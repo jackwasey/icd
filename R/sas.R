@@ -57,12 +57,14 @@ sasFormatExtract <- function(sasTxt) {
   out
 }
 
-#' @title get assignments from a character string, or vector of character 
-#'   strings.
-#' @description   #form is aaa-bbb, ccc-ddd, eee, etc. = "name" abc-def, ghi,
+#' @title get assignments from a character string strings.
+#' @description   #form is aaa-bbb, ccc-ddd, eee, etc. = "name" abc-def, ghi, 
 #'   etc. = "anothername" there is no delimiter between each assignment. '
-#'   @import futile.logger
-#' @return list with each list item containing a matrix of "char ranges",
+#' @param x is a character string containing space delimited assignments, in SAS
+#'   declaration format.
+#'   @param stripWhiteSpace will strip all whitespace from the returned values
+#'   @param stripQuotes will strip all double quotation marks from the returned values
+#' @return list with each list item containing a matrix of "char ranges", 
 #'   "assigned value" pairs
 sasParseAssignments <- function(x, stripWhiteSpace=T, stripQuotes=T) {
   
@@ -99,8 +101,6 @@ sasParseAssignments <- function(x, stripWhiteSpace=T, stripQuotes=T) {
   
   #spaces may matter still, so don't randomly strip them?
   
-  
-  flog.debug("length of threequarters = %d", length(threequarters))
   
   out <- list()
   for (pair in seq(from=1, to=length(threequarters), by=2)) {

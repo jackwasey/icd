@@ -1,87 +1,3 @@
-#' @rdname icd9ToComorbidities
-#' @title match ICD9 codes
-#' @description This does the hard work of finding whether a given icd9 code
-#'   falls under a group of reference ICD9 codes. baseCodes is expanded to cover
-#'   all possible subgroups, then we look for matches where the given ICD9 codes
-#'   appear in the baseCodes. 
-#'   http://www.acep.org/Clinical---Practice-Management/V-and-E-Codes-FAQ/
-#' @seealso comorbidities.
-#' @param icd9codes vector, either decimal (string or floating point) or short
-#'   form (must be character)
-#' @param baseCodes vector, decimal (but may be string or floating point)
-#' @param icd9codeShort true or false, default to accept short codes
-#' @param baseCodeShort true or false, default to accept long codes
-#' @return logical vector of which icd9codes match or are subcategory of
-#'   baseCodes
-#' @keywords internal
-icd9ToComorbid <- function(icd9codes, baseCodes, icd9codeShort=TRUE, baseCodeShort=FALSE) {
-  
-  if (!class(icd9codes) %in% c("character","numeric","integer")) stop("icd9ToComorbid expects a character or number vector for the icd9codes to examine, but got: ", class(icd9codes))
-  if (!class(baseCodes) %in% c("character","numeric","integer")) stop("icd9ToComorbid expects a character or number vector for the basecodes,to avoid ambiguity with trailing zeroes, but got: ", class(baseCodes))
-  if (class(icd9codeShort)!='logical') stop("icd9ToComorbid expects logical value for icd9codeShort")
-  if (class(baseCodeShort)!='logical') stop("icd9ToComorbid expects logical value for baseCodeShort")
-  
-  if (length(icd9codeShort)>1 )  stop("icd9ToComorbid got vector for icd9CodeShort, expected single TRUE or FALSE value")
-  if (length(baseCodeShort)>1 )  stop("icd9ToComorbid got vector for baseCodeShort, expected single TRUE or FALSE value")
-  if (length(icd9codeShort)==0 )  stop("icd9ToComorbid got empty vector for icd9CodeShort, expected single TRUE or FALSE value")
-  if (length(baseCodeShort)==0 )  stop("icd9ToComorbid got empty vector for baseCodeShort, expected single TRUE or FALSE value")
-  
-  if (length(baseCodes)==0) stop("icd9ToComorbid expects at least one icd9 code to test against")
-  
-  warnIfInvalidICD9(icd9codes, callingFunction="icd9ToComorbid-icd9codes", short=icd9codeShort)
-  #maybe do once, not every loop: stopIfInvalidICD9(baseCodes, callingFunction="icd9ToComorbid-baseCodes", short=baseCodeShort)
-  
-  # take a regular string of an ICD9 code of format (ABC.zxyz) with or without leading and trailing zeroes.
-  #top level ICD9 code and return T/F if the icd9codes fall within subgroups
-  icd9codes %in% icd9DecimalToShort(
-    c(
-      lapply(baseCodes, FUN=function(x) icd9ExpandBaseCode(icd9=x, short=baseCodeShort)), 
-      recursive=TRUE)
-  )
-}
-
-
-#' @rdname icd9ToComorbidities
-#' @title get co-morbidities for given list of visitId codes of in-patients
-#' @description merges the visitId list against the pre-calculated icd9 comorbidities
-#' get co-morbidities flagged as Present On Arrival (POA) for given list of PATCOMs
-#' get co-morbidities actively marked not Present On Arrival (POA) for given list of PATCOMs
-#' @param patcom number or character vector
-#' @param patcomField defaults to 'patcom'
-#' @param TODO: icd9lk is one of 'comorbidAllInpt','comorbidPoaInpt','comorbidNotPoaInpt'
-#' @return data.frame with input patcoms merged with all ever comorbidities
-#' @keywords internal
-lookupComorbiditiesAll <- function(dat, visitId, icd9lk='comorbidAllInpt', mergeFun=mergeBetter) {
-  
-  if (icd9lk %nin% c('comorbidAllInpt','comorbidPoaInpt','comorbidNotPoaInpt')) 
-    stop("the icd9 comorbidities must be one of: 'comorbidAllInpt','comorbidPoaInpt','comorbidNotPoaInpt' but I received ", icd9lk)
-  
-  # comorbidAllInpt <- icd9codesToComorbidities(icd9diagInpt, visitId="patcom", icd9Field="i9diag")
-  
-  mp <- do.call(mergeFun, list(x=dat, by.x=visitId, y=get(icd9lk), by.y=visitId, leftOuterJoin=T))
-  
-  # update just the new logical rows replacing NA with FALSE. This happens when a patient has no comorbidities.
-  comorbidityNames <- names(get(icd9lk))
-  comorbidityNames <- comorbidityNames[comorbidityNames != visitId] # select only the logical fields, not the patcom field
-  mp[, comorbidityNames] <- mp[, comorbidityNames] & !is.na(mp[, comorbidityNames])
-  mp
-}
-
-#' @rdname icd9ToComorbidities
-#' @export
-lookupComorbiditiesAll <- function(dat, visitId)
-  lookupComorbidities(dat, visitId, 'comorbidAllInpt')
-
-#' @rdname icd9ToComorbidities
-#' @export
-lookupComorbiditiesPoa <- function(dat, visitId)
-  lookupComorbidities(dat, visitId, 'comorbidPoaInpt')
-
-#' @rdname icd9ToComorbidities
-#' @export
-lookupComorbiditiesPoa <- function(dat, visitId)
-  lookupComorbidities(dat, visitId, 'comorbidNotPoaInpt')
-
 #' @title generate all child codes for given decimal ICD9 codes
 #' @description take ICD9 codes in decimal form and lists of all possible
 #'   sub-classification codes: e.g. 1.1 returns 1.11, 1.12, 1.13 etc. There are
@@ -103,14 +19,21 @@ icd9ExpandBaseCodeDecimal <- function(icd9) {
   parts <- icd9ExtractPartsDecimal(icd9, minorEmpty="")
   out <- c()
   for (r in rownames(parts)) {
-    out <- append(out, paste(parts[[r, "major"]], icd9ExpandMinor(parts[[r, "minor"]]), sep="."))
+    out <- append(out, 
+                  paste(
+                    parts[[r, "major"]], 
+                    icd9ExpandMinor(parts[[r, "minor"]]), sep="."
+                    )
+                  )
   }
   out
 }
 
 #' @title expand 5 character form 'short' ICD9 to all possible sub codes
-#' @description this is so the raw info from SAS code provided by AHRQ can be interpreted without manually reformatting.
-#' @param icd9 0 or whitespace padded on left, whitespace padded on right, character
+#' @description this is so the raw info from SAS code provided by AHRQ can be
+#'   interpreted without manually reformatting.
+#' @param icd9 0 or whitespace padded on left, whitespace padded on right,
+#'   character
 icd9ExpandBaseCodeShort <- function(icd9) {
   if (!is.character(icd9)) stop('must have character only input to expand a short basecode to avoid ambiguity')
   
@@ -152,16 +75,11 @@ icd9SortShort <- function(icd9) {
 }
 
 # TODO: make this suffix N?
-icd9GenerateShort <- function() icd9ExpandBaseCodeShort(as.character(1:999))
+#icd9GenerateShort <- function() icd9ExpandBaseCodeShort(as.character(1:999))
 # TODO: this is not quite right...
-icd9GenerateShortV <- function() paste("V", icd9ExpandBaseCodeShort(as.character(1:99)), sep="")
+#icd9GenerateShortV <- function() paste("V", icd9ExpandBaseCodeShort(as.character(1:99)), sep="")
 # TODO: this is not quite right, since E99 is invalid. 
-icd9GenerateShortE <- function() sub("0", "", paste("E", icd9ExpandBaseCodeShort(as.character(80:99)), sep=""))
-
-
-#' @describeIn icd9ExpandRangeShort
-#' @export
-"%icd9%" <- function(start, end) icd9ExpandRangeShort(start=start, end=end)
+#icd9GenerateShortE <- function() sub("0", "", paste("E", icd9ExpandBaseCodeShort(as.character(80:99)), sep=""))
 
 #' @title take SAS icd9 format for character range and expand to a list of codes
 #' @description this is pretty horrible code, covering a whole load of edge 
@@ -200,7 +118,10 @@ icd9ExpandRangeShort <- function(start, end) {
     #       startMinor, " and endMinor=", endMinor)
     # the following result works when minors have same length, but incomplete for start minor shorter.
     result <- icd9PartsToShort(startMajor,
-                               intersect(icd9SubsequentMinors(startMinor), icd9PrecedingMinors(endMinor))
+                               intersect(
+                                 icd9SubsequentMinors(startMinor), 
+                                 icd9PrecedingMinors(endMinor)
+                                 )
     )
     
     # case where startMinor lengths are 0,0 1,1 or 2,2: no corner cases
@@ -255,6 +176,10 @@ icd9ExpandRangeShort <- function(start, end) {
   stopifnot(toupper(c[1]) == toupper(d[1])) #
   paste(c[,1], c[,2]:d[,2], sep="")
 }
+
+#' @describeIn icd9ExpandRangeShort
+#' @export
+"%icd9%" <- function(start, end) icd9ExpandRangeShort(start=start, end=end)
 
 #' @title extract numeric part of icd9 code, i.e. remove whitespace and V or E 
 #'   prefix
@@ -361,8 +286,7 @@ icd9ExpandMinor <- function(minor="") {
   
   # minor should be 0-2 character, digits only
   if (nchar(minor) > 2)
-    stop("icd9ExpandMinor: starting length already too long!
-          This is an error in ICD9 to comorbidity mapping, not source data.")
+    stop("icd9ExpandMinor: starting length already too long!")
   
   # iterate through minors to generate all possible child codes.
   while (max(nchar(minor))<2) {
@@ -373,15 +297,14 @@ icd9ExpandMinor <- function(minor="") {
 }
 
 #' @title append zero to nine
-#' @description appends the characters "0" to "9" to elements of character
-#'   vector Used for extrapolating all the possible ICD9 codes in order to
-#'   match. The alternative approach is the way done in the 'comorbidities'
-#'   package, but this has a load of messy seq functions in the middle of the
-#'   comorbid groups specification. My way allows simple specification of, e.g.
-#'   code "100" and all possible child codes are captured.
-#' #examples
-#' #appendZeroToNine("1")
-#' #appendZeroToNine(1:3)
+#' @description appends the characters "0" to "9" to elements of character 
+#'   vector Used for extrapolating all the possible ICD9 codes in order to 
+#'   match. The alternative approach is the way done in the 'comorbidities' 
+#'   package, but this has a load of messy seq() functions in the middle of the 
+#'   comorbid groups specification, and as far as I can tell, some errors
+#'   arising from the non-numeric nature of ICD-9 codes. My way allows simple
+#'   specification of, e.g. code "100" and all possible child codes are
+#'   captured. #examples #appendZeroToNine("1") #appendZeroToNine(1:3)
 #' @param str vector of numbers (or character representation of numbers)
 #' @return vector of characters with 0 to 9 appended to each input value
 #' @keywords internal
@@ -389,105 +312,6 @@ appendZeroToNine <- function(str) {
   if (!allIsNumeric(str)) stop("appendZeroToNine expects number input, or character input representing numbers")
   apply(expand.grid(str, as.character(0:9),""), 1, paste, collapse="")
 }
-
-#' @title stop or warn, then  log if any of given ICD9 codes is invalid
-#' @param icd9codes vector of character or numeric type containing icd9 codes
-#' @param callingFunction not implemented: ideally look at call stack and indicate who called here.
-#' @export
-stopIfInvalidICD9 <- function(icd9codes, callingFunction="", short) {
-  if (short && any(!icd9ValidShort(icd9codes)))
-    stop("Invalid short-form ICD9 codes found: ", getInvalidShortICD9(icd9codes))
-  if (!short && any(!icd9ValidDecimal(icd9codes))) 
-    stop("Invalid long-form ICD9 codes found: ", getInvalidDecimalIcd9(icd9codes))
-}
-
-#' @describeIn stopIfInvalidICD9
-#' @export
-warnIfInvalidICD9 <- function(icd9codes, callingFunction="", short) {
-  if (short && any(!icd9ValidShort(icd9codes)))
-    warning("Invalid short-form ICD9 codes found: ", getInvalidShortICD9(icd9codes))
-  if (!short && any(!icd9ValidDecimal(icd9codes))) 
-    warning("Invalid long-form ICD9 codes found: ", getInvalidDecimalIcd9(icd9codes))
-}
-
-#' @title check whether icd9 codes are valid
-#' @description Check validity of short or 'long' (i.e. decimal form) ICD9 codes. 
-#' The codes may be numeric disease descriptiors or V or E prefixed for procedures or ?complications.
-#' @details Long form is not ambiguous. However, the decimal-free form is stored
-#' in the Hopkins database. The numbers are written as characters so the
-#' essential preceding zeroes are included. This means a non-decimal ICD9 code,
-#' like 1000, is ambiguous and should make an error.
-#' @param icd9 vector of character or numeric icd9 codes, in decimal format
-#' @return logical vector with T or F for each icd9 code provided according to validity
-#' @seealso http://www.stata.com/users/wgould/icd9/icd9.hlp and http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes
-#' @export
-icd9ValidDecimal <- function(icd9) {
-  
-  if (class(icd9) != "character" & class(icd9) != 'factor') 
-    stop("icd9ValidDecimal expects factor, character or numeric vector input but got class: ", class(icd9))
-  if (length(icd9)==0) stop("icd9ValidDecimal expects at least one icd9 code to test")
-  
-  # quick numeric check, although I think working purely in character would be
-  # more reliable. e.g. by not introducing weird rounding errors using %%
-  if (is.numeric(icd9)) {
-    icd9 <- as.numeric(icd9)
-    return(
-      icd9>=0 & icd9<1000 & (icd9*100%%1 == 0) # allow zero, which is 'no code' code.
-    )
-  }
-  
-  icd9ValidDecimalN(icd9) | icd9ValidDecimalV(icd9) | icd9ValidDecimalE(icd9)
-}
-
-#' @describeIn icd9ValidDecimal
-icd9ValidShort <- function(icd9) {
-  if (!(class(icd9) %in% c("character","factor"))) { 
-    stop("isValidShortICD9 expects character vector input. Numeric is ambiguous, 
-          so not allowed (although integers would not be ambiguous, simpler to stick to character-only.")
-    # this is not just invalid data: there is a programming error in the data structure
-  }
-  if (length(icd9) == 0) { 
-    warning("isValidShortICD9 expects at least one icd9 code to test") 
-    return() # return NULL, equivalent of c()
-  }
-  if (class(icd9) =="factor") # quicker to test rather than always try to convert
-    icd9 <- asCharacterNoWarn(icd9) # factor levels are always character, so no concern about introducing ambiguity with e.g. short code of 100 vs 10.0 (0100, 0010)
-  
-  # as explained in details, a numeric short ID has different validity requirements than a string because of leading zeroes.
-  icd9ValidShortN(icd9) | icd9ValidShortV(icd9) | icd9ValidShortE(icd9)
-}
-
-#' @describeIn icd9ValidDecimal
-#' @export
-icd9ValidShortV <- function(icd9) grepl("^[[:space:]]*[Vv](([1-9][[:digit:]])|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", icd9)
-
-#' @describeIn icd9ValidDecimal
-#' @export
-icd9ValidShortE <- function(icd9) grepl("^[[:space:]]*[Ee][89][[:digit:]]{2,3}[[:space:]]*$", icd9)
-
-#' @describeIn icd9ValidDecimal
-#' @export
-icd9ValidShortN <- function(icd9) grepl("^[[:space:]]*[[:digit:]]{1,5}[[:space:]]*$", icd9) # need to allow 0, but not 0.xx as valid code
-
-#' @describeIn icd9ValidDecimal
-#' @export
-icd9ValidDecimalV <- function(icd9) grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", icd9)
-
-#' @describeIn icd9ValidDecimal
-#' @export
-icd9ValidDecimalE <- function(icd9) grepl("^[[:space:]]*[Ee][89][[:digit:]]{2}(\\.[[:digit:]]?)?[[:space:]]*$", icd9)
-
-#' @describeIn icd9ValidDecimal
-#' @export
-icd9ValidDecimalN <- function(icd9) grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", icd9) # not quite right, since it would validate 0.12
-
-#' @describeIn icd9ValidDecimal
-#' @export
-getInvalidDecimalIcd9 <- function(icd9) icd9[!icd9ValidDecimal(icd9)]
-
-#' @describeIn icd9ValidDecimal
-#' @export
-getInvalidShortICD9 <- function(icd9) icd9[!icd9ValidShort(icd9)]
 
 #' @title convert between icd9 decimal and short formats
 #' @description converted decimal ICD9 code, e.g. 123.45 to 'short' e.g. 12345 
@@ -565,57 +389,6 @@ icd9ExtractPartsDecimal <- function(icd9, padMajor=T, minorEmpty="", validate=F)
   x[is.na(x[["minor"]]), "minor"] <- minorEmpty
   x
 }
-
-#' @rdname icd9ToComorbidities
-#' @title merge comorbidities with icd9 codes per visitId (or other identity)
-#' @description default response is Jack's mapping of comorbidities which was 
-#'   curated by hand based on several published lists of ICD9 codes used to
-#'   ennumerate comorbidities. Other options are \code{deyo} and \code{ahrq}. 
-#'   This is slow with long lists of patients, so intended to be used as
-#'   intermediate step to save files like comorbidPoaInpt
-#' @param icd9df data.frame with fields specified by visitId and icd9Code.
-#'   icd9code is assumed to be a non-decimal 'short' form ICD9 code.
-#' @param icd9translate list of the comorbidities with each top-level list item
-#'   containing a vector of decimal ICD9 codes
-#' @export
-icd9comorbidities <- function(icd9df, visitId="visitId", icd9Field="icd9Code", 
-                              icd9Mapping = icd9JackMapping) {
-  
-  # validate mapping here, or not at all. Will stop checking down the chain of function calls.
-  
-  i <- cbind(
-    icd9df[visitId],
-    vapply(
-      X = names(icd9Mapping), # loop through names of icd9 mapping, i.e. one comorbidity at a time
-      FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]])), # way faster with vapply, and it keeps the logicals instead of making them character
-      FUN = function(comorbidity) {
-        icd9ToComorbid( 
-          asCharacterNoWarn(icd9df[[icd9Field]]), # drop factor down to character codes #TODO: is this necessary?
-          icd9Mapping[[comorbidity]] # provide vector of base ICD9 codes for this comorbidity group
-        )
-      }
-    )
-  )
-  ag <- aggregate( x=i[,-which(names(i)==visitId)], by=list(i[[visitId]]), FUN = any, simplify=F)
-  names(ag)[1] <- visitId
-  ag
-}
-
-#' @title gets those comorbidities where the "Present on Arrival" (POA) flag is set or not set.
-#' @description this is not a simple binary, since many codes are exempt, unspecified, or unknown. Therefore, two options are given: get all the comorbidities where the POA flag was definitely -ve, coded as "N" or definitely +ve and coded as "Y". Negating one set won't give the other set unless all codes were either Y or N.
-#' @describeIn icd9comorbidities
-#' @export
-icd9comorbiditiesNotPoa <- function(icd9df, visitId="visitId", icd9Field="icd9Code",
-                                    poaField="poa", icd9Mapping = icd9JackMapping)
-  icd9comorbidities(icd9df[ is.na(icd9df[[poaField]]) | icd9df[[poaField]] != "N",],
-                    visitId=visitId, icd9Field=icd9Field, icd9Mapping=icd9Mapping)
-
-#' @describeIn icd9comorbidities
-#' @export
-icd9comorbiditiesPoa <- function(icd9df, visitId="visitId", icd9Field="icd9Code",
-                                 poaField="poa", icd9Mapping = icd9JackMapping)
-  icd9comorbidities(icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "Y",],
-                    visitId=visitId, icd9Field=icd9Field, icd9Mapping=icd9Mapping)
 
 #' @title pad decimal icd9 codes with leading zeroes
 #' @param icd9 vector of icd9 codes in character or numeric form
