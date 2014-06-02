@@ -144,3 +144,60 @@ icd9comorbiditiesPoa <- function(icd9df, icd9Mapping, visitId="visitId",
                                  icd9Field="icd9Code", poaField="poa")
   icd9comorbidities(icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "Y",],
                     visitId=visitId, icd9Field=icd9Field, icd9Mapping=icd9Mapping)
+
+
+#' @title parse AHRQ and ICD9-CM data
+#' @description Takes the raw data taken directly from the AHRQ web site and 
+#'   parses into RData. It is then saved in the development tree data directory,
+#'   so this is an internal function, used in generating the package itself!
+#' @return list of lists, name value pairs, and where a single name was 
+#'   associated with multiple further name-value pairs, this is presented as a 
+#'   sub-list. This is primarily required because of the obtuse SAS FORMAT data
+#'   structure: the AHRQ codes are hidden in a sublist of the first item.
+parseAhrqSas <- function() {
+  ahrq.dx <- read.csv(file=system.file("extdata", "ccs_multi_dx_tool_2013.csv", package="icd9"), quote="'\"")
+  ahrq.pr <- read.csv(file=system.file("extdata", "ccs_multi_pr_tool_2014.csv", package="icd9"), quote="'\"")
+  
+  # all fields suitable for 'factor' class, except ICD.9.CM.CODE, which has no repeated values.
+  ahrq.dx[["ICD.9.CM.CODE"]] <- asCharacterNoWarn(ahrq.dx[["ICD.9.CM.CODE"]])
+  
+  save(list=c("ahrq.dx","ahrq.pr"), file=pathOfInternalData("ahrq.RData"), compress="xz")
+  
+  # now work on groupings:
+  ag<-aggregate(ICD.9.CM.CODE ~ CCS.LVL.1.LABEL, data=ahrq.dx, FUN=paste)
+  # TODO
+  
+  ahrqAll <- sasFormatExtract(
+    readLines(system.file("extdata","comformat2012-2013.txt", package="jh")))
+  
+  ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
+  # boom. The remainder is DRG stuff.
+  
+  ahrqComorbid <- list()
+  
+  for (cmd in names(ahrqComorbidWork)) {
+    flog.info("working on %s", cmd)
+    somePairs <- strsplit(x=ahrqComorbidWork[[cmd]], split="-")
+    flog.debug("got these values and ranges:", somePairs, capture=T)
+    out <- as.list(somePairs[lapply(somePairs, length) == 1]) # non-range values just go on list
+    thePairs <- somePairs[lapply(somePairs, length) == 2]
+    flog.debug("got these ranges:", thePairs, capture=T)
+    out <- append(out, as.list(lapply(thePairs, function(x) icd9ExpandRangeShort(x[1], x[2]))))
+    # update ahrqComorbid with full range of icd9 codes:
+    ahrqComorbid[[cmd]] <- unlist(out)
+  }
+  
+  # save the data in the development tree, so the package user doesn't need to decode it themselves.
+  save(ahrqComorbid, file=file.path(pathOfInternalData("ahrqComorbid.R")))
+  
+  # 
+  
+  
+  #   r <- r[-(1:grep("VALUE \\$RCOMFMT", r))] # drop lines up to marker
+  #   r <- r[!grepl(pattern="^[[:space:]]*\\/\\*.*\\*\\/", x=r)] # non-comment-only lines
+  #   r <- r[r!=""]
+  #   m <- regexec(pattern='"([0-9 ]*)"-"([0-9 ]*)"', text=r)
+  #   ranges <- regmatches(r, m)
+  #   
+  
+}
