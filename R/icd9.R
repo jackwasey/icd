@@ -489,3 +489,32 @@ icd9explain.character <- function(icd9) {
 #  #codes    which represent the group.") this doesn't work for real ICD9 codes,
 #  #because they rarely fill out all decimal child possibilities, if ever
 #}
+
+#' @title read the ICD-9-CM description data as provided by the Center for
+#'   Medicaid Services.
+#' @description ICD9-CM data unfortunately has no comma separation, so have to
+#'   pre-process
+#' @details ideally would get ICD9-CM data zip directly from CMS web page, and
+#'   extract, but the built-in unzip only extracts the first file in a zip.
+#' @param save logical whether to attempt to save output in package source tree
+#'   data directory
+#' @return invisibly return the result
+parseIcd9Cm <- function(save=F) {
+  f <- file(system.file("extdata","CMS32_DESC_LONG_DX.txt", package='icd9'), "r")
+  r <- readLines(f, encoding="latin1")
+  r<-strsplit(r, " ")
+  icd9LongCode <- lapply(r, FUN=function(row) row[1])
+  icd9LongDesc <- lapply(r, FUN=function(row) paste(row[-c(1,2)], collapse=" "))
+  
+  f <- file(system.file("extdata","CMS32_DESC_SHORT_DX.txt", package='icd9'), "r")
+  r <- readLines(f, encoding="latin1")
+  r<-strsplit(r, " ")
+  icd9ShortCode <- lapply(r, FUN=function(row) row[1])
+  icd9ShortDesc <- lapply(r, FUN=function(row) paste(row[-c(1,2)], collapse=" "))
+  icd9CmDesc <- data.frame(icd9=unlist(icd9LongCode), descLong=unlist(icd9LongDesc), descShort=unlist(icd9ShortDesc))
+  
+  # attempt to write the date from the source file to RData in the package source tree.
+  if (save) saveSourceTreeData("icd9CmDesc", path="~/icd9")
+
+  invisible(icd9CmDesc)
+}

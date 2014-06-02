@@ -73,3 +73,20 @@ asIntegerNoWarn <- function(x)
 #' @keywords internal
 "%nin%" <- function(x, table) match(x, table, nomatch = 0) == 0
 # original %in% is: match(x, table, nomatch = 0L) > 0L
+
+#' @title save data in source tree
+#' @description attempt to write the date from the source file to RData in the
+#'   package source tree.
+#' @param varName is the variable name and the part of the filename which will
+#'   be saved, followed by ".RData"
+saveSourceTreeData <- function(varName, path="~/icd9") {
+  require(devtools)
+  devpath <- file.path(path, "data") 
+  stopifnot(file.exists(devpath))
+  save(list  = varName, 
+       envir = parent.frame(), # get from my parent
+       file  = file.path(devpath, paste0(varName, ".RData"))
+  )
+       #compress="xz"
+}
+
