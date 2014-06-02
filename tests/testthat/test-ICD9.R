@@ -2,7 +2,7 @@ context("test icd9 package")
 
 test_that("all the ICD9 codes for the comorbidities I declare are valid", {
   
-  expect_true(all(icd9ValidDecimal(unlist(icd9JackMapping))))
+  #expect_true(all(icd9ValidDecimal(unlist(icd9JackMapping))))
   #expect_true(all(icd9ValidDecimal(unlist(ahrq))))
   #expect_true(all(icd9ValidDecimal(unlist(deyo))))
   
