@@ -2,6 +2,7 @@
 #' @title stop or warn, then  log if any of given ICD9 codes is invalid
 #' @param icd9codes vector of character or numeric type containing icd9 codes
 #' @param callingFunction not implemented: ideally look at call stack and indicate who called here.
+#' @param short is logical, set TRUE if icd9codes are short form
 #' @export
 stopIfInvalidICD9 <- function(icd9codes, callingFunction="", short) {
   if (short && any(!icd9ValidShort(icd9codes)))

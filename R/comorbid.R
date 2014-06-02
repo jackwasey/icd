@@ -105,7 +105,7 @@ lookupComorbiditiesPoa <- function(dat, visitId)
 #' @param icd9Mapping list of the comorbidities with each top-level list item
 #'   containing a vector of decimal ICD9 codes
 #' @export
-icd9comorbidities <- function(icd9df, visitId="visitId", icd9Field="icd9Code", 
+icd9Comorbidities <- function(icd9df, visitId="visitId", icd9Field="icd9Code", 
                               icd9Mapping) {
   
   # validate mapping here, or not at all. Will stop checking down the chain of function calls.
@@ -128,16 +128,17 @@ icd9comorbidities <- function(icd9df, visitId="visitId", icd9Field="icd9Code",
   ag
 }
 
+#' @rdname icd9ToComorbidities
 #' @title gets those comorbidities where the "Present on Arrival" (POA) flag is set or not set.
 #' @description this is not a simple binary, since many codes are exempt, unspecified, or unknown. Therefore, two options are given: get all the comorbidities where the POA flag was definitely -ve, coded as "N" or definitely +ve and coded as "Y". Negating one set won't give the other set unless all codes were either Y or N.
-#' @describeIn icd9comorbidities
+#' #describeIn icd9Comorbidities
 #' @export
 icd9comorbiditiesNotPoa <- function(icd9df, visitId="visitId", icd9Field="icd9Code",
                                     poaField="poa", icd9Mapping = icd9JackMapping)
   icd9comorbidities(icd9df[ is.na(icd9df[[poaField]]) | icd9df[[poaField]] != "N",],
                     visitId=visitId, icd9Field=icd9Field, icd9Mapping=icd9Mapping)
 
-#' @describeIn icd9comorbidities
+#' @rdname icd9ToComorbidities
 #' @export
 icd9comorbiditiesPoa <- function(icd9df, visitId="visitId", icd9Field="icd9Code",
                                  poaField="poa", icd9Mapping = icd9JackMapping)

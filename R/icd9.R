@@ -6,7 +6,7 @@
 #'   from expanding "100.00" (no expansion) \code{0.1 == .3/3} is a problem...
 #'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
 #'   
-#' @param baseCode ICD9 codes in xxx.xx format
+#' @param icd9 ICD-9 codes in xxx.xx format
 #' @return unsorted vector of ICD9 codes for all subsections of the provided
 #'   code.
 icd9ExpandBaseCodeDecimal <- function(icd9) {
@@ -30,10 +30,12 @@ icd9ExpandBaseCodeDecimal <- function(icd9) {
 }
 
 #' @title expand 5 character form 'short' ICD9 to all possible sub codes
-#' @description this is so the raw info from SAS code provided by AHRQ can be
+#' @description this is so the raw info from SAS code provided by AHRQ can be 
 #'   interpreted without manually reformatting.
-#' @param icd9 0 or whitespace padded on left, whitespace padded on right,
+#' @param icd9 0 or whitespace padded on left, whitespace padded on right, 
 #'   character
+#' @param short logical which is TRUE when specifying that provided icd9 is in
+#'   short (non-decimal) form
 icd9ExpandBaseCodeShort <- function(icd9) {
   if (!is.character(icd9)) stop('must have character only input to expand a short basecode to avoid ambiguity')
   
@@ -93,6 +95,8 @@ icd9SortShort <- function(icd9) {
 #' "4280 " %icd9% "4289 "
 #' "V80 " %icd9% " V8210 "
 #' icd9ExpandRangeShort("4280 ", "43014") # should give all codes in 428 EXCEPT "428", and all codes upto 43014 EXCEPT 430 and 4301
+#' @param start is a short form ICD9 code, i.e. no decimal point, must be character (not number)
+#' @param end is a short form ICD9 code
 #' @export
 icd9ExpandRangeShort <- function(start, end) {
   stopifnot(length(start)==1 && length(end)==1)
