@@ -169,8 +169,9 @@ icd9ExpandRangeShort <- function(start, end) {
 #' @title create range of icd9 major parts
 #' @description accepts V, E or numeric codes. Does not validate codes beyond
 #'   ensuring that the start and end of the range are of the same type.
-#' @param start, end character or numeric icd9 major part (i.e. part before
+#' @param start character or numeric icd9 major part (i.e. part before
 #'   decimal point, or first Vxx, Exxx or xxx, with or without zero padding)
+#' @param end, see start.
 #' @return character vector with range inclusive of start and end
 #' @export
 "%i9m%" <- function(start, end) {
@@ -321,7 +322,7 @@ appendZeroToNine <- function(str) {
 #' @description converted decimal ICD9 code, e.g. 123.45 to 'short' e.g. 12345 
 #'   non-decimal format, or vice versa
 #' @param icd9Decimal is a vector of numeric or character type in ICD9 decimal 
-#'   or short form
+#' @param icd9Short is a vector of numeric or character type in ICD9 short form
 #' @return character vector of converted ICD-9 codes
 #' @export
 icd9DecimalToShort <- function(icd9Decimal) {
