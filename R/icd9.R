@@ -23,8 +23,8 @@ icd9ExpandBaseCodeDecimal <- function(icd9) {
                   paste(
                     parts[[r, "major"]], 
                     icd9ExpandMinor(parts[[r, "minor"]]), sep="."
-                    )
                   )
+    )
   }
   out
 }
@@ -125,7 +125,7 @@ icd9ExpandRangeShort <- function(start, end) {
                                intersect(
                                  icd9SubsequentMinors(startMinor), 
                                  icd9PrecedingMinors(endMinor)
-                                 )
+                               )
     )
     
     # case where startMinor lengths are 0,0 1,1 or 2,2: no corner cases
@@ -466,20 +466,26 @@ icd9PartsToLong <- function(major, minor) icd9PartsRecompose(major=major, minor=
 #' TODO: could also lookup against the short codes to validate? The Hopkins ICD9 lookup table is a mess. 
 #' @param icd9 is a vector of decimal ICD9 codes, or a list of comorbidity to icd9 code mappings.
 #' The ICD9 codes may be in character or numeric form, or a mixture.
+#' @examples
+#' \dontrun{
+#' icd9Explain(ahrqComorbid)
+#' }
 #' @return data frame, or list of data frames, with fields for ICD9 code, name and description, derived from datamart lookup table
 #' @seealso package \code{comorbidities}
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
-icd9explain <- function(icd9) UseMethod("icd9explain")
+icd9Explain <- function(icd9) UseMethod("icd9Explain")
 
-icd9explain.list <- function(icd9) lapply(icd9, icd9explain)
-icd9explain.numeric <- function(icd9) icd9explain.character(as.character(icd9))
-icd9explain.character <- function(icd9) {
-  loadCleanData('lkI9DIAG')
+icd9Explain.list <- function(icd9) lapply(icd9, icd9Explain)
+icd9Explain.numeric <- function(icd9) icd9Explain.character(as.character(icd9))
+icd9Explain.character <- function(icd9) {
+  #todo: use s3 class to quickly differentiate short and decimal form icd9 codes.
   
-  out <- lkI9DIAG[lkI9DIAG$DiagCode %in% icd9ZeroPadDecimal(icd9), c("DiagCode", "I9Diagnosis", "Description")]
+  # lookup table directly from CMS is: icd9CmDesc
+  
+  out <- icd9CmDesc[ icd9CmDesc$icd9 %in% icd9ZeroPadDecimal(icd9), ]
   row.names(out) <- NULL
-  names(out) <- c("ICD9 code", "Diagnosis", "Description")
+  names(out) <- c("ICD9 Code", "Diagnosis", "Description")
   out
 }
 
@@ -490,13 +496,14 @@ icd9explain.character <- function(icd9) {
 #  #because they rarely fill out all decimal child possibilities, if ever
 #}
 
-#' @title read the ICD-9-CM description data as provided by the Center for
+#' @title read the ICD-9-CM description data as provided by the Center for 
 #'   Medicaid Services.
-#' @description ICD9-CM data unfortunately has no comma separation, so have to
-#'   pre-process
-#' @details ideally would get ICD9-CM data zip directly from CMS web page, and
+#' @description ICD9-CM data unfortunately has no comma separation, so have to 
+#'   pre-process. Note that this canonical data doesn't specify non-diagnostic
+#'   higher-level codes, just the specific diagnostic 'child' codes.
+#' @details ideally would get ICD9-CM data zip directly from CMS web page, and 
 #'   extract, but the built-in unzip only extracts the first file in a zip.
-#' @param save logical whether to attempt to save output in package source tree
+#' @param save logical whether to attempt to save output in package source tree 
 #'   data directory
 #' @return invisibly return the result
 parseIcd9Cm <- function(save=F, path="~/icd9/data") {
@@ -515,6 +522,6 @@ parseIcd9Cm <- function(save=F, path="~/icd9/data") {
   
   # attempt to write the date from the source file to RData in the package source tree.
   if (save) saveSourceTreeData("icd9CmDesc", path = path)
-
-  invisisble(icd9CmDesc)
+  
+  invisible(icd9CmDesc)
 }

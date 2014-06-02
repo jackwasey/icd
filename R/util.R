@@ -79,6 +79,7 @@ asIntegerNoWarn <- function(x)
 #'   package source tree.
 #' @param varName is the variable name and the part of the filename which will
 #'   be saved, followed by ".RData"
+#'   @param path is a path name to destination folder for the data: no trailing slash.
 saveSourceTreeData <- function(varName, path="~/icd9/data") {
   require(devtools)
   stopifnot(file.exists(path))
