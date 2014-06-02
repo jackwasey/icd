@@ -8,6 +8,15 @@ test_that("all the ICD9 codes for the comorbidities I declare are valid", {
   
 })
 
+test_that("appendZeroToNine", {
+  expect_error(appendZeroToNine(list(a=c(1,2)))) # random crap
+  expect_identical(appendZeroToNine("1"), as.character(10:19))
+  expect_identical(appendZeroToNine(1), as.character(10:19))
+  expect_identical(appendZeroToNine(""), as.character(0:9))
+  expect_identical(sort(appendZeroToNine(c("1","2"))), as.character(c(10:19,20:29)))
+  expect_identical(sort(appendZeroToNine(c("","9"))), as.character(c(0:9,90:99)))
+})
+
 test_that("icd9ExpandMinor", {
   expect_error(icd9ExpandMinor(c(1,2)))
   expect_error(icd9ExpandMinor("JACK"))
@@ -324,8 +333,8 @@ test_that("expand icd9 range definition", {
   
   
   expect_equal( # the range 44100-4419 from the AHRQ found a gap in the code.
-    icd9ExpandRangeShort("4410","4419"),
-    c("4100", icd9ExpandRangeShort("44100","4419"))
+    sort(icd9ExpandRangeShort("4410","4412")),
+    sort(c("4410", icd9ExpandRangeShort("44100","4412")))
   )
   
   expect_equal(icd9ExpandRangeShort("401","401"), icd9ExpandBaseCode("401", short=T))
