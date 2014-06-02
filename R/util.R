@@ -79,13 +79,12 @@ asIntegerNoWarn <- function(x)
 #'   package source tree.
 #' @param varName is the variable name and the part of the filename which will
 #'   be saved, followed by ".RData"
-saveSourceTreeData <- function(varName, path="~/icd9") {
+saveSourceTreeData <- function(varName, path="~/icd9/data") {
   require(devtools)
-  devpath <- file.path(path, "data") 
-  stopifnot(file.exists(devpath))
+  stopifnot(file.exists(path))
   save(list  = varName, 
        envir = parent.frame(), # get from my parent
-       file  = file.path(devpath, paste0(varName, ".RData"))
+       file  = file.path(path, paste0(varName, ".RData"))
   )
        #compress="xz"
 }

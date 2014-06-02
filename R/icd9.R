@@ -499,7 +499,7 @@ icd9explain.character <- function(icd9) {
 #' @param save logical whether to attempt to save output in package source tree
 #'   data directory
 #' @return invisibly return the result
-parseIcd9Cm <- function(save=F) {
+parseIcd9Cm <- function(save=F, path="~/icd9/data") {
   f <- file(system.file("extdata","CMS32_DESC_LONG_DX.txt", package='icd9'), "r")
   r <- readLines(f, encoding="latin1")
   r<-strsplit(r, " ")
@@ -514,7 +514,7 @@ parseIcd9Cm <- function(save=F) {
   icd9CmDesc <- data.frame(icd9=unlist(icd9LongCode), descLong=unlist(icd9LongDesc), descShort=unlist(icd9ShortDesc))
   
   # attempt to write the date from the source file to RData in the package source tree.
-  if (save) saveSourceTreeData("icd9CmDesc", path="~/icd9")
+  if (save) saveSourceTreeData("icd9CmDesc", path = path)
 
-  invisible(icd9CmDesc)
+  invisisble(icd9CmDesc)
 }
