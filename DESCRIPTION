@@ -1,0 +1,32 @@
+Package: icd9
+Title: reading, analysis and manipulation of ICD-9 codes
+Description: ICD-9 codes are not numbers, and great care is needed when
+    matching individual codes and ranges of codes. It is easy to make mistake,
+    hence the need for this code and test suite. ICD-9 codes can be presented
+    in 'short' 5 character format, or 'decimal' format, seperating the code
+    into two groups. Zeros after a decimal place are meaningful, so numerics
+    cannot be used in most cases. This package enforces character specification
+    to avoid mistakes. The package also provides a means of looking up which
+    comorbidities exist in a patient given a set of ICD-9 codes, based on a
+    mapping of ICD-9 codes to comorbidity groups specified in R. This entails
+    parsing source SAS source code, and this is also included in the package,
+    so that subsequent releases of SAS FORMAT data for comorbidities can be
+    used.
+Version: 0.1
+Date: 2014-06-1
+Authors@R: person(given="Jack O.", family="Wasey", role=c("aut", "cre"), email=c("jackwasey@jhmi.edu", "jack@jackwasey.com"))
+Maintainer: Jack O. Wasey <jack@jackwasey.com>
+Depends:
+    R (>= 3.0.0)
+Imports:
+    futile.logger
+Suggests:
+    testthat,
+    roxygen2,
+    devtools
+LazyData: true
+LazyDataCompression: xz
+BugReports: mailto://jack@jackwasey.com
+Roxygen: list(wrap=FALSE)
+License: GPL-3
+
