@@ -40,7 +40,10 @@ asCharacterNoWarn <- function(x) {
 
 #' @title convert factor or vector to numeric without warnings
 #' @aliases asIntegerNoWarn
-#' @description correctly converts factors to vectors, and then converts to numeric, which may silently introduce NAs
+#' @description correctly converts factors to vectors, and then converts to 
+#'   numeric or integer, which may silently introduce NAs. Invisible rounding
+#'   errors can be a problem going from numeric to integer, so consider adding
+#'   tolerance to this conversion.
 #' @param x is a vector, probably of numbers of characters
 #' @keywords internal
 #' @return numeric vector, may have NA values

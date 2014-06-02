@@ -4,13 +4,11 @@
 #'   regex, but, as you will see from the code, R is not a great language with
 #'   which to write a SAS parser.
 #'   
-#' ##examples
-#' #\dontrun{
+#' #example
 #' #sasFormatExtract(readLines('inst/extdata//comformat2012-2013.txt'))
-#' #}
+#' 
 #' @param sasTxt is a character vector, with one item per line, e.g. from
 #'   \code{readLines}
-#' @import futile.logger
 #' @references
 #'   \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}
 #'    \url{https://communities.sas.com/thread/47571?start=0&tstart=0} 
@@ -53,7 +51,6 @@ sasFormatExtract <- function(sasTxt) {
   #aVals <- vapply(allAssignments, '[[', 2, FUN.VALUE=rep("", length(allAssignments)))
   
   for (m in allAssignments) {
-    flog.debug("working on assignment pair:", m, capture=T)
     out[m[[1]]] <- list(sasParseAssignments(m[[2]]))
   }
   

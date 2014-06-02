@@ -279,11 +279,6 @@ test_that("icd9 codes to comorbities", {
     row.names = 5000000:5000019, 
     class = "data.frame")
   
-  warning("todo")
-  
-  # heavy test with real data:
-  #testdat <- icd9diagInpt[7300001:7400000,]
-  
 })
 
 test_that("zero pad decimal", {
@@ -415,6 +410,7 @@ test_that("icd9 parts to short form", {
   expect_equal(icd9ZeroPadMajor(10L),"010")
   expect_equal(icd9ZeroPadMajor(999L),"999")
   expect_error(icd9ZeroPadMajor(10.1))
+  #expect_equal(icd9ZeroPadMajor("V1"), "V01") # TODO
   expect_equal(icd9ZeroPadMajor(" V10"), "V10")
   expect_equal(icd9ZeroPadMajor(c("10","V25")), c("010","V25"))
   expect_equal(icd9PartsToShort(10L,"20"), "01020")

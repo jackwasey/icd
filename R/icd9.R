@@ -67,17 +67,17 @@ lookupComorbiditiesAll <- function(dat, visitId, icd9lk='comorbidAllInpt', merge
   mp
 }
 
-#' @describeIn lookupComorbiditiesAll
+#' @rdname icd9ToComorbidities
 #' @export
 lookupComorbiditiesAll <- function(dat, visitId)
   lookupComorbidities(dat, visitId, 'comorbidAllInpt')
 
-#' @describeIn lookupComorbiditiesAll
+#' @rdname icd9ToComorbidities
 #' @export
 lookupComorbiditiesPoa <- function(dat, visitId)
   lookupComorbidities(dat, visitId, 'comorbidPoaInpt')
 
-#' @describeIn lookupComorbiditiesAll
+#' @rdname icd9ToComorbidities
 #' @export
 lookupComorbiditiesPoa <- function(dat, visitId)
   lookupComorbidities(dat, visitId, 'comorbidNotPoaInpt')
@@ -181,14 +181,17 @@ icd9ExpandRangeShort <- function(start, end) {
   if (nchar(start)==nchar(end) && start>end) stop("start is after end time")
   sdf <- icd9ExtractPartsShort(start)
   edf <- icd9ExtractPartsShort(end)
-  startMajor <- sdf[["major"]]
-  endMajor <- edf[["major"]]
+  startMajor <- icd9ZeroPadMajor(sdf[["major"]]) # zero pad to tolerate entering "1" instead of "001"
+  endMajor <- icd9ZeroPadMajor(edf[["major"]]) 
   startMinor <- sdf[["minor"]]
   endMinor <- edf[["minor"]]
   
   # use icd9ExtractAlphaNumeric to get just the numbers (ignore V or E), and compare those:
   majorNumsOnly <- as.integer(icd9ExtractAlphaNumeric(c(startMajor, endMajor))[,2])
-  if (majorNumsOnly[1] > majorNumsOnly[2]) stop("start is after end (major part)")
+  if (!all(icd9SortShort(c(start, end)) == c(start, end))) 
+    stop("start is after end")
+  if (!all(icd9SortShort(c(startMajor, endMajor)) == c(startMajor, endMajor))) 
+    stop("start is after end (major part)")
   
   # deal with special case where start major = start minor
   if (startMajor == endMajor) {
@@ -200,7 +203,10 @@ icd9ExpandRangeShort <- function(start, end) {
                                intersect(icd9SubsequentMinors(startMinor), icd9PrecedingMinors(endMinor))
     )
     
+    # case where startMinor lengths are 0,0 1,1 or 2,2: no corner cases
     if (nchar(startMinor) == nchar(endMinor)) return(result)
+    
+    # startMinor length is one, but endMinor could be zero or two chars.
     if (nchar(startMinor) == 1) return(unique(c(start, result)))
     if (nchar(startMinor) == 0) {
       # cover edge case where minor is "0x" so "0" is not included, and yet
@@ -373,12 +379,10 @@ icd9ExpandMinor <- function(minor="") {
 #'   package, but this has a load of messy seq functions in the middle of the
 #'   comorbid groups specification. My way allows simple specification of, e.g.
 #'   code "100" and all possible child codes are captured.
-#' @param str vector of numbers (or character representation of numbers)
 #' #examples
-#' /dontrun{
-#' appendZeroToNine("1")
-#' appendZeroToNine(1:3)
-#' }
+#' #appendZeroToNine("1")
+#' #appendZeroToNine(1:3)
+#' @param str vector of numbers (or character representation of numbers)
 #' @return vector of characters with 0 to 9 appended to each input value
 #' @keywords internal
 appendZeroToNine <- function(str) {
