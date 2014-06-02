@@ -104,7 +104,7 @@ sasParseAssignments <- function(x, stripWhiteSpace=T, stripQuotes=T) {
   
   out <- list()
   for (pair in seq(from=1, to=length(threequarters), by=2)) {
-    flog.debug("%s = %s", threequarters[pair], threequarters[pair+1])
+    #flog.debug("%s = %s", threequarters[pair], threequarters[pair+1])
     if (stripWhiteSpace) {
       outwhite <- gsub(pattern="[[:space:]]*", replacement="", threequarters[pair])
     } else {

@@ -19,8 +19,6 @@ Authors@R: person(given="Jack O.", family="Wasey", role=c("aut", "cre"),
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 Depends:
     R (>= 3.0.0)
-Imports:
-    futile.logger
 Suggests:
     testthat,
     roxygen2,
