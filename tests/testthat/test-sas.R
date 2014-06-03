@@ -60,3 +60,9 @@ test_that("groups of SAS assignments can be extracted", {
   )
   
 })
+
+test_that("AHRQ interpretation at least returns something reasonable", {
+  result <- parseAhrqSas(save=F)
+  expect_that(result, is_a("list"))
+  expect_true(length(result) > 10)
+ })

@@ -50,6 +50,7 @@ icd9ValidDecimal <- function(icd9) {
 }
 
 #' @describeIn icd9ValidDecimal
+#' @export
 icd9ValidShort <- function(icd9) {
   if (!(class(icd9) %in% c("character","factor"))) { 
     stop("isValidShortICD9 expects character vector input. Numeric is ambiguous, 

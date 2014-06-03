@@ -1,0 +1,29 @@
+\documentclass{article}
+
+\begin{document}
+
+<<>=
+
+patientData <- data.frame(
+  visitId = c(1000,1000,1000,1001,1001,1002)
+  icd9 = c("27801", "7208", "25001", "34400", "4011", "4011")
+  poa = as.factor("Y","N","Y","N","Y","N"),
+  stringsAsFactors <- F
+)
+
+
+
+@
+
+AHRQ comorbidity data.
+
+The AHRQ makes an annual classification of ICD-9-CM codes into comorbidities useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
+
+<<>>=
+ahrqComorbid <- parseAhrqSas(save = F)
+names(ahrqComorbid)[1:10]
+ahrqComorbid["OBESE"]
+@
+
+
+\end{document}
