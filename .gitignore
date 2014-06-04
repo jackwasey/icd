@@ -3,5 +3,10 @@
 .RData
 man
 icd9.Rproj
-ahrqComorbid.RData
+data/ahrqComorbid.RData
 icd9CmDesc.RData
+vignettes/icd9.tex
+vignettes/icd9.pdf
+vignettes/icd9.synctex.gz
+vignettes/icd9.log
+vignettes/icd9-concordance.tex
