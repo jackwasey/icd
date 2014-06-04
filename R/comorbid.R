@@ -14,7 +14,7 @@
 #' @return logical vector of which icd9codes match or are subcategory of
 #'   baseCodes
 #' @keywords internal
-icd9ToComorbid <- function(icd9codes, baseCodes, icd9codeShort=TRUE, baseCodeShort=FALSE) {
+icd9ToComorbid <- function(icd9codes, baseCodes, icd9codeShort = TRUE, baseCodeShort = TRUE) {
   
   if (!class(icd9codes) %in% c("character","numeric","integer")) stop("icd9ToComorbid expects a character or number vector for the icd9codes to examine, but got: ", class(icd9codes))
   if (!class(baseCodes) %in% c("character","numeric","integer")) stop("icd9ToComorbid expects a character or number vector for the basecodes,to avoid ambiguity with trailing zeroes, but got: ", class(baseCodes))
@@ -40,7 +40,6 @@ icd9ToComorbid <- function(icd9codes, baseCodes, icd9codeShort=TRUE, baseCodeSho
   )
 }
 
-#' @rdname icd9ToComorbidities
 #' @title lookup pre-calculated co-morbidities for given list of visit IDs
 #' @description merges the data frame \code{dat} with pre-calculated icd9 
 #'   comorbidities by \code{visitId}
@@ -48,12 +47,12 @@ icd9ToComorbid <- function(icd9codes, baseCodes, icd9codeShort=TRUE, baseCodeSho
 #'   and likely a field "poa" for the present on arrival flag. Additional fields
 #'   are preserved. Merging fields with duplicated visitId will behave according
 #'   to default of \code{mergeFun}.
-#' @param visitId defaults to 'visitId'
 #' @param icd9lk is one of the pre-prepared lookup tables. e.g.
 #'   'comorbidAllInpt','comorbidPoaInpt','comorbidNotPoaInpt' If a character
 #'   string is given (vector of unit length), then the name is used to lookup
 #'   the data in current environment tree. If a data frame is given, this is
 #'   used as the data to lookup co-morbidities for the given
+#' @param visitId defaults to 'visitId'
 #' @param mergeFun is the function used to merge the comorbidity data with the 
 #'   visitId list, using visitId as the key. Can be left as default \code{merge}
 #'   but this has limited ability when identical fields appear, and in how field
@@ -62,18 +61,14 @@ icd9ToComorbid <- function(icd9codes, baseCodes, icd9codeShort=TRUE, baseCodeSho
 #' @param ... additional arguments passed to \code{mergeFun}
 #' @return data.frame with input visit IDs merged with comorbidities
 #' @keywords internal
-lookupComorbiditiesAll <- function(dat, 
-                                   visitId = "visitId", 
-                                   icd9lk = 'comorbidAllInpt',
-                                   mergeFun = merge, 
-                                   ...) {
-  
+lookupComorbidities <- function(dat, 
+                                icd9lk,
+                                visitId = "visitId", 
+                                mergeFun = merge, 
+                                ...) {
   if (is.character(icd9lk)) {
-    
     if (!exists(x=icd9lk, inherits=T)) stop("the icd9 comorbidities pre-generated lookup table '", icd9lk, "' doesn't exist in current environments")
-    
     icd9lk <- get("icd9lk", inherits=T)
-    
   } 
   stopifnot(visitId %in% names(icd9lk), visitId %in% names(dat))
   stopifnot(exists(mergeFun))
@@ -116,12 +111,12 @@ lookupComorbiditiesAll <- function(dat,
 #' @export
 icd9Comorbidities <- function(icd9df, 
                               visitId = "visitId",
-                              icd9Field = "icd9Code", 
+                              icd9Field = "icd9", 
                               icd9Mapping = ahrqComorbid,
                               validateMapping = F,
                               shortMapping = T) {
   
-  stopifnot(visitId %in% icd9df, icd9Field %in% icd9df)
+  stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
   
   if (is.character(icd9Mapping)) {
     stopifnot(exists(icd9Mapping))

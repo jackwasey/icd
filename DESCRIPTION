@@ -22,9 +22,11 @@ Depends:
 Suggests:
     testthat,
     roxygen2,
-    devtools
+    devtools,
+    knitr
 LazyData: true
 LazyDataCompression: xz
 BugReports: mailto://jack@jackwasey.com
 Roxygen: list(wrap=FALSE)
 License: GPL-3
+VignetteBuilder: knitr
