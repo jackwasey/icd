@@ -6,38 +6,52 @@
 #'   appear in the baseCodes. 
 #'   http://www.acep.org/Clinical---Practice-Management/V-and-E-Codes-FAQ/
 #' @seealso comorbidities.
-#' @param icd9codes vector, either decimal (string or floating point) or short
+#' @param icd9Codes vector, either decimal (string or floating point) or short
 #'   form (must be character)
 #' @param baseCodes vector, decimal (but may be string or floating point)
-#' @param icd9codeShort true or false, default to accept short codes
+#' @param icd9CodeShort true or false, default to accept short codes
 #' @param baseCodeShort true or false, default to accept long codes
-#' @return logical vector of which icd9codes match or are subcategory of
+#' @return logical vector of which icd9Codes match or are subcategory of
 #'   baseCodes
 #' @keywords internal
-icd9ToComorbid <- function(icd9codes, baseCodes, icd9codeShort = TRUE, baseCodeShort = TRUE) {
+icd9ToComorbid <- function(icd9Codes, baseCodes, icd9CodeShort = TRUE, baseCodeShort = TRUE) {
   
-  if (!class(icd9codes) %in% c("character","numeric","integer")) stop("icd9ToComorbid expects a character or number vector for the icd9codes to examine, but got: ", class(icd9codes))
-  if (!class(baseCodes) %in% c("character","numeric","integer")) stop("icd9ToComorbid expects a character or number vector for the basecodes,to avoid ambiguity with trailing zeroes, but got: ", class(baseCodes))
-  if (class(icd9codeShort)!='logical') stop("icd9ToComorbid expects logical value for icd9codeShort")
+  if (!class(icd9Codes) %in% c("character","numeric","integer")) 
+    stop("icd9ToComorbid expects a character or number vector for icd9Codes, but got: ", class(icd9Codes))
+  if (!class(baseCodes) %in% c("character","numeric","integer"))
+    stop("icd9ToComorbid expects a character or number vector for the basecodes,
+         to avoid ambiguity with trailing zeroes, but got: ", class(baseCodes))
+  if (class(icd9CodeShort)!='logical') stop("icd9ToComorbid expects logical value for icd9CodeShort")
   if (class(baseCodeShort)!='logical') stop("icd9ToComorbid expects logical value for baseCodeShort")
   
-  if (length(icd9codeShort)>1 )  stop("icd9ToComorbid got vector for icd9CodeShort, expected single TRUE or FALSE value")
-  if (length(baseCodeShort)>1 )  stop("icd9ToComorbid got vector for baseCodeShort, expected single TRUE or FALSE value")
-  if (length(icd9codeShort)==0 )  stop("icd9ToComorbid got empty vector for icd9CodeShort, expected single TRUE or FALSE value")
-  if (length(baseCodeShort)==0 )  stop("icd9ToComorbid got empty vector for baseCodeShort, expected single TRUE or FALSE value")
+  if (length(icd9CodeShort) >  1 ) 
+    stop("icd9ToComorbid got vector for icd9CodeShort, expected single TRUE or FALSE value")
+  if (length(baseCodeShort) >  1 ) 
+    stop("icd9ToComorbid got vector for baseCodeShort, expected single TRUE or FALSE value")
+  if (length(icd9CodeShort) == 0 ) 
+    stop("icd9ToComorbid got empty vector for icd9CodeShort, expected single TRUE or FALSE value")
+  if (length(baseCodeShort) == 0 ) 
+    stop("icd9ToComorbid got empty vector for baseCodeShort, expected single TRUE or FALSE value")
   
   if (length(baseCodes)==0) stop("icd9ToComorbid expects at least one icd9 code to test against")
   
-  warnIfInvalidICD9(icd9codes, callingFunction="icd9ToComorbid-icd9codes", short=icd9codeShort)
+  warnIfInvalidICD9(icd9Codes, callingFunction="icd9ToComorbid-icd9Codes", short=icd9CodeShort)
   #maybe do once, not every loop: stopIfInvalidICD9(baseCodes, callingFunction="icd9ToComorbid-baseCodes", short=baseCodeShort)
   
   # take a regular string of an ICD9 code of format (ABC.zxyz) with or without leading and trailing zeroes.
-  #top level ICD9 code and return T/F if the icd9codes fall within subgroups
-  icd9codes %in% icd9DecimalToShort(
-    c(
-      lapply(baseCodes, FUN=function(x) icd9ExpandBaseCode(icd9=x, short=baseCodeShort)), 
-      recursive=TRUE)
+  #top level ICD9 code and return T/F if the icd9Codes fall within subgroups
+  allBaseCodes <- c(
+    lapply(
+      baseCodes, 
+      FUN=function(x) icd9ExpandBaseCode(icd9=x, short=baseCodeShort)
+    ), 
+    recursive=TRUE
   )
+  # convert to short form to make comparison
+  if (icd9CodeShort == FALSE) icd9Codes <- icd9DecimalToShort(icd9Codes)
+  if (baseCodeShort ==FALSE) allBaseCodes <- icd9DecimalToShort(allBaseCodes)
+  
+  icd9Codes %in% allBaseCodes
 }
 
 #' @title lookup pre-calculated co-morbidities for given list of visit IDs
@@ -73,7 +87,7 @@ lookupComorbidities <- function(dat,
   stopifnot(visitId %in% names(icd9lk), visitId %in% names(dat))
   stopifnot(exists(mergeFun))
   
-  # comorbidAllInpt <- icd9codesToComorbidities(icd9diagInpt, visitId="patcom", icd9Field="i9diag")
+  # comorbidAllInpt <- icd9CodesToComorbidities(icd9diagInpt, visitId="patcom", icd9Field="i9diag")
   
   mp <- do.call(mergeFun, list(x=dat, by.x=visitId, y=get(icd9lk), by.y=visitId, leftOuterJoin=T, ...))
   
@@ -90,7 +104,7 @@ lookupComorbidities <- function(dat,
 #'   long lists of patients, so intended to be used as intermediate step to save
 #'   files like comorbidPoaInpt
 #' @param icd9df data.frame with fields specified by visitId and icd9Code. 
-#'   icd9code is assumed to be a non-decimal 'short' form ICD9 code. There is a 
+#'   icd9Code is assumed to be a non-decimal 'short' form ICD9 code. There is a 
 #'   many to many ratio of icd9:visitId. This table contains multiple visitId 
 #'   rows, with one row per ICD-9 code. Therefore, every ICD-9 code listed is 
 #'   associated with at least one visit ID.
@@ -131,14 +145,17 @@ icd9Comorbidities <- function(icd9df,
     }
   }
   
+  # loop through names of icd9 mapping, and put the results together so each
+  # column is one comorbidity in a data frame. This is much faster with vapply,
+  # and it keeps the logicals instead of making them characters
   i <- cbind(
     icd9df[visitId],
     vapply(
-      X = names(icd9Mapping), # loop through names of icd9 mapping, i.e. one comorbidity at a time
-      FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]])), # way faster with vapply, and it keeps the logicals instead of making them character
+      X = names(icd9Mapping), 
+      FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]])), 
       FUN = function(comorbidity) {
         icd9ToComorbid( 
-          asCharacterNoWarn(icd9df[[icd9Field]]), # drop factor down to character codes #TODO: is this necessary?
+          asCharacterNoWarn(icd9df[[icd9Field]]), # drop factor down to character codes #TODO: is this necessary or desirable?
           icd9Mapping[[comorbidity]] # provide vector of base ICD9 codes for this comorbidity group
         )
       }
@@ -185,7 +202,7 @@ icd9comorbiditiesPoa <- function(icd9df, icd9Mapping, visitId="visitId",
 #'   associated with multiple further name-value pairs, this is presented as a 
 #'   sub-list. This is primarily required because of the obtuse SAS FORMAT data 
 #'   structure: the AHRQ codes are hidden in a sublist of the first item.
-#' @keywords internal
+#' @export
 parseAhrqSas <- function(save=F, path="~/icd9/data") {
   f <- file(system.file("extdata", "comformat2012-2013.txt", package="icd9"), "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # no special encoding?

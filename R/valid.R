@@ -70,7 +70,7 @@ icd9ValidShort <- function(icd9) {
 
 #' @describeIn icd9ValidDecimal
 #' @export
-icd9ValidShortV <- function(icd9) grepl("^[[:space:]]*[Vv](([1-9][[:digit:]])|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", icd9)
+icd9ValidShortV <- function(icd9) grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", icd9)
 
 #' @describeIn icd9ValidDecimal
 #' @export
@@ -91,6 +91,19 @@ icd9ValidDecimalE <- function(icd9) grepl("^[[:space:]]*[Ee][89][[:digit:]]{2}(\
 #' @describeIn icd9ValidDecimal
 #' @export
 icd9ValidDecimalN <- function(icd9) grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", icd9) # not quite right, since it would validate 0.12
+
+#' @title validate an icd9 mapping to comorbidities
+#' @description just takes each item in each vector of the list of vectors and checks validity
+#' @param icd9Mapping named list containing vectors of icd9 codes.
+#' @export
+icd9ValidMappingShort <- function(icd9Mapping) all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names=F))
+#' @describeIn icd9ValidMappingShort
+#' @export
+icd9ValidMappingDecimal <- function(icd9Mapping) all(unlist(lapply(icd9Mapping, FUN = icd9ValidDecimal), use.names=F))
+
+#' @describeIn icd9ValidDecimal
+#' @export
+icd9ValidMappingShort <- function(icd9Mapping) all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names=F))
 
 #' @describeIn icd9ValidDecimal
 #' @export

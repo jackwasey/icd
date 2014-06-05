@@ -1,7 +1,38 @@
 
+# these utility functions are derived from Hmisc and one of my other projects.
+# All functions set for internal use in this package only to avoid namespace
+# conflicts.
+
+
+#' @title encode TRUE as 1, and FALSE as 0
+#' @description when saving data as text files for distribution, printing large amounts of text containing TRUE and FALSE
+#' is inefficient. Convert to binary takes more R memory, but allows more compact output
+#' @param dframe dataframe which may contain logical fields
+#' @return dframe without logical fields
+#' @keywords internal
+logicalToBinary <- function(dframe) {
+  
+  if (class(dframe) != 'data.frame') fstop("logicalToBinary expects a data frame, but got %s", class(dframe))
+  if (any(dim(dframe) == 0)) fstop("got zero in at least one dimension in data frame. %d, %d", dim(dframe)[1], dim(drame)[2])
+  
+  # can condense this code into a one-liner, but this is clearer:
+  logicalFields <- names(dframe)[sapply(dframe,class)=='logical']
+  if (is.na(logicalFields) || length(logicalFields) == 0) return(dframe)
+  
+  #update just the logical fields with integers
+  dframe[,logicalFields] <-
+    vapply(
+      X         = dframe[,logicalFields],
+      FUN       = function(x) ifelse(x,1L,0L),
+      FUN.VALUE = integer(length=dim(dframe)[1])
+    )
+  dframe
+}
+
 #' @title trim whitespace at ends of a line
 #' @param x is a character vector to trim
 #' @return character vector
+#' @keywords internal
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 #' @title return the actual matches from a bracketed regex
@@ -26,6 +57,7 @@ strMultiMatch <- function(pattern, text, ...) # unlist puts the name in the firs
 #' @param x is a character vector to be tested
 #' @param extras is a vector of character strings which are counted as NA values, defaults to '.' and 'NA'
 #' @return logical
+#' @keywords internal
 allIsNumeric <- function(x, extras=c('.','NA')) {
   old <- options(warn=-1)
   on.exit(options(old))
@@ -85,8 +117,8 @@ saveSourceTreeData <- function(varName, path="~/icd9/data") {
   stopifnot(file.exists(path))
   save(list  = varName, 
        envir = parent.frame(), # get from my parent
-       file  = file.path(path, paste0(varName, ".RData"))
+       file  = file.path(path, paste0(varName, ".RData")),
+       compress="XZ"
   )
-       #compress="xz"
 }
 

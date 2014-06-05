@@ -21,7 +21,7 @@ patientData
 
 The comorbidities can be determined as follows:
 <<getcomorbidities>>=
-#icd9Comorbidities(icd9df=patientData)
+icd9Comorbidities(icd9df = patientData)
 @
 
 The following shows the same code with default options written out:
@@ -39,9 +39,9 @@ AHRQ comorbidity data.
 The AHRQ makes an annual classification of ICD-9-CM codes into comorbidities useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
 <<ahrq>>=
-#ahrqComorbid <- parseAhrqSas(save = F)
-#names(ahrqComorbid)[1:10]
-#ahrqComorbid["OBESE"]
+ahrqComorbid <- parseAhrqSas(save = F)
+head(ahrqComorbid)
+ahrqComorbid["OBESE", "DEPRESS"]
 @
 
 

@@ -143,7 +143,7 @@ icd9ExpandRangeShort <- function(start, end) {
   }
   
   out = c() # vector of complete short codes
-  for (major in startMajor %i9m% endMajor) {
+  for (major in startMajor %i9mj% endMajor) {
     #if no minor spec for current major, then expand all
     if ((major %nin% c(startMajor,endMajor)) # current major is not first or last, so expand all children
         || (major == startMajor & startMinor == "") # starting major has no minor, so expand all children
@@ -174,7 +174,7 @@ icd9ExpandRangeShort <- function(start, end) {
 #' @param end, see start.
 #' @return character vector with range inclusive of start and end
 #' @export
-"%i9m%" <- function(start, end) {
+"%i9mj%" <- function(start, end) {
   stopifnot(length(start)==1 && length(end)==1)
   c <- icd9ExtractAlphaNumeric(start)
   d <- icd9ExtractAlphaNumeric(end)
@@ -347,11 +347,7 @@ icd9ShortToDecimal <- function(icd9Short) {
   
   if (class(icd9Short) != 'character') stop('icd9Short must be a character: number values could be ambiguous if converted blindly to character')
   
-  if (any(nchar(icd9Short) < 4)) {
-    warning('%d (out of %d ) icd9 short codes are too short so setting to NA. Min nchar is %d', sum(any(nchar(icd9Short<4))), length(icd9Short), min(nchar(icd9Short)))
-    icd9Short[nchar(icd9Short) < 4 ] <- NA
-  }
-  paste0( substr(icd9Short, 1, 3), ".", substr(icd9Short, 4, 10)) # should only be max of 6 chars...
+  paste( substr(icd9Short, 1, 3), ".", substr(icd9Short, 4, 10), sep="") # should only be max of 6 chars...
 }
 
 #' @title extract major and minor parts of a decimal ICD-9 code
@@ -414,6 +410,22 @@ icd9ZeroPadDecimal <- function(icd9) {
   zeroPaddedDecimal
 }
 
+#' @title add leading zeroes to short-form ICD-9 code
+#' @description Use with care. non-decimal ICD-9 codes with length<5 are often 
+#'   ambiguous. E.g. 100 could be 1.00 10.0 or 100
+#' @param icd9 is a character vector of ICD-9 codes. If fewer than five
+#'   characters is given in a code, then the digits are greedily assigned to
+#'   hundreds, then tens, then units, before the decimal parts. E.g. "10"
+#'   becomes "010", not "0010"
+#' @export
+icd9ZeroPadShort <- function(icd9) {
+  parts <- icd9ExtractPartsShort(icd9)
+  parts[["major"]] <- icd9ZeroPadMajor(parts[["major"]])
+  out <- icd9PartsToShort(parts=parts)
+  out[!icd9ValidShort(icd9)] <- NA # set NA for invalid inputs (may be done downstream?)
+  out
+}
+
 #' @rdname icd9ZeroPadDecimal
 #' @title zero-pad major part of ICD9 code
 #' @description three digit codes are returned unchanged, one and two digit 
@@ -430,11 +442,13 @@ icd9ZeroPadMajor <- function(major) {
   
   numMajor <- asNumericNoWarn(major) # make integers and characters into numeric (double) type
   vOrE <- icd9ValidShortV(major) | icd9ValidShortE(major)
-  isIntMajor <- !vOrE & (numMajor %% 1 ==0)
-  if (any(!vOrE & !isIntMajor, na.rm=T)) stop("if numeric type is given, it must acutally be an integer")
+  isIntMajor <- !vOrE & (numMajor %% 1 < 1e-6) # catch modulo rounding errors
+  if (any(!vOrE & !isIntMajor, na.rm=T)) stop("if numeric type is given, it must acutally be an integer, but I see a floating point")
   out <- rep(x=NA, times=length(major))
-  out[isIntMajor] <- sprintf("%03d", numMajor[isIntMajor]) # will give NAs for V and E codes, which are unhelpfully converted to "NA"
-  out[vOrE] <- trim(major[vOrE])
+  out[isIntMajor & !is.na(isIntMajor)] <- sprintf("%03d", numMajor[isIntMajor & !is.na(isIntMajor)]) # will give NAs for V and E codes, which are unhelpfully converted to "NA"
+  outve <- trim(major[vOrE])
+  outve[nchar(outve) == 2] <- paste(substr(outve, 1, 1), "0", substr(outve, 2, 2), sep="") # if single digit V or E code, then slip in a zero.
+  out[vOrE] <- outve
   out
 }
 
@@ -444,21 +458,29 @@ icd9ZeroPadMajor <- function(major) {
 #'   fine for major or minor.
 #' @param major icd9 major part
 #' @param minor icd9 minor part
+#' @param parts data.frame with major and minor fields. This can be given
+#'   instead of major and minor vectors
 #' @param sep character separator, expected to be "" or "."
-#' @return character vector
+#' @return character vector. Deliberately returns zero-padded major, because
+#'   otherwise we are creating ambiguous codes (even if we know what we mean)
 #' @keywords internal
-icd9PartsRecompose <- function(major, minor, sep) {
-  if (length(major) != length(minor) && length(major) !=1 && length(minor) !=1) stop("major and minor vectors are of non-unit differing lengths. length(major)=%d length(minor)=%d", length(major), length(minor))
+icd9PartsRecompose <- function(major=NULL, minor=NULL, parts=NULL, sep) {
+  if (!is.null(parts)) {
+    stopifnot(is.null(major), is.null(minor)) # enforce parts OR major, minor
+    return(paste(icd9ZeroPadMajor(parts[["major"]]),parts[["minor"]], sep=sep))
+  }
+  #stopifnot(length(major) == length(minor), length(major) !=1, length(minor) !=1) 
+  stopifnot(length(sep) ==1)
   paste(icd9ZeroPadMajor(major), minor, sep=sep)
 }
 
 #' @describeIn icd9PartsRecompose
 #' @export
-icd9PartsToShort <- function(major, minor) icd9PartsRecompose(major=major, minor=minor, sep="")
+icd9PartsToShort <- function(major=NULL, minor=NULL, parts=NULL) icd9PartsRecompose(major=major, minor=minor, parts=parts, sep="")
 
 #' @describeIn icd9PartsRecompose
 #' @export
-icd9PartsToLong <- function(major, minor) icd9PartsRecompose(major=major, minor=minor, sep=".")
+icd9PartsToLong <- function(major=NULL, minor=NULL, parts=NULL) icd9PartsRecompose(major=major, minor=minor, parts=parts, sep=".")
 
 #' @title explain ICD9 codes
 #' @description convert full format (123.45 style) ICD9 codes into the name and description for human review
