@@ -2,7 +2,7 @@ context("test icd9 package")
 
 test_that("wrap up all icd9 tests", {
   
-  set.seed=1441
+  set.seed(1441)
   
   n <- 50000
   np <- round(n/20) # icd9 codes per patients
@@ -223,7 +223,7 @@ test_that("wrap up all icd9 tests", {
     expect_equal(icd9ExtractPartsDecimal("444"), data.frame(major="444", minor="", stringsAsFactors=F))
     expect_equal(icd9ExtractPartsDecimal("444", minorEmpty=NA_character_), data.frame(major="444", minor=NA_character_, stringsAsFactors=F))
     expect_equal(icd9ExtractPartsDecimal("444", minorEmpty=""), data.frame(major="444", minor="", stringsAsFactors=F))
-    expect_equal(icd9ExtractPartsDecimal("12.3", padMajor=T), data.frame(major="012", minor="3", stringsAsFactors=F))
+    expect_equal(icd9ExtractPartsDecimal("12.3", zeroPad=T), data.frame(major="012", minor="3", stringsAsFactors=F))
     expect_equal(icd9ExtractPartsDecimal(c("9.9", "88.88", "777.6")), 
                  data.frame(
                    major=c("009", "088", "777"),
@@ -484,24 +484,73 @@ test_that("wrap up all icd9 tests", {
   
   test_that("running short to decimal conversion before and after expansion of a ICD-9 base codes gives the same result", {
     
-    expect_equal(icd9ShortToDecimal("013"), "013")
-    expect_equal(icd9ShortToDecimal("013", zeroPad=F), "13")
-    expect_equal(icd9ShortToDecimal("013", keepDecimal=T), "013.")
-    expect_equal(icd9ShortToDecimal("013", zeroPad=F, keepDecimal=T), "13.")
-    expect_equal(icd9ShortToDecimal("V13"), "V13")
+    expect_equal(icd9ShortToDecimal("013"), "13")
+    expect_equal(icd9ShortToDecimal("013", zeroPad = T), "013")
+    expect_equal(icd9ShortToDecimal("013", keepLoneDecimal = T), "13.")
+    expect_equal(icd9ShortToDecimal("013", zeroPad = T, keepLoneDecimal = T), "013.")
+    expect_equal(icd9ShortToDecimal("V013"), "V1.3")
+    expect_equal(icd9ShortToDecimal("V013", zeroPad = T), "V01.3")
+    expect_equal(icd9ShortToDecimal("V01", keepLoneDecimal = T), "V1.")
+    expect_equal(icd9ShortToDecimal("V01", zeroPad = T, keepLoneDecimal = T), "V01.")
     
     icd9List <- list(rs=randomShortIcd9, ra=randomSampleAhrq, fi=fewIcd9)
     
     for (i in names(icd9List)) {
       expect_equal(
-        icd9DecimalToShort(icd9ShortToDecimal(icd9List[[i]])),
-        icd9List[[i]],
+        icd9DecimalToShort(icd9ShortToDecimal(icd9List[[i]], zeroPad=T), zeroPad=T),
+        icd9ZeroPadShort(icd9List[[i]]),
         info = paste("in loop:", i)
         )
     }
     
-    expect_equal(icd9ShortToDecimal(icd9DecimalToShort(randomDecimalIcd9)), randomDecimalIcd9)
+    # keep the decimal point just because that is how we created the test data.
+    expect_equal(icd9ShortToDecimal(icd9DecimalToShort(randomDecimalIcd9), keepLoneDecimal=T), randomDecimalIcd9)
+    # test without decimal, too...
+    rd2 <- as.character(as.integer(randomDecimalIcd9))
+    expect_equal(icd9ShortToDecimal(icd9DecimalToShort(rd2), keepLoneDecimal=F), rd2)
     
+  })
+  
+  test_that("strip leading zero from decimal", {
+
+    expect_error(icd9DropZeroFromDecimal("sandwiches"))
+    expect_error(icd9DropZeroFromDecimal("VE123456.789"))
+    
+    expect_equal(icd9DropZeroFromDecimal("1"), "1")
+    expect_equal(icd9DropZeroFromDecimal("01"), "1")
+    expect_equal(icd9DropZeroFromDecimal("001"), "1")
+    expect_equal(icd9DropZeroFromDecimal("1."), "1.")
+    expect_equal(icd9DropZeroFromDecimal("01."), "1.")
+    expect_equal(icd9DropZeroFromDecimal("001."), "1.")
+    expect_equal(icd9DropZeroFromDecimal("12"), "12")
+    expect_equal(icd9DropZeroFromDecimal("012"), "12")
+    expect_equal(icd9DropZeroFromDecimal("12."), "12.")
+    expect_equal(icd9DropZeroFromDecimal("012."), "12.")
+    expect_equal(icd9DropZeroFromDecimal("123"), "123")
+    expect_equal(icd9DropZeroFromDecimal("123."), "123.")
+    expect_equal(icd9DropZeroFromDecimal("1.2"), "1.2")
+    expect_equal(icd9DropZeroFromDecimal("01.2"), "1.2")
+    expect_equal(icd9DropZeroFromDecimal("001.2"), "1.2")
+    expect_equal(icd9DropZeroFromDecimal("12.4"), "12.4")
+    expect_equal(icd9DropZeroFromDecimal("012.4"), "12.4")
+    expect_equal(icd9DropZeroFromDecimal("12.78"), "12.78")
+    expect_equal(icd9DropZeroFromDecimal("012.78"), "12.78")
+    expect_equal(icd9DropZeroFromDecimal("123.9"), "123.9")
+    expect_equal(icd9DropZeroFromDecimal("123.87"), "123.87")
+    expect_equal(icd9DropZeroFromDecimal("V1"), "V1")
+    expect_equal(icd9DropZeroFromDecimal("V01"), "V1")
+    expect_equal(icd9DropZeroFromDecimal("V1."), "V1.")
+    expect_equal(icd9DropZeroFromDecimal("V01."), "V1.")
+    expect_equal(icd9DropZeroFromDecimal("V12"), "V12")
+    expect_equal(icd9DropZeroFromDecimal("V12.3"), "V12.3")
+    expect_equal(icd9DropZeroFromDecimal("V1.2"), "V1.2")
+    expect_equal(icd9DropZeroFromDecimal("V01.2"), "V1.2")
+    expect_equal(icd9DropZeroFromDecimal("V12.78"), "V12.78")
+    expect_equal(icd9DropZeroFromDecimal("E912"), "E912")
+    expect_equal(icd9DropZeroFromDecimal("E912."), "E912.")
+    expect_equal(icd9DropZeroFromDecimal("E912.7"), "E912.7")
+    
+    expect_equal(icd9DropZeroFromDecimal(c("V12.78", " E898.", "02", "034.5")), c("V12.78", "E898.", "2", "34.5"))
   })
   
 })
