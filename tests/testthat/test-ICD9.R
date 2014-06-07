@@ -53,12 +53,13 @@ test_that("wrap up all icd9 tests", {
   
   test_that("icd9ExpandBaseCodeDecimal", {
     #expect_error(icd9ExpandBaseCode(list(c(1,2),"crap"))) # junk
-    expect_error(icd9ExpandBaseCodeDecimal("1234")) # too long major
-    expect_error(icd9ExpandBaseCodeDecimal("V234")) # too long V major
-    expect_error(icd9ExpandBaseCodeDecimal("v101.1")) # too long major
-    expect_error(icd9ExpandBaseCodeDecimal("JACK")) # not number or V format
-    expect_error(icd9ExpandBaseCodeDecimal("123.456")) # too long minor
-    expect_error(icd9ExpandBaseCodeDecimal("9123.456")) # too long major and minor
+    expect_error(icd9ExpandBaseCodeDecimal("1234", validate=T)) # too long major
+    expect_error(icd9ExpandBaseCodeDecimal("V234", validate=T)) # too long V major
+    expect_error(icd9ExpandBaseCodeDecimal("v101.1", validate=T)) # too long major
+    expect_error(icd9ExpandBaseCodeDecimal("e123.45", validate=T)) # wrong in three ways
+    expect_error(icd9ExpandBaseCodeDecimal("JACK", validate=T)) # not number or V format
+    expect_error(icd9ExpandBaseCodeDecimal("123.456", validate=T)) # too long minor
+    expect_error(icd9ExpandBaseCodeDecimal("9123.456", validate=T)) # too long major and minor
     expect_equal(icd9ExpandBaseCodeDecimal("V10.0"), append("V10.0",paste("V10.0",0:9, sep="")))
     expect_equal(toupper(icd9ExpandBaseCodeDecimal("v10.0")), icd9ExpandBaseCodeDecimal("V10.0"))
     expect_equal(icd9ExpandBaseCodeDecimal(" V10.0  "), icd9ExpandBaseCodeDecimal("V10.0"))
@@ -69,10 +70,11 @@ test_that("wrap up all icd9 tests", {
   
   test_that("icd9ExpandBaseCodeShort", {
     #expect_error(icd9ExpandBaseCode(list(c(1,2),"crap"))) # junk
-    expect_error(icd9ExpandBaseCodeShort("123456")) # too long
-    expect_error(icd9ExpandBaseCodeShort(" 09123456  ")) # even longer
-    expect_error(icd9ExpandBaseCodeShort("V12345")) # too long V
-    expect_error(icd9ExpandBaseCodeShort("JACK")) # not number or V or E format
+    expect_error(icd9ExpandBaseCodeShort("123456", validate=T)) # too long
+    expect_error(icd9ExpandBaseCodeShort(" 09123456  ", validate=T)) # even longer
+    expect_error(icd9ExpandBaseCodeShort("V12345", validate=T)) # too long V
+    expect_error(icd9ExpandBaseCodeShort("E987654", validate=T)) # too long E
+    expect_error(icd9ExpandBaseCodeShort("JACK", validate=T)) # not number or V or E format
     expect_equal(icd9ExpandBaseCodeShort("V100"), paste("V100",c("",0:9), sep=""))
     #expect_equal(toupper(icd9ExpandBaseCodeShort("v100")), icd9ExpandBaseCode("V100"))
     expect_equal(icd9ExpandBaseCodeShort(" V100  "), icd9ExpandBaseCodeShort("V100"))
@@ -171,17 +173,17 @@ test_that("wrap up all icd9 tests", {
     expect_error(icd9ToComorbid(""))
     expect_error(icd9ToComorbid(123)) # no numbers, just strings
     expect_error(icd9ToComorbid("salami"))
-    expect_warning(n <- icd9ToComorbid("bratwurst", "123"))
-    expect_equal(n, FALSE)
-    expect_error(icd9ToComorbid("421", "boudin")) # base codes definitely must be valid: so generate errors
+    expect_error(icd9ToComorbid("bratwurst", "123", validate = T))
+    expect_equal(icd9ToComorbid("bratwurst", "123", validate = F), FALSE)
+    expect_error(icd9ToComorbid("421", "boudin")) # base codes definitely must be valid regardless of validate=T (for the input data): so do generate errors
     #expect_error(n <- icd9ToComorbid(c("421","123"), c("123", "V432"))) # invalid V code # automatically validate? TODO
     expect_error(n <- icd9ToComorbid(c("421","123"), c("123", "E"))) # invalid 
     expect_error(n <- icd9ToComorbid(c("421","123"), c("123", "V"))) # invalid 
     expect_equal(icd9ToComorbid(c("421","123"),c("123","V42")), c(F, T))
-    expect_warning(n <- icd9ToComorbid(c("123","V43210"), c("421","123")))
-    expect_equal(n, c(T,F))
-    expect_warning(n <- icd9ToComorbid(c("100.1", "200"), "200")) # not expecting decimals in input data
-    expect_equal(n, c(F,T))
+    expect_error(icd9ToComorbid(c("123","V43210"), c("421","123"), validate = T))
+    expect_equal(icd9ToComorbid(c("123","V43210"), c("421","123"), validate = F), c(T, F))
+    expect_error(icd9ToComorbid(c("100.1", "200"), "200", validate = T)) # not expecting decimals in input data
+    expect_equal(icd9ToComorbid(c("100.1", "200"), "200", validate = F), c(F,T))
     
     expect_identical(icd9ToComorbid(c("2501", "25001", "999"), c("V101","250")), c(T, T, F))
     
@@ -370,11 +372,19 @@ test_that("wrap up all icd9 tests", {
     expect_error(icd9ExpandRangeShort("4019", "4018"))
     expect_error(icd9ExpandRangeShort("402", "401"))
     expect_error(icd9ExpandRangeShort("2", "1"))
-    expect_error(icd9ExpandRangeShort("002", "1"))
+    expect_error(icd9ExpandRangeShort("002", "1", validate=T))
     expect_error(icd9ExpandRangeShort("002", "001"))
     expect_error(icd9ExpandRangeShort("2", "001"))
     expect_error(icd9ExpandRangeShort("4010", "401"))
     
+    expect_equal(icd9ExpandRangeShort("4280", "4280 "), "4280")
+    expect_equal(icd9ExpandRangeShort("4280", " 4280 "), "4280")
+    expect_equal(icd9ExpandRangeShort("4280", "4280 "), "4280")
+    expect_equal(icd9ExpandRangeShort("4280", "  4280"), "4280")
+    expect_equal(icd9ExpandRangeShort("4280", "4280"), "4280")
+    expect_equal(icd9ExpandRangeShort("4280 ", "4280"), "4280")
+    expect_equal(icd9ExpandRangeShort(" 4280", "4280"), "4280")
+    expect_equal(icd9ExpandRangeShort(" 4280 ", "4280"), "4280")
     
     expect_equal( # the range 44100-4419 from the AHRQ found a gap in the code.
       sort(icd9ExpandRangeShort("4410","4412")),
@@ -552,5 +562,28 @@ test_that("wrap up all icd9 tests", {
     
     expect_equal(icd9DropZeroFromDecimal(c("V12.78", " E898.", "02", "034.5")), c("V12.78", "E898.", "2", "34.5"))
   })
+
+  test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
+    
+    ptdf <- icd9Comorbidities(icd9df = patientData, icd9Mapping = ahrqComorbid, visitId = "visitId")
+    
+    expect_equal(names(ptdf), c("visitId", names(ahrqComorbid)))
+    
+    expect_true(all(sapply(names(ahrqComorbid), function(x) class(ptdf[,x])) == "logical"))
+    ptdflogical <- logicalToBinary(ptdf)
+    expect_true(all(sapply(names(ahrqComorbid), function(x) class(ptdflogical[,x])) == "integer"))
+    # do not expect all the rest of patient data to be returned - we aren't
+    # responsible for aggregating other fields by visitId!
+    expect_equal(dim(ptdf), c(length(unique(patientData[["visitId"]])), 1 + length(ahrqComorbid))) 
+    expect_true(all(names(ptdf)        %in% c("visitId", names(ahrqComorbid))))
+    expect_true(all(names(ptdflogical) %in% c("visitId", names(ahrqComorbid))))
+    
+    expect_equal(
+      logicalToBinary(data.frame(a=c("jack","hayley"), b=c(T, F), f=c(T, T))),
+      data.frame(a=c("jack", "hayley"), b=c(1,0), f=c(1,1))
+    )
+      
+    })
   
 })
+

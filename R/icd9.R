@@ -6,18 +6,18 @@
 #'   from expanding "100.00" (no expansion) \code{0.1 == .3/3} is a problem...
 #'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
 #'   
-#' @template icd9-any
+#' @template icd9-decimal
 #' @template validate
 #' @return unsorted vector of ICD9 codes for all subsections of the provided
 #'   code.
-icd9ExpandBaseCodeDecimal <- function(icd9Decimal, validate) {
+icd9ExpandBaseCodeDecimal <- function(icd9Decimal, validate = F) {
   
   if (!is.character(icd9Decimal)) stop('baseCode must be character only to avoid ambiguity')
   
-  if (validate) stopIfInvalidICD9(icd9Decimal, short=F)
+  if (validate) stopIfInvalidICD9(icd9Decimal, short = F)
   
   #vOrE <- grepl(pattern="[VvEe]", x=baseCode)
-  parts <- icd9ExtractPartsDecimal(icd9, minorEmpty="")
+  parts <- icd9ExtractPartsDecimal(icd9Decimal, minorEmpty="")
   out <- c()
   for (r in rownames(parts)) {
     out <- append(out, 
@@ -36,7 +36,7 @@ icd9ExpandBaseCodeDecimal <- function(icd9Decimal, validate) {
 #' @template icd9-short
 #' @template validate
 #' @template short
-#'   short (non-decimal) form
+#' @keywords internal
 icd9ExpandBaseCodeShort <- function(icd9Short, validate=F) {
   if (!is.character(icd9Short)) stop('must have character only input to expand a short basecode to avoid ambiguity')
   
@@ -60,10 +60,12 @@ icd9ExpandBaseCode <- function(icd9, short) {
 }
 
 #' @title sort short-form icd9 codes
-#' @description should work with numeric only, V or E codes.
-#' Note that a numeric sort does not work for ICD-9 codes, since "162" > "1620"
-#' TODO: write tests
-#' @template icd9-any
+#' @description should work with numeric only, V or E codes. Note that a numeric
+#'   sort does not work for ICD-9 codes, since "162" > "1620" TODO: write tests.
+#'   TODO: reply with the actual items given (not trimmed, etc.) TODO: need to
+#'   be able to compare a pair of codes quickly, then use built-in sort. This
+#'   becomes easier when I move to S3 classes for ICD-9.
+#' @template icd9-short
 #' @return sorted vector of ICD-9 codes
 #' @export
 icd9SortShort <- function(icd9Short) {
@@ -101,8 +103,11 @@ icd9SortShort <- function(icd9Short) {
 #' @template icd9-short
 #' @export
 icd9ExpandRangeShort <- function(start, end) {
+  stopifnot(is.character(start), is.character(end))
   stopifnot(length(start)==1 && length(end)==1)
-  if (nchar(start)==nchar(end) && start>end) stop("start is after end time")
+  start <- trim(start)
+  end <- trim(end)
+  if (nchar(start) == nchar(end) && start>end) stop("start is after end time")
   sdf <- icd9ExtractPartsShort(start)
   edf <- icd9ExtractPartsShort(end)
   startMajor <- icd9leadingZeroesMajor(sdf[["major"]]) # zero pad to tolerate entering "1" instead of "001"
@@ -112,10 +117,10 @@ icd9ExpandRangeShort <- function(start, end) {
   
   # use icd9ExtractAlphaNumeric to get just the numbers (ignore V or E), and compare those:
   majorNumsOnly <- as.integer(icd9ExtractAlphaNumeric(c(startMajor, endMajor))[,2])
-  if (!all(icd9SortShort(c(start, end)) == c(start, end))) 
+  if (!all(icd9SortShort(c(start, end)) == trim(c(start, end)))) 
     stop("start is after end")
-  if (!all(icd9SortShort(c(startMajor, endMajor)) == c(startMajor, endMajor))) 
-    stop("start is after end (major part)")
+  #if (!all(icd9SortShort(c(startMajor, endMajor)) == c(startMajor, endMajor))) 
+    #stop("start is after end (major part)")
   
   # deal with special case where start major = start minor
   if (startMajor == endMajor) {
@@ -326,7 +331,7 @@ appendZeroToNine <- function(str) {
 
 #' @title convert between icd9 decimal and short formats
 #' @description converted decimal ICD9 code, e.g. 123.45 to 'short' e.g. 12345 
-#'   non-decimal format, or vice versa
+#'   non-decimal format
 #' @template icd9-decimal
 #' @template leadingZeroes
 #' @return character vector of converted ICD-9 codes
@@ -347,16 +352,18 @@ icd9DecimalToShort <- function(icd9Decimal, leadingZeroes = T) {
   y
 }
 
-#' @describeIn icd9DecimalToShort
+#' @title icd9ShortToDecimal
+#' @description converts ICD-9 'short' form to decimal form
 #' @template icd9-short
 #' @template leadingZeroes
-#' @param keepLoneDecimal logical. Since the presence or absence of a trailing
+#' @param keepLoneDecimal logical. Since the presence or absence of a trailing 
 #'   zero in an ICD-9 code can make a difference, when converting to decimal, we
-#'   have a situation where we do not want to add trailing zeroes, but may wish
-#'   to preserve the decimal point. If this is desired, then set this value to
+#'   have a situation where we do not want to add trailing zeroes, but may wish 
+#'   to preserve the decimal point. If this is desired, then set this value to 
 #'   TRUE.
+#' @template validate
 #' @export
-icd9ShortToDecimal <- function(icd9Short, leadingZeroes = F, keepLoneDecimal = F, validate=T) {
+icd9ShortToDecimal <- function(icd9Short, leadingZeroes = F, keepLoneDecimal = F, validate = F) {
   
   # unclear whether I should validate icd9 codes here at all.
   if (validate) stopifnot(icd9ValidShort(icd9Short))
@@ -383,7 +390,7 @@ icd9ShortToDecimal <- function(icd9Short, leadingZeroes = F, keepLoneDecimal = F
 #'   least in ICD-9 if leadingZeroes is true, then the major part must also be
 #'   character.
 #' @export
-icd9ExtractPartsShort <- function(icd9Short, minorEmpty="") {
+icd9ExtractPartsShort <- function(icd9Short, minorEmpty = "") {
   x <- data.frame(
     major=substr(trim(icd9Short), 0, 3),
     minor=substr(trim(icd9Short), 4, 5),  # probably breaks for E codes
@@ -393,13 +400,16 @@ icd9ExtractPartsShort <- function(icd9Short, minorEmpty="") {
   x
 }
 
-#' @describeIn icd9ExtractPartsShort
-#' @template icd9-short
+#' @title icd9ExtractPartsDecimal
+#' @template icd9-decimal
+#' @template leadingZeroes
+#' @param minorEmpty vector of length one, to be used in place of
+#'   minor part of zero. Defaults to ""
 #' @template validate
 #' @export
-icd9ExtractPartsDecimal <- function(icd9Short, leadingZeroes=T, minorEmpty="", validate=F) {
-  if (validate) icd9Short[!icd9ValidDecimal(icd9Short)] <- NA
-  a <- strsplit(trim(icd9Short), "\\.")
+icd9ExtractPartsDecimal <- function(icd9Decimal, leadingZeroes=T, minorEmpty="", validate=F) {
+  if (validate) icd9Decimal[!icd9ValidDecimal(icd9Decimal)] <- NA
+  a <- strsplit(trim(icd9Decimal), "\\.")
   x <- as.data.frame(
     do.call(rbind, lapply(a, '[', 1:2)),
     stringsAsFactors = F
@@ -419,7 +429,8 @@ icd9leadingZeroesDecimal <- function(icd9Decimal) {
   parts <- icd9ExtractPartsDecimal(icd9Decimal, leadingZeroes=F) # avoid infinite recursion!
   lzdf <- parts
   # now just pad the numeric-only icd9 major parts, and strip whitespace from V and E codes
-  lzdf[icd9ValidDecimalN(icd9),"major"] <- icd9leadingZeroesMajor(parts[icd9ValidDecimalN(icd9),"major"])
+  ivd <- icd9ValidDecimalN(icd9Decimal)
+  lzdf[ivd, "major"] <- icd9leadingZeroesMajor(parts[ivd, "major"])
   # TODO: strip whitespace from V & E?
   lzDecimal <- paste(lzdf$major, lzdf$minor, sep=".")
   # get rid of NA errors, which sprintf insists on converting to "NA". Also "xxx" becomes "xxx.", so drop these, too
@@ -557,17 +568,19 @@ icd9Explain.character <- function(icd9) {
 #' @title read the ICD-9-CM description data as provided by the Center for 
 #'   Medicaid Services.
 #' @description ICD9-CM data unfortunately has no comma separation, so have to 
-#'   pre-process. Note that this canonical data doesn't specify non-diagnostic
+#'   pre-process. Note that this canonical data doesn't specify non-diagnostic 
 #'   higher-level codes, just the specific diagnostic 'child' codes.
 #' @details ideally would get ICD9-CM data zip directly from CMS web page, and 
 #'   extract, but the built-in unzip only extracts the first file in a zip.
 #' @param save logical whether to attempt to save output in package source tree 
 #'   data directory
+#' @param path absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @export
-parseIcd9Cm <- function(save=F, path="~/icd9/data") {
+parseIcd9Cm <- function(save = F, path = "~/icd9/data") {
   f <- file(system.file("extdata","CMS32_DESC_LONG_DX.txt", package='icd9'), "r")
   r <- readLines(f, encoding="latin1")
+  close(f)
   r<-strsplit(r, " ")
   icd9LongCode <- lapply(r, FUN=function(row) row[1])
   icd9LongDesc <- lapply(r, FUN=function(row) paste(row[-c(1,2)], collapse=" "))

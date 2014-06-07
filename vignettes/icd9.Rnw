@@ -1,3 +1,6 @@
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{}
+
 \documentclass{article}
 
 \begin{document}
@@ -23,6 +26,7 @@ patientData
 
 The comorbidities can be determined as follows:
 <<getcomorbidities, eval=TRUE>>=
+class(icd9Comorbidities(icd9df = patientData))
 logicalToBinary(icd9Comorbidities(icd9df = patientData))
 @
 

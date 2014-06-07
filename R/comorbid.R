@@ -6,48 +6,52 @@
 #'   appear in the icd9Reference. 
 #'   http://www.acep.org/Clinical---Practice-Management/V-and-E-Codes-FAQ/
 #' @seealso comorbidities.
-#' @templateVar icd9AnyName icd9,icd9Reference
+#' @templateVar icd9AnyName "icd9,icd9Reference"
 #' @template icd9-any
 #' @template short
-#' @param baseCodeShort logical, see argument \code{short}
+#' @template validate
+#' @param shortReference logical, see argument \code{short}
 #' @return logical vector of which icd9 match or are subcategory of
 #'   icd9Reference
 #' @keywords internal
-icd9ToComorbid <- function(icd9, icd9Reference, short = TRUE, baseCodeShort = TRUE) {
+icd9ToComorbid <- function(icd9, icd9Reference, short = TRUE, shortReference = TRUE, validate = FALSE, validateReference = TRUE) {
   
   if (!class(icd9) %in% c("character", "numeric", "integer")) 
     stop("icd9ToComorbid expects a character or number vector for icd9, but got: ", class(icd9))
   if (!class(icd9Reference) %in% c("character", "numeric", "integer"))
     stop("icd9ToComorbid expects a character or number vector for the basecodes,
          to avoid ambiguity with trailing zeroes, but got: ", class(icd9Reference))
-  stopifnot(class(short) == 'logical', class(baseCodeShort)=="logical")
+  stopifnot(class(short) == 'logical', class(shortReference) == "logical")
   
   if (length(short) >  1 ) 
     stop("icd9ToComorbid got vector for short, expected single TRUE or FALSE value")
-  if (length(baseCodeShort) >  1 ) 
-    stop("icd9ToComorbid got vector for baseCodeShort, expected single TRUE or FALSE value")
+  if (length(shortReference) >  1 ) 
+    stop("icd9ToComorbid got vector for shortReference, expected single TRUE or FALSE value")
   if (length(short) == 0 ) 
     stop("icd9ToComorbid got empty vector for short, expected single TRUE or FALSE value")
-  if (length(baseCodeShort) == 0 ) 
-    stop("icd9ToComorbid got empty vector for baseCodeShort, expected single TRUE or FALSE value")
+  if (length(shortReference) == 0 ) 
+    stop("icd9ToComorbid got empty vector for shortReference, expected single TRUE or FALSE value")
   
-  if (length(icd9Reference)==0) stop("icd9ToComorbid expects at least one icd9 code to test against")
+  if (length(icd9Reference) == 0) stop("icd9ToComorbid expects at least one icd9 code to test against")
   
-  warnIfInvalidICD9(icd9, callingFunction="icd9ToComorbid-icd9", short=short)
-  #maybe do once, not every loop: stopIfInvalidICD9(icd9Reference, callingFunction="icd9ToComorbid-icd9Reference", short=baseCodeShort)
+  if (validate) stopIfInvalidICD9(icd9, callingFunction = "icd9ToComorbid-icd9", short = short)
+  if (validateReference) stopIfInvalidICD9(icd9Reference, callingFunction = "icd9ToComorbid-icd9", short = shortReference)
   
-  # take a regular string of an ICD9 code of format (ABC.zxyz) with or without leading and trailing zeroes.
-  #top level ICD9 code and return T/F if the icd9 fall within subgroups
+  #maybe do once, not every loop: stopIfInvalidICD9. ALternatively, if memoise is used, we can validate 'every' time.
+  
+  #take a regular string of an ICD9 code of format (ABC.zxyz) with or without
+  #leading and trailing zeroes. top level ICD9 code and return T/F if the icd9
+  #fall within subgroups
   allBaseCodes <- c(
     lapply(
       icd9Reference, 
-      FUN=function(x) icd9ExpandBaseCode(icd9=x, short=baseCodeShort)
+      FUN = function(x) icd9ExpandBaseCode(icd9 = x, short = shortReference)
     ), 
-    recursive=TRUE
+    recursive = TRUE
   )
   # convert to short form to make comparison
   if (short == FALSE) icd9 <- icd9DecimalToShort(icd9)
-  if (baseCodeShort ==FALSE) allBaseCodes <- icd9DecimalToShort(allBaseCodes)
+  if (shortReference == FALSE) allBaseCodes <- icd9DecimalToShort(allBaseCodes)
   
   icd9 %in% allBaseCodes
 }
@@ -79,19 +83,19 @@ lookupComorbidities <- function(dat,
                                 mergeFun = merge, 
                                 ...) {
   if (is.character(icd9lk)) {
-    if (!exists(x=icd9lk, inherits=T)) stop("the icd9 comorbidities pre-generated lookup table '", icd9lk, "' doesn't exist in current environments")
+    if (!exists(x = icd9lk, inherits=T)) stop("the icd9 comorbidities pre-generated lookup table '", icd9lk, "' doesn't exist in current environments")
     icd9lk <- get("icd9lk", inherits=T)
   } 
   stopifnot(visitId %in% names(icd9lk), visitId %in% names(dat))
   stopifnot(exists(mergeFun))
   
-  # comorbidAllInpt <- icd9CodesToComorbidities(icd9diagInpt, visitId="patcom", icd9Field="i9diag")
-  
   mp <- do.call(mergeFun, list(x=dat, by.x=visitId, y=get(icd9lk), by.y=visitId, leftOuterJoin=T, ...))
   
-  # update just the new logical rows replacing NA with FALSE. This happens when a patient has no comorbidities.
+  # update just the new logical rows replacing NA with FALSE. This happens when
+  # a patient has no comorbidities.
   comorbidityNames <- names(get(icd9lk))
-  comorbidityNames <- comorbidityNames[comorbidityNames != visitId] # select only the logical fields, not the patcom field
+  # select only the logical fields, not the patcom field
+  comorbidityNames <- comorbidityNames[comorbidityNames != visitId] 
   mp[, comorbidityNames] <- mp[, comorbidityNames] & !is.na(mp[, comorbidityNames])
   mp
 }
@@ -153,13 +157,15 @@ icd9Comorbidities <- function(icd9df,
       FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]])), 
       FUN = function(comorbidity) {
         icd9ToComorbid( 
-          asCharacterNoWarn(icd9df[[icd9Field]]), # drop factor down to character codes #TODO: is this necessary or desirable?
-          icd9Mapping[[comorbidity]] # provide vector of base ICD9 codes for this comorbidity group
+          # drop factor down to character codes #TODO: is this necessary or desirable?
+          asCharacterNoWarn(icd9df[[icd9Field]]), 
+          # provide vector of base ICD9 codes for this comorbidity group
+          icd9Mapping[[comorbidity]] 
         )
       }
     )
   )
-  ag <- aggregate( x=i[,-which(names(i)==visitId)], by=list(i[[visitId]]), FUN = any, simplify=F)
+  ag <- aggregate( x=i[,-which(names(i)==visitId)], by=list(i[[visitId]]), FUN = any, simplify=T)
   names(ag)[1] <- visitId
   ag
 }
@@ -173,19 +179,19 @@ icd9Comorbidities <- function(icd9df,
 #'   definitely +ve and coded as "Y". Negating one set won't give the other set
 #'   unless all codes were either Y or N. #describeIn icd9Comorbidities
 #' @export
-icd9comorbiditiesNotPoa <- function(icd9df, icd9Mapping, visitId="visitId",
+icd9ComorbiditiesNotPoa <- function(icd9df, icd9Mapping, visitId="visitId",
                                     icd9Field="icd9Code", poaField="poa") {
   stopifnot(poaField %in% names(icd9df))
-  icd9comorbidities(icd9df[ is.na(icd9df[[poaField]]) | icd9df[[poaField]] != "N",],
+  icd9Comorbidities(icd9df[ is.na(icd9df[[poaField]]) | icd9df[[poaField]] != "N",],
                     visitId=visitId, icd9Field=icd9Field, icd9Mapping=icd9Mapping)
 }
 
 #' @rdname icd9ToComorbidities
 #' @export
-icd9comorbiditiesPoa <- function(icd9df, icd9Mapping, visitId="visitId", 
+icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId="visitId", 
                                  icd9Field="icd9Code", poaField="poa") {
   stopifnot(poaField %in% names(icd9df))
-  icd9comorbidities(icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "Y",],
+  icd9Comorbidities(icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "Y",],
                     visitId=visitId, icd9Field=icd9Field, icd9Mapping=icd9Mapping)
 }
 
@@ -203,44 +209,53 @@ icd9comorbiditiesPoa <- function(icd9df, icd9Mapping, visitId="visitId",
 #'   sub-list. This is primarily required because of the obtuse SAS FORMAT data 
 #'   structure: the AHRQ codes are hidden in a sublist of the first item.
 #' @export
-parseAhrqSas <- function(save=F, path="~/icd9/data") {
-  f <- file(system.file("extdata", "comformat2012-2013.txt", package="icd9"), "r")
+parseAhrqSas <- function(save = F, path="~/icd9/data") {
+  f <- file(system.file("extdata", "comformat2012-2013.txt", package = "icd9"), "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # no special encoding?
+  close(f)
   
   ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
-  # Boom. The remainder is DRG stuff.
+  # Boom. The remainder of the AHRQ SAS input file consists of DRG definitions (TODO).
   
   ahrqComorbid <- list()
   
   for (cmd in names(ahrqComorbidWork)) {
-    #flog.info("working on %s", cmd)
-    somePairs <- strsplit(x=ahrqComorbidWork[[cmd]], split="-")
-    #flog.debug("got these values and ranges:", somePairs, capture=T)
-    out <- as.list(somePairs[lapply(somePairs, length) == 1]) # non-range values just go on list
+    somePairs <- strsplit(x = ahrqComorbidWork[[cmd]], split = "-")
+    # non-range values just go on list
+    out <- as.list(somePairs[lapply(somePairs, length) == 1])
     thePairs <- somePairs[lapply(somePairs, length) == 2]
-    #flog.debug("got these ranges:", thePairs, capture=T)
-    out <- append(out, as.list(lapply(thePairs, function(x) icd9ExpandRangeShort(x[1], x[2]))))
+    out <- append(out, lapply(thePairs, function(x) icd9ExpandRangeShort(x[1], x[2])))
     # update ahrqComorbid with full range of icd9 codes:
     ahrqComorbid[[cmd]] <- unlist(out)
   }
   
-  # drop this superfluous finale which allocates any other ICD-9 code to the "Other" group
+  # drop this superfluous finale which allocates any other ICD-9 code to the
+  # "Other" group
   ahrqComorbid[[" "]] <- NULL
   
   # todo: save/return the DRG mappings.
   
-  # save the data in the development tree, so the package user doesn't need to decode it themselves.
+  # save the data in the development tree, so the package user doesn't need to
+  # decode it themselves.
   if (save) saveSourceTreeData("ahrqComorbid", path = path)
   
   invisible(ahrqComorbid)
 }
 
-# TODO: function to extract these standard ICD-9 groupings, not focussed on co-morbidities, but useful for classification
-#ahrq.dx <- read.csv(file=system.file("extdata", "ccs_multi_dx_tool_2013.csv", package="icd9"), quote="'\"")
-#ahrq.pr <- read.csv(file=system.file("extdata", "ccs_multi_pr_tool_2014.csv", package="icd9"), quote="'\"")
+#TODO: function to extract these standard ICD-9 groupings, not focussed on
+#co-morbidities, but useful for classification ahrq.dx <-
+# read.csv(file=system.file(
+#   "extdata", 
+#   "ccs_multi_dx_tool_2013.csv", 
+#   package="icd9"), quote="'\"")
+# ahrq.pr <- read.csv(file=system.file(
+#   "extdata",
+#   "ccs_multi_pr_tool_2014.csv",
+#   package="icd9"), quote="'\"")
 
-# all fields suitable for 'factor' class, except ICD.9.CM.CODE, which has no repeated values.
-#ahrq.dx[["ICD.9.CM.CODE"]] <- asCharacterNoWarn(ahrq.dx[["ICD.9.CM.CODE"]])
+#all fields suitable for 'factor' class, except ICD.9.CM.CODE, which has no
+#repeated values. 
+# ahrq.dx[["ICD.9.CM.CODE"]] <- asCharacterNoWarn(ahrq.dx[["ICD.9.CM.CODE"]])
 
 # now work on groupings:
 #ag<-aggregate(ICD.9.CM.CODE ~ CCS.LVL.1.LABEL, data=ahrq.dx, FUN=paste)

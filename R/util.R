@@ -7,13 +7,14 @@
 #' @title encode TRUE as 1, and FALSE as 0
 #' @description when saving data as text files for distribution, printing large amounts of text containing TRUE and FALSE
 #' is inefficient. Convert to binary takes more R memory, but allows more compact output
+#' TODO: test
 #' @param dframe dataframe which may contain logical fields
 #' @return dframe without logical fields
 #' @export
 logicalToBinary <- function(dframe) {
   
-  if (class(dframe) != 'data.frame') fstop("logicalToBinary expects a data frame, but got %s", class(dframe))
-  if (any(dim(dframe) == 0)) fstop("got zero in at least one dimension in data frame. %d, %d", dim(dframe)[1], dim(drame)[2])
+  if (class(dframe) != 'data.frame') stop("logicalToBinary expects a data frame, but got %s", class(dframe))
+  if (any(dim(dframe) == 0)) stop("got zero in at least one dimension in data frame. %d, %d", dim(dframe)[1], dim(dframe)[2])
   
   # can condense this code into a one-liner, but this is clearer:
   logicalFields <- names(dframe)[sapply(dframe,class)=='logical']
@@ -118,7 +119,7 @@ saveSourceTreeData <- function(varName, path="~/icd9/data") {
   save(list  = varName, 
        envir = parent.frame(), # get from my parent
        file  = file.path(path, paste0(varName, ".RData")),
-       compress="XZ"
+       compress="xz"
   )
 }
 
