@@ -223,7 +223,7 @@ test_that("wrap up all icd9 tests", {
     expect_equal(icd9ExtractPartsDecimal("444"), data.frame(major="444", minor="", stringsAsFactors=F))
     expect_equal(icd9ExtractPartsDecimal("444", minorEmpty=NA_character_), data.frame(major="444", minor=NA_character_, stringsAsFactors=F))
     expect_equal(icd9ExtractPartsDecimal("444", minorEmpty=""), data.frame(major="444", minor="", stringsAsFactors=F))
-    expect_equal(icd9ExtractPartsDecimal("12.3", zeroPad=T), data.frame(major="012", minor="3", stringsAsFactors=F))
+    expect_equal(icd9ExtractPartsDecimal("12.3", leadingZeroes=T), data.frame(major="012", minor="3", stringsAsFactors=F))
     expect_equal(icd9ExtractPartsDecimal(c("9.9", "88.88", "777.6")), 
                  data.frame(
                    major=c("009", "088", "777"),
@@ -307,51 +307,51 @@ test_that("wrap up all icd9 tests", {
   
   test_that("zero pad decimal", {
     
-    expect_equal(icd9ZeroPadDecimal("1"), "001")
-    expect_equal(icd9ZeroPadDecimal("01"), "001")
-    expect_equal(icd9ZeroPadDecimal(" 01 "), "001")
-    expect_equal(icd9ZeroPadDecimal("1.1"), "001.1")
-    expect_equal(icd9ZeroPadDecimal("1.99"), "001.99")
-    expect_equal(icd9ZeroPadDecimal("22"), "022")
-    expect_equal(icd9ZeroPadDecimal(" 22.34      "), "022.34")
-    expect_equal(icd9ZeroPadDecimal("V1"), "V1")
-    expect_equal(icd9ZeroPadDecimal(" V1 "), "V1")
-    expect_equal(icd9ZeroPadDecimal("V1.1"), "V1.1")
-    expect_equal(icd9ZeroPadDecimal("V1.99"), "V1.99")
-    expect_equal(icd9ZeroPadDecimal("V22"), "V22")
-    expect_equal(icd9ZeroPadDecimal(" V22.34      "), "V22.34")
-    expect_equal(icd9ZeroPadDecimal("333"), "333")
-    expect_equal(icd9ZeroPadDecimal("333.99"), "333.99")
-    expect_equal(icd9ZeroPadDecimal("333.1 "), "333.1")
-    expect_equal(icd9ZeroPadDecimal(
+    expect_equal(icd9leadingZeroesDecimal("1"), "001")
+    expect_equal(icd9leadingZeroesDecimal("01"), "001")
+    expect_equal(icd9leadingZeroesDecimal(" 01 "), "001")
+    expect_equal(icd9leadingZeroesDecimal("1.1"), "001.1")
+    expect_equal(icd9leadingZeroesDecimal("1.99"), "001.99")
+    expect_equal(icd9leadingZeroesDecimal("22"), "022")
+    expect_equal(icd9leadingZeroesDecimal(" 22.34      "), "022.34")
+    expect_equal(icd9leadingZeroesDecimal("V1"), "V1")
+    expect_equal(icd9leadingZeroesDecimal(" V1 "), "V1")
+    expect_equal(icd9leadingZeroesDecimal("V1.1"), "V1.1")
+    expect_equal(icd9leadingZeroesDecimal("V1.99"), "V1.99")
+    expect_equal(icd9leadingZeroesDecimal("V22"), "V22")
+    expect_equal(icd9leadingZeroesDecimal(" V22.34      "), "V22.34")
+    expect_equal(icd9leadingZeroesDecimal("333"), "333")
+    expect_equal(icd9leadingZeroesDecimal("333.99"), "333.99")
+    expect_equal(icd9leadingZeroesDecimal("333.1 "), "333.1")
+    expect_equal(icd9leadingZeroesDecimal(
       c("01","1.99 ", "22.34", "333", "999.00")), 
       c("001","001.99","022.34","333","999.00"))
-    expect_equal(icd9ZeroPadDecimal(NA_character_), NA_character_)
+    expect_equal(icd9leadingZeroesDecimal(NA_character_), NA_character_)
     
   })
   
   test_that("zero pad short", {
     
-    expect_error(icd9ZeroPadShort("1.1"))
+    expect_error(icd9leadingZeroesShort("1.1"))
     
-    expect_equal(icd9ZeroPadShort("1"), "001")
-    expect_equal(icd9ZeroPadShort("01"), "001")
-    expect_equal(icd9ZeroPadShort("22"), "022")
-    expect_equal(icd9ZeroPadShort(" 01 "), "001")
-    expect_equal(icd9ZeroPadShort("199"), "199")
-    expect_equal(icd9ZeroPadShort(" 02234      "), "02234")
-    expect_equal(icd9ZeroPadShort("V1"), "V01")
-    expect_equal(icd9ZeroPadShort(" V1 "), "V01")
-    expect_equal(icd9ZeroPadShort("V11"), "V11")
-    expect_equal(icd9ZeroPadShort("V012"), "V012")
-    expect_equal(icd9ZeroPadShort("V199"), "V199")
-    expect_equal(icd9ZeroPadShort(" V2234      "), "V2234")
-    expect_equal(icd9ZeroPadShort("3331 "), "3331")
-    expect_equal(icd9ZeroPadShort(
+    expect_equal(icd9leadingZeroesShort("1"), "001")
+    expect_equal(icd9leadingZeroesShort("01"), "001")
+    expect_equal(icd9leadingZeroesShort("22"), "022")
+    expect_equal(icd9leadingZeroesShort(" 01 "), "001")
+    expect_equal(icd9leadingZeroesShort("199"), "199")
+    expect_equal(icd9leadingZeroesShort(" 02234      "), "02234")
+    expect_equal(icd9leadingZeroesShort("V1"), "V01")
+    expect_equal(icd9leadingZeroesShort(" V1 "), "V01")
+    expect_equal(icd9leadingZeroesShort("V11"), "V11")
+    expect_equal(icd9leadingZeroesShort("V012"), "V012")
+    expect_equal(icd9leadingZeroesShort("V199"), "V199")
+    expect_equal(icd9leadingZeroesShort(" V2234      "), "V2234")
+    expect_equal(icd9leadingZeroesShort("3331 "), "3331")
+    expect_equal(icd9leadingZeroesShort(
       c("9","01","0199 ", "02234", "333", "99900")), 
       c("009","001","0199","02234","333","99900"))
-    expect_equal(icd9ZeroPadShort(NA_character_), NA_character_)
-    expect_equal(icd9ZeroPadShort("V12.34"), NA_character_)
+    expect_equal(icd9leadingZeroesShort(NA_character_), NA_character_)
+    expect_equal(icd9leadingZeroesShort("V12.34"), NA_character_)
     
   })
   
@@ -455,15 +455,15 @@ test_that("wrap up all icd9 tests", {
   })
   
   test_that("icd9 parts to short form", {
-    expect_equal(icd9ZeroPadMajor(1L),"001")
-    expect_equal(icd9ZeroPadMajor(10L),"010")
-    expect_equal(icd9ZeroPadMajor(999L),"999")
-    expect_error(icd9ZeroPadMajor(10.1))
-    #expect_equal(icd9ZeroPadMajor("V1"), "V01") # TODO
-    expect_equal(icd9ZeroPadMajor(" V10"), "V10")
-    expect_equal(icd9ZeroPadMajor("V2"), "V02")
-    expect_equal(icd9ZeroPadMajor("V03"), "V03")
-    expect_equal(icd9ZeroPadMajor(c("10","V05")), c("010","V05"))
+    expect_equal(icd9leadingZeroesMajor(1L),"001")
+    expect_equal(icd9leadingZeroesMajor(10L),"010")
+    expect_equal(icd9leadingZeroesMajor(999L),"999")
+    expect_error(icd9leadingZeroesMajor(10.1))
+    #expect_equal(icd9leadingZeroesMajor("V1"), "V01") # TODO
+    expect_equal(icd9leadingZeroesMajor(" V10"), "V10")
+    expect_equal(icd9leadingZeroesMajor("V2"), "V02")
+    expect_equal(icd9leadingZeroesMajor("V03"), "V03")
+    expect_equal(icd9leadingZeroesMajor(c("10","V05")), c("010","V05"))
     expect_equal(icd9PartsToShort(10L,"20"), "01020")
     expect_equal(icd9PartsToShort("V10",c("0","1")), c("V100", "V101"))
   })
@@ -485,20 +485,20 @@ test_that("wrap up all icd9 tests", {
   test_that("running short to decimal conversion before and after expansion of a ICD-9 base codes gives the same result", {
     
     expect_equal(icd9ShortToDecimal("013"), "13")
-    expect_equal(icd9ShortToDecimal("013", zeroPad = T), "013")
+    expect_equal(icd9ShortToDecimal("013", leadingZeroes = T), "013")
     expect_equal(icd9ShortToDecimal("013", keepLoneDecimal = T), "13.")
-    expect_equal(icd9ShortToDecimal("013", zeroPad = T, keepLoneDecimal = T), "013.")
+    expect_equal(icd9ShortToDecimal("013", leadingZeroes = T, keepLoneDecimal = T), "013.")
     expect_equal(icd9ShortToDecimal("V013"), "V1.3")
-    expect_equal(icd9ShortToDecimal("V013", zeroPad = T), "V01.3")
+    expect_equal(icd9ShortToDecimal("V013", leadingZeroes = T), "V01.3")
     expect_equal(icd9ShortToDecimal("V01", keepLoneDecimal = T), "V1.")
-    expect_equal(icd9ShortToDecimal("V01", zeroPad = T, keepLoneDecimal = T), "V01.")
+    expect_equal(icd9ShortToDecimal("V01", leadingZeroes = T, keepLoneDecimal = T), "V01.")
     
     icd9List <- list(rs=randomShortIcd9, ra=randomSampleAhrq, fi=fewIcd9)
     
     for (i in names(icd9List)) {
       expect_equal(
-        icd9DecimalToShort(icd9ShortToDecimal(icd9List[[i]], zeroPad=T), zeroPad=T),
-        icd9ZeroPadShort(icd9List[[i]]),
+        icd9DecimalToShort(icd9ShortToDecimal(icd9List[[i]], leadingZeroes=T), leadingZeroes=T),
+        icd9leadingZeroesShort(icd9List[[i]]),
         info = paste("in loop:", i)
         )
     }

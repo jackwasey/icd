@@ -1,10 +1,10 @@
 
 #' @title stop or warn, then  log if any of given ICD9 codes is invalid
-#' @param icd9codes vector of character or numeric type containing icd9 codes
+#' @template icd9
+#' @template short
 #' @param callingFunction not implemented: ideally look at call stack and indicate who called here.
-#' @param short is logical, set TRUE if icd9codes are short form
 #' @export
-stopIfInvalidICD9 <- function(icd9codes, callingFunction="", short) {
+stopIfInvalidICD9 <- function(icd9codes, short, callingFunction="") {
   if (short && any(!icd9ValidShort(icd9codes)))
     stop("Invalid short-form ICD9 codes found: ", getInvalidShortICD9(icd9codes))
   if (!short && any(!icd9ValidDecimal(icd9codes))) 
@@ -13,7 +13,7 @@ stopIfInvalidICD9 <- function(icd9codes, callingFunction="", short) {
 
 #' @describeIn stopIfInvalidICD9
 #' @export
-warnIfInvalidICD9 <- function(icd9codes, callingFunction="", short) {
+warnIfInvalidICD9 <- function(icd9codes, short, callingFunction="") {
   if (short && any(!icd9ValidShort(icd9codes)))
     warning("Invalid short-form ICD9 codes found: ", getInvalidShortICD9(icd9codes))
   if (!short && any(!icd9ValidDecimal(icd9codes))) 
@@ -27,7 +27,7 @@ warnIfInvalidICD9 <- function(icd9codes, callingFunction="", short) {
 #' in the Hopkins database. The numbers are written as characters so the
 #' essential preceding zeroes are included. This means a non-decimal ICD9 code,
 #' like 1000, is ambiguous and should make an error.
-#' @param icd9 vector of character or numeric icd9 codes, in decimal format
+#' @template icd9
 #' @return logical vector with T or F for each icd9 code provided according to validity
 #' @seealso http://www.stata.com/users/wgould/icd9/icd9.hlp and http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes
 #' @export
@@ -94,9 +94,10 @@ icd9ValidDecimalN <- function(icd9) grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit
 
 #' @title validate an icd9 mapping to comorbidities
 #' @description just takes each item in each vector of the list of vectors and checks validity
-#' @param icd9Mapping named list containing vectors of icd9 codes.
+#' @template mapping
 #' @export
 icd9ValidMappingShort <- function(icd9Mapping) all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names=F))
+
 #' @describeIn icd9ValidMappingShort
 #' @export
 icd9ValidMappingDecimal <- function(icd9Mapping) all(unlist(lapply(icd9Mapping, FUN = icd9ValidDecimal), use.names=F))

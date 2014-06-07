@@ -13,35 +13,37 @@ patientData <- data.frame(
 )
 @
 
+\section{icd9}
+
 This package is designed to be used with a variety of input data, including multiple formats of ICD-9 codes, but some assumptions are made. When calcuating which patients have which comorbidities, the input data is structured as follows:
 
-<<begin>>=
+<<begin, eval=TRUE>>=
 patientData
 @
 
 The comorbidities can be determined as follows:
-<<getcomorbidities>>=
-icd9Comorbidities(icd9df = patientData)
+<<getcomorbidities, eval=TRUE>>=
+logicalToBinary(icd9Comorbidities(icd9df = patientData))
 @
 
 The following shows the same code with default options written out:
 <<echo=TRUE,eval=FALSE>>=
-icd9Comorbidities(icd9df=patientData, 
-                  visitId="visitId",
-                  icd9Field="icd9",
-                  icd9Mapping=ahrqComorbid, 
-                  validateMapping=F, 
-                  shortMapping=T)
+icd9Comorbidities(icd9df = patientData, 
+                  visitId = "visitId",
+                  icd9Field = "icd9",
+                  icd9Mapping = ahrqComorbid, 
+                  validateMapping = F, 
+                  shortMapping = T)
 @
 
-AHRQ comorbidity data.
+\subsection{AHRQ comorbidity classification}
 
 The AHRQ makes an annual classification of ICD-9-CM codes into comorbidities useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
 <<ahrq>>=
 ahrqComorbid <- parseAhrqSas(save = F)
-head(ahrqComorbid)
-ahrqComorbid["OBESE", "DEPRESS"]
+summary(ahrqComorbid)
+ahrqComorbid[c("OBESE", "DEPRESS")]
 @
 
 

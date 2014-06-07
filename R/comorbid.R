@@ -1,57 +1,55 @@
 #' @rdname icd9ToComorbidities
 #' @title match ICD9 codes
 #' @description This does the hard work of finding whether a given icd9 code
-#'   falls under a group of reference ICD9 codes. baseCodes is expanded to cover
+#'   falls under a group of reference ICD9 codes. icd9Reference is expanded to cover
 #'   all possible subgroups, then we look for matches where the given ICD9 codes
-#'   appear in the baseCodes. 
+#'   appear in the icd9Reference. 
 #'   http://www.acep.org/Clinical---Practice-Management/V-and-E-Codes-FAQ/
 #' @seealso comorbidities.
-#' @param icd9Codes vector, either decimal (string or floating point) or short
-#'   form (must be character)
-#' @param baseCodes vector, decimal (but may be string or floating point)
-#' @param icd9CodeShort true or false, default to accept short codes
-#' @param baseCodeShort true or false, default to accept long codes
-#' @return logical vector of which icd9Codes match or are subcategory of
-#'   baseCodes
+#' @templateVar icd9AnyName icd9,icd9Reference
+#' @template icd9-any
+#' @template short
+#' @param baseCodeShort logical, see argument \code{short}
+#' @return logical vector of which icd9 match or are subcategory of
+#'   icd9Reference
 #' @keywords internal
-icd9ToComorbid <- function(icd9Codes, baseCodes, icd9CodeShort = TRUE, baseCodeShort = TRUE) {
+icd9ToComorbid <- function(icd9, icd9Reference, short = TRUE, baseCodeShort = TRUE) {
   
-  if (!class(icd9Codes) %in% c("character","numeric","integer")) 
-    stop("icd9ToComorbid expects a character or number vector for icd9Codes, but got: ", class(icd9Codes))
-  if (!class(baseCodes) %in% c("character","numeric","integer"))
+  if (!class(icd9) %in% c("character", "numeric", "integer")) 
+    stop("icd9ToComorbid expects a character or number vector for icd9, but got: ", class(icd9))
+  if (!class(icd9Reference) %in% c("character", "numeric", "integer"))
     stop("icd9ToComorbid expects a character or number vector for the basecodes,
-         to avoid ambiguity with trailing zeroes, but got: ", class(baseCodes))
-  if (class(icd9CodeShort)!='logical') stop("icd9ToComorbid expects logical value for icd9CodeShort")
-  if (class(baseCodeShort)!='logical') stop("icd9ToComorbid expects logical value for baseCodeShort")
+         to avoid ambiguity with trailing zeroes, but got: ", class(icd9Reference))
+  stopifnot(class(short) == 'logical', class(baseCodeShort)=="logical")
   
-  if (length(icd9CodeShort) >  1 ) 
-    stop("icd9ToComorbid got vector for icd9CodeShort, expected single TRUE or FALSE value")
+  if (length(short) >  1 ) 
+    stop("icd9ToComorbid got vector for short, expected single TRUE or FALSE value")
   if (length(baseCodeShort) >  1 ) 
     stop("icd9ToComorbid got vector for baseCodeShort, expected single TRUE or FALSE value")
-  if (length(icd9CodeShort) == 0 ) 
-    stop("icd9ToComorbid got empty vector for icd9CodeShort, expected single TRUE or FALSE value")
+  if (length(short) == 0 ) 
+    stop("icd9ToComorbid got empty vector for short, expected single TRUE or FALSE value")
   if (length(baseCodeShort) == 0 ) 
     stop("icd9ToComorbid got empty vector for baseCodeShort, expected single TRUE or FALSE value")
   
-  if (length(baseCodes)==0) stop("icd9ToComorbid expects at least one icd9 code to test against")
+  if (length(icd9Reference)==0) stop("icd9ToComorbid expects at least one icd9 code to test against")
   
-  warnIfInvalidICD9(icd9Codes, callingFunction="icd9ToComorbid-icd9Codes", short=icd9CodeShort)
-  #maybe do once, not every loop: stopIfInvalidICD9(baseCodes, callingFunction="icd9ToComorbid-baseCodes", short=baseCodeShort)
+  warnIfInvalidICD9(icd9, callingFunction="icd9ToComorbid-icd9", short=short)
+  #maybe do once, not every loop: stopIfInvalidICD9(icd9Reference, callingFunction="icd9ToComorbid-icd9Reference", short=baseCodeShort)
   
   # take a regular string of an ICD9 code of format (ABC.zxyz) with or without leading and trailing zeroes.
-  #top level ICD9 code and return T/F if the icd9Codes fall within subgroups
+  #top level ICD9 code and return T/F if the icd9 fall within subgroups
   allBaseCodes <- c(
     lapply(
-      baseCodes, 
+      icd9Reference, 
       FUN=function(x) icd9ExpandBaseCode(icd9=x, short=baseCodeShort)
     ), 
     recursive=TRUE
   )
   # convert to short form to make comparison
-  if (icd9CodeShort == FALSE) icd9Codes <- icd9DecimalToShort(icd9Codes)
+  if (short == FALSE) icd9 <- icd9DecimalToShort(icd9)
   if (baseCodeShort ==FALSE) allBaseCodes <- icd9DecimalToShort(allBaseCodes)
   
-  icd9Codes %in% allBaseCodes
+  icd9 %in% allBaseCodes
 }
 
 #' @title lookup pre-calculated co-morbidities for given list of visit IDs
@@ -196,8 +194,10 @@ icd9comorbiditiesPoa <- function(icd9df, icd9Mapping, visitId="visitId",
 #' @description Takes the raw data taken directly from the AHRQ web site and 
 #'   parses into RData. It is then saved in the development tree data directory,
 #'   so this is an internal function, used in generating the package itself!
-#' @param save logical, whether to try to save the output data in the source
+#' @param save logical, whether to try to save the output data in the source 
 #'   tree.
+#' @param path character vector of unit length containing path to the source
+#'   package data directory. Default is ~/icd9/data
 #' @return list of lists, name value pairs, and where a single name was 
 #'   associated with multiple further name-value pairs, this is presented as a 
 #'   sub-list. This is primarily required because of the obtuse SAS FORMAT data 

@@ -9,7 +9,7 @@
 #' is inefficient. Convert to binary takes more R memory, but allows more compact output
 #' @param dframe dataframe which may contain logical fields
 #' @return dframe without logical fields
-#' @keywords internal
+#' @export
 logicalToBinary <- function(dframe) {
   
   if (class(dframe) != 'data.frame') fstop("logicalToBinary expects a data frame, but got %s", class(dframe))
