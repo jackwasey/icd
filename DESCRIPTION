@@ -1,7 +1,7 @@
 Package: icd9
-Title: reading, analysis and manipulation of ICD-9 codes
-Description: ICD-9 codes are not numbers, and great care is needed when
-    matching individual codes and ranges of codes. It is easy to make mistake,
+Title: tools for working with ICD-9 codes, and finding comorbidities
+Description: ICD-9 (CM) codes are not numbers, and great care is needed when
+    matching individual codes and ranges of codes. It is easy to make mistakes,
     hence the need for this code and test suite. ICD-9 codes can be presented
     in 'short' 5 character format, or 'decimal' format, seperating the code
     into two groups. Zeros after a decimal place are meaningful, so numerics
@@ -15,8 +15,8 @@ Description: ICD-9 codes are not numbers, and great care is needed when
 Version: 0.1
 Date: 2014-06-1
 Authors@R: person(given="Jack O.", family="Wasey", role=c("aut", "cre"),
-    email=c("jackwasey@jhmi.edu", "jack@jackwasey.com"))
-Maintainer: Jack O. Wasey <jack@jackwasey.com>
+    email=c("jackwasey@jhmi.edu", "icd9@jackwasey.com"))
+Maintainer: Jack O. Wasey <icd9@jackwasey.com>
 Depends:
     R (>= 3.0.0)
 Suggests:
@@ -26,7 +26,7 @@ Suggests:
     knitr
 LazyData: true
 LazyDataCompression: xz
-BugReports: mailto://jack@jackwasey.com
+BugReports: mailto://icd9@jackwasey.com
 Roxygen: list(wrap=FALSE)
 License: GPL-3
 VignetteBuilder: knitr

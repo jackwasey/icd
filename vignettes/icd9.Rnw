@@ -1,13 +1,21 @@
 %\VignetteEngine{knitr::knitr}
-%\VignetteIndexEntry{}
+%\VignetteIndexEntry{Using icd9}
 
 \documentclass{article}
 
+\title{icd9: R package for working with ICD-9 codes and comorbidities}
+\author{Jack O. Wasey}
+
 \begin{document}
+
+\maketitle
 
 <<setup, eval=TRUE, echo=FALSE>>=
 
-library(icd9, quietly=T, warn.conflicts=F, verbose=F)
+#oldOpt <- options(width = 20) # prevent stupid hbox overflows.
+#on.exit(options(oldOpt))
+
+suppressMessages(library(icd9, quietly=T, warn.conflicts=F, verbose=F))
 
 patientData <- data.frame(
   visitId = c(1000,1000,1000,1001,1001,1002),
@@ -16,19 +24,23 @@ patientData <- data.frame(
 )
 @
 
-\section{icd9}
+\section{ICD-9 interpretation and processing}
 
-This package is designed to be used with a variety of input data, including multiple formats of ICD-9 codes, but some assumptions are made. When calcuating which patients have which comorbidities, the input data is structured as follows:
+This package is designed to be used with a variety of input data, including multiple possible formats of ICD-9 codes, but some assumptions are made. There are many ways of misinterpreting ICD-9 codes, especially when dealing with ranges. The code in this package carefully considers a wide range of possibilities. \textbf{ICD-9 codes are not numeric}. Using numeric values for either decimal or non-decimal form will cause serious problems, hence the predominantly string-based processing here, and a robust set of unit tests.
+
+When calcuating which patients have which comorbidities, the input data is typically structured as follows:
 
 <<begin, eval=TRUE>>=
 patientData
 @
 
+Only the visitId column is propogated to the results. If 'present-on-arrival' is needed, it must be separated out first. The implicit default, therefore, is to ignore it, and give ICD-9 code regardless of POA status.
+
 The comorbidities can be determined as follows:
 <<getcomorbidities, eval=TRUE>>=
-class(icd9Comorbidities(icd9df = patientData))
-logicalToBinary(icd9Comorbidities(icd9df = patientData))
+logicalToBinary(icd9Comorbidities(icd9df = patientData))[,1:5]
 @
+(note that a call to logicalToBinary reduces the verbose TRUEs and FALSEs down to 1s and 0s)
 
 The following shows the same code with default options written out:
 <<echo=TRUE,eval=FALSE>>=
@@ -40,13 +52,30 @@ icd9Comorbidities(icd9df = patientData,
                   shortMapping = T)
 @
 
-\subsection{AHRQ comorbidity classification}
+\subsection{Outstanding work}
+There are a number of outstanding issues.
+\begin{itemize}
+ \item ICD-10 is imminent. There exists an official ICD-9-CM to ICD-10-CM mapping from the CDC (in pdf format...)
+ \item ICD-9 is not the same as ICD-9-CM (clinical modification). The original ICD coding system was intended for disease surveillance. I haven't identified yet whether ICD-9 is a simple subset of ICD-9-CM.
+ \item performance is currently modest. This is partly due to lots of string processing using regular expression in R. This could be done more quickly in C++. The test suite is fairly robust, so refactoring for performance shouldn't be too troublesome. Profr may be helpful, but I really dislike the necessity of sampling, not following the execution path completely.
+ \item validation of codes is partially implemented. Some functions have optional validation. There should be trickle-down of validation, so that, if a set of codes is already validated by a function, then other functions called by the validating function need not do so.
+ \item the codes would best be presented in an object oriented model. This would be a significant refactoring but would have some advantages, most notable dispatch on long/short codes, self validation (which could be done once per instantiation, if S5 objects are used), and overall would be a more pleasing, although more complicated way of presenting the interface to a user.
+ \item additional testing against more real world ICD-9 data would be very helpful, and thereby generation of new tests.
+\end{itemize}
+
+\section{AHRQ comorbidity classification}
 
 The AHRQ makes an annual classification of ICD-9-CM codes into comorbidities useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
 <<ahrq>>=
 ahrqComorbid <- parseAhrqSas(save = F)
-summary(ahrqComorbid)
+head(summary(ahrqComorbid))
+@
+
+Here are a couple of the shorter ICD-9 groups listed in ahrqComorbid:
+
+<<example_ahrqComorbid>>=
+options(width = 55)
 ahrqComorbid[c("OBESE", "DEPRESS")]
 @
 
