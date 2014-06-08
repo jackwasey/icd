@@ -1,0 +1,20 @@
+
+icd9
+====
+
+ICD-9 code manipulation, validation and comorbidity generation in R
+-------------------------------------------------------------------
+
+ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in 'short' 5 character format, or 'decimal' format, with a decimal place seperating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeros after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. Given these problems, this package offers the following main features:
+
+ * validation of ICD-9 codes (decimal or non-decimal "short" form), including V and E prefixes
+ * conversion of ICD-9 codes between decimal and "short" forms
+ * allocation of cases (e.g. patients or patient visits) to standard groups of co-morbidities according to ICD-9 coding and arbitrary mappings of ICD-9 codes to co-morbidities
+ * sorting of ICD-9 codes
+ * generation of child codes from lists of higher-level ICD-9 codes
+
+The initial release of this package contains ICD-9 to co-morbidity mappings from [AHRQ](http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp). Since the data is provided in SAS source code format, this package contains functions to parse this SAS source code and generate R data structures. This processing is limited to what is needed for this purpose, although may be generalizable and useful in other contexts.
+
+More detail can be found in the accompanying vignette, the thorough documentation of package functions, and by examination of the source code including the comprehensive unit tests.
+
+Suggestions for improvement and contributions of code are very welcome. Contributions will be credited. I ask that, if you use this package for published work, you cite this work citation(package='icd9')
