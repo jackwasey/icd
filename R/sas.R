@@ -13,6 +13,7 @@
 #'   \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}
 #'    \url{https://communities.sas.com/thread/47571?start=0&tstart=0} 
 #'   \url{https://communities.sas.com/message/165945}
+#' @return list (of lists)
 #' @export
 sasFormatExtract <- function(sasTxt) {
   
@@ -66,6 +67,7 @@ sasFormatExtract <- function(sasTxt) {
 #'   @param stripQuotes will strip all double quotation marks from the returned values
 #' @return list with each list item containing a matrix of "char ranges", 
 #'   "assigned value" pairs
+#' @keywords internal manip
 sasParseAssignments <- function(x, stripWhiteSpace=T, stripQuotes=T) {
   
   stopifnot(length(x)==1) # sorry...
@@ -120,7 +122,7 @@ sasParseAssignments <- function(x, stripWhiteSpace=T, stripQuotes=T) {
 #' "HTNDRG" 079,305 = "YES"
 #' I would like this to be list(HTNDRG="079,305")
 #' @param x in this case is '079,305 = "YES"' (quotes may be present in the string itself)
-#' @keywords internal
+#' @keywords internal manip
 sasDropOtherAssignment <- function(x) {
   #regmatches(m=regexec(pattern="(.*)=", text='079,305 = "YES"'), x='079,305 = "YES"')[[1]][2]
   lapply(x, function(y) strsplit(y, split="[[:space:]]*=")[[1]][1]) # asssuming one "="

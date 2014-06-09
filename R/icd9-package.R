@@ -1,17 +1,32 @@
-#' @title reading, analysis and manipulation of ICD-9 codes
-#' @description ICD-9 codes are not numbers, and great care is needed when
-#'   matching individual codes and ranges of codes. It is easy to make mistake,
-#'   hence the need for this code and test suite. ICD-9 codes can be presented
-#'   in 'short' 5 character format, or 'decimal' format, seperating the code nto
-#'   two groups. Zeros after a decimal place are meaningful, so numerics cannot
-#'   be used in most cases. This package enforces character specification to
-#'   avoid mistakes. The package also provides a means of looking up which
-#'   comorbidities exist in a patient given a set of ICD-9 codes, based on a
-#'   mapping of ICD-9 codes to comorbidity groups specified in R. This entails
-#'   parsing source SAS source code, and this is also included in the package,
-#'   so that subsequent releases of SAS FORMAT data for comorbidities can be
-#'   used.
+#' @title tools for working with ICD-9 codes, and finding comorbidities
+#' @description \code{icd9} provides functions to validate and compare ICD-9 
+#'   codes, and also generate co-morbidities based on ICD-9 to comorbidity 
+#'   mappings (typically many:one).
+#'   
+#'   * \code{\link{icd9ValidDecimal}}, \code{\link{icd9ValidShort}} and related
+#'   functions (\code{\link{icd9ValidDecimalN}}, \code{\link{icd9ValidDecimalV}},
+#'   \code{\link{icd9ValidDecimalE}}, \code{\link{icd9ValidShortN}},
+#'   \code{\link{icd9ValidShortV}}), \code{\link{icd9ValidShortE}}) check 
+#'   whether given ICD-9 codes are syntactically valid (although not necessarily
+#'   genuine ICD-9 codes) * \code{\link{icd9Comorbidities}} determines 
+#'   co-morbidities for a set of patients with one or more ICD-9 codes each.
+#'   
+#'   * AHRQ comorbidity mapping is provided, and a function to read the raw SAS 
+#'   code from AHRQ into R data structures. The pre-processed data is available 
+#'   by lazy-loading in \code{\link{ahrqComorbid}}. AHRQ releases new mappings 
+#'   annually.
+#'   
+#'   * \code{\link{parseAhrqSas}} interprets an SAS format file, returning R 
+#'   data, intended currently only for the FORMAT code provided by AHRQ for 
+#'   comorbidities.
+#'   
+
 #' @docType package
 #' @name icd9-package
-#' @aliases icd9
+#' @aliases icd9 package-icd9
+## @author Jack O. Wasey \email{jackwasey@jhmi.edu}
+#' @keywords misc utilities
+#' @references \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
+#' @seealso \code{\link{rClinicalCodes}}
+#' @concept icd9 ICD-9 comorbidity comorbidities
 NULL

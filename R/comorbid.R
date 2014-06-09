@@ -1,4 +1,3 @@
-#' @rdname icd9ToComorbidities
 #' @title match ICD9 codes
 #' @description This does the hard work of finding whether a given icd9 code
 #'   falls under a group of reference ICD9 codes. icd9Reference is expanded to cover
@@ -12,32 +11,30 @@
 #' @template validate
 #' @param shortReference logical, see argument \code{short}
 #' @return logical vector of which icd9 match or are subcategory of
-#'   icd9Reference
+#'   icd9Referenec
 #' @keywords internal
-icd9ToComorbid <- function(icd9, icd9Reference, short = TRUE, shortReference = TRUE, validate = FALSE, validateReference = TRUE) {
+icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReference = TRUE, validate = FALSE, validateReference = FALSE) {
   
   if (!class(icd9) %in% c("character", "numeric", "integer")) 
-    stop("icd9ToComorbid expects a character or number vector for icd9, but got: ", class(icd9))
+    stop("icd9InReferenceCode expects a character or number vector for icd9, but got: ", class(icd9))
   if (!class(icd9Reference) %in% c("character", "numeric", "integer"))
-    stop("icd9ToComorbid expects a character or number vector for the basecodes,
+    stop("icd9InReferenceCode expects a character or number vector for the basecodes,
          to avoid ambiguity with trailing zeroes, but got: ", class(icd9Reference))
   stopifnot(class(short) == 'logical', class(shortReference) == "logical")
   
   if (length(short) >  1 ) 
-    stop("icd9ToComorbid got vector for short, expected single TRUE or FALSE value")
+    stop("icd9InReferenceCode got vector for short, expected single TRUE or FALSE value")
   if (length(shortReference) >  1 ) 
-    stop("icd9ToComorbid got vector for shortReference, expected single TRUE or FALSE value")
+    stop("icd9InReferenceCode got vector for shortReference, expected single TRUE or FALSE value")
   if (length(short) == 0 ) 
-    stop("icd9ToComorbid got empty vector for short, expected single TRUE or FALSE value")
+    stop("icd9InReferenceCode got empty vector for short, expected single TRUE or FALSE value")
   if (length(shortReference) == 0 ) 
-    stop("icd9ToComorbid got empty vector for shortReference, expected single TRUE or FALSE value")
+    stop("icd9InReferenceCode got empty vector for shortReference, expected single TRUE or FALSE value")
   
-  if (length(icd9Reference) == 0) stop("icd9ToComorbid expects at least one icd9 code to test against")
+  if (length(icd9Reference) == 0) stop("icd9InReferenceCode expects at least one icd9 code to test against")
   
-  if (validate) stopIfInvalidICD9(icd9, callingFunction = "icd9ToComorbid-icd9", short = short)
-  if (validateReference) stopIfInvalidICD9(icd9Reference, callingFunction = "icd9ToComorbid-icd9", short = shortReference)
-  
-  #maybe do once, not every loop: stopIfInvalidICD9. ALternatively, if memoise is used, we can validate 'every' time.
+  if (validate) stopIfInvalidIcd9(icd9, callingFunction = "icd9InReferenceCode-icd9", short = short)
+  if (validateReference) stopIfInvalidIcd9(icd9Reference, callingFunction = "icd9InReferenceCode-icd9", short = shortReference)
   
   #take a regular string of an ICD9 code of format (ABC.zxyz) with or without
   #leading and trailing zeroes. top level ICD9 code and return T/F if the icd9
@@ -55,6 +52,16 @@ icd9ToComorbid <- function(icd9, icd9Reference, short = TRUE, shortReference = T
   
   icd9 %in% allBaseCodes
 }
+
+#' @rdname icd9InReferenceCode
+#' @examples
+#' "1024" %i9in% "102"
+#' "1024" %i9in% c("102","1025")
+#' c("102", "1024","1025") %i9in% "102"
+#' c("102", "1024","1025") %i9in% c("1024", "1025")
+#' c("102", "1024","1025") %i9in% c("102", "1024", "1025")
+"%i9in%" <- function(icd9, icd9Reference)
+  icd9InReferenceCode(icd9 = icd9, icd9Reference = icd9Reference)
 
 #' @title lookup pre-calculated co-morbidities for given list of visit IDs
 #' @description merges the data frame \code{dat} with pre-calculated icd9 
@@ -100,7 +107,6 @@ lookupComorbidities <- function(dat,
   mp
 }
 
-#' @rdname icd9ToComorbidities
 #' @title merge comorbidities with icd9 codes per visitId (or other identity)
 #' @description default comorbidity mapping is with AHRQ data. This is slow with
 #'   long lists of patients, so intended to be used as intermediate step to save
@@ -156,7 +162,7 @@ icd9Comorbidities <- function(icd9df,
       X = names(icd9Mapping), 
       FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]])), 
       FUN = function(comorbidity) {
-        icd9ToComorbid( 
+        icd9InReferenceCode( 
           # drop factor down to character codes #TODO: is this necessary or desirable?
           asCharacterNoWarn(icd9df[[icd9Field]]), 
           # provide vector of base ICD9 codes for this comorbidity group
@@ -170,47 +176,52 @@ icd9Comorbidities <- function(icd9df,
   ag
 }
 
-#' @rdname icd9ToComorbidities
+#' @rdname icd9Comorbidities
 #' @title gets those comorbidities where the "Present on Arrival" (POA) flag is 
-#'   set or not set.
+#'   not set, or set to "N"
 #' @description this is not a simple binary, since many codes are exempt,
 #'   unspecified, or unknown. Therefore, two options are given: get all the
 #'   comorbidities where the POA flag was definitely -ve, coded as "N" or
 #'   definitely +ve and coded as "Y". Negating one set won't give the other set
 #'   unless all codes were either Y or N. #describeIn icd9Comorbidities
 #' @export
-icd9ComorbiditiesNotPoa <- function(icd9df, icd9Mapping, visitId="visitId",
-                                    icd9Field="icd9Code", poaField="poa") {
+icd9ComorbiditiesNotPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
+                                    icd9Field = "icd9Code", poaField = "poa") {
   stopifnot(poaField %in% names(icd9df))
   icd9Comorbidities(icd9df[ is.na(icd9df[[poaField]]) | icd9df[[poaField]] != "N",],
                     visitId=visitId, icd9Field=icd9Field, icd9Mapping=icd9Mapping)
 }
 
-#' @rdname icd9ToComorbidities
+#' @rdname icd9Comorbidities
+#' @title gets those comorbidities where the "Present on Arrival" (POA) flag is 
+#'   set to "Y"
 #' @export
-icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId="visitId", 
-                                 icd9Field="icd9Code", poaField="poa") {
+icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId", 
+                                 icd9Field = "icd9Code", poaField = "poa") {
   stopifnot(poaField %in% names(icd9df))
   icd9Comorbidities(icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "Y",],
-                    visitId=visitId, icd9Field=icd9Field, icd9Mapping=icd9Mapping)
+                    visitId = visitId, icd9Field = icd9Field, icd9Mapping = icd9Mapping)
 }
 
 
-#' @title parse AHRQ and ICD9-CM data
+#' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and 
 #'   parses into RData. It is then saved in the development tree data directory,
 #'   so this is an internal function, used in generating the package itself!
+#' @param sasPath single character string containing path to SAS FORMAT
+#'   definition code.
 #' @param save logical, whether to try to save the output data in the source 
 #'   tree.
-#' @param path character vector of unit length containing path to the source
+#' @param path character vector of unit length containing path to the source 
 #'   package data directory. Default is ~/icd9/data
 #' @return list of lists, name value pairs, and where a single name was 
 #'   associated with multiple further name-value pairs, this is presented as a 
 #'   sub-list. This is primarily required because of the obtuse SAS FORMAT data 
 #'   structure: the AHRQ codes are hidden in a sublist of the first item.
-#' @export
-parseAhrqSas <- function(save = F, path="~/icd9/data") {
-  f <- file(system.file("extdata", "comformat2012-2013.txt", package = "icd9"), "r")
+#' @keywords internal
+parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
+                         save = F, path="~/icd9/data") {
+  f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # no special encoding?
   close(f)
   

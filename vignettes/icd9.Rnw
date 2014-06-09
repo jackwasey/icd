@@ -38,9 +38,8 @@ Only the visitId column is propogated to the results. If 'present-on-arrival' is
 
 The comorbidities can be determined as follows:
 <<getcomorbidities, eval=TRUE>>=
-logicalToBinary(icd9Comorbidities(icd9df = patientData))[,1:5]
+icd9Comorbidities(icd9df = patientData)[,1:5]
 @
-(note that a call to logicalToBinary reduces the verbose TRUEs and FALSEs down to 1s and 0s)
 
 The following shows the same code with default options written out:
 <<echo=TRUE,eval=FALSE>>=
@@ -67,8 +66,11 @@ There are a number of outstanding issues.
 
 The AHRQ makes an annual classification of ICD-9-CM codes into comorbidities useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
-<<ahrq>>=
+<<ahrq,eval=F>>=
 ahrqComorbid <- parseAhrqSas(save = F)
+@
+
+<<ahrqcontents>>=
 head(summary(ahrqComorbid))
 @
 

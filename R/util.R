@@ -10,7 +10,7 @@
 #' TODO: test
 #' @param dframe dataframe which may contain logical fields
 #' @return dframe without logical fields
-#' @export
+#' @keywords internal manip
 logicalToBinary <- function(dframe) {
   
   if (class(dframe) != 'data.frame') stop("logicalToBinary expects a data frame, but got %s", class(dframe))
@@ -94,7 +94,7 @@ asNumericNoWarn <- function(x) {
   as.numeric(x)
 }
 
-#' @describeIn asNumericNoWarn
+#' @rdname asNumericNoWarn
 asIntegerNoWarn <- function(x)
   as.integer(asNumericNoWarn(x))
 
