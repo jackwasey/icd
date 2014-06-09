@@ -435,6 +435,7 @@ test_that("wrap up all icd9 tests", {
     expect_error(icd9ExpandRangeShort(c("10","20"), c("11","21"))) # only works with single range
     
     expect_equal(icd9ExpandRangeShort("E9501", "E9502"), c("E9501", "E9502"))
+    expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
   })
   
   test_that("preceding minors", {
