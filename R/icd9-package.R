@@ -27,6 +27,6 @@
 ## @author Jack O. Wasey \email{jackwasey@jhmi.edu}
 #' @keywords misc utilities
 #' @references \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
-#' @seealso \code{\link{rClinicalCodes}}
+#' @seealso rClinicalCodes
 #' @concept icd9 ICD-9 comorbidity comorbidities
 NULL

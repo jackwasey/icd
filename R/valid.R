@@ -34,8 +34,8 @@ warnIfInvalidIcd9 <- function(icd9, short, callingFunction="") {
 #' @template icd9-decimal
 #' @return logical vector with T or F for each icd9 code provided according to 
 #'   validity
-#' @seealso \code{\url{http://www.stata.com/users/wgould/icd9/icd9.hlp}}
-#'   \code{url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}}
+#' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
+#'   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @family ICD9 validation
 #' @export
 icd9ValidDecimal <- function(icd9Decimal) {
@@ -65,8 +65,8 @@ icd9ValidDecimal <- function(icd9Decimal) {
 #' @return logical vector with T or F for each icd9 code provided according to
 #'   validity
 #' @family ICD9 validation
-#' @seealso \code{\url{http://www.stata.com/users/wgould/icd9/icd9.hlp}}
-#'   \code{\url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}}
+#' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
+#'   \url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @export
 icd9ValidShort <- function(icd9Short) {
   if (!(class(icd9Short) %in% c("character","factor"))) { 

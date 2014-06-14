@@ -103,7 +103,6 @@ icd9SortShort <- function(icd9Short) {
 #' @examples
 #' "4280 " %i9s% "4289 "
 #' "V80 " %i9s% " V8210 "
-#' "E901.0 " %i9d% "E901.4"
 #' 
 #' # the following should give all codes in 428 EXCEPT "428", 
 #' # and all codes upto 43014 EXCEPT 430 and 4301
@@ -484,7 +483,7 @@ icd9ExtractPartsShort <- function(icd9Short, minorEmpty = "") {
   eCodes <- grepl(pattern = "E", icd9Short)
   x[eCodes] <- xe[eCodes]
   
-  x[!is.na(x[["minor"]]) & x[["minor"]]=="", "minor"] <- minorEmpty  # equivalent to =="0"
+  x[!is.na(x[["minor"]]) & x[["minor"]] == "", "minor"] <- minorEmpty  # equivalent to =="0"
   x
 }
 
@@ -632,7 +631,7 @@ icd9PartsToDecimal <- function(major=NULL, minor=NULL, parts=NULL) icd9PartsReco
 #' }
 #' @return data frame, or list of data frames, with fields for ICD9 code, name 
 #'   and description, derived from datamart lookup table
-#' @seealso package \code{\link{comorbidities}}
+#' @seealso package comorbidities
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
 icd9Explain <- function(icd9Decimal) UseMethod("icd9Explain")
@@ -644,7 +643,7 @@ icd9Explain.list <- function(icd9Decimal) lapply(icd9Decimal, icd9Explain)
 icd9Explain.character <- function(icd9Decimal) {
   out <- icd9CmDesc[ icd9CmDesc$icd9 %in% icd9AddLeadingZeroesDecimal(icd9Decimal), ]
   row.names(out) <- NULL
-  names(out) <- c("ICD9 Code", "Diagnosis", "Description")
+  names(out) <- c("ICD9", "Diagnosis", "Description")
   out
 }
 
@@ -662,9 +661,11 @@ icd9Explain.character <- function(icd9Decimal) {
 #'   higher-level codes, just the specific diagnostic 'child' codes.
 #' @details ideally would get ICD9-CM data zip directly from CMS web page, and 
 #'   extract, but the built-in unzip only extracts the first file in a zip.
+#' @param icd9path path of the source data which is in /extddata in the
+#'   installed package, but would be in inst/extdata in development tree.
 #' @param save logical whether to attempt to save output in package source tree 
 #'   data directory
-#' @param path absolute path in which to save parsed data
+#' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @export
 parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt", package='icd9'),

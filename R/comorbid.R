@@ -1,4 +1,5 @@
 #' @title match ICD9 codes
+#' @aliases "%i9in%" 
 #' @description This does the hard work of finding whether a given icd9 code
 #'   falls under a group of reference ICD9 codes. icd9Reference is expanded to cover
 #'   all possible subgroups, then we look for matches where the given ICD9 codes
@@ -54,6 +55,7 @@ icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReferenc
 }
 
 #' @rdname icd9InReferenceCode
+#' @export
 #' @examples
 #' "1024" %i9in% "102"
 #' "1024" %i9in% c("102","1025")
@@ -75,7 +77,7 @@ icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReferenc
 #'   string is given (vector of unit length), then the name is used to lookup
 #'   the data in current environment tree. If a data frame is given, this is
 #'   used as the data to lookup co-morbidities for the given
-#' @param visitId defaults to 'visitId'
+#' @template visitid
 #' @param mergeFun is the function used to merge the comorbidity data with the 
 #'   visitId list, using visitId as the key. Can be left as default \code{merge}
 #'   but this has limited ability when identical fields appear, and in how field
@@ -116,6 +118,8 @@ lookupComorbidities <- function(dat,
 #'   many to many ratio of icd9:visitId. This table contains multiple visitId 
 #'   rows, with one row per ICD-9 code. Therefore, every ICD-9 code listed is 
 #'   associated with at least one visit ID.
+#' @template visitid
+#' @template icd9field
 #' @param icd9Mapping list (or name of a list if character vector of length one 
 #'   is given as argument) of the comorbidities with each top-level list item 
 #'   containing a vector of decimal ICD9 codes. This is in the form of a list, 
@@ -179,11 +183,15 @@ icd9Comorbidities <- function(icd9df,
 #' @rdname icd9Comorbidities
 #' @title gets those comorbidities where the "Present on Arrival" (POA) flag is 
 #'   not set, or set to "N"
-#' @description this is not a simple binary, since many codes are exempt,
-#'   unspecified, or unknown. Therefore, two options are given: get all the
-#'   comorbidities where the POA flag was definitely -ve, coded as "N" or
-#'   definitely +ve and coded as "Y". Negating one set won't give the other set
+#' @description this is not a simple binary, since many codes are exempt, 
+#'   unspecified, or unknown. Therefore, two options are given: get all the 
+#'   comorbidities where the POA flag was definitely -ve, coded as "N" or 
+#'   definitely +ve and coded as "Y". Negating one set won't give the other set 
 #'   unless all codes were either Y or N. #describeIn icd9Comorbidities
+#' @param poaField The name of column in the data frame which contains the 
+#'   Present On Arrival flag. The flag itself is a single character, typically 
+#'   one of "Y", "N", "E", "X", "U" or empty. The poaField is a character vector
+#'   of length one.
 #' @export
 icd9ComorbiditiesNotPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
                                     icd9Field = "icd9Code", poaField = "poa") {

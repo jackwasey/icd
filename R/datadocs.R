@@ -3,7 +3,7 @@
 #' @docType data
 #' @keywords datasets
 #' @format data frame
-#' @source \code{\link{http://www.cdc.gov/nchs/icd/icd9cm.htm}}
+#' @source \url{http://www.cdc.gov/nchs/icd/icd9cm.htm}
 #' @name icd9CmDesc
 NULL
 
@@ -13,6 +13,6 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @format list of character vectors
-#' @source \code{\link{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}}
+#' @source \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @name ahrqComorbid
 NULL
