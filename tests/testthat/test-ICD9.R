@@ -433,9 +433,17 @@ test_that("wrap up all icd9 tests", {
     
     expect_error(icd9ExpandRangeShort("V10", "   V1 ")) # should fail despite end being 'longer' than start
     expect_error(icd9ExpandRangeShort(c("10","20"), c("11","21"))) # only works with single range
+
+    # E codes are handled differently. Currently need lots of changes to support
+    # this, so check for error if any E code range requested
+    expect_error(icd9ExpandRangeShort("E950", "E951"))
     
-    expect_equal(icd9ExpandRangeShort("E9501", "E9502"), c("E9501", "E9502"))
-    expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
+#     expect_equal(icd9ExpandRangeShort("E9501", "E9502"), c("E9501", "E9502"))
+#     expect_equal(icd9ExpandRangeShort("E950", "E9509"),
+#                                       c("E950", "E9501", "E9502", "E9503", "E9504",
+#                                         "E9505", "E9506", "E9507", "E9508", "E9509"))
+#     expect_error(icd9ExpandRangeShort("E95012", "E95013", validate = T))
+#     expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
   })
   
   test_that("preceding minors", {
