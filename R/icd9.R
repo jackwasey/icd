@@ -115,7 +115,7 @@ icd9SortShort <- function(icd9Short) {
 icd9ExpandRangeShort <- function(start, end, validate = FALSE) {
   stopifnot(is.character(start), is.character(end))
   stopifnot(length(start) == 1, length(end) == 1)
-  stopifnot(all(grepl(pattern = "^[^E]*$", c(start, end))))
+  stopifnot(all(grepl(pattern = "^[^E]*$", c(start, end)))) # cannot handle E ranges yet
   if (validate) stopifnot(icd9ValidShort(start), icd9ValidShort(end))
   start <- trim(start)
   end <- trim(end)

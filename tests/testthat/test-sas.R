@@ -39,7 +39,7 @@ test_that("basic SAS VALUE declarations can be read into an R list", {
   
 })
 
-test_that("proc format opening is understood", {})
+#test_that("proc format opening is understood", {})
 
 test_that("groups of SAS assignments can be extracted", {
   
@@ -66,3 +66,4 @@ test_that("AHRQ interpretation at least returns something reasonable", {
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
  })
+
