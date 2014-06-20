@@ -1,5 +1,10 @@
 context("test icd9 package")
 
+print("running test ICD9")
+
+print("env is:")
+print(environment())
+
 test_that("wrap up all icd9 tests", {
   
   set.seed(1441)

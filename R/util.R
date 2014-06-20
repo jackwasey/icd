@@ -1,4 +1,4 @@
-
+# 
 # these utility functions are derived from Hmisc and one of my other projects.
 # All functions set for internal use in this package only to avoid namespace
 # conflicts.
@@ -114,7 +114,6 @@ asIntegerNoWarn <- function(x)
 #'   be saved, followed by ".RData"
 #'   @param path is a path name to destination folder for the data: no trailing slash.
 saveSourceTreeData <- function(varName, path="~/icd9/data") {
-  require(devtools)
   stopifnot(file.exists(path))
   save(list  = varName, 
        envir = parent.frame(), # get from my parent
@@ -122,4 +121,3 @@ saveSourceTreeData <- function(varName, path="~/icd9/data") {
        compress="xz"
   )
 }
-
