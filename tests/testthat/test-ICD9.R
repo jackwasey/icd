@@ -438,17 +438,17 @@ test_that("wrap up all icd9 tests", {
     
     expect_error(icd9ExpandRangeShort("V10", "   V1 ")) # should fail despite end being 'longer' than start
     expect_error(icd9ExpandRangeShort(c("10","20"), c("11","21"))) # only works with single range
-
+    
     # E codes are handled differently. Currently need lots of changes to support
     # this, so check for error if any E code range requested
     expect_error(icd9ExpandRangeShort("E950", "E951"))
     
-#     expect_equal(icd9ExpandRangeShort("E9501", "E9502"), c("E9501", "E9502"))
-#     expect_equal(icd9ExpandRangeShort("E950", "E9509"),
-#                                       c("E950", "E9501", "E9502", "E9503", "E9504",
-#                                         "E9505", "E9506", "E9507", "E9508", "E9509"))
-#     expect_error(icd9ExpandRangeShort("E95012", "E95013", validate = T))
-#     expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
+    #     expect_equal(icd9ExpandRangeShort("E9501", "E9502"), c("E9501", "E9502"))
+    #     expect_equal(icd9ExpandRangeShort("E950", "E9509"),
+    #                                       c("E950", "E9501", "E9502", "E9503", "E9504",
+    #                                         "E9505", "E9506", "E9507", "E9508", "E9509"))
+    #     expect_error(icd9ExpandRangeShort("E95012", "E95013", validate = T))
+    #     expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
   })
   
   test_that("preceding minors", {
@@ -540,7 +540,7 @@ test_that("wrap up all icd9 tests", {
         icd9DecimalToShort(icd9ShortToDecimal(icd9List[[i]], leadingZeroes=T), leadingZeroes=T),
         icd9AddLeadingZeroesShort(icd9List[[i]]),
         info = paste("in loop:", i)
-        )
+      )
     }
     
     # keep the decimal point just because that is how we created the test data.
@@ -552,7 +552,7 @@ test_that("wrap up all icd9 tests", {
   })
   
   test_that("strip leading zero from decimal", {
-
+    
     expect_error(icd9DropZeroFromDecimal("sandwiches"))
     expect_error(icd9DropZeroFromDecimal("VE123456.789"))
     
@@ -592,7 +592,7 @@ test_that("wrap up all icd9 tests", {
     
     expect_equal(icd9DropZeroFromDecimal(c("V12.78", " E898.", "02", "034.5")), c("V12.78", "E898.", "2", "34.5"))
   })
-
+  
   test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
     
     ptdf <- icd9Comorbidities(icd9df = patientData, icd9Mapping = ahrqComorbid, visitId = "visitId")
@@ -612,8 +612,16 @@ test_that("wrap up all icd9 tests", {
       logicalToBinary(data.frame(a=c("jack","hayley"), b=c(T, F), f=c(T, T))),
       data.frame(a=c("jack", "hayley"), b=c(1,0), f=c(1,1))
     )
-      
-    })
+    
+  })
+  
+  test_that("stop if invalid", {
+    expect_error(stopIfInvalidIcd9('notvalidicd9', short = T))
+  })
+  
+  test_that("warn if invalid", {
+    expect_warning(warnIfInvalidIcd9('notvalidicd9', short = T))
+  })
   
 })
 
