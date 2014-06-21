@@ -99,61 +99,43 @@ icd9ValidShortV <- function(icd9Short)
 
 #' @rdname icd9ValidShort
 #' @export
-icd9ValidShortE <- function(icd9Short) {
+icd9ValidShortE <- function(icd9Short)
   grepl("^[[:space:]]*[Ee][89][[:digit:]]{2,3}[[:space:]]*$", icd9Short)
-}
 
 #' @rdname icd9ValidShort
 #' @export
-icd9ValidShortN <- function(icd9Short) {
+icd9ValidShortN <- function(icd9Short)
   grepl("^[[:space:]]*[[:digit:]]{1,5}[[:space:]]*$", icd9Short) # need to allow 0, but not 0.xx as valid code
-}
 
 #' @rdname icd9ValidDecimal
 #' @export
-icd9ValidDecimalV <- function(icd9Decimal) {
-  if (exists(".envtest", envir = .GlobalEnv)) {
-    print("icd9ValidDecimalV environment:")
-    print(parent.env(environment()))
-    print("icd9ValidDecimalV parent environment:")
-    print(parent.env(parent.env(environment())))
-    print("icd9ValidDecimalV parent parent environment:")
-    print(parent.env(parent.env(parent.env(environment()))))
-    print("icd9ValidDecimalV parent parent parent environment:")
-    print(parent.env(parent.env(parent.env(parent.env(environment())))))
-  }
+icd9ValidDecimalV <- function(icd9Decimal)
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", icd9Decimal)
-}
+
 
 #' @rdname icd9ValidDecimal
 #' @export
-icd9ValidDecimalE <- function(icd9Decimal) {
+icd9ValidDecimalE <- function(icd9Decimal)
   grepl("^[[:space:]]*[Ee][89][[:digit:]]{2}(\\.[[:digit:]]?)?[[:space:]]*$", icd9Decimal)
-}
 
 #' @rdname icd9ValidDecimal
 #' @note TODO: icd9ValidDecimalN not quite right, since it would validate 0.12
 #' @export
-icd9ValidDecimalN <- function(icd9Decimal) {
+icd9ValidDecimalN <- function(icd9Decimal)
   grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", icd9Decimal) 
-}
 
 #' @title validate an icd9 mapping to comorbidities
 #' @description just takes each item in each vector of the list of vectors and
 #'   checks validity
 #' @template mapping
 #' @export
-icd9ValidMappingShort <- function(icd9Mapping) {
-  unused <- "another statement in this function to test the tracing ofr code coverage"
+icd9ValidMappingShort <- function(icd9Mapping)
   all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names=F))
-}
 
 #' @rdname icd9ValidMappingShort
 #' @export
-icd9ValidMappingDecimal <- function(icd9Mapping) {
-  unused <- "another statement in this function to test the tracing ofr code coverage"
+icd9ValidMappingDecimal <- function(icd9Mapping)
   all(unlist(lapply(icd9Mapping, FUN = icd9ValidDecimal), use.names=F))
-}
 
 #' @title invalid subset of decimal or short ICD-9 codes
 #' @aliases getInvalidShortIcd9
