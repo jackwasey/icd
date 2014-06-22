@@ -9,7 +9,7 @@ test_that("wrap up all icd9 tests", {
   
   set.seed(1441)
   
-  n <- 1000
+  n <- 5000
   np <- round(n/20) # icd9 codes per patients
   
   randomShortIcd9 <- as.character(floor(runif(min=10000, max=99999, n=n)))
@@ -504,6 +504,8 @@ test_that("wrap up all icd9 tests", {
     #expect_equal(icd9AddLeadingZeroesMajor("E9"), "E9") # minimal validation of major, should just give back E codes.
     
     
+    expect_error(icd9PartsToShort(c("123","34", "56"), c("1","20"))) # don't allow cycling.
+    expect_error(icd9PartsToShort(c("123","34"), c("1","20", "45"))) # don't allow cycling.
     expect_equal(icd9PartsToShort(10L,"20"), "01020")
     expect_equal(icd9PartsToShort("V10",c("0","1")), c("V100", "V101"))
   })

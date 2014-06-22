@@ -41,19 +41,35 @@ icd9ExpandBaseCodeDecimal <- function(icd9Decimal, validate = F) {
 #' @template validate
 #' @template short
 #' @keywords internal
-icd9ExpandBaseCodeShort <- function(icd9Short, validate=F) {
+icd9ExpandBaseCodeShort <- function(icd9Short, validate = F) {
   if (!is.character(icd9Short)) stop('must have character only input to expand a short basecode to avoid ambiguity')
   
-  if (validate) stopIfInvalidIcd9(icd9Short, short=T)
+  if (validate) stopIfInvalidIcd9(icd9Short, short = T)
   
   # split into major and minor parts
-  parts <- icd9ExtractPartsShort(icd9Short, minorEmpty="")
+  parts <- icd9ExtractPartsShort(icd9Short, minorEmpty = "")
   out <- c()
   for (r in 1:nrow(parts)) {
     out <- c(out, icd9PartsToShort(parts[[r, "major"]], icd9ExpandMinor(parts[[r, "minor"]])))
   }
   out
 }
+
+icd9ExpandBaseCodeShortFast <- function(icd9Short, validate = F) {
+  if (!is.character(icd9Short)) stop('must have character only input to expand a short basecode to avoid ambiguity')
+  
+  if (validate) stopIfInvalidIcd9(icd9Short, short = T)
+  partsList <- icd9ExtractPartsShortNV(icd9Short) # ignoring E codes for now
+  unlist(
+    lapply(
+      partsList, 
+      function(x) {
+        icd9PartsToShort(x[[1]], icd9ExpandMinor(x[[2]]))
+      } 
+    )
+  )
+}
+
 
 #' @rdname icd9ExpandBaseCodeShort
 #' @template icd9-any
@@ -367,6 +383,9 @@ icd9ExpandMinor <- function(minor = "", validate = FALSE) {
 
 #' @rdname icd9ExpandMinor
 icd9ExpandMinorNV <- function(minor = "") {
+  
+  stopifnot(is.character(minor))
+  
   # minor should be 0-2 character, digits only
   if (nchar(minor) > 2)
     stop("icd9ExpandMinor: starting length already too long! minor is: ", minor)
@@ -468,10 +487,37 @@ icd9ShortToDecimal <- function(icd9Short, leadingZeroes = F, keepLoneDecimal = F
 #' @keywords internal manip
 icd9ExtractPartsShort <- function(icd9Short, minorEmpty = "") {
   
+  eCodes <- grepl(pattern = "E", x = icd9Short, fixed = TRUE, useBytes = TRUE) # bytes not unicode...
+  
+  len <- length(icd9Short)
+  #x <- data.frame(major = character(len), minor = character(len), stringsAsFactors = FALSE)
+  #x <- data.frame(matrix(ncol = 2, nrow = len)) # this is unfortunately a slow step
+  #names(x) <- c("major", "minor")
+  #icd9Short <- trim(icd9Short)
+  x <- data.frame(
+    major = substr(icd9Short[!eCodes], 0, 3),
+    minor = substr(icd9Short[!eCodes], 4, 5))
+  x[eCodes, "major"] <- substr(icd9Short[eCodes], 0, 4)
+  x[eCodes, "minor"] <- substr(icd9Short[eCodes], 5, 5)
+  
+  x[!is.na(x[["minor"]]) & x[["minor"]] == "", "minor"] <- minorEmpty
+  x
+}
+
+# benchmark is slower than handling a data frame.
+icd9ExtractPartsShortList <- function(icd9Short, minorEmpty = "") {
+  eCodes <- grepl(pattern = "E", x = icd9Short, fixed = TRUE, useBytes = TRUE) # bytes not unicode...
+  out <- icd9ExtractPartsShortNV(icd9Short)
+  out[eCodes] <- icd9ExtractPartsShortE(icd9Short[eCodes])  
+  out
+}
+
+icd9ExtractPartsShortSlow <- function(icd9Short, minorEmpty = "") {
+  
   x <- data.frame(
     major = substr(trim(icd9Short), 0, 3),
     minor = substr(trim(icd9Short), 4, 5),  # probably breaks for E codes
-    stringsAsFactors=F
+    stringsAsFactors = FALSE
   )
   # this is not efficient!
   xe <- data.frame(
@@ -482,9 +528,21 @@ icd9ExtractPartsShort <- function(icd9Short, minorEmpty = "") {
   
   eCodes <- grepl(pattern = "E", icd9Short)
   x[eCodes] <- xe[eCodes]
-  
   x[!is.na(x[["minor"]]) & x[["minor"]] == "", "minor"] <- minorEmpty  # equivalent to =="0"
   x
+}
+
+icd9ExtractPartsShortNV <- function(icd9Short) {
+  vapply(X = icd9Short, 
+         FUN.VALUE = c("", ""),
+         FUN = function(x) { c(substr(x, 0, 3), substr(x, 4, 5)) }
+        )
+}
+
+icd9ExtractPartsShortE <- function(icd9Short) {
+  vapply(X = icd9Short, 
+         FUN.VALUE = c("", ""),
+         FUN = function(x) { c(substr(x, 0, 4), substr(x, 5, 5)) })
 }
 
 #' @title icd9ExtractPartsDecimal

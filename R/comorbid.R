@@ -37,22 +37,36 @@ icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReferenc
   if (validate) stopIfInvalidIcd9(icd9, callingFunction = "icd9InReferenceCode-icd9", short = short)
   if (validateReference) stopIfInvalidIcd9(icd9Reference, callingFunction = "icd9InReferenceCode-icd9", short = shortReference)
   
-  #take a regular string of an ICD9 code of format (ABC.zxyz) with or without
-  #leading and trailing zeroes. top level ICD9 code and return T/F if the icd9
-  #fall within subgroups
-  allBaseCodes <- c(
+  kids <- memSpawnRefKids(icd9Reference, shortReference)
+  
+  # convert to short form to make comparison
+  if (short == FALSE) icd9 <- icd9DecimalToShort(icd9)
+  if (shortReference == FALSE) kids <- icd9DecimalToShort(kids)
+  
+  icd9 %in% kids
+}
+
+#' spawn reference codes into all possible lower-level codes (and memoise)
+#' 
+#' take a regular string of an ICD9 code of format (ABC.zxyz) with or without 
+#' leading and trailing zeroes. top level ICD9 code and return T/F if the icd9 
+#' fall within subgroups. This takes several seconds on an unimpressive desktop
+#' PC, so would benefit from memoization.
+#' 
+#' 
+#' @keywords internal
+spawnReferenceChildren <- 
+  function(icd9Reference, shortReference) {
+  c(
     lapply(
       icd9Reference, 
       FUN = function(x) icd9ExpandBaseCode(icd9 = x, short = shortReference)
     ), 
     recursive = TRUE
   )
-  # convert to short form to make comparison
-  if (short == FALSE) icd9 <- icd9DecimalToShort(icd9)
-  if (shortReference == FALSE) allBaseCodes <- icd9DecimalToShort(allBaseCodes)
-  
-  icd9 %in% allBaseCodes
 }
+
+memSpawnRefKids <- memoise(spawnReferenceChildren)
 
 #' @rdname icd9InReferenceCode
 #' @export
@@ -175,8 +189,13 @@ icd9Comorbidities <- function(icd9df,
       }
     )
   )
-  ag <- aggregate( x=i[,-which(names(i)==visitId)], by=list(i[[visitId]]), FUN = any, simplify=T)
-  names(ag)[1] <- visitId
+  ag <- aggregate(
+    x = i[, -which(names(i) == visitId)], # all cols except visit ID will be aggregated
+    by = list(visitId = i[[visitId]]), # group by the visitId
+    FUN = any, 
+    simplify = TRUE
+  )
+  #names(ag)[1] <- visitId
   ag
 }
 

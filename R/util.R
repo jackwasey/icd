@@ -34,7 +34,11 @@ logicalToBinary <- function(dframe) {
 #' @param x is a character vector to trim
 #' @return character vector
 #' @keywords internal
-trim <- function (x) gsub("^\\s+|\\s+$", "", x)
+trim <- function (x) 
+  gsub(pattern = " ", replacement = " ", x, fixed = TRUE, useBytes = TRUE) # beware unicode
+
+trimSlow <- function(x)
+  gsub("^\\s+|\\s+$", "", x)
 
 #' @title return the actual matches from a bracketed regex
 #' @description Be careful: this may throw funny results for exotic regex, but
