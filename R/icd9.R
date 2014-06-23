@@ -745,6 +745,10 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
   
   # attempt to write the date from the source file to RData in the package source tree.
   if (save) saveSourceTreeData("icd9CmDesc", path = path)
+
+  message("The following long descriptions contain UTF-8 codes:")
+  message(icd9CmDesc[grep(pattern="UTF", Encoding(levels(icd9CmDesc$descLong))), ])
+
   
   invisible(icd9CmDesc)
 }
