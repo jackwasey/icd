@@ -1,3 +1,11 @@
+Version 0.1.1
+------------------------------------------------------------------------------
+
+* Include missing import for memoise
+* optionally process AHRQ comorbidity subcategories into parent categories
+* include the processed binary data. Unlikely to change often, and not too big.
+
+
 Version 0.1
 ------------------------------------------------------------------------------
 
