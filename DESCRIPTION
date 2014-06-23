@@ -14,6 +14,7 @@ Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd9
 Depends:
     R (>= 3.0.0)
+Imports: memoise
 Suggests:
     testthat,
     roxygen2,

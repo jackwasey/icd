@@ -53,7 +53,7 @@ icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReferenc
 #' fall within subgroups. This takes several seconds on an unimpressive desktop
 #' PC, so would benefit from memoization.
 #' 
-#' 
+#' @import memoise
 #' @keywords internal
 spawnReferenceChildren <- 
   function(icd9Reference, shortReference) {
@@ -66,7 +66,8 @@ spawnReferenceChildren <-
   )
 }
 
-
+# this runs outside of a function, on package load
+library(memoise)
 memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
 
 #' @rdname icd9InReferenceCode
