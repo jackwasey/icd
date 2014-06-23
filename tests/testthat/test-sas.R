@@ -67,3 +67,13 @@ test_that("AHRQ interpretation at least returns something reasonable", {
   expect_true(length(result) > 10)
  })
 
+test_that("HTN subgroups all worked", {
+  # pick one subcategory
+  expect_true(all(ahrqComorbidAll$HTNPREG %in% ahrqComorbid$HTNCX))
+
+  # and we didn't drop any:
+  expect_true(all(ahrqComorbidAll$HTNCX %in% ahrqComorbid$HTNCX))
+  expect_true(all(ahrqComorbidAll$CHF %in% ahrqComorbid$CHF))
+  expect_true(all(ahrqComorbidAll$RENLFAIL %in% ahrqComorbid$RENLFAIL))
+
+})
