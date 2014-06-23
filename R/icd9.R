@@ -694,9 +694,11 @@ icd9PartsToDecimal <- function(major=NULL, minor=NULL, parts=NULL) icd9PartsReco
 icd9Explain <- function(icd9Decimal) UseMethod("icd9Explain")
 
 #' @describeIn icd9Explain explain alll ICD-9 codes in a list of vectors
+#' @export
 icd9Explain.list <- function(icd9Decimal) lapply(icd9Decimal, icd9Explain)
 
 #' @describeIn icd9Explain explain character vector of ICD-9 codes 
+#' @export
 icd9Explain.character <- function(icd9Decimal) {
   out <- icd9CmDesc[ icd9CmDesc$icd9 %in% icd9AddLeadingZeroesDecimal(icd9Decimal), ]
   row.names(out) <- NULL
@@ -735,7 +737,7 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
   icd9LongDesc <- lapply(r, FUN=function(row) paste(row[-c(1,2)], collapse=" "))
   
   f <- file(system.file("extdata","CMS32_DESC_SHORT_DX.txt", package='icd9'), "r")
-  r <- readLines(f, encoding="latin1")
+  r <- readLines(f) # this is ascii
   r<-strsplit(r, " ")
   icd9ShortCode <- lapply(r, FUN=function(row) row[1])
   icd9ShortDesc <- lapply(r, FUN=function(row) paste(row[-c(1,2)], collapse=" "))

@@ -250,7 +250,7 @@ icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
                          save = FALSE, path="~/icd9/data") {
   f <- file(sasPath, "r")
-  ahrqAll <- sasFormatExtract(readLines(f)) # no special encoding?
+  ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
   
   ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
