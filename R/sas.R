@@ -68,9 +68,9 @@ sasFormatExtract <- function(sasTxt) {
 #' @return list with each list item containing a matrix of "char ranges", 
 #'   "assigned value" pairs
 #' @keywords internal manip
-sasParseAssignments <- function(x, stripWhiteSpace=T, stripQuotes=T) {
+sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
   
-  stopifnot(length(x)==1) # sorry...
+  stopifnot(length(x) == 1) # sorry...
   # splitting with clever regex to separate each pair of assignments seems
   # tricky, so doing it in steps.
   halfway <- as.list(unlist(

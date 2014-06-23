@@ -66,7 +66,8 @@ spawnReferenceChildren <-
   )
 }
 
-memSpawnRefKids <- memoise(spawnReferenceChildren)
+
+memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
 
 #' @rdname icd9InReferenceCode
 #' @export
@@ -195,7 +196,7 @@ icd9Comorbidities <- function(icd9df,
     FUN = any, 
     simplify = TRUE
   )
-  #names(ag)[1] <- visitId
+  
   ag
 }
 
@@ -247,7 +248,7 @@ icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
 #'   structure: the AHRQ codes are hidden in a sublist of the first item.
 #' @keywords internal
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
-                         save = F, path="~/icd9/data") {
+                         save = FALSE, path="~/icd9/data") {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # no special encoding?
   close(f)

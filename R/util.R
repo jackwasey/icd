@@ -30,14 +30,22 @@ logicalToBinary <- function(dframe) {
   dframe
 }
 
-#' @title trim whitespace at ends of a line
+#' @title strip all whitespace
+#' @description could do this with regular expression, but slow, and this
+#'   function is called frequently. My only use case works with removal of all
+#'   whitespace.
+#' @param x is a character vector to strip
+#' @return character vector
+#' @keywords internal
+strip <- function (x) 
+  gsub(pattern = " ", replacement = "", x, fixed = TRUE, useBytes = TRUE) # beware unicode
+
+#' @title strip whitespace from ends of each string in given character vector
+#' @description slower than \code{strip}.
 #' @param x is a character vector to trim
 #' @return character vector
 #' @keywords internal
-trim <- function (x) 
-  gsub(pattern = " ", replacement = " ", x, fixed = TRUE, useBytes = TRUE) # beware unicode
-
-trimSlow <- function(x)
+trim <- function(x)
   gsub("^\\s+|\\s+$", "", x)
 
 #' @title return the actual matches from a bracketed regex

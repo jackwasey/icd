@@ -133,8 +133,8 @@ icd9ExpandRangeShort <- function(start, end, validate = FALSE) {
   stopifnot(length(start) == 1, length(end) == 1)
   stopifnot(all(grepl(pattern = "^[^E]*$", c(start, end)))) # cannot handle E ranges yet
   if (validate) stopifnot(icd9ValidShort(start), icd9ValidShort(end))
-  start <- trim(start)
-  end <- trim(end)
+  start <- strip(start)
+  end <- strip(end)
   if (nchar(start) == nchar(end) && start>end) stop("start is after end time")
   sdf <- icd9ExtractPartsShort(start)
   edf <- icd9ExtractPartsShort(end)
@@ -489,48 +489,47 @@ icd9ExtractPartsShort <- function(icd9Short, minorEmpty = "") {
   
   eCodes <- grepl(pattern = "E", x = icd9Short, fixed = TRUE, useBytes = TRUE) # bytes not unicode...
   
-  len <- length(icd9Short)
-  #x <- data.frame(major = character(len), minor = character(len), stringsAsFactors = FALSE)
-  #x <- data.frame(matrix(ncol = 2, nrow = len)) # this is unfortunately a slow step
-  #names(x) <- c("major", "minor")
-  #icd9Short <- trim(icd9Short)
+  icd9Short <- strip(icd9Short)
   x <- data.frame(
     major = substr(icd9Short[!eCodes], 0, 3),
-    minor = substr(icd9Short[!eCodes], 4, 5))
+    minor = substr(icd9Short[!eCodes], 4, 5),
+    stringsAsFactors = FALSE)
   x[eCodes, "major"] <- substr(icd9Short[eCodes], 0, 4)
   x[eCodes, "minor"] <- substr(icd9Short[eCodes], 5, 5)
   
-  x[!is.na(x[["minor"]]) & x[["minor"]] == "", "minor"] <- minorEmpty
+  if (minorEmpty != "") 
+    x[!is.na(x[["minor"]]) & x[["minor"]] == "", "minor"] <- minorEmpty
+  
   x
 }
 
-# benchmark is slower than handling a data frame.
-icd9ExtractPartsShortList <- function(icd9Short, minorEmpty = "") {
-  eCodes <- grepl(pattern = "E", x = icd9Short, fixed = TRUE, useBytes = TRUE) # bytes not unicode...
-  out <- icd9ExtractPartsShortNV(icd9Short)
-  out[eCodes] <- icd9ExtractPartsShortE(icd9Short[eCodes])  
-  out
-}
+## benchmark is slower than handling a data frame.
+# icd9ExtractPartsShortList <- function(icd9Short, minorEmpty = "") {
+#   eCodes <- grepl(pattern = "E", x = icd9Short, fixed = TRUE, useBytes = TRUE) # bytes not unicode...
+#   out <- icd9ExtractPartsShortNV(icd9Short)
+#   out[eCodes] <- icd9ExtractPartsShortE(icd9Short[eCodes])  
+#   out
+# }
 
-icd9ExtractPartsShortSlow <- function(icd9Short, minorEmpty = "") {
-  
-  x <- data.frame(
-    major = substr(trim(icd9Short), 0, 3),
-    minor = substr(trim(icd9Short), 4, 5),  # probably breaks for E codes
-    stringsAsFactors = FALSE
-  )
-  # this is not efficient!
-  xe <- data.frame(
-    major = substr(trim(icd9Short), 0, 4),
-    minor = substr(trim(icd9Short), 5, 5),  # probably breaks for E codes
-    stringsAsFactors=F
-  )
-  
-  eCodes <- grepl(pattern = "E", icd9Short)
-  x[eCodes] <- xe[eCodes]
-  x[!is.na(x[["minor"]]) & x[["minor"]] == "", "minor"] <- minorEmpty  # equivalent to =="0"
-  x
-}
+# icd9ExtractPartsShortSlow <- function(icd9Short, minorEmpty = "") {
+#   
+#   x <- data.frame(
+#     major = substr(, 0, 3),
+#     minor = substr(trim(icd9Short), 4, 5),  # probably breaks for E codes
+#     stringsAsFactors = FALSE
+#   )
+#   # this is not efficient!
+#   xe <- data.frame(
+#     major = substr(trim(icd9Short), 0, 4),
+#     minor = substr(trim(icd9Short), 5, 5),  # probably breaks for E codes
+#     stringsAsFactors=F
+#   )
+#   
+#   eCodes <- grepl(pattern = "E", icd9Short)
+#   x[eCodes] <- xe[eCodes]
+#   x[!is.na(x[["minor"]]) & x[["minor"]] == "", "minor"] <- minorEmpty  # equivalent to =="0"
+#   x
+# }
 
 icd9ExtractPartsShortNV <- function(icd9Short) {
   vapply(X = icd9Short, 
@@ -593,7 +592,7 @@ icd9AddLeadingZeroesDecimal <- function(icd9Decimal) {
 icd9AddLeadingZeroesShort <- function(icd9) {
   parts <- icd9ExtractPartsShort(icd9)
   parts[["major"]] <- icd9AddLeadingZeroesMajor(parts[["major"]])
-  out <- icd9PartsToShort(parts=parts)
+  out <- icd9PartsToShort(parts = parts)
   out[!icd9ValidShort(icd9)] <- NA # set NA for invalid inputs (may be done downstream?)
   out
 }
@@ -661,8 +660,10 @@ icd9PartsRecompose <- function(major=NULL, minor=NULL, parts=NULL, sep) {
     stopifnot(is.null(major), is.null(minor)) # enforce parts OR major, minor
     return(paste(icd9AddLeadingZeroesMajor(parts[["major"]]),parts[["minor"]], sep=sep))
   }
-  #stopifnot(length(major) == length(minor), length(major) !=1, length(minor) !=1) 
-  stopifnot(length(sep) ==1)
+  stopifnot(length(sep) == 1)
+  if (length(major) != 1 && length(minor) != 1 && length(major) != length(minor))
+    stop("icd9PartsRecompose requires major and minor vectors to be of the same length, or for one of them to be unit length")
+  
   paste(icd9AddLeadingZeroesMajor(major), minor, sep=sep)
 }
 
@@ -684,9 +685,7 @@ icd9PartsToDecimal <- function(major=NULL, minor=NULL, parts=NULL) icd9PartsReco
 #'   ICD-9 codes.
 #' @template icd9-decimal
 #' @examples
-#' \dontrun{
-#' icd9Explain(ahrqComorbid)
-#' }
+#' icd9Explain(ahrqComorbid[[1]][1:3])
 #' @return data frame, or list of data frames, with fields for ICD9 code, name 
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities

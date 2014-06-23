@@ -18,7 +18,8 @@ Suggests:
     testthat,
     roxygen2,
     devtools,
-    knitr
+    knitr,
+    microbenchmark
 LazyData: true
 LazyDataCompression: xz
 BugReports: mailto://jackwasey@jhmi.edu
