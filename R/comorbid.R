@@ -240,15 +240,16 @@ icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
 #'   definition code.
 #' @param save logical, whether to try to save the output data in the source 
 #'   tree.
-#' @param path character vector of unit length containing path to the source 
+#' @param saveDir character vector of unit length containing path to the source 
 #'   package data directory. Default is ~/icd9/data
+#' @param returnAll logical which, if TRUE, will result in the invisible return of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
 #' @return list of lists, name value pairs, and where a single name was 
 #'   associated with multiple further name-value pairs, this is presented as a 
 #'   sub-list. This is primarily required because of the obtuse SAS FORMAT data 
 #'   structure: the AHRQ codes are hidden in a sublist of the first item.
 #' @keywords internal
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
-                         save = FALSE, path="~/icd9/data") {
+                         save = FALSE, saveDir = "~/icd9/data", returnAll = FALSE) {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
@@ -272,7 +273,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   # "Other" group
   ahrqComorbidAll[[" "]] <- NULL
 
-  ahrqComorbid <- ahrqComorbid
+  ahrqComorbid <- ahrqComorbidAll
 
   ahrqComorbid$HTNCX <- c(
     ahrqComorbid$HTNCX, # some codes already in this category
@@ -299,6 +300,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
     ahrqComorbid$HHRWRF,
     ahrqComorbid$HHRWHRF)
 
+
   ahrqComorbid[c("HTNPREG", "OHTNPREG", "HTNWOCHF", 
     "HTNWCHF","HRENWORF", "HRENWRF", "HHRWOHRF",
     "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
@@ -311,9 +313,10 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   
   # save the data in the development tree, so the package user doesn't need to
   # decode it themselves.
-  if (save) saveSourceTreeData("ahrqComorbidAll", path = path)
-  if (save) saveSourceTreeData("ahrqComorbid", path = path)
+  if (save) saveSourceTreeData("ahrqComorbidAll", path = saveDir)
+  if (save) saveSourceTreeData("ahrqComorbid", path = saveDir)
   
+  if (returnAll) return(invisible(ahrqComorbidAll))
   invisible(ahrqComorbid)
 }
 
