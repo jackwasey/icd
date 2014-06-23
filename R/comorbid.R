@@ -241,15 +241,16 @@ icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
 #'   definition code.
 #' @param save logical, whether to try to save the output data in the source 
 #'   tree.
-#' @param path character vector of unit length containing path to the source 
+#' @param saveDir character vector of unit length containing path to the source 
 #'   package data directory. Default is ~/icd9/data
+#' @param returnAll logical which, if TRUE, will result in the invisible return of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
 #' @return list of lists, name value pairs, and where a single name was 
 #'   associated with multiple further name-value pairs, this is presented as a 
 #'   sub-list. This is primarily required because of the obtuse SAS FORMAT data 
 #'   structure: the AHRQ codes are hidden in a sublist of the first item.
 #' @keywords internal
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
-                         save = FALSE, path="~/icd9/data") {
+                         save = FALSE, saveDir = "~/icd9/data", returnAll = FALSE) {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
@@ -257,7 +258,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
   # Boom. The remainder of the AHRQ SAS input file consists of DRG definitions (TODO).
   
-  ahrqComorbid <- list()
+  ahrqComorbidAll <- list()
   
   for (cmd in names(ahrqComorbidWork)) {
     somePairs <- strsplit(x = ahrqComorbidWork[[cmd]], split = "-")
@@ -266,19 +267,57 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
     thePairs <- somePairs[lapply(somePairs, length) == 2]
     out <- append(out, lapply(thePairs, function(x) icd9ExpandRangeShort(x[1], x[2])))
     # update ahrqComorbid with full range of icd9 codes:
-    ahrqComorbid[[cmd]] <- unlist(out)
+    ahrqComorbidAll[[cmd]] <- unlist(out)
   }
   
   # drop this superfluous finale which allocates any other ICD-9 code to the
   # "Other" group
-  ahrqComorbid[[" "]] <- NULL
+  ahrqComorbidAll[[" "]] <- NULL
+
+  ahrqComorbid <- ahrqComorbidAll
+
+  ahrqComorbid$HTNCX <- c(
+    ahrqComorbid$HTNCX, # some codes already in this category
+    ahrqComorbid$HTNPREG,
+    ahrqComorbid$OHTNPREG,
+    ahrqComorbid$HTNWOCHF,
+    ahrqComorbid$HTNWCHF,
+    ahrqComorbid$HRENWORF,
+    ahrqComorbid$HRENWRF,
+    ahrqComorbid$HHRWOHRF,
+    ahrqComorbid$HHRWCHF,
+    ahrqComorbid$HHRWRF,
+    ahrqComorbid$HHRWHRF)
+
+  ahrqComorbid$CHF <- c(
+    ahrqComorbid$CHF, # some codes already in this category
+    ahrqComorbid$HTNWCHF,
+    ahrqComorbid$HHRWCHF,
+    ahrqComorbid$HHRWHRF)
+
+  ahrqComorbid$RENLFAIL <- c(
+    ahrqComorbid$RENLFAIL, # some codes already in this category
+    ahrqComorbid$HRENWRF,
+    ahrqComorbid$HHRWRF,
+    ahrqComorbid$HHRWHRF)
+
+
+  ahrqComorbid[c("HTNPREG", "OHTNPREG", "HTNWOCHF", 
+    "HTNWCHF","HRENWORF", "HRENWRF", "HHRWOHRF",
+    "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
+ 
+  # officially, AHRQ HTN with complications means that HTN on its own should be unset.
+  # however, this is not feasible here, since we just package up the data into a list, and it can be used however the user wishes. It would not be hard to write an AHRQ specific function to do this if needed, but it makes more sense to me 
+  
   
   # todo: save/return the DRG mappings.
   
   # save the data in the development tree, so the package user doesn't need to
   # decode it themselves.
-  if (save) saveSourceTreeData("ahrqComorbid", path = path)
+  if (save) saveSourceTreeData("ahrqComorbidAll", path = saveDir)
+  if (save) saveSourceTreeData("ahrqComorbid", path = saveDir)
   
+  if (returnAll) return(invisible(ahrqComorbidAll))
   invisible(ahrqComorbid)
 }
 
