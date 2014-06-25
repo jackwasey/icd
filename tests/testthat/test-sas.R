@@ -62,7 +62,7 @@ test_that("groups of SAS assignments can be extracted", {
 })
 
 test_that("AHRQ interpretation at least returns something reasonable", {
-  result <- parseAhrqSas(save = FALSE)
+  result <- parseAhrqSas(sasPath = system.file("extdata", "comformat2012-2013.txt", package="icd9"), save = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
  })
@@ -75,5 +75,24 @@ test_that("HTN subgroups all worked", {
   expect_true(all(ahrqComorbidAll$HTNCX %in% ahrqComorbid$HTNCX))
   expect_true(all(ahrqComorbidAll$CHF %in% ahrqComorbid$CHF))
   expect_true(all(ahrqComorbidAll$RENLFAIL %in% ahrqComorbid$RENLFAIL))
+
+})
+
+test_that("read LET string declarations from SAS code", {
+
+  letStrOne <-  "\t%LET DC16=%STR('196','197','198','199');      "
+  resList <- sasExtractLetStrings(letStrOne)
+  expect_true(is.list(resList))
+  expect_true(names(resList) == "DC16")
+  expect_equal(resList[[1]], c("196", "197", "198", "199"))
+
+  resList <- sasExtractLetStrings(c("\t%LET DC16=%STR('196','197','198','199');      ",
+    "\t%LET DC17=%STR('042','043','044');"))
+
+  expect_equal(resList[["DC16"]], c("196", "197", "198", "199"))
+  expect_equal(resList[["DC17"]], c("042", "043", "044"))
+ 
+  resList <- sasExtractLetStrings("\t%LET LBL16=%STR(Metastatic Carcinoma);")
+  expect_equal(resList[["LBL16"]], "Metastatic Carcinoma")
 
 })

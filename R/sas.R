@@ -127,3 +127,20 @@ sasDropOtherAssignment <- function(x) {
   #regmatches(m=regexec(pattern="(.*)=", text='079,305 = "YES"'), x='079,305 = "YES"')[[1]][2]
   lapply(x, function(y) strsplit(y, split="[[:space:]]*=")[[1]][1]) # asssuming one "="
 }
+
+#' @title extract quoted or unquoted SAS string definitions
+sasExtractLetStrings <- function(x) {
+
+  #letStr <- grep(pattern="LET.*STR", x)
+  a <- strMultiMatch(pattern = "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)",
+                  text = x, dropEmpty = TRUE)
+  vls <- vapply(a, FUN=function(x) x[[2]], FUN.VALUE="")
+  splt <- strsplit(vls, split=",")
+  result <- lapply(splt, strip, pattern="'")
+  names(result) <- vapply(a, FUN=function(x) x[[1]], FUN.VALUE="")
+  result
+
+}
+
+
+

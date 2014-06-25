@@ -37,8 +37,8 @@ logicalToBinary <- function(dframe) {
 #' @param x is a character vector to strip
 #' @return character vector
 #' @keywords internal
-strip <- function (x) 
-  gsub(pattern = " ", replacement = "", x, fixed = TRUE, useBytes = TRUE) # beware unicode
+strip <- function (x, pattern=" ") 
+  gsub(pattern = pattern, replacement = "", x, fixed = TRUE, useBytes = TRUE) # beware unicode
 
 #' @title strip whitespace from ends of each string in given character vector
 #' @description slower than \code{strip}.
@@ -59,10 +59,15 @@ trim <- function(x)
 #' @param ... are additional parameters passed to regexec and regmatches. I
 #'   haven't tried this: it may need two separate variables containing lists of
 #'   params, since this will send everything to both functions.
+#' @param dropEmpty logical whether to drop rows with no matches
 #' @return list of character vectors, list length being the length of the inptu
 #'   text vector.
-strMultiMatch <- function(pattern, text, ...) # unlist puts the name in the first position, which I don't think I ever want.
-  lapply(text, function(x) unlist(regmatches(x=x, m=regexec(pattern=pattern, text=x, ...), ...))[-1])
+strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
+  # unlist puts the name in the first position, which I don't think I ever want.
+  result <- lapply(text, function(x) unlist(regmatches(x=x, m=regexec(pattern=pattern, text=x, ...), ...))[-1])
+  if (!dropEmpty) return(result)
+  result[sapply(result, function(x) length(x) != 0)]
+}
 
 #' @title check whether character vector represents all numeric values
 #' @description check whether all the items of input vector are numeric without throwing warning

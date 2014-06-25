@@ -237,20 +237,17 @@ icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
 #' @description Takes the raw data taken directly from the AHRQ web site and 
 #'   parses into RData. It is then saved in the development tree data directory,
 #'   so this is an internal function, used in generating the package itself!
-#' @param sasPath single character string containing path to SAS FORMAT
-#'   definition code.
-#' @param save logical, whether to try to save the output data in the source 
-#'   tree.
-#' @param saveDir character vector of unit length containing path to the source 
-#'   package data directory. Default is ~/icd9/data
+#' @template savesas
 #' @param returnAll logical which, if TRUE, will result in the invisible return of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
 #' @return list of lists, name value pairs, and where a single name was 
 #'   associated with multiple further name-value pairs, this is presented as a 
 #'   sub-list. This is primarily required because of the obtuse SAS FORMAT data 
 #'   structure: the AHRQ codes are hidden in a sublist of the first item.
 #' @keywords internal
-parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
-                         save = FALSE, saveDir = "~/icd9/data", returnAll = FALSE) {
+parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package="icd9"),
+                         save = FALSE, 
+                         saveDir = "~/icd9/data", 
+                         returnAll = FALSE) {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
@@ -340,3 +337,23 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #ag<-aggregate(ICD.9.CM.CODE ~ CCS.LVL.1.LABEL, data=ahrq.dx, FUN=paste)
 # TODO to be continued...
 
+#' @title parse original SAS code defining Quan's update of Deyo comorbidities.
+#' @description As with \code{parseAhrqSas}, this function reads SAS code, and 
+#'   in, a very limited way, extracts definitions. In this case the code uses 
+#'   LET statements, with strings or lists of strings. This saves and invisibly 
+#'   returns a list with names corresponding to the comorbidities and values as 
+#'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
+#'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
+#'   simpler.
+parseQuanSas <- function(sasPath = "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
+                         save = FALSE, saveDir = "~/icd9/data") {
+  quanSas <- readLines(sasPath, warn = FALSE)
+  qlets <- sasExtractLetStrings(quanSas)
+  qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
+  quanComorbid <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
+  names(quanComorbid) <- unlist(unname(qlabels))
+  
+  if (save) saveSourceTreeData("quanComorbid", path = saveDir)
+  
+  invisible(quanComorbid)
+}
