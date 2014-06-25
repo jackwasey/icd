@@ -700,7 +700,7 @@ icd9Explain.list <- function(icd9Decimal) lapply(icd9Decimal, icd9Explain)
 #' @describeIn icd9Explain explain character vector of ICD-9 codes 
 #' @export
 icd9Explain.character <- function(icd9Decimal) {
-  out <- icd9CmDesc[ icd9CmDesc$icd9 %in% icd9AddLeadingZeroesDecimal(icd9Decimal), ]
+  out <- icd9CmDesc[ icd9CmDesc$icd9 %in% icd9DecimalToShort(icd9AddLeadingZeroesDecimal(icd9Decimal)), ]
   row.names(out) <- NULL
   names(out) <- c("ICD9", "Diagnosis", "Description")
   out
@@ -741,13 +741,17 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
   r<-strsplit(r, " ")
   icd9ShortCode <- lapply(r, FUN=function(row) row[1])
   icd9ShortDesc <- lapply(r, FUN=function(row) paste(row[-c(1,2)], collapse=" "))
-  icd9CmDesc <- data.frame(icd9=unlist(icd9LongCode), descLong=unlist(icd9LongDesc), descShort=unlist(icd9ShortDesc))
+  icd9CmDesc <- data.frame(
+    icd9 = unlist(icd9LongCode), 
+    descLong = unlist(icd9LongDesc), 
+    descShort = unlist(icd9ShortDesc),
+    stringsAsFactors = FALSE)
   
   # attempt to write the date from the source file to RData in the package source tree.
   if (save) saveSourceTreeData("icd9CmDesc", path = path)
 
   message("The following long descriptions contain UTF-8 codes:")
-  message(icd9CmDesc[grep(pattern="UTF", Encoding(levels(icd9CmDesc$descLong))), ])
+  message(paste(icd9CmDesc[grep(pattern="UTF", Encoding(icd9CmDesc$descLong)), ], sep = ", "))
 
   
   invisible(icd9CmDesc)
