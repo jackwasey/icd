@@ -345,6 +345,8 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
 #'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
 #'   simpler.
+#' @template savesas
+#' @keywords internal
 parseQuanSas <- function(sasPath = "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
                          save = FALSE, saveDir = "~/icd9/data") {
   quanSas <- readLines(sasPath, warn = FALSE)
