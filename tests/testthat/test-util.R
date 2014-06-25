@@ -1,7 +1,6 @@
-context('test utility functions.')
+context("test utility functions")
 
-test_that('strMultiMatch with and without dropping empties',
-{
+test_that('strMultiMatch with and without dropping empties', {
 
 expect_equal(strMultiMatch(pattern="jack", text=c("not", "here")), list(character(), character()))
 expect_equal(strMultiMatch(pattern="(jack)", text=c("not", "here")), list(character(), character()))

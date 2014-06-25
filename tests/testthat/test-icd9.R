@@ -516,8 +516,14 @@ test_that("wrap up all icd9 tests", {
   
   test_that("built-in icd9 to comorbidity mappings are all valid", {
     expect_true(icd9ValidMappingShort(ahrqComorbid))
+    expect_true(icd9ValidMappingShort(quanComorbid))
+    expect_true(icd9ValidMappingShort(elixhauserComorbid))
+    
     expect_identical(ahrqComorbid, parseAhrqSas(save = FALSE)) # same but from source data. Should be absolutely identical.
     expect_identical(ahrqComorbidAll, parseAhrqSas(save = FALSE, returnAll = TRUE)) # same but from source data. Should be absolutely identical.
+    expect_identical(elixhauserComorbid, parseElixhauser(save = FALSE))
+    expect_identical(quanComorbid, parseQuanSas(save = FALSE))
+    
   })
   
   test_that("running short to decimal conversion before and after expansion of a ICD-9 base codes gives the same result", {

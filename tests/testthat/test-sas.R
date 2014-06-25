@@ -1,3 +1,4 @@
+context("test SAS interpretation")
 
 test_that("basic SAS VALUE declarations can be read into an R list", {
   
