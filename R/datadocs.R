@@ -9,11 +9,14 @@ NULL
 
 #' @title AHRQ comorbidities
 #' @description This mapping of comorbidities to ICD-9 codes is dervied directly
-#'   from SAS code provided by AHRQ, and translated into this R data structure.
+#'   from SAS code provided by AHRQ, and translated into this R data structure. 
+#'   This is a revision of the Elixhauser system, notably exluding cradiac
+#'   arrythmia.
 #' @docType data
 #' @keywords datasets
 #' @format list of character vectors
-#' @source \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
+#' @source 
+#' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @name ahrqComorbid
 NULL
 
@@ -32,7 +35,8 @@ NULL
 
 #' @title Quan adaptation of Deyo comorbidities
 #' @description Derived programmatically from the SAS code used in the original 
-#'   publication.
+#'   publication. According to the referenced study, this provides the best
+#'   presdictor of in-patient to <30d mortality.
 #' @docType data
 #' @keywords datasets
 #' @format list of character vectors, each named by co-morbidity

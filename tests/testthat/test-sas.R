@@ -93,7 +93,9 @@ test_that("read LET string declarations from SAS code", {
   expect_equal(resList[["DC16"]], c("196", "197", "198", "199"))
   expect_equal(resList[["DC17"]], c("042", "043", "044"))
  
-  resList <- sasExtractLetStrings("\t%LET LBL16=%STR(Metastatic Carcinoma);")
-  expect_equal(resList[["LBL16"]], "Metastatic Carcinoma")
+  expect_equal(sasExtractLetString("\t%LET LBL16=%STR(Metastatic Carcinoma);")[["LBL16"]], "Metastatic Carcinoma")
+
+  expect_equal(sasExtractLetString("\t%LET ABC=%STR("123");")[["ABC"]], "123")
 
 })
+

@@ -62,12 +62,13 @@ Validation forces the package user to provide character format ICD-9 codes. If g
 icd9ValidShort(100) # throws an error
 @
 
-\section{human-readable ICD-9}
+\section{Human-readable ICD-9}
 <<explain,eval=T>>=
 icd9Explain("1.0")
 icd9Explain("001.1")
 icd9Explain(icd9ShortToDecimal("0019"))
 icd9Explain(list(cholera = c("001", "001.0", "001.1", "001.9")))
+
 @
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
 <<noexplain,eval=T>>=
