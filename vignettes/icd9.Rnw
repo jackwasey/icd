@@ -24,7 +24,7 @@ patientData <- data.frame(
 )
 @
 
-\section{ICD-9 interpretation and processing}
+\section{Introduction}
 
 This package is designed to be used with a variety of input data, including multiple possible formats of ICD-9 codes, but some assumptions are made. There are many ways of misinterpreting ICD-9 codes, especially when dealing with ranges. The code in this package carefully considers a wide range of possibilities. \textbf{ICD-9 codes are not numeric}. Using numeric values for either decimal or non-decimal form will cause serious problems, hence the predominantly string-based processing here, and a robust set of unit tests.
 
@@ -43,15 +43,15 @@ icd9Comorbidities(icd9df = patientData)[, 1:5]
 
 The following shows the same code with default options written out:
 <<echo=TRUE,eval=FALSE>>=
-icd9Comorbidities(icd9df = patientData, 
+icd9Comorbidities(icd9df = patientData,
                   visitId = "visitId",
                   icd9Field = "icd9",
-                  icd9Mapping = ahrqComorbid, 
-                  validateMapping = FALSE, 
+                  icd9Mapping = ahrqComorbid,
+                  validateMapping = FALSE,
                   shortMapping = TRUE)
 @
 
-\section{validation of ICD-9 codes}
+\section{Validation of ICD-9 codes}
 <<validation,eval=T>>=
 icd9ValidDecimal("V10.2")
 icd9ValidShort(c("099.17", "-1"))
@@ -126,7 +126,7 @@ PROC FORMAT LIB=library fmtlib;
       "V8541"-"V8545",
       "V8554",
       "79391"         = "OBESE"     /* Obesity      */
-              
+
       "3004 ",
       "30112",
       "3090 ",
@@ -145,5 +145,21 @@ resulting in a named list. here is an extract.
 <<example_ahrqComorbid>>=
 ahrqComorbid[c("OBESE", "DEPRESS")]
 @
+
+\section{Elixhauser co-morbidities}
+
+Elixhauser originally devleoped this set of co-morbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
+
+<<elix>>=
+names(elixhauserComorbid)
+@
+
+\section{Quan}
+
+Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's co-morbidities. Thus there are two 'Quan' comorbidity mappings, of which the Charlson/Deyo is provided at present.
+<<elix>>=
+names(quanCharlsonComorbid)
+@
+
 
 \end{document}

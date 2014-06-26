@@ -355,12 +355,12 @@ parseQuanSas <- function(sasPath = "http://mchp-appserv.cpe.umanitoba.ca/concept
   quanSas <- readLines(sasPath, warn = FALSE)
   qlets <- sasExtractLetStrings(quanSas)
   qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
-  quanComorbid <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
-  names(quanComorbid) <- unlist(unname(qlabels))
+  quanCharlsonComorbid <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
+  names(quanCharlsonComorbid) <- unlist(unname(qlabels))
 
-  if (save) saveSourceTreeData("quanComorbid", path = saveDir)
+  if (save) saveSourceTreeData("quanCharlsonComorbid", path = saveDir)
 
-  invisible(quanComorbid)
+  invisible(quanCharlsonComorbid)
 }
 
 #' @title Generate Elixhauser comorbidities

@@ -128,26 +128,26 @@ test_that("wrap up all icd9 tests", {
     expect_false(icd9ValidDecimal("E100")) # E800-E999 defined
     expect_false(icd9ValidDecimal("E0999")) # this is 099.9 which is not a valid E code
     # TODO: more E validation
-    expect_equal(icd9ValidDecimal(c("100", "chestnut")), c(T, F))
+    expect_equal(icd9ValidDecimal(c("100", "chestnut")), c(TRUE, FALSE))
     #expect_warning(naVal <- icd9ValidDecimal("100, 200")) # note this is a string with two numbers in it...
     #expect_equal(naVal, NA)
-    expect_equal(icd9ValidDecimal(c("two", "things")), c(F, F))
-    expect_equal(icd9ValidDecimal(c("100", "200.55", "V01.11")), c(T, T, TRUE))
-    expect_equal(icd9ValidDecimal(as.factor(c("0", "100", "222.22", "100", "1", "0"))), c(T, T, T, T, T, TRUE))
-    expect_equal(icd9ValidDecimal(c("10.1", "100", "999.99", "0.01")), c(T, T, T, TRUE))
+    expect_equal(icd9ValidDecimal(c("two", "things")), c(FALSE, FALSE))
+    expect_equal(icd9ValidDecimal(c("100", "200.55", "V01.11")), c(TRUE, TRUE, TRUE))
+    expect_equal(icd9ValidDecimal(as.factor(c("0", "100", "222.22", "100", "1", "0"))), c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE))
+    expect_equal(icd9ValidDecimal(c("10.1", "100", "999.99", "0.01")), c(TRUE, TRUE, TRUE, TRUE))
   })
 
   test_that("icd9ValidShort", {
     expect_error(icd9ValidShort(list(1230, c(12323, 2323), c("nonesnseses"))))
     #expect_false(icd9ValidShort("0"))
     expect_true(icd9ValidShort("0"))
-    expect_equal(icd9ValidShort(c("0", "00", "000", "0000", "00000")), c(T, T, T, T, TRUE))
+    expect_equal(icd9ValidShort(c("0", "00", "000", "0000", "00000")), c(TRUE, TRUE, TRUE, TRUE, TRUE))
     expect_true(icd9ValidShort("12345"))
     expect_true(icd9ValidShort("12 "))
     expect_error(icd9ValidShort(1))
-    expect_equal(icd9ValidShort(c("99999", "1")), c(T, TRUE))
-    expect_equal(icd9ValidShort(c("1", "100", "222.22")), c(T, T, F))
-    expect_equal(icd9ValidShort(as.factor(c("1", "100", "222.22", "100", "1.1"))), c(T, T, F, T, F))
+    expect_equal(icd9ValidShort(c("99999", "1")), c(TRUE, TRUE))
+    expect_equal(icd9ValidShort(c("1", "100", "222.22")), c(TRUE, TRUE, FALSE))
+    expect_equal(icd9ValidShort(as.factor(c("1", "100", "222.22", "100", "1.1"))), c(TRUE, TRUE, FALSE, TRUE, FALSE))
     expect_true(icd9ValidShort("V1")) # not zero-padded, but not ambiguous. Should pass.
 
     expect_false(icd9ValidShort("jericho"))
@@ -174,18 +174,18 @@ test_that("wrap up all icd9 tests", {
     expect_error(icd9InReferenceCode(123)) # no numbers, just strings
     expect_error(icd9InReferenceCode("salami"))
     expect_error(icd9InReferenceCode("bratwurst", "123", validate = TRUE))
-    expect_equal(icd9InReferenceCode("bratwurst", "123", validate = F), FALSE)
+    expect_equal(icd9InReferenceCode("bratwurst", "123", validate = FALSE), FALSE)
     expect_error(icd9InReferenceCode("421", "boudin", validateReference = TRUE)) # base codes definitely must be valid regardless of validate = TRUE (for the input data): so do generate errors
     #expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "V432"))) # invalid V code # automatically validate? TODO
     expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "E"), validateReference = TRUE)) # invalid reference code
     expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "V"), validateReference = TRUE)) # invalid reference code
-    expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V42")), c(F, TRUE))
+    expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V42")), c(FALSE, TRUE))
     expect_error(icd9InReferenceCode(c("123", "V43210"), c("421", "123"), validate = TRUE))
-    expect_equal(icd9InReferenceCode(c("123", "V43210"), c("421", "123"), validate = F), c(T, F))
+    expect_equal(icd9InReferenceCode(c("123", "V43210"), c("421", "123"), validate = FALSE), c(TRUE, FALSE))
     expect_error(icd9InReferenceCode(c("100.1", "200"), "200", validate = TRUE)) # not expecting decimals in input data
-    expect_equal(icd9InReferenceCode(c("100.1", "200"), "200", validate = F), c(F, TRUE))
+    expect_equal(icd9InReferenceCode(c("100.1", "200"), "200", validate = FALSE), c(FALSE, TRUE))
 
-    expect_identical(icd9InReferenceCode(c("2501", "25001", "999"), c("V101", "250")), c(T, T, F))
+    expect_identical(icd9InReferenceCode(c("2501", "25001", "999"), c("V101", "250")), c(TRUE, TRUE, FALSE))
 
     #ni = runif(n=1000000, min=100, max=99999) # create a large set of valid icd9 codes (of the integer variety)
     # ni <- c(36211,
@@ -526,8 +526,8 @@ test_that("wrap up all icd9 tests", {
   })
 
   test_that("built-in icd9 to comorbidity mappings are all valid", {
-    expect_true(icd9ValidMappingShort(ahrqComorbid))
-    expect_true(icd9ValidMappingShort(quanComorbid))
+    expect_true(icd9ValidMappingShort(ahrqCharlsonComorbid))
+    expect_true(icd9ValidMappingShort(quanCharlsonComorbid))
     expect_true(icd9ValidMappingShort(elixhauserComorbid))
 
     expect_identical(ahrqComorbid, parseAhrqSas(save = FALSE)) # same but from source data. Should be absolutely identical.
@@ -542,11 +542,11 @@ test_that("wrap up all icd9 tests", {
     expect_equal(icd9ShortToDecimal("013"), "13")
     expect_equal(icd9ShortToDecimal("013", leadingZeroes = TRUE), "013")
     expect_equal(icd9ShortToDecimal("013", keepLoneDecimal = TRUE), "13.")
-    expect_equal(icd9ShortToDecimal("013", leadingZeroes = T, keepLoneDecimal = TRUE), "013.")
+    expect_equal(icd9ShortToDecimal("013", leadingZeroes = TRUE, keepLoneDecimal = TRUE), "013.")
     expect_equal(icd9ShortToDecimal("V013"), "V1.3")
     expect_equal(icd9ShortToDecimal("V013", leadingZeroes = TRUE), "V01.3")
     expect_equal(icd9ShortToDecimal("V01", keepLoneDecimal = TRUE), "V1.")
-    expect_equal(icd9ShortToDecimal("V01", leadingZeroes = T, keepLoneDecimal = TRUE), "V01.")
+    expect_equal(icd9ShortToDecimal("V01", leadingZeroes = TRUE, keepLoneDecimal = TRUE), "V01.")
 
     icd9List <- list(rs=randomShortIcd9, ra=randomSampleAhrq, fi=fewIcd9)
 
@@ -562,7 +562,7 @@ test_that("wrap up all icd9 tests", {
     expect_equal(icd9ShortToDecimal(icd9DecimalToShort(randomDecimalIcd9), keepLoneDecimal= TRUE), randomDecimalIcd9)
     # test without decimal, too...
     rd2 <- as.character(as.integer(randomDecimalIcd9))
-    expect_equal(icd9ShortToDecimal(icd9DecimalToShort(rd2), keepLoneDecimal=F), rd2)
+    expect_equal(icd9ShortToDecimal(icd9DecimalToShort(rd2), keepLoneDecimal=FALSE), rd2)
 
   })
 
