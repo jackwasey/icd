@@ -62,6 +62,22 @@ Validation forces the package user to provide character format ICD-9 codes. If g
 icd9ValidShort(100) # throws an error
 @
 
+\section{Ranges of ICD-9 codes}
+
+These functions generate syntactically valid ICD-9 codes, without including parent codes when the range limit would subset the parent. E.g. "100.99" \%i9d\% "101.01" does not include "100" or "100.0", both of which imply large subsets than requested by the range command.
+
+<<ranges,eval=T>>=
+"10099" %i9s% "10101"
+"V10" %i9d% "V10.02"
+# "E987" %i9d% "E988.9"
+@
+
+Another way of specifying ranges are to use function calls. These are exactly equivalent to the \%i9s\% and \%i9d\% range operators. This example shows the result when the user specifies a range which would include parents but not all their children:
+<<rangeanomaly>>=
+icd9ExpandRangeShort("V100", "V1002")
+@
+Although V100 would include ten children, the range only returns 4 values. In all other cases, parents are omitted to avoid the range returning overly broad classifications than intended. A planned feature is to optionally enable returning these parent codes, which would then follow a more numerical pattern (although still distinguishing trailing zeroes).
+
 \section{Human-readable ICD-9}
 <<explain,eval=T>>=
 icd9Explain("1.0")

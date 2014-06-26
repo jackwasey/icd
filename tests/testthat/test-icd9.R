@@ -372,7 +372,7 @@ test_that("wrap up all icd9 tests", {
     expect_error(icd9ExpandRangeShort("4019", "4018"))
     expect_error(icd9ExpandRangeShort("402", "401"))
     expect_error(icd9ExpandRangeShort("2", "1"))
-    expect_error(icd9ExpandRangeShort("002", "1", validate=T))
+    expect_error(icd9ExpandRangeShort("002", "1", validate = T))
     expect_error(icd9ExpandRangeShort("002", "001"))
     expect_error(icd9ExpandRangeShort("2", "001"))
     expect_error(icd9ExpandRangeShort("4010", "401"))
@@ -430,9 +430,15 @@ test_that("wrap up all icd9 tests", {
     
     expect_equal(icd9ExpandRangeShort("401","40102"), c("401", "4010", "40100", "40101","40102"))
     expect_equal(icd9ExpandRangeShort("V1000","V1002"), c("V1000","V1001","V1002"))
+    # although we don't usually return parents whose scope overlaps the upper
+    # limit, if the range specification already has this 'anomaly', we just roll
+    # with it.
+    expect_equal(icd9ExpandRangeShort("V10", "V1001"), c("V10","V100","V1000", "V1001")) 
+    # but we cap off the upper range correctly:
+    expect_equal(icd9ExpandRangeShort("V1009", "V101"), c("V1009", "V101", "V1010", "V1011", "V1012", "V1013", "V1014", "V1015", "V1016", "V1017", "V1018", "V1019")) 
     
     expect_error(icd9ExpandRangeShort("V10", "   V1 ")) # should fail despite end being 'longer' than start
-    expect_error(icd9ExpandRangeShort(c("10","20"), c("11","21"))) # only works with single range
+    expect_error(icd9ExpandRangeShort(c("10", "20"), c("11","21"))) # only works with single range
     
     # E codes are handled differently. Currently need lots of changes to support
     # this, so check for error if any E code range requested

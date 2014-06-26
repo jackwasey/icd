@@ -134,10 +134,11 @@ sasExtractLetStrings <- function(x) {
   #letStr <- grep(pattern="LET.*STR", x)
   a <- strMultiMatch(pattern = "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)",
                   text = x, dropEmpty = TRUE)
-  vls <- vapply(a, FUN=function(x) x[[2]], FUN.VALUE="")
+  vls <- vapply(a, FUN=function(x) x[[2]], FUN.VALUE = "")
   splt <- strsplit(vls, split=",")
-  result <- lapply(splt, strip, pattern="'")
-  names(result) <- vapply(a, FUN=function(x) x[[1]], FUN.VALUE="")
+  result <- lapply(splt, strip, pattern="'") # strip single quotes
+  result <- lapply(result, strip, pattern='"') # strip double quotes
+  names(result) <- vapply(a, FUN = function(x) x[[1]], FUN.VALUE="")
   result
 
 }

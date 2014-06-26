@@ -346,7 +346,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
 #'   simpler.
 #' @template savesas
-#' @keywords internal
+#' @keywords internal datasets
 parseQuanSas <- function(sasPath = "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
                          save = FALSE, saveDir = "~/icd9/data") {
   quanSas <- readLines(sasPath, warn = FALSE)
@@ -360,14 +360,13 @@ parseQuanSas <- function(sasPath = "http://mchp-appserv.cpe.umanitoba.ca/concept
   invisible(quanComorbid)
 }
 
-#' @title Elixhauser comorbidities
-#' @description This function uses the \code{%i9d%} operator, so cannot be done
+#' @title Generate Elixhauser comorbidities
+#' @description This function uses the \code{\%i9d\%} operator, so cannot be done
 #'   as an R file in the \code{data} directory. The data is documented in
 #'   \code{datadocs.R}.
 #' @param saveDir path to directory to save the data. This is typically the data
 #'   folder in the devleopment source tree.
-#' @docType data
-#' @keywords internal
+#' @keywords internal datasets
 parseElixhauser <- function(save = FALSE, saveDir = "~/icd9/data") {
   elixhauserComorbid <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91", "404.93", "428.0" %i9d% "428.9"),
@@ -403,6 +402,9 @@ parseElixhauser <- function(save = FALSE, saveDir = "~/icd9/data") {
     depression = c("300.4", "301.12", "309.0", "309.1", "311")
   )
 
+  # convert to short form, for consistency with other mappings.
+  elixhauserComorbid <- lapply(elixhauserComorbid, icd9DecimalToShort)
+  
   if (save) saveSourceTreeData("elixhauserComorbid", path = saveDir)
 
   invisible(elixhauserComorbid)
