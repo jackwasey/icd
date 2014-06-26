@@ -2,7 +2,6 @@
 .Rhistory
 .RData
 man
-icd9.Rproj
 vignettes/icd9.tex
 vignettes/icd9.pdf
 vignettes/icd9.synctex.gz
