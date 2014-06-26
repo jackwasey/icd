@@ -359,3 +359,51 @@ parseQuanSas <- function(sasPath = "http://mchp-appserv.cpe.umanitoba.ca/concept
   
   invisible(quanComorbid)
 }
+
+#' @title Elixhauser comorbidities
+#' @description This function uses the \code{%i9d%} operator, so cannot be done
+#'   as an R file in the \code{data} directory. The data is documented in
+#'   \code{datadocs.R}.
+#' @param saveDir path to directory to save the data. This is typically the data
+#'   folder in the devleopment source tree.
+#' @docType data
+#' @keywords internal
+parseElixhauser <- function(save = FALSE, saveDir = "~/icd9/data") {
+  elixhauserComorbid <- list(
+    chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91", "404.93", "428" %i9d% "428.9"),
+    arrhythmia = c("426.1", "426.11", "426.13", "426.2" %i9d% "426.53", "426.6" %i9d% "426.89", "427", "427.2", "427.31", "427.6", "427.9", "785"),
+    valve = c("93.2" %i9d% "93.24", "394" %i9d% "397.1", "424" %i9d% "424.91", "746.3" %i9d% "746.6"),
+    pulm.circ = c("416" %i9d% "416.9", " 417.9"),
+    pvd = c("440" %i9d% "440.9", "441.2", "441.4", "441.7", "441.9", "443.1" %i9d% "443.9", "447.1", "557.1", "557.9"),
+    htn = c("401.1", "401.9", "402.1", "402.9", "404.1", "404.9", "405.11", "405.19", "405.91", "405.99"),
+    paralysis = c("342" %i9d% "342.12", "342.9" %i9d% "344.9"),
+    neuro.other = c("331.9", "332", "333.4", "333.5", "334" %i9d% "335.9", "340", "341.1" %i9d% "341.9", "345" %i9d% "345.11", "345.4" %i9d% "345.51", "345.8" %i9d% "345.91", "348.1", "348.3", "780.3", "784.3"),
+    chronic.pulm = c("490" %i9d% "492.8", "493" %i9d% "493.91", "494", "495" %i9d% "505", "506.4"),
+    dm.uncomp = c("250" %i9d% "250.33"),
+    dm.comp = c("250.4" %i9d% "250.73", "250.9" %i9d% "250.93"),
+    hypothyroid = c("243" %i9d% "244.2", "244.8", "244.9"),
+    renal = c("403.11", "403.91", "404.12", "404.92", "585", "586"),
+    liver = c("70.32", "70.33", "70.54", "456", "456.1", "456.2", "456.21", "571", "571.2", "571.3", "571.4" %i9d% "571.49", "571.5", "571.6", "571.8", "571.9", "572.3", "572.8"),
+    pud = c("531.7", "531.9", "532.7", "532.9", "533.7", "533.9", "534.7", "534.9"),
+    hiv = c("42" %i9d% "44.9"),
+    lymphoma = c("200" %i9d% "202.38", "202.5" %i9d% "203.01", "203.8" %i9d% "203.81", "238.6", "273.3"),
+    mets = c("196" %i9d% "199.1"),
+    solid.tumor = c("140" %i9d% "172.9", "174" %i9d% "175.9", "179" %i9d% "195.8"),
+    rheum = c("701", "710" %i9d% "710.9", "714" %i9d% "714.9", "720" %i9d% "720.9", "725"),
+    coag = c("286.0" %i9d% "286.9", "287.1", "287.3" %i9d% "287.5"),
+    obesity = c("278"),
+    wt.loss = c("260" %i9d% "263.9"),
+    lytes = c("276" %i9d% "276.9"),
+    anemia.loss = c("280"),
+    anemia.def = c("280.1" %i9d% "281.9", "285.9"),
+    etoh = c("291.1", "291.2", "291.5", "291.8", "291.9", "303.9" %i9d% "303.93", "305" %i9d% "305.03"),
+    drugs = c("292", "292.82" %i9d% "292.89", "292.9", "304" %i9d% "304.93", "305.2" %i9d% "305.93"),
+    psychoses = c("295" %i9d% "298.9", "299.1" %i9d% "299.11"),
+    depression = c("300.4", "301.12", "309", "309.1", "311")
+  )
+
+  if (save) saveSourceTreeData("elixhauserComorbid", path = saveDir)
+
+  invisible(elixhauserComorbidities)
+}
+
