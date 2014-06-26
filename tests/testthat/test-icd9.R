@@ -550,7 +550,7 @@ test_that("wrap up all icd9 tests", {
 
     icd9List <- list(rs=randomShortIcd9, ra=randomSampleAhrq, fi=fewIcd9)
 
-    for (i in names(icd9LisTRUE)) {
+    for (i in names(icd9List)) {
       expect_equal(
         icd9DecimalToShort(icd9ShortToDecimal(icd9List[[i]], leadingZeroes= TRUE), leadingZeroes= TRUE),
         icd9AddLeadingZeroesShort(icd9List[[i]]),
