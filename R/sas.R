@@ -37,7 +37,7 @@ sasFormatExtract <- function(sasTxt) {
   sasTxt <- trim(sasTxt)
 
   # drop everything except VALUE statements
-  sasTxt <- grep(pattern="^VALUE.*", x=sasTxt, value=T)
+  sasTxt <- grep(pattern = "^VALUE.*", x = sasTxt, value = TRUE)
 
   # put each VALUE declaration in a vector element
   allAssignments <- strMultiMatch(
@@ -134,7 +134,7 @@ sasExtractLetStrings <- function(x) {
 
   #letStr <- grep(pattern="LET.*STR", x)
   a <- strMultiMatch(pattern = "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)",
-                  text = x, dropEmpty = TRUE)
+                     text = x, dropEmpty = TRUE)
   vls <- vapply(a, FUN=function(x) x[[2]], FUN.VALUE = "")
   splt <- strsplit(vls, split=",")
   result <- lapply(splt, strip, pattern="'") # strip single quotes

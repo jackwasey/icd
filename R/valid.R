@@ -10,16 +10,16 @@
 stopIfInvalidIcd9 <- function(icd9, short, callingFunction="") {
   if (short && any(!icd9ValidShort(icd9)))
     stop("Invalid short-form ICD9 codes found: ", getInvalidShortICD9(icd9))
-  if (!short && any(!icd9ValidDecimal(icd9))) 
+  if (!short && any(!icd9ValidDecimal(icd9)))
     stop("Invalid long-form ICD9 codes found: ", getInvalidDecimalIcd9(icd9))
 }
 
-#' @rdname stopIfInvalidIcd9 
+#' @rdname stopIfInvalidIcd9
 #' @export
 warnIfInvalidIcd9 <- function(icd9, short, callingFunction="") {
   if (short && any(!icd9ValidShort(icd9)))
     warning("Invalid short-form ICD9 codes found: ", getInvalidShortICD9(icd9))
-  if (!short && any(!icd9ValidDecimal(icd9))) 
+  if (!short && any(!icd9ValidDecimal(icd9)))
     warning("Invalid long-form ICD9 codes found: ", getInvalidDecimalIcd9(icd9))
 }
 
@@ -32,29 +32,29 @@ warnIfInvalidIcd9 <- function(icd9, short, callingFunction="") {
 #'   between 100 and 100.0, and indeed 100.00. Therefore, character class is
 #'   enforced to avoid this problem.
 #' @template icd9-decimal
-#' @return logical vector with T or F for each icd9 code provided according to 
+#' @return logical vector with T or F for each icd9 code provided according to
 #'   validity
 #' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
 #'   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @family ICD9 validation
 #' @export
 icd9ValidDecimal <- function(icd9Decimal) {
-  
-  if (class(icd9Decimal) != "character" & class(icd9Decimal) != 'factor') 
+
+  if (class(icd9Decimal) != "character" & class(icd9Decimal) != 'factor')
     stop("icd9ValidDecimal expects factor, character or numeric vector input but got class: ", class(icd9Decimal))
   if (length(icd9Decimal) == 0) stop("icd9ValidDecimal expects at least one icd9 code to test")
-  
+
   # quick numeric check, although I think working purely in character would be
   # more reliable. e.g. by not introducing weird rounding errors using %%
   if (is.numeric(icd9Decimal)) {
     icd9Decimal <- as.numeric(icd9Decimal)
     return( # allow zero, which is 'no code' code.
-      icd9Decimal >= 0 & icd9Decimal < 1000 & (icd9Decimal * 100 %% 1 == 0) 
+      icd9Decimal >= 0 & icd9Decimal < 1000 & (icd9Decimal * 100 %% 1 == 0)
     )
   }
-  
+
   #   reduendant_assign <- icd9ValidDecimalN(icd9Decimal)
-  
+
   icd9ValidDecimalN(icd9Decimal) | icd9ValidDecimalV(icd9Decimal) | icd9ValidDecimalE(icd9Decimal)
 }
 
@@ -71,22 +71,22 @@ icd9ValidDecimal <- function(icd9Decimal) {
 #'   \url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @export
 icd9ValidShort <- function(icd9Short) {
-  if (!(class(icd9Short) %in% c("character","factor"))) { 
-    stop("isValidShortICD9 expects character vector input. Numeric is ambiguous, 
+  if (!(class(icd9Short) %in% c("character","factor"))) {
+    stop("isValidShortICD9 expects character vector input. Numeric is ambiguous,
          so not allowed (although integers would not be ambiguous, simpler to stick to character-only.")
     # this is not just invalid data: there is a programming error in the data
     # structure
   }
-  if (length(icd9Short) == 0) { 
-    warning("isValidShortICD9 expects at least one icd9 code to test") 
+  if (length(icd9Short) == 0) {
+    warning("isValidShortICD9 expects at least one icd9 code to test")
     return() # return NULL, equivalent of c()
   }
   # quicker to test rather than always try to convert. Factor levels are always
   # character, so no concern about introducing ambiguity with e.g. short code of
   # 100 vs 10.0 (0100, 0010)
-  if (class(icd9Short) =="factor") 
-    icd9Short <- asCharacterNoWarn(icd9Short) 
-  
+  if (class(icd9Short) =="factor")
+    icd9Short <- asCharacterNoWarn(icd9Short)
+
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.
   icd9ValidShortN(icd9Short) | icd9ValidShortV(icd9Short) | icd9ValidShortE(icd9Short)
@@ -94,7 +94,7 @@ icd9ValidShort <- function(icd9Short) {
 
 #' @rdname icd9ValidShort
 #' @export
-icd9ValidShortV <- function(icd9Short) 
+icd9ValidShortV <- function(icd9Short)
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", icd9Short)
 
 #' @rdname icd9ValidShort
@@ -110,7 +110,7 @@ icd9ValidShortN <- function(icd9Short)
 #' @rdname icd9ValidDecimal
 #' @export
 icd9ValidDecimalV <- function(icd9Decimal)
-  grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", 
+  grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
         icd9Decimal)
 
 #' @rdname icd9ValidDecimal
@@ -123,7 +123,7 @@ icd9ValidDecimalE <- function(icd9Decimal)
 #' @export
 icd9ValidDecimalN <- function(icd9Decimal)
   grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
-        icd9Decimal) 
+        icd9Decimal)
 
 #' @title validate an icd9 mapping to comorbidities
 #' @description just takes each item in each vector of the list of vectors and
@@ -152,7 +152,7 @@ getInvalidDecimalIcd9 <- function(icd9Decimal) {
   icd9Decimal[!icd9ValidDecimal(icd9Decimal)]
 }
 
-#' @rdname getInvalidDecimalIcd9 
+#' @rdname getInvalidDecimalIcd9
 #' @template icd9-short
 #' @export
 getInvalidShortICD9 <- function(icd9Short) {

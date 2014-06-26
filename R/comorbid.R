@@ -1,9 +1,9 @@
 #' @title match ICD9 codes
-#' @aliases "%i9in%" 
+#' @aliases "%i9in%"
 #' @description This does the hard work of finding whether a given icd9 code
 #'   falls under a group of reference ICD9 codes. icd9Reference is expanded to cover
 #'   all possible subgroups, then we look for matches where the given ICD9 codes
-#'   appear in the icd9Reference. 
+#'   appear in the icd9Reference.
 #'   http://www.acep.org/Clinical---Practice-Management/V-and-E-Codes-FAQ/
 #' @seealso comorbidities.
 #' @templateVar icd9AnyName "icd9,icd9Reference"
@@ -15,56 +15,56 @@
 #'   icd9Referenec
 #' @keywords internal
 icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReference = TRUE, validate = FALSE, validateReference = FALSE) {
-  
-  if (!class(icd9) %in% c("character", "numeric", "integer")) 
+
+  if (!class(icd9) %in% c("character", "numeric", "integer"))
     stop("icd9InReferenceCode expects a character or number vector for icd9, but got: ", class(icd9))
   if (!class(icd9Reference) %in% c("character", "numeric", "integer"))
     stop("icd9InReferenceCode expects a character or number vector for the basecodes,
          to avoid ambiguity with trailing zeroes, but got: ", class(icd9Reference))
   stopifnot(class(short) == 'logical', class(shortReference) == "logical")
-  
-  if (length(short) >  1 ) 
+
+  if (length(short) >  1 )
     stop("icd9InReferenceCode got vector for short, expected single TRUE or FALSE value")
-  if (length(shortReference) >  1 ) 
+  if (length(shortReference) >  1 )
     stop("icd9InReferenceCode got vector for shortReference, expected single TRUE or FALSE value")
-  if (length(short) == 0 ) 
+  if (length(short) == 0 )
     stop("icd9InReferenceCode got empty vector for short, expected single TRUE or FALSE value")
-  if (length(shortReference) == 0 ) 
+  if (length(shortReference) == 0 )
     stop("icd9InReferenceCode got empty vector for shortReference, expected single TRUE or FALSE value")
-  
+
   if (length(icd9Reference) == 0) stop("icd9InReferenceCode expects at least one icd9 code to test against")
-  
+
   if (validate) stopIfInvalidIcd9(icd9, callingFunction = "icd9InReferenceCode-icd9", short = short)
   if (validateReference) stopIfInvalidIcd9(icd9Reference, callingFunction = "icd9InReferenceCode-icd9", short = shortReference)
-  
+
   kids <- memSpawnRefKids(icd9Reference, shortReference)
-  
+
   # convert to short form to make comparison
   if (short == FALSE) icd9 <- icd9DecimalToShort(icd9)
   if (shortReference == FALSE) kids <- icd9DecimalToShort(kids)
-  
+
   icd9 %in% kids
 }
 
 #' spawn reference codes into all possible lower-level codes (and memoise)
-#' 
-#' take a regular string of an ICD9 code of format (ABC.zxyz) with or without 
-#' leading and trailing zeroes. top level ICD9 code and return T/F if the icd9 
+#'
+#' take a regular string of an ICD9 code of format (ABC.zxyz) with or without
+#' leading and trailing zeroes. top level ICD9 code and return T/F if the icd9
 #' fall within subgroups. This takes several seconds on an unimpressive desktop
 #' PC, so would benefit from memoization.
-#' 
+#'
 #' @import memoise
 #' @keywords internal
-spawnReferenceChildren <- 
+spawnReferenceChildren <-
   function(icd9Reference, shortReference) {
-  c(
-    lapply(
-      icd9Reference, 
-      FUN = function(x) icd9ExpandBaseCode(icd9 = x, short = shortReference)
-    ), 
-    recursive = TRUE
-  )
-}
+    c(
+      lapply(
+        icd9Reference,
+        FUN = function(x) icd9ExpandBaseCode(icd9 = x, short = shortReference)
+      ),
+      recursive = TRUE
+    )
+  }
 
 # this runs outside of a function, on package load
 library(memoise)
@@ -82,7 +82,7 @@ memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
   icd9InReferenceCode(icd9 = icd9, icd9Reference = icd9Reference)
 
 #' @title lookup pre-calculated co-morbidities for given list of visit IDs
-#' @description merges the data frame \code{dat} with pre-calculated icd9 
+#' @description merges the data frame \code{dat} with pre-calculated icd9
 #'   comorbidities by \code{visitId}
 #' @param dat contains the data with at least one field named by \code{visitId},
 #'   and likely a field "poa" for the present on arrival flag. Additional fields
@@ -94,33 +94,36 @@ memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
 #'   the data in current environment tree. If a data frame is given, this is
 #'   used as the data to lookup co-morbidities for the given
 #' @template visitid
-#' @param mergeFun is the function used to merge the comorbidity data with the 
+#' @param mergeFun is the function used to merge the comorbidity data with the
 #'   visitId list, using visitId as the key. Can be left as default \code{merge}
 #'   but this has limited ability when identical fields appear, and in how field
-#'   name clashes can rename; neither does it report on how effective the merge 
+#'   name clashes can rename; neither does it report on how effective the merge
 #'   was.
 #' @param ... additional arguments passed to \code{mergeFun}
 #' @return data.frame with input visit IDs merged with comorbidities
 #' @keywords internal
-lookupComorbidities <- function(dat, 
+lookupComorbidities <- function(dat,
                                 icd9lk,
-                                visitId = "visitId", 
-                                mergeFun = merge, 
+                                visitId = "visitId",
+                                mergeFun = merge,
                                 ...) {
   if (is.character(icd9lk)) {
-    if (!exists(x = icd9lk, inherits=T)) stop("the icd9 comorbidities pre-generated lookup table '", icd9lk, "' doesn't exist in current environments")
-    icd9lk <- get("icd9lk", inherits=T)
-  } 
+    if (!exists(x = icd9lk, inherits = TRUE))
+      stop("the icd9 comorbidities pre-generated lookup table '", icd9lk, "' doesn't exist in current environments")
+    icd9lk <- get("icd9lk", inherits = TRUE)
+  }
   stopifnot(visitId %in% names(icd9lk), visitId %in% names(dat))
   stopifnot(exists(mergeFun))
-  
-  mp <- do.call(mergeFun, list(x=dat, by.x=visitId, y=get(icd9lk), by.y=visitId, leftOuterJoin=T, ...))
-  
+
+  mp <- do.call(
+    mergeFun,
+    list(x = dat, by.x = visitId, y = get(icd9lk), by.y = visitId, leftOuterJoin = TRUE, ...))
+
   # update just the new logical rows replacing NA with FALSE. This happens when
   # a patient has no comorbidities.
   comorbidityNames <- names(get(icd9lk))
   # select only the logical fields, not the patcom field
-  comorbidityNames <- comorbidityNames[comorbidityNames != visitId] 
+  comorbidityNames <- comorbidityNames[comorbidityNames != visitId]
   mp[, comorbidityNames] <- mp[, comorbidityNames] & !is.na(mp[, comorbidityNames])
   mp
 }
@@ -129,42 +132,42 @@ lookupComorbidities <- function(dat,
 #' @description default comorbidity mapping is with AHRQ data. This is slow with
 #'   long lists of patients, so intended to be used as intermediate step to save
 #'   files like comorbidPoaInpt
-#' @param icd9df data.frame with fields specified by visitId and icd9Code. 
-#'   icd9Code is assumed to be a non-decimal 'short' form ICD9 code. There is a 
-#'   many to many ratio of icd9:visitId. This table contains multiple visitId 
-#'   rows, with one row per ICD-9 code. Therefore, every ICD-9 code listed is 
+#' @param icd9df data.frame with fields specified by visitId and icd9Code.
+#'   icd9Code is assumed to be a non-decimal 'short' form ICD9 code. There is a
+#'   many to many ratio of icd9:visitId. This table contains multiple visitId
+#'   rows, with one row per ICD-9 code. Therefore, every ICD-9 code listed is
 #'   associated with at least one visit ID.
 #' @template visitid
 #' @template icd9field
-#' @param icd9Mapping list (or name of a list if character vector of length one 
-#'   is given as argument) of the comorbidities with each top-level list item 
-#'   containing a vector of decimal ICD9 codes. This is in the form of a list, 
+#' @param icd9Mapping list (or name of a list if character vector of length one
+#'   is given as argument) of the comorbidities with each top-level list item
+#'   containing a vector of decimal ICD9 codes. This is in the form of a list,
 #'   with the names of the items corresponding to the comorbidities (e.g. "HTN",
-#'   or "diabetes") and the contents of each list item being a character vector 
+#'   or "diabetes") and the contents of each list item being a character vector
 #'   of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
-#' @param validateMapping logical, whether to validate all the ICD-9 codes in 
-#'   the mapping list. Default is not to check. If validation fails, stop with 
+#' @param validateMapping logical, whether to validate all the ICD-9 codes in
+#'   the mapping list. Default is not to check. If validation fails, stop with
 #'   an error. This is probably worth doing at least once for each mapping used,
 #'   since there should never be an error in mapping. There is overhead to check
 #'   the mapping each time, so not done by default. Could consider using
 #'   \code{memoise} to cache the result of the check. (TODO)
-#' @param shortMapping logical, whether the mapping is defined with short ICD-9 
+#' @param shortMapping logical, whether the mapping is defined with short ICD-9
 #'   codes (TRUE, the default), or decimal if set to FALSE.
 #' @export
-icd9Comorbidities <- function(icd9df, 
+icd9Comorbidities <- function(icd9df,
                               visitId = "visitId",
-                              icd9Field = "icd9", 
+                              icd9Field = "icd9",
                               icd9Mapping = ahrqComorbid,
                               validateMapping = F,
                               shortMapping = T) {
-  
+
   stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
-  
+
   if (is.character(icd9Mapping)) {
     stopifnot(exists(icd9Mapping))
     icd9Mapping <- get(icd9Mapping)
   }
-  
+
   if (validateMapping) {
     if (shortMapping) {
       stopifnot(all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names=F)))
@@ -172,21 +175,21 @@ icd9Comorbidities <- function(icd9df,
       stopifnot(all(unlist(lapply(icd9Mapping, FUN = icd9ValidDecimal), use.names=F)))
     }
   }
-  
+
   # loop through names of icd9 mapping, and put the results together so each
   # column is one comorbidity in a data frame. This is much faster with vapply,
   # and it keeps the logicals instead of making them characters
   i <- cbind(
     icd9df[visitId],
     vapply(
-      X = names(icd9Mapping), 
-      FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]])), 
+      X = names(icd9Mapping),
+      FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]])),
       FUN = function(comorbidity) {
-        icd9InReferenceCode( 
+        icd9InReferenceCode(
           # drop factor down to character codes #TODO: is this necessary or desirable?
-          asCharacterNoWarn(icd9df[[icd9Field]]), 
+          asCharacterNoWarn(icd9df[[icd9Field]]),
           # provide vector of base ICD9 codes for this comorbidity group
-          icd9Mapping[[comorbidity]] 
+          icd9Mapping[[comorbidity]]
         )
       }
     )
@@ -194,23 +197,23 @@ icd9Comorbidities <- function(icd9df,
   ag <- aggregate(
     x = i[, -which(names(i) == visitId)], # all cols except visit ID will be aggregated
     by = list(visitId = i[[visitId]]), # group by the visitId
-    FUN = any, 
+    FUN = any,
     simplify = TRUE
   )
-  
+
   ag
 }
 
 #' @rdname icd9Comorbidities
-#' @title gets those comorbidities where the "Present on Arrival" (POA) flag is 
+#' @title gets those comorbidities where the "Present on Arrival" (POA) flag is
 #'   not set, or set to "N"
-#' @description this is not a simple binary, since many codes are exempt, 
-#'   unspecified, or unknown. Therefore, two options are given: get all the 
-#'   comorbidities where the POA flag was definitely -ve, coded as "N" or 
-#'   definitely +ve and coded as "Y". Negating one set won't give the other set 
+#' @description this is not a simple binary, since many codes are exempt,
+#'   unspecified, or unknown. Therefore, two options are given: get all the
+#'   comorbidities where the POA flag was definitely -ve, coded as "N" or
+#'   definitely +ve and coded as "Y". Negating one set won't give the other set
 #'   unless all codes were either Y or N. #describeIn icd9Comorbidities
-#' @param poaField The name of column in the data frame which contains the 
-#'   Present On Arrival flag. The flag itself is a single character, typically 
+#' @param poaField The name of column in the data frame which contains the
+#'   Present On Arrival flag. The flag itself is a single character, typically
 #'   one of "Y", "N", "E", "X", "U" or empty. The poaField is a character vector
 #'   of length one.
 #' @export
@@ -222,10 +225,10 @@ icd9ComorbiditiesNotPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
 }
 
 #' @rdname icd9Comorbidities
-#' @title gets those comorbidities where the "Present on Arrival" (POA) flag is 
+#' @title gets those comorbidities where the "Present on Arrival" (POA) flag is
 #'   set to "Y"
 #' @export
-icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId", 
+icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
                                  icd9Field = "icd9Code", poaField = "poa") {
   stopifnot(poaField %in% names(icd9df))
   icd9Comorbidities(icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "Y",],
@@ -234,29 +237,29 @@ icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
 
 
 #' @title parse AHRQ data
-#' @description Takes the raw data taken directly from the AHRQ web site and 
+#' @description Takes the raw data taken directly from the AHRQ web site and
 #'   parses into RData. It is then saved in the development tree data directory,
 #'   so this is an internal function, used in generating the package itself!
 #' @template savesas
 #' @param returnAll logical which, if TRUE, will result in the invisible return of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
-#' @return list of lists, name value pairs, and where a single name was 
-#'   associated with multiple further name-value pairs, this is presented as a 
-#'   sub-list. This is primarily required because of the obtuse SAS FORMAT data 
+#' @return list of lists, name value pairs, and where a single name was
+#'   associated with multiple further name-value pairs, this is presented as a
+#'   sub-list. This is primarily required because of the obtuse SAS FORMAT data
 #'   structure: the AHRQ codes are hidden in a sublist of the first item.
 #' @keywords internal
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package="icd9"),
-                         save = FALSE, 
-                         saveDir = "~/icd9/data", 
+                         save = FALSE,
+                         saveDir = "~/icd9/data",
                          returnAll = FALSE) {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
-  
+
   ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
   # Boom. The remainder of the AHRQ SAS input file consists of DRG definitions (TODO).
-  
+
   ahrqComorbidAll <- list()
-  
+
   for (cmd in names(ahrqComorbidWork)) {
     somePairs <- strsplit(x = ahrqComorbidWork[[cmd]], split = "-")
     # non-range values just go on list
@@ -266,7 +269,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
     # update ahrqComorbid with full range of icd9 codes:
     ahrqComorbidAll[[cmd]] <- unlist(out)
   }
-  
+
   # drop this superfluous finale which allocates any other ICD-9 code to the
   # "Other" group
   ahrqComorbidAll[[" "]] <- NULL
@@ -299,21 +302,21 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
     ahrqComorbid$HHRWHRF)
 
 
-  ahrqComorbid[c("HTNPREG", "OHTNPREG", "HTNWOCHF", 
-    "HTNWCHF","HRENWORF", "HRENWRF", "HHRWOHRF",
-    "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
- 
+  ahrqComorbid[c("HTNPREG", "OHTNPREG", "HTNWOCHF",
+                 "HTNWCHF","HRENWORF", "HRENWRF", "HHRWOHRF",
+                 "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
+
   # officially, AHRQ HTN with complications means that HTN on its own should be unset.
-  # however, this is not feasible here, since we just package up the data into a list, and it can be used however the user wishes. It would not be hard to write an AHRQ specific function to do this if needed, but it makes more sense to me 
-  
-  
+  # however, this is not feasible here, since we just package up the data into a list, and it can be used however the user wishes. It would not be hard to write an AHRQ specific function to do this if needed, but it makes more sense to me
+
+
   # todo: save/return the DRG mappings.
-  
+
   # save the data in the development tree, so the package user doesn't need to
   # decode it themselves.
   if (save) saveSourceTreeData("ahrqComorbidAll", path = saveDir)
   if (save) saveSourceTreeData("ahrqComorbid", path = saveDir)
-  
+
   if (returnAll) return(invisible(ahrqComorbidAll))
   invisible(ahrqComorbid)
 }
@@ -321,8 +324,8 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #TODO: function to extract these standard ICD-9 groupings, not focussed on
 #co-morbidities, but useful for classification ahrq.dx <-
 # read.csv(file=system.file(
-#   "extdata", 
-#   "ccs_multi_dx_tool_2013.csv", 
+#   "extdata",
+#   "ccs_multi_dx_tool_2013.csv",
 #   package="icd9"), quote="'\"")
 # ahrq.pr <- read.csv(file=system.file(
 #   "extdata",
@@ -330,7 +333,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #   package="icd9"), quote="'\"")
 
 #all fields suitable for 'factor' class, except ICD.9.CM.CODE, which has no
-#repeated values. 
+#repeated values.
 # ahrq.dx[["ICD.9.CM.CODE"]] <- asCharacterNoWarn(ahrq.dx[["ICD.9.CM.CODE"]])
 
 # now work on groupings:
@@ -338,10 +341,10 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 # TODO to be continued...
 
 #' @title parse original SAS code defining Quan's update of Deyo comorbidities.
-#' @description As with \code{parseAhrqSas}, this function reads SAS code, and 
-#'   in, a very limited way, extracts definitions. In this case the code uses 
-#'   LET statements, with strings or lists of strings. This saves and invisibly 
-#'   returns a list with names corresponding to the comorbidities and values as 
+#' @description As with \code{parseAhrqSas}, this function reads SAS code, and
+#'   in, a very limited way, extracts definitions. In this case the code uses
+#'   LET statements, with strings or lists of strings. This saves and invisibly
+#'   returns a list with names corresponding to the comorbidities and values as
 #'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
 #'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
 #'   simpler.
@@ -354,9 +357,9 @@ parseQuanSas <- function(sasPath = "http://mchp-appserv.cpe.umanitoba.ca/concept
   qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
   quanComorbid <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
   names(quanComorbid) <- unlist(unname(qlabels))
-  
+
   if (save) saveSourceTreeData("quanComorbid", path = saveDir)
-  
+
   invisible(quanComorbid)
 }
 
@@ -404,7 +407,7 @@ parseElixhauser <- function(save = FALSE, saveDir = "~/icd9/data") {
 
   # convert to short form, for consistency with other mappings.
   elixhauserComorbid <- lapply(elixhauserComorbid, icd9DecimalToShort)
-  
+
   if (save) saveSourceTreeData("elixhauserComorbid", path = saveDir)
 
   invisible(elixhauserComorbid)
