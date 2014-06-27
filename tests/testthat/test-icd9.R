@@ -638,5 +638,17 @@ test_that("wrap up all icd9 tests", {
     expect_warning(warnIfInvalidIcd9('notvalidicd9', short = TRUE))
   })
 
+  test_that("condense ranges", {
+    expect_equal(icd9CondenseShort(icd9ExpandBaseCodeShort("123")), "123")
+    expect_equal(icd9CondenseShort(icd9ExpandBaseCodeShort("1")), "001")
+    expect_equal(icd9CondenseShort(icd9ExpandBaseCodeShort("12345")), "12345")
+    expect_equal(icd9CondenseShort("12345"), "12345")
+    expect_equal(icd9CondenseShort(icd9ExpandBaseCodeShort("00123")), "00123")
+    expect_equal(icd9CondenseShort(icd9ExpandBaseCodeShort("V1234")), "V1234")
+    expect_equal(icd9CondenseShort("V1234"), "V1234")
+    expect_equal(icd9CondenseShort(icd9ExpandBaseCodeShort("V12")), "V12")
+
+  })
+
 })
 

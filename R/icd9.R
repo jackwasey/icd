@@ -261,6 +261,26 @@ icd9ExpandRangeDecimal <- function(start, end)
 #' @export
 "%i9d%" <- function(start, end) icd9ExpandRangeDecimal(start = start, end = end)
 
+#' @title condense list of short ICD-9 code into minimal set of parent codes
+#' @description This can be thought of as the inverse operation to expanding a range. The list given must already contain the parents, because this function will never add a parent ICD-9 which, although may have all children present, may itself have an additional clinical meaning.
+#' @param icd9Short character vector of ICD-9 codes in short form
+#' @export
+
+icd9CondenseShort <- function(icd9Short) {
+  # make homogeneous
+  icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short)) # sort so we will hit the parents first, kids later.
+  out <- icd9Short
+
+  # for every entry, search for all possible child entries in the list, and if we find ALL the children, then delete them from the output list.
+  for (i in icd9Short) {
+    kids <- icd9ExpandBaseCodeShort(i)
+    if (all(kids %in% out)) {
+      out <- c(i, out[!out %in% kids]) # keep self!
+    }
+  }
+  out
+}
+
 #' @title extract alphabetic, and numeric part of icd9 code
 #'   prefix
 #' @description removes whitespace and separates V or E if present.
