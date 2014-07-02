@@ -6,6 +6,7 @@
 #'   from expanding "100.00" (no expansion) \code{0.1 == .3/3} is a problem...
 #'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
 #'
+#'
 #' @template icd9-decimal
 #' @template invalid
 #' @examples
@@ -13,20 +14,21 @@
 #' #icd9ChildrenDecimal("2.34")
 #' @return unsorted vector of ICD9 codes for all subsections of the provided
 #'   code.
-#' @keywords internal manip
+#' @export
+#' @family ICD-9 ranges
+#' @keywords manip
 icd9ChildrenDecimal <- function(icd9Decimal, invalidAction = c("ignore", "silent", "warn", "stop")) {
 
   if (!is.character(icd9Decimal)) stop('baseCode must be character only to avoid ambiguity')
   icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal, invalidAction = invalidAction)
 
-  #vOrE <- grepl(pattern="[VvEe]", x=baseCode)
   parts <- icd9ExtractPartsDecimal(icd9Decimal, minorEmpty = "")
   out <- c()
   for (r in rownames(parts)) {
     out <- append(out,
                   paste(
                     parts[[r, "major"]],
-                    icd9ExpandMinor(parts[[r, "minor"]]), sep="."
+                    icd9ExpandMinor(parts[[r, "minor"]]), sep = "."
                   )
     )
   }
@@ -39,9 +41,12 @@ icd9ChildrenDecimal <- function(icd9Decimal, invalidAction = c("ignore", "silent
 #' @template icd9-short
 #' @template invalid
 #' @template short
-#' @keywords internal
+#' @keywords manip
+#' @family ICD-9 ranges
+#' @export
 icd9ChildrenShort <- function(icd9Short, invalidAction = c("ignore", "silent", "warn", "stop")) {
   if (!is.character(icd9Short)) stop('must have character only input to expand a short basecode to avoid ambiguity')
+  if (length(icd9Short) == 0) return(character())
   icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = invalidAction)
 
   # split into major and minor parts
@@ -70,6 +75,7 @@ icd9ChildrenShort <- function(icd9Short, invalidAction = c("ignore", "silent", "
 #' @rdname icd9ChildrenShort
 #' @template icd9-any
 #' @template short
+#' @family ICD-9 ranges
 #' @keywords internal
 icd9Children <- function(icd9, short) {
   if (short) return(icd9ChildrenShort(icd9))
@@ -85,6 +91,7 @@ icd9Children <- function(icd9, short) {
 #' @template icd9-short
 #' @template invalid
 #' @return sorted vector of ICD-9 codes
+#' @keywords manip
 #' @export
 icd9SortShort <- function(icd9Short, invalidAction = c("ignore", "silent", "warn", "stop")) {
   icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = invalidAction)
@@ -100,14 +107,7 @@ icd9SortShort <- function(icd9Short, invalidAction = c("ignore", "silent", "warn
   )
 }
 
-# TODO: make this suffix N?
-#icd9GenerateShort <- function() icd9ChildrenShort(as.character(1:999))
-# TODO: this is not quite right...
-#icd9GenerateShortV <- function() paste("V", icd9ChildrenShort(as.character(1:99)),sep  = "")
-# TODO: this is not quite right, since E99 is invalid.
-#icd9GenerateShortE <- function() sub("0", "", paste("E", icd9ChildrenShort(as.character(80:99)),sep  = ""))
-
-#' @title take SAS icd9 format for character range and expand to a list of codes
+#' @title take two ICD-9 codes and expand range to include all child codes
 #' @description this is cumbersome code, covering a whole load of edge cases
 #'   relating to the fact that icd9 codes are \strong{not} in numeric order. An
 #'   alternative strategy would be to list all the ICD9 codes, then a range
@@ -126,7 +126,7 @@ icd9SortShort <- function(icd9Short, invalidAction = c("ignore", "silent", "warn
 #' @template icd9-short
 #' @template invalid
 #' @export
-#'
+#' @family ICD-9 ranges
 icd9ExpandRangeShort <- function(start, end, invalidAction = c("ignore", "silent", "warn", "stop")) {
   # minimal quick validation checks
   stopifnot(is.character(start), is.character(end))
@@ -214,21 +214,13 @@ icd9ExpandRangeShort <- function(start, end, invalidAction = c("ignore", "silent
   out
 }
 
-#' @title find range of ICD-9 codes between two E-codes
-#' @description E codes only have a single possible numeral after the decimal
-#'   place. This makes processing very different from V and pure numeric codes.
-#' @inheritParams icd9ExpandRangeShort
-
-#'
-
 #' @title create range of icd9 major parts
 #' @description accepts V, E or numeric codes. Does not validate codes beyond
 #'   ensuring that the start and end of the range are of the same type.
 #' @templateVar icd9AnyName start,end
 #' @template icd9-any
 #' @return character vector with range inclusive of start and end
-#' @family ICD-9
-#' @family jack
+#' @family ICD-9 ranges
 #' @export
 "%i9mj%" <- function(start, end) {
   stopifnot(length(start) == 1 && length(end) == 1)
@@ -246,7 +238,7 @@ icd9ExpandRangeShort <- function(start, end, invalidAction = c("ignore", "silent
 #' @description As with \code{link{icd9ExpandRangeShort}} great care is taken not to include codes which have children not in the range. E.g. "100.9" to "101.1" would _not_ include code "101".
 #' @template invalid
 #' @keywords internal manip
-#' @family ICD-9
+#' @family ICD-9 ranges
 icd9ExpandRangeDecimal <- function(start, end, invalidAction = c("stop", "ignore", "silent", "warn")) {
 
   invalidAction <- match.arg(invalidAction)
@@ -274,10 +266,10 @@ icd9ExpandRangeDecimal <- function(start, end, invalidAction = c("stop", "ignore
 
 #' @title condense list of short ICD-9 code into minimal set of parent codes
 #' @description This can be thought of as the inverse operation to expanding a range. The list given must already contain the parents, because this function will never add a parent ICD-9 which, although may have all children present, may itself have an additional clinical meaning.
-#' @param icd9Short character vector of ICD-9 codes in short form
+#' @template icd9-short
 #' @template invalid
+#' @family ICD-9 ranges
 #' @export
-
 icd9CondenseShort <- function(icd9Short, invalidAction = c("stop", "ignore", "silent", "warn")) {
 
   invalidAction <- match.arg(invalidAction)
@@ -291,6 +283,31 @@ icd9CondenseShort <- function(icd9Short, invalidAction = c("stop", "ignore", "si
   for (i in icd9Short) {
     kids <- icd9ChildrenShort(i)
     if (all(kids %in% out)) {
+      out <- c(i, out[!out %in% kids]) # keep self!
+    }
+  }
+  out
+}
+
+#' @title condense list of short ICD-9 code into minimal set of parent codes which have descriptions.
+#' @description This can be thought of as the inverse operation to expanding a range. The list given must already contain the parents, because this function will never add a parent ICD-9 which, although may have all children present, may itself have an additional clinical meaning. In addition, in contrast to \code{icd9CondenseShort}, this function only walks back up to parents which have descriptions in \code{icd9CmDesc}, so it is useful for generating a minimal textual description of a set of ICD-9 codes.
+#' @template icd9-short
+#' @template invalid
+#' @family ICD-9 ranges
+#' @export
+icd9CondenseToExplainShort <- function(icd9Short, invalidAction = c("stop", "ignore", "silent", "warn")) {
+
+  invalidAction <- match.arg(invalidAction)
+  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = invalidAction)
+
+  # make homogeneous
+  icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short)) # sort so we will hit the parents first, kids later.
+  out <- icd9Short
+
+  # for every entry, search for all possible child entries in the list, and if we find ALL the children, then delete them from the output list.
+  for (i in icd9Short) {
+    kids <- icd9ChildrenShort(i)
+    if (i %in% icd9CmDesc[["icd9"]] && all(kids %in% out)) {
       out <- c(i, out[!out %in% kids]) # keep self!
     }
   }
@@ -331,6 +348,7 @@ icd9ExtractAlphaNumeric <- function(icd9) {
 #'   learned, it is not possible to treat ICD-9 codes as numbers without risking
 #'   ambiguity and subtle mistakes.
 #' @template minor
+#' @family ICD-9 ranges
 #' @keywords internal manip
 icd9SubsequentMinors <- function(minor) {
 
@@ -400,6 +418,7 @@ icd9PrecedingMinors <- function(minor, invalidAction = c("ignore", "silent", "wa
 #' @template minor
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 #'   non-existent) sub-divisions.
+#' @family ICD-9 ranges
 #' @keywords internal manip
 icd9ExpandMinor <- function(minor = "", invalidAction = c("ignore", "silent", "warn", "stop")) {
 
@@ -474,6 +493,7 @@ appendZeroToNine <- function(str) {
 #' @template leadingZeroes
 #' @template invalid
 #' @return character vector of converted ICD-9 codes
+#' @family ICD-9 convert
 #' @keywords manip
 icd9DecimalToShort <- function(icd9Decimal,
                                leadingZeroes = TRUE,
@@ -507,7 +527,8 @@ icd9DecimalToShort <- function(icd9Decimal,
 #'   TRUE.
 #' @template invalid
 #' @export
-#' @keywords manip
+#' @family ICD-9 convert
+#' #' @keywords manip
 icd9ShortToDecimal <- function(icd9Short, leadingZeroes = FALSE, keepLoneDecimal = FALSE,
                                invalidAction = c("ignore", "silent", "warn", "stop")) {
 
@@ -656,6 +677,7 @@ icd9AddLeadingZeroesDecimal <- function(icd9Decimal, invalidAction = c("ignore",
 #' @description Use with care. non-decimal ICD-9 codes with length<5 are often
 #'   ambiguous. E.g. 100 could be 1.00 10.0 or 100
 #' @template icd9-any
+#' @family ICD-9 convert
 #' @keywords internal manip
 icd9AddLeadingZeroesShort <- function(icd9Short, invalidAction = c("ignore", "silent", "warn", "stop")) {
   parts <- icd9ExtractPartsShort(icd9Short, invalidAction = invalidAction)
@@ -675,6 +697,7 @@ icd9AddLeadingZeroesShort <- function(icd9Short, invalidAction = c("ignore", "si
 #' @template invalid
 #' @return character vector of ICD-9 codes with extra zeroes dropped from major
 #'   part
+#' @family ICD-9 convert
 #' @keywords internal manip
 icd9DropZeroFromDecimal <- function(icd9Decimal, invalidAction = c("ignore", "silent", "warn", "stop")) {
 
@@ -696,6 +719,7 @@ icd9DropZeroFromDecimal <- function(icd9Decimal, invalidAction = c("ignore", "si
 #'   non-numeric, and doesn't match a valid V or E code format.
 #' @template major
 #' @return character vector
+#' @family ICD-9 convert
 #' @keywords internal manip
 icd9AddLeadingZeroesMajor <- function(major, invalidAction = c("ignore", "silent", "warn", "stop")) {
   # major should be character or factor only, nchar between 1 and 4 (including E
@@ -738,6 +762,7 @@ icd9AddLeadingZeroesMajor <- function(major, invalidAction = c("ignore", "silent
 #' @template sep
 #' @return character vector. Deliberately returns zero-padded major, because
 #'   otherwise we are creating ambiguous codes (even if we know what we mean)
+#' @family ICD-9 convert
 #' @keywords internal
 icd9PartsRecompose <- function(major = NULL, minor = NULL, parts = NULL, sep) {
   if (!is.null(parts)) {
@@ -781,9 +806,11 @@ icd9PartsToDecimal <- function(major = NULL, minor = NULL, parts = NULL)
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
 icd9Explain <- function(icd9, short) UseMethod("icd9Explain")
+
 #' @rdname icd9Explain
 #' @export
 icd9ExplainShort <- function(icd9Short) icd9Explain(icd9Short, short = TRUE)
+
 #' @rdname icd9Explain
 #' @export
 icd9ExplainDecimal <- function(icd9Decimal) icd9Explain(icd9Decimal, short = FALSE)
@@ -801,8 +828,13 @@ icd9Explain.character <- function(icd9, short) {
     icd9 <- icd9AddLeadingZeroesDecimal(icd9)
     icd9 <- icd9DecimalToShort(icd9)
   }
-  icd9 <- icd9CondenseShort(icd9, invalidAction = "warn")
-  out <- icd9CmDesc[ icd9CmDesc[["icd9"]] %in% icd9, ]
+  # find common parent ICD-9 codes, but only if they have a description
+  icd9 <- icd9CondenseToExplainShort(icd9, invalidAction = "warn")
+  # find those codes without explanations:
+  unexplainedParents <- icd9[!(icd9 %in% icd9CmDesc[["icd9"]])]
+  # get all their children, so we can work backwards to the highest-level explanations
+  orphans <- icd9CondenseToExplainShort(icd9ChildrenShort(unexplainedParents), invalidAction = "warn")
+  out <- icd9CmDesc[ icd9CmDesc[["icd9"]] %in% c(icd9, orphans), ]
   row.names(out) <- NULL
   names(out) <- c("ICD9", "Diagnosis", "Description")
   out

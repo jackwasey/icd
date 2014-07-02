@@ -18,7 +18,7 @@
 suppressMessages(library(icd9, quietly = TRUE, warn.conflicts = FALSE))
 
 patientData <- data.frame(
-  visitId = c(1000,1000,1000,1001,1001,1002),
+  visitId = c(1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = c("27801", "7208", "25001", "34400", "4011", "4011"),
   poa = factor(c("Y","N","Y","N","Y","N"))
 )
@@ -85,8 +85,14 @@ icd9Explain("1.0", short = FALSE)
 icd9ExplainDecimal("001.1")
 icd9ExplainDecimal(icd9ShortToDecimal("0019"))
 icd9ExplainShort("0019")
+# named list(s) of codes
 icd9ExplainDecimal(list(cholera = c("001", "001.0", "001.1", "001.9")))
+# same using decimal codes without a list
 icd9ExplainDecimal(c("001", "001.0", "001.1", "001.9"))
+
+# 001/cholera doesn't itself have an explanation: TODO walk down children to get next level explanations.
+icd9ExplainDecimal(list(cholera = "001", rheumatic_heart = "390"))
+
 
 @
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
@@ -98,7 +104,7 @@ icd9ExplainDecimal(list(cholera=c("001.0", "001.1", "001.9")))
 
 \section{AHRQ comorbidity classification}
 
-The AHRQ makes an annual classification of ICD-9-CM codes into comorbidities useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
+The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
 <<ahrq,eval=F>>=
 ahrqComorbid <- parseAhrqSas(save = F)
@@ -147,6 +153,7 @@ resulting in a named list. here is an extract.
 
 <<example_ahrqComorbid>>=
 ahrqComorbid[c("OBESE", "DEPRESS")]
+lapply(ahrqComorbid[c("OBESE", "DEPRESS")], icd9ChildrenShort)
 @
 
 \section{Elixhauser co-morbidities}
@@ -159,9 +166,10 @@ names(elixhauserComorbid)
 
 \section{Quan}
 
-Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's co-morbidities. Thus there are two 'Quan' comorbidity mappings, of which the Charlson/Deyo is provided at present.
+Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's co-morbidities. Thus there are two 'Quan' comorbidity mappings.
 <<quanElix>>=
 names(quanDeyoComorbid)
+names(quanElixhauserComorbid)
 @
 
 

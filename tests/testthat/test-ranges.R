@@ -164,25 +164,31 @@ test_that("icd9ChildrenDecimal", {
   #   expect_equal(icd9ChildrenDecimal("123.456", validate = FALSE), NA_character_) # too long minor
   #   expect_equal(icd9ChildrenDecimal("9123.456", validate = FALSE), NA_character_) # too long major and minor
 
-  expect_equal(icd9ChildrenDecimal("V10.0"), append("V10.0", paste("V10.0", 0:9, sep="")))
+  expect_equal(icd9ChildrenDecimal("V10.0"), append("V10.0", paste("V10.0", 0:9, sep = "")))
   expect_equal(toupper(icd9ChildrenDecimal("v10.0")), icd9ChildrenDecimal("V10.0"))
   expect_equal(icd9ChildrenDecimal(" V10.0 "), icd9ChildrenDecimal("V10.0"))
-  expect_equal(icd9ChildrenDecimal("10.0"), append("010.0", paste("010.0", 0:9, sep="")))
+  expect_equal(icd9ChildrenDecimal("10.0"), append("010.0", paste("010.0", 0:9, sep = "")))
   #expect_equal(icd9ChildrenDecimal("010.0"), icd9ChildrenDecimal("10.0"))
 
 })
 
-test_that("icd9ChildrenShort", {
-  #expect_error(icd9Children(list(c(1, 2), "crap"))) # junk
+test_that("icd9ChildrenShort invalid input", {
+  expect_error(icd9Children(list(c(1, 2), "crap"))) # junk
   expect_error(icd9ChildrenShort("123456", invalidAction = "stop")) # too long
   expect_error(icd9ChildrenShort(" 09123456 ", invalidAction = "stop")) # even longer
   expect_error(icd9ChildrenShort("V12345", invalidAction = "stop")) # too long V
   expect_error(icd9ChildrenShort("E987654", invalidAction = "stop")) # too long E
   expect_error(icd9ChildrenShort("JACK", invalidAction = "stop")) # not number or V or E format
-  expect_equal(icd9ChildrenShort("V100"), paste("V100", c("", 0:9), sep=""))
+
+  expect_error(icd9ChildrenShort())
+  expect_equal(icd9ChildrenShort(character()), character())
+})
+
+test_that("icd9ChildrenShort valid input", {
+  expect_equal(icd9ChildrenShort("V100"), paste("V100", c("", 0:9), sep = ""))
   #expect_equal(toupper(icd9ChildrenShort("v100")), icd9Children("V100"))
   expect_equal(icd9ChildrenShort(" V100 "), icd9ChildrenShort("V100"))
-  expect_equal(icd9ChildrenShort("0100"), paste("0100", c("", 0:9), sep=""))
+  expect_equal(icd9ChildrenShort("0100"), paste("0100", c("", 0:9), sep = ""))
   expect_equal(icd9ChildrenShort("1")[1], "001")
   expect_equal(icd9ChildrenShort("23")[1], "023")
   expect_equal(icd9ChildrenShort("456")[1], "456")

@@ -40,6 +40,7 @@ warnIfInvalidIcd9 <- function(icd9, short, callingFunction = "") {
 #' @template icd9-any
 #' @template short
 #' @template invalid
+#' @family ICD9 validation
 #' @keywords internal
 icd9ValidNaWarnStop <- function(icd9, short, invalidAction = c("ignore", "silent", "warn", "stop")) {
   invalidAction <- match.arg(invalidAction)
@@ -54,17 +55,32 @@ icd9ValidNaWarnStop <- function(icd9, short, invalidAction = c("ignore", "silent
   invisible(icd9)
 }
 
+#' @title warn or stop with message based on switch
+#' @param ... message components passed on to \code{warning} or \code{stop}
+#' @param invalid
+#' @keywords internal
 icd9WarnStopMessage <- function(..., invalidAction = c("stop", "warn", "silent")) {
   invalidAction <- match.arg(invalidAction)
   if (invalidAction == "warn") warning(...)
   if (invalidAction == "stop") stop(...)
 }
 
+#' @rdname icd9ValidNaWarnStop
 icd9ValidNaWarnStopShort <- function(icd9, invalidAction)
   icd9ValidNaWarnStop(icd9 = icd9, short = TRUE, invalidAction = invalidAction)
 
+#' @rdname icd9ValidNaWarnStop
 icd9ValidNaWarnStopDecimal <- function(icd9, invalidAction)
   icd9ValidNaWarnStop(icd9 = icd9, short = FALSE, invalidAction = invalidAction)
+
+#' @title check whether any ICD-9 code is syntactically valid
+#' @template icd9-any
+#' @template short
+#' @seealso \code{\link{icd9ValidDecimal}} and \code{\link{icd9ValidShort}}
+#' @family ICD9 validation
+#' @export
+icd9Valid <- function(icd9, short)
+  if (short) icd9ValidShort(icd9) else icd9ValidDecimal(icd9)
 
 #' @title check whether decimal icd9 codes are valid
 #' @aliases icd9ValidDecimalN icd9ValidDecimalV icd9ValidDecimalE
@@ -85,7 +101,7 @@ icd9ValidDecimal <- function(icd9Decimal) {
 
   if (length(icd9Decimal) == 0) {
     #warning("icd9ValidDecimal expects at least one code to test")
-    return(NULL)
+    return(logical())
   }
   if (class(icd9Decimal) != "character" & class(icd9Decimal) != 'factor')
     stop("icd9ValidDecimal expects factor or character vector input but got class: ",
@@ -109,8 +125,8 @@ icd9ValidDecimal <- function(icd9Decimal) {
 icd9ValidShort <- function(icd9Short) {
 
   if (length(icd9Short) == 0) {
-    warning("isValidShortICD9 expects at least one icd9 code to test")
-    return(NULL)
+    #warning("isValidShortICD9 expects at least one icd9 code to test")
+    return(logical())
   }
 
   if (!(class(icd9Short) %in% c("character", "factor"))) {
@@ -168,30 +184,43 @@ icd9ValidDecimalN <- function(icd9Decimal)
 #' @description validation for just the 'major' part of an ICD-9 code. This can in fact be provided as a numeric, since there is no ambiguity. Numeric-only codes should be one to three digitis, V codes are followed by one or two digits, and E codes always by three digits between 800 and 999.
 # example/test grepl(c("", "1", "22", "333", "4444", "V", "V2", "V34", "V567", "E", "E1", "E70", "E")
 #' @template major
-#' @keywords internal
+#' @family ICD9 validation
+#' @export
 icd9ValidMajor <- function(major) {
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][89][[:digit:]]{2}[[:space:]]*$)",
     x = major
-    )
+  )
 }
 
 #' @title validate an icd9 mapping to comorbidities
 #' @description just takes each item in each vector of the list of vectors and
 #'   checks validity
 #' @template mapping
+#' @template short
+#' @family ICD9 validation
 #' @export
-icd9ValidMappingShort <- function(icd9Mapping)
-  all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names = FALSE))
+icd9ValidMapping <- function(icd9Mapping, short)
+  all(unlist(
+    lapply(icd9Mapping, FUN = function(icd9Map) icd9Valid(icd9Map, short)),
+    use.names = FALSE
+  ))
 
-#' @rdname icd9ValidMappingShort
+#' @rdname icd9ValidMapping
 #' @export
-icd9ValidMappingDecimal <- function(icd9Mapping)
-  all(unlist(lapply(icd9Mapping, FUN = icd9ValidDecimal), use.names = FALSE))
+icd9ValidMappingDecimal <- function(icd9Mapping) icd9ValidMapping(icd9Mapping, FALSE)
 
+#' @rdname icd9ValidMapping
+#' @export
+icd9ValidMappingShort <- function(icd9Mapping) icd9ValidMapping(icd9Mapping, TRUE)
+
+#' @rdname icd9ValidMapping
+#' @export
 icd9GetInvalidMappingShort <- function(icd9Mapping)
   unlist(lapply(icd9Mapping, FUN = getInvalidShortIcd9), use.names = FALSE)
 
+#' @rdname icd9ValidMapping
+#' @export
 icd9GetInvalidMappingDecimal <- function(icd9Mapping)
   unlist(lapply(icd9Mapping, FUN = getInvalidDecimalIcd9), use.names = FALSE)
 

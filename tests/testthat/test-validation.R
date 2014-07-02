@@ -2,7 +2,7 @@ context("icd9 validation")
 
 test_that("icd9ValidDecimal - rubbish input", {
   expect_error(icd9ValidDecimal(list(1230, c(12323, 2323), c("nonesnseses"))))
-  expect_null(icd9ValidDecimal(c()))
+  expect_equal(icd9ValidDecimal(character()), logical())
   expect_false(icd9ValidDecimal("."))
   expect_equal(icd9ValidDecimal(c("100", "chestnut")), c(TRUE, FALSE))
   #expect_warning(naVal <- icd9ValidDecimal("100, 200")) # note this is a string with two numbers in it... TODO? could warn if any commas or other separators.
@@ -63,6 +63,7 @@ test_that("icd9ValidDecimal E codes", {
 })
 
 test_that("icd9ValidShort", {
+  expect_equal(icd9ValidShort(character()), logical())
   expect_error(icd9ValidShort(list(1230, c(12323, 2323), c("nonesnseses"))))
   #expect_false(icd9ValidShort("0"))
   expect_true(icd9ValidShort("0"))
