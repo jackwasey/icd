@@ -80,17 +80,20 @@ Although V100 would include ten children, the range only returns 4 values. In al
 
 \section{Human-readable ICD-9}
 <<explain,eval=T>>=
-icd9Explain("1.0")
-icd9Explain("001.1")
-icd9Explain(icd9ShortToDecimal("0019"))
-icd9Explain(list(cholera = c("001", "001.0", "001.1", "001.9")))
+icd9ExplainDecimal("1.0")
+icd9Explain("1.0", short = FALSE)
+icd9ExplainDecimal("001.1")
+icd9ExplainDecimal(icd9ShortToDecimal("0019"))
+icd9ExplainShort("0019")
+icd9ExplainDecimal(list(cholera = c("001", "001.0", "001.1", "001.9")))
+icd9ExplainDecimal(c("001", "001.0", "001.1", "001.9"))
 
 @
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
 <<noexplain,eval=T>>=
-icd9Explain("001.5")
+icd9ExplainDecimal("001.5")
 @
-icd9Explain(list(cholera=c("001.0", "001.1", "001.9")))
+icd9ExplainDecimal(list(cholera=c("001.0", "001.1", "001.9")))
 @
 
 \section{AHRQ comorbidity classification}
@@ -157,8 +160,8 @@ names(elixhauserComorbid)
 \section{Quan}
 
 Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's co-morbidities. Thus there are two 'Quan' comorbidity mappings, of which the Charlson/Deyo is provided at present.
-<<elix>>=
-names(quanCharlsonComorbid)
+<<quanElix>>=
+names(quanDeyoComorbid)
 @
 
 

@@ -23,13 +23,13 @@ icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReferenc
          to avoid ambiguity with trailing zeroes, but got: ", class(icd9Reference))
   stopifnot(class(short) == 'logical', class(shortReference) == "logical")
 
-  if (length(short) >  1 )
+  if (length(short) >  1)
     stop("icd9InReferenceCode got vector for short, expected single TRUE or FALSE value")
-  if (length(shortReference) >  1 )
+  if (length(shortReference) >  1)
     stop("icd9InReferenceCode got vector for shortReference, expected single TRUE or FALSE value")
   if (length(short) == 0 )
     stop("icd9InReferenceCode got empty vector for short, expected single TRUE or FALSE value")
-  if (length(shortReference) == 0 )
+  if (length(shortReference) == 0)
     stop("icd9InReferenceCode got empty vector for shortReference, expected single TRUE or FALSE value")
 
   if (length(icd9Reference) == 0) stop("icd9InReferenceCode expects at least one icd9 code to test against")
@@ -60,7 +60,7 @@ spawnReferenceChildren <-
     c(
       lapply(
         icd9Reference,
-        FUN = function(x) icd9ExpandBaseCode(icd9 = x, short = shortReference)
+        FUN = function(x) icd9Children(icd9 = x, short = shortReference)
       ),
       recursive = TRUE
     )
@@ -234,182 +234,3 @@ icd9ComorbiditiesPoa <- function(icd9df, icd9Mapping, visitId = "visitId",
   icd9Comorbidities(icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "Y",],
                     visitId = visitId, icd9Field = icd9Field, icd9Mapping = icd9Mapping)
 }
-
-
-#' @title parse AHRQ data
-#' @description Takes the raw data taken directly from the AHRQ web site and
-#'   parses into RData. It is then saved in the development tree data directory,
-#'   so this is an internal function, used in generating the package itself!
-#' @template savesas
-#' @param returnAll logical which, if TRUE, will result in the invisible return of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
-#' @return list of lists, name value pairs, and where a single name was
-#'   associated with multiple further name-value pairs, this is presented as a
-#'   sub-list. This is primarily required because of the obtuse SAS FORMAT data
-#'   structure: the AHRQ codes are hidden in a sublist of the first item.
-#' @keywords internal
-parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package="icd9"),
-                         save = FALSE,
-                         saveDir = "~/icd9/data",
-                         returnAll = FALSE) {
-  f <- file(sasPath, "r")
-  ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
-  close(f)
-
-  ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
-  # Boom. The remainder of the AHRQ SAS input file consists of DRG definitions (TODO).
-
-  ahrqComorbidAll <- list()
-
-  for (cmd in names(ahrqComorbidWork)) {
-    somePairs <- strsplit(x = ahrqComorbidWork[[cmd]], split = "-")
-    # non-range values just go on list
-    out <- as.list(somePairs[lapply(somePairs, length) == 1])
-    thePairs <- somePairs[lapply(somePairs, length) == 2]
-    out <- append(out, lapply(thePairs, function(x) icd9ExpandRangeShort(x[1], x[2])))
-    # update ahrqComorbid with full range of icd9 codes:
-    ahrqComorbidAll[[cmd]] <- unlist(out)
-  }
-
-  # drop this superfluous finale which allocates any other ICD-9 code to the
-  # "Other" group
-  ahrqComorbidAll[[" "]] <- NULL
-
-  ahrqComorbid <- ahrqComorbidAll
-
-  ahrqComorbid$HTNCX <- c(
-    ahrqComorbid$HTNCX, # some codes already in this category
-    ahrqComorbid$HTNPREG,
-    ahrqComorbid$OHTNPREG,
-    ahrqComorbid$HTNWOCHF,
-    ahrqComorbid$HTNWCHF,
-    ahrqComorbid$HRENWORF,
-    ahrqComorbid$HRENWRF,
-    ahrqComorbid$HHRWOHRF,
-    ahrqComorbid$HHRWCHF,
-    ahrqComorbid$HHRWRF,
-    ahrqComorbid$HHRWHRF)
-
-  ahrqComorbid$CHF <- c(
-    ahrqComorbid$CHF, # some codes already in this category
-    ahrqComorbid$HTNWCHF,
-    ahrqComorbid$HHRWCHF,
-    ahrqComorbid$HHRWHRF)
-
-  ahrqComorbid$RENLFAIL <- c(
-    ahrqComorbid$RENLFAIL, # some codes already in this category
-    ahrqComorbid$HRENWRF,
-    ahrqComorbid$HHRWRF,
-    ahrqComorbid$HHRWHRF)
-
-
-  ahrqComorbid[c("HTNPREG", "OHTNPREG", "HTNWOCHF",
-                 "HTNWCHF","HRENWORF", "HRENWRF", "HHRWOHRF",
-                 "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
-
-  # officially, AHRQ HTN with complications means that HTN on its own should be unset.
-  # however, this is not feasible here, since we just package up the data into a list, and it can be used however the user wishes. It would not be hard to write an AHRQ specific function to do this if needed, but it makes more sense to me
-
-
-  # todo: save/return the DRG mappings.
-
-  # save the data in the development tree, so the package user doesn't need to
-  # decode it themselves.
-  if (save) saveSourceTreeData("ahrqComorbidAll", path = saveDir)
-  if (save) saveSourceTreeData("ahrqComorbid", path = saveDir)
-
-  if (returnAll) return(invisible(ahrqComorbidAll))
-  invisible(ahrqComorbid)
-}
-
-#TODO: function to extract these standard ICD-9 groupings, not focussed on
-#co-morbidities, but useful for classification ahrq.dx <-
-# read.csv(file=system.file(
-#   "extdata",
-#   "ccs_multi_dx_tool_2013.csv",
-#   package="icd9"), quote="'\"")
-# ahrq.pr <- read.csv(file=system.file(
-#   "extdata",
-#   "ccs_multi_pr_tool_2014.csv",
-#   package="icd9"), quote="'\"")
-
-#all fields suitable for 'factor' class, except ICD.9.CM.CODE, which has no
-#repeated values.
-# ahrq.dx[["ICD.9.CM.CODE"]] <- asCharacterNoWarn(ahrq.dx[["ICD.9.CM.CODE"]])
-
-# now work on groupings:
-#ag<-aggregate(ICD.9.CM.CODE ~ CCS.LVL.1.LABEL, data=ahrq.dx, FUN=paste)
-# TODO to be continued...
-
-#' @title parse original SAS code defining Quan's update of Deyo comorbidities.
-#' @description As with \code{parseAhrqSas}, this function reads SAS code, and
-#'   in, a very limited way, extracts definitions. In this case the code uses
-#'   LET statements, with strings or lists of strings. This saves and invisibly
-#'   returns a list with names corresponding to the comorbidities and values as
-#'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
-#'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
-#'   simpler.
-#' @template savesas
-#' @keywords internal datasets
-parseQuanSas <- function(sasPath = "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
-                         save = FALSE, saveDir = "~/icd9/data") {
-  quanSas <- readLines(sasPath, warn = FALSE)
-  qlets <- sasExtractLetStrings(quanSas)
-  qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
-  quanCharlsonComorbid <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
-  names(quanCharlsonComorbid) <- unlist(unname(qlabels))
-
-  if (save) saveSourceTreeData("quanCharlsonComorbid", path = saveDir)
-
-  invisible(quanCharlsonComorbid)
-}
-
-#' @title Generate Elixhauser comorbidities
-#' @description This function uses the \code{\%i9d\%} operator, so cannot be done
-#'   as an R file in the \code{data} directory. The data is documented in
-#'   \code{datadocs.R}.
-#' @param saveDir path to directory to save the data. This is typically the data
-#'   folder in the devleopment source tree.
-#' @keywords internal datasets
-parseElixhauser <- function(save = FALSE, saveDir = "~/icd9/data") {
-  elixhauserComorbid <- list(
-    chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91", "404.93", "428.0" %i9d% "428.9"),
-    arrhythmia = c("426.1", "426.11", "426.13", "426.2" %i9d% "426.53", "426.6" %i9d% "426.89", "427.0", "427.2", "427.31", "427.60", "427.9", "785", "V45.0", "V53.3"),
-    valve = c("93.20" %i9d% "93.24", "394.0" %i9d% "397.1", "424.0" %i9d% "424.91", "746.3" %i9d% "746.6", "V42.2", "V43.3"),
-    pulm.circ = c("416.0" %i9d% "416.9", " 417.9"),
-    pvd = c("440.0" %i9d% "440.9", "441.2", "441.4", "441.7", "441.9", "443.1" %i9d% "443.9", "447.1", "557.1", "557.9", "V43.4"),
-    htn = c("401.1", "401.9"),
-    htncx = c("402.10", "402.90", "404.10", "404.90", "405.11", "405.19", "405.91", "405.99"),
-    paralysis = c("342.0" %i9d% "342.12", "342.9" %i9d% "344.9"),
-    neuro.other = c("331.9", "332.0", "333.4", "333.5", "334.0" %i9d% "335.9", "340", "341.1" %i9d% "341.9", "345.00" %i9d% "345.11", "345.40" %i9d% "345.51", "345.80" %i9d% "345.91", "348.1", "348.3", "780.3", "784.3"),
-    chronic.pulm = c("490" %i9d% "492.8", "493.00" %i9d% "493.91", "494", "495.0" %i9d% "505", "506.4"),
-    dm.uncomp = c("250.00" %i9d% "250.33"),
-    dm.comp = c("250.40" %i9d% "250.73", "250.90" %i9d% "250.93"),
-    hypothyroid = c("243" %i9d% "244.2", "244.8", "244.9"),
-    renal = c("403.11", "403.91", "404.12", "404.92", "585", "586", "V42.0", "V45.1", "V56.0", "V56.8"),
-    liver = c("70.32", "70.33", "70.54", "456.0", "456.1", "456.20", "456.21", "571.0", "571.2", "571.3", "571.40" %i9d% "571.49", "571.5", "571.6", "571.8", "571.9", "572.3", "572.8", "V42.7"),
-    pud = c("531.70", "531.90", "532.70", "532.90", "533.70", "533.90", "534.70", "534.90", "V12.71"),
-    hiv = c("42" %i9d% "44.9"),
-    lymphoma = c("200.00" %i9d% "202.38", "202.50" %i9d% "203.01", "203.8" %i9d% "203.81", "238.6", "273.3", "V10.71", "V10.72", "V10.79"),
-    mets = c("196.0" %i9d% "199.1"),
-    solid.tumor = c("140.0" %i9d% "172.9", "174.0" %i9d% "175.9", "179" %i9d% "195.8", "V10.00" %i9d% "V10.9"),
-    rheum = c("701.0", "710.0" %i9d% "710.9", "714.0" %i9d% "714.9", "720.0" %i9d% "720.9", "725"),
-    coag = c("286.0" %i9d% "286.9", "287.1", "287.3" %i9d% "287.5"),
-    obesity = c("278.0"),
-    wt.loss = c("260" %i9d% "263.9"),
-    lytes = c("276.0" %i9d% "276.9"),
-    anemia.loss = c("280.0"),
-    anemia.def = c("280.1" %i9d% "281.9", "285.9"),
-    etoh = c("291.1", "291.2", "291.5", "291.8", "291.9", "303.90" %i9d% "303.93", "305.00" %i9d% "305.03", "V11.3"),
-    drugs = c("292.0", "292.82" %i9d% "292.89", "292.9", "304.00" %i9d% "304.93", "305.20" %i9d% "305.93"),
-    psychoses = c("295.00" %i9d% "298.9", "299.10" %i9d% "299.11"),
-    depression = c("300.4", "301.12", "309.0", "309.1", "311")
-  )
-
-  # convert to short form, for consistency with other mappings.
-  elixhauserComorbid <- lapply(elixhauserComorbid, icd9DecimalToShort)
-
-  if (save) saveSourceTreeData("elixhauserComorbid", path = saveDir)
-
-  invisible(elixhauserComorbid)
-}
-

@@ -33,7 +33,7 @@ NULL
 #' @name ahrqComorbidAll
 NULL
 
-#' @title Quan adaptation of Deyo comorbidities
+#' @title Quan adaptation of Deyo/Charlson comorbidities
 #' @description Derived programmatically from the SAS code used in the original
 #'   publication. According to the referenced study, this provides the best
 #'   presdictor of in-patient to <30d mortality.
@@ -46,7 +46,21 @@ NULL
 #'   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
-#' @name quanCharlsonComorbid
+#' @name quanDeyoComorbid
+NULL
+
+#' @title Quan adaptation of Elixhauser comorbidities
+#' @description These were transcribed directly from the Quan paper referenced.
+#' @docType data
+#' @keywords datasets
+#' @format list of character vectors, each named by co-morbidity
+#' @references Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew Fong,
+#'   Bernard Burnand, Jean-Christophe Luthi, L. Duncan Saunders, Cynthia A.
+#'   Beck, Thomas E. Feasby, and William A. Ghali. "Coding Algorithms for
+#'   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
+#'   Care 43, no. 11 (November 1, 2005): 1130-39.
+#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
+#' @name quanElixhauserComorbid
 NULL
 
 #' @title Elixhauser comorbidities

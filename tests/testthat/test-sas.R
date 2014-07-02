@@ -62,23 +62,6 @@ test_that("groups of SAS assignments can be extracted", {
 
 })
 
-test_that("AHRQ interpretation at least returns something reasonable", {
-  result <- parseAhrqSas(sasPath = system.file("extdata", "comformat2012-2013.txt", package="icd9"), save = FALSE)
-  expect_that(result, is_a("list"))
-  expect_true(length(result) > 10)
-})
-
-test_that("HTN subgroups all worked", {
-  # pick one subcategory
-  expect_true(all(ahrqComorbidAll$HTNPREG %in% ahrqComorbid$HTNCX))
-
-  # and we didn't drop any:
-  expect_true(all(ahrqComorbidAll$HTNCX %in% ahrqComorbid$HTNCX))
-  expect_true(all(ahrqComorbidAll$CHF %in% ahrqComorbid$CHF))
-  expect_true(all(ahrqComorbidAll$RENLFAIL %in% ahrqComorbid$RENLFAIL))
-
-})
-
 test_that("read LET string declarations from SAS code", {
 
   letStrOne <-  "\t%LET DC16=%STR('196','197','198','199');      "
