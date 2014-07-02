@@ -1,57 +1,5 @@
 context("test icd9 package")
 
-test_that("running short to decimal conversion before and after expansion of a ICD-9 base codes gives the same result", {
-
-  expect_equal(icd9ShortToDecimal("013"), "13")
-  expect_equal(icd9ShortToDecimal("013", leadingZeroes = TRUE), "013")
-  expect_equal(icd9ShortToDecimal("013", keepLoneDecimal = TRUE), "13.")
-  expect_equal(icd9ShortToDecimal("013", leadingZeroes = TRUE, keepLoneDecimal = TRUE), "013.")
-  expect_equal(icd9ShortToDecimal("V013"), "V1.3")
-  expect_equal(icd9ShortToDecimal("V013", leadingZeroes = TRUE), "V01.3")
-  expect_equal(icd9ShortToDecimal("V01", keepLoneDecimal = TRUE), "V1.")
-  expect_equal(icd9ShortToDecimal("V01", leadingZeroes = TRUE, keepLoneDecimal = TRUE), "V01.")
-
-  #bad codes:
-  expect_equal(icd9ShortToDecimal("valsalva", invalidAction = "silent"), NA_character_)
-  expect_equal(icd9ShortToDecimal("123456", invalidAction = "silent"), NA_character_)
-  expect_equal(icd9ShortToDecimal("", invalidAction = "silent"), NA_character_)
-  expect_equal(icd9ShortToDecimal("-1", invalidAction = "silent"), NA_character_)
-  expect_error(icd9ShortToDecimal("-1", invalidAction = "stop"))
-  expect_error(icd9ShortToDecimal(NA, invalidAction = "silent")) # NA is not character type, so expect error.
-  expect_error(icd9ShortToDecimal(NA, invalidAction = "ignore")) # NA is not character type, so expect error.
-  expect_equal(icd9ShortToDecimal(c("000000", "0ab1bc2d"), invalidAction = "silent"), c(NA_character_, NA_character_))
-  expect_error(icd9ShortToDecimal("valsalva", invalidAction = "stop"))
-  expect_error(icd9ShortToDecimal("123456", invalidAction = "stop"))
-  expect_error(icd9ShortToDecimal("", invalidAction = "stop"))
-  expect_error(icd9ShortToDecimal("-1", invalidAction = "stop"))
-  expect_error(icd9ShortToDecimal(NA, invalidAction = "stop"))
-  expect_error(icd9ShortToDecimal(c("000000", "0ab1bc2d"), invalidAction = "stop"))
-  expect_error(icd9ShortToDecimal(c("123", "0ab1bc2d"), invalidAction = "stop")) # first is valid
-
-  icd9List <- ahrqComorbid #todo SUBSET OR EXTRA MAPPINGS?
-  for (i in names(icd9List)) {
-    expect_equal(
-      icd9DecimalToShort(icd9ShortToDecimal(icd9List[[i]], leadingZeroes = TRUE), leadingZeroes = TRUE),
-      icd9AddLeadingZeroesShort(icd9List[[i]]),
-      info = paste("in loop:", i)
-    )
-  }
-
-  n = 250
-  randomDecimalIcd9 <- paste(
-    round(runif(min = 1, max = 999, n = n)),
-    sample(icd9ExpandMinor(), replace = TRUE, size = n),
-    sep = "."
-  )
-  # keep the decimal point just because that is how we created the test data.
-  expect_equal(icd9ShortToDecimal(icd9DecimalToShort(randomDecimalIcd9), keepLoneDecimal = TRUE), randomDecimalIcd9)
-  # test without decimal, too...
-  rd2 <- as.character(round(runif(min = 1, max = 999, n = n)))
-  expect_equal(icd9ShortToDecimal(icd9DecimalToShort(rd2), keepLoneDecimal = FALSE), rd2)
-
-})
-
-
 test_that("appendZeroToNine", {
   expect_error(appendZeroToNine(list(a = c(1, 2)))) # error on silly input
   expect_identical(appendZeroToNine("1"), as.character(10:19))
@@ -62,37 +10,37 @@ test_that("appendZeroToNine", {
 })
 
 test_that("extract decimal parts", {
-  expect_equal(icd9ExtractPartsDecimal("0"), data.frame(major = "000", minor = "", stringsAsFactors = FALSE)) # zero is valid, means no code.
-  expect_equal(icd9ExtractPartsDecimal("V1.2"), data.frame(major = "V1", minor = "2", stringsAsFactors = FALSE))
-  expect_equal(icd9ExtractPartsDecimal("1.1"), data.frame(major = "001", minor = "1", stringsAsFactors = FALSE))
-  expect_equal(icd9ExtractPartsDecimal("22.22"), data.frame(major = "022", minor = "22", stringsAsFactors = FALSE))
-  expect_equal(icd9ExtractPartsDecimal("333.3"), data.frame(major = "333", minor = "3", stringsAsFactors = FALSE))
-  expect_equal(icd9ExtractPartsDecimal("444"), data.frame(major = "444", minor = "", stringsAsFactors = FALSE))
-  expect_equal(icd9ExtractPartsDecimal("444", minorEmpty=NA_character_), data.frame(major = "444", minor=NA_character_, stringsAsFactors = FALSE))
-  expect_equal(icd9ExtractPartsDecimal("444", minorEmpty = ""), data.frame(major = "444", minor = "", stringsAsFactors = FALSE))
-  expect_equal(icd9ExtractPartsDecimal("12.3", leadingZeroes = TRUE), data.frame(major = "012", minor = "3", stringsAsFactors = FALSE))
-  expect_equal(icd9ExtractPartsDecimal(c("9.9", "88.88", "777.6")),
+  expect_equal(icd9DecimalToParts("0"), data.frame(major = "000", minor = "", stringsAsFactors = FALSE)) # zero is valid, means no code.
+  expect_equal(icd9DecimalToParts("V1.2"), data.frame(major = "V1", minor = "2", stringsAsFactors = FALSE))
+  expect_equal(icd9DecimalToParts("1.1"), data.frame(major = "001", minor = "1", stringsAsFactors = FALSE))
+  expect_equal(icd9DecimalToParts("22.22"), data.frame(major = "022", minor = "22", stringsAsFactors = FALSE))
+  expect_equal(icd9DecimalToParts("333.3"), data.frame(major = "333", minor = "3", stringsAsFactors = FALSE))
+  expect_equal(icd9DecimalToParts("444"), data.frame(major = "444", minor = "", stringsAsFactors = FALSE))
+  expect_equal(icd9DecimalToParts("444", minorEmpty=NA_character_), data.frame(major = "444", minor=NA_character_, stringsAsFactors = FALSE))
+  expect_equal(icd9DecimalToParts("444", minorEmpty = ""), data.frame(major = "444", minor = "", stringsAsFactors = FALSE))
+  expect_equal(icd9DecimalToParts("12.3", leadingZeroes = TRUE), data.frame(major = "012", minor = "3", stringsAsFactors = FALSE))
+  expect_equal(icd9DecimalToParts(c("9.9", "88.88", "777.6")),
                data.frame(
                  major = c("009", "088", "777"),
                  minor = c("9", "88", "6"),
                  stringsAsFactors = FALSE
                )
   )
-  expect_equal(icd9ExtractPartsDecimal(c("9.9", "88", "777.6"), minorEmpty=NA),
+  expect_equal(icd9DecimalToParts(c("9.9", "88", "777.6"), minorEmpty=NA),
                data.frame(
                  major = c("009", "088", "777"),
                  minor = c("9", NA, "6"),
                  stringsAsFactors = FALSE
                )
   )
-  expect_equal(icd9ExtractPartsDecimal(c("1", "g", "", "991.23"), invalidAction = "silent", minorEmpty = NA),
+  expect_equal(icd9DecimalToParts(c("1", "g", "", "991.23"), invalidAction = "silent", minorEmpty = NA),
                data.frame(
                  major = c("001", NA, NA, "991"),
                  minor = c(NA, NA, NA, "23"),
                  stringsAsFactors = FALSE
                )
   )
-  expect_equal(icd9ExtractPartsDecimal(c("1", "g", "", "991.23"), invalidAction = "ignore", minorEmpty = NA),
+  expect_equal(icd9DecimalToParts(c("1", "g", "", "991.23"), invalidAction = "ignore", minorEmpty = NA),
                data.frame(
                  major = c("001", "g", NA, "991"),
                  minor = c(NA, NA, NA, "23"),

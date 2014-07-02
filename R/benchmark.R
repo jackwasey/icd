@@ -22,9 +22,9 @@ icd9Benchmark <- function() {
   #summaryRprof(filename = tmp, memory = "stats", lines = "both")
   summaryRprof(filename = tmp, memory = "both", lines = "show")
 
-  #microbenchmark(times = 10, icd9ExtractPartsShort(randomShortIcd9(5E+5)))
-  #microbenchmark(times = 10, icd9ExtractPartsShortSlow(randomShortIcd9(5E+5)))
-  #microbenchmark(times = 10, icd9ExtractPartsShortList(randomShortIcd9(5E+5)))
+  #microbenchmark(times = 10, icd9ShortToParts(randomShortIcd9(5E+5)))
+  #microbenchmark(times = 10, icd9ShortToPartsSlow(randomShortIcd9(5E+5)))
+  #microbenchmark(times = 10, icd9ShortToPartsList(randomShortIcd9(5E+5)))
 
   microbenchmark(times = 50, trim(randomShortIcd9))
   microbenchmark(times = 50, strip(randomShortIcd9))

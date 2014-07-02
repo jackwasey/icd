@@ -1,3 +1,13 @@
+Version 0.2
+------------------------------------------------------------------------------
+
+* Added more co-morbidity mappings, Elixhauser original and Quan/Elixhauser.
+* Exposed more functions to public API
+* Better conversion of ICD-9 codes to textual representation
+* Expanded vignette
+* Bug fixes and test cases
+* Improved documentation
+
 Version 0.1.1
 ------------------------------------------------------------------------------
 
