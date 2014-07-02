@@ -118,9 +118,8 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #' @template savesas
 #' @template parse
 #' @keywords internal
-parseQuanDeyoSas <- function(sasPath =
-                               "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
-                             condense = FALSE, save = FALSE, saveDir = "~/icd9/data") {
+parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE, saveDir = "~/icd9/data") {
+  if (is.null(sasPath)) sasPath <- "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt"
   quanSas <- readLines(sasPath, warn = FALSE)
   qlets <- sasExtractLetStrings(quanSas)
   qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]

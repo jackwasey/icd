@@ -4,9 +4,9 @@ Description: This package allows accurate manipulation, validation and
     comparison of ICD-9-CM (clinical modification) codes. Although ICD-9 codes
     appear numeric, this is not the case, since trailing zeroes, and a mixture
     of decimal and non-decimal "short" format codes exist. Tools to map ICD-9
-    codes to co-morbidities are also provided, with mappings from Quan (Deyo and Elixhauser versions),
-    Elixhauser and AHRQ included.
-Version: 0.2.0
+    codes to co-morbidities are also provided, with mappings from Quan (Deyo
+    and Elixhauser versions), Elixhauser and AHRQ included.
+Version: 0.2.1
 Date: 2014-06-8
 Authors@R: person(given="Jack O.", family="Wasey", role=c("aut", "cre"),
     email=c("jack@jackwasey.com"))
