@@ -1,8 +1,6 @@
 context("comorbidities, generally slow tests")
 
-
 set.seed(1441)
-
 n <- 500
 np <- round(n/20) # icd9 codes per patients
 

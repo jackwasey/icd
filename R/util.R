@@ -1,4 +1,4 @@
-# 
+#
 # these utility functions are derived from Hmisc and one of my other projects.
 # All functions set for internal use in this package only to avoid namespace
 # conflicts.
@@ -12,14 +12,14 @@
 #' @return dframe without logical fields
 #' @keywords internal manip
 logicalToBinary <- function(dframe) {
-  
+
   if (class(dframe) != 'data.frame') stop("logicalToBinary expects a data frame, but got %s", class(dframe))
   if (any(dim(dframe) == 0)) stop("got zero in at least one dimension in data frame. %d, %d", dim(dframe)[1], dim(dframe)[2])
-  
+
   # can condense this code into a one-liner, but this is clearer:
   logicalFields <- names(dframe)[sapply(dframe,class)=='logical']
   if (is.na(logicalFields) || length(logicalFields) == 0) return(dframe)
-  
+
   #update just the logical fields with integers
   dframe[,logicalFields] <-
     vapply(
@@ -33,11 +33,11 @@ logicalToBinary <- function(dframe) {
 #' @title strip all whitespace
 #' @description could do this with regular expression, but slow, and this
 #'   function is called frequently. My only use case works with removal of all
-#'   whitespace.
+#'   whitespace, and I don't expect <TAB>.
 #' @param x is a character vector to strip
 #' @return character vector
 #' @keywords internal
-strip <- function (x, pattern=" ") 
+strip <- function (x, pattern = " ")
   gsub(pattern = pattern, replacement = "", x, fixed = TRUE, useBytes = TRUE) # beware unicode
 
 #' @title strip whitespace from ends of each string in given character vector
@@ -64,7 +64,16 @@ trim <- function(x)
 #'   text vector.
 strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
   # unlist puts the name in the first position, which I don't think I ever want.
-  result <- lapply(text, function(x) unlist(regmatches(x=x, m=regexec(pattern=pattern, text=x, ...), ...))[-1])
+  result <- lapply(
+    text, function(x) unlist(
+      regmatches(
+        x = x,
+        m = regexec(
+          pattern = pattern,
+          text=x, ...),
+        ...)
+    )[-1]
+  )
   if (!dropEmpty) return(result)
   result[sapply(result, function(x) length(x) != 0)]
 }
@@ -97,10 +106,10 @@ asCharacterNoWarn <- function(x) {
 
 #' @title convert factor or vector to numeric without warnings
 #' @aliases asIntegerNoWarn
-#' @description correctly converts factors to vectors, and then converts to 
+#' @description correctly converts factors to vectors, and then converts to
 #'   numeric or integer, which may silently introduce NAs. Invisible rounding
 #'   errors can be a problem going from numeric to integer, so consider adding
-#'   tolerance to this conversion.
+#'   tolerance to this conversion. \code{asIntegerNoWarn} silently \code{\link{floor}}s.
 #' @param x is a vector, probably of numbers of characters
 #' @keywords internal
 #' @return numeric vector, may have NA values
@@ -114,6 +123,14 @@ asNumericNoWarn <- function(x) {
 #' @rdname asNumericNoWarn
 asIntegerNoWarn <- function(x)
   as.integer(asNumericNoWarn(x))
+
+#' @rdname asNumericNoWarn
+areIntegers <- function(x) {
+  n <- asNumericNoWarn(x)
+  i <- abs(n - floor(n)) < 1e-9
+  i[is.na(i)] <- FALSE
+  i
+}
 
 #' @title inverse of \%in\%
 #' @description borrowed from Hmisc. See %in%
@@ -132,7 +149,7 @@ asIntegerNoWarn <- function(x)
 #'   @param path is a path name to destination folder for the data: no trailing slash.
 saveSourceTreeData <- function(varName, path="~/icd9/data") {
   stopifnot(file.exists(path))
-  save(list  = varName, 
+  save(list  = varName,
        envir = parent.frame(), # get from my parent
        file  = file.path(path, paste0(varName, ".RData")),
        compress="xz"

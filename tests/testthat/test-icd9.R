@@ -9,48 +9,12 @@ test_that("appendZeroToNine", {
   expect_identical(sort(appendZeroToNine(c("", "9"))), as.character(c(0:9, 90:99)))
 })
 
-test_that("extract decimal parts", {
-  expect_equal(icd9DecimalToParts("0"), data.frame(major = "000", minor = "", stringsAsFactors = FALSE)) # zero is valid, means no code.
-  expect_equal(icd9DecimalToParts("V1.2"), data.frame(major = "V1", minor = "2", stringsAsFactors = FALSE))
-  expect_equal(icd9DecimalToParts("1.1"), data.frame(major = "001", minor = "1", stringsAsFactors = FALSE))
-  expect_equal(icd9DecimalToParts("22.22"), data.frame(major = "022", minor = "22", stringsAsFactors = FALSE))
-  expect_equal(icd9DecimalToParts("333.3"), data.frame(major = "333", minor = "3", stringsAsFactors = FALSE))
-  expect_equal(icd9DecimalToParts("444"), data.frame(major = "444", minor = "", stringsAsFactors = FALSE))
-  expect_equal(icd9DecimalToParts("444", minorEmpty=NA_character_), data.frame(major = "444", minor=NA_character_, stringsAsFactors = FALSE))
-  expect_equal(icd9DecimalToParts("444", minorEmpty = ""), data.frame(major = "444", minor = "", stringsAsFactors = FALSE))
-  expect_equal(icd9DecimalToParts("12.3", leadingZeroes = TRUE), data.frame(major = "012", minor = "3", stringsAsFactors = FALSE))
-  expect_equal(icd9DecimalToParts(c("9.9", "88.88", "777.6")),
-               data.frame(
-                 major = c("009", "088", "777"),
-                 minor = c("9", "88", "6"),
-                 stringsAsFactors = FALSE
-               )
-  )
-  expect_equal(icd9DecimalToParts(c("9.9", "88", "777.6"), minorEmpty=NA),
-               data.frame(
-                 major = c("009", "088", "777"),
-                 minor = c("9", NA, "6"),
-                 stringsAsFactors = FALSE
-               )
-  )
-  expect_equal(icd9DecimalToParts(c("1", "g", "", "991.23"), invalidAction = "silent", minorEmpty = NA),
-               data.frame(
-                 major = c("001", NA, NA, "991"),
-                 minor = c(NA, NA, NA, "23"),
-                 stringsAsFactors = FALSE
-               )
-  )
-  expect_equal(icd9DecimalToParts(c("1", "g", "", "991.23"), invalidAction = "ignore", minorEmpty = NA),
-               data.frame(
-                 major = c("001", "g", NA, "991"),
-                 minor = c(NA, NA, NA, "23"),
-                 stringsAsFactors = FALSE
-               )
-  )
+test_that("zero pad decimal - bad input", {
+  expect_equal(icd9AddLeadingZeroesDecimal(character()), character())
+  expect_equal(icd9AddLeadingZeroesDecimal(NA_character_), NA_character_)
 })
 
-
-test_that("zero pad decimal", {
+test_that("zero pad decimal, numeric only", {
 
   expect_equal(icd9AddLeadingZeroesDecimal("1"), "001")
   expect_equal(icd9AddLeadingZeroesDecimal("01"), "001")
@@ -59,44 +23,68 @@ test_that("zero pad decimal", {
   expect_equal(icd9AddLeadingZeroesDecimal("1.99"), "001.99")
   expect_equal(icd9AddLeadingZeroesDecimal("22"), "022")
   expect_equal(icd9AddLeadingZeroesDecimal(" 22.34 "), "022.34")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V1")
-  expect_equal(icd9AddLeadingZeroesDecimal(" V1 "), "V1")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.1"), "V1.1")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.99"), "V1.99")
-  expect_equal(icd9AddLeadingZeroesDecimal("V22"), "V22")
-  expect_equal(icd9AddLeadingZeroesDecimal(" V22.34 "), "V22.34")
+
   expect_equal(icd9AddLeadingZeroesDecimal("333"), "333")
   expect_equal(icd9AddLeadingZeroesDecimal("333.99"), "333.99")
   expect_equal(icd9AddLeadingZeroesDecimal("333.1 "), "333.1")
   expect_equal(icd9AddLeadingZeroesDecimal(
     c("01", "1.99 ", "22.34", "333", "999.00")),
     c("001", "001.99", "022.34", "333", "999.00"))
-  expect_equal(icd9AddLeadingZeroesDecimal(NA_character_), NA_character_)
 
 })
 
+test_that("zero pad decimel V and E codes", {
+  expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V1")
+  expect_equal(icd9AddLeadingZeroesDecimal(" V1 "), "V1")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1.1"), "V1.1")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1.99"), "V1.99")
+  expect_equal(icd9AddLeadingZeroesDecimal("V22"), "V22")
+  expect_equal(icd9AddLeadingZeroesDecimal(" V22.34 "), "V22.34")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1", addZeroV = TRUE), "V01")
+  expect_equal(icd9AddLeadingZeroesDecimal(" V1 ", addZeroV = TRUE), "V01")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1.1", addZeroV = TRUE), "V01.1")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1.99", addZeroV = TRUE), "V01.99")
+  expect_equal(icd9AddLeadingZeroesDecimal("V22", addZeroV = TRUE), "V22")
+  expect_equal(icd9AddLeadingZeroesDecimal(" V22.34 ", addZeroV = TRUE), "V22.34")
+})
+
+test_that("zero pad short invalid codes", {
+
+  expect_equal(icd9AddLeadingZeroesShort(character()), character())
+  # behavior of "ignore" for incorrect input is undefined, so don't test:
+  # expect_equal(icd9AddLeadingZeroesShort("anything", invalidAction = "ignore"), "anything")
+  expect_equal(icd9AddLeadingZeroesShort("anything", invalidAction = "silent"), NA_character_)
+  expect_error(icd9AddLeadingZeroesShort("anything", invalidAction = "stop"))
+  expect_equal(icd9AddLeadingZeroesShort(NA_character_), NA_character_)
+  expect_error(icd9AddLeadingZeroesShort(NA_character_, invalidAction = "stop")) # is NA invalid? TODO
+  expect_equal(icd9AddLeadingZeroesShort("V012"), "V012") # this is just re-checking the validation code...
+  expect_equal(icd9AddLeadingZeroesShort("V199"), "V199")
+  expect_error(icd9AddLeadingZeroesShort("1.1", invalidAction = "stop")) # at least we confirm we follow the invalidAction directive correctly.
+})
+
 test_that("zero pad short", {
-
-  expect_error(icd9AddLeadingZeroesShort("1.1"))
-
   expect_equal(icd9AddLeadingZeroesShort("1"), "001")
   expect_equal(icd9AddLeadingZeroesShort("01"), "001")
   expect_equal(icd9AddLeadingZeroesShort("22"), "022")
   expect_equal(icd9AddLeadingZeroesShort(" 01 "), "001")
   expect_equal(icd9AddLeadingZeroesShort("199"), "199")
   expect_equal(icd9AddLeadingZeroesShort(" 02234 "), "02234")
-  expect_equal(icd9AddLeadingZeroesShort("V1"), "V01")
-  expect_equal(icd9AddLeadingZeroesShort(" V1 "), "V01")
+  expect_equal(icd9AddLeadingZeroesShort("V1"), "V1")
+  expect_equal(icd9AddLeadingZeroesShort(" V1 "), "V1")
+  expect_equal(icd9AddLeadingZeroesShort("V1", addZeroV = TRUE), "V01")
+  expect_equal(icd9AddLeadingZeroesShort(" V1 ", addZeroV = TRUE), "V01")
   expect_equal(icd9AddLeadingZeroesShort("V11"), "V11")
-  expect_equal(icd9AddLeadingZeroesShort("V012"), "V012")
-  expect_equal(icd9AddLeadingZeroesShort("V199"), "V199")
+  expect_equal(icd9AddLeadingZeroesShort(" V11 "), "V11")
+  expect_equal(icd9AddLeadingZeroesShort("V11", addZeroV = TRUE), "V11")
+  expect_equal(icd9AddLeadingZeroesShort(" V11 ", addZeroV = TRUE), "V11")
   expect_equal(icd9AddLeadingZeroesShort(" V2234 "), "V2234")
   expect_equal(icd9AddLeadingZeroesShort("3331 "), "3331")
   expect_equal(icd9AddLeadingZeroesShort(
     c("9", "01", "0199 ", "02234", "333", "99900")),
     c("009", "001", "0199", "02234", "333", "99900"))
   expect_equal(icd9AddLeadingZeroesShort(NA_character_), NA_character_)
-  expect_equal(icd9AddLeadingZeroesShort("V12.34"), NA_character_)
+  expect_equal(icd9AddLeadingZeroesShort("V12.34", invalidAction = "silent"), NA_character_)
+  expect_error(icd9AddLeadingZeroesShort("V12.34", invalidAction = "stop"))
 
 })
 
@@ -104,17 +92,29 @@ test_that("icd9 parts to short form numeric input", {
   expect_equal(icd9AddLeadingZeroesMajor(1L), "001")
   expect_equal(icd9AddLeadingZeroesMajor(10L), "010")
   expect_equal(icd9AddLeadingZeroesMajor(999L), "999")
-  expect_error(icd9AddLeadingZeroesMajor(10.1))
+  expect_error(icd9AddLeadingZeroesMajor(10.1, invalidAction = "stop"))
 })
 
-test_that("icd9 parts to short form V and E input", {
+test_that("add leading zeroes to V (and E) majors", {
 
-  expect_equal(icd9AddLeadingZeroesMajor("V1"), "V01") # TODO
-  expect_equal(icd9AddLeadingZeroesMajor(" V10"), "V10")
-  expect_equal(icd9AddLeadingZeroesMajor("V2"), "V02")
-  expect_equal(icd9AddLeadingZeroesMajor("V03"), "V03")
-  expect_equal(icd9AddLeadingZeroesMajor(c("10", "V05")), c("010", "V05"))
-  expect_equal(icd9AddLeadingZeroesMajor("E915"), "E915") # should never be any extra zeroes.
+  expect_equal(icd9AddLeadingZeroesMajor("V1", addZeroV = TRUE), "V01")
+  expect_equal(icd9AddLeadingZeroesMajor("V1", addZeroV = FALSE), "V1")
+  expect_equal(icd9AddLeadingZeroesMajor(" V10", addZeroV = TRUE), "V10")
+  expect_equal(icd9AddLeadingZeroesMajor(" V10", addZeroV = FALSE), "V10")
+  expect_equal(icd9AddLeadingZeroesMajor("V2", addZeroV = TRUE), "V02")
+  expect_equal(icd9AddLeadingZeroesMajor("V2", addZeroV = FALSE), "V2")
+  expect_equal(icd9AddLeadingZeroesMajor("V03", addZeroV = TRUE), "V03")
+  expect_equal(icd9AddLeadingZeroesMajor("V03", addZeroV = FALSE), "V03")
+  expect_equal(icd9AddLeadingZeroesMajor(c("10", "V05"), addZeroV = TRUE), c("010", "V05"))
+  expect_equal(icd9AddLeadingZeroesMajor(c("10", "V05"), addZeroV = FALSE), c("010", "V05"))
+  expect_equal(icd9AddLeadingZeroesMajor("E915", addZeroV = TRUE), "E915") # should never be any extra zeroes.
+  expect_equal(icd9AddLeadingZeroesMajor("E915", addZeroV = FALSE), "E915") # should never be any extra zeroes.
+})
+
+test_that("add leading zeroes to majors, invalid input", {
+  expect_equal(icd9AddLeadingZeroesMajor("g", invalidAction = "ignore"), "g") # dont change nonsense in ignore mode
+  expect_equal(icd9AddLeadingZeroesMajor("E9", addZeroV = TRUE), "E9") # should never be any extra zeroes, even if invalid (but no checking)
+  expect_equal(icd9AddLeadingZeroesMajor("E9", addZeroV = FALSE), "E9") # should never be any extra zeroes, even if invalid
   expect_equal(icd9AddLeadingZeroesMajor("E", invalidAction = "silent"), NA_character_) # should be minimally valid code
   expect_equal(icd9AddLeadingZeroesMajor("V", invalidAction = "silent"), NA_character_)
   expect_equal(icd9AddLeadingZeroesMajor("jasmine", invalidAction = "silent"), NA_character_)
@@ -122,11 +122,6 @@ test_that("icd9 parts to short form V and E input", {
   expect_error(icd9AddLeadingZeroesMajor("V", invalidAction = "stop"))
   expect_error(icd9AddLeadingZeroesMajor("jasmine", invalidAction = "stop"))
   #expect_equal(icd9AddLeadingZeroesMajor("E9"), "E9") # minimal validation of major, should just give back E codes.
-
-  expect_error(icd9PartsToShort(c("123", "34", "56"), c("1", "20"))) # don't allow cycling.
-  expect_error(icd9PartsToShort(c("123", "34"), c("1", "20", "45"))) # don't allow cycling.
-  expect_equal(icd9PartsToShort(10L, "20"), "01020")
-  expect_equal(icd9PartsToShort("V10", c("0", "1")), c("V100", "V101"))
 })
 
 test_that("all generated icd9 lookup tables are valid!", {})
@@ -138,55 +133,141 @@ test_that("icd9ExtractAlphaNumeric", {
 
 })
 
-test_that("strip leading zero from decimal errors", {
+test_that("strip leading zeroes: errors", {
 
-  expect_error(icd9DropZeroFromDecimal("sandwiches", invalidAction = "stop"))
-  expect_error(icd9DropZeroFromDecimal("VE123456.789", invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesDecimal("sandwiches", invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesDecimal("VE123456.789", invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesDecimal("V10.1,E989.2", invalidAction = "stop"))
 })
 
 test_that("strip leading zero from decimal numeric only", {
 
-  expect_equal(icd9DropZeroFromDecimal(NA_character_), NA_character_)
-  expect_equal(icd9DropZeroFromDecimal("1"), "1")
-  expect_equal(icd9DropZeroFromDecimal("01"), "1")
-  expect_equal(icd9DropZeroFromDecimal("001"), "1")
-  expect_equal(icd9DropZeroFromDecimal("1."), "1.")
-  expect_equal(icd9DropZeroFromDecimal("01."), "1.")
-  expect_equal(icd9DropZeroFromDecimal("001."), "1.")
-  expect_equal(icd9DropZeroFromDecimal("12"), "12")
-  expect_equal(icd9DropZeroFromDecimal("012"), "12")
-  expect_equal(icd9DropZeroFromDecimal("12."), "12.")
-  expect_equal(icd9DropZeroFromDecimal("012."), "12.")
-  expect_equal(icd9DropZeroFromDecimal("123"), "123")
-  expect_equal(icd9DropZeroFromDecimal("123."), "123.")
-  expect_equal(icd9DropZeroFromDecimal("1.2"), "1.2")
-  expect_equal(icd9DropZeroFromDecimal("01.2"), "1.2")
-  expect_equal(icd9DropZeroFromDecimal("001.2"), "1.2")
-  expect_equal(icd9DropZeroFromDecimal("12.4"), "12.4")
-  expect_equal(icd9DropZeroFromDecimal("012.4"), "12.4")
-  expect_equal(icd9DropZeroFromDecimal("12.78"), "12.78")
-  expect_equal(icd9DropZeroFromDecimal("012.78"), "12.78")
-  expect_equal(icd9DropZeroFromDecimal("123.9"), "123.9")
-  expect_equal(icd9DropZeroFromDecimal("123.87"), "123.87")
+  expect_equal(icd9DropLeadingZeroesDecimal(NA_character_), NA_character_)
+  expect_equal(icd9DropLeadingZeroesDecimal("1"), "1")
+  expect_equal(icd9DropLeadingZeroesDecimal("01"), "1")
+  expect_equal(icd9DropLeadingZeroesDecimal("001"), "1")
+  expect_equal(icd9DropLeadingZeroesDecimal("1."), "1.")
+  expect_equal(icd9DropLeadingZeroesDecimal("01."), "1.")
+  expect_equal(icd9DropLeadingZeroesDecimal("001."), "1.")
+  expect_equal(icd9DropLeadingZeroesDecimal("12"), "12")
+  expect_equal(icd9DropLeadingZeroesDecimal("012"), "12")
+  expect_equal(icd9DropLeadingZeroesDecimal("12."), "12.")
+  expect_equal(icd9DropLeadingZeroesDecimal("012."), "12.")
+  expect_equal(icd9DropLeadingZeroesDecimal("123"), "123")
+  expect_equal(icd9DropLeadingZeroesDecimal("123."), "123.")
+  expect_equal(icd9DropLeadingZeroesDecimal("1.2"), "1.2")
+  expect_equal(icd9DropLeadingZeroesDecimal("01.2"), "1.2")
+  expect_equal(icd9DropLeadingZeroesDecimal("001.2"), "1.2")
+  expect_equal(icd9DropLeadingZeroesDecimal("12.4"), "12.4")
+  expect_equal(icd9DropLeadingZeroesDecimal("012.4"), "12.4")
+  expect_equal(icd9DropLeadingZeroesDecimal("12.78"), "12.78")
+  expect_equal(icd9DropLeadingZeroesDecimal("012.78"), "12.78")
+  expect_equal(icd9DropLeadingZeroesDecimal("123.9"), "123.9")
+  expect_equal(icd9DropLeadingZeroesDecimal("123.87"), "123.87")
 })
 
 test_that("strip leading zero from decimal V and E", {
 
-  expect_equal(icd9DropZeroFromDecimal("V1"), "V1")
-  expect_equal(icd9DropZeroFromDecimal("V01"), "V1")
-  expect_equal(icd9DropZeroFromDecimal("V1."), "V1.")
-  expect_equal(icd9DropZeroFromDecimal("V01."), "V1.")
-  expect_equal(icd9DropZeroFromDecimal("V12"), "V12")
-  expect_equal(icd9DropZeroFromDecimal("V12.3"), "V12.3")
-  expect_equal(icd9DropZeroFromDecimal("V1.2"), "V1.2")
-  expect_equal(icd9DropZeroFromDecimal("V01.2"), "V1.2")
-  expect_equal(icd9DropZeroFromDecimal("V12.78"), "V12.78")
-  expect_equal(icd9DropZeroFromDecimal("E912"), "E912")
-  expect_equal(icd9DropZeroFromDecimal("E912."), "E912.")
-  expect_equal(icd9DropZeroFromDecimal("E912.7"), "E912.7")
+  expect_equal(icd9DropLeadingZeroesDecimal("V1"), "V1")
+  expect_equal(icd9DropLeadingZeroesDecimal("V01"), "V01")
+  expect_equal(icd9DropLeadingZeroesDecimal("V01", dropZeroV = TRUE), "V1")
+  expect_equal(icd9DropLeadingZeroesDecimal("V1."), "V1.")
+  expect_equal(icd9DropLeadingZeroesDecimal("V01.", dropZeroV = TRUE), "V1.")
+  expect_equal(icd9DropLeadingZeroesDecimal("V12"), "V12")
+  expect_equal(icd9DropLeadingZeroesDecimal("V12.3"), "V12.3")
+  expect_equal(icd9DropLeadingZeroesDecimal("V1.2"), "V1.2")
+  expect_equal(icd9DropLeadingZeroesDecimal("V01.2"), "V01.2")
+  expect_equal(icd9DropLeadingZeroesDecimal("V01.2", dropZeroV = TRUE), "V1.2")
+  expect_equal(icd9DropLeadingZeroesDecimal("V12.78"), "V12.78")
+  expect_equal(icd9DropLeadingZeroesDecimal("E912"), "E912")
+  expect_equal(icd9DropLeadingZeroesDecimal("E912."), "E912.")
+  expect_equal(icd9DropLeadingZeroesDecimal("E912.7"), "E912.7")
 
-  expect_equal(icd9DropZeroFromDecimal(c("V12.78", " E898.", "02", "034.5")), c("V12.78", "E898.", "2", "34.5"))
+  expect_equal(icd9DropLeadingZeroesDecimal(c("V12.78", " E898.", "02", "034.5")), c("V12.78", "E898.", "2", "34.5"))
 })
+
+test_that("strip leading zero from short numeric only", {
+
+  expect_equal(icd9DropLeadingZeroesShort(NA_character_), NA_character_)
+  expect_equal(icd9DropLeadingZeroesShort("0012"), "0012") # must have zero to be valid (001.2)
+  expect_equal(icd9DropLeadingZeroesShort("00123"), "00123") # must have zero to be valid (001.23)
+  expect_equal(icd9DropLeadingZeroesShort("0124"), "0124")
+  expect_equal(icd9DropLeadingZeroesShort("01278"), "01278") # this is 12.78
+  expect_equal(icd9DropLeadingZeroesShort("1239"), "1239")
+  expect_equal(icd9DropLeadingZeroesShort("12387"), "12387")
+})
+
+test_that("strip leading zero from decimal V and E", {
+
+  expect_equal(icd9DropLeadingZeroesShort("V1"), "V1")
+  expect_equal(icd9DropLeadingZeroesShort("V01", dropZeroV = TRUE), "V1") # TODO: do I care about the default action?
+  expect_equal(icd9DropLeadingZeroesShort("V01", dropZeroV = FALSE), "V01")
+  expect_equal(icd9DropLeadingZeroesShort("V12", dropZeroV = TRUE), "V12")
+  expect_equal(icd9DropLeadingZeroesShort("V12", dropZeroV = FALSE), "V12")
+  expect_equal(icd9DropLeadingZeroesShort("V123", dropZeroV = TRUE), "V123")
+  expect_equal(icd9DropLeadingZeroesShort("V123", dropZeroV = FALSE), "V123")
+  expect_equal(icd9DropLeadingZeroesShort("V012", dropZeroV = TRUE), "V012") # cannot drop zero and be the same code. This is an important test!
+  expect_equal(icd9DropLeadingZeroesShort("V012", dropZeroV = FALSE), "V012")
+  expect_equal(icd9DropLeadingZeroesShort("V1278", dropZeroV = TRUE), "V1278")
+  expect_equal(icd9DropLeadingZeroesShort("V1278", dropZeroV = FALSE), "V1278")
+  expect_equal(icd9DropLeadingZeroesShort("E912", dropZeroV = TRUE), "E912")
+  expect_equal(icd9DropLeadingZeroesShort("E912", dropZeroV = FALSE), "E912")
+  expect_equal(icd9DropLeadingZeroesShort("E9127", dropZeroV = TRUE), "E9127")
+  expect_equal(icd9DropLeadingZeroesShort("E9127", dropZeroV = FALSE), "E9127")
+
+  test_that("mixed vector drop leading zero short", {
+    expect_equal(icd9DropLeadingZeroesShort(c("V1278", " E898", "02", "0345")), c("V1278", "E898", "2", "0345"))
+  })
+})
+
+test_that("drop leading zeroes from majors: invalid input", {
+  # this is a little dangerous. dropping zeroes from a major is only valid for
+  # short codes if the minor is empty, but this function is unaware of this.
+  expect_error(icd9DropLeadingZeroesMajor("", invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesMajor("100", dropZeroV = "not logical", invalidAction = "ignore"))
+  expect_error(icd9DropLeadingZeroesMajor(NA, invalidAction = "stop"))
+  expect_equal(icd9DropLeadingZeroesMajor("", invalidAction = "silent"), NA_character_)
+  expect_equal(icd9DropLeadingZeroesMajor(NA, invalidAction = "silent"), NA_character_)
+  expect_error(icd9DropLeadingZeroesMajor("54321", invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesMajor(1.5, invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesMajor(pi, invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesMajor("V10.20", invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesMajor("E9127", invalidAction = "stop"))
+  expect_error(icd9DropLeadingZeroesMajor("rhubarb", invalidAction = "stop"))
+})
+
+test_that("drop leading zeroes from majors: numeric input", {
+  expect_equal(icd9DropLeadingZeroesMajor(1), "1")
+  expect_equal(icd9DropLeadingZeroesMajor(20), "20")
+  expect_equal(icd9DropLeadingZeroesMajor(333), "333")
+  expect_equal(icd9DropLeadingZeroesMajor("1"), "1")
+  expect_equal(icd9DropLeadingZeroesMajor("20"), "20")
+  expect_equal(icd9DropLeadingZeroesMajor("333"), "333")
+  expect_equal(icd9DropLeadingZeroesMajor("01"), "1")
+  expect_equal(icd9DropLeadingZeroesMajor(" 01 "), "1")
+  expect_equal(icd9DropLeadingZeroesMajor("001"), "1")
+  expect_equal(icd9DropLeadingZeroesMajor("020"), "20")
+})
+
+test_that("drop leading zeroes from majors: V codes", {
+  expect_equal(icd9DropLeadingZeroesMajor("V1", dropZeroV = FALSE), "V1")
+  expect_equal(icd9DropLeadingZeroesMajor(" v01 ", dropZeroV = FALSE), "v01")
+  expect_equal(icd9DropLeadingZeroesMajor("V01", dropZeroV = FALSE), "V01")
+  expect_equal(icd9DropLeadingZeroesMajor("V12", dropZeroV = FALSE), "V12")
+
+  expect_equal(icd9DropLeadingZeroesMajor("V1", dropZeroV = TRUE), "V1")
+  expect_equal(icd9DropLeadingZeroesMajor(" v01 ", dropZeroV = TRUE), "v1")
+  expect_equal(icd9DropLeadingZeroesMajor("V01", dropZeroV = TRUE), "V1")
+  expect_equal(icd9DropLeadingZeroesMajor("V12", dropZeroV = TRUE), "V12")
+})
+
+test_that("drop leading zeroes from majors: E codes", {
+  expect_equal(icd9DropLeadingZeroesMajor("E800"), "E800")
+  expect_equal(icd9DropLeadingZeroesMajor(" e812 "), "e812")
+})
+
+
+context("explain ICD-9: code to human-readable")
 
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
@@ -236,6 +317,8 @@ test_that("expalin a single top level ICD-9 code without a top level explanation
                                    ),
               row.names = c(NA, -5L),
               class = "data.frame"
-              )
+    )
   )
 })
+
+#todo, set up long chain of multiple conversions as kind of integration test, and to flush out errors.

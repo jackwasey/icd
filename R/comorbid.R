@@ -8,40 +8,40 @@
 #' @seealso comorbidities.
 #' @templateVar icd9AnyName "icd9,icd9Reference"
 #' @template icd9-any
-#' @template short
+#' @template isShort
 #' @template validate
-#' @param shortReference logical, see argument \code{short}
+#' @param isShortReference logical, see argument \code{isShort}
 #' @return logical vector of which icd9 match or are subcategory of
 #'   icd9Referenec
 #' @keywords internal
-icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReference = TRUE, validate = FALSE, validateReference = FALSE) {
+icd9InReferenceCode <- function(icd9, icd9Reference, isShort = TRUE, isShortReference = TRUE, validate = FALSE, validateReference = FALSE) {
 
   if (!class(icd9) %in% c("character", "numeric", "integer"))
     stop("icd9InReferenceCode expects a character or number vector for icd9, but got: ", class(icd9))
   if (!class(icd9Reference) %in% c("character", "numeric", "integer"))
     stop("icd9InReferenceCode expects a character or number vector for the basecodes,
          to avoid ambiguity with trailing zeroes, but got: ", class(icd9Reference))
-  stopifnot(class(short) == 'logical', class(shortReference) == "logical")
+  stopifnot(class(isShort) == 'logical', class(isShortReference) == "logical")
 
-  if (length(short) >  1)
-    stop("icd9InReferenceCode got vector for short, expected single TRUE or FALSE value")
-  if (length(shortReference) >  1)
-    stop("icd9InReferenceCode got vector for shortReference, expected single TRUE or FALSE value")
-  if (length(short) == 0 )
-    stop("icd9InReferenceCode got empty vector for short, expected single TRUE or FALSE value")
-  if (length(shortReference) == 0)
-    stop("icd9InReferenceCode got empty vector for shortReference, expected single TRUE or FALSE value")
+  if (length(isShort) >  1)
+    stop("icd9InReferenceCode got vector for isShort, expected single TRUE or FALSE value")
+  if (length(isShortReference) >  1)
+    stop("icd9InReferenceCode got vector for isShortReference, expected single TRUE or FALSE value")
+  if (length(isShort) == 0 )
+    stop("icd9InReferenceCode got empty vector for isShort, expected single TRUE or FALSE value")
+  if (length(isShortReference) == 0)
+    stop("icd9InReferenceCode got empty vector for isShortReference, expected single TRUE or FALSE value")
 
   if (length(icd9Reference) == 0) stop("icd9InReferenceCode expects at least one icd9 code to test against")
 
-  if (validate) stopIfInvalidIcd9(icd9, callingFunction = "icd9InReferenceCode-icd9", short = short)
-  if (validateReference) stopIfInvalidIcd9(icd9Reference, callingFunction = "icd9InReferenceCode-icd9", short = shortReference)
+  if (validate) stopIfInvalidIcd9(icd9, isShort = isShort)
+  if (validateReference) stopIfInvalidIcd9(icd9Reference, isShort = isShortReference)
 
-  kids <- memSpawnRefKids(icd9Reference, shortReference)
+  kids <- memSpawnRefKids(icd9Reference, isShortReference)
 
   # convert to short form to make comparison
-  if (short == FALSE) icd9 <- icd9DecimalToShort(icd9)
-  if (shortReference == FALSE) kids <- icd9DecimalToShort(kids)
+  if (isShort == FALSE) icd9 <- icd9DecimalToShort(icd9)
+  if (isShortReference == FALSE) kids <- icd9DecimalToShort(kids)
 
   icd9 %in% kids
 }
@@ -56,11 +56,11 @@ icd9InReferenceCode <- function(icd9, icd9Reference, short = TRUE, shortReferenc
 #' @import memoise
 #' @keywords internal
 spawnReferenceChildren <-
-  function(icd9Reference, shortReference) {
+  function(icd9Reference, isShortReference) {
     c(
       lapply(
         icd9Reference,
-        FUN = function(x) icd9Children(icd9 = x, short = shortReference)
+        FUN = function(x) icd9Children(icd9 = x, isShort = isShortReference)
       ),
       recursive = TRUE
     )
@@ -151,15 +151,15 @@ lookupComorbidities <- function(dat,
 #'   since there should never be an error in mapping. There is overhead to check
 #'   the mapping each time, so not done by default. Could consider using
 #'   \code{memoise} to cache the result of the check. (TODO)
-#' @param shortMapping logical, whether the mapping is defined with short ICD-9
+#' @param isShortMapping logical, whether the mapping is defined with short ICD-9
 #'   codes (TRUE, the default), or decimal if set to FALSE.
 #' @export
 icd9Comorbidities <- function(icd9df,
                               visitId = "visitId",
                               icd9Field = "icd9",
                               icd9Mapping = ahrqComorbid,
-                              validateMapping = F,
-                              shortMapping = T) {
+                              validateMapping = FALSE,
+                              isShortMapping = TRUE) {
 
   stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
 
@@ -169,10 +169,10 @@ icd9Comorbidities <- function(icd9df,
   }
 
   if (validateMapping) {
-    if (shortMapping) {
-      stopifnot(all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names=F)))
+    if (isShortMapping) {
+      stopifnot(all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names = FALSE)))
     } else {
-      stopifnot(all(unlist(lapply(icd9Mapping, FUN = icd9ValidDecimal), use.names=F)))
+      stopifnot(all(unlist(lapply(icd9Mapping, FUN = icd9ValidDecimal), use.names = FALSE)))
     }
   }
 

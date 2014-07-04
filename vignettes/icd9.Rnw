@@ -12,8 +12,6 @@
 
 <<setup, eval=TRUE, echo=FALSE>>=
 
-library("icd9", quietly = T, verbose = F)
-
 #oldOpt <- options(width = 20) # prevent stupid hbox overflows.
 #on.exit(options(oldOpt))
 
@@ -54,21 +52,18 @@ icd9Comorbidities(icd9df = patientData,
 @
 
 \section{Converting ICD-9 codes between types}
-These functions were designed with the problem of incorrectly or bizarrely formatted ICD-9 codes in mind. \begin{verbatim}leadingZeroes\end{verbatim} allows the result (when syntactically valid) to be prefixed by zeroes. For short codes, this is only true for top-level codes (integers 1 to 999), even then, "010" could be ambiguous (is it "1.0" or "10"?). These functions make the assumption that short codes of three or fewer characters must be describing only the 'major' part. \begin{verbatim}keepLoneDecimal\end{verbatim} allows retention of the decimal plan
+These functions were designed with the problem of incorrectly or bizarrely formatted ICD-9 codes in mind. These functions make the reasonable assumption that short codes of three or fewer characters must be describing only the 'major' part. \begin{verbatim}keepLoneDecimal\end{verbatim} allows retention of the decimal point even if there are no subsequent characters.
 
 <<conversion,eval=T>>=
 icd9DecimalToShort(c("10.20", "100", "123.45"))
 icd9ShortToDecimal(icd9DecimalToShort(c("10.20", "100", "123.45")))
 
 # note that only a subset of short codes can suffer dropping of leading zeroes.
-icd9DecimalToShort(c("1", "22", "22.44", "100"), leadingZeroes = TRUE)
-icd9DecimalToShort(c("1", "22", "22.44", "100"), leadingZeroes = FALSE)
+icd9DecimalToShort(c("1", "22", "22.44", "100"))
 
-icd9ShortToDecimal(icd9DecimalToShort(c("1", "1.2", "123.45")), leadingZeroes = TRUE)
-icd9ShortToDecimal(icd9DecimalToShort(c("1", "1.2", "123.45")), leadingZeroes = FALSE)
+icd9ShortToDecimal(icd9DecimalToShort(c("1", "1.2", "123.45")))
 
-icd9ShortToDecimal(icd9DecimalToShort(c("1", "2.2", "100")), keepLoneDecimal = FALSE)
-icd9ShortToDecimal(icd9DecimalToShort(c("1", "2.2", "100")), keepLoneDecimal = TRUE)
+icd9ShortToDecimal(icd9DecimalToShort(c("1", "2.2", "100")))
 @
 
 \section{Validation of ICD-9 codes}
@@ -101,7 +96,7 @@ Although V100 would include ten children, the range only returns 4 values. In al
 \section{Human-readable ICD-9}
 <<explain,eval=T>>=
 icd9ExplainDecimal("1.0")
-icd9Explain("1.0", short = FALSE)
+icd9Explain("1.0", isShort = FALSE)
 icd9ExplainDecimal("001.1")
 icd9ExplainDecimal(icd9ShortToDecimal("0019"))
 icd9ExplainShort("0019")

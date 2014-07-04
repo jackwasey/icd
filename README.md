@@ -5,7 +5,7 @@ icd9
 ICD-9 code manipulation, validation and comorbidity generation in R
 -------------------------------------------------------------------
 
-ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in 'short' 5 character format, or 'decimal' format, with a decimal place seperating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeros after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. Given these problems, this package offers the following main features:
+ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in 'short' 5 character format, or 'decimal' format, with a decimal place seperating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeroes after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. Given these problems, this package offers the following main features:
 
  * validation of ICD-9 codes (decimal or non-decimal "short" form), including V and E prefixes
  * conversion of ICD-9 codes between decimal and short forms

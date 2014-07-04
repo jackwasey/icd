@@ -1,3 +1,10 @@
+#' @title invalid actions, default is first item
+#' @description Some functions accept \code{invalidAction} argument, but require non-default validation, but the vast majority will honor the default of 'ignore.' Ignore may lead to downstream errors, since bad data may arrive in internal functions, however, this is the fastest option. A typical use-case of this package would involve validation and cleaning steps (with validation), followed by repeated analysis (as fast as possible, with minimal validation).
+#'
+#' @keywords sysdata character
+#' @export
+icd9InvalidActions <- c("ignore", "silent", "warn", "stop")
+
 #' @title warn or stop with invalid ICD-9 codes
 #' @description In the case of warning, execution continues, and the logical
 #'   vector containing the *invalid* codes is returned invisibly. Returning the
@@ -5,24 +12,22 @@
 #'   this function only uses one call to check validity, making execution as
 #'   fast as possible.
 #' @template icd9-any
-#' @template short
-#' @param callingFunction not implemented: ideally look at call stack and
-#'   indicate who called here.
+#' @template isShort
 #' @keywords error
 #' @family ICD9 validation
 #' @export
-stopIfInvalidIcd9 <- function(icd9, short, callingFunction = "") {
-  if (short && any(!icd9ValidShort(icd9)))
+stopIfInvalidIcd9 <- function(icd9, isShort) {
+  if (isShort && any(!icd9ValidShort(icd9)))
     stop("Invalid short-form ICD9 codes found: ", paste(getInvalidShortIcd9(icd9)))
-  if (!short && any(!icd9ValidDecimal(icd9)))
+  if (!isShort && any(!icd9ValidDecimal(icd9)))
     stop("Invalid long-form ICD9 codes found: ", paste(getInvalidDecimalIcd9(icd9)))
 }
 
 #' @rdname stopIfInvalidIcd9
 #' @export
-warnIfInvalidIcd9 <- function(icd9, short, callingFunction = "") {
+warnIfInvalidIcd9 <- function(icd9, isShort) {
   invalid = FALSE
-  if (short) {
+  if (isShort) {
     invalidLogical <- !icd9ValidShort(icd9)
   } else {
     invalidLogical <- !icd9ValidDecimal(icd9)
@@ -35,20 +40,26 @@ warnIfInvalidIcd9 <- function(icd9, short, callingFunction = "") {
 #' stop, warn, replace invalid with NA or continue
 #'
 #' Switch based on \code{invalidAction}
+#' If \code{major} is provided, then \code{isShort} is ignored.
 #'
 #' @return icd9 codes, with invalid codes replaced by NA, if \code{invalidAction != "ignore"}
 #' @template icd9-any
-#' @template short
+#' @template isShort
 #' @template invalid
+#' @template major
 #' @family ICD9 validation
 #' @keywords internal
-icd9ValidNaWarnStop <- function(icd9, short, invalidAction = c("ignore", "silent", "warn", "stop")) {
+icd9ValidNaWarnStop <- function(icd9, isShort, isMajor = FALSE, invalidAction = icd9InvalidActions) {
   invalidAction <- match.arg(invalidAction)
   if (invalidAction == "ignore") return(invisible(icd9)) # get out quickly without expense of validation
-  if (short) {
-    valid <- icd9ValidShort(icd9)
+  if (isMajor) {
+    valid <- icd9ValidMajor(icd9)
   } else {
-    valid <- icd9ValidDecimal(icd9)
+    if (isShort) {
+      valid <- icd9ValidShort(icd9)
+    } else {
+      valid <- icd9ValidDecimal(icd9)
+    }
   }
   if (any(!valid)) icd9WarnStopMessage("Invalid ICD9 codes found: ", paste(icd9[!valid]), invalidAction = invalidAction)
   icd9[!valid] <- NA # silent is only option left
@@ -66,24 +77,29 @@ icd9WarnStopMessage <- function(..., invalidAction = c("stop", "warn", "silent")
 }
 
 #' @rdname icd9ValidNaWarnStop
-icd9ValidNaWarnStopShort <- function(icd9, invalidAction)
-  icd9ValidNaWarnStop(icd9 = icd9, short = TRUE, invalidAction = invalidAction)
+#' @template icd9-short
+icd9ValidNaWarnStopShort <- function(icd9Short, invalidAction)
+  icd9ValidNaWarnStop(icd9 = icd9Short, isShort = TRUE, isMajor = FALSE, invalidAction = invalidAction)
 
 #' @rdname icd9ValidNaWarnStop
-icd9ValidNaWarnStopDecimal <- function(icd9, invalidAction)
-  icd9ValidNaWarnStop(icd9 = icd9, short = FALSE, invalidAction = invalidAction)
+#' @template icd9-decimal
+icd9ValidNaWarnStopDecimal <- function(icd9Decimal, invalidAction)
+  icd9ValidNaWarnStop(icd9 = icd9Decimal, isShort = FALSE, isMajor = FALSE, invalidAction = invalidAction)
+
+#' @rdname icd9ValidNaWarnStop
+icd9ValidNaWarnStopMajor <- function(major, invalidAction)
+  icd9ValidNaWarnStop(icd9 = major, isShort = FALSE, isMajor = TRUE, invalidAction = invalidAction)
 
 #' @title check whether any ICD-9 code is syntactically valid
 #' @template icd9-any
-#' @template short
+#' @template isShort
 #' @seealso \code{\link{icd9ValidDecimal}} and \code{\link{icd9ValidShort}}
 #' @family ICD9 validation
 #' @export
-icd9Valid <- function(icd9, short)
-  if (short) icd9ValidShort(icd9) else icd9ValidDecimal(icd9)
+icd9Valid <- function(icd9, isShort)
+  if (isShort) icd9ValidShort(icd9) else icd9ValidDecimal(icd9)
 
 #' @title check whether decimal icd9 codes are valid
-#' @aliases icd9ValidDecimalN icd9ValidDecimalV icd9ValidDecimalE
 #' @description Check validity of 'long' (i.e. decimal form) ICD9 codes. The
 #'   codes may be numeric disease descriptiors or V or E prefixed.
 #' @details Long form is not ambiguous so additional zeroes are tolerated.
@@ -111,7 +127,6 @@ icd9ValidDecimal <- function(icd9Decimal) {
 }
 
 #' @title validate ICD-9 short form code
-#' @aliases icd9ValidShortN icd9ValidShortV icd9ValidShortE
 #' @description As in \code{icd9ValidDecimal}, character type of the
 #'   input is enforced. An integer 100 could correspond to decimal ICD-9 codes
 #'   1.00 10.0 or 100.
@@ -139,8 +154,7 @@ icd9ValidShort <- function(icd9Short) {
   # quicker to test rather than always try to convert. Factor levels are always
   # character, so no concern about introducing ambiguity with e.g. short code of
   # 100 vs 10.0 (0100, 0010)
-  if (class(icd9Short) == "factor")
-    icd9Short <- asCharacterNoWarn(icd9Short)
+  if (is.factor(icd9Short)) icd9Short <- asCharacterNoWarn(icd9Short)
 
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.
@@ -193,16 +207,40 @@ icd9ValidMajor <- function(major) {
   )
 }
 
+#' @rdname icd9ValidMajor
+icd9ValidMajorN <- function(major) {
+  grepl(
+    pattern = "^[[:space:]]*[[:digit:]]{1,3}[[:space:]]*$",
+    x = major
+  )
+}
+
+#' @rdname icd9ValidMajor
+icd9ValidMajorV <- function(major) {
+  grepl(
+    pattern = "^[[:space:]]*[Vv][[:digit:]]{1,2}[[:space:]]*$",
+    x = major
+  )
+}
+
+#' @rdname icd9ValidMajor
+icd9ValidMajorE <- function(major) {
+  grepl(
+    pattern = "^[[:space:]]*[Ee][89][[:digit:]]{2}[[:space:]]*$",
+    x = major
+  )
+}
+
 #' @title validate an icd9 mapping to comorbidities
 #' @description just takes each item in each vector of the list of vectors and
 #'   checks validity
 #' @template mapping
-#' @template short
+#' @template isShort
 #' @family ICD9 validation
 #' @export
-icd9ValidMapping <- function(icd9Mapping, short)
+icd9ValidMapping <- function(icd9Mapping, isShort)
   all(unlist(
-    lapply(icd9Mapping, FUN = function(icd9Map) icd9Valid(icd9Map, short)),
+    lapply(icd9Mapping, FUN = function(icd9Map) icd9Valid(icd9Map, isShort)),
     use.names = FALSE
   ))
 
@@ -225,7 +263,6 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping)
   unlist(lapply(icd9Mapping, FUN = getInvalidDecimalIcd9), use.names = FALSE)
 
 #' @title invalid subset of decimal or short ICD-9 codes
-#' @aliases getInvalidShortIcd9
 #' @description given vector of short or decimal ICD-9 codes in
 #'   \code{icd9Decimal} or \code{icd9Short}, return (in the same format) those
 #'   codes which are invalid. Useful for generating error messages with the
@@ -244,3 +281,31 @@ getInvalidDecimalIcd9 <- function(icd9Decimal) {
 getInvalidShortIcd9 <- function(icd9Short) {
   icd9Short[!icd9ValidShort(icd9Short)]
 }
+
+#' @title is the given code V or E type?
+#' @description quickly find V or E codes, without fully validating V or E
+#'   codes. Use fixed instead of regex for speed. Don't check position of V or
+#'   E: this is not validation, just a quick classification of pre-validated
+#'   codes. TODO: this doesn't look efficient, but can't use fixed with ignore
+#'   case, and regex slower.
+#' @template icd9-any
+#' @examples
+#' \dontrun{
+#' # regex is a little faster
+#' icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
+#' microbenchmark(times = 1000,
+#'   grepl(pattern = "E", icd9, fixed = TRUE) |
+#'   grepl(pattern = "e", icd9, fixed = TRUE) |
+#'   grepl(pattern = "V", icd9, fixed = TRUE) |
+#'   grepl(pattern = "v", icd9, fixed = TRUE))
+#' microbenchmark(times = 1000, grepl(pattern = "[EeVv]", rnd))
+#' }
+#' @keywords internal
+icd9IsVE <- function(icd9)
+  grepl(pattern = "[EeVv]", icd9)
+
+icd9IsV <- function(icd9)
+  grepl(pattern = "[Vv]", icd9)
+
+icd9IsE <- function(icd9)
+  grepl(pattern = "[Ee]", icd9)
