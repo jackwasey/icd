@@ -18,9 +18,9 @@ icd9InvalidActions <- c("ignore", "silent", "warn", "stop")
 #' @export
 stopIfInvalidIcd9 <- function(icd9, isShort) {
   if (isShort && any(!icd9ValidShort(icd9)))
-    stop("Invalid short-form ICD9 codes found: ", paste(getInvalidShortIcd9(icd9)))
+    stop("Invalid short-form ICD9 codes found: ", paste(icd9InvalidShort(icd9)))
   if (!isShort && any(!icd9ValidDecimal(icd9)))
-    stop("Invalid long-form ICD9 codes found: ", paste(getInvalidDecimalIcd9(icd9)))
+    stop("Invalid long-form ICD9 codes found: ", paste(icd9InvalidDecimal(icd9)))
 }
 
 #' @rdname stopIfInvalidIcd9
@@ -238,11 +238,13 @@ icd9ValidMajorE <- function(major) {
 #' @template isShort
 #' @family ICD9 validation
 #' @export
-icd9ValidMapping <- function(icd9Mapping, isShort)
+icd9ValidMapping <- function(icd9Mapping, isShort) {
+  # TOOD: warn/return the invalid labels
   all(unlist(
     lapply(icd9Mapping, FUN = function(icd9Map) icd9Valid(icd9Map, isShort)),
     use.names = FALSE
   ))
+}
 
 #' @rdname icd9ValidMapping
 #' @export
@@ -255,12 +257,12 @@ icd9ValidMappingShort <- function(icd9Mapping) icd9ValidMapping(icd9Mapping, TRU
 #' @rdname icd9ValidMapping
 #' @export
 icd9GetInvalidMappingShort <- function(icd9Mapping)
-  unlist(lapply(icd9Mapping, FUN = getInvalidShortIcd9), use.names = FALSE)
+  unlist(lapply(icd9Mapping, FUN = icd9InvalidShort), use.names = FALSE)
 
 #' @rdname icd9ValidMapping
 #' @export
 icd9GetInvalidMappingDecimal <- function(icd9Mapping)
-  unlist(lapply(icd9Mapping, FUN = getInvalidDecimalIcd9), use.names = FALSE)
+  unlist(lapply(icd9Mapping, FUN = icd9InvalidDecimal), use.names = FALSE)
 
 #' @title invalid subset of decimal or short ICD-9 codes
 #' @description given vector of short or decimal ICD-9 codes in
@@ -271,14 +273,14 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping)
 #' @keywords manip
 #' @family ICD-9 validation
 #' @export
-getInvalidDecimalIcd9 <- function(icd9Decimal) {
+icd9InvalidDecimal <- function(icd9Decimal) {
   icd9Decimal[!icd9ValidDecimal(icd9Decimal)]
 }
 
-#' @rdname getInvalidDecimalIcd9
+#' @rdname icd9InvalidDecimal
 #' @template icd9-short
 #' @export
-getInvalidShortIcd9 <- function(icd9Short) {
+icd9InvalidShort <- function(icd9Short) {
   icd9Short[!icd9ValidShort(icd9Short)]
 }
 
@@ -309,3 +311,4 @@ icd9IsV <- function(icd9)
 
 icd9IsE <- function(icd9)
   grepl(pattern = "[Ee]", icd9)
+

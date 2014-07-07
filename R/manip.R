@@ -144,3 +144,24 @@ icd9DropLeadingZeroesMajor <- function(major, dropZeroV = FALSE, invalidAction =
   #everything else is passed through
   major
 }
+
+#' @title get parent of an ICD-9 code
+#' @description not likely to be useful for end-user, so using keyword
+#'   \code{internal} for now.
+#' @template minor
+#' @template invalid
+#' @return character vector of ICD-9 codes, one for each code given.
+#' @keywords internal
+icd9ParentMinor <- function(minor, invalidAction = icd9InvalidActions) {
+  invalidAction <- match.arg(invalidAction)
+  #todo - validate minors
+  nOne <- nchar(minor) == 1
+  minor[nOne] <- ""
+  nTwo <- nchar(minor) == 2
+  minor[nTwo] <- substr(minor[nTwo], 1, 1)
+ minor
+}
+
+icd9Parent <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
+
+}

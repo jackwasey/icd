@@ -3,7 +3,7 @@
 
 \documentclass{article}
 
-\title{icd9: working with ICD-9 codes and comorbidities in R}
+\title{Introducing icd9: working with ICD-9 codes and comorbidities in R}
 \author{Jack O. Wasey}
 
 \begin{document}
@@ -12,15 +12,18 @@
 
 <<setup, eval=TRUE, echo=FALSE>>=
 
+set.seed = 1441
+
 #oldOpt <- options(width = 20) # prevent stupid hbox overflows.
 #on.exit(options(oldOpt))
 
 suppressMessages(library(icd9, quietly = TRUE, warn.conflicts = FALSE))
+suppressMessages(library("magrittr", quietly = TRUE, warn.conflicts = FALSE))
 
 patientData <- data.frame(
   visitId = c(1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = c("27801", "7208", "25001", "34400", "4011", "4011"),
-  poa = factor(c("Y","N","Y","N","Y","N"))
+  poa = factor(c("Y", "N", "Y", "N", "Y", "N"))
 )
 @
 
@@ -117,12 +120,43 @@ icd9ExplainDecimal("001.5")
 icd9ExplainDecimal(list(cholera=c("001.0", "001.1", "001.9")))
 @
 
+\section{Chaining commands}
+With the \begin{verbatim}magrittr\end{verbatim} package installed, commands can be chained together in a convenient and readable manner:
+<<chaining1,eval=T>>=
+c("001.1", "391") %>% icd9DecimalToShort %>% icd9ExplainShort
+@
+
+Find all ICD-9 codes matching 'heart' or 'cardiac' in the short or long descriptions:
+<<>>=
+cardiac <- unique(c(
+  icd9CmDesc[grepl(pattern="(heart)|(cardiac)", x = icd9CmDesc[["descLong"]], ignore.case = TRUE), "icd9"],
+  icd9CmDesc[grepl(pattern="(heart)|(cardiac)", x = icd9CmDesc[["descShort"]], ignore.case = TRUE), "icd9"]
+  )
+)
+@
+then explain the list, just showing the first ten:
+<<>>=
+cardiac %>% icd9ExplainShort %>% extract(2) %>% head(10)
+@
+
+More examples, this time also demonstrating automatic summarization of a long list of ICD-9 codes into the minimum set of explanatory parent codes:
+<<>>=
+quanDeyoComorbid[["Dementia"]] %>% icd9ExplainShort()
+
+# generate a range with more than two hundred (possible) ICD-9 codes
+
+length("390" %i9d% "392.1")
+"390" %i9d% "392.1" %>% icd9DecimalToShort %>% icd9ExplainShort
+"390" %i9d% "392.1" %>% icd9ExplainDecimal
+
+@
+
 \section{AHRQ comorbidity classification}
 
 The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
 <<ahrq,eval=F>>=
-ahrqComorbid <- parseAhrqSas(save = F)
+ahrqComorbid <- parseAhrqSas()
 @
 
 <<ahrqcontents>>=

@@ -1,3 +1,19 @@
+Version 0.3
+------------------------------------------------------------------------------
+
+* Addition of several utility functions, mostly kept for internal use, but which clarify the code
+* Consistent behavior with invalid codes, allowing ignore, silent conversion to NA, warn with conversion to NA, or stopping.
+* Outline of code to read top level ICD-9 definitions from canonical CDC RTF file.
+* Progress to
+* Made functions magrittr friendly
+* Bug fixes, refactoring, more tests
+* Include parsing of hierarchy
+* Internal function which reads a file from a zip at a URL
+
+Version 0.2.1
+------------------------------------------------------------------------------
+ * trivial changes to appease CRAN
+
 Version 0.2
 ------------------------------------------------------------------------------
 

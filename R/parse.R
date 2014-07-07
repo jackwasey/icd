@@ -7,7 +7,7 @@
 #' @template parse
 #' @param returnAll logical which, if TRUE, will result in the invisible return of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
 #' @keywords internal
-parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package="icd9"),
+parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
                          condense = FALSE, save = FALSE, saveDir = "~/icd9/data", returnAll = FALSE) {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
@@ -240,4 +240,46 @@ parseElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd9/da
   if (save) saveSourceTreeData("elixhauserComorbid", path = saveDir)
 
   invisible(elixhauserComorbid)
+}
+
+# AHRQ hierarchy.
+
+parseAhrqHeirarchy <- function() {
+read.zip.url(
+  url = "http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip",
+  filename = "ccs_multi_dx_tool_2013.csv",
+  FUN = read.csv,
+  row.names = NULL
+  )
+}
+# 'single level' CCS AHRQ diagnoses:
+# http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Single_Level_CCS_2014.zip
+
+# 'multi level' CCS AHRQ diagnoses
+# http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip
+
+#' @title parse list of top-level ICD-9 chapters from canonical data from CDC.
+#' @description There is no easily machine-readable list of the three digit (I call the 'major') ICD-9 code chapters. This code downloads a pretty RTF file and extracts these codes with their names. WORK IN PROGRESS!
+#' @import magrittr
+#' @return named list, with name of chapter being the item name, and value being the three-digit code, or Vxx or Exxx code.
+#' @keywords internal
+parseIcd9Chapters <- function() {
+  # 10 Mb file
+  rtf <- read.zip.url(
+    url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip",
+    filename = "Dtab10.RTF",
+    warn = FALSE
+    )
+  out <- strMultiMatch(pattern = "\\}([VvEe]?[0-9]{3})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
+
+  #validate:
+  majors <- vapply(X = out, FUN = '[', FUN.VALUE = "0", 1) %>% sort
+  refMajors <- icd9CmDesc$icd9 %>% icd9ShortToMajor %>% unique %>% sort
+
+  # assert that there are no top level icd9 codes which do not already appear in the ICD-9-CM code list.
+  stopifnot(refMajors[majors %nin% refMajors %>% length == 0])
+  print("the following category codes have child codes in the ICD-9-CM code list, but did not have descriptions extracted from the RTF.")
+  print(refMajors[refMajors %nin% majors])
+
+
 }

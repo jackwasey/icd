@@ -1,3 +1,27 @@
+#' spawn reference codes into all possible lower-level codes (and memoise)
+#'
+#' take a regular string of an ICD9 code of format (ABC.zxyz) with or without
+#' leading and trailing zeroes. top level ICD9 code and return T/F if the icd9
+#' fall within subgroups. This takes several seconds on an unimpressive desktop
+#' PC, so would benefit from memoization.
+#'
+#' @import memoise
+#' @keywords internal
+spawnReferenceChildren <-
+  function(icd9Reference, isShortReference) {
+    c(
+      lapply(
+        icd9Reference,
+        FUN = function(x) icd9Children(icd9 = x, isShort = isShortReference)
+      ),
+      recursive = TRUE
+    )
+  }
+
+# this runs outside of a function, on package load
+library(memoise)
+memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
+
 #' @title match ICD9 codes
 #' @aliases "%i9in%"
 #' @description This does the hard work of finding whether a given icd9 code
@@ -45,30 +69,6 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort = TRUE, isShortRefe
 
   icd9 %in% kids
 }
-
-#' spawn reference codes into all possible lower-level codes (and memoise)
-#'
-#' take a regular string of an ICD9 code of format (ABC.zxyz) with or without
-#' leading and trailing zeroes. top level ICD9 code and return T/F if the icd9
-#' fall within subgroups. This takes several seconds on an unimpressive desktop
-#' PC, so would benefit from memoization.
-#'
-#' @import memoise
-#' @keywords internal
-spawnReferenceChildren <-
-  function(icd9Reference, isShortReference) {
-    c(
-      lapply(
-        icd9Reference,
-        FUN = function(x) icd9Children(icd9 = x, isShort = isShortReference)
-      ),
-      recursive = TRUE
-    )
-  }
-
-# this runs outside of a function, on package load
-library(memoise)
-memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
 
 #' @rdname icd9InReferenceCode
 #' @export
@@ -168,13 +168,7 @@ icd9Comorbidities <- function(icd9df,
     icd9Mapping <- get(icd9Mapping)
   }
 
-  if (validateMapping) {
-    if (isShortMapping) {
-      stopifnot(all(unlist(lapply(icd9Mapping, FUN = icd9ValidShort), use.names = FALSE)))
-    } else {
-      stopifnot(all(unlist(lapply(icd9Mapping, FUN = icd9ValidDecimal), use.names = FALSE)))
-    }
-  }
+  stopifnot(icd9ValidMapping(icd9Mapping = icd9Mapping, isShort = isShortMapping))
 
   # loop through names of icd9 mapping, and put the results together so each
   # column is one comorbidity in a data frame. This is much faster with vapply,
@@ -194,14 +188,12 @@ icd9Comorbidities <- function(icd9df,
       }
     )
   )
-  ag <- aggregate(
+  aggregate(
     x = i[, -which(names(i) == visitId)], # all cols except visit ID will be aggregated
     by = list(visitId = i[[visitId]]), # group by the visitId
     FUN = any,
     simplify = TRUE
   )
-
-  ag
 }
 
 #' @rdname icd9Comorbidities

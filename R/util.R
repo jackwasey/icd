@@ -3,11 +3,10 @@
 # All functions set for internal use in this package only to avoid namespace
 # conflicts.
 
-
 #' @title encode TRUE as 1, and FALSE as 0
-#' @description when saving data as text files for distribution, printing large amounts of text containing TRUE and FALSE
-#' is inefficient. Convert to binary takes more R memory, but allows more compact output
-#' TODO: test
+#' @description when saving data as text files for distribution, printing large
+#'   amounts of text containing TRUE and FALSE is inefficient. Convert to binary
+#'   takes more R memory, but allows more compact output TODO: test
 #' @param dframe dataframe which may contain logical fields
 #' @return dframe without logical fields
 #' @keywords internal manip
@@ -37,8 +36,8 @@ logicalToBinary <- function(dframe) {
 #' @param x is a character vector to strip
 #' @return character vector
 #' @keywords internal
-strip <- function (x, pattern = " ")
-  gsub(pattern = pattern, replacement = "", x, fixed = TRUE, useBytes = TRUE) # beware unicode
+strip <- function (x, pattern = " ") # beware unicode
+  gsub(pattern = pattern, replacement = "", x, fixed = TRUE, useBytes = TRUE)
 
 #' @title strip whitespace from ends of each string in given character vector
 #' @description slower than \code{strip}.
@@ -79,10 +78,11 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 }
 
 #' @title check whether character vector represents all numeric values
-#' @description check whether all the items of input vector are numeric without throwing warning
-#' derived from Hmsic package
+#' @description check whether all the items of input vector are numeric without
+#'   throwing warning derived from Hmsic package
 #' @param x is a character vector to be tested
-#' @param extras is a vector of character strings which are counted as NA values, defaults to '.' and 'NA'
+#' @param extras is a vector of character strings which are counted as NA
+#'   values, defaults to '.' and 'NA'
 #' @return logical
 #' @keywords internal
 allIsNumeric <- function(x, extras=c('.','NA')) {
@@ -93,7 +93,8 @@ allIsNumeric <- function(x, extras=c('.','NA')) {
 }
 
 #' @title convert factor or vector to character without warnings
-#' @description correctly converts factors to vectors, and then converts to character, which may silently introduce NAs
+#' @description correctly converts factors to vectors, and then converts to
+#'   character, which may silently introduce NAs
 #' @param x is a vector, probably of numbers of characters
 #' @return character vector, may have NA values
 #' @keywords internal
@@ -154,4 +155,38 @@ saveSourceTreeData <- function(varName, path="~/icd9/data") {
        file  = file.path(path, paste0(varName, ".RData")),
        compress="xz"
   )
+}
+
+#' @title read file from zip at URL
+#' @description downloads zip file, and opens named file \code{filename}, or the
+#'   single file in zip if \code{filename} is not specified. FUN is a function,
+#'   with additional arguments to FUN given by \dots.
+#' @param url character vector of length one containing URL of zip file.
+#' @param filename character vector of length one containing name of file to
+#'   extract from zip. If not specified, and the zip contains a single file,
+#'   then this single file will be used.
+#' @param FUN function used to process the file in the zip, defaults to
+#'   readLines. The first argument to FUN will be the path of the extracted
+#'   \code{filename}
+#' @param \dots further arguments to FUN
+#' @keywords internal
+read.zip.url <- function(url, filename = NULL, FUN = readLines, ...) {
+  zipfile <- tempfile()
+  download.file(url = url, destfile = zipfile, quiet = TRUE)
+  zipdir <- tempfile()
+  dir.create(zipdir)
+  unzip(zipfile, exdir = zipdir) # files="" so extract all
+  files <- list.files(zipdir)
+  if (is.null(filename)) {
+    if (length(files) == 1) {
+      filename <- files
+    } else {
+      stop("multiple files in zip, but no filename specified: ", paste(files, collapse = ", "))
+    }
+  } else { # filename specified
+    stopifnot(length(filename) ==1)
+    stopifnot(filename %in% files)
+  }
+  file <- paste(zipdir, files[1], sep="/")
+  do.call(FUN, args = c(list(file.path(zipdir, filename)), list(...)))
 }

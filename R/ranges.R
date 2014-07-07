@@ -49,11 +49,16 @@ icd9ChildrenShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
   if (length(icd9Short) == 0) return(character())
   icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = match.arg(invalidAction))
 
-  # split into major and minor parts
   parts <- icd9ShortToParts(icd9Short, minorEmpty = "")
   out <- c()
   for (r in 1:nrow(parts)) {
-    out <- c(out, icd9PartsToShort(parts[[r, "major"]], icd9ExpandMinor(parts[[r, "minor"]])))
+    out <- c(out,
+             icd9MajMinToShort(
+               major = parts[[r, "major"]],
+               minor = icd9ExpandMinor(parts[[r, "minor"]])
+             ),
+             invalidAction = "ignore"
+    )
   }
   unique(out)
 }
@@ -124,37 +129,44 @@ icd9SortShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
 #' icd9ExpandRangeShort("4280 ", "43014")
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
+#' @param inferParents single logical value, if TRUE, will infer and include a
+#'   parent code if a range ends with a value which terminates a higher-level
+#'   code. E.g. "043" %i9s% "0449" . "0449" expands out to 04499, and thus all
+#'   the codes from 0440 to 04499, are covered, but "044" is not explicit. If
+#'   \code{inferParents} is TRUE, "044" would be added, otherwise omitted.
 #' @template invalid
 #' @export
 #' @family ICD-9 ranges
-icd9ExpandRangeShort <- function(start, end, invalidAction = icd9InvalidActions) {
+icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction = icd9InvalidActions) {
   invalidAction <- match.arg(invalidAction)
   # minimal quick validation checks
   stopifnot(is.character(start), is.character(end))
   stopifnot(length(start) == 1, length(end) == 1)
-  stopifnot(all(!icd9IsE(c(start, end)))) # cannot handle E ranges yet (this is not a quick test with regex... make 'fixed' TODO)
+  stopifnot(is.logical(inferParents), length(inferParents) == 1)
+  # cannot handle E ranges yet (this is not a quick test with regex... make 'fixed' TODO)
+  stopifnot(all(!icd9IsE(c(start, end))))
 
   start <- icd9ValidNaWarnStopShort(start, invalidAction = invalidAction)
   end <- icd9ValidNaWarnStopShort(end, invalidAction = invalidAction)
 
   start <- trim(start)
   end <- trim(end)
+  # TODO: this is not a very elegant or complete test, and done more
+  # comprehensively a few lines later.
   if (nchar(start) == nchar(end) && start > end) stop("start is after end")
+
   sdf <- icd9ShortToParts(start)
   edf <- icd9ShortToParts(end)
 
-  # should have single digit minors for E codes.
-
   startMajor <- icd9AddLeadingZeroesMajor(sdf[["major"]]) # zero pad to tolerate entering "1" instead of "001"
-
   endMajor <- icd9AddLeadingZeroesMajor(edf[["major"]])
   startMinor <- sdf[["minor"]]
   endMinor <- edf[["minor"]]
 
   # use icd9ExtractAlphaNumeric to get just the numbers (ignore V or E by taking
   # the second element returned), and compare those:
-  startMajorInt <- as.integer(icd9ExtractAlphaNumeric(startMajor)[,2])
-  endMajorInt <- as.integer(icd9ExtractAlphaNumeric(endMajor)[,2])
+  startMajorInt <- as.integer(icd9ExtractAlphaNumeric(startMajor)[, 2])
+  endMajorInt <- as.integer(icd9ExtractAlphaNumeric(endMajor)[, 2])
   if (endMajorInt < startMajorInt)  {
     stop("start is after end")
   } else if (startMajorInt == endMajorInt && icd9SortShort(c(start, end)) != c(start, end)) {
@@ -164,80 +176,104 @@ icd9ExpandRangeShort <- function(start, end, invalidAction = icd9InvalidActions)
   #if (!all(icd9SortShort(c(startMajor, endMajor)) == c(startMajor, endMajor)))
   #stop("start is after end (major part)")
 
-  # deal with special case where start major = start minor
+  # If start and end majors are the same, we just need to calculate the minor range.
   if (startMajor == endMajor) {
-    #if (startMinor > endMinor) # not obvious, because "1" is greater than "02"
-    #  stop("majors match and end minor has broader scope than start minor. startMinor=",
-    #       startMinor, " and endMinor=", endMinor)
-    # the following result works when minors have same length, but incomplete for start minor shorter.
-    result <- icd9PartsToShort(startMajor,
-                               intersect(
-                                 icd9SubsequentMinors(startMinor),
-                                 icd9PrecedingMinors(endMinor)
-                               )
+    # the following initial \code{result} works when minors have same length,
+    # but incomplete for start minor shorter.
+    result <- icd9MajMinToShort(major = startMajor,
+                                minor = intersect(
+                                  icd9SubsequentMinors(startMinor),
+                                  icd9PrecedingMinors(endMinor)
+                                )
     )
 
+
     # case where startMinor lengths are 0,0 1,1 or 2,2: no corner cases
-    if (nchar(startMinor) == nchar(endMinor))
-      return(
-        icd9AddLeadingZeroesShort(result)
-      )
+    if (nchar(startMinor) == nchar(endMinor)) return(icd9AddLeadingZeroesShort(result))
 
     # startMinor length is one, but endMinor could be zero or two chars.
     if (nchar(startMinor) == 1) return(unique(icd9AddLeadingZeroesShort(c(start, result))))
     if (nchar(startMinor) == 0) {
       # cover edge case where minor is "0x" so "0" is not included, and yet
       # should be if the start minor is ""
-      if (substr(endMinor,1,1) == "0") result <- c(icd9PartsToShort(startMajor, "0"), result)
+      if (substr(endMinor,1,1) == "0") result <- c(icd9MajMinToShort(startMajor, "0"), result)
       return(icd9AddLeadingZeroesShort(
         c( # zero pad the major for consistency.
-          icd9PartsToShort(startMajor, startMinor),
+          icd9MajMinToShort(startMajor, startMinor),
           result
         )
       ))
+    } # end nchar(startMinor) == 0
+    # if here, then startMinor was 2 characters long
+  } else { # startMajor != endMajor
+    result = c() # vector of complete short codes
+
+    # corner case: the end minor terminates with a '9', so we can infer the parent:
+    if (inferParents) {
+      # do this twice, because we care about XXX99 and XXX9
+      if (substr(endMinor, length(endMinor), length(endMinor)) == "9") endMinor <- icd9ParentMinor(endMinor)
+      if (substr(endMinor, length(endMinor), length(endMinor)) == "9") endMinor <- icd9ParentMinor(endMinor)
     }
-    return(icd9AddLeadingZeroesShort(result)) # i.e. startMinor was 2 characters long.
-  }
 
-  out = c() # vector of complete short codes
-  for (major in startMajor %i9mj% endMajor) {
-    #if no minor spec for current major, then expand all
-    if ((major %nin% c(startMajor,endMajor)) # current major is not first or last, so expand all children
-        || (major == startMajor & startMinor == "") # starting major has no minor, so expand all children
-        || (major == endMajor & endMinor == "") #   ending major has no minor, so expand all children
-    ) {
-      out <- c(out, icd9ChildrenShort(as.character(major)))
-    } else { # loop minors from start minor, or until end minor
-
-      # at this point we definitely have a minor code, whether for start or end
-      # (but not both at same time)
-
-      # if minor is a start minor, then get subsequent minors
-      if (major == startMajor) {
-        out <- c(out, icd9PartsToShort(major, icd9SubsequentMinors(startMinor)))
-      } else if (major == edf[["major"]]) { # otherwise get preceeding minors
-        out <- c(out, icd9PartsToShort(major, icd9PrecedingMinors(endMinor)))
-      }
-    }
-  }
-  icd9AddLeadingZeroesShort(out)
+    for (major in startMajor %i9mj% endMajor) {
+      #if no minor spec for current major, then expand all
+      if ((major %nin% c(startMajor,endMajor)) # current major is not first or last, so expand all children
+          || (major == startMajor & startMinor == "") # starting major has no minor, so expand all children
+          || (major == endMajor & endMinor == "")) { #   ending major has no minor, so expand all children
+        result <- c(result, icd9ChildrenShort(as.character(major)))
+      } else { # loop minors from start minor, or until end minor
+        # at this point we definitely have a minor code, whether for start or end
+        # (but not both at same time)
+        # if minor is a start minor, then get subsequent minors
+        if (major == startMajor) {
+          result <- c(result,
+                      icd9MajMinToShort(
+                        major = major,
+                        minor = icd9SubsequentMinors(startMinor)
+                      )
+          )
+        } else if (major == edf[["major"]]) { # otherwise get preceeding minors
+          result <- c(result,
+                      icd9MajMinToShort(
+                        major = major,
+                        minor = icd9PrecedingMinors(endMinor)
+                      )
+          )
+        }
+      } # end if - whether to expand all children
+    } #end loop through majors
+  } # end startMajor != endMajor
+  icd9AddLeadingZeroesShort(result)
 }
 
 #' @title create range of icd9 major parts
 #' @description accepts V, E or numeric codes. Does not validate codes beyond
-#'   ensuring that the start and end of the range are of the same type.
+#'   ensuring that the start and end of the range are of the same type. Will add
+#'   leading zeroes when appropriate. User can strip them out with
+#'   icd9DropLeadingZeroes if they wish.
 #' @templateVar icd9AnyName start,end
 #' @template icd9-any
+#' @template invalid
 #' @return character vector with range inclusive of start and end
 #' @family ICD-9 ranges
 #' @export
-"%i9mj%" <- function(start, end) {
+icd9ExpandRangeMajor <- function(start, end, invalidAction = icd9InvalidActions) {
+  invalidAction <- match.arg(invalidAction)
+  start <- icd9ValidNaWarnStopMajor(start, invalidAction = invalidAction)
+  end <- icd9ValidNaWarnStopMajor(end, invalidAction = invalidAction)
   stopifnot(length(start) == 1 && length(end) == 1)
   c <- icd9ExtractAlphaNumeric(start)
   d <- icd9ExtractAlphaNumeric(end)
   stopifnot(toupper(c[1]) == toupper(d[1])) # cannot range between numeric, V and E codes, so ensure same type.
-  paste(c[,1], c[,2]:d[,2],sep  = "")
+  if (icd9IsV(start)) fmt <- "%02d" else fmt <- "%03d"
+  paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
 }
+
+#' @rdname icd9ExpandRangeMajor
+#' @export
+"%i9mj%" <- function(start, end)
+  icd9ExpandRangeMajor(start = start, end = end)
+
 
 #' @rdname icd9ExpandRangeShort
 #' @export
@@ -303,14 +339,9 @@ icd9CondenseShort <- function(icd9Short, invalidAction = c("stop", "ignore", "si
 #' @family ICD-9 ranges
 #' @export
 icd9CondenseToExplainShort <- function(icd9Short, invalidAction = c("stop", "ignore", "silent", "warn")) {
-
-  invalidAction <- match.arg(invalidAction)
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = invalidAction)
-
+  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = match.arg(invalidAction))
   # make homogeneous
-  icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short)) # sort so we will hit the parents first, kids later.
-  out <- icd9Short
-
+  out <- icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short)) # sort so we will hit the parents first, kids later.
   # for every entry, search for all possible child entries in the list, and if we find ALL the children, then delete them from the output list.
   for (i in icd9Short) {
     kids <- icd9ChildrenShort(i)
@@ -320,7 +351,6 @@ icd9CondenseToExplainShort <- function(icd9Short, invalidAction = c("stop", "ign
   }
   out
 }
-
 
 #' @title determine preceding or subsequent post-decimal parts of ICD9 codes
 #' @description this is not simply numeric, since "4" is after "39" and "0" !=

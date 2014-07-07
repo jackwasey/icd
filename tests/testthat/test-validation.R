@@ -122,11 +122,11 @@ test_that("warn if invalid", {
 
 test_that("NA warn stop switch handles NA values", {
 
-  expect_that(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "ignore"), not(gives_warning()))
-  expect_that(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "silent"), not(gives_warning()))
+  expect_that(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "ignore"), testthat::not(gives_warning()))
+  expect_that(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "silent"), testthat::not(gives_warning()))
   expect_that(warnNa <- icd9ValidNaWarnStopShort(NA_character_, invalidAction = "warn"), gives_warning())
   expect_that(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "stop"), throws_error())
-  expect_that(icd9ValidNaWarnStopShort(NA, invalidAction = "ignore"), not(throws_error()))
+  expect_that(icd9ValidNaWarnStopShort(NA, invalidAction = "ignore"), testthat::not(throws_error()))
   expect_that(icd9ValidNaWarnStopShort(NA, invalidAction = "silent"), throws_error()) # this is now an incorrect data type (logical/numeric NA, not NA_character_
   expect_that(icd9ValidNaWarnStopShort(NA, invalidAction = "warn"), throws_error())
   expect_that(icd9ValidNaWarnStopShort(NA, invalidAction = "stop"), throws_error())

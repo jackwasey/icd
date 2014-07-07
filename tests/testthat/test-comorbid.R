@@ -65,10 +65,10 @@ test_that("can condense the big lists of comorbidities without errors", {
   expect_is(quanDeyo, class = "list")
   expect_is(quanElixhauser, class = "list")
   # the comorbidity mappings save in \code{data} should not be condensed.
-  expect_that(ahrq, not(equals(ahrqComorbid)))
-  expect_that(elixhauser, not(equals(elixhauserComorbid)))
-  expect_that(quanDeyo, not(equals(quanDeyoComorbid)))
-  expect_that(quanElixhauser, not(equals(quanElixhauserComorbid)))
+  expect_false(identical(ahrq, ahrqComorbid))
+  expect_false(identical(elixhauser, elixhauserComorbid))
+  expect_false(identical(quanDeyo, quanDeyoComorbid))
+  expect_false(identical(quanElixhauser, quanElixhauserComorbid))
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {

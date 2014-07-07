@@ -1,6 +1,5 @@
 context('icd9 ranges')
 
-
 test_that("expand icd9 range definition", {
   expect_equal(sort(icd9ExpandRangeShort("4012", "40145")),
                sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
@@ -37,6 +36,11 @@ test_that("expand icd9 range definition", {
 
   expect_equal(icd9ExpandRangeShort("401", "401"), icd9Children("401", isShort = TRUE))
   expect_equal(icd9ExpandRangeShort("401", "402"), icd9Children(c("401", "402"), isShort = TRUE))
+  # the next two cases cover the HIV ranges in the co-morbidities, wherein the
+  # final code is included, in which case the parent ("044" in this case) is
+  # implied strongly.
+  expect_equal(icd9ExpandRangeShort("043", "0449"), icd9ExpandRangeShort("043", "044"))
+  expect_equal(icd9ExpandRangeShort("043", "04499"), icd9ExpandRangeShort("043", "044"))
   expect_equal(icd9ExpandRangeShort("401", "402"),
                c("401", "4010", "4011", "4012", "4013", "4014", "4015", "4016",
                  "4017", "4018", "4019", "40100", "40110", "40120", "40130", "40140",

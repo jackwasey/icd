@@ -14,7 +14,15 @@ test_that("extract decimal parts - invalid or empty input", {
   )
 
   # empty input gives empty output, not error.
-  expect_that(icd9DecimalToParts(character(), invalidAction = "stop"), not(throws_error()))
+  emptydf <- structure(
+    list(
+      major = structure(integer(0), .Label = character(0), class = "factor"),
+      minor = structure(integer(0), .Label = character(0), class = "factor")
+    ), .Names = c("major","minor"), row.names = integer(0), class = "data.frame")
+
+  # use testthat::not to avoid conflict with magrittr
+  expect_that(icd9DecimalToParts(character(), invalidAction = "stop"), testthat::not(throws_error()))
+  expect_equal(icd9DecimalToParts(character(), invalidAction = "stop"), emptydf)
   expect_warning(icd9DecimalToParts("", invalidAction = "warn"))
 })
 
@@ -79,6 +87,10 @@ test_that("extract decimal parts - valid inputs", {
   )
 })
 
+test_that("icd9 decimal to short form, bad codes", {
+  expect_equal(icd9DecimalToShort(character()), character())
+  # TODO: flesh out
+})
 test_that("icd9 decimal to short form", {
 
   expect_equal(icd9DecimalToShort("1"), "001")
@@ -127,9 +139,9 @@ test_that("short to decimal with flags", {
   expect_equal(icd9ShortToDecimal("V013"), "V01.3")
 })
 
-test_that("running short to decimal conversion before and after expansion of a ICD-9 base codes gives the same result", {
+test_that("short to decimal bad input", {
 
-  #bad codes:
+  expect_equal(icd9ShortToDecimal(character()), character())
   expect_equal(icd9ShortToDecimal("valsalva", invalidAction = "silent"), NA_character_)
   expect_equal(icd9ShortToDecimal("123456", invalidAction = "silent"), NA_character_)
   expect_equal(icd9ShortToDecimal("", invalidAction = "silent"), NA_character_)
@@ -145,6 +157,8 @@ test_that("running short to decimal conversion before and after expansion of a I
   expect_error(icd9ShortToDecimal(NA, invalidAction = "stop"))
   expect_error(icd9ShortToDecimal(c("000000", "0ab1bc2d"), invalidAction = "stop"))
   expect_error(icd9ShortToDecimal(c("123", "0ab1bc2d"), invalidAction = "stop")) # first is valid
+})
+test_that("running short to decimal conversion before and after expansion of a ICD-9 base codes gives the same result", {
 
   icd9List <- ahrqComorbid #todo SUBSET OR EXTRA MAPPINGS?
   for (i in names(icd9List)) {
@@ -236,19 +250,19 @@ test_that("parts to valid simple numeric inputs", {
 })
 
 test_that("parts to short V code inputs", {
-  expect_equal(icd9PartsToShort("V1", c("0", "1")), c("V010", "V011")) # default to zero spacing the V codes
-  expect_equal(icd9PartsToShort("V01", c("0", "1")), c("V010", "V011")) # and force zero spacing if required for syntax
-  expect_equal(icd9PartsToShort("V1", c("", NA)), c("V1", "V1"))
-  expect_equal(icd9PartsToShort("V01", c("", NA)), c("V01", "V01"))
+  expect_equal(icd9MajMinToShort("V1", c("0", "1")), c("V010", "V011")) # default to zero spacing the V codes
+  expect_equal(icd9MajMinToShort("V01", c("0", "1")), c("V010", "V011")) # and force zero spacing if required for syntax
+  expect_equal(icd9MajMinToShort("V1", c("", NA)), c("V1", "V1"))
+  expect_equal(icd9MajMinToShort("V01", c("", NA)), c("V01", "V01"))
 })
 
 test_that("icd9 parts to short: don't allow cycling.", {
-  expect_error(icd9PartsToShort(c("123", "34", "56"), c("1", "20")))
-  expect_error(icd9PartsToShort(c("123", "34"), c("1", "20", "45")))
+  expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")))
+  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
 })
 
 test_that("icd9 parts to short form V and E input, mismatched lengths", {
-  expect_equal(icd9PartsToShort(10L, "20"), "01020")
-  expect_equal(icd9PartsToShort("V10", c("0", "1")), c("V100", "V101"))
-  expect_equal(icd9PartsToShort("V01", c("0", "1")), c("V010", "V011"))
+  expect_equal(icd9MajMinToShort(10L, "20"), "01020")
+  expect_equal(icd9MajMinToShort("V10", c("0", "1")), c("V100", "V101"))
+  expect_equal(icd9MajMinToShort("V01", c("0", "1")), c("V010", "V011"))
 })
