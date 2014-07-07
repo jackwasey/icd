@@ -244,7 +244,7 @@ parseElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd9/da
 
 # AHRQ hierarchy.
 
-parseAhrqHeirarchy <- function() {
+parseAhrqHierarchy <- function() {
 read.zip.url(
   url = "http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip",
   filename = "ccs_multi_dx_tool_2013.csv",
