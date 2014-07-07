@@ -5,20 +5,21 @@ icd9
 ICD-9 code manipulation, validation and comorbidity generation in R
 -------------------------------------------------------------------
 
-ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in 'short' 5 character format, or 'decimal' format, with a decimal place seperating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeroes after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. This package primarily deals with ICD-9-CM (Clinical Modification) codes, but should be applicable or easily extendible to the original WHO ICD-9 system. This package offers the following main features:
+ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in 'short' 5 character format, or 'decimal' format, with a decimal place separating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeroes after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. This package primarily deals with ICD-9-CM (Clinical Modification) codes, but should be applicable or easily extendible to the original WHO ICD-9 system. This package offers the following main features:
 
  * validation of ICD-9 codes (decimal or non-decimal "short" form), including V and E prefixes
  * conversion of ICD-9 codes between decimal and short forms
  * allocation of cases (e.g. patients or patient visits) to standard groups of co-morbidities according to ICD-9 coding and arbitrary mappings of ICD-9 codes to co-morbidities. AHRQ mapping is provided.
  * sorting of ICD-9 codes
  * generation of child codes from lists of higher-level ICD-9 codes, allowing testing of whether a specific ICD-9 code falls under a more general code category.
+ * explaining ICD-9 codes in a succinct, human readable manner.
 
 This package contains ICD-9 to co-morbidity mappings from several sources, based on either the Charlson or Elixhauser lists of co-morbidities. Updated versions of these lists from [AHRQ](http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp) and [Quan et al](http://www.ncbi.nlm.nih.gov/pubmed/16224307) are included, along with the original Elixhauser mapping . Since some data is provided in SAS source code format, this package contains functions to parse this SAS source code and generate R data structures. This processing is limited to what is needed for this purpose, although may be generalizable and useful in other contexts. Other lists are transcribed directly from the published articles, but interpretation of SAS code from the publication author is preferred.
 
-More detail can be found in the accompanying vignette, the thorough documentation of package functions, and by examination of the source code including the comprehensive unit tests. Suggestions for improvement and contributions of code are very welcome. Contributions will be credited. I ask that, if you use this package for published work, you cite this work citation(package='icd9')
+More detail can be found in the accompanying vignette, the thorough documentation of package functions, and by examination of the source code including the comprehensive unit tests. Suggestions for improvement and contributions of code are very welcome. Contributions will be credited. I ask that, if you use this package for published work, you cite this work citation(package = "icd9")
 
 The latest version is available in [github](https://github.com/jackwasey/icd9) and can be installed with:
-`devtools::install_github('icd9', user="jackwasey")`
+`devtools::install_github("icd9", user="jackwasey")`
 The master branch at github should always build and pass all tests and R CMD check. The CRAN releases are relatively stable milestones, but always somewhat behind the git repo. I want to minimize changes to the API from now on, but need feedback to confirm I have made good choices.
 
 Further work

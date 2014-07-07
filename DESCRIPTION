@@ -1,5 +1,5 @@
 Package: icd9
-Title: tools for working with ICD-9 codes, and finding comorbidities
+Title: Tools for Working with ICD-9 Codes, and Finding Comorbidities
 Description: This package allows accurate manipulation, validation and
     comparison of ICD-9-CM (clinical modification) codes. Although ICD-9 codes
     appear numeric, this is not the case, since trailing zeroes, and a mixture
