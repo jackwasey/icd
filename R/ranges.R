@@ -55,9 +55,8 @@ icd9ChildrenShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
     out <- c(out,
              icd9MajMinToShort(
                major = parts[[r, "major"]],
-               minor = icd9ExpandMinor(parts[[r, "minor"]])
-             ),
-             invalidAction = "ignore"
+               minor = icd9ExpandMinor(parts[[r, "minor"]]),
+               invalidAction = "ignore")
     )
   }
   unique(out)
@@ -220,7 +219,7 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
       if ((major %nin% c(startMajor,endMajor)) # current major is not first or last, so expand all children
           || (major == startMajor & startMinor == "") # starting major has no minor, so expand all children
           || (major == endMajor & endMinor == "")) { #   ending major has no minor, so expand all children
-        result <- c(result, icd9ChildrenShort(as.character(major)))
+        result <- c(result, icd9ChildrenShort(as.character(major), invalidAction = "ignore"))
       } else { # loop minors from start minor, or until end minor
         # at this point we definitely have a minor code, whether for start or end
         # (but not both at same time)
@@ -243,7 +242,7 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
       } # end if - whether to expand all children
     } #end loop through majors
   } # end startMajor != endMajor
-  icd9AddLeadingZeroesShort(result)
+  icd9AddLeadingZeroesShort(result, addZeroV = TRUE, invalidAction = "ignore")
 }
 
 #' @title create range of icd9 major parts
@@ -271,13 +270,16 @@ icd9ExpandRangeMajor <- function(start, end, invalidAction = icd9InvalidActions)
 
 #' @rdname icd9ExpandRangeMajor
 #' @export
-"%i9mj%" <- function(start, end)
-  icd9ExpandRangeMajor(start = start, end = end)
+"%i9mj%" <- function(start, end) {
+  icd9ExpandRangeMajor(start = start, end = end, invalidAction = "warn")
+}
 
 
 #' @rdname icd9ExpandRangeShort
 #' @export
-"%i9s%" <- function(start, end) icd9ExpandRangeShort(start = start, end = end, invalidAction = "warn")
+"%i9s%" <- function(start, end) {
+  icd9ExpandRangeShort(start = start, end = end, invalidAction = "warn")
+}
 
 #' @title expand range of ICD-9 decimal codes to all possible intermediate and sub-codes
 #' @description As with \code{link{icd9ExpandRangeShort}} great care is taken not to include codes which have children not in the range. E.g. "100.9" to "101.1" would _not_ include code "101".
@@ -305,7 +307,9 @@ icd9ExpandRangeDecimal <- function(start, end, invalidAction = c("stop", "ignore
 
 #' @rdname icd9ExpandRangeDecimal
 #' @export
-"%i9d%" <- function(start, end) icd9ExpandRangeDecimal(start = start, end = end)
+"%i9d%" <- function(start, end) {
+  icd9ExpandRangeDecimal(start = start, end = end, invalidAction = "warn")
+}
 
 #' @title condense list of short ICD-9 code into minimal set of parent codes
 #' @description This can be thought of as the inverse operation to expanding a range. The list given must already contain the parents, because this function will never add a parent ICD-9 which, although may have all children present, may itself have an additional clinical meaning.

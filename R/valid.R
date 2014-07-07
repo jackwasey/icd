@@ -33,8 +33,8 @@ warnIfInvalidIcd9 <- function(icd9, isShort) {
     invalidLogical <- !icd9ValidDecimal(icd9)
   }
   invalids <- icd9[invalidLogical] # duplicates the function getInvalid.... but avoids two calls to check validity.
-  if (length(invalids > 0)) warning("Invalid ICD9 codes found: ", paste(invalids, collapse=", "))
-  return(invisible(invalidLogical))
+  if (length(invalids > 0)) warning("Invalid ICD-9 codes found: ", paste(invalids, collapse=", "))
+  invisible(invalidLogical)
 }
 
 #' stop, warn, replace invalid with NA or continue
@@ -61,7 +61,7 @@ icd9ValidNaWarnStop <- function(icd9, isShort, isMajor = FALSE, invalidAction = 
       valid <- icd9ValidDecimal(icd9)
     }
   }
-  if (any(!valid)) icd9WarnStopMessage("Invalid ICD9 codes found: ", paste(icd9[!valid]), invalidAction = invalidAction)
+  if (any(!valid)) icd9WarnStopMessage("Invalid ICD-9 codes found: ", paste(icd9[!valid]), invalidAction = invalidAction)
   icd9[!valid] <- NA # silent is only option left
   invisible(icd9)
 }
@@ -78,17 +78,17 @@ icd9WarnStopMessage <- function(..., invalidAction = c("stop", "warn", "silent")
 
 #' @rdname icd9ValidNaWarnStop
 #' @template icd9-short
-icd9ValidNaWarnStopShort <- function(icd9Short, invalidAction)
-  icd9ValidNaWarnStop(icd9 = icd9Short, isShort = TRUE, isMajor = FALSE, invalidAction = invalidAction)
+icd9ValidNaWarnStopShort <- function(icd9Short, invalidAction = icd9InvalidActions)
+  icd9ValidNaWarnStop(icd9 = icd9Short, isShort = TRUE, isMajor = FALSE, invalidAction = match.arg(invalidAction))
 
 #' @rdname icd9ValidNaWarnStop
 #' @template icd9-decimal
-icd9ValidNaWarnStopDecimal <- function(icd9Decimal, invalidAction)
-  icd9ValidNaWarnStop(icd9 = icd9Decimal, isShort = FALSE, isMajor = FALSE, invalidAction = invalidAction)
+icd9ValidNaWarnStopDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions)
+  icd9ValidNaWarnStop(icd9 = icd9Decimal, isShort = FALSE, isMajor = FALSE, invalidAction = match.arg(invalidAction))
 
 #' @rdname icd9ValidNaWarnStop
-icd9ValidNaWarnStopMajor <- function(major, invalidAction)
-  icd9ValidNaWarnStop(icd9 = major, isShort = FALSE, isMajor = TRUE, invalidAction = invalidAction)
+icd9ValidNaWarnStopMajor <- function(major, invalidAction = icd9InvalidActions)
+  icd9ValidNaWarnStop(icd9 = major, isShort = FALSE, isMajor = TRUE, invalidAction = match.arg(invalidAction))
 
 #' @title check whether any ICD-9 code is syntactically valid
 #' @template icd9-any

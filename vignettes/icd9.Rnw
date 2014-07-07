@@ -61,7 +61,7 @@ These functions were designed with the problem of incorrectly or bizarrely forma
 icd9DecimalToShort(c("10.20", "100", "123.45"))
 icd9ShortToDecimal(icd9DecimalToShort(c("10.20", "100", "123.45")))
 
-# note that only a subset of short codes can suffer dropping of leading zeroes.
+# only a subset of short codes can suffer dropping of leading zeroes.
 icd9DecimalToShort(c("1", "22", "22.44", "100"))
 
 icd9ShortToDecimal(icd9DecimalToShort(c("1", "1.2", "123.45")))
@@ -73,6 +73,7 @@ icd9ShortToDecimal(icd9DecimalToShort(c("1", "2.2", "100")))
 <<validation,eval=T>>=
 icd9ValidDecimal("V10.2")
 icd9ValidShort(c("099.17", "-1"))
+icd9ValidShort(c("1", "001", "100", "10023"))
 @
 
 Validation forces the package user to provide character format ICD-9 codes. If great care is taken, passing some integers could be valid, but given the high chance of mistakes, and the simplicity of dealing entirely with character input, character is enforced:
@@ -129,25 +130,38 @@ c("001.1", "391") %>% icd9DecimalToShort %>% icd9ExplainShort
 Find all ICD-9 codes matching 'heart' or 'cardiac' in the short or long descriptions:
 <<>>=
 cardiac <- unique(c(
-  icd9CmDesc[grepl(pattern="(heart)|(cardiac)", x = icd9CmDesc[["descLong"]], ignore.case = TRUE), "icd9"],
-  icd9CmDesc[grepl(pattern="(heart)|(cardiac)", x = icd9CmDesc[["descShort"]], ignore.case = TRUE), "icd9"]
-  )
-)
+  icd9CmDesc[
+    grepl(
+      pattern="(heart)|(cardiac)",
+      x = icd9CmDesc[["descLong"]],
+      ignore.case = TRUE
+    ),
+    "icd9"],
+  icd9CmDesc[
+    grepl(
+      pattern="(heart)|(cardiac)",
+      x = icd9CmDesc[["descShort"]],
+      ignore.case = TRUE
+    ),
+    "icd9"]
+))
 @
 then explain the list, just showing the first ten:
-<<>>=
+<<eval=TRUE,echo=TRUE>>=
 cardiac %>% icd9ExplainShort %>% extract(2) %>% head(10)
 @
 
 More examples, this time also demonstrating automatic summarization of a long list of ICD-9 codes into the minimum set of explanatory parent codes:
-<<>>=
-quanDeyoComorbid[["Dementia"]] %>% icd9ExplainShort()
+<<eval=TRUE,echo=TRUE>>=
+quanDeyoComorbid[["Dementia"]] %>%
+  icd9ExplainShort() %>%
+  extract(c("ICD-9","Description"))
 
-# generate a range with more than two hundred (possible) ICD-9 codes
+# use a range with more than two hundred ICD-9 codes
 
 length("390" %i9d% "392.1")
-"390" %i9d% "392.1" %>% icd9DecimalToShort %>% icd9ExplainShort
-"390" %i9d% "392.1" %>% icd9ExplainDecimal
+"390" %i9d% "392.1" %>% icd9DecimalToShort() %>% icd9ExplainShort()
+"390" %i9d% "392.1" %>% icd9ExplainDecimal()
 
 @
 
@@ -174,22 +188,22 @@ A fragment of a recent AHRQ SAS comorbidity mapping SAS FORMAT is as follows. No
 
 \begin{verbatim}
 PROC FORMAT LIB=library fmtlib;
-   VALUE $RCOMFMT
-      "2780 ",
-      "27800",
-      "27801",
-      "27803",
-      "64910"-"64914",
-      "V8530"-"V8539",
-      "V8541"-"V8545",
-      "V8554",
-      "79391"         = "OBESE"     /* Obesity      */
+VALUE $RCOMFMT
+"2780 ",
+"27800",
+"27801",
+"27803",
+"64910"-"64914",
+"V8530"-"V8539",
+"V8541"-"V8545",
+"V8554",
+"79391"         = "OBESE"     /* Obesity      */
 
-      "3004 ",
-      "30112",
-      "3090 ",
-      "3091 ",
-      "311  "         = "DEPRESS"
+"3004 ",
+"30112",
+"3090 ",
+"3091 ",
+"311  "         = "DEPRESS"
 \end{verbatim}
 
 This is parsed using:
