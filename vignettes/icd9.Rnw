@@ -112,13 +112,11 @@ icd9ExplainDecimal(c("001", "001.0", "001.1", "001.9"))
 # 001/cholera doesn't itself have an explanation: TODO walk down children to get next level explanations.
 icd9ExplainDecimal(list(cholera = "001", rheumatic_heart = "390"))
 
-
 @
+
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
 <<noexplain,eval=T>>=
 icd9ExplainDecimal("001.5")
-@
-icd9ExplainDecimal(list(cholera=c("001.0", "001.1", "001.9")))
 @
 
 \section{Chaining commands}
