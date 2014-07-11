@@ -61,6 +61,7 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort = TRUE, isShortRefe
   if (validate) stopIfInvalidIcd9(icd9, isShort = isShort)
   if (validateReference) stopIfInvalidIcd9(icd9Reference, isShort = isShortReference)
 
+  # TODO: this may be omitted if all the children are elaborated in the comorbidity mappings in advance. This is fine for ones I provide, but not necessarily user-generated ones. It is a slow step, hence memoisation. It would be simpler and faster if this could be skipped. I'm currently also elaborating all syntactically possible children, not just codes listed in the official ICD-9-CM list.
   kids <- memSpawnRefKids(icd9Reference, isShortReference)
 
   # convert to short form to make comparison
@@ -173,6 +174,7 @@ icd9Comorbidities <- function(icd9df,
   # loop through names of icd9 mapping, and put the results together so each
   # column is one comorbidity in a data frame. This is much faster with vapply,
   # and it keeps the logicals instead of making them characters
+  ic <- asCharacterNoWarn(icd9df[[icd9Field]])
   i <- cbind(
     icd9df[visitId],
     vapply(
@@ -181,7 +183,7 @@ icd9Comorbidities <- function(icd9df,
       FUN = function(comorbidity) {
         icd9InReferenceCode(
           # drop factor down to character codes #TODO: is this necessary or desirable?
-          asCharacterNoWarn(icd9df[[icd9Field]]),
+          ic,
           # provide vector of base ICD9 codes for this comorbidity group
           icd9Mapping[[comorbidity]]
         )
