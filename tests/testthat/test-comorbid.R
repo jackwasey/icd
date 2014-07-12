@@ -157,3 +157,10 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
   )
 
 })
+
+test_that("Charlson Deyo mapping doesn't double count disease with multiple severities", {
+  # there should be no overlapping codes
+  expect_true(any(quanDeyoComorbid[["Mild Liver Disease"]] %in% quanDeyoComorbid[["Moderate or Severe Liver Disease"]] ))
+  expect_true(any(quanDeyoComorbid[["Cancer"]] %in% quanDeyoComorbid[["Metastatic Carcinoma"]] ))
+  expect_true(any(quanDeyoComorbid[["Diabetes without complications"]] %in% quanDeyoComorbid[["Diabetes with complications"]] ))
+})

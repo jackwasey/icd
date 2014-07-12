@@ -1,7 +1,7 @@
 #' @title invalid actions, default is first item
 #' @description Some functions accept \code{invalidAction} argument, but require non-default validation, but the vast majority will honor the default of 'ignore.' Ignore may lead to downstream errors, since bad data may arrive in internal functions, however, this is the fastest option. A typical use-case of this package would involve validation and cleaning steps (with validation), followed by repeated analysis (as fast as possible, with minimal validation).
 #'
-#' @keywords sysdata character
+#' @keywords character
 #' @export
 icd9InvalidActions <- c("ignore", "silent", "warn", "stop")
 

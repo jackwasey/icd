@@ -10,3 +10,6 @@ vignettes/icd9-concordance.tex
 .Rprofile
 Rprof.out
 *.swp
+*.o
+*.so
+*.dll
