@@ -44,7 +44,7 @@ The comorbidities can be determined as follows:
 icd9Comorbidities(icd9df = patientData)[, 1:5]
 @
 or using magrittr to chain functions together:
-<<getcomorbidities, eval=TRUE>>=
+<<getcomorbidities2, eval=TRUE>>=
 patientData %>%
   icd9FilterPoaNotNo() %>%
   icd9ComorbiditiesAhrq(isShort = TRUE) %>%
@@ -186,22 +186,31 @@ myData <- data.frame(
   poa = c("Y", "N", NA, "Y"),
   stringsAsFactors = FALSE)
 myData
+@
+
+@
+<<simplepoa>>=
 myData %>% icd9FilterPoaYes() %>% extract(1:7)
+@
+Show that 'yes' is not equal to 'not no':
+<<notnopoa>>=
 myData %>% icd9FilterPoaNotNo() %>% extract(1:7)
+@
+Chain commands together to get a few columns of comorbidities. This is showing off how magrittr works in the context of this package.
+<<chainpoatocomorbid>>=
 myData %>%
   icd9FilterPoaNotNo() %>%
   icd9ComorbiditiesAhrq(isShort = TRUE) %>%
   extract(1:7)
 @
-This is showing off how magrittr works in the context of this package: Fill out some named fields:
-<<>>=
-
+Can fill out some named fields, if we want:
+<<customnamesinchain>>=
 myData %>% icd9FilterPoaYes(poaField="poa") %>%
   icd9ComorbiditiesAhrq(visitId = "visitId") %>%
   extract(1:7)
 @
 Call the core icd9Comorbidities function with an arbitrary mapping
-<<>>=
+<<arbitrarycomorbiditymapinchain>>=
 myData %>%
   icd9FilterPoaYes() %>%
   icd9Comorbidities(

@@ -138,24 +138,30 @@ icd9Comorbidities <- function(icd9df,
 
   stopifnot(icd9ValidMapping(icd9Mapping = icd9Mapping, isShort = isShortMapping))
 
+  # drop factor down to character codes #TODO: is this necessary or desirable?
+  icd9c <- asCharacterNoWarn(icd9df[[icd9Field]])
+
   # loop through names of icd9 mapping, and put the results together so each
   # column is one comorbidity in a data frame. This is much faster with vapply,
   # and it keeps the logicals instead of making them characters
+
   i <- cbind(
     icd9df[visitId],
     vapply(
       X = names(icd9Mapping),
       FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]])),
+      # FUN looks up each visit icd9 code in given set of comorbidity icd9 codes
       FUN = function(comorbidity) {
-        icd9InReferenceCode(
-          # drop factor down to character codes #TODO: is this necessary or desirable?
-          asCharacterNoWarn(icd9df[[icd9Field]]),
-          # provide vector of base ICD9 codes for this comorbidity group
+        icd9InReferenceCode( # this function is just a fancy %in% with sanity checks
+          icd9c,
           icd9Mapping[[comorbidity]]
         )
       }
     )
   )
+  # at this point, 'i' still has multiple rows per visit, but with a column per
+  # comorbidity: next step aggregates all the comorbidities together to give one
+  # row per visitid
   aggregate(
     x = i[, -which(names(i) == visitId)], # all cols except visit ID will be aggregated
     by = list(visitId = i[[visitId]]), # group by the visitId
@@ -235,26 +241,26 @@ icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
 #' @export
 icd9FilterPoaYes <- function(icd9df, poaField = "poa") {
   stopifnot(poaField %in% names(icd9df))
-  icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "Y", -which(names(icd9df) == poaField)]
+  icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] %in% c("Y", "y"), -which(names(icd9df) == poaField)]
 }
 
 #' @rdname icd9FilterPoa
 #' @export
 icd9FilterPoaNo <- function(icd9df, poaField = "poa") {
   stopifnot(poaField %in% names(icd9df))
-  icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] == "N", -which(names(icd9df) == poaField)]
+  icd9df[!is.na(icd9df[[poaField]]) & icd9df[[poaField]] %in% c("N", "n"), -which(names(icd9df) == poaField)]
 }
 
 #' @rdname icd9FilterPoa
 #' @export
 icd9FilterPoaNotNo <- function(icd9df, poaField = "poa") {
   stopifnot(poaField %in% names(icd9df))
-  icd9df[is.na(icd9df[[poaField]]) | icd9df[[poaField]] != "N", -which(names(icd9df) == poaField)]
+  icd9df[is.na(icd9df[[poaField]]) | icd9df[[poaField]] %nin% c("N", "n"), -which(names(icd9df) == poaField)]
 }
 
 #' @rdname icd9FilterPoa
 #' @export
 icd9FilterPoaNotYes <- function(icd9df, poaField = "poa") {
   stopifnot(poaField %in% names(icd9df))
-  icd9df[is.na(icd9df[[poaField]]) | icd9df[[poaField]] != "Y", -which(names(icd9df) == poaField)]
+  icd9df[is.na(icd9df[[poaField]]) | icd9df[[poaField]] %nin% c("Y", "y"), -which(names(icd9df) == poaField)]
 }

@@ -14,6 +14,21 @@ patientData <- data.frame(
   poa = factor(c("Y", "N", "Y", "N", "Y", "N"))
 )
 
+simplePoaPatients <- data.frame(
+  visitId = c("v1", "v2", "v3", "v4"),
+  icd9 = c("39891", "39790", "41791", "4401"),
+  poa = c("y", "N", "E", NA_character_), # should tolerate mixed case
+  stringsAsFactors = FALSE
+)
+
+# multiple codes for POA and not POA, bad POA input. Throw in some invalid ICD9 codes
+complexPoaPatients <- data.frame(
+  visitId = c("v1", "v1", "v1", "v2", "v2", "v3", "v3"),
+  icd9 = c("39891", "39891", "39790", "41791", "41791", "41791", "4401"),
+  poa = c("Y", "n", NA_character_, "E", NA_character_, "paris", ""),
+  stringsAsFactors = FALSE
+)
+
 randomPatients <- data.frame(
   visitId = sample(seq(1, np), replace = TRUE, size=n),
   icd9 = randomShortIcd9,
@@ -23,6 +38,24 @@ randomPatients <- data.frame(
 # random patients with icd9 codes selected from ahrq data
 randomPatientsAhrqIcd9 <- randomPatients
 randomPatientsAhrqIcd9[["icd9"]] <- randomSampleAhrq
+
+testTwenty <- structure(
+  list(visitId = c(207210584L, 207210584L, 207210584L,
+                   207210584L, 207210584L, 207210600L, 207210600L,
+                   207210600L, 207210600L, 207210600L, 207210600L,
+                   207210600L, 207210600L, 207210600L, 207210600L,
+                   207210600L, 207210600L, 207210600L, 207210618L, 207210618L),
+       icd9Code = structure(
+         c(17L, 1L, 14L, 10L, 13L, 11L, 8L, 6L,
+           18L, 2L, 7L, 19L, 3L, 5L, 20L, 16L, 12L, 4L, 15L, 9L),
+         .Label = c("04104", "1912", "2449", "2949", "29680", "4254", "4371", "4530",
+                    "5070", "59370", "5990", "71595", "74689", "7757", "85226",
+                    "V153", "77182", "45341", "78097", "V1529"), class = "factor"),
+       poa = c("N", "N", "N", "Y", "Y", "Y", "Y", "Y", "Y", "Y",
+               "Y", "Y", "Y", "Y", "E", "E", "Y", "Y", "Y", "N")),
+  .Names = c("visitId", "icd9Code", "poa"),
+  row.names = 5000000:5000019,
+  class = "data.frame")
 
 test_that("no NA values in the co-morbidity lists", {
   expect_false(any(is.na(unlist(unname(ahrqComorbid)))))
@@ -111,26 +144,7 @@ test_that("HTN subgroups all worked", {
 
 })
 
-
 test_that("icd9 codes to comorbities", {
-
-  testdat <- structure(
-    list(visitId = c(207210584L, 207210584L, 207210584L,
-                     207210584L, 207210584L, 207210600L, 207210600L,
-                     207210600L, 207210600L, 207210600L, 207210600L,
-                     207210600L, 207210600L, 207210600L, 207210600L,
-                     207210600L, 207210600L, 207210600L, 207210618L, 207210618L),
-         icd9Code = structure(
-           c(17L, 1L, 14L, 10L, 13L, 11L, 8L, 6L,
-             18L, 2L, 7L, 19L, 3L, 5L, 20L, 16L, 12L, 4L, 15L, 9L),
-           .Label = c("04104", "1912", "2449", "2949", "29680", "4254", "4371", "4530",
-                      "5070", "59370", "5990", "71595", "74689", "7757", "85226",
-                      "V153", "77182", "45341", "78097", "V1529"), class = "factor"),
-         poa = c("N", "N", "N", "Y", "Y", "Y", "Y", "Y", "Y", "Y",
-                 "Y", "Y", "Y", "Y", "E", "E", "Y", "Y", "Y", "N")),
-    .Names = c("visitId", "icd9Code", "poa"),
-    row.names = 5000000:5000019,
-    class = "data.frame")
 
   # TODO write the test!
 
@@ -160,7 +174,81 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 
 test_that("Charlson Deyo mapping doesn't double count disease with multiple severities", {
   # there should be no overlapping codes
-  expect_true(any(quanDeyoComorbid[["Mild Liver Disease"]] %in% quanDeyoComorbid[["Moderate or Severe Liver Disease"]] ))
-  expect_true(any(quanDeyoComorbid[["Cancer"]] %in% quanDeyoComorbid[["Metastatic Carcinoma"]] ))
-  expect_true(any(quanDeyoComorbid[["Diabetes without complications"]] %in% quanDeyoComorbid[["Diabetes with complications"]] ))
+  expect_true(any(quanDeyoComorbid[["Mild Liver Disease"]] %nin% quanDeyoComorbid[["Moderate or Severe Liver Disease"]] ))
+  expect_true(any(quanDeyoComorbid[["Cancer"]] %nin% quanDeyoComorbid[["Metastatic Carcinoma"]] ))
+  expect_true(any(quanDeyoComorbid[["Diabetes without complications"]] %nin% quanDeyoComorbid[["Diabetes with complications"]] ))
+})
+
+
+test_that("filter POA - not a data frame", {
+  expect_error(icd9FilterPoaNo(list(pollo = "loco")))
+  expect_error(icd9FilterPoaNotYes(visitId=c("1","2"), icd9 = c("1","2"), poa = c("Y","N")))
+})
+
+test_that("filter POA - no poa field", {
+  expect_error(icd9FilterPoaYes(simplePoaPatients[1:2]))
+})
+
+test_that("filter POA - generic func - invalid poa type", {
+  expect_error(icd9FilterPoa(icd9df = simplePoaPatients, poaField = "poa", poa = "not an option"))
+  expect_error(icd9FilterPoa(icd9df = simplePoaPatients, poaField = "poa", poa = ""))
+  expect_error(icd9FilterPoa(icd9df = simplePoaPatients, poaField = "poa", poa = NA))
+})
+
+test_that("filter POA - wrong name poa field", {
+  pd <- simplePoaPatients
+  names(pd) <- c("visitId", "icd9", "achilleus")
+  expect_error(icd9FilterPoaYes(pd, poaField = "poa"))
+  expect_error(icd9FilterPoaYes(pd, poaField = "odysseus"))
+  expect_error(icd9FilterPoaYes(pd))
+})
+
+test_that("filter POA - poa is factor", {
+  # POA flag is an obvious case for using factors. Not sure if it saves much
+  # memory, and it certainly risks screwing up the analysis with obscure and
+  # difficult to debug errors. ICD-9 code is also factor fodder, and likely to
+  # be highly repeated over millions of patients, but I've resisted its charms
+  # thus far.
+  simplePoaPatients$poa <- factor(simplePoaPatients$poa) # just within this closure
+  names(simplePoaPatients)[3] = "poa"
+  complexPoaPatients$poa <- factor(complexPoaPatients$poa) # just within this closure
+  names(complexPoaPatients)[3] = "poa"
+
+  # row names are preserved here: probably not important, but a little annoying
+  expect_identical(icd9FilterPoaYes(simplePoaPatients), simplePoaPatients[1, 1:2])
+  expect_identical(icd9FilterPoaNotYes(simplePoaPatients), simplePoaPatients[-1, 1:2])
+  expect_identical(icd9FilterPoaNo(simplePoaPatients), simplePoaPatients[2, 1:2])
+  expect_identical(icd9FilterPoaNotNo(simplePoaPatients), simplePoaPatients[-2, 1:2])
+
+  expect_identical(icd9FilterPoaYes(complexPoaPatients), complexPoaPatients[1, 1:2])
+  expect_identical(icd9FilterPoaNotYes(complexPoaPatients), complexPoaPatients[-1, 1:2])
+  expect_identical(icd9FilterPoaNo(complexPoaPatients), complexPoaPatients[2, 1:2])
+  expect_identical(icd9FilterPoaNotNo(complexPoaPatients), complexPoaPatients[-2, 1:2])
+})
+
+test_that("filter POA - poa is vector", {
+  expect_identical(icd9FilterPoaYes(simplePoaPatients), simplePoaPatients[1, 1:2])
+  expect_identical(icd9FilterPoaNotYes(simplePoaPatients), simplePoaPatients[-1, 1:2])
+  expect_identical(icd9FilterPoaNo(simplePoaPatients), simplePoaPatients[2, 1:2])
+  expect_identical(icd9FilterPoaNotNo(simplePoaPatients), simplePoaPatients[-2, 1:2])
+
+  expect_identical(icd9FilterPoaYes(complexPoaPatients), complexPoaPatients[1, 1:2])
+  expect_identical(icd9FilterPoaNotYes(complexPoaPatients), complexPoaPatients[-1, 1:2])
+  expect_identical(icd9FilterPoaNo(complexPoaPatients), complexPoaPatients[2, 1:2])
+  expect_identical(icd9FilterPoaNotNo(complexPoaPatients), complexPoaPatients[-2, 1:2])
+
+})
+
+test_that("filter POA - poa upper and lower case", {
+ smpl <- simplePoaPatients
+ smpl[["poa"]] <- c("Y", "n", "e", NA)
+ expect_identical(icd9FilterPoaNo(smpl), icd9FilterPoaNo(simplePoaPatients))
+})
+
+test_that("filter POA - just Y and N should be complementary", {
+  # take any data frame to start out:
+  dfrm <- testTwenty;
+  dfrm <- dfrm[dfrm[["poa"]] %in% c("Y", "N", "y", "n"),]
+  expect_identical(icd9FilterPoaNo(dfrm),  icd9FilterPoaNotYes(dfrm))
+  expect_identical(icd9FilterPoaYes(dfrm), icd9FilterPoaNotNo(dfrm))
 })
