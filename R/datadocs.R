@@ -167,7 +167,7 @@ NULL
 NULL
 
 #' @title Elixhauser comorbidity names with hypertension subgroups
-#' @desscription These names are taken from the original paper. Uncomplicated
+#' @description These names are taken from the original paper. Uncomplicated
 #'   and complicated hypertension are listed separately, but are always
 #'   combined. Complicated DM excludes uncomplicated DM, and metastatic cancer
 #'   precludes solid tumor without metastasis.
@@ -181,7 +181,7 @@ NULL
 NULL
 
 #' @title Elixhauser comorbidity names with combined hypertension
-#' @desscription These names are taken from the original paper. Uncomplicated
+#' @description These names are taken from the original paper. Uncomplicated
 #'   and complicated hypertension are listed together, giving a simple list of
 #'   30 items  as in the original paper.
 #' @format list, with character/numeric code. "01" to "30"

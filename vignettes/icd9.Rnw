@@ -44,7 +44,9 @@ Only the visitId column is propogated to the results. If 'present-on-arrival' is
 
 The comorbidities can be determined as follows:
 <<getcomorbidities, eval=TRUE>>=
-icd9Comorbidities(icd9df = patientData)[, 1:5]
+icd9ComorbiditiesAhrq(icd9df = patientData)[, 1:5]
+# or
+icd9ComorbiditiesQuanDeyo(patientData)[, 1:5]
 @
 or using magrittr to chain functions together:
 <<getcomorbidities2, eval=TRUE,cache=TRUE, size="small">>=
@@ -64,12 +66,12 @@ icd9Comorbidities(icd9df = patientData,
 \section{Converting ICD-9 codes between types}
 These functions were designed with the problem of incorrectly or bizarrely formatted ICD-9 codes in mind. These functions make the reasonable assumption that short codes of three or fewer characters must be describing only the 'major' part. \begin{verbatim}keepLoneDecimal\end{verbatim} allows retention of the decimal point even if there are no subsequent characters.
 
-<<conversion,eval=T>>=
+<<"conversionSimple",eval=T>>=
 icd9DecimalToShort(c("10.20", "100", "123.45"))
 icd9ShortToDecimal(icd9DecimalToShort(c("10.20", "100", "123.45")))
 @
 Only a subset of short codes can suffer dropping of leading zeroes.
-<<conversion,eval=T>>=
+<<"conversionNeedZero",eval=T>>=
 icd9DecimalToShort(c("1", "22", "22.44", "100"))
 icd9ShortToDecimal(icd9DecimalToShort(c("1", "1.2", "123.45")))
 icd9ShortToDecimal(icd9DecimalToShort(c("1", "2.2", "100")))

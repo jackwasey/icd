@@ -234,7 +234,7 @@ icd9ComorbiditiesQuanDeyo <- function(icd9df,
     cbd[cbd[["Diabetes with complications"]] > 0, "Diabetes without complications"] <- 0
     cbd[cbd[["Moderate or Severe Liver Disease"]] > 0, "Mild Liver Disease"] <- 0
   }
-  if (abbrevNames) names(cbd)[-1] <- CharlsonComorbidNames
+  if (abbrevNames) names(cbd)[-1] <- charlsonComorbidNames
 }
 
 #' @rdname icd9Comorbidities
