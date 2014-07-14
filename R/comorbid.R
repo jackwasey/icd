@@ -198,17 +198,22 @@ icd9ComorbiditiesAhrq <- function(icd9df,
                                   applyHierarchy = TRUE) {
 
   cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
-                    isShort = isShort, icd9Mapping = ahrqComorbid)
+                           isShort = isShort, icd9Mapping = ahrqComorbid)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
-    cbd[cbd[["Mets"]] > 0, "Tumor"] <- 0
-    cbd[cbd[["DM"]] > 0, "DMcx"] <- 0
-    # HTN already combined in AHRQ
+    cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
+    cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
+    cbd[["HTN"]] <- cbd[["HTN"]] + cbd[["HTNcx"]] > 0
+    cbd[["HTNcx"]] <- NULL
+
+    if (abbrevNames) { names(cbd)[-1] <- ahrqComorbidNamesAbbrev } else { names(cbd)[-1] <- ahrqComorbidNames }
+    return(cbd)
+  } else {
+    if (abbrevNames) { names(cbd)[-1] <- ahrqComorbidNamesHtnAbbrev } else { names(cbd)[-1] <- ahrqComorbidNamesHtn }
+    return(cbd)
   }
-  if (abbrevNames) { names(cbd)[-1] <- ahrqComorbidNamesAbbrev } else { names(cbd)[-1] <- ahrqComorbidNames }
-  cbd
 }
 
 #' @rdname icd9Comorbidities
@@ -225,14 +230,14 @@ icd9ComorbiditiesQuanDeyo <- function(icd9df,
                                       abbrevNames = TRUE,
                                       applyHierarchy = TRUE) {
   cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
-                    isShort = isShort, icd9Mapping = quanDeyoComorbid)
+                           isShort = isShort, icd9Mapping = quanDeyoComorbid)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
-    cbd[cbd[["Metastatic Carcinoma"]] > 0, "Cancer"] <- 0
-    cbd[cbd[["Diabetes with complications"]] > 0, "Diabetes without complications"] <- 0
-    cbd[cbd[["Moderate or Severe Liver Disease"]] > 0, "Mild Liver Disease"] <- 0
+    cbd[cbd[["Mets"]] > 0, "Cancer"] <- FALSE
+    cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
+    cbd[cbd[["LiverSevere"]] > 0, "LiverMild"] <- FALSE
   }
   if (abbrevNames) names(cbd)[-1] <- charlsonComorbidNames
 }
@@ -247,16 +252,16 @@ icd9ComorbiditiesQuanElixhauser <- function(icd9df,
                                             rename = TRUE,
                                             applyHierarchy = TRUE) {
   cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
-                    isShort = isShort, icd9Mapping = quanElixhauserComorbid)
+                           isShort = isShort, icd9Mapping = quanElixhauserComorbid)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
-    cbd[cbd[["mets"]] > 0, "solid tumor"] <- 0
-    cbd[cbd[["dm.comp"]] > 0, "dm.uncomp"] <- 0
+    cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
+    cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
     # combine HTN
-    cbd[["htn"]] <- cbd[["htn"]] + cbd[["htncx"]] > 0
-    cbd[["htncx"]] <- NULL
+    cbd[["HTN"]] <- cbd[["HTN"]] + cbd[["HTNcx"]] > 0
+    cbd[["HTNcx"]] <- NULL
 
     if (rename) names(cbd)[-1] <- quanElixhauserComorbidNames
   } else {
@@ -284,10 +289,10 @@ icd9ComorbiditiesElixhauser <- function(icd9df,
   cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
                            isShort = isShort, icd9Mapping = elixhauserComorbid)
   if (applyHierarchy) {
-    cbd[cbd[["mets"]] > 0, "solid tumor"] <- 0
-    cbd[cbd[["dm.comp"]] > 0, "dm.uncomp"] <- 0
-    cbd[["htn"]] <- cbd[["htn"]] + cbd[["htncx"]] > 0
-    cbd[["htncx"]] <- NULL
+    cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
+    cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
+    cbd[["HTN"]] <- cbd[["HTN"]] + cbd[["HTNcx"]] > 0
+    cbd[["HTNcx"]] <- NULL
     if (rename) names(cbd)[-1] <- elixhauserComorbidNames
   } else {
     if (rename) names(cbd)[-1] <- elixhauserComorbidNamesHtn
