@@ -249,7 +249,7 @@ icd9ComorbiditiesQuanElixhauser <- function(icd9df,
                                             icd9Field = "icd9",
                                             isShort,
                                             validateMapping = FALSE,
-                                            rename = TRUE,
+                                            abbrevNames = TRUE,
                                             applyHierarchy = TRUE) {
   cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
                            isShort = isShort, icd9Mapping = quanElixhauserComorbid)
@@ -263,8 +263,6 @@ icd9ComorbiditiesQuanElixhauser <- function(icd9df,
     cbd[["HTN"]] <- cbd[["HTN"]] + cbd[["HTNcx"]] > 0
     cbd[["HTNcx"]] <- NULL
 
-    if (rename) names(cbd)[-1] <- quanElixhauserComorbidNames
-  } else {
     # if we didn't apply the hierarchy, we have to use the naming scheme with HTN separated out:
 
     # assume that the comorbidities are the last 31 fields. At present, the
@@ -272,7 +270,10 @@ icd9ComorbiditiesQuanElixhauser <- function(icd9df,
     # know about, e.g. POA, or anything else the user provides in the data
     # frame, so these are just dropped, leaving the fields for visitId and all
     # the comorbidities:
-    if (rename) names(cbd)[-1] <- quanElixhauserComorbidNamesHtn
+
+    if (abbrevNames) { names(cbd)[-1] <- quanElixhauserComorbidNamesAbbrev } else { names(cbd)[-1] <- quanElixhauserComorbidNames}
+  } else {
+    if (abbrevNames) { names(cbd)[-1] <- quanElixhauserComorbidNamesHtnAbbrev } else { names(cbd)[-1] <- quanElixhauserComorbidNamesHtn}
   }
   cbd
 }
@@ -284,7 +285,7 @@ icd9ComorbiditiesElixhauser <- function(icd9df,
                                         icd9Field = "icd9",
                                         isShort,
                                         validateMapping = FALSE,
-                                        rename = TRUE,
+                                        abbrevNames = TRUE,
                                         applyHierarchy = TRUE) {
   cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
                            isShort = isShort, icd9Mapping = elixhauserComorbid)
@@ -293,9 +294,9 @@ icd9ComorbiditiesElixhauser <- function(icd9df,
     cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
     cbd[["HTN"]] <- cbd[["HTN"]] + cbd[["HTNcx"]] > 0
     cbd[["HTNcx"]] <- NULL
-    if (rename) names(cbd)[-1] <- elixhauserComorbidNames
+    if (abbrevNames) { names(cbd)[-1] <- elixhauserComorbidNamesAbbrev } else { names(cbd)[-1] <- elixhauserComorbidNames}
   } else {
-    if (rename) names(cbd)[-1] <- elixhauserComorbidNamesHtn
+    if (abbrevNames) { names(cbd)[-1] <- elixhauserComorbidNamesHtnAbbrev } else { names(cbd)[-1] <- elixhauserComorbidNamesHtn}
   }
   cbd
 }

@@ -173,6 +173,24 @@ ahrqTestDat <- data.frame(
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 )
+icd9fl <- unlist(unname(c(lapply(elixhauserComorbid, head, n=1), lapply(elixhauserComorbid, tail, n=1))))
+elixhauserTestDat <- data.frame(
+  visitId = rep("visit1", times = length(icd9fl)),
+  icd9 = icd9fl,
+  stringsAsFactors = FALSE
+)
+icd9fl <- unlist(unname(c(lapply(quanElixhauserComorbid, head, n=1), lapply(quanElixhauserComorbid, tail, n=1))))
+quanElixhauserTestDat <- data.frame(
+  visitId = rep("visit1", times = length(icd9fl)),
+  icd9 = icd9fl,
+  stringsAsFactors = FALSE
+)
+icd9fl <- unlist(unname(c(lapply(quanDeyoComorbid, head, n=1), lapply(quanDeyoComorbid, tail, n=1))))
+quanDeyoTestDat <- data.frame(
+  visitId = rep("visit1", times = length(icd9fl)),
+  icd9 = icd9fl,
+  stringsAsFactors = FALSE
+)
 
 test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, hier", {
   res <- icd9ComorbiditiesAhrq(ahrqTestDat, abbrevNames = FALSE, applyHierarchy = TRUE)
@@ -187,7 +205,7 @@ test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in o
   res <- icd9ComorbiditiesAhrq(ahrqTestDat, abbrevNames = TRUE, applyHierarchy = TRUE)
   expect_equal(dim(res), c(1,30))
   expect_true(all(ahrqComorbidNamesAbbrev %in% names(res)))
-  expect_false(all(as.logical(res[1, unlist(ahrqComorbidNamesAbbrev)])))as.logical( # should not have dm and dmcx, etc
+  expect_false(all(as.logical(res[1, unlist(ahrqComorbidNamesAbbrev)]))) # should not have dm and dmcx, etc
   expect_false(res[1, "DM"])
   expect_false(res[1, "Tumor"])
 })
@@ -195,15 +213,85 @@ test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in o
 test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, no hier", {
   res <- icd9ComorbiditiesAhrq(ahrqTestDat, abbrevNames = FALSE, applyHierarchy = FALSE)
   expect_equal(dim(res), c(1,31)) #longer because 2x htn
-  expect_true(all(ahrqComorbidNames %in% names(res))) # not applying hierarchy, so dm and dmcx can both be true
-  expect_true(all(as.logical(res[1, unlist(ahrqComorbidNames)])))
+  expect_true(all(ahrqComorbidNamesHtn %in% names(res))) # not applying hierarchy, so dm and dmcx can both be true
+  expect_true(all(as.logical(res[1, unlist(ahrqComorbidNamesHtn)])))
 })
 
 test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, no hier", {
   res <- icd9ComorbiditiesAhrq(ahrqTestDat, abbrevNames = TRUE, applyHierarchy = FALSE)
   expect_equal(dim(res), c(1,31))
-  expect_true(all(ahrqComorbidNamesAbbrev %in% names(res)))
-  expect_true(all(as.logical(res[1, unlist(ahrqComorbidNamesAbbrev)])))
+  expect_true(all(ahrqComorbidNamesHtnAbbrev %in% names(res)))
+  expect_true(all(as.logical(res[1, unlist(ahrqComorbidNamesHtnAbbrev)])))
+
+})
+
+# elixhauser orig
+
+test_that("elix comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, hier", {
+  res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, abbrevNames = FALSE, applyHierarchy = TRUE)
+  expect_equal(dim(res), c(1,31))
+  expect_true(all(elixhauserComorbidNames %in% names(res)))
+  expect_false(all(as.logical(res[1, unlist(elixhauserComorbidNames)])))# should not have dm and dmcx, etc
+  expect_false(res[1, "Diabetes, uncomplicated"])
+  expect_false(res[1, "Solid tumor without metastasis"])
+})
+
+test_that("elix comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, hier", {
+  res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, abbrevNames = TRUE, applyHierarchy = TRUE)
+  expect_equal(dim(res), c(1,31))
+  expect_true(all(elixhauserComorbidNamesAbbrev %in% names(res)))
+  expect_false(all(as.logical(res[1, unlist(elixhauserComorbidNamesAbbrev)]))) # should not have dm and dmcx, etc
+  expect_false(res[1, "DM"])
+  expect_false(res[1, "Tumor"])
+})
+
+test_that("elix comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, no hier", {
+  res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, abbrevNames = FALSE, applyHierarchy = FALSE)
+  expect_equal(dim(res), c(1,32)) #longer because 2x htn
+  expect_true(all(elixhauserComorbidNamesHtn %in% names(res))) # not applying hierarchy, so dm and dmcx can both be true
+  expect_true(all(as.logical(res[1, unlist(elixhauserComorbidNamesHtn)])))
+})
+
+test_that("elix comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, no hier", {
+  res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, abbrevNames = TRUE, applyHierarchy = FALSE)
+  expect_equal(dim(res), c(1,32))
+  expect_true(all(elixhauserComorbidNamesHtnAbbrev %in% names(res)))
+  expect_true(all(as.logical(res[1, unlist(elixhauserComorbidNamesHtnAbbrev)])))
+
+})
+
+# quan elixhauser
+
+test_that("qelix comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, hier", {
+  res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, abbrevNames = FALSE, applyHierarchy = TRUE)
+  expect_equal(dim(res), c(1,31))
+  expect_true(all(quanElixhauserComorbidNames %in% names(res)))
+  expect_false(all(as.logical(res[1, unlist(quanElixhauserComorbidNames)])))# should not have dm and dmcx, etc
+  expect_false(res[1, "Diabetes, uncomplicated"])
+  expect_false(res[1, "Solid tumor without metastasis"])
+})
+
+test_that("qelix comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, hier", {
+  res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, abbrevNames = TRUE, applyHierarchy = TRUE)
+  expect_equal(dim(res), c(1,31))
+  expect_true(all(quanElixhauserComorbidNamesAbbrev %in% names(res)))
+  expect_false(all(as.logical(res[1, unlist(quanElixhauserComorbidNamesAbbrev)]))) # should not have dm and dmcx, etc
+  expect_false(res[1, "DM"])
+  expect_false(res[1, "Tumor"])
+})
+
+test_that("qelix comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, no hier", {
+  res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, abbrevNames = FALSE, applyHierarchy = FALSE)
+  expect_equal(dim(res), c(1,32)) #longer because 2x htn
+  expect_true(all(quanElixhauserComorbidNamesHtn %in% names(res))) # not applying hierarchy, so dm and dmcx can both be true
+  expect_true(all(as.logical(res[1, unlist(quanElixhauserComorbidNamesHtn)])))
+})
+
+test_that("qelix comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, no hier", {
+  res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, abbrevNames = TRUE, applyHierarchy = FALSE)
+  expect_equal(dim(res), c(1,32))
+  expect_true(all(quanElixhauserComorbidNamesHtnAbbrev %in% names(res)))
+  expect_true(all(as.logical(res[1, unlist(quanElixhauserComorbidNamesHtnAbbrev)])))
 
 })
 
