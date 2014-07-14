@@ -1,3 +1,14 @@
+Version 0.4
+------------------------------------------------------------------------------
+
+* Present-on-arrival field handled gracefully
+* Revised co-morbidity handling, with functions specific to each mapping
+* Standardized naming of fields across Elixhauser and Charlson based mappings for clarity, consistency and comparaibility
+* Handle mild and severe co-morbidities without double-counting. Fixes issue #23
+* Enable magrittr-style piping as option to clarify chains of operations. Issue #5
+* many more test cases, including specific tests for individual values in each computed mapping, and also for the new comorbidity functions
+* Vignette updated to demonstrate clearer new functions
+
 Version 0.3
 ------------------------------------------------------------------------------
 

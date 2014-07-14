@@ -194,7 +194,7 @@ icd9ComorbiditiesAhrq <- function(icd9df,
                                   icd9Field = "icd9",
                                   isShort,
                                   validateMapping = FALSE,
-                                  abbrevNames = FALSE,
+                                  abbrevNames = TRUE,
                                   applyHierarchy = TRUE) {
 
   cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
@@ -239,7 +239,8 @@ icd9ComorbiditiesQuanDeyo <- function(icd9df,
     cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
     cbd[cbd[["LiverSevere"]] > 0, "LiverMild"] <- FALSE
   }
-  if (abbrevNames) names(cbd)[-1] <- charlsonComorbidNames
+  if (abbrevNames) { names(cbd)[-1] <- charlsonComorbidNamesAbbrev } else { names(cbd)[-1] <- charlsonComorbidNames }
+  cbd
 }
 
 #' @rdname icd9Comorbidities
@@ -310,6 +311,7 @@ icd9ComorbiditiesElixhauser <- function(icd9df,
 #' @template poaField
 #' @examples
 #' # using magrittr is beautiful:
+#' library("magrittr", quietly = TRUE, warn.conflicts = FALSE)
 #' myData <- data.frame(
 #'   visitId = c("v1", "v2", "v3", "v4"),
 #'   icd9 = c("39891", "39790", "41791", "4401"),
