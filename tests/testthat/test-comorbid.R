@@ -135,7 +135,7 @@ test_that("condense an ICD-9 code set to minimal group", {
 
 test_that("HTN subgroups all worked", {
   # pick one subcategory
-  expect_true(all(ahrqComorbidAll$HTNPREG %in% ahrqComorbid[["HTN"]]))
+  expect_true(all(ahrqComorbidAll$HTNPREG %in% ahrqComorbid[["HTNcx"]]))
 
   # and we didn't drop any:
   expect_true(all(ahrqComorbidAll$HTNCX %in% ahrqComorbid[["HTNcx"]]))
