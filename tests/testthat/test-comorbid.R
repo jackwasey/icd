@@ -135,12 +135,12 @@ test_that("condense an ICD-9 code set to minimal group", {
 
 test_that("HTN subgroups all worked", {
   # pick one subcategory
-  expect_true(all(ahrqComorbidAll$HTNPREG %in% ahrqComorbid$HTNCX))
+  expect_true(all(ahrqComorbidAll$HTNPREG %in% ahrqComorbid[["HTN"]]))
 
   # and we didn't drop any:
-  expect_true(all(ahrqComorbidAll$HTNCX %in% ahrqComorbid$HTNCX))
-  expect_true(all(ahrqComorbidAll$CHF %in% ahrqComorbid$CHF))
-  expect_true(all(ahrqComorbidAll$RENLFAIL %in% ahrqComorbid$RENLFAIL))
+  expect_true(all(ahrqComorbidAll$HTNCX %in% ahrqComorbid[["HTNcx"]]))
+  expect_true(all(ahrqComorbidAll$CHF %in% ahrqComorbid[["CHF"]]))
+  expect_true(all(ahrqComorbidAll$RENLFAIL %in% ahrqComorbid[["Renal"]]))
 
 })
 
@@ -173,10 +173,18 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 })
 
 test_that("Charlson Deyo mapping doesn't double count disease with multiple severities", {
-  # there should be no overlapping codes
-  expect_true(any(quanDeyoComorbid[["Mild Liver Disease"]] %nin% quanDeyoComorbid[["Moderate or Severe Liver Disease"]] ))
-  expect_true(any(quanDeyoComorbid[["Cancer"]] %nin% quanDeyoComorbid[["Metastatic Carcinoma"]] ))
-  expect_true(any(quanDeyoComorbid[["Diabetes without complications"]] %nin% quanDeyoComorbid[["Diabetes with complications"]] ))
+  expect_false(any(quanDeyoComorbid[["Mild Liver Disease"]] %in% quanDeyoComorbid[["Moderate or Severe Liver Disease"]] ))
+  expect_false(any(quanDeyoComorbid[["Cancer"]] %in% quanDeyoComorbid[["Metastatic Carcinoma"]] ))
+  expect_false(any(quanDeyoComorbid[["Diabetes without complications"]] %in% quanDeyoComorbid[["Diabetes with complications"]] ))
+})
+
+test_that("Elixhauser mapping doesn't double count disease with multiple severities", {
+  expect_false(any(quanElixhauserComorbid[["dm.uncomp"]] %in% quanElixhauserComorbid[["dm.comp"]] ))
+  expect_false(any(quanElixhauserComorbid[["solid.tumor"]] %in% quanElixhauserComorbid[["mets"]] ))
+  expect_false(any(elixhauserComorbid[["dm.uncomp"]] %in% elixhauserComorbid[["dm.comp"]] ))
+  expect_false(any(elixhauserComorbid[["solid.tumor"]] %in% elixhauserComorbid[["mets"]] ))
+  expect_false(any(ahrqComorbid[["DM"]] %in% ahrqComorbid[["DMCX"]] ))
+  expect_false(any(ahrqComorbid[["TUMOR"]] %in% ahrqComorbid[["METS"]] ))
 })
 
 

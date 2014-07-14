@@ -1,30 +1,30 @@
 #' @title ICD-9-CM chapters
 #' @name icd9CmChapters
-#' @description these are the top level chapter groupings. Not huge clinical signicance, but may be helpful in summarizing codes, grouping for human-readable output, and possibly as an input signal in case matching.
-#' \itemize{
-#' \item 001-139 Infectious And Parasitic Diseases
-#' \item 140-239 Neoplasms
-#' \item 240-279 Endocrine, Nutritional And Metabolic Diseases, And Immunity Disorders
-#' \item 280-289 Diseases Of The Blood And Blood-Forming Organs
-#' \item 290-319 Mental Disorders
-#' \item 320-389 Diseases Of The Nervous System And Sense Organs
-#' \item 390-459 Diseases Of The Circulatory System
-#' \item 460-519 Diseases Of The Respiratory System
-#' \item 520-579 Diseases Of The Digestive System
-#' \item 580-629 Diseases Of The Genitourinary System
-#' \item 630-679 Complications Of Pregnancy, Childbirth, And The Puerperium
-#' \item 680-709 Diseases Of The Skin And Subcutaneous Tissue
-#' \item 710-739 Diseases Of The Musculoskeletal System And Connective Tissue
-#' \item 740-759 Congenital Anomalies
-#' \item 760-779 Certain Conditions Originating In The Perinatal Period
-#' \item 780-799 Symptoms, Signs, And Ill-Defined Conditions
-#' \item 800-999 Injury And Poisoning
-#' \item V01-V91 Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services
-#' \item E000-E999 Supplementary Classification Of External Causes Of Injury And Poisoning
-#' }
+#' @description these are the top level chapter groupings. Not huge clinical
+#'   signicance, but may be helpful in summarizing codes, grouping for
+#'   human-readable output, and possibly as an input signal in case matching.
+#'
+#'   \itemize{ \item 001-139 Infectious And Parasitic Diseases \item 140-239
+#'   Neoplasms \item 240-279 Endocrine, Nutritional And Metabolic Diseases, And
+#'   Immunity Disorders \item 280-289 Diseases Of The Blood And Blood-Forming
+#'   Organs \item 290-319 Mental Disorders \item 320-389 Diseases Of The Nervous
+#'   System And Sense Organs \item 390-459 Diseases Of The Circulatory System
+#'   \item 460-519 Diseases Of The Respiratory System \item 520-579 Diseases Of
+#'   The Digestive System \item 580-629 Diseases Of The Genitourinary System
+#'   \item 630-679 Complications Of Pregnancy, Childbirth, And The Puerperium
+#'   \item 680-709 Diseases Of The Skin And Subcutaneous Tissue \item 710-739
+#'   Diseases Of The Musculoskeletal System And Connective Tissue \item 740-759
+#'   Congenital Anomalies \item 760-779 Certain Conditions Originating In The
+#'   Perinatal Period \item 780-799 Symptoms, Signs, And Ill-Defined Conditions
+#'   \item 800-999 Injury And Poisoning \item V01-V91 Supplementary
+#'   Classification Of Factors Influencing Health Status And Contact With Health
+#'   Services \item E000-E999 Supplementary Classification Of External Causes Of
+#'   Injury And Poisoning }
+#'
 #' @keywords datasets list
 #' @docType data
-#' @format list with chapter names stored in list names, each with two element named character vector with start and end codes.
+#' @format list with chapter names stored in list names, each with two element
+#'   named character vector with start and end codes.
 NULL
 
 #' @title ICD9-CM diagnosis code lookup
@@ -48,11 +48,16 @@ NULL
 #' @source This is the more easily machine-readable source which is used for
 #'   \code{icd9CmDesc}
 #'   \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+#'
 #' @source \url{http://wonder.cdc.gov/wonder/help/icd.html}
-#' @source \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
-#' @source \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
-#' @source \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icdcm.asp}
-#' @source \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
+#' @source
+#'   \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
+#' @source
+#'   \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
+#' @source
+#'   \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icdcm.asp}
+#' @source
+#'   \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
 #' @name icd9CmDesc
 NULL
 
@@ -82,6 +87,21 @@ NULL
 #' @name ahrqComorbidAll
 NULL
 
+#' @title AHRQ comorbidity names
+#' @description The names of the AHRQ comorbidities are almost identical to the
+#'   original Elixhauser names. They keep HTN combined, and drop arrhythmia,
+#'   giving a total of 29. These data are presented in lists because there is a
+#'   standard (arbitrary) order which is non-alphabetical, and is helpful to
+#'   preserve. Many R functions implicitly sort vectors of names, and having a
+#'   key to the original order is helpful.
+#' @docType data
+#' @keywords datasets
+#' @format list with character/numeric names, e.g. "02" = "Valvular disease"
+#' @source
+#' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
+#' @name ahrqComorbidNames
+NULL
+
 #' @title Quan adaptation of Deyo/Charlson comorbidities
 #' @description Derived programmatically from the SAS code used in the original
 #'   publication. According to the referenced study, this provides the best
@@ -100,8 +120,9 @@ NULL
 #'   Beck, Thomas E. Feasby, and William A. Ghali. "Coding Algorithms for
 #'   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
-#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307} unavailable:
-#'   unavailable: \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307} unavailable: unavailable:
+#'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+#'
 #'
 #' @name quanDeyoComorbid
 NULL
@@ -116,8 +137,9 @@ NULL
 #'   Beck, Thomas E. Feasby, and William A. Ghali. "Coding Algorithms for
 #'   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
-#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
-#'   unavailable: \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307} unavailable:
+#'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+#'
 
 #' @name quanElixhauserComorbid
 NULL
@@ -142,4 +164,29 @@ NULL
 #'   "Comorbidity Measures for Use with Administrative Data." Medical Care
 #'   January 1998 36, no. 1 (1998): 8-27.
 #' @name elixhauserComorbid
+NULL
+
+#' @title Elixhauser comorbidity names with hypertension subgroups
+#' @desscription These names are taken from the original paper. Uncomplicated
+#'   and complicated hypertension are listed separately, but are always
+#'   combined. Complicated DM excludes uncomplicated DM, and metastatic cancer
+#'   precludes solid tumor without metastasis.
+#' @format list, with character/numeric code. HTN numbered 6a and 6b. DM,
+#'   cancer, mets are counted as in the original paper giving the original 30
+#'   groups. "01" to "30"
+#' @references Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna
+#'   M. Coffey. "Comorbidity Measures for Use with Administrative Data." Medical
+#'   Care January 1998 36, no. 1 (1998): 8-27.
+#' @name elixhauserComorbidNamesHtn
+NULL
+
+#' @title Elixhauser comorbidity names with combined hypertension
+#' @desscription These names are taken from the original paper. Uncomplicated
+#'   and complicated hypertension are listed together, giving a simple list of
+#'   30 items  as in the original paper.
+#' @format list, with character/numeric code. "01" to "30"
+#' @references Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna
+#'   M. Coffey. "Comorbidity Measures for Use with Administrative Data." Medical
+#'   Care January 1998 36, no. 1 (1998): 8-27.
+#' @name elixhauserComorbidNames
 NULL

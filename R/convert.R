@@ -10,7 +10,6 @@
 icd9DecimalToShort <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
 
   if (!is.character(icd9Decimal)) stop("icd9DecimalToShort must be given character string, not a numeric type")
-
   if (length(icd9Decimal) == 0) return(character()) # question whether an empty vector is valid?
 
   icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal, invalidAction)
@@ -22,7 +21,7 @@ icd9DecimalToShort <- function(icd9Decimal, invalidAction = icd9InvalidActions) 
   y
 }
 
-#' @title icd9DecimalToParts
+#' @title convert decimal-form ICD-9 code to major and minor parts
 #' @template icd9-decimal
 #' @param minorEmpty vector of length one, to be used in place of
 #'   minor part of zero. Defaults to ""
@@ -58,15 +57,13 @@ icd9DecimalToMajor <- function(icd9Decimal, invalidAction = icd9InvalidActions) 
   icd9DecimalToParts(icd9Decimal = icd9Decimal, invalidAction = match.arg(invalidAction))[["major"]]
 }
 
-
-
-#' @title icd9ShortToDecimal
+#' @title convert short-form ICD-9 code to decimal form
 #' @description converts ICD-9 'short' form to decimal form
 #' @template icd9-short
 #' @template invalid
-#' @export
 #' @family ICD-9 convert
 #' @keywords manip
+#' @export
 icd9ShortToDecimal <- function(icd9Short, invalidAction = icd9InvalidActions) {
   # prevalidate regardless of invalidAction - TODO: ensure this is done consistently for every public entry point.
   if (class(icd9Short) != "character")

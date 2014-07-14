@@ -51,7 +51,9 @@ memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
 #' @return logical vector of which icd9 match or are subcategory of
 #'   icd9Referenec
 #' @keywords internal
-icd9InReferenceCode <- function(icd9, icd9Reference, isShort = TRUE, isShortReference = TRUE, validate = FALSE, validateReference = FALSE) {
+icd9InReferenceCode <- function(icd9, icd9Reference,
+                                isShort = TRUE, isShortReference = TRUE,
+                                validate = FALSE, validateReference = FALSE) {
 
   if (!class(icd9) %in% c("character", "numeric", "integer"))
     stop("icd9InReferenceCode expects a character or number vector for icd9, but got: ", class(icd9))
@@ -69,7 +71,8 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort = TRUE, isShortRefe
   if (length(isShortReference) == 0)
     stop("icd9InReferenceCode got empty vector for isShortReference, expected single TRUE or FALSE value")
 
-  if (length(icd9Reference) == 0) stop("icd9InReferenceCode expects at least one icd9 code to test against")
+  if (length(icd9Reference) == 0)
+    stop("icd9InReferenceCode expects at least one icd9 code to test against")
 
   if (validate) stopIfInvalidIcd9(icd9, isShort = isShort)
   if (validateReference) stopIfInvalidIcd9(icd9Reference, isShort = isShortReference)
@@ -97,7 +100,11 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort = TRUE, isShortRefe
 
 #' @title find comorbidities from ICD-9 codes.
 #' @description This is the main function which extracts co-morbidities from a
-#'   set of ICD-9 codes.
+#'   set of ICD-9 codes. This is when some trivial post-processing of the
+#'   comorbidity data is done, e.g. renaming to human-friendly field names, and
+#'   updating fields according to rules. The exact fields from the original
+#'   mappings can be obtained using \code{applyHierarchy = FALSE}, but for
+#'   comorbidity counting, Charlson Score, etc., the rules should be applied.
 #' @param icd9df data.frame with fields specified by visitId and icd9Code.
 #'   icd9Code is assumed to be a non-decimal 'short' form ICD9 code. There is a
 #'   many to many ratio of icd9:visitId. This table contains multiple visitId
@@ -112,12 +119,22 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort = TRUE, isShortRefe
 #'   with the names of the items corresponding to the comorbidities (e.g. "HTN",
 #'   or "diabetes") and the contents of each list item being a character vector
 #'   of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
+#'   No default: user should prefer to use the derivative functions, e.g.
+#'   icd9ComorbiditiesAhrq, since these also provide appropriate naming for the
+#'   fields, and squashing the hierarchy (see \code{applyHierarchy} below)
 #' @param validateMapping logical, whether to validate all the ICD-9 codes in
 #'   the mapping list. Default is not to check. If validation fails, stop with
 #'   an error. This is probably worth doing at least once for each mapping used,
 #'   since there should never be an error in mapping. There is overhead to check
 #'   the mapping each time, so not done by default. Could consider using
 #'   \code{memoise} to cache the result of the check. (TODO)
+#' @param longNames single locical value that defaults to \code{TRUE}, in which
+#'   case the more human-readable names stored in e.g. \code{ahrqComorbidNames}
+#'   are applied to the data frame column names.
+#' @param applyHierarchy single logical value that defaults to \code{TRUE}, in
+#'   which case the hierarchy defined for the mapping is applied. E.g. in
+#'   Elixhauser, you can't have uncomplicated and complicated diabetes both
+#'   flagged.
 #' @param isShortMapping logical, whether the mapping is defined with short
 #'   ICD-9 codes (TRUE, the default), or decimal if set to FALSE.
 #' @export
@@ -125,7 +142,7 @@ icd9Comorbidities <- function(icd9df,
                               visitId = "visitId",
                               icd9Field = "icd9",
                               isShort,
-                              icd9Mapping = ahrqComorbid,
+                              icd9Mapping,
                               validateMapping = FALSE,
                               isShortMapping = TRUE) {
 
@@ -172,42 +189,110 @@ icd9Comorbidities <- function(icd9df,
 
 #' @rdname icd9Comorbidities
 #' @export
- icd9ComorbiditiesAhrq <- function(icd9df,
-                                   visitId = "visitId",
-                                   icd9Field = "icd9",
-                                   isShort,
-                                   validateMapping = FALSE) {
-   icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field, isShort = isShort, icd9Mapping = ahrqComorbid)
- }
-
-#' @rdname icd9Comorbidities
-#' @export
-icd9ComorbiditiesQuanDeyo <- function(icd9df,
+icd9ComorbiditiesAhrq <- function(icd9df,
                                   visitId = "visitId",
                                   icd9Field = "icd9",
                                   isShort,
-                                  validateMapping = FALSE) {
-  icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field, isShort = isShort, icd9Mapping = quanDeyoComorbid)
+                                  validateMapping = FALSE,
+                                  abbrevNames = FALSE,
+                                  applyHierarchy = TRUE) {
+
+  cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
+                    isShort = isShort, icd9Mapping = ahrqComorbid)
+  if (applyHierarchy) {
+
+    # Use >0 rather than logical - apparently faster, and future proof against
+    # change to binary from logical values in the matirx.
+    cbd[cbd[["Mets"]] > 0, "Tumor"] <- 0
+    cbd[cbd[["DM"]] > 0, "DMcx"] <- 0
+    # HTN already combined in AHRQ
+  }
+  if (abbrevNames) { names(cbd)[-1] <- ahrqComorbidNamesAbbrev } else { names(cbd)[-1] <- ahrqComorbidNames }
+  cbd
+}
+
+#' @rdname icd9Comorbidities
+#' @description For Charlson-based comorbidities, strictly speaking, there is no
+#'   dropping of more e.g. uncomplicated DM if complicated DM exists, however,
+#'   this is probaably useful, in general and is essential when calculating the
+#'   Charlson score.
+#' @export
+icd9ComorbiditiesQuanDeyo <- function(icd9df,
+                                      visitId = "visitId",
+                                      icd9Field = "icd9",
+                                      isShort,
+                                      validateMapping = FALSE,
+                                      abbrevNames = TRUE,
+                                      applyHierarchy = TRUE) {
+  cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
+                    isShort = isShort, icd9Mapping = quanDeyoComorbid)
+  if (applyHierarchy) {
+
+    # Use >0 rather than logical - apparently faster, and future proof against
+    # change to binary from logical values in the matirx.
+    cbd[cbd[["Metastatic Carcinoma"]] > 0, "Cancer"] <- 0
+    cbd[cbd[["Diabetes with complications"]] > 0, "Diabetes without complications"] <- 0
+    cbd[cbd[["Moderate or Severe Liver Disease"]] > 0, "Mild Liver Disease"] <- 0
+  }
+  if (abbrevNames) names(cbd)[-1] <- CharlsonComorbidNames
 }
 
 #' @rdname icd9Comorbidities
 #' @export
 icd9ComorbiditiesQuanElixhauser <- function(icd9df,
-                                  visitId = "visitId",
-                                  icd9Field = "icd9",
-                                  isShort,
-                                  validateMapping = FALSE) {
-  icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field, isShort = isShort, icd9Mapping = quanElixhauserComorbid)
+                                            visitId = "visitId",
+                                            icd9Field = "icd9",
+                                            isShort,
+                                            validateMapping = FALSE,
+                                            rename = TRUE,
+                                            applyHierarchy = TRUE) {
+  cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
+                    isShort = isShort, icd9Mapping = quanElixhauserComorbid)
+  if (applyHierarchy) {
+
+    # Use >0 rather than logical - apparently faster, and future proof against
+    # change to binary from logical values in the matirx.
+    cbd[cbd[["mets"]] > 0, "solid tumor"] <- 0
+    cbd[cbd[["dm.comp"]] > 0, "dm.uncomp"] <- 0
+    # combine HTN
+    cbd[["htn"]] <- cbd[["htn"]] + cbd[["htncx"]] > 0
+    cbd[["htncx"]] <- NULL
+
+    if (rename) names(cbd)[-1] <- quanElixhauserComorbidNames
+  } else {
+    # if we didn't apply the hierarchy, we have to use the naming scheme with HTN separated out:
+
+    # assume that the comorbidities are the last 31 fields. At present, the
+    # icd9Comorbidities function doesn't attempt to aggregate fields it doesn't
+    # know about, e.g. POA, or anything else the user provides in the data
+    # frame, so these are just dropped, leaving the fields for visitId and all
+    # the comorbidities:
+    if (rename) names(cbd)[-1] <- quanElixhauserComorbidNamesHtn
+  }
+  cbd
 }
 
 #' @rdname icd9Comorbidities
 #' @export
 icd9ComorbiditiesElixhauser <- function(icd9df,
-                                  visitId = "visitId",
-                                  icd9Field = "icd9",
-                                  isShort,
-                                  validateMapping = FALSE) {
-  icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field, isShort = isShort, icd9Mapping = elixhauserComorbid)
+                                        visitId = "visitId",
+                                        icd9Field = "icd9",
+                                        isShort,
+                                        validateMapping = FALSE,
+                                        rename = TRUE,
+                                        applyHierarchy = TRUE) {
+  cbd <- icd9Comorbidities(icd9df = icd9df, visitId = visitId, icd9Field = icd9Field,
+                           isShort = isShort, icd9Mapping = elixhauserComorbid)
+  if (applyHierarchy) {
+    cbd[cbd[["mets"]] > 0, "solid tumor"] <- 0
+    cbd[cbd[["dm.comp"]] > 0, "dm.uncomp"] <- 0
+    cbd[["htn"]] <- cbd[["htn"]] + cbd[["htncx"]] > 0
+    cbd[["htncx"]] <- NULL
+    if (rename) names(cbd)[-1] <- elixhauserComorbidNames
+  } else {
+    if (rename) names(cbd)[-1] <- elixhauserComorbidNamesHtn
+  }
+  cbd
 }
 
 #' @title filters data frame based on present-on-arrival flag
@@ -219,7 +304,12 @@ icd9ComorbiditiesElixhauser <- function(icd9df,
 #' @template poaField
 #' @examples
 #' # using magrittr is beautiful:
-#' myData <- data.frame(visitId = c("v1", "v2", "v3", "v4"), icd9 = c("39891", "39790", "41791", "4401"), poa = c("Y", "N", NA, "Y"), stringsAsFactors = FALSE)
+#' myData <- data.frame(
+#'   visitId = c("v1", "v2", "v3", "v4"),
+#'   icd9 = c("39891", "39790", "41791", "4401"),
+#'   poa = c("Y", "N", NA, "Y"),
+#'   stringsAsFactors = FALSE
+#' )
 #' myData %>% icd9FilterPoaNotNo() %>% icd9ComorbiditiesAhrq(isShort = TRUE)
 #' # can fill out named fields also:
 #' myData %>% icd9FilterPoaYes(poaField="poa") %>% icd9ComorbiditiesAhrq(icd9Field = "icd9", visitId = "visitId")

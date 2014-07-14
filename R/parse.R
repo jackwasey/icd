@@ -1,4 +1,12 @@
-
+#' @title parse all known mappings and save to development tree
+#' @param saveDir directory to save in, default is \code{~/icd9/data}
+#' @keywords internal
+icd9ParseAndSaveMappings <- function(saveDir = "~/icd9/data") {
+  parseAhrqSas(save = TRUE, saveDir = saveDir)
+  parseElixhauser(save = TRUE, saveDir = saveDir)
+  parseQuanDeyoSas(save = TRUE, saveDir = saveDir)
+  parseQuanElixhauser(save = TRUE, saveDir = saveDir)
+}
 #' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and
 #'   parses into RData. It is then saved in the development tree data directory,
@@ -79,12 +87,15 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
     ahrqComorbidAll <- lapply(ahrqComorbidAll, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
   }
 
+  names(ahrqComorbid) <- ahrqComorbidNamesHtnAbbrev;
+
   # save the data in the development tree, so the package user doesn't need to
   # decode it themselves.
   if (save) saveSourceTreeData("ahrqComorbidAll", path = saveDir)
   if (save) saveSourceTreeData("ahrqComorbid", path = saveDir)
 
   if (returnAll) return(invisible(ahrqComorbidAll))
+
   invisible(ahrqComorbid)
 }
 
@@ -133,8 +144,8 @@ parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE, sav
     quanDeyoComorbid <- lapply(quanDeyoComorbid, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
   }
 
+  names(quanDeyoComorbid) <- charlsonComorbidNamesAbbrev
   if (save) saveSourceTreeData("quanDeyoComorbid", path = saveDir)
-
   invisible(quanDeyoComorbid)
 }
 
@@ -183,6 +194,7 @@ parseQuanElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd
   } else {
     quanElixhauserComorbid <- lapply(quanElixhauserComorbid, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
   }
+  names(quanElixhauserComorbid) <- quanElixhauserComorbidNamesHtnAbbrev
   if (save) saveSourceTreeData("quanElixhauserComorbid", path = saveDir)
   invisible(quanElixhauserComorbid)
 }
@@ -237,19 +249,19 @@ parseElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd9/da
     elixhauserComorbid <- lapply(elixhauserComorbid, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
   }
 
+  names(elixhauserComorbid) <- elixhauserComorbidNamesHtnAbbrev
   if (save) saveSourceTreeData("elixhauserComorbid", path = saveDir)
-
   invisible(elixhauserComorbid)
 }
 
 # AHRQ hierarchy.
 
 parseAhrqHierarchy <- function() {
-read.zip.url(
-  url = "http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip",
-  filename = "ccs_multi_dx_tool_2013.csv",
-  FUN = read.csv,
-  row.names = NULL
+  read.zip.url(
+    url = "http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip",
+    filename = "ccs_multi_dx_tool_2013.csv",
+    FUN = read.csv,
+    row.names = NULL
   )
 }
 # 'single level' CCS AHRQ diagnoses:
@@ -269,7 +281,7 @@ parseIcd9Chapters <- function() {
     url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip",
     filename = "Dtab10.RTF",
     warn = FALSE
-    )
+  )
   out <- strMultiMatch(pattern = "\\}([VvEe]?[0-9]{3})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
 
   #validate:
@@ -280,6 +292,5 @@ parseIcd9Chapters <- function() {
   stopifnot(refMajors[majors %nin% refMajors %>% length == 0])
   print("the following category codes have child codes in the ICD-9-CM code list, but did not have descriptions extracted from the RTF.")
   print(refMajors[refMajors %nin% majors])
-
-
+  #TODO complete this function
 }
