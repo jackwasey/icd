@@ -260,3 +260,45 @@ test_that("filter POA - just Y and N should be complementary", {
   expect_identical(icd9FilterPoaNo(dfrm),  icd9FilterPoaNotYes(dfrm))
   expect_identical(icd9FilterPoaYes(dfrm), icd9FilterPoaNotNo(dfrm))
 })
+
+
+test_that("sample of ICD-9 codes from the original sources do appear in my data", {
+  # these tests demonstrate that the interpreted data is correctly transcribed
+  # in cases where the data is structured differently, and also affirms that
+  # 'child' codes are included in the RData mappings in the package. E.g. if the
+  # mapping specifies "044", we do expect 111 total codes to be in the mapping
+  # 0440 04400 04401 etc. Ahrq
+  expect_true("3337" %in% ahrqComorbid$NeuroOther) # single value
+  expect_true("33370" %in% ahrqComorbid$NeuroOther) # single value sub-code
+  expect_true("494" %in% ahrqComorbid$Pulmonary) # single top-level value at start of range
+  expect_true("4940" %in% ahrqComorbid$Pulmonary) # value within range
+  expect_true("49400" %in% ahrqComorbid$Pulmonary) # sub-value within range
+
+  # Quan Deyo Charlson
+  expect_true("410" %in% quanDeyoComorbid$MI) # top level single value
+  expect_false("411" %in% quanDeyoComorbid$MI) # this is not included (410 and 412 defined)
+  expect_false("41199" %in% quanDeyoComorbid$MI) # this is not included (410 and 412 defined)
+  expect_true("4100" %in% quanDeyoComorbid$MI) # midlevel value, not from range
+  expect_true("41001" %in% quanDeyoComorbid$MI) # lower-level value, not from range
+  expect_true("2504" %in% quanDeyoComorbid$DMcx) # midlevel definition
+  expect_true("25041" %in% quanDeyoComorbid$DMcx) # midlevel definition lower-level code
+
+})
+
+test_that("sample of ICD-9 codes from manually specified mappings do appear", {
+  # the following tests cover the mappings in which there was no source SAS
+  # data, but the numbers were transcribed manually. This is therefore testing a
+  # little of the transcription, and also the elobration of codes definied in
+  # ranges
+  expect_true("2500" %in% quanElixhauserComorbid$DM)
+  expect_true("2501" %in% quanElixhauserComorbid$DM)
+  expect_true("25011" %in% quanElixhauserComorbid$DM)
+  expect_true("276" %in% quanElixhauserComorbid$FluidsLytes)
+  expect_true("2761" %in% quanElixhauserComorbid$FluidsLytes)
+  expect_true("27612" %in% quanElixhauserComorbid$FluidsLytes)
+  expect_false("710" %in% quanElixhauserComorbid$FluidsLytes) # top level should not be included automatically
+  expect_true("09320" %in% elixhauserComorbid$Valvular)
+  expect_true("3971" %in% elixhauserComorbid$Valvular)
+  expect_true("V560" %in% elixhauserComorbid$Renal)
+  expect_true("V1090" %in% elixhauserComorbid$Tumor) # child at end of a V range
+})
