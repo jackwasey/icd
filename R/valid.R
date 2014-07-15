@@ -163,36 +163,44 @@ icd9ValidShort <- function(icd9Short) {
 
 #' @rdname icd9ValidShort
 #' @export
-icd9ValidShortV <- function(icd9Short)
+icd9ValidShortV <- function(icd9Short) {
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", icd9Short)
+}
 
 #' @rdname icd9ValidShort
 #' @export
-icd9ValidShortE <- function(icd9Short)
-  grepl("^[[:space:]]*[Ee][89][[:digit:]]{2,3}[[:space:]]*$", icd9Short)
+icd9ValidShortE <- function(icd9Short) {
+  # need Perl regex for lookbehind. may even be quicker, according to the docs.
+  grepl("^[Ee](?!0+$)[[:digit:]]{1,4}$", trim(icd9Short), perl = TRUE)
+}
 
 #' @rdname icd9ValidShort
 #' @export
-icd9ValidShortN <- function(icd9Short)
+icd9ValidShortN <- function(icd9Short) {
   grepl("^[[:space:]]*[[:digit:]]{1,5}[[:space:]]*$", icd9Short) # need to allow 0, but not 0.xx as valid code
+}
 
 #' @rdname icd9ValidDecimal
 #' @export
-icd9ValidDecimalV <- function(icd9Decimal)
+icd9ValidDecimalV <- function(icd9Decimal) {
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
         icd9Decimal)
+}
 
 #' @rdname icd9ValidDecimal
 #' @export
-icd9ValidDecimalE <- function(icd9Decimal)
-  grepl("^[[:space:]]*[Ee][89][[:digit:]]{2}(\\.[[:digit:]]?)?[[:space:]]*$", icd9Decimal)
+icd9ValidDecimalE <- function(icd9Decimal) {
+  # need Perl regex for lookbehind. may even be quicker, according to the docs.
+  grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$", trim(icd9Decimal), perl = TRUE)
+}
 
 #' @rdname icd9ValidDecimal
 #' @note TODO: icd9ValidDecimalN not quite right, since it would validate 0.12
 #' @export
-icd9ValidDecimalN <- function(icd9Decimal)
+icd9ValidDecimalN <- function(icd9Decimal) {
   grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
         icd9Decimal)
+}
 
 #' @title validate a major part
 #' @description validation for just the 'major' part of an ICD-9 code. This can in fact be provided as a numeric, since there is no ambiguity. Numeric-only codes should be one to three digitis, V codes are followed by one or two digits, and E codes always by three digits between 800 and 999.
