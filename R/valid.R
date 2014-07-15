@@ -311,12 +311,41 @@ icd9InvalidShort <- function(icd9Short) {
 #' microbenchmark(times = 1000, grepl(pattern = "[EeVv]", rnd))
 #' }
 #' @keywords internal
-icd9IsVE <- function(icd9)
+icd9IsVE <- function(icd9) {
   grepl(pattern = "[EeVv]", icd9)
+}
 
-icd9IsV <- function(icd9)
+icd9IsV <- function(icd9) {
   grepl(pattern = "[Vv]", icd9)
+}
 
-icd9IsE <- function(icd9)
+icd9IsE <- function(icd9) {
   grepl(pattern = "[Ee]", icd9)
+}
 
+#' @title Does ICD-9 code exist
+#' @description This is different from syntactic validity: it looks it up in the list of icd9 codes. This may have been easier all along, but checking syntactic validity still very useful, with a changing list of icd-9 codes over time, and possibly imperfections in the master list derived from CMS.
+#' @param icd9-any
+#' @param isShort
+#' @param invalid
+#' @return logical vector
+#' @export
+icd9Real <- function(icd9, isShort, invalidAction = icd9InvalidActions ) {
+  invalidAction = match.arg(invalidAction)
+  if (isShort) return(icd9RealShort(icd9, invalidAction = invalidAction))
+  icd9RealDecimal(icd9, invalidAction = invalidAction)
+}
+
+#' @rdname icd9Real
+#' @template icd9-short
+icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
+  icd9ValidNaWarnStopShort(icd9Short = icd9Short, invalidAction = match.arg(invalidAction))
+  icd9Short %in% icd9CmDesc[["icd9"]]
+}
+
+#' @rdname icd9Real
+#' @template icd9-decimal
+icd9RealDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
+  icd9ValidNaWarnStopDecimal(icd9Decimal, match.arg(invalidAction))
+  icd9RealShort(icd9DecimalToShort(icd9Decimal, invalidAction = "silent"))
+}

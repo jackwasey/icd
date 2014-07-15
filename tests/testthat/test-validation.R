@@ -181,8 +181,8 @@ test_that("valid short form E codes - invalid input", {
   expect_false(icd9ValidShortE(" "))
   expect_false(icd9ValidShortE("   "))
   expect_false(icd9ValidShortE("."))
-# now test by routing through the higher level function (which is really the
-# only one that should be used)
+  # now test by routing through the higher level function (which is really the
+  # only one that should be used)
   expect_false(icd9ValidShort("0E1"))
   expect_false(icd9ValidShort("E"))
   expect_false(icd9ValidShort("E."))
@@ -286,4 +286,22 @@ test_that("NA warn stop switch handles NA values", {
   expect_equal(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "ignore"), NA_character_)
   expect_equal(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "silent"), NA_character_)
   expect_equal(warnNa, NA_character_)
+})
+
+test_that("check icd-9 code is really in the list, not just syntactically valid", {
+  expect_true(icd9RealShort("8027"))
+  expect_true(icd9RealShort("E9329"))
+  expect_false(icd9RealShort("J8027"))
+  expect_false(icd9RealShort("802.7"))
+  expect_true(icd9RealDecimal("802.7"))
+  expect_true(icd9RealDecimal("E932.9"))
+  expect_false(icd9RealDecimal("E9329"))
+  expect_false(icd9RealDecimal("J80.27"))
+  expect_false(icd9RealDecimal("V802.7"))
+
+  expect_equal(icd9RealDecimal("V802.7"), FALSE)
+  expect_equal(icd9RealDecimal("V802.7", invalidAction = "silent"), FALSE)
+  expect_error(icd9RealDecimal("V802.7", invalidAction = "stop"))
+  expect_error(icd9RealShort("V802.7", invalidAction = "stop"))
+  expect_equal(icd9Real(c("8027", "E9329", "E000"), isShort = TRUE), c(TRUE, TRUE, FALSE))
 })
