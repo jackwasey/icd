@@ -123,7 +123,6 @@ NULL
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307} unavailable:
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #'
-
 #' @name quanElixhauserComorbid
 NULL
 
@@ -150,19 +149,24 @@ NULL
 NULL
 
 #' @title Comorbidity names
-#' @description In the Elixhauser derived mappings, uncomplicated
-#'   and complicated hypertension are listed separately, but are always
-#'   combined in the final analyses. Both HTN separate and merged are provided. Complicated DM excludes uncomplicated DM, and metastatic cancer
-#'   precludes solid tumor without metastasis. Abbrev suffix indicates a very short space-free description. Quan's version of Elixhauser is identical. AHRQ's update drops the arrythmia field. The Naming convention with neither/either/both suffixes \code{Htn} and \code{Abbrev}.
-#' The Charlson derived mappings do not include hypertension.
+#' @description In the Elixhauser derived mappings, uncomplicated and
+#'   complicated hypertension are listed separately, but are always combined in
+#'   the final analyses. Uncomplicated and complicated hypertension are list
+#'   separately and as "Hypertension, combined." Abbrev suffix indicates a very
+#'   short space-free description. Quan's version of Elixhauser is identical.
+#'   AHRQ's update drops the arrythmia field. The Naming convention with
+#'   neither/either/both suffixes \code{Htn} and \code{Abbrev}. The Charlson
+#'   derived mappings do not include hypertension.
 #' @format list, with character/numeric code. HTN numbered 6a and 6b. DM,
 #'   cancer, mets are counted as in the original paper giving the original 30
 #'   groups. "01" to "30"
-#' @references Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna
-#'   M. Coffey. "Comorbidity Measures for Use with Administrative Data." Medical
-#'   Care January 1998 36, no. 1 (1998): 8-27.
 #' @name elixhauserComorbidNames
-#' @aliases elixhauserComorbidNamesAbbrev elixhauserComorbidNamesHtn elixhauserComorbidNamesHtnAbbrev quanElixhauserComorbidNames quanElixhauserComorbidNamesAbbrev quanElixhauserComorbidNamesHtn quanElixhauserComorbidNamesHtnAbbrev ahrqComorbidNames ahrqComorbidNamesAbbrev ahrqComorbidNamesHtn ahrqComorbidNamesHtnAbbrev charlsonComorbidNames charlsonComorbidNamesAbbrev
+#' @aliases elixhauserComorbidNamesAbbrev elixhauserComorbidNamesHtn
+#'   elixhauserComorbidNamesHtnAbbrev quanElixhauserComorbidNames
+#'   quanElixhauserComorbidNamesAbbrev quanElixhauserComorbidNamesHtn
+#'   quanElixhauserComorbidNamesHtnAbbrev ahrqComorbidNames
+#'   ahrqComorbidNamesAbbrev ahrqComorbidNamesHtn ahrqComorbidNamesHtnAbbrev
+#'   charlsonComorbidNames charlsonComorbidNamesAbbrev
 #' @keywords datasets
 #' @docType data
 NULL

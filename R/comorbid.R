@@ -300,6 +300,7 @@ icd9ComorbiditiesElixhauser <- function(icd9df,
 #' @template poaField
 #' @template poa
 #' @examples
+#' \dontrun{
 #' # using magrittr is beautiful:
 #' library("magrittr", quietly = TRUE, warn.conflicts = FALSE)
 #' myData <- data.frame(
@@ -310,11 +311,16 @@ icd9ComorbiditiesElixhauser <- function(icd9df,
 #' )
 #' myData %>% icd9FilterPoaNotNo() %>% icd9ComorbiditiesAhrq(isShort = TRUE)
 #' # can fill out named fields also:
-#' myData %>% icd9FilterPoaYes(poaField="poa") %>% icd9ComorbiditiesAhrq(icd9Field = "icd9", visitId = "visitId")
+#' myData %>% icd9FilterPoaYes(poaField="poa") %>%
+#'   icd9ComorbiditiesAhrq(icd9Field = "icd9", visitId = "visitId")
 #' # can call the core icd9Comorbidities function with an arbitrary mapping
 #' myData %>%
 #' icd9FilterPoaYes() %>%
-#' icd9Comorbidities(icd9Field = "icd9", visitId = "visitId", icd9Mapping = quanElixhauserComorbid, validateMapping = TRUE, isShortMapping = TRUE)
+#' icd9Comorbidities(icd9Field = "icd9", visitId = "visitId",
+#'   icd9Mapping = quanElixhauserComorbid,
+#'  validateMapping = TRUE,
+#'  isShortMapping = TRUE)
+#' }
 #' @export
 icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
   poa = match.arg(poa)
