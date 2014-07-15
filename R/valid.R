@@ -67,10 +67,12 @@ icd9ValidNaWarnStop <- function(icd9, isShort, isMajor = FALSE, invalidAction = 
 }
 
 #' @title warn or stop with message based on switch
+#' @description Note that the default action is "stop," not "warn" here.
+#'   "ignore" and "silent" are synonymous.
 #' @param ... message components passed on to \code{warning} or \code{stop}
 #' @param invalid
 #' @keywords internal
-icd9WarnStopMessage <- function(..., invalidAction = c("stop", "warn", "silent")) {
+icd9WarnStopMessage <- function(..., invalidAction = c("stop", "warn", "silent", "ignore")) {
   invalidAction <- match.arg(invalidAction)
   if (invalidAction == "warn") warning(...)
   if (invalidAction == "stop") stop(...)
@@ -337,6 +339,7 @@ icd9Real <- function(icd9, isShort, invalidAction = icd9InvalidActions ) {
 }
 
 #' @rdname icd9Real
+#' @export
 #' @template icd9-short
 icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
   icd9ValidNaWarnStopShort(icd9Short = icd9Short, invalidAction = match.arg(invalidAction))
@@ -345,6 +348,7 @@ icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
 
 #' @rdname icd9Real
 #' @template icd9-decimal
+#' @export
 icd9RealDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
   icd9ValidNaWarnStopDecimal(icd9Decimal, match.arg(invalidAction))
   icd9RealShort(icd9DecimalToShort(icd9Decimal, invalidAction = "silent"))

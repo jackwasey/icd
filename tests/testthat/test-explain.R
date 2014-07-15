@@ -55,4 +55,29 @@ test_that("expalin a single top level ICD-9 code without a top level explanation
   )
 })
 
+test_that("guess icd9 types: short", {
+  expect_true(icd9GuessIsShort("12345"))
+  expect_true(icd9GuessIsShort("1234"))
+})
+
+test_that("guess icd9 types: ambiguous", {
+  expect_equal(icd9GuessIsShort("123"), NA)
+  expect_equal(icd9GuessIsShort(c("123.4","2345")), NA)
+})
+
+test_that("guess icd9 types: decimal", {
+  expect_false(icd9GuessIsShort("123.45"))
+  expect_false(icd9GuessIsShort("123.4"))
+  expect_false(icd9GuessIsShort("123."))
+})
+
+test_that("guess icd9 types: invalid", {
+  expect_equal(icd9GuessIsShort(NA_character_), NA)
+  expect_error(icd9GuessIsShort(NA_character_, invalidAction = "stop"))
+  expect_warning(icd9GuessIsShort("mogli", invalidAction = "warn"))
+  expect_warning(icd9GuessIsShort(c(100, 200, 300, 400, 500, "mogli"), invalidAction = "warn"))
+  expect_warning(icd9GuessIsShort(c(100.1, 200.2, 300.3, 400.4, 500.5, "mogli"), invalidAction = "warn"))
+  expect_warning(icd9GuessIsShort(c(1001, 2002, 3003, 4004, 5005, "mogli"), invalidAction = "warn"))
+})
+
 #TODO, set up long chain of multiple conversions as kind of integration test, and to flush out errors.

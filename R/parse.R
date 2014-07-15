@@ -270,6 +270,52 @@ parseAhrqHierarchy <- function() {
 # 'multi level' CCS AHRQ diagnoses
 # http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip
 
+#' @title read the ICD-9-CM description data as provided by the Center for
+#'   Medicaid Services.
+#' @description ICD9-CM data unfortunately has no comma separation, so have to
+#'   pre-process. Note that this canonical data doesn't specify non-diagnostic
+#'   higher-level codes, just the specific diagnostic 'child' codes.
+#' @details ideally would get ICD9-CM data zip directly from CMS web page, and
+#'   extract, but the built-in unzip only extracts the first file in a zip.
+#' @param icd9path path of the source data which is in /extddata in the
+#'   installed package, but would be in inst/extdata in development tree.
+#' @param save logical whether to attempt to save output in package source tree
+#'   data directory
+#' @param path Absolute path in which to save parsed data
+#' @return invisibly return the result
+#' @export
+parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt",
+                                               package = 'icd9'),
+                        save = FALSE,
+                        path = "~/icd9/data") {
+  f <- file(icd9path, "r")
+  r <- readLines(f, encoding = "latin1")
+  close(f)
+  r <- strsplit(r, " ")
+  icd9LongCode <- lapply(r, FUN = function(row) row[1])
+  icd9LongDesc <- lapply(r, FUN = function(row) paste(row[-c(1,2)], collapse = " "))
+
+  f <- file(system.file("extdata", "CMS32_DESC_SHORT_DX.txt", package='icd9'), "r")
+  r <- readLines(f) # this is ascii
+  close(f)
+  r <- strsplit(r, " ")
+  icd9ShortCode <- lapply(r, FUN = function(row) row[1])
+  icd9ShortDesc <- lapply(r, FUN = function(row) paste(row[-c(1,2)], collapse = " "))
+  icd9CmDesc <- data.frame(
+    icd9 = unlist(icd9LongCode),
+    descLong = unlist(icd9LongDesc),
+    descisShort = unlist(icd9ShortDesc),
+    stringsAsFactors = FALSE)
+
+  # attempt to write the date from the source file to RData in the package source tree.
+  if (save) saveSourceTreeData("icd9CmDesc", path = path)
+
+  message("The following long descriptions contain UTF-8 codes:")
+  message(paste(icd9CmDesc[grep(pattern = "UTF", Encoding(icd9CmDesc$descLong)), ], sep = ", "))
+
+  invisible(icd9CmDesc)
+}
+
 #' @title parse list of top-level ICD-9 chapters from canonical data from CDC.
 #' @description There is no easily machine-readable list of the three digit (I call the 'major') ICD-9 code chapters. This code downloads a pretty RTF file and extracts these codes with their names. WORK IN PROGRESS!
 #' @import magrittr
@@ -294,3 +340,4 @@ parseIcd9Chapters <- function() {
   print(refMajors[refMajors %nin% majors])
   #TODO complete this function
 }
+

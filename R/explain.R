@@ -65,67 +65,49 @@ icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
   icd9Explain.character(as.character(icd9), isShort = isShort)
 }
 
-#' @title describe ICD-9 codes, guess whether short or long
+#' @title guess whether short or long
 #' @description partly implemented. Goal is to guess whether codes are short or
 #'   decimal form, then to call icd9Explain with the condense argument.
 #'   Currently condense works, but not with the icd9 lookup table currently in
-#'   use. Not exporting this function until it works as intended.
+#'   use. Not exporting this function until it works as intended. Of note,
+#'   validation is a bit different here, since we don't know the type until
+#'   after we guess. We could look for where both short and long are invalid,
+#'   and otherwise assume valid, even if the bulk are short. However, it may be
+#'   more useful to check validity after the guess.
+#' @return single logical value, \code{TRUE} if input data are predominantly
+#'   short type. If there is some uncertainty, then return NA.
 #' @keywords internal
-icd9Tell <- function(icd9) {
+icd9GuessIsShort <- function(icd9, invalidAction = icd9InvalidActions) {
+  invalidAction <- match.arg(invalidAction)
   icd9 <- as.character(icd9)
   if (is.list(icd9)) {
     testCodes <- icd9[[1]]
   } else {
     testCodes <- icd9
   }
-  if (mean(icd9ValidDecimal(testCodes) > 0.9)) return(icd9ExplainDecimal(icd9, doCondense = TRUE))
-  icd9ExplainShort(icd9, doCondense = TRUE)
-}
-
-#' @title read the ICD-9-CM description data as provided by the Center for
-#'   Medicaid Services.
-#' @description ICD9-CM data unfortunately has no comma separation, so have to
-#'   pre-process. Note that this canonical data doesn't specify non-diagnostic
-#'   higher-level codes, just the specific diagnostic 'child' codes.
-#' @details ideally would get ICD9-CM data zip directly from CMS web page, and
-#'   extract, but the built-in unzip only extracts the first file in a zip.
-#' @param icd9path path of the source data which is in /extddata in the
-#'   installed package, but would be in inst/extdata in development tree.
-#' @param save logical whether to attempt to save output in package source tree
-#'   data directory
-#' @param path Absolute path in which to save parsed data
-#' @return invisibly return the result
-#' @export
-parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt",
-                                               package = 'icd9'),
-                        save = FALSE,
-                        path = "~/icd9/data") {
-  f <- file(icd9path, "r")
-  r <- readLines(f, encoding = "latin1")
-  close(f)
-  r <- strsplit(r, " ")
-  icd9LongCode <- lapply(r, FUN = function(row) row[1])
-  icd9LongDesc <- lapply(r, FUN = function(row) paste(row[-c(1,2)], collapse = " "))
-
-  f <- file(system.file("extdata", "CMS32_DESC_SHORT_DX.txt", package='icd9'), "r")
-  r <- readLines(f) # this is ascii
-  close(f)
-  r <- strsplit(r, " ")
-  icd9ShortCode <- lapply(r, FUN = function(row) row[1])
-  icd9ShortDesc <- lapply(r, FUN = function(row) paste(row[-c(1,2)], collapse = " "))
-  icd9CmDesc <- data.frame(
-    icd9 = unlist(icd9LongCode),
-    descLong = unlist(icd9LongDesc),
-    descisShort = unlist(icd9ShortDesc),
-    stringsAsFactors = FALSE)
-
-  # attempt to write the date from the source file to RData in the package source tree.
-  if (save) saveSourceTreeData("icd9CmDesc", path = path)
-
-  message("The following long descriptions contain UTF-8 codes:")
-  message(paste(icd9CmDesc[grep(pattern = "UTF", Encoding(icd9CmDesc$descLong)), ], sep = ", "))
-
-  invisible(icd9CmDesc)
+  vs <- icd9ValidShort(testCodes)
+  vd <- icd9ValidDecimal(testCodes)
+  vsm <- mean(vs)
+  vdm <- mean(vd)
+  if (vsm - vdm > 0.5) {
+    # this function returns, but we don't care what it returns.
+    icd9ValidNaWarnStopShort(icd9Short = testCodes, invalidAction = invalidAction)
+    return(TRUE)
+  }
+  if (vdm - vsm > 0.5) {
+    icd9ValidNaWarnStopDecimal(icd9Decimal = testCodes, invalidAction = invalidAction)
+    return(FALSE)
+  }
+  # now we really can't do much validation, but if requested, we can see if any
+  # are neither valid short nor valid decimal
+  if (any(!vs & !vd)) {
+    icd9WarnStopMessage(
+      "icd9GuessIsShort: predominant type not determined, and some codes were
+        neither valid short nor decimal formats:", paste(testCodes[!vs | !vd]),
+      invalidAction = invalidAction
+    )
+  }
+  NA
 }
 
 #' @title get ICD-9 Chapters from vector of ICD-9 codes
@@ -137,5 +119,5 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
 icd9ChapterShort <- function(icd9Short, isShort, invalidAction = icd9InvalidActions) {
   majors <- icd9ShortToMajor(icd9Short, match.arg(invalidAction))
   chapterExpandedRanges <- lapply(icd9CmChapters, function(x) x[[1]] %i9mj% x[[2]])
-#TODO complete this with 'spread' type function, as done when generating co-morbidities. Maybe use dplyr
+  #TODO complete this with 'spread' type function, as done when generating co-morbidities. Maybe use dplyr
 }
