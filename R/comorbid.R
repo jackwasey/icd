@@ -105,11 +105,7 @@ icd9InReferenceCode <- function(icd9, icd9Reference,
 #'   updating fields according to rules. The exact fields from the original
 #'   mappings can be obtained using \code{applyHierarchy = FALSE}, but for
 #'   comorbidity counting, Charlson Score, etc., the rules should be applied.
-#' @param icd9df data.frame with fields specified by visitId and icd9Code.
-#'   icd9Code is assumed to be a non-decimal 'short' form ICD9 code. There is a
-#'   many to many ratio of icd9:visitId. This table contains multiple visitId
-#'   rows, with one row per ICD-9 code. Therefore, every ICD-9 code listed is
-#'   associated with at least one visit ID.
+#' @template icd9df
 #' @template visitid
 #' @template icd9field
 #' @template isShort
@@ -125,18 +121,10 @@ icd9InReferenceCode <- function(icd9, icd9Reference,
 #' @param validateMapping logical, whether to validate all the ICD-9 codes in
 #'   the mapping list. Default is not to check. If validation fails, stop with
 #'   an error. This is probably worth doing at least once for each mapping used,
-#'   since there should never be an error in mapping. There is overhead to check
-#'   the mapping each time, so not done by default. Could consider using
-#'   \code{memoise} to cache the result of the check. (TODO)
-#' @param longNames single locical value that defaults to \code{TRUE}, in which
-#'   case the more human-readable names stored in e.g. \code{ahrqComorbidNames}
-#'   are applied to the data frame column names.
-#' @param applyHierarchy single logical value that defaults to \code{TRUE}, in
-#'   which case the hierarchy defined for the mapping is applied. E.g. in
-#'   Elixhauser, you can't have uncomplicated and complicated diabetes both
-#'   flagged.
+#'   since there should never be an error in mapping.
 #' @param isShortMapping logical, whether the mapping is defined with short
 #'   ICD-9 codes (TRUE, the default), or decimal if set to FALSE.
+#' @template abbrevHier
 #' @export
 icd9Comorbidities <- function(icd9df,
                               visitId = "visitId",
@@ -308,7 +296,9 @@ icd9ComorbiditiesElixhauser <- function(icd9df,
 #'   comorbidities where the POA flag was definitely -ve, coded as "N" or
 #'   definitely +ve and coded as "Y". Negating one set won't give the other set
 #'   unless all codes were either Y or N. #describeIn icd9Comorbidities
+#' @template icd9df
 #' @template poaField
+#' @template poa
 #' @examples
 #' # using magrittr is beautiful:
 #' library("magrittr", quietly = TRUE, warn.conflicts = FALSE)

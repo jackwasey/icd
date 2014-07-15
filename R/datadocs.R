@@ -87,21 +87,6 @@ NULL
 #' @name ahrqComorbidAll
 NULL
 
-#' @title AHRQ comorbidity names
-#' @description The names of the AHRQ comorbidities are almost identical to the
-#'   original Elixhauser names. They keep HTN combined, and drop arrhythmia,
-#'   giving a total of 29. These data are presented in lists because there is a
-#'   standard (arbitrary) order which is non-alphabetical, and is helpful to
-#'   preserve. Many R functions implicitly sort vectors of names, and having a
-#'   key to the original order is helpful.
-#' @docType data
-#' @keywords datasets
-#' @format list with character/numeric names, e.g. "02" = "Valvular disease"
-#' @source
-#' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
-#' @name ahrqComorbidNames
-NULL
-
 #' @title Quan adaptation of Deyo/Charlson comorbidities
 #' @description Derived programmatically from the SAS code used in the original
 #'   publication. According to the referenced study, this provides the best
@@ -122,8 +107,6 @@ NULL
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307} unavailable: unavailable:
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
-#'
-#'
 #' @name quanDeyoComorbid
 NULL
 
@@ -166,27 +149,21 @@ NULL
 #' @name elixhauserComorbid
 NULL
 
-#' @title Elixhauser comorbidity names with hypertension subgroups
-#' @description These names are taken from the original paper. Uncomplicated
+#' @title Comorbidity names
+#' @description In the Elixhauser derived mappings, uncomplicated
 #'   and complicated hypertension are listed separately, but are always
-#'   combined. Complicated DM excludes uncomplicated DM, and metastatic cancer
-#'   precludes solid tumor without metastasis.
+#'   combined in the final analyses. Both HTN separate and merged are provided. Complicated DM excludes uncomplicated DM, and metastatic cancer
+#'   precludes solid tumor without metastasis. Abbrev suffix indicates a very short space-free description. Quan's version of Elixhauser is identical. AHRQ's update drops the arrythmia field. The Naming convention with neither/either/both suffixes \code{Htn} and \code{Abbrev}.
+#' The Charlson derived mappings do not include hypertension.
 #' @format list, with character/numeric code. HTN numbered 6a and 6b. DM,
 #'   cancer, mets are counted as in the original paper giving the original 30
 #'   groups. "01" to "30"
 #' @references Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna
 #'   M. Coffey. "Comorbidity Measures for Use with Administrative Data." Medical
 #'   Care January 1998 36, no. 1 (1998): 8-27.
-#' @name elixhauserComorbidNamesHtn
+#' @name elixhauserComorbidNames
+#' @aliases elixhauserComorbidNamesAbbrev elixhauserComorbidNamesHtn elixhauserComorbidNamesHtnAbbrev quanElixhauserComorbidNames quanElixhauserComorbidNamesAbbrev quanElixhauserComorbidNamesHtn quanElixhauserComorbidNamesHtnAbbrev ahrqComorbidNames ahrqComorbidNamesAbbrev ahrqComorbidNamesHtn ahrqComorbidNamesHtnAbbrev charlsonComorbidNames charlsonComorbidNamesAbbrev
+#' @keywords datasets
+#' @docType data
 NULL
 
-#' @title Elixhauser comorbidity names with combined hypertension
-#' @description These names are taken from the original paper. Uncomplicated
-#'   and complicated hypertension are listed together, giving a simple list of
-#'   30 items  as in the original paper.
-#' @format list, with character/numeric code. "01" to "30"
-#' @references Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna
-#'   M. Coffey. "Comorbidity Measures for Use with Administrative Data." Medical
-#'   Care January 1998 36, no. 1 (1998): 8-27.
-#' @name elixhauserComorbidNames
-NULL
