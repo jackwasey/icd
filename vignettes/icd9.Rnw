@@ -227,6 +227,30 @@ myData %>%
   extract(1:9)
 @
 
+\section{Arbitrary ICD-9 mapping}
+The user can provide any ICD-9 mapping they wish. Included in this package is a small data set called icd9CmChapters, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping
+<<"arbitraryMapping>>=
+icd9CmChapters[1:5]
+@
+The next expression is obsolete since all children are now included in the packaged
+mappings. The user may provide their own mapping which needs this operation.
+<<eval=FALSE>>=
+# expand range, and find all children of these top-level codes in one lapply:
+myMap <- lapply(ahrqComorbid[c("Obesity", "Depression")], icd9ChildrenShort)
+system.time(
+  patientChapters <- icd9Comorbidities(
+    icd9df = patientData, icd9Mapping = myMap, isShortMapping = TRUE, validateMapping = FALSE)
+)
+# much faster the second time because the internal lookup is memoised:
+system.time(
+  patientChapters <- icd9Comorbidities(
+    icd9df = patientData, icd9Mapping = myMap, isShortMapping = TRUE, validateMapping = FALSE)
+)
+
+str(patientChapters)
+
+@
+
 \section{AHRQ comorbidity classification}
 
 The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
@@ -269,11 +293,6 @@ parseAhrqSas()
 resulting in a named list. Here is an extract.
 <<"exampleAhrqComorbid",cache=TRUE>>=
 ahrqComorbid[c("Obesity", "Depression")]
-@
-The next expression is obsolete since all children are now included in the packaged
-mappings. The user may provide their own mapping which needs this operation.
-<<eval=FALSE>>=
-lapply(ahrqComorbid[c("Obesity", "Depression")], icd9ChildrenShort)
 @
 
 The inverse operation to find condensed list using any parent codes that fully describe the same set is work in progress.

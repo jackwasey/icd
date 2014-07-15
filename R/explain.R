@@ -116,8 +116,15 @@ icd9GuessIsShort <- function(icd9, invalidAction = icd9InvalidActions) {
 #' @param isShort
 #' @param invalid
 #' @keywords internal
-icd9ChapterShort <- function(icd9Short, isShort, invalidAction = icd9InvalidActions) {
-  majors <- icd9ShortToMajor(icd9Short, match.arg(invalidAction))
-  chapterExpandedRanges <- lapply(icd9CmChapters, function(x) x[[1]] %i9mj% x[[2]])
+icd9Chapter <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
+  invalidAction = match.arg(invalidAction)
+  if (isShort) {
+    majors <- icd9ShortToMajor(icd9, invalidAction)
+  } else {
+    majors <- icd9DecimalToMajor(icd9, invalidAction)
+  }
+  chapterExpandedRanges <- lapply(icd9CmChapters, function(x) x[["start"]] %i9mj% x[["end"]])
   #TODO complete this with 'spread' type function, as done when generating co-morbidities. Maybe use dplyr
+  #this is derived from icd9Comorbid. ?generalize
+
 }

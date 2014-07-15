@@ -63,28 +63,16 @@ test_that("validate invalid decimal E codes", {
   expect_false(icd9ValidDecimal("0E1"))
   expect_false(icd9ValidDecimal("E"))
   expect_false(icd9ValidDecimal("E."))
-  expect_false(icd9ValidDecimal("E0"))
-  expect_false(icd9ValidDecimal("E00"))
-  expect_false(icd9ValidDecimal("E000"))
   expect_false(icd9ValidDecimal("E0000"))
   expect_false(icd9ValidDecimal("E00000"))
-  expect_false(icd9ValidDecimal("E0."))
-  expect_false(icd9ValidDecimal("E00."))
-  expect_false(icd9ValidDecimal("E000."))
   expect_false(icd9ValidDecimal("E0000."))
   expect_false(icd9ValidDecimal("E00000."))
-  expect_false(icd9ValidDecimal("E0.0"))
-  expect_false(icd9ValidDecimal("E00.0"))
-  expect_false(icd9ValidDecimal("E000.0"))
   expect_false(icd9ValidDecimal("E0000.0"))
   expect_false(icd9ValidDecimal("E00000.0"))
   expect_false(icd9ValidDecimal("E1000."))
   expect_false(icd9ValidDecimal("E10000."))
   expect_false(icd9ValidDecimal("E1000.0"))
   expect_false(icd9ValidDecimal("E10000.0"))
-  expect_false(icd9ValidDecimal("E0.1"))
-  expect_false(icd9ValidDecimal("E00.1"))
-  expect_false(icd9ValidDecimal("E000.1"))
   expect_false(icd9ValidDecimal("E0000.1"))
   expect_false(icd9ValidDecimal("E00000.1"))
   expect_false(icd9ValidDecimal("E1000.1"))
@@ -117,6 +105,18 @@ test_that("validate invalid decimal E codes", {
 })
 
 test_that("icd9ValidDecimal valid E codes", {
+  expect_true(icd9ValidDecimal("E0")) #E000 is okay
+  expect_true(icd9ValidDecimal("E00"))
+  expect_true(icd9ValidDecimal("E000"))
+  expect_true(icd9ValidDecimal("E0."))
+  expect_true(icd9ValidDecimal("E00."))
+  expect_true(icd9ValidDecimal("E000."))
+  expect_true(icd9ValidDecimal("E0.0"))
+  expect_true(icd9ValidDecimal("E00.0"))
+  expect_true(icd9ValidDecimal("E000.0"))
+  expect_true(icd9ValidDecimal("E0.1"))
+  expect_true(icd9ValidDecimal("E00.1"))
+  expect_true(icd9ValidDecimal("E000.1"))
   expect_true(icd9ValidDecimal("E999"))
   expect_true(icd9ValidDecimal(" E999"))
   expect_true(icd9ValidDecimal("E999 "))
@@ -186,10 +186,6 @@ test_that("valid short form E codes - invalid input", {
   expect_false(icd9ValidShort("0E1"))
   expect_false(icd9ValidShort("E"))
   expect_false(icd9ValidShort("E."))
-  expect_false(icd9ValidShort("E0"))
-  expect_false(icd9ValidShort("E00"))
-  expect_false(icd9ValidShort("E000"))
-  expect_false(icd9ValidShort("E0000"))
   expect_false(icd9ValidShort("E00000"))
   expect_false(icd9ValidShort("E0."))
   expect_false(icd9ValidShort("E00."))
@@ -225,12 +221,16 @@ test_that("valid short form E codes - invalid input", {
   expect_false(icd9ValidShort("E99.9.12"))
   expect_false(icd9ValidShort(".E999.1"))
   expect_false(icd9ValidShort(".E9991"))
-  #expect_true(icd9ValidShort("E0999"))})
   expect_false(icd9ValidShort("E98765"))
 })
 
 test_that("valid short form E codes - valid input", {
+  expect_true(icd9ValidShort("E0")) # E000 is valid! http://www.icd9data.com/2012/Volume1/E000-E999/E000-E000/E000/default.htm
+  expect_true(icd9ValidShort("E00"))
+  expect_true(icd9ValidShort("E000"))
+  expect_true(icd9ValidShort("E0000"))
   expect_true(icd9ValidShort("E999"))
+  expect_true(icd9ValidShort("E0999"))
   expect_true(icd9ValidShort("e800"))
   expect_true(icd9ValidShort(" E999"))
   expect_true(icd9ValidShort("E999 "))
@@ -258,9 +258,10 @@ test_that("test valid major numeric, valid", {
 
 test_that("test major validation", {
   expect_equal(
-    icd9ValidMajor(c("", "1", "22", "333", "4444", "V", "V2", "V34", "V567", "E", "E1", "E70", "E300", "E876")),
-    c(FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE)
+    icd9ValidMajor(c("", "1", "22", "333", "4444", "V", "V2", "V34", "V567", "E", "E1", "E000", "E70", "E300", "E876")),
+    c(FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE)
   )
+  expect_equal(icd9ValidMajorE(c("E", "E1", "E000", "E70", "E300", "E876")), c(FALSE, TRUE, TRUE, TRUE, TRUE, TRUE))
 })
 
 test_that("stop if invalid", {

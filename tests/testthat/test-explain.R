@@ -55,6 +55,15 @@ test_that("expalin a single top level ICD-9 code without a top level explanation
   )
 })
 
+# TODO:
+# use cases for explaining ICD-9 codes:
+test_that("given ICD-9 codes all have human-readable explanations", {})
+test_that("some of the given valid ICD-9 codes have human-readable explanations, but some don't", {})
+test_that("some of the given valid ICD-9 codes have human-readable explanations, but some don't, and some are invalid", {})
+test_that("none of the given ICD-9 codes have human-readable explanations, but are all valid", {})
+test_that("none of the given  ICD-9 codes are even valid", {})
+
+
 test_that("guess icd9 types: short", {
   expect_true(icd9GuessIsShort("12345"))
   expect_true(icd9GuessIsShort("1234"))

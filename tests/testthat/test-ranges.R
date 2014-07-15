@@ -93,10 +93,20 @@ test_that("expand icd9 range definition", {
   # only works with single range
   expect_error(icd9ExpandRangeShort(c("10", "20"), c("11", "21")))
 
-  # E codes are handled differently. Currently need lots of changes to support
-  # this, so check for error if any E code range requested
-  expect_error(icd9ExpandRangeShort("E950", "E951"))
+  resall = "E000" %i9mj% "E999"
+  expect_equal(length(resall), 1000)
+  expect_true("E000" %in% resall)
+  expect_true("E123" %in% resall)
+  expect_true("E999" %in% resall)
+  resallbut = "E1" %i9mj% "E998"
+  expect_equal(length(resallbut), 998)
+  expect_false("E000" %in% resallbut)
+  expect_true("E001" %in% resallbut)
+  expect_true("E123" %in% resallbut)
+  expect_true("E998" %in% resallbut)
+  expect_false("E999" %in% resallbut)
 
+  expect_equal("E99" %i9mj% "E101", c("E099", "E100", "E101"))
   # expect_equal(icd9ExpandRangeShort("E9501", "E9502"), c("E9501", "E9502"))
   # expect_equal(icd9ExpandRangeShort("E950", "E9509"),
   # c("E950", "E9501", "E9502", "E9503", "E9504",
@@ -140,14 +150,27 @@ test_that("preceding minors", {
 })
 
 
-test_that("icd9ExpandMinor", {
+test_that("icd9ExpandMinor: invalid", {
   expect_error(icd9ExpandMinor(c(1, 2)))
   expect_error(icd9ExpandMinor("JACK"))
   expect_error(icd9ExpandMinor(c(123)))
-  expect_error(naVal <- icd9ExpandMinor(c("123")))
+  expect_error(icd9ExpandMinor(c("123")))
+  expect_error(icd9ExpandMinor(c(1, 2), isE = TRUE))
+  expect_error(icd9ExpandMinor("JACK"), isE = TRUE)
+  expect_error(icd9ExpandMinor("00", isE = TRUE))
+  expect_error(icd9ExpandMinor(c(123), isE = TRUE))
+  expect_error(icd9ExpandMinor(c("123"), isE = TRUE))
+})
+
+test_that("icd9ExpandMinor: valid", {
   expect_equal(length(icd9ExpandMinor("")), 111)
   expect_identical(icd9ExpandMinor("00"), "00")
   expect_identical(icd9ExpandMinor("9"), as.character(c(9, 90:99)))
+
+  expect_equal(icd9ExpandMinor("0", isE = TRUE), "0")
+  expect_equal(icd9ExpandMinor("9", isE = TRUE), "9")
+  expect_equal(icd9ExpandMinor("", isE = TRUE), c("", as.character(0:9)))
+
 })
 
 test_that("icd9ChildrenDecimal", {
@@ -201,6 +224,7 @@ test_that("icd9ChildrenShort valid input", {
   expect_equal(icd9ChildrenShort("023")[1], "023")
   expect_equal(icd9ChildrenShort("23")[1], "23")
   expect_equal(icd9ChildrenShort("456")[1], "456")
+  expect_equal(icd9ChildrenShort("E100"), c("E100","E1000","E1001","E1002","E1003","E1004","E1005","E1006","E1007","E1008","E1009"))
 })
 
 test_that("condense ranges which do consense", {

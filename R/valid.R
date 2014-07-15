@@ -172,8 +172,7 @@ icd9ValidShortV <- function(icd9Short) {
 #' @rdname icd9ValidShort
 #' @export
 icd9ValidShortE <- function(icd9Short) {
-  # need Perl regex for lookbehind. may even be quicker, according to the docs.
-  grepl("^[Ee](?!0+$)[[:digit:]]{1,4}$", trim(icd9Short), perl = TRUE)
+  grepl("^[[:space:]]*[Ee][[:digit:]]{1,4}[[:space:]]*$", icd9Short)
 }
 
 #' @rdname icd9ValidShort
@@ -193,7 +192,8 @@ icd9ValidDecimalV <- function(icd9Decimal) {
 #' @export
 icd9ValidDecimalE <- function(icd9Decimal) {
   # need Perl regex for lookbehind. may even be quicker, according to the docs.
-  grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$", trim(icd9Decimal), perl = TRUE)
+  #grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$", trim(icd9Decimal), perl = TRUE)
+  grepl("^[[:space:]]*[Ee][[:digit:]]{1,3}(\\.[[:digit:]]?)?[[:space:]]*$", icd9Decimal)
 }
 
 #' @rdname icd9ValidDecimal
@@ -212,7 +212,7 @@ icd9ValidDecimalN <- function(icd9Decimal) {
 #' @export
 icd9ValidMajor <- function(major) {
   grepl(
-    pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][89][[:digit:]]{2}[[:space:]]*$)",
+    pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)",
     x = major
   )
 }
@@ -236,7 +236,7 @@ icd9ValidMajorV <- function(major) {
 #' @rdname icd9ValidMajor
 icd9ValidMajorE <- function(major) {
   grepl(
-    pattern = "^[[:space:]]*[Ee][89][[:digit:]]{2}[[:space:]]*$",
+    pattern = "^[[:space:]]*[Ee][[:digit:]]{1,3}[[:space:]]*$",
     x = major
   )
 }

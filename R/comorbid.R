@@ -150,6 +150,8 @@ icd9Comorbidities <- function(icd9df,
   # loop through names of icd9 mapping, and put the results together so each
   # column is one comorbidity in a data frame. This is much faster with vapply,
   # and it keeps the logicals instead of making them characters
+
+  #TODO pre-allocate before big cbind
   i <- cbind(
     icd9df[visitId],
     vapply(
