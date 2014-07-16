@@ -18,19 +18,27 @@
 #' @seealso package comorbidities
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
-icd9Explain <- function(icd9, isShort, doCondense = TRUE) UseMethod("icd9Explain")
+icd9Explain <- function(icd9, isShort, doCondense = TRUE) {
+  UseMethod("icd9Explain")
+}
 
 #' @rdname icd9Explain
 #' @export
-icd9ExplainShort <- function(icd9Short, doCondense = TRUE) icd9Explain(icd9Short, isShort = TRUE, doCondense = doCondense)
+icd9ExplainShort <- function(icd9Short, doCondense = TRUE) {
+  icd9Explain(icd9Short, isShort = TRUE, doCondense = doCondense)
+}
 
 #' @rdname icd9Explain
 #' @export
-icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE) icd9Explain(icd9Decimal, isShort = FALSE, doCondense = doCondense)
+icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE) {
+  icd9Explain(icd9Decimal, isShort = FALSE, doCondense = doCondense)
+}
 
 #' @describeIn icd9Explain explain alll ICD-9 codes in a list of vectors
 #' @export
-icd9Explain.list <- function(icd9, isShort, doCondense = TRUE) lapply(icd9, icd9Explain, isShort = isShort, doCondense = doCondense)
+icd9Explain.list <- function(icd9, isShort, doCondense = TRUE) {
+  lapply(icd9, icd9Explain, isShort = isShort, doCondense = doCondense)
+}
 
 #' @describeIn icd9Explain explain character vector of ICD-9 codes
 #' @export

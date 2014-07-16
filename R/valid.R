@@ -339,8 +339,8 @@ icd9Real <- function(icd9, isShort, invalidAction = icd9InvalidActions ) {
 }
 
 #' @rdname icd9Real
-#' @export
 #' @template icd9-short
+#' @export
 icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
   icd9ValidNaWarnStopShort(icd9Short = icd9Short, invalidAction = match.arg(invalidAction))
   icd9Short %in% icd9CmDesc[["icd9"]]
@@ -352,4 +352,32 @@ icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
 icd9RealDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
   icd9ValidNaWarnStopDecimal(icd9Decimal, match.arg(invalidAction))
   icd9RealShort(icd9DecimalToShort(icd9Decimal, invalidAction = "silent"))
+}
+
+#TODO
+#icd9FilterValid <- function(x, icd9Field = "icd9", isShort = TRUE, invert = FALSE) { UseMethod("icd9FilterValid") }
+icd9FilterValid <- function(x, ...) { UseMethod("icd9FilterValid") }
+
+#icd9FilterValid.default <- function() { }
+
+icd9FilterValid.data.frame <- function(x, icd9Field = "icd9", isShort = TRUE, invert = FALSE) {
+  v <- icd9Valid(icd9 = x[[icd9Field]], isShort = isShort)
+  if (invert) v <- !v
+  x[v, ]
+}
+
+icd9FilterValid.character <- function(x, isShort = TRUE, invert = FALSE) {
+  v <- icd9Valid(icd9 = x, isShort = isShort)
+  if (invert) v <- !v
+  x[v]
+}
+
+icd9FilterValid.list <- function(x, isShort = TRUE, invert = FALSE) {
+  v <- icd9Valid(icd9 = x, isShort = isShort)
+  if (invert) v <- !v
+  x[v]
+}
+
+icd9FilterInvalid <- function(x, ...) {
+  icd9FilterValid(x, invert = TRUE, ...)
 }

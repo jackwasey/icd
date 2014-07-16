@@ -158,6 +158,19 @@ test_that("short to decimal bad input", {
   expect_error(icd9ShortToDecimal(c("000000", "0ab1bc2d"), invalidAction = "stop"))
   expect_error(icd9ShortToDecimal(c("123", "0ab1bc2d"), invalidAction = "stop")) # first is valid
 })
+
+test_that("icd9 short to major part, E codes", {
+  expect_equal(icd9ShortToMajor("E000"), "E000")
+  expect_equal(icd9ShortToMajor("E00"), "E00")
+  expect_equal(icd9ShortToMajor("E0"), "E0")
+  expect_equal(icd9ShortToMajor("E1"), "E1")
+  expect_equal(icd9ShortToMajor("E001"), "E001")
+  expect_equal(icd9ShortToMajor("E0123"), "E012")
+  expect_equal(icd9ShortToMajor("E100"), "E100")
+  expect_equal(icd9ShortToMajor("E1234"), "E123")
+
+})
+
 test_that("running short to decimal conversion before and after expansion of a ICD-9 base codes gives the same result", {
 
   icd9List <- ahrqComorbid #todo SUBSET OR EXTRA MAPPINGS?

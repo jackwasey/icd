@@ -361,3 +361,12 @@ icd9FilterPoaNotYes <- function(icd9df, poaField = "poa") {
   stopifnot(poaField %in% names(icd9df))
   icd9df[is.na(icd9df[[poaField]]) | icd9df[[poaField]] %nin% c("Y", "y"), -which(names(icd9df) == poaField)]
 }
+
+icd9CharlsonFromIcd <- function(icd9df) {
+  icd9df %>%
+  icd9CharlsonFromComorbidities
+}
+
+icd9CharlsonFromComorbidities <- function(comorbid) {
+
+}

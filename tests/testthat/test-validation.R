@@ -306,3 +306,42 @@ test_that("check icd-9 code is really in the list, not just syntactically valid"
   expect_error(icd9RealShort("V802.7", invalidAction = "stop"))
   expect_equal(icd9Real(c("8027", "E9329", "E000"), isShort = TRUE), c(TRUE, TRUE, FALSE))
 })
+
+mixInvalidPts <- data.frame(
+  visitId = c(1000, 1000, 1001),
+  icd9 = c("27801", "invalides", "25001"),
+  poa = factor(c("Y", "N", "Y"))
+)
+
+test_that("filter valid - bad input", {
+  expect_error(icd9FilterValid())
+  expect_error(icd9FilterValid(list(j = "k")))
+})
+
+test_that("filter valid - vector input", {
+
+  expect_equal(icd9FilterValid("100"), "100")
+  expect_equal(icd9FilterValid("nolk"), character())
+  expect_equal(icd9FilterValid(c("100", "nolk")), "100")
+  expect_equal(icd9FilterInvalid(c("100", "nolk")), "nolk")
+  expect_equal(icd9FilterValid(c("100", "nolk"), invert = TRUE), "nolk")
+})
+
+test_that("filter valid - data frame input", {
+
+  expect_equal(icd9FilterValid(mixInvalidPts), mixInvalidPts[c(1,3), ])
+
+  expect_equal(icd9FilterInvalid(mixInvalidPts), mixInvalidPts[2, ])
+  expect_equal(icd9FilterValid(mixInvalidPts, invert = TRUE), mixInvalidPts[2, ])
+
+  # no non-short so all are invalid:
+  expect_equal(icd9FilterValid(mixInvalidPts, invert = TRUE, isShort = FALSE), mixInvalidPts)
+  # arg order irrelevant, but can be mixed up in S3 dispatch.
+  expect_equal(icd9FilterValid(mixInvalidPts, isShort = FALSE, invert = TRUE), mixInvalidPts)
+
+  # use invert and isShort args:
+  expect_equal(icd9FilterValid(mixInvalidPts, isShort = TRUE, invert = TRUE), mixInvalidPts[2, ])
+  expect_equal(icd9FilterValid(mixInvalidPts, isShort = TRUE, invert = FALSE), mixInvalidPts[c(1,3), ])
+
+
+  })

@@ -90,3 +90,51 @@ test_that("guess icd9 types: invalid", {
 })
 
 #TODO, set up long chain of multiple conversions as kind of integration test, and to flush out errors.
+
+test_that("extraction of top-level ICD-9 codes from the RTF gives the complete list", {
+# total number of codes
+# pick out a few at random
+# all valid major form.
+
+  n <- names(icd9CmMajors)
+
+expect_true("059" %in% n)
+expect_equal(unname(icd9CmMajors[n == "059"]), "Other poxvirus infections")
+expect_true("538" %in% n)
+expect_false("888" %in% n)
+expect_false("889" %in% n)
+expect_true("001" %in% n)
+expect_false("V00" %in% n)
+expect_false("V38" %in% n)
+expect_true("V01" %in% n)
+# V90 and V91 are defined elsewhere, but not in this source RTF. TODO: is there an updated RTF or addendum?
+expect_true("V89" %in% n)
+expect_true("E000" %in% n)
+expect_true("E001" %in% n)
+expect_true("E009" %in% n)
+expect_true("E013" %in% n)
+expect_true("E016" %in% n)
+expect_true("E849" %in% n) # this does have special formatting in the rtf doc, so missed by regex
+expect_true("E917" %in% n)
+expect_false("E777" %in% n)
+
+#TODO: "539"  "E013" "E016" "E849" "E917" "V90"  "V91"
+# 010 data goes to V89... I need 2014.
+})
+
+test_that("parse icd9CmMajors set tests", {
+expect_true(all(icd9ValidMajor(n)))
+expect_equal(length(icd9CmMajors), length(unique(n))) # should be no duplicate names
+expect_equal(length(icd9CmMajors), length(unique(icd9CmMajors))) # or duplicate codes
+# no zero length names:
+expect_true(all(nchar(icd9CmMajors > 0)))
+expect_true(all(!is.na(icd9CmMajors)))
+expect_true(all(!is.na(n)))
+
+ # get all the majors from the other list, to compare
+ compareMajors <- icd9CmDesc$icd9 %>% icd9ShortToMajor %>% unique
+ expect_that(all(compareMajors %in% n))
+ expect_that(all(n %in% compareMajors))
+
+})
+

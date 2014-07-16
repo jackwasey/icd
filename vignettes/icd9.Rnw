@@ -39,20 +39,20 @@ patientData
 Only the visitId column is propogated to the results. If 'present-on-arrival' is needed, it must be separated out first. The implicit default, therefore, is to ignore it, and give ICD-9 code regardless of POA status.
 
 The comorbidities can be determined as follows:
-<<getcomorbidities,eval=TRUE,cache=TRUE>>=
+<<getcomorbidities,cache=TRUE>>=
 icd9ComorbiditiesAhrq(icd9df = patientData)[, 1:10]
 @
 or
-<<getcomorbidities1a,eval=TRUE,cache=TRUE>>=
+<<getcomorbidities1a,cache=TRUE>>=
 icd9ComorbiditiesQuanDeyo(patientData)[, 1:10]
 @
 or using magrittr to chain functions together:
-<<getcomorbidities2,eval=TRUE,cache=TRUE>>=
+<<getcomorbidities2,cache=TRUE>>=
 patientData %>% icd9FilterPoaYes() %>%
   icd9ComorbiditiesAhrq(isShort = TRUE) %>% extract(1:5)
 @
 The following code shows gets the same result with default options written out:
-<<"comorbidUsingDefaultOpts",echo=TRUE,eval=FALSE,cache=TRUE>>=
+<<"comorbidUsingDefaultOpts",eval=FALSE,cache=TRUE>>=
 icd9Comorbidities(icd9df = icdFilterPoaYes(patientData),
                   visitId = "visitId",
                   icd9Field = "icd9",
@@ -157,18 +157,18 @@ cardiac <- unique(c(
 ))
 @
 then explain the list, just showing the first ten:
-<<eval=TRUE,echo=TRUE>>=
+<<cardiacChainExplainExample>>=
 cardiac %>% icd9ExplainShort %>% extract(2) %>% head(10)
 @
 
 More examples, this time also demonstrating automatic summarization of a long list of ICD-9 codes into the minimum set of explanatory parent codes:
-<<eval=TRUE,echo=TRUE>>=
+<<ExampleQDDementia>>=
 quanDeyoComorbid[["Dementia"]] %>%
   icd9ExplainShort() %>%
   extract(c("ICD-9","Description"))
 @
 Use a range with more than two hundred ICD-9 codes:
-<<eval=TRUE,echo=TRUE>>=
+<<ShowRangeOperator>>=
 length("390" %i9d% "392.1")
 
 "390" %i9d% "392.1" %>%
@@ -180,12 +180,12 @@ length("390" %i9d% "392.1")
 
 \section{Filtering from Present-on-Arrival}
 Present-on-arrival (POA) is typically a factor, or vector of values such as "Y", "N", "X", "E", or NA. Intermediate codes, such as "exempt", "unknown" and NA mean that "yes" is not the same as "not no." This requires four functions to cover the possibilities stored in icd9PoaChoices:
-<<eval=TRUE,echo=TRUE>>=
+<<ShowPoaChoices>>=
 icd9PoaChoices
 @
 
 Magrittr allows chaining of the filtering very nicely:
-<<eval=TRUE,echo=TRUE>>=
+<<MagrittrSetupData>>=
 myData <- data.frame(
   visitId = c("v1", "v2", "v3", "v4"),
   icd9 = c("39891", "39790", "41791", "4401"),
@@ -216,7 +216,7 @@ myData %>% icd9FilterPoaYes(poaField="poa") %>%
   extract(1:9)
 @
 Call the core icd9Comorbidities function with an arbitrary mapping
-<<arbitrarycomorbiditymapinchain>>=
+<<specifiedComorbidityMapChain>>=
 myData %>%
   icd9FilterPoaYes() %>%
   icd9Comorbidities(
@@ -229,7 +229,7 @@ myData %>%
 
 \section{Arbitrary ICD-9 mapping}
 The user can provide any ICD-9 mapping they wish. Included in this package is a small data set called icd9CmChapters, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping
-<<"arbitraryMapping>>=
+<<"arbitraryMapping">>=
 icd9CmChapters[1:5]
 @
 The next expression is obsolete since all children are now included in the packaged
@@ -247,7 +247,7 @@ system.time(
     icd9df = patientData, icd9Mapping = myMap, isShortMapping = TRUE, validateMapping = FALSE)
 )
 
-str(patientChapters)
+str(patientChapters[5:12])
 
 @
 
@@ -255,7 +255,7 @@ str(patientChapters)
 
 The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
-<<ahrq,eval=F>>=
+<<ahrq,eval=FALSE>>=
 ahrqComorbid <- parseAhrqSas()
 @
 
@@ -287,7 +287,7 @@ VALUE $RCOMFMT
 \end{verbatim}
 
 This is parsed using:
-<<echo=TRUE,eval=FALSE>>=
+<<eval=FALSE>>=
 parseAhrqSas()
 @
 resulting in a named list. Here is an extract.

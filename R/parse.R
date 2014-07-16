@@ -316,28 +316,33 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
   invisible(icd9CmDesc)
 }
 
-#' @title parse list of top-level ICD-9 chapters from canonical data from CDC.
+#' @title parse list of top-level ICD-9 codes from canonical data from CDC.
 #' @description There is no easily machine-readable list of the three digit (I call the 'major') ICD-9 code chapters. This code downloads a pretty RTF file and extracts these codes with their names. WORK IN PROGRESS!
+#' @param save
 #' @import magrittr
-#' @return named list, with name of chapter being the item name, and value being the three-digit code, or Vxx or Exxx code.
+#' @return named list, with name of top-level code being the item name, and value being the three-digit code, or Vxx or Exxx code.
 #' @keywords internal
-parseIcd9Chapters <- function() {
+parseIcd9Majors <- function(save = FALSE, saveDir = "~/icd9/data") {
   # 10 Mb file
   rtf <- read.zip.url(
-    url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip",
-    filename = "Dtab10.RTF",
+    #url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip", # this is form to get a previous year... TODO
+    url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip",
+    #filename = "Dtab10.RTF", # note case difference. Thanks.
+    filename = "Dtab12.rtf",
     warn = FALSE
   )
-  out <- strMultiMatch(pattern = "\\}([VvEe]?[0-9]{3})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
+  #outNE2009 <- strMultiMatch(pattern = "\\}([Ee]?[[:digit:]]{3})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
+  #outV2090 <- strMultiMatch(pattern = "\\}([Vv][[:digit:]]{2})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
+  outNE2011 <- strMultiMatch(pattern = "f1 ([Ee]?[[:digit:]]{3})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
+  outV2011 <- strMultiMatch(pattern = "f1 ([Vv][[:digit:]]{2})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
+  out = c(outNE2011, outV2011)
 
-  #validate:
-  majors <- vapply(X = out, FUN = '[', FUN.VALUE = "0", 1) %>% sort
-  refMajors <- icd9CmDesc$icd9 %>% icd9ShortToMajor %>% unique %>% sort
+  icd9CmMajorIcd9Codes <- vapply(X = out, FUN = '[', FUN.VALUE = "0", 1)
+  icd9CmMajorDescriptions <- vapply(X = out, FUN = '[', FUN.VALUE = "0", 2)
 
-  # assert that there are no top level icd9 codes which do not already appear in the ICD-9-CM code list.
-  stopifnot(refMajors[majors %nin% refMajors %>% length == 0])
-  print("the following category codes have child codes in the ICD-9-CM code list, but did not have descriptions extracted from the RTF.")
-  print(refMajors[refMajors %nin% majors])
-  #TODO complete this function
+  icd9CmMajors <- icd9CmMajorDescriptions[icd9CmMajorIcd9Codes %>% icd9ValidMajor()]
+  names(icd9CmMajors) <- icd9CmMajorIcd9Codes[icd9CmMajorIcd9Codes %>% icd9ValidMajor()]
+  if (save) saveSourceTreeData("icd9CmMajors", path = saveDir)
+  invisible(icd9CmMajors)
 }
 
