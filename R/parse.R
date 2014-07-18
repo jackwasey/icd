@@ -8,7 +8,7 @@ icd9ParseAndSaveMappings <- function(saveDir = "~/icd9/data") {
   parseQuanElixhauser(save = TRUE, saveDir = saveDir)
 
   parseIcd9Cm(save = TRUE, saveDir = saveDir)
-  parseIcd9Majors(save = TRUE, saveDir = saveDir)
+  parseIcd9Chapters(save = TRUE, saveDir = saveDir)
 }
 #' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and
@@ -322,7 +322,6 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
 # #' @title parse list of top-level ICD-9 codes from canonical data from CDC.
 # #' @description There is no easily machine-readable list of the three digit (I call the 'major') ICD-9 code chapters. This code downloads a pretty RTF file and extracts these codes with their names. WORK IN PROGRESS!
 # #' @param save
-# #' @import magrittr
 # #' @return named list, with name of top-level code being the item name, and value being the three-digit code, or Vxx or Exxx code.
 # #' @keywords internal
 # parseIcd9Majors <- function(save = FALSE, saveDir = "~/icd9/data") {
@@ -351,7 +350,6 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
 
 #' @title Read higher-level ICD-9 structure from a reliable web site
 #' @description Previous iteration attempted to use the canonical data from annual RTF files from the CDC, however, this was ridiculously tricky and error prone, so now using a reliable website and scraping. Will still confirm the results with tests.
-#' @import XML
 #' @keywords internal
 parseIcd9Chapters <- function(year = NULL, save = FALSE, saveDir = "~/icd9/data") {
   if (is.null(year)) {

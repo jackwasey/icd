@@ -22,7 +22,8 @@ Suggests:
     roxygen2,
     devtools,
     knitr,
-    microbenchmark
+    microbenchmark,
+    XML
 LazyData: true
 LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues

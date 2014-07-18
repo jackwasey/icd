@@ -234,23 +234,20 @@ icd9Chapters[1:5]
 @
 The next expression is obsolete since all children are now included in the packaged
 mappings. The user may provide their own mapping which needs this operation.
-<<eval=FALSE>>=
-# expand range, and find all children of these top-level codes in one lapply:
+<<eval=TRUE>>=
+myMap <- icd9:::icd9ChaptersToMap(icd9Chapters, isShort = TRUE)
 
-TODO: fix this so it really does go from the chapters to a comorbidity map
-
-myMap <- lapply(ahrqComorbid[c("Obesity", "Depression")], icd9ChildrenShort)
 system.time(
   patientChapters <- icd9Comorbidities(
-    icd9df = patientData, icd9Mapping = myMap, isShortMapping = TRUE, validateMapping = FALSE)
+    icd9df = patientData, icd9Mapping = myMap)
 )
 # much faster the second time because the internal lookup is memoised:
 system.time(
   patientChapters <- icd9Comorbidities(
-    icd9df = patientData, icd9Mapping = myMap, isShortMapping = TRUE, validateMapping = FALSE)
+    icd9df = patientData, icd9Mapping = myMap)
 )
 
-str(patientChapters[5:12])
+str(patientChapters)
 
 @
 

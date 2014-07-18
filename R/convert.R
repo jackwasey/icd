@@ -210,11 +210,9 @@ icd9MajMinToDecimal <- function(major, minor, invalidAction = icd9InvalidActions
 #' @description the chapter headings can be converted into the full set of their
 #'   children, and then used to look-up which chapter, sub-chapter, or 'major' a
 #'   given code belongs.
-#'   @param x Either a chapter list itself, or the name of one, e.g. icd9ChaptersSub
-#'   @exmaples
-#'   myMap <- icd9ChaptersToMap(icd9Chapters)
-#'   icd9Comorbidities() #TODO finish this example
-#'   @keywords internal manip
+#' @param x Either a chapter list itself, or the name of one, e.g.
+#'   icd9ChaptersSub
+#' @keywords internal manip
 icd9ChaptersToMap <- function(x, isShort) {
   if (length(x) == 1) x <- get(x)
   ranges <- names(x)

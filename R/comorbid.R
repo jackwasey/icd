@@ -363,8 +363,8 @@ icd9FilterPoaNotYes <- function(icd9df, poaField = "poa") {
 }
 
 icd9CharlsonFromIcd <- function(icd9df) {
-  icd9df %>%
-  icd9CharlsonFromComorbidities
+  #icd9df %>%
+  #icd9CharlsonFromComorbidities
 }
 
 icd9CharlsonFromComorbidities <- function(comorbid) {

@@ -123,6 +123,7 @@ test_that("extraction of top-level ICD-9 codes from the RTF gives the complete l
 })
 
 test_that("icd9ChaptersMajor - positive values", {
+  n <- names(icd9ChaptersMajor)
   expect_true("001" %in% n)
   expect_true("V01" %in% n)
   expect_true("V91" %in% n) # only up to V89 in 2011.
@@ -136,6 +137,7 @@ test_that("icd9ChaptersMajor - positive values", {
 })
 
 test_that("icd9ChaptersMajor - negative values", {
+  n <- names(icd9ChaptersMajor)
   # there are some gaps: just make sure we don't have any spurious codes:
   expect_false("888" %in% n)
   expect_false("889" %in% n)
@@ -157,14 +159,14 @@ for (i in list("icd9Chapters", "icd9ChaptersSub", "icd9ChaptersMajor")) {
 }
 
 test_that("parse icd9ChaptersMajor vs those listed in the other CDC source of the leaf definitions.", {
-
+  library(magrittr, quietly = T, warn.conflicts = F)
   # get all the majors from the other list, to compare
   compareMajors <- icd9CmDesc$icd9 %>% icd9ShortToMajor %>% unique
   expect_true(all(compareMajors %in% names(icd9ChaptersMajor)))
   expect_true(all(names(icd9ChaptersMajor) %in% compareMajors))
 })
 
-# this is hand written: use to verify top level of the web site scrape:
+# this is hand written: use to verify top level of the web site scrape: TODO
 testChapters <- list(
   "Infectious And Parasitic Diseases" = c(start = "001", end = "139"),
   "Neoplasms" = c(start = "140", end = "239"),

@@ -82,6 +82,8 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 #' @description \code{strPaitMatch} differs in that there should only be two
 #'   pairs of parenthesis, then the first (by default) becomes the name, and the
 #'   second the value.
+#' @param swap logical scalar, whether to swap the names and values. Default is
+#'   not to swap, so the first match becomes the name.
 strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
   res <- strMultiMatch(pattern = pattern, text = text, dropEmpty = TRUE, ...)
   outNames <- vapply(X = res, FUN = '[', FUN.VALUE = character(1), ifelse(swap, 2, 1))

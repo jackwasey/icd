@@ -327,9 +327,9 @@ icd9IsE <- function(icd9) {
 
 #' @title Does ICD-9 code exist
 #' @description This is different from syntactic validity: it looks it up in the list of icd9 codes. This may have been easier all along, but checking syntactic validity still very useful, with a changing list of icd-9 codes over time, and possibly imperfections in the master list derived from CMS.
-#' @param icd9-any
-#' @param isShort
-#' @param invalid
+#' @template icd9-any
+#' @template isShort
+#' @template invalid
 #' @return logical vector
 #' @export
 icd9Real <- function(icd9, isShort, invalidAction = icd9InvalidActions ) {

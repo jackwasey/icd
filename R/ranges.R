@@ -85,7 +85,11 @@ icd9Children <- function(icd9, isShort) {
 }
 
 #' @title List all child ICD-9 codes for a range definition
-#' @description This is primarily useful for converting the icd9Chapters to ranges of children. E.g. "280-289" becomes "280" %i9s% "289"
+#' @description This is primarily useful for converting the icd9Chapters to
+#'   ranges of children. E.g. "280-289" becomes "280" %i9s% "289". In this case,
+#'   isShort determines the output, not the input.
+#' @param range character vector length one e.g. "V10-V15"
+#' @template isShort
 icd9ChildrenRange <- function(range, isShort) {
   x <- unlist(strMultiMatch("([VvEe[:digit:]]*)-([VvEe[:digit:]]*)", range))
   if (isShort) {
