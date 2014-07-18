@@ -84,6 +84,25 @@ icd9Children <- function(icd9, isShort) {
   icd9ChildrenDecimal(icd9)
 }
 
+#' @title List all child ICD-9 codes for a range definition
+#' @description This is primarily useful for converting the icd9Chapters to ranges of children. E.g. "280-289" becomes "280" %i9s% "289"
+icd9ChildrenRange <- function(range, isShort) {
+  x <- unlist(strMultiMatch("([VvEe[:digit:]]*)-([VvEe[:digit:]]*)", range))
+  if (isShort) {
+    return(x[1] %i9s% x[2])
+  } else {
+    return(x[1] %i9d% x[2])
+  }
+}
+
+icd9ChildrenRangeDecimal <- function(range) {
+  icd9ChildrenRange(range, isShort = FALSE)
+}
+
+icd9ChildrenRangeShort <- function(range) {
+  icd9ChildrenRange(range, isShort = TRUE)
+}
+
 #' @title sort short-form icd9 codes
 #' @description should work with numeric only, V or E codes. Note that a numeric
 #'   sort does not work for ICD-9 codes, since "162" > "1620" TODO: write tests.
@@ -140,8 +159,8 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
   stopifnot(is.character(start), is.character(end))
   stopifnot(length(start) == 1, length(end) == 1)
   stopifnot(is.logical(inferParents), length(inferParents) == 1)
-  # cannot handle E ranges yet (this is not a quick test with regex... make 'fixed' TODO)
-  stopifnot(all(!icd9IsE(c(start, end))))
+
+  isE = icd9IsE(start)
 
   start <- icd9ValidNaWarnStopShort(start, invalidAction = invalidAction)
   end <- icd9ValidNaWarnStopShort(end, invalidAction = invalidAction)
@@ -179,8 +198,8 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
     # but incomplete for start minor shorter.
     result <- icd9MajMinToShort(major = startMajor,
                                 minor = intersect(
-                                  icd9SubsequentMinors(startMinor),
-                                  icd9PrecedingMinors(endMinor)
+                                  icd9SubsequentMinors(startMinor, isE = isE),
+                                  icd9PrecedingMinors(endMinor, isE = isE)
                                 )
     )
 
@@ -226,14 +245,14 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
           result <- c(result,
                       icd9MajMinToShort(
                         major = major,
-                        minor = icd9SubsequentMinors(startMinor)
+                        minor = icd9SubsequentMinors(startMinor, isE)
                       )
           )
         } else if (major == edf[["major"]]) { # otherwise get preceeding minors
           result <- c(result,
                       icd9MajMinToShort(
                         major = major,
-                        minor = icd9PrecedingMinors(endMinor)
+                        minor = icd9PrecedingMinors(endMinor, isE)
                       )
           )
         }
@@ -376,7 +395,9 @@ icd9CondenseToExplainShort <- function(icd9Short, invalidAction = c("stop", "ign
 #' @template minor
 #' @family ICD-9 ranges
 #' @keywords internal manip
-icd9SubsequentMinors <- function(minor) {
+icd9SubsequentMinors <- function(minor, isE) {
+
+  stopifnot(!isE | nchar(minor) < 2)
 
   # these validations are done downstream
   #if (!is.character(minor)) stop("must have character input for minor")
@@ -384,11 +405,14 @@ icd9SubsequentMinors <- function(minor) {
 
   # if no minor, then provide all 111 minor codes. (Noting again that there are
   # 111 codes between each integer ICD-9 top level code.)
-  if (nchar(minor) == 0) return(icd9ExpandMinor())
+  if (nchar(minor) == 0) return(icd9ExpandMinor(isE = isE))
 
   # simple case where minor is a single character, so we can legitimately include all child codes
-  if (nchar(minor) == 1)
-    return(unlist(lapply(as.character(seq(as.integer(minor),9)), icd9ExpandMinor)))
+  if (nchar(minor) == 1) {
+    if (isE) return(as.character(seq(as.integer(minor), 9)))
+    return(unlist(lapply(as.character(seq(as.integer(minor),9)), icd9ExpandMinorNV)))
+  }
+
 
   # now working purely with two-digit minor parts
   minorBig <- as.integer(substr(minor,1,1)) # this is the first digit after the decimal
@@ -404,19 +428,21 @@ icd9SubsequentMinors <- function(minor) {
   minorSmalls <- as.character(seq(as.integer(minor),99)) # faulty for "0x" minor codes.
 
   if (minorBig == "9") return(minorSmalls)
-  minorBigs <- unlist(lapply(as.character(seq(minorBig + 1, 9)), icd9ExpandMinor))
+  minorBigs <- unlist(lapply(as.character(seq(minorBig + 1, 9)), icd9ExpandMinor, isE))
   unique(c(minorBigs, minorSmalls))
 }
 
 #' @rdname icd9SubsequentMinors
-icd9PrecedingMinors <- function(minor, invalidAction = icd9InvalidActions) {
+icd9PrecedingMinors <- function(minor, isE) {
 
-  if (nchar(minor)==0) return(icd9ExpandMinor())
+  stopifnot(!isE | nchar(minor) < 2)
+
+  if (nchar(minor) == 0) return(icd9ExpandMinor(isE = isE))
 
   # take care of single digit minor codes.
-  if (nchar(minor)==1) {
+  if (nchar(minor) == 1) {
     if (minor == "0") return(minor)
-    return(unlist(lapply(as.character(seq(0, as.integer(minor))), icd9ExpandMinor)))
+    return(unlist(lapply(as.character(seq(0, as.integer(minor))), icd9ExpandMinor, isE)))
   }
 
   minorBig <- as.integer(substr(minor,1,1))
@@ -424,12 +450,12 @@ icd9PrecedingMinors <- function(minor, invalidAction = icd9InvalidActions) {
   if (minorBig == 0) return(paste("0", seq(0, minorSmall),sep  = "")) #fill out 00 to 0x
   # remaining possibilities are between 10 and 99, two digits
   minorSmalls <- c(
-    icd9ExpandMinor("0"),
-    as.character(seq(10,as.integer(minor)))
+    icd9ExpandMinor("0", isE = FALSE),
+    as.character(seq(10, as.integer(minor)))
   )
 
   if (minorBig == 1) return(minorSmalls)
-  minorBigs <- unlist(lapply(as.character(seq(0, minorBig-1)), icd9ExpandMinor))
+  minorBigs <- unlist(lapply(as.character(seq(0, minorBig-1)), icd9ExpandMinor, isE = FALSE))
 
   unique(c(minorBigs, minorSmalls))
 }
@@ -438,18 +464,18 @@ icd9PrecedingMinors <- function(minor, invalidAction = icd9InvalidActions) {
 #' @description Accepts a single number or character input starting point for
 #'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
 #'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
-#'   #examples #icd9ExpandMinor() # return all possible decimal parts of ICD9
+#'   #examples #icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9
 #'   codes icd9ExpandMinor(1) # "1"  "10" "11" "12" "13" "14" "15" "16" "17"
 #'   "18" "19" icd9ExpandMinor("1") # same
 #' @template minor
 #' @param isE single logical, which if TRUE, treats the minor as part of an E
 #'   code (which is one character), as opposed to a V or numeric-only code,
-#'   which is two character.
+#'   which is two character. No default.
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-icd9ExpandMinor <- function(minor = "", isE = FALSE, invalidAction = icd9InvalidActions) {
+icd9ExpandMinor <- function(minor = "", isE, invalidAction = icd9InvalidActions) {
 
   invalidAction <- match.arg(invalidAction)
   # this is an error, not just invalidity. Could easily allow multiple values,

@@ -77,6 +77,19 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
   result[sapply(result, function(x) length(x) != 0)]
 }
 
+#' @rdname strMultiMatch
+#' @export
+#' @description \code{strPaitMatch} differs in that there should only be two
+#'   pairs of parenthesis, then the first (by default) becomes the name, and the
+#'   second the value.
+strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
+  res <- strMultiMatch(pattern = pattern, text = text, dropEmpty = TRUE, ...)
+  outNames <- vapply(X = res, FUN = '[', FUN.VALUE = character(1), ifelse(swap, 2, 1))
+  out <- vapply(X = res, FUN = '[', FUN.VALUE = character(1), ifelse(swap, 1, 2))
+  names(out) <- outNames
+  out
+}
+
 #' @title check whether character vector represents all numeric values
 #' @description check whether all the items of input vector are numeric without
 #'   throwing warning derived from Hmsic package

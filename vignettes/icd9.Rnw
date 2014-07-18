@@ -228,14 +228,17 @@ myData %>%
 @
 
 \section{Arbitrary ICD-9 mapping}
-The user can provide any ICD-9 mapping they wish. Included in this package is a small data set called icd9CmChapters, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping
+The user can provide any ICD-9 mapping they wish. Included in this package is a small data set called icd9Chapters, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping
 <<"arbitraryMapping">>=
-icd9CmChapters[1:5]
+icd9Chapters[1:5]
 @
 The next expression is obsolete since all children are now included in the packaged
 mappings. The user may provide their own mapping which needs this operation.
 <<eval=FALSE>>=
 # expand range, and find all children of these top-level codes in one lapply:
+
+TODO: fix this so it really does go from the chapters to a comorbidity map
+
 myMap <- lapply(ahrqComorbid[c("Obesity", "Depression")], icd9ChildrenShort)
 system.time(
   patientChapters <- icd9Comorbidities(

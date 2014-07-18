@@ -186,7 +186,7 @@ test_that("running short to decimal conversion before and after expansion of a I
   n = 250
   randomDecimalIcd9 <- paste(
     round(runif(min = 1, max = 999, n = n)),
-    sample(icd9ExpandMinor(), replace = TRUE, size = n),
+    sample(icd9ExpandMinor(minor="", isE = FALSE), replace = TRUE, size = n),
     sep = "."
   )
   randomDecimalIcd9 <- sub(pattern = "\\.$", replacement = "", randomDecimalIcd9)

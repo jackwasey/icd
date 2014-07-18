@@ -6,6 +6,9 @@ icd9ParseAndSaveMappings <- function(saveDir = "~/icd9/data") {
   parseElixhauser(save = TRUE, saveDir = saveDir)
   parseQuanDeyoSas(save = TRUE, saveDir = saveDir)
   parseQuanElixhauser(save = TRUE, saveDir = saveDir)
+
+  parseIcd9Cm(save = TRUE, saveDir = saveDir)
+  parseIcd9Majors(save = TRUE, saveDir = saveDir)
 }
 #' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and
@@ -316,33 +319,84 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
   invisible(icd9CmDesc)
 }
 
-#' @title parse list of top-level ICD-9 codes from canonical data from CDC.
-#' @description There is no easily machine-readable list of the three digit (I call the 'major') ICD-9 code chapters. This code downloads a pretty RTF file and extracts these codes with their names. WORK IN PROGRESS!
-#' @param save
-#' @import magrittr
-#' @return named list, with name of top-level code being the item name, and value being the three-digit code, or Vxx or Exxx code.
+# #' @title parse list of top-level ICD-9 codes from canonical data from CDC.
+# #' @description There is no easily machine-readable list of the three digit (I call the 'major') ICD-9 code chapters. This code downloads a pretty RTF file and extracts these codes with their names. WORK IN PROGRESS!
+# #' @param save
+# #' @import magrittr
+# #' @return named list, with name of top-level code being the item name, and value being the three-digit code, or Vxx or Exxx code.
+# #' @keywords internal
+# parseIcd9Majors <- function(save = FALSE, saveDir = "~/icd9/data") {
+#   # 10 Mb file
+#   rtf <- read.zip.url(
+#     #url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip", # this is form to get a previous year... TODO
+#     url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip",
+#     #filename = "Dtab10.RTF", # note case difference. Thanks.
+#     filename = "Dtab12.rtf",
+#     warn = FALSE
+#   )
+#   #outNE2009 <- strMultiMatch(pattern = "\\}([Ee]?[[:digit:]]{3})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
+#   #outV2090 <- strMultiMatch(pattern = "\\}([Vv][[:digit:]]{2})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
+#   outNE2011 <- strMultiMatch(pattern = "f1 ([Ee]?[[:digit:]]{3})\\\\tab ([^\\\\]*$)", text = rtf, dropEmpty = TRUE)
+#   outV2011 <- strMultiMatch(pattern = "f1 ([Vv][[:digit:]]{2})\\\\tab ([^\\\\]*$)", text = rtf, dropEmpty = TRUE)
+#   out = c(outNE2011, outV2011)
+#
+#   icd9CmMajorCodes <- vapply(X = out, FUN = '[', FUN.VALUE = "0", 1)
+#   icd9CmMajorDescriptions <- vapply(X = out, FUN = '[', FUN.VALUE = "0", 2)
+#
+#   icd9CmMajors <- icd9CmMajorDescriptions[icd9CmMajorCodes %>% icd9ValidMajor()]
+#   names(icd9CmMajors) <- icd9CmMajorIcd9Codes[icd9CmMajorCodes %>% icd9ValidMajor()]
+#   if (save) saveSourceTreeData("icd9CmMajors", path = saveDir)
+#   invisible(icd9CmMajors)
+# }
+
+#' @title Read higher-level ICD-9 structure from a reliable web site
+#' @description Previous iteration attempted to use the canonical data from annual RTF files from the CDC, however, this was ridiculously tricky and error prone, so now using a reliable website and scraping. Will still confirm the results with tests.
+#' @import XML
 #' @keywords internal
-parseIcd9Majors <- function(save = FALSE, saveDir = "~/icd9/data") {
-  # 10 Mb file
-  rtf <- read.zip.url(
-    #url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip", # this is form to get a previous year... TODO
-    url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip",
-    #filename = "Dtab10.RTF", # note case difference. Thanks.
-    filename = "Dtab12.rtf",
-    warn = FALSE
-  )
-  #outNE2009 <- strMultiMatch(pattern = "\\}([Ee]?[[:digit:]]{3})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
-  #outV2090 <- strMultiMatch(pattern = "\\}([Vv][[:digit:]]{2})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
-  outNE2011 <- strMultiMatch(pattern = "f1 ([Ee]?[[:digit:]]{3})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
-  outV2011 <- strMultiMatch(pattern = "f1 ([Vv][[:digit:]]{2})\\\\tab ([[:print:]]*$)", text = rtf, dropEmpty = TRUE)
-  out = c(outNE2011, outV2011)
+parseIcd9Chapters <- function(year = NULL, save = FALSE, saveDir = "~/icd9/data") {
+  if (is.null(year)) {
+    year <- "2014"
+  } else {
+    if (format(Sys.time(), "%Y") != year)
+      warning("Getting ICD-9 data for 2014 which is not the current year. Tests were written to validate extraction of 2014 data.")
+  }
+  icd9Chapters <- icd9WebParseGetList(paste0("http://www.icd9data.com/", year, "/Volume1/default.htm"))
+  icd9ChaptersSub <- character()
+  icd9ChaptersMajor <- character()
+  for (chap in names(icd9Chapters)) {
+    if (chap == "280-289" || chap == "740-759") {
+      # these have no subchapter, straight into the three-digit codes
+      icd9ChaptersMajor <- c(icd9ChaptersMajor, icd9WebParseGetMajors(year, chap))
+    } else {
+      # get the sub chapters
+      subchaps <- icd9WebParseGetList(paste0("http://www.icd9data.com/", year, "/Volume1/", chap, "/default.htm"))
+      icd9ChaptersSub <- c(icd9ChaptersSub, subchaps)
+      for (subchap in names(subchaps)) {
+        icd9ChaptersMajor <- c(icd9ChaptersMajor, icd9WebParseGetMajors(year, chap, subchap))
+      }
+    }
+  }
+  if (save) {
+    saveSourceTreeData("icd9Chapters", path = saveDir)
+    saveSourceTreeData("icd9ChaptersSub", path = saveDir)
+    saveSourceTreeData("icd9ChaptersMajor", path = saveDir)
+  }
+  invisible(list(icd9Chapters = icd9Chapters, icd9ChaptersSub = icd9ChaptersSub, icd9ChaptersMajor = icd9ChaptersMajor))
+}
 
-  icd9CmMajorIcd9Codes <- vapply(X = out, FUN = '[', FUN.VALUE = "0", 1)
-  icd9CmMajorDescriptions <- vapply(X = out, FUN = '[', FUN.VALUE = "0", 2)
+# internal only
+icd9WebParseGetMajors <- function(year, chapter, subchap = NULL) {
+  if (is.null(subchap)) {
+    majorurl <- paste0("http://www.icd9data.com/", year, "/Volume1/", chapter, "/default.htm")
+  } else {
+    majorurl <- paste0("http://www.icd9data.com/", year, "/Volume1/", chapter, "/", subchap, "/default.htm")
+  }
+  icd9WebParseGetList(majorurl)
+}
 
-  icd9CmMajors <- icd9CmMajorDescriptions[icd9CmMajorIcd9Codes %>% icd9ValidMajor()]
-  names(icd9CmMajors) <- icd9CmMajorIcd9Codes[icd9CmMajorIcd9Codes %>% icd9ValidMajor()]
-  if (save) saveSourceTreeData("icd9CmMajors", path = saveDir)
-  invisible(icd9CmMajors)
+icd9WebParseGetList <- function(icd9url) {
+  pat <- "^([VvEe[:digit:]-]*)[[:space:]]*(.*)$"
+  li <-  XML::readHTMLList(doc = icd9url, which = 1)
+  unlist(strPairMatch(pat, li))
 }
 

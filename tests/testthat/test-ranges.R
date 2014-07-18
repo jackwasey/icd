@@ -93,6 +93,19 @@ test_that("expand icd9 range definition", {
   # only works with single range
   expect_error(icd9ExpandRangeShort(c("10", "20"), c("11", "21")))
 
+})
+
+test_that("E code ranges", {
+  expect_equal(icd9ExpandRangeShort("E9501", "E9502"), c("E9501", "E9502"))
+  expect_equal(icd9ExpandRangeShort("E950", "E9509"),
+               c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
+                 "E9505", "E9506", "E9507", "E9508", "E9509")
+  )
+  expect_error(icd9ExpandRangeShort("E95012", "E95013", invalidAction = "stop"))
+  expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
+})
+
+test_that("major ranges", {
   resall = "E000" %i9mj% "E999"
   expect_equal(length(resall), 1000)
   expect_true("E000" %in% resall)
@@ -107,25 +120,24 @@ test_that("expand icd9 range definition", {
   expect_false("E999" %in% resallbut)
 
   expect_equal("E99" %i9mj% "E101", c("E099", "E100", "E101"))
-  # expect_equal(icd9ExpandRangeShort("E9501", "E9502"), c("E9501", "E9502"))
-  # expect_equal(icd9ExpandRangeShort("E950", "E9509"),
-  # c("E950", "E9501", "E9502", "E9503", "E9504",
-  # "E9505", "E9506", "E9507", "E9508", "E9509"))
-  # expect_error(icd9ExpandRangeShort("E95012", "E95013", invalidAction = "stop"))
-  # expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
 })
 
-test_that("preceding minors", {
-  expect_equal(icd9PrecedingMinors("20"),
+test_that("preceding and subsequent minors", {
+  expect_equal(icd9PrecedingMinors("20", isE = FALSE),
                c("0", "00", "01", "02", "03", "04", "05", "06", "07", "08",
                  "09", "1", "10", "11", "12", "13", "14", "15", "16", "17", "18",
                  "19", "20"))
-  expect_equal(sort(icd9PrecedingMinors("19")),
+  expect_equal(sort(icd9PrecedingMinors("19", isE = FALSE)),
                c("0", "00", "01", "02", "03", "04", "05", "06", "07", "08",
                  "09", "10", "11", "12", "13", "14", "15", "16", "17", "18",
                  "19"))
 
-  expect_equal(sort(icd9SubsequentMinors("08")),
+  expect_equal(icd9PrecedingMinors("2", isE = TRUE), c("0", "1", "2"))
+  expect_equal(icd9SubsequentMinors("8", isE = TRUE), c("8", "9"))
+  expect_error(icd9PrecedingMinors("00", isE = TRUE))
+  expect_error(icd9SubsequentMinors("00", isE = TRUE))
+
+  expect_equal(sort(icd9SubsequentMinors("08", isE = FALSE)),
                sort(c("08", "09",
                       "1", "10", "11", "12", "13", "14", "15", "16", "17", "18",
                       "19", "2", "20", "21", "22", "23", "24", "25", "26", "27", "28",
@@ -163,9 +175,12 @@ test_that("icd9ExpandMinor: invalid", {
 })
 
 test_that("icd9ExpandMinor: valid", {
-  expect_equal(length(icd9ExpandMinor("")), 111)
-  expect_identical(icd9ExpandMinor("00"), "00")
-  expect_identical(icd9ExpandMinor("9"), as.character(c(9, 90:99)))
+  expect_equal(length(icd9ExpandMinor("", isE = FALSE)), 111)
+  expect_equal(length(icd9ExpandMinor("", isE = TRUE)), 11)
+  expect_identical(icd9ExpandMinor("00", isE = FALSE), "00")
+  expect_identical(icd9ExpandMinor("9", isE = FALSE), as.character(c(9, 90:99)))
+  expect_error(icd9ExpandMinor("00", isE = TRUE))
+  expect_identical(icd9ExpandMinor("9", isE = TRUE), "9")
 
   expect_equal(icd9ExpandMinor("0", isE = TRUE), "0")
   expect_equal(icd9ExpandMinor("9", isE = TRUE), "9")
