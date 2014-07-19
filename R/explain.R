@@ -124,15 +124,39 @@ icd9GuessIsShort <- function(icd9, invalidAction = icd9InvalidActions) {
 #' @param isShort
 #' @param invalid
 #' @keywords internal
-icd9Chapter <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
+icd9GetChapters <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
   invalidAction = match.arg(invalidAction)
-  if (isShort) {
-    majors <- icd9ShortToMajor(icd9, invalidAction)
-  } else {
-    majors <- icd9DecimalToMajor(icd9, invalidAction)
-  }
-  chapterExpandedRanges <- lapply(icd9CmChapters, function(x) x[["start"]] %i9mj% x[["end"]])
-  #TODO complete this with 'spread' type function, as done when generating co-morbidities. Maybe use dplyr
-  #this is derived from icd9Comorbid. ?generalize
 
+  # set up comorbidity maps for chapters/sub/major group, then loop through each
+  # ICD-9 code, loop through each comorbidity and lookup code in the map for
+  # that field, then add the factor level for the match. There should be 100%
+  # matches.
+
+  majors     <- icd9GetMajor(icd9, isShort, invalidAction)
+
+  cf <- factor(rep(NA, length(icd9)), levels = c(names(icd9Chapters), NA_character_))
+  sf <- factor(rep(NA, length(icd9)), levels = c(names(icd9ChaptersSub), NA_character_))
+  mf <- factor(rep(NA, length(icd9)), levels = c(names(icd9ChaptersMajor), NA_character_))
+  out <- data.frame(icd9, chapter = cf, subchapter = sf, major = mf)
+  for (i in 1:length(majors)) {
+    for (chap in names(icd9Chapters)) {
+      if (any(majors[i] %in% (icd9Chapters[[chap]]["start"] %i9mj% icd9Chapters[[chap]]["end"]))) {
+        out[i, "chapter"] <- chap
+        break
+      }
+    }
+    for (subchap in names(icd9ChaptersSub)) {
+      if (any(majors[i] %in% (icd9ChaptersSub[[subchap]]["start"] %i9mj% icd9ChaptersSub[[subchap]]["end"]))) {
+        out[i, "subchapter"] <- subchap
+        break
+      }
+    }
+    for (mj in names(icd9ChaptersMajor)) {
+      if (majors[i] == icd9ChaptersMajor[[mj]]) {
+        out[i, "major"] <- mj
+        break
+      }
+    }
+  }
+  out
 }

@@ -356,45 +356,70 @@ parseIcd9Chapters <- function(year = NULL, save = FALSE, saveDir = "~/icd9/data"
     year <- "2014"
   } else {
     if (format(Sys.time(), "%Y") != year)
-      warning("Getting ICD-9 data for 2014 which is not the current year. Tests were written to validate extraction of 2014 data.")
+      warning("Getting ICD-9 data for 2014 which is not the current year.
+              Tests were written to validate extraction of 2014 data.")
   }
-  icd9Chapters <- icd9WebParseGetList(paste0("http://www.icd9data.com/", year, "/Volume1/default.htm"))
-  icd9ChaptersSub <- character()
-  icd9ChaptersMajor <- character()
+  icd9Chapters <- icd9WebParseGetList(year)
+  icd9ChaptersSub <- list()
+  icd9ChaptersMajor <- list()
   for (chap in names(icd9Chapters)) {
-    if (chap == "280-289" || chap == "740-759") {
+    if (chap == "Diseases Of The Blood And Blood-Forming Organs" || chap == "Congenital Anomalies") {
       # these have no subchapter, straight into the three-digit codes
-      icd9ChaptersMajor <- c(icd9ChaptersMajor, icd9WebParseGetMajors(year, chap))
+      icd9ChaptersMajor <- c(icd9ChaptersMajor,
+                             icd9WebParseGetList(year, icd9Chapters[[chap]]))
     } else {
-      # get the sub chapters
-      subchaps <- icd9WebParseGetList(paste0("http://www.icd9data.com/", year, "/Volume1/", chap, "/default.htm"))
+      # construct URL for next level and get the sub chapters
+      subchaps <- icd9WebParseGetList(year, icd9Chapters[[chap]])
       icd9ChaptersSub <- c(icd9ChaptersSub, subchaps)
+      # loop through each subchapter to get the majors:
       for (subchap in names(subchaps)) {
-        icd9ChaptersMajor <- c(icd9ChaptersMajor, icd9WebParseGetMajors(year, chap, subchap))
+        icd9ChaptersMajor <- c(icd9ChaptersMajor,
+                               icd9WebParseGetList(year, icd9Chapters[[chap]], icd9ChaptersSub[[subchap]]))
       }
     }
   }
-  if (save) {
-    saveSourceTreeData("icd9Chapters", path = saveDir)
-    saveSourceTreeData("icd9ChaptersSub", path = saveDir)
-    saveSourceTreeData("icd9ChaptersMajor", path = saveDir)
-  }
+  # there are multiple use-cases to be served here. One is to look up an ICD-9 from the CMS list, and find the higher level groups it belongs to. Another is to do the same for an arbitrary code.
+  # One approach would be to construct a data frame with a row for each known code, and a factor for each hierarchy level: this would not enable matching an arbitrary code, but this is probably a limited problem for the rare cases of obsolete codes, or new codes, when the coding was done in a different year from this analysis.
+  icd9CmDesc <- parseIcd9Cm() # don't rely on having already done this when setting up other data.
+
+  icd9ChaptersMapFull <-
+    if (save) {
+      saveSourceTreeData("icd9Chapters", path = saveDir)
+      saveSourceTreeData("icd9ChaptersSub", path = saveDir)
+      saveSourceTreeData("icd9ChaptersMajor", path = saveDir)
+    }
   invisible(list(icd9Chapters = icd9Chapters, icd9ChaptersSub = icd9ChaptersSub, icd9ChaptersMajor = icd9ChaptersMajor))
+  }
+
+icd9WebParseStartEndToRange <- function(v) {
+  paste(v[["start"]], v[["end"]], sep = "-")
 }
 
 # internal only
-icd9WebParseGetMajors <- function(year, chapter, subchap = NULL) {
-  if (is.null(subchap)) {
-    majorurl <- paste0("http://www.icd9data.com/", year, "/Volume1/", chapter, "/default.htm")
+icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
+  #print(paste(year, chapter, subchap))
+  if (is.null(chapter)) { icd9url <- paste0("http://www.icd9data.com/", year, "/Volume1/default.htm")
   } else {
-    majorurl <- paste0("http://www.icd9data.com/", year, "/Volume1/", chapter, "/", subchap, "/default.htm")
+    chapter <- icd9WebParseStartEndToRange(chapter)
+    if (is.null(subchap)) {
+      icd9url <- paste0("http://www.icd9data.com/", year, "/Volume1/", chapter, "/default.htm")
+    } else {
+      subchap <- icd9WebParseStartEndToRange(subchap)
+      icd9url <- paste0("http://www.icd9data.com/", year, "/Volume1/", chapter, "/", subchap, "/default.htm")
+    }
   }
-  icd9WebParseGetList(majorurl)
+  li <-  memReadHtmlList(doc = icd9url, which = 1)
+  # swap so descriptions (second on web page) become the vector names
+  v <- strPairMatch("^([VvEe0-9-]*)[[:space:]]*(.*)$", li, swap = TRUE)
+  lapply(v,
+         FUN = function(x) {
+           y <- unlist(strMultiMatch(pattern = "^([VvEe0-9]+)-?([VvEe0-9]+)?$", text = x))
+           names(y) <- c("start", "end")
+           if (y[["end"]] == "") { y <- y[-2]; names(y) <- "major" }
+           y
+         }
+  )
 }
 
-icd9WebParseGetList <- function(icd9url) {
-  pat <- "^([VvEe[:digit:]-]*)[[:space:]]*(.*)$"
-  li <-  XML::readHTMLList(doc = icd9url, which = 1)
-  unlist(strPairMatch(pat, li))
-}
-
+#if (memoise::is.memoised(XML::readHTMLList)) memoise::forget(XML::readHTMLList)
+memReadHtmlList <- memoise::memoise(XML::readHTMLList)

@@ -48,13 +48,32 @@ icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "", invalidAction = icd
   x
 }
 
-#' @title extract major part from decimal ICD-9 code
-#' @description Simply extracts parts, then returns only the major part
-#' @template icd9-decimal
+#' @title extract major part from short or decimal ICD-9 code
+#' @description Simply extracts parts, then returns only the major part in a character vector
+#' @template icd9-any
+#' @template isShort
 #' @template invalid
 #' @return character vector
+icd9GetMajor <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
+  invalidAction = match.arg(invalidAction)
+  if (isShort) {
+    i <- icd9ShortToParts(icd9Short = icd9, invalidAction)
+  } else {
+    i <- icd9DecimalToParts(icd9Decimal = icd9, invalidAction)
+  }
+  i[["major"]]
+}
+
+#' @rdname icd9GetMajor
+#' @template icd9-decimal
 icd9DecimalToMajor <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
-  icd9DecimalToParts(icd9Decimal = icd9Decimal, invalidAction = match.arg(invalidAction))[["major"]]
+  icd9GetMajor(icd9 = icd9Decimal, isShort = FALSE, invalidAction = match.arg(invalidAction))
+}
+
+#' @rdname icd9GetMajor
+#' @template icd9-short
+icd9ShortToMajor <- function(icd9Short, invalidAction = icd9InvalidActions) {
+  icd9GetMajor(icd9 = icd9Short, isShort = TRUE, invalidAction = match.arg(invalidAction))
 }
 
 #' @title convert short-form ICD-9 code to decimal form
@@ -124,15 +143,6 @@ icd9ShortToPartsE <- function(icd9Short) {
          FUN.VALUE = c("", ""),
          FUN = function(x) c(substr(x, 0, 4), substr(x, 5, 5))
   )
-}
-
-#' @title extract major part from short ICD-9 code
-#' @description Simply extracts parts, then returns only the major part
-#' @template icd9-short
-#' @template invalid
-#' @return character vector
-icd9ShortToMajor <- function(icd9Short, invalidAction = icd9InvalidActions) {
-  icd9ShortToParts(icd9Short = icd9Short, invalidAction = match.arg(invalidAction))[["major"]]
 }
 
 #' @title recompose major and minor parts into icd9 codes
