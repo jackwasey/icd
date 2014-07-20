@@ -37,23 +37,22 @@ memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
 
 #' @title match ICD9 codes
 #' @aliases "%i9in%"
-#' @description This does the hard work of finding whether a given icd9 code
-#'   falls under a group of reference ICD9 codes. icd9Reference is expanded to cover
-#'   all possible subgroups, then we look for matches where the given ICD9 codes
-#'   appear in the icd9Reference.
-#'   http://www.acep.org/Clinical---Practice-Management/V-and-E-Codes-FAQ/
-#' @seealso comorbidities.
+#' @description Finds children of ricd9Reference and looks for icd9 in the
+#'   resulting vector.  It is a glorified %in% function.
 #' @templateVar icd9AnyName "icd9,icd9Reference"
 #' @template icd9-any
 #' @template isShort
-#' @template validate
 #' @param isShortReference logical, see argument \code{isShort}
+#' @templateVar invalidActionName "invalidAction,invalidActionReference"
+#' @template invalid
 #' @return logical vector of which icd9 match or are subcategory of
 #'   icd9Referenec
 #' @keywords internal
 icd9InReferenceCode <- function(icd9, icd9Reference,
-                                isShort = TRUE, isShortReference = TRUE,
-                                validate = FALSE, validateReference = FALSE) {
+                                isShort = TRUE,
+                                isShortReference = TRUE,
+                                invalidAction = icd9InvalidActions,
+                                invalidActionReference = icd9InvalidActions) {
 
   if (!class(icd9) %in% c("character", "numeric", "integer"))
     stop("icd9InReferenceCode expects a character or number vector for icd9, but got: ", class(icd9))
@@ -74,8 +73,8 @@ icd9InReferenceCode <- function(icd9, icd9Reference,
   if (length(icd9Reference) == 0)
     stop("icd9InReferenceCode expects at least one icd9 code to test against")
 
-  if (validate) stopIfInvalidIcd9(icd9, isShort = isShort)
-  if (validateReference) stopIfInvalidIcd9(icd9Reference, isShort = isShortReference)
+  icd9 <- icd9ValidNaWarnStop(icd9 = icd9, isShort = isShort, isMajor = FALSE, invalidAction = match.arg(invalidAction))
+  icd9Reference <- icd9ValidNaWarnStop(icd9 = icd9Reference, isShort = isShort, isMajor = FALSE, invalidAction = match.arg(invalidActionReference))
 
   # TODO: this may be omitted if all the children are elaborated in the comorbidity mappings in advance. This is fine for ones I provide, but not necessarily user-generated ones. It is a slow step, hence memoisation. It would be simpler and faster if this could be skipped. I'm currently also elaborating all syntactically possible children, not just codes listed in the official ICD-9-CM list.
   kids <- memSpawnRefKids(icd9Reference, isShortReference)

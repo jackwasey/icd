@@ -1,4 +1,5 @@
-#' @param invalidAction character string (unit length) containing one of:
+#' @param <% if (exists("invalidActionName")) cat(invalidActionName) else cat("invalidAction")
+#'   %> character string (unit length) containing one of:
 #'   "ignore", "silent", "warn", "stop"
 #'
 #'   - \code{ignore} no check for validity of ICD-9 code is made implicitly.

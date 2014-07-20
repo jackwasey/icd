@@ -343,7 +343,7 @@ icd9Real <- function(icd9, isShort, invalidAction = icd9InvalidActions ) {
 #' @export
 icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
   icd9ValidNaWarnStopShort(icd9Short = icd9Short, invalidAction = match.arg(invalidAction))
-  icd9Short %in% icd9CmDesc[["icd9"]]
+  icd9Short %in% icd9Hierarchy[["icd9"]]
 }
 
 #' @rdname icd9Real

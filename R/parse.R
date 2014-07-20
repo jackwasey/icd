@@ -1,25 +1,27 @@
 #' @title parse all known mappings and save to development tree
-#' @param saveDir directory to save in, default is \code{~/icd9/data}
+#' @param path directory to save in, default is \code{~/icd9/data}
 #' @keywords internal
-icd9ParseAndSaveMappings <- function(saveDir = "~/icd9/data") {
-  parseAhrqSas(save = TRUE, saveDir = saveDir)
-  parseElixhauser(save = TRUE, saveDir = saveDir)
-  parseQuanDeyoSas(save = TRUE, saveDir = saveDir)
-  parseQuanElixhauser(save = TRUE, saveDir = saveDir)
+icd9ParseAndSaveMappings <- function(path = "~/icd9/data") {
+  parseAhrqSas(save = TRUE, path = path)
+  parseElixhauser(save = TRUE, path = path)
+  parseQuanDeyoSas(save = TRUE, path = path)
+  parseQuanElixhauser(save = TRUE, path = path)
 
-  parseIcd9Cm(save = TRUE, saveDir = saveDir)
-  parseIcd9Chapters(save = TRUE, saveDir = saveDir)
+  #parseIcd9Descriptions(save = TRUE, path = path)
+  parseIcd9Chapters(save = TRUE, path = path)
+  # this is not strictly a parsing step, but is quite slow
+  icd9GetChaptersHierarchy(save= TRUE, path = path)
 }
 #' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and
 #'   parses into RData. It is then saved in the development tree data directory,
 #'   so this is an internal function, used in generating the package itself!
 #' @template savesas
-#' @template parse
+#' @template parse-template
 #' @param returnAll logical which, if TRUE, will result in the invisible return of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
 #' @keywords internal
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
-                         condense = FALSE, save = FALSE, saveDir = "~/icd9/data", returnAll = FALSE) {
+                         condense = FALSE, save = FALSE, path = "~/icd9/data", returnAll = FALSE) {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
@@ -94,8 +96,8 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 
   # save the data in the development tree, so the package user doesn't need to
   # decode it themselves.
-  if (save) saveSourceTreeData("ahrqComorbidAll", path = saveDir)
-  if (save) saveSourceTreeData("ahrqComorbid", path = saveDir)
+  if (save) saveSourceTreeData("ahrqComorbidAll", path = path)
+  if (save) saveSourceTreeData("ahrqComorbid", path = path)
 
   if (returnAll) return(invisible(ahrqComorbidAll))
 
@@ -130,9 +132,9 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
 #'   simpler.
 #' @template savesas
-#' @template parse
+#' @template parse-template
 #' @keywords internal
-parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE, saveDir = "~/icd9/data") {
+parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE, path = "~/icd9/data") {
   if (is.null(sasPath)) sasPath <- "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt"
   quanSas <- readLines(sasPath, warn = FALSE)
   qlets <- sasExtractLetStrings(quanSas)
@@ -148,14 +150,14 @@ parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE, sav
   }
 
   names(quanDeyoComorbid) <- charlsonComorbidNamesAbbrev
-  if (save) saveSourceTreeData("quanDeyoComorbid", path = saveDir)
+  if (save) saveSourceTreeData("quanDeyoComorbid", path = path)
   invisible(quanDeyoComorbid)
 }
 
 #' @title Generate Quan's revised Elixhauser comorbidities
-#' @template parse
+#' @template parse-template
 #' @keywords internal
-parseQuanElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd9/data") {
+parseQuanElixhauser <- function(condense = FALSE, save = FALSE, path = "~/icd9/data") {
   quanElixhauserComorbid <- list(
     chf = c("398.91", "402.01", "402.11", "402.91", "404.01", "404.03", "404.11", "404.13", "404.91", "404.93", "425.4" %i9d% "425.9", "428"),
     arrhythmia = c("426.0", "426.13", "426.7", "426.9", "426.10", "426.12", "427.0" %i9d% "427.4", "427.6" %i9d% "427.9", "785.0", "996.01", "996.04", "V45.0", "V53.3"),
@@ -198,7 +200,7 @@ parseQuanElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd
     quanElixhauserComorbid <- lapply(quanElixhauserComorbid, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
   }
   names(quanElixhauserComorbid) <- quanElixhauserComorbidNamesHtnAbbrev
-  if (save) saveSourceTreeData("quanElixhauserComorbid", path = saveDir)
+  if (save) saveSourceTreeData("quanElixhauserComorbid", path = path)
   invisible(quanElixhauserComorbid)
 }
 
@@ -206,9 +208,9 @@ parseQuanElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd
 #' @description This function uses the \code{\%i9d\%} operator, so cannot be done
 #'   as an R file in the \code{data} directory. The data is documented in
 #'   \code{datadocs.R}.
-#' @template parse
+#' @template parse-template
 #' @keywords internal
-parseElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd9/data") {
+parseElixhauser <- function(condense = FALSE, save = FALSE, path = "~/icd9/data") {
   elixhauserComorbid <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91", "404.93", "428.0" %i9d% "428.9"),
     arrhythmia = c("426.1", "426.11", "426.13", "426.2" %i9d% "426.53", "426.6" %i9d% "426.89", "427.0", "427.2", "427.31", "427.60", "427.9", "785", "V45.0", "V53.3"),
@@ -253,7 +255,7 @@ parseElixhauser <- function(condense = FALSE, save = FALSE, saveDir = "~/icd9/da
   }
 
   names(elixhauserComorbid) <- elixhauserComorbidNamesHtnAbbrev
-  if (save) saveSourceTreeData("elixhauserComorbid", path = saveDir)
+  if (save) saveSourceTreeData("elixhauserComorbid", path = path)
   invisible(elixhauserComorbid)
 }
 
@@ -286,8 +288,8 @@ parseAhrqHierarchy <- function() {
 #'   data directory
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
-#' @export
-parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt",
+#' @keywords internal
+parseIcd9Descriptions <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt",
                                                package = 'icd9'),
                         save = FALSE,
                         path = "~/icd9/data") {
@@ -311,7 +313,7 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
     stringsAsFactors = FALSE)
 
   # attempt to write the date from the source file to RData in the package source tree.
-  if (save) saveSourceTreeData("icd9CmDesc", path = path)
+  # disable saving this: use icd9Hierarchy instead. if (save) saveSourceTreeData("icd9CmDesc", path = path)
 
   message("The following long descriptions contain UTF-8 codes:")
   message(paste(icd9CmDesc[grep(pattern = "UTF", Encoding(icd9CmDesc$descLong)), ], sep = ", "))
@@ -324,7 +326,7 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
 # #' @param save
 # #' @return named list, with name of top-level code being the item name, and value being the three-digit code, or Vxx or Exxx code.
 # #' @keywords internal
-# parseIcd9Majors <- function(save = FALSE, saveDir = "~/icd9/data") {
+# parseIcd9Majors <- function(save = FALSE, path = "~/icd9/data") {
 #   # 10 Mb file
 #   rtf <- read.zip.url(
 #     #url = "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip", # this is form to get a previous year... TODO
@@ -344,14 +346,14 @@ parseIcd9Cm <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt
 #
 #   icd9CmMajors <- icd9CmMajorDescriptions[icd9CmMajorCodes %>% icd9ValidMajor()]
 #   names(icd9CmMajors) <- icd9CmMajorIcd9Codes[icd9CmMajorCodes %>% icd9ValidMajor()]
-#   if (save) saveSourceTreeData("icd9CmMajors", path = saveDir)
+#   if (save) saveSourceTreeData("icd9CmMajors", path = path)
 #   invisible(icd9CmMajors)
 # }
 
 #' @title Read higher-level ICD-9 structure from a reliable web site
 #' @description Previous iteration attempted to use the canonical data from annual RTF files from the CDC, however, this was ridiculously tricky and error prone, so now using a reliable website and scraping. Will still confirm the results with tests.
 #' @keywords internal
-parseIcd9Chapters <- function(year = NULL, save = FALSE, saveDir = "~/icd9/data") {
+parseIcd9Chapters <- function(year = NULL, save = FALSE, path = "~/icd9/data") {
   if (is.null(year)) {
     year <- "2014"
   } else {
@@ -380,13 +382,13 @@ parseIcd9Chapters <- function(year = NULL, save = FALSE, saveDir = "~/icd9/data"
   }
   # there are multiple use-cases to be served here. One is to look up an ICD-9 from the CMS list, and find the higher level groups it belongs to. Another is to do the same for an arbitrary code.
   # One approach would be to construct a data frame with a row for each known code, and a factor for each hierarchy level: this would not enable matching an arbitrary code, but this is probably a limited problem for the rare cases of obsolete codes, or new codes, when the coding was done in a different year from this analysis.
-  icd9CmDesc <- parseIcd9Cm() # don't rely on having already done this when setting up other data.
+  icd9CmDesc <- parseIcd9Descriptions() # don't rely on having already done this when setting up other data.
 
   icd9ChaptersMapFull <-
     if (save) {
-      saveSourceTreeData("icd9Chapters", path = saveDir)
-      saveSourceTreeData("icd9ChaptersSub", path = saveDir)
-      saveSourceTreeData("icd9ChaptersMajor", path = saveDir)
+      saveSourceTreeData("icd9Chapters", path)
+      saveSourceTreeData("icd9ChaptersSub", path)
+      saveSourceTreeData("icd9ChaptersMajor", path)
     }
   invisible(list(icd9Chapters = icd9Chapters, icd9ChaptersSub = icd9ChaptersSub, icd9ChaptersMajor = icd9ChaptersMajor))
   }

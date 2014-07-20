@@ -10,7 +10,7 @@
 
 \maketitle
 
-<<setup,eval=TRUE,echo=FALSE>>=
+<<setup, eval=TRUE, echo=FALSE, cache=FALSE>>=
 suppressMessages(library("knitr", quietly = TRUE, warn.conflicts = FALSE))
 suppressMessages(library(icd9, quietly = TRUE, warn.conflicts = FALSE))
 suppressMessages(library("magrittr", quietly = TRUE, warn.conflicts = FALSE))
@@ -32,27 +32,27 @@ This package is designed to be used with a variety of input data, including mult
 
 When calcuating which patients have which comorbidities, the input data is typically structured as follows:
 
-<<begin, eval=TRUE>>=
+<<begin, cache=TRUE>>=
 patientData
 @
 
 Only the visitId column is propogated to the results. If 'present-on-arrival' is needed, it must be separated out first. The implicit default, therefore, is to ignore it, and give ICD-9 code regardless of POA status.
 
 The comorbidities can be determined as follows:
-<<getcomorbidities,cache=TRUE>>=
+<<getcomorbidities, cache=TRUE>>=
 icd9ComorbiditiesAhrq(icd9df = patientData)[, 1:10]
 @
 or
-<<getcomorbidities1a,cache=TRUE>>=
+<<getcomorbidities1a, cache=TRUE>>=
 icd9ComorbiditiesQuanDeyo(patientData)[, 1:10]
 @
 or using magrittr to chain functions together:
-<<getcomorbidities2,cache=TRUE>>=
+<<getcomorbidities2, cache=TRUE>>=
 patientData %>% icd9FilterPoaYes() %>%
   icd9ComorbiditiesAhrq(isShort = TRUE) %>% extract(1:5)
 @
 The following code shows gets the same result with default options written out:
-<<"comorbidUsingDefaultOpts",eval=FALSE,cache=TRUE>>=
+<<"comorbidUsingDefaultOpts",eval=FALSE, cache=TRUE>>=
 icd9Comorbidities(icd9df = icdFilterPoaYes(patientData),
                   visitId = "visitId",
                   icd9Field = "icd9",
@@ -62,27 +62,27 @@ icd9Comorbidities(icd9df = icdFilterPoaYes(patientData),
 @
 
 \section{Converting ICD-9 codes between types}
-These functions were designed with the problem of incorrectly or bizarrely formatted ICD-9 codes in mind. These functions make the reasonable assumption that short codes of three or fewer characters must be describing only the 'major' part. \begin{verbatim}keepLoneDecimal\end{verbatim} allows retention of the decimal point even if there are no subsequent characters.
-<<"conversionSimple",eval=T>>=
+These functions were designed with the problem of incorrectly or bizarrely formatted ICD-9 codes in mind. These functions make the reasonable assumption that short codes of three or fewer characters must be describing only the 'major' part. \Sexpr{"keepLoneDecimal"} allows retention of the decimal point even if there are no subsequent characters.
+<<"conversionSimple", cache=TRUE>>=
 icd9DecimalToShort(c("10.20", "100", "123.45"))
 icd9ShortToDecimal(icd9DecimalToShort(c("10.20", "100", "123.45")))
 @
 Only a subset of short codes can suffer dropping of leading zeroes.
-<<"conversionNeedZero",eval=T>>=
+<<"conversionNeedZero", cache=TRUE>>=
 icd9DecimalToShort(c("1", "22", "22.44", "100"))
 icd9ShortToDecimal(icd9DecimalToShort(c("1", "1.2", "123.45")))
 icd9ShortToDecimal(icd9DecimalToShort(c("1", "2.2", "100")))
 @
 
 \section{Validation of ICD-9 codes}
-<<validation,eval=T>>=
+<<validation, cache=TRUE>>=
 icd9ValidDecimal("V10.2")
 icd9ValidShort(c("099.17", "-1"))
 icd9ValidShort(c("1", "001", "100", "10023"))
 @
 
 Validation forces the package user to provide character format ICD-9 codes. If great care is taken, passing some integers could be valid, but given the high chance of mistakes, and the simplicity of dealing entirely with character input, character is enforced:
-<<invalidint,eval=F>>=
+<<invalidint, eval=FALSE>>=
 icd9ValidShort(100) # throws an error
 @
 
@@ -90,21 +90,21 @@ icd9ValidShort(100) # throws an error
 
 These functions generate syntactically valid ICD-9 codes, without including parent codes when the range limit would subset the parent. E.g. "100.99" \%i9d\% "101.01" does not include "100" or "100.0", both of which imply large subsets than requested by the range command.
 
-<<ranges,eval=T>>=
+<<ranges, cache=TRUE>>=
 "10099" %i9s% "10101"
 "V10" %i9d% "V10.02"
 # "E987" %i9d% "E988.9"
 @
 
 Another way of specifying ranges are to use function calls. These are exactly equivalent to the \%i9s\% and \%i9d\% range operators. This example shows the result when the user specifies a range which would include parents but not all their children:
-<<rangeanomaly>>=
+<<rangeanomaly, cache=TRUE>>=
 icd9ExpandRangeShort("V100", "V1002")
 @
 Although V100 would include ten children, the range only returns 4 values. In all other cases, parents are omitted to avoid the range returning overly broad classifications than intended. A planned feature is to optionally enable returning these parent codes, which would then follow a more numerical pattern (although still distinguishing trailing zeroes).
 
 \section{Human-readable ICD-9}
 There are various ways of extracting the description of the condition described by an ICD-9 code. the icd9Explain... functions return a data frame with a column for the ICD-9 code, a column for the full length Diagnosis, and a column for the short Description.
-<<explainSimple,eval=T>>=
+<<explainSimple, cache=TRUE>>=
 icd9ExplainDecimal("1.0")
 icd9ExplainShort("0019")
 @
@@ -116,59 +116,60 @@ icd9ExplainDecimal(icd9ShortToDecimal("0019"))
 "413.1" %>% icd9DecimalToShort() %>% icd9ExplainShort()
 @
 Arbitrary named list(s) of codes:
-<<explainArb,eval=T>>=
+<<explainArb, cache=TRUE>>=
 icd9ExplainDecimal(list(cholera = c("001", "001.0", "001.1", "001.9")))
 # same using decimal codes without a list
 icd9ExplainDecimal(c("001", "001.0", "001.1", "001.9"))
 @
+
 <<echo=FALSE,eval=FALSE>>= #TODO:
 # 001/cholera doesn't itself have an explanation: TODO walk down children to get next level explanations.
 icd9ExplainDecimal(list(cholera = "001", rheumatic_heart = "390"))
 @
 
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
-<<noexplain,eval=T>>=
+<<noexplain, cache=TRUE>>=
 icd9ExplainDecimal("001.5")
 @
 
 \section{Chaining commands}
 With the \begin{verbatim}magrittr\end{verbatim} package installed, commands can be chained together in a convenient and readable manner:
-<<chaining1,eval=T>>=
+<<chaining1, cache=TRUE>>=
 c("001.1", "391") %>% icd9DecimalToShort %>% icd9ExplainShort
 @
 
 Find all ICD-9 codes matching 'heart' or 'cardiac' in the short or long descriptions:
-<<>>=
+<<cardiacgrep, cache=TRUE>>=
 cardiac <- unique(c(
-  icd9CmDesc[
+  icd9Hierarchy[
     grepl(
       pattern="(heart)|(cardiac)",
-      x = icd9CmDesc[["descLong"]],
+      x = icd9Hierarchy[["descLong"]],
       ignore.case = TRUE
     ),
     "icd9"],
-  icd9CmDesc[
+  icd9Hierarchy[
     grepl(
       pattern="(heart)|(cardiac)",
-      x = icd9CmDesc[["descShort"]],
+      x = icd9Hierarchy[["descShort"]],
       ignore.case = TRUE
     ),
     "icd9"]
 ))
 @
 then explain the list, just showing the first ten:
-<<cardiacChainExplainExample>>=
+<<cardiacChainExplainExample, cache=TRUE>>=
 cardiac %>% icd9ExplainShort %>% extract(2) %>% head(10)
 @
 
 More examples, this time also demonstrating automatic summarization of a long list of ICD-9 codes into the minimum set of explanatory parent codes:
-<<ExampleQDDementia>>=
+<<ExampleQDDementia, cache=TRUE>>=
 quanDeyoComorbid[["Dementia"]] %>%
   icd9ExplainShort() %>%
   extract(c("ICD-9","Description"))
 @
 Use a range with more than two hundred ICD-9 codes:
-<<ShowRangeOperator>>=
+<<ShowRangeOperator, cache=TRUE>>=
 length("390" %i9d% "392.1")
 
 "390" %i9d% "392.1" %>%
@@ -180,43 +181,41 @@ length("390" %i9d% "392.1")
 
 \section{Filtering from Present-on-Arrival}
 Present-on-arrival (POA) is typically a factor, or vector of values such as "Y", "N", "X", "E", or NA. Intermediate codes, such as "exempt", "unknown" and NA mean that "yes" is not the same as "not no." This requires four functions to cover the possibilities stored in icd9PoaChoices:
-<<ShowPoaChoices>>=
+<<ShowPoaChoices, cache=TRUE>>=
 icd9PoaChoices
 @
 
-Magrittr allows chaining of the filtering very nicely:
-<<MagrittrSetupData>>=
+Magrittr allows chaining of the filtering very nicely. Set up some data to demonstrate this:
+<<MagrittrSetupData, cache=FALSE>>=
 myData <- data.frame(
   visitId = c("v1", "v2", "v3", "v4"),
   icd9 = c("39891", "39790", "41791", "4401"),
   poa = c("Y", "N", NA, "Y"),
   stringsAsFactors = FALSE)
-myData
 @
-
-@
-<<simplepoa>>=
+Filter for present-on-arrival being "Y"
+<<simplepoa, cache=TRUE>>=
 myData %>% icd9FilterPoaYes()
 @
 Show that 'yes' is not equal to 'not no':
-<<notnopoa>>=
+<<notnopoa, cache=TRUE>>=
 myData %>% icd9FilterPoaNotNo()
 @
 Chain commands together to get a few columns of comorbidities. This is showing off how magrittr works in the context of this package.
-<<chainpoatocomorbid>>=
+<<chainpoatocomorbid, cache=TRUE>>=
 myData %>%
   icd9FilterPoaNotNo() %>%
   icd9ComorbiditiesAhrq(isShort = TRUE) %>%
   extract(1:9)
 @
 Can fill out some named fields, if we want:
-<<customnamesinchain>>=
+<<customnamesinchain, cache=TRUE>>=
 myData %>% icd9FilterPoaYes(poaField="poa") %>%
   icd9ComorbiditiesAhrq(visitId = "visitId") %>%
   extract(1:9)
 @
-Call the core icd9Comorbidities function with an arbitrary mapping
-<<specifiedComorbidityMapChain>>=
+Call the core icd9Comorbidities function with a named mapping:
+<<specifiedComorbidityMapChain, cache=TRUE>>=
 myData %>%
   icd9FilterPoaYes() %>%
   icd9Comorbidities(
@@ -234,8 +233,8 @@ icd9Chapters[1:5]
 @
 The next expression is obsolete since all children are now included in the packaged
 mappings. The user may provide their own mapping which needs this operation.
-<<eval=TRUE>>=
-myMap <- icd9:::icd9ChaptersToMap(icd9Chapters, isShort = TRUE)
+<<"mapFromChapters", eval=TRUE, cache=TRUE>>=
+myMap <- icd9:::icd9ChaptersToMap(icd9Chapters[c(1,2:4)])
 
 system.time(
   patientChapters <- icd9Comorbidities(
@@ -247,7 +246,7 @@ system.time(
     icd9df = patientData, icd9Mapping = myMap)
 )
 
-str(patientChapters)
+patientChapters
 
 @
 
@@ -255,11 +254,11 @@ str(patientChapters)
 
 The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
-<<ahrq,eval=FALSE>>=
+<<ahrq, eval=FALSE>>=
 ahrqComorbid <- parseAhrqSas()
 @
 
-<<ahrqcontents>>=
+<<ahrqcontents, cache=TRUE>>=
 head(summary(ahrqComorbid))
 @
 
@@ -287,31 +286,25 @@ VALUE $RCOMFMT
 \end{verbatim}
 
 This is parsed using:
-<<eval=FALSE>>=
+<<eval=FALSE, cache=TRUE>>=
 parseAhrqSas()
 @
 resulting in a named list. Here is an extract.
-<<"exampleAhrqComorbid",cache=TRUE>>=
+<<"exampleAhrqComorbid", cache=TRUE>>=
 ahrqComorbid[c("Obesity", "Depression")]
 @
-
 The inverse operation to find condensed list using any parent codes that fully describe the same set is work in progress.
 
 \section{Elixhauser co-morbidities}
-
 Elixhauser originally devleoped this set of co-morbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
-
-<<elix>>=
+<<elix, cache=TRUE>>=
 names(elixhauserComorbid)
 @
 
 \section{Quan}
-
 Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's co-morbidities. Thus there are two 'Quan' comorbidity mappings.
-<<quanElix>>=
+<<quanElix, cache=TRUE>>=
 names(quanDeyoComorbid)
 names(quanElixhauserComorbid)
 @
-
-
 \end{document}

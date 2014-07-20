@@ -49,7 +49,8 @@ icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "", invalidAction = icd
 }
 
 #' @title extract major part from short or decimal ICD-9 code
-#' @description Simply extracts parts, then returns only the major part in a character vector
+#' @description Simply extracts parts, then returns only the major part in a
+#'   character vector
 #' @template icd9-any
 #' @template isShort
 #' @template invalid
@@ -171,13 +172,15 @@ icd9PartsRecompose <- function(parts, isShort, invalidAction = icd9InvalidAction
 
   minor[is.na(minor)] <- ""
 
-  # only allow pass through of non-zero-padded majors in short if no minor. Otherwise, major is passed through unchanged.
+  # only allow pass through of non-zero-padded majors in short if no minor.
+  # Otherwise, major is passed through unchanged.
   if (isShort) {
     nonEmptyMinors <- minor != ""
     major[nonEmptyMinors] <- icd9AddLeadingZeroesMajor(major[nonEmptyMinors], addZeroV = TRUE, invalidAction = invalidAction)
   }
 
-  # paste regardless of major or minor validity. If major is NA, then adding leading zeroes also gives NA.
+  # paste regardless of major or minor validity. If major is NA, then adding
+  # leading zeroes also gives NA.
   out <- paste(major, minor, sep = sep)
   out[is.na(major)] <- NA_character_
 
@@ -188,47 +191,55 @@ icd9PartsRecompose <- function(parts, isShort, invalidAction = icd9InvalidAction
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9PartsToShort <- function(parts, invalidAction = icd9InvalidActions)
+icd9PartsToShort <- function(parts, invalidAction = icd9InvalidActions) {
   icd9PartsRecompose(parts = parts, isShort = TRUE, invalidAction = match.arg(invalidAction))
+}
 
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9PartsToDecimal <- function(parts, invalidAction = icd9InvalidActions)
+icd9PartsToDecimal <- function(parts, invalidAction = icd9InvalidActions) {
   icd9PartsRecompose(parts = parts, isShort = FALSE, invalidAction = match.arg(invalidAction))
+}
 
 #' @rdname icd9PartsRecompose
 #' @description icd9MajMinToDf simply composes the data frame needed
 #'   as input to the PartsToXxxx functions
 #' @export
-icd9MajMinToParts <- function(major, minor)
+icd9MajMinToParts <- function(major, minor) {
   data.frame(major = major, minor = minor, stringsAsFactors = FALSE)
+}
 
 #' @rdname icd9PartsRecompose
-#' @description icd9MajMinTo\{Short|Decimal\} simply composes the data frame needed
-#'   as input to the PartsToXxxx functions. Having two inputs breaks the ability to 'pipe' commands together using \link{magrittr}, so passing a single \code{data.frame} is preferred.
+#' @description icd9MajMinTo\{Short|Decimal\} simply composes the data frame
+#'   needed as input to the PartsToXxxx functions. Having two inputs breaks the
+#'   ability to 'pipe' commands together using \link{magrittr}, so passing a
+#'   single \code{data.frame} is preferred.
 #' @export
-icd9MajMinToShort <- function(major, minor, invalidAction = icd9InvalidActions)
+icd9MajMinToShort <- function(major, minor, invalidAction = icd9InvalidActions) {
   icd9PartsToShort(parts = icd9MajMinToParts(major, minor), invalidAction = match.arg(invalidAction))
+}
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9MajMinToDecimal <- function(major, minor, invalidAction = icd9InvalidActions)
+icd9MajMinToDecimal <- function(major, minor, invalidAction = icd9InvalidActions) {
   icd9PartsToDecimal(parts = icd9MajMinToParts(major, minor), invalidAction = match.arg(invalidAction))
+}
 
 #' @title convert the chapter headings to lists of codes
 #' @description the chapter headings can be converted into the full set of their
 #'   children, and then used to look-up which chapter, sub-chapter, or 'major' a
-#'   given code belongs.
+#'   given code belongs. Always returns a map with short-form icd-9 codes. These
+#'   can be converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
 #'   icd9ChaptersSub
 #' @keywords internal manip
-icd9ChaptersToMap <- function(x, isShort) {
+icd9ChaptersToMap <- function(x) {
   if (length(x) == 1) x <- get(x)
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- icd9ChildrenRangeShort(r)
+    map[[r]] <- icd9ExpandRangeShort(x[[r]][1], x[[r]][2])
   }
   map
 }

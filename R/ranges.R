@@ -84,29 +84,6 @@ icd9Children <- function(icd9, isShort) {
   icd9ChildrenDecimal(icd9)
 }
 
-#' @title List all child ICD-9 codes for a range definition
-#' @description This is primarily useful for converting the icd9Chapters to
-#'   ranges of children. E.g. "280-289" becomes "280" %i9s% "289". In this case,
-#'   isShort determines the output, not the input.
-#' @param range character vector length one e.g. "V10-V15"
-#' @template isShort
-icd9ChildrenRange <- function(range, isShort) {
-  x <- unlist(strMultiMatch("([VvEe[:digit:]]*)-([VvEe[:digit:]]*)", range))
-  if (isShort) {
-    return(x[1] %i9s% x[2])
-  } else {
-    return(x[1] %i9d% x[2])
-  }
-}
-
-icd9ChildrenRangeDecimal <- function(range) {
-  icd9ChildrenRange(range, isShort = FALSE)
-}
-
-icd9ChildrenRangeShort <- function(range) {
-  icd9ChildrenRange(range, isShort = TRUE)
-}
-
 #' @title sort short-form icd9 codes
 #' @description should work with numeric only, V or E codes. Note that a numeric
 #'   sort does not work for ICD-9 codes, since "162" > "1620" TODO: write tests.
@@ -370,7 +347,7 @@ icd9CondenseShort <- function(icd9Short, invalidAction = c("stop", "ignore", "si
 #'   function will never add a parent ICD-9 which, although may have all
 #'   children present, may itself have an additional clinical meaning. In
 #'   addition, in contrast to \code{icd9CondenseShort}, this function only walks
-#'   back up to parents which have descriptions in \code{icd9CmDesc}, so it is
+#'   back up to parents which have descriptions in \code{icd9Hierarchy}, so it is
 #'   useful for generating a minimal textual description of a set of ICD-9
 #'   codes.
 #' @template icd9-short
@@ -384,7 +361,7 @@ icd9CondenseToExplainShort <- function(icd9Short, invalidAction = c("stop", "ign
   # for every entry, search for all possible child entries in the list, and if we find ALL the children, then delete them from the output list.
   for (i in icd9Short) {
     kids <- icd9ChildrenShort(i)
-    if (i %in% icd9CmDesc[["icd9"]] && all(kids %in% out)) {
+    if (i %in% icd9Hierarchy[["icd9"]] && all(kids %in% out)) {
       out <- c(i, out[!out %in% kids]) # keep self!
     }
   }

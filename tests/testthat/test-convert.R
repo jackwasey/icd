@@ -20,7 +20,7 @@ test_that("extract decimal parts - invalid or empty input", {
       minor = structure(integer(0), .Label = character(0), class = "factor")
     ), .Names = c("major","minor"), row.names = integer(0), class = "data.frame")
 
-  # use testthat::not to avoid conflict with magrittr
+  # use testthat::not to avoid annoying conflict with magrittr
   expect_that(icd9DecimalToParts(character(), invalidAction = "stop"), testthat::not(throws_error()))
   expect_equal(icd9DecimalToParts(character(), invalidAction = "stop"), emptydf)
   expect_warning(icd9DecimalToParts("", invalidAction = "warn"))

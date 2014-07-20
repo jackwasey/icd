@@ -4,7 +4,7 @@
 #'   without further processing. Small memory versus time trade-off.
 #' @param save logical whether to save the result in the source tree. Defaults
 #'   to \code{FALSE}.
-#' @param saveDir path to directory to save the data. This is typically the data
+#' @param path path to directory to save the data. This is typically the data
 #'   folder in the devleopment source tree. Defaults to \code{"~/icd9/data"}.
 #'   Could possibly avoid hard-coding path with devtools functions.
 #' @return invisibly returns the list of vectors, where a

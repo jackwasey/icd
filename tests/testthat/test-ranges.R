@@ -271,16 +271,16 @@ test_that("icd9InReferenceCodeLong", {
   expect_error(icd9InReferenceCode(123)) # no numbers, just strings
   expect_error(icd9InReferenceCode("salami"))
   expect_error(icd9InReferenceCode("bratwurst", "123", invalidAction = "stop"))
-  expect_equal(icd9InReferenceCode("bratwurst", "123", validate = FALSE), FALSE)
-  expect_error(icd9InReferenceCode("421", "boudin", validateReference = TRUE)) # base codes definitely must be valid regardless of invalidAction = "stop" (for the input data): so do generate errors
+  expect_equal(icd9InReferenceCode("bratwurst", "123", invalidAction = "silent"), FALSE)
+  expect_error(icd9InReferenceCode("421", "boudin", invalidActionReference = TRUE)) # base codes definitely must be valid regardless of invalidAction = "stop" (for the input data): so do generate errors
   #expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "V432"))) # invalid V code # automatically validate? TODO
-  expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "E"), validateReference = TRUE)) # invalid reference code
-  expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "V"), validateReference = TRUE)) # invalid reference code
+  expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "E"), invalidActionReference = TRUE)) # invalid reference code
+  expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "V"), invalidActionReference = TRUE)) # invalid reference code
   expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V42")), c(FALSE, TRUE))
   expect_error(icd9InReferenceCode(c("123", "V43210"), c("421", "123"), invalidAction = "stop"))
-  expect_equal(icd9InReferenceCode(c("123", "V43210"), c("421", "123"), validate = FALSE), c(TRUE, FALSE))
+  expect_equal(icd9InReferenceCode(c("123", "V43210"), c("421", "123"), invalidAction = "silent"), c(TRUE, FALSE))
   expect_error(icd9InReferenceCode(c("100.1", "200"), "200", invalidAction = "stop")) # not expecting decimals in input data
-  expect_equal(icd9InReferenceCode(c("100.1", "200"), "200", validate = FALSE), c(FALSE, TRUE))
+  expect_equal(icd9InReferenceCode(c("100.1", "200"), "200", invalidAction = "silent"), c(FALSE, TRUE))
 
   expect_identical(icd9InReferenceCode(c("2501", "25001", "999"), c("V101", "250")), c(TRUE, TRUE, FALSE))
 

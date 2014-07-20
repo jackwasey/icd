@@ -45,7 +45,7 @@ icd9Explain.list <- function(icd9, isShort, doCondense = TRUE) {
 icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
 
   if (!isShort) {
-    # make sure there are preceding zeroes, in order to match the icd9CmDesc data.
+    # make sure there are preceding zeroes, in order to match the icd9Hierarchy data.
     icd9 <- icd9AddLeadingZeroesDecimal(icd9)
     icd9 <- icd9DecimalToShort(icd9)
   }
@@ -54,11 +54,12 @@ icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
     # find common parent ICD-9 codes, but only if they have a description
     icd9 <- icd9CondenseToExplainShort(icd9, invalidAction = "warn")
     # find those codes without explanations:
-    unexplainedParents <- icd9[!(icd9 %in% icd9CmDesc[["icd9"]])]
+    unexplainedParents <- icd9[!(icd9 %in% icd9Hierarchy[["icd9"]])]
     # get all their children, so we can work backwards to the highest-level explanations
     orphans <- icd9CondenseToExplainShort(icd9ChildrenShort(unexplainedParents), invalidAction = "warn")
   }
-  out <- icd9CmDesc[ icd9CmDesc[["icd9"]] %in% c(icd9, orphans), ]
+  # TODO: could include more of the hierarchy in the description here:
+  out <- icd9Hierarchy[ icd9Hierarchy[["icd9"]] %in% c(icd9, orphans), c("icd9", "descLong", "descShort")]
   row.names(out) <- NULL
   names(out) <- c("ICD-9", "Diagnosis", "Description")
   if (!isShort) out[["ICD-9"]] <- icd9ShortToDecimal(out[["ICD-9"]])
@@ -137,7 +138,7 @@ icd9GetChapters <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
   cf <- factor(rep(NA, length(icd9)), levels = c(names(icd9Chapters), NA_character_))
   sf <- factor(rep(NA, length(icd9)), levels = c(names(icd9ChaptersSub), NA_character_))
   mf <- factor(rep(NA, length(icd9)), levels = c(names(icd9ChaptersMajor), NA_character_))
-  out <- data.frame(icd9, chapter = cf, subchapter = sf, major = mf)
+  out <- data.frame(chapter = cf, subchapter = sf, major = mf)
   for (i in 1:length(majors)) {
     for (chap in names(icd9Chapters)) {
       if (any(majors[i] %in% (icd9Chapters[[chap]]["start"] %i9mj% icd9Chapters[[chap]]["end"]))) {
@@ -159,4 +160,17 @@ icd9GetChapters <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
     }
   }
   out
+}
+
+# internal
+icd9GetChaptersHierarchy <- function(save = FALSE, path = "~/icd9/data") {
+
+  icd9CmDesc <- parseIcd9Descriptions() # don't rely on having already done this when setting up other data.
+
+  icd9Descriptions <- parseIcd9Descriptions()
+  icd9Hierarchy <- cbind(
+    icd9CmDesc,
+    icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE, invalidAction = "stop")
+  )
+  saveSourceTreeData("icd9Hierarchy", path = path)
 }
