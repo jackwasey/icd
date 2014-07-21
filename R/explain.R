@@ -49,21 +49,13 @@ icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
     icd9 <- icd9AddLeadingZeroesDecimal(icd9)
     icd9 <- icd9DecimalToShort(icd9)
   }
-  orphans <- c()
   if (doCondense) {
-    # find common parent ICD-9 codes, but only if they have a description
-    icd9 <- icd9CondenseToExplainShort(icd9, invalidAction = "warn")
-    # find those codes without explanations:
-    unexplainedParents <- icd9[!(icd9 %in% icd9Hierarchy[["icd9"]])]
-    # get all their children, so we can work backwards to the highest-level explanations
-    orphans <- icd9CondenseToExplainShort(icd9ChildrenShort(unexplainedParents), invalidAction = "warn")
+    return(icd9CondenseToExplain(icd9))
   }
-  # TODO: could include more of the hierarchy in the description here:
-  out <- icd9Hierarchy[ icd9Hierarchy[["icd9"]] %in% c(icd9, orphans), c("icd9", "descLong", "descShort")]
-  row.names(out) <- NULL
-  names(out) <- c("ICD-9", "Diagnosis", "Description")
-  if (!isShort) out[["ICD-9"]] <- icd9ShortToDecimal(out[["ICD-9"]])
-  out
+  mj <- unique(icd9ShortToMajor(icd9))
+  c(names(icd9ChaptersMajor)[icd9ChaptersMajor %in% mj[mj %in% icd9]],
+    icd9Hierarchy[ icd9Hierarchy[["icd9"]] %in% icd9, "descLong"]
+  )
 }
 
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning
@@ -172,5 +164,121 @@ icd9GetChaptersHierarchy <- function(save = FALSE, path = "~/icd9/data") {
     icd9CmDesc,
     icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE, invalidAction = "stop")
   )
-  saveSourceTreeData("icd9Hierarchy", path = path)
+  if (save) saveSourceTreeData("icd9Hierarchy", path = path)
+}
+
+#' @title condense list of short ICD-9 code into minimal set of parent descriptions
+#' @description This can be thought of as the inverse operation to expanding a
+#'   range. The list given must already contain the parents, because this
+#'   function will never add a parent ICD-9 which, although may have all
+#'   children present, may itself have an additional clinical meaning. In
+#'   addition, in contrast to \code{icd9CondenseToMajor}, this function only walks
+#'   back up to parents which have descriptions in \code{icd9Hierarchy}, so it is
+#'   useful for generating a minimal textual description of a set of ICD-9
+#'   codes.
+#' @template icd9-short
+#' @template invalid
+#' @family ICD-9 ranges
+#' @export
+#' @keywords manip
+icd9CondenseToExplain <- function(icd9Short, invalidAction = c("stop", "ignore", "silent", "warn")) {
+
+  invalidAction <- match.arg(invalidAction)
+  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = invalidAction)
+
+  # we also rely on the icd9 codes existing in the reference table:
+  if (invalidAction == "warn" && any(!icd9RealShort(icd9Short)))
+    warning("dropping values which are not in the reference table",
+            paste(icd9Short[!icd9RealShort(icd9Short)], sep = ", ", collapse = ", "))
+
+  # make homogeneous and sort so we will hit the parents first, kids later.
+  icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short))
+  # set up a factor which contains levels for any description within the hierarchy:
+  fout <- factor(levels = c(
+    levels(icd9Hierarchy["chapter"]),
+    levels(icd9Hierarchy["subchapter"]),
+    levels(icd9Hierarchy["major"]),
+    levels(icd9Hierarchy["descLong"])
+  ))
+
+  # find factor levels for the given codes in icd9hier
+  # for chapter/sub/major do we have all rows for that level?
+
+  for (i in icd9Short) {
+
+    if (icd9IsMajor(i)) {
+      fout <- c(fout, names(icd9ChaptersMajor)[icd9ChaptersMajor == i])
+      break
+    }
+
+    fm <- asCharacterNoWarn(icd9Hierarchy[icd9Hierarchy$icd9 == i, "chapter"])
+    peers <- icd9Hierarchy[icd9Hierarchy[["chapter"]] == fm, "icd9"]
+    if (all(peers %in% icd9Short)) { fout <- c(fout, fm); break }
+
+    fm <- asCharacterNoWarn(icd9Hierarchy[icd9Hierarchy$icd9 == i, "subchapter"])
+    peers <- icd9Hierarchy[icd9Hierarchy[["subchapter"]] == fm, "icd9"]
+    if (all(peers %in% icd9Short)) { fout <- c(fout, fm); break }
+
+    fm <- asCharacterNoWarn(icd9Hierarchy[icd9Hierarchy$icd9 == i, "major"])
+    peers <- icd9Hierarchy[icd9Hierarchy[["major"]] == fm, "icd9"]
+    if (all(peers %in% icd9Short)) { fout <- c(fout, fm); break }
+
+    fout <- c(fout, fm <- asCharacterNoWarn(icd9Hierarchy[icd9Hierarchy$icd9 == i, "descLong"]));
+  }
+
+  mjrs <- unique(fout[icd9IsMajor(fout)] ) # not just major parts, but the codes which are already majors
+  for (i in mjrs) {
+    fm <- asCharacterNoWarn(icd9Hierarchy[icd9Hierarchy$icd9 == i, "chapter"])
+    peers <- icd9Hierarchy[icd9Hierarchy[["chapter"]] == fm, "icd9"]
+    if (all(peers %in% icd9Short)) { fout <- c(fout, fm); break }
+
+    fm <- asCharacterNoWarn(icd9Hierarchy[icd9Hierarchy$icd9 == i, "subchapter"])
+    peers <- icd9Hierarchy[icd9Hierarchy[["subchapter"]] == fm, "icd9"]
+    if (all(peers %in% icd9Short)) { fout <- c(fout, fm); break }
+
+    fm <- asCharacterNoWarn(icd9Hierarchy[icd9Hierarchy$icd9 == i, "major"])
+    peers <- icd9Hierarchy[icd9Hierarchy[["major"]] == fm, "icd9"]
+    if (all(peers %in% icd9Short)) { fout <- c(fout, fm); break }
+
+    fout <- c(fout, fm <- asCharacterNoWarn(icd9Hierarchy[icd9Hierarchy$icd9 == i, "descLong"]));
+
+  }
+
+  asCharacterNoWarn(fout)
+}
+
+
+#' @title condense list of short ICD-9 code into minimal set of major-part-only
+#'   codes
+#' @description This can be thought of as the inverse operation to
+#'   icd9Children("123"). The list given must already contain the parents,
+#'   because this function will never add a parent ICD-9 which, although may
+#'   have all children present, may itself have an additional clinical meaning.
+#' @template icd9-short
+#' @template onlyReal
+#' @param dropNonReal single logical, if TRUE, and \code{onlyReal} is TRUE, then
+#'   codes not found in the master list are dropped; otherwise they are included
+#'   in the output.
+#' @template invalid
+#' @family ICD-9 ranges
+#' @export
+icd9CondenseToMajor <- function(icd9Short, onlyReal, dropNonReal = TRUE, invalidAction = c("stop", "ignore", "silent", "warn")) {
+
+  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = match.arg(invalidAction))
+
+  # make homogeneous and sort so we will hit the parents first, kids later.
+  out <- icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short))
+  mjs <- unique(icd9ShortToMajor(icd9Short))
+  # if all major children are in the list, replace those items with just the
+  # major codes, leave the rest.
+  includemjs <- c()
+  for (mj in mjs) {
+    matchKids <- icd9ChildrenShort(mj, onlyReal = onlyReal)
+    if (all(matchKids %in% out)) {
+      out <- out[!out %in% matchKids]
+      includemjs <- c(includemjs, mj)
+    }
+  }
+  if (onlyReal && dropNonReal) out <- out[icd9RealShort(out)] # TODO: tests for this
+  c(unique(includemjs), out)
 }

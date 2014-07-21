@@ -8,6 +8,7 @@
 #'
 #'
 #' @template icd9-decimal
+#' @template onlyReal
 #' @template invalid
 #' @examples
 #' #icd9ChildrenDecimal("100.1")
@@ -17,7 +18,7 @@
 #' @export
 #' @family ICD-9 ranges
 #' @keywords manip
-icd9ChildrenDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
+icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE, invalidAction = icd9InvalidActions) {
 
   if (!is.character(icd9Decimal)) stop('baseCode must be character only to avoid ambiguity')
   icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal, invalidAction = invalidAction)
@@ -33,7 +34,10 @@ icd9ChildrenDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions)
                   )
     )
   }
+  out <- unique(out)
+  if (onlyReal) return(out[icd9RealDecimal(out)])
   out
+
 }
 
 #' @title expand 5 character form 'short' ICD9 to all possible sub codes
@@ -42,7 +46,7 @@ icd9ChildrenDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions)
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @export
-icd9ChildrenShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
+icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE, invalidAction = icd9InvalidActions) {
   if (!is.character(icd9Short)) stop('must have character only input to expand a short basecode to avoid ambiguity')
   if (length(icd9Short) == 0) return(character())
   icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = match.arg(invalidAction))
@@ -57,7 +61,9 @@ icd9ChildrenShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
                invalidAction = "ignore")
     )
   }
-  unique(out)
+  out <- unique(out)
+  if (onlyReal) return(out[icd9RealShort(out)])
+  out
 }
 
 # icd9ChildrenShortFast <- function(icd9Short, invalidAction = icd9InvalidActions) {
@@ -79,9 +85,9 @@ icd9ChildrenShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
 #' @template isShort
 #' @family ICD-9 ranges
 #' @keywords internal
-icd9Children <- function(icd9, isShort) {
-  if (isShort) return(icd9ChildrenShort(icd9))
-  icd9ChildrenDecimal(icd9)
+icd9Children <- function(icd9, onlyReal = FALSE, isShort) {
+  if (isShort) return(icd9ChildrenShort(icd9, onlyReal = onlyReal))
+  icd9ChildrenDecimal(icd9, onlyReal = onlyReal)
 }
 
 #' @title sort short-form icd9 codes
@@ -310,62 +316,6 @@ icd9ExpandRangeDecimal <- function(start, end, invalidAction = c("stop", "ignore
 #' @export
 "%i9d%" <- function(start, end) {
   icd9ExpandRangeDecimal(start = start, end = end, invalidAction = "warn")
-}
-
-#' @title condense list of short ICD-9 code into minimal set of parent codes
-#' @description This can be thought of as the inverse operation to expanding a
-#'   range. The list given must already contain the parents, because this
-#'   function will never add a parent ICD-9 which, although may have all
-#'   children present, may itself have an additional clinical meaning.
-#' @template icd9-short
-#' @template invalid
-#' @family ICD-9 ranges
-#' @export
-icd9CondenseShort <- function(icd9Short, invalidAction = c("stop", "ignore", "silent", "warn")) {
-
-  invalidAction <- match.arg(invalidAction)
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = invalidAction)
-
-  # make homogeneous
-  icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short)) # sort so we will hit the parents first, kids later.
-  out <- icd9Short
-
-  # for every entry, search for all possible child entries in the list, and if we find ALL the children, then delete them from the output list.
-  for (i in icd9Short) {
-    kids <- icd9ChildrenShort(i)
-    if (all(kids %in% out)) {
-      out <- c(i, out[!out %in% kids]) # keep self!
-    }
-  }
-  out
-}
-
-#' @title condense list of short ICD-9 code into minimal set of parent codes
-#'   which have descriptions.
-#' @description This can be thought of as the inverse operation to expanding a
-#'   range. The list given must already contain the parents, because this
-#'   function will never add a parent ICD-9 which, although may have all
-#'   children present, may itself have an additional clinical meaning. In
-#'   addition, in contrast to \code{icd9CondenseShort}, this function only walks
-#'   back up to parents which have descriptions in \code{icd9Hierarchy}, so it is
-#'   useful for generating a minimal textual description of a set of ICD-9
-#'   codes.
-#' @template icd9-short
-#' @template invalid
-#' @family ICD-9 ranges
-#' @export
-icd9CondenseToExplainShort <- function(icd9Short, invalidAction = c("stop", "ignore", "silent", "warn")) {
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = match.arg(invalidAction))
-  # make homogeneous
-  out <- icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short)) # sort so we will hit the parents first, kids later.
-  # for every entry, search for all possible child entries in the list, and if we find ALL the children, then delete them from the output list.
-  for (i in icd9Short) {
-    kids <- icd9ChildrenShort(i)
-    if (i %in% icd9Hierarchy[["icd9"]] && all(kids %in% out)) {
-      out <- c(i, out[!out %in% kids]) # keep self!
-    }
-  }
-  out
 }
 
 #' @title determine preceding or subsequent post-decimal parts of ICD9 codes

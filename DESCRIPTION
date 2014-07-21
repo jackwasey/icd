@@ -6,7 +6,7 @@ Description: This package allows accurate manipulation, conversion, validation
     mixture of decimal and non-decimal "short" format codes exist. Tools to map
     ICD-9 codes to co-morbidities are also provided, with mappings from Quan
     (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-Version: 0.4
+Version: 0.5
 Date: 2014-07-14
 Authors@R: person(given="Jack O.", family="Wasey", role=c("aut", "cre"),
     email=c("jack@jackwasey.com"))

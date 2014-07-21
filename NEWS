@@ -1,3 +1,15 @@
+Version 0.5
+------------------------------------------------------------------------------
+
+* Filter icd9 data for validity or existence. Fixes issue #27
+* Guess whether a code is short or decimal. Fixes #22
+* Enable ranges for Exxx codes. Fixes #9
+* Explain and condense long lists of ICD-9 codes using maximum number of higher-level descriptions without being overly broad. Fixes #3
+* Include high level descriptions, chapters, majors, which do not have CMS descriptions because they are not themselves billable codes. Fixes #2
+* E codes <800 can be valid in 2014. Fixes #1
+* Bug fixes, vignette and other documentation updated.
+* Test suite ever more comprehensive.
+
 Version 0.4
 ------------------------------------------------------------------------------
 

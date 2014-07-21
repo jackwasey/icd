@@ -20,9 +20,9 @@ opts_chunk$set(size="scriptsize")
 options(width = 90)
 
 patientData <- data.frame(
-  visitId = c(1000, 1000, 1000, 1001, 1001, 1002),
-  icd9 = c("27801", "7208", "25001", "34400", "4011", "4011"),
-  poa = factor(c("Y", "N", "Y", "N", "Y", "N"))
+  visitId = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
+  icd9 = c("402010", "27801", "7208", "25001", "34400", "4011", "4011"),
+  poa = factor(c("Y", "Y", "N", "Y", "N", "Y", "N"))
 )
 @
 
@@ -100,7 +100,17 @@ Another way of specifying ranges are to use function calls. These are exactly eq
 <<rangeanomaly, cache=TRUE>>=
 icd9ExpandRangeShort("V100", "V1002")
 @
-Although V100 would include ten children, the range only returns 4 values. In all other cases, parents are omitted to avoid the range returning overly broad classifications than intended. A planned feature is to optionally enable returning these parent codes, which would then follow a more numerical pattern (although still distinguishing trailing zeroes).
+Although V100 would include ten children, the range only returns 4 values. In all other cases, parents are omitted to avoid the range returning broader classifications than intended. A planned feature is to optionally enable returning these parent codes, which would then follow a more numerical pattern (although still distinguishing trailing zeroes).
+
+We can easily find the children of a given higher-level ICD-9 code:
+<<"childrenReal", cache=TRUE>>=
+icd9ChildrenShort("391", onlyReal = TRUE)
+@
+Without the onlyReal flag, all syntactically correct ICD-9 codes are returned, even if not defined. This is relevant because of minor coding errors, or coding in a different year to the master list. A planned feature is to allow testing of an ICD-9 code against the valid codes for the year it was entered, but at present only the 2014 master list is used. This means that some older valid codes may not longer be on the list.
+
+<<"childrenAll", cache=TRUE>>=
+icd9ChildrenShort("391", onlyReal = FALSE)[1:10]
+@
 
 \section{Human-readable ICD-9}
 There are various ways of extracting the description of the condition described by an ICD-9 code. the icd9Explain... functions return a data frame with a column for the ICD-9 code, a column for the full length Diagnosis, and a column for the short Description.
@@ -108,12 +118,21 @@ There are various ways of extracting the description of the condition described 
 icd9ExplainDecimal("1.0")
 icd9ExplainShort("0019")
 @
-<<explainComplex,eval=T>>=
+
+<<explainComplex, cache=TRUE>>=
 icd9Explain("1.0", isShort = FALSE)
 icd9Explain(c("0010","4131"), isShort = TRUE)
+# combine with some conversions
 icd9ExplainDecimal(icd9ShortToDecimal("0019"))
 "4139" %>% icd9ShortToDecimal() %>% icd9ExplainDecimal()
 "413.1" %>% icd9DecimalToShort() %>% icd9ExplainShort()
+
+#explain top level code with children
+"391" %>% icd9ChildrenShort(onlyReal = TRUE)
+"391" %>% icd9ExplainShort()
+# default is to condense down to three-digit "major" level
+"391" %>% icd9ChildrenShort() %>% icd9ExplainShort()
+"391" %>% icd9ChildrenShort() %>% icd9ExplainShort(doCondense = FALSE)
 @
 Arbitrary named list(s) of codes:
 <<explainArb, cache=TRUE>>=
@@ -293,7 +312,11 @@ resulting in a named list. Here is an extract.
 <<"exampleAhrqComorbid", cache=TRUE>>=
 ahrqComorbid[c("Obesity", "Depression")]
 @
-The inverse operation to find condensed list using any parent codes that fully describe the same set is work in progress.
+The icd9Condense functions can be used to make a minimal set of parent codes which describes each group:
+<<"condenseMapping", cache=TRUE>>=
+lapply(ahrqComorbid[c("Obesity", "Depression")], icd9CondenseToMajor, onlyReal = T)
+ahrqComorbid[c("Obesity", "Depression")] %>% icd9ExplainShort(doCondense = FALSE)
+@
 
 \section{Elixhauser co-morbidities}
 Elixhauser originally devleoped this set of co-morbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
