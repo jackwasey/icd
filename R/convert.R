@@ -213,7 +213,7 @@ icd9MajMinToParts <- function(major, minor) {
 #' @rdname icd9PartsRecompose
 #' @description icd9MajMinTo\{Short|Decimal\} simply composes the data frame
 #'   needed as input to the PartsToXxxx functions. Having two inputs breaks the
-#'   ability to 'pipe' commands together using \link{magrittr}, so passing a
+#'   ability to 'pipe' commands together using \code{magrittr}, so passing a
 #'   single \code{data.frame} is preferred.
 #' @export
 icd9MajMinToShort <- function(major, minor, invalidAction = icd9InvalidActions) {

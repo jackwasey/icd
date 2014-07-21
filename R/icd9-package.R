@@ -28,11 +28,11 @@
 #'   that might appear in a simple numerical range. See the test suite for some
 #'   example cases. \code{\link{icd9ChildrenDecimal}} and
 #'   \code{\link{icd9ChildrenShort}} generate the full range of child ICD-9
-#'   codes. The reverse operation is \code{\link{icd9CondenseShort}}, which
-#'   takes a mass of codes and finds the smallest set of parent codes with any
-#'   of the original codes, which exactly describes the original set.
-#'   \code{\link{icd9CondenseToExplainShort}}) does the same as
-#'   \code{\link{icd9CondenseShort}}, but only finds parents which have a
+#'   codes. The reverse operation is \code{\link{icd9CondenseToMajor}}, which
+#'   takes a mass of codes and finds the smallest set of parent 'major' codes
+#'   with any of the original codes, which exactly describes the original set.
+#'   \code{\link{icd9CondenseToExplain}}) does the same as
+#'   \code{\link{icd9CondenseToMajor}}, but only finds parents which have a
 #'   human-readable name. Many top-level codes, e.g. "391" are not themselves
 #'   defined, but have description for their children. \code{\link{\%i9mj\%}}
 #'   creates a range of icd9 major codes, whereas \code{\link{\%i9s\%}}

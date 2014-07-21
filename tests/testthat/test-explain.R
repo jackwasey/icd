@@ -2,57 +2,33 @@ context("explain ICD-9: code to human-readable")
 
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
-    icd9ExplainShort(icd9ChildrenShort("391")),
-    structure(
-      list(
-        ICD9 = c("3910", "3911", "3912", "3918", "3919"),
-        Diagnosis = c("Acute rheumatic pericarditis", "Acute rheumatic endocarditis",
-                      "Acute rheumatic myocarditis", "Other acute rheumatic heart disease",
-                      "Acute rheumatic heart disease, unspecified"),
-        Description = c("Acute rheumatic pericard",
-                        "Acute rheumatic endocard", "Ac rheumatic myocarditis", "Ac rheumat hrt dis NEC",
-                        "Ac rheumat hrt dis NOS")),
-      .Names = c("ICD-9", "Diagnosis", "Description"),
-      row.names = c(NA, -5L),
-      class = "data.frame"
-    )
+    icd9ExplainShort(icd9ChildrenShort("391", onlyReal = FALSE), doCondense = FALSE),
+    c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis", "Acute rheumatic endocarditis",
+      "Acute rheumatic myocarditis", "Other acute rheumatic heart disease",
+      "Acute rheumatic heart disease, unspecified")
   )
+
+  #TODO same but condensing
+  expect_identical(
+    icd9ExplainShort(icd9ChildrenShort("391"), doCondense = TRUE),
+    "Rheumatic fever with heart involvement"
+  )
+
 })
 
-test_that("explain a single top level ICD-9 code which does have an explanation", {
-  expect_identical(
-    icd9ExplainShort("390"),
-    structure(
-      list(
-        ICD9 = "390",
-        Diagnosis = " Rheumatic fever without mention of heart involvement",
-        Description = " Rheum fev w/o hrt involv"
-      ),
-      .Names = c("ICD-9", "Diagnosis", "Description"),
-      row.names = c(NA, -1L),
-      class = "data.frame"
-    )
-  )
+test_that("explain a single top level ICD-9 code which is billable, and has no children", {
+  # the code "390" is a billable major: good test case.
+  expect_identical(icd9ExplainShort("390"), "Rheumatic fever without mention of heart involvement")
 })
 
 test_that("expalin a single top level ICD-9 code without a top level explanation", {
-  expect_identical(
-    icd9ExplainShort("391"),
-    structure(
-      list(
-        'ICD-9' = c("3910", "3911", "3912", "3918", "3919"),
-        Diagnosis = c("Acute rheumatic pericarditis", "Acute rheumatic endocarditis",
-                      "Acute rheumatic myocarditis", "Other acute rheumatic heart disease",
-                      "Acute rheumatic heart disease, unspecified"),
-        Description = c("Acute rheumatic pericard", "Acute rheumatic endocard",
-                        "Ac rheumatic myocarditis", "Ac rheumat hrt dis NEC",
-                        "Ac rheumat hrt dis NOS")
-      ),
-      .Names = c("ICD-9", "Diagnosis", "Description"),
-      row.names = c(NA, -5L),
-      class = "data.frame"
-    )
-  )
+  expect_identical(icd9ExplainShort("391"), "Rheumatic fever with heart involvement")
+})
+
+
+test_that("explain a single leaf node" , {
+  expect_equal(icd9ExplainShort("27800", doCondense = FALSE), "Obesity, unspecified")
+  expect_equal(icd9ExplainShort("27800", doCondense = TRUE), "Obesity, unspecified")
 })
 
 # TODO:
@@ -173,6 +149,10 @@ test_that("parse icd9ChaptersMajor vs those listed in the other CDC source of th
   expect_true(all(icd9ChaptersMajor %in% compareMajors))
 })
 
+test_that("unsorted hierarchy tests", {
+  expect_equal(tolower(icd9Hierarchy[icd9Hierarchy[["icd9"]] == "00321", "descLong"]), tolower("Salmonella Meningitis"))
+})
+
 # this is hand written: use to verify top level of the web site scrape: TODO
 testChapters <- list(
   "Infectious And Parasitic Diseases" = c(start = "001", end = "139"),
@@ -195,3 +175,30 @@ testChapters <- list(
   "Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services" = c(start = "V01", end = "V99"),
   "Supplementary Classification Of External Causes Of Injury And Poisoning  " = c(start = "E000", end = "E999")
 )
+
+test_that("condense single major and its children", {
+  expect_equal(icd9CondenseToExplain("391"), "Rheumatic fever with heart involvement")
+  expect_equal(icd9CondenseToExplain(icd9ChildrenShort("391")), "Rheumatic fever with heart involvement")
+  expect_equal(icd9CondenseToExplain(icd9ChildrenShort("391", onlyReal = TRUE)), "Rheumatic fever with heart involvement")
+})
+
+test_that("condense short range", {
+  # dont have data yet
+  #localizedsalmonella <- c("00320", "00321", "00322", "00323", "00324", "00329")
+  #expect_equal(icd9CondenseToMajor(icd9Short = ic), "0032")
+
+  othersalmonella <- c("0030", "0031", "00320", "00321", "00322", "00323", "00324", "00329", "0038", "0039")
+
+  expect_equal(icd9CondenseToExplain(icd9Short = othersalmonella), "Other salmonella infections")
+  expect_equal(icd9CondenseToExplain(icd9Short = othersalmonella[-3]), icd9Hierarchy[c(9,10,12:18), "descLong"])
+
+  expect_equal(icd9CondenseToMajor(icd9Short = othersalmonella, onlyReal = TRUE), "003")
+  expect_equal(icd9CondenseToMajor(icd9Short = othersalmonella, onlyReal = FALSE), othersalmonella)
+  expect_equal(icd9CondenseToMajor(icd9Short = othersalmonella[-3], onlyReal = TRUE), othersalmonella[-3])
+  expect_equal(icd9CondenseToMajor(icd9Short = othersalmonella[-3], onlyReal = FALSE), othersalmonella[-3])
+
+  expect_equal(icd9ChildrenShort(icd9Short = "001", onlyReal = TRUE), c("0010", "0011", "0019"))
+
+
+
+})

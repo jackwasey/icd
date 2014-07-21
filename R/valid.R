@@ -325,6 +325,10 @@ icd9IsE <- function(icd9) {
   grepl(pattern = "[Ee]", icd9)
 }
 
+icd9IsMajor <- function(icd9) {
+  nchar(icd9) - icd9IsE(icd9) < 4
+}
+
 #' @title Does ICD-9 code exist
 #' @description This is different from syntactic validity: it looks it up in the list of icd9 codes. This may have been easier all along, but checking syntactic validity still very useful, with a changing list of icd-9 codes over time, and possibly imperfections in the master list derived from CMS.
 #' @template icd9-any
@@ -350,8 +354,7 @@ icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
 #' @template icd9-decimal
 #' @export
 icd9RealDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
-  icd9ValidNaWarnStopDecimal(icd9Decimal, match.arg(invalidAction))
-  icd9RealShort(icd9DecimalToShort(icd9Decimal, invalidAction = "silent"))
+  icd9RealShort(icd9DecimalToShort(icd9Decimal, match.arg(invalidAction)))
 }
 
 #TODO

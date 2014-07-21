@@ -85,8 +85,8 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 
   # either fully expand or fully condense the results
   if (condense) {
-    ahrqComorbid <- lapply(ahrqComorbid, icd9CondenseShort)
-    ahrqComorbidAll <- lapply(ahrqComorbidAll, icd9CondenseShort)
+    ahrqComorbid <- lapply(ahrqComorbid, icd9CondenseToMajor)
+    ahrqComorbidAll <- lapply(ahrqComorbidAll, icd9CondenseToMajor)
   } else {
     ahrqComorbid <- lapply(ahrqComorbid, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
     ahrqComorbidAll <- lapply(ahrqComorbidAll, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
@@ -144,7 +144,7 @@ parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE, pat
 
   # use validation: takes time, but these are run-once per package creation (and test) tasks.
   if (condense) {
-    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd9CondenseShort, invalidAction = "stop")
+    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd9CondenseToMajor, invalidAction = "stop")
   } else {
     quanDeyoComorbid <- lapply(quanDeyoComorbid, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
   }
@@ -195,7 +195,7 @@ parseQuanElixhauser <- function(condense = FALSE, save = FALSE, path = "~/icd9/d
   quanElixhauserComorbid <- lapply(quanElixhauserComorbid, function(x) icd9DecimalToShort(x, invalidAction = "stop"))
 
   if (condense) {
-    quanElixhauserComorbid <- lapply(quanElixhauserComorbid, function(x) icd9CondenseShort(x, invalidAction = "stop"))
+    quanElixhauserComorbid <- lapply(quanElixhauserComorbid, function(x) icd9CondenseToMajor(x, invalidAction = "stop"))
   } else {
     quanElixhauserComorbid <- lapply(quanElixhauserComorbid, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
   }
@@ -249,7 +249,7 @@ parseElixhauser <- function(condense = FALSE, save = FALSE, path = "~/icd9/data"
 
   # convert to short form, for consistency with other mappings.
   if (condense) {
-    elixhauserComorbid <- lapply(elixhauserComorbid, function(x) icd9CondenseShort(x, invalidAction = "stop"))
+    elixhauserComorbid <- lapply(elixhauserComorbid, function(x) icd9CondenseToMajor(x, invalidAction = "stop"))
   } else {
     elixhauserComorbid <- lapply(elixhauserComorbid, function(x) icd9ChildrenShort(x, invalidAction = "stop"))
   }
@@ -289,23 +289,23 @@ parseAhrqHierarchy <- function() {
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
-parseIcd9Descriptions <- function(icd9path = system.file("extdata","CMS32_DESC_LONG_DX.txt",
-                                               package = 'icd9'),
-                        save = FALSE,
-                        path = "~/icd9/data") {
+parseIcd9Descriptions <- function(icd9path =
+                                    system.file("extdata","CMS32_DESC_LONG_DX.txt",
+                                                package = 'icd9'),
+                                  save = FALSE,  path = "~/icd9/data") {
   f <- file(icd9path, "r")
   r <- readLines(f, encoding = "latin1")
   close(f)
   r <- strsplit(r, " ")
-  icd9LongCode <- lapply(r, FUN = function(row) row[1])
-  icd9LongDesc <- lapply(r, FUN = function(row) paste(row[-c(1,2)], collapse = " "))
+  icd9LongCode <- lapply(r, FUN = function(row) trim(row[1]))
+  icd9LongDesc <- lapply(r, FUN = function(row) trim(paste(row[-1], collapse = " ")))
 
   f <- file(system.file("extdata", "CMS32_DESC_SHORT_DX.txt", package='icd9'), "r")
   r <- readLines(f) # this is ascii
   close(f)
   r <- strsplit(r, " ")
-  icd9ShortCode <- lapply(r, FUN = function(row) row[1])
-  icd9ShortDesc <- lapply(r, FUN = function(row) paste(row[-c(1,2)], collapse = " "))
+  icd9ShortCode <- lapply(r, FUN = function(row) trim(row[1]))
+  icd9ShortDesc <- lapply(r, FUN = function(row) trim(paste(row[-1], collapse = " ")))
   icd9CmDesc <- data.frame(
     icd9 = unlist(icd9LongCode),
     descLong = unlist(icd9LongDesc),
@@ -391,7 +391,7 @@ parseIcd9Chapters <- function(year = NULL, save = FALSE, path = "~/icd9/data") {
       saveSourceTreeData("icd9ChaptersMajor", path)
     }
   invisible(list(icd9Chapters = icd9Chapters, icd9ChaptersSub = icd9ChaptersSub, icd9ChaptersMajor = icd9ChaptersMajor))
-  }
+}
 
 icd9WebParseStartEndToRange <- function(v) {
   paste(v[["start"]], v[["end"]], sep = "-")

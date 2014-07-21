@@ -240,28 +240,38 @@ test_that("icd9ChildrenShort valid input", {
   expect_equal(icd9ChildrenShort("23")[1], "23")
   expect_equal(icd9ChildrenShort("456")[1], "456")
   expect_equal(icd9ChildrenShort("E100"), c("E100","E1000","E1001","E1002","E1003","E1004","E1005","E1006","E1007","E1008","E1009"))
+  expect_equal(icd9ChildrenShort("390", onlyReal = TRUE), "390")
+})
+
+# TODO:
+test_that("onlyReal flag", {
+
 })
 
 test_that("condense ranges which do consense", {
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("123")), "123")
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("1")), "001")
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("12345")), "12345")
-  expect_equal(icd9CondenseShort("12345"), "12345")
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("00123")), "00123")
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("V1234")), "V1234")
-  expect_equal(icd9CondenseShort("V1234"), "V1234")
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("V12")), "V12")
-  expect_equal(icd9CondenseShort(c("1000", as.character(10000:10009))), "1000")
-  expect_equal(icd9CondenseShort(c("V100", paste0("V", as.character(1000:1009)))), "V100")
+  expect_equal(icd9CondenseToMajor(icd9ChildrenShort("123", onlyReal = TRUE), onlyReal = TRUE), "123")
+  expect_equal(icd9CondenseToMajor(icd9ChildrenShort("1", onlyReal = TRUE), onlyReal = TRUE), "001")
+  for (or1 in c(TRUE, FALSE)) {
+    for (or2 in c(TRUE, FALSE)) {
+      expect_equal(icd9CondenseToMajor(icd9ChildrenShort("00321", onlyReal = or1), onlyReal = or2), "00321", info = paste(or1, or2))
+      expect_equal(icd9CondenseToMajor(icd9ChildrenShort("V1221", onlyReal = or1), onlyReal = or2), "V1221", info = paste(or1, or2))
+    }
+  }
+  expect_equal(icd9CondenseToMajor(icd9ChildrenShort("V12", onlyReal = TRUE), onlyReal = TRUE), "V12")
+  expect_equal(icd9CondenseToMajor(icd9ChildrenShort("V12", onlyReal = FALSE), onlyReal = FALSE), "V12")
+  #expect_equal(icd9CondenseToMajor(c("1000", as.character(10000:10009))), "1000")
+  #expect_equal(icd9CondenseToMajor(c("V100", paste0("V", as.character(1000:1009)))), "V100")
 })
+
 test_that("condense ranges that don't condense at all", {
-  expect_equal(sort(icd9CondenseShort(as.character(10000:10009))), as.character(10000:10009)) # the parent "1000" is not included.
-  expect_equal(sort(icd9CondenseShort(c("1000", as.character(10000:10008)))), c("1000", as.character(10000:10008))) # missing 10009
+  expect_equal(icd9CondenseToMajor(icd9ChildrenShort("123", onlyReal = TRUE), onlyReal = FALSE), icd9ChildrenShort("123", onlyReal = TRUE))
+  expect_equal(sort(icd9CondenseToMajor(as.character(10000:10009), onlyReal = FALSE)), as.character(10000:10009)) # the parent "1000" is not included.
+  expect_equal(sort(icd9CondenseToMajor(c("1000", as.character(10000:10008)), onlyReal = FALSE)), c("1000", as.character(10000:10008))) # missing 10009
 })
 
 test_that("condense range invalid data" ,{
-  #expect_equal(icd9CondenseShort("turnpike"), NA) # ? or character(0)
-  expect_error(icd9CondenseShort("turnpike", invalidAction = "stop"))
+  #expect_equal(icd9CondenseToMajor("turnpike"), NA) # ? or character(0)
+  expect_error(icd9CondenseToMajor("turnpike", invalidAction = "stop"))
   # TODO more tests here
 })
 
