@@ -369,3 +369,16 @@ icd9CharlsonFromIcd <- function(icd9df) {
 icd9CharlsonFromComorbidities <- function(comorbid) {
 
 }
+
+#' @title count comorbidities for each patient
+#' @description takes a data frame of comorbidities and returns a simple count
+#'   of comorbidities for each patient.
+#' @param comorbid data frame with one row per patient, and a true/false or 1/0
+#'   flag for each column. The first column is the patient identifier and is not
+#'   counted.
+#' @export
+#' @return vector of the counts, with one per row of the input data
+icd9CountComorbid <- function(comorbid) {
+  apply(X = comorbid[, -1] %>%
+          logicalToBinary, MARGIN = 1, FUN = sum)
+}
