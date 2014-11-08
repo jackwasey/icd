@@ -14,3 +14,4 @@ Rprof.out
 *.o
 *.so
 *.dll
+inst/todo
