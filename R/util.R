@@ -84,7 +84,7 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 #'   second the value.
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
-strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
+icd9StrPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
   res <- strMultiMatch(pattern = pattern, text = text, dropEmpty = TRUE, ...)
   outNames <- vapply(X = res, FUN = '[', FUN.VALUE = character(1), ifelse(swap, 2, 1))
   out <- vapply(X = res, FUN = '[', FUN.VALUE = character(1), ifelse(swap, 1, 2))

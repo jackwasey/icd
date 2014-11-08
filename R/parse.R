@@ -12,6 +12,7 @@ icd9ParseAndSaveMappings <- function(path = "~/icd9/data") {
   # this is not strictly a parsing step, but is quite slow
   icd9GetChaptersHierarchy(save= TRUE, path = path)
 }
+
 #' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and
 #'   parses into RData. It is then saved in the development tree data directory,
@@ -21,7 +22,10 @@ icd9ParseAndSaveMappings <- function(path = "~/icd9/data") {
 #' @param returnAll logical which, if TRUE, will result in the invisible return of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
 #' @keywords internal
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
-                         condense = FALSE, save = FALSE, path = "~/icd9/data", returnAll = FALSE) {
+                         condense = FALSE,
+                         save = FALSE,
+                         path = "~/icd9/data",
+                         returnAll = FALSE) {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
@@ -131,11 +135,22 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
 #'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
 #'   simpler.
+#'
+#'   With thanks to Dr. Quan, I have permission to distribute his SAS code.
+#'   Previously, the SAS code would be downloaded from the University of
+#'   Manitoba at
+#'   \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}.
+#'   There are structural differences between this version and the version
+#'   directly from Dr. Quan, however, the parsing results in identical data.
 #' @template savesas
 #' @template parse-template
 #' @keywords internal
-parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE, path = "~/icd9/data") {
-  if (is.null(sasPath)) sasPath <- "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt"
+parseQuanDeyoSas <- function(sasPath = NULL,
+                             condense = FALSE,
+                             save = FALSE,
+                             path = "~/icd9/data") {
+  if (is.null(sasPath)) sasPath <- system.file("extdata", "ICD9_E_Charlson.sas", package = 'icd9')
+
   quanSas <- readLines(sasPath, warn = FALSE)
   qlets <- sasExtractLetStrings(quanSas)
   qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
@@ -157,7 +172,9 @@ parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE, pat
 #' @title Generate Quan's revised Elixhauser comorbidities
 #' @template parse-template
 #' @keywords internal
-parseQuanElixhauser <- function(condense = FALSE, save = FALSE, path = "~/icd9/data") {
+parseQuanElixhauser <- function(condense = FALSE,
+                                save = FALSE,
+                                path = "~/icd9/data") {
   quanElixhauserComorbid <- list(
     chf = c("398.91", "402.01", "402.11", "402.91", "404.01", "404.03", "404.11", "404.13", "404.91", "404.93", "425.4" %i9d% "425.9", "428"),
     arrhythmia = c("426.0", "426.13", "426.7", "426.9", "426.10", "426.12", "427.0" %i9d% "427.4", "427.6" %i9d% "427.9", "785.0", "996.01", "996.04", "V45.0", "V53.3"),
@@ -412,7 +429,7 @@ icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
   }
   li <-  memReadHtmlList(doc = icd9url, which = 1)
   # swap so descriptions (second on web page) become the vector names
-  v <- strPairMatch("^([VvEe0-9-]*)[[:space:]]*(.*)$", li, swap = TRUE)
+  v <- icd9StrPairMatch("^([VvEe0-9-]*)[[:space:]]*(.*)$", li, swap = TRUE)
   lapply(v,
          FUN = function(x) {
            y <- unlist(strMultiMatch(pattern = "^([VvEe0-9]+)-?([VvEe0-9]+)?$", text = x))
