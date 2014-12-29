@@ -89,7 +89,7 @@ test_that("extract decimal parts - valid inputs", {
 
 test_that("icd9 decimal to short form, bad codes", {
   expect_equal(icd9DecimalToShort(character()), character())
-  # TODO: flesh out
+  skip("TODO: flesh out")
 })
 test_that("icd9 decimal to short form", {
 

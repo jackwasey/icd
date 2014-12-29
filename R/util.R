@@ -6,27 +6,30 @@
 #' @title encode TRUE as 1, and FALSE as 0
 #' @description when saving data as text files for distribution, printing large
 #'   amounts of text containing TRUE and FALSE is inefficient. Convert to binary
-#'   takes more R memory, but allows more compact output TODO: test
-#' @param dframe dataframe which may contain logical fields
-#' @return dframe without logical fields
+#'   takes more R memory, but allows more compact output TODO: test Also TODO:
+#'   remove these now they are in \code{jwutil}.
+#' @param x dataframe which may contain logical fields
+#' @return x without logical fields
 #' @keywords internal manip
-logicalToBinary <- function(dframe) {
+logicalToBinary <- function(x) {
 
-  if (class(dframe) != 'data.frame') stop("logicalToBinary expects a data frame, but got %s", class(dframe))
-  if (any(dim(dframe) == 0)) stop("got zero in at least one dimension in data frame. %d, %d", dim(dframe)[1], dim(dframe)[2])
+  stopifnot(is.data.frame(x))
+  if (any(dim(x) == 0)) stop(sprintf(
+    "got zero in at least one dimension in data frame. %d, %d",
+    dim(x)[1], dim(x)[2]))
 
   # can condense this code into a one-liner, but this is clearer:
-  logicalFields <- names(dframe)[sapply(dframe,class)=='logical']
-  if (is.na(logicalFields) || length(logicalFields) == 0) return(dframe)
+  logicalFields <- names(x)[sapply(x, is.logical)]
+  if (is.na(logicalFields) || length(logicalFields) == 0) return(x)
 
   #update just the logical fields with integers
-  dframe[,logicalFields] <-
+  x[, logicalFields] <-
     vapply(
-      X         = dframe[,logicalFields],
-      FUN       = function(x) ifelse(x,1L,0L),
-      FUN.VALUE = integer(length=dim(dframe)[1])
+      X         = x[,logicalFields],
+      FUN       = function(y) ifelse(y, 1L, 0L),
+      FUN.VALUE = integer(length = dim(x)[1])
     )
-  dframe
+  x
 }
 
 #' @title strip all whitespace
@@ -84,10 +87,19 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 #'   second the value.
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
-icd9StrPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
+icd9StrPairMatch <- function(pattern,
+                             text,
+                             swap = FALSE,
+                             dropEmpty = FALSE, ...) {
   res <- strMultiMatch(pattern = pattern, text = text, dropEmpty = TRUE, ...)
-  outNames <- vapply(X = res, FUN = '[', FUN.VALUE = character(1), ifelse(swap, 2, 1))
-  out <- vapply(X = res, FUN = '[', FUN.VALUE = character(1), ifelse(swap, 1, 2))
+  outNames <- vapply(X = res,
+                     FUN = "[",
+                     FUN.VALUE = character(1),
+                     ifelse(swap, 2, 1))
+  out <- vapply(X = res,
+                FUN = "[",
+                FUN.VALUE = character(1),
+                ifelse(swap, 1, 2))
   names(out) <- outNames
   out
 }
@@ -100,10 +112,10 @@ icd9StrPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...
 #'   values, defaults to '.' and 'NA'
 #' @return logical
 #' @keywords internal
-allIsNumeric <- function(x, extras=c('.','NA')) {
-  old <- options(warn=-1)
+allIsNumeric <- function(x, extras=c(".", "NA")) {
+  old <- options(warn = -1)
   on.exit(options(old))
-  xs <- x[x %nin% c('',extras)]
+  xs <- x[x %nin% c("", extras)]
   !any(is.na(as.numeric(xs)))
 }
 
@@ -116,7 +128,7 @@ allIsNumeric <- function(x, extras=c('.','NA')) {
 asCharacterNoWarn <- function(x) {
   old <- options(warn = -1)
   on.exit(options(old))
-  if (class(x)=='factor') x <- levels(x)[x]
+  if (is.factor(x)) x <- levels(x)[x]
   as.character(x)
 }
 
@@ -125,14 +137,15 @@ asCharacterNoWarn <- function(x) {
 #' @description correctly converts factors to vectors, and then converts to
 #'   numeric or integer, which may silently introduce NAs. Invisible rounding
 #'   errors can be a problem going from numeric to integer, so consider adding
-#'   tolerance to this conversion. \code{asIntegerNoWarn} silently \code{\link{floor}}s.
+#'   tolerance to this conversion. \code{asIntegerNoWarn} silently
+#'   \code{\link{floor}}s.
 #' @param x is a vector, probably of numbers of characters
 #' @keywords internal
 #' @return numeric vector, may have NA values
 asNumericNoWarn <- function(x) {
   old <- options(warn = -1)
   on.exit(options(old))
-  if (class(x)=='factor') x <- levels(x)[x]
+  if (is.factor(x)) x <- levels(x)[x]
   as.numeric(x)
 }
 
@@ -162,8 +175,9 @@ areIntegers <- function(x) {
 #'   package source tree.
 #' @param varName is the variable name and the part of the filename which will
 #'   be saved, followed by ".RData"
-#'   @param path is a path name to destination folder for the data: no trailing slash.
-saveSourceTreeData <- function(varName, path="~/icd9/data") {
+#' @param path is a path name to destination folder for the data: no trailing
+#'   slash.
+saveSourceTreeData <- function(varName, path = "data") {
   stopifnot(file.exists(path))
   save(list  = varName,
        envir = parent.frame(), # get from my parent
@@ -196,12 +210,12 @@ read.zip.url <- function(url, filename = NULL, FUN = readLines, ...) {
     if (length(files) == 1) {
       filename <- files
     } else {
-      stop("multiple files in zip, but no filename specified: ", paste(files, collapse = ", "))
+      stop("multiple files in zip, but no filename specified: ",
+           paste(files, collapse = ", "))
     }
-  } else { # filename specified
-    stopifnot(length(filename) ==1)
+  } else {
+    stopifnot(length(filename) == 1)
     stopifnot(filename %in% files)
   }
-  file <- paste(zipdir, files[1], sep="/")
   do.call(FUN, args = c(list(file.path(zipdir, filename)), list(...)))
 }

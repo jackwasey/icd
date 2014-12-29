@@ -108,7 +108,8 @@ if (!doSlowTests) { message("skipping slow tests") } else {
 
   test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
 
-    ptdf <- icd9Comorbidities(icd9df = patientData, icd9Mapping = ahrqComorbid, visitId = "visitId")
+    ptdf <- icd9Comorbidities(icd9df = patientData, isShort = TRUE,
+                              icd9Mapping = ahrqComorbid, visitId = "visitId")
 
     expect_equal(names(ptdf), c("visitId", names(ahrqComorbid)))
 
@@ -142,7 +143,7 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   })
 
   test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, hier", {
-    res <- icd9ComorbiditiesAhrq(ahrqTestDat, abbrevNames = FALSE, applyHierarchy = TRUE)
+    res <- icd9ComorbiditiesAhrq(ahrqTestDat, isShort = TRUE, abbrevNames = FALSE, applyHierarchy = TRUE)
     expect_equal(dim(res), c(1,30))
     expect_true(all(ahrqComorbidNames %in% names(res)))
     expect_false(all(as.logical(res[1, unlist(ahrqComorbidNames)])))# should not have dm and dmcx, etc
@@ -151,7 +152,7 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   })
 
   test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, hier", {
-    res <- icd9ComorbiditiesAhrq(ahrqTestDat, abbrevNames = TRUE, applyHierarchy = TRUE)
+    res <- icd9ComorbiditiesAhrq(ahrqTestDat, isShort = TRUE, abbrevNames = TRUE, applyHierarchy = TRUE)
     expect_equal(dim(res), c(1,30))
     expect_true(all(ahrqComorbidNamesAbbrev %in% names(res)))
     expect_false(all(as.logical(res[1, unlist(ahrqComorbidNamesAbbrev)]))) # should not have dm and dmcx, etc
@@ -160,14 +161,14 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   })
 
   test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, no hier", {
-    res <- icd9ComorbiditiesAhrq(ahrqTestDat, abbrevNames = FALSE, applyHierarchy = FALSE)
+    res <- icd9ComorbiditiesAhrq(ahrqTestDat, isShort = TRUE, abbrevNames = FALSE, applyHierarchy = FALSE)
     expect_equal(dim(res), c(1,31)) #longer because 2x htn
     expect_true(all(ahrqComorbidNamesHtn %in% names(res))) # not applying hierarchy, so dm and dmcx can both be true
     expect_true(all(as.logical(res[1, unlist(ahrqComorbidNamesHtn)])))
   })
 
   test_that("ahrq comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, no hier", {
-    res <- icd9ComorbiditiesAhrq(ahrqTestDat, abbrevNames = TRUE, applyHierarchy = FALSE)
+    res <- icd9ComorbiditiesAhrq(ahrqTestDat, isShort = TRUE, abbrevNames = TRUE, applyHierarchy = FALSE)
     expect_equal(dim(res), c(1,31))
     expect_true(all(ahrqComorbidNamesHtnAbbrev %in% names(res)))
     expect_true(all(as.logical(res[1, unlist(ahrqComorbidNamesHtnAbbrev)])))
@@ -177,7 +178,7 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   # elixhauser orig
 
   test_that("elix comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, hier", {
-    res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, abbrevNames = FALSE, applyHierarchy = TRUE)
+    res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, isShort = TRUE, abbrevNames = FALSE, applyHierarchy = TRUE)
     expect_equal(dim(res), c(1,31))
     expect_true(all(elixhauserComorbidNames %in% names(res)))
     expect_false(all(as.logical(res[1, unlist(elixhauserComorbidNames)])))# should not have dm and dmcx, etc
@@ -186,7 +187,7 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   })
 
   test_that("elix comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, hier", {
-    res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, abbrevNames = TRUE, applyHierarchy = TRUE)
+    res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, isShort = TRUE, abbrevNames = TRUE, applyHierarchy = TRUE)
     expect_equal(dim(res), c(1,31))
     expect_true(all(elixhauserComorbidNamesAbbrev %in% names(res)))
     expect_false(all(as.logical(res[1, unlist(elixhauserComorbidNamesAbbrev)]))) # should not have dm and dmcx, etc
@@ -195,14 +196,14 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   })
 
   test_that("elix comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, no hier", {
-    res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, abbrevNames = FALSE, applyHierarchy = FALSE)
+    res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, isShort = TRUE, abbrevNames = FALSE, applyHierarchy = FALSE)
     expect_equal(dim(res), c(1,32)) #longer because 2x htn
     expect_true(all(elixhauserComorbidNamesHtn %in% names(res))) # not applying hierarchy, so dm and dmcx can both be true
     expect_true(all(as.logical(res[1, unlist(elixhauserComorbidNamesHtn)])))
   })
 
   test_that("elix comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, no hier", {
-    res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, abbrevNames = TRUE, applyHierarchy = FALSE)
+    res <- icd9ComorbiditiesElixhauser(elixhauserTestDat, isShort = TRUE, abbrevNames = TRUE, applyHierarchy = FALSE)
     expect_equal(dim(res), c(1,32))
     expect_true(all(elixhauserComorbidNamesHtnAbbrev %in% names(res)))
     expect_true(all(as.logical(res[1, unlist(elixhauserComorbidNamesHtnAbbrev)])))
@@ -212,7 +213,7 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   # quan elixhauser
 
   test_that("qelix comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, hier", {
-    res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, abbrevNames = FALSE, applyHierarchy = TRUE)
+    res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, isShort = TRUE, abbrevNames = FALSE, applyHierarchy = TRUE)
     expect_equal(dim(res), c(1,31))
     expect_true(all(quanElixhauserComorbidNames %in% names(res)))
     expect_false(all(as.logical(res[1, unlist(quanElixhauserComorbidNames)])))# should not have dm and dmcx, etc
@@ -221,7 +222,7 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   })
 
   test_that("qelix comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, hier", {
-    res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, abbrevNames = TRUE, applyHierarchy = TRUE)
+    res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, isShort = TRUE, abbrevNames = TRUE, applyHierarchy = TRUE)
     expect_equal(dim(res), c(1,31))
     expect_true(all(quanElixhauserComorbidNamesAbbrev %in% names(res)))
     expect_false(all(as.logical(res[1, unlist(quanElixhauserComorbidNamesAbbrev)]))) # should not have dm and dmcx, etc
@@ -230,14 +231,14 @@ if (!doSlowTests) { message("skipping slow tests") } else {
   })
 
   test_that("qelix comorbidity mapping is applied correctly, all comorbidities in one patient, no abbrev, no hier", {
-    res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, abbrevNames = FALSE, applyHierarchy = FALSE)
+    res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, isShort = TRUE, abbrevNames = FALSE, applyHierarchy = FALSE)
     expect_equal(dim(res), c(1,32)) #longer because 2x htn
     expect_true(all(quanElixhauserComorbidNamesHtn %in% names(res))) # not applying hierarchy, so dm and dmcx can both be true
     expect_true(all(as.logical(res[1, unlist(quanElixhauserComorbidNamesHtn)])))
   })
 
   test_that("qelix comorbidity mapping is applied correctly, all comorbidities in one patient, abbrev, no hier", {
-    res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, abbrevNames = TRUE, applyHierarchy = FALSE)
+    res <- icd9ComorbiditiesQuanElixhauser(quanElixhauserTestDat, isShort = TRUE, abbrevNames = TRUE, applyHierarchy = FALSE)
     expect_equal(dim(res), c(1,32))
     expect_true(all(quanElixhauserComorbidNamesHtnAbbrev %in% names(res)))
     expect_true(all(as.logical(res[1, unlist(quanElixhauserComorbidNamesHtnAbbrev)])))

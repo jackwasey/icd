@@ -7,17 +7,25 @@
 #' @family ICD-9 convert
 #' @keywords manip
 #' @export
-icd9DecimalToShort <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
+icd9DecimalToShort <- function(icd9Decimal,
+                               invalidAction = icd9InvalidActions) {
 
-  if (!is.character(icd9Decimal)) stop("icd9DecimalToShort must be given character string, not a numeric type")
-  if (length(icd9Decimal) == 0) return(character()) # question whether an empty vector is valid?
+  if (!is.character(icd9Decimal))
+    stop("icd9DecimalToShort must be given character string,
+         not a numeric type")
+  if (length(icd9Decimal) == 0) return(character())
 
   icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal, invalidAction)
 
-  x <- icd9DecimalToParts(icd9Decimal) # should return everything zero-padded by default. Good default behaviour.
-  x[is.na(x[["minor"]]), "minor"] <- "" # NA to ""
-  y <- paste(icd9AddLeadingZeroesMajor(x$major, addZeroV = TRUE, invalidAction = "ignore"), x$minor,sep  = "")
-  y[is.na(x[["major"]])] <- NA # to avoid "NA" strings appearing...
+  # should return everything zero-padded by default. Good default behaviour.
+  x <- icd9DecimalToParts(icd9Decimal)
+
+  x[is.na(x$minor), "minor"] <- "" # NA to ""
+  y <- paste(
+    icd9AddLeadingZeroesMajor(x$major, addZeroV = TRUE,
+                              invalidAction = "ignore"),
+    x$minor,sep  = "")
+  y[is.na(x$major)] <- NA # to avoid "NA" strings appearing...
   y
 }
 
@@ -28,23 +36,26 @@ icd9DecimalToShort <- function(icd9Decimal, invalidAction = icd9InvalidActions) 
 #' @template invalid
 #' @keywords manip
 #' @export
-icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "", invalidAction = icd9InvalidActions) {
+icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "",
+                               invalidAction = icd9InvalidActions) {
 
   stopifnot(length(minorEmpty) == 1)
-  if (is.na(minorEmpty)) minorEmpty <- NA_character_ # we're working in characters, even if given "logical" NA
+  if (is.na(minorEmpty)) minorEmpty <- NA_character_
 
-  if (length(icd9Decimal) == 0) return (data.frame(major = character(), minor = character()))
-  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal, match.arg(invalidAction))
+  if (length(icd9Decimal) == 0) return(data.frame(major = character(),
+                                                  minor = character()))
+  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal,
+                                            match.arg(invalidAction))
   icd9Decimal <- trim(icd9Decimal)
   icd9Decimal[icd9Decimal == ""] <- "." # don't ask
   a <- strsplit(icd9Decimal, ".", fixed = TRUE)
   x <- as.data.frame(
-    do.call(rbind, lapply(a, '[', 1:2)),
+    do.call(rbind, lapply(a, "[", 1:2)),
     stringsAsFactors = FALSE
   )  # this may be slow! (need to flip axes from list to data frame)
   names(x) <- c("major", "minor")
   # if major is NA, then I think the minor must be NA, regardless of minorEmpty.
-  x[is.na(x[["minor"]]) & !is.na(x[["major"]]), "minor"] <- minorEmpty
+  x[is.na(x$minor) & !is.na(x$major), "minor"] <- minorEmpty
   x
 }
 
@@ -55,26 +66,31 @@ icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "", invalidAction = icd
 #' @template isShort
 #' @template invalid
 #' @return character vector
-icd9GetMajor <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
-  invalidAction = match.arg(invalidAction)
+icd9GetMajor <- function(icd9, isShort,
+                         invalidAction = icd9InvalidActions) {
+  invalidAction <- match.arg(invalidAction)
   if (isShort) {
     i <- icd9ShortToParts(icd9Short = icd9, invalidAction)
   } else {
     i <- icd9DecimalToParts(icd9Decimal = icd9, invalidAction)
   }
-  i[["major"]]
+  i$major
 }
 
 #' @rdname icd9GetMajor
 #' @template icd9-decimal
-icd9DecimalToMajor <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
-  icd9GetMajor(icd9 = icd9Decimal, isShort = FALSE, invalidAction = match.arg(invalidAction))
+icd9DecimalToMajor <- function(icd9Decimal,
+                               invalidAction = icd9InvalidActions) {
+  icd9GetMajor(icd9 = icd9Decimal, isShort = FALSE,
+               invalidAction = match.arg(invalidAction))
 }
 
 #' @rdname icd9GetMajor
 #' @template icd9-short
-icd9ShortToMajor <- function(icd9Short, invalidAction = icd9InvalidActions) {
-  icd9GetMajor(icd9 = icd9Short, isShort = TRUE, invalidAction = match.arg(invalidAction))
+icd9ShortToMajor <- function(icd9Short,
+                             invalidAction = icd9InvalidActions) {
+  icd9GetMajor(icd9 = icd9Short, isShort = TRUE,
+               invalidAction = match.arg(invalidAction))
 }
 
 #' @title convert short-form ICD-9 code to decimal form
@@ -85,23 +101,26 @@ icd9ShortToMajor <- function(icd9Short, invalidAction = icd9InvalidActions) {
 #' @keywords manip
 #' @export
 icd9ShortToDecimal <- function(icd9Short, invalidAction = icd9InvalidActions) {
-  # prevalidate regardless of invalidAction - TODO: ensure this is done consistently for every public entry point.
+  # prevalidate regardless of invalidAction - TODO: ensure this is done
+  # consistently for every public entry point.
   if (class(icd9Short) != "character")
-    stop("icd9Short must be a character: number values could be ambiguous if converted blindly to character")
+    stop("icd9Short must be a character: number values could be ambiguous
+         if converted blindly to character")
 
-  if (length(icd9Short) == 0) return(character()) # question whether an empty vector is valid?
+  if (length(icd9Short) == 0) return(character())
 
   icd9Short <- icd9ValidNaWarnStopShort(icd9Short,  match.arg(invalidAction))
   parts <- icd9ShortToParts(icd9Short)
-  out <- paste( parts[["major"]], ".", parts[["minor"]], sep = "") # should only be max of 6 chars...
-  if (any(parts[["minor"]] == "") || is.na(parts[["minor"]])) {
+  out <- paste( parts$major, ".", parts$minor, sep = "")
+  if (any(parts$minor == "") || is.na(parts$minor)) {
 
-    out[parts[["minor"]] == "" | is.na(parts[["minor"]])] <-
-      parts[parts[["minor"]] == "" | is.na(parts[["minor"]]), "major"]
+    out[parts$minor == "" | is.na(parts$minor)] <-
+      parts[parts$minor == "" | is.na(parts$minor), "major"]
   }
 
-  # paste inevitably makes <NA> into a string "NA", so if major was NA, then restore that:
-  out[is.na(parts[["major"]])] <- NA_character_
+  # paste inevitably makes <NA> into a string "NA", so if major was NA, then
+  # restore that:
+  out[is.na(parts$major)] <- NA_character_
   out
 }
 
@@ -115,7 +134,8 @@ icd9ShortToDecimal <- function(icd9Short, invalidAction = icd9InvalidActions) {
 #'   character, because "03" is different to "3", but "30" is the same as "3"
 #' @keywords  manip
 #' @export
-icd9ShortToParts <- function(icd9Short, minorEmpty = "", invalidAction = icd9InvalidActions) {
+icd9ShortToParts <- function(icd9Short, minorEmpty = "",
+                             invalidAction = icd9InvalidActions) {
   icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction)
   # assume bytes not unicode, for speed.
   eCodes <- icd9IsE(icd9Short)
@@ -128,7 +148,7 @@ icd9ShortToParts <- function(icd9Short, minorEmpty = "", invalidAction = icd9Inv
   x[eCodes, "major"] <- substr(icd9Short[eCodes], 0, 4)
   x[eCodes, "minor"] <- substr(icd9Short[eCodes], 5, 5)
   if (minorEmpty != "")
-    x[!is.na(x[["minor"]]) & x[["minor"]] == "", "minor"] <- minorEmpty
+    x[!is.na(x$minor) & x$minor == "", "minor"] <- minorEmpty
   x
 }
 
@@ -159,16 +179,19 @@ icd9ShortToPartsE <- function(icd9Short) {
 #'   otherwise we are creating ambiguous codes (even if we know what we mean)
 #' @family ICD-9 convert
 #' @keywords internal
-icd9PartsRecompose <- function(parts, isShort, invalidAction = icd9InvalidActions) {
+icd9PartsRecompose <- function(parts, isShort,
+                               invalidAction = icd9InvalidActions) {
   invalidAction <- match.arg(invalidAction)
   stopifnot(class(isShort) == "logical")
 
-  sep = "."
-  if (isShort) sep = ""
+  sep <- "."
+  if (isShort) sep <- ""
 
   stopifnot(names(parts) == c("major", "minor"))
-  major <- asCharacterNoWarn(parts[["major"]]) # no factors, please. TODO: might it be okay? It would be more memory efficient with big lists.
-  minor <- asCharacterNoWarn(parts[["minor"]])
+  # no factors, please. TODO: might it be okay? It would be more memory
+  # efficient with big lists.
+  major <- asCharacterNoWarn(parts$major)
+  minor <- asCharacterNoWarn(parts$minor)
 
   minor[is.na(minor)] <- ""
 
@@ -176,7 +199,9 @@ icd9PartsRecompose <- function(parts, isShort, invalidAction = icd9InvalidAction
   # Otherwise, major is passed through unchanged.
   if (isShort) {
     nonEmptyMinors <- minor != ""
-    major[nonEmptyMinors] <- icd9AddLeadingZeroesMajor(major[nonEmptyMinors], addZeroV = TRUE, invalidAction = invalidAction)
+    major[nonEmptyMinors] <-
+      icd9AddLeadingZeroesMajor(major[nonEmptyMinors],
+                                addZeroV = TRUE, invalidAction = invalidAction)
   }
 
   # paste regardless of major or minor validity. If major is NA, then adding
@@ -185,21 +210,26 @@ icd9PartsRecompose <- function(parts, isShort, invalidAction = icd9InvalidAction
   out[is.na(major)] <- NA_character_
 
   # now optionally check if the result is valid, default being not to check.
-  out <- icd9ValidNaWarnStop(icd9 = out, isShort = isShort, invalidAction = invalidAction)
+  out <- icd9ValidNaWarnStop(icd9 = out, isShort = isShort,
+                             invalidAction = invalidAction)
   out
 }
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9PartsToShort <- function(parts, invalidAction = icd9InvalidActions) {
-  icd9PartsRecompose(parts = parts, isShort = TRUE, invalidAction = match.arg(invalidAction))
+icd9PartsToShort <- function(parts,
+                             invalidAction = icd9InvalidActions) {
+  icd9PartsRecompose(parts = parts, isShort = TRUE,
+                     invalidAction = match.arg(invalidAction))
 }
 
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9PartsToDecimal <- function(parts, invalidAction = icd9InvalidActions) {
-  icd9PartsRecompose(parts = parts, isShort = FALSE, invalidAction = match.arg(invalidAction))
+icd9PartsToDecimal <- function(parts,
+                               invalidAction = icd9InvalidActions) {
+  icd9PartsRecompose(parts = parts, isShort = FALSE,
+                     invalidAction = match.arg(invalidAction))
 }
 
 #' @rdname icd9PartsRecompose
@@ -216,14 +246,18 @@ icd9MajMinToParts <- function(major, minor) {
 #'   ability to 'pipe' commands together using \code{magrittr}, so passing a
 #'   single \code{data.frame} is preferred.
 #' @export
-icd9MajMinToShort <- function(major, minor, invalidAction = icd9InvalidActions) {
-  icd9PartsToShort(parts = icd9MajMinToParts(major, minor), invalidAction = match.arg(invalidAction))
+icd9MajMinToShort <- function(major, minor,
+                              invalidAction = icd9InvalidActions) {
+  icd9PartsToShort(parts = icd9MajMinToParts(major, minor),
+                   invalidAction = match.arg(invalidAction))
 }
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9MajMinToDecimal <- function(major, minor, invalidAction = icd9InvalidActions) {
-  icd9PartsToDecimal(parts = icd9MajMinToParts(major, minor), invalidAction = match.arg(invalidAction))
+icd9MajMinToDecimal <- function(major, minor,
+                                invalidAction = icd9InvalidActions) {
+  icd9PartsToDecimal(parts = icd9MajMinToParts(major, minor),
+                     invalidAction = match.arg(invalidAction))
 }
 
 #' @title convert the chapter headings to lists of codes

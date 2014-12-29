@@ -4,9 +4,8 @@
 #'   no codes like 1.10 which are distinct from 1.1, so this can be purely
 #'   numeric Also, note that expanding "100.0" (100.00 to 100.09) is different
 #'   from expanding "100.00" (no expansion) \code{0.1 == .3/3} is a problem...
-#'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
-#'
-#'
+#'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#\
+#'   Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
 #' @template icd9-decimal
 #' @template onlyReal
 #' @template invalid
@@ -18,10 +17,13 @@
 #' @export
 #' @family ICD-9 ranges
 #' @keywords manip
-icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE, invalidAction = icd9InvalidActions) {
+icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE,
+                                invalidAction = icd9InvalidActions) {
 
-  if (!is.character(icd9Decimal)) stop('baseCode must be character only to avoid ambiguity')
-  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal, invalidAction = invalidAction)
+  if (!is.character(icd9Decimal))
+    stop("baseCode must be character only to avoid ambiguity")
+  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal,
+                                            invalidAction = invalidAction)
 
   parts <- icd9DecimalToParts(icd9Decimal, minorEmpty = "")
   out <- c()
@@ -29,7 +31,8 @@ icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE, invalidAction = i
     out <- append(out,
                   paste(
                     parts[[r, "major"]],
-                    icd9ExpandMinor(parts[[r, "minor"]], isE = icd9IsE(parts[[r, "major"]])),
+                    icd9ExpandMinor(parts[[r, "minor"]],
+                                    isE = icd9IsE(parts[[r, "major"]])),
                     sep = "."
                   )
     )
@@ -46,10 +49,14 @@ icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE, invalidAction = i
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @export
-icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE, invalidAction = icd9InvalidActions) {
-  if (!is.character(icd9Short)) stop('must have character only input to expand a short basecode to avoid ambiguity')
+icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE,
+                              invalidAction = icd9InvalidActions) {
+  if (!is.character(icd9Short))
+    stop("need character input to expand a short basecode to avoid ambiguity")
   if (length(icd9Short) == 0) return(character())
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = match.arg(invalidAction))
+  icd9Short <- icd9ValidNaWarnStopShort(
+    icd9Short,
+    invalidAction = match.arg(invalidAction))
 
   parts <- icd9ShortToParts(icd9Short, minorEmpty = "")
   out <- c()
@@ -57,7 +64,8 @@ icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE, invalidAction = icd9I
     out <- c(out,
              icd9MajMinToShort(
                major = parts[[r, "major"]],
-               minor = icd9ExpandMinor(parts[[r, "minor"]], isE = icd9IsE(parts[[r, "major"]])),
+               minor = icd9ExpandMinor(parts[[r, "minor"]],
+                                       isE = icd9IsE(parts[[r, "major"]])),
                invalidAction = "ignore")
     )
   }
@@ -66,9 +74,9 @@ icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE, invalidAction = icd9I
   out
 }
 
-# icd9ChildrenShortFast <- function(icd9Short, invalidAction = icd9InvalidActions) {
-#   if (!is.character(icd9Short)) stop('must have character only input to expand a short basecode to avoid ambiguity')
-#
+# TODO someday
+# icd9ChildrenShortFast <- function(icd9Short,
+#                                   invalidAction = icd9InvalidActions) {
 #   partsList <- icd9ShortToPartsNV(icd9Short) # ignoring E codes for now
 #   unlist(
 #     lapply(
@@ -101,17 +109,29 @@ icd9Children <- function(icd9, onlyReal = FALSE, isShort) {
 #' @return sorted vector of ICD-9 codes
 #' @keywords manip
 #' @export
-icd9SortShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction = invalidAction)
+icd9SortShort <- function(icd9Short,
+                          invalidAction = icd9InvalidActions) {
+  icd9Short <- icd9ValidNaWarnStopShort(icd9Short,
+                                        invalidAction = invalidAction)
 
-  tmp <- strsplit(icd9Short, "") # split into characters
+  # split into characters
+  tmp <- strsplit(icd9Short, "")
   # convert to matrix and pad out to five characters, starting from the left
-  xmatrix <- do.call(rbind, lapply(tmp, '[', 1:5))
+  xmatrix <- do.call(rbind, lapply(tmp, "[", 1:5))
   # then order by column, starting from the left:
-  xmatrix <- xmatrix[order(xmatrix[,1], xmatrix[,2], xmatrix[,3], xmatrix[,4], xmatrix[,5], na.last = FALSE),]
+  xmatrix <- xmatrix[order(xmatrix[, 1],
+                           xmatrix[, 2],
+                           xmatrix[, 3],
+                           xmatrix[, 4],
+                           xmatrix[, 5],
+                           na.last = FALSE),
+                     ]
   # and piece it togehter again, replacing NA with ""
   apply(xmatrix, MARGIN = 1,
-        function(x) { x[is.na(x)] <- ""; paste(x, collapse = "") }
+        function(x) {
+          x[is.na(x)] <- ""
+          paste(x, collapse = "")
+        }
   )
 }
 
@@ -140,14 +160,15 @@ icd9SortShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
 #' @template invalid
 #' @export
 #' @family ICD-9 ranges
-icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction = icd9InvalidActions) {
+icd9ExpandRangeShort <- function(start, end, inferParents = TRUE,
+                                 invalidAction = icd9InvalidActions) {
   invalidAction <- match.arg(invalidAction)
   # minimal quick validation checks
   stopifnot(is.character(start), is.character(end))
   stopifnot(length(start) == 1, length(end) == 1)
   stopifnot(is.logical(inferParents), length(inferParents) == 1)
 
-  isE = icd9IsE(start)
+  isE <- icd9IsE(start)
 
   start <- icd9ValidNaWarnStopShort(start, invalidAction = invalidAction)
   end <- icd9ValidNaWarnStopShort(end, invalidAction = invalidAction)
@@ -161,7 +182,8 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
   sdf <- icd9ShortToParts(start)
   edf <- icd9ShortToParts(end)
 
-  startMajor <- icd9AddLeadingZeroesMajor(sdf[["major"]]) # zero pad to tolerate entering "1" instead of "001"
+  # zero pad to tolerate entering "1" instead of "001"
+  startMajor <- icd9AddLeadingZeroesMajor(sdf[["major"]])
   endMajor <- icd9AddLeadingZeroesMajor(edf[["major"]])
   startMinor <- sdf[["minor"]]
   endMinor <- edf[["minor"]]
@@ -170,16 +192,17 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
   # the second element returned), and compare those:
   startMajorInt <- as.integer(icd9ExtractAlphaNumeric(startMajor)[, 2])
   endMajorInt <- as.integer(icd9ExtractAlphaNumeric(endMajor)[, 2])
-  if (endMajorInt < startMajorInt)  {
+  if (endMajorInt < startMajorInt)
     stop("start is after end")
-  } else if (startMajorInt == endMajorInt && icd9SortShort(c(start, end)) != c(start, end)) {
+  else if (startMajorInt == endMajorInt &&
+             icd9SortShort(c(start, end)) != c(start, end))
     stop("start is after end in minor part")
-  }
+
 
   #if (!all(icd9SortShort(c(startMajor, endMajor)) == c(startMajor, endMajor)))
   #stop("start is after end (major part)")
 
-  # If start and end majors are the same, we just need to calculate the minor range.
+  # If start and end majors are the same, we need to calculate the minor range.
   if (startMajor == endMajor) {
     # the following initial \code{result} works when minors have same length,
     # but incomplete for start minor shorter.
@@ -190,44 +213,54 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
                                 )
     )
 
-
     # case where startMinor lengths are 0,0 1,1 or 2,2: no corner cases
-    if (nchar(startMinor) == nchar(endMinor)) return(icd9AddLeadingZeroesShort(result))
+    if (nchar(startMinor) == nchar(endMinor))
+      return(icd9AddLeadingZeroesShort(result))
 
     # startMinor length is one, but endMinor could be zero or two chars.
-    if (nchar(startMinor) == 1) return(unique(icd9AddLeadingZeroesShort(c(start, result))))
+    if (nchar(startMinor) == 1)
+      return(unique(icd9AddLeadingZeroesShort(c(start, result))))
     if (nchar(startMinor) == 0) {
       # cover edge case where minor is "0x" so "0" is not included, and yet
       # should be if the start minor is ""
-      if (substr(endMinor,1,1) == "0") result <- c(icd9MajMinToShort(startMajor, "0"), result)
-      return(icd9AddLeadingZeroesShort(
-        c( # zero pad the major for consistency.
-          icd9MajMinToShort(startMajor, startMinor),
-          result
-        )
-      ))
-    } # end nchar(startMinor) == 0
+      if (substr(endMinor,1,1) == "0")
+        result <- c(icd9MajMinToShort(startMajor, "0"), result)
+      # zero pad the major for consistency, adn return
+      return(
+        icd9AddLeadingZeroesShort(c(icd9MajMinToShort(startMajor,
+                                                      startMinor),
+                                    result))
+      )
+    }  # end nchar(startMinor) == 0
     # if here, then startMinor was 2 characters long
-  } else { # startMajor != endMajor
-    result = c() # vector of complete short codes
+  } else {
+    # we know startMajor != endMajor
+    result <- c()
 
-    # corner case: the end minor terminates with a '9', so we can infer the parent:
+    # corner case: the end minor terminates with a '9', so we can infer the
+    # parent:
     if (inferParents) {
       # do this twice, because we care about XXX99 and XXX9
-      if (substr(endMinor, length(endMinor), length(endMinor)) == "9") endMinor <- icd9ParentMinor(endMinor)
-      if (substr(endMinor, length(endMinor), length(endMinor)) == "9") endMinor <- icd9ParentMinor(endMinor)
+      if (substr(endMinor, length(endMinor), length(endMinor)) == "9")
+        endMinor <- icd9ParentMinor(endMinor)
+      if (substr(endMinor, length(endMinor), length(endMinor)) == "9")
+        endMinor <- icd9ParentMinor(endMinor)
     }
 
     for (major in startMajor %i9mj% endMajor) {
-      #if no minor spec for current major, then expand all
-      if ((major %nin% c(startMajor,endMajor)) # current major is not first or last, so expand all children
-          || (major == startMajor & startMinor == "") # starting major has no minor, so expand all children
-          || (major == endMajor & endMinor == "")) { #   ending major has no minor, so expand all children
-        result <- c(result, icd9ChildrenShort(as.character(major), invalidAction = "ignore"))
-      } else { # loop minors from start minor, or until end minor
-        # at this point we definitely have a minor code, whether for start or end
-        # (but not both at same time)
-        # if minor is a start minor, then get subsequent minors
+      #if no minor spec for current major, then expand all current major is not
+      #first or last, so expand all children. starting major has no minor, so
+      #expand all children. ending major has no minor, so expand all children.
+      if ((major %nin% c(startMajor,endMajor))
+          || (major == startMajor & startMinor == "")
+          || (major == endMajor & endMinor == ""))
+        result <- c(result, icd9ChildrenShort(as.character(major),
+                                              invalidAction = "ignore"))
+      else {
+        # loop minors from start minor, or until end minor
+        # at this point we definitely have a minor code, whether for start or
+        # end (but not both at same time) if minor is a start minor, then get
+        # subsequent minors
         if (major == startMajor) {
           result <- c(result,
                       icd9MajMinToShort(
@@ -235,14 +268,14 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
                         minor = icd9SubsequentMinors(startMinor, isE)
                       )
           )
-        } else if (major == edf[["major"]]) { # otherwise get preceeding minors
+          # otherwise get preceeding minors
+        } else if (major == edf[["major"]])
           result <- c(result,
-                      icd9MajMinToShort(
-                        major = major,
-                        minor = icd9PrecedingMinors(endMinor, isE)
-                      )
-          )
-        }
+                      icd9MajMinToShort(major = major,
+                                        minor = icd9PrecedingMinors(endMinor,
+                                                                    isE)
+                      ))
+
       } # end if - whether to expand all children
     } #end loop through majors
   } # end startMajor != endMajor
@@ -260,7 +293,8 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE, invalidAction 
 #' @return character vector with range inclusive of start and end
 #' @family ICD-9 ranges
 #' @export
-icd9ExpandRangeMajor <- function(start, end, invalidAction = icd9InvalidActions) {
+icd9ExpandRangeMajor <- function(start, end,
+                                 invalidAction = icd9InvalidActions) {
   invalidAction <- match.arg(invalidAction)
   start <- icd9ValidNaWarnStopMajor(start, invalidAction = invalidAction)
   end <- icd9ValidNaWarnStopMajor(end, invalidAction = invalidAction)
@@ -293,7 +327,9 @@ icd9ExpandRangeMajor <- function(start, end, invalidAction = icd9InvalidActions)
 #' @template invalid
 #' @keywords internal manip
 #' @family ICD-9 ranges
-icd9ExpandRangeDecimal <- function(start, end, invalidAction = c("stop", "ignore", "silent", "warn")) {
+icd9ExpandRangeDecimal <- function(start, end,
+                                   invalidAction = c("stop", "ignore",
+                                                     "silent", "warn")) {
 
   invalidAction <- match.arg(invalidAction)
   # invalidAction may only need to be specified in the innermost call here,
@@ -330,36 +366,36 @@ icd9SubsequentMinors <- function(minor, isE) {
 
   stopifnot(!isE | nchar(minor) < 2)
 
-  # these validations are done downstream
-  #if (!is.character(minor)) stop("must have character input for minor")
-  #if (nchar(minor) > 2) stop("minor provided with length > 2")
-
   # if no minor, then provide all 111 minor codes. (Noting again that there are
   # 111 codes between each integer ICD-9 top level code.)
   if (nchar(minor) == 0) return(icd9ExpandMinor(isE = isE))
 
-  # simple case where minor is a single character, so we can legitimately include all child codes
+  # simple case where minor is a single character, so we can legitimately
+  # include all child codes
   if (nchar(minor) == 1) {
     if (isE) return(as.character(seq(as.integer(minor), 9)))
-    return(unlist(lapply(as.character(seq(as.integer(minor),9)), icd9ExpandMinorNV)))
+    return(unlist(lapply(as.character(seq(as.integer(minor), 9)),
+                         FUN = icd9ExpandMinorNV)))
   }
 
-
   # now working purely with two-digit minor parts
-  minorBig <- as.integer(substr(minor,1,1)) # this is the first digit after the decimal
+  # this is the first digit after the decimal
+  minorBig <- as.integer(substr(minor,1,1))
 
   # treat 0x as an edge cases 0x .... 09, then 1 to 99.
   if (minorBig == 0) {
     return(c(
-      appendZeroToNine("0")[(as.integer(minor)+1):10],
-      as.character(seq(1,99))))
+      appendZeroToNine("0")[(as.integer(minor) + 1):10],
+      as.character(seq(1, 99))))
   }
 
   # now we have minors from 10 to 99 to handle.
-  minorSmalls <- as.character(seq(as.integer(minor),99)) # faulty for "0x" minor codes.
+  # faulty for "0x" minor codes.
+  minorSmalls <- as.character(seq(as.integer(minor), 99))
 
   if (minorBig == "9") return(minorSmalls)
-  minorBigs <- unlist(lapply(as.character(seq(minorBig + 1, 9)), icd9ExpandMinor, isE))
+  minorBigs <- unlist(lapply(as.character(seq(minorBig + 1, 9)),
+                             FUN = icd9ExpandMinor, isE))
   unique(c(minorBigs, minorSmalls))
 }
 
@@ -373,12 +409,14 @@ icd9PrecedingMinors <- function(minor, isE) {
   # take care of single digit minor codes.
   if (nchar(minor) == 1) {
     if (minor == "0") return(minor)
-    return(unlist(lapply(as.character(seq(0, as.integer(minor))), icd9ExpandMinor, isE)))
+    return(unlist(lapply(as.character(seq(0, as.integer(minor))),
+                         FUN = icd9ExpandMinor, isE)))
   }
 
   minorBig <- as.integer(substr(minor,1,1))
   minorSmall <- as.integer(substr(minor,2,2))
-  if (minorBig == 0) return(paste("0", seq(0, minorSmall),sep  = "")) #fill out 00 to 0x
+  #fill out 00 to 0x
+  if (minorBig == 0) return(paste("0", seq(0, minorSmall), sep  = ""))
   # remaining possibilities are between 10 and 99, two digits
   minorSmalls <- c(
     icd9ExpandMinor("0", isE = FALSE),
@@ -386,7 +424,9 @@ icd9PrecedingMinors <- function(minor, isE) {
   )
 
   if (minorBig == 1) return(minorSmalls)
-  minorBigs <- unlist(lapply(as.character(seq(0, minorBig-1)), icd9ExpandMinor, isE = FALSE))
+  minorBigs <- unlist(lapply(as.character(seq(0, minorBig - 1)),
+                             icd9ExpandMinor,
+                             isE = FALSE))
 
   unique(c(minorBigs, minorSmalls))
 }
@@ -395,9 +435,9 @@ icd9PrecedingMinors <- function(minor, isE) {
 #' @description Accepts a single number or character input starting point for
 #'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
 #'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
-#'   #examples #icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9
-#'   codes icd9ExpandMinor(1) # "1"  "10" "11" "12" "13" "14" "15" "16" "17"
-#'   "18" "19" icd9ExpandMinor("1") # same
+#'   #examples #icd9ExpandMinor(isE = FALSE) # return all possible decimal parts
+#'   of ICD9 codes icd9ExpandMinor(1) # "1"  "10" "11" "12" "13" "14" "15" "16"
+#'   "17" "18" "19" icd9ExpandMinor("1") # same
 #' @template minor
 #' @param isE single logical, which if TRUE, treats the minor as part of an E
 #'   code (which is one character), as opposed to a V or numeric-only code,
@@ -406,22 +446,26 @@ icd9PrecedingMinors <- function(minor, isE) {
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-icd9ExpandMinor <- function(minor = "", isE, invalidAction = icd9InvalidActions) {
+icd9ExpandMinor <- function(minor = "", isE,
+                            invalidAction = icd9InvalidActions) {
 
   invalidAction <- match.arg(invalidAction)
   # this is an error, not just invalidity. Could easily allow multiple values,
   # but I would then have to return a list and post-process that, so I think
   # this keeps things simpler, but maybe slower.
   # TODO: why not allow multiple?
-  if (length(minor) > 1) stop("icd9ExpandMinor received more than one code to expand")
+  if (length(minor) > 1) stop("received more than one code to expand")
 
   if (!is.character(minor))
-    stop("icd9ExpandMinor expects character input only. Minor class is ", class(minor))
+    stop("expecting character input only. Minor class is ", class(minor))
 
   if (invalidAction != "ignore") {
-    valid <- allIsNumeric(minor) # single value, but this takes care of characters, factors
-    if (!valid) icd9WarnStopMessage("minor validation failed: non numeric: ", minor, invalidAction = invalidAction)
-    if (!valid) minor = NA # again, limiting ourselves to single values
+    # single value, but this takes care of characters, factors
+    valid <- allIsNumeric(minor)
+    if (!valid) icd9WarnStopMessage("minor validation failed: non numeric: ",
+                                    minor, invalidAction = invalidAction)
+    # again, limiting ourselves to single values
+    if (!valid) minor <- NA
   }
 
   if (isE) return(icd9ExpandMinorE(minor = minor))
@@ -440,7 +484,8 @@ icd9ExpandMinorNV <- function(minor = "") {
   # iterate through minors to generate all possible child codes.
   while (max(nchar(minor)) < 2) {
     newStrings <- appendZeroToNine(minor)
-    minor <- unique(append(minor, newStrings)) # and add the new ones of any length
+    # and add the new ones of any length
+    minor <- unique(append(minor, newStrings))
   }
   minor
 }
@@ -449,7 +494,7 @@ icd9ExpandMinorNV <- function(minor = "") {
 icd9ExpandMinorE <- function(minor = "") {
   if (nchar(minor) == 0) return(c("", as.character(seq(0,9))))
   if (nchar(minor) == 1) return(minor)
-  if (nchar(minor) > 1) stop("icd9ExpandMinorE: starting length already too long! minor is: ", minor)
+  if (nchar(minor) > 1) stop("starting length too long! minor is: ", minor)
   stop("other invalid E minor condition for minor = ", minor)
 }
 
@@ -466,6 +511,6 @@ icd9ExpandMinorE <- function(minor = "") {
 #' @return vector of characters with 0 to 9 appended to each input value
 #' @keywords internal
 appendZeroToNine <- function(str) {
-  if (!allIsNumeric(str)) stop("appendZeroToNine expects number input, or character input representing numbers")
+  stopifnot(allIsNumeric(str))
   apply(expand.grid(str, as.character(0:9),""), 1, paste, collapse="")
 }
