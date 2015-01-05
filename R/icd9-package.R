@@ -12,7 +12,7 @@
 #'   \code{\link{icd9ValidDecimalE}}, \code{\link{icd9ValidShortN}},
 #'   \code{\link{icd9ValidShortV}}), \code{\link{icd9ValidShortE}}) check
 #'   whether given ICD-9 codes are syntactically valid (although not necessarily
-#'   genuine ICD-9 codes) * \code{\link{icd9Comorbidities}} determines
+#'   genuine ICD-9 codes) * \code{\link{icd9Comorbid}} determines
 #'   co-morbidities for a set of patients with one or more ICD-9 codes each.
 #'
 #'   * Functions to convert vectors (not lists) of ICD-9 codes include:
@@ -52,7 +52,7 @@
 #'   * Quan revised both Deyo/Charlson and Elixhauser ICD-9 to comorbidity
 #'   mappings. These are presented as: \code{link{quanDeyoComorbid}} (which is
 #'   also derived from the original SAS code used in his publication, referenced
-#'   in the data documentation), and \code{\link{quanElixhauserComorbid}} which
+#'   in the data documentation), and \code{\link{quanElixComorbid}} which
 #'   was transcribed directly from the same paper.
 #'
 #'   * The original Elixhauser mapping is provided, with codes transcribed from

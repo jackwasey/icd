@@ -24,11 +24,10 @@
 #'   Classification Of Factors Influencing Health Status And Contact With Health
 #'   Services \item E000-E999 Supplementary Classification Of External Causes Of
 #'   Injury And Poisoning }
-#'
 #' @keywords datasets list category
 #' @docType data
-#' @format list with chapter/usb-chapter or major names stored in list names, each with two element
-#'   named character vector with start and end codes.
+#' @format list with chapter/usb-chapter or major names stored in list names,
+#'   each with two element named character vector with start and end codes.
 NULL
 
 #' @title ICD9-CM diagnosis code lookup
@@ -41,10 +40,10 @@ NULL
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
 #' @source Rich text descriptions here:
 #'   \url{http://www.cdc.gov/nchs/icd/icd9cm.htm}
-#'   \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+#'   \url{http://www.cms.gov/Medicare/Coding/\
+#'   ICD9ProviderDiagnosticCodes/codes.html}
 #'    This page has versions 23 to 32 (2005 to 2014). At present, only the 2014
 #'   data is included in this package.
-#'
 #' @source \url{http://wonder.cdc.gov/wonder/help/icd.html}
 #' @source
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
@@ -102,7 +101,8 @@ NULL
 #'   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307} unavailable: unavailable:
-#'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+#'   \url{http://web.archive.org/web/20110225042437/\
+#'   http://www.chaps.ucalgary.ca/sas}
 #' @name quanDeyoComorbid
 NULL
 
@@ -117,9 +117,10 @@ NULL
 #'   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307} unavailable:
-#'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+#'   \url{http://web.archive.org/web/20110225042437/\
+#'   http://www.chaps.ucalgary.ca/sas}
 #'
-#' @name quanElixhauserComorbid
+#' @name quanElixComorbid
 NULL
 
 #' @title Elixhauser comorbidities
@@ -141,7 +142,7 @@ NULL
 #'   Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna M. Coffey.
 #'   "Comorbidity Measures for Use with Administrative Data." Medical Care
 #'   January 1998 36, no. 1 (1998): 8-27.
-#' @name elixhauserComorbid
+#' @name elixComorbid
 NULL
 
 #' @title Comorbidity names
@@ -156,14 +157,13 @@ NULL
 #' @format list, with character/numeric code. HTN numbered 6a and 6b. DM,
 #'   cancer, mets are counted as in the original paper giving the original 30
 #'   groups. "01" to "30"
-#' @name elixhauserComorbidNames
-#' @aliases elixhauserComorbidNamesAbbrev elixhauserComorbidNamesHtn
-#'   elixhauserComorbidNamesHtnAbbrev quanElixhauserComorbidNames
-#'   quanElixhauserComorbidNamesAbbrev quanElixhauserComorbidNamesHtn
-#'   quanElixhauserComorbidNamesHtnAbbrev ahrqComorbidNames
+#' @name elixComorbidNames
+#' @aliases elixComorbidNamesAbbrev elixComorbidNamesHtn
+#'   elixComorbidNamesHtnAbbrev quanElixComorbidNames
+#'   quanElixComorbidNamesAbbrev quanElixComorbidNamesHtn
+#'   quanElixComorbidNamesHtnAbbrev ahrqComorbidNames
 #'   ahrqComorbidNamesAbbrev ahrqComorbidNamesHtn ahrqComorbidNamesHtnAbbrev
 #'   charlsonComorbidNames charlsonComorbidNamesAbbrev
 #' @keywords datasets
 #' @docType data
 NULL
-

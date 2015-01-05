@@ -39,7 +39,8 @@ charlsonComorbidNamesAbbrev <- list(
 )
 
 # 31 in this list, with two for HTN
-elixhauserComorbidNamesHtn <- list( # HTN marked together as combined, but DM not.
+# HTN marked together as combined, but DM not.
+elixComorbidNamesHtn <- list(
   "01" = "Congestive heart failure",
   "02" = "Cardiac arrhythmias",
   "03" = "Valvular disease",
@@ -73,7 +74,8 @@ elixhauserComorbidNamesHtn <- list( # HTN marked together as combined, but DM no
   "30" = "Depression"
 )
 
-elixhauserComorbidNamesHtnAbbrev <- list( # HTN marked together as combined, but DM not.
+# HTN marked together as combined, but DM not.
+elixComorbidNamesHtnAbbrev <- list(
   "01" = "CHF",
   "02" = "Arrhythmia",
   "03" = "Valvular",
@@ -108,38 +110,40 @@ elixhauserComorbidNamesHtnAbbrev <- list( # HTN marked together as combined, but
 )
 
 # Elixhauser with HTN combined:
-elixhauserComorbidNames <- elixhauserComorbidNamesHtn
-elixhauserComorbidNames["06b"] <- NULL
-elixhauserComorbidNames["06a"] <- "Hypertension, combined"
-names(elixhauserComorbidNames)[6] <- "06"
+elixComorbidNames <- elixComorbidNamesHtn
+elixComorbidNames["06b"] <- NULL
+elixComorbidNames["06a"] <- "Hypertension, combined"
+names(elixComorbidNames)[6] <- "06"
 # Abbreviated
-elixhauserComorbidNamesAbbrev <- elixhauserComorbidNamesHtnAbbrev
-elixhauserComorbidNamesAbbrev["06b"] <- NULL
-names(elixhauserComorbidNamesAbbrev)[6] <- "06"
+elixComorbidNamesAbbrev <- elixComorbidNamesHtnAbbrev
+elixComorbidNamesAbbrev["06b"] <- NULL
+names(elixComorbidNamesAbbrev)[6] <- "06"
 
 # Quan Elixhauser identical ot original
-quanElixhauserComorbidNames <- elixhauserComorbidNames
-quanElixhauserComorbidNamesHtn <- elixhauserComorbidNamesHtn
+quanElixComorbidNames <- elixComorbidNames
+quanElixComorbidNamesHtn <- elixComorbidNamesHtn
 # Abbreviated
-quanElixhauserComorbidNamesAbbrev <- elixhauserComorbidNamesAbbrev
-quanElixhauserComorbidNamesHtnAbbrev <- elixhauserComorbidNamesHtnAbbrev
+quanElixComorbidNamesAbbrev <- elixComorbidNamesAbbrev
+quanElixComorbidNamesHtnAbbrev <- elixComorbidNamesHtnAbbrev
 
-# AHRQ very similar to Elixhauser (with HTN combined, arrhythmia dropped, giving 29 total)
-ahrqComorbidNames <- elixhauserComorbidNames
+# AHRQ very similar to Elixhauser (with HTN combined, arrhythmia dropped, giving
+# 29 total)
+ahrqComorbidNames <- elixComorbidNames
 ahrqComorbidNames["02"] <- NULL
-names(ahrqComorbidNames) <- names(elixhauserComorbidNames)[-30]
+names(ahrqComorbidNames) <- names(elixComorbidNames)[-30]
 # Abbreviated
-ahrqComorbidNamesAbbrev <- elixhauserComorbidNamesAbbrev
+ahrqComorbidNamesAbbrev <- elixComorbidNamesAbbrev
 ahrqComorbidNamesAbbrev["02"] <- NULL
-names(ahrqComorbidNamesAbbrev) <- names(elixhauserComorbidNamesAbbrev)[-30]
+names(ahrqComorbidNamesAbbrev) <- names(elixComorbidNamesAbbrev)[-30]
 # with HTN separated out:
-ahrqComorbidNamesHtn <- elixhauserComorbidNamesHtn
+ahrqComorbidNamesHtn <- elixComorbidNamesHtn
 ahrqComorbidNamesHtn["02"] <- NULL
-names(ahrqComorbidNamesHtn) <- names(elixhauserComorbidNamesHtn)[-30]
+names(ahrqComorbidNamesHtn) <- names(elixComorbidNamesHtn)[-30]
 # Abbreviated
-ahrqComorbidNamesHtnAbbrev <- elixhauserComorbidNamesHtnAbbrev
+ahrqComorbidNamesHtnAbbrev <- elixComorbidNamesHtnAbbrev
 ahrqComorbidNamesHtnAbbrev["02"] <- NULL
-names(ahrqComorbidNamesHtnAbbrev) <- names(elixhauserComorbidNamesHtnAbbrev)[-30]
+names(ahrqComorbidNamesHtnAbbrev) <-
+  names(elixComorbidNamesHtnAbbrev)[-30]
 
 # comparable between Elixhauser and Charlson:
 #TODO

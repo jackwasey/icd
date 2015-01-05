@@ -9,6 +9,7 @@ Version 0.5
 * E codes <800 can be valid in 2014. Fixes #1
 * Bug fixes, vignette and other documentation updated.
 * Test suite ever more comprehensive.
+* Rename Elixhauser arguments and functions to "Elix" for clarity of code, and ease of typing.
 
 Version 0.4
 ------------------------------------------------------------------------------

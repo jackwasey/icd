@@ -15,7 +15,7 @@ icd9Benchmark <- function() {
 
   tmp <- tempfile(fileext = ".Rprof")
   Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = TRUE)
-  capture.output(icd9Comorbidities(rpts))
+  capture.output(icd9Comorbid(rpts))
   Rprof(NULL)
 
   #summaryRprof(filename = tmp, memory = "stats", lines = "both")

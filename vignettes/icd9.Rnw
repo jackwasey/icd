@@ -11,9 +11,12 @@
 \maketitle
 
 <<setup, eval=TRUE, echo=FALSE, cache=FALSE>>=
-suppressMessages(library("knitr", quietly = TRUE, warn.conflicts = FALSE))
-suppressMessages(library(icd9, quietly = TRUE, warn.conflicts = FALSE))
-suppressMessages(library("magrittr", quietly = TRUE, warn.conflicts = FALSE))
+suppressMessages({
+  library("knitr", quietly = TRUE, warn.conflicts = FALSE)
+  library(icd9, quietly = TRUE, warn.conflicts = FALSE)
+  library("magrittr", quietly = TRUE, warn.conflicts = FALSE)
+  library(jwutil)
+})
 
 ## font size options from the highlight package: c("normalsize", "tiny", "scriptsize", "footnotesize", "small", "large", "Large", "LARGE", "huge", "Huge")
 opts_chunk$set(size="scriptsize")
@@ -40,25 +43,25 @@ Only the visitId column is propogated to the results. If 'present-on-arrival' is
 
 The comorbidities can be determined as follows:
 <<getcomorbidities, cache=TRUE>>=
-icd9ComorbiditiesAhrq(icd9df = patientData)[, 1:10]
+icd9ComorbidAhrq(icd9df = patientData, isShort = TRUE)[, 1:10]
 @
 or
 <<getcomorbidities1a, cache=TRUE>>=
-icd9ComorbiditiesQuanDeyo(patientData)[, 1:10]
+icd9ComorbidQuanDeyo(patientData, isShort = TRUE)[, 1:10]
 @
 or using magrittr to chain functions together:
 <<getcomorbidities2, cache=TRUE>>=
 patientData %>% icd9FilterPoaYes() %>%
-  icd9ComorbiditiesAhrq(isShort = TRUE) %>% extract(1:5)
+  icd9ComorbidAhrq(isShort = TRUE) %>% extract(1:5)
 @
 The following code shows gets the same result with default options written out:
 <<"comorbidUsingDefaultOpts",eval=FALSE, cache=TRUE>>=
-icd9Comorbidities(icd9df = icdFilterPoaYes(patientData),
-                  visitId = "visitId",
-                  icd9Field = "icd9",
-                  icd9Mapping = ahrqComorbid,
-                  validateMapping = FALSE,
-                  shortMapping = TRUE)[1:5]
+icd9Comorbid(icd9df = icdFilterPoaYes(patientData),
+             visitId = "visitId",
+             icd9Field = "icd9",
+             icd9Mapping = ahrqComorbid,
+             validateMapping = FALSE,
+             shortMapping = TRUE)[1:5]
 @
 
 \section{Converting ICD-9 codes between types}
@@ -224,22 +227,22 @@ Chain commands together to get a few columns of comorbidities. This is showing o
 <<chainpoatocomorbid, cache=TRUE>>=
 myData %>%
   icd9FilterPoaNotNo() %>%
-  icd9ComorbiditiesAhrq(isShort = TRUE) %>%
+  icd9ComorbidAhrq(isShort = TRUE) %>%
   extract(1:9)
 @
 Can fill out some named fields, if we want:
 <<customnamesinchain, cache=TRUE>>=
-myData %>% icd9FilterPoaYes(poaField="poa") %>%
-  icd9ComorbiditiesAhrq(visitId = "visitId") %>%
+myData %>% icd9FilterPoaYes(poaField = "poa") %>%
+  icd9ComorbidAhrq(visitId = "visitId", isShort = TRUE) %>%
   extract(1:9)
 @
-Call the core icd9Comorbidities function with a named mapping:
+Call the core icd9Comorbid function with a named mapping:
 <<specifiedComorbidityMapChain, cache=TRUE>>=
 myData %>%
   icd9FilterPoaYes() %>%
-  icd9Comorbidities(
+  icd9Comorbid(
     icd9Field = "icd9", visitId = "visitId",
-    icd9Mapping = quanElixhauserComorbid,
+    isShort = TRUE, icd9Mapping = quanElixComorbid,
     validateMapping = TRUE, isShortMapping = TRUE
   )  %>%
   extract(1:9)
@@ -256,13 +259,17 @@ mappings. The user may provide their own mapping which needs this operation.
 myMap <- icd9:::icd9ChaptersToMap(icd9Chapters[c(1,2:4)])
 
 system.time(
-  patientChapters <- icd9Comorbidities(
-    icd9df = patientData, icd9Mapping = myMap)
+  patientChapters <- icd9Comorbid(
+    icd9df = patientData,
+    isShort = TRUE,
+    icd9Mapping = myMap)
 )
 # much faster the second time because the internal lookup is memoised:
 system.time(
-  patientChapters <- icd9Comorbidities(
-    icd9df = patientData, icd9Mapping = myMap)
+  patientChapters <- icd9Comorbid(
+    icd9df = patientData,
+    isShort = TRUE,
+    icd9Mapping = myMap)
 )
 
 patientChapters
@@ -321,13 +328,13 @@ ahrqComorbid[c("Obesity", "Depression")] %>% icd9ExplainShort(doCondense = FALSE
 \section{Elixhauser co-morbidities}
 Elixhauser originally devleoped this set of co-morbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
 <<elix, cache=TRUE>>=
-names(elixhauserComorbid)
+names(elixComorbid)
 @
 
 \section{Quan}
 Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's co-morbidities. Thus there are two 'Quan' comorbidity mappings.
 <<quanElix, cache=TRUE>>=
 names(quanDeyoComorbid)
-names(quanElixhauserComorbid)
+names(quanElixComorbid)
 @
 \end{document}

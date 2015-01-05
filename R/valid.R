@@ -219,13 +219,18 @@ icd9ValidDecimalN <- function(icd9Decimal)
   grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
         icd9Decimal)
 
-#' @title validate a major part ' @description validation for just the 'major'
-#part of an ICD-9 code. This can in fact be provided as a numeric, since there
-#is no ambiguity. Numeric-only codes should be one to three digitis, V codes are
-#followed by one or two digits, and E codes always by three digits between 800
-#and 999. example/test grepl(c("", "1", "22", "333", "4444", "V", "V2", "V34",
-#"V567", "E", "E1", "E70", "E") ' @template major ' @family ICD9 validation '
-#@export
+#' @title validate a major part
+#' @description validation for just the 'major' part of an ICD-9 code. This can
+#'   in fact be provided as a numeric, since there is no ambiguity. Numeric-only
+#'   codes should be one to three digitis, V codes are followed by one or two
+#'   digits, and E codes always by three digits between 800 and 999.
+#'
+#'   example/test grepl(c("", "1", "22", "333", "4444", "V", "V2", "V34",
+#'   "V567", "E", "E1", "E70", "E"))
+#'
+#' @template major
+#' @family ICD9 validation
+#' @export
 icd9ValidMajor <- function(major)
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)",
@@ -361,7 +366,7 @@ icd9Real <- function(icd9, isShort, invalidAction = icd9InvalidActions ) {
 icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
   icd9ValidNaWarnStopShort(icd9Short = icd9Short,
                            invalidAction = match.arg(invalidAction))
-  icd9Short %in% icd9Hierarchy[["icd9"]]
+  icd9Short %in% icd9::icd9Hierarchy[["icd9"]]
 }
 
 #' @rdname icd9Real

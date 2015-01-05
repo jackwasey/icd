@@ -4,8 +4,8 @@
 #'   no codes like 1.10 which are distinct from 1.1, so this can be purely
 #'   numeric Also, note that expanding "100.0" (100.00 to 100.09) is different
 #'   from expanding "100.00" (no expansion) \code{0.1 == .3/3} is a problem...
-#'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#\
-#'   Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
+#'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
+#'
 #' @template icd9-decimal
 #' @template onlyReal
 #' @template invalid
@@ -158,6 +158,7 @@ icd9SortShort <- function(icd9Short,
 #'   the codes from 0440 to 04499, are covered, but "044" is not explicit. If
 #'   \code{inferParents} is TRUE, "044" would be added, otherwise omitted.
 #' @template invalid
+#' @import jwutil
 #' @export
 #' @family ICD-9 ranges
 icd9ExpandRangeShort <- function(start, end, inferParents = TRUE,
