@@ -54,11 +54,9 @@ icd9InReferenceCode <- function(icd9, icd9Reference,
                                 invalidAction = icd9InvalidActions,
                                 invalidActionReference = icd9InvalidActions) {
 
-  if (!class(icd9) %in% c("character", "numeric", "integer"))
-    stop("expected character or number for icd9, but got: ", class(icd9))
-  if (!class(icd9Reference) %in% c("character", "numeric", "integer"))
-    stop("expected character or number for the basecodes, to avoid ambiguity
-         with trailing zeroes, but got: ", class(icd9Reference))
+  stopifnot(is.numeric(icd9) || is.character(icd9))
+  stopifnot(is.numeric(icd9Reference) || is.character(icd9Reference))
+  stopifnot(is.logical(isShort), is.logical(isShortReference))
   stopifnot(is.logical(isShort), is.logical(isShortReference))
   stopifnot(length(isShort) ==  1, length(isShortReference) == 1)
   stopifnot(length(icd9Reference) > 0)
@@ -126,12 +124,12 @@ icd9InReferenceCode <- function(icd9, icd9Reference,
 #' @template abbrevHier
 #' @export
 icd9Comorbid <- function(icd9df,
-                              visitId = "visitId",
-                              icd9Field = "icd9",
-                              isShort,
-                              icd9Mapping,
-                              validateMapping = FALSE,
-                              isShortMapping = TRUE) {
+                         visitId = "visitId",
+                         icd9Field = "icd9",
+                         isShort,
+                         icd9Mapping,
+                         validateMapping = FALSE,
+                         isShortMapping = TRUE) {
 
   stopifnot(is.data.frame(icd9df))
   stopifnot(is.character(visitId), length(visitId) == 1)
@@ -182,16 +180,16 @@ icd9Comorbid <- function(icd9df,
 #' @rdname icd9Comorbid
 #' @export
 icd9ComorbidAhrq <- function(icd9df,
-                                  visitId = "visitId",
-                                  icd9Field = "icd9",
-                                  isShort,
-                                  validateMapping = FALSE,
-                                  abbrevNames = TRUE,
-                                  applyHierarchy = TRUE) {
+                             visitId = "visitId",
+                             icd9Field = "icd9",
+                             isShort,
+                             validateMapping = FALSE,
+                             abbrevNames = TRUE,
+                             applyHierarchy = TRUE) {
 
   cbd <- icd9Comorbid(icd9df = icd9df, visitId = visitId,
-                           icd9Field = icd9Field, isShort = isShort,
-                           icd9Mapping = icd9::ahrqComorbid)
+                      icd9Field = icd9Field, isShort = isShort,
+                      icd9Mapping = icd9::ahrqComorbid)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -221,15 +219,15 @@ icd9ComorbidAhrq <- function(icd9df,
 #'   Charlson score.
 #' @export
 icd9ComorbidQuanDeyo <- function(icd9df,
-                                      visitId = "visitId",
-                                      icd9Field = "icd9",
-                                      isShort,
-                                      validateMapping = FALSE,
-                                      abbrevNames = TRUE,
-                                      applyHierarchy = TRUE) {
+                                 visitId = "visitId",
+                                 icd9Field = "icd9",
+                                 isShort,
+                                 validateMapping = FALSE,
+                                 abbrevNames = TRUE,
+                                 applyHierarchy = TRUE) {
   cbd <- icd9Comorbid(icd9df = icd9df, visitId = visitId,
-                           icd9Field = icd9Field, isShort = isShort,
-                           icd9Mapping = icd9::quanDeyoComorbid)
+                      icd9Field = icd9Field, isShort = isShort,
+                      icd9Mapping = icd9::quanDeyoComorbid)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -249,15 +247,15 @@ icd9ComorbidQuanDeyo <- function(icd9df,
 #' @rdname icd9Comorbid
 #' @export
 icd9ComorbidQuanElix <- function(icd9df,
-                                      visitId = "visitId",
-                                      icd9Field = "icd9",
-                                      isShort,
-                                      validateMapping = FALSE,
-                                      abbrevNames = TRUE,
-                                      applyHierarchy = TRUE) {
+                                 visitId = "visitId",
+                                 icd9Field = "icd9",
+                                 isShort,
+                                 validateMapping = FALSE,
+                                 abbrevNames = TRUE,
+                                 applyHierarchy = TRUE) {
   cbd <- icd9Comorbid(icd9df = icd9df, visitId = visitId,
-                           icd9Field = icd9Field, isShort = isShort,
-                           icd9Mapping = icd9::quanElixComorbid)
+                      icd9Field = icd9Field, isShort = isShort,
+                      icd9Mapping = icd9::quanElixComorbid)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -293,15 +291,15 @@ icd9ComorbidQuanElix <- function(icd9df,
 #' @rdname icd9Comorbid
 #' @export
 icd9ComorbidElix <- function(icd9df,
-                                  visitId = "visitId",
-                                  icd9Field = "icd9",
-                                  isShort,
-                                  validateMapping = FALSE,
-                                  abbrevNames = TRUE,
-                                  applyHierarchy = TRUE) {
+                             visitId = "visitId",
+                             icd9Field = "icd9",
+                             isShort,
+                             validateMapping = FALSE,
+                             abbrevNames = TRUE,
+                             applyHierarchy = TRUE) {
   cbd <- icd9Comorbid(icd9df = icd9df, visitId = visitId,
-                           icd9Field = icd9Field, isShort = isShort,
-                           icd9Mapping = icd9::elixComorbid)
+                      icd9Field = icd9Field, isShort = isShort,
+                      icd9Mapping = icd9::elixComorbid)
   if (applyHierarchy) {
     cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
     cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
