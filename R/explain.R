@@ -268,7 +268,7 @@ icd9CondenseToExplain <- function(icd9Short,
   # not just major parts, but the codes which are already majors
   mjrs <- unique(fout[icd9IsMajor(fout)] )
   for (i in mjrs) {
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9Hierarchy$icd9 == i,
+    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
                                           "chapter"])
     peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["chapter"]] == fm, "icd9"]
     if (all(peers %in% icd9Short)) {
@@ -276,7 +276,7 @@ icd9CondenseToExplain <- function(icd9Short,
       break
     }
 
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9Hierarchy$icd9 == i,
+    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
                                           "subchapter"])
     peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["subchapter"]] == fm,
                                  "icd9"]
@@ -285,9 +285,9 @@ icd9CondenseToExplain <- function(icd9Short,
       break
     }
 
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9Hierarchy$icd9 == i,
+    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
                                           "major"])
-    peers <- icd9::icd9Hierarchy[icd9Hierarchy[["major"]] == fm, "icd9"]
+    peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["major"]] == fm, "icd9"]
     if (all(peers %in% icd9Short))  {
       fout <- c(fout, fm)
       break
@@ -295,7 +295,7 @@ icd9CondenseToExplain <- function(icd9Short,
 
     fout <- c(fout,
               asCharacterNoWarn(
-                icd9Hierarchy[icd9Hierarchy$icd9 == i, "descLong"]))
+                icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i, "descLong"]))
   }
   asCharacterNoWarn(fout)
 }

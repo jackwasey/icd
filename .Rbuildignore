@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 inst/todo/*
 man-roxygen
+.git/*

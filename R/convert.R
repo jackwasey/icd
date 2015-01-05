@@ -181,7 +181,7 @@ icd9ShortToPartsE <- function(icd9Short) {
 icd9PartsRecompose <- function(parts, isShort,
                                invalidAction = icd9InvalidActions) {
   invalidAction <- match.arg(invalidAction)
-  stopifnot(is.loical(isShort))
+  stopifnot(is.logical(isShort))
 
   sep <- "."
   if (isShort) sep <- ""
