@@ -38,6 +38,7 @@ icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE,
     )
   }
   out <- unique(out)
+  out <- icd9AddLeadingZeroesDecimal(out)
   if (onlyReal) return(out[icd9RealDecimal(out)])
   out
 
@@ -70,6 +71,7 @@ icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE,
     )
   }
   out <- unique(out)
+  out <- icd9AddLeadingZeroesShort(out)
   if (onlyReal) return(out[icd9RealShort(out)])
   out
 }

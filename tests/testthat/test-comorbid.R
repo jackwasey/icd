@@ -1,4 +1,4 @@
-context("comorbidities, optionsl slow tests")
+context("comorbidities")
 
 set.seed(1441)
 n <- 500
@@ -118,8 +118,8 @@ test_that("icd9 comorbidities are created correctly,
             and logical to binary conversion ok", {
 
               ptdf <- icd9Comorbid(icd9df = patientData, isShort = TRUE,
-                                        icd9Mapping = ahrqComorbid,
-                                        visitId = "visitId")
+                                   icd9Mapping = ahrqComorbid,
+                                   visitId = "visitId")
 
               expect_equal(names(ptdf), c("visitId", names(ahrqComorbid)))
 
@@ -179,8 +179,8 @@ test_that("Elixhauser icd9 mappings are all
 test_that("ahrq comorbidity mapping is applied correctly,
             all comorbidities in one patient, no abbrev, hier", {
               res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
-                                           abbrevNames = FALSE,
-                                           applyHierarchy = TRUE)
+                                      abbrevNames = FALSE,
+                                      applyHierarchy = TRUE)
               expect_equal(dim(res), c(1,30))
               expect_true(all(ahrqComorbidNames %in% names(res)))
               # should not have dm and dmcx, etc
@@ -192,8 +192,8 @@ test_that("ahrq comorbidity mapping is applied correctly,
 test_that("ahrq comorbidity mapping is applied correctly,
             all comorbidities in one patient, abbrev, hier", {
               res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
-                                           abbrevNames = TRUE,
-                                           applyHierarchy = TRUE)
+                                      abbrevNames = TRUE,
+                                      applyHierarchy = TRUE)
               expect_equal(dim(res), c(1,30))
               expect_true(all(ahrqComorbidNamesAbbrev %in% names(res)))
               # should not have dm and dmcx, etc
@@ -206,8 +206,8 @@ test_that("ahrq comorbidity mapping is applied correctly,
 test_that("ahrq comorbidity mapping is applied correctly,
             all comorbidities in one patient, no abbrev, no hier", {
               res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
-                                           abbrevNames = FALSE,
-                                           applyHierarchy = FALSE)
+                                      abbrevNames = FALSE,
+                                      applyHierarchy = FALSE)
               #longer because 2x htn
               expect_equal(dim(res), c(1, 31))
               # not applying hierarchy, so dm and dmcx can both be true
@@ -218,8 +218,8 @@ test_that("ahrq comorbidity mapping is applied correctly,
 test_that("ahrq comorbidity mapping is applied correctly,
             all comorbidities in one patient, abbrev, no hier", {
               res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
-                                           abbrevNames = TRUE,
-                                           applyHierarchy = FALSE)
+                                      abbrevNames = TRUE,
+                                      applyHierarchy = FALSE)
               expect_equal(dim(res), c(1,31))
               expect_true(all(ahrqComorbidNamesHtnAbbrev %in% names(res)))
               expect_true(
@@ -230,8 +230,8 @@ test_that("ahrq comorbidity mapping is applied correctly,
 test_that("elix comorbidity mapping is applied correctly,
             all comorbidities in one patient, no abbrev, hier", {
               res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
-                                           abbrevNames = FALSE,
-                                           applyHierarchy = TRUE)
+                                      abbrevNames = FALSE,
+                                      applyHierarchy = TRUE)
               expect_equal(dim(res), c(1,31))
               expect_true(all(elixComorbidNames %in% names(res)))
               # should not have dm and dmcx, etc
@@ -243,9 +243,9 @@ test_that("elix comorbidity mapping is applied correctly,
 test_that("elix comorbidity mapping is applied correctly,
             all comorbidities in one patient, abbrev, hier", {
               res <- icd9ComorbidElix(elixTestDat,
-                                           isShort = TRUE,
-                                           abbrevNames = TRUE,
-                                           applyHierarchy = TRUE)
+                                      isShort = TRUE,
+                                      abbrevNames = TRUE,
+                                      applyHierarchy = TRUE)
               expect_equal(dim(res), c(1,31))
               expect_true(all(elixComorbidNamesAbbrev %in% names(res)))
               # should not have dm and dmcx, etc
@@ -258,8 +258,8 @@ test_that("elix comorbidity mapping is applied correctly,
 test_that("elix comorbidity mapping is applied correctly,
             all comorbidities in one patient, no abbrev, no hier", {
               res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
-                                           abbrevNames = FALSE,
-                                           applyHierarchy = FALSE)
+                                      abbrevNames = FALSE,
+                                      applyHierarchy = FALSE)
               expect_equal(dim(res), c(1,32)) #longer because 2x htn
               expect_true(all(elixComorbidNamesHtn %in% names(res)))
               # not applying hierarchy, so dm and dmcx can both be true
@@ -269,8 +269,8 @@ test_that("elix comorbidity mapping is applied correctly,
 test_that("elix comorbidity mapping is applied correctly,
             all comorbidities in one patient, abbrev, no hier", {
               res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
-                                           abbrevNames = TRUE,
-                                           applyHierarchy = FALSE)
+                                      abbrevNames = TRUE,
+                                      applyHierarchy = FALSE)
               expect_equal(dim(res), c(1,32))
               expect_true(all(elixComorbidNamesHtnAbbrev %in% names(res)))
               expect_true(
@@ -281,9 +281,9 @@ test_that("elix comorbidity mapping is applied correctly,
 test_that("qelix comorbidity mapping is applied correctly,
             all comorbidities in one patient, no abbrev, hier", {
               res <- icd9ComorbidQuanElix(quanElixTestDat,
-                                               isShort = TRUE,
-                                               abbrevNames = FALSE,
-                                               applyHierarchy = TRUE)
+                                          isShort = TRUE,
+                                          abbrevNames = FALSE,
+                                          applyHierarchy = TRUE)
               expect_equal(dim(res), c(1,31))
               expect_true(all(quanElixComorbidNames %in% names(res)))
               # should not have dm and dmcx, etc
@@ -296,9 +296,9 @@ test_that("qelix comorbidity mapping is applied correctly,
 test_that("qelix comorbidity mapping is applied correctly,
             all comorbidities in one patient, abbrev, hier", {
               res <- icd9ComorbidQuanElix(quanElixTestDat,
-                                               isShort = TRUE,
-                                               abbrevNames = TRUE,
-                                               applyHierarchy = TRUE)
+                                          isShort = TRUE,
+                                          abbrevNames = TRUE,
+                                          applyHierarchy = TRUE)
               expect_equal(dim(res), c(1,31))
               expect_true(all(quanElixComorbidNamesAbbrev %in% names(res)))
               # should not have dm and dmcx, etc
@@ -311,9 +311,9 @@ test_that("qelix comorbidity mapping is applied correctly,
 test_that("qelix comorbidity mapping is applied correctly,
             all comorbidities in one patient, no abbrev, no hier", {
               res <- icd9ComorbidQuanElix(quanElixTestDat,
-                                               isShort = TRUE,
-                                               abbrevNames = FALSE,
-                                               applyHierarchy = FALSE)
+                                          isShort = TRUE,
+                                          abbrevNames = FALSE,
+                                          applyHierarchy = FALSE)
               #longer because 2x htn
               expect_equal(dim(res), c(1,32))
               # not applying hierarchy, so dm and dmcx can both be true
@@ -325,9 +325,9 @@ test_that("qelix comorbidity mapping is applied correctly,
 test_that("qelix comorbidity mapping is applied correctly,
             all comorbidities in one patient, abbrev, no hier", {
               res <- icd9ComorbidQuanElix(quanElixTestDat,
-                                               isShort = TRUE,
-                                               abbrevNames = TRUE,
-                                               applyHierarchy = FALSE)
+                                          isShort = TRUE,
+                                          abbrevNames = TRUE,
+                                          applyHierarchy = FALSE)
               expect_equal(dim(res), c(1,32))
               expect_true(all(quanElixComorbidNamesHtnAbbrev %in% names(res)))
               expect_true(
@@ -598,4 +598,16 @@ test_that("sample of ICD-9 codes from manually specified mappings do appear", {
   expect_true("3971" %in% elixComorbid$Valvular)
   expect_true("V560" %in% elixComorbid$Renal)
   expect_true("V1090" %in% elixComorbid$Tumor) # child at end of a V range
+})
+
+test_that("github #34 - short and long custom map give different results", {
+  mydf <- data.frame(visitId = c("a","b","b","c"), icd9 = c("1","010","10","20"))
+
+  mymaps <- list(jack = c("1", "2", "3"), alf = c("010", "20"))
+  mymapd <- lapply(mymaps, icd9ShortToDecimal)
+
+  expect_identical(
+    icd9Comorbid(mydf, icd9Mapping = mymaps, isShort = TRUE),
+    icd9Comorbid(mydf, icd9Mapping = mymapd, isShort = FALSE))
+
 })

@@ -13,7 +13,7 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 
 #' spawn reference codes into all possible lower-level codes (and memoise)
 #'
-#' take a regular string of an ICD9 code of format (ABC.zxyz) with or without
+#' Take a regular string of an ICD9 code of format (ABC.zxyz) with or without
 #' leading and trailing zeroes. top level ICD9 code and return T/F if the icd9
 #' fall within subgroups. This takes several seconds on an unimpressive desktop
 #' PC, so would benefit from memoization.
@@ -77,10 +77,10 @@ icd9InReferenceCode <- function(icd9, icd9Reference,
   kids <- memSpawnRefKids(icd9Reference, isShortReference)
 
   # convert to short form to make comparison
-  if (isShort == FALSE) icd9 <- icd9DecimalToShort(icd9)
-  if (isShortReference == FALSE) kids <- icd9DecimalToShort(kids)
+  if (!isShort)          icd9 <- icd9DecimalToShort(icd9)
+  if (!isShortReference) kids <- icd9DecimalToShort(kids)
 
-  icd9 %in% kids
+  icd9AddLeadingZeroesShort(icd9) %in% kids
 }
 
 #' @rdname icd9InReferenceCode

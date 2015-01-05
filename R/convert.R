@@ -100,7 +100,8 @@ icd9ShortToMajor <- function(icd9Short,
 #' @family ICD-9 convert
 #' @keywords manip
 #' @export
-icd9ShortToDecimal <- function(icd9Short, invalidAction = icd9InvalidActions) {
+icd9ShortToDecimal <- function(icd9Short,
+                               invalidAction = icd9InvalidActions) {
   # prevalidate regardless of invalidAction - TODO: ensure this is done
   # consistently for every public entry point.
   if (!is.character(icd9Short))
@@ -217,27 +218,24 @@ icd9PartsRecompose <- function(parts, isShort,
 #' @rdname icd9PartsRecompose
 #' @export
 icd9PartsToShort <- function(parts,
-                             invalidAction = icd9InvalidActions) {
+                             invalidAction = icd9InvalidActions)
   icd9PartsRecompose(parts = parts, isShort = TRUE,
                      invalidAction = match.arg(invalidAction))
-}
 
 
 #' @rdname icd9PartsRecompose
 #' @export
 icd9PartsToDecimal <- function(parts,
-                               invalidAction = icd9InvalidActions) {
+                               invalidAction = icd9InvalidActions)
   icd9PartsRecompose(parts = parts, isShort = FALSE,
                      invalidAction = match.arg(invalidAction))
-}
 
 #' @rdname icd9PartsRecompose
 #' @description icd9MajMinToDf simply composes the data frame needed
 #'   as input to the PartsToXxxx functions
 #' @export
-icd9MajMinToParts <- function(major, minor) {
+icd9MajMinToParts <- function(major, minor)
   data.frame(major = major, minor = minor, stringsAsFactors = FALSE)
-}
 
 #' @rdname icd9PartsRecompose
 #' @description icd9MajMinTo\{Short|Decimal\} simply composes the data frame
@@ -246,18 +244,16 @@ icd9MajMinToParts <- function(major, minor) {
 #'   single \code{data.frame} is preferred.
 #' @export
 icd9MajMinToShort <- function(major, minor,
-                              invalidAction = icd9InvalidActions) {
+                              invalidAction = icd9InvalidActions)
   icd9PartsToShort(parts = icd9MajMinToParts(major, minor),
                    invalidAction = match.arg(invalidAction))
-}
 
 #' @rdname icd9PartsRecompose
 #' @export
 icd9MajMinToDecimal <- function(major, minor,
-                                invalidAction = icd9InvalidActions) {
+                                invalidAction = icd9InvalidActions)
   icd9PartsToDecimal(parts = icd9MajMinToParts(major, minor),
                      invalidAction = match.arg(invalidAction))
-}
 
 #' @title convert the chapter headings to lists of codes
 #' @description the chapter headings can be converted into the full set of their

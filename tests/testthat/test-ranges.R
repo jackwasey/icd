@@ -201,7 +201,6 @@ test_that("icd9ExpandMinor: valid", {
 })
 
 test_that("icd9ChildrenDecimal", {
-  #expect_error(icd9Children(list(c(1, 2), "crap"))) # junk
   # too long major
   expect_error(icd9ChildrenDecimal("1234", invalidAction = "stop"))
   # too long V major
@@ -228,7 +227,7 @@ test_that("icd9ChildrenDecimal", {
     icd9ChildrenDecimal("V10.0"))
   expect_equal(
     icd9ChildrenDecimal("10.0"),
-    append("10.0", paste("10.0", 0:9, sep = "")))
+    icd9ChildrenDecimal("010.0"))
   expect_equal(
     icd9ChildrenDecimal("010.0"),
     append("010.0", paste("010.0", 0:9, sep = "")))
@@ -258,11 +257,11 @@ test_that("icd9ChildrenShort valid input", {
   #expect_equal(toupper(icd9ChildrenShort("v100")), icd9Children("V100"))
   expect_equal(icd9ChildrenShort(" V100 "), icd9ChildrenShort("V100"))
   expect_equal(icd9ChildrenShort("0100"), paste("0100", c("", 0:9), sep = ""))
-  expect_equal(icd9ChildrenShort("1")[1], "1")
-  expect_equal(icd9ChildrenShort("01")[1], "01")
+  expect_equal(icd9ChildrenShort("1")[1], "001")
+  expect_equal(icd9ChildrenShort("01")[1], "001")
   expect_equal(icd9ChildrenShort("001")[1], "001")
   expect_equal(icd9ChildrenShort("023")[1], "023")
-  expect_equal(icd9ChildrenShort("23")[1], "23")
+  expect_equal(icd9ChildrenShort("23")[1], "023")
   expect_equal(icd9ChildrenShort("456")[1], "456")
   expect_equal(
     icd9ChildrenShort("E100"),
@@ -356,7 +355,7 @@ test_that("icd9InReferenceCodeLong", {
                                    invalidAction = "silent"),
                c(TRUE, FALSE))
 
-  # not expecting decimals in input data
+  # not expecting decimals in input data (default is always short)
   expect_error(icd9InReferenceCode(c("100.1", "200"), "200",
                                    invalidAction = "stop"))
   expect_equal(icd9InReferenceCode(c("100.1", "200"), "200",
@@ -365,6 +364,31 @@ test_that("icd9InReferenceCodeLong", {
   expect_identical(icd9InReferenceCode(c("2501", "25001", "999"),
                                        c("V101", "250")),
                    c(TRUE, TRUE, FALSE))
+
+  # the function must not care whether either the mapping codes or the test
+  # codes are zero padded:
+
+  # basic tests for numeric codes with major < 100
+  expect_true(icd9InReferenceCode("1", "1"))
+  expect_true(icd9InReferenceCode("1", "01"))
+  expect_true(icd9InReferenceCode("1", "001"))
+  expect_true(icd9InReferenceCode("01", "1"))
+  expect_true(icd9InReferenceCode("01", "01"))
+  expect_true(icd9InReferenceCode("001", "1"))
+  expect_true(icd9InReferenceCode("001", "001"))
+
+  expect_identical(icd9InReferenceCode("1", "001"),
+                   icd9InReferenceCode("01", "001"))
+  expect_identical(icd9InReferenceCode("1", "001"),
+                   icd9InReferenceCode("001", "001"))
+  expect_identical(icd9InReferenceCode("1", "1"),
+                   icd9InReferenceCode("01", "1"))
+  expect_identical(icd9InReferenceCode("1", "1"),
+                   icd9InReferenceCode("001", "1"))
+  expect_identical(icd9InReferenceCode("0011", "001"),
+                   icd9InReferenceCode("0011", "1"))
+  expect_identical(icd9InReferenceCode("0011", "001"),
+                   icd9InReferenceCode("0011", "01"))
 
   # create a large set of valid icd9 codes (of the integer variety)
   #ni = runif(n=1000000, min=100, max=99999)
