@@ -601,7 +601,8 @@ test_that("sample of ICD-9 codes from manually specified mappings do appear", {
 })
 
 test_that("github #34 - short and long custom map give different results", {
-  mydf <- data.frame(visitId = c("a","b","b","c"), icd9 = c("1","010","10","20"))
+  mydf <- data.frame(visitId = c("a","b","b","c"),
+                     icd9 = c("1","010","10","20"))
 
   mymaps <- list(jack = c("1", "2", "3"), alf = c("010", "20"))
   mymapd <- lapply(mymaps, icd9ShortToDecimal)
@@ -610,4 +611,119 @@ test_that("github #34 - short and long custom map give different results", {
     icd9Comorbid(mydf, icd9Mapping = mymaps, isShort = TRUE),
     icd9Comorbid(mydf, icd9Mapping = mymapd, isShort = FALSE))
 
+})
+
+test_that("get Charlson/Deyo comorbidities for a single patient", {
+  mydf <- data.frame(visitId = c("a"),
+                     icd9 = c("044.9"),
+                     stringsAsFactors = FALSE)
+  expect_equal(
+    icd9ComorbidQuanDeyo(icd9df = mydf, isShort = FALSE),
+    structure(
+      list(
+        visitId = "a",
+        MI = FALSE, CHF = FALSE, PVD = FALSE, Stroke = FALSE, Dementia = FALSE,
+        Pulmonary = FALSE, Rheumatic = FALSE, PUD = FALSE, LiverMild = FALSE,
+        DM = FALSE, DMcx = FALSE, Paralysis = FALSE, Renal = FALSE,
+        Cancer = FALSE, LiverSevere = FALSE, Mets = FALSE, HIV = TRUE),
+      .Names = c("visitId",
+                 "MI", "CHF", "PVD", "Stroke", "Dementia", "Pulmonary",
+                 "Rheumatic", "PUD", "LiverMild", "DM", "DMcx", "Paralysis",
+                 "Renal", "Cancer", "LiverSevere", "Mets", "HIV"),
+      row.names = 1L,
+      class = "data.frame")
+  )
+
+  mydf <- data.frame(visitId = c("a", "a"),
+                     icd9 = c("044.9", "044.9"),
+                     stringsAsFactors = FALSE)
+  expect_that(icd9ComorbidQuanDeyo(mydf, isShort = FALSE),
+              testthat::not(throws_error()))
+
+  mydf <- data.frame(visitId = c("a", "a"), icd9 = c("441", "412.93"))
+  expect_that(icd9ComorbidQuanDeyo(mydf, isShort = FALSE),
+              testthat::not(throws_error()))
+
+})
+
+test_that("Charlson score", {
+  mydf <- data.frame(visitId = c("a", "b", "c"),
+                     icd9 = c("441", "412.93", "044.9"),
+                     stringsAsFactors = TRUE)
+  expect_equal(
+    icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE) %>%
+      icd9CharlsonFromComorbid,
+    icd9Charlson(mydf, isShort = FALSE)
+  )
+  expect_equal(icd9Charlson(mydf,
+                            return.df = TRUE,
+                            stringsAsFactors = TRUE,
+                            isShort = FALSE),
+               structure(list(visitId = structure(1:3,
+                                                  .Label = c("a", "b", "c"),
+                                                  class = "factor"),
+                              Charlson = c(1, 1, 6)),
+                         .Names = c("visitId", "Charlson"),
+                         row.names = c(NA, -3L),
+                         class = "data.frame")
+  )
+
+  mydff <- data.frame(visitId = c("a", "b", "c"),
+                      icd9 = c("441", "412.93", "044.9"),
+                      stringsAsFactors = FALSE)
+
+  expect_equal(icd9Charlson(mydff,
+                            return.df = TRUE,
+                            stringsAsFactors = TRUE,
+                            isShort = FALSE),
+               structure(list(visitId = c("a", "b", "c"),
+                              Charlson = c(1, 1, 6)),
+                         .Names = c("visitId", "Charlson"),
+                         row.names = c(NA, -3L),
+                         class = "data.frame")
+  )
+
+  mydfff <- mydff
+  names(mydfff)[1] <- "v"
+  expect_equal(icd9Charlson(mydfff,
+                            return.df = TRUE,
+                            stringsAsFactors = FALSE,
+                            isShort = FALSE),
+               structure(list(v = c("a", "b", "c"),
+                              Charlson = c(1, 1, 6)),
+                         .Names = c("v", "Charlson"),
+                         row.names = c(NA, -3L),
+                         class = "data.frame")
+  )
+
+  mydffff <- cbind(mydfff, data.frame(v2 = mydfff$v, stringsAsFactors = FALSE))
+  mydffff$v <- NULL
+  expect_equal(icd9Charlson(mydffff, visitId = "v2",
+                            return.df = TRUE,
+                            stringsAsFactors = FALSE,
+                            isShort = FALSE),
+               structure(list(v2 = c("a", "b", "c"),
+                              Charlson = c(1, 1, 6)),
+                         .Names = c("v2", "Charlson"),
+                         row.names = c(NA, -3L),
+                         class = "data.frame")
+  )
+
+  baddf <- data.frame(visitId = c("d", "d"),
+                      icd9 = c("2500", "25042"),
+                      stringsAsFactors = TRUE)
+  cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
+  expect_error(icd9CharlsonFromComorbid(cmb, applyHierarchy = FALSE))
+
+  baddf <- data.frame(visitId = c("d", "d"),
+                      icd9 = c("2500", "25042"),
+                      stringsAsFactors = TRUE)
+  cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
+  expect_error(icd9CharlsonFromComorbid(cmb, applyHierarchy = FALSE))
+
+  baddf <- data.frame(visitId = c("d", "d"),
+                      icd9 = c("57224", "57345"),
+                      stringsAsFactors = TRUE)
+  cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
+  expect_error(icd9CharlsonFromComorbid(cmb, applyHierarchy = FALSE))
 })

@@ -155,7 +155,7 @@ icd9Comorbid <- function(icd9df,
 
   i <- cbind(
     icd9df[visitId],
-    vapply(
+    sapply(
       X = names(icd9Mapping),
       # FUN looks up each visit icd9 code in given set of comorbidity icd9 codes
       FUN = function(comorbidity)
@@ -163,7 +163,7 @@ icd9Comorbid <- function(icd9df,
                              icd9Reference = icd9Mapping[[comorbidity]],
                              isShort = isShort,
                              isShortReference = isShortMapping),
-      FUN.VALUE = rep(FALSE, length(icd9df[[icd9Field]]))
+      simplify = FALSE # vapply always simplifies if only one row
     )
   )
   # at this point, 'i' still has multiple rows per visit, but with a column per
@@ -213,7 +213,7 @@ icd9ComorbidAhrq <- function(icd9df,
 }
 
 #' @rdname icd9Comorbid
-#' @description For Charlson-based comorbidities, strictly speaking, there is no
+#' @description For Charlson/Deyo comorbidities, strictly speaking, there is no
 #'   dropping of more e.g. uncomplicated DM if complicated DM exists, however,
 #'   this is probaably useful, in general and is essential when calculating the
 #'   Charlson score.
@@ -393,25 +393,106 @@ icd9FilterPoaNotYes <- function(icd9df, poaField = "poa") {
          names(icd9df) != poaField]
 }
 
-icd9CharlsonFromIcd <- function(icd9df) {
-  #icd9df %>%
-  #icd9CharlsonFromComorbidities
+#' @title Calculate Charlson Comorbidity Index (Charlson Score)
+#' @rdname icd9Charlson
+#' @description Charlson score is calculated in the basis of the Quan revision
+#'   of Deyo's ICD-9 mapping. (Peptic Ulcer disease no longer warrants a point.)
+#'   Quan published an updated set of scores, but it seems most people use the
+#'   original scores for easier comaprison between studies, even though Quan's
+#'   were more predictive. TODO: add Quan Charlson score calculation.
+#' @details Per Quan, "The following comorbid conditions were mutually
+#'   exclusive: diabetes with chronic complications and diabetes without chronic
+#'   complications; mild liver disease and moderate or severe liver disease; and
+#'   any malignancy and metastatic solid tumor.""
+#' @param x data frame containing a column of visit or patient identifiers, and
+#'   a column of ICD-9 codes. It may have other columns which will be ignored.
+#'   By default, the first column is the patient identifier and is not counted.
+#'   If \code{visitId} is not specified, the first column is used.
+#' @template visitid
+#' @param return.df single logical value, if true, a two column data frame will
+#'   be returned, with the first column named as in input data frame (i.e.
+#'   \code{visitId}), containing all the visits, and the second column
+#'   containing the Charlson Comorbidity Index.
+#' @param stringsAsFactors single logical, passed on when constructing
+#'   data.frame if \code{return.df} is \code{TRUE}. If the input data frame
+#'   \code{x} has a factor for the visitId, this is not changed, but a
+#'   non-factor visitId may be converted or not converted according to your
+#'   system default or this setting.
+#' @param ... further arguments to pass on to \code{icd9ComorbidQuanDeyo}, e.g.
+#'   \code{icd9Field}
+#' @examples
+#' mydf <- data.frame(visitId = c("a", "b", "c"),
+#'                    icd9 = c("441", "412.93", "044.9"))
+#' cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)
+#' cmb
+#' icd9CharlsonFromCodes(mydf, isShort = FALSE)
+#' icd9CharlsonFromCodes(mydf, isShort = FALSE, return.df = TRUE)
+#' icd9CharlsonFromComorbid(cmb)
+#' @export
+icd9Charlson <- function(x, visitId = NULL,
+                         return.df = FALSE,
+                         stringsAsFactors = getOption("stringsAsFacotrs"),
+                         ...) {
+  stopifnot(is.data.frame(x))
+  if (is.null(visitId))
+    visitId <- names(x)[1]
+  else
+    stopifnot(visitId %in% names(x))
+  stopifnot(is.character(visitId))
+  stopifnot(length(visitId) == 1)
+  stopifnot(is.logical(return.df))
+  stopifnot(length(return.df) == 1)
+  res <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...) %>%
+    icd9CharlsonFromComorbid
+  if (return.df) return(cbind(x[visitId],
+                              data.frame("Charlson" = res),
+                              stringsAsFactors = stringsAsFactors))
+  res
 }
 
-icd9CharlsonFromComorbidities <- function(comorbid) {
+#' @rdname icd9Charlson
+#' @param applyHierarchy single logical value, default is FALSE. If TRUE, will
+#'   drop DM if DMcx is present, etc.
+#' @export
+icd9CharlsonFromComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
+  if (is.null(visitId)) visitId <- names(x)[1]
+  stopifnot(is.character(visitId))
+  stopifnot(length(visitId) == 1)
+  stopifnot(ncol(x) == 18)
+  weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+               2, 2, 2, 2,
+               3, 6, 6)
 
+
+  if (applyHierarchy) {
+    x$DM <- x$DM & !x$DMcx
+    x$LiverMild <- x$LiverMild & !x$LiverSevere
+    x$Cancer <- x$Cancer & !x$Mets
+  } else {
+    stopifnot(!any(x$DM & x$DMcx))
+    stopifnot(!any(x$LiverMild & x$LiverSevere))
+    stopifnot(!any(x$Cancer & x$Mets))
+  }
+  m <- as.matrix(x[, names(x) %nin% visitId])
+  rowSums(m * weights)
 }
 
 #' @title count comorbidities for each patient
-#' @description takes a data frame of comorbidities and returns a simple count
-#'   of comorbidities for each patient.
-#' @param comorbid data frame with one row per patient, and a true/false or 1/0
-#'   flag for each column. The first column is the patient identifier and is not
-#'   counted.
+#' @description Uses a data frame of comorbidities and returns a simple count of
+#'   comorbidities for each patient. This is sometimes used as a metric of
+#'   comorbidity load, instead of, or inaddition to metrics like the Charlson
+#'   Comorbidity Index (aka Charlson Score)
+#' @param x data frame with one row per patient, and a true/false or 1/0 flag
+#'   for each column. By default, the first column is the patient identifier and
+#'   is not counted. If \code{visitId} is not specified, the first column is
+#'   used.
+#' @template visitid
 #' @export
 #' @return vector of the counts, with one per row of the input data
-icd9CountComorbid <- function(comorbid) {
-  apply(logicalToBinary(comorbid[, -1]),
+icd9CountComorbid <- function(x, visitId = NULL) {
+  if (is.null(visitId)) visitId <- names(x)[1]
+  apply(logicalToBinary(x[, names(x) %nin% visitId]),
         MARGIN = 1,
         FUN = sum)
 }
+
