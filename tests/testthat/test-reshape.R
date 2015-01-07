@@ -34,7 +34,7 @@ test_that("wide data to long data", {
 
   expect_equivalent(icd9WideToLong(widedfempty),
                     longdf)
-  expect_equal(icd9WideToLong(widedf),
+  expect_equal(icd9WideToLong(widedfempty),
                icd9WideToLong(widedfempty))
 
 })

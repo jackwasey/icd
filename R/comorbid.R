@@ -577,13 +577,18 @@ icd9CountComorbidBin <- function(x, visitId = NULL, return.df = FALSE) {
 #' @rdname icd9Count
 #' @description For \code{icd9Count}, it is assumed that all the columns apart
 #'   from \code{vistiId} represent actual or possible ICD-9 codes. Duplicate
-#'   \code{visitId}s are repeated as given and not aggregated. This is left as
-#'   an exercise for the reader. (My recommendation is to work with data in long
-#'   format, i.e. multiple rows per patient and one icd9 column: this overcomes
-#'   the frequent 15 or 30 ICD code limit.)
+#'   \code{visitId}s are repeated as given and aggregated.
+#' @param aggregate, single logical, default is FALSE. If TRUE, the length (or
+#'   rows) of the output will no longer match the input, but duplicate visitIds
+#'   will be counted together.
 #' @export
-icd9CountWide <- function(x, visitId = NULL, return.df = FALSE) {
+icd9CountWide <- function(x,
+                          visitId = NULL,
+                          return.df = FALSE,
+                          aggregate = FALSE) {
   stopifnot(is.data.frame(x))
+  stopifnot(is.logical(return.df))
+  stopifnot(is.logical(aggregate))
   if (is.null(visitId)) {
     if (!any(names(x) == "visitId"))
       visitId <- names(x)[1]
@@ -594,9 +599,18 @@ icd9CountWide <- function(x, visitId = NULL, return.df = FALSE) {
   stopifnot(is.character(visitId))
   stopifnot(length(visitId) == 1)
 
-  res <- apply(x[, names(x) %nin% visitId], 1, function(x) sum(!is.na(x)))
+  res <- apply(x[names(x) %nin% visitId], 1, function(x) sum(!is.na(x)))
   names(res) <- x[[visitId]]
-  if (return.df) return(cbind(x[visitId], "icd9Count" = res))
-
-  res
+  if (!aggregate) {
+    if (return.df)
+      return(cbind(x[visitId], "count" = res))
+    else
+      return(res)
+  }
+  rdf <- cbind(x[visitId], "count" = res)
+  rdfagg <- aggregate(rdf["count"], by = rdf[visitId], FUN = sum)
+  if (return.df) return(rdfagg)
+  vec <- rdfagg[["count"]]
+  names(vec) <- rdfagg[[visitId]]
+  vec
 }
