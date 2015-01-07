@@ -272,3 +272,124 @@ icd9ChaptersToMap <- function(x) {
   }
   map
 }
+
+#' @title convert ICD data from wide to long format
+#' @description This is different enough to \code{dcast} in \code{reshape2} that
+#'   it needs writing again specifically for ICD codes. This function packages
+#'   the core \code{reshape} function. Empty strings and NA values will be
+#'   dropped, and everything else kept. No validation of the ICD codes is done.
+#' @param x \code{data.frame} in wide format, i.e. one row per patient, and
+#'   multiple columns containing ICD codes, empty strings or NA.
+#' @template visitid
+#' @param icd.labels vector of column names in which codes are found. If NULL,
+#'   all columns matching icd or ICD will be included.
+#' @param icd.name character vector length one containing the new column name
+#'   for the ICD codes, defaults to "icd9Code"
+#' @return data frame with visitId column named the same as input, and a column
+#'   named by \code{icd.name} containing all the non-NA and non-empty codes
+#'   found in the wide input data.
+#' @examples
+#'   widedf <- data.frame(visitId = c("a", "b", "c"),
+#'     icd9_01 = c("441", "4424", "441"),
+#'     icd9_02 = c(NA, "443", NA))
+#'   icd9WideToLong(widedf)
+#' @export
+icd9WideToLong <- function(x,
+                           visitId = NULL,
+                           icd.labels = NULL,
+                           icd.name = "icdCode") {
+  if (is.null(icd.labels))
+    icd.labels <- grep("icd", names(x), ignore.case = TRUE, value = TRUE)
+  else
+    stopifnot(all(icd.labels %in% names(x)))
+
+  if (is.null(visitId)) {
+    if (!any(names(x) == "visitId"))
+      visitId <- names(x)[1]
+    else
+      visitId <- "visitId"
+  } else
+    stopifnot(visitId %in% names(x))
+  stopifnot(is.character(visitId))
+  stopifnot(length(visitId) == 1)
+
+  res <- reshape(x,
+                 direction = "long",
+                 varying = icd.labels,
+                 idvar = visitId,
+                 timevar = NULL,
+                 v.names = icd.name)
+
+  rownames(res) <- NULL
+  res <- res[!is.na(res[[icd.name]]), ]
+  res <- res[nchar(levels(res[[icd.name]])[res[[icd.name]]]) > 0, ]
+  res[order(res[[visitId]]), ]
+}
+
+#' @title convert ICD data from long to wide format
+#' @description This is more complicated than reshape or reshape2::dcast allows.
+#'   This is a reasonably simple solution using built-in functions.
+#' @param x data.frame of long-form data, one column for visitId and one for ICD
+#'   code
+#' @param visitId single character, if NULL will use "visitId" if exists,
+#'   otherwise the first column
+#' @param icdId single character string with name of column containing the ICD
+#'   codes. If left as NULL, the field is guessed to be the first matching ICD
+#'   or icd, and a warning is given if multiple columns match.
+#' @param prefix character, default "icd_" to prefix new columns
+#' @param empty value to fill out empty fields of wide output data, defaults to
+#'   \code{NA}
+#' @param width, single integer, if specified, writes out this many columns even
+#'   if no patients have that many codes. Must be greater than or equal to the
+#'   maximum number of codes per patient.
+#' @examples
+#'   longdf <- data.frame(visitId = c("a", "b", "b", "c"),
+#'     icd9 = c("441", "4424", "443", "441"))
+#'   icd9LongToWide(longdf)
+#'   icd9LongToWide(longdf, prefix = "ICD10_", empty = "")
+#' @export
+icd9LongToWide <- function(x,
+                           visitId = NULL,
+                           icdId = NULL,
+                           prefix = "icd_",
+                           empty = NA,
+                           width = NULL) {
+  stopifnot(is.data.frame(x))
+  if (is.null(visitId)) {
+    if (!any(names(x) == "visitId"))
+      visitId <- names(x)[1]
+    else
+      visitId <- "visitId"
+  } else
+    stopifnot(visitId %in% names(x))
+  stopifnot(is.character(visitId))
+  stopifnot(length(visitId) == 1)
+
+  if (is.null(icdId)) {
+    im <- grep("icd", names(x), ignore.case = TRUE, value = TRUE)
+    if (length(im) >= 1) {
+      icdId <- im[1]
+      if (length(im) > 1) warning("multiple possible ICD column: using first")
+    } else
+      stop("no ICD column found: use argument icdId to specify it")
+  } else
+    stopifnot(icdId %in% names(x))
+
+  lst <- aggregate(x[names(x) %nin% visitId], by = x[visitId], asCharacterNoWarn)
+  ncol <- max(sapply(lst[[icdId]], length))
+  if (is.null(width))
+    width = ncol
+  else
+    stopifnot(ncol <= width)
+
+  m <-matrix(data = empty,
+             nrow = length(lst[[visitId]]),
+             ncol = width)
+  for (v in 1:length(lst[[visitId]])) {
+    codes <- lst[[icdId]][[v]]
+    m[v, 1:length(codes)] <- codes
+  }
+  res <- data.frame(lst[visitId], as.data.frame(m))
+  names(res)[-1] <- paste(prefix, sprintf("%02d", 1:ncol), sep = "")
+  res
+}
