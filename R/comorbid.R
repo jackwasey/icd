@@ -425,9 +425,9 @@ icd9FilterPoaNotYes <- function(icd9df, poaField = "poa") {
 #'                    icd9 = c("441", "412.93", "044.9"))
 #' cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)
 #' cmb
-#' icd9CharlsonFromCodes(mydf, isShort = FALSE)
-#' icd9CharlsonFromCodes(mydf, isShort = FALSE, return.df = TRUE)
-#' icd9CharlsonFromComorbid(cmb)
+#' icd9Charlson(mydf, isShort = FALSE)
+#' icd9Charlson(mydf, isShort = FALSE, return.df = TRUE)
+#' icd9CharlsonComorbid(cmb)
 #' @export
 icd9Charlson <- function(x, visitId = NULL,
                          return.df = FALSE,
@@ -442,8 +442,9 @@ icd9Charlson <- function(x, visitId = NULL,
   stopifnot(length(visitId) == 1)
   stopifnot(is.logical(return.df))
   stopifnot(length(return.df) == 1)
-  res <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...) %>%
-    icd9CharlsonFromComorbid
+  res <- icd9CharlsonComorbid(
+    icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...))
+
   if (return.df) return(cbind(x[visitId],
                               data.frame("Charlson" = res),
                               stringsAsFactors = stringsAsFactors))
@@ -454,10 +455,18 @@ icd9Charlson <- function(x, visitId = NULL,
 #' @param applyHierarchy single logical value, default is FALSE. If TRUE, will
 #'   drop DM if DMcx is present, etc.
 #' @export
-icd9CharlsonFromComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
-  if (is.null(visitId)) visitId <- names(x)[1]
+icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
+  stopifnot(is.data.frame(x))
+  if (is.null(visitId)) {
+    if (!any(names(x) == "visitId"))
+      visitId <- names(x)[1]
+    else
+      visitId <- "visitId"
+  } else
+    stopifnot(visitId %in% names(x))
   stopifnot(is.character(visitId))
   stopifnot(length(visitId) == 1)
+
   stopifnot(ncol(x) == 18)
   weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                2, 2, 2, 2,
@@ -477,22 +486,117 @@ icd9CharlsonFromComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) 
   rowSums(m * weights)
 }
 
-#' @title count comorbidities for each patient
-#' @description Uses a data frame of comorbidities and returns a simple count of
-#'   comorbidities for each patient. This is sometimes used as a metric of
-#'   comorbidity load, instead of, or inaddition to metrics like the Charlson
-#'   Comorbidity Index (aka Charlson Score)
+#' @title count icd9 codes or comorbidities for each patient
+#' @rdname icd9Count
+#' @description \code{icd9Count} takes a data frame with a column for
+#'   \code{visitId} and another for ICD-9 code, and returns the number of
+#'   distinct codes for each patient.
+#'
+#'   The visitId field is typically the first column. If there is no column
+#'   called \code{visitId} and \code{visitId} is not specified, the first column
+#'   is used.
+#' @details TODO: optionally check each code is valid before counting.
 #' @param x data frame with one row per patient, and a true/false or 1/0 flag
 #'   for each column. By default, the first column is the patient identifier and
 #'   is not counted. If \code{visitId} is not specified, the first column is
 #'   used.
 #' @template visitid
+#' @param return.df single logical, if \code{TRUE}, return the result as a data
+#'   frame with the first column being the \code{visitId}, and the second being
+#'   the count. If \code{visitId} was a factor or named differently in the
+#'   input, this is preserved.
+#' @return vector of the count of comorbidities for each patient. This is
+#'   sometimes used as a metric of comorbidity load, instead of, or inaddition
+#'   to metrics like the Charlson Comorbidity Index (aka Charlson Score)
+#' @examples
+#'   mydf <- data.frame(visitId = c("r", "r", "s"),
+#'                    icd9 = c("441", "412.93", "044.9"))
+#'   icd9Count(mydf, return.df = TRUE)
+#'   icd9Count(mydf)
+#'
+#'   cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE)
+#'   icd9CountComorbidBin(cmb)
+#'
+#'   wide <- data.frame(visitId = c("r", "s", "t"),
+#'                    icd9_1 = c("0011", "441", "456"),
+#'                    icd9_2 = c(NA, "442", NA),
+#'                    icd9_3 = c(NA, NA, "510"))
+#'   icd9CountWide(wide)
+#'   # or:
+#'   library(magrittr)
+#'   widedf %>% icd9WideToLong %>% icd9Count
 #' @export
-#' @return vector of the counts, with one per row of the input data
-icd9CountComorbid <- function(x, visitId = NULL) {
-  if (is.null(visitId)) visitId <- names(x)[1]
-  apply(logicalToBinary(x[, names(x) %nin% visitId]),
-        MARGIN = 1,
-        FUN = sum)
+icd9Count <- function(x, visitId = NULL, return.df = FALSE) {
+  stopifnot(is.data.frame(x))
+  if (is.null(visitId)) {
+    if (!any(names(x) == "visitId"))
+      visitId <- names(x)[1]
+    else
+      visitId <- "visitId"
+  } else
+    stopifnot(visitId %in% names(x))
+  stopifnot(is.character(visitId))
+  stopifnot(length(visitId) == 1)
+
+  res <- aggregate(x[names(mydf) %nin% visitId],
+                   by = x[visitId],
+                   FUN = length)
+  names(res)[names(res) %nin% visitId] <- "icd9Count"
+  if (return.df) return(res)
+  res[["icd9Count"]]
 }
 
+#' @rdname icd9Count
+#' @description \code{icd9CountComorbidBin} differs from the other counting
+#'   functions in that it counts _comorbidities_, not individual diagnoses. It
+#'   accepts any data frame with either logicals or zero/non-zero contents, with
+#'   a single column for visitId. No checks are made to see whether visitId is
+#'   duplicated.
+#' @export
+icd9CountComorbidBin <- function(x, visitId = NULL, return.df = FALSE) {
+  stopifnot(is.data.frame(x))
+  if (is.null(visitId)) {
+    if (!any(names(x) == "visitId"))
+      visitId <- names(x)[1]
+    else
+      visitId <- "visitId"
+  } else
+    stopifnot(visitId %in% names(x))
+  stopifnot(is.character(visitId))
+  stopifnot(length(visitId) == 1)
+
+  res <- apply(x[, names(x) %nin% visitId],
+               MARGIN = 1,
+               FUN = sum)
+  names(res) <- x[[visitId]]
+  if (return.df) return(cbind(x[visitId], "icd9Count" = res))
+
+  res
+}
+
+#' @rdname icd9Count
+#' @description For \code{icd9Count}, it is assumed that all the columns apart
+#'   from \code{vistiId} represent actual or possible ICD-9 codes. Duplicate
+#'   \code{visitId}s are repeated as given and not aggregated. This is left as
+#'   an exercise for the reader. (My recommendation is to work with data in long
+#'   format, i.e. multiple rows per patient and one icd9 column: this overcomes
+#'   the frequent 15 or 30 ICD code limit.)
+#' @export
+icd9CountWide <- function(x, visitId = NULL, return.df = FALSE) {
+  stopifnot(is.data.frame(x))
+  if (is.null(visitId)) {
+    if (!any(names(x) == "visitId"))
+      visitId <- names(x)[1]
+    else
+      visitId <- "visitId"
+  } else
+    stopifnot(visitId %in% names(x))
+  stopifnot(is.character(visitId))
+  stopifnot(length(visitId) == 1)
+
+  res <- apply(x[, names(x) %nin% visitId], 1, function(x) sum(!is.na(x)))
+  names(res) <- x[[visitId]]
+  if (return.df) return(cbind(x[visitId], "icd9Count" = res))
+
+  res
+}

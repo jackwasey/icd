@@ -652,7 +652,7 @@ test_that("Charlson score", {
                      stringsAsFactors = TRUE)
   expect_equal(
     icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE) %>%
-      icd9CharlsonFromComorbid,
+      icd9CharlsonComorbid,
     icd9Charlson(mydf, isShort = FALSE)
   )
   expect_equal(icd9Charlson(mydf,
@@ -713,17 +713,65 @@ test_that("Charlson score", {
                       icd9 = c("2500", "25042"),
                       stringsAsFactors = TRUE)
   cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
-  expect_error(icd9CharlsonFromComorbid(cmb, applyHierarchy = FALSE))
+  expect_error(icd9CharlsonComorbid(cmb, applyHierarchy = FALSE))
 
   baddf <- data.frame(visitId = c("d", "d"),
                       icd9 = c("2500", "25042"),
                       stringsAsFactors = TRUE)
   cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
-  expect_error(icd9CharlsonFromComorbid(cmb, applyHierarchy = FALSE))
+  expect_error(icd9CharlsonComorbid(cmb, applyHierarchy = FALSE))
 
   baddf <- data.frame(visitId = c("d", "d"),
                       icd9 = c("57224", "57345"),
                       stringsAsFactors = TRUE)
   cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
-  expect_error(icd9CharlsonFromComorbid(cmb, applyHierarchy = FALSE))
+  expect_error(icd9CharlsonComorbid(cmb, applyHierarchy = FALSE))
+})
+
+test_that("count icd9 codes", {
+    mydf <- data.frame(visitId = c("r", "r", "s"),
+                     icd9 = c("441", "412.93", "044.9"))
+    expect_equal(icd9Count(mydf, return.df = TRUE),
+                 data.frame(visitId = c("r", "s"),
+                            icd9Count = c(2, 1))
+    )
+    expect_equal(icd9Count(mydf), c(2, 1))
+
+    cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE)
+    expect_equivalent(icd9CountComorbidBin(cmb), icd9Count(mydf))
+
+    wide <- data.frame(visitId = c("r", "s", "t"),
+                     icd9_1 = c("0011", "441", "456"),
+                     icd9_2 = c(NA, "442", NA),
+                     icd9_3 = c(NA, NA, "510"))
+
+    expect_equal(icd9CountWide(wide),
+                 c("r" = 1, "s" = 2, "t" = 2))
+
+    widezero <- data.frame(visitId = c("j"),
+                           icd9_a = c(NA),
+                           icd9_b = c(NA))
+    expect_equal(icd9CountWide(wide),
+                 c("j" = 0))
+
+    widezero2 <- data.frame(visitId = c("j"),
+                           icd9_a = c(NA))
+    expect_equal(icd9CountWide(wide),
+                 c("j" = 0))
+
+    expect_error(icd9CountWide(data.frame(visitId = NA)))
+    expect_error(icd9CountWide(data.frame(visitId = c("j"))))
+    expect_error(icd9CountWide(data.frame(visitId = c("j", "k"))))
+})
+
+test_that("count wide directly (old func) same as reshape count", {
+
+  widedf <- data.frame(visitId = c("a", "b", "c"),
+                       icd9_01 = c("441", "4424", "441"),
+                       icd9_02 = c(NA, "443", NA))
+
+  # we don't get names back for the vector for 'long'
+  expect_equivalent(icd9CountWide(widedf),
+               widedf %>% icd9WideToLong %>% icd9Count)
+
 })
