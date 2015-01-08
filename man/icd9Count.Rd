@@ -10,7 +10,7 @@ icd9Count(x, visitId = NULL, return.df = FALSE)
 
 icd9CountComorbidBin(x, visitId = NULL, return.df = FALSE)
 
-icd9CountWide(x, visitId = NULL, return.df = FALSE)
+icd9CountWide(x, visitId = NULL, return.df = FALSE, aggregate = FALSE)
 }
 \arguments{
 \item{x}{data frame with one row per patient, and a true/false or 1/0 flag
@@ -27,6 +27,10 @@ character vector of length one. Defaults to "visitId"}
 frame with the first column being the \code{visitId}, and the second being
 the count. If \code{visitId} was a factor or named differently in the
 input, this is preserved.}
+
+\item{aggregate,}{single logical, default is FALSE. If TRUE, the length (or
+rows) of the output will no longer match the input, but duplicate visitIds
+will be counted together.}
 }
 \value{
 vector of the count of comorbidities for each patient. This is
@@ -50,10 +54,7 @@ vector of the count of comorbidities for each patient. This is
 
 For \code{icd9Count}, it is assumed that all the columns apart
   from \code{vistiId} represent actual or possible ICD-9 codes. Duplicate
-  \code{visitId}s are repeated as given and not aggregated. This is left as
-  an exercise for the reader. (My recommendation is to work with data in long
-  format, i.e. multiple rows per patient and one icd9 column: this overcomes
-  the frequent 15 or 30 ICD code limit.)
+  \code{visitId}s are repeated as given and aggregated.
 }
 \details{
 TODO: optionally check each code is valid before counting.
