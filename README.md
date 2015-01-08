@@ -1,6 +1,7 @@
-
 icd9
 ====
+
+[![Build Status](https://travis-ci.org/jackwasey/icd9.png?branch=master)](https://travis-ci.org/jackwasey/icd9)
 
 ICD-9 code manipulation, validation and comorbidity generation in R
 -------------------------------------------------------------------
