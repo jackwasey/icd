@@ -1,10 +1,8 @@
 .Rproj.user
 .Rhistory
 .RData
-man
 vignettes/cache
 vignettes/icd9.tex
-vignettes/icd9.pdf
 vignettes/icd9.synctex.gz
 vignettes/icd9.log
 vignettes/icd9-concordance.tex
