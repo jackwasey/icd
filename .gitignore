@@ -13,3 +13,4 @@ Rprof.out
 *.so
 *.dll
 inst/todo
+vignettes/icd9.aux
