@@ -1,6 +1,12 @@
 context("test Charlson and counting")
 
+
+# may wish to skip slow tests on CRAN, Travis or locally, so decide here:
+# if (identical(Sys.getenv("TRAVIS"), "true"))
+skip.slow <- TRUE
+
 test_that("Charlson score", {
+  if (skip.slow) skip("skipping slow tests")
   mydf <- data.frame(visitId = c("a", "b", "c"),
                      icd9 = c("441", "412.93", "044.9"),
                      stringsAsFactors = TRUE)
@@ -83,6 +89,7 @@ test_that("Charlson score", {
 })
 
 test_that("count icd9 codes", {
+  if (skip.slow) skip("skipping slow tests")
   mydf <- data.frame(visitId = c("r", "r", "s"),
                      icd9 = c("441", "412.93", "044.9"))
   expect_equal(icd9Count(mydf, return.df = TRUE),
