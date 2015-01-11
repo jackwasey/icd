@@ -429,15 +429,15 @@ parseIcd9Descriptions <- function(icd9path =
 #'   confirm the results with tests.
 #' @keywords internal
 parseIcd9Chapters <- function(year = NULL,
-                              save = FALSE,
-                              path = "data") {
-  if (is.null(year)) {
+                              save = FALSE) {
+  if (is.null(year))
     year <- "2014"
-  } else {
-    if (format(Sys.time(), "%Y") != year)
-      warning("Getting ICD-9 data for 2014 which is not the current year.
-              Tests were written to validate extraction of 2014 data.")
-  }
+  else
+    year <- as.character(year)
+  if (format(Sys.time(), "%Y") != year)
+    warning(sprintf("Getting ICD-9 data for %s which is not the current year.
+              Tests were written to validate extraction of 2014 data.", year))
+
   icd9Chapters <- icd9WebParseGetList(year)
   icd9ChaptersSub <- list()
   icd9ChaptersMajor <- list()

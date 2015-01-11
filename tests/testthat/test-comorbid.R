@@ -388,6 +388,15 @@ if (do.slow) {
                  icd9::icd9Hierarchy)
   })
 
+  # the following test is dependent on availability and consistency of
+  # http://www.icd9data.com because there is no machine readable CDC or CMS file
+  # with this data.
+  test_that("icd9Chapters, etc. as saved in data can be recreated", {
+    res <- parseIcd9Chapters(year = "2014", save = FALSE)
+    expect_equal(res$icd9Chapters, icd9::icd9Chapters)
+    expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)
+    expect_equal(res$icd9ChaptersMajor, icd9::icd9ChaptersMajor)
+  })
 }
 ## end slow tests (about 20-30 seconds each, but depends on memoisation)
 
