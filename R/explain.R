@@ -120,7 +120,8 @@ icd9GuessIsShort <- function(icd9, invalidAction = icd9InvalidActions) {
 }
 
 #' @title get ICD-9 Chapters from vector of ICD-9 codes
-#' @description work-in-progress
+#' @description This runs quite slowly. Used too rarely to be worth optimizing
+#'   now.
 #' @param icd9-any
 #' @param isShort
 #' @param invalid
@@ -142,7 +143,10 @@ icd9GetChapters <- function(icd9, isShort,
                levels = c(names(icd9::icd9ChaptersSub), NA_character_))
   mf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9ChaptersMajor), NA_character_))
-  out <- data.frame(chapter = cf, subchapter = sf, major = mf)
+  allmjrs <- lapply(icd9::icd9ChaptersMajor, `[[`, "major")
+  thrdgt <- factor(rep(NA, length(icd9)),levels = c(allmjrs, NA_character_))
+  out <- data.frame(threedigit = thrdgt, major = mf,
+                    subchapter = sf, chapter = cf)
   for (i in 1:length(majors)) {
     for (chap in names(icd9::icd9Chapters)) {
       if (any(majors[i] %in%
@@ -162,18 +166,19 @@ icd9GetChapters <- function(icd9, isShort,
         break
       }
     }
-    for (mj in names(icd9::icd9ChaptersMajor)) {
-      if (majors[i] == icd9::icd9ChaptersMajor[[mj]]) {
-        out[i, "major"] <- mj
-        break
-      }
-    }
   }
+  whch <- match(majors, allmjrs, nomatch = NA_character_)
+  out$major[] <- names(allmjrs)[whch]
+  out$threedigit[] <- unlist(allmjrs)[whch]
+
+  # many possible three digit codes don't exist. We should return NA for the
+  # whole row. Chapter is coded as a range, so picks up these non-existent codes
+  out$chapter[is.na(out$major)] <- NA_character_
+
   out
 }
 
-# internal. Assumes working in project root, so saving to directory 'data'
-icd9GetChaptersHierarchy <- function(save = FALSE, path = "data") {
+icd9GetChaptersHierarchy <- function(save = FALSE) {
 
   # don't rely on having already done this when setting up other data.
   icd9CmDesc <- parseIcd9Descriptions()

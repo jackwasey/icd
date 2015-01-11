@@ -261,3 +261,46 @@ test_that("condense short range", {
 
 
 })
+
+test_that("explain icd9GetChapters bad input", {})
+
+test_that("explain icd9GetChapters simple input", {
+  chaps1 <- icd9GetChapters(c("410", "411", "412"), isShort = TRUE)
+  expect_equal(nrow(chaps), 3)
+
+  chaps2 <- icd9GetChapters("418", isShort = TRUE)
+  expect_is(chaps2, "data.frame")
+  expect_is(chaps2$threedigit, "factor")
+  expect_is(chaps2$major, "factor")
+  expect_is(chaps2$subchapter, "factor")
+  expect_is(chaps2$chapter, "factor")
+  expect_equal(asCharacterNoWarn(chaps2$threedigit), NA_character_)
+  expect_equal(asCharacterNoWarn(chaps2$major), NA_character_)
+  expect_equal(asCharacterNoWarn(chaps2$subchapter), NA_character_)
+  expect_equal(asCharacterNoWarn(chaps2$chapter), NA_character_)
+
+  chaps3 <- icd9GetChapters("417", isShort = FALSE)
+  expect_equal(asCharacterNoWarn(chaps3$threedigit), "417")
+  expect_equal(asCharacterNoWarn(chaps3$major),
+               "Other diseases of pulmonary circulation")
+  expect_equal(asCharacterNoWarn(chaps3$subchapter),
+               "Diseases Of Pulmonary Circulation")
+  expect_equal(asCharacterNoWarn(chaps3$chapter),
+               "Diseases Of The Circulatory System")
+
+  chaps4 <- icd9GetChapters("417", isShort = TRUE)
+  chaps5 <- icd9GetChapters("417.1", isShort = FALSE)
+  chaps6 <- icd9GetChapters("4171", isShort = TRUE)
+  chaps7 <- icd9GetChapters("417.1", isShort = FALSE)
+  chaps8 <- icd9GetChapters("4171", isShort = TRUE)
+  expect_equal(chaps3, chaps4)
+  expect_equal(chaps3, chaps5)
+  expect_equal(chaps3, chaps6)
+  expect_equal(chaps3, chaps7)
+  expect_equal(chaps3, chaps8)
+
+  #TODO: decide whether to give NA rows if the major group doesn't exist, or
+  #whether also to do this for non-existent minor parts. E.g. 41710 doesn't
+  #exist, but 4171 does. Should we give a NA row back or not?
+})
+

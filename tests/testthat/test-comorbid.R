@@ -383,6 +383,11 @@ if (do.slow) {
 
   })
 
+  test_that("icd9Hierarchy as saved in data can be recreated", {
+    expect_equal(icd9GetChaptersHierarchy(save = FALSE),
+                 icd9::icd9Hierarchy)
+  })
+
 }
 ## end slow tests (about 20-30 seconds each, but depends on memoisation)
 
