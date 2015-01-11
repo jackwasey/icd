@@ -1,7 +1,8 @@
 icd9
 ====
 
-[![Build Status](https://travis-ci.org/jackwasey/icd9.png?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://img.shields.io/coveralls/jackwasey/icd9.svg)](https://coveralls.io/r/jackwasey/icd9?branch=master)
+_dev_ [![Build Status](https://travis-ci.org/jackwasey/icd9.png?branch=v0.6dev)](https://travis-ci.org/jackwasey/icd9) 
+[![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.png?branch=v0.6dev)](https://coveralls.io/r/jackwasey/icd9?branch=v0.6dev)
 
 ICD-9 code manipulation, validation and comorbidity generation in R
 -------------------------------------------------------------------
