@@ -14,7 +14,8 @@ icd9GetChapters(icd9, isShort, invalidAction = icd9InvalidActions)
 \item{invalid}{}
 }
 \description{
-work-in-progress
+This runs quite slowly. Used too rarely to be worth optimizing
+  now.
 }
 \keyword{internal}
 

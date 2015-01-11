@@ -18,7 +18,8 @@ after_failure:
   - ./travis-tool.sh dump_logs
 
 env:
-   - R_CHECK_ARGS = "--no-tests --build-vignettes"
+  global:
+    - R_CHECK_ARGS="--no-tests --build-vignettes"
 # tests are done by coveralls, andwe don't need to do them twice.
 
 #  - WARNINGS_ARE_ERRORS=1
