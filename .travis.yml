@@ -12,12 +12,15 @@ install:
 script: ./travis-tool.sh run_tests
 
 after_success:
-  - Rscript -e 'library(covr); coveralls()'
+  - Rscript -e --verbose 'library(covr); coveralls()'
 
 after_failure:
   - ./travis-tool.sh dump_logs
 
-#env:
+env:
+   - R_CHECK_ARGS = "--no-tests --build-vignettes"
+# tests are done by coveralls, andwe don't need to do them twice.
+
 #  - WARNINGS_ARE_ERRORS=1
 
 notifications:
