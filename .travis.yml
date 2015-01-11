@@ -6,17 +6,20 @@ before_install:
   - ./travis-tool.sh bootstrap
 
 install:
-  - travis_wait mvn install
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh github_package jimhester/covr
 
 script: travis_wait ./travis-tool.sh run_tests
 
 after_success:
-  - Rscript -e --verbose 'library(covr); coveralls()'
+  - travis_wait Rscript -e --verbose 'library(covr); coveralls()'
 
 after_failure:
   - ./travis-tool.sh dump_logs
+
+after_script:
+  - ./travis-tool.sh dump_logs_by_extension "timings"
+  - ./travis-tool.sh dump_sysinfo
 
 env:
   global:
