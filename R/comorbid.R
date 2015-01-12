@@ -18,7 +18,6 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 #' fall within subgroups. This takes several seconds on an unimpressive desktop
 #' PC, so would benefit from memoization.
 #'
-#' @import memoise
 #' @keywords internal
 spawnReferenceChildren <-
   function(icd9Reference, isShortReference) {
@@ -32,8 +31,11 @@ spawnReferenceChildren <-
   }
 
 # this runs outside of a function, on package load, in package namespace
-library(memoise)
-memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
+if (suppressWarnings(require("memoise", character.only = TRUE, quiet = TRUE))) {
+  memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
+} else {
+  memSpawnRefKids <- spawnReferenceChildren
+}
 
 #' @title match ICD9 codes
 #' @aliases "%i9in%"

@@ -6,7 +6,7 @@
 # appears to be set only by devtools::check()
 
 if (!exists("do.slow")) do.slow = TRUE
-do.slow %<>% or(identical(Sys.getenv("TRAVIS"), "true"))
+do.slow <- do.slow || identical(Sys.getenv("TRAVIS"), "true")
 
 if (do.slow) message("Doing slow tests") else message("Skipping slow tests")
 

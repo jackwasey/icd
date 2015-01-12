@@ -8,8 +8,9 @@ if (do.slow) {
                        icd9 = c("441", "412.93", "044.9"),
                        stringsAsFactors = TRUE)
     expect_equal(
-      icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE) %>%
-        icd9CharlsonComorbid,
+      icd9CharlsonComorbid(
+        icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)
+      ),
       icd9Charlson(mydf, isShort = FALSE)
     )
     expect_equal(icd9Charlson(mydf,

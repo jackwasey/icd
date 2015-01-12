@@ -8,6 +8,5 @@ test_that("count wide directly (old func) same as reshape count", {
 
   # we don't get names back for the vector for 'long'
   expect_equivalent(icd9CountWide(widedf),
-                    widedf %>% icd9WideToLong %>% icd9Count)
-
+                    icd9Count(icd9WideToLong(widedf)))
 })

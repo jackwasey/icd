@@ -517,5 +517,12 @@ icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
 
 # don't assume XML is loaded - it is a suggested package, and needed only for
 # creating packaged data.
-if (suppressWarnings(require("XML", quietly = TRUE)))
-  memReadHtmlList <- memoise::memoise(XML::readHTMLList)
+if (suppressWarnings(require("XML",
+                             character.only = TRUE, quietly = TRUE))) {
+  if (suppressWarnings(require("memoise",
+                               character.only = TRUE, quietly = TRUE)))
+    memReadHtmlList <- memoise::memoise(XML::readHTMLList)
+  else
+    memReadHtmlList <- XML::readHTMLList
+} else
+  memReadHtmlList <- NULL
