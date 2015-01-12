@@ -24,8 +24,8 @@ after_script:
 
 env:
   global:
-    # do want manual to be built for examples to be run?
-    - R_BUILD_ARGS="--no-build-vignettes"
+    # default is no manual and no vignettes, so latex isn't needed
+    # - R_BUILD_ARGS="--no-build-vignettes"
     - R_CHECK_ARGS="--no-build-vignettes --no-tests --as-cran --timings"
     - _R_CHECK_TIMINGS_="5"
     # report timings for more than 5 seconds per test or example. Default with --as-cran is 10 seconds.
