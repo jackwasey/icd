@@ -1,10 +1,6 @@
 context("test Charlson and counting")
 
-
-# may wish to skip slow tests on CRAN, Travis or locally, so decide here:
-# if (identical(Sys.getenv("TRAVIS"), "true"))
-if (identical(Sys.getenv("TRAVIS"), "true") ||
-      identical(Sys.getenv("NOT_CRAN"), "true")) {
+if (do.slow) {
 
   test_that("Charlson score", {
 

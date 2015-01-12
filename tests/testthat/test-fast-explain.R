@@ -266,7 +266,7 @@ test_that("explain icd9GetChapters bad input", {})
 
 test_that("explain icd9GetChapters simple input", {
   chaps1 <- icd9GetChapters(c("410", "411", "412"), isShort = TRUE)
-  expect_equal(nrow(chaps), 3)
+  expect_equal(nrow(chaps1), 3)
 
   chaps2 <- icd9GetChapters("418", isShort = TRUE)
   expect_is(chaps2, "data.frame")
