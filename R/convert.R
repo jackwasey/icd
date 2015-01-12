@@ -188,12 +188,11 @@ icd9PartsRecompose <- function(parts, isShort) {
 
   # only allow pass through of non-zero-padded majors in short if no minor.
   # Otherwise, major is passed through unchanged.
-  if (isShort)
-    major <- icd9AddLeadingZeroesMajor(major, addZeroV = TRUE)
 
   minor[is.na(minor)] <- ""
 
   if (isShort)
+    major <- icd9AddLeadingZeroesMajor(major, addZeroV = TRUE)
     out <- sprintf("%s%s", major, minor)
   else
     out <- sprintf("%s.%s", major, minor)

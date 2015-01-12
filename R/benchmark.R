@@ -7,11 +7,18 @@
 
 icd9Benchmark <- function() {
   library(microbenchmark)
+  library(profr)
   # generate large data set: this is copied from test-ICD9.R for now...
   set.seed(1441)
   n <- 1E7 # 10 million rows
 
   rpts <- randomPatients(n)
+
+
+  # run slow tests
+  res <- test_dir("tests/testthat/", filter = "slow", reporter = ListReporter())
+  res <- as.data.frame(res)
+  print(res[order(res$real), c("test", "real")])
 
   tmp <- tempfile(fileext = ".Rprof")
   Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = TRUE)
@@ -27,7 +34,25 @@ icd9Benchmark <- function() {
   Rprof(NULL)
   summaryRprof(filename = tmp, lines = "show")
 
-  ggplot(profr::profr(icd9ChildrenShort("300" %i9s% "450")))
+  prfCharl <- profr(icd9Charlson(mydf,
+                                 return.df = TRUE,
+                                 stringsAsFactors = TRUE,
+                                 isShort = FALSE))
+  ggplot(prfCharl)
+
+  prfChild <- profr::profr(icd9ChildrenShort("300" %i9s% "450"))
+  ggplot(prfChild)
+
+  microbenchmark::microbenchmark(time = 20,
+                 icd9PartsRecompose(data.frame(major = as.character(100:999),
+                                               minor = rep("01", times = 900)),
+                                    isShort = T)
+  )
+  microbenchmark::microbenchmark(time = 20,
+                                 icd9PartsRecompose(data.frame(major = as.character(100:999),
+                                                               minor = rep(NA, times = 900)),
+                                                    isShort = T)
+  )
 
   # 3.5 sec in v0.5, 2.7 sec without validation checks
   microbenchmark::microbenchmark(times = 5, icd9ChildrenShort("400" %i9s% "450"))
@@ -47,7 +72,7 @@ icd9Benchmark <- function() {
   # initializing empty data frame
   microbenchmark::microbenchmark(data.frame(matrix(ncol = 2, nrow = 100000)))
   microbenchmark::microbenchmark(data.frame(major = character(100000),
-                            minor = character(100000)))
+                                            minor = character(100000)))
 
 }
 
