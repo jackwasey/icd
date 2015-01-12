@@ -13,11 +13,9 @@ icd9DropLeadingZeroes(icd9, isShort, dropZeroV = FALSE,
 icd9DropLeadingZeroesDecimal(icd9Decimal, dropZeroV = FALSE,
   invalidAction = icd9InvalidActions)
 
-icd9DropLeadingZeroesShort(icd9Short, dropZeroV = FALSE,
-  invalidAction = icd9InvalidActions)
+icd9DropLeadingZeroesShort(icd9Short, dropZeroV = FALSE)
 
-icd9DropLeadingZeroesMajor(major, dropZeroV = FALSE,
-  invalidAction = icd9InvalidActions)
+icd9DropLeadingZeroesMajor(major, dropZeroV = FALSE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is

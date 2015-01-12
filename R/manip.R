@@ -89,9 +89,8 @@ icd9AddLeadingZeroesMajor <- function(major, addZeroV = FALSE,
   # codes with E00, they start at 800.
   if (addZeroV) {
     justV <- icd9IsV(major)
-    major[nchar(major[justV]) == 2] <- paste("V0",
-                                             substr(major[justV], 2, 2),
-                                             sep  = "")
+    major[nchar(major[justV]) == 2] <- sprintf("V0%s",
+                                               substr(major[justV], 2, 2))
   }
   major
 }
@@ -134,7 +133,7 @@ icd9DropLeadingZeroesDecimal <- function(icd9Decimal, dropZeroV = FALSE,
       pattern = "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]+)[[:space:]]*",
       text = icd9Decimal),
     FUN = function(x)
-      if (length(x) > 0) paste(x[c(1,3)], collapse = "") else NA_character_ ,
+      if (length(x) > 0) sprintf("%s%s", x[1], x[3]) else NA_character_ ,
     FUN.VALUE = character(1) # template result PER vapply 'row'
   )
   # if user request preservation of V0x, then keep the input data for those
@@ -148,31 +147,20 @@ icd9DropLeadingZeroesDecimal <- function(icd9Decimal, dropZeroV = FALSE,
 
 #' @rdname icd9DropLeadingZeroes
 #' @template icd9-short
-icd9DropLeadingZeroesShort <- function(icd9Short, dropZeroV = FALSE,
-                                       invalidAction = icd9InvalidActions) {
-  minorEmpty <- ""
-  parts <- icd9ShortToParts(icd9Short = icd9Short,
-                            minorEmpty = minorEmpty,
-                            invalidAction = match.arg(invalidAction))
+icd9DropLeadingZeroesShort <- function(icd9Short, dropZeroV = FALSE) {
+  parts <- icd9ShortToParts(icd9Short = icd9Short, minorEmpty = "")
   # very important: only drop the zero in V codes if the minor part is empty.
-  if (!all(is.na(parts[["minor"]])))
-    icd9DropLeadingZeroesMajor(
-      parts[parts[["minor"]] == minorEmpty, "major"],
-      dropZeroV = dropZeroV,
-      invalidAction = "ignore"
-    ) -> parts[parts[["minor"]] == minorEmpty, "major"]
+  areEmpty <- parts[["minor"]] == ""
+  parts[areEmpty, "major"] <-
+    icd9DropLeadingZeroesMajor(parts[areEmpty, "major"], dropZeroV = dropZeroV)
   icd9PartsToShort(parts = parts)
 }
 
 #' @rdname icd9DropLeadingZeroes
-icd9DropLeadingZeroesMajor <- function(major, dropZeroV = FALSE,
-                                       invalidAction = icd9InvalidActions) {
-  stopifnot(is.logical(dropZeroV))
-  stopifnot(length(dropZeroV) == 1)
-  stopifnot(is.character(major) || is.numeric(major) || is.na(major))
+icd9DropLeadingZeroesMajor <- function(major, dropZeroV = FALSE) {
   # trim everything??? TODO: consider just passing through the unprocessed
   # codes. remove trim tests?
-  major <- trim(icd9ValidNaWarnStopMajor(major, match.arg(invalidAction)))
+  major <- trim(major)
   # E codes just pass through
   isV <- icd9IsV(major) #not checking validity, necessarily, just quick check
   # alternative might be just to get numeric-only, possibly quicker? TODO

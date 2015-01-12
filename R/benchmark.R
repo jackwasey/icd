@@ -15,11 +15,27 @@ icd9Benchmark <- function() {
 
   tmp <- tempfile(fileext = ".Rprof")
   Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = TRUE)
-  capture.output(icd9Comorbid(rpts))
+  capture.output(icd9ComorbidAhrq(rpts, isShort = TRUE))
   Rprof(NULL)
-
   #summaryRprof(filename = tmp, memory = "stats", lines = "both")
   summaryRprof(filename = tmp, memory = "both", lines = "show")
+
+
+  tmp <- tempfile(fileext = ".Rprof")
+  Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = FALSE)
+  capture.output(icd9ChildrenShort("300" %i9s% "450"))
+  Rprof(NULL)
+  summaryRprof(filename = tmp, lines = "show")
+
+  ggplot(profr::profr(icd9ChildrenShort("300" %i9s% "450")))
+
+  # 3.5 sec in v0.5, 2.7 sec without validation checks
+  microbenchmark::microbenchmark(times = 5, icd9ChildrenShort("400" %i9s% "450"))
+
+
+  #sprintf wins
+  microbenchmark::microbenchmark(times = 500000, sprintf("%s%s", "410", "01"))
+  microbenchmark::microbenchmark(times = 500000, paste("410", "01", sep = ""))
 
   #microbenchmark(times = 10, icd9ShortToParts(randomShortIcd9(5E+5)))
   #microbenchmark(times = 10, icd9ShortToPartsSlow(randomShortIcd9(5E+5)))

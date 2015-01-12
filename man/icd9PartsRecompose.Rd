@@ -9,17 +9,17 @@
 \alias{icd9PartsToShort}
 \title{recompose major and minor parts into icd9 codes}
 \usage{
-icd9PartsRecompose(parts, isShort, invalidAction = icd9InvalidActions)
+icd9PartsRecompose(parts, isShort)
 
-icd9PartsToShort(parts, invalidAction = icd9InvalidActions)
+icd9PartsToShort(parts)
 
-icd9PartsToDecimal(parts, invalidAction = icd9InvalidActions)
+icd9PartsToDecimal(parts)
 
 icd9MajMinToParts(major, minor)
 
-icd9MajMinToShort(major, minor, invalidAction = icd9InvalidActions)
+icd9MajMinToShort(major, minor)
 
-icd9MajMinToDecimal(major, minor, invalidAction = icd9InvalidActions)
+icd9MajMinToDecimal(major, minor)
 }
 \arguments{
 \item{parts}{data.frame with major and minor fields. This can be given
@@ -27,25 +27,6 @@ instead of major and minor vectors}
 
 \item{isShort}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form.}
-
-\item{invalidAction}{character string (unit length) containing one of:
-"ignore", "silent", "warn", "stop"
-
-- \code{ignore} no check for validity of ICD-9 code is made implicitly. This
-is the fastest option. If the function call is explicitly to check validity,
-e.g. icd9ValidShort(icd9Short = "12345", invalidAction = "ignore"), then the
-behavior is the same as \code{silent}.
-
-- \code{silent} invalid ICD-9 codes are replaced silently by \code{NA}
-(actually \code{NA_character_}). If the function returns \code{TRUE} or
-\code{FALSE} rather than the ICD-9 code itself, then \code{FALSE} is returned
-
-- \code{warn} invalid ICD-9 codes are replaced by \code{NA} with a warning
-revealing the invalid code(s).
-
-- \code{stop} stop with error if any invalid codes are found in input. This
-is the preferred method when doing one-time validation, e.g. of the
-co-morbidity mapping lists.}
 }
 \value{
 character vector. Deliberately returns zero-padded major, because

@@ -147,6 +147,7 @@ icd9ShortToParts <- function(icd9Short, minorEmpty = "",
   # now fix the E codes:
   x[eCodes, "major"] <- substr(icd9Short[eCodes], 0, 4)
   x[eCodes, "minor"] <- substr(icd9Short[eCodes], 5, 5)
+  x$minor[is.na(x$minor)] <- minorEmpty
   if (minorEmpty != "")
     x[!is.na(x$minor) & x$minor == "", "minor"] <- minorEmpty
   x
@@ -174,61 +175,42 @@ icd9ShortToPartsE <- function(icd9Short) {
 #' @param parts data.frame with major and minor fields. This can be given
 #'   instead of major and minor vectors
 #' @template isShort
-#' @template invalid
 #' @return character vector. Deliberately returns zero-padded major, because
 #'   otherwise we are creating ambiguous codes (even if we know what we mean)
 #' @family ICD-9 convert
 #' @keywords internal
-icd9PartsRecompose <- function(parts, isShort,
-                               invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
-  stopifnot(is.logical(isShort))
+icd9PartsRecompose <- function(parts, isShort) {
 
-  sep <- "."
-  if (isShort) sep <- ""
-
-  stopifnot(names(parts) == c("major", "minor"))
-  # no factors, please. TODO: might it be okay? It would be more memory
-  # efficient with big lists.
   major <- asCharacterNoWarn(parts$major)
   minor <- asCharacterNoWarn(parts$minor)
 
-  minor[is.na(minor)] <- ""
+  ## TODO: don't allow Vx single digit V codes to be appended when making a short.
 
   # only allow pass through of non-zero-padded majors in short if no minor.
   # Otherwise, major is passed through unchanged.
-  if (isShort) {
-    nonEmptyMinors <- minor != ""
-    major[nonEmptyMinors] <-
-      icd9AddLeadingZeroesMajor(major[nonEmptyMinors],
-                                addZeroV = TRUE, invalidAction = invalidAction)
-  }
+  if (isShort)
+    major <- icd9AddLeadingZeroesMajor(major, addZeroV = TRUE)
 
-  # paste regardless of major or minor validity. If major is NA, then adding
-  # leading zeroes also gives NA.
-  out <- paste(major, minor, sep = sep)
+  minor[is.na(minor)] <- ""
+
+  if (isShort)
+    out <- sprintf("%s%s", major, minor)
+  else
+    out <- sprintf("%s.%s", major, minor)
   out[is.na(major)] <- NA_character_
-
-  # now optionally check if the result is valid, default being not to check.
-  out <- icd9ValidNaWarnStop(icd9 = out, isShort = isShort,
-                             invalidAction = invalidAction)
   out
 }
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9PartsToShort <- function(parts,
-                             invalidAction = icd9InvalidActions)
-  icd9PartsRecompose(parts = parts, isShort = TRUE,
-                     invalidAction = match.arg(invalidAction))
+icd9PartsToShort <- function(parts)
+  icd9PartsRecompose(parts = parts, isShort = TRUE)
 
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9PartsToDecimal <- function(parts,
-                               invalidAction = icd9InvalidActions)
-  icd9PartsRecompose(parts = parts, isShort = FALSE,
-                     invalidAction = match.arg(invalidAction))
+icd9PartsToDecimal <- function(parts)
+  icd9PartsRecompose(parts = parts, isShort = FALSE)
 
 #' @rdname icd9PartsRecompose
 #' @description icd9MajMinToDf simply composes the data frame needed
@@ -243,17 +225,13 @@ icd9MajMinToParts <- function(major, minor)
 #'   ability to 'pipe' commands together using \code{magrittr}, so passing a
 #'   single \code{data.frame} is preferred.
 #' @export
-icd9MajMinToShort <- function(major, minor,
-                              invalidAction = icd9InvalidActions)
-  icd9PartsToShort(parts = icd9MajMinToParts(major, minor),
-                   invalidAction = match.arg(invalidAction))
+icd9MajMinToShort <- function(major, minor)
+  icd9PartsToShort(icd9MajMinToParts(major, minor))
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9MajMinToDecimal <- function(major, minor,
-                                invalidAction = icd9InvalidActions)
-  icd9PartsToDecimal(parts = icd9MajMinToParts(major, minor),
-                     invalidAction = match.arg(invalidAction))
+icd9MajMinToDecimal <- function(major, minor)
+  icd9PartsToDecimal(parts = icd9MajMinToParts(major, minor))
 
 #' @title convert the chapter headings to lists of codes
 #' @description the chapter headings can be converted into the full set of their

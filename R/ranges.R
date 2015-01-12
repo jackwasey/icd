@@ -66,8 +66,9 @@ icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE,
              icd9MajMinToShort(
                major = parts[[r, "major"]],
                minor = icd9ExpandMinor(parts[[r, "minor"]],
-                                       isE = icd9IsE(parts[[r, "major"]])),
-               invalidAction = "ignore")
+                                       isE = icd9IsE(parts[[r, "major"]]))
+               #invalidAction = "ignore"
+               )
     )
   }
   out <- unique(out)

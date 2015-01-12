@@ -308,26 +308,26 @@ test_that("parts to valid short with empty or NA minor", {
     # more consistent, because any code <100 with a minor must be zero padded to
     # avoid ambiguity.
     expect_equal(icd9PartsToShort(data.frame(major = "100", minor = mn)), "100")
-    expect_equal(icd9PartsToShort(data.frame(major = "10", minor = mn)), "10")
+    expect_equal(icd9PartsToShort(data.frame(major = "10", minor = mn)), "010")
     expect_equal(icd9PartsToShort(data.frame(major = "010", minor = mn)), "010")
     expect_equal(icd9PartsToShort(data.frame(major = "001", minor = mn)), "001")
-    expect_equal(icd9PartsToShort(data.frame(major = "01", minor = mn)), "01")
-    expect_equal(icd9PartsToShort(data.frame(major = "1", minor = mn)), "1")
+    expect_equal(icd9PartsToShort(data.frame(major = "01", minor = mn)), "001")
+    expect_equal(icd9PartsToShort(data.frame(major = "1", minor = mn)), "001")
   }
 })
 
 test_that("parts to valid simple numeric inputs", {
-  expect_equal(icd9PartsToShort(data.frame(major = "1", minor = "23")),
+  expect_equal(icd9PartsToShort(data.frame(major = "1", minor = "23", stringsAsFactors = FALSE)),
                "00123")
-  expect_equal(icd9PartsToShort(data.frame(major = "01", minor = "23")),
+  expect_equal(icd9PartsToShort(data.frame(major = "01", minor = "23", stringsAsFactors = TRUE)),
                "00123")
-  expect_equal(icd9PartsToShort(data.frame(major = "001", minor = "23")),
+  expect_equal(icd9PartsToShort(data.frame(major = "001", minor = "23", stringsAsFactors = FALSE)),
                "00123")
-  expect_equal(icd9PartsToShort(data.frame(major = "10", minor = "23")),
+  expect_equal(icd9PartsToShort(data.frame(major = "10", minor = "23", stringsAsFactors = TRUE)),
                "01023")
-  expect_equal(icd9PartsToShort(data.frame(major = "010", minor = "23")),
+  expect_equal(icd9PartsToShort(data.frame(major = "010", minor = "23", stringsAsFactors = FALSE)),
                "01023")
-  expect_equal(icd9PartsToShort(data.frame(major = "100", minor = "23")),
+  expect_equal(icd9PartsToShort(data.frame(major = "100", minor = "23", stringsAsFactors = TRUE)),
                "10023")
 })
 
@@ -336,7 +336,8 @@ test_that("parts to short V code inputs", {
   expect_equal(icd9MajMinToShort("V1", c("0", "1")), c("V010", "V011"))
   # and force zero spacing if required for syntax
   expect_equal(icd9MajMinToShort("V01", c("0", "1")), c("V010", "V011"))
-  expect_equal(icd9MajMinToShort("V1", c("", NA)), c("V1", "V1"))
+  # simpler to fix non-zero prefixed V codes in conversion
+  expect_equal(icd9MajMinToShort("V1", c("", NA)), c("V01", "V01"))
   expect_equal(icd9MajMinToShort("V01", c("", NA)), c("V01", "V01"))
 })
 
