@@ -270,6 +270,7 @@ if (do.slow) {
   })
 
   test_that("icd9Hierarchy as saved in data can be recreated", {
+    skip("this is a very slow test - 10 mins for one assertion")
     expect_equal(icd9GetChaptersHierarchy(save = FALSE),
                  icd9::icd9Hierarchy)
   })
