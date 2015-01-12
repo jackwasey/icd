@@ -9,10 +9,11 @@ install:
   - ./travis-tool.sh install_deps
   - ./travis-tool.sh github_package jimhester/covr
 
-script: travis_wait ./travis-tool.sh run_tests
+script: ./travis-tool.sh run_tests
 
 after_success:
-  - travis_wait Rscript -e --verbose 'library(covr); coveralls()'
+  - Rscript -e --verbose 'library(covr); coveralls()'
+# or travis_wait Rscript ...
 
 after_failure:
   - ./travis-tool.sh dump_logs
@@ -23,7 +24,7 @@ after_script:
 
 env:
   global:
-    - R_CHECK_ARGS="--build-vignettes --as-cran --timings"
+    - R_CHECK_ARGS="--no-tests --as-cran --timings"
     - _R_CHECK_TIMINGS_="5"
 # report timings for more than 5 seconds per test or example. Default with --as-cran is 10 seconds.
 # tests are done by coveralls, maybe avoid doing twice?

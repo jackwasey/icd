@@ -3,7 +3,8 @@ context("test Charlson and counting")
 
 # may wish to skip slow tests on CRAN, Travis or locally, so decide here:
 # if (identical(Sys.getenv("TRAVIS"), "true"))
-if (identical(Sys.getenv("TRAVIS"), "true")) {
+if (identical(Sys.getenv("TRAVIS"), "true") ||
+      identical(Sys.getenv("NOT_CRAN"), "true")) {
 
   test_that("Charlson score", {
 
@@ -155,15 +156,3 @@ if (identical(Sys.getenv("TRAVIS"), "true")) {
   })
 }
 ## end slow tests
-
-test_that("count wide directly (old func) same as reshape count", {
-
-  widedf <- data.frame(visitId = c("a", "b", "c"),
-                       icd9_01 = c("441", "4424", "441"),
-                       icd9_02 = c(NA, "443", NA))
-
-  # we don't get names back for the vector for 'long'
-  expect_equivalent(icd9CountWide(widedf),
-                    widedf %>% icd9WideToLong %>% icd9Count)
-
-})
