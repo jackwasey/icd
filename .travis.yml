@@ -24,12 +24,15 @@ after_script:
 
 env:
   global:
-    - R_CHECK_ARGS="--no-tests --as-cran --timings"
+    # do want manual to be built for examples to be run?
+    - R_BUILD_ARGS="--no-build-vignettes"
+    - R_CHECK_ARGS="--no-build-vignettes --no-tests --as-cran --timings"
     - _R_CHECK_TIMINGS_="5"
-# report timings for more than 5 seconds per test or example. Default with --as-cran is 10 seconds.
-# tests are done by coveralls, maybe avoid doing twice?
+    # report timings for more than 5 seconds per test or example. Default with --as-cran is 10 seconds.
+    # tests are done by coveralls, avoid doing twice
 
-#  - WARNINGS_ARE_ERRORS=1
+    # if the following is defined at all, warnings stop the build
+    #  - WARNINGS_ARE_ERRORS=1
 
 notifications:
   email:

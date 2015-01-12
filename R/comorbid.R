@@ -147,7 +147,7 @@ icd9Comorbid <- function(icd9df,
   if (validateMapping) stopifnot(icd9ValidMapping(icd9Mapping, isShortMapping))
 
   # drop factor down to character codes #TODO: is this necessary or desirable?
-  ic <- asCharacterNoWarn(icd9df[[icd9Field]])
+  ic <- jwutil::asCharacterNoWarn(icd9df[[icd9Field]])
 
   # loop through names of icd9 mapping, and put the results together so each
   # column is one comorbidity in a data frame. This is much faster with vapply,

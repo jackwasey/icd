@@ -4,3 +4,4 @@ inst/todo/*
 man-roxygen
 .git/*
 \.travis\.yml$
+.*\.log$
