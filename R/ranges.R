@@ -45,12 +45,13 @@ icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE,
 }
 
 #' @title expand 5 character form 'short' ICD9 to all possible sub codes
+#' @rdname icd9ChildrenShort
 #' @template icd9-short
 #' @template invalid
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @export
-icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE,
+icd9ChildrenShort_R <- function(icd9Short, onlyReal = FALSE,
                               invalidAction = icd9InvalidActions) {
   if (!is.character(icd9Short))
     stop("need character input to expand a short basecode to avoid ambiguity")

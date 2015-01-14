@@ -71,4 +71,6 @@
 #' @references \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @seealso rClinicalCodes
 #' @concept icd9 ICD-9 comorbidity comorbidities
+#' @useDynLib icd9
+#' @importFrom Rcpp sourceCpp
 NULL

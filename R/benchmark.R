@@ -74,6 +74,24 @@ icd9Benchmark <- function() {
   microbenchmark::microbenchmark(data.frame(major = character(100000),
                                             minor = character(100000)))
 
+  # C++ faster, especially with multiple invocations.
+  dat <- icd9:::randomShortIcd9(500)
+  microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=5000)
+  dat <- icd9:::randomShortIcd9(5000)
+  microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=500)
+  dat <- icd9:::randomShortIcd9(50000)
+  microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=50)
+
+  microbenchmark::microbenchmark(icd9ShortToDecimal_R(dat), icd9ShortToDecimal(dat), times=5)
+
+  mjr <- as.character(rep(seq.int(999), times = 5))
+  mnr <- as.character(rep(seq.int(9), times = 555))
+  microbenchmark::microbenchmark(icd9MajMinToShort_R(mjr, mnr), icd9MajMinToShort(mjr, mnr),
+                                 icd9MajMinToDecimal_R(mjr, mnr), icd9MajMinToDecimal(mjr, mnr),
+                                 times=10)
+
+
+
 }
 
 randomPatients <- function(n = 50000, np = 20) {

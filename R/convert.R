@@ -100,16 +100,12 @@ icd9ShortToMajor <- function(icd9Short,
 #' @family ICD-9 convert
 #' @keywords manip
 #' @export
-icd9ShortToDecimal <- function(icd9Short,
-                               invalidAction = icd9InvalidActions) {
-  # prevalidate regardless of invalidAction - TODO: ensure this is done
-  # consistently for every public entry point.
+icd9ShortToDecimal_R <- function(icd9Short) {
   if (!is.character(icd9Short))
     stop("icd9Short must be a character: number values could be ambiguous if converted blindly to character")
 
   if (length(icd9Short) == 0) return(character())
 
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short,  match.arg(invalidAction))
   parts <- icd9ShortToParts(icd9Short)
   out <- paste( parts$major, ".", parts$minor, sep = "")
   if (any(parts$minor == "") || is.na(parts$minor)) {
@@ -134,13 +130,11 @@ icd9ShortToDecimal <- function(icd9Short,
 #'   character, because "03" is different to "3", but "30" is the same as "3"
 #' @keywords  manip
 #' @export
-icd9ShortToParts <- function(icd9Short, minorEmpty = "",
-                             invalidAction = icd9InvalidActions) {
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction)
+icd9ShortToParts_R <- function(icd9Short, minorEmpty = "") {
   # assume bytes not unicode, for speed.
   eCodes <- icd9IsE(icd9Short)
   icd9Short <- strip(icd9Short)
-  x <- icd9MajMinToParts(
+  x <- icd9MajMinToParts_R(
     major = substr(icd9Short, 0, 3),
     minor = substr(icd9Short, 4, 5)
   )
@@ -191,9 +185,10 @@ icd9PartsRecompose <- function(parts, isShort) {
 
   minor[is.na(minor)] <- ""
 
-  if (isShort)
+  if (isShort) {
     major <- icd9AddLeadingZeroesMajor(major, addZeroV = TRUE)
     out <- sprintf("%s%s", major, minor)
+  }
   else
     out <- sprintf("%s.%s", major, minor)
   out[is.na(major)] <- NA_character_
@@ -202,20 +197,20 @@ icd9PartsRecompose <- function(parts, isShort) {
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9PartsToShort <- function(parts)
+icd9PartsToShort_R <- function(parts)
   icd9PartsRecompose(parts = parts, isShort = TRUE)
 
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9PartsToDecimal <- function(parts)
+icd9PartsToDecimal_R <- function(parts)
   icd9PartsRecompose(parts = parts, isShort = FALSE)
 
 #' @rdname icd9PartsRecompose
 #' @description icd9MajMinToDf simply composes the data frame needed
 #'   as input to the PartsToXxxx functions
 #' @export
-icd9MajMinToParts <- function(major, minor)
+icd9MajMinToParts_R <- function(major, minor)
   data.frame(major = major, minor = minor, stringsAsFactors = FALSE)
 
 #' @rdname icd9PartsRecompose
@@ -224,13 +219,13 @@ icd9MajMinToParts <- function(major, minor)
 #'   ability to 'pipe' commands together using \code{magrittr}, so passing a
 #'   single \code{data.frame} is preferred.
 #' @export
-icd9MajMinToShort <- function(major, minor)
-  icd9PartsToShort(icd9MajMinToParts(major, minor))
+icd9MajMinToShort_R <- function(major, minor)
+  icd9PartsToShort(icd9MajMinToParts_R(major, minor))
 
 #' @rdname icd9PartsRecompose
 #' @export
-icd9MajMinToDecimal <- function(major, minor)
-  icd9PartsToDecimal(parts = icd9MajMinToParts(major, minor))
+icd9MajMinToDecimal_R <- function(major, minor)
+  icd9PartsToDecimal(parts = icd9MajMinToParts_R(major, minor))
 
 #' @title convert the chapter headings to lists of codes
 #' @description the chapter headings can be converted into the full set of their

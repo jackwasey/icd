@@ -63,7 +63,7 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{\%i9s\%}},
   \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9Children}},
-  \code{\link{icd9ChildrenShort}};
+  \code{\link{icd9ChildrenShort_R}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
   \code{\link{icd9ExpandMinor}},
