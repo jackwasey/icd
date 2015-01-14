@@ -49,6 +49,48 @@ CharacterVector icd9MajMinToCode(std::vector< std::string > mjr, std::vector< st
   return as<CharacterVector>(out);
 }
 
+
+// [[Rcpp::export]]
+CharacterVector icd9MajMinToCode_test(CharacterVector mjr, CharacterVector mnr, bool isShort ) {
+
+  // TODO: exception if lengths unequal
+  CharacterVector out(max(mjr.length(), mnr.length()));
+
+  CharacterVector::iterator j = mjr.begin();
+  CharacterVector::iterator n = mnr.begin();
+
+  for(; j != mjr.end() && n != mnr.end(); ++j, ++n) {
+    CharacterVector mjrelem = *j;
+    switch (mjrelem.length()) {
+      case 0:
+      out.push_back(NA_STRING);
+      continue;
+      case 1:
+      mjrelem.insert(0, "00");
+      break;
+      case 2:
+      mjrelem.insert(0, "0");
+    }
+    if (mjrelem == "NA") {
+      out.push_back(NA_STRING);
+      continue;
+    }
+    std::string mnrelem = *n;
+    if (mnrelem == "NA") {
+      out.push_back(mjrelem);
+      continue;
+    }
+    std::string s(mjrelem);
+    if (!isShort) { s.append("."); }
+    s.append(mnrelem);
+    out.push_back(s);
+
+  }
+  // String chr_s = NA_STRING;
+
+  return as<CharacterVector>(out);
+}
+
 //' @name icd9MajMinToShort
 //' @title icd9MajMinToShort
 //' @export
