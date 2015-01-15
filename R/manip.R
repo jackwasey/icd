@@ -59,15 +59,11 @@ icd9AddLeadingZeroesDecimal <- function(icd9Decimal, addZeroV = FALSE,
 #' @description Non-decimal ICD-9 codes with length<5 are often ambiguous. E.g.
 #'   100 could be 1.00 10.0 or 100
 #' @template icd9-short
-icd9AddLeadingZeroesShort <- function(icd9Short, addZeroV = FALSE,
-                                      invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction)
-  parts <- icd9ShortToParts(icd9Short, invalidAction = invalidAction)
+icd9AddLeadingZeroesShort <- function(icd9Short, addZeroV = FALSE) {
+  parts <- icd9ShortToParts(icd9Short)
   #already validated, so don't attempt further validation downstream
   parts[["major"]] <- icd9AddLeadingZeroesMajor(parts[["major"]],
-                                                addZeroV = addZeroV,
-                                                invalidAction = "ignore")
+                                                addZeroV = addZeroV)
   out <- icd9PartsToShort(parts = parts)
   # if we got NA in, then we give NA back.
   out[is.na(icd9Short)] <- NA_character_
@@ -78,13 +74,12 @@ icd9AddLeadingZeroesShort <- function(icd9Short, addZeroV = FALSE,
 #' @description three digit codes are returned unchanged, one and two digit
 #'   codes are preceded by 00 or 0. V codes are only zero padded if addZeroV is
 #'   set to TRUE.
-icd9AddLeadingZeroesMajor <- function(major, addZeroV = FALSE,
-                                      invalidAction = icd9InvalidActions) {
-  major <- icd9ValidNaWarnStopMajor(major = major, match.arg(invalidAction))
-  isIntMajor <- areIntegers(major) # NA gives FALSE
-  major[isIntMajor] <- sprintf("%03d", as.integer(major[isIntMajor]))
+icd9AddLeadingZeroesMajor <- function(major, addZeroV = FALSE) {
+  #isIntMajor <- areIntegers(major) # NA gives FALSE
+  #major[isIntMajor] <- sprintf("%03d", as.integer(major[isIntMajor]))
+  major <- sprintf("%03d", asIntegerNoWarn(major))
   # just because we always trim, and this is not necessarily done otherwise
-  major <- trim(major)
+  #major <- trim(major)
   # if single digit V code, then try to slip in a zero. There are no valid E
   # codes with E00, they start at 800.
   if (addZeroV) {

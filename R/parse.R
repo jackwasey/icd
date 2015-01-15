@@ -179,7 +179,7 @@ parseQuanDeyoSas <- function(sasPath = NULL,
   else
     quanDeyoComorbid <- lapply(
       quanDeyoComorbid,
-      function(x) icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort)
 
   names(quanDeyoComorbid) <- icd9::charlsonComorbidNamesAbbrev
   if (save) saveInDataDir("quanDeyoComorbid")
@@ -256,7 +256,7 @@ parseQuanElix <- function(condense = FALSE,
   else
     quanElixComorbid <- lapply(
       quanElixComorbid,
-      function(x) icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
   if (save) saveInDataDir("quanElixComorbid")
@@ -336,7 +336,7 @@ parseElix <- function(condense = FALSE, save = FALSE, path = "data") {
   } else {
     elixComorbid <- lapply(
       elixComorbid,
-      function(x) icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort)
   }
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev

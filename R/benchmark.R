@@ -34,25 +34,36 @@ icd9Benchmark <- function() {
   Rprof(NULL)
   summaryRprof(filename = tmp, lines = "show")
 
-  prfCharl <- profr(icd9Charlson(mydf,
+  mydf <- data.frame(visitId = c("a", "b", "c"),
+                     icd9 = c("441", "412.93", "044.9"),
+                     stringsAsFactors = TRUE)
+  prfCharl <- profr::profr(icd9Charlson(mydf,
                                  return.df = TRUE,
                                  stringsAsFactors = TRUE,
                                  isShort = FALSE))
-  ggplot(prfCharl)
+  ggplot2::ggplot(prfCharl, minlabel = 0.04)
 
-  prfChild <- profr::profr(icd9ChildrenShort("300" %i9s% "450"))
-  ggplot(prfChild)
+  rng <- "300" %i9s% "450"
+  prfChild <- profr::profr(icd9ChildrenShort(rng))
+  ggplot(prfChild, minlabel = 0.001)
+  ggsave("tmpggplot.jpg", width = 250, height=5, dpi=200, limitsize = FALSE)
 
-  microbenchmark::microbenchmark(time = 20,
-                 icd9PartsRecompose(data.frame(major = as.character(100:999),
-                                               minor = rep("01", times = 900)),
+  microbenchmark::microbenchmark(times = 20,
+                 icd9PartsRecompose(data.frame(major = rep(as.character(100:999), times = 250),
+                                               minor = rep("01", times = 900 * 250)),
                                     isShort = T)
   )
-  microbenchmark::microbenchmark(time = 20,
+  microbenchmark::microbenchmark(times = 1,
                                  icd9PartsRecompose(data.frame(major = as.character(100:999),
                                                                minor = rep(NA, times = 900)),
                                                     isShort = T)
   )
+
+  microbenchmark::microbenchmark(times = 500, # initial about 2ms
+                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
+
+  microbenchmark::microbenchmark(times = 500, # initial about 2ms
+                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep="")), addZeroV = TRUE))
 
   # 3.5 sec in v0.5, 2.7 sec without validation checks
   microbenchmark::microbenchmark(times = 5, icd9ChildrenShort("400" %i9s% "450"))

@@ -129,14 +129,11 @@ icd9ShortToDecimal <- function(icd9Short,
 #' @template icd9-short
 #' @param minorEmpty vector of length one, to be used in place of
 #'   minor part of zero. Defaults to ""
-#' @template invalid
 #' @return data.frame with two columns. At least the minor part must be
 #'   character, because "03" is different to "3", but "30" is the same as "3"
 #' @keywords  manip
 #' @export
-icd9ShortToParts <- function(icd9Short, minorEmpty = "",
-                             invalidAction = icd9InvalidActions) {
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short, invalidAction)
+icd9ShortToParts <- function(icd9Short, minorEmpty = "") {
   # assume bytes not unicode, for speed.
   eCodes <- icd9IsE(icd9Short)
   icd9Short <- strip(icd9Short)
@@ -145,8 +142,10 @@ icd9ShortToParts <- function(icd9Short, minorEmpty = "",
     minor = substr(icd9Short, 4, 5)
   )
   # now fix the E codes:
-  x[eCodes, "major"] <- substr(icd9Short[eCodes], 0, 4)
-  x[eCodes, "minor"] <- substr(icd9Short[eCodes], 5, 5)
+  if (any(eCodes)) {
+    x[eCodes, "major"] <- substr(icd9Short[eCodes], 0, 4)
+    x[eCodes, "minor"] <- substr(icd9Short[eCodes], 5, 5)
+  }
   x$minor[is.na(x$minor)] <- minorEmpty
   if (minorEmpty != "")
     x[!is.na(x$minor) & x$minor == "", "minor"] <- minorEmpty
@@ -181,22 +180,26 @@ icd9ShortToPartsE <- function(icd9Short) {
 #' @keywords internal
 icd9PartsRecompose <- function(parts, isShort) {
 
-  major <- asCharacterNoWarn(parts$major)
-  minor <- asCharacterNoWarn(parts$minor)
+  if (is.factor(parts$major))
+    parts$major <- asCharacterNoWarn(parts$major)
+
+  if (is.factor(parts$minor))
+    parts$minor <- asCharacterNoWarn(parts$minor)
 
   ## TODO: don't allow Vx single digit V codes to be appended when making a short.
 
   # only allow pass through of non-zero-padded majors in short if no minor.
   # Otherwise, major is passed through unchanged.
 
-  minor[is.na(minor)] <- ""
+  parts$minor[is.na(parts$minor)] <- ""
 
-  if (isShort)
-    major <- icd9AddLeadingZeroesMajor(major, addZeroV = TRUE)
-    out <- sprintf("%s%s", major, minor)
+  if (isShort) {
+    parts$major <- icd9AddLeadingZeroesMajor(parts$major, addZeroV = TRUE)
+    out <- sprintf("%s%s", parts$major, parts$minor)
+  }
   else
-    out <- sprintf("%s.%s", major, minor)
-  out[is.na(major)] <- NA_character_
+    out <- sprintf("%s.%s", parts$major, parts$minor)
+  out[is.na(parts$major)] <- NA_character_
   out
 }
 
@@ -204,7 +207,6 @@ icd9PartsRecompose <- function(parts, isShort) {
 #' @export
 icd9PartsToShort <- function(parts)
   icd9PartsRecompose(parts = parts, isShort = TRUE)
-
 
 #' @rdname icd9PartsRecompose
 #' @export
@@ -217,6 +219,8 @@ icd9PartsToDecimal <- function(parts)
 #' @export
 icd9MajMinToParts <- function(major, minor)
   data.frame(major = major, minor = minor, stringsAsFactors = FALSE)
+  # much slower! CheapDataFrameBuilder(list(major, minor))
+
 
 #' @rdname icd9PartsRecompose
 #' @description icd9MajMinTo\{Short|Decimal\} simply composes the data frame
