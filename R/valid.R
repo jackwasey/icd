@@ -313,32 +313,13 @@ icd9InvalidShort <- function(icd9Short) {
   icd9Short[!icd9ValidShort(icd9Short)]
 }
 
-#' @title is the given code V or E type?
-#' @description quickly find V or E codes, without fully validating V or E
-#'   codes. Use fixed instead of regex for speed. Don't check position of V or
-#'   E: this is not validation, just a quick classification of pre-validated
-#'   codes. TODO: this doesn't look efficient, but can't use fixed with ignore
-#'   case, and regex slower.
-#' @template icd9-any
-#' @examples
-#' \dontrun{
-#' # regex is a little faster
-#' icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
-#' microbenchmark(times = 1000,
-#'   grepl(pattern = "E", icd9, fixed = TRUE) |
-#'   grepl(pattern = "e", icd9, fixed = TRUE) |
-#'   grepl(pattern = "V", icd9, fixed = TRUE) |
-#'   grepl(pattern = "v", icd9, fixed = TRUE))
-#' microbenchmark(times = 1000, grepl(pattern = "[EeVv]", rnd))
-#' }
-#' @keywords internal
-icd9IsVE <- function(icd9)
+icd9IsVE_R <- function(icd9)
   grepl(pattern = "[EeVv]", icd9)
 
-icd9IsV <- function(icd9)
+icd9IsV_R <- function(icd9)
   grepl(pattern = "[Vv]", icd9)
 
-icd9IsE <- function(icd9)
+icd9IsE_R <- function(icd9)
   grepl(pattern = "[Ee]", icd9)
 
 icd9IsMajor <- function(icd9)

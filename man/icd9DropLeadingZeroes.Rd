@@ -69,15 +69,15 @@ decimal form ICD-9 codes are not ambiguous if the leading zeroes
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9DecimalToShort}};
-  \code{\link{icd9MajMinToDecimal}},
-  \code{\link{icd9MajMinToParts}},
-  \code{\link{icd9MajMinToShort}},
+  \code{\link{icd9MajMinToDecimal_R}},
+  \code{\link{icd9MajMinToParts_R}},
+  \code{\link{icd9MajMinToShort_R}},
   \code{\link{icd9PartsRecompose}},
   \code{\link{icd9PartsToDecimal}},
-  \code{\link{icd9PartsToDecimal}},
+  \code{\link{icd9PartsToDecimal_R}},
   \code{\link{icd9PartsToShort}},
-  \code{\link{icd9PartsToShort}};
-  \code{\link{icd9ShortToDecimal}}
+  \code{\link{icd9PartsToShort_R}};
+  \code{\link{icd9ShortToDecimal_R}}
 }
 \keyword{internal}
 \keyword{manip}

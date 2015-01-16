@@ -12,12 +12,13 @@ Authors@R: person(given = "Jack O.", family = "Wasey", role = c("aut", "cre"),
     email = c("jack@jackwasey.com"))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd9
-Depends: 
+Depends:
     R (>= 3.0.3)
-Imports: 
+Imports:
     jwutil,
-    Rcpp
-Suggests: 
+    Rcpp,
+    BH
+Suggests:
     testthat,
     knitr,
     microbenchmark,
@@ -29,4 +30,4 @@ LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues
 License: GPL-3
 VignetteBuilder: knitr
-LinkingTo: Rcpp
+LinkingTo: Rcpp, BH

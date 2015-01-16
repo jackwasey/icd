@@ -66,7 +66,7 @@ icd9Benchmark <- function() {
                                  icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep="")), addZeroV = TRUE))
 
   # 3.5 sec in v0.5, 2.7 sec without validation checks
-  microbenchmark::microbenchmark(times = 5, icd9ChildrenShort("400" %i9s% "450"))
+  microbenchmark::microbenchmark(times = 5, icd9ChildrenShort_R("400" %i9s% "450"))
 
 
   #sprintf wins
@@ -84,6 +84,30 @@ icd9Benchmark <- function() {
   microbenchmark::microbenchmark(data.frame(matrix(ncol = 2, nrow = 100000)))
   microbenchmark::microbenchmark(data.frame(major = character(100000),
                                             minor = character(100000)))
+
+  # C++ faster, especially with multiple invocations.
+  dat <- icd9:::randomShortIcd9(500)
+  microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=5000)
+  dat <- icd9:::randomShortIcd9(5000)
+  microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=500)
+  dat <- icd9:::randomShortIcd9(50000)
+  microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=50)
+
+  microbenchmark::microbenchmark(icd9ShortToDecimal_R(dat), icd9ShortToDecimal(dat), times=5)
+
+  mjr <- as.character(rep(seq.int(999), times = 5))
+  mnr <- as.character(rep(seq.int(9), times = 555))
+  microbenchmark::microbenchmark(icd9MajMinToShort_R(mjr, mnr), icd9MajMinToShort(mjr, mnr),
+                                 icd9MajMinToDecimal_R(mjr, mnr), icd9MajMinToDecimal(mjr, mnr),
+                                 times=10)
+
+  mjr <- as.character(rep(seq.int(111), times = 5))
+  mnr <- as.character(rep(seq.int(1), times = 555))
+  microbenchmark::microbenchmark(icd9MajMinToShort_R(mjr, mnr), icd9MajMinToShort(mjr, mnr),
+                                 icd9MajMinToDecimal_R(mjr, mnr), icd9MajMinToDecimal(mjr, mnr),
+                                 times=100)
+
+
 
 }
 

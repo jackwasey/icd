@@ -66,9 +66,11 @@
 #' @docType package
 #' @name icd9-package
 #' @aliases icd9 package-icd9
-## @author Jack O. Wasey \email{jack@jackwasey.com}
+#' @author Jack O. Wasey \email{jack@jackwasey.com}
 #' @keywords misc utilities
 #' @references \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @seealso rClinicalCodes
 #' @concept icd9 ICD-9 comorbidity comorbidities
+#' @useDynLib icd9
+#' @importFrom Rcpp sourceCpp
 NULL

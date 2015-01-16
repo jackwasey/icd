@@ -37,37 +37,23 @@ icd9AddLeadingZeroes <- function(icd9, isShort, addZeroV = FALSE,
 }
 
 #' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesDecimal <- function(icd9Decimal, addZeroV = FALSE,
-                                        invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
-  # avoid infinite recursion by setting leadingZeroes to FALSE
-  parts <- icd9DecimalToParts(icd9Decimal, invalidAction = invalidAction)
+icd9AddLeadingZeroesDecimal <- function(icd9Decimal, addZeroV = FALSE) {
+  parts <- icd9DecimalToParts(icd9Decimal)
   parts[["major"]] <- icd9AddLeadingZeroesMajor(parts[["major"]],
                                                 addZeroV = addZeroV)
-  # TODO: check strip whitespace from V & E? has this already been done by
-  # \code{parts}
-  lzDecimal <- icd9PartsToDecimal(parts = parts)
-  # if either part is 'NA', then return NA for that value
-  lzDecimal[is.na(parts$major) | is.na(parts$minor)] <- NA
-  # TODO: drop or retain the lone decimal?
-  # just pick major if minor was NA or "" (implies no lone decimal)
-  lzDecimal[parts$minor == ""] <- parts[parts$minor == "", "major"]
-  lzDecimal
+  icd9PartsToDecimal(parts = parts)
 }
 
 #' @rdname icd9AddLeadingZeroes
 #' @description Non-decimal ICD-9 codes with length<5 are often ambiguous. E.g.
-#'   100 could be 1.00 10.0 or 100
+#'   100 could be 1.00 10.0 or 100 if coded incorrectly. We must assume 100 is
+#'   really 100
 #' @template icd9-short
 icd9AddLeadingZeroesShort <- function(icd9Short, addZeroV = FALSE) {
   parts <- icd9ShortToParts(icd9Short)
-  #already validated, so don't attempt further validation downstream
   parts[["major"]] <- icd9AddLeadingZeroesMajor(parts[["major"]],
                                                 addZeroV = addZeroV)
-  out <- icd9PartsToShort(parts = parts)
-  # if we got NA in, then we give NA back.
-  out[is.na(icd9Short)] <- NA_character_
-  out
+  icd9PartsToShort(parts = parts)
 }
 
 #' @rdname icd9AddLeadingZeroes

@@ -45,22 +45,20 @@ icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE,
 }
 
 #' @title expand 5 character form 'short' ICD9 to all possible sub codes
+#' @rdname icd9ChildrenShort
 #' @template icd9-short
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @export
-icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE) {
-  if (!is.character(icd9Short))
-    stop("need character input to expand a short basecode to avoid ambiguity")
-  if (length(icd9Short) == 0) return(character())
-
+icd9ChildrenShort_R <- function(icd9Short, onlyReal = FALSE) {
+  #if (length(icd9Short) == 0) return()
   parts <- icd9ShortToParts(icd9Short, minorEmpty = "")
   out <- c()
   for (r in 1:nrow(parts)) {
     out <- c(out,
-             icd9MajMinToShort(
+             icd9MajMinToShort_R(
                major = parts[[r, "major"]],
-               minor = icd9ExpandMinor(parts[[r, "minor"]],
+               minor = icd9ExpandMinor_R(parts[[r, "minor"]],
                                        isE = icd9IsE(parts[[r, "major"]]))))
   }
   out <- unique(out)
@@ -156,24 +154,13 @@ icd9SortShort <- function(icd9Short,
 #' @import jwutil
 #' @export
 #' @family ICD-9 ranges
-icd9ExpandRangeShort <- function(start, end, inferParents = TRUE,
-                                 invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
+icd9ExpandRangeShort <- function(start, end, inferParents = TRUE) {
   # minimal quick validation checks
   stopifnot(is.character(start), is.character(end))
   stopifnot(length(start) == 1, length(end) == 1)
   stopifnot(is.logical(inferParents), length(inferParents) == 1)
 
   isE <- icd9IsE(start)
-
-  start <- icd9ValidNaWarnStopShort(start, invalidAction = invalidAction)
-  end <- icd9ValidNaWarnStopShort(end, invalidAction = invalidAction)
-
-  start <- trim(start)
-  end <- trim(end)
-  # TODO: this is not a very elegant or complete test, and done more
-  # comprehensively a few lines later.
-  if (nchar(start) == nchar(end) && start > end) stop("start is after end")
 
   sdf <- icd9ShortToParts(start)
   edf <- icd9ShortToParts(end)
@@ -437,34 +424,20 @@ icd9PrecedingMinors <- function(minor, isE) {
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-icd9ExpandMinor <- function(minor = "", isE,
-                            invalidAction = icd9InvalidActions) {
+icd9ExpandMinor_R <- function(minor = "", isE) {
 
-  invalidAction <- match.arg(invalidAction)
   # this is an error, not just invalidity. Could easily allow multiple values,
   # but I would then have to return a list and post-process that, so I think
   # this keeps things simpler, but maybe slower.
   # TODO: why not allow multiple?
   if (length(minor) > 1) stop("received more than one code to expand")
 
-  if (!is.character(minor))
-    stop("expecting character input only. Minor class is ", class(minor))
-
-  if (invalidAction != "ignore") {
-    # single value, but this takes care of characters, factors
-    valid <- allIsNumeric(minor)
-    if (!valid) icd9WarnStopMessage("minor validation failed: non numeric: ",
-                                    minor, invalidAction = invalidAction)
-    # again, limiting ourselves to single values
-    if (!valid) minor <- NA
-  }
-
   if (isE) return(icd9ExpandMinorE(minor = minor))
-  icd9ExpandMinorNV(minor = minor)
+  icd9ExpandMinorNV_R(minor = minor)
 }
 
 #' @rdname icd9ExpandMinor
-icd9ExpandMinorNV <- function(minor = "") {
+icd9ExpandMinorNV_R <- function(minor = "") {
 
   stopifnot(is.character(minor))
 
