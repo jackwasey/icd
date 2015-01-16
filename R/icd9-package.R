@@ -62,11 +62,9 @@
 #'   data, intended currently only for the FORMAT code provided by AHRQ for
 #'   comorbidities.
 #'
-
 #' @docType package
 #' @name icd9-package
 #' @aliases icd9 package-icd9
-#' @author Jack O. Wasey \email{jack@jackwasey.com}
 #' @keywords misc utilities
 #' @references \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @seealso rClinicalCodes
@@ -74,3 +72,4 @@
 #' @useDynLib icd9
 #' @importFrom Rcpp sourceCpp
 NULL
+# #' @author Jack O. Wasey \email{jack@jackwasey.com} - workaround roxygen problem temporarily

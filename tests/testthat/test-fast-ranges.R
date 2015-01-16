@@ -304,9 +304,9 @@ test_that("condense ranges which do consense", {
 
 test_that("condense ranges that don't condense at all", {
   expect_equal(
-    icd9CondenseToMajor(icd9ChildrenShort("123", onlyReal = TRUE),
-                        onlyReal = FALSE),
-    icd9ChildrenShort("123", onlyReal = TRUE))
+    sort(icd9CondenseToMajor(icd9ChildrenShort("123", onlyReal = TRUE),
+                        onlyReal = FALSE)),
+    sort(icd9ChildrenShort("123", onlyReal = TRUE)))
   # the parent "1000" is not included.
   expect_equal(sort(icd9CondenseToMajor(as.character(10000:10009),
                                         onlyReal = FALSE)),

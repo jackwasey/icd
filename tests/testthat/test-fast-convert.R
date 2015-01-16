@@ -200,14 +200,14 @@ test_that("short to decimal bad input", {
 })
 
 test_that("icd9 short to major part, E codes", {
-  expect_equal(icd9ShortToMajor("E000"), "E000")
-  expect_equal(icd9ShortToMajor("E00"), "E00")
-  expect_equal(icd9ShortToMajor("E0"), "E0")
-  expect_equal(icd9ShortToMajor("E1"), "E1")
-  expect_equal(icd9ShortToMajor("E001"), "E001")
-  expect_equal(icd9ShortToMajor("E0123"), "E012")
-  expect_equal(icd9ShortToMajor("E100"), "E100")
-  expect_equal(icd9ShortToMajor("E1234"), "E123")
+  expect_equal(icd9GetMajor(isShort = TRUE, "E000"), "E000")
+  expect_equal(icd9GetMajor(isShort = TRUE, "E00"), "E00")
+  expect_equal(icd9GetMajor(isShort = TRUE, "E0"), "E0")
+  expect_equal(icd9GetMajor(isShort = TRUE, "E1"), "E1")
+  expect_equal(icd9GetMajor(isShort = TRUE, "E001"), "E001")
+  expect_equal(icd9GetMajor(isShort = TRUE, "E0123"), "E012")
+  expect_equal(icd9GetMajor(isShort = TRUE, "E100"), "E100")
+  expect_equal(icd9GetMajor(isShort = TRUE, "E1234"), "E123")
 
 })
 

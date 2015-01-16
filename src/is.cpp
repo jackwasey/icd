@@ -41,6 +41,7 @@ std::vector<bool> icd9IsE(std::vector< std::string > sv) { return icd9IsA(sv, "E
 // [[Rcpp::export]]
 std::vector<bool> icd9IsVE(std::vector< std::string > sv) { return icd9IsA(sv, "VvEe"); }
 
+//' @name icd9Is_cpp_slow
 //' @title is the given code V or E type?
 //' @description quickly find V or E codes, without fully validating V or E
 //'   codes. Use fixed instead of regex for speed. Don't check position of V or
@@ -49,20 +50,18 @@ std::vector<bool> icd9IsVE(std::vector< std::string > sv) { return icd9IsA(sv, "
 //'   case, and regex slower.
 //' @template icd9-any
 //' @examples
-//' \dontrun{
+//'
 //' library(microbenchmark)
 //' # regex is a little faster than fixed
 //' icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
-//' microbenchmark(times = 1000,
+//' microbenchmark(times = 3,
 //'   grepl(pattern = "E", icd9, fixed = TRUE) |
 //'   grepl(pattern = "e", icd9, fixed = TRUE) |
 //'   grepl(pattern = "V", icd9, fixed = TRUE) |
 //'   grepl(pattern = "v", icd9, fixed = TRUE))
-//' microbenchmark(times = 1000, grepl(pattern = "[EeVv]", rnd))
+//' microbenchmark(times = 3, grepl(pattern = "[EeVv]", rnd))
 //' microbenchmark(icd9:::icd9IsV_cpp_slower(icd9), icd9:::icd9IsV_R(icd9), icd9:::icd9IsV_cpp_slow(icd9), icd9:::icd9IsV(icd9))
-//' }
-// test single string for V. which of String, std::string, CharacterVector?
-
+//'
 // [[Rcpp::export]]
 std::vector<bool> icd9Is_cpp_slow(std::vector< std::string > sv, std::string c) {
   int len = sv.size();
@@ -73,17 +72,11 @@ std::vector<bool> icd9Is_cpp_slow(std::vector< std::string > sv, std::string c) 
   return out;
 }
 
-//' @rdname icd9Is
-//' @export
 // [[Rcpp::export]]
 std::vector<bool> icd9IsV_cpp_slow(std::vector< std::string > sv) { return icd9Is_cpp_slow(sv, "Vv");}
 
-//' @rdname icd9Is
-//' @export
 // [[Rcpp::export]]
 std::vector<bool> icd9IsE_cpp_slow(std::vector< std::string > sv) { return icd9Is_cpp_slow(sv, "Ee");}
 
-//' @rdname icd9Is
-//' @export
 // [[Rcpp::export]]
 std::vector<bool> icd9IsVE_cpp_slow(std::vector< std::string > sv) { return icd9Is_cpp_slow(sv, "VvEe");}

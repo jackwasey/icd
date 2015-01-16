@@ -17,7 +17,7 @@
 #' @export
 #' @family ICD-9 ranges
 #' @keywords manip
-icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE,
+icd9ChildrenDecimal_R <- function(icd9Decimal, onlyReal = FALSE,
                                 invalidAction = icd9InvalidActions) {
 
   if (!is.character(icd9Decimal))
@@ -189,8 +189,8 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE) {
   if (startMajor == endMajor) {
     # the following initial \code{result} works when minors have same length,
     # but incomplete for start minor shorter.
-    result <- icd9MajMinToShort(major = startMajor,
-                                minor = intersect(
+    result <- icd9MajMinToShort(startMajor,
+                                intersect(
                                   icd9SubsequentMinors(startMinor, isE = isE),
                                   icd9PrecedingMinors(endMinor, isE = isE)
                                 )
@@ -353,7 +353,7 @@ icd9SubsequentMinors <- function(minor, isE) {
   if (nchar(minor) == 1) {
     if (isE) return(as.character(seq(as.integer(minor), 9)))
     return(unlist(lapply(as.character(seq(as.integer(minor), 9)),
-                         FUN = icd9ExpandMinorNV)))
+                         FUN = icd9ExpandMinor, FALSE)))
   }
 
   # now working purely with two-digit minor parts

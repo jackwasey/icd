@@ -57,7 +57,7 @@ icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
   if (doCondense) {
     return(icd9CondenseToExplain(icd9))
   }
-  mj <- unique(icd9ShortToMajor(icd9))
+  mj <- unique(icd9GetMajor(icd9, isShort = TRUE))
   c(names(icd9::icd9ChaptersMajor)[icd9::icd9ChaptersMajor %in%
                                      mj[mj %in% icd9]],
     icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% icd9, "descLong"]
@@ -319,23 +319,18 @@ icd9CondenseToExplain <- function(icd9Short,
 #' @template invalid
 #' @family ICD-9 ranges
 #' @export
-icd9CondenseToMajor <- function(icd9Short, onlyReal, dropNonReal = TRUE,
-                                invalidAction = c("stop", "ignore",
-                                                  "silent", "warn")) {
-  icd9Short <- icd9ValidNaWarnStopShort(
-    icd9Short,
-    invalidAction = match.arg(invalidAction))
+icd9CondenseToMajor <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.
-  out <- icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short))
-  mjs <- unique(icd9ShortToMajor(icd9Short))
+  out <- icd9Short
+  mjs <- unique(icd9GetMajor(icd9Short, isShort = TRUE))
   # if all major children are in the list, replace those items with just the
   # major codes, leave the rest.
   includemjs <- c()
   for (mj in mjs) {
     matchKids <- icd9ChildrenShort(mj, onlyReal = onlyReal)
     if (all(matchKids %in% out)) {
-      out <- out[!out %in% matchKids]
+      out <- out[out %nin% matchKids]
       includemjs <- c(includemjs, mj)
     }
   }

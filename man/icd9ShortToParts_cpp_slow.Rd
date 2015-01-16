@@ -36,7 +36,7 @@ co-morbidity mapping lists.}
 }
 \value{
 data.frame with two columns. At least the minor part must be
-  character, because "03" is different to "3", but "30" is the same as "3"
+character, because "03" is different to "3", but "30" is the same as "3"
 }
 \description{
 accepts Vxxxx Exxxx or xxxxx

@@ -10,14 +10,11 @@
 icd9AddLeadingZeroes(icd9, isShort, addZeroV = FALSE,
   invalidAction = icd9InvalidActions)
 
-icd9AddLeadingZeroesDecimal(icd9Decimal, addZeroV = FALSE,
-  invalidAction = icd9InvalidActions)
+icd9AddLeadingZeroesDecimal(icd9Decimal, addZeroV = FALSE)
 
-icd9AddLeadingZeroesShort(icd9Short, addZeroV = FALSE,
-  invalidAction = icd9InvalidActions)
+icd9AddLeadingZeroesShort(icd9Short, addZeroV = FALSE)
 
-icd9AddLeadingZeroesMajor(major, addZeroV = FALSE,
-  invalidAction = icd9InvalidActions)
+icd9AddLeadingZeroesMajor(major, addZeroV = FALSE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -63,7 +60,8 @@ character vector of icd9 codes
 pad decimal ICD-9 codes with leading zeroes
 
 Non-decimal ICD-9 codes with length<5 are often ambiguous. E.g.
-  100 could be 1.00 10.0 or 100
+  100 could be 1.00 10.0 or 100 if coded incorrectly. We must assume 100 is
+  really 100
 
 three digit codes are returned unchanged, one and two digit
   codes are preceded by 00 or 0. V codes are only zero padded if addZeroV is

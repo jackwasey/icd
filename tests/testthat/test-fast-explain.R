@@ -181,7 +181,7 @@ test_that("parse icd9ChaptersMajor vs those listed
           in the other CDC source of the leaf definitions.", {
             # get all the majors from the other list, to compare
 
-            compareMajors <- unique(icd9ShortToMajor(icd9::icd9Hierarchy$icd9))
+            compareMajors <- unique(icd9GetMajor(icd9::icd9Hierarchy$icd9, isShort = TRUE))
             expect_true(all(compareMajors %in% icd9ChaptersMajor))
             expect_true(all(icd9ChaptersMajor %in% compareMajors))
           })

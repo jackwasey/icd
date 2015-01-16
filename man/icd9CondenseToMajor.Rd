@@ -5,8 +5,7 @@
 \title{condense list of short ICD-9 code into minimal set of major-part-only
   codes}
 \usage{
-icd9CondenseToMajor(icd9Short, onlyReal, dropNonReal = TRUE,
-  invalidAction = c("stop", "ignore", "silent", "warn"))
+icd9CondenseToMajor(icd9Short, onlyReal, dropNonReal = TRUE)
 }
 \arguments{
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
@@ -57,13 +56,12 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9ExpandRangeMajor}};
   \code{\link{\%i9s\%}},
   \code{\link{icd9ExpandRangeShort}};
-  \code{\link{icd9ChildrenDecimal}};
+  \code{\link{icd9ChildrenDecimal_R}};
   \code{\link{icd9Children}},
+  \code{\link{icd9ChildrenShort}},
   \code{\link{icd9ChildrenShort_R}};
   \code{\link{icd9CondenseToExplain}};
-  \code{\link{icd9ExpandMinor}},
-  \code{\link{icd9ExpandMinorE}},
-  \code{\link{icd9ExpandMinorNV}};
+  \code{\link{icd9ExpandMinor_R}};
   \code{\link{icd9PrecedingMinors}},
   \code{\link{icd9SubsequentMinors}}
 }

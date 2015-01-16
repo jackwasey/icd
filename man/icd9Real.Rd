@@ -8,7 +8,7 @@
 \usage{
 icd9Real(icd9, isShort, invalidAction = icd9InvalidActions)
 
-icd9RealShort(icd9Short, invalidAction = icd9InvalidActions)
+icd9RealShort(icd9Short)
 
 icd9RealDecimal(icd9Decimal, invalidAction = icd9InvalidActions)
 }
