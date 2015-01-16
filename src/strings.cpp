@@ -10,6 +10,11 @@
 #include <boost/algorithm/string.hpp>
 using namespace Rcpp;
 
+//////// headers
+// cludge to avoid writing header file
+std::vector<bool> icd9IsE(std::vector< std::string > sv);
+bool icd9IsSingleVE(std::string s);
+
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToCode( CharacterVector mj, CharacterVector mn, bool isShort ) {
 
@@ -27,10 +32,16 @@ CharacterVector icd9MajMinToCode( CharacterVector mj, CharacterVector mn, bool i
       out.push_back(NA_STRING);
       continue;
       case 1:
-      mjrelem.insert(0, "00");
+      if (!icd9IsSingleVE(mjrelem)) {
+        mjrelem.insert(0, "00");
+      }
       break;
       case 2:
-      mjrelem.insert(0, "0");
+      if (!icd9IsSingleVE(mjrelem)) {
+        mjrelem.insert(0, "0");
+      } else {
+        mjrelem.insert(1, "0");
+      }
     }
     if (mjrelem == "NA") {
       out.push_back(NA_STRING);
@@ -47,7 +58,7 @@ CharacterVector icd9MajMinToCode( CharacterVector mj, CharacterVector mn, bool i
     out.push_back(s);
 
   }
-  // String chr_s = NA_STRING;
+  // String chr_s = NA_STRING; // TODO
 
   return as<CharacterVector>(out);
 }
@@ -59,12 +70,15 @@ CharacterVector icd9MajMinToCode( CharacterVector mj, CharacterVector mn, bool i
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToShort(CharacterVector mjr,
 CharacterVector mnr) {
-
-  if (mjr.size() == 1) {
-    CharacterVector newmjr(mnr.size(), mjr[0]);
-    return icd9MajMinToCode(newmjr, mnr, true);
-  }
-  return icd9MajMinToCode(mjr, mnr, true);
+  if ((mjr.size()!=1 && mjr.size() != mnr.size()) ||
+      (mjr.size()==1 && mnr.size()==0)) {
+      stop("icd9MajMinToShort, length of majors and minors must be equal.");
+    }
+    if (mjr.size() == 1) {
+      CharacterVector newmjr(mnr.size(), mjr[0]);
+      return icd9MajMinToCode(newmjr, mnr, true);
+    }
+    return icd9MajMinToCode(mjr, mnr, true);
 }
 
 //' @name icd9MajMinToDecimal
@@ -269,8 +283,8 @@ List icd9ShortToParts(CharacterVector icd9Short, std::string minorEmpty = "") {
 
 // [[Rcpp::export]]
 List icd9DecimalToParts(CharacterVector icd9Decimal, std::string minorEmpty = "") {
-//  std::vector< std::string > majors;
-//  std::vector< std::string > minors;
+  //  std::vector< std::string > majors;
+  //  std::vector< std::string > minors;
   CharacterVector majors;
   CharacterVector minors;
   int ilen = icd9Decimal.length();
@@ -285,10 +299,10 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, std::string minorEmpty = ""
     std::string mjrin;
     String mnrout;
     if (pos != std::string::npos) {
-    mjrin = thiscode.substr(0, pos);
-    mnrout = thiscode.substr(pos+1);
+      mjrin = thiscode.substr(0, pos);
+      mnrout = thiscode.substr(pos+1);
     } else { // didn't find '.'
-      mjrin = thiscode; mnrout = "";
+    mjrin = thiscode; mnrout = "";
     }
     String mjrout;
     switch (mjrin.size()) {
@@ -463,9 +477,6 @@ CharacterVector icd9ExpandMinor(std::string x, bool isE) {
   }
 }
 
-// cludge to avoid writing header file
-std::vector<bool> icd9IsE(std::vector< std::string > sv);
-
 //' @title Expand 5 character form 'short' ICD9 to all possible sub codes
 //' @description Much faster in C++, but gains diminished with increasing numbers of input shorts.
 //' @rdname icd9ChildrenShort
@@ -520,10 +531,10 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = fal
 //TODO export to public in R
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = false) {
-//  CharacterVector out = icd9ChildrenShort(
-    //TODO icd9DecimalToShort(icd9Decimal),
-//    onlyReal);
-//  return icd9ShortToDecimal(out);
+  //  CharacterVector out = icd9ChildrenShort(
+  //TODO icd9DecimalToShort(icd9Decimal),
+  //    onlyReal);
+  //  return icd9ShortToDecimal(out);
 }
 
 //' @title extract major part from short or decimal ICD-9 code

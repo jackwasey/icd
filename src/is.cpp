@@ -34,6 +34,22 @@ std::vector<bool> icd9IsA(std::vector< std::string > sv, std::string ms) {
   return out;
 }
 
+bool icd9IsSingle(std::string s, std::string ms) {
+    return s.find_first_of(ms) != std::string::npos;
+}
+// [[Rcpp::export]]
+bool icd9IsSingleV(std::string s) {
+  return icd9IsSingle(s, "Vv");
+}
+// [[Rcpp::export]]
+bool icd9IsSingleE(std::string s) {
+  return icd9IsSingle(s, "Ee");
+}
+// [[Rcpp::export]]
+bool icd9IsSingleVE(std::string s) {
+  return icd9IsSingle(s, "VvEe");
+}
+
 // [[Rcpp::export]]
 std::vector<bool> icd9IsV(std::vector< std::string > sv) { return icd9IsA(sv, "Vv"); }
 // [[Rcpp::export]]

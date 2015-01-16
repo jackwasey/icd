@@ -9,6 +9,18 @@ icd9IsV_cpp_slower <- function(sv) {
     .Call('icd9_icd9IsV_cpp_slower', PACKAGE = 'icd9', sv)
 }
 
+icd9IsSingleV <- function(s) {
+    .Call('icd9_icd9IsSingleV', PACKAGE = 'icd9', s)
+}
+
+icd9IsSingleE <- function(s) {
+    .Call('icd9_icd9IsSingleE', PACKAGE = 'icd9', s)
+}
+
+icd9IsSingleVE <- function(s) {
+    .Call('icd9_icd9IsSingleVE', PACKAGE = 'icd9', s)
+}
+
 icd9IsV <- function(sv) {
     .Call('icd9_icd9IsV', PACKAGE = 'icd9', sv)
 }

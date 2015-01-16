@@ -36,6 +36,51 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
+// icd9IsSingleV
+bool icd9IsSingleV(std::string s);
+RcppExport SEXP icd9_icd9IsSingleV(SEXP sSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
+        bool __result = icd9IsSingleV(s);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// icd9IsSingleE
+bool icd9IsSingleE(std::string s);
+RcppExport SEXP icd9_icd9IsSingleE(SEXP sSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
+        bool __result = icd9IsSingleE(s);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
+// icd9IsSingleVE
+bool icd9IsSingleVE(std::string s);
+RcppExport SEXP icd9_icd9IsSingleVE(SEXP sSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
+        bool __result = icd9IsSingleVE(s);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // icd9IsV
 std::vector<bool> icd9IsV(std::vector< std::string > sv);
 RcppExport SEXP icd9_icd9IsV(SEXP svSEXP) {
