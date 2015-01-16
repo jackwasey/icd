@@ -441,7 +441,8 @@ const CharacterVector vbase = CharacterVector::create(
   // cludge to avoid writing header file
   std::vector<bool> icd9IsE(std::vector< std::string > sv);
 
-  //' @title expand 5 character form 'short' ICD9 to all possible sub codes
+  //' @title Expand 5 character form 'short' ICD9 to all possible sub codes
+  //' @description Much faster in C++, but gains diminished with increasing numbers of input shorts.
   //' @rdname icd9ChildrenShort
   //' @template icd9-short
   //' @keywords manip
@@ -449,7 +450,7 @@ const CharacterVector vbase = CharacterVector::create(
   //' @examples
   //' \dontrun{
   //'   library(microbenchmark)
-  //'   "300" %i9s% "410" -> shorts
+  //'   "400" %i9s% "410" -> shorts
   //'   microbenchmark(icd9:::icd9ChildrenShort(shorts), icd9:::icd9ChildrenShort_R(shorts), times = 5)
   //'   }
   //' @export
@@ -482,6 +483,11 @@ const CharacterVector vbase = CharacterVector::create(
         out.push_back(*itnew);
       }
     }
-    //if (onlyReal) return(out[icd9RealShort(out)])
+    if (onlyReal) {
+      const Environment env("package:icd9");
+      List icd9Hierarchy = env["icd9Hierarchy"]; // TODO: unnecessary copy?
+      CharacterVector out_real = intersect(out, as<CharacterVector>(icd9Hierarchy["icd9"]));
+      return out_real;
+    }
     return out;
   }
