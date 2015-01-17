@@ -17,13 +17,7 @@
 #' @export
 #' @family ICD-9 ranges
 #' @keywords manip
-icd9ChildrenDecimal_R <- function(icd9Decimal, onlyReal = FALSE,
-                                invalidAction = icd9InvalidActions) {
-
-  if (!is.character(icd9Decimal))
-    stop("baseCode must be character only to avoid ambiguity")
-  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal,
-                                            invalidAction = invalidAction)
+icd9ChildrenDecimal_R <- function(icd9Decimal, onlyReal = FALSE) {
 
   parts <- icd9DecimalToParts(icd9Decimal, minorEmpty = "")
   out <- c()
@@ -67,20 +61,6 @@ icd9ChildrenShort_R <- function(icd9Short, onlyReal = FALSE) {
   out
 }
 
-# TODO someday
-# icd9ChildrenShortFast <- function(icd9Short,
-#                                   invalidAction = icd9InvalidActions) {
-#   partsList <- icd9ShortToPartsNV(icd9Short) # ignoring E codes for now
-#   unlist(
-#     lapply(
-#       partsList,
-#       function(x) {
-#         icd9PartsToShort(x[[1]], icd9ExpandMinor(x[[2]]))
-#       }
-#     )
-#   )
-# }
-
 #' @rdname icd9ChildrenShort
 #' @template icd9-any
 #' @template isShort
@@ -102,10 +82,7 @@ icd9Children <- function(icd9, onlyReal = FALSE, isShort) {
 #' @return sorted vector of ICD-9 codes
 #' @keywords manip
 #' @export
-icd9SortShort <- function(icd9Short,
-                          invalidAction = icd9InvalidActions) {
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short,
-                                        invalidAction = invalidAction)
+icd9SortShort <- function(icd9Short) {
 
   # split into characters
   tmp <- strsplit(icd9Short, "")

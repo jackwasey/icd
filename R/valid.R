@@ -335,10 +335,9 @@ icd9IsMajor <- function(icd9)
 #' @template invalid
 #' @return logical vector
 #' @export
-icd9Real <- function(icd9, isShort, invalidAction = icd9InvalidActions ) {
-  invalidAction <- match.arg(invalidAction)
-  if (isShort) return(icd9RealShort(icd9, invalidAction = invalidAction))
-  icd9RealDecimal(icd9, invalidAction = invalidAction)
+icd9Real <- function(icd9, isShort) {
+  if (isShort) return(icd9RealShort(icd9))
+  icd9RealDecimal(icd9)
 }
 
 #' @rdname icd9Real
@@ -351,8 +350,8 @@ icd9RealShort <- function(icd9Short) {
 #' @rdname icd9Real
 #' @template icd9-decimal
 #' @export
-icd9RealDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
-  icd9RealShort(icd9DecimalToShort(icd9Decimal, match.arg(invalidAction)))
+icd9RealDecimal <- function(icd9Decimal) {
+  icd9RealShort(icd9DecimalToShort(icd9Decimal))
 }
 
 icd9FilterValid <- function(x, ...) UseMethod("icd9FilterValid")

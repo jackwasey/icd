@@ -332,13 +332,12 @@ test_that("icd-9 code is really in the list, not just syntactically valid", {
   expect_false(icd9RealShort("802.7"))
   expect_true(icd9RealDecimal("802.7"))
   expect_true(icd9RealDecimal("E932.9"))
-  expect_false(icd9RealDecimal("E9329", "silent"))
+  expect_false(icd9RealDecimal("E9329"))
   expect_false(icd9RealDecimal("J80.27"))
   expect_false(icd9RealDecimal("V802.7"))
 
   expect_equal(icd9RealDecimal("V802.7"), FALSE)
-  expect_equal(icd9RealDecimal("V802.7", invalidAction = "silent"), FALSE)
-  expect_error(icd9RealDecimal("V802.7", invalidAction = "stop"))
+  expect_equal(icd9RealDecimal("V802.7"), FALSE)
   expect_error(icd9RealShort("V802.7", invalidAction = "stop"))
   expect_equal(icd9Real(c("8027", "E9329", "E000"), isShort = TRUE),
                c(TRUE, TRUE, FALSE))
