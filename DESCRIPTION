@@ -17,7 +17,8 @@ Depends:
 Imports:
     jwutil,
     Rcpp,
-    BH
+    BH,
+    checkmate
 Suggests:
     testthat,
     knitr,

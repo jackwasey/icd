@@ -16,7 +16,7 @@ test_that("expand icd9 range definition", {
   expect_error(icd9ExpandRangeShort("4019", "4018"))
   expect_error(icd9ExpandRangeShort("402", "401"))
   expect_error(icd9ExpandRangeShort("2", "1"))
-  expect_error(icd9ExpandRangeShort("002", "1", invalidAction = "stop"))
+  expect_error(icd9ExpandRangeShort("002", "1"))
   expect_error(icd9ExpandRangeShort("002", "001"))
   expect_error(icd9ExpandRangeShort("2", "001"))
   expect_error(icd9ExpandRangeShort("4010", "401"))
@@ -112,7 +112,7 @@ test_that("E code ranges", {
                c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
                  "E9505", "E9506", "E9507", "E9508", "E9509")
   )
-  expect_error(icd9ExpandRangeShort("E95012", "E95013", invalidAction = "stop"))
+  #expect_error(icd9ExpandRangeShort("E95012", "E95013", invalidAction = "stop")) # what to do?
   expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
 })
 
@@ -202,19 +202,19 @@ test_that("icd9ExpandMinor: valid", {
 
 test_that("icd9ChildrenDecimal", {
   # too long major
-  expect_error(icd9ChildrenDecimal("1234", invalidAction = "stop"))
+  expect_error(icd9ChildrenDecimal("1234"))
   # too long V major
-  expect_error(icd9ChildrenDecimal("V234", invalidAction = "stop"))
+  expect_error(icd9ChildrenDecimal("V234"))
   # too long major
-  expect_error(icd9ChildrenDecimal("v101.1", invalidAction = "stop"))
+  expect_error(icd9ChildrenDecimal("v101.1"))
   # wrong in three ways
-  expect_error(icd9ChildrenDecimal("e123.45", invalidAction = "stop"))
+  expect_error(icd9ChildrenDecimal("e123.45"))
   # not number or V format
-  expect_error(icd9ChildrenDecimal("JACK", invalidAction = "stop"))
+  expect_error(icd9ChildrenDecimal("JACK"))
   # too long minor
-  expect_error(icd9ChildrenDecimal("123.456", invalidAction = "stop"))
+  expect_error(icd9ChildrenDecimal("123.456"))
   # too long major and minor
-  expect_error(icd9ChildrenDecimal("9123.456", invalidAction = "stop"))
+  expect_error(icd9ChildrenDecimal("9123.456"))
 
   expect_equal(
     icd9ChildrenDecimal("V10.0"),
@@ -238,15 +238,15 @@ test_that("icd9ChildrenDecimal", {
 test_that("icd9ChildrenShort invalid input", {
   expect_error(icd9Children(list(c(1, 2), "crap"))) # junk
   # too long
-  expect_error(icd9ChildrenShort("123456", invalidAction = "stop"))
+  expect_error(icd9ChildrenShort("123456"))
   # even longer with whitespace
-  expect_error(icd9ChildrenShort(" 09123456 ", invalidAction = "stop"))
+  expect_error(icd9ChildrenShort(" 09123456 "))
   # too long V
-  expect_error(icd9ChildrenShort("V12345", invalidAction = "stop"))
+  expect_error(icd9ChildrenShort("V12345"))
   # too long E
-  expect_error(icd9ChildrenShort("E987654", invalidAction = "stop"))
+  expect_error(icd9ChildrenShort("E987654"))
   # not number or V or E format
-  expect_error(icd9ChildrenShort("JACK", invalidAction = "stop"))
+  expect_error(icd9ChildrenShort("JACK"))
 
   expect_error(icd9ChildrenShort())
   expect_equal(icd9ChildrenShort(character()), character())
@@ -319,7 +319,7 @@ test_that("condense ranges that don't condense at all", {
 
 test_that("condense range invalid data" ,{
   #expect_equal(icd9CondenseToMajor("turnpike"), NA) # ? or character(0)
-  expect_error(icd9CondenseToMajor("turnpike", invalidAction = "stop"))
+  expect_error(icd9CondenseToMajor("turnpike"))
   # TODO more tests here
 })
 
@@ -330,36 +330,30 @@ test_that("icd9InReferenceCodeLong", {
   expect_error(icd9InReferenceCode("salami"))
   expect_error(icd9InReferenceCode("bratwurst", "123",
                                    invalidAction = "stop"))
-  expect_equal(icd9InReferenceCode("bratwurst", "123",
-                                   invalidAction = "silent"), FALSE)
+  expect_equal(icd9InReferenceCode("bratwurst", "123"), FALSE)
   # base codes definitely must be valid regardless of invalidAction = "stop"
   # (for the input data): so do generate errors
-  expect_error(icd9InReferenceCode("421", "boudin",
-                                   invalidActionReference = TRUE))
+  expect_error(icd9InReferenceCode("421", "boudin"))
   #expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "V432"))) #
   #invalid V code # automatically validate? TODO invalid reference code
   expect_error(icd9InReferenceCode(c("421", "123"),
-                                   c("123", "E"),
-                                   invalidActionReference = TRUE))
+                                   c("123", "E")))
   # invalid reference code
   expect_error(icd9InReferenceCode(c("421", "123"),
-                                   c("123", "V"),
-                                   invalidActionReference = TRUE))
+                                   c("123", "V")))
   expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V42")),
                c(FALSE, TRUE))
-  expect_error(icd9InReferenceCode(c("123", "V43210"),
-                                   c("421", "123"),
-                                   invalidAction = "stop"))
+#   expect_error(icd9InReferenceCode(c("123", "V43210"),
+#                                    c("421", "123"),
+#                                    invalidAction = "stop"))
   expect_equal(icd9InReferenceCode(c("123", "V43210"),
-                                   c("421", "123"),
-                                   invalidAction = "silent"),
+                                   c("421", "123")),
                c(TRUE, FALSE))
 
   # not expecting decimals in input data (default is always short)
-  expect_error(icd9InReferenceCode(c("100.1", "200"), "200",
-                                   invalidAction = "stop"))
-  expect_equal(icd9InReferenceCode(c("100.1", "200"), "200",
-                                   invalidAction = "silent"), c(FALSE, TRUE))
+#   expect_error(icd9InReferenceCode(c("100.1", "200"), "200",
+#                                    invalidAction = "stop"))
+  expect_equal(icd9InReferenceCode(c("100.1", "200"), "200"), c(FALSE, TRUE))
 
   expect_identical(icd9InReferenceCode(c("2501", "25001", "999"),
                                        c("V101", "250")),

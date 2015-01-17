@@ -110,15 +110,14 @@ icd9DropLeadingZeroesShort <- function(icd9Short, dropZeroV = FALSE) {
 }
 
 #' @rdname icd9DropLeadingZeroes
-icd9DropLeadingZeroesMajor <- function(major, dropZeroV = FALSE) {
+icd9DropLeadingZeroesMajor <- function(major) {
   # trim everything??? TODO: consider just passing through the unprocessed
   # codes. remove trim tests?
   major <- trim(major)
-  # E codes just pass through
   isV <- icd9IsV(major) #not checking validity, necessarily, just quick check
   # alternative might be just to get numeric-only, possibly quicker? TODO
   isN <- icd9ValidMajorN(major)
-  if (dropZeroV) major[isV] <- sub(pattern = "^([Vv])0([[:digit:]]{1})$",
+  major[isV] <- sub(pattern = "^([Vv])0([[:digit:]]{1})$",
                                    replacement = "\\1\\2",
                                    x = major[isV])
   #just replace the FIRST string of zeros everything else is passed through
@@ -129,22 +128,15 @@ icd9DropLeadingZeroesMajor <- function(major, dropZeroV = FALSE) {
 }
 
 #' @title get parent of an ICD-9 code
-#' @description not likely to be useful for end-user, so using keyword
-#'   \code{internal} for now.
+#' @description not likely to be useful for end-user
 #' @template minor
 #' @template invalid
 #' @return character vector of ICD-9 codes, one for each code given.
 #' @keywords internal
-icd9ParentMinor <- function(minor, invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
-  #todo - validate minors
-  nOne <- nchar(minor) == 1
-  minor[nOne] <- ""
+icd9ParentMinor <- function(minor) {
+  minor[nchar(minor) == 1] <- ""
   nTwo <- nchar(minor) == 2
   minor[nTwo] <- substr(minor[nTwo], 1, 1)
   minor
 }
 
-icd9Parent <- function(icd9, isShort, invalidAction = icd9InvalidActions) {
-  stop("TODO")
-}

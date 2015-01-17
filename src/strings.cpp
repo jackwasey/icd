@@ -19,7 +19,6 @@
 
 using namespace Rcpp;
 
-
 // from https://github.com/jjallaire/RcppStrings/blob/master/src/Trim.cpp
 namespace {
   // Generic character vector transformation logic
@@ -171,8 +170,8 @@ List icd9MajMinToParts(CharacterVector mjr, CharacterVector mnr) {
     _["major"] = mjr,
     _["minor"] = mnr);
 
+    // TODO: can do this with lists, ?no need for a data frame
     StringVector sample_row = returned_frame(0);
-    // this appears to make it slower:
     IntegerVector row_names = seq_len(sample_row.length());
     returned_frame.attr("row.names") = row_names;
     returned_frame.attr("class") = "data.frame";
@@ -213,10 +212,11 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
   CharacterVector mnr(icd9Short.size());
 
   for (int i = 0; i < icd9Short.size(); ++i) {
-
     if (icd9Short[i] == NA_STRING) {NA_STRING; mnr[i] = NA_STRING; continue;}
 
     std::string s = as<std::string>(icd9Short[i]); // do i need to convert?
+
+    // since we loop anyway, don't call vectorized trim
     boost::algorithm::trim(s); // minimal speed difference
 
     if (!icd9::icd9IsSingleE(s)) { // not an E code
@@ -269,6 +269,7 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
     String strna = *it;
     if (strna == NA_STRING || strna == "") { majors.push_back(NA_STRING); minors.push_back(NA_STRING); continue; }
     std::string thiscode = as<std::string >(*it); // Rcpp::String doesn't implement many functions.
+    boost::algorithm::trim(thiscode);
     std::size_t pos = thiscode.find(".");
     // substring parts
     std::string mjrin;
