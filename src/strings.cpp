@@ -14,20 +14,62 @@
 //#include <sstream>
 #include <string>
 #include <iostream>
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <icd9.h>
 
 using namespace Rcpp;
+
+
+// from https://github.com/jjallaire/RcppStrings/blob/master/src/Trim.cpp
+namespace {
+  // Generic character vector transformation logic
+  typedef void (*Transformer)(std::string& str, const std::locale&);
+  CharacterVector stringTransform(CharacterVector input, Transformer transform) {
+    const std::locale& locale = std::locale();
+    CharacterVector output(input.size());
+    for (int i = 0; i<input.size(); i++) {
+      std::string str(input[i]);
+      transform(str, locale);
+      output[i] = str;
+    }
+    return output;
+  }
+} // anonymous namespace
+
+//' Trim whitespace from start and/or end of string
+//'
+//' @usage trim(input, side = "both")
+//' @param input input character vector
+//' @param side side on which whitespace is removed (left, right, or both)
+//' @return character vector with leading and trailing whitespace removed
+//' @examples
+//' \dontrun{
+//' trimString("\n\nString with trailing and leading white space \t")
+//' }
+// [[Rcpp::export("stringTrim")]]
+CharacterVector stringTrim(CharacterVector input, std::string side = "both") {
+  // select correct transformation
+  Transformer transform = NULL;
+  if (side == "both")
+  transform = boost::algorithm::trim<std::string>;
+  else if (side == "left")
+  transform = boost::algorithm::trim_left<std::string>;
+  else if (side == "right")
+  transform = boost::algorithm::trim_right<std::string>;
+  else {
+    // we need to fix a bug in Rcpp modules to allow throwing exceptions
+    // from module functions. for now we just warn and return the input
+    stop("Unrecognized side argument '" + side + "'");
+    return input; // keep compiler happy
+  }
+  // perform the transformation
+  return stringTransform(input, transform);
+}
 
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool isShort ) {
 
   CharacterVector out;
-  //std::vector< std::string > mjr = as<std::vector< std::string > >(mj);
-  //std::vector< std::string > mnr = as<std::vector< std::string > >(mn);
-
-  //std::vector< std::string >::iterator j = mjr.begin();
-  //std::vector< std::string >::iterator n = mnr.begin();
   CharacterVector::iterator j = mjr.begin();
   CharacterVector::iterator n = mnr.begin();
 
@@ -216,8 +258,8 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
 
 // [[Rcpp::export]]
 List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
-  CharacterVector majors; //majors.reserve(ilen); // would be nice
-  CharacterVector minors;
+  CharacterVector majors(icd9Decimal.size());
+  CharacterVector minors(icd9Decimal.size());
   int ilen = icd9Decimal.length();
 
   if (icd9Decimal.length() == 0) { return List::create(_["major"] = CharacterVector::create(),
@@ -248,8 +290,7 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9ShortToDecimal(CharacterVector x) {
-  List parts = icd9ShortToParts(x);
-  return icd9PartsToDecimal(parts);
+  return icd9PartsToDecimal(icd9ShortToParts(x));
 }
 
 //' @name icd9DecimalToShort
@@ -319,7 +360,7 @@ const CharacterVector vv = MakeVector();
 //'
 // [[Rcpp::export]]
 CharacterVector icd9ExpandMinor(std::string x, bool isE) {
-  //std::string x = as<std::string>(y[0]);
+
   if (!isE) {
     switch (x.size()) {
       case 0: return vv;
@@ -365,7 +406,7 @@ CharacterVector icd9ExpandMinor(std::string x, bool isE) {
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = false) {
-  CharacterVector out;
+  CharacterVector out(icd9Short.size()); // likely to be much longer, however.
   if (icd9Short.size() == 0) { return out; }
   List parts = icd9ShortToParts(icd9Short, "");
   CharacterVector mjr = parts[0];
@@ -404,10 +445,8 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = fal
 //TODO export to public in R
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = false) {
-  //  CharacterVector out = icd9ChildrenShort(
-  //TODO icd9DecimalToShort(icd9Decimal),
-  //    onlyReal);
-  //  return icd9ShortToDecimal(out);
+  return icd9ShortToDecimal(icd9ChildrenShort(
+    icd9DecimalToShort(icd9Decimal), onlyReal));
 }
 
 //' @title extract major part from short or decimal ICD-9 code
@@ -483,7 +522,7 @@ CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short) {
 
 // [[Rcpp::export]]
 CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
-  List parts = icd9ShortToParts(icd9Decimal);
+  List parts = icd9DecimalToParts(icd9Decimal);
   parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
   return icd9PartsToDecimal(parts);
 }

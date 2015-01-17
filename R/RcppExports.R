@@ -92,6 +92,20 @@ icd9ShortToParts_cpp_test <- function(icd9Short, minorEmpty = "") {
     .Call('icd9_icd9ShortToParts_cpp_test', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
+#' Trim whitespace from start and/or end of string
+#'
+#' @usage trim(input, side = "both")
+#' @param input input character vector
+#' @param side side on which whitespace is removed (left, right, or both)
+#' @return character vector with leading and trailing whitespace removed
+#' @examples
+#' \dontrun{
+#' trimString("\n\nString with trailing and leading white space \t")
+#' }
+stringTrim <- function(input, side = "both") {
+    .Call('icd9_stringTrim', PACKAGE = 'icd9', input, side)
+}
+
 icd9MajMinToCode <- function(mjr, mnr, isShort) {
     .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', mjr, mnr, isShort)
 }

@@ -5,7 +5,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::depends(icd9)]]
 
-#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/trim.hpp>
 #include <Rcpp.h>
 #include <string>
 #include <icd9.h>

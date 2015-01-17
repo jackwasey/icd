@@ -271,6 +271,25 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
+    inline CharacterVector stringTrim(CharacterVector input, std::string side = "both") {
+        typedef SEXP(*Ptr_stringTrim)(SEXP,SEXP);
+        static Ptr_stringTrim p_stringTrim = NULL;
+        if (p_stringTrim == NULL) {
+            validateSignature("CharacterVector(*stringTrim)(CharacterVector,std::string)");
+            p_stringTrim = (Ptr_stringTrim)R_GetCCallable("icd9", "icd9_stringTrim");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_stringTrim(Rcpp::wrap(input), Rcpp::wrap(side));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<CharacterVector >(__result);
+    }
+
     inline CharacterVector icd9MajMinToCode(CharacterVector mjr, CharacterVector mnr, bool isShort) {
         typedef SEXP(*Ptr_icd9MajMinToCode)(SEXP,SEXP,SEXP);
         static Ptr_icd9MajMinToCode p_icd9MajMinToCode = NULL;
