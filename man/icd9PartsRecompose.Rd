@@ -48,7 +48,7 @@ icd9MajMinTo\{Short|Decimal\} simply composes the data frame
   single \code{data.frame} is preferred.
 }
 \seealso{
-Other ICD-9 convert: \code{\link{icd9DecimalToShort}};
+Other ICD-9 convert: \code{\link{icd9DecimalToShort_R}};
   \code{\link{icd9DropLeadingZeroes}},
   \code{\link{icd9DropLeadingZeroesDecimal}},
   \code{\link{icd9DropLeadingZeroesMajor}},

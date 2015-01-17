@@ -1,61 +1,73 @@
 // use Rcpp11 here if we want: //// [[plugins(cpp11)]]
 // Sys.setenv("PKG_CXXFLAGS"="-std=c++11")
 
+// include boost
 // [[depends(BH)]]
 
+// [[Rcpp::interfaces(r, cpp)]]
+// and use them (does this need two compilation steps?)
+// [[Rcpp::depends(icd9)]]
+
+// TODO: Don't use push_back on Rcpp types. The way Rcpp vectors are currently implemented this requires copying all of the data each time. This is a very expensive operation.
+
 #include <Rcpp.h>
-#include <sstream>
+//#include <sstream>
 #include <string>
 #include <iostream>
 #include <boost/algorithm/string.hpp>
+#include <icd9.h>
+
 using namespace Rcpp;
 
-//////// headers
-// cludge to avoid writing header file
-std::vector<bool> icd9IsE(std::vector< std::string > sv);
-bool icd9IsSingleVE(std::string s);
-
 // [[Rcpp::export]]
-CharacterVector icd9MajMinToCode( CharacterVector mj, CharacterVector mn, bool isShort ) {
+CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool isShort ) {
 
   CharacterVector out;
-  std::vector< std::string > mjr = as<std::vector< std::string > >(mj);
-  std::vector< std::string > mnr = as<std::vector< std::string > >(mn);
+  //std::vector< std::string > mjr = as<std::vector< std::string > >(mj);
+  //std::vector< std::string > mnr = as<std::vector< std::string > >(mn);
 
-  std::vector< std::string >::iterator j = mjr.begin();
-  std::vector< std::string >::iterator n = mnr.begin();
+  //std::vector< std::string >::iterator j = mjr.begin();
+  //std::vector< std::string >::iterator n = mnr.begin();
+  CharacterVector::iterator j = mjr.begin();
+  CharacterVector::iterator n = mnr.begin();
 
   for(; j != mjr.end() && n != mnr.end(); ++j, ++n) {
-    std::string mjrelem = *j;
-    switch (mjrelem.length()) {
+    //std::string mjrelem = as<std::string>(*j);
+    String mjrelem = *j;
+    if (mjrelem == NA_STRING) {
+      out.push_back(NA_STRING);
+      continue;
+    }
+    // work around Rcpp bug with push_front: convert to string just for this
+    std::string smj = std::string(mjrelem.get_cstring());
+    switch (strlen(mjrelem.get_cstring())) {
       case 0:
       out.push_back(NA_STRING);
       continue;
       case 1:
-      if (!icd9IsSingleVE(mjrelem)) {
-        mjrelem.insert(0, "00");
+      if (!icd9::icd9IsSingleVE(mjrelem)) {
+        smj.insert(0, "00");
       }
       break;
       case 2:
-      if (!icd9IsSingleVE(mjrelem)) {
-        mjrelem.insert(0, "0");
+      if (!icd9::icd9IsSingleVE(mjrelem)) {
+        smj.insert(0, "0");
       } else {
-        mjrelem.insert(1, "0");
+        smj.insert(1, "0");
       }
+      // default: // major is 3 (or more) chars already
     }
-    if (mjrelem == "NA") {
-      out.push_back(NA_STRING);
+    String mnrelem = *n;
+    if (mnrelem == NA_STRING) {
+      //out.push_back(mjrelem);
+      out.push_back(smj);
       continue;
     }
-    std::string mnrelem = *n;
-    if (mnrelem == "NA") {
-      out.push_back(mjrelem);
-      continue;
-    }
-    std::string s(mjrelem);
-    if (!isShort) { s.append("."); }
-    s.append(mnrelem);
-    out.push_back(s);
+    // this can probably be done more quickly:
+    //std::string smj(mjrelem);
+    if (!isShort && mnrelem != "") { smj.append("."); }
+    smj.append(mnrelem);
+    out.push_back(smj);
 
   }
   // String chr_s = NA_STRING; // TODO
@@ -71,14 +83,14 @@ CharacterVector icd9MajMinToCode( CharacterVector mj, CharacterVector mn, bool i
 CharacterVector icd9MajMinToShort(CharacterVector mjr,
 CharacterVector mnr) {
   if ((mjr.size()!=1 && mjr.size() != mnr.size()) ||
-      (mjr.size()==1 && mnr.size()==0)) {
-      stop("icd9MajMinToShort, length of majors and minors must be equal.");
-    }
-    if (mjr.size() == 1) {
-      CharacterVector newmjr(mnr.size(), mjr[0]);
-      return icd9MajMinToCode(newmjr, mnr, true);
-    }
-    return icd9MajMinToCode(mjr, mnr, true);
+  (mjr.size()==1 && mnr.size()==0)) {
+    stop("icd9MajMinToShort, length of majors and minors must be equal.");
+  }
+  if (mjr.size() == 1) {
+    CharacterVector newmjr(mnr.size(), mjr[0]);
+    return icd9MajMinToCode(newmjr, mnr, true);
+  }
+  return icd9MajMinToCode(mjr, mnr, true);
 }
 
 //' @name icd9MajMinToDecimal
@@ -105,8 +117,8 @@ CharacterVector icd9PartsToDecimal(List parts) {
   return icd9MajMinToCode(parts["major"], parts["minor"], false);
 }
 
-//' @name icd9MajMinToParts_df
-//' @title icd9MajMinToParts_df
+//' @name icd9MajMinToParts
+//' @title icd9MajMinToParts
 //' @description Convert vectors of major and minor components into a data frame with a column for major and a column for minor.
 //' This is 20x faster in this C++ implementation, and important for a very frequently used function.
 //' @import Rcpp
@@ -141,94 +153,9 @@ List icd9MajMinToParts_list(CharacterVector mjr, CharacterVector mnr) {
     return out;
 }
 
-//' @name icd9MajMinToParts_slower
-//' @title icd9MajMinToParts_slower
-//' @description Convert vectors of major and minor components into a data frame with a column for major and a column for minor.
-//' This is slightly slower than the R implementation. using Rcpp11 std::to_string is even slower than this.
-//' @import Rcpp
-//' @export
-// [[Rcpp::export]]
-List icd9MajMinToParts_slower(CharacterVector mjr, CharacterVector mnr) {
-  List returned_frame = List::create(
-    _["major"] = mjr,
-    _["minor"] = mnr);
-
-    StringVector sample_row = returned_frame(0);
-    StringVector row_names(sample_row.length());
-    for (int i = 0; i < sample_row.length(); ++i) {
-      char name[9]; // this is the buffer, so make a good number of chats. Could log10+1 the number of rows. Or use std::string
-      sprintf(&(name[0]), "%d", i);
-      row_names(i) = name;
-    }
-
-    returned_frame.attr("row.names") = row_names;
-    returned_frame.attr("class") = "data.frame";
-
-    return returned_frame;
-}
-
-//' @name icd9ShortToParts_cpp_slow
-//' @title extract major and minor parts of a decimal ICD-9 code
-//' @description accepts Vxxxx Exxxx or xxxxx
-//' @template icd9-short
-//' @param minorEmpty vector of length one, to be used in place of
-//' minor part of zero. Defaults to ""
-//' @template invalid
-//' @return data.frame with two columns. At least the minor part must be
-//' character, because "03" is different to "3", but "30" is the same as "3"
-//' @keywords manip
-//' @export
-// [[Rcpp::export]]
-List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = "") {
-
-  CharacterVector mjr;
-  CharacterVector mnr;
-  // can only reserve with std::vector
-  //mjr.reserve(icd9Short.size())
-  //mnr.reserve(icd9Short.size())
-
-  for (CharacterVector::iterator i(icd9Short.begin());
-  i < icd9Short.end();
-  ++i) {
-
-    std::string s = as<std::string>(*i); // do i need to convert?
-    boost::algorithm::trim(s); // minimal speed difference
-
-    if (s.find_first_of("Ee") == std::string::npos) { // not an E code
-    switch (s.size()) {
-      case 1:
-      case 2:
-      case 3:
-      mjr.push_back(s.substr(0, s.size()));
-      mnr.push_back(minorEmpty);
-      continue;
-      case 4:
-      case 5:
-      mjr.push_back(s.substr(0, 3));
-      mnr.push_back(s.substr(3, s.size()-3));
-      continue;
-      default:
-      mjr.push_back(NA_STRING); mnr.push_back(NA_STRING); continue;
-    }
-    } else { // E code
-    if (s.size()<4) {
-      mjr.push_back(NA_STRING); mnr.push_back(NA_STRING); continue;
-    }
-    mjr.push_back(s.substr(0, 4));
-    if (s.size()<5) {
-      mnr.push_back(minorEmpty);
-    } else {
-      mnr.push_back(s.substr(4, 1));
-    }
-    } // E code
-  } // for
-
-  return icd9MajMinToParts(mjr, mnr);
-}
-
 //' @name icd9ShortToParts
 //' @title extract major and minor parts of a decimal ICD-9 code
-//' @description accepts Vxxxx Exxxx or xxxxx. This version just beats native R, but lowerhead for calls.
+//' @description accepts Vxxxx Exxxx or xxxxx. This version just beats native R, but lowerhead for calls. If minorEmpty is NA, it must be an NA_character_ (for now).
 //' @template icd9-short
 //' @param minorEmpty vector of length one, to be used in place of
 //' minor part of zero. Defaults to ""
@@ -238,17 +165,19 @@ List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = ""
 //' @keywords manip
 //' @export
 // [[Rcpp::export]]
-List icd9ShortToParts(CharacterVector icd9Short, std::string minorEmpty = "") {
+List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
 
   CharacterVector mjr(icd9Short.size());
   CharacterVector mnr(icd9Short.size());
 
   for (int i = 0; i < icd9Short.size(); ++i) {
 
+    if (icd9Short[i] == NA_STRING) {NA_STRING; mnr[i] = NA_STRING; continue;}
+
     std::string s = as<std::string>(icd9Short[i]); // do i need to convert?
     boost::algorithm::trim(s); // minimal speed difference
 
-    if (s.at(0) != char('E') && s.at(0) != char('e')) { // not an E code // char match makes little difference to speed
+    if (!icd9::icd9IsSingleE(s)) { // not an E code
     switch (s.size()) {
       case 1:
       case 2:
@@ -265,35 +194,39 @@ List icd9ShortToParts(CharacterVector icd9Short, std::string minorEmpty = "") {
       mjr[i] = NA_STRING; mnr[i] = NA_STRING; continue;
     }
     } else { // E code
-    if (s.size()<4) {
+
+    switch (s.size()) {
+      case 2:
+      case 3:
+      case 4:
+      mjr[i] = s.substr(0, s.size());
+      mnr[i] = minorEmpty; break;
+      case 5:
+      mjr[i] = s.substr(0, 4);
+      mnr[i] = s.substr(4, 1); break;
+      default:
       mjr[i] = NA_STRING; mnr[i] = NA_STRING; continue;
     }
-    mjr[i] = s.substr(0, 4);
-    if (s.size()<5) {
-      mnr[i] = minorEmpty;
-    } else {
-      mnr[i] = s.substr(4, 1);
-    }
     } // E code
+    //mjr[i] = icd9::icd9AddLeadingZeroesMajorSingle(mjr[i]); // or loop through them all again...
   } // for
 
-  return icd9MajMinToParts(mjr, mnr);
+  return icd9MajMinToParts(icd9::icd9AddLeadingZeroesMajor(mjr), mnr);
 }
 
-
 // [[Rcpp::export]]
-List icd9DecimalToParts(CharacterVector icd9Decimal, std::string minorEmpty = "") {
-  //  std::vector< std::string > majors;
-  //  std::vector< std::string > minors;
-  CharacterVector majors;
+List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
+  CharacterVector majors; //majors.reserve(ilen); // would be nice
   CharacterVector minors;
   int ilen = icd9Decimal.length();
-  //majors.reserve(ilen);
-  //minors.reserve(ilen);
+
+  if (icd9Decimal.length() == 0) { return List::create(_["major"] = CharacterVector::create(),
+  _["minor"] = CharacterVector::create()); }
+
   for (CharacterVector::iterator it = icd9Decimal.begin(); it != icd9Decimal.end(); ++it) {
     String strna = *it;
-    if (strna == NA_STRING) { majors.push_back(NA_STRING); minors.push_back(NA_STRING); continue; }
-    std::string thiscode = as<std::string >(*it); // must I really do this??
+    if (strna == NA_STRING || strna == "") { majors.push_back(NA_STRING); minors.push_back(NA_STRING); continue; }
+    std::string thiscode = as<std::string >(*it); // Rcpp::String doesn't implement many functions.
     std::size_t pos = thiscode.find(".");
     // substring parts
     std::string mjrin;
@@ -301,64 +234,13 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, std::string minorEmpty = ""
     if (pos != std::string::npos) {
       mjrin = thiscode.substr(0, pos);
       mnrout = thiscode.substr(pos+1);
-    } else { // didn't find '.'
-    mjrin = thiscode; mnrout = "";
+    } else {
+      mjrin = thiscode; mnrout = minorEmpty;
     }
-    String mjrout;
-    switch (mjrin.size()) {
-      case 3: break;
-      case 2: mjrout = "0"+mjrin; break;
-      case 1: mjrout = "00"+mjrin; break;
-      case 0: mjrout = NA_STRING; mnrout = NA_STRING; // can't do this with std::string
-      default: break;
-    }
-    majors.push_back(mjrout);
+    majors.push_back(icd9::icd9AddLeadingZeroesMajorSingle(mjrin));
     minors.push_back(mnrout);
   }
   return List::create(_["major"] = majors, _["minor"] = minors);
-}
-
-// [[Rcpp::export]]
-List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty = "") {
-
-  CharacterVector mjr(icd9Short.size());
-  CharacterVector mnr(icd9Short.size());
-
-  for (int i = 0; i < icd9Short.size(); ++i) {
-
-    std::string s = as<std::string>(icd9Short[i]); // do i need to convert?
-    boost::algorithm::trim(s); // minimal speed difference
-
-    if (s.at(0) != char('E') && s.at(0) != char('e')) { // not an E code // char match makes little difference to speed
-    switch (s.size()) {
-      case 1:
-      case 2:
-      case 3:
-      mjr[i] = s.substr(0, s.size());
-      mnr[minorEmpty];
-      continue;
-      case 4:
-      case 5:
-      mjr[i] = s.substr(0, 3);
-      mnr[i] = s.substr(3, s.size()-3);
-      continue;
-      default:
-      mjr[i] = NA_STRING; mnr[i] = NA_STRING; continue;
-    }
-    } else { // E code
-    if (s.size()<4) {
-      mjr[i] = NA_STRING; mnr[i] = NA_STRING; continue;
-    }
-    mjr[i] = s.substr(0, 4);
-    if (s.size()<5) {
-      mnr[i] = minorEmpty;
-    } else {
-      mnr[i] = s.substr(4, 1);
-    }
-    } // E code
-  } // for
-
-  return icd9MajMinToParts(mjr, mnr);
 }
 
 //' @name icd9ShortToDecimal
@@ -368,6 +250,14 @@ List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty
 CharacterVector icd9ShortToDecimal(CharacterVector x) {
   List parts = icd9ShortToParts(x);
   return icd9PartsToDecimal(parts);
+}
+
+//' @name icd9DecimalToShort
+//' @title icd9ShortToDecimal
+//' @export
+// [[Rcpp::export]]
+CharacterVector icd9DecimalToShort(CharacterVector x) {
+  return icd9PartsToShort(icd9DecimalToParts(x));
 }
 
 // this is simplest just to hard-code
@@ -397,7 +287,7 @@ CharacterVector cvy) {
   std::vector< std::string > v;
   std::vector< std::string > x = as<std::vector< std::string > >(cvx);
   std::vector< std::string > y = as<std::vector< std::string > >(cvy);
-  v = concatsv(x,y);
+  v = concatsv(x,y); // TODO: must i copy?
   return wrap(v);
 }
 
@@ -432,47 +322,30 @@ CharacterVector icd9ExpandMinor(std::string x, bool isE) {
   //std::string x = as<std::string>(y[0]);
   if (!isE) {
     switch (x.size()) {
-      case 0:
-      return vv;
+      case 0: return vv;
       case 1:
       switch (x.at(0)) {
-        case '0':
-        return v0;
-        case '1':
-        return v1;
-        case '2':
-        return v2;
-        case '3':
-        return v3;
-        case '4':
-        return v4;
-        case '5':
-        return v5;
-        case '6':
-        return v6;
-        case '7':
-        return v7;
-        case '8':
-        return v8;
-        case '9':
-        return v9;
-        default:
-        std::cout << "unrecognized char\n";
+        case '0':        return v0;
+        case '1':        return v1;
+        case '2':        return v2;
+        case '3':        return v3;
+        case '4':        return v4;
+        case '5':        return v5;
+        case '6':        return v6;
+        case '7':        return v7;
+        case '8':        return v8;
+        case '9':        return v9;
+        default:        std::cout << "unrecognized char\n";
       }
-      case 2:
-      return wrap(x);
-      default:
-      std::cout << "minor of >2 characters received by icd9ExpandMinor\n";
+      case 2: return wrap(x);
+      default: std::cout << "minor of >2 characters received by icd9ExpandMinor\n";
     }
   } else {
     // is E code, so minor is just one character
     switch (x.size()) {
-      case 0:
-      return vbase;
-      case 1:
-      return x;
-      default:
-      std::cout << "too many characters in E code minor part\n";
+      case 0:      return vbase;
+      case 1:      return x;
+      default:      std::cout << "too many characters in E code minor part\n";
     }
   }
 }
@@ -551,4 +424,65 @@ CharacterVector icd9GetMajor(CharacterVector icd9, bool isShort) {
     return as<CharacterVector>(parts[0]);
   }
   stop("not implemented");
+}
+
+// zero-pad a single major
+// [[Rcpp::export]]
+String icd9AddLeadingZeroesMajorSingle(String ms) {
+  if (ms == NA_STRING) { return(NA_STRING); }
+  std::string m(ms);
+  if (!icd9::icd9IsSingleVE(ms)) {
+    switch (strlen(ms.get_cstring())) {
+      case 0: return(NA_STRING);
+      case 1: return("00" + m);
+      case 2: return("0" + m);
+      case 3: return(m);
+    }
+  } else {
+    switch (strlen(ms.get_cstring())) {
+      case 1: return(NA_STRING);
+      case 2:
+      if (icd9::icd9IsSingleV(m)) {
+        m.insert(1, "0"); return(m);
+      } else {
+        m.insert(1, "00"); return(m);
+      }
+      case 3:
+      if (icd9::icd9IsSingleV(m)) {
+        return(m);
+      } else {
+        m.insert(1, "0"); return(m);
+      }
+      case 4:
+      if (icd9::icd9IsSingleE(m)) return(m);
+    }
+  }
+  return NA_STRING;
+}
+
+//' @rdname icd9AddLeadingZeroes
+//' @description three digit codes are returned unchanged, one and two digit
+//'   codes are preceded by 00 or 0.
+// [[Rcpp::export]]
+CharacterVector icd9AddLeadingZeroesMajor(CharacterVector mjr) {
+  return(sapply(mjr, icd9AddLeadingZeroesMajorSingle));
+}
+
+//' @rdname icd9AddLeadingZeroes
+//' @description Non-decimal ICD-9 codes with length<5 are often ambiguous. E.g.
+//'   100 could be 1.00 10.0 or 100 if coded incorrectly. We must assume 100 is
+//'   really 100
+//' @template icd9-short
+// [[Rcpp::export]]
+CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short) {
+  List parts = icd9ShortToParts(icd9Short);
+  parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
+  return icd9PartsToShort(parts);
+}
+
+// [[Rcpp::export]]
+CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
+  List parts = icd9ShortToParts(icd9Decimal);
+  parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
+  return icd9PartsToDecimal(parts);
 }

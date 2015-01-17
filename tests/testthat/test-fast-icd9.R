@@ -42,13 +42,13 @@ test_that("zero pad decimel V and E codes", {
   expect_equal(icd9AddLeadingZeroesDecimal("V1.99"), "V1.99")
   expect_equal(icd9AddLeadingZeroesDecimal("V22"), "V22")
   expect_equal(icd9AddLeadingZeroesDecimal(" V22.34 "), "V22.34")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1", addZeroV = TRUE), "V01")
-  expect_equal(icd9AddLeadingZeroesDecimal(" V1 ", addZeroV = TRUE), "V01")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.1", addZeroV = TRUE), "V01.1")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.99", addZeroV = TRUE), "V01.99")
-  expect_equal(icd9AddLeadingZeroesDecimal("V22", addZeroV = TRUE), "V22")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V01")
+  expect_equal(icd9AddLeadingZeroesDecimal(" V1 "), "V01")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1.1"), "V01.1")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1.99"), "V01.99")
+  expect_equal(icd9AddLeadingZeroesDecimal("V22"), "V22")
   expect_equal(
-    icd9AddLeadingZeroesDecimal(" V22.34 ", addZeroV = TRUE),
+    icd9AddLeadingZeroesDecimal(" V22.34 "),
     "V22.34")
 })
 
@@ -81,12 +81,12 @@ test_that("zero pad short", {
   expect_equal(icd9AddLeadingZeroesShort(" 02234 "), "02234")
   expect_equal(icd9AddLeadingZeroesShort("V1"), "V01")
   expect_equal(icd9AddLeadingZeroesShort(" V1 "), "V01")
-  expect_equal(icd9AddLeadingZeroesShort("V1", addZeroV = TRUE), "V01")
-  expect_equal(icd9AddLeadingZeroesShort(" V1 ", addZeroV = TRUE), "V01")
+  expect_equal(icd9AddLeadingZeroesShort("V1"), "V01")
+  expect_equal(icd9AddLeadingZeroesShort(" V1 "), "V01")
   expect_equal(icd9AddLeadingZeroesShort("V11"), "V11")
   expect_equal(icd9AddLeadingZeroesShort(" V11 "), "V11")
-  expect_equal(icd9AddLeadingZeroesShort("V11", addZeroV = TRUE), "V11")
-  expect_equal(icd9AddLeadingZeroesShort(" V11 ", addZeroV = TRUE), "V11")
+  expect_equal(icd9AddLeadingZeroesShort("V11"), "V11")
+  expect_equal(icd9AddLeadingZeroesShort(" V11 "), "V11")
   expect_equal(icd9AddLeadingZeroesShort(" V2234 "), "V2234")
   expect_equal(icd9AddLeadingZeroesShort("3331 "), "3331")
   expect_equal(icd9AddLeadingZeroesShort(
@@ -108,38 +108,23 @@ test_that("icd9 parts to short form numeric input", {
 
 test_that("add leading zeroes to V (and E) majors", {
 
-  expect_equal(icd9AddLeadingZeroesMajor("V1", addZeroV = TRUE), "V01")
-  expect_equal(icd9AddLeadingZeroesMajor("V1", addZeroV = FALSE), "V1")
-  expect_equal(icd9AddLeadingZeroesMajor(" V10", addZeroV = TRUE), "V10")
-  expect_equal(icd9AddLeadingZeroesMajor(" V10", addZeroV = FALSE), "V10")
-  expect_equal(icd9AddLeadingZeroesMajor("V2", addZeroV = TRUE), "V02")
-  expect_equal(icd9AddLeadingZeroesMajor("V2", addZeroV = FALSE), "V2")
-  expect_equal(icd9AddLeadingZeroesMajor("V03", addZeroV = TRUE), "V03")
-  expect_equal(icd9AddLeadingZeroesMajor("V03", addZeroV = FALSE), "V03")
-  expect_equal(icd9AddLeadingZeroesMajor(c("10", "V05"), addZeroV = TRUE),
+  expect_equal(icd9AddLeadingZeroesMajor("V1"), "V01")
+  expect_equal(icd9AddLeadingZeroesMajor(" V10"), "V10")
+  expect_equal(icd9AddLeadingZeroesMajor("V2"), "V02")
+  expect_equal(icd9AddLeadingZeroesMajor("V03"), "V03")
+  expect_equal(icd9AddLeadingZeroesMajor(c("10", "V05")),
                c("010", "V05"))
-  expect_equal(icd9AddLeadingZeroesMajor(c("10", "V05"), addZeroV = FALSE),
-               c("010", "V05"))
-  # should never be any extra zeroes.
-  expect_equal(icd9AddLeadingZeroesMajor("E915", addZeroV = TRUE), "E915")
-  # should never be any extra zeroes.
-  expect_equal(icd9AddLeadingZeroesMajor("E915", addZeroV = FALSE), "E915")
+  expect_equal(icd9AddLeadingZeroesMajor("E915"), "E915")
 })
 
 test_that("add leading zeroes to majors, invalid input", {
   # dont change nonsense in ignore mode
   expect_equal(icd9AddLeadingZeroesMajor("g", invalidAction = "ignore"), "g")
-  # should never be any extra zeroes, even if invalid (but no checking)
-  expect_equal(icd9AddLeadingZeroesMajor("E9", addZeroV = TRUE), "E9")
-  # should never be any extra zeroes, even if invalid
-  expect_equal(icd9AddLeadingZeroesMajor("E9", addZeroV = FALSE), "E9")
+  expect_equal(icd9AddLeadingZeroesMajor("E9"), "E009")
   # should be minimally valid code
-  expect_equal(icd9AddLeadingZeroesMajor("E", invalidAction = "silent"),
-               NA_character_)
-  expect_equal(icd9AddLeadingZeroesMajor("V", invalidAction = "silent"),
-               NA_character_)
-  expect_equal(icd9AddLeadingZeroesMajor("jasmine", invalidAction = "silent"),
-               NA_character_)
+  expect_equal(icd9AddLeadingZeroesMajor("E"), NA_character_)
+  expect_equal(icd9AddLeadingZeroesMajor("V"), NA_character_)
+  expect_equal(icd9AddLeadingZeroesMajor("jasmine"), NA_character_)
   # error if validating
   expect_error(icd9AddLeadingZeroesMajor("E", invalidAction = "stop"))
   expect_error(icd9AddLeadingZeroesMajor("V", invalidAction = "stop"))

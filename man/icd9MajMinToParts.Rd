@@ -5,9 +5,14 @@
 \alias{icd9MajMinToParts_list}
 \title{icd9MajMinToParts}
 \usage{
+icd9MajMinToParts(mjr, mnr)
+
 icd9MajMinToParts_list(mjr, mnr)
 }
 \description{
+Convert vectors of major and minor components into a data frame with a column for major and a column for minor.
+This is 20x faster in this C++ implementation, and important for a very frequently used function.
+
 Convert vectors of major and minor components into a data frame with a column for major and a column for minor.
 This is probably just as quick in R, but I think I may rely on having a data frame output (which is slower to construct in R)
 }

@@ -63,7 +63,7 @@ icd9Benchmark <- function() {
                                  icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep="")), addZeroV = TRUE))
+                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
 
   # 3.5 sec in v0.5, 2.7 sec without validation checks
   microbenchmark::microbenchmark(times = 5, icd9ChildrenShort_R("400" %i9s% "450"))

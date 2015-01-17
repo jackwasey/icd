@@ -7,23 +7,16 @@
 #' @family ICD-9 convert
 #' @keywords manip
 #' @export
-icd9DecimalToShort <- function(icd9Decimal,
-                               invalidAction = icd9InvalidActions) {
+icd9DecimalToShort_R <- function(icd9Decimal) {
 
-  if (!is.character(icd9Decimal))
-    stop("icd9DecimalToShort must be given character string,
-         not a numeric type")
   if (length(icd9Decimal) == 0) return(character())
-
-  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal, invalidAction)
 
   # should return everything zero-padded by default. Good default behaviour.
   x <- icd9DecimalToParts(icd9Decimal)
 
   x[is.na(x$minor), "minor"] <- "" # NA to ""
   y <- paste(
-    icd9AddLeadingZeroesMajor(x$major, addZeroV = TRUE,
-                              invalidAction = "ignore"),
+    icd9AddLeadingZeroesMajor(x$major),
     x$minor,sep  = "")
   y[is.na(x$major)] <- NA # to avoid "NA" strings appearing...
   y
@@ -167,7 +160,7 @@ icd9PartsRecompose <- function(parts, isShort) {
   parts$minor[is.na(parts$minor)] <- ""
 
   if (isShort) {
-    parts$major <- icd9AddLeadingZeroesMajor(parts$major, addZeroV = TRUE)
+    parts$major <- icd9AddLeadingZeroesMajor(parts$major)
     out <- sprintf("%s%s", parts$major, parts$minor)
   }
   else

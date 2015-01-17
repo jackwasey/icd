@@ -21,26 +21,18 @@ icd9ExtractAlphaNumeric <- function(icd9) {
 #' @title pad decimal ICD-9 codes with leading zeroes
 #' @template icd9-any
 #' @template isShort
-#' @template addZeroV
 #' @template invalid
 #' @return character vector of icd9 codes
 #' @keywords internal manip
-icd9AddLeadingZeroes <- function(icd9, isShort, addZeroV = FALSE,
-                                 invalidAction = icd9InvalidActions) {
-  if (isShort) return(
-    icd9AddLeadingZeroesShort(icd9Short = icd9,
-                              addZeroV = addZeroV,
-                              invalidAction = match.arg(invalidAction)))
-  icd9AddLeadingZeroesDecimal(icd9Decimal = icd9,
-                              addZeroV = addZeroV,
-                              invalidAction = match.arg(invalidAction))
+icd9AddLeadingZeroes <- function(icd9, isShort) {
+  if (isShort) return(icd9AddLeadingZeroesShort(icd9Short = icd9))
+  icd9AddLeadingZeroesDecimal(icd9Decimal = icd9)
 }
 
 #' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesDecimal <- function(icd9Decimal, addZeroV = FALSE) {
+icd9AddLeadingZeroesDecimal_R <- function(icd9Decimal) {
   parts <- icd9DecimalToParts(icd9Decimal)
-  parts[["major"]] <- icd9AddLeadingZeroesMajor(parts[["major"]],
-                                                addZeroV = addZeroV)
+  parts[["major"]] <- icd9AddLeadingZeroesMajor(parts[["major"]])
   icd9PartsToDecimal(parts = parts)
 }
 
@@ -49,32 +41,17 @@ icd9AddLeadingZeroesDecimal <- function(icd9Decimal, addZeroV = FALSE) {
 #'   100 could be 1.00 10.0 or 100 if coded incorrectly. We must assume 100 is
 #'   really 100
 #' @template icd9-short
-icd9AddLeadingZeroesShort <- function(icd9Short, addZeroV = FALSE) {
+icd9AddLeadingZeroesShort_R <- function(icd9Short) {
   parts <- icd9ShortToParts(icd9Short)
-  parts[["major"]] <- icd9AddLeadingZeroesMajor(parts[["major"]],
-                                                addZeroV = addZeroV)
+  parts[["major"]] <- icd9AddLeadingZeroesMajor(parts[["major"]])
   icd9PartsToShort(parts = parts)
 }
 
 #' @rdname icd9AddLeadingZeroes
 #' @description three digit codes are returned unchanged, one and two digit
-#'   codes are preceded by 00 or 0. V codes are only zero padded if addZeroV is
-#'   set to TRUE.
-icd9AddLeadingZeroesMajor <- function(major, addZeroV = FALSE) {
-  #isIntMajor <- areIntegers(major) # NA gives FALSE
-  #major[isIntMajor] <- sprintf("%03d", as.integer(major[isIntMajor]))
-  major <- sprintf("%03d", asIntegerNoWarn(major))
-  # just because we always trim, and this is not necessarily done otherwise
-  #major <- trim(major)
-  # if single digit V code, then try to slip in a zero. There are no valid E
-  # codes with E00, they start at 800.
-  if (addZeroV) {
-    justV <- icd9IsV(major)
-    major[nchar(major[justV]) == 2] <- sprintf("V0%s",
-                                               substr(major[justV], 2, 2))
-  }
-  major
-}
+#'   codes are preceded by 00 or 0.
+icd9AddLeadingZeroesMajor_R <- function(major)
+  sprintf("%03d", asIntegerNoWarn(major))
 
 #' @title drop zero padding from decimal ICD-9 code.
 #' @description decimal form ICD-9 codes are not ambiguous if the leading zeroes
@@ -88,15 +65,10 @@ icd9AddLeadingZeroesMajor <- function(major, addZeroV = FALSE) {
 #'   part
 #' @family ICD-9 convert
 #' @keywords internal manip
-icd9DropLeadingZeroes <- function(icd9, isShort, dropZeroV = FALSE,
-                                  invalidAction = icd9InvalidActions) {
+icd9DropLeadingZeroes <- function(icd9, isShort, dropZeroV = FALSE) {
   if (isShort) return(
-    icd9DropLeadingZeroesShort(icd9Short = icd9,
-                               dropZeroV = dropZeroV,
-                               invalidAction = match.arg(invalidAction)))
-  icd9DropLeadingZeroesDecimal(icd9Decimal = icd9,
-                               dropZeroV = dropZeroV,
-                               invalidAction = match.arg(invalidAction))
+    icd9DropLeadingZeroesShort(icd9Short = icd9, dropZeroV = dropZeroV))
+  icd9DropLeadingZeroesDecimal(icd9Decimal = icd9, dropZeroV = dropZeroV)
 }
 
 #' @rdname icd9DropLeadingZeroes

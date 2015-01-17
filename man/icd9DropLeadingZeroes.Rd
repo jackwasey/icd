@@ -7,8 +7,7 @@
 \alias{icd9DropLeadingZeroesShort}
 \title{drop zero padding from decimal ICD-9 code.}
 \usage{
-icd9DropLeadingZeroes(icd9, isShort, dropZeroV = FALSE,
-  invalidAction = icd9InvalidActions)
+icd9DropLeadingZeroes(icd9, isShort, dropZeroV = FALSE)
 
 icd9DropLeadingZeroesDecimal(icd9Decimal, dropZeroV = FALSE,
   invalidAction = icd9InvalidActions)
@@ -27,6 +26,11 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 Vx.yz In the case of 'short' form codes, this is only valid when there is
 no decimal part, e.g. V01 can become V1, but V0123 cannot become V123
 because its meaning changes.}
+
+\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
 
 \item{invalidAction}{character string (unit length) containing one of:
 "ignore", "silent", "warn", "stop"
@@ -47,11 +51,6 @@ revealing the invalid code(s).
 is the preferred method when doing one-time validation, e.g. of the
 co-morbidity mapping lists.}
 
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
-characters is given in a code, then the digits are greedily assigned to
-hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
-
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
@@ -68,7 +67,7 @@ decimal form ICD-9 codes are not ambiguous if the leading zeroes
   short-form codes. This is the inverse of icd9AddLeadingZeroesDecimal
 }
 \seealso{
-Other ICD-9 convert: \code{\link{icd9DecimalToShort}};
+Other ICD-9 convert: \code{\link{icd9DecimalToShort_R}};
   \code{\link{icd9MajMinToDecimal_R}},
   \code{\link{icd9MajMinToParts_R}},
   \code{\link{icd9MajMinToShort_R}},

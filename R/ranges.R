@@ -261,7 +261,7 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE) {
       } # end if - whether to expand all children
     } #end loop through majors
   } # end startMajor != endMajor
-  icd9AddLeadingZeroesShort(result, addZeroV = TRUE)
+  icd9AddLeadingZeroesShort(result)
 }
 
 #' @title create range of icd9 major parts
