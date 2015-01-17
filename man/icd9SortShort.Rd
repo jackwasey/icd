@@ -4,7 +4,7 @@
 \alias{icd9SortShort}
 \title{sort short-form icd9 codes}
 \usage{
-icd9SortShort(icd9Short, invalidAction = icd9InvalidActions)
+icd9SortShort(icd9Short)
 }
 \arguments{
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than

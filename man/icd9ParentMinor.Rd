@@ -4,7 +4,7 @@
 \alias{icd9ParentMinor}
 \title{get parent of an ICD-9 code}
 \usage{
-icd9ParentMinor(minor, invalidAction = icd9InvalidActions)
+icd9ParentMinor(minor)
 }
 \arguments{
 \item{minor}{character vector of 'minor' part of ICD-9 codes, i.e. that part
@@ -35,8 +35,7 @@ co-morbidity mapping lists.}
 character vector of ICD-9 codes, one for each code given.
 }
 \description{
-not likely to be useful for end-user, so using keyword
-  \code{internal} for now.
+not likely to be useful for end-user
 }
 \keyword{internal}
 

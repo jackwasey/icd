@@ -7,14 +7,13 @@
 \alias{icd9DropLeadingZeroesShort}
 \title{drop zero padding from decimal ICD-9 code.}
 \usage{
-icd9DropLeadingZeroes(icd9, isShort, dropZeroV = FALSE)
+icd9DropLeadingZeroes(icd9, isShort)
 
-icd9DropLeadingZeroesDecimal(icd9Decimal, dropZeroV = FALSE,
-  invalidAction = icd9InvalidActions)
+icd9DropLeadingZeroesDecimal(icd9Decimal)
 
-icd9DropLeadingZeroesShort(icd9Short, dropZeroV = FALSE)
+icd9DropLeadingZeroesShort(icd9Short)
 
-icd9DropLeadingZeroesMajor(major, dropZeroV = FALSE)
+icd9DropLeadingZeroesMajor(major)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -22,14 +21,14 @@ given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010"}
 
-\item{dropZeroV}{single logical, if TRUE will additionally drop V0x.yz to
-Vx.yz In the case of 'short' form codes, this is only valid when there is
-no decimal part, e.g. V01 can become V1, but V0123 cannot become V123
-because its meaning changes.}
-
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
+five characters is given in a code, then the digits are greedily assigned
+to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
 \item{invalidAction}{character string (unit length) containing one of:
@@ -50,11 +49,6 @@ revealing the invalid code(s).
 - \code{stop} stop with error if any invalid codes are found in input. This
 is the preferred method when doing one-time validation, e.g. of the
 co-morbidity mapping lists.}
-
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
 }
 \value{
 character vector of ICD-9 codes with extra zeroes dropped from major

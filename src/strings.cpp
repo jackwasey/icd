@@ -258,8 +258,8 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
 
 // [[Rcpp::export]]
 List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
-  CharacterVector majors(icd9Decimal.size());
-  CharacterVector minors(icd9Decimal.size());
+  CharacterVector majors;
+  CharacterVector minors;
   int ilen = icd9Decimal.length();
 
   if (icd9Decimal.length() == 0) { return List::create(_["major"] = CharacterVector::create(),
@@ -524,6 +524,6 @@ CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short) {
 // [[Rcpp::export]]
 CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
   List parts = icd9DecimalToParts(icd9Decimal);
-  parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
+  parts["major"] = icd9AddLeadingZeroesMajor(as<CharacterVector>(parts["major"]));
   return icd9PartsToDecimal(parts);
 }

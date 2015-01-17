@@ -59,27 +59,20 @@ icd9AddLeadingZeroesMajor_R <- function(major)
 #'   but many would be problematic, so no function is provided to do this for
 #'   short-form codes. This is the inverse of icd9AddLeadingZeroesDecimal
 #' @template icd9-any
-#' @template dropZeroV
 #' @template invalid
 #' @return character vector of ICD-9 codes with extra zeroes dropped from major
 #'   part
 #' @family ICD-9 convert
 #' @keywords internal manip
-icd9DropLeadingZeroes <- function(icd9, isShort, dropZeroV = FALSE) {
+icd9DropLeadingZeroes <- function(icd9, isShort) {
   if (isShort) return(
-    icd9DropLeadingZeroesShort(icd9Short = icd9, dropZeroV = dropZeroV))
-  icd9DropLeadingZeroesDecimal(icd9Decimal = icd9, dropZeroV = dropZeroV)
+    icd9DropLeadingZeroesShort(icd9Short = icd9))
+  icd9DropLeadingZeroesDecimal(icd9Decimal = icd9)
 }
 
 #' @rdname icd9DropLeadingZeroes
 #' @template icd9-decimal
-icd9DropLeadingZeroesDecimal <- function(icd9Decimal, dropZeroV = FALSE,
-                                         invalidAction = icd9InvalidActions) {
-  icd9Decimal <- icd9ValidNaWarnStopDecimal(
-    icd9Decimal,
-    invalidAction = match.arg(invalidAction)
-  )
-  # consider simplification in the vein of 'short' equivalent.
+icd9DropLeadingZeroesDecimal <- function(icd9Decimal) {
 
   out <- vapply(
     X = strMultiMatch(
@@ -89,23 +82,16 @@ icd9DropLeadingZeroesDecimal <- function(icd9Decimal, dropZeroV = FALSE,
       if (length(x) > 0) sprintf("%s%s", x[1], x[3]) else NA_character_ ,
     FUN.VALUE = character(1) # template result PER vapply 'row'
   )
-  # if user request preservation of V0x, then keep the input data for those
-  # items.
-  if (!dropZeroV) {
-    isV <- icd9IsV(icd9Decimal)
-    out[isV] <- icd9Decimal[isV]
-  }
   out
 }
 
 #' @rdname icd9DropLeadingZeroes
 #' @template icd9-short
-icd9DropLeadingZeroesShort <- function(icd9Short, dropZeroV = FALSE) {
+icd9DropLeadingZeroesShort <- function(icd9Short) {
   parts <- icd9ShortToParts(icd9Short = icd9Short, minorEmpty = "")
   # very important: only drop the zero in V codes if the minor part is empty.
   areEmpty <- parts[["minor"]] == ""
-  parts[areEmpty, "major"] <-
-    icd9DropLeadingZeroesMajor(parts[areEmpty, "major"], dropZeroV = dropZeroV)
+  parts[areEmpty, "major"] <- icd9DropLeadingZeroesMajor(parts[areEmpty, "major"])
   icd9PartsToShort(parts = parts)
 }
 

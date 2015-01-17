@@ -4,8 +4,7 @@
 \alias{icd9ChildrenDecimal_R}
 \title{generate all child codes for given decimal ICD9 codes}
 \usage{
-icd9ChildrenDecimal_R(icd9Decimal, onlyReal = FALSE,
-  invalidAction = icd9InvalidActions)
+icd9ChildrenDecimal_R(icd9Decimal, onlyReal = FALSE)
 }
 \arguments{
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five

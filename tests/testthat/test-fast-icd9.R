@@ -36,10 +36,10 @@ test_that("zero pad decimal, numeric only", {
 })
 
 test_that("zero pad decimel V and E codes", {
-  expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V1")
-  expect_equal(icd9AddLeadingZeroesDecimal(" V1 "), "V1")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.1"), "V1.1")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.99"), "V1.99")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V01")
+  expect_equal(icd9AddLeadingZeroesDecimal(" V1 "), "V01")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1.1"), "V01.1")
+  expect_equal(icd9AddLeadingZeroesDecimal("V1.99"), "V01.99")
   expect_equal(icd9AddLeadingZeroesDecimal("V22"), "V22")
   expect_equal(icd9AddLeadingZeroesDecimal(" V22.34 "), "V22.34")
   expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V01")
@@ -176,15 +176,13 @@ test_that("strip leading zero from decimal numeric only", {
 test_that("strip leading zero from decimal V and E", {
 
   expect_equal(icd9DropLeadingZeroesDecimal("V1"), "V1")
-  expect_equal(icd9DropLeadingZeroesDecimal("V01"), "V01")
-  expect_equal(icd9DropLeadingZeroesDecimal("V01", dropZeroV = TRUE), "V1")
-  expect_equal(icd9DropLeadingZeroesDecimal("V1."), "V1.")
-  expect_equal(icd9DropLeadingZeroesDecimal("V01.", dropZeroV = TRUE), "V1.")
+  expect_equal(icd9DropLeadingZeroesDecimal("V01"), "V1")
+  #TODO: expect_equal(icd9DropLeadingZeroesDecimal("V1."), "V1")
+  #TODO: expect_equal(icd9DropLeadingZeroesDecimal("V01."), "V1")
   expect_equal(icd9DropLeadingZeroesDecimal("V12"), "V12")
   expect_equal(icd9DropLeadingZeroesDecimal("V12.3"), "V12.3")
   expect_equal(icd9DropLeadingZeroesDecimal("V1.2"), "V1.2")
-  expect_equal(icd9DropLeadingZeroesDecimal("V01.2"), "V01.2")
-  expect_equal(icd9DropLeadingZeroesDecimal("V01.2", dropZeroV = TRUE), "V1.2")
+  expect_equal(icd9DropLeadingZeroesDecimal("V01.2"), "V1.2")
   expect_equal(icd9DropLeadingZeroesDecimal("V12.78"), "V12.78")
   expect_equal(icd9DropLeadingZeroesDecimal("E912"), "E912")
   expect_equal(icd9DropLeadingZeroesDecimal("E912."), "E912.")
@@ -210,21 +208,14 @@ test_that("strip leading zero from short numeric only", {
 
 test_that("strip leading zero from decimal V and E", {
 
-  expect_equal(icd9DropLeadingZeroesShort("V1", dropZeroV = TRUE), "V01")
-  expect_equal(icd9DropLeadingZeroesShort("V01", dropZeroV = FALSE), "V01")
-  expect_equal(icd9DropLeadingZeroesShort("V12", dropZeroV = TRUE), "V12")
-  expect_equal(icd9DropLeadingZeroesShort("V12", dropZeroV = FALSE), "V12")
-  expect_equal(icd9DropLeadingZeroesShort("V123", dropZeroV = TRUE), "V123")
-  expect_equal(icd9DropLeadingZeroesShort("V123", dropZeroV = FALSE), "V123")
+  expect_equal(icd9DropLeadingZeroesShort("V1"), "V01")
+  expect_equal(icd9DropLeadingZeroesShort("V12"), "V12")
+  expect_equal(icd9DropLeadingZeroesShort("V123"), "V123")
   # cannot drop zero and be the same code. This is an important test!
-  expect_equal(icd9DropLeadingZeroesShort("V012", dropZeroV = TRUE), "V012")
-  expect_equal(icd9DropLeadingZeroesShort("V012", dropZeroV = FALSE), "V012")
-  expect_equal(icd9DropLeadingZeroesShort("V1278", dropZeroV = TRUE), "V1278")
-  expect_equal(icd9DropLeadingZeroesShort("V1278", dropZeroV = FALSE), "V1278")
-  expect_equal(icd9DropLeadingZeroesShort("E912", dropZeroV = TRUE), "E912")
-  expect_equal(icd9DropLeadingZeroesShort("E912", dropZeroV = FALSE), "E912")
-  expect_equal(icd9DropLeadingZeroesShort("E9127", dropZeroV = TRUE), "E9127")
-  expect_equal(icd9DropLeadingZeroesShort("E9127", dropZeroV = FALSE), "E9127")
+  expect_equal(icd9DropLeadingZeroesShort("V012"), "V012")
+  expect_equal(icd9DropLeadingZeroesShort("V1278"), "V1278")
+  expect_equal(icd9DropLeadingZeroesShort("E912"), "E912")
+  expect_equal(icd9DropLeadingZeroesShort("E9127"), "E9127")
 
   test_that("mixed vector drop leading zero short", {
     expect_equal(icd9DropLeadingZeroesShort(c("V1278", " E898", "02", "0345")),
@@ -259,15 +250,10 @@ test_that("drop leading zeroes from majors: numeric input", {
 })
 
 test_that("drop leading zeroes from majors: V codes", {
-  expect_equal(icd9DropLeadingZeroesMajor("V1", dropZeroV = FALSE), "V1")
-  expect_equal(icd9DropLeadingZeroesMajor(" v01 ", dropZeroV = FALSE), "v01")
-  expect_equal(icd9DropLeadingZeroesMajor("V01", dropZeroV = FALSE), "V01")
-  expect_equal(icd9DropLeadingZeroesMajor("V12", dropZeroV = FALSE), "V12")
-
-  expect_equal(icd9DropLeadingZeroesMajor("V1", dropZeroV = TRUE), "V1")
-  expect_equal(icd9DropLeadingZeroesMajor(" v01 ", dropZeroV = TRUE), "v1")
-  expect_equal(icd9DropLeadingZeroesMajor("V01", dropZeroV = TRUE), "V1")
-  expect_equal(icd9DropLeadingZeroesMajor("V12", dropZeroV = TRUE), "V12")
+  expect_equal(icd9DropLeadingZeroesMajor("V1"), "V1")
+  #TODO: expect_equal(icd9DropLeadingZeroesMajor(" v01 "), "V1")
+  expect_equal(icd9DropLeadingZeroesMajor("V01"), "V1")
+  expect_equal(icd9DropLeadingZeroesMajor("V12"), "V12")
 })
 
 test_that("drop leading zeroes from majors: E codes", {

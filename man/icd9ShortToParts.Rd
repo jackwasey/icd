@@ -39,7 +39,7 @@ data.frame with two columns. At least the minor part must be
 character, because "03" is different to "3", but "30" is the same as "3"
 }
 \description{
-accepts Vxxxx Exxxx or xxxxx. This version just beats native R, but lowerhead for calls.
+accepts Vxxxx Exxxx or xxxxx. This version just beats native R, but lowerhead for calls. If minorEmpty is NA, it must be an NA_character_ (for now).
 }
 \keyword{manip}
 
