@@ -126,16 +126,14 @@ icd9GuessIsShort <- function(icd9, invalidAction = icd9InvalidActions) {
 #' @param isShort
 #' @param invalid
 #' @keywords internal
-icd9GetChapters <- function(icd9, isShort,
-                            invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
+icd9GetChapters <- function(icd9, isShort) {
 
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
 
-  majors     <- icd9GetMajor(icd9, isShort, invalidAction)
+  majors     <- icd9GetMajor(icd9, isShort)
 
   cf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9Chapters), NA_character_))
@@ -185,8 +183,7 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 
   icd9Hierarchy <- cbind(
     icd9CmDesc,
-    icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE,
-                    invalidAction = "stop")
+    icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE)
   )
   if (save) saveInDataDir("icd9Hierarchy")
 }

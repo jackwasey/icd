@@ -420,10 +420,11 @@ CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal =
 // [[Rcpp::export]]
 CharacterVector icd9GetMajor(CharacterVector icd9, bool isShort) {
   if (isShort) {
-    List parts = icd9ShortToParts(icd9);
-    return as<CharacterVector>(parts[0]);
+    return as<CharacterVector>(icd9ShortToParts(icd9)[0]);
   }
-  stop("not implemented");
+  return as<CharacterVector>(icd9DecimalToParts(icd9)[0]);
+
+
 }
 
 // zero-pad a single major

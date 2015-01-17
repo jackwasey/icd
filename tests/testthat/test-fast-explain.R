@@ -71,14 +71,6 @@ test_that("guess icd9 types: decimal", {
 
 test_that("guess icd9 types: invalid", {
   expect_equal(icd9GuessIsShort(NA_character_), NA)
-  expect_error(icd9GuessIsShort(NA_character_, invalidAction = "stop"))
-  expect_warning(icd9GuessIsShort("mogli", invalidAction = "warn"))
-  expect_warning(icd9GuessIsShort(c(100, 200, 300, 400, 500, "mogli"),
-                                  invalidAction = "warn"))
-  expect_warning(icd9GuessIsShort(c(100.1, 200.2, 300.3, 400.4, 500.5, "mogli"),
-                                  invalidAction = "warn"))
-  expect_warning(icd9GuessIsShort(c(1001, 2002, 3003, 4004, 5005, "mogli"),
-                                  invalidAction = "warn"))
 })
 
 # TODO, set up long chain of multiple conversions as kind of integration test,
@@ -253,7 +245,7 @@ test_that("condense short range", {
   expect_equal(icd9CondenseToMajor(othersalmonella[-3], onlyReal = FALSE),
                othersalmonella[-3])
 
-  expect_equal(icd9ChildrenShort(icd9Short = "001", onlyReal = TRUE),
+  expect_equal(sort(icd9ChildrenShort(icd9Short = "001", onlyReal = TRUE)),
                c("0010", "0011", "0019"))
 
 
