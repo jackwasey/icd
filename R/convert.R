@@ -2,7 +2,6 @@
 #' @description converted decimal ICD9 code, e.g. 123.45 to 'short' e.g. 12345
 #'   non-decimal format
 #' @template icd9-decimal
-#' @template invalid
 #' @return character vector of converted ICD-9 codes
 #' @family ICD-9 convert
 #' @keywords manip
@@ -26,19 +25,16 @@ icd9DecimalToShort_R <- function(icd9Decimal) {
 #' @template icd9-decimal
 #' @param minorEmpty vector of length one, to be used in place of
 #'   minor part of zero. Defaults to ""
-#' @template invalid
 #' @keywords manip
 #' @export
-icd9DecimalToParts_R <- function(icd9Decimal, minorEmpty = "",
-                               invalidAction = icd9InvalidActions) {
+icd9DecimalToParts_R <- function(icd9Decimal, minorEmpty = "") {
 
   stopifnot(length(minorEmpty) == 1)
   if (is.na(minorEmpty)) minorEmpty <- NA_character_
 
   if (length(icd9Decimal) == 0) return(data.frame(major = character(),
                                                   minor = character()))
-  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal,
-                                            match.arg(invalidAction))
+  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal)
   icd9Decimal <- trim(icd9Decimal)
   icd9Decimal[icd9Decimal == ""] <- "." # don't ask
   a <- strsplit(icd9Decimal, ".", fixed = TRUE)
@@ -52,13 +48,11 @@ icd9DecimalToParts_R <- function(icd9Decimal, minorEmpty = "",
   x
 }
 
-icd9GetMajor_R <- function(icd9, isShort,
-                         invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
+icd9GetMajor_R <- function(icd9, isShort) {
   if (isShort) {
-    i <- icd9ShortToParts(icd9Short = icd9, invalidAction)
+    i <- icd9ShortToParts(icd9Short = icd9)
   } else {
-    i <- icd9DecimalToParts(icd9Decimal = icd9, invalidAction)
+    i <- icd9DecimalToParts(icd9Decimal = icd9)
   }
   i$major
 }
@@ -66,7 +60,6 @@ icd9GetMajor_R <- function(icd9, isShort,
 #' @title convert short-form ICD-9 code to decimal form
 #' @description converts ICD-9 'short' form to decimal form
 #' @template icd9-short
-#' @template invalid
 #' @family ICD-9 convert
 #' @keywords manip
 #' @export

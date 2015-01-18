@@ -53,13 +53,13 @@ icd9ExpandRangeShort("4280 ", "43014")
 Other ICD-9 ranges: \code{\link{\%i9mj\%}},
   \code{\link{icd9ExpandRangeMajor}};
   \code{\link{icd9ChildrenDecimal_R}};
+  \code{\link{icd9ChildrenDecimal}};
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenShort}},
-  \code{\link{icd9ChildrenShort_R}};
+  \code{\link{icd9ChildrenShort_R}},
+  \code{\link{icd9Children_R}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9PrecedingMinors}},
-  \code{\link{icd9SubsequentMinors}}
+  \code{\link{icd9ExpandMinor_R}}
 }
 

@@ -84,8 +84,7 @@ icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
 #' @return single logical value, \code{TRUE} if input data are predominantly
 #'   short type. If there is some uncertainty, then return NA.
 #' @keywords internal
-icd9GuessIsShort <- function(icd9, invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
+icd9GuessIsShort <- function(icd9) {
   icd9 <- as.character(icd9)
   if (is.list(icd9)) {
     testCodes <- icd9[[1]]
@@ -96,26 +95,13 @@ icd9GuessIsShort <- function(icd9, invalidAction = icd9InvalidActions) {
   vd <- icd9ValidDecimal(testCodes)
   vsm <- mean(vs)
   vdm <- mean(vd)
-  if (vsm - vdm > 0.5) {
-    # this function returns, but we don't care what it returns.
-    icd9ValidNaWarnStopShort(icd9Short = testCodes,
-                             invalidAction = invalidAction)
+  if (vsm - vdm > 0.5)
     return(TRUE)
-  }
-  if (vdm - vsm > 0.5) {
-    icd9ValidNaWarnStopDecimal(icd9Decimal = testCodes,
-                               invalidAction = invalidAction)
+
+  if (vdm - vsm > 0.5)
     return(FALSE)
-  }
-  # now we really can't do much validation, but if requested, we can see if any
-  # are neither valid short nor valid decimal
-  if (any(!vs & !vd)) {
-    icd9WarnStopMessage(
-      "icd9GuessIsShort: predominant type not determined, and some codes were
-        neither valid short nor decimal formats:", paste(testCodes[!vs | !vd]),
-      invalidAction = invalidAction
-    )
-  }
+
+  # NA for couldn't tell?
   NA
 }
 
@@ -198,23 +184,10 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #'   useful for generating a minimal textual description of a set of ICD-9
 #'   codes.
 #' @template icd9-short
-#' @template invalid
 #' @family ICD-9 ranges
 #' @export
 #' @keywords manip
-icd9CondenseToExplain <- function(icd9Short,
-                                  invalidAction = c("stop", "ignore",
-                                                    "silent", "warn")) {
-
-  invalidAction <- match.arg(invalidAction)
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short,
-                                        invalidAction = invalidAction)
-
-  # we also rely on the icd9 codes existing in the reference table:
-  if (invalidAction == "warn" && any(!icd9IsRealShort(icd9Short)))
-    warning("dropping values which are not in the reference table",
-            paste(icd9Short[!icd9IsRealShort(icd9Short)],
-                  sep = ", ", collapse = ", "))
+icd9CondenseToExplain <- function(icd9Short) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.
   icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short))
@@ -313,7 +286,6 @@ icd9CondenseToExplain <- function(icd9Short,
 #' @param dropNonReal single logical, if TRUE, and \code{onlyReal} is TRUE, then
 #'   codes not found in the master list are dropped; otherwise they are included
 #'   in the output.
-#' @template invalid
 #' @family ICD-9 ranges
 #' @export
 icd9CondenseToMajor <- function(icd9Short, onlyReal, dropNonReal = TRUE) {

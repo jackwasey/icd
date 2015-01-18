@@ -4,33 +4,13 @@
 \alias{icd9CondenseToExplain}
 \title{condense list of short ICD-9 code into minimal set of parent descriptions}
 \usage{
-icd9CondenseToExplain(icd9Short, invalidAction = c("stop", "ignore", "silent",
-  "warn"))
+icd9CondenseToExplain(icd9Short)
 }
 \arguments{
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
-
-\item{invalidAction}{character string (unit length) containing one of:
-"ignore", "silent", "warn", "stop"
-
-- \code{ignore} no check for validity of ICD-9 code is made implicitly. This
-is the fastest option. If the function call is explicitly to check validity,
-e.g. icd9ValidShort(icd9Short = "12345", invalidAction = "ignore"), then the
-behavior is the same as \code{silent}.
-
-- \code{silent} invalid ICD-9 codes are replaced silently by \code{NA}
-(actually \code{NA_character_}). If the function returns \code{TRUE} or
-\code{FALSE} rather than the ICD-9 code itself, then \code{FALSE} is returned
-
-- \code{warn} invalid ICD-9 codes are replaced by \code{NA} with a warning
-revealing the invalid code(s).
-
-- \code{stop} stop with error if any invalid codes are found in input. This
-is the preferred method when doing one-time validation, e.g. of the
-co-morbidity mapping lists.}
 }
 \description{
 This can be thought of as the inverse operation to expanding a
@@ -46,16 +26,16 @@ This can be thought of as the inverse operation to expanding a
 Other ICD-9 ranges: \code{\link{\%i9mj\%}},
   \code{\link{icd9ExpandRangeMajor}};
   \code{\link{icd9ChildrenDecimal_R}};
+  \code{\link{icd9ChildrenDecimal}};
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenShort}},
-  \code{\link{icd9ChildrenShort_R}};
+  \code{\link{icd9ChildrenShort_R}},
+  \code{\link{icd9Children_R}};
   \code{\link{icd9CondenseToMajor}};
   \code{\link{icd9ExpandMinor_R}};
   \code{\link{icd9ExpandRange}},
   \code{\link{icd9ExpandRangeDecimal}},
-  \code{\link{icd9ExpandRangeShort}};
-  \code{\link{icd9PrecedingMinors}},
-  \code{\link{icd9SubsequentMinors}}
+  \code{\link{icd9ExpandRangeShort}}
 }
 \keyword{manip}
 

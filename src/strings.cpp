@@ -434,12 +434,9 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = fal
     List icd9Hierarchy = env["icd9Hierarchy"]; // TODO: unnecessary copy?
     std::vector< std::string > out_real;
     std::vector< std::string > reals = as<std::vector< std::string > >(icd9Hierarchy["icd9"]);
-    for (int i = 0; i < 25; ++i) {
-      std::cout << i << ": " << out[i] << "\n";
-    }
-//    for (int i = 0; i < out.size(); ++i) {
-//      std::cout << i << ": " << out[i] << "\n";
-//    }
+    // sort so set_intersection works:
+    std::sort(out.begin(), out.end());
+    std::sort(reals.begin(), reals.end());
     std::set_intersection(out.begin(), out.end(),
     reals.begin(), reals.end(),
     std::back_inserter(out_real));
@@ -566,7 +563,6 @@ CharacterVector icd9AddLeadingZeroes(CharacterVector icd9, bool isShort) {
 //' @template icd9-any
 //' @template isShort
 //' @param isShortReference logical, see argument \code{isShort}
-//' @templateVar invalidActionName "invalidAction,invalidActionReference"
 //' @template invalid
 //' @return logical vector of which icd9 match or are subcategory of
 //'   icd9Reference

@@ -100,9 +100,9 @@ parseAhrqSas <- function(sasPath = system.file("extdata",
     ahrqComorbidAll <- lapply(ahrqComorbidAll, icd9CondenseToMajor)
   } else {
     ahrqComorbid <- lapply(ahrqComorbid, function(x)
-      icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort(x))
     ahrqComorbidAll <- lapply(ahrqComorbidAll, function(x)
-      icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort(x))
   }
 
   names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
@@ -175,7 +175,7 @@ parseQuanDeyoSas <- function(sasPath = NULL,
   if (condense)
     quanDeyoComorbid <- lapply(
       quanDeyoComorbid,
-      icd9CondenseToMajor, invalidAction = "stop")
+      icd9CondenseToMajor)
   else
     quanDeyoComorbid <- lapply(
       quanDeyoComorbid,
@@ -247,12 +247,12 @@ parseQuanElix <- function(condense = FALSE,
 
   quanElixComorbid <- lapply(
     quanElixComorbid,
-    function(x) icd9DecimalToShort(x, invalidAction = "stop"))
+    function(x) icd9DecimalToShort(x))
 
   if (condense)
     quanElixComorbid <- lapply(
       quanElixComorbid,
-      function(x) icd9CondenseToMajor(x, invalidAction = "stop"))
+      function(x) icd9CondenseToMajor(x))
   else
     quanElixComorbid <- lapply(
       quanElixComorbid,
@@ -326,13 +326,13 @@ parseElix <- function(condense = FALSE, save = FALSE, path = "data") {
 
   elixComorbid <- lapply(
     elixComorbid, function(x)
-      icd9DecimalToShort(x, invalidAction = "stop"))
+      icd9DecimalToShort(x))
 
   # convert to short form, for consistency with other mappings.
   if (condense) {
     elixComorbid <- lapply(
       elixComorbid,
-      function(x) icd9CondenseToMajor(x, invalidAction = "stop"))
+      function(x) icd9CondenseToMajor(x))
   } else {
     elixComorbid <- lapply(
       elixComorbid,

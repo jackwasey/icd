@@ -332,7 +332,6 @@ icd9IsMajor <- function(icd9)
 #'   over time, and possibly imperfections in the master list derived from CMS.
 #' @template icd9-any
 #' @template isShort
-#' @template invalid
 #' @return logical vector
 #' @export
 icd9IsReal <- function(icd9, isShort) {

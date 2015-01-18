@@ -47,7 +47,6 @@ spawnReferenceChildren_R <-
 #' @template isShort
 #' @param isShortReference logical, see argument \code{isShort}
 #' @templateVar invalidActionName "invalidAction,invalidActionReference"
-#' @template invalid
 #' @return logical vector of which icd9 match or are subcategory of
 #'   icd9Referenec
 #' @import checkmate

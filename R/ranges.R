@@ -8,7 +8,6 @@
 #'
 #' @template icd9-decimal
 #' @template onlyReal
-#' @template invalid
 #' @examples
 #' #icd9ChildrenDecimal("100.1")
 #' #icd9ChildrenDecimal("2.34")
@@ -77,7 +76,6 @@ icd9Children_R <- function(icd9, onlyReal = FALSE, isShort) {
 #'   be able to compare a pair of codes quickly, then use built-in sort. This
 #'   becomes easier when I move to S3 classes for ICD-9.
 #' @template icd9-short
-#' @template invalid
 #' @return sorted vector of ICD-9 codes
 #' @keywords manip
 #' @export
@@ -222,7 +220,6 @@ icd9ExpandRangeShort <- function(start, end, onlyReal = FALSE, omitParents = FAL
 #'   icd9DropLeadingZeroes if they wish.
 #' @templateVar icd9AnyName start,end
 #' @template icd9-any
-#' @template invalid
 #' @return character vector with range inclusive of start and end
 #' @family ICD-9 ranges
 #' @export

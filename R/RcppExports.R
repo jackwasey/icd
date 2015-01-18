@@ -292,7 +292,6 @@ icd9AddLeadingZeroes <- function(icd9, isShort) {
 #' @template icd9-any
 #' @template isShort
 #' @param isShortReference logical, see argument \code{isShort}
-#' @templateVar invalidActionName "invalidAction,invalidActionReference"
 #' @template invalid
 #' @return logical vector of which icd9 match or are subcategory of
 #'   icd9Reference

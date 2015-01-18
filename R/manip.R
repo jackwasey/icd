@@ -21,7 +21,6 @@ icd9ExtractAlphaNumeric <- function(icd9) {
 #' @title pad decimal ICD-9 codes with leading zeroes
 #' @template icd9-any
 #' @template isShort
-#' @template invalid
 #' @return character vector of icd9 codes
 #' @keywords internal manip
 icd9AddLeadingZeroes <- function(icd9, isShort) {
@@ -59,7 +58,6 @@ icd9AddLeadingZeroesMajor_R <- function(major)
 #'   but many would be problematic, so no function is provided to do this for
 #'   short-form codes. This is the inverse of icd9AddLeadingZeroesDecimal
 #' @template icd9-any
-#' @template invalid
 #' @return character vector of ICD-9 codes with extra zeroes dropped from major
 #'   part
 #' @family ICD-9 convert
@@ -116,7 +114,6 @@ icd9DropLeadingZeroesMajor <- function(major) {
 #' @title get parent of an ICD-9 code
 #' @description not likely to be useful for end-user
 #' @template minor
-#' @template invalid
 #' @return character vector of ICD-9 codes, one for each code given.
 #' @keywords internal
 icd9ParentMinor <- function(minor) {
