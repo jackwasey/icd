@@ -11,15 +11,16 @@
 #' @export
 icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 
-#' spawn reference codes into all possible lower-level codes (and memoise)
+#' spawn reference codes into all possible lower-level codes (and memoise).
 #'
-#' Take a regular string of an ICD9 code of format (ABC.zxyz) with or without
-#' leading and trailing zeroes. top level ICD9 code and return T/F if the icd9
-#' fall within subgroups. This takes several seconds on an unimpressive desktop
-#' PC, so would benefit from memoization.
+#' Obsolete now C++ children handles multiple inputs, and is so fast. Take a
+#' regular string of an ICD9 code of format (ABC.zxyz) with or without leading
+#' and trailing zeroes. top level ICD9 code and return T/F if the icd9 fall
+#' within subgroups. This takes several seconds on an unimpressive desktop PC,
+#' so would benefit from memoization.
 #'
 #' @keywords internal
-spawnReferenceChildren <-
+spawnReferenceChildren_R <-
   function(icd9Reference, isShortReference) {
     c(
       lapply(
@@ -30,12 +31,12 @@ spawnReferenceChildren <-
     )
   }
 
-# this runs outside of a function, on package load, in package namespace
-if (suppressWarnings(require("memoise", character.only = TRUE, quiet = TRUE))) {
-  memSpawnRefKids <- memoise::memoise(spawnReferenceChildren)
-} else {
-  memSpawnRefKids <- spawnReferenceChildren
-}
+# # this runs outside of a function, on package load, in package namespace
+# if (suppressWarnings(require("memoise", character.only = TRUE, quiet = TRUE))) {
+#   memSpawnRefKids <- memoise::memoise(spawnReferenceChildren_R)
+# } else {
+#   memSpawnRefKids <- spawnReferenceChildren_R
+# }
 
 #' @title match ICD9 codes
 #' @aliases "%i9in%"
@@ -49,40 +50,18 @@ if (suppressWarnings(require("memoise", character.only = TRUE, quiet = TRUE))) {
 #' @template invalid
 #' @return logical vector of which icd9 match or are subcategory of
 #'   icd9Referenec
+#' @import checkmate
 #' @keywords internal
-icd9InReferenceCode <- function(icd9, icd9Reference,
+icd9InReferenceCode_R <- function(icd9, icd9Reference,
                                 isShort = TRUE,
-                                isShortReference = TRUE,
-                                invalidAction = icd9InvalidActions,
-                                invalidActionReference = icd9InvalidActions) {
+                                isShortReference = TRUE) {
 
-  stopifnot(is.numeric(icd9) || is.character(icd9))
-  stopifnot(is.numeric(icd9Reference) || is.character(icd9Reference))
-  stopifnot(is.logical(isShort), is.logical(isShortReference))
-  stopifnot(is.logical(isShort), is.logical(isShortReference))
-  stopifnot(length(isShort) ==  1, length(isShortReference) == 1)
-  stopifnot(length(icd9Reference) > 0)
+  checkmate::checkVector(icd9, strict = TRUE)
+  checkmate::checkVector(icd9Reference, strict = TRUE, any.missing = FALSE)
+  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
+  checkmate::checkLogical(isShortReference, any.missing = FALSE, len = 1)
 
-  icd9 <- icd9ValidNaWarnStop(
-    icd9 = icd9, isShort = isShort, isMajor = FALSE,
-    invalidAction = match.arg(invalidAction))
-  icd9Reference <- icd9ValidNaWarnStop(
-    icd9 = icd9Reference, isShort = isShort, isMajor = FALSE,
-    invalidAction = match.arg(invalidActionReference))
-
-  # TODO: this may be omitted if all the children are elaborated in the
-  # comorbidity mappings in advance. This is fine for ones I provide, but not
-  # necessarily user-generated ones. It is a slow step, hence memoisation. It
-  # would be simpler and faster if this could be skipped. I'm currently also
-  # elaborating all syntactically possible children, not just codes listed in
-  # the official ICD-9-CM list.
-  kids <- memSpawnRefKids(icd9Reference, isShortReference)
-
-  # convert to short form to make comparison
-  if (!isShort)          icd9 <- icd9DecimalToShort(icd9)
-  if (!isShortReference) kids <- icd9DecimalToShort(kids)
-
-  icd9AddLeadingZeroesShort(icd9) %in% kids
+  icd9AddLeadingZeroes(icd9, isShort) %in% icd9Children(icd9Reference, isShortReference)
 }
 
 #' @rdname icd9InReferenceCode

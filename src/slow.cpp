@@ -82,7 +82,7 @@ List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = ""
     }
     } // E code
   } // for
-
+  return List::create();
   // TODO: return icd9MajMinToParts(mjr, mnr);
 }
 

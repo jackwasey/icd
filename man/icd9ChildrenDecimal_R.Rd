@@ -55,9 +55,7 @@ take ICD9 codes in decimal form and lists of all possible
 #icd9ChildrenDecimal("2.34")
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{\%i9d\%}},
-  \code{\link{icd9ExpandRangeDecimal}};
-  \code{\link{\%i9mj\%}},
+Other ICD-9 ranges: \code{\link{\%i9mj\%}},
   \code{\link{icd9ExpandRangeMajor}};
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenShort}},
@@ -65,7 +63,9 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
   \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9GenerateAllShort}};
+  \code{\link{icd9ExpandRange}},
+  \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9PrecedingMinors}},
   \code{\link{icd9SubsequentMinors}}
 }

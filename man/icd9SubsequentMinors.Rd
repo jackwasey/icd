@@ -22,9 +22,7 @@ this is not simply numeric, since "4" is after "39" and "0" !=
   ambiguity and subtle mistakes.
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{\%i9d\%}},
-  \code{\link{icd9ExpandRangeDecimal}};
-  \code{\link{\%i9mj\%}},
+Other ICD-9 ranges: \code{\link{\%i9mj\%}},
   \code{\link{icd9ExpandRangeMajor}};
   \code{\link{icd9ChildrenDecimal_R}};
   \code{\link{icd9Children}},
@@ -33,7 +31,9 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
   \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9GenerateAllShort}}
+  \code{\link{icd9ExpandRange}},
+  \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeShort}}
 }
 \keyword{internal}
 \keyword{manip}

@@ -2,12 +2,19 @@ context("icd9 ranges")
 
 test_that("expand icd9 range definition", {
   expect_equal(
-    sort(icd9ExpandRangeShort("4012", "40145")),
+    icd9ExpandRangeShort("4012", "40145", omitParents = FALSE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
-           "40139", "40140", "40141", "40142", "40143", "40144", "40145")))
-
+           "40139", "4014", "40140", "40141", "40142", "40143", "40144", "40145")))
+# the following tests the unimplemented omitParents = TRUE
+#   expect_equal(
+#     icd9ExpandRangeShort("4012", "40145", omitParents = TRUE),
+#     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
+#            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
+#            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
+#            "40139", "40140", "40141", "40142", "40143", "40144", "40145")))
+#
   expect_equal(icd9ExpandRangeShort("40100", "40101"), c("40100", "40101"))
   expect_equal(icd9ExpandRangeShort("40108", "40109"), c("40108", "40109"))
   expect_equal(icd9ExpandRangeShort("40198", "40199"), c("40198", "40199"))
@@ -21,14 +28,9 @@ test_that("expand icd9 range definition", {
   expect_error(icd9ExpandRangeShort("2", "001"))
   expect_error(icd9ExpandRangeShort("4010", "401"))
 
-  expect_equal(icd9ExpandRangeShort("4280", "4280 "), "4280")
-  expect_equal(icd9ExpandRangeShort("4280", " 4280 "), "4280")
-  expect_equal(icd9ExpandRangeShort("4280", "4280 "), "4280")
-  expect_equal(icd9ExpandRangeShort("4280", " 4280"), "4280")
-  expect_equal(icd9ExpandRangeShort("4280", "4280"), "4280")
-  expect_equal(icd9ExpandRangeShort("4280 ", "4280"), "4280")
-  expect_equal(icd9ExpandRangeShort(" 4280", "4280"), "4280")
-  expect_equal(icd9ExpandRangeShort(" 4280 ", "4280"), "4280")
+  expect_equal(icd9ExpandRangeShort(" 4280 ", " 4280 "),
+               icd9ExpandRangeShort("4280", "4280"))
+
 
   # the range 44100-4419 from the AHRQ found a gap in the code.
   expect_equal(
@@ -37,9 +39,11 @@ test_that("expand icd9 range definition", {
   )
 
   expect_equal(icd9ExpandRangeShort("401", "401"),
-               icd9Children("401", isShort = TRUE))
+               sort(icd9Children("401", isShort = TRUE)))
+  # expand range should already be sorted. do i want to sort children by default
+  # or with an option?
   expect_equal(icd9ExpandRangeShort("401", "402"),
-               icd9Children(c("401", "402"), isShort = TRUE))
+               sort(icd9Children(c("401", "402"), isShort = TRUE)))
   # the next two cases cover the HIV ranges in the co-morbidities, wherein the
   # final code is included, in which case the parent ("044" in this case) is
   # implied strongly.
@@ -49,7 +53,7 @@ test_that("expand icd9 range definition", {
                icd9ExpandRangeShort("043", "044"))
   expect_equal(
     icd9ExpandRangeShort("401", "402"),
-    c("401", "4010", "4011", "4012", "4013", "4014", "4015", "4016",
+    sort(c("401", "4010", "4011", "4012", "4013", "4014", "4015", "4016",
       "4017", "4018", "4019", "40100", "40110", "40120", "40130", "40140",
       "40150", "40160", "40170", "40180", "40190", "40101", "40111",
       "40121", "40131", "40141", "40151", "40161", "40171", "40181",
@@ -80,7 +84,7 @@ test_that("expand icd9 range definition", {
       "40287", "40297", "40208", "40218", "40228", "40238", "40248",
       "40258", "40268", "40278", "40288", "40298", "40209", "40219",
       "40229", "40239", "40249", "40259", "40269", "40279", "40289",
-      "40299")
+      "40299"))
   )
 
   expect_equal(icd9ExpandRangeShort("401", "40102"),
@@ -133,39 +137,11 @@ test_that("major ranges", {
   expect_equal("E99" %i9mj% "E101", c("E099", "E100", "E101"))
 })
 
-test_that("preceding and subsequent minors", {
-  expect_equal(icd9PrecedingMinors("20", isE = FALSE),
-               c("0", "00", "01", "02", "03", "04", "05", "06", "07", "08",
-                 "09", "1", "10", "11", "12", "13", "14", "15", "16", "17",
-                 "18", "19", "20"))
-  expect_equal(sort(icd9PrecedingMinors("19", isE = FALSE)),
-               c("0", "00", "01", "02", "03", "04", "05", "06", "07", "08",
-                 "09", "10", "11", "12", "13", "14", "15", "16", "17", "18",
-                 "19"))
-
-  expect_equal(icd9PrecedingMinors("2", isE = TRUE), c("0", "1", "2"))
-  expect_equal(icd9SubsequentMinors("8", isE = TRUE), c("8", "9"))
-  expect_error(icd9PrecedingMinors("00", isE = TRUE))
-  expect_error(icd9SubsequentMinors("00", isE = TRUE))
-
-  expect_equal(
-    sort(icd9SubsequentMinors("08", isE = FALSE)),
-    sort(c("08", "09",
-           "1", "10", "11", "12", "13", "14", "15", "16", "17", "18",
-           "19", "2", "20", "21", "22", "23", "24", "25", "26", "27", "28",
-           "29", "3", "30", "31", "32", "33", "34", "35", "36", "37", "38",
-           "39", "4", "40", "41", "42", "43", "44", "45", "46", "47", "48",
-           "49", "5", "50", "51", "52", "53", "54", "55", "56", "57", "58",
-           "59", "6", "60", "61", "62", "63", "64", "65", "66", "67", "68",
-           "69", "7", "70", "71", "72", "73", "74", "75", "76", "77", "78",
-           "79", "8", "80", "81", "82", "83", "84", "85", "86", "87", "88",
-           "89", "9", "90", "91", "92", "93", "94", "95", "96", "97", "98",
-           "99")))
-
+test_that("range bugs", {
   # these both failed - need zero padding for the first
   expect_equal( ("042 " %i9s% "043 ")[1], "042")
   expect_equal( ("42" %i9s% "043 ")[1], "042")
-  "3420 " %i9s% "3449 "
+  expect_true("345" %nin% ("3420 " %i9s% "3449 "))
 
   expect_equal("042.11" %i9d% "042.13", c("042.11", "042.12", "042.13"))
 
@@ -181,9 +157,7 @@ test_that("icd9ExpandMinor: invalid", {
   expect_error(icd9ExpandMinor(c("123")))
   expect_error(icd9ExpandMinor(c(1, 2), isE = TRUE))
   expect_error(icd9ExpandMinor("JACK"), isE = TRUE)
-  expect_error(icd9ExpandMinor("00", isE = TRUE))
   expect_error(icd9ExpandMinor(c(123), isE = TRUE))
-  expect_error(icd9ExpandMinor(c("123"), isE = TRUE))
 })
 
 test_that("icd9ExpandMinor: valid", {
@@ -191,7 +165,7 @@ test_that("icd9ExpandMinor: valid", {
   expect_equal(length(icd9ExpandMinor("", isE = TRUE)), 11)
   expect_identical(icd9ExpandMinor("00", isE = FALSE), "00")
   expect_identical(icd9ExpandMinor("9", isE = FALSE), as.character(c(9, 90:99)))
-  expect_error(icd9ExpandMinor("00", isE = TRUE))
+  expect_equal(icd9ExpandMinor("00", isE = TRUE), NA_character_)
   expect_identical(icd9ExpandMinor("9", isE = TRUE), "9")
 
   expect_equal(icd9ExpandMinor("0", isE = TRUE), "0")
@@ -200,7 +174,8 @@ test_that("icd9ExpandMinor: valid", {
 
 })
 
-test_that("icd9ChildrenDecimal", {
+test_that("icd9ChildrenDecimal invalid", {
+  skip("not testing invalid inputs to everything")
   # too long major
   expect_error(icd9ChildrenDecimal("1234"))
   # too long V major
@@ -216,6 +191,9 @@ test_that("icd9ChildrenDecimal", {
   # too long major and minor
   expect_error(icd9ChildrenDecimal("9123.456"))
 
+})
+
+test_that("icd9ChildrenDecimal valid input", {
   expect_equal(
     icd9ChildrenDecimal("V10.0"),
     append("V10.0", paste("V10.0", 0:9, sep = "")))
@@ -236,6 +214,8 @@ test_that("icd9ChildrenDecimal", {
 })
 
 test_that("icd9ChildrenShort invalid input", {
+  expect_equal(icd9ChildrenShort(character()), character())
+  skip("moving away from checking errors on input to every function")
   expect_error(icd9Children(list(c(1, 2), "crap"))) # junk
   # too long
   expect_error(icd9ChildrenShort("123456"))
@@ -249,7 +229,6 @@ test_that("icd9ChildrenShort invalid input", {
   expect_error(icd9ChildrenShort("JACK"))
 
   expect_error(icd9ChildrenShort())
-  expect_equal(icd9ChildrenShort(character()), character())
 })
 
 test_that("icd9ChildrenShort valid input", {
@@ -305,7 +284,7 @@ test_that("condense ranges which do consense", {
 test_that("condense ranges that don't condense at all", {
   expect_equal(
     sort(icd9CondenseToMajor(icd9ChildrenShort("123", onlyReal = TRUE),
-                        onlyReal = FALSE)),
+                             onlyReal = FALSE)),
     sort(icd9ChildrenShort("123", onlyReal = TRUE)))
   # the parent "1000" is not included.
   expect_equal(sort(icd9CondenseToMajor(as.character(10000:10009),
@@ -324,35 +303,27 @@ test_that("condense range invalid data" ,{
 })
 
 test_that("icd9InReferenceCodeLong", {
-  expect_error(icd9InReferenceCode())
-  expect_error(icd9InReferenceCode(""))
-  expect_error(icd9InReferenceCode(123)) # no numbers, just strings
-  expect_error(icd9InReferenceCode("salami"))
-  expect_error(icd9InReferenceCode("bratwurst", "123",
-                                   invalidAction = "stop"))
+  # if the input icd9 code is definitely junk, e.g. longer than 5 char, or 0 char, we get an NA back
   expect_equal(icd9InReferenceCode("bratwurst", "123"), FALSE)
-  # base codes definitely must be valid regardless of invalidAction = "stop"
-  # (for the input data): so do generate errors
-  expect_error(icd9InReferenceCode("421", "boudin"))
+  # but if, with absolutely minimal validation, it could be okay...
+  expect_equal(icd9InReferenceCode("bdn", "123"), FALSE)
   #expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "V432"))) #
-  #invalid V code # automatically validate? TODO invalid reference code
-  expect_error(icd9InReferenceCode(c("421", "123"),
-                                   c("123", "E")))
-  # invalid reference code
-  expect_error(icd9InReferenceCode(c("421", "123"),
-                                   c("123", "V")))
+
+  # invalid reference code. it can be validated beforehand, if needed.
+  expect_equal(icd9InReferenceCode(c("421", "123"),
+                                   c("123", "V")), c(FALSE, TRUE))
   expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V42")),
                c(FALSE, TRUE))
-#   expect_error(icd9InReferenceCode(c("123", "V43210"),
-#                                    c("421", "123"),
-#                                    invalidAction = "stop"))
+  #   expect_error(icd9InReferenceCode(c("123", "V43210"),
+  #                                    c("421", "123"),
+  #                                    invalidAction = "stop"))
   expect_equal(icd9InReferenceCode(c("123", "V43210"),
                                    c("421", "123")),
                c(TRUE, FALSE))
 
   # not expecting decimals in input data (default is always short)
-#   expect_error(icd9InReferenceCode(c("100.1", "200"), "200",
-#                                    invalidAction = "stop"))
+  #   expect_error(icd9InReferenceCode(c("100.1", "200"), "200",
+  #                                    invalidAction = "stop"))
   expect_equal(icd9InReferenceCode(c("100.1", "200"), "200"), c(FALSE, TRUE))
 
   expect_identical(icd9InReferenceCode(c("2501", "25001", "999"),

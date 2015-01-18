@@ -326,20 +326,20 @@ test_that("NA warn stop switch handles NA values", {
 })
 
 test_that("icd-9 code is really in the list, not just syntactically valid", {
-  expect_true(icd9RealShort("8027"))
-  expect_true(icd9RealShort("E9329"))
-  expect_false(icd9RealShort("J8027"))
-  expect_false(icd9RealShort("802.7"))
-  expect_true(icd9RealDecimal("802.7"))
-  expect_true(icd9RealDecimal("E932.9"))
-  expect_false(icd9RealDecimal("E9329"))
-  expect_false(icd9RealDecimal("J80.27"))
-  expect_false(icd9RealDecimal("V802.7"))
+  expect_true(icd9IsRealShort("8027"))
+  expect_true(icd9IsRealShort("E9329"))
+  expect_false(icd9IsRealShort("J8027"))
+  expect_false(icd9IsRealShort("802.7"))
+  expect_true(icd9IsRealDecimal("802.7"))
+  expect_true(icd9IsRealDecimal("E932.9"))
+  expect_false(icd9IsRealDecimal("E9329"))
+  expect_false(icd9IsRealDecimal("J80.27"))
+  expect_false(icd9IsRealDecimal("V802.7"))
 
-  expect_equal(icd9RealDecimal("V802.7"), FALSE)
-  expect_equal(icd9RealDecimal("V802.7"), FALSE)
-  expect_error(icd9RealShort("V802.7", invalidAction = "stop"))
-  expect_equal(icd9Real(c("8027", "E9329", "E000"), isShort = TRUE),
+  expect_equal(icd9IsRealDecimal("V802.7"), FALSE)
+  expect_equal(icd9IsRealDecimal("V802.7"), FALSE)
+  expect_error(icd9IsRealShort("V802.7", invalidAction = "stop"))
+  expect_equal(icd9IsReal(c("8027", "E9329", "E000"), isShort = TRUE),
                c(TRUE, TRUE, FALSE))
 })
 

@@ -86,12 +86,12 @@ CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool
       out.push_back(NA_STRING);
       continue;
       case 1:
-      if (!icd9::icd9IsSingleVE(mjrelem)) {
+      if (!icd9::icd9IsASingleVE(mjrelem)) {
         smj.insert(0, "00");
       }
       break;
       case 2:
-      if (!icd9::icd9IsSingleVE(mjrelem)) {
+      if (!icd9::icd9IsASingleVE(mjrelem)) {
         smj.insert(0, "0");
       } else {
         smj.insert(1, "0");
@@ -212,14 +212,14 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
   CharacterVector mnr(icd9Short.size());
 
   for (int i = 0; i < icd9Short.size(); ++i) {
-    if (icd9Short[i] == NA_STRING) {NA_STRING; mnr[i] = NA_STRING; continue;}
+    if (icd9Short[i] == NA_STRING) { NA_STRING; mnr[i] = NA_STRING; continue; }
 
     std::string s = as<std::string>(icd9Short[i]); // do i need to convert?
 
     // since we loop anyway, don't call vectorized trim
     boost::algorithm::trim(s); // minimal speed difference
 
-    if (!icd9::icd9IsSingleE(s)) { // not an E code
+    if (!icd9::icd9IsASingleE(s)) { // not an E code
     switch (s.size()) {
       case 1:
       case 2:
@@ -303,7 +303,7 @@ CharacterVector icd9DecimalToShort(CharacterVector x) {
 }
 
 // this is simplest just to hard-code
-const CharacterVector vbase = CharacterVector::create("" , "0" ,"1", "2", "3", "4", "5" , "6" , "7" , "8", "9" , "00");
+const CharacterVector vbase = CharacterVector::create("",  "0", "1", "2", "3", "4", "5",  "6",  "7",  "8", "9",  "00");
 const CharacterVector v0 = CharacterVector::create("0", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09");
 const CharacterVector v1 = CharacterVector::create("1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19");
 const CharacterVector v2 = CharacterVector::create("2", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29");
@@ -385,15 +385,16 @@ CharacterVector icd9ExpandMinor(std::string x, bool isE) {
   } else {
     // is E code, so minor is just one character
     switch (x.size()) {
-      case 0:      return vbase;
+      case 0:      return CharacterVector::create("", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
       case 1:      return x;
-      default:      std::cout << "too many characters in E code minor part\n";
+      //default:      std::cout << "too many characters in E code minor part\n";
     }
   }
+  return(NA_STRING); // should never get here
 }
 
 //' @title Expand 5 character form 'short' ICD9 to all possible sub codes
-//' @description Much faster in C++, but gains diminished with increasing numbers of input shorts.
+//' @description Much faster in C++, but gains diminished with increasing numbers of input shorts, probably because I am copying memory unnecessarily.
 //' @rdname icd9ChildrenShort
 //' @template icd9-short
 //' @keywords manip
@@ -407,8 +408,8 @@ CharacterVector icd9ExpandMinor(std::string x, bool isE) {
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = false) {
-  CharacterVector out; // would be better to initialize to some size, then fill, rather than extend.
-  if (icd9Short.size() == 0) return out;
+  std::vector< std::string > out; // we are never going to put NAs in the output?
+  if (icd9Short.size() == 0) return wrap(out);
   List parts = icd9ShortToParts(icd9Short, "");
   CharacterVector mjr = parts[0];
   CharacterVector mnr = parts[1];
@@ -417,38 +418,61 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = fal
   for (itmjr = mjr.begin(), itmnr = mnr.begin();
   itmjr != mjr.end();
   ++itmjr, ++itmnr) {
-    //std::string thismjr = *itmjr;
-    //std::vector< std::string > thismjr = as<std::vector< std::string > >(*itmjr);
     std::string thismjr = as<std::string >(*itmjr);
-    //bool isE = icd9IsE(thismjr)[0];
-    bool isE = thismjr.find_first_of("Ee") != std::string::npos;
     std::string thismnr = as<std::string >(*itmnr);
 
-    CharacterVector newminors = icd9ExpandMinor(thismnr, isE);
+    CharacterVector newminors = icd9ExpandMinor(thismnr, icd9::icd9IsASingleE(thismjr));
 
     // push back slower, but difficult to predict size of output
-    CharacterVector newshort = icd9MajMinToShort(thismjr, newminors);
+    std::vector< std::string > newshort = as<std::vector< std::string > >(icd9MajMinToShort(thismjr, newminors));
 
-    // can only push_back or insert one at a time
-    for (CharacterVector::iterator itnew = newshort.begin(); itnew != newshort.end(); ++itnew) {
-      out.push_back(*itnew);
-    }
+    // std insert is a thousand times faster than looping through CharacterVector and push_backing
+    out.insert(out.end(), newshort.begin(), newshort.end());
   }
   if (onlyReal) {
     const Environment env("package:icd9");
     List icd9Hierarchy = env["icd9Hierarchy"]; // TODO: unnecessary copy?
-    CharacterVector out_real = intersect(out, as<CharacterVector>(icd9Hierarchy["icd9"]));
-    return out_real;
+    std::vector< std::string > out_real;
+    std::vector< std::string > reals = as<std::vector< std::string > >(icd9Hierarchy["icd9"]);
+    for (int i = 0; i < 25; ++i) {
+      std::cout << i << ": " << out[i] << "\n";
+    }
+//    for (int i = 0; i < out.size(); ++i) {
+//      std::cout << i << ": " << out[i] << "\n";
+//    }
+    std::set_intersection(out.begin(), out.end(),
+    reals.begin(), reals.end(),
+    std::back_inserter(out_real));
+    return wrap(out_real);
   }
-  return out;
+  return wrap(out);
 }
 
-//TODO export to public in R
+//' @rdname icd9ChildrenDecimal
+//' @template icd9-decimal
+//' @template onlyReal
+//' @family ICD-9 ranges
+//' @keywords internal
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = false) {
-  return icd9ShortToDecimal(icd9ChildrenShort(
-    icd9DecimalToShort(icd9Decimal), onlyReal));
+  CharacterVector shrt = icd9::icd9DecimalToShort(icd9Decimal);
+  CharacterVector kids = icd9::icd9ChildrenShort(shrt, onlyReal);
+  return icd9::icd9ShortToDecimal(kids);
 }
+
+//' @rdname icd9ChildrenShort
+//' @template icd9-any
+//' @template isShort
+//' @template onlyReal
+//' @family ICD-9 ranges
+//' @keywords internal
+// [[Rcpp::export]]
+CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = false) {
+  if (isShort) return(icd9::icd9ChildrenShort(icd9, onlyReal));
+  return(icd9::icd9ChildrenDecimal(icd9, onlyReal));
+}
+
+
 
 //' @title extract major part from short or decimal ICD-9 code
 //' @description Simply extracts parts, then returns only the major part in a
@@ -472,7 +496,7 @@ CharacterVector icd9GetMajor(CharacterVector icd9, bool isShort) {
 String icd9AddLeadingZeroesMajorSingle(String ms) {
   if (ms == NA_STRING) { return(NA_STRING); }
   std::string m(ms);
-  if (!icd9::icd9IsSingleVE(ms)) {
+  if (!icd9::icd9IsASingleVE(ms)) {
     switch (strlen(ms.get_cstring())) {
       case 0: return(NA_STRING);
       case 1: return("00" + m);
@@ -483,19 +507,19 @@ String icd9AddLeadingZeroesMajorSingle(String ms) {
     switch (strlen(ms.get_cstring())) {
       case 1: return(NA_STRING);
       case 2:
-      if (icd9::icd9IsSingleV(m)) {
+      if (icd9::icd9IsASingleV(m)) {
         m.insert(1, "0"); return(m);
       } else {
         m.insert(1, "00"); return(m);
       }
       case 3:
-      if (icd9::icd9IsSingleV(m)) {
+      if (icd9::icd9IsASingleV(m)) {
         return(m);
       } else {
         m.insert(1, "0"); return(m);
       }
       case 4:
-      if (icd9::icd9IsSingleE(m)) return(m);
+      if (icd9::icd9IsASingleE(m)) return(m);
     }
   }
   return NA_STRING;
@@ -526,4 +550,35 @@ CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
   List parts = icd9DecimalToParts(icd9Decimal);
   parts["major"] = icd9AddLeadingZeroesMajor(as<CharacterVector>(parts["major"]));
   return icd9PartsToDecimal(parts);
+}
+
+// [[Rcpp::export]]
+CharacterVector icd9AddLeadingZeroes(CharacterVector icd9, bool isShort) {
+  if (isShort) return icd9AddLeadingZeroesShort(icd9);
+  return icd9AddLeadingZeroesDecimal(icd9);
+}
+
+//' @title match ICD9 codes
+//' @aliases "%i9in%"
+//' @description Finds children of ricd9Reference and looks for icd9 in the
+//'   resulting vector.  It is a glorified %in% function.
+//' @templateVar icd9AnyName "icd9,icd9Reference"
+//' @template icd9-any
+//' @template isShort
+//' @param isShortReference logical, see argument \code{isShort}
+//' @templateVar invalidActionName "invalidAction,invalidActionReference"
+//' @template invalid
+//' @return logical vector of which icd9 match or are subcategory of
+//'   icd9Reference
+//' @keywords internal
+// [[Rcpp::export]]
+LogicalVector icd9InReferenceCode(CharacterVector icd9, CharacterVector icd9Reference,
+bool isShort = true,
+bool isShortReference = true) {
+
+  CharacterVector x = icd9AddLeadingZeroes(icd9, isShort);
+  CharacterVector y = icd9Children(icd9Reference, isShortReference);
+  // Rcpp match is not quite as good as R:
+  LogicalVector res = !is_na(match(x, y));
+  return res;
 }

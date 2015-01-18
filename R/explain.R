@@ -211,9 +211,9 @@ icd9CondenseToExplain <- function(icd9Short,
                                         invalidAction = invalidAction)
 
   # we also rely on the icd9 codes existing in the reference table:
-  if (invalidAction == "warn" && any(!icd9RealShort(icd9Short)))
+  if (invalidAction == "warn" && any(!icd9IsRealShort(icd9Short)))
     warning("dropping values which are not in the reference table",
-            paste(icd9Short[!icd9RealShort(icd9Short)],
+            paste(icd9Short[!icd9IsRealShort(icd9Short)],
                   sep = ", ", collapse = ", "))
 
   # make homogeneous and sort so we will hit the parents first, kids later.
@@ -332,6 +332,6 @@ icd9CondenseToMajor <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
     }
   }
   # TODO: tests for this
-  if (onlyReal && dropNonReal) out <- out[icd9RealShort(out)]
+  if (onlyReal && dropNonReal) out <- out[icd9IsRealShort(out)]
   c(unique(includemjs), out)
 }

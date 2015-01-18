@@ -335,24 +335,44 @@ icd9IsMajor <- function(icd9)
 #' @template invalid
 #' @return logical vector
 #' @export
-icd9Real <- function(icd9, isShort) {
-  if (isShort) return(icd9RealShort(icd9))
-  icd9RealDecimal(icd9)
+icd9IsReal <- function(icd9, isShort) {
+  if (isShort) return(icd9IsRealShort(icd9))
+  icd9IsRealDecimal(icd9)
 }
 
-#' @rdname icd9Real
+#' @rdname icd9IsReal
 #' @template icd9-short
 #' @export
-icd9RealShort <- function(icd9Short) {
+icd9IsRealShort <- function(icd9Short) {
   icd9Short %in% icd9::icd9Hierarchy[["icd9"]]
 }
 
-#' @rdname icd9Real
+#' @rdname icd9IsReal
 #' @template icd9-decimal
 #' @export
-icd9RealDecimal <- function(icd9Decimal) {
-  icd9RealShort(icd9DecimalToShort(icd9Decimal))
+icd9IsRealDecimal <- function(icd9Decimal) {
+  icd9IsRealShort(icd9DecimalToShort(icd9Decimal))
 }
+
+#' @rdname icd9IsReal
+#' @template icd9-any
+#' @export
+icd9GetReal <- function(icd9, isShort) {
+  if (isShort) return(icd9GetRealShort(icd9))
+  icd9GetRealDecimal(icd9)
+}
+
+#' @rdname icd9IsReal
+#' @template icd9-short
+#' @export
+icd9GetRealShort <- function(icd9Short)
+  icd9Short[icd9IsRealShort(icd9Short)]
+
+#' @rdname icd9IsReal
+#' @template icd9-decimal
+#' @export
+icd9GetRealDecimal <- function(icd9Decimal)
+  icd9Decimal[icd9IsRealDecimal(icd9Decimal)]
 
 icd9FilterValid <- function(x, ...) UseMethod("icd9FilterValid")
 
