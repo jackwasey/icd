@@ -29,19 +29,19 @@ Accepts a single number or character input starting point for
   "17" "18" "19" icd9ExpandMinor("1") # same
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{\%i9mj\%}},
-  \code{\link{icd9ExpandRangeMajor}};
-  \code{\link{icd9ChildrenDecimal_R}};
-  \code{\link{icd9Children}},
-  \code{\link{icd9ChildrenShort}},
-  \code{\link{icd9ChildrenShort_R}};
-  \code{\link{icd9CondenseToExplain}};
-  \code{\link{icd9CondenseToMajor}};
+Other ICD-9 ranges: \code{\link{\%i9d\%}},
+  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
   \code{\link{icd9ExpandRange}},
   \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeMajor}},
   \code{\link{icd9ExpandRangeShort}};
-  \code{\link{icd9PrecedingMinors}},
-  \code{\link{icd9SubsequentMinors}}
+  \code{\link{icd9ChildrenDecimal}};
+  \code{\link{icd9Children}},
+  \code{\link{icd9ChildrenShort}},
+  \code{\link{icd9ChildrenShort_R}},
+  \code{\link{icd9Children_R}};
+  \code{\link{icd9CondenseToExplain}};
+  \code{\link{icd9CondenseToMajor}}
 }
 \keyword{internal}
 \keyword{manip}

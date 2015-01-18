@@ -1,21 +1,4 @@
-#' @title generate all child codes for given decimal ICD9 codes
-#' @description take ICD9 codes in decimal form and lists of all possible
-#'   sub-classification codes: e.g. 1.1 returns 1.11, 1.12, 1.13 etc. There are
-#'   no codes like 1.10 which are distinct from 1.1, so this can be purely
-#'   numeric Also, note that expanding "100.0" (100.00 to 100.09) is different
-#'   from expanding "100.00" (no expansion) \code{0.1 == .3/3} is a problem...
-#'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
-#'
-#' @template icd9-decimal
-#' @template onlyReal
-#' @examples
-#' #icd9ChildrenDecimal("100.1")
-#' #icd9ChildrenDecimal("2.34")
-#' @return unsorted vector of ICD9 codes for all subsections of the provided
-#'   code.
-#' @export
-#' @family ICD-9 ranges
-#' @keywords manip
+
 icd9ChildrenDecimal_R <- function(icd9Decimal, onlyReal = FALSE) {
 
   parts <- icd9DecimalToParts(icd9Decimal, minorEmpty = "")
@@ -161,6 +144,7 @@ icd9ExpandRange <- function(start, end, onlyReal, isShort) {
 }
 
 #' @rdname icd9ExpandRange
+#' @export
 icd9ExpandRangeShort <- function(start, end, onlyReal = FALSE, omitParents = FALSE) {
   start <- icd9AddLeadingZeroesShort(trim(start))
   end <- icd9AddLeadingZeroesShort(trim(end))
@@ -213,15 +197,7 @@ icd9ExpandRangeShort <- function(start, end, onlyReal = FALSE, omitParents = FAL
   res
 }
 
-#' @title create range of icd9 major parts
-#' @description accepts V, E or numeric codes. Does not validate codes beyond
-#'   ensuring that the start and end of the range are of the same type. Will add
-#'   leading zeroes when appropriate. User can strip them out with
-#'   icd9DropLeadingZeroes if they wish.
-#' @templateVar icd9AnyName start,end
-#' @template icd9-any
-#' @return character vector with range inclusive of start and end
-#' @family ICD-9 ranges
+#' @rdname icd9ExpandRange
 #' @export
 icd9ExpandRangeMajor <- function(start, end) {
   stopifnot(length(start) == 1 && length(end) == 1)
@@ -233,19 +209,8 @@ icd9ExpandRangeMajor <- function(start, end) {
   paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
 }
 
-#' @rdname icd9ExpandRangeMajor
-#' @export
-"%i9mj%" <- function(start, end) {
-  icd9ExpandRangeMajor(start = start, end = end)
-}
-
-#' @rdname icd9ExpandRangeShort
-#' @export
-"%i9s%" <- function(start, end) {
-  icd9ExpandRangeShort(start, end)
-}
-
 #' @rdname icd9ExpandRange
+#' @export
 icd9ExpandRangeDecimal <- function(start, end) {
   icd9ShortToDecimal(
     icd9ExpandRangeShort(
@@ -254,10 +219,22 @@ icd9ExpandRangeDecimal <- function(start, end) {
   )
 }
 
-#' @rdname icd9ExpandRangeDecimal
+#' @rdname icd9ExpandRange
 #' @export
 "%i9d%" <- function(start, end) {
   icd9ExpandRangeDecimal(start, end)
+}
+
+#' @rdname icd9ExpandRange
+#' @export
+"%i9mj%" <- function(start, end) {
+  icd9ExpandRangeMajor(start = start, end = end)
+}
+
+#' @rdname icd9ExpandRange
+#' @export
+"%i9s%" <- function(start, end) {
+  icd9ExpandRangeShort(start, end)
 }
 
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes

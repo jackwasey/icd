@@ -11,58 +11,6 @@
 #' @export
 icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 
-#' spawn reference codes into all possible lower-level codes (and memoise).
-#'
-#' Obsolete now C++ children handles multiple inputs, and is so fast. Take a
-#' regular string of an ICD9 code of format (ABC.zxyz) with or without leading
-#' and trailing zeroes. top level ICD9 code and return T/F if the icd9 fall
-#' within subgroups. This takes several seconds on an unimpressive desktop PC,
-#' so would benefit from memoization.
-#'
-#' @keywords internal
-spawnReferenceChildren_R <-
-  function(icd9Reference, isShortReference) {
-    c(
-      lapply(
-        icd9Reference,
-        FUN = function(x) icd9Children(icd9 = x, isShort = isShortReference)
-      ),
-      recursive = TRUE
-    )
-  }
-
-# # this runs outside of a function, on package load, in package namespace
-# if (suppressWarnings(require("memoise", character.only = TRUE, quiet = TRUE))) {
-#   memSpawnRefKids <- memoise::memoise(spawnReferenceChildren_R)
-# } else {
-#   memSpawnRefKids <- spawnReferenceChildren_R
-# }
-
-#' @title match ICD9 codes
-#' @aliases "%i9in%"
-#' @description Finds children of ricd9Reference and looks for icd9 in the
-#'   resulting vector.  It is a glorified %in% function.
-#' @templateVar icd9AnyName "icd9,icd9Reference"
-#' @template icd9-any
-#' @template isShort
-#' @param isShortReference logical, see argument \code{isShort}
-#' @templateVar invalidActionName "invalidAction,invalidActionReference"
-#' @return logical vector of which icd9 match or are subcategory of
-#'   icd9Referenec
-#' @import checkmate
-#' @keywords internal
-icd9InReferenceCode_R <- function(icd9, icd9Reference,
-                                isShort = TRUE,
-                                isShortReference = TRUE) {
-
-  checkmate::checkVector(icd9, strict = TRUE)
-  checkmate::checkVector(icd9Reference, strict = TRUE, any.missing = FALSE)
-  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
-  checkmate::checkLogical(isShortReference, any.missing = FALSE, len = 1)
-
-  icd9AddLeadingZeroes(icd9, isShort) %in% icd9Children(icd9Reference, isShortReference)
-}
-
 #' @rdname icd9InReferenceCode
 #' @export
 #' @examples

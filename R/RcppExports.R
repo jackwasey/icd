@@ -226,11 +226,24 @@ icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE) {
     .Call('icd9_icd9ChildrenShort', PACKAGE = 'icd9', icd9Short, onlyReal)
 }
 
-#' @rdname icd9ChildrenDecimal
+#' @title generate all child codes for given decimal ICD9 codes
+#' @description take ICD9 codes in decimal form and lists of all possible
+#'   sub-classification codes: e.g. 1.1 returns 1.11, 1.12, 1.13 etc. There are
+#'   no codes like 1.10 which are distinct from 1.1, so this can be purely
+#'   numeric Also, note that expanding "100.0" (100.00 to 100.09) is different
+#'   from expanding "100.00" (no expansion) \code{0.1 == .3/3} is a problem...
+#'   \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
+#'
 #' @template icd9-decimal
 #' @template onlyReal
+#' @examples
+#' #icd9ChildrenDecimal("100.1")
+#' #icd9ChildrenDecimal("2.34")
+#' @return unsorted vector of ICD9 codes for all subsections of the provided
+#'   code.
 #' @family ICD-9 ranges
-#' @keywords internal
+#' @keywords manip
+#' @export
 icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE) {
     .Call('icd9_icd9ChildrenDecimal', PACKAGE = 'icd9', icd9Decimal, onlyReal)
 }

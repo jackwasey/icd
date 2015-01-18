@@ -3,7 +3,7 @@
 
 // generate header files in 'inst/include'
 // [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::depends(icd9)]]
+//#[[Rcpp::depends(icd9)]]
 
 #include <boost/algorithm/string/trim.hpp>
 #include <Rcpp.h>

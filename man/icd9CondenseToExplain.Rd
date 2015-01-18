@@ -23,19 +23,19 @@ This can be thought of as the inverse operation to expanding a
   codes.
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{\%i9mj\%}},
-  \code{\link{icd9ExpandRangeMajor}};
-  \code{\link{icd9ChildrenDecimal_R}};
+Other ICD-9 ranges: \code{\link{\%i9d\%}},
+  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{icd9ExpandRange}},
+  \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeMajor}},
+  \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9ChildrenDecimal}};
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenShort}},
   \code{\link{icd9ChildrenShort_R}},
   \code{\link{icd9Children_R}};
   \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9ExpandRange}},
-  \code{\link{icd9ExpandRangeDecimal}},
-  \code{\link{icd9ExpandRangeShort}}
+  \code{\link{icd9ExpandMinor_R}}
 }
 \keyword{manip}
 

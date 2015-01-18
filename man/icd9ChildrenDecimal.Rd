@@ -2,6 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{icd9ChildrenDecimal}
 \alias{icd9ChildrenDecimal}
+\title{generate all child codes for given decimal ICD9 codes}
 \usage{
 icd9ChildrenDecimal(icd9Decimal, onlyReal = FALSE)
 }
@@ -18,20 +19,36 @@ Since nearly valid, out-dated or new codes may be missed, not limiting to
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
 }
+\value{
+unsorted vector of ICD9 codes for all subsections of the provided
+  code.
+}
+\description{
+take ICD9 codes in decimal form and lists of all possible
+  sub-classification codes: e.g. 1.1 returns 1.11, 1.12, 1.13 etc. There are
+  no codes like 1.10 which are distinct from 1.1, so this can be purely
+  numeric Also, note that expanding "100.0" (100.00 to 100.09) is different
+  from expanding "100.00" (no expansion) \code{0.1 == .3/3} is a problem...
+  \url{http://cran.r-project.org/doc/FAQ/R-FAQ.html#Why-doesn_0027t-R-think-these-numbers-are-equal_003f}
+}
+\examples{
+#icd9ChildrenDecimal("100.1")
+#icd9ChildrenDecimal("2.34")
+}
 \seealso{
-Other ICD-9 ranges: \code{\link{\%i9mj\%}},
-  \code{\link{icd9ExpandRangeMajor}};
-  \code{\link{icd9ChildrenDecimal_R}};
+Other ICD-9 ranges: \code{\link{\%i9d\%}},
+  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{icd9ExpandRange}},
+  \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeMajor}},
+  \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenShort}},
   \code{\link{icd9ChildrenShort_R}},
   \code{\link{icd9Children_R}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9ExpandRange}},
-  \code{\link{icd9ExpandRangeDecimal}},
-  \code{\link{icd9ExpandRangeShort}}
+  \code{\link{icd9ExpandMinor_R}}
 }
-\keyword{internal}
+\keyword{manip}
 

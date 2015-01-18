@@ -4,7 +4,7 @@
 // generate header files in 'inst/include'
 // [[Rcpp::interfaces(r, cpp)]]
 // and use them (does this need two compilation steps?)
-// [[Rcpp::depends(icd9)]]
+//#[[Rcpp::depends(icd9)]]
 
 #include <Rcpp.h>
 #include <sstream>

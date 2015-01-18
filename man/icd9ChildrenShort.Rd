@@ -60,49 +60,49 @@ library(microbenchmark)
 microbenchmark(icd9:::icd9ChildrenShort(shorts), icd9:::icd9ChildrenShort_R(shorts), times = 5)
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{\%i9mj\%}},
-  \code{\link{icd9ExpandRangeMajor}};
-  \code{\link{icd9ChildrenDecimal_R}};
+Other ICD-9 ranges: \code{\link{\%i9d\%}},
+  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{icd9ExpandRange}},
+  \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeMajor}},
+  \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9ChildrenDecimal}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9ExpandRange}},
-  \code{\link{icd9ExpandRangeDecimal}},
-  \code{\link{icd9ExpandRangeShort}}
+  \code{\link{icd9ExpandMinor_R}}
 
-Other ICD-9 ranges: \code{\link{\%i9mj\%}},
-  \code{\link{icd9ExpandRangeMajor}};
-  \code{\link{icd9ChildrenDecimal_R}};
+Other ICD-9 ranges: \code{\link{\%i9d\%}},
+  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{icd9ExpandRange}},
+  \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeMajor}},
+  \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9ChildrenDecimal}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9ExpandRange}},
-  \code{\link{icd9ExpandRangeDecimal}},
-  \code{\link{icd9ExpandRangeShort}}
+  \code{\link{icd9ExpandMinor_R}}
 
-Other ICD-9 ranges: \code{\link{\%i9mj\%}},
-  \code{\link{icd9ExpandRangeMajor}};
-  \code{\link{icd9ChildrenDecimal_R}};
+Other ICD-9 ranges: \code{\link{\%i9d\%}},
+  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{icd9ExpandRange}},
+  \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeMajor}},
+  \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9ChildrenDecimal}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9ExpandRange}},
-  \code{\link{icd9ExpandRangeDecimal}},
-  \code{\link{icd9ExpandRangeShort}}
+  \code{\link{icd9ExpandMinor_R}}
 
-Other ICD-9 ranges: \code{\link{\%i9mj\%}},
-  \code{\link{icd9ExpandRangeMajor}};
-  \code{\link{icd9ChildrenDecimal_R}};
+Other ICD-9 ranges: \code{\link{\%i9d\%}},
+  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{icd9ExpandRange}},
+  \code{\link{icd9ExpandRangeDecimal}},
+  \code{\link{icd9ExpandRangeMajor}},
+  \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9ChildrenDecimal}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9ExpandMinor_R}};
-  \code{\link{icd9ExpandRange}},
-  \code{\link{icd9ExpandRangeDecimal}},
-  \code{\link{icd9ExpandRangeShort}}
+  \code{\link{icd9ExpandMinor_R}}
 }
 \keyword{internal}
 \keyword{manip}
