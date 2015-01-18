@@ -262,7 +262,7 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
   CharacterVector minors;
   int ilen = icd9Decimal.length();
 
-  if (icd9Decimal.length() == 0) { return List::create(_["major"] = CharacterVector::create(),
+  if (ilen == 0) { return List::create(_["major"] = CharacterVector::create(),
   _["minor"] = CharacterVector::create()); }
 
   for (CharacterVector::iterator it = icd9Decimal.begin(); it != icd9Decimal.end(); ++it) {
@@ -407,8 +407,8 @@ CharacterVector icd9ExpandMinor(std::string x, bool isE) {
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = false) {
-  CharacterVector out(icd9Short.size()); // likely to be much longer, however.
-  if (icd9Short.size() == 0) { return out; }
+  CharacterVector out; // would be better to initialize to some size, then fill, rather than extend.
+  if (icd9Short.size() == 0) return out;
   List parts = icd9ShortToParts(icd9Short, "");
   CharacterVector mjr = parts[0];
   CharacterVector mnr = parts[1];

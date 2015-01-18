@@ -33,14 +33,13 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9ExpandRangeDecimal}};
   \code{\link{\%i9mj\%}},
   \code{\link{icd9ExpandRangeMajor}};
-  \code{\link{\%i9s\%}},
-  \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9ChildrenDecimal_R}};
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenShort}},
   \code{\link{icd9ChildrenShort_R}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
+  \code{\link{icd9GenerateAllShort}};
   \code{\link{icd9PrecedingMinors}},
   \code{\link{icd9SubsequentMinors}}
 }

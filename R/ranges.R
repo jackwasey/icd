@@ -128,14 +128,25 @@ icd9SortShort <- function(icd9Short) {
 #'   the codes from 0440 to 04499, are covered, but "044" is not explicit. If
 #'   \code{inferParents} is TRUE, "044" would be added, otherwise omitted.
 #' @template invalid
-#' @import jwutil
+#' @import jwutil checkmate
 #' @export
 #' @family ICD-9 ranges
+
+#' @keywords internal
+icd9GenerateAllShort <- function(save = FALSE) {
+  allShort = c() # allShortReal is already in icd9Hierarchy$icd9, but ?order
+  for ( i in 1:999) {
+    allShort <- c(allShort, icd9ChildrenShort(i, onlyReal = FALSE))
+  }
+  realShort = icd9RealShort(allShort);
+}
+
+# obsolete - should be able to lookup a range within a master range much more
+# efficiently.
 icd9ExpandRangeShort <- function(start, end, inferParents = TRUE) {
   # minimal quick validation checks
-  stopifnot(is.character(start), is.character(end))
+  checkmate::checkLogical(inferParents, len=1, any.missing = FALSE)
   stopifnot(length(start) == 1, length(end) == 1)
-  stopifnot(is.logical(inferParents), length(inferParents) == 1)
 
   isE <- icd9IsE(start)
 
@@ -214,7 +225,7 @@ icd9ExpandRangeShort <- function(start, end, inferParents = TRUE) {
       if ((major %nin% c(startMajor,endMajor))
           || (major == startMajor & startMinor == "")
           || (major == endMajor & endMinor == ""))
-        result <- c(result, icd9ChildrenShort(as.character(major)))
+        result <- c(result, icd9ChildrenShort(major))
       else {
         # loop minors from start minor, or until end minor
         # at this point we definitely have a minor code, whether for start or
