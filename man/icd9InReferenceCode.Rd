@@ -6,8 +6,7 @@
 \alias{icd9InReferenceCode}
 \title{match ICD9 codes}
 \usage{
-icd9InReferenceCode(icd9, icd9Reference, isShort = TRUE,
-  isShortReference = TRUE)
+icd9InReferenceCode(icd9, icd9Reference, isShort, isShortReference = TRUE)
 
 icd9 \%i9in\% icd9Reference
 }

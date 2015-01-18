@@ -50,6 +50,7 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 #' @param isShortMapping logical, whether the mapping is defined with short
 #'   ICD-9 codes (TRUE, the default), or decimal if set to FALSE.
 #' @template abbrevHier
+#' @import checkmate
 #' @export
 icd9Comorbid <- function(icd9df,
                          visitId = "visitId",
@@ -59,12 +60,13 @@ icd9Comorbid <- function(icd9df,
                          validateMapping = FALSE,
                          isShortMapping = TRUE) {
 
-  stopifnot(is.data.frame(icd9df))
-  stopifnot(is.character(visitId), length(visitId) == 1)
-  stopifnot(is.character(icd9Field), length(icd9Field) == 1)
-  stopifnot(is.logical(isShort), length(isShort) == 1)
-  stopifnot(is.logical(validateMapping), length(validateMapping) == 1)
-  stopifnot(is.logical(isShortMapping), length(isShortMapping) == 1)
+  checkmate::checkDataFrame(icd9df, min.cols = 2)
+  #checkmate::checkString(visitId)
+  visitId <- as.character(visitId)
+  checkmate::checkString(icd9Field)
+  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
+  checkmate::checkLogical(validateMapping, any.missing = FALSE, len = 1)
+  checkmate::checkLogical(isShortMapping, any.missing = FALSE, len = 1)
   stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
 
   if (is.character(icd9Mapping)) {

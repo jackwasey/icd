@@ -408,7 +408,7 @@ CharacterVector icd9ExpandMinor(std::string x, bool isE) {
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = false) {
-  std::vector< std::string > out; // we are never going to put NAs in the output?
+  std::set< std::string > out; // we are never going to put NAs in the output?
   if (icd9Short.size() == 0) return wrap(out);
   List parts = icd9ShortToParts(icd9Short, "");
   CharacterVector mjr = parts[0];
@@ -427,19 +427,15 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = fal
     std::vector< std::string > newshort = as<std::vector< std::string > >(icd9MajMinToShort(thismjr, newminors));
 
     // std insert is a thousand times faster than looping through CharacterVector and push_backing
-    out.insert(out.end(), newshort.begin(), newshort.end());
+    out.insert(newshort.begin(), newshort.end());
   }
   if (onlyReal) {
     const Environment env("package:icd9");
     List icd9Hierarchy = env["icd9Hierarchy"]; // TODO: unnecessary copy?
-    std::vector< std::string > out_real;
-    std::vector< std::string > reals = as<std::vector< std::string > >(icd9Hierarchy["icd9"]);
-    // sort so set_intersection works:
-    std::sort(out.begin(), out.end());
-    std::sort(reals.begin(), reals.end());
-    std::set_intersection(out.begin(), out.end(),
-    reals.begin(), reals.end(),
-    std::back_inserter(out_real));
+    std::set< std::string > out_real;
+    std::vector< std::string > tmp = as<std::vector< std::string > >(icd9Hierarchy["icd9"]);
+    std::set< std::string > reals(tmp.begin(), tmp.end());
+    std::set_intersection(out.begin(), out.end(), reals.begin(), reals.end(), std::inserter(out_real, out_real.begin()));
     return wrap(out_real);
   }
   return wrap(out);
@@ -582,11 +578,16 @@ CharacterVector icd9AddLeadingZeroes(CharacterVector icd9, bool isShort) {
 //' @keywords internal
 // [[Rcpp::export]]
 LogicalVector icd9InReferenceCode(CharacterVector icd9, CharacterVector icd9Reference,
-bool isShort = true,
+bool isShort,
 bool isShortReference = true) {
 
   CharacterVector x = icd9AddLeadingZeroes(icd9, isShort);
+  if (!isShort)
+    x = icd9DecimalToShort(x);
+
   CharacterVector y = icd9Children(icd9Reference, isShortReference);
+  if (!isShortReference)
+    y = icd9DecimalToShort(y);
   // Rcpp match is not quite as good as R:
   LogicalVector res = !is_na(match(x, y));
   return res;

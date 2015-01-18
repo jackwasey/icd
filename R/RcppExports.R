@@ -309,7 +309,7 @@ icd9AddLeadingZeroes <- function(icd9, isShort) {
 #' @return logical vector of which icd9 match or are subcategory of
 #'   icd9Reference
 #' @keywords internal
-icd9InReferenceCode <- function(icd9, icd9Reference, isShort = TRUE, isShortReference = TRUE) {
+icd9InReferenceCode <- function(icd9, icd9Reference, isShort, isShortReference = TRUE) {
     .Call('icd9_icd9InReferenceCode', PACKAGE = 'icd9', icd9, icd9Reference, isShort, isShortReference)
 }
 

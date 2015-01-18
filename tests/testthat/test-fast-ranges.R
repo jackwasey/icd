@@ -302,58 +302,63 @@ test_that("condense range invalid data" ,{
   # TODO more tests here
 })
 
-test_that("icd9InReferenceCodeLong", {
+test_that("icd9InReferenceCode", {
   # if the input icd9 code is definitely junk, e.g. longer than 5 char, or 0 char, we get an NA back
-  expect_equal(icd9InReferenceCode("bratwurst", "123"), FALSE)
+  expect_equal(icd9InReferenceCode("bratwurst", "123", isShort = TRUE), FALSE)
   # but if, with absolutely minimal validation, it could be okay...
-  expect_equal(icd9InReferenceCode("bdn", "123"), FALSE)
+  expect_equal(icd9InReferenceCode("bdn", "123", isShort = FALSE), FALSE)
   #expect_error(n <- icd9InReferenceCode(c("421", "123"), c("123", "V432"))) #
 
+  expect_equal(icd9InReferenceCode("123.45", "12345", isShort = FALSE, isShortReference = TRUE), TRUE)
+  expect_equal(icd9InReferenceCode("123.45", "123.45", isShort = FALSE, isShortReference = FALSE), TRUE)
+  expect_equal(icd9InReferenceCode("12345", "123.45", isShort = TRUE, isShortReference = FALSE), TRUE)
+  expect_equal(icd9InReferenceCode("12345", "12345", isShort = TRUE, isShortReference = TRUE), TRUE)
+
   # invalid reference code. it can be validated beforehand, if needed.
-  expect_equal(icd9InReferenceCode(c("421", "123"),
-                                   c("123", "V")), c(FALSE, TRUE))
-  expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V42")),
+  expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V"), isShort = FALSE),
+               c(FALSE, TRUE))
+  expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V"), isShort = FALSE, isShortReference = FALSE),
+               c(FALSE, TRUE))
+  expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V42"), isShort = FALSE),
                c(FALSE, TRUE))
   #   expect_error(icd9InReferenceCode(c("123", "V43210"),
   #                                    c("421", "123"),
   #                                    invalidAction = "stop"))
-  expect_equal(icd9InReferenceCode(c("123", "V43210"),
-                                   c("421", "123")),
+  expect_equal(icd9InReferenceCode(c("123", "V43210"), c("421", "123"), isShort = TRUE),
                c(TRUE, FALSE))
 
   # not expecting decimals in input data (default is always short)
   #   expect_error(icd9InReferenceCode(c("100.1", "200"), "200",
   #                                    invalidAction = "stop"))
-  expect_equal(icd9InReferenceCode(c("100.1", "200"), "200"), c(FALSE, TRUE))
+  expect_equal(icd9InReferenceCode(c("100.1", "200"), "200", isShort = TRUE), c(FALSE, TRUE))
 
-  expect_identical(icd9InReferenceCode(c("2501", "25001", "999"),
-                                       c("V101", "250")),
+  expect_identical(icd9InReferenceCode(c("2501", "25001", "999"), c("V101", "250"), isShort = TRUE),
                    c(TRUE, TRUE, FALSE))
 
   # the function must not care whether either the mapping codes or the test
   # codes are zero padded:
 
   # basic tests for numeric codes with major < 100
-  expect_true(icd9InReferenceCode("1", "1"))
-  expect_true(icd9InReferenceCode("1", "01"))
-  expect_true(icd9InReferenceCode("1", "001"))
-  expect_true(icd9InReferenceCode("01", "1"))
-  expect_true(icd9InReferenceCode("01", "01"))
-  expect_true(icd9InReferenceCode("001", "1"))
-  expect_true(icd9InReferenceCode("001", "001"))
+  expect_true(icd9InReferenceCode("1", "1", isShort = TRUE))
+  expect_true(icd9InReferenceCode("1", "01", isShort = TRUE))
+  expect_true(icd9InReferenceCode("1", "001", isShort = TRUE))
+  expect_true(icd9InReferenceCode("01", "1", isShort = TRUE))
+  expect_true(icd9InReferenceCode("01", "01", isShort = TRUE))
+  expect_true(icd9InReferenceCode("001", "1", isShort = TRUE))
+  expect_true(icd9InReferenceCode("001", "001", isShort = TRUE))
 
-  expect_identical(icd9InReferenceCode("1", "001"),
-                   icd9InReferenceCode("01", "001"))
-  expect_identical(icd9InReferenceCode("1", "001"),
-                   icd9InReferenceCode("001", "001"))
-  expect_identical(icd9InReferenceCode("1", "1"),
-                   icd9InReferenceCode("01", "1"))
-  expect_identical(icd9InReferenceCode("1", "1"),
-                   icd9InReferenceCode("001", "1"))
-  expect_identical(icd9InReferenceCode("0011", "001"),
-                   icd9InReferenceCode("0011", "1"))
-  expect_identical(icd9InReferenceCode("0011", "001"),
-                   icd9InReferenceCode("0011", "01"))
+  expect_identical(icd9InReferenceCode("1", "001", isShort = TRUE),
+                   icd9InReferenceCode("01", "001", isShort = TRUE))
+  expect_identical(icd9InReferenceCode("1", "001", isShort = TRUE),
+                   icd9InReferenceCode("001", "001", isShort = TRUE))
+  expect_identical(icd9InReferenceCode("1", "1", isShort = TRUE),
+                   icd9InReferenceCode("01", "1", isShort = TRUE))
+  expect_identical(icd9InReferenceCode("1", "1", isShort = TRUE),
+                   icd9InReferenceCode("001", "1", isShort = TRUE))
+  expect_identical(icd9InReferenceCode("0011", "001", isShort = TRUE),
+                   icd9InReferenceCode("0011", "1", isShort = TRUE))
+  expect_identical(icd9InReferenceCode("0011", "001", isShort = TRUE),
+                   icd9InReferenceCode("0011", "01", isShort = TRUE))
 
   # create a large set of valid icd9 codes (of the integer variety)
   #ni = runif(n=1000000, min=100, max=99999)

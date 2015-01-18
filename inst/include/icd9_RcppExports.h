@@ -708,7 +708,7 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline LogicalVector icd9InReferenceCode(CharacterVector icd9, CharacterVector icd9Reference, bool isShort = true, bool isShortReference = true) {
+    inline LogicalVector icd9InReferenceCode(CharacterVector icd9, CharacterVector icd9Reference, bool isShort, bool isShortReference = true) {
         typedef SEXP(*Ptr_icd9InReferenceCode)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9InReferenceCode p_icd9InReferenceCode = NULL;
         if (p_icd9InReferenceCode == NULL) {

@@ -1252,7 +1252,7 @@ RcppExport SEXP icd9_icd9AddLeadingZeroes(SEXP icd9SEXP, SEXP isShortSEXP) {
     return __result;
 }
 // icd9InReferenceCode
-LogicalVector icd9InReferenceCode(CharacterVector icd9, CharacterVector icd9Reference, bool isShort = true, bool isShortReference = true);
+LogicalVector icd9InReferenceCode(CharacterVector icd9, CharacterVector icd9Reference, bool isShort, bool isShortReference = true);
 static SEXP icd9_icd9InReferenceCode_try(SEXP icd9SEXP, SEXP icd9ReferenceSEXP, SEXP isShortSEXP, SEXP isShortReferenceSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;

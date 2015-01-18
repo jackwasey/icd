@@ -4,27 +4,24 @@ context("comorbidities")
 
 if (do.slow) {
 
-  test_that("ahrq make sure all the children are listed in the saved data.", {
-    ahrq <- lapply(ahrqComorbid, icd9ChildrenShort)
-    expect_equal(ahrq, ahrqComorbid)
-  })
+  test_that("ahrq make sure all the children
+            are listed in the saved data.", {
+              for (i in ahrqComorbid) expect_equal(icd9ChildrenShort(i), sort(i))
+            })
 
   test_that("Elixhauser make sure all the children
             are listed in the saved data.", {
-              elix <- lapply(elixComorbid, icd9ChildrenShort)
-              expect_equal(elix, elixComorbid)
+              for (i in elixComorbid) expect_equal(icd9ChildrenShort(i), sort(i))
             })
 
   test_that("Quan Charlson make sure all the children
             are listed in the saved data.", {
-              quanDeyo <- lapply(quanDeyoComorbid, icd9ChildrenShort)
-              expect_equal(quanDeyo, quanDeyoComorbid)
+              for (i in quanDeyoComorbid) expect_equal(icd9ChildrenShort(i), sort(i))
             })
 
   test_that("Quan Elixhauser make sure all the children
             are listed in the saved data.", {
-              quanElix <- lapply(quanElixComorbid, icd9ChildrenShort)
-              expect_equal(quanElix, quanElixComorbid)
+              for (i in quanElixComorbid) expect_equal(icd9ChildrenShort(i), sort(i))
             })
 
   test_that("icd9 comorbidities are created correctly,
@@ -64,7 +61,7 @@ if (do.slow) {
 
   test_that("ahrq icd9 mappings generated from the current generation code", {
     # same but from source data. Should be absolutely identical.
-    expect_identical(ahrqComorbid,
+    expect_equal(ahrqComorbid,
                      parseAhrqSas(condense = FALSE,
                                   save = FALSE, returnAll = FALSE))
     # same but from source data. Should be absolutely identical.
