@@ -160,6 +160,9 @@ test_that("strip leading zero from decimal numeric only", {
   expect_equal(icd9DropLeadingZeroesDecimal("012.78"), "12.78")
   expect_equal(icd9DropLeadingZeroesDecimal("123.9"), "123.9")
   expect_equal(icd9DropLeadingZeroesDecimal("123.87"), "123.87")
+
+  # just double check we can do this the other way:
+  expect_equal(icd9DropLeadingZeroes("012.78", isShort = FALSE), "12.78")
 })
 
 test_that("strip leading zero from decimal V and E", {
@@ -193,6 +196,10 @@ test_that("strip leading zero from short numeric only", {
   expect_equal(icd9DropLeadingZeroesShort("01278"), "01278")
   expect_equal(icd9DropLeadingZeroesShort("1239"), "1239")
   expect_equal(icd9DropLeadingZeroesShort("12387"), "12387")
+
+
+  # check other way
+  expect_equal(icd9DropLeadingZeroes("1239", isShort = TRUE), "1239")
 })
 
 test_that("strip leading zero from decimal V and E", {
@@ -217,12 +224,12 @@ test_that("drop leading zeroes from majors: invalid input", {
   # short codes if the minor is empty, but this function is unaware of this.
   # TODO expect_equal(icd9DropLeadingZeroesMajor(""), NA_character_)
   expect_equal(icd9DropLeadingZeroesMajor(NA), NA_character_)
-#   expect_error(icd9DropLeadingZeroesMajor("54321"))
-#   expect_error(icd9DropLeadingZeroesMajor(1.5))
-#   expect_error(icd9DropLeadingZeroesMajor(pi))
-#   expect_error(icd9DropLeadingZeroesMajor("V10.20"))
-#   expect_error(icd9DropLeadingZeroesMajor("E9127"))
-#   expect_error(icd9DropLeadingZeroesMajor("rhubarb"))
+  #   expect_error(icd9DropLeadingZeroesMajor("54321"))
+  #   expect_error(icd9DropLeadingZeroesMajor(1.5))
+  #   expect_error(icd9DropLeadingZeroesMajor(pi))
+  #   expect_error(icd9DropLeadingZeroesMajor("V10.20"))
+  #   expect_error(icd9DropLeadingZeroesMajor("E9127"))
+  #   expect_error(icd9DropLeadingZeroesMajor("rhubarb"))
 })
 
 test_that("drop leading zeroes from majors: numeric input", {

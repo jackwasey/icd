@@ -1253,41 +1253,6 @@ RcppExport SEXP icd9_icd9ShortToParts_cpp_test(SEXP icd9ShortSEXP, SEXP minorEmp
     UNPROTECT(1);
     return __result;
 }
-// stringTrim
-CharacterVector stringTrim(CharacterVector input, std::string side = "both");
-static SEXP icd9_stringTrim_try(SEXP inputSEXP, SEXP sideSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type input(inputSEXP );
-        Rcpp::traits::input_parameter< std::string >::type side(sideSEXP );
-        CharacterVector __result = stringTrim(input, side);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_stringTrim(SEXP inputSEXP, SEXP sideSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_stringTrim_try(inputSEXP, sideSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int icd9_RcppExport_validate(const char* sig) { 
@@ -1329,7 +1294,6 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("std::vector<bool>(*icd9IsE_cpp_slow)(std::vector< std::string >)");
         signatures.insert("std::vector<bool>(*icd9IsVE_cpp_slow)(std::vector< std::string >)");
         signatures.insert("List(*icd9ShortToParts_cpp_test)(CharacterVector,std::string)");
-        signatures.insert("CharacterVector(*stringTrim)(CharacterVector,std::string)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -1372,7 +1336,6 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9IsE_cpp_slow", (DL_FUNC)icd9_icd9IsE_cpp_slow_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsVE_cpp_slow", (DL_FUNC)icd9_icd9IsVE_cpp_slow_try);
     R_RegisterCCallable("icd9", "icd9_icd9ShortToParts_cpp_test", (DL_FUNC)icd9_icd9ShortToParts_cpp_test_try);
-    R_RegisterCCallable("icd9", "icd9_stringTrim", (DL_FUNC)icd9_stringTrim_try);
     R_RegisterCCallable("icd9", "icd9_RcppExport_validate", (DL_FUNC)icd9_RcppExport_validate);
     return R_NilValue;
 }

@@ -76,16 +76,3 @@ icd9DropLeadingZeroesMajor <- function(major) {
                     x = major[isN])
   major
 }
-
-#' @title get parent of an ICD-9 code
-#' @description not likely to be useful for end-user
-#' @template minor
-#' @return character vector of ICD-9 codes, one for each code given.
-#' @keywords internal
-icd9ParentMinor <- function(minor) {
-  minor[nchar(minor) == 1] <- ""
-  nTwo <- nchar(minor) == 2
-  minor[nTwo] <- substr(minor[nTwo], 1, 1)
-  minor
-}
-
