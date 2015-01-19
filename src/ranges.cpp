@@ -22,13 +22,13 @@ const CharacterVector v9 = CharacterVector::create("9", "90", "91", "92", "93", 
 CharacterVector MakeAllMinors() {
   CharacterVector vv = vbase;
 
+  // create numbers 1 to 99 but cycle 10s first
   for (int i=0; i<10; ++i) {
     for (int j=0; j<10; ++j) {
-      char buffer[2];
-      sprintf(buffer, "%02d", i+j*10);
-      if (i+j!=0) {
-        vv.push_back(buffer);
-      }
+      std::string s;
+      s = j+i;
+      if (i+j!=0)
+      vv.push_back(s);
     }
   }
   return(vv);
@@ -174,11 +174,11 @@ bool isShortReference = true) {
 
   CharacterVector x = icd9::icd9AddLeadingZeroes(icd9, isShort);
   if (!isShort)
-    x = icd9::icd9DecimalToShort(x);
+  x = icd9::icd9DecimalToShort(x);
 
   CharacterVector y = icd9Children(icd9Reference, isShortReference);
   if (!isShortReference)
-    y = icd9::icd9DecimalToShort(y);
+  y = icd9::icd9DecimalToShort(y);
   // Rcpp match is not quite as good as R:
   LogicalVector res = !is_na(match(x, y));
   return res;

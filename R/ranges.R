@@ -83,7 +83,7 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda")) {
 #' @template icd9-short
 #' @template onlyReal
 #' @template isShort
-#' @import jwutil checkmate
+#' @import jwutil
 #' @family ICD-9 ranges
 #' @export
 icd9ExpandRange <- function(start, end, onlyReal, isShort) {
