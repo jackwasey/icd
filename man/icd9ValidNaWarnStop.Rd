@@ -2,8 +2,6 @@
 % Please edit documentation in R/valid.R
 \name{icd9ValidNaWarnStop}
 \alias{icd9ValidNaWarnStop}
-\alias{icd9ValidNaWarnStopDecimal}
-\alias{icd9ValidNaWarnStopMajor}
 \alias{icd9ValidNaWarnStopShort}
 \title{stop, warn, replace invalid with NA or continue}
 \usage{
@@ -11,10 +9,6 @@ icd9ValidNaWarnStop(icd9, isShort, isMajor = FALSE,
   invalidAction = icd9InvalidActions)
 
 icd9ValidNaWarnStopShort(icd9Short, invalidAction = icd9InvalidActions)
-
-icd9ValidNaWarnStopDecimal(icd9Decimal, invalidAction = icd9InvalidActions)
-
-icd9ValidNaWarnStopMajor(major, invalidAction = icd9InvalidActions)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -47,11 +41,6 @@ co-morbidity mapping lists.}
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
-
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
-characters is given in a code, then the digits are greedily assigned to
-hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
 \item{mjr}{character vector of 'major' part of ICD-9 codes, i.e. that part

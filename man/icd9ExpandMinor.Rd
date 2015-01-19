@@ -25,7 +25,8 @@ Accepts a single number or character input starting point for
   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
 }
 \examples{
-length(icd9:::icd9ExpandMinor("", isE = FALSE)) # return all possible decimal parts of ICD9 codes (111 in total)
+# return all possible decimal parts of ICD9 codes (111 in total)
+  length(icd9:::icd9ExpandMinor("", isE = FALSE))
   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 }
 \seealso{
@@ -38,8 +39,9 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
   \code{\link{icd9ChildrenShort}};
-  \code{\link{icd9CondenseToExplain}};
-  \code{\link{icd9CondenseToMajor}}
+  \code{\link{icd9CondenseToMajor}};
+  \code{\link{icd9Condense}},
+  \code{\link{icd9CondenseShort}}
 }
 \keyword{internal}
 \keyword{manip}

@@ -39,7 +39,7 @@
   codes. The reverse operation is \code{\link{icd9CondenseToMajor}}, which
   takes a mass of codes and finds the smallest set of parent 'major' codes
   with any of the original codes, which exactly describes the original set.
-  \code{\link{icd9CondenseToExplain}}) does the same as
+  \code{\link{icd9Condense}}) does the same as
   \code{\link{icd9CondenseToMajor}}, but only finds parents which have a
   human-readable name. Many top-level codes, e.g. "391" are not themselves
   defined, but have description for their children. \code{\link{\%i9mj\%}}

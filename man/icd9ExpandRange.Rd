@@ -10,7 +10,7 @@
 \alias{icd9ExpandRangeShort}
 \title{take two ICD-9 codes and expand range to include all child codes}
 \usage{
-icd9ExpandRange(start, end, onlyReal, isShort)
+icd9ExpandRange(start, end, isShort, onlyReal = FALSE)
 
 icd9ExpandRangeShort(start, end, onlyReal = FALSE, omitParents = FALSE)
 
@@ -30,15 +30,15 @@ five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
+\item{isShort}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form.}
+
 \item{onlyReal}{single logical value, if TRUE, will limit the search to those
 codes which appear in the master list, not just syntactically valid codes.
 Since nearly valid, out-dated or new codes may be missed, not limiting to
 'real' values will be useful. Ultimately, there will need to be annual (and
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
-
-\item{isShort}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form.}
 }
 \description{
 this is cumbersome code, covering a whole load of edge cases
@@ -65,8 +65,9 @@ icd9ExpandRangeShort("4280 ", "43014")
 Other ICD-9 ranges: \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
   \code{\link{icd9ChildrenShort}};
-  \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
+  \code{\link{icd9Condense}},
+  \code{\link{icd9CondenseShort}};
   \code{\link{icd9ExpandMinor}}
 }
 

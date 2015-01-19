@@ -47,8 +47,9 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9ExpandRangeDecimal}},
   \code{\link{icd9ExpandRangeMajor}},
   \code{\link{icd9ExpandRangeShort}};
-  \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
+  \code{\link{icd9Condense}},
+  \code{\link{icd9CondenseShort}};
   \code{\link{icd9ExpandMinor}}
 }
 \keyword{manip}
