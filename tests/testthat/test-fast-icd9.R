@@ -1,16 +1,5 @@
 context("test icd9 package")
 
-test_that("appendZeroToNine", {
-  expect_error(appendZeroToNine(list(a = c(1, 2)))) # error on silly input
-  expect_identical(appendZeroToNine("1"), as.character(10:19))
-  expect_identical(appendZeroToNine(1), as.character(10:19))
-  expect_identical(appendZeroToNine(""), as.character(0:9))
-  expect_identical(sort(appendZeroToNine(c("1", "2"))),
-                   as.character(c(10:19, 20:29)))
-  expect_identical(sort(appendZeroToNine(c("", "9"))),
-                   as.character(c(0:9, 90:99)))
-})
-
 test_that("zero pad decimal - bad input", {
   expect_equal(icd9AddLeadingZeroesDecimal(character()), character())
   expect_equal(icd9AddLeadingZeroesDecimal(NA_character_), NA_character_)

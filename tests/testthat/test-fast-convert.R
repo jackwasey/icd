@@ -218,9 +218,6 @@ test_that("parts to short invalid inputs", {
   expect_equal(icd9PartsToShort(list(major = NA, minor = NA)),
                NA_character_)
 
-  # parts data frame sent to major
-  expect_error(icd9PartsToShort(list(major = "100",
-                                             minor = "23")))
 })
 
 test_that("parts to valid short with empty or NA minor", {
