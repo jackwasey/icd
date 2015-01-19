@@ -394,3 +394,21 @@ test_that("icd9InReferenceCode", {
   # (i>=401 & i<406) | (i>=4010 & i<4060) | (i>=40100 & i<40600) | (i==36211)
   # )
 })
+
+test_that("sort works as expected", {
+  expect_equal(icd9SortShort(c("3", "02", "001", "003")), c("001", "02", "3", "003"))
+  expect_equal(icd9Sort(c("1", "V02", "V1", "E003"), isShort = TRUE), c("1", "E003", "V1", "V02"))
+  expect_equal(icd9SortShort(c("0032", "0288", "0019", "0031")), c("0019", "0031", "0032", "0288"))
+  expect_equal(icd9Sort(c("V0251", "V25", "E0039", "E003"), isShort = TRUE), c("E003", "E0039", "V25", "V251"))
+  expect_equal(icd9Sort(c("V25.1", "V25", "E003.9", "E003"), isShort = FALSE), c("E003", "E003.9", "V25", "V25.1"))
+  expect_equal(icd9SortDecimal(c("E1.1", "V2.2", "E001", "V02.1", "999.99", "88.8", "77")),
+               c("77", "88.8", "999.99", "E001", "E1.1", "V02.1", "V2.2"))
+})
+
+test_that("sysdata.rda is okay", {
+  lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
+    "icd9NShortReal", "icd9VShortReal", "icd9EShortReal")
+
+  expect_that(sysdat <- icd9GenerateSysData(do.save = FALSE), testthat::not(throws_error()))
+  expect_equal(names(sysdat), lknames)
+})

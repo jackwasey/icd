@@ -6,39 +6,34 @@
 #'   TODO: reply with the actual items given (not trimmed, etc.) TODO: need to
 #'   be able to compare a pair of codes quickly, then use built-in sort. This
 #'   becomes easier when I move to S3 classes for ICD-9.
+#' @template icd9-any
 #' @template icd9-short
-#' @return sorted vector of ICD-9 codes
+#' @template icd9-decimal
+#' @template isShort
+#' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 #' @keywords manip
 #' @export
-icd9SortShort <- function(icd9Short) {
-stop("redo using ordered list in sysdata.rda")
-  # split into characters
-  tmp <- strsplit(icd9Short, "")
-  # convert to matrix and pad out to five characters, starting from the left
-  xmatrix <- do.call(rbind, lapply(tmp, "[", 1:5))
-  # then order by column, starting from the left:
-  xmatrix <- xmatrix[order(xmatrix[, 1],
-                           xmatrix[, 2],
-                           xmatrix[, 3],
-                           xmatrix[, 4],
-                           xmatrix[, 5],
-                           na.last = FALSE),
-                     ]
-  # and piece it togehter again, replacing NA with ""
-  apply(xmatrix, MARGIN = 1,
-        function(x) {
-          x[is.na(x)] <- ""
-          paste(x, collapse = "")
-        }
-  )
+icd9Sort <- function(icd9, isShort) {
+  if (isShort) return(icd9SortShort(icd9))
+  icd9SortDecimal(icd9)
 }
+
+#' @rdname icd9Sort
+#' @export
+icd9SortShort <- function(icd9Short)
+  icd9Short[order(icd9AddLeadingZeroesShort(icd9Short))]
+
+#' @rdname icd9Sort
+#' @export
+icd9SortDecimal <- function(icd9Decimal)
+  icd9Decimal[order(icd9DecimalToShort(icd9Decimal))]
 
 #' Generate sysdata.rda
 #'
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
 #' quick, but much to slow when it appears many times in a loop.
 #' @keywords internal
-icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda")) {
+icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do.save = TRUE) {
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for ( i in 1:999)
     icd9NShort <- c(icd9NShort, sort(icd9ChildrenShort(i, onlyReal = FALSE)))
@@ -55,9 +50,11 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda")) {
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.
-  save(list = c("icd9NShort", "icd9VShort", "icd9EShort",
-                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal"),
+  lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
+               "icd9NShortReal", "icd9VShortReal", "icd9EShortReal");
+  if (do.save) save(list = lknames,
        file = sysdata.path, compress = "xz")
+  invisible(mget(lknames))
 }
 
 #' @title take two ICD-9 codes and expand range to include all child codes
