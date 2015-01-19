@@ -151,16 +151,16 @@ icd9AddLeadingZeroesMajor <- function(mjr) {
 #' @template minor
 #' @param isE single logical, which if TRUE, treats the minor as part of an E
 #'   code (which is one character), as opposed to a V or numeric-only code,
-#'   which is two character. No default.
+#'   which is two character. Default is \code{FALSE}.
 #' @examples
 #' \dontrun{
-#'   icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9 codes (111 in total)
+#'   icd9:::icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9 codes (111 in total)
 #'   }
-#'   icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-icd9ExpandMinor <- function(mnr, isE) {
+icd9ExpandMinor <- function(mnr, isE = FALSE) {
     .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', mnr, isE)
 }
 

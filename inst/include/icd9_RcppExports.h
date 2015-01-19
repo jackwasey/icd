@@ -480,7 +480,7 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline CharacterVector icd9ExpandMinor(std::string mnr, bool isE) {
+    inline CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false) {
         typedef SEXP(*Ptr_icd9ExpandMinor)(SEXP,SEXP);
         static Ptr_icd9ExpandMinor p_icd9ExpandMinor = NULL;
         if (p_icd9ExpandMinor == NULL) {

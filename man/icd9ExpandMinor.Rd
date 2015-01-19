@@ -4,7 +4,7 @@
 \alias{icd9ExpandMinor}
 \title{expand decimal part of ICD-9 code to cover all possible sub-codes}
 \usage{
-icd9ExpandMinor(mnr, isE)
+icd9ExpandMinor(mnr, isE = FALSE)
 }
 \arguments{
 \item{mnr}{character vector of 'minor' part of ICD-9 codes, i.e. that part
@@ -14,7 +14,7 @@ last two characters represent the 'minor' part, in this case.)}
 
 \item{isE}{single logical, which if TRUE, treats the minor as part of an E
 code (which is one character), as opposed to a V or numeric-only code,
-which is two character. No default.}
+which is two character. Default is \code{FALSE}.}
 }
 \value{
 NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
@@ -26,9 +26,9 @@ Accepts a single number or character input starting point for
 }
 \examples{
 \dontrun{
-  icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9 codes (111 in total)
+  icd9:::icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9 codes (111 in total)
   }
-  icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+  icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{\%i9d\%}},

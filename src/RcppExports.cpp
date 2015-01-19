@@ -835,7 +835,7 @@ RcppExport SEXP icd9_icd9AddLeadingZeroesMajor(SEXP mjrSEXP) {
     return __result;
 }
 // icd9ExpandMinor
-CharacterVector icd9ExpandMinor(std::string mnr, bool isE);
+CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false);
 static SEXP icd9_icd9ExpandMinor_try(SEXP mnrSEXP, SEXP isESEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
