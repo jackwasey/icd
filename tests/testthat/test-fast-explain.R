@@ -218,6 +218,19 @@ testChapters <- list(
     c(start = "E000", end = "E999")
 )
 
+test_that("condense full ranges", {
+  # condensing to "real" means we don't get a lot of majors, which are often not
+  # themselves defined.
+  # majors:
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("003", onlyReal = FALSE), onlyReal = FALSE), "003")
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("3", onlyReal = FALSE), onlyReal = FALSE), "003")
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("410", onlyReal = FALSE), onlyReal = FALSE), "410")
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("V12", onlyReal = FALSE), onlyReal = FALSE), "V12")
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
+
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE), onlyReal = FALSE), "0031")
+})
+
 test_that("condense single major and its children", {
   expect_equal(icd9CondenseShort("391"),
                "Rheumatic fever with heart involvement")

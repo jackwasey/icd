@@ -184,17 +184,7 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #' @family ICD-9 ranges
 #' @keywords manip
 #' @export
-icd9Condense <- function(icd9, isShort) {
-  if (isShort) return(icd9CondenseShort(icd9))
-  icd9DecimalToShort(icd9CondenseShort(icd9))
-}
-
-icd9CondenseDecimal <- function(icd9Decimal)
-  icd9Condense(icd9Decimal, FALSE)
-
-#' @rdname icd9Condense
-#' @export
-icd9CondenseShort <- function(icd9Short) {
+icd9ExplainCondense <- function(icd9Short) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.
   icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short))
@@ -295,7 +285,7 @@ icd9CondenseShort <- function(icd9Short) {
 #'   in the output.
 #' @family ICD-9 ranges
 #' @export
-icd9CondenseToMajor <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
+icd9CondenseToMajorShort <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.
   out <- icd9Short
@@ -305,12 +295,39 @@ icd9CondenseToMajor <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
   includemjs <- c()
   for (mj in mjs) {
     matchKids <- icd9ChildrenShort(mj, onlyReal = onlyReal)
+    matchKids <- matchKids[matchKids != mj] # drop the major itself for comparison
     if (all(matchKids %in% out)) {
       out <- out[out %nin% matchKids]
-      includemjs <- c(includemjs, mj)
+      includemjs <- c(includemjs, mj) # keep track of which majors we looked up
     }
   }
   # TODO: tests for this
   if (onlyReal && dropNonReal) out <- out[icd9IsRealShort(out)]
-  c(unique(includemjs), out)
+  unique(c(includemjs, out))
+}
+
+icd9CondenseToShort <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
+
+  # make homogeneous and sort so we will hit the parents first, kids later.
+  i9t <- i9n <- sort(unique(icd9Short))
+
+  i9o <- c()
+  for (i in i9n) {
+    matchKids <- icd9ChildrenShort(i, onlyReal = onlyReal)
+    if (all(matchKids %in% i9t)) {
+      i9t <- i9t[i9t %nin% matchKids] # drop the matches
+      i9o <- c(i9o, i)
+    }
+  }
+  if (onlyReal && dropNonReal) out <- out[icd9IsRealShort(out)]
+  i9o
+}
+
+
+icd9CondenseDecimal <- function(icd9Decimal)
+  icd9Condense(icd9Decimal, FALSE)
+
+icd9Condense <- function(icd9, isShort) {
+  if (isShort) return(icd9CondenseShort(icd9))
+  icd9DecimalToShort(icd9CondenseShort(icd9))
 }
