@@ -6,8 +6,6 @@
 #' whereas this script stresses the core functions, and looks for bottlenecks.
 
 icd9Benchmark <- function() {
-  library(microbenchmark)
-  library(profr)
   # generate large data set: this is copied from test-ICD9.R for now...
   set.seed(1441)
   n <- 1E7 # 10 million rows
@@ -15,8 +13,8 @@ icd9Benchmark <- function() {
   rpts <- randomPatients(n)
 
 
-  # run slow tests
-  res <- test_dir("tests/testthat/", filter = "slow", reporter = ListReporter())
+  # run slow tests (these are now much much faster with C++ implementations)
+  res <- testthat::test_dir("tests/testthat/", filter = "slow", reporter = testthat::ListReporter())
   res <- as.data.frame(res)
   print(res[order(res$real), c("test", "real")])
 
@@ -45,8 +43,8 @@ icd9Benchmark <- function() {
 
   rng <- "300" %i9s% "450"
   prfChild <- profr::profr(icd9ChildrenShort(rng))
-  ggplot(prfChild, minlabel = 0.001)
-  ggsave("tmpggplot.jpg", width = 250, height=5, dpi=200, limitsize = FALSE)
+  ggplot2::ggplot(prfChild, minlabel = 0.001)
+  ggplot2::ggsave("tmpggplot.jpg", width = 250, height=5, dpi=200, limitsize = FALSE)
 
   microbenchmark::microbenchmark(times = 20,
                                  icd9PartsRecompose(data.frame(major = rep(as.character(100:999), times = 250),
@@ -60,10 +58,10 @@ icd9Benchmark <- function() {
   )
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
+                                 icd9AddLeadingZeroesMajor(mjr = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
+                                 icd9AddLeadingZeroesMajor(mjr = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
 
   # 3.5 sec in v0.5, 2.7 sec without validation checks
   #microbenchmark::microbenchmark(times = 5, icd9ChildrenShort_R("400" %i9s% "450"))
@@ -73,9 +71,9 @@ icd9Benchmark <- function() {
   microbenchmark::microbenchmark(times = 500000, sprintf("%s%s", "410", "01"))
   microbenchmark::microbenchmark(times = 500000, paste("410", "01", sep = ""))
 
-  #microbenchmark(times = 10, icd9ShortToParts(randomShortIcd9(5E+5)))
-  #microbenchmark(times = 10, icd9ShortToPartsSlow(randomShortIcd9(5E+5)))
-  #microbenchmark(times = 10, icd9ShortToPartsList(randomShortIcd9(5E+5)))
+  #microbenchmark::microbenchmark(times = 10, icd9ShortToParts(randomShortIcd9(5E+5)))
+  #microbenchmark::microbenchmark(times = 10, icd9ShortToPartsSlow(randomShortIcd9(5E+5)))
+  #microbenchmark::microbenchmark(times = 10, icd9ShortToPartsList(randomShortIcd9(5E+5)))
 
   microbenchmark::microbenchmark(times = 50, trim(randomShortIcd9))
   microbenchmark::microbenchmark(times = 50, strip(randomShortIcd9))
@@ -86,11 +84,11 @@ icd9Benchmark <- function() {
                                             minor = character(100000)))
 
   # C++ faster, especially with multiple invocations.
-  #dat <- icd9:::randomShortIcd9(500)
+  #dat <- icd9::randomShortIcd9(500)
   #microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=5000)
-  #dat <- icd9:::randomShortIcd9(5000)
+  #dat <- icd9::randomShortIcd9(5000)
   #microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=500)
-  #dat <- icd9:::randomShortIcd9(50000)
+  #dat <- icd9::randomShortIcd9(50000)
   #microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=50)
 
   #microbenchmark::microbenchmark(icd9ShortToDecimal_R(dat), icd9ShortToDecimal(dat), times=5)
@@ -107,14 +105,14 @@ icd9Benchmark <- function() {
   #                                  icd9MajMinToDecimal_R(mjr, mnr), icd9MajMinToDecimal(mjr, mnr),
   #                                  times=100)
 
-  microbenchmark(icd9:::icd9ExpandMinor("7", FALSE), icd9:::icd9ExpandMinor_R("7", FALSE))
-  microbenchmark(icd9:::icd9ExpandMinor("", FALSE), icd9:::icd9ExpandMinor_R("", FALSE))
-  microbenchmark(icd9:::icd9ExpandMinor("7", TRUE), icd9:::icd9ExpandMinor_R("7", TRUE))
-  microbenchmark(icd9:::icd9ExpandMinor("", TRUE), icd9:::icd9ExpandMinor_R("", TRUE))
+  microbenchmark::microbenchmark(icd9::icd9ExpandMinor("7", FALSE), icd9::icd9ExpandMinor_R("7", FALSE))
+  microbenchmark::microbenchmark(icd9::icd9ExpandMinor("", FALSE), icd9::icd9ExpandMinor_R("", FALSE))
+  microbenchmark::microbenchmark(icd9::icd9ExpandMinor("7", TRUE), icd9::icd9ExpandMinor_R("7", TRUE))
+  microbenchmark::microbenchmark(icd9::icd9ExpandMinor("", TRUE), icd9::icd9ExpandMinor_R("", TRUE))
 
   # regex is a little faster than fixed
   icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
-  microbenchmark(times = 3,
+  microbenchmark::microbenchmark(times = 3,
                  grepl(pattern = "E", icd9, fixed = TRUE) |
                    grepl(pattern = "e", icd9, fixed = TRUE) |
                    grepl(pattern = "V", icd9, fixed = TRUE) |
@@ -122,8 +120,8 @@ icd9Benchmark <- function() {
 
 
 
-  microbenchmark(times = 3, grepl(pattern = "[EeVv]", rnd))
-  microbenchmark(icd9:::icd9IsV_cpp_slower(icd9), icd9:::icd9IsV_R(icd9), icd9:::icd9IsV_cpp_slow(icd9), icd9:::icd9IsV(icd9))
+  microbenchmark::microbenchmark(times = 3, grepl(pattern = "[EeVv]", rnd))
+  microbenchmark::microbenchmark(icd9::icd9IsV_cpp_slower(icd9), icd9::icd9IsV_R(icd9), icd9::icd9IsV_cpp_slow(icd9), icd9::icd9IsV(icd9))
 
 }
 

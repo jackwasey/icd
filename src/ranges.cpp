@@ -1,7 +1,8 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include <string>
-#include <iostream>
+//#include <iostream>
+#include <sstream>
 #include <icd9.h>
 using namespace Rcpp;
 
@@ -25,10 +26,10 @@ CharacterVector MakeAllMinors() {
   // create numbers 1 to 99 but cycle 10s first
   for (int i=0; i<10; ++i) {
     for (int j=0; j<10; ++j) {
-      std::string s;
-      s = j+i;
+      std::ostringstream s;
+      s << j << i;
       if (i+j!=0)
-      vv.push_back(s);
+      vv.push_back(s.str());
     }
   }
   return(vv);
@@ -46,9 +47,7 @@ const CharacterVector vv = MakeAllMinors();
 //'   code (which is one character), as opposed to a V or numeric-only code,
 //'   which is two character. Default is \code{FALSE}.
 //' @examples
-//' \dontrun{
-//'   icd9:::icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9 codes (111 in total)
-//'   }
+//'   length(icd9:::icd9ExpandMinor("", isE = FALSE)) # return all possible decimal parts of ICD9 codes (111 in total)
 //'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 //' @return NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
 //' @family ICD-9 ranges
@@ -71,10 +70,10 @@ CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false) {
         case '7':        return v7;
         case '8':        return v8;
         case '9':        return v9;
-        default:        std::cout << "unrecognized char\n";
+        default:        stop("unrecognized minor character"); return CharacterVector::create();
       }
       case 2: return wrap(mnr);
-      default: std::cout << "minor of >2 characters received by icd9ExpandMinor\n";
+      default: stop("minor of >2 characters received by icd9ExpandMinor"); return CharacterVector::create();
     }
   } else {
     // is E code, so minor is just one character

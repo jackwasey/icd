@@ -40,7 +40,7 @@ CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool
       } else {
         smj.insert(1, "0");
       }
-      // default: // major is 3 (or more) chars already
+      // default: // mjr is 3 (or more) chars already
     }
     String mnrelem = *n;
     if (mnrelem == NA_STRING) {
@@ -181,8 +181,8 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
 //' @export
 // [[Rcpp::export]]
 List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
-  CharacterVector majors;
-  CharacterVector minors;
+  CharacterVector mjrs;
+  CharacterVector mnrs;
   int ilen = icd9Decimal.length();
 
   if (ilen == 0) { return List::create(_["major"] = CharacterVector::create(),
@@ -190,7 +190,7 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
 
   for (CharacterVector::iterator it = icd9Decimal.begin(); it != icd9Decimal.end(); ++it) {
     String strna = *it;
-    if (strna == NA_STRING || strna == "") { majors.push_back(NA_STRING); minors.push_back(NA_STRING); continue; }
+    if (strna == NA_STRING || strna == "") { mjrs.push_back(NA_STRING); mnrs.push_back(NA_STRING); continue; }
     std::string thiscode = as<std::string >(*it); // Rcpp::String doesn't implement many functions.
     boost::algorithm::trim(thiscode);
     std::size_t pos = thiscode.find(".");
@@ -203,10 +203,10 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
     } else {
       mjrin = thiscode; mnrout = minorEmpty;
     }
-    majors.push_back(icd9::icd9AddLeadingZeroesMajorSingle(mjrin));
-    minors.push_back(mnrout);
+    mjrs.push_back(icd9::icd9AddLeadingZeroesMajorSingle(mjrin));
+    mnrs.push_back(mnrout);
   }
-  return List::create(_["major"] = majors, _["minor"] = minors);
+  return List::create(_["major"] = mjrs, _["minor"] = mnrs);
 }
 
 //' @rdname convert

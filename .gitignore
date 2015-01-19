@@ -13,3 +13,4 @@ Rprof.out
 *.dll
 inst/todo
 vignettes/icd9.aux
+.RData

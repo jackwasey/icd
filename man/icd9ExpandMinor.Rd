@@ -25,9 +25,7 @@ Accepts a single number or character input starting point for
   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
 }
 \examples{
-\dontrun{
-  icd9:::icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9 codes (111 in total)
-  }
+length(icd9:::icd9ExpandMinor("", isE = FALSE)) # return all possible decimal parts of ICD9 codes (111 in total)
   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 }
 \seealso{

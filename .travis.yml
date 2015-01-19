@@ -13,23 +13,21 @@ script: ./travis-tool.sh run_tests
 
 after_success:
   - Rscript -e 'library(covr); coveralls()'
-# or travis_wait Rscript ...
 
 after_failure:
   - ./travis-tool.sh dump_logs
 
 after_script:
-  - ./travis-tool.sh dump_logs_by_extension "timings"
+#  - ./travis-tool.sh dump_logs_by_extension "timings"
   - ./travis-tool.sh dump_sysinfo
 
 env:
   global:
     # default is no manual and no vignettes, so latex isn't needed
     # - R_BUILD_ARGS="--no-build-vignettes"
-    - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran --no-tests --timings"
-    - _R_CHECK_TIMINGS_="5"
-    # report timings for more than 5 seconds per test or example. Default with --as-cran is 10 seconds.
-    # tests are done by coveralls, avoid doing twice
+    - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran --timings"
+    # - _R_CHECK_TIMINGS_="5"
+    # # report timings for more than 5 seconds per test or example. Default with --as-cran is 10 seconds.
 
     # if the following is defined at all, warnings stop the build
     #  - WARNINGS_ARE_ERRORS=1

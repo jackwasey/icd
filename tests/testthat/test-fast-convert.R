@@ -219,7 +219,7 @@ test_that("parts to short invalid inputs", {
                NA_character_)
 
   # parts data frame sent to major
-  expect_error(icd9PartsToShort(major = list(major = "100",
+  expect_error(icd9PartsToShort(list(major = "100",
                                              minor = "23")))
 })
 
