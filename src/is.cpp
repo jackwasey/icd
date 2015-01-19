@@ -1,11 +1,5 @@
-// include boost
-// [[Rcpp::depends(BH)]]
-
 // generate header files in 'inst/include'
 // [[Rcpp::interfaces(r, cpp)]]
-//#[[Rcpp::depends(icd9)]]
-
-#include <boost/algorithm/string/trim.hpp>
 #include <Rcpp.h>
 #include <string>
 #include <icd9.h>
@@ -38,11 +32,25 @@ bool icd9IsASingleVE(std::string s) {
   return s.find_first_of("VvEe") != std::string::npos;
 }
 
+//' @name icd9Is
+//' @title are the given codes numeric, V or E type?
+//' @description Quickly find V or E codes, without any validation.
+//' @template icd9-any
+//' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsV(std::vector< std::string > sv) { return icd9IsA(sv, "Vv"); }
+std::vector<bool> icd9IsV(std::vector< std::string > icd9) { return icd9IsA(icd9, "Vv"); }
+
+//' @rdname icd9Is
+//' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsE(std::vector< std::string > sv) { return icd9IsA(sv, "Ee"); }
+std::vector<bool> icd9IsE(std::vector< std::string > icd9) { return icd9IsA(icd9, "Ee"); }
+
+//' @rdname icd9Is
+//' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsVE(std::vector< std::string > sv) { return icd9IsA(sv, "VvEe"); }
+std::vector<bool> icd9Iicd9E(std::vector< std::string > icd9) { return icd9IsA(icd9, "VvEe"); }
+
+//' @rdname icd9Is
+//' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsN(std::vector< std::string > sv) { return icd9IsA(sv, "VvEe", true); }
+std::vector<bool> icd9IsN(std::vector< std::string > icd9) { return icd9IsA(icd9, "VvEe", true); }

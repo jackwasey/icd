@@ -70,11 +70,14 @@
   data, intended currently only for the FORMAT code provided by AHRQ for
   comorbidities.
 }
+\author{
+Jack O. Wasey \email{jack@jackwasey.com}
+}
 \references{
 \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 }
 \seealso{
-rClinicalCodes
+rClinicalCodes comorbidities
 }
 \concept{
 icd9 ICD-9 comorbidity comorbidities

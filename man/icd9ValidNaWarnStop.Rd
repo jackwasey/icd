@@ -54,7 +54,7 @@ characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
-\item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
+\item{mjr}{character vector of 'major' part of ICD-9 codes, i.e. that part
 which falls before the decimal point, in decimal notation. (In 5 digit
 notation, the 'major' part is be the first three characters (with leading
 zeroes), and includes V or E prefix. xyz}

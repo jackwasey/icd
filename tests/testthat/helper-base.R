@@ -5,11 +5,6 @@
 # i want test coverage on travis, and can wait for the remote builds. NOT_CRAN
 # appears to be set only by devtools::check()
 
-if (!exists("do.slow")) do.slow = TRUE
-do.slow <- do.slow || identical(Sys.getenv("TRAVIS"), "true")
-
-if (do.slow) message("Doing slow tests") else message("Skipping slow tests")
-
 set.seed(1441)
 n <- 500
 np <- round(n / 20) # icd9 codes per patients

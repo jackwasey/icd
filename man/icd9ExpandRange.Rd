@@ -62,13 +62,11 @@ this is cumbersome code, covering a whole load of edge cases
 icd9ExpandRangeShort("4280 ", "43014")
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{icd9ChildrenDecimal}};
-  \code{\link{icd9Children}},
-  \code{\link{icd9ChildrenShort}},
-  \code{\link{icd9ChildrenShort_R}},
-  \code{\link{icd9Children_R}};
+Other ICD-9 ranges: \code{\link{icd9Children}},
+  \code{\link{icd9ChildrenDecimal}},
+  \code{\link{icd9ChildrenShort}};
   \code{\link{icd9CondenseToExplain}};
   \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9ExpandMinor_R}}
+  \code{\link{icd9ExpandMinor}}
 }
 

@@ -16,6 +16,26 @@ the chapter headings can be converted into the full set of their
   given code belongs. Always returns a map with short-form icd-9 codes. These
   can be converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
 }
+\seealso{
+Other ICD-9 convert: \code{\link{convert}},
+  \code{\link{icd9DecimalToParts}},
+  \code{\link{icd9DecimalToShort}},
+  \code{\link{icd9GetMajor}},
+  \code{\link{icd9MajMinToCode}},
+  \code{\link{icd9MajMinToDecimal}},
+  \code{\link{icd9MajMinToParts}},
+  \code{\link{icd9MajMinToShort}},
+  \code{\link{icd9PartsToDecimal}},
+  \code{\link{icd9PartsToShort}},
+  \code{\link{icd9ShortToDecimal}},
+  \code{\link{icd9ShortToParts}};
+  \code{\link{icd9DropLeadingZeroes}},
+  \code{\link{icd9DropLeadingZeroesDecimal}},
+  \code{\link{icd9DropLeadingZeroesMajor}},
+  \code{\link{icd9DropLeadingZeroesShort}};
+  \code{\link{icd9LongToWide}};
+  \code{\link{icd9WideToLong}}
+}
 \keyword{internal}
 \keyword{manip}
 

@@ -313,14 +313,7 @@ icd9InvalidShort <- function(icd9Short) {
   icd9Short[!icd9ValidShort(icd9Short)]
 }
 
-icd9IsVE_R <- function(icd9)
-  grepl(pattern = "[EeVv]", icd9)
 
-icd9IsV_R <- function(icd9)
-  grepl(pattern = "[Vv]", icd9)
-
-icd9IsE_R <- function(icd9)
-  grepl(pattern = "[Ee]", icd9)
 
 icd9IsMajor <- function(icd9)
   nchar(icd9) - icd9IsE(icd9) < 4

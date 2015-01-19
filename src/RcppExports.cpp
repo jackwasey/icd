@@ -8,520 +8,6 @@
 
 using namespace Rcpp;
 
-// icd9IsASingleV
-bool icd9IsASingleV(std::string s);
-static SEXP icd9_icd9IsASingleV_try(SEXP sSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
-        bool __result = icd9IsASingleV(s);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsASingleV(SEXP sSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsASingleV_try(sSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsASingleE
-bool icd9IsASingleE(std::string s);
-static SEXP icd9_icd9IsASingleE_try(SEXP sSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
-        bool __result = icd9IsASingleE(s);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsASingleE(SEXP sSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsASingleE_try(sSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsASingleVE
-bool icd9IsASingleVE(std::string s);
-static SEXP icd9_icd9IsASingleVE_try(SEXP sSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
-        bool __result = icd9IsASingleVE(s);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsASingleVE(SEXP sSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsASingleVE_try(sSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsV
-std::vector<bool> icd9IsV(std::vector< std::string > sv);
-static SEXP icd9_icd9IsV_try(SEXP svSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
-        std::vector<bool> __result = icd9IsV(sv);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsV(SEXP svSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsV_try(svSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsE
-std::vector<bool> icd9IsE(std::vector< std::string > sv);
-static SEXP icd9_icd9IsE_try(SEXP svSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
-        std::vector<bool> __result = icd9IsE(sv);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsE(SEXP svSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsE_try(svSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsVE
-std::vector<bool> icd9IsVE(std::vector< std::string > sv);
-static SEXP icd9_icd9IsVE_try(SEXP svSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
-        std::vector<bool> __result = icd9IsVE(sv);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsVE(SEXP svSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsVE_try(svSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsN
-std::vector<bool> icd9IsN(std::vector< std::string > sv);
-static SEXP icd9_icd9IsN_try(SEXP svSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
-        std::vector<bool> __result = icd9IsN(sv);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsN(SEXP svSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsN_try(svSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsV_cpp_slower
-std::vector<bool> icd9IsV_cpp_slower(std::vector< std::string > sv);
-static SEXP icd9_icd9IsV_cpp_slower_try(SEXP svSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
-        std::vector<bool> __result = icd9IsV_cpp_slower(sv);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsV_cpp_slower(SEXP svSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsV_cpp_slower_try(svSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9ShortToParts_cpp_slow
-List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = "");
-static SEXP icd9_icd9ShortToParts_cpp_slow_try(SEXP icd9ShortSEXP, SEXP minorEmptySEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type icd9Short(icd9ShortSEXP );
-        Rcpp::traits::input_parameter< String >::type minorEmpty(minorEmptySEXP );
-        List __result = icd9ShortToParts_cpp_slow(icd9Short, minorEmpty);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9ShortToParts_cpp_slow(SEXP icd9ShortSEXP, SEXP minorEmptySEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9ShortToParts_cpp_slow_try(icd9ShortSEXP, minorEmptySEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9MajMinToParts_slower
-List icd9MajMinToParts_slower(CharacterVector mjr, CharacterVector mnr);
-static SEXP icd9_icd9MajMinToParts_slower_try(SEXP mjrSEXP, SEXP mnrSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type mjr(mjrSEXP );
-        Rcpp::traits::input_parameter< CharacterVector >::type mnr(mnrSEXP );
-        List __result = icd9MajMinToParts_slower(mjr, mnr);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9MajMinToParts_slower(SEXP mjrSEXP, SEXP mnrSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9MajMinToParts_slower_try(mjrSEXP, mnrSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsV_cpp_slow
-std::vector<bool> icd9IsV_cpp_slow(std::vector< std::string > sv);
-static SEXP icd9_icd9IsV_cpp_slow_try(SEXP svSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
-        std::vector<bool> __result = icd9IsV_cpp_slow(sv);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsV_cpp_slow(SEXP svSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsV_cpp_slow_try(svSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsE_cpp_slow
-std::vector<bool> icd9IsE_cpp_slow(std::vector< std::string > sv);
-static SEXP icd9_icd9IsE_cpp_slow_try(SEXP svSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
-        std::vector<bool> __result = icd9IsE_cpp_slow(sv);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsE_cpp_slow(SEXP svSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsE_cpp_slow_try(svSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9IsVE_cpp_slow
-std::vector<bool> icd9IsVE_cpp_slow(std::vector< std::string > sv);
-static SEXP icd9_icd9IsVE_cpp_slow_try(SEXP svSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
-        std::vector<bool> __result = icd9IsVE_cpp_slow(sv);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsVE_cpp_slow(SEXP svSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsVE_cpp_slow_try(svSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9ShortToParts_cpp_test
-List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty = "");
-static SEXP icd9_icd9ShortToParts_cpp_test_try(SEXP icd9ShortSEXP, SEXP minorEmptySEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type icd9Short(icd9ShortSEXP );
-        Rcpp::traits::input_parameter< std::string >::type minorEmpty(minorEmptySEXP );
-        List __result = icd9ShortToParts_cpp_test(icd9Short, minorEmpty);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9ShortToParts_cpp_test(SEXP icd9ShortSEXP, SEXP minorEmptySEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9ShortToParts_cpp_test_try(icd9ShortSEXP, minorEmptySEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// stringTrim
-CharacterVector stringTrim(CharacterVector input, std::string side = "both");
-static SEXP icd9_stringTrim_try(SEXP inputSEXP, SEXP sideSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type input(inputSEXP );
-        Rcpp::traits::input_parameter< std::string >::type side(sideSEXP );
-        CharacterVector __result = stringTrim(input, side);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_stringTrim(SEXP inputSEXP, SEXP sideSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_stringTrim_try(inputSEXP, sideSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
 // icd9MajMinToCode
 CharacterVector icd9MajMinToCode(CharacterVector mjr, CharacterVector mnr, bool isShort);
 static SEXP icd9_icd9MajMinToCode_try(SEXP mjrSEXP, SEXP mnrSEXP, SEXP isShortSEXP) {
@@ -904,26 +390,506 @@ RcppExport SEXP icd9_icd9DecimalToShort(SEXP xSEXP) {
     UNPROTECT(1);
     return __result;
 }
-// icd9ExpandMinor
-CharacterVector icd9ExpandMinor(std::string x, bool isE);
-static SEXP icd9_icd9ExpandMinor_try(SEXP xSEXP, SEXP isESEXP) {
+// icd9GetMajor
+CharacterVector icd9GetMajor(CharacterVector icd9, bool isShort);
+static SEXP icd9_icd9GetMajor_try(SEXP icd9SEXP, SEXP isShortSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
-        Rcpp::traits::input_parameter< std::string >::type x(xSEXP );
-        Rcpp::traits::input_parameter< bool >::type isE(isESEXP );
-        CharacterVector __result = icd9ExpandMinor(x, isE);
+        Rcpp::traits::input_parameter< CharacterVector >::type icd9(icd9SEXP );
+        Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP );
+        CharacterVector __result = icd9GetMajor(icd9, isShort);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_icd9ExpandMinor(SEXP xSEXP, SEXP isESEXP) {
+RcppExport SEXP icd9_icd9GetMajor(SEXP icd9SEXP, SEXP isShortSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9ExpandMinor_try(xSEXP, isESEXP));
+        __result = PROTECT(icd9_icd9GetMajor_try(icd9SEXP, isShortSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsASingleV
+bool icd9IsASingleV(std::string s);
+static SEXP icd9_icd9IsASingleV_try(SEXP sSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
+        bool __result = icd9IsASingleV(s);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsASingleV(SEXP sSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsASingleV_try(sSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsASingleE
+bool icd9IsASingleE(std::string s);
+static SEXP icd9_icd9IsASingleE_try(SEXP sSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
+        bool __result = icd9IsASingleE(s);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsASingleE(SEXP sSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsASingleE_try(sSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsASingleVE
+bool icd9IsASingleVE(std::string s);
+static SEXP icd9_icd9IsASingleVE_try(SEXP sSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::string >::type s(sSEXP );
+        bool __result = icd9IsASingleVE(s);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsASingleVE(SEXP sSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsASingleVE_try(sSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsV
+std::vector<bool> icd9IsV(std::vector< std::string > icd9);
+static SEXP icd9_icd9IsV_try(SEXP icd9SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::vector< std::string > >::type icd9(icd9SEXP );
+        std::vector<bool> __result = icd9IsV(icd9);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsV(SEXP icd9SEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsV_try(icd9SEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsE
+std::vector<bool> icd9IsE(std::vector< std::string > icd9);
+static SEXP icd9_icd9IsE_try(SEXP icd9SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::vector< std::string > >::type icd9(icd9SEXP );
+        std::vector<bool> __result = icd9IsE(icd9);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsE(SEXP icd9SEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsE_try(icd9SEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9Iicd9E
+std::vector<bool> icd9Iicd9E(std::vector< std::string > icd9);
+static SEXP icd9_icd9Iicd9E_try(SEXP icd9SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::vector< std::string > >::type icd9(icd9SEXP );
+        std::vector<bool> __result = icd9Iicd9E(icd9);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9Iicd9E(SEXP icd9SEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9Iicd9E_try(icd9SEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsN
+std::vector<bool> icd9IsN(std::vector< std::string > icd9);
+static SEXP icd9_icd9IsN_try(SEXP icd9SEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::vector< std::string > >::type icd9(icd9SEXP );
+        std::vector<bool> __result = icd9IsN(icd9);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsN(SEXP icd9SEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsN_try(icd9SEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9AddLeadingZeroesMajorSingle
+String icd9AddLeadingZeroesMajorSingle(String mjr);
+static SEXP icd9_icd9AddLeadingZeroesMajorSingle_try(SEXP mjrSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< String >::type mjr(mjrSEXP );
+        String __result = icd9AddLeadingZeroesMajorSingle(mjr);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9AddLeadingZeroesMajorSingle(SEXP mjrSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9AddLeadingZeroesMajorSingle_try(mjrSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9AddLeadingZeroes
+CharacterVector icd9AddLeadingZeroes(CharacterVector icd9, bool isShort);
+static SEXP icd9_icd9AddLeadingZeroes_try(SEXP icd9SEXP, SEXP isShortSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type icd9(icd9SEXP );
+        Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP );
+        CharacterVector __result = icd9AddLeadingZeroes(icd9, isShort);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9AddLeadingZeroes(SEXP icd9SEXP, SEXP isShortSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9AddLeadingZeroes_try(icd9SEXP, isShortSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9AddLeadingZeroesShort
+CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short);
+static SEXP icd9_icd9AddLeadingZeroesShort_try(SEXP icd9ShortSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type icd9Short(icd9ShortSEXP );
+        CharacterVector __result = icd9AddLeadingZeroesShort(icd9Short);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9AddLeadingZeroesShort(SEXP icd9ShortSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9AddLeadingZeroesShort_try(icd9ShortSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9AddLeadingZeroesDecimal
+CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal);
+static SEXP icd9_icd9AddLeadingZeroesDecimal_try(SEXP icd9DecimalSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type icd9Decimal(icd9DecimalSEXP );
+        CharacterVector __result = icd9AddLeadingZeroesDecimal(icd9Decimal);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9AddLeadingZeroesDecimal(SEXP icd9DecimalSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9AddLeadingZeroesDecimal_try(icd9DecimalSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9AddLeadingZeroesMajor
+CharacterVector icd9AddLeadingZeroesMajor(CharacterVector mjr);
+static SEXP icd9_icd9AddLeadingZeroesMajor_try(SEXP mjrSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type mjr(mjrSEXP );
+        CharacterVector __result = icd9AddLeadingZeroesMajor(mjr);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9AddLeadingZeroesMajor(SEXP mjrSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9AddLeadingZeroesMajor_try(mjrSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9ExpandMinor
+CharacterVector icd9ExpandMinor(std::string mnr, bool isE);
+static SEXP icd9_icd9ExpandMinor_try(SEXP mnrSEXP, SEXP isESEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::string >::type mnr(mnrSEXP );
+        Rcpp::traits::input_parameter< bool >::type isE(isESEXP );
+        CharacterVector __result = icd9ExpandMinor(mnr, isE);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9ExpandMinor(SEXP mnrSEXP, SEXP isESEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9ExpandMinor_try(mnrSEXP, isESEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9Children
+CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = false);
+static SEXP icd9_icd9Children_try(SEXP icd9SEXP, SEXP isShortSEXP, SEXP onlyRealSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type icd9(icd9SEXP );
+        Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP );
+        Rcpp::traits::input_parameter< bool >::type onlyReal(onlyRealSEXP );
+        CharacterVector __result = icd9Children(icd9, isShort, onlyReal);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9Children(SEXP icd9SEXP, SEXP isShortSEXP, SEXP onlyRealSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9Children_try(icd9SEXP, isShortSEXP, onlyRealSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1009,248 +975,6 @@ RcppExport SEXP icd9_icd9ChildrenDecimal(SEXP icd9DecimalSEXP, SEXP onlyRealSEXP
     UNPROTECT(1);
     return __result;
 }
-// icd9Children
-CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = false);
-static SEXP icd9_icd9Children_try(SEXP icd9SEXP, SEXP isShortSEXP, SEXP onlyRealSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type icd9(icd9SEXP );
-        Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP );
-        Rcpp::traits::input_parameter< bool >::type onlyReal(onlyRealSEXP );
-        CharacterVector __result = icd9Children(icd9, isShort, onlyReal);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9Children(SEXP icd9SEXP, SEXP isShortSEXP, SEXP onlyRealSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9Children_try(icd9SEXP, isShortSEXP, onlyRealSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9GetMajor
-CharacterVector icd9GetMajor(CharacterVector icd9, bool isShort);
-static SEXP icd9_icd9GetMajor_try(SEXP icd9SEXP, SEXP isShortSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type icd9(icd9SEXP );
-        Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP );
-        CharacterVector __result = icd9GetMajor(icd9, isShort);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9GetMajor(SEXP icd9SEXP, SEXP isShortSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9GetMajor_try(icd9SEXP, isShortSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9AddLeadingZeroesMajorSingle
-String icd9AddLeadingZeroesMajorSingle(String ms);
-static SEXP icd9_icd9AddLeadingZeroesMajorSingle_try(SEXP msSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< String >::type ms(msSEXP );
-        String __result = icd9AddLeadingZeroesMajorSingle(ms);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9AddLeadingZeroesMajorSingle(SEXP msSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9AddLeadingZeroesMajorSingle_try(msSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9AddLeadingZeroesMajor
-CharacterVector icd9AddLeadingZeroesMajor(CharacterVector mjr);
-static SEXP icd9_icd9AddLeadingZeroesMajor_try(SEXP mjrSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type mjr(mjrSEXP );
-        CharacterVector __result = icd9AddLeadingZeroesMajor(mjr);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9AddLeadingZeroesMajor(SEXP mjrSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9AddLeadingZeroesMajor_try(mjrSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9AddLeadingZeroesShort
-CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short);
-static SEXP icd9_icd9AddLeadingZeroesShort_try(SEXP icd9ShortSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type icd9Short(icd9ShortSEXP );
-        CharacterVector __result = icd9AddLeadingZeroesShort(icd9Short);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9AddLeadingZeroesShort(SEXP icd9ShortSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9AddLeadingZeroesShort_try(icd9ShortSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9AddLeadingZeroesDecimal
-CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal);
-static SEXP icd9_icd9AddLeadingZeroesDecimal_try(SEXP icd9DecimalSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type icd9Decimal(icd9DecimalSEXP );
-        CharacterVector __result = icd9AddLeadingZeroesDecimal(icd9Decimal);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9AddLeadingZeroesDecimal(SEXP icd9DecimalSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9AddLeadingZeroesDecimal_try(icd9DecimalSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
-// icd9AddLeadingZeroes
-CharacterVector icd9AddLeadingZeroes(CharacterVector icd9, bool isShort);
-static SEXP icd9_icd9AddLeadingZeroes_try(SEXP icd9SEXP, SEXP isShortSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< CharacterVector >::type icd9(icd9SEXP );
-        Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP );
-        CharacterVector __result = icd9AddLeadingZeroes(icd9, isShort);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9AddLeadingZeroes(SEXP icd9SEXP, SEXP isShortSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9AddLeadingZeroes_try(icd9SEXP, isShortSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
 // icd9InReferenceCode
 LogicalVector icd9InReferenceCode(CharacterVector icd9, CharacterVector icd9Reference, bool isShort, bool isShortReference = true);
 static SEXP icd9_icd9InReferenceCode_try(SEXP icd9SEXP, SEXP icd9ReferenceSEXP, SEXP isShortSEXP, SEXP isShortReferenceSEXP) {
@@ -1288,26 +1012,287 @@ RcppExport SEXP icd9_icd9InReferenceCode(SEXP icd9SEXP, SEXP icd9ReferenceSEXP, 
     UNPROTECT(1);
     return __result;
 }
+// icd9IsV_cpp_slower
+std::vector<bool> icd9IsV_cpp_slower(std::vector< std::string > sv);
+static SEXP icd9_icd9IsV_cpp_slower_try(SEXP svSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
+        std::vector<bool> __result = icd9IsV_cpp_slower(sv);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsV_cpp_slower(SEXP svSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsV_cpp_slower_try(svSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9ShortToParts_cpp_slow
+List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = "");
+static SEXP icd9_icd9ShortToParts_cpp_slow_try(SEXP icd9ShortSEXP, SEXP minorEmptySEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type icd9Short(icd9ShortSEXP );
+        Rcpp::traits::input_parameter< String >::type minorEmpty(minorEmptySEXP );
+        List __result = icd9ShortToParts_cpp_slow(icd9Short, minorEmpty);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9ShortToParts_cpp_slow(SEXP icd9ShortSEXP, SEXP minorEmptySEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9ShortToParts_cpp_slow_try(icd9ShortSEXP, minorEmptySEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9MajMinToParts_slower
+List icd9MajMinToParts_slower(CharacterVector mjr, CharacterVector mnr);
+static SEXP icd9_icd9MajMinToParts_slower_try(SEXP mjrSEXP, SEXP mnrSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type mjr(mjrSEXP );
+        Rcpp::traits::input_parameter< CharacterVector >::type mnr(mnrSEXP );
+        List __result = icd9MajMinToParts_slower(mjr, mnr);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9MajMinToParts_slower(SEXP mjrSEXP, SEXP mnrSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9MajMinToParts_slower_try(mjrSEXP, mnrSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsV_cpp_slow
+std::vector<bool> icd9IsV_cpp_slow(std::vector< std::string > sv);
+static SEXP icd9_icd9IsV_cpp_slow_try(SEXP svSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
+        std::vector<bool> __result = icd9IsV_cpp_slow(sv);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsV_cpp_slow(SEXP svSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsV_cpp_slow_try(svSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsE_cpp_slow
+std::vector<bool> icd9IsE_cpp_slow(std::vector< std::string > sv);
+static SEXP icd9_icd9IsE_cpp_slow_try(SEXP svSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
+        std::vector<bool> __result = icd9IsE_cpp_slow(sv);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsE_cpp_slow(SEXP svSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsE_cpp_slow_try(svSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9IsVE_cpp_slow
+std::vector<bool> icd9IsVE_cpp_slow(std::vector< std::string > sv);
+static SEXP icd9_icd9IsVE_cpp_slow_try(SEXP svSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< std::vector< std::string > >::type sv(svSEXP );
+        std::vector<bool> __result = icd9IsVE_cpp_slow(sv);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsVE_cpp_slow(SEXP svSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsVE_cpp_slow_try(svSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9ShortToParts_cpp_test
+List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty = "");
+static SEXP icd9_icd9ShortToParts_cpp_test_try(SEXP icd9ShortSEXP, SEXP minorEmptySEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type icd9Short(icd9ShortSEXP );
+        Rcpp::traits::input_parameter< std::string >::type minorEmpty(minorEmptySEXP );
+        List __result = icd9ShortToParts_cpp_test(icd9Short, minorEmpty);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9ShortToParts_cpp_test(SEXP icd9ShortSEXP, SEXP minorEmptySEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9ShortToParts_cpp_test_try(icd9ShortSEXP, minorEmptySEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// stringTrim
+CharacterVector stringTrim(CharacterVector input, std::string side = "both");
+static SEXP icd9_stringTrim_try(SEXP inputSEXP, SEXP sideSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< CharacterVector >::type input(inputSEXP );
+        Rcpp::traits::input_parameter< std::string >::type side(sideSEXP );
+        CharacterVector __result = stringTrim(input, side);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_stringTrim(SEXP inputSEXP, SEXP sideSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_stringTrim_try(inputSEXP, sideSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int icd9_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("bool(*icd9IsASingleV)(std::string)");
-        signatures.insert("bool(*icd9IsASingleE)(std::string)");
-        signatures.insert("bool(*icd9IsASingleVE)(std::string)");
-        signatures.insert("std::vector<bool>(*icd9IsV)(std::vector< std::string >)");
-        signatures.insert("std::vector<bool>(*icd9IsE)(std::vector< std::string >)");
-        signatures.insert("std::vector<bool>(*icd9IsVE)(std::vector< std::string >)");
-        signatures.insert("std::vector<bool>(*icd9IsN)(std::vector< std::string >)");
-        signatures.insert("std::vector<bool>(*icd9IsV_cpp_slower)(std::vector< std::string >)");
-        signatures.insert("List(*icd9ShortToParts_cpp_slow)(CharacterVector,String)");
-        signatures.insert("List(*icd9MajMinToParts_slower)(CharacterVector,CharacterVector)");
-        signatures.insert("std::vector<bool>(*icd9IsV_cpp_slow)(std::vector< std::string >)");
-        signatures.insert("std::vector<bool>(*icd9IsE_cpp_slow)(std::vector< std::string >)");
-        signatures.insert("std::vector<bool>(*icd9IsVE_cpp_slow)(std::vector< std::string >)");
-        signatures.insert("List(*icd9ShortToParts_cpp_test)(CharacterVector,std::string)");
-        signatures.insert("CharacterVector(*stringTrim)(CharacterVector,std::string)");
         signatures.insert("CharacterVector(*icd9MajMinToCode)(CharacterVector,CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9MajMinToShort)(CharacterVector,CharacterVector)");
         signatures.insert("CharacterVector(*icd9MajMinToDecimal)(CharacterVector,CharacterVector)");
@@ -1319,38 +1304,38 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("List(*icd9DecimalToParts)(CharacterVector,String)");
         signatures.insert("CharacterVector(*icd9ShortToDecimal)(CharacterVector)");
         signatures.insert("CharacterVector(*icd9DecimalToShort)(CharacterVector)");
-        signatures.insert("CharacterVector(*icd9ExpandMinor)(std::string,bool)");
-        signatures.insert("CharacterVector(*icd9ChildrenShort)(CharacterVector,bool)");
-        signatures.insert("CharacterVector(*icd9ChildrenDecimal)(CharacterVector,bool)");
-        signatures.insert("CharacterVector(*icd9Children)(CharacterVector,bool,bool)");
         signatures.insert("CharacterVector(*icd9GetMajor)(CharacterVector,bool)");
+        signatures.insert("bool(*icd9IsASingleV)(std::string)");
+        signatures.insert("bool(*icd9IsASingleE)(std::string)");
+        signatures.insert("bool(*icd9IsASingleVE)(std::string)");
+        signatures.insert("std::vector<bool>(*icd9IsV)(std::vector< std::string >)");
+        signatures.insert("std::vector<bool>(*icd9IsE)(std::vector< std::string >)");
+        signatures.insert("std::vector<bool>(*icd9Iicd9E)(std::vector< std::string >)");
+        signatures.insert("std::vector<bool>(*icd9IsN)(std::vector< std::string >)");
         signatures.insert("String(*icd9AddLeadingZeroesMajorSingle)(String)");
-        signatures.insert("CharacterVector(*icd9AddLeadingZeroesMajor)(CharacterVector)");
+        signatures.insert("CharacterVector(*icd9AddLeadingZeroes)(CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9AddLeadingZeroesShort)(CharacterVector)");
         signatures.insert("CharacterVector(*icd9AddLeadingZeroesDecimal)(CharacterVector)");
-        signatures.insert("CharacterVector(*icd9AddLeadingZeroes)(CharacterVector,bool)");
+        signatures.insert("CharacterVector(*icd9AddLeadingZeroesMajor)(CharacterVector)");
+        signatures.insert("CharacterVector(*icd9ExpandMinor)(std::string,bool)");
+        signatures.insert("CharacterVector(*icd9Children)(CharacterVector,bool,bool)");
+        signatures.insert("CharacterVector(*icd9ChildrenShort)(CharacterVector,bool)");
+        signatures.insert("CharacterVector(*icd9ChildrenDecimal)(CharacterVector,bool)");
         signatures.insert("LogicalVector(*icd9InReferenceCode)(CharacterVector,CharacterVector,bool,bool)");
+        signatures.insert("std::vector<bool>(*icd9IsV_cpp_slower)(std::vector< std::string >)");
+        signatures.insert("List(*icd9ShortToParts_cpp_slow)(CharacterVector,String)");
+        signatures.insert("List(*icd9MajMinToParts_slower)(CharacterVector,CharacterVector)");
+        signatures.insert("std::vector<bool>(*icd9IsV_cpp_slow)(std::vector< std::string >)");
+        signatures.insert("std::vector<bool>(*icd9IsE_cpp_slow)(std::vector< std::string >)");
+        signatures.insert("std::vector<bool>(*icd9IsVE_cpp_slow)(std::vector< std::string >)");
+        signatures.insert("List(*icd9ShortToParts_cpp_test)(CharacterVector,std::string)");
+        signatures.insert("CharacterVector(*stringTrim)(CharacterVector,std::string)");
     }
     return signatures.find(sig) != signatures.end();
 }
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP icd9_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("icd9", "icd9_icd9IsASingleV", (DL_FUNC)icd9_icd9IsASingleV_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsASingleE", (DL_FUNC)icd9_icd9IsASingleE_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsASingleVE", (DL_FUNC)icd9_icd9IsASingleVE_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsV", (DL_FUNC)icd9_icd9IsV_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsE", (DL_FUNC)icd9_icd9IsE_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsVE", (DL_FUNC)icd9_icd9IsVE_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsN", (DL_FUNC)icd9_icd9IsN_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsV_cpp_slower", (DL_FUNC)icd9_icd9IsV_cpp_slower_try);
-    R_RegisterCCallable("icd9", "icd9_icd9ShortToParts_cpp_slow", (DL_FUNC)icd9_icd9ShortToParts_cpp_slow_try);
-    R_RegisterCCallable("icd9", "icd9_icd9MajMinToParts_slower", (DL_FUNC)icd9_icd9MajMinToParts_slower_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsV_cpp_slow", (DL_FUNC)icd9_icd9IsV_cpp_slow_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsE_cpp_slow", (DL_FUNC)icd9_icd9IsE_cpp_slow_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsVE_cpp_slow", (DL_FUNC)icd9_icd9IsVE_cpp_slow_try);
-    R_RegisterCCallable("icd9", "icd9_icd9ShortToParts_cpp_test", (DL_FUNC)icd9_icd9ShortToParts_cpp_test_try);
-    R_RegisterCCallable("icd9", "icd9_stringTrim", (DL_FUNC)icd9_stringTrim_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToCode", (DL_FUNC)icd9_icd9MajMinToCode_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToShort", (DL_FUNC)icd9_icd9MajMinToShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToDecimal", (DL_FUNC)icd9_icd9MajMinToDecimal_try);
@@ -1362,17 +1347,32 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9DecimalToParts", (DL_FUNC)icd9_icd9DecimalToParts_try);
     R_RegisterCCallable("icd9", "icd9_icd9ShortToDecimal", (DL_FUNC)icd9_icd9ShortToDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9DecimalToShort", (DL_FUNC)icd9_icd9DecimalToShort_try);
-    R_RegisterCCallable("icd9", "icd9_icd9ExpandMinor", (DL_FUNC)icd9_icd9ExpandMinor_try);
-    R_RegisterCCallable("icd9", "icd9_icd9ChildrenShort", (DL_FUNC)icd9_icd9ChildrenShort_try);
-    R_RegisterCCallable("icd9", "icd9_icd9ChildrenDecimal", (DL_FUNC)icd9_icd9ChildrenDecimal_try);
-    R_RegisterCCallable("icd9", "icd9_icd9Children", (DL_FUNC)icd9_icd9Children_try);
     R_RegisterCCallable("icd9", "icd9_icd9GetMajor", (DL_FUNC)icd9_icd9GetMajor_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsASingleV", (DL_FUNC)icd9_icd9IsASingleV_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsASingleE", (DL_FUNC)icd9_icd9IsASingleE_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsASingleVE", (DL_FUNC)icd9_icd9IsASingleVE_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsV", (DL_FUNC)icd9_icd9IsV_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsE", (DL_FUNC)icd9_icd9IsE_try);
+    R_RegisterCCallable("icd9", "icd9_icd9Iicd9E", (DL_FUNC)icd9_icd9Iicd9E_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsN", (DL_FUNC)icd9_icd9IsN_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajorSingle", (DL_FUNC)icd9_icd9AddLeadingZeroesMajorSingle_try);
-    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajor", (DL_FUNC)icd9_icd9AddLeadingZeroesMajor_try);
+    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroes", (DL_FUNC)icd9_icd9AddLeadingZeroes_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesShort", (DL_FUNC)icd9_icd9AddLeadingZeroesShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesDecimal", (DL_FUNC)icd9_icd9AddLeadingZeroesDecimal_try);
-    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroes", (DL_FUNC)icd9_icd9AddLeadingZeroes_try);
+    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajor", (DL_FUNC)icd9_icd9AddLeadingZeroesMajor_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ExpandMinor", (DL_FUNC)icd9_icd9ExpandMinor_try);
+    R_RegisterCCallable("icd9", "icd9_icd9Children", (DL_FUNC)icd9_icd9Children_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ChildrenShort", (DL_FUNC)icd9_icd9ChildrenShort_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ChildrenDecimal", (DL_FUNC)icd9_icd9ChildrenDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9InReferenceCode", (DL_FUNC)icd9_icd9InReferenceCode_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsV_cpp_slower", (DL_FUNC)icd9_icd9IsV_cpp_slower_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ShortToParts_cpp_slow", (DL_FUNC)icd9_icd9ShortToParts_cpp_slow_try);
+    R_RegisterCCallable("icd9", "icd9_icd9MajMinToParts_slower", (DL_FUNC)icd9_icd9MajMinToParts_slower_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsV_cpp_slow", (DL_FUNC)icd9_icd9IsV_cpp_slow_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsE_cpp_slow", (DL_FUNC)icd9_icd9IsE_cpp_slow_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsVE_cpp_slow", (DL_FUNC)icd9_icd9IsVE_cpp_slow_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ShortToParts_cpp_test", (DL_FUNC)icd9_icd9ShortToParts_cpp_test_try);
+    R_RegisterCCallable("icd9", "icd9_stringTrim", (DL_FUNC)icd9_stringTrim_try);
     R_RegisterCCallable("icd9", "icd9_RcppExport_validate", (DL_FUNC)icd9_RcppExport_validate);
     return R_NilValue;
 }

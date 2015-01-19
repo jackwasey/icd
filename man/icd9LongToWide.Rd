@@ -37,4 +37,24 @@ longdf <- data.frame(visitId = c("a", "b", "b", "c"),
   icd9LongToWide(longdf)
   icd9LongToWide(longdf, prefix = "ICD10_", empty = "")
 }
+\seealso{
+Other ICD-9 convert: \code{\link{convert}},
+  \code{\link{icd9DecimalToParts}},
+  \code{\link{icd9DecimalToShort}},
+  \code{\link{icd9GetMajor}},
+  \code{\link{icd9MajMinToCode}},
+  \code{\link{icd9MajMinToDecimal}},
+  \code{\link{icd9MajMinToParts}},
+  \code{\link{icd9MajMinToShort}},
+  \code{\link{icd9PartsToDecimal}},
+  \code{\link{icd9PartsToShort}},
+  \code{\link{icd9ShortToDecimal}},
+  \code{\link{icd9ShortToParts}};
+  \code{\link{icd9ChaptersToMap}};
+  \code{\link{icd9DropLeadingZeroes}},
+  \code{\link{icd9DropLeadingZeroesDecimal}},
+  \code{\link{icd9DropLeadingZeroesMajor}},
+  \code{\link{icd9DropLeadingZeroesShort}};
+  \code{\link{icd9WideToLong}}
+}
 

@@ -4,7 +4,6 @@
 // generate header files in 'inst/include'
 // [[Rcpp::interfaces(r, cpp)]]
 // and use them (does this need two compilation steps?)
-//#[[Rcpp::depends(icd9)]]
 
 #include <Rcpp.h>
 #include <sstream>
@@ -28,22 +27,12 @@ std::vector<bool> icd9IsV_cpp_slower(std::vector< std::string > sv) {
   return out;
 }
 
-//' @name icd9ShortToParts_cpp_slow
-//' @title extract major and minor parts of a decimal ICD-9 code
-//' @description accepts Vxxxx Exxxx or xxxxx
-//' @template icd9-short
-//' @param minorEmpty vector of length one, to be used in place of
-//' minor part of zero. Defaults to ""
-//' @template invalid
-//' @return data.frame with two columns. At least the minor part must be
-//' character, because "03" is different to "3", but "30" is the same as "3"
-//' @keywords manip
 // [[Rcpp::export]]
 List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = "") {
 
   CharacterVector mjr;
   CharacterVector mnr;
-  // can only reserve with std::vector
+  // can only reserve with std::vector, but can pre-size a Rcpp::Vector
   //mjr.reserve(icd9Short.size())
   //mnr.reserve(icd9Short.size())
 
@@ -86,13 +75,6 @@ List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = ""
   // TODO: return icd9MajMinToParts(mjr, mnr);
 }
 
-
-//' @name icd9MajMinToParts_slower
-//' @title icd9MajMinToParts_slower
-//' @description Convert vectors of major and minor components into a data frame with a column for major and a column for minor.
-//' This is slightly slower than the R implementation. using Rcpp11 std::to_string is even slower than this.
-//' @import Rcpp
-//' @export
 // [[Rcpp::export]]
 List icd9MajMinToParts_slower(CharacterVector mjr, CharacterVector mnr) {
   List returned_frame = List::create(
@@ -125,39 +107,14 @@ std::vector<bool> icd9Is_cpp_slow(std::vector< std::string > sv, const char* c) 
   return out;
 }
 
-
-//' @name icd9Is_cpp_slow
-//' @title is the given code V or E type?
-//' @description quickly find V or E codes, without fully validating V or E
-//'   codes. Use fixed instead of regex for speed. Don't check position of V or
-//'   E: this is not validation, just a quick classification of pre-validated
-//'   codes. TODO: this doesn't look efficient, but can't use fixed with ignore
-//'   case, and regex slower.
-//' @template icd9-any
-//' @examples
-//'
-//' library(microbenchmark)
-//' # regex is a little faster than fixed
-//' icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
-//' microbenchmark(times = 3,
-//'   grepl(pattern = "E", icd9, fixed = TRUE) |
-//'   grepl(pattern = "e", icd9, fixed = TRUE) |
-//'   grepl(pattern = "V", icd9, fixed = TRUE) |
-//'   grepl(pattern = "v", icd9, fixed = TRUE))
-//' microbenchmark(times = 3, grepl(pattern = "[EeVv]", rnd))
-//' microbenchmark(icd9:::icd9IsV_cpp_slower(icd9), icd9:::icd9IsV_R(icd9), icd9:::icd9IsV_cpp_slow(icd9), icd9:::icd9IsV(icd9))
-//'
 // [[Rcpp::export]]
 std::vector<bool> icd9IsV_cpp_slow(std::vector< std::string > sv) { return icd9Is_cpp_slow(sv, "Vv");}
 
-//' @rdname icd9Is_cpp_slow
 // [[Rcpp::export]]
 std::vector<bool> icd9IsE_cpp_slow(std::vector< std::string > sv) { return icd9Is_cpp_slow(sv, "Ee");}
 
-//' @rdname icd9Is_cpp_slow
 // [[Rcpp::export]]
 std::vector<bool> icd9IsVE_cpp_slow(std::vector< std::string > sv) { return icd9Is_cpp_slow(sv, "VvEe"); }
-
 
 // [[Rcpp::export]]
 List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty = "") {
