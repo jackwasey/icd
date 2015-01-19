@@ -10,7 +10,7 @@
 #' @template icd9-short
 #' @template icd9-decimal
 #' @template isShort
-#' @param doCondense single logical value which indicates whether to condense
+#' @param condense single logical value which indicates whether to condense
 #'   the given set of ICD-9 codes by replacing subsets of codes with 'parent'
 #'   codes which exactly encompass certain subsets. E.g. If all cholera
 #'   diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
@@ -22,31 +22,31 @@
 #' @seealso package comorbidities
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
-icd9Explain <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain <- function(icd9, isShort, condense = TRUE) {
   UseMethod("icd9Explain")
 }
 
 #' @rdname icd9Explain
 #' @export
-icd9ExplainShort <- function(icd9Short, doCondense = TRUE) {
-  icd9Explain(icd9Short, isShort = TRUE, doCondense = doCondense)
+icd9ExplainShort <- function(icd9Short, condense = TRUE) {
+  icd9Explain(icd9Short, isShort = TRUE, condense = condense)
 }
 
 #' @rdname icd9Explain
 #' @export
-icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE) {
-  icd9Explain(icd9Decimal, isShort = FALSE, doCondense = doCondense)
+icd9ExplainDecimal <- function(icd9Decimal, condense = TRUE) {
+  icd9Explain(icd9Decimal, isShort = FALSE, condense = condense)
 }
 
 #' @describeIn icd9Explain explain alll ICD-9 codes in a list of vectors
 #' @export
-icd9Explain.list <- function(icd9, isShort, doCondense = TRUE) {
-  lapply(icd9, icd9Explain, isShort = isShort, doCondense = doCondense)
+icd9Explain.list <- function(icd9, isShort, condense = TRUE) {
+  lapply(icd9, icd9Explain, isShort = isShort, condense = condense)
 }
 
 #' @describeIn icd9Explain explain character vector of ICD-9 codes
 #' @export
-icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain.character <- function(icd9, isShort, condense = TRUE) {
 
   if (!isShort) {
     # make sure there are preceding zeroes, in order to match the icd9Hierarchy
@@ -54,7 +54,7 @@ icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
     icd9 <- icd9AddLeadingZeroesDecimal(icd9)
     icd9 <- icd9DecimalToShort(icd9)
   }
-  if (doCondense) {
+  if (condense) {
     return(icd9CondenseToExplain(icd9))
   }
   mj <- unique(icd9GetMajor(icd9, isShort = TRUE))
@@ -66,7 +66,7 @@ icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
 
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning
 #' @export
-icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain.numeric <- function(icd9, isShort, condense = TRUE) {
   warning("Numeric ICD-9 codes are unable to accurately represent actual ICD-9
            codes. Converting to character, but beware of inevitable errors.")
   icd9Explain.character(as.character(icd9), isShort = isShort)

@@ -3,7 +3,7 @@ context("explain ICD-9: code to human-readable")
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
     icd9ExplainShort(icd9ChildrenShort("391", onlyReal = FALSE),
-                     doCondense = FALSE),
+                     condense = FALSE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
@@ -12,7 +12,7 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 
   #TODO same but condensing
   expect_identical(
-    icd9ExplainShort(icd9ChildrenShort("391"), doCondense = TRUE),
+    icd9ExplainShort(icd9ChildrenShort("391"), condense = TRUE),
     "Rheumatic fever with heart involvement"
   )
 
@@ -31,9 +31,9 @@ test_that("expalin a single top level code without a top level explanation", {
 
 
 test_that("explain a single leaf node" , {
-  expect_equal(icd9ExplainShort("27800", doCondense = FALSE),
+  expect_equal(icd9ExplainShort("27800", condense = FALSE),
                "Obesity, unspecified")
-  expect_equal(icd9ExplainShort("27800", doCondense = TRUE),
+  expect_equal(icd9ExplainShort("27800", condense = TRUE),
                "Obesity, unspecified")
 })
 
