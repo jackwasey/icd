@@ -64,22 +64,26 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
   expect_identical(ahrqComorbidAll,
                    parseAhrqSas(condense = FALSE,
                                 save = FALSE, returnAll = TRUE))
+  expect_equivalent(icd9GetInvalidMappingShort(ahrqComorbid), list())
 })
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
               expect_identical(quanDeyoComorbid,
                                parseQuanDeyoSas(condense = FALSE, save = FALSE))
+              expect_equivalent(icd9GetInvalidMappingShort(quanDeyoComorbid), list())
             })
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(quanElixComorbid,
                                parseQuanElix(condense = FALSE, save = FALSE))
+              expect_equivalent(icd9GetInvalidMappingShort(quanElixComorbid), list())
             })
 test_that("Elixhauser icd9 mappings are all
             generated from the current generation code", {
 
               expect_identical(elixComorbid,
                                parseElix(condense = FALSE, save = FALSE))
+              expect_equivalent(icd9GetInvalidMappingShort(elixComorbid), list())
             })
 
 test_that("ahrq comorbidity mapping is applied correctly,

@@ -24,9 +24,9 @@ icd9InvalidActions <- c("ignore", "silent", "warn", "stop")
 #' @export
 stopIfInvalidIcd9 <- function(icd9, isShort) {
   if (isShort && any(!icd9ValidShort(icd9)))
-    stop("Invalid short ICD9 codes found: ", paste(icd9InvalidShort(icd9)))
+    stop("Invalid short ICD9 codes found: ", paste(icd9GetInvalidShort(icd9)))
   if (!isShort && any(!icd9ValidDecimal(icd9)))
-    stop("Invalid long ICD9 codes found: ", paste(icd9InvalidDecimal(icd9)))
+    stop("Invalid long ICD9 codes found: ", paste(icd9GetInvalidDecimal(icd9)))
 }
 
 #' @rdname stopIfInvalidIcd9
@@ -97,19 +97,6 @@ icd9ValidNaWarnStopShort <- function(icd9Short,
   icd9ValidNaWarnStop(icd9 = icd9Short, isShort = TRUE, isMajor = FALSE,
                       invalidAction = match.arg(invalidAction))
 
-#' @rdname icd9ValidNaWarnStop
-#' @template icd9-decimal
-icd9ValidNaWarnStopDecimal <- function(icd9Decimal,
-                                       invalidAction = icd9InvalidActions)
-  icd9ValidNaWarnStop(icd9 = icd9Decimal, isShort = FALSE, isMajor = FALSE,
-                      invalidAction = match.arg(invalidAction))
-
-#' @rdname icd9ValidNaWarnStop
-icd9ValidNaWarnStopMajor <- function(major,
-                                     invalidAction = icd9InvalidActions)
-  icd9ValidNaWarnStop(icd9 = major, isShort = FALSE, isMajor = TRUE,
-                      invalidAction = match.arg(invalidAction))
-
 #' @title check whether any ICD-9 code is syntactically valid
 #' @template icd9-any
 #' @template isShort
@@ -135,10 +122,8 @@ icd9Valid <- function(icd9, isShort)
 #' @export
 icd9ValidDecimal <- function(icd9Decimal) {
 
-  if (length(icd9Decimal) == 0) {
-    #warning("icd9ValidDecimal expects at least one code to test")
-    return(logical())
-  }
+  if (length(icd9Decimal) == 0) return(logical())
+
   stopifnot(is.character(icd9Decimal) || is.factor(icd9Decimal))
 
   icd9ValidDecimalN(icd9Decimal) |
@@ -285,13 +270,17 @@ icd9ValidMappingShort <- function(icd9Mapping)
 
 #' @rdname icd9ValidMapping
 #' @export
-icd9GetInvalidMappingShort <- function(icd9Mapping)
-  unlist(lapply(icd9Mapping, FUN = icd9InvalidShort), use.names = FALSE)
+icd9GetInvalidMappingShort <- function(icd9Mapping) {
+  x <- lapply(icd9Mapping, FUN = icd9GetInvalidShort)
+  x[lapply(x, length) > 0]
+}
 
 #' @rdname icd9ValidMapping
 #' @export
-icd9GetInvalidMappingDecimal <- function(icd9Mapping)
-  unlist(lapply(icd9Mapping, FUN = icd9InvalidDecimal), use.names = FALSE)
+icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
+  x <- lapply(icd9Mapping, FUN = icd9GetInvalidDecimal)
+  x[lapply(x, length) > 0]
+  }
 
 #' @title invalid subset of decimal or short ICD-9 codes
 #' @description given vector of short or decimal ICD-9 codes in
@@ -302,18 +291,16 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping)
 #' @keywords manip
 #' @family ICD-9 validation
 #' @export
-icd9InvalidDecimal <- function(icd9Decimal) {
+icd9GetInvalidDecimal <- function(icd9Decimal) {
   icd9Decimal[!icd9ValidDecimal(icd9Decimal)]
 }
 
-#' @rdname icd9InvalidDecimal
+#' @rdname icd9GetInvalidDecimal
 #' @template icd9-short
 #' @export
-icd9InvalidShort <- function(icd9Short) {
+icd9GetInvalidShort <- function(icd9Short) {
   icd9Short[!icd9ValidShort(icd9Short)]
 }
-
-
 
 icd9IsMajor <- function(icd9)
   nchar(icd9) - icd9IsE(icd9) < 4

@@ -219,11 +219,11 @@ testChapters <- list(
 )
 
 test_that("condense single major and its children", {
-  expect_equal(icd9CondenseToExplain("391"),
+  expect_equal(icd9CondenseShort("391"),
                "Rheumatic fever with heart involvement")
-  expect_equal(icd9CondenseToExplain(icd9ChildrenShort("391")),
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("391")),
                "Rheumatic fever with heart involvement")
-  expect_equal(icd9CondenseToExplain(icd9ChildrenShort("391", onlyReal = TRUE)),
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("391", onlyReal = TRUE)),
                "Rheumatic fever with heart involvement")
 })
 
@@ -232,9 +232,9 @@ test_that("condense short range", {
   othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
                        "00323", "00324", "00329", "0038", "0039")
 
-  expect_equal(icd9CondenseToExplain(icd9Short = othersalmonella),
+  expect_equal(icd9CondenseShort(icd9Short = othersalmonella),
                "Other salmonella infections")
-  expect_equal(icd9CondenseToExplain(icd9Short = othersalmonella[-3]),
+  expect_equal(icd9CondenseShort(icd9Short = othersalmonella[-3]),
                icd9Hierarchy[c(9, 10, 12:18), "descLong"])
 
   expect_equal(icd9CondenseToMajor(othersalmonella, onlyReal = TRUE), "003")

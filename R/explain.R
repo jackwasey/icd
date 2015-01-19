@@ -48,15 +48,9 @@ icd9Explain.list <- function(icd9, isShort, condense = TRUE) {
 #' @export
 icd9Explain.character <- function(icd9, isShort, condense = TRUE) {
 
-  if (!isShort) {
-    # make sure there are preceding zeroes, in order to match the icd9Hierarchy
-    # data.
-    icd9 <- icd9AddLeadingZeroesDecimal(icd9)
-    icd9 <- icd9DecimalToShort(icd9)
-  }
-  if (condense) {
-    return(icd9CondenseToExplain(icd9))
-  }
+  if (!isShort) icd9 <- icd9DecimalToShort(icd9)
+  if (condense) return(icd9CondenseShort(icd9))
+
   mj <- unique(icd9GetMajor(icd9, isShort = TRUE))
   c(names(icd9::icd9ChaptersMajor)[icd9::icd9ChaptersMajor %in%
                                      mj[mj %in% icd9]],
@@ -183,11 +177,24 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #'   back up to parents which have descriptions in \code{icd9Hierarchy}, so it is
 #'   useful for generating a minimal textual description of a set of ICD-9
 #'   codes.
+#' @template icd9-any
 #' @template icd9-short
+#' @template icd9-decimal
+#' @template isShort
 #' @family ICD-9 ranges
-#' @export
 #' @keywords manip
-icd9CondenseToExplain <- function(icd9Short) {
+#' @export
+icd9Condense <- function(icd9, isShort) {
+  if (isShort) return(icd9CondenseShort(icd9))
+  icd9DecimalToShort(icd9CondenseShort(icd9))
+}
+
+icd9CondenseDecimal <- function(icd9Decimal)
+  icd9Condense(icd9Decimal, FALSE)
+
+#' @rdname icd9Condense
+#' @export
+icd9CondenseShort <- function(icd9Short) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.
   icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short))

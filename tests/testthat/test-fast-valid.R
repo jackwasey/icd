@@ -281,6 +281,14 @@ test_that("test major validation", {
   )
   expect_equal(icd9ValidMajorE(c("E", "E1", "E000", "E70", "E300", "E876")),
                c(FALSE, TRUE, TRUE, TRUE, TRUE, TRUE))
+
+  expect_equal(icd9ValidMajorV(c("", "1", "22", "333", "4444", "V", "V2", "V34",
+                   "V567", "E", "E1", "E000", "E70", "E300", "E876",
+                   "V1.1", "V2.89", "V12.4", "V23.45")),
+  c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE,
+    FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+    FALSE, FALSE, FALSE, FALSE)
+)
 })
 
 test_that("stop if invalid", {
