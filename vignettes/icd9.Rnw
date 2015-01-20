@@ -322,8 +322,8 @@ ahrqComorbid[c("Obesity", "Depression")]
 @
 The icd9Condense functions can be used to make a minimal set of parent codes which describes each group:
 <<"condenseMapping">>=
-lapply(ahrqComorbid[c("Obesity", "Depression")], icd9CondenseToMajor, onlyReal = T)
-ahrqComorbid[c("Obesity", "Depression")] %>% icd9ExplainShort(condense = FALSE)
+lapply(ahrqComorbid[c("Obesity", "Depression")], icd9CondenseToMajorShort, onlyReal = TRUE)
+ahrqComorbid[c("Obesity", "Depression")] %>% icd9ExplainShort(doCondense = FALSE)
 @
 
 \section{Elixhauser co-morbidities}
