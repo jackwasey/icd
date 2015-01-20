@@ -80,22 +80,17 @@ icd9Explain.numeric <- function(icd9, isShort, condense = TRUE) {
 #' @keywords internal
 icd9GuessIsShort <- function(icd9) {
   icd9 <- as.character(icd9)
-  if (is.list(icd9)) {
+  if (is.list(icd9))
     testCodes <- icd9[[1]]
-  } else {
+  else
     testCodes <- icd9
-  }
+
   vs <- icd9ValidShort(testCodes)
   vd <- icd9ValidDecimal(testCodes)
   vsm <- mean(vs)
   vdm <- mean(vd)
-  if (vsm - vdm > 0.5)
-    return(TRUE)
-
-  if (vdm - vsm > 0.5)
-    return(FALSE)
-
-  # NA for couldn't tell?
+  if (vsm - vdm > 0.5) return(TRUE)
+  if (vdm - vsm > 0.5) return(FALSE)
   NA
 }
 
@@ -306,7 +301,7 @@ icd9CondenseToMajorShort <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
   unique(c(includemjs, out))
 }
 
-icd9CondenseToShort <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
+icd9CondenseShort <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.
   i9t <- i9n <- sort(unique(icd9Short))
