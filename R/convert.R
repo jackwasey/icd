@@ -14,11 +14,6 @@
 #'   of structuring it that way.
   #'   \item two vectors of separated major and minor parts
 #'   }
-#' @details Due to a strange GCC compiler quirk, the words \code{major} and \code{minor}
-#' for function arguments in Rcpp code are not allowed. See
-#' \url{https:#github.com/RcppCore/Rcpp/issues/227}. This means there is a change from
-#' the previous versions of \strong{icd9}, since these must now be named \code{mjr} and
-#' \code{mnr}.
 #' @param major
 #' @param minor
 #' @param icd9-any

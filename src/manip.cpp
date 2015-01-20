@@ -6,7 +6,8 @@
 using namespace Rcpp;
 
 // zero-pad a single major value
-// [[Rcpp::export]]
+//' @rdname icd9AddLeadingZeroes
+// [[Rcpp::export("icd9_AddLeadingZeroesMajorSingle")]]
 String icd9AddLeadingZeroesMajorSingle(String mjr) {
   if (mjr == NA_STRING) { return(NA_STRING); }
   std::string m(mjr);
@@ -59,7 +60,7 @@ CharacterVector icd9AddLeadingZeroes(CharacterVector icd9, bool isShort) {
 // [[Rcpp::export]]
 CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short) {
   List parts = icd9::icd9ShortToParts(icd9Short);
-  parts["major"] = icd9::icd9AddLeadingZeroesMajor(parts["major"]);
+  parts["major"] = icd9::icd9_AddLeadingZeroesMajor(parts["major"]);
   return icd9::icd9PartsToShort(parts);
 }
 
@@ -67,12 +68,12 @@ CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short) {
 // [[Rcpp::export]]
 CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
   List parts = icd9::icd9DecimalToParts(icd9Decimal);
-  parts["major"] = icd9::icd9AddLeadingZeroesMajor(as<CharacterVector>(parts["major"]));
+  parts["major"] = icd9::icd9_AddLeadingZeroesMajor(as<CharacterVector>(parts["major"]));
   return icd9::icd9PartsToDecimal(parts);
 }
 
 //' @rdname icd9AddLeadingZeroes
-// [[Rcpp::export]]
+// [[Rcpp::export("icd9_AddLeadingZeroesMajor")]]
 CharacterVector icd9AddLeadingZeroesMajor(CharacterVector mjr) {
-  return sapply(mjr, icd9AddLeadingZeroesMajorSingle);
+  return sapply(mjr, icd9::icd9_AddLeadingZeroesMajorSingle);
 }

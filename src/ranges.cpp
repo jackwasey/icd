@@ -53,7 +53,7 @@ const CharacterVector vv = MakeAllMinors();
 //' @return NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
 //' @family ICD-9 ranges
 //' @keywords internal manip
-// [[Rcpp::export]]
+// [[Rcpp::export("icd9_ExpandMinor")]]
 CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false) {
 
   if (!isE) {
@@ -130,7 +130,7 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = tru
     CharacterVector newminors = icd9ExpandMinor(thismnr, icd9::icd9IsASingleE(thismjr));
 
     // push back slower, but difficult to predict size of output
-    std::vector< std::string > newshort = as<std::vector< std::string > >(icd9::icd9MajMinToShort(thismjr, newminors));
+    std::vector< std::string > newshort = as<std::vector< std::string > >(icd9::icd9_MajMinToShort(thismjr, newminors));
 
     // std insert is a thousand times faster than looping through CharacterVector and push_backing
     out.insert(newshort.begin(), newshort.end());

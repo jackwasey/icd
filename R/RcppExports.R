@@ -2,20 +2,17 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @rdname convert
-#' @export
-icd9MajMinToCode <- function(mjr, mnr, isShort) {
+icd9_MajMinToCode <- function(mjr, mnr, isShort) {
     .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', mjr, mnr, isShort)
 }
 
 #' @rdname convert
-#' @export
-icd9MajMinToShort <- function(mjr, mnr) {
+icd9_MajMinToShort <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToShort', PACKAGE = 'icd9', mjr, mnr)
 }
 
 #' @rdname convert
-#' @export
-icd9MajMinToDecimal <- function(mjr, mnr) {
+icd9_MajMinToDecimal <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToDecimal', PACKAGE = 'icd9', mjr, mnr)
 }
 
@@ -32,12 +29,11 @@ icd9PartsToDecimal <- function(parts) {
 }
 
 #' @rdname convert
-#' @export
-icd9MajMinToParts <- function(mjr, mnr) {
+icd9_MajMinToParts <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToParts', PACKAGE = 'icd9', mjr, mnr)
 }
 
-icd9MajMinToParts_list <- function(mjr, mnr) {
+icd9_MajMinToParts_list <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToParts_list', PACKAGE = 'icd9', mjr, mnr)
 }
 
@@ -110,7 +106,8 @@ icd9IsN <- function(icd9) {
     .Call('icd9_icd9IsN', PACKAGE = 'icd9', icd9)
 }
 
-icd9AddLeadingZeroesMajorSingle <- function(mjr) {
+#' @rdname icd9AddLeadingZeroes
+icd9_AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', mjr)
 }
 
@@ -139,7 +136,7 @@ icd9AddLeadingZeroesDecimal <- function(icd9Decimal) {
 }
 
 #' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesMajor <- function(mjr) {
+icd9_AddLeadingZeroesMajor <- function(mjr) {
     .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', mjr)
 }
 
@@ -159,7 +156,7 @@ icd9AddLeadingZeroesMajor <- function(mjr) {
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-icd9ExpandMinor <- function(mnr, isE = FALSE) {
+icd9_ExpandMinor <- function(mnr, isE = FALSE) {
     .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', mnr, isE)
 }
 

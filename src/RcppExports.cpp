@@ -1258,13 +1258,13 @@ RcppExport SEXP icd9_icd9ShortToParts_cpp_test(SEXP icd9ShortSEXP, SEXP minorEmp
 static int icd9_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("CharacterVector(*icd9MajMinToCode)(CharacterVector,CharacterVector,bool)");
-        signatures.insert("CharacterVector(*icd9MajMinToShort)(CharacterVector,CharacterVector)");
-        signatures.insert("CharacterVector(*icd9MajMinToDecimal)(CharacterVector,CharacterVector)");
+        signatures.insert("CharacterVector(*icd9_MajMinToCode)(CharacterVector,CharacterVector,bool)");
+        signatures.insert("CharacterVector(*icd9_MajMinToShort)(CharacterVector,CharacterVector)");
+        signatures.insert("CharacterVector(*icd9_MajMinToDecimal)(CharacterVector,CharacterVector)");
         signatures.insert("CharacterVector(*icd9PartsToShort)(List)");
         signatures.insert("CharacterVector(*icd9PartsToDecimal)(List)");
-        signatures.insert("List(*icd9MajMinToParts)(CharacterVector,CharacterVector)");
-        signatures.insert("List(*icd9MajMinToParts_list)(CharacterVector,CharacterVector)");
+        signatures.insert("List(*icd9_MajMinToParts)(CharacterVector,CharacterVector)");
+        signatures.insert("List(*icd9_MajMinToParts_list)(CharacterVector,CharacterVector)");
         signatures.insert("List(*icd9ShortToParts)(CharacterVector,String)");
         signatures.insert("List(*icd9DecimalToParts)(CharacterVector,String)");
         signatures.insert("CharacterVector(*icd9ShortToDecimal)(CharacterVector)");
@@ -1277,12 +1277,12 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("std::vector<bool>(*icd9IsE)(std::vector< std::string >)");
         signatures.insert("std::vector<bool>(*icd9Iicd9E)(std::vector< std::string >)");
         signatures.insert("std::vector<bool>(*icd9IsN)(std::vector< std::string >)");
-        signatures.insert("String(*icd9AddLeadingZeroesMajorSingle)(String)");
+        signatures.insert("String(*icd9_AddLeadingZeroesMajorSingle)(String)");
         signatures.insert("CharacterVector(*icd9AddLeadingZeroes)(CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9AddLeadingZeroesShort)(CharacterVector)");
         signatures.insert("CharacterVector(*icd9AddLeadingZeroesDecimal)(CharacterVector)");
-        signatures.insert("CharacterVector(*icd9AddLeadingZeroesMajor)(CharacterVector)");
-        signatures.insert("CharacterVector(*icd9ExpandMinor)(std::string,bool)");
+        signatures.insert("CharacterVector(*icd9_AddLeadingZeroesMajor)(CharacterVector)");
+        signatures.insert("CharacterVector(*icd9_ExpandMinor)(std::string,bool)");
         signatures.insert("CharacterVector(*icd9Children)(CharacterVector,bool,bool)");
         signatures.insert("CharacterVector(*icd9ChildrenShort)(CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9ChildrenDecimal)(CharacterVector,bool)");
@@ -1300,13 +1300,13 @@ static int icd9_RcppExport_validate(const char* sig) {
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP icd9_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("icd9", "icd9_icd9MajMinToCode", (DL_FUNC)icd9_icd9MajMinToCode_try);
-    R_RegisterCCallable("icd9", "icd9_icd9MajMinToShort", (DL_FUNC)icd9_icd9MajMinToShort_try);
-    R_RegisterCCallable("icd9", "icd9_icd9MajMinToDecimal", (DL_FUNC)icd9_icd9MajMinToDecimal_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_MajMinToCode", (DL_FUNC)icd9_icd9MajMinToCode_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_MajMinToShort", (DL_FUNC)icd9_icd9MajMinToShort_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_MajMinToDecimal", (DL_FUNC)icd9_icd9MajMinToDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9PartsToShort", (DL_FUNC)icd9_icd9PartsToShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9PartsToDecimal", (DL_FUNC)icd9_icd9PartsToDecimal_try);
-    R_RegisterCCallable("icd9", "icd9_icd9MajMinToParts", (DL_FUNC)icd9_icd9MajMinToParts_try);
-    R_RegisterCCallable("icd9", "icd9_icd9MajMinToParts_list", (DL_FUNC)icd9_icd9MajMinToParts_list_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_MajMinToParts", (DL_FUNC)icd9_icd9MajMinToParts_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_MajMinToParts_list", (DL_FUNC)icd9_icd9MajMinToParts_list_try);
     R_RegisterCCallable("icd9", "icd9_icd9ShortToParts", (DL_FUNC)icd9_icd9ShortToParts_try);
     R_RegisterCCallable("icd9", "icd9_icd9DecimalToParts", (DL_FUNC)icd9_icd9DecimalToParts_try);
     R_RegisterCCallable("icd9", "icd9_icd9ShortToDecimal", (DL_FUNC)icd9_icd9ShortToDecimal_try);
@@ -1319,12 +1319,12 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9IsE", (DL_FUNC)icd9_icd9IsE_try);
     R_RegisterCCallable("icd9", "icd9_icd9Iicd9E", (DL_FUNC)icd9_icd9Iicd9E_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsN", (DL_FUNC)icd9_icd9IsN_try);
-    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajorSingle", (DL_FUNC)icd9_icd9AddLeadingZeroesMajorSingle_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_AddLeadingZeroesMajorSingle", (DL_FUNC)icd9_icd9AddLeadingZeroesMajorSingle_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroes", (DL_FUNC)icd9_icd9AddLeadingZeroes_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesShort", (DL_FUNC)icd9_icd9AddLeadingZeroesShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesDecimal", (DL_FUNC)icd9_icd9AddLeadingZeroesDecimal_try);
-    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajor", (DL_FUNC)icd9_icd9AddLeadingZeroesMajor_try);
-    R_RegisterCCallable("icd9", "icd9_icd9ExpandMinor", (DL_FUNC)icd9_icd9ExpandMinor_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_AddLeadingZeroesMajor", (DL_FUNC)icd9_icd9AddLeadingZeroesMajor_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_ExpandMinor", (DL_FUNC)icd9_icd9ExpandMinor_try);
     R_RegisterCCallable("icd9", "icd9_icd9Children", (DL_FUNC)icd9_icd9Children_try);
     R_RegisterCCallable("icd9", "icd9_icd9ChildrenShort", (DL_FUNC)icd9_icd9ChildrenShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9ChildrenDecimal", (DL_FUNC)icd9_icd9ChildrenDecimal_try);

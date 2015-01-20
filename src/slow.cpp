@@ -149,5 +149,5 @@ List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty
     } // E code
   } // for
 
-  return icd9::icd9MajMinToParts(mjr, mnr);
+  return icd9::icd9_MajMinToParts(mjr, mnr);
 }

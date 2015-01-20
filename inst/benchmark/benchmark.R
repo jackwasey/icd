@@ -81,10 +81,10 @@ icd9Benchmark <- function() {
   )
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(mjr = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
+                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(mjr = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
+                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))
 
   # 3.5 sec in v0.5, 2.7 sec without validation checks
   #microbenchmark::microbenchmark(times = 5, icd9ChildrenShort_R("400" %i9s% "450"))
@@ -116,16 +116,16 @@ icd9Benchmark <- function() {
 
   #microbenchmark::microbenchmark(icd9ShortToDecimal_R(dat), icd9ShortToDecimal(dat), times=5)
 
-  #   mjr <- as.character(rep(seq.int(999), times = 5))
-  #   mnr <- as.character(rep(seq.int(9), times = 555))
-  #   microbenchmark::microbenchmark(icd9MajMinToShort_R(mjr, mnr), icd9MajMinToShort(mjr, mnr),
-  #                                  icd9MajMinToDecimal_R(mjr, mnr), icd9MajMinToDecimal(mjr, mnr),
+  #   major <- as.character(rep(seq.int(999), times = 5))
+  #   minor <- as.character(rep(seq.int(9), times = 555))
+  #   microbenchmark::microbenchmark(icd9MajMinToShort_R(major, minor), icd9MajMinToShort(major, minor),
+  #                                  icd9MajMinToDecimal_R(major, minor), icd9MajMinToDecimal(major, minor),
   #                                  times=10)
   #
-  #   mjr <- as.character(rep(seq.int(111), times = 5))
-  #   mnr <- as.character(rep(seq.int(1), times = 555))
-  #   microbenchmark::microbenchmark(icd9MajMinToShort_R(mjr, mnr), icd9MajMinToShort(mjr, mnr),
-  #                                  icd9MajMinToDecimal_R(mjr, mnr), icd9MajMinToDecimal(mjr, mnr),
+  #   major <- as.character(rep(seq.int(111), times = 5))
+  #   minor <- as.character(rep(seq.int(1), times = 555))
+  #   microbenchmark::microbenchmark(icd9MajMinToShort_R(major, minor), icd9MajMinToShort(major, minor),
+  #                                  icd9MajMinToDecimal_R(major, minor), icd9MajMinToDecimal(major, minor),
   #                                  times=100)
 
   microbenchmark::microbenchmark(icd9::icd9ExpandMinor("7", FALSE), icd9::icd9ExpandMinor_R("7", FALSE))

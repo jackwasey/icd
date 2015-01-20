@@ -53,7 +53,11 @@ Other ICD-9 convert: \code{\link{convert}},
   \code{\link{icd9PartsToDecimal}},
   \code{\link{icd9PartsToShort}},
   \code{\link{icd9ShortToDecimal}},
-  \code{\link{icd9ShortToParts}};
+  \code{\link{icd9ShortToParts}},
+  \code{\link{icd9_MajMinToCode}},
+  \code{\link{icd9_MajMinToDecimal}},
+  \code{\link{icd9_MajMinToParts}},
+  \code{\link{icd9_MajMinToShort}};
   \code{\link{icd9ChaptersToMap}};
   \code{\link{icd9LongToWide}};
   \code{\link{icd9WideToLong}}

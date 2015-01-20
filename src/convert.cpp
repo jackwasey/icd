@@ -7,9 +7,9 @@
 #include <icd9.h>
 using namespace Rcpp;
 
+// // temporarily move  @export to my shim
 //' @rdname convert
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export("icd9_MajMinToCode")]]
 CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool isShort ) {
 
   CharacterVector out;
@@ -61,8 +61,7 @@ CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool
 }
 
 //' @rdname convert
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export("icd9_MajMinToShort")]]
 CharacterVector icd9MajMinToShort(CharacterVector mjr,
 CharacterVector mnr) {
   if ((mjr.size()!=1 && mjr.size() != mnr.size()) ||
@@ -77,8 +76,7 @@ CharacterVector mnr) {
 }
 
 //' @rdname convert
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export("icd9_MajMinToDecimal")]]
 CharacterVector icd9MajMinToDecimal(CharacterVector mjr, CharacterVector mnr) {
   return icd9MajMinToCode(mjr, mnr, false);
 }
@@ -98,8 +96,7 @@ CharacterVector icd9PartsToDecimal(List parts) {
 }
 
 //' @rdname convert
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export("icd9_MajMinToParts")]]
 List icd9MajMinToParts(CharacterVector mjr, CharacterVector mnr) {
   List returned_frame = List::create(
     _["major"] = mjr,
@@ -115,7 +112,7 @@ List icd9MajMinToParts(CharacterVector mjr, CharacterVector mnr) {
 }
 
 // this is even faster, but loses some useful data frame features which cause test failure
-// [[Rcpp::export]]
+// [[Rcpp::export("icd9_MajMinToParts_list")]]
 List icd9MajMinToParts_list(CharacterVector mjr, CharacterVector mnr) {
   List out = List::create(
     _["major"] = mjr,
@@ -174,7 +171,7 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
     //mjr[i] = icd9::icd9AddLeadingZeroesMajorSingle(mjr[i]); // or loop through them all again...
   } // for
 
-  return icd9MajMinToParts(icd9::icd9AddLeadingZeroesMajor(mjr), mnr);
+  return icd9MajMinToParts(icd9::icd9_AddLeadingZeroesMajor(mjr), mnr);
 }
 
 //' @rdname convert
@@ -203,7 +200,7 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
     } else {
       mjrin = thiscode; mnrout = minorEmpty;
     }
-    mjrs.push_back(icd9::icd9AddLeadingZeroesMajorSingle(mjrin));
+    mjrs.push_back(icd9::icd9_AddLeadingZeroesMajorSingle(mjrin));
     mnrs.push_back(mnrout);
   }
   return List::create(_["major"] = mjrs, _["minor"] = mnrs);
