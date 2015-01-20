@@ -136,7 +136,7 @@ icd9ExplainDecimal(icd9ShortToDecimal("0019"))
 "391" %>% icd9ExplainShort()
 # default is to condense down to three-digit "major" level
 "391" %>% icd9ChildrenShort() %>% icd9ExplainShort()
-"391" %>% icd9ChildrenShort() %>% icd9ExplainShort(condense = FALSE)
+"391" %>% icd9ChildrenShort() %>% icd9ExplainShort(doCondense = FALSE)
 @
 Arbitrary named list(s) of codes:
 <<explainArb>>=
