@@ -65,9 +65,8 @@ icd9ExpandRangeShort("4280 ", "43014")
 Other ICD-9 ranges: \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
   \code{\link{icd9ChildrenShort}};
-  \code{\link{icd9CondenseToMajor}};
-  \code{\link{icd9Condense}},
-  \code{\link{icd9CondenseShort}};
-  \code{\link{icd9ExpandMinor}}
+  \code{\link{icd9CondenseToMajorShort}};
+  \code{\link{icd9ExpandMinor}};
+  \code{\link{icd9ExplainCondense}}
 }
 
