@@ -2,22 +2,20 @@
 % Please edit documentation in R/explain.R
 \name{icd9Condense}
 \alias{icd9Condense}
+\alias{icd9CondenseDecimal}
 \alias{icd9CondenseShort}
 \alias{icd9CondenseToMajorShort}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
-icd9Condense(icd9, isShort)
+icd9Condense(icd9, isShort, onlyReal = NULL, toMajor = TRUE)
 
 icd9CondenseToMajorShort(icd9Short, onlyReal = NULL)
 
 icd9CondenseShort(icd9Short, onlyReal = NULL, toMajor = TRUE)
+
+icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, toMajor = TRUE)
 }
 \arguments{
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
-
 \item{onlyReal}{single logical value, if TRUE, will limit the search to those
 codes which appear in the master list, not just syntactically valid codes.
 Since nearly valid, out-dated or new codes may be missed, not limiting to
@@ -29,6 +27,11 @@ master list given the year of the ICD-9 coding.}
 is a major category, but is not itself used as a diagnostic code.
 Therefore, strictly, asking for only \emph{real} codes excludes the major. We'll
 turn a blind eye to this if we specifically request majors with toMajor.}
+
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
+five characters is given in a code, then the digits are greedily assigned
+to hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
 }
 \description{
 This can be thought of as the inverse operation to

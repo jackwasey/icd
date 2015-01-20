@@ -179,9 +179,9 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #'   turn a blind eye to this if we specifically request majors with toMajor.
 #' @family ICD-9 ranges
 #' @export
-icd9Condense <- function(icd9, isShort) {
-  if (isShort) return(icd9CondenseShort(icd9))
-  icd9DecimalToShort(icd9CondenseShort(icd9))
+icd9Condense <- function(icd9, isShort, onlyReal = NULL, toMajor = TRUE) {
+  if (isShort) return(icd9CondenseShort(icd9, onlyReal, toMajor))
+  icd9CondenseDecimal(icd9, onlyReal, toMajor)
 }
 
 #' @rdname icd9Condense
@@ -267,6 +267,11 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, toMajor = TRUE) {
   sort(unique(c(i9o, i9w)))
 }
 
-icd9CondenseDecimal <- function(icd9Decimal)
-  icd9Condense(icd9Decimal, FALSE)
-
+#' @rdname icd9Condense
+#' @export
+icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, toMajor = TRUE)
+  icd9ShortToDecimal(
+    icd9CondenseShort(
+      icd9DecimalToShort(icd9Decimal), onlyReal, toMajor
+      )
+    )

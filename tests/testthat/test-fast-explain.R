@@ -19,6 +19,26 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 
 })
 
+test_that("explain S3 dispatch", {
+  expect_equal(icd9Explain("003.21", isShort = FALSE),
+               "Salmonella meningitis")
+  expect_equal(icd9ExplainDecimal("003.21"),
+               icd9Explain("003.21", isShort = FALSE))
+  expect_equal(icd9Explain.list(list(a = "003.21"), isShort = FALSE),
+               list(a=icd9Explain("00321", isShort = TRUE)))
+  expect_equal(icd9Explain.list(list(a = "003.21", b= "390"), isShort = FALSE),
+               list(a = icd9Explain("00321", isShort = TRUE),
+                    b = "Rheumatic fever without mention of heart involvement"))
+  expect_warning(res <- icd9Explain(list(a = "not", b="icd9code"), isShort = TRUE))
+  expect_equal(res, list(a = character(0), b = character(0)))
+  expect_warning(res <- icd9Explain(list(a = "not", b="icd9code"), isShort = FALSE))
+  expect_equal(res, list(a = character(0), b = character(0)))
+
+  expect_warning(res <- icd9Explain.numeric(3.21, isShort = FALSE))
+  expect_equal(res, icd9Explain("00321", isShort = TRUE))
+
+})
+
 test_that("explain single top level code which is billable, has no children", {
   # the code "390" is a billable major: good test case.
   expect_identical(icd9ExplainShort("390"),
@@ -229,6 +249,20 @@ test_that("condense full ranges", {
   expect_equal(icd9CondenseShort(icd9ChildrenShort("410", onlyReal = FALSE), onlyReal = FALSE), "410")
   expect_equal(icd9CondenseShort(icd9ChildrenShort("V12", onlyReal = FALSE), onlyReal = FALSE), "V12")
   expect_equal(icd9CondenseShort(icd9ChildrenShort("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
+  # repeat some tests with decimals instead
+  expect_equal(icd9CondenseDecimal(icd9Children("003", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "003")
+  expect_equal(icd9Condense(icd9ChildrenDecimal("3", onlyReal = FALSE), isShort = FALSE, onlyReal = FALSE), "003")
+  expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("410", onlyReal = FALSE), onlyReal = FALSE), "410")
+  expect_equal(icd9CondenseDecimal(icd9Children("V12", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "V12")
+  expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
+  # repeat some tests with decimals and smaller codes
+  expect_equal(icd9CondenseDecimal(icd9Children("003.2", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE),
+               "003.2")
+  expect_equal(icd9Condense(icd9ChildrenDecimal("3.2", onlyReal = FALSE), isShort = FALSE, onlyReal = FALSE),
+               "003.2")
+  expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("410.0", onlyReal = FALSE), onlyReal = FALSE), "410.0")
+  expect_equal(icd9CondenseDecimal(icd9Children("V12", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "V12")
+  expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE), onlyReal = FALSE), "0031")
   # major is allowed
