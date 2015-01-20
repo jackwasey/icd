@@ -35,7 +35,7 @@ Much faster in C++, but gains diminished with increasing numbers of input shorts
 library(magrittr)
 icd9ChildrenShort("10201", FALSE) # no children other than self
 icd9ChildrenShort("10201", TRUE) # empty list because 102.01 is not a meaningful code
-icd9ChildrenShort("003", TRUE) \%>\% icd9ExplainShort(condense = FALSE)
+icd9ChildrenShort("003", TRUE) \%>\% icd9ExplainShort(doCondense = FALSE)
 icd9ChildrenDecimal("100.0")
 icd9ChildrenDecimal("100.00")
 icd9ChildrenDecimal("2.34")

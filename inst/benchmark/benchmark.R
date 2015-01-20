@@ -5,6 +5,29 @@
 #' importance, after correctness. R package test code is for correctness,
 #' whereas this script stresses the core functions, and looks for bottlenecks.
 
+
+randomPatients <- function(n = 50000, np = 20) {
+  pts <- round(n / np)
+  data.frame(
+    visitId = sample(seq(1, pts), replace = TRUE, size = n),
+    icd9 = randomShortIcd9(n),
+    poa = as.factor(
+      sample(x = c("Y","N", "n", "n", "y", "X","E","",NA),
+             replace = TRUE, size = n))
+  )
+}
+
+randomShortIcd9 <- function(n = 50000)
+  as.character(floor(runif(min = 1, max = 99999, n = n)))
+
+randomDecimalIcd9 <- function(n = 50000)
+  paste(
+    round(runif(min = 1, max = 999, n = n)),
+    sample(icd9ExpandMinor(), replace = TRUE, size = n),
+    sep = "."
+  )
+
+
 icd9Benchmark <- function() {
   # generate large data set: this is copied from test-ICD9.R for now...
   set.seed(1441)
@@ -124,24 +147,3 @@ icd9Benchmark <- function() {
   microbenchmark::microbenchmark(icd9::icd9IsV_cpp_slower(icd9), icd9::icd9IsV_R(icd9), icd9::icd9IsV_cpp_slow(icd9), icd9::icd9IsV(icd9))
 
 }
-
-randomPatients <- function(n = 50000, np = 20) {
-  pts <- round(n / np)
-  data.frame(
-    visitId = sample(seq(1, pts), replace = TRUE, size = n),
-    icd9 = randomShortIcd9(n),
-    poa = as.factor(
-      sample(x = c("Y","N", "n", "n", "y", "X","E","",NA),
-             replace = TRUE, size = n))
-  )
-}
-
-randomShortIcd9 <- function(n = 50000)
-  as.character(floor(runif(min = 1, max = 99999, n = n)))
-
-randomDecimalIcd9 <- function(n = 50000)
-  paste(
-    round(runif(min = 1, max = 999, n = n)),
-    sample(icd9ExpandMinor(), replace = TRUE, size = n),
-    sep = "."
-  )
