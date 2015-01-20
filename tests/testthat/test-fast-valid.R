@@ -309,6 +309,7 @@ test_that("icd-9 code is really in the list, not just syntactically valid", {
   expect_false(icd9IsRealDecimal("E9329"))
   expect_false(icd9IsRealDecimal("J80.27"))
   expect_false(icd9IsRealDecimal("V802.7"))
+  expect_false(icd9IsReal("V802.7", isShort = FALSE))
 
   expect_equal(icd9IsRealDecimal("V802.7"), FALSE)
   expect_equal(icd9IsReal(c("8027", "E9329", "E000", "armitage"),
@@ -355,4 +356,31 @@ test_that("filter valid - data frame input", {
                mixInvalidPts[2, ])
   expect_equal(icd9FilterValid(mixInvalidPts, isShort = TRUE, invert = FALSE),
                mixInvalidPts[c(1,3), ])
+})
+
+test_that("stop if invalid decimal", {
+  expect_error(stopIfInvalidIcd9("chipotle", isShort = FALSE))
+  expect_that(stopIfInvalidIcd9("100.2", isShort = TRUE), throws_error())
+  expect_that(stopIfInvalidIcd9("1002", isShort = FALSE), throws_error())
+  expect_that(stopIfInvalidIcd9("100.2", isShort = FALSE), testthat::not(throws_error()))
+})
+
+test_that("validate mappings", {
+  # TODO: check all real, also?
+  expect_true(icd9ValidMappingDecimal(list(a="100.1", b="202.3")))
+  expect_true(icd9ValidMappingShort(list(a="1001", b="2023")))
+  expect_false(icd9ValidMappingDecimal(list(a="1001", b="2023")))
+  expect_false(icd9ValidMappingShort(list(a="100.1", b="202.3")))
+
+  expect_false(icd9ValidMapping(list(a="car", b="et"), isShort = FALSE))
+  expect_true(icd9ValidMapping(list(a="1001", b="2023"), isShort = TRUE))
+})
+
+test_that("get invalid decimals", {
+  expect_equal(icd9GetInvalidDecimal(c("10.1", "rhubarb", "3000")), c("rhubarb", "3000"))
+})
+
+test_that("get real codes from a longer list", {
+  expect_equal(icd9GetRealShort(c("003", "0031", "0032"), majorOk = FALSE), "0031")
+  expect_equal(icd9GetRealDecimal(c("003", "003.1", "3.2"), majorOk = FALSE), "003.1")
 })

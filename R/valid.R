@@ -194,13 +194,13 @@ icd9ValidMapping <- function(icd9Mapping, isShort)
 
 #' @rdname icd9ValidMapping
 #' @export
-icd9ValidMappingDecimal <- function(icd9Mapping)
-  icd9ValidMapping(icd9Mapping, FALSE)
+icd9ValidMappingShort <- function(icd9Mapping)
+  icd9ValidMapping(icd9Mapping, TRUE)
 
 #' @rdname icd9ValidMapping
 #' @export
-icd9ValidMappingShort <- function(icd9Mapping)
-  icd9ValidMapping(icd9Mapping, TRUE)
+icd9ValidMappingDecimal <- function(icd9Mapping)
+  icd9ValidMapping(icd9Mapping, FALSE)
 
 #' @rdname icd9ValidMapping
 #' @export
@@ -225,16 +225,14 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
 #' @keywords manip
 #' @family ICD-9 validation
 #' @export
-icd9GetInvalidDecimal <- function(icd9Decimal) {
+icd9GetInvalidDecimal <- function(icd9Decimal)
   icd9Decimal[!icd9ValidDecimal(icd9Decimal)]
-}
 
 #' @rdname icd9GetInvalidDecimal
 #' @template icd9-short
 #' @export
-icd9GetInvalidShort <- function(icd9Short) {
+icd9GetInvalidShort <- function(icd9Short)
   icd9Short[!icd9ValidShort(icd9Short)]
-}
 
 icd9IsMajor <- function(icd9)
   nchar(icd9) - icd9IsE(icd9) < 4
