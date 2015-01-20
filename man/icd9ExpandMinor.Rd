@@ -42,8 +42,7 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9ChildrenShort}};
   \code{\link{icd9Condense}},
   \code{\link{icd9CondenseShort}},
-  \code{\link{icd9CondenseToMajorShort}};
-  \code{\link{icd9ExplainCondense}}
+  \code{\link{icd9CondenseToMajorShort}}
 }
 \keyword{internal}
 \keyword{manip}
