@@ -301,7 +301,7 @@ icd9CondenseToMajorShort <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
   unique(c(includemjs, out))
 }
 
-icd9CondenseShort <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
+icd9CondenseShort <- function(icd9Short, onlyReal, toMajor = TRUE) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.
   i9t <- i9n <- sort(unique(icd9Short))
@@ -309,12 +309,14 @@ icd9CondenseShort <- function(icd9Short, onlyReal, dropNonReal = TRUE) {
   i9o <- c()
   for (i in i9n) {
     matchKids <- icd9ChildrenShort(i, onlyReal = onlyReal)
+    if (toMajor && onlyReal)
+      matchKids <- c(unique(icd9GetMajor(i, isShort = TRUE)), matchKids)
     if (all(matchKids %in% i9t)) {
       i9t <- i9t[i9t %nin% matchKids] # drop the matches
       i9o <- c(i9o, i)
     }
   }
-  if (onlyReal && dropNonReal) out <- out[icd9IsRealShort(out)]
+  if (onlyReal) return(icd9GetRealShort(i9o))
   i9o
 }
 
