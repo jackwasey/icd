@@ -3,16 +3,17 @@ context("explain ICD-9: code to human-readable")
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
     icd9ExplainShort(icd9ChildrenShort("391", onlyReal = FALSE),
-                     condense = FALSE),
-    c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
+                     doCondense = FALSE),
+    c("Rheumatic fever with heart involvement","Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
       "Acute rheumatic heart disease, unspecified")
   )
+  # TODO: also warn or message if there are codes without explanations
 
   #TODO same but condensing
   expect_identical(
-    icd9ExplainShort(icd9ChildrenShort("391"), condense = TRUE),
+    icd9ExplainShort(icd9ChildrenShort("391"), doCondense = TRUE),
     "Rheumatic fever with heart involvement"
   )
 
@@ -31,9 +32,9 @@ test_that("expalin a single top level code without a top level explanation", {
 
 
 test_that("explain a single leaf node" , {
-  expect_equal(icd9ExplainShort("27800", condense = FALSE),
+  expect_equal(icd9ExplainShort("27800", doCondense = FALSE),
                "Obesity, unspecified")
-  expect_equal(icd9ExplainShort("27800", condense = TRUE),
+  expect_equal(icd9ExplainShort("27800", doCondense = TRUE),
                "Obesity, unspecified")
 })
 
@@ -173,7 +174,8 @@ test_that("parse icd9ChaptersMajor vs those listed
           in the other CDC source of the leaf definitions.", {
             # get all the majors from the other list, to compare
 
-            compareMajors <- unique(icd9GetMajor(icd9::icd9Hierarchy$icd9, isShort = TRUE))
+            compareMajors <- unique(icd9GetMajor(icd9::icd9Hierarchy$icd9,
+                                                 isShort = TRUE))
             expect_true(all(compareMajors %in% icd9ChaptersMajor))
             expect_true(all(icd9ChaptersMajor %in% compareMajors))
           })
@@ -229,39 +231,71 @@ test_that("condense full ranges", {
   expect_equal(icd9CondenseShort(icd9ChildrenShort("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE), onlyReal = FALSE), "0031")
+  # major is allowed
+  expect_equal(icd9CondenseShort(c("003", othersalmonella), onlyReal = TRUE), "003")
+  # major is returned
+  expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
+  expect_equal(icd9CondenseShort(othersalmonella, onlyReal = FALSE), othersalmonella)
+  # now do we find a missing major if all chilren present?
+  almostall003 <- icd9ChildrenShort("003", onlyReal = FALSE)
+  almostall003 <- almostall003[almostall003 != "003"] # drop the major
+  expect_equal(icd9CondenseShort(almostall003, onlyReal = FALSE, toMajor = TRUE), "003")
+
+  # tomajor = false
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE), onlyReal = FALSE, toMajor = FALSE), "0031")
+  # major is allowed
+  expect_that(res <- icd9CondenseShort(c("003", othersalmonella), onlyReal = TRUE, toMajor = FALSE),
+              gives_warning())
+  expect_equal(res, character())
+  # major is returned
+  expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
+  expect_equal(icd9CondenseShort(othersalmonella, onlyReal = FALSE), othersalmonella)
+  # now do we find a missing major if all chilren present?
+  almostall003 <- icd9ChildrenShort("003", onlyReal = FALSE)
+  almostall003 <- almostall003[almostall003 != "003"] # drop the major
+  expect_equal(icd9CondenseShort(almostall003, onlyReal = FALSE, toMajor = TRUE), "003")
+
 })
 
 test_that("condense single major and its children", {
-  expect_equal(icd9CondenseShort("391"),
+  # message for not specifying onlyReal
+  expect_that(res <- icd9CondenseShort("003"), shows_message())
+  expect_equal(res, "003")
+
+  skip("TODO: recode these as Explain tests")
+  expect_equal(icd9ExplainShort("391"),
                "Rheumatic fever with heart involvement")
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("391")),
+  expect_equal(icd9ExplainShort(icd9ChildrenShort("391")),
                "Rheumatic fever with heart involvement")
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("391", onlyReal = TRUE)),
+  expect_equal(icd9ExplainShort(icd9ChildrenShort("391", onlyReal = TRUE)),
                "Rheumatic fever with heart involvement")
 })
 
 test_that("condense short range", {
 
-  othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
-                       "00323", "00324", "00329", "0038", "0039")
-
-  expect_equal(icd9CondenseShort(icd9Short = othersalmonella),
+  expect_equal(icd9ExplainShort(icd9Short = othersalmonella),
                "Other salmonella infections")
-  expect_equal(icd9CondenseShort(icd9Short = othersalmonella[-3]),
+  expect_equal(icd9ExplainShort(icd9Short = othersalmonella[-3]),
                icd9Hierarchy[c(9, 10, 12:18), "descLong"])
 
-  expect_equal(icd9CondenseToMajor(othersalmonella, onlyReal = TRUE), "003")
-  expect_equal(icd9CondenseToMajor(othersalmonella, onlyReal = FALSE),
+  expect_equal(icd9CondenseToMajorShort(othersalmonella, onlyReal = TRUE), "003")
+  expect_equal(icd9CondenseToMajorShort(othersalmonella, onlyReal = FALSE),
                othersalmonella)
-  expect_equal(icd9CondenseToMajor(othersalmonella[-3], onlyReal = TRUE),
+  expect_equal(icd9CondenseToMajorShort(othersalmonella[-3], onlyReal = TRUE),
                othersalmonella[-3])
-  expect_equal(icd9CondenseToMajor(othersalmonella[-3], onlyReal = FALSE),
+  expect_equal(icd9CondenseToMajorShort(othersalmonella[-3], onlyReal = FALSE),
                othersalmonella[-3])
 
   expect_equal(sort(icd9ChildrenShort(icd9Short = "001", onlyReal = TRUE)),
                c("0010", "0011", "0019"))
 
-
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("00320", onlyReal = TRUE), onlyReal = TRUE), "00320")
+  # if we ask for real codes, we should expect all real codes as input:
+  expect_that(icd9CondenseShort(c("0032", icd9ChildrenShort("0032", onlyReal = TRUE)), onlyReal = TRUE), gives_warning())
+  # but majors should be okay, even if not 'real'
+  expect_that(icd9CondenseShort(c("003", icd9ChildrenShort("003", onlyReal = TRUE))), testthat::not(gives_warning()))
+  # unless we excluded majors:
+  expect_that(icd9CondenseShort(c("003", icd9ChildrenShort("003", onlyReal = TRUE)), toMajor = FALSE), shows_message())
 
 })
 

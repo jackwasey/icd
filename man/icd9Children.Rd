@@ -6,11 +6,11 @@
 \alias{icd9ChildrenShort}
 \title{Expand 5 character form 'short' ICD9 to all possible sub codes}
 \usage{
-icd9Children(icd9, isShort, onlyReal = FALSE)
+icd9Children(icd9, isShort, onlyReal = TRUE)
 
-icd9ChildrenShort(icd9Short, onlyReal = FALSE)
+icd9ChildrenShort(icd9Short, onlyReal = TRUE)
 
-icd9ChildrenDecimal(icd9Decimal, onlyReal = FALSE)
+icd9ChildrenDecimal(icd9Decimal, onlyReal = TRUE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -42,11 +42,14 @@ icd9ChildrenDecimal("2.34")
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{\%i9d\%}},
-  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{\%i9da\%}}, \code{\link{\%i9mj\%}},
+  \code{\link{\%i9s\%}}, \code{\link{\%i9sa\%}},
   \code{\link{icd9ExpandRange}},
   \code{\link{icd9ExpandRangeDecimal}},
   \code{\link{icd9ExpandRangeMajor}},
   \code{\link{icd9ExpandRangeShort}};
+  \code{\link{icd9Condense}},
+  \code{\link{icd9CondenseShort}},
   \code{\link{icd9CondenseToMajorShort}};
   \code{\link{icd9ExpandMinor}};
   \code{\link{icd9ExplainCondense}}

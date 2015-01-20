@@ -9,17 +9,17 @@
 \alias{icd9ExplainShort}
 \title{explain ICD9 codes}
 \usage{
-icd9Explain(icd9, isShort, condense = TRUE)
+icd9Explain(icd9, isShort, doCondense = TRUE)
 
-icd9ExplainShort(icd9Short, condense = TRUE)
+icd9ExplainShort(icd9Short, doCondense = TRUE)
 
-icd9ExplainDecimal(icd9Decimal, condense = TRUE)
+icd9ExplainDecimal(icd9Decimal, doCondense = TRUE)
 
-\method{icd9Explain}{list}(icd9, isShort, condense = TRUE)
+\method{icd9Explain}{list}(icd9, isShort, doCondense = TRUE)
 
-\method{icd9Explain}{character}(icd9, isShort, condense = TRUE)
+\method{icd9Explain}{character}(icd9, isShort, doCondense = TRUE)
 
-\method{icd9Explain}{numeric}(icd9, isShort, condense = TRUE)
+\method{icd9Explain}{numeric}(icd9, isShort, doCondense = TRUE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -30,7 +30,7 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 \item{isShort}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form.}
 
-\item{condense}{single logical value which indicates whether to condense
+\item{doCondense}{single logical value which indicates whether to condense
 the given set of ICD-9 codes by replacing subsets of codes with 'parent'
 codes which exactly encompass certain subsets. E.g. If all cholera
 diagnoses are provided, only '001 - Cholera' needs to be displayed, not all

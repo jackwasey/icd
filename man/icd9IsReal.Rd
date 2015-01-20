@@ -9,17 +9,17 @@
 \alias{icd9IsRealShort}
 \title{Does ICD-9 code exist}
 \usage{
-icd9IsReal(icd9, isShort)
+icd9IsReal(icd9, isShort, majorOk = TRUE)
 
-icd9IsRealShort(icd9Short)
+icd9IsRealShort(icd9Short, majorOk = TRUE)
 
-icd9IsRealDecimal(icd9Decimal)
+icd9IsRealDecimal(icd9Decimal, majorOk = TRUE)
 
-icd9GetReal(icd9, isShort)
+icd9GetReal(icd9, isShort, majorOk = TRUE)
 
-icd9GetRealShort(icd9Short)
+icd9GetRealShort(icd9Short, majorOk = TRUE)
 
-icd9GetRealDecimal(icd9Decimal)
+icd9GetRealDecimal(icd9Decimal, majorOk = TRUE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is

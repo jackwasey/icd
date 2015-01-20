@@ -13,7 +13,8 @@ notation, the 'major' part is be xyz, even when x and y are zero, thus the
 last two characters represent the 'minor' part, in this case.)}
 
 \item{isE}{single logical, which if TRUE, treats the minor as part of an E
-code (which is one character), as opposed to a V or numeric-only code,}
+code (which is one character), as opposed to a V or numeric-only code,
+which is two character. Default is \code{FALSE}.}
 }
 \value{
 NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
@@ -24,14 +25,14 @@ Accepts a single number or character input starting point for
   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
 }
 \examples{
-\dontrun{
-  icd9:::icd9ExpandMinor(isE = FALSE) # return all possible decimal parts of ICD9 codes (111 in total)
-  }
+# return all possible decimal parts of ICD9 codes (111 in total)
+  length(icd9:::icd9ExpandMinor("", isE = FALSE))
   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{\%i9d\%}},
-  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{\%i9da\%}}, \code{\link{\%i9mj\%}},
+  \code{\link{\%i9s\%}}, \code{\link{\%i9sa\%}},
   \code{\link{icd9ExpandRange}},
   \code{\link{icd9ExpandRangeDecimal}},
   \code{\link{icd9ExpandRangeMajor}},
@@ -39,6 +40,8 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
   \code{\link{icd9ChildrenShort}};
+  \code{\link{icd9Condense}},
+  \code{\link{icd9CondenseShort}},
   \code{\link{icd9CondenseToMajorShort}};
   \code{\link{icd9ExplainCondense}}
 }

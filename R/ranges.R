@@ -66,9 +66,12 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do
 #'   valid children. However, I expect at least some of these have been used in
 #'   some billing databases.
 #'
-#'   As with \code{link{icd9ExpandRangeShort}} great care is taken
-#'   not to include codes which have children not in the range. E.g. "100.9" to
-#'   "101.1" would _not_ include code "101".
+#'   As with \code{link{icd9ExpandRangeShort}} great care is taken not to
+#'   include codes which have children not in the range. E.g. "100.9" to "101.1"
+#'   would _not_ include code "101".
+#'
+#'   \code{onlyReal} default is \code{TRUE} (a change from previous versions)
+#'   since this is far more likely to be useful to the end user.
 #' @examples
 #' "4280 " %i9s% "4289 "
 #' "V80 " %i9s% " V8210 "
@@ -83,27 +86,34 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do
 #' @import jwutil
 #' @family ICD-9 ranges
 #' @export
-icd9ExpandRange <- function(start, end, isShort, onlyReal = FALSE) {
+icd9ExpandRange <- function(start, end, isShort, onlyReal = TRUE) {
   if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal))
   return(icd9ExpandRangeDecimal(start, end, onlyReal))
 }
 
 #' @rdname icd9ExpandRange
 #' @export
-icd9ExpandRangeShort <- function(start, end, onlyReal = FALSE, omitParents = FALSE) {
+icd9ExpandRangeShort <- function(start, end,
+                                 onlyReal = TRUE,
+                                 omitParents = FALSE) {
+  checkmate::checkVector(start, len = 1) # i'll permit numeric but prefer char
+  checkmate::checkVector(end, len = 1)
   start <- icd9AddLeadingZeroesShort(trim(start))
   end <- icd9AddLeadingZeroesShort(trim(end))
 
   worker <- function(s, e, lookup) {
+    # s & e should be length 1, so match will only give a single value
     si <- match(s, lookup)
-    if (is.na(si)) stop(sprintf(
+    checkmate::assertInteger(si, len = 1)
+    if (is.na(si[1])) stop(sprintf(
       "start value '%s' not found in look-up table of ICD-9 codes.", s))
     # now if end is not a full-length code (5 for V or N, 4 for E), we keep
     # going until we get to the last code before the same hierarchical level is
     # reached. E.g. 101 to 102 should include all of 102 subcodes, but not 103.
     # See the tests.
     ei <- match(e, lookup)
-    if (is.na(ei)) stop(sprintf(
+    checkmate::assertInteger(ei, len = 1)
+    if (is.na(ei[1])) stop(sprintf(
       "end value '%s' not found in look-up table of ICD-9 codes.", e))
     if (ei < si) stop("end code must be greater than or equal to start code")
     if (nchar(e) != 5) {
@@ -144,40 +154,55 @@ icd9ExpandRangeShort <- function(start, end, onlyReal = FALSE, omitParents = FAL
 
 #' @rdname icd9ExpandRange
 #' @export
-icd9ExpandRangeMajor <- function(start, end) {
+icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
   stopifnot(length(start) == 1 && length(end) == 1)
   c <- icd9ExtractAlphaNumeric(start)
   d <- icd9ExtractAlphaNumeric(end)
   # cannot range between numeric, V and E codes, so ensure same type.
   stopifnot(toupper(c[1]) == toupper(d[1]))
   if (icd9IsV(start)) fmt <- "%02d" else fmt <- "%03d"
-  paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
+  majors <- paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
+  if (onlyReal) return(icd9GetRealShort(majors, majorOk = TRUE))
+  majors
 }
 
 #' @rdname icd9ExpandRange
 #' @export
-icd9ExpandRangeDecimal <- function(start, end) {
+icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE, omitParents = FALSE) {
   icd9ShortToDecimal(
     icd9ExpandRangeShort(
-      icd9DecimalToShort(start), icd9DecimalToShort(end)
+      icd9DecimalToShort(start), icd9DecimalToShort(end),
+      onlyReal = onlyReal, omitParents = omitParents
     )
   )
 }
 
 #' @rdname icd9ExpandRange
 #' @export
+"%i9da%" <- function(start, end) {
+  icd9ExpandRangeDecimal(start, end, onlyReal = FALSE)
+}
+
+#' @rdname icd9ExpandRange
+#' @export
+"%i9sa%" <- function(start, end) {
+  icd9ExpandRangeShort(start, end, onlyReal = FALSE)
+}
+
+#' @rdname icd9ExpandRange
+#' @export
 "%i9d%" <- function(start, end) {
-  icd9ExpandRangeDecimal(start, end)
+  icd9ExpandRangeDecimal(start, end, onlyReal = TRUE)
 }
 
 #' @rdname icd9ExpandRange
 #' @export
 "%i9mj%" <- function(start, end) {
-  icd9ExpandRangeMajor(start = start, end = end)
+  icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 }
 
 #' @rdname icd9ExpandRange
 #' @export
 "%i9s%" <- function(start, end) {
-  icd9ExpandRangeShort(start, end)
+  icd9ExpandRangeShort(start, end, onlyReal = TRUE)
 }

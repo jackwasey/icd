@@ -180,19 +180,19 @@ icd9ExpandMinor <- function(mnr, isE = FALSE) {
 #' icd9ChildrenDecimal("2.34")
 #'
 #' @export
-icd9Children <- function(icd9, isShort, onlyReal = FALSE) {
+icd9Children <- function(icd9, isShort, onlyReal = TRUE) {
     .Call('icd9_icd9Children', PACKAGE = 'icd9', icd9, isShort, onlyReal)
 }
 
 #' @rdname icd9Children
 #' @export
-icd9ChildrenShort <- function(icd9Short, onlyReal = FALSE) {
+icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE) {
     .Call('icd9_icd9ChildrenShort', PACKAGE = 'icd9', icd9Short, onlyReal)
 }
 
 #' @rdname icd9Children
 #' @export
-icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE) {
+icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE) {
     .Call('icd9_icd9ChildrenDecimal', PACKAGE = 'icd9', icd9Decimal, onlyReal)
 }
 
@@ -203,7 +203,6 @@ icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = FALSE) {
 #' @template icd9-any
 #' @template isShort
 #' @param isShortReference logical, see argument \code{isShort}
-#' @template invalid
 #' @return logical vector of which icd9 match or are subcategory of
 #'   \code{icd9Reference}
 #' @keywords internal

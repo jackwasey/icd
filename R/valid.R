@@ -1,16 +1,3 @@
-#' @title invalid actions, default is first item
-#' @description Some functions accept \code{invalidAction} argument, but require
-#'   non-default validation, but the vast majority will honor the default of
-#'   'ignore.' Ignore may lead to downstream errors, since bad data may arrive
-#'   in internal functions, however, this is the fastest option. A typical
-#'   use-case of this package would involve validation and cleaning steps (with
-#'   validation), followed by repeated analysis (as fast as possible, with
-#'   minimal validation).
-#'
-#' @keywords character
-#' @export
-icd9InvalidActions <- c("ignore", "silent", "warn", "stop")
-
 #' @title warn or stop with invalid ICD-9 codes
 #' @description In the case of warning, execution continues, and the logical
 #'   vector containing the *invalid* codes is returned invisibly. Returning the
@@ -41,61 +28,8 @@ warnIfInvalidIcd9 <- function(icd9, isShort) {
   invalids <- icd9[invalidLogical]
   if (length(invalids > 0)) warning("Invalid ICD-9 codes found: ",
                                     paste(invalids, collapse=", "))
-  invisible(invalidLogical)
+  invisible(icd9[invalidLogical])
 }
-
-#' stop, warn, replace invalid with NA or continue
-#'
-#' Switch based on \code{invalidAction} If \code{major} is provided, then
-#' \code{isShort} is ignored.
-#' @return icd9 codes, with invalid codes replaced by NA, if \code{invalidAction
-#'   != "ignore"}
-#' @template icd9-any
-#' @template isShort
-#' @template invalid
-#' @template major
-#' @family ICD9 validation
-#' @keywords internal
-icd9ValidNaWarnStop <- function(icd9, isShort, isMajor = FALSE,
-                                invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
-  # get out quickly without expense of validation
-  if (invalidAction == "ignore") return(invisible(icd9))
-  if (isMajor) {
-    valid <- icd9ValidMajor(icd9)
-  } else {
-    if (isShort) {
-      valid <- icd9ValidShort(icd9)
-    } else {
-      valid <- icd9ValidDecimal(icd9)
-    }
-  }
-  if (any(!valid)) icd9WarnStopMessage("Invalid ICD-9 codes found: ",
-                                       paste(icd9[!valid]),
-                                       invalidAction = invalidAction)
-  icd9[!valid] <- NA # silent is only option left
-  invisible(icd9)
-}
-
-#' @title warn or stop with message based on switch
-#' @description Note that the default action is "stop," not "warn" here.
-#'   "ignore" and "silent" are synonymous.
-#' @param ... message components passed on to \code{warning} or \code{stop}
-#' @param invalid
-#' @keywords internal
-icd9WarnStopMessage <- function(..., invalidAction = c("stop", "warn",
-                                                       "silent", "ignore")) {
-  invalidAction <- match.arg(invalidAction)
-  if (invalidAction == "warn") warning(...)
-  if (invalidAction == "stop") stop(...)
-}
-
-#' @rdname icd9ValidNaWarnStop
-#' @template icd9-short
-icd9ValidNaWarnStopShort <- function(icd9Short,
-                                     invalidAction = icd9InvalidActions)
-  icd9ValidNaWarnStop(icd9 = icd9Short, isShort = TRUE, isMajor = FALSE,
-                      invalidAction = match.arg(invalidAction))
 
 #' @title check whether any ICD-9 code is syntactically valid
 #' @template icd9-any
@@ -280,7 +214,7 @@ icd9GetInvalidMappingShort <- function(icd9Mapping) {
 icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
   x <- lapply(icd9Mapping, FUN = icd9GetInvalidDecimal)
   x[lapply(x, length) > 0]
-  }
+}
 
 #' @title invalid subset of decimal or short ICD-9 codes
 #' @description given vector of short or decimal ICD-9 codes in
@@ -314,44 +248,48 @@ icd9IsMajor <- function(icd9)
 #' @template isShort
 #' @return logical vector
 #' @export
-icd9IsReal <- function(icd9, isShort) {
-  if (isShort) return(icd9IsRealShort(icd9))
-  icd9IsRealDecimal(icd9)
+icd9IsReal <- function(icd9, isShort, majorOk = TRUE) {
+  if (isShort) return(icd9IsRealShort(icd9, majorOk = majorOk))
+  icd9IsRealDecimal(icd9, majorOk = majorOk)
 }
 
 #' @rdname icd9IsReal
 #' @template icd9-short
 #' @export
-icd9IsRealShort <- function(icd9Short) {
+icd9IsRealShort <- function(icd9Short, majorOk = TRUE) {
+  if (majorOk)
+    return(icd9Short %in% c(icd9::icd9Hierarchy[["icd9"]],
+                            icd9::icd9ChaptersMajor))
   icd9Short %in% icd9::icd9Hierarchy[["icd9"]]
+
 }
 
 #' @rdname icd9IsReal
 #' @template icd9-decimal
 #' @export
-icd9IsRealDecimal <- function(icd9Decimal) {
-  icd9IsRealShort(icd9DecimalToShort(icd9Decimal))
+icd9IsRealDecimal <- function(icd9Decimal, majorOk = TRUE) {
+  icd9IsRealShort(icd9DecimalToShort(icd9Decimal), majorOk = majorOk)
 }
 
 #' @rdname icd9IsReal
 #' @template icd9-any
 #' @export
-icd9GetReal <- function(icd9, isShort) {
-  if (isShort) return(icd9GetRealShort(icd9))
-  icd9GetRealDecimal(icd9)
+icd9GetReal <- function(icd9, isShort, majorOk = TRUE) {
+  if (isShort) return(icd9GetRealShort(icd9, majorOk = majorOk))
+  icd9GetRealDecimal(icd9, majorOk = majorOk)
 }
 
 #' @rdname icd9IsReal
 #' @template icd9-short
 #' @export
-icd9GetRealShort <- function(icd9Short)
-  icd9Short[icd9IsRealShort(icd9Short)]
+icd9GetRealShort <- function(icd9Short, majorOk = TRUE)
+  icd9Short[icd9IsRealShort(icd9Short, majorOk = majorOk)]
 
 #' @rdname icd9IsReal
 #' @template icd9-decimal
 #' @export
-icd9GetRealDecimal <- function(icd9Decimal)
-  icd9Decimal[icd9IsRealDecimal(icd9Decimal)]
+icd9GetRealDecimal <- function(icd9Decimal, majorOk = TRUE)
+  icd9Decimal[icd9IsRealDecimal(icd9Decimal, majorOk = majorOk)]
 
 icd9FilterValid <- function(x, ...) UseMethod("icd9FilterValid")
 

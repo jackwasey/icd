@@ -37,7 +37,8 @@ This can be thought of as the inverse operation to expanding a
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{\%i9d\%}},
-  \code{\link{\%i9mj\%}}, \code{\link{\%i9s\%}},
+  \code{\link{\%i9da\%}}, \code{\link{\%i9mj\%}},
+  \code{\link{\%i9s\%}}, \code{\link{\%i9sa\%}},
   \code{\link{icd9ExpandRange}},
   \code{\link{icd9ExpandRangeDecimal}},
   \code{\link{icd9ExpandRangeMajor}},
@@ -45,6 +46,8 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
   \code{\link{icd9ChildrenShort}};
+  \code{\link{icd9Condense}},
+  \code{\link{icd9CondenseShort}},
   \code{\link{icd9CondenseToMajorShort}};
   \code{\link{icd9ExpandMinor}}
 }

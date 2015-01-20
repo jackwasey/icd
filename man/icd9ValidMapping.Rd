@@ -42,8 +42,6 @@ Other ICD9 validation: \code{\link{icd9ValidDecimal}},
   \code{\link{icd9ValidMajorE}},
   \code{\link{icd9ValidMajorN}},
   \code{\link{icd9ValidMajorV}};
-  \code{\link{icd9ValidNaWarnStop}},
-  \code{\link{icd9ValidNaWarnStopShort}};
   \code{\link{icd9ValidShort}},
   \code{\link{icd9ValidShortE}},
   \code{\link{icd9ValidShortN}},

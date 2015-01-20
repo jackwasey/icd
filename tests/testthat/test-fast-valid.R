@@ -299,40 +299,6 @@ test_that("warn if invalid", {
   expect_warning(warnIfInvalidIcd9("notvalidicd9", isShort = TRUE))
 })
 
-test_that("NA warn stop switch handles NA values", {
-
-  expect_that(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "ignore"),
-              testthat::not(gives_warning()))
-  expect_that(icd9ValidNaWarnStopShort(NA_character_, invalidAction = "silent"),
-              testthat::not(gives_warning()))
-  expect_that(
-    warnNa <- icd9ValidNaWarnStopShort(NA_character_, invalidAction = "warn"),
-    gives_warning())
-  expect_equal(warnNa, NA_character_)
-  expect_that(
-    icd9ValidNaWarnStopShort(NA_character_, invalidAction = "stop"),
-    throws_error())
-  expect_that(
-    icd9ValidNaWarnStopShort(NA, invalidAction = "ignore"),
-    testthat::not(throws_error()))
-  # this is now an incorrect data type (logical/numeric NA, not NA_character_)
-  expect_that(
-    icd9ValidNaWarnStopShort(NA, invalidAction = "silent"), throws_error())
-  expect_that(
-    icd9ValidNaWarnStopShort(NA, invalidAction = "warn"), throws_error())
-  expect_that(
-    icd9ValidNaWarnStopShort(NA, invalidAction = "stop"), throws_error())
-  # ignore just passes through, but this is really not something test-worthy...
-  expect_equal(icd9ValidNaWarnStopShort(NA, invalidAction = "ignore"), NA)
-  expect_equal(
-    icd9ValidNaWarnStopShort(NA_character_, invalidAction = "ignore"),
-    NA_character_)
-  expect_equal(
-    icd9ValidNaWarnStopShort(NA_character_, invalidAction = "silent"),
-    NA_character_)
-
-})
-
 test_that("icd-9 code is really in the list, not just syntactically valid", {
   expect_true(icd9IsRealShort("8027"))
   expect_true(icd9IsRealShort("E9329"))
@@ -345,10 +311,8 @@ test_that("icd-9 code is really in the list, not just syntactically valid", {
   expect_false(icd9IsRealDecimal("V802.7"))
 
   expect_equal(icd9IsRealDecimal("V802.7"), FALSE)
-  expect_equal(icd9IsRealDecimal("V802.7"), FALSE)
-  expect_error(icd9IsRealShort("V802.7", invalidAction = "stop"))
-  expect_equal(icd9IsReal(c("8027", "E9329", "E000"), isShort = TRUE),
-               c(TRUE, TRUE, FALSE))
+  expect_equal(icd9IsReal(c("8027", "E9329", "E000", "armitage"),
+                          isShort = TRUE), c(TRUE, TRUE, TRUE, FALSE))
 })
 
 mixInvalidPts <- data.frame(

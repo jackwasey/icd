@@ -44,10 +44,6 @@ test_that("zero pad decimel V and E codes", {
 test_that("zero pad short invalid codes", {
 
   expect_equal(icd9AddLeadingZeroesShort(character()), character())
-  # behavior of "ignore" for incorrect input is undefined, so don't test:
-  # expect_equal(
-  #   icd9AddLeadingZeroesShort("anything", invalidAction = "ignore"),
-  #   "anything")
   expect_equal(icd9AddLeadingZeroesShort("anything"),
                NA_character_)
   expect_equal(icd9AddLeadingZeroesShort("anything"), NA_character_)
@@ -55,8 +51,6 @@ test_that("zero pad short invalid codes", {
   # this is just re-checking the validation code...
   expect_equal(icd9AddLeadingZeroesShort("V012"), "V012")
   expect_equal(icd9AddLeadingZeroesShort("V199"), "V199")
-  # at least we confirm we follow the invalidAction directive correctly.
-  #expect_error(icd9AddLeadingZeroesShort("1.1"))
 })
 
 test_that("zero pad short", {

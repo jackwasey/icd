@@ -105,7 +105,7 @@ CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false) {
 //'
 //' @export
 // [[Rcpp::export]]
-CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = false) {
+CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = true) {
   if (isShort) return(icd9::icd9ChildrenShort(icd9, onlyReal));
   return(icd9::icd9ChildrenDecimal(icd9, onlyReal));
 }
@@ -113,7 +113,7 @@ CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal =
 //' @rdname icd9Children
 //' @export
 // [[Rcpp::export]]
-CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = false) {
+CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = true) {
   std::set< std::string > out; // we are never going to put NAs in the output?
   if (icd9Short.size() == 0) return wrap(out);
   List parts = icd9::icd9ShortToParts(icd9Short, "");
@@ -150,7 +150,7 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = fal
 //' @rdname icd9Children
 //' @export
 // [[Rcpp::export]]
-CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = false) {
+CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = true) {
   CharacterVector shrt = icd9::icd9DecimalToShort(icd9Decimal);
   CharacterVector kids = icd9::icd9ChildrenShort(shrt, onlyReal);
   return icd9::icd9ShortToDecimal(kids);
@@ -163,7 +163,6 @@ CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal =
 //' @template icd9-any
 //' @template isShort
 //' @param isShortReference logical, see argument \code{isShort}
-//' @template invalid
 //' @return logical vector of which icd9 match or are subcategory of
 //'   \code{icd9Reference}
 //' @keywords internal
@@ -176,7 +175,7 @@ bool isShortReference = true) {
   if (!isShort)
   x = icd9::icd9DecimalToShort(x);
 
-  CharacterVector y = icd9Children(icd9Reference, isShortReference);
+  CharacterVector y = icd9Children(icd9Reference, isShortReference, false);
   if (!isShortReference)
   y = icd9::icd9DecimalToShort(y);
   // Rcpp match is not quite as good as R:

@@ -870,7 +870,7 @@ RcppExport SEXP icd9_icd9ExpandMinor(SEXP mnrSEXP, SEXP isESEXP) {
     return __result;
 }
 // icd9Children
-CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = false);
+CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = true);
 static SEXP icd9_icd9Children_try(SEXP icd9SEXP, SEXP isShortSEXP, SEXP onlyRealSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -906,7 +906,7 @@ RcppExport SEXP icd9_icd9Children(SEXP icd9SEXP, SEXP isShortSEXP, SEXP onlyReal
     return __result;
 }
 // icd9ChildrenShort
-CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = false);
+CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = true);
 static SEXP icd9_icd9ChildrenShort_try(SEXP icd9ShortSEXP, SEXP onlyRealSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -941,7 +941,7 @@ RcppExport SEXP icd9_icd9ChildrenShort(SEXP icd9ShortSEXP, SEXP onlyRealSEXP) {
     return __result;
 }
 // icd9ChildrenDecimal
-CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = false);
+CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = true);
 static SEXP icd9_icd9ChildrenDecimal_try(SEXP icd9DecimalSEXP, SEXP onlyRealSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;

@@ -2,21 +2,27 @@
 % Please edit documentation in R/ranges.R
 \name{icd9ExpandRange}
 \alias{\%i9d\%}
+\alias{\%i9da\%}
 \alias{\%i9mj\%}
 \alias{\%i9s\%}
+\alias{\%i9sa\%}
 \alias{icd9ExpandRange}
 \alias{icd9ExpandRangeDecimal}
 \alias{icd9ExpandRangeMajor}
 \alias{icd9ExpandRangeShort}
 \title{take two ICD-9 codes and expand range to include all child codes}
 \usage{
-icd9ExpandRange(start, end, isShort, onlyReal = FALSE)
+icd9ExpandRange(start, end, isShort, onlyReal = TRUE)
 
-icd9ExpandRangeShort(start, end, onlyReal = FALSE, omitParents = FALSE)
+icd9ExpandRangeShort(start, end, onlyReal = TRUE, omitParents = FALSE)
 
-icd9ExpandRangeMajor(start, end)
+icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 
-icd9ExpandRangeDecimal(start, end)
+icd9ExpandRangeDecimal(start, end, onlyReal = TRUE, omitParents = FALSE)
+
+start \%i9da\% end
+
+start \%i9sa\% end
 
 start \%i9d\% end
 
@@ -49,9 +55,12 @@ this is cumbersome code, covering a whole load of edge cases
   valid children. However, I expect at least some of these have been used in
   some billing databases.
 
-  As with \code{link{icd9ExpandRangeShort}} great care is taken
-  not to include codes which have children not in the range. E.g. "100.9" to
-  "101.1" would _not_ include code "101".
+  As with \code{link{icd9ExpandRangeShort}} great care is taken not to
+  include codes which have children not in the range. E.g. "100.9" to "101.1"
+  would _not_ include code "101".
+
+  \code{onlyReal} default is \code{TRUE} (a change from previous versions)
+  since this is far more likely to be useful to the end user.
 }
 \examples{
 "4280 " \%i9s\% "4289 "
@@ -65,6 +74,8 @@ icd9ExpandRangeShort("4280 ", "43014")
 Other ICD-9 ranges: \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
   \code{\link{icd9ChildrenShort}};
+  \code{\link{icd9Condense}},
+  \code{\link{icd9CondenseShort}},
   \code{\link{icd9CondenseToMajorShort}};
   \code{\link{icd9ExpandMinor}};
   \code{\link{icd9ExplainCondense}}

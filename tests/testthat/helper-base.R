@@ -95,3 +95,7 @@ quanDeyoTestDat <- data.frame(
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 )
+
+
+othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
+                     "00323", "00324", "00329", "0038", "0039")

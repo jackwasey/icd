@@ -499,7 +499,7 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = false) {
+    inline CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = true) {
         typedef SEXP(*Ptr_icd9Children)(SEXP,SEXP,SEXP);
         static Ptr_icd9Children p_icd9Children = NULL;
         if (p_icd9Children == NULL) {
@@ -518,7 +518,7 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = false) {
+    inline CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = true) {
         typedef SEXP(*Ptr_icd9ChildrenShort)(SEXP,SEXP);
         static Ptr_icd9ChildrenShort p_icd9ChildrenShort = NULL;
         if (p_icd9ChildrenShort == NULL) {
@@ -537,7 +537,7 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = false) {
+    inline CharacterVector icd9ChildrenDecimal(CharacterVector icd9Decimal, bool onlyReal = true) {
         typedef SEXP(*Ptr_icd9ChildrenDecimal)(SEXP,SEXP);
         static Ptr_icd9ChildrenDecimal p_icd9ChildrenDecimal = NULL;
         if (p_icd9ChildrenDecimal == NULL) {
