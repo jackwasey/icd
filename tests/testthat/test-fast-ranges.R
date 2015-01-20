@@ -89,7 +89,19 @@ test_that("expand icd9 range definition", {
 
   expect_equal(icd9ExpandRangeShort("401", "40102", onlyReal = FALSE),
                c("401", "4010", "40100", "40101", "40102"))
-  expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
+
+  # only works with single range
+  expect_error(icd9ExpandRangeShort(c("10", "20"), c("11", "21")))
+
+# found bugs when expanding Injury and Poisoning chapter.
+expect_that(icd9ExpandRangeShort("997", "998"), testthat::not(throws_error()))
+expect_false("999" %in% icd9ExpandRangeShort("998", "998", onlyReal = FALSE))
+expect_false("009" %in% icd9ExpandRangeShort("8", "8", onlyReal = FALSE))
+
+})
+
+test_that("V code ranges", {
+expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
                c("V1000", "V1001", "V1002"))
   # although we don't usually return parents whose scope overlaps the upper
   # limit, if the range specification already has this 'anomaly', we just roll
@@ -105,8 +117,8 @@ test_that("expand icd9 range definition", {
   # should fail despite end being 'longer' than start
   expect_error(icd9ExpandRangeShort("V10", " V1 "))
 
-  # only works with single range
-  expect_error(icd9ExpandRangeShort(c("10", "20"), c("11", "21")))
+  expect_equal(icd9ExpandRangeShort("V1009", "V101", onlyReal = FALSE),
+               icd9ExpandRangeShort("V1009", "V1019", onlyReal = FALSE))
 
 })
 

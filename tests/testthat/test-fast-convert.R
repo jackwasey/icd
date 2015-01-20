@@ -264,3 +264,15 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
   expect_equal(icd9MajMinToShort("V10", c("0", "1")), c("V100", "V101"))
   expect_equal(icd9MajMinToShort("V01", c("0", "1")), c("V010", "V011"))
 })
+
+test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity map", {
+  one.of.each <- c("002.3", "140.25", "245", "285", "290.01", "389.99", "320.0",
+                  "390.00", "518", "525", "581", "631", "700", "720", "765",
+                  "780.95", "800", "V02.34", "E900.4")
+  ooe <- data.frame(visitId = seq_along(one.of.each), icd9 = one.of.each)
+
+  test.map <- icd9ChaptersToMap(icd9::icd9Chapters)
+  cmb <- icd9Comorbid(icd9df = ooe, isShort = FALSE, icd9Mapping = test.map, isShortMapping = TRUE)
+  expmat <- diag(nrow = length(ooe$icd9))
+  expect_equal(as.matrix(cmb[-1]), expmat)
+})

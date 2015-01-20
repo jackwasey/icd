@@ -38,13 +38,15 @@ NULL
 #' @param x Either a chapter list itself, or the name of one, e.g.
 #'   icd9ChaptersSub
 #' @family ICD-9 convert
+#' @import checkmate
 #' @keywords internal manip
 icd9ChaptersToMap <- function(x) {
-  if (length(x) == 1) x <- get(x)
+  checkList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
+  if (is.character(x) == 1) x <- get(x)
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- icd9ExpandRangeShort(x[[r]][1], x[[r]][2])
+    map[[r]] <- icd9ExpandRangeShort(x[[r]][1], x[[r]][2], onlyReal = FALSE)
   }
   map
 }

@@ -117,10 +117,17 @@ icd9ExpandRangeShort <- function(start, end,
       "end value '%s' not found in look-up table of ICD-9 codes.", e))
     if (ei < si) stop("end code must be greater than or equal to start code")
     if (nchar(e) != 5) {
-      nlk = nchar(lookup[ei + 1 : ei + 112])
-      ei <- ei + match(nchar(e), nlk) -
-        (nchar(e) == 4 && substr(e, 4, 4) == "9") +
-        icd9IsASingleE(e)
+      # calculate the number of codes to span, start with lookup table of nchar of each
+      nlk = nchar(lookup[seq(from = ei + 1, to = ei + 111)])
+      lene = nchar(e)
+      # lookup the next code with the same hierarchical level
+      mlen <- match(lene, nlk)
+      # if the next code can't be found, e.g. after 999, just pick a big number.
+      if (is.na(mlen)) mlen = 111
+      ei <- ei + mlen
+      ei <- ei - (lene - 2)
+      if (icd9IsASingleE(e)) ei <- ei + 1
+      else if (icd9IsASingleV(e) && lene < nchar(s)) ei <- ei + 1
     }
     # except if 'end' is 4 char and ends in 9, because we don't want to catch
     # the preceding 3 digit.
