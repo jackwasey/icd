@@ -15,7 +15,7 @@ typedef std::vector<SetStr > VecSetStr;
 //' @rdname icd9Comorbid
 //' @export
 // [[Rcpp::export]]
-DataFrame icd9ComorbidShort(
+List icd9ComorbidShort(
   DataFrame icd9df,
   List icd9Mapping,
   std::string visitId = "visitId", // or CharacterVector?
