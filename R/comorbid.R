@@ -25,36 +25,34 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
                       isShort = TRUE, isShortReference = TRUE)
 }
 
-#' @title find comorbidities from ICD-9 codes.
-#' @description This is the main function which extracts co-morbidities from a
-#'   set of ICD-9 codes. This is when some trivial post-processing of the
-#'   comorbidity data is done, e.g. renaming to human-friendly field names, and
-#'   updating fields according to rules. The exact fields from the original
-#'   mappings can be obtained using \code{applyHierarchy = FALSE}, but for
-#'   comorbidity counting, Charlson Score, etc., the rules should be applied.
-#' @template icd9df
-#' @template visitid
-#' @template icd9field
-#' @template isShort
-#' @param icd9Mapping list (or name of a list if character vector of length one
-#'   is given as argument) of the comorbidities with each top-level list item
-#'   containing a vector of decimal ICD9 codes. This is in the form of a list,
-#'   with the names of the items corresponding to the comorbidities (e.g. "HTN",
-#'   or "diabetes") and the contents of each list item being a character vector
-#'   of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
-#'   No default: user should prefer to use the derivative functions, e.g.
-#'   icd9ComorbidAhrq, since these also provide appropriate naming for the
-#'   fields, and squashing the hierarchy (see \code{applyHierarchy} below)
-#' @param validateMapping logical, whether to validate all the ICD-9 codes in
-#'   the mapping list. Default is not to check. If validation fails, stop with
-#'   an error. This is probably worth doing at least once for each mapping used,
-#'   since there should never be an error in mapping.
-#' @param isShortMapping logical, whether the mapping is defined with short
-#'   ICD-9 codes (TRUE, the default), or decimal if set to FALSE.
-#' @template abbrevHier
-#' @import checkmate
-#' @export
 icd9Comorbid <- function(icd9df,
+                         icd9Mapping,
+                         visitId = "visitId",
+                         icd9Field = "icd9",
+                         isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
+                         isShortMapping = icd9GuessIsShort(icd9Mapping[[1]])) {
+
+  checkmate::checkDataFrame(icd9df, min.cols = 2)
+  #checkmate::checkString(visitId)
+  visitId <- as.character(visitId)
+  checkmate::checkString(icd9Field)
+  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
+  checkmate::checkLogical(isShortMapping, any.missing = FALSE, len = 1)
+  stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
+
+  if (!isShort)
+    icd9df[[visitId]] <- icd9DecimalToShort(icd9df[[visitId]])
+
+  if (!isShortMapping)
+    icd9Mapping <- lappply(icd9Mapping, icd9DecimalToShort)
+
+  # return via call to the C++ function:
+  icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
+
+}
+
+# old version, now in C++
+icd9Comorbid_R <- function(icd9df,
                          visitId = "visitId",
                          icd9Field = "icd9",
                          isShort,
@@ -62,14 +60,6 @@ icd9Comorbid <- function(icd9df,
                          validateMapping = FALSE,
                          isShortMapping = TRUE) {
 
-  checkmate::checkDataFrame(icd9df, min.cols = 2)
-  #checkmate::checkString(visitId)
-  visitId <- as.character(visitId)
-  checkmate::checkString(icd9Field)
-  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
-  checkmate::checkLogical(validateMapping, any.missing = FALSE, len = 1)
-  checkmate::checkLogical(isShortMapping, any.missing = FALSE, len = 1)
-  stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
 
   if (is.character(icd9Mapping)) {
     stopifnot(exists(icd9Mapping))

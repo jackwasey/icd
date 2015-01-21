@@ -10,9 +10,9 @@
 \usage{
 icd9ValidMapping(icd9Mapping, isShort)
 
-icd9ValidMappingDecimal(icd9Mapping)
-
 icd9ValidMappingShort(icd9Mapping)
+
+icd9ValidMappingDecimal(icd9Mapping)
 
 icd9GetInvalidMappingShort(icd9Mapping)
 
