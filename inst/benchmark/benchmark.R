@@ -5,7 +5,6 @@
 #' importance, after correctness. R package test code is for correctness,
 #' whereas this script stresses the core functions, and looks for bottlenecks.
 
-
 randomPatients <- function(n = 50000, np = 20) {
   pts <- round(n / np)
   data.frame(
@@ -35,7 +34,6 @@ icd9Benchmark <- function() {
 
   rpts <- randomPatients(n)
 
-
   # run slow tests (these are now much much faster with C++ implementations)
   res <- testthat::test_dir("tests/testthat/", filter = "slow", reporter = testthat::ListReporter())
   res <- as.data.frame(res)
@@ -48,6 +46,16 @@ icd9Benchmark <- function() {
   #summaryRprof(filename = tmp, memory = "stats", lines = "both")
   summaryRprof(filename = tmp, memory = "both", lines = "show")
 
+# see how we do scaling up:
+  microbenchmark::microbenchmark(
+    icd9ComorbidAhrq(randomPatients(1), isShort = TRUE),
+    icd9ComorbidAhrq(randomPatients(10), isShort = TRUE),
+    icd9ComorbidAhrq(randomPatients(100), isShort = TRUE),
+    icd9ComorbidAhrq(randomPatients(1000), isShort = TRUE),
+    # argh, we fall off a cliff between 1000 and 10000 and get much slower.
+    icd9ComorbidAhrq(randomPatients(10000), isShort = TRUE),
+    times = 5
+  )
 
   tmp <- tempfile(fileext = ".Rprof")
   Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = FALSE)

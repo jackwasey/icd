@@ -1,0 +1,64 @@
+#include <Rcpp.h>
+#include <string>
+using namespace Rcpp;
+
+// Below is a simple example of exporting a C++ function to R. You can
+// source this function into an R session using the Rcpp::sourceCpp
+// function (or via the Source button on the editor toolbar)
+
+// For more on using Rcpp click the Help button on the editor toolbar
+
+typedef std::vector<std::string > VecStr;
+typedef std::set<std::string > SetStr;
+typedef std::vector<SetStr > VecSetStr;
+
+// [[Rcpp::export]]
+LogicalMatrix icd9Comorbid_cpp(
+  DataFrame icd9df,
+  List icd9Mapping,
+  std::string visitId = "visitId", // or CharacterVector?
+  std::string icd9Field = "icd9"
+  ) {
+    //CharacterVector uv = unique(vso);
+    VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
+    VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field])); //
+    SetStr uniqvs(vs.begin(), vs.end());
+    int nref = icd9Mapping.size();
+    LogicalMatrix out(uniqvs.size(), nref); // fills with FALSE
+
+    // convert mapping from List of CharacterVectors to std vector of sets. This
+    // is a small one-off cost, and dramatically improves the performance of the
+    // later loops.
+    VecSetStr map;
+    for (List::iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end(); ++mi) {
+      VecStr mvs(as<VecStr>(*mi));
+      SetStr ss(mvs.begin(), mvs.end());
+      map.push_back(ss);
+    }
+
+    std::string lastv("");
+    // loop through rows or cols first. may be easier to do the rows first, so
+    // we can aggregate as we go along
+    int nrow = vs.size();
+    int outrow = 0;
+    for (int vr = 0; vr < nrow; ++vr) {
+      //std::cout << "vr = " << vr << "\n";
+      std::string icd = icds[vr];
+      std::string v = vs[vr];
+
+      //std::cout << "outrow = " << outrow << "\n";
+      // assume that unique visitIds are grouped together... we could sort first
+      // to make sure of it, which is probably not a huge cost.
+      if (v.compare(lastv) != 0) {
+        // new visit, so start a new row in the output matrix.
+        outrow += 1;
+      }
+      for (int cmb = 0; cmb < nref; ++cmb) {
+        //std::cout << "cmb = " << cmb << "\n";
+        if (map[cmb].find(icd) != map[cmb].end()) {
+          out(outrow, cmb) = true;
+        }
+      }
+    }
+    return out;
+  }

@@ -8,6 +8,24 @@
 
 using namespace Rcpp;
 
+// icd9Comorbid_cpp
+LogicalMatrix icd9Comorbid_cpp(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9");
+RcppExport SEXP icd9_icd9Comorbid_cpp(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::RNGScope __rngScope;
+        Rcpp::traits::input_parameter< DataFrame >::type icd9df(icd9dfSEXP );
+        Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
+        Rcpp::traits::input_parameter< std::string >::type visitId(visitIdSEXP );
+        Rcpp::traits::input_parameter< std::string >::type icd9Field(icd9FieldSEXP );
+        LogicalMatrix __result = icd9Comorbid_cpp(icd9df, icd9Mapping, visitId, icd9Field);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP
+}
 // icd9MajMinToCode
 CharacterVector icd9MajMinToCode(CharacterVector mjr, CharacterVector mnr, bool isShort);
 static SEXP icd9_icd9MajMinToCode_try(SEXP mjrSEXP, SEXP mnrSEXP, SEXP isShortSEXP) {
