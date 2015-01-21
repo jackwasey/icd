@@ -24,7 +24,33 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
   icd9InReferenceCode(icd9 = icd9, icd9Reference = icd9Reference,
                       isShort = TRUE, isShortReference = TRUE)
 }
-
+#' @title find comorbidities from ICD-9 codes.
+#' @description This is the main function which extracts co-morbidities from a
+#'   set of ICD-9 codes. This is when some trivial post-processing of the
+#'   comorbidity data is done, e.g. renaming to human-friendly field names, and
+#'   updating fields according to rules. The exact fields from the original
+#'   mappings can be obtained using \code{applyHierarchy = FALSE}, but for
+#'   comorbidity counting, Charlson Score, etc., the rules should be applied.
+#' @template icd9df
+#' @param icd9Mapping list (or name of a list if character vector of length one
+#'   is given as argument) of the comorbidities with each top-level list item
+#'   containing a vector of decimal ICD9 codes. This is in the form of a list,
+#'   with the names of the items corresponding to the comorbidities (e.g. "HTN",
+#'   or "diabetes") and the contents of each list item being a character vector
+#'   of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
+#'   No default: user should prefer to use the derivative functions, e.g.
+#'   icd9ComorbidAhrq, since these also provide appropriate naming for the
+#'   fields, and squashing the hierarchy (see \code{applyHierarchy} below)
+#' @template visitid
+#' @template icd9field
+#' @details There is a change in behavior from previous versions. The visitId
+#'   column is (implicitly) sorted by using std::set container. Previously, the
+#'   visitId output order was whatever R's \code{aggregate} produced.
+#' @examples
+#'   pts = data.frame(visitId = c("2", "1", "2", "3", "3"),
+#'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
+#'    icd9ComorbidShort(pts, ahrqComorbid) # visitId is now sorted
+#' @export
 icd9Comorbid <- function(icd9df,
                          icd9Mapping,
                          visitId = "visitId",
