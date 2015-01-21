@@ -61,7 +61,6 @@ icd9Comorbid(icd9df = icdFilterPoaYes(patientData),
              visitId = "visitId",
              icd9Field = "icd9",
              icd9Mapping = ahrqComorbid,
-             validateMapping = FALSE,
              shortMapping = TRUE)[1:5]
 @
 
@@ -241,10 +240,9 @@ Call the core icd9Comorbid function with a named mapping:
 <<specifiedComorbidityMapChain>>=
 myData %>%
   icd9FilterPoaYes() %>%
-  icd9Comorbid(
+  icd9Comorbid(icd9Mapping = quanElixComorbid,
     icd9Field = "icd9", visitId = "visitId",
-    isShort = TRUE, icd9Mapping = quanElixComorbid,
-    validateMapping = TRUE, isShortMapping = TRUE
+    isShort = TRUE, isShortMapping = TRUE
   )  %>%
   extract(1:9)
 @

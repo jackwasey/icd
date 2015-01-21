@@ -59,6 +59,7 @@ icd9Comorbid <- function(icd9df,
                          isShortMapping = icd9GuessIsShort(icd9Mapping[[1]])) {
 
   checkmate::checkDataFrame(icd9df, min.cols = 2)
+  checkmate::checkList(icd9Mapping, types = "character", any.missing = FALSE, min.len = 1)
   #checkmate::checkString(visitId)
   visitId <- as.character(visitId)
   checkmate::checkString(icd9Field)
@@ -81,7 +82,7 @@ icd9Comorbid <- function(icd9df,
 icd9Comorbid_R <- function(icd9df,
                          visitId = "visitId",
                          icd9Field = "icd9",
-                         isShort,
+                         isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                          icd9Mapping,
                          validateMapping = FALSE,
                          isShortMapping = TRUE) {
@@ -128,16 +129,16 @@ icd9Comorbid_R <- function(icd9df,
 #' @rdname icd9Comorbid
 #' @export
 icd9ComorbidAhrq <- function(icd9df,
+                             isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                              visitId = "visitId",
                              icd9Field = "icd9",
-                             isShort,
                              validateMapping = FALSE,
                              abbrevNames = TRUE,
                              applyHierarchy = TRUE) {
 
-  cbd <- icd9Comorbid(icd9df = icd9df, visitId = visitId,
-                      icd9Field = icd9Field, isShort = isShort,
-                      icd9Mapping = icd9::ahrqComorbid)
+  cbd <- icd9Comorbid(icd9df = icd9df, icd9Mapping = icd9::ahrqComorbid,
+                      visitId = visitId, icd9Field = icd9Field,
+                      isShort = isShort)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -169,13 +170,15 @@ icd9ComorbidAhrq <- function(icd9df,
 icd9ComorbidQuanDeyo <- function(icd9df,
                                  visitId = "visitId",
                                  icd9Field = "icd9",
-                                 isShort,
+                                 isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                                  validateMapping = FALSE,
                                  abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
-  cbd <- icd9Comorbid(icd9df = icd9df, visitId = visitId,
-                      icd9Field = icd9Field, isShort = isShort,
-                      icd9Mapping = icd9::quanDeyoComorbid)
+  cbd <- icd9Comorbid(icd9df = icd9df, icd9Mapping = icd9::quanDeyoComorbid,
+                      visitId = visitId,
+                      icd9Field = icd9Field,
+                      isShort = isShort
+                      )
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -197,13 +200,14 @@ icd9ComorbidQuanDeyo <- function(icd9df,
 icd9ComorbidQuanElix <- function(icd9df,
                                  visitId = "visitId",
                                  icd9Field = "icd9",
-                                 isShort,
-                                 validateMapping = FALSE,
+                                 isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                                  abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
-  cbd <- icd9Comorbid(icd9df = icd9df, visitId = visitId,
-                      icd9Field = icd9Field, isShort = isShort,
-                      icd9Mapping = icd9::quanElixComorbid)
+  cbd <- icd9Comorbid(icd9df = icd9df,
+                      icd9Mapping = icd9::quanElixComorbid,
+                      visitId = visitId,
+                      icd9Field = icd9Field,
+                      isShort = isShort)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -241,13 +245,14 @@ icd9ComorbidQuanElix <- function(icd9df,
 icd9ComorbidElix <- function(icd9df,
                              visitId = "visitId",
                              icd9Field = "icd9",
-                             isShort,
-                             validateMapping = FALSE,
+                             isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                              abbrevNames = TRUE,
                              applyHierarchy = TRUE) {
-  cbd <- icd9Comorbid(icd9df = icd9df, visitId = visitId,
-                      icd9Field = icd9Field, isShort = isShort,
-                      icd9Mapping = icd9::elixComorbid)
+  cbd <- icd9Comorbid(icd9df = icd9df,
+                      icd9Mapping = icd9::elixComorbid,
+                      visitId = visitId,
+                      icd9Field = icd9Field,
+                      isShort = isShort)
   if (applyHierarchy) {
     cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
     cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
