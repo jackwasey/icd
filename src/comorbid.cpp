@@ -12,8 +12,10 @@ typedef std::vector<std::string > VecStr;
 typedef std::set<std::string > SetStr;
 typedef std::vector<SetStr > VecSetStr;
 
+// # benchmark
+// icd9Comorbid_cpp(randomPatients(100), ahrqComorbid)
 // [[Rcpp::export]]
-LogicalMatrix icd9Comorbid_cpp(
+DataFrame icd9Comorbid_cpp(
   DataFrame icd9df,
   List icd9Mapping,
   std::string visitId = "visitId", // or CharacterVector?
@@ -23,8 +25,9 @@ LogicalMatrix icd9Comorbid_cpp(
     VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
     VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field])); //
     SetStr uniqvs(vs.begin(), vs.end());
+    int usize = uniqvs.size();
     int nref = icd9Mapping.size();
-    LogicalMatrix out(uniqvs.size(), nref); // fills with FALSE
+    LogicalMatrix out(usize, nref); // fills with FALSE
 
     // convert mapping from List of CharacterVectors to std vector of sets. This
     // is a small one-off cost, and dramatically improves the performance of the
@@ -60,5 +63,25 @@ LogicalMatrix icd9Comorbid_cpp(
         }
       }
     }
-    return out;
+
+    // this look clumsy, but suggested by a rcpp developer:
+    // http://stackoverflow.com/questions/24352208/best-way-to-convert-dataframe-to-matrix-in-rcpp
+    // DataFrame outdf = internal::convert_using_rfunction(x, "as.data.frame");
+
+    // but I need a visitId column (ideally in the first position), so let's do it manually:
+    List outdf;
+    outdf[visitId] = uniqvs;
+    CharacterVector cn = icd9Mapping.names();
+    for (int ci = 0; ci < cn.size(); ++ci) {
+      // write each column
+      LogicalVector lv = out( _, ci);
+      String nm = cn[ci];
+      outdf[nm] = lv;
+    }
+
+    IntegerVector row_names = seq_len(usize);
+    outdf.attr("row.names") = row_names;
+    outdf.attr("class") = "data.frame";
+
+    return outdf;
   }

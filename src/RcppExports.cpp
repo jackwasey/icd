@@ -9,7 +9,7 @@
 using namespace Rcpp;
 
 // icd9Comorbid_cpp
-LogicalMatrix icd9Comorbid_cpp(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9");
+DataFrame icd9Comorbid_cpp(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9");
 RcppExport SEXP icd9_icd9Comorbid_cpp(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -19,7 +19,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
         Rcpp::traits::input_parameter< std::string >::type visitId(visitIdSEXP );
         Rcpp::traits::input_parameter< std::string >::type icd9Field(icd9FieldSEXP );
-        LogicalMatrix __result = icd9Comorbid_cpp(icd9df, icd9Mapping, visitId, icd9Field);
+        DataFrame __result = icd9Comorbid_cpp(icd9df, icd9Mapping, visitId, icd9Field);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);

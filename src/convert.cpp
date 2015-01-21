@@ -104,7 +104,7 @@ List icd9MajMinToParts(CharacterVector mjr, CharacterVector mnr) {
 
     // TODO: can do this with lists, ?no need for a data frame
     StringVector sample_row = returned_frame(0);
-    IntegerVector row_names = seq_len(sample_row.length());
+    IntegerVector row_names = seq_along(sample_row);
     returned_frame.attr("row.names") = row_names;
     returned_frame.attr("class") = "data.frame";
 
