@@ -53,7 +53,7 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do
   lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal");
   if (do.save) save(list = lknames,
-       file = sysdata.path, compress = "xz")
+                    file = sysdata.path, compress = "xz")
   invisible(mget(lknames))
 }
 
@@ -126,8 +126,10 @@ icd9ExpandRangeShort <- function(start, end,
       if (is.na(mlen)) mlen = 111
       ei <- ei + mlen
       ei <- ei - (lene - 2)
-      if (icd9IsASingleE(e)) ei <- ei + 1
-      else if (icd9IsASingleV(e) && lene < nchar(s)) ei <- ei + 1
+      if (icd9IsASingleE(e))
+        ei <- ei + 1
+      else if (icd9IsASingleV(e) && lene < nchar(s) && substr(e, lene, lene) != "9")
+        ei <- ei + 1
     }
     # except if 'end' is 4 char and ends in 9, because we don't want to catch
     # the preceding 3 digit.

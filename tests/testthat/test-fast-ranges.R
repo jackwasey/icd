@@ -120,6 +120,10 @@ expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
   expect_equal(icd9ExpandRangeShort("V1009", "V101", onlyReal = FALSE),
                icd9ExpandRangeShort("V1009", "V1019", onlyReal = FALSE))
 
+# failed similar test in Elixhauser mapping generation.
+  expect_false("V11" %in% icd9ExpandRangeDecimal("V10.89", "V10.9", onlyReal = FALSE))
+expect_false("V11" %in% icd9ExpandRangeDecimal("V10.89", "V10.99", onlyReal = FALSE))
+
 })
 
 test_that("E code ranges", {
