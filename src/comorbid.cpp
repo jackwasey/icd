@@ -26,8 +26,6 @@ List icd9ComorbidShort(
     VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field])); //
     SetStr uniqvs(vs.begin(), vs.end());
     int usize = uniqvs.size();
-    int nref = icd9Mapping.size();
-    LogicalMatrix out(usize, nref); // fills with FALSE
 
     // convert mapping from List of CharacterVectors to std vector of sets. This
     // is a small one-off cost, and dramatically improves the performance of the
@@ -38,6 +36,9 @@ List icd9ComorbidShort(
       SetStr ss(mvs.begin(), mvs.end());
       map.push_back(ss);
     }
+
+    int nref = map.size();
+    LogicalMatrix out(usize, nref); // fills with FALSE
 
     std::string lastv("");
     // loop through rows or cols first. may be easier to do the rows first, so
@@ -75,7 +76,7 @@ List icd9ComorbidShort(
     for (int ci = 0; ci < cn.size(); ++ci) {
       // write each column
       LogicalVector lv = out( _, ci);
-      String nm = cn[ci];
+      String nm = cn[ci]; // get name of current comorbidity
       outdf[nm] = lv;
     }
 

@@ -10,7 +10,7 @@ n <- 500
 np <- round(n / 20) # icd9 codes per patients
 
 randomShortIcd9 <- as.character(floor(runif(min = 10000, max = 99999, n = n)))
-randomSampleAhrq <- sample(unname(c(ahrqComorbid, recursive = TRUE)),
+randomSampleAhrq <- sample(unname(c(icd9::ahrqComorbid, recursive = TRUE)),
                            replace = TRUE, size = n)
 fewIcd9 <- c("27801", "7208", "25001", "34400", "4011", "4011")
 
@@ -67,29 +67,29 @@ testTwenty <- structure(
   class = "data.frame")
 
 # first and last item from each comorbidity:
-icd9fl <- unlist(unname(c(lapply(ahrqComorbid, head, n = 1),
-                          lapply(ahrqComorbid, tail, n = 1))))
+icd9fl <- unlist(unname(c(lapply(icd9::ahrqComorbid, head, n = 1),
+                          lapply(icd9::ahrqComorbid, tail, n = 1))))
 ahrqTestDat <- data.frame(
   visitId = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 )
-icd9fl <- unlist(unname(c(lapply(elixComorbid, head, n = 1),
-                          lapply(elixComorbid, tail, n = 1))))
+icd9fl <- unlist(unname(c(lapply(icd9::elixComorbid, head, n = 1),
+                          lapply(icd9::elixComorbid, tail, n = 1))))
 elixTestDat <- data.frame(
   visitId = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 )
-icd9fl <- unlist(unname(c(lapply(quanElixComorbid, head, n = 1),
-                          lapply(quanElixComorbid, tail, n = 1))))
+icd9fl <- unlist(unname(c(lapply(icd9::quanElixComorbid, head, n = 1),
+                          lapply(icd9::quanElixComorbid, tail, n = 1))))
 quanElixTestDat <- data.frame(
   visitId = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 )
-icd9fl <- unlist(unname(c(lapply(quanDeyoComorbid, head, n = 1),
-                          lapply(quanDeyoComorbid, tail, n = 1))))
+icd9fl <- unlist(unname(c(lapply(icd9::quanDeyoComorbid, head, n = 1),
+                          lapply(icd9::quanDeyoComorbid, tail, n = 1))))
 quanDeyoTestDat <- data.frame(
   visitId = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,

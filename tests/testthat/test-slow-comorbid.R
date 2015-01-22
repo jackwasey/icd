@@ -1,5 +1,11 @@
 context("comorbidities")
 
+test_that("induce c++ segfault bug", {
+   trigdat <- data.frame(visitId = c("visit1", "visit1"), icd9 = c("39891", "09320"))
+
+  res <- icd9ComorbidAhrq(trigdat, isShort = TRUE) # seems to run okay now
+}
+
 test_that("ahrq make sure all the children
             are listed in the saved data.", {
               for (i in ahrqComorbid) expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
