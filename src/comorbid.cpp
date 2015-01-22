@@ -56,6 +56,8 @@ List icd9ComorbidShort(
       if (v.compare(lastv) != 0) {
         // new visit, so start a new row in the output matrix.
         outrow += 1;
+        if (outrow >= usize)
+          throw std::out_of_range ("More unique visitIds found than expected.")
       }
       for (int cmb = 0; cmb < nref; ++cmb) {
         //std::cout << "cmb = " << cmb << "\n";
