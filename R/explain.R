@@ -84,19 +84,15 @@ icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
 #'   short type. If there is some uncertainty, then return NA.
 #' @keywords internal
 icd9GuessIsShort <- function(icd9) {
+  #if (all(is.na(icd9))) return(TRUE) # don't take responsibility for validation here.
   icd9 <- as.character(icd9)
   if (is.list(icd9))
-    testCodes <- icd9[[1]]
-  else
-    testCodes <- icd9
+    icd9 <- icd9[[1]]
 
-  vs <- icd9ValidShort(testCodes)
-  vd <- icd9ValidDecimal(testCodes)
-  vsm <- mean(vs)
-  vdm <- mean(vd)
-  if (vsm - vdm > 0.5) return(TRUE)
-  if (vdm - vsm > 0.5) return(FALSE)
-  NA
+  vs <- icd9ValidShort(icd9)
+  vd <- icd9ValidDecimal(icd9)
+  if (sum(vd) > sum(vs)) return(FALSE)
+  TRUE
 }
 
 #' @title get ICD-9 Chapters from vector of ICD-9 codes

@@ -11,7 +11,8 @@ test_that("Charlson score", {
     ),
     icd9Charlson(mydf, isShort = FALSE)
   )
-  expect_equal(icd9Charlson(mydf,
+
+  expect_equivalent(icd9Charlson(mydf,
                             return.df = TRUE,
                             stringsAsFactors = TRUE,
                             isShort = FALSE),
@@ -28,7 +29,7 @@ test_that("Charlson score", {
                       icd9 = c("441", "412.93", "044.9"),
                       stringsAsFactors = FALSE)
 
-  expect_equal(icd9Charlson(mydff,
+  expect_equivalent(icd9Charlson(mydff,
                             return.df = TRUE,
                             stringsAsFactors = TRUE,
                             isShort = FALSE),
@@ -41,7 +42,7 @@ test_that("Charlson score", {
 
   mydfff <- mydff
   names(mydfff)[1] <- "v"
-  expect_equal(icd9Charlson(mydfff,
+  expect_equivalent(icd9Charlson(mydfff,
                             return.df = TRUE,
                             stringsAsFactors = FALSE,
                             isShort = FALSE),
@@ -54,7 +55,7 @@ test_that("Charlson score", {
 
   mydffff <- cbind(mydfff, data.frame(v2 = mydfff$v, stringsAsFactors = FALSE))
   mydffff$v <- NULL
-  expect_equal(icd9Charlson(mydffff, visitId = "v2",
+  expect_equivalent(icd9Charlson(mydffff, visitId = "v2",
                             return.df = TRUE,
                             stringsAsFactors = FALSE,
                             isShort = FALSE),

@@ -79,9 +79,9 @@ test_that("guess icd9 types: short", {
   expect_true(icd9GuessIsShort("1234"))
 })
 
-test_that("guess icd9 types: ambiguous", {
-  expect_equal(icd9GuessIsShort("123"), NA)
-  expect_equal(icd9GuessIsShort(c("123.4","2345")), NA)
+test_that("guess icd9 types: ambiguous, default to short", {
+  expect_equal(icd9GuessIsShort(c("123.4","2345")), TRUE)
+  expect_equal(icd9GuessIsShort(c("123.4", NA, "2345")), TRUE)
 })
 
 test_that("guess icd9 types: decimal", {
@@ -91,7 +91,13 @@ test_that("guess icd9 types: decimal", {
 })
 
 test_that("guess icd9 types: invalid", {
-  expect_equal(icd9GuessIsShort(NA_character_), NA)
+  expect_equal(icd9GuessIsShort(NA_character_), TRUE)
+})
+
+test_that("guess with just majors", {
+# it acutally doesn't matter if they are all majors, so we default to 'short'
+# which is usually the most direct route to an answer
+  expect_true(icd9GuessIsShort(c("100", "101", "102")))
 })
 
 # TODO, set up long chain of multiple conversions as kind of integration test,

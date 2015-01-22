@@ -14,21 +14,23 @@ icd9ComorbidShort(icd9df, icd9Mapping, visitId = "visitId",
 
 icd9Comorbid(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9",
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-  isShortMapping = icd9GuessIsShort(icd9Mapping[[1]]))
+  isShortMapping = icd9GuessIsShort(icd9Mapping))
 
-icd9ComorbidAhrq(icd9df, visitId = "visitId", icd9Field = "icd9", isShort,
-  validateMapping = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE)
+icd9ComorbidAhrq(icd9df, isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
+  visitId = "visitId", icd9Field = "icd9", validateMapping = FALSE,
+  abbrevNames = TRUE, applyHierarchy = TRUE)
 
 icd9ComorbidQuanDeyo(icd9df, visitId = "visitId", icd9Field = "icd9",
-  isShort, validateMapping = FALSE, abbrevNames = TRUE,
-  applyHierarchy = TRUE)
+  isShort = icd9GuessIsShort(icd9df[[icd9Field]]), validateMapping = FALSE,
+  abbrevNames = TRUE, applyHierarchy = TRUE)
 
 icd9ComorbidQuanElix(icd9df, visitId = "visitId", icd9Field = "icd9",
-  isShort, validateMapping = FALSE, abbrevNames = TRUE,
+  isShort = icd9GuessIsShort(icd9df[[icd9Field]]), abbrevNames = TRUE,
   applyHierarchy = TRUE)
 
-icd9ComorbidElix(icd9df, visitId = "visitId", icd9Field = "icd9", isShort,
-  validateMapping = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE)
+icd9ComorbidElix(icd9df, visitId = "visitId", icd9Field = "icd9",
+  isShort = icd9GuessIsShort(icd9df[[icd9Field]]), abbrevNames = TRUE,
+  applyHierarchy = TRUE)
 }
 \arguments{
 \item{icd9df}{data frame containing columns for visitId (which is the feault

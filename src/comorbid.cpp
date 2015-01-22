@@ -2,6 +2,8 @@
 #include <string>
 using namespace Rcpp;
 
+//#define DEBUG = true
+
 // Below is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp
 // function (or via the Source button on the editor toolbar)
@@ -25,7 +27,13 @@ List icd9ComorbidShort(
     VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
     VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field])); //
     SetStr uniqvs(vs.begin(), vs.end());
-    int usize = uniqvs.size() + 1;
+    int usize = uniqvs.size();
+    #ifdef DEBUG
+    for (SetStr::iterator si = uniqvs.begin(); si!=uniqvs.end(); ++si) {
+     Rcout << "unique visitId: " << *si << "\n";
+    }
+    Rcout << "total unique visitId: " << usize << "\n";
+    #endif
 
     // convert mapping from List of CharacterVectors to std vector of sets. This
     // is a small one-off cost, and dramatically improves the performance of the
@@ -44,24 +52,30 @@ List icd9ComorbidShort(
     // loop through rows or cols first. may be easier to do the rows first, so
     // we can aggregate as we go along
     int nrow = vs.size();
-    int outrow = 0;
+    int outrow = -1; // so when we begin incrementing, we hit zero.
     for (int vr = 0; vr < nrow; ++vr) {
-      //std::cout << "vr = " << vr << "\n";
+      //Rcout << "vr = " << vr << "\n";
       std::string icd = icds[vr];
       std::string v = vs[vr];
 
-      //std::cout << "outrow = " << outrow << "\n";
+      //Rcout << "outrow = " << outrow << "\n";
       // assume that unique visitIds are grouped together... we could sort first
       // to make sure of it, which is probably not a huge cost.
       if (v.compare(lastv) != 0) {
+        #ifdef DEBUG
+        Rcout << "starting new output row with visitId: " << v;
+        #endif
         // new visit, so start a new row in the output matrix.
         outrow += 1;
+        #ifdef DEBUG
+        Rcout << " and outrow now = " << outrow << "\n";
+        #endif
         if (outrow >= usize)
           throw std::out_of_range("More unique visitIds found than expected.");
         lastv = v;
       }
       for (int cmb = 0; cmb < nref; ++cmb) {
-        //std::cout << "cmb = " << cmb << "\n";
+        //Rcout << "cmb = " << cmb << "\n";
         if (map[cmb].find(icd) != map[cmb].end()) {
           out(outrow, cmb) = true;
         }

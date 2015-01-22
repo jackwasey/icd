@@ -56,7 +56,7 @@ icd9Comorbid <- function(icd9df,
                          visitId = "visitId",
                          icd9Field = "icd9",
                          isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-                         isShortMapping = icd9GuessIsShort(icd9Mapping[[1]])) {
+                         isShortMapping = icd9GuessIsShort(icd9Mapping)) {
 
   checkmate::checkDataFrame(icd9df, min.cols = 2)
   checkmate::checkList(icd9Mapping, types = "character", any.missing = FALSE, min.len = 1)
@@ -68,7 +68,7 @@ icd9Comorbid <- function(icd9df,
   stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
 
   if (!isShort)
-    icd9df[[visitId]] <- icd9DecimalToShort(icd9df[[visitId]])
+    icd9df[[icd9Field]] <- icd9DecimalToShort(icd9df[[icd9Field]])
 
   if (!isShortMapping)
     icd9Mapping <- lappply(icd9Mapping, icd9DecimalToShort)
