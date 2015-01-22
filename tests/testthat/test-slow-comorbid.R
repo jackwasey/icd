@@ -1,7 +1,7 @@
 context("comorbidities")
 
 test_that("try to induce c++ segfault bug", {
-   #trigdat <- data.frame(visitId = c("visit1", "visit1"), icd9 = c("39891", "09320"))
+  #trigdat <- data.frame(visitId = c("visit1", "visit1"), icd9 = c("39891", "09320"))
 
   res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE) # seems to run okay now
 })
@@ -332,16 +332,16 @@ test_that("ahrq comorbidity mapping is applied correctly,
 test_that("condense an ICD-9 code set to minimal group", {
   skip("TODO:  this test breaks because %i9s% now includes the last major, even if not all its child.")
   expect_equal(sort(icd9CondenseToMajorShort("98799" %i9s% "98901",
-                                        onlyReal = FALSE)),
+                                             onlyReal = FALSE)),
                sort(c("98799", "988", "98900", "98901")))
   expect_equal(sort(icd9CondenseToMajorShort("98799" %i9s% "98901",
-                                        onlyReal = TRUE,
-                                        dropNonReal = TRUE)),
+                                             onlyReal = TRUE,
+                                             dropNonReal = TRUE)),
                "988")
   expect_equal(
     sort(icd9CondenseToMajorShort("98799" %i9s% "98901",
-                             onlyReal = TRUE,
-                             dropNonReal = FALSE)),
+                                  onlyReal = TRUE,
+                                  dropNonReal = FALSE)),
     sort(
       # this list is the full range with these missing:
       #  c("9880", "9881", "9882", "9888", "9889")
@@ -581,4 +581,10 @@ test_that("built-in icd9 to comorbidity mappings are all valid", {
   expect_true(icd9ValidMappingShort(quanDeyoComorbid))
   expect_true(icd9ValidMappingShort(quanElixComorbid))
   expect_true(icd9ValidMappingShort(elixComorbid))
+})
+
+test_that("unordered visit ids", {
+  pts = data.frame(visitId = c("2", "1", "2", "3", "3"),
+                   icd9 = c("39891", "40110", "09322", "41514", "39891"))
+  icd9ComorbidShort(pts, ahrqComorbid)
 })

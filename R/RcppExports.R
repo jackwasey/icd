@@ -7,6 +7,10 @@ icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Fiel
     .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
 
+addListElementByRef <- function(df, name) {
+    .Call('icd9_addListElementByRef', PACKAGE = 'icd9', df, name)
+}
+
 #' @rdname convert
 icd9_MajMinToCode <- function(mjr, mnr, isShort) {
     .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', mjr, mnr, isShort)
