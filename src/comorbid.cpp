@@ -25,7 +25,7 @@ List icd9ComorbidShort(
     VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
     VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field])); //
     SetStr uniqvs(vs.begin(), vs.end());
-    int usize = uniqvs.size();
+    int usize = uniqvs.size() + 1;
 
     // convert mapping from List of CharacterVectors to std vector of sets. This
     // is a small one-off cost, and dramatically improves the performance of the
@@ -58,6 +58,7 @@ List icd9ComorbidShort(
         outrow += 1;
         if (outrow >= usize)
           throw std::out_of_range("More unique visitIds found than expected.");
+        lastv = v;
       }
       for (int cmb = 0; cmb < nref; ++cmb) {
         //std::cout << "cmb = " << cmb << "\n";
