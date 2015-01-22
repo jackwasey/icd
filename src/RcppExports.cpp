@@ -26,22 +26,6 @@ BEGIN_RCPP
     return __sexp_result;
 END_RCPP
 }
-// addListElementByRef
-//List addListElementByRef(List& df, std::string name);
-RcppExport SEXP icd9_addListElementByRef(SEXP dfSEXP, SEXP nameSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::RNGScope __rngScope;
-        Rcpp::traits::input_parameter< List& >::type df(dfSEXP );
-        Rcpp::traits::input_parameter< std::string >::type name(nameSEXP );
-        //List __result = addListElementByRef(df, name);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP
-}
 // icd9MajMinToCode
 CharacterVector icd9MajMinToCode(CharacterVector mjr, CharacterVector mnr, bool isShort);
 static SEXP icd9_icd9MajMinToCode_try(SEXP mjrSEXP, SEXP mnrSEXP, SEXP isShortSEXP) {

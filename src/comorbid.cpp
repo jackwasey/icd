@@ -8,7 +8,7 @@
 using namespace Rcpp;
 using namespace boost::multi_index;
 
-#define DEBUG = true
+#define DEBUG = false
 
 // Below is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp
@@ -26,7 +26,6 @@ typedef std::vector<std::vector<bool > > Vvb;
 
 int printVecStr(VecStr sv);
 int printCharVec(CharacterVector cv);
-//List addListElementByRef(List& df, std::string name);
 
 //' @rdname icd9Comorbid
 //' @export
@@ -42,31 +41,28 @@ List icd9ComorbidShort(
     VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
 
     CharacterVector mapnames = icd9Mapping.names();
+
     // create a multimap of visitid-code pairs
     Tmm vcdb;
-
-    //loop through visit and icd codes together
+    //loop through visit and icd codes and put together
     VecStrIt j = icds.begin();
     for (VecStrIt i = vs.begin(); i != vs.end(); ++i, ++j) {
       vcdb.insert(std::pair<std::string, std::string>(*i, *j));
     }
-
     #ifdef DEBUG
     std::cout << "multimap created\n";
     #endif
+
     //get unique visitIds so we can name and size the output
-    VecStr uvis(vs.size());
+    SetStr uvis;
     int pos;
     for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
-      pos = distance(vcdb.begin(), it);
-      uvis[pos] = it->first;
+      uvis.insert(it->first);
     }
-    int usize = pos+1;
-    uvis.resize(usize);
-
+    int usize = uvis.size();
     #ifdef DEBUG
     std::cout << "got the following unique visitIds: ";
-    printVecStr(uvis);
+    //printVecStr(uvis);
     #endif
 
     // convert mapping from List of CharacterVectors to std vector of sets. This
@@ -91,22 +87,26 @@ List icd9ComorbidShort(
       LogicalVector cmbcol(usize, false); // inital vector of falses
       String cmbnm = mapnames[cmb];
       out[cmbnm] = cmbcol; // does data copy
-      //addListElementByRef(out, cmbnm);
     }
 
     // use std::multimap to get subset of icd codes for each visitId key
+    //TODO: upper_bound jumps index irregularly
     for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
 
       // find the icd9 codes for a given visitId
       std::pair <Tmm::iterator, Tmm::iterator> matchrange;
-      matchrange = vcdb.equal_range(it->first);
+      std::string key = it->first;
+      matchrange = vcdb.equal_range(key);
+
+      // get distance to the unique key, not the position of the key in the multimap
+      //int urow = distance(vcdb.begin(), it);
+      int urow = distance(uvis.begin(), std::find(uvis.begin(), uvis.end(), key)); //TODO make uvis a std::set to speed this up.
 
       // loop through comorbidities
       for (int cmb = 0; cmb < nref; ++cmb) {
         // loop through icd codes for this visitId
         for (Tmm::iterator j = matchrange.first; j != matchrange.second; ++j) {
           if (map[cmb].find(j->second) != map[cmb].end()) {
-            int urow = distance(vcdb.begin(), it) ;
             LogicalVector cmbcol = out[cmb+1]; // does this copy?
             cmbcol[urow] = true;
           }
@@ -139,24 +139,3 @@ List icd9ComorbidShort(
     }
     return 0;
   }
-
-// this is from: http://stackoverflow.com/questions/15731106/passing-by-reference-a-data-frame-and-updating-it-with-rcpp
-// updates a data frame, note copying is with pointers, not the whole df
-// [[Rcpp::export]]
-//List addListElementByRef(List& df, std::string name) {
-//    CharacterVector v = df[0];
-//    int nr = v.size();
-//    int nc = df.size() ;
-//    LogicalVector newCol(nr, false);
-//    List out(nc+1) ;
-//    CharacterVector onames = df.attr("names") ;
-//    CharacterVector names( nc + 1 ) ;
-//    for( int i=0; i<nc; i++) {
-//        out[i] = df[i] ; // copying by reference
-//        names[i] = onames[i] ;
-//    }
-//    out[nc] = newCol ;
-//    names[nc] = name ;
-//    out.attr("names") = names ;
-//    return out ;
-//}
