@@ -8,7 +8,7 @@
 using namespace Rcpp;
 using namespace boost::multi_index;
 
-#define DEBUG = false
+//#define DEBUG = 1
 
 // Below is a simple example of exporting a C++ function to R. You can
 // source this function into an R session using the Rcpp::sourceCpp
