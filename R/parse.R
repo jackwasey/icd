@@ -438,6 +438,18 @@ parseIcd9Chapters <- function(year = NULL,
     warning(sprintf("Getting ICD-9 data for %s which is not the current year.
               Tests were written to validate extraction of 2014 data.", year))
 
+  # don't assume XML is loaded - it is a suggested package, and needed only for
+  # creating packaged data.
+  if (suppressWarnings(requireNamespace("XML",
+                                        character.only = TRUE, quietly = TRUE))) {
+    if (suppressWarnings(requireNamespace("memoise",
+                                          character.only = TRUE, quietly = TRUE)))
+      memReadHtmlList <- memoise::memoise(XML::readHTMLList)
+    else
+      memReadHtmlList <- XML::readHTMLList
+  } else
+    memReadHtmlList <- NULL
+
   icd9Chapters <- icd9WebParseGetList(year)
   icd9ChaptersSub <- list()
   icd9ChaptersMajor <- list()
@@ -484,7 +496,6 @@ icd9WebParseStartEndToRange <- function(v) {
 
 # internal only
 icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
-  #print(paste(year, chapter, subchap))
   if (is.null(chapter)) {
     icd9url <- sprintf("http://www.icd9data.com/%s/Volume1/default.htm", year)
   } else {
@@ -514,15 +525,3 @@ icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
          }
   )
 }
-
-# don't assume XML is loaded - it is a suggested package, and needed only for
-# creating packaged data.
-if (suppressWarnings(require("XML",
-                             character.only = TRUE, quietly = TRUE))) {
-  if (suppressWarnings(require("memoise",
-                               character.only = TRUE, quietly = TRUE)))
-    memReadHtmlList <- memoise::memoise(XML::readHTMLList)
-  else
-    memReadHtmlList <- XML::readHTMLList
-} else
-  memReadHtmlList <- NULL

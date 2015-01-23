@@ -277,6 +277,31 @@ patientChapters
 
 @
 
+\section{Putting things together}
+\subsection{Example 1}
+For the next example, we will find the differences between some categories of the original Elixhauser and the updated version by Quan.
+<<elixvsquanelix>>=
+in_both <- intersect(elixComorbid$Pulmonary, quanElixComorbid$Pulmonary) # ~1800
+only_in_elix <- setdiff(elixComorbid$Pulmonary, quanElixComorbid$Pulmonary) # none
+only_in_quanElix <- setdiff(quanElixComorbid$Pulmonary, elixComorbid$Pulmonary) #about 50
+
+in_both %>% icd9GetReal %>% icd9Explain
+only_in_quanElix %>% icd9GetReal %>% icd9Explain
+@
+
+Passing through icd9GetReal stops icd9Explain complaining that some of the input codes don't exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the real (official billable) ones.
+
+\subsection{Example 2}
+Suppose we want to exact match only real ICD-9 codes when looking up comorbdities for some patients. E.g. if the coder accidentally omited a trailing zero, e.g. code 003.20 (\emph{Localized salmonella infection, unspecified}) might have been written as 003.2 which has a heading (\emph{Localized salmonella infections}) but is not itself billable. Use of ICD-9 codes for comorbidities generally assumes the codes are either right or wrong. How do we match only real codes, for a strict interpretation of comorbidities? It's one line or R code:
+
+<<realmapping>>=
+ahrqStrict <- lapply(ahrqComorbid, icd9GetReal)
+
+# first five of the original:
+str(ahrqComorbid[1:5])
+# and we see the first five of the updated list is much shorter:
+str(ahrqStrict[1:5])
+@
 \section{AHRQ comorbidity classification}
 
 The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.

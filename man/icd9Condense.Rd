@@ -23,10 +23,10 @@ Since nearly valid, out-dated or new codes may be missed, not limiting to
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
 
-\item{toMajor}{Most major codes are not \emph{real}, e.g. Salmonella 003
-is a major category, but is not itself used as a diagnostic code.
-Therefore, strictly, asking for only \emph{real} codes excludes the major. We'll
-turn a blind eye to this if we specifically request majors with toMajor.}
+\item{toMajor}{Most major codes are not \emph{real}, e.g. Salmonella 003 is a
+major category, but is not itself used as a diagnostic code. Therefore,
+strictly, asking for only \emph{real} codes excludes the major. We'll turn
+a blind eye to this if we specifically request majors with toMajor.}
 
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned

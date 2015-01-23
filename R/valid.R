@@ -247,7 +247,7 @@ icd9IsRealDecimal <- function(icd9Decimal, majorOk = TRUE) {
 #' @rdname icd9IsReal
 #' @template icd9-any
 #' @export
-icd9GetReal <- function(icd9, isShort, majorOk = TRUE) {
+icd9GetReal <- function(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE) {
   if (isShort) return(icd9GetRealShort(icd9, majorOk = majorOk))
   icd9GetRealDecimal(icd9, majorOk = majorOk)
 }

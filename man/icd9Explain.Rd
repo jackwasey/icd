@@ -9,17 +9,20 @@
 \alias{icd9ExplainShort}
 \title{explain ICD9 codes}
 \usage{
-icd9Explain(icd9, isShort, doCondense = TRUE)
+icd9Explain(icd9, isShort = icd9GuessIsShort(icd9), doCondense = TRUE)
 
 icd9ExplainShort(icd9Short, doCondense = TRUE)
 
 icd9ExplainDecimal(icd9Decimal, doCondense = TRUE)
 
-\method{icd9Explain}{list}(icd9, isShort, doCondense = TRUE)
+\method{icd9Explain}{list}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE)
 
-\method{icd9Explain}{character}(icd9, isShort, doCondense = TRUE)
+\method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE)
 
-\method{icd9Explain}{numeric}(icd9, isShort, doCondense = TRUE)
+\method{icd9Explain}{numeric}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is

@@ -15,7 +15,7 @@ icd9IsRealShort(icd9Short, majorOk = TRUE)
 
 icd9IsRealDecimal(icd9Decimal, majorOk = TRUE)
 
-icd9GetReal(icd9, isShort, majorOk = TRUE)
+icd9GetReal(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE)
 
 icd9GetRealShort(icd9Short, majorOk = TRUE)
 

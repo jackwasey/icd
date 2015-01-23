@@ -22,7 +22,8 @@
 #' @seealso package comorbidities
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
-icd9Explain <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                        doCondense = TRUE) {
   UseMethod("icd9Explain")
 }
 
@@ -40,13 +41,15 @@ icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE) {
 
 #' @describeIn icd9Explain explain alll ICD-9 codes in a list of vectors
 #' @export
-icd9Explain.list <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain.list <- function(icd9,  isShort = icd9GuessIsShort(icd9),
+                             doCondense = TRUE) {
   lapply(icd9, icd9Explain, isShort = isShort, doCondense = doCondense)
 }
 
 #' @describeIn icd9Explain explain character vector of ICD-9 codes
 #' @export
-icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                                  doCondense = TRUE) {
 
   if (!isShort) icd9 <- icd9DecimalToShort(icd9)
   if (doCondense) icd9 <- icd9CondenseShort(icd9, onlyReal = TRUE)
@@ -65,7 +68,8 @@ icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
 
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning
 #' @export
-icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                                doCondense = TRUE) {
   warnNumericCode()
   icd9Explain.character(as.character(icd9), isShort = isShort)
 }
@@ -83,11 +87,14 @@ icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
 #'   short type. If there is some uncertainty, then return NA.
 #' @keywords internal
 icd9GuessIsShort <- function(icd9) {
-  #if (all(is.na(icd9))) return(TRUE) # don't take responsibility for validation here.
+  # don't take responsibility for validation here.
   icd9 <- as.character(icd9)
-  if (is.list(icd9))
-    icd9 <- icd9[[1]]
-
+  if (is.list(icd9)) {
+    if (length(icd9) > 0)
+      icd9 <- icd9[[1]]
+    else
+      return(TRUE)
+  }
   vs <- icd9ValidShort(icd9)
   vd <- icd9ValidDecimal(icd9)
   if (sum(vd) > sum(vs)) return(FALSE)
@@ -168,10 +175,10 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #'   \code{icd9Children}.
 #' @template icd9-short
 #' @template onlyReal
-#' @param toMajor Most major codes are not \emph{real}, e.g. Salmonella 003
-#'   is a major category, but is not itself used as a diagnostic code.
-#'   Therefore, strictly, asking for only \emph{real} codes excludes the major. We'll
-#'   turn a blind eye to this if we specifically request majors with toMajor.
+#' @param toMajor Most major codes are not \emph{real}, e.g. Salmonella 003 is a
+#'   major category, but is not itself used as a diagnostic code. Therefore,
+#'   strictly, asking for only \emph{real} codes excludes the major. We'll turn
+#'   a blind eye to this if we specifically request majors with toMajor.
 #' @family ICD-9 ranges
 #' @export
 icd9Condense <- function(icd9, isShort, onlyReal = NULL, toMajor = TRUE) {
@@ -252,7 +259,8 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, toMajor = TRUE) {
     lookin <- i9w
     if (toMajor) lookin <- unique(c(icd9GetMajor(i, isShort = TRUE), lookin))
     if (all(matchKids %in% lookin)) {
-      i9w <- i9w[i9w %nin% matchKids] # drop the matches (but not including major if added)
+      # drop the matches (but not including major if added)
+      i9w <- i9w[i9w %nin% matchKids]
       i9o <- c(i9o, i)
     }
   }
