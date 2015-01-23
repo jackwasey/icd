@@ -5,6 +5,9 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // and use them (does this need two compilation steps?)
 
+// EXCLUDE COVERAGE
+
+
 #include <Rcpp.h>
 #include <sstream>
 #include <string>
