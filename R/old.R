@@ -1,7 +1,7 @@
 # old R versions of code, now reimplemented in C++. Kept here for performance
 # comparison and debugging
 
-# EXCLUDE COVERAGE
+# EXCLUDE COVERAGE START
 
 icd9Children_R <- function(icd9, onlyReal = FALSE, isShort) {
   if (isShort) return(icd9ChildrenShort(icd9, onlyReal = onlyReal))
@@ -391,3 +391,4 @@ icd9Comorbid_R <- function(icd9df,
     simplify = TRUE
   )
 }
+# EXCLUDE COVERAGE END

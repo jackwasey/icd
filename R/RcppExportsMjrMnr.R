@@ -2,6 +2,8 @@
 # commited), by temporarily renaming the function arguments manually to major
 # and minor.
 
+# EXCLUDE COVERAGE START
+
 #' @rdname convert
 #' @export
 icd9MajMinToCode <- function(major, minor, isShort) {
@@ -58,3 +60,4 @@ icd9AddLeadingZeroesMajor <- function(major) {
 icd9ExpandMinor <- function(minor, isE = FALSE) {
   .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', minor, isE)
 }
+# EXCLUDE COVERAGE END
