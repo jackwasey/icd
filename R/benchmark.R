@@ -1,4 +1,4 @@
-# EXCLUDE COVERAGE
+# EXCLUDE COVERAGE START
 
 randomPatients <- function(n = 50000, np = 20) {
   pts <- round(n / np)
@@ -157,3 +157,4 @@ icd9Benchmark <- function() {
   microbenchmark::microbenchmark(icd9::icd9IsV_cpp_slower(icd9), icd9::icd9IsV_R(icd9), icd9::icd9IsV_cpp_slow(icd9), icd9::icd9IsV(icd9))
 
 }
+# EXCLUDE COVERAGE END

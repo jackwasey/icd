@@ -5,8 +5,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // and use them (does this need two compilation steps?)
 
-// # EXCLUDE COVERAGE
-
+// # EXCLUDE COVERAGE START
 
 #include <Rcpp.h>
 #include <sstream>
@@ -154,3 +153,4 @@ List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty
 
   return icd9::icd9_MajMinToParts(mjr, mnr);
 }
+// # EXCLUDE COVERAGE END
