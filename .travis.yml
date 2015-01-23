@@ -13,7 +13,7 @@ script: ./travis-tool.sh run_tests
 
 after_success:
 #  - Rscript -e 'library(covr); coveralls(exclusion=list("R/benchmark.R" = 1, "R/old.R" = 1, "R/RcppExports.R" = 1, "src/RcppExports.cpp" = 1, "src/slow.cpp" = 1))'
-  - Rscript -e 'library(covr); coveralls(exclusion=list("./R/RcppExports.R" = c(0,5000), "./src/RcppExports.cpp" = c(0,5000)))'
+  - Rscript -e 'library(covr); coveralls(exclusion=list("RcppExports.R" = c(0,5000), "RcppExports.cpp" = c(0,5000)))'
 
 after_failure:
   - ./travis-tool.sh dump_logs
