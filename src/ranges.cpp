@@ -1,8 +1,5 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include <string>
-//#include <iostream>
-#include <sstream>
 #include <icd9.h>
 using namespace Rcpp;
 

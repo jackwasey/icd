@@ -1,7 +1,5 @@
-// generate header files in 'inst/include'
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include <string>
 #include <icd9.h>
 using namespace Rcpp;
 
@@ -9,9 +7,6 @@ std::vector<bool> icd9IsA(std::vector< std::string > sv, std::string ms, bool in
   int len = sv.size();
   std::vector<bool> out(len);
   for (int i = 0; i < len; ++i) {
-    //std::string svt = boost::algorithm::trim_left_copy(sv[i]); // little speed difference
-    //if (svt.size() == 0) { continue; }
-    //out[i] = svt.find_first_of("Vv") != std::string::npos;
     out[i] = inverse == (sv[i].find_first_of(ms) == std::string::npos);
   }
   return out;

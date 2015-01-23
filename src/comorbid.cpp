@@ -1,12 +1,7 @@
+// [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include <string>
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/ordered_index.hpp>
-#include <boost/multi_index/identity.hpp>
-#include <boost/multi_index/member.hpp>
-
 using namespace Rcpp;
-using namespace boost::multi_index;
 
 //#define DEBUG = 1
 
@@ -48,19 +43,18 @@ List icd9ComorbidShort(
     for (VecStrIt i = vs.begin(); i != vs.end(); ++i, ++j) {
       vcdb.insert(std::pair<std::string, std::string>(*i, *j));
     }
-    #ifdef DEBUG
+    #ifdef ICD9_DEBUG
     std::cout << "multimap created\n";
     #endif
 
     //get unique visitIds so we can name and size the output
-    // TODO this needs an alphabetic index (boost multi) or maybe std can allow custom index in a set.
     SetStr uvis;
     int pos;
     for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
       uvis.insert(it->first);
     }
     int usize = uvis.size();
-    #ifdef DEBUG
+    #ifdef ICD9_DEBUG
     std::cout << "got the following unique visitIds: ";
     //printVecStr(uvis);
     #endif
@@ -74,7 +68,7 @@ List icd9ComorbidShort(
       SetStr ss(mvs.begin(), mvs.end());
       map.push_back(ss);
     }
-    #ifdef DEBUG
+    #ifdef ICD9_DEBUG
     std::cout << "reference mapping std structure created\n";
     #endif
 
@@ -114,10 +108,6 @@ List icd9ComorbidShort(
       }
     }
     mapnames.push_front("visitId");
-    //    #ifdef DEBUG
-    //    std::cout << "mapping names\n";
-    //    printCharVec(mapnames);
-    //    #endif
     out.names() = mapnames;
     IntegerVector row_names = seq_len(usize);
     out.attr("row.names") = row_names;
@@ -125,6 +115,7 @@ List icd9ComorbidShort(
     return out;
   }
 
+#ifdef ICD9_DEBUG
   int printVecStr(VecStr sv) {
     for (VecStr::iterator i = sv.begin(); i != sv.end(); ++i) {
       std::cout << *i << "\n";
@@ -139,3 +130,4 @@ List icd9ComorbidShort(
     }
     return 0;
   }
+#endif

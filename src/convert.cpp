@@ -1,10 +1,8 @@
 // [[depends(BH)]]
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include <string>
-#include <iostream>
-#include <boost/algorithm/string/trim.hpp>
 #include <icd9.h>
+#include <boost/algorithm/string/trim.hpp>
 using namespace Rcpp;
 
 // // temporarily move  @export to my shim
@@ -135,7 +133,7 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
     std::string s = as<std::string>(icd9Short[i]); // do i need to convert?
 
     // since we loop anyway, don't call vectorized trim
-    boost::algorithm::trim(s); // minimal speed difference
+    boost::algorithm::trim(s); // minimal speed penalty
 
     if (!icd9::icd9IsASingleE(s)) { // not an E code
     switch (s.size()) {

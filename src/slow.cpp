@@ -1,18 +1,11 @@
-//include boost
 // [[depends(BH)]]
-
-// generate header files in 'inst/include'
 // [[Rcpp::interfaces(r, cpp)]]
-// and use them (does this need two compilation steps?)
 
 // # EXCLUDE COVERAGE START
 
 #include <Rcpp.h>
-#include <sstream>
-#include <string>
-#include <iostream>
-#include <boost/algorithm/string.hpp>
 #include <icd9.h>
+#include <boost/algorithm/string/trim.hpp>
 using namespace Rcpp;
 
 // slow versions of functions for benchmarking

@@ -1,11 +1,8 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include <string>
-#include <iostream>
 #include <icd9.h>
 using namespace Rcpp;
 
-// zero-pad a single major value
 //' @rdname icd9AddLeadingZeroes
 // [[Rcpp::export("icd9_AddLeadingZeroesMajorSingle")]]
 String icd9AddLeadingZeroesMajorSingle(String mjr) {
