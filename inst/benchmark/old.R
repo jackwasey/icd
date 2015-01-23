@@ -367,3 +367,52 @@ icd9ExplainCondense <- function(icd9Short) {
   }
   asCharacterNoWarn(fout)
 }
+
+
+# old version, now in C++
+icd9Comorbid_R <- function(icd9df,
+                           visitId = "visitId",
+                           icd9Field = "icd9",
+                           isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
+                           icd9Mapping,
+                           validateMapping = FALSE,
+                           isShortMapping = TRUE) {
+
+
+  if (is.character(icd9Mapping)) {
+    stopifnot(exists(icd9Mapping))
+    icd9Mapping <- get(icd9Mapping)
+  }
+
+  if (validateMapping) stopifnot(icd9ValidMapping(icd9Mapping, isShortMapping))
+
+  # drop factor down to character codes #TODO: is this necessary or desirable?
+  ic <- jwutil::asCharacterNoWarn(icd9df[[icd9Field]])
+
+  # loop through names of icd9 mapping, and put the results together so each
+  # column is one comorbidity in a data frame. This is much faster with vapply,
+  # and it keeps the logicals instead of making them characters
+
+  i <- cbind(
+    icd9df[visitId],
+    sapply(
+      X = names(icd9Mapping),
+      # FUN looks up each visit icd9 code in given set of comorbidity icd9 codes
+      FUN = function(comorbidity)
+        icd9InReferenceCode( icd9 = ic,
+                             icd9Reference = icd9Mapping[[comorbidity]],
+                             isShort = isShort,
+                             isShortReference = isShortMapping),
+      simplify = FALSE # vapply always simplifies if only one row
+    )
+  )
+  # at this point, 'i' still has multiple rows per visit, but with a column per
+  # comorbidity: next step aggregates all the comorbidities together to give one
+  # row per visitid
+  aggregate(
+    x = i[, names(i) != visitId],
+    by = list(visitId = i[[visitId]]),
+    FUN = any,
+    simplify = TRUE
+  )
+}

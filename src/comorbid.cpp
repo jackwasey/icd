@@ -19,11 +19,10 @@ using namespace boost::multi_index;
 typedef std::vector<std::string > VecStr;
 typedef VecStr::iterator VecStrIt;
 typedef std::set<std::string > SetStr;
-typedef std::vector<SetStr > VecSetStr;
+typedef std::map<int,std::string > MapStr;
+typedef std::vector<SetStr > CmbMap;
 typedef std::multimap<std::string, std::string> Tmm;
-typedef std::vector<std::vector<bool > > Vvb;
-
-
+// internal function definitions
 int printVecStr(VecStr sv);
 int printCharVec(CharacterVector cv);
 
@@ -54,6 +53,7 @@ List icd9ComorbidShort(
     #endif
 
     //get unique visitIds so we can name and size the output
+    // TODO this needs an alphabetic index (boost multi) or maybe std can allow custom index in a set.
     SetStr uvis;
     int pos;
     for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
@@ -68,7 +68,7 @@ List icd9ComorbidShort(
     // convert mapping from List of CharacterVectors to std vector of sets. This
     // is a small one-off cost, and dramatically improves the performance of the
     // later loops, because we can .find() instead of linear search.
-    VecSetStr map;
+    CmbMap map;
     for (List::iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end(); ++mi) {
       VecStr mvs(as<VecStr>(*mi));
       SetStr ss(mvs.begin(), mvs.end());
