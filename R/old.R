@@ -1,6 +1,8 @@
 # old R versions of code, now reimplemented in C++. Kept here for performance
 # comparison and debugging
 
+# EXCLUDE COVERAGE
+
 icd9Children_R <- function(icd9, onlyReal = FALSE, isShort) {
   if (isShort) return(icd9ChildrenShort(icd9, onlyReal = onlyReal))
   icd9ChildrenDecimal(icd9, onlyReal = onlyReal)
@@ -264,22 +266,6 @@ test_that("appendZeroToNine", {
                    as.character(c(0:9, 90:99)))
 })
 
-#' @title condense list of short ICD-9 code into minimal set of parent descriptions
-#' @description This can be thought of as the inverse operation to expanding a
-#'   range. The list given must already contain the parents, because this
-#'   function will never add a parent ICD-9 which, although may have all
-#'   children present, may itself have an additional clinical meaning. In
-#'   addition, in contrast to \code{icd9CondenseToMajor}, this function only walks
-#'   back up to parents which have descriptions in \code{icd9Hierarchy}, so it is
-#'   useful for generating a minimal textual description of a set of ICD-9
-#'   codes.
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
-#' @template isShort
-#' @family ICD-9 ranges
-#' @keywords manip
-#' @export
 icd9ExplainCondense <- function(icd9Short) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.

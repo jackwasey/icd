@@ -1,3 +1,4 @@
+# EXCLUDE COVERAGE
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
 "Welcome to the icd9 package for finding comorbidities and interpretation of ICD-9 codes.
