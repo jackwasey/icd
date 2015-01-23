@@ -12,7 +12,7 @@ install:
 script: ./travis-tool.sh run_tests
 
 after_success:
-  - Rscript -e 'library(covr); coveralls()'
+  - Rscript -e 'library(covr); coveralls(exclude=list("R/RcppExports.R" = 1, "src/RcppExports.R" = 1))'
 
 after_failure:
   - ./travis-tool.sh dump_logs

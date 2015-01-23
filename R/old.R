@@ -255,17 +255,6 @@ icd9AddLeadingZeroesShort_R <- function(icd9Short) {
 icd9AddLeadingZeroesMajor_R <- function(major)
   sprintf("%03d", asIntegerNoWarn(major))
 
-test_that("appendZeroToNine", {
-  expect_error(appendZeroToNine(list(a = c(1, 2)))) # error on silly input
-  expect_identical(appendZeroToNine("1"), as.character(10:19))
-  expect_identical(appendZeroToNine(1), as.character(10:19))
-  expect_identical(appendZeroToNine(""), as.character(0:9))
-  expect_identical(sort(appendZeroToNine(c("1", "2"))),
-                   as.character(c(10:19, 20:29)))
-  expect_identical(sort(appendZeroToNine(c("", "9"))),
-                   as.character(c(0:9, 90:99)))
-})
-
 icd9ExplainCondense <- function(icd9Short) {
 
   # make homogeneous and sort so we will hit the parents first, kids later.
