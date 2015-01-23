@@ -5,7 +5,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // and use them (does this need two compilation steps?)
 
-// EXCLUDE COVERAGE
+// # EXCLUDE COVERAGE
 
 
 #include <Rcpp.h>
