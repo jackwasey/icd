@@ -16,7 +16,12 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 provided is in short (TRUE) or decimal (FALSE) form.}
 }
 \description{
-check whether any ICD-9 code is syntactically valid
+This does not check whether the code coresponds to a real
+  ICD-9-CM billing code, or parent grouping. For that, see
+  \code{\link{icd9Real}}.
+
+  factors are accepted, and since the validation is done with \code{grepl}
+  these are handled correctly.
 }
 \seealso{
 \code{\link{icd9ValidDecimal}} and \code{\link{icd9ValidShort}}
@@ -37,8 +42,6 @@ Other ICD9 validation: \code{\link{icd9GetInvalidMappingDecimal}},
   \code{\link{icd9ValidShort}},
   \code{\link{icd9ValidShortE}},
   \code{\link{icd9ValidShortN}},
-  \code{\link{icd9ValidShortV}};
-  \code{\link{stopIfInvalidIcd9}},
-  \code{\link{warnIfInvalidIcd9}}
+  \code{\link{icd9ValidShortV}}
 }
 

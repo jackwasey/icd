@@ -66,8 +66,7 @@ icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning
 #' @export
 icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
-  warning("Numeric ICD-9 codes are unable to accurately represent actual ICD-9
-           codes. Converting to character, but beware of inevitable errors.")
+  warnNumericCode()
   icd9Explain.character(as.character(icd9), isShort = isShort)
 }
 
@@ -102,7 +101,7 @@ icd9GuessIsShort <- function(icd9) {
 #' @param isShort
 #' @param invalid
 #' @keywords internal
-icd9GetChapters <- function(icd9, isShort) {
+icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
 
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
@@ -240,7 +239,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, toMajor = TRUE) {
   }
 
   if (onlyReal && !all(icd9IsRealShort(icd9Short, majorOk = toMajor)))
-    warning("only real values requested, but unreal ICD-9 code given.")
+    warning("only real values requested, but unreal ICD-9 code(s) given.")
 
   if (toMajor)
     i9n <- unique(c(icd9GetMajor(i9w, isShort = TRUE), i9w))
@@ -269,5 +268,5 @@ icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, toMajor = TRUE)
   icd9ShortToDecimal(
     icd9CondenseShort(
       icd9DecimalToShort(icd9Decimal), onlyReal, toMajor
-      )
     )
+  )

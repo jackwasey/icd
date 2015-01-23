@@ -4,7 +4,7 @@
 \alias{icd9GetChapters}
 \title{get ICD-9 Chapters from vector of ICD-9 codes}
 \usage{
-icd9GetChapters(icd9, isShort)
+icd9GetChapters(icd9, isShort = icd9GuessIsShort(icd9df[[icd9Field]]))
 }
 \arguments{
 \item{isShort}{}

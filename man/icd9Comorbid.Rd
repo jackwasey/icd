@@ -7,6 +7,11 @@
 \alias{icd9ComorbidQuanDeyo}
 \alias{icd9ComorbidQuanElix}
 \alias{icd9ComorbidShort}
+\alias{icd9Comorbidities}
+\alias{icd9ComorbiditiesAhrq}
+\alias{icd9ComorbiditiesElixHauser}
+\alias{icd9ComorbiditiesQuanDeyo}
+\alias{icd9ComorbiditiesQuanElixhauser}
 \title{find comorbidities from ICD-9 codes.}
 \usage{
 icd9ComorbidShort(icd9df, icd9Mapping, visitId = "visitId",
@@ -21,8 +26,8 @@ icd9ComorbidAhrq(icd9df, isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
   abbrevNames = TRUE, applyHierarchy = TRUE)
 
 icd9ComorbidQuanDeyo(icd9df, visitId = "visitId", icd9Field = "icd9",
-  isShort = icd9GuessIsShort(icd9df[[icd9Field]]), validateMapping = FALSE,
-  abbrevNames = TRUE, applyHierarchy = TRUE)
+  isShort = icd9GuessIsShort(icd9df[[icd9Field]]), abbrevNames = TRUE,
+  applyHierarchy = TRUE)
 
 icd9ComorbidQuanElix(icd9df, visitId = "visitId", icd9Field = "icd9",
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]), abbrevNames = TRUE,
@@ -31,6 +36,16 @@ icd9ComorbidQuanElix(icd9df, visitId = "visitId", icd9Field = "icd9",
 icd9ComorbidElix(icd9df, visitId = "visitId", icd9Field = "icd9",
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]), abbrevNames = TRUE,
   applyHierarchy = TRUE)
+
+icd9Comorbidities(...)
+
+icd9ComorbiditiesAhrq(...)
+
+icd9ComorbiditiesElixHauser(...)
+
+icd9ComorbiditiesQuanDeyo(...)
+
+icd9ComorbiditiesQuanElixhauser(...)
 }
 \arguments{
 \item{icd9df}{data frame containing columns for visitId (which is the feault

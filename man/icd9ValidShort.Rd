@@ -46,8 +46,6 @@ Other ICD9 validation: \code{\link{icd9GetInvalidMappingDecimal}},
   \code{\link{icd9ValidMajor}},
   \code{\link{icd9ValidMajorE}},
   \code{\link{icd9ValidMajorN}},
-  \code{\link{icd9ValidMajorV}}; \code{\link{icd9Valid}};
-  \code{\link{stopIfInvalidIcd9}},
-  \code{\link{warnIfInvalidIcd9}}
+  \code{\link{icd9ValidMajorV}}; \code{\link{icd9Valid}}
 }
 

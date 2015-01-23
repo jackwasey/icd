@@ -1301,7 +1301,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("CharacterVector(*icd9AddLeadingZeroesDecimal)(CharacterVector)");
         signatures.insert("CharacterVector(*icd9_AddLeadingZeroesMajor)(CharacterVector)");
         signatures.insert("CharacterVector(*icd9_ExpandMinor)(std::string,bool)");
-        signatures.insert("CharacterVector(*icd9Children)(CharacterVector,bool,bool)");
+        signatures.insert("CharacterVector(*icd9_Children)(CharacterVector,bool,bool)");
         signatures.insert("CharacterVector(*icd9ChildrenShort)(CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9ChildrenDecimal)(CharacterVector,bool)");
         signatures.insert("LogicalVector(*icd9InReferenceCode)(CharacterVector,CharacterVector,bool,bool)");
@@ -1343,7 +1343,7 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesDecimal", (DL_FUNC)icd9_icd9AddLeadingZeroesDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9_AddLeadingZeroesMajor", (DL_FUNC)icd9_icd9AddLeadingZeroesMajor_try);
     R_RegisterCCallable("icd9", "icd9_icd9_ExpandMinor", (DL_FUNC)icd9_icd9ExpandMinor_try);
-    R_RegisterCCallable("icd9", "icd9_icd9Children", (DL_FUNC)icd9_icd9Children_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_Children", (DL_FUNC)icd9_icd9Children_try);
     R_RegisterCCallable("icd9", "icd9_icd9ChildrenShort", (DL_FUNC)icd9_icd9ChildrenShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9ChildrenDecimal", (DL_FUNC)icd9_icd9ChildrenDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9InReferenceCode", (DL_FUNC)icd9_icd9InReferenceCode_try);

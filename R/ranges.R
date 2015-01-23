@@ -13,7 +13,7 @@
 #' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 #' @keywords manip
 #' @export
-icd9Sort <- function(icd9, isShort) {
+icd9Sort <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
   if (isShort) return(icd9SortShort(icd9))
   icd9SortDecimal(icd9)
 }
@@ -31,7 +31,7 @@ icd9SortDecimal <- function(icd9Decimal)
 #' Generate sysdata.rda
 #'
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
-#' quick, but much to slow when it appears many times in a loop.
+#' quick, but much too slow when it appears many times in a loop.
 #' @keywords internal
 icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do.save = TRUE) {
   c() -> icd9NShort -> icd9VShort -> icd9EShort

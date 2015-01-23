@@ -146,44 +146,11 @@ icd9_AddLeadingZeroesMajor <- function(mjr) {
     .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', mjr)
 }
 
-#' @name icd9ExpandMinor
-#' @title expand decimal part of ICD-9 code to cover all possible sub-codes
-#' @description Accepts a single number or character input starting point for
-#'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
-#'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
-#' @template minor
-#' @param isE single logical, which if TRUE, treats the minor as part of an E
-#'   code (which is one character), as opposed to a V or numeric-only code,
-#'   which is two character. Default is \code{FALSE}.
-#' @examples
-#'   # return all possible decimal parts of ICD9 codes (111 in total)
-#'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
-#'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
-#' @return NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
-#' @family ICD-9 ranges
-#' @keywords internal manip
 icd9_ExpandMinor <- function(mnr, isE = FALSE) {
     .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', mnr, isE)
 }
 
-#' @title Expand 5 character form 'short' ICD9 to all possible sub codes
-#' @description Much faster in C++, but gains diminished with increasing numbers of input shorts, probably because I am copying memory unnecessarily.
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
-#' @keywords manip
-#' @family ICD-9 ranges
-#' @examples
-#' library(magrittr)
-#' icd9ChildrenShort("10201", FALSE) # no children other than self
-#' icd9ChildrenShort("10201", TRUE) # empty list because 102.01 is not a meaningful code
-#' icd9ChildrenShort("003", TRUE) %>% icd9ExplainShort(doCondense = FALSE)
-#' icd9ChildrenDecimal("100.0")
-#' icd9ChildrenDecimal("100.00")
-#' icd9ChildrenDecimal("2.34")
-#'
-#' @export
-icd9Children <- function(icd9, isShort, onlyReal = TRUE) {
+icd9_Children <- function(icd9, isShort, onlyReal = TRUE) {
     .Call('icd9_icd9Children', PACKAGE = 'icd9', icd9, isShort, onlyReal)
 }
 

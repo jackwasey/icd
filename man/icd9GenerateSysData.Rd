@@ -9,7 +9,7 @@ icd9GenerateSysData(sysdata.path = file.path("R", "sysdata.rda"),
 }
 \description{
 Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
-quick, but much to slow when it appears many times in a loop.
+quick, but much too slow when it appears many times in a loop.
 }
 \keyword{internal}
 

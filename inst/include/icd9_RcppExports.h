@@ -499,17 +499,17 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = true) {
-        typedef SEXP(*Ptr_icd9Children)(SEXP,SEXP,SEXP);
-        static Ptr_icd9Children p_icd9Children = NULL;
-        if (p_icd9Children == NULL) {
-            validateSignature("CharacterVector(*icd9Children)(CharacterVector,bool,bool)");
-            p_icd9Children = (Ptr_icd9Children)R_GetCCallable("icd9", "icd9_icd9Children");
+    inline CharacterVector icd9_Children(CharacterVector icd9, bool isShort, bool onlyReal = true) {
+        typedef SEXP(*Ptr_icd9_Children)(SEXP,SEXP,SEXP);
+        static Ptr_icd9_Children p_icd9_Children = NULL;
+        if (p_icd9_Children == NULL) {
+            validateSignature("CharacterVector(*icd9_Children)(CharacterVector,bool,bool)");
+            p_icd9_Children = (Ptr_icd9_Children)R_GetCCallable("icd9", "icd9_icd9_Children");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9Children(Rcpp::wrap(icd9), Rcpp::wrap(isShort), Rcpp::wrap(onlyReal));
+            __result = p_icd9_Children(Rcpp::wrap(icd9), Rcpp::wrap(isShort), Rcpp::wrap(onlyReal));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

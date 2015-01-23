@@ -291,14 +291,6 @@ test_that("test major validation", {
 )
 })
 
-test_that("stop if invalid", {
-  expect_error(stopIfInvalidIcd9("notvalidicd9", isShort = TRUE))
-})
-
-test_that("warn if invalid", {
-  expect_warning(warnIfInvalidIcd9("notvalidicd9", isShort = TRUE))
-})
-
 test_that("icd-9 code is really in the list, not just syntactically valid", {
   expect_true(icd9IsRealShort("8027"))
   expect_true(icd9IsRealShort("E9329"))
@@ -356,13 +348,6 @@ test_that("filter valid - data frame input", {
                mixInvalidPts[2, ])
   expect_equal(icd9FilterValid(mixInvalidPts, isShort = TRUE, invert = FALSE),
                mixInvalidPts[c(1,3), ])
-})
-
-test_that("stop if invalid decimal", {
-  expect_error(stopIfInvalidIcd9("chipotle", isShort = FALSE))
-  expect_that(stopIfInvalidIcd9("100.2", isShort = TRUE), throws_error())
-  expect_that(stopIfInvalidIcd9("1002", isShort = FALSE), throws_error())
-  expect_that(stopIfInvalidIcd9("100.2", isShort = FALSE), testthat::not(throws_error()))
 })
 
 test_that("validate mappings", {

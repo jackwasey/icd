@@ -78,8 +78,6 @@ Other ICD-9 ranges: \code{\link{icd9Children}},
   \code{\link{icd9CondenseDecimal}},
   \code{\link{icd9CondenseShort}},
   \code{\link{icd9CondenseToMajorShort}};
-  \code{\link{icd9ExpandMinor}},
-  \code{\link{icd9ExpandMinor}},
-  \code{\link{icd9_ExpandMinor}}
+  \code{\link{icd9ExpandMinor}}
 }
 

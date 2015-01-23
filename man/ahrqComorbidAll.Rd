@@ -12,7 +12,8 @@
 This mapping of comorbidities to ICD-9 codes is dervied directly
   from SAS code provided by AHRQ, and translated into this R data structure.
   Beyond ahrqComorbid, this includes all the HTN, CHF and renal subgroups,
-  not rolled into their parent categories.
+  not rolled into their parent categories. This resolution is not needed in
+  typical usage: \code{ahrqComorbid} is probably what you want.
 }
 \keyword{datasets}
 
