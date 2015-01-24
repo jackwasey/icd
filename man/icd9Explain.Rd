@@ -5,24 +5,19 @@
 \alias{icd9Explain.character}
 \alias{icd9Explain.list}
 \alias{icd9Explain.numeric}
-\alias{icd9ExplainDecimal}
-\alias{icd9ExplainShort}
 \title{explain ICD9 codes}
 \usage{
-icd9Explain(icd9, isShort = icd9GuessIsShort(icd9), doCondense = TRUE)
-
-icd9ExplainShort(icd9Short, doCondense = TRUE)
-
-icd9ExplainDecimal(icd9Decimal, doCondense = TRUE)
+icd9Explain(icd9, isShort = icd9GuessIsShort(icd9), doCondense = TRUE,
+  brief = FALSE)
 
 \method{icd9Explain}{list}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE)
+  doCondense = TRUE, brief = FALSE)
 
 \method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE)
+  doCondense = TRUE, brief = FALSE)
 
 \method{icd9Explain}{numeric}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE)
+  doCondense = TRUE, brief = FALSE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -60,7 +55,7 @@ convert full format (123.45 style) ICD9 codes into the name and
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{list}: explain alll ICD-9 codes in a list of vectors
+\item \code{list}: explain all ICD-9 codes in a list of vectors
 
 \item \code{character}: explain character vector of ICD-9 codes
 
@@ -74,6 +69,7 @@ TODO: it will be useful to have S3 ICD-9 short and long classes for
 }
 \examples{
 icd9ExplainShort(ahrqComorbid[[1]][1:3])
+icd9ExplainShort(ahrqComorbid[[1]][1:3], brief = TRUE)
 }
 \references{
 \url{http://www.stata.com/help.cgi?icd9}
