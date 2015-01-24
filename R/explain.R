@@ -37,7 +37,7 @@ icd9ExplainShort <- function(icd9Short, doCondense = TRUE, brief = FALSE) {
 
 #' @rdname icd9Explain explain a set of decimal format codes
 #' @export
-icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE) {
+icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE, brief = FALSE) {
   icd9Explain(icd9Decimal, isShort = FALSE,
               doCondense = doCondense, brief = brief)
 }
