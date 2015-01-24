@@ -277,7 +277,7 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
   checkmate::checkLogical(explain, any.missing = FALSE, len = 1)
   stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))
 
-  if (!is.null(names) && (!is.null(x.names) | is.null(y.names)))
+  if (!is.null(names) && (!is.null(x.names) | !is.null(y.names)))
     stop("if 'names' is specified, 'x.names' and 'y.names' should not be")
 
   if (!is.null(names)) {
