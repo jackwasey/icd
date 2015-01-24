@@ -1,5 +1,21 @@
 # EXCLUDE COVERAGE START
 
+allIsNumeric <- function(x, extras = c(".", "NA", NA)) {
+  old <- options(warn = - 1)
+  on.exit(options(old))
+  xs <- x[x %nin% c("", extras)]
+  !any(is.na(as.numeric(xs)))
+}
+
+asNumericNoWarn <- function(x) {
+  old <- options(warn = - 1)
+  on.exit(options(old))
+  if (is.factor(x)) x <- levels(x)[x]
+  as.numeric(x)
+}
+
+asIntegerNoWarn <- function(x)
+  as.integer(asNumericNoWarn(x))
 
 asCharacterNoWarn <- function(x) {
   old <- options(warn = - 1)
@@ -17,6 +33,14 @@ trim <- function(x)
 strip <- function (x, pattern = " ", useBytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = useBytes)
+
+saveInDataDir <- function(var, suffix = "") {
+  save(list = var,
+       envir = parent.frame(),
+       file = file.path("data", strip(paste0(var, suffix, ".RData"))),
+       compress = ifelse(Sys.info()[["sysname"]] == "Windows", "bzip2", "xz")
+  )
+}
 
 #' @title encode TRUE as 1, and FALSE as 0 (integers)
 #' @description when saving data as text files for distribution, printing large
@@ -116,6 +140,42 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
 
   names(out) <- outNames
   out
+}
+
+#' @title read file from zip at URL
+#' @description downloads zip file, and opens named file \code{filename}, or the
+#'   single file in zip if \code{filename} is not specified. FUN is a function,
+#'   with additional arguments to FUN given by \dots.
+#' @param url character vector of length one containing URL of zip file.
+#' @param filename character vector of length one containing name of file to
+#'   extract from zip. If not specified, and the zip contains a single file,
+#'   then this single file will be used.
+#' @param FUN function used to process the file in the zip, defaults to
+#'   readLines. The first argument to FUN will be the path of the extracted
+#'   \code{filename}
+#' @param \dots further arguments to FUN
+#' @export
+read.zip.url <- function(url, filename = NULL, FUN = readLines, ...) {
+  stopifnot(length(filename) <= 1)
+  stopifnot(is.character(url), length(url) == 1)
+  zipfile <- tempfile()
+  download.file(url = url, destfile = zipfile, quiet = TRUE)
+  zipdir <- tempfile()
+  dir.create(zipdir)
+  unzip(zipfile, exdir = zipdir)  # files="" so extract all
+  files <- list.files(zipdir)
+  if (is.null(filename)) {
+    if (length(files) == 1) {
+      filename <- files
+    } else {
+      stop("multiple files in zip, but no filename specified: ",
+           paste(files, collapse = ", "))
+    }
+  } else
+    stopifnot(filename %in% files)
+
+  do.call(FUN, args = c(list(file.path(zipdir, filename), warn = FALSE),
+                        list(...)))
 }
 
 # EXCLUDE COVERAGE END

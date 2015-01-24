@@ -6,3 +6,6 @@ man-roxygen
 \.travis\.yml$
 .*\.log$
 .*\.gcda$
+ICD10_Charlson.sas
+ICD10_Elixhauser.sas
+ccs_multi_pr_tool_2014.csv

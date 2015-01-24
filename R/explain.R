@@ -218,7 +218,7 @@ icd9CondenseToMajor <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @rdname icd9Condense
 #' @export
 icd9CondenseToMajorDecimal <- function(icd9Decimal, onlyReal = NULL)
-  icd9CondenseToMajorShort(icd9DecimalToShort(icd9), onlyReal)
+  icd9CondenseToMajorShort(icd9DecimalToShort(icd9Decimal), onlyReal)
 
 #' @rdname icd9Condense
 #' @export

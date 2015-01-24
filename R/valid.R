@@ -228,7 +228,7 @@ icd9IsMajor <- function(icd9)
 #'   billable (which is at present synonmous with 'realness').
 #' @return logical vector
 #' @export
-icd9IsReal <- function(icd9, isShort = icd9GuessShort(icd), majorOk = TRUE) {
+icd9IsReal <- function(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE) {
   if (isShort) return(icd9IsRealShort(icd9, majorOk = majorOk))
   icd9IsRealDecimal(icd9, majorOk = majorOk)
 }

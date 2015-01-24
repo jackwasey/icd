@@ -9,7 +9,7 @@
 \alias{icd9IsRealShort}
 \title{Check whether ICD-9 codes exist}
 \usage{
-icd9IsReal(icd9, isShort = icd9GuessShort(icd), majorOk = TRUE)
+icd9IsReal(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE)
 
 icd9IsRealShort(icd9Short, majorOk = TRUE)
 
