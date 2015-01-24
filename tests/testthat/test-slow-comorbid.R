@@ -577,10 +577,10 @@ test_that("no NA values in the co-morbidity lists", {
 })
 
 test_that("built-in icd9 to comorbidity mappings are all valid", {
-  expect_true(icd9ValidMappingShort(ahrqComorbid))
-  expect_true(icd9ValidMappingShort(quanDeyoComorbid))
-  expect_true(icd9ValidMappingShort(quanElixComorbid))
-  expect_true(icd9ValidMappingShort(elixComorbid))
+  expect_true(icd9IsValidMappingShort(ahrqComorbid))
+  expect_true(icd9IsValidMappingShort(quanDeyoComorbid))
+  expect_true(icd9IsValidMappingShort(quanElixComorbid))
+  expect_true(icd9IsValidMappingShort(elixComorbid))
 })
 
 test_that("unordered visit ids", {

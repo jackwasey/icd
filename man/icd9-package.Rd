@@ -14,11 +14,11 @@
   codes to co-morbidities are also provided, with mappings from Quan,
   Elixhauser and AHRQ included.
 
-  * \code{\link{icd9Valid}}\code{\link{icd9ValidDecimal}},
-  \code{\link{icd9ValidShort}} and related functions
-  (\code{\link{icd9ValidDecimalN}}, \code{\link{icd9ValidDecimalV}},
-  \code{\link{icd9ValidDecimalE}}, \code{\link{icd9ValidShortN}},
-  \code{\link{icd9ValidShortV}}), \code{\link{icd9ValidShortE}}) check
+  * \code{\link{icd9IsValid}}\code{\link{icd9IsValidDecimal}},
+  \code{\link{icd9IsValidShort}} and related functions
+  (\code{\link{icd9IsValidDecimalN}}, \code{\link{icd9IsValidDecimalV}},
+  \code{\link{icd9IsValidDecimalE}}, \code{\link{icd9IsValidShortN}},
+  \code{\link{icd9IsValidShortV}}), \code{\link{icd9IsValidShortE}}) check
   whether given ICD-9 codes are syntactically valid (although not necessarily
   genuine ICD-9 codes) * \code{\link{icd9Comorbid}} determines
   co-morbidities for a set of patients with one or more ICD-9 codes each.

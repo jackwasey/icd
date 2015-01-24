@@ -14,11 +14,11 @@
 \usage{
 icd9ExpandRange(start, end, isShort, onlyReal = TRUE)
 
-icd9ExpandRangeShort(start, end, onlyReal = TRUE, omitParents = FALSE)
+icd9ExpandRangeShort(start, end, onlyReal = TRUE)
 
 icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 
-icd9ExpandRangeDecimal(start, end, onlyReal = TRUE, omitParents = FALSE)
+icd9ExpandRangeDecimal(start, end, onlyReal = TRUE)
 
 start \%i9da\% end
 
@@ -37,7 +37,8 @@ to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
 \item{isShort}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form.}
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 
 \item{onlyReal}{single logical value, if TRUE, will limit the search to those
 codes which appear in the master list, not just syntactically valid codes.

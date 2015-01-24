@@ -15,6 +15,9 @@
 #'   codes which exactly encompass certain subsets. E.g. If all cholera
 #'   diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
 #'   subtypes. This is currently partially implemented. See issue #3 in github.
+#' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
+#'   the short description from the canonical CMS descriptions (included in
+#'   \code{extdata}) will be used, otherwise the long description is used.
 #' @examples
 #' icd9ExplainShort(ahrqComorbid[[1]][1:3])
 #' icd9ExplainShort(ahrqComorbid[[1]][1:3], brief = TRUE)
@@ -28,14 +31,14 @@ icd9Explain <- function(icd9, isShort = icd9GuessIsShort(icd9),
   UseMethod("icd9Explain")
 }
 
-#' @rdname icd9Explain explain a set of 'short' format codes
+#' @rdname icd9Explain
 #' @export
 icd9ExplainShort <- function(icd9Short, doCondense = TRUE, brief = FALSE) {
   icd9Explain(icd9Short, isShort = TRUE,
               doCondense = doCondense, brief = brief)
 }
 
-#' @rdname icd9Explain explain a set of decimal format codes
+#' @rdname icd9Explain
 #' @export
 icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE, brief = FALSE) {
   icd9Explain(icd9Decimal, isShort = FALSE,
@@ -106,8 +109,8 @@ icd9GuessIsShort <- function(icd9) {
     else
       return(TRUE)
   }
-  vs <- icd9ValidShort(icd9)
-  vd <- icd9ValidDecimal(icd9)
+  vs <- icd9IsValidShort(icd9)
+  vd <- icd9IsValidDecimal(icd9)
   if (sum(vd) > sum(vs)) return(FALSE)
   TRUE
 }

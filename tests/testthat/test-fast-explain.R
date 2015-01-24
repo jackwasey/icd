@@ -150,15 +150,15 @@ test_that("extract top-level codes from the RTF gives the complete list", {
 
   # all the range limits and majors should be valid majors
   expect_true(
-    all(icd9ValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE="", 1))))
+    all(icd9IsValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE="", 1))))
   expect_true(
-    all(icd9ValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE="", 2))))
+    all(icd9IsValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE="", 2))))
   expect_true(
-    all(icd9ValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE="", 1))))
+    all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE="", 1))))
   expect_true(
-    all(icd9ValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE="", 2))))
+    all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE="", 2))))
   expect_true(
-    all(icd9ValidMajor(vapply(icd9ChaptersMajor, "[[", FUN.VALUE="", 1))))
+    all(icd9IsValidMajor(vapply(icd9ChaptersMajor, "[[", FUN.VALUE="", 1))))
 })
 
 test_that("icd9ChaptersMajor - positive values", {

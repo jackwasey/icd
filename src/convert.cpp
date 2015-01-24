@@ -6,7 +6,6 @@
 using namespace Rcpp;
 
 // // temporarily move  @export to my shim
-//' @rdname convert
 // [[Rcpp::export("icd9_MajMinToCode")]]
 CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool isShort ) {
 
@@ -58,10 +57,8 @@ CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool
   return wrap(out);
 }
 
-//' @rdname convert
 // [[Rcpp::export("icd9_MajMinToShort")]]
-CharacterVector icd9MajMinToShort(CharacterVector mjr,
-CharacterVector mnr) {
+CharacterVector icd9MajMinToShort(CharacterVector mjr, CharacterVector mnr) {
   if ((mjr.size()!=1 && mjr.size() != mnr.size()) ||
   (mjr.size()==1 && mnr.size()==0)) {
     stop("icd9MajMinToShort, length of majors and minors must be equal.");
@@ -73,7 +70,6 @@ CharacterVector mnr) {
   return icd9MajMinToCode(mjr, mnr, true);
 }
 
-//' @rdname convert
 // [[Rcpp::export("icd9_MajMinToDecimal")]]
 CharacterVector icd9MajMinToDecimal(CharacterVector mjr, CharacterVector mnr) {
   return icd9MajMinToCode(mjr, mnr, false);
@@ -93,7 +89,6 @@ CharacterVector icd9PartsToDecimal(List parts) {
   return icd9MajMinToCode(parts["major"], parts["minor"], false);
 }
 
-//' @rdname convert
 // [[Rcpp::export("icd9_MajMinToParts")]]
 List icd9MajMinToParts(CharacterVector mjr, CharacterVector mnr) {
   List returned_frame = List::create(
@@ -207,15 +202,15 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
-CharacterVector icd9ShortToDecimal(CharacterVector x) {
-  return icd9PartsToDecimal(icd9ShortToParts(x));
+CharacterVector icd9ShortToDecimal(CharacterVector icd9Short) {
+  return icd9PartsToDecimal(icd9ShortToParts(icd9Short));
 }
 
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
-CharacterVector icd9DecimalToShort(CharacterVector x) {
-  return icd9PartsToShort(icd9DecimalToParts(x));
+CharacterVector icd9DecimalToShort(CharacterVector icd9Decimal) {
+  return icd9PartsToShort(icd9DecimalToParts(icd9Decimal));
 }
 
 //' @rdname convert

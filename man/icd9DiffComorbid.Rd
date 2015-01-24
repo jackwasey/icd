@@ -4,10 +4,43 @@
 \alias{icd9DiffComorbid}
 \title{show the difference between two comorbidity mappings}
 \usage{
-icd9DiffComorbid(x, y, x.names = NULL, y.names = NULL, show = TRUE,
-  explain = TRUE)
+icd9DiffComorbid(x, y, names = NULL, x.names = NULL, y.names = NULL,
+  show = TRUE, explain = TRUE)
+}
+\arguments{
+\item{x}{list of character vectors}
+
+\item{y}{list of character vectors}
+
+\item{names}{character vector of the comorbidity names}
+
+\item{x.names}{character vector of the comorbidity names from \code{x} to
+compare}
+
+\item{y.names}{character vector of the comorbidity names from \code{y} to
+compare}
+
+\item{show}{single logical value. The default is \code{TRUE} which causes a
+report to be printed.}
+
+\item{explain}{single logical value. The default is \code{TRUE} which means
+the differing codes are attempted to be reduced to their parent codes, in
+order to give a more succinct summary.}
+}
+\value{
+A list, each item of which is another list containing the
+  intersections and both asymmetric differences.
 }
 \description{
-show the difference between two comorbidity mappings
+Compares two comorbidity:icd9 code mappings. The results are
+  returned invisibly as a list. Only those comorbidities with (case
+  sensitive) overlapping names are compared.
+}
+\examples{
+icd9DiffComorbid(elixComorbid, ahrqComorbid, "CHF")
+\dontrun{
+# give full report on all comorbidities for these mappings
+icd9DiffComorbid(elixComorbid, ahrqComorbid)
+}
 }
 

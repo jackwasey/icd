@@ -41,7 +41,6 @@ icd9AddLeadingZeroesMajor <- function(major) {
   .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', major)
 }
 
-#' @name icd9ExpandMinor
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes
 #' @description Accepts a single number or character input starting point for
 #'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
@@ -54,7 +53,8 @@ icd9AddLeadingZeroesMajor <- function(major) {
 #'   # return all possible decimal parts of ICD9 codes (111 in total)
 #'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
 #'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
-#' @return NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
+#' @return NA for invalid minor, otherwise a vector of all possible (perhaps
+#'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
 icd9ExpandMinor <- function(minor, isE = FALSE) {

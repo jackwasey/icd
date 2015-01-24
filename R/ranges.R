@@ -94,8 +94,7 @@ icd9ExpandRange <- function(start, end, isShort, onlyReal = TRUE) {
 #' @rdname icd9ExpandRange
 #' @export
 icd9ExpandRangeShort <- function(start, end,
-                                 onlyReal = TRUE,
-                                 omitParents = FALSE) {
+                                 onlyReal = TRUE) {
   checkmate::checkVector(start, len = 1) # i'll permit numeric but prefer char
   checkmate::checkVector(end, len = 1)
   start <- icd9AddLeadingZeroesShort(trim(start))
@@ -138,7 +137,6 @@ icd9ExpandRangeShort <- function(start, end,
     # finally, drop any higher-level codes which would describe broader ranges
     # than specified. E.g. 1019 to 1021 should omit 102, but 1059 to 1079 should
     # include 106.
-    if (omitParents) stop("not implemented")
     out
   }
 
@@ -177,11 +175,11 @@ icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
 
 #' @rdname icd9ExpandRange
 #' @export
-icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE, omitParents = FALSE) {
+icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE) {
   icd9ShortToDecimal(
     icd9ExpandRangeShort(
       icd9DecimalToShort(start), icd9DecimalToShort(end),
-      onlyReal = onlyReal, omitParents = omitParents
+      onlyReal = onlyReal
     )
   )
 }

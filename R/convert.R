@@ -14,11 +14,11 @@
 #'   of structuring it that way.
   #'   \item two vectors of separated major and minor parts
 #'   }
-#' @param major
-#' @param minor
-#' @param icd9-any
-#' @param icd9-short
-#' @param icd9-long
+#' @template major
+#' @template minor
+#' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
 #' @param parts data.frame with major and minor fields. This can be given
 #'   instead of major and minor vectors
 #' @param minorEmpty vector of length one, to be used in place of

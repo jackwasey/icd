@@ -2,7 +2,7 @@ context("icd9 ranges")
 
 test_that("expand icd9 range definition", {
   expect_equal(
-    icd9ExpandRangeShort("4012", "40145", onlyReal = FALSE, omitParents = FALSE),
+    icd9ExpandRangeShort("4012", "40145", onlyReal = FALSE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",

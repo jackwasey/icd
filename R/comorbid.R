@@ -71,7 +71,7 @@ icd9Comorbid <- function(icd9df,
     icd9df[[icd9Field]] <- icd9DecimalToShort(icd9df[[icd9Field]])
 
   if (!isShortMapping)
-    icd9Mapping <- lappply(icd9Mapping, icd9DecimalToShort)
+    icd9Mapping <- lapply(icd9Mapping, icd9DecimalToShort)
 
   # return via call to the C++ function:
   icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
@@ -243,13 +243,47 @@ icd9ComorbiditiesQuanDeyo <- function(...) icd9ComorbidQuanDeyo(...)
 icd9ComorbiditiesQuanElixhauser <- function(...) icd9ComorbidQuanElix(...)
 
 #' @title show the difference between two comorbidity mappings
+#' @description Compares two comorbidity:icd9 code mappings. The results are
+#'   returned invisibly as a list. Only those comorbidities with (case
+#'   sensitive) overlapping names are compared.
+#' @param x list of character vectors
+#' @param y list of character vectors
+#' @param names character vector of the comorbidity names
+#' @param x.names character vector of the comorbidity names from \code{x} to
+#'   compare
+#' @param y.names character vector of the comorbidity names from \code{y} to
+#'   compare
+#' @param show single logical value. The default is \code{TRUE} which causes a
+#'   report to be printed.
+#' @param explain single logical value. The default is \code{TRUE} which means
+#'   the differing codes are attempted to be reduced to their parent codes, in
+#'   order to give a more succinct summary.
+#' @examples
+#' icd9DiffComorbid(elixComorbid, ahrqComorbid, "CHF")
+#' \dontrun{
+#' # give full report on all comorbidities for these mappings
+#' icd9DiffComorbid(elixComorbid, ahrqComorbid)
+#' }
+#' @return A list, each item of which is another list containing the
+#'   intersections and both asymmetric differences.
 #' @export
-icd9DiffComorbid <- function(x, y, x.names = NULL, y.names = NULL,
+icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
                              show = TRUE, explain = TRUE) {
   checkmate::checkList(x, min.len = 1, any.missing = FALSE,
                        types = c("character", "numeric", "integer"))
+  checkmate::checkList(y, min.len = 1, any.missing = FALSE,
+                       types = c("character", "numeric", "integer"))
+  checkmate::checkLogical(show, any.missing = FALSE, len = 1)
+  checkmate::checkLogical(explain, any.missing = FALSE, len = 1)
   stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))
 
+  if (!is.null(names) && (!is.null(x.names) | is.null(y.names)))
+    stop("if 'names' is specified, 'x.names' and 'y.names' should not be")
+
+  if (!is.null(names)) {
+    x.names <- names
+    y.names <- names
+  }
   if (is.null(x.names)) x.names = names(x)
   if (is.null(y.names)) y.names = names(y)
 

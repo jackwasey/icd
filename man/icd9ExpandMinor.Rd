@@ -7,17 +7,18 @@
 icd9ExpandMinor(minor, isE = FALSE)
 }
 \arguments{
-\item{isE}{single logical, which if TRUE, treats the minor as part of an E
-code (which is one character), as opposed to a V or numeric-only code,
-which is two character. Default is \code{FALSE}.}
-
-\item{mnr}{character vector of 'minor' part of ICD-9 codes, i.e. that part
+\item{minor}{character vector of 'minor' part of ICD-9 codes, i.e. that part
 which falls after the decimal point, in decimal notation. (In 5 digit
 notation, the 'major' part is be xyz, even when x and y are zero, thus the
 last two characters represent the 'minor' part, in this case.)}
+
+\item{isE}{single logical, which if TRUE, treats the minor as part of an E
+code (which is one character), as opposed to a V or numeric-only code,
+which is two character. Default is \code{FALSE}.}
 }
 \value{
-NA for invalid minor, otherwise a vector of all possible (perhaps non-existent) sub-divisions.
+NA for invalid minor, otherwise a vector of all possible (perhaps
+  non-existent) sub-divisions.
 }
 \description{
 Accepts a single number or character input starting point for

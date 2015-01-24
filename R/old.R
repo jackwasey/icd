@@ -113,12 +113,10 @@ icd9DecimalToShort_R <- function(icd9Decimal) {
 
 icd9DecimalToParts_R <- function(icd9Decimal, minorEmpty = "") {
 
-  stopifnot(length(minorEmpty) == 1)
   if (is.na(minorEmpty)) minorEmpty <- NA_character_
 
   if (length(icd9Decimal) == 0) return(data.frame(major = character(),
                                                   minor = character()))
-  icd9Decimal <- icd9ValidNaWarnStopDecimal(icd9Decimal)
   icd9Decimal <- trim(icd9Decimal)
   icd9Decimal[icd9Decimal == ""] <- "." # don't ask
   a <- strsplit(icd9Decimal, ".", fixed = TRUE)
@@ -359,7 +357,7 @@ icd9Comorbid_R <- function(icd9df,
     icd9Mapping <- get(icd9Mapping)
   }
 
-  if (validateMapping) stopifnot(icd9ValidMapping(icd9Mapping, isShortMapping))
+  if (validateMapping) stopifnot(icd9IsValidMapping(icd9Mapping, isShortMapping))
 
   # drop factor down to character codes #TODO: is this necessary or desirable?
   ic <- jwutil::asCharacterNoWarn(icd9df[[icd9Field]])

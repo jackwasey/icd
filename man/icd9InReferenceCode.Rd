@@ -11,7 +11,8 @@ icd9 \%i9in\% icd9Reference
 }
 \arguments{
 \item{isShort}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form.}
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 
 \item{isShortReference}{logical, see argument \code{isShort}}
 

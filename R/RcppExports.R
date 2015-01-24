@@ -7,17 +7,14 @@ icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Fiel
     .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
 
-#' @rdname convert
 icd9_MajMinToCode <- function(mjr, mnr, isShort) {
     .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', mjr, mnr, isShort)
 }
 
-#' @rdname convert
 icd9_MajMinToShort <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToShort', PACKAGE = 'icd9', mjr, mnr)
 }
 
-#' @rdname convert
 icd9_MajMinToDecimal <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToDecimal', PACKAGE = 'icd9', mjr, mnr)
 }
@@ -34,7 +31,6 @@ icd9PartsToDecimal <- function(parts) {
     .Call('icd9_icd9PartsToDecimal', PACKAGE = 'icd9', parts)
 }
 
-#' @rdname convert
 icd9_MajMinToParts <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToParts', PACKAGE = 'icd9', mjr, mnr)
 }
@@ -57,14 +53,14 @@ icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
 
 #' @rdname convert
 #' @export
-icd9ShortToDecimal <- function(x) {
-    .Call('icd9_icd9ShortToDecimal', PACKAGE = 'icd9', x)
+icd9ShortToDecimal <- function(icd9Short) {
+    .Call('icd9_icd9ShortToDecimal', PACKAGE = 'icd9', icd9Short)
 }
 
 #' @rdname convert
 #' @export
-icd9DecimalToShort <- function(x) {
-    .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', x)
+icd9DecimalToShort <- function(icd9Decimal) {
+    .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', icd9Decimal)
 }
 
 #' @rdname convert
@@ -112,7 +108,6 @@ icd9IsN <- function(icd9) {
     .Call('icd9_icd9IsN', PACKAGE = 'icd9', icd9)
 }
 
-#' @rdname icd9AddLeadingZeroes
 icd9_AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', mjr)
 }
@@ -141,7 +136,6 @@ icd9AddLeadingZeroesDecimal <- function(icd9Decimal) {
     .Call('icd9_icd9AddLeadingZeroesDecimal', PACKAGE = 'icd9', icd9Decimal)
 }
 
-#' @rdname icd9AddLeadingZeroes
 icd9_AddLeadingZeroesMajor <- function(mjr) {
     .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', mjr)
 }

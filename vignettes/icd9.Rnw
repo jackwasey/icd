@@ -86,15 +86,15 @@ codes %>% icd9DecimalToShort %>% icd9ShortToDecimal
 
 \section{Validation of ICD-9 codes}
 <<validation>>=
-icd9ValidDecimal("V10.2")
-icd9ValidShort(c("099.17", "-1"))
-icd9ValidDecimal(c("099.17", "-1"))
-icd9ValidShort(c("1", "001", "100", "123456", "003.21"))
+icd9IsValidDecimal("V10.2")
+icd9IsValidShort(c("099.17", "-1"))
+icd9IsValidDecimal(c("099.17", "-1"))
+icd9IsValidShort(c("1", "001", "100", "123456", "003.21"))
 @
 
 Validation forces the package user to provide character format ICD-9 codes. If great care is taken, passing some integers could be valid, but given the high chance of mistakes, and the simplicity of dealing entirely with character input, character is enforced:
 <<invalidint, eval=FALSE>>=
-icd9ValidShort(100) # warns
+icd9IsValidShort(100) # warns
 @
 
 \section{Ranges of ICD-9 codes}

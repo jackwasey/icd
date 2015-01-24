@@ -1,10 +1,5 @@
 .Rproj.user
 .Rhistory
-vignettes/cache
-vignettes/icd9.tex
-vignettes/icd9.synctex.gz
-vignettes/icd9.log
-vignettes/icd9-concordance.tex
 .Rprofile
 Rprof.out
 *.swp
@@ -12,5 +7,4 @@ Rprof.out
 *.so
 *.dll
 inst/todo
-vignettes/icd9.aux
 .RData

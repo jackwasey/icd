@@ -3,19 +3,20 @@ icd9FilterValid <- function(x, ...) UseMethod("icd9FilterValid")
 
 icd9FilterValid.data.frame <- function(x, icd9Field = "icd9",
                                        isShort = TRUE, invert = FALSE) {
-  v <- icd9Valid(icd9 = x[[icd9Field]], isShort = isShort)
+  v <- icd9IsValid(icd9 = x[[icd9Field]], isShort = isShort)
   if (invert) v <- !v
   x[v, ]
 }
 
+# this is the same as icd9GetValid? TODO
 icd9FilterValid.character <- function(x, isShort = TRUE, invert = FALSE) {
-  v <- icd9Valid(icd9 = x, isShort = isShort)
+  v <- icd9IsValid(icd9 = x, isShort = isShort)
   if (invert) v <- !v
   x[v]
 }
 
 icd9FilterValid.list <- function(x, isShort = TRUE, invert = FALSE) {
-  v <- icd9Valid(icd9 = x, isShort = isShort)
+  v <- icd9IsValid(icd9 = x, isShort = isShort)
   if (invert) v <- !v
   x[v]
 }

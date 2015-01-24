@@ -56,7 +56,7 @@ icd9DropLeadingZeroesShort <- function(icd9Short) {
   # very important: only drop the zero in V codes if the minor part is empty.
   areEmpty <- parts[["minor"]] == ""
   parts[areEmpty, "major"] <- icd9DropLeadingZeroesMajor(parts[areEmpty, "major"])
-  icd9PartsToShort(parts = parts)
+  icd9PartsToShort(parts)
 }
 
 #' @rdname icd9DropLeadingZeroes
@@ -66,7 +66,7 @@ icd9DropLeadingZeroesMajor <- function(major) {
   major <- trim(major)
   isV <- icd9IsV(major) #not checking validity, necessarily, just quick check
   # alternative might be just to get numeric-only, possibly quicker? TODO
-  isN <- icd9ValidMajorN(major)
+  isN <- icd9IsValidMajorN(major)
   major[isV] <- sub(pattern = "^([Vv])0([[:digit:]]{1})$",
                                    replacement = "\\1\\2",
                                    x = major[isV])

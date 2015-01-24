@@ -3,7 +3,6 @@
 #include <icd9.h>
 using namespace Rcpp;
 
-//' @rdname icd9AddLeadingZeroes
 // [[Rcpp::export("icd9_AddLeadingZeroesMajorSingle")]]
 String icd9AddLeadingZeroesMajorSingle(String mjr) {
   if (mjr == NA_STRING) { return(NA_STRING); }
@@ -69,7 +68,6 @@ CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
   return icd9::icd9PartsToDecimal(parts);
 }
 
-//' @rdname icd9AddLeadingZeroes
 // [[Rcpp::export("icd9_AddLeadingZeroesMajor")]]
 CharacterVector icd9AddLeadingZeroesMajor(CharacterVector mjr) {
   return sapply(mjr, icd9::icd9_AddLeadingZeroesMajorSingle);

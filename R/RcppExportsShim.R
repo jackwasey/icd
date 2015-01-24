@@ -2,6 +2,7 @@
 
 # icd9Children separate so that I can guess isShort
 
+#' @name icd9Children
 #' @title Expand 5 character form 'short' ICD9 to all possible sub codes
 #' @description Much faster in C++, but gains diminished with increasing numbers
 #'   of input shorts, probably because I am copying memory unnecessarily.
