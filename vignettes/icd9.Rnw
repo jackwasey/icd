@@ -64,7 +64,7 @@ icd9Comorbid(icd9df = icdFilterPoaYes(patientData),
              icd9Mapping = ahrqComorbid,
              visitId = "visitId",
              icd9Field = "icd9",
-             isShort = icd9:::icd9GuessIsShort(icd9df[[icd9Field]])
+             isShort = icd9:::icd9GuessIsShort(icd9df[[icd9Field]]),
              shortMapping = TRUE)[1:5]
 @
 
