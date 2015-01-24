@@ -1,8 +1,8 @@
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Using icd9}
 
-
 \documentclass{article}
+\usepackage{hyperref}
 
 \title{Introducing icd9: working with ICD-9 codes and comorbidities in R}
 \author{Jack O. Wasey}
@@ -12,11 +12,13 @@
 \maketitle
 
 <<setup, eval=TRUE, echo=FALSE, cache=FALSE>>=
-suppressMessages({
-  library(knitr, warn.conflicts = FALSE)
-  library(icd9, warn.conflicts = FALSE)
-  library(magrittr, warn.conflicts = FALSE)
-  library(jwutil, warn.conflicts = FALSE)
+suppressWarnings({
+  suppressMessages({
+    library(knitr, warn.conflicts = FALSE)
+    library(icd9, warn.conflicts = FALSE)
+    library(magrittr, warn.conflicts = FALSE)
+    library(jwutil, warn.conflicts = FALSE)
+  })
 })
 
 ## font size options from the highlight package: c("normalsize", "tiny", "scriptsize", "footnotesize", "small", "large", "Large", "LARGE", "huge", "Huge")
@@ -174,12 +176,12 @@ With the \begin{verbatim}magrittr\end{verbatim} package installed, commands can 
 For example, let's find all ICD-9 codes matching 'heart' or 'cardiac' in the short or long descriptions, first without magrittr:
 <<cardiacgrep>>=
 icd9Hierarchy[
-    grepl(
-      pattern = "(heart)|(cardiac)",
-      x = c(icd9Hierarchy[["descLong"]],
-            icd9Hierarchy[["descShort"]]),
-      ignore.case = TRUE),
-    "icd9"] %>% unique -> cardiac
+  grepl(
+    pattern = "(heart)|(cardiac)",
+    x = c(icd9Hierarchy[["descLong"]],
+          icd9Hierarchy[["descShort"]]),
+    ignore.case = TRUE),
+  "icd9"] %>% unique -> cardiac
 @
 then explain the list, just showing the first ten:
 <<cardiacChainExplainExample>>=
@@ -243,8 +245,8 @@ Call the core icd9Comorbid function with a named mapping:
 myData %>%
   icd9FilterPoaYes() %>%
   icd9Comorbid(icd9Mapping = quanElixComorbid,
-    icd9Field = "icd9", visitId = "visitId",
-    isShort = TRUE, isShortMapping = TRUE
+               icd9Field = "icd9", visitId = "visitId",
+               isShort = TRUE, isShortMapping = TRUE
   )  %>%
   extract(1:9)
 @
