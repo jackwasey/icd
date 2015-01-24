@@ -74,10 +74,14 @@ icd9ExpandRangeShort("4280 ", "43014")
 \seealso{
 Other ICD-9 ranges: \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
+  \code{\link{icd9ChildrenDecimal}},
+  \code{\link{icd9ChildrenShort}},
   \code{\link{icd9ChildrenShort}};
   \code{\link{icd9Condense}},
   \code{\link{icd9CondenseDecimal}},
   \code{\link{icd9CondenseShort}},
+  \code{\link{icd9CondenseToMajor}},
+  \code{\link{icd9CondenseToMajorDecimal}},
   \code{\link{icd9CondenseToMajorShort}};
   \code{\link{icd9ExpandMinor}}
 }

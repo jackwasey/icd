@@ -43,6 +43,10 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 #'   fields, and squashing the hierarchy (see \code{applyHierarchy} below)
 #' @template visitid
 #' @template icd9field
+#' @template isShort
+#' @param isShortMapping Same as isShort, but applied to \code{icd9Mapping}
+#'   instead of \code{icd9df}. All the codes in a mapping should be of the same
+#'   type, i.e. short or decimal.
 #' @details There is a change in behavior from previous versions. The visitId
 #'   column is (implicitly) sorted by using std::set container. Previously, the
 #'   visitId output order was whatever R's \code{aggregate} produced.
@@ -79,12 +83,18 @@ icd9Comorbid <- function(icd9df,
 }
 
 #' @rdname icd9Comorbid
+#' @param abbrevNames  single locical value that defaults to \code{TRUE}, in
+#'   which case the ishorter human-readable names stored in e.g.
+#'   \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.
+#' @param applyHierarchy single logical value that defaults to \code{TRUE}, in
+#'   which case the hierarchy defined for the mapping is applied. E.g. in
+#'   Elixhauser, you can't have uncomplicated and complicated diabetes both
+#'   flagged.
 #' @export
 icd9ComorbidAhrq <- function(icd9df,
                              isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                              visitId = "visitId",
                              icd9Field = "icd9",
-                             validateMapping = FALSE,
                              abbrevNames = TRUE,
                              applyHierarchy = TRUE) {
 
@@ -223,6 +233,9 @@ icd9ComorbidElix <- function(icd9df,
 }
 
 #' @rdname icd9Comorbid
+#' @param ... arguments passed to the corresponding function from the alias.
+#'   E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
+#'   to \code{icd9ComorbidAhrq}
 #' @export
 icd9Comorbidities <- function(...) icd9Comorbid(...)
 

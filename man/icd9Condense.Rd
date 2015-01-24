@@ -4,10 +4,16 @@
 \alias{icd9Condense}
 \alias{icd9CondenseDecimal}
 \alias{icd9CondenseShort}
+\alias{icd9CondenseToMajor}
+\alias{icd9CondenseToMajorDecimal}
 \alias{icd9CondenseToMajorShort}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
 icd9Condense(icd9, isShort, onlyReal = NULL, toMajor = TRUE)
+
+icd9CondenseToMajor(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = NULL)
+
+icd9CondenseToMajorDecimal(icd9Decimal, onlyReal = NULL)
 
 icd9CondenseToMajorShort(icd9Short, onlyReal = NULL)
 
@@ -16,6 +22,15 @@ icd9CondenseShort(icd9Short, onlyReal = NULL, toMajor = TRUE)
 icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, toMajor = TRUE)
 }
 \arguments{
+\item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
+given in a code, then the digits are greedily assigned to hundreds, then
+tens, then units, before the decimal parts. E.g. "10" becomes "010", not
+"0010"}
+
+\item{isShort}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
 \item{onlyReal}{single logical value, if TRUE, will limit the search to those
 codes which appear in the master list, not just syntactically valid codes.
 Since nearly valid, out-dated or new codes may be missed, not limiting to
@@ -28,6 +43,11 @@ major category, but is not itself used as a diagnostic code. Therefore,
 strictly, asking for only \emph{real} codes excludes the major. We'll turn
 a blind eye to this if we specifically request majors with toMajor.}
 
+\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
@@ -38,9 +58,9 @@ This can be thought of as the inverse operation to
   \code{icd9Children}.
 }
 \details{
-\code{icd9CondenseToMajorShort} is required, at least in this
-  release because of issue #37 in github. This function just gets majors,
-  unlike \code{icd9CondenseShort}.
+\code{icd9CondenseToMajor} family of functions are required, at
+  least in this release because of issue #37 in github. This function just
+  gets majors, unlike \code{icd9CondenseShort}.
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{\%i9d\%}},
@@ -52,6 +72,8 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
+  \code{\link{icd9ChildrenDecimal}},
+  \code{\link{icd9ChildrenShort}},
   \code{\link{icd9ChildrenShort}};
   \code{\link{icd9ExpandMinor}}
 }

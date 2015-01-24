@@ -60,7 +60,6 @@ myData \%>\%
 icd9FilterPoaYes() \%>\%
 icd9Comorbid(icd9Field = "icd9", visitId = "visitId",
   icd9Mapping = quanElixComorbid,
- validateMapping = TRUE,
  isShortMapping = TRUE)
 }
 }

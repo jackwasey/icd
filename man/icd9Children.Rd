@@ -18,6 +18,13 @@ five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
+\item{onlyReal}{single logical value, if TRUE, will limit the search to those
+codes which appear in the master list, not just syntactically valid codes.
+Since nearly valid, out-dated or new codes may be missed, not limiting to
+'real' values will be useful. Ultimately, there will need to be annual (and
+all-time) master lists of codes and the ability to test against a given
+master list given the year of the ICD-9 coding.}
+
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
@@ -27,6 +34,10 @@ becomes "010", not "0010"}
 given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010"}
+
+\item{isShort}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 }
 \description{
 Much faster in C++, but gains diminished with increasing numbers
@@ -36,7 +47,7 @@ Much faster in C++, but gains diminished with increasing numbers
 library(magrittr)
 icd9ChildrenShort("10201", FALSE) # no children other than self
 icd9Children("0032", FALSE) # guess it was a short, not decimal code
-icd9ChildrenShort("10201", TRUE) # empty list because 102.01 is not a meaningful code
+icd9ChildrenShort("10201", TRUE) # empty because 102.01 is not meaningful
 icd9ChildrenShort("003", TRUE) \%>\% icd9ExplainShort(doCondense = FALSE)
 icd9ChildrenDecimal("100.0")
 icd9ChildrenDecimal("100.00")
@@ -53,6 +64,8 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9Condense}},
   \code{\link{icd9CondenseDecimal}},
   \code{\link{icd9CondenseShort}},
+  \code{\link{icd9CondenseToMajor}},
+  \code{\link{icd9CondenseToMajorDecimal}},
   \code{\link{icd9CondenseToMajorShort}};
   \code{\link{icd9ExpandMinor}}
 }

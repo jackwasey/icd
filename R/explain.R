@@ -188,7 +188,10 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #' @title Condense ICD-9 code by replacing complete families with parent codes
 #' @description This can be thought of as the inverse operation to
 #'   \code{icd9Children}.
+#' @template icd9-any
 #' @template icd9-short
+#' @template icd9-decimal
+#' @template isShort
 #' @template onlyReal
 #' @param toMajor Most major codes are not \emph{real}, e.g. Salmonella 003 is a
 #'   major category, but is not itself used as a diagnostic code. Therefore,
@@ -202,12 +205,24 @@ icd9Condense <- function(icd9, isShort, onlyReal = NULL, toMajor = TRUE) {
 }
 
 #' @rdname icd9Condense
-#' @details \code{icd9CondenseToMajorShort} is required, at least in this
-#'   release because of issue #37 in github. This function just gets majors,
-#'   unlike \code{icd9CondenseShort}.
+#' @details \code{icd9CondenseToMajor} family of functions are required, at
+#'   least in this release because of issue #37 in github. This function just
+#'   gets majors, unlike \code{icd9CondenseShort}.
+#' @export
+icd9CondenseToMajor <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                                onlyReal = NULL) {
+  if (isShort) return(icd9CondenseToMajorShort(icd9, onlyReal))
+  icd9CondenseToMajorDecimal(icd9, onlyReal)
+}
+
+#' @rdname icd9Condense
+#' @export
+icd9CondenseToMajorDecimal <- function(icd9Decimal, onlyReal = NULL)
+  icd9CondenseToMajorShort(icd9DecimalToShort(icd9), onlyReal)
+
+#' @rdname icd9Condense
 #' @export
 icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL) {
-
   i9w <- sort(unique(icd9Short))
 
   if (is.null(onlyReal)) {

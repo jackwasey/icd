@@ -1,5 +1,3 @@
-
-
 #' @title sort short-form icd9 codes
 #' @description should work with numeric only, V or E codes. Note that a numeric
 #'   sort does not work for ICD-9 codes, since "162" > "1620" TODO: write tests.
@@ -27,35 +25,6 @@ icd9SortShort <- function(icd9Short)
 #' @export
 icd9SortDecimal <- function(icd9Decimal)
   icd9Decimal[order(icd9DecimalToShort(icd9Decimal))]
-
-#' Generate sysdata.rda
-#'
-#' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
-#' quick, but much too slow when it appears many times in a loop.
-#' @keywords internal
-icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do.save = TRUE) {
-  c() -> icd9NShort -> icd9VShort -> icd9EShort
-  for ( i in 1:999)
-    icd9NShort <- c(icd9NShort, sort(icd9ChildrenShort(i, onlyReal = FALSE)))
-  for ( i in 0:99)
-    icd9VShort <- c(icd9VShort, sort(icd9ChildrenShort(paste("V", i, sep = ""), onlyReal = FALSE)))
-  for ( i in 0:999)
-    icd9EShort <- c(icd9EShort, sort(icd9ChildrenShort(paste("E", i, sep = ""), onlyReal = FALSE)))
-
-  # we can either use the icd9IsReal functions on these lists, or just grep the
-  # canonical list directly to get the numeric, V and E codes.
-  icd9NShortReal <- grep("[^VE]*", icd9::icd9Hierarchy$icd9, value = TRUE)
-  icd9VShortReal <- grep("V", icd9::icd9Hierarchy$icd9, value = TRUE)
-  icd9EShortReal <- grep("E", icd9::icd9Hierarchy$icd9, value = TRUE)
-  # we assume we are in the root of the package directory. Save to sysdata.rda
-  # because these are probably not of interest to a user and would clutter an
-  # already busy namespace.
-  lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
-               "icd9NShortReal", "icd9VShortReal", "icd9EShortReal");
-  if (do.save) save(list = lknames,
-                    file = sysdata.path, compress = "xz")
-  invisible(mget(lknames))
-}
 
 #' @title take two ICD-9 codes and expand range to include all child codes
 #' @description this is cumbersome code, covering a whole load of edge cases
@@ -212,4 +181,33 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE) {
 #' @export
 "%i9s%" <- function(start, end) {
   icd9ExpandRangeShort(start, end, onlyReal = TRUE)
+}
+
+#' Generate sysdata.rda
+#'
+#' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
+#' quick, but much too slow when it appears many times in a loop.
+#' @keywords internal
+icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do.save = TRUE) {
+  c() -> icd9NShort -> icd9VShort -> icd9EShort
+  for ( i in 1:999)
+    icd9NShort <- c(icd9NShort, sort(icd9ChildrenShort(i, onlyReal = FALSE)))
+  for ( i in 0:99)
+    icd9VShort <- c(icd9VShort, sort(icd9ChildrenShort(paste("V", i, sep = ""), onlyReal = FALSE)))
+  for ( i in 0:999)
+    icd9EShort <- c(icd9EShort, sort(icd9ChildrenShort(paste("E", i, sep = ""), onlyReal = FALSE)))
+
+  # we can either use the icd9IsReal functions on these lists, or just grep the
+  # canonical list directly to get the numeric, V and E codes.
+  icd9NShortReal <- grep("[^VE]*", icd9::icd9Hierarchy$icd9, value = TRUE)
+  icd9VShortReal <- grep("V", icd9::icd9Hierarchy$icd9, value = TRUE)
+  icd9EShortReal <- grep("E", icd9::icd9Hierarchy$icd9, value = TRUE)
+  # we assume we are in the root of the package directory. Save to sysdata.rda
+  # because these are probably not of interest to a user and would clutter an
+  # already busy namespace.
+  lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
+               "icd9NShortReal", "icd9VShortReal", "icd9EShortReal");
+  if (do.save) save(list = lknames,
+                    file = sysdata.path, compress = "xz")
+  invisible(mget(lknames))
 }

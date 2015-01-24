@@ -22,8 +22,8 @@ icd9Comorbid(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9",
   isShortMapping = icd9GuessIsShort(icd9Mapping))
 
 icd9ComorbidAhrq(icd9df, isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-  visitId = "visitId", icd9Field = "icd9", validateMapping = FALSE,
-  abbrevNames = TRUE, applyHierarchy = TRUE)
+  visitId = "visitId", icd9Field = "icd9", abbrevNames = TRUE,
+  applyHierarchy = TRUE)
 
 icd9ComorbidQuanDeyo(icd9df, visitId = "visitId", icd9Field = "icd9",
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]), abbrevNames = TRUE,
@@ -68,6 +68,27 @@ character vector of length one. Defaults to "visitId"}
 
 \item{icd9Field}{The column in the data frame which contains the ICD-9 codes.
 This is a character vector of length one.}
+
+\item{isShort}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
+\item{isShortMapping}{Same as isShort, but applied to \code{icd9Mapping}
+instead of \code{icd9df}. All the codes in a mapping should be of the same
+type, i.e. short or decimal.}
+
+\item{abbrevNames}{single locical value that defaults to \code{TRUE}, in
+which case the ishorter human-readable names stored in e.g.
+\code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.}
+
+\item{applyHierarchy}{single logical value that defaults to \code{TRUE}, in
+which case the hierarchy defined for the mapping is applied. E.g. in
+Elixhauser, you can't have uncomplicated and complicated diabetes both
+flagged.}
+
+\item{...}{arguments passed to the corresponding function from the alias.
+E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
+to \code{icd9ComorbidAhrq}}
 }
 \description{
 This is the main function which extracts co-morbidities from a

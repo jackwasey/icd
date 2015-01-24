@@ -5,12 +5,6 @@ using namespace Rcpp;
 
 //#define DEBUG = 1
 
-// Below is a simple example of exporting a C++ function to R. You can
-// source this function into an R session using the Rcpp::sourceCpp
-// function (or via the Source button on the editor toolbar)
-
-// For more on using Rcpp click the Help button on the editor toolbar
-
 typedef std::vector<std::string > VecStr;
 typedef VecStr::iterator VecStrIt;
 typedef std::set<std::string > SetStr;

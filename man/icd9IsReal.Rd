@@ -7,9 +7,9 @@
 \alias{icd9IsReal}
 \alias{icd9IsRealDecimal}
 \alias{icd9IsRealShort}
-\title{Does ICD-9 code exist}
+\title{Check whether ICD-9 codes exist}
 \usage{
-icd9IsReal(icd9, isShort, majorOk = TRUE)
+icd9IsReal(icd9, isShort = icd9GuessShort(icd), majorOk = TRUE)
 
 icd9IsRealShort(icd9Short, majorOk = TRUE)
 
@@ -44,29 +44,16 @@ becomes "010", not "0010"}
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
-
-\item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
-given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010"}
-
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
-
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
-characters is given in a code, then the digits are greedily assigned to
-hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
 }
 \value{
 logical vector
 }
 \description{
 This is different from syntactic validity: it looks it up in the
-  list of icd9 codes. This may have been easier all along, but checking
-  syntactic validity still very useful, with a changing list of icd-9 codes
-  over time, and possibly imperfections in the master list derived from CMS.
+  canonical list of ICD-9 codes published by the CMS, and which are included
+  in this package under \code{extdata}. This may have been easier all along,
+  but checking syntactic validity still very useful, with a changing list of
+  icd-9 codes over time, and possibly imperfections in the master list
+  derived from CMS.
 }
 
