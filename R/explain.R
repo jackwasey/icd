@@ -60,6 +60,7 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
   # if there are only real codes, we should condense with this in mind:
 
   onlyReal = all(icd9IsRealShort(icd9))
+  if (!onlyReal) warning("Some ICD codes are not 'real'")
   if (doCondense) icd9 <- icd9CondenseShort(icd9, onlyReal)
 
   mj <- unique(icd9GetMajor(icd9, isShort = TRUE))

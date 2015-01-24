@@ -29,9 +29,9 @@ test_that("explain S3 dispatch", {
   expect_equal(icd9Explain.list(list(a = "003.21", b= "390"), isShort = FALSE),
                list(a = icd9Explain("00321", isShort = TRUE),
                     b = "Rheumatic fever without mention of heart involvement"))
-  expect_warning(res <- icd9Explain(list(a = "not", b="icd9code"), isShort = TRUE))
+  expect_warning(res <- icd9Explain(list(a = "not", b = "icd9code"), isShort = TRUE))
   expect_equal(res, list(a = character(0), b = character(0)))
-  expect_warning(res <- icd9Explain(list(a = "not", b="icd9code"), isShort = FALSE))
+  expect_warning(res <- icd9Explain(list(a = "not", b = "icd9code"), isShort = FALSE))
   expect_equal(res, list(a = character(0), b = character(0)))
 
   expect_warning(res <- icd9Explain.numeric(3.21, isShort = FALSE))
