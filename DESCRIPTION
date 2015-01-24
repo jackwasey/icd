@@ -1,13 +1,14 @@
 Package: icd9
 Title: Tools for Working with ICD-9 Codes, and Finding Comorbidities
-Description: This package allows accurate manipulation, conversion, validation
-    and comparison of ICD-9-CM (clinical modification) codes. Although ICD-9
-    codes appear numeric, this is not the case, since trailing zeroes, and a
-    mixture of decimal and non-decimal "short" format codes exist. Tools to map
-    ICD-9 codes to co-morbidities are also provided, with mappings from Quan
-    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+Description: This package calculates comorbidities, and allows accurate
+    validation, conversion, manipulation, filtering and comparison of ICD-9-CM
+    (clinical modification) codes. ICD-9 codes appear numeric but leading and
+    trailing zeroes, and both decimal and non-decimal "short" format codes
+    exist. The package enables a workflow from raw lists of ICD-9 codes from
+    hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
+    from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 Version: 0.6
-Date: 2015-01-03
+Date: 2015-01-24
 Authors@R: person(given = "Jack O.", family = "Wasey", role = c("aut", "cre"),
     email = c("jack@jackwasey.com"))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>

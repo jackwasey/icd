@@ -7,12 +7,13 @@
 \alias{package-icd9}
 \title{tools for working with ICD-9 codes, and finding comorbidities}
 \description{
-\code{icd9} package allows accurate manipulation, validation and
-  comparison of ICD-9-CM (clinical modification) codes. Although ICD-9 codes
-  appear numeric, this is not the case, since trailing zeroes, and a mixture
-  of decimal and non-decimal "short" format codes exist. Tools to map ICD-9
-  codes to co-morbidities are also provided, with mappings from Quan,
-  Elixhauser and AHRQ included.
+This package calculates comorbidities, and allows accurate
+  validation, conversion, manipulation, filtering and comparison of ICD-9-CM
+  (clinical modification) codes. ICD-9 codes appear numeric but leading and
+  trailing zeroes, and both decimal and non-decimal "short" format codes
+  exist. The package enables a workflow from raw lists of ICD-9 codes from
+  hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
+  from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 
   * \code{\link{icd9IsValid}}\code{\link{icd9IsValidDecimal}},
   \code{\link{icd9IsValidShort}} and related functions
@@ -20,8 +21,8 @@
   \code{\link{icd9IsValidDecimalE}}, \code{\link{icd9IsValidShortN}},
   \code{\link{icd9IsValidShortV}}), \code{\link{icd9IsValidShortE}}) check
   whether given ICD-9 codes are syntactically valid (although not necessarily
-  genuine ICD-9 codes) * \code{\link{icd9Comorbid}} determines
-  co-morbidities for a set of patients with one or more ICD-9 codes each.
+  genuine ICD-9 codes) * \code{\link{icd9Comorbid}} determines co-morbidities
+  for a set of patients with one or more ICD-9 codes each.
 
   * Functions to convert vectors (not lists) of ICD-9 codes include:
   \code{\link{icd9DecimalToShort}}, \code{\link{icd9ShortToDecimal}}.
@@ -60,8 +61,8 @@
   * Quan revised both Deyo/Charlson and Elixhauser ICD-9 to comorbidity
   mappings. These are presented as: \code{link{quanDeyoComorbid}} (which is
   also derived from the original SAS code used in his publication, referenced
-  in the data documentation), and \code{\link{quanElixComorbid}} which
-  was transcribed directly from the same paper.
+  in the data documentation), and \code{\link{quanElixComorbid}} which was
+  transcribed directly from the same paper.
 
   * The original Elixhauser mapping is provided, with codes transcribed from
   the original publication.
