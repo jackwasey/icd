@@ -47,7 +47,6 @@ logicalToBinary <- function(x) {
   x
 }
 
-
 #' @title return the actual matches from a bracketed regex
 #' @description Be careful: this may throw funny results for exotic regex, but
 #'   so far, it seems okay. it also drops the first result which always seems to

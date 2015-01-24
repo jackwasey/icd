@@ -307,6 +307,9 @@ str(ahrqStrict[1:5])
 \section{Comorbidities}
 The comorbidities from different sources are provided as lists. At present only the most recent mapping of ICD-9 codes to comorbidities is provided. See \url{https://github.com/jackwasey/icd9/issues/6} and \url{https://github.com/jackwasey/icd9/issues/7}.
 
+This package contains ICD-9-CM to co-morbidity mappings from several sources, based on either the Charlson or Elixhauser lists of co-morbidities. Updated versions of these lists from [AHRQ](http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp) and [Quan et al](http://www.ncbi.nlm.nih.gov/pubmed/16224307) are included, along with the original Elixhauser mapping . Since some data is provided in SAS source code format, this package contains functions to parse this SAS source code and generate R data structures. This processing is limited to what is needed for this purpose, although may be generalizable and useful in other contexts. Other lists are transcribed directly from the published articles, but interpretation of SAS code from the publication author is preferred.
+
+
 A function is provided to compare comorbidity mappings, and show the differences.
 <<diffcomorbid>>=
 # compare the first five comorbidities on these mappings
