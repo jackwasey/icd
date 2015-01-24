@@ -241,3 +241,69 @@ icd9ComorbiditiesQuanDeyo <- function(...) icd9ComorbidQuanDeyo(...)
 #' @rdname icd9Comorbid
 #' @export
 icd9ComorbiditiesQuanElixhauser <- function(...) icd9ComorbidQuanElix(...)
+
+#' @title show the difference between two comorbidity mappings
+#' @export
+icd9DiffComorbid <- function(x, y, x.names = NULL, y.names = NULL,
+                             show = TRUE, explain = TRUE) {
+  checkmate::checkList(x, min.len = 1, any.missing = FALSE,
+                       types = c("character", "numeric", "integer"))
+  stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))
+
+  if (is.null(x.names)) x.names = names(x)
+  if (is.null(y.names)) y.names = names(y)
+
+  common.names = intersect(x.names, y.names)
+
+  out <- list();
+
+  for (n in common.names) {
+    both <- intersect(x[[n]], y[[n]])
+    only.x <- setdiff(x[[n]], y[[n]])
+    only.y <- setdiff(y[[n]], x[[n]])
+    out[[n]] <- list(both, only.x, only.y)
+    if (show) {
+      cat(sprintf("Comorbidity %s: ", n))
+      if (length(both) == 0) {
+        cat("no common codes. ")
+      }
+      if (length(only.x) == 0 && length(only.y) == 0) {
+        cat("match.\n")
+        next
+      }
+      if (length(only.x) > 0) {
+        cat(sprintf("\n'x' has %d codes not in 'y'. First few are:\n",
+                    length(only.x)))
+        lapply(icd9Explain(only.x, doCondense = TRUE, brief = TRUE)[1:5],
+               function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
+
+        #lapply(only.x[1:5], function(s) if (!is.na(s)) cat(sprintf("%s ", s)))
+      }
+      if (length(only.y) > 0) {
+        cat(sprintf("\n'y' has %d codes not in 'x'. First few are:\n",
+                    length(only.y)))
+        lapply(icd9Explain(only.y, doCondense = TRUE, brief = TRUE)[1:5],
+               function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
+        #lapply(only.y[1:5], function(s) if (!is.na(s)) cat(sprintf("%s ", s)))
+      }
+      cat("\n")
+    }
+  }
+  if (show) {
+    cmb.only.x <- setdiff(x.names, y.names)
+    cmb.only.y <- setdiff(y.names, x.names)
+
+    if (length(cmb.only.x) > 0) {
+      cat("Comorbidities only defined in 'x' are: ")
+      lapply(cmb.only.x, function(s) cat(sprintf("%s ", s)))
+      cat("\n")
+    }
+
+    if (length(cmb.only.y) > 0) {
+      cat("Comorbidities only defined in 'y' are: ")
+      lapply(cmb.only.y, function(s) cat(sprintf("%s ", s)))
+      cat("\n")
+    }
+  }
+  invisible(out)
+}

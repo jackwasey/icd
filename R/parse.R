@@ -407,18 +407,18 @@ parseIcd9Descriptions <- function(icd9path =
   icd9CmDesc <- data.frame(
     icd9 = unlist(icd9LongCode),
     descLong = unlist(icd9LongDesc),
-    descisShort = unlist(icd9ShortDesc),
+    descShort = unlist(icd9ShortDesc),
     stringsAsFactors = FALSE)
 
   # attempt to write the date from the source file to RData in the package
   # source tree. disable saving this: use icd9Hierarchy instead. if (save)
   # saveInDataDir("icd9CmDesc")
 
-  message("The following long descriptions contain UTF-8 codes:")
-  message(paste(icd9CmDesc[grep(pattern = "UTF",
-                                Encoding(icd9CmDesc$descLong)), ],
-                sep = ", "))
-
+  utf8 <- grep(pattern = "UTF", Encoding(icd9CmDesc$descLong))
+  if (length(utf8) > 0 ) {
+    message("The following long descriptions contain UTF-8 codes:")
+    message(paste(icd9CmDesc[utf8, ], sep = ", "))
+  }
   invisible(icd9CmDesc)
 }
 
@@ -438,19 +438,10 @@ parseIcd9Chapters <- function(year = NULL,
     warning(sprintf("Getting ICD-9 data for %s which is not the current year.
               Tests were written to validate extraction of 2014 data.", year))
 
-  # don't assume XML is loaded - it is a suggested package, and needed only for
-  # creating packaged data.
-  if (suppressWarnings(requireNamespace("XML",
-                                        character.only = TRUE, quietly = TRUE))) {
-    if (suppressWarnings(requireNamespace("memoise",
-                                          character.only = TRUE, quietly = TRUE)))
-      memReadHtmlList <- memoise::memoise(XML::readHTMLList)
-    else
-      memReadHtmlList <- XML::readHTMLList
-  } else
-    memReadHtmlList <- NULL
+  # if either XML or memoise are not installed, an error will be given by R
+  memReadHtmlList <- memoise::memoise(XML::readHTMLList)
 
-  icd9Chapters <- icd9WebParseGetList(year)
+  icd9Chapters <- icd9WebParseGetList(year, memfun = memReadHtmlList)
   icd9ChaptersSub <- list()
   icd9ChaptersMajor <- list()
   for (chap in names(icd9Chapters)) {
@@ -458,15 +449,16 @@ parseIcd9Chapters <- function(year = NULL,
           chap == "Congenital Anomalies") {
       # these have no subchapter, straight into the three-digit codes
       icd9ChaptersMajor <- c(icd9ChaptersMajor,
-                             icd9WebParseGetList(year, icd9Chapters[[chap]]))
+                             icd9WebParseGetList(year, memfun = memReadHtmlList,
+                                                 icd9Chapters[[chap]]))
     } else {
       # construct URL for next level and get the sub chapters
-      subchaps <- icd9WebParseGetList(year, icd9Chapters[[chap]])
+      subchaps <- icd9WebParseGetList(year, memReadHtmlList, icd9Chapters[[chap]])
       icd9ChaptersSub <- c(icd9ChaptersSub, subchaps)
       # loop through each subchapter to get the majors:
       for (subchap in names(subchaps)) {
         icd9ChaptersMajor <- c(icd9ChaptersMajor,
-                               icd9WebParseGetList(year,
+                               icd9WebParseGetList(year, memfun = memReadHtmlList,
                                                    icd9Chapters[[chap]],
                                                    icd9ChaptersSub[[subchap]]))
       }
@@ -495,7 +487,7 @@ icd9WebParseStartEndToRange <- function(v) {
 }
 
 # internal only
-icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
+icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   if (is.null(chapter)) {
     icd9url <- sprintf("http://www.icd9data.com/%s/Volume1/default.htm", year)
   } else {
@@ -509,7 +501,7 @@ icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
                          year, chapter, subchap)
     }
   }
-  li <-  memReadHtmlList(doc = icd9url, which = 1)
+  li <-  memfun(doc = icd9url, which = 1)
   # swap so descriptions (second on web page) become the vector names
   v <- jwutil::strPairMatch("^([VvEe0-9-]*)[[:space:]]*(.*)$", li, swap = TRUE)
   lapply(v,

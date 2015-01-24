@@ -17,42 +17,50 @@
 #'   subtypes. This is currently partially implemented. See issue #3 in github.
 #' @examples
 #' icd9ExplainShort(ahrqComorbid[[1]][1:3])
+#' icd9ExplainShort(ahrqComorbid[[1]][1:3], brief = TRUE)
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
 icd9Explain <- function(icd9, isShort = icd9GuessIsShort(icd9),
-                        doCondense = TRUE) {
+                        doCondense = TRUE, brief = FALSE) {
   UseMethod("icd9Explain")
 }
 
-#' @rdname icd9Explain
+#' @rdname icd9Explain explain a set of 'short' format codes
 #' @export
-icd9ExplainShort <- function(icd9Short, doCondense = TRUE) {
-  icd9Explain(icd9Short, isShort = TRUE, doCondense = doCondense)
+icd9ExplainShort <- function(icd9Short, doCondense = TRUE, brief = FALSE) {
+  icd9Explain(icd9Short, isShort = TRUE,
+              doCondense = doCondense, brief = brief)
 }
 
-#' @rdname icd9Explain
+#' @rdname icd9Explain explain a set of decimal format codes
 #' @export
 icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE) {
-  icd9Explain(icd9Decimal, isShort = FALSE, doCondense = doCondense)
+  icd9Explain(icd9Decimal, isShort = FALSE,
+              doCondense = doCondense, brief = brief)
 }
 
-#' @describeIn icd9Explain explain alll ICD-9 codes in a list of vectors
+#' @describeIn icd9Explain explain all ICD-9 codes in a list of vectors
 #' @export
 icd9Explain.list <- function(icd9,  isShort = icd9GuessIsShort(icd9),
-                             doCondense = TRUE) {
-  lapply(icd9, icd9Explain, isShort = isShort, doCondense = doCondense)
+                             doCondense = TRUE, brief = FALSE) {
+  lapply(icd9, icd9Explain, isShort = isShort,
+         doCondense = doCondense, brief = brief)
 }
 
 #' @describeIn icd9Explain explain character vector of ICD-9 codes
 #' @export
 icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
-                                  doCondense = TRUE) {
+                                  doCondense = TRUE, brief = FALSE) {
 
   if (!isShort) icd9 <- icd9DecimalToShort(icd9)
-  if (doCondense) icd9 <- icd9CondenseShort(icd9, onlyReal = TRUE)
+
+  # if there are only real codes, we should condense with this in mind:
+
+  onlyReal = all(icd9IsRealShort(icd9))
+  if (doCondense) icd9 <- icd9CondenseShort(icd9, onlyReal)
 
   mj <- unique(icd9GetMajor(icd9, isShort = TRUE))
 
@@ -60,8 +68,9 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                                 mj[mj %in% icd9]]
   # don't double count when major is also billable
   icd9 <- icd9[icd9 %nin% mj]
+  descField = ifelse(brief, "descShort", "descLong")
   c(mjexplain,
-    icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% icd9, "descLong"]
+    icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% icd9, descField]
   )
 
 }
@@ -69,9 +78,10 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning
 #' @export
 icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
-                                doCondense = TRUE) {
+                                doCondense = TRUE, brief = FALSE) {
   warnNumericCode()
-  icd9Explain.character(as.character(icd9), isShort = isShort)
+  icd9Explain.character(as.character(icd9), isShort = isShort,
+                        doCondense = doCondense, brief = FALSE)
 }
 
 #' @title guess whether short or long
@@ -158,6 +168,7 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
   out
 }
 
+# this is rather slow, queries a web page repeatedly
 icd9GetChaptersHierarchy <- function(save = FALSE) {
 
   # don't rely on having already done this when setting up other data.

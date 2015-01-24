@@ -302,7 +302,17 @@ str(ahrqComorbid[1:5])
 # and we see the first five of the updated list is much shorter:
 str(ahrqStrict[1:5])
 @
-\section{AHRQ comorbidity classification}
+
+\section{Comorbidities}
+The comorbidities from different sources are provided as lists. At present only the most recent mapping of ICD-9 codes to comorbidities is provided. See \url{https://github.com/jackwasey/icd9/issues/6} and \url{https://github.com/jackwasey/icd9/issues/7}.
+
+A function is provided to compare comorbidity mappings, and show the differences.
+<<diffcomorbid>>=
+# compare the first five comorbidities on these mappings
+icd9DiffComorbid(ahrqComorbid[1:5], elixComorbid[1:5])
+@
+
+\subsection{AHRQ comorbidity classification}
 
 The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. This package provides just enough code to parse the SAS source code provided by the AHRQ (but probably not much other SAS code), and generate a list of ICD-9 codes for each comorbidity.
 
