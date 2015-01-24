@@ -2,3 +2,5 @@
 *.so
 *.dll
 *.gcda
+*.gcno
+*.gcov

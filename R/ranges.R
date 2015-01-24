@@ -52,7 +52,6 @@ icd9SortDecimal <- function(icd9Decimal)
 #' @template icd9-short
 #' @template onlyReal
 #' @template isShort
-#' @import jwutil
 #' @family ICD-9 ranges
 #' @export
 icd9ExpandRange <- function(start, end, isShort, onlyReal = TRUE) {

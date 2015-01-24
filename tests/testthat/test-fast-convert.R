@@ -273,7 +273,7 @@ test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity 
 
   test.map <- icd9ChaptersToMap(icd9::icd9Chapters)
   cmb <- icd9Comorbid(icd9df = ooe, isShort = FALSE, icd9Mapping = test.map, isShortMapping = TRUE)
-  cmbcmp <- unname(as.matrix(jwutil::logicalToBinary(cmb)[-1]))
+  cmbcmp <- unname(as.matrix(logicalToBinary(cmb)[-1]))
   expmat <- diag(nrow = length(ooe$icd9))
   expect_equivalent(cmbcmp, expmat)
 })

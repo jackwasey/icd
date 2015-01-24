@@ -17,7 +17,6 @@ suppressWarnings({
     library(knitr, warn.conflicts = FALSE)
     library(icd9, warn.conflicts = FALSE)
     library(magrittr, warn.conflicts = FALSE)
-    library(jwutil, warn.conflicts = FALSE)
   })
 })
 

@@ -9,14 +9,14 @@ Description: This package calculates comorbidities, and allows accurate
     from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 Version: 0.6
 Date: 2015-01-24
-Authors@R: person(given = "Jack O.", family = "Wasey", role = c("aut", "cre"),
+Authors@R: person(given = "Jack O.", family = "Wasey",
+    role = c("aut", "cre", "cph"),
     email = c("jack@jackwasey.com"))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd9
 Depends:
     R (>= 3.0.0)
 Imports:
-    jwutil,
     Rcpp,
     checkmate
 Suggests:
@@ -32,5 +32,6 @@ LazyData: true
 LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues
 License: GPL-3
+Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
 LinkingTo: Rcpp, BH

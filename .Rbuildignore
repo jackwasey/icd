@@ -5,3 +5,4 @@ man-roxygen
 .git/*
 \.travis\.yml$
 .*\.log$
+.*\.gcda$
