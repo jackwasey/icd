@@ -10,7 +10,7 @@ output:
 %\VignetteEngine{knitr::knitr}
 %\VignetteIndexEntry{Introducing icd9}
 --->
-```{r setup, eval=TRUE, echo=FALSE, cache=FALSE}
+```{r setup, echo = FALSE, cache = FALSE}
 suppressWarnings({
   suppressMessages({
     #library(knitr, warn.conflicts = FALSE) # for opts_chunk only
@@ -62,7 +62,7 @@ patientData %>%
   extract(1:5)
 ```
 The following code shows gets the same result with default options written out. Note that if \begin{verbatim}isShort\end{verbatim} is not provided, the value is guessed using an internal function.
-```{r "comorbidUsingDefaultOpts", eval=FALSE}
+```{r "comorbidUsingDefaultOpts", eval = FALSE}
 icd9Comorbid(icd9df = icdFilterPoaYes(patientData),
              icd9Mapping = ahrqComorbid,
              visitId = "visitId",
@@ -94,7 +94,7 @@ icd9IsValidShort(c("1", "001", "100", "123456", "003.21"))
 ```
 
 Validation forces the package user to provide character format ICD-9 codes. If great care is taken, passing some integers could be valid, but given the high chance of mistakes, and the simplicity of dealing entirely with character input, character is enforced:
-```{r invalidint, eval=FALSE}
+```{r invalidint, eval = FALSE}
 icd9IsValidShort(100) # warns
 ```
 
@@ -161,13 +161,13 @@ icd9ExplainDecimal(list(cholera = c("001", "001.0", "001.1", "001.9")))
 icd9ExplainDecimal(c("001", "001.0", "001.1", "001.9"))
 ```
 
-```{r echo=FALSE,eval=FALSE} #TODO:
+```{r cholera,echo = FALSE,eval = FALSE}
 # 001/cholera doesn't itself have an explanation: TODO walk down children to get next level explanations.
 icd9ExplainDecimal(list(cholera = "001", rheumatic_heart = "390"))
 ```
 
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
-```{r noexplain, eval=FALSE}
+```{r noexplain, eval = FALSE}
 icd9ExplainDecimal("001.5") # gives warning
 ```
 
@@ -216,7 +216,7 @@ icd9PoaChoices
 ```
 
 Magrittr allows chaining of the filtering very nicely. Set up some data to demonstrate this:
-```{r MagrittrSetupData, cache=FALSE}
+```{r MagrittrSetupData, cache = FALSE}
 myData <- data.frame(
   visitId = c("v1", "v2", "v3", "v4"),
   icd9 = c("39891", "39790", "41791", "4401"),
@@ -265,7 +265,7 @@ mappings. The user may provide their own mapping which needs this operation.
 ```{r "mapFromChapters", eval=TRUE}
 myMap <- icd9:::icd9ChaptersToMap(icd9Chapters[c(1,2:4)])
 
-system.time(
+ system.time(
   patientChapters <- icd9Comorbid(
     icd9df = patientData,
     isShort = TRUE,

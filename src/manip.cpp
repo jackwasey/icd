@@ -4,18 +4,18 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-String icd9AddLeadingZeroesMajorSingle(String mjr) {
-  if (mjr == NA_STRING) { return(NA_STRING); }
-  std::string m(mjr);
-  if (!icd9::icd9IsASingleVE(mjr)) {
-    switch (strlen(mjr.get_cstring())) {
+String icd9AddLeadingZeroesMajorSingle(String major) {
+  if (major == NA_STRING) { return(NA_STRING); }
+  std::string m(major);
+  if (!icd9::icd9IsASingleVE(major)) {
+    switch (strlen(major.get_cstring())) {
       case 0: return(NA_STRING);
       case 1: return("00" + m);
       case 2: return("0" + m);
       case 3: return(m);
     }
   } else {
-    switch (strlen(mjr.get_cstring())) {
+    switch (strlen(major.get_cstring())) {
       case 1: return(NA_STRING);
       case 2:
       if (icd9::icd9IsASingleV(m)) {
@@ -70,6 +70,6 @@ CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
 
 //' @rdname icd9AddLeadingZeroes
 // [[Rcpp::export]]
-CharacterVector icd9AddLeadingZeroesMajor(CharacterVector mjr) {
-  return sapply(mjr, icd9::icd9AddLeadingZeroesMajorSingle);
+CharacterVector icd9AddLeadingZeroesMajor(CharacterVector major) {
+  return sapply(major, icd9::icd9AddLeadingZeroesMajorSingle);
 }

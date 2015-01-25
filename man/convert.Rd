@@ -15,17 +15,17 @@
 \alias{icd9ShortToParts}
 \title{Convert ICD9 codes between formats and structures.}
 \usage{
-icd9MajMinToCode(mjr, mnr, isShort)
+icd9MajMinToCode(major, minor, isShort)
 
-icd9MajMinToShort(mjr, mnr)
+icd9MajMinToShort(major, minor)
 
-icd9MajMinToDecimal(mjr, mnr)
+icd9MajMinToDecimal(major, minor)
 
 icd9PartsToShort(parts)
 
 icd9PartsToDecimal(parts)
 
-icd9MajMinToParts(mjr, mnr)
+icd9MajMinToParts(major, minor)
 
 icd9ShortToParts(icd9Short, minorEmpty = "")
 
@@ -38,6 +38,16 @@ icd9DecimalToShort(icd9Decimal)
 icd9GetMajor(icd9, isShort)
 }
 \arguments{
+\item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
+which falls before the decimal point, in decimal notation. (In 5 digit
+notation, the 'major' part is be the first three characters (with leading
+zeroes), and includes V or E prefix. xyz}
+
+\item{minor}{character vector of 'minor' part of ICD-9 codes, i.e. that part
+which falls after the decimal point, in decimal notation. (In 5 digit
+notation, the 'major' part is be xyz, even when x and y are zero, thus the
+last two characters represent the 'minor' part, in this case.)}
+
 \item{isShort}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
@@ -62,16 +72,6 @@ becomes "010", not "0010"}
 given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010"}
-
-\item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
-which falls before the decimal point, in decimal notation. (In 5 digit
-notation, the 'major' part is be the first three characters (with leading
-zeroes), and includes V or E prefix. xyz}
-
-\item{minor}{character vector of 'minor' part of ICD-9 codes, i.e. that part
-which falls after the decimal point, in decimal notation. (In 5 digit
-notation, the 'major' part is be xyz, even when x and y are zero, thus the
-last two characters represent the 'minor' part, in this case.)}
 }
 \value{
 Character vector or list. Deliberately returns zero-padded major, because

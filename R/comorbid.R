@@ -282,13 +282,15 @@ icd9ComorbiditiesQuanElixhauser <- function(...) icd9ComorbidQuanElix(...)
 #' @export
 icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
                              show = TRUE, explain = TRUE) {
-  checkmate::checkList(x, min.len = 1, any.missing = FALSE,
-                       types = c("character", "numeric", "integer"))
+  checkmate::checkList(x, min.len = 1, any.missing = FALSE)
   checkmate::checkList(y, min.len = 1, any.missing = FALSE,
                        types = c("character", "numeric", "integer"))
   checkmate::checkLogical(show, any.missing = FALSE, len = 1)
   checkmate::checkLogical(explain, any.missing = FALSE, len = 1)
   stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))
+
+  lapply(x, function(z) stopifnot(is.character(z)))
+  lapply(y, function(z) stopifnot(is.character(z)))
 
   if (!is.null(names) && (!is.null(x.names) | !is.null(y.names)))
     stop("if 'names' is specified, 'x.names' and 'y.names' should not be")
@@ -321,7 +323,7 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
       if (length(only.x) > 0) {
         cat(sprintf("\n'x' has %d codes not in 'y'. First few are:\n",
                     length(only.x)))
-        lapply(icd9Explain(only.x, doCondense = TRUE, brief = TRUE)[1:5],
+        lapply(icd9Explain(only.x, doCondense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
 
         #lapply(only.x[1:5], function(s) if (!is.na(s)) cat(sprintf("%s ", s)))
@@ -329,7 +331,7 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
       if (length(only.y) > 0) {
         cat(sprintf("\n'y' has %d codes not in 'x'. First few are:\n",
                     length(only.y)))
-        lapply(icd9Explain(only.y, doCondense = TRUE, brief = TRUE)[1:5],
+        lapply(icd9Explain(only.y, doCondense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
         #lapply(only.y[1:5], function(s) if (!is.na(s)) cat(sprintf("%s ", s)))
       }

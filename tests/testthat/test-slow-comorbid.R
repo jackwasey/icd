@@ -604,13 +604,18 @@ test_that("diff comorbid works", {
     "Coagulopathy", "Obesity", "WeightLoss", "FluidsLytes", "BloodLoss",
     "Anemia", "Alcohol", "Drugs", "Psychoses", "Depression")))
   # one side diff
-  expect_identical(res$Lymphoma[[2]], character(0))
+  expect_identical(res$Lymphoma[["only.x"]], character(0))
   # other side diff
-  expect_identical(res$Lymphoma[[3]], character(0))
+  expect_identical(res$Drugs[["only.y"]], character(0))
   # match
   expect_identical(res$Depression[[2]], character(0))
   expect_identical(res$Depression[[3]], character(0))
 
   # both, also with elements in either side set diff
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
+
+  expect_that(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE),
+              testthat::not(gives_warning()))
+  capture.output(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE))
+
 })

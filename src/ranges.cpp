@@ -51,13 +51,13 @@ const CharacterVector vv = MakeAllMinors();
 //' @family ICD-9 ranges
 //' @keywords internal manip
 // [[Rcpp::export]]
-CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false) {
+CharacterVector icd9ExpandMinor(std::string minor, bool isE = false) {
 
   if (!isE) {
-    switch (mnr.size()) {
+    switch (minor.size()) {
       case 0: return vv;
       case 1:
-      switch (mnr.at(0)) {
+      switch (minor.at(0)) {
         case '0':        return v0;
         case '1':        return v1;
         case '2':        return v2;
@@ -70,14 +70,14 @@ CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false) {
         case '9':        return v9;
         default:        stop("unrecognized minor character"); return CharacterVector::create();
       }
-      case 2: return wrap(mnr);
+      case 2: return wrap(minor);
       default: stop("minor of >2 characters received by icd9ExpandMinor"); return CharacterVector::create();
     }
   } else {
     // is E code, so minor is just one character
-    switch (mnr.size()) {
+    switch (minor.size()) {
       case 0:      return CharacterVector::create("", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
-      case 1:      return mnr;
+      case 1:      return minor;
       //default:      std::cout << "too many characters in E code minor part\n";
     }
   }
@@ -97,18 +97,18 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = tru
   std::set< std::string > out; // we are never going to put NAs in the output?
   if (icd9Short.size() == 0) return wrap(out);
   List parts = icd9::icd9ShortToParts(icd9Short, "");
-  CharacterVector mjr = parts[0];
-  CharacterVector mnr = parts[1];
-  CharacterVector::iterator itmjr = mjr.begin(); // iterator seems to be a CharacterVector of length 1
-  CharacterVector::iterator itmnr = mnr.begin();
-  for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-    std::string thismjr = as<std::string >(*itmjr);
-    std::string thismnr = as<std::string >(*itmnr);
+  CharacterVector major = parts[0];
+  CharacterVector minor = parts[1];
+  CharacterVector::iterator itmajor = major.begin(); // iterator seems to be a CharacterVector of length 1
+  CharacterVector::iterator itminor = minor.begin();
+  for (; itmajor != major.end(); ++itmajor, ++itminor) {
+    std::string thismajor = as<std::string >(*itmajor);
+    std::string thisminor = as<std::string >(*itminor);
 
-    CharacterVector newminors = icd9ExpandMinor(thismnr, icd9::icd9IsASingleE(thismjr));
+    CharacterVector newminors = icd9ExpandMinor(thisminor, icd9::icd9IsASingleE(thismajor));
 
     // push back slower, but difficult to predict size of output
-    std::vector< std::string > newshort = as<std::vector< std::string > >(icd9::icd9MajMinToShort(thismjr, newminors));
+    std::vector< std::string > newshort = as<std::vector< std::string > >(icd9::icd9MajMinToShort(thismajor, newminors));
 
     // std insert is a thousand times faster than looping through CharacterVector and push_backing
     out.insert(newshort.begin(), newshort.end());

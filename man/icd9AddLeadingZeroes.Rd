@@ -13,7 +13,7 @@ icd9AddLeadingZeroesShort(icd9Short)
 
 icd9AddLeadingZeroesDecimal(icd9Decimal)
 
-icd9AddLeadingZeroesMajor(mjr)
+icd9AddLeadingZeroesMajor(major)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is

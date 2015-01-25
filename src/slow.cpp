@@ -23,11 +23,11 @@ std::vector<bool> icd9IsV_cpp_slower(std::vector< std::string > sv) {
 // [[Rcpp::export]]
 List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = "") {
 
-  CharacterVector mjr;
-  CharacterVector mnr;
+  CharacterVector major;
+  CharacterVector minor;
   // can only reserve with std::vector, but can pre-size a Rcpp::Vector
-  //mjr.reserve(icd9Short.size())
-  //mnr.reserve(icd9Short.size())
+  //major.reserve(icd9Short.size())
+  //minor.reserve(icd9Short.size())
 
   for (CharacterVector::iterator i(icd9Short.begin());
   i < icd9Short.end();
@@ -41,38 +41,38 @@ List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = ""
       case 1:
       case 2:
       case 3:
-      mjr.push_back(s.substr(0, s.size()));
-      mnr.push_back(minorEmpty);
+      major.push_back(s.substr(0, s.size()));
+      minor.push_back(minorEmpty);
       continue;
       case 4:
       case 5:
-      mjr.push_back(s.substr(0, 3));
-      mnr.push_back(s.substr(3, s.size()-3));
+      major.push_back(s.substr(0, 3));
+      minor.push_back(s.substr(3, s.size()-3));
       continue;
       default:
-      mjr.push_back(NA_STRING); mnr.push_back(NA_STRING); continue;
+      major.push_back(NA_STRING); minor.push_back(NA_STRING); continue;
     }
     } else { // E code
     if (s.size()<4) {
-      mjr.push_back(NA_STRING); mnr.push_back(NA_STRING); continue;
+      major.push_back(NA_STRING); minor.push_back(NA_STRING); continue;
     }
-    mjr.push_back(s.substr(0, 4));
+    major.push_back(s.substr(0, 4));
     if (s.size()<5) {
-      mnr.push_back(minorEmpty);
+      minor.push_back(minorEmpty);
     } else {
-      mnr.push_back(s.substr(4, 1));
+      minor.push_back(s.substr(4, 1));
     }
     } // E code
   } // for
   return List::create();
-  // TODO: return icd9MajMinToParts(mjr, mnr);
+  // TODO: return icd9MajMinToParts(major, minor);
 }
 
 // [[Rcpp::export]]
-List icd9MajMinToParts_slower(CharacterVector mjr, CharacterVector mnr) {
+List icd9MajMinToParts_slower(CharacterVector major, CharacterVector minor) {
   List returned_frame = List::create(
-    _["major"] = mjr,
-    _["minor"] = mnr);
+    _["major"] = major,
+    _["minor"] = minor);
 
     StringVector sample_row = returned_frame(0);
     StringVector row_names(sample_row.length());
@@ -112,8 +112,8 @@ std::vector<bool> icd9IsVE_cpp_slow(std::vector< std::string > sv) { return icd9
 // [[Rcpp::export]]
 List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty = "") {
 
-  CharacterVector mjr(icd9Short.size());
-  CharacterVector mnr(icd9Short.size());
+  CharacterVector major(icd9Short.size());
+  CharacterVector minor(icd9Short.size());
 
   for (int i = 0; i < icd9Short.size(); ++i) {
     std::string s = as<std::string>(icd9Short[i]);
@@ -123,24 +123,24 @@ List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty
     switch (s.size()) {
       case 1:
       case 2:
-      case 3: mjr[i] = s.substr(0, s.size()); mnr[minorEmpty]; continue;
+      case 3: major[i] = s.substr(0, s.size()); minor[minorEmpty]; continue;
       case 4:
-      case 5: mjr[i] = s.substr(0, 3); mnr[i] = s.substr(3, s.size()-3); continue;
-      default: mjr[i] = NA_STRING; mnr[i] = NA_STRING; continue;
+      case 5: major[i] = s.substr(0, 3); minor[i] = s.substr(3, s.size()-3); continue;
+      default: major[i] = NA_STRING; minor[i] = NA_STRING; continue;
     }
     } else { // E code
     if (s.size()<4) {
-      mjr[i] = NA_STRING; mnr[i] = NA_STRING; continue;
+      major[i] = NA_STRING; minor[i] = NA_STRING; continue;
     }
-    mjr[i] = s.substr(0, 4);
+    major[i] = s.substr(0, 4);
     if (s.size()<5) {
-      mnr[i] = minorEmpty;
+      minor[i] = minorEmpty;
     } else {
-      mnr[i] = s.substr(4, 1);
+      minor[i] = s.substr(4, 1);
     }
     } // E code
   } // for
 
-  return icd9::icd9MajMinToParts(mjr, mnr);
+  return icd9::icd9MajMinToParts(major, minor);
 }
 // # EXCLUDE COVERAGE END

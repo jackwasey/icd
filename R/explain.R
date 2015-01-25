@@ -18,6 +18,9 @@
 #' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
 #'   the short description from the canonical CMS descriptions (included in
 #'   \code{extdata}) will be used, otherwise the long description is used.
+#' @param warn single logical value, default is \code{TRUE}, meaning that codes
+#'   which do not correspond to diagnoses, or to three-digit codes, will trigger
+#'   a warning.
 #' @examples
 #' icd9ExplainShort(ahrqComorbid[[1]][1:3])
 #' icd9ExplainShort(ahrqComorbid[[1]][1:3], brief = TRUE)
@@ -27,44 +30,51 @@
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
 icd9Explain <- function(icd9, isShort = icd9GuessIsShort(icd9),
-                        doCondense = TRUE, brief = FALSE) {
+                        doCondense = TRUE, brief = FALSE, warn = TRUE) {
   UseMethod("icd9Explain")
 }
 
 #' @rdname icd9Explain
 #' @export
-icd9ExplainShort <- function(icd9Short, doCondense = TRUE, brief = FALSE) {
+icd9ExplainShort <- function(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE) {
   icd9Explain(icd9Short, isShort = TRUE,
-              doCondense = doCondense, brief = brief)
+              doCondense = doCondense, brief = brief, warn = warn)
 }
 
 #' @rdname icd9Explain
 #' @export
-icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE, brief = FALSE) {
+icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE, brief = FALSE, warn = TRUE) {
   icd9Explain(icd9Decimal, isShort = FALSE,
-              doCondense = doCondense, brief = brief)
+              doCondense = doCondense, brief = brief, warn = warn)
 }
 
 #' @describeIn icd9Explain explain all ICD-9 codes in a list of vectors
 #' @export
 icd9Explain.list <- function(icd9,  isShort = icd9GuessIsShort(icd9),
-                             doCondense = TRUE, brief = FALSE) {
+                             doCondense = TRUE, brief = FALSE, warn = TRUE) {
   lapply(icd9, icd9Explain, isShort = isShort,
-         doCondense = doCondense, brief = brief)
+         doCondense = doCondense, brief = brief, warn = warn)
 }
 
 #' @describeIn icd9Explain explain character vector of ICD-9 codes
 #' @export
 icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
-                                  doCondense = TRUE, brief = FALSE) {
+                                  doCondense = TRUE, brief = FALSE, warn = TRUE) {
 
   if (!isShort) icd9 <- icd9DecimalToShort(icd9)
 
   # if there are only real codes, we should condense with this in mind:
 
-  onlyReal = all(icd9IsRealShort(icd9))
-  if (!onlyReal) warning("Some ICD codes are not 'real'")
-  if (doCondense) icd9 <- icd9CondenseShort(icd9, onlyReal)
+  if (doCondense) {
+    onlyReal = all(icd9IsRealShort(icd9))
+    if (warn && !onlyReal) {
+      unreal = icd9[!icd9IsRealShort(icd9)]
+      warning("Some ICD codes are not 'real', e.g. ",
+              paste(unreal[seq(from = 1, to = min(5, length(unreal)))],
+                    collapse = " "))
+    }
+    icd9 <- icd9CondenseShort(icd9, onlyReal)
+  }
 
   mj <- unique(icd9GetMajor(icd9, isShort = TRUE))
 
@@ -82,10 +92,10 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning
 #' @export
 icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
-                                doCondense = TRUE, brief = FALSE) {
+                                doCondense = TRUE, brief = FALSE, warn = FALSE) {
   warnNumericCode()
   icd9Explain.character(as.character(icd9), isShort = isShort,
-                        doCondense = doCondense, brief = FALSE)
+                        doCondense = doCondense, brief = brief, warn = warn)
 }
 
 #' @title guess whether short or long

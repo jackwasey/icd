@@ -10,20 +10,21 @@
 \title{explain ICD9 codes}
 \usage{
 icd9Explain(icd9, isShort = icd9GuessIsShort(icd9), doCondense = TRUE,
-  brief = FALSE)
+  brief = FALSE, warn = TRUE)
 
-icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE)
+icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE)
 
-icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE)
+icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
+  warn = TRUE)
 
 \method{icd9Explain}{list}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE)
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE)
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd9Explain}{numeric}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE)
+  doCondense = TRUE, brief = FALSE, warn = FALSE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -44,6 +45,10 @@ subtypes. This is currently partially implemented. See issue #3 in github.}
 \item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
 the short description from the canonical CMS descriptions (included in
 \code{extdata}) will be used, otherwise the long description is used.}
+
+\item{warn}{single logical value, default is \code{TRUE}, meaning that codes
+which do not correspond to diagnoses, or to three-digit codes, will trigger
+a warning.}
 
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned

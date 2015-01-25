@@ -9,20 +9,20 @@ icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Fiel
 
 #' @rdname convert
 #' @export
-icd9MajMinToCode <- function(mjr, mnr, isShort) {
-    .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', mjr, mnr, isShort)
+icd9MajMinToCode <- function(major, minor, isShort) {
+    .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', major, minor, isShort)
 }
 
 #' @rdname convert
 #' @export
-icd9MajMinToShort <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToShort', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToShort <- function(major, minor) {
+    .Call('icd9_icd9MajMinToShort', PACKAGE = 'icd9', major, minor)
 }
 
 #' @rdname convert
 #' @export
-icd9MajMinToDecimal <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToDecimal', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToDecimal <- function(major, minor) {
+    .Call('icd9_icd9MajMinToDecimal', PACKAGE = 'icd9', major, minor)
 }
 
 #' @rdname convert
@@ -39,12 +39,12 @@ icd9PartsToDecimal <- function(parts) {
 
 #' @rdname convert
 #' @export
-icd9MajMinToParts <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToParts', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToParts <- function(major, minor) {
+    .Call('icd9_icd9MajMinToParts', PACKAGE = 'icd9', major, minor)
 }
 
-icd9MajMinToParts_list <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToParts_list', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToParts_list <- function(major, minor) {
+    .Call('icd9_icd9MajMinToParts_list', PACKAGE = 'icd9', major, minor)
 }
 
 #' @rdname convert
@@ -116,8 +116,8 @@ icd9IsN <- function(icd9) {
     .Call('icd9_icd9IsN', PACKAGE = 'icd9', icd9)
 }
 
-icd9AddLeadingZeroesMajorSingle <- function(mjr) {
-    .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', mjr)
+icd9AddLeadingZeroesMajorSingle <- function(major) {
+    .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', major)
 }
 
 #' @title Add leading zeroes to incomplete ICD codes
@@ -145,8 +145,8 @@ icd9AddLeadingZeroesDecimal <- function(icd9Decimal) {
 }
 
 #' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesMajor <- function(mjr) {
-    .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', mjr)
+icd9AddLeadingZeroesMajor <- function(major) {
+    .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', major)
 }
 
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes
@@ -165,8 +165,8 @@ icd9AddLeadingZeroesMajor <- function(mjr) {
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-icd9ExpandMinor <- function(mnr, isE = FALSE) {
-    .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', mnr, isE)
+icd9ExpandMinor <- function(minor, isE = FALSE) {
+    .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', minor, isE)
 }
 
 icd9Children_cpp <- function(icd9, isShort, onlyReal = TRUE) {
@@ -207,8 +207,8 @@ icd9ShortToParts_cpp_slow <- function(icd9Short, minorEmpty = "") {
     .Call('icd9_icd9ShortToParts_cpp_slow', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
-icd9MajMinToParts_slower <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToParts_slower', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToParts_slower <- function(major, minor) {
+    .Call('icd9_icd9MajMinToParts_slower', PACKAGE = 'icd9', major, minor)
 }
 
 icd9IsV_cpp_slow <- function(sv) {
