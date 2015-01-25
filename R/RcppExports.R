@@ -98,8 +98,8 @@ icd9IsE <- function(icd9) {
 
 #' @rdname icd9Is
 #' @export
-icd9Iicd9E <- function(icd9) {
-    .Call('icd9_icd9Iicd9E', PACKAGE = 'icd9', icd9)
+icd9IsVE <- function(icd9) {
+    .Call('icd9_icd9IsVE', PACKAGE = 'icd9', icd9)
 }
 
 #' @rdname icd9Is
@@ -202,8 +202,8 @@ icd9ShortToParts_cpp_test <- function(icd9Short, minorEmpty = "") {
     .Call('icd9_icd9ShortToParts_cpp_test', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
-strim <- function(s) {
-    .Call('icd9_strim', PACKAGE = 'icd9', s)
+strim_cpp <- function(s) {
+    .Call('icd9_strim_cpp', PACKAGE = 'icd9', s)
 }
 
 trim_cpp <- function(sv) {

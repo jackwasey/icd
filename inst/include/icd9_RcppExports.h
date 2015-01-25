@@ -366,17 +366,17 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline std::vector<bool> icd9Iicd9E(std::vector< std::string > icd9) {
-        typedef SEXP(*Ptr_icd9Iicd9E)(SEXP);
-        static Ptr_icd9Iicd9E p_icd9Iicd9E = NULL;
-        if (p_icd9Iicd9E == NULL) {
-            validateSignature("std::vector<bool>(*icd9Iicd9E)(std::vector< std::string >)");
-            p_icd9Iicd9E = (Ptr_icd9Iicd9E)R_GetCCallable("icd9", "icd9_icd9Iicd9E");
+    inline std::vector<bool> icd9IsVE(std::vector< std::string > icd9) {
+        typedef SEXP(*Ptr_icd9IsVE)(SEXP);
+        static Ptr_icd9IsVE p_icd9IsVE = NULL;
+        if (p_icd9IsVE == NULL) {
+            validateSignature("std::vector<bool>(*icd9IsVE)(std::vector< std::string >)");
+            p_icd9IsVE = (Ptr_icd9IsVE)R_GetCCallable("icd9", "icd9_icd9IsVE");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9Iicd9E(Rcpp::wrap(icd9));
+            __result = p_icd9IsVE(Rcpp::wrap(icd9));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -727,17 +727,17 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline std::string strim(std::string& s) {
-        typedef SEXP(*Ptr_strim)(SEXP);
-        static Ptr_strim p_strim = NULL;
-        if (p_strim == NULL) {
-            validateSignature("std::string(*strim)(std::string&)");
-            p_strim = (Ptr_strim)R_GetCCallable("icd9", "icd9_strim");
+    inline std::string strim_cpp(std::string& s) {
+        typedef SEXP(*Ptr_strim_cpp)(SEXP);
+        static Ptr_strim_cpp p_strim_cpp = NULL;
+        if (p_strim_cpp == NULL) {
+            validateSignature("std::string(*strim_cpp)(std::string&)");
+            p_strim_cpp = (Ptr_strim_cpp)R_GetCCallable("icd9", "icd9_strim_cpp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_strim(Rcpp::wrap(s));
+            __result = p_strim_cpp(Rcpp::wrap(s));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

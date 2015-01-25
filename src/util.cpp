@@ -15,7 +15,7 @@ std::string trimLeft(std::string& s) {
 }
 
 // [[Rcpp::export]]
-std::string strim(std::string& s) {
+std::string strim_cpp(std::string& s) {
    trimLeft(s);
    trimRight(s);
    return s;
@@ -24,7 +24,7 @@ std::string strim(std::string& s) {
 // [[Rcpp::export]]
 std::vector<std::string > trim_cpp(std::vector<std::string >& sv) {
   for (std::vector<std::string >::iterator i = sv.begin(); i != sv.end(); ++i) {
-    strim(*i);
+    strim_cpp(*i);
   }
   return sv;
 }

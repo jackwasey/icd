@@ -277,3 +277,15 @@ test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity 
   expmat <- diag(nrow = length(ooe$icd9))
   expect_equivalent(cmbcmp, expmat)
 })
+
+# some functions are only called via C++ (at present), so the path through
+# RcppExports is not tested. Also, compare slower functions for identical
+# results as a regression test.
+test_that("code routes through RcppExports.R and slower versions", {
+  expect_equal(icd9ShortToParts("1001"),
+               data.frame(major = "100", minor = "1", stringsAsFactors = FALSE))
+  expect_equal(icd9ShortToParts(c("99999", "0011")),
+               data.frame(major = c("999", "001"), minor = c("99", "1"), stringsAsFactors = FALSE))
+  # expect_identical(icd9ShortToParts("1001"), icd9ShortToParts_cpp_slow("1001"))
+  expect_identical(icd9ShortToParts("1001"), icd9ShortToParts_cpp_test("1001"))
+})

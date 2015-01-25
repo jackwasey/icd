@@ -13,7 +13,7 @@ std::vector<bool> icd9IsV_cpp_slower(std::vector< std::string > sv) {
   int len = sv.size();
   std::vector<bool> out(len);
   for (int i = 0; i < len; ++i) {
-    std::string svt = icd9::strim(sv[i]);
+    std::string svt = icd9::strim_cpp(sv[i]);
     if (svt.size() == 0) continue;
     out[i] = svt.at(0) == 'V' || svt.at(0) == 'v';
   }
@@ -34,7 +34,7 @@ List icd9ShortToParts_cpp_slow(CharacterVector icd9Short, String minorEmpty = ""
   ++i) {
 
     std::string s = as<std::string>(*i); // do i need to convert?
-    s = icd9::strim(s); // minimal speed difference
+    s = icd9::strim_cpp(s); // minimal speed difference
 
     if (s.find_first_of("Ee") == std::string::npos) { // not an E code
     switch (s.size()) {
@@ -117,7 +117,7 @@ List icd9ShortToParts_cpp_test(CharacterVector icd9Short, std::string minorEmpty
 
   for (int i = 0; i < icd9Short.size(); ++i) {
     std::string s = as<std::string>(icd9Short[i]);
-    s = icd9::strim(s); // minimal speed difference
+    s = icd9::strim_cpp(s); // minimal speed difference
 
     if (s.at(0) != char('E') && s.at(0) != char('e')) { // not an E code // char match makes little difference to speed
     switch (s.size()) {
