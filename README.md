@@ -1,10 +1,10 @@
 icd9
 ====
 
-_master_ [![Build Status](https://travis-ci.org/jackwasey/icd9.png?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.png?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
+_master_ [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
 
-_dev_ [![Build Status](https://travis-ci.org/jackwasey/icd9.png?branch=rcpp-optim)](https://travis-ci.org/jackwasey/icd9) 
-[![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.png?branch=rcpp-optim)](https://coveralls.io/r/jackwasey/icd9?branch=rcpp-optim)
+_dev_ [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=rcpp-optim)](https://travis-ci.org/jackwasey/icd9) 
+[![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=rcpp-optim)](https://coveralls.io/r/jackwasey/icd9?branch=rcpp-optim)
 
 ICD-9 code manipulation, validation and comorbidity generation in R
 -------------------------------------------------------------------
