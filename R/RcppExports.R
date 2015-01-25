@@ -202,6 +202,14 @@ icd9ShortToParts_cpp_test <- function(icd9Short, minorEmpty = "") {
     .Call('icd9_icd9ShortToParts_cpp_test', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
+strim <- function(s) {
+    .Call('icd9_strim', PACKAGE = 'icd9', s)
+}
+
+trim_cpp <- function(sv) {
+    .Call('icd9_trim_cpp', PACKAGE = 'icd9', sv)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('icd9_RcppExport_registerCCallable', PACKAGE = 'icd9')

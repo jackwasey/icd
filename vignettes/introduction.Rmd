@@ -13,13 +13,13 @@ output:
 ```{r setup, eval=TRUE, echo=FALSE, cache=FALSE}
 suppressWarnings({
   suppressMessages({
-    library(knitr, warn.conflicts = FALSE)
-    library(icd9, warn.conflicts = FALSE)
-    library(magrittr, warn.conflicts = FALSE)
+    #library(knitr, warn.conflicts = FALSE) # for opts_chunk only
+    library(icd9)
+    library(magrittr)
   })
 })
 
-opts_chunk$set(cache = TRUE) # unless otherwise stated
+knitr::opts_chunk$set(cache = TRUE) # unless otherwise stated
 
 patientData <- data.frame(
   visitId = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
@@ -30,7 +30,13 @@ patientData <- data.frame(
 
 ## Introduction
 
-This package is designed to be used with a variety of input data, including multiple possible formats of ICD-9 codes, but some assumptions are made. There are many ways of misinterpreting ICD-9 codes, especially when dealing with ranges. The code in this package carefully considers a wide range of possibilities. \textbf{ICD-9 codes are not numeric}. Using numeric values for either decimal or non-decimal form will cause serious problems, hence the predominantly string-based processing here, and a robust set of unit tests.
+This package calculates comorbidities, and allows accurate
+    validation, conversion, manipulation, filtering and comparison of ICD-9-CM
+    (clinical modification) codes. ICD-9 codes appear numeric but leading and
+    trailing zeroes, and both decimal and non-decimal "short" format codes
+    exist. The package enables a workflow from raw lists of ICD-9 codes from
+    hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
+    from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 
 When calcuating which patients have which comorbidities, the input data is typically structured as follows:
 

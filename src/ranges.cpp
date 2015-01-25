@@ -83,11 +83,9 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = tru
   List parts = icd9::icd9ShortToParts(icd9Short, "");
   CharacterVector mjr = parts[0];
   CharacterVector mnr = parts[1];
-  CharacterVector::iterator itmjr; // iterator seems to be a CharacterVector of length 1
-  CharacterVector::iterator itmnr;
-  for (itmjr = mjr.begin(), itmnr = mnr.begin();
-  itmjr != mjr.end();
-  ++itmjr, ++itmnr) {
+  CharacterVector::iterator itmjr = mjr.begin(); // iterator seems to be a CharacterVector of length 1
+  CharacterVector::iterator itmnr = mnr.begin();
+  for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
     std::string thismjr = as<std::string >(*itmjr);
     std::string thismnr = as<std::string >(*itmnr);
 

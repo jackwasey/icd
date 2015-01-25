@@ -61,10 +61,8 @@ icd9DropLeadingZeroesShort <- function(icd9Short) {
 
 #' @rdname icd9DropLeadingZeroes
 icd9DropLeadingZeroesMajor <- function(major) {
-  # trim everything??? TODO: consider just passing through the unprocessed
-  # codes. remove trim tests?
   major <- trim(major)
-  isV <- icd9IsV(major) #not checking validity, necessarily, just quick check
+  isV <- icd9IsV(major) # not checking validity, necessarily, just quick check
   # alternative might be just to get numeric-only, possibly quicker? TODO
   isN <- icd9IsValidMajorN(major)
   major[isV] <- sub(pattern = "^([Vv])0([[:digit:]]{1})$",

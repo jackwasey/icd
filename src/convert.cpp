@@ -1,8 +1,6 @@
-// [[depends(BH)]]
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include <icd9.h>
-#include <boost/algorithm/string/trim.hpp>
 using namespace Rcpp;
 
 // // temporarily move  @export to my shim
@@ -125,10 +123,8 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
   for (int i = 0; i < icd9Short.size(); ++i) {
     if (icd9Short[i] == NA_STRING) { NA_STRING; mnr[i] = NA_STRING; continue; }
 
-    std::string s = as<std::string>(icd9Short[i]); // do i need to convert?
-
-    // since we loop anyway, don't call vectorized trim
-    boost::algorithm::trim(s); // minimal speed penalty
+    std::string s = as<std::string>(icd9Short[i]);
+    s = icd9::strim(s); // do i need to convert?
 
     if (!icd9::icd9IsASingleE(s)) { // not an E code
     switch (s.size()) {
@@ -182,7 +178,7 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
     String strna = *it;
     if (strna == NA_STRING || strna == "") { mjrs.push_back(NA_STRING); mnrs.push_back(NA_STRING); continue; }
     std::string thiscode = as<std::string >(*it); // Rcpp::String doesn't implement many functions.
-    boost::algorithm::trim(thiscode);
+    thiscode = icd9::strim(thiscode); // TODO: update in place.
     std::size_t pos = thiscode.find(".");
     // substring parts
     std::string mjrin;

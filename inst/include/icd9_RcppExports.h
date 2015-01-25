@@ -727,6 +727,44 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
+    inline std::string strim(std::string& s) {
+        typedef SEXP(*Ptr_strim)(SEXP);
+        static Ptr_strim p_strim = NULL;
+        if (p_strim == NULL) {
+            validateSignature("std::string(*strim)(std::string&)");
+            p_strim = (Ptr_strim)R_GetCCallable("icd9", "icd9_strim");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_strim(Rcpp::wrap(s));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::string >(__result);
+    }
+
+    inline std::vector<std::string > trim_cpp(std::vector<std::string >& sv) {
+        typedef SEXP(*Ptr_trim_cpp)(SEXP);
+        static Ptr_trim_cpp p_trim_cpp = NULL;
+        if (p_trim_cpp == NULL) {
+            validateSignature("std::vector<std::string >(*trim_cpp)(std::vector<std::string >&)");
+            p_trim_cpp = (Ptr_trim_cpp)R_GetCCallable("icd9", "icd9_trim_cpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_trim_cpp(Rcpp::wrap(sv));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<std::string > >(__result);
+    }
+
 }
 
 #endif // __icd9_RcppExports_h__

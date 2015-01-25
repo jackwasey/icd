@@ -27,12 +27,15 @@ asCharacterNoWarn <- function(x) {
 "%nin%" <- function(x, table)
   match(x, table, nomatch = 0) == 0
 
-trim <- function(x)
-  gsub("^\\s+|\\s+$", "", x)
-
 strip <- function (x, pattern = " ", useBytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = useBytes)
+
+trim <- function (x) {
+  nax = is.na(x)
+  x[!nax] <- trim_cpp(as.character(x[!nax]))
+  x
+}
 
 saveInDataDir <- function(var, suffix = "") {
   save(list = var,
@@ -154,7 +157,6 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
 #'   readLines. The first argument to FUN will be the path of the extracted
 #'   \code{filename}
 #' @param \dots further arguments to FUN
-#' @export
 read.zip.url <- function(url, filename = NULL, FUN = readLines, ...) {
   stopifnot(length(filename) <= 1)
   stopifnot(is.character(url), length(url) == 1)
