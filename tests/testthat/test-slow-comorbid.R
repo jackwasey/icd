@@ -590,3 +590,27 @@ test_that("unordered visit ids", {
                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
   icd9ComorbidShort(pts, ahrqComorbid)
 })
+
+test_that("diff comorbid works", {
+  expect_error(icd9DiffComorbid(bad_input)) # list, but not list of character vectors
+  expect_error(icd9DiffComorbid(bad_input, bad_input))
+
+  # no warning or error for good data
+  expect_that(res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE), testthat::not(gives_warning()))
+  expect_true(all(names(res) %in% c(
+    "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
+    "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",
+    "Liver", "PUD", "HIV", "Lymphoma", "Mets", "Tumor", "Rheumatic",
+    "Coagulopathy", "Obesity", "WeightLoss", "FluidsLytes", "BloodLoss",
+    "Anemia", "Alcohol", "Drugs", "Psychoses", "Depression")))
+  # one side diff
+  expect_identical(res$Lymphoma[[2]], character(0))
+  # other side diff
+  expect_identical(res$Lymphoma[[3]], character(0))
+  # match
+  expect_identical(res$Depression[[2]], character(0))
+  expect_identical(res$Depression[[3]], character(0))
+
+  # both, also with elements in either side set diff
+  expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
+})

@@ -308,7 +308,7 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
     both <- intersect(x[[n]], y[[n]])
     only.x <- setdiff(x[[n]], y[[n]])
     only.y <- setdiff(y[[n]], x[[n]])
-    out[[n]] <- list(both, only.x, only.y)
+    out[[n]] <- list(both = both, only.x = only.x, only.y = only.y)
     if (show) {
       cat(sprintf("Comorbidity %s: ", n))
       if (length(both) == 0) {
