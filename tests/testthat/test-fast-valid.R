@@ -156,7 +156,7 @@ test_that("icd9IsValidShort", {
     c(TRUE, TRUE, TRUE, TRUE, TRUE))
   expect_true(icd9IsValidShort("12345"))
   expect_true(icd9IsValidShort("12 "))
-  expect_error(icd9IsValidShort(1))
+  expect_warning(icd9IsValidShort(1))
   expect_equal(icd9IsValidShort(c("99999", "1")), c(TRUE, TRUE))
   expect_equal(icd9IsValidShort(c("1", "100", "222.22")), c(TRUE, TRUE, FALSE))
   expect_equal(
