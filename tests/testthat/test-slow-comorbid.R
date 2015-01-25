@@ -282,8 +282,7 @@ test_that("icd9Hierarchy as saved in data can be recreated", {
 # http://www.icd9data.com because there is no machine readable CDC or CMS file
 # with this data.
 test_that("icd9Chapters, etc. as saved in data can be recreated", {
-  skip_on_cran()
-  skip_on_travis()
+  skip_on_cran() # and/or skip_on_travis()
   res <- parseIcd9Chapters(year = "2014", save = FALSE)
   expect_equal(res$icd9Chapters, icd9::icd9Chapters)
   expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)

@@ -304,6 +304,9 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
 
   common.names = intersect(x.names, y.names)
 
+  x.title = deparse(substitute(x))
+  y.title = deparse(substitute(y))
+
   out <- list();
 
   for (n in common.names) {
@@ -321,16 +324,16 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
         next
       }
       if (length(only.x) > 0) {
-        cat(sprintf("\n'x' has %d codes not in 'y'. First few are:\n",
-                    length(only.x)))
+        cat(sprintf("\n%s has %d codes not in %s. First few are: ",
+                    x.title, length(only.x), y.title))
         lapply(icd9Explain(only.x, doCondense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
 
         #lapply(only.x[1:5], function(s) if (!is.na(s)) cat(sprintf("%s ", s)))
       }
       if (length(only.y) > 0) {
-        cat(sprintf("\n'y' has %d codes not in 'x'. First few are:\n",
-                    length(only.y)))
+        cat(sprintf("\n%s has %d codes not in %s. First few are: ",
+                    y.title, length(only.y), x.title))
         lapply(icd9Explain(only.y, doCondense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
         #lapply(only.y[1:5], function(s) if (!is.na(s)) cat(sprintf("%s ", s)))
@@ -343,13 +346,13 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
     cmb.only.y <- setdiff(y.names, x.names)
 
     if (length(cmb.only.x) > 0) {
-      cat("Comorbidities only defined in 'x' are: ")
+      cat(sprintf("Comorbidities only defined in %s are: ", x.title))
       lapply(cmb.only.x, function(s) cat(sprintf("%s ", s)))
       cat("\n")
     }
 
     if (length(cmb.only.y) > 0) {
-      cat("Comorbidities only defined in 'y' are: ")
+      cat(sprintf("Comorbidities only defined in %s are: ", y.title))
       lapply(cmb.only.y, function(s) cat(sprintf("%s ", s)))
       cat("\n")
     }

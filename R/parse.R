@@ -1,3 +1,4 @@
+# EXCLUDE COVERAGE START
 #' @title parse all known mappings and save to development tree
 #' @param path directory to save in, default is \code{data}
 #' @keywords internal
@@ -12,6 +13,7 @@ icd9ParseAndSaveMappings <- function() {
   # this is not strictly a parsing step, but is quite slow
   icd9GetChaptersHierarchy(save= TRUE)
 }
+# EXCLUDE COVERAGE END
 
 #' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and

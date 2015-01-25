@@ -54,10 +54,12 @@ icd9IsValidDecimal <- function(icd9Decimal) {
 icd9IsValidShort <- function(icd9Short) {
 
   if (length(icd9Short) == 0) {
-    #warning("isValidShortICD9 expects at least one icd9 code to test")
-    return(logical())
+    return(logical(0))
   }
-
+  if (is.numeric(icd9Short)) {
+    warning("Numeric format icd9 codes. This is likely to cause problems.")
+    icd9Short <- asCharacterNoWarn(icd9Short)
+  }
   stopifnot(is.character(icd9Short) || is.factor(icd9Short))
   # this is not just invalid data: there is a programming error in the data
   # structure
