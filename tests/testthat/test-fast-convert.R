@@ -266,9 +266,7 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
 })
 
 test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity map", {
-  one.of.each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
-                   "390.00", "518", "525", "581", "631", "700", "720", "759.99",
-                   "765", "780.95", "800", "V02.34", "E900.4")
+
   ooe <- data.frame(visitId = sprintf("pt%02d", seq_along(one.of.each)), icd9 = one.of.each)
 
   test.map <- icd9ChaptersToMap(icd9::icd9Chapters)
