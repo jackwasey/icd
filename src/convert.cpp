@@ -3,8 +3,9 @@
 #include <icd9.h>
 using namespace Rcpp;
 
-// // temporarily move  @export to my shim
-// [[Rcpp::export("icd9_MajMinToCode")]]
+//' @rdname convert
+//' @export
+// [[Rcpp::export]]
 CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool isShort ) {
 
   CharacterVector out;
@@ -55,7 +56,9 @@ CharacterVector icd9MajMinToCode( CharacterVector mjr, CharacterVector mnr, bool
   return wrap(out);
 }
 
-// [[Rcpp::export("icd9_MajMinToShort")]]
+//' @rdname convert
+//' @export
+// [[Rcpp::export]]
 CharacterVector icd9MajMinToShort(CharacterVector mjr, CharacterVector mnr) {
   if ((mjr.size()!=1 && mjr.size() != mnr.size()) ||
   (mjr.size()==1 && mnr.size()==0)) {
@@ -68,7 +71,9 @@ CharacterVector icd9MajMinToShort(CharacterVector mjr, CharacterVector mnr) {
   return icd9MajMinToCode(mjr, mnr, true);
 }
 
-// [[Rcpp::export("icd9_MajMinToDecimal")]]
+//' @rdname convert
+//' @export
+// [[Rcpp::export]]
 CharacterVector icd9MajMinToDecimal(CharacterVector mjr, CharacterVector mnr) {
   return icd9MajMinToCode(mjr, mnr, false);
 }
@@ -87,7 +92,9 @@ CharacterVector icd9PartsToDecimal(List parts) {
   return icd9MajMinToCode(parts["major"], parts["minor"], false);
 }
 
-// [[Rcpp::export("icd9_MajMinToParts")]]
+//' @rdname convert
+//' @export
+// [[Rcpp::export]]
 List icd9MajMinToParts(CharacterVector mjr, CharacterVector mnr) {
   List returned_frame = List::create(
     _["major"] = mjr,
@@ -103,7 +110,7 @@ List icd9MajMinToParts(CharacterVector mjr, CharacterVector mnr) {
 }
 
 // this is even faster, but loses some useful data frame features which cause test failure
-// [[Rcpp::export("icd9_MajMinToParts_list")]]
+// [[Rcpp::export]]
 List icd9MajMinToParts_list(CharacterVector mjr, CharacterVector mnr) {
   List out = List::create(
     _["major"] = mjr,
@@ -160,7 +167,7 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
     //mjr[i] = icd9::icd9AddLeadingZeroesMajorSingle(mjr[i]); // or loop through them all again...
   } // for
 
-  return icd9MajMinToParts(icd9::icd9_AddLeadingZeroesMajor(mjr), mnr);
+  return icd9MajMinToParts(icd9::icd9AddLeadingZeroesMajor(mjr), mnr);
 }
 
 //' @rdname convert
@@ -189,7 +196,7 @@ List icd9DecimalToParts(CharacterVector icd9Decimal, String minorEmpty = "") {
     } else {
       mjrin = thiscode; mnrout = minorEmpty;
     }
-    mjrs.push_back(icd9::icd9_AddLeadingZeroesMajorSingle(mjrin));
+    mjrs.push_back(icd9::icd9AddLeadingZeroesMajorSingle(mjrin));
     mnrs.push_back(mnrout);
   }
   return List::create(_["major"] = mjrs, _["minor"] = mnrs);

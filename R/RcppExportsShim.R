@@ -29,6 +29,6 @@ icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE
   checkmate::checkCharacter(icd9)
   checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
   checkmate::checkLogical(onlyReal, any.missing = FALSE, len = 1)
-  .Call('icd9_icd9Children', PACKAGE = 'icd9', icd9, isShort, onlyReal)
+  .Call('icd9_icd9Children_cpp', PACKAGE = 'icd9', icd9, isShort, onlyReal)
 }
 # EXCLUDE COVERAGE END

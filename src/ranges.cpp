@@ -34,7 +34,23 @@ CharacterVector MakeAllMinors() {
 
 const CharacterVector vv = MakeAllMinors();
 
-// [[Rcpp::export("icd9_ExpandMinor")]]
+//' @title expand decimal part of ICD-9 code to cover all possible sub-codes
+//' @description Accepts a single number or character input starting point for
+//'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
+//'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
+//' @template minor
+//' @param isE single logical, which if TRUE, treats the minor as part of an E
+//'   code (which is one character), as opposed to a V or numeric-only code,
+//'   which is two character. Default is \code{FALSE}.
+//' @examples
+//'   # return all possible decimal parts of ICD9 codes (111 in total)
+//'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
+//'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+//' @return NA for invalid minor, otherwise a vector of all possible (perhaps
+//'   non-existent) sub-divisions.
+//' @family ICD-9 ranges
+//' @keywords internal manip
+// [[Rcpp::export]]
 CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false) {
 
   if (!isE) {
@@ -68,8 +84,8 @@ CharacterVector icd9ExpandMinor(std::string mnr, bool isE = false) {
   return(NA_STRING); // should never get here
 }
 
-// [[Rcpp::export("icd9_Children")]]
-CharacterVector icd9Children(CharacterVector icd9, bool isShort, bool onlyReal = true) {
+// [[Rcpp::export]]
+CharacterVector icd9Children_cpp(CharacterVector icd9, bool isShort, bool onlyReal = true) {
   if (isShort) return(icd9::icd9ChildrenShort(icd9, onlyReal));
   return(icd9::icd9ChildrenDecimal(icd9, onlyReal));
 }
@@ -92,7 +108,7 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = tru
     CharacterVector newminors = icd9ExpandMinor(thismnr, icd9::icd9IsASingleE(thismjr));
 
     // push back slower, but difficult to predict size of output
-    std::vector< std::string > newshort = as<std::vector< std::string > >(icd9::icd9_MajMinToShort(thismjr, newminors));
+    std::vector< std::string > newshort = as<std::vector< std::string > >(icd9::icd9MajMinToShort(thismjr, newminors));
 
     // std insert is a thousand times faster than looping through CharacterVector and push_backing
     out.insert(newshort.begin(), newshort.end());
@@ -137,7 +153,7 @@ bool isShortReference = true) {
   if (!isShort)
   x = icd9::icd9DecimalToShort(x);
 
-  CharacterVector y = icd9Children(icd9Reference, isShortReference, false);
+  CharacterVector y = icd9Children_cpp(icd9Reference, isShortReference, false);
   if (!isShortReference)
   y = icd9::icd9DecimalToShort(y);
   // Rcpp match is not quite as good as R:

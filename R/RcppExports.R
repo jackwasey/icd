@@ -7,15 +7,21 @@ icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Fiel
     .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
 
-icd9_MajMinToCode <- function(mjr, mnr, isShort) {
+#' @rdname convert
+#' @export
+icd9MajMinToCode <- function(mjr, mnr, isShort) {
     .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', mjr, mnr, isShort)
 }
 
-icd9_MajMinToShort <- function(mjr, mnr) {
+#' @rdname convert
+#' @export
+icd9MajMinToShort <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToShort', PACKAGE = 'icd9', mjr, mnr)
 }
 
-icd9_MajMinToDecimal <- function(mjr, mnr) {
+#' @rdname convert
+#' @export
+icd9MajMinToDecimal <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToDecimal', PACKAGE = 'icd9', mjr, mnr)
 }
 
@@ -31,11 +37,13 @@ icd9PartsToDecimal <- function(parts) {
     .Call('icd9_icd9PartsToDecimal', PACKAGE = 'icd9', parts)
 }
 
-icd9_MajMinToParts <- function(mjr, mnr) {
+#' @rdname convert
+#' @export
+icd9MajMinToParts <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToParts', PACKAGE = 'icd9', mjr, mnr)
 }
 
-icd9_MajMinToParts_list <- function(mjr, mnr) {
+icd9MajMinToParts_list <- function(mjr, mnr) {
     .Call('icd9_icd9MajMinToParts_list', PACKAGE = 'icd9', mjr, mnr)
 }
 
@@ -108,7 +116,7 @@ icd9IsN <- function(icd9) {
     .Call('icd9_icd9IsN', PACKAGE = 'icd9', icd9)
 }
 
-icd9_AddLeadingZeroesMajorSingle <- function(mjr) {
+icd9AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', mjr)
 }
 
@@ -136,16 +144,33 @@ icd9AddLeadingZeroesDecimal <- function(icd9Decimal) {
     .Call('icd9_icd9AddLeadingZeroesDecimal', PACKAGE = 'icd9', icd9Decimal)
 }
 
-icd9_AddLeadingZeroesMajor <- function(mjr) {
+#' @rdname icd9AddLeadingZeroes
+icd9AddLeadingZeroesMajor <- function(mjr) {
     .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', mjr)
 }
 
-icd9_ExpandMinor <- function(mnr, isE = FALSE) {
+#' @title expand decimal part of ICD-9 code to cover all possible sub-codes
+#' @description Accepts a single number or character input starting point for
+#'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
+#'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
+#' @template minor
+#' @param isE single logical, which if TRUE, treats the minor as part of an E
+#'   code (which is one character), as opposed to a V or numeric-only code,
+#'   which is two character. Default is \code{FALSE}.
+#' @examples
+#'   # return all possible decimal parts of ICD9 codes (111 in total)
+#'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
+#'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#' @return NA for invalid minor, otherwise a vector of all possible (perhaps
+#'   non-existent) sub-divisions.
+#' @family ICD-9 ranges
+#' @keywords internal manip
+icd9ExpandMinor <- function(mnr, isE = FALSE) {
     .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', mnr, isE)
 }
 
-icd9_Children <- function(icd9, isShort, onlyReal = TRUE) {
-    .Call('icd9_icd9Children', PACKAGE = 'icd9', icd9, isShort, onlyReal)
+icd9Children_cpp <- function(icd9, isShort, onlyReal = TRUE) {
+    .Call('icd9_icd9Children_cpp', PACKAGE = 'icd9', icd9, isShort, onlyReal)
 }
 
 #' @rdname icd9Children
