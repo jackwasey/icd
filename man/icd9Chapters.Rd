@@ -5,6 +5,7 @@
 \alias{icd9Chapters}
 \alias{icd9ChaptersMajor}
 \alias{icd9ChaptersSub}
+\alias{icd9chapters}
 \title{ICD-9-CM chapters}
 \format{list with chapter/usb-chapter or major names stored in list names,
   each with two element named character vector with start and end codes.}

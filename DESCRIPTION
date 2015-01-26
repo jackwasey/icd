@@ -1,30 +1,37 @@
 Package: icd9
 Title: Tools for Working with ICD-9 Codes, and Finding Comorbidities
-Description: This package allows accurate manipulation, conversion, validation
-    and comparison of ICD-9-CM (clinical modification) codes. Although ICD-9
-    codes appear numeric, this is not the case, since trailing zeroes, and a
-    mixture of decimal and non-decimal "short" format codes exist. Tools to map
-    ICD-9 codes to co-morbidities are also provided, with mappings from Quan
-    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-Version: 0.6
-Date: 2015-01-03
-Authors@R: person(given = "Jack O.", family = "Wasey", role = c("aut", "cre"),
+Description: This package calculates comorbidities, and allows accurate
+    validation, conversion, manipulation, filtering and comparison of ICD-9-CM
+    (clinical modification) codes. ICD-9 codes appear numeric but leading and
+    trailing zeroes, and both decimal and non-decimal "short" format codes
+    exist. The package enables a work flow from raw lists of ICD-9 codes from
+    hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
+    from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+Version: 1.0
+Date: 2015-01-24
+Authors@R: person(given = "Jack O.", family = "Wasey",
+    role = c("aut", "cre", "cph"),
     email = c("jack@jackwasey.com"))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd9
 Depends:
-    R (>= 3.0.3)
+    R (>= 3.0.0)
 Imports:
-    jwutil,
-    memoise
+    Rcpp (>= 0.11.4),
+    checkmate (>= 1.5.1)
 Suggests:
     testthat,
     knitr,
     microbenchmark,
     XML,
-    magrittr
+    magrittr,
+    memoise,
+    profr,
+    ggplot2
 LazyData: true
 LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues
 License: GPL-3
+Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
+LinkingTo: Rcpp

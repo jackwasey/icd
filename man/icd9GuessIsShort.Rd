@@ -4,7 +4,7 @@
 \alias{icd9GuessIsShort}
 \title{guess whether short or long}
 \usage{
-icd9GuessIsShort(icd9, invalidAction = icd9InvalidActions)
+icd9GuessIsShort(icd9)
 }
 \value{
 single logical value, \code{TRUE} if input data are predominantly

@@ -1,169 +1,79 @@
-#' @title invalid actions, default is first item
-#' @description Some functions accept \code{invalidAction} argument, but require
-#'   non-default validation, but the vast majority will honor the default of
-#'   'ignore.' Ignore may lead to downstream errors, since bad data may arrive
-#'   in internal functions, however, this is the fastest option. A typical
-#'   use-case of this package would involve validation and cleaning steps (with
-#'   validation), followed by repeated analysis (as fast as possible, with
-#'   minimal validation).
+#' @title check whether ICD-9 codes are syntactically valid
+#' @description This does not check whether the code coresponds to a real
+#'   ICD-9-CM billing code, or parent grouping. For that, see
+#'   \code{\link{icd9IsReal}}.
 #'
-#' @keywords character
-#' @export
-icd9InvalidActions <- c("ignore", "silent", "warn", "stop")
-
-#' @title warn or stop with invalid ICD-9 codes
-#' @description In the case of warning, execution continues, and the logical
-#'   vector containing the *invalid* codes is returned invisibly. Returning the
-#'   invalids for consistency with the name of the function. The warn version of
-#'   this function only uses one call to check validity, making execution as
-#'   fast as possible.
-#' @template icd9-any
-#' @template isShort
-#' @keywords error
-#' @family ICD9 validation
-#' @export
-stopIfInvalidIcd9 <- function(icd9, isShort) {
-  if (isShort && any(!icd9ValidShort(icd9)))
-    stop("Invalid short ICD9 codes found: ", paste(icd9InvalidShort(icd9)))
-  if (!isShort && any(!icd9ValidDecimal(icd9)))
-    stop("Invalid long ICD9 codes found: ", paste(icd9InvalidDecimal(icd9)))
-}
-
-#' @rdname stopIfInvalidIcd9
-#' @export
-warnIfInvalidIcd9 <- function(icd9, isShort) {
-  if (isShort)
-    invalidLogical <- !icd9ValidShort(icd9)
-  else
-    invalidLogical <- !icd9ValidDecimal(icd9)
-
-  # duplicates the function getInvalid, but avoids two calls to check validity.
-  invalids <- icd9[invalidLogical]
-  if (length(invalids > 0)) warning("Invalid ICD-9 codes found: ",
-                                    paste(invalids, collapse=", "))
-  invisible(invalidLogical)
-}
-
-#' stop, warn, replace invalid with NA or continue
-#'
-#' Switch based on \code{invalidAction} If \code{major} is provided, then
-#' \code{isShort} is ignored.
-#' @return icd9 codes, with invalid codes replaced by NA, if \code{invalidAction
-#'   != "ignore"}
-#' @template icd9-any
-#' @template isShort
-#' @template invalid
+#'   Factors are accepted, and since the validation is done with \code{grepl}
+#'   these are handled correctly.
+#' @section Three-digit validation:
+#'   \code{isValidMajor} validates just the 'major' three-digit part of an ICD-9
+#'   code. This can in fact be provided as a numeric, since there is no
+#'   ambiguity. Numeric-only codes should be one to three digitis, V codes are
+#'   followed by one or two digits, and E codes always by three digits between
+#'   800 and 999.
 #' @template major
-#' @family ICD9 validation
-#' @keywords internal
-icd9ValidNaWarnStop <- function(icd9, isShort, isMajor = FALSE,
-                                invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
-  # get out quickly without expense of validation
-  if (invalidAction == "ignore") return(invisible(icd9))
-  if (isMajor) {
-    valid <- icd9ValidMajor(icd9)
-  } else {
-    if (isShort) {
-      valid <- icd9ValidShort(icd9)
-    } else {
-      valid <- icd9ValidDecimal(icd9)
-    }
-  }
-  if (any(!valid)) icd9WarnStopMessage("Invalid ICD-9 codes found: ",
-                                       paste(icd9[!valid]),
-                                       invalidAction = invalidAction)
-  icd9[!valid] <- NA # silent is only option left
-  invisible(icd9)
-}
-
-#' @title warn or stop with message based on switch
-#' @description Note that the default action is "stop," not "warn" here.
-#'   "ignore" and "silent" are synonymous.
-#' @param ... message components passed on to \code{warning} or \code{stop}
-#' @param invalid
-#' @keywords internal
-icd9WarnStopMessage <- function(..., invalidAction = c("stop", "warn",
-                                                       "silent", "ignore")) {
-  invalidAction <- match.arg(invalidAction)
-  if (invalidAction == "warn") warning(...)
-  if (invalidAction == "stop") stop(...)
-}
-
-#' @rdname icd9ValidNaWarnStop
-#' @template icd9-short
-icd9ValidNaWarnStopShort <- function(icd9Short,
-                                     invalidAction = icd9InvalidActions)
-  icd9ValidNaWarnStop(icd9 = icd9Short, isShort = TRUE, isMajor = FALSE,
-                      invalidAction = match.arg(invalidAction))
-
-#' @rdname icd9ValidNaWarnStop
-#' @template icd9-decimal
-icd9ValidNaWarnStopDecimal <- function(icd9Decimal,
-                                       invalidAction = icd9InvalidActions)
-  icd9ValidNaWarnStop(icd9 = icd9Decimal, isShort = FALSE, isMajor = FALSE,
-                      invalidAction = match.arg(invalidAction))
-
-#' @rdname icd9ValidNaWarnStop
-icd9ValidNaWarnStopMajor <- function(major,
-                                     invalidAction = icd9InvalidActions)
-  icd9ValidNaWarnStop(icd9 = major, isShort = FALSE, isMajor = TRUE,
-                      invalidAction = match.arg(invalidAction))
-
-#' @title check whether any ICD-9 code is syntactically valid
+#' @details Leading zeroes in the decimal form are not ambiguous. Although
+#'   integer ICD-9 codes could be intended by the user, there is a difference
+#'   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
+#'   is provided
 #' @template icd9-any
-#' @template isShort
-#' @seealso \code{\link{icd9ValidDecimal}} and \code{\link{icd9ValidShort}}
-#' @family ICD9 validation
-#' @export
-icd9Valid <- function(icd9, isShort)
-  if (isShort) icd9ValidShort(icd9) else icd9ValidDecimal(icd9)
-
-#' @title check whether decimal icd9 codes are valid
-#' @description Check validity of 'long' (i.e. decimal form) ICD9 codes. The
-#'   codes may be numeric disease descriptiors or V or E prefixed.
-#' @details Long form is not ambiguous so additional zeroes are tolerated.
-#'   Although integer ICD-9 codes could be correct, there is a difference
-#'   between 100 and 100.0, and indeed 100.00. Therefore, character class is
-#'   enforced to avoid this problem.
+#' @template icd9-short
 #' @template icd9-decimal
-#' @return logical vector with T or F for each icd9 code provided according to
-#'   validity
-#' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
+#' @template isShort
+#' @seealso \code{\link{icd9IsValidDecimal}}, \code{\link{icd9IsValidShort}},
+#'   \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
 #'   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @family ICD9 validation
+#' @return logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
+#'   provided according to its validity
+#' @examples
+#'   icd9IsValidShort(c("", "1", "22", "333", "4444", "123.45", "V",
+#'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
+#'   icd9IsValidMajor(c("", "1", "22", "333", "4444", "123.45", "V",
+#'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 #' @export
-icd9ValidDecimal <- function(icd9Decimal) {
+icd9IsValid <- function(icd9, isShort)
+  if (isShort) icd9IsValidShort(icd9) else icd9IsValidDecimal(icd9)
 
-  if (length(icd9Decimal) == 0) {
-    #warning("icd9ValidDecimal expects at least one code to test")
-    return(logical())
-  }
-  stopifnot(is.character(icd9Decimal) || is.factor(icd9Decimal))
-
-  icd9ValidDecimalN(icd9Decimal) |
-    icd9ValidDecimalV(icd9Decimal) |
-    icd9ValidDecimalE(icd9Decimal)
+#' @rdname icd9IsValid
+#' @export
+icd9Valid <- function(icd9, isShort) {
+  warning("icd9Valid is deprecated, please use icd9IsValid")
+  icd9IsValid(icd9, isShort)
 }
 
-#' @title validate ICD-9 short form code
-#' @description As in \code{icd9ValidDecimal}, character type of the
-#'   input is enforced. An integer 100 could correspond to decimal ICD-9 codes
-#'   1.00 10.0 or 100.
-#' @template icd9-short
-#' @return logical vector with T or F for each icd9 code provided according to
-#'   validity
-#' @family ICD9 validation
-#' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
-#'   \url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
+#' @rdname icd9IsValid
 #' @export
-icd9ValidShort <- function(icd9Short) {
-
-  if (length(icd9Short) == 0) {
-    #warning("isValidShortICD9 expects at least one icd9 code to test")
-    return(logical())
+icd9IsValidDecimal <- function(icd9Decimal) {
+  if (is.numeric(icd9Decimal)) {
+    warnNumericCode()
+    icd9Decimal <- as.character(icd9Decimal)
   }
+  stopifnot(is.character(icd9Decimal) || is.factor(icd9Decimal))
+  if (length(icd9Decimal) == 0) return(logical())
 
+  icd9IsValidDecimalN(icd9Decimal) |
+    icd9IsValidDecimalV(icd9Decimal) |
+    icd9IsValidDecimalE(icd9Decimal)
+}
+
+#' @rdname icd9IsValid
+#' @export
+icd9ValidDecimal <- function(icd9) {
+  warning("icd9ValidDecimal is deprecated, please use icd9IsValidDecimal")
+  icd9IsValidDecimal(icd9)
+}
+
+#' @rdname icd9IsValid
+#' @export
+icd9IsValidShort <- function(icd9Short) {
+
+  if (length(icd9Short) == 0) return(logical(0))
+
+  if (is.numeric(icd9Short)) {
+    warning("Numeric format icd9 codes. This is likely to cause problems.")
+    icd9Short <- asCharacterNoWarn(icd9Short)
+  }
   stopifnot(is.character(icd9Short) || is.factor(icd9Short))
   # this is not just invalid data: there is a programming error in the data
   # structure
@@ -175,227 +85,208 @@ icd9ValidShort <- function(icd9Short) {
 
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.
-  icd9ValidShortN(icd9Short) |
-    icd9ValidShortV(icd9Short) |
-    icd9ValidShortE(icd9Short)
+  icd9IsValidShortN(icd9Short) |
+    icd9IsValidShortV(icd9Short) |
+    icd9IsValidShortE(icd9Short)
 }
 
-#' @rdname icd9ValidShort
+#' @rdname icd9IsValid
 #' @export
-icd9ValidShortV <- function(icd9Short)
+icd9ValidShort <- function(icd9) {
+  warning("icd9ValidShort is deprecated, please use icd9IsValidShort")
+  icd9IsValidShort(icd9)
+}
+
+#' @rdname icd9IsValid
+#' @export
+icd9IsValidShortV <- function(icd9Short)
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$",
         icd9Short)
 
-#' @rdname icd9ValidShort
+#' @rdname icd9IsValid
 #' @export
-icd9ValidShortE <- function(icd9Short)
+icd9IsValidShortE <- function(icd9Short)
   grepl("^[[:space:]]*[Ee][[:digit:]]{1,4}[[:space:]]*$", icd9Short)
 
-#' @rdname icd9ValidShort
+#' @rdname icd9IsValid
 #' @export
-icd9ValidShortN <- function(icd9Short)
+icd9IsValidShortN <- function(icd9Short)
   grepl("^[[:space:]]*[[:digit:]]{1,5}[[:space:]]*$", icd9Short)
 
-
-#' @rdname icd9ValidDecimal
-#' @export
-icd9ValidDecimalV <- function(icd9Decimal)
+icd9IsValidDecimalV <- function(icd9Decimal)
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
         icd9Decimal)
 
-#' @rdname icd9ValidDecimal
-#' @export
-icd9ValidDecimalE <- function(icd9Decimal)
+icd9IsValidDecimalE <- function(icd9Decimal)
   #need Perl regex for lookbehind. may even be quicker, according to the docs.
   #grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$",
   #trim(icd9Decimal), perl = TRUE)
   grepl("^[[:space:]]*[Ee][[:digit:]]{1,3}(\\.[[:digit:]]?)?[[:space:]]*$",
         icd9Decimal)
 
-#' @rdname icd9ValidDecimal
-#' @note TODO: icd9ValidDecimalN not quite right, since it would validate 0.12
-#' @export
-icd9ValidDecimalN <- function(icd9Decimal)
+icd9IsValidDecimalN <- function(icd9Decimal)
   grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
         icd9Decimal)
 
-#' @title validate a major part
-#' @description validation for just the 'major' part of an ICD-9 code. This can
-#'   in fact be provided as a numeric, since there is no ambiguity. Numeric-only
-#'   codes should be one to three digitis, V codes are followed by one or two
-#'   digits, and E codes always by three digits between 800 and 999.
-#'
-#'   example/test grepl(c("", "1", "22", "333", "4444", "V", "V2", "V34",
-#'   "V567", "E", "E1", "E70", "E"))
-#'
-#' @template major
-#' @family ICD9 validation
+#' @rdname icd9IsValid
 #' @export
-icd9ValidMajor <- function(major)
+icd9IsValidMajor <- function(major)
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)",
     x = major
   )
 
-
-#' @rdname icd9ValidMajor
-icd9ValidMajorN <- function(major)
+icd9IsValidMajorN <- function(major)
   grepl(
     pattern = "^[[:space:]]*[[:digit:]]{1,3}[[:space:]]*$",
     x = major
   )
 
-#' @rdname icd9ValidMajor
-icd9ValidMajorV <- function(major)
+icd9IsValidMajorV <- function(major)
   grepl(
     pattern = "^[[:space:]]*[Vv][[:digit:]]{1,2}[[:space:]]*$",
     x = major
   )
 
-#' @rdname icd9ValidMajor
-icd9ValidMajorE <- function(major)
+icd9IsValidMajorE <- function(major)
   grepl(
     pattern = "^[[:space:]]*[Ee][[:digit:]]{1,3}[[:space:]]*$",
     x = major
   )
 
 #' @title validate an icd9 mapping to comorbidities
-#' @description just takes each item in each vector of the list of vectors and
-#'   checks validity
+#' @description takes each item in each vector of the list of vectors and checks
+#'   validity, or returns those items which are valid for each comorbidity.
 #' @template mapping
 #' @template isShort
 #' @family ICD9 validation
 #' @export
-icd9ValidMapping <- function(icd9Mapping, isShort)
+icd9IsValidMapping <- function(icd9Mapping, isShort)
   # TOOD: warn/return the invalid labels
   all(unlist(
-    lapply(icd9Mapping, FUN = function(icd9Map) icd9Valid(icd9Map, isShort)),
+    lapply(icd9Mapping, FUN = function(icd9Map) icd9IsValid(icd9Map, isShort)),
     use.names = FALSE
   ))
 
-#' @rdname icd9ValidMapping
+#' @rdname icd9IsValidMapping
 #' @export
-icd9ValidMappingDecimal <- function(icd9Mapping)
-  icd9ValidMapping(icd9Mapping, FALSE)
+icd9IsValidMappingShort <- function(icd9Mapping)
+  icd9IsValidMapping(icd9Mapping, TRUE)
 
-#' @rdname icd9ValidMapping
+#' @rdname icd9IsValidMapping
 #' @export
-icd9ValidMappingShort <- function(icd9Mapping)
-  icd9ValidMapping(icd9Mapping, TRUE)
+icd9IsValidMappingDecimal <- function(icd9Mapping)
+  icd9IsValidMapping(icd9Mapping, FALSE)
 
-#' @rdname icd9ValidMapping
+#' @rdname icd9IsValidMapping
 #' @export
-icd9GetInvalidMappingShort <- function(icd9Mapping)
-  unlist(lapply(icd9Mapping, FUN = icd9InvalidShort), use.names = FALSE)
+icd9GetInvalidMappingShort <- function(icd9Mapping) {
+  x <- lapply(icd9Mapping, FUN = icd9GetInvalidShort)
+  x[lapply(x, length) > 0]
+}
 
-#' @rdname icd9ValidMapping
+7#' @rdname icd9IsValidMapping
 #' @export
-icd9GetInvalidMappingDecimal <- function(icd9Mapping)
-  unlist(lapply(icd9Mapping, FUN = icd9InvalidDecimal), use.names = FALSE)
+icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
+  x <- lapply(icd9Mapping, FUN = icd9GetInvalidDecimal)
+  x[lapply(x, length) > 0]
+}
 
+#' @name icd9GetValid
 #' @title invalid subset of decimal or short ICD-9 codes
-#' @description given vector of short or decimal ICD-9 codes in
-#'   \code{icd9Decimal} or \code{icd9Short}, return (in the same format) those
-#'   codes which are invalid. Useful for generating error messages with the
-#'   faulty codes if validation fails.
+#' @description Given vector of short or decimal ICD-9 codes, return (in the
+#'   same format) those codes which are valid or invalid. Useful for generating
+#'   error messages with the faulty codes if validation fails.
+#' @template icd9-any
+#' @template icd9-short
 #' @template icd9-decimal
+#' @template isShort
 #' @keywords manip
 #' @family ICD-9 validation
 #' @export
-icd9InvalidDecimal <- function(icd9Decimal) {
-  icd9Decimal[!icd9ValidDecimal(icd9Decimal)]
-}
+icd9GetValid <- function(icd9, isShort = icd9GuessIsShort(icd9))
+  icd9[icd9IsValid(icd9, isShort = isShort)]
 
-#' @rdname icd9InvalidDecimal
-#' @template icd9-short
+#' @describeIn icd9GetValid
 #' @export
-icd9InvalidShort <- function(icd9Short) {
-  icd9Short[!icd9ValidShort(icd9Short)]
-}
+icd9GetValidDecimal <- function(icd9Decimal)
+  icd9Decimal[icd9IsValidDecimal(icd9Decimal)]
 
-#' @title is the given code V or E type?
-#' @description quickly find V or E codes, without fully validating V or E
-#'   codes. Use fixed instead of regex for speed. Don't check position of V or
-#'   E: this is not validation, just a quick classification of pre-validated
-#'   codes. TODO: this doesn't look efficient, but can't use fixed with ignore
-#'   case, and regex slower.
-#' @template icd9-any
-#' @examples
-#' \dontrun{
-#' # regex is a little faster
-#' icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
-#' microbenchmark(times = 1000,
-#'   grepl(pattern = "E", icd9, fixed = TRUE) |
-#'   grepl(pattern = "e", icd9, fixed = TRUE) |
-#'   grepl(pattern = "V", icd9, fixed = TRUE) |
-#'   grepl(pattern = "v", icd9, fixed = TRUE))
-#' microbenchmark(times = 1000, grepl(pattern = "[EeVv]", rnd))
-#' }
-#' @keywords internal
-icd9IsVE <- function(icd9)
-  grepl(pattern = "[EeVv]", icd9)
+#' @describeIn icd9GetValid
+#' @export
+icd9GetValidShort <- function(icd9Short)
+  icd9Short[icd9IsValidShort(icd9Short)]
 
-icd9IsV <- function(icd9)
-  grepl(pattern = "[Vv]", icd9)
+#' @describeIn icd9GetValid
+#' @export
+icd9GetInvalid <- function(icd9, isShort = icd9GuessIsShort(icd9))
+  icd9[!icd9IsValid(icd9, isShort = isShort)]
 
-icd9IsE <- function(icd9)
-  grepl(pattern = "[Ee]", icd9)
+#' @describeIn icd9GetValid
+#' @export
+icd9GetInvalidDecimal <- function(icd9Decimal)
+  icd9Decimal[!icd9IsValidDecimal(icd9Decimal)]
+
+#' @describeIn icd9GetValid
+#' @export
+icd9GetInvalidShort <- function(icd9Short)
+  icd9Short[!icd9IsValidShort(icd9Short)]
 
 icd9IsMajor <- function(icd9)
   nchar(icd9) - icd9IsE(icd9) < 4
 
-#' @title Does ICD-9 code exist
+#' @title Check whether ICD-9 codes exist
 #' @description This is different from syntactic validity: it looks it up in the
-#'   list of icd9 codes. This may have been easier all along, but checking
-#'   syntactic validity still very useful, with a changing list of icd-9 codes
-#'   over time, and possibly imperfections in the master list derived from CMS.
+#'   canonical list of ICD-9 codes published by the CMS, and which are included
+#'   in this package under \code{extdata}. Checking syntactic validity using
+#'   \code{link{icd9IsValid}} etc. is still useful, with a changing list of
+#'   icd-9 codes over time, and possible imperfections in the master lists
+#'   derived from CMS.
 #' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
 #' @template isShort
-#' @template invalid
+#' @param majorOk single logical, if \code{TRUE} will consider a three-digit
+#'   code to be real, even though the majority of three-digit codes aren't
+#'   billable (which is at present synonmous with 'realness').
 #' @return logical vector
 #' @export
-icd9Real <- function(icd9, isShort, invalidAction = icd9InvalidActions ) {
-  invalidAction <- match.arg(invalidAction)
-  if (isShort) return(icd9RealShort(icd9, invalidAction = invalidAction))
-  icd9RealDecimal(icd9, invalidAction = invalidAction)
+icd9IsReal <- function(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE) {
+  if (isShort) return(icd9IsRealShort(icd9, majorOk = majorOk))
+  icd9IsRealDecimal(icd9, majorOk = majorOk)
 }
 
-#' @rdname icd9Real
-#' @template icd9-short
+#' @describeIn icd9IsReal
 #' @export
-icd9RealShort <- function(icd9Short, invalidAction = icd9InvalidActions) {
-  icd9ValidNaWarnStopShort(icd9Short = icd9Short,
-                           invalidAction = match.arg(invalidAction))
+icd9IsRealShort <- function(icd9Short, majorOk = TRUE) {
+  if (majorOk)
+    return(icd9Short %in% c(icd9::icd9Hierarchy[["icd9"]],
+                            icd9::icd9ChaptersMajor))
   icd9Short %in% icd9::icd9Hierarchy[["icd9"]]
 }
 
-#' @rdname icd9Real
-#' @template icd9-decimal
+#' @describeIn icd9IsReal
 #' @export
-icd9RealDecimal <- function(icd9Decimal, invalidAction = icd9InvalidActions) {
-  icd9RealShort(icd9DecimalToShort(icd9Decimal, match.arg(invalidAction)))
+icd9IsRealDecimal <- function(icd9Decimal, majorOk = TRUE) {
+  icd9IsRealShort(icd9DecimalToShort(icd9Decimal), majorOk = majorOk)
 }
 
-icd9FilterValid <- function(x, ...) UseMethod("icd9FilterValid")
-
-icd9FilterValid.data.frame <- function(x, icd9Field = "icd9",
-                                       isShort = TRUE, invert = FALSE) {
-  v <- icd9Valid(icd9 = x[[icd9Field]], isShort = isShort)
-  if (invert) v <- !v
-  x[v, ]
+#' @describeIn icd9IsReal
+#' @export
+icd9GetReal <- function(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE) {
+  if (isShort) return(icd9GetRealShort(icd9, majorOk = majorOk))
+  icd9GetRealDecimal(icd9, majorOk = majorOk)
 }
 
-icd9FilterValid.character <- function(x, isShort = TRUE, invert = FALSE) {
-  v <- icd9Valid(icd9 = x, isShort = isShort)
-  if (invert) v <- !v
-  x[v]
-}
+#' @describeIn icd9IsReal
+#' @export
+icd9GetRealShort <- function(icd9Short, majorOk = TRUE)
+  icd9Short[icd9IsRealShort(icd9Short, majorOk = majorOk)]
 
-icd9FilterValid.list <- function(x, isShort = TRUE, invert = FALSE) {
-  v <- icd9Valid(icd9 = x, isShort = isShort)
-  if (invert) v <- !v
-  x[v]
-}
+#' @describeIn icd9IsReal
+#' @export
+icd9GetRealDecimal <- function(icd9Decimal, majorOk = TRUE)
+  icd9Decimal[icd9IsRealDecimal(icd9Decimal, majorOk = majorOk)]
 
-icd9FilterInvalid <- function(x, ...)
-  icd9FilterValid(x, invert = TRUE, ...)
+warnNumericCode <- function()
+  warning("input data is in numeric format. This can easily lead to errors in short or decimal codes, e.g. short code 1000: is it 10.00 or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10", call. = FALSE)

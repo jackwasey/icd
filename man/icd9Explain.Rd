@@ -9,17 +9,22 @@
 \alias{icd9ExplainShort}
 \title{explain ICD9 codes}
 \usage{
-icd9Explain(icd9, isShort, doCondense = TRUE)
+icd9Explain(icd9, isShort = icd9GuessIsShort(icd9), doCondense = TRUE,
+  brief = FALSE, warn = TRUE)
 
-icd9ExplainShort(icd9Short, doCondense = TRUE)
+icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE)
 
-icd9ExplainDecimal(icd9Decimal, doCondense = TRUE)
+icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
+  warn = TRUE)
 
-\method{icd9Explain}{list}(icd9, isShort, doCondense = TRUE)
+\method{icd9Explain}{list}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
-\method{icd9Explain}{character}(icd9, isShort, doCondense = TRUE)
+\method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
-\method{icd9Explain}{numeric}(icd9, isShort, doCondense = TRUE)
+\method{icd9Explain}{numeric}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE, brief = FALSE, warn = FALSE)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -28,13 +33,22 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010"}
 
 \item{isShort}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form.}
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 
 \item{doCondense}{single logical value which indicates whether to condense
 the given set of ICD-9 codes by replacing subsets of codes with 'parent'
 codes which exactly encompass certain subsets. E.g. If all cholera
 diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
 subtypes. This is currently partially implemented. See issue #3 in github.}
+
+\item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
+the short description from the canonical CMS descriptions (included in
+\code{extdata}) will be used, otherwise the long description is used.}
+
+\item{warn}{single logical value, default is \code{TRUE}, meaning that codes
+which do not correspond to diagnoses, or to three-digit codes, will trigger
+a warning.}
 
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
@@ -57,7 +71,7 @@ convert full format (123.45 style) ICD9 codes into the name and
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{list}: explain alll ICD-9 codes in a list of vectors
+\item \code{list}: explain all ICD-9 codes in a list of vectors
 
 \item \code{character}: explain character vector of ICD-9 codes
 
@@ -71,6 +85,7 @@ TODO: it will be useful to have S3 ICD-9 short and long classes for
 }
 \examples{
 icd9ExplainShort(ahrqComorbid[[1]][1:3])
+icd9ExplainShort(ahrqComorbid[[1]][1:3], brief = TRUE)
 }
 \references{
 \url{http://www.stata.com/help.cgi?icd9}

@@ -4,7 +4,7 @@
 \alias{parseIcd9Chapters}
 \title{Read higher-level ICD-9 structure from a reliable web site}
 \usage{
-parseIcd9Chapters(year = NULL, save = FALSE, path = "data")
+parseIcd9Chapters(year = NULL, save = FALSE)
 }
 \description{
 Previous iteration attempted to use the canonical data from

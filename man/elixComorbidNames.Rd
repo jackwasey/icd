@@ -17,18 +17,24 @@
 \alias{quanElixComorbidNamesHtn}
 \alias{quanElixComorbidNamesHtnAbbrev}
 \title{Comorbidity names}
-\format{list, with character/numeric code. HTN numbered 6a and 6b. DM,
-  cancer, mets are counted as in the original paper giving the original 30
-  groups. "01" to "30"}
+\format{list, with character/numeric code. 'Hypertension, uncomplicated' and
+  'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
+  and metastasis are counted independently, as in the original paper, giving
+  the original 30 groups. "01" to "30"}
 \description{
-In the Elixhauser derived mappings, uncomplicated and
-  complicated hypertension are listed separately, but are always combined in
-  the final analyses. Uncomplicated and complicated hypertension are list
-  separately and as "Hypertension, combined." Abbrev suffix indicates a very
-  short space-free description. Quan's version of Elixhauser is identical.
-  AHRQ's update drops the arrythmia field. The Naming convention with
-  neither/either/both suffixes \code{Htn} and \code{Abbrev}. The Charlson
-  derived mappings do not include hypertension.
+These lists provide correctly sorted names of the comorbidities
+  and their particular permutations in both full and abbreviated forms.
+
+  In the Elixhauser derived mappings, uncomplicated and complicated
+  hypertension are listed separately, but are always combined in the final
+  analyses. Uncomplicated and complicated hypertension are list separately
+  and as "Hypertension, combined." Abbrev suffix indicates a very short
+  space-free description. Quan's version of Elixhauser is identical. AHRQ's
+  update drops the arrythmia field. The naming convention is a root, e.g.
+  \code{elixComorbid}, with neither/either/both suffixes \code{Htn} and
+  \code{Abbrev}. The Charlson derived mappings do not include hypertension.
+  Abbreviated comorbidity names are helpful for interactive work, whereas the
+  full names might be prefered for plotting.
 }
 \keyword{datasets}
 

@@ -15,61 +15,88 @@
 #'   codes which exactly encompass certain subsets. E.g. If all cholera
 #'   diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
 #'   subtypes. This is currently partially implemented. See issue #3 in github.
+#' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
+#'   the short description from the canonical CMS descriptions (included in
+#'   \code{extdata}) will be used, otherwise the long description is used.
+#' @param warn single logical value, default is \code{TRUE}, meaning that codes
+#'   which do not correspond to diagnoses, or to three-digit codes, will trigger
+#'   a warning.
 #' @examples
 #' icd9ExplainShort(ahrqComorbid[[1]][1:3])
+#' icd9ExplainShort(ahrqComorbid[[1]][1:3], brief = TRUE)
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
 #' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
-icd9Explain <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                        doCondense = TRUE, brief = FALSE, warn = TRUE) {
   UseMethod("icd9Explain")
 }
 
 #' @rdname icd9Explain
 #' @export
-icd9ExplainShort <- function(icd9Short, doCondense = TRUE) {
-  icd9Explain(icd9Short, isShort = TRUE, doCondense = doCondense)
+icd9ExplainShort <- function(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE) {
+  icd9Explain(icd9Short, isShort = TRUE,
+              doCondense = doCondense, brief = brief, warn = warn)
 }
 
 #' @rdname icd9Explain
 #' @export
-icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE) {
-  icd9Explain(icd9Decimal, isShort = FALSE, doCondense = doCondense)
+icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE, brief = FALSE, warn = TRUE) {
+  icd9Explain(icd9Decimal, isShort = FALSE,
+              doCondense = doCondense, brief = brief, warn = warn)
 }
 
-#' @describeIn icd9Explain explain alll ICD-9 codes in a list of vectors
+#' @describeIn icd9Explain explain all ICD-9 codes in a list of vectors
 #' @export
-icd9Explain.list <- function(icd9, isShort, doCondense = TRUE) {
-  lapply(icd9, icd9Explain, isShort = isShort, doCondense = doCondense)
+icd9Explain.list <- function(icd9,  isShort = icd9GuessIsShort(icd9),
+                             doCondense = TRUE, brief = FALSE, warn = TRUE) {
+  lapply(icd9, icd9Explain, isShort = isShort,
+         doCondense = doCondense, brief = brief, warn = warn)
 }
 
 #' @describeIn icd9Explain explain character vector of ICD-9 codes
 #' @export
-icd9Explain.character <- function(icd9, isShort, doCondense = TRUE) {
+icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                                  doCondense = TRUE, brief = FALSE, warn = TRUE) {
 
-  if (!isShort) {
-    # make sure there are preceding zeroes, in order to match the icd9Hierarchy
-    # data.
-    icd9 <- icd9AddLeadingZeroesDecimal(icd9)
-    icd9 <- icd9DecimalToShort(icd9)
-  }
+  if (!isShort) icd9 <- icd9DecimalToShort(icd9)
+
+  # if there are only real codes, we should condense with this in mind:
+
   if (doCondense) {
-    return(icd9CondenseToExplain(icd9))
+    onlyReal = all(icd9IsRealShort(icd9))
+    if (warn && !onlyReal) {
+      unreal = icd9[!icd9IsRealShort(icd9)]
+      warning("Some ICD codes are not 'real', e.g. ",
+              paste(unreal[seq(from = 1, to = min(5, length(unreal)))],
+                    collapse = " "),
+              call. = FALSE)
+    }
+    icd9 <- icd9CondenseShort(icd9, onlyReal)
   }
-  mj <- unique(icd9ShortToMajor(icd9))
-  c(names(icd9::icd9ChaptersMajor)[icd9::icd9ChaptersMajor %in%
-                                     mj[mj %in% icd9]],
-    icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% icd9, "descLong"]
+
+  mj <- unique(icd9GetMajor(icd9, isShort = TRUE))
+
+  mjexplain <- names(icd9::icd9ChaptersMajor)[icd9::icd9ChaptersMajor %in%
+                                                mj[mj %in% icd9]]
+  # don't double count when major is also billable
+  icd9 <- icd9[icd9 %nin% mj]
+  descField = ifelse(brief, "descShort", "descLong")
+  c(mjexplain,
+    icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% icd9, descField]
   )
+
 }
 
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning
 #' @export
-icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
-  warning("Numeric ICD-9 codes are unable to accurately represent actual ICD-9
-           codes. Converting to character, but beware of inevitable errors.")
-  icd9Explain.character(as.character(icd9), isShort = isShort)
+icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                                doCondense = TRUE, brief = FALSE, warn = FALSE) {
+  warnNumericCode()
+  icd9Explain.character(as.character(icd9), isShort = isShort,
+                        doCondense = doCondense, brief = brief, warn = warn)
 }
 
 #' @title guess whether short or long
@@ -84,57 +111,37 @@ icd9Explain.numeric <- function(icd9, isShort, doCondense = TRUE) {
 #' @return single logical value, \code{TRUE} if input data are predominantly
 #'   short type. If there is some uncertainty, then return NA.
 #' @keywords internal
-icd9GuessIsShort <- function(icd9, invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
+icd9GuessIsShort <- function(icd9) {
+  # don't take responsibility for validation here.
+  if (is.list(icd9)) icd9 <- unlist(icd9)
   icd9 <- as.character(icd9)
   if (is.list(icd9)) {
-    testCodes <- icd9[[1]]
-  } else {
-    testCodes <- icd9
+    if (length(icd9) > 0)
+      icd9 <- icd9[[1]]
+    else
+      return(TRUE)
   }
-  vs <- icd9ValidShort(testCodes)
-  vd <- icd9ValidDecimal(testCodes)
-  vsm <- mean(vs)
-  vdm <- mean(vd)
-  if (vsm - vdm > 0.5) {
-    # this function returns, but we don't care what it returns.
-    icd9ValidNaWarnStopShort(icd9Short = testCodes,
-                             invalidAction = invalidAction)
-    return(TRUE)
-  }
-  if (vdm - vsm > 0.5) {
-    icd9ValidNaWarnStopDecimal(icd9Decimal = testCodes,
-                               invalidAction = invalidAction)
-    return(FALSE)
-  }
-  # now we really can't do much validation, but if requested, we can see if any
-  # are neither valid short nor valid decimal
-  if (any(!vs & !vd)) {
-    icd9WarnStopMessage(
-      "icd9GuessIsShort: predominant type not determined, and some codes were
-        neither valid short nor decimal formats:", paste(testCodes[!vs | !vd]),
-      invalidAction = invalidAction
-    )
-  }
-  NA
+  vs <- icd9IsValidShort(icd9)
+  vd <- icd9IsValidDecimal(icd9)
+  if (sum(vd) > sum(vs)) return(FALSE)
+  TRUE
 }
 
 #' @title get ICD-9 Chapters from vector of ICD-9 codes
-#' @description work-in-progress
+#' @description This runs quite slowly. Used too rarely to be worth optimizing
+#'   now.
 #' @param icd9-any
 #' @param isShort
 #' @param invalid
 #' @keywords internal
-icd9GetChapters <- function(icd9, isShort,
-                            invalidAction = icd9InvalidActions) {
-  invalidAction <- match.arg(invalidAction)
+icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
 
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
 
-  majors     <- icd9GetMajor(icd9, isShort, invalidAction)
+  majors     <- icd9GetMajor(icd9, isShort)
 
   cf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9Chapters), NA_character_))
@@ -142,7 +149,10 @@ icd9GetChapters <- function(icd9, isShort,
                levels = c(names(icd9::icd9ChaptersSub), NA_character_))
   mf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9ChaptersMajor), NA_character_))
-  out <- data.frame(chapter = cf, subchapter = sf, major = mf)
+  allmjrs <- lapply(icd9::icd9ChaptersMajor, `[[`, "major")
+  thrdgt <- factor(rep(NA, length(icd9)),levels = c(allmjrs, NA_character_))
+  out <- data.frame(threedigit = thrdgt, major = mf,
+                    subchapter = sf, chapter = cf)
   for (i in 1:length(majors)) {
     for (chap in names(icd9::icd9Chapters)) {
       if (any(majors[i] %in%
@@ -162,179 +172,151 @@ icd9GetChapters <- function(icd9, isShort,
         break
       }
     }
-    for (mj in names(icd9::icd9ChaptersMajor)) {
-      if (majors[i] == icd9::icd9ChaptersMajor[[mj]]) {
-        out[i, "major"] <- mj
-        break
-      }
-    }
   }
+  whch <- match(majors, allmjrs, nomatch = NA_character_)
+  out$major[] <- names(allmjrs)[whch]
+  out$threedigit[] <- unlist(allmjrs)[whch]
+
+  # many possible three digit codes don't exist. We should return NA for the
+  # whole row. Chapter is coded as a range, so picks up these non-existent codes
+  out$chapter[is.na(out$major)] <- NA_character_
+
   out
 }
 
-# internal. Assumes working in project root, so saving to directory 'data'
-icd9GetChaptersHierarchy <- function(save = FALSE, path = "data") {
+# this is rather slow, queries a web page repeatedly
+icd9GetChaptersHierarchy <- function(save = FALSE) {
 
   # don't rely on having already done this when setting up other data.
   icd9CmDesc <- parseIcd9Descriptions()
 
   icd9Hierarchy <- cbind(
     icd9CmDesc,
-    icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE,
-                    invalidAction = "stop")
+    icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE)
   )
   if (save) saveInDataDir("icd9Hierarchy")
 }
 
-#' @title condense list of short ICD-9 code into minimal set of parent descriptions
-#' @description This can be thought of as the inverse operation to expanding a
-#'   range. The list given must already contain the parents, because this
-#'   function will never add a parent ICD-9 which, although may have all
-#'   children present, may itself have an additional clinical meaning. In
-#'   addition, in contrast to \code{icd9CondenseToMajor}, this function only walks
-#'   back up to parents which have descriptions in \code{icd9Hierarchy}, so it is
-#'   useful for generating a minimal textual description of a set of ICD-9
-#'   codes.
-#' @template icd9-short
-#' @template invalid
-#' @family ICD-9 ranges
-#' @export
-#' @keywords manip
-icd9CondenseToExplain <- function(icd9Short,
-                                  invalidAction = c("stop", "ignore",
-                                                    "silent", "warn")) {
-
-  invalidAction <- match.arg(invalidAction)
-  icd9Short <- icd9ValidNaWarnStopShort(icd9Short,
-                                        invalidAction = invalidAction)
-
-  # we also rely on the icd9 codes existing in the reference table:
-  if (invalidAction == "warn" && any(!icd9RealShort(icd9Short)))
-    warning("dropping values which are not in the reference table",
-            paste(icd9Short[!icd9RealShort(icd9Short)],
-                  sep = ", ", collapse = ", "))
-
-  # make homogeneous and sort so we will hit the parents first, kids later.
-  icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short))
-  # set up a factor which contains levels for any description within the
-  # hierarchy:
-  fout <- factor(levels = c(
-    levels(icd9::icd9Hierarchy["chapter"]),
-    levels(icd9::icd9Hierarchy["subchapter"]),
-    levels(icd9::icd9Hierarchy["major"]),
-    levels(icd9::icd9Hierarchy["descLong"])
-  ))
-
-  # find factor levels for the given codes in icd9hier
-  # for chapter/sub/major do we have all rows for that level?
-
-  for (i in icd9Short) {
-    if (icd9IsMajor(i)) {
-      fout <- c(fout,
-                names(icd9::icd9ChaptersMajor)[icd9::icd9ChaptersMajor == i])
-      break
-    }
-
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
-                                          "chapter"])
-    peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["chapter"]] == fm, "icd9"]
-    if (all(peers %in% icd9Short)) {
-      fout <- c(fout, fm)
-      break
-    }
-
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
-                                          "subchapter"])
-    peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["subchapter"]] == fm,
-                                 "icd9"]
-    if (all(peers %in% icd9Short)) {
-      fout <- c(fout, fm)
-      break
-    }
-
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
-                                          "major"])
-    peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["major"]] == fm, "icd9"]
-    if (all(peers %in% icd9Short)) {
-      fout <- c(fout, fm)
-      break
-    }
-
-    fout <- c(fout,
-              asCharacterNoWarn(
-                icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i, "descLong"]))
-  }
-
-  # not just major parts, but the codes which are already majors
-  mjrs <- unique(fout[icd9IsMajor(fout)] )
-  for (i in mjrs) {
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
-                                          "chapter"])
-    peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["chapter"]] == fm, "icd9"]
-    if (all(peers %in% icd9Short)) {
-      fout <- c(fout, fm)
-      break
-    }
-
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
-                                          "subchapter"])
-    peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["subchapter"]] == fm,
-                                 "icd9"]
-    if (all(peers %in% icd9Short)) {
-      fout <- c(fout, fm)
-      break
-    }
-
-    fm <- asCharacterNoWarn(icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i,
-                                          "major"])
-    peers <- icd9::icd9Hierarchy[icd9::icd9Hierarchy[["major"]] == fm, "icd9"]
-    if (all(peers %in% icd9Short))  {
-      fout <- c(fout, fm)
-      break
-    }
-
-    fout <- c(fout,
-              asCharacterNoWarn(
-                icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == i, "descLong"]))
-  }
-  asCharacterNoWarn(fout)
-}
-
-#' @title condense list of short ICD-9 code into minimal set of major-part-only
-#'   codes
+#' @title Condense ICD-9 code by replacing complete families with parent codes
 #' @description This can be thought of as the inverse operation to
-#'   icd9Children("123"). The list given must already contain the parents,
-#'   because this function will never add a parent ICD-9 which, although may
-#'   have all children present, may itself have an additional clinical meaning.
+#'   \code{icd9Children}.
+#' @template icd9-any
 #' @template icd9-short
+#' @template icd9-decimal
+#' @template isShort
 #' @template onlyReal
-#' @param dropNonReal single logical, if TRUE, and \code{onlyReal} is TRUE, then
-#'   codes not found in the master list are dropped; otherwise they are included
-#'   in the output.
-#' @template invalid
+#' @param toMajor Most major codes are not \emph{real}, e.g. Salmonella 003 is a
+#'   major category, but is not itself used as a diagnostic code. Therefore,
+#'   strictly, asking for only \emph{real} codes excludes the major. We'll turn
+#'   a blind eye to this if we specifically request majors with toMajor.
 #' @family ICD-9 ranges
 #' @export
-icd9CondenseToMajor <- function(icd9Short, onlyReal, dropNonReal = TRUE,
-                                invalidAction = c("stop", "ignore",
-                                                  "silent", "warn")) {
-  icd9Short <- icd9ValidNaWarnStopShort(
-    icd9Short,
-    invalidAction = match.arg(invalidAction))
+icd9Condense <- function(icd9, isShort, onlyReal = NULL, toMajor = TRUE) {
+  if (isShort) return(icd9CondenseShort(icd9, onlyReal, toMajor))
+  icd9CondenseDecimal(icd9, onlyReal, toMajor)
+}
 
-  # make homogeneous and sort so we will hit the parents first, kids later.
-  out <- icd9Short <- sort(icd9AddLeadingZeroesShort(icd9Short))
-  mjs <- unique(icd9ShortToMajor(icd9Short))
-  # if all major children are in the list, replace those items with just the
-  # major codes, leave the rest.
-  includemjs <- c()
-  for (mj in mjs) {
-    matchKids <- icd9ChildrenShort(mj, onlyReal = onlyReal)
-    if (all(matchKids %in% out)) {
-      out <- out[!out %in% matchKids]
-      includemjs <- c(includemjs, mj)
+#' @rdname icd9Condense
+#' @details \code{icd9CondenseToMajor} family of functions are required, at
+#'   least in this release because of issue #37 in github. This function just
+#'   gets majors, unlike \code{icd9CondenseShort}.
+#' @export
+icd9CondenseToMajor <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                                onlyReal = NULL) {
+  if (isShort) return(icd9CondenseToMajorShort(icd9, onlyReal))
+  icd9CondenseToMajorDecimal(icd9, onlyReal)
+}
+
+#' @rdname icd9Condense
+#' @export
+icd9CondenseToMajorDecimal <- function(icd9Decimal, onlyReal = NULL)
+  icd9CondenseToMajorShort(icd9DecimalToShort(icd9Decimal), onlyReal)
+
+#' @rdname icd9Condense
+#' @export
+icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL) {
+  i9w <- sort(unique(icd9Short))
+
+  if (is.null(onlyReal)) {
+    if (all(icd9IsRealShort(i9w, majorOk = TRUE))) {
+      onlyReal <- TRUE
+      message("onlyReal not given, but all codes 'real' so assuming TRUE")
+    } else {
+      onlyReal <- FALSE
+      message("onlyReal not given, but not all codes 'real' so assuming FALSE")
+    }
+  } else {
+    checkmate::checkLogical(onlyReal, len = 1)
+  }
+
+  if (onlyReal && !all(icd9IsRealShort(icd9Short, majorOk = TRUE)))
+    warning("only real values requested, but unreal ICD-9 code(s) given.")
+
+  i9o <- c()
+  for (i in unique(icd9GetMajor(i9w, isShort = TRUE))) {
+
+    matchKids <- icd9ChildrenShort(i, onlyReal = onlyReal)
+    lookin <- unique(c(icd9GetMajor(i, isShort = TRUE), i9w))
+    if (all(matchKids %in% lookin)) {
+      i9w <- i9w[i9w %nin% matchKids] # drop the matches
+      i9o <- c(i9o, i)
     }
   }
-  # TODO: tests for this
-  if (onlyReal && dropNonReal) out <- out[icd9RealShort(out)]
-  c(unique(includemjs), out)
+  if (onlyReal) return(icd9GetRealShort(c(i9o, i9w), majorOk = TRUE))
+  # return parents with residual unmatched leaf codes, in this case, majors, and
+  # incomplete sets of non-majors.
+  sort(unique(c(i9o, i9w)))
 }
+
+#' @rdname icd9Condense
+#' @export
+icd9CondenseShort <- function(icd9Short, onlyReal = NULL, toMajor = TRUE) {
+
+  checkmate::checkLogical(toMajor, len = 1, any.missing = FALSE)
+  i9w <- sort(unique(icd9Short))
+
+  if (is.null(onlyReal)) {
+    if (all(icd9IsRealShort(i9w, majorOk = toMajor))) {
+      onlyReal <- TRUE
+      message("onlyReal not given, but all codes 'real' so assuming TRUE")
+    } else {
+      onlyReal <- FALSE
+      message("onlyReal not given, but not all codes 'real' so assuming FALSE")
+    }
+  } else {
+    checkmate::checkLogical(onlyReal, len = 1)
+  }
+
+  if (onlyReal && !all(icd9IsRealShort(icd9Short, majorOk = toMajor)))
+    warning("only real values requested, but unreal ICD-9 code(s) given.")
+
+  if (toMajor)
+    i9n <- unique(c(icd9GetMajor(i9w, isShort = TRUE), i9w))
+  else
+    i9n <- i9w
+
+  i9o <- c()
+  for (i in i9n) {
+    matchKids <- icd9ChildrenShort(i, onlyReal = onlyReal)
+    lookin <- i9w
+    if (toMajor) lookin <- unique(c(icd9GetMajor(i, isShort = TRUE), lookin))
+    if (all(matchKids %in% lookin)) {
+      # drop the matches (but not including major if added)
+      i9w <- i9w[i9w %nin% matchKids]
+      i9o <- c(i9o, i)
+    }
+  }
+
+  if (onlyReal) return(icd9GetRealShort(unique(c(i9o, i9w)), majorOk = toMajor))
+  # return parents with residual unmatched leaf codes
+  sort(unique(c(i9o, i9w)))
+}
+
+#' @rdname icd9Condense
+#' @export
+icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, toMajor = TRUE)
+  icd9ShortToDecimal(
+    icd9CondenseShort(
+      icd9DecimalToShort(icd9Decimal), onlyReal, toMajor
+    )
+  )

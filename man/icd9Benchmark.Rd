@@ -12,4 +12,5 @@ millions or rows. Performance of core functions is therefore of some
 importance, after correctness. R package test code is for correctness,
 whereas this script stresses the core functions, and looks for bottlenecks.
 }
+\keyword{internal}
 

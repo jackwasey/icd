@@ -11,7 +11,7 @@
 \description{
 This mapping of comorbidities to ICD-9 codes is dervied directly
   from SAS code provided by AHRQ, and translated into this R data structure.
-  This is a revision of the Elixhauser system, notably exluding cradiac
+  This is a revision of the Elixhauser system, notably exluding cardiac
   arrythmia.
 }
 \keyword{datasets}

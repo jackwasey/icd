@@ -1,3 +1,4 @@
+# EXCLUDE COVERAGE START
 #' @title parse all known mappings and save to development tree
 #' @param path directory to save in, default is \code{data}
 #' @keywords internal
@@ -12,6 +13,7 @@ icd9ParseAndSaveMappings <- function() {
   # this is not strictly a parsing step, but is quite slow
   icd9GetChaptersHierarchy(save= TRUE)
 }
+# EXCLUDE COVERAGE END
 
 #' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and
@@ -45,7 +47,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata",
     out <- as.list(somePairs[lapply(somePairs, length) == 1])
     thePairs <- somePairs[lapply(somePairs, length) == 2]
     out <- append(out, lapply(thePairs,
-                              function(x) icd9ExpandRangeShort(x[1], x[2])))
+                              function(x) icd9ExpandRangeShort(x[1], x[2], onlyReal = FALSE)))
     # update ahrqComorbid with full range of icd9 codes:
     ahrqComorbidAll[[cmd]] <- unlist(out)
   }
@@ -96,13 +98,13 @@ parseAhrqSas <- function(sasPath = system.file("extdata",
 
   # either fully expand or fully condense the results
   if (condense) {
-    ahrqComorbid <- lapply(ahrqComorbid, icd9CondenseToMajor)
-    ahrqComorbidAll <- lapply(ahrqComorbidAll, icd9CondenseToMajor)
+    ahrqComorbid <- lapply(ahrqComorbid, icd9CondenseToMajorShort, )
+    ahrqComorbidAll <- lapply(ahrqComorbidAll, icd9CondenseToMajorShort)
   } else {
     ahrqComorbid <- lapply(ahrqComorbid, function(x)
-      icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort(x, onlyReal = FALSE))
     ahrqComorbidAll <- lapply(ahrqComorbidAll, function(x)
-      icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort(x, onlyReal = FALSE))
   }
 
   names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
@@ -175,11 +177,11 @@ parseQuanDeyoSas <- function(sasPath = NULL,
   if (condense)
     quanDeyoComorbid <- lapply(
       quanDeyoComorbid,
-      icd9CondenseToMajor, invalidAction = "stop")
+      icd9CondenseToMajorShort)
   else
     quanDeyoComorbid <- lapply(
       quanDeyoComorbid,
-      function(x) icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort, onlyReal = FALSE)
 
   names(quanDeyoComorbid) <- icd9::charlsonComorbidNamesAbbrev
   if (save) saveInDataDir("quanDeyoComorbid")
@@ -194,52 +196,52 @@ parseQuanElix <- function(condense = FALSE,
                           path = "data") {
   quanElixComorbid <- list(
     chf = c("398.91", "402.01", "402.11", "402.91", "404.01", "404.03",
-            "404.11", "404.13", "404.91", "404.93", "425.4" %i9d% "425.9",
+            "404.11", "404.13", "404.91", "404.93", "425.4" %i9da% "425.9",
             "428"),
     arrhythmia = c("426.0", "426.13", "426.7", "426.9", "426.10", "426.12",
-                   "427.0" %i9d% "427.4", "427.6" %i9d% "427.9", "785.0",
+                   "427.0" %i9da% "427.4", "427.6" %i9da% "427.9", "785.0",
                    "996.01", "996.04", "V45.0", "V53.3"),
-    valve = c("93.2", "394" %i9d% "397", "424", "746.3" %i9d% "746.6", "V42.2",
+    valve = c("93.2", "394" %i9da% "397", "424", "746.3" %i9da% "746.6", "V42.2",
               "V43.3"),
     pulm.circ = c("415.0", "415.1", "416", "417.0", "417.8", "417.9"),
-    pvd = c("093.0", "437.3", "440", "441", "443.1" %i9d% "443.9", "447.1",
+    pvd = c("093.0", "437.3", "440", "441", "443.1" %i9da% "443.9", "447.1",
             "557.1", "557.9", "V43.4"),
     htn = c("401"),
-    htncx = c("402" %i9d% "405"),
-    paralysis = c("334.1", "342", "343", "344.0" %i9d% "344.6", "344.9"),
+    htncx = c("402" %i9da% "405"),
+    paralysis = c("334.1", "342", "343", "344.0" %i9da% "344.6", "344.9"),
     neuro.other = c("331.9", "332.0", "332.1", "333.4", "333.5", "333.92",
                     "334", "335", "336.2", "340", "341", "345", "348.1",
                     "348.3", "780.3", "784.3"),
-    chronic.pulm = c("416.8", "416.9", "490" %i9d% "505", "506.4", "508.1",
+    chronic.pulm = c("416.8", "416.9", "490" %i9da% "505", "506.4", "508.1",
                      "508.8"),
-    dm.uncomp = c("250.0" %i9d% "250.3"),
-    dm.comp = c("250.4" %i9d% "250.9"),
+    dm.uncomp = c("250.0" %i9da% "250.3"),
+    dm.comp = c("250.4" %i9da% "250.9"),
     hypothyroid = c("240.9", "243", "244", "246.1", "246.8"),
     renal = c("403.01", "403.11", "403.91", "404.02", "404.03", "404.12",
               "404.13", "404.92", "404.93", "585", "586", "588", "V42.0",
               "V45.1", "V56"),
     liver = c("70.22", "70.23", "70.32", "70.33", "70.44", "70.54", "70.6",
-              "70.9", "456.0" %i9d% "456.2", "570", "571",
-              "572.2" %i9d% "572.8", "573.3", "573.4", "573.8", "573.9",
+              "70.9", "456.0" %i9da% "456.2", "570", "571",
+              "572.2" %i9da% "572.8", "573.3", "573.4", "573.8", "573.9",
               "V42.7"),
     pud = c("531.7", "531.9", "532.7", "532.9", "533.7", "533.9", "534.7",
             "534.9"),
-    hiv = c("42" %i9d% "44"),
-    lymphoma = c("200" %i9d% "202", "203.0", "238.6"),
-    mets = c("196" %i9d% "199"),
-    solid.tumor = c("140" %i9d% "172", "174" %i9d% "195"),
-    rheum = c("446", "701.0", "710.0" %i9d% "710.4", "710.8", "710.9", "711.2",
+    hiv = c("42" %i9da% "44"),
+    lymphoma = c("200" %i9da% "202", "203.0", "238.6"),
+    mets = c("196" %i9da% "199"),
+    solid.tumor = c("140" %i9da% "172", "174" %i9da% "195"),
+    rheum = c("446", "701.0", "710.0" %i9da% "710.4", "710.8", "710.9", "711.2",
               "714", "719.3", "720", "725", "728.5", "728.89", "729.30"),
-    coag = c("286", "287.1", "287.3" %i9d% "287.5"),
+    coag = c("286", "287.1", "287.3" %i9da% "287.5"),
     obesity = c("278.0"),
-    wt.loss = c("260" %i9d% "263", "783.2", "799.4"),
+    wt.loss = c("260" %i9da% "263", "783.2", "799.4"),
     lytes = c("253.6", "276"),
     anemia.loss = c("280.0"),
-    anemia.def = c("280.1" %i9d% "280.9", "281"),
-    etoh = c("265.2", "291.1" %i9d% "291.3", "291.5" %i9d% "291.9", "303.0",
-             "303.9", "305.0", "357.5", "425.5", "535.3", "571.0" %i9d% "571.3",
+    anemia.def = c("280.1" %i9da% "280.9", "281"),
+    etoh = c("265.2", "291.1" %i9da% "291.3", "291.5" %i9da% "291.9", "303.0",
+             "303.9", "305.0", "357.5", "425.5", "535.3", "571.0" %i9da% "571.3",
              "980", "V11.3"),
-    drugs = c("292", "304", "305.2" %i9d% "305.9", "V65.42"),
+    drugs = c("292", "304", "305.2" %i9da% "305.9", "V65.42"),
     psychoses = c("293.8", "295", "296.04", "296.14", "296.44", "296.54", "297",
                   "298"),
     depression = c("296.2", "296.3", "296.5", "300.4", "309", "311")
@@ -247,16 +249,16 @@ parseQuanElix <- function(condense = FALSE,
 
   quanElixComorbid <- lapply(
     quanElixComorbid,
-    function(x) icd9DecimalToShort(x, invalidAction = "stop"))
+    function(x) icd9DecimalToShort(x))
 
   if (condense)
     quanElixComorbid <- lapply(
       quanElixComorbid,
-      function(x) icd9CondenseToMajor(x, invalidAction = "stop"))
+      function(x) icd9CondenseToMajorShort(x, onlyReal = FALSE))
   else
     quanElixComorbid <- lapply(
       quanElixComorbid,
-      function(x) icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort, onlyReal = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
   if (save) saveInDataDir("quanElixComorbid")
@@ -272,71 +274,71 @@ parseQuanElix <- function(condense = FALSE,
 parseElix <- function(condense = FALSE, save = FALSE, path = "data") {
   elixComorbid <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91",
-            "404.93", "428.0" %i9d% "428.9"),
-    arrhythmia = c("426.1", "426.11", "426.13", "426.2" %i9d% "426.53",
-                   "426.6" %i9d% "426.89", "427.0", "427.2", "427.31", "427.60",
+            "404.93", "428.0" %i9da% "428.9"),
+    arrhythmia = c("426.1", "426.11", "426.13", "426.2" %i9da% "426.53",
+                   "426.6" %i9da% "426.89", "427.0", "427.2", "427.31", "427.60",
                    "427.9", "785", "V45.0", "V53.3"),
-    valve = c("93.20" %i9d% "93.24", "394.0" %i9d% "397.1",
-              "424.0" %i9d% "424.91", "746.3" %i9d% "746.6", "V42.2", "V43.3"),
-    pulm.circ = c("416.0" %i9d% "416.9", " 417.9"),
-    pvd = c("440.0" %i9d% "440.9", "441.2", "441.4", "441.7", "441.9",
-            "443.1" %i9d% "443.9", "447.1", "557.1", "557.9", "V43.4"),
+    valve = c("93.20" %i9da% "93.24", "394.0" %i9da% "397.1",
+              "424.0" %i9da% "424.91", "746.3" %i9da% "746.6", "V42.2", "V43.3"),
+    pulm.circ = c("416.0" %i9da% "416.9", " 417.9"),
+    pvd = c("440.0" %i9da% "440.9", "441.2", "441.4", "441.7", "441.9",
+            "443.1" %i9da% "443.9", "447.1", "557.1", "557.9", "V43.4"),
     htn = c("401.1", "401.9"),
     htncx = c("402.10", "402.90", "404.10", "404.90", "405.11", "405.19",
               "405.91", "405.99"),
-    paralysis = c("342.0" %i9d% "342.12", "342.9" %i9d% "344.9"),
-    neuro.other = c("331.9", "332.0", "333.4", "333.5", "334.0" %i9d% "335.9",
-                    "340", "341.1" %i9d% "341.9", "345.00" %i9d% "345.11",
-                    "345.40" %i9d% "345.51", "345.80" %i9d% "345.91", "348.1",
+    paralysis = c("342.0" %i9da% "342.12", "342.9" %i9da% "344.9"),
+    neuro.other = c("331.9", "332.0", "333.4", "333.5", "334.0" %i9da% "335.9",
+                    "340", "341.1" %i9da% "341.9", "345.00" %i9da% "345.11",
+                    "345.40" %i9da% "345.51", "345.80" %i9da% "345.91", "348.1",
                     "348.3", "780.3", "784.3"),
-    chronic.pulm = c("490" %i9d% "492.8", "493.00" %i9d% "493.91", "494",
-                     "495.0" %i9d% "505", "506.4"),
-    dm.uncomp = c("250.00" %i9d% "250.33"),
-    dm.comp = c("250.40" %i9d% "250.73", "250.90" %i9d% "250.93"),
-    hypothyroid = c("243" %i9d% "244.2", "244.8", "244.9"),
+    chronic.pulm = c("490" %i9da% "492.8", "493.00" %i9da% "493.91", "494",
+                     "495.0" %i9da% "505", "506.4"),
+    dm.uncomp = c("250.00" %i9da% "250.33"),
+    dm.comp = c("250.40" %i9da% "250.73", "250.90" %i9da% "250.93"),
+    hypothyroid = c("243" %i9da% "244.2", "244.8", "244.9"),
     renal = c("403.11", "403.91", "404.12", "404.92", "585", "586", "V42.0",
               "V45.1", "V56.0", "V56.8"),
     liver = c("70.32", "70.33", "70.54", "456.0", "456.1", "456.20", "456.21",
-              "571.0", "571.2", "571.3", "571.40" %i9d% "571.49", "571.5",
+              "571.0", "571.2", "571.3", "571.40" %i9da% "571.49", "571.5",
               "571.6", "571.8", "571.9", "572.3", "572.8", "V42.7"),
     pud = c("531.70", "531.90", "532.70", "532.90", "533.70", "533.90",
             "534.70", "534.90", "V12.71"),
-    hiv = c("42" %i9d% "44.9"),
-    lymphoma = c("200.00" %i9d% "202.38", "202.50" %i9d% "203.01",
-                 "203.8" %i9d% "203.81", "238.6", "273.3", "V10.71", "V10.72",
+    hiv = c("42" %i9da% "44.9"),
+    lymphoma = c("200.00" %i9da% "202.38", "202.50" %i9da% "203.01",
+                 "203.8" %i9da% "203.81", "238.6", "273.3", "V10.71", "V10.72",
                  "V10.79"),
-    mets = c("196.0" %i9d% "199.1"),
-    solid.tumor = c("140.0" %i9d% "172.9", "174.0" %i9d% "175.9",
-                    "179" %i9d% "195.8", "V10.00" %i9d% "V10.9"),
-    rheum = c("701.0", "710.0" %i9d% "710.9", "714.0" %i9d% "714.9",
-              "720.0" %i9d% "720.9", "725"),
-    coag = c("286.0" %i9d% "286.9", "287.1", "287.3" %i9d% "287.5"),
+    mets = c("196.0" %i9da% "199.1"),
+    solid.tumor = c("140.0" %i9da% "172.9", "174.0" %i9da% "175.9",
+                    "179" %i9da% "195.8", "V10.00" %i9da% "V10.9"),
+    rheum = c("701.0", "710.0" %i9da% "710.9", "714.0" %i9da% "714.9",
+              "720.0" %i9da% "720.9", "725"),
+    coag = c("286.0" %i9da% "286.9", "287.1", "287.3" %i9da% "287.5"),
     obesity = c("278.0"),
-    wt.loss = c("260" %i9d% "263.9"),
-    lytes = c("276.0" %i9d% "276.9"),
+    wt.loss = c("260" %i9da% "263.9"),
+    lytes = c("276.0" %i9da% "276.9"),
     anemia.loss = c("280.0"),
-    anemia.def = c("280.1" %i9d% "281.9", "285.9"),
+    anemia.def = c("280.1" %i9da% "281.9", "285.9"),
     etoh = c("291.1", "291.2", "291.5", "291.8", "291.9",
-             "303.90" %i9d% "303.93", "305.00" %i9d% "305.03", "V11.3"),
-    drugs = c("292.0", "292.82" %i9d% "292.89", "292.9",
-              "304.00" %i9d% "304.93", "305.20" %i9d% "305.93"),
-    psychoses = c("295.00" %i9d% "298.9", "299.10" %i9d% "299.11"),
+             "303.90" %i9da% "303.93", "305.00" %i9da% "305.03", "V11.3"),
+    drugs = c("292.0", "292.82" %i9da% "292.89", "292.9",
+              "304.00" %i9da% "304.93", "305.20" %i9da% "305.93"),
+    psychoses = c("295.00" %i9da% "298.9", "299.10" %i9da% "299.11"),
     depression = c("300.4", "301.12", "309.0", "309.1", "311")
   )
 
   elixComorbid <- lapply(
     elixComorbid, function(x)
-      icd9DecimalToShort(x, invalidAction = "stop"))
+      icd9DecimalToShort(x))
 
   # convert to short form, for consistency with other mappings.
   if (condense) {
     elixComorbid <- lapply(
       elixComorbid,
-      function(x) icd9CondenseToMajor(x, invalidAction = "stop"))
+      function(x) icd9CondenseToMajorShort(x, onlyReal = FALSE))
   } else {
     elixComorbid <- lapply(
       elixComorbid,
-      function(x) icd9ChildrenShort(x, invalidAction = "stop"))
+      icd9ChildrenShort, onlyReal = FALSE)
   }
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
@@ -407,18 +409,18 @@ parseIcd9Descriptions <- function(icd9path =
   icd9CmDesc <- data.frame(
     icd9 = unlist(icd9LongCode),
     descLong = unlist(icd9LongDesc),
-    descisShort = unlist(icd9ShortDesc),
+    descShort = unlist(icd9ShortDesc),
     stringsAsFactors = FALSE)
 
   # attempt to write the date from the source file to RData in the package
   # source tree. disable saving this: use icd9Hierarchy instead. if (save)
   # saveInDataDir("icd9CmDesc")
 
-  message("The following long descriptions contain UTF-8 codes:")
-  message(paste(icd9CmDesc[grep(pattern = "UTF",
-                                Encoding(icd9CmDesc$descLong)), ],
-                sep = ", "))
-
+  utf8 <- grep(pattern = "UTF", Encoding(icd9CmDesc$descLong))
+  if (length(utf8) > 0 ) {
+    message("The following long descriptions contain UTF-8 codes:")
+    message(paste(icd9CmDesc[utf8, ], sep = ", "))
+  }
   invisible(icd9CmDesc)
 }
 
@@ -429,16 +431,19 @@ parseIcd9Descriptions <- function(icd9path =
 #'   confirm the results with tests.
 #' @keywords internal
 parseIcd9Chapters <- function(year = NULL,
-                              save = FALSE,
-                              path = "data") {
-  if (is.null(year)) {
+                              save = FALSE) {
+  if (is.null(year))
     year <- "2014"
-  } else {
-    if (format(Sys.time(), "%Y") != year)
-      warning("Getting ICD-9 data for 2014 which is not the current year.
-              Tests were written to validate extraction of 2014 data.")
-  }
-  icd9Chapters <- icd9WebParseGetList(year)
+  else
+    year <- as.character(year)
+  if (format(Sys.time(), "%Y") != year)
+    warning(sprintf("Getting ICD-9 data for %s which is not the current year.
+              Tests were written to validate extraction of 2014 data.", year))
+
+  # if either XML or memoise are not installed, an error will be given by R
+  memReadHtmlList <- memoise::memoise(XML::readHTMLList)
+
+  icd9Chapters <- icd9WebParseGetList(year, memfun = memReadHtmlList)
   icd9ChaptersSub <- list()
   icd9ChaptersMajor <- list()
   for (chap in names(icd9Chapters)) {
@@ -446,15 +451,16 @@ parseIcd9Chapters <- function(year = NULL,
           chap == "Congenital Anomalies") {
       # these have no subchapter, straight into the three-digit codes
       icd9ChaptersMajor <- c(icd9ChaptersMajor,
-                             icd9WebParseGetList(year, icd9Chapters[[chap]]))
+                             icd9WebParseGetList(year, memfun = memReadHtmlList,
+                                                 icd9Chapters[[chap]]))
     } else {
       # construct URL for next level and get the sub chapters
-      subchaps <- icd9WebParseGetList(year, icd9Chapters[[chap]])
+      subchaps <- icd9WebParseGetList(year, memReadHtmlList, icd9Chapters[[chap]])
       icd9ChaptersSub <- c(icd9ChaptersSub, subchaps)
       # loop through each subchapter to get the majors:
       for (subchap in names(subchaps)) {
         icd9ChaptersMajor <- c(icd9ChaptersMajor,
-                               icd9WebParseGetList(year,
+                               icd9WebParseGetList(year, memfun = memReadHtmlList,
                                                    icd9Chapters[[chap]],
                                                    icd9ChaptersSub[[subchap]]))
       }
@@ -483,8 +489,7 @@ icd9WebParseStartEndToRange <- function(v) {
 }
 
 # internal only
-icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
-  #print(paste(year, chapter, subchap))
+icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   if (is.null(chapter)) {
     icd9url <- sprintf("http://www.icd9data.com/%s/Volume1/default.htm", year)
   } else {
@@ -498,9 +503,9 @@ icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
                          year, chapter, subchap)
     }
   }
-  li <-  memReadHtmlList(doc = icd9url, which = 1)
+  li <-  memfun(doc = icd9url, which = 1)
   # swap so descriptions (second on web page) become the vector names
-  v <- jwutil::strPairMatch("^([VvEe0-9-]*)[[:space:]]*(.*)$", li, swap = TRUE)
+  v <- strPairMatch("^([VvEe0-9-]*)[[:space:]]*(.*)$", li, swap = TRUE)
   lapply(v,
          FUN = function(x) {
            y <- unlist(strMultiMatch(pattern = "^([VvEe0-9]+)-?([VvEe0-9]+)?$",
@@ -514,8 +519,3 @@ icd9WebParseGetList <- function(year, chapter = NULL, subchap = NULL) {
          }
   )
 }
-
-# don't assume XML is loaded - it is a suggested package, and needed only for
-# creating packaged data.
-if (suppressWarnings(require("XML", quietly = TRUE)))
-  memReadHtmlList <- memoise::memoise(XML::readHTMLList)

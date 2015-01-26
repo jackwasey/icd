@@ -1,15 +1,18 @@
 context("test Charlson and counting")
 
 test_that("Charlson score", {
+
   mydf <- data.frame(visitId = c("a", "b", "c"),
                      icd9 = c("441", "412.93", "044.9"),
                      stringsAsFactors = TRUE)
   expect_equal(
-    icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE) %>%
-      icd9CharlsonComorbid,
+    icd9CharlsonComorbid(
+      icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)
+    ),
     icd9Charlson(mydf, isShort = FALSE)
   )
-  expect_equal(icd9Charlson(mydf,
+
+  expect_equivalent(icd9Charlson(mydf,
                             return.df = TRUE,
                             stringsAsFactors = TRUE,
                             isShort = FALSE),
@@ -26,7 +29,7 @@ test_that("Charlson score", {
                       icd9 = c("441", "412.93", "044.9"),
                       stringsAsFactors = FALSE)
 
-  expect_equal(icd9Charlson(mydff,
+  expect_equivalent(icd9Charlson(mydff,
                             return.df = TRUE,
                             stringsAsFactors = TRUE,
                             isShort = FALSE),
@@ -39,7 +42,7 @@ test_that("Charlson score", {
 
   mydfff <- mydff
   names(mydfff)[1] <- "v"
-  expect_equal(icd9Charlson(mydfff,
+  expect_equivalent(icd9Charlson(mydfff,
                             return.df = TRUE,
                             stringsAsFactors = FALSE,
                             isShort = FALSE),
@@ -52,7 +55,7 @@ test_that("Charlson score", {
 
   mydffff <- cbind(mydfff, data.frame(v2 = mydfff$v, stringsAsFactors = FALSE))
   mydffff$v <- NULL
-  expect_equal(icd9Charlson(mydffff, visitId = "v2",
+  expect_equivalent(icd9Charlson(mydffff, visitId = "v2",
                             return.df = TRUE,
                             stringsAsFactors = FALSE,
                             isShort = FALSE),
@@ -125,13 +128,13 @@ test_that("count icd9 codes", {
                c("j" = 0))
 
   widezero3b <- data.frame(visitId = c("j", "j"),
-                          icd9_a = c(NA, NA))
+                           icd9_a = c(NA, NA))
   expect_equal(icd9CountWide(widezero3b, aggregate = FALSE),
                c("j" = 0, "j" = 0))
 
   widezero4b <- data.frame(visitId = c("j", "j"),
-                          icd9_a = c(NA, NA),
-                          icd9_b = c(NA, NA))
+                           icd9_a = c(NA, NA),
+                           icd9_b = c(NA, NA))
   expect_equal(icd9CountWide(widezero4b, aggregate = FALSE),
                c("j" = 0, "j" = 0))
 
@@ -145,17 +148,5 @@ test_that("count icd9 codes", {
                           icd9_b = c(NA, NA))
   expect_equal(icd9CountWide(widezero6),
                c("j" = 0, "k" = 0))
-
-})
-
-test_that("count wide directly (old func) same as reshape count", {
-
-  widedf <- data.frame(visitId = c("a", "b", "c"),
-                       icd9_01 = c("441", "4424", "441"),
-                       icd9_02 = c(NA, "443", NA))
-
-  # we don't get names back for the vector for 'long'
-  expect_equivalent(icd9CountWide(widedf),
-                    widedf %>% icd9WideToLong %>% icd9Count)
 
 })

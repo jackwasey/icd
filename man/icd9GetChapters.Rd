@@ -4,7 +4,7 @@
 \alias{icd9GetChapters}
 \title{get ICD-9 Chapters from vector of ICD-9 codes}
 \usage{
-icd9GetChapters(icd9, isShort, invalidAction = icd9InvalidActions)
+icd9GetChapters(icd9, isShort = icd9GuessIsShort(icd9))
 }
 \arguments{
 \item{isShort}{}
@@ -14,7 +14,8 @@ icd9GetChapters(icd9, isShort, invalidAction = icd9InvalidActions)
 \item{invalid}{}
 }
 \description{
-work-in-progress
+This runs quite slowly. Used too rarely to be worth optimizing
+  now.
 }
 \keyword{internal}
 
