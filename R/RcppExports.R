@@ -8,6 +8,7 @@ icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Fiel
 }
 
 #' @rdname convert
+#' @name convert
 #' @export
 icd9MajMinToCode <- function(major, minor, isShort) {
     .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', major, minor, isShort)
@@ -174,6 +175,7 @@ icd9Children_cpp <- function(icd9, isShort, onlyReal = TRUE) {
 }
 
 #' @rdname icd9Children
+#' @name icd9Children
 #' @export
 icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE) {
     .Call('icd9_icd9ChildrenShort', PACKAGE = 'icd9', icd9Short, onlyReal)

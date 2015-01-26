@@ -71,7 +71,8 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
       unreal = icd9[!icd9IsRealShort(icd9)]
       warning("Some ICD codes are not 'real', e.g. ",
               paste(unreal[seq(from = 1, to = min(5, length(unreal)))],
-                    collapse = " "))
+                    collapse = " "),
+              call. = FALSE)
     }
     icd9 <- icd9CondenseShort(icd9, onlyReal)
   }
@@ -112,6 +113,7 @@ icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @keywords internal
 icd9GuessIsShort <- function(icd9) {
   # don't take responsibility for validation here.
+  if (is.list(icd9)) icd9 <- unlist(icd9)
   icd9 <- as.character(icd9)
   if (is.list(icd9)) {
     if (length(icd9) > 0)

@@ -381,3 +381,7 @@ test_that("explain icd9GetChapters simple input", {
   #exist, but 4171 does. Should we give a NA row back or not?
 })
 
+test_that("working with named lists of codes, decimal is guessed", {
+  expect_that(icd9ExplainDecimal(list(a = c("001"), b = c("001.1", "001.9"))), testthat::not(gives_warning()))
+  expect_that(icd9Explain(list(a = c("001"), b = c("001.1", "001.9"))), testthat::not(gives_warning()))
+})

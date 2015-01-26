@@ -7,69 +7,71 @@
 \alias{package-icd9}
 \title{tools for working with ICD-9 codes, and finding comorbidities}
 \description{
-This package calculates comorbidities, and allows accurate
-  validation, conversion, manipulation, filtering and comparison of ICD-9-CM
-  (clinical modification) codes. ICD-9 codes appear numeric but leading and
-  trailing zeroes, and both decimal and non-decimal "short" format codes
-  exist. The package enables a workflow from raw lists of ICD-9 codes from
-  hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
-  from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+This package calculates comorbidities, and allows fast and
+  accurate validation, conversion, manipulation, filtering and comparison of
+  ICD-9-CM (clinical modification) codes. ICD-9 codes appear numeric but
+  leading and trailing zeroes, and both decimal and non-decimal "short"
+  format codes exist. The package enables a workflow from raw lists of ICD-9
+  codes from hospital billing databases to comorbidities. ICD-9 to
+  comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser
+  and AHRQ included.
 
-  * \code{\link{icd9IsValid}}\code{\link{icd9IsValidDecimal}},
-  \code{\link{icd9IsValidShort}} and related functions
-  (\code{\link{icd9IsValidDecimalN}}, \code{\link{icd9IsValidDecimalV}},
-  \code{\link{icd9IsValidDecimalE}}, \code{\link{icd9IsValidShortN}},
-  \code{\link{icd9IsValidShortV}}), \code{\link{icd9IsValidShortE}}) check
-  whether given ICD-9 codes are syntactically valid (although not necessarily
-  genuine ICD-9 codes) * \code{\link{icd9Comorbid}} determines co-morbidities
+  \describe{
+
+  \item{Comorbidities}{ \code{\link{icd9Comorbid}} determines co-morbidities
   for a set of patients with one or more ICD-9 codes each.
+  \code{\link{icd9Charlson}} calculates Charlson score (Comorbidity Index).
 
-  * Functions to convert vectors (not lists) of ICD-9 codes include:
-  \code{\link{icd9DecimalToShort}}, \code{\link{icd9ShortToDecimal}}.
-  \code{\link{icd9ShortToParts}} and \code{\link{icd9DecimalToParts}} split a
-  vector of ICD-9 codes into the 'major' part (before decimal point), and
-  'minor' part (after decimal). The inverse operations are
-  \code{\link{icd9PartsToShort}} and \code{\link{icd9PartsToDecimal}}.
+  \itemize{
 
-  * Several functions interpret or generate ranges of ICD-9 codes. ICD-9
-  codes in publications are often specified in ranges, and this requires
-  careful interpretation to avoid including overly broad intermediate codes
-  that might appear in a simple numerical range. See the test suite for some
-  example cases. \code{\link{icd9ChildrenDecimal}} and
-  \code{\link{icd9ChildrenShort}} generate the full range of child ICD-9
-  codes. The reverse operation is \code{\link{icd9CondenseToMajor}}, which
-  takes a mass of codes and finds the smallest set of parent 'major' codes
-  with any of the original codes, which exactly describes the original set.
-  \code{\link{icd9Condense}}) does the same as
-  \code{\link{icd9CondenseToMajor}}, but only finds parents which have a
-  human-readable name. Many top-level codes, e.g. "391" are not themselves
-  defined, but have description for their children. \code{\link{\%i9mj\%}}
-  creates a range of icd9 major codes, whereas \code{\link{\%i9s\%}}
-  (\code{\link{icd9ExpandRangeShort}}) and \code{\link{\%i9d\%}}
-  (\code{\link{icd9ExpandRangeDecimal}}) create correct ranges of short and
-  decimal ICD-9 codes, respectively. The only limitation is that E code
-  ranges are not implemented (not ever seen in the wild by the author).
+  \item AHRQ comorbidity mapping is provided, and a function to read the raw
+  SAS code from AHRQ into R data structures. The pre-processed data is
+  available by lazy-loading in \code{\link{ahrqComorbid}}. AHRQ releases new
+  mappings annually.
 
-  * \code{\link{icd9SortShort}} sorts in heirarchical, then numerical order,
-  so 100.0 comes before 100.00, for example.
-
-  * AHRQ comorbidity mapping is provided, and a function to read the raw SAS
-  code from AHRQ into R data structures. The pre-processed data is available
-  by lazy-loading in \code{\link{ahrqComorbid}}. AHRQ releases new mappings
-  annually.
-
-  * Quan revised both Deyo/Charlson and Elixhauser ICD-9 to comorbidity
+  \item Quan revised both Deyo/Charlson and Elixhauser ICD-9 to comorbidity
   mappings. These are presented as: \code{link{quanDeyoComorbid}} (which is
   also derived from the original SAS code used in his publication, referenced
   in the data documentation), and \code{\link{quanElixComorbid}} which was
   transcribed directly from the same paper.
 
-  * The original Elixhauser mapping is provided, with codes transcribed from
-  the original publication.
+  \item The original Elixhauser mapping is provided, with codes transcribed
+  from the original publication. See \code{\link{elixComorbid}}.
 
-  * \code{\link{parseAhrqSas}} interprets an SAS format file, returning R
-  data, intended currently only for the FORMAT code provided by AHRQ for
-  comorbidities.
+  }
+  }
+
+  \item{Validation}{\code{\link{icd9IsValid}} checks whether ICD-9 codes are
+  syntactically valid (although not necessarily genuine ICD-9 diagnoses). In
+  contrast, \code{\link{icd9IsReal}} checks whether ICD-9 codes correspond to
+  diagnoses in the current ICD-9-CM definition from CMS.}
+
+  \item{Conversion}{ There are many functions to convert ICD-9 codes or their
+  components between different formats and structures. The most commonly used
+  are:  \code{\link{icd9DecimalToShort}}, \code{\link{icd9ShortToDecimal}} to
+  convert, e.g., 002.3 to 0023 and back again. See \link{convert} for other
+  options.}
+
+  \item{Manipulation}{You can find children of a higher-level ICD-9 code with
+  \code{\link{icd9Children}} and find a common parent to a set of children
+  (or arbitrary list of ICD-9 codes) with \code{\link{icd9Condense}}.
+  \code{\link{icd9Sort}} sorts in hierarchical, then numerical order, so
+  100.0 comes before 100.00, for example. \code{\link{icd9WideToLong}} and
+  \code{\link{icd9LongToWide}} convert the two most common data structures
+  containing patient disease data. This is more sophisticated than standard R
+  or Hadleyverse reshaping.}
+
+  \item{Explanation, or decoding}{Use \code{\link{icd9Explain}} to convert a
+  list of codes into human-readable descriptions. This function can
+  optionally reduce the codes to a their top-level groups if all the child
+  members of a group are present. \code{\link{icd9DiffComorbid}} allows
+  summary of the differences between comorbidity mappings, e.g. to find what
+  has changed from year-to-year or between revisions by different authors.
+  \code{\link{icd9Hierarchy}} is a \code{data.frame} containing the full
+  ICD-9 classification for each diagnosis. \code{\link{icd9Chapters}}
+  contains definitions of chapters, sub-chapters and three-digit groups.}
+
+  }
 }
 \author{
 Jack O. Wasey \email{jack@jackwasey.com}

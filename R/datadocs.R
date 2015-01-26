@@ -1,6 +1,6 @@
 #' @title ICD-9-CM chapters
 #' @name icd9Chapters
-#' @aliases icd9ChaptersSub icd9ChaptersMajor
+#' @aliases icd9ChaptersSub icd9ChaptersMajor icd9chapters icd9Chapters
 #' @description \code{icd9Chapters}, \code{icd9ChaptersSub} and
 #'   \code{icd9ChaptersMajor} contain mappings from the higher level
 #'   descriptions of ICD-9 codes to the ranges of ICD-9 codes they describe.

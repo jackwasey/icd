@@ -2,9 +2,36 @@
 % Please edit documentation in R/valid.R
 \name{icd9IsValid}
 \alias{icd9IsValid}
-\title{check whether any ICD-9 code is syntactically valid}
+\alias{icd9IsValidDecimal}
+\alias{icd9IsValidMajor}
+\alias{icd9IsValidShort}
+\alias{icd9IsValidShortE}
+\alias{icd9IsValidShortN}
+\alias{icd9IsValidShortV}
+\alias{icd9Valid}
+\alias{icd9ValidDecimal}
+\alias{icd9ValidShort}
+\title{check whether ICD-9 codes are syntactically valid}
 \usage{
 icd9IsValid(icd9, isShort)
+
+icd9Valid(icd9, isShort)
+
+icd9IsValidDecimal(icd9Decimal)
+
+icd9ValidDecimal(icd9)
+
+icd9IsValidShort(icd9Short)
+
+icd9ValidShort(icd9)
+
+icd9IsValidShortV(icd9Short)
+
+icd9IsValidShortE(icd9Short)
+
+icd9IsValidShortN(icd9Short)
+
+icd9IsValidMajor(major)
 }
 \arguments{
 \item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
@@ -15,34 +42,63 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 \item{isShort}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
+
+\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
+five characters is given in a code, then the digits are greedily assigned
+to hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
+\item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
+which falls before the decimal point, in decimal notation. (In 5 digit
+notation, the 'major' part is be the first three characters (with leading
+zeroes), and includes V or E prefix. xyz}
+}
+\value{
+logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
+  provided according to its validity
 }
 \description{
 This does not check whether the code coresponds to a real
   ICD-9-CM billing code, or parent grouping. For that, see
   \code{\link{icd9IsReal}}.
 
-  factors are accepted, and since the validation is done with \code{grepl}
+  Factors are accepted, and since the validation is done with \code{grepl}
   these are handled correctly.
 }
+\details{
+Leading zeroes in the decimal form are not ambiguous. Although
+  integer ICD-9 codes could be intended by the user, there is a difference
+  between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
+  is provided
+}
+\section{Three-digit validation}{
+
+  \code{isValidMajor} validates just the 'major' three-digit part of an ICD-9
+  code. This can in fact be provided as a numeric, since there is no
+  ambiguity. Numeric-only codes should be one to three digitis, V codes are
+  followed by one or two digits, and E codes always by three digits between
+  800 and 999.
+}
+\examples{
+icd9IsValidShort(c("", "1", "22", "333", "4444", "123.45", "V",
+                     "V2", "V34", "V567", "E", "E1", "E70", "E"))
+  icd9IsValidMajor(c("", "1", "22", "333", "4444", "123.45", "V",
+                     "V2", "V34", "V567", "E", "E1", "E70", "E"))
+}
 \seealso{
-\code{\link{icd9IsValidDecimal}} and \code{\link{icd9IsValidShort}}
+\code{\link{icd9IsValidDecimal}}, \code{\link{icd9IsValidShort}},
+  \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
+  url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 
 Other ICD9 validation: \code{\link{icd9GetInvalidMappingDecimal}},
   \code{\link{icd9GetInvalidMappingShort}},
   \code{\link{icd9IsValidMapping}},
   \code{\link{icd9IsValidMappingDecimal}},
-  \code{\link{icd9IsValidMappingShort}};
-  \code{\link{icd9IsValidDecimal}},
-  \code{\link{icd9IsValidDecimalE}},
-  \code{\link{icd9IsValidDecimalN}},
-  \code{\link{icd9IsValidDecimalV}};
-  \code{\link{icd9IsValidMajor}},
-  \code{\link{icd9IsValidMajorE}},
-  \code{\link{icd9IsValidMajorN}},
-  \code{\link{icd9IsValidMajorV}};
-  \code{\link{icd9IsValidShort}},
-  \code{\link{icd9IsValidShortE}},
-  \code{\link{icd9IsValidShortN}},
-  \code{\link{icd9IsValidShortV}}
+  \code{\link{icd9IsValidMappingShort}}
 }
 

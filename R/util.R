@@ -1,3 +1,17 @@
+
+# assume length is one for strim
+strim <- function(x) {
+  if (!is.na(x[1]))
+    return(.Call('icd9_strim_cpp', PACKAGE = 'icd9', as.character(x)))
+  return(NA_character_)
+}
+
+trim <- function (x) {
+  nax = is.na(x)
+  x[!nax] <- .Call('icd9_trim_cpp', PACKAGE = 'icd9', as.character(x[!nax]))
+  x
+}
+
 # EXCLUDE COVERAGE START
 
 allIsNumeric <- function(x, extras = c(".", "NA", NA)) {
@@ -31,25 +45,11 @@ strip <- function (x, pattern = " ", useBytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = useBytes)
 
-# assume length is one for strim
-strim <- function(x) {
-  if (!is.na(x[1]))
-    return(.Call('icd9_strim_cpp', PACKAGE = 'icd9', as.character(x)))
-  return(NA_character_)
-}
-
-trim <- function (x) {
-  nax = is.na(x)
-  x[!nax] <- .Call('icd9_trim_cpp', PACKAGE = 'icd9', as.character(x[!nax]))
-  x
-}
-
 saveInDataDir <- function(var, suffix = "") {
   save(list = var,
        envir = parent.frame(),
        file = file.path("data", strip(paste0(var, suffix, ".RData"))),
-       compress = ifelse(Sys.info()[["sysname"]] == "Windows", "bzip2", "xz")
-  )
+       compress = "xz")
 }
 
 #' @title encode TRUE as 1, and FALSE as 0 (integers)
@@ -164,6 +164,7 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
 #'   readLines. The first argument to FUN will be the path of the extracted
 #'   \code{filename}
 #' @param \dots further arguments to FUN
+#' @keywords internal
 read.zip.url <- function(url, filename = NULL, FUN = readLines, ...) {
   stopifnot(length(filename) <= 1)
   stopifnot(is.character(url), length(url) == 1)

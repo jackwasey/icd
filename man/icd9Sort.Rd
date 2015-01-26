@@ -36,11 +36,9 @@ becomes "010", not "0010"}
 sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 }
 \description{
-should work with numeric only, V or E codes. Note that a numeric
-  sort does not work for ICD-9 codes, since "162" > "1620" TODO: write tests.
-  TODO: reply with the actual items given (not trimmed, etc.) TODO: need to
-  be able to compare a pair of codes quickly, then use built-in sort. This
-  becomes easier when I move to S3 classes for ICD-9.
+Sorts lists of numeric only, V or E codes. Note that a simple
+  numeric sort does not work for ICD-9 codes, since "162" > "1620" TODO:
+  write tests. TODO: reply with the actual items given (not trimmed, etc.)
 }
 \keyword{manip}
 

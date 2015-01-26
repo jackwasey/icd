@@ -6,7 +6,23 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+```{r, echo = FALSE}
 
+library(icd9)
+library(magrittr)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+patientData <- data.frame(
+  visitId = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
+  icd9 = c("40201", "2258", "7208", "25001", "34400", "4011", "4011"),
+  poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
+  stringsAsFactors = FALSE
+  )
+```
 # icd9
 
 master [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
@@ -34,42 +50,17 @@ ICD-9 codes are not numbers, and great care is needed when matching individual c
 
 See the vignette for many more examples. Here's a taste, 
 
-
-```r
+```{r example}
 patientData
-#>   visitId  icd9  poa
-#> 1    1000 40201    Y
-#> 2    1000  2258 <NA>
-#> 3    1000  7208    N
-#> 4    1000 25001    Y
-#> 5    1001 34400    X
-#> 6    1001  4011    Y
-#> 7    1002  4011    E
 
 # get comorbidities:
 icd9ComorbidQuanDeyo(patientData)
-#>   visitId    MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD
-#> 1    1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE
-#> 2    1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE
-#> 3    1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE
-#>   LiverMild    DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV
-#> 1     FALSE  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
-#> 2     FALSE FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE
-#> 3     FALSE FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
 
 # find diagnoses present on admission:
 icd9FilterPoa(patientData)
-#>   visitId  icd9
-#> 1    1000 40201
-#> 4    1000 25001
-#> 6    1001  4011
 
 # reformat input data:
 patientData %>% icd9LongToWide # everything works well with magrittr
-#>   visitId icd_01 icd_02 icd_03 icd_04
-#> 1    1000  40201   2258   7208  25001
-#> 2    1001  34400   4011   <NA>   <NA>
-#> 3    1002   4011   <NA>   <NA>   <NA>
 ```
 
 

@@ -43,7 +43,7 @@ decimal form ICD-9 codes are not ambiguous if the leading zeroes
 }
 \seealso{
 Other ICD-9 convert: \code{\link{convert}},
-  \code{\link{icd9DecimalToParts}},
+  \code{\link{convert}}, \code{\link{icd9DecimalToParts}},
   \code{\link{icd9DecimalToShort}},
   \code{\link{icd9GetMajor}},
   \code{\link{icd9MajMinToCode}},

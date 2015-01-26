@@ -14,8 +14,7 @@
 #' \url{https://communities.sas.com/thread/47571?start=0&tstart=0}
 #' \url{https://communities.sas.com/message/165945}
 #' @return list (of lists)
-#' @keywords programming list
-#' @export
+#' @keywords programming list internal
 sasFormatExtract <- function(sasTxt) {
 
   # collapse everything onto one big line, so we can filter multi-line

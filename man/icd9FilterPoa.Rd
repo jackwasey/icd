@@ -6,7 +6,7 @@
 \alias{icd9FilterPoaNotNo}
 \alias{icd9FilterPoaNotYes}
 \alias{icd9FilterPoaYes}
-\title{filters data frame based on present-on-arrival flag}
+\title{Filters data frame based on present-on-arrival flag}
 \usage{
 icd9FilterPoa(icd9df, poaField = "poa", poa = icd9PoaChoices)
 
@@ -35,12 +35,22 @@ intermediate codes, such as "exempt", "unknown" and \code{NA} mean that
 "yes" is not the same as "not no."}
 }
 \description{
-this is not a simple binary, since many codes are exempt,
-  unspecified, or unknown. Therefore, two options are given: get all the
-  comorbidities where the POA flag was definitely -ve, coded as "N" or
-  definitely +ve and coded as "Y". Negating one set won't give the other set
-  unless all codes were either Y or N. #describeIn icd9Comorbid
+Present On Arrival (POA) is not a simple flag, since many codes
+  are exempt, unspecified, or unknown. Therefore, two options are given: get
+  all the comorbidities where the POA flag was definitely -ve, coded as "N"
+  or definitely +ve and coded as "Y". Negating one set won't give the other
+  set unless all codes were either Y or N. #describeIn icd9Comorbid
 }
+\section{Functions}{
+\itemize{
+\item \code{icd9FilterPoaYes}: 
+
+\item \code{icd9FilterPoaNo}: 
+
+\item \code{icd9FilterPoaNotNo}: 
+
+\item \code{icd9FilterPoaNotYes}: 
+}}
 \examples{
 \dontrun{
 # using magrittr is beautiful:

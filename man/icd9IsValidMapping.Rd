@@ -31,22 +31,18 @@ provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 }
 \description{
-just takes each item in each vector of the list of vectors and
-  checks validity
+takes each item in each vector of the list of vectors and checks
+  validity, or returns those items which are valid for each comorbidity.
 }
 \seealso{
-Other ICD9 validation: \code{\link{icd9IsValidDecimal}},
-  \code{\link{icd9IsValidDecimalE}},
-  \code{\link{icd9IsValidDecimalN}},
-  \code{\link{icd9IsValidDecimalV}};
+Other ICD9 validation: \code{\link{icd9IsValid}},
+  \code{\link{icd9IsValidDecimal}},
   \code{\link{icd9IsValidMajor}},
-  \code{\link{icd9IsValidMajorE}},
-  \code{\link{icd9IsValidMajorN}},
-  \code{\link{icd9IsValidMajorV}};
   \code{\link{icd9IsValidShort}},
   \code{\link{icd9IsValidShortE}},
   \code{\link{icd9IsValidShortN}},
-  \code{\link{icd9IsValidShortV}};
-  \code{\link{icd9IsValid}}
+  \code{\link{icd9IsValidShortV}}, \code{\link{icd9Valid}},
+  \code{\link{icd9ValidDecimal}},
+  \code{\link{icd9ValidShort}}
 }
 

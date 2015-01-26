@@ -91,6 +91,7 @@ CharacterVector icd9Children_cpp(CharacterVector icd9, bool isShort, bool onlyRe
 }
 
 //' @rdname icd9Children
+//' @name icd9Children
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = true) {

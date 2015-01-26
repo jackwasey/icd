@@ -4,6 +4,7 @@
 using namespace Rcpp;
 
 //' @rdname convert
+//' @name convert
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToCode( CharacterVector major, CharacterVector minor, bool isShort ) {

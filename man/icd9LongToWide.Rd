@@ -39,7 +39,7 @@ longdf <- data.frame(visitId = c("a", "b", "b", "c"),
 }
 \seealso{
 Other ICD-9 convert: \code{\link{convert}},
-  \code{\link{icd9DecimalToParts}},
+  \code{\link{convert}}, \code{\link{icd9DecimalToParts}},
   \code{\link{icd9DecimalToShort}},
   \code{\link{icd9GetMajor}},
   \code{\link{icd9MajMinToCode}},

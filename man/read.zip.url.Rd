@@ -24,4 +24,5 @@ downloads zip file, and opens named file \code{filename}, or the
   single file in zip if \code{filename} is not specified. FUN is a function,
   with additional arguments to FUN given by \dots.
 }
+\keyword{internal}
 

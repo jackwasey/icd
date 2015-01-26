@@ -1,35 +1,35 @@
-
-icd9FilterValid <- function(x, ...) UseMethod("icd9FilterValid")
-
-icd9FilterValid.data.frame <- function(x, icd9Field = "icd9",
-                                       isShort = TRUE, invert = FALSE) {
-  v <- icd9IsValid(icd9 = x[[icd9Field]], isShort = isShort)
-  if (invert) v <- !v
-  x[v, ]
+#' @title Filter ICD-9 codes by validity.
+#' @description Filters a data.frame of patients for valid or invalid ICD-9 codes
+#' @template icd9df
+#' @template icd9field
+#' @template isShort
+#' @param invert single logical value, if TRUE will return invalid instead of valid rows.
+#' @export
+icd9FilterValid <- function(icd9df, icd9Field = "icd9",
+                                       isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE) {
+  v <- icd9IsValid(icd9 = icd9df[[icd9Field]], isShort = isShort) != invert
+  icd9df[v, ]
 }
 
-# this is the same as icd9GetValid? TODO
-icd9FilterValid.character <- function(x, isShort = TRUE, invert = FALSE) {
-  v <- icd9IsValid(icd9 = x, isShort = isShort)
-  if (invert) v <- !v
-  x[v]
-}
+#' @title Filter ICD-9 codes by invalidity.
+#' @description Filters a data.frame of patients for valid or invalid ICD-9 codes
+#' @template icd9df
+#' @template icd9field
+#' @template isShort
+#' @param invert single logical value, if TRUE will return valid instead of invalid rows.
+#' @export
+icd9FilterInvalid <- function(icd9df, icd9Field = "icd9",
+                                       isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE)
+  icd9FilterValid(icd9df, icd9Field, isShort, invert = !invert)
 
-icd9FilterValid.list <- function(x, isShort = TRUE, invert = FALSE) {
-  v <- icd9IsValid(icd9 = x, isShort = isShort)
-  if (invert) v <- !v
-  x[v]
-}
 
-icd9FilterInvalid <- function(x, ...)
-  icd9FilterValid(x, invert = TRUE, ...)
-
-#' @title filters data frame based on present-on-arrival flag
-#' @description this is not a simple binary, since many codes are exempt,
-#'   unspecified, or unknown. Therefore, two options are given: get all the
-#'   comorbidities where the POA flag was definitely -ve, coded as "N" or
-#'   definitely +ve and coded as "Y". Negating one set won't give the other set
-#'   unless all codes were either Y or N. #describeIn icd9Comorbid
+#' @name icd9FilterPoa
+#' @title Filters data frame based on present-on-arrival flag
+#' @description Present On Arrival (POA) is not a simple flag, since many codes
+#'   are exempt, unspecified, or unknown. Therefore, two options are given: get
+#'   all the comorbidities where the POA flag was definitely -ve, coded as "N"
+#'   or definitely +ve and coded as "Y". Negating one set won't give the other
+#'   set unless all codes were either Y or N. #describeIn icd9Comorbid
 #' @template icd9df
 #' @template poaField
 #' @template poa
@@ -74,22 +74,22 @@ icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
   icd9df[!is.na(p) & p %in% choice, names(icd9df) != poaField]
 }
 
-#' @rdname icd9FilterPoa
+#' @describeIn icd9FilterPoa
 #' @export
 icd9FilterPoaYes <- function(icd9df, poaField = "poa")
   .icd9FilterPoa(icd9df, poaField, choice = c("Y", "y"), negative = FALSE)
 
-#' @rdname icd9FilterPoa
+#' @describeIn icd9FilterPoa
 #' @export
 icd9FilterPoaNo <- function(icd9df, poaField = "poa")
   .icd9FilterPoa(icd9df, poaField, choice = c("N", "n"), negative = FALSE)
 
-#' @rdname icd9FilterPoa
+#' @describeIn icd9FilterPoa
 #' @export
 icd9FilterPoaNotNo <- function(icd9df, poaField = "poa")
   .icd9FilterPoa(icd9df, poaField, choice = c("N", "n"), negative = TRUE)
 
-#' @rdname icd9FilterPoa
+#' @describeIn icd9FilterPoa
 #' @export
 icd9FilterPoaNotYes <- function(icd9df, poaField = "poa")
   .icd9FilterPoa(icd9df, poaField, choice = c("Y", "y"), negative = TRUE)

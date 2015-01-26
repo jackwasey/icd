@@ -3,9 +3,7 @@
 # icd9Children separate from C++ docs so that I can guess isShort
 
 #' @name icd9Children
-#' @title Expand 5 character form 'short' ICD9 to all possible sub codes
-#' @description Much faster in C++, but gains diminished with increasing numbers
-#'   of input shorts, probably because I am copying memory unnecessarily.
+#' @title Expand ICD-9 codes to all possible sub-codes
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
@@ -13,7 +11,6 @@
 #' @template onlyReal
 #' @keywords manip
 #' @family ICD-9 ranges
-#' @aliases icd9ChildrenShort icd9ChildrenDecimal icd9ChildrenShort
 #' @examples
 #' library(magrittr)
 #' icd9ChildrenShort("10201", FALSE) # no children other than self

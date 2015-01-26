@@ -319,13 +319,12 @@ test_that("filter valid - bad input", {
   expect_error(icd9FilterValid(list(j = "k")))
 })
 
-test_that("filter valid - vector input", {
+test_that("get valid - vector input", {
 
-  expect_equal(icd9FilterValid("100"), "100")
-  expect_equal(icd9FilterValid("nolk"), character())
-  expect_equal(icd9FilterValid(c("100", "nolk")), "100")
-  expect_equal(icd9FilterInvalid(c("100", "nolk")), "nolk")
-  expect_equal(icd9FilterValid(c("100", "nolk"), invert = TRUE), "nolk")
+  expect_equal(icd9GetValid("100"), "100")
+  expect_equal(icd9GetValid("nolk"), character())
+  expect_equal(icd9GetValid(c("100", "nolk")), "100")
+  expect_equal(icd9GetInvalid(c("100", "nolk")), "nolk")
 })
 
 test_that("filter valid - data frame input", {

@@ -1,9 +1,7 @@
 #' @title sort short-form icd9 codes
-#' @description should work with numeric only, V or E codes. Note that a numeric
-#'   sort does not work for ICD-9 codes, since "162" > "1620" TODO: write tests.
-#'   TODO: reply with the actual items given (not trimmed, etc.) TODO: need to
-#'   be able to compare a pair of codes quickly, then use built-in sort. This
-#'   becomes easier when I move to S3 classes for ICD-9.
+#' @description Sorts lists of numeric only, V or E codes. Note that a simple
+#'   numeric sort does not work for ICD-9 codes, since "162" > "1620" TODO:
+#'   write tests. TODO: reply with the actual items given (not trimmed, etc.)
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
@@ -12,6 +10,8 @@
 #' @keywords manip
 #' @export
 icd9Sort <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
+  # TODO: need to be able to compare a pair of codes quickly, then use built-in
+  # sort. This becomes easier when I move to S3 classes for ICD-9.
   if (isShort) return(icd9SortShort(icd9))
   icd9SortDecimal(icd9)
 }
