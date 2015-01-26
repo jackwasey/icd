@@ -35,7 +35,7 @@ patientData <- data.frame(
 
 ## Introduction
 
-This package calculates comorbidities, and allows accurate
+Calculate comorbidities, and perform fast and accurate
 validation, conversion, manipulation, filtering and comparison of ICD-9-CM
 (clinical modification) codes. ICD-9 codes appear numeric but leading and
 trailing zeroes, and both decimal and non-decimal "short" format codes

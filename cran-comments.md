@@ -1,3 +1,6 @@
+## Resubmission
+In this version I have updated the package description to remove redundant text "This package..."
+
 ## Test environments
 * Ubuntu 14.04 R 3.1.2
 * Ubuntu 12.04 (on travis-ci) R 3.1.2
@@ -17,12 +20,12 @@ There are three notes:
   comorbidities (3:38, 8:35)
   comorbidity (8:59)
 
-"Comorbidity" is in widesread use, whereas "co-morbidity" is rarely seen.
+"Comorbidity" is in widespread use, whereas "co-morbidity" is rarely seen.
  
  * checking data for non-ASCII characters ... NOTE
   Note: found 7 marked UTF-8 strings
 
-These are integral to included data which has accented chracters in some disease names.
+These are integral to included data which has accented characters in some disease names.
   
 * checking installed package size ... NOTE
   installed size is  8.8Mb

@@ -6,6 +6,19 @@ output:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+
+```
+## Welcome to the icd9 package for finding comorbidities and interpretation of ICD-9 codes.
+## Suggestions and contributions are welcome at https://github.com/jackwasey/icd9 .
+## 
+## Please cite this package if you find it useful for your published work.
+## citation(package = "icd9")
+## 
+## Development version can be installed with
+## # install.packages("devtools")
+## library(devtools)
+## install_github("jackwasey/icd9")
+```
 # icd9
 
 master [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
@@ -14,6 +27,8 @@ _dev_ [![Build Status](https://travis-ci.org/jackwasey/icd9.png?branch=rcpp-opti
 [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=rcpp-optim)](https://coveralls.io/r/jackwasey/icd9?branch=rcpp-optim)
 
 # ICD-9 comorbidities, manipulation and validation
+
+Calculate comorbidities, and perform fast and accurate validation, conversion, manipulation, filtering and comparison of ICD-9-CM (clinical modification) codes. ICD-9 codes appear numeric but leading and trailing zeroes, and both decimal and non-decimal "short" format codes exist. The package enables a work flow from raw lists of ICD-9 codes from hospital billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 
 ICD-9 codes are still in wide use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) is in widespread use. ICD-10 and the corresponding ICD-10-CM are imminent, however a vast amount of patient data is recorded with ICD-9 codes of some kind: this package enables their use in R. A common requirement for medical research involving patients is determining new or existing comorbidities. This often get reported in *Table 1* of research papers to demonstrate the similarity of groups. This package is focussed on fast and accurate generation of this comorbidity information from raw lists of ICD-9 codes.
 

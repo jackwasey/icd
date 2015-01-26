@@ -7,14 +7,13 @@
 \alias{package-icd9}
 \title{tools for working with ICD-9 codes, and finding comorbidities}
 \description{
-This package calculates comorbidities, and allows fast and
-  accurate validation, conversion, manipulation, filtering and comparison of
-  ICD-9-CM (clinical modification) codes. ICD-9 codes appear numeric but
-  leading and trailing zeroes, and both decimal and non-decimal "short"
-  format codes exist. The package enables a work flow from raw lists of ICD-9
-  codes from hospital billing databases to comorbidities. ICD-9 to
-  comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser
-  and AHRQ included.
+Calculate comorbidities, and perform fast and accurate
+  validation, conversion, manipulation, filtering and comparison of ICD-9-CM
+  (clinical modification) codes. ICD-9 codes appear numeric but leading and
+  trailing zeroes, and both decimal and non-decimal "short" format codes
+  exist. The package enables a work flow from raw lists of ICD-9 codes from
+  hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
+  from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 
   \describe{
 
