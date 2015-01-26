@@ -22,9 +22,8 @@ Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew Fong,
   Beck, Thomas E. Feasby, and William A. Ghali. "Coding Algorithms for
   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
   Care 43, no. 11 (November 1, 2005): 1130-39.
-  \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307} unavailable: unavailable:
-  \url{http://web.archive.org/web/20110225042437/\
-  http://www.chaps.ucalgary.ca/sas}
+  \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
+  \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 }
 \keyword{datasets}
 

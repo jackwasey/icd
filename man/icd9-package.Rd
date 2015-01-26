@@ -11,7 +11,7 @@ This package calculates comorbidities, and allows fast and
   accurate validation, conversion, manipulation, filtering and comparison of
   ICD-9-CM (clinical modification) codes. ICD-9 codes appear numeric but
   leading and trailing zeroes, and both decimal and non-decimal "short"
-  format codes exist. The package enables a workflow from raw lists of ICD-9
+  format codes exist. The package enables a work flow from raw lists of ICD-9
   codes from hospital billing databases to comorbidities. ICD-9 to
   comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser
   and AHRQ included.
@@ -38,8 +38,7 @@ This package calculates comorbidities, and allows fast and
   \item The original Elixhauser mapping is provided, with codes transcribed
   from the original publication. See \code{\link{elixComorbid}}.
 
-  }
-  }
+  } }
 
   \item{Validation}{\code{\link{icd9IsValid}} checks whether ICD-9 codes are
   syntactically valid (although not necessarily genuine ICD-9 diagnoses). In

@@ -10,8 +10,7 @@
 
 Rich text descriptions here:
   \url{http://www.cdc.gov/nchs/icd/icd9cm.htm}
-  \url{http://www.cms.gov/Medicare/Coding/\
-  ICD9ProviderDiagnosticCodes/codes.html}
+  \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
    This page has versions 23 to 32 (2005 to 2014). At present, only the 2014
   data is included in this package.
 

@@ -43,7 +43,6 @@ List icd9ComorbidShort(
 
     //get unique visitIds so we can name and size the output
     SetStr uvis;
-    int pos;
     for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
       uvis.insert(it->first);
     }

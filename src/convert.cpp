@@ -129,7 +129,7 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
   CharacterVector minor(icd9Short.size());
 
   for (int i = 0; i < icd9Short.size(); ++i) {
-    if (icd9Short[i] == NA_STRING) { NA_STRING; minor[i] = NA_STRING; continue; }
+    if (icd9Short[i] == NA_STRING) { minor[i] = NA_STRING; continue; }
 
     std::string s = as<std::string>(icd9Short[i]);
     s = icd9::strim_cpp(s); // do i need to convert?

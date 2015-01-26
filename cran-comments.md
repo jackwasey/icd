@@ -5,7 +5,18 @@
 
 ## R CMD check results
 
-There are two notes:
+There are three notes:
+ 
+ Possibly mis-spelled words in DESCRIPTION:
+  AHRQ (9:62)
+  Comorbidities (2:56)
+  Deyo (9:16)
+  Elixhauser (9:25, 9:47)
+  ICD (2:31, 4:71, 5:36, 7:61, 8:50)
+  Quan (9:10)
+  comorbidities (3:38, 8:35)
+  comorbidity (8:59)
+ 
  * checking data for non-ASCII characters ... NOTE
   Note: found 7 marked UTF-8 strings
   
