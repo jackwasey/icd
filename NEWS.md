@@ -1,3 +1,8 @@
+# Version 1.1
+
+* big performance increase from using std::vector instead of std::set more intelligently to get the unique visitIds: one million rows of ICD-9 codes assigned to comorbidities in < 1 sec.
+ * drop unwanted old vignette from the build. Fixes #42
+
 # Version 1.0
 
 * Calculate Charlson scores

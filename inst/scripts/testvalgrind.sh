@@ -5,4 +5,7 @@ R -d "valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -v" -
 # R -d valgrind -e "icd9::icd9ComorbidAhrq(data.frame(visitId = c('a','a'), icd9 = c('39891','00321')), isShort = TRUE)"
 # R -d valgrind -e "source('tests/testthat/helper-base.R'); icd9::icd9ComorbidAhrq(ahrqTestDat, isShort = T, abbrevNames = F, applyHierarchy = T)"
 
-R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); icd9:::icd9BenchComorbid(100)"
+R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); icd9:::icd9BenchComorbid(10000)"
+# then run:
+# callgrind_annotate --auto=yes callgrind.out.#PID filename.cpp
+
