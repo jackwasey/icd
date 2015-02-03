@@ -3,9 +3,7 @@ output:
   md_document:
     variant: markdown_github
 ---
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r, echo = FALSE}
 
 suppressPackageStartupMessages(library(icd9))
@@ -25,10 +23,7 @@ patientData <- data.frame(
 ```
 # icd9
 
-master [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
-
-_dev_ [![Build Status](https://travis-ci.org/jackwasey/icd9.png?branch=rcpp-optim)](https://travis-ci.org/jackwasey/icd9) 
-[![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=rcpp-optim)](https://coveralls.io/r/jackwasey/icd9?branch=rcpp-optim)
+[![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
 
 # ICD-9 comorbidities, manipulation and validation
 
@@ -48,6 +43,9 @@ ICD-9 codes are not numbers, and great care is needed when matching individual c
  * conversion between different representations of ICD-9 codes, with and without a decimal point
  * comprehensive tests to increase confidence in accurate processing of ICD-9 codes.
 
+## New since last CRAN release:
+ * big performance increase: 1 million ICD-9 codes assigned to comorbidities in <1s
+
 ## Examples
 
 See the vignette for many more examples. Here's a taste, 
@@ -64,8 +62,6 @@ icd9FilterPoa(patientData)
 # reformat input data:
 patientData %>% icd9LongToWide # everything works well with magrittr
 ```
-
-
 ## Install
 
 The latest version is available in [github](https://github.com/jackwasey/icd9) and can be installed with:
