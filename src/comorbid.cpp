@@ -41,10 +41,11 @@ List icd9ComorbidShort(
     std::cout << "multimap created\n";
     #endif
 
-    //get unique visitIds so we can name and size the output
-    SetStr uvis;
+    //get unique visitIds so we can name and size the output, and also populate the visitId col of output
+    VecStr uvis;
+    uvis.reserve(vcdb.size()); // over-reserve massively as first approximation
     for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
-      uvis.insert(it->first);
+      uvis.insert(uvis.end(), it->first); // according to valgrind, this is the very slow step when uvis was a std::set
     }
     int usize = uvis.size();
     #ifdef ICD9_DEBUG

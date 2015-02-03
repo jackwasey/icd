@@ -1,2 +1,10 @@
 PKG_CPPFLAGS = -I. -I../inst/include/
+#CXX=g++
+#CC=gcc
+#PKG_CXXFLAGS = -O0
+
+# see  http://clang.llvm.org/docs/UsersManual.html#profiling-with-instrumentation
+# $ clang++ -O2 -fprofile-instr-generate code.cc -o code
+# this requires a hand-built clang/llvm/compiler-rt
+# PKG_CXXFLAGS = -O2 -fprofile-instr-generate
 

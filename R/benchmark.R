@@ -22,6 +22,9 @@ randomDecimalIcd9 <- function(n = 50000)
   )
 
 
+icd9BenchComorbid <- function(n=1E5)
+  invisible(icd9ComorbidAhrq(randomPatients(n)))
+
 #' benchmark and profile major functions with larger data sets
 #'
 #' \code{icd9} package is intended to be used with large data sets, with
@@ -48,7 +51,8 @@ icd9Benchmark <- function() {
   #summaryRprof(filename = tmp, memory = "stats", lines = "both")
   summaryRprof(filename = tmp, memory = "both", lines = "show")
 
-# see how we do scaling up:
+  # see how we do scaling up:
+  set.seed(1441)
   microbenchmark::microbenchmark(
     icd9ComorbidAhrq(randomPatients(1), isShort = TRUE),
     icd9ComorbidAhrq(randomPatients(10), isShort = TRUE),
@@ -56,6 +60,7 @@ icd9Benchmark <- function() {
     icd9ComorbidAhrq(randomPatients(1000), isShort = TRUE),
     # argh, we fall off a cliff between 1000 and 10000 and get much slower.
     icd9ComorbidAhrq(randomPatients(10000), isShort = TRUE),
+    icd9ComorbidAhrq(randomPatients(100000), isShort = TRUE),
     times = 5
   )
 
@@ -146,10 +151,10 @@ icd9Benchmark <- function() {
   # regex is a little faster than fixed
   icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
   microbenchmark::microbenchmark(times = 3,
-                 grepl(pattern = "E", icd9, fixed = TRUE) |
-                   grepl(pattern = "e", icd9, fixed = TRUE) |
-                   grepl(pattern = "V", icd9, fixed = TRUE) |
-                   grepl(pattern = "v", icd9, fixed = TRUE))
+                                 grepl(pattern = "E", icd9, fixed = TRUE) |
+                                   grepl(pattern = "e", icd9, fixed = TRUE) |
+                                   grepl(pattern = "V", icd9, fixed = TRUE) |
+                                   grepl(pattern = "v", icd9, fixed = TRUE))
 
 
 
