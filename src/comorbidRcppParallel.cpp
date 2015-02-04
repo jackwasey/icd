@@ -3,30 +3,19 @@
 // [[Rcpp::depends(RcppParallel)]]
 #include <progress.hpp>
 #include <Rcpp.h>
+#include <local.h>
 #include <string>
 #include <RcppParallel.h>
 
 using namespace Rcpp;
 using namespace RcppParallel;
 
-#define ICD9_DEBUG = 1
-
-typedef std::vector<std::string > VecStr;
-typedef VecStr::iterator VecStrIt;
-typedef std::set<std::string > SetStr;
-typedef std::map<int,std::string > MapStr;
-typedef std::vector<SetStr > CmbMap;
-typedef std::multimap<std::string, std::string> Tmm;
-// internal function definitions
-int printVecStr(VecStr sv);
-int printCharVec(CharacterVector cv);
-
 struct ComorbidWorker : public Worker {
   // source vectors
   Tmm vcdb;
   CmbMap map;
   CharacterVector mapnames;
-  int nref;
+  int num_comorbid;
   List out; // it's actually a proto-data.frame
 
   // constructors
@@ -48,20 +37,17 @@ struct ComorbidWorker : public Worker {
     std::cout << usize << "\n";
     #endif
 
-    nref = map.size(); // the number of comorbidity groups
+    num_comorbid = map.size(); // the number of comorbidity groups
 
-    // initialize with empty logical vectors
-    LogicalVector cmb_all_false(usize, false); // inital vector of falses
-    for (int cmb = 0; cmb < nref; ++cmb) {
-      String cmbnm = mapnames[cmb];
-      out[cmbnm] = cmb_all_false; // does data copy
+    // initialize the output List
+    out["visitId"] = uvis;
+    // initialize the rest with empty logical vectors
+    const LogicalVector empty_comorbid(usize, false); // inital vector of falses
+    for (int cmb = 0; cmb < num_comorbid; ++cmb) {
+      const String cmbnm = mapnames[cmb];
+      out[cmbnm] = empty_comorbid; // copies empty vectors into the result list/data.frame
     }
 
-    for (int cmb = 0; cmb < nref; ++cmb) {
-      LogicalVector cmbcol(usize, false); // inital vector of falses
-      String cmbnm = mapnames[cmb];
-      out[cmbnm] = cmbcol; // does data copy
-    }
     // use std::multimap to get subset of icd codes for each visitId key
     for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
 
@@ -73,7 +59,7 @@ struct ComorbidWorker : public Worker {
 
       // instead of assuming order of keys and counting, we need to insert the key, so the loop can go parallel
       // loop through comorbidities
-      for (int cmb = 0; cmb < nref; ++cmb) {
+      for (int cmb = 0; cmb < num_comorbid; ++cmb) {
         // loop through icd codes for this visitId
         for (Tmm::iterator j = matchrange.first; j != matchrange.second; ++j) {
           if (map[cmb].find(j->second) != map[cmb].end()) {
@@ -84,19 +70,18 @@ struct ComorbidWorker : public Worker {
       }
     }
 
+
+
   }
 
   void join(ComorbidWorker& rhs) {
     // now insert vectors from each col of RHS into out
-    //for (CharacterVector::iterator it = mapnames.begin(); it != mapnames.end(); ++it) {
-    for (int cmb = 0; cmb < nref; ++cmb) {
-      //String cmb = *it;
-
+    for (int cmb = 0; cmb < num_comorbid; ++cmb) {
       // does conv to stl types copy data? I don't think it should
       std::vector<bool> cmbcol = as<std::vector<bool> >(out[cmb]);
       std::vector<bool> rhscol = as<std::vector<bool> >(rhs.out[cmb]);
       cmbcol.insert(cmbcol.end(), rhscol.begin(), rhscol.end());
-      // should have updated 'out' by referencing
+      // should have updated 'out' by reference
     }
   }
 };
@@ -108,8 +93,7 @@ struct ComorbidWorker : public Worker {
 List icd9ComorbidShortRcppParallel(DataFrame icd9df,
 List icd9Mapping,
 std::string visitId = "visitId", // or CharacterVector?
-std::string icd9Field = "icd9",
-int threads = 4) {
+std::string icd9Field = "icd9") {
   List out;
   VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
   VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
@@ -133,6 +117,9 @@ int threads = 4) {
   // later loops, because we can .find() instead of linear search.
   CmbMap map;
   for (List::iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end(); ++mi) {
+    #ifdef ICD9_DEBUG
+    std::cout << "working on building map..." << "\n";
+    #endif
     VecStr mvs(as<VecStr>(*mi));
     SetStr ss(mvs.begin(), mvs.end());
     map.push_back(ss);
@@ -141,25 +128,18 @@ int threads = 4) {
   std::cout << "reference mapping std structure created\n";
   #endif
 
-  //get unique visitIds so we can name and size the output, and also populate the visitId col of output
-  VecStr uvis; // can this be made const?
-  uvis.reserve(vcdb.size()); // over-reserve massively as first approximation
-  for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
-    uvis.insert(uvis.end(), it->first); // according to valgrind, this is the very slow step when uvis was a std::set
-  }
-  int usize = uvis.size();
+  ComorbidWorker worker(vcdb, map, mapnames);
   #ifdef ICD9_DEBUG
-  std::cout << "got" << usize << "unique visitIds.\n";
+  std::cout << "worker created\n";
+  #endif
+  parallelFor(0, vcdb.size(), worker);
+  #ifdef ICD9_DEBUG
+  std::cout << "work complete\n";
   #endif
 
-  ComorbidWorker worker(vcdb, map, mapnames);
-  parallelFor(0, vcdb.size(), worker);
-
-  mapnames.push_front("visitId"); // try to do this in the parallel part
-  out.names() = mapnames;
-  IntegerVector row_names = seq_len(usize);
-  out.attr("row.names") = row_names;
-  out.attr("class") = "data.frame";
+  //IntegerVector row_names = seq_len(as<LogicalVector>(out[1]).size());
+  //out.attr("row.names") = row_names;
+  //out.attr("class") = "data.frame";
   return out;
 }
 

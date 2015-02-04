@@ -3,6 +3,7 @@
 // [[Rcpp::plugins(openmp)]]
 #include <progress.hpp>
 #include <Rcpp.h>
+#include <local.h>
 #include <string>
 
 #ifdef _OPENMP
@@ -11,24 +12,12 @@
 
 using namespace Rcpp;
 
-#define ICD9_DEBUG = 1
-
-typedef std::vector<std::string > VecStr;
-typedef VecStr::iterator VecStrIt;
-typedef std::set<std::string > SetStr;
-typedef std::map<int,std::string > MapStr;
-typedef std::vector<SetStr > CmbMap;
-typedef std::multimap<std::string, std::string> Tmm;
-// internal function definitions
-int printVecStr(VecStr sv);
-int printCharVec(CharacterVector cv);
-
 //' @rdname icd9Comorbid
 //' @description ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
 //' I'm pretty sure this is bad because STL is not thread safe.
 //' @export
 // [[Rcpp::export]]
-List icd9ComorbidShortParallelOne(
+List icd9ComorbidShortParallelOpenMP(
   DataFrame icd9df,
   List icd9Mapping,
   std::string visitId = "visitId", // or CharacterVector?

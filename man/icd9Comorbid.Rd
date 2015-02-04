@@ -7,6 +7,8 @@
 \alias{icd9ComorbidQuanDeyo}
 \alias{icd9ComorbidQuanElix}
 \alias{icd9ComorbidShort}
+\alias{icd9ComorbidShortParallelOpenMP}
+\alias{icd9ComorbidShortRcppParallel}
 \alias{icd9Comorbidities}
 \alias{icd9ComorbiditiesAhrq}
 \alias{icd9ComorbiditiesElixHauser}
@@ -15,6 +17,12 @@
 \title{find comorbidities from ICD-9 codes.}
 \usage{
 icd9ComorbidShort(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9")
+
+icd9ComorbidShortParallelOpenMP(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9", threads = 4L)
+
+icd9ComorbidShortRcppParallel(icd9df, icd9Mapping, visitId = "visitId",
   icd9Field = "icd9")
 
 icd9Comorbid(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9",
@@ -91,6 +99,11 @@ E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 to \code{icd9ComorbidAhrq}}
 }
 \description{
+ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
+I'm pretty sure this is bad because STL is not thread safe.
+
+ParallelTwo will try to use built in STL parallelism
+
 This is the main function which extracts co-morbidities from a
   set of ICD-9 codes. This is when some trivial post-processing of the
   comorbidity data is done, e.g. renaming to human-friendly field names, and

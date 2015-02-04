@@ -11,15 +11,15 @@ icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Fiel
 #' @description ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
 #' I'm pretty sure this is bad because STL is not thread safe.
 #' @export
-icd9ComorbidShortParallelOne <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 4L) {
-    .Call('icd9_icd9ComorbidShortParallelOne', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
+icd9ComorbidShortParallelOpenMP <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 4L) {
+    .Call('icd9_icd9ComorbidShortParallelOpenMP', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
 }
 
 #' @rdname icd9Comorbid
 #' @description ParallelTwo will try to use built in STL parallelism
 #' @export
-icd9ComorbidShortRcppParallel <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 4L) {
-    .Call('icd9_icd9ComorbidShortRcppParallel', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
+icd9ComorbidShortRcppParallel <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9ComorbidShortRcppParallel', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
 
 #' @rdname convert
