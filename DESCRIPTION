@@ -34,4 +34,4 @@ BugReports: https://github.com/jackwasey/icd9/issues
 License: GPL-3
 Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
-LinkingTo: Rcpp, RcppProgress
+LinkingTo: Rcpp, RcppProgress, RcppParallel
