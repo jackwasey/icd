@@ -23,10 +23,15 @@ struct ComorbidWorker : public Worker {
   void operator()(std::size_t begin, std::size_t end) {
     // do the work for the given range
 
+
+    Tmm::iterator chunkbegin = vcdb.begin();
+    Tmm::iterator chunkend = vcdb.begin();
+    advance(chunkbegin, begin);
+    advance(chunkend, end);
     //get unique visitIds so we can name and size the output, and also populate the visitId col of output
     VecStr uvis; // can this be made const?
-    uvis.reserve(vcdb.size()); // over-reserve massively as first approximation
-    for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
+    uvis.reserve(end - begin); // over-reserve massively as first approximation (i.e. 1 comorbid per pt)
+    for( Tmm::iterator it = chunkbegin; it != chunkend; it = vcdb.upper_bound(it->first)) {
       uvis.insert(uvis.end(), it->first); // according to valgrind, this is the very slow step when uvis was a std::set
     }
     int usize = uvis.size();
@@ -47,7 +52,7 @@ struct ComorbidWorker : public Worker {
     }
 
     // use std::multimap to get subset of icd codes for each visitId key
-    for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
+    for( Tmm::iterator it = chunkbegin; it != chunkend; it = vcdb.upper_bound(it->first)) {
 
       // find the icd9 codes for a given visitId
       std::string key = it->first;
@@ -67,18 +72,18 @@ struct ComorbidWorker : public Worker {
         }
       }
     }
-
-
-
   }
 
   void join(ComorbidWorker& rhs) {
     // now insert vectors from each col of RHS into out
-    for (int cmb = 0; cmb < num_comorbid; ++cmb) {
+    for (int cmb = 1; cmb < num_comorbid; ++cmb) { // visitId is col 0, TODO: go to n+1
+      #ifdef ICD9_DEBUG
+      cout << "working on joining cmb: " << cmb << "\n";
+      #endif
       // does conv to stl types copy data? I don't think it should
-      std::vector<bool> cmbcol = as<std::vector<bool> >(out[cmb]);
-      std::vector<bool> rhscol = as<std::vector<bool> >(rhs.out[cmb]);
-      cmbcol.insert(cmbcol.end(), rhscol.begin(), rhscol.end());
+      //std::vector<bool> cmbcol = as<std::vector<bool> >(out[cmb]);
+      //std::vector<bool> rhscol = as<std::vector<bool> >(rhs.out[cmb]);
+      //cmbcol.insert(cmbcol.end(), rhscol.begin(), rhscol.end()); // don't insert just for testing
       // should have updated 'out' by reference
     }
   }

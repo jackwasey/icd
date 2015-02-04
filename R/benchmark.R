@@ -22,10 +22,15 @@ randomDecimalIcd9 <- function(n = 50000)
   )
 
 
+icd9BenchSingleComorbid <- function() {
+  pts <- randomPatients(50)
+  icd9ComorbidShortRcppParallel(pts, ahrqComorbid)
+}
+
 icd9BenchComorbid <- function(n=1E5, threads = 1)
   system.time(icd9ComorbidShortParallelOne(randomPatients(n), icd9Mapping = ahrqComorbid, threads = threads))
 
-icd9BenchComorbidParallelOne <- function() {
+icd9BenchComorbidParallelOpenMP <- function() {
   pts10000 <- randomPatients(10000)
   pts100000 <- randomPatients(100000)
   ptsBig <- randomPatients(500000)
