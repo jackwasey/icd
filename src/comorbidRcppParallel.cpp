@@ -1,7 +1,5 @@
 // [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::depends(RcppProgress)]]
 // [[Rcpp::depends(RcppParallel)]]
-#include <progress.hpp>
 #include <Rcpp.h>
 #include <local.h>
 #include <string>

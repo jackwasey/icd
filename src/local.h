@@ -1,7 +1,4 @@
 // [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::depends(RcppProgress)]]
-// [[Rcpp::plugins(openmp)]]
-#include <progress.hpp>
 #include <Rcpp.h>
 
 #define DEBUG = 1
@@ -14,4 +11,4 @@ typedef std::vector<SetStr > CmbMap;
 typedef std::multimap<std::string, std::string> Tmm;
 // internal function definitions
 int printVecStr(VecStr sv);
-int printCharVec(CharacterVector cv);
+int printCharVec(Rcpp::CharacterVector cv);

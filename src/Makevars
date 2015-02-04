@@ -1,10 +1,10 @@
-CC=gcc
-CXX=g++
+#PKG_CC=gcc
+#PKGCXX=g++
 
 PKG_CPPFLAGS = -I. -I../inst/include/
-PKG_CXXFLAGS = -march=native -fopenmp
+PKG_CXXFLAGS = -march=native -fopenmp -Wall
 # i thought rcpp plugin takes care of -fopenmp
-PKG_LIBS = -fopenmp
+PKG_LIBS = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` -fopenmp
 
 # -lgomp in libs?
 
