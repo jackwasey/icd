@@ -2,7 +2,17 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @rdname icd9Comorbid
+#' @description ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
+#' I'm pretty sure this is bad because STL is not thread safe.
 #' @export
+icd9ComorbidShortParallelOne <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 4L) {
+    .Call('icd9_icd9ComorbidShortParallelOne', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
+}
+
+icd9ComorbidShortParallelTwo <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 4L) {
+    .Call('icd9_icd9ComorbidShortParallelTwo', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
+}
+
 icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
     .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }

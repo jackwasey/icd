@@ -22,8 +22,56 @@ randomDecimalIcd9 <- function(n = 50000)
   )
 
 
-icd9BenchComorbid <- function(n=1E5)
-  invisible(icd9ComorbidAhrq(randomPatients(n)))
+icd9BenchComorbid <- function(n=1E5, threads = 1)
+  system.time(icd9ComorbidShortParallelOne(randomPatients(n), icd9Mapping = ahrqComorbid, threads = threads))
+
+icd9BenchComorbidParallelOne <- function() {
+  pts10000 <- randomPatients(10000)
+  pts100000 <- randomPatients(100000)
+  ptsBig <- randomPatients(500000)
+  microbenchmark(
+    icd9ComorbidShortParallelOne(pts10000, ahrqComorbid, threads = 0),
+    icd9ComorbidShortParallelOne(pts10000, ahrqComorbid, threads = 1),
+    icd9ComorbidShortParallelOne(pts10000, ahrqComorbid, threads = 2),
+    icd9ComorbidShortParallelOne(pts10000, ahrqComorbid, threads = 4),
+    icd9ComorbidShortParallelOne(pts10000, ahrqComorbid, threads = 6),
+    icd9ComorbidShortParallelOne(pts100000, ahrqComorbid, threads = 0),
+    icd9ComorbidShortParallelOne(pts100000, ahrqComorbid, threads = 1),
+    icd9ComorbidShortParallelOne(pts100000, ahrqComorbid, threads = 2),
+    icd9ComorbidShortParallelOne(pts100000, ahrqComorbid, threads = 4),
+    icd9ComorbidShortParallelOne(pts100000, ahrqComorbid, threads = 6),
+    icd9ComorbidShortParallelOne(ptsBig, ahrqComorbid, threads = 0),
+    icd9ComorbidShortParallelOne(ptsBig, ahrqComorbid, threads = 1),
+    icd9ComorbidShortParallelOne(ptsBig, ahrqComorbid, threads = 2),
+    icd9ComorbidShortParallelOne(ptsBig, ahrqComorbid, threads = 4),
+    icd9ComorbidShortParallelOne(ptsBig, ahrqComorbid, threads = 6),
+    # 8 is very slow (maxes hyperthreading...)
+    times = 5) %>% print
+}
+
+icd9BenchComorbidParallelTwo <- function() {
+  pts10000 <- randomPatients(10000)
+  pts100000 <- randomPatients(100000)
+  ptsBig <- randomPatients(500000)
+  microbenchmark(
+    icd9ComorbidShortParallelTwo(pts10000, ahrqComorbid, threads = 0),
+    icd9ComorbidShortParallelTwo(pts10000, ahrqComorbid, threads = 1),
+    icd9ComorbidShortParallelTwo(pts10000, ahrqComorbid, threads = 2),
+    icd9ComorbidShortParallelTwo(pts10000, ahrqComorbid, threads = 4),
+    icd9ComorbidShortParallelTwo(pts10000, ahrqComorbid, threads = 6),
+    icd9ComorbidShortParallelTwo(pts100000, ahrqComorbid, threads = 0),
+    icd9ComorbidShortParallelTwo(pts100000, ahrqComorbid, threads = 1),
+    icd9ComorbidShortParallelTwo(pts100000, ahrqComorbid, threads = 2),
+    icd9ComorbidShortParallelTwo(pts100000, ahrqComorbid, threads = 4),
+    icd9ComorbidShortParallelTwo(pts100000, ahrqComorbid, threads = 6),
+    icd9ComorbidShortParallelTwo(ptsBig, ahrqComorbid, threads = 0),
+    icd9ComorbidShortParallelTwo(ptsBig, ahrqComorbid, threads = 1),
+    icd9ComorbidShortParallelTwo(ptsBig, ahrqComorbid, threads = 2),
+    icd9ComorbidShortParallelTwo(ptsBig, ahrqComorbid, threads = 4),
+    icd9ComorbidShortParallelTwo(ptsBig, ahrqComorbid, threads = 6),
+    # 8 is very slow (maxes hyperthreading...)
+    times = 5) %>% print
+}
 
 #' benchmark and profile major functions with larger data sets
 #'

@@ -71,10 +71,10 @@ List icd9ComorbidShort(
     out[visitId] = uvis;
 
     // initialize with empty logical vectors
+    const LogicalVector cmb_all_false(usize, false); // inital vector of falses
     for (int cmb = 0; cmb < nref; ++cmb) {
-      LogicalVector cmbcol(usize, false); // inital vector of falses
       String cmbnm = mapnames[cmb];
-      out[cmbnm] = cmbcol; // does data copy
+      out[cmbnm] = cmb_all_false; // does data copy
     }
 
     // use std::multimap to get subset of icd codes for each visitId key
@@ -96,7 +96,7 @@ List icd9ComorbidShort(
         for (Tmm::iterator j = matchrange.first; j != matchrange.second; ++j) {
           if (map[cmb].find(j->second) != map[cmb].end()) {
             LogicalVector cmbcol = out[cmb+1]; // does this copy?
-            cmbcol[urow] = true;
+            cmbcol[urow] = true; // cmbcol updates 'out' by reference (I think)
           }
         }
       }

@@ -1,6 +1,14 @@
+CC=gcc
+CXX=g++
+
 PKG_CPPFLAGS = -I. -I../inst/include/
-#CXX=g++
-#CC=gcc
+PKG_CXXFLAGS = -march=native -fopenmp
+# i thought rcpp plugin takes care of -fopenmp
+PKG_LIBS = -fopenmp
+
+# -lgomp in libs?
+
+# may need the following for debug or optimization
 #PKG_CXXFLAGS = -O0
 
 # see  http://clang.llvm.org/docs/UsersManual.html#profiling-with-instrumentation
