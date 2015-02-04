@@ -26,10 +26,11 @@ struct ComorbidWorker : public Worker {
   Tmm vcdb;
   CmbMap map;
   CharacterVector mapnames;
+  int nref;
   List out; // it's actually a proto-data.frame
 
   // constructors
-  ComorbidWorker(Tmm vcdb, CmbMap map, CharacterVector mapnames, List out)
+  ComorbidWorker(Tmm vcdb, CmbMap map, CharacterVector mapnames)
   : vcdb(vcdb), map(map), mapnames(mapnames), out(List::create()) {}
 
   void operator()(std::size_t begin, std::size_t end) {
@@ -47,7 +48,7 @@ struct ComorbidWorker : public Worker {
     std::cout << usize << "\n";
     #endif
 
-    int nref = map.size(); // the number of comorbidity groups
+    nref = map.size(); // the number of comorbidity groups
 
     // initialize with empty logical vectors
     LogicalVector cmb_all_false(usize, false); // inital vector of falses
@@ -84,9 +85,19 @@ struct ComorbidWorker : public Worker {
     }
 
   }
-  // join my value with that of another InnerProduct
+
   void join(ComorbidWorker& rhs) {
-    // TODO
+    // now insert vectors from each col of RHS into out
+    //for (CharacterVector::iterator it = mapnames.begin(); it != mapnames.end(); ++it) {
+    for (int cmb = 0; cmb < nref; ++cmb) {
+      //String cmb = *it;
+
+      // does conv to stl types copy data? I don't think it should
+      std::vector<bool> cmbcol = as<std::vector<bool> >(out[cmb]);
+      std::vector<bool> rhscol = as<std::vector<bool> >(rhs.out[cmb]);
+      cmbcol.insert(cmbcol.end(), rhscol.begin(), rhscol.end());
+      // should have updated 'out' by referencing
+    }
   }
 };
 
@@ -138,11 +149,11 @@ int threads = 4) {
   }
   int usize = uvis.size();
   #ifdef ICD9_DEBUG
-  std::cout << "got the following unique visitIds: ";
-  std::cout << usize << "\n";
+  std::cout << "got" << usize << "unique visitIds.\n";
   #endif
 
-  //parallelFor
+  ComorbidWorker worker(vcdb, map, mapnames);
+  parallelFor(0, vcdb.size(), worker);
 
   mapnames.push_front("visitId"); // try to do this in the parallel part
   out.names() = mapnames;
