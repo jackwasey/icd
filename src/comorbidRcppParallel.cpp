@@ -92,7 +92,7 @@ using namespace RcppParallel;
      // now insert vectors from each col of RHS into out
      for (int cmb = 1; cmb < num_comorbid; ++cmb) { // visitId is col 0, TODO: go to n+1
      #ifdef ICD9_DEBUG
-     cout << "working on joining cmb: " << cmb << "\n";
+     std::cout << "working on joining cmb: " << cmb << "\n";
      #endif
      // does conv to stl types copy data? I don't think it should
      out.insert(out.end(), rhs.out.begin(), rhs.out.end());

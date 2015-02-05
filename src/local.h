@@ -1,7 +1,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 
-#define DEBUG = 1
+#define ICD9_DEBUG = 1
 
 typedef std::vector<std::string > VecStr;
 typedef std::vector<bool> VB;
