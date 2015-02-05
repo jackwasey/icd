@@ -99,18 +99,18 @@ List icd9ComorbidShort(
   }
 
 #ifdef ICD9_DEBUG
-  int printVecStr(VecStr sv) {
-    for (VecStr::iterator i = sv.begin(); i != sv.end(); ++i) {
+  void printVecStr(VecStr sv) {
+    for (VecStrIt i=sv.begin();i!=sv.end();++i) {
       std::cout << *i << "\n";
     }
-    return 0;
+    return;
   }
 
-  int printCharVec(CharacterVector cv) {
+  void printCharVec(CharacterVector cv) {
     for (CharacterVector::iterator i = cv.begin(); i != cv.end(); ++i) {
       String s = *i;
       std::cout << s.get_cstring() << "\n";
     }
-    return 0;
+    return;
   }
 #endif

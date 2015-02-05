@@ -3,13 +3,17 @@
 
 #define ICD9_DEBUG = 1
 
-typedef std::vector<std::string > VecStr;
+typedef std::string Str;
+typedef std::vector<Str> VecStr;
 typedef std::vector<bool> VB;
+
 typedef VecStr::iterator VecStrIt;
-typedef std::set<std::string > SetStr;
-typedef std::map<int,std::string > MapStr;
-typedef std::vector<SetStr > CmbMap;
-typedef std::multimap<std::string, std::string> Tmm;
+
+typedef std::set<Str> SetStr;
+typedef std::map<Str,VecStr> MapVecStr;
+typedef std::map<int,Str> MapStr;
+typedef std::vector<SetStr> CmbMap;
+typedef std::multimap<Str, Str> Tmm;
 // internal function definitions
-int printVecStr(VecStr sv);
-int printCharVec(Rcpp::CharacterVector cv);
+void printVecStr(VecStr sv);
+void printCharVec(Rcpp::CharacterVector cv);
