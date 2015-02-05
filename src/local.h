@@ -4,6 +4,7 @@
 #define DEBUG = 1
 
 typedef std::vector<std::string > VecStr;
+typedef std::vector<bool> VB;
 typedef VecStr::iterator VecStrIt;
 typedef std::set<std::string > SetStr;
 typedef std::map<int,std::string > MapStr;

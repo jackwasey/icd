@@ -15,9 +15,6 @@ icd9ComorbidShortParallelOpenMP <- function(icd9df, icd9Mapping, visitId = "visi
     .Call('icd9_icd9ComorbidShortParallelOpenMP', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
 }
 
-#' @rdname icd9Comorbid
-#' @description ParallelTwo will try to use built in STL parallelism
-#' @export
 icd9ComorbidShortRcppParallel <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
     .Call('icd9_icd9ComorbidShortRcppParallel', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
