@@ -22,7 +22,7 @@ randomDecimalIcd9 <- function(n = 50000)
   )
 
 
-icd9BenchSingleComorbid <- function() {
+sc <- function() {
   pts <- randomPatients(50)
   icd9ComorbidShortRcppParallel(pts, ahrqComorbid)
 }

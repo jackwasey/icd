@@ -38,6 +38,7 @@ using namespace RcppParallel;
      for(Tmm::iterator it = chunkbegin; it != chunkend; it = vcdb.upper_bound(it->first)) {
        uvis.insert(uvis.end(), it->first); // according to valgrind, this is the very slow step when unique_visits was a std::set
      }
+     std::cout << "got uvis = " << uvis.size();
      return uvis;
    }
 
@@ -81,7 +82,7 @@ using namespace RcppParallel;
          // loop through icd codes for this visitId
          for (Tmm::iterator j = matchrange.first; j != matchrange.second; ++j) {
            if (map[cmb].find(j->second) != map[cmb].end()) {
-             out[cmb*num_comorbid + urow] = true; // and update the current 'row'
+             out[cmb*(num_comorbid-1) + urow] = true; // and update the current 'row'
            }
          }
        }
@@ -90,7 +91,7 @@ using namespace RcppParallel;
 
    void join(ComorbidWorker& rhs) {
      // now insert vectors from each col of RHS into out
-     for (int cmb = 1; cmb < num_comorbid; ++cmb) { // visitId is col 0, TODO: go to n+1
+     for (int cmb = 0; cmb < num_comorbid; ++cmb) { // visitId is col 0, TODO: go to n+1
      #ifdef ICD9_DEBUG
      std::cout << "working on joining cmb: " << cmb << "\n";
      #endif
@@ -109,11 +110,11 @@ using namespace RcppParallel;
  //' @description ParallelTwo will try to use built in STL parallelism
  //' @export
  // [[Rcpp::export]]
- List icd9ComorbidShortRcppParallel(DataFrame icd9df,
+ std::vector<bool> icd9ComorbidShortRcppParallel(DataFrame icd9df,
  List icd9Mapping,
  std::string visitId = "visitId", // or CharacterVector?
  std::string icd9Field = "icd9") {
-   List out;
+   VB out;
    VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
    VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
 
