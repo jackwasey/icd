@@ -11,3 +11,6 @@ R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); icd9:::
 
 # test with real data
 R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); load('i9test.RData'); icd9ComorbidAhrq(i9test, visitId='patcom',icd9Field='i9diag')"
+
+# stress with fabricated data on parallel implementation
+R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); devnull<-icd9:::sc(1000000)"

@@ -8,8 +8,6 @@ typedef std::string Str;
 typedef std::vector<Str> VecStr;
 typedef std::vector<bool> VB;
 
-typedef VecStr::iterator VecStrIt;
-
 typedef std::set<Str> SetStr;
 typedef std::map<Str,VecStr> MapVecStr;
 typedef std::map<int,Str> MapStr;

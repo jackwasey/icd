@@ -40,8 +40,8 @@ struct ComorbidWorker : public Worker {
     for(MapVecStr::const_iterator vis_it = chunkbegin; vis_it != chunkend; ++vis_it) {
 
       // find the icd9 codes for a given visitId
-      std::string key = vis_it->first;
-      VecStr codes = vis_it->second; // these are the ICD-9 codes for the current visitid
+      const std::string key = vis_it->first;
+      const VecStr codes = vis_it->second; // these are the ICD-9 codes for the current visitid
 
       #ifdef ICD9_DEBUG
       std::cout << "working on key: " << key <<" with codes: ";
@@ -62,22 +62,23 @@ struct ComorbidWorker : public Worker {
         std::cout << "working on cmb: " << cmb <<"... ";
         #endif
         // loop through icd codes for this visitId
-        for (VecStrIt code_it = codes.begin(); code_it != codes.end(); ++code_it) {
+        const VecStr::const_iterator cbegin = codes.begin();
+        const VecStr::const_iterator cend = codes.end();
+        for (VecStr::const_iterator code_it = cbegin; code_it != cend; ++code_it) {
           #ifdef ICD9_TRACE
           std::cout << "working on code: " << *code_it << "\n";
           printSetStr(map[cmb]);
           #endif
-          if (map[cmb].find(*code_it) != map[cmb].end()) {
+          const SetStr::const_iterator found_it = map[cmb].find(*code_it);
+          const SetStr::const_iterator found_end = map[cmb].end();
+          if (found_it != found_end) {
             VB::size_type out_idx = cmb*(num_visits-1) + urow;
             #ifdef ICD9_TRACE
             std::cout << "found match";
             std::cout << out.size() << ", but idx = " << out_idx << "\n";
             #endif
-            if (out_idx < out.size()) {
+            // no bounds check: confidence in the mathematics
             out[out_idx] = true; // and update the current item. This is where we define the matrix indexing to be by visitid first, then cmb, which fits with a dataframe of a list of columns.
-            } else {
-              std::cout << "out of bounds!\n";
-            }
           }
           #ifdef ICD9_TRACE
           std::cout << "\n";
@@ -93,9 +94,10 @@ struct ComorbidWorker : public Worker {
 //' @export
 // [[Rcpp::export]]
 List icd9ComorbidShortRcppParallel(DataFrame icd9df, List icd9Mapping,
-std::string visitId = "visitId", std::string icd9Field = "icd9") {
-  VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
-  VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
+const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+
+  const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
+  const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
 
   // TODO reserve size for map if possible for vcdb?
   MapVecStr vcdb;
@@ -166,7 +168,7 @@ std::string visitId = "visitId", std::string icd9Field = "icd9") {
   for (MapVecStr::iterator it=vcdb.begin(); it !=vcdb.end(); ++it) {
     visitIds.push_back(it->first);
   }
-  df_out["visitId"] = wrap(visitIds);
+  df_out[visitId] = wrap(visitIds);
   // loop through comorbidities to extract logical vectors
   #ifdef ICD9_DEBUG
   int n = (int)worker.out.size();
@@ -175,7 +177,7 @@ std::string visitId = "visitId", std::string icd9Field = "icd9") {
   #endif
 
   for (size_t i=0;i<worker.num_comorbid;++i) {
-    String cmb_name = mapnames[i];
+    const String cmb_name = mapnames[i];
     VB::iterator start = worker.out.begin();
     VB::iterator end = worker.out.begin();
     std::advance(start, i*worker.num_visits);

@@ -36,11 +36,18 @@ icd9BenchComorbid <- function(n=1E5, threads = 1)
 
 
 icd9BenchComorbidRcppParallel <- function() {
-  ptsSmall <- randomPatients(10000)
-  ptsBig <- randomPatients(1000000)
+  ptsSmallOne <- randomPatients(10000, np = 1)
+  ptsSmall <- randomPatients(10000, np = 20)
+  ptsBigOne <- randomPatients(1000000, np = 1)
+  ptsBig <- randomPatients(1000000, np = 20)
+  # original fast-ish but incorrect!!!
+  # stopifnot(identical(icd9ComorbidShort(ptsSmall, ahrqComorbid),
+  #                     icd9ComorbidShortRcppParallel(ptsSmall, ahrqComorbid)))
   microbenchmark(
+    icd9ComorbidShort(ptsSmallOne, ahrqComorbid),
     icd9ComorbidShort(ptsSmall, ahrqComorbid),
     icd9ComorbidShort(ptsBig, ahrqComorbid),
+    icd9ComorbidShortRcppParallel(ptsSmallOne, ahrqComorbid),
     icd9ComorbidShortRcppParallel(ptsSmall, ahrqComorbid),
     icd9ComorbidShortRcppParallel(ptsBig, ahrqComorbid),
     times = 5) %>% print

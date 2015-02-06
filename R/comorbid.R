@@ -78,7 +78,8 @@ icd9Comorbid <- function(icd9df,
     icd9Mapping <- lapply(icd9Mapping, icd9DecimalToShort)
 
   # return via call to the C++ function:
-  icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
+  #icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
+  icd9ComorbidShortRcppParallel(icd9df, icd9Mapping, visitId, icd9Field)
 
 }
 

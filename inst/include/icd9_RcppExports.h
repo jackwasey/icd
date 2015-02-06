@@ -43,6 +43,25 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
+    inline List icd9ComorbidShortGccParallel(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9ComorbidShortGccParallel)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidShortGccParallel p_icd9ComorbidShortGccParallel = NULL;
+        if (p_icd9ComorbidShortGccParallel == NULL) {
+            validateSignature("List(*icd9ComorbidShortGccParallel)(DataFrame,List,std::string,std::string)");
+            p_icd9ComorbidShortGccParallel = (Ptr_icd9ComorbidShortGccParallel)R_GetCCallable("icd9", "icd9_icd9ComorbidShortGccParallel");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9ComorbidShortGccParallel(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<List >(__result);
+    }
+
     inline List icd9ComorbidShortParallelOpenMP(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9", int threads = 4) {
         typedef SEXP(*Ptr_icd9ComorbidShortParallelOpenMP)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortParallelOpenMP p_icd9ComorbidShortParallelOpenMP = NULL;
@@ -62,11 +81,11 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline List icd9ComorbidShortRcppParallel(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9") {
+    inline List icd9ComorbidShortRcppParallel(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
         typedef SEXP(*Ptr_icd9ComorbidShortRcppParallel)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortRcppParallel p_icd9ComorbidShortRcppParallel = NULL;
         if (p_icd9ComorbidShortRcppParallel == NULL) {
-            validateSignature("List(*icd9ComorbidShortRcppParallel)(DataFrame,List,std::string,std::string)");
+            validateSignature("List(*icd9ComorbidShortRcppParallel)(DataFrame,List,const std::string,const std::string)");
             p_icd9ComorbidShortRcppParallel = (Ptr_icd9ComorbidShortRcppParallel)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRcppParallel");
         }
         RObject __result;

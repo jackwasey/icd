@@ -7,7 +7,9 @@
 \alias{icd9ComorbidQuanDeyo}
 \alias{icd9ComorbidQuanElix}
 \alias{icd9ComorbidShort}
+\alias{icd9ComorbidShortGccParallel}
 \alias{icd9ComorbidShortParallelOpenMP}
+\alias{icd9ComorbidShortRcppParallel}
 \alias{icd9Comorbidities}
 \alias{icd9ComorbiditiesAhrq}
 \alias{icd9ComorbiditiesElixHauser}
@@ -18,8 +20,14 @@
 icd9ComorbidShort(icd9df, icd9Mapping, visitId = "visitId",
   icd9Field = "icd9")
 
+icd9ComorbidShortGccParallel(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9")
+
 icd9ComorbidShortParallelOpenMP(icd9df, icd9Mapping, visitId = "visitId",
   icd9Field = "icd9", threads = 4L)
+
+icd9ComorbidShortRcppParallel(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9")
 
 icd9Comorbid(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9",
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
@@ -97,6 +105,8 @@ to \code{icd9ComorbidAhrq}}
 \description{
 ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
 I'm pretty sure this is bad because STL is not thread safe.
+
+RcppParallel approach
 
 This is the main function which extracts co-morbidities from a
   set of ICD-9 codes. This is when some trivial post-processing of the

@@ -8,6 +8,12 @@ icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Fiel
 }
 
 #' @rdname icd9Comorbid
+#' @export
+icd9ComorbidShortGccParallel <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9ComorbidShortGccParallel', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
+}
+
+#' @rdname icd9Comorbid
 #' @description ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
 #' I'm pretty sure this is bad because STL is not thread safe.
 #' @export
