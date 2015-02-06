@@ -5,6 +5,7 @@
 #include <string>
 #include <RcppParallel.h>
 
+using namespace RcppParallel;
 using namespace Rcpp;
 
 struct ComorbidWorker : public Worker {
@@ -45,7 +46,7 @@ struct ComorbidWorker : public Worker {
       printVecStr(codes);
       #endif
 
-// the MapVecStr::iterator has unique keys, so we can just iterate now: TODO
+      // the MapVecStr::iterator has unique keys, so we can just iterate now: TODO
       // the Tmm iterator counts down whole list of (probably duplicated) visits, so we need to keep track:
       int urow = distance(vcdb.begin(), vis_it);
 
@@ -68,50 +69,56 @@ struct ComorbidWorker : public Worker {
 //' @export
 // [[Rcpp::export]]
 std::vector<bool> icd9ComorbidShortRcppParallel(DataFrame icd9df, List icd9Mapping,
-  std::string visitId = "visitId", std::string icd9Field = "icd9") {
+std::string visitId = "visitId", std::string icd9Field = "icd9") {
   VB out;
   VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
   VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
 
   // TODO reserve size for map if possible for vcdb?
-MapVecStr vcdb;
+  MapVecStr vcdb;
   // probably a slower initial step: create map of VecStr
   // (doesn't need to be sorted, but keys must be unique. Unsorted map though is C++11)
-  std::string prevVisitId = "";
   int vlen = vs.size();
-  VecStr vcodes; // codes for one visit
+
   for (int i=0; i<vlen; ++i) {
-    if (vs[i]!=prevVisitId) {
+    #ifdef ICD9_DEBUG
+    std::cout << "building visit: it = " << i << ", id = " << vs[i] << "\n";
+    std::cout << "length vcdb = " << vcdb.size() << "\n";
+    #endif
+
+    MapVecStr::iterator mapit = vcdb.find(vs[i]);
+    if (mapit==vcdb.end()) {
+      #ifdef ICD9_DEBUG
+      std::cout << "first sight of key " << vs[i] << "), so just insert the code\n";
+      #endif
+      VecStr vcodes(1,icds[i]); // construct one element vec str
+      vcdb.insert(std::make_pair(vs[i], vcodes));
+    } else {
       // no guarantee of order of visitId, so if the key already exists, we need to extend it
-      MapVecStr::iterator mapit = vcdb.find(prevVisitId);
-      if (mapit==vcdb.end()) {
-        // first sight of this key, so just insert the accumulated codes:
-        vcdb.insert(std::make_pair(prevVisitId, vcodes));
-      } else {
-        // already have the visitId in map, so update it (in place?!)
-        VecStr old_codes = mapit->second;
-        old_codes.insert(old_codes.begin(), vcodes.begin(), vcodes.end());
-      }
-      // now work on the next code
-      vcodes.clear();
+      // already have the visitId in map, so update it (in place?!)
+      #ifdef ICD9_DEBUG
+      std::cout << "repeat id found: " << vs[i] << ". Got these existing codes: ";
+      printVecStr(mapit->second);
+      #endif
+      (mapit->second).push_back(icds[i]);
+      #ifdef ICD9_DEBUG
+      std::cout << "updated codes: ";
+      printVecStr(mapit->second);
+      std::cout << "\n";
+      #endif
     }
-    vcodes.push_back(icds[i]); // whether we wrote out the last visit codes, or have a new code
   }
   #ifdef ICD9_DEBUG
-  std::cout << "visit map: vec icd9 created\n";
+  std::cout << "visit map created\n";
   #endif
 
   CharacterVector mapnames = icd9Mapping.names(); // could do this in worker instantiation.
-
 
   // convert mapping from List of CharacterVectors to std vector of sets. This
   // is a small one-off cost, and dramatically improves the performance of the
   // later loops, because we can .find() instead of linear search.
   CmbMap map;
   for (List::iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end(); ++mi) {
-    #ifdef ICD9_DEBUG
-    std::cout << "working on building map..." << "\n";
-    #endif
     VecStr mvs(as<VecStr>(*mi));
     SetStr ss(mvs.begin(), mvs.end());
     map.push_back(ss);
@@ -122,7 +129,7 @@ MapVecStr vcdb;
 
   ComorbidWorker worker(vcdb, map, mapnames);
   #ifdef ICD9_DEBUG
-  std::cout << "worker created\n";
+  std::cout << "worker instantiated with size " << vcdb.size() << "\n";
   #endif
   // PARALLEL FOR HAS TO SPLIT UP WITH EACH VISITID TOGETHER: can't just slice whole list
   parallelFor(0, vcdb.size(), worker);
@@ -136,14 +143,12 @@ MapVecStr vcdb;
   return out;
 }
 
-using namespace RcppParallel;
-
 /**
- * * * * * initialize with the visitids:icd9s, comorbidity mapping
- * * * * * per thread:
- * * * * *    get thread's subset of the visits
- * * * * *    find unique visitIds (save in instance)
- * * * * *    create 'matrix' of logical comorbidities by searching the map for each code.
- * * * * *    update the master "matrix" by simply inserting the new values at the end
- * * * * * convert big bool vector into data.frame
- * * * * */
+ * * * * * * * * * * * * * initialize with the visitids:icd9s, comorbidity mapping
+ * * * * * * * * * * * * * per thread:
+ * * * * * * * * * * * * *    get thread's subset of the visits
+ * * * * * * * * * * * * *    find unique visitIds (save in instance)
+ * * * * * * * * * * * * *    create 'matrix' of logical comorbidities by searching the map for each code.
+ * * * * * * * * * * * * *    update the master "matrix" by simply inserting the new values at the end
+ * * * * * * * * * * * * * convert big bool vector into data.frame
+ * * * * * * * * * * * * */

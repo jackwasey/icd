@@ -1,6 +1,7 @@
 # EXCLUDE COVERAGE START
 
 randomPatients <- function(n = 50000, np = 20) {
+  set.seed(1441)
   pts <- round(n / np)
   data.frame(
     visitId = sample(seq(1, pts), replace = TRUE, size = n),
@@ -22,8 +23,8 @@ randomDecimalIcd9 <- function(n = 50000)
   )
 
 
-sc <- function() {
-  pts <- randomPatients(50)
+sc <- function(n=50) {
+  pts <- randomPatients(n)
   icd9ComorbidShortRcppParallel(pts, ahrqComorbid)
 }
 
