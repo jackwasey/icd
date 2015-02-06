@@ -34,6 +34,18 @@ sc <- function(n = 50) {
 icd9BenchComorbid <- function(n=1E5, threads = 1)
   system.time(icd9ComorbidShortParallelOne(randomPatients(n), icd9Mapping = ahrqComorbid, threads = threads))
 
+
+icd9BenchComorbidRcppParallel <- function() {
+  ptsSmall <- randomPatients(10000)
+  ptsBig <- randomPatients(1000000)
+  microbenchmark(
+    icd9ComorbidShort(ptsSmall, ahrqComorbid),
+    icd9ComorbidShort(ptsBig, ahrqComorbid),
+    icd9ComorbidShortRcppParallel(ptsSmall, ahrqComorbid),
+    icd9ComorbidShortRcppParallel(ptsBig, ahrqComorbid),
+    times = 5) %>% print
+}
+
 icd9BenchComorbidParallelOpenMP <- function() {
   pts10000 <- randomPatients(10000)
   pts100000 <- randomPatients(100000)
