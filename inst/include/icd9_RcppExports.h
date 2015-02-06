@@ -62,11 +62,11 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline std::vector<bool> icd9ComorbidShortRcppParallel(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9") {
+    inline List icd9ComorbidShortRcppParallel(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9") {
         typedef SEXP(*Ptr_icd9ComorbidShortRcppParallel)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortRcppParallel p_icd9ComorbidShortRcppParallel = NULL;
         if (p_icd9ComorbidShortRcppParallel == NULL) {
-            validateSignature("std::vector<bool>(*icd9ComorbidShortRcppParallel)(DataFrame,List,std::string,std::string)");
+            validateSignature("List(*icd9ComorbidShortRcppParallel)(DataFrame,List,std::string,std::string)");
             p_icd9ComorbidShortRcppParallel = (Ptr_icd9ComorbidShortRcppParallel)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRcppParallel");
         }
         RObject __result;
@@ -78,7 +78,7 @@ namespace icd9 {
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<std::vector<bool> >(__result);
+        return Rcpp::as<List >(__result);
     }
 
     inline CharacterVector icd9MajMinToCode(CharacterVector major, CharacterVector minor, bool isShort) {

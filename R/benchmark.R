@@ -5,15 +5,19 @@ randomPatients <- function(n = 50000, np = 20) {
   pts <- round(n / np)
   data.frame(
     visitId = sample(seq(1, pts), replace = TRUE, size = n),
-    icd9 = randomShortIcd9(n),
+    icd9 = c(randomShortIcd9(round(n/2)), randomShortAhrq(n-round(n/2))),
     poa = as.factor(
       sample(x = c("Y","N", "n", "n", "y", "X","E","",NA),
-             replace = TRUE, size = n))
+             replace = TRUE, size = n)),
+    stringsAsFactors = FALSE
   )
 }
 
 randomShortIcd9 <- function(n = 50000)
   as.character(floor(runif(min = 1, max = 99999, n = n)))
+
+randomShortAhrq <- function(n = 50000)
+  sample(unname(unlist(ahrqComorbid)), size = n, replace = TRUE)
 
 randomDecimalIcd9 <- function(n = 50000)
   paste(
@@ -22,8 +26,7 @@ randomDecimalIcd9 <- function(n = 50000)
     sep = "."
   )
 
-
-sc <- function(n=50) {
+sc <- function(n = 50) {
   pts <- randomPatients(n)
   icd9ComorbidShortRcppParallel(pts, ahrqComorbid)
 }

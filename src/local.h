@@ -1,7 +1,8 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 
-#define ICD9_DEBUG = 1
+//#define ICD9_DEBUG = 1
+//#define ICD9_TRACE = 1
 
 typedef std::string Str;
 typedef std::vector<Str> VecStr;
@@ -14,6 +15,8 @@ typedef std::map<Str,VecStr> MapVecStr;
 typedef std::map<int,Str> MapStr;
 typedef std::vector<SetStr> CmbMap;
 typedef std::multimap<Str, Str> Tmm;
+
 // internal function definitions
 void printVecStr(VecStr sv);
+void printSetStr(SetStr vs);
 void printCharVec(Rcpp::CharacterVector cv);

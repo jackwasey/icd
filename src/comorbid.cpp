@@ -97,22 +97,3 @@ List icd9ComorbidShort(
     out.attr("class") = "data.frame";
     return out;
   }
-
-#ifdef ICD9_DEBUG
-  void printVecStr(VecStr sv) {
-    for (VecStrIt i=sv.begin();i!=sv.end();++i) {
-      std::cout << *i << ", ";
-    }
-    std::cout << "\n";
-    return;
-  }
-
-  void printCharVec(CharacterVector cv) {
-    for (CharacterVector::iterator i = cv.begin(); i != cv.end(); ++i) {
-      String s = *i;
-      std::cout << s.get_cstring() << ", ";
-    }
-    std::cout << "\n";
-    return;
-  }
-#endif
