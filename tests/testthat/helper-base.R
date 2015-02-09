@@ -96,7 +96,6 @@ quanDeyoTestDat <- data.frame(
   stringsAsFactors = FALSE
 )
 
-
 othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
                      "00323", "00324", "00329", "0038", "0039")
 
@@ -104,3 +103,8 @@ othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
 one.of.each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
                  "390.00", "518", "525", "581", "631", "700", "720", "759.99",
                  "765", "780.95", "800", "V02.34", "E900.4")
+
+# two items per map, two codes per item, two codes for two visits
+twoPts <- list(visitId = c("v01", "v01", "v02", "v02"),
+               icd9 = c("040", "000", "100", "000"))
+twoMap <- list("malady" = c("100", "2000"), "ailment" = c("003", "040"))

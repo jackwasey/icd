@@ -28,29 +28,46 @@ randomDecimalIcd9 <- function(n = 50000)
 
 sc <- function(n = 50) {
   pts <- randomPatients(n)
-  icd9ComorbidShortRcppParallel(pts, ahrqComorbid)
+  icd9ComorbidShortRcppParallelVector(pts, ahrqComorbid)
 }
 
-icd9BenchComorbid <- function(n=1E5, threads = 1)
+benchComorbid <- function(n=1E5, threads = 1)
   system.time(icd9ComorbidShortParallelOne(randomPatients(n), icd9Mapping = ahrqComorbid, threads = threads))
 
 
-icd9BenchComorbidRcppParallel <- function() {
-  ptsSmallOne <- randomPatients(10000, np = 1)
-  ptsSmall <- randomPatients(10000, np = 20)
-  ptsBigOne <- randomPatients(1000000, np = 1)
-  ptsBig <- randomPatients(1000000, np = 20)
-  # original fast-ish but incorrect!!!
-  # stopifnot(identical(icd9ComorbidShort(ptsSmall, ahrqComorbid),
-  #                     icd9ComorbidShortRcppParallel(ptsSmall, ahrqComorbid)))
+benchComorbidRcppParallel <- function() {
+  ptsSmallOne <- randomPatients(1000, np = 1)
+  ptsSmall <- randomPatients(1000, np = 20)
+  ptsBigOne <- randomPatients(100000, np = 1)
+  ptsBig <- randomPatients(100000, np = 20)
+  ptsHugeOne <- randomPatients(1000000, np = 1)
+  ptsHuge <- randomPatients(1000000, np = 20)
+
   microbenchmark(
     icd9ComorbidShort(ptsSmallOne, ahrqComorbid),
-    icd9ComorbidShort(ptsSmall, ahrqComorbid),
-    icd9ComorbidShort(ptsBig, ahrqComorbid),
     icd9ComorbidShortRcppParallel(ptsSmallOne, ahrqComorbid),
+    icd9ComorbidShortRcppParallelHalfVector(ptsSmallOne, ahrqComorbid),
+
+    icd9ComorbidShort(ptsSmall, ahrqComorbid),
     icd9ComorbidShortRcppParallel(ptsSmall, ahrqComorbid),
+    icd9ComorbidShortRcppParallelHalfVector(ptsSmall, ahrqComorbid),
+
+    icd9ComorbidShort(ptsBig, ahrqComorbid),
     icd9ComorbidShortRcppParallel(ptsBig, ahrqComorbid),
-    times = 5) %>% print
+    icd9ComorbidShortRcppParallelHalfVector(ptsBig, ahrqComorbid),
+
+    icd9ComorbidShort(ptsBigOne, ahrqComorbid),
+    icd9ComorbidShortRcppParallel(ptsBigOne, ahrqComorbid),
+    icd9ComorbidShortRcppParallelHalfVector(ptsBigOne, ahrqComorbid),
+
+    icd9ComorbidShort(ptsHuge, ahrqComorbid),
+    icd9ComorbidShortRcppParallel(ptsHuge, ahrqComorbid),
+    icd9ComorbidShortRcppParallelHalfVector(ptsHuge, ahrqComorbid),
+
+    # icd9ComorbidShortBoost(ptsSmall, ahrqComorbid), # very slow
+    # icd9ComorbidShortBoost(ptsBig, ahrqComorbid), # very slow
+    # icd9ComorbidShortBoost(ptsBigOne, ahrqComorbid),
+    times = 1) %>% print
 }
 
 icd9BenchComorbidParallelOpenMP <- function() {

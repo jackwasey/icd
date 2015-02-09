@@ -24,6 +24,25 @@ namespace icd9 {
         }
     }
 
+    inline List icd9ComorbidShortBoost(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9ComorbidShortBoost)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidShortBoost p_icd9ComorbidShortBoost = NULL;
+        if (p_icd9ComorbidShortBoost == NULL) {
+            validateSignature("List(*icd9ComorbidShortBoost)(DataFrame,List,std::string,std::string)");
+            p_icd9ComorbidShortBoost = (Ptr_icd9ComorbidShortBoost)R_GetCCallable("icd9", "icd9_icd9ComorbidShortBoost");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9ComorbidShortBoost(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<List >(__result);
+    }
+
     inline List icd9ComorbidShort(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9") {
         typedef SEXP(*Ptr_icd9ComorbidShort)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShort p_icd9ComorbidShort = NULL;
@@ -35,25 +54,6 @@ namespace icd9 {
         {
             RNGScope __rngScope;
             __result = p_icd9ComorbidShort(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<List >(__result);
-    }
-
-    inline List icd9ComorbidShortGccParallel(DataFrame icd9df, List icd9Mapping, std::string visitId = "visitId", std::string icd9Field = "icd9") {
-        typedef SEXP(*Ptr_icd9ComorbidShortGccParallel)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9ComorbidShortGccParallel p_icd9ComorbidShortGccParallel = NULL;
-        if (p_icd9ComorbidShortGccParallel == NULL) {
-            validateSignature("List(*icd9ComorbidShortGccParallel)(DataFrame,List,std::string,std::string)");
-            p_icd9ComorbidShortGccParallel = (Ptr_icd9ComorbidShortGccParallel)R_GetCCallable("icd9", "icd9_icd9ComorbidShortGccParallel");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9ComorbidShortGccParallel(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -92,6 +92,44 @@ namespace icd9 {
         {
             RNGScope __rngScope;
             __result = p_icd9ComorbidShortRcppParallel(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<List >(__result);
+    }
+
+    inline List icd9ComorbidShortRcppParallelFullVector(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9ComorbidShortRcppParallelFullVector)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidShortRcppParallelFullVector p_icd9ComorbidShortRcppParallelFullVector = NULL;
+        if (p_icd9ComorbidShortRcppParallelFullVector == NULL) {
+            validateSignature("List(*icd9ComorbidShortRcppParallelFullVector)(DataFrame,List,const std::string,const std::string)");
+            p_icd9ComorbidShortRcppParallelFullVector = (Ptr_icd9ComorbidShortRcppParallelFullVector)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRcppParallelFullVector");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9ComorbidShortRcppParallelFullVector(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<List >(__result);
+    }
+
+    inline List icd9ComorbidShortRcppParallelHalfVector(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9ComorbidShortRcppParallelHalfVector)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidShortRcppParallelHalfVector p_icd9ComorbidShortRcppParallelHalfVector = NULL;
+        if (p_icd9ComorbidShortRcppParallelHalfVector == NULL) {
+            validateSignature("List(*icd9ComorbidShortRcppParallelHalfVector)(DataFrame,List,const std::string,const std::string)");
+            p_icd9ComorbidShortRcppParallelHalfVector = (Ptr_icd9ComorbidShortRcppParallelHalfVector)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRcppParallelHalfVector");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9ComorbidShortRcppParallelHalfVector(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -1,8 +1,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::depends(RcppParallel)]]
-#include <Rcpp.h>
+// [[Rcpp::depends(RcppParallel,BH)]]
 #include <local.h>
-#include <string>
+#include <Rcpp.h>
 #include <RcppParallel.h>
 
 using namespace RcppParallel;
@@ -14,7 +13,7 @@ struct ComorbidWorker : public Worker {
   const CharacterVector mapnames;
   const CmbMap::size_type num_comorbid;
   const MapVecStr::size_type num_visits;
-  VB out; // vector of bools we can restructure to a data.frame later
+  VecBool out; // vector of booleans we can restructure to a data.frame later
 
   // constructors
   ComorbidWorker(MapVecStr vcdb, CmbMap map, CharacterVector mapnames)
@@ -59,7 +58,7 @@ struct ComorbidWorker : public Worker {
       // loop through comorbidities
       for (CmbMap::size_type cmb = 0; cmb < num_comorbid; ++cmb) {
         #ifdef ICD9_TRACE
-        std::cout << "working on cmb: " << cmb <<"... ";
+        std::cout << "working on cmb: " << cmb << "... ";
         #endif
         // loop through icd codes for this visitId
         const VecStr::const_iterator cbegin = codes.begin();
@@ -72,7 +71,7 @@ struct ComorbidWorker : public Worker {
           const SetStr::const_iterator found_it = map[cmb].find(*code_it);
           const SetStr::const_iterator found_end = map[cmb].end();
           if (found_it != found_end) {
-            VB::size_type out_idx = cmb*(num_visits-1) + urow;
+            VecBool::size_type out_idx = cmb*(num_visits-1) + urow;
             #ifdef ICD9_TRACE
             std::cout << "found match";
             std::cout << out.size() << ", but idx = " << out_idx << "\n";
@@ -178,8 +177,8 @@ const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
 
   for (size_t i=0;i<worker.num_comorbid;++i) {
     const String cmb_name = mapnames[i];
-    VB::iterator start = worker.out.begin();
-    VB::iterator end = worker.out.begin();
+    VecBool::iterator start = worker.out.begin();
+    VecBool::iterator end = worker.out.begin();
     std::advance(start, i*worker.num_visits);
     std::advance(end, (i+1)*(worker.num_visits));
     #ifdef ICD9_DEBUG

@@ -42,10 +42,10 @@ List icd9ComorbidShortParallelOpenMP(
     #endif
 
     // create a multimap of visitid-code pairs
-    Tmm vcdb;
+    MapVisitCode vcdb;
     //loop through visit and icd codes and put together
-    VecStrIt j = icds.begin();
-    for (VecStrIt i = vs.begin(); i != vs.end(); ++i, ++j) {
+    VecStr::iterator j = icds.begin();
+    for (VecStr::iterator i = vs.begin(); i != vs.end(); ++i, ++j) {
       vcdb.insert(std::pair<std::string, std::string>(*i, *j));
     }
     #ifdef ICD9_DEBUG
@@ -55,7 +55,7 @@ List icd9ComorbidShortParallelOpenMP(
     //get unique visitIds so we can name and size the output, and also populate the visitId col of output
     VecStr uvis;
     uvis.reserve(vcdb.size()); // over-reserve massively as first approximation
-    for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
+    for( MapVisitCode::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
       uvis.insert(uvis.end(), it->first); // according to valgrind, this is the very slow step when uvis was a std::set
     }
     int usize = uvis.size();
@@ -90,10 +90,10 @@ List icd9ComorbidShortParallelOpenMP(
 
     // use std::multimap to get subset of icd codes for each visitId key
     //TODO: upper_bound jumps index irregularly
-    for( Tmm::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
+    for( MapVisitCode::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
       if (Progress::check_abort() ) return out; // abort if ctrl-C pressed. ?performance hit
       // find the icd9 codes for a given visitId
-      std::pair <Tmm::iterator, Tmm::iterator> matchrange;
+      std::pair <MapVisitCode::iterator, MapVisitCode::iterator> matchrange;
       std::string key = it->first;
       matchrange = vcdb.equal_range(key);
 
@@ -105,7 +105,7 @@ List icd9ComorbidShortParallelOpenMP(
       #pragma omp parallel for schedule(dynamic) // dynamic may be better suited than static.
       for (int cmb = 0; cmb < nref; ++cmb) {
         // loop through icd codes for this visitId
-        for (Tmm::iterator j = matchrange.first; j != matchrange.second; ++j) {
+        for (MapVisitCode::iterator j = matchrange.first; j != matchrange.second; ++j) {
           if (map[cmb].find(j->second) != map[cmb].end()) {
             LogicalVector cmbcol = out[cmb+1]; // NOT THREAD SAFE?!
             cmbcol[urow] = true;

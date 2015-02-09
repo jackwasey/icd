@@ -6,7 +6,7 @@ using namespace Rcpp;
 //' @rdname icd9Comorbid
 //' @export
 // [[Rcpp::export]]
-List icd9ComorbidShort(
+List icd9ComorbidShortBoost(
   DataFrame icd9df,
   List icd9Mapping,
   std::string visitId = "visitId", // or CharacterVector?
@@ -19,7 +19,7 @@ List icd9ComorbidShort(
     CharacterVector mapnames = icd9Mapping.names();
 
     // create a multimap of visitid-code pairs
-    MapVisitCode vcdb;
+    BoostMapVisitCode vcdb;
     //loop through visit and icd codes and put together
     VecStr::iterator j = icds.begin();
     for (VecStr::iterator i = vs.begin(); i != vs.end(); ++i, ++j) {
@@ -32,7 +32,7 @@ List icd9ComorbidShort(
     //get unique visitIds so we can name and size the output, and also populate the visitId col of output
     VecStr uvis;
     uvis.reserve(vcdb.size()); // over-reserve massively as first approximation
-    for( MapVisitCode::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
+    for( BoostMapVisitCode::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
       uvis.insert(uvis.end(), it->first); // according to valgrind, this is the very slow step when uvis was a std::set
     }
     int usize = uvis.size();
@@ -44,10 +44,12 @@ List icd9ComorbidShort(
     // convert mapping from List of CharacterVectors to std vector of sets. This
     // is a small one-off cost, and dramatically improves the performance of the
     // later loops, because we can .find() instead of linear search.
-    CmbMap map;
+    BoostCmbMap map;
+    // can reserve with boost
+    map.reserve(icd9Mapping.size());
     for (List::iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end(); ++mi) {
       VecStr mvs(as<VecStr>(*mi));
-      SetStr ss(mvs.begin(), mvs.end());
+      BoostSetStr ss(mvs.begin(), mvs.end());
       map.push_back(ss);
     }
     #ifdef ICD9_DEBUG
@@ -67,10 +69,10 @@ List icd9ComorbidShort(
 
     // use std::multimap to get subset of icd codes for each visitId key
     //TODO: upper_bound jumps index irregularly
-    for( MapVisitCode::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
+    for( BoostMapVisitCode::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
 
       // find the icd9 codes for a given visitId
-      std::pair <MapVisitCode::iterator, MapVisitCode::iterator> matchrange;
+      std::pair <BoostMapVisitCode::iterator, BoostMapVisitCode::iterator> matchrange;
       std::string key = it->first;
       matchrange = vcdb.equal_range(key);
 
@@ -81,10 +83,10 @@ List icd9ComorbidShort(
       // loop through comorbidities
       for (int cmb = 0; cmb < nref; ++cmb) {
         // loop through icd codes for this visitId
-        for (MapVisitCode::iterator j = matchrange.first; j != matchrange.second; ++j) {
+        for (BoostMapVisitCode::iterator j = matchrange.first; j != matchrange.second; ++j) {
           if (map[cmb].find(j->second) != map[cmb].end()) {
             LogicalVector cmbcol = out[cmb+1]; // does this copy?
-            cmbcol[urow] = true; // cmbcol updates 'out' by reference (I think)
+            cmbcol[urow] = true; // updates 'out' by reference (I think)
           }
         }
       }

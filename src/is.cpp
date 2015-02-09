@@ -24,7 +24,9 @@ bool icd9IsASingleE(std::string s) {
 
 // [[Rcpp::export]]
 bool icd9IsASingleVE(std::string s) {
-  return s.find_first_of("VvEe") != std::string::npos;
+	char c = s.c_str()[0];
+	return c=='V' || c=='E' || c=='v' || c=='e';
+  //return s.find_first_of("VvEe") != std::string::npos;
 }
 
 //' @name icd9Is

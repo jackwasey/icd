@@ -55,3 +55,16 @@ void printCharVec(CharacterVector cv) {
   return;
 }
 #endif
+
+int str_to_int(const char *s) {
+    int n = 0;
+    // would be easy to skip whitespace here too, but probably no need.
+    if (*s<'0' && *s>'9') { // V or E code
+        ++s;
+    }
+    while (*s>='0' && *s<='9') {
+        n=(n*10)+(*s-'0');
+        ++s;
+    }
+    return n;
+}
