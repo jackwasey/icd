@@ -1,8 +1,8 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::depends(RcppProgress)]]
 // [[Rcpp::plugins(openmp)]]
-#include <progress.hpp>
 #include <Rcpp.h>
+#include <progress.hpp>
 #include <local.h>
 #include <string>
 
@@ -13,11 +13,11 @@
 using namespace Rcpp;
 
 //' @rdname icd9Comorbid
-//' @description ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
+//' @description ParallelOpenMP invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
 //' I'm pretty sure this is bad because STL is not thread safe.
 //' @export
 // [[Rcpp::export]]
-List icd9ComorbidShortParallelOpenMP(
+List icd9ComorbidShortOpenMP(
   DataFrame icd9df,
   List icd9Mapping,
   std::string visitId = "visitId", // or CharacterVector?
@@ -102,7 +102,7 @@ List icd9ComorbidShortParallelOpenMP(
       int urow = distance(uvis.begin(), std::find(uvis.begin(), uvis.end(), key)); //TODO make uvis a std::set to speed this up.
 
       // loop through comorbidities
-      #pragma omp parallel for schedule(dynamic) // dynamic may be better suited than static.
+      #pragma omp parallel for schedule(static) // dynamic may be better suited than static.
       for (int cmb = 0; cmb < nref; ++cmb) {
         // loop through icd codes for this visitId
         for (MapVisitCode::iterator j = matchrange.first; j != matchrange.second; ++j) {

@@ -1,11 +1,12 @@
+#ifdef ICD_BOOST
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include <local.h>
 using namespace Rcpp;
 
-//' @rdname icd9Comorbid
-//' @export
-// [[Rcpp::export]]
+// //@rdname icd9Comorbid
+// //@export
+// //[[Rcpp::export]]
 List icd9ComorbidShortBoost(
   DataFrame icd9df,
   List icd9Mapping,
@@ -98,3 +99,5 @@ List icd9ComorbidShortBoost(
     out.attr("class") = "data.frame";
     return out;
   }
+#endif
+

@@ -4,3 +4,6 @@
 *.gcda
 *.gcno
 *.gcov
+*.out
+.cproject
+.settings/

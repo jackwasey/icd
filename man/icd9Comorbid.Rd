@@ -7,9 +7,14 @@
 \alias{icd9ComorbidQuanDeyo}
 \alias{icd9ComorbidQuanElix}
 \alias{icd9ComorbidShort}
-\alias{icd9ComorbidShortGccParallel}
-\alias{icd9ComorbidShortParallelOpenMP}
-\alias{icd9ComorbidShortRcppParallel}
+\alias{icd9ComorbidShortOpenMP}
+\alias{icd9ComorbidShortOpenMPVecInt}
+\alias{icd9ComorbidShortRP}
+\alias{icd9ComorbidShortRPFullVector}
+\alias{icd9ComorbidShortRPHalfVector}
+\alias{icd9ComorbidShortRPSetInt}
+\alias{icd9ComorbidShortRPVecInt}
+\alias{icd9ComorbidShortRPVecIntBatch}
 \alias{icd9Comorbidities}
 \alias{icd9ComorbiditiesAhrq}
 \alias{icd9ComorbiditiesElixHauser}
@@ -20,14 +25,29 @@
 icd9ComorbidShort(icd9df, icd9Mapping, visitId = "visitId",
   icd9Field = "icd9")
 
-icd9ComorbidShortGccParallel(icd9df, icd9Mapping, visitId = "visitId",
-  icd9Field = "icd9")
-
-icd9ComorbidShortParallelOpenMP(icd9df, icd9Mapping, visitId = "visitId",
+icd9ComorbidShortOpenMP(icd9df, icd9Mapping, visitId = "visitId",
   icd9Field = "icd9", threads = 4L)
 
-icd9ComorbidShortRcppParallel(icd9df, icd9Mapping, visitId = "visitId",
+icd9ComorbidShortOpenMPVecInt(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9", grainSize = 0L)
+
+icd9ComorbidShortRP(icd9df, icd9Mapping, visitId = "visitId",
   icd9Field = "icd9")
+
+icd9ComorbidShortRPFullVector(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9")
+
+icd9ComorbidShortRPHalfVector(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9")
+
+icd9ComorbidShortRPSetInt(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9", grainSize = 0L)
+
+icd9ComorbidShortRPVecIntBatch(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9", grainSize = 0L)
+
+icd9ComorbidShortRPVecInt(icd9df, icd9Mapping, visitId = "visitId",
+  icd9Field = "icd9", grainSize = 0L)
 
 icd9Comorbid(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9",
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
@@ -103,8 +123,20 @@ E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 to \code{icd9ComorbidAhrq}}
 }
 \description{
-ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
+ParallelOpenMP invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
 I'm pretty sure this is bad because STL is not thread safe.
+
+RcppParallel approach with openmp and int strategy
+
+RcppParallel approach
+
+RcppParallel approach
+
+RcppParallel approach
+
+RcppParallel approach
+
+RcppParallel approach
 
 RcppParallel approach
 

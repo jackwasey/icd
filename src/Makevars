@@ -1,5 +1,5 @@
-PKG_CC=gcc
-PKGCXX=g++
+#PKG_CC=gcc
+#PKGCXX=g++
 
 PKG_CPPFLAGS = -I. -I../inst/include/
 CPPFLAGS = -I. -I../inst/include/

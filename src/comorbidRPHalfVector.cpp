@@ -7,7 +7,7 @@
 using namespace RcppParallel;
 using namespace Rcpp;
 
-struct ComorbidWorker : public Worker {
+struct ComorbidWorkerHV : public Worker {
   const MapVecStr vcdb;
   const ComorbidVecMap map;
   const CharacterVector mapnames;
@@ -16,7 +16,7 @@ struct ComorbidWorker : public Worker {
   VecBool out; // vector of booleans we can restructure to a data.frame later
 
   // constructors
-  ComorbidWorker(MapVecStr vcdb, ComorbidVecMap map, CharacterVector mapnames)
+  ComorbidWorkerHV(MapVecStr vcdb, ComorbidVecMap map, CharacterVector mapnames)
   : vcdb(vcdb), map(map), mapnames(mapnames),
   num_comorbid(map.size()), num_visits(vcdb.size()),
   out(std::vector<bool>(vcdb.size()*map.size(), false)) {}
@@ -66,7 +66,7 @@ struct ComorbidWorker : public Worker {
         for (VecStr::const_iterator code_it = cbegin; code_it != cend; ++code_it) {
           #ifdef ICD9_TRACE
           std::cout << "working on code: " << *code_it << "\n";
-          printVecStr(map[cmb]);
+          printIt(map[cmb]);
           #endif
           if (std::binary_search(map[cmb].begin(), map[cmb].end(), *code_it)) {
             VecBool::size_type out_idx = cmb*(num_visits-1) + urow;
@@ -90,8 +90,11 @@ struct ComorbidWorker : public Worker {
 //' @description RcppParallel approach
 //' @export
 // [[Rcpp::export]]
-List icd9ComorbidShortRcppParallelHalfVector(DataFrame icd9df, List icd9Mapping,
+List icd9ComorbidShortRPHalfVector(DataFrame icd9df, List icd9Mapping,
 const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+#ifdef ICD9_DEBUG
+std::cout << "icd9ComorbidShortRPHalfVector\n";
+#endif
 
   const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
   const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
@@ -146,7 +149,7 @@ const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
   std::cout << "reference comorbidity mapping STL structure created\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
   #endif
 
-  ComorbidWorker worker(vcdb, map, mapnames);
+  ComorbidWorkerHV worker(vcdb, map, mapnames);
   #ifdef ICD9_DEBUG
   std::cout << "worker instantiated with size " << vcdb.size() << "\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n";
   #endif

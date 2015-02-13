@@ -30,26 +30,10 @@ std::vector<std::string > trim_cpp(std::vector<std::string >& sv) {
 }
 
 #ifdef ICD9_DEBUG
-void printVecStr(VecStr sv) {
-  for (VecStrIt i=sv.begin(); i!=sv.end(); ++i) {
-    std::cout << *i << ", ";
-  }
-  std::cout << "\n";
-  return;
-}
-
-void printSetStr(SetStr vs) {
-  for (SetStr::iterator i=vs.begin(); i!=vs.end(); ++i) {
-    std::cout << *i << ", ";
-  }
-  std::cout << "\n";
-  return;
-}
-
 void printCharVec(CharacterVector cv) {
-  for (CharacterVector::iterator i = cv.begin(); i != cv.end(); ++i) {
+  for (CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {
     String s = *i;
-    std::cout << s.get_cstring() << ", ";
+    std::cout << s.get_cstring() << " ";
   }
   std::cout << "\n";
   return;

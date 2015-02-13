@@ -3,43 +3,65 @@
 
 #' @rdname icd9Comorbid
 #' @export
-icd9ComorbidShortBoost <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9ComorbidShortBoost', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
-}
-
-#' @rdname icd9Comorbid
-#' @export
 icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
     .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
 
 #' @rdname icd9Comorbid
-#' @description ParallelOne invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
+#' @description ParallelOpenMP invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
 #' I'm pretty sure this is bad because STL is not thread safe.
 #' @export
-icd9ComorbidShortParallelOpenMP <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 4L) {
-    .Call('icd9_icd9ComorbidShortParallelOpenMP', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
+icd9ComorbidShortOpenMP <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 4L) {
+    .Call('icd9_icd9ComorbidShortOpenMP', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
+}
+
+#' @rdname icd9Comorbid
+#' @description RcppParallel approach with openmp and int strategy
+#' @export
+icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
+    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
 }
 
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach
 #' @export
-icd9ComorbidShortRcppParallel <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9ComorbidShortRcppParallel', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
+icd9ComorbidShortRP <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9ComorbidShortRP', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
 
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach
 #' @export
-icd9ComorbidShortRcppParallelFullVector <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9ComorbidShortRcppParallelFullVector', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
+icd9ComorbidShortRPFullVector <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9ComorbidShortRPFullVector', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
 
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach
 #' @export
-icd9ComorbidShortRcppParallelHalfVector <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9ComorbidShortRcppParallelHalfVector', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
+icd9ComorbidShortRPHalfVector <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9ComorbidShortRPHalfVector', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
+}
+
+#' @rdname icd9Comorbid
+#' @description RcppParallel approach
+#' @export
+icd9ComorbidShortRPSetInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
+    .Call('icd9_icd9ComorbidShortRPSetInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
+}
+
+#' @rdname icd9Comorbid
+#' @description RcppParallel approach
+#' @export
+icd9ComorbidShortRPVecIntBatch <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
+    .Call('icd9_icd9ComorbidShortRPVecIntBatch', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
+}
+
+#' @rdname icd9Comorbid
+#' @description RcppParallel approach
+#' @export
+icd9ComorbidShortRPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
+    .Call('icd9_icd9ComorbidShortRPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
 }
 
 #' @rdname convert

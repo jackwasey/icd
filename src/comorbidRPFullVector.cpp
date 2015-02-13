@@ -7,7 +7,7 @@
 using namespace RcppParallel;
 using namespace Rcpp;
 
-struct ComorbidWorker : public Worker {
+struct ComorbidWorkerRPFV : public Worker {
 	const VecCodes vc;
 	const ComorbidVecMap map;
 	const ComorbidVecMap::size_type num_comorbid;
@@ -15,7 +15,7 @@ struct ComorbidWorker : public Worker {
 	VecBool out; // vector of booleans we can restructure to a data.frame later
 
 	// constructors
-	ComorbidWorker(VecCodes vc, ComorbidVecMap map)
+	ComorbidWorkerRPFV(VecCodes vc, ComorbidVecMap map)
 	: vc(vc), map(map), num_comorbid(map.size()), num_visits(vc.size()),
 	  out(std::vector<bool>(vc.size()*map.size(), false)) {}
 
@@ -54,7 +54,7 @@ struct ComorbidWorker : public Worker {
 				for (VecStr::const_iterator code_it = cbegin; code_it != cend; ++code_it) {
 #ifdef ICD9_TRACE
 					std::cout << "working on code: " << *code_it << "\n";
-					printSetStr(map[cmb]);
+					printIt(map[cmb]);
 #endif
 					if (std::binary_search(map[cmb].begin(), map[cmb].end(), *code_it)) {
 						VecBool::size_type out_idx = cmb*(num_visits-1) + urow;
@@ -79,8 +79,11 @@ struct ComorbidWorker : public Worker {
 //' @description RcppParallel approach
 //' @export
 // [[Rcpp::export]]
-List icd9ComorbidShortRcppParallelFullVector(DataFrame icd9df, List icd9Mapping,
+List icd9ComorbidShortRPFullVector(DataFrame icd9df, List icd9Mapping,
 		const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+#ifdef ICD9_DEBUG
+std::cout << "icd9ComorbidShortRPFullVector\n";
+#endif
 
 	const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
 	const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
@@ -98,7 +101,6 @@ List icd9ComorbidShortRcppParallelFullVector(DataFrame icd9df, List icd9Mapping,
 	VecStr unique_visits = vs;
 	std::sort(unique_visits.begin(), unique_visits.end());
 	unique_visits.erase( std::unique(unique_visits.begin(), unique_visits.end()), unique_visits.end());
-	VecStr::size_type unique_len = unique_visits.size();
 
 	VecCodes vc;
 
@@ -106,6 +108,7 @@ List icd9ComorbidShortRcppParallelFullVector(DataFrame icd9df, List icd9Mapping,
 #ifdef ICD9_DEBUG
 		std::cout << "building visit: unique visit = " << *i << "\n";
 		std::cout << "length vc = " << vc.size() << "\n";
+	VecStr::size_type unique_len = unique_visits.size();
 		std::cout << "length unique visits = " << unique_len << "\n";
 #endif
 
@@ -154,7 +157,7 @@ List icd9ComorbidShortRcppParallelFullVector(DataFrame icd9df, List icd9Mapping,
 	std::cout << "reference comorbidity mapping STL structure created\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 #endif
 
-	ComorbidWorker worker(vc, map);
+	ComorbidWorkerRPFV worker(vc, map);
 #ifdef ICD9_DEBUG
 	std::cout << "worker instantiated with size " << vc.size() << "\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n";
 #endif
