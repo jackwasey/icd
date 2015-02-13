@@ -48,10 +48,14 @@ icd9Charlson <- function(x, visitId = NULL,
   stopifnot(length(visitId) == 1)
   stopifnot(is.logical(return.df))
   stopifnot(length(return.df) == 1)
-  res <- icd9CharlsonComorbid(
-    icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...))
 
-  if (return.df) return(cbind(x[visitId],
+  res <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...)
+  # saving the visitIds here where the work has already been done to find uniques
+  #  as opposed to duplicating that work by using unique(x[visitId]) in the cbind statement below
+  # also, pulling visitId column class from the original input because it is lost by icd9ComorbidQuanDeyo
+  if(return.df) output.id.col <- if(class(x[,visitId])=="factor") as.factor(res[,"visitId"]) else res["visitId"]
+  res <- icd9CharlsonComorbid(res)
+  if (return.df) return(cbind(output.id.col,
                               data.frame("Charlson" = res),
                               stringsAsFactors = stringsAsFactors))
   res
@@ -89,7 +93,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
     stopifnot(!any(x$Cancer & x$Mets))
   }
   m <- as.matrix(x[, names(x) %nin% visitId])
-  rowSums(m * weights)
+  rowSums(t(t(m) * weights))
 }
 
 #' @title count icd9 codes or comorbidities for each patient
