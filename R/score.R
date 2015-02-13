@@ -52,7 +52,8 @@ icd9Charlson <- function(x, visitId = NULL,
   res <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...)
   # saving the visitIds here where the work has already been done to find uniques
   #  as opposed to duplicating that work by using unique(x[visitId]) in the cbind statement below
-  if(return.df) output.id.col <- if(stringsAsFactors) as.factor(res[,"visitId"]) else res["visitId"]
+  # also, pulling visitId column class from the original input because it is lost by icd9ComorbidQuanDeyo
+  if(return.df) output.id.col <- if(class(x[,visitId])=="factor") as.factor(res[,"visitId"]) else res["visitId"]
   res <- icd9CharlsonComorbid(res)
   if (return.df) return(cbind(output.id.col,
                               data.frame("Charlson" = res),
