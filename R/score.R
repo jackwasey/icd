@@ -48,10 +48,13 @@ icd9Charlson <- function(x, visitId = NULL,
   stopifnot(length(visitId) == 1)
   stopifnot(is.logical(return.df))
   stopifnot(length(return.df) == 1)
-  res <- icd9CharlsonComorbid(
-    icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...))
 
-  if (return.df) return(cbind(x[visitId],
+  res <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...)
+  # saving the visitIds here where the work has already been done to find uniques
+  #  as opposed to duplicating that work by using unique(x[visitId]) in the cbind statement below
+  if(return.df) output.id.col <- res["visitId"]
+  res <- icd9CharlsonComorbid(res)
+  if (return.df) return(cbind(output.id.col,
                               data.frame("Charlson" = res),
                               stringsAsFactors = stringsAsFactors))
   res
@@ -220,3 +223,4 @@ icd9CountWide <- function(x,
   names(vec) <- rdfagg[[visitId]]
   vec
 }
+
