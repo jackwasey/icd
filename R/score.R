@@ -92,7 +92,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
     stopifnot(!any(x$Cancer & x$Mets))
   }
   m <- as.matrix(x[, names(x) %nin% visitId])
-  rowSums(m * weights)
+  rowSums(t(t(m) * weights))
 }
 
 #' @title count icd9 codes or comorbidities for each patient
@@ -223,4 +223,3 @@ icd9CountWide <- function(x,
   names(vec) <- rdfagg[[visitId]]
   vec
 }
-
