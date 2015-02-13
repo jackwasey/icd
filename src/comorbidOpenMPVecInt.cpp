@@ -21,7 +21,7 @@ REprintf("Number of threads=%i\n", omp_get_max_threads());
 
 using namespace Rcpp;
 
-
+#ifdef ICD9_IGNORE
 //' @rdname icd9Comorbid
 //' @description RcppParallel approach with openmp and int strategy
 //' @export
@@ -155,34 +155,34 @@ LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 
 	// #pragma omp parallel for schedule(static) // dynamic may be better suited than static.
 
-	const MapVecInt vcdb;
+//	const MapVecInt vcdb;
 	const ComorbidVecInt map; // map of comorbidities to ICD9 codes
 	const ComorbidVecInt::size_type num_comorbid = map.size();
 	const MapVecInt::size_type num_visits = vcdb_n.size();
 	VecBool out; // vector of booleans we can restructure to a data.frame later
 
-	const MapVecInt::const_iterator chunkbegin = vcdb.begin();
-	const MapVecInt::const_iterator chunkend = vcdb.begin();
+	const MapVecInt::const_iterator vbegin = vcdb_n.begin();
+	const MapVecInt::const_iterator vend = vcdb_n.begin();
 
 #ifdef ICD9_DEBUG
-	std::cout << vcdb.size() << " visits\n";
+	std::cout << vcdb_n.size() << " visits\n";
 #endif
 
 	// iterate through the block of vcdb which we have been given
-	for(MapVecInt::const_iterator vis_it = chunkbegin; vis_it != chunkend; ++vis_it) {
+	for(MapVecInt::const_iterator vis_it = vbegin; vis_it != vend; ++vis_it) {
 
 		// find the icd9 codes for a given visitId
-		const std::string key = vis_it->first;
 		const VecUInt codes = vis_it->second; // these are the ICD-9 codes for the current visitid
 
 #ifdef ICD9_DEBUG
+		const std::string key = vis_it->first;
 		std::cout << "working on key: " << key <<" with codes: ";
-		//printVecStr(codes);
+		printIt(codes);
 #endif
 
-		int urow = distance(vcdb.begin(), vis_it);
+		MapVecInt::size_type urow = std::distance(vcdb_n.begin(), vis_it);
 #ifdef ICD9_DEBUG
-		std::cout << "urow = " << urow <<"\n";
+		std::cout << "urow = " << (int)urow <<"\n";
 #endif
 
 		// instead of assuming order of keys and counting, we need to insert the key, so the loop can go parallel
@@ -239,10 +239,8 @@ LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 		std::cout << "dstart = " << dstart << ", dend = " << dend << "\n";
 #endif
 		LogicalVector lv(start, end);
-		df_out[cmb_name] = lv;
+		mat_out[cmb_name] = lv;
 	}
-	IntegerVector row_names = seq_len(num_visits);
-	df_out.attr("row.names") = row_names;
-	df_out.attr("class") = "data.frame";
-	return df_out;
+	return mat_out;
 }
+#endif

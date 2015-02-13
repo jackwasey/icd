@@ -270,44 +270,6 @@ RcppExport SEXP icd9_icd9ComorbidShortRPSetInt(SEXP icd9dfSEXP, SEXP icd9Mapping
     UNPROTECT(1);
     return __result;
 }
-// icd9ComorbidShortRPVecIntBatch
-List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0);
-static SEXP icd9_icd9ComorbidShortRPVecIntBatch_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< DataFrame >::type icd9df(icd9dfSEXP );
-        Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
-        Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
-        Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
-        Rcpp::traits::input_parameter< size_t >::type grainSize(grainSizeSEXP );
-        List __result = icd9ComorbidShortRPVecIntBatch(icd9df, icd9Mapping, visitId, icd9Field, grainSize);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9ComorbidShortRPVecIntBatch(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9ComorbidShortRPVecIntBatch_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, grainSizeSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
 // icd9ComorbidShortRPVecInt
 List icd9ComorbidShortRPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0);
 static SEXP icd9_icd9ComorbidShortRPVecInt_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
@@ -331,6 +293,44 @@ RcppExport SEXP icd9_icd9ComorbidShortRPVecInt(SEXP icd9dfSEXP, SEXP icd9Mapping
     {
         Rcpp::RNGScope __rngScope;
         __result = PROTECT(icd9_icd9ComorbidShortRPVecInt_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, grainSizeSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9ComorbidShortRPVecIntBatch
+List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0);
+static SEXP icd9_icd9ComorbidShortRPVecIntBatch_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< DataFrame >::type icd9df(icd9dfSEXP );
+        Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
+        Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
+        Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
+        Rcpp::traits::input_parameter< size_t >::type grainSize(grainSizeSEXP );
+        List __result = icd9ComorbidShortRPVecIntBatch(icd9df, icd9Mapping, visitId, icd9Field, grainSize);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9ComorbidShortRPVecIntBatch(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9ComorbidShortRPVecIntBatch_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, grainSizeSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1671,8 +1671,8 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("List(*icd9ComorbidShortRPFullVector)(DataFrame,List,const std::string,const std::string)");
         signatures.insert("List(*icd9ComorbidShortRPHalfVector)(DataFrame,List,const std::string,const std::string)");
         signatures.insert("List(*icd9ComorbidShortRPSetInt)(DataFrame,List,const std::string,const std::string,size_t)");
-        signatures.insert("List(*icd9ComorbidShortRPVecIntBatch)(DataFrame,List,const std::string,const std::string,size_t)");
         signatures.insert("List(*icd9ComorbidShortRPVecInt)(DataFrame,List,const std::string,const std::string,size_t)");
+        signatures.insert("List(*icd9ComorbidShortRPVecIntBatch)(DataFrame,List,const std::string,const std::string,size_t)");
         signatures.insert("CharacterVector(*icd9MajMinToCode)(CharacterVector,CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9MajMinToShort)(CharacterVector,CharacterVector)");
         signatures.insert("CharacterVector(*icd9MajMinToDecimal)(CharacterVector,CharacterVector)");
@@ -1724,8 +1724,8 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortRPFullVector", (DL_FUNC)icd9_icd9ComorbidShortRPFullVector_try);
     R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortRPHalfVector", (DL_FUNC)icd9_icd9ComorbidShortRPHalfVector_try);
     R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortRPSetInt", (DL_FUNC)icd9_icd9ComorbidShortRPSetInt_try);
-    R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortRPVecIntBatch", (DL_FUNC)icd9_icd9ComorbidShortRPVecIntBatch_try);
     R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortRPVecInt", (DL_FUNC)icd9_icd9ComorbidShortRPVecInt_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortRPVecIntBatch", (DL_FUNC)icd9_icd9ComorbidShortRPVecIntBatch_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToCode", (DL_FUNC)icd9_icd9MajMinToCode_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToShort", (DL_FUNC)icd9_icd9MajMinToShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToDecimal", (DL_FUNC)icd9_icd9MajMinToDecimal_try);

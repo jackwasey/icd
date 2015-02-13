@@ -14,3 +14,5 @@ Rprof.out
 *.dll
 todo
 i9test.RData
+.cproject
+.project
