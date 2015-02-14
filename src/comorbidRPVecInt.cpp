@@ -93,7 +93,7 @@ struct ComorbidWorkerVI : public Worker {
 // [[Rcpp::export]]
 List icd9ComorbidShortRPVecInt(DataFrame icd9df, List icd9Mapping,
 		const std::string visitId = "visitId", const std::string icd9Field = "icd9",
-		size_t grainSize = 0) {
+		int grainSize = 0) {
 #ifdef ICD9_DEBUG
 	std::cout << "icd9ComorbidShortRPVecInt\n";
 #endif

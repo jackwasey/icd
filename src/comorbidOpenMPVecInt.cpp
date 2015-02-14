@@ -14,21 +14,19 @@
 #ifdef ICD9_DEBUG_PARALLEL
 REprintf("_OPENMP is defined. Setting threads.\n");
 if (threads > 0)
-	omp_set_num_threads(threads);
+omp_set_num_threads(threads);
 REprintf("Number of threads=%i\n", omp_get_max_threads());
 #endif
 #endif
 
 using namespace Rcpp;
 
-#ifdef ICD9_IGNORE
 //' @rdname icd9Comorbid
 //' @description RcppParallel approach with openmp and int strategy
 //' @export
 // [[Rcpp::export]]
 LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
-		const std::string visitId = "visitId", const std::string icd9Field = "icd9",
-		size_t grainSize = 0) {
+		const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
 #ifdef ICD9_DEBUG
 	std::cout << "icd9ComorbidShortRPVecInt\n";
 #endif
@@ -153,13 +151,14 @@ LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 	std::cout << "reference comorbidity mapping STL structure created\n%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n";
 #endif
 
-	// #pragma omp parallel for schedule(static) // dynamic may be better suited than static.
 
 //	const MapVecInt vcdb;
-	const ComorbidVecInt map; // map of comorbidities to ICD9 codes
+	const ComorbidVecInt map;// map of comorbidities to ICD9 codes
 	const ComorbidVecInt::size_type num_comorbid = map.size();
 	const MapVecInt::size_type num_visits = vcdb_n.size();
-	VecBool out; // vector of booleans we can restructure to a data.frame later
+	VecBool out(num_comorbid*num_visits, false); // vector of booleans we can restructure to a data.frame later
+	// definitely need to work in row major for best parallel execution with spatio-temporal locality
+	// transpose not too expensive later
 
 	const MapVecInt::const_iterator vbegin = vcdb_n.begin();
 	const MapVecInt::const_iterator vend = vcdb_n.begin();
@@ -168,19 +167,19 @@ LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 	std::cout << vcdb_n.size() << " visits\n";
 #endif
 
-	// iterate through the block of vcdb which we have been given
+	#pragma omp parallel for schedule(static) // dynamic may be better suited than static.
 	for(MapVecInt::const_iterator vis_it = vbegin; vis_it != vend; ++vis_it) {
 
 		// find the icd9 codes for a given visitId
-		const VecUInt codes = vis_it->second; // these are the ICD-9 codes for the current visitid
+		const VecUInt codes = vis_it->second;// these are the ICD-9 codes for the current visitid
 
 #ifdef ICD9_DEBUG
 		const std::string key = vis_it->first;
 		std::cout << "working on key: " << key <<" with codes: ";
 		printIt(codes);
 #endif
-
-		MapVecInt::size_type urow = std::distance(vcdb_n.begin(), vis_it);
+// TODO, maybe faster to keep count?
+		MapVecInt::size_type urow = std::distance<MapVecInt::const_iterator>(vcdb_n.begin(), vis_it);
 #ifdef ICD9_DEBUG
 		std::cout << "urow = " << (int)urow <<"\n";
 #endif
@@ -200,13 +199,14 @@ LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 				printIt(map[cmb]);
 #endif
 				if (std::binary_search(map[cmb].begin(), map[cmb].end(), *code_it)) {
-					VecBool::size_type out_idx = cmb*(num_visits-1) + urow;
+					// this defines row-major for the output matrix, i.e. for
+					VecBool::size_type out_idx = num_comorbid*urow + cmb;
 #ifdef ICD9_TRACE
 					std::cout << "found match";
 					std::cout << out.size() << ", but idx = " << out_idx << "\n";
 #endif
 					// no bounds check: confidence in the mathematics
-					out[out_idx] = true; // and update the current item. This is where we define the matrix indexing to be by visitid first, then cmb, which fits with a dataframe of a list of columns.
+					out[out_idx] = true;// and update the current item. This is where we define the matrix indexing to be by visitid first, then cmb, which fits with a dataframe of a list of columns.
 				}
 #ifdef ICD9_TRACE
 				std::cout << "\n";
@@ -214,15 +214,21 @@ LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 			}
 		} // end for looping through whole comorbidity map
 	}
-	LogicalMatrix mat_out;
-	// list of visit keys
+	//LogicalMatrix mat_out(num_visits, num_comorbid); // default false
+	LogicalMatrix mat_out(out);
+	// set dimensions in reverse (row major for parallel step)
+	mat_out.attr(".Dim") = IntegerVector((int)num_comorbid, (int)num_visits);
+	Function t("t");
+	//LogicalMatrix mat_out_t = t(mat_out);
+	mat_out = t(mat_out);
+
 	std::vector<std::string> visitIds;
 	for (MapVecInt::iterator it=vcdb_n.begin(); it !=vcdb_n.end(); ++it) {
 		visitIds.push_back(it->first);
 	}
-	CharacterVector rowNames = wrap(visitIds);
-	mat_out.attr(".Dimnames") = List::create(rowNames, R_NilValue);
-	mat_out.attr(".Dim") = IntegerVector(num_visits, num_comorbid);
+	//CharacterVector rowNames = wrap(visitIds);
+	mat_out.attr(".Dimnames") = List::create(visitIds, R_NilValue);
+	//mat_out.attr(".Dim") = IntegerVector((int)num_visits, (int)num_comorbid);
 
 	// loop through comorbidities to extract logical vectors, and manually transpose?
 	// may be better to let R transpose, as the memory access will be crazy if I'm not careful.
@@ -239,8 +245,7 @@ LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 		std::cout << "dstart = " << dstart << ", dend = " << dend << "\n";
 #endif
 		LogicalVector lv(start, end);
-		mat_out[cmb_name] = lv;
+		//mat_out[cmb_name] = lv;
 	}
 	return mat_out;
 }
-#endif

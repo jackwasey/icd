@@ -18,8 +18,8 @@ icd9ComorbidShortOpenMP <- function(icd9df, icd9Mapping, visitId = "visitId", ic
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach with openmp and int strategy
 #' @export
-icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
-    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
+icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
 }
 
 #' @rdname icd9Comorbid

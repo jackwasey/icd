@@ -7,7 +7,7 @@
 using namespace RcppParallel;
 using namespace Rcpp;
 
-struct ComorbidWorkerVIB : public Worker {
+struct ComorbidWorkerVIB: public Worker {
 	const MapVecInt vcdb;
 	const ComorbidVecInt map; // map of comorbidities to ICD9 codes
 	const CharacterVector mapnames;
@@ -18,9 +18,11 @@ struct ComorbidWorkerVIB : public Worker {
 	// at the end, because we need to be able to write subsets of the rows at a time when working in parallel.
 
 	// constructors
-	ComorbidWorkerVIB(MapVecInt vcdb, ComorbidVecInt map, CharacterVector mapnames)
-	: vcdb(vcdb), map(map), mapnames(mapnames),
-	  num_comorbid(map.size()), num_visits(vcdb.size()) {}
+	ComorbidWorkerVIB(MapVecInt vcdb, ComorbidVecInt map,
+			CharacterVector mapnames) :
+			vcdb(vcdb), map(map), mapnames(mapnames), num_comorbid(map.size()), num_visits(
+					vcdb.size()) {
+	}
 	// out(std::vector<bool>(vcdb.size()*map.size(), false)) // predefine size of out, but then need to replace
 
 	void operator()(std::size_t begin, std::size_t end) {
@@ -30,9 +32,9 @@ struct ComorbidWorkerVIB : public Worker {
 		MapVecInt::const_iterator chunkend = vcdb.begin();
 		advance(chunkbegin, begin);
 		advance(chunkend, end);
-		out.reserve(vcdb.size()*map.size());
-		MapVecInt::size_type num_visits_chunk = 1+end-begin;
-		VecBool batchOut(num_comorbid*(end-begin), false); // temporary place to write to avoid cache contention.
+		out.reserve(vcdb.size() * map.size());
+		MapVecInt::size_type num_visits_chunk = 1 + end - begin;
+		VecBool batchOut(num_comorbid * (end - begin), false); // temporary place to write to avoid cache contention.
 
 #ifdef ICD9_DEBUG_PARALLEL
 		std::cout << vcdb.size() << " visits in this chunk\n";
@@ -42,7 +44,8 @@ struct ComorbidWorkerVIB : public Worker {
 #endif
 
 		// iterate through the block of vcdb which we have been given
-		for(MapVecInt::const_iterator vis_it = chunkbegin; vis_it != chunkend; ++vis_it) {
+		for (MapVecInt::const_iterator vis_it = chunkbegin; vis_it != chunkend;
+				++vis_it) {
 
 			// find the icd9 codes for a given visitId
 			const VecUInt codes = vis_it->second; // these are the ICD-9 codes for the current visitid
@@ -72,17 +75,20 @@ struct ComorbidWorkerVIB : public Worker {
 				// loop through icd codes for this visitId
 				const VecUInt::const_iterator cbegin = codes.begin();
 				const VecUInt::const_iterator cend = codes.end();
-				for (VecUInt::const_iterator code_it = cbegin; code_it != cend; ++code_it) {
+				for (VecUInt::const_iterator code_it = cbegin; code_it != cend;
+						++code_it) {
 #ifdef ICD9_TRACE
 					std::cout << "working on code: " << *code_it << "\n";
 					std::cout.flush();
 					printIt(map[cmb]);
 #endif
-					if (std::binary_search(map[cmb].begin(), map[cmb].end(), *code_it)) {
-						VecBool::size_type out_idx = urow*num_visits_chunk + cmb; // + urow;
+					if (std::binary_search(map[cmb].begin(), map[cmb].end(),
+							*code_it)) {
+						VecBool::size_type out_idx =
+								urow * num_visits_chunk + cmb; // + urow;
 #ifdef ICD9_TRACE
-						std::cout << "found match";
-						std::cout << batchOut.size() << ", out idx = " << out_idx << "\n";
+										std::cout << "found match";
+										std::cout << batchOut.size() << ", out idx = " << out_idx << "\n";
 #endif
 						// no bounds check: confidence in the mathematics
 						// and update the current item. This is where we define the matrix indexing to be by visitid first, then cmb, which fits with a dataframe of a list of columns.
@@ -90,11 +96,12 @@ struct ComorbidWorkerVIB : public Worker {
 #ifdef ICD9_DEBUG
 						if (out_idx > batchOut.size()) {
 							char buff[100];
-							sprintf(buff, "idx = %d, but size = %d\n", (int)out_idx, (int)batchOut.size());
+							sprintf(buff, "idx = %d, but size = %d\n",
+									(int) out_idx, (int) batchOut.size());
 							std::cout << buff;
 							std::cout.flush();
-							sleep(1);
-							Rcpp::stop("out idx out of range"); }
+							Rcpp::stop("out idx out of range");
+						}
 #endif
 
 						batchOut[out_idx] = true;
@@ -102,9 +109,9 @@ struct ComorbidWorkerVIB : public Worker {
 				}
 			} // end for looping through whole comorbidity map
 		} // end loop through visits
-		// write batch out to the main out.
-		// Without doing this, even if the out data is in cache, it is locked so other threads can't touch it.
-		// TODO: is this even thread safe?
+		  // write batch out to the main out.
+		  // Without doing this, even if the out data is in cache, it is locked so other threads can't touch it.
+		  // TODO: is this even thread safe?
 #ifdef ICD9_TRACE
 		std::cout << "finished a batch\n";
 		printIt(batchOut);
@@ -123,8 +130,8 @@ struct ComorbidWorkerVIB : public Worker {
 //' @export
 // [[Rcpp::export]]
 List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping,
-		const std::string visitId = "visitId", const std::string icd9Field = "icd9",
-		size_t grainSize = 0) {
+		const std::string visitId = "visitId", const std::string icd9Field =
+				"icd9", int grainSize = 0) {
 #ifdef ICD9_DEBUG
 	std::cout << "icd9ComorbidShortRPVecIntBatch\n";
 #endif
@@ -139,7 +146,7 @@ List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping,
 
 	int vlen = vs.size();
 
-	for (int i=0; i<vlen; ++i) {
+	for (int i = 0; i < vlen; ++i) {
 #ifdef ICD9_DEBUG_SETUP
 		std::cout << "building visit: it = " << i << ", id = " << vs[i] << "\n";
 		std::cout << "length vcdb_n = " << vcdb_n.size() << "\n";
@@ -155,7 +162,7 @@ List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping,
 		unsigned int n = 0;
 		// would be easy to skip whitespace here too, but probably no need.
 
-		if (*s<'0' && *s>'9') { // V or E code
+		if (*s < '0' && *s > '9') { // V or E code
 			if (*s == 'V' || *s == 'v') {
 				whichmap = vcdb_v;
 			} else {
@@ -164,17 +171,17 @@ List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping,
 			++s;
 
 		}
-		while (*s>='0' && *s<='9') {
-			n=(n*10)+(*s-'0');
+		while (*s >= '0' && *s <= '9') {
+			n = (n * 10) + (*s - '0');
 			++s;
 		}
 
 		MapVecInt::iterator mapit = whichmap.find(vs[i]);
-		if (mapit==whichmap.end()) {
+		if (mapit == whichmap.end()) {
 #ifdef ICD9_DEBUG_SETUP
 			std::cout << "first sight of key " << vs[i] << "), so just insert the code\n";
 #endif
-			VecUInt vcodes(1,n); // construct one element vec str
+			VecUInt vcodes(1, n); // construct one element vec str
 			whichmap.insert(std::make_pair(vs[i], vcodes));
 		} else {
 			// no guarantee of order of visitId, so if the key already exists, we need to extend it
@@ -207,19 +214,21 @@ List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping,
 	/*
 	 * icd9Mapping is a List of string vectors
 	 */
-	for (List::iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end(); ++mi) {
+	for (List::iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();
+			++mi) {
 
 		VecStr comorbid_strings(as<VecStr>(*mi));
 		VecUInt vec_n;
 		VecUInt vec_v;
 		VecUInt vec_e;
-		for (VecStr::iterator vi = comorbid_strings.begin(); vi != comorbid_strings.end(); ++vi) {
+		for (VecStr::iterator vi = comorbid_strings.begin();
+				vi != comorbid_strings.end(); ++vi) {
 			VecUInt& whichvec = vec_n;
 			const char *s = (*vi).c_str();
 			unsigned int n = 0;
 			// would be easy to skip whitespace here too, but probably no need.
 
-			if (*s<'0' && *s>'9') { // V or E code
+			if (*s < '0' && *s > '9') { // V or E code
 				if (*s == 'V' || *s == 'v') {
 					whichvec = vec_v;
 				} else {
@@ -227,8 +236,8 @@ List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping,
 				}
 				++s;
 			}
-			while (*s>='0' && *s<='9') {
-				n=(n*10)+(*s-'0');
+			while (*s >= '0' && *s <= '9') {
+				n = (n * 10) + (*s - '0');
 				++s;
 			}
 			// push the int code to the right set:
@@ -247,7 +256,8 @@ List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping,
 
 	ComorbidWorkerVIB worker(vcdb_n, map_n, mapnames);
 #ifdef ICD9_DEBUG
-	std::cout << "worker instantiated with size " << vcdb_n.size() << "\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n";
+	std::cout << "worker instantiated with size " << vcdb_n.size()
+			<< "\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n";
 #endif
 	if (grainSize != 0) {
 		parallelFor(0, vcdb_n.size(), worker, grainSize);
@@ -261,22 +271,22 @@ List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping,
 	List df_out;
 	// list of visit keys
 	std::vector<std::string> visitIds;
-	for (MapVecInt::iterator it=vcdb_n.begin(); it !=vcdb_n.end(); ++it) {
+	for (MapVecInt::iterator it = vcdb_n.begin(); it != vcdb_n.end(); ++it) {
 		visitIds.push_back(it->first);
 	}
 	df_out[visitId] = wrap(visitIds);
 	// loop through comorbidities to extract logical vectors
 #ifdef ICD9_DEBUG
-	int n = (int)worker.out.size();
-	std::cout << "worker.out length = " << n <<"\n";
-	std::cout << "worker.num_comorbid = " << worker.num_comorbid <<"\n";
+	int n = (int) worker.out.size();
+	std::cout << "worker.out length = " << n << "\n";
+	std::cout << "worker.num_comorbid = " << worker.num_comorbid << "\n";
 #endif
 
 	// difficult now to restructure row major vector/matrix into R data frame, but I'm pretty sure i have the best (row major) strategy for parallelization.
-	for (ComorbidVecInt::size_type i=0;i<worker.num_comorbid;++i) {
+	for (ComorbidVecInt::size_type i = 0; i < worker.num_comorbid; ++i) {
 		LogicalVector lv(worker.num_visits);
-		for (MapVecInt::size_type v=0;v<worker.num_visits;v++) {
-			lv[v] = worker.out[v*worker.num_comorbid+i]; // row major to column major
+		for (MapVecInt::size_type v = 0; v < worker.num_visits; v++) {
+			lv[v] = worker.out[v * worker.num_comorbid + i]; // row major to column major
 		}
 		String cmb_name = mapnames[i];
 		df_out[cmb_name] = lv;

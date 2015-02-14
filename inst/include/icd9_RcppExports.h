@@ -62,17 +62,17 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0) {
-        typedef SEXP(*Ptr_icd9ComorbidShortOpenMPVecInt)(SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9ComorbidShortOpenMPVecInt)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortOpenMPVecInt p_icd9ComorbidShortOpenMPVecInt = NULL;
         if (p_icd9ComorbidShortOpenMPVecInt == NULL) {
-            validateSignature("LogicalMatrix(*icd9ComorbidShortOpenMPVecInt)(DataFrame,List,const std::string,const std::string,size_t)");
+            validateSignature("LogicalMatrix(*icd9ComorbidShortOpenMPVecInt)(DataFrame,List,const std::string,const std::string)");
             p_icd9ComorbidShortOpenMPVecInt = (Ptr_icd9ComorbidShortOpenMPVecInt)R_GetCCallable("icd9", "icd9_icd9ComorbidShortOpenMPVecInt");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9ComorbidShortOpenMPVecInt(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(grainSize));
+            __result = p_icd9ComorbidShortOpenMPVecInt(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -138,11 +138,11 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline List icd9ComorbidShortRPSetInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0) {
+    inline List icd9ComorbidShortRPSetInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0) {
         typedef SEXP(*Ptr_icd9ComorbidShortRPSetInt)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortRPSetInt p_icd9ComorbidShortRPSetInt = NULL;
         if (p_icd9ComorbidShortRPSetInt == NULL) {
-            validateSignature("List(*icd9ComorbidShortRPSetInt)(DataFrame,List,const std::string,const std::string,size_t)");
+            validateSignature("List(*icd9ComorbidShortRPSetInt)(DataFrame,List,const std::string,const std::string,int)");
             p_icd9ComorbidShortRPSetInt = (Ptr_icd9ComorbidShortRPSetInt)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRPSetInt");
         }
         RObject __result;
@@ -157,11 +157,11 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline List icd9ComorbidShortRPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0) {
+    inline List icd9ComorbidShortRPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0) {
         typedef SEXP(*Ptr_icd9ComorbidShortRPVecInt)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortRPVecInt p_icd9ComorbidShortRPVecInt = NULL;
         if (p_icd9ComorbidShortRPVecInt == NULL) {
-            validateSignature("List(*icd9ComorbidShortRPVecInt)(DataFrame,List,const std::string,const std::string,size_t)");
+            validateSignature("List(*icd9ComorbidShortRPVecInt)(DataFrame,List,const std::string,const std::string,int)");
             p_icd9ComorbidShortRPVecInt = (Ptr_icd9ComorbidShortRPVecInt)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRPVecInt");
         }
         RObject __result;
@@ -176,11 +176,11 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0) {
+    inline List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0) {
         typedef SEXP(*Ptr_icd9ComorbidShortRPVecIntBatch)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortRPVecIntBatch p_icd9ComorbidShortRPVecIntBatch = NULL;
         if (p_icd9ComorbidShortRPVecIntBatch == NULL) {
-            validateSignature("List(*icd9ComorbidShortRPVecIntBatch)(DataFrame,List,const std::string,const std::string,size_t)");
+            validateSignature("List(*icd9ComorbidShortRPVecIntBatch)(DataFrame,List,const std::string,const std::string,int)");
             p_icd9ComorbidShortRPVecIntBatch = (Ptr_icd9ComorbidShortRPVecIntBatch)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRPVecIntBatch");
         }
         RObject __result;

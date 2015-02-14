@@ -84,8 +84,8 @@ RcppExport SEXP icd9_icd9ComorbidShortOpenMP(SEXP icd9dfSEXP, SEXP icd9MappingSE
     return __result;
 }
 // icd9ComorbidShortOpenMPVecInt
-LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0);
-static SEXP icd9_icd9ComorbidShortOpenMPVecInt_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
+LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9");
+static SEXP icd9_icd9ComorbidShortOpenMPVecInt_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -93,19 +93,18 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
         Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
         Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
-        Rcpp::traits::input_parameter< size_t >::type grainSize(grainSizeSEXP );
-        LogicalMatrix __result = icd9ComorbidShortOpenMPVecInt(icd9df, icd9Mapping, visitId, icd9Field, grainSize);
+        LogicalMatrix __result = icd9ComorbidShortOpenMPVecInt(icd9df, icd9Mapping, visitId, icd9Field);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_icd9ComorbidShortOpenMPVecInt(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
+RcppExport SEXP icd9_icd9ComorbidShortOpenMPVecInt(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9ComorbidShortOpenMPVecInt_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, grainSizeSEXP));
+        __result = PROTECT(icd9_icd9ComorbidShortOpenMPVecInt_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -233,7 +232,7 @@ RcppExport SEXP icd9_icd9ComorbidShortRPHalfVector(SEXP icd9dfSEXP, SEXP icd9Map
     return __result;
 }
 // icd9ComorbidShortRPSetInt
-List icd9ComorbidShortRPSetInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0);
+List icd9ComorbidShortRPSetInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0);
 static SEXP icd9_icd9ComorbidShortRPSetInt_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -242,7 +241,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
         Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
         Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
-        Rcpp::traits::input_parameter< size_t >::type grainSize(grainSizeSEXP );
+        Rcpp::traits::input_parameter< int >::type grainSize(grainSizeSEXP );
         List __result = icd9ComorbidShortRPSetInt(icd9df, icd9Mapping, visitId, icd9Field, grainSize);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
@@ -271,7 +270,7 @@ RcppExport SEXP icd9_icd9ComorbidShortRPSetInt(SEXP icd9dfSEXP, SEXP icd9Mapping
     return __result;
 }
 // icd9ComorbidShortRPVecInt
-List icd9ComorbidShortRPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0);
+List icd9ComorbidShortRPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0);
 static SEXP icd9_icd9ComorbidShortRPVecInt_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -280,7 +279,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
         Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
         Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
-        Rcpp::traits::input_parameter< size_t >::type grainSize(grainSizeSEXP );
+        Rcpp::traits::input_parameter< int >::type grainSize(grainSizeSEXP );
         List __result = icd9ComorbidShortRPVecInt(icd9df, icd9Mapping, visitId, icd9Field, grainSize);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
@@ -309,7 +308,7 @@ RcppExport SEXP icd9_icd9ComorbidShortRPVecInt(SEXP icd9dfSEXP, SEXP icd9Mapping
     return __result;
 }
 // icd9ComorbidShortRPVecIntBatch
-List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", size_t grainSize = 0);
+List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0);
 static SEXP icd9_icd9ComorbidShortRPVecIntBatch_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP grainSizeSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
@@ -318,7 +317,7 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
         Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
         Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
-        Rcpp::traits::input_parameter< size_t >::type grainSize(grainSizeSEXP );
+        Rcpp::traits::input_parameter< int >::type grainSize(grainSizeSEXP );
         List __result = icd9ComorbidShortRPVecIntBatch(icd9df, icd9Mapping, visitId, icd9Field, grainSize);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
@@ -1666,13 +1665,13 @@ static int icd9_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("List(*icd9ComorbidShort)(DataFrame,List,std::string,std::string)");
         signatures.insert("List(*icd9ComorbidShortOpenMP)(DataFrame,List,std::string,std::string,int)");
-        signatures.insert("LogicalMatrix(*icd9ComorbidShortOpenMPVecInt)(DataFrame,List,const std::string,const std::string,size_t)");
+        signatures.insert("LogicalMatrix(*icd9ComorbidShortOpenMPVecInt)(DataFrame,List,const std::string,const std::string)");
         signatures.insert("List(*icd9ComorbidShortRP)(DataFrame,List,const std::string,const std::string)");
         signatures.insert("List(*icd9ComorbidShortRPFullVector)(DataFrame,List,const std::string,const std::string)");
         signatures.insert("List(*icd9ComorbidShortRPHalfVector)(DataFrame,List,const std::string,const std::string)");
-        signatures.insert("List(*icd9ComorbidShortRPSetInt)(DataFrame,List,const std::string,const std::string,size_t)");
-        signatures.insert("List(*icd9ComorbidShortRPVecInt)(DataFrame,List,const std::string,const std::string,size_t)");
-        signatures.insert("List(*icd9ComorbidShortRPVecIntBatch)(DataFrame,List,const std::string,const std::string,size_t)");
+        signatures.insert("List(*icd9ComorbidShortRPSetInt)(DataFrame,List,const std::string,const std::string,int)");
+        signatures.insert("List(*icd9ComorbidShortRPVecInt)(DataFrame,List,const std::string,const std::string,int)");
+        signatures.insert("List(*icd9ComorbidShortRPVecIntBatch)(DataFrame,List,const std::string,const std::string,int)");
         signatures.insert("CharacterVector(*icd9MajMinToCode)(CharacterVector,CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9MajMinToShort)(CharacterVector,CharacterVector)");
         signatures.insert("CharacterVector(*icd9MajMinToDecimal)(CharacterVector,CharacterVector)");
