@@ -1,5 +1,6 @@
-#PKG_CC=gcc
-#PKGCXX=g++
+# need gcc for openmp
+PKG_CC=gcc
+PKG_CXX=g++
 
 PKG_CPPFLAGS = -I. -I../inst/include/
 CPPFLAGS = -I. -I../inst/include/

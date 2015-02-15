@@ -62,23 +62,23 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline LogicalMatrix icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
-        typedef SEXP(*Ptr_icd9ComorbidShortOpenMPVecInt)(SEXP,SEXP,SEXP,SEXP);
+    inline SEXP icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int threads = 6) {
+        typedef SEXP(*Ptr_icd9ComorbidShortOpenMPVecInt)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortOpenMPVecInt p_icd9ComorbidShortOpenMPVecInt = NULL;
         if (p_icd9ComorbidShortOpenMPVecInt == NULL) {
-            validateSignature("LogicalMatrix(*icd9ComorbidShortOpenMPVecInt)(DataFrame,List,const std::string,const std::string)");
+            validateSignature("SEXP(*icd9ComorbidShortOpenMPVecInt)(DataFrame,List,const std::string,const std::string,int)");
             p_icd9ComorbidShortOpenMPVecInt = (Ptr_icd9ComorbidShortOpenMPVecInt)R_GetCCallable("icd9", "icd9_icd9ComorbidShortOpenMPVecInt");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9ComorbidShortOpenMPVecInt(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+            __result = p_icd9ComorbidShortOpenMPVecInt(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<LogicalMatrix >(__result);
+        return Rcpp::as<SEXP >(__result);
     }
 
     inline List icd9ComorbidShortRP(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
@@ -157,25 +157,6 @@ namespace icd9 {
         return Rcpp::as<List >(__result);
     }
 
-    inline List icd9ComorbidShortRPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0) {
-        typedef SEXP(*Ptr_icd9ComorbidShortRPVecInt)(SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9ComorbidShortRPVecInt p_icd9ComorbidShortRPVecInt = NULL;
-        if (p_icd9ComorbidShortRPVecInt == NULL) {
-            validateSignature("List(*icd9ComorbidShortRPVecInt)(DataFrame,List,const std::string,const std::string,int)");
-            p_icd9ComorbidShortRPVecInt = (Ptr_icd9ComorbidShortRPVecInt)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRPVecInt");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9ComorbidShortRPVecInt(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(grainSize));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<List >(__result);
-    }
-
     inline List icd9ComorbidShortRPVecIntBatch(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0) {
         typedef SEXP(*Ptr_icd9ComorbidShortRPVecIntBatch)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortRPVecIntBatch p_icd9ComorbidShortRPVecIntBatch = NULL;
@@ -187,6 +168,25 @@ namespace icd9 {
         {
             RNGScope __rngScope;
             __result = p_icd9ComorbidShortRPVecIntBatch(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(grainSize));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<List >(__result);
+    }
+
+    inline List icd9ComorbidShortRPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int grainSize = 0) {
+        typedef SEXP(*Ptr_icd9ComorbidShortRPVecInt)(SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidShortRPVecInt p_icd9ComorbidShortRPVecInt = NULL;
+        if (p_icd9ComorbidShortRPVecInt == NULL) {
+            validateSignature("List(*icd9ComorbidShortRPVecInt)(DataFrame,List,const std::string,const std::string,int)");
+            p_icd9ComorbidShortRPVecInt = (Ptr_icd9ComorbidShortRPVecInt)R_GetCCallable("icd9", "icd9_icd9ComorbidShortRPVecInt");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9ComorbidShortRPVecInt(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(grainSize));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

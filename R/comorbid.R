@@ -62,6 +62,9 @@ icd9Comorbid <- function(icd9df,
                          isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                          isShortMapping = icd9GuessIsShort(icd9Mapping)) {
 
+# Rcpp --------------------------------------------------------------------
+
+
   checkmate::checkDataFrame(icd9df, min.cols = 2)
   checkmate::checkList(icd9Mapping, types = "character", any.missing = FALSE, min.len = 1)
   #checkmate::checkString(visitId)
@@ -79,7 +82,7 @@ icd9Comorbid <- function(icd9df,
 
   # return via call to the C++ function:
   #icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
-  icd9ComorbidShortRcppParallel(icd9df, icd9Mapping, visitId, icd9Field)
+  icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
 
 }
 
