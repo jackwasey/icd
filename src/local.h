@@ -16,8 +16,8 @@ typedef boost::container::flat_multimap<Str, Str> BoostMapVisitCode; // used in 
 typedef std::vector<BoostSetStr> BoostCmbMap; // ? faster with boost flat_sets: many lookups but each is from relatively small set
 #endif
 
-//#define ICD9_DEBUG
-//#define ICD9_DEBUG_SETUP
+#define ICD9_DEBUG
+#define ICD9_DEBUG_SETUP
 //#define ICD9_TRACE
 //#define ICD9_DEBUG_PARALLEL
 
@@ -100,35 +100,20 @@ CodesVecSubtype buildVisitCodes(const Rcpp::DataFrame& icd9df, const std::string
 /*
  * comorbidity lookup function variations
  */
-void lookupComorbid(const CodesVecSubtype& allCodes, const ComorbidVecInt& map, const MapVecInt::size_type num_visits,
-		const ComorbidVecInt::size_type num_comorbid, VecBool& out);
+void lookupComorbid(const CodesVecSubtype& allCodes, const ComorbidVecInt& map, VecBool& out);
 
-VecBool lookupComorbid(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
-		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid);
+VecBool lookupComorbid(const CodesVecSubtype& allCodes, const ComorbidVecInt& map);
 
 void lookupComorbidByRow(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
-		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid,
 		VecBool& out);
 
-VecBool lookupComorbidByRow(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
-		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid);
-
-void lookupComorbidByRowOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
-		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid, VecBool& out);
-
-VecBool lookupComorbidByRowOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
-		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid);
-
 void lookupComorbidRangeOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
-		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid,
 		std::size_t begin, std::size_t end, VecBool& out);
 
 void lookupComorbidRangeOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
-		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid,
 		std::size_t begin, std::size_t end, VecBool& out);
 
 VecBool lookupComorbidRangeOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
-		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid,
 		std::size_t begin, std::size_t end);
 
 void lookupComorbidByChunk(const CodesVecSubtype& allCodes, const ComorbidVecInt& map, size_t chunkSize, VecBool& out);
@@ -136,3 +121,4 @@ void lookupComorbidByChunk(const CodesVecSubtype& allCodes, const ComorbidVecInt
 VecBool lookupComorbidByChunk(const CodesVecSubtype& allCodes, const ComorbidVecInt& map, size_t chunkSize);
 
 void writeChunk(VecBool chunk_out, size_t begin, VecBool& out);
+void insertChunk(const VecBool chunk_out, VecBool& out);
