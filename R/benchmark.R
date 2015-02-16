@@ -46,7 +46,7 @@ runOpenMPVecInt <- function(n = 4, np = 2) {
   icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid)
 }
 benchComorbid <- function(n=1E5, threads = 1)
-  system.time(icd9ComorbidShortParalelOpenMP(randomPatients(n), icd9Mapping = ahrqComorbid, threads = threads))
+  system.time(icd9ComorbidShortOpenMPVecInt(randomPatients(n), icd9Mapping = ahrqComorbid, threads = threads))
 
 benchGrain <- function() {
   ptsHuge <- randomPatients(1000000, np = 17)

@@ -5,108 +5,159 @@
 #include <algorithm>
 using namespace Rcpp;
 
-/*
- * Build vector of vector of unsigned ints to contain comorbidity map
- */
-void buildMap(List icd9Mapping, ComorbidVecInt& map_v, ComorbidVecInt& map_e,
-  	ComorbidVecInt& map_n) {
-	for (List::iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();
-			++mi) {
-		VecStr comorbid_strings(as<VecStr>(*mi));
-		VecUInt vec_n;
-		VecUInt vec_v;
-		VecUInt vec_e;
-		for (VecStr::iterator vi = comorbid_strings.begin();
-				vi != comorbid_strings.end(); ++vi) {
-			VecUInt& whichvec = vec_n;
-			const char* s = (*vi).c_str();
-			unsigned int n = 0;
-			// would be easy to skip whitespace here too, but probably no need.
-			if (*s < '0' && *s > '9') {
-				// V or E code
-				if (*s == 'V' || *s == 'v') {
-					whichvec = vec_v;
-				} else {
-					whichvec = vec_e;
+void lookupComorbid(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+		const MapVecInt::size_type num_visits,
+		const ComorbidVecInt::size_type num_comorbid, VecBool& out) {
+	for (size_t urow = 0; urow < num_visits; ++urow) {
+		// TODO any advantage in using iterator and distance?
+		const VecUInt codes = allCodes[urow]; // these are the ICD-9 codes for the current visitid
+		for (ComorbidVecInt::size_type cmb = 0; cmb < num_comorbid; ++cmb) {
+			// loop through icd codes for this visitId
+			const VecUInt::const_iterator cbegin = codes.begin();
+			const VecUInt::const_iterator cend = codes.end();
+			for (VecUInt::const_iterator code_it = cbegin; code_it != cend;
+					++code_it) {
+				if (std::binary_search(map[cmb].begin(), map[cmb].end(),
+						*code_it)) {
+					VecBool::size_type out_idx = num_comorbid * urow + cmb;
+					out[out_idx] = true; // and update the current item. TODO break out to chunks to avoid contention.
 				}
-				++s;
 			}
-			while (*s >= '0' && *s <= '9') {
-				n = (n * 10) + (*s - '0');
-				++s;
-			}
-			// push the int code to the right set:
-			whichvec.push_back(n);
-		}
-		sort(vec_n.begin(), vec_n.end());
-		sort(vec_v.begin(), vec_v.end());
-		sort(vec_e.begin(), vec_e.end());
-		map_n.push_back(vec_n);
-		map_v.push_back(vec_v);
-		map_e.push_back(vec_e);
+		} // end for looping through whole comorbidity map
 	}
-	std::cout << "reference comorbidity mapping STL structure created\n";
 }
 
-ComorbidVecInt buildMap(List icd9Mapping) {
-	ComorbidVecInt map;
-	return map;
+// wrap lookupComorbid (by reference) to return data in new vector
+VecBool lookupComorbid(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid) {
+	VecBool out;
+	lookupComorbid(allCodes, map, num_visits, num_comorbid, out);
+	return out;
 }
 
-void buildVisitCodes(const DataFrame& icd9df, const std::string& visitId,
-		const std::string& icd9Field, MapVecInt& vcdb_n) {
-	// const MapVecInt& vcdb_v //TODO
-	// const MapVecInt& vcdb_e
-	const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
-	const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
-	int vlen = vs.size();
-	for (int i = 0; i < vlen; ++i) {
-#ifdef ICD9_DEBUG
-		std::cout << "building visit: it = " << i << ", id = " << vs[i] << "\n";
-		std::cout << "length vcdb_n = " << vcdb_n.size() << "\n";
-#endif
-		/*
-		 * see if code is numeric, V or E
-		 * convert integer part to unsigned int
-		 * add that int to the N, V or E map
-		 */
-		MapVecInt& whichmap = vcdb_n;
-		const char* s = icds[i].c_str();
-		unsigned int n = 0;
-		// would be easy to skip whitespace here too, but probably no need.
-		if (*s < '0' && *s > '9') {
-			// V or E code
-			if (*s == 'V' || *s == 'v') {
-				//whichmap = vcdb_v;
-			} else {
-				//whichmap = vcdb_e;
+VecBool lookupComorbidByRow(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid) {
+	VecBool out;
+	lookupComorbidByRow(allCodes, map, num_visits, num_comorbid, out);
+	return out;
+}
+
+void lookupComorbidByRow(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid,
+		VecBool& out) {
+	for (size_t urow = 0; urow < num_visits; ++urow) {
+		// TODO any advantage in using iterator and distance?
+		const VecUInt codes = allCodes[urow]; // these are the ICD-9 codes for the current visitid
+		VecBool row_out(num_comorbid, false);
+		for (ComorbidVecInt::size_type cmb = 0; cmb < num_comorbid; ++cmb) {
+			// loop through icd codes for this visitId
+			const VecUInt::const_iterator cbegin = codes.begin();
+			const VecUInt::const_iterator cend = codes.end();
+			for (VecUInt::const_iterator code_it = cbegin; code_it != cend;
+					++code_it) {
+				if (std::binary_search(map[cmb].begin(), map[cmb].end(),
+						*code_it)) {
+					VecBool::size_type out_idx = num_comorbid * urow + cmb;
+					//out[out_idx] = true;// and update the current item. TODO break out to chunks to avoid contention.
+					row_out[cmb] = true; // and update the current item. TODO break out to chunks to avoid contention.
+				}
 			}
-			++s;
-		}
-		while (*s >= '0' && *s <= '9') {
-			n = (n * 10) + (*s - '0');
-			++s;
-		}
-		MapVecInt::iterator mapit = whichmap.find(vs[i]);
-		if (mapit == whichmap.end()) {
-#ifdef ICD9_DEBUG
-			std::cout << "first sight of key " << vs[i] << "\n";
-#endif
-
-			VecUInt vcodes(1, n); // construct one element vec str
-			whichmap.insert(std::make_pair(vs[i], vcodes));
-		} else {
-#ifdef ICD9_DEBUG
-			std::cout << "repeat id found: " << vs[i] << "\n";
-#endif
-			(mapit->second).push_back(n);
-		}
+		} // end for looping through whole comorbidity map
+		out.insert(out.end(), row_out.begin(), row_out.end());
 	}
-	std::cout << "visit map created\n";
 }
 
-VecUInt buildVisitCodes(const DataFrame& icd9df, const std::string& visitId,
-		const std::string& icd9Field, VecStr& visitIds) {
-	VecUInt& codes;
-	return codes;
+VecBool lookupComorbidByRowOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid) {
+	VecBool out;
+	lookupComorbidByRow(allCodes, map, num_visits, num_comorbid, out);
+	return out;
+}
+
+void lookupComorbidByRowOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid,
+		VecBool& out) {
+#pragma omp parallel for schedule(static)
+	for (size_t urow = 0; urow < num_visits; ++urow) {
+		// TODO any advantage in using iterator and distance?
+		const VecUInt codes = allCodes[urow]; // these are the ICD-9 codes for the current visitid
+		VecBool row_out(num_comorbid, false);
+		for (ComorbidVecInt::size_type cmb = 0; cmb < num_comorbid; ++cmb) {
+			// loop through icd codes for this visitId
+			const VecUInt::const_iterator cbegin = codes.begin();
+			const VecUInt::const_iterator cend = codes.end();
+			for (VecUInt::const_iterator code_it = cbegin; code_it != cend;
+					++code_it) {
+				if (std::binary_search(map[cmb].begin(), map[cmb].end(),
+						*code_it)) {
+					VecBool::size_type out_idx = num_comorbid * urow + cmb;
+					//out[out_idx] = true;// and update the current item. TODO break out to chunks to avoid contention.
+					row_out[cmb] = true; // and update the current item. TODO break out to chunks to avoid contention.
+				}
+			}
+		} // end for looping through whole comorbidity map
+		out.insert(out.end(), row_out.begin(), row_out.end());
+	}
+}
+
+void lookupComorbidRangeOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid,
+		std::size_t begin, std::size_t end, VecBool& out) {
+	VecBool chunk_out(num_comorbid*(end-begin), false);
+#pragma omp parallel for schedule(static)
+	for (size_t urow = begin; urow < end; ++urow) {
+		const VecUInt codes = allCodes[urow]; // these are the ICD-9 codes for the current visitid
+		for (ComorbidVecInt::size_type cmb = 0; cmb < num_comorbid; ++cmb) {
+			// loop through icd codes for this visitId
+			const VecUInt::const_iterator cbegin = codes.begin();
+			const VecUInt::const_iterator cend = codes.end();
+			for (VecUInt::const_iterator code_it = cbegin; code_it != cend;
+					++code_it) {
+				if (std::binary_search(map[cmb].begin(), map[cmb].end(),
+						*code_it)) {
+					VecBool::size_type chunk_out_idx = num_comorbid*(urow-begin)+cmb;
+					chunk_out[chunk_out_idx] = true; // and update the current item. TODO break out to chunks to avoid contention.
+				}
+			}
+		} // end for looping through whole comorbidity map
+	}
+	// TODO: do I need to update a pre-allocate 'out'? Insert is certainly easier, but this might invalidate cache.
+	out.insert(out.end(), chunk_out.begin(), chunk_out.end());
+	writeChunk(chunk_out, begin, out);
+}
+
+VecBool lookupComorbidRangeOpenMP(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+		const MapVecInt::size_type num_visits, const ComorbidVecInt::size_type num_comorbid,
+		std::size_t begin, std::size_t end) {
+	VecBool out;
+	lookupComorbidRangeOpenMP(allCodes, map, num_visits, num_comorbid, begin, end);
+	return out;
+}
+
+/*
+ * out as reference: assume it is pre-allocated
+ */
+void lookupComorbidByChunk(const CodesVecSubtype& allCodes, const ComorbidVecInt& map, size_t chunkSize, VecBool& out) {
+	const ComorbidVecInt::size_type num_comorbid = map.size();
+	const MapVecInt::size_type last_i = allCodes.size()-1;
+	size_t vis_i=0;
+	while (vis_i<last_i) {
+		size_t chunk_end = vis_i + chunkSize;
+		if (chunk_end>last_i) { chunk_end = last_i; }
+		VecBool chunk_out = lookupComorbidRangeOpenMP(allCodes, map, last_i+1, num_comorbid, vis_i, chunk_end, out)
+	}
+}
+
+VecBool lookupComorbidByChunk(const CodesVecSubtype& allCodes, const ComorbidVecInt& map, size_t chunkSize) {
+	VecBool out;
+	lookupComorbidByChunk(allCodes, map, chunkSize);
+	return out;
+}
+
+void writeChunk(const VecBool chunk_out, size_t begin, VecBool& out) {
+	size_t end = chunk_out.size();
+	for (size_t i = 0; i != end; ++i) {
+		// TODO convert to [] for speed
+		out.at(i+begin) = chunk_out(i);
+	}
 }
