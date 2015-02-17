@@ -42,7 +42,7 @@ void buildMap(const List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& ma
 #endif
 		map_n.push_back(vec_n);
 #ifdef ICD9_DEBUG_SETUP
-		std::cout << "last vec pushed back has length: " << map_n[map_n.size()].size() << "\n";
+		std::cout << "last vec pushed back has length: " << map_n[map_n.size()-1].size() << "\n";
 #endif
 		map_v.push_back(vec_v);
 		map_e.push_back(vec_e);

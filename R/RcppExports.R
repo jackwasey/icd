@@ -18,8 +18,8 @@ icd9ComorbidShortOpenMP <- function(icd9df, icd9Mapping, visitId = "visitId", ic
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach with openmp and int strategy
 #' @export
-icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 6L) {
-    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
+icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 6L, chunkSize = 50L) {
+    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize)
 }
 
 #' @rdname icd9Comorbid
@@ -53,15 +53,15 @@ icd9ComorbidShortRPSetInt <- function(icd9df, icd9Mapping, visitId = "visitId", 
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach
 #' @export
-icd9ComorbidShortRPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
-    .Call('icd9_icd9ComorbidShortRPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
+icd9ComorbidShortRPVecIntBatch <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
+    .Call('icd9_icd9ComorbidShortRPVecIntBatch', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
 }
 
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach
 #' @export
-icd9ComorbidShortRPVecIntBatch <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
-    .Call('icd9_icd9ComorbidShortRPVecIntBatch', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
+icd9ComorbidShortRPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
+    .Call('icd9_icd9ComorbidShortRPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
 }
 
 #' @rdname convert

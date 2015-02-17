@@ -17,8 +17,8 @@ typedef std::vector<BoostSetStr> BoostCmbMap; // ? faster with boost flat_sets: 
 #endif
 
 #define ICD9_DEBUG
-#define ICD9_DEBUG_SETUP
-//#define ICD9_TRACE
+//#define ICD9_DEBUG_SETUP
+#define ICD9_TRACE
 //#define ICD9_DEBUG_PARALLEL
 
 typedef std::string Str;

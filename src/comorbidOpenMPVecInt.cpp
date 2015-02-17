@@ -1,24 +1,23 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
+
+// R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
+#ifdef _OPENMP // not available on clang
+#include <omp.h>
+#endif
 #include <Rcpp.h>
 #include <local.h>
 #include <string>
 #include <algorithm>
-
-#ifdef _OPENMP // not available on clang
-#include <omp.h>
-#endif
-
 using namespace Rcpp;
 
-
 //' @rdname icd9Comorbid
-//' @description RcppParallel approach with openmp and int strategy
+//' @description RcppParallel approach with openmp and vector of integer strategy
 //' @export
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 		const std::string visitId = "visitId", const std::string icd9Field =
-				"icd9", int threads = 6) {
+				"icd9", int threads = 6, size_t chunkSize = 50) {
 #ifdef ICD9_DEBUG
 	std::cout << "icd9ComorbidShortOpenMPVecInt\n";
 #endif
@@ -37,7 +36,6 @@ SEXP icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 #endif
 #endif
 
-
 	VecStr _visitIds; // ideally would be const
 	const CodesVecSubtype allCodes = buildVisitCodes(icd9df, visitId, icd9Field, _visitIds);
 	const VecStr visitIds = _visitIds; // worth it?
@@ -54,7 +52,7 @@ SEXP icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 
 	//VecBool out;
 	//out.reserve(num_comorbid * num_visits); // vector of booleans we can restructure to a data.frame later
-	const VecBool out = lookupComorbidByChunk(allCodes, map, 50);
+	const VecBool out = lookupComorbidByChunk(allCodes, map, chunkSize);
 
 #ifdef ICD9_DEBUG
 	std::cout << "out length is " << out.size() << "\n";

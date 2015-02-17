@@ -1,8 +1,6 @@
 // [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::depends(RcppProgress)]]
 // [[Rcpp::plugins(openmp)]]
 #include <Rcpp.h>
-#include <progress.hpp>
 #include <local.h>
 #include <string>
 
@@ -27,7 +25,6 @@ List icd9ComorbidShortOpenMP(
     List out;
     VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
     VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
-    Progress p(0, false); // we need an instance, should be improved in next version
     CharacterVector mapnames = icd9Mapping.names();
 
     #ifdef _OPENMP
@@ -91,7 +88,6 @@ List icd9ComorbidShortOpenMP(
     // use std::multimap to get subset of icd codes for each visitId key
     //TODO: upper_bound jumps index irregularly
     for( MapVisitCode::iterator it = vcdb.begin(); it != vcdb.end(); it = vcdb.upper_bound(it->first)) {
-      if (Progress::check_abort() ) return out; // abort if ctrl-C pressed. ?performance hit
       // find the icd9 codes for a given visitId
       std::pair <MapVisitCode::iterator, MapVisitCode::iterator> matchrange;
       std::string key = it->first;
