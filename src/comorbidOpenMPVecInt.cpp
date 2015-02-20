@@ -9,17 +9,24 @@
 #include <local.h>
 #include <string>
 #include <algorithm>
+// enable linux performance counting
+#ifdef ICD9_VALGRIND
+#include <valgrind/callgrind.h>
+#endif
 using namespace Rcpp;
 
 //' @rdname icd9Comorbid
 //' @description RcppParallel approach with openmp and vector of integer strategy
 //' @export
 // [[Rcpp::export]]
-SEXP icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
-		const std::string visitId = "visitId", const std::string icd9Field =
-				"icd9", int threads = 6, size_t chunkSize = 50) {
-#ifdef ICD9_DEBUG
+SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId="visitId",
+		const std::string icd9Field="icd9", const int threads=8, const size_t chunkSize=256, const size_t ompChunkSize=1) {
+#ifdef ICD9_VALGRIND
+	CALLGRIND_START_INSTRUMENTATION;
+#endif
+#if (defined ICD9_DEBUG || defined ICD9_SETUP)
 	std::cout << "icd9ComorbidShortOpenMPVecInt\n";
+	std::cout << "chunk size = " << chunkSize << "\n";
 #endif
 
 #ifdef ICD9_DEBUG_PARALLEL
@@ -27,32 +34,44 @@ SEXP icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 #endif
 #ifdef _OPENMP
 #ifdef ICD9_DEBUG_PARALLEL
-	std::cout << "_OPENMP is defined. Setting threads.\n";
+	std::cout << "_OPENMP is defined.\n";
 #endif
 	if (threads > 0)
 		omp_set_num_threads(threads);
 #ifdef ICD9_DEBUG_PARALLEL
-	std::cout << "Number of threads=" << omp_get_max_threads() << "\n";
+	std::cout << "Max Number of threads=" << omp_get_max_threads() << "\n";
 #endif
 #endif
 
 	VecStr _visitIds; // ideally would be const
-	const CodesVecSubtype allCodes = buildVisitCodes(icd9df, visitId, icd9Field, _visitIds);
+#ifdef ICD9_DEBUG
+	std::cout << "building visit:codes structure\n";
+#endif
+
+	//const CodesVecSubtype allCodes = buildVisitCodesVecFromMap(icd9df, visitId, icd9Field, _visitIds);
+	CodesVecSubtype allCodes;
+	CodesVecSubtype vcdb_v;
+	CodesVecSubtype vcdb_e;
+	buildVisitCodesVec(icd9df, visitId, icd9Field, allCodes, vcdb_v, vcdb_e, _visitIds);
+
 	const VecStr visitIds = _visitIds; // worth it?
 
+#ifdef ICD9_DEBUG
+	std::cout << "building icd9Mapping\n";
+#endif
 	const ComorbidVecInt map = buildMap(icd9Mapping);
-	// todo: move these out? DOn't want to repeat them every iteration, but should be okay not being here at top level, apart from debug.
+	// todo: move these out? Don't want to repeat them every iteration, but should be okay not being here at top level, apart from debug.
 	const ComorbidVecInt::size_type num_comorbid = map.size();
-	const MapVecInt::size_type num_visits = visitIds.size();
+	const CodesVecSubtype::size_type num_visits = visitIds.size();
 
 #ifdef ICD9_DEBUG
 	std::cout << num_visits << " visits\n";
 	std::cout << num_comorbid << " is num_comorbid\n";
 #endif
 
-	//VecBool out;
-	//out.reserve(num_comorbid * num_visits); // vector of booleans we can restructure to a data.frame later
-	const VecBool out = lookupComorbidByChunk(allCodes, map, chunkSize);
+	//const Out out = lookupComorbidByRowFor(allCodes, map, chunkSize);
+	//const Out out = lookupComorbidByChunkWhile(allCodes, map, chunkSize);
+	const Out out = lookupComorbidByChunkFor(allCodes, map, chunkSize, ompChunkSize);
 
 #ifdef ICD9_DEBUG
 	std::cout << "out length is " << out.size() << "\n";
@@ -62,13 +81,18 @@ SEXP icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping,
 	std::cout << "out is: ";
 	printIt(out);
 #endif
-	LogicalVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
+	IntegerVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
+	//IntegerVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
 	mat_out.attr("dim") = Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
 	mat_out.attr("dimnames") = List::create(icd9Mapping.names(), visitIds);
 	Function t("t"); // use R transpose - seems pretty fast
-	//LogicalMatrix mat_out_t = t(mat_out);
 #ifdef ICD9_DEBUG
-	std::cout << "Ready to transpose\n";
+	std::cout << "Ready to transpose and return\n";
 #endif
+#ifdef ICD9_VALGRIND
+	CALLGRIND_STOP_INSTRUMENTATION;
+	CALLGRIND_DUMP_STATS;
+#endif
+
 	return t(mat_out);
 }

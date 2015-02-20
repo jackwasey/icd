@@ -18,7 +18,7 @@ struct ComorbidWorkerRP : public Worker {
   ComorbidWorkerRP(MapVecStr vcdb, CmbMap map, CharacterVector mapnames)
   : vcdb(vcdb), map(map), mapnames(mapnames),
   num_comorbid(map.size()), num_visits(vcdb.size()),
-  out(std::vector<bool>(vcdb.size()*map.size(), false)) {}
+  out(VecBool(vcdb.size()*map.size(), false)) {}
 
   void operator()(std::size_t begin, std::size_t end) {
     // do the work for the given range

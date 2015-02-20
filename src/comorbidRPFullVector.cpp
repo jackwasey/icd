@@ -17,7 +17,7 @@ struct ComorbidWorkerRPFV : public Worker {
 	// constructors
 	ComorbidWorkerRPFV(VecCodes vc, ComorbidVecMap map)
 	: vc(vc), map(map), num_comorbid(map.size()), num_visits(vc.size()),
-	  out(std::vector<bool>(vc.size()*map.size(), false)) {}
+	  out(VecBool(vc.size()*map.size(), false)) {}
 
 	void operator()(std::size_t begin, std::size_t end) {
 		// do the work for the given range

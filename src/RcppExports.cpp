@@ -84,29 +84,30 @@ RcppExport SEXP icd9_icd9ComorbidShortOpenMP(SEXP icd9dfSEXP, SEXP icd9MappingSE
     return __result;
 }
 // icd9ComorbidShortOpenMPVecInt
-SEXP icd9ComorbidShortOpenMPVecInt(DataFrame icd9df, List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", int threads = 6, size_t chunkSize = 50);
-static SEXP icd9_icd9ComorbidShortOpenMPVecInt_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP) {
+SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const size_t chunkSize = 256, const size_t ompChunkSize = 1);
+static SEXP icd9_icd9ComorbidShortOpenMPVecInt_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
-        Rcpp::traits::input_parameter< DataFrame >::type icd9df(icd9dfSEXP );
-        Rcpp::traits::input_parameter< List >::type icd9Mapping(icd9MappingSEXP );
+        Rcpp::traits::input_parameter< const DataFrame >::type icd9df(icd9dfSEXP );
+        Rcpp::traits::input_parameter< const List >::type icd9Mapping(icd9MappingSEXP );
         Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
         Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
-        Rcpp::traits::input_parameter< int >::type threads(threadsSEXP );
-        Rcpp::traits::input_parameter< size_t >::type chunkSize(chunkSizeSEXP );
-        SEXP __result = icd9ComorbidShortOpenMPVecInt(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize);
+        Rcpp::traits::input_parameter< const int >::type threads(threadsSEXP );
+        Rcpp::traits::input_parameter< const size_t >::type chunkSize(chunkSizeSEXP );
+        Rcpp::traits::input_parameter< const size_t >::type ompChunkSize(ompChunkSizeSEXP );
+        SEXP __result = icd9ComorbidShortOpenMPVecInt(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_icd9ComorbidShortOpenMPVecInt(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP) {
+RcppExport SEXP icd9_icd9ComorbidShortOpenMPVecInt(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9ComorbidShortOpenMPVecInt_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, threadsSEXP, chunkSizeSEXP));
+        __result = PROTECT(icd9_icd9ComorbidShortOpenMPVecInt_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, threadsSEXP, chunkSizeSEXP, ompChunkSizeSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1667,7 +1668,7 @@ static int icd9_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("List(*icd9ComorbidShort)(DataFrame,List,std::string,std::string)");
         signatures.insert("List(*icd9ComorbidShortOpenMP)(DataFrame,List,std::string,std::string,int)");
-        signatures.insert("SEXP(*icd9ComorbidShortOpenMPVecInt)(DataFrame,List,const std::string,const std::string,int,size_t)");
+        signatures.insert("SEXP(*icd9ComorbidShortOpenMPVecInt)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
         signatures.insert("List(*icd9ComorbidShortRP)(DataFrame,List,const std::string,const std::string)");
         signatures.insert("List(*icd9ComorbidShortRPFullVector)(DataFrame,List,const std::string,const std::string)");
         signatures.insert("List(*icd9ComorbidShortRPHalfVector)(DataFrame,List,const std::string,const std::string)");

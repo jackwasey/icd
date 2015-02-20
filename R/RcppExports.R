@@ -16,10 +16,10 @@ icd9ComorbidShortOpenMP <- function(icd9df, icd9Mapping, visitId = "visitId", ic
 }
 
 #' @rdname icd9Comorbid
-#' @description RcppParallel approach with openmp and int strategy
+#' @description RcppParallel approach with openmp and vector of integer strategy
 #' @export
-icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 6L, chunkSize = 50L) {
-    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize)
+icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L) {
+    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize)
 }
 
 #' @rdname icd9Comorbid

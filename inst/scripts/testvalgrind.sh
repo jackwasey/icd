@@ -14,3 +14,7 @@ R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); load('i
 
 # stress with fabricated data on parallel implementation
 R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); devnull<-icd9:::sc(1000000)"
+
+# valgrind parallel code? yes, can use flag to split out threads.
+# another useful option I put in .valgrindrc is --instr-atstart=no, so setup runs fast, then use ifdefs to enable valgrind in the key code areas.
+R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); pts<-icd9:::randomPatients(5e6,10); j<-icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 1)"
