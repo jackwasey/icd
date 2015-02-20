@@ -43,6 +43,25 @@ namespace icd9 {
         return Rcpp::as<SEXP >(__result);
     }
 
+    inline SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const size_t chunkSize = 256, const size_t ompChunkSize = 1) {
+        typedef SEXP(*Ptr_icd9ComorbidShortOpenMPVecInt)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidShortOpenMPVecInt p_icd9ComorbidShortOpenMPVecInt = NULL;
+        if (p_icd9ComorbidShortOpenMPVecInt == NULL) {
+            validateSignature("SEXP(*icd9ComorbidShortOpenMPVecInt)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
+            p_icd9ComorbidShortOpenMPVecInt = (Ptr_icd9ComorbidShortOpenMPVecInt)R_GetCCallable("icd9", "icd9_icd9ComorbidShortOpenMPVecInt");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9ComorbidShortOpenMPVecInt(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<SEXP >(__result);
+    }
+
     inline CharacterVector icd9MajMinToCode(CharacterVector major, CharacterVector minor, bool isShort) {
         typedef SEXP(*Ptr_icd9MajMinToCode)(SEXP,SEXP,SEXP);
         static Ptr_icd9MajMinToCode p_icd9MajMinToCode = NULL;

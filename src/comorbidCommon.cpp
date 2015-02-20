@@ -4,7 +4,9 @@
 #include <string>
 #include <algorithm>
 #ifdef _OPENMP // not available on clang
+#ifdef ICD9_OPENMP // only when I want to
 #include <omp.h>
+#endif
 #endif
 using namespace Rcpp;
 
@@ -67,6 +69,10 @@ void lookupOneChunk(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v
 			} // end loop through one comorbidity
 		} // end for looping through whole comorbidity map
 	}
+#ifdef ICD9_DEBUG
+		std::cout << "finished with one chunk\n";
+#endif
+
 }
 
 Out lookupOneChunk(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
@@ -86,19 +92,28 @@ void lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubty
 	Out chunk_out;
 	size_t chunk_end;
 	// chunk size (in fact, chunkSize * num_comorbid must be word (maybe int?) length, so that bitwise vector bool is thread safe
+#ifdef ICD9_OPENMP
 #pragma omp parallel shared(vcdb_n, vcdb_v, vcdb_e, map_n, map_v, map_e, out) private(chunk_end, chunk_out)
-#pragma omp for schedule(static,1)
+#pragma omp for schedule(static,4)
+#endif
 	for (size_t vis_i=0; vis_i<last_i; vis_i+=chunkSize) {
+#ifdef ICD9_OPENMP
 		omp_set_schedule(omp_sched_static, ompChunkSize); // ideally wouldn't repeat this over and over again
+#endif
 #ifdef ICD9_DEBUG
 		std::cout << "vis_i = " << vis_i << " ";
 #endif
 		chunk_end=vis_i+chunkSize;
 		if (chunk_end>num_visits) { chunk_end=num_visits-1; }
 		chunk_out = lookupOneChunk(vcdb_n, vcdb_v, vcdb_e, map_n, map_v, map_e, num_comorbid, vis_i, chunk_end);
+#ifdef ICD9_OPENMP
 #pragma omp critical
+#endif
 		writeChunk(chunk_out, vis_i, out); // write the chunk (as critical not for coherence, but for false sharing)
 	}
+#ifdef ICD9_DEBUG
+		std::cout << "finished looking up all chunks in for loop\n";
+#endif
 }
 
 // just return the chunk results: this wouldn't cause invalidation of shared 'out'

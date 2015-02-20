@@ -41,7 +41,7 @@ runVecIntBatch <- function(n = 4, np = 2, grain_size = 0) {
   icd9ComorbidShortRPVecIntBatch(pts, ahrqComorbid, grainSize = grain_size)
 }
 
-runOpenMPVecInt <- function(n = 4, np = 2, threads = 6, chunkSize = 1) {
+runOpenMPVecInt <- function(n = 4, np = 2, threads = 6, chunkSize = 32) {
   pts <- randomPatients(n, np = np)
   icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = threads, chunkSize = chunkSize)
 }

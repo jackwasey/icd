@@ -82,6 +82,8 @@ SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std
 
 #ifdef ICD9_DEBUG
 	std::cout << "out length is " << out.size() << "\n";
+	int outsum = std::accumulate(out.begin(), out.end(), 0);
+	std::cout << "out sum is " << outsum << "\n";
 	std::cout << "Ready to convert to R Matrix\n";
 #endif
 #ifdef ICD9_TRACE
@@ -89,6 +91,9 @@ SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std
 	printIt(out);
 #endif
 	IntegerVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
+#ifdef ICD9_DEBUG
+	std::cout << "wrapped out\n";
+#endif
 	//IntegerVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
 	mat_out.attr("dim") = Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
 	mat_out.attr("dimnames") = List::create(icd9Mapping.names(), visitIds);
@@ -102,4 +107,10 @@ SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std
 #endif
 
 	return t(mat_out);
+}
+
+// [[Rcpp::export]]
+SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId="visitId",
+		const std::string icd9Field="icd9", const int threads=8, const size_t chunkSize=256, const size_t ompChunkSize=1) {
+	return icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize);
 }

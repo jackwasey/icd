@@ -8,6 +8,10 @@ icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Fiel
     .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize)
 }
 
+icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L) {
+    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize)
+}
+
 #' @rdname convert
 #' @name convert
 #' @export

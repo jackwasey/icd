@@ -3,25 +3,27 @@
 #include <RcppParallel.h>
 #include <string>
 #include <vector>
-#include <map>
 #include <set>
 
-#ifdef ICD9_BOOST
-#include <boost/container/flat_map.hpp> // may be better, but doesn't get parallelized by Rcpp
-#include <boost/container/flat_set.hpp>
-// try with boost (much slower and doesn't thread, at least in my first implementation)
-typedef boost::container::flat_set<Str> BoostSetStr;
-typedef boost::container::flat_map<Str, VecStr> BoostMapVecStr; // turns out this is very slow, and doesn't parallelize
-typedef boost::container::flat_multimap<Str, Str> BoostMapVisitCode; // used in non-parallel implementation
-typedef std::vector<BoostSetStr> BoostCmbMap; // ? faster with boost flat_sets: many lookups but each is from relatively small set
-#endif
+//#ifdef ICD9_BOOST
+//#include <boost/container/flat_map.hpp> // may be better, but doesn't get parallelized by Rcpp
+//#include <boost/container/flat_set.hpp>
+//// boost (much slower and doesn't thread, at least in my first implementation)
+//typedef boost::container::flat_set<Str> BoostSetStr;
+//typedef boost::container::flat_map<Str, VecStr> BoostMapVecStr; // turns out this is very slow, and doesn't parallelize
+//typedef boost::container::flat_multimap<Str, Str> BoostMapVisitCode; // used in non-parallel implementation
+//typedef std::vector<BoostSetStr> BoostCmbMap; // ? faster with boost flat_sets: many lookups but each is from relatively small set
+//#endif
 
-//#define ICD9_DEBUG
+#define ICD9_DEBUG
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_TRACE
 //#define ICD9_DEBUG_PARALLEL
 //#define ICD9_VALGRIND
+#ifdef _OPENMP
+//#define ICD9_OPENMP
+#endif
 
 // can do both searches for comparison - showing, for my workload, binary is 19x faster
 #define ICD9_BINARY_SEARCH
@@ -32,10 +34,9 @@ typedef std::vector<Str> VecStr;
 
 //typedef std::vector<bool> VecBool;
 typedef std::vector<int> VecInt;
-typedef VecInt Out;
-
 typedef std::vector<unsigned int> VecUInt;
 typedef VecUInt SingleComorbiditySubtype; // i.e. only V, E or numeric at a time.
+typedef VecUInt Out; // TODO: would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads. Boost has a safer option. Anyway, R itself tends to be faster with ints than bools. Doubt there are big optimizations here.
 
 typedef std::set<Str> SetStr;
 typedef std::set<int> SetInt;

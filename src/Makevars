@@ -1,10 +1,10 @@
-# need gcc for openmp
+# need gcc for openmp, clang catching up
 PKG_CC=gcc
 PKG_CXX=g++
 
 PKG_CPPFLAGS = -I. -I../inst/include/
-#PKG_CXXFLAGS = -march=native -fopenmp -Wall -D_GLIBCXX_DEBUG
-PKG_CXXFLAGS = -march=native -fopenmp -Wall -O3
+PKG_CXXFLAGS = -march=native -fopenmp -Wall
+#-D_GLIBCXX_DEBUG
 # use -O0 for gdb, but ?overridden by /etc/R/Makeconf. Solution is to use:  MAKEFLAGS="CXXFLAGS=-O0 -g" R --vanilla -e "1+1;"
 
 # i thought rcpp plugin takes care of -fopenmp
