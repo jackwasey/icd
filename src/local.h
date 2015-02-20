@@ -98,11 +98,10 @@ void printCharVec(Rcpp::CharacterVector cv);
 
 
 void buildMap(const Rcpp::List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& map_v, ComorbidVecInt& map_e);
-ComorbidVecInt buildComorbidMap(const Rcpp::List& icd9Mapping);
 
 void buildVisitCodesVec(const Rcpp::DataFrame& icd9df, const std::string& visitId, const std::string& icd9Field,
 		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, VecStr& visitIds);
 
-Out lookupComorbidByRowFor(const CodesVecSubtype& allCodes, const ComorbidVecInt& map, size_t chunkSize=32);
-Out lookupComorbidByChunkFor(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,
+Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
+		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
 		const size_t chunkSize, const size_t ompChunkSize);

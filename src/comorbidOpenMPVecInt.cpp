@@ -24,7 +24,7 @@ SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
 #endif
-#if (defined ICD9_DEBUG || defined ICD9_SETUP)
+#if (defined ICD9_DEBUG_SETUP || defined ICD9_SETUP)
 	std::cout << "icd9ComorbidShortOpenMPVecInt\n";
 	std::cout << "chunk size = " << chunkSize << "\n";
 #endif
@@ -44,33 +44,41 @@ SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std
 #endif
 
 	VecStr _visitIds; // ideally would be const
-#ifdef ICD9_DEBUG
+#ifdef ICD9_DEBUG_SETUP
 	std::cout << "building visit:codes structure\n";
 #endif
 
 	//const CodesVecSubtype allCodes = buildVisitCodesVecFromMap(icd9df, visitId, icd9Field, _visitIds);
-	CodesVecSubtype allCodes;
+	CodesVecSubtype vcdb_n;
 	CodesVecSubtype vcdb_v;
 	CodesVecSubtype vcdb_e;
-	buildVisitCodesVec(icd9df, visitId, icd9Field, allCodes, vcdb_v, vcdb_e, _visitIds);
+	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb_n, vcdb_v, vcdb_e, _visitIds);
 
 	const VecStr visitIds = _visitIds; // worth it?
 
-#ifdef ICD9_DEBUG
+#ifdef ICD9_DEBUG_SETUP
 	std::cout << "building icd9Mapping\n";
 #endif
-	const ComorbidVecInt map = buildComorbidMap(icd9Mapping);
-	const ComorbidVecInt::size_type num_comorbid = map.size();
+	ComorbidVecInt map_n;
+	ComorbidVecInt map_v;
+	ComorbidVecInt map_e;
+	buildMap(icd9Mapping, map_n, map_v, map_e);
+
+#ifdef ICD9_DEBUG_SETUP
+		std::cout << "first cmb has len: " << map_n[0].size() << "\n";
+#endif
+
+	const ComorbidVecInt::size_type num_comorbid = map_n.size(); // should be same for V and E
 	const CodesVecSubtype::size_type num_visits = visitIds.size();
 
-#ifdef ICD9_DEBUG
+#ifdef ICD9_DEBUG_SETUP
 	std::cout << num_visits << " visits\n";
 	std::cout << num_comorbid << " is num_comorbid\n";
 #endif
 
 	//const Out out = lookupComorbidByRowFor(allCodes, map, chunkSize);
 	//const Out out = lookupComorbidByChunkWhile(allCodes, map, chunkSize);
-	const Out out = lookupComorbidByChunkFor(allCodes, map, chunkSize, ompChunkSize);
+	const Out out = lookupComorbidByChunkFor(vcdb_n, vcdb_v, vcdb_e, map_n, map_v, map_e, chunkSize, ompChunkSize);
 
 #ifdef ICD9_DEBUG
 	std::cout << "out length is " << out.size() << "\n";

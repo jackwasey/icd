@@ -52,25 +52,11 @@ void buildMap(const List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& ma
 #endif
 }
 
-ComorbidVecInt buildComorbidMap(const List& icd9Mapping) {
-	ComorbidVecInt map_n;
-	ComorbidVecInt map_v;
-	ComorbidVecInt map_e;
-
-	buildMap(icd9Mapping, map_n, map_v, map_e);
-
-#ifdef ICD9_DEBUG_SETUP
-		std::cout << "first cmb has len: " << map_n[0].size() << "\n";
-#endif
-
-	return map_n;
-}
-
 void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId, const std::string& icd9Field,
 		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, VecStr& visitIds) {
-	const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
+	const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId])); // ?unavoidable fairly slow step for big n
 	const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
-	const unsigned int cmb_per_visit = 5;
+	const unsigned int cmb_per_visit = 5; // just an estimate
 	int vlen = vs.size();
 	vcdb_n.reserve(vlen/cmb_per_visit);
 	vcdb_v.reserve(vlen/cmb_per_visit);
