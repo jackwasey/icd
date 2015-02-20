@@ -21,7 +21,8 @@ typedef std::vector<BoostSetStr> BoostCmbMap; // ? faster with boost flat_sets: 
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_TRACE
 //#define ICD9_DEBUG_PARALLEL
-#define ICD9_VALGRIND
+//#define ICD9_VALGRIND
+
 // can do both searches for comparison - showing, for my workload, binary is 19x faster
 #define ICD9_BINARY_SEARCH
 //#define ICD9_LINEAR_SEARCH
@@ -29,7 +30,7 @@ typedef std::vector<BoostSetStr> BoostCmbMap; // ? faster with boost flat_sets: 
 typedef std::string Str;
 typedef std::vector<Str> VecStr;
 
-typedef std::vector<bool> VecBool;
+//typedef std::vector<bool> VecBool;
 typedef std::vector<int> VecInt;
 typedef VecInt Out;
 
@@ -40,17 +41,17 @@ typedef std::set<Str> SetStr;
 typedef std::set<int> SetInt;
 typedef std::set<unsigned int> SetUInt;
 
-typedef std::map<Str, VecStr> MapVecStr; // will remove all string processing: definitely going to be slower.
-typedef std::map<Str, VecUInt> MapVecInt;
-typedef MapVecInt VisitToCodesSubtype; // gives all the N, V _or_ E codes for a visit ID
+//typedef std::map<Str, VecStr> MapVecStr; // will remove all string processing: definitely going to be slower.
+//typedef std::map<Str, VecUInt> MapVecInt;
+//typedef MapVecInt VisitToCodesSubtype; // gives all the N, V _or_ E codes for a visit ID
 typedef std::vector< VecStr > VecCodes; // obsolete, may be needed for pre-processing
-typedef std::vector< VecInt > VecIntCodes;
+//typedef std::vector< VecInt > VecIntCodes;
 typedef std::vector< VecUInt > CodesVecSubtype;
 
-typedef std::vector<SetStr> CmbMap;
+//typedef std::vector<SetStr> CmbMap;
 typedef std::vector<VecStr> ComorbidVecMap;
 typedef std::vector<VecUInt> ComorbidVecInt;
-typedef std::vector<SetUInt> ComorbidSetInt;
+//typedef std::vector<SetUInt> ComorbidSetInt;
 
 typedef std::multimap<Str, Str> MapVisitCode; // used in non-parallel implementation
 
@@ -97,16 +98,10 @@ void printCharVec(Rcpp::CharacterVector cv);
 
 
 void buildMap(const Rcpp::List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& map_v, ComorbidVecInt& map_e);
-ComorbidVecInt buildMap(const Rcpp::List& icd9Mapping);
-
-void buildVisitCodesMap(const Rcpp::DataFrame& icd9df, const std::string& visitId,
-		const std::string& icd9Field, MapVecInt& vcdb_n);
+ComorbidVecInt buildComorbidMap(const Rcpp::List& icd9Mapping);
 
 void buildVisitCodesVec(const Rcpp::DataFrame& icd9df, const std::string& visitId, const std::string& icd9Field,
 		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, VecStr& visitIds);
-
-CodesVecSubtype buildVisitCodesVecFromMap(const Rcpp::DataFrame& icd9df, const std::string& visitId,
-		const std::string& icd9Field, VecStr& visitIds);
 
 Out lookupComorbidByRowFor(const CodesVecSubtype& allCodes, const ComorbidVecInt& map, size_t chunkSize=32);
 Out lookupComorbidByChunkFor(const CodesVecSubtype& allCodes, const ComorbidVecInt& map,

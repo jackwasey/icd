@@ -19,7 +19,7 @@ using namespace Rcpp;
 //' @description RcppParallel approach with openmp and vector of integer strategy
 //' @export
 // [[Rcpp::export]]
-SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId="visitId",
+SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std::string visitId="visitId",
 		const std::string icd9Field="icd9", const int threads=8, const size_t chunkSize=256, const size_t ompChunkSize=1) {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
@@ -59,8 +59,7 @@ SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mappin
 #ifdef ICD9_DEBUG
 	std::cout << "building icd9Mapping\n";
 #endif
-	const ComorbidVecInt map = buildMap(icd9Mapping);
-	// todo: move these out? Don't want to repeat them every iteration, but should be okay not being here at top level, apart from debug.
+	const ComorbidVecInt map = buildComorbidMap(icd9Mapping);
 	const ComorbidVecInt::size_type num_comorbid = map.size();
 	const CodesVecSubtype::size_type num_visits = visitIds.size();
 

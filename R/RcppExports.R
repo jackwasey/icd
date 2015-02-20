@@ -2,66 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @rdname icd9Comorbid
-#' @export
-icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
-}
-
-#' @rdname icd9Comorbid
-#' @description ParallelOpenMP invokes openmp at visitId level loop for only 25% speed-up with 4 threads.
-#' I'm pretty sure this is bad because STL is not thread safe.
-#' @export
-icd9ComorbidShortOpenMP <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 4L) {
-    .Call('icd9_icd9ComorbidShortOpenMP', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads)
-}
-
-#' @rdname icd9Comorbid
 #' @description RcppParallel approach with openmp and vector of integer strategy
 #' @export
-icd9ComorbidShortOpenMPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L) {
-    .Call('icd9_icd9ComorbidShortOpenMPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize)
-}
-
-#' @rdname icd9Comorbid
-#' @description RcppParallel approach
-#' @export
-icd9ComorbidShortRP <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9ComorbidShortRP', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
-}
-
-#' @rdname icd9Comorbid
-#' @description RcppParallel approach
-#' @export
-icd9ComorbidShortRPFullVector <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9ComorbidShortRPFullVector', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
-}
-
-#' @rdname icd9Comorbid
-#' @description RcppParallel approach
-#' @export
-icd9ComorbidShortRPHalfVector <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9ComorbidShortRPHalfVector', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field)
-}
-
-#' @rdname icd9Comorbid
-#' @description RcppParallel approach
-#' @export
-icd9ComorbidShortRPSetInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
-    .Call('icd9_icd9ComorbidShortRPSetInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
-}
-
-#' @rdname icd9Comorbid
-#' @description RcppParallel approach
-#' @export
-icd9ComorbidShortRPVecIntBatch <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
-    .Call('icd9_icd9ComorbidShortRPVecIntBatch', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
-}
-
-#' @rdname icd9Comorbid
-#' @description RcppParallel approach
-#' @export
-icd9ComorbidShortRPVecInt <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", grainSize = 0L) {
-    .Call('icd9_icd9ComorbidShortRPVecInt', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, grainSize)
+icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L) {
+    .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize)
 }
 
 #' @rdname convert

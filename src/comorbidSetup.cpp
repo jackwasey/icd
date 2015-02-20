@@ -52,7 +52,7 @@ void buildMap(const List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& ma
 #endif
 }
 
-ComorbidVecInt buildMap(const List& icd9Mapping) {
+ComorbidVecInt buildComorbidMap(const List& icd9Mapping) {
 	ComorbidVecInt map_n;
 	ComorbidVecInt map_v;
 	ComorbidVecInt map_e;
@@ -64,60 +64,6 @@ ComorbidVecInt buildMap(const List& icd9Mapping) {
 #endif
 
 	return map_n;
-}
-
-void buildVisitCodesMap(const DataFrame& icd9df, const std::string& visitId,
-		const std::string& icd9Field, MapVecInt& vcdb_n) {
-	// const MapVecInt& vcdb_v //TODO
-	// const MapVecInt& vcdb_e
-	const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId]));
-	const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
-	int vlen = vs.size();
-	for (int i = 0; i < vlen; ++i) {
-#ifdef ICD9_DEBUG_SETUP_TRACE
-		std::cout << "building visit: it = " << i << ", id = " << vs[i] << "\n";
-		std::cout << "length vcdb_n = " << vcdb_n.size() << "\n";
-#endif
-		/*
-		 * see if code is numeric, V or E
-		 * convert integer part to unsigned int
-		 * add that int to the N, V or E map
-		 */
-		MapVecInt& whichmap = vcdb_n;
-		const char* s = icds[i].c_str();
-		unsigned int n = 0;
-		// would be easy to skip whitespace here too, but probably no need.
-		if (*s < '0' && *s > '9') {
-			// V or E code
-			if (*s == 'V' || *s == 'v') {
-				//whichmap = vcdb_v;
-			} else {
-				//whichmap = vcdb_e;
-			}
-			++s;
-		}
-		while (*s >= '0' && *s <= '9') {
-			n = (n * 10) + (*s - '0');
-			++s;
-		}
-		MapVecInt::iterator mapit = whichmap.find(vs[i]);
-		if (mapit == whichmap.end()) {
-#ifdef ICD9_DEBUG_SETUP_TRACE
-			std::cout << "first sight of key " << vs[i] << "\n";
-#endif
-
-			VecUInt vcodes(1, n); // construct one element vec str
-			whichmap.insert(std::make_pair(vs[i], vcodes));
-		} else {
-#ifdef ICD9_DEBUG_SETUP_TRACE
-			std::cout << "repeat id found: " << vs[i] << "\n";
-#endif
-			(mapit->second).push_back(n);
-		}
-	}
-#ifdef ICD9_DEBUG_SETUP
-	std::cout << "visit map created\n";
-#endif
 }
 
 void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId, const std::string& icd9Field,
@@ -179,24 +125,3 @@ void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId, con
 	std::cout << "visit map created\n";
 #endif
 }
-
-CodesVecSubtype buildVisitCodesVecFromMap(const DataFrame& icd9df, const std::string& visitId,
-		const std::string& icd9Field, VecStr& visitIds) {
-#ifdef ICD9_DEBUG_SETUP
-			std::cout << "running build visit codes, with return val\n";
-#endif
-	CodesVecSubtype codes;
-	MapVecInt temp_map;
-	codes.reserve(temp_map.size()); // doesn't make much difference in speed
-	buildVisitCodesMap(icd9df, visitId, icd9Field, temp_map); //this is the slow step
-#ifdef ICD9_DEBUG_SETUP
-			std::cout << "push back map results to vector\n";
-#endif
-	for (MapVecInt::iterator it = temp_map.begin(); it != temp_map.end(); ++it) {
-		visitIds.push_back(it->first);
-		codes.push_back(it->second);
-
-	}
-	return codes; //TODO: return codes in seq we use? May be obsolete if I keep input order.
-}
-
