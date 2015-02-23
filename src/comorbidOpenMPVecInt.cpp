@@ -17,9 +17,10 @@ using namespace Rcpp;
 
 //' @rdname icd9Comorbid
 //' @description RcppParallel approach with openmp and vector of integer strategy
+//' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
 //' @export
 // [[Rcpp::export]]
-SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std::string visitId="visitId",
+SEXP icd9ComorbidShortMatrix(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId="visitId",
 		const std::string icd9Field="icd9", const int threads=8, const size_t chunkSize=256, const size_t ompChunkSize=1) {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
@@ -31,15 +32,18 @@ SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std
 
 #ifdef ICD9_DEBUG_PARALLEL
 	std::cout << "checking _OPENMP... ";
-#endif
 #ifdef _OPENMP
-#ifdef ICD9_DEBUG_PARALLEL
 	std::cout << "_OPENMP is defined.\n";
+#else
+	std::cout << "_OPENMP is not defined.\n";
 #endif
+#endif
+
+#ifdef _OPENMP
 	if (threads > 0)
 		omp_set_num_threads(threads);
 #ifdef ICD9_DEBUG_PARALLEL
-	std::cout << "Max Number of threads=" << omp_get_max_threads() << "\n";
+	std::cout << "Max Number of available threads=" << omp_get_max_threads() << "\n";
 #endif
 #endif
 
@@ -112,5 +116,5 @@ SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId="visitId",
 		const std::string icd9Field="icd9", const int threads=8, const size_t chunkSize=256, const size_t ompChunkSize=1) {
-	return icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize);
+	return icd9ComorbidShortMatrix(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize);
 }

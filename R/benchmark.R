@@ -1,6 +1,14 @@
 # EXCLUDE COVERAGE START
 
-randomPatients <- function(n = 50000, np = 20) {
+randomPatients <- function(n = 100, np=10)
+  randomOrderedPatients(n, np)
+
+randomOrderedPatients <- function(n = 100, np = 10) {
+  x = randomUnorderedPatients(n, np)
+  x[order(x$visitId), ]
+}
+
+randomUnorderedPatients <- function(n = 50000, np = 20) {
   set.seed(1441)
   pts <- round(n / np)
   data.frame(
@@ -63,15 +71,27 @@ benchOpenMPThreads <- function(n=2^18-1, np=7) {
     icd9ComorbidShortOpenMPVecInt(randomPatients(n), ahrqComorbid, threads = 4, chunkSize=1024),
     times = 5
   )
-  # vary n
-  microbenchmark(
-    icd9ComorbidShortOpenMPVecInt(randomPatients(100), ahrqComorbid, threads = 4, chunkSize=256),
-    icd9ComorbidShortOpenMPVecInt(randomPatients(1000), ahrqComorbid, threads = 4, chunkSize=256),
-    icd9ComorbidShortOpenMPVecInt(randomPatients(10000), ahrqComorbid, threads = 4, chunkSize=256),
-    icd9ComorbidShortOpenMPVecInt(randomPatients(100000), ahrqComorbid, threads = 4, chunkSize=256),
-    icd9ComorbidShortOpenMPVecInt(randomPatients(1000000), ahrqComorbid, threads = 4, chunkSize=256),
-    times = 5
-  )
+}
+
+benchVaryn <- function(np = 5, threads = 4, chunkSize = 256, ompChunkSize = 1) {
+  # default to good options from other tests
+  mbr <- NULL
+  for (n in c(1e0, 1e3, 1e4, 1e5, 1e6)) {
+  #for (n in c(1e0, 1e3)) {
+    message("n = ", n)
+    pts <- randomOrderedPatients(n, np)
+    res <- microbenchmark(
+      icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 4, chunkSize = chunkSize, ompChunkSize = ompChunkSize),
+      times = 5)
+    if (is.null(mbr))
+      mbr <- cbind(n,res)
+    else
+      mbr <- rbind(mbr, cbind(n,res))
+  }
+  mbr
+}
+
+otherbench <- function() {
   # vary threads for big n, chunk = 1
   microbenchmark(
     icd9ComorbidShortOpenMPVecInt(randomPatients(1000000), ahrqComorbid, threads = 1, chunkSize=1),
@@ -118,7 +138,7 @@ benchOpenMPThreads <- function(n=2^18-1, np=7) {
         message("threads = ", threads, ",np = ", np, ", n = ", n, ", cs = ", cs)
         microbenchmark(
           icd9ComorbidShortOpenMPVecInt(randomPatients(n, np), ahrqComorbid, threads = threads, chunkSize = cs, check=identical),
-          times = 10
+          times = 10, check=identical
         ) %>% print
       }
     }
@@ -137,6 +157,32 @@ benchOpenMPThreads <- function(n=2^18-1, np=7) {
   ))
 }
 
+checkThreadChunk <- function() {
+  for (n in c(1, 12345)) {
+    for (np in c(1, 30)) {
+      pts = randomPatients(n, np);
+      message("NOT BENCHMARKING HERE, just checking. np = ", np, ", n = ", n)
+      # use microbenchmark to conveniently check the results are all identical
+      microbenchmark(
+        icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 1, chunkSize = 1, ompChunkSize = 1),
+        icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 1, chunkSize = 1, ompChunkSize = 1024),
+        icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 1, chunkSize = 1024, ompChunkSize = 1),
+        icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 1, chunkSize = 1024, ompChunkSize = 1024),
+        icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 8, chunkSize = 1, ompChunkSize = 1),
+        icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 8, chunkSize = 1, ompChunkSize = 1024),
+        icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 8, chunkSize = 1024, ompChunkSize = 1),
+        icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 8, chunkSize = 1024, ompChunkSize = 1024),
+        check = my_check, times = 1)
+    }
+  }
+}
+
+my_check <- function(values) {
+  sapply(values, function(x) message("dims: ", nrow(x), " by ", ncol(x)))
+  sapply(values, function(x) message("digest: ", digest::digest(x)))
+  sapply(values, function(x) { print(head(x)); print(tail(x)) })
+  all(sapply(values[-1], function(x) identical(values[[1]], x)))
+}
 
 benchGrain <- function() {
   ptsHuge <- randomPatients(1000000, np = 17)

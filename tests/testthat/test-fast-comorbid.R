@@ -14,3 +14,27 @@ test_that("comorbid quick test", {
   expect_equal(testres, trueres)
 
 })
+
+test_that("control params don't affect result of comorbid calc", {
+  pts <- randomPatients(101, 13)
+  expect_identical(
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 1, chunkSize=32),
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 3, chunkSize=32)
+  )
+  expect_identical(
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 3, chunkSize=1),
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 3, chunkSize=32)
+  )
+  expect_identical(
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 3, chunkSize=1, ompChunkSize = 1),
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 3, chunkSize=33, ompChunkSize = 1)
+  )
+  expect_identical(
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 3, chunkSize=1, ompChunkSize = 11),
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 3, chunkSize=33, ompChunkSize = 11)
+  )
+  expect_identical(
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid),
+    icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 3, chunkSize=17, ompChunkSize = 7)
+  )
+})

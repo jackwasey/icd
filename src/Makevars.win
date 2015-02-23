@@ -2,9 +2,9 @@
 #PKGCXX=g++
 
 PKG_CPPFLAGS = -I. -I../inst/include/
-PKG_CXXFLAGS = -march=native -fopenmp -Wall -std=c++0x
-# -D_GLIBCXX_DEBUG
-# -D_GLIBCXX_DEBUG # for std container debug?
+PKG_CXXFLAGS = -march=native -fopenmp -Wall
+# -std=c++0x
+# -D_GLIBCXX_DEBUG # for std container debug? may need another flag, too.
 # -O0 for debug, but overridden by /etc/R/Makeconf. Solution is to use:  MAKEFLAGS="CXXFLAGS=-O0 -g" R --vanilla -e "1+1;"
 
 # i thought rcpp plugin takes care of -fopenmp

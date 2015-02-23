@@ -8,9 +8,9 @@
 
 using namespace Rcpp;
 
-// icd9ComorbidShort
-SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const size_t chunkSize = 256, const size_t ompChunkSize = 1);
-static SEXP icd9_icd9ComorbidShort_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP) {
+// icd9ComorbidShortMatrix
+SEXP icd9ComorbidShortMatrix(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const size_t chunkSize = 256, const size_t ompChunkSize = 1);
+static SEXP icd9_icd9ComorbidShortMatrix_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -21,18 +21,18 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const int >::type threads(threadsSEXP );
         Rcpp::traits::input_parameter< const size_t >::type chunkSize(chunkSizeSEXP );
         Rcpp::traits::input_parameter< const size_t >::type ompChunkSize(ompChunkSizeSEXP );
-        SEXP __result = icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize);
+        SEXP __result = icd9ComorbidShortMatrix(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_icd9ComorbidShort(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP) {
+RcppExport SEXP icd9_icd9ComorbidShortMatrix(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9ComorbidShort_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, threadsSEXP, chunkSizeSEXP, ompChunkSizeSEXP));
+        __result = PROTECT(icd9_icd9ComorbidShortMatrix_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, threadsSEXP, chunkSizeSEXP, ompChunkSizeSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1406,7 +1406,7 @@ RcppExport SEXP icd9_trim_cpp(SEXP svSEXP) {
 static int icd9_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("SEXP(*icd9ComorbidShort)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
+        signatures.insert("SEXP(*icd9ComorbidShortMatrix)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
         signatures.insert("SEXP(*icd9ComorbidShortOpenMPVecInt)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
         signatures.insert("CharacterVector(*icd9MajMinToCode)(CharacterVector,CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9MajMinToShort)(CharacterVector,CharacterVector)");
@@ -1452,7 +1452,7 @@ static int icd9_RcppExport_validate(const char* sig) {
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP icd9_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("icd9", "icd9_icd9ComorbidShort", (DL_FUNC)icd9_icd9ComorbidShort_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortMatrix", (DL_FUNC)icd9_icd9ComorbidShortMatrix_try);
     R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortOpenMPVecInt", (DL_FUNC)icd9_icd9ComorbidShortOpenMPVecInt_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToCode", (DL_FUNC)icd9_icd9MajMinToCode_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToShort", (DL_FUNC)icd9_icd9MajMinToShort_try);

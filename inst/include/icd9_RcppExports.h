@@ -24,17 +24,17 @@ namespace icd9 {
         }
     }
 
-    inline SEXP icd9ComorbidShort(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const size_t chunkSize = 256, const size_t ompChunkSize = 1) {
-        typedef SEXP(*Ptr_icd9ComorbidShort)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9ComorbidShort p_icd9ComorbidShort = NULL;
-        if (p_icd9ComorbidShort == NULL) {
-            validateSignature("SEXP(*icd9ComorbidShort)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
-            p_icd9ComorbidShort = (Ptr_icd9ComorbidShort)R_GetCCallable("icd9", "icd9_icd9ComorbidShort");
+    inline SEXP icd9ComorbidShortMatrix(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const size_t chunkSize = 256, const size_t ompChunkSize = 1) {
+        typedef SEXP(*Ptr_icd9ComorbidShortMatrix)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidShortMatrix p_icd9ComorbidShortMatrix = NULL;
+        if (p_icd9ComorbidShortMatrix == NULL) {
+            validateSignature("SEXP(*icd9ComorbidShortMatrix)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
+            p_icd9ComorbidShortMatrix = (Ptr_icd9ComorbidShortMatrix)R_GetCCallable("icd9", "icd9_icd9ComorbidShortMatrix");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9ComorbidShort(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize));
+            __result = p_icd9ComorbidShortMatrix(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

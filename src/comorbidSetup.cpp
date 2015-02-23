@@ -9,12 +9,12 @@ void buildMap(const List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& ma
 	for (List::const_iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();
 			++mi) {
 		VecStr comorbid_strings(as<VecStr>(*mi));
-		VecUInt vec_n;
-		VecUInt vec_v;
-		VecUInt vec_e;
+		Codes vec_n;
+		Codes vec_v;
+		Codes vec_e;
 		for (VecStr::iterator vi = comorbid_strings.begin();
 				vi != comorbid_strings.end(); ++vi) {
-			VecUInt& whichvec = vec_n;
+			Codes& whichvec = vec_n;
 			const char* s = (*vi).c_str();
 			unsigned int n = 0;
 			// would be easy to skip whitespace here too, but probably no need.
@@ -56,13 +56,13 @@ void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId, con
 		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, VecStr& visitIds) {
 	const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId])); // ?unavoidable fairly slow step for big n
 	const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
-	const unsigned int cmb_per_visit = 5; // just an estimate
-	int vlen = vs.size();
-	vcdb_n.reserve(vlen/cmb_per_visit);
-	vcdb_v.reserve(vlen/cmb_per_visit);
-	vcdb_e.reserve(vlen/cmb_per_visit);
+	const unsigned int approx_cmb_per_visit = 5; // just an estimate
+	VecStr::size_type vlen = vs.size();
+	vcdb_n.reserve(vlen/approx_cmb_per_visit);
+	vcdb_v.reserve(vlen/approx_cmb_per_visit);
+	vcdb_e.reserve(vlen/approx_cmb_per_visit);
 	Str last_visit;
-	for (int i = 0; i < vlen; ++i) {
+	for (VecStr::size_type i = 0; i < vlen; ++i) {
 #ifdef ICD9_DEBUG_SETUP_TRACE
 		std::cout << "building visit: it = " << i << ", id = " << vs[i] << "\n";
 		std::cout << "length vcdb_n = " << vcdb_n.size() << "\n";
@@ -95,18 +95,20 @@ void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId, con
 			std::cout << "new key " << vs[i] << "\n";
 #endif
 
-			VecUInt vcodes;
-			vcodes.reserve(5); // estimate of number of codes per patient.
-			vcodes.push_back(n); // construct one element vec str
-			codeVecSubtype.push_back(vcodes);
+			Codes vcodes;
+			vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
+			// start with empty N, V and E vectors for each new patient ('new' in sequential sense from input data)
+			vcdb_n.push_back(vcodes);
+			vcdb_v.push_back(vcodes);
+			vcdb_e.push_back(vcodes);
 			visitIds.push_back(vs[i]);
-		} else {
+		}
 #ifdef ICD9_DEBUG_SETUP_TRACE
 			std::cout << "repeat id found: " << vs[i] << "\n";
 #endif
-			codeVecSubtype[codeVecSubtype.size()-1].push_back(n); // augment current visit
-		}
-	}
+			codeVecSubtype[codeVecSubtype.size()-1].push_back(n); // augment vec for current visit and N/V/E type
+			last_visit = vs[i];
+	} // end loop through all visit-code input data
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "visit map created\n";
 #endif
