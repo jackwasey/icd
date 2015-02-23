@@ -232,67 +232,62 @@ CharacterVector icd9GetMajor(CharacterVector icd9, bool isShort) {
 //' @title Convert long to wide from as matrix
 //' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit. If \code{aggregate} is off, this is faster, but doesn't handle non-contiguous visitIds, e.g. \code{c(1,1,2,1)} would give three output matrix rows. If you know your data are contiguous, then turn this off for speed.
 //' @export
-LogicalMatrix longToWideMatrix(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId="visitId",
+CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId="visitId",
 		const std::string icd9Field="icd9", bool aggregate = true) {
-	//const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId])); // ?unavoidable fairly slow step for big n
 
 	SEXP icds = getListElement(icd9df, icd9Field.c_str());
-	//const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
+	VecStr vs = as<VecStr>(as<CharacterVector>(icd9df)[visitId]);
 	const unsigned int approx_cmb_per_visit = 5; // just an estimate
-	//VecStr::size_type vlen = vs.size();
-	int vlen = length(icds);
-	vcdb_n.reserve(vlen/approx_cmb_per_visit);
-	vcdb_v.reserve(vlen/approx_cmb_per_visit);
-	vcdb_e.reserve(vlen/approx_cmb_per_visit);
+	int vlen = Rf_length(icds);
+	VecStr visitIds;
+	visitIds.reserve(vlen/approx_cmb_per_visit);
+	std::vector<VecStr> ragged; // intermediate structure
+	int max_per_pt = 1;
 	Str last_visit;
-	for (VecStr::size_type i = 0; i < vlen; ++i) {
-#ifdef ICD9_DEBUG_SETUP_TRACE
-		std::cout << "building visit: it = " << i << ", id = " << vs[i] << "\n";
-		std::cout << "length vcdb_n = " << vcdb_n.size() << "\n";
-#endif
-		/*
-		 * see if code is numeric, V or E
-		 * convert integer part to unsigned int
-		 * add that int to the N, V or E map
-		 */
-		CodesVecSubtype& codeVecSubtype = vcdb_n;
-		const char* s = icds[i].c_str();
-		unsigned int n = 0;
-		// would be easy to skip whitespace here too, but probably no need.
-		if (*s < '0' && *s > '9') {
-			// V or E code
-			if (*s == 'V' || *s == 'v') {
-				codeVecSubtype = vcdb_v;
-			} else {
-				codeVecSubtype = vcdb_e;
-			}
-			++s;
-		}
-		while (*s >= '0' && *s <= '9') {
-			n = (n * 10) + (*s - '0');
-			++s;
-		}
+	bool repeat_visit;
+	for (int i = 0; i < vlen; ++i) {
+		int cmb_num = 0;
+		const char* s = CHAR(STRING_ELT(icds, i));
 		// CodesVecSubtype::iterator mapit = codeVecSubtype.find(vs[i]); don't find in a vector, just see if we differ from previous
-		if (vs[i] != last_visit) {
+		if ((aggregate && std::find(vs.begin()+i+1, vs.end(), vs[i]) != vs.end())
+				|| (!aggregate && vs[i] != last_visit)) {
+
 #ifdef ICD9_DEBUG_SETUP_TRACE
 			std::cout << "new key " << vs[i] << "\n";
 #endif
-
-			Codes vcodes;
+			VecStr vcodes;
 			vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
-			// start with empty N, V and E vectors for each new patient ('new' in sequential sense from input data)
-			vcdb_n.push_back(vcodes);
-			vcdb_v.push_back(vcodes);
-			vcdb_e.push_back(vcodes);
+			vcodes.push_back(s); // new vector of ICD codes with this first item
+			ragged.push_back(vcodes); // and add that vector to the intermediate structure
 			visitIds.push_back(vs[i]);
-		}
+		} else {
 #ifdef ICD9_DEBUG_SETUP_TRACE
-		std::cout << "repeat id found: " << vs[i] << "\n";
+			std::cout << "repeat id found: " << vs[i] << "\n";
 #endif
-		codeVecSubtype[codeVecSubtype.size()-1].push_back(n); // augment vec for current visit and N/V/E type
-		last_visit = vs[i];
+			ragged[ragged.size()-1].push_back(s); // augment vec for current visit and N/V/E type
+			int len = ragged[ragged.size()-1].size();
+			if (len>max_per_pt) { max_per_pt <- len; }
+		}
+		if (!aggregate) {
+			last_visit = vs[i];
+		}
 	} // end loop through all visit-code input data
+	// now ragged has a vector with vectors of icd codes per patient:
+	// turn into a matrix or data frame. Start with matrix:
+	CharacterVector out(vlen*max_per_pt); // default empty strings? NA? //TODO
+	//for (std::vector<VecStr>::iterator row_it = ragged.begin(); row_it != ragged.end(); ++row_it) {
+	//		for (VecStr::iterator col_it = (*row_it).begin(); col_it != (*row_it).end(); ++col_it) {
+	for (size_t row_it = 0; row_it != ragged.size(); ++row_it) {
+		VecStr& this_row = ragged[row_it];
+		size_t this_row_len = this_row.size();
+		for (size_t col_it = 0; col_it < this_row_len; ++col_it) {
+			size_t out_idx = row_it + (max_per_pt*col_it); // straight to row major //TODO benchmark alternative with transposition
+			out[out_idx] = this_row[col_it];
+		}
+	}
+
 #ifdef ICD9_DEBUG_SETUP
-	std::cout << "visit map created\n";
+	std::cout << "intermediate map created\n";
 #endif
+	return out;
 }
