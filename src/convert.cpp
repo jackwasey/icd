@@ -3,6 +3,10 @@
 #include <R.h>
 #include <Rinternals.h>
 #include <icd9.h>
+#include <local.h>
+extern "C" {
+  #include "local_c.h"
+}
 using namespace Rcpp;
 
 //' @rdname convert
@@ -232,21 +236,22 @@ CharacterVector icd9GetMajor(CharacterVector icd9, bool isShort) {
 //' @title Convert long to wide from as matrix
 //' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit. If \code{aggregate} is off, this is faster, but doesn't handle non-contiguous visitIds, e.g. \code{c(1,1,2,1)} would give three output matrix rows. If you know your data are contiguous, then turn this off for speed.
 //' @export
+// [[Rcpp::export]]
 CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId="visitId",
 		const std::string icd9Field="icd9", bool aggregate = true) {
 
 	SEXP icds = getListElement(icd9df, icd9Field.c_str());
 	VecStr vs = as<VecStr>(as<CharacterVector>(icd9df)[visitId]);
 	const unsigned int approx_cmb_per_visit = 5; // just an estimate
-	int vlen = Rf_length(icds);
+	unsigned int vlen = Rf_length(icds);
 	VecStr visitIds;
 	visitIds.reserve(vlen/approx_cmb_per_visit);
 	std::vector<VecStr> ragged; // intermediate structure
-	int max_per_pt = 1;
+	unsigned int max_per_pt = 1;
 	Str last_visit;
 	bool repeat_visit;
-	for (int i = 0; i < vlen; ++i) {
-		int cmb_num = 0;
+	for (unsigned int i = 0; i < vlen; ++i) {
+		unsigned int cmb_num = 0;
 		const char* s = CHAR(STRING_ELT(icds, i));
 		// CodesVecSubtype::iterator mapit = codeVecSubtype.find(vs[i]); don't find in a vector, just see if we differ from previous
 		if ((aggregate && std::find(vs.begin()+i+1, vs.end(), vs[i]) != vs.end())
@@ -265,8 +270,8 @@ CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId="
 			std::cout << "repeat id found: " << vs[i] << "\n";
 #endif
 			ragged[ragged.size()-1].push_back(s); // augment vec for current visit and N/V/E type
-			int len = ragged[ragged.size()-1].size();
-			if (len>max_per_pt) { max_per_pt <- len; }
+			unsigned int len = ragged[ragged.size()-1].size();
+			if (len>max_per_pt) max_per_pt=len;
 		}
 		if (!aggregate) {
 			last_visit = vs[i];
@@ -277,11 +282,11 @@ CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId="
 	CharacterVector out(vlen*max_per_pt); // default empty strings? NA? //TODO
 	//for (std::vector<VecStr>::iterator row_it = ragged.begin(); row_it != ragged.end(); ++row_it) {
 	//		for (VecStr::iterator col_it = (*row_it).begin(); col_it != (*row_it).end(); ++col_it) {
-	for (size_t row_it = 0; row_it != ragged.size(); ++row_it) {
+	for (unsigned int row_it = 0; row_it != ragged.size(); ++row_it) {
 		VecStr& this_row = ragged[row_it];
-		size_t this_row_len = this_row.size();
-		for (size_t col_it = 0; col_it < this_row_len; ++col_it) {
-			size_t out_idx = row_it + (max_per_pt*col_it); // straight to row major //TODO benchmark alternative with transposition
+		unsigned int this_row_len = this_row.size();
+		for (unsigned int col_it = 0; col_it < this_row_len; ++col_it) {
+			unsigned int out_idx = row_it + (max_per_pt*col_it); // straight to row major //TODO benchmark alternative with transposition
 			out[out_idx] = this_row[col_it];
 		}
 	}

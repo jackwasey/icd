@@ -127,7 +127,7 @@ void lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubty
 // just return the chunk results: this wouldn't cause invalidation of shared 'out'
 Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
 		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
-		const size_t chunkSize, const size_t ompChunkSize) {
+		const int chunkSize, const int ompChunkSize) {
 	Out out(vcdb_n.size()*map_n.size(), false);
 	lookupComorbidByChunkFor(vcdb_n, vcdb_v, vcdb_e, map_n, map_v, map_e, chunkSize, ompChunkSize, out);
 	return out;

@@ -86,6 +86,5 @@ void buildVisitCodesVec(const Rcpp::DataFrame& icd9df, const std::string& visitI
 
 Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
 		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
-		const size_t chunkSize, const size_t ompChunkSize);
+		const int chunkSize, const int ompChunkSize);
 
-SEXP getListElement(SEXP list, const char *str);

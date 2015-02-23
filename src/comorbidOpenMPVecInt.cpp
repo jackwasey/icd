@@ -21,7 +21,7 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortMatrix(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId="visitId",
-		const std::string icd9Field="icd9", const int threads=8, const size_t chunkSize=256, const size_t ompChunkSize=1) {
+		const std::string icd9Field="icd9", const int threads=8, const int chunkSize=256, const int ompChunkSize=1) {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
 #endif
@@ -115,6 +115,6 @@ SEXP icd9ComorbidShortMatrix(const DataFrame& icd9df, const List& icd9Mapping, c
 
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId="visitId",
-		const std::string icd9Field="icd9", const int threads=8, const size_t chunkSize=256, const size_t ompChunkSize=1) {
+		const std::string icd9Field="icd9", const int threads=8, const int chunkSize=256, const int ompChunkSize=1) {
 	return icd9ComorbidShortMatrix(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize);
 }

@@ -24,11 +24,11 @@ namespace icd9 {
         }
     }
 
-    inline SEXP icd9ComorbidShortMatrix(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const size_t chunkSize = 256, const size_t ompChunkSize = 1) {
+    inline SEXP icd9ComorbidShortMatrix(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1) {
         typedef SEXP(*Ptr_icd9ComorbidShortMatrix)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortMatrix p_icd9ComorbidShortMatrix = NULL;
         if (p_icd9ComorbidShortMatrix == NULL) {
-            validateSignature("SEXP(*icd9ComorbidShortMatrix)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
+            validateSignature("SEXP(*icd9ComorbidShortMatrix)(const DataFrame&,const List&,const std::string,const std::string,const int,const int,const int)");
             p_icd9ComorbidShortMatrix = (Ptr_icd9ComorbidShortMatrix)R_GetCCallable("icd9", "icd9_icd9ComorbidShortMatrix");
         }
         RObject __result;
@@ -43,11 +43,11 @@ namespace icd9 {
         return Rcpp::as<SEXP >(__result);
     }
 
-    inline SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const size_t chunkSize = 256, const size_t ompChunkSize = 1) {
+    inline SEXP icd9ComorbidShortOpenMPVecInt(const DataFrame icd9df, const List icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1) {
         typedef SEXP(*Ptr_icd9ComorbidShortOpenMPVecInt)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortOpenMPVecInt p_icd9ComorbidShortOpenMPVecInt = NULL;
         if (p_icd9ComorbidShortOpenMPVecInt == NULL) {
-            validateSignature("SEXP(*icd9ComorbidShortOpenMPVecInt)(const DataFrame,const List,const std::string,const std::string,const int,const size_t,const size_t)");
+            validateSignature("SEXP(*icd9ComorbidShortOpenMPVecInt)(const DataFrame,const List,const std::string,const std::string,const int,const int,const int)");
             p_icd9ComorbidShortOpenMPVecInt = (Ptr_icd9ComorbidShortOpenMPVecInt)R_GetCCallable("icd9", "icd9_icd9ComorbidShortOpenMPVecInt");
         }
         RObject __result;
@@ -282,6 +282,25 @@ namespace icd9 {
         {
             RNGScope __rngScope;
             __result = p_icd9GetMajor(Rcpp::wrap(icd9), Rcpp::wrap(isShort));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<CharacterVector >(__result);
+    }
+
+    inline CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9", bool aggregate = true) {
+        typedef SEXP(*Ptr_longToWideMatrix)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_longToWideMatrix p_longToWideMatrix = NULL;
+        if (p_longToWideMatrix == NULL) {
+            validateSignature("CharacterVector(*longToWideMatrix)(const SEXP&,const std::string,const std::string,bool)");
+            p_longToWideMatrix = (Ptr_longToWideMatrix)R_GetCCallable("icd9", "icd9_longToWideMatrix");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_longToWideMatrix(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(aggregate));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -3,6 +3,7 @@
 
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach with openmp and vector of integer strategy
+#' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
 #' @export
 icd9ComorbidShortMatrix <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L) {
     .Call('icd9_icd9ComorbidShortMatrix', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize)
@@ -81,6 +82,13 @@ icd9DecimalToShort <- function(icd9Decimal) {
 #' @export
 icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
+}
+
+#' @title Convert long to wide from as matrix
+#' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit. If \code{aggregate} is off, this is faster, but doesn't handle non-contiguous visitIds, e.g. \code{c(1,1,2,1)} would give three output matrix rows. If you know your data are contiguous, then turn this off for speed.
+#' @export
+longToWideMatrix <- function(icd9df, visitId = "visitId", icd9Field = "icd9", aggregate = TRUE) {
+    .Call('icd9_longToWideMatrix', PACKAGE = 'icd9', icd9df, visitId, icd9Field, aggregate)
 }
 
 icd9IsASingleV <- function(s) {
