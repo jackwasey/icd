@@ -89,6 +89,8 @@ flagged.}
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 to \code{icd9ComorbidAhrq}}
+
+\item{aggregate}{single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.}
 }
 \description{
 RcppParallel approach with openmp and vector of integer strategy

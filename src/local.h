@@ -5,8 +5,8 @@
 #include <set>
 
 //#define ICD9_DEBUG
-//#define ICD9_DEBUG_SETUP
-//#define ICD9_DEBUG_SETUP_TRACE
+#define ICD9_DEBUG_SETUP
+#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_TRACE
 //#define ICD9_DEBUG_PARALLEL
 //#define ICD9_VALGRIND
@@ -39,7 +39,7 @@ typedef std::vector<VecInt> ComorbidVecInt;
 typedef std::multimap<Str, Str> MapVisitCode; // used in non-parallel implementation
 
 // internal function definitions
-#ifdef ICD9_DEBUG
+#if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
 #include <iostream> // only include std::cout if debugging: R won't like cout so we should not do this unless debugging.
 // not so easy to get an iterator for any std container (no common parent class), without Boost
 template<typename VT>
@@ -50,7 +50,6 @@ void printIt(std::vector<VT> v) {
 	o << "\n";
 	std::cout << o.str();
 	std::cout.flush();
-	return;
 }
 
 //overload for set
@@ -62,7 +61,6 @@ void printIt(std::set<ST> v) {
 	o << "\n";
 	std::cout << o.str();
 	std::cout.flush();
-	return;
 }
 
 //overload for map
@@ -74,7 +72,6 @@ void printIt(std::map<MK,MV> v) {
 	o << "\n";
 	std::cout << o.str();
 	std::cout.flush();
-	return;
 }
 #endif
 void printCharVec(Rcpp::CharacterVector cv);
