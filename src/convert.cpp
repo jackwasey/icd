@@ -181,7 +181,7 @@ List icd9ShortToParts(CharacterVector icd9Short, String minorEmpty = "") {
 				continue;
 			}
 		} // E code
-		  //major[i] = icd9::icd9AddLeadingZeroesMajorSingle(major[i]); // or loop through them all again...
+		//major[i] = icd9::icd9AddLeadingZeroesMajorSingle(major[i]); // or loop through them all again...
 	} // for
 
 	return icd9MajMinToParts(icd9::icd9AddLeadingZeroesMajor(major), minor);
@@ -251,13 +251,41 @@ CharacterVector icd9GetMajor(CharacterVector icd9, bool isShort) {
 	return as<CharacterVector>(icd9DecimalToParts(icd9)[0]);
 }
 
+CharacterVector raggedWideToMatrix(const std::vector<VecStr>& ragged,
+		unsigned int max_per_pt, const VecStr& visitIds) {
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "visitIds = ";
+	printIt(visitIds);
+#endif
+	unsigned int distinct_visits = ragged.size();
+	CharacterVector out(distinct_visits * max_per_pt); // default empty strings? NA? //TODO
+	for (unsigned int row_it = 0; row_it != distinct_visits; ++row_it) {
+		const VecStr& this_row = ragged[row_it];
+		unsigned int this_row_len = this_row.size();
+		for (unsigned int col_it = 0; col_it < this_row_len; ++col_it) {
+			unsigned int out_idx = row_it + (distinct_visits * col_it); // straight to row major //TODO benchmark alternative with transposition
+			out[out_idx] = this_row[col_it];
+		}
+	}
+
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "writing dimensions\n";
+#endif
+	out.attr("dim") = Dimension(distinct_visits, max_per_pt); // set dimensions in reverse (row major for parallel step)
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "writing labels\n";
+#endif
+	CharacterVector nonames;
+	rownames(out) = wrap(visitIds);
+	return out;
+}
+
 //' @title Convert long to wide from as matrix
 //' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit. If \code{aggregate} is off, this is faster, but doesn't handle non-contiguous visitIds, e.g. \code{c(1,1,2,1)} would give three output matrix rows. If you know your data are contiguous, then turn this off for speed.
 //' @export
 // [[Rcpp::export]]
-CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId =
-		"visitId", const std::string icd9Field = "icd9",
-		bool aggregate = true) {
+SEXP icd9LongToWideMatrix(const SEXP& icd9df, const std::string visitId =
+		"visitId", const std::string icd9Field = "icd9") {
 
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "calling C to get icd codes\n";
@@ -278,9 +306,7 @@ CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId =
 	std::vector<VecStr> ragged; // intermediate structure
 	unsigned int max_per_pt = 1;
 	Str last_visit;
-	bool repeat_visit;
 	for (unsigned int i = 0; i < vlen; ++i) {
-		unsigned int cmb_num = 0;
 #ifdef ICD9_DEBUG_SETUP_TRACE
 		std::cout << "calling R C function to get current ICD...";
 #endif
@@ -291,10 +317,9 @@ CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId =
 		printIt(visitIds);
 		std::cout << "Current visitId: " << vs[i] << "\n";
 #endif
-		// CodesVecSubtype::iterator mapit = codeVecSubtype.find(vs[i]); don't find in a vector, just see if we differ from previous
-		if ((aggregate
-				&& std::find(visitIds.begin(), visitIds.end(), vs[i])
-						!= visitIds.end()) || (!aggregate && vs[i] != last_visit)) {
+		VecStr::iterator found_pos;
+		found_pos = std::find(visitIds.begin(), visitIds.end(), vs[i]);
+		if (found_pos == visitIds.end()) {
 
 #ifdef ICD9_DEBUG_SETUP_TRACE
 			std::cout << "new key " << vs[i] << "\n";
@@ -304,42 +329,56 @@ CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId =
 			vcodes.push_back(s); // new vector of ICD codes with this first item
 			ragged.push_back(vcodes); // and add that vector to the intermediate structure
 			visitIds.push_back(vs[i]);
+
 		} else {
 #ifdef ICD9_DEBUG_SETUP_TRACE
 			std::cout << "repeat id found: " << vs[i] << "\n";
+			std::cout << "ragged.size(): " << ragged.size() << "\n";
 #endif
-			ragged[ragged.size() - 1].push_back(s); // augment vec for current visit and N/V/E type
-			unsigned int len = ragged[ragged.size() - 1].size(); // get new count of cmb for one patient
+			int ragged_idx = std::distance(visitIds.begin(), found_pos);
+			ragged[ragged_idx].push_back(s); // augment vec for current visit and N/V/E type
+			unsigned int len = ragged[ragged_idx].size(); // get new count of cmb for one patient
 			if (len > max_per_pt)
 				max_per_pt = len;
 		}
-		if (!aggregate) {
-			last_visit = vs[i];
+	} // end loop through all visit-code input data
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "intermediate ragged-right map created\n";
+#endif
+	return raggedWideToMatrix(ragged, max_per_pt, visitIds);
+}
+
+// [[Rcpp::export]]
+SEXP icd9LongOrderedToWideMatrix(const SEXP& icd9df, const std::string visitId =
+		"visitId", const std::string icd9Field = "icd9") {
+
+	SEXP icds = getListElement(icd9df, icd9Field.c_str());
+	VecStr vs = as<VecStr>(
+			as<CharacterVector>(getListElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
+	const unsigned int approx_cmb_per_visit = 5; // just an estimate
+	unsigned int vlen = Rf_length(icds);
+	VecStr visitIds;
+	Str lastVisit = "";
+	visitIds.reserve(vlen / approx_cmb_per_visit);
+	std::vector<VecStr> ragged; // intermediate structure
+	unsigned int max_per_pt = 1;
+	Str last_visit;
+	for (unsigned int i = 0; i < vlen; ++i) {
+		const char* s = CHAR(STRING_ELT(icds, i));
+		if (vs[i] != lastVisit) {
+			VecStr vcodes;
+			vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
+			vcodes.push_back(s); // new vector of ICD codes with this first item
+			ragged.push_back(vcodes); // and add that vector to the intermediate structure
+			visitIds.push_back(vs[i]);
+			lastVisit = vs[i];
+		} else {
+			int ragged_end = ragged.size()-1;
+			ragged[ragged_end].push_back(s); // augment vec for current visit and N/V/E type
+			unsigned int len = ragged[ragged_end].size(); // get new count of cmb for one patient
+			if (len > max_per_pt)
+				max_per_pt = len;
 		}
 	} // end loop through all visit-code input data
-	  // now ragged has a vector with vectors of icd codes per patient:
-	  // turn into a matrix or data frame. Start with matrix:
-	CharacterVector out(vlen * max_per_pt); // default empty strings? NA? //TODO
-	//for (std::vector<VecStr>::iterator row_it = ragged.begin(); row_it != ragged.end(); ++row_it) {
-	//		for (VecStr::iterator col_it = (*row_it).begin(); col_it != (*row_it).end(); ++col_it) {
-	unsigned int distinct_visits = ragged.size();
-	for (unsigned int row_it = 0; row_it != distinct_visits; ++row_it) {
-		VecStr& this_row = ragged[row_it];
-		unsigned int this_row_len = this_row.size();
-		for (unsigned int col_it = 0; col_it < this_row_len; ++col_it) {
-			unsigned int out_idx = row_it + (distinct_visits * col_it); // straight to row major //TODO benchmark alternative with transposition
-			out[out_idx] = this_row[col_it];
-		}
-	}
-
-#ifdef ICD9_DEBUG_SETUP
-	std::cout << "intermediate map created\n";
-	std::cout << "visitIds = ";
-	printIt(visitIds);
-	//std::cout << "out = ";
-	//printCharVec(out);
-#endif
-	out.attr("dim") = Dimension(ragged.size(), max_per_pt); // set dimensions in reverse (row major for parallel step)
-	out.attr("dimnames") = List::create(CharacterVector::create(), visitIds);
-	return out;
+	return raggedWideToMatrix(ragged, max_per_pt, visitIds);
 }

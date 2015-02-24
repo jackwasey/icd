@@ -505,28 +505,63 @@ RcppExport SEXP icd9_icd9GetMajor(SEXP icd9SEXP, SEXP isShortSEXP) {
     UNPROTECT(1);
     return __result;
 }
-// longToWideMatrix
-CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9", bool aggregate = true);
-static SEXP icd9_longToWideMatrix_try(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP aggregateSEXP) {
+// icd9LongToWideMatrix
+SEXP icd9LongToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9");
+static SEXP icd9_icd9LongToWideMatrix_try(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
         Rcpp::traits::input_parameter< const SEXP& >::type icd9df(icd9dfSEXP );
         Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
         Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
-        Rcpp::traits::input_parameter< bool >::type aggregate(aggregateSEXP );
-        CharacterVector __result = longToWideMatrix(icd9df, visitId, icd9Field, aggregate);
+        SEXP __result = icd9LongToWideMatrix(icd9df, visitId, icd9Field);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_longToWideMatrix(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP aggregateSEXP) {
+RcppExport SEXP icd9_icd9LongToWideMatrix(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_longToWideMatrix_try(icd9dfSEXP, visitIdSEXP, icd9FieldSEXP, aggregateSEXP));
+        __result = PROTECT(icd9_icd9LongToWideMatrix_try(icd9dfSEXP, visitIdSEXP, icd9FieldSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9LongOrderedToWideMatrix
+SEXP icd9LongOrderedToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9");
+static SEXP icd9_icd9LongOrderedToWideMatrix_try(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< const SEXP& >::type icd9df(icd9dfSEXP );
+        Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP );
+        Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP );
+        SEXP __result = icd9LongOrderedToWideMatrix(icd9df, visitId, icd9Field);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9LongOrderedToWideMatrix(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9LongOrderedToWideMatrix_try(icd9dfSEXP, visitIdSEXP, icd9FieldSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1457,7 +1492,8 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("CharacterVector(*icd9ShortToDecimal)(CharacterVector)");
         signatures.insert("CharacterVector(*icd9DecimalToShort)(CharacterVector)");
         signatures.insert("CharacterVector(*icd9GetMajor)(CharacterVector,bool)");
-        signatures.insert("CharacterVector(*longToWideMatrix)(const SEXP&,const std::string,const std::string,bool)");
+        signatures.insert("SEXP(*icd9LongToWideMatrix)(const SEXP&,const std::string,const std::string)");
+        signatures.insert("SEXP(*icd9LongOrderedToWideMatrix)(const SEXP&,const std::string,const std::string)");
         signatures.insert("bool(*icd9IsASingleV)(std::string)");
         signatures.insert("bool(*icd9IsASingleE)(std::string)");
         signatures.insert("bool(*icd9IsASingleVE)(std::string)");
@@ -1504,7 +1540,8 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9ShortToDecimal", (DL_FUNC)icd9_icd9ShortToDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9DecimalToShort", (DL_FUNC)icd9_icd9DecimalToShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9GetMajor", (DL_FUNC)icd9_icd9GetMajor_try);
-    R_RegisterCCallable("icd9", "icd9_longToWideMatrix", (DL_FUNC)icd9_longToWideMatrix_try);
+    R_RegisterCCallable("icd9", "icd9_icd9LongToWideMatrix", (DL_FUNC)icd9_icd9LongToWideMatrix_try);
+    R_RegisterCCallable("icd9", "icd9_icd9LongOrderedToWideMatrix", (DL_FUNC)icd9_icd9LongOrderedToWideMatrix_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsASingleV", (DL_FUNC)icd9_icd9IsASingleV_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsASingleE", (DL_FUNC)icd9_icd9IsASingleE_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsASingleVE", (DL_FUNC)icd9_icd9IsASingleVE_try);

@@ -107,7 +107,7 @@ SEXP icd9ComorbidShortMatrix(const DataFrame& icd9df, const List& icd9Mapping, c
 #endif
 #ifdef ICD9_VALGRIND
 	CALLGRIND_STOP_INSTRUMENTATION;
-	CALLGRIND_DUMP_STATS;
+	//CALLGRIND_DUMP_STATS;
 #endif
 
 	return t(mat_out);

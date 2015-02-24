@@ -290,23 +290,42 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline CharacterVector longToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9", bool aggregate = true) {
-        typedef SEXP(*Ptr_longToWideMatrix)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_longToWideMatrix p_longToWideMatrix = NULL;
-        if (p_longToWideMatrix == NULL) {
-            validateSignature("CharacterVector(*longToWideMatrix)(const SEXP&,const std::string,const std::string,bool)");
-            p_longToWideMatrix = (Ptr_longToWideMatrix)R_GetCCallable("icd9", "icd9_longToWideMatrix");
+    inline SEXP icd9LongToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9LongToWideMatrix)(SEXP,SEXP,SEXP);
+        static Ptr_icd9LongToWideMatrix p_icd9LongToWideMatrix = NULL;
+        if (p_icd9LongToWideMatrix == NULL) {
+            validateSignature("SEXP(*icd9LongToWideMatrix)(const SEXP&,const std::string,const std::string)");
+            p_icd9LongToWideMatrix = (Ptr_icd9LongToWideMatrix)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrix");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_longToWideMatrix(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(aggregate));
+            __result = p_icd9LongToWideMatrix(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<CharacterVector >(__result);
+        return Rcpp::as<SEXP >(__result);
+    }
+
+    inline SEXP icd9LongOrderedToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9LongOrderedToWideMatrix)(SEXP,SEXP,SEXP);
+        static Ptr_icd9LongOrderedToWideMatrix p_icd9LongOrderedToWideMatrix = NULL;
+        if (p_icd9LongOrderedToWideMatrix == NULL) {
+            validateSignature("SEXP(*icd9LongOrderedToWideMatrix)(const SEXP&,const std::string,const std::string)");
+            p_icd9LongOrderedToWideMatrix = (Ptr_icd9LongOrderedToWideMatrix)R_GetCCallable("icd9", "icd9_icd9LongOrderedToWideMatrix");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9LongOrderedToWideMatrix(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<SEXP >(__result);
     }
 
     inline bool icd9IsASingleV(std::string s) {
