@@ -309,11 +309,11 @@ namespace icd9 {
         return Rcpp::as<SEXP >(__result);
     }
 
-    inline CharacterVector icd9LongToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+    inline SEXP icd9LongToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
         typedef SEXP(*Ptr_icd9LongToWideMatrix)(SEXP,SEXP,SEXP);
         static Ptr_icd9LongToWideMatrix p_icd9LongToWideMatrix = NULL;
         if (p_icd9LongToWideMatrix == NULL) {
-            validateSignature("CharacterVector(*icd9LongToWideMatrix)(const SEXP&,const std::string,const std::string)");
+            validateSignature("SEXP(*icd9LongToWideMatrix)(const SEXP&,const std::string,const std::string)");
             p_icd9LongToWideMatrix = (Ptr_icd9LongToWideMatrix)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrix");
         }
         RObject __result;
@@ -325,7 +325,7 @@ namespace icd9 {
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<CharacterVector >(__result);
+        return Rcpp::as<SEXP >(__result);
     }
 
     inline SEXP icd9LongToWideMatrixOrdered(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {

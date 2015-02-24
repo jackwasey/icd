@@ -4,6 +4,10 @@
 #include <Rinternals.h>
 #include <icd9.h>
 #include <local.h>
+#ifdef ICD9_VALGRIND
+#include <valgrind/callgrind.h>
+#endif
+
 //#include <boost/unordered/unordered_set.hpp>
 extern "C" {
 #include "local_c.h"
@@ -309,14 +313,18 @@ SEXP raggedWideMultimapToMatrix(const MMVisitCodes &mm, const unsigned int max_p
 // [[Rcpp::export]]
 SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 		"visitId", const std::string icd9Field = "icd9") {
+#ifdef ICD9_VALGRIND
+CALLGRIND_START_INSTRUMENTATION;
+#endif
 
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "calling C to get icd codes\n";
 #endif
-	SEXP icds = getListElement(icd9df, icd9Field.c_str());
+	SEXP icds = getListElement(icd9df, icd9Field.c_str()); // very fast
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "back from C\n";
 #endif
+        // very slow, but probably necessary, because we are going to be manipulating them more. Could we go straight from SEXP to VecStr?
 	VecStr vs = as<VecStr>(
 			as<CharacterVector>(getListElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
 	const unsigned int approx_cmb_per_visit = 5; // just an estimate
@@ -326,9 +334,7 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 	unsigned int vlen = Rf_length(icds);
 	MMVisitCodes visitCodes;
 	unsigned int max_per_pt = 1;
-	Str lastVisitId;
-	MMVisitCodes::iterator last_found_it;
-	for (unsigned int i = 0; i < vlen; ++i) {
+	for (unsigned int i=0; i<vlen; ++i) {
 #ifdef ICD9_DEBUG_SETUP_TRACE
 		std::cout << "calling R C function to get current ICD...";
 #endif
@@ -339,17 +345,7 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 		//printIt(visitIds);
 		std::cout << "Current visitId: " << vs[i] << "\n";
 #endif
-		if (lastVisitId==s) { // shortcut for overwhelmingly most frequent case
-#ifdef ICD9_DEBUG_SETUP_TRACE
-				std::cout << "in-sequence repeat id found: " << vs[i] << "\n";
-#endif
 
-			(last_found_it->second).push_back(s);
-			//TODO: avoid the slow lookup here?
-			unsigned int len = (last_found_it->second).size(); // get new count of cmb for one patient
-			if (len > max_per_pt)
-				max_per_pt = len;
-		} else {
 			MMVisitCodes::iterator found_it = visitCodes.find(vs[i]);
 			if (found_it != visitCodes.end()) {
 #ifdef ICD9_DEBUG_SETUP_TRACE
@@ -369,14 +365,16 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 				vcodes.push_back(s); // new vector of ICD codes with this first item
 				visitCodes.insert(std::make_pair(vs[i],vcodes));
 			} // end find
-			lastVisitId = s;
-			last_found_it = found_it;
-		} //end match shortcut
 	} // end loop through all visit-code input data
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "intermediate ragged-right map created\n";
 #endif
-	return raggedWideMultimapToMatrix(visitCodes, max_per_pt);
+	CharacterVector cv = raggedWideMultimapToMatrix(visitCodes, max_per_pt);
+#ifdef ICD9_VALGRIND
+CALLGRIND_STOP_INSTRUMENTATION;
+CALLGRIND_DUMP_STATS;
+#endif
+return cv;
 }
 
 
@@ -386,7 +384,7 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 //' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
 //' @export
 // [[Rcpp::export]]
-CharacterVector icd9LongToWideMatrix(const SEXP& icd9df, const std::string visitId="visitId", const std::string icd9Field="icd9") {
+SEXP icd9LongToWideMatrix(const SEXP& icd9df, const std::string visitId="visitId", const std::string icd9Field="icd9") {
 	SEXP icds = getListElement(icd9df, icd9Field.c_str());
 	VecStr vs = as<VecStr>(
 			as<CharacterVector>(getListElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
