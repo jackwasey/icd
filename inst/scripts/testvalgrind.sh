@@ -20,3 +20,6 @@ R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); devnull
 R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); pts<-icd9:::randomPatients(5e6,10); j<-icd9ComorbidShortOpenMPVecInt(pts, ahrqComorbid, threads = 1)"
 
 R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); library(microbenchmark); benchVaryn()"
+
+# useful to install first...
+R CMD INSTALL icd9 && R -d "valgrind --tool=callgrind"  -e "library(icd9); pts <- icd9:::randomOrderedPatients(1000, 10); icd9:::icd9LongToWideMatrix(pts)"

@@ -84,15 +84,26 @@ icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
 }
 
+icd9LongToWideMatrixByMap <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9LongToWideMatrixByMap', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
+}
+
 #' @title Convert long to wide from as matrix
-#' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit. If \code{aggregate} is off, this is faster, but doesn't handle non-contiguous visitIds, e.g. \code{c(1,1,2,1)} would give three output matrix rows. If you know your data are contiguous, then turn this off for speed.
+#' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit.
+#' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
+#' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
 #' @export
 icd9LongToWideMatrix <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
     .Call('icd9_icd9LongToWideMatrix', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
 }
 
-icd9LongOrderedToWideMatrix <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9LongOrderedToWideMatrix', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
+#' @title Convert ordered long to wide from as matrix
+#' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit. Each time a new visitId is seen when scanning the list, a new row in the comorbidity output will be made. This will introduce >=1 extra row per out-of-order visitId, but not cause an error.
+#' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
+#' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
+#' @export
+icd9LongToWideMatrixOrdered <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9LongToWideMatrixOrdered', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
 }
 
 icd9IsASingleV <- function(s) {

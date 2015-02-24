@@ -157,6 +157,14 @@ otherbench <- function() {
   ))
 }
 
+benchLongToWide <- function(n=10000, np=7) {
+  pts<-randomOrderedPatients(n, np)
+  microbenchmark(icd9LongToWideMatrixByMap(pts),
+                 icd9LongToWideMatrix(pts),
+                 icd9LongToWideMatrixOrdered(pts),
+                 times = 10)
+}
+
 checkThreadChunk <- function() {
   for (n in c(1, 12345)) {
     for (np in c(1, 30)) {

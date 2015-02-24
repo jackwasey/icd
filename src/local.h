@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <set>
+//#include <boost/unordered/unordered_set.hpp>
 
 //#define ICD9_DEBUG
 //#define ICD9_DEBUG_SETUP
@@ -36,7 +37,9 @@ typedef std::vector< VecInt > CodesVecSubtype;
 typedef std::vector<VecStr> ComorbidVecMap;
 typedef std::vector<VecInt> ComorbidVecInt;
 
-typedef std::multimap<Str, Str> MapVisitCode; // used in non-parallel implementation
+//typedef std::multimap<Str, Str> MapVisitCode; // used in non-parallel implementation
+typedef std::map<std::string,VecStr> MMVisitCodes;
+//typedef boost::unordered_set<std::string> UnSet;
 
 // internal function definitions
 #if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
@@ -52,6 +55,15 @@ void printIt(std::vector<VT> v) {
 	std::cout.flush();
 }
 
+template<typename T>
+void printIt(boost::unordered_set<T> v) {
+	typename boost::unordered_set<T>::iterator i;
+	std::ostringstream o;
+	for (i=v.begin(); i!=v.end(); ++i) { o << *i << " "; }
+	o << "\n";
+	std::cout << o.str();
+	std::cout.flush();
+}
 //overload for set
 template<typename ST>
 void printIt(std::set<ST> v) {
@@ -84,4 +96,3 @@ void buildVisitCodesVec(const Rcpp::DataFrame& icd9df, const std::string& visitI
 Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
 		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
 		const int chunkSize, const int ompChunkSize);
-
