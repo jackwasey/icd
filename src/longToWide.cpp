@@ -4,12 +4,14 @@
 #include <Rinternals.h>
 #include <icd9.h>
 #include <local.h>
+#include <stdio.h>
 #ifdef ICD9_VALGRIND
 #include <valgrind/callgrind.h>
 #endif
 
 extern "C" {
 #include "local_c.h"
+#include <cstdlib>
 }
 using namespace Rcpp;
 
@@ -20,9 +22,19 @@ SEXP raggedWideVecVecToMatrix(const std::vector<VecStr>& ragged,
 	std::cout << "visitIds = ";
 	printIt(visitIds);
 #endif
-	unsigned int distinct_visits = ragged.size();
+	unsigned int distinct_visits=ragged.size();
 	CharacterVector out(distinct_visits * max_per_pt); // default empty strings? NA? //TODO
-	for (unsigned int row_it = 0; row_it != distinct_visits; ++row_it) {
+#ifdef ICD9_DEBUG_SETUP
+	if (distinct_visits==0) {
+		std::cout << "no visits. returning blank data\n";
+		return CharacterVector::create();
+	}
+	if (distinct_visits!=visitIds.size()) {
+		std::cout << "visit and ragged sizes differ. visits = " << visitIds.size() << ", ragged size = " << distinct_visits << ": returning blank data\n";
+		return CharacterVector::create();
+	}
+#endif
+	for (unsigned int row_it = 0; row_it < distinct_visits; ++row_it) {
 		const VecStr& this_row = ragged[row_it];
 		unsigned int this_row_len = this_row.size();
 		for (unsigned int col_it = 0; col_it < this_row_len; ++col_it) {
@@ -80,13 +92,13 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "calling C to get icd codes\n";
 #endif
-	SEXP icds = getListElement(icd9df, icd9Field.c_str()); // very fast
+	SEXP icds = getRListOrDfElement(icd9df, icd9Field.c_str()); // very fast
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "back from C\n";
 #endif
 	// very slow, but probably necessary, because we are going to be manipulating them more. Could we go straight from SEXP to VecStr?
 	VecStr vs = as<VecStr>(
-			as<CharacterVector>(getListElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
+			as<CharacterVector>(getRListOrDfElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
 	const unsigned int approx_cmb_per_visit = 5; // just an estimate
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "getting length of icd codes\n";
@@ -137,7 +149,7 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 	return cv;
 }
 
-unsigned int longToWideAggregateCore(const char* lastVisitId, const char* icd,
+unsigned int longToWideAggregateCoreChar(const char* lastVisitId, const char* icd,
 		const char* vi, const unsigned int approx_cmb_per_visit,
 		unsigned int max_per_pt, VecStr& visitIds,
 		std::vector<VecStr>& ragged) {
@@ -160,32 +172,97 @@ unsigned int longToWideAggregateCore(const char* lastVisitId, const char* icd,
 	return max_per_pt;
 }
 
+std::string myuitos(unsigned int i) {
+#ifdef ICD9_DEBUG_SETUP_TRACE
+			std::cout << "myuitos\n";
+#endif
+
+	std::string s(std::numeric_limits<unsigned int>::digits10+2, 0);
+	unsigned int size=0;
+	if (i==0) {
+		s[size++]='0';
+	} else {
+#ifdef ICD9_DEBUG_SETUP_TRACE
+			std::cout << "non-zero, looping through powers of ten\n";
+#endif
+
+		int ro = 0;
+		for (int i_div; i; i=i_div) {
+			i_div = i/10;
+#ifdef ICD9_DEBUG_SETUP_TRACE
+			std::cout << "i_div = " << i_div << ", and i = " << i << "\n";
+#endif
+
+			int i_mod=i%10;
+			s[size++] = static_cast<char>('0' + i_mod);
+		}
+		std::reverse(&s[ro], &s[size]);
+	}
+	s.resize(size);
+	return s;
+}
+
+int longToWideAggregateCoreInt(const int lastVisitId, const char* icd,
+		const int vi, const int approx_cmb_per_visit,
+		int max_per_pt, std::vector<int>& visitIds,
+		std::vector<VecStr>& ragged) {
+	if (lastVisitId != vi && std::find(visitIds.rbegin(), visitIds.rend(), vi) == visitIds.rend()) {
+		VecStr vcodes;
+		vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
+		vcodes.push_back(icd); // new vector of ICD codes with this first item
+		ragged.push_back(vcodes); // and add that vector to the intermediate structure
+		visitIds.push_back(vi);
+	} else {
+		ragged[ragged.size() - 1].push_back(icd); // augment vec for current visit and N/V/E type
+		int len = ragged[ragged.size() - 1].size(); // get new count of cmb for one patient
+		if (len > max_per_pt)
+			max_per_pt = len;
+	}
+	return max_per_pt;
+}
 // [[Rcpp::export]]
-SEXP icd9LongToWideMatrixAggregate(const SEXP& icd9df, const std::string visitId="visitId", const std::string icd9Field="icd9") {
-	SEXP icds = getListElement(icd9df, icd9Field.c_str());
+CharacterVector icd9LongToWideMatrixAggregate(const SEXP icd9df, const std::string visitId="visitId", const std::string icd9Field="icd9") {
+	SEXP icds = getRListOrDfElement(icd9df, icd9Field.c_str());
 	//VecStr vs = as<VecStr>(as<CharacterVector>(getListElement(icd9df, visitId.c_str()))); // TODO do this in one step without Rcpp copying?
-	SEXP vsexp = getListElement(icd9df, visitId.c_str());
-	const unsigned int approx_cmb_per_visit = 7; // just an estimate
-	unsigned int vlen = Rf_length(icds);
+	SEXP vsexp = getRListOrDfElement(icd9df, visitId.c_str());
+	const int approx_cmb_per_visit = 7; // just an estimate
+	int vlen = Rf_length(icds);
 	VecStr visitIds;
 	visitIds.reserve(vlen / approx_cmb_per_visit);
 	std::vector<VecStr> ragged; // intermediate structure
-	unsigned int max_per_pt = 1;
+	int max_per_pt = 1;
 	switch(TYPEOF(vsexp)) {
 	case INTSXP:
 #ifdef ICD9_DEBUG_SETUP
 		std::cout << "SEXP is INT\n";
 #endif
 		{
-			int lastVisitId = -999999999;
-			for (unsigned int i = 0; i < vlen; ++i) {
-				const char* icd = CHAR(STRING_ELT(icds, i)); // always STRING? may get pure numeric/integer
-				const int vi = INTEGER(VECTOR_ELT(vsexp, i));
-				max_per_pt = longToWideAggregateCore(lastVisitId, icd, vi,
-						approx_cmb_per_visit, max_per_pt, visitIds, ragged);
-
-				lastVisitId = vi;
-			} // end loop through all visit-code input data
+			int* vi;
+			vi = INTEGER(vsexp); // point to the integer vector
+			std::vector<int> visitIdsInt(0); // initialize as empty, don't just define?
+			visitIdsInt.reserve(vlen / approx_cmb_per_visit);
+			int lastVisitId = 4294967295; // 2^32-1
+			for (int i = 0; i < vlen; ++i) {
+				const char* icd = CHAR(STRING_ELT(icds, i));
+				max_per_pt = longToWideAggregateCoreInt(lastVisitId, icd, vi[i],
+						approx_cmb_per_visit, max_per_pt, visitIdsInt, ragged);
+				lastVisitId = vi[i];
+			}
+#ifdef ICD9_DEBUG_SETUP
+			std::cout << "end loop through all visit-code input data\n";
+			std::cout << "visitIdsInt size = " << visitIdsInt.size() << "\n";
+#endif
+#ifdef ICD9_DEBUG_SETUP_TRACE
+printIt(visitIdsInt);
+#endif
+			const int known_len = visitIdsInt.size();
+			visitIds.reserve(known_len);
+			//char* buf[32];
+			for (int j=0; j!=known_len; ++j) {
+				visitIds.push_back(myuitos(visitIdsInt[j]));
+				//snprintf(buf, 32, "%d", visitIdsInt[j]);
+				//visitIds[j] = buf;
+			}
 		} // end block
 		break;
 	case REALSXP:
@@ -196,18 +273,17 @@ SEXP icd9LongToWideMatrixAggregate(const SEXP& icd9df, const std::string visitId
 	case STRSXP:
 	{
 		const char* lastVisitId = "";
-		for (unsigned int i = 0; i < vlen; ++i) {
+		for (int i = 0; i < vlen; ++i) {
 			const char* icd = CHAR(STRING_ELT(icds, i)); // always STRING? may get pure numeric/integer
 			const char* vi = CHAR(STRING_ELT(vsexp, i));
-			max_per_pt = longToWideAggregateCore(lastVisitId, icd, vi,
+			max_per_pt = longToWideAggregateCoreChar(lastVisitId, icd, vi,
 					approx_cmb_per_visit, max_per_pt, visitIds, ragged);
-
 			lastVisitId = vi;
 		} // end loop through all visit-code input data
 	} // end block
 	break;
 	default:
-		std::cout << "SEXP is other...\n";
+		Rcpp::Rcout << "SEXP is unknown...\n";
 		// shouldn't be here...
 		break;
 	}
@@ -220,12 +296,12 @@ SEXP icd9LongToWideMatrixAggregate(const SEXP& icd9df, const std::string visitId
 //' @description This runs only slightly more quickly than the aggregating version when patients are ordered or nearly ordered.
 //' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9LongToWideMatrixNoAggregate(const SEXP& icd9df, const std::string visitId =
+CharacterVector icd9LongToWideMatrixNoAggregate(const SEXP& icd9df, const std::string visitId =
 		"visitId", const std::string icd9Field = "icd9") {
 
-	SEXP icds = getListElement(icd9df, icd9Field.c_str());
+	SEXP icds = getRListOrDfElement(icd9df, icd9Field.c_str());
 	VecStr vs = as<VecStr>(
-			as<CharacterVector>(getListElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
+			as<CharacterVector>(getRListOrDfElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
 	const unsigned int approx_cmb_per_visit = 7; // just an estimate
 	unsigned int vlen = Rf_length(icds);
 	VecStr visitIds;

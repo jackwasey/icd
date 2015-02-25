@@ -61,7 +61,7 @@ void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId,
 		CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, VecStr& visitIds) {
 	const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId])); // ?unavoidable fairly slow step for big n
 	//const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
-	SEXP icds = getListElement(icd9df, icd9Field.c_str());
+	SEXP icds = getRListOrDfElement(icd9df, icd9Field.c_str());
 	const unsigned int approx_cmb_per_visit = 5; // just an estimate
 	VecStr::size_type vlen = vs.size();
 	vcdb_n.reserve(vlen / approx_cmb_per_visit);

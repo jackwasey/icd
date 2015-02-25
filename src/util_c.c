@@ -1,15 +1,16 @@
 #include <R.h>
 #include <Rinternals.h>
 
-SEXP getListElement(SEXP list, const char *str)
-{
-    SEXP elmt = R_NilValue, names = Rf_getAttrib(list, R_NamesSymbol);
-    int i;
-    for (i = 0; i < Rf_length(list); i++)
-	if(strcmp(CHAR(STRING_ELT(names, i)), str) == 0) {
-	   elmt = VECTOR_ELT(list, i);
-	   break;
+SEXP getRListOrDfElement(SEXP list_or_df, const char* element_name) {
+	SEXP names = Rf_getAttrib(list_or_df, R_NamesSymbol);
+	SEXP element = R_NilValue;
+	int i;
+	for (i=0; i<Rf_length(list_or_df); i++) {
+		if(strcmp(CHAR(STRING_ELT(names, i)), element_name) == 0) {
+			element = VECTOR_ELT(list_or_df, i);
+			break;
+		}
 	}
-    return elmt;
+	return element;
 }
 

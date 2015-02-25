@@ -1,1 +1,1 @@
-SEXP getListElement(SEXP list, const char *str);
+SEXP getRListOrDfElement(SEXP list, const char *str);
