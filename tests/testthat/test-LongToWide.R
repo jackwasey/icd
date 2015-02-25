@@ -1,8 +1,14 @@
 context("compare ordered long to wide methods")
 
-pts <- randomOrderedPatients(1000, 10)
+pts <- randomOrderedPatients(5000, 13)
 
 test_that("ordered and unordered methods on ordered data are identical", {
-  expect_identical(icd9LongToWideMatrixByMap(pts), icd9LongOrderedToWideMatrix(pts))
-  expect_identical(icd9LongToWideMatrix(pts), icd9LongOrderedToWideMatrix(pts))
+  #expect_identical(icd9LongToWideMatrixByMap(pts), icd9LongOrderedToWideMatrix(pts))
+  agg <- icd9LongToWideMatrixAggregate(pts)
+  ord <- icd9LongToWideMatrixNoAggregate(pts)
+  expect_identical(ord, agg)
+  expect_true(all(rownames(ord) %in% pts$visitId))
+  expect_true(all(rownames(agg) %in% pts$visitId))
+  expect_true(all(pts$visitId %in% rownames(ord)))
+  expect_true(all(pts$visitId %in% rownames(agg)))
 })

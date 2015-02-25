@@ -3,9 +3,13 @@
 #include <local.h>
 #include <string>
 #include <algorithm>
+extern "C" {
+#include "local_c.h"
+}
 using namespace Rcpp;
 
-void buildMap(const List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& map_v, ComorbidVecInt& map_e) {
+void buildMap(const List& icd9Mapping, ComorbidVecInt& map_n,
+		ComorbidVecInt& map_v, ComorbidVecInt& map_e) {
 	for (List::const_iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();
 			++mi) {
 		VecStr comorbid_strings(as<VecStr>(*mi));
@@ -52,15 +56,17 @@ void buildMap(const List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& ma
 #endif
 }
 
-void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId, const std::string& icd9Field,
-		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, VecStr& visitIds) {
+void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId,
+		const std::string& icd9Field, CodesVecSubtype& vcdb_n,
+		CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, VecStr& visitIds) {
 	const VecStr vs = as<VecStr>(as<CharacterVector>(icd9df[visitId])); // ?unavoidable fairly slow step for big n
-	const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
+	//const VecStr icds = as<VecStr>(as<CharacterVector>(icd9df[icd9Field]));
+	SEXP icds = getListElement(icd9df, icd9Field.c_str());
 	const unsigned int approx_cmb_per_visit = 5; // just an estimate
 	VecStr::size_type vlen = vs.size();
-	vcdb_n.reserve(vlen/approx_cmb_per_visit);
-	vcdb_v.reserve(vlen/approx_cmb_per_visit);
-	vcdb_e.reserve(vlen/approx_cmb_per_visit);
+	vcdb_n.reserve(vlen / approx_cmb_per_visit);
+	vcdb_v.reserve(vlen / approx_cmb_per_visit);
+	vcdb_e.reserve(vlen / approx_cmb_per_visit);
 	Str last_visit;
 	for (VecStr::size_type i = 0; i < vlen; ++i) {
 #ifdef ICD9_DEBUG_SETUP_TRACE
@@ -73,7 +79,7 @@ void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId, con
 		 * add that int to the N, V or E map
 		 */
 		CodesVecSubtype& codeVecSubtype = vcdb_n;
-		const char* s = icds[i].c_str();
+		const char* s = CHAR(STRING_ELT(icds, i));
 		unsigned int n = 0;
 		// would be easy to skip whitespace here too, but probably no need.
 		if (*s < '0' && *s > '9') {
@@ -104,10 +110,10 @@ void buildVisitCodesVec(const DataFrame& icd9df, const std::string& visitId, con
 			visitIds.push_back(vs[i]);
 		}
 #ifdef ICD9_DEBUG_SETUP_TRACE
-			std::cout << "repeat id found: " << vs[i] << "\n";
+		std::cout << "repeat id found: " << vs[i] << "\n";
 #endif
-			codeVecSubtype[codeVecSubtype.size()-1].push_back(n); // augment vec for current visit and N/V/E type
-			last_visit = vs[i];
+		codeVecSubtype[codeVecSubtype.size() - 1].push_back(n); // augment vec for current visit and N/V/E type
+		last_visit = vs[i];
 	} // end loop through all visit-code input data
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "visit map created\n";

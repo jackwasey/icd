@@ -55,7 +55,7 @@ Other ICD-9 convert: \code{\link{convert}},
   \code{\link{icd9ShortToDecimal}},
   \code{\link{icd9ShortToParts}};
   \code{\link{icd9ChaptersToMap}};
-  \code{\link{icd9LongToWide}};
+  \code{\link{icd9LongToWide_R}};
   \code{\link{icd9WideToLong}}
 }
 \keyword{internal}

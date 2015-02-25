@@ -290,63 +290,6 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
-        typedef SEXP(*Ptr_icd9LongToWideMatrixByMap)(SEXP,SEXP,SEXP);
-        static Ptr_icd9LongToWideMatrixByMap p_icd9LongToWideMatrixByMap = NULL;
-        if (p_icd9LongToWideMatrixByMap == NULL) {
-            validateSignature("SEXP(*icd9LongToWideMatrixByMap)(const SEXP&,const std::string,const std::string)");
-            p_icd9LongToWideMatrixByMap = (Ptr_icd9LongToWideMatrixByMap)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrixByMap");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9LongToWideMatrixByMap(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<SEXP >(__result);
-    }
-
-    inline SEXP icd9LongToWideMatrix(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
-        typedef SEXP(*Ptr_icd9LongToWideMatrix)(SEXP,SEXP,SEXP);
-        static Ptr_icd9LongToWideMatrix p_icd9LongToWideMatrix = NULL;
-        if (p_icd9LongToWideMatrix == NULL) {
-            validateSignature("SEXP(*icd9LongToWideMatrix)(const SEXP&,const std::string,const std::string)");
-            p_icd9LongToWideMatrix = (Ptr_icd9LongToWideMatrix)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrix");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9LongToWideMatrix(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<SEXP >(__result);
-    }
-
-    inline SEXP icd9LongToWideMatrixOrdered(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
-        typedef SEXP(*Ptr_icd9LongToWideMatrixOrdered)(SEXP,SEXP,SEXP);
-        static Ptr_icd9LongToWideMatrixOrdered p_icd9LongToWideMatrixOrdered = NULL;
-        if (p_icd9LongToWideMatrixOrdered == NULL) {
-            validateSignature("SEXP(*icd9LongToWideMatrixOrdered)(const SEXP&,const std::string,const std::string)");
-            p_icd9LongToWideMatrixOrdered = (Ptr_icd9LongToWideMatrixOrdered)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrixOrdered");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9LongToWideMatrixOrdered(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<SEXP >(__result);
-    }
-
     inline bool icd9IsASingleV(std::string s) {
         typedef SEXP(*Ptr_icd9IsASingleV)(SEXP);
         static Ptr_icd9IsASingleV p_icd9IsASingleV = NULL;
@@ -478,6 +421,82 @@ namespace icd9 {
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
         return Rcpp::as<std::vector<bool> >(__result);
+    }
+
+    inline SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9LongToWideMatrixByMap)(SEXP,SEXP,SEXP);
+        static Ptr_icd9LongToWideMatrixByMap p_icd9LongToWideMatrixByMap = NULL;
+        if (p_icd9LongToWideMatrixByMap == NULL) {
+            validateSignature("SEXP(*icd9LongToWideMatrixByMap)(const SEXP&,const std::string,const std::string)");
+            p_icd9LongToWideMatrixByMap = (Ptr_icd9LongToWideMatrixByMap)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrixByMap");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9LongToWideMatrixByMap(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<SEXP >(__result);
+    }
+
+    inline SEXP icd9LongToWideMatrixAggregate(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9LongToWideMatrixAggregate)(SEXP,SEXP,SEXP);
+        static Ptr_icd9LongToWideMatrixAggregate p_icd9LongToWideMatrixAggregate = NULL;
+        if (p_icd9LongToWideMatrixAggregate == NULL) {
+            validateSignature("SEXP(*icd9LongToWideMatrixAggregate)(const SEXP&,const std::string,const std::string)");
+            p_icd9LongToWideMatrixAggregate = (Ptr_icd9LongToWideMatrixAggregate)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrixAggregate");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9LongToWideMatrixAggregate(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<SEXP >(__result);
+    }
+
+    inline SEXP icd9LongToWideMatrixNoAggregate(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
+        typedef SEXP(*Ptr_icd9LongToWideMatrixNoAggregate)(SEXP,SEXP,SEXP);
+        static Ptr_icd9LongToWideMatrixNoAggregate p_icd9LongToWideMatrixNoAggregate = NULL;
+        if (p_icd9LongToWideMatrixNoAggregate == NULL) {
+            validateSignature("SEXP(*icd9LongToWideMatrixNoAggregate)(const SEXP&,const std::string,const std::string)");
+            p_icd9LongToWideMatrixNoAggregate = (Ptr_icd9LongToWideMatrixNoAggregate)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrixNoAggregate");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9LongToWideMatrixNoAggregate(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<SEXP >(__result);
+    }
+
+    inline SEXP icd9LongToWide(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9", bool aggregate = true) {
+        typedef SEXP(*Ptr_icd9LongToWide)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9LongToWide p_icd9LongToWide = NULL;
+        if (p_icd9LongToWide == NULL) {
+            validateSignature("SEXP(*icd9LongToWide)(const SEXP&,const std::string,const std::string,bool)");
+            p_icd9LongToWide = (Ptr_icd9LongToWide)R_GetCCallable("icd9", "icd9_icd9LongToWide");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9LongToWide(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(aggregate));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<SEXP >(__result);
     }
 
     inline String icd9AddLeadingZeroesMajorSingle(String major) {

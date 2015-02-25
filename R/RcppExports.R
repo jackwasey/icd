@@ -84,28 +84,6 @@ icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
 }
 
-icd9LongToWideMatrixByMap <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9LongToWideMatrixByMap', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
-}
-
-#' @title Convert long to wide from as matrix
-#' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit.
-#' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
-#' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
-#' @export
-icd9LongToWideMatrix <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9LongToWideMatrix', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
-}
-
-#' @title Convert ordered long to wide from as matrix
-#' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit. Each time a new visitId is seen when scanning the list, a new row in the comorbidity output will be made. This will introduce >=1 extra row per out-of-order visitId, but not cause an error.
-#' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
-#' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
-#' @export
-icd9LongToWideMatrixOrdered <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9LongToWideMatrixOrdered', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
-}
-
 icd9IsASingleV <- function(s) {
     .Call('icd9_icd9IsASingleV', PACKAGE = 'icd9', s)
 }
@@ -143,6 +121,30 @@ icd9IsVE <- function(icd9) {
 #' @export
 icd9IsN <- function(icd9) {
     .Call('icd9_icd9IsN', PACKAGE = 'icd9', icd9)
+}
+
+icd9LongToWideMatrixByMap <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9LongToWideMatrixByMap', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
+}
+
+icd9LongToWideMatrixAggregate <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9LongToWideMatrixAggregate', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
+}
+
+#' @title Convert ordered long to wide from as matrix
+#' @description This runs only slightly more quickly than the aggregating version when patients are ordered or nearly ordered.
+#' @keywords internal
+icd9LongToWideMatrixNoAggregate <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
+    .Call('icd9_icd9LongToWideMatrixNoAggregate', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
+}
+
+#' @title Convert long to wide from as matrix
+#' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit.
+#' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
+#' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
+#' @export
+icd9LongToWide <- function(icd9df, visitId = "visitId", icd9Field = "icd9", aggregate = TRUE) {
+    .Call('icd9_icd9LongToWide', PACKAGE = 'icd9', icd9df, visitId, icd9Field, aggregate)
 }
 
 icd9AddLeadingZeroesMajorSingle <- function(major) {

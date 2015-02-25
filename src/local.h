@@ -6,14 +6,18 @@
 //#include <boost/unordered/unordered_set.hpp>
 
 //#define ICD9_DEBUG
-//#define ICD9_DEBUG_SETUP
+#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_TRACE
 //#define ICD9_DEBUG_PARALLEL
-#define ICD9_VALGRIND
+//#define ICD9_VALGRIND
 #ifdef _OPENMP
 //#define ICD9_OPENMP
 #define ICD9_ORDER_GUARANTEE
+#endif
+
+#ifdef ICD9_VALGRIND
+#include <valgrind/callgrind.h>
 #endif
 
 typedef std::string Str;
@@ -55,15 +59,16 @@ void printIt(std::vector<VT> v) {
 	std::cout.flush();
 }
 
-template<typename T>
-void printIt(boost::unordered_set<T> v) {
-	typename boost::unordered_set<T>::iterator i;
-	std::ostringstream o;
-	for (i=v.begin(); i!=v.end(); ++i) { o << *i << " "; }
-	o << "\n";
-	std::cout << o.str();
-	std::cout.flush();
-}
+//template<typename T>
+//void printIt(boost::unordered_set<T> v) {
+//	typename boost::unordered_set<T>::iterator i;
+//	std::ostringstream o;
+//	for (i=v.begin(); i!=v.end(); ++i) { o << *i << " "; }
+//	o << "\n";
+//	std::cout << o.str();
+//	std::cout.flush();
+//}
+
 //overload for set
 template<typename ST>
 void printIt(std::set<ST> v) {

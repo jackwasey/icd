@@ -134,11 +134,11 @@ otherbench <- function() {
   )
   for (threads in c(1,4,8)) { # with parallel for, best is 8 threads, static chunk of ONE (dynamic slightly slower)
     for (n in c(500000)) {
-      for (cs in c(1,32,1024)) {
-        message("threads = ", threads, ",np = ", np, ", n = ", n, ", cs = ", cs)
+      for (cs in c(1, 32, 1024)) {
+        message("threads = ", threads, ", np = ", np, ", n = ", n, ", cs = ", cs)
         microbenchmark(
           icd9ComorbidShortOpenMPVecInt(randomPatients(n, np), ahrqComorbid, threads = threads, chunkSize = cs, check=identical),
-          times = 10, check=identical
+          times = 10
         ) %>% print
       }
     }
@@ -157,11 +157,11 @@ otherbench <- function() {
   ))
 }
 
-benchLongToWide <- function(n=10000, np=7) {
+benchLongToWide <- function(n = 10000, np = 7) {
   pts<-randomOrderedPatients(n, np)
   microbenchmark(icd9LongToWideMatrixByMap(pts),
-                 icd9LongToWideMatrix(pts),
-                 icd9LongToWideMatrixOrdered(pts),
+                 icd9LongToWideMatrixAggregate(pts),
+                 icd9LongToWideMatrixNoAggregate(pts),
                  times = 10)
 }
 
