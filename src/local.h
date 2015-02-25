@@ -10,7 +10,7 @@
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_TRACE
 //#define ICD9_DEBUG_PARALLEL
-//#define ICD9_VALGRIND
+#define ICD9_VALGRIND
 #ifdef _OPENMP
 //#define ICD9_OPENMP
 #define ICD9_ORDER_GUARANTEE

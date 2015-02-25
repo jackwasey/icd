@@ -23,7 +23,7 @@ SEXP raggedWideVecVecToMatrix(const std::vector<VecStr>& ragged,
 	printIt(visitIds);
 #endif
 	unsigned int distinct_visits=ragged.size();
-	CharacterVector out(distinct_visits * max_per_pt); // default empty strings? NA? //TODO
+	CharacterVector out(distinct_visits * max_per_pt, NA_STRING); // default empty strings? NA? //TODO
 #ifdef ICD9_DEBUG_SETUP
 	if (distinct_visits==0) {
 		std::cout << "no visits. returning blank data\n";
@@ -92,14 +92,14 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "calling C to get icd codes\n";
 #endif
-	SEXP icds = getRListOrDfElement(icd9df, icd9Field.c_str()); // very fast
+	SEXP icds = PROTECT(getRListOrDfElement(icd9df, icd9Field.c_str())); // very fast
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "back from C\n";
 #endif
 	// very slow, but probably necessary, because we are going to be manipulating them more. Could we go straight from SEXP to VecStr?
 	VecStr vs = as<VecStr>(
 			as<CharacterVector>(getRListOrDfElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
-	const unsigned int approx_cmb_per_visit = 5; // just an estimate
+	const unsigned int approx_cmb_per_visit = 15; // just an estimate. probably better to overestimate significantly.
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "getting length of icd codes\n";
 #endif
@@ -133,7 +133,7 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 			std::cout << "new key " << vs[i] << "\n";
 #endif
 			VecStr vcodes;
-			vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
+			vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient. // this is a little expensive
 			vcodes.push_back(s); // new vector of ICD codes with this first item
 			visitCodes.insert(std::make_pair(vs[i],vcodes));
 		} // end find
@@ -146,6 +146,7 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 	CALLGRIND_STOP_INSTRUMENTATION;
 	CALLGRIND_DUMP_STATS;
 #endif
+UNPROTECT(1);
 	return cv;
 }
 
@@ -164,7 +165,7 @@ unsigned int longToWideAggregateCoreChar(const char* lastVisitId, const char* ic
 		ragged.push_back(vcodes); // and add that vector to the intermediate structure
 		visitIds.push_back(vi);
 	} else {
-		ragged[ragged.size() - 1].push_back(icd); // augment vec for current visit and N/V/E type
+		ragged[ragged.size() - 1].push_back(icd); // augment vec for current visit and N/V/E type // EXPENSIVE. TODO try over-reserving more.
 		unsigned int len = ragged[ragged.size() - 1].size(); // get new count of cmb for one patient
 		if (len > max_per_pt)
 			max_per_pt = len;
@@ -222,10 +223,13 @@ int longToWideAggregateCoreInt(const int lastVisitId, const char* icd,
 }
 // [[Rcpp::export]]
 CharacterVector icd9LongToWideMatrixAggregate(const SEXP icd9df, const std::string visitId="visitId", const std::string icd9Field="icd9") {
+#ifdef ICD9_VALGRIND
+        CALLGRIND_START_INSTRUMENTATION;
+#endif
 	SEXP icds = getRListOrDfElement(icd9df, icd9Field.c_str());
 	//VecStr vs = as<VecStr>(as<CharacterVector>(getListElement(icd9df, visitId.c_str()))); // TODO do this in one step without Rcpp copying?
 	SEXP vsexp = getRListOrDfElement(icd9df, visitId.c_str());
-	const int approx_cmb_per_visit = 7; // just an estimate
+	const int approx_cmb_per_visit = 15; // just an estimate. Prob best to overestimate.
 	int vlen = Rf_length(icds);
 	VecStr visitIds;
 	visitIds.reserve(vlen / approx_cmb_per_visit);
@@ -288,7 +292,12 @@ printIt(visitIdsInt);
 		break;
 	}
 
-	return raggedWideVecVecToMatrix(ragged, max_per_pt, visitIds);
+	CharacterVector out = raggedWideVecVecToMatrix(ragged, max_per_pt, visitIds);
+#ifdef ICD9_VALGRIND
+        CALLGRIND_STOP_INSTRUMENTATION;
+//        CALLGRIND_DUMP_STATS;
+#endif
+ return out;
 }
 
 
@@ -302,7 +311,7 @@ CharacterVector icd9LongToWideMatrixNoAggregate(const SEXP& icd9df, const std::s
 	SEXP icds = getRListOrDfElement(icd9df, icd9Field.c_str());
 	VecStr vs = as<VecStr>(
 			as<CharacterVector>(getRListOrDfElement(icd9df, visitId.c_str()))); // TODO can we do this in one step without Rcpp copying?
-	const unsigned int approx_cmb_per_visit = 7; // just an estimate
+	const unsigned int approx_cmb_per_visit = 15; // just an estimate. err on overestimate
 	unsigned int vlen = Rf_length(icds);
 	VecStr visitIds;
 	Str lastVisit = "";
