@@ -26,8 +26,7 @@ std::vector<std::string > trim_cpp(std::vector<std::string >& sv) {
 	for (std::vector<std::string >::iterator i = sv.begin(); i != sv.end(); ++i) {
 		strim_cpp(*i);
 	}
-	return sv;
-}
+	return sv;}
 
 #ifdef ICD9_DEBUG
 void printCharVec(CharacterVector cv) {
@@ -51,4 +50,35 @@ int str_to_int(const char *s) {
 		++s;
 	}
 	return n;
+}
+
+
+std::string myuitos(unsigned int i) {
+#ifdef ICD9_DEBUG_SETUP_TRACE
+			std::cout << "myuitos\n";
+#endif
+
+	std::string s(std::numeric_limits<unsigned int>::digits10+2, 0);
+	unsigned int size=0;
+	if (i==0) {
+		s[size++]='0';
+	} else {
+#ifdef ICD9_DEBUG_SETUP_TRACE
+			std::cout << "non-zero, looping through powers of ten\n";
+#endif
+
+		int ro = 0;
+		for (int i_div; i; i=i_div) {
+			i_div = i/10;
+#ifdef ICD9_DEBUG_SETUP_TRACE
+			std::cout << "i_div = " << i_div << ", and i = " << i << "\n";
+#endif
+
+			int i_mod=i%10;
+			s[size++] = static_cast<char>('0' + i_mod);
+		}
+		std::reverse(&s[ro], &s[size]);
+	}
+	s.resize(size);
+	return s;
 }

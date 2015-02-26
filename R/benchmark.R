@@ -157,12 +157,16 @@ otherbench <- function() {
   ))
 }
 
-benchLongToWide <- function(n = 10000, np = 7) {
+benchLongToWide <- function(n = 10000, np = 7, times = 10) {
   pts<-randomOrderedPatients(n, np)
-  microbenchmark(icd9LongToWideMatrixByMap(pts),
-                 icd9LongToWideMatrixAggregate(pts),
-                 icd9LongToWideMatrixNoAggregate(pts),
-                 times = 10)
+#   microbenchmark(icd9LongToWideMatrixByMap(pts),
+#                  icd9LongToWideMatrixAggregate(pts),
+#                  icd9LongToWideMatrixNoAggregate(pts),
+#                  times = times)
+microbenchmark(icd9LongToWide(pts, aggregate = FALSE),
+               icd9LongToWide(pts, aggregate = TRUE),
+               times = times
+               )
 }
 
 checkThreadChunk <- function() {

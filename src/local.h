@@ -10,7 +10,7 @@
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_TRACE
 //#define ICD9_DEBUG_PARALLEL
-#define ICD9_VALGRIND
+//#define ICD9_VALGRIND
 #ifdef _OPENMP
 //#define ICD9_OPENMP
 #define ICD9_ORDER_GUARANTEE
@@ -95,9 +95,11 @@ void printCharVec(Rcpp::CharacterVector cv);
 
 void buildMap(const Rcpp::List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& map_v, ComorbidVecInt& map_e);
 
+template <typename VISID>
 void buildVisitCodesVec(const Rcpp::DataFrame& icd9df, const std::string& visitId, const std::string& icd9Field,
-		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, VecStr& visitIds);
+		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, std::vector<VISID>& visitIds);
 
 Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
 		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
 		const int chunkSize, const int ompChunkSize);
+std::string myuitos(unsigned int i);

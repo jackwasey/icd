@@ -127,17 +127,6 @@ icd9LongToWideMatrixByMap <- function(icd9df, visitId = "visitId", icd9Field = "
     .Call('icd9_icd9LongToWideMatrixByMap', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
 }
 
-icd9LongToWideMatrixAggregate <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9LongToWideMatrixAggregate', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
-}
-
-#' @title Convert ordered long to wide from as matrix
-#' @description This runs only slightly more quickly than the aggregating version when patients are ordered or nearly ordered.
-#' @keywords internal
-icd9LongToWideMatrixNoAggregate <- function(icd9df, visitId = "visitId", icd9Field = "icd9") {
-    .Call('icd9_icd9LongToWideMatrixNoAggregate', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
-}
-
 #' @title Convert long to wide from as matrix
 #' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit.
 #' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
