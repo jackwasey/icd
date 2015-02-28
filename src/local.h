@@ -9,6 +9,7 @@
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_TRACE
+//#define ICD9_DEBUG_TRACE
 //#define ICD9_DEBUG_PARALLEL
 //#define ICD9_VALGRIND
 #ifdef _OPENMP
@@ -27,6 +28,7 @@ typedef std::vector<Str> VecStr;
 typedef std::vector<int> VecInt;
 //typedef std::vector<unsigned int> VecUInt; // doesn't work well with Rcpp
 typedef VecInt Out; // TODO: would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads.
+//typedef std::vector<char> Out; // TODO: would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads.
 typedef VecInt Codes; // e.g. the codes in a comorbidity subtype (ie numeric, V, or E)
 //Boost has a safer option. Anyway, R itself tends to be faster with ints than bools. Doubt there are big optimizations here.
 
@@ -91,15 +93,32 @@ void printIt(std::map<MK,MV> v) {
 	std::cout.flush();
 }
 #endif
+
+
+std::string myuitos(unsigned int i);
+VecStr myvecitos(VecInt vi);
+
 void printCharVec(Rcpp::CharacterVector cv);
 
 void buildMap(const Rcpp::List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& map_v, ComorbidVecInt& map_e);
 
-template <typename VISID>
-void buildVisitCodesVec(const Rcpp::DataFrame& icd9df, const std::string& visitId, const std::string& icd9Field,
-		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, std::vector<VISID>& visitIds);
+void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId, const std::string& icd9Field,
+		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e,
+		VecStr& visitIds, bool aggregate);
+void buildVisitCodesVec(const SEXP& icd9df, const std::string visitId,
+		const std::string icd9Field, CodesVecSubtype& vcdb_n,
+		CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, std::vector<int>& visitIds,
+		bool aggregate);
 
 Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
 		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
 		const int chunkSize, const int ompChunkSize);
-std::string myuitos(unsigned int i);
+
+int longToWideWork(const char* lastVisitId, const char* icd,
+		const char* vi, const int approx_cmb_per_visit,
+		int max_per_pt, std::vector<std::string>& visitIds,
+		std::vector<VecStr>& ragged, bool aggregate);
+int longToWideWork(const int lastVisitId, const char* icd,
+		const int vi, const int approx_cmb_per_visit,
+		int max_per_pt, std::vector<int>& visitIds,
+		std::vector<VecStr>& ragged, bool aggregate);

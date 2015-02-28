@@ -15,46 +15,7 @@ extern "C" {
 }
 using namespace Rcpp;
 
-template<typename T>
-SEXP raggedWideVecVecToMatrix(const std::vector<VecStr>& ragged,
-		unsigned int max_per_pt, const T &visitIds) {
-#ifdef ICD9_DEBUG_SETUP
-	std::cout << "visitIds = ";
-	printIt(visitIds);
-#endif
-	unsigned int distinct_visits=ragged.size();
-	CharacterVector out(distinct_visits * max_per_pt, NA_STRING); // default empty strings? NA? //TODO
-#ifdef ICD9_DEBUG_SETUP
-	if (distinct_visits==0) {
-		std::cout << "no visits. returning blank data\n";
-		return CharacterVector::create();
-	}
-	if (distinct_visits!=visitIds.size()) {
-		std::cout << "visit and ragged sizes differ. visits = " << visitIds.size() << ", ragged size = " << distinct_visits << ": returning blank data\n";
-		return CharacterVector::create();
-	}
-#endif
-	for (unsigned int row_it = 0; row_it < distinct_visits; ++row_it) {
-		const VecStr& this_row = ragged[row_it];
-		unsigned int this_row_len = this_row.size();
-		for (unsigned int col_it = 0; col_it < this_row_len; ++col_it) {
-			unsigned int out_idx = row_it + (distinct_visits * col_it); // straight to row major //TODO benchmark alternative with transposition
-			out[out_idx] = this_row[col_it];
-		}
-	}
-#ifdef ICD9_DEBUG_SETUP
-	std::cout << "writing dimensions\n";
-#endif
-	out.attr("dim") = Dimension(distinct_visits, max_per_pt); // set dimensions in reverse (row major for parallel step)
-#ifdef ICD9_DEBUG_SETUP
-	std::cout << "writing labels\n";
-#endif
-	CharacterVector nonames;
-	rownames(out) = wrap(visitIds);
-	return out;
-}
-
-SEXP raggedWideMultimapToMatrix(const MMVisitCodes &mm, const unsigned int max_per_pt) {
+CharacterVector raggedWideMultimapToMatrix(const MMVisitCodes &mm, const int max_per_pt) {
 #ifdef ICD9_DEBUG_SETUP
 	//std::cout << "visitIds = ";
 	//printIt(visitIds);
@@ -83,7 +44,7 @@ SEXP raggedWideMultimapToMatrix(const MMVisitCodes &mm, const unsigned int max_p
 
 // THIS IS SLOWER THAN THE non-map version, when the patients are ordered or nearly ordered.
 // [[Rcpp::export]]
-SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
+CharacterVector icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 		"visitId", const std::string icd9Field = "icd9") {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
@@ -146,118 +107,200 @@ SEXP icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId =
 	CALLGRIND_STOP_INSTRUMENTATION;
 	CALLGRIND_DUMP_STATS;
 #endif
-UNPROTECT(1);
+	UNPROTECT(1);
 	return cv;
 }
 
-int longToWideAggregateCoreChar(const char* lastVisitId, const char* icd,
-		const char* vi, const unsigned int approx_cmb_per_visit,
-		int max_per_pt, VecStr& visitIds,
-		std::vector<VecStr>& ragged, bool aggregate) {
-	// reverse find might be quicker (or slower)
-	if (lastVisitId != vi &&  (aggregate && std::find(visitIds.rbegin(), visitIds.rend(), vi)==visitIds.rend())) {
-		//if (std::find(visitIds.rbegin(), visitIds.rend(), vs[i]) == visitIds.rend()) {
-		VecStr vcodes;
-		vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
-		vcodes.push_back(icd); // new vector of ICD codes with this first item
-		ragged.push_back(vcodes); // and add that vector to the intermediate structure
-		visitIds.push_back(vi);
-	} else {
-		ragged[ragged.size() - 1].push_back(icd); // augment vec for current visit and N/V/E type // EXPENSIVE. TODO try over-reserving more.
-		unsigned int len = ragged[ragged.size() - 1].size(); // get new count of cmb for one patient
-		if (len > max_per_pt)
-			max_per_pt = len;
+// string version
+CharacterVector raggedToWide(const std::vector<VecStr>& ragged, int max_per_pt, const std::vector<std::string> &visitIds) {
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "visitIds = ";
+	printIt(visitIds);
+#endif
+	int distinct_visits=ragged.size();
+	CharacterVector out(distinct_visits * max_per_pt, NA_STRING); // default empty strings? NA? //TODO
+#ifdef ICD9_DEBUG_SETUP
+	if (distinct_visits==0) {
+		std::cout << "no visits. returning blank data\n";
+		return CharacterVector::create();
 	}
-	return max_per_pt;
+	if (distinct_visits!=visitIds.size()) {
+		std::cout << "visit and ragged sizes differ. visits = " << visitIds.size() << ", ragged size = " << distinct_visits << ": returning blank data\n";
+		return CharacterVector::create();
+	}
+#endif
+	for (unsigned int row_it = 0; row_it < distinct_visits; ++row_it) {
+		const VecStr& this_row = ragged[row_it];
+		unsigned int this_row_len = this_row.size();
+		for (unsigned int col_it = 0; col_it < this_row_len; ++col_it) {
+			unsigned int out_idx = row_it + (distinct_visits * col_it); // straight to row major //TODO benchmark alternative with transposition
+			out[out_idx] = this_row[col_it];
+		}
+	}
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "writing dimensions\n";
+#endif
+	out.attr("dim") = Dimension(distinct_visits, max_per_pt); // set dimensions in reverse (row major for parallel step)
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "writing labels\n";
+#endif
+	CharacterVector nonames;
+	rownames(out) = wrap(visitIds);
+	return out;
 }
 
-int longToWideAggregateCoreInt(const int lastVisitId, const char* icd,
-		const int vi, const int approx_cmb_per_visit,
-		int max_per_pt, std::vector<int>& visitIds,
-		std::vector<VecStr>& ragged, bool aggregate) {
-	if (lastVisitId != vi && (aggregate && std::find(visitIds.rbegin(), visitIds.rend(), vi) == visitIds.rend())) {
-		VecStr vcodes;
-		vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
-		vcodes.push_back(icd); // new vector of ICD codes with this first item
-		ragged.push_back(vcodes); // and add that vector to the intermediate structure
-		visitIds.push_back(vi);
-	} else {
-		ragged[ragged.size() - 1].push_back(icd); // augment vec for current visit and N/V/E type
-		int len = ragged[ragged.size() - 1].size(); // get new count of cmb for one patient
-		if (len > max_per_pt)
-			max_per_pt = len;
+//int version
+CharacterVector raggedToWide(const std::vector<VecStr>& ragged, int max_per_pt, const std::vector<int> &visitIds) {
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "visitIds = ";
+	printIt(visitIds);
+	std::cout << "raggedToWide got ragged size" << ragged.size() << "\n";
+#endif
+	int distinct_visits=ragged.size();
+	CharacterVector out(distinct_visits * max_per_pt, NA_STRING); // default empty strings? NA? //TODO
+	if (distinct_visits==0) {
+		Rcout << "no visits. returning blank data\n";
+		return CharacterVector::create();
 	}
-	return max_per_pt;
+#ifdef ICD9_DEBUG_SETUP
+	if (distinct_visits!=visitIds.size()) {
+		std::cout << "visit and ragged sizes differ. visits = " << visitIds.size() << ", ragged size = " << distinct_visits << ": returning blank data\n";
+		return CharacterVector::create();
+	}
+#endif
+	for (unsigned int row_it = 0; row_it < distinct_visits; ++row_it) {
+		const VecStr& this_row = ragged[row_it];
+		unsigned int this_row_len = this_row.size();
+		for (unsigned int col_it = 0; col_it < this_row_len; ++col_it) {
+			unsigned int out_idx = row_it + (distinct_visits * col_it); // straight to row major //TODO benchmark alternative with transposition
+			out[out_idx] = this_row[col_it];
+		}
+	}
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "writing dimensions\n";
+#endif
+	out.attr("dim") = Dimension(distinct_visits, max_per_pt); // set dimensions in reverse (row major for parallel step)
+#ifdef ICD9_DEBUG_SETUP
+	std::cout << "writing labels\n";
+#endif
+	CharacterVector nonames;
+	rownames(out) = wrap(visitIds);
+	return out;
 }
 
-//' @title Convert long to wide from as matrix
-//' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit.
-//' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
-//' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
-//' @export
-// [[Rcpp::export]]
-CharacterVector icd9LongToWide(const SEXP& icd9df,
+// int version
+int longToRagged(const SEXP& icd9df, std::vector<std::vector<std::string> >& ragged, std::vector<int>& visitIds,
 		const std::string visitId="visitId", const std::string icd9Field="icd9",
 		bool aggregate=true) {
 #ifdef ICD9_VALGRIND
-        CALLGRIND_START_INSTRUMENTATION;
+	CALLGRIND_START_INSTRUMENTATION;
 #endif
 	SEXP icds = PROTECT(getRListOrDfElement(icd9df, icd9Field.c_str()));
-	//VecStr vs = as<VecStr>(as<CharacterVector>(getListElement(icd9df, visitId.c_str()))); // TODO do this in one step without Rcpp copying?
 	SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 	const int approx_cmb_per_visit = 15; // just an estimate. Prob best to overestimate.
 	int vlen = Rf_length(icds);
-	VecStr visitIds;
 	visitIds.reserve(vlen / approx_cmb_per_visit);
-	std::vector<VecStr> ragged; // intermediate structure
 	int max_per_pt = 1;
 	switch(TYPEOF(vsexp)) {
 	case INTSXP:
 #ifdef ICD9_DEBUG_SETUP
-		std::cout << "SEXP is INT\n";
+		std::cout << "longToRagged SEXP is INT\n";
 #endif
 		{
 			int* vi;
 			vi = INTEGER(vsexp); // point to the integer vector
-			std::vector<int> visitIdsInt(0); // initialize as empty, don't just define?
-			visitIdsInt.reserve(vlen / approx_cmb_per_visit);
+			visitIds.reserve(vlen / approx_cmb_per_visit);
 			int lastVisitId = 1294967295L; // random big number
 			for (int i = 0; i < vlen; ++i) {
 				const char* icd = CHAR(STRING_ELT(icds, i));
-				max_per_pt = longToWideAggregateCoreInt(lastVisitId, icd, vi[i],
-						approx_cmb_per_visit, max_per_pt, visitIdsInt, ragged, aggregate);
+				if (lastVisitId != vi[i] &&  (!aggregate || std::find(visitIds.rbegin(), visitIds.rend(), vi[i])==visitIds.rend())) {
+					//if (std::find(visitIds.rbegin(), visitIds.rend(), vs[i]) == visitIds.rend()) {
+					VecStr vcodes;
+					vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
+					vcodes.push_back(icd); // new vector of ICD codes with this first item
+					ragged.push_back(vcodes); // and add that vector to the intermediate structure
+					visitIds.push_back(vi[i]);
+				} else {
+#ifdef ICD9_DEBUG_SETUP
+					if (ragged.size()==0) {
+						Rcout << "ragged size is ZERO! aborting\n";
+						break;
+					}
+#endif
+					ragged[ragged.size() - 1].push_back(icd); // augment vec for current visit and N/V/E type // EXPENSIVE. TODO try over-reserving more.
+					int len = ragged[ragged.size() - 1].size(); // get new count of cmb for one patient
+					if (len > max_per_pt)
+						max_per_pt = len;
+				}
 				lastVisitId = vi[i];
 			}
 #ifdef ICD9_DEBUG_SETUP
 			std::cout << "end loop through all visit-code input data\n";
-			std::cout << "visitIdsInt size = " << visitIdsInt.size() << "\n";
+			std::cout << "visitIds size = " << visitIds.size() << "\n";
 #endif
 #ifdef ICD9_DEBUG_SETUP_TRACE
-printIt(visitIdsInt);
+			printIt(visitIds);
 #endif
-			const int known_len = visitIdsInt.size();
-			visitIds.reserve(known_len);
-			//char* buf[32];
-			for (int j=0; j!=known_len; ++j) {
-				visitIds.push_back(myuitos(visitIdsInt[j])); // v fast
-				//snprintf(buf, 32, "%d", visitIdsInt[j]); // v slow
-				//visitIds[j] = buf;
-			}
 		} // end block
 		break;
-	case REALSXP:
-#ifdef ICD9_DEBUG_SETUP
-		std::cout << "SEXP is REAL\n";
-#endif
+	default:
+		Rcpp::Rcout << "SEXP is unknown...\n";
+		// shouldn't be here...
 		break;
+	}
+#ifdef ICD9_VALGRIND
+	CALLGRIND_STOP_INSTRUMENTATION;
+	//        CALLGRIND_DUMP_STATS;
+#endif
+	UNPROTECT(2); // do sooner if possible?
+	return max_per_pt;
+}
+
+// string version
+int longToRagged(const SEXP& icd9df, std::vector<std::vector<std::string> > ragged, std::vector<std::string>& visitIds,
+		const std::string visitId="visitId", const std::string icd9Field="icd9",
+		bool aggregate=true) {
+#ifdef ICD9_VALGRIND
+	CALLGRIND_START_INSTRUMENTATION;
+#endif
+	SEXP icds = PROTECT(getRListOrDfElement(icd9df, icd9Field.c_str()));
+	SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
+	const int approx_cmb_per_visit = 15; // just an estimate. Prob best to overestimate.
+	int vlen = Rf_length(icds);
+	visitIds.reserve(vlen / approx_cmb_per_visit);
+	int max_per_pt = 1;
+	switch(TYPEOF(vsexp)) {
 	case STRSXP:
 	{
+#ifdef ICD9_DEBUG_SETUP
+		std::cout << "longToRagged SEXP is STR\n";
+#endif
+
 		const char* lastVisitId = "";
 		for (int i = 0; i < vlen; ++i) {
 			const char* icd = CHAR(STRING_ELT(icds, i)); // always STRING? may get pure numeric/integer
 			const char* vi = CHAR(STRING_ELT(vsexp, i));
-			max_per_pt = longToWideAggregateCoreChar(lastVisitId, icd, vi,
-					approx_cmb_per_visit, max_per_pt, visitIds, ragged, aggregate);
+
+			if (strcmp(lastVisitId, vi)!=0 && (!aggregate || std::find(visitIds.rbegin(), visitIds.rend(), vi)==visitIds.rend())) {
+				//if (std::find(visitIds.rbegin(), visitIds.rend(), vs[i]) == visitIds.rend()) {
+				VecStr vcodes;
+				vcodes.reserve(approx_cmb_per_visit); // estimate of number of codes per patient.
+				vcodes.push_back(icd); // new vector of ICD codes with this first item
+				ragged.push_back(vcodes); // and add that vector to the intermediate structure
+				visitIds.push_back(vi);
+			} else {
+#ifdef ICD9_DEBUG_SETUP
+				if (ragged.size()==0) {
+					Rcout << "ragged size is ZERO! aborting\n";
+					break;
+				}
+#endif
+				ragged[ragged.size() - 1].push_back(icd); // augment vec for current visit and N/V/E type // EXPENSIVE. TODO try over-reserving more.
+				int len = ragged[ragged.size() - 1].size(); // get new count of cmb for one patient
+				if (len > max_per_pt)
+					max_per_pt = len;
+			}
+
 			lastVisitId = vi;
 		} // end loop through all visit-code input data
 	} // end block
@@ -268,11 +311,50 @@ printIt(visitIdsInt);
 		break;
 	}
 
-	CharacterVector out = raggedWideVecVecToMatrix(ragged, max_per_pt, visitIds);
+	//CharacterVector out = raggedToWide(ragged, max_per_pt, visitIds);
 #ifdef ICD9_VALGRIND
-        CALLGRIND_STOP_INSTRUMENTATION;
-//        CALLGRIND_DUMP_STATS;
+	CALLGRIND_STOP_INSTRUMENTATION;
+	//        CALLGRIND_DUMP_STATS;
 #endif
-        UNPROTECT(2); // do sooner if possible?
- return out;
+	UNPROTECT(2); // do sooner if possible?
+	return max_per_pt;
+}
+
+
+//' @title Convert long to wide from as matrix
+//' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit.
+//' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
+//' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
+//' @export
+// [[Rcpp::export]]
+CharacterVector icd9LongToWide(const SEXP& icd9df, const std::string visitId="visitId",
+		const std::string icd9Field="icd9", bool aggregate=true) {
+
+	std::vector<std::vector<std::string> > ragged;
+	int max_per_pt = 0;
+
+	SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
+	int sexpType = TYPEOF(vsexp);
+	UNPROTECT(1);
+	switch(sexpType) {
+	case INTSXP:
+	{
+		VecInt visitIds; // may be vector of integers or strings
+		max_per_pt = longToRagged(icd9df, ragged, visitIds, visitId, icd9Field, aggregate);
+		return raggedToWide(ragged, max_per_pt, visitIds);
+		break;
+	}
+	case STRSXP:
+	{
+		std::vector<std::string> visitIds; // may be vector of integers or strings
+		max_per_pt = longToRagged(icd9df, ragged, visitIds, visitId, icd9Field, aggregate);
+		return raggedToWide(ragged, max_per_pt, visitIds);
+		break;
+	}
+	default:
+		Rcpp::Rcout << "icd9LongToWide SEXP is unknown...\n";
+		break;
+	}
+	Rcpp::Rcout << "Returning empty data\n";
+	return CharacterVector::create();
 }

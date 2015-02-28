@@ -92,7 +92,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
   rowSums(m * weights)
 }
 
-#' @title count icd9 codes or comorbidities for each patient
+#' @title count ICD codes or comorbidities for each patient
 #' @rdname icd9Count
 #' @description \code{icd9Count} takes a data frame with a column for
 #'   \code{visitId} and another for ICD-9 code, and returns the number of

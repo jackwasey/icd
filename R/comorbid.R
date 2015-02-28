@@ -60,15 +60,11 @@ icd9Comorbid <- function(icd9df,
                          visitId = "visitId",
                          icd9Field = "icd9",
                          isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-                         isShortMapping = icd9GuessIsShort(icd9Mapping)) {
-
-  # Rcpp --------------------------------------------------------------------
-
-
+                         isShortMapping = icd9GuessIsShort(icd9Mapping),
+                         return.df = TRUE) {
   checkmate::checkDataFrame(icd9df, min.cols = 2)
   checkmate::checkList(icd9Mapping, types = "character", any.missing = FALSE, min.len = 1)
-  #checkmate::checkString(visitId)
-  visitId <- as.character(visitId)
+  #visitId <- as.character(visitId)
   checkmate::checkString(icd9Field)
   checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
   checkmate::checkLogical(isShortMapping, any.missing = FALSE, len = 1)
@@ -80,12 +76,20 @@ icd9Comorbid <- function(icd9df,
   if (!isShortMapping)
     icd9Mapping <- lapply(icd9Mapping, icd9DecimalToShort)
 
+  icd9Mapping <- lapply(icd9Mapping, function(m) if (is.factor(m)) asCharacterNoWarn(m) else m)
+
   # return via call to the C++ function:
   #icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
-  mat <- icd9ComorbidShortMatrix(icd9df, icd9Mapping, visitId, icd9Field)
-
-  df.out <- as.data.frame(mat)
-  cbind(rownames(mat), df.out)
+  if (!return.df) {
+    return(icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field))
+  } else {
+    mat <- icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
+    df.out <- cbind(rownames(mat), as.data.frame(mat), stringsAsFactors = is.factor(icd9df[[visitId]]))
+    names(df.out)[1] <- visitId
+    # perhaps leave (duplicated) rownames which came from the matrix:
+    rownames(df.out) <- NULL
+    return(df.out)
+  }
 }
 
 #' @rdname icd9Comorbid

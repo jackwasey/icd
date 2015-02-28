@@ -53,13 +53,13 @@ int str_to_int(const char *s) {
 }
 
 
-std::string myuitos(unsigned int i) {
+std::string myuitos(int i) {
 #ifdef ICD9_DEBUG_SETUP_TRACE
 			std::cout << "myuitos\n";
 #endif
 
-	std::string s(std::numeric_limits<unsigned int>::digits10+2, 0);
-	unsigned int size=0;
+	std::string s(std::numeric_limits<int>::digits10+2, 0);
+	int size=0;
 	if (i==0) {
 		s[size++]='0';
 	} else {
@@ -81,4 +81,12 @@ std::string myuitos(unsigned int i) {
 	}
 	s.resize(size);
 	return s;
+}
+
+std::vector<std::string> myvecitos(std::vector<int> vi) {
+	std::vector<std::string> out(vi.size());
+	for (int it=0; it!=vi.size(); ++it) {
+		out[it] = myuitos(vi[it]);
+	}
+	return out;
 }
