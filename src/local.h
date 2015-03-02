@@ -24,27 +24,21 @@
 typedef std::string Str;
 typedef std::vector<Str> VecStr;
 
-//typedef std::vector<bool> VecBool;
 typedef std::vector<int> VecInt;
 //typedef std::vector<unsigned int> VecUInt; // doesn't work well with Rcpp
 typedef VecInt Out; // TODO: would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads.
-//typedef std::vector<char> Out; // TODO: would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads.
+//typedef std::vector<char> Out; // TODO: would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads, and char doesn't cast to bool with Rcpp
 typedef VecInt Codes; // e.g. the codes in a comorbidity subtype (ie numeric, V, or E)
-//Boost has a safer option. Anyway, R itself tends to be faster with ints than bools. Doubt there are big optimizations here.
 
-typedef std::set<Str> SetStr;
-typedef std::set<int> SetInt;
+//typedef std::set<Str> SetStr;
+//typedef std::set<int> SetInt;
 typedef std::set<unsigned int> SetUInt;
 
 typedef std::vector< VecStr > VecCodes; // obsolete, may be needed for pre-processing
-typedef std::vector< VecInt > CodesVecSubtype;
-//typedef CodesVecSubtype::size_type Visit_size_t;
-
 typedef std::vector<VecInt> VecVecInt;
+typedef VecVecInt::size_type VecVecIntSz;
 
-//typedef std::multimap<Str, Str> MapVisitCode; // used in non-parallel implementation
 typedef std::map<std::string,VecStr> MMVisitCodes;
-//typedef boost::unordered_set<std::string> UnSet;
 
 // internal function definitions
 #if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)

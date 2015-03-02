@@ -20,7 +20,7 @@ CharacterVector raggedWideMultimapToMatrix(const MMVisitCodes &mm, const int max
 	//std::cout << "visitIds = ";
 	//printIt(visitIds);
 #endif
-	unsigned int distinct_visits = mm.size();
+	MMVisitCodes::size_type distinct_visits = mm.size();
 	CharacterVector out(distinct_visits * max_per_pt); // default empty strings? NA? //TODO
 	for (MMVisitCodes::const_iterator it=mm.begin(); it!=mm.end(); ++it) {
 		unsigned int this_row_len = (it->second).size();
@@ -112,7 +112,8 @@ CharacterVector icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string 
 }
 
 // string version
-CharacterVector raggedToWide(const std::vector<VecStr>& ragged, int max_per_pt, const std::vector<std::string> &visitIds) {
+CharacterVector raggedToWide(const std::vector<VecStr>& ragged,
+		int max_per_pt, const std::vector<std::string> &visitIds) {
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "visitIds = ";
 	printIt(visitIds);
@@ -129,7 +130,7 @@ CharacterVector raggedToWide(const std::vector<VecStr>& ragged, int max_per_pt, 
 		return CharacterVector::create();
 	}
 #endif
-	for (unsigned int row_it = 0; row_it < distinct_visits; ++row_it) {
+	for (std::vector<VecStr>::size_type row_it = 0; row_it < distinct_visits; ++row_it) {
 		const VecStr& this_row = ragged[row_it];
 		unsigned int this_row_len = this_row.size();
 		for (unsigned int col_it = 0; col_it < this_row_len; ++col_it) {

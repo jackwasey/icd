@@ -91,8 +91,6 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 		VecStr visitIds;
 		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, visitIds, aggregate);
 
-			//TODO out_row_names = myvecitos(visitIds);
-
 		break;
 	}
 	case STRSXP:
@@ -120,7 +118,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 
 	const VecVecInt::size_type num_comorbid = map.size(); // should be same for V and E
 	//const CodesVecSubtype::size_type num_visits = visitIds.size();
-	const CodesVecSubtype::size_type num_visits = vcdb.size();
+	const VecVecIntSz num_visits = vcdb.size();
 
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << num_visits << " visits\n";

@@ -4,7 +4,7 @@
 \alias{icd9Count}
 \alias{icd9CountComorbidBin}
 \alias{icd9CountWide}
-\title{count icd9 codes or comorbidities for each patient}
+\title{count ICD codes or comorbidities for each patient}
 \usage{
 icd9Count(x, visitId = NULL, return.df = FALSE)
 

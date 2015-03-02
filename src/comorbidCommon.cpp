@@ -10,7 +10,7 @@
 #endif
 using namespace Rcpp;
 
-void lookupOneChunk(const CodesVecSubtype& vcdb, const ComorbidVecInt& map,
+void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 		const size_t num_comorbid, const size_t begin, const size_t end,
 		Out& chunk) {
 
@@ -24,7 +24,7 @@ void lookupOneChunk(const CodesVecSubtype& vcdb, const ComorbidVecInt& map,
 #ifdef ICD9_TRACE
 		std::cout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
 #endif
-		for (ComorbidVecInt::size_type cmb=0; cmb<num_comorbid; ++cmb) { // loop through icd codes for this visitId
+		for (VecVecInt::size_type cmb=0; cmb<num_comorbid; ++cmb) { // loop through icd codes for this visitId
 #ifdef ICD9_TRACE
 			std::cout << "cmb = " << cmb << "\n";
 #endif
@@ -58,10 +58,9 @@ void lookupOneChunk(const CodesVecSubtype& vcdb, const ComorbidVecInt& map,
 #ifdef ICD9_DEBUG_TRACE
 	std::cout << "finished with one chunk\n";
 #endif
-
 }
 
-void lookupComorbidByChunkFor(const CodesVecSubtype& vcdb, const ComorbidVecInt& map,
+void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		const size_t chunkSize, const size_t ompChunkSize, Out& out) {
 	const size_t num_comorbid = map.size();
 	const size_t num_visits = vcdb.size();
@@ -110,7 +109,7 @@ void lookupComorbidByChunkFor(const CodesVecSubtype& vcdb, const ComorbidVecInt&
 }
 
 // just return the chunk results: this wouldn't cause invalidation of shared 'out'
-Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb, const ComorbidVecInt& map,
+Out lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		const int chunkSize, const int ompChunkSize) {
 	Out out(vcdb.size()*map.size(), false);
 	lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
