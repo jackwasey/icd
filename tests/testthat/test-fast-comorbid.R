@@ -24,41 +24,51 @@ test_that("comorbid quick test", {
 
 test_that("control params don't affect result of comorbid calc", {
   pts <- randomPatients(101, 13)
+  pts$visitId <- asCharacterNoWarn(pts$visitId)
+  pts$icd9 <- as.factor(pts$icd9)
   upts <- length(unique(pts$visitId))
+  ac <-  lapply(ahrqComorbid, function(x) {
+    f <- factor(x, levels(pts[["icd9"]]))
+    f[!is.na(f)]
+  })
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 1, chunkSize=32),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=32)
+    icd9ComorbidShortCpp(pts, ac, threads = 1, chunkSize=32),
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=32)
   )
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=1),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=32)
+    icd9ComorbidShortCpp(pts, ac, threads = 2, chunkSize=32),
+    icd9ComorbidShortCpp(pts, ac, threads = 5, chunkSize=32)
   )
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 4, chunkSize=upts-1),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 4, chunkSize=upts)
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=1),
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=32)
   )
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 4, chunkSize=upts-1),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 4, chunkSize=upts+1)
+    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize=upts-1),
+    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize=upts)
   )
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 4, chunkSize=upts+1),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 4, chunkSize=upts)
+    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize=upts-1),
+    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize=upts+1)
   )
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=upts-2, ompChunkSize = 1),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=upts+2, ompChunkSize = 1)
+    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize=upts+1),
+    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize=upts)
   )
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=upts-2, ompChunkSize = 11),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=upts+2, ompChunkSize = 11)
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts-2, ompChunkSize = 1),
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts+2, ompChunkSize = 1)
   )
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=upts, ompChunkSize = 1),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=upts, ompChunkSize = 11)
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts-2, ompChunkSize = 11),
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts+2, ompChunkSize = 11)
   )
   expect_identical(
-    icd9ComorbidShort(pts, ahrqComorbid),
-    icd9ComorbidShort(pts, ahrqComorbid, threads = 3, chunkSize=3, ompChunkSize = 5) # primes < unique visits
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts, ompChunkSize = 1),
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts, ompChunkSize = 11)
+  )
+  expect_identical(
+    icd9ComorbidShortCpp(pts, ac),
+    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=3, ompChunkSize = 5) # primes < unique visits
   )
 })

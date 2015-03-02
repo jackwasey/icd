@@ -88,6 +88,8 @@ icd9Comorbid <- function(icd9df,
     icd9df[[icd9Field]] <- as.factor(icd9df[[icd9Field]])
 
   # we need to convert to string and group these anyway, and much easier and pretty quick to do it here:
+  icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
+  if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
   icd9df[[visitId]] <- asCharacterNoWarn(icd9df[[visitId]])
 
   # again, R is very fast at creating factors from a known set of levels
@@ -107,12 +109,20 @@ icd9Comorbid <- function(icd9df,
     return(icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field))
   } else {
     mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field)
-    df.out <- cbind(rownames(mat), as.data.frame(mat), stringsAsFactors = is.factor(icd9df[[visitId]]))
+    if (icd9VisitWasFactor)
+      rownm <- factor(x = rownames(mat), levels = ivLevels)
+    else
+      rownm <- rownames(mat)
+    df.out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = icd9VisitWasFactor)
     names(df.out)[1] <- visitId
     # perhaps leave (duplicated) rownames which came from the matrix:
     rownames(df.out) <- NULL
     return(df.out)
   }
+}
+
+icd9ComorbidShort <- function(...) {
+  icd9Comorbid(..., isShort = TRUE)
 }
 
 #' @rdname icd9Comorbid
