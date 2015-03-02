@@ -62,6 +62,7 @@ icd9Comorbid <- function(icd9df,
                          isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                          isShortMapping = icd9GuessIsShort(icd9Mapping),
                          return.df = TRUE) {
+  # TODO: allow factors for icd9df fields
   checkmate::checkDataFrame(icd9df, min.cols = 2)
   checkmate::checkList(icd9Mapping, types = "character", any.missing = FALSE, min.len = 1)
   #visitId <- as.character(visitId)
@@ -73,15 +74,34 @@ icd9Comorbid <- function(icd9df,
   if (!isShort)
     icd9df[[icd9Field]] <- icd9DecimalToShort(icd9df[[icd9Field]])
 
+  icd9Mapping <- lapply(icd9Mapping, asCharacterNoWarn)
+
   if (!isShortMapping)
     icd9Mapping <- lapply(icd9Mapping, icd9DecimalToShort)
 
-  icd9Mapping <- lapply(icd9Mapping, function(m) if (is.factor(m)) asCharacterNoWarn(m) else m)
+  # new stragegy is to start with a factor for the icd codes in icd9df, recode
+  # (and drop superfluous) icd codes in the mapping, then do very fast match on
+  # integer without need for N, V or E distinction. Char to factor conversion in
+  # R is very fast.
+
+  if (!is.factor(icd9df[[icd9Field]]))
+    icd9df[[icd9Field]] <- as.factor(icd9df[[icd9Field]])
+
+  # again, R is very fast at creating factors from a known set of levels
+  icd9Mapping <- lapply(icd9Mapping, function(x) {
+    f <- factor(x, levels(icd9df[[icd9Field]]))
+    f[!is.na(f)]
+  })
+
+  # now we also benefit from only have factor levels in the mapping which appear
+  # in the diagnoses we are going to be examining. From the C++ perspective, we
+  # can now do pure integer matching for icd9 codes. Only string manip becomes
+  # (optionally) defactoring the visitId for the matrix row names.
 
   # return via call to the C++ function:
   #icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
   if (!return.df) {
-    return(icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field))
+    return(icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field))
   } else {
     mat <- icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
     df.out <- cbind(rownames(mat), as.data.frame(mat), stringsAsFactors = is.factor(icd9df[[visitId]]))

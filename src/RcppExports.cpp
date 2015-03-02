@@ -8,9 +8,9 @@
 
 using namespace Rcpp;
 
-// icd9ComorbidShort
-SEXP icd9ComorbidShort(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true);
-static SEXP icd9_icd9ComorbidShort_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP, SEXP aggregateSEXP) {
+// icd9ComorbidShortCpp
+SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true);
+static SEXP icd9_icd9ComorbidShortCpp_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP, SEXP aggregateSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
@@ -22,18 +22,18 @@ BEGIN_RCPP
         Rcpp::traits::input_parameter< const int >::type chunkSize(chunkSizeSEXP );
         Rcpp::traits::input_parameter< const int >::type ompChunkSize(ompChunkSizeSEXP );
         Rcpp::traits::input_parameter< bool >::type aggregate(aggregateSEXP );
-        SEXP __result = icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate);
+        SEXP __result = icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
     return __sexp_result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_icd9ComorbidShort(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP, SEXP aggregateSEXP) {
+RcppExport SEXP icd9_icd9ComorbidShortCpp(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP, SEXP aggregateSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9ComorbidShort_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, threadsSEXP, chunkSizeSEXP, ompChunkSizeSEXP, aggregateSEXP));
+        __result = PROTECT(icd9_icd9ComorbidShortCpp_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, threadsSEXP, chunkSizeSEXP, ompChunkSizeSEXP, aggregateSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1440,7 +1440,7 @@ RcppExport SEXP icd9_trim_cpp(SEXP svSEXP) {
 static int icd9_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("SEXP(*icd9ComorbidShort)(const SEXP&,const List&,const std::string,const std::string,const int,const int,const int,bool)");
+        signatures.insert("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const List&,const std::string,const std::string,const int,const int,const int,bool)");
         signatures.insert("CharacterVector(*icd9MajMinToCode)(const CharacterVector,const CharacterVector,bool)");
         signatures.insert("CharacterVector(*icd9MajMinToShort)(const CharacterVector,const CharacterVector)");
         signatures.insert("CharacterVector(*icd9MajMinToDecimal)(const CharacterVector,const CharacterVector)");
@@ -1487,7 +1487,7 @@ static int icd9_RcppExport_validate(const char* sig) {
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP icd9_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("icd9", "icd9_icd9ComorbidShort", (DL_FUNC)icd9_icd9ComorbidShort_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ComorbidShortCpp", (DL_FUNC)icd9_icd9ComorbidShortCpp_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToCode", (DL_FUNC)icd9_icd9MajMinToCode_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToShort", (DL_FUNC)icd9_icd9MajMinToShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToDecimal", (DL_FUNC)icd9_icd9MajMinToDecimal_try);

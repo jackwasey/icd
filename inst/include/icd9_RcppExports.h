@@ -24,17 +24,17 @@ namespace icd9 {
         }
     }
 
-    inline SEXP icd9ComorbidShort(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true) {
-        typedef SEXP(*Ptr_icd9ComorbidShort)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9ComorbidShort p_icd9ComorbidShort = NULL;
-        if (p_icd9ComorbidShort == NULL) {
-            validateSignature("SEXP(*icd9ComorbidShort)(const SEXP&,const List&,const std::string,const std::string,const int,const int,const int,bool)");
-            p_icd9ComorbidShort = (Ptr_icd9ComorbidShort)R_GetCCallable("icd9", "icd9_icd9ComorbidShort");
+    inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true) {
+        typedef SEXP(*Ptr_icd9ComorbidShortCpp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidShortCpp p_icd9ComorbidShortCpp = NULL;
+        if (p_icd9ComorbidShortCpp == NULL) {
+            validateSignature("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const List&,const std::string,const std::string,const int,const int,const int,bool)");
+            p_icd9ComorbidShortCpp = (Ptr_icd9ComorbidShortCpp)R_GetCCallable("icd9", "icd9_icd9ComorbidShortCpp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9ComorbidShort(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize), Rcpp::wrap(aggregate));
+            __result = p_icd9ComorbidShortCpp(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize), Rcpp::wrap(aggregate));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -5,8 +5,8 @@
 #' @description RcppParallel approach with openmp and vector of integer strategy
 #' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
 #' @export
-icd9ComorbidShort <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE) {
-    .Call('icd9_icd9ComorbidShort', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate)
+icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE) {
+    .Call('icd9_icd9ComorbidShortCpp', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate)
 }
 
 #' @rdname convert

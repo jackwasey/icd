@@ -26,7 +26,7 @@ using namespace Rcpp;
 //' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
 //' @export
 // [[Rcpp::export]]
-SEXP icd9ComorbidShort(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId="visitId",
+SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId="visitId",
 		const std::string icd9Field="icd9", const int threads=8, const int chunkSize=256, const int ompChunkSize=1, bool aggregate=true) {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
@@ -53,20 +53,33 @@ SEXP icd9ComorbidShort(const SEXP& icd9df, const List& icd9Mapping, const std::s
 #endif
 #endif
 
-	//VecStr visitIds; // ideally would be const
 	VecStr out_row_names; // TODO: Reserve size
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "building visit:codes structure\n";
 #endif
 
 	//const CodesVecSubtype allCodes = buildVisitCodesVecFromMap(icd9df, visitId, icd9Field, _visitIds);
-	CodesVecSubtype vcdb_n; //TODO: reserve sizes
-	CodesVecSubtype vcdb_v;
-	CodesVecSubtype vcdb_e;
-	//TODO: switch on visitId is int or str
+	VecVecInt vcdb; //TODO: reserve sizes
+
+//	if (Rf_isFactor(vsexp)) {
+//		#ifdef ICD9_DEBUG_SETUP
+//		std::cout << "converting integer factor ids back to names for matrix row names\n";
+//#endif
+//		SEXP levels = Rf_getAttrib(vsexp, Rf_install("levels"));
+//		for (size_t vis_it = 0; vis_it != visitIds.size(); vis_it++) {
+//#ifdef ICD9_DEBUG_SETUP_TRACE
+//			std::cout << "levels length = " << Rf_length(levels) << "\n";
+//		std::cout << "vis_it = " << vis_it << " and visit# = " << visitIds[vis_it] << "\n"; // " and facidx = " << INTEGER(vsexp)[vis_it] << "\n";
+//#endif
+//			out_row_names.push_back(CHAR(STRING_ELT(levels, visitIds[vis_it]-1)));
+//		}
+//}
+
+	//TODO: make sure we pre-convert factors and ints to char (or do it here). They will end up being chars anyway as row names.
+	// TODO: do I need to allocate memory when I do this?
 	SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 #ifdef ICD9_DEBUG_SETUP
-	std::cout << "type int = " << TYPEOF(vsexp) << "\n";
+	std::cout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif
 	switch(TYPEOF(vsexp)) {
 	case INTSXP:
@@ -75,23 +88,11 @@ SEXP icd9ComorbidShort(const SEXP& icd9df, const List& icd9Mapping, const std::s
 		std::cout << "icd9ComorbidShortMatrix INTSXP\n";
 		if (Rf_isFactor(vsexp)) std::cout << "and is a factor\n";
 #endif
-		VecInt visitIds;
-		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb_n, vcdb_v, vcdb_e, visitIds, aggregate);
-		if (Rf_isFactor(vsexp)) {
-#ifdef ICD9_DEBUG_SETUP
-			std::cout << "converting integer factor ids back to names for matrix row names\n";
-#endif
-			SEXP levels = Rf_getAttrib(vsexp, Rf_install("levels"));
-			for (size_t vis_it = 0; vis_it != visitIds.size(); vis_it++) {
-#ifdef ICD9_DEBUG_SETUP_TRACE
-				std::cout << "levels length = " << Rf_length(levels) << "\n";
-			std::cout << "vis_it = " << vis_it << " and visit# = " << visitIds[vis_it] << "\n"; // " and facidx = " << INTEGER(vsexp)[vis_it] << "\n";
-#endif
-				out_row_names.push_back(CHAR(STRING_ELT(levels, visitIds[vis_it]-1)));
-			}
-		} else {
-			out_row_names = myvecitos(visitIds);
-		}
+		VecStr visitIds;
+		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, visitIds, aggregate);
+
+			//TODO out_row_names = myvecitos(visitIds);
+
 		break;
 	}
 	case STRSXP:
@@ -99,7 +100,7 @@ SEXP icd9ComorbidShort(const SEXP& icd9df, const List& icd9Mapping, const std::s
 #ifdef ICD9_DEBUG_SETUP
 		std::cout << "icd9ComorbidShortMatrix STRSXP\n";
 #endif
-		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb_n, vcdb_v, vcdb_e, out_row_names, aggregate);
+		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
 		break;
 	}
 	default:
@@ -110,18 +111,16 @@ SEXP icd9ComorbidShort(const SEXP& icd9df, const List& icd9Mapping, const std::s
 	std::cout << "building icd9Mapping\n";
 #endif
 	// TODO: doing this as a factor would avoid splitting up into three different vectors
-	ComorbidVecInt map_n;
-	ComorbidVecInt map_v;
-	ComorbidVecInt map_e;
-	buildMap(icd9Mapping, map_n, map_v, map_e);
+	VecVecInt map;
+	buildMap(icd9Mapping, map);
 
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "first cmb has len: " << map_n[0].size() << "\n";
 #endif
 
-	const ComorbidVecInt::size_type num_comorbid = map_n.size(); // should be same for V and E
+	const VecVecInt::size_type num_comorbid = map.size(); // should be same for V and E
 	//const CodesVecSubtype::size_type num_visits = visitIds.size();
-	const CodesVecSubtype::size_type num_visits = vcdb_n.size();
+	const CodesVecSubtype::size_type num_visits = vcdb.size();
 
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << num_visits << " visits\n";
@@ -130,7 +129,7 @@ SEXP icd9ComorbidShort(const SEXP& icd9df, const List& icd9Mapping, const std::s
 
 	//const Out out = lookupComorbidByRowFor(allCodes, map, chunkSize);
 	//const Out out = lookupComorbidByChunkWhile(allCodes, map, chunkSize);
-	const Out out = lookupComorbidByChunkFor(vcdb_n, vcdb_v, vcdb_e, map_n, map_v, map_e, chunkSize, ompChunkSize);
+	const Out out = lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize);
 
 #ifdef ICD9_DEBUG
 	std::cout << "out length is " << out.size() << "\n";

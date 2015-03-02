@@ -10,13 +10,9 @@
 #endif
 using namespace Rcpp;
 
-void lookupOneChunk(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
-		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
+void lookupOneChunk(const CodesVecSubtype& vcdb, const ComorbidVecInt& map,
 		const size_t num_comorbid, const size_t begin, const size_t end,
 		Out& chunk) {
-
-	const CodesVecSubtype *vcdb_point[3] = {&vcdb_n, &vcdb_v, &vcdb_e};
-	const ComorbidVecInt *map_point[3] = {&map_n, &map_v, &map_e};
 
 #ifdef ICD9_DEBUG_TRACE
 	std::cout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
@@ -37,9 +33,8 @@ void lookupOneChunk(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v
 				std::cout << "nve = " << nve << ". vcdb_x length = " << (*vcdb_point[nve]).size() << "\n";
 #endif
 
-				const Codes& codes = (*vcdb_point[nve])[urow]; // these are the ICD-9 codes for the current visitid
-				//const ComorbidVecInt map = *map_point[nve];
-				const Codes& mapCodes = (*map_point[nve])[cmb];
+				const Codes& codes = vcdb[urow]; // these are the ICD-9 codes for the current visitid
+				const Codes& mapCodes = map[cmb];
 
 				const Codes::const_iterator cbegin = codes.begin();
 				const Codes::const_iterator cend = codes.end();
@@ -66,11 +61,10 @@ void lookupOneChunk(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v
 
 }
 
-void lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
-		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
+void lookupComorbidByChunkFor(const CodesVecSubtype& vcdb, const ComorbidVecInt& map,
 		const size_t chunkSize, const size_t ompChunkSize, Out& out) {
-	const size_t num_comorbid = map_n.size();
-	const size_t num_visits = vcdb_n.size();
+	const size_t num_comorbid = map.size();
+	const size_t num_visits = vcdb.size();
 	const size_t last_i = num_visits-1;
 	size_t chunk_end_i;
 #ifdef ICD9_OPENMP
@@ -92,7 +86,7 @@ void lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubty
 		chunk_end_i=vis_i+chunkSize-1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
 		if (chunk_end_i>last_i) chunk_end_i=last_i; // indices
 		Out chunk;
-		lookupOneChunk(vcdb_n, vcdb_v, vcdb_e, map_n, map_v, map_e, num_comorbid, vis_i, chunk_end_i, chunk);
+		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
 		//#ifdef ICD9_ORDER_GUARANTEE
 #pragma omp ordered
 		//#else
@@ -116,11 +110,10 @@ void lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubty
 }
 
 // just return the chunk results: this wouldn't cause invalidation of shared 'out'
-Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
-		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
+Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb, const ComorbidVecInt& map,
 		const int chunkSize, const int ompChunkSize) {
-	Out out(vcdb_n.size()*map_n.size(), false);
-	lookupComorbidByChunkFor(vcdb_n, vcdb_v, vcdb_e, map_n, map_v, map_e, chunkSize, ompChunkSize, out);
+	Out out(vcdb.size()*map.size(), false);
+	lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
 	return out;
 }
 

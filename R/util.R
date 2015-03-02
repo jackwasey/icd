@@ -34,7 +34,7 @@ asIntegerNoWarn <- function(x)
 asCharacterNoWarn <- function(x) {
   old <- options(warn = - 1)
   on.exit(options(old))
-  if (is.factor(x)) x <- levels(x)[x]
+  if (is.factor(x)) return(levels(x)[x])
   as.character(x)
 }
 

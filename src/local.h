@@ -40,8 +40,7 @@ typedef std::vector< VecStr > VecCodes; // obsolete, may be needed for pre-proce
 typedef std::vector< VecInt > CodesVecSubtype;
 //typedef CodesVecSubtype::size_type Visit_size_t;
 
-typedef std::vector<VecStr> ComorbidVecMap;
-typedef std::vector<VecInt> ComorbidVecInt;
+typedef std::vector<VecInt> VecVecInt;
 
 //typedef std::multimap<Str, Str> MapVisitCode; // used in non-parallel implementation
 typedef std::map<std::string,VecStr> MMVisitCodes;
@@ -100,18 +99,12 @@ VecStr myvecitos(VecInt vi);
 
 void printCharVec(Rcpp::CharacterVector cv);
 
-void buildMap(const Rcpp::List& icd9Mapping, ComorbidVecInt& map_n, ComorbidVecInt& map_v, ComorbidVecInt& map_e);
+void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId, const std::string& icd9Field,
-		CodesVecSubtype& vcdb_n, CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e,
-		VecStr& visitIds, bool aggregate);
-void buildVisitCodesVec(const SEXP& icd9df, const std::string visitId,
-		const std::string icd9Field, CodesVecSubtype& vcdb_n,
-		CodesVecSubtype& vcdb_v, CodesVecSubtype& vcdb_e, std::vector<int>& visitIds,
-		bool aggregate);
+		VecVecInt& vcdb, VecStr& visitIds, const bool aggregate);
 
-Out lookupComorbidByChunkFor(const CodesVecSubtype& vcdb_n, const CodesVecSubtype& vcdb_v, const CodesVecSubtype& vcdb_e,
-		const ComorbidVecInt& map_n, const ComorbidVecInt& map_v, const ComorbidVecInt& map_e,
+Out lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		const int chunkSize, const int ompChunkSize);
 
 int longToWideWork(const char* lastVisitId, const char* icd,
