@@ -113,7 +113,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 	buildMap(icd9Mapping, map);
 
 #ifdef ICD9_DEBUG_SETUP
-	std::cout << "first cmb has len: " << map_n[0].size() << "\n";
+	std::cout << "first cmb has len: " << map[0].size() << "\n";
 #endif
 
 	const VecVecInt::size_type num_comorbid = map.size(); // should be same for V and E

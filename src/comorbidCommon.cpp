@@ -67,7 +67,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	const size_t last_i = num_visits-1;
 	size_t chunk_end_i;
 #ifdef ICD9_OPENMP
-#pragma omp parallel shared(vcdb_n, vcdb_v, vcdb_e, map_n, map_v, map_e, out) private(chunk_end, chunk_out)
+#pragma omp parallel shared(vcdb, map, out) private(chunk_end, chunk_out)
 	omp_set_schedule(omp_sched_static, ompChunkSize); // ideally wouldn't repeat this over and over again
 #ifdef ICD9_DEBUG_PARALLEL
 	omp_sched_t* sched;

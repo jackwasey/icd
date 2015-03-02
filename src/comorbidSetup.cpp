@@ -48,10 +48,10 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId, const st
 		{
 			visitIds.reserve(vlen / approx_cmb_per_visit);
 			const char* lastVisitId = "JJ94967295JJ"; // random
-			int* n;
+			int n;
 			for (int i = 0; i < vlen; ++i) {
 				const char* vi = CHAR(STRING_ELT(vsexp, i));
-				*n = INTEGER(icds)[i];
+				n = INTEGER(icds)[i];
 #ifdef ICD9_DEBUG_SETUP_TRACE
 				std::cout << "building visit: it = " << i << ", id = " << vi[i] << "\n";
 				std::cout << "length vcdb_n = " << vcdb_n.size() << "\n";
@@ -66,7 +66,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId, const st
 
 					Codes vcodes;
 					vcodes.reserve(approx_cmb_per_visit);
-					vcodes.push_back(*n);
+					vcodes.push_back(n);
 					vcdb.push_back(vcodes);
 					visitIds.push_back(vi);
 					++vcdb_idx; // save us looking up current size every time when we hit a repeat.
@@ -74,7 +74,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId, const st
 #ifdef ICD9_DEBUG_SETUP_TRACE
 				std::cout << "repeat id found: " << vi[i] << "\n";
 #endif
-				vcdb[vcdb_idx].push_back(*n); // augment vec for current visit and N/V/E type
+				vcdb[vcdb_idx].push_back(n); // augment vec for current visit and N/V/E type
 				lastVisitId = vi;
 			} // end loop through all visit-code input data
 			break; // break out of INT SEXP switch
