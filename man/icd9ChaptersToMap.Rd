@@ -33,7 +33,7 @@ Other ICD-9 convert: \code{\link{convert}},
   \code{\link{icd9DropLeadingZeroesDecimal}},
   \code{\link{icd9DropLeadingZeroesMajor}},
   \code{\link{icd9DropLeadingZeroesShort}};
-  \code{\link{icd9LongToWide_R}};
+  \code{\link{icd9LongToWide}};
   \code{\link{icd9WideToLong}}
 }
 \keyword{internal}

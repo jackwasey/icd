@@ -13,13 +13,19 @@ longcmp <- data.frame(visitId = c("a", "b", "c"),
                       icd_002 = c(NA, "443", NA))
   expect_equal(icd9LongToWide(longdf), longcmp)
 
+longcmp2 <- data.frame(visitId = c("a", "b", "c"),
+                      icd_001 = c("441", "4424", "441"),
+                      icd_002 = c(NA, "443", NA),
+                      icd_003 = c(NA, NA, NA))
+expect_equal(icd9LongToWide(longdf, min.width = 3), longcmp2)
+
+
   longdf2 <- data.frame(i = c("441", "4424", "443", "441"),
                         v = c("a", "b", "b", "c"))
   expect_equal(names(icd9LongToWide(longdf2,
                                     visitId = "v",
                                     icd9Field = "i",
-                                    prefix = "ICD10_",
-                                    empty = "")),
+                                    prefix = "ICD10_")),
                c("v", "ICD10_001", "ICD10_002"))
 })
 

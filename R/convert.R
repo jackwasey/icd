@@ -116,9 +116,7 @@ icd9WideToLong <- function(x,
 #'   codes. If left as NULL, the field is guessed to be the first matching ICD
 #'   or icd, and a warning is given if multiple columns match.
 #' @param prefix character, default "icd_" to prefix new columns
-#' @param empty value to fill out empty fields of wide output data, defaults to
-#'   \code{NA}
-#' @param width, single integer, if specified, writes out this many columns even
+#' @param min.width, single integer, if specified, writes out this many columns even
 #'   if no patients have that many codes. Must be greater than or equal to the
 #'   maximum number of codes per patient.
 #' @examples
@@ -132,10 +130,10 @@ icd9LongToWide <- function(icd9df,
                            visitId = "visitId",
                            icd9Field = "icd9",
                            prefix = "icd_",
-                           empty = NA,
-                           width = NULL,
+                           min.width = 0,
                            aggregate = TRUE,
                            return.df = TRUE) {
+  checkmate::checkInteger(min.width, lower = 0, any.missing = FALSE, max.len = 1)
   # we're now going to return a matrix
   icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
   if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
@@ -147,58 +145,17 @@ icd9LongToWide <- function(icd9df,
       rownm <- factor(x = rownames(mat), levels = ivLevels)
     else
       rownm <- rownames(mat)
-    df.out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = icd9VisitWasFactor)
+    df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9VisitWasFactor)
     names(df.out)[1] <- visitId
     # perhaps leave (duplicated) rownames which came from the matrix:
     rownames(df.out) <- NULL
-    names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:ncol(df.out)), sep = "")
+    nc <- ncol(df.out) - 1
+    if (nc < min.width) {
+      df.out <- cbind(df.out, matrix(rep(NA, min.width - nc), nrow = 1))
+      nc <- min.width
+    }
+    names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:nc), sep = "")
     return(df.out)
   }
   icd9LongToWideCpp(icd9df, visitId, icd9Field, aggregate)
-}
-
-icd9LongToWide_R <- function(x,
-                             visitId = NULL,
-                             icdId = NULL,
-                             prefix = "icd_",
-                             empty = NA,
-                             width = NULL) {
-  stopifnot(is.data.frame(x))
-  if (is.null(visitId)) {
-    if (!any(names(x) == "visitId"))
-      visitId <- names(x)[1]
-    else
-      visitId <- "visitId"
-  } else
-    stopifnot(visitId %in% names(x))
-  stopifnot(is.character(visitId))
-  stopifnot(length(visitId) == 1)
-
-  if (is.null(icdId)) {
-    im <- grep("icd", names(x), ignore.case = TRUE, value = TRUE)
-    if (length(im) >= 1) {
-      icdId <- im[1]
-      if (length(im) > 1) warning("multiple possible ICD column: using first")
-    } else
-      stop("no ICD column found: use argument icdId to specify it")
-  } else
-    stopifnot(icdId %in% names(x))
-
-  lst <- aggregate(x[names(x) %nin% visitId], by = x[visitId], asCharacterNoWarn)
-  ncol <- max(sapply(lst[[icdId]], length))
-  if (is.null(width))
-    width = ncol
-  else
-    stopifnot(ncol <= width)
-
-  m <- matrix(data = empty,
-             nrow = length(lst[[visitId]]),
-             ncol = width)
-  for (v in 1:length(lst[[visitId]])) {
-    codes <- lst[[icdId]][[v]]
-    m[v, 1:length(codes)] <- codes
-  }
-  res <- data.frame(lst[visitId], as.data.frame(m))
-  names(res)[-1] <- paste(prefix, sprintf("%02d", 1:ncol), sep = "")
-  res
 }
