@@ -8,11 +8,11 @@
 #' @section
 #' Structures used in this package are:
 #' \itemize{
-  #'   \item vector (usually character vectors) of \emph{short} or \emph{long} codes
+#'   \item vector (usually character vectors) of \emph{short} or \emph{long} codes
 #'   \item list, containing two elements with equal length vectors called \code{major}
-  #'   \code{minor}. Yes, this is very like a data frame, but we do not need the overhead
+#'   \code{minor}. Yes, this is very like a data frame, but we do not need the overhead
 #'   of structuring it that way.
-  #'   \item two vectors of separated major and minor parts
+#'   \item two vectors of separated major and minor parts
 #'   }
 #' @template major
 #' @template minor
@@ -112,7 +112,7 @@ icd9WideToLong <- function(x,
 #'   code
 #' @param visitId single character, if NULL will use "visitId" if exists,
 #'   otherwise the first column
-#' @param icdId single character string with name of column containing the ICD
+#' @param icd9Field single character string with name of column containing the ICD
 #'   codes. If left as NULL, the field is guessed to be the first matching ICD
 #'   or icd, and a warning is given if multiple columns match.
 #' @param prefix character, default "icd_" to prefix new columns
@@ -128,12 +128,41 @@ icd9WideToLong <- function(x,
 #'   icd9LongToWide(longdf, prefix = "ICD10_", empty = "")
 #' @family ICD-9 convert
 #' @keywords internal
-icd9LongToWide_R <- function(x,
-                           visitId = NULL,
-                           icdId = NULL,
+icd9LongToWide <- function(icd9df,
+                           visitId = "visitId",
+                           icd9Field = "icd9",
                            prefix = "icd_",
                            empty = NA,
-                           width = NULL) {
+                           width = NULL,
+                           aggregate = TRUE,
+                           return.df = TRUE) {
+  # we're now going to return a matrix
+  icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
+  if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
+  icd9df[[visitId]] <- asCharacterNoWarn(icd9df[[visitId]])
+  icd9df[[icd9Field]] <- asCharacterNoWarn(icd9df[[icd9Field]])
+  if (return.df) {
+    mat <- icd9LongToWideCpp(icd9df, visitId, icd9Field, aggregate)
+    if (icd9VisitWasFactor)
+      rownm <- factor(x = rownames(mat), levels = ivLevels)
+    else
+      rownm <- rownames(mat)
+    df.out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = icd9VisitWasFactor)
+    names(df.out)[1] <- visitId
+    # perhaps leave (duplicated) rownames which came from the matrix:
+    rownames(df.out) <- NULL
+    names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:ncol(df.out)), sep = "")
+    return(df.out)
+  }
+  icd9LongToWideCpp(icd9df, visitId, icd9Field, aggregate)
+}
+
+icd9LongToWide_R <- function(x,
+                             visitId = NULL,
+                             icdId = NULL,
+                             prefix = "icd_",
+                             empty = NA,
+                             width = NULL) {
   stopifnot(is.data.frame(x))
   if (is.null(visitId)) {
     if (!any(names(x) == "visitId"))
@@ -162,7 +191,7 @@ icd9LongToWide_R <- function(x,
   else
     stopifnot(ncol <= width)
 
-  m <-matrix(data = empty,
+  m <- matrix(data = empty,
              nrow = length(lst[[visitId]]),
              ncol = width)
   for (v in 1:length(lst[[visitId]])) {

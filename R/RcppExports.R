@@ -123,13 +123,13 @@ icd9LongToWideMatrixByMap <- function(icd9df, visitId = "visitId", icd9Field = "
     .Call('icd9_icd9LongToWideMatrixByMap', PACKAGE = 'icd9', icd9df, visitId, icd9Field)
 }
 
-#' @title Convert long to wide from as matrix
+#' @title Convert long to wide form as matrix
 #' @description Take a data frame with visits and ICD codes in two columns, and convert to a matrix with one row per visit.
 #' Since multiple rows are combined when visits are out of sequence, no guarantee is made about the returned order. We sort implicitly.
 #' For guaranteed order, we can't de-duplicate disordered visitIds, just aggregate contiguous blocks: icd9LongOrderedToWide does this quickly.
 #' @export
-icd9LongToWide <- function(icd9df, visitId = "visitId", icd9Field = "icd9", aggregate = TRUE) {
-    .Call('icd9_icd9LongToWide', PACKAGE = 'icd9', icd9df, visitId, icd9Field, aggregate)
+icd9LongToWideCpp <- function(icd9df, visitId = "visitId", icd9Field = "icd9", aggregate = TRUE) {
+    .Call('icd9_icd9LongToWideCpp', PACKAGE = 'icd9', icd9df, visitId, icd9Field, aggregate)
 }
 
 icd9AddLeadingZeroesMajorSingle <- function(major) {

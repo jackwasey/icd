@@ -135,7 +135,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 	std::cout << "out sum is " << outsum << "\n";
 	std::cout << "Ready to convert to R Matrix\n";
 #endif
-#ifdef ICD9_TRACE
+#ifdef ICD9_DEBUG_TRACE
 	std::cout << "out is: ";
 	printIt(out);
 	std::cout << "printed\n";

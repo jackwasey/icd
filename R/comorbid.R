@@ -105,9 +105,7 @@ icd9Comorbid <- function(icd9df,
 
   # return via call to the C++ function:
   #icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
-  if (!return.df) {
-    return(icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field))
-  } else {
+  if (return.df) {
     mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field)
     if (icd9VisitWasFactor)
       rownm <- factor(x = rownames(mat), levels = ivLevels)
@@ -119,6 +117,7 @@ icd9Comorbid <- function(icd9df,
     rownames(df.out) <- NULL
     return(df.out)
   }
+  icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field)
 }
 
 icd9ComorbidShort <- function(...) {

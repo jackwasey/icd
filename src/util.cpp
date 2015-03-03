@@ -26,7 +26,8 @@ std::vector<std::string > trim_cpp(std::vector<std::string >& sv) {
 	for (std::vector<std::string >::iterator i = sv.begin(); i != sv.end(); ++i) {
 		strim_cpp(*i);
 	}
-	return sv;}
+	return sv;
+}
 
 #ifdef ICD9_DEBUG
 void printCharVec(CharacterVector cv) {

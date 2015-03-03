@@ -1,9 +1,10 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
+//#include <local.h>
 #include <icd9.h>
 using namespace Rcpp;
 
-std::vector<bool> icd9IsA(std::vector< std::string > sv, std::string ms, bool inverse = false) {
+std::vector<bool> icd9IsA(const std::vector<std::string>& sv, std::string ms, bool inverse = false) {
   int len = sv.size();
   std::vector<bool> out(len);
   for (int i = 0; i < len; ++i) {
@@ -13,20 +14,21 @@ std::vector<bool> icd9IsA(std::vector< std::string > sv, std::string ms, bool in
 }
 
 // [[Rcpp::export]]
-bool icd9IsASingleV(std::string s) {
+bool icd9IsASingleV(const std::string& s) {
   return s.find_first_of("Vv") != std::string::npos;
 }
 
 // [[Rcpp::export]]
-bool icd9IsASingleE(std::string s) {
+bool icd9IsASingleE(const std::string& s) {
   return s.find_first_of("Ee") != std::string::npos;
 }
 
 // [[Rcpp::export]]
-bool icd9IsASingleVE(std::string s) {
-	char c = s.c_str()[0];
-	return c=='V' || c=='E' || c=='v' || c=='e';
-  //return s.find_first_of("VvEe") != std::string::npos;
+bool icd9IsASingleVE(const std::string& s) {
+	// TODO: much quicker with c_str
+	//char c = s.c_str()[0];
+	//return c=='V' || c=='E' || c=='v' || c=='e';
+  return s.find_first_of("VvEe") != std::string::npos;
 }
 
 //' @name icd9Is
@@ -35,19 +37,19 @@ bool icd9IsASingleVE(std::string s) {
 //' @template icd9-any
 //' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsV(std::vector< std::string > icd9) { return icd9IsA(icd9, "Vv"); }
+std::vector<bool> icd9IsV(const std::vector<std::string>& icd9) { return icd9IsA(icd9, "Vv"); }
 
 //' @rdname icd9Is
 //' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsE(std::vector< std::string > icd9) { return icd9IsA(icd9, "Ee"); }
+std::vector<bool> icd9IsE(const std::vector<std::string>& icd9) { return icd9IsA(icd9, "Ee"); }
 
 //' @rdname icd9Is
 //' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsVE(std::vector< std::string > icd9) { return icd9IsA(icd9, "VvEe"); }
+std::vector<bool> icd9IsVE(const std::vector<std::string>& icd9) { return icd9IsA(icd9, "VvEe"); }
 
 //' @rdname icd9Is
 //' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsN(std::vector< std::string > icd9) { return icd9IsA(icd9, "VvEe", true); }
+std::vector<bool> icd9IsN(const std::vector<std::string>& icd9) { return icd9IsA(icd9, "VvEe", true); }

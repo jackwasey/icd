@@ -21,16 +21,16 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 	chunk = falseComorbidChunk;
 	// TODO: now parallel is working well, try looping through comorbidities in outside loop?
 	for (size_t urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
-#ifdef ICD9_TRACE
+#ifdef ICD9_DEBUG_TRACE
 		std::cout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
 #endif
 		for (VecVecInt::size_type cmb=0; cmb<num_comorbid; ++cmb) { // loop through icd codes for this visitId
-#ifdef ICD9_TRACE
+#ifdef ICD9_DEBUG_TRACE
 			std::cout << "cmb = " << cmb << "\n";
 #endif
 			for (int nve=0; nve<3; ++nve) { // N, V, then E codes... argh
-#ifdef ICD9_TRACE
-				std::cout << "nve = " << nve << ". vcdb_x length = " << (*vcdb_point[nve]).size() << "\n";
+#ifdef ICD9_DEBUG_TRACE
+				std::cout << "nve = " << nve << ". vcdb_x length = " << vcdb.size() << "\n";
 #endif
 
 				const Codes& codes = vcdb[urow]; // these are the ICD-9 codes for the current visitid

@@ -271,11 +271,11 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline bool icd9IsASingleV(std::string s) {
+    inline bool icd9IsASingleV(const std::string& s) {
         typedef SEXP(*Ptr_icd9IsASingleV)(SEXP);
         static Ptr_icd9IsASingleV p_icd9IsASingleV = NULL;
         if (p_icd9IsASingleV == NULL) {
-            validateSignature("bool(*icd9IsASingleV)(std::string)");
+            validateSignature("bool(*icd9IsASingleV)(const std::string&)");
             p_icd9IsASingleV = (Ptr_icd9IsASingleV)R_GetCCallable("icd9", "icd9_icd9IsASingleV");
         }
         RObject __result;
@@ -290,11 +290,11 @@ namespace icd9 {
         return Rcpp::as<bool >(__result);
     }
 
-    inline bool icd9IsASingleE(std::string s) {
+    inline bool icd9IsASingleE(const std::string& s) {
         typedef SEXP(*Ptr_icd9IsASingleE)(SEXP);
         static Ptr_icd9IsASingleE p_icd9IsASingleE = NULL;
         if (p_icd9IsASingleE == NULL) {
-            validateSignature("bool(*icd9IsASingleE)(std::string)");
+            validateSignature("bool(*icd9IsASingleE)(const std::string&)");
             p_icd9IsASingleE = (Ptr_icd9IsASingleE)R_GetCCallable("icd9", "icd9_icd9IsASingleE");
         }
         RObject __result;
@@ -309,11 +309,11 @@ namespace icd9 {
         return Rcpp::as<bool >(__result);
     }
 
-    inline bool icd9IsASingleVE(std::string s) {
+    inline bool icd9IsASingleVE(const std::string& s) {
         typedef SEXP(*Ptr_icd9IsASingleVE)(SEXP);
         static Ptr_icd9IsASingleVE p_icd9IsASingleVE = NULL;
         if (p_icd9IsASingleVE == NULL) {
-            validateSignature("bool(*icd9IsASingleVE)(std::string)");
+            validateSignature("bool(*icd9IsASingleVE)(const std::string&)");
             p_icd9IsASingleVE = (Ptr_icd9IsASingleVE)R_GetCCallable("icd9", "icd9_icd9IsASingleVE");
         }
         RObject __result;
@@ -328,11 +328,11 @@ namespace icd9 {
         return Rcpp::as<bool >(__result);
     }
 
-    inline std::vector<bool> icd9IsV(std::vector< std::string > icd9) {
+    inline std::vector<bool> icd9IsV(const std::vector<std::string>& icd9) {
         typedef SEXP(*Ptr_icd9IsV)(SEXP);
         static Ptr_icd9IsV p_icd9IsV = NULL;
         if (p_icd9IsV == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsV)(std::vector< std::string >)");
+            validateSignature("std::vector<bool>(*icd9IsV)(const std::vector<std::string>&)");
             p_icd9IsV = (Ptr_icd9IsV)R_GetCCallable("icd9", "icd9_icd9IsV");
         }
         RObject __result;
@@ -347,11 +347,11 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline std::vector<bool> icd9IsE(std::vector< std::string > icd9) {
+    inline std::vector<bool> icd9IsE(const std::vector<std::string>& icd9) {
         typedef SEXP(*Ptr_icd9IsE)(SEXP);
         static Ptr_icd9IsE p_icd9IsE = NULL;
         if (p_icd9IsE == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsE)(std::vector< std::string >)");
+            validateSignature("std::vector<bool>(*icd9IsE)(const std::vector<std::string>&)");
             p_icd9IsE = (Ptr_icd9IsE)R_GetCCallable("icd9", "icd9_icd9IsE");
         }
         RObject __result;
@@ -366,11 +366,11 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline std::vector<bool> icd9IsVE(std::vector< std::string > icd9) {
+    inline std::vector<bool> icd9IsVE(const std::vector<std::string>& icd9) {
         typedef SEXP(*Ptr_icd9IsVE)(SEXP);
         static Ptr_icd9IsVE p_icd9IsVE = NULL;
         if (p_icd9IsVE == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsVE)(std::vector< std::string >)");
+            validateSignature("std::vector<bool>(*icd9IsVE)(const std::vector<std::string>&)");
             p_icd9IsVE = (Ptr_icd9IsVE)R_GetCCallable("icd9", "icd9_icd9IsVE");
         }
         RObject __result;
@@ -385,11 +385,11 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline std::vector<bool> icd9IsN(std::vector< std::string > icd9) {
+    inline std::vector<bool> icd9IsN(const std::vector<std::string>& icd9) {
         typedef SEXP(*Ptr_icd9IsN)(SEXP);
         static Ptr_icd9IsN p_icd9IsN = NULL;
         if (p_icd9IsN == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsN)(std::vector< std::string >)");
+            validateSignature("std::vector<bool>(*icd9IsN)(const std::vector<std::string>&)");
             p_icd9IsN = (Ptr_icd9IsN)R_GetCCallable("icd9", "icd9_icd9IsN");
         }
         RObject __result;
@@ -423,17 +423,17 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline CharacterVector icd9LongToWide(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9", bool aggregate = true) {
-        typedef SEXP(*Ptr_icd9LongToWide)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9LongToWide p_icd9LongToWide = NULL;
-        if (p_icd9LongToWide == NULL) {
-            validateSignature("CharacterVector(*icd9LongToWide)(const SEXP&,const std::string,const std::string,bool)");
-            p_icd9LongToWide = (Ptr_icd9LongToWide)R_GetCCallable("icd9", "icd9_icd9LongToWide");
+    inline CharacterVector icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9", bool aggregate = true) {
+        typedef SEXP(*Ptr_icd9LongToWideCpp)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9LongToWideCpp p_icd9LongToWideCpp = NULL;
+        if (p_icd9LongToWideCpp == NULL) {
+            validateSignature("CharacterVector(*icd9LongToWideCpp)(const SEXP&,const std::string,const std::string,bool)");
+            p_icd9LongToWideCpp = (Ptr_icd9LongToWideCpp)R_GetCCallable("icd9", "icd9_icd9LongToWideCpp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9LongToWide(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(aggregate));
+            __result = p_icd9LongToWideCpp(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(aggregate));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

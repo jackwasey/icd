@@ -5,12 +5,11 @@
 #include <set>
 //#include <boost/unordered/unordered_set.hpp>
 
-#define ICD9_DEBUG
-#define ICD9_DEBUG_SETUP
+//#define ICD9_DEBUG
+//#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
-//#define ICD9_TRACE
 //#define ICD9_DEBUG_TRACE
-#define ICD9_DEBUG_PARALLEL
+//#define ICD9_DEBUG_PARALLEL
 //#define ICD9_VALGRIND
 #ifdef _OPENMP
 //#define ICD9_OPENMP
@@ -32,9 +31,9 @@ typedef VecInt Codes; // e.g. the codes in a comorbidity subtype (ie numeric, V,
 
 //typedef std::set<Str> SetStr;
 //typedef std::set<int> SetInt;
-typedef std::set<unsigned int> SetUInt;
+//typedef std::set<unsigned int> SetUInt;
 
-typedef std::vector< VecStr > VecCodes; // obsolete, may be needed for pre-processing
+typedef std::vector< VecStr > VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
 
