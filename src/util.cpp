@@ -86,7 +86,7 @@ std::string myuitos(int i) {
 
 std::vector<std::string> myvecitos(std::vector<int> vi) {
 	std::vector<std::string> out(vi.size());
-	for (int it=0; it!=vi.size(); ++it) {
+	for (std::vector<std::string>::size_type it=0; it!=vi.size(); ++it) {
 		out[it] = myuitos(vi[it]);
 	}
 	return out;
