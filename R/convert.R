@@ -132,7 +132,7 @@ icd9LongToWide <- function(icd9df,
                            prefix = "icd_",
                            min.width = 0,
                            aggregate = TRUE,
-                           return.df = TRUE) {
+                           return.df = FALSE) {
   checkmate::checkInteger(min.width, lower = 0, any.missing = FALSE, max.len = 1)
   # we're now going to return a matrix
   icd9VisitWasFactor <- is.factor(icd9df[[visitId]])

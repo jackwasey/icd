@@ -6,19 +6,25 @@ twoPtsFac <- data.frame(visitId = c("v01", "v01", "v02", "v02"), icd9 = c("040",
 twoMapFac <- data.frame("malady" = c("100", "2000"), "ailment" = c("003", "040"), stringsAsFactors = TRUE)
 
 test_that("comorbid quick test", {
-  testres <- icd9Comorbid(twoPts, twoMap)
+  testres <- icd9Comorbid(twoPts, twoMap, return.df = TRUE)
   trueres <- data.frame("visitId" = c("v01", "v02"),
                         "malady" = c(FALSE, TRUE),
                         "ailment" = c(TRUE, FALSE),
                         stringsAsFactors = FALSE)
   expect_equal(testres, trueres)
 
-  testresfac <- icd9Comorbid(twoPtsFac, twoMapFac)
+  testmat <- icd9Comorbid(twoPts, twoMap, return.df = FALSE)
+  truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE), nrow=2,
+                    dimnames = list(c("v01", "v02"), c("malady", "ailment")))
+  expect_equal(testmat, truemat)
+
+  testresfac <- icd9Comorbid(twoPtsFac, twoMapFac, return.df = TRUE)
   trueresfac <- data.frame("visitId" = c("v01", "v02"),
                         "malady" = c(FALSE, TRUE),
                         "ailment" = c(TRUE, FALSE),
                         stringsAsFactors = TRUE)
   expect_equal(testresfac, trueresfac)
+  expect_equal(icd9Comorbid(twoPtsFac, twoMapFac), truemat)
 
 })
 

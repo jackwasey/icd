@@ -61,7 +61,7 @@ icd9Comorbid <- function(icd9df,
                          icd9Field = "icd9",
                          isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                          isShortMapping = icd9GuessIsShort(icd9Mapping),
-                         return.df = TRUE) {
+                         return.df = FALSE) {
   # TODO: allow factors for icd9df fields
   checkmate::checkDataFrame(icd9df, min.cols = 2)
   checkmate::checkList(icd9Mapping, types = "character", any.missing = FALSE, min.len = 1)
@@ -133,16 +133,10 @@ icd9ComorbidShort <- function(...) {
 #'   Elixhauser, you can't have uncomplicated and complicated diabetes both
 #'   flagged.
 #' @export
-icd9ComorbidAhrq <- function(icd9df,
-                             isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-                             visitId = "visitId",
-                             icd9Field = "icd9",
-                             abbrevNames = TRUE,
+icd9ComorbidAhrq <- function(..., abbrevNames = TRUE,
                              applyHierarchy = TRUE) {
 
-  cbd <- icd9Comorbid(icd9df = icd9df, icd9Mapping = icd9::ahrqComorbid,
-                      visitId = visitId, icd9Field = icd9Field,
-                      isShort = isShort)
+  cbd <- icd9Comorbid(..., icd9Mapping = icd9::ahrqComorbid)
   if (applyHierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -171,19 +165,10 @@ icd9ComorbidAhrq <- function(icd9df,
 #'   this is probaably useful, in general and is essential when calculating the
 #'   Charlson score.
 #' @export
-icd9ComorbidQuanDeyo <- function(icd9df,
-                                 visitId = "visitId",
-                                 icd9Field = "icd9",
-                                 isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-                                 abbrevNames = TRUE,
+icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
-  cbd <- icd9Comorbid(icd9df = icd9df, icd9Mapping = icd9::quanDeyoComorbid,
-                      visitId = visitId,
-                      icd9Field = icd9Field,
-                      isShort = isShort
-  )
+  cbd <- icd9Comorbid(..., icd9Mapping = icd9::quanDeyoComorbid)
   if (applyHierarchy) {
-
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
     cbd[cbd[["Mets"]] > 0, "Cancer"] <- FALSE
@@ -200,21 +185,10 @@ icd9ComorbidQuanDeyo <- function(icd9df,
 
 #' @rdname icd9Comorbid
 #' @export
-icd9ComorbidQuanElix <- function(icd9df,
-                                 visitId = "visitId",
-                                 icd9Field = "icd9",
-                                 isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-                                 abbrevNames = TRUE,
+icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
-  cbd <- icd9Comorbid(icd9df = icd9df,
-                      icd9Mapping = icd9::quanElixComorbid,
-                      visitId = visitId,
-                      icd9Field = icd9Field,
-                      isShort = isShort)
+  cbd <- icd9Comorbid(..., icd9Mapping = icd9::quanElixComorbid)
   if (applyHierarchy) {
-
-    # Use >0 rather than logical - apparently faster, and future proof against
-    # change to binary from logical values in the matirx.
     cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
     cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
     # combine HTN
@@ -245,17 +219,8 @@ icd9ComorbidQuanElix <- function(icd9df,
 
 #' @rdname icd9Comorbid
 #' @export
-icd9ComorbidElix <- function(icd9df,
-                             visitId = "visitId",
-                             icd9Field = "icd9",
-                             isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-                             abbrevNames = TRUE,
-                             applyHierarchy = TRUE) {
-  cbd <- icd9Comorbid(icd9df = icd9df,
-                      icd9Mapping = icd9::elixComorbid,
-                      visitId = visitId,
-                      icd9Field = icd9Field,
-                      isShort = isShort)
+icd9ComorbidElix <- function(..., abbrevNames = TRUE, applyHierarchy = TRUE) {
+  cbd <- icd9Comorbid(..., icd9Mapping = icd9::elixComorbid)
   if (applyHierarchy) {
     cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
     cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
