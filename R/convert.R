@@ -125,7 +125,8 @@ icd9WideToLong <- function(x,
 #'   icd9LongToWide(longdf)
 #'   icd9LongToWide(longdf, prefix = "ICD10_", empty = "")
 #' @family ICD-9 convert
-#' @keywords internal
+#' @keywords manip
+#' @export
 icd9LongToWide <- function(icd9df,
                            visitId = "visitId",
                            icd9Field = "icd9",

@@ -144,7 +144,8 @@ icd9ComorbidAhrq <- function(..., abbrevNames = TRUE,
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
-    cbd[,"HTNcx"] <- NULL
+
+    cbd <- cbd[, -which(rownames(cbd) %nin% "HTNcx")] # drop HTNcx
 
     if (abbrevNames)
       colnames(cbd)[-1] <- icd9::ahrqComorbidNamesAbbrev

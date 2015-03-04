@@ -5,7 +5,7 @@
 \title{convert ICD data from long to wide format}
 \usage{
 icd9LongToWide(icd9df, visitId = "visitId", icd9Field = "icd9",
-  prefix = "icd_", min.width = 0, aggregate = TRUE, return.df = TRUE)
+  prefix = "icd_", min.width = 0, aggregate = TRUE, return.df = FALSE)
 }
 \arguments{
 \item{visitId}{single character, if NULL will use "visitId" if exists,
@@ -54,5 +54,5 @@ Other ICD-9 convert: \code{\link{convert}},
   \code{\link{icd9DropLeadingZeroesShort}};
   \code{\link{icd9WideToLong}}
 }
-\keyword{internal}
+\keyword{manip}
 

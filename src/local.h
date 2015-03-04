@@ -5,7 +5,7 @@
 #include <set>
 //#include <boost/unordered/unordered_set.hpp>
 
-//#define ICD9_DEBUG
+#define ICD9_DEBUG
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_DEBUG_TRACE
