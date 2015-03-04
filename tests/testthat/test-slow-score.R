@@ -7,9 +7,9 @@ test_that("Charlson score", {
                      stringsAsFactors = TRUE)
   expect_equal(
     icd9CharlsonComorbid(
-      icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)
+      icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE, return.df = TRUE)
     ),
-    icd9Charlson(mydf, isShort = FALSE)
+    icd9Charlson(mydf, isShort = FALSE, return.df = FALSE)
   )
 
   expect_equivalent(icd9Charlson(mydf,
@@ -94,7 +94,7 @@ test_that("count icd9 codes", {
   )
   expect_equal(icd9Count(mydf), c(2, 1))
 
-  cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE)
+  cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE)
   expect_equivalent(icd9CountComorbidBin(cmb), icd9Count(mydf))
 
   wide <- data.frame(visitId = c("r", "s", "t"),

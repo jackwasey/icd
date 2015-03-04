@@ -33,7 +33,7 @@ typedef VecInt Codes; // e.g. the codes in a comorbidity subtype (ie numeric, V,
 //typedef std::set<int> SetInt;
 //typedef std::set<unsigned int> SetUInt;
 
-typedef std::vector< VecStr > VecVecStr;
+typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
 

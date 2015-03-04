@@ -3,7 +3,7 @@ context("comorbidities")
 test_that("try to induce c++ segfault bug", {
   #trigdat <- data.frame(visitId = c("visit1", "visit1"), icd9 = c("39891", "09320"))
 
-  res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE) # seems to run okay now
+  devnull <- icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE) # seems to run okay now
 })
 
 test_that("ahrq make sure all the children

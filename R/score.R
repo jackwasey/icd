@@ -38,18 +38,37 @@
 icd9Charlson <- function(x, visitId = NULL,
                          return.df = FALSE,
                          stringsAsFactors = getOption("stringsAsFacotrs"),
-                         ...) {
+                         ...)
+  UseMethod("icd9Charlson")
+
+icd9Charlson.default <- function(x, visitId = NULL,
+                                 return.df = FALSE,
+                                 stringsAsFactors = getOption("stringsAsFacotrs"),
+                                 ...)
+  stop("icd9Charlson requires a matrix or data frame of comorbidities")
+
+icd9Charlson.matrix <- function(x, visitId = NULL,
+                                return.df = FALSE,
+                                stringsAsFactors = getOption("stringsAsFacotrs"),
+                                ...) {
+  stop("todo")
+}
+
+icd9Charlson.data.frame <- function(x, visitId = NULL,
+                                    return.df = FALSE,
+                                    stringsAsFactors = getOption("stringsAsFacotrs"),
+                                    ...) {
+  message("data.frame")
   stopifnot(is.data.frame(x))
+  checkmate::checkCharacter(visitId, any.missing = FALSE, max.len = 1)
   if (is.null(visitId))
     visitId <- names(x)[1]
   else
     stopifnot(visitId %in% names(x))
-  stopifnot(is.character(visitId))
-  stopifnot(length(visitId) == 1)
-  stopifnot(is.logical(return.df))
-  stopifnot(length(return.df) == 1)
+  checkmate::checkLogical(return.df, any.missing = FALSE, len = 1)
   res <- icd9CharlsonComorbid(
-    icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE, ...))
+    icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
+                         return.df = return.df, ...))
 
   if (return.df) return(cbind(x[visitId],
                               data.frame("Charlson" = res),
@@ -62,34 +81,34 @@ icd9Charlson <- function(x, visitId = NULL,
 #'   drop DM if DMcx is present, etc.
 #' @export
 icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
-  stopifnot(is.data.frame(x))
   if (is.null(visitId)) {
-    if (!any(names(x) == "visitId"))
-      visitId <- names(x)[1]
+    if (!any(colnames(x) == "visitId"))
+      visitId <- colnames(x)[1]
     else
       visitId <- "visitId"
   } else
-    stopifnot(visitId %in% names(x))
-  stopifnot(is.character(visitId))
+    stopifnot(visitId %in% colnames(x))
   stopifnot(length(visitId) == 1)
-
-  stopifnot(ncol(x) == 18)
+  stopifnot(ncol(x) - is.data.frame(x) == 17)
   weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                2, 2, 2, 2,
                3, 6, 6)
 
-
   if (applyHierarchy) {
-    x$DM <- x$DM & !x$DMcx
-    x$LiverMild <- x$LiverMild & !x$LiverSevere
-    x$Cancer <- x$Cancer & !x$Mets
+    x[,"DM"] <- x[, "DM"] & !x[, "DMcx"]
+    x[, "LiverMild"] <- x[, "LiverMild"] & !x[, "LiverSevere"]
+    x[, "Cancer"] <- x[, "Cancer"] & !x[, "Mets"]
   } else {
-    stopifnot(!any(x$DM & x$DMcx))
-    stopifnot(!any(x$LiverMild & x$LiverSevere))
-    stopifnot(!any(x$Cancer & x$Mets))
+    stopifnot(!any(x[, "DM"] & x[, "DMcx"]))
+    stopifnot(!any(x[, "LiverMild"] & x[, "LiverSevere"]))
+    stopifnot(!any(x[, "Cancer"] & x[, "Mets"]))
   }
-  m <- as.matrix(x[, names(x) %nin% visitId])
-  rowSums(m * weights)
+  if (is.data.frame(x)) {
+    visitIdNames <- x[[visitId]]
+    x <- as.matrix(x[, names(x) %nin% visitId])
+    rownames(x) <- visitIdNames
+  }
+  rowSums(t(t(x) * weights))
 }
 
 #' @title count ICD codes or comorbidities for each patient

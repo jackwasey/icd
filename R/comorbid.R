@@ -141,20 +141,20 @@ icd9ComorbidAhrq <- function(..., abbrevNames = TRUE,
 
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
-    cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
-    cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
-    cbd[["HTN"]] <- cbd[["HTN"]] + cbd[["HTNcx"]] > 0
-    cbd[["HTNcx"]] <- NULL
+    cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
+    cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    cbd[,"HTNcx"] <- NULL
 
     if (abbrevNames)
-      names(cbd)[-1] <- icd9::ahrqComorbidNamesAbbrev
+      colnames(cbd)[-1] <- icd9::ahrqComorbidNamesAbbrev
     else
-      names(cbd)[-1] <- icd9::ahrqComorbidNames
+      colnames(cbd)[-1] <- icd9::ahrqComorbidNames
   } else {
     if (abbrevNames)
-      names(cbd)[-1] <- icd9::ahrqComorbidNamesHtnAbbrev
+      colnames(cbd)[-1] <- icd9::ahrqComorbidNamesHtnAbbrev
     else
-      names(cbd)[-1] <- icd9::ahrqComorbidNamesHtn
+      colnames(cbd)[-1] <- icd9::ahrqComorbidNamesHtn
   }
   cbd
 }
@@ -171,9 +171,9 @@ icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
   if (applyHierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
-    cbd[cbd[["Mets"]] > 0, "Cancer"] <- FALSE
-    cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
-    cbd[cbd[["LiverSevere"]] > 0, "LiverMild"] <- FALSE
+    cbd[cbd[, "Mets"] > 0, "Cancer"] <- FALSE
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
+    cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
   if (abbrevNames)
     names(cbd)[-1] <- icd9::charlsonComorbidNamesAbbrev
@@ -189,11 +189,11 @@ icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::quanElixComorbid)
   if (applyHierarchy) {
-    cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
-    cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
+    cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     # combine HTN
-    cbd[["HTN"]] <- cbd[["HTN"]] + cbd[["HTNcx"]] > 0
-    cbd[["HTNcx"]] <- NULL
+    cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    cbd[, "HTNcx"] <- NULL
 
     # if we didn't apply the hierarchy, we have to use the naming scheme with
     # HTN separated out:
@@ -222,10 +222,10 @@ icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
 icd9ComorbidElix <- function(..., abbrevNames = TRUE, applyHierarchy = TRUE) {
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::elixComorbid)
   if (applyHierarchy) {
-    cbd[cbd[["Mets"]] > 0, "Tumor"] <- FALSE
-    cbd[cbd[["DMcx"]] > 0, "DM"] <- FALSE
-    cbd[["HTN"]] <- cbd[["HTN"]] + cbd[["HTNcx"]] > 0
-    cbd[["HTNcx"]] <- NULL
+    cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
+    cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    cbd[, "HTNcx"] <- NULL
     if (abbrevNames)
       names(cbd)[-1] <- icd9::elixComorbidNamesAbbrev
     else
