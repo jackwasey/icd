@@ -6,6 +6,7 @@
 \alias{icd9ComorbidElix}
 \alias{icd9ComorbidQuanDeyo}
 \alias{icd9ComorbidQuanElix}
+\alias{icd9ComorbidShort}
 \alias{icd9ComorbidShortCpp}
 \alias{icd9Comorbidities}
 \alias{icd9ComorbiditiesAhrq}
@@ -21,6 +22,8 @@ icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId = "visitId",
 icd9Comorbid(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9",
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
   isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE)
+
+icd9ComorbidShort(...)
 
 icd9ComorbidAhrq(..., abbrevNames = TRUE, applyHierarchy = TRUE)
 

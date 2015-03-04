@@ -120,6 +120,8 @@ icd9Comorbid <- function(icd9df,
   icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field)
 }
 
+#' @rdname icd9Comorbid
+#' @export
 icd9ComorbidShort <- function(...) {
   icd9Comorbid(..., isShort = TRUE)
 }
