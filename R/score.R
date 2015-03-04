@@ -41,12 +41,16 @@ icd9Charlson <- function(x, visitId = NULL,
                          ...)
   UseMethod("icd9Charlson")
 
+#' @describeIn icd9Charlson default method for icd9Charlson
+#' @export
 icd9Charlson.default <- function(x, visitId = NULL,
                                  return.df = FALSE,
                                  stringsAsFactors = getOption("stringsAsFacotrs"),
                                  ...)
   stop("icd9Charlson requires a matrix or data frame of comorbidities")
 
+#' @describeIn icd9Charlson Charlson scores from comorbidity matrix
+#' @export
 icd9Charlson.matrix <- function(x, visitId = NULL,
                                 return.df = FALSE,
                                 stringsAsFactors = getOption("stringsAsFacotrs"),
@@ -54,11 +58,12 @@ icd9Charlson.matrix <- function(x, visitId = NULL,
   stop("todo")
 }
 
+#' @describeIn icd9Charlson Charlson scores from comorbidity data frame
+#' @export
 icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     return.df = FALSE,
                                     stringsAsFactors = getOption("stringsAsFacotrs"),
                                     ...) {
-  message("data.frame")
   stopifnot(is.data.frame(x))
   checkmate::checkCharacter(visitId, any.missing = FALSE, max.len = 1)
   if (is.null(visitId))

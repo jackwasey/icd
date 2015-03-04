@@ -2,10 +2,22 @@
 % Please edit documentation in R/score.R
 \name{icd9Charlson}
 \alias{icd9Charlson}
+\alias{icd9Charlson.data.frame}
+\alias{icd9Charlson.default}
+\alias{icd9Charlson.matrix}
 \alias{icd9CharlsonComorbid}
 \title{Calculate Charlson Comorbidity Index (Charlson Score)}
 \usage{
 icd9Charlson(x, visitId = NULL, return.df = FALSE,
+  stringsAsFactors = getOption("stringsAsFacotrs"), ...)
+
+\method{icd9Charlson}{default}(x, visitId = NULL, return.df = FALSE,
+  stringsAsFactors = getOption("stringsAsFacotrs"), ...)
+
+\method{icd9Charlson}{matrix}(x, visitId = NULL, return.df = FALSE,
+  stringsAsFactors = getOption("stringsAsFacotrs"), ...)
+
+\method{icd9Charlson}{data.frame}(x, visitId = NULL, return.df = FALSE,
   stringsAsFactors = getOption("stringsAsFacotrs"), ...)
 
 icd9CharlsonComorbid(x, visitId = NULL, applyHierarchy = FALSE)
@@ -51,6 +63,14 @@ Per Quan, "The following comorbid conditions were mutually
   complications; mild liver disease and moderate or severe liver disease; and
   any malignancy and metastatic solid tumor.""
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{default}: default method for icd9Charlson
+
+\item \code{matrix}: Charlson scores from comorbidity matrix
+
+\item \code{data.frame}: Charlson scores from comorbidity data frame
+}}
 \examples{
 mydf <- data.frame(visitId = c("a", "b", "c"),
                    icd9 = c("441", "412.93", "044.9"))

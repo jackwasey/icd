@@ -141,7 +141,14 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 	std::cout << "printed\n";
 #endif
 	//IntegerVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
-	LogicalVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
+	// TODO: segfaults consistently with some input, e.g. 2e6 rows on linux. Need to manually convert int to logical?
+	// try cast to logical first. (in which case I can use char for Out)
+	std::vector<bool> intermed;
+	intermed.assign(out.begin(), out.end());
+#ifdef ICD9_DEBUG
+	std::cout << "static_cast to vec bool completed\n";
+#endif
+	LogicalVector mat_out = wrap(intermed); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
 #ifdef ICD9_DEBUG
 	std::cout << "wrapped out\n";
 #endif
