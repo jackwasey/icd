@@ -1,1 +1,3 @@
 linters: with_defaults(object_camel_case_linter = NULL, line_length_linter(120))
+exclusions: list("R/RcppExports.R" = 1, "RcppExports.R" = 1)
+

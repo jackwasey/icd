@@ -31,7 +31,7 @@ sasFormatExtract <- function(sasTxt) {
 
   #strip whitespace and ?undetected newline characters, replace with single
   #spaces.
-  sasTxt <- gsub(pattern = "\\\\n", "", sasTxt)
+  sasTxt <- gsub(pattern = "\\\\n", "", sasTxt) # nolint
   sasTxt <- gsub(pattern = "[[:space:]]+", " ", sasTxt)
   sasTxt <- trim(sasTxt)
 

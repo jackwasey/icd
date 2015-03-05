@@ -109,7 +109,7 @@ There is a change in behavior from previous versions. The visitId
   visitId output order was whatever R's \code{aggregate} produced.
 }
 \examples{
-pts = data.frame(visitId = c("2", "1", "2", "3", "3"),
+pts <- data.frame(visitId = c("2", "1", "2", "3", "3"),
                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
    icd9ComorbidShort(pts, ahrqComorbid) # visitId is now sorted
 }
