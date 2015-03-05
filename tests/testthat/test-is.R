@@ -13,23 +13,8 @@ test_that("find codes", {
   expect_true(all(icd9IsN(ns)))
 })
 
-test_that("slow versions for comparison", {
-  expect_equal(icd9IsV(vs), icd9IsV_cpp_slow(vs))
-  expect_equal(icd9IsV(vs), icd9IsV_cpp_slower(vs))
-  expect_equal(icd9IsV(es), icd9IsV_cpp_slow(es))
-  expect_equal(icd9IsV(es), icd9IsV_cpp_slower(es))
-
-  expect_equal(icd9IsE(es), icd9IsE_cpp_slow(es))
-  expect_equal(icd9IsE(ns), icd9IsE_cpp_slow(ns))
-
-  expect_equal(icd9IsN(ns), !icd9IsVE_cpp_slow(ns))
-  expect_equal(icd9IsN(vs), !icd9IsVE_cpp_slow(vs))
-})
-
-test_that("slow and maybe obsolete", {
+test_that("v, e", {
   expect_true(all(icd9IsVE(c(vs, es))))
-  expect_equal(icd9IsVE(c(vs, es)), icd9IsVE_R(c(vs, es)))
-  expect_equal(icd9IsVE(c(vs, es)), icd9IsVE_cpp_slow(c(vs, es)))
 
   expect_error(icd9IsASingleVE(c("V12", "E800")))
   expect_true(icd9IsASingleVE(" V12"))

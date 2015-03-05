@@ -2,21 +2,11 @@ language: r
 
 r_github_packages:
  - jimhester/covr
+ - jimhester/lintr
  - hadley/testthat
 
-r_binary_packages:
- - Rcpp
- - checkmate
- - knitr
- - microbenchmark
- - XML
- - magrittr
- - memoise
- - profr
- - ggplot2
- - digest
-
 after_success:
- - Rscript -e 'library(covr); coveralls(exclusion=list("R/benchmark.R" = 1, "R/old.R" = 1, "R/RcppExports.R" = 1, "src/RcppExports.cpp" = 1, "src/slow.cpp" = 1))'
+ - Rscript -e 'devtools::install()'
+ - Rscript -e 'library(covr); coveralls(exclusion=list("R/benchmark.R" = 1, "R/RcppExports.R" = 1, "src/RcppExports.cpp" = 1))'
 
 warnings_are_errors: false

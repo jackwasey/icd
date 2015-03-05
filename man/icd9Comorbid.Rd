@@ -113,4 +113,5 @@ pts = data.frame(visitId = c("2", "1", "2", "3", "3"),
                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
    icd9ComorbidShort(pts, ahrqComorbid) # visitId is now sorted
 }
+\keyword{internal}
 

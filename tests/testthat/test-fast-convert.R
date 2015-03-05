@@ -285,6 +285,4 @@ test_that("code routes through RcppExports.R and slower versions", {
                data.frame(major = "100", minor = "1", stringsAsFactors = FALSE))
   expect_equal(icd9ShortToParts(c("99999", "0011")),
                data.frame(major = c("999", "001"), minor = c("99", "1"), stringsAsFactors = FALSE))
-  # expect_identical(icd9ShortToParts("1001"), icd9ShortToParts_cpp_slow("1001"))
-  expect_identical(icd9ShortToParts("1001"), icd9ShortToParts_cpp_test("1001"))
 })

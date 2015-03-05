@@ -2,13 +2,13 @@
 # assume length is one for strim
 strim <- function(x) {
   if (!is.na(x[1]))
-    return(.Call('icd9_strim_cpp', PACKAGE = 'icd9', as.character(x)))
+    return(.Call('icd9_strimCpp', PACKAGE = 'icd9', as.character(x)))
   return(NA_character_)
 }
 
 trim <- function (x) {
   nax = is.na(x)
-  x[!nax] <- .Call('icd9_trim_cpp', PACKAGE = 'icd9', as.character(x[!nax]))
+  x[!nax] <- .Call('icd9_trimCpp', PACKAGE = 'icd9', as.character(x[!nax]))
   x
 }
 

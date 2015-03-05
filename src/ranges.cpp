@@ -154,7 +154,7 @@ bool isShortReference = true) {
   if (!isShort)
   x = icd9::icd9DecimalToShort(x);
 
-  CharacterVector y = icd9Children_cpp(icd9Reference, isShortReference, false);
+  CharacterVector y = icd9ChildrenCpp(icd9Reference, isShortReference, false);
   if (!isShortReference)
   y = icd9::icd9DecimalToShort(y);
   // Rcpp match is not quite as good as R:

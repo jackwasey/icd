@@ -216,34 +216,6 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort, isShortReference =
     .Call('icd9_icd9InReferenceCode', PACKAGE = 'icd9', icd9, icd9Reference, isShort, isShortReference)
 }
 
-icd9IsV_cpp_slower <- function(sv) {
-    .Call('icd9_icd9IsV_cpp_slower', PACKAGE = 'icd9', sv)
-}
-
-icd9ShortToParts_cpp_slow <- function(icd9Short, minorEmpty = "") {
-    .Call('icd9_icd9ShortToParts_cpp_slow', PACKAGE = 'icd9', icd9Short, minorEmpty)
-}
-
-icd9MajMinToParts_slower <- function(major, minor) {
-    .Call('icd9_icd9MajMinToParts_slower', PACKAGE = 'icd9', major, minor)
-}
-
-icd9IsV_cpp_slow <- function(sv) {
-    .Call('icd9_icd9IsV_cpp_slow', PACKAGE = 'icd9', sv)
-}
-
-icd9IsE_cpp_slow <- function(sv) {
-    .Call('icd9_icd9IsE_cpp_slow', PACKAGE = 'icd9', sv)
-}
-
-icd9IsVE_cpp_slow <- function(sv) {
-    .Call('icd9_icd9IsVE_cpp_slow', PACKAGE = 'icd9', sv)
-}
-
-icd9ShortToParts_cpp_test <- function(icd9Short, minorEmpty = "") {
-    .Call('icd9_icd9ShortToParts_cpp_test', PACKAGE = 'icd9', icd9Short, minorEmpty)
-}
-
 strimCpp <- function(s) {
     .Call('icd9_strimCpp', PACKAGE = 'icd9', s)
 }

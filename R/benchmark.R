@@ -339,34 +339,6 @@ icd9Benchmark <- function() {
   microbenchmark::microbenchmark(data.frame(matrix(ncol = 2, nrow = 100000)))
   microbenchmark::microbenchmark(data.frame(major = character(100000),
                                             minor = character(100000)))
-
-  # C++ faster, especially with multiple invocations.
-  #dat <- randomShortIcd9(500)
-  #microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=5000)
-  #dat <- randomShortIcd9(5000)
-  #microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=500)
-  #dat <- randomShortIcd9(50000)
-  #microbenchmark::microbenchmark(icd9ShortToParts_R(dat), icd9ShortToParts(dat), times=50)
-
-  #microbenchmark::microbenchmark(icd9ShortToDecimal_R(dat), icd9ShortToDecimal(dat), times=5)
-
-  #   major <- as.character(rep(seq.int(999), times = 5))
-  #   minor <- as.character(rep(seq.int(9), times = 555))
-  #   microbenchmark::microbenchmark(icd9MajMinToShort_R(major, minor), icd9MajMinToShort(major, minor),
-  #                                  icd9MajMinToDecimal_R(major, minor), icd9MajMinToDecimal(major, minor),
-  #                                  times=10)
-  #
-  #   major <- as.character(rep(seq.int(111), times = 5))
-  #   minor <- as.character(rep(seq.int(1), times = 555))
-  #   microbenchmark::microbenchmark(icd9MajMinToShort_R(major, minor), icd9MajMinToShort(major, minor),
-  #                                  icd9MajMinToDecimal_R(major, minor), icd9MajMinToDecimal(major, minor),
-  #                                  times=100)
-
-  microbenchmark::microbenchmark(icd9ExpandMinor("7", FALSE), icd9ExpandMinor_R("7", FALSE))
-  microbenchmark::microbenchmark(icd9ExpandMinor("", FALSE), icd9ExpandMinor_R("", FALSE))
-  microbenchmark::microbenchmark(icd9ExpandMinor("7", TRUE), icd9ExpandMinor_R("7", TRUE))
-  microbenchmark::microbenchmark(icd9ExpandMinor("", TRUE), icd9ExpandMinor_R("", TRUE))
-
   # regex is a little faster than fixed
   icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
   microbenchmark::microbenchmark(times = 3,
@@ -375,10 +347,6 @@ icd9Benchmark <- function() {
                                    grepl(pattern = "V", icd9, fixed = TRUE) |
                                    grepl(pattern = "v", icd9, fixed = TRUE))
 
-
-
   microbenchmark::microbenchmark(times = 3, grepl(pattern = "[EeVv]", rpts))
-  microbenchmark::microbenchmark(icd9IsV_cpp_slower(icd9), icd9IsV_R(icd9), icd9IsV_cpp_slow(icd9), icd9IsV(icd9))
-
 }
 # EXCLUDE COVERAGE END

@@ -141,7 +141,7 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 		}
 
 		std::string s = as<std::string>(icd9Short[i]);
-		s = icd9::strim_cpp(s); // do i need to convert?
+		s = icd9::strimCpp(s); // do i need to convert?
 
 		if (!icd9::icd9IsASingleE(s)) { // not an E code
 			switch (s.size()) {
@@ -208,7 +208,7 @@ List icd9DecimalToParts(const CharacterVector icd9Decimal, const String minorEmp
 			continue;
 		}
 		std::string thiscode = as<std::string>(*it); // Rcpp::String doesn't implement many functions.
-		thiscode = icd9::strim_cpp(thiscode); // TODO: update in place.
+		thiscode = icd9::strimCpp(thiscode); // TODO: update in place.
 		std::size_t pos = thiscode.find(".");
 		// substring parts
 		std::string majorin;
