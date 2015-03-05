@@ -2,8 +2,8 @@ language: r
 
 r_github_packages:
  - jimhester/covr
- - jimhester/lintr
- - hadley/testthat
+# - jimhester/lintr
+# - hadley/testthat
 
 after_success:
  - Rscript -e 'devtools::install()'
