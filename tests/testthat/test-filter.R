@@ -82,13 +82,13 @@ test_that("filter POA - poa is vector", {
                    complexPoaPatients[-2, 1:2])
 
   # same via core function
-  expect_identical(icd9FilterPoa(complexPoaPatients, "yes"),
+  expect_identical(icd9FilterPoa(complexPoaPatients, poa = "yes"),
                    complexPoaPatients[1, 1:2])
-  expect_identical(icd9FilterPoa(complexPoaPatients, "notYes"),
+  expect_identical(icd9FilterPoa(complexPoaPatients, poa = "notYes"),
                    complexPoaPatients[-1, 1:2])
-  expect_identical(icd9FilterPoa(complexPoaPatients, "no"),
+  expect_identical(icd9FilterPoa(complexPoaPatients, poa = "no"),
                    complexPoaPatients[2, 1:2])
-  expect_identical(icd9FilterPoa(complexPoaPatients, "notNo"),
+  expect_identical(icd9FilterPoa(complexPoaPatients, poa = "notNo"),
                    complexPoaPatients[-2, 1:2])
 
 })

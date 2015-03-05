@@ -37,7 +37,7 @@
 #' @export
 icd9Charlson <- function(x, visitId = NULL,
                          return.df = FALSE,
-                         stringsAsFactors = getOption("stringsAsFacotrs"),
+                         stringsAsFactors = getOption("stringsAsFactors"),
                          ...)
   UseMethod("icd9Charlson")
 
@@ -45,7 +45,7 @@ icd9Charlson <- function(x, visitId = NULL,
 #' @export
 icd9Charlson.default <- function(x, visitId = NULL,
                                  return.df = FALSE,
-                                 stringsAsFactors = getOption("stringsAsFacotrs"),
+                                 stringsAsFactors = getOption("stringsAsFactors"),
                                  ...)
   stop("icd9Charlson requires a matrix or data frame of comorbidities")
 
@@ -53,7 +53,7 @@ icd9Charlson.default <- function(x, visitId = NULL,
 #' @export
 icd9Charlson.matrix <- function(x, visitId = NULL,
                                 return.df = FALSE,
-                                stringsAsFactors = getOption("stringsAsFacotrs"),
+                                stringsAsFactors = getOption("stringsAsFactors"),
                                 ...) {
   stop("todo")
 }
@@ -62,23 +62,27 @@ icd9Charlson.matrix <- function(x, visitId = NULL,
 #' @export
 icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     return.df = FALSE,
-                                    stringsAsFactors = getOption("stringsAsFacotrs"),
+                                    stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
-  stopifnot(is.data.frame(x))
+  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
   checkmate::checkCharacter(visitId, any.missing = FALSE, max.len = 1)
   if (is.null(visitId))
     visitId <- names(x)[1]
   else
     stopifnot(visitId %in% names(x))
   checkmate::checkLogical(return.df, any.missing = FALSE, len = 1)
-  res <- icd9CharlsonComorbid(
-    icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
-                         return.df = return.df, ...))
+  tmp <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
+                              return.df = TRUE, ...)
+  res <- icd9CharlsonComorbid(tmp, visitId = visitId, applyHierarchy = FALSE)
 
-  if (return.df) return(cbind(x[visitId],
-                              data.frame("Charlson" = res),
-                              stringsAsFactors = stringsAsFactors))
-  res
+  # TODO someday it might be nice (like with comorbid.R) to recreate a factor
+  # with the same levels for visitId if this is what is given to us.
+  if (!return.df) return(res)
+  out <- cbind(names(res),
+               data.frame("Charlson" = unname(res)),
+               stringsAsFactors = stringsAsFactors)
+  names(out)[1] <- visitId
+  out
 }
 
 #' @rdname icd9Charlson
