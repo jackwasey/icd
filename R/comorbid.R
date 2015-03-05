@@ -309,13 +309,13 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
     x.names <- names
     y.names <- names
   }
-  if (is.null(x.names)) x.names = names(x)
-  if (is.null(y.names)) y.names = names(y)
+  if (is.null(x.names)) x.names <- names(x)
+  if (is.null(y.names)) y.names <- names(y)
 
-  common.names = intersect(x.names, y.names)
+  common.names <- intersect(x.names, y.names)
 
-  x.title = deparse(substitute(x))
-  y.title = deparse(substitute(y))
+  x.title <- deparse(substitute(x))
+  y.title <- deparse(substitute(y))
 
   out <- list();
 
@@ -352,18 +352,18 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
     }
   }
   if (show) {
-    cmb.only.x <- setdiff(x.names, y.names)
-    cmb.only.y <- setdiff(y.names, x.names)
+    cmb_only_x <- setdiff(x.names, y.names)
+    cmb_only_y <- setdiff(y.names, x.names)
 
-    if (length(cmb.only.x) > 0) {
+    if (length(cmb_only_x) > 0) {
       cat(sprintf("Comorbidities only defined in %s are: ", x.title))
-      lapply(cmb.only.x, function(s) cat(sprintf("%s ", s)))
+      lapply(cmb_only_x, function(s) cat(sprintf("%s ", s)))
       cat("\n")
     }
 
-    if (length(cmb.only.y) > 0) {
+    if (length(cmb_only_y) > 0) {
       cat(sprintf("Comorbidities only defined in %s are: ", y.title))
-      lapply(cmb.only.y, function(s) cat(sprintf("%s ", s)))
+      lapply(cmb_only_y, function(s) cat(sprintf("%s ", s)))
       cat("\n")
     }
   }

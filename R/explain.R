@@ -66,9 +66,9 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
   # if there are only real codes, we should condense with this in mind:
 
   if (doCondense) {
-    onlyReal = all(icd9IsRealShort(icd9))
+    onlyReal <- all(icd9IsRealShort(icd9))
     if (warn && !onlyReal) {
-      unreal = icd9[!icd9IsRealShort(icd9)]
+      unreal <- icd9[!icd9IsRealShort(icd9)]
       warning("Some ICD codes are not 'real', e.g. ",
               paste(unreal[seq(from = 1, to = min(5, length(unreal)))],
                     collapse = " "),
@@ -83,7 +83,7 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                                 mj[mj %in% icd9]]
   # don't double count when major is also billable
   icd9 <- icd9[icd9 %nin% mj]
-  descField = ifelse(brief, "descShort", "descLong")
+  descField <- ifelse(brief, "descShort", "descLong")
   c(mjexplain,
     icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% icd9, descField]
   )

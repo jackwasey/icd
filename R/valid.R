@@ -100,7 +100,7 @@ icd9ValidShort <- function(icd9) {
 #' @rdname icd9IsValid
 #' @export
 icd9IsValidShortV <- function(icd9Short)
-  grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$",
+  grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", # nolint
         icd9Short)
 
 #' @rdname icd9IsValid
@@ -114,7 +114,7 @@ icd9IsValidShortN <- function(icd9Short)
   grepl("^[[:space:]]*[[:digit:]]{1,5}[[:space:]]*$", icd9Short)
 
 icd9IsValidDecimalV <- function(icd9Decimal)
-  grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
+  grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
         icd9Decimal)
 
 icd9IsValidDecimalE <- function(icd9Decimal)
@@ -125,14 +125,14 @@ icd9IsValidDecimalE <- function(icd9Decimal)
         icd9Decimal)
 
 icd9IsValidDecimalN <- function(icd9Decimal)
-  grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$",
+  grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
         icd9Decimal)
 
 #' @rdname icd9IsValid
 #' @export
 icd9IsValidMajor <- function(major)
   grepl(
-    pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)",
+    pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)", # nolint
     x = major
   )
 
@@ -289,4 +289,4 @@ icd9GetRealDecimal <- function(icd9Decimal, majorOk = TRUE)
   icd9Decimal[icd9IsRealDecimal(icd9Decimal, majorOk = majorOk)]
 
 warnNumericCode <- function()
-  warning("input data is in numeric format. This can easily lead to errors in short or decimal codes, e.g. short code 1000: is it 10.00 or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10", call. = FALSE)
+  warning("input data is in numeric format. This can easily lead to errors in short or decimal codes, e.g. short code 1000: is it 10.00 or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10", call. = FALSE) # nolint

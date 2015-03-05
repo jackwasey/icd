@@ -85,12 +85,12 @@ icd9ExpandRangeShort <- function(start, end,
     if (ei < si) stop("end code must be greater than or equal to start code")
     if (nchar(e) != 5) {
       # calculate the number of codes to span, start with lookup table of nchar of each
-      nlk = nchar(lookup[seq(from = ei + 1, to = ei + 111)])
-      lene = nchar(e)
+      nlk <- nchar(lookup[seq(from = ei + 1, to = ei + 111)])
+      lene <- nchar(e)
       # lookup the next code with the same hierarchical level
       mlen <- match(lene, nlk)
       # if the next code can't be found, e.g. after 999, just pick a big number.
-      if (is.na(mlen)) mlen = 111
+      if (is.na(mlen)) mlen <- 111
       ei <- ei + mlen
       ei <- ei - (lene - 2)
       if (icd9IsASingleE(e))
@@ -206,7 +206,7 @@ icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE
   checkmate::checkCharacter(icd9)
   checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
   checkmate::checkLogical(onlyReal, any.missing = FALSE, len = 1)
-  .Call('icd9_icd9ChildrenCpp', PACKAGE = 'icd9', icd9, isShort, onlyReal)
+  .Call("icd9_icd9ChildrenCpp", PACKAGE = "icd9", icd9, isShort, onlyReal)
 }
 
 #' Generate sysdata.rda
@@ -225,9 +225,9 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do
 
   # we can either use the icd9IsReal functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
-  icd9NShortReal <- grep("[^VE]*", icd9::icd9Hierarchy$icd9, value = TRUE)
-  icd9VShortReal <- grep("V", icd9::icd9Hierarchy$icd9, value = TRUE)
-  icd9EShortReal <- grep("E", icd9::icd9Hierarchy$icd9, value = TRUE)
+  icd9NShortReal <- grep("[^VE]*", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
+  icd9VShortReal <- grep("V", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
+  icd9EShortReal <- grep("E", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.

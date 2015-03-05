@@ -22,8 +22,8 @@ sasFormatExtract <- function(sasTxt) {
   sasTxt <- paste(sasTxt, collapse=" \\n")
 
   # sas comments are in the form /* ... */ inline/multiline, or * ... ;
-  sasTxt <- gsub(pattern = "/\\*.*?\\*/", replacement = "", x = sasTxt)
-  sasTxt <- gsub(pattern = "\\n\\*.*?;", replacement = "\\n", x = sasTxt)
+  sasTxt <- gsub(pattern = "/\\*.*?\\*/", replacement = "", x = sasTxt) # nolint
+  sasTxt <- gsub(pattern = "\\n\\*.*?;", replacement = "\\n", x = sasTxt) # nolint
 
   sasTxt <- strsplit(sasTxt, split="\\;")[[1]]
   #sasCleanLines <- strsplit(sasNoComments, split="\\\\n")[[1]]
