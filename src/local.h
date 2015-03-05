@@ -37,7 +37,7 @@ typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
 
-typedef std::map<std::string,VecStr> MMVisitCodes;
+typedef std::map<std::string, VecStr> MMVisitCodes;
 
 // internal function definitions
 #if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
@@ -47,7 +47,7 @@ template<typename VT>
 void printIt(std::vector<VT> v) {
 	typename std::vector<VT>::iterator i;
 	std::ostringstream o;
-	for (i=v.begin(); i!=v.end(); ++i) { o << *i << " "; }
+	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
 	o << "\n";
 	std::cout << o.str();
 	std::cout.flush();
@@ -68,7 +68,7 @@ template<typename ST>
 void printIt(std::set<ST> v) {
 	typename std::set<ST>::iterator i;
 	std::ostringstream o;
-	for (i=v.begin(); i!=v.end(); ++i) { o << *i << " "; }
+	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
 	o << "\n";
 	std::cout << o.str();
 	std::cout.flush();
@@ -79,13 +79,12 @@ template<typename MK, typename MV>
 void printIt(std::map<MK,MV> v) {
 	typename std::vector<MK,MV>::iterator i;
 	std::ostringstream o;
-	for (i=v.begin(); i!=v.end(); ++i) { o << *i << " "; }
+	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
 	o << "\n";
 	std::cout << o.str();
 	std::cout.flush();
 }
 #endif
-
 
 std::string myuitos(unsigned int i);
 VecStr myvecitos(VecInt vi);
@@ -94,17 +93,18 @@ void printCharVec(Rcpp::CharacterVector cv);
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 
-void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId, const std::string& icd9Field,
-		VecVecInt& vcdb, VecStr& visitIds, const bool aggregate);
+void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
+		const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
+		const bool aggregate);
 
 Out lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		const int chunkSize, const int ompChunkSize);
 
-int longToWideWork(const char* lastVisitId, const char* icd,
-		const char* vi, const int approx_cmb_per_visit,
-		int max_per_pt, std::vector<std::string>& visitIds,
-		std::vector<VecStr>& ragged, bool aggregate);
-int longToWideWork(const int lastVisitId, const char* icd,
-		const int vi, const int approx_cmb_per_visit,
-		int max_per_pt, std::vector<int>& visitIds,
-		std::vector<VecStr>& ragged, bool aggregate);
+int longToWideWork(const char* lastVisitId, const char* icd, const char* vi,
+		const int approx_cmb_per_visit, int max_per_pt,
+		std::vector<std::string>& visitIds, std::vector<VecStr>& ragged,
+		bool aggregate);
+int longToWideWork(const int lastVisitId, const char* icd, const int vi,
+		const int approx_cmb_per_visit, int max_per_pt,
+		std::vector<int>& visitIds, std::vector<VecStr>& ragged,
+		bool aggregate);

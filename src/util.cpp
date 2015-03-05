@@ -22,8 +22,9 @@ std::string strimCpp(std::string& s) {
 }
 
 // [[Rcpp::export]]
-std::vector<std::string > trimCpp(std::vector<std::string >& sv) {
-	for (std::vector<std::string >::iterator i = sv.begin(); i != sv.end(); ++i) {
+std::vector<std::string> trimCpp(std::vector<std::string>& sv) {
+	for (std::vector<std::string>::iterator i = sv.begin(); i != sv.end();
+			++i) {
 		strimCpp(*i);
 	}
 	return sv;
@@ -43,39 +44,38 @@ void printCharVec(CharacterVector cv) {
 int str_to_int(const char *s) {
 	int n = 0;
 	// would be easy to skip whitespace here too, but probably no need.
-	if (*s<'0' && *s>'9') { // V or E code
+	if (*s < '0' && *s > '9') { // V or E code
 		++s;
 	}
-	while (*s>='0' && *s<='9') {
-		n=(n*10)+(*s-'0');
+	while (*s >= '0' && *s <= '9') {
+		n = (n * 10) + (*s - '0');
 		++s;
 	}
 	return n;
 }
 
-
 std::string myuitos(int i) {
 #ifdef ICD9_DEBUG_SETUP_TRACE
-			std::cout << "myuitos\n";
+	std::cout << "myuitos\n";
 #endif
 
-	std::string s(std::numeric_limits<int>::digits10+2, 0);
-	int size=0;
-	if (i==0) {
-		s[size++]='0';
+	std::string s(std::numeric_limits<int>::digits10 + 2, 0);
+	int size = 0;
+	if (i == 0) {
+		s[size++] = '0';
 	} else {
 #ifdef ICD9_DEBUG_SETUP_TRACE
-			std::cout << "non-zero, looping through powers of ten\n";
+		std::cout << "non-zero, looping through powers of ten\n";
 #endif
 
 		int ro = 0;
-		for (int i_div; i; i=i_div) {
-			i_div = i/10;
+		for (int i_div; i; i = i_div) {
+			i_div = i / 10;
 #ifdef ICD9_DEBUG_SETUP_TRACE
 			std::cout << "i_div = " << i_div << ", and i = " << i << "\n";
 #endif
 
-			int i_mod=i%10;
+			int i_mod = i % 10;
 			s[size++] = static_cast<char>('0' + i_mod);
 		}
 		std::reverse(&s[ro], &s[size]);
@@ -86,7 +86,7 @@ std::string myuitos(int i) {
 
 std::vector<std::string> myvecitos(std::vector<int> vi) {
 	std::vector<std::string> out(vi.size());
-	for (std::vector<std::string>::size_type it=0; it!=vi.size(); ++it) {
+	for (std::vector<std::string>::size_type it = 0; it != vi.size(); ++it) {
 		out[it] = myuitos(vi[it]);
 	}
 	return out;

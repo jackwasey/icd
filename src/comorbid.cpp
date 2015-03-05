@@ -26,8 +26,10 @@ using namespace Rcpp;
 //' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
 //' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId="visitId",
-		const std::string icd9Field="icd9", const int threads=8, const int chunkSize=256, const int ompChunkSize=1, bool aggregate=true) {
+SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
+		const std::string visitId = "visitId", const std::string icd9Field =
+				"icd9", const int threads = 8, const int chunkSize = 256,
+		const int ompChunkSize = 1, bool aggregate = true) {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
 #endif
@@ -47,7 +49,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 
 #ifdef _OPENMP
 	if (threads > 0)
-		omp_set_num_threads(threads);
+	omp_set_num_threads(threads);
 #ifdef ICD9_DEBUG_PARALLEL
 	std::cout << "Max Number of available threads=" << omp_get_max_threads() << "\n";
 #endif
@@ -81,28 +83,29 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif
-	switch(TYPEOF(vsexp)) {
-	case INTSXP:
-	{
+	switch (TYPEOF(vsexp)) {
+	case INTSXP: {
 #ifdef ICD9_DEBUG_SETUP
 		std::cout << "icd9ComorbidShortMatrix INTSXP\n";
 		if (Rf_isFactor(vsexp)) std::cout << "and is a factor\n";
 #endif
 		VecStr visitIds;
-		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, visitIds, aggregate);
+		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, visitIds,
+				aggregate);
 
 		break;
 	}
-	case STRSXP:
-	{
+	case STRSXP: {
 #ifdef ICD9_DEBUG_SETUP
 		std::cout << "icd9ComorbidShortMatrix STRSXP\n";
 #endif
-		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
+		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
+				aggregate);
 		break;
 	}
 	default:
-		Rcout << "shouldn't be here in comorbid. TYPEOF is " << TYPEOF(vsexp) << "\n";
+		Rcout << "shouldn't be here in comorbid. TYPEOF is " << TYPEOF(vsexp)
+				<< "\n";
 	}
 
 #ifdef ICD9_DEBUG_SETUP
@@ -127,7 +130,8 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 
 	//const Out out = lookupComorbidByRowFor(allCodes, map, chunkSize);
 	//const Out out = lookupComorbidByChunkWhile(allCodes, map, chunkSize);
-	const Out out = lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize);
+	const Out out = lookupComorbidByChunkFor(vcdb, map, chunkSize,
+			ompChunkSize);
 
 #ifdef ICD9_DEBUG
 	std::cout << "out length is " << out.size() << "\n";
@@ -150,13 +154,13 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std
 #endif
 	LogicalVector mat_out = wrap(intermed); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
 #ifdef ICD9_DEBUG
-	std::cout << "wrapped out\n";
+			std::cout << "wrapped out\n";
 #endif
 	mat_out.attr("dim") = Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
 	mat_out.attr("dimnames") = List::create(icd9Mapping.names(), out_row_names);
 	Function t("t"); // use R transpose - seems pretty fast
 #ifdef ICD9_DEBUG
-	std::cout << "Ready to transpose and return\n";
+			std::cout << "Ready to transpose and return\n";
 #endif
 #ifdef ICD9_VALGRIND
 	CALLGRIND_STOP_INSTRUMENTATION;
