@@ -85,7 +85,7 @@ CharacterVector icd9ExpandMinor(std::string minor, bool isE = false) {
 }
 
 // [[Rcpp::export]]
-CharacterVector icd9Children_cpp(CharacterVector icd9, bool isShort, bool onlyReal = true) {
+CharacterVector icd9ChildrenCpp(CharacterVector icd9, bool isShort, bool onlyReal = true) {
   if (isShort) return(icd9::icd9ChildrenShort(icd9, onlyReal));
   return(icd9::icd9ChildrenDecimal(icd9, onlyReal));
 }

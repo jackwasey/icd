@@ -1,16 +1,15 @@
 # need gcc for openmp, clang catching up
-PKG_CC=gcc
-PKG_CXX=g++
+# PKG_CC=gcc
+# PKG_CXX=g++
 
 PKG_CPPFLAGS = -I. -I../inst/include/
-PKG_CXXFLAGS = -march=native -fopenmp -Wall
-#-D_GLIBCXX_DEBUG
-# use -O0 for gdb, but ?overridden by /etc/R/Makeconf. Solution is to use:  MAKEFLAGS="CXXFLAGS=-O0 -g" R --vanilla -e "1+1;"
+# PKG_CXXFLAGS = -march=native -fopenmp -Wall
+# -D_GLIBCXX_DEBUG
+# use -O0 for gdb, but ?overridden by /etc/R/Makeconf. Solution is to use:  MAKEFLAGS="CXXFLAGS=-O0 -g" R --vanilla -e "1+1;" or change .R/Makevars
 
 # i thought rcpp plugin takes care of -fopenmp
-PKG_LIBS = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` -fopenmp -ltbb
-
-# not sure why I need -ltbb on linux, doesn't RcppParallel take care of this?
+# PKG_LIBS = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` -fopenmp -ltbb
+# not sure why I would need -ltbb on linux, doesn't RcppParallel take care of this?
 
 # see  http://clang.llvm.org/docs/UsersManual.html#profiling-with-instrumentation
 # $ clang++ -O2 -fprofile-instr-generate code.cc -o code

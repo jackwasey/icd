@@ -18,3 +18,6 @@ icd9\.Rnw$
 ^README\.Rmd$
 ^README-*\.png$
 cran-comments\.md$
+icd9.aux
+icd9.out
+.lintr

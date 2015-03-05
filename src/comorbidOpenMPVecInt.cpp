@@ -24,7 +24,7 @@ using namespace Rcpp;
 //' @rdname icd9Comorbid
 //' @description RcppParallel approach with openmp and vector of integer strategy
 //' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
-//' @export
+//' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId="visitId",
 		const std::string icd9Field="icd9", const int threads=8, const int chunkSize=256, const int ompChunkSize=1, bool aggregate=true) {

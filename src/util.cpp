@@ -15,16 +15,16 @@ std::string trimLeft(std::string& s) {
 }
 
 // [[Rcpp::export]]
-std::string strim_cpp(std::string& s) {
+std::string strimCpp(std::string& s) {
 	trimLeft(s);
 	trimRight(s);
 	return s;
 }
 
 // [[Rcpp::export]]
-std::vector<std::string > trim_cpp(std::vector<std::string >& sv) {
+std::vector<std::string > trimCpp(std::vector<std::string >& sv) {
 	for (std::vector<std::string >::iterator i = sv.begin(); i != sv.end(); ++i) {
-		strim_cpp(*i);
+		strimCpp(*i);
 	}
 	return sv;
 }

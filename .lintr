@@ -1,0 +1,1 @@
+exclusions: list("src/slow.cpp")

@@ -1,40 +1,22 @@
-language: c
+language: r
 
-before_install:
-  - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
-  - chmod 755 ./travis-tool.sh
-  - ./travis-tool.sh bootstrap
+r_github_packages:
+ - jimhester/covr
+ - hadley/testthat
 
-install:
-  - ./travis-tool.sh install_deps
-  - ./travis-tool.sh github_package jimhester/covr
-  - ./travis-tool.sh github_package hadley/testthat
-
-script: ./travis-tool.sh run_tests
+r_binary_packages:
+ - Rcpp
+ - checkmate
+ - knitr
+ - microbenchmark
+ - XML
+ - magrittr
+ - memoise
+ - profr
+ - ggplot2
+ - digest
 
 after_success:
-#  - Rscript -e 'library(covr); coveralls(exclusion=list("R/benchmark.R" = 1, "R/old.R" = 1, "R/RcppExports.R" = 1, "src/RcppExports.cpp" = 1, "src/slow.cpp" = 1))'
-  - Rscript -e 'library(covr); coveralls(exclusion=list("src/RcppExports.cpp" = 1))'
+ - Rscript -e 'library(covr); coveralls(exclusion=list("R/benchmark.R" = 1, "R/old.R" = 1, "R/RcppExports.R" = 1, "src/RcppExports.cpp" = 1, "src/slow.cpp" = 1))'
 
-after_failure:
-  - ./travis-tool.sh dump_logs
-
-after_script:
-#  - ./travis-tool.sh dump_logs_by_extension "timings"
-  - ./travis-tool.sh dump_sysinfo
-
-env:
-  global:
-    # default is no manual and no vignettes, so latex isn't needed
-    # - R_BUILD_ARGS="--no-build-vignettes"
-    - R_CHECK_ARGS="--no-build-vignettes --no-manual --as-cran --timings"
-    # - _R_CHECK_TIMINGS_="5"
-    # # report timings for more than 5 seconds per test or example. Default with --as-cran is 10 seconds.
-
-    # if the following is defined at all, warnings stop the build
-    #  - WARNINGS_ARE_ERRORS=1
-
-notifications:
-  email:
-    on_success: change
-    on_failure: change
+warnings_are_errors: false

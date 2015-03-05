@@ -27,7 +27,8 @@ Suggests:
     magrittr,
     memoise,
     profr,
-    ggplot2
+    ggplot2,
+    digest
 LazyData: true
 LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues

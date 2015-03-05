@@ -4,7 +4,7 @@
 #' @rdname icd9Comorbid
 #' @description RcppParallel approach with openmp and vector of integer strategy
 #' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
-#' @export
+#' @keywords internal
 icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE) {
     .Call('icd9_icd9ComorbidShortCpp', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate)
 }
@@ -185,8 +185,8 @@ icd9ExpandMinor <- function(minor, isE = FALSE) {
     .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', minor, isE)
 }
 
-icd9Children_cpp <- function(icd9, isShort, onlyReal = TRUE) {
-    .Call('icd9_icd9Children_cpp', PACKAGE = 'icd9', icd9, isShort, onlyReal)
+icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
+    .Call('icd9_icd9ChildrenCpp', PACKAGE = 'icd9', icd9, isShort, onlyReal)
 }
 
 #' @rdname icd9Children
@@ -244,12 +244,12 @@ icd9ShortToParts_cpp_test <- function(icd9Short, minorEmpty = "") {
     .Call('icd9_icd9ShortToParts_cpp_test', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
-strim_cpp <- function(s) {
-    .Call('icd9_strim_cpp', PACKAGE = 'icd9', s)
+strimCpp <- function(s) {
+    .Call('icd9_strimCpp', PACKAGE = 'icd9', s)
 }
 
-trim_cpp <- function(sv) {
-    .Call('icd9_trim_cpp', PACKAGE = 'icd9', sv)
+trimCpp <- function(sv) {
+    .Call('icd9_trimCpp', PACKAGE = 'icd9', sv)
 }
 
 # Register entry points for exported C++ functions
