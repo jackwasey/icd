@@ -57,13 +57,14 @@ icd9FilterInvalid <- function(icd9df, icd9Field = "icd9",
 #' @export
 icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
   poa <- match.arg(poa)
-  stopifnot(is.data.frame(icd9df))
-  stopifnot(is.character(poaField), length(poaField) == 1)
+  checkmate::checkDataFrame(icd9df, min.cols = 1, col.names = "named")
+  checkmate::checkString(poaField, na.ok = FALSE)
   stopifnot(poaField %in% names(icd9df))
   if (poa == "yes") return(icd9FilterPoaYes(icd9df, poaField = poaField))
   if (poa == "no") return(icd9FilterPoaNo(icd9df, poaField = poaField))
   if (poa == "notYes") return(icd9FilterPoaNotYes(icd9df, poaField = poaField))
-  if (poa == "notNo") return(icd9FilterPoaNotNo(icd9df, poaField = poaField))
+  #if (poa == "notNo")
+  icd9FilterPoaNotNo(icd9df, poaField = poaField)
 }
 
 .icd9FilterPoa <- function(icd9df, poaField, choice, negative = FALSE) {
