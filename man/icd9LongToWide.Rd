@@ -32,7 +32,7 @@ This is more complicated than reshape or reshape2::dcast allows.
 longdf <- data.frame(visitId = c("a", "b", "b", "c"),
     icd9 = c("441", "4424", "443", "441"))
   icd9LongToWide(longdf)
-  icd9LongToWide(longdf, prefix = "ICD10_", empty = "")
+  icd9LongToWide(longdf, prefix = "ICD10_")
 }
 \seealso{
 Other ICD-9 convert: \code{\link{convert}},

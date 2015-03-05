@@ -144,7 +144,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
 #'   icd9Count(mydf, return.df = TRUE)
 #'   icd9Count(mydf)
 #'
-#'   cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE)
+#'   cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE)
 #'   icd9CountComorbidBin(cmb)
 #'
 #'   wide <- data.frame(visitId = c("r", "s", "t"),
