@@ -86,8 +86,8 @@ icd9IsValidShort <- function(icd9Short) {
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.
   icd9IsValidShortN(icd9Short) |
-    icd9IsValidShortV(icd9Short) |
-    icd9IsValidShortE(icd9Short)
+      icd9IsValidShortV(icd9Short) |
+      icd9IsValidShortE(icd9Short)
 }
 
 #' @rdname icd9IsValid

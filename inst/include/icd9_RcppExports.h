@@ -651,11 +651,11 @@ namespace icd9 {
         return Rcpp::as<std::string >(__result);
     }
 
-    inline std::vector<std::string > trimCpp(std::vector<std::string >& sv) {
+    inline std::vector<std::string> trimCpp(std::vector<std::string>& sv) {
         typedef SEXP(*Ptr_trimCpp)(SEXP);
         static Ptr_trimCpp p_trimCpp = NULL;
         if (p_trimCpp == NULL) {
-            validateSignature("std::vector<std::string >(*trimCpp)(std::vector<std::string >&)");
+            validateSignature("std::vector<std::string>(*trimCpp)(std::vector<std::string>&)");
             p_trimCpp = (Ptr_trimCpp)R_GetCCallable("icd9", "icd9_trimCpp");
         }
         RObject __result;
@@ -667,7 +667,7 @@ namespace icd9 {
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<std::vector<std::string > >(__result);
+        return Rcpp::as<std::vector<std::string> >(__result);
     }
 
 }

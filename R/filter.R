@@ -6,7 +6,7 @@
 #' @param invert single logical value, if TRUE will return invalid instead of valid rows.
 #' @export
 icd9FilterValid <- function(icd9df, icd9Field = "icd9",
-                                       isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE) {
+                            isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE) {
   v <- icd9IsValid(icd9 = icd9df[[icd9Field]], isShort = isShort) != invert
   icd9df[v, ]
 }
@@ -19,7 +19,7 @@ icd9FilterValid <- function(icd9df, icd9Field = "icd9",
 #' @param invert single logical value, if TRUE will return valid instead of invalid rows.
 #' @export
 icd9FilterInvalid <- function(icd9df, icd9Field = "icd9",
-                                       isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE)
+                              isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE)
   icd9FilterValid(icd9df, icd9Field, isShort, invert = !invert)
 
 

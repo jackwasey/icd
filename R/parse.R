@@ -448,7 +448,7 @@ parseIcd9Chapters <- function(year = NULL,
   icd9ChaptersMajor <- list()
   for (chap in names(icd9Chapters)) {
     if (chap == "Diseases Of The Blood And Blood-Forming Organs" ||
-          chap == "Congenital Anomalies") {
+        chap == "Congenital Anomalies") {
       # these have no subchapter, straight into the three-digit codes
       icd9ChaptersMajor <- c(icd9ChaptersMajor,
                              icd9WebParseGetList(year, memfun = memReadHtmlList,

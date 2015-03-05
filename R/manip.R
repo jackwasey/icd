@@ -66,8 +66,8 @@ icd9DropLeadingZeroesMajor <- function(major) {
   # alternative might be just to get numeric-only, possibly quicker? TODO
   isN <- icd9IsValidMajorN(major)
   major[isV] <- sub(pattern = "^([Vv])0([[:digit:]]{1})$",
-                                   replacement = "\\1\\2",
-                                   x = major[isV])
+                    replacement = "\\1\\2",
+                    x = major[isV])
   #just replace the FIRST string of zeros everything else is passed through
   major[isN] <- sub(pattern = "^[[:space:]]*0{1,2}",
                     replacement = "",

@@ -1161,13 +1161,13 @@ RcppExport SEXP icd9_strimCpp(SEXP sSEXP) {
     return __result;
 }
 // trimCpp
-std::vector<std::string > trimCpp(std::vector<std::string >& sv);
+std::vector<std::string> trimCpp(std::vector<std::string>& sv);
 static SEXP icd9_trimCpp_try(SEXP svSEXP) {
 BEGIN_RCPP
     SEXP __sexp_result;
     {
-        Rcpp::traits::input_parameter< std::vector<std::string >& >::type sv(svSEXP );
-        std::vector<std::string > __result = trimCpp(sv);
+        Rcpp::traits::input_parameter< std::vector<std::string>& >::type sv(svSEXP );
+        std::vector<std::string> __result = trimCpp(sv);
         PROTECT(__sexp_result = Rcpp::wrap(__result));
     }
     UNPROTECT(1);
@@ -1232,7 +1232,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("CharacterVector(*icd9ChildrenDecimal)(CharacterVector,bool)");
         signatures.insert("LogicalVector(*icd9InReferenceCode)(CharacterVector,CharacterVector,bool,bool)");
         signatures.insert("std::string(*strimCpp)(std::string&)");
-        signatures.insert("std::vector<std::string >(*trimCpp)(std::vector<std::string >&)");
+        signatures.insert("std::vector<std::string>(*trimCpp)(std::vector<std::string>&)");
     }
     return signatures.find(sig) != signatures.end();
 }
