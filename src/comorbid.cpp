@@ -2,23 +2,7 @@
 // [[Rcpp::plugins(openmp)]]
 
 // R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
-#ifdef _OPENMP // not available on clang
-#include <omp.h>
-#endif
-#include <Rcpp.h>
-#include <R.h>
-#include <Rinternals.h>
 #include <local.h>
-#include <string>
-#include <algorithm>
-// enable linux performance counting
-#ifdef ICD9_VALGRIND
-#include <valgrind/callgrind.h>
-#endif
-extern "C" {
-#include "local_c.h"
-#include <cstdlib>
-}
 using namespace Rcpp;
 
 //' @rdname icd9Comorbid

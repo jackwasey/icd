@@ -1,8 +1,16 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
+#include <R.h>
+#include <Rinternals.h>
 #include <string>
+#include <algorithm>
 #include <vector>
 #include <set>
+
+extern "C" {
+#include "local_c.h"
+#include <cstdlib>
+}
 
 //#define ICD9_DEBUG
 //#define ICD9_DEBUG_TRACE
@@ -11,10 +19,14 @@
 //#define ICD9_DEBUG_PARALLEL
 //#define ICD9_VALGRIND
 #ifdef _OPENMP
-//#define ICD9_OPENMP
+#include <omp.h>
+#define ICD9_OPENMP
 #define ICD9_ORDER_GUARANTEE
 #endif
 
+#ifdef _OPENMP // not available on clang
+#endif
+// enable linux performance counting
 #ifdef ICD9_VALGRIND
 #include <valgrind/callgrind.h>
 #endif

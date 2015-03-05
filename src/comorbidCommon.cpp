@@ -1,13 +1,5 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
 #include <local.h>
-#include <string>
-#include <algorithm>
-#ifdef _OPENMP // not available on clang
-#ifdef ICD9_OPENMP // only when I want to
-#include <omp.h>
-#endif
-#endif
 using namespace Rcpp;
 
 void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
@@ -90,15 +82,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 			chunk_end_i = last_i; // indices
 		ComorbidOut chunk;
 		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
-		//#ifdef ICD9_ORDER_GUARANTEE
 #pragma omp ordered
-		//#else
-		//#pragma omp critical
-		//#endif
-		//	writeChunk(chunk_out, vis_i, out); // write the chunk (as critical not for coherence, but for false sharing)
-
-		// (over)write a chunk in position to the full output matrix
-		//		void writeChunk(const Out chunk_out, Out::size_type begin, Out& out) {
 		{
 #ifdef ICD9_DEBUG_TRACE
 			std::cout << "writing a chunk beginning at: " << vis_i << "\n";

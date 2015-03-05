@@ -2,7 +2,7 @@ language: r
 
 r_github_packages:
  - hadley/devtools
- - jimhester/covr
+ - jackwasey/covr
 
 after_success:
  - Rscript -e 'devtools::install()'
