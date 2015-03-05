@@ -173,20 +173,13 @@ test_that("running short to decimal conversion before and after expansion
             expect_equal(icd9DecimalToShort("123."), "123")
           })
 
-test_that("recompose parts realises when data frame is sent to major,
-          or vector to parts", {
-            expect_error(icd9PartsRecompose(major =
-                                              list(major = "100",
-                                                   minor = "98")))
-            expect_error(icd9PartsRecompose(list(major =
-                                                   "100", minor = "98")))
-            expect_error(icd9PartsRecompose(parts = c("100", "200")))
-          })
-
 test_that("parts to decimal", {
-  #expect_that(icd9PartsToDecimal("100", NA), equals("100"))
-  #expect_that(icd9PartsToDecimal("100", ""), equals("100"))
-  #expect_that(icd9PartsToDecimal("100", "1"), equals("100.1"))
+  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = NA)), equals("100"))
+  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "")), equals("100"))
+  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "1")), equals("100.1"))
+  expect_that(icd9MajMinToDecimal("100", NA), equals("100"))
+  expect_that(icd9MajMinToDecimal("100", ""), equals("100"))
+  expect_that(icd9MajMinToDecimal("100", "1"), equals("100.1"))
 })
 
 test_that("parts to short invalid inputs", {

@@ -25,7 +25,7 @@ randomShortIcd9 <- function(n = 50000)
   as.character(floor(runif(min = 1, max = 99999, n = n)))
 
 randomShortAhrq <- function(n = 50000)
-  sample(unname(unlist(ahrqComorbid)), size = n, replace = TRUE)
+  sample(unname(unlist(icd9::ahrqComorbid)), size = n, replace = TRUE)
 
 randomDecimalIcd9 <- function(n = 50000)
   paste(
@@ -120,10 +120,10 @@ otherbench <- function() {
   for (threads in c(1,4,8)) { # with parallel for, best is 8 threads, static chunk of ONE (dynamic slightly slower)
     for (n in c(500000)) {
       for (cs in c(1, 32, 1024)) {
-        message("threads = ", threads, ", np = ", np, ", n = ", n, ", cs = ", cs)
+        message("threads = ", threads, ", n = ", n, ", cs = ", cs)
         print(microbenchmark::microbenchmark(
-          icd9ComorbidShortCpp(randomPatients(n, np),icd9::ahrqComorbid, threads = threads, chunkSize = cs, check=identical),
-          times = 10
+          icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = threads, chunkSize = cs),
+          check = my_check, times = 10
         ))
       }
     }
@@ -181,21 +181,6 @@ my_check <- function(values) {
   all(sapply(values[-1], function(x) identical(values[[1]], x)))
 }
 
-benchGrain <- function() {
-  ptsHuge <- randomPatients(1000000, np = 17)
-  microbenchmark::microbenchmark(
-    icd9ComorbidShortRPVecInt(ptsHuge,icd9::ahrqComorbid, grainSize = 2000),
-    icd9ComorbidShortRPVecInt(ptsHuge,icd9::ahrqComorbid, grainSize = 1000),
-    icd9ComorbidShortRPVecInt(ptsHuge,icd9::ahrqComorbid, grainSize = 500),
-    icd9ComorbidShortRPVecInt(ptsHuge,icd9::ahrqComorbid, grainSize = 250),
-    icd9ComorbidShortRPVecInt(ptsHuge,icd9::ahrqComorbid, grainSize = 125),
-    icd9ComorbidShortRPVecInt(ptsHuge,icd9::ahrqComorbid, grainSize = 50),
-    icd9ComorbidShortRPVecInt(ptsHuge,icd9::ahrqComorbid, grainSize = 25),
-    icd9ComorbidShortRPVecInt(ptsHuge,icd9::ahrqComorbid, grainSize = 10),
-    times = 3
-  )
-}
-
 icd9BenchComorbidParallel <- function() {
   pts10000 <- randomPatients(10000)
   pts100000 <- randomPatients(100000)
@@ -216,30 +201,6 @@ icd9BenchComorbidParallel <- function() {
     icd9ComorbidShortCpp(ptsBig,icd9::ahrqComorbid, threads = 2),
     icd9ComorbidShortCpp(ptsBig,icd9::ahrqComorbid, threads = 4),
     icd9ComorbidShortCpp(ptsBig,icd9::ahrqComorbid, threads = 6),
-    # 8 is very slow (maxes hyperthreading...)
-    times = 5))
-}
-
-icd9BenchComorbidParallelTwo <- function() {
-  pts10000 <- randomPatients(10000)
-  pts100000 <- randomPatients(100000)
-  ptsBig <- randomPatients(500000)
-  print(microbenchmark::microbenchmark(
-    icd9ComorbidShortParallelTwo(pts10000,icd9::ahrqComorbid, threads = 0),
-    icd9ComorbidShortParallelTwo(pts10000,icd9::ahrqComorbid, threads = 1),
-    icd9ComorbidShortParallelTwo(pts10000,icd9::ahrqComorbid, threads = 2),
-    icd9ComorbidShortParallelTwo(pts10000,icd9::ahrqComorbid, threads = 4),
-    icd9ComorbidShortParallelTwo(pts10000,icd9::ahrqComorbid, threads = 6),
-    icd9ComorbidShortParallelTwo(pts100000,icd9::ahrqComorbid, threads = 0),
-    icd9ComorbidShortParallelTwo(pts100000,icd9::ahrqComorbid, threads = 1),
-    icd9ComorbidShortParallelTwo(pts100000,icd9::ahrqComorbid, threads = 2),
-    icd9ComorbidShortParallelTwo(pts100000,icd9::ahrqComorbid, threads = 4),
-    icd9ComorbidShortParallelTwo(pts100000,icd9::ahrqComorbid, threads = 6),
-    icd9ComorbidShortParallelTwo(ptsBig,icd9::ahrqComorbid, threads = 0),
-    icd9ComorbidShortParallelTwo(ptsBig,icd9::ahrqComorbid, threads = 1),
-    icd9ComorbidShortParallelTwo(ptsBig,icd9::ahrqComorbid, threads = 2),
-    icd9ComorbidShortParallelTwo(ptsBig,icd9::ahrqComorbid, threads = 4),
-    icd9ComorbidShortParallelTwo(ptsBig,icd9::ahrqComorbid, threads = 6),
     # 8 is very slow (maxes hyperthreading...)
     times = 5))
 }
@@ -302,17 +263,6 @@ icd9Benchmark <- function() {
   prfChild <- profr::profr(icd9ChildrenShort(rng))
   ggplot2::ggplot(prfChild, minlabel = 0.001)
   ggplot2::ggsave("tmpggplot.jpg", width = 250, height=5, dpi=200, limitsize = FALSE)
-
-  microbenchmark::microbenchmark(times = 20,
-                                 icd9PartsRecompose(data.frame(major = rep(as.character(100:999), times = 250),
-                                                               minor = rep("01", times = 900 * 250)),
-                                                    isShort = T)
-  )
-  microbenchmark::microbenchmark(times = 1,
-                                 icd9PartsRecompose(data.frame(major = as.character(100:999),
-                                                               minor = rep(NA, times = 900)),
-                                                    isShort = T)
-  )
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
                                  icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep=""))))

@@ -404,25 +404,6 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline CharacterVector icd9LongToWideMatrixByMap(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9") {
-        typedef SEXP(*Ptr_icd9LongToWideMatrixByMap)(SEXP,SEXP,SEXP);
-        static Ptr_icd9LongToWideMatrixByMap p_icd9LongToWideMatrixByMap = NULL;
-        if (p_icd9LongToWideMatrixByMap == NULL) {
-            validateSignature("CharacterVector(*icd9LongToWideMatrixByMap)(const SEXP&,const std::string,const std::string)");
-            p_icd9LongToWideMatrixByMap = (Ptr_icd9LongToWideMatrixByMap)R_GetCCallable("icd9", "icd9_icd9LongToWideMatrixByMap");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9LongToWideMatrixByMap(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<CharacterVector >(__result);
-    }
-
     inline CharacterVector icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9", bool aggregate = true) {
         typedef SEXP(*Ptr_icd9LongToWideCpp)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9LongToWideCpp p_icd9LongToWideCpp = NULL;

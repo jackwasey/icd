@@ -116,7 +116,7 @@ CharacterVector icd9ChildrenShort(CharacterVector icd9Short, bool onlyReal = tru
   }
   if (onlyReal) {
     const Environment env("package:icd9");
-    List icd9Hierarchy = env["icd9Hierarchy"]; // TODO: unnecessary copy?
+    List icd9Hierarchy = env["icd9Hierarchy"];
     std::set< std::string > out_real;
     std::vector< std::string > tmp = as<std::vector< std::string > >(icd9Hierarchy["icd9"]);
     std::set< std::string > reals(tmp.begin(), tmp.end());

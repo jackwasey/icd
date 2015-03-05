@@ -108,17 +108,25 @@ icd9WideToLong <- function(x,
 #' @title convert ICD data from long to wide format
 #' @description This is more complicated than reshape or reshape2::dcast allows.
 #'   This is a reasonably simple solution using built-in functions.
-#' @param x data.frame of long-form data, one column for visitId and one for ICD
-#'   code
+#' @param icd9df data.frame of long-form data, one column for visitId and one
+#'   for ICD code
 #' @param visitId single character, if NULL will use "visitId" if exists,
 #'   otherwise the first column
-#' @param icd9Field single character string with name of column containing the ICD
-#'   codes. If left as NULL, the field is guessed to be the first matching ICD
-#'   or icd, and a warning is given if multiple columns match.
+#' @param icd9Field single character string with name of column containing the
+#'   ICD codes. If left as NULL, the field is guessed to be the first matching
+#'   ICD or icd, and a warning is given if multiple columns match.
 #' @param prefix character, default "icd_" to prefix new columns
-#' @param min.width, single integer, if specified, writes out this many columns even
-#'   if no patients have that many codes. Must be greater than or equal to the
-#'   maximum number of codes per patient.
+#' @param min.width, single integer, if specified, writes out this many columns
+#'   even if no patients have that many codes. Must be greater than or equal to
+#'   the maximum number of codes per patient.
+#' @param aggregate single logical value, if TRUE (the default) will take more
+#'   time to find out-of-order visitIds, and combine all the codes for each
+#'   unique visitId. If \code{FALSE}, then out-of-order visitIds will result in
+#'   a row in the output data per contiguous block of identical visitIds.
+#' @param return.df single logical value, if \code{TRUE}, return a data frame
+#'   with a field for the visitId. This may be more convenient, but the default
+#'   of \code{FALSE} gives the more natural return data of a matrix with
+#'   rownames being the visitIds.
 #' @examples
 #'   longdf <- data.frame(visitId = c("a", "b", "b", "c"),
 #'     icd9 = c("441", "4424", "443", "441"))

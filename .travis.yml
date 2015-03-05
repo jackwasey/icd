@@ -1,12 +1,13 @@
 language: r
 
-# r_github_packages:
-# - jimhester/covr
-# - jimhester/lintr
+# warnings_are_errors: false
+
+ r_github_packages:
+ - hadley/devtools
+ - jimhester/covr
 # - hadley/testthat
+# - jimhester/lintr
 
-# after_success:
-#  - Rscript -e 'devtools::install()'
-# - Rscript -e 'library(covr); coveralls(exclusion=list("R/benchmark.R" = 1, "R/RcppExports.R" = 1, "src/RcppExports.cpp" = 1))'
-
-warnings_are_errors: false
+after_success:
+ - Rscript -e 'devtools::install()'
+ - Rscript -e 'library(covr); coveralls(exclusion=list("R/benchmark.R" = 1, "R/RcppExports.R" = 1, "src/RcppExports.cpp" = 1))'
