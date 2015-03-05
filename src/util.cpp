@@ -1,5 +1,5 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
+#include <local.h>
 using namespace Rcpp;
 
 std::string trimRight(std::string& s) {

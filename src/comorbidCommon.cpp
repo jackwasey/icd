@@ -1,4 +1,5 @@
 // [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::plugins(openmp)]]
 #include <local.h>
 using namespace Rcpp;
 

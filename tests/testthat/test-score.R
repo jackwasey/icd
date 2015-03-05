@@ -1,5 +1,10 @@
 context("test Charlson and counting")
 
+test_that("only matrix or data.frame accepted", {
+  expect_error(icd9Charlson(c(1, 2)))
+  expect_error(icd9Charlson(c(1, 2), visitId = "roam", return.df = TRUE, stringsAsFactors = TRUE))
+})
+
 test_that("Charlson score", {
 
   mydf <- data.frame(visitId = c("a", "b", "c"),

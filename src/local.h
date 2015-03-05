@@ -46,6 +46,8 @@ void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
 		const bool aggregate);
+ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
+                                     const int chunkSize, const int ompChunkSize);
 
 #if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
 #include <iostream> // only include std::cout if debugging: R won't like cout so we should not do this unless debugging.

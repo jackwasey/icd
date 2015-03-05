@@ -1,9 +1,9 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
-
-// R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
 #include <local.h>
 using namespace Rcpp;
+
+// R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
 
 //' @rdname icd9Comorbid
 //' @description RcppParallel approach with openmp and vector of integer strategy
