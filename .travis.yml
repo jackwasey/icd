@@ -6,4 +6,6 @@ r_github_packages:
 
 after_success:
  - Rscript -e 'devtools::install()'
+ - Rscript -e 'devtools::session_info()'
+ - Rscript -e 'install_github("hadley/devtools")'
  - Rscript -e 'library(covr); coveralls(exclusion=list("R/benchmark.R" = 1, "R/RcppExports.R" = 1, "src/RcppExports.cpp" = 1))'

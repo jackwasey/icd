@@ -12,14 +12,14 @@ using namespace Rcpp;
 
 void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 		const size_t num_comorbid, const size_t begin, const size_t end,
-		Out& chunk) {
+		ComorbidOut& chunk) {
 
 #ifdef ICD9_DEBUG_TRACE
 	std::cout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
 #endif
-	const Out falseComorbidChunk(num_comorbid * (1 + end - begin), false);
+	const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin), false);
 	chunk = falseComorbidChunk;
-	// TODO: now parallel is working well, try looping through comorbidities in outside loop?
+	// TODO: someday try looping through comorbidities in outside loop instead of inner loop.
 	for (size_t urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
 #ifdef ICD9_DEBUG_TRACE
 			std::cout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
@@ -33,17 +33,17 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 					std::cout << "nve = " << nve << ". vcdb_x length = " << vcdb.size() << "\n";
 #endif
 
-				const Codes& codes = vcdb[urow]; // these are the ICD-9 codes for the current visitid
-				const Codes& mapCodes = map[cmb];
+				const VecInt& codes = vcdb[urow]; // these are the ICD-9 codes for the current visitid
+				const VecInt& mapCodes = map[cmb];
 
-				const Codes::const_iterator cbegin = codes.begin();
-				const Codes::const_iterator cend = codes.end();
-				for (Codes::const_iterator code_it = cbegin; code_it != cend;
+				const VecInt::const_iterator cbegin = codes.begin();
+				const VecInt::const_iterator cend = codes.end();
+				for (VecInt::const_iterator code_it = cbegin; code_it != cend;
 						++code_it) {
 					bool found_it = std::binary_search(mapCodes.begin(),
 							mapCodes.end(), *code_it);
 					if (found_it) {
-						const Out::size_type chunk_idx = num_comorbid
+						const ComorbidOut::size_type chunk_idx = num_comorbid
 								* (urow - begin) + cmb;
 #ifdef ICD9_DEBUG
 						chunk.at(chunk_idx) = true;
@@ -64,7 +64,7 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 }
 
 void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
-		const size_t chunkSize, const size_t ompChunkSize, Out& out) {
+		const size_t chunkSize, const size_t ompChunkSize, ComorbidOut& out) {
 	const size_t num_comorbid = map.size();
 	const size_t num_visits = vcdb.size();
 	const size_t last_i = num_visits - 1;
@@ -88,7 +88,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
 		if (chunk_end_i > last_i)
 			chunk_end_i = last_i; // indices
-		Out chunk;
+		ComorbidOut chunk;
 		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
 		//#ifdef ICD9_ORDER_GUARANTEE
 #pragma omp ordered
@@ -114,9 +114,9 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 }
 
 // just return the chunk results: this wouldn't cause invalidation of shared 'out'
-Out lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
+ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		const int chunkSize, const int ompChunkSize) {
-	Out out(vcdb.size() * map.size(), false);
+	ComorbidOut out(vcdb.size() * map.size(), false);
 	lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
 	return out;
 }

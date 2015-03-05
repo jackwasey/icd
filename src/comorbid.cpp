@@ -60,24 +60,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 	std::cout << "building visit:codes structure\n";
 #endif
 
-	//const CodesVecSubtype allCodes = buildVisitCodesVecFromMap(icd9df, visitId, icd9Field, _visitIds);
-	VecVecInt vcdb; //TODO: reserve sizes
-
-//	if (Rf_isFactor(vsexp)) {
-//		#ifdef ICD9_DEBUG_SETUP
-//		std::cout << "converting integer factor ids back to names for matrix row names\n";
-//#endif
-//		SEXP levels = Rf_getAttrib(vsexp, Rf_install("levels"));
-//		for (size_t vis_it = 0; vis_it != visitIds.size(); vis_it++) {
-//#ifdef ICD9_DEBUG_SETUP_TRACE
-//			std::cout << "levels length = " << Rf_length(levels) << "\n";
-//		std::cout << "vis_it = " << vis_it << " and visit# = " << visitIds[vis_it] << "\n"; // " and facidx = " << INTEGER(vsexp)[vis_it] << "\n";
-//#endif
-//			out_row_names.push_back(CHAR(STRING_ELT(levels, visitIds[vis_it]-1)));
-//		}
-//}
-
-	//TODO: make sure we pre-convert factors and ints to char (or do it here). They will end up being chars anyway as row names.
+	VecVecInt vcdb; //size is reserved later
 	// TODO: do I need to allocate memory when I do this?
 	SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 #ifdef ICD9_DEBUG_SETUP
@@ -89,7 +72,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 		std::cout << "icd9ComorbidShortMatrix INTSXP\n";
 		if (Rf_isFactor(vsexp)) std::cout << "and is a factor\n";
 #endif
-		VecStr visitIds;
+		VecStr visitIds; // size reserved later
 		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, visitIds,
 				aggregate);
 
@@ -111,7 +94,6 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "building icd9Mapping\n";
 #endif
-	// TODO: doing this as a factor would avoid splitting up into three different vectors
 	VecVecInt map;
 	buildMap(icd9Mapping, map);
 
@@ -130,7 +112,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 
 	//const Out out = lookupComorbidByRowFor(allCodes, map, chunkSize);
 	//const Out out = lookupComorbidByChunkWhile(allCodes, map, chunkSize);
-	const Out out = lookupComorbidByChunkFor(vcdb, map, chunkSize,
+	const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunkSize,
 			ompChunkSize);
 
 #ifdef ICD9_DEBUG
@@ -145,7 +127,8 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 	std::cout << "printed\n";
 #endif
 	//IntegerVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
-	// TODO: segfaults consistently with some input, e.g. 2e6 rows on linux. Need to manually convert int to logical?
+	// TODO: the above line segfaults consistently with some input, e.g. 2e6 rows on linux. Need to manually convert int to logical?
+
 	// try cast to logical first. (in which case I can use char for Out)
 	std::vector<bool> intermed;
 	intermed.assign(out.begin(), out.end());

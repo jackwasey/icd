@@ -3,12 +3,11 @@
 #include <string>
 #include <vector>
 #include <set>
-//#include <boost/unordered/unordered_set.hpp>
 
 //#define ICD9_DEBUG
+//#define ICD9_DEBUG_TRACE
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
-//#define ICD9_DEBUG_TRACE
 //#define ICD9_DEBUG_PARALLEL
 //#define ICD9_VALGRIND
 #ifdef _OPENMP
@@ -25,13 +24,9 @@ typedef std::vector<Str> VecStr;
 
 typedef std::vector<int> VecInt;
 //typedef std::vector<unsigned int> VecUInt; // doesn't work well with Rcpp
-typedef VecInt Out; // TODO: would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads.
-//typedef std::vector<char> Out; // TODO: would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads, and char doesn't cast to bool with Rcpp
-typedef VecInt Codes; // e.g. the codes in a comorbidity subtype (ie numeric, V, or E)
-
-//typedef std::set<Str> SetStr;
-//typedef std::set<int> SetInt;
-//typedef std::set<unsigned int> SetUInt;
+//typedef VecInt Out;
+typedef std::vector<char> ComorbidOut;
+// would rather use char or bool, or something more compact, but vector<bool> dangerous with multiple threads, and char doesn't cast to bool with Rcpp
 
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
@@ -97,8 +92,8 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
 		const bool aggregate);
 
-Out lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
-		const int chunkSize, const int ompChunkSize);
+ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
+		const VecVecInt& map, const int chunkSize, const int ompChunkSize);
 
 int longToWideWork(const char* lastVisitId, const char* icd, const char* vi,
 		const int approx_cmb_per_visit, int max_per_pt,
