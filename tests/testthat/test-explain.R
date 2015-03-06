@@ -76,6 +76,9 @@ test_that("none ICD-9 codes are even valid", {
 
 test_that("guess icd9 types: short", {
   expect_true(icd9GuessIsShort("12345"))
+  expect_true(icd9GuessIsShort(c("12345", "234")))
+  # we only look at first one...
+  expect_true(icd9GuessIsShort(c("12345", "23.4")))
   expect_true(icd9GuessIsShort("1234"))
 })
 
@@ -95,8 +98,8 @@ test_that("guess icd9 types: invalid", {
 })
 
 test_that("guess with just majors", {
-# it acutally doesn't matter if they are all majors, so we default to 'short'
-# which is usually the most direct route to an answer
+  # it acutally doesn't matter if they are all majors, so we default to 'short'
+  # which is usually the most direct route to an answer
   expect_true(icd9GuessIsShort(c("100", "101", "102")))
 })
 
