@@ -50,30 +50,14 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif
-	switch (TYPEOF(vsexp)) {
-	case INTSXP: {
-#ifdef ICD9_DEBUG_SETUP
-		std::cout << "icd9ComorbidShortMatrix INTSXP\n";
-		if (Rf_isFactor(vsexp)) std::cout << "and is a factor\n";
-#endif
-		VecStr visitIds; // size reserved later
-		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, visitIds,
-				aggregate);
+	if (TYPEOF(vsexp) != STRSXP)
+		Rcpp::stop("expecting vsexp to be character vector");
 
-		break;
-	}
-	case STRSXP: {
 #ifdef ICD9_DEBUG_SETUP
-		std::cout << "icd9ComorbidShortMatrix STRSXP\n";
+	std::cout << "icd9ComorbidShortMatrix STRSXP\n";
 #endif
-		buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
-				aggregate);
-		break;
-	}
-	default:
-		Rcout << "shouldn't be here in comorbid. TYPEOF is " << TYPEOF(vsexp)
-				<< "\n";
-	}
+	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
+			aggregate);
 
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "building icd9Mapping\n";

@@ -18,8 +18,7 @@ Depends:
     R (>= 3.0.0)
 Imports:
     Rcpp (>= 0.11.4),
-    checkmate (>= 1.5.1),
-    methods
+    checkmate (>= 1.5.1)
 Suggests:
     testthat,
     knitr,

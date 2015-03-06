@@ -9,16 +9,16 @@
 \title{Calculate Charlson Comorbidity Index (Charlson Score)}
 \usage{
 icd9Charlson(x, visitId = NULL, return.df = FALSE,
-  stringsAsFactors = getOption("stringsAsFacotrs"), ...)
+  stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 \method{icd9Charlson}{default}(x, visitId = NULL, return.df = FALSE,
-  stringsAsFactors = getOption("stringsAsFacotrs"), ...)
+  stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 \method{icd9Charlson}{matrix}(x, visitId = NULL, return.df = FALSE,
-  stringsAsFactors = getOption("stringsAsFacotrs"), ...)
+  stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 \method{icd9Charlson}{data.frame}(x, visitId = NULL, return.df = FALSE,
-  stringsAsFactors = getOption("stringsAsFacotrs"), ...)
+  stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 icd9CharlsonComorbid(x, visitId = NULL, applyHierarchy = FALSE)
 }
