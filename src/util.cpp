@@ -2,12 +2,14 @@
 #include <local.h>
 using namespace Rcpp;
 
+// trim one string from right
 std::string trimRight(std::string& s) {
 	std::size_t n = s.find_last_not_of(" \f\n\r\t\v");
 	s.erase(n + 1);
 	return s;
 }
 
+// trim one string from left
 std::string trimLeft(std::string& s) {
 	std::size_t n = s.find_first_not_of(" \f\n\r\t\v");
 	s.erase(0, n);
@@ -40,4 +42,3 @@ void printCharVec(CharacterVector cv) {
 	return;
 }
 #endif
-

@@ -86,8 +86,8 @@ icd9IsValidShort <- function(icd9Short) {
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.
   icd9IsValidShortN(icd9Short) |
-      icd9IsValidShortV(icd9Short) |
-      icd9IsValidShortE(icd9Short)
+    icd9IsValidShortV(icd9Short) |
+    icd9IsValidShortE(icd9Short)
 }
 
 #' @rdname icd9IsValid
@@ -232,8 +232,11 @@ icd9GetInvalidDecimal <- function(icd9Decimal)
 icd9GetInvalidShort <- function(icd9Short)
   icd9Short[!icd9IsValidShort(icd9Short)]
 
-icd9IsMajor <- function(icd9)
+#' @keywords internal
+icd9IsMajor <- function(icd9) {
+  icd9 <- trim(icd9)
   nchar(icd9) - icd9IsE(icd9) < 4
+}
 
 #' @title Check whether ICD-9 codes exist
 #' @description This is different from syntactic validity: it looks it up in the

@@ -1,9 +1,9 @@
 context("icd9 validation")
 
 test_that("warning for deprecation of icd9ValidDecimal", {
-  expect_that(icd9ValidDecimal(c("1", "2")), throws_warning())
-  expect_that(icd9ValidShort(c("1", "2")), throws_warning())
-  expect_that(icd9Valid(c("1", "2"), isShort = TRUE), throws_warning())
+  expect_that(icd9ValidDecimal(c("1", "2")), gives_warning())
+  expect_that(icd9ValidShort(c("1", "2")), gives_warning())
+  expect_that(icd9Valid(c("1", "2"), isShort = TRUE), gives_warning())
 })
 
 test_that("icd9IsValidDecimal - rubbish input", {
@@ -332,7 +332,7 @@ test_that("get valid - vector input", {
   expect_equal(icd9GetValid("100"), "100")
   expect_equal(icd9GetValid("nolk"), character())
   expect_equal(icd9GetValid(c("100", "nolk")), "100")
-  expect_equal(icd9GetValidDecimal("10.0", "100.x"), "10.0")
+  expect_equal(icd9GetValidDecimal(c("10.0", "100.x")), "10.0")
   expect_equal(icd9GetValidShort("nolk"), character())
   expect_equal(icd9GetValidShort(c("V100", "nolk")), "V100")
   expect_equal(icd9GetInvalid(c("100", "nolk")), "nolk")
