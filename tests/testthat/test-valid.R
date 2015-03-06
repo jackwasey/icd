@@ -3,10 +3,13 @@ context("icd9 validation")
 test_that("warning for deprecation of icd9ValidDecimal", {
   expect_that(icd9ValidDecimal(c("1", "2")), throws_warning())
   expect_that(icd9ValidShort(c("1", "2")), throws_warning())
+  expect_that(icd9Valid(c("1", "2"), isShort = TRUE), throws_warning())
 })
 
 test_that("icd9IsValidDecimal - rubbish input", {
   expect_error(icd9IsValidDecimal(list(1230, c(12323, 2323), c("nonesnseses"))))
+  expect_warning(icd9IsValidDecimal(c(10.1, 200)))
+  expect_equal(icd9IsValidDecimal(c(10.1, 9999, -1)), c(TRUE, FALSE, FALSE))
   expect_equal(icd9IsValidDecimal(character()), logical())
   expect_false(icd9IsValidDecimal("."))
   expect_equal(icd9IsValidDecimal(c("100", "chestnut")), c(TRUE, FALSE))

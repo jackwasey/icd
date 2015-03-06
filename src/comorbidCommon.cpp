@@ -4,16 +4,18 @@
 using namespace Rcpp;
 
 void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
-		const size_t num_comorbid, const size_t begin, const size_t end,
+		const VecVecInt::size_type num_comorbid,
+		const VecVecInt::size_type begin, const VecVecInt::size_type end,
 		ComorbidOut& chunk) {
 
 #ifdef ICD9_DEBUG_TRACE
 	std::cout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
 #endif
-	const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin), false);
+	const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin),
+			false);
 	chunk = falseComorbidChunk;
 	// TODO: someday try looping through comorbidities in outside loop instead of inner loop.
-	for (size_t urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
+	for (VecVecInt::size_type urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
 #ifdef ICD9_DEBUG_TRACE
 			std::cout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
 #endif
@@ -57,11 +59,12 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 }
 
 void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
-		const size_t chunkSize, const size_t ompChunkSize, ComorbidOut& out) {
-	const size_t num_comorbid = map.size();
-	const size_t num_visits = vcdb.size();
-	const size_t last_i = num_visits - 1;
-	size_t chunk_end_i;
+		const VecVecInt::size_type chunkSize,
+		const VecVecInt::size_type ompChunkSize, ComorbidOut& out) {
+	const VecVecInt::size_type num_comorbid = map.size();
+	const VecVecInt::size_type num_visits = vcdb.size();
+	const VecVecInt::size_type last_i = num_visits - 1;
+	VecVecInt::size_type chunk_end_i;
 #ifdef ICD9_OPENMP
 #pragma omp parallel shared(vcdb, map, out) private(chunk_end, chunk_out)
 	omp_set_schedule(omp_sched_static, ompChunkSize); // ideally wouldn't repeat this over and over again
@@ -74,7 +77,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 #pragma omp for ordered schedule(static)
 #endif
 	// loop through chunks at a time
-	for (size_t vis_i = 0; vis_i < num_visits;) {
+	for (VecVecInt::size_type vis_i = 0; vis_i < num_visits;) {
 #ifdef ICD9_DEBUG_TRACE
 		std::cout << "vis_i = " << vis_i << " ";
 #endif
@@ -99,8 +102,8 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 }
 
 // just return the chunk results: this wouldn't cause invalidation of shared 'out'
-ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
-		const int chunkSize, const int ompChunkSize) {
+ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
+		const VecVecInt& map, const int chunkSize, const int ompChunkSize) {
 	ComorbidOut out(vcdb.size() * map.size(), false);
 	lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
 	return out;

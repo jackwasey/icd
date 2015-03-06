@@ -29,8 +29,8 @@ test_that("trim with acceptable inputs" , {
                    trimCpp(c("123", " a s d f ")))
 
   # strim (trim a single string)
-  expect_equal(trim(NA_integer_), NA_character_)
-  expect_equal(trim(NA_character_), NA_character_)
+  expect_equal(strim(NA_integer_), NA_character_)
+  expect_equal(strim(NA_character_), NA_character_)
   expect_equal(strim("jack"), "jack")
   expect_equal(strim("jack "), "jack")
   expect_equal(strim(" jack "), "jack")
@@ -42,8 +42,9 @@ test_that("trim with acceptable inputs" , {
   expect_equal(strim("ja ck "), "ja ck")
   expect_equal(strim(" ja ck "), "ja ck")
   expect_equal(strim(" ja ck"), "ja ck")
-
-  # strim and strimCpp should do the same thing, for non-NA
+  # is this what I want?
+  expect_error(strim(c("jack", " an other ")))
+  # strim and strimCpp should do the same thing, for non-NA input
   expect_identical(strim(" a s d f "), strimCpp(" a s d f "))
 
 })
