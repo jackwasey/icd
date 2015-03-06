@@ -111,10 +111,12 @@ parseAhrqSas <- function(sasPath = system.file("extdata",
 
   # save the data in the development tree, so the package user doesn't need to
   # decode it themselves.
+  # EXCLUDE COVERAGE START
   if (save) {
     saveInDataDir("ahrqComorbidAll")
     saveInDataDir("ahrqComorbid")
   }
+  # EXCLUDE COVERAGE END
 
   if (returnAll) return(invisible(ahrqComorbidAll))
 
@@ -473,12 +475,13 @@ parseIcd9Chapters <- function(year = NULL,
   # level: this would not enable matching an arbitrary code, but this is
   # probably a limited problem for the rare cases of obsolete codes, or new
   # codes, when the coding was done in a different year from this analysis.
-
+  # EXCLUDE COVERAGE START
   if (save) {
     saveInDataDir("icd9Chapters")
     saveInDataDir("icd9ChaptersSub")
     saveInDataDir("icd9ChaptersMajor")
   }
+  # EXCLUDE COVERAGE END
   invisible(list(icd9Chapters = icd9Chapters,
                  icd9ChaptersSub = icd9ChaptersSub,
                  icd9ChaptersMajor = icd9ChaptersMajor))

@@ -194,7 +194,7 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
     icd9CmDesc,
     icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE)
   )
-  if (save) saveInDataDir("icd9Hierarchy")
+  if (save) saveInDataDir("icd9Hierarchy") # EXCLUDE COVERAGE
 }
 
 #' @title Condense ICD-9 code by replacing complete families with parent codes

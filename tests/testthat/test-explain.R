@@ -385,3 +385,13 @@ test_that("working with named lists of codes, decimal is guessed", {
   expect_that(icd9ExplainDecimal(list(a = c("001"), b = c("001.1", "001.9"))), testthat::not(gives_warning()))
   expect_that(icd9Explain(list(a = c("001"), b = c("001.1", "001.9"))), testthat::not(gives_warning()))
 })
+
+test_that("icd9 descriptions is parsed correctly", {
+  x <- parseIcd9Descriptions()
+  expect_equal(names(x), c("icd9", "descLong", "descShort"))
+  expect_equal(nrow(x), 14567)
+  expect_true(is.character(x$icd9))
+  # TODO: add specific tests, e.g. for Menieres with non-standard character
+  # sets, punctuation
+  # most of the results of this are already tested in icd9Hierarchy
+})
