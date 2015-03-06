@@ -32,8 +32,10 @@
 #'   icd9IsValidMajor(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 #' @export
-icd9IsValid <- function(icd9, isShort)
+icd9IsValid <- function(icd9, isShort) {
+  checkmate::checkFlag(isShort)
   if (isShort) icd9IsValidShort(icd9) else icd9IsValidDecimal(icd9)
+}
 
 #' @rdname icd9IsValid
 #' @export
@@ -78,10 +80,7 @@ icd9IsValidShort <- function(icd9Short) {
   # this is not just invalid data: there is a programming error in the data
   # structure
 
-  # quicker to test rather than always try to convert. Factor levels are always
-  # character, so no concern about introducing ambiguity with e.g. short code of
-  # 100 vs 10.0 (0100, 0010)
-  if (is.factor(icd9Short)) icd9Short <- asCharacterNoWarn(icd9Short)
+  icd9Short <- asCharacterNoWarn(icd9Short)
 
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.

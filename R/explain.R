@@ -60,6 +60,10 @@ icd9Explain.list <- function(icd9,  isShort = icd9GuessIsShort(icd9),
 #' @export
 icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                   doCondense = TRUE, brief = FALSE, warn = TRUE) {
+  checkmate::checkFlag(isShort)
+  checkmate::checkFlag(doCondense)
+  checkmate::checkFlag(brief)
+  checkmate::checkFlag(warn)
 
   if (!isShort) icd9 <- icd9DecimalToShort(icd9)
 
@@ -114,7 +118,7 @@ icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
 icd9GuessIsShort <- function(icd9) {
   # don't take responsibility for validation here.
   if (is.list(icd9)) icd9 <- unlist(icd9)
-  icd9 <- as.character(icd9)
+  icd9 <- asCharacterNoWarn(icd9)
   if (is.list(icd9)) {
     if (length(icd9) > 0)
       icd9 <- icd9[[1]]
@@ -140,7 +144,8 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
-
+  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
+  checkmate::checkCharacter(icd9)
   majors     <- icd9GetMajor(icd9, isShort)
 
   cf <- factor(rep(NA, length(icd9)),
@@ -156,8 +161,8 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
   for (i in 1:length(majors)) {
     for (chap in names(icd9::icd9Chapters)) {
       if (any(majors[i] %in%
-              (icd9::icd9Chapters[[chap]]["start"] %i9mj%
-               icd9::icd9Chapters[[chap]]["end"])
+                (icd9::icd9Chapters[[chap]]["start"] %i9mj%
+                   icd9::icd9Chapters[[chap]]["end"])
       )) {
         out[i, "chapter"] <- chap
         break
@@ -165,8 +170,8 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
     }
     for (subchap in names(icd9::icd9ChaptersSub)) {
       if (any(majors[i] %in%
-              (icd9::icd9ChaptersSub[[subchap]]["start"] %i9mj%
-               icd9::icd9ChaptersSub[[subchap]]["end"])
+                (icd9::icd9ChaptersSub[[subchap]]["start"] %i9mj%
+                   icd9::icd9ChaptersSub[[subchap]]["end"])
       )) {
         out[i, "subchapter"] <- subchap
         break
@@ -186,7 +191,7 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
 
 # this is rather slow, queries a web page repeatedly
 icd9GetChaptersHierarchy <- function(save = FALSE) {
-
+  checkmate::checkFlag(save)
   # don't rely on having already done this when setting up other data.
   icd9CmDesc <- parseIcd9Descriptions()
 
@@ -212,6 +217,8 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #' @family ICD-9 ranges
 #' @export
 icd9Condense <- function(icd9, isShort, onlyReal = NULL, toMajor = TRUE) {
+  checkmate::checkFlag(isShort)
+  checkmate::checkFlag(toMajor)
   if (isShort) return(icd9CondenseShort(icd9, onlyReal, toMajor))
   icd9CondenseDecimal(icd9, onlyReal, toMajor)
 }
@@ -271,8 +278,7 @@ icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL) {
 #' @rdname icd9Condense
 #' @export
 icd9CondenseShort <- function(icd9Short, onlyReal = NULL, toMajor = TRUE) {
-
-  checkmate::checkLogical(toMajor, len = 1, any.missing = FALSE)
+  checkmate::checkFlag(toMajor)
   i9w <- sort(unique(icd9Short))
 
   if (is.null(onlyReal)) {
