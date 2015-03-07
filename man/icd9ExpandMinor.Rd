@@ -27,8 +27,8 @@ Accepts a single number or character input starting point for
 }
 \examples{
 # return all possible decimal parts of ICD9 codes (111 in total)
-  length(icd9:::icd9ExpandMinor("", isE = FALSE))
-  icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+  length(:icd9ExpandMinor("", isE = FALSE))
+  :icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{\%i9d\%}},
@@ -39,8 +39,11 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9ExpandRangeMajor}},
   \code{\link{icd9ExpandRangeShort}};
   \code{\link{icd9Children}}, \code{\link{icd9Children}},
+  \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
-  \code{\link{icd9ChildrenShort}};
+  \code{\link{icd9ChildrenDecimalCpp}},
+  \code{\link{icd9ChildrenShort}},
+  \code{\link{icd9ChildrenShortCpp}};
   \code{\link{icd9Condense}},
   \code{\link{icd9CondenseDecimal}},
   \code{\link{icd9CondenseShort}},

@@ -7,6 +7,28 @@ test_that("github issue #44 from wmurphyrd", {
   expect_that(icd9Charlson(mydf, return.df = TRUE), testthat::not(throws_error()))
 })
 
+test_that("github issue #46 from wmurphyd", {
+  mydf <- data.frame(visitId = "a", icd9 = "250.0")
+  comorbids <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE)
+  set.seed(123)
+  # Fill a QuanDeyo comorbidity data frame with random data
+  comorbids <- rbind(comorbids,
+                     data.frame(
+                       visitId = letters[2:10],
+                       matrix(runif((ncol(comorbids) - 1) * 9) > 0.7,
+                              ncol=17,
+                              dimnames = list(character(0), names(comorbids[2:18]))
+                              )
+                       )
+                     )
+  print(comorbids[2,]) # Case 2: Dementia, LiverMild, Cancer, HIV
+  c2.inv <-cbind(t(comorbids[2,2:18]),c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 6, 6))
+  expect_equivalent(
+    icd9CharlsonComorbid(comorbids,applyHierarchy=TRUE)[2],
+    sum(apply(c2.inv,1,prod))
+  )
+})
+
 test_that("only matrix or data.frame accepted", {
   expect_error(icd9Charlson(c(1, 2)))
   expect_error(icd9Charlson(c(1, 2), visitId = "roam", return.df = TRUE, stringsAsFactors = TRUE))
@@ -42,25 +64,25 @@ test_that("Charlson score", {
                       stringsAsFactors = FALSE)
 
   expect_identical(icd9Charlson(mydff,
-                                 return.df = TRUE,
-                                 stringsAsFactors = FALSE,
-                                 isShort = FALSE),
-                    structure(list(visitId = c("a", "b", "c"),
-                                   Charlson = c(1, 1, 6)),
-                              .Names = c("visitId", "Charlson"),
-                              row.names = c(NA, -3L),
-                              class = "data.frame")
+                                return.df = TRUE,
+                                stringsAsFactors = FALSE,
+                                isShort = FALSE),
+                   structure(list(visitId = c("a", "b", "c"),
+                                  Charlson = c(1, 1, 6)),
+                             .Names = c("visitId", "Charlson"),
+                             row.names = c(NA, -3L),
+                             class = "data.frame")
   )
 
   expect_identical(icd9Charlson(mydff,
-                                 return.df = TRUE,
-                                 stringsAsFactors = TRUE,
-                                 isShort = FALSE),
-                    structure(list(visitId = factor(c("a", "b", "c")),
-                                   Charlson = c(1, 1, 6)),
-                              .Names = c("visitId", "Charlson"),
-                              row.names = c(NA, -3L),
-                              class = "data.frame")
+                                return.df = TRUE,
+                                stringsAsFactors = TRUE,
+                                isShort = FALSE),
+                   structure(list(visitId = factor(c("a", "b", "c")),
+                                  Charlson = c(1, 1, 6)),
+                             .Names = c("visitId", "Charlson"),
+                             row.names = c(NA, -3L),
+                             class = "data.frame")
   )
 
   mydfff <- mydff

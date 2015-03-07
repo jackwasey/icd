@@ -3,14 +3,20 @@
 \name{icd9Children}
 \alias{icd9Children}
 \alias{icd9ChildrenDecimal}
+\alias{icd9ChildrenDecimalCpp}
 \alias{icd9ChildrenShort}
+\alias{icd9ChildrenShortCpp}
 \title{Expand ICD-9 codes to all possible sub-codes}
 \usage{
-icd9ChildrenShort(icd9Short, onlyReal = TRUE)
+icd9ChildrenShortCpp(icd9Short, onlyReal)
 
-icd9ChildrenDecimal(icd9Decimal, onlyReal = TRUE)
+icd9ChildrenDecimalCpp(icd9Decimal, onlyReal)
 
 icd9Children(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE)
+
+icd9ChildrenShort(icd9Short, onlyReal = TRUE)
+
+icd9ChildrenDecimal(icd9Decimal, onlyReal)
 }
 \arguments{
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than

@@ -22,6 +22,7 @@ test_that("find codes", {
 })
 
 test_that("v, e", {
+  skip("should be tested by vectorized versions")
   expect_true(all(icd9IsVE(c(vs, es))))
 
   expect_error(icd9IsASingleVE(c("V12", "E800")))

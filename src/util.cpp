@@ -2,6 +2,8 @@
 #include <local.h>
 using namespace Rcpp;
 
+//TODO someday, can go much faster (but less portable) with C strings
+
 // trim one string from right
 std::string trimRight(std::string& s) {
 	std::size_t n = s.find_last_not_of(" \f\n\r\t\v");
@@ -16,6 +18,7 @@ std::string trimLeft(std::string& s) {
 	return s;
 }
 
+// trim a single string at both ends
 // [[Rcpp::export]]
 std::string strimCpp(std::string& s) {
 	trimLeft(s);

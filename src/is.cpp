@@ -1,43 +1,47 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
-//#include <local.h>
-#include <icd9.h>
-using namespace Rcpp;
+#include <local.h>
 
-std::vector<bool> icd9IsA(const std::vector<std::string>& sv, std::string ms,
+bool icd9IsASingle(const char* s, const char* x) {
+	while (*s == ' ')
+		++s;
+	while (*x) {
+		if (*s == *x)
+			return true;
+		++x;
+	}
+	return false;
+}
+
+bool icd9IsASingleV(const char* s) {
+	while (*s == ' ')
+		++s;
+	return *s == 'V' || *s == 'v';
+}
+
+bool icd9IsASingleE(const char* s) {
+	while (*s == ' ')
+		++s;
+	return *s == 'E' || *s == 'e';
+}
+
+bool icd9IsASingleVE(const char* s) {
+	// ditch preceding spaces (probably should also do other white space)
+	while (*s == ' ')
+		++s;
+	return *s == 'V' || *s == 'E' || *s == 'v' || *s == 'e';
+	//return s.find_first_of("VvEe") != std::string::npos;
+}
+
+std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x,
 		bool inverse = false) {
+	//TODO benchmark vector<char> or vector<int>
 	int len = sv.size();
 	std::vector<bool> out(len);
 	for (int i = 0; i < len; ++i) {
-		out[i] = inverse == (sv[i].find_first_of(ms) == std::string::npos);
+		//out[i] = inverse == (sv[i].find_first_of(x) == std::string::npos);
+		out[i] = inverse != (icd9IsASingle(sv[i].c_str(), x));
 	}
 	return out;
-}
-
-// [[Rcpp::export]]
-bool icd9IsASingleV(const std::string& s) {
-	return s.find_first_of("Vv") != std::string::npos;
-}
-
-// [[Rcpp::export]]
-bool icd9IsASingleE(const std::string& s) {
-	return s.find_first_of("Ee") != std::string::npos;
-}
-
-// [[Rcpp::export]]
-bool icd9IsASingleVEstr(const std::string& s) {
-	// TODO: much quicker with c_str
-	//char c = s.c_str()[0];
-	//return c=='V' || c=='E' || c=='v' || c=='e';
-	return s.find_first_of("VvEe") != std::string::npos;
-}
-
-// [[Rcpp::export]]
-bool icd9IsASingleVE(const std::string& s) {
-  const char* t = s.c_str();
-  // ditch preceding spaces (probably should also do other white space)
-  while (*t == ' ') ++t;
-  return *t=='V' || *t=='E' || *t=='v' || *t=='e';
 }
 
 //' @name icd9Is

@@ -1,8 +1,4 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
-#include <R.h>
-#include <Rinternals.h>
-#include <icd9.h>
 #include <local.h>
 #include <stdio.h>
 #ifdef ICD9_VALGRIND

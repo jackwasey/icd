@@ -80,22 +80,6 @@ icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
 }
 
-icd9IsASingleV <- function(s) {
-    .Call('icd9_icd9IsASingleV', PACKAGE = 'icd9', s)
-}
-
-icd9IsASingleE <- function(s) {
-    .Call('icd9_icd9IsASingleE', PACKAGE = 'icd9', s)
-}
-
-icd9IsASingleVEstr <- function(s) {
-    .Call('icd9_icd9IsASingleVEstr', PACKAGE = 'icd9', s)
-}
-
-icd9IsASingleVE <- function(s) {
-    .Call('icd9_icd9IsASingleVE', PACKAGE = 'icd9', s)
-}
-
 #' @name icd9Is
 #' @title are the given codes numeric, V or E type?
 #' @description Quickly find V or E codes, without any validation.
@@ -131,6 +115,21 @@ icd9AddLeadingZeroesMajorSingle <- function(major) {
     .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', major)
 }
 
+#' @rdname icd9AddLeadingZeroes
+icd9AddLeadingZeroesMajor <- function(major) {
+    .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', major)
+}
+
+#' @rdname icd9AddLeadingZeroes
+icd9AddLeadingZeroesShort <- function(icd9Short) {
+    .Call('icd9_icd9AddLeadingZeroesShort', PACKAGE = 'icd9', icd9Short)
+}
+
+#' @rdname icd9AddLeadingZeroes
+icd9AddLeadingZeroesDecimal <- function(icd9Decimal) {
+    .Call('icd9_icd9AddLeadingZeroesDecimal', PACKAGE = 'icd9', icd9Decimal)
+}
+
 #' @title Add leading zeroes to incomplete ICD codes
 #' @description Non-decimal ICD-9 codes with length<5 are often ambiguous. E.g.
 #'   100 could be 1.00 10.0 or 100 if coded incorrectly. We must assume 100 is
@@ -145,21 +144,6 @@ icd9AddLeadingZeroes <- function(icd9, isShort) {
     .Call('icd9_icd9AddLeadingZeroes', PACKAGE = 'icd9', icd9, isShort)
 }
 
-#' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesShort <- function(icd9Short) {
-    .Call('icd9_icd9AddLeadingZeroesShort', PACKAGE = 'icd9', icd9Short)
-}
-
-#' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesDecimal <- function(icd9Decimal) {
-    .Call('icd9_icd9AddLeadingZeroesDecimal', PACKAGE = 'icd9', icd9Decimal)
-}
-
-#' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesMajor <- function(major) {
-    .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', major)
-}
-
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes
 #' @description Accepts a single number or character input starting point for
 #'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
@@ -170,8 +154,8 @@ icd9AddLeadingZeroesMajor <- function(major) {
 #'   which is two character. Default is \code{FALSE}.
 #' @examples
 #'   # return all possible decimal parts of ICD9 codes (111 in total)
-#'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
-#'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#'   length(:icd9ExpandMinor("", isE = FALSE))
+#'   :icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
@@ -180,21 +164,21 @@ icd9ExpandMinor <- function(minor, isE = FALSE) {
     .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', minor, isE)
 }
 
-icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
-    .Call('icd9_icd9ChildrenCpp', PACKAGE = 'icd9', icd9, isShort, onlyReal)
-}
-
 #' @rdname icd9Children
 #' @name icd9Children
 #' @export
-icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE) {
-    .Call('icd9_icd9ChildrenShort', PACKAGE = 'icd9', icd9Short, onlyReal)
+icd9ChildrenShortCpp <- function(icd9Short, onlyReal) {
+    .Call('icd9_icd9ChildrenShortCpp', PACKAGE = 'icd9', icd9Short, onlyReal)
 }
 
 #' @rdname icd9Children
 #' @export
-icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE) {
-    .Call('icd9_icd9ChildrenDecimal', PACKAGE = 'icd9', icd9Decimal, onlyReal)
+icd9ChildrenDecimalCpp <- function(icd9Decimal, onlyReal) {
+    .Call('icd9_icd9ChildrenDecimalCpp', PACKAGE = 'icd9', icd9Decimal, onlyReal)
+}
+
+icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
+    .Call('icd9_icd9ChildrenCpp', PACKAGE = 'icd9', icd9, isShort, onlyReal)
 }
 
 #' @title match ICD9 codes

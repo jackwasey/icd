@@ -93,9 +93,9 @@ icd9ExpandRangeShort <- function(start, end,
       if (is.na(mlen)) mlen <- 111
       ei <- ei + mlen
       ei <- ei - (lene - 2)
-      if (icd9IsASingleE(e))
+      if (icd9IsE(e))
         ei <- ei + 1
-      else if (icd9IsASingleV(e) && lene < nchar(s) && substr(e, lene, lene) != "9")
+      else if (icd9IsV(e) && lene < nchar(s) && substr(e, lene, lene) != "9")
         ei <- ei + 1
     }
     # except if 'end' is 4 char and ends in 9, because we don't want to catch
@@ -236,4 +236,18 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do
   if (do.save) save(list = lknames,
                     file = sysdata.path, compress = "xz")
   invisible(mget(lknames))
+}
+
+
+#' @rdname icd9Children
+#' @name icd9Children
+#' @export
+icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE) {
+  .Call('icd9_icd9ChildrenShortCpp', PACKAGE = 'icd9', icd9Short, onlyReal)
+}
+
+#' @rdname icd9Children
+#' @export
+icd9ChildrenDecimal <- function(icd9Decimal, onlyReal) {
+  .Call('icd9_icd9ChildrenDecimalCpp', PACKAGE = 'icd9', icd9Decimal, onlyReal)
 }

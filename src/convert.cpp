@@ -1,10 +1,8 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include <R.h>
-#include <Rinternals.h>
-#include <icd9.h>
-#include <local.h>
-
+#include <is.h>
+#include <util.h>
+#include <manip.h>
 extern "C" {
 #include "local_c.h"
 }
@@ -16,7 +14,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToCode(const CharacterVector major, const CharacterVector minor, bool isShort) {
 
-	CharacterVector out;
+	CharacterVector out; // wish I could reserve space for this
 	CharacterVector::const_iterator j = major.begin();
 	CharacterVector::const_iterator n = minor.begin();
 
@@ -28,18 +26,19 @@ CharacterVector icd9MajMinToCode(const CharacterVector major, const CharacterVec
 			continue;
 		}
 		// work around Rcpp bug with push_front: convert to string just for this
-		std::string smj = std::string(majorelem.get_cstring());
-		switch (strlen(majorelem.get_cstring())) {
+		const char* smj_c = majorelem.get_cstring();
+		std::string smj = std::string(smj_c);
+		switch (strlen(smj_c)) {
 		case 0:
 			out.push_back(NA_STRING);
 			continue;
 		case 1:
-			if (!icd9::icd9IsASingleVE(majorelem)) {
+			if (!icd9IsASingleVE(smj_c)) {
 				smj.insert(0, "00");
 			}
 			break;
 		case 2:
-			if (!icd9::icd9IsASingleVE(majorelem)) {
+			if (!icd9IsASingleVE(smj_c)) {
 				smj.insert(0, "0");
 			} else {
 				smj.insert(1, "0");
@@ -141,9 +140,9 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 		}
 
 		std::string s = as<std::string>(icd9Short[i]);
-		s = icd9::strimCpp(s); // do i need to convert?
+		s = strimCpp(s); // do i need to convert?
 
-		if (!icd9::icd9IsASingleE(s)) { // not an E code
+		if (!icd9IsASingleE(s.c_str())) { // not an E code
 			switch (s.size()) {
 			case 1:
 			case 2:
@@ -180,10 +179,10 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 				continue;
 			}
 		} // E code
-		//major[i] = icd9::icd9AddLeadingZeroesMajorSingle(major[i]); // or loop through them all again...
+		//major[i] = icd9AddLeadingZeroesMajorSingle(major[i]); // or loop through them all again...
 	} // for
 
-	return icd9MajMinToParts(icd9::icd9AddLeadingZeroesMajor(major), minor);
+	return icd9MajMinToParts(icd9AddLeadingZeroesMajor(major), minor);
 }
 
 //' @rdname convert
@@ -208,7 +207,7 @@ List icd9DecimalToParts(const CharacterVector icd9Decimal, const String minorEmp
 			continue;
 		}
 		std::string thiscode = as<std::string>(*it); // Rcpp::String doesn't implement many functions.
-		thiscode = icd9::strimCpp(thiscode); // TODO: update in place.
+		thiscode = strimCpp(thiscode); // TODO: update in place.
 		std::size_t pos = thiscode.find(".");
 		// substring parts
 		std::string majorin;
@@ -220,7 +219,7 @@ List icd9DecimalToParts(const CharacterVector icd9Decimal, const String minorEmp
 			majorin = thiscode;
 			minorout = minorEmpty;
 		}
-		majors.push_back(icd9::icd9AddLeadingZeroesMajorSingle(majorin));
+		majors.push_back(icd9AddLeadingZeroesMajorSingle(majorin));
 		minors.push_back(minorout);
 	}
 	return List::create(_["major"] = majors, _["minor"] = minors);
