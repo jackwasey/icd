@@ -1,9 +1,5 @@
 language: r
 
-r_github_packages:
- - hadley/devtools
- - jackwasey/covr
-
 after_success:
  - Rscript -e 'devtools::install()'
  - Rscript -e 'devtools::session_info()'
