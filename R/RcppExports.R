@@ -154,8 +154,8 @@ icd9AddLeadingZeroes <- function(icd9, isShort) {
 #'   which is two character. Default is \code{FALSE}.
 #' @examples
 #'   # return all possible decimal parts of ICD9 codes (111 in total)
-#'   length(:icd9ExpandMinor("", isE = FALSE))
-#'   :icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
+#'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
@@ -164,15 +164,10 @@ icd9ExpandMinor <- function(minor, isE = FALSE) {
     .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', minor, isE)
 }
 
-#' @rdname icd9Children
-#' @name icd9Children
-#' @export
 icd9ChildrenShortCpp <- function(icd9Short, onlyReal) {
     .Call('icd9_icd9ChildrenShortCpp', PACKAGE = 'icd9', icd9Short, onlyReal)
 }
 
-#' @rdname icd9Children
-#' @export
 icd9ChildrenDecimalCpp <- function(icd9Decimal, onlyReal) {
     .Call('icd9_icd9ChildrenDecimalCpp', PACKAGE = 'icd9', icd9Decimal, onlyReal)
 }

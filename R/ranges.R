@@ -209,6 +209,19 @@ icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE
   .Call("icd9_icd9ChildrenCpp", PACKAGE = "icd9", icd9, isShort, onlyReal)
 }
 
+#' @rdname icd9Children
+#' @name icd9Children
+#' @export
+icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE) {
+  .Call('icd9_icd9ChildrenShortCpp', PACKAGE = 'icd9', icd9Short, onlyReal)
+}
+
+#' @rdname icd9Children
+#' @export
+icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE) {
+  .Call('icd9_icd9ChildrenDecimalCpp', PACKAGE = 'icd9', icd9Decimal, onlyReal)
+}
+
 #' Generate sysdata.rda
 #'
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
@@ -236,18 +249,4 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do
   if (do.save) save(list = lknames,
                     file = sysdata.path, compress = "xz")
   invisible(mget(lknames))
-}
-
-
-#' @rdname icd9Children
-#' @name icd9Children
-#' @export
-icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE) {
-  .Call('icd9_icd9ChildrenShortCpp', PACKAGE = 'icd9', icd9Short, onlyReal)
-}
-
-#' @rdname icd9Children
-#' @export
-icd9ChildrenDecimal <- function(icd9Decimal, onlyReal) {
-  .Call('icd9_icd9ChildrenDecimalCpp', PACKAGE = 'icd9', icd9Decimal, onlyReal)
 }

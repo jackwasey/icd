@@ -48,8 +48,8 @@ const CharacterVector vv = MakeAllMinors();
 //'   which is two character. Default is \code{FALSE}.
 //' @examples
 //'   # return all possible decimal parts of ICD9 codes (111 in total)
-//'   length(:icd9ExpandMinor("", isE = FALSE))
-//'   :icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+//'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
+//'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 //' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 //'   non-existent) sub-divisions.
 //' @family ICD-9 ranges
@@ -89,9 +89,6 @@ CharacterVector icd9ExpandMinor(std::string minor, bool isE = false) {
   return(NA_STRING); // should never get here
 }
 
-//' @rdname icd9Children
-//' @name icd9Children
-//' @export
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenShortCpp(CharacterVector icd9Short, bool onlyReal) {
   std::set< std::string > out; // we are never going to put NAs in the output?
@@ -125,8 +122,6 @@ CharacterVector icd9ChildrenShortCpp(CharacterVector icd9Short, bool onlyReal) {
   return wrap(out);
 }
 
-//' @rdname icd9Children
-//' @export
 // [[Rcpp::export]]
 CharacterVector icd9ChildrenDecimalCpp(CharacterVector icd9Decimal, bool onlyReal) {
   CharacterVector shrt = icd9DecimalToShort(icd9Decimal);
