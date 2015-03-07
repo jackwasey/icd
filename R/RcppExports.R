@@ -88,6 +88,10 @@ icd9IsASingleE <- function(s) {
     .Call('icd9_icd9IsASingleE', PACKAGE = 'icd9', s)
 }
 
+icd9IsASingleVEstr <- function(s) {
+    .Call('icd9_icd9IsASingleVEstr', PACKAGE = 'icd9', s)
+}
+
 icd9IsASingleVE <- function(s) {
     .Call('icd9_icd9IsASingleVE', PACKAGE = 'icd9', s)
 }

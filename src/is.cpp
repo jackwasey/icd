@@ -25,11 +25,19 @@ bool icd9IsASingleE(const std::string& s) {
 }
 
 // [[Rcpp::export]]
-bool icd9IsASingleVE(const std::string& s) {
+bool icd9IsASingleVEstr(const std::string& s) {
 	// TODO: much quicker with c_str
 	//char c = s.c_str()[0];
 	//return c=='V' || c=='E' || c=='v' || c=='e';
 	return s.find_first_of("VvEe") != std::string::npos;
+}
+
+// [[Rcpp::export]]
+bool icd9IsASingleVE(const std::string& s) {
+  const char* t = s.c_str();
+  // ditch preceding spaces (probably should also do other white space)
+  while (*t == ' ') ++t;
+  return *t=='V' || *t=='E' || *t=='v' || *t=='e';
 }
 
 //' @name icd9Is
