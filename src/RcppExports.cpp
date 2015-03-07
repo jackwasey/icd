@@ -534,6 +534,40 @@ RcppExport SEXP icd9_icd9IsASingleE(SEXP sSEXP) {
     UNPROTECT(1);
     return __result;
 }
+// icd9IsASingleVEstr
+bool icd9IsASingleVEstr(const std::string& s);
+static SEXP icd9_icd9IsASingleVEstr_try(SEXP sSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< const std::string& >::type s(sSEXP );
+        bool __result = icd9IsASingleVEstr(s);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9IsASingleVEstr(SEXP sSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9IsASingleVEstr_try(sSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
 // icd9IsASingleVE
 bool icd9IsASingleVE(const std::string& s);
 static SEXP icd9_icd9IsASingleVE_try(SEXP sSEXP) {
@@ -1178,6 +1212,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("CharacterVector(*icd9GetMajor)(const CharacterVector,const bool)");
         signatures.insert("bool(*icd9IsASingleV)(const std::string&)");
         signatures.insert("bool(*icd9IsASingleE)(const std::string&)");
+        signatures.insert("bool(*icd9IsASingleVEstr)(const std::string&)");
         signatures.insert("bool(*icd9IsASingleVE)(const std::string&)");
         signatures.insert("std::vector<bool>(*icd9IsV)(const std::vector<std::string>&)");
         signatures.insert("std::vector<bool>(*icd9IsE)(const std::vector<std::string>&)");
@@ -1217,6 +1252,7 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9GetMajor", (DL_FUNC)icd9_icd9GetMajor_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsASingleV", (DL_FUNC)icd9_icd9IsASingleV_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsASingleE", (DL_FUNC)icd9_icd9IsASingleE_try);
+    R_RegisterCCallable("icd9", "icd9_icd9IsASingleVEstr", (DL_FUNC)icd9_icd9IsASingleVEstr_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsASingleVE", (DL_FUNC)icd9_icd9IsASingleVE_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsV", (DL_FUNC)icd9_icd9IsV_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsE", (DL_FUNC)icd9_icd9IsE_try);

@@ -309,6 +309,25 @@ namespace icd9 {
         return Rcpp::as<bool >(__result);
     }
 
+    inline bool icd9IsASingleVEstr(const std::string& s) {
+        typedef SEXP(*Ptr_icd9IsASingleVEstr)(SEXP);
+        static Ptr_icd9IsASingleVEstr p_icd9IsASingleVEstr = NULL;
+        if (p_icd9IsASingleVEstr == NULL) {
+            validateSignature("bool(*icd9IsASingleVEstr)(const std::string&)");
+            p_icd9IsASingleVEstr = (Ptr_icd9IsASingleVEstr)R_GetCCallable("icd9", "icd9_icd9IsASingleVEstr");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9IsASingleVEstr(Rcpp::wrap(s));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<bool >(__result);
+    }
+
     inline bool icd9IsASingleVE(const std::string& s) {
         typedef SEXP(*Ptr_icd9IsASingleVE)(SEXP);
         static Ptr_icd9IsASingleVE p_icd9IsASingleVE = NULL;
