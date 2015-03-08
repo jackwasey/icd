@@ -1,8 +1,15 @@
 # Version 1.1
 
-* big performance increase from using std::vector instead of std::set more intelligently to get the unique visitIds: one million rows of ICD-9 codes assigned to comorbidities in < 1 sec.
+ * C++ OpenMP parallel processing of comorbidities for further many-fold speed improvement, scaling to cores available in a machine, allocating about a million rows of comorbidities in a second or two, on a moderate workstation
+ * C++ optimization using simpler STL structures, working with R factors (converted automatically) so comorbidity assignment is done using integer logic only
  * drop unwanted old vignette from the build. Fixes #42
-
+ * refinement of many functions to specifically accept factors or character vectors, but not integers in most cases. Fixes #38
+ * more natural use of matrix for comorbidities, with option to return data frames. Allow matrix or data.frame in fuctions which accept comorbidities
+ * bug fixes with thanks to @wmurhpyrd. Fixes #44, fixes #46
+ * fixes #41
+ * extensive use of the excellent and very efficient checkmate for validating function arguments
+ * improved test coverage, demonstrated by the excellent covr package and coveralls.io . Fixes #4
+ 
 # Version 1.0
 
 * Calculate Charlson scores

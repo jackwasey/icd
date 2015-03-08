@@ -19,7 +19,7 @@ Main Features
 
 -   assignment of patients to high level comorbidities based on admission or discharge ICD-9 codes
     -   several mappings of ICD-9 codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
-    -   very fast assignment of ICD-9 codes to comorbidities (using C++ internally)
+    -   very fast assignment of ICD-9 codes to comorbidities (using C++ internally, with automatic parallel execution using OpenMP when possible)
 -   validation of ICD-9 codes
 -   summarizing ICD-9 codes into groups, and to human-readable descriptions
 -   conversion between different representations of ICD-9 codes, with and without a decimal point
@@ -29,6 +29,8 @@ New since last CRAN release:
 ----------------------------
 
 -   big performance increase: 1 million ICD-9 codes assigned to comorbidities in \<1s
+-   logical matrix or data.frame for comorbidity output and manipulation
+-   see NEWS.md or github changelog for more details
 
 Examples
 --------
@@ -48,14 +50,18 @@ patientData
 
 # get comorbidities:
 icd9ComorbidQuanDeyo(patientData)
-#>   visitId    MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD
-#> 1    1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE
-#> 2    1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE
-#> 3    1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE
-#>   LiverMild    DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV
-#> 1     FALSE  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
-#> 2     FALSE FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE
-#> 3     FALSE FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
+#>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
+#> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#> 1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#>         DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV
+#> 1000  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
+#> 1001 FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE
+#> 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
+#> attr(,"names")
+#>  [1] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+#> [24] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
+#> [47] NA NA NA NA NA
 
 # find diagnoses present on admission:
 icd9FilterPoa(patientData)
@@ -66,10 +72,10 @@ icd9FilterPoa(patientData)
 
 # reformat input data:
 patientData %>% icd9LongToWide # everything works well with magrittr
-#>   visitId icd_01 icd_02 icd_03 icd_04
-#> 1    1000  40201   2258   7208  25001
-#> 2    1001  34400   4011   <NA>   <NA>
-#> 3    1002   4011   <NA>   <NA>   <NA>
+#>      [,1]    [,2]   [,3]   [,4]   
+#> 1000 "40201" "2258" "7208" "25001"
+#> 1001 "34400" "4011" NA     NA     
+#> 1002 "4011"  NA     NA     NA
 ```
 
 Install

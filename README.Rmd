@@ -37,7 +37,7 @@ ICD-9 codes are not numbers, and great care is needed when matching individual c
 
  * assignment of patients to high level comorbidities based on admission or discharge ICD-9 codes
      * several mappings of ICD-9 codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
-     * very fast assignment of ICD-9 codes to comorbidities (using C++ internally)
+     * very fast assignment of ICD-9 codes to comorbidities (using C++ internally, with automatic parallel execution using OpenMP when possible)
  * validation of ICD-9 codes
  * summarizing ICD-9 codes into groups, and to human-readable descriptions
  * conversion between different representations of ICD-9 codes, with and without a decimal point
@@ -45,6 +45,8 @@ ICD-9 codes are not numbers, and great care is needed when matching individual c
 
 ## New since last CRAN release:
  * big performance increase: 1 million ICD-9 codes assigned to comorbidities in <1s
+ * logical matrix or data.frame for comorbidity output and manipulation
+ * see NEWS.md or github changelog for more details
 
 ## Examples
 
