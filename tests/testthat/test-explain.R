@@ -19,6 +19,13 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 
 })
 
+test_that("github issue #41", {
+  expect_equal(
+    icd9Explain(icd9GetReal(quanDeyoComorbid[["Dementia"]])),
+    icd9Explain(quanDeyoComorbid[["Dementia"]])
+  )
+})
+
 test_that("explain S3 dispatch", {
   expect_equal(icd9Explain("003.21", isShort = FALSE),
                "Salmonella meningitis")

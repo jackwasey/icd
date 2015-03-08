@@ -64,13 +64,6 @@ std::vector<bool> icd9IsE(const std::vector<std::string>& icd9) {
 //' @rdname icd9Is
 //' @export
 // [[Rcpp::export]]
-std::vector<bool> icd9IsVE(const std::vector<std::string>& icd9) {
-	return icd9IsA(icd9, "VvEe");
-}
-
-//' @rdname icd9Is
-//' @export
-// [[Rcpp::export]]
 std::vector<bool> icd9IsN(const std::vector<std::string>& icd9) {
 	return icd9IsA(icd9, "VvEe", true);
 }

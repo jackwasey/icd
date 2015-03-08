@@ -309,25 +309,6 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline std::vector<bool> icd9IsVE(const std::vector<std::string>& icd9) {
-        typedef SEXP(*Ptr_icd9IsVE)(SEXP);
-        static Ptr_icd9IsVE p_icd9IsVE = NULL;
-        if (p_icd9IsVE == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsVE)(const std::vector<std::string>&)");
-            p_icd9IsVE = (Ptr_icd9IsVE)R_GetCCallable("icd9", "icd9_icd9IsVE");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9IsVE(Rcpp::wrap(icd9));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<std::vector<bool> >(__result);
-    }
-
     inline std::vector<bool> icd9IsN(const std::vector<std::string>& icd9) {
         typedef SEXP(*Ptr_icd9IsN)(SEXP);
         static Ptr_icd9IsN p_icd9IsN = NULL;

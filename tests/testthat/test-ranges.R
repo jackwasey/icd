@@ -16,7 +16,7 @@ test_that("expand icd9 range definition", {
 #            "40139", "40140", "40141", "40142", "40143", "40144", "40145")))
 #
   expect_equal(icd9ExpandRangeShort("40100", "40101", onlyReal = FALSE), c("40100", "40101"))
-  expect_equal(icd9ExpandRangeShort("40108", "40109", onlyReal = FALSE), c("40108", "40109"))
+  expect_equal(icd9ExpandRange("40108", "40109", isShort = TRUE, onlyReal = FALSE), c("40108", "40109"))
   expect_equal(icd9ExpandRangeShort("40198", "40199", onlyReal = FALSE), c("40198", "40199"))
   # must be in ICD9 order, otherwise error:
   expect_error(icd9ExpandRangeShort("40109", "40108"))
@@ -122,7 +122,8 @@ expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
 
 # failed similar test in Elixhauser mapping generation.
   expect_false("V11" %in% icd9ExpandRangeDecimal("V10.89", "V10.9", onlyReal = FALSE))
-expect_false("V11" %in% icd9ExpandRangeDecimal("V10.89", "V10.99", onlyReal = FALSE))
+  expect_false("V11" %in% icd9ExpandRange("V10.89", "V10.9", isShort = FALSE, onlyReal = FALSE))
+  expect_false("V11" %in% icd9ExpandRangeDecimal("V10.89", "V10.99", onlyReal = FALSE))
 
 })
 
@@ -166,6 +167,15 @@ test_that("range bugs", {
   expect_equal("42.11" %i9da% "42.13", c("042.11", "042.12", "042.13"))
 })
 
+
+test_that("range abbrevs", {
+  expect_identical(icd9ExpandRange("123", "123.6", isShort = FALSE, onlyReal = FALSE),
+                   "123" %i9da% "123.6")
+  expect_identical(icd9ExpandRange("123", "123.6", isShort = FALSE, onlyReal = TRUE),
+                   "123" %i9d% "123.6")
+  expect_identical(icd9ExpandRange("1234", "125", isShort = TRUE, onlyReal = FALSE),
+                   "1234" %i9sa% "125")
+})
 
 test_that("icd9ExpandMinor: invalid", {
   expect_error(icd9ExpandMinor(c(1, 2)))

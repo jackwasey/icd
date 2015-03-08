@@ -534,40 +534,6 @@ RcppExport SEXP icd9_icd9IsE(SEXP icd9SEXP) {
     UNPROTECT(1);
     return __result;
 }
-// icd9IsVE
-std::vector<bool> icd9IsVE(const std::vector<std::string>& icd9);
-static SEXP icd9_icd9IsVE_try(SEXP icd9SEXP) {
-BEGIN_RCPP
-    SEXP __sexp_result;
-    {
-        Rcpp::traits::input_parameter< const std::vector<std::string>& >::type icd9(icd9SEXP );
-        std::vector<bool> __result = icd9IsVE(icd9);
-        PROTECT(__sexp_result = Rcpp::wrap(__result));
-    }
-    UNPROTECT(1);
-    return __sexp_result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_icd9IsVE(SEXP icd9SEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9IsVE_try(icd9SEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
 // icd9IsN
 std::vector<bool> icd9IsN(const std::vector<std::string>& icd9);
 static SEXP icd9_icd9IsN_try(SEXP icd9SEXP) {
@@ -1076,7 +1042,6 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("CharacterVector(*icd9GetMajor)(const CharacterVector,const bool)");
         signatures.insert("std::vector<bool>(*icd9IsV)(const std::vector<std::string>&)");
         signatures.insert("std::vector<bool>(*icd9IsE)(const std::vector<std::string>&)");
-        signatures.insert("std::vector<bool>(*icd9IsVE)(const std::vector<std::string>&)");
         signatures.insert("std::vector<bool>(*icd9IsN)(const std::vector<std::string>&)");
         signatures.insert("CharacterVector(*icd9LongToWideCpp)(const SEXP&,const std::string,const std::string,bool)");
         signatures.insert("String(*icd9AddLeadingZeroesMajorSingle)(String)");
@@ -1112,7 +1077,6 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9GetMajor", (DL_FUNC)icd9_icd9GetMajor_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsV", (DL_FUNC)icd9_icd9IsV_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsE", (DL_FUNC)icd9_icd9IsE_try);
-    R_RegisterCCallable("icd9", "icd9_icd9IsVE", (DL_FUNC)icd9_icd9IsVE_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsN", (DL_FUNC)icd9_icd9IsN_try);
     R_RegisterCCallable("icd9", "icd9_icd9LongToWideCpp", (DL_FUNC)icd9_icd9LongToWideCpp_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajorSingle", (DL_FUNC)icd9_icd9AddLeadingZeroesMajorSingle_try);

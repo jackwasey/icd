@@ -97,12 +97,6 @@ icd9IsE <- function(icd9) {
 
 #' @rdname icd9Is
 #' @export
-icd9IsVE <- function(icd9) {
-    .Call('icd9_icd9IsVE', PACKAGE = 'icd9', icd9)
-}
-
-#' @rdname icd9Is
-#' @export
 icd9IsN <- function(icd9) {
     .Call('icd9_icd9IsN', PACKAGE = 'icd9', icd9)
 }
