@@ -2,17 +2,23 @@
 % Please edit documentation in R/convert.R
 \name{icd9ComorbidMatToDf}
 \alias{icd9ComorbidMatToDf}
-\title{convert matrix of comorbidities into data frame, preserving visitId information}
+\title{convert matrix of comorbidities into data frame, preserving visitId
+  information}
 \usage{
-icd9ComorbidMatToDf(x, visitId = NULL,
-  stringsAsFactors = getOption("stringsAsFactors"))
-
-icd9ComorbidMatToDf(x, visitId = NULL,
+icd9ComorbidMatToDf(x, visitId = "visitId",
   stringsAsFactors = getOption("stringsAsFactors"))
 }
-\description{
-convert matrix of comorbidities into data frame, preserving visitId information
+\arguments{
+\item{x}{Matrix of comorbidities, with row and columns names defined}
 
-convert matrix of comorbidities into data frame, preserving visitId information
+\item{visitId}{single character string to name the visitId column of returned data.frame. Default is "visitId".}
+
+\item{stringsAsFactors}{whether the resulting data frame should have strings,
+i.e. visitId converted to factor. Default is to follow the current session
+option.}
+}
+\description{
+convert matrix of comorbidities into data frame, preserving visitId
+  information
 }
 

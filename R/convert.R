@@ -169,7 +169,13 @@ icd9LongToWide <- function(icd9df,
   icd9LongToWideCpp(icd9df, visitId, icd9Field, aggregate)
 }
 
-#' @title convert matrix of comorbidities into data frame, preserving visitId information
+#' @title convert matrix of comorbidities into data frame, preserving visitId
+#'   information
+#' @param x Matrix of comorbidities, with row and columns names defined
+#' @param visitId single character string to name the visitId column of returned data.frame. Default is "visitId".
+#' @param stringsAsFactors whether the resulting data frame should have strings,
+#'   i.e. visitId converted to factor. Default is to follow the current session
+#'   option.
 #' @export
 icd9ComorbidMatToDf <- function(x, visitId = "visitId",
                                 stringsAsFactors = getOption("stringsAsFactors")) {
@@ -181,17 +187,23 @@ icd9ComorbidMatToDf <- function(x, visitId = "visitId",
   out
 }
 
-#' @title convert matrix of comorbidities into data frame, preserving visitId information
+#' @title convert matrix of comorbidities into data frame, preserving visitId
+#'   information
+#' @param x data frame, with a \code{visitId} column (not necessarily first),
+#'   and other columns with flags for comorbidities, as such column names are
+#'   required.
+#' @template visitId
+#' @param stringsAsFactors whether the resulting data frame should have strings,
+#'   i.e. visitId converted to factor. Default is to follow the current session
+#'   option.
 #' @export
-icd9ComorbidMatToDf <- function(x, visitId = NULL,
+icd9ComorbidDfToMat <- function(x, visitId = NULL,
                                 stringsAsFactors = getOption("stringsAsFactors")) {
-  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 1, col.names = TRUE)
-  checkmate::checkString(visitId)
+  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = TRUE)
   checkmate::checkFlag(stringsAsFactors)
   visitId <- getVisitId(x, visitId)
 
   out <- as.matrix.data.frame(x[-which(names(x) == visitId)])
-  names(out)[1] <- visitId
+  rownames(out) <- x[[visitId]]
   out
 }
-

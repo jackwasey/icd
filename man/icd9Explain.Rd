@@ -11,24 +11,25 @@
 \title{explain ICD9 codes}
 \usage{
 icd9Explain(icd9, isShort = icd9GuessIsShort(icd9), doCondense = TRUE,
-  brief = FALSE, warn = TRUE)
+  brief = FALSE, warn = TRUE, toMajor = TRUE)
 
-icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE)
+icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE,
+  toMajor = TRUE)
 
 icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
-  warn = TRUE)
+  warn = TRUE, toMajor = TRUE)
 
 \method{icd9Explain}{list}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE, warn = TRUE)
+  doCondense = TRUE, brief = FALSE, warn = TRUE, toMajor = TRUE)
 
 \method{icd9Explain}{factor}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE, warn = TRUE)
+  doCondense = TRUE, brief = FALSE, warn = TRUE, toMajor = TRUE)
 
 \method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
   doCondense = TRUE, brief = FALSE, warn = TRUE, toMajor = TRUE)
 
 \method{icd9Explain}{numeric}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE, warn = FALSE)
+  doCondense = TRUE, brief = FALSE, warn = FALSE, toMajor = TRUE)
 }
 \arguments{
 \item{icd9}{is
@@ -54,6 +55,11 @@ the short description from the canonical CMS descriptions (included in
 \item{warn}{single logical value, default is \code{TRUE}, meaning that codes
 which do not correspond to diagnoses, or to three-digit codes, will trigger
 a warning.}
+
+\item{toMajor}{Most major codes are not \emph{real}, e.g. Salmonella 003 is a
+major category, but is not itself used as a diagnostic code. Therefore,
+strictly, asking for only \emph{real} codes excludes the major. We'll turn
+a blind eye to this if we specifically request majors with toMajor.}
 
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned

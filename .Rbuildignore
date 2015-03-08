@@ -8,6 +8,7 @@ man-roxygen
 .*\.log$
 .*\.gcda$
 .*\.gcno$
+.*\.gcov$
 extdata\/ICD10_Charlson\.sas
 extdata\/ICD10_Elixhauser\.sas
 extdata\/ccs_multi_pr_tool_2014\.csv
