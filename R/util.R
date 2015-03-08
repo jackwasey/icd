@@ -194,7 +194,7 @@ getVisitId <- function(x, visitId = NULL) {
     else
       visitId <- "visitId"
   }
-  checkmate::assertString(vistiId)
+  checkmate::assertString(visitId)
   stopifnot(visitId %in% names(x))
   return(visitId)
 }

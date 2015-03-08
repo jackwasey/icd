@@ -22,10 +22,11 @@ icd9GetRealShort(icd9Short, majorOk = TRUE)
 icd9GetRealDecimal(icd9Decimal, majorOk = TRUE)
 }
 \arguments{
-\item{icd9}{is a character vector of ICD-9 codes. If fewer than five characters is
-given in a code, then the digits are greedily assigned to hundreds, then
+\item{icd9}{is
+a character vector or factor of ICD-9 codes. If fewer than five characters
+is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010"}
+"0010".}
 
 \item{isShort}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this

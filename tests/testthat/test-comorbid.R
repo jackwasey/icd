@@ -522,15 +522,14 @@ test_that("diff comorbid works", {
 twoPts <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
                      icd9 = c("040", "000", "100", "000"),
                      stringsAsFactors = FALSE)
-twoMap <- data.frame("malady" = c("100", "2000"),
-                     "ailment" = c("003", "040"),
-                     stringsAsFactors = FALSE)
+twoMap <- list("malady" = c("100", "2000"),
+                     "ailment" = c("003", "040"))
 twoPtsFac <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
                         icd9 = c("040", "000", "100", "000"),
                         stringsAsFactors = TRUE)
-twoMapFac <- data.frame("malady" = c("100", "2000"),
+twoMapFac <- as.list(data.frame("malady" = c("100", "2000"),
                         "ailment" = c("003", "040"),
-                        stringsAsFactors = TRUE)
+                        stringsAsFactors = TRUE))
 
 test_that("comorbid quick test", {
   testres <- icd9Comorbid(twoPts, twoMap, return.df = TRUE)

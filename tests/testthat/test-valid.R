@@ -8,8 +8,7 @@ test_that("warning for deprecation of icd9ValidDecimal", {
 
 test_that("icd9IsValidDecimal - rubbish input", {
   expect_error(icd9IsValidDecimal(list(1230, c(12323, 2323), c("nonesnseses"))))
-  expect_warning(icd9IsValidDecimal(c(10.1, 200)))
-  expect_equal(icd9IsValidDecimal(c(10.1, 9999, -1)), c(TRUE, FALSE, FALSE))
+  expect_error(icd9IsValidDecimal(c(10.1, 200)))
   expect_equal(icd9IsValidDecimal(character()), logical())
   expect_false(icd9IsValidDecimal("."))
   expect_equal(icd9IsValidDecimal(c("100", "chestnut")), c(TRUE, FALSE))
@@ -64,9 +63,7 @@ test_that("icd9IsValidDecimal V codes", {
 
 test_that("validate invalid decimal E codes", {
 
-  # okay, maybe this should error, but the vast majority of the time, only
-  # character input will be presented to this function
-  expect_false(icd9IsValidDecimalE(8760))
+  expect_error(icd9IsValidDecimalE(8760))
 
   expect_false(icd9IsValidDecimalE(NA_character_))
   expect_false(icd9IsValidDecimalE("NA"))
@@ -164,7 +161,7 @@ test_that("icd9IsValidShort", {
     c(TRUE, TRUE, TRUE, TRUE, TRUE))
   expect_true(icd9IsValidShort("12345"))
   expect_true(icd9IsValidShort("12 "))
-  expect_warning(icd9IsValidShort(1))
+  expect_error(icd9IsValidShort(1))
   expect_equal(icd9IsValidShort(c("99999", "1")), c(TRUE, TRUE))
   expect_equal(icd9IsValidShort(c("1", "100", "222.22")), c(TRUE, TRUE, FALSE))
   expect_equal(

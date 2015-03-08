@@ -65,7 +65,7 @@ icd9Comorbid <- function(icd9df,
   # TODO: allow factors for icd9df fields
   checkmate::assertDataFrame(icd9df, min.cols = 2)
   checkmate::assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
-                        types = "character", names = "unique")
+                        types = c("character", "factor"), names = "unique")
   checkmate::assertString(visitId)
   checkmate::assertString(icd9Field)
   checkmate::assertFlag(isShort)

@@ -53,7 +53,7 @@ vector of the count of comorbidities for each patient. This is
   duplicated.
 
 For \code{icd9Count}, it is assumed that all the columns apart
-  from \code{vistiId} represent actual or possible ICD-9 codes. Duplicate
+  from \code{visitId} represent actual or possible ICD-9 codes. Duplicate
   \code{visitId}s are repeated as given and aggregated.
 }
 \details{

@@ -65,7 +65,6 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
   checkmate::assertDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
-  checkmate::assertCharacter(visitId, any.missing = FALSE, max.len = 1)
   checkmate::assertFlag(return.df)
   visitId <- getVisitId(x, visitId)
   tmp <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
@@ -185,7 +184,7 @@ visitId <- getVisitId(x, visitId)
 
 #' @rdname icd9Count
 #' @description For \code{icd9Count}, it is assumed that all the columns apart
-#'   from \code{vistiId} represent actual or possible ICD-9 codes. Duplicate
+#'   from \code{visitId} represent actual or possible ICD-9 codes. Duplicate
 #'   \code{visitId}s are repeated as given and aggregated.
 #' @param aggregate, single logical, default is FALSE. If TRUE, the length (or
 #'   rows) of the output will no longer match the input, but duplicate visitIds

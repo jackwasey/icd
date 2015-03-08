@@ -78,24 +78,24 @@ icd9WideToLong <- function(x,
                            icdLabels = NULL,
                            icdName = "icdCode") {
   checkmate::assertString(icdName)
-  if (is.null(icd.labels))
-    icd.labels <- grep("icd", names(x), ignore.case = TRUE, value = TRUE)
+  if (is.null(icdLabels))
+    icdLabels <- grep("icd", names(x), ignore.case = TRUE, value = TRUE)
   else {
     checkmate::assertCharacter(icdLabels, any.missing = FALSE)
-    stopifnot(all(icd.labels %in% names(x)))
+    stopifnot(all(icdLabels %in% names(x)))
   }
   visitId <- getVisitId(x, visitId)
 
   res <- reshape(x,
                  direction = "long",
-                 varying = icd.labels,
+                 varying = icdLabels,
                  idvar = visitId,
                  timevar = NULL,
-                 v.names = icd.name)
+                 v.names = icdName)
 
   rownames(res) <- NULL
-  res <- res[!is.na(res[[icd.name]]), ]
-  res <- res[nchar(levels(res[[icd.name]])[res[[icd.name]]]) > 0, ]
+  res <- res[!is.na(res[[icdName]]), ]
+  res <- res[nchar(levels(res[[icdName]])[res[[icdName]]]) > 0, ]
   res[order(res[[visitId]]), ]
 }
 
