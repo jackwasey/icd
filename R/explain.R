@@ -2,10 +2,6 @@
 #' @description convert full format (123.45 style) ICD9 codes into the name and
 #'   description for human review there are official ICD9-CM data tables, not
 #'   with conversion to decimal notation, but to the textual format.
-#' @note TODO: it will be useful to have S3 ICD-9 short and long classes for
-#'   situations like this where we could easily dispatch on short or long type,
-#'   or even use a print.icd9decimal or print.icd9Short S3 method to display
-#'   ICD-9 codes.
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
@@ -66,7 +62,8 @@ icd9Explain.factor <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @describeIn icd9Explain explain character vector of ICD-9 codes
 #' @export
 icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
-                                  doCondense = TRUE, brief = FALSE, warn = TRUE) {
+                                  doCondense = TRUE, brief = FALSE, warn = TRUE,
+                                  toMajor = TRUE) {
   checkmate::assertCharacter(icd9)
   checkmate::assertFlag(isShort)
   checkmate::assertFlag(doCondense)
@@ -84,7 +81,8 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
                     collapse = " "),
               call. = FALSE)
     }
-    icd9 <- icd9CondenseShort(icd9, onlyReal)
+    icd9 <- icd9GetRealShort(icd9, majorOk = toMajor)
+    icd9 <- icd9CondenseShort(icd9, onlyReal = TRUE, toMajor = toMajor)
   }
 
   mj <- unique(icd9GetMajor(icd9, isShort = TRUE))
