@@ -63,12 +63,13 @@ icd9Comorbid <- function(icd9df,
                          isShortMapping = icd9GuessIsShort(icd9Mapping),
                          return.df = FALSE) {
   # TODO: allow factors for icd9df fields
-  checkmate::checkDataFrame(icd9df, min.cols = 2)
-  checkmate::checkList(icd9Mapping, types = "character", any.missing = FALSE, min.len = 1)
-  #visitId <- as.character(visitId)
-  checkmate::checkString(icd9Field)
-  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
-  checkmate::checkLogical(isShortMapping, any.missing = FALSE, len = 1)
+  checkmate::assertDataFrame(icd9df, min.cols = 2)
+  checkmate::assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
+                        types = "character", names = "unique")
+  checkmate::assertString(visitId)
+  checkmate::assertString(icd9Field)
+  checkmate::assertFlag(isShort)
+  checkmate::assertFlag(isShortMapping)
   stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
 
   if (!isShort)
@@ -87,7 +88,8 @@ icd9Comorbid <- function(icd9df,
   if (!is.factor(icd9df[[icd9Field]]))
     icd9df[[icd9Field]] <- as.factor(icd9df[[icd9Field]])
 
-  # we need to convert to string and group these anyway, and much easier and pretty quick to do it here:
+  # we need to convert to string and group these anyway, and much easier and
+  # pretty quick to do it here:
   icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
   if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
   icd9df[[visitId]] <- asCharacterNoWarn(icd9df[[visitId]])
@@ -122,9 +124,8 @@ icd9Comorbid <- function(icd9df,
 
 #' @rdname icd9Comorbid
 #' @export
-icd9ComorbidShort <- function(...) {
+icd9ComorbidShort <- function(...)
   icd9Comorbid(..., isShort = TRUE)
-}
 
 #' @rdname icd9Comorbid
 #' @param abbrevNames  single locical value that defaults to \code{TRUE}, in
@@ -137,6 +138,8 @@ icd9ComorbidShort <- function(...) {
 #' @export
 icd9ComorbidAhrq <- function(..., abbrevNames = TRUE,
                              applyHierarchy = TRUE) {
+  checkmate::assertFlag(abbrevNames)
+  checkmate::assertFlag(applyHierarchy)
 
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::ahrqComorbid)
   if (applyHierarchy) {
@@ -170,6 +173,8 @@ icd9ComorbidAhrq <- function(..., abbrevNames = TRUE,
 #' @export
 icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
+  checkmate::assertFlag(abbrevNames)
+  checkmate::assertFlag(applyHierarchy)
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::quanDeyoComorbid)
   if (applyHierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -190,6 +195,8 @@ icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
 #' @export
 icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
+  checkmate::assertFlag(abbrevNames)
+  checkmate::assertFlag(applyHierarchy)
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::quanElixComorbid)
   if (applyHierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
@@ -223,6 +230,8 @@ icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
 #' @rdname icd9Comorbid
 #' @export
 icd9ComorbidElix <- function(..., abbrevNames = TRUE, applyHierarchy = TRUE) {
+  checkmate::assertFlag(abbrevNames)
+  checkmate::assertFlag(applyHierarchy)
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::elixComorbid)
   if (applyHierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
@@ -292,11 +301,12 @@ icd9ComorbiditiesQuanElixhauser <- function(...) icd9ComorbidQuanElix(...)
 #' @export
 icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
                              show = TRUE, explain = TRUE) {
-  checkmate::checkList(x, min.len = 1, any.missing = FALSE)
-  checkmate::checkList(y, min.len = 1, any.missing = FALSE,
-                       types = c("character", "numeric", "integer"))
-  checkmate::checkLogical(show, any.missing = FALSE, len = 1)
-  checkmate::checkLogical(explain, any.missing = FALSE, len = 1)
+  checkmate::assertList(x, min.len = 1, any.missing = FALSE,
+                        types = c("character"), names = "unique")
+  checkmate::assertList(y, min.len = 1, any.missing = FALSE,
+                       types = c("character"), names = "unique")
+  checkmate::assertFlag(show)
+  checkmate::assertFlag(explain)
   stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))
 
   lapply(x, function(z) stopifnot(is.character(z)))
@@ -338,15 +348,12 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
                     x.title, length(only.x), y.title))
         lapply(icd9Explain(only.x, doCondense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
-
-        #lapply(only.x[1:5], function(s) if (!is.na(s)) cat(sprintf("%s ", s)))
       }
       if (length(only.y) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     y.title, length(only.y), x.title))
         lapply(icd9Explain(only.y, doCondense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
-        #lapply(only.y[1:5], function(s) if (!is.na(s)) cat(sprintf("%s ", s)))
       }
       cat("\n")
     }

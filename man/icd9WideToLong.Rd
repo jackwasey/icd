@@ -4,7 +4,7 @@
 \alias{icd9WideToLong}
 \title{convert ICD data from wide to long format}
 \usage{
-icd9WideToLong(x, visitId = NULL, icd.labels = NULL, icd.name = "icdCode")
+icd9WideToLong(x, visitId = NULL, icdLabels = NULL, icdName = "icdCode")
 }
 \arguments{
 \item{x}{\code{data.frame} in wide format, i.e. one row per patient, and
@@ -15,11 +15,11 @@ patient or visit identifier. Typically this is the visit identifier, since
 patients come leave and enter hospital with different ICD-9 codes. It is a
 character vector of length one. Defaults to "visitId"}
 
-\item{icd.labels}{vector of column names in which codes are found. If NULL,
+\item{icdLabels}{vector of column names in which codes are found. If NULL,
 all columns matching icd or ICD will be included.}
 
-\item{icd.name}{character vector length one containing the new column name
-for the ICD codes, defaults to "icd9Code"}
+\item{icdName}{character vector length one containing the new column name
+for the ICD codes, defaults to "icdCode"}
 }
 \value{
 data frame with visitId column named the same as input, and a column

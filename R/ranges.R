@@ -10,7 +10,7 @@
 #' @keywords manip
 #' @export
 icd9Sort <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
-  checkmate::checkFlag(isShort)
+  checkmate::assertFlag(isShort)
   # TODO: need to be able to compare a pair of codes quickly, then use built-in
   # sort. This becomes easier when I move to S3 classes for ICD-9.
   if (isShort) return(icd9SortShort(icd9))
@@ -19,13 +19,17 @@ icd9Sort <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
 
 #' @rdname icd9Sort
 #' @export
-icd9SortShort <- function(icd9Short)
+icd9SortShort <- function(icd9Short) {
+  assertFactorOrCharacter(icd9Short)
   icd9Short[order(icd9AddLeadingZeroesShort(icd9Short))]
+}
 
 #' @rdname icd9Sort
 #' @export
-icd9SortDecimal <- function(icd9Decimal)
+icd9SortDecimal <- function(icd9Decimal) {
+  assertFactorOrCharacter(icd9Decimal)
   icd9Decimal[order(icd9DecimalToShort(icd9Decimal))]
+}
 
 #' @title take two ICD-9 codes and expand range to include all child codes
 #' @description this is cumbersome code, covering a whole load of edge cases
@@ -56,10 +60,10 @@ icd9SortDecimal <- function(icd9Decimal)
 #' @family ICD-9 ranges
 #' @export
 icd9ExpandRange <- function(start, end, isShort, onlyReal = TRUE) {
-  checkmate::checkVector(start, len = 1)
-  checkmate::checkVector(end, len = 1)
-  checkmate::checkFlag(isShort)
-  checkmate::checkFlag(onlyReal)
+  checkmate::assertScalar(start) # i'll permit numeric but prefer char
+  checkmate::assertScalar(end)
+  checkmate::assertFlag(isShort)
+  checkmate::assertFlag(onlyReal)
   if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal))
   icd9ExpandRangeDecimal(start, end, onlyReal)
 }
@@ -68,9 +72,9 @@ icd9ExpandRange <- function(start, end, isShort, onlyReal = TRUE) {
 #' @export
 icd9ExpandRangeShort <- function(start, end,
                                  onlyReal = TRUE) {
-  checkmate::checkVector(start, len = 1) # i'll permit numeric but prefer char
-  checkmate::checkVector(end, len = 1)
-  checkmate::checkFlag(onlyReal)
+  checkmate::assertScalar(start) # i'll permit numeric but prefer char
+  checkmate::assertScalar(end)
+  checkmate::assertFlag(onlyReal)
   start <- icd9AddLeadingZeroesShort(trim(start))
   end <- icd9AddLeadingZeroesShort(trim(end))
 
@@ -136,9 +140,9 @@ icd9ExpandRangeShort <- function(start, end,
 #' @rdname icd9ExpandRange
 #' @export
 icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
-  checkmate::checkVector(start, len = 1)
-  checkmate::checkVector(end, len = 1)
-  checkmate::checkFlag(onlyReal)
+  checkmate::assertScalar(start) # i'll permit numeric but prefer char
+  checkmate::assertScalar(end)
+  checkmate::assertFlag(onlyReal)
   c <- icd9ExtractAlphaNumeric(start)
   d <- icd9ExtractAlphaNumeric(end)
   # cannot range between numeric, V and E codes, so ensure same type.
@@ -211,9 +215,9 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE) {
 #' icd9ChildrenDecimal("2.34")
 #' @export
 icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE) {
-  checkmate::checkCharacter(icd9) # although still considering allowing numeric
-  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
-  checkmate::checkLogical(onlyReal, any.missing = FALSE, len = 1)
+  assertFactorOrCharacter(icd9)
+  checkmate::assertFlag(isShort)
+  checkmate::assertFlag(onlyReal)
   .Call("icd9_icd9ChildrenCpp", PACKAGE = "icd9", icd9, isShort, onlyReal)
 }
 

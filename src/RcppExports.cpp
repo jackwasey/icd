@@ -1022,6 +1022,40 @@ RcppExport SEXP icd9_trimCpp(SEXP svSEXP) {
     UNPROTECT(1);
     return __result;
 }
+// assertFactorOrCharacter
+bool assertFactorOrCharacter(SEXP x);
+static SEXP icd9_assertFactorOrCharacter_try(SEXP xSEXP) {
+BEGIN_RCPP
+    SEXP __sexp_result;
+    {
+        Rcpp::traits::input_parameter< SEXP >::type x(xSEXP );
+        bool __result = assertFactorOrCharacter(x);
+        PROTECT(__sexp_result = Rcpp::wrap(__result));
+    }
+    UNPROTECT(1);
+    return __sexp_result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_assertFactorOrCharacter(SEXP xSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_assertFactorOrCharacter_try(xSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int icd9_RcppExport_validate(const char* sig) { 
@@ -1056,6 +1090,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("LogicalVector(*icd9InReferenceCode)(CharacterVector,CharacterVector,bool,bool)");
         signatures.insert("std::string(*strimCpp)(std::string&)");
         signatures.insert("std::vector<std::string>(*trimCpp)(std::vector<std::string>&)");
+        signatures.insert("bool(*assertFactorOrCharacter)(SEXP)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -1091,6 +1126,7 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9InReferenceCode", (DL_FUNC)icd9_icd9InReferenceCode_try);
     R_RegisterCCallable("icd9", "icd9_strimCpp", (DL_FUNC)icd9_strimCpp_try);
     R_RegisterCCallable("icd9", "icd9_trimCpp", (DL_FUNC)icd9_trimCpp_try);
+    R_RegisterCCallable("icd9", "icd9_assertFactorOrCharacter", (DL_FUNC)icd9_assertFactorOrCharacter_try);
     R_RegisterCCallable("icd9", "icd9_RcppExport_validate", (DL_FUNC)icd9_RcppExport_validate);
     return R_NilValue;
 }

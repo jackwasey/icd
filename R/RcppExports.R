@@ -192,6 +192,10 @@ trimCpp <- function(sv) {
     .Call('icd9_trimCpp', PACKAGE = 'icd9', sv)
 }
 
+assertFactorOrCharacter <- function(x) {
+    .Call('icd9_assertFactorOrCharacter', PACKAGE = 'icd9', x)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('icd9_RcppExport_registerCCallable', PACKAGE = 'icd9')

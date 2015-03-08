@@ -35,6 +35,14 @@ std::vector<std::string> trimCpp(std::vector<std::string>& sv) {
 	return sv;
 }
 
+// [[Rcpp::export]]
+bool assertFactorOrCharacter(SEXP x) {
+	if (!Rf_isString(x) && !Rf_isFactor(x)) {
+		Rf_error("Must be a factor or character");
+	}
+	return true; // Rcpp fails with void for some reason
+}
+
 #ifdef ICD9_DEBUG
 void printCharVec(CharacterVector cv) {
 	for (CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {

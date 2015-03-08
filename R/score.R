@@ -64,13 +64,10 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     return.df = FALSE,
                                     stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
-  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
-  checkmate::checkCharacter(visitId, any.missing = FALSE, max.len = 1)
-  if (is.null(visitId))
-    visitId <- names(x)[1]
-  else
-    stopifnot(visitId %in% names(x))
-  checkmate::checkLogical(return.df, any.missing = FALSE, len = 1)
+  checkmate::assertDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
+  checkmate::assertCharacter(visitId, any.missing = FALSE, max.len = 1)
+  checkmate::assertFlag(return.df)
+  visitId <- getVisitId(x, visitId)
   tmp <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
                               return.df = TRUE, ...)
   res <- icd9CharlsonComorbid(tmp, visitId = visitId, applyHierarchy = FALSE)
@@ -90,14 +87,7 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
 #'   drop DM if DMcx is present, etc.
 #' @export
 icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
-  if (is.null(visitId)) {
-    if (!any(colnames(x) == "visitId"))
-      visitId <- colnames(x)[1]
-    else
-      visitId <- "visitId"
-  } else
-    stopifnot(visitId %in% colnames(x))
-  stopifnot(length(visitId) == 1)
+  visitId <- getVisitId(x, visitId)
   stopifnot(ncol(x) - is.data.frame(x) == 17)
   weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                2, 2, 2, 2,
@@ -162,13 +152,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
 #' @export
 icd9Count <- function(x, visitId = NULL, return.df = FALSE) {
   stopifnot(is.data.frame(x))
-  if (is.null(visitId)) {
-    if (!any(names(x) == "visitId"))
-      visitId <- names(x)[1]
-    else
-      visitId <- "visitId"
-  } else
-    stopifnot(visitId %in% names(x))
+  visitId <- getVisitId(x, visitId)
   stopifnot(is.character(visitId))
   stopifnot(length(visitId) == 1)
 
@@ -188,17 +172,8 @@ icd9Count <- function(x, visitId = NULL, return.df = FALSE) {
 #'   duplicated.
 #' @export
 icd9CountComorbidBin <- function(x, visitId = NULL, return.df = FALSE) {
-  stopifnot(is.data.frame(x))
-  if (is.null(visitId)) {
-    if (!any(names(x) == "visitId"))
-      visitId <- names(x)[1]
-    else
-      visitId <- "visitId"
-  } else
-    stopifnot(visitId %in% names(x))
-  stopifnot(is.character(visitId))
-  stopifnot(length(visitId) == 1)
-
+  visitId <- getVisitId(x, visitId)
+visitId <- getVisitId(x, visitId)
   res <- apply(x[, names(x) %nin% visitId],
                MARGIN = 1,
                FUN = sum)
@@ -220,18 +195,9 @@ icd9CountWide <- function(x,
                           visitId = NULL,
                           return.df = FALSE,
                           aggregate = FALSE) {
-  stopifnot(is.data.frame(x))
-  stopifnot(is.logical(return.df))
-  stopifnot(is.logical(aggregate))
-  if (is.null(visitId)) {
-    if (!any(names(x) == "visitId"))
-      visitId <- names(x)[1]
-    else
-      visitId <- "visitId"
-  } else
-    stopifnot(visitId %in% names(x))
-  stopifnot(is.character(visitId))
-  stopifnot(length(visitId) == 1)
+  visitId <- getVisitId(x, visitId)
+  checkmate::assertFlag(return.df)
+  checkmate::assertFlag(aggregate)
 
   res <- apply(x[names(x) %nin% visitId], 1, function(x) sum(!is.na(x)))
   names(res) <- x[[visitId]]

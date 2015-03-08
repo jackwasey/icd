@@ -575,6 +575,25 @@ namespace icd9 {
         return Rcpp::as<std::vector<std::string> >(__result);
     }
 
+    inline bool assertFactorOrCharacter(SEXP x) {
+        typedef SEXP(*Ptr_assertFactorOrCharacter)(SEXP);
+        static Ptr_assertFactorOrCharacter p_assertFactorOrCharacter = NULL;
+        if (p_assertFactorOrCharacter == NULL) {
+            validateSignature("bool(*assertFactorOrCharacter)(SEXP)");
+            p_assertFactorOrCharacter = (Ptr_assertFactorOrCharacter)R_GetCCallable("icd9", "icd9_assertFactorOrCharacter");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_assertFactorOrCharacter(Rcpp::wrap(x));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<bool >(__result);
+    }
+
 }
 
 #endif // __icd9_RcppExports_h__

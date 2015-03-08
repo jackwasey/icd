@@ -5,14 +5,11 @@
 \alias{icd9IsE}
 \alias{icd9IsN}
 \alias{icd9IsV}
-\alias{icd9IsVE}
 \title{are the given codes numeric, V or E type?}
 \usage{
 icd9IsV(icd9)
 
 icd9IsE(icd9)
-
-icd9IsVE(icd9)
 
 icd9IsN(icd9)
 }

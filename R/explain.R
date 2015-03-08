@@ -56,15 +56,22 @@ icd9Explain.list <- function(icd9,  isShort = icd9GuessIsShort(icd9),
          doCondense = doCondense, brief = brief, warn = warn)
 }
 
+#' @describeIn icd9Explain explain factor of ICD-9 codes
+#' @export
+icd9Explain.factor <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                               doCondense = TRUE, brief = FALSE, warn = TRUE)
+  icd9Explain.character(asCharacterNoWarn(icd9), isShort = isShort,
+                        doCondense = doCondense, brief = brief, warn = warn)
+
 #' @describeIn icd9Explain explain character vector of ICD-9 codes
 #' @export
 icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                   doCondense = TRUE, brief = FALSE, warn = TRUE) {
-  checkmate::checkFlag(isShort)
-  checkmate::checkFlag(doCondense)
-  checkmate::checkFlag(brief)
-  checkmate::checkFlag(warn)
-
+  checkmate::assertCharacter(icd9)
+  checkmate::assertFlag(isShort)
+  checkmate::assertFlag(doCondense)
+  checkmate::assertFlag(brief)
+  checkmate::assertFlag(warn)
   if (!isShort) icd9 <- icd9DecimalToShort(icd9)
 
   # if there are only real codes, we should condense with this in mind:
@@ -93,7 +100,7 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
 
 }
 
-#' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning
+#' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning. In general, this is not allowed because of the possible ambiguity of numeric decimal codes, but for convenience, this is allowed in this case to avoid typing many quotes.
 #' @export
 icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                 doCondense = TRUE, brief = FALSE, warn = FALSE) {
@@ -115,7 +122,7 @@ icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #'   short type. If there is some uncertainty, then return NA.
 #' @keywords internal
 icd9GuessIsShort <- function(icd9) {
-  # don't take responsibility for validation here.
+  # don't take responsibility for validation of codes:
   if (is.list(icd9)) icd9 <- unlist(icd9)
   icd9 <- asCharacterNoWarn(icd9)
   if (is.list(icd9)) {
@@ -138,13 +145,13 @@ icd9GuessIsShort <- function(icd9) {
 #' @param invalid
 #' @keywords internal
 icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
-
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
-  checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
-  checkmate::checkCharacter(icd9)
+  checkmate::assertFlag(isShort)
+  assertFactorOrCharacter(icd9)
+  icd9 <- asCharacterNoWarn(icd9)
   majors     <- icd9GetMajor(icd9, isShort)
 
   cf <- factor(rep(NA, length(icd9)),
@@ -190,7 +197,7 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
 
 # this is rather slow, queries a web page repeatedly
 icd9GetChaptersHierarchy <- function(save = FALSE) {
-  checkmate::checkFlag(save)
+  checkmate::assertFlag(save)
   # don't rely on having already done this when setting up other data.
   icd9CmDesc <- parseIcd9Descriptions()
 
@@ -216,9 +223,8 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #' @family ICD-9 ranges
 #' @export
 icd9Condense <- function(icd9, isShort, onlyReal = NULL, toMajor = TRUE) {
-  checkmate::checkFlag(isShort)
-  checkmate::checkLogical(onlyReal, any.missing = FALSE, max.len = 1)
-  checkmate::checkFlag(toMajor)
+  checkmate::assertFlag(isShort)
+  checkmate::assertFlag(toMajor)
   if (isShort) return(icd9CondenseShort(icd9, onlyReal, toMajor))
   icd9CondenseDecimal(icd9, onlyReal, toMajor)
 }
@@ -242,6 +248,9 @@ icd9CondenseToMajorDecimal <- function(icd9Decimal, onlyReal = NULL)
 #' @rdname icd9Condense
 #' @export
 icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL) {
+  assertFactorOrCharacter(icd9Short)
+  icd9Short <- asCharacterNoWarn(icd9Short)
+
   i9w <- sort(unique(icd9Short))
 
   if (is.null(onlyReal)) {
@@ -253,7 +262,7 @@ icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL) {
       message("onlyReal not given, but not all codes are 'real' so assuming FALSE")
     }
   } else
-    checkmate::checkLogical(onlyReal, len = 1)
+    checkmate::assertFlag(onlyReal)
 
   if (onlyReal && !all(icd9IsRealShort(icd9Short, majorOk = TRUE)))
     warning("only real values requested, but undefined ('non-real') ICD-9 code(s) given.")
@@ -277,7 +286,10 @@ icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL) {
 #' @rdname icd9Condense
 #' @export
 icd9CondenseShort <- function(icd9Short, onlyReal = NULL, toMajor = TRUE) {
-  checkmate::checkFlag(toMajor)
+  assertFactorOrCharacter(icd9Short)
+  icd9Short <- asCharacterNoWarn(icd9Short)
+
+  checkmate::assertFlag(toMajor)
   i9w <- sort(unique(icd9Short))
 
   if (is.null(onlyReal)) {
@@ -288,9 +300,8 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, toMajor = TRUE) {
       onlyReal <- FALSE
       message("onlyReal not given, but not all codes 'real' so assuming FALSE")
     }
-  } else {
-    checkmate::checkLogical(onlyReal, len = 1)
-  }
+  } else
+    checkmate::assertFlag(onlyReal)
 
   if (onlyReal && !all(icd9IsRealShort(icd9Short, majorOk = toMajor)))
     warning("only real values requested, but unreal ICD-9 code(s) given.")

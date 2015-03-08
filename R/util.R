@@ -62,7 +62,7 @@ saveInDataDir <- function(var, suffix = "") {
 #' @return data frame without logical fields
 #' @keywords internal manip
 logicalToBinary <- function(x) {
-  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 1)
+  checkmate::assertDataFrame(x, min.rows = 1, min.cols = 1)
   if (any(dim(x) == 0))
     stop("got zero in at least one dimension in data frame. %d, %d",
          dim(x)[1], dim(x)[2])
@@ -123,10 +123,10 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
 strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
-  checkmate::checkString(pattern)
-  checkmate::checkCharacter(text, min.len = 1)
-  checkmate::checkFlag(swap)
-  checkmate::checkFlag(dropEmpty)
+  checkmate::assertString(pattern)
+  checkmate::assertCharacter(text, min.len = 1)
+  checkmate::assertFlag(swap)
+  checkmate::assertFlag(dropEmpty)
 
   res <- strMultiMatch(pattern = pattern, text = text,
                        dropEmpty = dropEmpty, ...)
@@ -185,3 +185,16 @@ read.zip.url <- function(url, filename = NULL, FUN = readLines, ...) {
 }
 
 # EXCLUDE COVERAGE END
+
+getVisitId <- function(x, visitId = NULL) {
+  checkmate::checkDataFrame(x, min.cols = 1, col.names = "named")
+  if (is.null(visitId)) {
+    if (!any(names(x) == "visitId"))
+      visitId <- names(x)[1]
+    else
+      visitId <- "visitId"
+  }
+  checkmate::assertString(vistiId)
+  stopifnot(visitId %in% names(x))
+  return(visitId)
+}

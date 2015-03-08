@@ -3,6 +3,7 @@
 \name{icd9Explain}
 \alias{icd9Explain}
 \alias{icd9Explain.character}
+\alias{icd9Explain.factor}
 \alias{icd9Explain.list}
 \alias{icd9Explain.numeric}
 \alias{icd9ExplainDecimal}
@@ -18,6 +19,9 @@ icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
   warn = TRUE)
 
 \method{icd9Explain}{list}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
+
+\method{icd9Explain}{factor}(icd9, isShort = icd9GuessIsShort(icd9),
   doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
@@ -40,7 +44,7 @@ is guessed from the input data.}
 the given set of ICD-9 codes by replacing subsets of codes with 'parent'
 codes which exactly encompass certain subsets. E.g. If all cholera
 diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
-subtypes. This is currently partially implemented. See issue #3 in github.}
+subtypes.}
 
 \item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
 the short description from the canonical CMS descriptions (included in
@@ -73,9 +77,11 @@ convert full format (123.45 style) ICD9 codes into the name and
 \itemize{
 \item \code{list}: explain all ICD-9 codes in a list of vectors
 
+\item \code{factor}: explain factor of ICD-9 codes
+
 \item \code{character}: explain character vector of ICD-9 codes
 
-\item \code{numeric}: explain numeric vector of ICD-9 codes, with warning
+\item \code{numeric}: explain numeric vector of ICD-9 codes, with warning. In general, this is not allowed because of the possible ambiguity of numeric decimal codes, but for convenience, this is allowed in this case to avoid typing many quotes.
 }}
 \note{
 TODO: it will be useful to have S3 ICD-9 short and long classes for
@@ -85,7 +91,7 @@ TODO: it will be useful to have S3 ICD-9 short and long classes for
 }
 \examples{
 icd9ExplainShort(ahrqComorbid[[1]][1:3])
-icd9ExplainShort(ahrqComorbid[[1]][1:3], brief = TRUE)
+icd9Explain(ahrqComorbid[[1]][1:3], brief = TRUE)
 }
 \references{
 \url{http://www.stata.com/help.cgi?icd9}

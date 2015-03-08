@@ -33,7 +33,7 @@
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 #' @export
 icd9IsValid <- function(icd9, isShort) {
-  checkmate::checkFlag(isShort)
+  checkmate::assertFlag(isShort)
   if (isShort) icd9IsValidShort(icd9) else icd9IsValidDecimal(icd9)
 }
 
@@ -47,11 +47,7 @@ icd9Valid <- function(icd9, isShort) {
 #' @rdname icd9IsValid
 #' @export
 icd9IsValidDecimal <- function(icd9Decimal) {
-  if (is.numeric(icd9Decimal)) {
-    warnNumericCode()
-    icd9Decimal <- as.character(icd9Decimal)
-  }
-  stopifnot(is.character(icd9Decimal) || is.factor(icd9Decimal))
+  assertFactorOrCharacter(icd9Decimal)
   if (length(icd9Decimal) == 0) return(logical())
 
   icd9IsValidDecimalN(icd9Decimal) |
@@ -70,17 +66,9 @@ icd9ValidDecimal <- function(icd9) {
 #' @export
 icd9IsValidShort <- function(icd9Short) {
 
-  if (length(icd9Short) == 0) return(logical(0))
+  if (length(icd9Short) == 0) return(logical())
 
-  if (is.numeric(icd9Short)) {
-    warning("Numeric format icd9 codes. This is likely to cause problems.")
-    icd9Short <- asCharacterNoWarn(icd9Short)
-  }
-  stopifnot(is.character(icd9Short) || is.factor(icd9Short))
-  # this is not just invalid data: there is a programming error in the data
-  # structure
-
-  icd9Short <- asCharacterNoWarn(icd9Short)
+  assertFactorOrCharacter(icd9Short)
 
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.
@@ -98,38 +86,57 @@ icd9ValidShort <- function(icd9) {
 
 #' @rdname icd9IsValid
 #' @export
-icd9IsValidShortV <- function(icd9Short)
+icd9IsValidShortV <- function(icd9Short) {
+  assertFactorOrCharacter(icd9Short)
+  icd9Short <- asCharacterNoWarn(icd9Short)
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", # nolint
         icd9Short)
+}
 
 #' @rdname icd9IsValid
 #' @export
-icd9IsValidShortE <- function(icd9Short)
+icd9IsValidShortE <- function(icd9Short){
+  assertFactorOrCharacter(icd9Short)
+  icd9Short <- asCharacterNoWarn(icd9Short)
   grepl("^[[:space:]]*[Ee][[:digit:]]{1,4}[[:space:]]*$", icd9Short)
+}
 
 #' @rdname icd9IsValid
 #' @export
-icd9IsValidShortN <- function(icd9Short)
+icd9IsValidShortN <- function(icd9Short) {
+  assertFactorOrCharacter(icd9Short)
+  icd9Short <- asCharacterNoWarn(icd9Short)
   grepl("^[[:space:]]*[[:digit:]]{1,5}[[:space:]]*$", icd9Short)
+}
 
-icd9IsValidDecimalV <- function(icd9Decimal)
+icd9IsValidDecimalV <- function(icd9Decimal) {
+  assertFactorOrCharacter(icd9Decimal)
+  icd9Decimal <- asCharacterNoWarn(icd9Decimal)
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
         icd9Decimal)
+}
 
-icd9IsValidDecimalE <- function(icd9Decimal)
+icd9IsValidDecimalE <- function(icd9Decimal) {
   #need Perl regex for lookbehind. may even be quicker, according to the docs.
   #grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$",
   #trim(icd9Decimal), perl = TRUE)
+  assertFactorOrCharacter(icd9Decimal)
+  icd9Decimal <- asCharacterNoWarn(icd9Decimal)
   grepl("^[[:space:]]*[Ee][[:digit:]]{1,3}(\\.[[:digit:]]?)?[[:space:]]*$",
         icd9Decimal)
+}
 
-icd9IsValidDecimalN <- function(icd9Decimal)
+icd9IsValidDecimalN <- function(icd9Decimal) {
+  assertFactorOrCharacter(icd9Decimal)
+  icd9Decimal <- asCharacterNoWarn(icd9Decimal)
   grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
         icd9Decimal)
+}
 
 #' @rdname icd9IsValid
 #' @export
 icd9IsValidMajor <- function(major)
+  # let grepl do what it can with integers, factors, etc.
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)", # nolint
     x = major
@@ -160,12 +167,16 @@ icd9IsValidMajorE <- function(major)
 #' @template isShort
 #' @family ICD9 validation
 #' @export
-icd9IsValidMapping <- function(icd9Mapping, isShort)
+icd9IsValidMapping <- function(icd9Mapping, isShort) {
+  checkmate::assertList(icd9Mapping, types = "character", any.missing = FALSE,
+                        min.len = 1, unique = TRUE, names = TRUE)
+  checkmate::checkFlag(isShort)
   # TOOD: warn/return the invalid labels
   all(unlist(
     lapply(icd9Mapping, FUN = function(icd9Map) icd9IsValid(icd9Map, isShort)),
     use.names = FALSE
   ))
+}
 
 #' @rdname icd9IsValidMapping
 #' @export
@@ -261,6 +272,9 @@ icd9IsReal <- function(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE) {
 #' @describeIn icd9IsReal
 #' @export
 icd9IsRealShort <- function(icd9Short, majorOk = TRUE) {
+  assertFactorOrCharacter(icd9Short)
+  icd9Short <- asCharacterNoWarn(icd9Short)
+  checkmate::assertFlag(majorOk)
   if (majorOk)
     return(icd9Short %in% c(icd9::icd9Hierarchy[["icd9"]],
                             icd9::icd9ChaptersMajor))

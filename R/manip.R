@@ -6,6 +6,7 @@
 #'   code, which may include a decimal point.
 #' @keywords internal manip
 icd9ExtractAlphaNumeric <- function(icd9) {
+  assertFactorOrCharacter(icd9)
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
   t(
@@ -29,6 +30,8 @@ icd9ExtractAlphaNumeric <- function(icd9) {
 #' @family ICD-9 convert
 #' @keywords internal manip
 icd9DropLeadingZeroes <- function(icd9, isShort) {
+  assertFactorOrCharacter(icd9)
+  checkmate::assertFlag(isShort)
   if (isShort) return(
     icd9DropLeadingZeroesShort(icd9Short = icd9))
   icd9DropLeadingZeroesDecimal(icd9Decimal = icd9)
@@ -37,7 +40,7 @@ icd9DropLeadingZeroes <- function(icd9, isShort) {
 #' @rdname icd9DropLeadingZeroes
 #' @template icd9-decimal
 icd9DropLeadingZeroesDecimal <- function(icd9Decimal) {
-
+  assertFactorOrCharacter(icd9Decimal)
   out <- vapply(
     X = strMultiMatch(
       pattern = "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]+)[[:space:]]*",
@@ -52,6 +55,7 @@ icd9DropLeadingZeroesDecimal <- function(icd9Decimal) {
 #' @rdname icd9DropLeadingZeroes
 #' @template icd9-short
 icd9DropLeadingZeroesShort <- function(icd9Short) {
+  assertFactorOrCharacter(icd9Short)
   parts <- icd9ShortToParts(icd9Short = icd9Short, minorEmpty = "")
   # very important: only drop the zero in V codes if the minor part is empty.
   areEmpty <- parts[["minor"]] == ""
@@ -61,6 +65,7 @@ icd9DropLeadingZeroesShort <- function(icd9Short) {
 
 #' @rdname icd9DropLeadingZeroes
 icd9DropLeadingZeroesMajor <- function(major) {
+  # major can legitimately be an integer
   major <- trim(major)
   isV <- icd9IsV(major) # not checking validity, necessarily, just quick check
   # alternative might be just to get numeric-only, possibly quicker? TODO

@@ -41,8 +41,8 @@ NULL
 #' @import checkmate
 #' @keywords internal manip
 icd9ChaptersToMap <- function(x) {
+  if (is.character(x)) x <- get(x)
   checkList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
-  if (is.character(x) == 1) x <- get(x)
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
@@ -59,10 +59,10 @@ icd9ChaptersToMap <- function(x) {
 #' @param x \code{data.frame} in wide format, i.e. one row per patient, and
 #'   multiple columns containing ICD codes, empty strings or NA.
 #' @template visitid
-#' @param icd.labels vector of column names in which codes are found. If NULL,
+#' @param icdLabels vector of column names in which codes are found. If NULL,
 #'   all columns matching icd or ICD will be included.
-#' @param icd.name character vector length one containing the new column name
-#'   for the ICD codes, defaults to "icd9Code"
+#' @param icdName character vector length one containing the new column name
+#'   for the ICD codes, defaults to "icdCode"
 #' @return data frame with visitId column named the same as input, and a column
 #'   named by \code{icd.name} containing all the non-NA and non-empty codes
 #'   found in the wide input data.
@@ -75,22 +75,16 @@ icd9ChaptersToMap <- function(x) {
 #' @export
 icd9WideToLong <- function(x,
                            visitId = NULL,
-                           icd.labels = NULL,
-                           icd.name = "icdCode") {
+                           icdLabels = NULL,
+                           icdName = "icdCode") {
+  checkmate::assertString(icdName)
   if (is.null(icd.labels))
     icd.labels <- grep("icd", names(x), ignore.case = TRUE, value = TRUE)
-  else
+  else {
+    checkmate::assertCharacter(icdLabels, any.missing = FALSE)
     stopifnot(all(icd.labels %in% names(x)))
-
-  if (is.null(visitId)) {
-    if (!any(names(x) == "visitId"))
-      visitId <- names(x)[1]
-    else
-      visitId <- "visitId"
-  } else
-    stopifnot(visitId %in% names(x))
-  stopifnot(is.character(visitId))
-  stopifnot(length(visitId) == 1)
+  }
+  visitId <- getVisitId(x, visitId)
 
   res <- reshape(x,
                  direction = "long",
@@ -142,7 +136,13 @@ icd9LongToWide <- function(icd9df,
                            min.width = 0,
                            aggregate = TRUE,
                            return.df = FALSE) {
-  checkmate::checkInteger(min.width, lower = 0, any.missing = FALSE, max.len = 1)
+  checkmate::assertDataFrame(icd9df, col.names = "named")
+  checkmate::assertString(visitId)
+  checkmate::assertString(icd9Field)
+  checkmate::assertString(prefix)
+  checkmate::assertCount(min.width, na.ok = FALSE)
+  checkmate::assertFlag(aggregate)
+  checkmate::assertFlag(return.df)
   # we're now going to return a matrix
   icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
   if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
@@ -168,3 +168,30 @@ icd9LongToWide <- function(icd9df,
   }
   icd9LongToWideCpp(icd9df, visitId, icd9Field, aggregate)
 }
+
+#' @title convert matrix of comorbidities into data frame, preserving visitId information
+#' @export
+icd9ComorbidMatToDf <- function(x, visitId = "visitId",
+                                stringsAsFactors = getOption("stringsAsFactors")) {
+  checkmate::checkMatrix(x, min.rows = 1, min.cols = 1, row.names = TRUE, col.names = TRUE)
+  checkmate::checkString(visitId)
+  checkmate::checkFlag(stringsAsFactors)
+  out <- cbind(rownames(x), x, stringsAsFactors = stringsAsFactors)
+  names(out)[1] <- visitId
+  out
+}
+
+#' @title convert matrix of comorbidities into data frame, preserving visitId information
+#' @export
+icd9ComorbidMatToDf <- function(x, visitId = NULL,
+                                stringsAsFactors = getOption("stringsAsFactors")) {
+  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 1, col.names = TRUE)
+  checkmate::checkString(visitId)
+  checkmate::checkFlag(stringsAsFactors)
+  visitId <- getVisitId(x, visitId)
+
+  out <- as.matrix.data.frame(x[-which(names(x) == visitId)])
+  names(out)[1] <- visitId
+  out
+}
+
