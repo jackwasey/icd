@@ -2,12 +2,17 @@
 % Please edit documentation in R/convert.R
 \name{icd9ComorbidDfToMat}
 \alias{icd9ComorbidDfToMat}
-\title{convert matrix of comorbidities into data frame, preserving visitId information}
+\title{convert matrix of comorbidities into data frame, preserving visitId
+  information}
 \usage{
 icd9ComorbidDfToMat(x, visitId = NULL,
   stringsAsFactors = getOption("stringsAsFactors"))
 }
 \arguments{
+\item{x}{data frame, with a \code{visitId} column (not necessarily first),
+and other columns with flags for comorbidities, as such column names are
+required.}
+
 \item{visitId}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
 patients come leave and enter hospital with different ICD-9 codes. It is a
@@ -16,11 +21,9 @@ character vector of length one. Defaults to "visitId"}
 \item{stringsAsFactors}{whether the resulting data frame should have strings,
 i.e. visitId converted to factor. Default is to follow the current session
 option.}
-
-\item{icd9df}{data frame containing columns for visitId (which is the feault
-name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 }
 \description{
-convert matrix of comorbidities into data frame, preserving visitId information
+convert matrix of comorbidities into data frame, preserving visitId
+  information
 }
 
