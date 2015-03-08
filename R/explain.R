@@ -14,7 +14,7 @@
 #'   the given set of ICD-9 codes by replacing subsets of codes with 'parent'
 #'   codes which exactly encompass certain subsets. E.g. If all cholera
 #'   diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
-#'   subtypes. This is currently partially implemented. See issue #3 in github.
+#'   subtypes.
 #' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
 #'   the short description from the canonical CMS descriptions (included in
 #'   \code{extdata}) will be used, otherwise the long description is used.
@@ -23,7 +23,7 @@
 #'   a warning.
 #' @examples
 #' icd9ExplainShort(ahrqComorbid[[1]][1:3])
-#' icd9ExplainShort(ahrqComorbid[[1]][1:3], brief = TRUE)
+#' icd9Explain(ahrqComorbid[[1]][1:3], brief = TRUE)
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
@@ -68,7 +68,6 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
   if (!isShort) icd9 <- icd9DecimalToShort(icd9)
 
   # if there are only real codes, we should condense with this in mind:
-
   if (doCondense) {
     onlyReal <- all(icd9IsRealShort(icd9))
     if (warn && !onlyReal) {
@@ -218,6 +217,7 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
 #' @export
 icd9Condense <- function(icd9, isShort, onlyReal = NULL, toMajor = TRUE) {
   checkmate::checkFlag(isShort)
+  checkmate::checkLogical(onlyReal, any.missing = FALSE, max.len = 1)
   checkmate::checkFlag(toMajor)
   if (isShort) return(icd9CondenseShort(icd9, onlyReal, toMajor))
   icd9CondenseDecimal(icd9, onlyReal, toMajor)
@@ -247,17 +247,16 @@ icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL) {
   if (is.null(onlyReal)) {
     if (all(icd9IsRealShort(i9w, majorOk = TRUE))) {
       onlyReal <- TRUE
-      message("onlyReal not given, but all codes 'real' so assuming TRUE")
+      message("onlyReal not given, but all codes are 'real' so assuming TRUE")
     } else {
       onlyReal <- FALSE
-      message("onlyReal not given, but not all codes 'real' so assuming FALSE")
+      message("onlyReal not given, but not all codes are 'real' so assuming FALSE")
     }
-  } else {
+  } else
     checkmate::checkLogical(onlyReal, len = 1)
-  }
 
   if (onlyReal && !all(icd9IsRealShort(icd9Short, majorOk = TRUE)))
-    warning("only real values requested, but unreal ICD-9 code(s) given.")
+    warning("only real values requested, but undefined ('non-real') ICD-9 code(s) given.")
 
   i9o <- c()
   for (i in unique(icd9GetMajor(i9w, isShort = TRUE))) {
