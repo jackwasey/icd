@@ -21,7 +21,6 @@ test_that("github issue #46 from wmurphyd", {
                               )
                        )
                      )
-  print(comorbids[2,]) # Case 2: Dementia, LiverMild, Cancer, HIV
   c2.inv <-cbind(t(comorbids[2,2:18]),c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 6, 6))
   expect_equivalent(
     icd9CharlsonComorbid(comorbids,applyHierarchy=TRUE)[2],

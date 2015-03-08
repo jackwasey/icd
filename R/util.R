@@ -62,7 +62,7 @@ saveInDataDir <- function(var, suffix = "") {
 #' @return data frame without logical fields
 #' @keywords internal manip
 logicalToBinary <- function(x) {
-  stopifnot(is.data.frame(x))
+  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 1)
   if (any(dim(x) == 0))
     stop("got zero in at least one dimension in data frame. %d, %d",
          dim(x)[1], dim(x)[2])
@@ -123,14 +123,10 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
 strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
-  stopifnot(length(pattern) == 1)
-  stopifnot(length(text) > 0)
-  stopifnot(length(swap) == 1)
-  stopifnot(length(dropEmpty) == 1)
-  stopifnot(is.character(pattern))
-  stopifnot(is.character(text))
-  stopifnot(is.logical(swap))
-  stopifnot(is.logical(dropEmpty))
+  checkmate::checkString(pattern)
+  checkmate::checkCharacter(text, min.len = 1)
+  checkmate::checkFlag(swap)
+  checkmate::checkFlag(dropEmpty)
 
   res <- strMultiMatch(pattern = pattern, text = text,
                        dropEmpty = dropEmpty, ...)

@@ -10,6 +10,7 @@
 #' @keywords manip
 #' @export
 icd9Sort <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
+  checkmate::checkFlag(isShort)
   # TODO: need to be able to compare a pair of codes quickly, then use built-in
   # sort. This becomes easier when I move to S3 classes for ICD-9.
   if (isShort) return(icd9SortShort(icd9))
@@ -55,8 +56,12 @@ icd9SortDecimal <- function(icd9Decimal)
 #' @family ICD-9 ranges
 #' @export
 icd9ExpandRange <- function(start, end, isShort, onlyReal = TRUE) {
+  checkmate::checkVector(start, len = 1)
+  checkmate::checkVector(end, len = 1)
+  checkmate::checkFlag(isShort)
+  checkmate::checkFlag(onlyReal)
   if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal))
-  return(icd9ExpandRangeDecimal(start, end, onlyReal))
+  icd9ExpandRangeDecimal(start, end, onlyReal)
 }
 
 #' @rdname icd9ExpandRange
@@ -65,6 +70,7 @@ icd9ExpandRangeShort <- function(start, end,
                                  onlyReal = TRUE) {
   checkmate::checkVector(start, len = 1) # i'll permit numeric but prefer char
   checkmate::checkVector(end, len = 1)
+  checkmate::checkFlag(onlyReal)
   start <- icd9AddLeadingZeroesShort(trim(start))
   end <- icd9AddLeadingZeroesShort(trim(end))
 
@@ -130,7 +136,9 @@ icd9ExpandRangeShort <- function(start, end,
 #' @rdname icd9ExpandRange
 #' @export
 icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
-  stopifnot(length(start) == 1 && length(end) == 1)
+  checkmate::checkVector(start, len = 1)
+  checkmate::checkVector(end, len = 1)
+  checkmate::checkFlag(onlyReal)
   c <- icd9ExtractAlphaNumeric(start)
   d <- icd9ExtractAlphaNumeric(end)
   # cannot range between numeric, V and E codes, so ensure same type.
@@ -148,7 +156,7 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE) {
     icd9ExpandRangeShort(
       icd9DecimalToShort(start), icd9DecimalToShort(end),
       onlyReal = onlyReal
-    )
+    ) # although still considering allowing numeric
   )
 }
 
@@ -203,7 +211,7 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE) {
 #' icd9ChildrenDecimal("2.34")
 #' @export
 icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE) {
-  checkmate::checkCharacter(icd9)
+  checkmate::checkCharacter(icd9) # although still considering allowing numeric
   checkmate::checkLogical(isShort, any.missing = FALSE, len = 1)
   checkmate::checkLogical(onlyReal, any.missing = FALSE, len = 1)
   .Call("icd9_icd9ChildrenCpp", PACKAGE = "icd9", icd9, isShort, onlyReal)
