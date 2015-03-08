@@ -7,7 +7,7 @@ Description: Calculate comorbidities, and perform fast and accurate
     exist. The package enables a work flow from raw lists of ICD-9 codes from
     hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
     from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-Version: 1.0.0.9002
+Version: 1.0.0.9003
 Date: 2015-01-24
 Authors@R: person(given = "Jack O.", family = "Wasey",
     role = c("aut", "cre", "cph"),

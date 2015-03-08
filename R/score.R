@@ -86,7 +86,7 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
 #'   drop DM if DMcx is present, etc.
 #' @export
 icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
-  visitId <- getVisitId(x, visitId)
+  stopifnot(is.data.frame(x) || is.matrix(x))
   stopifnot(ncol(x) - is.data.frame(x) == 17)
   weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                2, 2, 2, 2,
@@ -102,6 +102,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
     stopifnot(!any(x[, "Cancer"] & x[, "Mets"]))
   }
   if (is.data.frame(x)) {
+    visitId <- getVisitId(x, visitId)
     visitIdNames <- x[[visitId]]
     x <- as.matrix(x[, names(x) %nin% visitId])
     rownames(x) <- visitIdNames

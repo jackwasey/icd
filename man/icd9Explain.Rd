@@ -25,7 +25,7 @@ icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
   doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE, warn = TRUE)
+  doCondense = TRUE, brief = FALSE, warn = TRUE, toMajor = TRUE)
 
 \method{icd9Explain}{numeric}(icd9, isShort = icd9GuessIsShort(icd9),
   doCondense = TRUE, brief = FALSE, warn = FALSE)
@@ -84,12 +84,6 @@ convert full format (123.45 style) ICD9 codes into the name and
 
 \item \code{numeric}: explain numeric vector of ICD-9 codes, with warning. In general, this is not allowed because of the possible ambiguity of numeric decimal codes, but for convenience, this is allowed in this case to avoid typing many quotes.
 }}
-\note{
-TODO: it will be useful to have S3 ICD-9 short and long classes for
-  situations like this where we could easily dispatch on short or long type,
-  or even use a print.icd9decimal or print.icd9Short S3 method to display
-  ICD-9 codes.
-}
 \examples{
 icd9ExplainShort(ahrqComorbid[[1]][1:3])
 icd9Explain(ahrqComorbid[[1]][1:3], brief = TRUE)

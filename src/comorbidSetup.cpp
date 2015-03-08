@@ -47,7 +47,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		n = INTEGER(icds)[i];
 #ifdef ICD9_DEBUG_SETUP_TRACE
 		std::cout << "building visit: it = " << i << ", id = " << vi[i] << "\n";
-		std::cout << "length vcdb_n = " << vcdb_n.size() << "\n";
+		std::cout << "length vcdb_n = " << vcdb.size() << "\n";
 #endif
 		// would be easy to skip whitespace here too, but probably no need.
 		// with much shorter lookups with factorization of only relevant mapping codes, linear search may be better again:

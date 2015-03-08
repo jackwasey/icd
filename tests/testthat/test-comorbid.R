@@ -604,3 +604,13 @@ test_that("control params don't affect result of comorbid calc", {
     icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=3, ompChunkSize = 5) # primes < unique visits
   )
 })
+
+test_that("failing example", {
+  mydf <- data.frame(visitId = c("a", "b", "c"),
+                     icd9 = c("441", "412.93", "044.9"))
+  cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)
+  expect_false("names" %in% names(attributes(cmb)))
+  icd9Charlson(mydf, isShort = FALSE)
+  icd9Charlson(mydf, isShort = FALSE, return.df = TRUE)
+  icd9CharlsonComorbid(cmb)
+})

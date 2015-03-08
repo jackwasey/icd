@@ -52,6 +52,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #endif
 	if (TYPEOF(vsexp) != STRSXP)
 		Rcpp::stop("expecting vsexp to be character vector");
+	UNPROTECT(1); // vsexp not used further
 
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "icd9ComorbidShortMatrix STRSXP\n";
@@ -69,7 +70,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 	std::cout << "first cmb has len: " << map[0].size() << "\n";
 #endif
 
-	const VecVecInt::size_type num_comorbid = map.size(); // should be same for V and E
+	const VecVecIntSz num_comorbid = map.size(); // should be same for V and E
 	//const CodesVecSubtype::size_type num_visits = visitIds.size();
 	const VecVecIntSz num_visits = vcdb.size();
 
@@ -78,8 +79,6 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 	std::cout << num_comorbid << " is num_comorbid\n";
 #endif
 
-	//const Out out = lookupComorbidByRowFor(allCodes, map, chunkSize);
-	//const Out out = lookupComorbidByChunkWhile(allCodes, map, chunkSize);
 	const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunkSize,
 			ompChunkSize);
 
@@ -109,6 +108,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #endif
 	mat_out.attr("dim") = Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
 	mat_out.attr("dimnames") = List::create(icd9Mapping.names(), out_row_names);
+	//mat_out.attr("class") = "matrix";
 	Function t("t"); // use R transpose - seems pretty fast
 #ifdef ICD9_DEBUG
 			std::cout << "Ready to transpose and return\n";
@@ -117,6 +117,5 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 	CALLGRIND_STOP_INSTRUMENTATION;
 	//CALLGRIND_DUMP_STATS;
 #endif
-	UNPROTECT(1);
 	return t(mat_out);
 }

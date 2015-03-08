@@ -183,12 +183,19 @@ icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
-  if (abbrevNames)
-    names(cbd)[-1] <- icd9::charlsonComorbidNamesAbbrev
-  else
-    names(cbd)[-1] <- icd9::charlsonComorbidNames
+  if (abbrevNames) {
+    if (is.data.frame(cbd))
+      colnames(cbd)[-1] <- icd9::charlsonComorbidNamesAbbrev
+    else
+      colnames(cbd) <- icd9::charlsonComorbidNamesAbbrev
+    } else {
+      if (is.data.frame(cbd))
+        colnames(cbd)[-1] <- icd9::charlsonComorbidNames
+      else
+        colnames(cbd) <- icd9::charlsonComorbidNames
+    }
 
-  cbd
+    cbd
 }
 
 #' @rdname icd9Comorbid
@@ -220,9 +227,9 @@ icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
       names(cbd)[-1] <- icd9::quanElixComorbidNames
   } else {
     if (abbrevNames)
-      names(cbd)[-1] <- icd9::quanElixComorbidNamesHtnAbbrev
+      colnames(cbd)[-1] <- icd9::quanElixComorbidNamesHtnAbbrev
     else
-      names(cbd)[-1] <- icd9::quanElixComorbidNamesHtn
+      colnames(cbd)[-1] <- icd9::quanElixComorbidNamesHtn
   }
   cbd
 }
@@ -239,14 +246,14 @@ icd9ComorbidElix <- function(..., abbrevNames = TRUE, applyHierarchy = TRUE) {
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
     cbd[, "HTNcx"] <- NULL
     if (abbrevNames)
-      names(cbd)[-1] <- icd9::elixComorbidNamesAbbrev
+      colnames(cbd)[-1] <- icd9::elixComorbidNamesAbbrev
     else
-      names(cbd)[-1] <- icd9::elixComorbidNames
+      colnames(cbd)[-1] <- icd9::elixComorbidNames
   } else {
     if (abbrevNames)
-      names(cbd)[-1] <- icd9::elixComorbidNamesHtnAbbrev
+      colnames(cbd)[-1] <- icd9::elixComorbidNamesHtnAbbrev
     else
-      names(cbd)[-1] <- icd9::elixComorbidNamesHtn
+      colnames(cbd)[-1] <- icd9::elixComorbidNamesHtn
   }
   cbd
 }
@@ -304,7 +311,7 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
   checkmate::assertList(x, min.len = 1, any.missing = FALSE,
                         types = c("character"), names = "unique")
   checkmate::assertList(y, min.len = 1, any.missing = FALSE,
-                       types = c("character"), names = "unique")
+                        types = c("character"), names = "unique")
   checkmate::assertFlag(show)
   checkmate::assertFlag(explain)
   stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))
