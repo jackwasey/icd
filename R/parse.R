@@ -408,6 +408,10 @@ parseIcd9Descriptions <- function(icd9path =
   icd9ShortDesc <- lapply(r,
                           FUN = function(row)
                             trim(paste(row[-1], collapse = " ")))
+
+  # double check:
+  stopifnot(identical(icd9ShortCode, icd9LongCode))
+
   icd9CmDesc <- data.frame(
     icd9 = unlist(icd9LongCode),
     descLong = unlist(icd9LongDesc),

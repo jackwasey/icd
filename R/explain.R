@@ -211,6 +211,10 @@ icd9GetChaptersHierarchy <- function(save = FALSE) {
     icd9CmDesc,
     icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE)
   )
+
+  # quick sanity check
+  stopifnot(all(icd9IsValidShort(icd9Hierarchy$icd9)))
+
   if (save) saveInDataDir("icd9Hierarchy") # EXCLUDE COVERAGE
 }
 

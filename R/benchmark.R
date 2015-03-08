@@ -39,21 +39,21 @@ runOpenMPVecInt <- function(n = 4, np = 2, threads = 6, chunkSize = 32) {
   icd9ComorbidShortCpp(pts,icd9::ahrqComorbid, threads = threads, chunkSize = chunkSize)
 }
 
-benchOpenMPThreads <- function(n=2^18-1, np=7) {
+benchOpenMPThreads <- function(n = 2^18-1, np = 7) {
   # if chunk size is <32 (i.e. one word) bits aren't updated correctly by concurrent threads'
   pts <- randomPatients(n, np)
   stopifnot(identical(
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 8, chunkSize=32),
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 8, chunkSize=32)
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize=32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize=32)
   ))
   stopifnot(identical(
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 1, chunkSize=32),
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 8, chunkSize=32)
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 1, chunkSize=32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize=32)
   ))
   microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(,icd9::ahrqComorbid, threads = 4, chunkSize=32),
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize=256),
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize=1024),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize=32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize=256),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize=1024),
     times = 5
   )
 }

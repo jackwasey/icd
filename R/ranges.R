@@ -250,9 +250,18 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do
 
   # we can either use the icd9IsReal functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
-  icd9NShortReal <- grep("[^VE]*", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
+  icd9NShortReal <- grep("^[^VE]+", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
   icd9VShortReal <- grep("V", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
   icd9EShortReal <- grep("E", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
+
+  # some very quick sanity checks: (duplicate in a test in test-ranges)
+  stopifnot(length(icd9NShortReal) < length(icd9NShort))
+  stopifnot(length(icd9VShortReal) < length(icd9VShort))
+  stopifnot(length(icd9EShortReal) < length(icd9EShort))
+  stopifnot(all(icd9NShortReal %in% icd9NShort))
+  stopifnot(all(icd9VShortReal %in% icd9VShort))
+  stopifnot(all(icd9EShortReal %in% icd9EShort))
+
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.

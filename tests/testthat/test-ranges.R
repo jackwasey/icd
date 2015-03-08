@@ -429,4 +429,12 @@ test_that("sysdata.rda is okay", {
 
   expect_that(sysdat <- icd9GenerateSysData(do.save = FALSE), testthat::not(throws_error()))
   expect_equal(names(sysdat), lknames)
+
+  stopifnot(length(icd9NShortReal) < length(icd9NShort))
+  stopifnot(length(icd9VShortReal) < length(icd9VShort))
+  stopifnot(length(icd9EShortReal) < length(icd9EShort))
+  stopifnot(all(icd9NShortReal %in% icd9NShort))
+  stopifnot(all(icd9VShortReal %in% icd9VShort))
+  stopifnot(all(icd9EShortReal %in% icd9EShort))
+
 })

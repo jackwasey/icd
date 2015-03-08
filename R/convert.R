@@ -192,7 +192,7 @@ icd9ComorbidMatToDf <- function(x, visitId = "visitId",
 #' @param x data frame, with a \code{visitId} column (not necessarily first),
 #'   and other columns with flags for comorbidities, as such column names are
 #'   required.
-#' @template visitId
+#' @template visitid
 #' @param stringsAsFactors whether the resulting data frame should have strings,
 #'   i.e. visitId converted to factor. Default is to follow the current session
 #'   option.
