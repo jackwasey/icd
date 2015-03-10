@@ -88,7 +88,9 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
 //#pragma omp ordered
 // next block doesn't need to be single threaded, but doing so improves cache contention
-#pragma omp critical
+#ifdef ICD9_OPENMP
+		#pragma omp critical
+#endif
 		{
 #ifdef ICD9_DEBUG_TRACE
 			std::cout << "writing a chunk beginning at: " << vis_i << "\n";

@@ -62,16 +62,6 @@ void printIt(std::vector<VT> v) {
 	std::cout.flush();
 }
 
-//template<typename T>
-//void printIt(boost::unordered_set<T> v) {
-//	typename boost::unordered_set<T>::iterator i;
-//	std::ostringstream o;
-//	for (i=v.begin(); i!=v.end(); ++i) { o << *i << " "; }
-//	o << "\n";
-//	std::cout << o.str();
-//	std::cout.flush();
-//}
-
 //overload for set
 template<typename ST>
 void printIt(std::set<ST> v) {
