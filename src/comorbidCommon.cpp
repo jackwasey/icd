@@ -38,8 +38,7 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 							* (urow - begin) + cmb;
 #ifdef ICD9_DEBUG
 					chunk.at(chunk_idx) = true;
-#endif
-#ifndef ICD9_DEBUG
+#else
 					chunk[chunk_idx] = true;
 #endif
 					break;
@@ -75,10 +74,12 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	// loop through chunks at a time
 	for (vis_i = 0; vis_i < num_visits; vis_i += chunkSize) {
 #ifdef ICD9_DEBUG_TRACE
-		std::cout << "vis_i = " << vis_i << " ";
+		Rcpp::Rcout << "vis_i = " << vis_i << " ";
 #endif
 #ifdef ICD9_OPENMP
-		std::cout << omp_get_thread_num();
+#ifdef ICD9_DEBUG
+		Rcpp::Rcout << omp_get_thread_num();
+#endif
 #endif
 
 		chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
