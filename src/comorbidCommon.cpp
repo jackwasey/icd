@@ -78,18 +78,18 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		std::cout << "vis_i = " << vis_i << " ";
 #endif
 #ifdef ICD9_OPENMP
-		 std::cout << omp_get_thread_num();
+		std::cout << omp_get_thread_num();
 #endif
 
 		chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
 		if (chunk_end_i > last_i)
 			chunk_end_i = last_i; // indices
-	        ComorbidOut chunk;
+		ComorbidOut chunk;
 		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
 //#pragma omp ordered
 // next block doesn't need to be single threaded, but doing so improves cache contention
 #ifdef ICD9_OPENMP
-		#pragma omp critical
+#pragma omp critical
 #endif
 		{
 #ifdef ICD9_DEBUG_TRACE

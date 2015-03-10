@@ -40,14 +40,14 @@ typedef std::vector<char> ComorbidOut; // TODO: someday benchmark int vs char (o
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
-typedef std::tr1::unordered_map<std::string,VecInt::size_type> VisLk;
+typedef std::tr1::unordered_map<std::string, VecInt::size_type> VisLk;
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
 		const bool aggregate);
-ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
-                                     const int chunkSize, const int ompChunkSize);
+ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
+		const VecVecInt& map, const int chunkSize, const int ompChunkSize);
 
 #if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
 #include <iostream> // only include std::cout if debugging: R won't like cout so we should not do this unless debugging.
@@ -86,5 +86,4 @@ void printIt(std::map<MK,MV> v) {
 
 void printCharVec(Rcpp::CharacterVector cv);
 #endif
-
 

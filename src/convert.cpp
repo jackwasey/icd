@@ -12,7 +12,8 @@ using namespace Rcpp;
 //' @name convert
 //' @export
 // [[Rcpp::export]]
-CharacterVector icd9MajMinToCode(const CharacterVector major, const CharacterVector minor, bool isShort) {
+CharacterVector icd9MajMinToCode(const CharacterVector major,
+		const CharacterVector minor, bool isShort) {
 
 	CharacterVector out; // wish I could reserve space for this
 	CharacterVector::const_iterator j = major.begin();
@@ -106,7 +107,8 @@ CharacterVector icd9PartsToDecimal(const List parts) {
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
-List icd9MajMinToParts(const CharacterVector major, const CharacterVector minor) {
+List icd9MajMinToParts(const CharacterVector major,
+		const CharacterVector minor) {
 	List returned_frame = List::create(_["major"] = major, _["minor"] = minor);
 
 	// TODO: can do this with lists, ?no need for a data frame
@@ -120,7 +122,8 @@ List icd9MajMinToParts(const CharacterVector major, const CharacterVector minor)
 
 // this is even faster, but loses some useful data frame features which cause test failure
 // [[Rcpp::export]]
-List icd9MajMinToParts_list(const CharacterVector major, const CharacterVector minor) {
+List icd9MajMinToParts_list(const CharacterVector major,
+		const CharacterVector minor) {
 	List out = List::create(_["major"] = major, _["minor"] = minor);
 	return out;
 }
@@ -128,7 +131,8 @@ List icd9MajMinToParts_list(const CharacterVector major, const CharacterVector m
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
-List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty = "") {
+List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
+		"") {
 
 	CharacterVector major(icd9Short.size());
 	CharacterVector minor(icd9Short.size());
@@ -179,7 +183,7 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 				continue;
 			}
 		} // E code
-		//major[i] = icd9AddLeadingZeroesMajorSingle(major[i]); // or loop through them all again...
+		  //major[i] = icd9AddLeadingZeroesMajorSingle(major[i]); // or loop through them all again...
 	} // for
 
 	return icd9MajMinToParts(icd9AddLeadingZeroesMajor(major), minor);
@@ -188,7 +192,8 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
-List icd9DecimalToParts(const CharacterVector icd9Decimal, const String minorEmpty = "") {
+List icd9DecimalToParts(const CharacterVector icd9Decimal,
+		const String minorEmpty = "") {
 	CharacterVector majors;
 	CharacterVector minors;
 	int ilen = icd9Decimal.length();
