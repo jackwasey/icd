@@ -50,7 +50,7 @@ ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
 		const VecVecInt& map, const int chunkSize, const int ompChunkSize);
 
 #if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
-#include <iostream> // only include std::cout if debugging: R won't like cout so we should not do this unless debugging.
+#include <iostream> // only include Rcpp::Rcout if debugging: R won't like cout so we should not do this unless debugging.
 // not so easy to get an iterator for any std container (no common parent class), without Boost
 template<typename VT>
 void printIt(std::vector<VT> v) {
@@ -58,8 +58,8 @@ void printIt(std::vector<VT> v) {
 	std::ostringstream o;
 	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
 	o << "\n";
-	std::cout << o.str();
-	std::cout.flush();
+	Rcpp::Rcout << o.str();
+	Rcpp::Rcout.flush();
 }
 
 //overload for set
@@ -69,8 +69,8 @@ void printIt(std::set<ST> v) {
 	std::ostringstream o;
 	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
 	o << "\n";
-	std::cout << o.str();
-	std::cout.flush();
+	Rcpp::Rcout << o.str();
+	Rcpp::Rcout.flush();
 }
 
 //overload for map
@@ -80,8 +80,8 @@ void printIt(std::map<MK,MV> v) {
 	std::ostringstream o;
 	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
 	o << "\n";
-	std::cout << o.str();
-	std::cout.flush();
+	Rcpp::Rcout << o.str();
+	Rcpp::Rcout.flush();
 }
 
 void printCharVec(Rcpp::CharacterVector cv);

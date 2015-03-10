@@ -8,7 +8,7 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 		const VecVecIntSz end, ComorbidOut& chunk) {
 
 #ifdef ICD9_DEBUG_TRACE
-	std::cout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
+	Rcpp::Rcout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
 #endif
 	const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin),
 			false);
@@ -16,12 +16,12 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 	// TODO: someday try looping through comorbidities in outside loop instead of inner loop.
 	for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
 #ifdef ICD9_DEBUG_TRACE
-			std::cout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
+			Rcpp::Rcout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
 #endif
 		for (VecVecIntSz cmb = 0; cmb < num_comorbid; ++cmb) { // loop through icd codes for this visitId
 #ifdef ICD9_DEBUG_TRACE
-				std::cout << "cmb = " << cmb << "\n";
-				std::cout << "vcdb_x length = " << vcdb.size() << "\n";
+				Rcpp::Rcout << "cmb = " << cmb << "\n";
+				Rcpp::Rcout << "vcdb_x length = " << vcdb.size() << "\n";
 #endif
 
 			const VecInt& codes = vcdb[urow]; // these are the ICD-9 codes for the current visitid
@@ -48,7 +48,7 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 		} // end loop through all comorbidities
 	} // end loop through visits
 #ifdef ICD9_DEBUG_TRACE
-	std::cout << "finished with one chunk\n";
+	Rcpp::Rcout << "finished with one chunk\n";
 #endif
 }
 
@@ -75,10 +75,10 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	// loop through chunks at a time
 	for (vis_i = 0; vis_i < num_visits; vis_i += chunkSize) {
 #ifdef ICD9_DEBUG_TRACE
-		std::cout << "vis_i = " << vis_i << " ";
+		Rcpp::Rcout << "vis_i = " << vis_i << " ";
 #endif
 #ifdef ICD9_OPENMP
-		std::cout << omp_get_thread_num();
+		Rcpp::Rcout << omp_get_thread_num();
 #endif
 
 		chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
@@ -93,7 +93,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 #endif
 		{
 #ifdef ICD9_DEBUG_TRACE
-			std::cout << "writing a chunk beginning at: " << vis_i << "\n";
+			Rcpp::Rcout << "writing a chunk beginning at: " << vis_i << "\n";
 #endif
 			std::copy(chunk.begin(), chunk.end(),
 					out.begin() + (num_comorbid * vis_i));
@@ -101,7 +101,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		//vis_i += chunkSize;
 	} // end parallel for
 #ifdef ICD9_DEBUG
-	std::cout << "finished looking up all chunks in for loop\n";
+	Rcpp::Rcout << "finished looking up all chunks in for loop\n";
 #endif
 }
 

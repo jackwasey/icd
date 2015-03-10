@@ -8,16 +8,16 @@ void buildMap(const List& icd9Mapping, VecVecInt& map) {
 		VecInt vec(as<VecInt>(*mi));
 		std::sort(vec.begin(), vec.end());
 #ifdef ICD9_DEBUG_SETUP_TRACE
-		std::cout << "pushing back vec of length: " << vec.size() << "\n";
+		Rcpp::Rcout << "pushing back vec of length: " << vec.size() << "\n";
 #endif
 		map.push_back(vec);
 #ifdef ICD9_DEBUG_SETUP_TRACE
-		std::cout << "last vec pushed back has length: "
+		Rcpp::Rcout << "last vec pushed back has length: "
 		<< map[map.size() - 1].size() << "\n";
 #endif
 	}
 #ifdef ICD9_DEBUG_SETUP
-	std::cout << "reference comorbidity mapping STL structure created\n";
+	Rcpp::Rcout << "reference comorbidity mapping STL structure created\n";
 #endif
 }
 
@@ -45,7 +45,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		stop("buildVisitCodesVec requires STRSXP");
 	}
 #ifdef ICD9_DEBUG_SETUP
-	std::cout << "buildVisitCodes SEXP is STR\n";
+	Rcpp::Rcout << "buildVisitCodes SEXP is STR\n";
 #endif
 	//visitIds.reserve(vlen / approx_cmb_per_visit);
 	//visitIds.reserve(vlen); // over reserve, consider resize and trim at end
@@ -56,8 +56,8 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		const char* vi = CHAR(STRING_ELT(vsexp, i));
 		n = INTEGER(icds)[i];
 #ifdef ICD9_DEBUG_SETUP_TRACE
-		std::cout << "building visit: it = " << i << ", id = " << vi << "\n";
-		std::cout << "length vcdb = " << vcdb.size() << "\n";
+		Rcpp::Rcout << "building visit: it = " << i << ", id = " << vi << "\n";
+		Rcpp::Rcout << "length vcdb = " << vcdb.size() << "\n";
 #endif
 		if (lastVisitId != vi) {
 			// assume new visitId unless aggregating
@@ -67,18 +67,18 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 				if (found != vis_lookup.end()) {
 					vcdb[found->second].push_back(n);
 #ifdef ICD9_DEBUG_SETUP_TRACE
-					std::cout << "repeat key " << vi << " found at position " << vcdb_use_idx << "\n";
+					Rcpp::Rcout << "repeat key " << vi << " found at position " << vcdb_use_idx << "\n";
 #endif
 					continue;
 				} else {
 					vis_lookup.insert(std::make_pair(vi, vcdb_new_idx)); // new visit, with associated position in vcdb
 #ifdef ICD9_DEBUG_SETUP_TRACE
-							std::cout << "(aggregating) new key " << vi << "\n";
+							Rcpp::Rcout << "(aggregating) new key " << vi << "\n";
 #endif
 				}
 			} else {
 #ifdef ICD9_DEBUG_SETUP_TRACE
-				std::cout << "(not aggregating) new key " << vi << "\n";
+				Rcpp::Rcout << "(not aggregating) new key " << vi << "\n";
 #endif
 			}
 			// all code paths now add a new row
@@ -91,12 +91,12 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		} else {
 			vcdb[vcdb_last_idx].push_back(n);
 #ifdef ICD9_DEBUG_SETUP_TRACE
-			std::cout << "repeat id found on next row: " << vi << "\n";
+			Rcpp::Rcout << "repeat id found on next row: " << vi << "\n";
 #endif
 		}
 	} // end loop through all visit-code input data
 #ifdef ICD9_DEBUG_SETUP
-	std::cout << "visit map created\n";
+	Rcpp::Rcout << "visit map created\n";
 #endif
 	UNPROTECT(2);
 	vcdb.resize(vcdb_max_idx + 1); // we over-sized (not just over-reserved) so now we trim.
