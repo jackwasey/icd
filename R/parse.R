@@ -442,7 +442,7 @@ parseIcd9Chapters <- function(year = NULL,
     year <- "2014"
   else
     year <- as.character(year)
-  if (format(Sys.time(), "%Y") != year)
+  if (save && format(Sys.time(), "%Y") != year)
     warning(sprintf("Getting ICD-9 data for %s which is not the current year.
               Tests were written to validate extraction of 2014 data.", year))
 

@@ -257,25 +257,25 @@ icd9CondenseToMajorDecimal <- function(icd9Decimal, onlyReal = NULL)
 
 #' @rdname icd9Condense
 #' @export
-icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL) {
+icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL, warnReal = FALSE) {
   assertFactorOrCharacter(icd9Short)
   icd9Short <- asCharacterNoWarn(icd9Short)
 
   i9w <- sort(unique(icd9Short))
 
-  if (is.null(onlyReal)) {
+  if (warnReal && is.null(onlyReal)) {
     if (all(icd9IsRealShort(i9w, majorOk = TRUE))) {
       onlyReal <- TRUE
-      message("onlyReal not given, but all codes are 'real' so assuming TRUE")
+      warning("onlyReal not given, but all codes are 'real' so assuming TRUE")
     } else {
       onlyReal <- FALSE
-      message("onlyReal not given, but not all codes are 'real' so assuming FALSE")
+      warning("onlyReal not given, but not all codes are 'real' so assuming FALSE")
     }
   } else
     checkmate::assertFlag(onlyReal)
 
-  if (onlyReal && !all(icd9IsRealShort(icd9Short, majorOk = TRUE)))
-    warning("only real values requested, but undefined ('non-real') ICD-9 code(s) given.")
+  if (warnReal && onlyReal && !all(icd9IsRealShort(icd9Short, majorOk = TRUE)))
+    warning("only real values requested, but some undefined ('non-real') ICD-9 code(s) given.")
 
   i9o <- c()
   for (i in unique(icd9GetMajor(i9w, isShort = TRUE))) {

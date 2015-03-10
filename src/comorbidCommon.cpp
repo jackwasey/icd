@@ -76,10 +76,8 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 #ifdef ICD9_DEBUG_TRACE
 		Rcpp::Rcout << "vis_i = " << vis_i << " ";
 #endif
-#ifdef ICD9_OPENMP
-#ifdef ICD9_DEBUG
+#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG)
 		Rcpp::Rcout << omp_get_thread_num();
-#endif
 #endif
 
 		chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
