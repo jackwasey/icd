@@ -59,28 +59,36 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	const VecVecIntSz num_visits = vcdb.size();
 	const VecVecIntSz last_i = num_visits - 1;
 	VecVecIntSz chunk_end_i;
+	VecVecIntSz vis_i;
 #ifdef ICD9_OPENMP
-#pragma omp parallel shared(vcdb, map, out) private(chunk_end, chunk_out)
+#pragma omp parallel default(none) shared(vcdb, map, out) private(chunk_end_i, vis_i)
 	omp_set_schedule(omp_sched_static, ompChunkSize); // ideally wouldn't repeat this over and over again
 #ifdef ICD9_DEBUG_PARALLEL
-	omp_sched_t* sched;
-	int* threads;
-	omp_get_schedule(sched, threads);
-	std::out << "threads set = " << threads;
+	omp_sched_t sched;
+	int threads;
+	omp_get_schedule(&sched, &threads);
+	Rcout << "threads set = " << threads << "\n";
 #endif
-#pragma omp for ordered schedule(static)
+//#pragma omp for ordered
+#pragma omp for schedule(static)
 #endif
 	// loop through chunks at a time
-	for (VecVecIntSz vis_i = 0; vis_i < num_visits;) {
+	for (vis_i = 0; vis_i < num_visits; vis_i += chunkSize) {
 #ifdef ICD9_DEBUG_TRACE
 		std::cout << "vis_i = " << vis_i << " ";
 #endif
+#ifdef ICD9_OPENMP
+		 std::cout << omp_get_thread_num();
+#endif
+
 		chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
 		if (chunk_end_i > last_i)
 			chunk_end_i = last_i; // indices
-		ComorbidOut chunk;
+	        ComorbidOut chunk;
 		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
-#pragma omp ordered
+//#pragma omp ordered
+// next block doesn't need to be single threaded, but doing so improves cache contention
+#pragma omp critical
 		{
 #ifdef ICD9_DEBUG_TRACE
 			std::cout << "writing a chunk beginning at: " << vis_i << "\n";
@@ -88,7 +96,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 			std::copy(chunk.begin(), chunk.end(),
 					out.begin() + (num_comorbid * vis_i));
 		}
-		vis_i += chunkSize;
+		//vis_i += chunkSize;
 	} // end parallel for
 #ifdef ICD9_DEBUG
 	std::cout << "finished looking up all chunks in for loop\n";

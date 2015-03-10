@@ -21,7 +21,7 @@ icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId = "visitId",
 
 icd9Comorbid(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9",
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
-  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE)
+  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
 
 icd9ComorbidShort(...)
 
@@ -75,9 +75,8 @@ is guessed from the input data.}
 instead of \code{icd9df}. All the codes in a mapping should be of the same
 type, i.e. short or decimal.}
 
-\item{...}{arguments passed to the corresponding function from the alias.
-E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
-to \code{icd9ComorbidAhrq}}
+\item{...}{further arguments e.g. chunkSize and ompChunkSize pass to the C++
+function}
 
 \item{abbrevNames}{single locical value that defaults to \code{TRUE}, in
 which case the ishorter human-readable names stored in e.g.
@@ -87,6 +86,10 @@ which case the ishorter human-readable names stored in e.g.
 which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
+
+\item{...}{arguments passed to the corresponding function from the alias.
+E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
+to \code{icd9ComorbidAhrq}}
 }
 \description{
 RcppParallel approach with openmp and vector of integer strategy
@@ -107,6 +110,10 @@ For Charlson/Deyo comorbidities, strictly speaking, there is no
 There is a change in behavior from previous versions. The visitId
   column is (implicitly) sorted by using std::set container. Previously, the
   visitId output order was whatever R's \code{aggregate} produced.
+
+  The threading of the C++ can be controlled using e.g.
+  \code{option(icd9.threads = 4)}. If it is not set, the number of cores in
+  the machine is used.
 }
 \examples{
 pts <- data.frame(visitId = c("2", "1", "2", "3", "3"),

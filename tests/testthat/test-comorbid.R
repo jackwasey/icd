@@ -614,3 +614,16 @@ test_that("failing example", {
   icd9Charlson(mydf, isShort = FALSE, return.df = TRUE)
   icd9CharlsonComorbid(cmb)
 })
+
+test_that("disordered visitIds works by default", {
+  set.seed(1441)
+  dat <- transform(testTwenty, visitId = sample(visitId))
+  cmp <-
+  tres <- icd9Comorbid(dat, ahrqComorbid, icd9Field = "icd9Code")
+  cres <- icd9Comorbid(testTwenty, ahrqComorbid, icd9Field = "icd9Code")
+  expect_equal(dim(tres), dim(cres))
+  expect_equal(sum(tres), sum(cres))
+  expect_true(setequal(rownames(tres), rownames(cres)))
+  expect_equal(colnames(tres), colnames(cres))
+
+})

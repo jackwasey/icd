@@ -594,6 +594,25 @@ namespace icd9 {
         return Rcpp::as<bool >(__result);
     }
 
+    inline int getOmpCores() {
+        typedef SEXP(*Ptr_getOmpCores)();
+        static Ptr_getOmpCores p_getOmpCores = NULL;
+        if (p_getOmpCores == NULL) {
+            validateSignature("int(*getOmpCores)()");
+            p_getOmpCores = (Ptr_getOmpCores)R_GetCCallable("icd9", "icd9_getOmpCores");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_getOmpCores();
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<int >(__result);
+    }
+
 }
 
 #endif // __icd9_RcppExports_h__

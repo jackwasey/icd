@@ -53,3 +53,13 @@ void printCharVec(CharacterVector cv) {
 	return;
 }
 #endif
+
+// [[Rcpp::export]]
+int getOmpCores() {
+	int cores = 1;
+#ifdef _OPENMP
+	cores = omp_get_num_procs();
+#endif
+	return cores;
+}
+

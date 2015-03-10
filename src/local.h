@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <vector>
 #include <set>
+#include <tr1/unordered_map>
 
 extern "C" {
 #include "local_c.h"
@@ -17,15 +18,13 @@ extern "C" {
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_DEBUG_PARALLEL
-//#define ICD9_VALGRIND
+#define ICD9_VALGRIND
+
 #ifdef _OPENMP
 #include <omp.h>
 #define ICD9_OPENMP
-#define ICD9_ORDER_GUARANTEE
 #endif
 
-#ifdef _OPENMP // not available on clang
-#endif
 // enable linux performance counting
 #ifdef ICD9_VALGRIND
 #include <valgrind/callgrind.h>
@@ -41,6 +40,7 @@ typedef std::vector<char> ComorbidOut; // TODO: someday benchmark int vs char (o
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
+typedef std::tr1::unordered_map<std::string,VecInt::size_type> VisLk;
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,

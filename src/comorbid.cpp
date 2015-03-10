@@ -46,7 +46,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 
 	VecVecInt vcdb; //size is reserved later
 	// TODO: do I need to allocate memory when I do this?
-	SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
+	const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 #ifdef ICD9_DEBUG_SETUP
 	std::cout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif

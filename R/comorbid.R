@@ -47,9 +47,15 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 #' @param isShortMapping Same as isShort, but applied to \code{icd9Mapping}
 #'   instead of \code{icd9df}. All the codes in a mapping should be of the same
 #'   type, i.e. short or decimal.
+#' @param ... further arguments e.g. chunkSize and ompChunkSize pass to the C++
+#'   function
 #' @details There is a change in behavior from previous versions. The visitId
 #'   column is (implicitly) sorted by using std::set container. Previously, the
 #'   visitId output order was whatever R's \code{aggregate} produced.
+#'
+#'   The threading of the C++ can be controlled using e.g.
+#'   \code{option(icd9.threads = 4)}. If it is not set, the number of cores in
+#'   the machine is used.
 #' @examples
 #'   pts <- data.frame(visitId = c("2", "1", "2", "3", "3"),
 #'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
@@ -61,7 +67,7 @@ icd9Comorbid <- function(icd9df,
                          icd9Field = "icd9",
                          isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                          isShortMapping = icd9GuessIsShort(icd9Mapping),
-                         return.df = FALSE) {
+                         return.df = FALSE, ...) {
   # TODO: allow factors for icd9df fields
   checkmate::assertDataFrame(icd9df, min.cols = 2)
   checkmate::assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
@@ -107,8 +113,11 @@ icd9Comorbid <- function(icd9df,
 
   # return via call to the C++ function:
   #icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
+
+  threads <- getOption("icd9.threads", getOmpCores())
+
   if (return.df) {
-    mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field)
+    mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = threads)
     if (icd9VisitWasFactor)
       rownm <- factor(x = rownames(mat), levels = ivLevels)
     else
@@ -119,7 +128,7 @@ icd9Comorbid <- function(icd9df,
     rownames(df.out) <- NULL
     return(df.out)
   }
-  icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field)
+  icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = threads)
 }
 
 #' @rdname icd9Comorbid
@@ -188,14 +197,14 @@ icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
       colnames(cbd)[-1] <- icd9::charlsonComorbidNamesAbbrev
     else
       colnames(cbd) <- icd9::charlsonComorbidNamesAbbrev
-    } else {
-      if (is.data.frame(cbd))
-        colnames(cbd)[-1] <- icd9::charlsonComorbidNames
-      else
-        colnames(cbd) <- icd9::charlsonComorbidNames
-    }
+  } else {
+    if (is.data.frame(cbd))
+      colnames(cbd)[-1] <- icd9::charlsonComorbidNames
+    else
+      colnames(cbd) <- icd9::charlsonComorbidNames
+  }
 
-    cbd
+  cbd
 }
 
 #' @rdname icd9Comorbid
