@@ -6,6 +6,7 @@ In this version I have updated the package description to remove redundant text 
 * Ubuntu 12.04 (on travis-ci) R 3.1.2
 * Debian jessie in docker with UBSAN and clang
 * win-builder
+* Windows 7 64 bit R 3.1.3 with gcc from Rtools
 
 ## R CMD check results
 
@@ -21,7 +22,7 @@ There are three notes:
   comorbidities (3:38, 8:35)
   comorbidity (8:59)
 
-"Comorbidity" is in widespread use, whereas "co-morbidity" is rarely seen.
+"Comorbidity" is in widespread use in published medical literature, whereas "co-morbidity" is rarely seen.
  
  * checking data for non-ASCII characters ... NOTE
   Note: found 7 marked UTF-8 strings
@@ -29,10 +30,10 @@ There are three notes:
 These are integral to included data which has accented characters in some disease names.
   
 * checking installed package size ... NOTE
-  installed size is  8.8Mb
+  installed size is  7.1Mb
   sub-directories of 1Mb or more:
     extdata   3.4Mb
-    libs      3.7Mb
+    libs      2.1Mb
 
 Total package size is less than 1 Mb tar.gz
 
