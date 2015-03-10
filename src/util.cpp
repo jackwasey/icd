@@ -47,9 +47,9 @@ bool assertFactorOrCharacter(SEXP x) {
 void printCharVec(CharacterVector cv) {
 	for (CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {
 		String s = *i;
-		std::cout << s.get_cstring() << " ";
+		Rcpp::Rcout << s.get_cstring() << " ";
 	}
-	std::cout << "\n";
+	Rcpp::Rcout << "\n";
 	return;
 }
 #endif
