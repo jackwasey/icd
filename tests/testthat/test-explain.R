@@ -296,9 +296,11 @@ test_that("condense full ranges", {
   expect_equal(icd9CondenseShort(almostall003, onlyReal = FALSE, toMajor = TRUE), "003")
 
   # tomajor = false
-  expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE), onlyReal = FALSE, toMajor = FALSE), "0031")
+  expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE),
+                                 onlyReal = FALSE, toMajor = FALSE), "0031")
   # major is allowed
-  expect_that(res <- icd9CondenseShort(c("003", othersalmonella), onlyReal = TRUE, toMajor = FALSE),
+  expect_that(res <- icd9CondenseShort(c("003", othersalmonella),
+                                       onlyReal = TRUE, toMajor = FALSE),
               gives_warning())
   expect_equal(res, character())
   # major is returned
@@ -345,15 +347,19 @@ test_that("condense short range", {
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("00320", onlyReal = TRUE), onlyReal = TRUE), "00320")
   # if we ask for real codes, we should expect all real codes as input:
-  expect_that(icd9CondenseShort(c("0032", icd9ChildrenShort("0032", onlyReal = TRUE)), onlyReal = TRUE), gives_warning())
+  expect_that(icd9CondenseShort(c("0032", icd9ChildrenShort("0032", onlyReal = TRUE)), onlyReal = TRUE),
+              gives_warning())
   # but majors should be okay, even if not 'real'
-  expect_that(icd9CondenseShort(c("003", icd9ChildrenShort("003", onlyReal = TRUE))), testthat::not(gives_warning()))
+  expect_that(icd9CondenseShort(c("003", icd9ChildrenShort("003", onlyReal = TRUE))),
+              testthat::not(gives_warning()))
   # unless we excluded majors:
   expect_that(icd9CondenseShort(c("003", icd9ChildrenShort("003", onlyReal = TRUE)), toMajor = FALSE), shows_message())
 
 })
 
-test_that("explain icd9GetChapters bad input", {})
+test_that("explain icd9GetChapters bad input", {
+  skip("todo")
+})
 
 test_that("explain icd9GetChapters simple input", {
   chaps1 <- icd9GetChapters(c("410", "411", "412"), isShort = TRUE)

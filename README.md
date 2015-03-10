@@ -1,5 +1,4 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-
 icd9
 ====
 
@@ -10,7 +9,7 @@ ICD-9 comorbidities, manipulation and validation
 
 Calculate comorbidities, and perform fast and accurate validation, conversion, manipulation, filtering and comparison of ICD-9-CM (clinical modification) codes. ICD-9 codes appear numeric but leading and trailing zeroes, and both decimal and non-decimal "short" format codes exist. The package enables a work flow from raw lists of ICD-9 codes from hospital billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 
-ICD-9 codes are still in wide use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) is in widespread use. ICD-10 and the corresponding ICD-10-CM are imminent, however a vast amount of patient data is recorded with ICD-9 codes of some kind: this package enables their use in R. A common requirement for medical research involving patients is determining new or existing comorbidities. This often get reported in *Table 1* of research papers to demonstrate the similarity of groups. This package is focussed on fast and accurate generation of this comorbidity information from raw lists of ICD-9 codes.
+ICD-9 codes are still in wide use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) is in widespread use. ICD-10 and the corresponding ICD-10-CM are imminent, however a vast amount of patient data is recorded with ICD-9 codes of some kind: this package enables their use in R. A common requirement for medical research involving patients is determining new or existing comorbidities. This is often reported in *Table 1* of research papers to demonstrate the similarity or differences of groups of patients. This package is focussed on fast and accurate generation of this comorbidity information from raw lists of ICD-9 codes.
 
 ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in *short* 5 character format, or *decimal* format, with a decimal place separating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeroes after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. This package primarily deals with ICD-9-CM (Clinical Modification) codes, but should be applicable or easily extendible to the original WHO ICD-9 system.
 
@@ -20,6 +19,7 @@ Main Features
 -   assignment of patients to high level comorbidities based on admission or discharge ICD-9 codes
     -   several mappings of ICD-9 codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
     -   very fast assignment of ICD-9 codes to comorbidities (using C++ internally, with automatic parallel execution using OpenMP when possible)
+-   Charlson score calculation
 -   validation of ICD-9 codes
 -   summarizing ICD-9 codes into groups, and to human-readable descriptions
 -   conversion between different representations of ICD-9 codes, with and without a decimal point
@@ -28,16 +28,16 @@ Main Features
 New since last CRAN release:
 ----------------------------
 
--   big performance increase: 1 million ICD-9 codes assigned to comorbidities in \<1s
+-   big performance increase: 1 million ICD-9 codes assigned to comorbidities in a couple of seconds
 -   logical matrix or data.frame for comorbidity output and manipulation
--   see NEWS.md or github changelog for more details
+-   see NEWS.md and github [changelog](https://github.com/jackwasey/icd9/commits/master) for more details
 
 Examples
 --------
 
-See the vignette for many more examples. Here's a taste,
+See the vignettea and code help for many more examples. Here's a taste,
 
-``` {.r}
+``` r
 patientData
 #>   visitId  icd9  poa
 #> 1    1000 40201    Y
@@ -58,10 +58,6 @@ icd9ComorbidQuanDeyo(patientData)
 #> 1000  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
 #> 1001 FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE
 #> 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
-#> attr(,"names")
-#>  [1] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
-#> [24] NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA NA
-#> [47] NA NA NA NA NA
 
 # find diagnoses present on admission:
 icd9FilterPoa(patientData)

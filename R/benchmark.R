@@ -4,7 +4,7 @@ randomPatients <- function(n = 100, np=10)
   randomOrderedPatients(n, np)
 
 randomOrderedPatients <- function(n = 100, np = 10) {
-  x = randomUnorderedPatients(n, np)
+  x <- randomUnorderedPatients(n, np)
   x[order(x$visitId), ]
 }
 
@@ -13,7 +13,7 @@ randomUnorderedPatients <- function(n = 50000, np = 20) {
   pts <- round(n / np)
   data.frame(
     visitId = sample(seq(1, pts), replace = TRUE, size = n),
-    icd9 = c(randomShortIcd9(round(n/2)), randomShortAhrq(n-round(n/2))),
+    icd9 = c(randomShortIcd9(round(n / 2)), randomShortAhrq(n - round(n / 2))),
     poa = as.factor(
       sample(x = c("Y","N", "n", "n", "y", "X","E","",NA),
              replace = TRUE, size = n)),
@@ -39,7 +39,7 @@ runOpenMPVecInt <- function(n = 4, np = 2, threads = 6, chunkSize = 32) {
   icd9ComorbidShortCpp(pts,icd9::ahrqComorbid, threads = threads, chunkSize = chunkSize)
 }
 
-benchOpenMPThreads <- function(n = 2^18-1, np = 7) {
+benchOpenMPThreads <- function(n = 2 ^ 18 - 1, np = 7) {
   # if chunk size is <32 (i.e. one word) bits aren't updated correctly by concurrent threads'
   pts <- randomPatients(n, np)
   stopifnot(identical(
@@ -101,7 +101,8 @@ otherbench <- function() {
     icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 1),
     icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=4096, ompChunkSize = 1),
     icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=32, ompChunkSize = 4),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 4), #barely wins with 1e6*5 rows
+    # next row barely won with 1e6*5 rows
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 4),
     icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=4096, ompChunkSize = 4),
     icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=32, ompChunkSize = 8),
     icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 8),
@@ -117,7 +118,8 @@ otherbench <- function() {
     icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 8, chunkSize=256, ompChunkSize = 8),
     times = 25
   )
-  for (threads in c(1,4,8)) { # with parallel for, best is 8 threads, static chunk of ONE (dynamic slightly slower)
+  # with parallel for, best is 8 threads, static chunk of ONE (dynamic slightly slower)
+  for (threads in c(1,4,8)) {
     for (n in c(500000)) {
       for (cs in c(1, 32, 1024)) {
         message("threads = ", threads, ", n = ", n, ", cs = ", cs)
@@ -143,7 +145,7 @@ otherbench <- function() {
 }
 
 benchLongToWide <- function(n = 10000, np = 7, times = 10) {
-  pts<-randomOrderedPatients(n, np)
+  pts <- randomOrderedPatients(n, np)
   #   microbenchmark::microbenchmark(icd9LongToWideMatrixByMap(pts),
   #                  icd9LongToWideMatrixAggregate(pts),
   #                  icd9LongToWideMatrixNoAggregate(pts),
@@ -157,7 +159,7 @@ benchLongToWide <- function(n = 10000, np = 7, times = 10) {
 checkThreadChunk <- function() {
   for (n in c(1, 12345)) {
     for (np in c(1, 30)) {
-      pts = randomPatients(n, np);
+      pts <- randomPatients(n, np);
       message("NOT BENCHMARKING HERE, just checking. np = ", np, ", n = ", n)
       # use microbenchmark::microbenchmark to conveniently check the results are all identical
       microbenchmark::microbenchmark(
@@ -177,7 +179,9 @@ checkThreadChunk <- function() {
 my_check <- function(values) {
   sapply(values, function(x) message("dims: ", nrow(x), " by ", ncol(x)))
   sapply(values, function(x) message("digest: ", digest::digest(x)))
-  sapply(values, function(x) { print(head(x)); print(tail(x)) })
+  sapply(values, function(x) {
+    print(head(x)); print(tail(x))
+    })
   all(sapply(values[-1], function(x) identical(values[[1]], x)))
 }
 

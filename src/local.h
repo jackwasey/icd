@@ -18,7 +18,7 @@ extern "C" {
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_DEBUG_PARALLEL
-#define ICD9_VALGRIND
+//#define ICD9_VALGRIND
 
 #ifdef _OPENMP
 #include <omp.h>

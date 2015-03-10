@@ -2,8 +2,9 @@
 In this version I have updated the package description to remove redundant text "This package..."
 
 ## Test environments
-* Ubuntu 14.04 R 3.1.2
+* Ubuntu 14.10 R 3.1.3, clang and gcc
 * Ubuntu 12.04 (on travis-ci) R 3.1.2
+* Debian jessie in docker with UBSAN and clang
 * win-builder
 
 ## R CMD check results
