@@ -105,7 +105,10 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
 
 }
 
-#' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning. In general, this is not allowed because of the possible ambiguity of numeric decimal codes, but for convenience, this is allowed in this case to avoid typing many quotes.
+#' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning.
+#'   In general, this is not allowed because of the possible ambiguity of
+#'   numeric decimal codes, but for convenience, this is allowed in this case to
+#'   avoid typing many quotes.
 #' @export
 icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                 doCondense = TRUE, brief = FALSE, warn = FALSE,
@@ -256,6 +259,9 @@ icd9CondenseToMajorDecimal <- function(icd9Decimal, onlyReal = NULL)
   icd9CondenseToMajorShort(icd9DecimalToShort(icd9Decimal), onlyReal)
 
 #' @rdname icd9Condense
+#' @param warnReal single logical value, if \code{TRUE}, give warnings when
+#'   there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
+#'   containing undefined codes.
 #' @export
 icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL, warnReal = FALSE) {
   assertFactorOrCharacter(icd9Short)
