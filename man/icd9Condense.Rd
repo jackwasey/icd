@@ -53,6 +53,10 @@ becomes "010", not "0010"}
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
+
+\item{warnReal}{single logical value, if \code{TRUE}, give warnings when
+there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
+containing undefined codes.}
 }
 \description{
 This can be thought of as the inverse operation to

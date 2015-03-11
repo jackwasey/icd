@@ -47,9 +47,9 @@ test_that("icd9 comorbidities are created correctly,
                            c(length(unique(patientData[["visitId"]])),
                              1 + length(ahrqComorbid)))
               expect_true(
-                all(names(ptdf) %in% c("visitId", names(ahrqComorbid))))
+                setequal(names(ptdf), c("visitId", names(ahrqComorbid))))
               expect_true(
-                all(names(ptdflogical) %in% c("visitId", names(ahrqComorbid))))
+                setequal(names(ptdflogical), c("visitId", names(ahrqComorbid))))
 
               expect_equal(
                 logicalToBinary(data.frame(a = c("jack", "hayley"),
@@ -72,6 +72,7 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
                                 save = FALSE, returnAll = TRUE))
   expect_equivalent(icd9GetInvalidMappingShort(ahrqComorbid), list())
 })
+
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
               expect_identical(quanDeyoComorbid,
@@ -90,127 +91,6 @@ test_that("Elixhauser icd9 mappings are all
               expect_identical(elixComorbid,
                                parseElix(condense = FALSE, save = FALSE))
               expect_equivalent(icd9GetInvalidMappingShort(elixComorbid), list())
-            })
-
-test_that("ahrq comorbidity mapping is applied correctly,
-            all comorbidities in one patient, no abbrev, hier", {
-              res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
-                                      abbrevNames = FALSE,
-                                      applyHierarchy = TRUE, return.df = TRUE)
-              expect_equal(dim(res), c(1,30))
-              expect_true(all(ahrqComorbidNames %in% names(res)))
-              # should not have dm and dmcx, etc
-              expect_false(all(as.logical(res[1, unlist(ahrqComorbidNames)])))
-              expect_false(res[1, "Diabetes, uncomplicated"])
-              expect_false(res[1, "Solid tumor without metastasis"])
-            })
-
-test_that("elix comorbidity mapping is applied correctly,
-            all comorbidities in one patient, no abbrev, hier", {
-              res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
-                                      abbrevNames = FALSE,
-                                      applyHierarchy = TRUE, return.df = TRUE)
-              expect_equal(dim(res), c(1,31))
-              expect_true(all(elixComorbidNames %in% names(res)))
-              # should not have dm and dmcx, etc
-              expect_false(all(as.logical(res[1, unlist(elixComorbidNames)])))
-              expect_false(res[1, "Diabetes, uncomplicated"])
-              expect_false(res[1, "Solid tumor without metastasis"])
-            })
-
-test_that("elix comorbidity mapping is applied correctly,
-            all comorbidities in one patient, abbrev, hier", {
-              res <- icd9ComorbidElix(elixTestDat,
-                                      isShort = TRUE,
-                                      abbrevNames = TRUE,
-                                      applyHierarchy = TRUE, return.df = TRUE)
-              expect_equal(dim(res), c(1,31))
-              expect_true(all(elixComorbidNamesAbbrev %in% names(res)))
-              # should not have dm and dmcx, etc
-              expect_false(
-                all(as.logical(res[1, unlist(elixComorbidNamesAbbrev)])))
-              expect_false(res[1, "DM"])
-              expect_false(res[1, "Tumor"])
-            })
-
-test_that("elix comorbidity mapping is applied correctly,
-            all comorbidities in one patient, no abbrev, no hier", {
-              res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
-                                      abbrevNames = FALSE,
-                                      applyHierarchy = FALSE, return.df = TRUE)
-              expect_equal(dim(res), c(1,32)) #longer because 2x htn
-              expect_true(all(elixComorbidNamesHtn %in% names(res)))
-              # not applying hierarchy, so dm and dmcx can both be true
-              expect_true(all(as.logical(res[1, unlist(elixComorbidNamesHtn)])))
-            })
-
-test_that("elix comorbidity mapping is applied correctly,
-            all comorbidities in one patient, abbrev, no hier", {
-              res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
-                                      abbrevNames = TRUE,
-                                      applyHierarchy = FALSE, return.df = TRUE)
-              expect_equal(dim(res), c(1,32))
-              expect_true(all(elixComorbidNamesHtnAbbrev %in% names(res)))
-              expect_true(
-                all(as.logical(res[1, unlist(elixComorbidNamesHtnAbbrev)])))
-
-            })
-
-test_that("qelix comorbidity mapping is applied correctly,
-            all comorbidities in one patient, no abbrev, hier", {
-              res <- icd9ComorbidQuanElix(quanElixTestDat,
-                                          isShort = TRUE,
-                                          abbrevNames = FALSE,
-                                          applyHierarchy = TRUE, return.df = TRUE)
-              expect_equal(dim(res), c(1,31))
-              expect_true(all(quanElixComorbidNames %in% names(res)))
-              # should not have dm and dmcx, etc
-              expect_false(
-                all(as.logical(res[1, unlist(quanElixComorbidNames)])))
-              expect_false(res[1, "Diabetes, uncomplicated"])
-              expect_false(res[1, "Solid tumor without metastasis"])
-            })
-
-test_that("qelix comorbidity mapping is applied correctly,
-            all comorbidities in one patient, abbrev, hier", {
-              res <- icd9ComorbidQuanElix(quanElixTestDat,
-                                          isShort = TRUE,
-                                          abbrevNames = TRUE,
-                                          applyHierarchy = TRUE, return.df = TRUE)
-              expect_equal(dim(res), c(1,31))
-              expect_true(all(quanElixComorbidNamesAbbrev %in% names(res)))
-              # should not have dm and dmcx, etc
-              expect_false(
-                all(as.logical(res[1, unlist(quanElixComorbidNamesAbbrev)])))
-              expect_false(res[1, "DM"])
-              expect_false(res[1, "Tumor"])
-            })
-
-test_that("qelix comorbidity mapping is applied correctly,
-            all comorbidities in one patient, no abbrev, no hier", {
-              res <- icd9ComorbidQuanElix(quanElixTestDat,
-                                          isShort = TRUE,
-                                          abbrevNames = FALSE,
-                                          applyHierarchy = FALSE, return.df = TRUE)
-              #longer because 2x htn
-              expect_equal(dim(res), c(1,32))
-              # not applying hierarchy, so dm and dmcx can both be true
-              expect_true(all(quanElixComorbidNamesHtn %in% names(res)))
-              expect_true(
-                all(as.logical(res[1, unlist(quanElixComorbidNamesHtn)])))
-            })
-
-test_that("qelix comorbidity mapping is applied correctly,
-            all comorbidities in one patient, abbrev, no hier", {
-              res <- icd9ComorbidQuanElix(quanElixTestDat,
-                                          isShort = TRUE,
-                                          abbrevNames = TRUE,
-                                          applyHierarchy = FALSE, return.df = TRUE)
-              expect_equal(dim(res), c(1,32))
-              expect_true(all(quanElixComorbidNamesHtnAbbrev %in% names(res)))
-              expect_true(
-                all(as.logical(res[1, unlist(quanElixComorbidNamesHtnAbbrev)])))
-
             })
 
 test_that("can condense the big lists of comorbidities without errors", {
@@ -238,38 +118,6 @@ test_that("can condense the big lists of comorbidities without errors", {
   }
 })
 
-test_that("get Charlson/Deyo comorbidities for a single patient", {
-  mydf <- data.frame(visitId = c("a"),
-                     icd9 = c("044.9"),
-                     stringsAsFactors = FALSE)
-  expect_equal(
-    icd9ComorbidQuanDeyo(icd9df = mydf, isShort = FALSE, return.df = TRUE),
-    structure(
-      list(
-        visitId = "a",
-        MI = FALSE, CHF = FALSE, PVD = FALSE, Stroke = FALSE, Dementia = FALSE,
-        Pulmonary = FALSE, Rheumatic = FALSE, PUD = FALSE, LiverMild = FALSE,
-        DM = FALSE, DMcx = FALSE, Paralysis = FALSE, Renal = FALSE,
-        Cancer = FALSE, LiverSevere = FALSE, Mets = FALSE, HIV = TRUE),
-      .Names = c("visitId",
-                 "MI", "CHF", "PVD", "Stroke", "Dementia", "Pulmonary",
-                 "Rheumatic", "PUD", "LiverMild", "DM", "DMcx", "Paralysis",
-                 "Renal", "Cancer", "LiverSevere", "Mets", "HIV"),
-      row.names = 1L,
-      class = "data.frame")
-  )
-
-  mydf <- data.frame(visitId = c("a", "a"),
-                     icd9 = c("044.9", "044.9"),
-                     stringsAsFactors = FALSE)
-  expect_that(icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE),
-              testthat::not(throws_error()))
-
-  mydf <- data.frame(visitId = c("a", "a"), icd9 = c("441", "412.93"))
-  expect_that(icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE),
-              testthat::not(throws_error()))
-
-})
 
 test_that("icd9Hierarchy as saved in data can be recreated", {
   skip("this is a very slow test with web lookup - 10 mins for one assertion")
@@ -281,53 +129,13 @@ test_that("icd9Hierarchy as saved in data can be recreated", {
 # http://www.icd9data.com because there is no machine readable CDC or CMS file
 # with this data.
 test_that("icd9Chapters, etc. as saved in data can be recreated", {
-  skip_on_cran() # and/or skip_on_travis()
+  #skip_on_cran() # and/or skip_on_travis()
+  skip("does web look-ups - don't want to hammer the target web site")
   res <- parseIcd9Chapters(year = "2014", save = FALSE)
   expect_equal(res$icd9Chapters, icd9::icd9Chapters)
   expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)
   expect_equal(res$icd9ChaptersMajor, icd9::icd9ChaptersMajor)
 })
-
-
-test_that("ahrq comorbidity mapping is applied correctly,
-            all comorbidities in one patient, abbrev, hier", {
-              res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
-                                      abbrevNames = TRUE,
-                                      applyHierarchy = TRUE, return.df = TRUE)
-              expect_equal(dim(res), c(1,30))
-              expect_true(all(ahrqComorbidNamesAbbrev %in% names(res)))
-              # should not have dm and dmcx, etc
-              expect_false(
-                all(as.logical(res[1, unlist(ahrqComorbidNamesAbbrev)])))
-              expect_false(res[1, "DM"])
-              expect_false(res[1, "Tumor"])
-            })
-
-test_that("ahrq comorbidity mapping is applied correctly,
-          all comorbidities in one patient, no abbrev, no hier", {
-            res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
-                                    abbrevNames = FALSE,
-                                    applyHierarchy = FALSE, return.df = TRUE)
-            #longer because 2x htn
-            expect_equal(dim(res), c(1, 31))
-            # not applying hierarchy, so dm and dmcx can both be true
-            expect_true(all(ahrqComorbidNamesHtn %in% names(res)))
-            expect_true(all(as.logical(res[1, unlist(ahrqComorbidNamesHtn)])))
-          })
-
-test_that("ahrq comorbidity mapping is applied correctly,
-          all comorbidities in one patient, abbrev, no hier", {
-            res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
-                                    abbrevNames = TRUE,
-                                    applyHierarchy = FALSE, return.df = TRUE)
-            expect_equal(dim(res), c(1,31))
-            expect_true(all(ahrqComorbidNamesHtnAbbrev %in% names(res)))
-            expect_true(
-              all(as.logical(res[1, unlist(ahrqComorbidNamesHtnAbbrev)])))
-
-          })
-
-
 
 test_that("condense an ICD-9 code set to minimal group", {
   skip("TODO:  this test breaks because %i9s% now includes the last major, even if not all its child.")
@@ -367,12 +175,13 @@ test_that("condense an ICD-9 code set to minimal group", {
 })
 
 
-# test_that("AHRQ interpretation at least returns something reasonable", {
-#   result <- parseAhrqSas(sasPath = system.file("extdata",
-#     "comformat2012-2013.txt", package="icd9"), save = FALSE)
-#   expect_that(result, is_a("list"))
-#   expect_true(length(result) > 10)
-# })
+test_that("AHRQ interpretation at least returns something reasonable", {
+  skip("defer")
+  result <- parseAhrqSas(sasPath = system.file("extdata",
+                                               "comformat2012-2013.txt", package="icd9"), save = FALSE)
+  expect_that(result, is_a("list"))
+  expect_true(length(result) > 10)
+})
 
 test_that("HTN subgroups all worked", {
   # pick one subcategory

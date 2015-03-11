@@ -67,10 +67,7 @@ icd9ComorbidQuanDeyo(patientData)[, 1:8]
 ```
 and things work beautifully using [magrittr](http://cran.r-project.org/web/packages/magrittr/index.html) `%>%` to chain functions together. This is not a dependency for this package, but is recommended because of the frequent need to chain together icd9 commands, and greater clarity.
 ```{r getcomorbidities2}
-patientData %>%
-  icd9FilterPoaYes() %>%
-  icd9ComorbidAhrq() %>%
-  extract(1:8)
+patientData %>% icd9FilterPoaYes %>% icd9ComorbidAhrq %>% extract(1:8)
 ```
 
 ## Converting ICD-9 codes between types
@@ -92,14 +89,14 @@ icd9IsValidDecimal(c("099.17", "-1.1"))
 icd9IsValidShort(c("1", "001", "100", "123456", "003.21"))
 ```
 
-Validation forces the package user to provide character format ICD-9 codes. If great care is taken, passing some integers could be valid, but given the high chance of mistakes, and the simplicity of dealing entirely with character input, character is enforced:
+Validation forces the package user to provide character format ICD-9 codes. If great care is taken, passing some integers could be valid, but given the high chance of mistakes, and the simplicity of dealing entirely with character input, character or factor is enforced. Furthermore, integer values could never include V or E codes (and all ICD-10 codes have non-numeric characters).
 ```{r invalidint, eval = FALSE}
-icd9IsValidShort(100) # gives a warning
+#icd9IsValidShort(100) # gives an error
 ```
 
 ## Ranges of ICD-9 codes
 
-These functions generate syntactically valid ICD-9 codes, without including parent codes when the range limit would subset the parent. E.g. `"100.99" %i9d% "101.01"` does not include `100` or `100.0`, both of which imply larger subsets than requested by the range command (i.e. every code up to `100.99`). The shorter forms `%i9s%` and `%i9d%` return only *real* codes (i.e. listed in the CMS definitions as either three-digit codes or diagnoses), whereas `%i9sa%` and `%i9da%` return all possible syntactically valid ICD-9 codes:
+These functions generate syntactically valid ICD-9 codes, without including parent codes when the range limit would subset the parent. E.g. `"100.99" %i9da% "101.01"` does not include `100` or `100.0`, both of which imply larger subsets than requested by the range command (i.e. every code up to `100.99`). The shorter forms `%i9s%` and `%i9d%` return only *real* codes (i.e. listed in the CMS definitions as either three-digit codes or diagnoses), whereas `%i9sa%` and `%i9da%` return all possible syntactically valid ICD-9 codes:
 ```{r ranges}
 # get all possible codes
 "003" %i9sa% "0033" %>% head(9) # show first 9 of 111 values
@@ -114,12 +111,14 @@ These functions generate syntactically valid ICD-9 codes, without including pare
 # "V10" %i9s% "E800" # throws an error
 ```
 
+This is used internally to interpret ranges of ICD-9 codes specified in the literature. Sometimes it is not clear exactly what an ICD-9 range presented in a paper means, but at least we can explicitly decide what should be included in our interpretation, and the ranges can be reused even when the underlying codes may be different, as codes are added and removed from time-to-time, and although the original papers would have been based on their ICD-9 ranges resolving to a specific set of codes, they are likely to be valid for new diagnoses in the given subgroups. Ultimately, this needs detailed attention, but the strategy in \code{icd9} is to give a good best guess, given these limitations.
+
 Another way of specifying ranges are to use function calls. These are exactly equivalent to the `%i9s%` and `%i9d%` range operators. This example shows the result when the user specifies a range which would include parents but not all their children:
 ```{r rangeanomaly}
-icd9ExpandRangeShort("V100", "V1002", onlyReal = TRUE) # default
-icd9ExpandRangeShort("V100", "V1002", onlyReal = FALSE) # V10.0 is not a leaf node
+icd9ExpandRangeShort("V100", "V1002", onlyReal = TRUE) # default, equivalent to %i9s%
+icd9ExpandRangeShort("V100", "V1002", onlyReal = FALSE) # V10.0 is not a leaf node, equivalent to %i9sa%
 ```
-Although `V10.0` would include ten children, the range only returns 4 values. In all other cases, parents are omitted to avoid the range returning broader classifications than intended.
+Although `V10.0` would include ten possible children, the range with \code{onlyReal = FALSE} only returns 4 values to avoid the range returning broader classifications than intended (V10.0 would imply all its children).
 
 It is easy to find the children of a higher-level ICD-9 code:
 ```{r "childrenReal"}
@@ -231,7 +230,7 @@ Take my patients, find the ones where there definitely or maybe was a diagnosis 
 patientData %>%
   icd9FilterPoaNotNo %>%
   icd9ComorbidAhrq %>%
-  extract(1:9) # chop off at nine for clarity
+  extract(1:9)
 ```
 
 ### Compare two comorbidity defintions
@@ -269,7 +268,7 @@ many_patients <- icd9:::randomPatients(100000)
 
 system.time(
   icd9ComorbidAhrq(many_patients)
-  )[["elapsed"]] # 2.5 seconds on my machine
+  )[["elapsed"]] # result in seconds
 ```
 
 ### Arbitrary ICD-9 mapping

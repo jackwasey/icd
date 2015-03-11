@@ -102,7 +102,6 @@ icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
   c(mjexplain,
     icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% icd9, descField]
   )
-
 }
 
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning.
@@ -259,9 +258,7 @@ icd9CondenseToMajorDecimal <- function(icd9Decimal, onlyReal = NULL)
   icd9CondenseToMajorShort(icd9DecimalToShort(icd9Decimal), onlyReal)
 
 #' @rdname icd9Condense
-#' @param warnReal single logical value, if \code{TRUE}, give warnings when
-#'   there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
-#'   containing undefined codes.
+#' @template warnReal
 #' @export
 icd9CondenseToMajorShort <- function(icd9Short, onlyReal = NULL, warnReal = FALSE) {
   assertFactorOrCharacter(icd9Short)

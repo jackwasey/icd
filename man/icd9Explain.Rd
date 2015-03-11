@@ -88,7 +88,10 @@ convert full format (123.45 style) ICD9 codes into the name and
 
 \item \code{character}: explain character vector of ICD-9 codes
 
-\item \code{numeric}: explain numeric vector of ICD-9 codes, with warning. In general, this is not allowed because of the possible ambiguity of numeric decimal codes, but for convenience, this is allowed in this case to avoid typing many quotes.
+\item \code{numeric}: explain numeric vector of ICD-9 codes, with warning.
+In general, this is not allowed because of the possible ambiguity of
+numeric decimal codes, but for convenience, this is allowed in this case to
+avoid typing many quotes.
 }}
 \examples{
 icd9ExplainShort(ahrqComorbid[[1]][1:3])

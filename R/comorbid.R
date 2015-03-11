@@ -159,17 +159,18 @@ icd9ComorbidAhrq <- function(..., abbrevNames = TRUE,
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
 
-    cbd <- cbd[, -which(rownames(cbd) %nin% "HTNcx")] # drop HTNcx
+    # drop HTNcx without converting to vector if matrix only has one row (drop=FALSE)
+    cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrevNames)
-      colnames(cbd)[-1] <- icd9::ahrqComorbidNamesAbbrev
+      colnames(cbd)[cr(cbd)] <- icd9::ahrqComorbidNamesAbbrev
     else
-      colnames(cbd)[-1] <- icd9::ahrqComorbidNames
+      colnames(cbd)[cr(cbd)] <- icd9::ahrqComorbidNames
   } else {
     if (abbrevNames)
-      colnames(cbd)[-1] <- icd9::ahrqComorbidNamesHtnAbbrev
+      colnames(cbd)[cr(cbd)] <- icd9::ahrqComorbidNamesHtnAbbrev
     else
-      colnames(cbd)[-1] <- icd9::ahrqComorbidNamesHtn
+      colnames(cbd)[cr(cbd)] <- icd9::ahrqComorbidNamesHtn
   }
   cbd
 }
@@ -192,17 +193,10 @@ icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
-  if (abbrevNames) {
-    if (is.data.frame(cbd))
-      colnames(cbd)[-1] <- icd9::charlsonComorbidNamesAbbrev
-    else
-      colnames(cbd) <- icd9::charlsonComorbidNamesAbbrev
-  } else {
-    if (is.data.frame(cbd))
-      colnames(cbd)[-1] <- icd9::charlsonComorbidNames
-    else
-      colnames(cbd) <- icd9::charlsonComorbidNames
-  }
+  if (abbrevNames)
+    colnames(cbd)[cr(cbd)] <- icd9::charlsonComorbidNamesAbbrev
+  else
+    colnames(cbd)[cr(cbd)] <- icd9::charlsonComorbidNames
 
   cbd
 }
@@ -219,7 +213,8 @@ icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     # combine HTN
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
-    cbd[, "HTNcx"] <- NULL
+    # drop HTNcx without converting to vector if matrix only has one row (drop=FALSE)
+    cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     # if we didn't apply the hierarchy, we have to use the naming scheme with
     # HTN separated out:
@@ -231,14 +226,14 @@ icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
     # the comorbidities:
 
     if (abbrevNames)
-      names(cbd)[-1] <- icd9::quanElixComorbidNamesAbbrev
+      colnames(cbd)[cr(cbd)] <- icd9::quanElixComorbidNamesAbbrev
     else
-      names(cbd)[-1] <- icd9::quanElixComorbidNames
+      colnames(cbd)[cr(cbd)] <- icd9::quanElixComorbidNames
   } else {
     if (abbrevNames)
-      colnames(cbd)[-1] <- icd9::quanElixComorbidNamesHtnAbbrev
+      colnames(cbd)[cr(cbd)] <- icd9::quanElixComorbidNamesHtnAbbrev
     else
-      colnames(cbd)[-1] <- icd9::quanElixComorbidNamesHtn
+      colnames(cbd)[cr(cbd)] <- icd9::quanElixComorbidNamesHtn
   }
   cbd
 }
@@ -253,16 +248,19 @@ icd9ComorbidElix <- function(..., abbrevNames = TRUE, applyHierarchy = TRUE) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
-    cbd[, "HTNcx"] <- NULL
+
+    # drop HTNcx without converting to vector if matrix only has one row (drop=FALSE)
+    cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
+
     if (abbrevNames)
-      colnames(cbd)[-1] <- icd9::elixComorbidNamesAbbrev
+      colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNamesAbbrev
     else
-      colnames(cbd)[-1] <- icd9::elixComorbidNames
+      colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNames
   } else {
     if (abbrevNames)
-      colnames(cbd)[-1] <- icd9::elixComorbidNamesHtnAbbrev
+      colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNamesHtnAbbrev
     else
-      colnames(cbd)[-1] <- icd9::elixComorbidNamesHtn
+      colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNamesHtn
   }
   cbd
 }
@@ -392,3 +390,9 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
   }
   invisible(out)
 }
+
+#' @title get sequence of column indices of comorbidities
+#' @param cbd matrix or data.frame of comorbidities
+#' @keywords internal
+cr <- function(cbd)
+  seq(from = 1 + is.data.frame(cbd), to = ncol(cbd))
