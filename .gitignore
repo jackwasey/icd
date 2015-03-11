@@ -16,3 +16,5 @@ todo
 i9test.RData
 .cproject
 .project
+src-i386
+src-x64
