@@ -181,7 +181,7 @@ my_check <- function(values) {
   sapply(values, function(x) message("digest: ", digest::digest(x)))
   sapply(values, function(x) {
     print(head(x)); print(tail(x))
-    })
+  })
   all(sapply(values[-1], function(x) identical(values[[1]], x)))
 }
 

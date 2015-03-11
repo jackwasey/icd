@@ -13,11 +13,11 @@ test_that("github issue #46 from wmurphyd", {
   set.seed(123)
   # Fill a QuanDeyo comorbidity data frame with random data
   comorbids <- rbind(comorbids, data.frame(
-                       visitId = letters[2:10], matrix(runif((ncol(comorbids) - 1) * 9) > 0.7,
-                              ncol=17, dimnames = list(character(0), names(comorbids[2:18]))
-                              )
-                       )
-                     )
+    visitId = letters[2:10], matrix(runif((ncol(comorbids) - 1) * 9) > 0.7,
+                                    ncol=17, dimnames = list(character(0), names(comorbids[2:18]))
+    )
+  )
+  )
   c2.inv <- cbind(t(comorbids[2,2:18]),c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 6, 6))
   expect_equivalent(
     icd9CharlsonComorbid(comorbids, applyHierarchy = TRUE)[2],

@@ -486,7 +486,7 @@ test_that("built-in icd9 to comorbidity mappings are all valid", {
 
 test_that("unordered visit ids", {
   pts <- data.frame(visitId = c("2", "1", "2", "3", "3"),
-                   icd9 = c("39891", "40110", "09322", "41514", "39891"))
+                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
   icd9ComorbidShort(pts, ahrqComorbid)
 })
 
@@ -523,13 +523,13 @@ twoPts <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
                      icd9 = c("040", "000", "100", "000"),
                      stringsAsFactors = FALSE)
 twoMap <- list("malady" = c("100", "2000"),
-                     "ailment" = c("003", "040"))
+               "ailment" = c("003", "040"))
 twoPtsFac <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
                         icd9 = c("040", "000", "100", "000"),
                         stringsAsFactors = TRUE)
 twoMapFac <- as.list(data.frame("malady" = c("100", "2000"),
-                        "ailment" = c("003", "040"),
-                        stringsAsFactors = TRUE))
+                                "ailment" = c("003", "040"),
+                                stringsAsFactors = TRUE))
 
 test_that("comorbid quick test", {
   testres <- icd9Comorbid(twoPts, twoMap, return.df = TRUE)
@@ -619,7 +619,7 @@ test_that("disordered visitIds works by default", {
   set.seed(1441)
   dat <- transform(testTwenty, visitId = sample(visitId))
   cmp <-
-  tres <- icd9Comorbid(dat, ahrqComorbid, icd9Field = "icd9Code")
+    tres <- icd9Comorbid(dat, ahrqComorbid, icd9Field = "icd9Code")
   cres <- icd9Comorbid(testTwenty, ahrqComorbid, icd9Field = "icd9Code")
   expect_equal(dim(tres), dim(cres))
   expect_equal(sum(tres), sum(cres))

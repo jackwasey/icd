@@ -15,7 +15,7 @@ icd9CondenseToMajor(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = NULL)
 
 icd9CondenseToMajorDecimal(icd9Decimal, onlyReal = NULL)
 
-icd9CondenseToMajorShort(icd9Short, onlyReal = NULL)
+icd9CondenseToMajorShort(icd9Short, onlyReal = NULL, warnReal = FALSE)
 
 icd9CondenseShort(icd9Short, onlyReal = NULL, toMajor = TRUE)
 

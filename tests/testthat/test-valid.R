@@ -267,12 +267,12 @@ test_that("valid short form E codes - valid input", {
 test_that("test valid major numeric, valid", {
   expect_equal(
     icd9IsValidMajorN(c("1", "22", "333", "4444", "55555",
-                      "1.1", "22.22", "333.333")),
+                        "1.1", "22.22", "333.333")),
     c(T, T, T, F, F, F, F, F)
   )
   expect_equal(
     icd9IsValidMajorN(c("01", "001", "22", "022", "0333", "04444",
-                      "0055555", "01.1", "022.22", "00333.333")),
+                        "0055555", "01.1", "022.22", "00333.333")),
     c(T, T, T, T, F, F, F, F, F, F)
   )
 })
@@ -280,7 +280,7 @@ test_that("test valid major numeric, valid", {
 test_that("test major validation", {
   expect_equal(
     icd9IsValidMajor(c("", "1", "22", "333", "4444", "V", "V2", "V34",
-                     "V567", "E", "E1", "E000", "E70", "E300", "E876")),
+                       "V567", "E", "E1", "E000", "E70", "E300", "E876")),
     c(FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE,
       FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE)
   )
@@ -288,12 +288,12 @@ test_that("test major validation", {
                c(FALSE, TRUE, TRUE, TRUE, TRUE, TRUE))
 
   expect_equal(icd9IsValidMajorV(c("", "1", "22", "333", "4444", "V", "V2", "V34",
-                   "V567", "E", "E1", "E000", "E70", "E300", "E876",
-                   "V1.1", "V2.89", "V12.4", "V23.45")),
-  c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE,
-    FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-    FALSE, FALSE, FALSE, FALSE)
-)
+                                   "V567", "E", "E1", "E000", "E70", "E300", "E876",
+                                   "V1.1", "V2.89", "V12.4", "V23.45")),
+               c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE,
+                 FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
+                 FALSE, FALSE, FALSE, FALSE)
+  )
 })
 
 test_that("icd-9 code is really in the list, not just syntactically valid", {

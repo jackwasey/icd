@@ -173,7 +173,7 @@ icd9Count <- function(x, visitId = NULL, return.df = FALSE) {
 #' @export
 icd9CountComorbidBin <- function(x, visitId = NULL, return.df = FALSE) {
   visitId <- getVisitId(x, visitId)
-visitId <- getVisitId(x, visitId)
+  visitId <- getVisitId(x, visitId)
   res <- apply(x[, names(x) %nin% visitId],
                MARGIN = 1,
                FUN = sum)

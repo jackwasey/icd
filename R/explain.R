@@ -173,8 +173,8 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
   for (i in 1:length(majors)) {
     for (chap in names(icd9::icd9Chapters)) {
       if (any(majors[i] %in%
-                (icd9::icd9Chapters[[chap]]["start"] %i9mj%
-                   icd9::icd9Chapters[[chap]]["end"])
+              (icd9::icd9Chapters[[chap]]["start"] %i9mj%
+               icd9::icd9Chapters[[chap]]["end"])
       )) {
         out[i, "chapter"] <- chap
         break
@@ -182,8 +182,8 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
     }
     for (subchap in names(icd9::icd9ChaptersSub)) {
       if (any(majors[i] %in%
-                (icd9::icd9ChaptersSub[[subchap]]["start"] %i9mj%
-                   icd9::icd9ChaptersSub[[subchap]]["end"])
+              (icd9::icd9ChaptersSub[[subchap]]["start"] %i9mj%
+               icd9::icd9ChaptersSub[[subchap]]["end"])
       )) {
         out[i, "subchapter"] <- subchap
         break

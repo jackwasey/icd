@@ -7,14 +7,14 @@ test_that("expand icd9 range definition", {
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
            "40139", "4014", "40140", "40141", "40142", "40143", "40144", "40145")))
-# the following tests the unimplemented omitParents = TRUE
-#   expect_equal(
-#     icd9ExpandRangeShort("4012", "40145", omitParents = TRUE),
-#     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
-#            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
-#            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
-#            "40139", "40140", "40141", "40142", "40143", "40144", "40145")))
-#
+  # the following tests the unimplemented omitParents = TRUE
+  #   expect_equal(
+  #     icd9ExpandRangeShort("4012", "40145", omitParents = TRUE),
+  #     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
+  #            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
+  #            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
+  #            "40139", "40140", "40141", "40142", "40143", "40144", "40145")))
+  #
   expect_equal(icd9ExpandRangeShort("40100", "40101", onlyReal = FALSE), c("40100", "40101"))
   expect_equal(icd9ExpandRange("40108", "40109", isShort = TRUE, onlyReal = FALSE), c("40108", "40109"))
   expect_equal(icd9ExpandRangeShort("40198", "40199", onlyReal = FALSE), c("40198", "40199"))
@@ -54,37 +54,37 @@ test_that("expand icd9 range definition", {
   expect_equal(
     icd9ExpandRangeShort("401", "402", onlyReal = FALSE),
     sort(c("401", "4010", "4011", "4012", "4013", "4014", "4015", "4016",
-      "4017", "4018", "4019", "40100", "40110", "40120", "40130", "40140",
-      "40150", "40160", "40170", "40180", "40190", "40101", "40111",
-      "40121", "40131", "40141", "40151", "40161", "40171", "40181",
-      "40191", "40102", "40112", "40122", "40132", "40142", "40152",
-      "40162", "40172", "40182", "40192", "40103", "40113", "40123",
-      "40133", "40143", "40153", "40163", "40173", "40183", "40193",
-      "40104", "40114", "40124", "40134", "40144", "40154", "40164",
-      "40174", "40184", "40194", "40105", "40115", "40125", "40135",
-      "40145", "40155", "40165", "40175", "40185", "40195", "40106",
-      "40116", "40126", "40136", "40146", "40156", "40166", "40176",
-      "40186", "40196", "40107", "40117", "40127", "40137", "40147",
-      "40157", "40167", "40177", "40187", "40197", "40108", "40118",
-      "40128", "40138", "40148", "40158", "40168", "40178", "40188",
-      "40198", "40109", "40119", "40129", "40139", "40149", "40159",
-      "40169", "40179", "40189", "40199", "402", "4020", "4021", "4022",
-      "4023", "4024", "4025", "4026", "4027", "4028", "4029", "40200",
-      "40210", "40220", "40230", "40240", "40250", "40260", "40270",
-      "40280", "40290", "40201", "40211", "40221", "40231", "40241",
-      "40251", "40261", "40271", "40281", "40291", "40202", "40212",
-      "40222", "40232", "40242", "40252", "40262", "40272", "40282",
-      "40292", "40203", "40213", "40223", "40233", "40243", "40253",
-      "40263", "40273", "40283", "40293", "40204", "40214", "40224",
-      "40234", "40244", "40254", "40264", "40274", "40284", "40294",
-      "40205", "40215", "40225", "40235", "40245", "40255", "40265",
-      "40275", "40285", "40295", "40206", "40216", "40226", "40236",
-      "40246", "40256", "40266", "40276", "40286", "40296", "40207",
-      "40217", "40227", "40237", "40247", "40257", "40267", "40277",
-      "40287", "40297", "40208", "40218", "40228", "40238", "40248",
-      "40258", "40268", "40278", "40288", "40298", "40209", "40219",
-      "40229", "40239", "40249", "40259", "40269", "40279", "40289",
-      "40299"))
+           "4017", "4018", "4019", "40100", "40110", "40120", "40130", "40140",
+           "40150", "40160", "40170", "40180", "40190", "40101", "40111",
+           "40121", "40131", "40141", "40151", "40161", "40171", "40181",
+           "40191", "40102", "40112", "40122", "40132", "40142", "40152",
+           "40162", "40172", "40182", "40192", "40103", "40113", "40123",
+           "40133", "40143", "40153", "40163", "40173", "40183", "40193",
+           "40104", "40114", "40124", "40134", "40144", "40154", "40164",
+           "40174", "40184", "40194", "40105", "40115", "40125", "40135",
+           "40145", "40155", "40165", "40175", "40185", "40195", "40106",
+           "40116", "40126", "40136", "40146", "40156", "40166", "40176",
+           "40186", "40196", "40107", "40117", "40127", "40137", "40147",
+           "40157", "40167", "40177", "40187", "40197", "40108", "40118",
+           "40128", "40138", "40148", "40158", "40168", "40178", "40188",
+           "40198", "40109", "40119", "40129", "40139", "40149", "40159",
+           "40169", "40179", "40189", "40199", "402", "4020", "4021", "4022",
+           "4023", "4024", "4025", "4026", "4027", "4028", "4029", "40200",
+           "40210", "40220", "40230", "40240", "40250", "40260", "40270",
+           "40280", "40290", "40201", "40211", "40221", "40231", "40241",
+           "40251", "40261", "40271", "40281", "40291", "40202", "40212",
+           "40222", "40232", "40242", "40252", "40262", "40272", "40282",
+           "40292", "40203", "40213", "40223", "40233", "40243", "40253",
+           "40263", "40273", "40283", "40293", "40204", "40214", "40224",
+           "40234", "40244", "40254", "40264", "40274", "40284", "40294",
+           "40205", "40215", "40225", "40235", "40245", "40255", "40265",
+           "40275", "40285", "40295", "40206", "40216", "40226", "40236",
+           "40246", "40256", "40266", "40276", "40286", "40296", "40207",
+           "40217", "40227", "40237", "40247", "40257", "40267", "40277",
+           "40287", "40297", "40208", "40218", "40228", "40238", "40248",
+           "40258", "40268", "40278", "40288", "40298", "40209", "40219",
+           "40229", "40239", "40249", "40259", "40269", "40279", "40289",
+           "40299"))
   )
 
   expect_equal(icd9ExpandRangeShort("401", "40102", onlyReal = FALSE),
@@ -93,15 +93,15 @@ test_that("expand icd9 range definition", {
   # only works with single range
   expect_error(icd9ExpandRangeShort(c("10", "20"), c("11", "21")))
 
-# found bugs when expanding Injury and Poisoning chapter.
-expect_that(icd9ExpandRangeShort("997", "998"), testthat::not(throws_error()))
-expect_false("999" %in% icd9ExpandRangeShort("998", "998", onlyReal = FALSE))
-expect_false("009" %in% icd9ExpandRangeShort("8", "8", onlyReal = FALSE))
+  # found bugs when expanding Injury and Poisoning chapter.
+  expect_that(icd9ExpandRangeShort("997", "998"), testthat::not(throws_error()))
+  expect_false("999" %in% icd9ExpandRangeShort("998", "998", onlyReal = FALSE))
+  expect_false("009" %in% icd9ExpandRangeShort("8", "8", onlyReal = FALSE))
 
 })
 
 test_that("V code ranges", {
-expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
+  expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
                c("V1000", "V1001", "V1002"))
   # although we don't usually return parents whose scope overlaps the upper
   # limit, if the range specification already has this 'anomaly', we just roll
@@ -120,7 +120,7 @@ expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
   expect_equal(icd9ExpandRangeShort("V1009", "V101", onlyReal = FALSE),
                icd9ExpandRangeShort("V1009", "V1019", onlyReal = FALSE))
 
-# failed similar test in Elixhauser mapping generation.
+  # failed similar test in Elixhauser mapping generation.
   expect_false("V11" %in% icd9ExpandRangeDecimal("V10.89", "V10.9", onlyReal = FALSE))
   expect_false("V11" %in% icd9ExpandRange("V10.89", "V10.9", isShort = FALSE, onlyReal = FALSE))
   expect_false("V11" %in% icd9ExpandRangeDecimal("V10.89", "V10.99", onlyReal = FALSE))
@@ -282,42 +282,42 @@ test_that("icd9ChildrenShort valid input", {
 test_that("condense ranges which do consense", {
   expect_equal(
     icd9CondenseToMajorShort(icd9ChildrenShort("123", onlyReal = TRUE),
-                        onlyReal = TRUE),
+                             onlyReal = TRUE),
     "123")
   expect_equal(
     icd9CondenseToMajorShort(icd9ChildrenShort("1", onlyReal = TRUE),
-                        onlyReal = TRUE),
+                             onlyReal = TRUE),
     "001")
   for (or1 in c(TRUE, FALSE)) {
     for (or2 in c(TRUE, FALSE)) {
       expect_equal(
         icd9CondenseToMajorShort(icd9ChildrenShort("00321", onlyReal = or1),
-                            onlyReal = or2),
+                                 onlyReal = or2),
         "00321", info = paste(or1, or2))
       expect_equal(
         icd9CondenseToMajorShort(icd9ChildrenShort("V1221", onlyReal = or1),
-                            onlyReal = or2),
+                                 onlyReal = or2),
         "V1221", info = paste(or1, or2))
     }
   }
   expect_equal(icd9CondenseToMajorShort(icd9ChildrenShort("V12", onlyReal = TRUE),
-                                   onlyReal = TRUE), "V12")
+                                        onlyReal = TRUE), "V12")
   expect_equal(icd9CondenseToMajorShort(icd9ChildrenShort("V12", onlyReal = FALSE),
-                                   onlyReal = FALSE), "V12")
+                                        onlyReal = FALSE), "V12")
 })
 
 test_that("condense ranges that don't condense at all", {
   expect_equal(
     sort(icd9CondenseToMajorShort(icd9ChildrenShort("123", onlyReal = TRUE),
-                             onlyReal = FALSE)),
+                                  onlyReal = FALSE)),
     sort(icd9ChildrenShort("123", onlyReal = TRUE)))
   # the parent "1000" is not included.
   expect_equal(sort(icd9CondenseToMajorShort(as.character(10000:10009),
-                                        onlyReal = FALSE)),
+                                             onlyReal = FALSE)),
                as.character(10000:10009))
   # missing 10009
   expect_equal(sort(icd9CondenseToMajorShort(c("1000", as.character(10000:10008)),
-                                        onlyReal = FALSE)),
+                                             onlyReal = FALSE)),
                c("1000", as.character(10000:10008)))
 })
 
@@ -425,7 +425,7 @@ test_that("sort works as expected", {
 
 test_that("sysdata.rda is okay", {
   lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
-    "icd9NShortReal", "icd9VShortReal", "icd9EShortReal")
+               "icd9NShortReal", "icd9VShortReal", "icd9EShortReal")
 
   expect_that(sysdat <- icd9GenerateSysData(do.save = FALSE), testthat::not(throws_error()))
   expect_equal(names(sysdat), lknames)
