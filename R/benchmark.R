@@ -1,8 +1,9 @@
 # EXCLUDE COVERAGE START
 
 getSlowestTests <- function(n = 5) {
-  res <- test_dir(file.path(inst("icd9"), "tests", "testthat"), reporter = ListReporter())
-  print(res[order(res$real), "test"] %>% tail(n))
+  res <- testthat::test_dir(file.path(".", "tests", "testthat"),
+                            reporter = testthat::ListReporter())
+  print(tail(res[order(res$real), "test"], n = n))
 }
 
 randomPatients <- function(n = 100, np=10)

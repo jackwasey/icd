@@ -30,10 +30,10 @@ There are three notes:
 These are integral to included data which has accented characters in some disease names.
   
 * checking installed package size ... NOTE
-  installed size is  7.1Mb
+  installed size is  6.9Mb
   sub-directories of 1Mb or more:
     extdata   3.4Mb
-    libs      2.1Mb
+    libs      1.9Mb
 
 Total package size is less than 1 Mb tar.gz
 

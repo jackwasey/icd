@@ -12,4 +12,4 @@
 
 SEXP getRListOrDfElement(SEXP list, const char *str);
 
-#endif /* UTIL_H_ */
+#endif // UTIL_H_
