@@ -3,9 +3,8 @@
 #include <is.h>
 #include <util.h>
 #include <manip.h>
-extern "C" {
-#include "local_c.h"
-}
+#include <local.h>
+
 using namespace Rcpp;
 
 //' @rdname convert

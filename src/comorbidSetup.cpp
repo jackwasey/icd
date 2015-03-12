@@ -1,5 +1,8 @@
 // [[Rcpp::interfaces(r, cpp)]]
+#include <Rinternals.h>
 #include <local.h>
+#include <algorithm>
+
 using namespace Rcpp;
 
 void buildMap(const List& icd9Mapping, VecVecInt& map) {

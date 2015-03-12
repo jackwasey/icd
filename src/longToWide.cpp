@@ -5,10 +5,6 @@
 #include <valgrind/callgrind.h>
 #endif
 
-extern "C" {
-#include "local_c.h"
-#include <cstdlib>
-}
 using namespace Rcpp;
 
 CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,

@@ -1,6 +1,6 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include <ranges.h>
 #include <Rcpp.h>
+#include <ranges.h>
 #include <convert.h>
 #include <manip.h>
 #include <is.h>
