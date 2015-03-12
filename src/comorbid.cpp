@@ -4,6 +4,7 @@
 #include <Rcpp.h>
 #include <local.h>
 #include <vector>
+#include <string>
 
 using namespace Rcpp;
 
