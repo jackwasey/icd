@@ -2,7 +2,7 @@
 * Ubuntu 14.10 R 3.1.3, clang and gcc
 * Ubuntu 12.04 (on travis-ci) R 3.1.2
 * Debian jessie in docker with UBSAN and clang, R 3.1.2
-* win-builder (R-devel 64 bit execution fails with hang in Rf_error(), discussed with Duncan Murdoch, likely toolchain problem on win-builder)
+* win-builder (R-devel 64 bit execution fails with hang in Rf_error(), discussed with Duncan Murdoch, likely toolchain/Rcpp interaction on win-builder)
 * Windows 7 64 bit R 3.1.3 with gcc from Rtools32
 
 ## R CMD check results
