@@ -5,6 +5,8 @@ date: "Saturday, January 24, 2015"
 output:
   html_document:
     toc: yes
+  pdf_document:
+    toc: yes
 vignette: >
   %\VignetteIndexEntry{Introducing icd9}
   %\VignetteEngine{knitr::rmarkdown}

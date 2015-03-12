@@ -40,7 +40,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 	vcdb.resize(vlen); // over-estimate and allocate all at once
 	VecVecIntSz vcdb_max_idx = -1; // we increment immediately to zero as first index
 	VecVecIntSz vcdb_new_idx;
-	VecVecIntSz vcdb_last_idx;
+	VecVecIntSz vcdb_last_idx = 6742381946372; // random number. It should always be initialized anyway, but just in case.
 	if (TYPEOF(vsexp) != STRSXP) {
 		stop("buildVisitCodesVec requires STRSXP");
 	}
