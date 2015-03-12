@@ -28,6 +28,8 @@ test_that("github issue #46 from wmurphyd", {
 test_that("only matrix or data.frame accepted", {
   expect_error(icd9Charlson(c(1, 2)))
   expect_error(icd9Charlson(c(1, 2), visitId = "roam", return.df = TRUE, stringsAsFactors = TRUE))
+  expect_error(icd9Charlson(list(1, 2)))
+  expect_error(icd9Charlson(list(1, 2), visitId = "roam", return.df = TRUE, stringsAsFactors = TRUE))
 })
 
 test_that("Charlson score", {
@@ -106,13 +108,9 @@ test_that("Charlson score", {
                               row.names = c(NA, -3L),
                               class = "data.frame")
   )
+})
 
-  baddf <- data.frame(visitId = c("d", "d"),
-                      icd9 = c("2500", "25042"),
-                      stringsAsFactors = TRUE)
-  cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
-  expect_error(icd9CharlsonComorbid(cmb, applyHierarchy = FALSE))
-
+test_that("Charlson - errors?", {
   baddf <- data.frame(visitId = c("d", "d"),
                       icd9 = c("2500", "25042"),
                       stringsAsFactors = TRUE)

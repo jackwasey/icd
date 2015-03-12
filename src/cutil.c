@@ -1,4 +1,5 @@
-#include <R.h>
+//#include <util.h>
+#include <string.h>
 #include <Rinternals.h>
 
 SEXP getRListOrDfElement(SEXP list_or_df, const char* element_name) {

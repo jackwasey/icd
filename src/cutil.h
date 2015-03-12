@@ -5,11 +5,11 @@
  *      Author: jack
  */
 
-#include <string>
+#include <Rinternals.h>
 
 #ifndef UTIL_H_
 #define UTIL_H_
 
-std::string strimCpp(std::string& s);
+SEXP getRListOrDfElement(SEXP list, const char *str);
 
 #endif /* UTIL_H_ */

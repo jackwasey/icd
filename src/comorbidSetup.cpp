@@ -1,5 +1,8 @@
 // [[Rcpp::interfaces(r, cpp)]]
+#include <Rinternals.h>
 #include <local.h>
+#include <algorithm>
+
 using namespace Rcpp;
 
 void buildMap(const List& icd9Mapping, VecVecInt& map) {
@@ -40,7 +43,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 	vcdb.resize(vlen); // over-estimate and allocate all at once
 	VecVecIntSz vcdb_max_idx = -1; // we increment immediately to zero as first index
 	VecVecIntSz vcdb_new_idx;
-	VecVecIntSz vcdb_last_idx = 6742381946372; // random number. It should always be initialized anyway, but just in case.
+	VecVecIntSz vcdb_last_idx = 4294967295; // random number less than 2^32 (to avoid 32bit R build warning) just to initialize: should always been initialized, though.
 	if (TYPEOF(vsexp) != STRSXP) {
 		stop("buildVisitCodesVec requires STRSXP");
 	}
@@ -52,7 +55,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 	visitIds.resize(vlen); // over reserve, consider resize and trim at end
 	const char* lastVisitId = "JJ94967295JJ"; // random
 	int n;
-	for (int i = 0; i < vlen; ++i) {
+	for (int i = 0; i != vlen; ++i) {
 		const char* vi = CHAR(STRING_ELT(vsexp, i));
 		n = INTEGER(icds)[i];
 #ifdef ICD9_DEBUG_SETUP_TRACE
@@ -71,9 +74,10 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 #endif
 					continue;
 				} else {
-					vis_lookup.insert(std::make_pair(vi, vcdb_new_idx)); // new visit, with associated position in vcdb
+					vis_lookup.insert(
+							std::make_pair(vi, vcdb_new_idx)); // new visit, with associated position in vcdb
 #ifdef ICD9_DEBUG_SETUP_TRACE
-							Rcpp::Rcout << "(aggregating) new key " << vi << "\n";
+									Rcpp::Rcout << "(aggregating) new key " << vi << "\n";
 #endif
 				}
 			} else {

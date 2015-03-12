@@ -1,6 +1,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 #include <local.h>
+#include <algorithm>
 using namespace Rcpp;
 
 void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,

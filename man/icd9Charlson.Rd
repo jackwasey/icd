@@ -3,18 +3,10 @@
 \name{icd9Charlson}
 \alias{icd9Charlson}
 \alias{icd9Charlson.data.frame}
-\alias{icd9Charlson.default}
-\alias{icd9Charlson.matrix}
 \alias{icd9CharlsonComorbid}
 \title{Calculate Charlson Comorbidity Index (Charlson Score)}
 \usage{
 icd9Charlson(x, visitId = NULL, return.df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), ...)
-
-\method{icd9Charlson}{default}(x, visitId = NULL, return.df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), ...)
-
-\method{icd9Charlson}{matrix}(x, visitId = NULL, return.df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 \method{icd9Charlson}{data.frame}(x, visitId = NULL, return.df = FALSE,
@@ -65,11 +57,7 @@ Per Quan, "The following comorbid conditions were mutually
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: default method for icd9Charlson
-
-\item \code{matrix}: Charlson scores from comorbidity matrix
-
-\item \code{data.frame}: Charlson scores from comorbidity data frame
+\item \code{data.frame}: Charlson scores from data frame of visits and ICD-9 codes
 }}
 \examples{
 mydf <- data.frame(visitId = c("a", "b", "c"),

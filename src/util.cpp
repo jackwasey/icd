@@ -1,8 +1,12 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include <local.h>
-using namespace Rcpp;
+#include <Rinternals.h>
+#include <vector>
+#include <string>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
-//TODO someday, can go much faster (but less portable) with C strings
+//TODO someday, can go much faster (but less portable) with C strings. see is.cpp for similar code.
 
 // trim one string from right
 std::string trimRight(std::string& s) {

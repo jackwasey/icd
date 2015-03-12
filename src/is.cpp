@@ -1,5 +1,6 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include <local.h>
+#include <string>
+#include <vector>
 
 bool icd9IsASingle(const char* s, const char* x) {
 	while (*s == ' ')
@@ -38,7 +39,6 @@ std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x,
 	int len = sv.size();
 	std::vector<bool> out(len);
 	for (int i = 0; i < len; ++i) {
-		//out[i] = inverse == (sv[i].find_first_of(x) == std::string::npos);
 		out[i] = inverse != (icd9IsASingle(sv[i].c_str(), x));
 	}
 	return out;

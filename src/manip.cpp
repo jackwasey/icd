@@ -1,5 +1,4 @@
 // [[Rcpp::interfaces(r, cpp)]]
-#include <local.h>
 #include <is.h>
 #include <convert.h>
 using namespace Rcpp;

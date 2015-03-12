@@ -1,6 +1,10 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
+
+#include <Rcpp.h>
 #include <local.h>
+#include <vector>
+
 using namespace Rcpp;
 
 // R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"

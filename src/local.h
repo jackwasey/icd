@@ -1,15 +1,25 @@
+/*
+ * local.h
+ *
+ *  Created on: Mar 7, 2015
+ *      Author: jack
+ */
+
+#ifndef LOCAL_H_
+#define LOCAL_H_
+
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include <R.h>
-#include <Rinternals.h>
-#include <string>
-#include <algorithm>
+//#include <R.h>
+//#include <Rinternals.h>
+//#include <string>
+//#include <algorithm>
 #include <vector>
 #include <set>
 #include <tr1/unordered_map>
 
 extern "C" {
-#include "local_c.h"
+#include "cutil.h"
 #include <cstdlib>
 }
 
@@ -87,3 +97,4 @@ void printIt(std::map<MK,MV> v) {
 void printCharVec(Rcpp::CharacterVector cv);
 #endif
 
+#endif // LOCAL_H_
