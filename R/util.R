@@ -18,7 +18,7 @@ allIsNumeric <- function(x, extras = c(".", "NA", NA)) {
   old <- options(warn = - 1)
   on.exit(options(old))
   xs <- x[x %nin% c("", extras)]
-  !any(is.na(as.numeric(xs)))
+  !anyNA(as.numeric(xs))
 }
 
 asNumericNoWarn <- function(x) {

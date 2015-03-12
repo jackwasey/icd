@@ -205,8 +205,8 @@ for (i in list("icd9Chapters", "icd9ChaptersSub", "icd9ChaptersMajor")) {
     # or duplicate codes
     expect_equal(length(il), length(unique(il)))
     expect_true(all(nchar(names(il) > 0)))
-    expect_false(any(is.na(il)))
-    expect_false(any(is.na(names(il))))
+    expect_false(anyNA(il))
+    expect_false(anyNA(names(il)))
   })
 }
 

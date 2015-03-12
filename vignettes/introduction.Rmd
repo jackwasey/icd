@@ -1,7 +1,7 @@
 ---
 title: 'Introducing icd9: working with ICD-9 codes and comorbidities in R'
 author: "Jack O. Wasey"
-date: "Saturday, January 24, 2015"
+date: "`r format(Sys.time(), "%Y-%m-%d")`"
 output:
   html_document:
     toc: yes

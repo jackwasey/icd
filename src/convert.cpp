@@ -13,7 +13,11 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToCode(const CharacterVector major,
 		const CharacterVector minor, bool isShort) {
-
+#ifdef ICD9_DEBUG
+	Rcout << "icd9MajMinToCode\n";
+	if (major.size() != minor.size())
+		Rf_error("aborting because major and minor lengths differ");
+#endif
 	CharacterVector out; // wish I could reserve space for this
 	CharacterVector::const_iterator j = major.begin();
 	CharacterVector::const_iterator n = minor.begin();
@@ -70,11 +74,19 @@ CharacterVector icd9MajMinToCode(const CharacterVector major,
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToShort(const CharacterVector major,
 		const CharacterVector minor) {
+#ifdef ICD9_DEBUG
+	Rcout << "icd9MajMinToShort: major.size() = " << major.size()
+			<< " and minor.size() = " << minor.size() << "\n";
+#endif
 	if ((major.size() != 1 && major.size() != minor.size())
 			|| (major.size() == 1 && minor.size() == 0)) {
-		stop("icd9MajMinToShort, length of majors and minors must be equal.");
+		Rf_error(
+				"icd9MajMinToShort, length of majors and minors must be equal.");
 	}
 	if (major.size() == 1) {
+#ifdef ICD9_DEBUG
+		Rcout << "icd9MajMinToShort: major.size() = 1\n";
+#endif
 		CharacterVector newmajor(minor.size(), major[0]);
 		return icd9MajMinToCode(newmajor, minor, true);
 	}

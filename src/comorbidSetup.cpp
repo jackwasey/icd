@@ -43,9 +43,9 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 	vcdb.resize(vlen); // over-estimate and allocate all at once
 	VecVecIntSz vcdb_max_idx = -1; // we increment immediately to zero as first index
 	VecVecIntSz vcdb_new_idx;
-	VecVecIntSz vcdb_last_idx = 4294967295; // random number less than 2^32 (to avoid 32bit R build warning) just to initialize: should always been initialized, though.
+	VecVecIntSz vcdb_last_idx = 2094967295; // random number less than 2^31 (to avoid 32bit R build warning) just to initialize: should always been initialized, though.
 	if (TYPEOF(vsexp) != STRSXP) {
-		stop("buildVisitCodesVec requires STRSXP");
+		Rf_error("buildVisitCodesVec requires STRSXP");
 	}
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "buildVisitCodes SEXP is STR\n";

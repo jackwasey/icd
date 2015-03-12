@@ -249,7 +249,14 @@ test_that("parts to short V code inputs", {
 
 test_that("icd9 parts to short: don't allow cycling.", {
   expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")))
+  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45"))) # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
+})
+
+test_that("Windows Rtools 3.2 hang test", {
+  skip("don't crash winbuilder 64 bit R-devel 3.2 with Rtools 3.3 (GCC 4.9)")
   expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
+  # see Rcpp issue #276. Now updated to use Rf_error instead of Rcpp::stop
+
 })
 
 test_that("icd9 parts to short form V and E input, mismatched lengths", {

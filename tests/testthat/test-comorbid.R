@@ -279,11 +279,11 @@ test_that("github #34 - short and long custom map give different results", {
 })
 
 test_that("no NA values in the co-morbidity lists", {
-  expect_false(any(is.na(unlist(unname(ahrqComorbid)))))
-  expect_false(any(is.na(unlist(unname(ahrqComorbidAll)))))
-  expect_false(any(is.na(unlist(unname(quanDeyoComorbid)))))
-  expect_false(any(is.na(unlist(unname(quanElixComorbid)))))
-  expect_false(any(is.na(unlist(unname(elixComorbid)))))
+  expect_false(anyNA(unlist(unname(ahrqComorbid))))
+  expect_false(anyNA(unlist(unname(ahrqComorbidAll))))
+  expect_false(anyNA(unlist(unname(quanDeyoComorbid))))
+  expect_false(anyNA(unlist(unname(quanElixComorbid))))
+  expect_false(anyNA(unlist(unname(elixComorbid))))
 })
 
 test_that("built-in icd9 to comorbidity mappings are all valid", {
