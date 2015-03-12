@@ -8,6 +8,8 @@
 #ifndef MANIP_H_
 #define MANIP_H_
 
+#include <Rcpp.h>
+
 Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String major);
 Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector icd9, bool isShort);
 Rcpp::CharacterVector icd9AddLeadingZeroesShort(Rcpp::CharacterVector icd9Short);

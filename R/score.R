@@ -41,30 +41,13 @@ icd9Charlson <- function(x, visitId = NULL,
                          ...)
   UseMethod("icd9Charlson")
 
-#' @describeIn icd9Charlson default method for icd9Charlson
-#' @export
-icd9Charlson.default <- function(x, visitId = NULL,
-                                 return.df = FALSE,
-                                 stringsAsFactors = getOption("stringsAsFactors"),
-                                 ...)
-  stop("icd9Charlson requires a matrix or data frame of comorbidities")
-
-#' @describeIn icd9Charlson Charlson scores from comorbidity matrix
-#' @export
-icd9Charlson.matrix <- function(x, visitId = NULL,
-                                return.df = FALSE,
-                                stringsAsFactors = getOption("stringsAsFactors"),
-                                ...) {
-  stop("todo")
-}
-
-#' @describeIn icd9Charlson Charlson scores from comorbidity data frame
+#' @describeIn icd9Charlson Charlson scores from data frame of visits and ICD-9 codes
 #' @export
 icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     return.df = FALSE,
                                     stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
-  checkmate::assertDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
+  checkmate::assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
   checkmate::assertFlag(return.df)
   visitId <- getVisitId(x, visitId)
   tmp <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
