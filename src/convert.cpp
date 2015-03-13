@@ -16,7 +16,7 @@ CharacterVector icd9MajMinToCode(const CharacterVector major,
 #ifdef ICD9_DEBUG
 	Rcout << "icd9MajMinToCode\n";
 	if (major.size() != minor.size())
-		Rf_error("aborting because major and minor lengths differ");
+		Rcpp::stop("aborting because major and minor lengths differ");
 #endif
 	CharacterVector out; // wish I could reserve space for this
 	CharacterVector::const_iterator j = major.begin();
@@ -80,7 +80,7 @@ CharacterVector icd9MajMinToShort(const CharacterVector major,
 #endif
 	if ((major.size() != 1 && major.size() != minor.size())
 			|| (major.size() == 1 && minor.size() == 0)) {
-		Rf_error(
+		Rcpp::stop(
 				"icd9MajMinToShort, length of majors and minors must be equal.");
 	}
 	if (major.size() == 1) {
