@@ -7,30 +7,27 @@
 
 using namespace Rcpp;
 
-//' @rdname convert
-//' @name convert
-//' @export
 // [[Rcpp::export]]
-CharacterVector icd9MajMinToCode(const CharacterVector major,
-		const CharacterVector minor, bool isShort) {
+CharacterVector icd9MajMinToCodeShim(const CharacterVector mjr,
+		const CharacterVector mnr, bool isShort) {
 #ifdef ICD9_DEBUG
 	Rcout << "icd9MajMinToCode\n";
-	if (major.size() != minor.size())
-		Rcpp::stop("aborting because major and minor lengths differ");
+	if (mjr.size() != mnr.size())
+	Rcpp::stop("aborting because mjr and mnr lengths differ");
 #endif
 	CharacterVector out; // wish I could reserve space for this
-	CharacterVector::const_iterator j = major.begin();
-	CharacterVector::const_iterator n = minor.begin();
+	CharacterVector::const_iterator j = mjr.begin();
+	CharacterVector::const_iterator n = mnr.begin();
 
-	for (; j != major.end() && n != minor.end(); ++j, ++n) {
-		//std::string majorelem = as<std::string>(*j);
-		String majorelem = *j;
-		if (majorelem == NA_STRING) {
+	for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
+		//std::string mjrelem = as<std::string>(*j);
+		String mjrelem = *j;
+		if (mjrelem == NA_STRING) {
 			out.push_back(NA_STRING);
 			continue;
 		}
 		// work around Rcpp bug with push_front: convert to string just for this
-		const char* smj_c = majorelem.get_cstring();
+		const char* smj_c = mjrelem.get_cstring();
 		std::string smj = std::string(smj_c);
 		switch (strlen(smj_c)) {
 		case 0:
@@ -47,20 +44,20 @@ CharacterVector icd9MajMinToCode(const CharacterVector major,
 			} else {
 				smj.insert(1, "0");
 			}
-			// default: // major is 3 (or more) chars already
+			// default: // mjr is 3 (or more) chars already
 		}
-		String minorelem = *n;
-		if (minorelem == NA_STRING) {
-			//out.push_back(majorelem);
+		String mnrelem = *n;
+		if (mnrelem == NA_STRING) {
+			//out.push_back(mjrelem);
 			out.push_back(smj);
 			continue;
 		}
 		// this can probably be done more quickly:
-		//std::string smj(majorelem);
-		if (!isShort && minorelem != "") {
+		//std::string smj(mjrelem);
+		if (!isShort && mnrelem != "") {
 			smj.append(".");
 		}
-		smj.append(minorelem);
+		smj.append(mnrelem);
 		out.push_back(smj);
 
 	}
@@ -69,58 +66,51 @@ CharacterVector icd9MajMinToCode(const CharacterVector major,
 	return wrap(out);
 }
 
-//' @rdname convert
-//' @export
 // [[Rcpp::export]]
-CharacterVector icd9MajMinToShort(const CharacterVector major,
-		const CharacterVector minor) {
+CharacterVector icd9MajMinToShortShim(const CharacterVector mjr,
+		const CharacterVector mnr) {
 #ifdef ICD9_DEBUG
-	Rcout << "icd9MajMinToShort: major.size() = " << major.size()
-			<< " and minor.size() = " << minor.size() << "\n";
+	Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
+	<< " and mnr.size() = " << mnr.size() << "\n";
 #endif
-	if ((major.size() != 1 && major.size() != minor.size())
-			|| (major.size() == 1 && minor.size() == 0)) {
-		Rcpp::stop(
-				"icd9MajMinToShort, length of majors and minors must be equal.");
+	if ((mjr.size() != 1 && mjr.size() != mnr.size())
+			|| (mjr.size() == 1 && mnr.size() == 0)) {
+		Rcpp::stop("icd9MajMinToShort, length of mjrs and mnrs must be equal.");
 	}
-	if (major.size() == 1) {
+	if (mjr.size() == 1) {
 #ifdef ICD9_DEBUG
-		Rcout << "icd9MajMinToShort: major.size() = 1\n";
+		Rcout << "icd9MajMinToShort: mjr.size() = 1\n";
 #endif
-		CharacterVector newmajor(minor.size(), major[0]);
-		return icd9MajMinToCode(newmajor, minor, true);
+		CharacterVector newmjr(mnr.size(), mjr[0]);
+		return icd9MajMinToCodeShim(newmjr, mnr, true);
 	}
-	return icd9MajMinToCode(major, minor, true);
+	return icd9MajMinToCodeShim(mjr, mnr, true);
 }
 
-//' @rdname convert
-//' @export
 // [[Rcpp::export]]
-CharacterVector icd9MajMinToDecimal(const CharacterVector major,
-		const CharacterVector minor) {
-	return icd9MajMinToCode(major, minor, false);
+CharacterVector icd9MajMinToDecimalShim(const CharacterVector mjr,
+		const CharacterVector mnr) {
+	return icd9MajMinToCodeShim(mjr, mnr, false);
 }
 
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9PartsToShort(const List parts) {
-	return icd9MajMinToCode(parts["major"], parts["minor"], true);
+	return icd9MajMinToCodeShim(parts["major"], parts["minor"], true);
 }
 
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9PartsToDecimal(const List parts) {
-	return icd9MajMinToCode(parts["major"], parts["minor"], false);
+	return icd9MajMinToCodeShim(parts["major"], parts["minor"], false);
 }
 
-//' @rdname convert
-//' @export
 // [[Rcpp::export]]
-List icd9MajMinToParts(const CharacterVector major,
-		const CharacterVector minor) {
-	List returned_frame = List::create(_["major"] = major, _["minor"] = minor);
+List icd9MajMinToPartsShim(const CharacterVector mjr,
+		const CharacterVector mnr) {
+	List returned_frame = List::create(_["major"] = mjr, _["minor"] = mnr);
 
 	// TODO: can do this with lists, ?no need for a data frame
 	StringVector sample_row = returned_frame(0);
@@ -131,11 +121,10 @@ List icd9MajMinToParts(const CharacterVector major,
 	return returned_frame;
 }
 
-// this is even faster, but loses some useful data frame features which cause test failure
 // [[Rcpp::export]]
-List icd9MajMinToParts_list(const CharacterVector major,
-		const CharacterVector minor) {
-	List out = List::create(_["major"] = major, _["minor"] = minor);
+List icd9MajMinToParts_listShim(const CharacterVector mjr,
+		const CharacterVector mnr) {
+	List out = List::create(_["major"] = mjr, _["minor"] = mnr);
 	return out;
 }
 
@@ -145,12 +134,12 @@ List icd9MajMinToParts_list(const CharacterVector major,
 List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 		"") {
 
-	CharacterVector major(icd9Short.size());
-	CharacterVector minor(icd9Short.size());
+	CharacterVector mjr(icd9Short.size());
+	CharacterVector mnr(icd9Short.size());
 
 	for (int i = 0; i < icd9Short.size(); ++i) {
 		if (CharacterVector::is_na(icd9Short[i])) {
-			minor[i] = NA_STRING;
+			mnr[i] = NA_STRING;
 			continue;
 		}
 
@@ -162,17 +151,17 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 			case 1:
 			case 2:
 			case 3:
-				major[i] = s.substr(0, s.size());
-				minor[minorEmpty];
+				mjr[i] = s.substr(0, s.size());
+				mnr[minorEmpty];
 				continue;
 			case 4:
 			case 5:
-				major[i] = s.substr(0, 3);
-				minor[i] = s.substr(3, s.size() - 3);
+				mjr[i] = s.substr(0, 3);
+				mnr[i] = s.substr(3, s.size() - 3);
 				continue;
 			default:
-				major[i] = NA_STRING;
-				minor[i] = NA_STRING;
+				mjr[i] = NA_STRING;
+				mnr[i] = NA_STRING;
 				continue;
 			}
 		} else { // E code
@@ -181,23 +170,23 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 			case 2:
 			case 3:
 			case 4:
-				major[i] = s.substr(0, s.size());
-				minor[i] = minorEmpty;
+				mjr[i] = s.substr(0, s.size());
+				mnr[i] = minorEmpty;
 				break;
 			case 5:
-				major[i] = s.substr(0, 4);
-				minor[i] = s.substr(4, 1);
+				mjr[i] = s.substr(0, 4);
+				mnr[i] = s.substr(4, 1);
 				break;
 			default:
-				major[i] = NA_STRING;
-				minor[i] = NA_STRING;
+				mjr[i] = NA_STRING;
+				mnr[i] = NA_STRING;
 				continue;
 			}
 		} // E code
-		  //major[i] = icd9AddLeadingZeroesMajorSingle(major[i]); // or loop through them all again...
+		  //mjr[i] = icd9AddLeadingZeroesmjrSingle(mjr[i]); // or loop through them all again...
 	} // for
 
-	return icd9MajMinToParts(icd9AddLeadingZeroesMajor(major), minor);
+	return icd9MajMinToPartsShim(icd9AddLeadingZeroesMajorShim(mjr), mnr);
 }
 
 //' @rdname convert
@@ -205,8 +194,8 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 // [[Rcpp::export]]
 List icd9DecimalToParts(const CharacterVector icd9Decimal,
 		const String minorEmpty = "") {
-	CharacterVector majors;
-	CharacterVector minors;
+	CharacterVector mjrs;
+	CharacterVector mnrs;
 	int ilen = icd9Decimal.length();
 
 	if (ilen == 0) {
@@ -218,27 +207,27 @@ List icd9DecimalToParts(const CharacterVector icd9Decimal,
 			it != icd9Decimal.end(); ++it) {
 		String strna = *it;
 		if (strna == NA_STRING || strna == "") {
-			majors.push_back(NA_STRING);
-			minors.push_back(NA_STRING);
+			mjrs.push_back(NA_STRING);
+			mnrs.push_back(NA_STRING);
 			continue;
 		}
 		std::string thiscode = as<std::string>(*it); // Rcpp::String doesn't implement many functions.
 		thiscode = strimCpp(thiscode); // TODO: update in place.
 		std::size_t pos = thiscode.find(".");
 		// substring parts
-		std::string majorin;
-		String minorout;
+		std::string mjrin;
+		String mnrout;
 		if (pos != std::string::npos) {
-			majorin = thiscode.substr(0, pos);
-			minorout = thiscode.substr(pos + 1);
+			mjrin = thiscode.substr(0, pos);
+			mnrout = thiscode.substr(pos + 1);
 		} else {
-			majorin = thiscode;
-			minorout = minorEmpty;
+			mjrin = thiscode;
+			mnrout = minorEmpty;
 		}
-		majors.push_back(icd9AddLeadingZeroesMajorSingle(majorin));
-		minors.push_back(minorout);
+		mjrs.push_back(icd9AddLeadingZeroesMajorSingleShim(mjrin));
+		mnrs.push_back(mnrout);
 	}
-	return List::create(_["major"] = majors, _["minor"] = minors);
+	return List::create(_["major"] = mjrs, _["minor"] = mnrs);
 }
 
 //' @rdname convert

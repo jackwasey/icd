@@ -35,7 +35,11 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 	const int approx_cmb_per_visit = 15; // just an estimate
 	int vlen = Rf_length(icds); // or vsexp
 
+#if defined(ICD9_DEBUG) && defined(_GLIBCXX_UNORDERED_MAP)
+	Rcout << "unordered_map is available\n";
+#endif
 	VisLk vis_lookup;
+
 
 	//vcdb.reserve(vlen / (approx_cmb_per_visit / 5)); // over-estimate total size
 	//vcdb.reserve(vlen); // over-estimate total size to maximum possible length
