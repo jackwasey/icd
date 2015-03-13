@@ -72,11 +72,11 @@ CharacterVector icd9ExpandMinor(std::string minor, bool isE = false) {
         case '7':        return v7;
         case '8':        return v8;
         case '9':        return v9;
-        default:        Rf_error("unrecognized minor character"); return CharacterVector::create();
+        default:        Rcpp::stop("unrecognized minor character"); return CharacterVector::create();
       }
       break;
       case 2: return wrap(minor);
-      default: Rf_error("minor of >2 characters received by icd9ExpandMinor"); return CharacterVector::create();
+      default: Rcpp::stop("minor of >2 characters received by icd9ExpandMinor"); return CharacterVector::create();
     }
   } else {
     // is E code, so minor is just one character

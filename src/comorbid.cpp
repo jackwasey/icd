@@ -56,7 +56,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 	Rcpp::Rcout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif
 	if (TYPEOF(vsexp) != STRSXP)
-		Rf_error("expecting vsexp to be character vector");
+		Rcpp::stop("expecting vsexp to be character vector");
 	UNPROTECT(1); // vsexp not used further
 
 #ifdef ICD9_DEBUG_SETUP

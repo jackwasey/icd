@@ -16,7 +16,7 @@
 //#include <algorithm>
 #include <vector>
 #include <set>
-#include <tr1/unordered_map>
+#include <unordered_map>
 
 extern "C" {
 #include "cutil.h"
@@ -50,7 +50,7 @@ typedef std::vector<char> ComorbidOut; // TODO: someday benchmark int vs char (o
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
-typedef std::tr1::unordered_map<std::string, VecInt::size_type> VisLk;
+typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
