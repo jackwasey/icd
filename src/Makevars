@@ -1,8 +1,8 @@
 CXX_STD = CXX11
 
 PKG_CPPFLAGS = -I.
-PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS) $(CXX1XSTD)
-PKG_CFLAGS = $(SHLIB_OPENMP_CFLAGS)
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS) $(CXX1XSTD) -mtune=native
+PKG_CFLAGS = $(SHLIB_OPENMP_CFLAGS) -mtune=native
 PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS)
 
-#CXX_STD = CXX11 # this trashes CXX in my personal Makevars preventing me using clang?
+#CXX_STD = CXX11 # note that this trashes my choice of compiler reverting to g++ instead of clang
