@@ -10,18 +10,18 @@ using namespace Rcpp;
 CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 		const VecStr &visitIds) {
 #ifdef ICD9_DEBUG_TRACE
-	std::cout << "visitIds = ";
+	Rcpp::Rcout << "visitIds = ";
 	printIt(visitIds);
 #endif
 	VecStr::size_type distinct_visits = ragged.size();
 	CharacterVector out(distinct_visits * max_per_pt, NA_STRING); // optionally default empty strings? NA? User can do this for now.
 #ifdef ICD9_DEBUG
 			if (distinct_visits==0) {
-				std::cout << "no visits. returning blank data\n";
+				Rcpp::Rcout << "no visits. returning blank data\n";
 				return CharacterVector::create();
 			}
 			if (distinct_visits != visitIds.size()) {
-				std::cout << "visit and ragged sizes differ. visits = " << visitIds.size() << ", ragged size = " << distinct_visits << ": returning blank data\n";
+				Rcpp::Rcout << "visit and ragged sizes differ. visits = " << visitIds.size() << ", ragged size = " << distinct_visits << ": returning blank data\n";
 				return CharacterVector::create();
 			}
 #endif
@@ -35,11 +35,11 @@ CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 		}
 	}
 #ifdef ICD9_DEBUG
-	std::cout << "writing dimensions\n";
+	Rcpp::Rcout << "writing dimensions\n";
 #endif
 	out.attr("dim") = Dimension(distinct_visits, max_per_pt); // set dimensions in reverse (row major for parallel step)
 #ifdef ICD9_DEBUG
-			std::cout << "writing labels\n";
+			Rcpp::Rcout << "writing labels\n";
 #endif
 	CharacterVector nonames;
 	rownames(out) = wrap(visitIds);
@@ -62,7 +62,7 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 	if (TYPEOF(vsexp) != STRSXP)
 		Rcpp::stop("need string input to longToRagged\n");
 #ifdef ICD9_DEBUG
-	std::cout << "longToRagged SEXP is STR\n";
+	Rcpp::Rcout << "longToRagged SEXP is STR\n";
 #endif
 
 	const char* lastVisitId = "";
