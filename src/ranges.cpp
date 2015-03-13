@@ -97,7 +97,8 @@ CharacterVector icd9ExpandMinorShim(std::string mnr, bool isE = false) {
 					"6", "7", "8", "9");
 		case 1:
 			return mnr;
-			//default:      std::cout << "too many characters in E code minor part\n";
+		default:
+			Rcpp::stop("too many characters in E code minor part\n");
 		}
 	}
 	return (NA_STRING); // should never get here
