@@ -1,5 +1,5 @@
 ## Resubmission
-* removed tr1/unordered_map include, replaced with flags per Writing R Extensions, with test for C++11 and use of unordered_map or map depending on availability.
+* removed tr1/unordered_map include, replaced with Makevars C++11 flags per Writing R Extensions 1.2.4, and tested for C++11 before choice of std::unordered_map or std::map depending on availability.
 
 ## Test environments
 * Ubuntu 14.10 R 3.1.3, clang and gcc

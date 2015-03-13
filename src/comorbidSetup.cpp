@@ -23,13 +23,12 @@ void buildMap(const List& icd9Mapping, VecVecInt& map) {
 #endif
 }
 
-// R CMD INSTALL --no-build-vignettes icd9 && R -d gdb -e "library(icd9);  mydf <- data.frame(visitId = c('a','b'), icd9=c('1','2')); icd9Comorbid(mydf, ahrqComorbid)"
+// R CMD INSTALL --no-build-vignettes icd9 && R -d gdb -e "library(icd9);x<-data.frame(visitId=c('a','b'),icd9=c('1','2'));icd9ComorbidAhrq(x)"
 
 // icd9 codes always strings. visitId may be factor or integer, but ultimately it becomes a string vector (as matrix row names)
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
 		const bool aggregate = true) {
-	// TODO: ?allocate as well, or are we just getting refs here???
 	SEXP icds = PROTECT(getRListOrDfElement(icd9df, icd9Field.c_str()));
 	SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 	const int approx_cmb_per_visit = 15; // just an estimate
@@ -40,10 +39,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 #endif
 	VisLk vis_lookup;
 
-
-	//vcdb.reserve(vlen / (approx_cmb_per_visit / 5)); // over-estimate total size
-	//vcdb.reserve(vlen); // over-estimate total size to maximum possible length
-	vcdb.resize(vlen); // over-estimate and allocate all at once
+	vcdb.resize(vlen); // over-estimate and allocate all at once (alternative is to reserve)
 	VecVecIntSz vcdb_max_idx = -1; // we increment immediately to zero as first index
 	VecVecIntSz vcdb_new_idx;
 	VecVecIntSz vcdb_last_idx = 2094967295; // random number less than 2^31 (to avoid 32bit R build warning) just to initialize: should always been initialized, though.
@@ -69,7 +65,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 			// assume new visitId unless aggregating
 			vcdb_new_idx = vcdb_max_idx + 1;
 			if (aggregate) { // only use unordered_map if aggregating
-				VisLk::iterator found = vis_lookup.find(vi);
+				VisLk::iterator found = vis_lookup.find(vi); // TODO make const?
 				if (found != vis_lookup.end()) {
 					vcdb[found->second].push_back(n);
 #ifdef ICD9_DEBUG_SETUP_TRACE
