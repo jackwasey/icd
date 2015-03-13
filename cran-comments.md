@@ -1,3 +1,6 @@
+## Resubmission
+* removed tr1/unordered_map include, replaced with flags per Writing R Extensions, with test for C++11 and use of unordered_map or map depending on availability.
+
 ## Test environments
 * Ubuntu 14.10 R 3.1.3, clang and gcc
 * Ubuntu 12.04 (on travis-ci) R 3.1.2

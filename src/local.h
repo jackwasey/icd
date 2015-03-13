@@ -16,7 +16,6 @@
 //#include <algorithm>
 #include <vector>
 #include <set>
-#include <unordered_map>
 
 extern "C" {
 #include "cutil.h"
@@ -50,7 +49,12 @@ typedef std::vector<char> ComorbidOut; // TODO: someday benchmark int vs char (o
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
+#ifdef _GLIBCXX_UNORDERED_MAP
+#include <unordered_map>
 typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
+#else
+typedef std::map<std::string, VecInt::size_type> VisLk;
+#endif
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
