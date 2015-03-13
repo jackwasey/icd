@@ -185,6 +185,9 @@ test_that("icd9ExpandMinor: invalid", {
   expect_error(icd9ExpandMinor(c(1, 2), isE = TRUE))
   expect_error(icd9ExpandMinor("JACK"), isE = TRUE)
   expect_error(icd9ExpandMinor(c(123), isE = TRUE))
+  expect_error(icd9ExpandMinor("00", isE = TRUE))
+  expect_error(icd9ExpandMinor("E0000", isE = TRUE))
+  expect_error(icd9ExpandMinor("99", isE = TRUE))
 })
 
 test_that("icd9ExpandMinor: valid", {
@@ -192,7 +195,6 @@ test_that("icd9ExpandMinor: valid", {
   expect_equal(length(icd9ExpandMinor("", isE = TRUE)), 11)
   expect_identical(icd9ExpandMinor("00", isE = FALSE), "00")
   expect_identical(icd9ExpandMinor("9", isE = FALSE), as.character(c(9, 90:99)))
-  expect_equal(icd9ExpandMinor("00", isE = TRUE), NA_character_)
   expect_identical(icd9ExpandMinor("9", isE = TRUE), "9")
 
   expect_equal(icd9ExpandMinor("0", isE = TRUE), "0")
