@@ -10,8 +10,13 @@
 
 ## R CMD check results
 
-There are three notes:
- 
+There are four notes:
+
+ checking CRAN incoming feasibility ... NOTE
+ Days since last update: 3
+
+ This initial submission was in the end was not accepted, hence this resubmission.
+
  Possibly mis-spelled words in DESCRIPTION:
   AHRQ (9:62)
   Comorbidities (2:56)
