@@ -1,7 +1,8 @@
-CXX_STD = CXX11
+# CXX_STD = CXX11
+# PKG_CXXFLAGS += $(CXX1XSTD) # on hold until CRAN will accept this (or I figured out how to write a configure script to generate this Makefile)
 
 PKG_CPPFLAGS = -I.
-PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS) $(CXX1XSTD)
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
 PKG_CFLAGS = $(SHLIB_OPENMP_CFLAGS)
 PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS)
 

@@ -34,7 +34,6 @@ extern "C" {
 #define ICD9_OPENMP
 #endif
 
-// enable linux performance counting
 #ifdef ICD9_VALGRIND
 #include <valgrind/callgrind.h>
 #endif
@@ -44,17 +43,18 @@ typedef std::vector<Str> VecStr;
 
 typedef std::vector<int> VecInt;
 typedef std::vector<char> ComorbidOut; // TODO: someday benchmark int vs char (or possibly Boost bitset)
-// vector<bool> dangerous with multiple threads, and note that char doesn't cast to bool with Rcpp
+// vector<bool> dangerous with multiple threads, and note that char doesn't cast to bool (directly) with Rcpp, yet.
 
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
-#ifdef _GLIBCXX_UNORDERED_MAP
-#include <unordered_map>
-typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
-#else
+//#if defined(_GLIBCXX_UNORDERED_MAP) && defined(__GXX_EXPERIMENTAL_CXX0X__)
+//#define ICD9_UNORDERED_MAP
+//#include <unordered_map>
+//typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
+//#else
 typedef std::map<std::string, VecInt::size_type> VisLk;
-#endif
+//#endif
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,

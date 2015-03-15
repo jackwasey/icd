@@ -34,9 +34,9 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 	const int approx_cmb_per_visit = 15; // just an estimate
 	int vlen = Rf_length(icds); // or vsexp
 
-#if defined(ICD9_DEBUG) && defined(_GLIBCXX_UNORDERED_MAP)
-	Rcout << "unordered_map is available\n";
-#endif
+//#if defined(ICD9_DEBUG) && defined(ICD9_UNORDERED_MAP)
+//	Rcout << "unordered_map is available\n";
+//#endif
 	VisLk vis_lookup;
 
 	vcdb.resize(vlen); // over-estimate and allocate all at once (alternative is to reserve)
@@ -64,7 +64,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 		if (lastVisitId != vi) {
 			// assume new visitId unless aggregating
 			vcdb_new_idx = vcdb_max_idx + 1;
-			if (aggregate) { // only use unordered_map if aggregating
+			if (aggregate) { // only use map if aggregating
 				VisLk::iterator found = vis_lookup.find(vi); // TODO make const?
 				if (found != vis_lookup.end()) {
 					vcdb[found->second].push_back(n);
