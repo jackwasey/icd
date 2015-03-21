@@ -61,7 +61,7 @@ Consistent with other functions in this package, this function allows for
 \examples{
 mydf <- data.frame(visitId = c("a", "b", "c"),
                    icd9 = c("441", "412.93", "044.9"))
-cmb <- icd9ComorbidQuanElix(mydf, isShort = FALSE, applyHierarchy = TRUE)
+cmb <- icd9ComorbidQuanElix(mydf, isShort = FALSE, applyHierarchy = TRUE, return.df=TRUE)
 cmb
 icd9VanWalraven(mydf, isShort = FALSE)
 icd9VanWalraven(mydf, isShort = FALSE, return.df = TRUE)

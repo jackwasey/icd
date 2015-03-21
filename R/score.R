@@ -228,7 +228,7 @@ icd9CountWide <- function(x,
 #' @examples
 #' mydf <- data.frame(visitId = c("a", "b", "c"),
 #'                    icd9 = c("441", "412.93", "044.9"))
-#' cmb <- icd9ComorbidQuanElix(mydf, isShort = FALSE, applyHierarchy = TRUE)
+#' cmb <- icd9ComorbidQuanElix(mydf, isShort = FALSE, applyHierarchy = TRUE, return.df=TRUE)
 #' cmb
 #' icd9VanWalraven(mydf, isShort = FALSE)
 #' icd9VanWalraven(mydf, isShort = FALSE, return.df = TRUE)
@@ -238,7 +238,7 @@ icd9VanWalraven <- function(x, visitId = NULL,
                          return.df = FALSE,
                          stringsAsFactors = getOption("stringsAsFactors"),
                          ...)
-  UseMethod("icd9Charlson")
+  UseMethod("icd9VanWalraven")
 
 #' @describeIn icd9VanWalraven van Walraven scores from data frame of visits and ICD-9 codes
 #' @export
@@ -269,13 +269,13 @@ icd9VanWalraven.data.frame <- function(x, visitId = NULL,
 #' @export
 icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
   stopifnot(is.data.frame(x) || is.matrix(x))
-  stopifnot(ncol(x) - is.data.frame(x) == 31)
+  stopifnot(ncol(x) - is.data.frame(x) == 30)
   weights <- c(7,5,-1,4,2,0,7,6,3,0,0,0,5,11,0,0,
                9,12,4,0,3,-4,6,5,-2,-2,0,-7,0,-3)
 
   if (applyHierarchy) {
     x[,"DM"] <- x[, "DM"] & !x[, "DMcx"]
-    x[, "Tumor"] <- x[, "TUmor"] & !x[, "Mets"]
+    x[, "Tumor"] <- x[, "Tumor"] & !x[, "Mets"]
   } else {
     stopifnot(!any(x[, "DM"] & x[, "DMcx"]))
     stopifnot(!any(x[, "Tumor"] & x[, "Mets"]))
