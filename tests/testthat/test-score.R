@@ -200,3 +200,47 @@ test_that("count wide directly (old func) same as reshape count", {
   expect_equivalent(icd9CountWide(widedf),
                     icd9Count(icd9WideToLong(widedf)))
 })
+
+test_that("icd9VanWalravenComorbid score calculation", {
+  mydf <- data.frame(visitId = "a", icd9 = "250.0")
+  comorbids <- icd9ComorbidQuanElix(mydf, isShort = FALSE, return.df = TRUE)
+  set.seed(123)
+  # Fill a QuanElix comorbidity data frame with random data
+  comorbids <- rbind(comorbids, data.frame(
+    visitId = letters[2:10], matrix(runif((ncol(comorbids) - 1) * 9) > 0.7,
+                                    ncol=ncol(comorbids) - 1,
+                                    dimnames = list(character(0), names(comorbids[2:18]))
+    )
+  )
+  )
+  c2.inv <- cbind(t(comorbids[2,2:30]),
+                  c(7,5,-1,4,2,0,7,6,3,0,0,0,5,11,0,0,
+                    9,12,4,0,3,-4,6,5,-2,-2,0,-7,0,-3))
+  expect_equivalent(
+    icd9VanWalravenComorbid(comorbids, applyHierarchy = TRUE)[2],
+    sum(apply(c2.inv,1,prod))
+  )
+})
+
+test_that("icd9VanWalraven comodbidity index and score", {
+  mydf <- data.frame(id=c(rep(1,20),rep(2,20),rep(3,18)),
+                     value=c("324.1", "285.9", "599.70", "038.9", "278.00", "38.97",
+                             "V88.01", "112.0", "427.89", "790.4", "401.9", "53.51", "584.9",
+                             "415.12", "995.91", "996.69", "83.39", "V46.2", "V58.61", "276.69",
+                             "515", "V14.6", "784.0", "V85.1", "427.31", "V85.44", "300",
+                             "86.28", "569.81", "041.49", "486", "45.62", "V15.82", "496",
+                             "261", "280.9", "275.2", "96.59", "V49.86", "V10.42", "276.8",
+                             "710.4", "311", "041.12", "276.0", "790.92", "518.84", "552.21",
+                             "V85.41", "278.01", "V15.82", "96.72", "070.70", "285.29", "276.3",
+                             "V66.7", "272.4", "790.92"))
+  expect_equivalent(icd9VanWalraven(mydf, visitId="id", icd9Field="value",return.df=FALSE),
+                    icd9VanWalravenComorbid(
+                      icd9ComorbidQuanElix(mydf,visitId="id", icd9Field="value",return.df=TRUE)))
+  expect_equivalent(icd9VanWalraven(mydf, visitId="id", icd9Field="value",return.df=TRUE),
+                    structure(list(visitId = c("1", "2", "3"),
+                                   vanWalraven = c(10, 12, -2)),
+                              .Names = c("id", "vanWalraven"),
+                              row.names = c("1","2","3"),
+                              class = "data.frame"))
+  expect_equal(icd9VanWalraven(mydf, visitId="id", icd9Field="value",return.df=FALSE), c(10,12,-2))
+})
