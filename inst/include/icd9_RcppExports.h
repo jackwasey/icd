@@ -24,7 +24,7 @@ namespace icd9 {
         }
     }
 
-    inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId = "visitId", const std::string icd9Field = "icd9", const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true) {
+    inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true) {
         typedef SEXP(*Ptr_icd9ComorbidShortCpp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortCpp p_icd9ComorbidShortCpp = NULL;
         if (p_icd9ComorbidShortCpp == NULL) {
@@ -328,7 +328,7 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline CharacterVector icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId = "visitId", const std::string icd9Field = "icd9", bool aggregate = true) {
+    inline CharacterVector icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate = true) {
         typedef SEXP(*Ptr_icd9LongToWideCpp)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9LongToWideCpp p_icd9LongToWideCpp = NULL;
         if (p_icd9LongToWideCpp == NULL) {

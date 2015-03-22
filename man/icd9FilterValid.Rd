@@ -4,15 +4,18 @@
 \alias{icd9FilterValid}
 \title{Filter ICD-9 codes by validity.}
 \usage{
-icd9FilterValid(icd9df, icd9Field = "icd9",
-  isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE)
+icd9FilterValid(icd9df, icd9Field = NULL, isShort = NULL, invert = FALSE)
 }
 \arguments{
 \item{icd9df}{data frame containing columns for visitId (which is the feault
 name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
-\item{icd9Field}{The column in the data frame which contains the ICD-9 codes.
-This is a character vector of length one.}
+\item{icd9Field}{The column in the data frame which contains the ICD codes.
+This is a character vector of length one. If it is \code{NULL}, \code{icd9}
+will attempt to guess the column name, looking for progressively less
+likely possibilities until it matche a single column. Failing this, it will
+take the first column in the data frame. Specifying the column using this
+argument avoids the guesswork.}
 
 \item{isShort}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this

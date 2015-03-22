@@ -63,20 +63,23 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 #' @export
 icd9Comorbid <- function(icd9df,
                          icd9Mapping,
-                         visitId = "visitId",
-                         icd9Field = "icd9",
+                         visitId = NULL,
+                         icd9Field = NULL,
                          isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
                          isShortMapping = icd9GuessIsShort(icd9Mapping),
                          return.df = FALSE, ...) {
+
+  visitId <- getVisitId(icd9df, visitId)
+  icd9Field <- getIcdField(icd9df, icd9Field)
+
   # TODO: allow factors for icd9df fields
   checkmate::assertDataFrame(icd9df, min.cols = 2)
   checkmate::assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
                         types = c("character", "factor"), names = "unique")
   checkmate::assertString(visitId)
-  checkmate::assertString(icd9Field)
   checkmate::assertFlag(isShort)
   checkmate::assertFlag(isShortMapping)
-  stopifnot(visitId %in% names(icd9df), icd9Field %in% names(icd9df))
+  stopifnot(visitId %in% names(icd9df))
 
   if (!isShort)
     icd9df[[icd9Field]] <- icd9DecimalToShort(icd9df[[icd9Field]])

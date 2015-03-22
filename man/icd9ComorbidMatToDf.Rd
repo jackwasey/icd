@@ -11,7 +11,9 @@ icd9ComorbidMatToDf(x, visitId = "visitId",
 \arguments{
 \item{x}{Matrix of comorbidities, with row and columns names defined}
 
-\item{visitId}{single character string to name the visitId column of returned data.frame. Default is "visitId".}
+\item{visitId}{Single character string with name for new column in output
+data frame. Everywhere else, \code{visitId} describes the input data, but
+here it is for output data.}
 
 \item{stringsAsFactors}{whether the resulting data frame should have strings,
 i.e. visitId converted to factor. Default is to follow the current session

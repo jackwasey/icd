@@ -15,11 +15,10 @@
 \alias{icd9ComorbiditiesQuanElixhauser}
 \title{find comorbidities from ICD-9 codes.}
 \usage{
-icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId = "visitId",
-  icd9Field = "icd9", threads = 8L, chunkSize = 256L, ompChunkSize = 1L,
-  aggregate = TRUE)
+icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
+  chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE)
 
-icd9Comorbid(icd9df, icd9Mapping, visitId = "visitId", icd9Field = "icd9",
+icd9Comorbid(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
   isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
   isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
 
@@ -60,10 +59,20 @@ fields, and squashing the hierarchy (see \code{applyHierarchy} below)}
 \item{visitId}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
 patients come leave and enter hospital with different ICD-9 codes. It is a
-character vector of length one. Defaults to "visitId"}
+character vector of length one. If left empty, or \code{NULL}, then an
+attempt is made to guess which field has the ID for the patient encounter
+(not a patient ID, although this can of course be specified directly). The
+guesses proceed until a single match is made. Data frames may be wide with
+many matching fields, so to avoid false positives, anything but a single
+match is rejected. If there are no successful guesses, and \code{visitId}
+was not specified, then the first column of the data frame is used.}
 
-\item{icd9Field}{The column in the data frame which contains the ICD-9 codes.
-This is a character vector of length one.}
+\item{icd9Field}{The column in the data frame which contains the ICD codes.
+This is a character vector of length one. If it is \code{NULL}, \code{icd9}
+will attempt to guess the column name, looking for progressively less
+likely possibilities until it matche a single column. Failing this, it will
+take the first column in the data frame. Specifying the column using this
+argument avoids the guesswork.}
 
 \item{aggregate}{single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.}
 

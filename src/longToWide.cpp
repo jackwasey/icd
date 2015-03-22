@@ -47,7 +47,7 @@ CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 }
 
 int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
-		const std::string visitId = "visitId", const std::string icd9Field =
+		const std::string visitId, const std::string icd9Field =
 				"icd9", bool aggregate = true) {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
@@ -108,8 +108,8 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 
 // [[Rcpp::export]]
 CharacterVector icd9LongToWideCpp(const SEXP& icd9df,
-		const std::string visitId = "visitId", const std::string icd9Field =
-				"icd9", bool aggregate = true) {
+		const std::string visitId, const std::string icd9Field,
+		bool aggregate = true) {
 
 	// a few options here. character matrix would make sense, but this can't be a factor. data frame harder to process on C++ side.
 	// Matrix easy to convert to data frame in R, if needed. Rows in output don't correspond to input, so no strong reason to preserve factors in any way.

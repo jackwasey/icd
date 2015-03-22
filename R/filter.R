@@ -5,10 +5,11 @@
 #' @template isShort
 #' @param invert single logical value, if TRUE will return invalid instead of valid rows.
 #' @export
-icd9FilterValid <- function(icd9df, icd9Field = "icd9",
-                            isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE) {
+icd9FilterValid <- function(icd9df, icd9Field = NULL,
+                            isShort =  NULL, invert = FALSE) {
+  icd9Field <- getIcdField(icd9df, icd9Field)
+  if (is.null(isShort)) isShort <- icd9GuessIsShort(icd9df[[icd9Field]])
   checkmate::assertDataFrame(icd9df, min.cols = 1, col.names = "named")
-  checkmate::assertString(icd9Field)
   checkmate::assertFlag(isShort)
   checkmate::assertFlag(invert)
   v <- icd9IsValid(icd9 = icd9df[[icd9Field]], isShort = isShort) != invert
@@ -22,8 +23,7 @@ icd9FilterValid <- function(icd9df, icd9Field = "icd9",
 #' @template isShort
 #' @param invert single logical value, if TRUE will return valid instead of invalid rows.
 #' @export
-icd9FilterInvalid <- function(icd9df, icd9Field = "icd9",
-                              isShort = icd9GuessIsShort(icd9df[[icd9Field]]), invert = FALSE)
+icd9FilterInvalid <- function(icd9df, icd9Field = NULL, isShort = NULL, invert = FALSE)
   icd9FilterValid(icd9df, icd9Field, isShort, invert = !invert)
 
 
@@ -43,18 +43,18 @@ icd9FilterInvalid <- function(icd9df, icd9Field = "icd9",
 #' library("magrittr", quietly = TRUE, warn.conflicts = FALSE)
 #' myData <- data.frame(
 #'   visitId = c("v1", "v2", "v3", "v4"),
-#'   icd9 = c("39891", "39790", "41791", "4401"),
+#'   diag = c("39891", "39790", "41791", "4401"),
 #'   poa = c("Y", "N", NA, "Y"),
 #'   stringsAsFactors = FALSE
 #' )
-#' myData %>% icd9FilterPoaNotNo() %>% icd9ComorbidAhrq(isShort = TRUE)
+#' myData %>% icd9FilterPoaNotNo() %>% icd9ComorbidAhrq
 #' # can fill out named fields also:
 #' myData %>% icd9FilterPoaYes(poaField="poa") %>%
-#'   icd9ComorbidAhrq(icd9Field = "icd9", visitId = "visitId")
+#'   icd9ComorbidAhrq(icd9Field = "diag", visitId = "visitId", isShort = TRUE)
 #' # can call the core icd9Comorbid function with an arbitrary mapping
 #' myData %>%
 #' icd9FilterPoaYes() %>%
-#' icd9Comorbid(icd9Field = "icd9", visitId = "visitId",
+#' icd9Comorbid(icd9Field = "diag", visitId = "visitId",
 #'   icd9Mapping = quanElixComorbid,
 #'  isShortMapping = TRUE)
 #' }

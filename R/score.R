@@ -198,17 +198,14 @@ icd9CountWide <- function(x,
   vec
 }
 
-
 #' @title Calculate van Walraven Elixhauser Score
 #' @rdname icd9VanWalraven
-#' @description van Walraven Elixhauser score is calculated in the basis of the Quan
-#'   revision of Elixhauser's ICD-9 mapping. Reference: van Walraven C, Austin PC, Jennings A,
-#'   Quan H, Forster AJ. A Modification to the Elixhauser Comorbidity Measures Into a Point
-#'   System for Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
-#' @details Consistent with other functions in this package, this function allows for
-#'   the heirarchical exlusion of less severe versions of comorbidities when their more
-#'   severe version is also present via the applyHeirarchy argument. For the Elixhauser
-#'   comorbidities, this is diabetes v. complex diabetes and solid tumor v. metastatic tumor
+#' @description van Walraven Elixhauser score is calculated from the Quan
+#'   revision of Elixhauser's ICD-9 mapping. This function allows for the
+#'   hierarchical exlusion of less severe versions of comorbidities when their
+#'   more severe version is also present via the applyHeirarchy argument. For
+#'   the Elixhauser comorbidities, this is diabetes v. complex diabetes and
+#'   solid tumor v. metastatic tumor
 #' @param x data frame containing a column of visit or patient identifiers, and
 #'   a column of ICD-9 codes. It may have other columns which will be ignored.
 #'   By default, the first column is the patient identifier and is not counted.
@@ -227,12 +224,20 @@ icd9CountWide <- function(x,
 #'   \code{icd9Field}, \code{applyHeirarchy}
 #' @examples
 #' mydf <- data.frame(visitId = c("a", "b", "c"),
-#'                    icd9 = c("441", "412.93", "044.9"))
-#' cmb <- icd9ComorbidQuanElix(mydf, isShort = FALSE, applyHierarchy = TRUE, return.df=TRUE)
-#' cmb
-#' icd9VanWalraven(mydf, isShort = FALSE)
-#' icd9VanWalraven(mydf, isShort = FALSE, return.df = TRUE)
+#'                    icd9 = c("412.93", "441", "044.9"))
+#'
+#' print(
+#'   cmb <- icd9ComorbidQuanElix(mydf, isShort = FALSE, applyHierarchy = TRUE, return.df=TRUE)
+#' )
 #' icd9VanWalravenComorbid(cmb)
+#'
+#' icd9VanWalraven(mydf)
+#' icd9VanWalraven(mydf, return.df = TRUE)
+#' @author wmurphyrd
+#' @references van Walraven C, Austin PC, Jennings A, Quan H, Forster AJ. A
+#'   Modification to the Elixhauser Comorbidity Measures Into a Point System for
+#'   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
+#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
 icd9VanWalraven <- function(x, visitId = NULL,
                          return.df = FALSE,
@@ -264,14 +269,14 @@ icd9VanWalraven.data.frame <- function(x, visitId = NULL,
 }
 
 #' @rdname icd9VanWalraven
-#' @param applyHierarchy single logical value, default is FALSE. If TRUE, will
-#'   drop DM if DMcx is present, etc.
+#' @param applyHierarchy single logical value, default is \code{FALSE}. If
+#'   \code{TRUE}, will drop DM if DMcx is present, etc.
 #' @export
 icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   stopifnot(ncol(x) - is.data.frame(x) == 30)
-  weights <- c(7,5,-1,4,2,0,7,6,3,0,0,0,5,11,0,0,
-               9,12,4,0,3,-4,6,5,-2,-2,0,-7,0,-3)
+  weights <- c(7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,
+               9, 12, 4, 0, 3, -4, 6, 5, -2, -2, 0, -7, 0, -3)
 
   if (applyHierarchy) {
     x[,"DM"] <- x[, "DM"] & !x[, "DMcx"]

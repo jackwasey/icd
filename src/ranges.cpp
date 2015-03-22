@@ -90,7 +90,7 @@ CharacterVector icd9ExpandMinorShim(std::string mnr, bool isE = false) {
 			return CharacterVector::create();
 		}
 	} else {
-		// is E code, so minor is just one character
+		// is E code, so minor must be just one character
 		switch (mnr.size()) {
 		case 0:
 			return CharacterVector::create("", "0", "1", "2", "3", "4", "5",
@@ -98,7 +98,7 @@ CharacterVector icd9ExpandMinorShim(std::string mnr, bool isE = false) {
 		case 1:
 			return mnr;
 		default:
-			Rcpp::stop("too many characters in E code minor part\n");
+			Rcpp::stop("too many characters for an E code minor part\n");
 		}
 	}
 	return (NA_STRING); // should never get here

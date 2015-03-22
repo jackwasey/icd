@@ -373,44 +373,44 @@ test_that("control params don't affect result of comorbid calc", {
     f[!is.na(f)]
   })
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 1, chunkSize=32),
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 1, chunkSize=32),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=32)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 2, chunkSize=32),
-    icd9ComorbidShortCpp(pts, ac, threads = 5, chunkSize=32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 2, chunkSize=32),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 5, chunkSize=32)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=1),
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=32)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize=upts)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts - 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize=upts)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize = upts + 1)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts - 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts + 1)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize = upts + 1),
-    icd9ComorbidShortCpp(pts, ac, threads = 4, chunkSize=upts)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts + 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize=upts)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts - 2, ompChunkSize = 1),
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts + 2, ompChunkSize = 1)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts - 2, ompChunkSize = 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts + 2, ompChunkSize = 1)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts - 2, ompChunkSize = 11),
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts + 2, ompChunkSize = 11)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts - 2, ompChunkSize = 11),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts + 2, ompChunkSize = 11)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts, ompChunkSize = 1),
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=upts, ompChunkSize = 11)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts, ompChunkSize = 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts, ompChunkSize = 11)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac),
-    icd9ComorbidShortCpp(pts, ac, threads = 3, chunkSize=3, ompChunkSize = 5) # primes < unique visits
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field"),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=3, ompChunkSize = 5) # primes < unique visits
   )
 })
 

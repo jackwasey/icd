@@ -16,8 +16,7 @@ using namespace Rcpp;
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
-		const std::string visitId = "visitId", const std::string icd9Field =
-				"icd9", const int threads = 8, const int chunkSize = 256,
+		const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunkSize = 256,
 		const int ompChunkSize = 1, bool aggregate = true) {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;

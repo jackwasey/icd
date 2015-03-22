@@ -187,14 +187,49 @@ read.zip.url <- function(url, filename = NULL, FUN = readLines, ...) {
 # EXCLUDE COVERAGE END
 
 getVisitId <- function(x, visitId = NULL) {
+  guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
+               "in.*enc", "out.*enc", "visit", "enc")
   checkmate::checkDataFrame(x, min.cols = 1, col.names = "named")
+
   if (is.null(visitId)) {
-    if (!any(names(x) == "visitId"))
+    for (guess in guesses) {
+      guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
+      if (length(guess_matched) == 1) {
+        visitId <- guess_matched
+        break
+      }
+    }
+    if (is.null(visitId))
       visitId <- names(x)[1]
-    else
-      visitId <- "visitId"
   }
   checkmate::assertString(visitId)
   stopifnot(visitId %in% names(x))
-  return(visitId)
+  visitId
+}
+
+# guess which field contains the (only) ICD code, in order of preference
+# case-insensitive regex. If there are zero or multiple matches, we move on down
+# the list, meaning some later possibilities are more or less specific regexes
+# than earlier ones.
+getIcdField <- function(x, icd9Field = NULL) {
+  guesses <- c("icd.?9", "icd.?9.?Code", "icd",
+               "diagnos", "diag.?code", "diag")
+  checkmate::checkDataFrame(x, min.cols = 1, col.names = "named")
+  if (is.null(icd9Field)) {
+    for (guess in guesses) {
+      guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
+      if (length(guess_matched) == 1) {
+        icd9Field <- guess_matched
+        break
+      }
+    }
+    if (is.null(icd9Field))
+      # still NULL so fallback to second column
+      icd9Field <- names(x)[2]
+    # TODO: look at contents of the data frame, although this evaluates a
+    # promise on potentially a big data frame
+  }
+  checkmate::assertString(icd9Field)
+  stopifnot(icd9Field %in% names(x))
+  icd9Field
 }

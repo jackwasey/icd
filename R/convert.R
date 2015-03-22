@@ -104,11 +104,8 @@ icd9WideToLong <- function(x,
 #'   This is a reasonably simple solution using built-in functions.
 #' @param icd9df data.frame of long-form data, one column for visitId and one
 #'   for ICD code
-#' @param visitId single character, if NULL will use "visitId" if exists,
-#'   otherwise the first column
-#' @param icd9Field single character string with name of column containing the
-#'   ICD codes. If left as NULL, the field is guessed to be the first matching
-#'   ICD or icd, and a warning is given if multiple columns match.
+#' @template visitid
+#' @template icd9field
 #' @param prefix character, default "icd_" to prefix new columns
 #' @param min.width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to
@@ -130,19 +127,22 @@ icd9WideToLong <- function(x,
 #' @keywords manip
 #' @export
 icd9LongToWide <- function(icd9df,
-                           visitId = "visitId",
-                           icd9Field = "icd9",
+                           visitId = NULL,
+                           icd9Field = NULL,
                            prefix = "icd_",
                            min.width = 0,
                            aggregate = TRUE,
                            return.df = FALSE) {
+
+  icd9Field <- getIcdField(icd9df, icd9Field)
+  visitId <- getVisitId(icd9df, visitId)
+
   checkmate::assertDataFrame(icd9df, col.names = "named")
-  checkmate::assertString(visitId)
-  checkmate::assertString(icd9Field)
   checkmate::assertString(prefix)
   checkmate::assertCount(min.width, na.ok = FALSE)
   checkmate::assertFlag(aggregate)
   checkmate::assertFlag(return.df)
+
   # we're now going to return a matrix
   icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
   if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
@@ -172,7 +172,9 @@ icd9LongToWide <- function(icd9df,
 #' @title convert matrix of comorbidities into data frame, preserving visitId
 #'   information
 #' @param x Matrix of comorbidities, with row and columns names defined
-#' @param visitId single character string to name the visitId column of returned data.frame. Default is "visitId".
+#' @param visitId Single character string with name for new column in output
+#'   data frame. Everywhere else, \code{visitId} describes the input data, but
+#'   here it is for output data.
 #' @param stringsAsFactors whether the resulting data frame should have strings,
 #'   i.e. visitId converted to factor. Default is to follow the current session
 #'   option.
