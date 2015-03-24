@@ -1,6 +1,7 @@
-# need to do this in autoconf: CXX_STD = CXX11
+# the following clobbers my choice of clang, and is unnecessary, since configure will add the right C++11 compiler flag itself.
+# CXX_STD = @CXX_STD@
 
-PKG_CFLAGS =  @HAVE_OPENMP@
-PKG_CXXFLAGS = -I.  @HAVE_OPENMP@
-PKG_LIBS =  
+PKG_CFLAGS = -fopenmp
+PKG_CXXFLAGS = -I. -fopenmp
+PKG_LIBS = -fopenmp 
 

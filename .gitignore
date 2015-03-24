@@ -15,3 +15,7 @@ src-i386
 src-x64
 .settings
 .DS_Store
+autom4te.cache
+config.log
+config.status
+aclocal.m4

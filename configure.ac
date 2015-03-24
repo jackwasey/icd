@@ -1,8 +1,9 @@
 AC_PREREQ([2.62])
-AC_INIT(icd9, [1.1], [jack@jackwasey.com])
-AC_CONFIG_SRCDIR([src])
-AC_CONFIG_HEADERS([src/config.h])
-AC_CONFIG_FILES([src/Makevars])
+AC_INIT(icd9)
+ICD9_SRC='src'
+AC_CONFIG_SRCDIR([$ICD9_SRC])
+# AC_CONFIG_HEADERS([$ICD9_SRC/config.h])
+AC_CONFIG_FILES([$ICD9_SRC/Makevars])
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -11,9 +12,11 @@ if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
   exit 1
 fi
-RBIN="${R_HOME}/bin/R"
-CC=`"${RBIN}" CMD config CC`;
-CFLAGS=`"${RBIN}" CMD config CFLAGS`
+R_BIN="${R_HOME}/bin/R"
+CC=`"${R_BIN}" CMD config CC`
+CPP=`"${R_BIN}" CMD config CPP`
+CFLAGS=`"${R_BIN}" CMD config CFLAGS`
+CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 LIBS="${PKG_LIBS}"
 
 # Checks for programs
@@ -27,10 +30,10 @@ AC_OPENMP
 # we also check that the actual package will work
 ac_pkg_openmp=no
 if test -n "${OPENMP_CFLAGS}"; then
-  AC_MSG_CHECKING([whether OpenMP will work in a package])
+  AC_MSG_CHECKING([OpenMP available, but does it work in a package])
   AC_LANG_CONFTEST(
   [AC_LANG_PROGRAM([[#include <omp.h>]], [[ return omp_get_num_threads (); ]])])
-  PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" "$RBIN" CMD SHLIB conftest.c 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && "$RBIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_pkg_openmp=yes
+  PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_pkg_openmp=yes
   AC_MSG_RESULT([${ac_pkg_openmp}])
 fi
 
@@ -47,8 +50,13 @@ AC_PROG_CXX
 AC_TYPE_SIZE_T
 
 # C++11, autoconf should determine the correct flags
-#AC_LANG([C++])
-AX_CXX_COMPILE_STDCXX_11
+AX_CXX_COMPILE_STDCXX_11(noext,optional)
+
+# CXX_STD=''
+# if test -n "${HAVE_CXX11}"; then
+#   AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
+#   CXX_STD='CXX11'
+# fi
+# AC_SUBST(CXX_STD)
 
 AC_OUTPUT
-

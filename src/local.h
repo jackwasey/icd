@@ -22,7 +22,7 @@ extern "C" {
 #include <cstdlib>
 }
 
-//#define ICD9_DEBUG
+#define ICD9_DEBUG
 //#define ICD9_DEBUG_TRACE
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
@@ -48,13 +48,13 @@ typedef std::vector<char> ComorbidOut; // TODO: someday benchmark int vs char (o
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
-//#if defined(_GLIBCXX_UNORDERED_MAP) && defined(__GXX_EXPERIMENTAL_CXX0X__)
-//#define ICD9_UNORDERED_MAP
-//#include <unordered_map>
-//typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
-//#else
+
+#ifdef _GLIBCXX_UNORDERED_MAP
+#include <unordered_map>
+typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
+#else
 typedef std::map<std::string, VecInt::size_type> VisLk;
-//#endif
+#endif
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,

@@ -34,9 +34,9 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 	const int approx_cmb_per_visit = 15; // just an estimate
 	int vlen = Rf_length(icds); // or vsexp
 
-//#if defined(ICD9_DEBUG) && defined(ICD9_UNORDERED_MAP)
-//	Rcout << "unordered_map is available\n";
-//#endif
+#ifdef  defined(ICD9_DEBUG) && defined(_GLIBCXX_UNORDERED_MAP)
+	Rcout << "unordered_map is available\n";
+#endif
 	VisLk vis_lookup;
 
 	vcdb.resize(vlen); // over-estimate and allocate all at once (alternative is to reserve)
@@ -49,9 +49,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "buildVisitCodes SEXP is STR\n";
 #endif
-	//visitIds.reserve(vlen / approx_cmb_per_visit);
-	//visitIds.reserve(vlen); // over reserve, consider resize and trim at end
-	visitIds.resize(vlen); // over reserve, consider resize and trim at end
+	visitIds.resize(vlen); // resize and trim at end, as alternative to reserve
 	const char* lastVisitId = "JJ94967295JJ"; // random
 	int n;
 	for (int i = 0; i != vlen; ++i) {
