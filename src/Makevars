@@ -3,5 +3,4 @@
 
 PKG_CFLAGS = -fopenmp
 PKG_CXXFLAGS = -I. -fopenmp -std=c++11
-PKG_LIBS = -fopenmp 
-
+PKG_LIBS = -fopenmp
