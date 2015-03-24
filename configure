@@ -622,6 +622,7 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+ICD9_CXX11
 HAVE_CXX11
 EGREP
 GREP
@@ -4049,6 +4050,7 @@ fi
 
 
 # C++11, autoconf should determine the correct flags
+# https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx_11.html
 
     ax_cxx_compile_cxx11_required=false
   ac_ext=cpp
@@ -4235,12 +4237,15 @@ $as_echo "#define HAVE_CXX11 1" >>confdefs.h
   fi
 
 
-# CXX_STD=''
-# if test -n "${HAVE_CXX11}"; then
-#   AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
-#   CXX_STD='CXX11'
-# fi
-# AC_SUBST(CXX_STD)
+ICD9_CXX11=''
+if test -n "${HAVE_CXX11}"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Have C++11, so set Makevars flag for R" >&5
+$as_echo_n "checking Have C++11, so set Makevars flag for R... " >&6; }
+  # ICD9_CXX11="AS_ESCAPE([${CXX1XSTD}])"
+  # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
+  ICD9_CXX11=${switch}
+fi
+
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

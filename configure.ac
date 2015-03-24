@@ -50,13 +50,16 @@ AC_PROG_CXX
 AC_TYPE_SIZE_T
 
 # C++11, autoconf should determine the correct flags
+# https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx_11.html
 AX_CXX_COMPILE_STDCXX_11(noext,optional)
 
-# CXX_STD=''
-# if test -n "${HAVE_CXX11}"; then
-#   AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
-#   CXX_STD='CXX11'
-# fi
-# AC_SUBST(CXX_STD)
+ICD9_CXX11=''
+if test -n "${HAVE_CXX11}"; then
+  AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
+  # ICD9_CXX11="AS_ESCAPE([${CXX1XSTD}])"
+  # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
+  ICD9_CXX11=${switch}
+fi
+AC_SUBST(ICD9_CXX11)
 
 AC_OUTPUT
