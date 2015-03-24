@@ -113,6 +113,12 @@ test_that("V code ranges", {
                c("V1009", "V101", "V1010", "V1011",
                  "V1012", "V1013", "V1014", "V1015",
                  "V1016", "V1017", "V1018", "V1019"))
+  # and with narrower top end
+  expect_equal(icd9ExpandRangeShort("V1009", "V1011", onlyReal = FALSE),
+               c("V1009", "V1010", "V1011"))
+  # but include those pesky parents when requested:
+  expect_true(all(c("V10", "V100") %in% icd9ExpandRangeShort("V099", "V1011", onlyReal = FALSE,
+                                                           excludeAmbiguousParent = FALSE)))
 
   # should fail despite end being 'longer' than start
   expect_error(icd9ExpandRangeShort("V10", " V1 "))
@@ -167,6 +173,40 @@ test_that("range bugs", {
   expect_equal("42.11" %i9da% "42.13", c("042.11", "042.12", "042.13"))
 })
 
+test_that("range doesn't include higher level parent github issue #14", {
+  # by default, any code returned in a range should also have all of its
+  # children, if any, in the range (whether including or excluding non-real.
+  expect_false("0101" %in% ("01006" %i9sa% "01010"))
+  # 0101 isn't billable itself
+  expect_false("0101" %in% ("01006" %i9s% "01010"))
+  # if real codes, then we can tolerate a higher level code if it is billable,
+  # e.g. 390 (no children)
+  expect_true("390" %in% ("389.9" %i9d% "390.1"))
+  # but not if we are looking at all possible codes. This is a subtle strange
+  # distinction. It is primarily of importance when expanding codes describing
+  # ICD to comorbodity mappings. We might want to either include all possible
+  # sub-codes, even if they are not (yet, or anymore) 'real'.
+  expect_false("390" %in% ("389.9" %i9da% "390.1"))
+  # and if range definitely covers the higher level code, re-affirm it is still in there:
+  expect_true("390" %in% ("389.9" %i9d% "391.1"))
+  expect_true("390" %in% ("389.9" %i9da% "391.1"))
+})
+
+test_that("ranges can include ambiguous parents, optionally", {
+  expect_true("0101" %in% (icd9ExpandRange("01006","01010", onlyReal = FALSE, excludeAmbiguousParent = FALSE)))
+  expect_false("0101" %in% (icd9ExpandRange("01006","01010", onlyReal = TRUE, excludeAmbiguousParent = FALSE)))
+  # if real codes, then we can tolerate a higher level code if it is billable,
+  # e.g. 390 (no children)
+  expect_true("390" %in% ("389.9" %i9d% "390.1"))
+  # but not if we are looking at all possible codes. This is a subtle strange
+  # distinction. It is primarily of importance when expanding codes describing
+  # ICD to comorbodity mappings. We might want to either include all possible
+  # sub-codes, even if they are not (yet, or anymore) 'real'.
+  expect_false("390" %in% ("389.9" %i9da% "390.1"))
+  # and if range definitely covers the higher level code, re-affirm it is still in there:
+  expect_true("390" %in% ("389.9" %i9d% "391.1"))
+  expect_true("390" %in% ("389.9" %i9da% "391.1"))
+})
 
 test_that("range abbrevs", {
   expect_identical(icd9ExpandRange("123", "123.6", isShort = FALSE, onlyReal = FALSE),

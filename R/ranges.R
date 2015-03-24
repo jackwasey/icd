@@ -53,28 +53,28 @@ icd9SortDecimal <- function(icd9Decimal) {
 #' # the following should give all codes in 428 EXCEPT "428",
 #' # and all codes upto 43014 EXCEPT 430 and 4301
 #' icd9ExpandRangeShort("4280 ", "43014")
+#' stopifnot(any(c("430", "4301") %nin% icd9ExpandRange("4280 ", "43014")))
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
 #' @template onlyReal
 #' @template isShort
+#' @param excludeAmbiguousParent single logical value, if \code{TRUE} (the default) the range returned will not include
 #' @family ICD-9 ranges
 #' @export
-icd9ExpandRange <- function(start, end, isShort, onlyReal = TRUE) {
-  checkmate::assertScalar(start) # i'll permit numeric but prefer char
-  checkmate::assertScalar(end)
-  checkmate::assertFlag(isShort)
-  checkmate::assertFlag(onlyReal)
-  if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal))
-  icd9ExpandRangeDecimal(start, end, onlyReal)
+icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)),
+                            onlyReal = TRUE, excludeAmbiguousParent = TRUE) {
+  if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal, excludeAmbiguousParent))
+  icd9ExpandRangeDecimal(start, end, onlyReal, excludeAmbiguousParent)
 }
 
 #' @rdname icd9ExpandRange
 #' @export
-icd9ExpandRangeShort <- function(start, end,
-                                 onlyReal = TRUE) {
+icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
+                                 excludeAmbiguousParent = TRUE) {
   checkmate::assertScalar(start) # i'll permit numeric but prefer char
   checkmate::assertScalar(end)
   checkmate::assertFlag(onlyReal)
+  checkmate::assertFlag(excludeAmbiguousParent)
   start <- icd9AddLeadingZeroesShort(trim(start))
   end <- icd9AddLeadingZeroesShort(trim(end))
 
@@ -112,9 +112,16 @@ icd9ExpandRangeShort <- function(start, end,
     # the preceding 3 digit.
 
     out <- lookup[si:ei]
+    tmp <- lookup[si:ei]
     # finally, drop any higher-level codes which would describe broader ranges
     # than specified. E.g. 1019 to 1021 should omit 102, but 1059 to 1079 should
-    # include 106.
+    # include 106. # github issue #14
+    if (excludeAmbiguousParent)
+      for (code in tmp) {
+        # this now does a lot of tests, slowing things down significantly.
+        if (!all(icd9ChildrenShort(code, onlyReal = onlyReal) %in% tmp))
+          out <- out[-which(out == code)]
+      }
     out
   }
 
@@ -155,7 +162,7 @@ icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
 
 #' @rdname icd9ExpandRange
 #' @export
-icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE) {
+icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE, excludeAmbiguousParent = TRUE) {
   icd9ShortToDecimal(
     icd9ExpandRangeShort(
       icd9DecimalToShort(start), icd9DecimalToShort(end),
