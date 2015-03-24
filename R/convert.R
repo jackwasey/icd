@@ -217,8 +217,8 @@ icd9ComorbidMatToDf <- function(x, visitId = "visitId",
 #' class(cmbdf)
 #' rownames(cmbdf)
 #' mat.out <- icd9ComorbidDfToMat(cmbdf)
-#' stopifnot(is.data.frame(mat.out))
-#' icd9ComorbidDfToMat(cmbdf)[, 1:4]
+#' stopifnot(is.matrix(mat.out))
+#' mat.out[, 1:4]
 #' @export
 icd9ComorbidDfToMat <- function(x, visitId = NULL,
                                 stringsAsFactors = getOption("stringsAsFactors")) {
