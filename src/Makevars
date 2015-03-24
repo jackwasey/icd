@@ -1,6 +1,0 @@
-# the following clobbers my choice of clang, and is unnecessary, since configure will add the right C++11 compiler flag itself.
-# CXX_STD = CXX11
-
-PKG_CFLAGS = -fopenmp
-PKG_CXXFLAGS = -I. -fopenmp -std=c++11
-PKG_LIBS = -fopenmp
