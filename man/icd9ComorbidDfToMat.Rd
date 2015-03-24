@@ -32,4 +32,13 @@ option.}
 convert matrix of comorbidities into data frame, preserving visitId
   information
 }
+\examples{
+longdf <- data.frame(visitId = c("a", "b", "b", "c"),
+    icd9 = c("441", "4424", "443", "441"))
+cmbdf <- icd9ComorbidElix(longdf, return.df = TRUE)
+class(cmbdf)
+rownames(cmbdf)
+is.data.frame(icd9ComorbidDfToMat(cmbdf))
+icd9ComorbidDfToMat(cmbdf)[, 1:4]
+}
 

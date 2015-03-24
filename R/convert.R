@@ -178,13 +178,25 @@ icd9LongToWide <- function(icd9df,
 #' @param stringsAsFactors whether the resulting data frame should have strings,
 #'   i.e. visitId converted to factor. Default is to follow the current session
 #'   option.
+#' @examples
+#' longdf <- data.frame(visitId = c("a", "b", "b", "c"),
+#'     icd9 = c("441", "4424", "443", "441"))
+#' mat <- icd9ComorbidElix(longdf)
+#' class(mat)
+#' typeof(mat)
+#' rownames(mat)
+#' df.out <- icd9ComorbidMatToDf(mat)
+#' stopifnot(is.data.frame(df.out))
+#' # output data frame has a factor for the visitId column
+#' stopifnot(identical(rownames(mat), as.character(df.out$visitId)))
+#' df.out[, 1:4]
 #' @export
 icd9ComorbidMatToDf <- function(x, visitId = "visitId",
                                 stringsAsFactors = getOption("stringsAsFactors")) {
-  checkmate::checkMatrix(x, min.rows = 1, min.cols = 1, row.names = TRUE, col.names = TRUE)
+  checkmate::checkMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
   checkmate::checkString(visitId)
   checkmate::checkFlag(stringsAsFactors)
-  out <- cbind(rownames(x), x, stringsAsFactors = stringsAsFactors)
+  out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors)
   names(out)[1] <- visitId
   out
 }
@@ -198,10 +210,19 @@ icd9ComorbidMatToDf <- function(x, visitId = "visitId",
 #' @param stringsAsFactors whether the resulting data frame should have strings,
 #'   i.e. visitId converted to factor. Default is to follow the current session
 #'   option.
+#' @examples
+#' longdf <- data.frame(visitId = c("a", "b", "b", "c"),
+#'     icd9 = c("441", "4424", "443", "441"))
+#' cmbdf <- icd9ComorbidElix(longdf, return.df = TRUE)
+#' class(cmbdf)
+#' rownames(cmbdf)
+#' mat.out <- icd9ComorbidDfToMat(cmbdf)
+#' stopifnot(is.data.frame(mat.out))
+#' icd9ComorbidDfToMat(cmbdf)[, 1:4]
 #' @export
 icd9ComorbidDfToMat <- function(x, visitId = NULL,
                                 stringsAsFactors = getOption("stringsAsFactors")) {
-  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = TRUE)
+  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
   checkmate::checkFlag(stringsAsFactors)
   visitId <- getVisitId(x, visitId)
 
