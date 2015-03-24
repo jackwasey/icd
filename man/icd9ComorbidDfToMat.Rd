@@ -38,7 +38,8 @@ longdf <- data.frame(visitId = c("a", "b", "b", "c"),
 cmbdf <- icd9ComorbidElix(longdf, return.df = TRUE)
 class(cmbdf)
 rownames(cmbdf)
-is.data.frame(icd9ComorbidDfToMat(cmbdf))
+mat.out <- icd9ComorbidDfToMat(cmbdf)
+stopifnot(is.data.frame(mat.out))
 icd9ComorbidDfToMat(cmbdf)[, 1:4]
 }
 

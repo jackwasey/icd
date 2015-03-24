@@ -32,7 +32,8 @@ typeof(mat)
 rownames(mat)
 df.out <- icd9ComorbidMatToDf(mat)
 stopifnot(is.data.frame(df.out))
-stopifnot(identical(rownames(mat), df.out$visitId))
+# output data frame has a factor for the visitId column
+stopifnot(identical(rownames(mat), as.character(df.out$visitId)))
 df.out[, 1:4]
 }
 
