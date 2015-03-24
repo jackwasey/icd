@@ -10,7 +10,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToCodeShim(const CharacterVector mjr,
 		const CharacterVector mnr, bool isShort) {
-#ifdef ICD9_DEBUG
+#ifdef ICD9_DEBUG_TRACE
 	Rcout << "icd9MajMinToCode\n";
 	if (mjr.size() != mnr.size())
 	Rcpp::stop("aborting because mjr and mnr lengths differ");
@@ -69,7 +69,7 @@ CharacterVector icd9MajMinToCodeShim(const CharacterVector mjr,
 // [[Rcpp::export]]
 CharacterVector icd9MajMinToShortShim(const CharacterVector mjr,
 		const CharacterVector mnr) {
-#ifdef ICD9_DEBUG
+#ifdef ICD9_DEBUG_TRACE
 	Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
 	<< " and mnr.size() = " << mnr.size() << "\n";
 #endif
@@ -78,7 +78,7 @@ CharacterVector icd9MajMinToShortShim(const CharacterVector mjr,
 		Rcpp::stop("icd9MajMinToShort, length of mjrs and mnrs must be equal.");
 	}
 	if (mjr.size() == 1) {
-#ifdef ICD9_DEBUG
+#ifdef ICD9_DEBUG_TRACE
 		Rcout << "icd9MajMinToShort: mjr.size() = 1\n";
 #endif
 		CharacterVector newmjr(mnr.size(), mjr[0]);

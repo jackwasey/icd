@@ -25,6 +25,7 @@ icd9.out
 .lintr
 .cproject
 .settings
+configure.scan
 config.status
 config.log
 autom4te.cache

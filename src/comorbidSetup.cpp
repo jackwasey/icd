@@ -34,8 +34,12 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 	const int approx_cmb_per_visit = 15; // just an estimate
 	int vlen = Rf_length(icds); // or vsexp
 
-#if defined(ICD9_DEBUG) && defined(_GLIBCXX_UNORDERED_MAP)
-	Rcout << "unordered_map is available\n";
+#ifdef ICD9_DEBUG
+#ifdef HAVE_CXX11
+	Rcout << "unordered_map is available (or at least C++11 is in some form)\n";
+#else
+	Rcout << "unordered_map is not available\n";
+#endif
 #endif
 	VisLk vis_lookup;
 

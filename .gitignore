@@ -19,3 +19,5 @@ autom4te.cache
 config.log
 config.status
 aclocal.m4
+configure.scan
+autoscan.log

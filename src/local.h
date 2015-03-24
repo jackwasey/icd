@@ -17,12 +17,14 @@
 #include <vector>
 #include <set>
 
+#include "config.h"
+
 extern "C" {
 #include "cutil.h"
 #include <cstdlib>
 }
 
-#define ICD9_DEBUG
+//#define ICD9_DEBUG
 //#define ICD9_DEBUG_TRACE
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
@@ -49,7 +51,8 @@ typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
 typedef VecVecInt::size_type VecVecIntSz;
 
-#ifdef _GLIBCXX_UNORDERED_MAP
+// use flag set by configure
+#ifdef HAVE_CXX11
 #include <unordered_map>
 typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
 #else

@@ -8,3 +8,6 @@
 .cproject
 .settings/
 *.gch
+Makevars
+config.h.in~
+config.h

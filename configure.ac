@@ -1,9 +1,8 @@
 AC_PREREQ([2.62])
 AC_INIT(icd9)
-ICD9_SRC='src'
-AC_CONFIG_SRCDIR([$ICD9_SRC])
-# AC_CONFIG_HEADERS([$ICD9_SRC/config.h])
-AC_CONFIG_FILES([$ICD9_SRC/Makevars])
+AC_CONFIG_SRCDIR([src])
+AC_CONFIG_HEADER([src/config.h:src/config.h.in])
+AC_CONFIG_FILES([src/Makevars])
 
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -48,18 +47,22 @@ AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADER_STDBOOL
 AC_PROG_CXX
 AC_TYPE_SIZE_T
+AC_C_INLINE
 
 # C++11, autoconf should determine the correct flags
 # https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx_11.html
 AX_CXX_COMPILE_STDCXX_11(noext,optional)
 
 ICD9_CXX11=''
+ICD9_CXX11_DEF=''
 if test -n "${HAVE_CXX11}"; then
   AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
   # ICD9_CXX11="AS_ESCAPE([${CXX1XSTD}])"
   # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
   ICD9_CXX11=${switch}
+  ICD9_CXX11_DEF=""
 fi
 AC_SUBST(ICD9_CXX11)
+AC_SUBST(ICD9_CXX11_DEF)
 
 AC_OUTPUT

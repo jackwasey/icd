@@ -1,9 +1,9 @@
-## Resubmission
-* now I better understand 1.2.1.1 of Writing R Extensions (specifically that adding the C++11 flag constitutes using a C++11 compiler), and given my current inability to write a configure script, this resubmission drops all C++11 code and flags.
+## Note
+* Thank you for comments on previous (failed) submission of version 1.1 about the need for configure script to test independently for OpenMP and C++11. This is now done. I realise this is a little soon after previous release, but it provides important speed improvements and bug fixes, and will be the last for a good while.
 
 ## Test environments
-* Ubuntu 14.10 R 3.1.3, clang and gcc
-* Ubuntu 12.04 (on travis-ci) R 3.1.2
+* Ubuntu 14.10 R 3.1.3, clang 3.7.0 and gcc 4.9.1
+* Ubuntu 12.04 (on travis-ci) R 3.1.3, gcc 4.6.3
 * Debian jessie in docker with UBSAN and clang, R 3.1.2
 * win-builder (R-devel 64 bit execution fails with hang in Rf_error(), discussed with Duncan Murdoch, likely toolchain/Rcpp interaction on win-builder)
 * Windows 7 64 bit R 3.1.3 with gcc from Rtools32
