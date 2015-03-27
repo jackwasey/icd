@@ -18,6 +18,7 @@ suppressWarnings({
     #library(knitr, warn.conflicts = FALSE) # for opts_chunk only
     library(icd9)
     library(magrittr)
+    library(xtable)
     })
   })
 
@@ -290,6 +291,24 @@ str(ahrqComorbid[1:5]) # first five of the original:
 str(ahrqStrict[1:5]) # and first five of the result:
 ```
 Note the much smaller numbers of codes in each group, now we have discarded all the ones which are not defined as diagnoses.
+
+### Which three-character ICD-9 codes have no subcodes
+The ICD-9-CM scheme is structured as follows:
+ - Chapter
+ - Sub-chapter
+ - Major part (3 digit codes)
+ - sub-division (1st decimal place)
+ - sub-sub-division (2nd decimal place)
+ 
+ For most combinations of 0 to 9, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
+```{r "find three digit billable"}
+allreal <- icd9::icd9Hierarchy[["icd9"]]
+# select the non-V and non-E codes with three characters (zeroes already prefixed)
+threedigitreal <- allreal[nchar(allreal) == 3 & icd9IsN(allreal)]
+# display
+threedigitdf <- data.frame(icd9 = threedigitreal,  description = icd9Explain(threedigitreal))
+print(threedigitdf[1:10, ], row.names = FALSE)
+```
 
 ## Conclusion
 

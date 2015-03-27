@@ -261,7 +261,7 @@ icd9GenerateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), do
   icd9VShortReal <- grep("V", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
   icd9EShortReal <- grep("E", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
 
-  # some very quick sanity checks: (duplicate in a test in test-ranges)
+  # some very quick sanity checks: (duplicate in a test in test-ranges.R)
   stopifnot(length(icd9NShortReal) < length(icd9NShort))
   stopifnot(length(icd9VShortReal) < length(icd9VShort))
   stopifnot(length(icd9EShortReal) < length(icd9EShort))

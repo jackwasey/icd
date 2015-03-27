@@ -35,7 +35,11 @@ bool icd9IsASingleVE(const char* s) {
 
 std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x,
 		bool inverse = false) {
-	//TODO benchmark vector<char> or vector<int>
+	// TODO benchmark vector<char> or vector<int> and also check
+	// whether this is used in threaded code (vector<bool> not thread safe
+	// because even if accessing different elements, the bits can still be
+	// stored in the same byte or word. Unfortunately, Rcpp can't cast a
+	// char vector to a LogicalVector.
 	int len = sv.size();
 	std::vector<bool> out(len);
 	for (int i = 0; i < len; ++i) {

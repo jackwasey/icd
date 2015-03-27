@@ -260,8 +260,8 @@ icd9IsMajor <- function(icd9) {
 #' @template icd9-decimal
 #' @template isShort
 #' @param majorOk single logical, if \code{TRUE} will consider a three-digit
-#'   code to be real, even though the majority of three-digit codes aren't
-#'   billable (which is at present synonmous with 'realness').
+#'   code to be real, even though the majority of syntactically valid
+#'   three-digit codes aren't billable.
 #' @return logical vector
 #' @export
 icd9IsReal <- function(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE) {

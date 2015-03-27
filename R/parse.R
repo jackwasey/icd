@@ -409,7 +409,7 @@ parseIcd9Descriptions <- function(icd9path =
                           FUN = function(row)
                             trim(paste(row[-1], collapse = " ")))
 
-  # double check:
+  # double check that we get the same code in same place from long and short description files.
   stopifnot(identical(icd9ShortCode, icd9LongCode))
 
   icd9CmDesc <- data.frame(
@@ -515,8 +515,7 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   v <- strPairMatch("^([VvEe0-9-]*)[[:space:]]*(.*)$", li, swap = TRUE)
   lapply(v,
          FUN = function(x) {
-           y <- unlist(strMultiMatch(pattern = "^([VvEe0-9]+)-?([VvEe0-9]+)?$",
-                                     text = x))
+           y <- unlist(strMultiMatch(pattern = "^([VvEe0-9]+)-?([VvEe0-9]+)?$", text = x))
            names(y) <- c("start", "end")
            if (y[["end"]] == "") {
              y <- y[-2]

@@ -109,7 +109,7 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
           pattern = pattern,
           text=x, ...),
         ...)
-    )[ - 1]
+    )[ -1]
   )
   if (!dropEmpty) return(result)
   result[sapply(result, function(x) length(x) != 0)]
@@ -232,4 +232,19 @@ getIcdField <- function(x, icd9Field = NULL) {
   checkmate::assertString(icd9Field)
   stopifnot(icd9Field %in% names(x))
   icd9Field
+}
+
+
+#' @title trim null or empty values from a list
+#' @param x list
+#' @return trimmed list
+#' @keywords internal
+listTrimFlat  <-  function(x) {
+  suppressWarnings(
+    x[sapply(x, length) != 0 &
+        sapply(x, nchar) != 0 &
+        !sapply(x, function(y) all(is.null(y))) &
+        !sapply(x, function(y) all(is.na(y)))
+      ]
+  )
 }
