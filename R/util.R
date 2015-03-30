@@ -122,26 +122,26 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
-strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, ...) {
+strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c(1, 2), ...) {
   checkmate::assertString(pattern)
   checkmate::assertCharacter(text, min.len = 1)
   checkmate::assertFlag(swap)
   checkmate::assertFlag(dropEmpty)
+  checkmate::assertIntegerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
   res <- strMultiMatch(pattern = pattern, text = text,
                        dropEmpty = dropEmpty, ...)
-  stopifnot(all(sapply(res, function(x) length(x) == 2)))
 
   outNames <- vapply(X = res,
                      FUN = "[",
                      FUN.VALUE = character(1),
-                     ifelse(swap, 2, 1))
+                     ifelse(swap, pos[2], pos[1]))
   stopifnot(all(!is.na(outNames)))
 
   out <- vapply(X = res,
                 FUN = "[",
                 FUN.VALUE = character(1),
-                ifelse(swap, 1, 2))
+                ifelse(swap, pos[1], pos[2]))
   stopifnot(all(!is.na(out)))
 
   names(out) <- outNames

@@ -4,30 +4,81 @@
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different approach in python
 #
 # setdiff(icd9ShortToDecimal(icd9Hierarchy$icd9), names(parseRtf()))
-parseRtf <- function(verbose = FALSE) {
-  alllines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
-  alllinespairs <- paste0(alllines[1:length(alllines) - 1], alllines[2:length(alllines)])
-  # some lines are split after the code. We just add the second part to the
-  # first, and let the free second part get mopped up later.
-  lines <- alllines
+
+parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"),
+                                          encoding = "CP1252", warn = FALSE),
+                     verbose = TRUE) {
+
+  filtered <- lines
+  #merge any line NOT starting with "\\par" on to previous line
+  non_par_lines <- grep("^\\\\par", filtered, invert = TRUE)
+  # in reverse order, put each non-par line on end of previous, then filter out all non-par lines
+  for (i in rev(non_par_lines)) {
+    filtered[i-1] <- paste(filtered[i-1], filtered[i])
+  }
+  filtered <- grep("^\\\\par", filtered, value = TRUE)
+
+  # drop stupid long line at end:
+  filtered <- filtered[-c(which(nchar(filtered) > 1000))]
+
+  filtered %<>% stripRtf
+
+  filtered <- grep("\\[[-[:digit:]]+\\]", filtered, value = TRUE, invert = TRUE) # references e.g. [0-6]
+  filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE) # empty lines
+
+  re_anycode <- "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
+
+    # now here we could potentially capture chapter headings, but I can drop
+  # excludes easily by removing lines with bracketed codes
+  filtered <- grep(paste0("\\((", re_anycode, ")+[-[:digit:]]*\\)"), filtered, value = TRUE, invert = TRUE)
+  filtered <- grep(paste0("Exclude"), filtered, value = TRUE, invert = TRUE)
+
+  # again, we can keep some more information, but we'll just take the primary
+  # description for each item, i.e. where a code begins a line. Some codes have
+  # ten or so alternative descriptions, e.g. 410.0
+  filtered <- grep(paste0("^[[:space:]]*", re_anycode), filtered, value = TRUE)
+
+  # spaces to single
+  filtered <- gsub("[[:space:]]+", " ", filtered)
+
+  # fix a few things, e.g. "040. 1 Rhinoscleroma", "527 .0 Atrophy"
+  filtered <- sub("^([VvEe]?[[:digit:]]+) ?\\. ?([[:digit:]]) (.*)", "\\1\\.\\2 \\3", filtered)
+  # and "210-229 Benign neoplasms"
+  filtered <- grep("[[:digit:]]{3}-[[:digit:]]{3}.*", filtered, value = TRUE, invert = TRUE)
+
+  # "707.02Upper back"
+  filtered <- sub("([[:digit:]])([[:alpha:]])", "\\1 \\2", filtered)
+
+  # "2009 H1 N1 swine influenza virus"
+
+  filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE)
+
+  # "495.7 \"Ventilation\" pneumonitis"
+
+  re_code_desc <- paste0("^(", re_anycode, ") +([ \"[:alnum:]]+)")
+  out <- strPairMatch(re_code_desc, filtered, pos = c(1, 6))
+
+}
+
+
+
+
+
+crap <- function() {
+
+
   # some regexes. It is not going to completely validate every possible code,
   # e.g. posn of decimal with E, but should be 100% sensitive.
-  re_anycode <- "[VEve]?[[:digit:]]{3}(\\.[[:digit:]]{1,2})?"
   re_anycodeatend <- paste0(re_anycode, "\\\\*tab *$")
 
-  # if a useful row has a line break, we merge the next row to it (and leave the second half in place)
-  broken_useful_lines <- grep(re_anycodeatend, alllines)
-  for (i in broken_useful_lines)
-      lines[i] <- paste0(lines[c(i, i + 1)], collapse = "")
-
   # now strip the RTF, find the ICD-9 codes, then group with the descriptions
-  lines %>% stripRtf %>%
-      # drop leading spaces
-      gsub("^ +", "", .) %>%
+  alllines %>% stripRtf %>%
+    # drop leading spaces
+    gsub("^ +", "", .) %>%
     #strMultiMatch(" *([VvEe]?[0-9]{1,3}(\\.[0-9]{1,2})) (.+)", ., dropEmpty = TRUE) -> out_list
-    strMultiMatch(paste0(".*(", re_anycode, ") (.+).*"), ., dropEmpty = TRUE) -> out_list
+    strMultiMatch(paste0(".*?(", re_anycode, ") (.+)"), ., dropEmpty = TRUE) -> out_list
   # ungroup the code from the description
-  out <- vapply(out_list, "[", FUN.VALUE = character(1), 3)
+  out <- vapply(out_list, "[", FUN.VALUE = character(1), 6)
   names(out) <- vapply(out_list, "[", FUN.VALUE = character(1), 1)
 
   # capture TB fifth digit: alllines[c(673:682)]
@@ -38,6 +89,7 @@ parseRtf <- function(verbose = FALSE) {
   # the string contains either a comma separated list of codes, comma-separated
   # list of ranges, a single code, and the codes may or may not have decimal
   # places
+  out_fifth <- c()
   for (sr in rows_starting_fifth_list) {
     row_str <- alllines[sr]
     out_possible <- parseRtfFifthDigitRanges(row_str, verbose = verbose)
@@ -48,7 +100,7 @@ parseRtf <- function(verbose = FALSE) {
     }
 
     # first look ahead until we get a number-desc pair:
-    re_numSubDesc <- "([[:digit:]]) +(.*)"
+    re_numSubDesc <- "([[:digit:]]) +([[:alpha:][:punct:]])+"
     srn <- sr
     # can't just advance until we find something good, because the first line may be split in the middle!!
     #while(!grepl(re_numSubDesc, stripRtf(alllines[srn])))
@@ -67,18 +119,22 @@ parseRtf <- function(verbose = FALSE) {
       # description flows onto the next line. It seems each description is
       # terminated by \par, so we merge lines then drop everything after the first par
       #complete_row <- gsub(".+\\\\par.*", "", alllinespairs[srn])
-      complete_row <- alllinespairs[srn]
-      if (verbose) message("combined row: ", complete_row)
-      if (!grepl("[[:digit:]]", complete_row)) {
-        # we likely have the tail end of a merged line
-        srn = srn + 1
-        next
+
+      line <- alllines[srn] %>% stripRtf
+      split_fifth_line <- !grepl(re_numSubDesc, line)
+      if (verbose) message("using line: ", line)
+
+      lookup_row <- strPairMatch(re_numSubDesc, line)
+      if (is.na(lookup_row)) {
+        lookup_row <- paste("**************** PARSING QUIRK AT ROW ", srn)
+        warning(lookup_row)
       }
-      lookup_row <- strPairMatch(re_numSubDesc, stripRtf(complete_row))
       if (verbose) print(lookup_row)
       lookup_fifth <- c(lookup_fifth, lookup_row)
       srn = srn + 1
-    }
+    } # next row in this block of fifth digit suffixes
+    if (length(lookup_fifth) == 0)
+      stop("Failed to get any fifth-digit definitions starting at line ", sr)
 
     # now the name of the result is the 5th digit. we drop all the five-digit
     # codes in the range that don't match the fifth digit, then append the descriptions for the matches against this list
@@ -87,10 +143,15 @@ parseRtf <- function(verbose = FALSE) {
     # fifth digit, for the current range, and extraneous ones. Filter only the
     # real ones, then match them to append the descriptions
     re_fifth_defined <- paste(c("[", names(lookup_fifth), "]$"), collapse = "")
+    if (verbose) message("re_fifth_defined = ", re_fifth_defined)
+    if (length(names(lookup_fifth)) == 0) {
+      warning("didn't get list of fifth digits to lookup")
+      browser()
+    }
     out_real_five <- grep(re_fifth_defined, out_possible_five, value = TRUE)
     out_fifth <- c()
     for (i in seq_along(out_real_five)) {
-      if (verbose) message("getting fifth digit desc for ", i)
+      #if (verbose) message("getting fifth digit desc for ", i)
       fifth_char <- substr(i, nchar(i), nchar(i))
       first_four <- substr(i, 1, nchar(i) - 1)
       parent_desc <- out[first_four]
@@ -180,9 +241,13 @@ stripRtf <- function(x) {
   x %>%
     # just for \tab, replace with space, otherwise, drop rtf tags entirely
     gsub("\\\\tab ", " ", .) %>%
-    gsub("\\\\lsdlocked[ [:alnum:]]*;", "", .) %>%
-    gsub("\\\\[-[:alnum:]]+[ ;:,.]?", "", .) %>%
-    gsub(" *\\{.*?\\} *", "", .) %>%
+    gsub("\\\\[[:punct:]]", "", .) %>% # control symbols only, not control words
+    gsub("\\\\lsdlocked[ [:alnum:]]*;", "", .) %>% # special case, still needed?
+    #gsub("\\\\[-[:alnum:]]+[ ;:,.]?", "", .) %>%
+    gsub("\\{\\\\bkmkstart.*?\\}", "", .) %>%
+    gsub("\\{\\\\bkmkend.*?\\}", "", .) %>%
+    #gsub("\\\\[[:alnum:]]*[ [:punct:]]", "", .) %>%
+    gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", .) %>% # no backslash in this list, others removed from http://www.regular-expressions.info/posixbrackets.html
     gsub(" *(\\}|\\{)", "", .) %>%
     trim
 }
@@ -200,4 +265,53 @@ parseFifthDigitDef <- function(x) {
   n <- substr(stripped, 1, 1)
   desc <- substr(stripped, 2, nchar(stripped))
   c(n, trim(desc))
+}
+
+parseUnrtf <- function(alllines = readLines(system.file("extdata", "Dtab12.unrtf.txt", package = "icd9"),
+                                            encoding = "CP1252", warn = FALSE),
+                       verbose = TRUE) {
+  # don't bother with vectorization, as there are so many position dependent decisions?
+  # some things can be filtered quickly:
+  re_anycode <- "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
+  # excludes e.g. positive PPD (795.51), but also gets chapter and subchapter
+  # headings, which I don't think we need to keep at this point.
+  filtered <- alllines
+  #filtered <- filtered[-c(grep("Excludes:", filtered))]
+  filtered <- filtered[-c(grep(paste0("\\((", re_anycode, ")+[-[:digit:]]*\\)"), filtered))] # this gets some middle level headings, and some exclude ranges
+  filtered <- filtered[-c(grep("\\[[-[:digit:]]+\\]", filtered))] # references e.g. [0-6]
+  filtered <- filtered[-c(grep("^[[:space:]]*$", filtered))] # empty lines
+  # header
+  filtered <- filtered[-c(grep("^----*", filtered))]
+  filtered <- filtered[-c(grep("^##*", filtered))]
+  filtered <- filtered[-c(grep("^AUTHOR.*", filtered))]
+  filtered <- filtered[-c(grep("^TITLE.*", filtered))]
+  filtered <- filtered[-c(grep("^CLASSIFICATION OF DISEASES AND INJURIES.*", filtered))]
+
+  filtered <- trim(filtered)
+
+  parsed <- c()
+  n <- 1
+  while (n <= length(filtered)) {
+    message("loop, n = ", n)
+    # skip any textual sections. Exlucdes easier because they all have bracketed codes.
+    if (grepl("Includes|Excludes|Note", filtered[n])) {
+      while(!grepl(paste0("^", re_anycode), filtered[n]))
+        n <- n + 1
+    }
+    # now n should point to a row starting with a code, next line should be description
+    code <- filtered[n]
+    if (verbose) message("working on code ", code, " at line ", n)
+    desc <- c()
+    n <- n + 1
+    while (!grepl(paste0("^", re_anycode), filtered[n])) {
+      if (verbose) message("working on part ", filtered[n], " at line ", n)
+      desc <- paste(desc, filtered[n])
+      n <- n + 1
+    }
+    if (is.null(desc))
+      stop("got NULL with code ", code, " at line ", n)
+
+    names(desc) <- code
+    parsed <- c(parsed, pair)
+  }
 }
