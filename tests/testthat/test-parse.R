@@ -88,13 +88,12 @@ test_that("parse fifth digit from rtf", {
 
 alllines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
 v91.9_line_nums <- grep("V91\\.9", alllines)[-1]
-testlines <- alllines[seq(min(v91.9_line_nums), max(v91.9_line_nums))]
+testlines <- alllines[seq(min(v91.9_line_nums) - 1, max(v91.9_line_nums))]
 
 test_that("sub-parse v91.9", {
   res <- parseRtf(testlines)
-  expect_equal(length(res), 4)
   expect_equal(names(res), c("V91.9", "V91.90", "V91.91", "V91.92", "V91.99"))
-  expect_equal(res["V91.92"], "Other specified multiple gestation, with two or more monoamniotic fetuses")
+  expect_equal(res[["V91.92"]], "Other specified multiple gestation, with two or more monoamniotic fetuses")
 })
 
 rtf_res <- parseRtf()

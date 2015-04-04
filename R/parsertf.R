@@ -6,11 +6,11 @@
 # setdiff(icd9ShortToDecimal(icd9Hierarchy$icd9), names(parseRtf()))
 
 parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"),
-                                          encoding = "CP1252", warn = FALSE),
+                                       encoding = "CP1252", warn = FALSE),
                      verbose = TRUE) {
 
   filtered <- lines
-  #merge any line NOT starting with "\\par" on to previous line
+  # merge any line NOT starting with "\\par" on to previous line
   non_par_lines <- grep("^\\\\par", filtered, invert = TRUE)
   # in reverse order, put each non-par line on end of previous, then filter out all non-par lines
   for (i in rev(non_par_lines)) {
@@ -19,7 +19,10 @@ parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", pack
   filtered <- grep("^\\\\par", filtered, value = TRUE)
 
   # drop stupid long line at end:
-  filtered <- filtered[-c(which(nchar(filtered) > 1000))]
+  longest_lines <- nchar(filtered) > 1000
+  # if none, then -c() returns no rows, so we have to test first
+  if (any(longest_lines))
+    filtered <- filtered[-c(which(longest_lines))]
 
   filtered %<>% stripRtf
 
@@ -28,7 +31,11 @@ parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", pack
 
   re_anycode <- "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
 
-    # now here we could potentially capture chapter headings, but I can drop
+  # grab fifth digit ranges now:
+  fifth_rows <- grep("fifth-digit subclas", filtered)
+  filtered[fifth_rows] %>% strsplit("[, :;]") %>% unlist %>% grep("[0-9]", ., value = T) -> vals
+
+  # now here we could potentially capture chapter headings, but I can drop
   # excludes easily by removing lines with bracketed codes
   filtered <- grep(paste0("\\((", re_anycode, ")+[-[:digit:]]*\\)"), filtered, value = TRUE, invert = TRUE)
   filtered <- grep(paste0("Exclude"), filtered, value = TRUE, invert = TRUE)
@@ -55,8 +62,15 @@ parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", pack
 
   # "495.7 \"Ventilation\" pneumonitis"
 
-  re_code_desc <- paste0("^(", re_anycode, ") +([ \"[:alnum:]]+)")
+  re_code_desc <- paste0("^(", re_anycode, ") +([ \"[:graph:]]+)")
   out <- strPairMatch(re_code_desc, filtered, pos = c(1, 6))
+
+  # debug:
+  ref <- icd9ShortToDecimal(icd9Hierarchy$icd9)
+  #names(out)[names(out) %nin% ref] # intermediate codes are what we want!
+  ref[ref %nin% names(out)]
+
+  out
 
 }
 
@@ -183,7 +197,7 @@ crap <- function() {
 parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
   out <- c()
   # get numbers and number ranges
-  row_str %>% stripRtf %>% strsplit("[, :;]")  %>% unlist %>% grep("[0-9]", ., value = T) -> vals
+  row_str %>% strsplit("[, :;]")  %>% unlist %>% grep("[0-9]", ., value = T) -> vals
   if (verbose) { message("vals are:"); print(vals) }
   # sometimes  we get things like:
   # [1] "345.0" ".1"    ".4-.9"
