@@ -112,16 +112,20 @@ icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
     # the preceding 3 digit.
 
     out <- lookup[si:ei]
-    tmp <- lookup[si:ei]
     # finally, drop any higher-level codes which would describe broader ranges
     # than specified. E.g. 1019 to 1021 should omit 102, but 1059 to 1079 should
     # include 106. # github issue #14
-    if (excludeAmbiguousParent)
+    if (excludeAmbiguousParent) {
+      tmp <- lookup[si:ei]
+      # drop start and end range arguments because we know we will accept those and their children
+      startkids <- icd9ChildrenShort(start, onlyReal = onlyReal)
+      endkids <- icd9ChildrenShort(end, onlyReal = onlyReal)
       for (code in tmp) {
         # this now does a lot of tests, slowing things down significantly.
         if (!all(icd9ChildrenShort(code, onlyReal = onlyReal) %in% tmp))
           out <- out[-which(out == code)]
       }
+    }
     out
   }
 
