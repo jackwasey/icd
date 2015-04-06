@@ -100,14 +100,30 @@ test_that("expand icd9 range definition", {
 
 })
 
-test_that("V code ranges", {
-  expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
-               c("V1000", "V1001", "V1002"))
+test_that("expand range worker gives correct ranges", {
+  # really, the test is against icd9ExpandRange family, but we can isolate an
+  # error to the sub-function
+  expect_equal(
+    expandRangeWorker("V10", "V1001", lookup = icd9:::icd9VShort,
+                      onlyReal = TRUE, excludeAmbiguousParent = FALSE),
+    c("V10", "V100", "V1000", "V1001"))
+})
+
+test_that("V code with ambiguous parent", {
   # although we don't usually return parents whose scope overlaps the upper
   # limit, if the range specification already has this 'anomaly', we just roll
   # with it.
+
+  # the default should be to include the stated higher-level code, and enough
+  # descendants just to reach the specified codes, but not all the children of
+  # the higher-level code.
   expect_equal(icd9ExpandRangeShort("V10", "V1001", onlyReal = FALSE),
                c("V10", "V100", "V1000", "V1001"))
+})
+
+test_that("V code ranges", {
+  expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
+               c("V1000", "V1001", "V1002"))
   # but we cap off the upper range correctly:
   expect_equal(icd9ExpandRangeShort("V1009", "V101", onlyReal = FALSE),
                c("V1009", "V101", "V1010", "V1011",
@@ -480,3 +496,4 @@ test_that("sysdata.rda is okay", {
   stopifnot(all(icd9EShortReal %in% icd9EShort))
 
 })
+

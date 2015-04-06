@@ -26,6 +26,7 @@
 #'   Injury And Poisoning }
 #' @keywords datasets list category
 #' @docType data
+#' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 #' @format list with chapter/usb-chapter or major names stored in list names,
 #'   each with two element named character vector with start and end codes.
 NULL

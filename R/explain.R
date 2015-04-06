@@ -147,7 +147,7 @@ icd9GuessIsShort <- function(icd9) {
 
 #' @title get ICD-9 Chapters from vector of ICD-9 codes
 #' @description This runs quite slowly. Used too rarely to be worth optimizing
-#'   now.
+#'   now. This is used to build a master list of ICD-9 codes with their respective chapters, sub-chapters, etc.. The querying of the web page to get these is already done, and the results saved in the lists \code{icd9Chapters} etc which define ranges.
 #' @param icd9-any
 #' @param isShort
 #' @param invalid
@@ -160,7 +160,7 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
   checkmate::assertFlag(isShort)
   assertFactorOrCharacter(icd9)
   icd9 <- asCharacterNoWarn(icd9)
-  majors     <- icd9GetMajor(icd9, isShort)
+  majors <- icd9GetMajor(icd9, isShort)
 
   cf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9Chapters), NA_character_))
@@ -203,17 +203,18 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
   out
 }
 
-# this is rather slow, queries a web page repeatedly
-icd9GetChaptersHierarchy <- function(save = FALSE) {
+icd9BuildChaptersHierarchy <- function(save = FALSE) {
   checkmate::assertFlag(save)
   # don't rely on having already done this when setting up other data.
-  icd9CmDesc <- parseIcd9Descriptions()
+  # icd9CmDesc <- parseIcd9LeafDescriptions() # just billable...
+  # everything, including mid-level and major definitions
+  # icd9Desc
 
   icd9Hierarchy <- cbind(
-    icd9CmDesc,
-    icd9GetChapters(icd9 = icd9CmDesc[["icd9"]], isShort = TRUE)
+    data.frame("icd9" = unname(icd9::icd9Desc),
+               "descLong" = names(icd9::icd9Desc)),
+    icd9GetChapters(icd9 = unname(icd9::icd9Desc), isShort = TRUE)
   )
-
   # quick sanity check
   stopifnot(all(icd9IsValidShort(icd9Hierarchy$icd9)))
 

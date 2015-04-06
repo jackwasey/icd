@@ -121,11 +121,11 @@ test_that("can condense the big lists of comorbidities without errors", {
 
 test_that("icd9Hierarchy as saved in data can be recreated", {
   skip("this is a very slow test with web lookup - 10 mins for one assertion")
-  expect_equal(icd9GetChaptersHierarchy(save = FALSE),
+  expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
                icd9::icd9Hierarchy)
 })
 
-# the following test is dependent on availability and consistency of
+# the following test is dependent on Buildilability and consistency of
 # http://www.icd9data.com because there is no machine readable CDC or CMS file
 # with this data.
 test_that("icd9Chapters, etc. as saved in data can be recreated", {
@@ -138,7 +138,7 @@ test_that("icd9Chapters, etc. as saved in data can be recreated", {
 })
 
 test_that("condense an ICD-9 code set to minimal group", {
-  skip("TODO:  this test breaks because %i9s% now includes the last major, even if not all its child.")
+  #skip("TODO:  this test breaks because %i9s% now includes the last major, even if not all its child.")
   expect_equal(sort(icd9CondenseToMajorShort("98799" %i9s% "98901",
                                              onlyReal = FALSE)),
                sort(c("98799", "988", "98900", "98901")))

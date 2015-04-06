@@ -12,13 +12,16 @@
 \alias{icd9ExpandRangeShort}
 \title{take two ICD-9 codes and expand range to include all child codes}
 \usage{
-icd9ExpandRange(start, end, isShort, onlyReal = TRUE)
+icd9ExpandRange(start, end, isShort = icd9GuessIsShort(c(start, end)),
+  onlyReal = TRUE, excludeAmbiguousParent = TRUE)
 
-icd9ExpandRangeShort(start, end, onlyReal = TRUE)
+icd9ExpandRangeShort(start, end, onlyReal = TRUE,
+  excludeAmbiguousParent = TRUE)
 
 icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 
-icd9ExpandRangeDecimal(start, end, onlyReal = TRUE)
+icd9ExpandRangeDecimal(start, end, onlyReal = TRUE,
+  excludeAmbiguousParent = TRUE)
 
 start \%i9da\% end
 
@@ -46,6 +49,8 @@ Since nearly valid, out-dated or new codes may be missed, not limiting to
 'real' values will be useful. Ultimately, there will need to be annual (and
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
+
+\item{excludeAmbiguousParent}{single logical value, if \code{TRUE} (the default) the range returned will not include}
 }
 \description{
 this is cumbersome code, covering a whole load of edge cases
@@ -70,6 +75,7 @@ this is cumbersome code, covering a whole load of edge cases
 # the following should give all codes in 428 EXCEPT "428",
 # and all codes upto 43014 EXCEPT 430 and 4301
 icd9ExpandRangeShort("4280 ", "43014")
+stopifnot(all(c("430", "4301") \%in\% icd9ExpandRange("4280 ", "43014")))
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{icd9Children}},

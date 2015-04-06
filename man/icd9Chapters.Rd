@@ -9,6 +9,9 @@
 \title{ICD-9-CM chapters}
 \format{list with chapter/usb-chapter or major names stored in list names,
   each with two element named character vector with start and end codes.}
+\source{
+\url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+}
 \description{
 \code{icd9Chapters}, \code{icd9ChaptersSub} and
   \code{icd9ChaptersMajor} contain mappings from the higher level

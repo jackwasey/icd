@@ -4,10 +4,33 @@
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different approach in python
 #
 # setdiff(icd9ShortToDecimal(icd9Hierarchy$icd9), names(parseRtf()))
-. <- "magrittr" # paper over rstudio warnings
+
+# . <- "magrittr" # paper over rstudio warnings
+
+# TODO: Indiana has actually already done this work: http://www.in.gov/isdh/reports/hosp_disch_data/2011/diagnosis_id.zip but unclear whether they did it properly, changed it by year (as is implied), and only goes 1999-2011. Could at least use for validation.
+
+parseRtfToDesc <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"),
+                                             encoding = "CP1252", warn = FALSE),
+                           verbose = FALSE, save = FALSE) {
+  checkmate::assertCharacter(lines)
+  checkmate::assertFlag(verbose)
+  checkmate::assertFlag(save)
+  out <- parseRtf(lines, verbose)
+  out[order(names(out))] %>% swapNamesWithVals -> icd9Desc
+  icd9Desc[] <- icd9DecimalToShort(icd9Desc) # workaround not keeping names
+  icd9Desc %<>% sort
+  # TODO: we now have V codes after E codes: not a big deal, but strictly
+  # they come before
+  if (save) saveInDataDir("icd9Desc")
+  invisible(icd9Desc)
+}
+
 parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"),
                                        encoding = "CP1252", warn = FALSE),
                      verbose = FALSE) {
+
+  checkmate::assertCharacter(lines)
+  checkmate::assertFlag(verbose)
 
   filtered <- lines
   # merge any line NOT starting with "\\par" on to previous line
@@ -26,10 +49,30 @@ parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", pack
 
   filtered %<>% stripRtf
 
-  filtered <- grep("\\[[-[:digit:]]+\\]", filtered, value = TRUE, invert = TRUE) # references e.g. [0-6]
+  #filtered <- grep("\\[[-[:digit:]]+\\]", filtered, value = TRUE, invert = TRUE) # references e.g. [0-6]
   filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE) # empty lines
 
   re_anycode <- "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
+
+  # this is so ghastly: find rows with sequare brackets containing definition of
+  # subset of fourth or fifth digit codes. Need to pull code from previous row,
+  # and create lookup, so we can exclude these when processing the fourth an
+  # fifth digits
+  re_qual_subset <- "\\[[-, [:digit:]]+\\]"
+  qual_subset_lines <- grep(re_qual_subset, filtered)
+  invalid_qual <- c()
+  for (ql in qual_subset_lines) {
+    # get prior code
+    strMultiMatch(paste0("(", re_anycode, ") (.*)"), filtered[ql - 1]) %>%
+      unlist %>% magrittr::extract2(1) -> code
+    sb <- parseRtfQualifierSubset(filtered[ql])
+    inv_sb <- setdiff(as.character(0:9), sb)
+    if (length(inv_sb) == 0) next
+    if (grepl("\\.", code))
+      invalid_qual <- c(invalid_qual, paste0(code, inv_sb))
+    else
+      invalid_qual <- c(invalid_qual, paste0(code, ".", inv_sb))
+  }
 
   # grab fifth digit ranges now:
   re_fifth_range_other <- "fifth +digit +to +identify +stage"
@@ -73,26 +116,26 @@ parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", pack
   }
 
   # at least two examples of "Use 0 as fourth digit for category 672"
-   re_fourth_digit_zero <- "Use 0 as fourth digit for category"
-   fourth_digit_zero_lines <- grep(re_fourth_digit_zero, filtered)
-   strPairMatch("(.*category )([[:digit:]]{3})$", filtered[fourth_digit_zero_lines]) %>%
-     unname -> fourth_digit_zero_categories
+  re_fourth_digit_zero <- "Use 0 as fourth digit for category"
+  fourth_digit_zero_lines <- grep(re_fourth_digit_zero, filtered)
+  strPairMatch("(.*category )([[:digit:]]{3})$", filtered[fourth_digit_zero_lines]) %>%
+    unname -> fourth_digit_zero_categories
 
-   for (categ in fourth_digit_zero_categories) {
-     parent_row <- grep(paste0("^", categ, " .+"), filtered, value = TRUE)
-     filtered[length(filtered)+ 1] <- paste0(categ, ".0 ", strPairMatch("([[:digit:]]{3} )(.+)", parent_row))
-   }
+  for (categ in fourth_digit_zero_categories) {
+    parent_row <- grep(paste0("^", categ, " .+"), filtered, value = TRUE)
+    filtered[length(filtered)+ 1] <- paste0(categ, ".0 ", strPairMatch("([[:digit:]]{3} )(.+)", parent_row))
+  }
 
 
   # lookup_fifth will contain vector of suffices, with names being the codes they augment
   lookup_fifth <- c()
   for (f in fifth_rows) {
     if (verbose) message("working on fifth-digit row:", f)
-      range <- parseRtfFifthDigitRanges(filtered[f], verbose = verbose)
+    range <- parseRtfFifthDigitRanges(filtered[f], verbose = verbose)
     # if ("941.00" %in% range) browser()
     filtered[seq(f + 1, f + 20)] %>%
-        grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
-        strPairMatch("([[:digit:]])[[:space:]](.*)", .) -> fifth_suffices
+      grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
+      strPairMatch("([[:digit:]])[[:space:]](.*)", .) -> fifth_suffices
 
     re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fifth digit
@@ -174,6 +217,25 @@ parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", pack
     }
   }
 
+  # clean up duplicates (about 350 in 2015 data), mostly one very brief
+  # description and a correct longer one; or, identical descriptions
+
+  dupes <- out[duplicated(names(out)) | duplicated(names(out), fromLast = TRUE)] %>% names %>% unique
+
+  for (d in dupes) {
+    dupe_rows <- which(names(out) == d)
+    if (all(out[dupe_rows[1]] == out[dupe_rows[-1]])) {
+      out <- out[-dupe_rows[-1]]
+      next
+    }
+    desclengths <- out[dupe_rows] %>% nchar
+    longestlength <- desclengths %>% max
+    if (verbose) message("removing differing duplicates: ", paste(out[dupe_rows]))
+    out <- out[-dupe_rows[-which(desclengths != longestlength)]]
+  }
+
+  out <- out[-which(names(out) %in% invalid_qual)]
+
   # 2015 quirks (many more are baked into the parsing: try to splinter out the most specific)
   # some may well apply to other years
 
@@ -189,7 +251,8 @@ parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", pack
 
   out["719.69"] <- "Other symptoms referable to joint, multiple sites"
   out["807.19"] <- "Open fracture of multiple ribs, unspecified"
-  out[order(names(out))]
+  out["E849"] <- "Place of occurence"
+  out
 }
 
 #' @title parse a row of RTF source data for ranges to apply fifth digit
@@ -260,8 +323,28 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
     }
 
   }
-
   out
+}
+
+parseRtfQualifierSubset <- function(qual) {
+  checkmate::assertString(qual) # one at a time
+
+  out <- c()
+
+  qual %>% strip %>%
+    strsplit("[]\\[,]") %>%
+    unlist %>%
+    grep("[[:digit:]]", ., value = TRUE) %>%
+    strsplit(",") %>% unlist -> vals
+  for (v in vals) {
+    if (grepl("-", v)) {
+      strsplit(v, "-") %>% unlist %>% as.integer -> pair
+      out <- c(out, seq(pair[1], pair[2]))
+      next
+    }
+    out <- c(out, as.integer(v))
+  }
+  as.character(out)
 }
 
 #' Strip RTF

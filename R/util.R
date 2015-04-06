@@ -248,3 +248,15 @@ listTrimFlat  <-  function(x) {
       ]
   )
 }
+
+#' @title swap names and values of a vector
+#' @param x named vector
+#' @return vector
+#' @keywords internal
+swapNamesWithVals <- function(x) {
+  checkmate::assertVector(x, strict = TRUE, any.missing = FALSE, names = "named")
+  new_names <- unname(x)
+  x <- names(x)
+  names(x) <- new_names
+  x
+}

@@ -7,7 +7,8 @@
 \usage{
 strMultiMatch(pattern, text, dropEmpty = FALSE, ...)
 
-strPairMatch(pattern, text, swap = FALSE, dropEmpty = FALSE, ...)
+strPairMatch(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c(1,
+  2), ...)
 }
 \arguments{
 \item{pattern}{regular expression: if it has bracketed sections, these

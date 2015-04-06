@@ -7,10 +7,10 @@
 parseIcd9Chapters(year = NULL, save = FALSE)
 }
 \description{
-Previous iteration attempted to use the canonical data from
-  annual RTF files from the CDC, however, this was ridiculously tricky and
-  error prone, so now using a reliable website and scraping. Will still
-  confirm the results with tests.
+This is rather slow, queries a web page repeatedly, which is
+  both non-reproducible, and perhaps bad form. Aim to deprecate and replace
+  with my own RTF parsing of canonical documents, which is now working
+  reasonably well, at least for 'major' codes from 2015. TODO: deprecate
 }
 \keyword{internal}
 

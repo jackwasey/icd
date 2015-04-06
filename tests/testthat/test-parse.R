@@ -81,71 +81,128 @@ test_that("stripRtf does what it says on the tin", {
 #   "2" =  "chronic, without mention of hepatitis delta",
 #   "3" = "chronic, with hepatitis delta")
 
-alllines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
-v91.9_line_nums <- grep("V91\\.9", alllines)[-1]
-testlines <- alllines[seq(min(v91.9_line_nums) - 1, max(v91.9_line_nums))]
-
 test_that("sub-parse v91.9", {
   skip("need to reformulate as tests on output of entire parse")
+  alllines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
+  v91.9_line_nums <- grep("V91\\.9", alllines)[-1]
+  testlines <- alllines[seq(min(v91.9_line_nums) - 1, max(v91.9_line_nums))]
   res <- parseRtf(testlines)
   expect_equal(names(res), c("V91.9", "V91.90", "V91.91", "V91.92", "V91.99"))
   expect_equal(res[["V91.92"]], "Other specified multiple gestation, with two or more monoamniotic fetuses")
 })
 
-rtf_res <- parseRtf()
+rtf <- parseRtf()
+nrtf <- names(rtf)
 
 test_that("tricky V91.9 and similar", {
-
+  skip("reformulate - really this was just used for dev, not necessarily helpful now")
   # first make sure we even have the codes somewhere in the source data
   v91.9_codes <- c("V91.90", "V91.91", "V91.92", "V91.99")
   for (vc in v91.9_codes)
     expect_true(any(grep(sub(".", "\\.", vc), testlines)))
 
   # show missing ones:
-  # setdiff(v91.9_codes, names(rtf_res))
-  expect_true(all(v91.9_codes %in% names(rtf_res)),
+  # setdiff(v91.9_codes, nrtf)
+  expect_true(all(v91.9_codes %in% nrtf),
               info = paste("missing codes are:",
-                           paste(setdiff(v91.9_codes, names(rtf_res)), collapse = ", ")))
+                           paste(setdiff(v91.9_codes, nrtf), collapse = ", ")))
 })
 
-test_that("all parsed codes are valid", {
-  expect_true(all(icd9IsValidDecimal(names(rtf_res))),
+test_that("all parsed codes are valid decimals", {
+  expect_true(all(icd9IsValidDecimal(nrtf)),
               info = paste("invalid codes are :",
-                           paste(icd9GetInvalid(names(rtf_res)), collapse = ", ")))
-})
-
-test_that("200-202 with eight suffix combinations", {
-  alllines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
-  th_line_nums <- grep("200\\.0", alllines)[-1]
-  testlines <- alllines[seq(min(v91.9_line_nums), max(v91.9_line_nums))]
-
-  # first make sure we even have the codes somewhere in the source data
-  v91.9_codes <- c("V91.90", "V91.91", "V91.92", "V91.99")
-  for (vc in v91.9_codes)
-    expect_true(any(grep(sub(".", "\\.", vc), testlines)))
-
-  # show missing ones:
-  # setdiff(v91.9_codes, names(rtf_res))
-  expect_true(all(v91.9_codes %in% names(rtf_res)),
-              info = paste("missing codes are:",
-                           paste(setdiff(v91.9_codes, names(rtf_res)), collapse = ", ")))
+                           paste(icd9GetInvalid(nrtf), collapse = ", ")))
 })
 
 test_that("no rtf formatting left in descriptions", {
-  expect_false(any(grepl("[{}]", rtf_res)),
+  expect_false(any(grepl("[\\\\{}]", rtf)),
                info = paste("rtf codes in descriptions:",
-                            paste(grep("[{}]", rtf_res, value = TRUE))))
+                            paste(grep("[\\\\{}]", rtf, value = TRUE))))
 
 })
 
 test_that("all csv extract codes are in rtf extract", {
-  missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9Hierarchy$icd9), names(rtf_res))
+  missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9Hierarchy$icd9), nrtf)
   expect_equal(length(missing_from_rtf), 0,
                info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
-#   expect_equal(length(missing_from_rtf), 0,
-#                info = paste("first fifty are:",
-#                             paste(missing_from_rtf[1:50], collapse = ", "),
-#                             "\nlast fifty are:",
-#                             paste(tail(missing_from_rtf, 50), collapse = ", ")
-#                ))
+  #   expect_equal(length(missing_from_rtf), 0,
+  #                info = paste("first fifty are:",
+  #                             paste(missing_from_rtf[1:50], collapse = ", "),
+  #                             "\nlast fifty are:",
+  #                             paste(tail(missing_from_rtf, 50), collapse = ", ")
+  #                ))
+})
+
+test_that("majors extracted from web page are the same as those from RTF", {
+  webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
+  work <- swapNamesWithVals(rtf)
+  rtfmajors <- work[icd9IsMajor(work)]
+
+  expect_identical(setdiff(rtfmajors, webmajors), character(0),
+                   info = paste("these majors are from RTF but not retrieved from web: ",
+                                paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
+  expect_identical(setdiff(webmajors, rtfmajors), character(0),
+                   info = paste("these majors are on web but not retrieved from RTF: ",
+                                paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
+})
+
+v32 <- parseIcd9LeafDescriptions(version = "32", save = FALSE, fromWeb = FALSE)
+
+test_that("all leaf codes from TXT are in RTF extract", {
+  v32$icd9 %>% icd9ShortToDecimal -> leaves
+  expect_true(all(leaves %in% nrtf))
+})
+
+test_that("RTF extract has no duplicates", {
+  expect_equal(sum(duplicated(nrtf)),
+               0,
+               info = paste("first few duplicates: ",
+                            paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
+                            ))
+  skip("now a manual step to list duplicates:")
+  rtf_codes <- nrtf
+  dupes <- rtf[duplicated(rtf_codes) | duplicated(rtf_codes, fromLast = TRUE)]
+
+})
+
+test_that("mid-level descriptions are in RTF extract", {
+  expect_equivalent(rtf["611"], "Other disorders of breast")
+  expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
+  expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
+})
+
+test_that("manual check to look at description differences between RTF and TXT", {
+  skip("manual check")
+  rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
+    swapNamesWithVals %>% sort -> rtf_leaves
+  print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
+})
+
+test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
+  # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
+  expect_false("640.02" %in% nrtf)
+  # grep "\[[[:digit:]],.*\]" Dtab12.rtf
+})
+
+test_that("extraction from qualifier subset works", {
+  all2015 <- c("[0-6]", "[0-3]", "[0-5,9]", "[0-8]", "[0-2]", "[0-1]", "[0-5]",
+               "[0,1,3]", "[0-4]", "[0,3]", "[0-1,3]", "[1-2]", "[0, 1, 3]",
+               "[0,1,4]", "[0,1]", "[0,2,4]", "[0-2,4]", "[0-9]", "[0,4,9]",
+               "[0,9]", "[0-5,7-9]", "[5]", "[0-7,9]", "[0-6,9]", "[0-3,9]",
+               "[0-4,9]", "[0-6, 9]", "[0]", "[0-7]", "[0,2-4,8,9]", "[0,2,4,8,9]",
+               "[0,4,8,9]", "[6-9]", "[0,8,9]")
+  expect_equal(
+    parseRtfQualifierSubset("[0-6]"),
+    as.character(c(0, 1, 2, 3, 4, 5, 6)))
+
+  expect_equal(
+    parseRtfQualifierSubset("[0,2-4,8,9]"),
+    as.character(c(0, 2, 3, 4, 8, 9)))
+
+  expect_equal(
+    parseRtfQualifierSubset("[0]"),
+    "0")
+
+  expect_true(all(sapply(all2015, FUN = function(f) length(parseRtfQualifierSubset(f)) > 0)))
+
 })

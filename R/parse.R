@@ -1,6 +1,5 @@
 # EXCLUDE COVERAGE START
 #' @title parse all known mappings and save to development tree
-#' @param path directory to save in, default is \code{data}
 #' @keywords internal
 icd9ParseAndSaveMappings <- function() {
   parseAhrqSas(save = TRUE)
@@ -8,10 +7,12 @@ icd9ParseAndSaveMappings <- function() {
   parseQuanDeyoSas(save = TRUE)
   parseQuanElix(save = TRUE)
 
-  #parseIcd9Descriptions(save = TRUE, path = path)
+  parseRtf(save = TRUE)
+
+  parseIcd9LeafDescriptions(save = TRUE)
   parseIcd9Chapters(save = TRUE)
   # this is not strictly a parsing step, but is quite slow
-  icd9GetChaptersHierarchy(save= TRUE)
+  icd9BuildChaptersHierarchy(save = TRUE)
 }
 # EXCLUDE COVERAGE END
 
@@ -27,9 +28,7 @@ icd9ParseAndSaveMappings <- function() {
 parseAhrqSas <- function(sasPath = system.file("extdata",
                                                "comformat2012-2013.txt",
                                                package = "icd9"),
-                         condense = FALSE,
-                         save = FALSE,
-                         path = "data",
+                         condense = FALSE, save = FALSE, path = "data",
                          returnAll = FALSE) {
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
@@ -358,19 +357,16 @@ parseAhrqHierarchy <- function() {
     row.names = NULL
   )
 }
-# 'single level' CCS AHRQ diagnoses:
-# http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Single_Level_CCS_2014.zip
-
-# 'multi level' CCS AHRQ diagnoses
-# http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip
 
 #' @title read the ICD-9-CM description data as provided by the Center for
 #'   Medicaid Services.
 #' @description ICD9-CM data unfortunately has no comma separation, so have to
 #'   pre-process. Note that this canonical data doesn't specify non-diagnostic
 #'   higher-level codes, just the specific diagnostic 'child' codes.
-#' @details ideally would get ICD9-CM data zip directly from CMS web page, and
-#'   extract, but the built-in unzip only extracts the first file in a zip.
+#'
+#'   The file can be pulled from the zip files on the CMS web site or from
+#'   within the package. Pulled data can be saved to the package development
+#'   tree.
 #' @param icd9path path of the source data which is in /extddata in the
 #'   installed package, but would be in inst/extdata in development tree.
 #' @param save logical whether to attempt to save output in package source tree
@@ -378,36 +374,55 @@ parseAhrqHierarchy <- function() {
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
-parseIcd9Descriptions <- function(icd9path =
-                                    system.file("extdata",
-                                                "CMS32_DESC_LONG_DX.txt",
-                                                package = "icd9"),
-                                  save = FALSE,
-                                  path = "data") {
-  f <- file(icd9path, "r")
-  r <- readLines(f, encoding = "latin1")
-  close(f)
-  r <- strsplit(r, " ")
-  icd9LongCode <- lapply(r,
-                         FUN = function(row)
-                           trim(row[1]))
-  icd9LongDesc <- lapply(r,
-                         FUN = function(row)
-                           trim(paste(row[-1], collapse = " ")))
+parseIcd9LeafDescriptions <- function(version = "32", save = FALSE, fromWeb = TRUE) {
 
-  f <- file(system.file("extdata",
-                        "CMS32_DESC_SHORT_DX.txt",
-                        package="icd9"),
-            "r")
-  r <- readLines(f) # this is ascii
-  close(f)
-  r <- strsplit(r, " ")
-  icd9ShortCode <- lapply(r,
-                          FUN = function(row)
-                            trim(row[1]))
-  icd9ShortDesc <- lapply(r,
-                          FUN = function(row)
-                            trim(paste(row[-1], collapse = " ")))
+  checkmate::assertScalar(version)
+  checkmate::assertFlag(save)
+  checkmate::assertFlag(fromWeb)
+  version <- as.character(version)
+  stopifnot(version %in% cmsIcd9ZipUrls$version)
+  dat <- cmsIcd9ZipUrls[cmsIcd9ZipUrls$version == version, ]
+  url <- dat$url
+  fn_short <- dat$short_filename
+  fn_long <- dat$long_filename
+  if (fromWeb) {
+    shortlines <- read.zip.url(url, fn_short)
+    longlines <- read.zip.url(url, fn_long)
+
+    if (save) {
+      # rewrite lines to our package
+      f <- file(file.path("inst", "extdata", fn_short), "w")
+      writeLines(shortlines, f)
+      close(f)
+
+      f <- file(file.path("inst", "extdata", fn_long), "w")
+      writeLines(longlines, f)
+      close(f)
+    }
+  } else {
+    f <- file(system.file("extdata", fn_short, package = "icd9"), "r")
+    readLines(f, encoding = "latin1") -> shortlines
+    close(f)
+    f <- file(system.file("extdata", fn_long, package = "icd9"), "r")
+    readLines(f, encoding = "latin1") -> longlines
+    close(f)
+  }
+
+  shortlines %<>% strsplit(" ")
+  longlines %<>% strsplit(" ")
+
+  icd9ShortCode <- lapply(shortlines,
+                          FUN = function(x)
+                            trim(x[1]))
+  icd9ShortDesc <- lapply(shortlines,
+                          FUN = function(x)
+                            trim(paste(x[-1], collapse = " ")))
+  icd9LongCode <- lapply(longlines,
+                         FUN = function(x)
+                           trim(x[1]))
+  icd9LongDesc <- lapply(longlines,
+                         FUN = function(x)
+                           trim(paste(x[-1], collapse = " ")))
 
   # double check that we get the same code in same place from long and short description files.
   stopifnot(identical(icd9ShortCode, icd9LongCode))
@@ -418,9 +433,7 @@ parseIcd9Descriptions <- function(icd9path =
     descShort = unlist(icd9ShortDesc),
     stringsAsFactors = FALSE)
 
-  # attempt to write the date from the source file to RData in the package
-  # source tree. disable saving this: use icd9Hierarchy instead. if (save)
-  # saveInDataDir("icd9CmDesc")
+  if (save) saveInDataDir("icd9CmDesc")
 
   utf8 <- grep(pattern = "UTF", Encoding(icd9CmDesc$descLong))
   if (length(utf8) > 0 ) {
@@ -431,17 +444,28 @@ parseIcd9Descriptions <- function(icd9path =
 }
 
 #' @title Read higher-level ICD-9 structure from a reliable web site
-#' @description Previous iteration attempted to use the canonical data from
-#'   annual RTF files from the CDC, however, this was ridiculously tricky and
-#'   error prone, so now using a reliable website and scraping. Will still
-#'   confirm the results with tests.
+#' @description This is rather slow, queries a web page repeatedly, which is
+#'   both non-reproducible, and perhaps bad form. Aim to deprecate and replace
+#'   with my own RTF parsing of canonical documents, which is now working
+#'   reasonably well, at least for 'major' codes from 2015. TODO: deprecate
 #' @keywords internal
 parseIcd9Chapters <- function(year = NULL,
                               save = FALSE) {
+  checkmate::assertFlag(save)
   if (is.null(year))
     year <- "2014"
-  else
+  else {
+    checkmate::assertScalar(year)
+    if (is.character(year)) {
+      year <- as.integer(year)
+    }
+    # version 23 dates back to 2005, but I don't have access on web for versions
+    # before 23. TODO: are these somewhere else?
+    # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
+    checkmate::assertIntegerish(year, lower = 2005, upper = 2015,
+                                any.missing = FALSE, len = 1)
     year <- as.character(year)
+  }
   if (save && format(Sys.time(), "%Y") != year)
     warning(sprintf("Getting ICD-9 data for %s which is not the current year.
               Tests were written to validate extraction of 2014 data.", year))
@@ -481,15 +505,15 @@ parseIcd9Chapters <- function(year = NULL,
   # codes, when the coding was done in a different year from this analysis.
   # EXCLUDE COVERAGE START
   if (save) {
-    saveInDataDir("icd9Chapters")
-    saveInDataDir("icd9ChaptersSub")
-    saveInDataDir("icd9ChaptersMajor")
+    # saveInDataDir("icd9Chapters") # manually entered
+    saveInDataDir("icd9ChaptersSub") # TODO: remove, now I have parsed from RTF
+    saveInDataDir("icd9ChaptersMajor") # TODO: remove, now I have parsed from RTF
   }
-  # EXCLUDE COVERAGE END
   invisible(list(icd9Chapters = icd9Chapters,
                  icd9ChaptersSub = icd9ChaptersSub,
                  icd9ChaptersMajor = icd9ChaptersMajor))
 }
+# EXCLUDE COVERAGE END
 
 icd9WebParseStartEndToRange <- function(v) {
   paste(v[["start"]], v[["end"]], sep = "-")
@@ -525,3 +549,46 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
          }
   )
 }
+
+cmsIcd9ZipUrls <- data.frame(
+  version = c(32, 31, 30, 29, 28, 27, "27 (2010)", 26, 25, 24, 23),
+  start_date = c("2014-10-01", "2013-10-01", "2012-10-01", "2011-10-01", "2010-10-01",
+                 "2009-10-01",
+                 "2009-10-01", "2008-10-01", "2007-10-01", "2006-10-01", "2005-10-01"),
+  long_filename = c(
+    "CMS32_DESC_LONG_DX.txt",
+    "CMS31_DESC_LONG_DX.txt",
+    "CMS30_DESC_LONG_DX 080612.txt",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""),
+  short_filename = c(
+    "CMS32_DESC_SHORT_DX.txt",
+    "CMS31_DESC_SHORT_DX.txt",
+    "CMS30_DESC_SHORT_DX.txt",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""),
+  url = c("http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/ICD-9-CM-v32-master-descriptions.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv31-master-descriptions.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv30_master_descriptions.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv29_master_descriptions.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv28_master_descriptions.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/FY2010Diagnosis-ProcedureCodesFullTitles.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v27_icd9.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v26_icd9.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v25_icd9.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v24_icd9.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v23_icd9.zip"),
+  stringsAsFactors = FALSE
+)
