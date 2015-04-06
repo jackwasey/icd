@@ -55,11 +55,6 @@ test_that("stripRtf does what it says on the tin", {
 
 })
 
-test_that("parse fifth digit from rtf", {
-  expect_equal("\\rtlch\\fcs1 \\af1\\afs20\\alang1025 \\ltrch\\fcs0 \\fs20\\cf1\\lang1033\\langfe1033\\loch\\af1\\hich\\af1\\dbch\\af31505\\cgrid\\langnp1033\\langfenp1033 {\\rtlch\\fcs1 \\ab\\af1 \\ltrch\\fcs0 \\b\\insrsid2429293 0\\tab \\hich\\af1\\dbch\\af31505\\loch\\f1 unspecified" %>% parseFifthDigitDef,
-               c("0", "unspecified"))
-})
-
 # now, this is probably year version dependent, but some ranges of codes have
 # common fifth digits, specified by 'major' range. E.g. 010-018 has sub-classifications for tuberculosis diagnoses.
 # tb <- "010" %i9da% "018"
@@ -91,6 +86,7 @@ v91.9_line_nums <- grep("V91\\.9", alllines)[-1]
 testlines <- alllines[seq(min(v91.9_line_nums) - 1, max(v91.9_line_nums))]
 
 test_that("sub-parse v91.9", {
+  skip("need to reformulate as tests on output of entire parse")
   res <- parseRtf(testlines)
   expect_equal(names(res), c("V91.9", "V91.90", "V91.91", "V91.92", "V91.99"))
   expect_equal(res[["V91.92"]], "Other specified multiple gestation, with two or more monoamniotic fetuses")
@@ -145,9 +141,11 @@ test_that("no rtf formatting left in descriptions", {
 test_that("all csv extract codes are in rtf extract", {
   missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9Hierarchy$icd9), names(rtf_res))
   expect_equal(length(missing_from_rtf), 0,
-               info = paste("first fifty are:",
-                            paste(missing_from_rtf[1:50], collapse = ", "),
-                            "last fifty are:",
-                            paste(tail(missing_from_rtf, 50), collapse = ", ")
-               ))
+               info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
+#   expect_equal(length(missing_from_rtf), 0,
+#                info = paste("first fifty are:",
+#                             paste(missing_from_rtf[1:50], collapse = ", "),
+#                             "\nlast fifty are:",
+#                             paste(tail(missing_from_rtf, 50), collapse = ", ")
+#                ))
 })
