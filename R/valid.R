@@ -248,5 +248,14 @@ icd9IsMajor <- function(icd9) {
   nchar(icd9) - icd9IsE(icd9) < 4
 }
 
+icd9IsN <- function(icd9)
+  icd9IsA(asCharacterNoWarn(icd9), "VEve", TRUE)
+
+icd9IsV <- function(icd9)
+  icd9IsA(asCharacterNoWarn(icd9), "Vv")
+
+icd9IsE <- function(icd9)
+  icd9IsA(asCharacterNoWarn(icd9), "Ee")
+
 warnNumericCode <- function()
   warning("input data is in numeric format. This can easily lead to errors in short or decimal codes, e.g. short code 1000: is it 10.00 or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10", call. = FALSE) # nolint

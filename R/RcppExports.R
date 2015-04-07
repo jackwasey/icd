@@ -71,25 +71,8 @@ icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
 }
 
-#' @name icd9Is
-#' @title are the given codes numeric, V or E type?
-#' @description Quickly find V or E codes, without any validation.
-#' @template icd9-any
-#' @export
-icd9IsV <- function(icd9) {
-    .Call('icd9_icd9IsV', PACKAGE = 'icd9', icd9)
-}
-
-#' @rdname icd9Is
-#' @export
-icd9IsE <- function(icd9) {
-    .Call('icd9_icd9IsE', PACKAGE = 'icd9', icd9)
-}
-
-#' @rdname icd9Is
-#' @export
-icd9IsN <- function(icd9) {
-    .Call('icd9_icd9IsN', PACKAGE = 'icd9', icd9)
+icd9IsA <- function(sv, x, invert = FALSE) {
+    .Call('icd9_icd9IsA', PACKAGE = 'icd9', sv, x, invert)
 }
 
 icd9LongToWideCpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {

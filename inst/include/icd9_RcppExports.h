@@ -271,55 +271,17 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline std::vector<bool> icd9IsV(const std::vector<std::string>& icd9) {
-        typedef SEXP(*Ptr_icd9IsV)(SEXP);
-        static Ptr_icd9IsV p_icd9IsV = NULL;
-        if (p_icd9IsV == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsV)(const std::vector<std::string>&)");
-            p_icd9IsV = (Ptr_icd9IsV)R_GetCCallable("icd9", "icd9_icd9IsV");
+    inline std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert = false) {
+        typedef SEXP(*Ptr_icd9IsA)(SEXP,SEXP,SEXP);
+        static Ptr_icd9IsA p_icd9IsA = NULL;
+        if (p_icd9IsA == NULL) {
+            validateSignature("std::vector<bool>(*icd9IsA)(const std::vector<std::string>&,const char*,bool)");
+            p_icd9IsA = (Ptr_icd9IsA)R_GetCCallable("icd9", "icd9_icd9IsA");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9IsV(Rcpp::wrap(icd9));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<std::vector<bool> >(__result);
-    }
-
-    inline std::vector<bool> icd9IsE(const std::vector<std::string>& icd9) {
-        typedef SEXP(*Ptr_icd9IsE)(SEXP);
-        static Ptr_icd9IsE p_icd9IsE = NULL;
-        if (p_icd9IsE == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsE)(const std::vector<std::string>&)");
-            p_icd9IsE = (Ptr_icd9IsE)R_GetCCallable("icd9", "icd9_icd9IsE");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9IsE(Rcpp::wrap(icd9));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<std::vector<bool> >(__result);
-    }
-
-    inline std::vector<bool> icd9IsN(const std::vector<std::string>& icd9) {
-        typedef SEXP(*Ptr_icd9IsN)(SEXP);
-        static Ptr_icd9IsN p_icd9IsN = NULL;
-        if (p_icd9IsN == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsN)(const std::vector<std::string>&)");
-            p_icd9IsN = (Ptr_icd9IsN)R_GetCCallable("icd9", "icd9_icd9IsN");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9IsN(Rcpp::wrap(icd9));
+            __result = p_icd9IsA(Rcpp::wrap(sv), Rcpp::wrap(x), Rcpp::wrap(invert));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
