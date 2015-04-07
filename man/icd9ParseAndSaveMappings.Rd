@@ -6,9 +6,6 @@
 \usage{
 icd9ParseAndSaveMappings()
 }
-\arguments{
-\item{path}{directory to save in, default is \code{data}}
-}
 \description{
 parse all known mappings and save to development tree
 }

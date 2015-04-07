@@ -4,10 +4,10 @@
 \alias{icd9GetReal}
 \alias{icd9GetRealDecimal}
 \alias{icd9GetRealShort}
+\alias{icd9IsBillable}
 \alias{icd9IsReal}
 \alias{icd9IsRealDecimal}
 \alias{icd9IsRealShort}
-\alias{icd9IsReallyReal}
 \title{Check whether ICD-9 codes exist}
 \usage{
 icd9IsReal(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE)
@@ -22,7 +22,7 @@ icd9GetRealShort(icd9Short, majorOk = TRUE)
 
 icd9GetRealDecimal(icd9Decimal, majorOk = TRUE)
 
-icd9IsReallyReal(icd9, isShort = icd9GuessIsShort(icd9))
+icd9IsBillable(icd9, isShort = icd9GuessIsShort(icd9))
 }
 \arguments{
 \item{icd9}{is
@@ -72,6 +72,6 @@ This is different from syntactic validity: it looks it up in the
 
 \item \code{icd9GetRealDecimal}: 
 
-\item \code{icd9IsReallyReal}: 
+\item \code{icd9IsBillable}: 
 }}
 

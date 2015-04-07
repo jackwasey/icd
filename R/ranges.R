@@ -60,14 +60,18 @@ sortOrderShort <- function(icd9Short) {
 #' # and all codes upto 43014 EXCEPT 430 and 4301
 #' icd9ExpandRangeShort("4280 ", "43014")
 #' stopifnot(all(c("430", "4301") %in% icd9ExpandRange("4280 ", "43014",
-#'   onlyReal = FALSE, excludeAmbiguousParent = FALSE)))
+#'   onlyReal = FALSE, excludeAmbiguousParent = TRUE)))
 #' stopifnot(!any(c("430", "4301") %in% icd9ExpandRange("4280 ", "43014",
 #'   onlyReal = FALSE, excludeAmbiguousParent = TRUE)))
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
 #' @template onlyReal
 #' @template isShort
-#' @param excludeAmbiguousParent single logical value, if \code{TRUE} (the default) the range returned will not include
+#' @param excludeAmbiguousParent single logical value, if \code{TRUE} the range
+#'   returned will not include codes which are explicitly listed in the range,
+#'   but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%
+#'   V1009} would by default (\code{FALSE}) include \code{V10} even though
+#'   \code{V10} itself is parent to everything up to \code{V11}.
 #' @family ICD-9 ranges
 #' @export
 icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)),

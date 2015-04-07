@@ -50,7 +50,11 @@ Since nearly valid, out-dated or new codes may be missed, not limiting to
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
 
-\item{excludeAmbiguousParent}{single logical value, if \code{TRUE} (the default) the range returned will not include}
+\item{excludeAmbiguousParent}{single logical value, if \code{TRUE} the range
+returned will not include codes which are explicitly listed in the range,
+but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%
+V1009} would by default (\code{FALSE}) include \code{V10} even though
+\code{V10} itself is parent to everything up to \code{V11}.}
 }
 \description{
 this is cumbersome code, covering a whole load of edge cases
@@ -75,7 +79,10 @@ this is cumbersome code, covering a whole load of edge cases
 # the following should give all codes in 428 EXCEPT "428",
 # and all codes upto 43014 EXCEPT 430 and 4301
 icd9ExpandRangeShort("4280 ", "43014")
-stopifnot(all(c("430", "4301") \%in\% icd9ExpandRange("4280 ", "43014")))
+stopifnot(all(c("430", "4301") \%in\% icd9ExpandRange("4280 ", "43014",
+  onlyReal = FALSE, excludeAmbiguousParent = TRUE)))
+stopifnot(!any(c("430", "4301") \%in\% icd9ExpandRange("4280 ", "43014",
+  onlyReal = FALSE, excludeAmbiguousParent = TRUE)))
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{icd9Children}},

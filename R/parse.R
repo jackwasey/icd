@@ -2,360 +2,47 @@
 #' @title parse all known mappings and save to development tree
 #' @keywords internal
 icd9ParseAndSaveMappings <- function() {
+  # comorbidity mappings
   parseAhrqSas(save = TRUE)
   parseElix(save = TRUE)
   parseQuanDeyoSas(save = TRUE)
   parseQuanElix(save = TRUE)
 
-  parseRtf(save = TRUE)
+  # RTF file(s)
+  parseRtfToDesc(save = TRUE)
 
-  parseIcd9LeafDescriptions(save = TRUE)
-  parseIcd9Chapters(save = TRUE)
-  # this is not strictly a parsing step, but is quite slow
+  # plain text billable codes
+  parseIcd9LeafDescriptionsAll(save = TRUE)
+
+  # this queries a web page: TODO: use only for testing result of RTF extraction
+  # parseIcd9Chapters(save = TRUE)
+
+  # this is not strictly a parsing step, but is quite slow. It relies on picking up already saved files from previous steps
   icd9BuildChaptersHierarchy(save = TRUE)
 }
 # EXCLUDE COVERAGE END
 
-#' @title parse AHRQ data
-#' @description Takes the raw data taken directly from the AHRQ web site and
-#'   parses into RData. It is then saved in the development tree data directory,
-#'   so this is an internal function, used in generating the package itself!
-#' @template savesas
-#' @template parse-template
-#' @param returnAll logical which, if TRUE, will result in the invisible return
-#'   of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
+#' @title get billable codes from all available years
+#' @description for versions 23 to 32, those which are on the CMS web site, get
+#'   any codes with long or short descriptions. Earlier years only have
+#'   abbreviated descriptions.
+#' @param save single logical value, if \code{TRUE} the source text or CSV file
+#'   will be saved in \code{inst/extdata}, otherwise (the default) the data is
+#'   simply returned invisibly.
+#' @return data frame with icd9, descShort and descLong columns. NA is placed in
+#'   descLong when not available.
+#' @source
+#' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parseAhrqSas <- function(sasPath = system.file("extdata",
-                                               "comformat2012-2013.txt",
-                                               package = "icd9"),
-                         condense = FALSE, save = FALSE, path = "data",
-                         returnAll = FALSE) {
-  f <- file(sasPath, "r")
-  ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
-  close(f)
+parseIcd9LeafDescriptionsAll <- function(save = FALSE) {
 
-  ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
-  # Boom. The remainder of the AHRQ SAS input file consists of DRG definitions
-  # (TODO).
-
-  ahrqComorbidAll <- list()
-
-  for (cmd in names(ahrqComorbidWork)) {
-    somePairs <- strsplit(x = ahrqComorbidWork[[cmd]], split = "-")
-    # non-range values just go on list
-    out <- as.list(somePairs[lapply(somePairs, length) == 1])
-    thePairs <- somePairs[lapply(somePairs, length) == 2]
-    out <- append(out, lapply(thePairs,
-                              function(x) icd9ExpandRangeShort(x[1], x[2], onlyReal = FALSE)))
-    # update ahrqComorbid with full range of icd9 codes:
-    ahrqComorbidAll[[cmd]] <- unlist(out)
+  versions <- cmsIcd9ZipUrls$version
+  icd9Billable <- list()
+  for (v in versions) {
+    icd9Billable[v] <- parseIcd9LeafDescriptionsVersion(version = v)
   }
-
-  # drop this superfluous finale which allocates any other ICD-9 code to the
-  # "Other" group
-  ahrqComorbidAll[[" "]] <- NULL
-
-  ahrqComorbid <- ahrqComorbidAll
-
-  ahrqComorbid$HTNCX <- c(
-    ahrqComorbid$HTNCX, # some codes already in this category
-    ahrqComorbid$HTNPREG,
-    ahrqComorbid$OHTNPREG,
-    ahrqComorbid$HTNWOCHF,
-    ahrqComorbid$HTNWCHF,
-    ahrqComorbid$HRENWORF,
-    ahrqComorbid$HRENWRF,
-    ahrqComorbid$HHRWOHRF,
-    ahrqComorbid$HHRWCHF,
-    ahrqComorbid$HHRWRF,
-    ahrqComorbid$HHRWHRF)
-
-  ahrqComorbid$CHF <- c(
-    ahrqComorbid$CHF, # some codes already in this category
-    ahrqComorbid$HTNWCHF,
-    ahrqComorbid$HHRWCHF,
-    ahrqComorbid$HHRWHRF)
-
-  ahrqComorbid$RENLFAIL <- c(
-    ahrqComorbid$RENLFAIL, # some codes already in this category
-    ahrqComorbid$HRENWRF,
-    ahrqComorbid$HHRWRF,
-    ahrqComorbid$HHRWHRF)
-
-
-  ahrqComorbid[c("HTNPREG", "OHTNPREG", "HTNWOCHF",
-                 "HTNWCHF","HRENWORF", "HRENWRF", "HHRWOHRF",
-                 "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
-
-  # officially, AHRQ HTN with complications means that HTN on its own should be
-  # unset. however, this is not feasible here, since we just package up the data
-  # into a list, and it can be used however the user wishes. It would not be
-  # hard to write an AHRQ specific function to do this if needed, but it makes
-  # more sense to me
-
-  # todo: save/return the DRG mappings.
-
-  # either fully expand or fully condense the results
-  if (condense) {
-    ahrqComorbid <- lapply(ahrqComorbid, icd9CondenseToMajorShort, )
-    ahrqComorbidAll <- lapply(ahrqComorbidAll, icd9CondenseToMajorShort)
-  } else {
-    ahrqComorbid <- lapply(ahrqComorbid, function(x)
-      icd9ChildrenShort(x, onlyReal = FALSE))
-    ahrqComorbidAll <- lapply(ahrqComorbidAll, function(x)
-      icd9ChildrenShort(x, onlyReal = FALSE))
-  }
-
-  names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
-
-  # save the data in the development tree, so the package user doesn't need to
-  # decode it themselves.
-  # EXCLUDE COVERAGE START
-  if (save) {
-    saveInDataDir("ahrqComorbidAll")
-    saveInDataDir("ahrqComorbid")
-  }
-  # EXCLUDE COVERAGE END
-
-  if (returnAll) return(invisible(ahrqComorbidAll))
-
-  invisible(ahrqComorbid)
-}
-
-#TODO: function to extract these standard ICD-9 groupings, not focussed on
-#co-morbidities, but useful for classification ahrq.dx <-
-# read.csv(file=system.file(
-#   "extdata",
-#   "ccs_multi_dx_tool_2013.csv",
-#   package="icd9"), quote="'\"")
-# ahrq.pr <- read.csv(file=system.file(
-#   "extdata",
-#   "ccs_multi_pr_tool_2014.csv",
-#   package="icd9"), quote="'\"")
-
-#all fields suitable for 'factor' class, except ICD.9.CM.CODE, which has no
-#repeated values.
-# ahrq.dx[["ICD.9.CM.CODE"]] <- asCharacterNoWarn(ahrq.dx[["ICD.9.CM.CODE"]])
-
-# now work on groupings:
-#ag<-aggregate(ICD.9.CM.CODE ~ CCS.LVL.1.LABEL, data=ahrq.dx, FUN=paste)
-# TODO to be continued...
-
-#' @title parse original SAS code defining Quan's update of Deyo comorbidities.
-#' @description As with \code{parseAhrqSas}, this function reads SAS code, and
-#'   in, a very limited way, extracts definitions. In this case the code uses
-#'   LET statements, with strings or lists of strings. This saves and invisibly
-#'   returns a list with names corresponding to the comorbidities and values as
-#'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
-#'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
-#'   simpler.
-#'
-#'   With thanks to Dr. Quan, I have permission to distribute his SAS code.
-#'   Previously, the SAS code would be downloaded from the University of
-#'   Manitoba at
-#'   \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}.
-#'   There are structural differences between this version and the version
-#'   directly from Dr. Quan, however, the parsing results in identical data.
-#' @template savesas
-#' @template parse-template
-#' @keywords internal
-parseQuanDeyoSas <- function(sasPath = NULL,
-                             condense = FALSE,
-                             save = FALSE,
-                             path = "data") {
-  if (is.null(sasPath)) sasPath <- system.file("extdata",
-                                               "ICD9_E_Charlson.sas",
-                                               package = "icd9")
-
-  quanSas <- readLines(sasPath, warn = FALSE)
-  qlets <- sasExtractLetStrings(quanSas)
-  qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
-  quanDeyoComorbid <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
-  names(quanDeyoComorbid) <- unlist(unname(qlabels))
-
-  # use validation: takes time, but these are run-once per package creation (and
-  # test) tasks.
-  if (condense)
-    quanDeyoComorbid <- lapply(
-      quanDeyoComorbid,
-      icd9CondenseToMajorShort)
-  else
-    quanDeyoComorbid <- lapply(
-      quanDeyoComorbid,
-      icd9ChildrenShort, onlyReal = FALSE)
-
-  names(quanDeyoComorbid) <- icd9::charlsonComorbidNamesAbbrev
-  if (save) saveInDataDir("quanDeyoComorbid")
-  invisible(quanDeyoComorbid)
-}
-
-#' @title Generate Quan's revised Elixhauser comorbidities
-#' @template parse-template
-#' @keywords internal
-parseQuanElix <- function(condense = FALSE,
-                          save = FALSE,
-                          path = "data") {
-  quanElixComorbid <- list(
-    chf = c("398.91", "402.01", "402.11", "402.91", "404.01", "404.03",
-            "404.11", "404.13", "404.91", "404.93", "425.4" %i9da% "425.9",
-            "428"),
-    arrhythmia = c("426.0", "426.13", "426.7", "426.9", "426.10", "426.12",
-                   "427.0" %i9da% "427.4", "427.6" %i9da% "427.9", "785.0",
-                   "996.01", "996.04", "V45.0", "V53.3"),
-    valve = c("93.2", "394" %i9da% "397", "424", "746.3" %i9da% "746.6", "V42.2",
-              "V43.3"),
-    pulm.circ = c("415.0", "415.1", "416", "417.0", "417.8", "417.9"),
-    pvd = c("093.0", "437.3", "440", "441", "443.1" %i9da% "443.9", "447.1",
-            "557.1", "557.9", "V43.4"),
-    htn = c("401"),
-    htncx = c("402" %i9da% "405"),
-    paralysis = c("334.1", "342", "343", "344.0" %i9da% "344.6", "344.9"),
-    neuro.other = c("331.9", "332.0", "332.1", "333.4", "333.5", "333.92",
-                    "334", "335", "336.2", "340", "341", "345", "348.1",
-                    "348.3", "780.3", "784.3"),
-    chronic.pulm = c("416.8", "416.9", "490" %i9da% "505", "506.4", "508.1",
-                     "508.8"),
-    dm.uncomp = c("250.0" %i9da% "250.3"),
-    dm.comp = c("250.4" %i9da% "250.9"),
-    hypothyroid = c("240.9", "243", "244", "246.1", "246.8"),
-    renal = c("403.01", "403.11", "403.91", "404.02", "404.03", "404.12",
-              "404.13", "404.92", "404.93", "585", "586", "588", "V42.0",
-              "V45.1", "V56"),
-    liver = c("70.22", "70.23", "70.32", "70.33", "70.44", "70.54", "70.6",
-              "70.9", "456.0" %i9da% "456.2", "570", "571",
-              "572.2" %i9da% "572.8", "573.3", "573.4", "573.8", "573.9",
-              "V42.7"),
-    pud = c("531.7", "531.9", "532.7", "532.9", "533.7", "533.9", "534.7",
-            "534.9"),
-    hiv = c("42" %i9da% "44"),
-    lymphoma = c("200" %i9da% "202", "203.0", "238.6"),
-    mets = c("196" %i9da% "199"),
-    solid.tumor = c("140" %i9da% "172", "174" %i9da% "195"),
-    rheum = c("446", "701.0", "710.0" %i9da% "710.4", "710.8", "710.9", "711.2",
-              "714", "719.3", "720", "725", "728.5", "728.89", "729.30"),
-    coag = c("286", "287.1", "287.3" %i9da% "287.5"),
-    obesity = c("278.0"),
-    wt.loss = c("260" %i9da% "263", "783.2", "799.4"),
-    lytes = c("253.6", "276"),
-    anemia.loss = c("280.0"),
-    anemia.def = c("280.1" %i9da% "280.9", "281"),
-    etoh = c("265.2", "291.1" %i9da% "291.3", "291.5" %i9da% "291.9", "303.0",
-             "303.9", "305.0", "357.5", "425.5", "535.3", "571.0" %i9da% "571.3",
-             "980", "V11.3"),
-    drugs = c("292", "304", "305.2" %i9da% "305.9", "V65.42"),
-    psychoses = c("293.8", "295", "296.04", "296.14", "296.44", "296.54", "297",
-                  "298"),
-    depression = c("296.2", "296.3", "296.5", "300.4", "309", "311")
-  )
-
-  quanElixComorbid <- lapply(
-    quanElixComorbid,
-    function(x) icd9DecimalToShort(x))
-
-  if (condense)
-    quanElixComorbid <- lapply(
-      quanElixComorbid,
-      function(x) icd9CondenseToMajorShort(x, onlyReal = FALSE))
-  else
-    quanElixComorbid <- lapply(
-      quanElixComorbid,
-      icd9ChildrenShort, onlyReal = FALSE)
-
-  names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
-  if (save) saveInDataDir("quanElixComorbid")
-  invisible(quanElixComorbid)
-}
-
-#' @title Generate Elixhauser comorbidities
-#' @description This function uses the \code{\%i9d\%} operator, so cannot be
-#'   done as an R file in the \code{data} directory. The data is documented in
-#'   \code{datadocs.R}.
-#' @template parse-template
-#' @keywords internal
-parseElix <- function(condense = FALSE, save = FALSE, path = "data") {
-  elixComorbid <- list(
-    chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91",
-            "404.93", "428.0" %i9da% "428.9"),
-    arrhythmia = c("426.1", "426.11", "426.13", "426.2" %i9da% "426.53",
-                   "426.6" %i9da% "426.89", "427.0", "427.2", "427.31", "427.60",
-                   "427.9", "785", "V45.0", "V53.3"),
-    valve = c("93.20" %i9da% "93.24", "394.0" %i9da% "397.1",
-              "424.0" %i9da% "424.91", "746.3" %i9da% "746.6", "V42.2", "V43.3"),
-    pulm.circ = c("416.0" %i9da% "416.9", " 417.9"),
-    pvd = c("440.0" %i9da% "440.9", "441.2", "441.4", "441.7", "441.9",
-            "443.1" %i9da% "443.9", "447.1", "557.1", "557.9", "V43.4"),
-    htn = c("401.1", "401.9"),
-    htncx = c("402.10", "402.90", "404.10", "404.90", "405.11", "405.19",
-              "405.91", "405.99"),
-    paralysis = c("342.0" %i9da% "342.12", "342.9" %i9da% "344.9"),
-    neuro.other = c("331.9", "332.0", "333.4", "333.5", "334.0" %i9da% "335.9",
-                    "340", "341.1" %i9da% "341.9", "345.00" %i9da% "345.11",
-                    "345.40" %i9da% "345.51", "345.80" %i9da% "345.91", "348.1",
-                    "348.3", "780.3", "784.3"),
-    chronic.pulm = c("490" %i9da% "492.8", "493.00" %i9da% "493.91", "494",
-                     "495.0" %i9da% "505", "506.4"),
-    dm.uncomp = c("250.00" %i9da% "250.33"),
-    dm.comp = c("250.40" %i9da% "250.73", "250.90" %i9da% "250.93"),
-    hypothyroid = c("243" %i9da% "244.2", "244.8", "244.9"),
-    renal = c("403.11", "403.91", "404.12", "404.92", "585", "586", "V42.0",
-              "V45.1", "V56.0", "V56.8"),
-    liver = c("70.32", "70.33", "70.54", "456.0", "456.1", "456.20", "456.21",
-              "571.0", "571.2", "571.3", "571.40" %i9da% "571.49", "571.5",
-              "571.6", "571.8", "571.9", "572.3", "572.8", "V42.7"),
-    pud = c("531.70", "531.90", "532.70", "532.90", "533.70", "533.90",
-            "534.70", "534.90", "V12.71"),
-    hiv = c("42" %i9da% "44.9"),
-    lymphoma = c("200.00" %i9da% "202.38", "202.50" %i9da% "203.01",
-                 "203.8" %i9da% "203.81", "238.6", "273.3", "V10.71", "V10.72",
-                 "V10.79"),
-    mets = c("196.0" %i9da% "199.1"),
-    solid.tumor = c("140.0" %i9da% "172.9", "174.0" %i9da% "175.9",
-                    "179" %i9da% "195.8", "V10.00" %i9da% "V10.9"),
-    rheum = c("701.0", "710.0" %i9da% "710.9", "714.0" %i9da% "714.9",
-              "720.0" %i9da% "720.9", "725"),
-    coag = c("286.0" %i9da% "286.9", "287.1", "287.3" %i9da% "287.5"),
-    obesity = c("278.0"),
-    wt.loss = c("260" %i9da% "263.9"),
-    lytes = c("276.0" %i9da% "276.9"),
-    anemia.loss = c("280.0"),
-    anemia.def = c("280.1" %i9da% "281.9", "285.9"),
-    etoh = c("291.1", "291.2", "291.5", "291.8", "291.9",
-             "303.90" %i9da% "303.93", "305.00" %i9da% "305.03", "V11.3"),
-    drugs = c("292.0", "292.82" %i9da% "292.89", "292.9",
-              "304.00" %i9da% "304.93", "305.20" %i9da% "305.93"),
-    psychoses = c("295.00" %i9da% "298.9", "299.10" %i9da% "299.11"),
-    depression = c("300.4", "301.12", "309.0", "309.1", "311")
-  )
-
-  elixComorbid <- lapply(
-    elixComorbid, function(x)
-      icd9DecimalToShort(x))
-
-  # convert to short form, for consistency with other mappings.
-  if (condense) {
-    elixComorbid <- lapply(
-      elixComorbid,
-      function(x) icd9CondenseToMajorShort(x, onlyReal = FALSE))
-  } else {
-    elixComorbid <- lapply(
-      elixComorbid,
-      icd9ChildrenShort, onlyReal = FALSE)
-  }
-
-  names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
-  if (save) saveInDataDir("elixComorbid")
-  invisible(elixComorbid)
-}
-
-# AHRQ hierarchy.
-
-parseAhrqHierarchy <- function() {
-  read.zip.url(
-    "http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip",
-    filename = "ccs_multi_dx_tool_2013.csv",
-    FUN = read.csv,
-    row.names = NULL
-  )
+  if (save) saveInDataDir("icd9Billable")
+  icd9Billable
 }
 
 #' @title read the ICD-9-CM description data as provided by the Center for
@@ -369,78 +56,138 @@ parseAhrqHierarchy <- function() {
 #'   tree.
 #' @param icd9path path of the source data which is in /extddata in the
 #'   installed package, but would be in inst/extdata in development tree.
-#' @param save logical whether to attempt to save output in package source tree
-#'   data directory
+#' @param save logical whether to attempt to re-save source files in inst
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
-parseIcd9LeafDescriptions <- function(version = "32", save = FALSE, fromWeb = TRUE) {
-
+parseIcd9LeafDescriptionsVersion <- function(version = "32", save = FALSE,
+                                             fromWeb = NULL, verbose = TRUE) {
+  if (verbose) message("Fetching billable codes version: ", version)
   checkmate::assertScalar(version)
   checkmate::assertFlag(save)
-  checkmate::assertFlag(fromWeb)
   version <- as.character(version)
+  if (as.character(version) == "27") return(invisible(parseIcd9LeafDescriptions27(save = save)))
   stopifnot(version %in% cmsIcd9ZipUrls$version)
   dat <- cmsIcd9ZipUrls[cmsIcd9ZipUrls$version == version, ]
   url <- dat$url
   fn_short <- dat$short_filename
   fn_long <- dat$long_filename
+  path_short <- file.path("inst", "extdata", fn_short)
+  path_long <- file.path("inst", "extdata", fn_long)
+  if (verbose) message(fn_short, ", ", fn_long, "\n", path_short, ", ", path_long)
+
+
+  if (!is.null(fromWeb))
+    checkmate::assertFlag(fromWeb)
+  else {
+    fromWeb = FALSE
+    if (!file.exists(path_short) || !file.exists(path_long)) {
+      fromWeb = TRUE
+      save = TRUE
+    }
+  }
+
   if (fromWeb) {
     shortlines <- read.zip.url(url, fn_short)
-    longlines <- read.zip.url(url, fn_long)
+    if (!is.na(fn_long))
+      longlines <- read.zip.url(url, fn_long)
+    else
+      longlines <- NA_character_
 
     if (save) {
       # rewrite lines to our package
-      f <- file(file.path("inst", "extdata", fn_short), "w")
+      f <- file(path_short, "w")
       writeLines(shortlines, f)
       close(f)
-
-      f <- file(file.path("inst", "extdata", fn_long), "w")
-      writeLines(longlines, f)
-      close(f)
+      if (!is.na(fn_long)) {
+        f <- file(path_long, "w")
+        writeLines(longlines, f)
+        close(f)
+      }
     }
   } else {
-    f <- file(system.file("extdata", fn_short, package = "icd9"), "r")
+    f <- file(path_short, "r")
     readLines(f, encoding = "latin1") -> shortlines
     close(f)
-    f <- file(system.file("extdata", fn_long, package = "icd9"), "r")
-    readLines(f, encoding = "latin1") -> longlines
-    close(f)
+    if (!is.na(fn_long)) {
+      f <- file(path_long, "r")
+      readLines(f, encoding = "latin1") -> longlines
+      close(f)
+    } else {
+      longlines <- NA_character_
+    }
   }
 
   shortlines %<>% strsplit(" ")
   longlines %<>% strsplit(" ")
 
-  icd9ShortCode <- lapply(shortlines,
-                          FUN = function(x)
-                            trim(x[1]))
-  icd9ShortDesc <- lapply(shortlines,
-                          FUN = function(x)
-                            trim(paste(x[-1], collapse = " ")))
-  icd9LongCode <- lapply(longlines,
-                         FUN = function(x)
-                           trim(x[1]))
-  icd9LongDesc <- lapply(longlines,
-                         FUN = function(x)
-                           trim(paste(x[-1], collapse = " ")))
-
-  # double check that we get the same code in same place from long and short description files.
-  stopifnot(identical(icd9ShortCode, icd9LongCode))
-
-  icd9CmDesc <- data.frame(
-    icd9 = unlist(icd9LongCode),
-    descLong = unlist(icd9LongDesc),
-    descShort = unlist(icd9ShortDesc),
-    stringsAsFactors = FALSE)
-
-  if (save) saveInDataDir("icd9CmDesc")
-
-  utf8 <- grep(pattern = "UTF", Encoding(icd9CmDesc$descLong))
-  if (length(utf8) > 0 ) {
-    message("The following long descriptions contain UTF-8 codes:")
-    message(paste(icd9CmDesc[utf8, ], sep = ", "))
+  icd9ShortCode <- lapply(shortlines, FUN = function(x) trim(x[1]))
+  icd9ShortDesc <- lapply(shortlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
+  if (!is.na(longlines)) {
+    # icd9LongCode <- lapply(longlines, FUN = function(x) trim(x[1]))
+    icd9LongDesc <- lapply(longlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
+  } else {
+    icd9LongDesc <- NA
   }
-  invisible(icd9CmDesc)
+
+  var_name <- paste0("icd9Billable", make.names(version))
+
+  assign(var_name,
+         data.frame(
+           icd9 = unlist(icd9ShortCode),
+           descShort = unlist(icd9ShortDesc),
+           descLong = unlist(icd9LongDesc),
+           stringsAsFactors = FALSE)
+  )
+
+  if (save) saveInDataDir(var_name)
+
+  if (!is.na(fn_long)) {
+    utf8 <- grep(pattern = "UTF", Encoding(get(var_name, inherits = FALSE)[["descLong"]]))
+    if (length(utf8) > 0 ) {
+      message("The following long descriptions contain UTF-8 codes:")
+      message(paste(get(var_name, inherits = FALSE)[utf8, ], sep = ", "))
+    }
+  }
+  invisible(get(var_name, inherits = FALSE))
+}
+
+parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL) {
+  checkmate::assertFlag(save)
+  fn <- cmsIcd9ZipUrls[cmsIcd9ZipUrls$version == 27, "other_filename"]
+  fp <- file.path("inst", "extdata", fn)
+  url <- cmsIcd9ZipUrls[cmsIcd9ZipUrls$version == 27, "url"]
+  if (!is.null(fromWeb))
+    checkmate::assertFlag(fromWeb)
+  else {
+    fromWeb = FALSE
+    if (!file.exists(fp)) {
+      fromWeb = TRUE
+      save = TRUE
+    }
+  }
+
+  if (fromWeb) {
+    read.zip.url(url, fn) -> tmp_dat
+    if (save)
+      save_path <- fp
+    else
+      save_path <- tempfile()
+    save_conn <- file(save_path, "w")
+    writeLines(tmp_dat, save_conn)
+    close(save_conn)
+    read.csv(save_path, stringsAsFactors = FALSE) -> x
+    if (!save) file.remove(save_path)
+  } else {
+    f <- file(fp, "r")
+    # encoding = "latin1" ?
+    read.csv(f, stringsAsFactors = FALSE) -> x
+    close(f)
+  }
+
+  names(x) <- c("icd9", "descLong", "descShort")
+  x <- x[c(1, 3, 2)]
+  x
 }
 
 #' @title Read higher-level ICD-9 structure from a reliable web site
@@ -550,42 +297,45 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   )
 }
 
+# http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 cmsIcd9ZipUrls <- data.frame(
-  version = c(32, 31, 30, 29, 28, 27, "27 (2010)", 26, 25, 24, 23),
+  version = c(32, 31, 30, 29, 28, 27,
+              #"27 (abbrev only)",
+              26, 25, 24, 23),
   start_date = c("2014-10-01", "2013-10-01", "2012-10-01", "2011-10-01", "2010-10-01",
-                 "2009-10-01",
-                 "2009-10-01", "2008-10-01", "2007-10-01", "2006-10-01", "2005-10-01"),
+                 NULL, "2009-10-01", "2008-10-01", "2007-10-01", "2006-10-01", "2005-10-01"),
   long_filename = c(
     "CMS32_DESC_LONG_DX.txt",
     "CMS31_DESC_LONG_DX.txt",
     "CMS30_DESC_LONG_DX 080612.txt",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    ""),
+    "CMS29_DESC_LONG_DX.101111.txt",
+    "CMS28_DESC_LONG_DX.txt",
+    NA, # see other_filename
+    NA, # no long descriptions available for these years
+    NA,
+    NA,
+    NA),
   short_filename = c(
     "CMS32_DESC_SHORT_DX.txt",
     "CMS31_DESC_SHORT_DX.txt",
     "CMS30_DESC_SHORT_DX.txt",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    ""),
+    "CMS29_DESC_SHORT_DX.txt",
+    "CMS28_DESC_SHORT_DX.txt",
+    NA,
+    "V26 I-9 Diagnosis.txt",
+    "I9diagnosesV25.txt",
+    "I9diagnosis.txt",
+    "I9DX_DESC.txt"),
+  other_filename = c(NA, NA, NA, NA, NA,
+                     "V27LONG_SHORT_DX_110909u021012.csv", # also V27LONG_SHORT_DX_110909.csv before update)
+                     NA, NA, NA, NA),
   url = c("http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/ICD-9-CM-v32-master-descriptions.zip",
           "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv31-master-descriptions.zip",
           "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv30_master_descriptions.zip",
           "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv29_master_descriptions.zip",
           "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv28_master_descriptions.zip",
-          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/FY2010Diagnosis-ProcedureCodesFullTitles.zip",
-          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v27_icd9.zip",
+          "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/FY2010Diagnosis-ProcedureCodesFullTitles.zip", # but this one is in a different format!
+          # this only contains abbreviated titles: "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v27_icd9.zip",
           "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v26_icd9.zip",
           "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v25_icd9.zip",
           "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v24_icd9.zip",

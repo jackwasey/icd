@@ -15,7 +15,7 @@ icd9GetChapters(icd9, isShort = icd9GuessIsShort(icd9))
 }
 \description{
 This runs quite slowly. Used too rarely to be worth optimizing
-  now.
+  now. This is used to build a master list of ICD-9 codes with their respective chapters, sub-chapters, etc.. The querying of the web page to get these is already done, and the results saved in the lists \code{icd9Chapters} etc which define ranges.
 }
 \keyword{internal}
 

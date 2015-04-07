@@ -2,11 +2,19 @@ context("icd9 ranges")
 
 test_that("expand icd9 range definition", {
   expect_equal(
-    icd9ExpandRangeShort("4012", "40145", onlyReal = FALSE),
+    icd9ExpandRangeShort("4012", "40145",
+                         onlyReal = FALSE, excludeAmbiguousParent = FALSE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
            "40139", "4014", "40140", "40141", "40142", "40143", "40144", "40145")))
+  expect_equal(
+    icd9ExpandRangeShort("4012", "40145",
+                         onlyReal = FALSE, excludeAmbiguousParent = TRUE),
+    sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
+           "40126", "40127", "40128", "40129", "4013", "40130", "40131",
+           "40132", "40133", "40134", "40135", "40136", "40137", "40138",
+           "40139", NULL, "40140", "40141", "40142", "40143", "40144", "40145")))
   # the following tests the unimplemented omitParents = TRUE
   #   expect_equal(
   #     icd9ExpandRangeShort("4012", "40145", omitParents = TRUE),
@@ -87,7 +95,12 @@ test_that("expand icd9 range definition", {
            "40299"))
   )
 
-  expect_equal(icd9ExpandRangeShort("401", "40102", onlyReal = FALSE),
+  # next test demonstrates that the default of excludeAmbig is TRUE
+  expect_equal(icd9ExpandRangeShort("401", "40102",
+                                    onlyReal = FALSE),
+               c("40100", "40101", "40102"))
+  expect_equal(icd9ExpandRangeShort("401", "40102",
+                                    onlyReal = FALSE, excludeAmbiguousParent = FALSE),
                c("401", "4010", "40100", "40101", "40102"))
 
   # only works with single range
@@ -117,8 +130,12 @@ test_that("V code with ambiguous parent", {
   # the default should be to include the stated higher-level code, and enough
   # descendants just to reach the specified codes, but not all the children of
   # the higher-level code.
-  expect_equal(icd9ExpandRangeShort("V10", "V1001", onlyReal = FALSE),
+  expect_equal(icd9ExpandRangeShort("V10", "V1001",
+                                    onlyReal = FALSE, excludeAmbiguousParent = FALSE),
                c("V10", "V100", "V1000", "V1001"))
+  expect_equal(icd9ExpandRangeShort("V10", "V1001",
+                                    onlyReal = FALSE), #excludAmbiguousParent = TRUE
+               c("V1000", "V1001"))
 })
 
 test_that("V code ranges", {
@@ -130,8 +147,12 @@ test_that("V code ranges", {
                  "V1012", "V1013", "V1014", "V1015",
                  "V1016", "V1017", "V1018", "V1019"))
   # and with narrower top end
-  expect_equal(icd9ExpandRangeShort("V1009", "V1011", onlyReal = FALSE),
+  expect_equal(icd9ExpandRangeShort("V1009", "V1011",
+                                    onlyReal = FALSE, excludeAmbiguousParent = TRUE),
                c("V1009", "V1010", "V1011"))
+  expect_equal(icd9ExpandRangeShort("V1009", "V1011",
+                                    onlyReal = FALSE, excludeAmbiguousParent = FALSE),
+               c("V1009", "V101", "V1010", "V1011"))
   # but include those pesky parents when requested:
   expect_true(all(c("V10", "V100") %in% icd9ExpandRangeShort("V099", "V1011", onlyReal = FALSE,
                                                            excludeAmbiguousParent = FALSE)))
