@@ -380,5 +380,4 @@ test_that("icd9 descriptions is parsed correctly", {
   expect_true(is.character(x$icd9))
   # TODO: add specific tests, e.g. for Menieres with non-standard character
   # sets, punctuation
-  # most of the results of this are already tested in icd9Hierarchy
 })

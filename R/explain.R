@@ -212,13 +212,53 @@ icd9BuildChaptersHierarchy <- function(save = FALSE) {
 
   icd9Hierarchy <- cbind(
     data.frame("icd9" = unname(icd9::icd9Desc),
-               "descLong" = names(icd9::icd9Desc)),
+               "descLong" = names(icd9::icd9Desc),
+               stringsAsFactors = FALSE),
+    # the following can and should be factors:
     icd9GetChapters(icd9 = unname(icd9::icd9Desc), isShort = TRUE)
   )
-  # quick sanity check
+
+  # fix congenital abnormalities not having subchapter defined:
+  # ( this might be easier to do when parsing the chapters themselves...)
+  icd9Hierarchy %<>% fixSubchapterNa(740, 759)
+  # and hematopoietic organs
+  icd9Hierarchy %<>% fixSubchapterNa(280, 289)
+
+  # insert the short descriptions from the billable codes text file. Where there
+  # is no short description, e.g. for most Major codes, or intermediate codes,
+  # just copy the long description over.
+  # TODO need to match the annual RTF with the annual txt file
+  billable_rows <- match(icd9::icd9CmDesc$icd9, icd9Hierarchy$icd9)
+  title_rows <- setdiff(seq_len(nrow(icd9Hierarchy)), billable_rows)
+  icd9Hierarchy[billable_rows, "descShort"] <- icd9::icd9CmDesc$descShort
+  # for rows without a short description (i.e. titles), useexisting long desc
+  icd9Hierarchy[title_rows, "descShort"] <- icd9Hierarchy[title_rows, "descLong"]
+  # now put the short description in the right column position
+  icd9Hierarchy <- icd9Hierarchy[c("icd9", "descShort", "descLong", "threedigit",
+                                   "major", "subchapter", "chapter")]
+
+  # quick sanity checks - full tests in test-parse.R
   stopifnot(all(icd9IsValidShort(icd9Hierarchy$icd9)))
+  stopifnot(!any(sapply(is.na(icd9Hierarchy))))
 
   if (save) saveInDataDir("icd9Hierarchy") # EXCLUDE COVERAGE
+}
+
+fixSubchapterNa <- function (x, start, end) {
+  # 740 CONGENITAL ANOMALIES is a chapter with no sub-chapters defined. For
+  # consistency, assign the same name to sub-chapters
+  congenital <- x$icd9 %in% (start %i9sa% end)
+  # assert all the same:
+  stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
+  # now some work to insert a new level into the sub-chapter factor in the right place
+  previous_sub <- x[(which(congenital) - 1)[1], "subchapter"] %>% asCharacterNoWarn
+  previous_sub_pos <- which(levels(x$subchapter) == previous_sub)
+  congenital_title <- x[which(congenital)[1], "chapter"] %>% asCharacterNoWarn
+  new_subs <- x$subchapter %>% asCharacterNoWarn
+  new_subs[congenital] <- congenital_title
+  new_levels <- append(levels(x$subchapter), congenital_title, previous_sub_pos)
+  x$subchapter <- factor(new_subs, new_levels)
+  x
 }
 
 #' @title Condense ICD-9 code by replacing complete families with parent codes

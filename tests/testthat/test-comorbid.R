@@ -120,9 +120,12 @@ test_that("can condense the big lists of comorbidities without errors", {
 
 
 test_that("icd9Hierarchy as saved in data can be recreated", {
-  skip("this is a very slow test with web lookup - 10 mins for one assertion")
-  expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
-               icd9::icd9Hierarchy)
+  if (do_slow_tests)
+    expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
+                 icd9::icd9Hierarchy)
+  else
+    skip("this is a very slow test with web lookup - 10 mins for one assertion")
+
 })
 
 # the following test is dependent on Buildilability and consistency of

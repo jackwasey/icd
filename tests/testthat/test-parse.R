@@ -122,7 +122,7 @@ test_that("no rtf formatting left in descriptions", {
 })
 
 test_that("all csv extract codes are in rtf extract", {
-  missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9Hierarchy$icd9), nrtf)
+  missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9Hierarchy$icd9), nrtf)
   expect_equal(length(missing_from_rtf), 0,
                info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
   #   expect_equal(length(missing_from_rtf), 0,
@@ -158,7 +158,7 @@ test_that("RTF extract has no duplicates", {
                0,
                info = paste("first few duplicates: ",
                             paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
-                            ))
+               ))
   skip("now a manual step to list duplicates:")
   rtf_codes <- nrtf
   dupes <- rtf[duplicated(rtf_codes) | duplicated(rtf_codes, fromLast = TRUE)]
@@ -204,5 +204,74 @@ test_that("extraction from qualifier subset works", {
     "0")
 
   expect_true(all(sapply(all2015, FUN = function(f) length(parseRtfQualifierSubset(f)) > 0)))
+})
 
+context("icd9::icd9Hierarchy is parsed as expected")
+# at present, icd9::icd9Hierarchy is derived from RTF parsing, a little web
+# scraping, some manually entered data, and (for the short description only)
+# another text file parsing.`
+
+test_that("no NA values", {
+  expect_false(any(sapply(icd9::icd9Hierarchy, is.na)))
+})
+
+test_that("factors are in the right place", {
+  expect_is(icd9::icd9Hierarchy$icd9, "character")
+  expect_is(icd9::icd9Hierarchy$descShort, "character")
+  expect_is(icd9::icd9Hierarchy$descLong, "character")
+  expect_is(icd9::icd9Hierarchy$threedigit, "factor")
+  expect_is(icd9::icd9Hierarchy$major, "factor")
+  expect_is(icd9::icd9Hierarchy$subchapter, "factor")
+  expect_is(icd9::icd9Hierarchy$chapter, "factor")
+})
+
+test_that("codes and descriptions are valid and unique", {
+  expect_true(unique(icd9::icd9Hierarchy$icd9))
+  expect_true(unique(icd9::icd9Hierarchy$descShort))
+  expect_true(unique(icd9::icd9Hierarchy$descLong))
+
+  expect_true(all(icd9IsValidShort(icd9::icd9Hierarchy$icd9)))
+})
+
+test_that("some chapters are correct", {
+  chaps <- icd9::icd9Hierarchy$chapter %>% asCharacterNoWarn
+  codes <- icd9::icd9Hierarchy$icd9
+  # first and last rows (E codes should be last)
+  expect_equal(chaps[1], "Infectious And Parasitic Diseases")
+  expect_equal(chaps[nrow(icd9::icd9Hierarchy)], "Supplementary Classification Of External Causes Of Injury And Poisoning")
+
+  # first and last rows of a block in the middle
+  neoplasm_rows <- which(codes %in% ("140" %i9sa% "239"))
+  expect_equal(chaps[neoplasm_rows[1] - 1], "Infectious And Parasitic Diseases")
+  expect_equal(chaps[neoplasm_rows[1]], "Neoplasms")
+  expect_equal(chaps[neoplasm_rows[length(neoplasm_rows)]], "Neoplasms")
+  expect_equal(chaps[neoplasm_rows[length(neoplasm_rows)] + 1],
+               "Endocrine, Nutritional And Metabolic Diseases, And Immunity Disorders")
+})
+
+test_that("some subchapters are correct", {
+  subchaps <- icd9::icd9Hierarchy$subchapter %>% asCharacterNoWarn
+  codes <- icd9::icd9Hierarchy$icd9
+
+  # first and last
+  expect_equal(subchaps[1], "Intestinal Infectious Diseases")
+  expect_equal(subchaps[nrow(icd9::icd9Hierarchy)], "Injury Resulting From Operations Of War")
+
+  # first and last of a block in the middle
+  suicide_rows <- which(codes %in% ("E950" %i9sa% "E959"))
+  expect_equal(subchaps[suicide_rows[1] - 1],
+               "Drugs, Medicinal And Biological Substances Causing Adverse Effects In Therapeutic Use")
+  expect_equal(subchaps[suicide_rows[1]], "Suicide And Self-Inflicted Injury")
+  expect_equal(subchaps[suicide_rows[length(suicide_rows)]], "Suicide And Self-Inflicted Injury")
+  expect_equal(subchaps[suicide_rows[length(suicide_rows)] + 1],
+               "Homicide And Injury Purposely Inflicted By Other Persons")
+})
+
+test_that("some randomly selected rows are correct", {
+  # icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname %>% dput
+
+  c("5060", "Bronchitis and pneumonitis due to fumes and vapors",
+    "506", "Respiratory conditions due to chemical fumes and vapors",
+    "Pneumoconioses And Other Lung Diseases Due To External Agents",
+    "Diseases Of The Respiratory System")
 })

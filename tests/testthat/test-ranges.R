@@ -471,14 +471,24 @@ test_that("icd9InReferenceCode", {
   # )
 })
 
-test_that("sort works as expected", {
+test_that("sorting char vectors", {
   expect_equal(icd9SortShort(c("3", "02", "001", "003")), c("001", "02", "3", "003"))
-  expect_equal(icd9Sort(c("1", "V02", "V1", "E003"), isShort = TRUE), c("1", "E003", "V1", "V02"))
+  expect_equal(icd9Sort(c("1", "V02", "V1", "E003"), isShort = TRUE), c("1", "V1", "V02", "E003"))
   expect_equal(icd9SortShort(c("0032", "0288", "0019", "0031")), c("0019", "0031", "0032", "0288"))
-  expect_equal(icd9Sort(c("V251", "V25", "E0039", "E003"), isShort = TRUE), c("E003", "E0039", "V25", "V251"))
-  expect_equal(icd9Sort(c("V25.1", "V25", "E003.9", "E003"), isShort = FALSE), c("E003", "E003.9", "V25", "V25.1"))
+  expect_equal(icd9Sort(c("V251", "V25", "E0039", "E003"), isShort = TRUE), c("V25", "V251", "E003", "E0039"))
+  expect_equal(icd9Sort(c("V25.1", "V25", "E003.9", "E003"), isShort = FALSE), c("V25", "V25.1", "E003", "E003.9"))
   expect_equal(icd9SortDecimal(c("E1.1", "V2.2", "E001", "V02.1", "999.99", "88.8", "77")),
-               c("77", "88.8", "999.99", "E001", "E1.1", "V02.1", "V2.2"))
+               c("77", "88.8", "999.99", "V02.1", "V2.2", "E001", "E1.1"))
+})
+
+test_that("sorting char factors", {
+  expect_equal(icd9SortShort(factor(c("3", "02", "001", "003"))), factor(c("001", "02", "3", "003")))
+  expect_equal(icd9Sort(factor(c("1", "V02", "V1", "E003")), isShort = TRUE), factor(c("1", "V1", "V02", "E003")))
+  expect_equal(icd9SortShort(factor(c("0032", "0288", "0019", "0031"))), factor(c("0019", "0031", "0032", "0288")))
+  expect_equal(icd9Sort(factor(c("V251", "V25", "E0039", "E003")), isShort = TRUE), factor(c("V25", "V251", "E003", "E0039")))
+  expect_equal(icd9Sort(factor(c("V25.1", "V25", "E003.9", "E003")), isShort = FALSE), factor(c("V25", "V25.1", "E003", "E003.9")))
+  expect_equal(icd9SortDecimal(factor(c("E1.1", "V2.2", "E001", "V02.1", "999.99", "88.8", "77"))),
+                               factor(c("77", "88.8", "999.99", "V02.1", "V2.2", "E001", "E1.1")))
 })
 
 test_that("sysdata.rda is okay", {

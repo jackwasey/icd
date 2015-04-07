@@ -1,7 +1,7 @@
 #' @title sort short-form icd9 codes
 #' @description Sorts lists of numeric only, V or E codes. Note that a simple
-#'   numeric sort does not work for ICD-9 codes, since "162" > "1620" TODO:
-#'   write tests. TODO: reply with the actual items given (not trimmed, etc.)
+#'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
+#'   V codes precede E codes
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
@@ -21,15 +21,21 @@ icd9Sort <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
 #' @export
 icd9SortShort <- function(icd9Short) {
   assertFactorOrCharacter(icd9Short)
-  icd9Short[order(icd9AddLeadingZeroesShort(icd9Short))]
+  icd9Short[sortOrderShort(icd9Short)]
 }
 
 #' @rdname icd9Sort
 #' @export
-icd9SortDecimal <- function(icd9Decimal) {
-  assertFactorOrCharacter(icd9Decimal)
-  icd9Decimal[order(icd9DecimalToShort(icd9Decimal))]
+icd9SortDecimal <- function(icd9Decimal)
+  icd9Decimal[icd9Decimal %>% icd9DecimalToShort %>% sortOrderShort]
+
+sortOrderShort <- function(icd9Short) {
+  x <- icd9Short[order(icd9AddLeadingZeroesShort(icd9Short))]
+  match(
+    x[c(which(icd9IsN(x)), which(icd9IsV(x)), which(icd9IsE(x)))],
+    icd9Short)
 }
+
 
 #' @title take two ICD-9 codes and expand range to include all child codes
 #' @description this is cumbersome code, covering a whole load of edge cases
