@@ -120,7 +120,7 @@ test_that("can condense the big lists of comorbidities without errors", {
 
 
 test_that("icd9Hierarchy as saved in data can be recreated", {
-  if (do_slow_tests)
+  if (exists(do_slow_tests) && do_slow_tests)
     expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
                  icd9::icd9Hierarchy)
   else

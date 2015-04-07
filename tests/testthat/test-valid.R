@@ -373,6 +373,12 @@ test_that("get invalid decimals", {
 })
 
 test_that("get real codes from a longer list", {
-  expect_equal(icd9GetRealShort(c("003", "0031", "0032"), majorOk = FALSE), "0031")
-  expect_equal(icd9GetRealDecimal(c("003", "003.1", "3.2"), majorOk = FALSE), "003.1")
+  expect_equal(icd9GetRealShort(c("003", "0031", "0032"), onlyBillable = TRUE), "0031")
+  expect_equal(icd9GetRealDecimal(c("003", "003.1", "3.2"), onlyBillable = TRUE), "003.1")
+})
+
+test_that("billable codes are identified", {
+  expect_true(icd9IsBillable("1000"))
+  expect_false(icd9IsBillable("1008"))
+  expect_true(icd9IsBillable("1009"))
 })

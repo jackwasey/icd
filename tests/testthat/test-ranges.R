@@ -407,6 +407,18 @@ test_that("condense range invalid data" ,{
   # TODO more tests here
 })
 
+test_that("condense codes with mix of four and five digit billables", {
+  expect_equal(
+    icd9CondenseToParentShort(c("10081", "10089", "1000", "1009")),
+    "100")
+})
+
+test_that("condense codes with mix of four and five digit including non-billable four digit code", {
+  expect_equal(
+    icd9CondenseToParentShort(c("1000", "1008", "10081", "10089", "1009")),
+    "100")
+})
+
 test_that("icd9InReferenceCode", {
   # if the input icd9 code is definitely junk, e.g. longer than 5 char, or 0 char, we get an NA back
   expect_equal(icd9InReferenceCode("bratwurst", "123", isShort = TRUE), FALSE)

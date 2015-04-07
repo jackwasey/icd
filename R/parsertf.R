@@ -15,12 +15,12 @@ parseRtfToDesc <- function(lines = readLines(system.file("extdata", "Dtab12.rtf"
   checkmate::assertCharacter(lines)
   checkmate::assertFlag(verbose)
   checkmate::assertFlag(save)
-  out <- parseRtf(lines, verbose)
-  out[order(names(out))] %>% swapNamesWithVals -> icd9Desc
-  icd9Desc[] <- icd9DecimalToShort(icd9Desc) # workaround not keeping names
-  icd9Desc %<>% sort
-  # TODO: we now have V codes after E codes: not a big deal, but strictly
-  # they come before
+  parseRtf(lines, verbose) %>% swapNamesWithVals %>% icd9SortDecimal -> out
+  # make Tidy data: don't like using row names to store things
+  icd9Desc <- data.frame(
+    icd9  = out %>% unname %>% icd9DecimalToShort,
+    desc = names(out),
+    stringsAsFactors = FALSE)
   if (save) saveInDataDir("icd9Desc")
   invisible(icd9Desc)
 }

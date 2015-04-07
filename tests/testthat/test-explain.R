@@ -252,38 +252,32 @@ test_that("condense full ranges", {
   expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE), onlyReal = FALSE), "0031")
-  # major is allowed
-  expect_equal(icd9CondenseShort(c("003", othersalmonella), onlyReal = TRUE), "003")
-  # major is returned
-  expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
+  # major is alloect_equal(icd9CondenseShort(c("003", othersalmonella), onlyReal = TRUE), "003")
+  # major is retupect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = FALSE), othersalmonella)
-  # now do we find a missing major if all chilren present?
+  # now do we fining major if all chilren present?
   almostall003 <- icd9ChildrenShort("003", onlyReal = FALSE)
   almostall003 <- almostall003[almostall003 != "003"] # drop the major
-  expect_equal(icd9CondenseShort(almostall003, onlyReal = FALSE, toMajor = TRUE), "003")
+  expect_equal(icd9CondenseShort(almostall003, onlyReal = FALSE), "003")
 
-  # tomajor = false
   expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE),
-                                 onlyReal = FALSE, toMajor = FALSE), "0031")
-  # major is allowed
-  expect_that(res <- icd9CondenseShort(c("003", othersalmonella),
-                                       onlyReal = TRUE, toMajor = FALSE),
-              gives_warning())
-  expect_equal(res, character())
+                                 onlyReal = FALSE), "0031")
+  # gives nothing back if a non-billable code provided, but billable requested
+
+  expect_equal(icd9CondenseShort(c("003", othersalmonella), onlyReal = TRUE, onlyBillable = TRUE),
+               character()) # TODO: return the value, or empty string?
   # major is returned
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = FALSE), othersalmonella)
   # now do we find a missing major if all chilren present?
   almostall003 <- icd9ChildrenShort("003", onlyReal = FALSE)
   almostall003 <- almostall003[almostall003 != "003"] # drop the major
-  expect_equal(icd9CondenseShort(almostall003, onlyReal = FALSE, toMajor = TRUE), "003")
+  expect_equal(icd9CondenseShort(almostall003, onlyReal = FALSE), "003")
 
 })
 
 test_that("condense single major and its children", {
-  # message for not specifying onlyReal
-  expect_that(res <- icd9CondenseShort("003"), shows_message())
-  expect_equal(res, "003")
+  expect_equal(icd9CondenseShort("003"), "003")
 
   skip("TODO: recode these as Explain tests")
   expect_equal(icd9ExplainShort("391"),
@@ -301,27 +295,30 @@ test_that("condense short range", {
   expect_equal(icd9ExplainShort(icd9Short = othersalmonella[-3]),
                icd9Hierarchy[c(9, 10, 12:18), "descLong"])
 
-  expect_equal(icd9CondenseToMajorShort(othersalmonella, onlyReal = TRUE), "003")
-  expect_equal(icd9CondenseToMajorShort(othersalmonella, onlyReal = FALSE),
+  expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
+  expect_equal(icd9CondenseShort(othersalmonella, onlyReal = FALSE),
                othersalmonella)
-  expect_equal(icd9CondenseToMajorShort(othersalmonella[-3], onlyReal = TRUE),
+  # missing this leaf node, we can't condense at all
+  expect_equal(icd9CondenseShort(othersalmonella[-3], onlyReal = TRUE),
                othersalmonella[-3])
-  expect_equal(icd9CondenseToMajorShort(othersalmonella[-3], onlyReal = FALSE),
+  # if we demand condensing to all possible values, we get the same back
+  expect_equal(icd9CondenseShort(othersalmonella[-3], onlyReal = FALSE),
                othersalmonella[-3])
 
-  expect_equal(sort(icd9ChildrenShort(icd9Short = "001", onlyReal = TRUE)),
+  expect_equal(sort(icd9ChildrenShort(icd9Short = "001", onlyBillable = TRUE)),
                c("0010", "0011", "0019"))
+
+  expect_equal(sort(icd9ChildrenShort(icd9Short = "001", onlyReal = TRUE)),
+               c("001", "0010", "0011", "0019"))
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("00320", onlyReal = TRUE), onlyReal = TRUE), "00320")
   # if we ask for real codes, we should expect all real codes as input:
-  expect_that(icd9CondenseShort(c("0032", icd9ChildrenShort("0032", onlyReal = TRUE)), onlyReal = TRUE),
+  expect_that(icd9CondenseShort(c("0032", icd9ChildrenShort("0032", onlyReal = FALSE)),
+                                onlyReal = TRUE, warnReal = TRUE),
               gives_warning())
   # but majors should be okay, even if not 'real'
   expect_that(icd9CondenseShort(c("003", icd9ChildrenShort("003", onlyReal = TRUE))),
               testthat::not(gives_warning()))
-  # unless we excluded majors:
-  expect_that(icd9CondenseShort(c("003", icd9ChildrenShort("003", onlyReal = TRUE)), toMajor = FALSE), shows_message())
-
 })
 
 test_that("explain icd9GetChapters bad input", {
@@ -369,13 +366,15 @@ test_that("explain icd9GetChapters simple input", {
 })
 
 test_that("working with named lists of codes, decimal is guessed", {
-  expect_that(icd9ExplainDecimal(list(a = c("001"), b = c("001.1", "001.9"))), testthat::not(gives_warning()))
-  expect_that(icd9Explain(list(a = c("001"), b = c("001.1", "001.9"))), testthat::not(gives_warning()))
+  expect_that(icd9ExplainDecimal(list(a = c("001"), b = c("001.1", "001.9"))),
+              testthat::not(gives_warning()))
+  expect_that(icd9Explain(list(a = c("001"), b = c("001.1", "001.9"))),
+              testthat::not(gives_warning()))
 })
 
 test_that("icd9 descriptions is parsed correctly", {
-  x <- parseIcd9LeafDescriptions(version = "32", fromWeb = FALSE)
-  expect_equal(names(x), c("icd9", "descLong", "descShort"))
+  x <- parseIcd9LeafDescriptionsVersion(version = "32", fromWeb = FALSE)
+  expect_equal(names(x), c("icd9", "descShort", "descLong"))
   expect_equal(nrow(x), 14567)
   expect_true(is.character(x$icd9))
   # TODO: add specific tests, e.g. for Menieres with non-standard character

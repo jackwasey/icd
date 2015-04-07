@@ -38,11 +38,11 @@ parseIcd9LeafDescriptionsAll <- function(save = FALSE) {
 
   versions <- cmsIcd9ZipUrls$version
   icd9Billable <- list()
-  for (v in versions) {
-    icd9Billable[v] <- parseIcd9LeafDescriptionsVersion(version = v)
+  for (v in as.character(versions)) {
+    icd9Billable[[as.character(v)]] <- parseIcd9LeafDescriptionsVersion(version = v)
   }
   if (save) saveInDataDir("icd9Billable")
-  icd9Billable
+  invisible(icd9Billable)
 }
 
 #' @title read the ICD-9-CM description data as provided by the Center for
@@ -72,8 +72,14 @@ parseIcd9LeafDescriptionsVersion <- function(version = "32", save = FALSE,
   url <- dat$url
   fn_short <- dat$short_filename
   fn_long <- dat$long_filename
-  path_short <- file.path("inst", "extdata", fn_short)
-  path_long <- file.path("inst", "extdata", fn_long)
+  if (save) {
+    path_short <- file.path("inst", "extdata", fn_short)
+    path_long <- file.path("inst", "extdata", fn_long)
+  } else{
+    path_short <- system.file("extdata", package = "icd9", fn_short)
+    path_long <- system.file("extdata", package = "icd9", fn_long)
+  }
+
   if (verbose) message(fn_short, ", ", fn_long, "\n", path_short, ", ", path_long)
 
 
@@ -123,7 +129,7 @@ parseIcd9LeafDescriptionsVersion <- function(version = "32", save = FALSE,
 
   icd9ShortCode <- lapply(shortlines, FUN = function(x) trim(x[1]))
   icd9ShortDesc <- lapply(shortlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
-  if (!is.na(longlines)) {
+  if (!is.na(longlines[1])) {
     # icd9LongCode <- lapply(longlines, FUN = function(x) trim(x[1]))
     icd9LongDesc <- lapply(longlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
   } else {
@@ -342,3 +348,62 @@ cmsIcd9ZipUrls <- data.frame(
           "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v23_icd9.zip"),
   stringsAsFactors = FALSE
 )
+
+# this takes HOURS
+# TODO: enable annual versions
+icd9BuildChaptersHierarchy <- function(save = FALSE) {
+  checkmate::assertFlag(save)
+  icd9Hierarchy <- cbind(
+    data.frame("icd9" = icd9::icd9Desc$icd9,
+               # TODO: could also get some long descs from more recent billable
+               # lists, but not older ones which only have short descs
+               "descLong" = icd9::icd9Desc$desc,
+               stringsAsFactors = FALSE),
+    # the following can and should be factors:
+    icd9GetChapters(icd9 = icd9::icd9Desc$icd9, isShort = TRUE)
+  )
+
+  # fix congenital abnormalities not having subchapter defined:
+  # ( this might be easier to do when parsing the chapters themselves...)
+  icd9Hierarchy %<>% fixSubchapterNa(740, 759)
+  # and hematopoietic organs
+  icd9Hierarchy %<>% fixSubchapterNa(280, 289)
+
+  # insert the short descriptions from the billable codes text file. Where there
+  # is no short description, e.g. for most Major codes, or intermediate codes,
+  # just copy the long description over.
+  # TODO need to match the annual RTF with the annual txt file
+  short_descs <- icd9::icd9Billable[32]["icd9", "descShort"]
+
+  billable_rows <- match(short_descs$icd9, icd9Hierarchy$icd9)
+  title_rows <- setdiff(seq_len(nrow(icd9Hierarchy)), billable_rows)
+  icd9Hierarchy[billable_rows, "descShort"] <- short_descs$descShort
+  # for rows without a short description (i.e. titles), useexisting long desc
+  icd9Hierarchy[title_rows, "descShort"] <- icd9Hierarchy[title_rows, "descLong"]
+  # now put the short description in the right column position
+  icd9Hierarchy <- icd9Hierarchy[c("icd9", "descShort", "descLong", "threedigit",
+                                   "major", "subchapter", "chapter")]
+
+  # quick sanity checks - full tests in test-parse.R
+  stopifnot(all(icd9IsValidShort(icd9Hierarchy$icd9)))
+  stopifnot(!any(sapply(is.na(icd9Hierarchy))))
+
+  if (save) saveInDataDir("icd9Hierarchy") # EXCLUDE COVERAGE
+}
+
+fixSubchapterNa <- function (x, start, end) {
+  # 740 CONGENITAL ANOMALIES is a chapter with no sub-chapters defined. For
+  # consistency, assign the same name to sub-chapters
+  congenital <- x$icd9 %in% (start %i9sa% end)
+  # assert all the same:
+  stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
+  # now some work to insert a new level into the sub-chapter factor in the right place
+  previous_sub <- x[(which(congenital) - 1)[1], "subchapter"] %>% asCharacterNoWarn
+  previous_sub_pos <- which(levels(x$subchapter) == previous_sub)
+  congenital_title <- x[which(congenital)[1], "chapter"] %>% asCharacterNoWarn
+  new_subs <- x$subchapter %>% asCharacterNoWarn
+  new_subs[congenital] <- congenital_title
+  new_levels <- append(levels(x$subchapter), congenital_title, previous_sub_pos)
+  x$subchapter <- factor(new_subs, new_levels)
+  x
+}

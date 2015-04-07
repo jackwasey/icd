@@ -36,7 +36,6 @@ sortOrderShort <- function(icd9Short) {
     icd9Short)
 }
 
-
 #' @title take two ICD-9 codes and expand range to include all child codes
 #' @description this is cumbersome code, covering a whole load of edge cases
 #'   relating to the fact that icd9 codes are \strong{not} in numeric order. An
@@ -174,7 +173,7 @@ icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
   stopifnot(toupper(c[1]) == toupper(d[1]))
   if (icd9IsV(start)) fmt <- "%02d" else fmt <- "%03d"
   majors <- paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
-  if (onlyReal) return(icd9GetRealShort(majors, majorOk = TRUE))
+  if (onlyReal) return(icd9GetRealShort(majors, onlyBillable = FALSE))
   majors
 }
 
@@ -227,6 +226,7 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE, excludeAmbiguous
 #' @template icd9-decimal
 #' @template isShort
 #' @template onlyReal
+#' @template onlyBillable
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @examples
@@ -239,24 +239,35 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE, excludeAmbiguous
 #' icd9ChildrenDecimal("100.00")
 #' icd9ChildrenDecimal("2.34")
 #' @export
-icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE) {
+icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                         onlyReal = TRUE, onlyBillable = FALSE) {
   assertFactorOrCharacter(icd9)
   checkmate::assertFlag(isShort)
   checkmate::assertFlag(onlyReal)
-  .Call("icd9_icd9ChildrenCpp", PACKAGE = "icd9", icd9, isShort, onlyReal)
+  res <- .Call("icd9_icd9ChildrenCpp", PACKAGE = "icd9", icd9, isShort, onlyReal)
+  if (onlyBillable) return(icd9GetBillable(res, isShort))
+  res
 }
 
 #' @rdname icd9Children
 #' @name icd9Children
 #' @export
-icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE) {
-  .Call("icd9_icd9ChildrenShortCpp", PACKAGE = "icd9", icd9Short, onlyReal)
+icd9ChildrenShort <- function(icd9Short,
+                              onlyReal = TRUE, onlyBillable = FALSE) {
+  checkmate::assertCharacter(icd9Short)
+  checkmate::assertFlag(onlyReal)
+  res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = "icd9", icd9Short, onlyReal)
+  if (onlyBillable) return(icd9GetBillableShort(res))
+  res
 }
 
 #' @rdname icd9Children
 #' @export
-icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE) {
-  .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = "icd9", icd9Decimal, onlyReal)
+icd9ChildrenDecimal <- function(icd9Decimal,
+                                onlyReal = TRUE, onlyBillable = FALSE) {
+  res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = "icd9", icd9Decimal, onlyReal)
+  if (onlyBillable) return(icd9GetBillableDecimal(res))
+  res
 }
 
 #' Generate sysdata.rda
