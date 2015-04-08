@@ -369,65 +369,6 @@ test_that("icd9ChildrenShort valid input", {
   expect_equal(icd9ChildrenShort("390", onlyReal = TRUE), "390")
 })
 
-test_that("condense ranges which do consense", {
-  expect_equal(
-    icd9Condense(icd9ChildrenShort("123", onlyReal = TRUE), onlyReal = TRUE),
-    "123")
-  expect_equal(
-    icd9Condense(icd9ChildrenShort("1", onlyReal = TRUE), onlyReal = TRUE),
-    "001")
-  expect_equal(icd9Condense(icd9ChildrenShort("123")), "123")
-  expect_equal(icd9Condense(icd9ChildrenShort("1")), "001")
-  for (or1 in c(TRUE, FALSE)) {
-    for (or2 in c(TRUE, FALSE)) {
-      expect_equal(
-        icd9Condense(icd9ChildrenShort("00321", onlyReal = or1),
-                                 onlyReal = or2),
-        "00321", info = paste(or1, or2))
-      expect_equal(
-        icd9Condense(icd9ChildrenShort("V1221", onlyReal = or1),
-                                 onlyReal = or2),
-        "V1221", info = paste(or1, or2))
-    }
-  }
-  expect_equal(icd9Condense(icd9ChildrenShort("V12", onlyReal = TRUE),
-                                        onlyReal = TRUE), "V12")
-  expect_equal(icd9Condense(icd9ChildrenShort("V12", onlyReal = FALSE),
-                                        onlyReal = FALSE), "V12")
-})
-
-test_that("condense ranges that don't condense at all", {
-  expect_equal(sort(icd9Condense(c("1230", "1232", "1236"), onlyReal = FALSE)), c("1230", "1232", "1236"))
-  expect_equal(sort(icd9Condense(c("1230", "1232", "1236"), onlyReal = TRUE)), c("1230", "1232", "1236"))
-  # the parent "1000" is not included.
-  expect_equal(sort(icd9Condense(as.character(10000:10009),
-                                             onlyReal = FALSE)),
-               as.character(10000:10009))
-  # missing 10009
-  expect_equal(sort(icd9Condense(c("1000", as.character(10000:10008)),
-                                             onlyReal = FALSE)),
-               c("1000", as.character(10000:10008)))
-})
-
-test_that("condense range invalid data", {
-  # no automatic validation, so we just get it back. We can validate separately.
-  # e.g. "turnpike" %>% icd9GetRealShort
-  expect_equal(icd9Condense("turnpike", onlyReal = FALSE), "turnpike")
-  # TODO more tests here
-})
-
-test_that("mix of four and five digit billable codes", {
-  expect_equal(
-    icd9CondenseShort(c("10081", "10089", "1000", "1009")),
-    "100")
-})
-
-test_that("mix of four and five digit with non-billable mid-level four digit code", {
-  expect_equal(
-    icd9CondenseShort(c("1000", "1008", "10081", "10089", "1009")),
-    "100")
-})
-
 test_that("icd9InReferenceCode", {
   # if the input icd9 code is definitely junk, e.g. longer than 5 char, or 0 char, we get an NA back
   expect_equal(icd9InReferenceCode("bratwurst", "123", isShort = TRUE), FALSE)
