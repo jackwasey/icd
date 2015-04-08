@@ -5,8 +5,8 @@
 \title{read the ICD-9-CM description data as provided by the Center for
   Medicaid Services.}
 \usage{
-parseIcd9LeafDescriptionsVersion(version = "32", save = FALSE,
-  fromWeb = NULL, verbose = TRUE)
+parseIcd9LeafDescriptionsVersion(version = getLatestBillableVersion(),
+  save = FALSE, fromWeb = NULL, verbose = TRUE)
 }
 \arguments{
 \item{save}{logical whether to attempt to re-save source files in inst}

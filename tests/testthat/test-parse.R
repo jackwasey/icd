@@ -146,7 +146,7 @@ test_that("majors extracted from web page are the same as those from RTF", {
                                 paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
 })
 
-v32 <- parseIcd9LeafDescriptions(version = "32", save = FALSE, fromWeb = FALSE)
+v32 <- parseIcd9LeafDescriptionsVersion(version = "32", save = FALSE, fromWeb = FALSE)
 
 test_that("all leaf codes from TXT are in RTF extract", {
   v32$icd9 %>% icd9ShortToDecimal -> leaves
@@ -274,4 +274,26 @@ test_that("some randomly selected rows are correct", {
     "506", "Respiratory conditions due to chemical fumes and vapors",
     "Pneumoconioses And Other Lung Diseases Due To External Agents",
     "Diseases Of The Respiratory System")
+})
+
+test_that("billable codes are recreated", {
+  expect_identical(parseIcd9LeafDescriptionsAll(save = FALSE),
+                   icd9::icd9Billable)
+})
+
+test_that("billable codes for expected versions exist", {
+  expect_true(all(as.character(23:32) %in% names(icd9Billable)))
+  expect_true(all(sapply(icd9Billable, is.data.frame)))
+})
+
+test_that("billable codes are all in order", {
+  for (v in names(icd9Billable)) {
+    icd9 <- icd9Billable[[v]][["icd9"]]
+    expect_identical(icd9, icd9SortShort(icd9),
+                     info = paste("version = ", v))
+  }
+})
+
+test_that("parsing 27 gives zero-padded digit icd9 codes", {
+  expect_equal(icd9Billable[["27"]][1, "icd9"], "0010")
 })

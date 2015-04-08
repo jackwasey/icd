@@ -6,11 +6,12 @@
 \alias{icd9ChildrenShort}
 \title{Expand ICD-9 codes to all possible sub-codes}
 \usage{
-icd9Children(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE)
+icd9Children(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE,
+  onlyBillable = FALSE)
 
-icd9ChildrenShort(icd9Short, onlyReal = TRUE)
+icd9ChildrenShort(icd9Short, onlyReal = TRUE, onlyBillable = FALSE)
 
-icd9ChildrenDecimal(icd9Decimal, onlyReal = TRUE)
+icd9ChildrenDecimal(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE)
 }
 \arguments{
 \item{icd9}{is
@@ -29,6 +30,13 @@ Since nearly valid, out-dated or new codes may be missed, not limiting to
 'real' values will be useful. Ultimately, there will need to be annual (and
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
+
+\item{onlyBillable}{single logical value, if \code{TRUE}, describes the input
+data, stating that it only contains billable codes. Usually, the function
+will try to guess this, but if you know in advance what they should be, the
+functions can optionally warn if this is incorrect, and save some
+computation time. The billable codes are derived from the CMS list. The
+most recent version is used by default.}
 
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
@@ -61,12 +69,9 @@ Other ICD-9 ranges: \code{\link{\%i9d\%}},
   \code{\link{icd9ExpandRangeDecimal}},
   \code{\link{icd9ExpandRangeMajor}},
   \code{\link{icd9ExpandRangeShort}};
-  \code{\link{icd9Condense}},
+  \code{\link{icd9Condense}}, \code{\link{icd9Condense}},
   \code{\link{icd9CondenseDecimal}},
-  \code{\link{icd9CondenseShort}},
-  \code{\link{icd9CondenseToMajor}},
-  \code{\link{icd9CondenseToMajorDecimal}},
-  \code{\link{icd9CondenseToMajorShort}};
+  \code{\link{icd9CondenseShort}};
   \code{\link{icd9ExpandMinor}}
 }
 \keyword{manip}

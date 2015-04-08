@@ -11,25 +11,24 @@
 \title{explain ICD9 codes}
 \usage{
 icd9Explain(icd9, isShort = icd9GuessIsShort(icd9), doCondense = TRUE,
-  brief = FALSE, warn = TRUE, toMajor = TRUE)
+  brief = FALSE, warn = TRUE)
 
-icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE,
-  toMajor = TRUE)
+icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
-  warn = TRUE, toMajor = TRUE)
+  warn = TRUE)
 
 \method{icd9Explain}{list}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE, warn = TRUE, toMajor = TRUE)
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd9Explain}{factor}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE, warn = TRUE, toMajor = TRUE)
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE, warn = TRUE, toMajor = TRUE)
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd9Explain}{numeric}(icd9, isShort = icd9GuessIsShort(icd9),
-  doCondense = TRUE, brief = FALSE, warn = FALSE, toMajor = TRUE)
+  doCondense = TRUE, brief = FALSE, warn = FALSE)
 }
 \arguments{
 \item{icd9}{is
@@ -56,11 +55,6 @@ the short description from the canonical CMS descriptions (included in
 which do not correspond to diagnoses, or to three-digit codes, will trigger
 a warning.}
 
-\item{toMajor}{Most major codes are not \emph{real}, e.g. Salmonella 003 is a
-major category, but is not itself used as a diagnostic code. Therefore,
-strictly, asking for only \emph{real} codes excludes the major. We'll turn
-a blind eye to this if we specifically request majors with toMajor.}
-
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
@@ -70,13 +64,16 @@ becomes "010", not "0010"}
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
+
+\item{toParent}{single logical value which, if \code{TRUE}, will step up the
+hierarchy to four or three digit descriptions of groups of codes.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD9 code, name
   and description, derived from datamart lookup table
 }
 \description{
-convert full format (123.45 style) ICD9 codes into the name and
+convert 'decimal' format (123.45 style) ICD9 codes into the name and
   description for human review there are official ICD9-CM data tables, not
   with conversion to decimal notation, but to the textual format.
 }

@@ -235,7 +235,7 @@ getIcdField <- function(x, icd9Field = NULL) {
 }
 
 getLatestBillableVersion <- function()
-  as.character(max(cmsIcd9ZipUrls$version))
+  as.character(max(icd9:::billable_sources$version))
 
 #' @title trim null or empty values from a list
 #' @param x list

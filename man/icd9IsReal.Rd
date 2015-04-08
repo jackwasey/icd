@@ -4,25 +4,22 @@
 \alias{icd9GetReal}
 \alias{icd9GetRealDecimal}
 \alias{icd9GetRealShort}
-\alias{icd9IsBillable}
 \alias{icd9IsReal}
 \alias{icd9IsRealDecimal}
 \alias{icd9IsRealShort}
 \title{Check whether ICD-9 codes exist}
 \usage{
-icd9IsReal(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE)
+icd9IsReal(icd9, isShort = icd9GuessIsShort(icd9), onlyBillable = FALSE)
 
-icd9IsRealShort(icd9Short, majorOk = TRUE)
+icd9IsRealShort(icd9Short, onlyBillable = FALSE)
 
-icd9IsRealDecimal(icd9Decimal, majorOk = TRUE)
+icd9IsRealDecimal(icd9Decimal, onlyBillable = FALSE)
 
-icd9GetReal(icd9, isShort = icd9GuessIsShort(icd9), majorOk = TRUE)
+icd9GetReal(icd9, isShort = icd9GuessIsShort(icd9), onlyBillable = FALSE)
 
-icd9GetRealShort(icd9Short, majorOk = TRUE)
+icd9GetRealShort(icd9Short, onlyBillable = FALSE)
 
-icd9GetRealDecimal(icd9Decimal, majorOk = TRUE)
-
-icd9IsBillable(icd9, isShort = icd9GuessIsShort(icd9))
+icd9GetRealDecimal(icd9Decimal, onlyBillable = FALSE)
 }
 \arguments{
 \item{icd9}{is
@@ -35,9 +32,9 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{majorOk}{single logical, if \code{TRUE} will consider a three-digit
-code to be real, even though the majority of syntactically valid
-three-digit codes aren't billable.}
+\item{onlyBillable}{single logical value (default \code{FALSE}), if
+\code{TRUE} will divert to test whether the codes are in the billable list
+instead of seeing if they are any leaf or branch node.}
 
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
@@ -71,7 +68,5 @@ This is different from syntactic validity: it looks it up in the
 \item \code{icd9GetRealShort}: 
 
 \item \code{icd9GetRealDecimal}: 
-
-\item \code{icd9IsBillable}: 
 }}
 

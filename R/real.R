@@ -60,7 +60,7 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE)
 #' @title Determine whether codes are billable leaf-nodes
 #' @description Codes provided are compared to the most recent version of the
 #'   CMS list of billable codes, or another version if specified.
-#' @template icd9
+#' @template icd9-any
 #' @template isShort
 #' @param version single number describing the version of the CMS ICD-9-CM
 #'   codes, defaults to the most recent available

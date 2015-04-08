@@ -63,10 +63,9 @@ test_that("expalin a single top level code without a top level explanation", {
 
 
 test_that("explain a single leaf node" , {
-  expect_equal(icd9ExplainShort("27800", doCondense = FALSE),
-               "Obesity, unspecified")
-  expect_equal(icd9ExplainShort("27800", doCondense = TRUE),
-               "Obesity, unspecified")
+  expect_equal(icd9ExplainShort("27800", doCondense = FALSE), "Obesity, unspecified")
+  expect_equal(icd9ExplainShort("27800", doCondense = TRUE), "Obesity, unspecified")
+  expect_equal(icd9Explain("00329"), "Other localized salmonella infections")
 })
 
 # TODO:
@@ -265,7 +264,7 @@ test_that("condense full ranges", {
   # gives nothing back if a non-billable code provided, but billable requested
 
   expect_equal(icd9CondenseShort(c("003", othersalmonella), onlyReal = TRUE, onlyBillable = TRUE),
-               character()) # TODO: return the value, or empty string?
+               "003") # onlyBillable describes input, it doesn't make any sense to describe output when condensing.
   # major is returned
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = FALSE), othersalmonella)
@@ -292,8 +291,6 @@ test_that("condense short range", {
 
   expect_equal(icd9ExplainShort(icd9Short = othersalmonella),
                "Other salmonella infections")
-  expect_equal(icd9ExplainShort(icd9Short = othersalmonella[-3]),
-               icd9Hierarchy[c(9, 10, 12:18), "descLong"])
 
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = FALSE),
@@ -312,13 +309,15 @@ test_that("condense short range", {
                c("001", "0010", "0011", "0019"))
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("00320", onlyReal = TRUE), onlyReal = TRUE), "00320")
-  # if we ask for real codes, we should expect all real codes as input:
-  expect_that(icd9CondenseShort(c("0032", icd9ChildrenShort("0032", onlyReal = FALSE)),
-                                onlyReal = TRUE, warnReal = TRUE),
-              gives_warning())
-  # but majors should be okay, even if not 'real'
+  # majors should be okay, even if not 'real'
   expect_that(icd9CondenseShort(c("003", icd9ChildrenShort("003", onlyReal = TRUE))),
               testthat::not(gives_warning()))
+})
+
+test_that("explain gives appropriate warnings", {
+  # if we ask for real codes, we should expect all real codes as input:
+  expect_that(icd9CondenseShort("003", onlyReal = TRUE, onlyBillable = TRUE, warn = TRUE),
+              gives_warning())
 })
 
 test_that("explain icd9GetChapters bad input", {

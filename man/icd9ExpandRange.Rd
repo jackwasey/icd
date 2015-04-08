@@ -74,6 +74,9 @@ this is cumbersome code, covering a whole load of edge cases
 }
 \examples{
 "4280 " \%i9s\% "4289 "
+"42799 " \%i9s\% "42802"
+"42799 " \%i9sa\% "42802" # doesn't include 428 or 4280
+"427.99 " \%i9da\% "428.02"
 "V80 " \%i9s\% " V8210 "
 
 # the following should give all codes in 428 EXCEPT "428",
@@ -89,12 +92,9 @@ Other ICD-9 ranges: \code{\link{icd9Children}},
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
   \code{\link{icd9ChildrenShort}};
-  \code{\link{icd9Condense}},
+  \code{\link{icd9Condense}}, \code{\link{icd9Condense}},
   \code{\link{icd9CondenseDecimal}},
-  \code{\link{icd9CondenseShort}},
-  \code{\link{icd9CondenseToMajor}},
-  \code{\link{icd9CondenseToMajorDecimal}},
-  \code{\link{icd9CondenseToMajorShort}};
+  \code{\link{icd9CondenseShort}};
   \code{\link{icd9ExpandMinor}}
 }
 

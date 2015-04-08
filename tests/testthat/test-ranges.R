@@ -230,8 +230,19 @@ test_that("range doesn't include higher level parent github issue #14", {
 })
 
 test_that("ranges can include ambiguous parents, optionally", {
-  expect_true("0101" %in% (icd9ExpandRange("01006","01010", onlyReal = FALSE, excludeAmbiguousParent = FALSE)))
-  expect_false("0101" %in% (icd9ExpandRange("01006","01010", onlyReal = TRUE, excludeAmbiguousParent = FALSE)))
+  expect_equal(
+    icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousParent = TRUE),
+    c("01006", "01010"))
+  expect_equal(
+    icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousParent = FALSE),
+    c("01006", "0101", "01010"))
+  expect_equal(
+    icd9ExpandRange("01006", "01010", onlyReal = FALSE, excludeAmbiguousParent = TRUE),
+    c("01006", "01007", "01008", "01009", "01010"))
+  expect_equal(
+    icd9ExpandRange("01006", "01010", onlyReal = FALSE, excludeAmbiguousParent = FALSE),
+    c("01006", "01007", "01008", "01009", "0101", "01010"))
+
   # if real codes, then we can tolerate a higher level code if it is billable,
   # e.g. 390 (no children)
   expect_true("390" %in% ("389.9" %i9d% "390.1"))
@@ -360,62 +371,60 @@ test_that("icd9ChildrenShort valid input", {
 
 test_that("condense ranges which do consense", {
   expect_equal(
-    icd9CondenseToMajorShort(icd9ChildrenShort("123", onlyReal = TRUE),
-                             onlyReal = TRUE),
+    icd9Condense(icd9ChildrenShort("123", onlyReal = TRUE), onlyReal = TRUE),
     "123")
   expect_equal(
-    icd9CondenseToMajorShort(icd9ChildrenShort("1", onlyReal = TRUE),
-                             onlyReal = TRUE),
+    icd9Condense(icd9ChildrenShort("1", onlyReal = TRUE), onlyReal = TRUE),
     "001")
+  expect_equal(icd9Condense(icd9ChildrenShort("123")), "123")
+  expect_equal(icd9Condense(icd9ChildrenShort("1")), "001")
   for (or1 in c(TRUE, FALSE)) {
     for (or2 in c(TRUE, FALSE)) {
       expect_equal(
-        icd9CondenseToMajorShort(icd9ChildrenShort("00321", onlyReal = or1),
+        icd9Condense(icd9ChildrenShort("00321", onlyReal = or1),
                                  onlyReal = or2),
         "00321", info = paste(or1, or2))
       expect_equal(
-        icd9CondenseToMajorShort(icd9ChildrenShort("V1221", onlyReal = or1),
+        icd9Condense(icd9ChildrenShort("V1221", onlyReal = or1),
                                  onlyReal = or2),
         "V1221", info = paste(or1, or2))
     }
   }
-  expect_equal(icd9CondenseToMajorShort(icd9ChildrenShort("V12", onlyReal = TRUE),
+  expect_equal(icd9Condense(icd9ChildrenShort("V12", onlyReal = TRUE),
                                         onlyReal = TRUE), "V12")
-  expect_equal(icd9CondenseToMajorShort(icd9ChildrenShort("V12", onlyReal = FALSE),
+  expect_equal(icd9Condense(icd9ChildrenShort("V12", onlyReal = FALSE),
                                         onlyReal = FALSE), "V12")
 })
 
 test_that("condense ranges that don't condense at all", {
-  expect_equal(
-    sort(icd9CondenseToMajorShort(icd9ChildrenShort("123", onlyReal = TRUE),
-                                  onlyReal = FALSE)),
-    sort(icd9ChildrenShort("123", onlyReal = TRUE)))
+  expect_equal(sort(icd9Condense(c("1230", "1232", "1236"), onlyReal = FALSE)), c("1230", "1232", "1236"))
+  expect_equal(sort(icd9Condense(c("1230", "1232", "1236"), onlyReal = TRUE)), c("1230", "1232", "1236"))
   # the parent "1000" is not included.
-  expect_equal(sort(icd9CondenseToMajorShort(as.character(10000:10009),
+  expect_equal(sort(icd9Condense(as.character(10000:10009),
                                              onlyReal = FALSE)),
                as.character(10000:10009))
   # missing 10009
-  expect_equal(sort(icd9CondenseToMajorShort(c("1000", as.character(10000:10008)),
+  expect_equal(sort(icd9Condense(c("1000", as.character(10000:10008)),
                                              onlyReal = FALSE)),
                c("1000", as.character(10000:10008)))
 })
 
-test_that("condense range invalid data" ,{
+test_that("condense range invalid data", {
   # no automatic validation, so we just get it back. We can validate separately.
   # e.g. "turnpike" %>% icd9GetRealShort
-  expect_equal(icd9CondenseToMajorShort("turnpike", onlyReal = FALSE), "turnpike")
+  expect_equal(icd9Condense("turnpike", onlyReal = FALSE), "turnpike")
   # TODO more tests here
 })
 
-test_that("condense codes with mix of four and five digit billables", {
+test_that("mix of four and five digit billable codes", {
   expect_equal(
-    icd9CondenseToParentShort(c("10081", "10089", "1000", "1009")),
+    icd9CondenseShort(c("10081", "10089", "1000", "1009")),
     "100")
 })
 
-test_that("condense codes with mix of four and five digit including non-billable four digit code", {
+test_that("mix of four and five digit with non-billable mid-level four digit code", {
   expect_equal(
-    icd9CondenseToParentShort(c("1000", "1008", "10081", "10089", "1009")),
+    icd9CondenseShort(c("1000", "1008", "10081", "10089", "1009")),
     "100")
 })
 
@@ -526,17 +535,22 @@ test_that("sorting char factors", {
 
 test_that("sysdata.rda is okay", {
   lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
-               "icd9NShortReal", "icd9VShortReal", "icd9EShortReal")
+               "icd9NShortBillable", "icd9VShortBillable", "icd9EShortBillable",
+               "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
+               "billable_sources")
 
-  expect_that(sysdat <- icd9GenerateSysData(do.save = FALSE), testthat::not(throws_error()))
+  expect_that(sysdat <- generateSysData(save = FALSE), testthat::not(throws_error()))
   expect_equal(names(sysdat), lknames)
 
-  stopifnot(length(icd9NShortReal) < length(icd9NShort))
-  stopifnot(length(icd9VShortReal) < length(icd9VShort))
-  stopifnot(length(icd9EShortReal) < length(icd9EShort))
-  stopifnot(all(icd9NShortReal %in% icd9NShort))
-  stopifnot(all(icd9VShortReal %in% icd9VShort))
-  stopifnot(all(icd9EShortReal %in% icd9EShort))
+  expect_less_than(length(icd9NShortBillable), length(icd9NShortReal))
+  expect_less_than(length(icd9VShortBillable), length(icd9VShortReal))
+  expect_less_than(length(icd9EShortBillable), length(icd9EShortReal))
+  expect_less_than(length(icd9NShortReal), length(icd9NShort))
+  expect_less_than(length(icd9VShortReal), length(icd9VShort))
+  expect_less_than(length(icd9EShortReal), length(icd9EShort))
+  expect_true(all(icd9NShortReal %in% icd9NShort))
+  expect_true(all(icd9VShortReal %in% icd9VShort))
+  expect_true(all(icd9EShortReal %in% icd9EShort))
 
 })
 
