@@ -8,11 +8,13 @@
 #' @param returnAll logical which, if TRUE, will result in the invisible return
 #'   of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
 #' @keywords internal
-parseAhrqSas <- function(sasPath = system.file("extdata",
-                                               "comformat2012-2013.txt",
-                                               package = "icd9"),
-                         condense = FALSE, save = FALSE, path = "data",
-                         returnAll = FALSE) {
+parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
+                         save = FALSE, path = "data", verbose = FALSE) {
+                         #returnAll = FALSE,
+  checkmate::assertString(sasPath)
+  checkmate::assertString(path)
+  checkmate::assertFlag(save)
+  #checkmate::assertFlag(returnAll)
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
@@ -23,15 +25,15 @@ parseAhrqSas <- function(sasPath = system.file("extdata",
 
   ahrqComorbidAll <- list()
 
-  for (cmd in names(ahrqComorbidWork)) {
-    somePairs <- strsplit(x = ahrqComorbidWork[[cmd]], split = "-")
+  for (cmb in names(ahrqComorbidWork)) {
+    if (verbose) message("parsing AHRQ SAS codes for '", cmb, "'")
+    somePairs <- strsplit(x = ahrqComorbidWork[[cmb]], split = "-")
     # non-range values just go on list
     out <- as.list(somePairs[lapply(somePairs, length) == 1])
     thePairs <- somePairs[lapply(somePairs, length) == 2]
-    out <- append(out, lapply(thePairs,
-                              function(x) icd9ExpandRangeShort(x[1], x[2], onlyReal = FALSE)))
+    out <- append(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
     # update ahrqComorbid with full range of icd9 codes:
-    ahrqComorbidAll[[cmd]] <- unlist(out)
+    ahrqComorbidAll[[cmb]] <- unlist(out)
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
@@ -78,30 +80,21 @@ parseAhrqSas <- function(sasPath = system.file("extdata",
 
   # todo: save/return the DRG mappings.
 
-  # either fully expand or fully condense the results
-  if (condense) {
-    ahrqComorbid <- lapply(ahrqComorbid, icd9CondenseToMajorShort, )
-    ahrqComorbidAll <- lapply(ahrqComorbidAll, icd9CondenseToMajorShort)
-  } else {
-    ahrqComorbid <- lapply(ahrqComorbid, function(x)
-      icd9ChildrenShort(x, onlyReal = FALSE))
-    ahrqComorbidAll <- lapply(ahrqComorbidAll, function(x)
-      icd9ChildrenShort(x, onlyReal = FALSE))
-  }
+#   # expand results (but not too much!)
+#   for (cmb in names(ahrqComorbid)) {
+#     if (verbose) message("working on ranges for: ", cmb)
+#     if (cmb == "CHRNLUNG") browser()
+#     ahrqComorbid[[cmb]] <- c(
+#       ahrqComorbid[[cmb]],
+#       icd9CondenseShort(ahrqComorbid[[cmb]], onlyReal = FALSE, onlyBillable = FALSE)
+#     )
+#     ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], icd9ChildrenShort(ahrqComorbid[[cmb]], onlyReal = FALSE))
+#     ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], icd9ChildrenShort(ahrqComorbid[[cmb]], onlyReal = TRUE))
+#     ahrqComorbid[[cmb]] <- icd9SortShort(ahrqComorbid[[cmb]])
+#   }
 
   names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
-
-  # save the data in the development tree, so the package user doesn't need to
-  # decode it themselves.
-  # EXCLUDE COVERAGE START
-  if (save) {
-    saveInDataDir("ahrqComorbidAll")
-    saveInDataDir("ahrqComorbid")
-  }
-  # EXCLUDE COVERAGE END
-
-  if (returnAll) return(invisible(ahrqComorbidAll))
-
+  if (save) saveInDataDir("ahrqComorbid") # EXCLUDE COVERAGE
   invisible(ahrqComorbid)
 }
 
@@ -159,13 +152,9 @@ parseQuanDeyoSas <- function(sasPath = NULL,
   # use validation: takes time, but these are run-once per package creation (and
   # test) tasks.
   if (condense)
-    quanDeyoComorbid <- lapply(
-      quanDeyoComorbid,
-      icd9CondenseToMajorShort)
+    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd9Condense)
   else
-    quanDeyoComorbid <- lapply(
-      quanDeyoComorbid,
-      icd9ChildrenShort, onlyReal = FALSE)
+    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd9ChildrenShort, onlyReal = FALSE)
 
   names(quanDeyoComorbid) <- icd9::charlsonComorbidNamesAbbrev
   if (save) saveInDataDir("quanDeyoComorbid")
@@ -238,7 +227,7 @@ parseQuanElix <- function(condense = FALSE,
   if (condense)
     quanElixComorbid <- lapply(
       quanElixComorbid,
-      function(x) icd9CondenseToMajorShort(x, onlyReal = FALSE))
+      function(x) icd9Condense(x, onlyReal = FALSE))
   else
     quanElixComorbid <- lapply(
       quanElixComorbid,
@@ -318,7 +307,7 @@ parseElix <- function(condense = FALSE, save = FALSE, path = "data") {
   if (condense) {
     elixComorbid <- lapply(
       elixComorbid,
-      function(x) icd9CondenseToMajorShort(x, onlyReal = FALSE))
+      function(x) icd9Condense(x, onlyReal = FALSE))
   } else {
     elixComorbid <- lapply(
       elixComorbid,

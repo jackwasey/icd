@@ -94,9 +94,12 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL,
     icd9GetMajor(i9w, isShort = TRUE) -> mjrs
     major_match <- mjrs == mp
     test_kids <- icd9ChildrenShort(mp, onlyReal = onlyReal, onlyBillable = onlyBillable)
-    if ((length(test_kids) - !onlyBillable) == sum(major_match)) {
-      out <- c(out, mp)
-      i9w <- i9w[-which(major_match)]
+    #if ((length(test_kids) - !onlyBillable) == sum(major_match)) {
+    if (all(test_kids %in% c(mp, i9w))) {
+      if ((length(test_kids) > 1) || (mp %in% i9w)) {
+        out <- c(out, mp)
+        i9w <- i9w[-which(major_match)]
+      }
     }
   }
 
@@ -108,15 +111,17 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL,
     substr(i9w, 0, 4) -> fourth_level
     fourth_match <- fourth_level == fp
     test_kids <- icd9ChildrenShort(fp, onlyReal = onlyReal, onlyBillable = onlyBillable)
-    # assumption is that no four digit code is billable AND a leaf node
-    if (length(test_kids) == sum(fourth_match)) {
-      # we matched (don't count the four-char itself)
-      out <- c(out, fp)
-      i9w <- i9w[-which(fourth_match)]
+    # if billable, then if the parent is not billable, the length will be one less
+    #if ((length(test_kids) - 1 + (onlyReal && !icd9IsBillableShort(fp))) == sum(fourth_match)) {
+    if (all(test_kids %in% c(fp, i9w))) {
+      if ((length(test_kids) > 1) || (fp %in% i9w)) {
+        out <- c(out, fp)
+        i9w <- i9w[-which(fourth_match)]
+      }
     }
   }
   #  if (onlyReal) return(icd9GetRealShort(c(i9o, i9w), majorOk = TRUE))
   out <- unique(icd9SortShort(c(out, i9w)))
   if (onlyReal) return(icd9GetRealShort(out))
   out
-  }
+}

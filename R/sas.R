@@ -65,7 +65,9 @@ sasFormatExtract <- function(sasTxt) {
 #' @keywords internal programming list
 sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
 
-  stopifnot(length(x) == 1) # sorry...
+  checkmate::assertString(x)
+  checkmate::assertFlag(stripWhiteSpace)
+  checkmate::assertFlag(stripQuotes)
   # splitting with clever regex to separate each pair of assignments seems
   # tricky, so doing it in steps.
   # n.b. this is a list with list per input row.
@@ -129,7 +131,7 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
 #'   string itself)
 #' @keywords internal manip util
 sasDropOtherAssignment <- function(x) {
-  # asssuming one "="
+  stopifnot(sapply(regmatches(x, gregexpr("=", x)), length) == 1)
   lapply(x, function(y) strsplit(y, split="[[:space:]]*=")[[1]][1])
 }
 

@@ -3,14 +3,14 @@ context("icd9 ranges")
 test_that("expand icd9 range definition", {
   expect_equal(
     icd9ExpandRangeShort("4012", "40145",
-                         onlyReal = FALSE, excludeAmbiguousParent = FALSE),
+                         onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
            "40139", "4014", "40140", "40141", "40142", "40143", "40144", "40145")))
   expect_equal(
     icd9ExpandRangeShort("4012", "40145",
-                         onlyReal = FALSE, excludeAmbiguousParent = TRUE),
+                         onlyReal = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
@@ -54,8 +54,8 @@ test_that("expand icd9 range definition", {
                sort(icd9Children(c("401", "402"), isShort = TRUE, onlyReal = FALSE)))
   # the next two cases cover the HIV ranges in the co-morbidities, wherein the
   # final code is included, in which case the parent ("044" in this case) is
-  # implied strongly.
-  expect_equal(icd9ExpandRangeShort("043", "0449", onlyReal = FALSE),
+  # implied strongly. CAN'T EXPECT RANGE TO ACCOUNT FOR THIS, but we can make next test work with flag as follows:
+  expect_equal(icd9ExpandRangeShort("043", "0449", onlyReal = FALSE, excludeAmbiguousEnd = FALSE),
                icd9ExpandRangeShort("043", "044", onlyReal = FALSE))
   expect_equal(icd9ExpandRangeShort("043", "04499", onlyReal = FALSE),
                icd9ExpandRangeShort("043", "044", onlyReal = FALSE))
@@ -95,12 +95,9 @@ test_that("expand icd9 range definition", {
            "40299"))
   )
 
-  # next test demonstrates that the default of excludeAmbig is TRUE
-  expect_equal(icd9ExpandRangeShort("401", "40102",
-                                    onlyReal = FALSE),
-               c("40100", "40101", "40102"))
-  expect_equal(icd9ExpandRangeShort("401", "40102",
-                                    onlyReal = FALSE, excludeAmbiguousParent = FALSE),
+  expect_equal(icd9ExpandRangeShort("401", "40102", onlyReal = FALSE,
+                                    excludeAmbiguousStart = FALSE,
+                                    excludeAmbiguousEnd = FALSE),
                c("401", "4010", "40100", "40101", "40102"))
 
   # only works with single range
@@ -113,12 +110,17 @@ test_that("expand icd9 range definition", {
 
 })
 
+test_that("expand range defined by two four digit codes includes last code", {
+  expect_true("1991" %in% icd9ExpandRangeShort("1960", "1991", onlyReal = FALSE))
+  expect_true("19919" %in% icd9ExpandRangeShort("1960", "1991", onlyReal = FALSE))
+})
+
 test_that("expand range worker gives correct ranges", {
   # really, the test is against icd9ExpandRange family, but we can isolate an
   # error to the sub-function
   expect_equal(
     expandRangeWorker("V10", "V1001", lookup = icd9:::icd9VShort,
-                      onlyReal = TRUE, excludeAmbiguousParent = FALSE),
+                      onlyReal = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("V10", "V100", "V1000", "V1001"))
 })
 
@@ -131,7 +133,7 @@ test_that("V code with ambiguous parent", {
   # descendants just to reach the specified codes, but not all the children of
   # the higher-level code.
   expect_equal(icd9ExpandRangeShort("V10", "V1001",
-                                    onlyReal = FALSE, excludeAmbiguousParent = FALSE),
+                                    onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
                c("V10", "V100", "V1000", "V1001"))
   expect_equal(icd9ExpandRangeShort("V10", "V1001",
                                     onlyReal = FALSE), #excludAmbiguousParent = TRUE
@@ -148,14 +150,14 @@ test_that("V code ranges", {
                  "V1016", "V1017", "V1018", "V1019"))
   # and with narrower top end
   expect_equal(icd9ExpandRangeShort("V1009", "V1011",
-                                    onlyReal = FALSE, excludeAmbiguousParent = TRUE),
+                                    onlyReal = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
                c("V1009", "V1010", "V1011"))
   expect_equal(icd9ExpandRangeShort("V1009", "V1011",
-                                    onlyReal = FALSE, excludeAmbiguousParent = FALSE),
+                                    onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
                c("V1009", "V101", "V1010", "V1011"))
   # but include those pesky parents when requested:
   expect_true(all(c("V10", "V100") %in% icd9ExpandRangeShort("V099", "V1011", onlyReal = FALSE,
-                                                           excludeAmbiguousParent = FALSE)))
+                                                           excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE)))
 
   # should fail despite end being 'longer' than start
   expect_error(icd9ExpandRangeShort("V10", " V1 "))
@@ -200,8 +202,8 @@ test_that("major ranges", {
 
 test_that("range bugs", {
   # these both failed - need zero padding for the first
-  expect_equal( ("042 " %i9s% "043 ")[1], "042")
-  expect_equal( ("42" %i9s% "043 ")[1], "042")
+  expect_equal( ("042 " %i9s% "042 ")[1], "042")
+  expect_equal( ("42" %i9s% "042 ")[1], "042")
   expect_true("345" %nin% ("3420 " %i9s% "3449 "))
 
   expect_equal("042.11" %i9da% "042.13", c("042.11", "042.12", "042.13"))
@@ -218,7 +220,7 @@ test_that("range doesn't include higher level parent github issue #14", {
   expect_false("0101" %in% ("01006" %i9s% "01010"))
   # if real codes, then we can tolerate a higher level code if it is billable,
   # e.g. 390 (no children)
-  expect_true("390" %in% ("389.9" %i9d% "390.1"))
+  expect_true("390" %in% ("389.9" %i9d% "391.1"))
   # but not if we are looking at all possible codes. This is a subtle strange
   # distinction. It is primarily of importance when expanding codes describing
   # ICD to comorbodity mappings. We might want to either include all possible
@@ -231,21 +233,21 @@ test_that("range doesn't include higher level parent github issue #14", {
 
 test_that("ranges can include ambiguous parents, optionally", {
   expect_equal(
-    icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousParent = TRUE),
+    icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
     c("01006", "01010"))
   expect_equal(
-    icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousParent = FALSE),
+    icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("01006", "0101", "01010"))
   expect_equal(
-    icd9ExpandRange("01006", "01010", onlyReal = FALSE, excludeAmbiguousParent = TRUE),
+    icd9ExpandRange("01006", "01010", onlyReal = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
     c("01006", "01007", "01008", "01009", "01010"))
   expect_equal(
-    icd9ExpandRange("01006", "01010", onlyReal = FALSE, excludeAmbiguousParent = FALSE),
+    icd9ExpandRange("01006", "01010", onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("01006", "01007", "01008", "01009", "0101", "01010"))
 
   # if real codes, then we can tolerate a higher level code if it is billable,
   # e.g. 390 (no children)
-  expect_true("390" %in% ("389.9" %i9d% "390.1"))
+  expect_true("390" %in% ("389.9" %i9d% "391.1"))
   # but not if we are looking at all possible codes. This is a subtle strange
   # distinction. It is primarily of importance when expanding codes describing
   # ICD to comorbodity mappings. We might want to either include all possible
@@ -367,65 +369,6 @@ test_that("icd9ChildrenShort valid input", {
     c("E100", "E1000", "E1001", "E1002", "E1003", "E1004",
       "E1005", "E1006", "E1007", "E1008", "E1009"))
   expect_equal(icd9ChildrenShort("390", onlyReal = TRUE), "390")
-})
-
-test_that("condense ranges which do consense", {
-  expect_equal(
-    icd9Condense(icd9ChildrenShort("123", onlyReal = TRUE), onlyReal = TRUE),
-    "123")
-  expect_equal(
-    icd9Condense(icd9ChildrenShort("1", onlyReal = TRUE), onlyReal = TRUE),
-    "001")
-  expect_equal(icd9Condense(icd9ChildrenShort("123")), "123")
-  expect_equal(icd9Condense(icd9ChildrenShort("1")), "001")
-  for (or1 in c(TRUE, FALSE)) {
-    for (or2 in c(TRUE, FALSE)) {
-      expect_equal(
-        icd9Condense(icd9ChildrenShort("00321", onlyReal = or1),
-                                 onlyReal = or2),
-        "00321", info = paste(or1, or2))
-      expect_equal(
-        icd9Condense(icd9ChildrenShort("V1221", onlyReal = or1),
-                                 onlyReal = or2),
-        "V1221", info = paste(or1, or2))
-    }
-  }
-  expect_equal(icd9Condense(icd9ChildrenShort("V12", onlyReal = TRUE),
-                                        onlyReal = TRUE), "V12")
-  expect_equal(icd9Condense(icd9ChildrenShort("V12", onlyReal = FALSE),
-                                        onlyReal = FALSE), "V12")
-})
-
-test_that("condense ranges that don't condense at all", {
-  expect_equal(sort(icd9Condense(c("1230", "1232", "1236"), onlyReal = FALSE)), c("1230", "1232", "1236"))
-  expect_equal(sort(icd9Condense(c("1230", "1232", "1236"), onlyReal = TRUE)), c("1230", "1232", "1236"))
-  # the parent "1000" is not included.
-  expect_equal(sort(icd9Condense(as.character(10000:10009),
-                                             onlyReal = FALSE)),
-               as.character(10000:10009))
-  # missing 10009
-  expect_equal(sort(icd9Condense(c("1000", as.character(10000:10008)),
-                                             onlyReal = FALSE)),
-               c("1000", as.character(10000:10008)))
-})
-
-test_that("condense range invalid data", {
-  # no automatic validation, so we just get it back. We can validate separately.
-  # e.g. "turnpike" %>% icd9GetRealShort
-  expect_equal(icd9Condense("turnpike", onlyReal = FALSE), "turnpike")
-  # TODO more tests here
-})
-
-test_that("mix of four and five digit billable codes", {
-  expect_equal(
-    icd9CondenseShort(c("10081", "10089", "1000", "1009")),
-    "100")
-})
-
-test_that("mix of four and five digit with non-billable mid-level four digit code", {
-  expect_equal(
-    icd9CondenseShort(c("1000", "1008", "10081", "10089", "1009")),
-    "100")
 })
 
 test_that("icd9InReferenceCode", {

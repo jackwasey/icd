@@ -76,71 +76,83 @@ sortOrderShort <- function(icd9Short) {
 #'   \code{V10} itself is parent to everything up to \code{V11}.
 #' @family ICD-9 ranges
 #' @export
-icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)),
-                            onlyReal = TRUE, excludeAmbiguousParent = TRUE) {
-  if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal, excludeAmbiguousParent))
-  icd9ExpandRangeDecimal(start, end, onlyReal, excludeAmbiguousParent)
+icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)), onlyReal = TRUE,
+                            excludeAmbiguousStart = TRUE,
+                            excludeAmbiguousEnd = TRUE) {
+  if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal,
+                                           excludeAmbiguousStart,
+                                           excludeAmbiguousEnd))
+  icd9ExpandRangeDecimal(start, end, onlyReal,
+                         excludeAmbiguousStart,
+                         excludeAmbiguousEnd)
 }
 
-expandRangeWorker <- function(s, e, lookup, onlyReal, excludeAmbiguousParent) {
-  # s & e should be length 1, so match will only give a single value
-  si <- match(s, lookup)
-  checkmate::assertInteger(si, len = 1)
-  if (is.na(si[1])) stop(sprintf(
-    "start value '%s' not found in look-up table of ICD-9 codes.", s))
-  # now if end is not a full-length code (5 for V or N, 4 for E), we keep
-  # going until we get to the last code before the same hierarchical level is
-  # reached. E.g. 101 to 102 should include all of 102 subcodes, but not 103.
-  # See the tests.
-  ei <- match(e, lookup)
-  checkmate::assertInteger(ei, len = 1)
-  if (is.na(ei[1])) stop(sprintf(
-    "end value '%s' not found in look-up table of ICD-9 codes.", e))
-  if (ei < si) stop("end code must be greater than or equal to start code")
-  if (nchar(e) != 5) {
-    # calculate the number of codes to span, start with lookup table of nchar of each
-    nlk <- nchar(lookup[seq(from = ei + 1, to = ei + 111)])
-    lene <- nchar(e)
-    # lookup the next code with the same hierarchical level
-    mlen <- match(lene, nlk)
-    # if the next code can't be found, e.g. after 999, just pick a big number.
-    if (is.na(mlen)) mlen <- 111
-    ei <- ei + mlen
-    ei <- ei - (lene - 2)
-    if (icd9IsE(e))
-      ei <- ei + 1
-    else if (icd9IsV(e) && lene < nchar(s) && substr(e, lene, lene) != "9")
-      ei <- ei + 1
-  }
-  # except if 'end' is 4 char and ends in 9, because we don't want to catch
-  # the preceding 3 digit.
+expandRangeWorker <- function(start, end, lookup, onlyReal,
+                                        excludeAmbiguousStart, excludeAmbiguousEnd) {
+  checkmate::assertString(start)
+  checkmate::assertString(end)
+  checkmate::assertCharacter(lookup, any.missing = FALSE, min.chars = 3)
+  checkmate::assertFlag(excludeAmbiguousStart)
+  checkmate::assertFlag(excludeAmbiguousEnd)
 
-  out <- lookup[si:ei]
-  # finally, drop any higher-level codes which would describe broader ranges
-  # than specified. E.g. 1019 to 1021 should omit 102, but 1059 to 1079 should
-  # include 106. # github issue #14
-  if (excludeAmbiguousParent) {
-    tmp <- lookup[si:ei]
-    # drop start and end range arguments because we know we will accept those and their children
-    startkids <- icd9ChildrenShort(s, onlyReal = onlyReal)
-    endkids <- icd9ChildrenShort(e, onlyReal = onlyReal)
-    for (code in tmp) {
-      # this now does a lot of tests, slowing things down significantly.
-      if (!all(icd9ChildrenShort(code, onlyReal = onlyReal) %in% tmp))
-        out <- out[-which(out == code)]
+  #stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
+
+  start_index <- match(start, lookup)
+  end_index <- match(end, lookup)
+  checkmate::assertInteger(start_index, len = 1)
+  if (is.na(start_index[1]))
+    stop(sprintf("start value '%s' not found in look-up table of ICD-9 codes.", start))
+  checkmate::assertInteger(end_index, len = 1)
+  if (is.na(end_index[1]))
+    stop(sprintf("end value '%s' not found in look-up table of ICD-9 codes.", end))
+  if (end_index < start_index)
+    stop("end code must be greater than or equal to start code")
+
+  if (start == end) return(icd9ChildrenShort(start, onlyReal = onlyReal))
+
+  out <- lookup[start_index:end_index]
+  if (excludeAmbiguousStart) {
+    # just remove those codes at the beginning which have children not in the output
+    # let's take the first 5, to cover cases like 100, 101, 102.1, 102.11, 102.2
+    starts <- tail(out, )
+    for (s in starts) {
+      if (any(icd9ChildrenShort(s, onlyReal = onlyReal) %nin% out))
+        out <- out[-which(out == s)]
     }
   }
-  out
+  if (excludeAmbiguousEnd) {
+    # at the end, we don't want any higher-level codes at the end which would have children beyond the range. There could be lots of lower level codes at the end, so we actually have to search the whole list. This means that even if trying to preserve the ambig start, setting ambig end will have to kill it, if it spills over.
+    out_cp <- out
+    for (o in out_cp) {
+      if (any(icd9ChildrenShort(o, onlyReal = onlyReal) %nin% out))
+        out <- out[-which(out == o)]
+    }
+  }
+  icd9SortShort(unique(c(out, icd9ChildrenShort(end, onlyReal = onlyReal))))
 }
+
+# horrible kludge for difficult source data
+icd9ExpandRangeForSas <- function(start, end) {
+  if (end == "0449") end <- start # HIV codes changed
+  reals <- icd9ExpandRangeShort(start, end, onlyReal = TRUE,
+                       excludeAmbiguousStart = FALSE,
+                       excludeAmbiguousEnd = TRUE)
+  real_parents <- icd9CondenseShort(reals, onlyReal = TRUE)
+  merged <- unique(c(reals, real_parents))
+  real_parents_of_merged <- icd9CondenseShort(merged, onlyReal = TRUE)
+  icd9ChildrenShort(real_parents_of_merged, onlyReal = FALSE)
+  }
 
 #' @rdname icd9ExpandRange
 #' @export
 icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
-                                 excludeAmbiguousParent = TRUE) {
+                                 excludeAmbiguousStart = TRUE,
+                                 excludeAmbiguousEnd = TRUE) {
   checkmate::assertScalar(start) # i'll permit numeric but prefer char
   checkmate::assertScalar(end)
   checkmate::assertFlag(onlyReal)
-  checkmate::assertFlag(excludeAmbiguousParent)
+  checkmate::assertFlag(excludeAmbiguousStart)
+  checkmate::assertFlag(excludeAmbiguousEnd)
 
   start <- icd9AddLeadingZeroesShort(trim(start))
   end <- icd9AddLeadingZeroesShort(trim(end))
@@ -149,18 +161,33 @@ icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
   # determine whether we are doing N, V or E
   # then lookup start and end indices in sysdata.rda lookup tables
 
-  if (icd9IsN(start) && icd9IsN(end))
-    res <- expandRangeWorker(start, end, icd9:::icd9NShort, onlyReal, excludeAmbiguousParent)
-  else if (icd9IsV(start) && icd9IsV(end))
-    res <- expandRangeWorker(start, end, icd9:::icd9VShort, onlyReal, excludeAmbiguousParent)
-  else if (icd9IsE(start) && icd9IsE(end))
-    res <- expandRangeWorker(start, end, icd9:::icd9EShort, onlyReal, excludeAmbiguousParent)
-  else
-    stop("mismatch between numeric, V and E types in start and end")
+  if (onlyReal) {
+    stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
+    if (icd9IsN(start) && icd9IsN(end))
+      res <- expandRangeWorker(start, end, icd9:::icd9NShortReal, onlyReal = TRUE,
+                               excludeAmbiguousStart, excludeAmbiguousEnd)
+    else if (icd9IsV(start) && icd9IsV(end))
+      res <- expandRangeWorker(start, end, icd9:::icd9VShortReal, onlyReal = TRUE,
+                               excludeAmbiguousStart, excludeAmbiguousEnd)
+    else if (icd9IsE(start) && icd9IsE(end))
+      res <- expandRangeWorker(start, end, icd9:::icd9EShortReal, onlyReal = TRUE,
+                               excludeAmbiguousStart, excludeAmbiguousEnd)
+    else
+      stop("mismatch between numeric, V and E types in start and end")
+  } else {
 
-  if (onlyReal)
-    return(icd9GetRealShort(res))
-
+    if (icd9IsN(start) && icd9IsN(end))
+      res <- expandRangeWorker(start, end, icd9:::icd9NShort, onlyReal = FALSE,
+                               excludeAmbiguousStart, excludeAmbiguousEnd)
+    else if (icd9IsV(start) && icd9IsV(end))
+      res <- expandRangeWorker(start, end, icd9:::icd9VShort, onlyReal = FALSE,
+                               excludeAmbiguousStart, excludeAmbiguousEnd)
+    else if (icd9IsE(start) && icd9IsE(end))
+      res <- expandRangeWorker(start, end, icd9:::icd9EShort, onlyReal = FALSE,
+                               excludeAmbiguousStart, excludeAmbiguousEnd)
+    else
+      stop("mismatch between numeric, V and E types in start and end")
+  }
   res
 }
 
@@ -182,12 +209,15 @@ icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
 
 #' @rdname icd9ExpandRange
 #' @export
-icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE, excludeAmbiguousParent = TRUE) {
+icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
+                                   excludeAmbiguousStart = TRUE,
+                                   excludeAmbiguousEnd = TRUE) {
   icd9ShortToDecimal(
     icd9ExpandRangeShort(
-      icd9DecimalToShort(start), icd9DecimalToShort(end),
-      onlyReal = onlyReal
-    ) # although still considering allowing numeric
+      icd9DecimalToShort(start), icd9DecimalToShort(end), onlyReal = onlyReal,
+      excludeAmbiguousStart = excludeAmbiguousStart,
+      excludeAmbiguousEnd = excludeAmbiguousEnd
+    )
   )
 }
 
