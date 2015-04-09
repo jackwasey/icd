@@ -9,9 +9,11 @@
 
 # TODO: Indiana has actually already done this work: http://www.in.gov/isdh/reports/hosp_disch_data/2011/diagnosis_id.zip but unclear whether they did it properly, changed it by year (as is implied), and only goes 1999-2011. Could at least use for validation.
 
-parseRtfToDesc <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"),
-                                             encoding = "CP1252", warn = FALSE),
+parseRtfToDesc <- function(lines = NULL,
                            verbose = FALSE, save = FALSE) {
+  if (is.null(lines))
+    lines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
+                            #encoding = "CP1252" # we should let R do its best to convert everything to UTF-8
   checkmate::assertCharacter(lines)
   checkmate::assertFlag(verbose)
   checkmate::assertFlag(save)
@@ -26,7 +28,9 @@ parseRtfToDesc <- function(lines = readLines(system.file("extdata", "Dtab12.rtf"
 }
 
 parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"),
-                                       encoding = "CP1252", warn = FALSE),
+                                       #encoding = "CP1252" # we should let R do its best to convert everything to UTF-8
+
+                                       warn = FALSE),
                      verbose = FALSE) {
 
   checkmate::assertCharacter(lines)

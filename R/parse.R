@@ -79,17 +79,16 @@ parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose 
 #' @return invisibly return the result
 #' @keywords internal
 parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
-                                             fromWeb = FALSE, verbose = FALSE, encoding = "latin1") {
+                                             fromWeb = FALSE, verbose = FALSE) {
   checkmate::assertString(version)
   checkmate::assertFlag(save)
   checkmate::assertFlag(fromWeb)
   checkmate::assertFlag(verbose)
-  checkmate::assertString(encoding)
 
   if (verbose) message("Fetching billable codes version: ", version)
 
   if (version == "27") return(invisible(parseIcd9LeafDescriptions27(save = save, fromWeb = fromWeb,
-                                                                    verbose = verbose, encoding = encoding)))
+                                                                    verbose = verbose)))
   stopifnot(version %in% icd9:::billable_sources$version)
   dat <- icd9:::billable_sources[icd9:::billable_sources$version == version, ]
   url <- dat$url
@@ -112,9 +111,9 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
 
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
-    shortlines <- read.zip.url(url, fn_short, encoding = encoding)
+    shortlines <- read.zip.url(url, fn_short)
     if (!is.na(fn_long))
-      longlines <- read.zip.url(url, fn_long, encoding = encoding)
+      longlines <- read.zip.url(url, fn_long)
     else
       longlines <- NA_character_
 
@@ -124,9 +123,9 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
     }
   }
 
-  readLines(path_short, encoding = encoding) -> shortlines
+  readLines(path_short) -> shortlines
   if (!is.na(fn_long))
-    readLines(path_long, encoding = encoding) -> longlines
+    readLines(path_long) -> longlines
   else
     NA_character_ -> longlines
 
@@ -157,23 +156,37 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   if (verbose) message("ready to save var '", var_name, "' in data dir")
   if (save) saveInDataDir(var_name)
 
+  # warn as we go:
+  oldwarn <- options(warn = 1)
+  on.exit(options(oldwarn))
   if (!is.na(fn_long) && verbose) {
-    message("checking UTF-8 characters")
-    utf8 <- grep(pattern = "UTF", Encoding(get(var_name, inherits = FALSE)[["descLong"]]))
-    if (length(utf8) > 0 ) {
-      message("The following long descriptions contain UTF-8 codes:")
-      message(paste(get(var_name, inherits = FALSE)[utf8, ], sep = ", "))
+    message("checking non-ASCII characters")
+    encs <- Encoding(get(var_name, inherits = FALSE)[["descLong"]])
+    message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
+    utf <- grep(pattern = "UTF", encs)
+    latin1 <- grep(pattern = "Latin", encs)
+    nonASCII <- grep(pattern = "ASCII", invert = TRUE, encs)
+    if (length(nonASCII) > 0 ) {
+      warning("The following long descriptions contain non-ASCII characters: ",
+      paste(get(var_name, inherits = FALSE)[nonASCII, ], sep = ", "))
+    }
+    if (length(utf) > 0 ) {
+      warning("The following long descriptions contain Unicode characters: ",
+      paste(get(var_name, inherits = FALSE)[utf, ], sep = ", "))
+    }
+    if (length(latin1) > 0 ) {
+      warning("The following long descriptions contain Latin-1 characters: ",
+      paste(get(var_name, inherits = FALSE)[latin1, ], sep = ", "))
     }
   }
   invisible(get(var_name, inherits = FALSE))
 }
 
-parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = FALSE, encoding = "latin1") {
+parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = FALSE) {
   if (verbose) message("working on version 27 quirk")
   checkmate::assertFlag(save)
   checkmate::assertFlag(fromWeb)
   checkmate::assertFlag(verbose)
-  checkmate::assertString(encoding)
   fn <- icd9:::billable_sources[icd9:::billable_sources$version == 27, "other_filename"]
   fp <- file.path("inst", "extdata", fn)
   url <- icd9:::billable_sources[icd9:::billable_sources$version == 27, "url"]
@@ -185,9 +198,9 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
 
   if (save || fromWeb || !file.exists(fp))
     writeLines(
-      read.zip.url(url, fn, encoding = encoding),
+      read.zip.url(url, fn),
       fp, useBytes = TRUE)
-  icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character", encoding = encoding)
+  icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character")
   names(icd9Billable27) <- c("icd9", "descLong", "descShort")
   icd9Billable27 <- icd9Billable27[c(1, 3, 2)] # reorder columns
 
@@ -443,6 +456,8 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
                        # hasn't got correctly formatted <3digit codes. TODO, use
                        # codes from first table, and descs from second.
                        NA, NA, NA, NA),
+    long_encoding = c("latin1", "latin1", "latin1", "latin1", "latin1", "latin1",
+                      NA, NA, NA, NA),
     url = c("http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/ICD-9-CM-v32-master-descriptions.zip",
             "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv31-master-descriptions.zip",
             "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv30_master_descriptions.zip",
