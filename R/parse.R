@@ -1,33 +1,34 @@
 # EXCLUDE COVERAGE START
 
 parseEverythingAndSave <- function() {
+  # this is not strictly a parsing step, but is quite slow. It relies on picking
+  # up already saved files from previous steps. It can take hours to complete,
+  # but only needs to be done rarely.
+
+  # this is only intended to be run from development tree, not as installed package
+  icd9BuildChaptersHierarchy(save = TRUE)
+
+  devtools::load_data(pkg = "icd9") # reload the newly saved data
   parseAndSaveQuick()
 
-  # this is not strictly a parsing step, but is quite slow. It relies on picking
-  # up already saved files from previous steps. It also takes many hours to
-  # complete, but only needs to be done rarely.
-  warning("starting multiple-hour process.
-          Make sure package is reloaded before running this step.")
-  icd9BuildChaptersHierarchy(save = TRUE)
 }
 
 #' @title parse almost everything
 #' @keywords internal
 parseAndSaveQuick <- function() {
-  # comorbidity mappings
+  # RTF file(s)
+  parseRtfToDesc(save = TRUE) # creates icd9Desc
+  devtools::load_data(pkg = "icd9")
+
+  # plain text billable codes
+  parseIcd9LeafDescriptionsAll(save = TRUE) # creates icd9Billable
+  devtools::load_data(pkg = "icd9")
+
+  # generate comorbidity mappings from source (make sure lookup files are updated firts)
   parseAhrqSas(save = TRUE)
   parseElix(save = TRUE)
   parseQuanDeyoSas(save = TRUE)
   parseQuanElix(save = TRUE)
-
-  # RTF file(s)
-  parseRtfToDesc(save = TRUE)
-
-  # plain text billable codes
-  parseIcd9LeafDescriptionsAll(save = TRUE)
-
-  # this queries a web page: TODO: use only for testing result of RTF extraction
-  # parseIcd9Chapters(save = TRUE)
 }
 # EXCLUDE COVERAGE END
 
