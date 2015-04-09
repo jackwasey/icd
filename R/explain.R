@@ -139,7 +139,7 @@ icd9GuessIsShort <- function(icd9) {
 #' @param isShort
 #' @param invalid
 #' @keywords internal
-icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9), verbose = TRUE) {
+icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9), verbose = FALSE) {
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
