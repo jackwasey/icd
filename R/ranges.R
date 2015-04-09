@@ -135,12 +135,16 @@ expandRangeWorker <- function(start, end, lookup, onlyReal,
 icd9ExpandRangeForSas <- function(start, end) {
   if (end == "0449") end <- start # HIV codes changed
   reals <- icd9ExpandRangeShort(start, end, onlyReal = TRUE,
-                       excludeAmbiguousStart = FALSE,
+                       excludeAmbiguousStart = FALSE, # hmmm, maybe get the diff and test all children of ambigs present later
                        excludeAmbiguousEnd = TRUE)
   real_parents <- icd9CondenseShort(reals, onlyReal = TRUE)
   merged <- unique(c(reals, real_parents))
   real_parents_of_merged <- icd9CondenseShort(merged, onlyReal = TRUE)
-  icd9ChildrenShort(real_parents_of_merged, onlyReal = FALSE)
+  halfway <- icd9ChildrenShort(real_parents_of_merged, onlyReal = FALSE)
+  nonrealrange <- icd9ExpandRangeShort(start, end, onlyReal = FALSE,
+                                excludeAmbiguousStart = TRUE,
+                                excludeAmbiguousEnd = TRUE)
+  icd9SortShort(unique(c(halfway, nonrealrange)))
   }
 
 #' @rdname icd9ExpandRange

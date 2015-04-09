@@ -14,26 +14,29 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   checkmate::assertString(sasPath)
   checkmate::assertString(path)
   checkmate::assertFlag(save)
-  #checkmate::assertFlag(returnAll)
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
 
   ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
-  # Boom. The remainder of the AHRQ SAS input file consists of DRG definitions
-  # (TODO).
+  # TODO: The remainder of the AHRQ SAS input file consists of DRG definitions
 
   ahrqComorbidAll <- list()
 
   for (cmb in names(ahrqComorbidWork)) {
     if (verbose) message("parsing AHRQ SAS codes for '", cmb, "'")
     somePairs <- strsplit(x = ahrqComorbidWork[[cmb]], split = "-")
-    # non-range values just go on list
-    out <- as.list(somePairs[lapply(somePairs, length) == 1])
+
+    # non-range values (and their children) just go on list
+    unpaired_items <- sapply(somePairs, length) == 1
+    out <- c()
+    if (any(unpaired_items))
+      out <- icd9ChildrenShort(unlist(somePairs[unpaired_items]), onlyReal = FALSE)
+
     thePairs <- somePairs[lapply(somePairs, length) == 2]
-    out <- append(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
+    out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
     # update ahrqComorbid with full range of icd9 codes:
-    ahrqComorbidAll[[cmb]] <- unlist(out)
+    ahrqComorbidAll[[cmb]] <- icd9SortShort(unique(unlist(out)))
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
@@ -69,7 +72,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 
 
   ahrqComorbid[c("HTNPREG", "OHTNPREG", "HTNWOCHF",
-                 "HTNWCHF","HRENWORF", "HRENWRF", "HHRWOHRF",
+                 "HTNWCHF", "HRENWORF", "HRENWRF", "HHRWOHRF",
                  "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
 
   # officially, AHRQ HTN with complications means that HTN on its own should be
@@ -80,18 +83,20 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 
   # todo: save/return the DRG mappings.
 
-#   # expand results (but not too much!)
-#   for (cmb in names(ahrqComorbid)) {
-#     if (verbose) message("working on ranges for: ", cmb)
-#     if (cmb == "CHRNLUNG") browser()
-#     ahrqComorbid[[cmb]] <- c(
-#       ahrqComorbid[[cmb]],
-#       icd9CondenseShort(ahrqComorbid[[cmb]], onlyReal = FALSE, onlyBillable = FALSE)
-#     )
-#     ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], icd9ChildrenShort(ahrqComorbid[[cmb]], onlyReal = FALSE))
-#     ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], icd9ChildrenShort(ahrqComorbid[[cmb]], onlyReal = TRUE))
-#     ahrqComorbid[[cmb]] <- icd9SortShort(ahrqComorbid[[cmb]])
-#   }
+#   condense to parents, for each parent, if children are all in the list, add the parent
+   for (cmb in names(ahrqComorbid)) {
+     if (verbose) message("working on ranges for: ", cmb)
+     #if (cmb == "HYPOTHY") browser()
+     # LYMPH ranges split up stupidly, so just skip corner case tests for these. the actual real codes work fine.
+     parents <- icd9CondenseShort(ahrqComorbid[[cmb]], onlyReal = FALSE)
+     # parents <- parents[order(nchar(parents), decreasing = TRUE)] # do four digit parents first, as they may be kids themselves
+     for (p in parents) {
+       kids <- icd9ChildrenShort(p, onlyReal = FALSE)
+       kids <- kids[-which(kids == p)] # don't include parent in test
+       if (all(kids %in% ahrqComorbid[[cmb]]))
+         ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], p)
+     }
+   }
 
   names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
   if (save) saveInDataDir("ahrqComorbid") # EXCLUDE COVERAGE
