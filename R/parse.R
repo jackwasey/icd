@@ -1,30 +1,38 @@
 # EXCLUDE COVERAGE START
 
-parseEverythingAndSave <- function() {
+parseEverythingAndSave <- function(verbose = TRUE) {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely.
 
   # this is only intended to be run from development tree, not as installed package
-  icd9BuildChaptersHierarchy(save = TRUE)
 
-  devtools::load_data(pkg = "icd9") # reload the newly saved data
-  parseAndSaveQuick()
+  generateSysData()
+
+  devtools::load_data(pkg = ".") # reload the newly saved data
+  parseAndSaveQuick(verbose = verbose)
+
+  icd9BuildChaptersHierarchy(save = TRUE, verbose = verbose) # depends on icd9Desc and icd9Billable
 
 }
 
 #' @title parse almost everything
 #' @keywords internal
-parseAndSaveQuick <- function() {
-  # RTF file(s)
-  parseRtfToDesc(save = TRUE) # creates icd9Desc
-  devtools::load_data(pkg = "icd9")
+parseAndSaveQuick <- function(verbose = FALSE) {
+  if (verbose) message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
+  parseRtfToDesc(save = TRUE, verbose = verbose) # creates icd9Desc
+  devtools::load_data(pkg = ".")
 
   # plain text billable codes
-  parseIcd9LeafDescriptionsAll(save = TRUE) # creates icd9Billable
-  devtools::load_data(pkg = "icd9")
+  if (verbose) message("Parsing plain text billable codes to create icd9Billable list of
+                       data frames with descriptions of billable codes only.
+                       No dependencies on other data.")
+  parseIcd9LeafDescriptionsAll(save = TRUE, verbose = verbose)
+  devtools::load_data(pkg = ".")
 
-  # generate comorbidity mappings from source (make sure lookup files are updated firts)
+  if (verbose) message("Parsing comorbidity mappings from SAS and text sources.
+                       (Make sure lookup files are updated first.)
+                       Depends on icd9Hierarchy being updated.")
   parseAhrqSas(save = TRUE)
   parseElix(save = TRUE)
   parseQuanDeyoSas(save = TRUE)
@@ -46,9 +54,10 @@ parseAndSaveQuick <- function() {
 #' @keywords internal
 parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FALSE) {
   versions <- icd9:::billable_sources$version
+  if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
-  for (v in as.character(versions)) {
-    icd9Billable[[as.character(v)]] <- parseIcd9LeafDescriptionsVersion(version = v, fromWeb = fromWeb, verbose = verbose)
+  for (v in versions) {
+    icd9Billable[[v]] <- parseIcd9LeafDescriptionsVersion(version = v, save = save, fromWeb = fromWeb, verbose = verbose)
   }
   if (save) saveInDataDir("icd9Billable")
   invisible(icd9Billable)
@@ -70,82 +79,68 @@ parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose 
 #' @return invisibly return the result
 #' @keywords internal
 parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
-                                             fromWeb = NULL, verbose = FALSE, encoding = "latin1") {
-  if (verbose) message("Fetching billable codes version: ", version)
-  checkmate::assertScalar(version)
+                                             fromWeb = FALSE, verbose = FALSE, encoding = "latin1") {
+  checkmate::assertString(version)
   checkmate::assertFlag(save)
-  version <- as.character(version)
-  if (as.character(version) == "27") return(invisible(parseIcd9LeafDescriptions27(save = save)))
+  checkmate::assertFlag(fromWeb)
+  checkmate::assertFlag(verbose)
+  checkmate::assertString(encoding)
+
+  if (verbose) message("Fetching billable codes version: ", version)
+
+  if (version == "27") return(invisible(parseIcd9LeafDescriptions27(save = save, fromWeb = fromWeb,
+                                                                    verbose = verbose, encoding = encoding)))
   stopifnot(version %in% icd9:::billable_sources$version)
   dat <- icd9:::billable_sources[icd9:::billable_sources$version == version, ]
   url <- dat$url
   fn_short <- dat$short_filename
   fn_long <- dat$long_filename
-  if (save) {
-    path_short <- file.path("inst", "extdata", fn_short)
-    path_long <- file.path("inst", "extdata", fn_long)
-  } else{
-    path_short <- system.file("extdata", package = "icd9", fn_short)
-    path_long <- system.file("extdata", package = "icd9", fn_long)
+  path_short <- file.path("inst", "extdata", fn_short)
+  path_long <- file.path("inst", "extdata", fn_long)
+  if (!save && !file.exists(path_short)) {
+    # not saving, so we can read-only get the path from the installed package:
+    path_short <- system.file("extdata", fn_short, package = "icd9")
+    path_long <- system.file("extdata", fn_long, package = "icd9")
   }
 
-  if (verbose) message(fn_short, ", ", fn_long, "\n", path_short, ", ", path_long)
-
-
-  if (!is.null(fromWeb))
-    checkmate::assertFlag(fromWeb)
-  else {
-    fromWeb = FALSE
-    if (!file.exists(path_short) || !file.exists(path_long)) {
-      fromWeb = TRUE
-      save = TRUE
-    }
+  if (verbose) {
+    message("short filename = ", fn_short, "\n long filename = ", fn_long)
+    message("short path = ", path_short, "\n long path = ", path_long)
   }
 
-  if (fromWeb) {
+  checkmate::assertCharacter(path_short, min.chars = 10, any.missing = FALSE, len = 1)
+
+  either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
+  if (fromWeb || either_file_missing) {
     shortlines <- read.zip.url(url, fn_short, encoding = encoding)
     if (!is.na(fn_long))
       longlines <- read.zip.url(url, fn_long, encoding = encoding)
     else
       longlines <- NA_character_
 
-    if (save) {
-      # rewrite lines to our package
-      f <- file(path_short, "w+")
-      writeLines(shortlines, f, useBytes = TRUE)
-      close(f)
-      if (!is.na(fn_long)) {
-        f <- file(path_long, "w+")
-        writeLines(longlines, f, useBytes = TRUE)
-        close(f)
-      }
-    }
-  } else {
-    f <- file(path_short, "r")
-    readLines(f, encoding = encoding) -> shortlines
-    close(f)
-    if (!is.na(fn_long)) {
-      f <- file(path_long, "r")
-      readLines(f, encoding = encoding) -> longlines
-      close(f)
-    } else {
-      longlines <- NA_character_
+    if (save || either_file_missing) {
+      writeLines(shortlines, path_short, useBytes = TRUE)
+      if (!is.na(fn_long)) writeLines(longlines, path_long, useBytes = TRUE)
     }
   }
+
+  readLines(path_short, encoding = encoding) -> shortlines
+  if (!is.na(fn_long))
+    readLines(path_long, encoding = encoding) -> longlines
+  else
+    NA_character_ -> longlines
 
   shortlines %<>% strsplit("[[:space:]]")
   longlines %<>% strsplit("[[:space:]]")
 
   icd9ShortCode <- lapply(shortlines, FUN = function(x) trim(x[1]))
   icd9ShortDesc <- lapply(shortlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
-  if (!is.na(longlines[1])) {
-    # icd9LongCode <- lapply(longlines, FUN = function(x) trim(x[1]))
+  if (!is.na(longlines[1]))
     icd9LongDesc <- lapply(longlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
-  } else {
+  else
     icd9LongDesc <- NA
-  }
 
-  var_name <- paste0("icd9Billable", make.names(version))
+  var_name <- paste0("icd9Billable", version)
 
   assign(var_name,
          data.frame(
@@ -159,9 +154,11 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   reorder <- sortOrderShort(get(var_name)[["icd9"]])
   assign(var_name, get(var_name)[reorder, ])
 
+  if (verbose) message("ready to save var '", var_name, "' in data dir")
   if (save) saveInDataDir(var_name)
 
-  if (!is.na(fn_long)) {
+  if (!is.na(fn_long) && verbose) {
+    message("checking UTF-8 characters")
     utf8 <- grep(pattern = "UTF", Encoding(get(var_name, inherits = FALSE)[["descLong"]]))
     if (length(utf8) > 0 ) {
       message("The following long descriptions contain UTF-8 codes:")
@@ -174,44 +171,32 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
 parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = FALSE, encoding = "latin1") {
   if (verbose) message("working on version 27 quirk")
   checkmate::assertFlag(save)
+  checkmate::assertFlag(fromWeb)
+  checkmate::assertFlag(verbose)
+  checkmate::assertString(encoding)
   fn <- icd9:::billable_sources[icd9:::billable_sources$version == 27, "other_filename"]
   fp <- file.path("inst", "extdata", fn)
   url <- icd9:::billable_sources[icd9:::billable_sources$version == 27, "url"]
-  if (verbose) message(fn, ", ", fp, "\n", url)
 
-  if (!is.null(fromWeb))
-    checkmate::assertFlag(fromWeb)
-  else {
-    fromWeb = FALSE
-    if (!file.exists(fp)) {
-      fromWeb = TRUE
-      save = TRUE
-    }
-  }
+  if (!save && !file.exists(fp))
+    fp <- system.file("extdata", fn, package = "icd9")
 
-  if (fromWeb) {
-    read.zip.url(url, fn, encoding = encoding) -> tmp_dat
-    if (save) {
-      save_path <- fp
-      save_conn <- file(save_path, "w+")
-      writeLines(tmp_dat, save_conn, useBytes = TRUE)
-      close(save_conn)
-    }
-  }
-  f <- file(fp, "r", encoding = encoding) # encoding for connection vs file itself?
-  read.csv(f, stringsAsFactors = FALSE,
-           colClasses = "character",
-           encoding = encoding) -> x
-  close(f)
+  if (verbose) message("v27 file name = '", fn, "', and path = '", fp, "'. URL = ", url)
 
-  names(x) <- c("icd9", "descLong", "descShort")
-  x <- x[c(1, 3, 2)]
+  if (save || fromWeb || !file.exists(fp))
+    writeLines(
+      read.zip.url(url, fn, encoding = encoding),
+      fp, useBytes = TRUE)
+  icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character", encoding = encoding)
+  names(icd9Billable27) <- c("icd9", "descLong", "descShort")
+  icd9Billable27 <- icd9Billable27[c(1, 3, 2)] # reorder columns
 
   # TODO, this is duplicated code: move to parent loop
   # now sort so that E is after V:
-  reorder <- sortOrderShort(x[["icd9"]])
-  x <- x[reorder, ]
-  x
+  reorder <- sortOrderShort(icd9Billable27[["icd9"]])
+  icd9Billable27 <- icd9Billable27[reorder, ]
+  if (save) saveInDataDir("icd9Billable27")
+  invisible(icd9Billable27)
 }
 
 #' @title Read higher-level ICD-9 structure from a reliable web site
@@ -318,12 +303,13 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   )
 }
 
-# this takes HOURS
 # TODO: enable annual versions
-icd9BuildChaptersHierarchy <- function(save = FALSE) {
+icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   checkmate::assertFlag(save)
 
-  # slow step
+  # TODO: now we get almost everything from the RTF, we can just pull the
+  # chapter and sub-chapters from the web very quickly (or from the RTF)
+  if (verbose) message("working on (possibly) slow step of web scrape to build icd9 Chapters Hierarchy.")
   chaps <- icd9GetChapters(icd9 = icd9::icd9Desc$icd9, isShort = TRUE)
 
   icd9Hierarchy <- cbind(
@@ -424,9 +410,9 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
 
   # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
   billable_sources <- data.frame(
-    version = c(32, 31, 30, 29, 28, 27,
-                #"27 (abbrev only)",
-                26, 25, 24, 23),
+    version = as.character(c(32, 31, 30, 29, 28, 27,
+                             #"27 (abbrev only)",
+                             26, 25, 24, 23)),
     start_date = c("2014-10-01", "2013-10-01", "2012-10-01", "2011-10-01", "2010-10-01",
                    NULL, "2009-10-01", "2008-10-01", "2007-10-01", "2006-10-01", "2005-10-01"),
     long_filename = c(

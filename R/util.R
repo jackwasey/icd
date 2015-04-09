@@ -41,7 +41,7 @@ asCharacterNoWarn <- function(x) {
 "%nin%" <- function(x, table)
   match(x, table, nomatch = 0) == 0
 
-strip <- function (x, pattern = " ", useBytes = TRUE)
+strip <- function(x, pattern = " ", useBytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = useBytes)
 
@@ -234,8 +234,8 @@ getIcdField <- function(x, icd9Field = NULL) {
   icd9Field
 }
 
-getLatestBillableVersion <- function()
-  as.character(max(icd9:::billable_sources$version))
+getLatestBillableVersion <- function() "32"
+  #as.character(max(icd9:::billable_sources$version))
 
 #' @title trim null or empty values from a list
 #' @param x list

@@ -211,8 +211,9 @@ context("icd9::icd9Hierarchy is parsed as expected")
 # scraping, some manually entered data, and (for the short description only)
 # another text file parsing.`
 
-test_that("no NA values", {
+test_that("no NA or zero-length values", {
   expect_false(any(sapply(icd9::icd9Hierarchy, is.na)))
+  expect_false(any(nchar(unlist(icd9::icd9Hierarchy)) == 0))
 })
 
 test_that("factors are in the right place", {
@@ -226,11 +227,19 @@ test_that("factors are in the right place", {
 })
 
 test_that("codes and descriptions are valid and unique", {
-  expect_true(unique(icd9::icd9Hierarchy$icd9))
-  expect_true(unique(icd9::icd9Hierarchy$descShort))
-  expect_true(unique(icd9::icd9Hierarchy$descLong))
-
+  expect_equal(anyDuplicated(icd9::icd9Hierarchy$icd9), 0)
   expect_true(all(icd9IsValidShort(icd9::icd9Hierarchy$icd9)))
+  skip("there can be duplicates when a heading is the same as a child node,
+       but could check that all codes at same hierarchical level are unique")
+  expect_equal(anyDuplicated(icd9::icd9Hierarchy$descShort), 0,
+               info = paste("first few duplicates are: ",
+                            paste(head(icd9::icd9Hierarchy$descShort[duplicated(icd9::icd9Hierarchy$descShort)]),
+                            collapse = ", ")))
+  expect_equal(anyDuplicated(icd9::icd9Hierarchy$descLong), 0,
+               info = paste("first few duplicates are: ",
+                            paste(head(icd9::icd9Hierarchy$descLong[duplicated(icd9::icd9Hierarchy$descLong)]),
+                                  collapse = ", ")))
+
 })
 
 test_that("some chapters are correct", {
@@ -277,8 +286,7 @@ test_that("some randomly selected rows are correct", {
 })
 
 test_that("billable codes are recreated", {
-  expect_identical(parseIcd9LeafDescriptionsAll(save = FALSE),
-                   icd9::icd9Billable)
+  expect_identical(parseIcd9LeafDescriptionsAll(save = FALSE), icd9::icd9Billable)
 })
 
 test_that("billable codes for expected versions exist", {
