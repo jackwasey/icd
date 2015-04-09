@@ -27,7 +27,7 @@ icd9SortShort <- function(icd9Short) {
 #' @rdname icd9Sort
 #' @export
 icd9SortDecimal <- function(icd9Decimal)
-  icd9Decimal[icd9Decimal %>% icd9DecimalToShort %>% sortOrderShort]
+  icd9Decimal[sortOrderShort(icd9DecimalToShort(icd9Decimal))]
 
 sortOrderShort <- function(icd9Short) {
   x <- icd9Short[order(icd9AddLeadingZeroesShort(icd9Short))]
@@ -53,18 +53,10 @@ sortOrderShort <- function(icd9Short) {
 #'   since this is far more likely to be useful to the end user.
 #' @examples
 #' "4280 " %i9s% "4289 "
-#' "42799 " %i9s% "42802"
+#' "4280 " %i9s% "42821"
 #' "42799 " %i9sa% "42802" # doesn't include 428 or 4280
 #' "427.99 " %i9da% "428.02"
-#' "V80 " %i9s% " V8210 "
-#'
-#' # the following should give all codes in 428 EXCEPT "428",
-#' # and all codes upto 43014 EXCEPT 430 and 4301
-#' icd9ExpandRangeShort("4280 ", "43014")
-#' stopifnot(all(c("430", "4301") %in% icd9ExpandRange("4280 ", "43014",
-#'   onlyReal = FALSE, excludeAmbiguousParent = TRUE)))
-#' stopifnot(!any(c("430", "4301") %in% icd9ExpandRange("4280 ", "43014",
-#'   onlyReal = FALSE, excludeAmbiguousParent = TRUE)))
+#' "V80 " %i9s% " V810 "
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
 #' @template onlyReal

@@ -364,10 +364,10 @@ fixSubchapterNa <- function(x, start, end) {
   # assert all the same:
   stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
   # now some work to insert a new level into the sub-chapter factor in the right place
-  previous_sub <- x[(which(congenital) - 1)[1], "subchapter"] %>% asCharacterNoWarn
+  previous_sub <- asCharacterNoWarn(x[(which(congenital) - 1)[1], "subchapter"])
   previous_sub_pos <- which(levels(x$subchapter) == previous_sub)
-  congenital_title <- x[which(congenital)[1], "chapter"] %>% asCharacterNoWarn
-  new_subs <- x$subchapter %>% asCharacterNoWarn
+  congenital_title <- asCharacterNoWarn(x[which(congenital)[1], "chapter"])
+  new_subs <- asCharacterNoWarn(x$subchapter)
   new_subs[congenital] <- congenital_title
   new_levels <- append(levels(x$subchapter), congenital_title, previous_sub_pos)
   x$subchapter <- factor(new_subs, new_levels)

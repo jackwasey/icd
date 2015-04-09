@@ -88,7 +88,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL,
   # children the same as the number of possible (real or not) children? Don't
   # need to compare them all, just count. actually, start with bigger group,
   # then we can eliminate more quickly
-  icd9GetMajor(i9w, isShort = TRUE) %>% unique -> majorParents
+  unique(icd9GetMajor(i9w, isShort = TRUE)) -> majorParents
   majorParents <- icd9GetValidShort(majorParents) # this gets rid of NAs, too.
   for (mp in majorParents) {
     icd9GetMajor(i9w, isShort = TRUE) -> mjrs
@@ -105,7 +105,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL,
 
   # now same for four digit codes, thinking carefully about V and E codes
   # the remaining codes are 4 or 5 chars. They have no common parents.
-  substr(i9w, 0, 4) %>% unique -> fourth_parents
+  unique(substr(i9w, 0, 4)) -> fourth_parents
   fourth_parents <- icd9GetValidShort(fourth_parents)
   for (fp in fourth_parents) {
     substr(i9w, 0, 4) -> fourth_level

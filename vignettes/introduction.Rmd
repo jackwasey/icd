@@ -104,7 +104,7 @@ These functions generate syntactically valid ICD-9 codes, without including pare
 # get all possible codes
 "003" %i9sa% "0033" %>% head(9) # show first 9 of 111 values
 # just get the ones which correspond to diagnoses (keeping the 3-digit chapters)
-"003" %i9s% "0033"
+"494" %i9s% "4941"
 
 "10099" %i9sa% "10101"
 "V10" %i9da% "V10.02"
@@ -118,10 +118,12 @@ This is used internally to interpret ranges of ICD-9 codes specified in the lite
 
 Another way of specifying ranges are to use function calls. These are exactly equivalent to the `%i9s%` and `%i9d%` range operators. This example shows the result when the user specifies a range which would include parents but not all their children:
 ```{r rangeanomaly}
-icd9ExpandRangeShort("V100", "V1002", onlyReal = TRUE) # default, equivalent to %i9s%
-icd9ExpandRangeShort("V100", "V1002", onlyReal = FALSE) # V10.0 is not a leaf node, equivalent to %i9sa%
+icd9ExpandRangeShort("4820", "4823") # default, equivalent to %i9s%
+icd9ExpandRangeShort("4820", "4823", onlyReal = FALSE)
+# see the first few differences (which are by definition not 'real' codes):
+setdiff(icd9ExpandRangeShort("4820", "4823", onlyReal = FALSE),
+        icd9ExpandRangeShort("4820", "4823")) %>% head
 ```
-Although `V10.0` would include ten possible children, the range with \code{onlyReal = FALSE} only returns 4 values to avoid the range returning broader classifications than intended (V10.0 would imply all its children).
 
 It is easy to find the children of a higher-level ICD-9 code:
 ```{r "childrenReal"}
@@ -130,6 +132,8 @@ icd9Children("391")
 icd9Children("0032")
 # leaf node has no children
 icd9Children("00321")
+# pneumococcal pneumonia is a three-digit code with no descendants
+icd9Children("481")
 ```
 By adding `onlyReal = TRUE`, all syntactically valid ICD-9 codes are returned, even if not defined by CMS as diagnoses. This is relevant because of minor coding errors, or coding in a different year to the master list. A planned feature is to allow testing of an ICD-9 code against the valid codes for the year it was entered, but at present only the 2014 master list is used. This means that some older valid codes may no longer be on the list. However, there have been very few changes to ICD-9-CM in the last five years with ICD-10-CM in the wings.
 ```{r "childrenAll"}

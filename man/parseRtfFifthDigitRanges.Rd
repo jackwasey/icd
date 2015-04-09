@@ -12,15 +12,5 @@ returns all the possible 5 digit codes encompassed by the given
   definition. This needs to be whittled down to just those matching fifth
   digits, but we haven't parsed them yet.
 }
-\examples{
-row_str <- "The following fifth-digit subclassification is for use with category 493.0-493.2, 493.9:"
-parseRtfFifthDigitRanges(row_str)
-
-row_str <- "The following fifth-digit subclassification is for use with categories 67\\\\hich\\\\af1\\\\dbch\\\\af31505\\\\loch\\\\f1 8-679 to denote the current episode of care:"
-parseRtfFifthDigitRanges(row_str)
-
-row_str <- "The following fifth-digit subclassification is for use with category 711; valid digits are in [brackets] under each code. see list at beginning of chapter for definitions:"
-parseRtfFifthDigitRanges(row_str)
-}
 \keyword{internal}
 

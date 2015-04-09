@@ -248,12 +248,21 @@ icd9IsMajor <- function(icd9) {
   nchar(icd9) - icd9IsE(icd9) < 4
 }
 
+#' @title are codes puerly numeric
+#' @description For each code, return \code{TRUE} if numric or \code{FALSE} if a
+#'   V or E code.
+#' @return logical vector
+#' @export
 icd9IsN <- function(icd9)
   icd9IsA(asCharacterNoWarn(icd9), "VEve", TRUE)
 
+#' @describeIn icd9IsN
+#' @export
 icd9IsV <- function(icd9)
   icd9IsA(asCharacterNoWarn(icd9), "Vv")
 
+#' @describeIn icd9IsN
+#' @export
 icd9IsE <- function(icd9)
   icd9IsA(asCharacterNoWarn(icd9), "Ee")
 

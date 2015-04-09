@@ -13,15 +13,16 @@
 \title{take two ICD-9 codes and expand range to include all child codes}
 \usage{
 icd9ExpandRange(start, end, isShort = icd9GuessIsShort(c(start, end)),
-  onlyReal = TRUE, excludeAmbiguousParent = TRUE)
+  onlyReal = TRUE, excludeAmbiguousStart = TRUE,
+  excludeAmbiguousEnd = TRUE)
 
 icd9ExpandRangeShort(start, end, onlyReal = TRUE,
-  excludeAmbiguousParent = TRUE)
+  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
 
 icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 
 icd9ExpandRangeDecimal(start, end, onlyReal = TRUE,
-  excludeAmbiguousParent = TRUE)
+  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
 
 start \%i9da\% end
 
@@ -74,18 +75,10 @@ this is cumbersome code, covering a whole load of edge cases
 }
 \examples{
 "4280 " \%i9s\% "4289 "
-"42799 " \%i9s\% "42802"
+"4280 " \%i9s\% "42821"
 "42799 " \%i9sa\% "42802" # doesn't include 428 or 4280
 "427.99 " \%i9da\% "428.02"
-"V80 " \%i9s\% " V8210 "
-
-# the following should give all codes in 428 EXCEPT "428",
-# and all codes upto 43014 EXCEPT 430 and 4301
-icd9ExpandRangeShort("4280 ", "43014")
-stopifnot(all(c("430", "4301") \%in\% icd9ExpandRange("4280 ", "43014",
-  onlyReal = FALSE, excludeAmbiguousParent = TRUE)))
-stopifnot(!any(c("430", "4301") \%in\% icd9ExpandRange("4280 ", "43014",
-  onlyReal = FALSE, excludeAmbiguousParent = TRUE)))
+"V80 " \%i9s\% " V810 "
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{icd9Children}},

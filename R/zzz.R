@@ -24,14 +24,20 @@ release_questions <- function() {
     "Have you checked all TODO comments",
     "Is there any commented code?",
     "Have commented tests been skipped or eliminated?",
-    "Are you happy with the code coverage?",
-    "Have you linted?",
+    "Do all examples look ok (not just run without errors)?",
+    "Anything to add to vignette?",
+    "Have all the fixed github issues been closed",
+    "Is NEWS.md updated?",
+    "Is README.Rmd updated and recompiled into README.md?",
     "Have you compiled with clang and gcc with full warnings?",
     "Have you included updated copies of all offline versions of online data?",
     "Have you regenerated icd9Hierarchy and other compiled data, using parseAndSave?",
+    "Are you happy with the code coverage?",
+    "Does it compile and check fine on travis?",
     "Have you checked on Windows, win_builder, Mac, Ubuntu and UBSAN rocker?",
-    "Have all unnecessary files been ignored in built archive? Especially thinking of autoconfigure stuff.",
-    "Have all the fixed github issues been closed"
+    "Have you linted?",
+    "Have all unnecessary files been ignored in built archive? Especially thinking of autoconfigure stuff."
+
   )
 }
 
