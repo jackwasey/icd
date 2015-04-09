@@ -33,11 +33,11 @@ release_questions <- function() {
     "Have you included updated copies of all offline versions of online data?",
     "Have you regenerated icd9Hierarchy and other compiled data, using parseAndSave?",
     "Are you happy with the code coverage?",
+    "Have you linted?",
     "Does it compile and check fine on travis?",
     "Have you checked on Windows, win_builder, Mac, Ubuntu and UBSAN rocker?",
-    "Have you linted?",
+    "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially thinking of autoconfigure stuff."
-
   )
 }
 

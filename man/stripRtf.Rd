@@ -10,7 +10,7 @@ stripRtf(x)
 \item{x}{vector of character strings containing RTF}
 }
 \description{
-Take a vector of character strings containing RTF, replace each \tab with a
+Take a vector of character strings containing RTF, replace each \\tab with a
 space and eradicate all other RTF symbols
 }
 \keyword{internal}

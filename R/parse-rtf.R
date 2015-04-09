@@ -340,7 +340,7 @@ parseRtfQualifierSubset <- function(qual) {
 
 #' Strip RTF
 #'
-#' Take a vector of character strings containing RTF, replace each \tab with a
+#' Take a vector of character strings containing RTF, replace each \\tab with a
 #' space and eradicate all other RTF symbols
 #' @param x vector of character strings containing RTF
 #' @keywords internal
