@@ -10,10 +10,6 @@ man-roxygen
 .*\.gcno$
 .*\.gcov$
 .*\.gch$
-extdata\/ICD10_Charlson\.sas
-extdata\/ICD10_Elixhauser\.sas
-extdata\/ccs_multi_pr_tool_2014\.csv
-extdata\/comoanaly2012-2013\.txt
 icd9\.Rnw$
 .*_cache.*
 ^NEWS\.md$
@@ -34,3 +30,16 @@ aclocal.m4
 m4
 icd9Billable[[:digit:]]+\.RData
 Makevars$
+CMS.*DESC.*
+Dtab[[:digit:]]{2}\.rtf
+Dtab[[:digit:]]{2}\.RTF
+DTAB[[:digit:]]{2}\.RTF
+I9diagnos.*\.txt
+I9DX_DESC\.txt
+V27LONG_SHORT_DX.*\.csv
+V26 I9 Diagnosis.txt
+extdata\/ICD10_Charlson\.sas
+extdata\/ICD10_Elixhauser\.sas
+extdata\/ccs_multi_pr_tool_2014\.csv
+extdata\/comoanaly2012-2013\.txt
+ccs_multi_dx_tool_2013\.csv

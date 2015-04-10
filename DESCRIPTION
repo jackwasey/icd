@@ -7,8 +7,8 @@ Description: Calculate comorbidities, Charlson scores, perform fast and accurate
     exist. The package enables a work flow from raw lists of ICD-9 codes from
     hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
     from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-Version: 1.1.1
-Date: 2015-03-14
+Version: 1.2
+Date: 2015-04-10
 Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"),
     email = c("jack@jackwasey.com")),

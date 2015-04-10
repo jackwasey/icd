@@ -287,12 +287,11 @@ parseIcd9Chapters <- function(year = NULL,
 }
 # EXCLUDE COVERAGE END
 
-icd9WebParseStartEndToRange <- function(v) {
+icd9WebParseStartEndToRange <- function(v)
   paste(v[["start"]], v[["end"]], sep = "-")
-}
 
-# internal only
 icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
+  icd9url <- NULL
   if (is.null(chapter)) {
     icd9url <- sprintf("http://www.icd9data.com/%s/Volume1/default.htm", year)
   } else {
@@ -313,7 +312,8 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
          FUN = function(x) {
            y <- unlist(strMultiMatch(pattern = "^([VvEe0-9]+)-?([VvEe0-9]+)?$", text = x))
            names(y) <- c("start", "end")
-           if (y[["end"]] == "") names(y <- y[-2]) <- "major"
+           y <- y[-2]
+           if (y[["end"]] == "") names(y) <- "major"
            y
          }
   )
@@ -329,7 +329,7 @@ icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   icd9Desc <- parseRtfYear(year = "2011", save = FALSE, verbose = verbose)
 
   if (verbose) message("working on (possibly) slow step of web scrape to build icd9 Chapters Hierarchy.")
-  chaps <- icd9GetChapters(icd9 = icd9::icd9Desc$icd9, isShort = TRUE, verbose = verbose)
+  chaps <- icd9GetChapters(icd9 = icd9Desc$icd9, isShort = TRUE, verbose = verbose)
 
   icd9Hierarchy <- cbind(
     data.frame("icd9" = icd9Desc$icd9,
