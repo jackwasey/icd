@@ -30,14 +30,14 @@ aclocal.m4
 m4
 icd9Billable[[:digit:]]+\.RData
 Makevars$
-CMS.*DESC.*
-Dtab[[:digit:]]{2}\.rtf
-Dtab[[:digit:]]{2}\.RTF
-DTAB[[:digit:]]{2}\.RTF
+CMS31.*DESC.*
+CMS30.*DESC.*
+CMS29.*DESC.*
+CMS28.*DESC.*
 I9diagnos.*\.txt
 I9DX_DESC\.txt
 V27LONG_SHORT_DX.*\.csv
-V26 I9 Diagnosis.txt
+V26 I-9 Diagnosis.txt
 extdata\/ICD10_Charlson\.sas
 extdata\/ICD10_Elixhauser\.sas
 extdata\/ccs_multi_pr_tool_2014\.csv
