@@ -1,23 +1,42 @@
+
 # try parsing the RTF, and therefore get subheadings, as well as billable codes.
 # ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/
 #
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different approach in python
-#
-# setdiff(icd9ShortToDecimal(icd9Hierarchy$icd9), names(parseRtf()))
-
-# . <- "magrittr" # paper over rstudio warnings
 
 # TODO: Indiana has actually already done this work: http://www.in.gov/isdh/reports/hosp_disch_data/2011/diagnosis_id.zip but unclear whether they did it properly, changed it by year (as is implied), and only goes 1999-2011. Could at least use for validation.
 
-parseRtfToDesc <- function(lines = NULL,
-                           verbose = FALSE, save = FALSE) {
-  if (is.null(lines))
-    lines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
-                            #encoding = "CP1252" # we should let R do its best to convert everything to UTF-8
-  checkmate::assertCharacter(lines)
-  checkmate::assertFlag(verbose)
+#' @title parse RTF description of entire ICD-9-CM for a specific year
+#' @description Currently only the most recent update is implemented. Note that CMS have published additional ICD-9-CM billable code lists since the last one from the CDC: I think these have been the same every year since 2011, though. THe last CDC release is Dtab12.rtf from 2011.
+#' @param year from 1996 to 2012 (this is what CDC has published). Only 2012 implemented thus far
+#' @source http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip and similar files run from 1996 to 2011.
+#' @keywords internal
+parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose = FALSE) {
+  checkmate::assertString(year)
   checkmate::assertFlag(save)
-  parseRtf(lines, verbose) %>% swapNamesWithVals %>% icd9SortDecimal -> out
+  checkmate::assertFlag(fromWeb)
+  checkmate::assertFlag(verbose)
+
+  rtf_dat <- icd9:::data_sources[data_sources$f_year == year, ]
+  url <- rtf_dat$rtf_url
+  fn <- rtf_dat$rtf_filename
+  fp <- file.path("inst", "extdata", fn)
+  if (!save && !file.exists(fp))
+    fp <- system.file("extdata", fn, package = "icd9")
+
+  if (fromWeb || !file.exists(fp)) {
+    lines <- read.zip.url(url, fn, encoding = "ASCII")
+    if (save || !file.exists(fp)) writeLines(lines, fp, useBytes = TRUE)
+  } else {
+    lines <- readLines(file(fp, encoding = "ASCII"), warn = FALSE)
+  }
+  # the file itself is 7 bit ASCII, but has its own internal encoding using CP1252.
+  # test meniere's disease with lines[24821:24822]
+  # using linux grep, it appears that character codes from CP1252 (see first line of header) are represented by e.g. \'e9
+  #  grep "\\\\'" inst/extdata/Dtab12.rtf
+  #  from dtab12.rtf, the complete list of hex codes is: E8, E9, F1, F6 (e acute, e grave, nn, o umlaut)
+  #  # grep("\\'[[:alnum:]][[:alnum:]]", paste(utf[24821:24822], collapse=""), value = T)
+  parseRtfLines(lines, verbose) %>% swapNamesWithVals %>% icd9SortDecimal -> out
   # make Tidy data: don't like using row names to store things
   icd9Desc <- data.frame(
     icd9  = out %>% unname %>% icd9DecimalToShort,
@@ -27,23 +46,31 @@ parseRtfToDesc <- function(lines = NULL,
   invisible(icd9Desc)
 }
 
-parseRtf <- function(lines = readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"),
-                                       #encoding = "CP1252" # we should let R do its best to convert everything to UTF-8
-
-                                       warn = FALSE),
-                     verbose = FALSE) {
+parseRtfLines <- function(lines, verbose = FALSE) {
 
   checkmate::assertCharacter(lines)
   checkmate::assertFlag(verbose)
 
-  filtered <- lines
+  # filtered <- iconv(lines, from = "ASCII", to = "UTF-8", mark = TRUE) I think
+  # the first 127 characters of ASCII are the same in Unicode, but we must make
+  # sure R treats the lines as Unicode.
+  filtered = lines
   # merge any line NOT starting with "\\par" on to previous line
   non_par_lines <- grep("^\\\\par", filtered, invert = TRUE)
   # in reverse order, put each non-par line on end of previous, then filter out all non-par lines
   for (i in rev(non_par_lines)) {
-    filtered[i-1] <- paste(filtered[i-1], filtered[i], sep = "")
+    filtered[i - 1] <- paste(filtered[i - 1], filtered[i], sep = "")
   }
   filtered <- grep("^\\\\par", filtered, value = TRUE)
+
+  # fix ASCII/CP1252/Unicode horror: of course, some char defs are split over lines...
+  #accented_rows <- grep("\\'[[:alnum:]][[:alnum:]]", filtered)
+  #accented_hex <- strMultiMatch(".*((\\'[[:alnum:]][[:alnum:]]).*?).*", filtered[accented_rows])
+  filtered <- gsub("\\\\'e8", "\u00e8", filtered)
+  filtered <- gsub("\\\\'e9", "\u00e9", filtered)
+  filtered <- gsub("\\\\'f1", "\u00f1", filtered)
+  filtered <- gsub("\\\\'f16", "\u00f6", filtered)
+# show that it worked: grep("\u00e8", filtered, value = T)
 
   # drop stupid long line at end:
   longest_lines <- nchar(filtered) > 3000

@@ -156,8 +156,10 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c
 #' @param filename character vector of length one containing name of file to
 #'   extract from zip. If not specified, and the zip contains a single file,
 #'   then this single file will be used.
+#' @param encoding passed to file when the contents of the zip is read, default
+#'   is "", i.e. R uses current locale to guess
 #' @keywords internal
-read.zip.url <- function(url, filename) {
+read.zip.url <- function(url, filename, encoding = "") {
   stopifnot(length(filename) <= 1)
   stopifnot(is.character(url), length(url) == 1)
   zipfile <- tempfile()
@@ -177,7 +179,7 @@ read.zip.url <- function(url, filename) {
     stopifnot(filename %in% files)
 
   readLines(
-    file(file.path(zipdir, filename)),
+    file(file.path(zipdir, filename), encoding = encoding),
     warn = FALSE
   )
 }
@@ -233,7 +235,7 @@ getIcdField <- function(x, icd9Field = NULL) {
 }
 
 getLatestBillableVersion <- function() "32"
-  #as.character(max(icd9:::billable_sources$version))
+  #as.character(max(icd9:::data_sources$version))
 
 #' @title trim null or empty values from a list
 #' @param x list

@@ -323,14 +323,3 @@ parseElix <- function(condense = FALSE, save = FALSE, path = "data") {
   if (save) saveInDataDir("elixComorbid")
   invisible(elixComorbid)
 }
-
-# AHRQ hierarchy.
-
-parseAhrqHierarchy <- function() {
-  read.zip.url(
-    "http://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2014.zip",
-    filename = "ccs_multi_dx_tool_2013.csv",
-    FUN = read.csv,
-    row.names = NULL
-  )
-}

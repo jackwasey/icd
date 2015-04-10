@@ -33,6 +33,7 @@ release_questions <- function() {
     "Have you included updated copies of all offline versions of online data?",
     "Have you regenerated icd9Hierarchy and other compiled data, using parseAndSave?",
     "Are you happy with the code coverage?",
+    "Does every file have correct licence information?",
     "Have you linted?",
     "Does it compile and check fine on travis?",
     "Have you checked on Windows, win_builder, Mac, Ubuntu and UBSAN rocker?",

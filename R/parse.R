@@ -3,15 +3,13 @@
 parseEverythingAndSave <- function(verbose = TRUE) {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
-  # but only needs to be done rarely.
-
-  # this is only intended to be run from development tree, not as installed package
+  # but only needs to be done rarely. This is only intended to be run from
+  # development tree, not as installed package
 
   generateSysData()
-
   devtools::load_data(pkg = ".") # reload the newly saved data
   parseAndSaveQuick(verbose = verbose)
-
+  devtools::load_data(pkg = ".") # reload the newly saved data
   icd9BuildChaptersHierarchy(save = TRUE, verbose = verbose) # depends on icd9Desc and icd9Billable
 
 }
@@ -20,7 +18,7 @@ parseEverythingAndSave <- function(verbose = TRUE) {
 #' @keywords internal
 parseAndSaveQuick <- function(verbose = FALSE) {
   if (verbose) message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
-  parseRtfToDesc(save = TRUE, verbose = verbose) # creates icd9Desc
+  parseRtfYear(year = "2011", save = TRUE, verbose = verbose) # creates icd9Desc
   devtools::load_data(pkg = ".")
 
   # plain text billable codes
@@ -53,7 +51,7 @@ parseAndSaveQuick <- function(verbose = FALSE) {
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
 parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FALSE) {
-  versions <- icd9:::billable_sources$version
+  versions <- icd9:::data_sources$version
   if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
   for (v in versions) {
@@ -85,17 +83,22 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   checkmate::assertFlag(fromWeb)
   checkmate::assertFlag(verbose)
 
+
+  # test encodings with
+  # readLines("inst/extdata/CMS32_DESC_LONG_DX.txt")[4510] %T>% cat
+
   if (verbose) message("Fetching billable codes version: ", version)
 
   if (version == "27") return(invisible(parseIcd9LeafDescriptions27(save = save, fromWeb = fromWeb,
                                                                     verbose = verbose)))
-  stopifnot(version %in% icd9:::billable_sources$version)
-  dat <- icd9:::billable_sources[icd9:::billable_sources$version == version, ]
+  stopifnot(version %in% icd9:::data_sources$version)
+  dat <- icd9:::data_sources[icd9:::data_sources$version == version, ]
   url <- dat$url
   fn_short <- dat$short_filename
   fn_long <- dat$long_filename
   path_short <- file.path("inst", "extdata", fn_short)
   path_long <- file.path("inst", "extdata", fn_long)
+
   if (!save && !file.exists(path_short)) {
     # not saving, so we can read-only get the path from the installed package:
     path_short <- system.file("extdata", fn_short, package = "icd9")
@@ -111,9 +114,9 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
 
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
-    shortlines <- read.zip.url(url, fn_short)
+    shortlines <- read.zip.url(url, fn_short, encoding = dat$short_encoding)
     if (!is.na(fn_long))
-      longlines <- read.zip.url(url, fn_long)
+      longlines <- read.zip.url(url, fn_long, encoding = dat$long_encoding)
     else
       longlines <- NA_character_
 
@@ -121,13 +124,13 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
       writeLines(shortlines, path_short, useBytes = TRUE)
       if (!is.na(fn_long)) writeLines(longlines, path_long, useBytes = TRUE)
     }
+  } else {
+    readLines(path_short, encoding = dat$short_encoding) -> shortlines
+    if (!is.na(fn_long))
+      readLines(path_long, encoding = dat$long_encoding) -> longlines
+    else
+      NA_character_ -> longlines
   }
-
-  readLines(path_short) -> shortlines
-  if (!is.na(fn_long))
-    readLines(path_long) -> longlines
-  else
-    NA_character_ -> longlines
 
   shortlines %<>% strsplit("[[:space:]]")
   longlines %<>% strsplit("[[:space:]]")
@@ -187,9 +190,9 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   checkmate::assertFlag(save)
   checkmate::assertFlag(fromWeb)
   checkmate::assertFlag(verbose)
-  fn <- icd9:::billable_sources[icd9:::billable_sources$version == 27, "other_filename"]
+  fn <- icd9:::data_sources[icd9:::data_sources$version == 27, "other_filename"]
   fp <- file.path("inst", "extdata", fn)
-  url <- icd9:::billable_sources[icd9:::billable_sources$version == 27, "url"]
+  url <- icd9:::data_sources[icd9:::data_sources$version == 27, "url"]
 
   if (!save && !file.exists(fp))
     fp <- system.file("extdata", fn, package = "icd9")
@@ -323,7 +326,7 @@ icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   # TODO: now we get almost everything from the RTF, we can just pull the
   # chapter and sub-chapters from the web very quickly (or from the RTF)
   if (verbose) message("working on (possibly) slow step of web scrape to build icd9 Chapters Hierarchy.")
-  chaps <- icd9GetChapters(icd9 = icd9::icd9Desc$icd9, isShort = TRUE)
+  chaps <- icd9GetChapters(icd9 = icd9::icd9Desc$icd9, isShort = TRUE, verbose = verbose)
 
   icd9Hierarchy <- cbind(
     data.frame("icd9" = icd9::icd9Desc$icd9,
@@ -422,12 +425,11 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
   stopifnot(all(icd9EShortReal %in% icd9EShort))
 
   # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
-  billable_sources <- data.frame(
-    version = as.character(c(32, 31, 30, 29, 28, 27,
-                             #"27 (abbrev only)",
-                             26, 25, 24, 23)),
+  data_sources <- data.frame(
+    version = as.character(c(32, 31, 30, 29, 28, 27, 26, 25, 24, 23)),
+    f_year = c(as.character(seq(2014, 2005))),
     start_date = c("2014-10-01", "2013-10-01", "2012-10-01", "2011-10-01", "2010-10-01",
-                   NULL, "2009-10-01", "2008-10-01", "2007-10-01", "2006-10-01", "2005-10-01"),
+                   "2009-10-01", "2008-10-01", "2007-10-01", "2006-10-01", "2005-10-01"),
     long_filename = c(
       "CMS32_DESC_LONG_DX.txt",
       "CMS31_DESC_LONG_DX.txt",
@@ -456,8 +458,8 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
                        # hasn't got correctly formatted <3digit codes. TODO, use
                        # codes from first table, and descs from second.
                        NA, NA, NA, NA),
-    long_encoding = c("latin1", "latin1", "latin1", "latin1", "latin1", "latin1",
-                      NA, NA, NA, NA),
+    long_encoding = c("latin1", "latin1", "latin1", "latin1", "latin1", "latin1", NA, NA, NA, NA),
+    short_encoding = rep_len("ASCII", 10),
     url = c("http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/ICD-9-CM-v32-master-descriptions.zip",
             "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv31-master-descriptions.zip",
             "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv30_master_descriptions.zip",
@@ -470,6 +472,17 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
             "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v25_icd9.zip",
             "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v24_icd9.zip",
             "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v23_icd9.zip"),
+    rtf_url = c( # FY11,12,13,14 are the same?
+      rep_len("http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip", 4),
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/DTAB11.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab10.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab09.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab08.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab07.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab06.zip"),
+    rtf_filename = c(
+      rep_len("Dtab12.rtf", 4), "DTAB11.RTF", "Dtab10.RTF", "Dtab09.RTF", "Dtab08.RTF",
+      "Dtab07.RTF", "Dtab06.rtf"), # there are more, but not with corresponding CMS, back to 1990s
     stringsAsFactors = FALSE
   )
 
@@ -479,7 +492,7 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
   lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
                "icd9NShortBillable", "icd9VShortBillable", "icd9EShortBillable",
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
-               "billable_sources")
+               "data_sources")
   if (save) save(list = lknames,
                  file = sysdata.path, compress = "xz")
   invisible(mget(lknames))
