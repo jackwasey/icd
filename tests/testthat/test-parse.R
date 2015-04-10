@@ -91,9 +91,9 @@ test_that("sub-parse v91.9", {
   expect_equal(res[["V91.92"]], "Other specified multiple gestation, with two or more monoamniotic fetuses")
 })
 
-rtf <- parseRtfLines(
-  readLines(file(system.file("extdata", "Dtab12.rtf", mustWork = TRUE, package = "icd9"), encoding = "ASCII"), warn = FALSE)
-)
+rtf_conn <- file(system.file("extdata", "Dtab12.rtf", mustWork = TRUE, package = "icd9"), encoding = "ASCII")
+rtf <- parseRtfLines(readLines(rtf_conn, warn = FALSE))
+close(rtf_conn)
 nrtf <- names(rtf)
 
 test_that("tricky V91.9 and similar", {

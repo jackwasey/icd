@@ -28,7 +28,9 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
     lines <- read.zip.url(url, fn, encoding = "ASCII")
     if (save || !file.exists(fp)) writeLines(lines, fp, useBytes = TRUE)
   } else {
-    lines <- readLines(file(fp, encoding = "ASCII"), warn = FALSE)
+    fp_conn <- file(fp, encoding = "ASCII")
+    on.exit(close(fp_conn))
+    lines <- readLines(fp_conn, warn = FALSE)
   }
   # the file itself is 7 bit ASCII, but has its own internal encoding using CP1252.
   # test meniere's disease with lines[24821:24822]

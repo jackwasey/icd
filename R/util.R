@@ -178,10 +178,13 @@ read.zip.url <- function(url, filename, encoding = "") {
   } else
     stopifnot(filename %in% files)
 
-  readLines(
-    file(file.path(zipdir, filename), encoding = encoding),
-    warn = FALSE
-  )
+  zip_conn <- file(file.path(zipdir, filename), encoding = encoding)
+  lines <- readLines(zip_conn, warn = FALSE)
+  # clean up
+  close(zip_conn)
+  unlink(zipdir, recursive = TRUE)
+  unlink(zipfile)
+  lines
 }
 
 # EXCLUDE COVERAGE END
