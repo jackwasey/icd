@@ -17,7 +17,7 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
   checkmate::assertFlag(fromWeb)
   checkmate::assertFlag(verbose)
 
-  rtf_dat <- icd9:::data_sources[data_sources$f_year == year, ]
+  rtf_dat <- data_sources[data_sources$f_year == year, ]
   url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename
   fp <- file.path("inst", "extdata", fn)

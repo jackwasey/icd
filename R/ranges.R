@@ -160,26 +160,26 @@ icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
   if (onlyReal) {
     stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
     if (icd9IsN(start) && icd9IsN(end))
-      res <- expandRangeWorker(start, end, icd9:::icd9NShortReal, onlyReal = TRUE,
+      res <- expandRangeWorker(start, end, icd9NShortReal, onlyReal = TRUE,
                                excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9IsV(start) && icd9IsV(end))
-      res <- expandRangeWorker(start, end, icd9:::icd9VShortReal, onlyReal = TRUE,
+      res <- expandRangeWorker(start, end, icd9VShortReal, onlyReal = TRUE,
                                excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9IsE(start) && icd9IsE(end))
-      res <- expandRangeWorker(start, end, icd9:::icd9EShortReal, onlyReal = TRUE,
+      res <- expandRangeWorker(start, end, icd9EShortReal, onlyReal = TRUE,
                                excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")
   } else {
 
     if (icd9IsN(start) && icd9IsN(end))
-      res <- expandRangeWorker(start, end, icd9:::icd9NShort, onlyReal = FALSE,
+      res <- expandRangeWorker(start, end, icd9NShort, onlyReal = FALSE,
                                excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9IsV(start) && icd9IsV(end))
-      res <- expandRangeWorker(start, end, icd9:::icd9VShort, onlyReal = FALSE,
+      res <- expandRangeWorker(start, end, icd9VShort, onlyReal = FALSE,
                                excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9IsE(start) && icd9IsE(end))
-      res <- expandRangeWorker(start, end, icd9:::icd9EShort, onlyReal = FALSE,
+      res <- expandRangeWorker(start, end, icd9EShort, onlyReal = FALSE,
                                excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")

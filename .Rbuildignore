@@ -34,3 +34,4 @@ aclocal.m4
 m4
 ~\$.+
 data\/icd9Billable[[:digit:]]+\.RData
+Makevars

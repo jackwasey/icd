@@ -4,7 +4,7 @@
 \alias{read.zip.url}
 \title{read file from zip at URL}
 \usage{
-read.zip.url(url, filename = NULL, FUN = readLines, ...)
+read.zip.url(url, filename, encoding = "")
 }
 \arguments{
 \item{url}{character vector of length one containing URL of zip file.}
@@ -13,11 +13,8 @@ read.zip.url(url, filename = NULL, FUN = readLines, ...)
 extract from zip. If not specified, and the zip contains a single file,
 then this single file will be used.}
 
-\item{FUN}{function used to process the file in the zip, defaults to
-readLines. The first argument to FUN will be the path of the extracted
-\code{filename}}
-
-\item{\dots}{further arguments to FUN}
+\item{encoding}{passed to file when the contents of the zip is read, default
+is "", i.e. R uses current locale to guess}
 }
 \description{
 downloads zip file, and opens named file \code{filename}, or the

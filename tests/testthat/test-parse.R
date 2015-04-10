@@ -252,7 +252,7 @@ test_that("some chapters are correct", {
   expect_equal(chaps[nrow(icd9::icd9Hierarchy)], "Supplementary Classification Of External Causes Of Injury And Poisoning")
 
   # first and last rows of a block in the middle
-  neoplasm_rows <- which(codes %in% ("140" %i9sa% "239"))
+  neoplasm_rows <- which(codes %in% ("140" %i9sa% "239")) # TODO someday: this is rather slow...
   expect_equal(chaps[neoplasm_rows[1] - 1], "Infectious And Parasitic Diseases")
   expect_equal(chaps[neoplasm_rows[1]], "Neoplasms")
   expect_equal(chaps[neoplasm_rows[length(neoplasm_rows)]], "Neoplasms")
@@ -306,6 +306,8 @@ test_that("billable codes for expected versions exist", {
 })
 
 test_that("billable codes are all in order", {
+  if (!do_slow_tests) skip("skipping because slow")
+  # TODO: when testthat is released with skip_on_travis, then use this and CRAN
   for (v in names(icd9Billable)) {
     icd9 <- icd9Billable[[v]][["icd9"]]
     expect_identical(icd9, icd9SortShort(icd9),

@@ -68,6 +68,8 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
             })
 
 test_that("ahrq icd9 mappings generated from the current generation code", {
+  #TODO skip on travis and CRAN
+  if (!do_slow_tests) skip("too slow on travis and CRAN")
   # same but from source data. Should be absolutely identical.
   expect_equal(ahrqComorbid, parseAhrqSas(save = FALSE))
   # same but from source data. Should be absolutely identical.

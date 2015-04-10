@@ -6,7 +6,7 @@
   Medicaid Services.}
 \usage{
 parseIcd9LeafDescriptionsVersion(version = getLatestBillableVersion(),
-  save = FALSE, fromWeb = FALSE, verbose = FALSE, encoding = "latin1")
+  save = FALSE, fromWeb = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{save}{logical whether to attempt to re-save source files in inst}

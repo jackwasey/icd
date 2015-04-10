@@ -51,7 +51,7 @@ parseAndSaveQuick <- function(verbose = FALSE) {
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
 parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FALSE) {
-  versions <- icd9:::data_sources$version
+  versions <- data_sources$version
   if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
   for (v in versions) {
@@ -91,8 +91,8 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
 
   if (version == "27") return(invisible(parseIcd9LeafDescriptions27(save = save, fromWeb = fromWeb,
                                                                     verbose = verbose)))
-  stopifnot(version %in% icd9:::data_sources$version)
-  dat <- icd9:::data_sources[icd9:::data_sources$version == version, ]
+  stopifnot(version %in% data_sources$version)
+  dat <- data_sources[data_sources$version == version, ]
   url <- dat$url
   fn_short <- dat$short_filename
   fn_long <- dat$long_filename
@@ -171,15 +171,15 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
     nonASCII <- grep(pattern = "ASCII", invert = TRUE, encs)
     if (length(nonASCII) > 0 ) {
       warning("The following long descriptions contain non-ASCII characters: ",
-      paste(get(var_name, inherits = FALSE)[nonASCII, ], sep = ", "))
+              paste(get(var_name, inherits = FALSE)[nonASCII, ], sep = ", "))
     }
     if (length(utf) > 0 ) {
       warning("The following long descriptions contain Unicode characters: ",
-      paste(get(var_name, inherits = FALSE)[utf, ], sep = ", "))
+              paste(get(var_name, inherits = FALSE)[utf, ], sep = ", "))
     }
     if (length(latin1) > 0 ) {
       warning("The following long descriptions contain Latin-1 characters: ",
-      paste(get(var_name, inherits = FALSE)[latin1, ], sep = ", "))
+              paste(get(var_name, inherits = FALSE)[latin1, ], sep = ", "))
     }
   }
   invisible(get(var_name, inherits = FALSE))
@@ -190,9 +190,9 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   checkmate::assertFlag(save)
   checkmate::assertFlag(fromWeb)
   checkmate::assertFlag(verbose)
-  fn <- icd9:::data_sources[icd9:::data_sources$version == 27, "other_filename"]
+  fn <- data_sources[data_sources$version == 27, "other_filename"]
   fp <- file.path("inst", "extdata", fn)
-  url <- icd9:::data_sources[icd9:::data_sources$version == 27, "url"]
+  url <- data_sources[data_sources$version == 27, "url"]
 
   if (!save && !file.exists(fp))
     fp <- system.file("extdata", fn, package = "icd9")
