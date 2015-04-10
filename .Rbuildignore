@@ -32,6 +32,5 @@ autom4te.cache
 src\/autom4te.cache
 aclocal.m4
 m4
-~\$.+
-data\/icd9Billable[[:digit:]]+\.RData
+icd9Billable[[:digit:]]+\.RData
 Makevars$
