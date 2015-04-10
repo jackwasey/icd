@@ -132,8 +132,8 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
       NA_character_ -> longlines
   }
 
-  shortlines %<>% strsplit("[[:space:]]")
-  longlines %<>% strsplit("[[:space:]]")
+  shortlines <- strsplit(shortlines, "[[:space:]]")
+  longlines <- strsplit(longlines, "[[:space:]]")
 
   icd9ShortCode <- lapply(shortlines, FUN = function(x) trim(x[1]))
   icd9ShortDesc <- lapply(shortlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
@@ -325,14 +325,17 @@ icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
 
   # TODO: now we get almost everything from the RTF, we can just pull the
   # chapter and sub-chapters from the web very quickly (or from the RTF)
+
+  icd9Desc <- parseRtfYear(year = "2011", save = FALSE, verbose = verbose)
+
   if (verbose) message("working on (possibly) slow step of web scrape to build icd9 Chapters Hierarchy.")
   chaps <- icd9GetChapters(icd9 = icd9::icd9Desc$icd9, isShort = TRUE, verbose = verbose)
 
   icd9Hierarchy <- cbind(
-    data.frame("icd9" = icd9::icd9Desc$icd9,
+    data.frame("icd9" = icd9Desc$icd9,
                # TODO: could also get some long descs from more recent billable
                # lists, but not older ones which only have short descs
-               "descLong" = icd9::icd9Desc$desc,
+               "descLong" = icd9Desc$desc,
                stringsAsFactors = FALSE),
     # the following can and should be factors:
     chaps
@@ -340,9 +343,9 @@ icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
 
   # fix congenital abnormalities not having subchapter defined:
   # ( this might be easier to do when parsing the chapters themselves...)
-  icd9Hierarchy %<>% fixSubchapterNa(740, 759)
+  icd9Hierarchy <- fixSubchapterNa(icd9Hierarchy, 740, 759)
   # and hematopoietic organs
-  icd9Hierarchy %<>% fixSubchapterNa(280, 289)
+  icd9Hierarchy <- fixSubchapterNa(icd9Hierarchy, 280, 289)
 
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,

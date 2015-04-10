@@ -51,11 +51,15 @@ Since nearly valid, out-dated or new codes may be missed, not limiting to
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
 
-\item{excludeAmbiguousParent}{single logical value, if \code{TRUE} the range
+\item{excludeAmbiguousStart}{single logical value, if \code{TRUE} the range
 returned will not include codes which are explicitly listed in the range,
 but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%
 V1009} would by default (\code{FALSE}) include \code{V10} even though
 \code{V10} itself is parent to everything up to \code{V11}.}
+
+\item{excludeAmbiguousEnd}{single logical, same as
+\code{excludeAmbiguousStart} but affects codes at the end of the range.
+E.g. 99.99 to 101.01 would by default exclude 101 and 101.0}
 }
 \description{
 this is cumbersome code, covering a whole load of edge cases
@@ -85,7 +89,7 @@ Other ICD-9 ranges: \code{\link{icd9Children}},
   \code{\link{icd9Children}},
   \code{\link{icd9ChildrenDecimal}},
   \code{\link{icd9ChildrenShort}};
-  \code{\link{icd9Condense}}, \code{\link{icd9Condense}},
+  \code{\link{icd9Condense}},
   \code{\link{icd9CondenseDecimal}},
   \code{\link{icd9CondenseShort}};
   \code{\link{icd9ExpandMinor}}

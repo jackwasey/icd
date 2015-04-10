@@ -23,6 +23,7 @@ Imports:
     checkmate (>= 1.5.1)
 Suggests:
     testthat,
+    devtools,
     knitr,
     microbenchmark,
     magrittr,

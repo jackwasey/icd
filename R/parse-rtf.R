@@ -1,15 +1,29 @@
+# we don't ever use magrittr in 'live' package use, just when it is using its
+# own functions for testing and generating its own data: in those cases magrittr
+# will be available, but we don't want CRAN check problems, so:
+utils::globalVariables(c(".", "%>%"))
 
 # try parsing the RTF, and therefore get subheadings, as well as billable codes.
 # ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/
 #
-# see https://github.com/LucaFoschini/ICD-9_Codes for a completely different approach in python
+# see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
+# approach in python
 
-# TODO: Indiana has actually already done this work: http://www.in.gov/isdh/reports/hosp_disch_data/2011/diagnosis_id.zip but unclear whether they did it properly, changed it by year (as is implied), and only goes 1999-2011. Could at least use for validation.
+# TODO: Indiana has actually already done this work:
+# http://www.in.gov/isdh/reports/hosp_disch_data/2011/diagnosis_id.zip but
+# unclear whether they did it properly, changed it by year (as is implied), and
+# only goes 1999-2011. Could at least use for validation.
 
 #' @title parse RTF description of entire ICD-9-CM for a specific year
-#' @description Currently only the most recent update is implemented. Note that CMS have published additional ICD-9-CM billable code lists since the last one from the CDC: I think these have been the same every year since 2011, though. THe last CDC release is Dtab12.rtf from 2011.
-#' @param year from 1996 to 2012 (this is what CDC has published). Only 2012 implemented thus far
-#' @source http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip and similar files run from 1996 to 2011.
+#' @description Currently only the most recent update is implemented. Note that
+#'   CMS have published additional ICD-9-CM billable code lists since the last
+#'   one from the CDC: I think these have been the same every year since 2011,
+#'   though. THe last CDC release is Dtab12.rtf from 2011.
+#' @param year from 1996 to 2012 (this is what CDC has published). Only 2012
+#'   implemented thus far
+#' @source
+#'   http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
+#'   and similar files run from 1996 to 2011.
 #' @keywords internal
 parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose = FALSE) {
   checkmate::assertString(year)
@@ -34,8 +48,11 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
   }
   # the file itself is 7 bit ASCII, but has its own internal encoding using CP1252.
   # test meniere's disease with lines[24821:24822]
-  # using linux grep, it appears that character codes from CP1252 (see first line of header) are represented by e.g. \'e9
-  #  grep "\\\\'" inst/extdata/Dtab12.rtf
+
+  # using linux grep, it appears that character codes from CP1252 (see first
+  # line of header) are represented by e.g. \'e9
+  #
+  #  $ grep "\\\\'" inst/extdata/Dtab12.rtf
   #  from dtab12.rtf, the complete list of hex codes is: E8, E9, F1, F6 (e acute, e grave, nn, o umlaut)
   #  # grep("\\'[[:alnum:]][[:alnum:]]", paste(utf[24821:24822], collapse=""), value = T)
   parseRtfLines(lines, verbose) %>% swapNamesWithVals %>% icd9SortDecimal -> out
@@ -295,6 +312,12 @@ parseRtfLines <- function(lines, verbose = FALSE) {
 #'   digits, but we haven't parsed them yet.
 #' @keywords internal
 parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
+  checkmate::assertString(row_str)
+  checkmate::assertFlag(verbose)
+  # this is really for CRAN, since this function is only run during package
+  # build, and calling library here would be disallowed
+  `%>%` <- magrittr::`%>%`
+
   out <- c()
   # get numbers and number ranges
   row_str %>% strsplit("[, :;]") %>% unlist %>% grep("[VvEe]?[0-9]", ., value = TRUE) -> vals

@@ -61,11 +61,14 @@ sortOrderShort <- function(icd9Short) {
 #' @template icd9-short
 #' @template onlyReal
 #' @template isShort
-#' @param excludeAmbiguousParent single logical value, if \code{TRUE} the range
+#' @param excludeAmbiguousStart single logical value, if \code{TRUE} the range
 #'   returned will not include codes which are explicitly listed in the range,
 #'   but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%
 #'   V1009} would by default (\code{FALSE}) include \code{V10} even though
 #'   \code{V10} itself is parent to everything up to \code{V11}.
+#' @param excludeAmbiguousEnd single logical, same as
+#'   \code{excludeAmbiguousStart} but affects codes at the end of the range.
+#'   E.g. 99.99 to 101.01 would by default exclude 101 and 101.0
 #' @family ICD-9 ranges
 #' @export
 icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)), onlyReal = TRUE,

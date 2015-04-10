@@ -44,8 +44,24 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{version}{single number describing the version of the CMS ICD-9-CM
-codes, defaults to the most recent available}
+\item{version}{single character string, default is "32" which is the latest
+release from CMS. Currently anything from "23" to "32" is accepted. Not
+numeric because there are possible cases with non-numeric names, e.g.
+revisions within one year, although none currently implemented.}
+
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
+five characters is given in a code, then the digits are greedily assigned
+to hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
+\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
+\item{invert}{single logical value, if \code{TRUE}, then the non-billable
+codes are returned. For functions with logical result, just negate with
+\code{!}. Default is \code{FALSE}.}
 }
 \value{
 logical vector of same length as input
