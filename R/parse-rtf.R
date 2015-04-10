@@ -78,7 +78,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   if (any(longest_lines))
     filtered <- filtered[-c(which(longest_lines))]
 
-  filtered %<>% stripRtf
+  filtered <- stripRtf(filtered)
 
   #filtered <- grep("\\[[-[:digit:]]+\\]", filtered, value = TRUE, invert = TRUE) # references e.g. [0-6]
   filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE) # empty lines
