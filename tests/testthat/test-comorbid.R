@@ -8,64 +8,64 @@ test_that("try to induce c++ segfault bug", {
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
   skip("this is not true because we don't fill in EVERY (unreal) possible code when there is odd specification of the range in the SAS code.")
-              for (i in names(ahrqComorbid))
-                expect_true(setequal(icd9ChildrenShort(ahrqComorbid[[i]], onlyReal = FALSE), ahrqComorbid[[i]]),
-                             info = paste("missing from saved ahrq comorbid (", i, "): ",
-                                          paste(setdiff(icd9ChildrenShort(ahrqComorbid[[i]], onlyReal = FALSE), ahrqComorbid[[i]]),
-                                                collapse = ", "
-                                                )
-                                          )
+  for (i in names(ahrqComorbid))
+    expect_true(setequal(icd9ChildrenShort(ahrqComorbid[[i]], onlyReal = FALSE), ahrqComorbid[[i]]),
+                info = paste("missing from saved ahrq comorbid (", i, "): ",
+                             paste(setdiff(icd9ChildrenShort(ahrqComorbid[[i]], onlyReal = FALSE), ahrqComorbid[[i]]),
+                                   collapse = ", "
                              )
-            })
+                )
+    )
+})
 
 test_that("Elixhauser make sure all the children are listed in the saved data.", {
-              for (i in elixComorbid)
-                expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
-            })
+  for (i in elixComorbid)
+    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+})
 
 test_that("Quan Charlson make sure all the children are listed in the saved data.", {
-              for (i in quanDeyoComorbid)
-                expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
-            })
+  for (i in quanDeyoComorbid)
+    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+})
 
 test_that("Quan Elixhauser make sure all the children are listed in the saved data.", {
-              for (i in quanElixComorbid)
-                expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
-            })
+  for (i in quanElixComorbid)
+    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+})
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
-              ptdf <- icd9Comorbid(icd9df = patientData, isShort = TRUE,
-                                   icd9Mapping = ahrqComorbid,
-                                   visitId = "visitId", return.df = TRUE)
+  ptdf <- icd9Comorbid(icd9df = patientData, isShort = TRUE,
+                       icd9Mapping = ahrqComorbid,
+                       visitId = "visitId", return.df = TRUE)
 
-              expect_equal(names(ptdf), c("visitId", names(ahrqComorbid)))
+  expect_equal(names(ptdf), c("visitId", names(ahrqComorbid)))
 
-              expect_true(all(sapply(names(ahrqComorbid),
-                                     function(x)
-                                       class(ptdf[, x])) == "logical"))
-              ptdflogical <- logicalToBinary(ptdf)
-              expect_true(all(sapply(names(ahrqComorbid),
-                                     function(x)
-                                       class(ptdflogical[, x])) == "integer"))
-              # do not expect all the rest of patient data to be returned - we
-              # aren't responsible for aggregating other fields by visitId!
-              expect_equal(dim(ptdf),
-                           c(length(unique(patientData[["visitId"]])),
-                             1 + length(ahrqComorbid)))
-              expect_true(
-                setequal(names(ptdf), c("visitId", names(ahrqComorbid))))
-              expect_true(
-                setequal(names(ptdflogical), c("visitId", names(ahrqComorbid))))
+  expect_true(all(sapply(names(ahrqComorbid),
+                         function(x)
+                           class(ptdf[, x])) == "logical"))
+  ptdflogical <- logicalToBinary(ptdf)
+  expect_true(all(sapply(names(ahrqComorbid),
+                         function(x)
+                           class(ptdflogical[, x])) == "integer"))
+  # do not expect all the rest of patient data to be returned - we
+  # aren't responsible for aggregating other fields by visitId!
+  expect_equal(dim(ptdf),
+               c(length(unique(patientData[["visitId"]])),
+                 1 + length(ahrqComorbid)))
+  expect_true(
+    setequal(names(ptdf), c("visitId", names(ahrqComorbid))))
+  expect_true(
+    setequal(names(ptdflogical), c("visitId", names(ahrqComorbid))))
 
-              expect_equal(
-                logicalToBinary(data.frame(a = c("jack", "hayley"),
-                                           b = c(TRUE, FALSE),
-                                           f = c(TRUE, TRUE))),
-                data.frame(a = c("jack", "hayley"),
-                           b = c(1, 0),
-                           f = c(1, 1))
-              )
-            })
+  expect_equal(
+    logicalToBinary(data.frame(a = c("jack", "hayley"),
+                               b = c(TRUE, FALSE),
+                               f = c(TRUE, TRUE))),
+    data.frame(a = c("jack", "hayley"),
+               b = c(1, 0),
+               f = c(1, 1))
+  )
+})
 
 test_that("ahrq icd9 mappings generated from the current generation code", {
   #TODO skip on travis and CRAN
@@ -100,11 +100,28 @@ test_that("can condense the big lists of comorbidities without errors", {
   # this is a useful test because the data weren't generated by just expanding
   # base ranges (which is how the condense works in reverse)
   for (onlyReal in c(TRUE, FALSE)) {
-    ahrq <- lapply(ahrqComorbid, icd9Condense, onlyReal)
-    quanDeyo <- lapply(quanDeyoComorbid, icd9Condense, onlyReal)
-    quanElix <- lapply(quanElixComorbid,
-                       icd9Condense, onlyReal)
-    elix <- lapply(elixComorbid, icd9Condense, onlyReal)
+    if (onlyReal) {
+      expect_that(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal = onlyReal),
+                  gives_warning())
+      expect_that(quanDeyo <- lapply(quanDeyoComorbid, icd9Condense, onlyReal),
+                  gives_warning())
+      expect_that(quanElix <- lapply(quanElixComorbid,
+                                     icd9Condense, onlyReal),
+                  gives_warning())
+      expect_that(elix <- lapply(elixComorbid, icd9Condense, onlyReal),
+                  gives_warning())
+    }
+    else {
+      expect_that(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal),
+                  testthat::not(gives_warning()))
+      expect_that(quanDeyo <- lapply(quanDeyoComorbid, icd9CondenseShort, onlyReal),
+                  testthat::not(gives_warning()))
+      expect_that(quanElix <- lapply(quanElixComorbid, icd9CondenseShort, onlyReal),
+                  testthat::not(gives_warning()))
+      expect_that(elix <- lapply(elixComorbid, icd9CondenseShort, onlyReal),
+                  testthat::not(gives_warning()))
+    }
+
     expect_is(ahrq, class = "list")
     expect_is(elix, class = "list")
     expect_is(quanDeyo, class = "list")
@@ -204,12 +221,12 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_false("438" %in% ahrqComorbid$Paralysis)
   expect_false("4386" %in% ahrqComorbid$Paralysis)
   # neuro other problem codes
-#   "3411 "-"3419 ",
-#   "34500"-"34511",
-#   "3452 "-"3453 ",
-#   "34540"-"34591",
-#   "34700"-"34701",
-#   "34710"-"34711",
+  #   "3411 "-"3419 ",
+  #   "34500"-"34511",
+  #   "3452 "-"3453 ",
+  #   "34540"-"34591",
+  #   "34700"-"34701",
+  #   "34710"-"34711",
   expect_true("3337" %in% ahrqComorbid$NeuroOther) # single value
   expect_true("33371" %in% ahrqComorbid$NeuroOther) # single value sub-code - zero not defined in 2015
   expect_true("494" %in% ahrqComorbid$Pulmonary) # top-level at start of range
@@ -226,11 +243,11 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("34539" %in% ahrqComorbid$NeuroOther)
   expect_true("3459" %in% ahrqComorbid$NeuroOther)
   expect_true("34599" %in% ahrqComorbid$NeuroOther) # by implication
-#   "490  "-"4928 ",
-#   "49300"-"49392", # this is all of asthma
-#   "494  "-"4941 ", # bronchiectasis is just 494, 4940 and 4941
-#   "4950 "-"505  ",
-#   "5064 "         = "CHRNLUNG"  /* Chronic pulmonary disease */
+  #   "490  "-"4928 ",
+  #   "49300"-"49392", # this is all of asthma
+  #   "494  "-"4941 ", # bronchiectasis is just 494, 4940 and 4941
+  #   "4950 "-"505  ",
+  #   "5064 "         = "CHRNLUNG"  /* Chronic pulmonary disease */
   expect_true("492" %in% ahrqComorbid$Pulmonary) # implied, and more below
   expect_true("4929" %in% ahrqComorbid$Pulmonary)
   expect_true("4920" %in% ahrqComorbid$Pulmonary)
@@ -243,9 +260,9 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("4940" %in% ahrqComorbid$Pulmonary)
   expect_true("4941" %in% ahrqComorbid$Pulmonary)
   expect_true("49499" %in% ahrqComorbid$Pulmonary) # implied
-#   "25000"-"25033",
-#   "64800"-"64804",
-#   "24900"-"24931" = "DM"        /* Diabetes w/o chronic complications*/
+  #   "25000"-"25033",
+  #   "64800"-"64804",
+  #   "24900"-"24931" = "DM"        /* Diabetes w/o chronic complications*/
   expect_false("249" %in% ahrqComorbid$DM)
   expect_false("2494" %in% ahrqComorbid$DM)
   expect_false("24941" %in% ahrqComorbid$DM)
@@ -261,9 +278,9 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("25033" %in% ahrqComorbid$DM)
   expect_true("2503" %in% ahrqComorbid$DM) # implied
   expect_true("25039" %in% ahrqComorbid$DM) # implied
-#   "25040"-"25093",
-#   "7751 ",
-#   "24940"-"24991" = "DMCX"      /* Diabetes w/ chronic complications */
+  #   "25040"-"25093",
+  #   "7751 ",
+  #   "24940"-"24991" = "DMCX"      /* Diabetes w/ chronic complications */
   expect_false("250" %in% ahrqComorbid$DMcx)
   expect_false("2503" %in% ahrqComorbid$DMcx)
   expect_true("2509" %in% ahrqComorbid$DMcx) # implied
@@ -274,9 +291,9 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("2498" %in% ahrqComorbid$DMcx)
   expect_true("24999" %in% ahrqComorbid$DMcx)
   expect_true("24991" %in% ahrqComorbid$DMcx)
-#   "243  "-"2442 ",
-#   "2448 ",
-#   "2449 "         = "HYPOTHY"   /* Hypothyroidism */
+  #   "243  "-"2442 ",
+  #   "2448 ",
+  #   "2449 "         = "HYPOTHY"   /* Hypothyroidism */
   expect_false("244" %in% ahrqComorbid$Hypothyroid) # some children are not included
   expect_false("2443" %in% ahrqComorbid$Hypothyroid) # explicitly excluded by Quan
   expect_false("24430" %in% ahrqComorbid$Hypothyroid) # implied exclusion
@@ -294,11 +311,11 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("V5632" %in% ahrqComorbid$Renal)
   expect_true("V568" %in% ahrqComorbid$Renal)
   expect_false("V56" %in% ahrqComorbid$Renal)
-#   "20000"-"20238",
-#   "20250"-"20301",
-#   "2386 ",
-#   "2733 ",
-#   "20302"-"20382" = "LYMPH"     /* Lymphoma */
+  #   "20000"-"20238",
+  #   "20250"-"20301",
+  #   "2386 ",
+  #   "2733 ",
+  #   "20302"-"20382" = "LYMPH"     /* Lymphoma */
   expect_true("200" %in% ahrqComorbid$Lymphoma)
   expect_true("2000" %in% ahrqComorbid$Lymphoma)
   expect_true("20000" %in% ahrqComorbid$Lymphoma)
@@ -349,10 +366,10 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_false("1993" %in% ahrqComorbid$Mets) # implied
   expect_false("19930" %in% ahrqComorbid$Mets) # implied
   expect_false("19999" %in% ahrqComorbid$Mets) # implied
-#   "179  "-"1958 ",
-#   "20900"-"20924",
-#   "20925"-"2093 ",
-#   "20930"-"20936",
+  #   "179  "-"1958 ",
+  #   "20900"-"20924",
+  #   "20925"-"2093 ",
+  #   "20930"-"20936",
   expect_true("195" %in% ahrqComorbid$Tumor) # all children, so implied
   expect_true("1950" %in% ahrqComorbid$Tumor)
   expect_true("1958" %in% ahrqComorbid$Tumor)
@@ -382,8 +399,8 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("20909" %in% ahrqComorbid$Tumor)
   expect_true("20919" %in% ahrqComorbid$Tumor)
   expect_true("20929" %in% ahrqComorbid$Tumor)
-#   "2871 ",
-#   "2873 "-"2875 ", # coag
+  #   "2871 ",
+  #   "2873 "-"2875 ", # coag
   expect_true("2871" %in% ahrqComorbid$Coagulopathy)
   expect_true("28710" %in% ahrqComorbid$Coagulopathy) # doesn't exist but really should work simply
   expect_true("28719" %in% ahrqComorbid$Coagulopathy) # doesn't exist but really should work simply
@@ -405,15 +422,15 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_false("2878" %in% ahrqComorbid$Coagulopathy)
   expect_false("2879" %in% ahrqComorbid$Coagulopathy)
   expect_false("28799" %in% ahrqComorbid$Coagulopathy)
-#   "2910 "-"2913 ",
-#   "2915 ",
-#   "2918 ",
-#   "29181",
-#   "29182",
-#   "29189",
-#   "2919 ",
-#   "30300"-"30393",
-#   "30500"-"30503" = "ALCOHOL"   /* Alcohol abuse */
+  #   "2910 "-"2913 ",
+  #   "2915 ",
+  #   "2918 ",
+  #   "29181",
+  #   "29182",
+  #   "29189",
+  #   "2919 ",
+  #   "30300"-"30393",
+  #   "30500"-"30503" = "ALCOHOL"   /* Alcohol abuse */
   expect_true("2910" %in% ahrqComorbid$Alcohol)
   expect_true("2913" %in% ahrqComorbid$Alcohol)
   expect_true("2915" %in% ahrqComorbid$Alcohol)
@@ -426,12 +443,12 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_false("2914" %in% ahrqComorbid$Alcohol)
   expect_false("29140" %in% ahrqComorbid$Alcohol)
   expect_false("29149" %in% ahrqComorbid$Alcohol)
-#   "2920 ",
-#   "29282"-"29289",
-#   "2929 ",
-#   "30400"-"30493",
-#   "30520"-"30593",
-#   "64830"-"64834" = "DRUG"      /* Drug abuse */
+  #   "2920 ",
+  #   "29282"-"29289",
+  #   "2929 ",
+  #   "30400"-"30493",
+  #   "30520"-"30593",
+  #   "64830"-"64834" = "DRUG"      /* Drug abuse */
   expect_true("304" %in% ahrqComorbid$Drugs)
   expect_true("3040" %in% ahrqComorbid$Drugs)
   expect_true("30400" %in% ahrqComorbid$Drugs)

@@ -39,7 +39,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE) {
   if (is.null(onlyReal)) {
     if (all(icd9IsRealShort(i9w))) {
       onlyReal <- TRUE
-      if (warn) warning("onlyReal not given, but all codes are 'real' so assuming TRUE")
+      message("'onlyReal' not given, but all codes are 'real' so assuming TRUE")
     } else {
       onlyReal <- FALSE
       if (warn) warning("onlyReal not given, but not all codes are 'real' so assuming FALSE")
