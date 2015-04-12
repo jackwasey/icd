@@ -64,9 +64,6 @@ becomes "010", not "0010"}
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
-
-\item{toParent}{single logical value which, if \code{TRUE}, will step up the
-hierarchy to four or three digit descriptions of groups of codes.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD9 code, name

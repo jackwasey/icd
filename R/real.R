@@ -77,10 +77,17 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE)
 #' @description Codes provided are compared to the most recent version of the
 #'   CMS list of billable codes, or another version if specified.
 #' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
 #' @template isShort
-#' @param version single number describing the version of the CMS ICD-9-CM
-#'   codes, defaults to the most recent available
-#'   @return logical vector of same length as input
+#' @param invert single logical value, if \code{TRUE}, then the non-billable
+#'   codes are returned. For functions with logical result, just negate with
+#'   \code{!}. Default is \code{FALSE}.
+#' @param version single character string, default is "32" which is the latest
+#'   release from CMS. Currently anything from "23" to "32" is accepted. Not
+#'   numeric because there are possible cases with non-numeric names, e.g.
+#'   revisions within one year, although none currently implemented.
+#' @return logical vector of same length as input
 #' @export
 icd9IsBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                            version = getLatestBillableVersion()) {

@@ -6,14 +6,12 @@
 \alias{icd9CondenseShort}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
-icd9Condense(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = NULL)
+icd9Condense(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = NULL,
+  warn = TRUE)
 
-icd9Condense(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = NULL)
+icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, warn = TRUE)
 
-icd9CondenseDecimal(icd9Decimal, onlyReal = NULL)
-
-icd9CondenseShort(icd9Short, onlyReal = NULL, onlyBillable = NULL,
-  warn = FALSE)
+icd9CondenseShort(icd9Short, onlyReal = NULL, warn = TRUE)
 }
 \arguments{
 \item{icd9}{is
@@ -26,6 +24,17 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
+\item{onlyReal}{single logical value, if TRUE, will limit the search to those
+codes which appear in the master list, not just syntactically valid codes.
+Since nearly valid, out-dated or new codes may be missed, not limiting to
+'real' values will be useful. Ultimately, there will need to be annual (and
+all-time) master lists of codes and the ability to test against a given
+master list given the year of the ICD-9 coding.}
+
+\item{warn}{single logical value, if \code{TRUE}, give warnings when
+there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
+containing undefined codes.}
+
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
@@ -35,17 +44,6 @@ becomes "010", not "0010"}
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
-
-\item{onlyBillable}{single logical value, if \code{TRUE}, describes the input
-data, stating that it only contains billable codes. Usually, the function
-will try to guess this, but if you know in advance what they should be, the
-functions can optionally warn if this is incorrect, and save some
-computation time. The billable codes are derived from the CMS list. The
-most recent version is used by default.}
-
-\item{warnReal}{single logical value, if \code{TRUE}, give warnings when
-there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
-containing undefined codes.}
 }
 \description{
 This can be thought of as the inverse operation to

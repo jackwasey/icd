@@ -268,6 +268,7 @@ icd9IsMajor <- function(icd9) {
 #' @title are codes puerly numeric
 #' @description For each code, return \code{TRUE} if numric or \code{FALSE} if a
 #'   V or E code.
+#' @template icd9-any
 #' @return logical vector
 #' @export
 icd9IsN <- function(icd9)

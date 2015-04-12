@@ -34,7 +34,6 @@
 #' @param warn single logical value, default is \code{TRUE}, meaning that codes
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.
-#' @template toParent
 #' @examples
 #' icd9ExplainShort(ahrqComorbid[[1]][1:3])
 #' icd9Explain(ahrqComorbid[[1]][1:3], brief = TRUE)
