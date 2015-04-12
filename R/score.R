@@ -256,17 +256,17 @@ icd9CountWide <- function(x,
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
 icd9VanWalraven <- function(x, visitId = NULL,
-                         return.df = FALSE,
-                         stringsAsFactors = getOption("stringsAsFactors"),
-                         ...)
+                            return.df = FALSE,
+                            stringsAsFactors = getOption("stringsAsFactors"),
+                            ...)
   UseMethod("icd9VanWalraven")
 
 #' @describeIn icd9VanWalraven van Walraven scores from data frame of visits and ICD-9 codes
 #' @export
 icd9VanWalraven.data.frame <- function(x, visitId = NULL,
-                                    return.df = FALSE,
-                                    stringsAsFactors = getOption("stringsAsFactors"),
-                                    ...) {
+                                       return.df = FALSE,
+                                       stringsAsFactors = getOption("stringsAsFactors"),
+                                       ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assertFlag(return.df)
   visitId <- getVisitId(x, visitId)

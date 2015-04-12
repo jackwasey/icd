@@ -56,7 +56,7 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
     fp <- system.file("extdata", fn, package = "icd9")
 
   if (fromWeb || !file.exists(fp)) {
-    lines <- read.zip.url(url, fn, encoding = "ASCII")
+    lines <- read.zip.url(url, fn)
     if (save || !file.exists(fp)) writeLines(lines, fp, useBytes = TRUE)
   } else {
     fp_conn <- file(fp, encoding = "ASCII")
@@ -90,7 +90,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   # filtered <- iconv(lines, from = "ASCII", to = "UTF-8", mark = TRUE) I think
   # the first 127 characters of ASCII are the same in Unicode, but we must make
   # sure R treats the lines as Unicode.
-  filtered = lines
+  filtered <- lines
   # merge any line NOT starting with "\\par" on to previous line
   non_par_lines <- grep("^\\\\par", filtered, invert = TRUE)
   # in reverse order, put each non-par line on end of previous, then filter out all non-par lines
@@ -106,7 +106,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   filtered <- gsub("\\\\'e9", "\u00e9", filtered)
   filtered <- gsub("\\\\'f1", "\u00f1", filtered)
   filtered <- gsub("\\\\'f16", "\u00f6", filtered)
-# show that it worked: grep("\u00e8", filtered, value = T)
+  # show that it worked: grep("\u00e8", filtered, value = T)
 
   # drop stupid long line at end:
   longest_lines <- nchar(filtered) > 3000
@@ -190,7 +190,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
 
   for (categ in fourth_digit_zero_categories) {
     parent_row <- grep(paste0("^", categ, " .+"), filtered, value = TRUE)
-    filtered[length(filtered)+ 1] <- paste0(categ, ".0 ", strPairMatch("([[:digit:]]{3} )(.+)", parent_row))
+    filtered[length(filtered) + 1] <- paste0(categ, ".0 ", strPairMatch("([[:digit:]]{3} )(.+)", parent_row))
   }
 
 
@@ -220,20 +220,21 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   }
 
   # TODO: V30-39 are a special case because combination of both fourth and fifth digits are specified
-  re_V30V39 <- "V3[[:digit:]]\\.((0[01]?$)|(1$)|(2$))"
+  #re_V30V39 <- "V3[[:digit:]]\\.((0[01]?$)|(1$)|(2$))"
   re_V30V39_fifth <- "V3[[:digit:]]\\.0[01]$"
 
   lines_V30V39 <- grep(re_fifth_range_V30V39, filtered)
   stopifnot(length(lines_V30V39) == 1)
-  filtered[(lines_V30V39 + 1):(lines_V30V39 + 3)] %>%
+  filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
     grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
     strPairMatch("([[:digit:]])[[:space:]](.*)", .) -> suffices_V30V39
-  re_fifth_definedV3039 <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
+  #re_fifth_definedV3039 <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
   range <- c("V30" %i9da% "V37", icd9ChildrenDecimal("V39"))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
   names(range) <- range
   for (fifth in names(suffices_V30V39)) {
-    re_fifth <- paste0("\\.0", fifth, "$") # only applies to .0x (in 2015 at least), but .1 also exists without 5th digit
+    # only applies to .0x (in 2015 at least), but .1 also exists without 5th digit
+    re_fifth <- paste0("\\.0", fifth, "$")
     range[grep(re_fifth, range)] <- suffices_V30V39[fifth]
   }
   lookup_fifth <- c(lookup_fifth, range)
@@ -329,16 +330,14 @@ parseRtfLines <- function(lines, verbose = FALSE) {
 #'   digits, but we haven't parsed them yet.
 #' @keywords internal
 parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
-  checkmate::assertString(row_str)
-  checkmate::assertFlag(verbose)
-  # this is really for CRAN, since this function is only run during package
-  # build, and calling library here would be disallowed
-  `%>%` <- magrittr::`%>%`
+  assertString(row_str)
+  assertFlag(verbose)
 
   out <- c()
   # get numbers and number ranges
-  row_str %>% strsplit("[, :;]") %>% unlist %>% grep("[VvEe]?[0-9]", ., value = TRUE) -> vals
-  if (verbose) { message("vals are:"); print(vals) }
+  strsplit(row_str, "[, :;]") %>% unlist %>% grep("[VvEe]?[0-9]", ., value = TRUE) -> vals
+  if (verbose) message("vals are:", paste(vals, collapse = ", "))
+
   # sometimes  we get things like:
   # [1] "345.0" ".1"    ".4-.9"
   grepl(pattern = "^\\.[[:digit:]]+.*", vals) -> decimal_start
@@ -349,7 +348,7 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
       if (verbose) message("dotmnr is: ", dotmnr)
       if (grepl("-", dotmnr)) {
         # range of minors
-        dotmnr %>%  strsplit("-", fixed = TRUE) %>% unlist -> pair
+        strsplit(dotmnr, "-", fixed = TRUE) %>% unlist -> pair
         first <- paste0(icd9GetMajor(base_code, isShort = FALSE), pair[1])
         last <- paste0(icd9GetMajor(base_code, isShort = FALSE), pair[2])
         if (verbose) message("expanding specified minor range from ", first, " to ", last)
@@ -427,7 +426,8 @@ stripRtf <- function(x) {
     gsub("\\{\\\\bkmkstart.*?\\}", "", .) %>%
     gsub("\\{\\\\bkmkend.*?\\}", "", .) %>%
     #gsub("\\\\[[:alnum:]]*[ [:punct:]]", "", .) %>%
-    gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", .) %>% # no backslash in this list, others removed from http://www.regular-expressions.info/posixbrackets.html
+    ## no backslash in this next list, others removed from http://www.regular-expressions.info/posixbrackets.html
+    gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", .) %>%
     gsub(" *(\\}|\\{)", "", .) %>%
     trim
 }

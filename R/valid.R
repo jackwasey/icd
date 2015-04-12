@@ -186,7 +186,7 @@ icd9IsValidMajorE <- function(major)
 #' @export
 icd9IsValidMapping <- function(icd9Mapping, isShort) {
   assertList(icd9Mapping, types = "character", any.missing = FALSE,
-                        min.len = 1, unique = TRUE, names = "named")
+             min.len = 1, unique = TRUE, names = "named")
   checkFlag(isShort)
   # TOOD: warn/return the invalid labels
   all(unlist(

@@ -290,7 +290,7 @@ test_that("some randomly selected rows are correct", {
 test_that("billable codes are recreated", {
   skip("linux reliable gives the right character set parsing, so don't check everywhere")
   check_billable <- parseIcd9LeafDescriptionsAll(save = FALSE)
-  v32dl <- icd9Billable[["32"]][["descLong"]]
+  v32dl <- icd9::icd9Billable[["32"]][["descLong"]]
   cb32dl <- check_billable[["32"]][["descLong"]]
   diff <- v32dl != cb32dl
   expect_identical(check_billable, icd9::icd9Billable,
@@ -309,7 +309,7 @@ test_that("billable codes are all in order", {
   if (!do_slow_tests) skip("skipping because slow")
   # TODO: when testthat is released with skip_on_travis, then use this and CRAN
   for (v in names(icd9Billable)) {
-    icd9 <- icd9Billable[[v]][["icd9"]]
+    icd9 <- icd9::icd9Billable[[v]][["icd9"]]
     expect_identical(icd9, icd9SortShort(icd9),
                      info = paste("version = ", v))
   }
@@ -318,4 +318,3 @@ test_that("billable codes are all in order", {
 test_that("parsing 27 gives zero-padded digit icd9 codes", {
   expect_equal(icd9Billable[["27"]][1, "icd9"], "0010")
 })
-

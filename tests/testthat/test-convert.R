@@ -249,7 +249,8 @@ test_that("parts to short V code inputs", {
 
 test_that("icd9 parts to short: don't allow cycling.", {
   expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")))
-  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45"))) # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
+  # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
+  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
 })
 
 test_that("Windows Rtools 3.2 hang test", {

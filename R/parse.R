@@ -72,7 +72,8 @@ parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose 
   if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
   for (v in versions) {
-    icd9Billable[[v]] <- parseIcd9LeafDescriptionsVersion(version = v, save = save, fromWeb = fromWeb, verbose = verbose)
+    icd9Billable[[v]] <- parseIcd9LeafDescriptionsVersion(version = v, save = save,
+                                                          fromWeb = fromWeb, verbose = verbose)
   }
   if (save) saveInDataDir("icd9Billable")
   invisible(icd9Billable)
@@ -141,19 +142,19 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
       writeLines(zip_longlines, path_long, useBytes = TRUE)
     }
   }
-    # yes, specify encoding twice, once to declare the source format, and again
-    # to tell R to flag (apparently only where necessary), the destination
-    # strings: in our case this is about ten accented character in long
-    # descriptions of disease names
-    short_conn <- file(path_short, encoding = dat$short_encoding)
-    readLines(short_conn, encoding = "UTF-8") -> shortlines
-    close(short_conn)
-    if (!is.na(fn_long_orig)) {
-      long_conn <- file(path_long, encoding = dat$long_encoding)
-      readLines(long_conn, encoding = "UTF-8") -> longlines
-      close(long_conn)
-    } else
-      longlines <- NA_character_
+  # yes, specify encoding twice, once to declare the source format, and again
+  # to tell R to flag (apparently only where necessary), the destination
+  # strings: in our case this is about ten accented character in long
+  # descriptions of disease names
+  short_conn <- file(path_short, encoding = dat$short_encoding)
+  readLines(short_conn, encoding = "UTF-8") -> shortlines
+  close(short_conn)
+  if (!is.na(fn_long_orig)) {
+    long_conn <- file(path_long, encoding = dat$long_encoding)
+    readLines(long_conn, encoding = "UTF-8") -> longlines
+    close(long_conn)
+  } else
+    longlines <- NA_character_
 
   shortlines <- strsplit(shortlines, "[[:space:]]")
   longlines <- strsplit(longlines, "[[:space:]]")
@@ -184,13 +185,15 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   on.exit(options(oldwarn))
   if (!is.na(fn_long_orig) && verbose) {
     encs <- Encoding(get(var_name, inherits = FALSE)[["descLong"]])
-    # tools::: has better options here, e.g.:
-    # for (f in list.files("inst/extdata", full.names = T)) { message("Checking ", f, " for non-ASCII"); tools:::showNonASCIIfile(f) }
+    # tools::: has better options here. TODO: , e.g.:
+    # for (f in list.files("inst/extdata", full.names = T)) {
+    #   message("Checking ", f, " for non-ASCII"); tools:::showNonASCIIfile(f)
+    # }
 
     message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
     utf <- grep(pattern = "UTF", encs)
     latin1 <- grep(pattern = "Latin", encs)
-    nonASCII <- grep(pattern = "ASCII", invert = TRUE, encs)
+    # nonASCII <- grep(pattern = "ASCII", invert = TRUE, encs)
     #     if (length(nonASCII) > 0 ) {
     #       warning("The following long descriptions contain non-ASCII characters: ",
     #               paste(get(var_name, inherits = FALSE)[nonASCII, ], sep = ", "))
@@ -257,7 +260,7 @@ parseIcd9Chapters <- function(year = NULL,
     # before 23. TODO: are these somewhere else?
     # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
     assertIntegerish(year, lower = 2005, upper = 2015,
-                                any.missing = FALSE, len = 1)
+                     any.missing = FALSE, len = 1)
     year <- as.character(year)
   }
   if (save && format(Sys.time(), "%Y") != year)
@@ -440,11 +443,14 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
 
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
-  icd9NShortBillable <- icd9GetBillable(icd9NShortReal, version = "32")
-  icd9VShortBillable <- icd9GetBillable(icd9VShortReal, version = "32")
-  icd9EShortBillable <- icd9GetBillable(icd9EShortReal, version = "32")
+  icd9NShortBillable <- icd9GetBillable(icd9NShortReal, version = "32") # nolint
+  icd9VShortBillable <- icd9GetBillable(icd9VShortReal, version = "32") # nolint
+  icd9EShortBillable <- icd9GetBillable(icd9EShortReal, version = "32") # nolint
 
   # some very quick sanity checks: (duplicate in a test in test-ranges.R)
+  stopifnot(length(icd9NShortBillable) < length(icd9NShortReal))
+  stopifnot(length(icd9VShortBillable) < length(icd9VShortReal))
+  stopifnot(length(icd9EShortBillable) < length(icd9EShortReal))
   stopifnot(length(icd9NShortReal) < length(icd9NShort))
   stopifnot(length(icd9VShortReal) < length(icd9VShort))
   stopifnot(length(icd9EShortReal) < length(icd9EShort))
@@ -488,18 +494,19 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
                        NA, NA, NA, NA),
     long_encoding = c("latin1", "latin1", "latin1", "latin1", "latin1", "latin1", NA, NA, NA, NA),
     short_encoding = rep_len("ASCII", 10),
-    url = c("http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/ICD-9-CM-v32-master-descriptions.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv31-master-descriptions.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv30_master_descriptions.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv29_master_descriptions.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv28_master_descriptions.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/FY2010Diagnosis-ProcedureCodesFullTitles.zip",
-            # but this one is in a different format! only contains short descs:
-            # "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v27_icd9.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v26_icd9.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v25_icd9.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v24_icd9.zip",
-            "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v23_icd9.zip"),
+    url = c(
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/ICD-9-CM-v32-master-descriptions.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv31-master-descriptions.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv30_master_descriptions.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv29_master_descriptions.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv28_master_descriptions.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/FY2010Diagnosis-ProcedureCodesFullTitles.zip",
+      # but this one is in a different format! only contains short descs:
+      # "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v27_icd9.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v26_icd9.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v25_icd9.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v24_icd9.zip",
+      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v23_icd9.zip"),
     rtf_url = c( # FY11,12,13,14 are the same?
       rep_len("http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip", 4),
       "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/DTAB11.zip",

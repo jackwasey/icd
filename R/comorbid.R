@@ -92,7 +92,7 @@ icd9Comorbid <- function(icd9df,
   # TODO: allow factors for icd9df fields
   assertDataFrame(icd9df, min.cols = 2)
   assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
-                        types = c("character", "factor"), names = "unique")
+             types = c("character", "factor"), names = "unique")
   assertString(visitId)
   assertFlag(isShort)
   assertFlag(isShortMapping)
@@ -336,9 +336,9 @@ icd9ComorbiditiesQuanElixhauser <- function(...) icd9ComorbidQuanElix(...)
 icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
                              show = TRUE, explain = TRUE) {
   assertList(x, min.len = 1, any.missing = FALSE,
-                        types = c("character"), names = "unique")
+             types = c("character"), names = "unique")
   assertList(y, min.len = 1, any.missing = FALSE,
-                        types = c("character"), names = "unique")
+             types = c("character"), names = "unique")
   assertFlag(show)
   assertFlag(explain)
   stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))

@@ -61,7 +61,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE) {
       if (warn) warning("onlyReal not given, but not all codes are 'real' so assuming FALSE")
     }
   }
-  checkmate::assertFlag(onlyReal)
+  assertFlag(onlyReal)
 
   if (warn && onlyReal && !all(icd9IsRealShort(icd9Short))) {
     icd9Short <- icd9GetRealShort(icd9Short)
@@ -78,17 +78,15 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE) {
   out <- majors <- i9w[areMajor <- icd9IsMajor(i9w)]
   i9w <- i9w[!areMajor]
   i9w <- i9w[i9w %nin% icd9Children(majors, onlyReal = onlyReal)]
-fout <- c()
+  fout <- c()
   unique(substr(i9w, 0, 4)) -> four_digit_parents
   # four_digit_parents <- icd9GetValidShort(four_digit_parents)
   for (fp in four_digit_parents) {
-    fourth_level <- substr(i9w, 0, 4)
-    fourth_matches <- fourth_level == fp
     test_kids <- icd9ChildrenShort(fp, onlyReal = onlyReal) # onlyBillable at 5th level is same as onlyReal
     if (length(test_kids) > 0 && all(test_kids %in% c(fp, i9w))) {
       #if ((length(test_kids) > 1) || (fp %in% i9w)) {
-        fout <- c(fout, fp)
-        i9w <- i9w[ - which(i9w %in% test_kids)]
+      fout <- c(fout, fp)
+      i9w <- i9w[-which(i9w %in% test_kids)]
       #}
     }
   }
@@ -102,16 +100,13 @@ fout <- c()
 
   # set new variable so we don't change the thing we are looping over...
   majorParents <- unique(icd9GetMajor(c(out, fout, i9w), isShort = TRUE))
-  # majorParents <- icd9GetValidShort(majorParents) # this gets rid of NAs, too.
   for (mp in majorParents) {
-    mjrs <- unique(icd9GetMajor(c(out, fout, i9w), isShort = TRUE))
-    major_match <- mjrs == mp
     test_kids <- icd9ChildrenShort(mp, onlyReal = onlyReal, onlyBillable = FALSE)
     test_kids <- test_kids[nchar(test_kids) < (5 + icd9IsE(mp))] # we've done these already
-    test_kids <- test_kids[ - which(test_kids == mp)]
+    test_kids <- test_kids[-which(test_kids == mp)]
     if (length(test_kids) > 0 && all(test_kids %in% c(out, fout, i9w))) {
       out <- c(out, mp)
-      fout <- fout[ - which(fout %in% test_kids)]
+      fout <- fout[-which(fout %in% test_kids)]
     }
   }
   out <- unique(icd9SortShort(c(out, fout, i9w)))

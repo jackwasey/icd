@@ -7,7 +7,8 @@ test_that("try to induce c++ segfault bug", {
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
-  skip("this is not true because we don't fill in EVERY (unreal) possible code when there is odd specification of the range in the SAS code.")
+  skip("this is not true because we don't fill in EVERY (unreal) possible code
+       when there is odd specification of the range in the SAS code.")
   for (i in names(ahrqComorbid))
     expect_true(setequal(icd9ChildrenShort(ahrqComorbid[[i]], onlyReal = FALSE), ahrqComorbid[[i]]),
                 info = paste("missing from saved ahrq comorbid (", i, "): ",
@@ -389,7 +390,8 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("20939" %in% ahrqComorbid$Tumor)
   expect_true("2090" %in% ahrqComorbid$Tumor)
   expect_true("2091" %in% ahrqComorbid$Tumor)
-  # expect_true("2092" %in% ahrqComorbid$Tumor) # range is split between definitions. ideally this would be included, but it is a corner case
+  # range is split between definitions. ideally this would be included, but it is a corner case
+  # expect_true("2092" %in% ahrqComorbid$Tumor)
   expect_true("20900" %in% ahrqComorbid$Tumor)
   expect_true("20910" %in% ahrqComorbid$Tumor)
   expect_true("20920" %in% ahrqComorbid$Tumor)
@@ -638,20 +640,20 @@ test_that("control params don't affect result of comorbid calc", {
     icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize=upts)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts - 2, ompChunkSize = 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts + 2, ompChunkSize = 1)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts - 2, ompChunkSize = 1), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts + 2, ompChunkSize = 1) # nolint
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts - 2, ompChunkSize = 11),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts + 2, ompChunkSize = 11)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts - 2, ompChunkSize = 11), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts + 2, ompChunkSize = 11) # nolint
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts, ompChunkSize = 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts, ompChunkSize = 11)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts, ompChunkSize = 1), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts, ompChunkSize = 11) # nolint
   )
   expect_identical(
     icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field"),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=3, ompChunkSize = 5) # primes < unique visits
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=3, ompChunkSize = 5) # nolint
   )
 })
 

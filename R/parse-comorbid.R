@@ -27,7 +27,7 @@
 #' @keywords internal
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
                          save = FALSE, path = "data", verbose = FALSE) {
-                         #returnAll = FALSE,
+  #returnAll = FALSE,
   assertString(sasPath)
   assertString(path)
   assertFlag(save)
@@ -100,20 +100,17 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 
   # todo: save/return the DRG mappings.
 
-#   condense to parents, for each parent, if children are all in the list, add the parent
-   for (cmb in names(ahrqComorbid)) {
-     if (verbose) message("working on ranges for: ", cmb)
-     #if (cmb == "HYPOTHY") browser()
-     # LYMPH ranges split up stupidly, so just skip corner case tests for these. the actual real codes work fine.
-     parents <- icd9CondenseShort(ahrqComorbid[[cmb]], onlyReal = FALSE)
-     # parents <- parents[order(nchar(parents), decreasing = TRUE)] # do four digit parents first, as they may be kids themselves
-     for (p in parents) {
-       kids <- icd9ChildrenShort(p, onlyReal = FALSE)
-       kids <- kids[-which(kids == p)] # don't include parent in test
-       if (all(kids %in% ahrqComorbid[[cmb]]))
-         ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], p)
-     }
-   }
+  #   condense to parents, for each parent, if children are all in the list, add the parent
+  for (cmb in names(ahrqComorbid)) {
+    if (verbose) message("working on ranges for: ", cmb)
+    parents <- icd9CondenseShort(ahrqComorbid[[cmb]], onlyReal = FALSE)
+    for (p in parents) {
+      kids <- icd9ChildrenShort(p, onlyReal = FALSE)
+      kids <- kids[-which(kids == p)] # don't include parent in test
+      if (all(kids %in% ahrqComorbid[[cmb]]))
+        ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], p)
+    }
+  }
 
   names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
   if (save) saveInDataDir("ahrqComorbid") # EXCLUDE COVERAGE

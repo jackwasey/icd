@@ -157,7 +157,7 @@ test_that("V code ranges", {
                c("V1009", "V101", "V1010", "V1011"))
   # but include those pesky parents when requested:
   expect_true(all(c("V10", "V100") %in% icd9ExpandRangeShort("V099", "V1011", onlyReal = FALSE,
-                                                           excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE)))
+                                                             excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE)))
 
   # should fail despite end being 'longer' than start
   expect_error(icd9ExpandRangeShort("V10", " V1 "))
@@ -467,13 +467,18 @@ test_that("sorting char vectors", {
 })
 
 test_that("sorting char factors", {
-  expect_equal(icd9SortShort(factor(c("3", "02", "001", "003"))), factor(c("001", "02", "3", "003")))
-  expect_equal(icd9Sort(factor(c("1", "V02", "V1", "E003")), isShort = TRUE), factor(c("1", "V1", "V02", "E003")))
-  expect_equal(icd9SortShort(factor(c("0032", "0288", "0019", "0031"))), factor(c("0019", "0031", "0032", "0288")))
-  expect_equal(icd9Sort(factor(c("V251", "V25", "E0039", "E003")), isShort = TRUE), factor(c("V25", "V251", "E003", "E0039")))
-  expect_equal(icd9Sort(factor(c("V25.1", "V25", "E003.9", "E003")), isShort = FALSE), factor(c("V25", "V25.1", "E003", "E003.9")))
+  expect_equal(icd9SortShort(factor(c("3", "02", "001", "003"))),
+               factor(c("001", "02", "3", "003")))
+  expect_equal(icd9Sort(factor(c("1", "V02", "V1", "E003")), isShort = TRUE),
+               factor(c("1", "V1", "V02", "E003")))
+  expect_equal(icd9SortShort(factor(c("0032", "0288", "0019", "0031"))),
+               factor(c("0019", "0031", "0032", "0288")))
+  expect_equal(icd9Sort(factor(c("V251", "V25", "E0039", "E003")), isShort = TRUE),
+               factor(c("V25", "V251", "E003", "E0039")))
+  expect_equal(icd9Sort(factor(c("V25.1", "V25", "E003.9", "E003")), isShort = FALSE),
+               factor(c("V25", "V25.1", "E003", "E003.9")))
   expect_equal(icd9SortDecimal(factor(c("E1.1", "V2.2", "E001", "V02.1", "999.99", "88.8", "77"))),
-                               factor(c("77", "88.8", "999.99", "V02.1", "V2.2", "E001", "E1.1")))
+               factor(c("77", "88.8", "999.99", "V02.1", "V2.2", "E001", "E1.1")))
 })
 
 test_that("sysdata.rda is okay", {
@@ -496,4 +501,3 @@ test_that("sysdata.rda is okay", {
   expect_true(all(icd9EShortReal %in% icd9EShort))
 
 })
-

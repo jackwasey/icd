@@ -100,7 +100,7 @@ icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)
 }
 
 expandRangeWorker <- function(start, end, lookup, onlyReal,
-                                        excludeAmbiguousStart, excludeAmbiguousEnd) {
+                              excludeAmbiguousStart, excludeAmbiguousEnd) {
   assertString(start)
   assertString(end)
   assertCharacter(lookup, any.missing = FALSE, min.chars = 3)
@@ -133,7 +133,11 @@ expandRangeWorker <- function(start, end, lookup, onlyReal,
     }
   }
   if (excludeAmbiguousEnd) {
-    # at the end, we don't want any higher-level codes at the end which would have children beyond the range. There could be lots of lower level codes at the end, so we actually have to search the whole list. This means that even if trying to preserve the ambig start, setting ambig end will have to kill it, if it spills over.
+    # at the end, we don't want any higher-level codes at the end which would
+    # have children beyond the range. There could be lots of lower level codes
+    # at the end, so we actually have to search the whole list. This means that
+    # even if trying to preserve the ambig start, setting ambig end will have to
+    # kill it, if it spills over.
     out_cp <- out
     for (o in out_cp) {
       if (any(icd9ChildrenShort(o, onlyReal = onlyReal) %nin% out))
@@ -147,17 +151,18 @@ expandRangeWorker <- function(start, end, lookup, onlyReal,
 icd9ExpandRangeForSas <- function(start, end) {
   if (end == "0449") end <- start # HIV codes changed
   reals <- icd9ExpandRangeShort(start, end, onlyReal = TRUE,
-                       excludeAmbiguousStart = FALSE, # hmmm, maybe get the diff and test all children of ambigs present later
-                       excludeAmbiguousEnd = TRUE)
+                                # hmmm, maybe get the diff and test all children of ambigs present later
+                                excludeAmbiguousStart = FALSE,
+                                excludeAmbiguousEnd = TRUE)
   real_parents <- icd9CondenseShort(reals, onlyReal = TRUE)
   merged <- unique(c(reals, real_parents))
   real_parents_of_merged <- icd9CondenseShort(merged, onlyReal = TRUE)
   halfway <- icd9ChildrenShort(real_parents_of_merged, onlyReal = FALSE)
   nonrealrange <- icd9ExpandRangeShort(start, end, onlyReal = FALSE,
-                                excludeAmbiguousStart = TRUE,
-                                excludeAmbiguousEnd = TRUE)
+                                       excludeAmbiguousStart = TRUE,
+                                       excludeAmbiguousEnd = TRUE)
   icd9SortShort(unique(c(halfway, nonrealrange)))
-  }
+}
 
 #' @rdname icd9ExpandRange
 #' @export
