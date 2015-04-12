@@ -27,7 +27,7 @@
 #' @export
 icd9Condense <- function(icd9, isShort = icd9GuessIsShort(icd9),
                          onlyReal = NULL, warn = TRUE) {
-  checkmate::assertFlag(isShort)
+  assertFlag(isShort)
   if (isShort) return(icd9CondenseShort(icd9,
                                         onlyReal = onlyReal, warn = warn))
   icd9CondenseDecimal(icd9, onlyReal)
@@ -135,13 +135,8 @@ icd9CondenseShortOld <- function(icd9Short, onlyReal = NULL, warn = FALSE) {
       if (warn) warning("onlyReal not given, but not all codes are 'real' so assuming FALSE")
     }
   }
-<<<<<<< HEAD
   assertFlag(onlyReal)
   if (!onlyReal) onlyBillable <- FALSE
-=======
-  checkmate::assertFlag(onlyReal)
->>>>>>> c7b24304555954d53f6513784778c66bc2c1b23e
-
   if (warn && onlyReal && !all(icd9IsRealShort(icd9Short)))
     warning("only real values requested, but some undefined ('non-real') ICD-9 code(s) given.")
 
