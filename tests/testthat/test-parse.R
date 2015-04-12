@@ -1,6 +1,7 @@
 context("test RTF parsing")
 
 test_that("multiple lines in one fifth digit disciminator", {
+  # nolint start
   testlines <- c("The following fifth-digit subclassification is for use with category 203:",
                  "\\par }\\pard\\plain \\ltrpar\\s59\\ql \\fi-720\\li2340\\ri0\\widctlpar\\tx180\\tx360\\tx540\\tx720\\tx900\\tx1080\\tx1260\\tx1440\\tx1620\\tx1800\\tx1980\\tx2160\\tx2340\\tx2520\\tx2700\\tx2880\\tx3060\\tx3240\\tx3420\\tx3600\\tx3780\\tx3960\\tx4140\\wrapdefault\\faauto\\rin0\\lin2340\\itap0 ",
                  "\\rtlch\\fcs1 \\af1\\afs20\\alang1025 \\ltrch\\fcs0 \\fs20\\cf1\\lang1033\\langfe1033\\loch\\af1\\hich\\af1\\dbch\\af31505\\cgrid\\langnp1033\\langfenp1033 {\\rtlch\\fcs1 \\af1 \\ltrch\\fcs0 \\insrsid2429293 \\hich\\af1\\dbch\\af31505\\loch\\f1 Hodgkin's:",
@@ -52,8 +53,9 @@ test_that("stripRtf does what it says on the tin", {
   # make sure we pick up unusual characters within Rtf expressions, otherwise we spill numbers etc into later parsing:
   expect_equal(stripRtf("\\par }\\pard\\plain \\ltrpar\\s82\\ql \\fi-1080\\li2160\\ri0\\widctlpar\\tx180\\tx360\\tx540\\tx720\\tx900\\tx1080\\tx1260\\tx1440\\tx1620\\tx1800\\tx1980\\tx2160\\tx2340\\tx2520\\tx2700\\tx2880\\tx3060\\tx3240\\tx3420\\tx3600\\tx3780\\tx3960\\tx4140\\wrapdefault\\faauto\\rin0\\lin2160\\itap0 "),
                "")
-
+  # nolint end
 })
+
 
 # now, this is probably year version dependent, but some ranges of codes have
 # common fifth digits, specified by 'major' range. E.g. 010-018 has sub-classifications for tuberculosis diagnoses.
@@ -249,7 +251,8 @@ test_that("some chapters are correct", {
   codes <- icd9::icd9Hierarchy$icd9
   # first and last rows (E codes should be last)
   expect_equal(chaps[1], "Infectious And Parasitic Diseases")
-  expect_equal(chaps[nrow(icd9::icd9Hierarchy)], "Supplementary Classification Of External Causes Of Injury And Poisoning")
+  expect_equal(chaps[nrow(icd9::icd9Hierarchy)],
+               "Supplementary Classification Of External Causes Of Injury And Poisoning")
 
   # first and last rows of a block in the middle
   neoplasm_rows <- which(codes %in% ("140" %i9sa% "239")) # TODO someday: this is rather slow...
@@ -297,7 +300,7 @@ test_that("billable codes are recreated", {
                    info = paste("descLong differences for v32:
                                 original: ", paste(v32dl[diff], collapse = ", "),
                                 "\nprocess:", paste(cb32dl[diff], collapse = ", ")
-                                ))
+                   ))
 })
 
 test_that("billable codes for expected versions exist", {

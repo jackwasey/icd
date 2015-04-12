@@ -1,3 +1,10 @@
+if (requireNamespace("lintr", quietly = TRUE)) {
+  context("lints")
+  test_that("Package Style", {
+    lintr::expect_lint_free()
+  })
+}
+
 context("test icd9 package")
 
 test_that("zero pad decimal - bad input", {

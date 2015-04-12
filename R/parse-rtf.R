@@ -419,6 +419,7 @@ parseRtfQualifierSubset <- function(qual) {
 stripRtf <- function(x) {
   x %>%
     # just for \tab, replace with space, otherwise, drop rtf tags entirely
+    # nolint start
     gsub("\\\\tab ", " ", .) %>%
     gsub("\\\\[[:punct:]]", "", .) %>% # control symbols only, not control words
     gsub("\\\\lsdlocked[ [:alnum:]]*;", "", .) %>% # special case, still needed?
@@ -430,4 +431,5 @@ stripRtf <- function(x) {
     gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", .) %>%
     gsub(" *(\\}|\\{)", "", .) %>%
     trim
+  # nolint end
 }

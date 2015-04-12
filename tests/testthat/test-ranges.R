@@ -156,8 +156,9 @@ test_that("V code ranges", {
                                     onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
                c("V1009", "V101", "V1010", "V1011"))
   # but include those pesky parents when requested:
-  expect_true(all(c("V10", "V100") %in% icd9ExpandRangeShort("V099", "V1011", onlyReal = FALSE,
-                                                             excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE)))
+  expect_true(
+    all(c("V10", "V100") %in% icd9ExpandRangeShort("V099", "V1011", onlyReal = FALSE,
+                                                   excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE)))
 
   # should fail despite end being 'longer' than start
   expect_error(icd9ExpandRangeShort("V10", " V1 "))
