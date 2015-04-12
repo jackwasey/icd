@@ -1,3 +1,19 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title Check whether ICD-9 codes exist
 #' @description This is different from syntactic validity: it looks it up in the
@@ -25,7 +41,7 @@ icd9IsReal <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @export
 icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
   assertFactorOrCharacter(icd9Short)
-  checkmate::assertFlag(onlyBillable)
+  assertFlag(onlyBillable)
   if (onlyBillable) return(icd9IsBillableShort(asCharacterNoWarn(icd9Short)))
   asCharacterNoWarn(icd9Short) %in% icd9::icd9Hierarchy[["icd9"]]
 }
@@ -34,7 +50,7 @@ icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
 #' @export
 icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   assertFactorOrCharacter(icd9Decimal)
-  checkmate::assertFlag(onlyBillable)
+  assertFlag(onlyBillable)
   if (onlyBillable) return(icd9IsBillableDecimal(icd9Decimal))
   icd9IsRealShort(icd9DecimalToShort(icd9Decimal))
 }
@@ -68,9 +84,9 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE)
 #' @export
 icd9IsBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                            version = getLatestBillableVersion()) {
-  checkmate::assertVector(icd9)
-  checkmate::assertFlag(isShort)
-  checkmate::assertString(version)
+  assertVector(icd9)
+  assertFlag(isShort)
+  assertString(version)
   if (isShort)
     return(icd9 %in% icd9::icd9Billable[[version]][["icd9"]])
   icd9DecimalToShort(icd9) %in% icd9::icd9Billable[[version]][["icd9"]]
@@ -90,10 +106,10 @@ icd9IsBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersio
 #' @export
 icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                             invert = FALSE, version = getLatestBillableVersion()) {
-  checkmate::assertVector(icd9)
-  checkmate::assertFlag(isShort)
-  checkmate::assertFlag(invert)
-  checkmate::assertString(version)
+  assertVector(icd9)
+  assertFlag(isShort)
+  assertFlag(invert)
+  assertString(version)
   if (isShort)
     return(icd9[icd9IsBillableShort(icd9, version = version) != invert])
   icd9[icd9IsBillableDecimal(icd9, version = version) != invert]

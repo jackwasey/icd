@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 # EXCLUDE COVERAGE START
 
 parseEverythingAndSave <- function(verbose = TRUE) {
@@ -17,8 +34,8 @@ parseEverythingAndSave <- function(verbose = TRUE) {
 #' @title parse almost everything
 #' @keywords internal
 parseAndSaveQuick <- function(verbose = FALSE) {
-  if (verbose) message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
-  parseRtfYear(year = "2011", save = TRUE, verbose = verbose) # creates icd9Desc
+  #if (verbose) message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
+  #parseRtfYear(year = "2011", save = TRUE, verbose = verbose) # creates icd9Desc
   devtools::load_data(pkg = ".")
 
   # plain text billable codes
@@ -78,10 +95,10 @@ parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose 
 #' @keywords internal
 parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
                                              fromWeb = FALSE, verbose = FALSE) {
-  checkmate::assertString(version)
-  checkmate::assertFlag(save)
-  checkmate::assertFlag(fromWeb)
-  checkmate::assertFlag(verbose)
+  assertString(version)
+  assertFlag(save)
+  assertFlag(fromWeb)
+  assertFlag(verbose)
 
 
   # test encodings with
@@ -94,8 +111,10 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   stopifnot(version %in% data_sources$version)
   dat <- data_sources[data_sources$version == version, ]
   url <- dat$url
-  fn_short <- dat$short_filename
-  fn_long <- dat$long_filename
+  fn_short_orig <- dat$short_filename
+  fn_long_orig <- dat$long_filename
+  fn_short <- make.names(fn_short_orig)
+  fn_long <- make.names(fn_long_orig)
   path_short <- file.path("inst", "extdata", fn_short)
   path_long <- file.path("inst", "extdata", fn_long)
 
@@ -110,27 +129,31 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
     message("short path = ", path_short, "\n long path = ", path_long)
   }
 
-  checkmate::assertCharacter(path_short, min.chars = 10, any.missing = FALSE, len = 1)
+  assertCharacter(path_short, min.chars = 10, any.missing = FALSE, len = 1)
 
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
-    shortlines <- read.zip.url(url, fn_short, encoding = dat$short_encoding)
-    if (!is.na(fn_long))
-      longlines <- read.zip.url(url, fn_long, encoding = dat$long_encoding)
-    else
-      longlines <- NA_character_
-
-    if (save || either_file_missing) {
-      writeLines(shortlines, path_short, useBytes = TRUE)
-      if (!is.na(fn_long)) writeLines(longlines, path_long, useBytes = TRUE)
+    # don't do any fancy encoding stuff, just dump the file, then re-read.
+    zip_shortlines <- read.zip.url(url, fn_short_orig)
+    writeLines(zip_shortlines, path_short, useBytes = TRUE)
+    if (!is.na(fn_long_orig)) {
+      zip_longlines <- read.zip.url(url, fn_long_orig)
+      writeLines(zip_longlines, path_long, useBytes = TRUE)
     }
-  } else {
-    readLines(path_short, encoding = dat$short_encoding) -> shortlines
-    if (!is.na(fn_long))
-      readLines(path_long, encoding = dat$long_encoding) -> longlines
-    else
-      NA_character_ -> longlines
   }
+    # yes, specify encoding twice, once to declare the source format, and again
+    # to tell R to flag (apparently only where necessary), the destination
+    # strings: in our case this is about ten accented character in long
+    # descriptions of disease names
+    short_conn <- file(path_short, encoding = dat$short_encoding)
+    readLines(short_conn, encoding = "UTF-8") -> shortlines
+    close(short_conn)
+    if (!is.na(fn_long_orig)) {
+      long_conn <- file(path_long, encoding = dat$long_encoding)
+      readLines(long_conn, encoding = "UTF-8") -> longlines
+      close(long_conn)
+    } else
+      longlines <- NA_character_
 
   shortlines %<>% strsplit("[[:space:]]")
   longlines %<>% strsplit("[[:space:]]")
@@ -156,23 +179,22 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   reorder <- sortOrderShort(get(var_name)[["icd9"]])
   assign(var_name, get(var_name)[reorder, ])
 
-  if (verbose) message("ready to save var '", var_name, "' in data dir")
-  if (save) saveInDataDir(var_name)
-
   # warn as we go:
   oldwarn <- options(warn = 1)
   on.exit(options(oldwarn))
-  if (!is.na(fn_long) && verbose) {
-    message("checking non-ASCII characters")
+  if (!is.na(fn_long_orig) && verbose) {
     encs <- Encoding(get(var_name, inherits = FALSE)[["descLong"]])
+    # tools::: has better options here, e.g.:
+    # for (f in list.files("inst/extdata", full.names = T)) { message("Checking ", f, " for non-ASCII"); tools:::showNonASCIIfile(f) }
+
     message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
     utf <- grep(pattern = "UTF", encs)
     latin1 <- grep(pattern = "Latin", encs)
     nonASCII <- grep(pattern = "ASCII", invert = TRUE, encs)
-    if (length(nonASCII) > 0 ) {
-      warning("The following long descriptions contain non-ASCII characters: ",
-              paste(get(var_name, inherits = FALSE)[nonASCII, ], sep = ", "))
-    }
+    #     if (length(nonASCII) > 0 ) {
+    #       warning("The following long descriptions contain non-ASCII characters: ",
+    #               paste(get(var_name, inherits = FALSE)[nonASCII, ], sep = ", "))
+    #     }
     if (length(utf) > 0 ) {
       warning("The following long descriptions contain Unicode characters: ",
               paste(get(var_name, inherits = FALSE)[utf, ], sep = ", "))
@@ -187,10 +209,10 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
 
 parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = FALSE) {
   if (verbose) message("working on version 27 quirk")
-  checkmate::assertFlag(save)
-  checkmate::assertFlag(fromWeb)
-  checkmate::assertFlag(verbose)
-  fn <- data_sources[data_sources$version == 27, "other_filename"]
+  assertFlag(save)
+  assertFlag(fromWeb)
+  assertFlag(verbose)
+  fn <- make.names(data_sources[data_sources$version == 27, "other_filename"])
   fp <- file.path("inst", "extdata", fn)
   url <- data_sources[data_sources$version == 27, "url"]
 
@@ -223,18 +245,18 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
 #' @keywords internal
 parseIcd9Chapters <- function(year = NULL,
                               save = FALSE) {
-  checkmate::assertFlag(save)
+  assertFlag(save)
   if (is.null(year))
     year <- "2014"
   else {
-    checkmate::assertScalar(year)
+    assertScalar(year)
     if (is.character(year)) {
       year <- as.integer(year)
     }
     # version 23 dates back to 2005, but I don't have access on web for versions
     # before 23. TODO: are these somewhere else?
     # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
-    checkmate::assertIntegerish(year, lower = 2005, upper = 2015,
+    assertIntegerish(year, lower = 2005, upper = 2015,
                                 any.missing = FALSE, len = 1)
     year <- as.character(year)
   }
@@ -321,18 +343,21 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
 
 # TODO: enable annual versions
 icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
-  checkmate::assertFlag(save)
+  assertFlag(save)
+  assertFlag(verbose)
+
+  icd9Desc <- parseRtfYear(year = "2011", save = TRUE, verbose = verbose)
 
   # TODO: now we get almost everything from the RTF, we can just pull the
   # chapter and sub-chapters from the web very quickly (or from the RTF)
   if (verbose) message("working on (possibly) slow step of web scrape to build icd9 Chapters Hierarchy.")
-  chaps <- icd9GetChapters(icd9 = icd9::icd9Desc$icd9, isShort = TRUE, verbose = verbose)
+  chaps <- icd9GetChapters(icd9 = icd9Desc$icd9, isShort = TRUE, verbose = verbose)
 
   icd9Hierarchy <- cbind(
-    data.frame("icd9" = icd9::icd9Desc$icd9,
+    data.frame("icd9" = icd9Desc$icd9,
                # TODO: could also get some long descs from more recent billable
                # lists, but not older ones which only have short descs
-               "descLong" = icd9::icd9Desc$desc,
+               "descLong" = icd9Desc$desc,
                stringsAsFactors = FALSE),
     # the following can and should be factors:
     chaps

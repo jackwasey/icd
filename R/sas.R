@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 #' @title extract assignments from a SAS FORMAT definition.
 #' @description this is modelled entirely on a single chunk of SAS code, but
 #'   hopefully will have some generalizability. It relies heavily on lists and
@@ -65,9 +82,9 @@ sasFormatExtract <- function(sasTxt) {
 #' @keywords internal programming list
 sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
 
-  checkmate::assertString(x)
-  checkmate::assertFlag(stripWhiteSpace)
-  checkmate::assertFlag(stripQuotes)
+  assertString(x)
+  assertFlag(stripWhiteSpace)
+  assertFlag(stripQuotes)
   # splitting with clever regex to separate each pair of assignments seems
   # tricky, so doing it in steps.
   # n.b. this is a list with list per input row.

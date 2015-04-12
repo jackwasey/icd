@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 #' @title present-on-admission flags
 #' @description Present-on-admission (POA) is not simply true or false. It can
 #'   be one of a number of indeterminate values, including \code{NA}, or "Y" or
@@ -73,12 +90,12 @@ icd9Comorbid <- function(icd9df,
   icd9Field <- getIcdField(icd9df, icd9Field)
 
   # TODO: allow factors for icd9df fields
-  checkmate::assertDataFrame(icd9df, min.cols = 2)
-  checkmate::assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
+  assertDataFrame(icd9df, min.cols = 2)
+  assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
                         types = c("character", "factor"), names = "unique")
-  checkmate::assertString(visitId)
-  checkmate::assertFlag(isShort)
-  checkmate::assertFlag(isShortMapping)
+  assertString(visitId)
+  assertFlag(isShort)
+  assertFlag(isShortMapping)
   stopifnot(visitId %in% names(icd9df))
 
   if (!isShort)
@@ -150,8 +167,8 @@ icd9ComorbidShort <- function(...)
 #' @export
 icd9ComorbidAhrq <- function(..., abbrevNames = TRUE,
                              applyHierarchy = TRUE) {
-  checkmate::assertFlag(abbrevNames)
-  checkmate::assertFlag(applyHierarchy)
+  assertFlag(abbrevNames)
+  assertFlag(applyHierarchy)
 
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::ahrqComorbid)
   if (applyHierarchy) {
@@ -186,8 +203,8 @@ icd9ComorbidAhrq <- function(..., abbrevNames = TRUE,
 #' @export
 icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
-  checkmate::assertFlag(abbrevNames)
-  checkmate::assertFlag(applyHierarchy)
+  assertFlag(abbrevNames)
+  assertFlag(applyHierarchy)
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::quanDeyoComorbid)
   if (applyHierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -208,8 +225,8 @@ icd9ComorbidQuanDeyo <- function(..., abbrevNames = TRUE,
 #' @export
 icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
-  checkmate::assertFlag(abbrevNames)
-  checkmate::assertFlag(applyHierarchy)
+  assertFlag(abbrevNames)
+  assertFlag(applyHierarchy)
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::quanElixComorbid)
   if (applyHierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
@@ -244,8 +261,8 @@ icd9ComorbidQuanElix <- function(..., abbrevNames = TRUE,
 #' @rdname icd9Comorbid
 #' @export
 icd9ComorbidElix <- function(..., abbrevNames = TRUE, applyHierarchy = TRUE) {
-  checkmate::assertFlag(abbrevNames)
-  checkmate::assertFlag(applyHierarchy)
+  assertFlag(abbrevNames)
+  assertFlag(applyHierarchy)
   cbd <- icd9Comorbid(..., icd9Mapping = icd9::elixComorbid)
   if (applyHierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
@@ -318,12 +335,12 @@ icd9ComorbiditiesQuanElixhauser <- function(...) icd9ComorbidQuanElix(...)
 #' @export
 icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
                              show = TRUE, explain = TRUE) {
-  checkmate::assertList(x, min.len = 1, any.missing = FALSE,
+  assertList(x, min.len = 1, any.missing = FALSE,
                         types = c("character"), names = "unique")
-  checkmate::assertList(y, min.len = 1, any.missing = FALSE,
+  assertList(y, min.len = 1, any.missing = FALSE,
                         types = c("character"), names = "unique")
-  checkmate::assertFlag(show)
-  checkmate::assertFlag(explain)
+  assertFlag(show)
+  assertFlag(explain)
   stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))
 
   lapply(x, function(z) stopifnot(is.character(z)))

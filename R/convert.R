@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 #' @name convert
 #' @title Convert ICD9 codes between formats and structures.
 #' @description ICD-9 codes are represented in \emph{short} and \emph{decimal} forms.
@@ -77,11 +94,11 @@ icd9WideToLong <- function(x,
                            visitId = NULL,
                            icdLabels = NULL,
                            icdName = "icdCode") {
-  checkmate::assertString(icdName)
+  assertString(icdName)
   if (is.null(icdLabels))
     icdLabels <- grep("icd", names(x), ignore.case = TRUE, value = TRUE)
   else {
-    checkmate::assertCharacter(icdLabels, any.missing = FALSE)
+    assertCharacter(icdLabels, any.missing = FALSE)
     stopifnot(all(icdLabels %in% names(x)))
   }
   visitId <- getVisitId(x, visitId)
@@ -137,11 +154,11 @@ icd9LongToWide <- function(icd9df,
   icd9Field <- getIcdField(icd9df, icd9Field)
   visitId <- getVisitId(icd9df, visitId)
 
-  checkmate::assertDataFrame(icd9df, col.names = "named")
-  checkmate::assertString(prefix)
-  checkmate::assertCount(min.width, na.ok = FALSE)
-  checkmate::assertFlag(aggregate)
-  checkmate::assertFlag(return.df)
+  assertDataFrame(icd9df, col.names = "named")
+  assertString(prefix)
+  assertCount(min.width, na.ok = FALSE)
+  assertFlag(aggregate)
+  assertFlag(return.df)
 
   # we're now going to return a matrix
   icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
@@ -193,9 +210,9 @@ icd9LongToWide <- function(icd9df,
 #' @export
 icd9ComorbidMatToDf <- function(x, visitId = "visitId",
                                 stringsAsFactors = getOption("stringsAsFactors")) {
-  checkmate::checkMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
-  checkmate::checkString(visitId)
-  checkmate::checkFlag(stringsAsFactors)
+  checkMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
+  checkString(visitId)
+  checkFlag(stringsAsFactors)
   out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors)
   names(out)[1] <- visitId
   out
@@ -222,8 +239,8 @@ icd9ComorbidMatToDf <- function(x, visitId = "visitId",
 #' @export
 icd9ComorbidDfToMat <- function(x, visitId = NULL,
                                 stringsAsFactors = getOption("stringsAsFactors")) {
-  checkmate::checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
-  checkmate::checkFlag(stringsAsFactors)
+  checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
+  checkFlag(stringsAsFactors)
   visitId <- getVisitId(x, visitId)
 
   out <- as.matrix.data.frame(x[-which(names(x) == visitId)])

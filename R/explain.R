@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 #' @title explain ICD9 codes
 #' @description convert 'decimal' format (123.45 style) ICD9 codes into the name and
 #'   description for human review there are official ICD9-CM data tables, not
@@ -57,11 +74,11 @@ icd9Explain.factor <- function(icd9, isShort = icd9GuessIsShort(icd9), doCondens
 #' @export
 icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                   doCondense = TRUE, brief = FALSE, warn = TRUE) {
-  checkmate::assertCharacter(icd9)
-  checkmate::assertFlag(isShort)
-  checkmate::assertFlag(doCondense)
-  checkmate::assertFlag(brief)
-  checkmate::assertFlag(warn)
+  assertCharacter(icd9)
+  assertFlag(isShort)
+  assertFlag(doCondense)
+  assertFlag(brief)
+  assertFlag(warn)
   if (!isShort) icd9 <- icd9DecimalToShort(icd9)
 
   # if there are only real codes, we should condense with this in mind:
@@ -144,7 +161,7 @@ icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9), verbose = FA
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
-  checkmate::assertFlag(isShort)
+  assertFlag(isShort)
   assertFactorOrCharacter(icd9)
   icd9 <- asCharacterNoWarn(icd9)
   majors <- icd9GetMajor(icd9, isShort)

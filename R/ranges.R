@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 #' @title sort short-form icd9 codes
 #' @description Sorts lists of numeric only, V or E codes. Note that a simple
 #'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
@@ -10,7 +27,7 @@
 #' @keywords manip
 #' @export
 icd9Sort <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
-  checkmate::assertFlag(isShort)
+  assertFlag(isShort)
   # TODO: need to be able to compare a pair of codes quickly, then use built-in
   # sort. This becomes easier when I move to S3 classes for ICD-9.
   if (isShort) return(icd9SortShort(icd9))
@@ -81,20 +98,20 @@ icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)
 
 expandRangeWorker <- function(start, end, lookup, onlyReal,
                                         excludeAmbiguousStart, excludeAmbiguousEnd) {
-  checkmate::assertString(start)
-  checkmate::assertString(end)
-  checkmate::assertCharacter(lookup, any.missing = FALSE, min.chars = 3)
-  checkmate::assertFlag(excludeAmbiguousStart)
-  checkmate::assertFlag(excludeAmbiguousEnd)
+  assertString(start)
+  assertString(end)
+  assertCharacter(lookup, any.missing = FALSE, min.chars = 3)
+  assertFlag(excludeAmbiguousStart)
+  assertFlag(excludeAmbiguousEnd)
 
   #stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
 
   start_index <- match(start, lookup)
   end_index <- match(end, lookup)
-  checkmate::assertInteger(start_index, len = 1)
+  assertInteger(start_index, len = 1)
   if (is.na(start_index[1]))
     stop(sprintf("start value '%s' not found in look-up table of ICD-9 codes.", start))
-  checkmate::assertInteger(end_index, len = 1)
+  assertInteger(end_index, len = 1)
   if (is.na(end_index[1]))
     stop(sprintf("end value '%s' not found in look-up table of ICD-9 codes.", end))
   if (end_index < start_index)
@@ -144,11 +161,11 @@ icd9ExpandRangeForSas <- function(start, end) {
 icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
                                  excludeAmbiguousStart = TRUE,
                                  excludeAmbiguousEnd = TRUE) {
-  checkmate::assertScalar(start) # i'll permit numeric but prefer char
-  checkmate::assertScalar(end)
-  checkmate::assertFlag(onlyReal)
-  checkmate::assertFlag(excludeAmbiguousStart)
-  checkmate::assertFlag(excludeAmbiguousEnd)
+  assertScalar(start) # i'll permit numeric but prefer char
+  assertScalar(end)
+  assertFlag(onlyReal)
+  assertFlag(excludeAmbiguousStart)
+  assertFlag(excludeAmbiguousEnd)
 
   start <- icd9AddLeadingZeroesShort(trim(start))
   end <- icd9AddLeadingZeroesShort(trim(end))
@@ -190,9 +207,9 @@ icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
 #' @rdname icd9ExpandRange
 #' @export
 icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
-  checkmate::assertScalar(start) # i'll permit numeric but prefer char
-  checkmate::assertScalar(end)
-  checkmate::assertFlag(onlyReal)
+  assertScalar(start) # i'll permit numeric but prefer char
+  assertScalar(end)
+  assertFlag(onlyReal)
   c <- icd9ExtractAlphaNumeric(start)
   d <- icd9ExtractAlphaNumeric(end)
   # cannot range between numeric, V and E codes, so ensure same type.
@@ -271,8 +288,8 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
 icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9),
                          onlyReal = TRUE, onlyBillable = FALSE) {
   assertFactorOrCharacter(icd9)
-  checkmate::assertFlag(isShort)
-  checkmate::assertFlag(onlyReal)
+  assertFlag(isShort)
+  assertFlag(onlyReal)
   res <- .Call("icd9_icd9ChildrenCpp", PACKAGE = "icd9", icd9, isShort, onlyReal)
   if (onlyBillable) return(icd9GetBillable(res, isShort))
   res
@@ -283,8 +300,8 @@ icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @export
 icd9ChildrenShort <- function(icd9Short,
                               onlyReal = TRUE, onlyBillable = FALSE) {
-  checkmate::assertCharacter(icd9Short)
-  checkmate::assertFlag(onlyReal)
+  assertCharacter(icd9Short)
+  assertFlag(onlyReal)
   res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = "icd9", icd9Short, onlyReal)
   if (onlyBillable) return(icd9GetBillableShort(res))
   res

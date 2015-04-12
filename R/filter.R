@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 #' @title Filter ICD-9 codes by validity.
 #' @description Filters a data.frame of patients for valid or invalid ICD-9 codes
 #' @template icd9df
@@ -9,9 +26,9 @@ icd9FilterValid <- function(icd9df, icd9Field = NULL,
                             isShort =  NULL, invert = FALSE) {
   icd9Field <- getIcdField(icd9df, icd9Field)
   if (is.null(isShort)) isShort <- icd9GuessIsShort(icd9df[[icd9Field]])
-  checkmate::assertDataFrame(icd9df, min.cols = 1, col.names = "named")
-  checkmate::assertFlag(isShort)
-  checkmate::assertFlag(invert)
+  assertDataFrame(icd9df, min.cols = 1, col.names = "named")
+  assertFlag(isShort)
+  assertFlag(invert)
   v <- icd9IsValid(icd9 = icd9df[[icd9Field]], isShort = isShort) != invert
   icd9df[v, ]
 }
@@ -61,8 +78,8 @@ icd9FilterInvalid <- function(icd9df, icd9Field = NULL, isShort = NULL, invert =
 #' @export
 icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
   poa <- match.arg(poa)
-  checkmate::assertDataFrame(icd9df, min.cols = 1, col.names = "named")
-  checkmate::assertString(poaField, na.ok = FALSE)
+  assertDataFrame(icd9df, min.cols = 1, col.names = "named")
+  assertString(poaField, na.ok = FALSE)
   stopifnot(poaField %in% names(icd9df))
   if (poa == "yes") return(icd9FilterPoaYes(icd9df, poaField = poaField))
   if (poa == "no") return(icd9FilterPoaNo(icd9df, poaField = poaField))
@@ -72,10 +89,10 @@ icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
 }
 
 .icd9FilterPoa <- function(icd9df, poaField, choice, negative = FALSE) {
-  checkmate::assertDataFrame(icd9df, min.cols = 1, col.names = "named")
-  checkmate::assertString(poaField, na.ok = FALSE)
-  checkmate::assertCharacter(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
-  checkmate::assertFlag(negative)
+  assertDataFrame(icd9df, min.cols = 1, col.names = "named")
+  assertString(poaField, na.ok = FALSE)
+  assertCharacter(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
+  assertFlag(negative)
   stopifnot(poaField %in% names(icd9df))
   p <- icd9df[[poaField]]
   if (negative)

@@ -1,3 +1,19 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title Calculate Charlson Comorbidity Index (Charlson Score)
 #' @rdname icd9Charlson
@@ -47,8 +63,8 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     return.df = FALSE,
                                     stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
-  checkmate::assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  checkmate::assertFlag(return.df)
+  assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
+  assertFlag(return.df)
   visitId <- getVisitId(x, visitId)
   tmp <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
                               return.df = TRUE, ...)
@@ -179,8 +195,8 @@ icd9CountWide <- function(x,
                           return.df = FALSE,
                           aggregate = FALSE) {
   visitId <- getVisitId(x, visitId)
-  checkmate::assertFlag(return.df)
-  checkmate::assertFlag(aggregate)
+  assertFlag(return.df)
+  assertFlag(aggregate)
 
   res <- apply(x[names(x) %nin% visitId], 1, function(x) sum(!is.na(x)))
   names(res) <- x[[visitId]]
@@ -251,8 +267,8 @@ icd9VanWalraven.data.frame <- function(x, visitId = NULL,
                                     return.df = FALSE,
                                     stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
-  checkmate::assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  checkmate::assertFlag(return.df)
+  assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
+  assertFlag(return.df)
   visitId <- getVisitId(x, visitId)
   tmp <- icd9ComorbidQuanElix(x, visitId, applyHierarchy = TRUE,
                               return.df = TRUE, ...)

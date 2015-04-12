@@ -1,3 +1,19 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 # assume length is one for strim
 strim <- function(x) {
@@ -62,7 +78,7 @@ saveInDataDir <- function(var, suffix = "") {
 #' @return data frame without logical fields
 #' @keywords internal manip
 logicalToBinary <- function(x) {
-  checkmate::assertDataFrame(x, min.rows = 1, min.cols = 1)
+  assertDataFrame(x, min.rows = 1, min.cols = 1)
   if (any(dim(x) == 0))
     stop("got zero in at least one dimension in data frame. %d, %d",
          dim(x)[1], dim(x)[2])
@@ -123,11 +139,11 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
 strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c(1, 2), ...) {
-  checkmate::assertString(pattern)
-  checkmate::assertCharacter(text, min.len = 1)
-  checkmate::assertFlag(swap)
-  checkmate::assertFlag(dropEmpty)
-  checkmate::assertIntegerish(pos, len = 2, lower = 1, any.missing = FALSE)
+  assertString(pattern)
+  assertCharacter(text, min.len = 1)
+  assertFlag(swap)
+  assertFlag(dropEmpty)
+  assertIntegerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
   res <- strMultiMatch(pattern = pattern, text = text,
                        dropEmpty = dropEmpty, ...)
@@ -159,7 +175,7 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c
 #' @param encoding passed to file when the contents of the zip is read, default
 #'   is "", i.e. R uses current locale to guess
 #' @keywords internal
-read.zip.url <- function(url, filename, encoding = "") {
+read.zip.url <- function(url, filename) {
   stopifnot(length(filename) <= 1)
   stopifnot(is.character(url), length(url) == 1)
   zipfile <- tempfile()
@@ -178,10 +194,13 @@ read.zip.url <- function(url, filename, encoding = "") {
   } else
     stopifnot(filename %in% files)
 
-  zip_conn <- file(file.path(zipdir, filename), encoding = encoding)
-  lines <- readLines(zip_conn, warn = FALSE)
+  # the argument encoding has the _source_ encoding
+  # zip_conn <- file(file.path(zipdir, filename), encoding = encoding)
+  # UTF-8 here specifies that non-ASCII chars will be flagged as such.
+  # lines <- readLines(zip_conn, encoding = "UTF-8", warn = FALSE)
+  lines <- readLines(file.path(zipdir, filename), warn = FALSE)
   # clean up
-  close(zip_conn)
+  # close(zip_conn)
   unlink(zipdir, recursive = TRUE)
   unlink(zipfile)
   lines
@@ -192,7 +211,7 @@ read.zip.url <- function(url, filename, encoding = "") {
 getVisitId <- function(x, visitId = NULL) {
   guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
                "in.*enc", "out.*enc", "visit", "enc")
-  checkmate::checkDataFrame(x, min.cols = 1, col.names = "named")
+  checkDataFrame(x, min.cols = 1, col.names = "named")
 
   if (is.null(visitId)) {
     for (guess in guesses) {
@@ -205,7 +224,7 @@ getVisitId <- function(x, visitId = NULL) {
     if (is.null(visitId))
       visitId <- names(x)[1]
   }
-  checkmate::assertString(visitId)
+  assertString(visitId)
   stopifnot(visitId %in% names(x))
   visitId
 }
@@ -217,7 +236,7 @@ getVisitId <- function(x, visitId = NULL) {
 getIcdField <- function(x, icd9Field = NULL) {
   guesses <- c("icd.?9", "icd.?9.?Code", "icd",
                "diagnos", "diag.?code", "diag")
-  checkmate::checkDataFrame(x, min.cols = 1, col.names = "named")
+  checkDataFrame(x, min.cols = 1, col.names = "named")
   if (is.null(icd9Field)) {
     for (guess in guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
@@ -232,7 +251,7 @@ getIcdField <- function(x, icd9Field = NULL) {
     # TODO: look at contents of the data frame, although this evaluates a
     # promise on potentially a big data frame
   }
-  checkmate::assertString(icd9Field)
+  assertString(icd9Field)
   stopifnot(icd9Field %in% names(x))
   icd9Field
 }
@@ -259,7 +278,7 @@ listTrimFlat  <-  function(x) {
 #' @return vector
 #' @keywords internal
 swapNamesWithVals <- function(x) {
-  checkmate::assertVector(x, strict = TRUE, any.missing = FALSE, names = "named")
+  assertVector(x, strict = TRUE, any.missing = FALSE, names = "named")
   new_names <- unname(x)
   x <- names(x)
   names(x) <- new_names

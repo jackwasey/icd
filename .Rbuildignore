@@ -1,7 +1,6 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 todo
-inst/scripts/.*
 man-roxygen
 .git/.*
 \.travis\.yml$
@@ -30,7 +29,6 @@ config.status
 config.log
 autom4te.cache
 src\/autom4te.cache
-aclocal.m4
-m4
+m4$
 icd9Billable[[:digit:]]+\.RData
 Makevars$

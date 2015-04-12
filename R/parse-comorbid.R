@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 
 #' @title parse AHRQ data
 #' @description Takes the raw data taken directly from the AHRQ web site and
@@ -11,9 +28,9 @@
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
                          save = FALSE, path = "data", verbose = FALSE) {
                          #returnAll = FALSE,
-  checkmate::assertString(sasPath)
-  checkmate::assertString(path)
-  checkmate::assertFlag(save)
+  assertString(sasPath)
+  assertString(path)
+  assertFlag(save)
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)

@@ -4,7 +4,7 @@
 \alias{read.zip.url}
 \title{read file from zip at URL}
 \usage{
-read.zip.url(url, filename, encoding = "")
+read.zip.url(url, filename)
 }
 \arguments{
 \item{url}{character vector of length one containing URL of zip file.}

@@ -1,3 +1,19 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 # try parsing the RTF, and therefore get subheadings, as well as billable codes.
 # ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/
@@ -12,10 +28,10 @@
 #' @source http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip and similar files run from 1996 to 2011.
 #' @keywords internal
 parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose = FALSE) {
-  checkmate::assertString(year)
-  checkmate::assertFlag(save)
-  checkmate::assertFlag(fromWeb)
-  checkmate::assertFlag(verbose)
+  assertString(year)
+  assertFlag(save)
+  assertFlag(fromWeb)
+  assertFlag(verbose)
 
   rtf_dat <- data_sources[data_sources$f_year == year, ]
   url <- rtf_dat$rtf_url
@@ -50,8 +66,8 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
 
 parseRtfLines <- function(lines, verbose = FALSE) {
 
-  checkmate::assertCharacter(lines)
-  checkmate::assertFlag(verbose)
+  assertCharacter(lines)
+  assertFlag(verbose)
 
   # filtered <- iconv(lines, from = "ASCII", to = "UTF-8", mark = TRUE) I think
   # the first 127 characters of ASCII are the same in Unicode, but we must make
@@ -351,7 +367,7 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
 }
 
 parseRtfQualifierSubset <- function(qual) {
-  checkmate::assertString(qual) # one at a time
+  assertString(qual) # one at a time
 
   out <- c()
 

@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 #' @title extract alphabetic, and numeric part of icd9 code prefix
 #' @description removes whitespace and separates V or E if present.
 #' @template icd9-any
@@ -31,7 +48,7 @@ icd9ExtractAlphaNumeric <- function(icd9) {
 #' @keywords internal manip
 icd9DropLeadingZeroes <- function(icd9, isShort) {
   assertFactorOrCharacter(icd9)
-  checkmate::assertFlag(isShort)
+  assertFlag(isShort)
   if (isShort) return(
     icd9DropLeadingZeroesShort(icd9Short = icd9))
   icd9DropLeadingZeroesDecimal(icd9Decimal = icd9)

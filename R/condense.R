@@ -1,3 +1,19 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title Condense ICD-9 code by replacing complete families with parent codes
 #' @description This can be thought of as the inverse operation to
@@ -10,8 +26,8 @@
 #' @family ICD-9 ranges
 #' @export
 icd9Condense <- function(icd9, isShort, onlyReal = NULL, toParent = TRUE) {
-  checkmate::assertFlag(isShort)
-  checkmate::assertFlag(toParent)
+  assertFlag(isShort)
+  assertFlag(toParent)
   if (isShort) return(icd9CondenseShort(icd9, onlyReal))
   icd9CondenseDecimal(icd9, onlyReal)
 }
@@ -38,7 +54,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL,
   # there is no such thing as 'condensing to billable codes' since they are all
   # leaves.
   assertFactorOrCharacter(icd9Short)
-  checkmate::assertFlag(warn)
+  assertFlag(warn)
   icd9Short <- asCharacterNoWarn(icd9Short) # TODO: still necessary?
 
   i9w <- sort(unique(icd9Short)) # TODO sorting may not be helpful
@@ -68,7 +84,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL,
       if (warn) warning("onlyReal not given, but not all codes are 'real' so assuming FALSE")
     }
   }
-  checkmate::assertFlag(onlyReal)
+  assertFlag(onlyReal)
   if (!onlyReal) onlyBillable <- FALSE
 
   if (warn && onlyReal && !all(icd9IsRealShort(icd9Short)))
