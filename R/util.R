@@ -175,7 +175,7 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c
 #' @param encoding passed to file when the contents of the zip is read, default
 #'   is "", i.e. R uses current locale to guess
 #' @keywords internal
-read.zip.url <- function(url, filename) {
+read.zip.url.lines <- function(url, filename, file_enc = "latin1", ...) {
   stopifnot(length(filename) <= 1)
   stopifnot(is.character(url), length(url) == 1)
   zipfile <- tempfile()
@@ -198,12 +198,13 @@ read.zip.url <- function(url, filename) {
   # zip_conn <- file(file.path(zipdir, filename), encoding = encoding)
   # UTF-8 here specifies that non-ASCII chars will be flagged as such.
   # lines <- readLines(zip_conn, encoding = "UTF-8", warn = FALSE)
-  lines <- readLines(file.path(zipdir, filename), warn = FALSE)
+  file_conn <- file(file.path(zipdir, filename), encoding = file_enc)
+  out <- readLines(file_conn, ...)
   # clean up
-  # close(zip_conn)
+  close(file_conn)
   unlink(zipdir, recursive = TRUE)
   unlink(zipfile)
-  lines
+  out
 }
 
 # EXCLUDE COVERAGE END

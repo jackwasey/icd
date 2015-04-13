@@ -137,10 +137,10 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
     # don't do any fancy encoding stuff, just dump the file, then re-read.
-    zip_shortlines <- read.zip.url(url, fn_short_orig)
+    zip_shortlines <- read.zip.url.lines(url, fn_short_orig)
     writeLines(zip_shortlines, path_short, useBytes = TRUE)
     if (!is.na(fn_long_orig)) {
-      zip_longlines <- read.zip.url(url, fn_long_orig)
+      zip_longlines <- read.zip.url.lines(url, fn_long_orig)
       writeLines(zip_longlines, path_long, useBytes = TRUE)
     }
   }
@@ -152,9 +152,9 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   readLines(short_conn) -> shortlines
   close(short_conn)
   if (!is.na(fn_long_orig)) {
-    long_conn <- file(path_long)
-    readLines(long_conn, encoding = "latin1") -> longlines
-    close(long_conn)
+    file_long <- file(path_long, encoding = dat$long_encoding)
+    readLines(file_long, encoding = "latin1") -> longlines
+    close(file_long)
   } else
     longlines <- NA_character_
 
@@ -231,7 +231,7 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
 
   if (save || fromWeb || !file.exists(fp))
     writeLines(
-      read.zip.url(url, fn),
+      read.zip.url.lines(url, fn),
       fp, useBytes = TRUE)
   icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character")
   names(icd9Billable27) <- c("icd9", "descLong", "descShort")
@@ -265,7 +265,7 @@ parseIcd9Chapters <- function(year = NULL,
   }
   if (save && format(Sys.time(), "%Y") != year)
     warning(sprintf("Getting ICD-9 data for %s which is not the current year.
-              Tests were written to validate extraction of 2014 data.", year))
+                    Tests were written to validate extraction of 2014 data.", year))
 
   # if either XML or memoise are not installed, an error will be given by R
   memReadHtmlList <- memoise::memoise(XML::readHTMLList)
