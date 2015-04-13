@@ -36,6 +36,7 @@ I9diagnos.*\.txt
 I9DX_DESC\.txt
 V27LONG_SHORT_DX.*\.csv
 V26 I-9 Diagnosis.txt
+V26\.I\.9\.Diagnosis.txt
 extdata\/ICD10_Charlson\.sas
 extdata\/ICD10_Elixhauser\.sas
 extdata\/ccs_multi_pr_tool_2014\.csv

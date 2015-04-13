@@ -423,7 +423,7 @@ fixSubchapterNa <- function(x, start, end) {
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
 #' quick, but much too slow when it appears many times in a loop.
 #' @keywords internal
-generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE) {
+generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE, verbose = FALSE) {
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
     icd9NShort <- c(icd9NShort, sort(icd9ChildrenShort(i, onlyReal = FALSE)))
@@ -518,6 +518,18 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
     stringsAsFactors = FALSE
   )
 
+  # minimal data_source validation
+  if (verbose)  {
+    long_fns <- data_sources[["long_filename"]]
+    short_fns <- data_sources[["long_filename"]]
+    # make.names is stricter than necessary, but no function to sanitize a file
+    # name in R, although R CMD check of course can do it...
+    message("non-portable long file names: ",
+            paste(long_fns[long_fns != make.names(long_fns)]))
+    message("non-portable short file names: ",
+            paste(short_fns[short_fns != make.names(short_fns)]))
+  }
+
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.
@@ -525,6 +537,7 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
                "icd9NShortBillable", "icd9VShortBillable", "icd9EShortBillable",
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
                "data_sources")
+
   if (save) save(list = lknames,
                  file = sysdata.path, compress = "xz")
   invisible(mget(lknames))
