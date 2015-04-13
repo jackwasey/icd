@@ -55,9 +55,9 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
   if (!save && !file.exists(fp))
     fp <- system.file("extdata", fn, package = "icd9")
 
-  if (fromWeb || !file.exists(fp)) {
-    lines <- read.zip.url(url, fn)
-    if (save || !file.exists(fp)) writeLines(lines, fp, useBytes = TRUE)
+  if (fromWeb || !file.exists(fp) || save) {
+    zip_single(url, fn, fp)
+    lines <- readLines(url, fp)
   } else {
     fp_conn <- file(fp, encoding = "ASCII")
     on.exit(close(fp_conn))
