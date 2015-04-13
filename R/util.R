@@ -22,6 +22,7 @@ strim <- function(x) {
   return(NA_character_)
 }
 
+# very quick, but drops any encoding labels
 trim <- function (x) {
   nax <- is.na(x)
   x[!nax] <- .Call("icd9_trimCpp", PACKAGE = "icd9", as.character(x[!nax]))
@@ -164,20 +165,7 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c
   out
 }
 
-#' @title read file from zip at URL
-#' @description downloads zip file, and opens named file \code{filename}, or the
-#'   single file in zip if \code{filename} is not specified. FUN is a function,
-#'   with additional arguments to FUN given by \dots.
-#' @param url character vector of length one containing URL of zip file.
-#' @param filename character vector of length one containing name of file to
-#'   extract from zip. If not specified, and the zip contains a single file,
-#'   then this single file will be used.
-#' @param encoding passed to file when the contents of the zip is read, default
-#'   is "", i.e. R uses current locale to guess
-#' @keywords internal
-read.zip.url.lines <- function(url, filename, file_enc = "latin1", ...) {
-  stopifnot(length(filename) <= 1)
-  stopifnot(is.character(url), length(url) == 1)
+zip_single <- function(url, filename, save_path) {
   zipfile <- tempfile()
   download.file(url = url, destfile = zipfile, quiet = TRUE)
   zipdir <- tempfile()
@@ -194,19 +182,8 @@ read.zip.url.lines <- function(url, filename, file_enc = "latin1", ...) {
   } else
     stopifnot(filename %in% files)
 
-  # the argument encoding has the _source_ encoding
-  # zip_conn <- file(file.path(zipdir, filename), encoding = encoding)
-  # UTF-8 here specifies that non-ASCII chars will be flagged as such.
-  # lines <- readLines(zip_conn, encoding = "UTF-8", warn = FALSE)
-  file_conn <- file(file.path(zipdir, filename), encoding = file_enc)
-  out <- readLines(file_conn, ...)
-  # clean up
-  close(file_conn)
-  unlink(zipdir, recursive = TRUE)
-  unlink(zipfile)
-  out
+  file.copy(file.path(zipdir, filename), save_path, overwrite = TRUE)
 }
-
 # EXCLUDE COVERAGE END
 
 getVisitId <- function(x, visitId = NULL) {
@@ -288,4 +265,8 @@ swapNamesWithVals <- function(x) {
 
 # mimic the R CMD check test
 getNonASCII <- function(x)
-  x[is.na(iconv(x, from = "latin1", to = "ASCII"))]
+  x[isNonASCII(x)]
+
+isNonASCII <- function (x) {
+  is.na(iconv(x, from = "latin1", to = "ASCII"))
+}

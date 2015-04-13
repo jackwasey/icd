@@ -136,13 +136,10 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
 
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
-    # don't do any fancy encoding stuff, just dump the file, then re-read.
-    zip_shortlines <- read.zip.url.lines(url, fn_short_orig)
-    writeLines(zip_shortlines, path_short, useBytes = TRUE)
-    if (!is.na(fn_long_orig)) {
-      zip_longlines <- read.zip.url.lines(url, fn_long_orig)
-      writeLines(zip_longlines, path_long, useBytes = TRUE)
-    }
+    # don't do any fancy encoding stuff, just dump the file
+    zip_single(url, fn_short_orig, path_short)
+    if (!is.na(fn_long_orig))
+      zip_single(url, fn_long_orig, path_long)
   }
   # yes, specify encoding twice, once to declare the source format, and again
   # to tell R to flag (apparently only where necessary), the destination
@@ -152,8 +149,8 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   readLines(short_conn) -> shortlines
   close(short_conn)
   if (!is.na(fn_long_orig)) {
-    file_long <- file(path_long, encoding = dat$long_encoding)
-    readLines(file_long, encoding = "latin1") -> longlines
+    file_long <- file(path_long, encoding = "latin1")
+    longlines <- readLines(path_long, encoding = "latin1")
     close(file_long)
   } else
     longlines <- NA_character_
@@ -161,57 +158,57 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   shortlines <- strsplit(shortlines, "[[:space:]]")
   longlines <- strsplit(longlines, "[[:space:]]")
 
-  icd9ShortCode <- lapply(shortlines, FUN = function(x) trim(x[1]))
-  icd9ShortDesc <- lapply(shortlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
+  # the encoding was stated, but is dropped by my trim function...
+  trim_regex <- function(x) gsub("(^[[:space:]])|([[:space:]]$)", "", x)
+
+  icd9ShortCode <- lapply(shortlines, FUN = function(x) trim_regex(x[1]))
+  icd9ShortDesc <- lapply(shortlines, FUN = function(x) trim_regex(paste(x[-1], collapse = " ")))
   if (!is.na(longlines[1]))
-    icd9LongDesc <- lapply(longlines, FUN = function(x) trim(paste(x[-1], collapse = " ")))
+    icd9LongDesc <- lapply(longlines, FUN = function(x) trim_regex(paste(x[-1], collapse = " ")))
   else
     icd9LongDesc <- NA
 
-  var_name <- paste0("icd9Billable", version)
-
-  assign(var_name,
-         data.frame(
-           icd9 = unlist(icd9ShortCode),
-           descShort = unlist(icd9ShortDesc),
-           descLong = unlist(icd9LongDesc),
-           stringsAsFactors = FALSE)
-  )
+  out <- data.frame(icd9 = unlist(icd9ShortCode),
+                    descShort = unlist(icd9ShortDesc),
+                    descLong = unlist(icd9LongDesc),
+                    stringsAsFactors = FALSE)
 
   # now sort so that E is after V:
-  reorder <- sortOrderShort(get(var_name)[["icd9"]])
-  assign(var_name, get(var_name)[reorder, ])
+  reorder <- sortOrderShort(out[["icd9"]])
+  out <- out[reorder, ]
 
   # warn as we go:
   oldwarn <- options(warn = 1)
   on.exit(options(oldwarn))
   if (!is.na(fn_long_orig) && verbose) {
-    encs <- Encoding(get(var_name, inherits = FALSE)[["descLong"]])
+    encs <- Encoding(out[["descLong"]])
     # tools::: has better options here. TODO: , e.g.:
     # for (f in list.files("inst/extdata", full.names = T)) {
     #   message("Checking ", f, " for non-ASCII"); tools:::showNonASCIIfile(f)
     # }
 
     message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
-    utf <- grep(pattern = "UTF", encs)
-    latin1 <- grep(pattern = "Latin", encs)
+    # utf <- grep(pattern = "UTF", encs)
+    # latin1 <- grep(pattern = "Latin", encs)
     # nonASCII <- grep(pattern = "ASCII", invert = TRUE, encs)
     #     if (length(nonASCII) > 0 ) {
     #       warning("The following long descriptions contain non-ASCII characters: ",
     #               paste(get(var_name, inherits = FALSE)[nonASCII, ], sep = ", "))
     #     }
-    if (length(utf) > 0 ) {
-      warning("The following long descriptions contain Unicode characters: ",
-              paste(get(var_name, inherits = FALSE)[utf, ], sep = ", "))
-    }
-    if (length(latin1) > 0 ) {
-      warning("The following long descriptions contain Latin-1 characters: ",
-              paste(get(var_name, inherits = FALSE)[latin1, ], sep = ", "))
-    }
+    #     if (length(utf) > 0 ) {
+    #       warning("The following long descriptions contain Unicode characters: ",
+    #               paste(get(var_name, inherits = FALSE)[utf, ], sep = ", "))
+    #     }
+    #     if (length(latin1) > 0 ) {
+    #       warning("The following long descriptions contain Latin-1 characters: ",
+    #               paste(get(var_name, inherits = FALSE)[latin1, ], sep = ", "))
+    #     }
     message("non-ASCII rows of long descriptions are: ",
-            paste(getNonASCII(get(var_name))[["descLong"]]), collapse = ", ")
+            paste(getNonASCII(out[["descLong"]]), collapse = ", "))
+    print(Encoding(out[["descLong"]][isNonASCII(out[["descLong"]])]))
+
   }
-  invisible(get(var_name, inherits = FALSE))
+  invisible(out)
 }
 
 parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = FALSE) {
@@ -227,13 +224,15 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   if (!save && !file.exists(fp))
     fp <- system.file("extdata", fn, package = "icd9")
 
-  if (verbose) message("v27 file name = '", fn, "', and path = '", fp, "'. URL = ", url)
+  if (verbose) message("v27 file name = '", fn,
+                       "', and path = '", fp,
+                       "'. URL = ", url)
 
-  if (save || fromWeb || !file.exists(fp))
-    writeLines(
-      read.zip.url.lines(url, fn),
-      fp, useBytes = TRUE)
-  icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character")
+  if (save || fromWeb || !file.exists(fp)) zip_single(url, fn, fp)
+  zip_single(url, fn, fp)
+  f <- file(fp, encoding = "latin1")
+  icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character", encoding = "latin1")
+  close(f)
   names(icd9Billable27) <- c("icd9", "descLong", "descShort")
   icd9Billable27 <- icd9Billable27[c(1, 3, 2)] # reorder columns
   reorder <- sortOrderShort(icd9Billable27[["icd9"]])
@@ -348,8 +347,6 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
 icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   assertFlag(save)
   assertFlag(verbose)
-
-  icd9Desc <- parseRtfYear(year = "2011", save = TRUE, verbose = verbose)
 
   # TODO: now we get almost everything from the RTF, we can just pull the
   # chapter and sub-chapters from the web very quickly (or from the RTF)
