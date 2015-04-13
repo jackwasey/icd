@@ -17,6 +17,8 @@
 
 # EXCLUDE COVERAGE START
 
+utils::globalVariables(c(".", "%>%", "data_sources"))
+
 parseEverythingAndSave <- function(verbose = TRUE) {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
@@ -27,7 +29,7 @@ parseEverythingAndSave <- function(verbose = TRUE) {
   devtools::load_data(pkg = ".") # reload the newly saved data
   parseAndSaveQuick(verbose = verbose)
   devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9BuildChaptersHierarchy(save = TRUE, verbose = verbose) # depends on icd9Desc and icd9Billable
+  icd9BuildChaptersHierarchy(save = TRUE, verbose = verbose) # depends on icd9Billable
 
 }
 
@@ -71,10 +73,10 @@ parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose 
   versions <- data_sources$version
   if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
-  for (v in versions) {
-    icd9Billable[[v]] <- parseIcd9LeafDescriptionsVersion(version = v, save = save,
-                                                          fromWeb = fromWeb, verbose = verbose)
-  }
+  for (v in versions)     icd9Billable[[v]] <- parseIcd9LeafDescriptionsVersion(version = v, save = save,
+                                                                                fromWeb = fromWeb, verbose = verbose)
+
+  # and in my utils.R  getNonASCII(charactervector)
   if (save) saveInDataDir("icd9Billable")
   invisible(icd9Billable)
 }
@@ -101,9 +103,9 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   assertFlag(fromWeb)
   assertFlag(verbose)
 
-
   # test encodings with
   # readLines("inst/extdata/CMS32_DESC_LONG_DX.txt")[4510] %T>% cat
+  # and in my utils.R  getNonASCII(charactervector)
 
   if (verbose) message("Fetching billable codes version: ", version)
 
@@ -146,12 +148,12 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   # to tell R to flag (apparently only where necessary), the destination
   # strings: in our case this is about ten accented character in long
   # descriptions of disease names
-  short_conn <- file(path_short, encoding = dat$short_encoding)
-  readLines(short_conn, encoding = "UTF-8") -> shortlines
+  short_conn <- file(path_short)
+  readLines(short_conn) -> shortlines
   close(short_conn)
   if (!is.na(fn_long_orig)) {
-    long_conn <- file(path_long, encoding = dat$long_encoding)
-    readLines(long_conn, encoding = "UTF-8") -> longlines
+    long_conn <- file(path_long)
+    readLines(long_conn) -> longlines
     close(long_conn)
   } else
     longlines <- NA_character_
@@ -206,6 +208,8 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
       warning("The following long descriptions contain Latin-1 characters: ",
               paste(get(var_name, inherits = FALSE)[latin1, ], sep = ", "))
     }
+    message("non-ASCII rows of long descriptions are: ",
+            paste(getNonASCII(get(var_name))[["descLong"]]), collapse = ", ")
   }
   invisible(get(var_name, inherits = FALSE))
 }
@@ -215,9 +219,10 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   assertFlag(save)
   assertFlag(fromWeb)
   assertFlag(verbose)
-  fn <- make.names(data_sources[data_sources$version == 27, "other_filename"])
+  v27 <- data_sources$version == "27"
+  fn <- make.names(data_sources[v27, "other_filename"])
   fp <- file.path("inst", "extdata", fn)
-  url <- data_sources[data_sources$version == 27, "url"]
+  url <- data_sources[v27, "url"]
 
   if (!save && !file.exists(fp))
     fp <- system.file("extdata", fn, package = "icd9")
@@ -231,13 +236,8 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character")
   names(icd9Billable27) <- c("icd9", "descLong", "descShort")
   icd9Billable27 <- icd9Billable27[c(1, 3, 2)] # reorder columns
-
-  # TODO, this is duplicated code: move to parent loop
-  # now sort so that E is after V:
   reorder <- sortOrderShort(icd9Billable27[["icd9"]])
-  icd9Billable27 <- icd9Billable27[reorder, ]
-  if (save) saveInDataDir("icd9Billable27")
-  invisible(icd9Billable27)
+  invisible(icd9Billable27[reorder, ])
 }
 
 #' @title Read higher-level ICD-9 structure from a reliable web site

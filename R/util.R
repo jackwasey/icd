@@ -284,3 +284,7 @@ swapNamesWithVals <- function(x) {
   names(x) <- new_names
   x
 }
+
+# mimic the R CMD check test
+getNonASCII <- function(x)
+  x[is.na(iconv(x, from = "latin1", to = "ASCII"))]
