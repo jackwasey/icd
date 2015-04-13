@@ -153,7 +153,7 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   close(short_conn)
   if (!is.na(fn_long_orig)) {
     long_conn <- file(path_long)
-    readLines(long_conn) -> longlines
+    readLines(long_conn, encoding = "latin1") -> longlines
     close(long_conn)
   } else
     longlines <- NA_character_
