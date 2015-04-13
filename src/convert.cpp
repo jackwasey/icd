@@ -37,7 +37,6 @@ CharacterVector icd9MajMinToCodeShim(const CharacterVector mjr,
 	CharacterVector::const_iterator n = mnr.begin();
 
 	for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
-		//std::string mjrelem = as<std::string>(*j);
 		String mjrelem = *j;
 		if (mjrelem == NA_STRING) {
 			out.push_back(NA_STRING);
@@ -78,7 +77,6 @@ CharacterVector icd9MajMinToCodeShim(const CharacterVector mjr,
 		out.push_back(smj);
 
 	}
-	// String chr_s = NA_STRING; // TODO
 
 	return wrap(out);
 }

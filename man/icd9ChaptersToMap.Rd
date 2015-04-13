@@ -18,9 +18,13 @@ the chapter headings can be converted into the full set of their
 }
 \seealso{
 Other ICD-9 convert: \code{\link{convert}},
-  \code{\link{icd9DecimalToParts}},
+  \code{\link{convert}}, \code{\link{icd9DecimalToParts}},
   \code{\link{icd9DecimalToShort}},
   \code{\link{icd9GetMajor}},
+  \code{\link{icd9MajMinToCode}},
+  \code{\link{icd9MajMinToDecimal}},
+  \code{\link{icd9MajMinToParts}},
+  \code{\link{icd9MajMinToShort}},
   \code{\link{icd9PartsToDecimal}},
   \code{\link{icd9PartsToShort}},
   \code{\link{icd9ShortToDecimal}},
