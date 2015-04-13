@@ -69,8 +69,7 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 })
 
 test_that("ahrq icd9 mappings generated from the current generation code", {
-  #TODO skip on travis and CRAN
-  if (!exists("do_slow_tests") || !do_slow_tests) skip("too slow")
+  skip_on_cran()
   # same but from source data. Should be absolutely identical.
   expect_equal(ahrqComorbid, parseAhrqSas(save = FALSE))
   # same but from source data. Should be absolutely identical.
@@ -141,7 +140,7 @@ test_that("can condense the big lists of comorbidities without errors", {
 
 
 test_that("icd9Hierarchy as saved in data can be recreated", {
-  if (!exists("do_slow_tests") || !do_slow_tests) skip("too slow")
+  if (!exists("do_slow_tests") || !do_slow_tests) skip("too slow to do routinely on any platform")
   expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
                  icd9::icd9Hierarchy)
 })

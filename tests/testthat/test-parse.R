@@ -309,7 +309,7 @@ test_that("billable codes for expected versions exist", {
 })
 
 test_that("billable codes are all in order", {
-  if (!exists("do_slow_tests") || !do_slow_tests) skip("too slow")
+  skip_on_cran()
   # TODO: when testthat is released with skip_on_travis, then use this and CRAN
   for (v in names(icd9Billable)) {
     icd9 <- icd9::icd9Billable[[v]][["icd9"]]
