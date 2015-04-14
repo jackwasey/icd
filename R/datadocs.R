@@ -207,6 +207,48 @@ NULL
 #'   string, e.g. "32". The constituent data frames have columns \code{icd9},
 #'   \code{shortDesc}, and \code{longDesc}.
 #' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
-#' @keywords datasets
-#' @docType data
 NULL
+
+#' @title de-identified data from public Vermont source for 2013
+#' @name vermont_dx
+#' @details Conditions of Release Release of public use data is subject to the
+#'   following conditions, which the requestor agrees to upon accepting copies
+#'   of the data:
+#'
+#'   1. The data may not be used in any manner that attempts to or does
+#'   identify, directly or indirectly, any individual patient or physician.
+#'
+#'   2. The requestor agrees to incorporate the following, or a substantially
+#'   similar, disclaimer in all reports or publications that include public use
+#'   data: “Hospital discharge data for use in this study were supplied by the
+#'   Vermont Association of Hospitals and Health Systems-Network Services
+#'   Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
+#'   Securities and Health Care Administration (BISHCA). All analyses,
+#'   interpretations or conclusions based on these data are solely that of [the
+#'   requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
+#'   analyses, interpretations or conclusions. In addition, as the data have
+#'   been edited and processed by VAHHS-NSO, BISHCA assumes no responsibility
+#'   for errors in the data due to coding or processing
+#' @source
+#' \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
+#'
+#' @format CSV original, minimally processed into R data.
+#' @keywords datasets
+#' @author Vermont Division of Health Care Administration
+#' @docType data
+.vermont <- function() {
+  vermont_dx <- read.csv("~/VTINP13.TXT")[, c(1, 4, 6, 7, 13:32)]
+  age_group <- vermont_dx$intage
+  attr(age_group, "class") = "factor"
+  attr(age_group, "levels") = c("Under 1", "1-17", "18-24",
+                               "25-29", "30-34", "35-39",
+                               "40-44", "45-49", "50-54",
+                               "55-59", "60-64", "65-69",
+                               "70-74", "75 and over",
+                               "Unknown")
+  vermont_dx$intage <- age_group
+  vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)
+  names(vermont_dx)[c(1, 2, 4)] <- c("visit_id", "age_group", "death")
+  vermont_dx %<>% head(1000)
+  saveInDataDir("vermont_dx")
+}
