@@ -78,8 +78,10 @@ icd9ChaptersToMap <- function(x) {
 #' @template visitid
 #' @param icdLabels vector of column names in which codes are found. If NULL,
 #'   all columns matching icd or ICD will be included.
-#' @param icdName character vector length one containing the new column name
-#'   for the ICD codes, defaults to "icdCode"
+#' @param icdName character vector length one containing the new column name for
+#'   the ICD codes, defaults to "icdCode"
+#' @param icdRegex vector of character strings containg a regex to identify ICD-9 diagnosis
+#'   columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}
 #' @return data frame with visitId column named the same as input, and a column
 #'   named by \code{icd.name} containing all the non-NA and non-empty codes
 #'   found in the wide input data.
@@ -93,14 +95,28 @@ icd9ChaptersToMap <- function(x) {
 icd9WideToLong <- function(x,
                            visitId = NULL,
                            icdLabels = NULL,
-                           icdName = "icdCode") {
+                           icdName = "icdCode",
+                           icdRegex = c("icd", "diag", "dx_", "dx"),
+                           verbose = FALSE) {
+  assertDataFrame(x, min.rows = 1, min.cols = 2)
   assertString(icdName)
-  if (is.null(icdLabels))
-    icdLabels <- grep("icd", names(x), ignore.case = TRUE, value = TRUE)
-  else {
-    assertCharacter(icdLabels, any.missing = FALSE)
-    stopifnot(all(icdLabels %in% names(x)))
+  assertCharacter(icdRegex, min.chars = 1, any.missing = FALSE, min.len = 1)
+  assertFlag(verbose)
+
+  if (is.null(icdLabels)) {
+    re <- length(icdRegex)
+    while (re > 0) {
+      if (verbose) message("checking whether regex: '", rev(icdRegex)[re], "' catches ICD columns.")
+      icdLabels <- grep(rev(icdRegex)[re], names(x), ignore.case = TRUE, value = TRUE)
+      if (verbose) message("found labels: ", paste(icdLabels, collapse = ", "))
+      if (length(icdLabels)) break
+      re <- re - 1
+    }
   }
+  assertCharacter(icdLabels, any.missing = FALSE, min.chars = 1,
+                  min.len = 1, max.len = ncol(x) - 1)
+  stopifnot(all(icdLabels %in% names(x)))
+
   visitId <- getVisitId(x, visitId)
 
   res <- reshape(x,
@@ -110,10 +126,11 @@ icd9WideToLong <- function(x,
                  timevar = NULL,
                  v.names = icdName)
 
-  rownames(res) <- NULL
   res <- res[!is.na(res[[icdName]]), ]
-  res <- res[nchar(levels(res[[icdName]])[res[[icdName]]]) > 0, ]
-  res[order(res[[visitId]]), ]
+  res <- res[nchar(asCharacterNoWarn(res[[icdName]])) > 0, ]
+  res <- res[order(res[[visitId]]), ]
+  rownames(res) <- NULL
+  res
 }
 
 #' @title convert ICD data from long to wide format

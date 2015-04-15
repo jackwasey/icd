@@ -237,7 +237,7 @@ NULL
 #' @author Vermont Division of Health Care Administration
 #' @docType data
 .vermont <- function() {
-  vermont_dx <- read.csv("~/VTINP13.TXT")[, c(74, 4, 6, 7, 11, 13:32)]
+  vermont_dx <- read.csv("~/VTINP13.TXT", stringsAsFactors = FALSE, strip.white = TRUE, nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
   age_group <- vermont_dx$intage
   attr(age_group, "class") = "factor"
   attr(age_group, "levels") = c("Under 1", "1-17", "18-24",
@@ -254,5 +254,6 @@ NULL
   vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)
   names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
   vermont_dx %<>% head(1000)
+
   saveInDataDir("vermont_dx")
 }
