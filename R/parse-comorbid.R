@@ -24,6 +24,7 @@
 #' @template parse-template
 #' @param returnAll logical which, if TRUE, will result in the invisible return
 #'   of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
+#' @template verbose
 #' @keywords internal
 parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
                          save = FALSE, path = "data", verbose = FALSE) {

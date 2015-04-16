@@ -21,7 +21,7 @@
 #'   of Deyo's ICD-9 mapping. (Peptic Ulcer disease no longer warrants a point.)
 #'   Quan published an updated set of scores, but it seems most people use the
 #'   original scores for easier comaprison between studies, even though Quan's
-#'   were more predictive. TODO: add Quan Charlson score calculation.
+#'   were more predictive.
 #' @details Per Quan, "The following comorbid conditions were mutually
 #'   exclusive: diabetes with chronic complications and diabetes without chronic
 #'   complications; mild liver disease and moderate or severe liver disease; and

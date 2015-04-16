@@ -310,7 +310,6 @@ test_that("billable codes for expected versions exist", {
 
 test_that("billable codes are all in order", {
   skip_on_cran()
-  # TODO: when testthat is released with skip_on_travis, then use this and CRAN
   for (v in names(icd9Billable)) {
     icd9 <- icd9::icd9Billable[[v]][["icd9"]]
     expect_identical(icd9, icd9SortShort(icd9),

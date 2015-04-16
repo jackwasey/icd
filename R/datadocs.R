@@ -209,6 +209,12 @@ NULL
 #' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 NULL
 
+
+# we don't ever use magrittr in 'live' package use, just when it is using its
+# own functions for testing and generating its own data: in those cases magrittr
+# will be available, but we don't want CRAN check problems, so:
+utils::globalVariables(c("%<>%"))
+
 #' @title de-identified data from public Vermont source for 2013
 #' @name vermont_dx
 #' @details Conditions of Release Release of public use data is subject to the

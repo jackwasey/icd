@@ -12,4 +12,4 @@ r_github_packages:
 after_success:
  - Rscript -e 'devtools::install()'
  - Rscript -e 'devtools::session_info()'
- - Rscript -e 'library(covr); coveralls(exclusions = list("R/RcppExports.R" = c(1,100000), "src/RcppExports.cpp" = c(1:100000), "R/benchmark.R" = c(1:100000)))'
+ - Rscript -e 'library(covr); coveralls(exclusions = list("R/RcppExports.R" = c(1,100000), "src/RcppExports.cpp" = c(1:100000), "R/benchmark.R" = c(1:100000)), quiet = FALSE)'

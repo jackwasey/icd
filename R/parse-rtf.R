@@ -38,6 +38,7 @@ utils::globalVariables(c(".", "%>%"))
 #'   though. THe last CDC release is Dtab12.rtf from 2011.
 #' @param year from 1996 to 2012 (this is what CDC has published). Only 2012
 #'   implemented thus far
+#' @template verbose
 #' @source
 #'   http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
 #'   and similar files run from 1996 to 2011.
@@ -82,6 +83,14 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
   invisible(icd9Desc)
 }
 
+#' @title parse a character vector containing RTF strings
+#' @param lines character vector containing RTF. Encoding?
+#' @template verbose
+#' @return named character vector, with names being the ICD-9 codes, and the
+#'   contents being the descriptions from the RTF source. Elsewhere I do this
+#'   the other way around, but the tests are now wired for this layout. "Tidy"
+#'   data would favour having an un-named two-column data frame.
+#' @keywords internal
 parseRtfLines <- function(lines, verbose = FALSE) {
 
   assertCharacter(lines)
@@ -328,6 +337,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
 #' @description returns all the possible 5 digit codes encompassed by the given
 #'   definition. This needs to be whittled down to just those matching fifth
 #'   digits, but we haven't parsed them yet.
+#' @template verbose
 #' @keywords internal
 parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
   assertString(row_str)

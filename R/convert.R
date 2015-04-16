@@ -82,6 +82,7 @@ icd9ChaptersToMap <- function(x) {
 #'   the ICD codes, defaults to "icdCode"
 #' @param icdRegex vector of character strings containg a regex to identify ICD-9 diagnosis
 #'   columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}
+#' @template verbose
 #' @return data frame with visitId column named the same as input, and a column
 #'   named by \code{icd.name} containing all the non-NA and non-empty codes
 #'   found in the wide input data.
