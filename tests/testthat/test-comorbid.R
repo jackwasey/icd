@@ -675,3 +675,13 @@ test_that("disordered visitIds works by default", {
   expect_equal(colnames(tres), colnames(cres))
 
 })
+
+test_that("comorbidities created from source data frame coded as factors", {
+  v2 <- icd9WideToLong(vermont_dx)
+  v2$visit_id <- as.factor(v2$visit_id)
+  v2$icdCode <- as.factor(v2$icdCode)
+
+  res <- icd9ComorbidAhrq(v2)
+  res_nofactor <- vermont_dx %>% icd9WideToLong %>% icd9ComorbidAhrq
+  expect_identical(res, res_nofactor)
+})

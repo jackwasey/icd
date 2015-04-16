@@ -59,14 +59,19 @@ This is different from syntactic validity: it looks it up in the
 }
 \section{Functions}{
 \itemize{
-\item \code{icd9IsRealShort}: 
+\item \code{icd9IsRealShort}: Are the given short-form codes defined at heading or
+leaf (billable) level?
 
-\item \code{icd9IsRealDecimal}: 
+\item \code{icd9IsRealDecimal}: Are the given decimal-form codes defined at heading or
+leaf (billable) level?
 
-\item \code{icd9GetReal}: 
+\item \code{icd9GetReal}: Return only those codes which are heading or leaf
+(billable), specifying whether codes are all short-form or all decimal-form
 
-\item \code{icd9GetRealShort}: 
+\item \code{icd9GetRealShort}: Return only those short-form codes which are heading
+or leaf (billable)
 
-\item \code{icd9GetRealDecimal}: 
+\item \code{icd9GetRealDecimal}: Return only those decimal-form codes which are heading
+or leaf (billable)
 }}
 

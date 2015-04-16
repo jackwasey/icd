@@ -4,7 +4,7 @@
 \alias{icd9IsE}
 \alias{icd9IsN}
 \alias{icd9IsV}
-\title{are codes puerly numeric}
+\title{do codes belong to numeric, V or E classes?}
 \usage{
 icd9IsN(icd9)
 
@@ -28,8 +28,8 @@ For each code, return \code{TRUE} if numric or \code{FALSE} if a
 }
 \section{Functions}{
 \itemize{
-\item \code{icd9IsV}: 
+\item \code{icd9IsV}: are the given codes V type?
 
-\item \code{icd9IsE}: 
+\item \code{icd9IsE}: are the given codes E type?
 }}
 

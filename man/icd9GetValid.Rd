@@ -49,15 +49,15 @@ Given vector of short or decimal ICD-9 codes, return (in the
 }
 \section{Functions}{
 \itemize{
-\item \code{icd9GetValidDecimal}: 
+\item \code{icd9GetValidDecimal}: Returns subset of codes which are in valid decimal format, e.g. "100" or "V01.10"
 
-\item \code{icd9GetValidShort}: 
+\item \code{icd9GetValidShort}: Returns subset of codes which are in valid short format, e.g. "E800" or "41001"
 
-\item \code{icd9GetInvalid}: 
+\item \code{icd9GetInvalid}: Returns subset of codes which are not in valid short or decimal format.
 
-\item \code{icd9GetInvalidDecimal}: 
+\item \code{icd9GetInvalidDecimal}: Returns subset of codes which are not in valid decimal format.
 
-\item \code{icd9GetInvalidShort}: 
+\item \code{icd9GetInvalidShort}: Returns subset of codes which are not in valid short format.
 }}
 \keyword{manip}
 

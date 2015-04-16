@@ -89,7 +89,6 @@ icd9Comorbid <- function(icd9df,
   visitId <- getVisitId(icd9df, visitId)
   icd9Field <- getIcdField(icd9df, icd9Field)
 
-  # TODO: allow factors for icd9df fields
   assertDataFrame(icd9df, min.cols = 2)
   assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
              types = c("character", "factor"), names = "unique")

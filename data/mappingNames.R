@@ -145,5 +145,3 @@ ahrqComorbidNamesHtnAbbrev["02"] <- NULL
 names(ahrqComorbidNamesHtnAbbrev) <-
   names(elixComorbidNamesHtnAbbrev)[-30]
 
-# comparable between Elixhauser and Charlson:
-#TODO

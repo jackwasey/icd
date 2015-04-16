@@ -43,13 +43,21 @@ Present On Arrival (POA) is not a simple flag, since many codes
 }
 \section{Functions}{
 \itemize{
-\item \code{icd9FilterPoaYes}: 
+\item \code{icd9FilterPoaYes}: Select rows where Present-on-Arrival flag is
+explicitly "Yes."
 
-\item \code{icd9FilterPoaNo}: 
+\item \code{icd9FilterPoaNo}: Select rows where Present-on-Arrival flag is
+explicitly "No."
 
-\item \code{icd9FilterPoaNotNo}: 
+\item \code{icd9FilterPoaNotNo}: Select rows where Present-on-Arrival flag is
+anything but "No." This includes unknown, exempt, other codes, and of
+course all those marked "Yes."
 
-\item \code{icd9FilterPoaNotYes}: 
+\item \code{icd9FilterPoaNotYes}: Select rows where Present-on-Arrival flag is
+anything byt "Yes." This would group exempt, unknown and other codes under
+"Not POA" which is unlikely to be a good choice, since exempt codes, of
+which there are a quite large number, tend to describe chronic or
+out-of-hospital characteristics.
 }}
 \examples{
 \dontrun{

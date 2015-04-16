@@ -3,14 +3,18 @@ context("icd9 ranges")
 test_that("expand icd9 range definition", {
   expect_equal(
     icd9ExpandRangeShort("4012", "40145",
-                         onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                         onlyReal = FALSE,
+                         excludeAmbiguousStart = FALSE,
+                         excludeAmbiguousEnd = FALSE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
            "40139", "4014", "40140", "40141", "40142", "40143", "40144", "40145")))
   expect_equal(
     icd9ExpandRangeShort("4012", "40145",
-                         onlyReal = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
+                         onlyReal = FALSE,
+                         excludeAmbiguousStart = TRUE,
+                         excludeAmbiguousEnd = TRUE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",

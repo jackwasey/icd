@@ -37,7 +37,8 @@ icd9IsReal <- function(icd9, isShort = icd9GuessIsShort(icd9),
   icd9IsRealDecimal(icd9, onlyBillable)
 }
 
-#' @describeIn icd9IsReal
+#' @describeIn icd9IsReal Are the given short-form codes defined at heading or
+#'   leaf (billable) level?
 #' @export
 icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
   assertFactorOrCharacter(icd9Short)
@@ -46,7 +47,8 @@ icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
   asCharacterNoWarn(icd9Short) %in% icd9::icd9Hierarchy[["icd9"]]
 }
 
-#' @describeIn icd9IsReal
+#' @describeIn icd9IsReal Are the given decimal-form codes defined at heading or
+#'   leaf (billable) level?
 #' @export
 icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   assertFactorOrCharacter(icd9Decimal)
@@ -55,23 +57,25 @@ icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   icd9IsRealShort(icd9DecimalToShort(icd9Decimal))
 }
 
-#' @describeIn icd9IsReal
+#' @describeIn icd9IsReal Return only those codes which are heading or leaf
+#'   (billable), specifying whether codes are all short-form or all decimal-form
 #' @export
 icd9GetReal <- function(icd9, isShort = icd9GuessIsShort(icd9), onlyBillable = FALSE) {
   if (isShort) return(icd9GetRealShort(icd9))
   icd9GetRealDecimal(icd9)
 }
 
-#' @describeIn icd9IsReal
+#' @describeIn icd9IsReal Return only those short-form codes which are heading
+#'   or leaf (billable)
 #' @export
 icd9GetRealShort <- function(icd9Short, onlyBillable = FALSE)
   icd9Short[icd9IsRealShort(icd9Short, onlyBillable)]
 
-#' @describeIn icd9IsReal
+#' @describeIn icd9IsReal Return only those decimal-form codes which are heading
+#'   or leaf (billable)
 #' @export
 icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE)
   icd9Decimal[icd9IsRealDecimal(icd9Decimal, onlyBillable)]
-
 
 #' @title Determine whether codes are billable leaf-nodes
 #' @description Codes provided are compared to the most recent version of the
@@ -99,17 +103,20 @@ icd9IsBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
   icd9DecimalToShort(icd9) %in% icd9::icd9Billable[[version]][["icd9"]]
 }
 
-#' @describeIn icd9IsBillable
+#' @describeIn icd9IsBillable Are the given short-form codes leaf (billable)
+#'   codes in the hierarchy?
 #' @export
 icd9IsBillableShort <- function(icd9Short, version = getLatestBillableVersion())
   icd9IsBillable(icd9Short, isShort = TRUE, version)
 
-#' @describeIn icd9IsBillable
+#' @describeIn icd9IsBillable Are the given decimal-form codes leaf (billable)
+#'   codes in the hierarchy?
 #' @export
 icd9IsBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersion())
   icd9IsBillable(icd9Decimal, isShort = FALSE, version)
 
-#' @describeIn icd9IsBillable
+#' @describeIn icd9IsBillable Return only those codes which are leaf (billable)
+#'   codes in the hierarchy.
 #' @export
 icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                             invert = FALSE, version = getLatestBillableVersion()) {
@@ -122,27 +129,35 @@ icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
   icd9[icd9IsBillableDecimal(icd9, version = version) != invert]
 }
 
-#' @describeIn icd9IsBillable
+#' @describeIn icd9IsBillable Return only those short-form codes which are leaf
+#'   (billable) codes in the hierarchy.
 #' @export
 icd9GetBillableShort <- function(icd9Short, version = getLatestBillableVersion())
   icd9GetBillable(icd9Short, isShort = TRUE, version = version)
 
-#' @describeIn icd9IsBillable
+#' @describeIn icd9IsBillable Return only those decimal-form codes which are
+#'   leaf (billable) codes in the hierarchy.
 #' @export
 icd9GetBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersion())
   icd9GetBillable(icd9Decimal, isShort = FALSE, version = version)
 
-#' @describeIn icd9IsBillable
+#' @describeIn icd9IsBillable Return only those short-form codes which are not
+#'   leaf (billable) codes in the hierarchy. This would include invalid and
+#'   heading codes.
 #' @export
 icd9GetNonBillableShort <- function(icd9Short, version = getLatestBillableVersion())
   icd9GetBillable(icd9Short, isShort = TRUE, invert = TRUE, version = version)
 
-#' @describeIn icd9IsBillable
+#' @describeIn icd9IsBillable Return only those decimal-form codes which are not
+#'   leaf (billable) codes in the hierarchy. This would include invalid and
+#'   heading codes.
 #' @export
 icd9GetNonBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersion())
   icd9GetBillable(icd9Decimal, isShort = FALSE, invert = TRUE, version = version)
 
-#' @describeIn icd9IsBillable
+#' @describeIn icd9IsBillable Return only those codes which are not leaf
+#'   (billable) codes in the hierarchy. This would include invalid and heading
+#'   codes. Codes are specified (or guessed) to be all decimal- or short-form.
 #' @export
 icd9GetNonBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                version = getLatestBillableVersion())

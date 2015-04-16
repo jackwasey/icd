@@ -100,22 +100,30 @@ icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
   icd9df[!is.na(p) & p %in% choice, names(icd9df) != poaField]
 }
 
-#' @describeIn icd9FilterPoa
+#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
+#'   explicitly "Yes."
 #' @export
 icd9FilterPoaYes <- function(icd9df, poaField = "poa")
   .icd9FilterPoa(icd9df, poaField, choice = c("Y", "y"), negative = FALSE)
 
-#' @describeIn icd9FilterPoa
+#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
+#'   explicitly "No."
 #' @export
 icd9FilterPoaNo <- function(icd9df, poaField = "poa")
   .icd9FilterPoa(icd9df, poaField, choice = c("N", "n"), negative = FALSE)
 
-#' @describeIn icd9FilterPoa
+#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
+#'   anything but "No." This includes unknown, exempt, other codes, and of
+#'   course all those marked "Yes."
 #' @export
 icd9FilterPoaNotNo <- function(icd9df, poaField = "poa")
   .icd9FilterPoa(icd9df, poaField, choice = c("N", "n"), negative = TRUE)
 
-#' @describeIn icd9FilterPoa
+#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
+#'   anything byt "Yes." This would group exempt, unknown and other codes under
+#'   "Not POA" which is unlikely to be a good choice, since exempt codes, of
+#'   which there are a quite large number, tend to describe chronic or
+#'   out-of-hospital characteristics.
 #' @export
 icd9FilterPoaNotYes <- function(icd9df, poaField = "poa")
   .icd9FilterPoa(icd9df, poaField, choice = c("Y", "y"), negative = TRUE)

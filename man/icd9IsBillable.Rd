@@ -72,20 +72,31 @@ Codes provided are compared to the most recent version of the
 }
 \section{Functions}{
 \itemize{
-\item \code{icd9IsBillableShort}: 
+\item \code{icd9IsBillableShort}: Are the given short-form codes leaf (billable)
+codes in the hierarchy?
 
-\item \code{icd9IsBillableDecimal}: 
+\item \code{icd9IsBillableDecimal}: Are the given decimal-form codes leaf (billable)
+codes in the hierarchy?
 
-\item \code{icd9GetBillable}: 
+\item \code{icd9GetBillable}: Return only those codes which are leaf (billable)
+codes in the hierarchy.
 
-\item \code{icd9GetBillableShort}: 
+\item \code{icd9GetBillableShort}: Return only those short-form codes which are leaf
+(billable) codes in the hierarchy.
 
-\item \code{icd9GetBillableDecimal}: 
+\item \code{icd9GetBillableDecimal}: Return only those decimal-form codes which are
+leaf (billable) codes in the hierarchy.
 
-\item \code{icd9GetNonBillableShort}: 
+\item \code{icd9GetNonBillableShort}: Return only those short-form codes which are not
+leaf (billable) codes in the hierarchy. This would include invalid and
+heading codes.
 
-\item \code{icd9GetNonBillableDecimal}: 
+\item \code{icd9GetNonBillableDecimal}: Return only those decimal-form codes which are not
+leaf (billable) codes in the hierarchy. This would include invalid and
+heading codes.
 
-\item \code{icd9GetNonBillable}: 
+\item \code{icd9GetNonBillable}: Return only those codes which are not leaf
+(billable) codes in the hierarchy. This would include invalid and heading
+codes. Codes are specified (or guessed) to be all decimal- or short-form.
 }}
 

@@ -234,27 +234,27 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
 icd9GetValid <- function(icd9, isShort = icd9GuessIsShort(icd9))
   icd9[icd9IsValid(icd9, isShort = isShort)]
 
-#' @describeIn icd9GetValid
+#' @describeIn icd9GetValid Returns subset of codes which are in valid decimal format, e.g. "100" or "V01.10"
 #' @export
 icd9GetValidDecimal <- function(icd9Decimal)
   icd9Decimal[icd9IsValidDecimal(icd9Decimal)]
 
-#' @describeIn icd9GetValid
+#' @describeIn icd9GetValid Returns subset of codes which are in valid short format, e.g. "E800" or "41001"
 #' @export
 icd9GetValidShort <- function(icd9Short)
   icd9Short[icd9IsValidShort(icd9Short)]
 
-#' @describeIn icd9GetValid
+#' @describeIn icd9GetValid Returns subset of codes which are not in valid short or decimal format.
 #' @export
 icd9GetInvalid <- function(icd9, isShort = icd9GuessIsShort(icd9))
   icd9[!icd9IsValid(icd9, isShort = isShort)]
 
-#' @describeIn icd9GetValid
+#' @describeIn icd9GetValid Returns subset of codes which are not in valid decimal format.
 #' @export
 icd9GetInvalidDecimal <- function(icd9Decimal)
   icd9Decimal[!icd9IsValidDecimal(icd9Decimal)]
 
-#' @describeIn icd9GetValid
+#' @describeIn icd9GetValid Returns subset of codes which are not in valid short format.
 #' @export
 icd9GetInvalidShort <- function(icd9Short)
   icd9Short[!icd9IsValidShort(icd9Short)]
@@ -265,7 +265,7 @@ icd9IsMajor <- function(icd9) {
   nchar(icd9) - icd9IsE(icd9) < 4
 }
 
-#' @title are codes puerly numeric
+#' @title do codes belong to numeric, V or E classes?
 #' @description For each code, return \code{TRUE} if numric or \code{FALSE} if a
 #'   V or E code.
 #' @template icd9-any
@@ -274,12 +274,13 @@ icd9IsMajor <- function(icd9) {
 icd9IsN <- function(icd9)
   icd9IsA(asCharacterNoWarn(icd9), "VEve", TRUE)
 
-#' @describeIn icd9IsN
+#' @describeIn icd9IsN are the given codes V type?
 #' @export
 icd9IsV <- function(icd9)
   icd9IsA(asCharacterNoWarn(icd9), "Vv")
 
-#' @describeIn icd9IsN
+
+#' @describeIn icd9IsN are the given codes E type?
 #' @export
 icd9IsE <- function(icd9)
   icd9IsA(asCharacterNoWarn(icd9), "Ee")
