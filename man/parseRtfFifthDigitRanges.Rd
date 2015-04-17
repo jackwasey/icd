@@ -7,6 +7,9 @@
 \usage{
 parseRtfFifthDigitRanges(row_str, verbose = FALSE)
 }
+\arguments{
+\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
+}
 \description{
 returns all the possible 5 digit codes encompassed by the given
   definition. This needs to be whittled down to just those matching fifth

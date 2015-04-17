@@ -39,7 +39,11 @@ sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 \description{
 Sorts lists of numeric only, V or E codes. Note that a simple
   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
-  V codes precede E codes
+  V codes precede E codes.
+}
+\details{
+Implementation used fast built-in sort, then shuffles the E codes to
+  the end.
 }
 \keyword{manip}
 

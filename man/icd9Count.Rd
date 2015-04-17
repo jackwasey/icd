@@ -62,9 +62,6 @@ For \code{icd9Count}, it is assumed that all the columns apart
   from \code{visitId} represent actual or possible ICD-9 codes. Duplicate
   \code{visitId}s are repeated as given and aggregated.
 }
-\details{
-TODO: optionally check each code is valid before counting.
-}
 \examples{
 mydf <- data.frame(visitId = c("r", "r", "s"),
                    icd9 = c("441", "412.93", "044.9"))

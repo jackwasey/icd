@@ -30,6 +30,8 @@ the ICD codes, defaults to "icdCode"}
 
 \item{icdRegex}{vector of character strings containg a regex to identify ICD-9 diagnosis
 columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}}
+
+\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \value{
 data frame with visitId column named the same as input, and a column

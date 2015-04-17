@@ -24,6 +24,8 @@ to \code{FALSE}.}
 folder in the devleopment source tree. Defaults to \code{"~/icd9/data"}.
 Could possibly avoid hard-coding path with devtools functions.}
 
+\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
+
 \item{condense}{logical whether to condense the result ranges to the minimal
 set of parent ICD-9 codes which exactly define the list. Defaults to
 \code{FALSE} so that the saved list will allow rapid look-up of codes

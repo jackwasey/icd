@@ -10,7 +10,11 @@ parseIcd9Chapters(year = NULL, save = FALSE)
 This is rather slow, queries a web page repeatedly, which is
   both non-reproducible, and perhaps bad form. Aim to deprecate and replace
   with my own RTF parsing of canonical documents, which is now working
-  reasonably well, at least for 'major' codes from 2015. TODO: deprecate
+  reasonably well, at least for 'major' codes from 2015.
+}
+\details{
+This is not almost obsolete. The only remaining use is the chapter
+  and sub-chapter names and ranges, or validation.
 }
 \keyword{internal}
 

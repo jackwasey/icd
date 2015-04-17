@@ -238,7 +238,7 @@ parseIcd9Chapters <- function(year = NULL,
       year <- as.integer(year)
     }
     # version 23 dates back to 2005, but I don't have access on web for versions
-    # before 23. TODO: are these somewhere else?
+    # before 23. Where are these?
     # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
     assertIntegerish(year, lower = 2005, upper = 2015,
                      any.missing = FALSE, len = 1)
@@ -284,8 +284,8 @@ parseIcd9Chapters <- function(year = NULL,
   # EXCLUDE COVERAGE START
   if (save) {
     # saveInDataDir("icd9Chapters") # manually entered
-    saveInDataDir("icd9ChaptersSub") # TODO: remove, now I have parsed from RTF
-    saveInDataDir("icd9ChaptersMajor") # TODO: remove, now I have parsed from RTF
+    saveInDataDir("icd9ChaptersSub")
+    saveInDataDir("icd9ChaptersMajor")
   }
   invisible(list(icd9Chapters = icd9Chapters,
                  icd9ChaptersSub = icd9ChaptersSub,
@@ -325,23 +325,19 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   )
 }
 
-# TODO: enable annual versions
 icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   assertFlag(save)
   assertFlag(verbose)
-
-  # TODO: now we get almost everything from the RTF, we can just pull the
-  # chapter and sub-chapters from the web very quickly (or from the RTF)
 
   icd9Desc <- parseRtfYear(year = "2011", save = FALSE, verbose = verbose)
 
   if (verbose) message("working on (possibly) slow step of web scrape to build icd9 Chapters Hierarchy.")
   chaps <- icd9GetChapters(icd9 = icd9Desc$icd9, isShort = TRUE, verbose = verbose)
 
+  # could also get some long descs from more recent billable lists, but not
+  # older ones which only have short descs
   icd9Hierarchy <- cbind(
     data.frame("icd9" = icd9Desc$icd9,
-               # TODO: could also get some long descs from more recent billable
-               # lists, but not older ones which only have short descs
                "descLong" = icd9Desc$desc,
                stringsAsFactors = FALSE),
     # the following can and should be factors:
@@ -357,7 +353,6 @@ icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
   # just copy the long description over.
-  # TODO need to match the annual RTF with the annual txt file
 
   bill32 <- icd9::icd9Billable[["32"]]
 
@@ -468,8 +463,7 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
     other_filename = c(NA, NA, NA, NA, NA,
                        "V27LONG_SHORT_DX_110909.csv",
                        # "V27LONG_SHORT_DX_110909u021012.csv" is 'updated' but
-                       # hasn't got correctly formatted <3digit codes. TODO, use
-                       # codes from first table, and descs from second.
+                       # hasn't got correctly formatted <3digit codes.
                        NA, NA, NA, NA),
     long_encoding = c("latin1", "latin1", "latin1", "latin1", "latin1", "latin1", NA, NA, NA, NA),
     short_encoding = rep_len("ASCII", 10),

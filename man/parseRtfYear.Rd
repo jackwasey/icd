@@ -14,6 +14,8 @@ parseRtfYear(year = "2011", save = FALSE, fromWeb = FALSE,
 \arguments{
 \item{year}{from 1996 to 2012 (this is what CDC has published). Only 2012
 implemented thus far}
+
+\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \description{
 Currently only the most recent update is implemented. Note that

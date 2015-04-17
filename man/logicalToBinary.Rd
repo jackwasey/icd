@@ -15,12 +15,12 @@ data frame without logical fields
 \description{
 when saving data as text files for distribution, printing large
   amounts of text containing TRUE and FALSE is inefficient. Convert to binary
-  takes more R memory, but allows more compact output TODO: test
+  takes more R memory, but allows more compact output
 }
 \details{
 Taken from my
-  \href{http://cran.r-project.org/web/packages/jwutil/index.html}{\code{jwutil}
-  package}.#'
+  \href{https://github.com/jackwasey/jwutil}{\code{jwutil} package}, which is
+  also intermittently on CRAN
 }
 \keyword{internal}
 \keyword{manip}

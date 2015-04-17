@@ -39,8 +39,8 @@ install_github(\"jackwasey/icd9\")
 release_questions <- function() {
   c(
     "Have you checked all TODO comments",
-    "Is there any commented code?",
-    "Have commented tests been skipped or eliminated?",
+    "Is there any commented code? (lint for this now possible)",
+    "Are there skipped tests?",
     "Do all examples look ok (not just run without errors)?",
     "Anything to add to vignette?",
     "Have all the fixed github issues been closed",

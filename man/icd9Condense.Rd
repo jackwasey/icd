@@ -11,7 +11,8 @@ icd9Condense(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = NULL,
 
 icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, warn = TRUE)
 
-icd9CondenseShort(icd9Short, onlyReal = NULL, warn = TRUE)
+icd9CondenseShort(icd9Short, onlyReal = NULL, warn = TRUE,
+  keepFactorLevels = FALSE)
 }
 \arguments{
 \item{icd9}{is
@@ -44,6 +45,10 @@ becomes "010", not "0010"}
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
+
+\item{keepFactorLevels}{single logical value, default \code{FALSE}. If
+\code{TRUE}, will reuse the factor levels from the input data for the
+output data. This only applies if a factor is given for the input codes.}
 }
 \description{
 This can be thought of as the inverse operation to

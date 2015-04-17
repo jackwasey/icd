@@ -227,8 +227,8 @@ getIcdField <- function(x, icd9Field = NULL) {
     if (is.null(icd9Field))
       # still NULL so fallback to second column
       icd9Field <- names(x)[2]
-    # TODO: look at contents of the data frame, although this evaluates a
-    # promise on potentially a big data frame
+    # Could look at contents of the data frame, although this evaluates a
+    # promise on potentially a big data frame, so could be costly
   }
   assertString(icd9Field)
   stopifnot(icd9Field %in% names(x))
