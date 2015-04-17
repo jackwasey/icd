@@ -72,10 +72,11 @@ saveInDataDir <- function(var, suffix = "") {
 #' @title encode TRUE as 1, and FALSE as 0 (integers)
 #' @description when saving data as text files for distribution, printing large
 #'   amounts of text containing TRUE and FALSE is inefficient. Convert to binary
-#'   takes more R memory, but allows more compact output TODO: test
+#'   takes more R memory, but allows more compact output
 #' @details Taken from my
-#'   \href{http://cran.r-project.org/web/packages/jwutil/index.html}{\code{jwutil}
-#'   package}.#' @param x dataframe which may contain logical fields
+#'   \href{https://github.com/jackwasey/jwutil}{\code{jwutil} package}, which is
+#'   also intermittently on CRAN
+#' @param x dataframe which may contain logical fields
 #' @return data frame without logical fields
 #' @keywords internal manip
 logicalToBinary <- function(x) {

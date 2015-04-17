@@ -182,27 +182,7 @@ parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(
   on.exit(options(oldwarn))
   if (!is.na(fn_long_orig) && verbose) {
     encs <- Encoding(out[["descLong"]])
-    # tools::: has better options here. TODO: , e.g.:
-    # for (f in list.files("inst/extdata", full.names = T)) {
-    #   message("Checking ", f, " for non-ASCII"); tools:::showNonASCIIfile(f)
-    # }
-
     message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
-    # utf <- grep(pattern = "UTF", encs)
-    # latin1 <- grep(pattern = "Latin", encs)
-    # nonASCII <- grep(pattern = "ASCII", invert = TRUE, encs)
-    #     if (length(nonASCII) > 0 ) {
-    #       warning("The following long descriptions contain non-ASCII characters: ",
-    #               paste(get(var_name, inherits = FALSE)[nonASCII, ], sep = ", "))
-    #     }
-    #     if (length(utf) > 0 ) {
-    #       warning("The following long descriptions contain Unicode characters: ",
-    #               paste(get(var_name, inherits = FALSE)[utf, ], sep = ", "))
-    #     }
-    #     if (length(latin1) > 0 ) {
-    #       warning("The following long descriptions contain Latin-1 characters: ",
-    #               paste(get(var_name, inherits = FALSE)[latin1, ], sep = ", "))
-    #     }
     message("non-ASCII rows of long descriptions are: ",
             paste(getNonASCII(out[["descLong"]]), collapse = ", "))
     print(Encoding(out[["descLong"]][isNonASCII(out[["descLong"]])]))
@@ -243,7 +223,9 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
 #' @description This is rather slow, queries a web page repeatedly, which is
 #'   both non-reproducible, and perhaps bad form. Aim to deprecate and replace
 #'   with my own RTF parsing of canonical documents, which is now working
-#'   reasonably well, at least for 'major' codes from 2015. TODO: deprecate
+#'   reasonably well, at least for 'major' codes from 2015.
+#' @details This is not almost obsolete. The only remaining use is the chapter
+#'   and sub-chapter names and ranges, or validation.
 #' @keywords internal
 parseIcd9Chapters <- function(year = NULL,
                               save = FALSE) {

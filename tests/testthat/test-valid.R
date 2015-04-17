@@ -377,7 +377,12 @@ test_that("get real codes from a longer list", {
   expect_equal(icd9GetRealDecimal(c("003", "003.1", "3.2"), onlyBillable = TRUE), "003.1")
 })
 
-test_that("billable codes are identified", {
+test_that("get real codes which are less than two digit major", {
+  expect_equal(icd9GetRealShort(c("3", "11", "V2"), onlyBillable = FALSE), c("3", "11", "V2"))
+  expect_equal(icd9GetRealDecimal(c("3", "11", "V2"), onlyBillable = FALSE), c("3", "11", "V2"))
+}
+          )
+test_that("illable codes are identified", {
   expect_true(icd9IsBillable("1000"))
   expect_false(icd9IsBillable("1008"))
   expect_true(icd9IsBillable("1009"))

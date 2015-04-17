@@ -70,8 +70,6 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
                               return.df = TRUE, ...)
   res <- icd9CharlsonComorbid(tmp, visitId = visitId, applyHierarchy = FALSE)
 
-  # TODO someday it might be nice (like with comorbid.R) to recreate a factor
-  # with the same levels for visitId if this is what is given to us.
   if (!return.df) return(res)
   out <- cbind(names(res),
                data.frame("Charlson" = unname(res)),
@@ -118,7 +116,6 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
 #'   The visitId field is typically the first column. If there is no column
 #'   called \code{visitId} and \code{visitId} is not specified, the first column
 #'   is used.
-#' @details TODO: optionally check each code is valid before counting.
 #' @param x data frame with one row per patient, and a true/false or 1/0 flag
 #'   for each column. By default, the first column is the patient identifier and
 #'   is not counted. If \code{visitId} is not specified, the first column is
@@ -274,8 +271,6 @@ icd9VanWalraven.data.frame <- function(x, visitId = NULL,
                               return.df = TRUE, ...)
   res <- icd9VanWalravenComorbid(tmp, visitId = visitId, applyHierarchy = FALSE)
 
-  # TODO someday it might be nice (like with comorbid.R) to recreate a factor
-  # with the same levels for visitId if this is what is given to us.
   if (!return.df) return(res)
   out <- cbind(names(res),
                data.frame("vanWalraven" = unname(res)),

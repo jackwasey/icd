@@ -26,11 +26,6 @@ utils::globalVariables(c(".", "%>%"))
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
 # approach in python
 
-# TODO: Indiana has actually already done this work:
-# http://www.in.gov/isdh/reports/hosp_disch_data/2011/diagnosis_id.zip but
-# unclear whether they did it properly, changed it by year (as is implied), and
-# only goes 1999-2011. Could at least use for validation.
-
 #' @title parse RTF description of entire ICD-9-CM for a specific year
 #' @description Currently only the most recent update is implemented. Note that
 #'   CMS have published additional ICD-9-CM billable code lists since the last
@@ -228,8 +223,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
     lookup_fifth <- c(lookup_fifth, range)
   }
 
-  # TODO: V30-39 are a special case because combination of both fourth and fifth digits are specified
-  #re_V30V39 <- "V3[[:digit:]]\\.((0[01]?$)|(1$)|(2$))"
+  # V30-39 are a special case because combination of both fourth and fifth digits are specified
   re_V30V39_fifth <- "V3[[:digit:]]\\.0[01]$"
 
   lines_V30V39 <- grep(re_fifth_range_V30V39, filtered)
@@ -311,13 +305,15 @@ parseRtfLines <- function(lines, verbose = FALSE) {
     out <- out[-dupe_rows[-which(desclengths != longestlength)]]
   }
 
+  # drop all the codes not specified by 5th digits in square brackets, which are
+  # applied over a range of codes.
   out <- out[-which(names(out) %in% invalid_qual)]
 
   # 2015 quirks (many more are baked into the parsing: try to splinter out the most specific)
   # some may well apply to other years
 
   # 650-659 ( and probably many others don't use whole subset of fourth or fifth digit qualifiers)
-  # TODO: going to have to parse these, e.g. [0,1,3], as there are so many...
+  # going to have to parse these, e.g. [0,1,3], as there are so many...
   out <- out[grep("65[12356789]\\.[[:digit:]][24]", names(out), invert = TRUE)]
 
   #657 just isn't formatted like any other codes

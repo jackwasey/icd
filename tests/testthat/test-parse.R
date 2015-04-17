@@ -210,7 +210,7 @@ test_that("extraction from qualifier subset works", {
   expect_true(all(sapply(all2015, FUN = function(f) length(parseRtfQualifierSubset(f)) > 0)))
 })
 
-context("icd9::icd9Hierarchy is parsed as expected")
+context("icd9Hierarchy is parsed as expected")
 # at present, icd9::icd9Hierarchy is derived from RTF parsing, a little web
 # scraping, some manually entered data, and (for the short description only)
 # another text file parsing.`

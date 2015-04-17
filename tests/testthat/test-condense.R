@@ -185,3 +185,17 @@ test_that("condense single major and its children", {
   expect_equal(icd9ExplainShort(icd9ChildrenShort("391", onlyReal = TRUE)),
                "Rheumatic fever with heart involvement")
 })
+
+test_that("condense a factor of codes instead of character vector", {
+  dat <- vermont_dx %>%
+    icd9WideToLong  %>%
+    extract2("icdCode")  %>%
+    icd9SortShort %>%
+    unique %>%
+    head(10)
+  # this is not a condensable list
+  dat <- as.factor(dat)
+  expect_equal(dat, icd9CondenseShort(dat))
+
+
+})

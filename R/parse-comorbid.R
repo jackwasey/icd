@@ -37,7 +37,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   close(f)
 
   ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
-  # TODO: The remainder of the AHRQ SAS input file consists of DRG definitions
+  # TODO someday: The remainder of the AHRQ SAS input file consists of DRG definitions
 
   ahrqComorbidAll <- list()
 
@@ -99,8 +99,6 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   # hard to write an AHRQ specific function to do this if needed, but it makes
   # more sense to me
 
-  # todo: save/return the DRG mappings.
-
   #   condense to parents, for each parent, if children are all in the list, add the parent
   for (cmb in names(ahrqComorbid)) {
     if (verbose) message("working on ranges for: ", cmb)
@@ -117,25 +115,6 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   if (save) saveInDataDir("ahrqComorbid") # EXCLUDE COVERAGE
   invisible(ahrqComorbid)
 }
-
-#TODO: function to extract these standard ICD-9 groupings, not focussed on
-#co-morbidities, but useful for classification ahrq.dx <-
-# read.csv(file=system.file(
-#   "extdata",
-#   "ccs_multi_dx_tool_2013.csv",
-#   package="icd9"), quote="'\"")
-# ahrq.pr <- read.csv(file=system.file(
-#   "extdata",
-#   "ccs_multi_pr_tool_2014.csv",
-#   package="icd9"), quote="'\"")
-
-#all fields suitable for 'factor' class, except ICD.9.CM.CODE, which has no
-#repeated values.
-# ahrq.dx[["ICD.9.CM.CODE"]] <- asCharacterNoWarn(ahrq.dx[["ICD.9.CM.CODE"]])
-
-# now work on groupings:
-#ag<-aggregate(ICD.9.CM.CODE ~ CCS.LVL.1.LABEL, data=ahrq.dx, FUN=paste)
-# TODO to be continued...
 
 #' @title parse original SAS code defining Quan's update of Deyo comorbidities.
 #' @description As with \code{parseAhrqSas}, this function reads SAS code, and

@@ -39,17 +39,22 @@ icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE)
   icd9ShortToDecimal(icd9CondenseShort(icd9DecimalToShort(icd9Decimal),
                                        onlyReal = onlyReal, warn = warn))
 
-
-
 #' @rdname icd9Condense
 #' @template warn
+#' @param keepFactorLevels single logical value, default \code{FALSE}. If
+#'   \code{TRUE}, will reuse the factor levels from the input data for the
+#'   output data. This only applies if a factor is given for the input codes.
 #' @export
-icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE) {
+icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   assertFactorOrCharacter(icd9Short)
   assertFlag(warn)
-  icd9Short <- asCharacterNoWarn(icd9Short) # TODO: still necessary?
+  icd9Levels <- levels(icd9Short) # NULL if not a factor
 
-  #i9w <- sort(unique(icd9GetValidShort(icd9Short))) # TODO sorting may not be helpful
+  # we can convert back to factor later. Lots of scope for errors by handling
+  # factors and character vectors in this function, so keep simple with
+  # character-only.
+  icd9Short <- asCharacterNoWarn(icd9Short)
+
   i9w <- unique(icd9GetValidShort(icd9Short))
 
   if (is.null(onlyReal)) {
@@ -110,6 +115,9 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE) {
     }
   }
   out <- unique(icd9SortShort(c(out, fout, i9w)))
+
+  if (keepFactorLevels && !is.null(icd9Levels)) out <- factor(out, icd9Levels)
+
   if (onlyReal) return(icd9GetRealShort(out)) # should there be any non-real?
   out
 }
