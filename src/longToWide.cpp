@@ -38,7 +38,8 @@ CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 				return CharacterVector::create();
 			}
 			if (distinct_visits != visitIds.size()) {
-				Rcpp::Rcout << "visit and ragged sizes differ. visits = " << visitIds.size() << ", ragged size = " << distinct_visits << ": returning blank data\n";
+				Rcpp::Rcout << "visit and ragged sizes differ. visits = " << visitIds.size() <<
+				  ", ragged size = " << distinct_visits << ": returning blank data\n";
 				return CharacterVector::create();
 			}
 #endif
@@ -46,15 +47,16 @@ CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 		const VecStr& this_row = ragged[row_it];
 		VecStr::size_type this_row_len = this_row.size();
 		for (VecStr::size_type col_it = 0; col_it < this_row_len; ++col_it) {
-			VecVecStr::size_type out_idx = row_it + (distinct_visits * col_it); // straight to row major
-			// TODO: someday it may be faster to write out column major, then transpose afterwards.
+		  // write in row major format, but this means transpose needed later
+			VecVecStr::size_type out_idx = row_it + (distinct_visits * col_it);
 			out[out_idx] = this_row[col_it];
 		}
 	}
 #ifdef ICD9_DEBUG
 	Rcpp::Rcout << "writing dimensions\n";
 #endif
-	out.attr("dim") = Dimension(distinct_visits, max_per_pt); // set dimensions in reverse (row major for parallel step)
+			// set dimensions in reverse (row major for parallel step)
+	out.attr("dim") = Dimension(distinct_visits, max_per_pt);
 #ifdef ICD9_DEBUG
 			Rcpp::Rcout << "writing labels\n";
 #endif
@@ -84,7 +86,8 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 
 	const char* lastVisitId = "";
 	for (int i = 0; i < vlen; ++i) {
-		const char* icd = CHAR(STRING_ELT(icds, i)); // always STRING? may get pure numeric/integer
+	  // always STRING? may get numeric, integer, factor? Can always handle this on R side
+		const char* icd = CHAR(STRING_ELT(icds, i));
 		const char* vi = CHAR(STRING_ELT(vsexp, i));
 
 		if (strcmp(lastVisitId, vi) != 0

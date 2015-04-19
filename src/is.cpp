@@ -43,21 +43,24 @@ bool icd9IsASingleE(const char* s) {
 }
 
 bool icd9IsASingleVE(const char* s) {
-	// ditch preceding spaces (probably should also do other white space)
 	while (*s == ' ')
 		++s;
 	return *s == 'V' || *s == 'E' || *s == 'v' || *s == 'e';
-	//return s.find_first_of("VvEe") != std::string::npos;
 }
 
+//' @title test whether elements of vector begin with V, E (or any other
+//'   character)
+//' @description Current returns a std::vector<bool> which is not thread safe,
+//'   or particularly fast, although it is memory efficient in the standard
+//'   borked implementation. As of icd9 version 1.2, this is not called by
+//'   threaded code, but this could change, so beware! ASCII spaces are trimmed
+//'   from the start of the string before testing, but no other whitesapce
+//' @param sv std::vector<std::string>&
+//' @param x const char* of choices of first character to match
+//' @keywords internal
 // [[Rcpp::export]]
 std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x,
 		bool invert = false) {
-	// TODO benchmark vector<char> or vector<int> and also check
-	// whether this is used in threaded code (vector<bool> not thread safe
-	// because even if accessing different elements, the bits can still be
-	// stored in the same byte or word. Unfortunately, Rcpp can't cast a
-	// char vector to a LogicalVector.
 	int len = sv.size();
 	std::vector<bool> out(len);
 	for (int i = 0; i < len; ++i) {

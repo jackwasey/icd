@@ -23,11 +23,11 @@
 #include <omp.h>
 #endif
 
-//TODO someday, can go much faster (but less portable) with C strings. see is.cpp for similar code.
-
 // trim one string from right
 std::string trimRight(std::string& s) {
-	std::size_t n = s.find_last_not_of(" \f\n\r\t\v");
+  // Could go much faster (but less portable) with C strings. see is.cpp for
+  // similar code. Only change if demonstrated as significant in benchmark
+  std::size_t n = s.find_last_not_of(" \f\n\r\t\v");
 	s.erase(n + 1);
 	return s;
 }
@@ -39,7 +39,7 @@ std::string trimLeft(std::string& s) {
 	return s;
 }
 
-// trim a single string at both ends
+// trim a single string at both ends, but loses any encoding attributes.
 // [[Rcpp::export]]
 std::string strimCpp(std::string& s) {
 	trimLeft(s);

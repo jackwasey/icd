@@ -60,7 +60,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #endif
 #endif
 
-	VecStr out_row_names; // TODO: Reserve size
+	VecStr out_row_names; // size is reserved in buildVisitCodesVec
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "building visit:codes structure\n";
 #endif
@@ -78,8 +78,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "icd9ComorbidShortMatrix STRSXP\n";
 #endif
-	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
-			aggregate);
+	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
 
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "building icd9Mapping\n";
@@ -113,22 +112,19 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 	printIt(out);
 	Rcpp::Rcout << "printed\n";
 #endif
-	//IntegerVector mat_out = wrap(out); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
-	// TODO: the above line segfaults consistently with some input, e.g. 2e6 rows on linux. Need to manually convert int to logical?
-
 	// try cast to logical first. (in which case I can use char for Out)
 	std::vector<bool> intermed;
 	intermed.assign(out.begin(), out.end());
 #ifdef ICD9_DEBUG
-	Rcpp::Rcout << "static_cast to vec bool completed\n";
+	Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast to R logical vector\n";
 #endif
-	LogicalVector mat_out = wrap(intermed); // matrix is just a vector with dimensions (and col major...) // please don't copy data!
+	LogicalVector mat_out = wrap(intermed); // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
 #ifdef ICD9_DEBUG
 			Rcpp::Rcout << "wrapped out\n";
 #endif
 	mat_out.attr("dim") = Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
 	mat_out.attr("dimnames") = List::create(icd9Mapping.names(), out_row_names);
-	//mat_out.attr("class") = "matrix";
+	// apparently don't need to set class as matrix here
 	Function t("t"); // use R transpose - seems pretty fast
 #ifdef ICD9_DEBUG
 			Rcpp::Rcout << "Ready to transpose and return\n";

@@ -186,16 +186,22 @@ test_that("condense single major and its children", {
                "Rheumatic fever with heart involvement")
 })
 
+vermont_dx %>%
+  icd9WideToLong  %>%
+  extract2("icdCode")  %>%
+  icd9SortShort %>%
+  unique %>%
+  head(10) -> vdat
+
 test_that("condense a factor of codes instead of character vector", {
-  dat <- vermont_dx %>%
-    icd9WideToLong  %>%
-    extract2("icdCode")  %>%
-    icd9SortShort %>%
-    unique %>%
-    head(10)
   # this is not a condensable list
-  dat <- as.factor(dat)
+  dat <- as.factor(vdat)
   expect_equal(dat, icd9CondenseShort(dat))
 
+})
 
+test_that("levels are preserved from source factor", {
+  dat <- factor(vdat, levels = c("plastic", vdat))
+  expect_identical(dat, icd9CondenseShort(dat, keepFactorLevels = TRUE))
+  expect_equivalent(dat, icd9CondenseShort(dat, keepFactorLevels = FALSE))
 })

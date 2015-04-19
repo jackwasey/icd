@@ -71,6 +71,16 @@ icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
 }
 
+#' @title test whether elements of vector begin with V, E (or any other
+#'   character)
+#' @description Current returns a std::vector<bool> which is not thread safe,
+#'   or particularly fast, although it is memory efficient in the standard
+#'   borked implementation. As of icd9 version 1.2, this is not called by
+#'   threaded code, but this could change, so beware! ASCII spaces are trimmed
+#'   from the start of the string before testing, but no other whitesapce
+#' @param sv std::vector<std::string>&
+#' @param x const char* of choices of first character to match
+#' @keywords internal
 icd9IsA <- function(sv, x, invert = FALSE) {
     .Call('icd9_icd9IsA', PACKAGE = 'icd9', sv, x, invert)
 }

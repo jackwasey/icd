@@ -116,7 +116,12 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
   }
   out <- unique(icd9SortShort(c(out, fout, i9w)))
 
-  if (keepFactorLevels && !is.null(icd9Levels)) out <- factor(out, icd9Levels)
+  if (!is.null(icd9Levels)) {
+    if (keepFactorLevels)
+      out <- factor(out, icd9Levels)
+    else
+      out <- factor(out)
+  }
 
   if (onlyReal) return(icd9GetRealShort(out)) # should there be any non-real?
   out

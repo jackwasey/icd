@@ -54,8 +54,10 @@ typedef std::string Str;
 typedef std::vector<Str> VecStr;
 
 typedef std::vector<int> VecInt;
-typedef std::vector<char> ComorbidOut; // TODO: someday benchmark int vs char (or possibly Boost bitset)
-// vector<bool> dangerous with multiple threads, and note that char doesn't cast to bool (directly) with Rcpp, yet.
+typedef std::vector<char> ComorbidOut;
+// this could be int ( which works around Rcpp bug which can't cast vector<char>
+// to LogicalVector). Will need to benchmark. vector<bool> dangerous with
+// multiple threads
 
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;

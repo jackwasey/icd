@@ -31,7 +31,6 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 	const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin),
 			false);
 	chunk = falseComorbidChunk;
-	// TODO: someday try looping through comorbidities in outside loop instead of inner loop.
 	for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
 #ifdef ICD9_DEBUG_TRACE
 			Rcpp::Rcout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";

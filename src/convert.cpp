@@ -127,10 +127,11 @@ List icd9MajMinToPartsShim(const CharacterVector mjr,
 		const CharacterVector mnr) {
 	List returned_frame = List::create(_["major"] = mjr, _["minor"] = mnr);
 
-	// TODO: can do this with lists, ?no need for a data frame
 	StringVector sample_row = returned_frame(0);
 	IntegerVector row_names = seq_along(sample_row);
 	returned_frame.attr("row.names") = row_names;
+  // doesn't actually need a data frame, although it is barely distinguishable
+  // from a list, and not costly to construct in this manner.
 	returned_frame.attr("class") = "data.frame";
 
 	return returned_frame;
@@ -226,8 +227,12 @@ List icd9DecimalToParts(const CharacterVector icd9Decimal,
 			mnrs.push_back(NA_STRING);
 			continue;
 		}
-		std::string thiscode = as<std::string>(*it); // Rcpp::String doesn't implement many functions.
-		thiscode = strimCpp(thiscode); // TODO: update in place.
+		// Rcpp::String doesn't implement many functions, so using STL. A FAST way
+		// would be to use String's function get_cstring, and recode the trim
+		// functions to take const char *. This would avoid the type change AND be
+		// faster trimming.
+		std::string thiscode = as<std::string>(*it);
+		thiscode = strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
 		std::size_t pos = thiscode.find(".");
 		// substring parts
 		std::string mjrin;
