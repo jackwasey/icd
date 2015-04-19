@@ -182,8 +182,7 @@ CharacterVector icd9ChildrenCpp(CharacterVector icd9, bool isShort,
 //' @template icd9-any
 //' @template isShort
 //' @param isShortReference logical, see argument \code{isShort}
-//' @return logical vector of which icd9 match or are subcategory of
-//'   \code{icd9Reference}
+//' @return logical vector
 //' @keywords internal
 // [[Rcpp::export]]
 LogicalVector icd9InReferenceCode(CharacterVector icd9,
@@ -197,7 +196,6 @@ LogicalVector icd9InReferenceCode(CharacterVector icd9,
 	CharacterVector y = icd9ChildrenCpp(icd9Reference, isShortReference, false);
 	if (!isShortReference)
 		y = icd9DecimalToShort(y);
-	// Rcpp match is not quite as good as R:
-	LogicalVector res = !is_na(match(x, y));
+   LogicalVector res = !is_na(match(x, y));
 	return res;
 }

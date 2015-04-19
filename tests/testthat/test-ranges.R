@@ -377,10 +377,11 @@ test_that("icd9ChildrenShort valid input", {
 })
 
 test_that("icd9InReferenceCode deals with bad input", {
-  expect_equal(icd9InReferenceCode(NA, "123", isShort = TRUE), NA_character_)
+  expect_equal(icd9InReferenceCode(NA, "123", isShort = TRUE), FALSE) # arguable: could return NA here
   expect_equal(icd9InReferenceCode("", "123", isShort = TRUE), FALSE)
   expect_equal(icd9InReferenceCode("bratwurst", "123", isShort = TRUE), FALSE)
 })
+
 test_that("icd9InReferenceCode mixing short and decimals", {
   expect_equal(icd9InReferenceCode("123.45", "12345", isShort = FALSE, isShortReference = TRUE), TRUE)
   expect_equal(icd9InReferenceCode("12345", "123.45", isShort = TRUE, isShortReference = FALSE), TRUE)
@@ -391,8 +392,30 @@ test_that("icd9InReferenceCode test code format matches mapping format", {
   expect_equal(icd9InReferenceCode("12345", "12345", isShort = TRUE, isShortReference = TRUE), TRUE)
 })
 
-test_that("icd9InReferenceCode", {
+test_that("icd9InReferenceCode produces the right length output", {
+  expect_equal(
+    icd9InReferenceCode(c("100", "200"), c("400", "100", "200", "300"), isShort = TRUE),
+    c(TRUE, TRUE)
+  )
+  expect_equal(
+    icd9InReferenceCode(c("100", "99"), c("400", "100", "200", "300"), isShort = TRUE),
+    c(TRUE, FALSE)
+  )
+  expect_equal(
+    icd9InReferenceCode(c("99", "100"), c("400", "100", "200", "300"), isShort = TRUE),
+    c(FALSE, TRUE)
+  )
+  expect_equal(
+    icd9InReferenceCode(c("99", "97"), c("400", "100", "200", "300"), isShort = TRUE),
+    c(FALSE, FALSE)
+  )
+  expect_equal(
+    icd9InReferenceCode(c("100", "200", "99"), c("400", "100", "200", "300"), isShort = TRUE),
+    c(TRUE, TRUE, FALSE)
+  )
+})
 
+test_that("icd9InReferenceCode", {
 
   expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V"), isShort = FALSE), c(FALSE, TRUE))
   expect_equal(
