@@ -201,7 +201,6 @@ test_that("major ranges", {
 
   expect_equal(icd9ExpandRangeMajor("E99", "E101", onlyReal = FALSE),
                c("E099", "E100", "E101"))
-  skip("now need to test major ranges with onlyReal = TRUE")
 })
 
 test_that("range bugs", {
@@ -297,25 +296,6 @@ test_that("icd9ExpandMinor: valid", {
 
 })
 
-test_that("icd9ChildrenDecimal invalid", {
-  skip("not testing invalid inputs to everything")
-  # too long major
-  expect_error(icd9ChildrenDecimal("1234"))
-  # too long V major
-  expect_error(icd9ChildrenDecimal("V234"))
-  # too long major
-  expect_error(icd9ChildrenDecimal("v101.1"))
-  # wrong in three ways
-  expect_error(icd9ChildrenDecimal("e123.45"))
-  # not number or V format
-  expect_error(icd9ChildrenDecimal("JACK"))
-  # too long minor
-  expect_error(icd9ChildrenDecimal("123.456"))
-  # too long major and minor
-  expect_error(icd9ChildrenDecimal("9123.456"))
-
-})
-
 test_that("icd9ChildrenDecimal valid input", {
   expect_equal(
     icd9ChildrenDecimal("V10.0", onlyReal = FALSE),
@@ -333,24 +313,6 @@ test_that("icd9ChildrenDecimal valid input", {
     icd9ChildrenDecimal("010.0", onlyReal = FALSE),
     append("010.0", paste("010.0", 0:9, sep = "")))
   expect_equal(icd9ChildrenDecimal("010.0"), icd9ChildrenDecimal("10.0"))
-})
-
-test_that("icd9ChildrenShort invalid input", {
-  expect_equal(icd9ChildrenShort(character()), character())
-  skip("moving away from checking errors on input to every function")
-  expect_error(icd9Children(list(c(1, 2), "crap"))) # junk
-  # too long
-  expect_error(icd9ChildrenShort("123456"))
-  # even longer with whitespace
-  expect_error(icd9ChildrenShort(" 09123456 "))
-  # too long V
-  expect_error(icd9ChildrenShort("V12345"))
-  # too long E
-  expect_error(icd9ChildrenShort("E987654"))
-  # not number or V or E format
-  expect_error(icd9ChildrenShort("JACK"))
-
-  expect_error(icd9ChildrenShort())
 })
 
 test_that("icd9ChildrenShort valid input", {

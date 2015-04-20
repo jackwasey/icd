@@ -59,33 +59,16 @@ test_that("stripRtf does what it says on the tin", {
 })
 
 
-test_that("sub-parse v91.9", {
-  skip("need to reformulate as tests on output of entire parse")
-  alllines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
-  v91.9_line_nums <- grep("V91\\.9", alllines)[-1]
-  testlines <- alllines[seq(min(v91.9_line_nums) - 1, max(v91.9_line_nums))]
-  res <- parseRtfLines(testlines)
-  expect_equal(names(res), c("V91.9", "V91.90", "V91.91", "V91.92", "V91.99"))
-  expect_equal(res[["V91.92"]], "Other specified multiple gestation, with two or more monoamniotic fetuses")
+test_that("tricky v91.9 works", {
+  expect_equal(
+    icd9Hierarchy[icd9Hierarchy$icd9 == "V9192", "descLong"],
+    "Other specified multiple gestation, with two or more monoamniotic fetuses")
 })
 
 rtf_conn <- file(system.file("extdata", "Dtab12.rtf", mustWork = TRUE, package = "icd9"), encoding = "ASCII")
 rtf <- parseRtfLines(readLines(rtf_conn, warn = FALSE))
 close(rtf_conn)
 nrtf <- names(rtf)
-
-test_that("tricky V91.9 and similar", {
-  skip("reformulate - really this was just used for dev, not necessarily helpful now")
-  # first make sure we even have the codes somewhere in the source data
-  v91.9_codes <- c("V91.90", "V91.91", "V91.92", "V91.99")
-  for (vc in v91.9_codes)
-    expect_true(any(grep(sub(".", "\\.", vc), testlines)))
-
-  # show missing ones:
-  expect_true(all(v91.9_codes %in% nrtf),
-              info = paste("missing codes are:",
-                           paste(setdiff(v91.9_codes, nrtf), collapse = ", ")))
-})
 
 test_that("all parsed codes are valid decimals", {
   expect_true(all(icd9IsValidDecimal(nrtf)),
@@ -132,10 +115,6 @@ test_that("RTF extract has no duplicates", {
                info = paste("first few duplicates: ",
                             paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
                ))
-  skip("now a manual step to list duplicates:")
-  rtf_codes <- nrtf
-  dupes <- rtf[duplicated(rtf_codes) | duplicated(rtf_codes, fromLast = TRUE)]
-
 })
 
 test_that("mid-level descriptions are in RTF extract", {
@@ -147,7 +126,8 @@ test_that("mid-level descriptions are in RTF extract", {
 test_that("manual check to look at description differences between RTF and TXT", {
   skip("manual check")
   rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
-    swapNamesWithVals %>% sort -> rtf_leaves
+    swapNamesWithVals %>%
+    sort -> rtf_leaves
   print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
 })
 
@@ -202,17 +182,6 @@ test_that("factors are in the right place", {
 test_that("codes and descriptions are valid and unique", {
   expect_equal(anyDuplicated(icd9::icd9Hierarchy$icd9), 0)
   expect_true(all(icd9IsValidShort(icd9::icd9Hierarchy$icd9)))
-  skip("there can be duplicates when a heading is the same as a child node,
-       but could check that all codes at same hierarchical level are unique")
-  expect_equal(anyDuplicated(icd9::icd9Hierarchy$descShort), 0,
-               info = paste("first few duplicates are: ",
-                            paste(head(icd9::icd9Hierarchy$descShort[duplicated(icd9::icd9Hierarchy$descShort)]),
-                                  collapse = ", ")))
-  expect_equal(anyDuplicated(icd9::icd9Hierarchy$descLong), 0,
-               info = paste("first few duplicates are: ",
-                            paste(head(icd9::icd9Hierarchy$descLong[duplicated(icd9::icd9Hierarchy$descLong)]),
-                                  collapse = ", ")))
-
 })
 
 test_that("some chapters are correct", {
@@ -262,16 +231,18 @@ test_that("some randomly selected rows are correct", {
 })
 
 test_that("billable codes are recreated", {
-  skip("linux reliable gives the right character set parsing, so don't check everywhere")
-  check_billable <- parseIcd9LeafDescriptionsAll(save = FALSE)
-  v32dl <- icd9::icd9Billable[["32"]][["descLong"]]
-  cb32dl <- check_billable[["32"]][["descLong"]]
-  diff <- v32dl != cb32dl
-  expect_identical(check_billable, icd9::icd9Billable,
-                   info = paste("descLong differences for v32:
-                                original: ", paste(v32dl[diff], collapse = ", "),
-                                "\nprocess:", paste(cb32dl[diff], collapse = ", ")
-                   ))
+  check_billable <- parseLeafDescriptionsAll(save = FALSE)
+
+  for (ver in c("27", "28", "29", "30", "31", "32")) {
+    v <- icd9::icd9Billable[[ver]][["descLong"]]
+    cb <- check_billable[[ver]][["descLong"]]
+    diff <- v != cb
+    expect_identical(check_billable[[ver]], icd9::icd9Billable[[ver]],
+                     info = paste("descLong differences for v32:
+                                original: ", paste(v[diff], collapse = ", "),
+                                  "\nprocess:", paste(cb[diff], collapse = ", ")
+                     ))
+  }
 })
 
 test_that("billable codes for expected versions exist", {

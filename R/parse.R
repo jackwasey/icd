@@ -43,7 +43,7 @@ parseAndSaveQuick <- function(verbose = FALSE) {
   if (verbose) message("Parsing plain text billable codes to create icd9Billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
-  parseIcd9LeafDescriptionsAll(save = TRUE, verbose = verbose)
+  parseLeafDescriptionsAll(save = TRUE, verbose = verbose)
   devtools::load_data(pkg = ".")
 
   if (verbose) message("Parsing comorbidity mappings from SAS and text sources.
@@ -68,7 +68,7 @@ parseAndSaveQuick <- function(verbose = FALSE) {
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FALSE) {
+parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FALSE) {
   versions <- data_sources$version
   if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
