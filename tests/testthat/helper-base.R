@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+if (!do_slow_tests) message("Will skip slow tests")
+if (!do_online_tests) message("Will skip online tests")
+
 set.seed(1441)
 n <- 500
 np <- round(n / 20) # icd9 codes per patients

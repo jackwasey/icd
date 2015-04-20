@@ -41,7 +41,7 @@ release_questions <- function() {
     "Have you checked all TODO comments",
     "Is there any commented code? (lint for this now possible)",
     "Have tests been run with do_slow_tests turned on?",
-    "Are there skipped tests?",
+    "Are there skipped tests which should be run?",
     "Do all examples look ok (not just run without errors)?",
     "Anything to add to vignette?",
     "Have all the fixed github issues been closed",

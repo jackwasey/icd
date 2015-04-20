@@ -28,7 +28,7 @@ src\/autom4te.cache
 m4$
 icd9Billable[[:digit:]]+\.RData
 Makevars$
-CMS32.*DESC.*
+CMS.*DESC.*
 I9diagnos.*\.txt
 I9DX_DESC\.txt
 V27LONG_SHORT_DX.*\.csv
