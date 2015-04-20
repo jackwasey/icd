@@ -22,13 +22,11 @@ icd9MajMinToDecimalShim <- function(mjr, mnr) {
 }
 
 #' @rdname convert
-#' @export
 icd9PartsToShort <- function(parts) {
     .Call('icd9_icd9PartsToShort', PACKAGE = 'icd9', parts)
 }
 
 #' @rdname convert
-#' @export
 icd9PartsToDecimal <- function(parts) {
     .Call('icd9_icd9PartsToDecimal', PACKAGE = 'icd9', parts)
 }
@@ -42,13 +40,11 @@ icd9MajMinToParts_listShim <- function(mjr, mnr) {
 }
 
 #' @rdname convert
-#' @export
 icd9ShortToParts <- function(icd9Short, minorEmpty = "") {
     .Call('icd9_icd9ShortToParts', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
 #' @rdname convert
-#' @export
 icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
     .Call('icd9_icd9DecimalToParts', PACKAGE = 'icd9', icd9Decimal, minorEmpty)
 }

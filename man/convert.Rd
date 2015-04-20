@@ -13,7 +13,7 @@
 \alias{icd9PartsToShort}
 \alias{icd9ShortToDecimal}
 \alias{icd9ShortToParts}
-\title{work around Rcpp issue https://github.com/RcppCore/Rcpp/issues/272}
+\title{Convert ICD9 codes between formats and structures.}
 \usage{
 icd9PartsToShort(parts)
 
@@ -79,8 +79,6 @@ Character vector or list. Deliberately returns zero-padded major, because
   otherwise we are creating ambiguous codes (even if we know what we mean)
 }
 \description{
-work around Rcpp issue https://github.com/RcppCore/Rcpp/issues/272
-
 ICD-9 codes are represented in \emph{short} and \emph{decimal} forms.
 The short form has up to 5 digits, or V or E followed by up to four digits. The decimal form
 has a dedcimal point to delimit the top-level (henceforth \emph{major}) category, and the

@@ -109,14 +109,12 @@ CharacterVector icd9MajMinToDecimalShim(const CharacterVector mjr,
 }
 
 //' @rdname convert
-//' @export
 // [[Rcpp::export]]
 CharacterVector icd9PartsToShort(const List parts) {
 	return icd9MajMinToCodeShim(parts["major"], parts["minor"], true);
 }
 
 //' @rdname convert
-//' @export
 // [[Rcpp::export]]
 CharacterVector icd9PartsToDecimal(const List parts) {
 	return icd9MajMinToCodeShim(parts["major"], parts["minor"], false);
@@ -145,7 +143,6 @@ List icd9MajMinToParts_listShim(const CharacterVector mjr,
 }
 
 //' @rdname convert
-//' @export
 // [[Rcpp::export]]
 List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty = "") {
 
@@ -205,7 +202,6 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 }
 
 //' @rdname convert
-//' @export
 // [[Rcpp::export]]
 List icd9DecimalToParts(const CharacterVector icd9Decimal,
 		const String minorEmpty = "") {

@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-#' work around Rcpp issue https://github.com/RcppCore/Rcpp/issues/272
-
 #' @rdname convert
 #' @name convert
 #' @export

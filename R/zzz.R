@@ -49,7 +49,7 @@ release_questions <- function() {
     "Is README.Rmd updated and recompiled into README.md?",
     "Have you compiled with clang and gcc with full warnings?",
     "Have you included updated copies of all offline versions of online data?",
-    "Have you regenerated icd9Hierarchy and other compiled data, using parseAndSave?",
+    "Have you regenerated icd9Hierarchy and other compiled data?",
     "Are you happy with the code coverage?",
     "Does every file have correct licence information?",
     "Have you linted?",
