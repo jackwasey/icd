@@ -40,7 +40,6 @@
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
-#' @references \url{http://www.stata.com/help.cgi?icd9}
 #' @export
 icd9Explain <- function(icd9, isShort = icd9GuessIsShort(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
   UseMethod("icd9Explain")

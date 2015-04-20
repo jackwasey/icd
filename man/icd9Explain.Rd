@@ -91,9 +91,6 @@ avoid typing many quotes.
 icd9ExplainShort(ahrqComorbid[[1]][1:3])
 icd9Explain(ahrqComorbid[[1]][1:3], brief = TRUE)
 }
-\references{
-\url{http://www.stata.com/help.cgi?icd9}
-}
 \seealso{
 package comorbidities
 }

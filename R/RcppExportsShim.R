@@ -16,39 +16,43 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @rdname convert
-#' @name convert
-#' @export
+#' @keywords internal manip
 icd9MajMinToCode <- function(major, minor, isShort) {
   .Call("icd9_icd9MajMinToCodeShim", PACKAGE = "icd9", major, minor, isShort)
 }
 
 #' @rdname convert
-#' @export
+#' @keywords internal manip
 icd9MajMinToShort <- function(major, minor) {
   .Call("icd9_icd9MajMinToShortShim", PACKAGE = "icd9", major, minor)
 }
 
 #' @rdname convert
-#' @export
+#' @keywords internal manip
 icd9MajMinToDecimal <- function(major, minor) {
   .Call("icd9_icd9MajMinToDecimalShim", PACKAGE = "icd9", major, minor)
 }
 
 #' @rdname convert
-#' @export
+#' @keywords internal manip
 icd9MajMinToParts <- function(major, minor) {
   .Call("icd9_icd9MajMinToPartsShim", PACKAGE = "icd9", major, minor)
 }
 
+#' @rdname convert
+#' @keywords internal manip
 icd9MajMinToParts_list <- function(major, minor) {
   .Call("icd9_icd9MajMinToParts_listShim", PACKAGE = "icd9", major, minor)
 }
 
+#' @rdname icd9AddLeadingZeroes
+#' @keywords internal manip
 icd9AddLeadingZeroesMajorSingle <- function(major) {
   .Call("icd9_icd9AddLeadingZeroesMajorSingleShim", PACKAGE = "icd9", major)
 }
 
 #' @rdname icd9AddLeadingZeroes
+#' @keywords internal manip
 icd9AddLeadingZeroesMajor <- function(major) {
   .Call("icd9_icd9AddLeadingZeroesMajorShim", PACKAGE = "icd9", major)
 }

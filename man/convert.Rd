@@ -3,15 +3,13 @@
 \name{icd9PartsToShort}
 \alias{convert}
 \alias{icd9DecimalToParts}
-\alias{icd9DecimalToShort}
-\alias{icd9GetMajor}
 \alias{icd9MajMinToCode}
 \alias{icd9MajMinToDecimal}
 \alias{icd9MajMinToParts}
+\alias{icd9MajMinToParts_list}
 \alias{icd9MajMinToShort}
 \alias{icd9PartsToDecimal}
 \alias{icd9PartsToShort}
-\alias{icd9ShortToDecimal}
 \alias{icd9ShortToParts}
 \title{Convert ICD9 codes between formats and structures.}
 \usage{
@@ -23,12 +21,6 @@ icd9ShortToParts(icd9Short, minorEmpty = "")
 
 icd9DecimalToParts(icd9Decimal, minorEmpty = "")
 
-icd9ShortToDecimal(icd9Short)
-
-icd9DecimalToShort(icd9Decimal)
-
-icd9GetMajor(icd9, isShort)
-
 icd9MajMinToCode(major, minor, isShort)
 
 icd9MajMinToShort(major, minor)
@@ -36,6 +28,8 @@ icd9MajMinToShort(major, minor)
 icd9MajMinToDecimal(major, minor)
 
 icd9MajMinToParts(major, minor)
+
+icd9MajMinToParts_list(major, minor)
 }
 \arguments{
 \item{parts}{data.frame with major and minor fields. This can be given
@@ -54,16 +48,6 @@ characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
-\item{icd9}{is
-a character vector or factor of ICD-9 codes. If fewer than five characters
-is given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010".}
-
-\item{isShort}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
-
 \item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
 which falls before the decimal point, in decimal notation. (In 5 digit
 notation, the 'major' part is be the first three characters (with leading
@@ -73,6 +57,16 @@ zeroes), and includes V or E prefix. xyz}
 which falls after the decimal point, in decimal notation. (In 5 digit
 notation, the 'major' part is be xyz, even when x and y are zero, thus the
 last two characters represent the 'minor' part, in this case.)}
+
+\item{isShort}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
+\item{icd9}{is
+a character vector or factor of ICD-9 codes. If fewer than five characters
+is given in a code, then the digits are greedily assigned to hundreds, then
+tens, then units, before the decimal parts. E.g. "10" becomes "010", not
+"0010".}
 }
 \value{
 Character vector or list. Deliberately returns zero-padded major, because
@@ -103,4 +97,6 @@ Other ICD-9 convert: \code{\link{icd9ChaptersToMap}};
   \code{\link{icd9LongToWide}};
   \code{\link{icd9WideToLong}}
 }
+\keyword{internal}
+\keyword{manip}
 

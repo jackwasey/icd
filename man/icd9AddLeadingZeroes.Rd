@@ -4,6 +4,7 @@
 \alias{icd9AddLeadingZeroes}
 \alias{icd9AddLeadingZeroesDecimal}
 \alias{icd9AddLeadingZeroesMajor}
+\alias{icd9AddLeadingZeroesMajorSingle}
 \alias{icd9AddLeadingZeroesShort}
 \title{Add leading zeroes to incomplete ICD codes}
 \usage{
@@ -12,6 +13,8 @@ icd9AddLeadingZeroesShort(icd9Short)
 icd9AddLeadingZeroesDecimal(icd9Decimal)
 
 icd9AddLeadingZeroes(icd9, isShort)
+
+icd9AddLeadingZeroesMajorSingle(major)
 
 icd9AddLeadingZeroesMajor(major)
 }

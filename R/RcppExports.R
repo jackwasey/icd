@@ -22,11 +22,13 @@ icd9MajMinToDecimalShim <- function(mjr, mnr) {
 }
 
 #' @rdname convert
+#' @keywords internal manip
 icd9PartsToShort <- function(parts) {
     .Call('icd9_icd9PartsToShort', PACKAGE = 'icd9', parts)
 }
 
 #' @rdname convert
+#' @keywords internal manip
 icd9PartsToDecimal <- function(parts) {
     .Call('icd9_icd9PartsToDecimal', PACKAGE = 'icd9', parts)
 }
@@ -40,28 +42,34 @@ icd9MajMinToParts_listShim <- function(mjr, mnr) {
 }
 
 #' @rdname convert
+#' @keywords internal manip
 icd9ShortToParts <- function(icd9Short, minorEmpty = "") {
     .Call('icd9_icd9ShortToParts', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
 #' @rdname convert
+#' @keywords internal manip
 icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
     .Call('icd9_icd9DecimalToParts', PACKAGE = 'icd9', icd9Decimal, minorEmpty)
 }
 
-#' @rdname convert
+#' @title Convert ICD-9 codes between short and decimal forms
+#' @template icd9-short
+#' @template icd9-decimal
 #' @export
 icd9ShortToDecimal <- function(icd9Short) {
     .Call('icd9_icd9ShortToDecimal', PACKAGE = 'icd9', icd9Short)
 }
 
-#' @rdname convert
+#' @rdname icd9ShortToDecimal
 #' @export
 icd9DecimalToShort <- function(icd9Decimal) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', icd9Decimal)
 }
 
-#' @rdname convert
+#' @title Get major (three-digit) part of ICD-9 codes
+#' @template icd9-any
+#' @template isShort
 #' @export
 icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)

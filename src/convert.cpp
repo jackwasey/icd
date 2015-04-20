@@ -109,12 +109,14 @@ CharacterVector icd9MajMinToDecimalShim(const CharacterVector mjr,
 }
 
 //' @rdname convert
+//' @keywords internal manip
 // [[Rcpp::export]]
 CharacterVector icd9PartsToShort(const List parts) {
 	return icd9MajMinToCodeShim(parts["major"], parts["minor"], true);
 }
 
 //' @rdname convert
+//' @keywords internal manip
 // [[Rcpp::export]]
 CharacterVector icd9PartsToDecimal(const List parts) {
 	return icd9MajMinToCodeShim(parts["major"], parts["minor"], false);
@@ -143,6 +145,7 @@ List icd9MajMinToParts_listShim(const CharacterVector mjr,
 }
 
 //' @rdname convert
+//' @keywords internal manip
 // [[Rcpp::export]]
 List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty = "") {
 
@@ -202,6 +205,7 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 }
 
 //' @rdname convert
+//' @keywords internal manip
 // [[Rcpp::export]]
 List icd9DecimalToParts(const CharacterVector icd9Decimal,
 		const String minorEmpty = "") {
@@ -245,21 +249,25 @@ List icd9DecimalToParts(const CharacterVector icd9Decimal,
 	return List::create(_["major"] = mjrs, _["minor"] = mnrs);
 }
 
-//' @rdname convert
+//' @title Convert ICD-9 codes between short and decimal forms
+//' @template icd9-short
+//' @template icd9-decimal
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9ShortToDecimal(const CharacterVector icd9Short) {
 	return icd9PartsToDecimal(icd9ShortToParts(icd9Short));
 }
 
-//' @rdname convert
+//' @rdname icd9ShortToDecimal
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9DecimalToShort(const CharacterVector icd9Decimal) {
 	return icd9PartsToShort(icd9DecimalToParts(icd9Decimal));
 }
 
-//' @rdname convert
+//' @title Get major (three-digit) part of ICD-9 codes
+//' @template icd9-any
+//' @template isShort
 //' @export
 // [[Rcpp::export]]
 CharacterVector icd9GetMajor(const CharacterVector icd9, const bool isShort) {
