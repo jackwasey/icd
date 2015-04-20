@@ -17,7 +17,7 @@
 
 # EXCLUDE COVERAGE START
 
-utils::globalVariables(c(".", "%>%", "data_sources"))
+utils::globalVariables(c(".", "data_sources"))
 
 parseEverythingAndSave <- function(verbose = TRUE) {
   # this is not strictly a parsing step, but is quite slow. It relies on picking

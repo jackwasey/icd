@@ -22,12 +22,19 @@
 #'
 #'   Factors are accepted, and since the validation is done with \code{grepl}
 #'   these are handled correctly.
-#' @section Three-digit validation:
-#'   \code{isValidMajor} validates just the 'major' three-digit part of an ICD-9
-#'   code. This can in fact be provided as a numeric, since there is no
-#'   ambiguity. Numeric-only codes should be one to three digitis, V codes are
-#'   followed by one or two digits, and E codes always by three digits between
-#'   800 and 999.
+#'
+#'   Currently, there is a limitation on NA values. Calling with \code{NA}
+#'   (which is a logical vector of length one by default) fails, because it is
+#'   not a string. This is rarely of significance in real life, since the NA
+#'   will be part of a character vector of codes, and will therefore be cast
+#'   already to \code{NA_character}
+#'
+#'   \code{NA} values result in a return value of \code{FALSE}.
+#' @section Three-digit validation: \code{isValidMajor} validates just the
+#'   'major' three-digit part of an ICD-9 code. This can in fact be provided as
+#'   a numeric, since there is no ambiguity. Numeric-only codes should be one to
+#'   three digitis, V codes are followed by one or two digits, and E codes
+#'   always by three digits between 800 and 999.
 #' @template major
 #' @details Leading zeroes in the decimal form are not ambiguous. Although
 #'   integer ICD-9 codes could be intended by the user, there is a difference

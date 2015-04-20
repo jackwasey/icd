@@ -12,9 +12,8 @@ test_that("icd9IsValidDecimal - rubbish input", {
   expect_equal(icd9IsValidDecimal(character()), logical())
   expect_false(icd9IsValidDecimal("."))
   expect_equal(icd9IsValidDecimal(c("100", "chestnut")), c(TRUE, FALSE))
-  #expect_warning(naVal <- icd9IsValidDecimal("100, 200")) # note this is a string
-  #with two numbers in it... TODO? could warn if any commas or other separators.
-  #expect_equal(naVal, NA)
+  expect_false(icd9IsValidDecimal("100, 200")) # note this is a string with two numbers in it.
+  expect_false(icd9IsValidDecimal(NA_character_))
   expect_equal(icd9IsValidDecimal(c("two", "things")), c(FALSE, FALSE))
 })
 
@@ -176,11 +175,11 @@ test_that("icd9IsValidShort", {
   expect_false(icd9IsValidShort("11.22")) # am not expecting decimal points
 })
 
-# TODO: more V code tests
 test_that("validate short form V codes - invalid codes", {
   expect_false(icd9IsValidShort("V"))
   expect_false(icd9IsValidShort("VV"))
-  expect_false(icd9IsValidShort("V0"))
+  expect_false(icd9IsValidShort("Vbog"))
+  expect_false(icd9IsValidShort(" V0"))
   expect_false(icd9IsValidShort("V00000"))
   expect_false(icd9IsValidShort("V123456"))
 })
@@ -309,8 +308,10 @@ test_that("icd-9 code is really in the list, not just syntactically valid", {
   expect_false(icd9IsReal("V802.7", isShort = FALSE))
 
   expect_equal(icd9IsRealDecimal("V802.7"), FALSE)
-  expect_equal(icd9IsReal(c("8027", "E9329", "E000", "armitage"),
-                          isShort = TRUE), c(TRUE, TRUE, TRUE, FALSE))
+  expect_equal(
+    icd9IsReal(c("8027", "E9329", "E000", "armitage"), isShort = TRUE),
+    c(TRUE, TRUE, TRUE, FALSE)
+    )
 })
 
 mixInvalidPts <- data.frame(
@@ -337,7 +338,7 @@ test_that("get valid - vector input", {
 
 test_that("filter valid - data frame input", {
 
-  expect_equal(icd9FilterValid(mixInvalidPts), mixInvalidPts[c(1,3), ])
+  expect_equal(icd9FilterValid(mixInvalidPts), mixInvalidPts[c(1, 3), ])
 
   expect_equal(icd9FilterInvalid(mixInvalidPts), mixInvalidPts[2, ])
   expect_equal(icd9FilterValid(mixInvalidPts, invert = TRUE),
@@ -354,18 +355,17 @@ test_that("filter valid - data frame input", {
   expect_equal(icd9FilterValid(mixInvalidPts, isShort = TRUE, invert = TRUE),
                mixInvalidPts[2, ])
   expect_equal(icd9FilterValid(mixInvalidPts, isShort = TRUE, invert = FALSE),
-               mixInvalidPts[c(1,3), ])
+               mixInvalidPts[c(1, 3 ), ])
 })
 
 test_that("validate mappings", {
-  # TODO: check all real, also?
-  expect_true(icd9IsValidMappingDecimal(list(a="100.1", b="202.3")))
-  expect_true(icd9IsValidMappingShort(list(a="1001", b="2023")))
-  expect_false(icd9IsValidMappingDecimal(list(a="1001", b="2023")))
-  expect_false(icd9IsValidMappingShort(list(a="100.1", b="202.3")))
+  expect_true(icd9IsValidMappingDecimal(list(a = "100.1", b = "202.3")))
+  expect_true(icd9IsValidMappingShort(list(a = "1001", b = "2023")))
+  expect_false(icd9IsValidMappingDecimal(list(a = "1001", b = "2023")))
+  expect_false(icd9IsValidMappingShort(list(a = "100.1", b = "202.3")))
 
-  expect_false(icd9IsValidMapping(list(a="car", b="et"), isShort = FALSE))
-  expect_true(icd9IsValidMapping(list(a="1001", b="2023"), isShort = TRUE))
+  expect_false(icd9IsValidMapping(list(a = "car", b = "et"), isShort = FALSE))
+  expect_true(icd9IsValidMapping(list(a = "1001", b = "2023"), isShort = TRUE))
 })
 
 test_that("get invalid decimals", {

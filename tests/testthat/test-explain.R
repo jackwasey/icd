@@ -9,9 +9,7 @@ test_that("explain a large set of ICD-9 codes succinctly", {
       "Other acute rheumatic heart disease",
       "Acute rheumatic heart disease, unspecified")
   )
-  # TODO: also warn or message if there are codes without explanations
 
-  #TODO same but condensing
   expect_identical(
     icd9ExplainShort(icd9ChildrenShort("391"), doCondense = TRUE),
     "Rheumatic fever with heart involvement"
@@ -68,19 +66,13 @@ test_that("explain a single leaf node" , {
   expect_equal(icd9Explain("00329"), "Other localized salmonella infections")
 })
 
-# TODO:
-# use cases for explaining ICD-9 codes:
-test_that("given ICD-9 codes all have human-readable explanations", {
+test_that("explain handles mix of valid and invalid", {
+  expect_equal(icd9Explain(c("radishes", "123"), warn = FALSE), "Other cestode infection")
+  expect_warning(icd9Explain(c("radishes", "123")))
 })
-test_that("some valid ICD-9 codes are human-readable, some aren't", {
-})
-test_that("some valid ICD-9 codes are human-readable,
-          but some aren't, and some are invalid", {
-          })
-test_that("none ICD-9 codes have human-readable explanations,
-          but are all valid", {
-          })
-test_that("none ICD-9 codes are even valid", {
+
+test_that("explain works when none ICD-9 codes are even valid", {
+  expect_equal(icd9Explain(c("radishes", "123123", NA), warn = FALSE), character(0))
 })
 
 
@@ -112,9 +104,6 @@ test_that("guess with just majors", {
   # which is usually the most direct route to an answer
   expect_true(icd9GuessIsShort(c("100", "101", "102")))
 })
-
-# TODO, set up long chain of multiple conversions as kind of integration test,
-# and to flush out errors.
 
 test_that("extract top-level codes from the RTF gives the complete list", {
   # total number of codes
@@ -270,9 +259,6 @@ test_that("explain icd9GetChapters simple input", {
   expect_equal(chaps3, chaps7)
   expect_equal(chaps3, chaps8)
 
-  #TODO: decide whether to give NA rows if the major group doesn't exist, or
-  #whether also to do this for non-existent minor parts. E.g. 41710 doesn't
-  #exist, but 4171 does. Should we give a NA row back or not?
 })
 
 test_that("working with named lists of codes, decimal is guessed", {
@@ -287,6 +273,4 @@ test_that("icd9 descriptions is parsed correctly", {
   expect_equal(names(x), c("icd9", "descShort", "descLong"))
   expect_equal(nrow(x), 14567)
   expect_true(is.character(x$icd9))
-  # TODO: add specific tests, e.g. for Menieres with non-standard character
-  # sets, punctuation
 })

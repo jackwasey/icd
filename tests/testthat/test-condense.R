@@ -1,7 +1,9 @@
 context("condense")
 
+library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
+
 test_that("five digit to five digit code range condenses", {
-expect_equal(icd9Condense("34500" %i9sa% "34509", onlyReal = FALSE), "3450")
+  expect_equal(icd9Condense("34500" %i9sa% "34509", onlyReal = FALSE), "3450")
 })
 
 test_that("condensing a single real codes gives themselves", {
@@ -21,7 +23,6 @@ test_that("condensing a single real codes gives themselves", {
 })
 
 test_that("condense an ICD-9 code set to minimal group", {
-  #skip("TODO:  this test breaks because %i9s% now includes the last major, even if not all its child.")
   expect_equal(sort(icd9Condense("98799" %i9sa% "98901", onlyReal = FALSE)),
                sort(c("98799", "988", "98900", "98901")))
   # non-real end of real range
@@ -29,8 +30,6 @@ test_that("condense an ICD-9 code set to minimal group", {
   expect_equal(res, "988")
   expect_that(res <- icd9Condense("9879" %i9sa% "9891", onlyReal = TRUE), gives_warning())
   expect_equal(res, c("9879", "988", "9890", "9891"))
-
-  # TODO: more tests
 })
 
 
@@ -70,7 +69,13 @@ test_that("condense ranges that don't condense at all", {
 
 test_that("condense range invalid data", {
   expect_equal(icd9Condense("turnpike", onlyReal = FALSE), character(0))
-  # TODO more tests here
+  expect_equal(icd9Condense(c("turnpike", "road"), onlyReal = FALSE), character(0))
+  expect_equal(icd9Condense(c(""), onlyReal = FALSE), character(0))
+  expect_equal(icd9Condense(c("", ""), onlyReal = FALSE), character(0))
+  expect_equal(icd9Condense(c(NA_character_), onlyReal = FALSE), character(0))
+  expect_equal(icd9Condense(c(NA_character_, ""), onlyReal = FALSE), character(0))
+  # one valid vode with invalids
+  expect_equal(icd9Condense(c("NA", "rotem", "123"), onlyReal = FALSE), "123")
 })
 
 test_that("mix of four and five digit billable codes", {
@@ -177,13 +182,10 @@ test_that("condense full ranges", {
 test_that("condense single major and its children", {
   expect_equal(icd9CondenseShort("003"), "003")
 
-  skip("TODO: recode these as Explain tests")
-  expect_equal(icd9ExplainShort("391"),
-               "Rheumatic fever with heart involvement")
-  expect_equal(icd9ExplainShort(icd9ChildrenShort("391")),
-               "Rheumatic fever with heart involvement")
-  expect_equal(icd9ExplainShort(icd9ChildrenShort("391", onlyReal = TRUE)),
-               "Rheumatic fever with heart involvement")
+  rheum_fever <- "Rheumatic fever with heart involvement"
+  expect_equal(icd9ExplainShort("391"), rheum_fever)
+  expect_equal(icd9ExplainShort(icd9ChildrenShort("391")), rheum_fever)
+  expect_equal(icd9ExplainShort(icd9ChildrenShort("391", onlyReal = TRUE)), rheum_fever)
 })
 
 vermont_dx %>%

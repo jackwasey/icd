@@ -1,5 +1,7 @@
 context("test RTF parsing")
 
+library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
+
 test_that("multiple lines in one fifth digit disciminator", {
   # nolint start
   testlines <- c("The following fifth-digit subclassification is for use with category 203:",
@@ -255,11 +257,12 @@ test_that("some chapters are correct", {
                "Supplementary Classification Of External Causes Of Injury And Poisoning")
 
   # first and last rows of a block in the middle
-  neoplasm_rows <- which(codes %in% ("140" %i9sa% "239")) # TODO someday: this is rather slow...
-  expect_equal(chaps[neoplasm_rows[1] - 1], "Infectious And Parasitic Diseases")
-  expect_equal(chaps[neoplasm_rows[1]], "Neoplasms")
-  expect_equal(chaps[neoplasm_rows[length(neoplasm_rows)]], "Neoplasms")
-  expect_equal(chaps[neoplasm_rows[length(neoplasm_rows)] + 1],
+  neoplasm_first_row <- which(codes == "140")
+  neoplasm_last_row <- which(codes == "240") - 1
+  expect_equal(chaps[neoplasm_first_row - 1], "Infectious And Parasitic Diseases")
+  expect_equal(chaps[neoplasm_first_row], "Neoplasms")
+  expect_equal(chaps[neoplasm_last_row], "Neoplasms")
+  expect_equal(chaps[neoplasm_last_row + 1],
                "Endocrine, Nutritional And Metabolic Diseases, And Immunity Disorders")
 })
 

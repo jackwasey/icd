@@ -1,5 +1,7 @@
 context("comorbidities")
 
+library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
+
 test_that("try to induce c++ segfault bug", {
   #trigdat <- data.frame(visitId = c("visit1", "visit1"), icd9 = c("39891", "09320"))
 
@@ -507,8 +509,8 @@ test_that("sample of ICD-9 codes from manually specified Elixhauser mapping exis
 })
 
 test_that("github #34 - short and long custom map give different results", {
-  mydf <- data.frame(visitId = c("a","b","b","c"),
-                     icd9 = c("1","010","10","20"))
+  mydf <- data.frame(visitId = c("a", "b", "b", "c"),
+                     icd9 = c("1", "010", "10", "20"))
 
   mymaps <- list(jack = c("1", "2", "3"), alf = c("010", "20"))
   mymapd <- lapply(mymaps, icd9ShortToDecimal)
@@ -566,12 +568,6 @@ test_that("diff comorbid works", {
 
 })
 
-# TODO: are these different from those in the helper file?
-twoPts <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
-                     icd9 = c("040", "000", "100", "000"),
-                     stringsAsFactors = FALSE)
-twoMap <- list("malady" = c("100", "2000"),
-               "ailment" = c("003", "040"))
 twoPtsFac <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
                         icd9 = c("040", "000", "100", "000"),
                         stringsAsFactors = TRUE)
@@ -612,20 +608,20 @@ test_that("control params don't affect result of comorbid calc", {
     f[!is.na(f)]
   })
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 1, chunkSize=32),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 1, chunkSize = 32),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = 32)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 2, chunkSize=32),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 5, chunkSize=32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 2, chunkSize = 32),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 5, chunkSize = 32)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = 32)
   )
   expect_identical(
     icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize=upts)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts)
   )
   expect_identical(
     icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts - 1),
@@ -633,23 +629,23 @@ test_that("control params don't affect result of comorbid calc", {
   )
   expect_identical(
     icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts + 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize=upts)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts - 2, ompChunkSize = 1), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts + 2, ompChunkSize = 1) # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts - 2, ompChunkSize = 1), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts + 2, ompChunkSize = 1) # nolint
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts - 2, ompChunkSize = 11), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts + 2, ompChunkSize = 11) # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts - 2, ompChunkSize = 11), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts + 2, ompChunkSize = 11) # nolint
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts, ompChunkSize = 1), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=upts, ompChunkSize = 11) # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts, ompChunkSize = 1), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts, ompChunkSize = 11) # nolint
   )
   expect_identical(
     icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field"),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize=3, ompChunkSize = 5) # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = 3, ompChunkSize = 5) # nolint
   )
 })
 

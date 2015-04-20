@@ -37,7 +37,6 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   close(f)
 
   ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
-  # TODO someday: The remainder of the AHRQ SAS input file consists of DRG definitions
 
   ahrqComorbidAll <- list()
 

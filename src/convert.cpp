@@ -147,8 +147,7 @@ List icd9MajMinToParts_listShim(const CharacterVector mjr,
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
-List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
-		"") {
+List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty = "") {
 
 	CharacterVector mjr(icd9Short.size());
 	CharacterVector mnr(icd9Short.size());
@@ -160,46 +159,46 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 		}
 
 		std::string s = as<std::string>(icd9Short[i]);
-		s = strimCpp(s); // do i need to convert?
+		s = strimCpp(s);
+		std::string::size_type sz = s.size();
 
-		if (!icd9IsASingleE(s.c_str())) { // not an E code
-			switch (s.size()) {
+		if (icd9IsASingleE(s.c_str())) { // E code
+		  switch (sz) {
+		  case 2:
+		  case 3:
+		  case 4:
+		    mjr[i] = s.substr(0, sz);
+		    mnr[i] = minorEmpty;
+		    break;
+		  case 5:
+		    mjr[i] = s.substr(0, 4);
+		    mnr[i] = s.substr(4, 1);
+		    break;
+		  default:
+		    mjr[i] = NA_STRING;
+		  mnr[i] = NA_STRING;
+		  continue;
+		  }
+		} else { // not an E code
+			switch (sz) {
 			case 1:
 			case 2:
 			case 3:
-				mjr[i] = s.substr(0, s.size());
+				mjr[i] = s.substr(0, sz);
 				mnr[minorEmpty];
 				continue;
 			case 4:
 			case 5:
 				mjr[i] = s.substr(0, 3);
-				mnr[i] = s.substr(3, s.size() - 3);
+				mnr[i] = s.substr(3, sz - 3);
 				continue;
 			default:
 				mjr[i] = NA_STRING;
 				mnr[i] = NA_STRING;
 				continue;
 			}
-		} else { // E code
+		}
 
-			switch (s.size()) {
-			case 2:
-			case 3:
-			case 4:
-				mjr[i] = s.substr(0, s.size());
-				mnr[i] = minorEmpty;
-				break;
-			case 5:
-				mjr[i] = s.substr(0, 4);
-				mnr[i] = s.substr(4, 1);
-				break;
-			default:
-				mjr[i] = NA_STRING;
-				mnr[i] = NA_STRING;
-				continue;
-			}
-		} // E code
-		  //mjr[i] = icd9AddLeadingZeroesmjrSingle(mjr[i]); // or loop through them all again...
 	} // for
 
 	return icd9MajMinToPartsShim(icd9AddLeadingZeroesMajorShim(mjr), mnr);

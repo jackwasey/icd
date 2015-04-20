@@ -105,6 +105,8 @@ one_of_each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
                  "765", "780.95", "800", "V02.34", "E900.4")
 
 # two items per map, two codes per item, two codes for two visits
-twoPts <- list(visitId = c("v01", "v01", "v02", "v02"),
-               icd9 = c("040", "000", "100", "000"))
-twoMap <- list("malady" = c("100", "2000"), "ailment" = c("003", "040"))
+twoPts <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
+               icd9 = c("040", "000", "100", "000"),
+               stringsAsFactors = FALSE)
+twoMap <- list("malady" = c("100", "2000"),
+               "ailment" = c("003", "040"))

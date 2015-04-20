@@ -13,7 +13,6 @@ test_that("extract decimal parts - invalid or empty input", {
 })
 
 test_that("extract decimal parts - valid inputs", {
-  # zero is technically "valid", means no code. TODO: apply elsewhere?
   expect_equal(icd9DecimalToParts("0"), list(major = "000", minor = ""))
   expect_equal(icd9DecimalToParts("000"), list(major = "000", minor = ""))
   expect_equal(icd9DecimalToParts("V1.2"), list(major = "V01", minor = "2"))
@@ -64,10 +63,13 @@ test_that("extract decimal parts - valid inputs", {
 
 test_that("icd9 decimal to short form, bad codes", {
   expect_equal(icd9DecimalToShort(character()), character())
-  skip("TODO: flesh out")
+  expect_equal(icd9DecimalToShort("harissa"), NA_character_)
+  expect_equal(icd9DecimalToShort("12345.678"), NA_character_)
+  expect_equal(icd9DecimalToShort("123 67"), NA_character_)
+  expect_true(all(is.na(icd9DecimalToShort(c("07022", "07023")))))
 })
-test_that("icd9 decimal to short form", {
 
+test_that("icd9 decimal to short form", {
   expect_equal(icd9DecimalToShort("1"), "001")
   expect_equal(icd9DecimalToShort("1.1"), "0011")
   expect_equal(icd9DecimalToShort("1.23"), "00123")
@@ -85,8 +87,6 @@ test_that("icd9 decimal to short form", {
   expect_equal(icd9DecimalToShort(c("1", "", "991.23")),
                c("001", NA_character_, "99123"))
 
-  expect_error(icd9DecimalToShort(c("07022","07023"), validate = TRUE))
-
 })
 
 test_that("short to decimal, numbers", {
@@ -95,21 +95,15 @@ test_that("short to decimal, numbers", {
   expect_equal(icd9DecimalToShort("1"), "001")
   expect_equal(icd9DecimalToShort("22"), "022")
   expect_equal(icd9DecimalToShort("345"), "345")
-})
-
-test_that("short to decimal with flags", {
-  #TODO more permutations to expand here:
   expect_equal(icd9ShortToDecimal("013"), "013")
   expect_equal(icd9ShortToDecimal("V013"), "V01.3")
 })
 
 test_that("short to decimal bad input", {
-
   expect_equal(icd9ShortToDecimal(character()), character())
   expect_equal(icd9ShortToDecimal("valsalva"), NA_character_)
   expect_equal(icd9ShortToDecimal("123456"), NA_character_)
   expect_equal(icd9ShortToDecimal(""), NA_character_)
-  #expect_equal(icd9ShortToDecimal("-1"), NA_character_)
   # NA is not character type, so expect error.
   expect_equal(icd9ShortToDecimal(NA), NA_character_)
   # NA is not character type, so expect error.
@@ -177,9 +171,9 @@ test_that("parts to decimal", {
   expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = NA)), testthat::equals("100"))
   expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "")), testthat::equals("100"))
   expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "1")), testthat::equals("100.1"))
-  expect_that(icd9MajMinToDecimal("100", NA), equals("100"))
-  expect_that(icd9MajMinToDecimal("100", ""), equals("100"))
-  expect_that(icd9MajMinToDecimal("100", "1"), equals("100.1"))
+  expect_that(icd9MajMinToDecimal("100", NA), testthat::equals("100"))
+  expect_that(icd9MajMinToDecimal("100", ""), testthat::equals("100"))
+  expect_that(icd9MajMinToDecimal("100", "1"), testthat::equals("100.1"))
 })
 
 test_that("parts to short invalid inputs", {
@@ -188,22 +182,10 @@ test_that("parts to short invalid inputs", {
 
   expect_equal(icd9PartsToShort(dfempty), character())
   expect_equal(icd9PartsToShort(dfe2), NA_character_)
-  # TODO: convert to get NAs back instead of errors
-  #   expect_error(icd9PartsToShort(list(major = "turbottt", minor = "23")))
-  #   expect_error(icd9PartsToShort(list(major = "", minor = "23")))
-  #   expect_error(icd9PartsToShort(list(major = "turbottt", minor = "")))
-  #   expect_error(icd9PartsToShort(list(major = "", minor = "")))
-  #   expect_error(icd9PartsToShort(list(major = "turbottt", minor = NA)))
-  #   expect_error(icd9PartsToShort(list(major = "", minor = NA)))
-
-  expect_equal(icd9PartsToShort(list(major = NA, minor = "trout")),
-               NA_character_)
-  expect_equal(icd9PartsToShort(list(major = NA, minor = "23")),
-               NA_character_)
-  expect_equal(icd9PartsToShort(list(major = NA, minor = "")),
-               NA_character_)
-  expect_equal(icd9PartsToShort(list(major = NA, minor = NA)),
-               NA_character_)
+  expect_equal(icd9PartsToShort(list(major = NA, minor = "trout")), NA_character_)
+  expect_equal(icd9PartsToShort(list(major = NA, minor = "23")), NA_character_)
+  expect_equal(icd9PartsToShort(list(major = NA, minor = "")), NA_character_)
+  expect_equal(icd9PartsToShort(list(major = NA, minor = NA)), NA_character_)
 
 })
 
