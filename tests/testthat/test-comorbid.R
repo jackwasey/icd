@@ -162,6 +162,7 @@ test_that("can condense the big lists of comorbidities without errors", {
 
 
 test_that("icd9Hierarchy as saved in data can be recreated", {
+  skip("this is 15 minutes alone, so skip this and run manually when needed")
   skip_slow_tests()
   skip_online_tests()
   expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
