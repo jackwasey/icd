@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 context("test RTF parsing")
 
 library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
@@ -58,85 +75,6 @@ test_that("stripRtf does what it says on the tin", {
   # nolint end
 })
 
-
-test_that("tricky v91.9 works", {
-  expect_equal(
-    icd9Hierarchy[icd9Hierarchy$icd9 == "V9192", "descLong"],
-    "Other specified multiple gestation, with two or more monoamniotic fetuses")
-})
-
-rtf_conn <- file(system.file("extdata", "Dtab12.rtf", mustWork = TRUE, package = "icd9"), encoding = "ASCII")
-rtf <- parseRtfLines(readLines(rtf_conn, warn = FALSE))
-close(rtf_conn)
-nrtf <- names(rtf)
-
-test_that("all parsed codes are valid decimals", {
-  expect_true(all(icd9IsValidDecimal(nrtf)),
-              info = paste("invalid codes are :",
-                           paste(icd9GetInvalid(nrtf), collapse = ", ")))
-})
-
-test_that("no rtf formatting left in descriptions", {
-  expect_false(any(grepl("[\\\\{}]", rtf)),
-               info = paste("rtf codes in descriptions:",
-                            paste(grep("[\\\\{}]", rtf, value = TRUE))))
-
-})
-
-test_that("all csv extract codes are in rtf extract", {
-  missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9Hierarchy$icd9), nrtf)
-  expect_equal(length(missing_from_rtf), 0,
-               info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
-})
-
-test_that("majors extracted from web page are the same as those from RTF", {
-  webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
-  work <- swapNamesWithVals(rtf)
-  rtfmajors <- work[icd9IsMajor(work)]
-
-  expect_identical(setdiff(rtfmajors, webmajors), character(0),
-                   info = paste("these majors are from RTF but not retrieved from web: ",
-                                paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
-  expect_identical(setdiff(webmajors, rtfmajors), character(0),
-                   info = paste("these majors are on web but not retrieved from RTF: ",
-                                paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
-})
-
-v32 <- parseLeafDescriptionsVersion(version = "32", save = FALSE, fromWeb = FALSE)
-
-test_that("all leaf codes from TXT are in RTF extract", {
-  v32$icd9 %>% icd9ShortToDecimal -> leaves
-  expect_true(all(leaves %in% nrtf))
-})
-
-test_that("RTF extract has no duplicates", {
-  expect_equal(sum(duplicated(nrtf)),
-               0,
-               info = paste("first few duplicates: ",
-                            paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
-               ))
-})
-
-test_that("mid-level descriptions are in RTF extract", {
-  expect_equivalent(rtf["611"], "Other disorders of breast")
-  expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
-  expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
-})
-
-test_that("manual check to look at description differences between RTF and TXT", {
-  skip("manual check")
-  rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
-    swapNamesWithVals %>%
-    sort -> rtf_leaves
-  print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
-})
-
-test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
-  # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
-  expect_false("640.02" %in% nrtf)
-  # grep "\[[[:digit:]],.*\]" Dtab12.rtf
-})
-
 test_that("extraction from qualifier subset works", {
   all2015 <- c("[0-6]", "[0-3]", "[0-5,9]", "[0-8]", "[0-2]", "[0-1]", "[0-5]",
                "[0,1,3]", "[0-4]", "[0,3]", "[0-1,3]", "[1-2]", "[0, 1, 3]",
@@ -159,106 +97,82 @@ test_that("extraction from qualifier subset works", {
   expect_true(all(sapply(all2015, FUN = function(f) length(parseRtfQualifierSubset(f)) > 0)))
 })
 
-context("icd9Hierarchy is parsed as expected")
-# at present, icd9::icd9Hierarchy is derived from RTF parsing, a little web
-# scraping, some manually entered data, and (for the short description only)
-# another text file parsing.`
+# The following tests on the RTF parsing get the RTF source over internet, so
+# package doesn't have to include the big RTF source file
+if (exists("do_online_tests") && do_online_tests) {
+  rtf_dat <- data_sources[data_sources$f_year == "2011", ]
+  url <- rtf_dat$rtf_url
+  fn <- rtf_dat$rtf_filename
+  zip_single(url, fn, tf <- tempfile())
+  rtf_lines <- readLines(url, tf)
+  unlink(tf)
+  rtf <- parseRtfLines(rtf_lines)
+  nrtf <- names(rtf)
 
-test_that("no NA or zero-length values", {
-  expect_false(any(sapply(icd9::icd9Hierarchy, is.na)))
-  expect_false(any(nchar(unlist(icd9::icd9Hierarchy)) == 0))
-})
+  test_that("all parsed codes are valid decimals", {
+    expect_true(all(icd9IsValidDecimal(nrtf)),
+                info = paste("invalid codes are :",
+                             paste(icd9GetInvalid(nrtf), collapse = ", ")))
+  })
 
-test_that("factors are in the right place", {
-  expect_is(icd9::icd9Hierarchy$icd9, "character")
-  expect_is(icd9::icd9Hierarchy$descShort, "character")
-  expect_is(icd9::icd9Hierarchy$descLong, "character")
-  expect_is(icd9::icd9Hierarchy$threedigit, "factor")
-  expect_is(icd9::icd9Hierarchy$major, "factor")
-  expect_is(icd9::icd9Hierarchy$subchapter, "factor")
-  expect_is(icd9::icd9Hierarchy$chapter, "factor")
-})
+  test_that("no rtf formatting left in descriptions", {
+    expect_false(any(grepl("[\\\\{}]", rtf)),
+                 info = paste("rtf codes in descriptions:",
+                              paste(grep("[\\\\{}]", rtf, value = TRUE))))
 
-test_that("codes and descriptions are valid and unique", {
-  expect_equal(anyDuplicated(icd9::icd9Hierarchy$icd9), 0)
-  expect_true(all(icd9IsValidShort(icd9::icd9Hierarchy$icd9)))
-})
+  })
 
-test_that("some chapters are correct", {
-  chaps <- icd9::icd9Hierarchy$chapter %>% asCharacterNoWarn
-  codes <- icd9::icd9Hierarchy$icd9
-  # first and last rows (E codes should be last)
-  expect_equal(chaps[1], "Infectious And Parasitic Diseases")
-  expect_equal(chaps[nrow(icd9::icd9Hierarchy)],
-               "Supplementary Classification Of External Causes Of Injury And Poisoning")
+  test_that("all csv extract codes are in rtf extract", {
+    missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9Hierarchy$icd9), nrtf)
+    expect_equal(length(missing_from_rtf), 0,
+                 info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
+  })
 
-  # first and last rows of a block in the middle
-  neoplasm_first_row <- which(codes == "140")
-  neoplasm_last_row <- which(codes == "240") - 1
-  expect_equal(chaps[neoplasm_first_row - 1], "Infectious And Parasitic Diseases")
-  expect_equal(chaps[neoplasm_first_row], "Neoplasms")
-  expect_equal(chaps[neoplasm_last_row], "Neoplasms")
-  expect_equal(chaps[neoplasm_last_row + 1],
-               "Endocrine, Nutritional And Metabolic Diseases, And Immunity Disorders")
-})
+  test_that("majors extracted from web page are the same as those from RTF", {
+    webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
+    work <- swapNamesWithVals(rtf)
+    rtfmajors <- work[icd9IsMajor(work)]
 
-test_that("some subchapters are correct", {
-  subchaps <- icd9::icd9Hierarchy$subchapter %>% asCharacterNoWarn
-  codes <- icd9::icd9Hierarchy$icd9
+    expect_identical(setdiff(rtfmajors, webmajors), character(0),
+                     info = paste("these majors are from RTF but not retrieved from web: ",
+                                  paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
+    expect_identical(setdiff(webmajors, rtfmajors), character(0),
+                     info = paste("these majors are on web but not retrieved from RTF: ",
+                                  paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
+  })
 
-  # first and last
-  expect_equal(subchaps[1], "Intestinal Infectious Diseases")
-  expect_equal(subchaps[nrow(icd9::icd9Hierarchy)], "Injury Resulting From Operations Of War")
+  v32 <- parseLeafDescriptionsVersion(version = "32", save = FALSE, fromWeb = FALSE)
 
-  # first and last of a block in the middle
-  suicide_rows <- which(codes %in% ("E950" %i9sa% "E959"))
-  expect_equal(subchaps[suicide_rows[1] - 1],
-               "Drugs, Medicinal And Biological Substances Causing Adverse Effects In Therapeutic Use")
-  expect_equal(subchaps[suicide_rows[1]], "Suicide And Self-Inflicted Injury")
-  expect_equal(subchaps[suicide_rows[length(suicide_rows)]], "Suicide And Self-Inflicted Injury")
-  expect_equal(subchaps[suicide_rows[length(suicide_rows)] + 1],
-               "Homicide And Injury Purposely Inflicted By Other Persons")
-})
+  test_that("all leaf codes from TXT are in RTF extract", {
+    v32$icd9 %>% icd9ShortToDecimal -> leaves
+    expect_true(all(leaves %in% nrtf))
+  })
 
-test_that("some randomly selected rows are correct", {
-  expect_equal(
-    icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname,
-    c("5060", "Fum/vapor bronc/pneumon", "Bronchitis and pneumonitis due to fumes and vapors",
-      "506", "Respiratory conditions due to chemical fumes and vapors",
-      "Pneumoconioses And Other Lung Diseases Due To External Agents",
-      "Diseases Of The Respiratory System")
-  )
-})
+  test_that("RTF extract has no duplicates", {
+    expect_equal(sum(duplicated(nrtf)),
+                 0,
+                 info = paste("first few duplicates: ",
+                              paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
+                 ))
+  })
 
-test_that("billable codes are recreated", {
-  check_billable <- parseLeafDescriptionsAll(save = FALSE)
+  test_that("mid-level descriptions are in RTF extract", {
+    expect_equivalent(rtf["611"], "Other disorders of breast")
+    expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
+    expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
+  })
 
-  for (ver in c("27", "28", "29", "30", "31", "32")) {
-    v <- icd9::icd9Billable[[ver]][["descLong"]]
-    cb <- check_billable[[ver]][["descLong"]]
-    diff <- v != cb
-    expect_identical(check_billable[[ver]], icd9::icd9Billable[[ver]],
-                     info = paste("descLong differences for v32:
-                                original: ", paste(v[diff], collapse = ", "),
-                                  "\nprocess:", paste(cb[diff], collapse = ", ")
-                     ))
-  }
-})
+  test_that("manual check to look at description differences between RTF and TXT", {
+    skip("manual check")
+    rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
+      swapNamesWithVals %>%
+      sort -> rtf_leaves
+    print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
+  })
 
-test_that("billable codes for expected versions exist", {
-  expect_true(all(as.character(23:32) %in% names(icd9Billable)))
-  expect_true(all(sapply(icd9Billable, is.data.frame)))
-})
-
-test_that("billable codes are all in order", {
-  skip_on_cran()
-  for (v in names(icd9Billable)) {
-    icd9 <- icd9::icd9Billable[[v]][["icd9"]]
-    expect_identical(icd9, icd9SortShort(icd9),
-                     info = paste("version = ", v))
-  }
-})
-
-test_that("parsing 27 gives zero-padded digit icd9 codes", {
-  expect_equal(icd9Billable[["27"]][1, "icd9"], "0010")
-})
+  test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
+    # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
+    expect_false("640.02" %in% nrtf)
+    # grep "\[[[:digit:]],.*\]" Dtab12.rtf
+  })
+}
