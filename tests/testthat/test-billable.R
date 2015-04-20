@@ -15,8 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+context("billable code lists")
+
 test_that("billable codes are recreated", {
-  check_billable <- parseLeafDescriptionsAll(save = FALSE)
+  skip_online_tests()
+  check_billable <- parseLeafDescriptionsAll(save = FALSE, fromWeb = TRUE)
   if (Sys.info()[["sysname"]] != "Linux")
     skip("Only do encoding problems on Linux.")
   for (ver in c("27", "28", "29", "30", "31", "32")) {

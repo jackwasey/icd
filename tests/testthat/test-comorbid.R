@@ -119,7 +119,7 @@ test_that("can condense the big lists of comorbidities without errors", {
   # reverse)
 
   skip_on_cran()
-  if (!exists("do_slow_tests") || !do_slow_tests) skip("fairly slow test of about 8s on fast PC")
+  skip_slow_tests()
 
   for (onlyReal in c(TRUE, FALSE)) {
     if (onlyReal) {
@@ -162,7 +162,8 @@ test_that("can condense the big lists of comorbidities without errors", {
 
 
 test_that("icd9Hierarchy as saved in data can be recreated", {
-  if (!exists("do_slow_tests") || !do_slow_tests) skip("too slow to do routinely on any platform")
+  skip_slow_tests()
+  skip_online_tests()
   expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
                icd9::icd9Hierarchy)
 })
@@ -172,18 +173,16 @@ test_that("icd9Hierarchy as saved in data can be recreated", {
 # with this data.
 test_that("icd9Chapters, etc. as saved in data can be recreated", {
   skip_on_cran() # and/or skip_on_travis()
-  if (exists("skip_on_travis")) skip_on_travis()
-  if (!exists("do_slow_tests") || !do_slow_tests)
-    skip("does web look-ups - don't want to hammer the target web site")
+  skip_on_travis()
+  skip_online_tests()
   res <- parseIcd9Chapters(year = "2014", save = FALSE)
   expect_equal(res$icd9Chapters, icd9::icd9Chapters)
   expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)
   expect_equal(res$icd9ChaptersMajor, icd9::icd9ChaptersMajor)
 })
 
-
 test_that("AHRQ interpretation at least returns something reasonable", {
-  skip("defer")
+  skip_slow_tests()
   result <- parseAhrqSas(sasPath = system.file("extdata",
                                                "comformat2012-2013.txt", package="icd9"), save = FALSE)
   expect_that(result, is_a("list"))

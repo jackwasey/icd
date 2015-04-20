@@ -269,3 +269,19 @@ getNonASCII <- function(x)
 isNonASCII <- function (x) {
   is.na(iconv(x, from = "latin1", to = "ASCII"))
 }
+
+skip_slow_tests <- function(msg = "skipping slow test") {
+  if (!exists("do_slow_tests") || !do_slow_tests)
+    skip(msg)
+}
+
+skip_online_tests <- function(msg = "skipping online test") {
+  if (!exists("do_online_tests") || !do_online_tests)
+    skip(msg)
+}
+
+# will be in next release of testthat
+skip_on_travis <- function() {
+  if (!identical(Sys.getenv("TRAVIS"), "true")) return()
+  skip("On Travis")
+}

@@ -28,10 +28,7 @@ src\/autom4te.cache
 m4$
 icd9Billable[[:digit:]]+\.RData
 Makevars$
-CMS31.*DESC.*
-CMS30.*DESC.*
-CMS29.*DESC.*
-CMS28.*DESC.*
+CMS32.*DESC.*
 I9diagnos.*\.txt
 I9DX_DESC\.txt
 V27LONG_SHORT_DX.*\.csv
@@ -42,3 +39,4 @@ extdata\/ICD10_Elixhauser\.sas
 extdata\/ccs_multi_pr_tool_2014\.csv
 extdata\/comoanaly2012-2013\.txt
 ccs_multi_dx_tool_2013\.csv
+.*\.rtf

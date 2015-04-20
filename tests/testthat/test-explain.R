@@ -284,7 +284,8 @@ test_that("working with named lists of codes, decimal is guessed", {
 })
 
 test_that("icd9 descriptions is parsed correctly", {
-  x <- parseLeafDescriptionsVersion(version = "32", fromWeb = FALSE)
+  skip_online_tests()
+  x <- parseLeafDescriptionsVersion(version = "32", fromWeb = TRUE)
   expect_equal(names(x), c("icd9", "descShort", "descLong"))
   expect_equal(nrow(x), 14567)
   expect_true(is.character(x$icd9))
