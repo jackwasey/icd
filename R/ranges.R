@@ -107,8 +107,6 @@ expandRangeWorker <- function(start, end, lookup, onlyReal,
   assertFlag(excludeAmbiguousStart)
   assertFlag(excludeAmbiguousEnd)
 
-  #stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
-
   start_index <- match(start, lookup)
   end_index <- match(end, lookup)
   assertInteger(start_index, len = 1)
@@ -310,7 +308,7 @@ icd9ChildrenShort <- function(icd9Short,
                               onlyReal = TRUE, onlyBillable = FALSE) {
   assertCharacter(icd9Short)
   assertFlag(onlyReal)
-  res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = "icd9", icd9Short, onlyReal)
+  res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = "icd9", toupper(icd9Short), onlyReal)
   if (onlyBillable) return(icd9GetBillableShort(res))
   res
 }

@@ -137,30 +137,28 @@ test_that("extract top-level codes from the RTF gives the complete list", {
     icd9ChaptersMajor[["Other and unspecified congenital anomalies"]],
     structure("759", .Names = "major"))
 
-  #expect_equal(icd9ChaptersMajor[[""]], "")
-
   # format of each hierarchy level:
   expect_equal(names(icd9Chapters[[1]]), c("start", "end"))
   expect_equal(names(icd9ChaptersSub[[1]]), c("start", "end"))
   expect_equal(names(icd9ChaptersMajor[[1]]), c("major"))
   # should be no NA values
-  expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE="", 1))))
-  expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE="", 2))))
-  expect_true(all(!is.na(vapply(icd9ChaptersSub, "[[", FUN.VALUE="", 1))))
-  expect_true(all(!is.na(vapply(icd9ChaptersSub, "[[", FUN.VALUE="", 2))))
-  expect_true(all(!is.na(vapply(icd9ChaptersMajor, "[[", FUN.VALUE="", 1))))
+  expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE = "", 1))))
+  expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE = "", 2))))
+  expect_true(all(!is.na(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 1))))
+  expect_true(all(!is.na(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 2))))
+  expect_true(all(!is.na(vapply(icd9ChaptersMajor, "[[", FUN.VALUE = "", 1))))
 
   # all the range limits and majors should be valid majors
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE="", 1))))
+    all(icd9IsValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE = "", 1))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE="", 2))))
+    all(icd9IsValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE = "", 2))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE="", 1))))
+    all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 1))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE="", 2))))
+    all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 2))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9ChaptersMajor, "[[", FUN.VALUE="", 1))))
+    all(icd9IsValidMajor(vapply(icd9ChaptersMajor, "[[", FUN.VALUE = "", 1))))
 })
 
 test_that("icd9ChaptersMajor - positive values", {
@@ -269,7 +267,7 @@ test_that("working with named lists of codes, decimal is guessed", {
 })
 
 test_that("icd9 descriptions is parsed correctly", {
-  x <- parseIcd9LeafDescriptionsVersion(version = "32", fromWeb = FALSE)
+  x <- parseLeafDescriptionsVersion(version = "32", fromWeb = FALSE)
   expect_equal(names(x), c("icd9", "descShort", "descLong"))
   expect_equal(nrow(x), 14567)
   expect_true(is.character(x$icd9))

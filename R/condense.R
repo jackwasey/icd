@@ -52,7 +52,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
 
   # we can convert back to factor later. Lots of scope for errors by handling
   # factors and character vectors in this function, so keep simple with
-  # character-only.
+  # character only.
   icd9Short <- asCharacterNoWarn(icd9Short)
 
   i9w <- unique(icd9GetValidShort(icd9Short))
@@ -85,7 +85,6 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
   i9w <- i9w[i9w %nin% icd9Children(majors, onlyReal = onlyReal)]
   fout <- c()
   unique(substr(i9w, 0, 4)) -> four_digit_parents
-  # four_digit_parents <- icd9GetValidShort(four_digit_parents)
   for (fp in four_digit_parents) {
     test_kids <- icd9ChildrenShort(fp, onlyReal = onlyReal) # onlyBillable at 5th level is same as onlyReal
     if (length(test_kids) > 0 && all(test_kids %in% c(fp, i9w))) {
@@ -106,7 +105,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
   # set new variable so we don't change the thing we are looping over...
   majorParents <- unique(icd9GetMajor(c(out, fout, i9w), isShort = TRUE))
   for (mp in majorParents) {
-    test_kids <- icd9ChildrenShort(mp, onlyReal = onlyReal, onlyBillable = FALSE)
+    test_kids <- icd9ChildrenShort(mp, onlyReal = onlyReal)
     test_kids <- test_kids[nchar(test_kids) < (5 + icd9IsE(mp))] # we've done these already
     test_kids <- test_kids[-which(test_kids == mp)]
     if (length(test_kids) > 0 && all(test_kids %in% c(out, fout, i9w))) {

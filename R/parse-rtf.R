@@ -60,14 +60,8 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
     lines <- readLines(fp_conn, warn = FALSE)
   }
   # the file itself is 7 bit ASCII, but has its own internal encoding using CP1252.
-  # test meniere's disease with lines[24821:24822]
+  # test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
-  # using linux grep, it appears that character codes from CP1252 (see first
-  # line of header) are represented by e.g. \'e9
-  #
-  #  $ grep "\\\\'" inst/extdata/Dtab12.rtf
-  #  from dtab12.rtf, the complete list of hex codes is: E8, E9, F1, F6 (e acute, e grave, nn, o umlaut)
-  #  # grep("\\'[[:alnum:]][[:alnum:]]", paste(utf[24821:24822], collapse=""), value = T)
   parseRtfLines(lines, verbose) %>% swapNamesWithVals %>% icd9SortDecimal -> out
   # make Tidy data: don't like using row names to store things
   icd9Desc <- data.frame(
@@ -104,13 +98,10 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   filtered <- grep("^\\\\par", filtered, value = TRUE)
 
   # fix ASCII/CP1252/Unicode horror: of course, some char defs are split over lines...
-  #accented_rows <- grep("\\'[[:alnum:]][[:alnum:]]", filtered)
-  #accented_hex <- strMultiMatch(".*((\\'[[:alnum:]][[:alnum:]]).*?).*", filtered[accented_rows])
   filtered <- gsub("\\\\'e8", "\u00e8", filtered)
   filtered <- gsub("\\\\'e9", "\u00e9", filtered)
   filtered <- gsub("\\\\'f1", "\u00f1", filtered)
   filtered <- gsub("\\\\'f16", "\u00f6", filtered)
-  # show that it worked: grep("\u00e8", filtered, value = T)
 
   # drop stupid long line at end:
   longest_lines <- nchar(filtered) > 3000
@@ -120,7 +111,6 @@ parseRtfLines <- function(lines, verbose = FALSE) {
 
   filtered <- stripRtf(filtered)
 
-  #filtered <- grep("\\[[-[:digit:]]+\\]", filtered, value = TRUE, invert = TRUE) # references e.g. [0-6]
   filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE) # empty lines
 
   re_anycode <- "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
@@ -166,7 +156,6 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   for (f in fourth_rows) {
     if (verbose) message("working on fourth-digit row:", f)
     range <- parseRtfFifthDigitRanges(filtered[f])
-    #if ("V30" %in% range) browser()
     filtered[seq(f + 1, f + 37)] %>%
       grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
       strPairMatch("([[:digit:]])[[:space:]](.*)", .) -> fourth_suffices
@@ -203,7 +192,6 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   for (f in fifth_rows) {
     if (verbose) message("working on fifth-digit row:", f)
     range <- parseRtfFifthDigitRanges(filtered[f], verbose = verbose)
-    # if ("941.00" %in% range) browser()
     filtered[seq(f + 1, f + 20)] %>%
       grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
       strPairMatch("([[:digit:]])[[:space:]](.*)", .) -> fifth_suffices
@@ -231,7 +219,6 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
     grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
     strPairMatch("([[:digit:]])[[:space:]](.*)", .) -> suffices_V30V39
-  #re_fifth_definedV3039 <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
   range <- c("V30" %i9da% "V37", icd9ChildrenDecimal("V39"))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
   names(range) <- range
@@ -277,7 +264,6 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   # apply fifth digit qualifiers:
   for (f in names(lookup_fifth)) {
     if (verbose) message("applying fifth digits to: ", f)
-    #if (f == "345.00") browser()
     parent_code <- substr(f, 0, nchar(f) - 1)
 
     if (parent_code %in% names(out)) {
@@ -364,7 +350,6 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
         out <- c(out, icd9ChildrenDecimal(single, onlyReal = FALSE))
       }
     }
-    #return(out)
     vals <- vals[1] # still need to process the base code
   }
 

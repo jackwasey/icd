@@ -36,8 +36,7 @@ parseEverythingAndSave <- function(verbose = TRUE) {
 #' @title parse almost everything
 #' @keywords internal
 parseAndSaveQuick <- function(verbose = FALSE) {
-  #if (verbose) message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
-  #parseRtfYear(year = "2011", save = TRUE, verbose = verbose) # creates icd9Desc
+  if (verbose) message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
   devtools::load_data(pkg = ".")
 
   # plain text billable codes
@@ -73,7 +72,7 @@ parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose 
   versions <- data_sources$version
   if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
-  for (v in versions)     icd9Billable[[v]] <- parseIcd9LeafDescriptionsVersion(version = v, save = save,
+for (v in versions)     icd9Billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
                                                                                 fromWeb = fromWeb, verbose = verbose)
 
   # and in my utils.R  getNonASCII(charactervector)
@@ -96,16 +95,12 @@ parseIcd9LeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose 
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
-parseIcd9LeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
+parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
                                              fromWeb = FALSE, verbose = FALSE) {
   assertString(version)
   assertFlag(save)
   assertFlag(fromWeb)
   assertFlag(verbose)
-
-  # test encodings with
-  # readLines("inst/extdata/CMS32_DESC_LONG_DX.txt")[4510] %T>% cat
-  # and in my utils.R  getNonASCII(charactervector)
 
   if (verbose) message("Fetching billable codes version: ", version)
 
@@ -283,7 +278,7 @@ parseIcd9Chapters <- function(year = NULL,
   # codes, when the coding was done in a different year from this analysis.
   # EXCLUDE COVERAGE START
   if (save) {
-    # saveInDataDir("icd9Chapters") # manually entered
+    # top level chapters are hand-written in data/
     saveInDataDir("icd9ChaptersSub")
     saveInDataDir("icd9ChaptersMajor")
   }

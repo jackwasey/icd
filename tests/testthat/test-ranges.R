@@ -139,8 +139,7 @@ test_that("V code with ambiguous parent", {
   expect_equal(icd9ExpandRangeShort("V10", "V1001",
                                     onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
                c("V10", "V100", "V1000", "V1001"))
-  expect_equal(icd9ExpandRangeShort("V10", "V1001",
-                                    onlyReal = FALSE), #excludAmbiguousParent = TRUE
+  expect_equal(icd9ExpandRangeShort("V10", "V1001", onlyReal = FALSE),
                c("V1000", "V1001"))
 })
 
@@ -333,8 +332,7 @@ test_that("icd9ChildrenDecimal valid input", {
   expect_equal(
     icd9ChildrenDecimal("010.0", onlyReal = FALSE),
     append("010.0", paste("010.0", 0:9, sep = "")))
-  #expect_equal(icd9ChildrenDecimal("010.0"), icd9ChildrenDecimal("10.0"))
-
+  expect_equal(icd9ChildrenDecimal("010.0"), icd9ChildrenDecimal("10.0"))
 })
 
 test_that("icd9ChildrenShort invalid input", {
@@ -358,7 +356,7 @@ test_that("icd9ChildrenShort invalid input", {
 test_that("icd9ChildrenShort valid input", {
   expect_equal(icd9ChildrenShort("V100", onlyReal = FALSE),
                paste("V100", c("", 0:9), sep = ""))
-  #expect_equal(toupper(icd9ChildrenShort("v100")), icd9Children("V100"))
+  expect_equal(icd9ChildrenShort("v100"), icd9Children("V100"))
   expect_equal(icd9ChildrenShort(" V100 ", onlyReal = FALSE),
                icd9ChildrenShort("V100", onlyReal = FALSE))
   expect_equal(icd9ChildrenShort("0100", onlyReal = FALSE),
@@ -427,9 +425,9 @@ test_that("icd9InReferenceCode", {
 
   expect_identical(icd9InReferenceCode(c("2501", "25001", "999"), c("V101", "250"), isShort = TRUE),
                    c(TRUE, TRUE, FALSE))
-  })
+})
 
-  test_that("icd9InReferenceCode works for numeric codes with major < 100", {
+test_that("icd9InReferenceCode works for numeric codes with major < 100", {
   expect_true(icd9InReferenceCode("1", "1", isShort = TRUE))
   expect_true(icd9InReferenceCode(" 1", "01", isShort = TRUE))
   expect_true(icd9InReferenceCode("1 ", "001", isShort = TRUE))

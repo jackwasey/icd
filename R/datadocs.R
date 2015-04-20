@@ -243,18 +243,21 @@ utils::globalVariables(c("%<>%"))
 #' @author Vermont Division of Health Care Administration
 #' @docType data
 .vermont <- function() {
-  vermont_dx <- read.csv("~/VTINP13.TXT", stringsAsFactors = FALSE, strip.white = TRUE, nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
+  vermont_dx <- read.csv("VTINP13.TXT",
+                         stringsAsFactors = FALSE,
+                         strip.white = TRUE,
+                         nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
   age_group <- vermont_dx$intage
-  attr(age_group, "class") = "factor"
-  attr(age_group, "levels") = c("Under 1", "1-17", "18-24",
+  attr(age_group, "class") <- "factor"
+  attr(age_group, "levels") <- c("Under 1", "1-17", "18-24",
                                "25-29", "30-34", "35-39",
                                "40-44", "45-49", "50-54",
                                "55-59", "60-64", "65-69",
                                "70-74", "75 and over",
                                "Unknown")
   sex <- vermont_dx$sex
-  attr(sex, "class") = "factor"
-  attr(sex, "levels") = c("male", "female", "unknown")
+  attr(sex, "class") <- "factor"
+  attr(sex, "levels") <- c("male", "female", "unknown")
   vermont_dx$intage <- age_group
   vermont_dx$sex <- sex
   vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)

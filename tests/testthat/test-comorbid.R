@@ -3,9 +3,7 @@ context("comorbidities")
 library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
 
 test_that("try to induce c++ segfault bug", {
-  #trigdat <- data.frame(visitId = c("visit1", "visit1"), icd9 = c("39891", "09320"))
-
-  devnull <- icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE) # seems to run okay now
+  expect_that(icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE), testthat::not(throws_error()))
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
@@ -149,15 +147,17 @@ test_that("can condense the big lists of comorbidities without errors", {
 test_that("icd9Hierarchy as saved in data can be recreated", {
   if (!exists("do_slow_tests") || !do_slow_tests) skip("too slow to do routinely on any platform")
   expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
-                 icd9::icd9Hierarchy)
+               icd9::icd9Hierarchy)
 })
 
 # the following test is dependent on Buildilability and consistency of
 # http://www.icd9data.com because there is no machine readable CDC or CMS file
 # with this data.
 test_that("icd9Chapters, etc. as saved in data can be recreated", {
-  #skip_on_cran() # and/or skip_on_travis()
-  skip("does web look-ups - don't want to hammer the target web site")
+  skip_on_cran() # and/or skip_on_travis()
+  if (exists("skip_on_travis")) skip_on_travis()
+  if (!exists("do_slow_tests") || !do_slow_tests)
+    skip("does web look-ups - don't want to hammer the target web site")
   res <- parseIcd9Chapters(year = "2014", save = FALSE)
   expect_equal(res$icd9Chapters, icd9::icd9Chapters)
   expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)
@@ -206,7 +206,7 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("39706" %in% ahrqComorbid$Valvular)
   expect_true("3971" %in% ahrqComorbid$Valvular)
   expect_true("3979" %in% ahrqComorbid$Valvular)
-  # SAS: "7463 "-"7466 "
+  # SAS source is "7463 "-"7466 "
   expect_true("7463" %in% ahrqComorbid$Valvular)
   expect_true("7466" %in% ahrqComorbid$Valvular)
   expect_true("74645" %in% ahrqComorbid$Valvular)
@@ -303,12 +303,12 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_false("24430" %in% ahrqComorbid$Hypothyroid) # implied exclusion
   expect_true("2442" %in% ahrqComorbid$Hypothyroid)
   expect_true("243" %in% ahrqComorbid$Hypothyroid) # top level billable code
-  # expect_true("2340" %in% ahrqComorbid$Hypothyroid) # implied, doesn't exist
-  # expect_true("23400" %in% ahrqComorbid$Hypothyroid) # implied
+  expect_true("2430" %in% ahrqComorbid$Hypothyroid) # implied, doesn't exist
+  expect_true("24300" %in% ahrqComorbid$Hypothyroid) # implied
   expect_true("2448" %in% ahrqComorbid$Hypothyroid)
   expect_true("2449" %in% ahrqComorbid$Hypothyroid)
-  #expect_true("24480" %in% ahrqComorbid$Hypothyroid)
-  #expect_true("24499" %in% ahrqComorbid$Hypothyroid)
+  expect_true("24480" %in% ahrqComorbid$Hypothyroid)
+  expect_true("24499" %in% ahrqComorbid$Hypothyroid)
   #      "V560 "-"V5632",
   expect_true("V560" %in% ahrqComorbid$Renal)
   expect_true("V563" %in% ahrqComorbid$Renal)
@@ -337,8 +337,7 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("20259" %in% ahrqComorbid$Lymphoma)
   expect_true("20298" %in% ahrqComorbid$Lymphoma)
   expect_true("20299" %in% ahrqComorbid$Lymphoma)
-  #expect_true("2030" %in% ahrqComorbid$Lymphoma) # parent # problem because this range is split for some reason
-  #expect_true("203" %in% ahrqComorbid$Lymphoma) # parent: secondary to 2030 problem
+  # 2030 and 203 are parents: problem because this range is split for some reason
   expect_true("2031" %in% ahrqComorbid$Lymphoma)
   expect_true("20310" %in% ahrqComorbid$Lymphoma)
   expect_true("20300" %in% ahrqComorbid$Lymphoma)
@@ -393,8 +392,8 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("20939" %in% ahrqComorbid$Tumor)
   expect_true("2090" %in% ahrqComorbid$Tumor)
   expect_true("2091" %in% ahrqComorbid$Tumor)
-  # range is split between definitions. ideally this would be included, but it is a corner case
-  # expect_true("2092" %in% ahrqComorbid$Tumor)
+  # is range split between definitions? ideally this would be included, but it
+  # is a corner case e.g. 2092
   expect_true("20900" %in% ahrqComorbid$Tumor)
   expect_true("20910" %in% ahrqComorbid$Tumor)
   expect_true("20920" %in% ahrqComorbid$Tumor)

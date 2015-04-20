@@ -1,10 +1,3 @@
-
-# may wish to skip slow tests on CRAN, Travis or locally, so decide here:
-# identical(Sys.getenv("TRAVIS"), "true") # or NOT_CRAN
-#
-# i want test coverage on travis, and can wait for the remote builds. NOT_CRAN
-# appears to be set only by devtools::check()
-
 set.seed(1441)
 n <- 500
 np <- round(n / 20) # icd9 codes per patients

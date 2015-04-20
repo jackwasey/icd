@@ -27,7 +27,7 @@ test_that("basic SAS VALUE declarations can be read into an R list", {
     'VALUE $RFRMSOMETHING 100-102 = "HTN" 103,104 = "CHF";\n',
     ' VALUE otherstuff 105 = "YES"'))
   expect_equal(result, list("$RFRMSOMETHING" = list(HTN = "100-102",
-                                                    CHF=c("103", "104")),
+                                                    CHF = c("103", "104")),
                             otherstuff = list("YES" = "105")))
 
   result <- sasFormatExtract(c(
@@ -36,18 +36,7 @@ test_that("basic SAS VALUE declarations can be read into an R list", {
   expect_equal(result, list("$RFRMSOMETHING" = list(HTN = "100-102",
                                                     CHF = c("103", "104")),
                             otherstuff = list("YES" = "105")))
-
-  # make sure it tolerates lack of whitespace...
-
-
-  # print(getwd()) # we're in the testthat directory, at least when running this
-  # code with test_file
-
-  # sasTxt <- readLines('inst/extdata//comformat2012-2013.txt')
-
 })
-
-#test_that("proc format opening is understood", {})
 
 test_that("groups of SAS assignments can be extracted", {
 

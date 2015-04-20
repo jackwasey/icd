@@ -153,7 +153,6 @@ test_that("icd9IsValidDecimal valid E codes", {
 test_that("icd9IsValidShort", {
   expect_equal(icd9IsValidShort(character()), logical())
   expect_error(icd9IsValidShort(list(1230, c(12323, 2323), c("nonesnseses"))))
-  #expect_false(icd9IsValidShort("0"))
   expect_true(icd9IsValidShort("0"))
   expect_equal(
     icd9IsValidShort(c("0", "00", "000", "0000", "00000")),
@@ -226,7 +225,7 @@ test_that("valid short form E codes - invalid input", {
   expect_false(icd9IsValidShort("E10000.1"))
   expect_false(icd9IsValidShort("E.1"))
   expect_false(icd9IsValidShort("E00000"))
-  #expect_true(icd9IsValidShort("E1234"))
+  expect_true(icd9IsValidShort("E1234"))
   expect_false(icd9IsValidShort("E000.00"))
   expect_false(icd9IsValidShort("E999.12"))
   expect_false(icd9IsValidShort("E099.12"))

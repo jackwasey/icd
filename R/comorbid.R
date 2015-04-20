@@ -130,9 +130,6 @@ icd9Comorbid <- function(icd9df,
   # can now do pure integer matching for icd9 codes. Only string manip becomes
   # (optionally) defactoring the visitId for the matrix row names.
 
-  # return via call to the C++ function:
-  #icd9ComorbidShort(icd9df, icd9Mapping, visitId, icd9Field)
-
   threads <- getOption("icd9.threads", getOmpCores())
 
   if (return.df) {

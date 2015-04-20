@@ -59,32 +59,6 @@ test_that("stripRtf does what it says on the tin", {
 })
 
 
-# now, this is probably year version dependent, but some ranges of codes have
-# common fifth digits, specified by 'major' range. E.g. 010-018 has sub-classifications for tuberculosis diagnoses.
-# tb <- "010" %i9da% "018"
-# tb.fifth <- list(
-#   "0" = "unspecified",
-#   "1" = "bacteriological or histological examination not done",
-#   "2" = "bacteriological or histological examination unknown (at present)",
-#   "3" = "tubercle bacilli found (in sputum) by microscopy",
-#   "4" = "tubercle bacilli not found (in sputum) by microscopy, but found by bacterial culture",
-#   "5" = "tubercle bacilli not found by bacteriological examination, but tuberculosis confirmed histologically",
-#   "6" = "tubercle bacilli not found by bacteriological or histological examination, but tuberculosis confirmed by other methods [inoculation of animals]")
-#
-# polio <- "045" %i9da% "045"
-# polio.fifth <- list(
-#   "0"	= "poliovirus, unspecified type",
-#   "1"	= "poliovirus type I",
-#   "2"	= "poliovirus type II",
-#   "3"	= "poliovirus type III")
-#
-# hep <- "070.2" %i9da% "070.3"
-# hep.fifth <- list(
-#   "0" = "acute or unspecified, without mention of hepatitis delta",
-#   "1" = "acute or unspecified, with hepatitis delta",
-#   "2" =  "chronic, without mention of hepatitis delta",
-#   "3" = "chronic, with hepatitis delta")
-
 test_that("sub-parse v91.9", {
   skip("need to reformulate as tests on output of entire parse")
   alllines <- readLines(system.file("extdata", "Dtab12.rtf", package = "icd9"), warn = FALSE)
@@ -108,7 +82,6 @@ test_that("tricky V91.9 and similar", {
     expect_true(any(grep(sub(".", "\\.", vc), testlines)))
 
   # show missing ones:
-  # setdiff(v91.9_codes, nrtf)
   expect_true(all(v91.9_codes %in% nrtf),
               info = paste("missing codes are:",
                            paste(setdiff(v91.9_codes, nrtf), collapse = ", ")))
@@ -131,12 +104,6 @@ test_that("all csv extract codes are in rtf extract", {
   missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9Hierarchy$icd9), nrtf)
   expect_equal(length(missing_from_rtf), 0,
                info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
-  #   expect_equal(length(missing_from_rtf), 0,
-  #                info = paste("first fifty are:",
-  #                             paste(missing_from_rtf[1:50], collapse = ", "),
-  #                             "\nlast fifty are:",
-  #                             paste(tail(missing_from_rtf, 50), collapse = ", ")
-  #                ))
 })
 
 test_that("majors extracted from web page are the same as those from RTF", {
@@ -152,7 +119,7 @@ test_that("majors extracted from web page are the same as those from RTF", {
                                 paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
 })
 
-v32 <- parseIcd9LeafDescriptionsVersion(version = "32", save = FALSE, fromWeb = FALSE)
+v32 <- parseLeafDescriptionsVersion(version = "32", save = FALSE, fromWeb = FALSE)
 
 test_that("all leaf codes from TXT are in RTF extract", {
   v32$icd9 %>% icd9ShortToDecimal -> leaves
@@ -285,12 +252,13 @@ test_that("some subchapters are correct", {
 })
 
 test_that("some randomly selected rows are correct", {
-  # icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname %>% dput
-
-  c("5060", "Bronchitis and pneumonitis due to fumes and vapors",
-    "506", "Respiratory conditions due to chemical fumes and vapors",
-    "Pneumoconioses And Other Lung Diseases Due To External Agents",
-    "Diseases Of The Respiratory System")
+  expect_equal(
+    icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname,
+    c("5060", "Fum/vapor bronc/pneumon", "Bronchitis and pneumonitis due to fumes and vapors",
+      "506", "Respiratory conditions due to chemical fumes and vapors",
+      "Pneumoconioses And Other Lung Diseases Due To External Agents",
+      "Diseases Of The Respiratory System")
+  )
 })
 
 test_that("billable codes are recreated", {

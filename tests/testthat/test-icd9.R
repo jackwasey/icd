@@ -113,8 +113,7 @@ test_that("add leading zeroes to majors, invalid input", {
   expect_equal(icd9AddLeadingZeroesMajor("E"), NA_character_)
   expect_equal(icd9AddLeadingZeroesMajor("V"), NA_character_)
   expect_equal(icd9AddLeadingZeroesMajor("jasmine"), NA_character_)
-  # minimal validation of major, should just give back E codes.
-  # expect_equal(icd9AddLeadingZeroesMajor("E9"), "E9")
+  expect_equal(icd9AddLeadingZeroesMajor("E9"), "E009")
 })
 
 test_that("all generated icd9 lookup tables are valid!", {

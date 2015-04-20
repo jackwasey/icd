@@ -20,12 +20,12 @@
 #'   hopefully will have some generalizability. It relies heavily on lists and
 #'   regex, but, as you will see from the code, R is not a great language with
 #'   which to write a SAS parser.
-#'
-#'   #example
-#'   #sasFormatExtract(readLines('inst/extdata//comformat2012-2013.txt'))
-#'
 #' @param sasTxt is a character vector, with one item per line, e.g. from
 #'   \code{readLines}
+#' @examples
+#'   \dontrun{
+#'   sasFormatExtract(readLines('inst/extdata//comformat2012-2013.txt'))
+#'   }
 #' @references
 #' \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}
 #' \url{https://communities.sas.com/thread/47571?start=0&tstart=0}
@@ -36,15 +36,13 @@ sasFormatExtract <- function(sasTxt) {
 
   # collapse everything onto one big line, so we can filter multi-line
   # commments. No ability to do multiline regex along a vector.
-  sasTxt <- paste(sasTxt, collapse=" \\n")
+  sasTxt <- paste(sasTxt, collapse = " \\n")
 
   # sas comments are in the form /* ... */ inline/multiline, or * ... ;
   sasTxt <- gsub(pattern = "/\\*.*?\\*/", replacement = "", x = sasTxt) # nolint
   sasTxt <- gsub(pattern = "\\n\\*.*?;", replacement = "\\n", x = sasTxt) # nolint
 
-  sasTxt <- strsplit(sasTxt, split="\\;")[[1]]
-  #sasCleanLines <- strsplit(sasNoComments, split="\\\\n")[[1]]
-  #sasNonEmptyLines <- sasCleanLines[sasCleanLines!=""]
+  sasTxt <- strsplit(sasTxt, split = "\\;")[[1]]
 
   #strip whitespace and ?undetected newline characters, replace with single
   #spaces.
@@ -58,7 +56,7 @@ sasFormatExtract <- function(sasTxt) {
   # put each VALUE declaration in a vector element
   allAssignments <- strMultiMatch(
     pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
-    text=sasTxt)
+    text = sasTxt)
 
   out <- list()
 
@@ -89,7 +87,7 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
   # tricky, so doing it in steps.
   # n.b. this is a list with list per input row.
   halfway <- as.list(unlist(
-    strsplit(x, split="[[:space:]]*=[[:space:]]*")
+    strsplit(x, split = "[[:space:]]*=[[:space:]]*")
   ))
 
   # we need to match the first unquoted space to get the boundary between the
@@ -125,11 +123,10 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
 
 
   out <- list()
-  for (pair in seq(from=1, to=length(threequarters), by=2)) {
-    #flog.debug("%s = %s", threequarters[pair], threequarters[pair+1])
+  for (pair in seq(from = 1, to = length(threequarters), by = 2)) {
     if (stripWhiteSpace) {
-      outwhite <- gsub(pattern="[[:space:]]*",
-                       replacement="",
+      outwhite <- gsub(pattern = "[[:space:]]*",
+                       replacement = "",
                        threequarters[pair])
     } else {
       outwhite <- threequarters[pair]
@@ -149,7 +146,7 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
 #' @keywords internal manip util
 sasDropOtherAssignment <- function(x) {
   stopifnot(sapply(regmatches(x, gregexpr("=", x)), length) == 1)
-  lapply(x, function(y) strsplit(y, split="[[:space:]]*=")[[1]][1])
+  lapply(x, function(y) strsplit(y, split = "[[:space:]]*=")[[1]][1])
 }
 
 #' @title extract quoted or unquoted SAS string definitions
@@ -161,15 +158,13 @@ sasDropOtherAssignment <- function(x) {
 #'   like \code{readLines(someSasFilePath)}
 #' @keywords internal programming list
 sasExtractLetStrings <- function(x) {
-
-  #letStr <- grep(pattern="LET.*STR", x)
   a <- strMultiMatch(
     "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)",
     text = x, dropEmpty = TRUE)
-  vls <- vapply(a, FUN=function(x) x[[2]], FUN.VALUE = "")
-  splt <- strsplit(vls, split=",")
+  vls <- vapply(a, FUN = function(x) x[[2]], FUN.VALUE = "")
+  splt <- strsplit(vls, split = ",")
   result <- lapply(splt, strip, pattern = "'") # strip single quotes
   result <- lapply(result, strip, pattern = '"') # strip double quotes
-  names(result) <- vapply(a, FUN = function(x) x[[1]], FUN.VALUE="")
+  names(result) <- vapply(a, FUN = function(x) x[[1]], FUN.VALUE = "")
   result
 }

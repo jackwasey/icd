@@ -18,9 +18,11 @@ this is modelled entirely on a single chunk of SAS code, but
   hopefully will have some generalizability. It relies heavily on lists and
   regex, but, as you will see from the code, R is not a great language with
   which to write a SAS parser.
-
-  #example
-  #sasFormatExtract(readLines('inst/extdata//comformat2012-2013.txt'))
+}
+\examples{
+\dontrun{
+  sasFormatExtract(readLines('inst/extdata//comformat2012-2013.txt'))
+  }
 }
 \references{
 \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}

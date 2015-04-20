@@ -213,8 +213,7 @@ getVisitId <- function(x, visitId = NULL) {
 # the list, meaning some later possibilities are more or less specific regexes
 # than earlier ones.
 getIcdField <- function(x, icd9Field = NULL) {
-  guesses <- c("icd.?9", "icd.?9.?Code", "icd",
-               "diagnos", "diag.?code", "diag")
+  guesses <- c("icd.?9", "icd.?9.?Code", "icd", "diagnos", "diag.?code", "diag", "i9")
   checkDataFrame(x, min.cols = 1, col.names = "named")
   if (is.null(icd9Field)) {
     for (guess in guesses) {
@@ -236,7 +235,6 @@ getIcdField <- function(x, icd9Field = NULL) {
 }
 
 getLatestBillableVersion <- function() "32"
-#as.character(max(icd9::data_sources$version))
 
 #' @title trim null or empty values from a list
 #' @param x list
