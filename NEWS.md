@@ -9,6 +9,7 @@
  * code clean-up with excellent `lintr` package from @jimhester
  * bug fixes
  * more tests, with coverage at about 85% with the full test suite
+ * included first thousand patients from a public domain dataset from Vermont, available as `vermont_dx`.
 
 # Version 1.1
 
