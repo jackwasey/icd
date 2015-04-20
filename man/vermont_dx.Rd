@@ -25,7 +25,7 @@ Conditions of Release Release of public use data is subject to the
 
   2. The requestor agrees to incorporate the following, or a substantially
   similar, disclaimer in all reports or publications that include public use
-  data: “Hospital discharge data for use in this study were supplied by the
+  data: "Hospital discharge data for use in this study were supplied by the
   Vermont Association of Hospitals and Health Systems-Network Services
   Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
   Securities and Health Care Administration (BISHCA). All analyses,
@@ -33,7 +33,7 @@ Conditions of Release Release of public use data is subject to the
   requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
   analyses, interpretations or conclusions. In addition, as the data have
   been edited and processed by VAHHS-NSO, BISHCA assumes no responsibility
-  for errors in the data due to coding or processing
+  for errors in the data due to coding or processing"
 }
 \author{
 Vermont Division of Health Care Administration
