@@ -8,6 +8,7 @@ env: R_CHECK_CRAN_INCOMING_=FALSE
 
 r_github_packages:
  - jimhester/covr
+ - hadley/testthat
 
 after_success:
  - Rscript -e 'devtools::install()'
