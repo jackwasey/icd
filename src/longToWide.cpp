@@ -79,7 +79,7 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 	ragged.reserve(vlen / approx_cmb_per_visit);
 	int max_per_pt = 1;
 	if (TYPEOF(vsexp) != STRSXP)
-		Rcpp::stop("need string input to longToRagged\n");
+	  Rf_error("need string input to longToRagged\n");
 #ifdef ICD9_DEBUG
 	Rcpp::Rcout << "longToRagged SEXP is STR\n";
 #endif
@@ -141,7 +141,7 @@ CharacterVector icd9LongToWideCpp(const SEXP& icd9df,
 	const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 	UNPROTECT(1);
 	if (TYPEOF(vsexp) != STRSXP)
-		Rcpp::stop(
+	  Rf_error(
 				"visitIds should be pre-converted to str - which is necessary for matrix rowname output anyway");
 
 	VecStr visitIds; // may be vector of integers or strings
