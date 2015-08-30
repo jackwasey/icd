@@ -54,7 +54,7 @@ release_questions <- function() {
     "Does every file have correct licence information?",
     "Have you linted?",
     "Does it compile and check fine on travis?",
-    "Have you checked on Windows, win_builder, Mac, Ubuntu and UBSAN rocker?",
+    "Have you checked on Windows, win_builder (if possible with configure step), Mac, Ubuntu, ASAN, and UBSAN rocker, and updated my docker image which resembles a CRAN maintainers environment?",
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially thinking of autoconfigure stuff."
   )

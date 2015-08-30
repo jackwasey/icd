@@ -25,18 +25,27 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-CharacterVector icd9MajMinToCodeShim(const CharacterVector mjr,
-		const CharacterVector mnr, bool isShort) {
+CharacterVector icd9MajMinToCode(const CharacterVector major,
+		const CharacterVector minor, bool isShort) {
 #ifdef ICD9_DEBUG_TRACE
-	Rcout << "icd9MajMinToCode\n";
-	if (mjr.size() != mnr.size())
-	Rcpp::stop("aborting because mjr and mnr lengths differ");
+  Rcout << "icd9MajMinToCode: major.size() = " << major.size()
+        << " and minor.size() = " << minor.size() << "\n";
 #endif
-	CharacterVector out; // wish I could reserve space for this
-	CharacterVector::const_iterator j = mjr.begin();
-	CharacterVector::const_iterator n = mnr.begin();
 
-	for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
+  if (major.size() != minor.size())
+    //throw(std::length_error("major and minor lengths differ"));
+    //Rcpp::stop("major and minor lengths differ"); // this fails the address sanitizer
+    Rf_error("major and minor lengths differ");
+
+#ifdef ICD9_DEBUG_TRACE
+  Rcout << "major and minor are the same?\n";
+#endif
+
+  CharacterVector out; // wish I could reserve space for this
+	CharacterVector::const_iterator j = major.begin();
+	CharacterVector::const_iterator n = minor.begin();
+
+	for (; j != major.end() && n != minor.end(); ++j, ++n) {
 		String mjrelem = *j;
 		if (mjrelem == NA_STRING) {
 			out.push_back(NA_STRING);
@@ -60,7 +69,7 @@ CharacterVector icd9MajMinToCodeShim(const CharacterVector mjr,
 			} else {
 				smj.insert(1, "0");
 			}
-			// default: // mjr is 3 (or more) chars already
+			// default: // major is 3 (or more) chars already
 		}
 		String mnrelem = *n;
 		if (mnrelem == NA_STRING) {
@@ -82,50 +91,50 @@ CharacterVector icd9MajMinToCodeShim(const CharacterVector mjr,
 }
 
 // [[Rcpp::export]]
-CharacterVector icd9MajMinToShortShim(const CharacterVector mjr,
-		const CharacterVector mnr) {
+CharacterVector icd9MajMinToShort(const CharacterVector major,
+		const CharacterVector minor) {
 #ifdef ICD9_DEBUG_TRACE
-	Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
-	<< " and mnr.size() = " << mnr.size() << "\n";
+	Rcout << "icd9MajMinToShort: major.size() = " << major.size()
+	<< " and minor.size() = " << minor.size() << "\n";
 #endif
-	if ((mjr.size() != 1 && mjr.size() != mnr.size())
-			|| (mjr.size() == 1 && mnr.size() == 0)) {
-		Rcpp::stop("icd9MajMinToShort, length of mjrs and mnrs must be equal.");
+	if ((major.size() != 1 && major.size() != minor.size())
+			|| (major.size() == 1 && minor.size() == 0)) {
+		Rf_error("icd9MajMinToShort, length of majors and minors must be equal, unless majors length is one.");
 	}
-	if (mjr.size() == 1) {
+	if (major.size() == 1) {
 #ifdef ICD9_DEBUG_TRACE
-		Rcout << "icd9MajMinToShort: mjr.size() = 1\n";
+		Rcout << "icd9MajMinToShort: major.size() = 1\n";
 #endif
-		CharacterVector newmjr(mnr.size(), mjr[0]);
-		return icd9MajMinToCodeShim(newmjr, mnr, true);
+		CharacterVector newmajor(minor.size(), major[0]);
+		return icd9MajMinToCode(newmajor, minor, true);
 	}
-	return icd9MajMinToCodeShim(mjr, mnr, true);
+	return icd9MajMinToCode(major, minor, true);
 }
 
 // [[Rcpp::export]]
-CharacterVector icd9MajMinToDecimalShim(const CharacterVector mjr,
-		const CharacterVector mnr) {
-	return icd9MajMinToCodeShim(mjr, mnr, false);
+CharacterVector icd9MajMinToDecimal(const CharacterVector major,
+		const CharacterVector minor) {
+	return icd9MajMinToCode(major, minor, false);
 }
 
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
 CharacterVector icd9PartsToShort(const List parts) {
-	return icd9MajMinToCodeShim(parts["major"], parts["minor"], true);
+	return icd9MajMinToCode(parts["major"], parts["minor"], true);
 }
 
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
 CharacterVector icd9PartsToDecimal(const List parts) {
-	return icd9MajMinToCodeShim(parts["major"], parts["minor"], false);
+	return icd9MajMinToCode(parts["major"], parts["minor"], false);
 }
 
 // [[Rcpp::export]]
-List icd9MajMinToPartsShim(const CharacterVector mjr,
-		const CharacterVector mnr) {
-	List returned_frame = List::create(_["major"] = mjr, _["minor"] = mnr);
+List icd9MajMinToParts(const CharacterVector major,
+		const CharacterVector minor) {
+	List returned_frame = List::create(_["major"] = major, _["minor"] = minor);
 
 	StringVector sample_row = returned_frame(0);
 	IntegerVector row_names = seq_along(sample_row);
@@ -138,9 +147,9 @@ List icd9MajMinToPartsShim(const CharacterVector mjr,
 }
 
 // [[Rcpp::export]]
-List icd9MajMinToParts_listShim(const CharacterVector mjr,
-		const CharacterVector mnr) {
-	List out = List::create(_["major"] = mjr, _["minor"] = mnr);
+List icd9MajMinToParts_list(const CharacterVector major,
+		const CharacterVector minor) {
+	List out = List::create(_["major"] = major, _["minor"] = minor);
 	return out;
 }
 
@@ -149,12 +158,12 @@ List icd9MajMinToParts_listShim(const CharacterVector mjr,
 // [[Rcpp::export]]
 List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty = "") {
 
-	CharacterVector mjr(icd9Short.size());
-	CharacterVector mnr(icd9Short.size());
+	CharacterVector major(icd9Short.size());
+	CharacterVector minor(icd9Short.size());
 
 	for (int i = 0; i < icd9Short.size(); ++i) {
 		if (CharacterVector::is_na(icd9Short[i])) {
-			mnr[i] = NA_STRING;
+			minor[i] = NA_STRING;
 			continue;
 		}
 
@@ -167,16 +176,16 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 		  case 2:
 		  case 3:
 		  case 4:
-		    mjr[i] = s.substr(0, sz);
-		    mnr[i] = minorEmpty;
+		    major[i] = s.substr(0, sz);
+		    minor[i] = minorEmpty;
 		    break;
 		  case 5:
-		    mjr[i] = s.substr(0, 4);
-		    mnr[i] = s.substr(4, 1);
+		    major[i] = s.substr(0, 4);
+		    minor[i] = s.substr(4, 1);
 		    break;
 		  default:
-		    mjr[i] = NA_STRING;
-		  mnr[i] = NA_STRING;
+		    major[i] = NA_STRING;
+		  minor[i] = NA_STRING;
 		  continue;
 		  }
 		} else { // not an E code
@@ -184,24 +193,24 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 			case 1:
 			case 2:
 			case 3:
-				mjr[i] = s.substr(0, sz);
-				mnr[minorEmpty];
+				major[i] = s.substr(0, sz);
+				minor[minorEmpty];
 				continue;
 			case 4:
 			case 5:
-				mjr[i] = s.substr(0, 3);
-				mnr[i] = s.substr(3, sz - 3);
+				major[i] = s.substr(0, 3);
+				minor[i] = s.substr(3, sz - 3);
 				continue;
 			default:
-				mjr[i] = NA_STRING;
-				mnr[i] = NA_STRING;
+				major[i] = NA_STRING;
+				minor[i] = NA_STRING;
 				continue;
 			}
 		}
 
 	} // for
 
-	return icd9MajMinToPartsShim(icd9AddLeadingZeroesMajorShim(mjr), mnr);
+	return icd9MajMinToParts(icd9AddLeadingZeroesMajor(major), minor);
 }
 
 //' @rdname convert
@@ -209,8 +218,8 @@ List icd9ShortToParts(const CharacterVector icd9Short, const String minorEmpty =
 // [[Rcpp::export]]
 List icd9DecimalToParts(const CharacterVector icd9Decimal,
 		const String minorEmpty = "") {
-	CharacterVector mjrs;
-	CharacterVector mnrs;
+	CharacterVector majors;
+	CharacterVector minors;
 	int ilen = icd9Decimal.length();
 
 	if (ilen == 0) {
@@ -222,8 +231,8 @@ List icd9DecimalToParts(const CharacterVector icd9Decimal,
 			it != icd9Decimal.end(); ++it) {
 		String strna = *it;
 		if (strna == NA_STRING || strna == "") {
-			mjrs.push_back(NA_STRING);
-			mnrs.push_back(NA_STRING);
+			majors.push_back(NA_STRING);
+			minors.push_back(NA_STRING);
 			continue;
 		}
 		// Rcpp::String doesn't implement many functions, so using STL. A FAST way
@@ -234,19 +243,19 @@ List icd9DecimalToParts(const CharacterVector icd9Decimal,
 		thiscode = strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
 		std::size_t pos = thiscode.find(".");
 		// substring parts
-		std::string mjrin;
-		String mnrout;
+		std::string majorin;
+		String minorout;
 		if (pos != std::string::npos) {
-			mjrin = thiscode.substr(0, pos);
-			mnrout = thiscode.substr(pos + 1);
+			majorin = thiscode.substr(0, pos);
+			minorout = thiscode.substr(pos + 1);
 		} else {
-			mjrin = thiscode;
-			mnrout = minorEmpty;
+			majorin = thiscode;
+			minorout = minorEmpty;
 		}
-		mjrs.push_back(icd9AddLeadingZeroesMajorSingleShim(mjrin));
-		mnrs.push_back(mnrout);
+		majors.push_back(icd9AddLeadingZeroesMajorSingle(majorin));
+		minors.push_back(minorout);
 	}
-	return List::create(_["major"] = mjrs, _["minor"] = mnrs);
+	return List::create(_["major"] = majors, _["minor"] = minors);
 }
 
 //' @title Convert ICD-9 codes between short and decimal forms

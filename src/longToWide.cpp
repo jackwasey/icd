@@ -28,7 +28,7 @@ CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 		const VecStr &visitIds) {
 #ifdef ICD9_DEBUG_TRACE
 	Rcpp::Rcout << "visitIds = ";
-	printIt(visitIds);
+	// printIt(visitIds); // broken, not sure why.
 #endif
 	VecStr::size_type distinct_visits = ragged.size();
 	CharacterVector out(distinct_visits * max_per_pt, NA_STRING); // optionally default empty strings? NA? User can do this for now.

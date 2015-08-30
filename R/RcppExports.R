@@ -9,16 +9,16 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
     .Call('icd9_icd9ComorbidShortCpp', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate)
 }
 
-icd9MajMinToCodeShim <- function(mjr, mnr, isShort) {
-    .Call('icd9_icd9MajMinToCodeShim', PACKAGE = 'icd9', mjr, mnr, isShort)
+icd9MajMinToCode <- function(major, minor, isShort) {
+    .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', major, minor, isShort)
 }
 
-icd9MajMinToShortShim <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToShortShim', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToShort <- function(major, minor) {
+    .Call('icd9_icd9MajMinToShort', PACKAGE = 'icd9', major, minor)
 }
 
-icd9MajMinToDecimalShim <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToDecimalShim', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToDecimal <- function(major, minor) {
+    .Call('icd9_icd9MajMinToDecimal', PACKAGE = 'icd9', major, minor)
 }
 
 #' @rdname convert
@@ -33,12 +33,12 @@ icd9PartsToDecimal <- function(parts) {
     .Call('icd9_icd9PartsToDecimal', PACKAGE = 'icd9', parts)
 }
 
-icd9MajMinToPartsShim <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToPartsShim', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToParts <- function(major, minor) {
+    .Call('icd9_icd9MajMinToParts', PACKAGE = 'icd9', major, minor)
 }
 
-icd9MajMinToParts_listShim <- function(mjr, mnr) {
-    .Call('icd9_icd9MajMinToParts_listShim', PACKAGE = 'icd9', mjr, mnr)
+icd9MajMinToParts_list <- function(major, minor) {
+    .Call('icd9_icd9MajMinToParts_list', PACKAGE = 'icd9', major, minor)
 }
 
 #' @rdname convert
@@ -93,12 +93,12 @@ icd9LongToWideCpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call('icd9_icd9LongToWideCpp', PACKAGE = 'icd9', icd9df, visitId, icd9Field, aggregate)
 }
 
-icd9AddLeadingZeroesMajorSingleShim <- function(mjr) {
-    .Call('icd9_icd9AddLeadingZeroesMajorSingleShim', PACKAGE = 'icd9', mjr)
+icd9AddLeadingZeroesMajorSingle <- function(major) {
+    .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', major)
 }
 
-icd9AddLeadingZeroesMajorShim <- function(mjr) {
-    .Call('icd9_icd9AddLeadingZeroesMajorShim', PACKAGE = 'icd9', mjr)
+icd9AddLeadingZeroesMajor <- function(major) {
+    .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', major)
 }
 
 #' @rdname icd9AddLeadingZeroes
@@ -125,8 +125,8 @@ icd9AddLeadingZeroes <- function(icd9, isShort) {
     .Call('icd9_icd9AddLeadingZeroes', PACKAGE = 'icd9', icd9, isShort)
 }
 
-icd9ExpandMinorShim <- function(mnr, isE = FALSE) {
-    .Call('icd9_icd9ExpandMinorShim', PACKAGE = 'icd9', mnr, isE)
+icd9ExpandMinor <- function(minor, isE = FALSE) {
+    .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', minor, isE)
 }
 
 icd9ChildrenShortCpp <- function(icd9Short, onlyReal) {

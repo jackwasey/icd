@@ -21,13 +21,13 @@
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-String icd9AddLeadingZeroesMajorSingleShim(String mjr) {
-	if (mjr == NA_STRING) {
+String icd9AddLeadingZeroesMajorSingle(String major) {
+	if (major == NA_STRING) {
 		return (NA_STRING);
 	}
-	std::string m(mjr);
-	if (!icd9IsASingleVE(mjr.get_cstring())) {
-		switch (strlen(mjr.get_cstring())) {
+	std::string m(major);
+	if (!icd9IsASingleVE(major.get_cstring())) {
+		switch (strlen(major.get_cstring())) {
 		case 0:
 			return (NA_STRING);
 		case 1:
@@ -38,7 +38,7 @@ String icd9AddLeadingZeroesMajorSingleShim(String mjr) {
 			return (m);
 		}
 	} else {
-		switch (strlen(mjr.get_cstring())) {
+		switch (strlen(major.get_cstring())) {
 		case 1:
 			return (NA_STRING);
 		case 2:
@@ -65,15 +65,15 @@ String icd9AddLeadingZeroesMajorSingleShim(String mjr) {
 }
 
 // [[Rcpp::export]]
-CharacterVector icd9AddLeadingZeroesMajorShim(CharacterVector mjr) {
-	return sapply(mjr, icd9AddLeadingZeroesMajorSingleShim);
+CharacterVector icd9AddLeadingZeroesMajor(CharacterVector major) {
+	return sapply(major, icd9AddLeadingZeroesMajorSingle);
 }
 
 //' @rdname icd9AddLeadingZeroes
 // [[Rcpp::export]]
 CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short) {
 	List parts = icd9ShortToParts(icd9Short);
-	parts["major"] = icd9AddLeadingZeroesMajorShim(parts["major"]);
+	parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
 	return icd9PartsToShort(parts);
 }
 
@@ -81,7 +81,7 @@ CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short) {
 // [[Rcpp::export]]
 CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
 	List parts = icd9DecimalToParts(icd9Decimal);
-	parts["major"] = icd9AddLeadingZeroesMajorShim(
+	parts["major"] = icd9AddLeadingZeroesMajor(
 			as<CharacterVector>(parts["major"]));
 	return icd9PartsToDecimal(parts);
 }

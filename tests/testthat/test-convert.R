@@ -252,7 +252,7 @@ test_that("icd9 parts to short: don't allow cycling.", {
   expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
 })
 
-test_that("Windows Rtools 3.2 hang test", {
+test_that("Windows Rtools 3.2 hang test - also triggers bug #75", {
   expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
   # see Rcpp issue #276.
 })

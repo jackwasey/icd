@@ -67,14 +67,14 @@ CharacterVector MakeAllMinors() {
 const CharacterVector vv = MakeAllMinors();
 
 // [[Rcpp::export]]
-CharacterVector icd9ExpandMinorShim(std::string mnr, bool isE = false) {
+CharacterVector icd9ExpandMinor(std::string minor, bool isE = false) {
 
 	if (!isE) {
-		switch (mnr.size()) {
+		switch (minor.size()) {
 		case 0:
 			return vv;
 		case 1:
-			switch (mnr.at(0)) {
+			switch (minor.at(0)) {
 			case '0':
 				return v0;
 			case '1':
@@ -96,26 +96,26 @@ CharacterVector icd9ExpandMinorShim(std::string mnr, bool isE = false) {
 			case '9':
 				return v9;
 			default:
-				Rcpp::stop("unrecognized minor character");
+			  Rf_error("unrecognized minor character");
 				return CharacterVector::create();
 			}
 			break;
 		case 2:
-			return wrap(mnr);
+			return wrap(minor);
 		default:
-			Rcpp::stop("minor of >2 characters received by icd9ExpandMinor");
+		  Rf_error("minor of >2 characters received by icd9ExpandMinor");
 			return CharacterVector::create();
 		}
 	} else {
 		// is E code, so minor must be just one character
-		switch (mnr.size()) {
+		switch (minor.size()) {
 		case 0:
 			return CharacterVector::create("", "0", "1", "2", "3", "4", "5",
 					"6", "7", "8", "9");
 		case 1:
-			return mnr;
+			return minor;
 		default:
-			Rcpp::stop("too many characters for an E code minor part\n");
+		  Rf_error("too many characters for an E code minor part\n");
 		}
 	}
 	return (NA_STRING); // should never get here
@@ -135,12 +135,12 @@ CharacterVector icd9ChildrenShortCpp(CharacterVector icd9Short, bool onlyReal) {
 		std::string thismajor = as<std::string>(*itmajor);
 		std::string thisminor = as<std::string>(*itminor);
 
-		CharacterVector newminors = icd9ExpandMinorShim(thisminor,
+		CharacterVector newminors = icd9ExpandMinor(thisminor,
 				icd9IsASingleE(thismajor.c_str()));
 
 		// push back slower, but difficult to predict size of output
 		std::vector<std::string> newshort = as<std::vector<std::string> >(
-				icd9MajMinToShortShim(thismajor, newminors));
+				icd9MajMinToShort(thismajor, newminors));
 
 		// std insert is a thousand times faster than looping through CharacterVector and push_backing
 		out.insert(newshort.begin(), newshort.end());

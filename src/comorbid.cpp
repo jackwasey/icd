@@ -109,7 +109,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #endif
 #ifdef ICD9_DEBUG_TRACE
 	Rcpp::Rcout << "out is: ";
-	printIt(out);
+	// printIt(out); // don't think I can do this through template, since char it is a base type?
 	Rcpp::Rcout << "printed\n";
 #endif
 	// try cast to logical first. (in which case I can use char for Out)
