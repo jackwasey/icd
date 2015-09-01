@@ -63,11 +63,11 @@ CharacterVector MakeAllMinors() {
 	}
 	return (vv);
 }
-
+// generate the lookups
 const CharacterVector vv = MakeAllMinors();
 
 // [[Rcpp::export]]
-CharacterVector icd9ExpandMinor(std::string minor, bool isE = false) {
+CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 
 	if (!isE) {
 		switch (minor.size()) {
@@ -135,7 +135,7 @@ CharacterVector icd9ChildrenShortCpp(CharacterVector icd9Short, bool onlyReal) {
 		std::string thismajor = as<std::string>(*itmajor);
 		std::string thisminor = as<std::string>(*itminor);
 
-		CharacterVector newminors = icd9ExpandMinor(thisminor,
+		CharacterVector newminors = icd9ExpandMinorShim(thisminor,
 				icd9IsASingleE(thismajor.c_str()));
 
 		// push back slower, but difficult to predict size of output

@@ -1,11 +1,12 @@
 ## Note
-* Thank you for comments on a previous (failed) submission of version 1.1 about the need for configure script to test independently for OpenMP and C++11, which is now done.
+* Many thanks to CRAN maintainers for discovering an obscure memory access violation. Corrected in this release, with other minor changes.
 
 ## Test environments
-* Ubuntu 14.10 R 3.2, clang 3.7.0 and gcc 4.9.1
+* Ubuntu 15.04 R 3.2.2, clang 3.6.0 and gcc 4.9.2
 * Ubuntu 12.04 (on travis-ci) R 3.2, gcc 4.6.3
 * Debian jessie in docker with UBSAN and clang, R 3.1.2
 * Windows 7 64 bit R 3.2 with gcc from Rtools32
+* Debian testing/unstable, clang 3.8 trunk, R-devel trunk, address and undefined behaviour santizers.
 
 ## R CMD check results
 

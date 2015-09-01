@@ -125,8 +125,8 @@ icd9AddLeadingZeroes <- function(icd9, isShort) {
     .Call('icd9_icd9AddLeadingZeroes', PACKAGE = 'icd9', icd9, isShort)
 }
 
-icd9ExpandMinor <- function(minor, isE = FALSE) {
-    .Call('icd9_icd9ExpandMinor', PACKAGE = 'icd9', minor, isE)
+icd9ExpandMinorShim <- function(minor, isE = FALSE) {
+    .Call('icd9_icd9ExpandMinorShim', PACKAGE = 'icd9', minor, isE)
 }
 
 icd9ChildrenShortCpp <- function(icd9Short, onlyReal) {

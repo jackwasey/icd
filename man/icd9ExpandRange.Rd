@@ -91,6 +91,7 @@ Other ICD-9 ranges: \code{\link{icd9Children}},
   \code{\link{icd9ChildrenShort}};
   \code{\link{icd9Condense}},
   \code{\link{icd9CondenseDecimal}},
-  \code{\link{icd9CondenseShort}}
+  \code{\link{icd9CondenseShort}};
+  \code{\link{icd9ExpandMinor}}
 }
 

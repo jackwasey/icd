@@ -321,3 +321,28 @@ icd9ChildrenDecimal <- function(icd9Decimal,
   if (onlyBillable) return(icd9GetBillableDecimal(res))
   res
 }
+
+
+#' @title expand decimal part of ICD-9 code to cover all possible sub-codes
+#' @description Accepts a single number or character input starting point for
+#'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
+#'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
+#' @template minor
+#' @param isE single logical, which if TRUE, treats the minor as part of an E
+#'   code (which is one character), as opposed to a V or numeric-only code,
+#'   which is two character. Default is \code{FALSE}.
+#' @examples
+#'   # return all possible decimal parts of ICD9 codes (111 in total)
+#'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
+#'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#' @return NA for invalid minor, otherwise a vector of all possible (perhaps
+#'   non-existent) sub-divisions.
+#' @family ICD-9 ranges
+#' @keywords internal manip
+icd9ExpandMinor <- function(minor, isE = FALSE) {
+  # clang 3.6 with address sanitizer seems to fail if a number is passed instead
+  # of string. It SHOULD fail with type error, and that might be an Rcpp
+  # problem...
+  assertString(minor)
+  .Call("icd9_icd9ExpandMinorShim", PACKAGE = "icd9", minor, isE)
+}

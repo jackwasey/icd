@@ -404,17 +404,17 @@ namespace icd9 {
         return Rcpp::as<CharacterVector >(__result);
     }
 
-    inline CharacterVector icd9ExpandMinor(std::string minor, bool isE = false) {
-        typedef SEXP(*Ptr_icd9ExpandMinor)(SEXP,SEXP);
-        static Ptr_icd9ExpandMinor p_icd9ExpandMinor = NULL;
-        if (p_icd9ExpandMinor == NULL) {
-            validateSignature("CharacterVector(*icd9ExpandMinor)(std::string,bool)");
-            p_icd9ExpandMinor = (Ptr_icd9ExpandMinor)R_GetCCallable("icd9", "icd9_icd9ExpandMinor");
+    inline CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
+        typedef SEXP(*Ptr_icd9ExpandMinorShim)(SEXP,SEXP);
+        static Ptr_icd9ExpandMinorShim p_icd9ExpandMinorShim = NULL;
+        if (p_icd9ExpandMinorShim == NULL) {
+            validateSignature("CharacterVector(*icd9ExpandMinorShim)(std::string,bool)");
+            p_icd9ExpandMinorShim = (Ptr_icd9ExpandMinorShim)R_GetCCallable("icd9", "icd9_icd9ExpandMinorShim");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9ExpandMinor(Rcpp::wrap(minor), Rcpp::wrap(isE));
+            __result = p_icd9ExpandMinorShim(Rcpp::wrap(minor), Rcpp::wrap(isE));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

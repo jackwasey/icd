@@ -1,10 +1,8 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- README.md is generated from README.Rmd. Please edit that file and render with rmarkdown::render("README.Rmd")-->
 icd9
 ====
 
-[![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](http://cran.r-project.org/web/packages/icd9/index.html)
-[![CRAN version](http://www.r-pkg.org/badges/version/icd9)](http://cran.r-project.org/web/packages/icd9/index.html)
+[![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master) [![CRAN version](http://www.r-pkg.org/badges/version/icd9)](http://cran.r-project.org/web/packages/icd9/index.html) [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](http://cran.r-project.org/web/packages/icd9/index.html) (RStudio mirror only)
 
 ICD-9 comorbidities, manipulation and validation
 ================================================
@@ -14,7 +12,7 @@ Main Features
 
 -   assignment of patients to high level comorbidities based on admission or discharge ICD-9 codes
     -   several mappings of ICD-9 codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
-    -   very fast assignment of ICD-9 codes to comorbidities (using C++ internally, with automatic parallel execution using OpenMP when possible)
+    -   very fast assignment of ICD-9 codes to comorbidities (using C and C++ internally, with automatic parallel execution using OpenMP when available)
 -   Charlson and Van Walvaren score calculations
 -   validation of ICD-9 codes from different annual revisions of ICD-9-CM
 -   summarizing ICD-9 codes into groups, and to human-readable descriptions
@@ -27,6 +25,7 @@ New since last CRAN release:
 -   further performance increases: 1 million ICD-9 codes assigned to comorbidities in a couple of seconds
 -   logical matrix or data.frame for comorbidity output and manipulation
 -   see NEWS.md and github [changelog](https://github.com/jackwasey/icd9/commits/master) for more details
+-   minor update to fix an obscure memory leak found with address sanitizer.
 
 Introduction
 ------------
@@ -90,7 +89,7 @@ Install
 
 The latest version is available in [github](https://github.com/jackwasey/icd9) and can be installed with:
 
-    # install.packages("devtools") # if needed
+    install.packages("devtools") # if needed
     devtools::install_github("jackwasey/icd9")
 
     install.packages("magrittr") # recommended, but not required
