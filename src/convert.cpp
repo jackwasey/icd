@@ -35,7 +35,7 @@ CharacterVector icd9MajMinToCode(const CharacterVector major,
   if (major.size() != minor.size())
     //throw(std::length_error("major and minor lengths differ"));
     //Rcpp::stop("major and minor lengths differ"); // this fails the address sanitizer
-    Rf_error("major and minor lengths differ");
+    Rcpp::stop("major and minor lengths differ");
 
 #ifdef ICD9_DEBUG_TRACE
   Rcout << "major and minor are the same?\n";
@@ -99,7 +99,7 @@ CharacterVector icd9MajMinToShort(const CharacterVector major,
 #endif
 	if ((major.size() != 1 && major.size() != minor.size())
 			|| (major.size() == 1 && minor.size() == 0)) {
-		Rf_error("icd9MajMinToShort, length of majors and minors must be equal, unless majors length is one.");
+	  Rcpp::stop("icd9MajMinToShort, length of majors and minors must be equal, unless majors length is one.");
 	}
 	if (major.size() == 1) {
 #ifdef ICD9_DEBUG_TRACE

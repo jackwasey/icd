@@ -96,14 +96,14 @@ CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 			case '9':
 				return v9;
 			default:
-			  Rf_error("unrecognized minor character");
+			  Rcpp::stop("unrecognized minor character");
 				return CharacterVector::create();
 			}
 			break;
 		case 2:
 			return wrap(minor);
 		default:
-		  Rf_error("minor of >2 characters received by icd9ExpandMinor");
+		  Rcpp::stop("minor of >2 characters received by icd9ExpandMinor");
 			return CharacterVector::create();
 		}
 	} else {
@@ -115,7 +115,7 @@ CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 		case 1:
 			return minor;
 		default:
-		  Rf_error("too many characters for an E code minor part\n");
+		  Rcpp::stop("too many characters for an E code minor part\n");
 		}
 	}
 	return (NA_STRING); // should never get here
