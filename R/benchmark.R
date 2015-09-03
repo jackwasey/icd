@@ -243,6 +243,7 @@ icd9BenchComorbidParallel <- function() {
 #' importance, after correctness. R package test code is for correctness,
 #' whereas this script stresses the core functions, and looks for bottlenecks.
 #' @keywords internal
+#' @importFrom utils Rprof capture.output Rprof summaryRprof
 icd9Benchmark <- function() {
   # generate large data set: this is copied from test-ICD9.R for now...
   set.seed(1441)

@@ -39,7 +39,7 @@ install_github(\"jackwasey/icd9\")
 release_questions <- function() {
   c(
     "Have you checked all TODO comments",
-    "Is there any commented code? (lint for this now possible)",
+    "Have you removed any commented code? (lint for this now possible)",
     "Have tests been run with do_slow_tests turned on?",
     "Are there skipped tests which should be run?",
     "Do all examples look ok (not just run without errors)?",
@@ -54,7 +54,9 @@ release_questions <- function() {
     "Does every file have correct licence information?",
     "Have you linted?",
     "Does it compile and check fine on travis?",
-    "Have you checked on Windows, win_builder (if possible with configure step), Mac, Ubuntu, ASAN, and UBSAN rocker, and updated my docker image which resembles a CRAN maintainers environment?",
+    "Have you checked on Windows, win_builder (if possible with configure step),
+    Mac, Ubuntu, ASAN, and UBSAN rocker, and updated my docker image which
+    resembles a CRAN maintainers environment?",
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially thinking of autoconfigure stuff."
   )

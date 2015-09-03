@@ -61,7 +61,6 @@ NULL
 #'   \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 #'    This page has versions 23 to 32 (2005 to 2014). At present, only the 2014
 #'   data is included in this package.
-#' @source \url{http://wonder.cdc.gov/wonder/help/icd.html}
 #' @source
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
 #' @source
