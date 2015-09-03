@@ -29,8 +29,8 @@ patientData <- data.frame(
 # icd9
 
 [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
-[![CRAN version](http://www.r-pkg.org/badges/version/icd9)](http://cran.r-project.org/web/packages/icd9/index.html)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](http://cran.r-project.org/web/packages/icd9/index.html) (RStudio mirror only)
+[![CRAN version](http://www.r-pkg.org/badges/version/icd9)](https://cran.r-project.org/package=icd9)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9) (RStudio mirror only)
 
 # ICD-9 comorbidities, manipulation and validation
 

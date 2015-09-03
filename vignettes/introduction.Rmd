@@ -65,7 +65,7 @@ or
 ```{r getcomorbidities1a}
 icd9ComorbidQuanDeyo(patientData)[, 1:8]
 ```
-and things work beautifully using [magrittr](http://cran.r-project.org/web/packages/magrittr/index.html) `%>%` to chain functions together. This is not a dependency for this package, but is recommended because of the frequent need to chain together icd9 commands, and greater clarity.
+and things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. This is not a dependency for this package, but is recommended because of the frequent need to chain together icd9 commands, and greater clarity.
 ```{r getcomorbidities2}
 patientData %>% icd9FilterPoaYes %>% icd9ComorbidAhrq %>% extract(1:8)
 ```
@@ -326,4 +326,4 @@ data.frame(icd9 = lost_since_27, desc = lost_since_27 %>% icd9Explain)
 
 ## Conclusion
 
-This package allows fluid, fast and accurate manipulation of ICD-9 codes, especially when combined with [magrittr](http://cran.r-project.org/web/packages/magrittr/index.html). Suggestions, contributions and comments are welcome via [github](https://github.com/jackwasey/icd9/issues).
+This package allows fluid, fast and accurate manipulation of ICD-9 codes, especially when combined with [magrittr](https://cran.r-project.org/package=magrittr). Suggestions, contributions and comments are welcome via [github](https://github.com/jackwasey/icd9/issues).

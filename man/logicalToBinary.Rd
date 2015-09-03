@@ -17,11 +17,6 @@ when saving data as text files for distribution, printing large
   amounts of text containing TRUE and FALSE is inefficient. Convert to binary
   takes more R memory, but allows more compact output
 }
-\details{
-Taken from my
-  \href{https://github.com/jackwasey/jwutil}{\code{jwutil} package}, which is
-  also intermittently on CRAN
-}
 \keyword{internal}
 \keyword{manip}
 

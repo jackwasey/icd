@@ -35,7 +35,7 @@
 * Bug fixes (see [github](https://github.com/jackwasey/icd9/issues?q=is%3Aissue+is%3Aclosed))
 * API changes
     - no more validation except in the icd9IsValidXxx functions. Removed stopIfInvalidIcd9, icd9InvalidActions
-    - internalized utility functions. They are also packaged and tested in [jwutil](http://cran.r-project.org/web/packages/jwutil/index.html)
+    - internalized utility functions. They are also packaged and tested in [jwutil](https://github.com/jackwasey/jwutil)
     - deprecated icd9ValidXxx in favour of icd9IsValidXxx
     - deprecated icd9ComorbditiesXxx replacing with briefer icd9ComorbidXxx
     - stopped exporting benchmarking and SAS code processing.

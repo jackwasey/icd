@@ -73,9 +73,6 @@ saveInDataDir <- function(var, suffix = "") {
 #' @description when saving data as text files for distribution, printing large
 #'   amounts of text containing TRUE and FALSE is inefficient. Convert to binary
 #'   takes more R memory, but allows more compact output
-#' @details Taken from my
-#'   \href{https://github.com/jackwasey/jwutil}{\code{jwutil} package}, which is
-#'   also intermittently on CRAN
 #' @param x dataframe which may contain logical fields
 #' @return data frame without logical fields
 #' @keywords internal manip
@@ -103,9 +100,6 @@ logicalToBinary <- function(x) {
 #' @description Be careful: this may throw funny results for exotic regex, but
 #'   so far, it seems okay. it also drops the first result which always seems to
 #'   be a duplicate or whole-string match.
-#' @details Taken from my
-#'   \href{http://cran.r-project.org/web/packages/jwutil/index.html}{\code{jwutil}
-#'   package}.
 #' @param pattern regular expression: if it has bracketed sections, these
 #'   submatches are returned
 #' @param text is the string to match against. This vector should be the same

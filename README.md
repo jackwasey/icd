@@ -1,8 +1,9 @@
 <!-- README.md is generated from README.Rmd. Please edit that file and render with rmarkdown::render("README.Rmd")-->
+
 icd9
 ====
 
-[![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master) [![CRAN version](http://www.r-pkg.org/badges/version/icd9)](http://cran.r-project.org/web/packages/icd9/index.html) [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](http://cran.r-project.org/web/packages/icd9/index.html) (RStudio mirror only)
+[![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master) [![CRAN version](http://www.r-pkg.org/badges/version/icd9)](https://cran.r-project.org/package=icd9) [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9) (RStudio mirror only)
 
 ICD-9 comorbidities, manipulation and validation
 ================================================
@@ -47,7 +48,7 @@ Examples
 
 See the vignette and code help for many more. Here's a taste:
 
-``` r
+``` {.r}
 patientData
 #>   visitId  icd9  poa
 #> 1    1000 40201    Y
