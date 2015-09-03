@@ -93,6 +93,7 @@ icd9ChaptersToMap <- function(x) {
 #'   icd9WideToLong(widedf)
 #' @family ICD-9 convert
 #' @export
+#' @importFrom stats reshape
 icd9WideToLong <- function(x,
                            visitId = NULL,
                            icdLabels = NULL,

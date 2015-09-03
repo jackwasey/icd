@@ -99,6 +99,9 @@ icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)
                          excludeAmbiguousEnd)
 }
 
+#' expand range worker function
+#' @keywords internal
+#' @importFrom utils head tail
 expandRangeWorker <- function(start, end, lookup, onlyReal,
                               excludeAmbiguousStart, excludeAmbiguousEnd) {
   assertString(start)

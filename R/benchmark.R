@@ -44,15 +44,19 @@ randomUnorderedPatients <- function(n = 50000, np = 20) {
   )
 }
 
+
+#' genereate random short icd9 codes
+#' @keywords internal
+#' @importFrom stats runif
 randomShortIcd9 <- function(n = 50000)
-  as.character(floor(runif(min = 1, max = 99999, n = n)))
+  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
 
 randomShortAhrq <- function(n = 50000)
   sample(unname(unlist(icd9::ahrqComorbid)), size = n, replace = TRUE)
 
 randomDecimalIcd9 <- function(n = 50000)
   paste(
-    round(runif(min = 1, max = 999, n = n)),
+    round(stats::runif(min = 1, max = 999, n = n)),
     sample(icd9ExpandMinor(), replace = TRUE, size = n),
     sep = "."
   )
@@ -203,7 +207,7 @@ my_check <- function(values) {
   sapply(values, function(x) message("dims: ", nrow(x), " by ", ncol(x)))
   sapply(values, function(x) message("digest: ", digest::digest(x)))
   sapply(values, function(x) {
-    print(head(x)); print(tail(x))
+    print(utils::head(x)); print(utils::tail(x))
   })
   all(sapply(values[-1], function(x) identical(values[[1]], x)))
 }
@@ -252,10 +256,10 @@ icd9Benchmark <- function() {
   print(res[order(res$real), c("test", "real")])
 
   tmp <- tempfile(fileext = ".Rprof")
-  Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = TRUE)
-  capture.output(icd9ComorbidAhrq(rpts, isShort = TRUE))
-  Rprof(NULL)
-  summaryRprof(filename = tmp, memory = "both", lines = "show")
+  utils::Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = TRUE)
+  utils::capture.output(icd9ComorbidAhrq(rpts, isShort = TRUE))
+  utils::Rprof(NULL)
+  utils::summaryRprof(filename = tmp, memory = "both", lines = "show")
 
   # see how we do scaling up:
   set.seed(1441)
@@ -271,10 +275,10 @@ icd9Benchmark <- function() {
   )
 
   tmp <- tempfile(fileext = ".Rprof")
-  Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = FALSE)
-  capture.output(icd9ChildrenShort("300" %i9s% "450"))
-  Rprof(NULL)
-  summaryRprof(filename = tmp, lines = "show")
+  utils::Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = FALSE)
+  utils::capture.output(icd9ChildrenShort("300" %i9s% "450"))
+  utils::Rprof(NULL)
+  utils::summaryRprof(filename = tmp, lines = "show")
 
   mydf <- data.frame(visitId = c("a", "b", "c"),
                      icd9 = c("441", "412.93", "044.9"),

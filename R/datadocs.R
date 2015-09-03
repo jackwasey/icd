@@ -242,6 +242,7 @@ utils::globalVariables(c("%<>%"))
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration
 #' @docType data
+#' @importFrom utils read.csv
 .vermont <- function() {
   vermont_dx <- read.csv("VTINP13.TXT",
                          stringsAsFactors = FALSE,

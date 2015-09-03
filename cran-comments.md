@@ -1,12 +1,11 @@
 ## Note
-* Many thanks to CRAN maintainers for discovering an obscure memory access violation. Corrected in this release, with other minor changes.
+* Many thanks to Prof. Ripley for discovering an obscure memory access violation. Corrected in this release, with other minor changes.
 
 ## Test environments
 * Ubuntu 15.04 R 3.2.2, clang 3.6.0 and gcc 4.9.2
 * Ubuntu 12.04 (on travis-ci) R 3.2, gcc 4.6.3
 * Debian jessie in docker with UBSAN and clang, R 3.1.2
 * Windows 7 64 bit R 3.2 with gcc from Rtools32
-* Debian testing/unstable, clang 3.8 trunk, R-devel trunk, address and undefined behaviour santizers.
 
 ## R CMD check results
 

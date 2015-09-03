@@ -146,6 +146,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
 #'   library(magrittr)
 #'   wide %>% icd9WideToLong %>% icd9Count
 #' @export
+#' @importFrom stats aggregate
 icd9Count <- function(x, visitId = NULL, return.df = FALSE) {
   stopifnot(is.data.frame(x))
   visitId <- getVisitId(x, visitId)
@@ -187,6 +188,7 @@ icd9CountComorbidBin <- function(x, visitId = NULL, return.df = FALSE) {
 #'   rows) of the output will no longer match the input, but duplicate visitIds
 #'   will be counted together.
 #' @export
+#' @import stats
 icd9CountWide <- function(x,
                           visitId = NULL,
                           return.df = FALSE,

@@ -227,7 +227,7 @@ test_that("icd9VanWalravenComorbid score calculation", {
   # Fill a QuanElix comorbidity data frame with random data
   comorbids <- rbind(comorbids,
                      data.frame(visitId = letters[2:10],
-                                matrix(runif((ncol(comorbids) - 1) * 9) > 0.7,
+                                matrix(stats::runif((ncol(comorbids) - 1) * 9) > 0.7,
                                        ncol = ncol(comorbids) - 1,
                                        dimnames = list(character(0), names(comorbids[2:31])))))
   c2.inv <- cbind(t(comorbids[2, -1]),

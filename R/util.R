@@ -166,6 +166,9 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c
   out
 }
 
+#' unzip a single file
+#' @keywords internal
+#' @importFrom utils download.file unzip
 zip_single <- function(url, filename, save_path) {
   zipfile <- tempfile()
   download.file(url = url, destfile = zipfile, quiet = TRUE)

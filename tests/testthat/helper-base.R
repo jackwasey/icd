@@ -22,7 +22,7 @@ set.seed(1441)
 n <- 500
 np <- round(n / 20) # icd9 codes per patients
 
-randomShortIcd9 <- as.character(floor(runif(min = 10000, max = 99999, n = n)))
+randomShortIcd9 <- as.character(floor(stats::runif(min = 10000, max = 99999, n = n)))
 randomSampleAhrq <- sample(unname(c(icd9::ahrqComorbid, recursive = TRUE)),
                            replace = TRUE, size = n)
 fewIcd9 <- c("27801", "7208", "25001", "34400", "4011", "4011")
