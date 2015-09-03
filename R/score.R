@@ -188,7 +188,7 @@ icd9CountComorbidBin <- function(x, visitId = NULL, return.df = FALSE) {
 #'   rows) of the output will no longer match the input, but duplicate visitIds
 #'   will be counted together.
 #' @export
-#' @import stats
+#' @importFrom stats aggregate
 icd9CountWide <- function(x,
                           visitId = NULL,
                           return.df = FALSE,
