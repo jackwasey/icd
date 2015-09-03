@@ -19,6 +19,7 @@
 #include <Rinternals.h>
 #include <vector>
 #include <string>
+#include <Rcpp.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
