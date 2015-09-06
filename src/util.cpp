@@ -16,13 +16,13 @@
 // along with icd9. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
-#include <Rinternals.h>
 #include <vector>
 #include <string>
+#include <Rcpp.h>
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+#include <Rinternals.h>
 
 // trim one string from right
 std::string trimRight(std::string& s) {
