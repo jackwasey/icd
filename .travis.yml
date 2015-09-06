@@ -45,3 +45,8 @@ after_success:
  - Rscript -e 'devtools::session_info()'
  - env: COVR=true
  - Rscript -e 'library(covr); coveralls(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R", quiet = FALSE)'
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
