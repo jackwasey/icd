@@ -18,12 +18,22 @@ CFLAGS=`"${R_BIN}" CMD config CFLAGS`
 CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 LIBS="${PKG_LIBS}"
 
+# following CXX and CXXFLAGS as recommended by Prof Ripley.
+CXX=`"${R_HOME}/bin/R" CMD config CXX1X`
+CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXX1XFLAGS`
+
+AC_LANG_PUSH(C++)
+AC_OPENMP
+AC_LANG_POP(C++)
+
 # Checks for programs
 AC_PROG_CXX
 AC_PROG_CC
 
-# Check for OpenMP
+# Check for OpenMP, again with thanks to Prof Ripley for tweak
+AC_LANG_PUSH(C++)
 AC_OPENMP
+AC_LANG_POP(C++)
 
 # since some systems have broken OMP libraries
 # we also check that the actual package will work
