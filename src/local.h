@@ -42,8 +42,8 @@ extern "C" {
 //#define ICD9_VALGRIND
 
 #ifdef _OPENMP
-#include <omp.h>
-#define ICD9_OPENMP
+//#include <omp.h>
+//#define ICD9_OPENMP
 #endif
 
 #ifdef ICD9_VALGRIND

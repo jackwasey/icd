@@ -1,3 +1,9 @@
+# Version 1.2.2
+ * Completed fix from version 1.2.1 by temporarily disabling OpenMP on all platforms. Still runs quickly due to other optimizations made in supporting the OpenMP. It'll be back, but only when I or someone else can create a docker or VM image which runs Clang 3.7 or greater, OpenMP, with/without LLVM C++ standard library. See #75
+
+# Version 1.2.1
+ * Partly fixed obscure memory access violation error seen only withwhen using OpenMP clang 3.7 on fedora, and maybe OS X.
+
 # Version 1.2
  * Make annual revisions of ICD-9-CM available. The package includes data from each year which CMS has published (versions 23 to 32). The default is to use version 32. More work will be needed to make it straightforward to use an arbitrary version when running `icd9` commands. These are avaiable in the package data `icd9Billable`. See vignette for examples.
  * Inexplicably, the only canonical list which includes both ICD-9-CM codes and headings is an RTF file. `icd9` can now parse this eclectically formatted document to extract all the headings, so it is not possible to do `icd9Explain` on a non-billable four-digit code, e.g. 643.0 (Mild hyperemesis of pregnancy). Previously on three-digit and billable (i.e. lead node) codes were used. In principle, the RTF parsing code could be run on previous versions going back to about year 2000. It seems that most years are the same or expand previous years, although there are a few deletions. Ideally, we would know what year/version a given ICD-9 code was coded under, and then validate or interpret accordingly. This can indeed be done for billable codes, but until the RTF is parsed for previous years, not for headings.

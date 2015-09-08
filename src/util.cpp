@@ -19,7 +19,7 @@
 #include <vector>
 #include <string>
 #include <Rcpp.h>
-#ifdef _OPENMP
+#ifdef ICD9_OPENMP
 #include <omp.h>
 #endif
 #include <Rinternals.h>
@@ -79,7 +79,7 @@ void printCharVec(CharacterVector cv) {
 // [[Rcpp::export]]
 int getOmpCores() {
 	int cores = 1;
-#ifdef _OPENMP
+#ifdef ICD9_OPENMP
 	cores = omp_get_num_procs();
 #endif
 	return cores;

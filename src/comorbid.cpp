@@ -45,14 +45,14 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 
 #ifdef ICD9_DEBUG_PARALLEL
 	Rcpp::Rcout << "checking _OPENMP... ";
-#ifdef _OPENMP
+#ifdef ICD9_OPENMP
 	Rcpp::Rcout << "_OPENMP is defined.\n";
 #else
 	Rcpp::Rcout << "_OPENMP is not defined.\n";
 #endif
 #endif
 
-#ifdef _OPENMP
+#ifdef ICD9_OPENMP
 	if (threads > 0)
 	omp_set_num_threads(threads);
 #ifdef ICD9_DEBUG_PARALLEL

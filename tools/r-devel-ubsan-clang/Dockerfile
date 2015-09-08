@@ -32,3 +32,6 @@ RUN r -e "install.packages(c('devtools', 'XML', 'testthat', 'Rcpp', 'ggplot2', '
 # how to build myself:
 # current directory at project root, i.e. containing Dockerfile and Makevars.site
 # docker build -t r-clang-san .
+
+
+# may need this before R, RD, or RDS invocation: LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.2
