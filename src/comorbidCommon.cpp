@@ -85,7 +85,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	omp_get_schedule(&sched, &threads);
 	Rcout << "threads set = " << threads << "\n";
 #endif
-//#pragma omp for ordered
+
 #pragma omp for schedule(static)
 #endif
 	// loop through chunks at a time
@@ -102,8 +102,8 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 			chunk_end_i = last_i; // indices
 		ComorbidOut chunk;
 		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
-//#pragma omp ordered
-// next block doesn't need to be single threaded, but doing so improves cache contention
+
+	// next block doesn't need to be single threaded, but doing so improves cache contention
 #ifdef ICD9_OPENMP
 #pragma omp critical
 #endif

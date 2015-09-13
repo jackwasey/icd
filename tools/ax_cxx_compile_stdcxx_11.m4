@@ -28,13 +28,14 @@
 #   Copyright (c) 2012 Zack Weinberg <zackw@panix.com>
 #   Copyright (c) 2013 Roy Stogner <roystgnr@ices.utexas.edu>
 #   Copyright (c) 2014, 2015 Google Inc.; contributed by Alexey Sokolov <sokolov@google.com>
+#   Copyright (c) 2015 Paul Norman <penorman@mac.com>
 #
 #   Copying and distribution of this file, with or without modification, are
 #   permitted in any medium without royalty provided the copyright notice
 #   and this notice are preserved. This file is offered as-is, without any
 #   warranty.
 
-#serial 10
+#serial 12
 
 m4_define([_AX_CXX_COMPILE_STDCXX_11_testbody], [[
   template <typename T>
@@ -84,6 +85,9 @@ m4_define([_AX_CXX_COMPILE_STDCXX_11_testbody], [[
             func<foo>(0);
         }
     }
+
+    // Check for C++11 attribute support
+    void noret [[noreturn]] () { throw 0; }
 ]])
 
 AC_DEFUN([AX_CXX_COMPILE_STDCXX_11], [dnl
@@ -128,7 +132,9 @@ AC_DEFUN([AX_CXX_COMPILE_STDCXX_11], [dnl
 
   m4_if([$1], [ext], [], [dnl
   if test x$ac_success = xno; then
-    for switch in -std=c++11 -std=c++0x; do
+    dnl HP's aCC needs +std=c++11 according to:
+    dnl http://h21007.www2.hp.com/portal/download/files/unprot/aCxx/PDF_Release_Notes/769149-001.pdf
+    for switch in -std=c++11 -std=c++0x +std=c++11; do
       cachevar=AS_TR_SH([ax_cv_cxx_compile_cxx11_$switch])
       AC_CACHE_CHECK(whether $CXX supports C++11 features with $switch,
                      $cachevar,
@@ -163,3 +169,4 @@ AC_DEFUN([AX_CXX_COMPILE_STDCXX_11], [dnl
     AC_SUBST(HAVE_CXX11)
   fi
 ])
+

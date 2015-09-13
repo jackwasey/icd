@@ -1,7 +1,3 @@
-# the following clobbers my choice of clang, and is unnecessary, since configure will add the right C++11 compiler flag itself.
-# CXX_STD = CXX11
-
 PKG_CFLAGS = @OPENMP_CFLAGS@
 PKG_CXXFLAGS = -I. @OPENMP_CFLAGS@ @ICD9_CXX11@
 PKG_LIBS = @OPENMP_CFLAGS@ @LIBS@
-

@@ -1,10 +1,10 @@
 AC_PREREQ([2.62])
 AC_INIT(icd9)
 AC_CONFIG_SRCDIR([src])
-AC_CONFIG_HEADER([src/config.h:src/config.h.in])
+AC_CONFIG_HEADERS([src/config.h:src/config.h.in])
 AC_CONFIG_FILES([src/Makevars])
 
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([tools])
 
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -19,21 +19,12 @@ CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 LIBS="${PKG_LIBS}"
 
 # following CXX and CXXFLAGS as recommended by Prof Ripley.
-CXX=`"${R_HOME}/bin/R" CMD config CXX1X`
-CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXX1XFLAGS`
+#CXX=`"${R_BIN}" CMD config CXX1X`
+#CXXFLAGS=`"${R_BIN}" CMD config CXX1XFLAGS`
 
-AC_LANG_PUSH(C++)
-AC_OPENMP
-AC_LANG_POP(C++)
-
-# Checks for programs
-AC_PROG_CXX
-AC_PROG_CC
-
-# Check for OpenMP, again with thanks to Prof Ripley for tweak
-AC_LANG_PUSH(C++)
-AC_OPENMP
-AC_LANG_POP(C++)
+#AC_LANG_PUSH(C++)
+R_OPENMP
+#AC_LANG_POP(C++)
 
 # since some systems have broken OMP libraries
 # we also check that the actual package will work
@@ -56,6 +47,7 @@ AC_SUBST(OPENMP_CFLAGS)
 AC_CHECK_HEADERS([string.h])
 AC_CHECK_HEADER_STDBOOL
 AC_PROG_CXX
+AC_PROG_CC
 AC_TYPE_SIZE_T
 AC_C_INLINE
 
@@ -67,7 +59,6 @@ ICD9_CXX11=''
 ICD9_CXX11_DEF=''
 if test -n "${HAVE_CXX11}"; then
   AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
-  # ICD9_CXX11="AS_ESCAPE([${CXX1XSTD}])"
   # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
   ICD9_CXX11=${switch}
   ICD9_CXX11_DEF=""
