@@ -78,6 +78,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	VecVecIntSz vis_i;
 #ifdef ICD9_OPENMP
 #pragma omp parallel default(none) shared(vcdb, map, out) private(chunk_end_i, vis_i)
+	// TODO: need to consider other processes using multiple cores, see Writing R Extensions.
 	omp_set_schedule(omp_sched_static, ompChunkSize); // ideally wouldn't repeat this over and over again
 #ifdef ICD9_DEBUG_PARALLEL
 	omp_sched_t sched;
