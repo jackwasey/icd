@@ -64,8 +64,6 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 #' @param isShortMapping Same as isShort, but applied to \code{icd9Mapping}
 #'   instead of \code{icd9df}. All the codes in a mapping should be of the same
 #'   type, i.e. short or decimal.
-#' @param ... further arguments e.g. chunkSize and ompChunkSize pass to the C++
-#'   function
 #' @details There is a change in behavior from previous versions. The visitId
 #'   column is (implicitly) sorted by using std::set container. Previously, the
 #'   visitId output order was whatever R's \code{aggregate} produced.
@@ -131,9 +129,12 @@ icd9Comorbid <- function(icd9df,
   # (optionally) defactoring the visitId for the matrix row names.
 
   threads <- getOption("icd9.threads", getOmpCores())
+  chunkSize <- getOption("icd9.chunkSize", 256L)
+  ompChunkSize <- getOption("icd9.ompChunkSize", 1L)
 
+  mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, 
+	threads = threads, chunkSize = chunkSize, ompChunkSize = ompChunkSize)
   if (return.df) {
-    mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = threads)
     if (icd9VisitWasFactor)
       rownm <- factor(x = rownames(mat), levels = ivLevels)
     else
@@ -144,7 +145,7 @@ icd9Comorbid <- function(icd9df,
     rownames(df.out) <- NULL
     return(df.out)
   }
-  icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = threads)
+  mat
 }
 
 #' @rdname icd9Comorbid

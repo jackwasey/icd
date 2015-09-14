@@ -14,3 +14,10 @@ git --git-dir=icd9/.git pull
 R CMD build --no-build-vignettes
 R CMD INSTALL --no-docs --install-tests `ls -tr | grep icd9.*gz$ | tail -1`
 Rscript -e 'library(icd9); x<-data.frame(visitId = "a", icd9 = "441"); icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)'
+
+
+# same but use openmp tests and devtools
+cd icd9
+git pull
+Rscript -e "library(devtools); clean_dll(); load_all(); library(testthat); print(getwd()); test_file('tests/testthat/test-openmp.R')"
+

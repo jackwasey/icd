@@ -80,20 +80,21 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	const VecVecIntSz last_i = num_visits - 1;
 	VecVecIntSz chunk_end_i;
 	VecVecIntSz vis_i;
-#ifdef ICD9_OPENMP
-#pragma omp parallel default(none) shared(vcdb, map, out) private(chunk_end_i, vis_i)
-	// TODO: need to consider other processes using multiple cores, see Writing R Extensions.
-	omp_set_schedule(omp_sched_static, ompChunkSize); // ideally wouldn't repeat this over and over again
-#ifdef ICD9_DEBUG_PARALLEL
-	debug_parallel();
+#ifdef ICD9_DEBUG_TRACE
+		Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
+		Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
-
+#ifdef ICD9_OPENMP
+// I think const values are automatically shared.
+#pragma omp parallel default(none) shared(out) private(chunk_end_i, vis_i)
+	// TODO: need to consider other processes using multiple cores, see Writing R Extensions.
+	omp_set_schedule(omp_sched_static, ompChunkSize); // TODO: ideally wouldn't repeat this over and over again
 #pragma omp for schedule(static)
 #endif
 	// loop through chunks at a time
 	for (vis_i = 0; vis_i < num_visits; vis_i += chunkSize) {
 #ifdef ICD9_DEBUG_TRACE
-		Rcpp::Rcout << "vis_i = " << vis_i << " ";
+		Rcpp::Rcout << "vis_i = " << vis_i << "\n";
 #endif
 #if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
 		debug_parallel();
@@ -102,9 +103,14 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		if (chunk_end_i > last_i)
 			chunk_end_i = last_i; // indices
 		ComorbidOut chunk;
+#ifdef ICD9_DEBUG_TRACE
+// this gives size 0 with OMP enabled. bug #75 unravelling: this isn't zero!
+		Rcpp::Rcout << "OMP vcdb.size() = " << vcdb.size() << "\n";
+		Rcpp::Rcout << "OMP map.size() = " << map.size() << "\n";
+#endif
 		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
 
-	// next block doesn't need to be single threaded, but doing so improves cache contention
+	// next block doesn't need to be single threaded(?), but doing so improves cache contention
 #ifdef ICD9_OPENMP
 #pragma omp critical
 #endif
@@ -128,6 +134,10 @@ ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
 		const VecVecInt& map, const int chunkSize, const int ompChunkSize) {
 	// initialize output matrix with all false for all comorbidities
 	ComorbidOut out(vcdb.size() * map.size(), false);
+#ifdef ICD9_DEBUG_TRACE
+		Rcpp::Rcout << "top level vcdb.size() = " << vcdb.size() << "\n";
+		Rcpp::Rcout << "top level map.size() = " << map.size() << "\n";
+#endif
 	lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
 	return out;
 }
