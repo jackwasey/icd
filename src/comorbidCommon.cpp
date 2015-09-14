@@ -22,6 +22,7 @@
 #include <algorithm>
 //using namespace Rcpp;
 
+// Look up comorbidities for one chunk of vcdb, this is called in parallel
 void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 		const VecVecIntSz num_comorbid, const VecVecIntSz begin,
 		const VecVecIntSz end, ComorbidOut& chunk) {
@@ -34,6 +35,7 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 	chunk = falseComorbidChunk;
 	for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
 #ifdef ICD9_DEBUG_TRACE
+// with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
 			Rcpp::Rcout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
 #endif
 		for (VecVecIntSz cmb = 0; cmb < num_comorbid; ++cmb) { // loop through icd codes for this visitId
@@ -110,19 +112,21 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 #ifdef ICD9_DEBUG_TRACE
 			Rcpp::Rcout << "writing a chunk beginning at: " << vis_i << "\n";
 #endif
+			// write out calculated data to the output matrix (must sync threads here, hence omp critical
 			std::copy(chunk.begin(), chunk.end(),
 					out.begin() + (num_comorbid * vis_i));
 		}
-		//vis_i += chunkSize;
 	} // end parallel for
+
 #ifdef ICD9_DEBUG
 	Rcpp::Rcout << "finished looking up all chunks in for loop\n";
 #endif
 }
 
-// just return the chunk results: this wouldn't cause invalidation of shared 'out'
+// just return the chunk results: this shouldn't cause invalidation of shared 'out'
 ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
 		const VecVecInt& map, const int chunkSize, const int ompChunkSize) {
+	// initialize output matrix with all false for all comorbidities
 	ComorbidOut out(vcdb.size() * map.size(), false);
 	lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
 	return out;
