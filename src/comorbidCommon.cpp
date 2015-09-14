@@ -72,27 +72,27 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 #endif
 }
 
-void lookupComorbidByChunkFor(const VecVecInt& _vcdb, const VecVecInt& _map,
+void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize,
 		ComorbidOut& out) {
-	const VecVecIntSz num_comorbid = _map.size();
-	const VecVecIntSz num_visits = _vcdb.size();
+	const VecVecIntSz num_comorbid = map.size();
+	const VecVecIntSz num_visits = vcdb.size();
 	const VecVecIntSz last_i = num_visits - 1;
 	VecVecIntSz chunk_end_i;
 	VecVecIntSz vis_i;
 #ifdef ICD9_DEBUG_TRACE
-		Rcpp::Rcout << "vcdb.size() = " << _vcdb.size() << "\n";
-		Rcpp::Rcout << "map.size() = " << _map.size() << "\n";
+		Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
+		Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
 // work around possible clang 3.7 bug: http://stackoverflow.com/questions/32572966/did-i-misuse-a-reference-variable-in-a-simple-openmp-for-loop-or-is-it-a-clang
-const VecVecInt *vcdb = &_vcdb;
-const VecVecInt *map = &_map;
+//const VecVecInt *vcdb = &_vcdb;
+//const VecVecInt *map = &_map;
 #ifdef ICD9_OPENMP
 // I think const values are automatically shared.
-#pragma omp parallel default(none) shared(out) private(chunk_end_i, vis_i)
+#pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout) private(chunk_end_i, vis_i)
 	// TODO: need to consider other processes using multiple cores, see Writing R Extensions.
-	omp_set_schedule(omp_sched_static, ompChunkSize); // TODO: ideally wouldn't repeat this over and over again
-#pragma omp for schedule(static)
+//	omp_set_schedule(omp_sched_static, ompChunkSize); // TODO: ideally wouldn't repeat this over and over again
+// #pragma omp for schedule(static)
 #endif
 	// loop through chunks at a time
 	for (vis_i = 0; vis_i < num_visits; vis_i += chunkSize) {
@@ -108,10 +108,10 @@ const VecVecInt *map = &_map;
 		ComorbidOut chunk;
 #ifdef ICD9_DEBUG_TRACE
 // this gives size 0 with OMP enabled. bug #75 unravelling: this isn't zero!
-		Rcpp::Rcout << "OMP vcdb.size() = " << vcdb->size() << "\n";
-		Rcpp::Rcout << "OMP map.size() = " << map->size() << "\n";
+		Rcpp::Rcout << "OMP vcdb.size() = " << vcdb.size() << "\n";
+		Rcpp::Rcout << "OMP map.size() = " << map.size() << "\n";
 #endif
-		lookupOneChunk(*vcdb, *map, num_comorbid, vis_i, chunk_end_i, chunk);
+		lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
 
 	// next block doesn't need to be single threaded(?), but doing so improves cache contention
 #ifdef ICD9_OPENMP

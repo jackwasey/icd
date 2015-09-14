@@ -113,6 +113,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 
 #ifdef ICD9_DEBUG
 	Rcpp::Rcout << "out length is " << out.size() << "\n";
+	// this next line now gives UBSAN in clang 3.7
 	int outsum = std::accumulate(out.begin(), out.end(), 0);
 	Rcpp::Rcout << "out sum is " << outsum << "\n";
 	Rcpp::Rcout << "Ready to convert to R Matrix\n";
