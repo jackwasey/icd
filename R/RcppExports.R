@@ -170,6 +170,10 @@ getOmpCores <- function() {
     .Call('icd9_getOmpCores', PACKAGE = 'icd9')
 }
 
+getOmpMaxThreads <- function() {
+    .Call('icd9_getOmpMaxThreads', PACKAGE = 'icd9')
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('icd9_RcppExport_registerCCallable', PACKAGE = 'icd9')

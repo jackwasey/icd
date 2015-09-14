@@ -16,6 +16,7 @@
 // along with icd9. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
+#include <local.h>
 #include <vector>
 #include <string>
 #include <Rcpp.h>
@@ -66,9 +67,9 @@ bool assertFactorOrCharacter(SEXP x) {
 }
 
 #ifdef ICD9_DEBUG
-void printCharVec(CharacterVector cv) {
-	for (CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {
-		String s = *i;
+void printCharVec(Rcpp::CharacterVector cv) {
+	for (Rcpp::CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {
+	  Rcpp::String s = *i;
 		Rcpp::Rcout << s.get_cstring() << " ";
 	}
 	Rcpp::Rcout << "\n";
@@ -78,10 +79,38 @@ void printCharVec(CharacterVector cv) {
 
 // [[Rcpp::export]]
 int getOmpCores() {
-	int cores = 1;
+	int cores = 99;
 #ifdef ICD9_OPENMP
 	cores = omp_get_num_procs();
 #endif
 	return cores;
 }
 
+// [[Rcpp::export]]
+int getOmpMaxThreads() {
+  int maxthreads = 99;
+#ifdef ICD9_OPENMP
+  maxthreads = omp_get_max_threads();
+#endif
+  return maxthreads;
+}
+
+int getOmpThreads() {
+  int threads = 99;
+#ifdef ICD9_OPENMP
+  omp_sched_t sched;
+  omp_get_schedule(&sched, &threads);
+#endif
+  return threads;
+}
+
+void debug_parallel() {
+#ifdef ICD9_DEBUG_PARALLEL
+#ifdef ICD9_OPENMP
+  Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
+  Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
+  Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << "\n";
+  Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
+#endif
+#endif
+}

@@ -59,7 +59,7 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 					chunk[chunk_idx] = true;
 #endif
 					break;
-				} // end found_it
+				} // end if found_it
 			} // end loop through codes in one comorbidity
 		} // end loop through all comorbidities
 	} // end loop through visits
@@ -81,9 +81,11 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	omp_set_schedule(omp_sched_static, ompChunkSize); // ideally wouldn't repeat this over and over again
 #ifdef ICD9_DEBUG_PARALLEL
 	omp_sched_t sched;
-	int threads;
+	int threads = 0;
 	omp_get_schedule(&sched, &threads);
-	Rcout << "threads set = " << threads << "\n";
+	Rcpp::Rcout << "threads per omp_get_schedule = " << threads << ". ";
+	Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
+	Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << "\n";
 #endif
 
 #pragma omp for schedule(static)
@@ -94,7 +96,8 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		Rcpp::Rcout << "vis_i = " << vis_i << " ";
 #endif
 #if defined(ICD9_OPENMP) && defined(ICD9_DEBUG)
-		Rcpp::Rcout << omp_get_thread_num();
+	  Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
+		Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << "\n";
 #endif
 
 		chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk

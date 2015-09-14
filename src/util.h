@@ -21,5 +21,8 @@
 #define UTIL_H_
 
 std::string strimCpp(std::string& s);
+int getOmpCores();
+int getOmpMaxThreads();
+void debug_parallel();
 
 #endif /* UTIL_H_ */

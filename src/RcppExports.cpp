@@ -907,6 +907,35 @@ RcppExport SEXP icd9_getOmpCores() {
     UNPROTECT(1);
     return __result;
 }
+// getOmpMaxThreads
+int getOmpMaxThreads();
+static SEXP icd9_getOmpMaxThreads_try() {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    __result = Rcpp::wrap(getOmpMaxThreads());
+    return __result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_getOmpMaxThreads() {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_getOmpMaxThreads_try());
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int icd9_RcppExport_validate(const char* sig) { 
@@ -941,6 +970,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("std::vector<std::string>(*trimCpp)(std::vector<std::string>&)");
         signatures.insert("bool(*assertFactorOrCharacter)(SEXP)");
         signatures.insert("int(*getOmpCores)()");
+        signatures.insert("int(*getOmpMaxThreads)()");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -976,6 +1006,7 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_trimCpp", (DL_FUNC)icd9_trimCpp_try);
     R_RegisterCCallable("icd9", "icd9_assertFactorOrCharacter", (DL_FUNC)icd9_assertFactorOrCharacter_try);
     R_RegisterCCallable("icd9", "icd9_getOmpCores", (DL_FUNC)icd9_getOmpCores_try);
+    R_RegisterCCallable("icd9", "icd9_getOmpMaxThreads", (DL_FUNC)icd9_getOmpMaxThreads_try);
     R_RegisterCCallable("icd9", "icd9_RcppExport_validate", (DL_FUNC)icd9_RcppExport_validate);
     return R_NilValue;
 }

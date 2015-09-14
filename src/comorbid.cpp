@@ -23,6 +23,10 @@
 #include <vector>
 #include <string>
 
+#ifdef ICD9_DEBUG_PARALLEL
+#include <util.h>
+#endif
+
 using namespace Rcpp;
 
 // R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
@@ -50,6 +54,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #else
 	Rcpp::Rcout << "_OPENMP is not defined.\n";
 #endif
+//debug_parallel()
 #endif
 
 #ifdef ICD9_OPENMP
