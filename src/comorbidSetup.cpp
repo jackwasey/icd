@@ -91,7 +91,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
         if (found != vis_lookup.end()) {
           vcdb[found->second].push_back(n);
 #ifdef ICD9_DEBUG_SETUP_TRACE
-          Rcpp::Rcout << "repeat key " << vi << " found at position " << vcdb_use_idx << "\n";
+          Rcpp::Rcout << "repeat key " << vi << " found at position " << vcdb_new_idx << "\n";
 #endif
           continue;
         } else {
