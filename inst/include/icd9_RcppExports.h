@@ -24,11 +24,11 @@ namespace icd9 {
         }
     }
 
-    inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true) {
+    inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true) {
         typedef SEXP(*Ptr_icd9ComorbidShortCpp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortCpp p_icd9ComorbidShortCpp = NULL;
         if (p_icd9ComorbidShortCpp == NULL) {
-            validateSignature("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const List&,const std::string,const std::string,const int,const int,const int,bool)");
+            validateSignature("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
             p_icd9ComorbidShortCpp = (Ptr_icd9ComorbidShortCpp)R_GetCCallable("icd9", "icd9_icd9ComorbidShortCpp");
         }
         RObject __result;
@@ -586,6 +586,25 @@ namespace icd9 {
         {
             RNGScope __rngScope;
             __result = p_getOmpMaxThreads();
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<int >(__result);
+    }
+
+    inline int getOmpThreads() {
+        typedef SEXP(*Ptr_getOmpThreads)();
+        static Ptr_getOmpThreads p_getOmpThreads = NULL;
+        if (p_getOmpThreads == NULL) {
+            validateSignature("int(*getOmpThreads)()");
+            p_getOmpThreads = (Ptr_getOmpThreads)R_GetCCallable("icd9", "icd9_getOmpThreads");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_getOmpThreads();
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

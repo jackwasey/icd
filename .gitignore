@@ -21,3 +21,5 @@ config.status
 aclocal.m4
 configure.scan
 autoscan.log
+inst/extdata/Dtab10.RTF
+inst/extdata/all-covariates.xls

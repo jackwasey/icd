@@ -95,6 +95,7 @@ int getOmpMaxThreads() {
   return maxthreads;
 }
 
+// [[Rcpp::export]]
 int getOmpThreads() {
   int threads = 99;
 #ifdef ICD9_OPENMP
@@ -104,13 +105,16 @@ int getOmpThreads() {
   return threads;
 }
 
-void debug_parallel() {
 #ifdef ICD9_DEBUG_PARALLEL
 #ifdef ICD9_OPENMP
+void debug_parallel() {
   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
+  Rcpp::Rcout << "max threads per omp_get_schedule = " << getOmpMaxThreads() << ". ";
   Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
-  Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << "\n";
+  Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << ". ";
   Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
-#endif
-#endif
 }
+#endif
+#endif
+// header for this is in local.h because it doesn't get picked up in util.h for some reason
+

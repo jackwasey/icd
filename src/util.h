@@ -22,6 +22,7 @@
 
 std::string strimCpp(std::string& s);
 int getOmpCores();
+int getOmpThreads();
 int getOmpMaxThreads();
 void debug_parallel();
 

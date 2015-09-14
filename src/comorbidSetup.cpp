@@ -19,12 +19,12 @@
 #include <local.h>
 #include <algorithm>
 
-using namespace Rcpp;
+// using namespace Rcpp;
 
-void buildMap(const List& icd9Mapping, VecVecInt& map) {
-  for (List::const_iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();
+void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map) {
+  for (Rcpp::List::const_iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();
   ++mi) {
-    VecInt vec(as<VecInt>(*mi));
+    VecInt vec(Rcpp::as<VecInt>(*mi));
     std::sort(vec.begin(), vec.end());
 #ifdef ICD9_DEBUG_SETUP_TRACE
     Rcpp::Rcout << "pushing back vec of length: " << vec.size() << "\n";
@@ -56,13 +56,16 @@ void buildVisitCodesVec(const SEXP& icd9df,
 
 #ifdef ICD9_DEBUG
 #ifdef HAVE_CXX11
-  Rcout << "unordered_map is available (or at least C++11 is in some form)\n";
+  Rcpp::Rcout << "unordered_map is available (or at least C++11 is in some form)\n";
 #else
   Rcout << "unordered_map is not available\n";
 #endif
 #endif
   VisLk vis_lookup;
 
+#ifdef ICD9_DEBUG
+  Rcpp::Rcout << "vcdb resized to length vlen = " << vlen << "\n";
+#endif
   vcdb.resize(vlen); // over-estimate and allocate all at once (alternative is to reserve)
   VecVecIntSz vcdb_max_idx = -1; // we increment immediately to zero as first index
   VecVecIntSz vcdb_new_idx;

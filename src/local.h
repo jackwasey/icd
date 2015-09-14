@@ -114,6 +114,7 @@ void printIt(std::map<MK,MV> v) {
 }
 
 void printCharVec(Rcpp::CharacterVector cv);
+void debug_parallel();
 #endif
 
 #endif // LOCAL_H_

@@ -18,8 +18,9 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 #include <local.h>
+#include <util.h>
 #include <algorithm>
-using namespace Rcpp;
+//using namespace Rcpp;
 
 void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 		const VecVecIntSz num_comorbid, const VecVecIntSz begin,
@@ -38,6 +39,7 @@ void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
 		for (VecVecIntSz cmb = 0; cmb < num_comorbid; ++cmb) { // loop through icd codes for this visitId
 #ifdef ICD9_DEBUG_TRACE
 				Rcpp::Rcout << "cmb = " << cmb << "\n";
+// with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
 				Rcpp::Rcout << "vcdb_x length = " << vcdb.size() << "\n";
 #endif
 
@@ -81,12 +83,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	// TODO: need to consider other processes using multiple cores, see Writing R Extensions.
 	omp_set_schedule(omp_sched_static, ompChunkSize); // ideally wouldn't repeat this over and over again
 #ifdef ICD9_DEBUG_PARALLEL
-	omp_sched_t sched;
-	int threads = 0;
-	omp_get_schedule(&sched, &threads);
-	Rcpp::Rcout << "threads per omp_get_schedule = " << threads << ". ";
-	Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
-	Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << "\n";
+	debug_parallel();
 #endif
 
 #pragma omp for schedule(static)
@@ -96,11 +93,9 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 #ifdef ICD9_DEBUG_TRACE
 		Rcpp::Rcout << "vis_i = " << vis_i << " ";
 #endif
-#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG)
-	  Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
-		Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << "\n";
+#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
+		debug_parallel();
 #endif
-
 		chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
 		if (chunk_end_i > last_i)
 			chunk_end_i = last_i; // indices
