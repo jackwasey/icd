@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # run a thousand identical icd9 codes
-git pull && Rscript -e 'devtools::clean_dll(); devtools::load_all(); mydf <- data.frame(visitId = rep("a", 1000), icd9 = rep("441", 1000)); cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)'
+# git pull && Rscript -e 'devtools::clean_dll(); devtools::load_all(); mydf <- data.frame(visitId = rep("a", 1000), icd9 = rep("441", 1000)); cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)'
 
 # run a single icd9 code
-git pull && Rscript -e 'devtools::clean_dll(); devtools::load_all(); mydf <- data.frame(visitId = "a", icd9 = "441"); cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)'
+# git pull && Rscript -e 'devtools::clean_dll(); devtools::load_all(); mydf <- data.frame(visitId = "a", icd9 = "441"); cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)'
 
 # pull, build and stress, without docs for speed and to avoid premature errors
 #if [ -d "icd9" ]; then

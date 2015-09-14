@@ -36,8 +36,8 @@ extern "C" {
 
 #define ICD9_DEBUG
 #define ICD9_DEBUG_TRACE
-//#define ICD9_DEBUG_SETUP
-//#define ICD9_DEBUG_SETUP_TRACE
+#define ICD9_DEBUG_SETUP
+#define ICD9_DEBUG_SETUP_TRACE
 #define ICD9_DEBUG_PARALLEL
 //#define ICD9_VALGRIND
 
