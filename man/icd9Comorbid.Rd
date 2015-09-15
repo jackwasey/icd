@@ -84,8 +84,9 @@ is guessed from the input data.}
 instead of \code{icd9df}. All the codes in a mapping should be of the same
 type, i.e. short or decimal.}
 
-\item{...}{further arguments e.g. chunkSize and ompChunkSize pass to the C++
-function}
+\item{...}{arguments passed to the corresponding function from the alias.
+E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
+to \code{icd9ComorbidAhrq}}
 
 \item{abbrevNames}{single locical value that defaults to \code{TRUE}, in
 which case the ishorter human-readable names stored in e.g.
@@ -95,10 +96,6 @@ which case the ishorter human-readable names stored in e.g.
 which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
-
-\item{...}{arguments passed to the corresponding function from the alias.
-E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
-to \code{icd9ComorbidAhrq}}
 }
 \description{
 RcppParallel approach with openmp and vector of integer strategy
