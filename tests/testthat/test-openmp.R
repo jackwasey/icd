@@ -19,24 +19,34 @@ context("OpenMP tests")
 # OpenMP already used, if compiled in, bu t need some specific stress tests, e.g for error in bug #75
 
 test_that("single icd9 code comorbidity", {
-# this is enough to segfault with clang 3.7, libc++ and libomp
-	x <- data.frame(visitId = "a", icd9 = "441")
-	icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
+  # this is enough to segfault with clang 3.7, libc++ and libomp
+  x <- data.frame(visitId = "a", icd9 = "441")
+  icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
 })
 
-test_that("thousands of patients", {
-	x <- randomPatients(10000)
-	icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
-})
+# test_that("thousands of patients", {
+#   x <- randomPatients(10000)
+#   icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
+# })
 
-test_that("vary chunk size, one thread", {
-	x <- randomPatients(10000)
-
-	for (cs in c(1,2,10,29, 181, 10001)) {
-		options("icd9.threads" = 1)
-		options("icd9.chunkSize" = cs)
-		options("icd9.ompChunkSize" = 1)
-		icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
-	}
+test_that("vary everything", {
+  for (pts in c(0, 1, 3, 31, 1013, 10009)) { # primes
+    for (dz_per_patient in c(1, 23)) { # primes, and this is a target dz per pt, not exactly distributed
+      for (threads in c(1, 5, 9)) {
+        for (chunkSize in c(1, 2, 11, 29, 101, 997, 10007)) { # unity, and prime numbers , 100003, 1000003, 10000019
+          options("icd9.threads" = threads)
+          options("icd9.chunkSize" = chunkSize)
+          # options("icd9.ompChunkSize" = ompChunkSize) # currently not set in CPP code
+          expect_that(
+            icd9ComorbidQuanDeyo(randomUnorderedPatients(pts, dz_per_patient),
+                                 isShort = FALSE, applyHierarchy = TRUE),
+            testthat::not(throws_error()),
+            info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunkSize = %i",
+                           pts, dz_per_patient, threads, chunkSize)
+          )
+        }
+      }
+    }
+  }
 })
 

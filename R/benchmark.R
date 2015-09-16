@@ -23,22 +23,23 @@ getSlowestTests <- function(n = 5) {
   print(tail(res[order(res$real), "test"], n = n))
 }
 
-randomPatients <- function(n = 100, np=10)
-  randomOrderedPatients(n, np)
+randomPatients <- function(...)
+  randomOrderedPatients(...)
 
-randomOrderedPatients <- function(n = 100, np = 10) {
-  x <- randomUnorderedPatients(n, np)
+randomOrderedPatients <- function(...) {
+  x <- randomUnorderedPatients(...)
   x[order(x$visitId), ]
 }
 
-randomUnorderedPatients <- function(n = 50000, np = 20) {
+randomUnorderedPatients <- function(num_patients = 50000, dz_per_patient = 20,
+                                    n = num_patients, np = dz_per_patient) {
   set.seed(1441)
   pts <- round(n / np)
   data.frame(
     visitId = sample(seq(1, pts), replace = TRUE, size = n),
     icd9 = c(randomShortIcd9(round(n / 2)), randomShortAhrq(n - round(n / 2))),
     poa = as.factor(
-      sample(x = c("Y","N", "n", "n", "y", "X","E","",NA),
+      sample(x = c("Y","N", "n", "n", "y", "X", "E", "", NA),
              replace = TRUE, size = n)),
     stringsAsFactors = FALSE
   )
