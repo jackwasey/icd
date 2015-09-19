@@ -41,8 +41,8 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 #endif
 
 #ifdef ICD9_OPENMP
-// I think const values are automatically shared.
-#pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout) private(chunk_end_i, vis_i)
+// I think const values are automatically shared, if default(none) is not used. Different compilers respond differently.
+#pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout, vcdb, map) private(chunk_end_i, vis_i)
 	// TODO: need to consider other processes using multiple cores, see Writing R Extensions.
 //	omp_set_schedule(omp_sched_static, ompChunkSize); // TODO: ideally wouldn't repeat this over and over again
 // #pragma omp for schedule(static)

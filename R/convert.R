@@ -271,11 +271,11 @@ icd9ComorbidDfToMat <- function(x, visitId = NULL,
 #' @keywords internal manip
 icd9ShortToParts <- function(icd9Short, minorEmpty = "") {
   # Cannot specify default values in both header and C++ function body, so use a shim here.
-  .Call('icd9_icd9ShortToPartsCpp', PACKAGE = 'icd9', icd9Short, minorEmpty)
+  .Call("icd9_icd9ShortToPartsCpp", PACKAGE = "icd9", icd9Short, minorEmpty)
 }
 
 #' @rdname convert
 #' @keywords internal manip
 icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
-  .Call('icd9_icd9DecimalToPartsCpp', PACKAGE = 'icd9', icd9Decimal, minorEmpty)
+  .Call("icd9_icd9DecimalToPartsCpp", PACKAGE = "icd9", icd9Decimal, minorEmpty)
 }

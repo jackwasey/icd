@@ -132,7 +132,7 @@ icd9Comorbid <- function(icd9df,
   chunkSize <- getOption("icd9.chunkSize", 256L)
   ompChunkSize <- getOption("icd9.ompChunkSize", 1L)
 
-  mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, 
+  mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field,
 	threads = threads, chunkSize = chunkSize, ompChunkSize = ompChunkSize)
   if (return.df) {
     if (icd9VisitWasFactor)
