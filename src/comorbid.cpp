@@ -18,16 +18,13 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 
+#include "local.h"
+//#ifdef ICD9_DEBUG_PARALLEL
+#include "util.h"
+//#endif
 #include <Rcpp.h>
-#include <local.h>
 #include <vector>
 #include <string>
-
-#ifdef ICD9_DEBUG_PARALLEL
-#include <util.h>
-#endif
-
-//using namespace Rcpp;
 
 // R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
 
@@ -37,10 +34,13 @@
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
-		const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunkSize = 256,
+		const std::string visitId, const std::string icd9Field,
+		const int threads = 8, const int chunkSize = 256,
 		const int ompChunkSize = 1, bool aggregate = true) {
 #ifdef ICD9_VALGRIND
-	CALLGRIND_START_INSTRUMENTATION;
+	Rcpp::Rcout << "Starting valgrind instrumentation... ";
+	CALLGRIND_START_INSTRUMENTATION
+	;
 #endif
 #if (defined ICD9_DEBUG_SETUP || defined ICD9_SETUP)
 	Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
@@ -56,15 +56,15 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #endif
 #ifdef ICD9_OPENMP
 	Rcpp::Rcout << "ICD9_OPENMP is defined.\n";
-	debug_parallel();
 #else
 	Rcpp::Rcout << "ICD9_OPENMP is not defined.\n";
 #endif
 #endif
-
+#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
+	debug_parallel();
+#endif
 #ifdef ICD9_OPENMP
-	if (threads > 0)
-	omp_set_num_threads(threads);
+//	if (threads > 0) omp_set_num_threads(threads);
 #ifdef ICD9_DEBUG_PARALLEL
 	debug_parallel();
 #endif
@@ -82,13 +82,14 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 	Rcpp::Rcout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif
 	if (TYPEOF(vsexp) != STRSXP)
-	  Rcpp::stop("expecting vsexp to be character vector");
+		Rcpp::stop("expecting vsexp to be character vector");
 	UNPROTECT(1); // vsexp not used further
 
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "icd9ComorbidShortMatrix STRSXP\n";
 #endif
-	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
+	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
+			aggregate);
 
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "building icd9Mapping\n";
@@ -134,14 +135,17 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 			Rcpp::Rcout << "wrapped out\n";
 #endif
 	mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
-	mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(), out_row_names);
+	mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(),
+			out_row_names);
 	// apparently don't need to set class as matrix here
 	Rcpp::Function t("t"); // use R transpose - seems pretty fast
 #ifdef ICD9_DEBUG
 			Rcpp::Rcout << "Ready to transpose and return\n";
 #endif
 #ifdef ICD9_VALGRIND
-	CALLGRIND_STOP_INSTRUMENTATION;
+	Rcpp::Rcout << "Stopping valgrind instrumentation... ";
+	CALLGRIND_STOP_INSTRUMENTATION
+	;
 	//CALLGRIND_DUMP_STATS;
 #endif
 	return t(mat_out);

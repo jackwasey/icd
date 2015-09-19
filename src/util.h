@@ -15,15 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with icd9. If not, see <http://www.gnu.org/licenses/>.
 
-#include <string>
-
 #ifndef UTIL_H_
 #define UTIL_H_
 
-std::string strimCpp(std::string& s);
+#include "local.h"
+#include <Rcpp.h>
+#include <vector>
+#include <string>
+#ifdef ICD9_OPENMP
+#include <omp.h>
+#endif
+
+std::string trimLeftCpp(std::string s);
+std::string strimCpp(std::string s);
+
+//#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
 int getOmpCores();
 int getOmpThreads();
 int getOmpMaxThreads();
 void debug_parallel();
+//#endif
 
 #endif /* UTIL_H_ */

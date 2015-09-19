@@ -45,7 +45,6 @@ randomUnorderedPatients <- function(num_patients = 50000, dz_per_patient = 20,
   )
 }
 
-
 #' genereate random short icd9 codes
 #' @keywords internal
 #' @importFrom stats runif
@@ -105,6 +104,10 @@ benchVaryn <- function(np = 5, threads = 4, chunkSize = 256, ompChunkSize = 1) {
 }
 
 otherbench <- function() {
+
+  # explore the parameter space. TODO: genetic optimize these parameters (and
+  # this may uncover corner case bugs, too)
+
   # vary threads for big n, chunk = 1
   microbenchmark::microbenchmark(
     icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 1, chunkSize=1),

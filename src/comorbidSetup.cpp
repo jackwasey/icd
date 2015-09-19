@@ -16,7 +16,8 @@
 // along with icd9. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <local.h>
+#include "local.h"
+#include <Rcpp.h>
 #include <algorithm>
 
 // using namespace Rcpp;

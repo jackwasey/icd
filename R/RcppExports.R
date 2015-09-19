@@ -9,6 +9,14 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
     .Call('icd9_icd9ComorbidShortCpp', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate)
 }
 
+#' @rdname icd9ShortToDecimal
+#' @export
+NULL
+
+#' @rdname icd9ShortToDecimal
+#' @export
+NULL
+
 icd9MajMinToCode <- function(major, minor, isShort) {
     .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', major, minor, isShort)
 }
@@ -43,14 +51,14 @@ icd9MajMinToParts_list <- function(major, minor) {
 
 #' @rdname convert
 #' @keywords internal manip
-icd9ShortToParts <- function(icd9Short, minorEmpty = "") {
-    .Call('icd9_icd9ShortToParts', PACKAGE = 'icd9', icd9Short, minorEmpty)
+icd9ShortToPartsCpp <- function(icd9Short, minorEmpty) {
+    .Call('icd9_icd9ShortToPartsCpp', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
 #' @rdname convert
 #' @keywords internal manip
-icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
-    .Call('icd9_icd9DecimalToParts', PACKAGE = 'icd9', icd9Decimal, minorEmpty)
+icd9DecimalToPartsCpp <- function(icd9Decimal, minorEmpty) {
+    .Call('icd9_icd9DecimalToPartsCpp', PACKAGE = 'icd9', icd9Decimal, minorEmpty)
 }
 
 #' @title Convert ICD-9 codes between short and decimal forms
@@ -63,16 +71,31 @@ icd9ShortToDecimal <- function(icd9Short) {
 
 #' @rdname icd9ShortToDecimal
 #' @export
+icd9DecimalToShortOld <- function(icd9Decimal) {
+    .Call('icd9_icd9DecimalToShortOld', PACKAGE = 'icd9', icd9Decimal)
+}
+
+#' @rdname convert
+#' @keywords internal manip
 icd9DecimalToShort <- function(icd9Decimal) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', icd9Decimal)
 }
 
 #' @title Get major (three-digit) part of ICD-9 codes
+#' @description This is reasonably fast, but calculates all the minors, then throws away the result.
+#'
 #' @template icd9-any
 #' @template isShort
+#' @keywords internal manip
 #' @export
 icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
+}
+
+#' @rdname icd9GetMajor
+#' @keywords internal manip
+icd9GetMajorShort <- function(icd9Short) {
+    .Call('icd9_icd9GetMajorShort', PACKAGE = 'icd9', icd9Short)
 }
 
 #' @title test whether elements of vector begin with V, E (or any other
@@ -95,6 +118,10 @@ icd9LongToWideCpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
 
 icd9AddLeadingZeroesMajorSingle <- function(major) {
     .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', major)
+}
+
+icd9AddLeadingZeroesMajorSingleStd <- function(m) {
+    .Call('icd9_icd9AddLeadingZeroesMajorSingleStd', PACKAGE = 'icd9', m)
 }
 
 icd9AddLeadingZeroesMajor <- function(major) {
@@ -154,6 +181,10 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort, isShortReference =
     .Call('icd9_icd9InReferenceCode', PACKAGE = 'icd9', icd9, icd9Reference, isShort, isShortReference)
 }
 
+trimLeftCpp <- function(s) {
+    .Call('icd9_trimLeftCpp', PACKAGE = 'icd9', s)
+}
+
 strimCpp <- function(s) {
     .Call('icd9_strimCpp', PACKAGE = 'icd9', s)
 }
@@ -176,6 +207,17 @@ getOmpMaxThreads <- function() {
 
 getOmpThreads <- function() {
     .Call('icd9_getOmpThreads', PACKAGE = 'icd9')
+}
+
+randomMajorCpp <- function(n) {
+    .Call('icd9_randomMajorCpp', PACKAGE = 'icd9', n)
+}
+
+#' genereate random short icd9 codes
+#' @keywords internal
+#' @importFrom stats runif
+randomShortIcd9 <- function(n = 50000L) {
+    .Call('icd9_randomShortIcd9', PACKAGE = 'icd9', n)
 }
 
 # Register entry points for exported C++ functions

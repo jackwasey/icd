@@ -126,7 +126,7 @@ CharacterVector icd9ChildrenShortCpp(CharacterVector icd9Short, bool onlyReal) {
 	std::set<std::string> out; // we are never going to put NAs in the output?
 	if (icd9Short.size() == 0)
 		return wrap(out);
-	List parts = icd9ShortToParts(icd9Short, "");
+	List parts = icd9ShortToPartsCpp(icd9Short, "");
 	CharacterVector major = parts[0];
 	CharacterVector minor = parts[1];
 	CharacterVector::iterator itmajor = major.begin(); // iterator seems to be a CharacterVector of length 1

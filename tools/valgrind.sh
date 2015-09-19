@@ -23,3 +23,7 @@ R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd9); library
 
 # useful to install first...
 R CMD INSTALL icd9 && R -d "valgrind --tool=callgrind"  -e "library(icd9); pts <- icd9:::randomOrderedPatients(1000, 10); icd9:::icd9LongToWideMatrix(pts)"
+
+
+# other useful options: --instr-atstart=no
+# then callgrind_control -i (or prograammatically) start instrumentation

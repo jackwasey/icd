@@ -17,8 +17,8 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
-#include <local.h>
-#include <util.h>
+#include "util.h"
+#include "local.h"
 #include <algorithm>
 
 void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
@@ -30,12 +30,16 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	VecVecIntSz chunk_end_i;
 	VecVecIntSz vis_i;
 #ifdef ICD9_DEBUG_TRACE
-		Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
-		Rcpp::Rcout << "map.size() = " << map.size() << "\n";
+	Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
+	Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
-// work around possible clang 3.7 bug: http://stackoverflow.com/questions/32572966/did-i-misuse-a-reference-variable-in-a-simple-openmp-for-loop-or-is-it-a-clang
+// possible work around possible clang 3.7 bug: http://stackoverflow.com/questions/32572966/did-i-misuse-a-reference-variable-in-a-simple-openmp-for-loop-or-is-it-a-clang
 //const VecVecInt *vcdb = &_vcdb;
 //const VecVecInt *map = &_map;
+#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
+	debug_parallel();
+#endif
+
 #ifdef ICD9_OPENMP
 // I think const values are automatically shared.
 #pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout) private(chunk_end_i, vis_i)
@@ -63,59 +67,57 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		// lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
 		// Look up comorbidities for one chunk of vcdb, this is called in parallel
 //		void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
-                      //const VecVecIntSz num_comorbid, const VecVecIntSz begin,
-                      //const VecVecIntSz end, ComorbidOut& chunk) {
-      VecVecIntSz begin = vis_i;
+		//const VecVecIntSz num_comorbid, const VecVecIntSz begin,
+		//const VecVecIntSz end, ComorbidOut& chunk) {
+		VecVecIntSz begin = vis_i;
 		VecVecIntSz end = chunk_end_i;
 
 #ifdef ICD9_DEBUG_TRACE
-		  Rcpp::Rcout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
+		Rcpp::Rcout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
 #endif
-		  const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin),
-                                         false);
-		  chunk = falseComorbidChunk;
-		  for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
+		const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin),
+				false);
+		chunk = falseComorbidChunk;
+		for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
 #ifdef ICD9_DEBUG_TRACE
-		    // with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
-		    Rcpp::Rcout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
+				// with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
+				Rcpp::Rcout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
 #endif
-		    for (VecVecIntSz cmb = 0; cmb < num_comorbid; ++cmb) { // loop through icd codes for this visitId
+			for (VecVecIntSz cmb = 0; cmb < num_comorbid; ++cmb) { // loop through icd codes for this visitId
 #ifdef ICD9_DEBUG_TRACE
-		      Rcpp::Rcout << "cmb = " << cmb << "\n";
-		      // with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
-		      Rcpp::Rcout << "vcdb length in lookupOneChunk = " << vcdb.size() << "\n";
-		      Rcpp::Rcout << "map length in lookupOneChunk = " << map.size() << "\n";
+					Rcpp::Rcout << "cmb = " << cmb << "\n";
+					// with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
+					Rcpp::Rcout << "vcdb length in lookupOneChunk = " << vcdb.size() << "\n";
+					Rcpp::Rcout << "map length in lookupOneChunk = " << map.size() << "\n";
 #endif
 
-		      const VecInt& codes = vcdb[urow]; // these are the ICD-9 codes for the current visitid
-		      const VecInt& mapCodes = map[cmb]; // may be zero length
+				const VecInt& codes = vcdb[urow]; // these are the ICD-9 codes for the current visitid
+				const VecInt& mapCodes = map[cmb]; // may be zero length
 
-		      const VecInt::const_iterator cbegin = codes.begin();
-		      const VecInt::const_iterator cend = codes.end();
-		      for (VecInt::const_iterator code_it = cbegin; code_it != cend;
-		      ++code_it) {
-		        bool found_it = std::binary_search(mapCodes.begin(),
-                                             mapCodes.end(), *code_it);
-		        if (found_it) {
-		          const ComorbidOut::size_type chunk_idx = num_comorbid
-		          * (urow - begin) + cmb;
+				const VecInt::const_iterator cbegin = codes.begin();
+				const VecInt::const_iterator cend = codes.end();
+				for (VecInt::const_iterator code_it = cbegin; code_it != cend;
+						++code_it) {
+					bool found_it = std::binary_search(mapCodes.begin(),
+							mapCodes.end(), *code_it);
+					if (found_it) {
+						const ComorbidOut::size_type chunk_idx = num_comorbid
+								* (urow - begin) + cmb;
 #ifdef ICD9_DEBUG
-		          chunk.at(chunk_idx) = true;
+						chunk.at(chunk_idx) = true;
 #else
-		          chunk[chunk_idx] = true;
+						chunk[chunk_idx] = true;
 #endif
-		          break;
-		        } // end if found_it
-		      } // end loop through codes in one comorbidity
-		    } // end loop through all comorbidities
-		  } // end loop through visits
+						break;
+					} // end if found_it
+				} // end loop through codes in one comorbidity
+			} // end loop through all comorbidities
+		} // end loop through visits
 #ifdef ICD9_DEBUG_TRACE
-		  Rcpp::Rcout << "finished with one chunk\n";
+		Rcpp::Rcout << "finished with one chunk\n";
 #endif
 
-
-
-	// next block doesn't need to be single threaded(?), but doing so improves cache contention
+		// next block doesn't need to be single threaded(?), but doing so improves cache contention
 #ifdef ICD9_OPENMP
 #pragma omp critical
 #endif
@@ -141,8 +143,8 @@ ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
 	// initialize output matrix with all false for all comorbidities
 	ComorbidOut out(vcdb.size() * map.size(), false);
 #ifdef ICD9_DEBUG_TRACE
-		Rcpp::Rcout << "top level vcdb.size() = " << vcdb.size() << "\n";
-		Rcpp::Rcout << "top level map.size() = " << map.size() << "\n";
+	Rcpp::Rcout << "top level vcdb.size() = " << vcdb.size() << "\n";
+	Rcpp::Rcout << "top level map.size() = " << map.size() << "\n";
 #endif
 //TODO: pass the output by reference
 	lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);

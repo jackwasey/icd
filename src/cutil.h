@@ -5,11 +5,16 @@
  *      Author: jack
  */
 
-#include <Rinternals.h>
+#ifndef CUTIL_H_
+#define CUTIL_H_
 
-#ifndef UTIL_H_
-#define UTIL_H_
+#include <R.h>
+#include <Rinternals.h>
+#include <string.h>
 
 SEXP getRListOrDfElement(SEXP list, const char *str);
 
-#endif // UTIL_H_
+void delanychar(char* str, char c);
+void dropdot(SEXP v);
+
+#endif // CUTIL_H_

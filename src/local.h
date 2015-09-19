@@ -20,10 +20,6 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-//#include <R.h>
-//#include <Rinternals.h>
-//#include <string>
-//#include <algorithm>
 #include <vector>
 #include <set>
 
@@ -41,14 +37,22 @@ extern "C" {
 //#define ICD9_DEBUG_PARALLEL
 //#define ICD9_VALGRIND
 
+// enabling this stops ackage compiling. useful for testing purely in C++.
+// See tools/standalone.sh
+//#define ICD9_STANDALONE
+
 #ifdef _OPENMP
 #include <omp.h>
 #define ICD9_OPENMP
 #endif
 
+//#ifdef __VALGRIND_H
 #ifdef ICD9_VALGRIND
 #include <valgrind/callgrind.h>
 #endif
+//#else
+//#undef ICD9_VALGRIND
+//#endif
 
 typedef std::string Str;
 typedef std::vector<Str> VecStr;
@@ -113,8 +117,7 @@ void printIt(std::map<MK,MV> v) {
 	Rcpp::Rcout.flush();
 }
 
-void printCharVec(Rcpp::CharacterVector cv);
-void debug_parallel();
-#endif
+#endif // end (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
 
 #endif // LOCAL_H_
+

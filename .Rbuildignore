@@ -40,3 +40,6 @@ extdata\/ccs_multi_pr_tool_2014\.csv
 extdata\/comoanaly2012-2013\.txt
 ccs_multi_dx_tool_2013\.csv
 .*\.rtf
+.*standalone.*
+icd.*tar\.gz
+inst\/standalone\/.*
