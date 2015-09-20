@@ -72,7 +72,7 @@ icd9DecimalToShortOld <- function(icd9Decimal) {
 }
 
 #' @rdname convert
-#' @keywords internal manip
+#' @export
 icd9DecimalToShort <- function(icd9Decimal) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', icd9Decimal)
 }
@@ -258,6 +258,14 @@ fastIntToStringStd <- function(x, bufferSize = 64L) {
 #' @rdname fastIntToString
 fastIntToStringRcpp <- function(x, bufferSize = 64L) {
     .Call('icd9_fastIntToStringRcpp', PACKAGE = 'icd9', x, bufferSize)
+}
+
+callgrindStart <- function(zerostats = FALSE) {
+    .Call('icd9_callgrindStart', PACKAGE = 'icd9', zerostats)
+}
+
+valgrindCallgrindStart <- function(zerostats = FALSE) {
+    .Call('icd9_valgrindCallgrindStart', PACKAGE = 'icd9', zerostats)
 }
 
 # Register entry points for exported C++ functions

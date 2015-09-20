@@ -138,8 +138,8 @@ icd9GuessIsShort <- function(icd9) {
     else
       return(TRUE)
   }
-  testend = length(icd9)
-  if (testend > 100) testend = 100
+  testend <- length(icd9)
+  if (testend > 100) testend <- 100
   vs <- icd9IsValidShort(icd9[1:testend])
   vd <- icd9IsValidDecimal(icd9[1:testend])
   if (sum(vd) > sum(vs)) return(FALSE)

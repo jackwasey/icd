@@ -38,51 +38,51 @@ std::string trimRightCpp(std::string s) {
 // trim one string from left
 // [[Rcpp::export]]
 std::string trimLeftCpp(std::string s) {
-	std::size_t n = s.find_first_not_of(" \f\n\r\t\v");
-	s.erase(0, n);
-	return s;
+  std::size_t n = s.find_first_not_of(" \f\n\r\t\v");
+  s.erase(0, n);
+  return s;
 }
 
 // trim a single string at both ends, but loses any encoding attributes.
 // [[Rcpp::export]]
 std::string strimCpp(std::string s) { // according to http://stackoverflow.com/questions/10789740/passing-stdstring-by-value-or-reference
-// C++11 (i.e. almost everyone) will avoid copy even without using reference argument.
-	return trimLeftCpp(trimRightCpp(s));
+  // C++11 (i.e. almost everyone) will avoid copy even without using reference argument.
+  return trimLeftCpp(trimRightCpp(s));
 }
 
 // [[Rcpp::export]]
 std::vector<std::string> trimCpp(std::vector<std::string> sv) {
-	for (std::vector<std::string>::iterator i = sv.begin(); i != sv.end(); ++i)
-		*i = strimCpp(*i);
-	return sv;
+  for (std::vector<std::string>::iterator i = sv.begin(); i != sv.end(); ++i)
+    *i = strimCpp(*i);
+  return sv;
 }
 
 // [[Rcpp::export]]
 bool assertFactorOrCharacter(SEXP x) {
-	if (!Rf_isString(x) && !Rf_isFactor(x)) {
-	  Rcpp::stop("Must be a factor or character");
-	}
-	return true; // Rcpp fails with void for some reason
+  if (!Rf_isString(x) && !Rf_isFactor(x)) {
+    Rcpp::stop("Must be a factor or character");
+  }
+  return true; // Rcpp fails with void for some reason
 }
 
 #ifdef ICD9_DEBUG
 void printCharVec(Rcpp::CharacterVector cv) {
-	for (Rcpp::CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {
-	  Rcpp::String s = *i;
-		Rcpp::Rcout << s.get_cstring() << " ";
-	}
-	Rcpp::Rcout << "\n";
-	return;
+  for (Rcpp::CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {
+    Rcpp::String s = *i;
+    Rcpp::Rcout << s.get_cstring() << " ";
+  }
+  Rcpp::Rcout << "\n";
+  return;
 }
 #endif
 
 // [[Rcpp::export]]
 int getOmpCores() {
-	int cores = 0;
+  int cores = 0;
 #ifdef ICD9_OPENMP
-	cores = omp_get_num_procs();
+  cores = omp_get_num_procs();
 #endif
-	return cores;
+  return cores;
 }
 
 // [[Rcpp::export]]
@@ -117,22 +117,22 @@ void debug_parallel() {
 // [[Rcpp::export]]
 Rcpp::NumericVector randomMajorCpp(int	n) {
   // TODO someday this can just be a sprintf like the others.
-	Rcpp::NumericVector iv = Rcpp::floor(Rcpp::runif(n) * 999);
-	return iv;
+  Rcpp::NumericVector iv = Rcpp::floor(Rcpp::runif(n) * 999);
+  return iv;
 }
 
 //' @title generate random short-form numeric icd9 codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
-	VecStr out(n);
+  VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
   char buffer[5];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "%.0f", randoms[i]);
     out[i] = buffer;
   }
-	return out;
+  return out;
 }
 
 //' @title generate random short-form icd9 V codes
@@ -172,20 +172,20 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
   char buffer[5];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
-// N, V or E?
-  switch ((int)randoms[i] % 3) {
-  case 0:
-    sprintf(buffer, "%.0f", randoms[i]);
-    break;
-  case 1:
-    sprintf(buffer, "V%.0f", randoms[i] / 10);
-    break;
-  case 2:
-    sprintf(buffer, "E%.0f", randoms[i] / 10);
-    break;
-  default:
-    {} // never here
-  }
+    // N, V or E?
+    switch ((int)randoms[i] % 3) {
+    case 0:
+      sprintf(buffer, "%.0f", randoms[i]);
+      break;
+    case 1:
+      sprintf(buffer, "V%.0f", randoms[i] / 10);
+      break;
+    case 2:
+      sprintf(buffer, "E%.0f", randoms[i] / 10);
+      break;
+    default:
+      {} // never here
+    }
     out[i] = buffer;
   }
   return out;
@@ -232,4 +232,36 @@ Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x, int bufferSize 
     out[i] = buffer;
   }
   return out;
+}
+
+// [[Rcpp::export]]
+int callgrindStart(bool zerostats = false) {
+#ifdef ICD9_VALGRIND
+#ifdef ICD9_DEBUG
+  Rcpp::Rcout << "Starting callgrind instrumentation...\n";
+#endif
+  CALLGRIND_START_INSTRUMENTATION;
+  if (zerostats) {
+#ifdef ICD9_DEBUG
+    Rcpp::Rcout << "Zeroing callgrind stats.\n";
+#endif
+    CALLGRIND_ZERO_STATS;
+  }
+#endif
+  return 0;
+}
+
+// [[Rcpp::export]]
+int valgrindCallgrindStart(bool zerostats = false) {
+#ifdef ICD9_VALGRIND
+#ifdef ICD9_DEBUG
+  Rcpp::Rcout << "Starting callgrind instrumentation...\n";
+#endif
+  CALLGRIND_START_INSTRUMENTATION;
+  if (zerostats) {
+    Rcpp::Rcout << "Zeroing callgrind stats.\n";
+    CALLGRIND_ZERO_STATS;
+  }
+#endif
+  return 0;
 }

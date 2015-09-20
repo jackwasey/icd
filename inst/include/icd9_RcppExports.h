@@ -822,6 +822,44 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
+    inline int callgrindStart(bool zerostats = false) {
+        typedef SEXP(*Ptr_callgrindStart)(SEXP);
+        static Ptr_callgrindStart p_callgrindStart = NULL;
+        if (p_callgrindStart == NULL) {
+            validateSignature("int(*callgrindStart)(bool)");
+            p_callgrindStart = (Ptr_callgrindStart)R_GetCCallable("icd9", "icd9_callgrindStart");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_callgrindStart(Rcpp::wrap(zerostats));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<int >(__result);
+    }
+
+    inline int valgrindCallgrindStart(bool zerostats = false) {
+        typedef SEXP(*Ptr_valgrindCallgrindStart)(SEXP);
+        static Ptr_valgrindCallgrindStart p_valgrindCallgrindStart = NULL;
+        if (p_valgrindCallgrindStart == NULL) {
+            validateSignature("int(*valgrindCallgrindStart)(bool)");
+            p_valgrindCallgrindStart = (Ptr_valgrindCallgrindStart)R_GetCCallable("icd9", "icd9_valgrindCallgrindStart");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_valgrindCallgrindStart(Rcpp::wrap(zerostats));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<int >(__result);
+    }
+
 }
 
 #endif // __icd9_RcppExports_h__

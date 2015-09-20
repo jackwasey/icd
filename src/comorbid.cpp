@@ -45,8 +45,11 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #ifdef ICD9_DEBUG
     Rcpp::Rcout << "Starting valgrind instrumentation... ";
 #endif
-	CALLGRIND_START_INSTRUMENTATION
-	;
+	CALLGRIND_START_INSTRUMENTATION;
+	if (FALSE) {
+	  Rcpp::Rcout << "Zeroing stats... ";
+	  CALLGRIND_ZERO_STATS;
+	}
 #endif
 #if (defined ICD9_DEBUG_SETUP || defined ICD9_SETUP)
 	Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
@@ -152,7 +155,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #ifdef ICD9_DEBUG_TRACE
   Rcpp::Rcout << "Stopping valgrind instrumentation... ";
 #endif
-CALLGRIND_STOP_INSTRUMENTATION
+CALLGRIND_STOP_INSTRUMENTATION;
 	;
 	//CALLGRIND_DUMP_STATS;
 #endif

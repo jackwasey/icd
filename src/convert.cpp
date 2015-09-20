@@ -293,7 +293,7 @@ Rcpp::CharacterVector icd9DecimalToShortOld(
 //}
 
 //' @rdname convert
-//' @keywords internal manip
+//' @export
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9DecimalToShort(
 		const Rcpp::CharacterVector icd9Decimal) {

@@ -37,7 +37,7 @@ extern "C" {
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_DEBUG_PARALLEL
-//#define ICD9_VALGRIND
+#define ICD9_VALGRIND
 
 // enabling this stops ackage compiling. useful for testing purely in C++.
 // See tools/standalone.sh
