@@ -51,9 +51,9 @@ AC_PROG_CC
 AC_TYPE_SIZE_T
 AC_C_INLINE
 
-# C++11, autoconf should determine the correct flags
-# https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx_11.html
-AX_CXX_COMPILE_STDCXX_11(noext,optional)
+# We do not need valgrind for normal operations, but it helps to know whether present on the platform compiling the code, so headers can be included if present (and instrumentation triggers inserted).
+# this uses automake, however, and is designed to check newly compiled code: AX_VALGRIND_CHECK
+AC_CHECK_HEADERS([valgrind/valgrind.h])
 
 ICD9_CXX11=''
 ICD9_CXX11_DEF=''

@@ -125,9 +125,9 @@ Rcpp::NumericVector randomMajorCpp(int	n) {
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
 	VecStr out(n);
-  std::vector<std::double_t> randoms = Rcpp::as<std::vector<std::double_t> >(Rcpp::runif(n, 0, 99999));
+  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
   char buffer[5];
-  for (std::vector<std::double_t>::size_type i = 0; i != n; ++i) {
+  for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "%.0f", randoms[i]);
     out[i] = buffer;
   }
@@ -139,9 +139,9 @@ std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n 
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
-  std::vector<std::double_t> randoms = Rcpp::as<std::vector<std::double_t> >(Rcpp::runif(n, 0, 9999));
+  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
   char buffer[5];
-  for (std::vector<std::double_t>::size_type i = 0; i != n; ++i) {
+  for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "V%.0f", randoms[i]);
     out[i] = buffer;
   }
@@ -153,9 +153,9 @@ std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n 
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
-  std::vector<std::double_t> randoms = Rcpp::as<std::vector<std::double_t> >(Rcpp::runif(n, 0, 9999));
+  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
   char buffer[5];
-  for (std::vector<std::double_t>::size_type i = 0; i != n; ++i) {
+  for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "E%.0f", randoms[i]);
     out[i] = buffer;
   }
@@ -168,9 +168,9 @@ std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n 
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
-  std::vector<std::double_t> randoms = Rcpp::as<std::vector<std::double_t> >(Rcpp::runif(n, 0, 99999));
+  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
   char buffer[5];
-  for (std::vector<std::double_t>::size_type i = 0; i != n; ++i) {
+  for (std::vector<double>::size_type i = 0; i != n; ++i) {
 // N, V or E?
   switch ((int)randoms[i] % 3) {
   case 0:

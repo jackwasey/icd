@@ -28,7 +28,7 @@
 Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
 		const Rcpp::CharacterVector minor, bool isShort) {
 #ifdef ICD9_DEBUG_TRACE
-	Rcout << "icd9MajMinToCode: major.size() = " << major.size()
+  Rcpp::Rcout << "icd9MajMinToCode: major.size() = " << major.size()
 			<< " and minor.size() = " << minor.size() << "\n";
 #endif
 
@@ -95,7 +95,7 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
 Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector major,
 		const Rcpp::CharacterVector minor) {
 #ifdef ICD9_DEBUG_TRACE
-	Rcout << "icd9MajMinToShort: major.size() = " << major.size()
+  Rcpp::Rcout << "icd9MajMinToShort: major.size() = " << major.size()
 			<< " and minor.size() = " << minor.size() << "\n";
 #endif
 	if ((major.size() != 1 && major.size() != minor.size())
@@ -105,7 +105,7 @@ Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector major,
 	}
 	if (major.size() == 1) {
 #ifdef ICD9_DEBUG_TRACE
-		Rcout << "icd9MajMinToShort: major.size() = 1\n";
+	  Rcpp::Rcout << "icd9MajMinToShort: major.size() = 1\n";
 #endif
 		Rcpp::CharacterVector newmajor(minor.size(), major[0]);
 		return icd9MajMinToCode(newmajor, minor, true);

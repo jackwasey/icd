@@ -35,7 +35,7 @@ extern "C" {
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_DEBUG_PARALLEL
-#define ICD9_VALGRIND
+//#define ICD9_VALGRIND
 
 // enabling this stops ackage compiling. useful for testing purely in C++.
 // See tools/standalone.sh
@@ -46,13 +46,14 @@ extern "C" {
 #define ICD9_OPENMP
 #endif
 
-//#ifdef __VALGRIND_H
 #ifdef ICD9_VALGRIND
+#ifdef HAVE_VALGRIND_VALGRIND_H
+//__CALLGRIND_H
 #include <valgrind/callgrind.h>
+#else
+#undef ICD9_VALGRIND
 #endif
-//#else
-//#undef ICD9_VALGRIND
-//#endif
+#endif
 
 typedef std::string Str;
 typedef std::vector<Str> VecStr;

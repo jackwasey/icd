@@ -1,8 +1,5 @@
 /* src/config.h.in.  Generated from configure.ac by autoheader.  */
 
-/* define if the compiler supports basic C++11 syntax */
-#undef HAVE_CXX11
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -29,6 +26,9 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <valgrind/valgrind.h> header file. */
+#undef HAVE_VALGRIND_VALGRIND_H
 
 /* Define to 1 if the system has the type `_Bool'. */
 #undef HAVE__BOOL
