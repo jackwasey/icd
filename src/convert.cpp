@@ -299,7 +299,7 @@ Rcpp::CharacterVector icd9DecimalToShortOld(
 Rcpp::CharacterVector icd9DecimalToShort(
 		const Rcpp::CharacterVector icd9Decimal) {
 	Rcpp::CharacterVector out = clone(icd9Decimal); // clone instead of pushing back thousands of times
-	int ilen = icd9Decimal.length();
+  size_t ilen = icd9Decimal.length();
 	if (ilen == 0)
 		return out;
 	for (size_t i = 0; i != ilen; ++i) {

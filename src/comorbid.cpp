@@ -38,7 +38,9 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 		const int threads = 8, const int chunkSize = 256,
 		const int ompChunkSize = 1, bool aggregate = true) {
 #ifdef ICD9_VALGRIND
-	Rcpp::Rcout << "Starting valgrind instrumentation... ";
+#ifdef ICD9_DEBUG
+    Rcpp::Rcout << "Starting valgrind instrumentation... ";
+#endif
 	CALLGRIND_START_INSTRUMENTATION
 	;
 #endif
@@ -143,8 +145,10 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 			Rcpp::Rcout << "Ready to transpose and return\n";
 #endif
 #ifdef ICD9_VALGRIND
-	Rcpp::Rcout << "Stopping valgrind instrumentation... ";
-	CALLGRIND_STOP_INSTRUMENTATION
+#ifdef ICD9_DEBUG_TRACE
+  Rcpp::Rcout << "Stopping valgrind instrumentation... ";
+#endif
+CALLGRIND_STOP_INSTRUMENTATION
 	;
 	//CALLGRIND_DUMP_STATS;
 #endif
