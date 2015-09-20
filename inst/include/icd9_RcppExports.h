@@ -708,17 +708,74 @@ namespace icd9 {
         return Rcpp::as<Rcpp::NumericVector >(__result);
     }
 
-    inline std::vector<std::string> randomShortIcd9(std::vector<std::string>::size_type n = 50000) {
-        typedef SEXP(*Ptr_randomShortIcd9)(SEXP);
-        static Ptr_randomShortIcd9 p_randomShortIcd9 = NULL;
-        if (p_randomShortIcd9 == NULL) {
-            validateSignature("std::vector<std::string>(*randomShortIcd9)(std::vector<std::string>::size_type)");
-            p_randomShortIcd9 = (Ptr_randomShortIcd9)R_GetCCallable("icd9", "icd9_randomShortIcd9");
+    inline std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
+        typedef SEXP(*Ptr_icd9RandomShortN)(SEXP);
+        static Ptr_icd9RandomShortN p_icd9RandomShortN = NULL;
+        if (p_icd9RandomShortN == NULL) {
+            validateSignature("std::vector<std::string>(*icd9RandomShortN)(std::vector<std::string>::size_type)");
+            p_icd9RandomShortN = (Ptr_icd9RandomShortN)R_GetCCallable("icd9", "icd9_icd9RandomShortN");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_randomShortIcd9(Rcpp::wrap(n));
+            __result = p_icd9RandomShortN(Rcpp::wrap(n));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<std::string> >(__result);
+    }
+
+    inline std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n = 5) {
+        typedef SEXP(*Ptr_icd9RandomShortV)(SEXP);
+        static Ptr_icd9RandomShortV p_icd9RandomShortV = NULL;
+        if (p_icd9RandomShortV == NULL) {
+            validateSignature("std::vector<std::string>(*icd9RandomShortV)(std::vector<std::string>::size_type)");
+            p_icd9RandomShortV = (Ptr_icd9RandomShortV)R_GetCCallable("icd9", "icd9_icd9RandomShortV");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9RandomShortV(Rcpp::wrap(n));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<std::string> >(__result);
+    }
+
+    inline std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n = 5) {
+        typedef SEXP(*Ptr_icd9RandomShortE)(SEXP);
+        static Ptr_icd9RandomShortE p_icd9RandomShortE = NULL;
+        if (p_icd9RandomShortE == NULL) {
+            validateSignature("std::vector<std::string>(*icd9RandomShortE)(std::vector<std::string>::size_type)");
+            p_icd9RandomShortE = (Ptr_icd9RandomShortE)R_GetCCallable("icd9", "icd9_icd9RandomShortE");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9RandomShortE(Rcpp::wrap(n));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<std::string> >(__result);
+    }
+
+    inline std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n = 5) {
+        typedef SEXP(*Ptr_icd9RandomShort)(SEXP);
+        static Ptr_icd9RandomShort p_icd9RandomShort = NULL;
+        if (p_icd9RandomShort == NULL) {
+            validateSignature("std::vector<std::string>(*icd9RandomShort)(std::vector<std::string>::size_type)");
+            p_icd9RandomShort = (Ptr_icd9RandomShort)R_GetCCallable("icd9", "icd9_icd9RandomShort");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9RandomShort(Rcpp::wrap(n));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

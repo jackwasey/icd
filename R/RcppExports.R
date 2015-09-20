@@ -213,11 +213,29 @@ randomMajorCpp <- function(n) {
     .Call('icd9_randomMajorCpp', PACKAGE = 'icd9', n)
 }
 
-#' genereate random short icd9 codes
+#' generate random short-form numeric icd9 codes
 #' @keywords internal
-#' @importFrom stats runif
-randomShortIcd9 <- function(n = 50000L) {
-    .Call('icd9_randomShortIcd9', PACKAGE = 'icd9', n)
+icd9RandomShortN <- function(n = 5L) {
+    .Call('icd9_icd9RandomShortN', PACKAGE = 'icd9', n)
+}
+
+#' generate random short-form icd9 V codes
+#' @keywords internal
+icd9RandomShortV <- function(n = 5L) {
+    .Call('icd9_icd9RandomShortV', PACKAGE = 'icd9', n)
+}
+
+#' generate random short-form icd9 E codes
+#' @keywords internal
+icd9RandomShortE <- function(n = 5L) {
+    .Call('icd9_icd9RandomShortE', PACKAGE = 'icd9', n)
+}
+
+#' generate random short-form icd9 E codes
+#' @description Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
+#' @keywords internal
+icd9RandomShort <- function(n = 5L) {
+    .Call('icd9_icd9RandomShort', PACKAGE = 'icd9', n)
 }
 
 # Register entry points for exported C++ functions

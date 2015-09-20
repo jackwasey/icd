@@ -302,7 +302,6 @@ Rcpp::CharacterVector icd9DecimalToShort(
 	int ilen = icd9Decimal.length();
 	if (ilen == 0)
 		return out;
-	size_t j;
 	for (size_t i = 0; i != ilen; ++i) {
 		Rcpp::String strna = icd9Decimal[i]; // need to copy here? does it copy?
 		if (strna == NA_STRING || strna == "")

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Copyright (C) 2014 - 2015  Jack O. Wasey
 #
@@ -20,13 +20,12 @@
 # build_and_test_icd9 with R-devel and clang with sanitizers.
 # This file is run within the container.
 
-
 ICD9_GIT_BRANCH=issue75
 
 cd /tmp
 git clone -b $ICD9_GIT_BRANCH https://github.com/jackwasey/icd9.git
-R CMD build --no-build-vignettes icd9
+Rdevel CMD build --no-build-vignettes icd9
 ICD9_PKG=`ls -t /tmp/icd9*tar.gz | tail -1`
-R CMD INSTALL $ICD9_PKG
-R CMD check $ICD9_PKG
+Rdevel CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
+Rdevel CMD check $ICD9_PKG
 # potentially just do testthat tests and run examples instead of full package check?

@@ -4,7 +4,6 @@ FROM rocker/r-devel:latest
 RUN apt-get update && apt-get --yes dist-upgrade && apt-get --yes install \
 	libxml2-dev/unstable \
 	libssl-dev/unstable \
-	littler \
 	libcurl4-openssl-dev \
 	texlive-base \
 	fonts-inconsolata \
@@ -61,8 +60,5 @@ RUN cd /tmp/R-devel \
 RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "XML", "memoise", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools"))'
 
 ADD build_and_test_icd9.sh /tmp/
-# 1000 is docker user, and avoids creating "root" privilege files in the volume shared with the host
-USER 1000
 CMD ["/tmp/build_and_test_icd9.sh"]
-
 

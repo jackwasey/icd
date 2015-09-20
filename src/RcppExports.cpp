@@ -1115,21 +1115,111 @@ RcppExport SEXP icd9_randomMajorCpp(SEXP nSEXP) {
     UNPROTECT(1);
     return __result;
 }
-// randomShortIcd9
-std::vector<std::string> randomShortIcd9(std::vector<std::string>::size_type n);
-static SEXP icd9_randomShortIcd9_try(SEXP nSEXP) {
+// icd9RandomShortN
+std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n);
+static SEXP icd9_icd9RandomShortN_try(SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::traits::input_parameter< std::vector<std::string>::size_type >::type n(nSEXP);
-    __result = Rcpp::wrap(randomShortIcd9(n));
+    __result = Rcpp::wrap(icd9RandomShortN(n));
     return __result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_randomShortIcd9(SEXP nSEXP) {
+RcppExport SEXP icd9_icd9RandomShortN(SEXP nSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_randomShortIcd9_try(nSEXP));
+        __result = PROTECT(icd9_icd9RandomShortN_try(nSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9RandomShortV
+std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n);
+static SEXP icd9_icd9RandomShortV_try(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< std::vector<std::string>::size_type >::type n(nSEXP);
+    __result = Rcpp::wrap(icd9RandomShortV(n));
+    return __result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9RandomShortV(SEXP nSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9RandomShortV_try(nSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9RandomShortE
+std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n);
+static SEXP icd9_icd9RandomShortE_try(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< std::vector<std::string>::size_type >::type n(nSEXP);
+    __result = Rcpp::wrap(icd9RandomShortE(n));
+    return __result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9RandomShortE(SEXP nSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9RandomShortE_try(nSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9RandomShort
+std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n);
+static SEXP icd9_icd9RandomShort_try(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< std::vector<std::string>::size_type >::type n(nSEXP);
+    __result = Rcpp::wrap(icd9RandomShort(n));
+    return __result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_icd9RandomShort(SEXP nSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_icd9RandomShort_try(nSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1186,7 +1276,10 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("int(*getOmpMaxThreads)()");
         signatures.insert("int(*getOmpThreads)()");
         signatures.insert("Rcpp::NumericVector(*randomMajorCpp)(int)");
-        signatures.insert("std::vector<std::string>(*randomShortIcd9)(std::vector<std::string>::size_type)");
+        signatures.insert("std::vector<std::string>(*icd9RandomShortN)(std::vector<std::string>::size_type)");
+        signatures.insert("std::vector<std::string>(*icd9RandomShortV)(std::vector<std::string>::size_type)");
+        signatures.insert("std::vector<std::string>(*icd9RandomShortE)(std::vector<std::string>::size_type)");
+        signatures.insert("std::vector<std::string>(*icd9RandomShort)(std::vector<std::string>::size_type)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -1229,7 +1322,10 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_getOmpMaxThreads", (DL_FUNC)icd9_getOmpMaxThreads_try);
     R_RegisterCCallable("icd9", "icd9_getOmpThreads", (DL_FUNC)icd9_getOmpThreads_try);
     R_RegisterCCallable("icd9", "icd9_randomMajorCpp", (DL_FUNC)icd9_randomMajorCpp_try);
-    R_RegisterCCallable("icd9", "icd9_randomShortIcd9", (DL_FUNC)icd9_randomShortIcd9_try);
+    R_RegisterCCallable("icd9", "icd9_icd9RandomShortN", (DL_FUNC)icd9_icd9RandomShortN_try);
+    R_RegisterCCallable("icd9", "icd9_icd9RandomShortV", (DL_FUNC)icd9_icd9RandomShortV_try);
+    R_RegisterCCallable("icd9", "icd9_icd9RandomShortE", (DL_FUNC)icd9_icd9RandomShortE_try);
+    R_RegisterCCallable("icd9", "icd9_icd9RandomShort", (DL_FUNC)icd9_icd9RandomShort_try);
     R_RegisterCCallable("icd9", "icd9_RcppExport_validate", (DL_FUNC)icd9_RcppExport_validate);
     return R_NilValue;
 }

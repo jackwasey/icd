@@ -17,18 +17,15 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-# build_and_test_icd9 with R-devel and GCC with sanitizers (but OpenMP unfortunately disabled).
+# build_and_test_icd9 with R-devel and clang 3.7 with sanitizers, libc (and libomp)
 # This file is run within the container.
 
 ICD9_GIT_BRANCH=issue75
 
 cd /tmp
 git clone -b $ICD9_GIT_BRANCH https://github.com/jackwasey/icd9.git
-
-export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.2 
-LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.2 R CMD build --no-build-vignettes icd9
+R CMD build --no-build-vignettes icd9
 ICD9_PKG=`ls -t /tmp/icd9*tar.gz | tail -1`
-LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.2  R CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
-LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libasan.so.2  R CMD check $ICD9_PKG
-
-# potentially do testthat tests and examples instead
+R CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
+R CMD check $ICD9_PKG
+# potentially just do testthat tests and run examples instead of full package check?

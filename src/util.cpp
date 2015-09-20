@@ -113,8 +113,6 @@ void debug_parallel() {
   Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
 #endif
 }
-// header for this is in local.h because it doesn't get picked up in util.h for some reason
-
 
 // [[Rcpp::export]]
 Rcpp::NumericVector randomMajorCpp(int	n) {
@@ -122,28 +120,73 @@ Rcpp::NumericVector randomMajorCpp(int	n) {
 	return iv;
 }
 
-//' genereate random short icd9 codes
+//' generate random short-form numeric icd9 codes
 //' @keywords internal
-//' @importFrom stats runif
 // [[Rcpp::export]]
-std::vector<std::string> randomShortIcd9(std::vector<std::string>::size_type n = 50000) {
-	static const char alphanum[] = "0123456789";
-
+std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
 	VecStr out(n);
-
-  //as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
-		  return out;
+  std::vector<std::double_t> randoms = Rcpp::as<std::vector<std::double_t> >(Rcpp::runif(n, 0, 99999));
+  char buffer[5];
+  for (std::vector<std::double_t>::size_type i = 0; i != n; ++i) {
+    sprintf(buffer, "%.0f", randoms[i]);
+    out[i] = buffer;
+  }
+	return out;
 }
 
-  void gen_random(char *s, const int len) {
-    static const char alphanum[] =
-      "0123456789"
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-      "abcdefghijklmnopqrstuvwxyz";
-
-    for (int i = 0; i < len; ++i) {
-      s[i] = alphanum[rand() % (sizeof(alphanum) - 1)];
-    }
-
-    s[len] = 0;
+//' generate random short-form icd9 V codes
+//' @keywords internal
+// [[Rcpp::export]]
+std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n = 5) {
+  VecStr out(n);
+  std::vector<std::double_t> randoms = Rcpp::as<std::vector<std::double_t> >(Rcpp::runif(n, 0, 9999));
+  char buffer[5];
+  for (std::vector<std::double_t>::size_type i = 0; i != n; ++i) {
+    sprintf(buffer, "V%.0f", randoms[i]);
+    out[i] = buffer;
   }
+  return out;
+}
+
+//' generate random short-form icd9 E codes
+//' @keywords internal
+// [[Rcpp::export]]
+std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n = 5) {
+  VecStr out(n);
+  std::vector<std::double_t> randoms = Rcpp::as<std::vector<std::double_t> >(Rcpp::runif(n, 0, 9999));
+  char buffer[5];
+  for (std::vector<std::double_t>::size_type i = 0; i != n; ++i) {
+    sprintf(buffer, "E%.0f", randoms[i]);
+    out[i] = buffer;
+  }
+  return out;
+}
+
+//' generate random short-form icd9 E codes
+//' @description Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
+//' @keywords internal
+// [[Rcpp::export]]
+std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n = 5) {
+  VecStr out(n);
+  std::vector<std::double_t> randoms = Rcpp::as<std::vector<std::double_t> >(Rcpp::runif(n, 0, 99999));
+  char buffer[5];
+  for (std::vector<std::double_t>::size_type i = 0; i != n; ++i) {
+// N, V or E?
+  switch ((int)randoms[i] % 3) {
+  case 0:
+    sprintf(buffer, "%.0f", randoms[i]);
+    break;
+  case 1:
+    sprintf(buffer, "V%.0f", randoms[i] / 10);
+    break;
+  case 2:
+    sprintf(buffer, "E%.0f", randoms[i] / 10);
+    break;
+  default:
+    {} // never here
+  }
+    out[i] = buffer;
+  }
+  return out;
+}
+
