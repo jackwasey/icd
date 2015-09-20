@@ -49,7 +49,7 @@ asIntegerNoWarn <- function(x)
   as.integer(asNumericNoWarn(x))
 
 asCharacterNoWarn <- function(x) {
-  old <- options(warn = - 1)
+  old <- options(warn = -1)
   on.exit(options(old))
   if (is.factor(x)) return(levels(x)[x])
   as.character(x)

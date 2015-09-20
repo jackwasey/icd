@@ -86,13 +86,13 @@ icd9Comorbid <- function(icd9df,
 
   visitId <- getVisitId(icd9df, visitId)
   icd9Field <- getIcdField(icd9df, icd9Field)
-
   assertDataFrame(icd9df, min.cols = 2)
   assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
              types = c("character", "factor"), names = "unique")
   assertString(visitId)
   assertFlag(isShort)
   assertFlag(isShortMapping)
+
   stopifnot(visitId %in% names(icd9df))
 
   if (!isShort)
@@ -108,13 +108,17 @@ icd9Comorbid <- function(icd9df,
   # integer without need for N, V or E distinction. Char to factor conversion in
   # R is very fast.
 
+  # this is a moderately slow step (if needed to be done)
   if (!is.factor(icd9df[[icd9Field]]))
     icd9df[[icd9Field]] <- as.factor(icd9df[[icd9Field]])
 
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
   icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
+
   if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
+
+  # this may be the slowest step (again, if needed, and many will have character IDs)
   icd9df[[visitId]] <- asCharacterNoWarn(icd9df[[visitId]])
 
   # again, R is very fast at creating factors from a known set of levels
@@ -133,7 +137,8 @@ icd9Comorbid <- function(icd9df,
   ompChunkSize <- getOption("icd9.ompChunkSize", 1L)
 
   mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field,
-	threads = threads, chunkSize = chunkSize, ompChunkSize = ompChunkSize)
+                              threads = threads, chunkSize = chunkSize, ompChunkSize = ompChunkSize)
+
   if (return.df) {
     if (icd9VisitWasFactor)
       rownm <- factor(x = rownames(mat), levels = ivLevels)
