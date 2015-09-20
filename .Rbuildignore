@@ -33,6 +33,9 @@ man-roxygen
 ^NEWS\.md$
 ^README-*\.png$
 ^README\.Rmd$
+^.*\.RProf.*$
+^.*\.Rprof.*$
+^.*\.rprof.*$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 .*\.rtf

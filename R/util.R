@@ -49,8 +49,10 @@ asIntegerNoWarn <- function(x)
   as.integer(asNumericNoWarn(x))
 
 asCharacterNoWarn <- function(x) {
+  if (is.character(x)) return(x)
   old <- options(warn = -1)
   on.exit(options(old))
+  if (is.integer(x)) fastIntToStringRcpp(x)
   if (is.factor(x)) return(levels(x)[x])
   as.character(x)
 }
@@ -283,4 +285,39 @@ skip_online_tests <- function(msg = "skipping online test") {
 skip_on_travis <- function() {
   if (!identical(Sys.getenv("TRAVIS"), "true")) return()
   testthat::skip("On Travis")
+}
+
+#' Fast Factor Generation
+#'
+#' This function generates factors more quickly, by leveraging \code{fastmatch::\link{fmatch}}. The speed increase for
+#' ICD-9 codes is about 33% reduction for 10 million codes.
+#'
+#' \code{NaN}s are converted to \code{NA} when used on numerics. Extracted from https://github.com/kevinushey/Kmisc.git
+#' @author Kevin Ushey, adapted by Jack Wasey
+#' @importFrom fastmatch fmatch
+#' @param x An object of atomic type \code{integer}, \code{numeric}, \code{character} or \code{logical}.
+#' @param levels An optional character vector of levels. Is coerced to the same type as \code{x}. By default, we
+#'   compute the levels as \code{sort(unique.default(x))}.
+#' @param labels A set of labels used to rename the levels, if desired.
+#' @param na.last If \code{TRUE} and there are missing values, the last level is set as \code{NA}; otherwise; they are
+#'   removed.
+#' @examples
+#' \dontrun{
+#' pts <- icd9:::randomUnorderedPatients(1e7)
+#' u <- unique.default(pts$icd9)
+#' # this shows that stringr (which uses stringi) sort takes 50% longer than built-in R sort.
+#' microbenchmark::microbenchmark(sort(u), stringr::str_sort(u))
+#'
+#' # this shows that \code{factor_} is about 50% faster than \code{factor} for big vectors of strings
+#' microbenchmark::microbenchmark(factor(pts$icd9), factor_(pts$icd9), times = 10)
+#' }
+#' @keywords internal
+factor_ <- function(x, levels = NULL, labels = levels, na.last = NA) {
+
+  if (is.factor(x)) return(x)
+  if (is.null(levels)) levels <- sort(unique.default(x), na.last = na.last)
+  suppressWarnings(f <- fmatch(x, levels, nomatch = if (isTRUE(na.last)) length(levels) else NA_integer_))
+  levels(f) <- as.character(labels)
+  class(f) <- "factor"
+  f
 }

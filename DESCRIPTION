@@ -23,7 +23,8 @@ Imports:
     Rcpp (>= 0.12.0),
     checkmate (>= 1.5.1),
     stats,
-    utils
+    utils,
+    fastmatch
 Suggests:
     testthat,
     devtools,

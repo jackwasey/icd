@@ -19,6 +19,7 @@ inst/extdata/Dtab10.RTF
 .Rhistory
 .Rprofile
 Rprof.out
+rprof.out
 .Rproj.user
 .settings
 *.so

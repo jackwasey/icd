@@ -116,11 +116,12 @@ void debug_parallel() {
 
 // [[Rcpp::export]]
 Rcpp::NumericVector randomMajorCpp(int	n) {
+  // TODO someday this can just be a sprintf like the others.
 	Rcpp::NumericVector iv = Rcpp::floor(Rcpp::runif(n) * 999);
 	return iv;
 }
 
-//' generate random short-form numeric icd9 codes
+//' @title generate random short-form numeric icd9 codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
@@ -134,7 +135,7 @@ std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n 
 	return out;
 }
 
-//' generate random short-form icd9 V codes
+//' @title generate random short-form icd9 V codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n = 5) {
@@ -148,7 +149,7 @@ std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' generate random short-form icd9 E codes
+//' @title generate random short-form icd9 E codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n = 5) {
@@ -162,7 +163,7 @@ std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' generate random short-form icd9 E codes
+//' @title generate random short-form icd9 E codes
 //' @description Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
 //' @keywords internal
 // [[Rcpp::export]]
@@ -189,4 +190,46 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   }
   return out;
 }
+//' @title fast convert integer vector to character vector
+//' @param x td::vector<int>
+//' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
+//'   No checks done for speed.
+//' @examples
+//' \dontrun{
+//' pts <- randomPatients(1e7)
+//' # conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
+//' microbenchmark::microbenchmark(fastIntToStringStd(pts$visitId, buffer = 8),
+//'                                fastIntToStringStd(pts$visitId, buffer = 16),
+//'                                fastIntToStringStd(pts$visitId, buffer = 64),
+//'                                fastIntToStringRcpp(pts$visitId, buffer = 8),
+//'                                fastIntToStringRcpp(pts$visitId, buffer = 16),
+//'                                fastIntToStringRcpp(pts$visitId, buffer = 64),
+//'                                as.character(pts$visitId),
+//'                                asCharacterNoWarn(pts$visitId), times = 5)
+//' }
+//' @keywords internal
+// [[Rcpp::export]]
+std::vector<std::string> fastIntToStringStd(std::vector<int> x, int bufferSize = 64) {
+  std::vector<std::string>::size_type len = x.size();
+  std::vector<std::string> out(len);
+  char buffer[bufferSize];
+  for (std::vector<double>::size_type i = 0; i != len; ++i) {
+    sprintf(buffer, "%u", x[i]);
+    out[i] = buffer;
+  }
+  return out;
+}
 
+
+//' @rdname fastIntToString
+// [[Rcpp::export]]
+Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x, int bufferSize = 64) {
+  size_t len = x.size();
+  Rcpp::CharacterVector out(len);
+  char buffer[bufferSize];
+  for (size_t i = 0; i != len; ++i) {
+    sprintf(buffer, "%u", x[i]);
+    out[i] = buffer;
+  }
+  return out;
+}

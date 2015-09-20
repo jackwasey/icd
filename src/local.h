@@ -18,12 +18,14 @@
 #ifndef LOCAL_H_
 #define LOCAL_H_
 
+// don't know whether I need this here:
 // [[Rcpp::interfaces(r, cpp)]]
+
+#include "config.h"
+
 #include <Rcpp.h>
 #include <vector>
 #include <set>
-
-#include "config.h"
 
 extern "C" {
 #include "cutil.h"

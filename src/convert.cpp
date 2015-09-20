@@ -16,7 +16,6 @@
 // along with icd9. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-// #include <convert.h> // hmm can't include because of default value minorEmpty
 #include "convert.h"
 #include "local.h"
 #include "util.h"
@@ -282,8 +281,8 @@ Rcpp::CharacterVector icd9DecimalToShortOld(
 	return icd9PartsToShort(icd9DecimalToPartsCpp(icd9Decimal, ""));
 }
 
-//' @rdname icd9ShortToDecimal
-//' @export
+// ' //rdname icd9ShortToDecimal
+// ' //export
 // [[//Rcpp::export]]
 //Rcpp::CharacterVector icd9DecimalToShort2(const Rcpp::CharacterVector icd9Decimal) {
 //  SEXP Sexpr_icd9Decimal = icd9Decimal.getSexpr();
@@ -349,8 +348,8 @@ Rcpp::CharacterVector icd9DecimalToShort(
 	return out;
 }
 
-//' @rdname icd9ShortToDecimal
-//' @export
+// ' //rdname icd9ShortToDecimal
+// ' //export
 // [[//Rcpp::export]]
 //int icd9DecimalToShortUpdate(const SEXP icd9Decimal) {
 //  if (TYPEOF(Sexpr_icd9Decimal) != STRSXP) Rcpp::stop("icd9DecimalToShort requires string vector input.");
@@ -362,7 +361,6 @@ Rcpp::CharacterVector icd9DecimalToShort(
 
 //' @title Get major (three-digit) part of ICD-9 codes
 //' @description This is reasonably fast, but calculates all the minors, then throws away the result.
-//'
 //' @template icd9-any
 //' @template isShort
 //' @keywords internal manip

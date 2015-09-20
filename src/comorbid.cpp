@@ -29,8 +29,12 @@
 // R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
 
 //' @rdname icd9Comorbid
-//' @description RcppParallel approach with openmp and vector of integer strategy
-//' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
+//' @description RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
+//'   fast, and most time is now spent setting up the data to be passed in.
+//' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
+//'   out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
+//'   IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
+//'   then use \code{TRUE}.
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,

@@ -58,9 +58,12 @@ longdf <- data.frame(visitId = c("a", "b", "b", "c"),
 \seealso{
 Other ICD-9 convert: \code{\link{convert}},
   \code{\link{icd9DecimalToParts}},
+  \code{\link{icd9DecimalToPartsCpp}},
+  \code{\link{icd9DecimalToShort}},
   \code{\link{icd9PartsToDecimal}},
   \code{\link{icd9PartsToShort}},
-  \code{\link{icd9ShortToParts}};
+  \code{\link{icd9ShortToParts}},
+  \code{\link{icd9ShortToPartsCpp}};
   \code{\link{icd9ChaptersToMap}};
   \code{\link{icd9DropLeadingZeroes}},
   \code{\link{icd9DropLeadingZeroesDecimal}},

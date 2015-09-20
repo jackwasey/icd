@@ -2,20 +2,16 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @rdname icd9Comorbid
-#' @description RcppParallel approach with openmp and vector of integer strategy
-#' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
+#' @description RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
+#'   fast, and most time is now spent setting up the data to be passed in.
+#' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
+#'   out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
+#'   IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
+#'   then use \code{TRUE}.
 #' @keywords internal
 icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE) {
     .Call('icd9_icd9ComorbidShortCpp', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate)
 }
-
-#' @rdname icd9ShortToDecimal
-#' @export
-NULL
-
-#' @rdname icd9ShortToDecimal
-#' @export
-NULL
 
 icd9MajMinToCode <- function(major, minor, isShort) {
     .Call('icd9_icd9MajMinToCode', PACKAGE = 'icd9', major, minor, isShort)
@@ -83,7 +79,6 @@ icd9DecimalToShort <- function(icd9Decimal) {
 
 #' @title Get major (three-digit) part of ICD-9 codes
 #' @description This is reasonably fast, but calculates all the minors, then throws away the result.
-#'
 #' @template icd9-any
 #' @template isShort
 #' @keywords internal manip
@@ -213,29 +208,56 @@ randomMajorCpp <- function(n) {
     .Call('icd9_randomMajorCpp', PACKAGE = 'icd9', n)
 }
 
-#' generate random short-form numeric icd9 codes
+#' @title generate random short-form numeric icd9 codes
 #' @keywords internal
 icd9RandomShortN <- function(n = 5L) {
     .Call('icd9_icd9RandomShortN', PACKAGE = 'icd9', n)
 }
 
-#' generate random short-form icd9 V codes
+#' @title generate random short-form icd9 V codes
 #' @keywords internal
 icd9RandomShortV <- function(n = 5L) {
     .Call('icd9_icd9RandomShortV', PACKAGE = 'icd9', n)
 }
 
-#' generate random short-form icd9 E codes
+#' @title generate random short-form icd9 E codes
 #' @keywords internal
 icd9RandomShortE <- function(n = 5L) {
     .Call('icd9_icd9RandomShortE', PACKAGE = 'icd9', n)
 }
 
-#' generate random short-form icd9 E codes
+#' @title generate random short-form icd9 E codes
 #' @description Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
 #' @keywords internal
 icd9RandomShort <- function(n = 5L) {
     .Call('icd9_icd9RandomShort', PACKAGE = 'icd9', n)
+}
+
+#' @title fast convert integer vector to character vector
+#' @param x td::vector<int>
+#' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
+#'   No checks done for speed.
+#' @examples
+#' \dontrun{
+#' pts <- randomPatients(1e7)
+#' # conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
+#' microbenchmark::microbenchmark(fastIntToStringStd(pts$visitId, buffer = 8),
+#'                                fastIntToStringStd(pts$visitId, buffer = 16),
+#'                                fastIntToStringStd(pts$visitId, buffer = 64),
+#'                                fastIntToStringRcpp(pts$visitId, buffer = 8),
+#'                                fastIntToStringRcpp(pts$visitId, buffer = 16),
+#'                                fastIntToStringRcpp(pts$visitId, buffer = 64),
+#'                                as.character(pts$visitId),
+#'                                asCharacterNoWarn(pts$visitId), times = 5)
+#' }
+#' @keywords internal
+fastIntToStringStd <- function(x, bufferSize = 64L) {
+    .Call('icd9_fastIntToStringStd', PACKAGE = 'icd9', x, bufferSize)
+}
+
+#' @rdname fastIntToString
+fastIntToStringRcpp <- function(x, bufferSize = 64L) {
+    .Call('icd9_fastIntToStringRcpp', PACKAGE = 'icd9', x, bufferSize)
 }
 
 # Register entry points for exported C++ functions

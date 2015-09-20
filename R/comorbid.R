@@ -80,37 +80,34 @@ icd9Comorbid <- function(icd9df,
                          icd9Mapping,
                          visitId = NULL,
                          icd9Field = NULL,
-                         isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
+                         isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
                          isShortMapping = icd9GuessIsShort(icd9Mapping),
                          return.df = FALSE, ...) {
 
   visitId <- getVisitId(icd9df, visitId)
   icd9Field <- getIcdField(icd9df, icd9Field)
   assertDataFrame(icd9df, min.cols = 2)
-  assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
-             types = c("character", "factor"), names = "unique")
+  assertList(icd9Mapping, any.missing = FALSE, min.len = 1, types = c("character", "factor"), names = "unique")
   assertString(visitId)
   assertFlag(isShort)
   assertFlag(isShortMapping)
 
   stopifnot(visitId %in% names(icd9df))
 
-  if (!isShort)
-    icd9df[[icd9Field]] <- icd9DecimalToShort(icd9df[[icd9Field]])
+  if (!isShort) icd9df[[icd9Field]] <- icd9DecimalToShort(icd9df[[icd9Field]])
 
   icd9Mapping <- lapply(icd9Mapping, asCharacterNoWarn)
 
-  if (!isShortMapping)
-    icd9Mapping <- lapply(icd9Mapping, icd9DecimalToShort)
+  if (!isShortMapping) icd9Mapping <- lapply(icd9Mapping, icd9DecimalToShort)
 
-  # new stragegy is to start with a factor for the icd codes in icd9df, recode
-  # (and drop superfluous) icd codes in the mapping, then do very fast match on
-  # integer without need for N, V or E distinction. Char to factor conversion in
-  # R is very fast.
+  # new stragegy is to start with a factor for the icd codes in icd9df, recode (and drop superfluous) icd codes in the
+  # mapping, then do very fast match on integer without need for N, V or E distinction. Char to factor conversion in R
+  # is very fast.
 
-  # this is a moderately slow step (if needed to be done)
+  # this is a moderately slow step (if needed to be done). Internally, the \code{sort} is slow. Fast match speeds up the
+  # subsequent step.
   if (!is.factor(icd9df[[icd9Field]]))
-    icd9df[[icd9Field]] <- as.factor(icd9df[[icd9Field]])
+    icd9df[[icd9Field]] <- factor_(icd9df[[icd9Field]])
 
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
@@ -123,7 +120,7 @@ icd9Comorbid <- function(icd9df,
 
   # again, R is very fast at creating factors from a known set of levels
   icd9Mapping <- lapply(icd9Mapping, function(x) {
-    f <- factor(x, levels(icd9df[[icd9Field]]))
+    f <- factor_(x, levels(icd9df[[icd9Field]]))
     f[!is.na(f)]
   })
 
@@ -141,7 +138,7 @@ icd9Comorbid <- function(icd9df,
 
   if (return.df) {
     if (icd9VisitWasFactor)
-      rownm <- factor(x = rownames(mat), levels = ivLevels)
+      rownm <- factor_(x = rownames(mat), levels = ivLevels)
     else
       rownm <- rownames(mat)
     df.out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = icd9VisitWasFactor)
