@@ -23,8 +23,12 @@
 #include <string>
 #ifdef ICD9_OPENMP
 #include <omp.h>
+#ifdef ICD9_STD_PARALLEL
+#include <parallel/algorithm>
+#else
+#include <algorithm>
 #endif
-//#include <Rinternals.h>
+#endif
 
 // trim one string from right
 std::string trimRightCpp(std::string s) {
@@ -190,6 +194,7 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   }
   return out;
 }
+//' @rdname fastIntToString
 //' @title fast convert integer vector to character vector
 //' @param x td::vector<int>
 //' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
@@ -264,4 +269,23 @@ int valgrindCallgrindStart(bool zerostats = false) {
   }
 #endif
   return 0;
+}
+
+//' @title Sort using STL
+//' @description if compiler flags and standard library support is available (only tested on glibc), OpenMP, then this
+//'   will use a parallel sort algorithm which is significantly faster. It doesn't however deal with NA values.
+//'   TODO: handle NA values.
+//' @examples
+//' \dontrun{
+//' pts <- icd9:::randomPatients(1e7)
+//' microbenchmark::microbenchmark(sort_std(pts$icd9), sort(pts$icd9), times = 5)
+//' # four times faster on 4 real core (8 with HT) machine.
+//' }
+//'
+// [[Rcpp::export]]
+std::vector<std::string> sort_std(std::vector<std::string> x) {
+  // will use parallel/algorithm if included
+  std::sort(x.begin(), x.end());
+  return(x);
+
 }

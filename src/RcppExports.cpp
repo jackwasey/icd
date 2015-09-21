@@ -1357,6 +1357,36 @@ RcppExport SEXP icd9_valgrindCallgrindStart(SEXP zerostatsSEXP) {
     UNPROTECT(1);
     return __result;
 }
+// sort_std
+std::vector<std::string> sort_std(std::vector<std::string> x);
+static SEXP icd9_sort_std_try(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type x(xSEXP);
+    __result = Rcpp::wrap(sort_std(x));
+    return __result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_sort_std(SEXP xSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_sort_std_try(xSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int icd9_RcppExport_validate(const char* sig) { 
@@ -1406,6 +1436,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector,int)");
         signatures.insert("int(*callgrindStart)(bool)");
         signatures.insert("int(*valgrindCallgrindStart)(bool)");
+        signatures.insert("std::vector<std::string>(*sort_std)(std::vector<std::string>)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -1456,6 +1487,7 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_fastIntToStringRcpp", (DL_FUNC)icd9_fastIntToStringRcpp_try);
     R_RegisterCCallable("icd9", "icd9_callgrindStart", (DL_FUNC)icd9_callgrindStart_try);
     R_RegisterCCallable("icd9", "icd9_valgrindCallgrindStart", (DL_FUNC)icd9_valgrindCallgrindStart_try);
+    R_RegisterCCallable("icd9", "icd9_sort_std", (DL_FUNC)icd9_sort_std_try);
     R_RegisterCCallable("icd9", "icd9_RcppExport_validate", (DL_FUNC)icd9_RcppExport_validate);
     return R_NilValue;
 }

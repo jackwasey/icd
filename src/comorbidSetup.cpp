@@ -18,9 +18,11 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include "local.h"
 #include <Rcpp.h>
+#ifdef ICD9_STD_PARALLEL
+#include <parallel/algorithm>
+#else
 #include <algorithm>
-
-// using namespace Rcpp;
+#endif
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map) {
   for (Rcpp::List::const_iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();

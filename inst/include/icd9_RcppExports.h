@@ -860,6 +860,25 @@ namespace icd9 {
         return Rcpp::as<int >(__result);
     }
 
+    inline std::vector<std::string> sort_std(std::vector<std::string> x) {
+        typedef SEXP(*Ptr_sort_std)(SEXP);
+        static Ptr_sort_std p_sort_std = NULL;
+        if (p_sort_std == NULL) {
+            validateSignature("std::vector<std::string>(*sort_std)(std::vector<std::string>)");
+            p_sort_std = (Ptr_sort_std)R_GetCCallable("icd9", "icd9_sort_std");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_sort_std(Rcpp::wrap(x));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<std::string> >(__result);
+    }
+
 }
 
 #endif // __icd9_RcppExports_h__

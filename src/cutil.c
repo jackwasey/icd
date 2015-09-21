@@ -47,7 +47,8 @@ void delanychar(char* str, char c) {
 void dropdot(SEXP v) {
 	int vlen = length(v);
 	char temp[15]; // TODO: check length, or make buffer bigger? ICD codes should be maximum 6 characters, but could have whitespace or bad data...
-	for (int i = 0; i != vlen; ++i) {
+	int i;
+	for (i = 0; i != vlen; ++i) {
 		if (STRING_ELT(v, i) == NA_STRING)
 			continue;
 		const char* vr = CHAR(STRING_ELT(v, i));

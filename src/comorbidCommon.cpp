@@ -19,7 +19,12 @@
 // [[Rcpp::plugins(openmp)]]
 #include "util.h"
 #include "local.h"
+//#ifdef ICD9_STD_PARALLEL
+// this will probably make things worse if already in an OpenMP block
+//#include <parallel/algorithm>
+//#else
 #include <algorithm>
+//#endif
 
 void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 		const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize,
