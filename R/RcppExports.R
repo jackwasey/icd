@@ -269,7 +269,10 @@ valgrindCallgrindStart <- function(zerostats = FALSE) {
     .Call('icd9_valgrindCallgrindStart', PACKAGE = 'icd9', zerostats)
 }
 
-#' @title Sort using STL, possibly parallelized
+#' @title Sort using STL
+#' @description if compiler flags and standard library support is available (only tested on glibc), OpenMP, then this
+#'   will use a parallel sort algorithm which is significantly faster. It doesn't however deal with NA values.
+#'   TODO: handle NA values.
 #' @examples
 #' \dontrun{
 #' pts <- icd9:::randomPatients(1e7)

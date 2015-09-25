@@ -107,7 +107,7 @@ icd9Comorbid <- function(icd9df,
   # this is a moderately slow step (if needed to be done). Internally, the \code{sort} is slow. Fast match speeds up the
   # subsequent step.
   if (!is.factor(icd9df[[icd9Field]]))
-    icd9df[[icd9Field]] <- factor_(icd9df[[icd9Field]])
+    icd9df[[icd9Field]] <- factor_nosort(icd9df[[icd9Field]])
 
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
@@ -120,7 +120,7 @@ icd9Comorbid <- function(icd9df,
 
   # again, R is very fast at creating factors from a known set of levels
   icd9Mapping <- lapply(icd9Mapping, function(x) {
-    f <- factor_(x, levels(icd9df[[icd9Field]]))
+    f <- factor_nosort(x, levels(icd9df[[icd9Field]]))
     f[!is.na(f)]
   })
 
@@ -138,7 +138,7 @@ icd9Comorbid <- function(icd9df,
 
   if (return.df) {
     if (icd9VisitWasFactor)
-      rownm <- factor_(x = rownames(mat), levels = ivLevels)
+      rownm <- factor_nosort(x = rownames(mat), levels = ivLevels)
     else
       rownm <- rownames(mat)
     df.out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = icd9VisitWasFactor)

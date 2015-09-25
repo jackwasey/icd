@@ -2,12 +2,14 @@
 % Please edit documentation in R/RcppExports.R
 \name{sort_std}
 \alias{sort_std}
-\title{Sort using STL, possibly parallelized}
+\title{Sort using STL}
 \usage{
 sort_std(x)
 }
 \description{
-Sort using STL, possibly parallelized
+if compiler flags and standard library support is available (only tested on glibc), OpenMP, then this
+  will use a parallel sort algorithm which is significantly faster. It doesn't however deal with NA values.
+  TODO: handle NA values.
 }
 \examples{
 \dontrun{

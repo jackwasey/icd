@@ -2,9 +2,12 @@
 % Please edit documentation in R/util.R
 \name{factor_}
 \alias{factor_}
+\alias{factor_nosort}
 \title{Fast Factor Generation}
 \usage{
 factor_(x, levels = NULL, labels = levels, na.last = NA)
+
+factor_nosort(x, levels = NULL, labels = levels)
 }
 \arguments{
 \item{x}{An object of atomic type \code{integer}, \code{numeric}, \code{character} or \code{logical}.}
@@ -23,6 +26,11 @@ ICD-9 codes is about 33% reduction for 10 million codes.
 }
 \details{
 \code{NaN}s are converted to \code{NA} when used on numerics. Extracted from https://github.com/kevinushey/Kmisc.git
+
+These feature from base R are missing: \code{exclude = NA, ordered = is.ordered(x), nmax = NA}
+
+I don't think there is any requirement for factor levels to be sorted in advance, especially not for ICD-9
+codes where a simple alphanumeric sorting will likely be completely wrong.
 }
 \examples{
 \dontrun{
@@ -33,10 +41,14 @@ microbenchmark::microbenchmark(sort(u), stringr::str_sort(u))
 
 # this shows that \\code{factor_} is about 50\% faster than \\code{factor} for big vectors of strings
 microbenchmark::microbenchmark(factor(pts$icd9), factor_(pts$icd9), times = 10)
+
+# without sorting is much faster:
+microbenchmark::microbenchmark(factor(pts$icd9), factor_(pts$icd9), factor_nosort(pts$icd9), times=25)
 }
 }
 \author{
 Kevin Ushey, adapted by Jack Wasey
 }
 \keyword{internal}
+\keyword{manip}
 

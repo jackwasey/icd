@@ -293,6 +293,8 @@ skip_on_travis <- function() {
 #' ICD-9 codes is about 33% reduction for 10 million codes.
 #'
 #' \code{NaN}s are converted to \code{NA} when used on numerics. Extracted from https://github.com/kevinushey/Kmisc.git
+#'
+#' These feature from base R are missing: \code{exclude = NA, ordered = is.ordered(x), nmax = NA}
 #' @author Kevin Ushey, adapted by Jack Wasey
 #' @importFrom fastmatch fmatch
 #' @param x An object of atomic type \code{integer}, \code{numeric}, \code{character} or \code{logical}.
@@ -310,13 +312,30 @@ skip_on_travis <- function() {
 #'
 #' # this shows that \code{factor_} is about 50% faster than \code{factor} for big vectors of strings
 #' microbenchmark::microbenchmark(factor(pts$icd9), factor_(pts$icd9), times = 10)
+#'
+#' # without sorting is much faster:
+#' microbenchmark::microbenchmark(factor(pts$icd9), factor_(pts$icd9), factor_nosort(pts$icd9), times=25)
 #' }
-#' @keywords internal
+#' @keywords internal manip
 factor_ <- function(x, levels = NULL, labels = levels, na.last = NA) {
 
   if (is.factor(x)) return(x)
   if (is.null(levels)) levels <- sort(unique.default(x), na.last = na.last)
   suppressWarnings(f <- fmatch(x, levels, nomatch = if (isTRUE(na.last)) length(levels) else NA_integer_))
+  levels(f) <- as.character(labels)
+  class(f) <- "factor"
+  f
+}
+
+#' @rdname factor_
+#' @details I don't think there is any requirement for factor levels to be sorted in advance, especially not for ICD-9
+#' codes where a simple alphanumeric sorting will likely be completely wrong.
+#' @keywords internal manip
+factor_nosort <- function(x, levels = NULL, labels = levels) {
+  # sort may be pre-requisite for fastmatch
+  if (is.factor(x)) return(x)
+  if (is.null(levels)) levels <- unique.default(x)
+  suppressWarnings(f <- fmatch(x, levels))
   levels(f) <- as.character(labels)
   class(f) <- "factor"
   f
