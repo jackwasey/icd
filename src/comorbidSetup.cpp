@@ -29,6 +29,10 @@ void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map) {
   ++mi) {
     VecInt vec(Rcpp::as<VecInt>(*mi));
     std::sort(vec.begin(), vec.end());
+    // to force a call to parallel version, not sure whether this forces
+    // parallel execution or just starts the heuristics which may invoke
+    // parallel execution:
+    //__gnu_parallel::sort(vec.begin(), vec.end());
 #ifdef ICD9_DEBUG_SETUP_TRACE
     Rcpp::Rcout << "pushing back vec of length: " << vec.size() << "\n";
 #endif
