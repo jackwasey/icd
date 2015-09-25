@@ -58,6 +58,7 @@ release_questions <- function() {
     Mac, Ubuntu, ASAN, and UBSAN rocker, and updated my docker image which
     resembles a CRAN maintainers environment?",
     "Are all NOTES from R CMD check documented in cran-comments.md",
+    "Is github pages site refreshed from latest documentation?",
     "Have all unnecessary files been ignored in built archive? Especially thinking of autoconfigure stuff."
   )
 }

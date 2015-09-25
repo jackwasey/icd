@@ -52,4 +52,3 @@ test_that("billable codes are all in order", {
 test_that("parsing 27 gives zero-padded digit icd9 codes", {
   expect_equal(icd9Billable[["27"]][1, "icd9"], "0010")
 })
-
