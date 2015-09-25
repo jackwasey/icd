@@ -18,25 +18,38 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 
+#include "local.h"
+//#ifdef ICD9_DEBUG_PARALLEL
+#include "util.h"
+//#endif
 #include <Rcpp.h>
-#include <local.h>
 #include <vector>
 #include <string>
-
-using namespace Rcpp;
 
 // R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
 
 //' @rdname icd9Comorbid
-//' @description RcppParallel approach with openmp and vector of integer strategy
-//' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
+//' @description RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
+//'   fast, and most time is now spent setting up the data to be passed in.
+//' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
+//'   out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
+//'   IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
+//'   then use \code{TRUE}.
 //' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
-		const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunkSize = 256,
+SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+		const std::string visitId, const std::string icd9Field,
+		const int threads = 8, const int chunkSize = 256,
 		const int ompChunkSize = 1, bool aggregate = true) {
 #ifdef ICD9_VALGRIND
+#ifdef ICD9_DEBUG
+    Rcpp::Rcout << "Starting valgrind instrumentation... ";
+#endif
 	CALLGRIND_START_INSTRUMENTATION;
+	if (FALSE) {
+	  Rcpp::Rcout << "Zeroing stats... ";
+	  CALLGRIND_ZERO_STATS;
+	}
 #endif
 #if (defined ICD9_DEBUG_SETUP || defined ICD9_SETUP)
 	Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
@@ -45,18 +58,24 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 
 #ifdef ICD9_DEBUG_PARALLEL
 	Rcpp::Rcout << "checking _OPENMP... ";
-#ifdef ICD9_OPENMP
+#ifdef _OPENMP
 	Rcpp::Rcout << "_OPENMP is defined.\n";
 #else
 	Rcpp::Rcout << "_OPENMP is not defined.\n";
 #endif
-#endif
-
 #ifdef ICD9_OPENMP
-	if (threads > 0)
-	omp_set_num_threads(threads);
+	Rcpp::Rcout << "ICD9_OPENMP is defined.\n";
+#else
+	Rcpp::Rcout << "ICD9_OPENMP is not defined.\n";
+#endif
+#endif
+#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
+	debug_parallel();
+#endif
+#ifdef ICD9_OPENMP
+//	if (threads > 0) omp_set_num_threads(threads);
 #ifdef ICD9_DEBUG_PARALLEL
-	Rcpp::Rcout << "Max Number of available threads=" << omp_get_max_threads() << "\n";
+	debug_parallel();
 #endif
 #endif
 
@@ -66,19 +85,20 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #endif
 
 	VecVecInt vcdb; //size is reserved later
-	// TODO: do I need to allocate memory when I do this?
+	// TODO: do I need to allocate memory when I do this PROTECT?
 	const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif
 	if (TYPEOF(vsexp) != STRSXP)
-	  Rcpp::stop("expecting vsexp to be character vector");
+		Rcpp::stop("expecting vsexp to be character vector");
 	UNPROTECT(1); // vsexp not used further
 
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "icd9ComorbidShortMatrix STRSXP\n";
 #endif
-	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
+	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
+			aggregate);
 
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "building icd9Mapping\n";
@@ -103,6 +123,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 
 #ifdef ICD9_DEBUG
 	Rcpp::Rcout << "out length is " << out.size() << "\n";
+	// this next line now gives UBSAN in clang 3.7
 	int outsum = std::accumulate(out.begin(), out.end(), 0);
 	Rcpp::Rcout << "out sum is " << outsum << "\n";
 	Rcpp::Rcout << "Ready to convert to R Matrix\n";
@@ -118,19 +139,24 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const List& icd9Mapping,
 #ifdef ICD9_DEBUG
 	Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast to R logical vector\n";
 #endif
-	LogicalVector mat_out = wrap(intermed); // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
+	Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed); // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
 #ifdef ICD9_DEBUG
 			Rcpp::Rcout << "wrapped out\n";
 #endif
-	mat_out.attr("dim") = Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
-	mat_out.attr("dimnames") = List::create(icd9Mapping.names(), out_row_names);
+	mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
+	mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(),
+			out_row_names);
 	// apparently don't need to set class as matrix here
-	Function t("t"); // use R transpose - seems pretty fast
+	Rcpp::Function t("t"); // use R transpose - seems pretty fast
 #ifdef ICD9_DEBUG
 			Rcpp::Rcout << "Ready to transpose and return\n";
 #endif
 #ifdef ICD9_VALGRIND
-	CALLGRIND_STOP_INSTRUMENTATION;
+#ifdef ICD9_DEBUG_TRACE
+  Rcpp::Rcout << "Stopping valgrind instrumentation... ";
+#endif
+CALLGRIND_STOP_INSTRUMENTATION;
+	;
 	//CALLGRIND_DUMP_STATS;
 #endif
 	return t(mat_out);

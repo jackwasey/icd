@@ -16,7 +16,7 @@
 // along with icd9. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <local.h>
+#include "local.h"
 #include <stdio.h>
 #ifdef ICD9_VALGRIND
 #include <valgrind/callgrind.h>

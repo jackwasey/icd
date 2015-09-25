@@ -18,16 +18,14 @@
 #ifndef LOCAL_H_
 #define LOCAL_H_
 
+// don't know whether I need this here:
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
-//#include <R.h>
-//#include <Rinternals.h>
-//#include <string>
-//#include <algorithm>
-#include <vector>
-#include <set>
 
 #include "config.h"
+
+#include <Rcpp.h>
+#include <vector>
+#include <set>
 
 extern "C" {
 #include "cutil.h"
@@ -39,15 +37,26 @@ extern "C" {
 //#define ICD9_DEBUG_SETUP
 //#define ICD9_DEBUG_SETUP_TRACE
 //#define ICD9_DEBUG_PARALLEL
-//#define ICD9_VALGRIND
+#define ICD9_VALGRIND
+
+// enabling this stops ackage compiling. useful for testing purely in C++.
+// See tools/standalone.sh
+//#define ICD9_STANDALONE
 
 #ifdef _OPENMP
-//#include <omp.h>
-//#define ICD9_OPENMP
+#include <omp.h>
+#define ICD9_OPENMP
+// openmp is required for GLIBC standard library parallel alternatives
+#define ICD9_STD_PARALLEL
 #endif
 
 #ifdef ICD9_VALGRIND
+#ifdef HAVE_VALGRIND_VALGRIND_H
+//__CALLGRIND_H
 #include <valgrind/callgrind.h>
+#else
+#undef ICD9_VALGRIND
+#endif
 #endif
 
 typedef std::string Str;
@@ -113,7 +122,7 @@ void printIt(std::map<MK,MV> v) {
 	Rcpp::Rcout.flush();
 }
 
-void printCharVec(Rcpp::CharacterVector cv);
-#endif
+#endif // end (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
 
 #endif // LOCAL_H_
+

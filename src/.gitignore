@@ -11,3 +11,4 @@
 Makevars
 config.h.in~
 config.h
+standalone

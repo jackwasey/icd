@@ -1,10 +1,11 @@
 AC_PREREQ([2.62])
 AC_INIT(icd9)
+AC_COPYRIGHT(Copyright (C) 2014 - 2015  Jack O. Wasey)
 AC_CONFIG_SRCDIR([src])
-AC_CONFIG_HEADER([src/config.h:src/config.h.in])
+AC_CONFIG_HEADERS([src/config.h:src/config.h.in])
 AC_CONFIG_FILES([src/Makevars])
 
-AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([tools])
 
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
@@ -19,21 +20,19 @@ CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 LIBS="${PKG_LIBS}"
 
 # following CXX and CXXFLAGS as recommended by Prof Ripley.
-CXX=`"${R_HOME}/bin/R" CMD config CXX1X`
-CXXFLAGS=`"${R_HOME}/bin/R" CMD config CXX1XFLAGS`
+#CXX=`"${R_BIN}" CMD config CXX1X`
+#CXXFLAGS=`"${R_BIN}" CMD config CXX1XFLAGS`
 
-AC_LANG_PUSH(C++)
-AC_OPENMP
-AC_LANG_POP(C++)
-
-# Checks for programs
+AC_CHECK_HEADER([string.h])
+AC_CHECK_HEADER_STDBOOL
 AC_PROG_CXX
 AC_PROG_CC
+AC_TYPE_SIZE_T
+AC_C_INLINE
 
-# Check for OpenMP, again with thanks to Prof Ripley for tweak
-AC_LANG_PUSH(C++)
-AC_OPENMP
-AC_LANG_POP(C++)
+#AC_LANG_PUSH(C++)
+R_OPENMP
+#AC_LANG_POP(C++)
 
 # since some systems have broken OMP libraries
 # we also check that the actual package will work
@@ -52,22 +51,46 @@ if test "${ac_pkg_openmp}" = no; then
 fi
 AC_SUBST(OPENMP_CFLAGS)
 
-# other checks recommended by autoscan
-AC_CHECK_HEADERS([string.h])
-AC_CHECK_HEADER_STDBOOL
-AC_PROG_CXX
-AC_TYPE_SIZE_T
-AC_C_INLINE
+# if we have OpenMP, we can try using GCC libstdc++ glibc parallel STD
+  AS_ECHO(["If OpenMP available, then check for standard library parallel availability..."])
+if test "${ac_pkg_openmp}" = yes; then
+  AS_ECHO(["  checking for standard library parallel availability..."])
+  # not sure whether this test is definitive...
+  # may want to test whether it works, also, but this would need adding a -D flag and -fopenmp
+  # -D_GLIBCXX_PARALLEL
+  ## doesn't work, don't know why: AC_CHECK_HEADER([parallel/parallel.h])
+  AC_EGREP_CPP(yes,
+  [#ifdef _GLIBCXX_PARALLEL_PARALLEL_H
+    yes
+  #endif
+], gcc_parallel=yes, gcc_parallel=no)
+fi
+GCC_PARALLEL_CFLAGS='-D_GLIBCXX_PARALLEL'
+if test "${gcc_parallel}" = no; then
+   GCC_PARALLEL_CFLAGS=''
+   AS_ECHO(["  did not find standard library parallel availability"])
+else
+  AC_MSG_RESULT([OK])
+fi
+AC_SUBST(GCC_PARALLEL_CFLAGS)
 
-# C++11, autoconf should determine the correct flags
-# https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx_11.html
-AX_CXX_COMPILE_STDCXX_11(noext,optional)
+AC_CHECK_HEADER([parallel.h])
+AC_CHECK_HEADER([parallel/parallel.h])
+AC_CHECK_HEADER([parallel])
+AC_CHECK_HEADER([parallel/algorithm])
+AC_CHECK_HEADER([/usr/include/c++/4.9/parallel.h])
+AC_CHECK_HEADER([parallel.h],
+                [AC_MSG_RESULT([OK])],
+                [AC_MSG_RESULT([NO])])
+
+# We do not need valgrind for normal operations, but it helps to know whether present on the platform compiling the code, so headers can be included if present (and instrumentation triggers inserted).
+# this uses automake, however, and is designed to check newly compiled code: AX_VALGRIND_CHECK
+AC_CHECK_HEADER([valgrind/valgrind.h])
 
 ICD9_CXX11=''
 ICD9_CXX11_DEF=''
 if test -n "${HAVE_CXX11}"; then
   AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
-  # ICD9_CXX11="AS_ESCAPE([${CXX1XSTD}])"
   # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
   ICD9_CXX11=${switch}
   ICD9_CXX11_DEF=""

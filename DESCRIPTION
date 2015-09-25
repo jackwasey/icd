@@ -8,13 +8,13 @@ Description: Calculate comorbidities, Charlson scores, perform fast and accurate
     hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
     from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Any
     other mapping of codes, such as ICD-10, to comorbidities can be used.
-Version: 1.2.2
+Version: 1.2.2.9000
 Date: 2015-09-08
 Authors@R: c(
-    person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"),
-    email = c("jack@jackwasey.com")),
-    person(given = "William", family = "Murphy", role = "ctb",
-    email = c("WMurphy@eatright.org")))
+    person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
+    person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org"),
+    person("R Core Team", role = c("ctb", "cph"))
+    )
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd9
 Depends:
@@ -23,7 +23,8 @@ Imports:
     Rcpp (>= 0.12.0),
     checkmate (>= 1.5.1),
     stats,
-    utils
+    utils,
+    fastmatch
 Suggests:
     testthat,
     devtools,

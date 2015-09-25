@@ -3,14 +3,23 @@
 \name{icd9PartsToShort}
 \alias{convert}
 \alias{icd9DecimalToParts}
+\alias{icd9DecimalToPartsCpp}
+\alias{icd9DecimalToShort}
 \alias{icd9PartsToDecimal}
 \alias{icd9PartsToShort}
 \alias{icd9ShortToParts}
+\alias{icd9ShortToPartsCpp}
 \title{Convert ICD9 codes between formats and structures.}
 \usage{
 icd9PartsToShort(parts)
 
 icd9PartsToDecimal(parts)
+
+icd9ShortToPartsCpp(icd9Short, minorEmpty)
+
+icd9DecimalToPartsCpp(icd9Decimal, minorEmpty)
+
+icd9DecimalToShort(icd9Decimal)
 
 icd9ShortToParts(icd9Short, minorEmpty = "")
 

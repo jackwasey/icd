@@ -2,8 +2,12 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @rdname icd9Comorbid
-#' @description RcppParallel approach with openmp and vector of integer strategy
-#' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.
+#' @description RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
+#'   fast, and most time is now spent setting up the data to be passed in.
+#' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
+#'   out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
+#'   IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
+#'   then use \code{TRUE}.
 #' @keywords internal
 icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE) {
     .Call('icd9_icd9ComorbidShortCpp', PACKAGE = 'icd9', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate)
@@ -43,14 +47,14 @@ icd9MajMinToParts_list <- function(major, minor) {
 
 #' @rdname convert
 #' @keywords internal manip
-icd9ShortToParts <- function(icd9Short, minorEmpty = "") {
-    .Call('icd9_icd9ShortToParts', PACKAGE = 'icd9', icd9Short, minorEmpty)
+icd9ShortToPartsCpp <- function(icd9Short, minorEmpty) {
+    .Call('icd9_icd9ShortToPartsCpp', PACKAGE = 'icd9', icd9Short, minorEmpty)
 }
 
 #' @rdname convert
 #' @keywords internal manip
-icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
-    .Call('icd9_icd9DecimalToParts', PACKAGE = 'icd9', icd9Decimal, minorEmpty)
+icd9DecimalToPartsCpp <- function(icd9Decimal, minorEmpty) {
+    .Call('icd9_icd9DecimalToPartsCpp', PACKAGE = 'icd9', icd9Decimal, minorEmpty)
 }
 
 #' @title Convert ICD-9 codes between short and decimal forms
@@ -63,16 +67,30 @@ icd9ShortToDecimal <- function(icd9Short) {
 
 #' @rdname icd9ShortToDecimal
 #' @export
+icd9DecimalToShortOld <- function(icd9Decimal) {
+    .Call('icd9_icd9DecimalToShortOld', PACKAGE = 'icd9', icd9Decimal)
+}
+
+#' @rdname convert
+#' @export
 icd9DecimalToShort <- function(icd9Decimal) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', icd9Decimal)
 }
 
 #' @title Get major (three-digit) part of ICD-9 codes
+#' @description This is reasonably fast, but calculates all the minors, then throws away the result.
 #' @template icd9-any
 #' @template isShort
+#' @keywords internal manip
 #' @export
 icd9GetMajor <- function(icd9, isShort) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
+}
+
+#' @rdname icd9GetMajor
+#' @keywords internal manip
+icd9GetMajorShort <- function(icd9Short) {
+    .Call('icd9_icd9GetMajorShort', PACKAGE = 'icd9', icd9Short)
 }
 
 #' @title test whether elements of vector begin with V, E (or any other
@@ -95,6 +113,10 @@ icd9LongToWideCpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
 
 icd9AddLeadingZeroesMajorSingle <- function(major) {
     .Call('icd9_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd9', major)
+}
+
+icd9AddLeadingZeroesMajorSingleStd <- function(m) {
+    .Call('icd9_icd9AddLeadingZeroesMajorSingleStd', PACKAGE = 'icd9', m)
 }
 
 icd9AddLeadingZeroesMajor <- function(major) {
@@ -154,6 +176,10 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort, isShortReference =
     .Call('icd9_icd9InReferenceCode', PACKAGE = 'icd9', icd9, icd9Reference, isShort, isShortReference)
 }
 
+trimLeftCpp <- function(s) {
+    .Call('icd9_trimLeftCpp', PACKAGE = 'icd9', s)
+}
+
 strimCpp <- function(s) {
     .Call('icd9_strimCpp', PACKAGE = 'icd9', s)
 }
@@ -168,6 +194,94 @@ assertFactorOrCharacter <- function(x) {
 
 getOmpCores <- function() {
     .Call('icd9_getOmpCores', PACKAGE = 'icd9')
+}
+
+getOmpMaxThreads <- function() {
+    .Call('icd9_getOmpMaxThreads', PACKAGE = 'icd9')
+}
+
+getOmpThreads <- function() {
+    .Call('icd9_getOmpThreads', PACKAGE = 'icd9')
+}
+
+randomMajorCpp <- function(n) {
+    .Call('icd9_randomMajorCpp', PACKAGE = 'icd9', n)
+}
+
+#' @title generate random short-form numeric icd9 codes
+#' @keywords internal
+icd9RandomShortN <- function(n = 5L) {
+    .Call('icd9_icd9RandomShortN', PACKAGE = 'icd9', n)
+}
+
+#' @title generate random short-form icd9 V codes
+#' @keywords internal
+icd9RandomShortV <- function(n = 5L) {
+    .Call('icd9_icd9RandomShortV', PACKAGE = 'icd9', n)
+}
+
+#' @title generate random short-form icd9 E codes
+#' @keywords internal
+icd9RandomShortE <- function(n = 5L) {
+    .Call('icd9_icd9RandomShortE', PACKAGE = 'icd9', n)
+}
+
+#' @title generate random short-form icd9 E codes
+#' @description Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
+#' @keywords internal
+icd9RandomShort <- function(n = 5L) {
+    .Call('icd9_icd9RandomShort', PACKAGE = 'icd9', n)
+}
+
+#' @rdname fastIntToString
+#' @title fast convert integer vector to character vector
+#' @param x td::vector<int>
+#' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
+#'   No checks done for speed.
+#' @examples
+#' \dontrun{
+#' pts <- randomPatients(1e7)
+#' # conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
+#' microbenchmark::microbenchmark(fastIntToStringStd(pts$visitId, buffer = 8),
+#'                                fastIntToStringStd(pts$visitId, buffer = 16),
+#'                                fastIntToStringStd(pts$visitId, buffer = 64),
+#'                                fastIntToStringRcpp(pts$visitId, buffer = 8),
+#'                                fastIntToStringRcpp(pts$visitId, buffer = 16),
+#'                                fastIntToStringRcpp(pts$visitId, buffer = 64),
+#'                                as.character(pts$visitId),
+#'                                asCharacterNoWarn(pts$visitId), times = 5)
+#' }
+#' @keywords internal
+fastIntToStringStd <- function(x, bufferSize = 64L) {
+    .Call('icd9_fastIntToStringStd', PACKAGE = 'icd9', x, bufferSize)
+}
+
+#' @rdname fastIntToString
+fastIntToStringRcpp <- function(x, bufferSize = 64L) {
+    .Call('icd9_fastIntToStringRcpp', PACKAGE = 'icd9', x, bufferSize)
+}
+
+callgrindStart <- function(zerostats = FALSE) {
+    .Call('icd9_callgrindStart', PACKAGE = 'icd9', zerostats)
+}
+
+valgrindCallgrindStart <- function(zerostats = FALSE) {
+    .Call('icd9_valgrindCallgrindStart', PACKAGE = 'icd9', zerostats)
+}
+
+#' @title Sort using STL
+#' @description if compiler flags and standard library support is available (only tested on glibc), OpenMP, then this
+#'   will use a parallel sort algorithm which is significantly faster. It doesn't however deal with NA values.
+#'   TODO: handle NA values.
+#' @examples
+#' \dontrun{
+#' pts <- icd9:::randomPatients(1e7)
+#' microbenchmark::microbenchmark(sort_std(pts$icd9), sort(pts$icd9), times = 5)
+#' # four times faster on 4 real core (8 with HT) machine.
+#' }
+#'
+sort_std <- function(x) {
+    .Call('icd9_sort_std', PACKAGE = 'icd9', x)
 }
 
 # Register entry points for exported C++ functions

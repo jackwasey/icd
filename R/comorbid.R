@@ -64,8 +64,6 @@ icd9PoaChoices <- c("yes", "no", "notYes", "notNo")
 #' @param isShortMapping Same as isShort, but applied to \code{icd9Mapping}
 #'   instead of \code{icd9df}. All the codes in a mapping should be of the same
 #'   type, i.e. short or decimal.
-#' @param ... further arguments e.g. chunkSize and ompChunkSize pass to the C++
-#'   function
 #' @details There is a change in behavior from previous versions. The visitId
 #'   column is (implicitly) sorted by using std::set container. Previously, the
 #'   visitId output order was whatever R's \code{aggregate} produced.
@@ -82,46 +80,47 @@ icd9Comorbid <- function(icd9df,
                          icd9Mapping,
                          visitId = NULL,
                          icd9Field = NULL,
-                         isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
+                         isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
                          isShortMapping = icd9GuessIsShort(icd9Mapping),
                          return.df = FALSE, ...) {
 
   visitId <- getVisitId(icd9df, visitId)
   icd9Field <- getIcdField(icd9df, icd9Field)
-
   assertDataFrame(icd9df, min.cols = 2)
-  assertList(icd9Mapping, any.missing = FALSE, min.len = 1,
-             types = c("character", "factor"), names = "unique")
+  assertList(icd9Mapping, any.missing = FALSE, min.len = 1, types = c("character", "factor"), names = "unique")
   assertString(visitId)
   assertFlag(isShort)
   assertFlag(isShortMapping)
+
   stopifnot(visitId %in% names(icd9df))
 
-  if (!isShort)
-    icd9df[[icd9Field]] <- icd9DecimalToShort(icd9df[[icd9Field]])
+  if (!isShort) icd9df[[icd9Field]] <- icd9DecimalToShort(icd9df[[icd9Field]])
 
   icd9Mapping <- lapply(icd9Mapping, asCharacterNoWarn)
 
-  if (!isShortMapping)
-    icd9Mapping <- lapply(icd9Mapping, icd9DecimalToShort)
+  if (!isShortMapping) icd9Mapping <- lapply(icd9Mapping, icd9DecimalToShort)
 
-  # new stragegy is to start with a factor for the icd codes in icd9df, recode
-  # (and drop superfluous) icd codes in the mapping, then do very fast match on
-  # integer without need for N, V or E distinction. Char to factor conversion in
-  # R is very fast.
+  # new stragegy is to start with a factor for the icd codes in icd9df, recode (and drop superfluous) icd codes in the
+  # mapping, then do very fast match on integer without need for N, V or E distinction. Char to factor conversion in R
+  # is very fast.
 
+  # this is a moderately slow step (if needed to be done). Internally, the \code{sort} is slow. Fast match speeds up the
+  # subsequent step.
   if (!is.factor(icd9df[[icd9Field]]))
-    icd9df[[icd9Field]] <- as.factor(icd9df[[icd9Field]])
+    icd9df[[icd9Field]] <- factor_nosort(icd9df[[icd9Field]])
 
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
   icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
+
   if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
+
+  # this may be the slowest step (again, if needed, and many will have character IDs)
   icd9df[[visitId]] <- asCharacterNoWarn(icd9df[[visitId]])
 
   # again, R is very fast at creating factors from a known set of levels
   icd9Mapping <- lapply(icd9Mapping, function(x) {
-    f <- factor(x, levels(icd9df[[icd9Field]]))
+    f <- factor_nosort(x, levels(icd9df[[icd9Field]]))
     f[!is.na(f)]
   })
 
@@ -131,11 +130,15 @@ icd9Comorbid <- function(icd9df,
   # (optionally) defactoring the visitId for the matrix row names.
 
   threads <- getOption("icd9.threads", getOmpCores())
+  chunkSize <- getOption("icd9.chunkSize", 256L)
+  ompChunkSize <- getOption("icd9.ompChunkSize", 1L)
+
+  mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field,
+                              threads = threads, chunkSize = chunkSize, ompChunkSize = ompChunkSize)
 
   if (return.df) {
-    mat <- icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = threads)
     if (icd9VisitWasFactor)
-      rownm <- factor(x = rownames(mat), levels = ivLevels)
+      rownm <- factor_nosort(x = rownames(mat), levels = ivLevels)
     else
       rownm <- rownames(mat)
     df.out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = icd9VisitWasFactor)
@@ -144,7 +147,7 @@ icd9Comorbid <- function(icd9df,
     rownames(df.out) <- NULL
     return(df.out)
   }
-  icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = threads)
+  mat
 }
 
 #' @rdname icd9Comorbid

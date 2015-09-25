@@ -4,7 +4,6 @@ FROM rocker/r-devel:latest
 RUN apt-get update && apt-get --yes dist-upgrade && apt-get --yes install \
 	libxml2-dev/unstable \
 	libssl-dev/unstable \
-	littler \
 	libcurl4-openssl-dev \
 	texlive-base \
 	fonts-inconsolata \
@@ -13,14 +12,12 @@ RUN apt-get update && apt-get --yes dist-upgrade && apt-get --yes install \
 	qpdf \
 	pandoc \
     	pandoc-citeproc
-
-# clean non-san/ubsan build tree, apparently /tmp isn't carried forward, anyway
-# RUN rm -rf /tmp/R-devel
+# switch libssh2-1-dev, or all updates to 'unstable' at some point?
 
  RUN cd /tmp \
         && svn co http://svn.r-project.org/R/trunk R-devel
 
-# GCC UBSAN and OpenMP don't work together! appears to be no evidence of fix
+# GCC UBSAN and OpenMP don't work together in any version! appears to be no evidence of fix
 # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=64888
 
 ENV ASAN_OPTIONS detect_leaks=0:detect_odr_violation=0
@@ -58,9 +55,10 @@ RUN cd /tmp/R-devel \
         && make install \
         && make clean
 
+#TODO: remove or keep -O0 flags? Not sure which would be most helpful. Most code in production use is compiled O2, but I don't know whether O0 would uncover the same UBSAN bugs, or just allow them to be characterized more easily.
+
 RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "XML", "memoise", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools"))'
 
 ADD build_and_test_icd9.sh /tmp/
 CMD ["/tmp/build_and_test_icd9.sh"]
-# /usr/share/doc/littler/examples/check.r --setwd /mnt --install-deps --as-cran icd9.*tar.gz" # 
 

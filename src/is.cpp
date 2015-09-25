@@ -16,6 +16,7 @@
 // along with icd9. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
+#include <is.h>
 #include <string>
 #include <vector>
 

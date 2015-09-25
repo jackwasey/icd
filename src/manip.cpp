@@ -16,12 +16,13 @@
 // along with icd9. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <is.h>
-#include <convert.h>
-using namespace Rcpp;
+#include <Rcpp.h>
+#include "manip.h"
+#include "is.h"
+#include "convert.h"
 
 // [[Rcpp::export]]
-String icd9AddLeadingZeroesMajorSingle(String major) {
+Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String major) {
 	if (major == NA_STRING) {
 		return (NA_STRING);
 	}
@@ -65,24 +66,74 @@ String icd9AddLeadingZeroesMajorSingle(String major) {
 }
 
 // [[Rcpp::export]]
-CharacterVector icd9AddLeadingZeroesMajor(CharacterVector major) {
-	return sapply(major, icd9AddLeadingZeroesMajorSingle);
+std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
+	const char * cs = m.c_str();
+	const std::string::size_type len = m.length();
+	if (!icd9IsASingleVE(cs)) {
+		switch (len) {
+		case 0:
+			return ("");
+		case 1:
+			return ("00" + m);
+		case 2:
+			return ("0" + m);
+		case 3:
+			return (m);
+		}
+	} else {
+		switch (len) {
+		case 1:
+			return ("");
+		case 2:
+			if (icd9IsASingleV(cs)) {
+				m.insert(1, "0");
+				return (m);
+			} else {
+				m.insert(1, "00");
+				return (m);
+			}
+		case 3:
+			if (icd9IsASingleV(cs)) {
+				return (m);
+			} else {
+				m.insert(1, "0");
+				return (m);
+			}
+		case 4:
+			if (icd9IsASingleE(cs))
+				return (m);
+		}
+	}
+	return "";
 }
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
+	return Rcpp::sapply(major, icd9AddLeadingZeroesMajorSingle);
+}
+
+//Rcpp::CharacterVector icd9AddLeadingZeroesMajorStd(std::vector<std::string> major) {
+//	// TODO: unclear whether this returns NA correctly. If not, I might as well loop myself.
+//	Rcpp::CharacterVector major_rcpp(major);
+//	return Rcpp::sapply(major_rcpp, icd9AddLeadingZeroesMajorSingle);
+//}
 
 //' @rdname icd9AddLeadingZeroes
 // [[Rcpp::export]]
-CharacterVector icd9AddLeadingZeroesShort(CharacterVector icd9Short) {
-	List parts = icd9ShortToParts(icd9Short);
+Rcpp::CharacterVector icd9AddLeadingZeroesShort(
+		Rcpp::CharacterVector icd9Short) {
+	Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
 	parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
 	return icd9PartsToShort(parts);
 }
 
 //' @rdname icd9AddLeadingZeroes
 // [[Rcpp::export]]
-CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
-	List parts = icd9DecimalToParts(icd9Decimal);
+Rcpp::CharacterVector icd9AddLeadingZeroesDecimal(
+		Rcpp::CharacterVector icd9Decimal) {
+	Rcpp::List parts = icd9DecimalToPartsCpp(icd9Decimal);
 	parts["major"] = icd9AddLeadingZeroesMajor(
-			as<CharacterVector>(parts["major"]));
+			Rcpp::as<Rcpp::CharacterVector>(parts["major"]));
 	return icd9PartsToDecimal(parts);
 }
 
@@ -97,7 +148,8 @@ CharacterVector icd9AddLeadingZeroesDecimal(CharacterVector icd9Decimal) {
 //' @return character vector of ICD codes (or major part thereof)
 //' @keywords internal manip
 // [[Rcpp::export]]
-CharacterVector icd9AddLeadingZeroes(CharacterVector icd9, bool isShort) {
+Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector icd9,
+		bool isShort) {
 	if (isShort)
 		return icd9AddLeadingZeroesShort(icd9);
 	return icd9AddLeadingZeroesDecimal(icd9);

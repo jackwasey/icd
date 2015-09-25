@@ -19,7 +19,7 @@ icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
   chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE)
 
 icd9Comorbid(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
-  isShort = icd9GuessIsShort(icd9df[[icd9Field]]),
+  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
   isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
 
 icd9ComorbidShort(...)
@@ -74,7 +74,10 @@ likely possibilities until it matche a single column. Failing this, it will
 take the first column in the data frame. Specifying the column using this
 argument avoids the guesswork.}
 
-\item{aggregate}{single logical value, if /code{TRUE}, then take (possible much) more time to aggregate out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered, then use \code{TRUE}.}
+\item{aggregate}{single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
+out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
+IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
+then use \code{TRUE}.}
 
 \item{isShort}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
@@ -84,8 +87,9 @@ is guessed from the input data.}
 instead of \code{icd9df}. All the codes in a mapping should be of the same
 type, i.e. short or decimal.}
 
-\item{...}{further arguments e.g. chunkSize and ompChunkSize pass to the C++
-function}
+\item{...}{arguments passed to the corresponding function from the alias.
+E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
+to \code{icd9ComorbidAhrq}}
 
 \item{abbrevNames}{single locical value that defaults to \code{TRUE}, in
 which case the ishorter human-readable names stored in e.g.
@@ -95,13 +99,10 @@ which case the ishorter human-readable names stored in e.g.
 which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
-
-\item{...}{arguments passed to the corresponding function from the alias.
-E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
-to \code{icd9ComorbidAhrq}}
 }
 \description{
-RcppParallel approach with openmp and vector of integer strategy
+RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
+  fast, and most time is now spent setting up the data to be passed in.
 
 This is the main function which extracts co-morbidities from a
   set of ICD-9 codes. This is when some trivial post-processing of the
