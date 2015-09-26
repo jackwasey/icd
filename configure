@@ -4706,7 +4706,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 if test "${ac_pkg_glibc_parallel}" = no; then
-  ICD9_GLIBC_PARALLEL=''
+  GCC_PARALLEL_CXXFLAGS=''
 fi
 
 

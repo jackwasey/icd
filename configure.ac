@@ -73,7 +73,7 @@ fi
 AC_LANG_POP([C++])
 
 if test "${ac_pkg_glibc_parallel}" = no; then
-  ICD9_GLIBC_PARALLEL=''
+  GCC_PARALLEL_CXXFLAGS=''
 fi
 AC_SUBST(GCC_PARALLEL_CXXFLAGS)
 
