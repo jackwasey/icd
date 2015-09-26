@@ -214,10 +214,10 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
 //' }
 //' @keywords internal
 // [[Rcpp::export]]
-std::vector<std::string> fastIntToStringStd(std::vector<int> x, int bufferSize = 64) {
+std::vector<std::string> fastIntToStringStd(std::vector<int> x) {
   std::vector<std::string>::size_type len = x.size();
   std::vector<std::string> out(len);
-  char buffer[bufferSize];
+  char buffer[64];
   for (std::vector<double>::size_type i = 0; i != len; ++i) {
     sprintf(buffer, "%u", x[i]);
     out[i] = buffer;
