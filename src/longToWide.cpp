@@ -33,7 +33,7 @@ CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 	VecStr::size_type distinct_visits = ragged.size();
 	CharacterVector out(distinct_visits * max_per_pt, NA_STRING); // optionally default empty strings? NA? User can do this for now.
 #ifdef ICD9_DEBUG
-			if (distinct_visits==0) {
+			if (distinct_visits == 0) {
 				Rcpp::Rcout << "no visits. returning blank data\n";
 				return CharacterVector::create();
 			}
@@ -101,8 +101,8 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 			visitIds.push_back(vi);
 		} else {
 #ifdef ICD9_DEBUG
-			if (ragged.size()==0) {
-				Rcout << "ragged size is ZERO! aborting\n";
+			if (ragged.size() == 0) {
+				Rcout << "ragged size is ZERO! bailing ou!\n";
 				break;
 			}
 #endif

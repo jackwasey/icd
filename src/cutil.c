@@ -29,14 +29,14 @@ void delanychar(char* str, char c) {
 //void rvecdelchar(SEXP v) {
 //        int vlen = length(v);
 //        for (int i = 0; i != vlen; ++i) {
-//		printf("i = %d\n", i);
+//		Rprintf("i = %d\n", i);
 //                char* vr = CHAR(STRING_ELT(v, i));
-//		printf("vr = %s\n", vr);
+//		Rprintf("vr = %s\n", vr);
 //		char* vw = vr;
-//		printf("vr = %s\n", vw);
+//		Rprintf("vr = %s\n", vw);
 //      	while (*vr) {
-//		printf("vr address = %d\n", vr);
-//		printf("vw address = %d\n", vw);
+//		Rprintf("vr address = %d\n", vr);
+//		Rprintf("vw address = %d\n", vw);
 //			*vw = *vr++;
 //			vw += (*vw != '.');
 //      	}
