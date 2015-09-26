@@ -4401,6 +4401,7 @@ esac
 
 
 # this macro is borrowed from R-devel source, and included in the m4 directory
+# possibly do this surrounded by push C++ language, but it is probably the same for C and C++ anyway, so I'll just use OPENMP_CFLAGS in Makefile.in
 
   OPENMP_CFLAGS=
   # Check whether --enable-openmp was given.
@@ -4467,6 +4468,35 @@ $as_echo "$ac_cv_prog_c_openmp" >&6; }
 	OPENMP_CFLAGS=$ac_cv_prog_c_openmp ;;
     esac
   fi
+
+
+
+# since some systems have broken OMP libraries
+# we also check that the actual package will work
+ac_pkg_openmp=no
+if test -n "${OPENMP_CFLAGS}"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking OpenMP available, but does it work in a package" >&5
+$as_echo_n "checking OpenMP available, but does it work in a package... " >&6; }
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <omp.h>
+int
+main ()
+{
+ return omp_get_num_threads ();
+  ;
+  return 0;
+}
+_ACEOF
+  PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&5 2>&5 && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&5 2>&5 && ac_pkg_openmp=yes
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_pkg_openmp}" >&5
+$as_echo "${ac_pkg_openmp}" >&6; }
+fi
+
+# if ${ac_pkg_openmp} = "yes" then we have OMP, otherwise it will be "no"
+if test "${ac_pkg_openmp}" = no; then
+  OPENMP_CFLAGS=''
+fi
 
 
 
