@@ -2259,6 +2259,8 @@ ac_config_files="$ac_config_files src/Makevars"
 
 
 
+# assuming that calling 'R' will pick the right one, even though we might be running in Rdevel...
+# workaround is for R_HOME to be set in advance, preventing the call to the wrong R.
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
@@ -4502,7 +4504,7 @@ if test "${ac_pkg_openmp}" = no; then
 else
   OPENMP_CFLAGS_IN_PKG=${OPENMP_CFLAGS}
 
-$as_echo "#define HAVE_OPENMP \"1\"" >>confdefs.h
+$as_echo "#define HAVE_R_OPENMP 1" >>confdefs.h
 
 fi
 
@@ -4650,12 +4652,12 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-for ac_header in parallel/parallel.h
+for ac_header in parallel/algorithm
 do :
-  ac_fn_cxx_check_header_mongrel "$LINENO" "parallel/parallel.h" "ac_cv_header_parallel_parallel_h" "$ac_includes_default"
-if test "x$ac_cv_header_parallel_parallel_h" = xyes; then :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "parallel/algorithm" "ac_cv_header_parallel_algorithm" "$ac_includes_default"
+if test "x$ac_cv_header_parallel_algorithm" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_PARALLEL_PARALLEL_H 1
+#define HAVE_PARALLEL_ALGORITHM 1
 _ACEOF
 
 fi

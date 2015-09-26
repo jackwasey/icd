@@ -9,11 +9,11 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
-/* "Whether OpenMP is available in R environment." */
-#undef HAVE_OPENMP
+/* Define to 1 if you have the <parallel/algorithm> header file. */
+#undef HAVE_PARALLEL_ALGORITHM
 
-/* Define to 1 if you have the <parallel/parallel.h> header file. */
-#undef HAVE_PARALLEL_PARALLEL_H
+/* "Whether OpenMP is available in R environment." */
+#undef HAVE_R_OPENMP
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H

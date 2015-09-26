@@ -6,6 +6,8 @@ AC_CONFIG_HEADERS([src/config.h:src/config.h.in])
 AC_CONFIG_FILES([src/Makevars])
 AC_CONFIG_MACRO_DIR([m4])
 
+# assuming that calling 'R' will pick the right one, even though we might be running in Rdevel...
+# workaround is for R_HOME to be set in advance, preventing the call to the wrong R.
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
@@ -54,7 +56,7 @@ AC_SUBST(OPENMP_CFLAGS_IN_PKG)
 
 # this only works in C++, since it is a C++ system header...
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADERS([parallel/parallel.h])
+AC_CHECK_HEADERS([parallel/algorithm])
 AC_LANG_POP([C++])
 
 # more detailed check to actually use parallel glibc in a package:

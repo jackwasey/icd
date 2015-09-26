@@ -42,21 +42,20 @@ extern "C" {
 
 // not enough to test whether header is available, because it may be disabled in R: #ifdef _OPENMP
 #ifdef HAVE_R_OPENMP
-#include <omp.h>
-#define ICD9_OPENMP
-// openmp is required for GLIBC standard library parallel alternatives
-#ifdef HAVE_PARALLEL_PARALLEL_H
-#define ICD9_STD_PARALLEL
-#endif
+  #include <omp.h>
+  #define ICD9_OPENMP
+  // openmp is required for GLIBC standard library parallel alternatives
+  #ifdef HAVE_PARALLEL_ALGORITHM
+    #define ICD9_STD_PARALLEL
+  #endif
 #endif
 
 #ifdef ICD9_VALGRIND
-#ifdef HAVE_VALGRIND_VALGRIND_H
-//__CALLGRIND_H
-#include <valgrind/callgrind.h>
-#else
-#undef ICD9_VALGRIND
-#endif
+  #ifdef HAVE_VALGRIND_VALGRIND_H
+    #include <valgrind/callgrind.h>
+  #else
+    #undef ICD9_VALGRIND
+  #endif
 #endif
 
 typedef std::string Str;

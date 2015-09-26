@@ -4,6 +4,7 @@ ccs_multi_dx_tool_2013\.csv
 CMS.*DESC.*
 config.log
 config.status
+configure.ac
 configure.scan
 .cproject
 cran-comments\.md$

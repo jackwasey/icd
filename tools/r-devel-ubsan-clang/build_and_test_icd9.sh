@@ -26,8 +26,12 @@ ICD9_GIT_BRANCH=issue75
 cd /tmp
 git clone -b $ICD9_GIT_BRANCH https://github.com/jackwasey/icd9.git
 # TODO: use devtools to install dependencies (based on DESCRIPTION). This may be cleaner than doing it in the docker image itself, but would take more time each build.
+
+
+# Use Rdevel for the default rocker builds because R will point to the uninstrumented system R. However, when I build R, I leave the 'R' binary in /usr/local/bin
 Rdevel CMD build --no-build-vignettes icd9
 ICD9_PKG=`ls -t /tmp/icd9*tar.gz | tail -1`
-Rdevel CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
+# THe configure script assumes 'R' is used, even if 'Rdevel' was called.
+R_HOME=/usr/local/lib/R Rdevel CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
 Rdevel CMD check $ICD9_PKG
 # potentially just do testthat tests and run examples instead of full package check?
