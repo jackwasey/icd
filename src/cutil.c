@@ -53,7 +53,7 @@ void dropdot(SEXP v) {
 			continue;
 		const char* vr = CHAR(STRING_ELT(v, i));
 		if (strlen(vr) > 15)
-			error("ICD code length greater than 15 characters");
+			Rf_error("ICD code length greater than 15 characters");
 		strcpy(temp, vr);
 		char *vw = temp; // reuse the same buffer, but get fresh pointer
 		while (*vr) {

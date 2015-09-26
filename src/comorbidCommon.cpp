@@ -20,7 +20,8 @@
 #include "util.h"
 #include "local.h"
 //#ifdef ICD9_STD_PARALLEL
-// this will probably make things worse if already in an OpenMP block
+// this will probably make things worse if already in an OpenMP block, unless I
+// can dynamically see how many threads are available or active.
 //#include <parallel/algorithm>
 //#else
 #include <algorithm>
@@ -38,9 +39,10 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
 	Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
 	Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
-// possible work around possible clang 3.7 bug: http://stackoverflow.com/questions/32572966/did-i-misuse-a-reference-variable-in-a-simple-openmp-for-loop-or-is-it-a-clang
-//const VecVecInt *vcdb = &_vcdb;
-//const VecVecInt *map = &_map;
+// possible work around possible clang 3.7 bug:
+// http://stackoverflow.com/questions/32572966/did-i-misuse-a-reference-variable-in-a-simple-openmp-for-loop-or-is-it-a-clang
+// const VecVecInt *vcdb = &_vcdb;
+// const VecVecInt *map = &_map;
 #if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
 	debug_parallel();
 #endif

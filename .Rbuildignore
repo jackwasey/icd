@@ -27,7 +27,6 @@ icd.*tar\.gz
 inst\/standalone\/.*
 .lintr
 .*\.log$
-m4$
 Makevars$
 man-roxygen
 ^NEWS\.md$
@@ -43,6 +42,7 @@ man-roxygen
 src\/autom4te.cache
 .*standalone.*
 todo
+tools$
 \.travis\.yml$
 V26 I-9 Diagnosis.txt
 V26\.I\.9\.Diagnosis.txt
