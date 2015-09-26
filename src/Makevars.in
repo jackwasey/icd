@@ -1,6 +1,4 @@
 # update Makevars.win when Makevars.in changes
-PKG_CFLAGS = @OPENMP_CFLAGS@
-
-# brute force the GNU standard library parallel extension flag, ignored when not using GCC, I think:
-PKG_CXXFLAGS = -I. @OPENMP_CFLAGS@ @ICD9_CXX11_FLAG@ @GCC_PARALLEL_CXXFLAGS@
-PKG_LIBS = @OPENMP_CFLAGS@ @LIBS@
+PKG_CFLAGS = @OPENMP_CFLAGS_IN_PKG@
+PKG_CXXFLAGS = -I. @OPENMP_CFLAGS_IN_PKG@ @ICD9_CXX11_FLAG@ @GCC_PARALLEL_CXXFLAGS@
+PKG_LIBS = @OPENMP_CFLAGS_IN_PKG@ @LIBS@

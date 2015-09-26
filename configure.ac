@@ -29,6 +29,8 @@ AC_C_INLINE
 # possibly do this surrounded by push C++ language, but it is probably the same for C and C++ anyway, so I'll just use OPENMP_CFLAGS in Makefile.in
 R_OPENMP
 
+# now the R openmp macro has already substituted OPENMP_CFLAGS, so can't do that again
+
 # since some systems have broken OMP libraries
 # we also check that the actual package will work
 ac_pkg_openmp=no
@@ -42,9 +44,12 @@ fi
 
 # if ${ac_pkg_openmp} = "yes" then we have OMP, otherwise it will be "no"
 if test "${ac_pkg_openmp}" = no; then
-  OPENMP_CFLAGS=''
+  OPENMP_CFLAGS_IN_PKG=''
+else
+  OPENMP_CFLAGS_IN_PKG=${OPENMP_CFLAGS}
+  AC_DEFINE(HAVE_R_OPENMP, 1, "Whether OpenMP is available in R environment.")
 fi
-AC_SUBST(OPENMP_CFLAGS)
+AC_SUBST(OPENMP_CFLAGS_IN_PKG)
 
 
 # this only works in C++, since it is a C++ system header...

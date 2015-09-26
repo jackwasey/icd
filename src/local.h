@@ -40,7 +40,8 @@ extern "C" {
 // in C++. See tools/standalone.sh
 //#define ICD9_STANDALONE
 
-#ifdef _OPENMP
+// not enough to test whether header is available, because it may be disabled in R: #ifdef _OPENMP
+#ifdef HAVE_R_OPENMP
 #include <omp.h>
 #define ICD9_OPENMP
 // openmp is required for GLIBC standard library parallel alternatives

@@ -628,6 +628,7 @@ ICD9_CXX11_FLAG
 HAVE_CXX11
 GCC_PARALLEL_CXXFLAGS
 CXXCPP
+OPENMP_CFLAGS_IN_PKG
 OPENMP_CFLAGS
 ac_ct_CXX
 CXXFLAGS
@@ -4471,6 +4472,8 @@ $as_echo "$ac_cv_prog_c_openmp" >&6; }
 
 
 
+# now the R openmp macro has already substituted OPENMP_CFLAGS, so can't do that again
+
 # since some systems have broken OMP libraries
 # we also check that the actual package will work
 ac_pkg_openmp=no
@@ -4495,7 +4498,12 @@ fi
 
 # if ${ac_pkg_openmp} = "yes" then we have OMP, otherwise it will be "no"
 if test "${ac_pkg_openmp}" = no; then
-  OPENMP_CFLAGS=''
+  OPENMP_CFLAGS_IN_PKG=''
+else
+  OPENMP_CFLAGS_IN_PKG=${OPENMP_CFLAGS}
+
+$as_echo "#define HAVE_OPENMP \"1\"" >>confdefs.h
+
 fi
 
 
