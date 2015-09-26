@@ -32,6 +32,7 @@ git clone -b $ICD9_GIT_BRANCH https://github.com/jackwasey/icd9.git
 Rdevel CMD build --no-build-vignettes icd9
 ICD9_PKG=`ls -t /tmp/icd9*tar.gz | tail -1`
 # THe configure script assumes 'R' is used, even if 'Rdevel' was called.
-R_HOME=/usr/local/lib/R Rdevel CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
+# R_HOME=/usr/local/lib/R Rdevel CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
+Rdevel CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
 Rdevel CMD check $ICD9_PKG
 # potentially just do testthat tests and run examples instead of full package check?
