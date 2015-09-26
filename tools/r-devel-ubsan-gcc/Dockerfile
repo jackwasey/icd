@@ -57,7 +57,7 @@ RUN cd /tmp/R-devel \
 
 #TODO: remove or keep -O0 flags? Not sure which would be most helpful. Most code in production use is compiled O2, but I don't know whether O0 would uncover the same UBSAN bugs, or just allow them to be characterized more easily.
 
-RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "XML", "memoise", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools"))'
+RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "XML", "memoise", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools", "fastmatch"))'
 
 ADD build_and_test_icd9.sh /tmp/
 CMD ["/tmp/build_and_test_icd9.sh"]

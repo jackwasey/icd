@@ -25,7 +25,7 @@ RUN apt-get update -y && apt-get install -y -t unstable \
 ## now we can pre-install a load of packages we know we'll need
 
 # use Rdevel (from the rocker image, because R is the standard g++ unsanitized one)
-RUN Rdevel -e "install.packages(c('devtools', 'XML', 'testthat', 'Rcpp', 'ggplot2', 'brew', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'plyr', 'gtable', 'reshape2', 'knitr', 'microbenchmark', 'profr', 'xtable', 'rmarkdown'))"
+RUN Rdevel -e "install.packages(c('devtools', 'XML', 'testthat', 'Rcpp', 'ggplot2', 'brew', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'plyr', 'gtable', 'reshape2', 'knitr', 'microbenchmark', 'profr', 'xtable', 'rmarkdown', 'fastmatch'))"
 
 ADD build_and_test_icd9.sh /tmp/
 CMD ["/tmp/build_and_test_icd9.sh"]
