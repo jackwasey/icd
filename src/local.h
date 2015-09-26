@@ -44,7 +44,7 @@ extern "C" {
 #include <omp.h>
 #define ICD9_OPENMP
 // openmp is required for GLIBC standard library parallel alternatives
-#ifdef _GLIBCXX_PARALLEL_PARALLEL_H
+#ifdef HAVE_PARALLEL_PARALLEL_H
 #define ICD9_STD_PARALLEL
 #endif
 #endif
