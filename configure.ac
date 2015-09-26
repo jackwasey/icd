@@ -68,7 +68,7 @@ if test -n "${OPENMP_CFLAGS}"; then
   AC_MSG_CHECKING([OpenMP available, but is glibc parallel mode working via R?])
   AC_LANG_CONFTEST(
   [AC_LANG_PROGRAM([[#include <parallel/algorithm>]], [[ std::vector<int> v; v.push_back(3); v.push_back(2); __gnu_parallel::sort(v.begin(), v.end()); ]])])
-  PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" PKG_CXXFLAGS="${OPENMP_CXXFLAGS} ${GCC_PARALLEL_CXXFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_pkg_glibc_parallel=yes
+  PKG_CPPFLAGS="${CPPFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" PKG_CXXFLAGS="${CXXFLAGS} ${OPENMP_CXXFLAGS} ${GCC_PARALLEL_CXXFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_pkg_glibc_parallel=yes
   AC_MSG_RESULT([${ac_pkg_glibc_parallel}])
 fi
 AC_LANG_POP([C++])

@@ -4695,7 +4695,7 @@ main ()
   return 0;
 }
 _ACEOF
-  PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" PKG_CXXFLAGS="${OPENMP_CXXFLAGS} ${GCC_PARALLEL_CXXFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&5 2>&5 && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&5 2>&5 && ac_pkg_glibc_parallel=yes
+  PKG_CPPFLAGS="${CPPFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" PKG_CXXFLAGS="${CXXFLAGS} ${OPENMP_CXXFLAGS} ${GCC_PARALLEL_CXXFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&5 2>&5 && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&5 2>&5 && ac_pkg_glibc_parallel=yes
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_pkg_glibc_parallel}" >&5
 $as_echo "${ac_pkg_glibc_parallel}" >&6; }
 fi
