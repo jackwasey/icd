@@ -6,7 +6,7 @@ FROM r-devel-ubsan-clang-3.7-libcxx
 # FROM HERE IS ICD9 specific
 
 ## do install these pesky libraries which must come from unstable (sid), and not the testing repo which is the default.
-RUN apt-get update -y && apt-get install -y -t unstable \
+RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstable \
 	fonts-inconsolata \
 	git \
 	libcurl4-openssl-dev \

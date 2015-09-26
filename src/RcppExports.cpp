@@ -1236,21 +1236,20 @@ RcppExport SEXP icd9_icd9RandomShort(SEXP nSEXP) {
     return __result;
 }
 // fastIntToStringStd
-std::vector<std::string> fastIntToStringStd(std::vector<int> x, int bufferSize);
-static SEXP icd9_fastIntToStringStd_try(SEXP xSEXP, SEXP bufferSizeSEXP) {
+std::vector<std::string> fastIntToStringStd(std::vector<int> x);
+static SEXP icd9_fastIntToStringStd_try(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::traits::input_parameter< std::vector<int> >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type bufferSize(bufferSizeSEXP);
-    __result = Rcpp::wrap(fastIntToStringStd(x, bufferSize));
+    __result = Rcpp::wrap(fastIntToStringStd(x));
     return __result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_fastIntToStringStd(SEXP xSEXP, SEXP bufferSizeSEXP) {
+RcppExport SEXP icd9_fastIntToStringStd(SEXP xSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_fastIntToStringStd_try(xSEXP, bufferSizeSEXP));
+        __result = PROTECT(icd9_fastIntToStringStd_try(xSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1267,21 +1266,20 @@ RcppExport SEXP icd9_fastIntToStringStd(SEXP xSEXP, SEXP bufferSizeSEXP) {
     return __result;
 }
 // fastIntToStringRcpp
-Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x, int bufferSize);
-static SEXP icd9_fastIntToStringRcpp_try(SEXP xSEXP, SEXP bufferSizeSEXP) {
+Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x);
+static SEXP icd9_fastIntToStringRcpp_try(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type bufferSize(bufferSizeSEXP);
-    __result = Rcpp::wrap(fastIntToStringRcpp(x, bufferSize));
+    __result = Rcpp::wrap(fastIntToStringRcpp(x));
     return __result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_fastIntToStringRcpp(SEXP xSEXP, SEXP bufferSizeSEXP) {
+RcppExport SEXP icd9_fastIntToStringRcpp(SEXP xSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_fastIntToStringRcpp_try(xSEXP, bufferSizeSEXP));
+        __result = PROTECT(icd9_fastIntToStringRcpp_try(xSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1357,36 +1355,6 @@ RcppExport SEXP icd9_valgrindCallgrindStart(SEXP zerostatsSEXP) {
     UNPROTECT(1);
     return __result;
 }
-// sort_std
-std::vector<std::string> sort_std(std::vector<std::string> x);
-static SEXP icd9_sort_std_try(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::traits::input_parameter< std::vector<std::string> >::type x(xSEXP);
-    __result = Rcpp::wrap(sort_std(x));
-    return __result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_sort_std(SEXP xSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_sort_std_try(xSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int icd9_RcppExport_validate(const char* sig) { 
@@ -1432,11 +1400,10 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("std::vector<std::string>(*icd9RandomShortV)(std::vector<std::string>::size_type)");
         signatures.insert("std::vector<std::string>(*icd9RandomShortE)(std::vector<std::string>::size_type)");
         signatures.insert("std::vector<std::string>(*icd9RandomShort)(std::vector<std::string>::size_type)");
-        signatures.insert("std::vector<std::string>(*fastIntToStringStd)(std::vector<int>,int)");
-        signatures.insert("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector,int)");
+        signatures.insert("std::vector<std::string>(*fastIntToStringStd)(std::vector<int>)");
+        signatures.insert("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector)");
         signatures.insert("int(*callgrindStart)(bool)");
         signatures.insert("int(*valgrindCallgrindStart)(bool)");
-        signatures.insert("std::vector<std::string>(*sort_std)(std::vector<std::string>)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -1487,7 +1454,6 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_fastIntToStringRcpp", (DL_FUNC)icd9_fastIntToStringRcpp_try);
     R_RegisterCCallable("icd9", "icd9_callgrindStart", (DL_FUNC)icd9_callgrindStart_try);
     R_RegisterCCallable("icd9", "icd9_valgrindCallgrindStart", (DL_FUNC)icd9_valgrindCallgrindStart_try);
-    R_RegisterCCallable("icd9", "icd9_sort_std", (DL_FUNC)icd9_sort_std_try);
     R_RegisterCCallable("icd9", "icd9_RcppExport_validate", (DL_FUNC)icd9_RcppExport_validate);
     return R_NilValue;
 }

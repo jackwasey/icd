@@ -5,9 +5,9 @@
 \alias{fastIntToStringStd}
 \title{fast convert integer vector to character vector}
 \usage{
-fastIntToStringStd(x, bufferSize = 64L)
+fastIntToStringStd(x)
 
-fastIntToStringRcpp(x, bufferSize = 64L)
+fastIntToStringRcpp(x)
 }
 \arguments{
 \item{x}{td::vector<int>}

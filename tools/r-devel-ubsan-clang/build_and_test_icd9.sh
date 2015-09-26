@@ -20,10 +20,12 @@
 # build_and_test_icd9 with R-devel and clang with sanitizers.
 # This file is run within the container.
 
+# TODO: make this branch name settable from command line.
 ICD9_GIT_BRANCH=issue75
 
 cd /tmp
 git clone -b $ICD9_GIT_BRANCH https://github.com/jackwasey/icd9.git
+# TODO: use devtools to install dependencies (based on DESCRIPTION). This may be cleaner than doing it in the docker image itself, but would take more time each build.
 Rdevel CMD build --no-build-vignettes icd9
 ICD9_PKG=`ls -t /tmp/icd9*tar.gz | tail -1`
 Rdevel CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log

@@ -252,13 +252,13 @@ icd9RandomShort <- function(n = 5L) {
 #'                                asCharacterNoWarn(pts$visitId), times = 5)
 #' }
 #' @keywords internal
-fastIntToStringStd <- function(x, bufferSize = 64L) {
-    .Call('icd9_fastIntToStringStd', PACKAGE = 'icd9', x, bufferSize)
+fastIntToStringStd <- function(x) {
+    .Call('icd9_fastIntToStringStd', PACKAGE = 'icd9', x)
 }
 
 #' @rdname fastIntToString
-fastIntToStringRcpp <- function(x, bufferSize = 64L) {
-    .Call('icd9_fastIntToStringRcpp', PACKAGE = 'icd9', x, bufferSize)
+fastIntToStringRcpp <- function(x) {
+    .Call('icd9_fastIntToStringRcpp', PACKAGE = 'icd9', x)
 }
 
 callgrindStart <- function(zerostats = FALSE) {
@@ -267,21 +267,6 @@ callgrindStart <- function(zerostats = FALSE) {
 
 valgrindCallgrindStart <- function(zerostats = FALSE) {
     .Call('icd9_valgrindCallgrindStart', PACKAGE = 'icd9', zerostats)
-}
-
-#' @title Sort using STL
-#' @description if compiler flags and standard library support is available (only tested on glibc), OpenMP, then this
-#'   will use a parallel sort algorithm which is significantly faster. It doesn't however deal with NA values.
-#'   TODO: handle NA values.
-#' @examples
-#' \dontrun{
-#' pts <- icd9:::randomPatients(1e7)
-#' microbenchmark::microbenchmark(sort_std(pts$icd9), sort(pts$icd9), times = 5)
-#' # four times faster on 4 real core (8 with HT) machine.
-#' }
-#'
-sort_std <- function(x) {
-    .Call('icd9_sort_std', PACKAGE = 'icd9', x)
 }
 
 # Register entry points for exported C++ functions

@@ -784,17 +784,17 @@ namespace icd9 {
         return Rcpp::as<std::vector<std::string> >(__result);
     }
 
-    inline std::vector<std::string> fastIntToStringStd(std::vector<int> x, int bufferSize = 64) {
-        typedef SEXP(*Ptr_fastIntToStringStd)(SEXP,SEXP);
+    inline std::vector<std::string> fastIntToStringStd(std::vector<int> x) {
+        typedef SEXP(*Ptr_fastIntToStringStd)(SEXP);
         static Ptr_fastIntToStringStd p_fastIntToStringStd = NULL;
         if (p_fastIntToStringStd == NULL) {
-            validateSignature("std::vector<std::string>(*fastIntToStringStd)(std::vector<int>,int)");
+            validateSignature("std::vector<std::string>(*fastIntToStringStd)(std::vector<int>)");
             p_fastIntToStringStd = (Ptr_fastIntToStringStd)R_GetCCallable("icd9", "icd9_fastIntToStringStd");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_fastIntToStringStd(Rcpp::wrap(x), Rcpp::wrap(bufferSize));
+            __result = p_fastIntToStringStd(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -803,17 +803,17 @@ namespace icd9 {
         return Rcpp::as<std::vector<std::string> >(__result);
     }
 
-    inline Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x, int bufferSize = 64) {
-        typedef SEXP(*Ptr_fastIntToStringRcpp)(SEXP,SEXP);
+    inline Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
+        typedef SEXP(*Ptr_fastIntToStringRcpp)(SEXP);
         static Ptr_fastIntToStringRcpp p_fastIntToStringRcpp = NULL;
         if (p_fastIntToStringRcpp == NULL) {
-            validateSignature("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector,int)");
+            validateSignature("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector)");
             p_fastIntToStringRcpp = (Ptr_fastIntToStringRcpp)R_GetCCallable("icd9", "icd9_fastIntToStringRcpp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_fastIntToStringRcpp(Rcpp::wrap(x), Rcpp::wrap(bufferSize));
+            __result = p_fastIntToStringRcpp(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -858,25 +858,6 @@ namespace icd9 {
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
         return Rcpp::as<int >(__result);
-    }
-
-    inline std::vector<std::string> sort_std(std::vector<std::string> x) {
-        typedef SEXP(*Ptr_sort_std)(SEXP);
-        static Ptr_sort_std p_sort_std = NULL;
-        if (p_sort_std == NULL) {
-            validateSignature("std::vector<std::string>(*sort_std)(std::vector<std::string>)");
-            p_sort_std = (Ptr_sort_std)R_GetCCallable("icd9", "icd9_sort_std");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_sort_std(Rcpp::wrap(x));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<std::vector<std::string> >(__result);
     }
 
 }
