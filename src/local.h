@@ -18,9 +18,6 @@
 #ifndef LOCAL_H_
 #define LOCAL_H_
 
-// don't know whether I need this here:
-// [[Rcpp::interfaces(r, cpp)]]
-
 #include "config.h"
 
 #include <Rcpp.h>
