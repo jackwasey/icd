@@ -30,7 +30,7 @@ R_OPENMP
 
 # this only works in C++, since it is a C++ system header...
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADER([parallel/parallel.h])
+AC_CHECK_HEADERS([parallel/parallel.h])
 AC_LANG_POP([C++])
 
 # more detailed check to actually use parallel glibc in a package:
@@ -53,18 +53,10 @@ AC_SUBST(GCC_PARALLEL_CXXFLAGS)
 
 # We do not need valgrind for normal operations, but it helps to know whether present on the platform compiling the code, so headers can be included if present (and instrumentation triggers inserted).
 # this uses automake, however, and is designed to check newly compiled code: AX_VALGRIND_CHECK
-AC_CHECK_HEADER([valgrind/valgrind.h])
+AC_CHECK_HEADERS([valgrind/valgrind.h])
 
 # C++11, autoconf should determine the correct flags
 # https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx_11.html
 AX_CXX_COMPILE_STDCXX_11(noext,optional)
-
-ICD9_CXX11=''
-if test -n "${HAVE_CXX11}"; then
-  AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
-  # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
-  ICD9_CXX11=${switch}
-fi
-AC_SUBST(ICD9_CXX11)
 
 AC_OUTPUT

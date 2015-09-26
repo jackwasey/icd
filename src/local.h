@@ -36,8 +36,8 @@ extern "C" {
 //#define ICD9_DEBUG_PARALLEL
 #define ICD9_VALGRIND
 
-// enabling this stops ackage compiling. useful for testing purely in C++.
-// See tools/standalone.sh
+// enabling this stops the package compiling, but is useful for testing purely
+// in C++. See tools/standalone.sh
 //#define ICD9_STANDALONE
 
 #ifdef _OPENMP

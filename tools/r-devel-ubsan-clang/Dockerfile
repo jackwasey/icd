@@ -1,9 +1,10 @@
 ## Emacs, make this -*- mode: sh; -*-
 
 ## start with the Docker 'base R' Debian-based image
+# n.b. the github repo is actually called r-devel-san-clang
 FROM rocker/r-devel-ubsan-clang
 
-# in which I think openmp is disabled
+# openmp is disabled in this image
 
 ## do install these pesky libraries which must come from unstable (sid), and not the testing repo which is the default.
 RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstable \

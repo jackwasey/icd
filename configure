@@ -624,7 +624,6 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
-ICD9_CXX11
 HAVE_CXX11
 GCC_PARALLEL_CXXFLAGS
 CXXCPP
@@ -4612,11 +4611,17 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-ac_fn_cxx_check_header_mongrel "$LINENO" "parallel/parallel.h" "ac_cv_header_parallel_parallel_h" "$ac_includes_default"
+for ac_header in parallel/parallel.h
+do :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "parallel/parallel.h" "ac_cv_header_parallel_parallel_h" "$ac_includes_default"
 if test "x$ac_cv_header_parallel_parallel_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_PARALLEL_PARALLEL_H 1
+_ACEOF
 
 fi
 
+done
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
@@ -4635,8 +4640,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 GCC_PARALLEL_CXXFLAGS='-D_GLIBCXX_PARALLEL'
 ac_pkg_glibc_parallel=no
 if test -n "${OPENMP_CFLAGS}"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking OpenMP available, but is glibc parallel mode available?" >&5
-$as_echo_n "checking OpenMP available, but is glibc parallel mode available?... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking OpenMP available, but is glibc parallel mode working via R?" >&5
+$as_echo_n "checking OpenMP available, but is glibc parallel mode working via R?... " >&6; }
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <parallel/algorithm>
@@ -4666,11 +4671,17 @@ fi
 
 # We do not need valgrind for normal operations, but it helps to know whether present on the platform compiling the code, so headers can be included if present (and instrumentation triggers inserted).
 # this uses automake, however, and is designed to check newly compiled code: AX_VALGRIND_CHECK
-ac_fn_c_check_header_mongrel "$LINENO" "valgrind/valgrind.h" "ac_cv_header_valgrind_valgrind_h" "$ac_includes_default"
+for ac_header in valgrind/valgrind.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "valgrind/valgrind.h" "ac_cv_header_valgrind_valgrind_h" "$ac_includes_default"
 if test "x$ac_cv_header_valgrind_valgrind_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_VALGRIND_VALGRIND_H 1
+_ACEOF
 
 fi
 
+done
 
 
 # C++11, autoconf should determine the correct flags
@@ -4866,14 +4877,9 @@ $as_echo "#define HAVE_CXX11 1" >>confdefs.h
   fi
 
 
-ICD9_CXX11=''
-if test -n "${HAVE_CXX11}"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: checking Have C++11, so set Makevars flag for R" >&5
-$as_echo_n "checking Have C++11, so set Makevars flag for R... " >&6; }
-  # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
-  ICD9_CXX11=${switch}
-fi
-
+#    AC_DEFINE(HAVE_CXX11,1,
+#                [define if the compiler supports basic C++11 syntax])
+#    AC_SUBST(HAVE_CXX11)
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

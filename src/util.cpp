@@ -115,6 +115,8 @@ void debug_parallel() {
   Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
   Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << ". ";
   Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
+#else
+  Rcpp::Rcout << "ICD9_OPENMP is not defined\n";
 #endif
 }
 
