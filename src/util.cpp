@@ -228,10 +228,10 @@ std::vector<std::string> fastIntToStringStd(std::vector<int> x) {
 
 //' @rdname fastIntToString
 // [[Rcpp::export]]
-Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x, int bufferSize = 64) {
+Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
   size_t len = x.size();
   Rcpp::CharacterVector out(len);
-  char buffer[bufferSize];
+  char buffer[64];
   for (size_t i = 0; i != len; ++i) {
     sprintf(buffer, "%u", x[i]);
     out[i] = buffer;
