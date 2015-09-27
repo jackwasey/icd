@@ -4919,7 +4919,7 @@ $as_echo "#define HAVE_CXX11 1" >>confdefs.h
 
 
 ICD9_CXX11_FLAG=''
-if test -n "${HAVE_CXX11}"; then
+if test "${HAVE_CXX11}" = 1; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking Have C++11, so set Makevars flag for R" >&5
 $as_echo_n "checking Have C++11, so set Makevars flag for R... " >&6; }
   # ICD9_CXX11_FLAG="AS_ESCAPE([${CXX1XSTD}])"

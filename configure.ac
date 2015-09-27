@@ -94,7 +94,7 @@ AC_CHECK_HEADERS([valgrind/valgrind.h])
 AX_CXX_COMPILE_STDCXX_11(noext,optional)
 
 ICD9_CXX11_FLAG=''
-if test -n "${HAVE_CXX11}"; then
+if test "${HAVE_CXX11}" = 1; then
   AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
   # ICD9_CXX11_FLAG="AS_ESCAPE([${CXX1XSTD}])"
   # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
