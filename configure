@@ -4665,22 +4665,11 @@ fi
 
 done
 
-ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
 
 # more detailed check to actually use parallel glibc in a package:
-ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
-
-GCC_PARALLEL_CXXFLAGS='-D_GLIBCXX_PARALLEL'
+# stay in C++ mode
 ac_pkg_glibc_parallel=no
+  TEST_GCC_PARALLEL_CXXFLAGS='-D_GLIBCXX_PARALLEL'
 if test -n "${OPENMP_CFLAGS}"; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking OpenMP available, but is glibc parallel mode working via R?" >&5
 $as_echo_n "checking OpenMP available, but is glibc parallel mode working via R?... " >&6; }
@@ -4695,7 +4684,7 @@ main ()
   return 0;
 }
 _ACEOF
-  PKG_CPPFLAGS="${CPPFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" PKG_CXXFLAGS="${CXXFLAGS} ${OPENMP_CXXFLAGS} ${GCC_PARALLEL_CXXFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&5 2>&5 && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&5 2>&5 && ac_pkg_glibc_parallel=yes
+  PKG_CFLAGS="${OPENMP_FLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" PKG_CXXFLAGS="${OPENMP_CXXFLAGS} ${TEST_GCC_PARALLEL_CXXFLAGS}" "$R_BIN" CMD SHLIB conftest.cpp 1>&5 2>&5 && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&5 2>&5 && ac_pkg_glibc_parallel=yes
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${ac_pkg_glibc_parallel}" >&5
 $as_echo "${ac_pkg_glibc_parallel}" >&6; }
 fi
@@ -4708,6 +4697,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 if test "${ac_pkg_glibc_parallel}" = no; then
   GCC_PARALLEL_CXXFLAGS=''
+else
+
+$as_echo "#define WORKING_PARALLEL_ALGORITHM 1" >>confdefs.h
+
+  GCC_PARALLEL_CXXFLAGS=${TEST_GCC_PARALLEL_CXXFLAGS}
 fi
 
 
