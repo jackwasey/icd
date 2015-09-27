@@ -59,6 +59,8 @@ RUN cd /tmp/R-devel \
 
 RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "XML", "memoise", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools", "fastmatch"))'
 
-ADD build_and_test_icd9.sh /tmp/
-CMD ["/tmp/build_and_test_icd9.sh"]
+ADD ../build_install_check_in_docker.sh /tmp/
+ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libasan.so.2
+ENV R_CMD Rdevel
+CMD ["/tmp/build_install_check_in_docker.sh"]
 

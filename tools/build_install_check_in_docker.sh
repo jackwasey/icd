@@ -20,12 +20,17 @@
 # build_and_test_icd9 with R-devel and clang 3.7 with sanitizers, libc (and libomp)
 # This file is run within the container.
 
-ICD9_GIT_BRANCH=issue75
+: ${R_PKG_NAME=icd9}
+: ${GIT_URL=https://github.com}
+: ${GITHUB_USER=jackwasey}
+: ${GITHUB_REPO=$R_PKG_NAME}
+: ${GIT_BRANCH=issue75}
+: ${R_CMD=R}
 
 cd /tmp
-git clone -b $ICD9_GIT_BRANCH https://github.com/jackwasey/icd9.git
-R CMD build --no-build-vignettes icd9
-ICD9_PKG=`ls -t /tmp/icd9*tar.gz | tail -1`
-R CMD INSTALL $ICD9_PKG || cat /tmp/icd9.Rcheck/00check.log
-R CMD check $ICD9_PKG
+git clone -b $GIT_BRANCH $GIT_URL/$GITHUB_USER/$GITHUB_REPO.git
+$R_CMD CMD build --no-build-vignettes $R_PKG_NAME
+R_PKG_TAR_GZ=`ls -t /tmp/$R_PKG_NAME*tar.gz | tail -1`
+$R_CMD CMD INSTALL $R_PKG_TAR_GZ 
+$R_CMD CMD check $R_PKG_TAR_GZ
 # potentially just do testthat tests and run examples instead of full package check?
