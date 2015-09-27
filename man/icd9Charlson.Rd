@@ -6,13 +6,15 @@
 \alias{icd9CharlsonComorbid}
 \title{Calculate Charlson Comorbidity Index (Charlson Score)}
 \usage{
-icd9Charlson(x, visitId = NULL, return.df = FALSE,
+icd9Charlson(x, visitId = NULL, scoringSystem = c("original", "quan"),
+  return.df = FALSE, stringsAsFactors = getOption("stringsAsFactors"), ...)
+
+\method{icd9Charlson}{data.frame}(x, visitId = NULL,
+  scoringSystem = c("original", "quan"), return.df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
-\method{icd9Charlson}{data.frame}(x, visitId = NULL, return.df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), ...)
-
-icd9CharlsonComorbid(x, visitId = NULL, applyHierarchy = FALSE)
+icd9CharlsonComorbid(x, visitId = NULL, applyHierarchy = FALSE,
+  scoringSystem = c("original", "quan"))
 }
 \arguments{
 \item{x}{data frame containing a column of visit or patient identifiers, and
@@ -30,6 +32,9 @@ guesses proceed until a single match is made. Data frames may be wide with
 many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visitId}
 was not specified, then the first column of the data frame is used.}
+
+\item{scoringSystem}{Whether to use the original Charlson weights for each
+comorbidity or the upated weights from Quan 2001 (see details)}
 
 \item{return.df}{single logical value, if true, a two column data frame will
 be returned, with the first column named as in input data frame (i.e.
@@ -56,10 +61,15 @@ Charlson score is calculated in the basis of the Quan revision
   were more predictive.
 }
 \details{
-Per Quan, "The following comorbid conditions were mutually
-  exclusive: diabetes with chronic complications and diabetes without chronic
-  complications; mild liver disease and moderate or severe liver disease; and
-  any malignancy and metastatic solid tumor.""
+When used, hierarchy is applied per Quan, "The following comorbid
+  conditions were mutually exclusive: diabetes with chronic complications
+  and diabetes without chronic complications; mild liver disease and moderate
+  or severe liver disease; and any malignancy and metastatic solid tumor."
+  The "quan" scoring weights come from the 2011 paper (dx.doi.org/10.1093/aje/kwq433).
+  The comorbidity weights were recalculated using updated discharge data, and
+  some changes, such as Myocardial Infarcation decreasing from 1 to 0, may reflect
+  improved outcomes due to advances in treatment since the original weights
+  were determined in 1984.
 }
 \section{Methods (by class)}{
 \itemize{
