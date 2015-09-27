@@ -6,9 +6,7 @@ AC_CONFIG_HEADERS([src/config.h:src/config.h.in])
 AC_CONFIG_FILES([src/Makevars])
 AC_CONFIG_MACRO_DIR([m4])
 
-
-echo "is R_HOME already set?"
-echo "R_HOME = ${R_HOME}"
+# R_HOME is already set by the R environment performing configure
 : ${R_HOME=`R RHOME`}
 if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
@@ -25,8 +23,8 @@ LIBS="${PKG_LIBS}"
 
 AC_CHECK_HEADER([string.h])
 AC_CHECK_HEADER_STDBOOL
-AC_PROG_CXX
 AC_PROG_CC
+AC_PROG_CXX
 AC_TYPE_SIZE_T
 AC_C_INLINE
 

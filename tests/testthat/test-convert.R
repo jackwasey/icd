@@ -80,11 +80,6 @@ test_that("extract decimal parts - valid inputs", {
 
 test_that("icd9 decimal to short form, bad codes", {
   expect_equal(icd9DecimalToShort(character()), character())
-# TOOD: consider doing minimal validation, however, this is code block is hit a lot, so tests slow things a lot
-#  expect_equal(icd9DecimalToShort("harissa"), NA_character_)
-#  expect_equal(icd9DecimalToShort("12345.678"), NA_character_)
-#  expect_equal(icd9DecimalToShort("123 67"), NA_character_)
-#  expect_true(all(is.na(icd9DecimalToShort(c("07022", "07023")))))
 })
 
 test_that("icd9 decimal to short form", {
