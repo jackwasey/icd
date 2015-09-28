@@ -31,7 +31,7 @@
 #define HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the <parallel/algorithm> header file. */
-#define HAVE_PARALLEL_ALGORITHM 1
+/* #undef HAVE_PARALLEL_ALGORITHM */
 
 /* "Whether OpenMP is available in R environment." */
 #define HAVE_R_OPENMP 1

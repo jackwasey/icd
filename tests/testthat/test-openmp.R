@@ -33,6 +33,7 @@ test_that("thousands of patients", {
 })
 
 test_that("vary everything", {
+  ompChunkSize = 1
   # prime numbers
   for (pts in c(0, 1, 3, 31, 1013, 10009)) {
     for (dz_per_patient in c(1, 23)) {
@@ -40,7 +41,8 @@ test_that("vary everything", {
         for (chunkSize in c(1, 2, 11, 29, 101, 997, 10007)) {
           options("icd9.threads" = threads)
           options("icd9.chunkSize" = chunkSize)
-          # options("icd9.ompChunkSize" = ompChunkSize) # currently not set in CPP code
+          # ompChunkSize is not currently not set in CPP code
+          options("icd9.ompChunkSize" = ompChunkSize)
           expect_that(
             icd9ComorbidQuanDeyo(randomUnorderedPatients(pts, dz_per_patient),
                                  isShort = FALSE, applyHierarchy = TRUE),

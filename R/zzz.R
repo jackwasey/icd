@@ -57,7 +57,7 @@ release_questions <- function() {
     "Is every SEXP PROTECT()ed and UNPROTECT()ed?",
     # testing and compilation and different platforms:
     "Have you run autoreconf before building and testing?",
-    "Has configure.win been updated to reflect latest configure.ac?",
+    "Has config.h.win been updated to reflect latest configure.ac results?",
     "Are there skipped tests which should be run?",
     "Have tests been run with do_slow_tests turned on?",
     "Does it compile and check fine on travis?",
@@ -66,7 +66,7 @@ release_questions <- function() {
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",
     "Have you compiled with clang and gcc with full warnings
-      (normally done by UBSAN builds)?",
+      (normally done by UBSAN builds anyway)?",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially
