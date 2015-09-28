@@ -93,8 +93,10 @@ AC_LANG_POP([C++])
 
 if test "${ac_pkg_glibc_parallel}" = yes; then
   echo "...header is both available, and useable in an R package."
-  AC_DEFINE(WORKING_PARALLEL_ALGORITHM, 1, "Whether glibc parallel STL works in R package.")
-  GCC_PARALLEL_CXXFLAGS=${TEST_GCC_PARALLEL_CXXFLAGS}
+  echo "but disabling because it causes R CMD check --as-cran failures with 'printf' and 'abort' found in compiled code, even if parallel/algorithm is not #included."
+  # AC_DEFINE(WORKING_PARALLEL_ALGORITHM, 1, "Whether glibc parallel STL works in R package.")
+  # GCC_PARALLEL_CXXFLAGS=${TEST_GCC_PARALLEL_CXXFLAGS}
+  GCC_PARALLEL_CXXFLAGS=
 else
   GCC_PARALLEL_CXXFLAGS=""
 fi

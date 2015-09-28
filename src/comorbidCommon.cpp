@@ -17,8 +17,8 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
-#include "util.h"
 #include "local.h"
+#include "util.h"
 //#ifdef ICD9_STD_PARALLEL
 // this will probably make things worse if already in an OpenMP block, unless I
 // can dynamically see how many threads are available or active.
@@ -90,7 +90,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
     for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
 #ifdef ICD9_DEBUG_TRACE
       // with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
-      Rcpp::Rcout << "lookupComorbidRangeOpenMP row: " << 1+urow-begin << " of " << 1+end-begin << "\n";
+      Rcpp::Rcout << "row: " << 1 + urow - begin << " of " << 1 + end - begin << "\n";
 #endif
       for (VecVecIntSz cmb = 0; cmb < num_comorbid; ++cmb) { // loop through icd codes for this visitId
 #ifdef ICD9_DEBUG_TRACE

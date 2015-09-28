@@ -312,14 +312,18 @@ skip_on_travis <- function() {
 #' \dontrun{
 #' pts <- icd9:::randomUnorderedPatients(1e7)
 #' u <- unique.default(pts$icd9)
-#' # this shows that stringr (which uses stringi) sort takes 50% longer than built-in R sort.
+#' # this shows that stringr (which uses stringi) sort takes 50% longer than
+#' # built-in R sort.
 #' microbenchmark::microbenchmark(sort(u), stringr::str_sort(u))
 #'
-#' # this shows that \code{factor_} is about 50% faster than \code{factor} for big vectors of strings
-#' microbenchmark::microbenchmark(factor(pts$icd9), factor_(pts$icd9), times = 10)
+#' # this shows that \code{factor_} is about 50% faster than \code{factor} for
+#' # big vectors of strings
 #'
 #' # without sorting is much faster:
-#' microbenchmark::microbenchmark(factor(pts$icd9), factor_(pts$icd9), factor_nosort(pts$icd9), times=25)
+#' microbenchmark::microbenchmark(factor(pts$icd9),
+#'                                factor_(pts$icd9),
+#'                                factor_nosort(pts$icd9),
+#'                                times=25)
 #' }
 #' @keywords internal manip
 factor_ <- function(x, levels = NULL, labels = levels, na.last = NA) {

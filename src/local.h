@@ -30,8 +30,8 @@ extern "C" {
 }
 
 // these are feature requests: if not available they are disabled.
-// #define ICD9_OPENMP
-// #define ICD9_STD_PARALLEL
+#define ICD9_OPENMP
+// #define ICD9_STD_PARALLEL // don't use right now: see comment below
 
 // debugging:
 // #define ICD9_DEBUG
@@ -45,13 +45,16 @@ extern "C" {
 // in C++. See tools/standalone.sh
 // #define ICD9_STANDALONE
 
-// not enough to test whether header is available, because it may be disabled in R: #ifdef _OPENMP
+// not enough to test whether header is available, because it may be disabled in
+// R: #ifdef _OPENMP
 #ifdef HAVE_R_OPENMP
   #include <omp.h>
   // openmp is required for GLIBC standard library parallel alternatives:
   // now was parallel mode STL requested?
   #ifdef ICD9_STD_PARALLEL
-  // WORKING_PARALLEL_ALGORITHM is defined by configure script
+  // WORKING_PARALLEL_ALGORITHM is defined by configure script, but at present
+  // always disabled because it leads to ?false positive 'abort' and 'printf'
+  // found during R CMD check --as-cran
     #ifndef WORKING_PARALLEL_ALGORITHM
   // but not available, so disable
       #undef ICD9_STD_PARALLEL
@@ -99,8 +102,10 @@ ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
 		const VecVecInt& map, const int chunkSize, const int ompChunkSize);
 
 #if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
-#include <iostream> // only include Rcpp::Rcout if debugging: R won't like cout so we should not do this unless debugging.
-// not so easy to get an iterator for any std container (no common parent class), without Boost
+#include <iostream>
+// only include Rcpp::Rcout if debugging: R won't like cout so we should not do
+// this unless debugging. not so easy to get an iterator for any std container
+// (no common parent class), without Boost
 template<typename VT>
 void printIt(std::vector<VT> v) {
 	typename std::vector<VT>::iterator i;
