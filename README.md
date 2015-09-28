@@ -5,8 +5,8 @@ icd9
 
 [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master) [![CRAN version](http://www.r-pkg.org/badges/version/icd9)](https://cran.r-project.org/package=icd9) [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9) (RStudio mirror only)
 
-ICD-9 comorbidities, manipulation and validation
-================================================
+ICD comorbidities, manipulation and validation
+==============================================
 
 Main Features
 -------------
@@ -23,7 +23,7 @@ Main Features
 New since last CRAN release:
 ----------------------------
 
--   further performance increases: 1 million ICD-9 codes assigned to comorbidities in a couple of seconds
+-   further performance increases: 1 million ICD-9 codes assigned to comorbidities in less than a second
 -   logical matrix or data.frame for comorbidity output and manipulation
 -   see NEWS.md and github [changelog](https://github.com/jackwasey/icd9/commits/master) for more details
 -   minor update to fix an obscure memory leak found with address sanitizer.
@@ -59,8 +59,8 @@ patientData
 #> 6    1001  4011    Y
 #> 7    1002  4011    E
 
-# reformat input data as needed:
-patientData %>% icd9LongToWide # everything works well with magrittr
+# reformat input data as needed
+patientData %>% icd9LongToWide # everything works well with magrittr %>%
 #>      [,1]    [,2]   [,3]   [,4]   
 #> 1000 "40201" "2258" "7208" "25001"
 #> 1001 "34400" "4011" NA     NA     
@@ -84,6 +84,8 @@ icd9FilterPoa(patientData)
 #> 4    1000 25001
 #> 6    1001  4011
 ```
+
+Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.
 
 Install
 -------

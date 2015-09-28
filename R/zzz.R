@@ -49,7 +49,6 @@ release_questions <- function() {
     "Have all the fixed github issues been closed",
     "Is NEWS.md updated and contributors credited?",
     "Is README.Rmd updated and recompiled into README.md?",
-    "Are all NOTES from R CMD check documented in cran-comments.md",
     "Does every file have correct licence information?",
     "Are github pages site refreshed from latest documentation?",
     # code quality:
@@ -69,6 +68,7 @@ release_questions <- function() {
     "Have you compiled with clang and gcc with full warnings
       (normally done by UBSAN builds)?",
     # final manual check:
+    "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially
       thinking of autoconfigure stuff. Look in the final built archive
       before submitting to CRAN?",

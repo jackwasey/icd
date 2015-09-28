@@ -1,7 +1,25 @@
-/* src/config.h.win.  Generated from config.h.in by configure.  */
+// Copyright (C) 2014 - 2015  Jack O. Wasey
+//
+// This file is part of icd9.
+//
+// icd9 is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// icd9 is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+
+/* src/config.h.win.  Based on config.h.in by autoconf.  */
 /* MinGW doesn't correctly identify C++11, so setting manually.  */
 /* Other flags are produced by running configure in MinGW. */
 /* src/config.h.in.  Generated from configure.ac by autoheader.  */
+
 
 /* define if the compiler supports basic C++11 syntax */
 #define HAVE_CXX11 1
@@ -11,6 +29,12 @@
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
+
+/* Define to 1 if you have the <parallel/algorithm> header file. */
+#define HAVE_PARALLEL_ALGORITHM 1
+
+/* "Whether OpenMP is available in R environment." */
+#define HAVE_R_OPENMP 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #define HAVE_STDINT_H 1
@@ -32,6 +56,9 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
+
+/* Define to 1 if you have the <valgrind/valgrind.h> header file. */
+#define HAVE_VALGRIND_VALGRIND_H 1
 
 /* Define to 1 if the system has the type `_Bool'. */
 #define HAVE__BOOL 1
@@ -57,6 +84,14 @@
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
+/* "Whether glibc parallel STL works in R package." */
+#define WORKING_PARALLEL_ALGORITHM 1
+
+/* Define to `__inline__' or `__inline' if that's what the C compiler
+   calls it, or to nothing if 'inline' is not supported under any name.  */
+#ifndef __cplusplus
+/* #undef inline */
+#endif
+
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 /* #undef size_t */
-

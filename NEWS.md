@@ -1,3 +1,8 @@
+# Version 1.3
+ * With many thanks to @wmurphyrd, Quan's revised scoring system for Charlson comorbidities is now included.
+ * Re-enabled OpenMP, and also use GNU C++ standard library parallel extensions (which also use OpenMP) when available. Thoroughly tested with various docker compiler configurations and no memory or undefined behavior problems appear.
+ * Use `fastmatch` for fast factor generation, but with the tweak of not sorting the levels. This had been by far the slowest step in generating comorbidities.
+
 # Version 1.2.2
  * Completed fix from version 1.2.1 by temporarily disabling OpenMP on all platforms. Still runs quickly due to other optimizations made in supporting the OpenMP. It'll be back, but only when I or someone else can create a docker or VM image which runs Clang 3.7 or greater, OpenMP, with/without LLVM C++ standard library. See #75
 

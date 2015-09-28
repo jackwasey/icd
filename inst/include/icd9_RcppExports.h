@@ -328,11 +328,11 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline CharacterVector icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate = true) {
+    inline Rcpp::CharacterVector icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate = true) {
         typedef SEXP(*Ptr_icd9LongToWideCpp)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9LongToWideCpp p_icd9LongToWideCpp = NULL;
         if (p_icd9LongToWideCpp == NULL) {
-            validateSignature("CharacterVector(*icd9LongToWideCpp)(const SEXP&,const std::string,const std::string,bool)");
+            validateSignature("Rcpp::CharacterVector(*icd9LongToWideCpp)(const SEXP&,const std::string,const std::string,bool)");
             p_icd9LongToWideCpp = (Ptr_icd9LongToWideCpp)R_GetCCallable("icd9", "icd9_icd9LongToWideCpp");
         }
         RObject __result;
@@ -344,7 +344,7 @@ namespace icd9 {
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<CharacterVector >(__result);
+        return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
     inline Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String major) {
