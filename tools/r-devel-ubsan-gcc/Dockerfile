@@ -59,7 +59,9 @@ RUN cd /tmp/R-devel \
 
 RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "XML", "memoise", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools", "fastmatch"))'
 
-ADD ../build_install_check_in_docker.sh /tmp/
+# can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
+ADD build_install_check_in_docker.sh /tmp/
+# set environment variables that I will use in the added script:
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libasan.so.2
 ENV R_CMD Rdevel
 CMD ["/tmp/build_install_check_in_docker.sh"]

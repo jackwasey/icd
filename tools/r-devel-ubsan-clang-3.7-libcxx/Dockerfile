@@ -19,5 +19,6 @@ texlive-base
 # use R (I didn't build my image to use Rdevel)
 RUN R -e "install.packages(c('devtools', 'XML', 'testthat', 'Rcpp', 'ggplot2', 'brew', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'plyr', 'gtable', 'reshape2', 'knitr', 'microbenchmark', 'profr', 'xtable', 'rmarkdown', 'fastmatch'))"
 
-ADD ../build_install_check_in_docker.sh /tmp/
+# can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
+ADD build_install_check_in_docker.sh /tmp/
 CMD ["/tmp/build_install_check_in_docker.sh"]

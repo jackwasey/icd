@@ -2259,10 +2259,8 @@ ac_config_files="$ac_config_files src/Makevars"
 
 
 
-
-echo "is R_HOME already set?"
-echo "R_HOME = ${R_HOME}"
-: ${R_HOME=`R RHOME`}
+echo "Checking whether R_HOME already set? R_HOME = ${R_HOME}"
+: ${R_HOME:=`R RHOME`}
 if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
   exit 1

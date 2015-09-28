@@ -38,28 +38,39 @@ install_github(\"jackwasey/icd9\")
 
 release_questions <- function() {
   c(
+    # data:
+    "Have you included updated copies of all offline versions of online data?",
+    "Have you regenerated icd9Hierarchy and other compiled data?",
+
+    # documentation:
     "Have you checked all TODO comments",
-    "Have you removed any commented code? (lint for this now possible)",
-    "Have tests been run with do_slow_tests turned on?",
-    "Are there skipped tests which should be run?",
     "Do all examples look ok (not just run without errors)?",
     "Anything to add to vignette?",
     "Have all the fixed github issues been closed",
-    "Is NEWS.md updated?",
+    "Is NEWS.md updated and contributors credited?",
     "Is README.Rmd updated and recompiled into README.md?",
-    "Have you compiled with clang and gcc with full warnings?",
-    "Have you included updated copies of all offline versions of online data?",
-    "Have you regenerated icd9Hierarchy and other compiled data?",
-    "Are you happy with the code coverage?",
+    "Are all NOTES from R CMD check documented in cran-comments.md",
     "Does every file have correct licence information?",
-    "Have you linted?",
+    "Are github pages site refreshed from latest documentation?",
+    # code quality:
+    "Have you linted, including removing commented code?",
+    "Are you happy with the code coverage?",
+    # testing and compilation and different platforms:
+    "Have you run autoreconf before building and testing?",
+    "Has configure.win been updated to reflect latest configure.ac?",
+    "Are there skipped tests which should be run?",
+    "Have tests been run with do_slow_tests turned on?",
     "Does it compile and check fine on travis?",
     "Have you checked on Windows, win_builder (if possible with configure step),
-    Mac, Ubuntu, ASAN, and UBSAN rocker, and updated my docker image which
-    resembles a CRAN maintainers environment?",
-    "Are all NOTES from R CMD check documented in cran-comments.md",
-    "Is github pages site refreshed from latest documentation?",
-    "Have all unnecessary files been ignored in built archive? Especially thinking of autoconfigure stuff."
+      Mac, Ubuntu, UBSAN rocker, and updated my docker image which
+      resembles a CRAN maintainers environment?",
+    "Have you compiled with clang and gcc with full warnings
+      (normally done by UBSAN builds)?",
+    # final manual check:
+    "Have all unnecessary files been ignored in built archive? Especially
+      thinking of autoconfigure stuff. Look in the final built archive
+      before submitting to CRAN?",
+    NULL
   )
 }
 

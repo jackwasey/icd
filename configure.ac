@@ -6,10 +6,8 @@ AC_CONFIG_HEADERS([src/config.h:src/config.h.in])
 AC_CONFIG_FILES([src/Makevars])
 AC_CONFIG_MACRO_DIR([m4])
 
-
-echo "is R_HOME already set?"
-echo "R_HOME = ${R_HOME}"
-: ${R_HOME=`R RHOME`}
+echo "Checking whether R_HOME already set? R_HOME = ${R_HOME}"
+: ${R_HOME:=`R RHOME`}
 if test -z "${R_HOME}"; then
   echo "could not determine R_HOME"
   exit 1
