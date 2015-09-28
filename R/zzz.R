@@ -55,6 +55,7 @@ release_questions <- function() {
     # code quality:
     "Have you linted, including removing commented code?",
     "Are you happy with the code coverage?",
+    "Is every SEXP PROTECT()ed and UNPROTECT()ed?",
     # testing and compilation and different platforms:
     "Have you run autoreconf before building and testing?",
     "Has configure.win been updated to reflect latest configure.ac?",

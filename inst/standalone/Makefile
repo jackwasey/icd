@@ -2,11 +2,8 @@
 ##
 ## Simple Makefile
 ##
-## TODO: 
-##  proper configure for non-Debian file locations,   [ Done ]
-##  allow RHOME to be set for non-default R etc
 
-## comment this out if you need a different version of R, 
+## comment this out if you need a different version of R,
 ## and set set R_HOME accordingly as an environment variable
 R_HOME := 		$(shell R RHOME)
 
@@ -14,7 +11,7 @@ sources := 		$(wildcard *.cpp)
 programs := 		$(sources:.cpp=)
 
 
-## include headers and libraries for R 
+## include headers and libraries for R
 RCPPFLAGS := 		$(shell $(R_HOME)/bin/R CMD config --cppflags)
 RLDFLAGS := 		$(shell $(R_HOME)/bin/R CMD config --ldflags)
 RBLAS := 		$(shell $(R_HOME)/bin/R CMD config BLAS_LIBS)
@@ -34,14 +31,14 @@ RINSIDEINCL := 		$(shell echo 'RInside:::CxxFlags()' | $(R_HOME)/bin/R --vanilla
 RINSIDELIBS := 		$(shell echo 'RInside:::LdFlags()'  | $(R_HOME)/bin/R --vanilla --slave)
 
 ## compiler etc settings used in default make rules
-CXX := 			$(shell $(R_HOME)/bin/R CMD config CXX1X) 
-CPPFLAGS := 		-Wall $(shell $(R_HOME)/bin/R CMD config CPPFLAGS) 
+CXX := 			$(shell $(R_HOME)/bin/R CMD config CXX1X)
+CPPFLAGS := 		-Wall $(shell $(R_HOME)/bin/R CMD config CPPFLAGS)
 CXXFLAGS := 		$(RCPPFLAGS) $(RCPPINCL) $(RINSIDEINCL) $(shell $(R_HOME)/bin/R CMD config CXX1XFLAGS) -std=c++11 -DICD9_STANDALONE
-LDLIBS := 		$(RLDFLAGS) $(RRPATH) $(RBLAS) $(RLAPACK) $(RINSIDELIBS) #$(RCPPLIBS)  
+LDLIBS := 		$(RLDFLAGS) $(RRPATH) $(RBLAS) $(RLAPACK) $(RINSIDELIBS) #$(RCPPLIBS)
 
 all: 			$(programs)
 ##			@test -x /usr/bin/strip && strip $^
-			
+
 standalone: standalone.cpp
 ## build and link in one step
 ##			$(CXX) $(LDFLAGS) $(CXXFLAGS) -o standalone.bin standalone.cpp $(LDLIBS) -DICD9_STANDALONE

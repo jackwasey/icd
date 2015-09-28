@@ -49,8 +49,11 @@ std::string trimLeftCpp(std::string s) {
 
 // trim a single string at both ends, but loses any encoding attributes.
 // [[Rcpp::export]]
-std::string strimCpp(std::string s) { // according to http://stackoverflow.com/questions/10789740/passing-stdstring-by-value-or-reference
-  // C++11 (i.e. almost everyone) will avoid copy even without using reference argument.
+std::string strimCpp(std::string s) {
+  // according to
+  // http://stackoverflow.com/questions/10789740/passing-stdstring-by-value-or-reference
+  // C++11 (i.e. almost everyone) will avoid copy even without using reference
+  // argument.
   return trimLeftCpp(trimRightCpp(s));
 }
 
@@ -66,7 +69,7 @@ bool assertFactorOrCharacter(SEXP x) {
   if (!Rf_isString(x) && !Rf_isFactor(x)) {
     Rcpp::stop("Must be a factor or character");
   }
-  return true; // Rcpp fails with void for some reason
+  return true;
 }
 
 #ifdef ICD9_DEBUG

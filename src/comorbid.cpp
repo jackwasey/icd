@@ -84,8 +84,12 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 	Rcpp::Rcout << "building visit:codes structure\n";
 #endif
 
-	VecVecInt vcdb; //size is reserved later
-	// TODO: do I need to allocate memory when I do this PROTECT?
+	VecVecInt vcdb; // size is reserved later
+
+	// http://gallery.rcpp.org/articles/reversing-a-vector/ Looks protection is
+	// needed even though using C++ and Rcpp. And from Hadley's adv-r "if you don’t
+	// protect every R object you create, the garbage collector will think they are
+	// unused and delete them."
 	const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 #ifdef ICD9_DEBUG_SETUP
 	Rcpp::Rcout << "type of vsexp = " << TYPEOF(vsexp) << "\n";

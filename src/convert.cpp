@@ -348,17 +348,6 @@ Rcpp::CharacterVector icd9DecimalToShort(
 	return out;
 }
 
-// ' //rdname icd9ShortToDecimal
-// ' //export
-// [[//Rcpp::export]]
-//int icd9DecimalToShortUpdate(const SEXP icd9Decimal) {
-//  if (TYPEOF(Sexpr_icd9Decimal) != STRSXP) Rcpp::stop("icd9DecimalToShort requires string vector input.");
-// change in place, or return a copy?
-//  dropdot(Sexpr_icd9Decimal);
-//return 0;
-//}
-
-
 //' @title Get major (three-digit) part of ICD-9 codes
 //' @description This is reasonably fast, but calculates all the minors, then throws away the result.
 //' @template icd9-any
@@ -368,7 +357,11 @@ Rcpp::CharacterVector icd9DecimalToShort(
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector icd9, const bool isShort) {
 	if (isShort) {
-		// TODO: casting (or just compiler/syntax checker hinting?) SEXP may be costly.
+		// TODO: am I casting (or just compiler/syntax checker hinting?) SEXP may be
+		// costly.
+
+		// I don't think i need to PROTECT here, because I immediately return the
+		// result via Rcpp.
 		SEXP majors = icd9ShortToPartsCpp(icd9, "")[0]; // actually wants to be an Rcpp::List
 		return Rcpp::as<Rcpp::CharacterVector>(majors);
 	}
