@@ -8,16 +8,16 @@ FROM rocker/r-devel-ubsan-clang
 
 ## do install these pesky libraries which must come from unstable (sid), and not the testing repo which is the default.
 RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstable \
-	libxml2-dev/unstable \
-	libssl-dev/unstable \
-	libcurl4-openssl-dev \
-	texlive-base \
-	fonts-inconsolata \
-	git \
-	libssh2-1-dev \
-	qpdf \
-	pandoc \
-    	pandoc-citeproc
+  fonts-inconsolata \
+  git \
+  libcurl4-openssl-dev \
+  libssl-dev/unstable \
+  libxml2-dev/unstable \
+  libssh2-1-dev \
+  pandoc \
+  pandoc-citeproc \
+  qpdf \
+  texlive-base
 
 ## now we can pre-install a load of packages we know we'll need, or alternatively, devtools can do this based on the DESCRIPTION file once the package source is available (but this wouldn't be preserved in the docker image)
 

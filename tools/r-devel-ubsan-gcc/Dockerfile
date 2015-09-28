@@ -1,18 +1,17 @@
 FROM rocker/r-devel:latest
 
 # use unstable to get the right development library versions
-RUN apt-get update && apt-get --yes dist-upgrade && apt-get --yes install \
-	libxml2-dev/unstable \
-	libssl-dev/unstable \
-	libcurl4-openssl-dev \
-	texlive-base \
-	fonts-inconsolata \
-	git \
-	libssh2-1-dev \
-	qpdf \
-	pandoc \
-    	pandoc-citeproc
-# switch libssh2-1-dev, or all updates to 'unstable' at some point?
+RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstable \
+  fonts-inconsolata \
+  git \
+  libcurl4-openssl-dev \
+  libssl-dev/unstable \
+  libxml2-dev/unstable \
+  libssh2-1-dev \
+  pandoc \
+  pandoc-citeproc \
+  qpdf \
+  texlive-base
 
  RUN cd /tmp \
         && svn co http://svn.r-project.org/R/trunk R-devel

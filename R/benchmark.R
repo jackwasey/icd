@@ -70,17 +70,17 @@ benchOpenMPThreads <- function(n = 2 ^ 18 - 1, np = 7) {
   # if chunk size is <32 (i.e. one word) bits aren't updated correctly by concurrent threads'
   pts <- randomPatients(n, np)
   stopifnot(identical(
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize=32),
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize=32)
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize = 32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize = 32)
   ))
   stopifnot(identical(
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 1, chunkSize=32),
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize=32)
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 1, chunkSize = 32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 8, chunkSize = 32)
   ))
   microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize=32),
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize=256),
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize=1024),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize = 32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize = 256),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, threads = 4, chunkSize = 1024),
     times = 5
   )
 }
@@ -93,7 +93,10 @@ benchVaryn <- function(np = 5, threads = 4, chunkSize = 256, ompChunkSize = 1) {
     message("n = ", n)
     pts <- randomOrderedPatients(n, np)
     res <- microbenchmark::microbenchmark(
-      icd9ComorbidShortCpp(pts,icd9::ahrqComorbid, threads = 4, chunkSize = chunkSize, ompChunkSize = ompChunkSize),
+      icd9ComorbidShortCpp(pts,icd9::ahrqComorbid,
+                           threads = 4,
+                           chunkSize = chunkSize,
+                           ompChunkSize = ompChunkSize),
       times = 5)
     if (is.null(mbr))
       mbr <- cbind(n,res)
@@ -105,52 +108,51 @@ benchVaryn <- function(np = 5, threads = 4, chunkSize = 256, ompChunkSize = 1) {
 
 otherbench <- function() {
 
-  # explore the parameter space. TODO: genetic optimize these parameters (and
-  # this may uncover corner case bugs, too)
+  # Someday explore the parameter space possibly with genetic optimization.
 
   # vary threads for big n, chunk = 1
   microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 1, chunkSize=1),
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 2, chunkSize=1),
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 4, chunkSize=1),
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 6, chunkSize=1),
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 8, chunkSize=1),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 1, chunkSize = 1),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 2, chunkSize = 1),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 4, chunkSize = 1),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 6, chunkSize = 1),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 8, chunkSize = 1),
     times = 5
   )
   # vary threads for big n, chunk = 256
   microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 1, chunkSize=256),
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 2, chunkSize=256),
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 4, chunkSize=256),
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 6, chunkSize=256),
-    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 8, chunkSize=256),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 1, chunkSize = 256),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 2, chunkSize = 256),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 4, chunkSize = 256),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 6, chunkSize = 256),
+    icd9ComorbidShortCpp(randomPatients(1000000),icd9::ahrqComorbid, threads = 8, chunkSize = 256),
     times = 5
   )
   fivemillion <- randomPatients(5000000, 5);
   microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=32, ompChunkSize = 1),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 1),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=4096, ompChunkSize = 1),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=32, ompChunkSize = 4),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 32, ompChunkSize = 1),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 256, ompChunkSize = 1),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 4096, ompChunkSize = 1),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 32, ompChunkSize = 4),
     # next row barely won with 1e6*5 rows
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 4),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=4096, ompChunkSize = 4),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=32, ompChunkSize = 8),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 8),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=4096, ompChunkSize = 8),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 256, ompChunkSize = 4),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 4096, ompChunkSize = 4),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 32, ompChunkSize = 8),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 256, ompChunkSize = 8),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 4096, ompChunkSize = 8),
     times = 5
   )
   microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 2),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 4),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize=256, ompChunkSize = 8),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 8, chunkSize=256, ompChunkSize = 2),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 8, chunkSize=256, ompChunkSize = 4),
-    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 8, chunkSize=256, ompChunkSize = 8),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 256, ompChunkSize = 2),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 256, ompChunkSize = 4),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 4, chunkSize = 256, ompChunkSize = 8),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 8, chunkSize = 256, ompChunkSize = 2),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 8, chunkSize = 256, ompChunkSize = 4),
+    icd9ComorbidShortCpp(fivemillion,icd9::ahrqComorbid, threads = 8, chunkSize = 256, ompChunkSize = 8),
     times = 25
   )
   # with parallel for, best is 8 threads, static chunk of ONE (dynamic slightly slower)
-  for (threads in c(1,4,8)) {
+  for (threads in c(1, 4, 8)) {
     for (n in c(500000)) {
       for (cs in c(1, 32, 1024)) {
         message("threads = ", threads, ", n = ", n, ", cs = ", cs)
@@ -162,16 +164,16 @@ otherbench <- function() {
     }
   }
   stopifnot(identical(
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize=1),
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize=32)
+    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize = 1),
+    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize = 32)
   ))
   stopifnot(identical(
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 1, chunkSize=1),
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize=1)
+    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 1, chunkSize = 1),
+    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize = 1)
   ))
   stopifnot(identical(
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 1, chunkSize=32),
-    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize=32)
+    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 1, chunkSize = 32),
+    icd9ComorbidShortCpp(randomPatients(n),icd9::ahrqComorbid, threads = 4, chunkSize = 32)
   ))
 }
 
@@ -297,7 +299,7 @@ icd9Benchmark <- function() {
   rng <- "300" %i9s% "450"
   prfChild <- profr::profr(icd9ChildrenShort(rng))
   ggplot2::ggplot(prfChild, minlabel = 0.001)
-  ggplot2::ggsave("tmpggplot.jpg", width = 250, height=5, dpi=200, limitsize = FALSE)
+  ggplot2::ggsave("tmpggplot.jpg", width = 250, height = 5, dpi = 200, limitsize = FALSE)
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
                                  icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep = ""))))
