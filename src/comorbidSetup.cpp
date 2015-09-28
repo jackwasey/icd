@@ -65,7 +65,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
 #ifdef HAVE_CXX11
   Rcpp::Rcout << "unordered_map is available (or at least C++11 is in some form)\n";
 #else
-  Rcout << "unordered_map is not available\n";
+  Rcpp::Rcout << "unordered_map is not available\n";
 #endif
 #endif
   VisLk vis_lookup;
@@ -76,7 +76,9 @@ void buildVisitCodesVec(const SEXP& icd9df,
   vcdb.resize(vlen); // over-estimate and allocate all at once (alternative is to reserve)
   VecVecIntSz vcdb_max_idx = -1; // we increment immediately to zero as first index
   VecVecIntSz vcdb_new_idx;
-  VecVecIntSz vcdb_last_idx = 2094967295; // random number less than 2^31 (to avoid 32bit R build warning) just to initialize: should always been initialized, though.
+  // 2094967295 is a random number less than 2^31 (to avoid 32bit R build
+  // warning) just to initialize: should always been initialized, though.
+  VecVecIntSz vcdb_last_idx = 2094967295;
   if (TYPEOF(vsexp) != STRSXP) {
     Rcpp::stop("buildVisitCodesVec requires STRSXP");
   }

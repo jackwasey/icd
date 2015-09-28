@@ -29,15 +29,17 @@ extern "C" {
 #include <cstdlib>
 }
 
-// these are requests: if not available they are disabled.
-#define ICD9_OPENMP
+// these are feature requests: if not available they are disabled.
+// #define ICD9_OPENMP
+// #define ICD9_STD_PARALLEL
+
+// debugging:
 // #define ICD9_DEBUG
 // #define ICD9_DEBUG_TRACE
 // #define ICD9_DEBUG_SETUP
 // #define ICD9_DEBUG_SETUP_TRACE
 // #define ICD9_DEBUG_PARALLEL
-#define ICD9_VALGRIND
-
+// #define ICD9_VALGRIND
 
 // enabling this stops the package compiling, but is useful for testing purely
 // in C++. See tools/standalone.sh
@@ -46,11 +48,17 @@ extern "C" {
 // not enough to test whether header is available, because it may be disabled in R: #ifdef _OPENMP
 #ifdef HAVE_R_OPENMP
   #include <omp.h>
-  // openmp is required for GLIBC standard library parallel alternatives
-  #ifdef WORKING_PARALLEL_ALGORITHM
-    #define ICD9_STD_PARALLEL
+  // openmp is required for GLIBC standard library parallel alternatives:
+  // now was parallel mode STL requested?
+  #ifdef ICD9_STD_PARALLEL
+  // WORKING_PARALLEL_ALGORITHM is defined by configure script
+    #ifndef WORKING_PARALLEL_ALGORITHM
+  // but not available, so disable
+      #undef ICD9_STD_PARALLEL
+    #endif
   #endif
 #else
+  // OpenMP requested, but not available
   #undef ICD9_OPENMP
 #endif
 

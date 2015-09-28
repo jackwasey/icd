@@ -1,3 +1,4 @@
+aclocal.m4
 autom4te.cache
 .*_cache.*
 ccs_multi_dx_tool_2013\.csv

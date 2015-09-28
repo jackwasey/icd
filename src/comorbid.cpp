@@ -19,9 +19,9 @@
 // [[Rcpp::plugins(openmp)]]
 
 #include "local.h"
-//#ifdef ICD9_DEBUG_PARALLEL
+#ifdef ICD9_DEBUG_PARALLEL
 #include "util.h"
-//#endif
+#endif
 #include <Rcpp.h>
 #include <vector>
 #include <string>
@@ -38,130 +38,122 @@
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
-		const std::string visitId, const std::string icd9Field,
-		const int threads = 8, const int chunkSize = 256,
-		const int ompChunkSize = 1, bool aggregate = true) {
+                          const std::string visitId, const std::string icd9Field,
+                          const int threads = 8, const int chunkSize = 256,
+                          const int ompChunkSize = 1, bool aggregate = true) {
 #ifdef ICD9_VALGRIND
 #ifdef ICD9_DEBUG
-    Rcpp::Rcout << "Starting valgrind instrumentation... ";
+  Rcpp::Rcout << "Starting valgrind instrumentation... ";
 #endif
-	CALLGRIND_START_INSTRUMENTATION;
-	if (FALSE) {
-	  Rcpp::Rcout << "Zeroing stats... ";
-	  CALLGRIND_ZERO_STATS;
-	}
+  CALLGRIND_START_INSTRUMENTATION;
+  if (FALSE) {
+    Rcpp::Rcout << "Zeroing stats... ";
+    CALLGRIND_ZERO_STATS;
+  }
 #endif
 #if (defined ICD9_DEBUG_SETUP || defined ICD9_SETUP)
-	Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
-	Rcpp::Rcout << "chunk size = " << chunkSize << "\n";
+  Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
+  Rcpp::Rcout << "chunk size = " << chunkSize << "\n";
 #endif
 
 #ifdef ICD9_DEBUG_PARALLEL
-	Rcpp::Rcout << "checking _OPENMP... ";
+  Rcpp::Rcout << "checking _OPENMP... ";
 #ifdef _OPENMP
-	Rcpp::Rcout << "_OPENMP is defined.\n";
+  Rcpp::Rcout << "_OPENMP is defined.\n";
 #else
-	Rcpp::Rcout << "_OPENMP is not defined.\n";
+  Rcpp::Rcout << "_OPENMP is not defined.\n";
 #endif
 #ifdef ICD9_OPENMP
-	Rcpp::Rcout << "ICD9_OPENMP is defined.\n";
+  Rcpp::Rcout << "ICD9_OPENMP is defined.\n";
 #else
-	Rcpp::Rcout << "ICD9_OPENMP is not defined.\n";
+  Rcpp::Rcout << "ICD9_OPENMP is not defined.\n";
 #endif
-#endif
-#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
-	debug_parallel();
-#endif
-#ifdef ICD9_OPENMP
-//	if (threads > 0) omp_set_num_threads(threads);
-#ifdef ICD9_DEBUG_PARALLEL
-	debug_parallel();
-#endif
+  debug_parallel();
 #endif
 
-	VecStr out_row_names; // size is reserved in buildVisitCodesVec
+  VecStr out_row_names; // size is reserved in buildVisitCodesVec
 #ifdef ICD9_DEBUG_SETUP
-	Rcpp::Rcout << "building visit:codes structure\n";
+  Rcpp::Rcout << "building visit:codes structure\n";
 #endif
 
-	VecVecInt vcdb; // size is reserved later
+  VecVecInt vcdb; // size is reserved later
 
-	// http://gallery.rcpp.org/articles/reversing-a-vector/ Looks protection is
-	// needed even though using C++ and Rcpp. And from Hadley's adv-r "if you don’t
-	// protect every R object you create, the garbage collector will think they are
-	// unused and delete them."
-	const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
+  // http://gallery.rcpp.org/articles/reversing-a-vector/ Looks protection is
+  // needed even though using C++ and Rcpp. And from Hadley's adv-r "if you don’t
+  // protect every R object you create, the garbage collector will think they are
+  // unused and delete them."
+  const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 #ifdef ICD9_DEBUG_SETUP
-	Rcpp::Rcout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
+  Rcpp::Rcout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif
-	if (TYPEOF(vsexp) != STRSXP)
-		Rcpp::stop("expecting vsexp to be character vector");
-	UNPROTECT(1); // vsexp not used further
+  if (TYPEOF(vsexp) != STRSXP)
+    Rcpp::stop("expecting vsexp to be character vector");
+  UNPROTECT(1); // vsexp not used further
 
 #ifdef ICD9_DEBUG_SETUP
-	Rcpp::Rcout << "icd9ComorbidShortMatrix STRSXP\n";
+  Rcpp::Rcout << "icd9ComorbidShortMatrix STRSXP\n";
 #endif
-	buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
-			aggregate);
+  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
+                     aggregate);
 
 #ifdef ICD9_DEBUG_SETUP
-	Rcpp::Rcout << "building icd9Mapping\n";
+  Rcpp::Rcout << "building icd9Mapping\n";
 #endif
-	VecVecInt map;
-	buildMap(icd9Mapping, map);
+  VecVecInt map;
+  buildMap(icd9Mapping, map);
 
 #ifdef ICD9_DEBUG_SETUP
-	Rcpp::Rcout << "first cmb has len: " << map[0].size() << "\n";
+  Rcpp::Rcout << "first cmb has len: " << map[0].size() << "\n";
 #endif
 
-	const VecVecIntSz num_comorbid = map.size();
-	const VecVecIntSz num_visits = vcdb.size();
+  const VecVecIntSz num_comorbid = map.size();
+  const VecVecIntSz num_visits = vcdb.size();
 
 #ifdef ICD9_DEBUG_SETUP
-	Rcpp::Rcout << num_visits << " visits\n";
-	Rcpp::Rcout << num_comorbid << " is num_comorbid\n";
+  Rcpp::Rcout << num_visits << " visits\n";
+  Rcpp::Rcout << num_comorbid << " is num_comorbid\n";
 #endif
 
-	const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunkSize,
-			ompChunkSize);
+  const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunkSize,
+                                                   ompChunkSize);
 
 #ifdef ICD9_DEBUG
-	Rcpp::Rcout << "out length is " << out.size() << "\n";
-	// this next line now gives UBSAN in clang 3.7
-	int outsum = std::accumulate(out.begin(), out.end(), 0);
-	Rcpp::Rcout << "out sum is " << outsum << "\n";
-	Rcpp::Rcout << "Ready to convert to R Matrix\n";
+  Rcpp::Rcout << "out length is " << out.size() << "\n";
+  // this next line now gives UBSAN in clang 3.7
+  int outsum = std::accumulate(out.begin(), out.end(), 0);
+  Rcpp::Rcout << "out sum is " << outsum << "\n";
+  Rcpp::Rcout << "Ready to convert to R Matrix\n";
 #endif
 #ifdef ICD9_DEBUG_TRACE
-	Rcpp::Rcout << "out is: ";
-	// printIt(out); // don't think I can do this through template, since char it is a base type?
-	Rcpp::Rcout << "printed\n";
+  Rcpp::Rcout << "out is: ";
+  // printIt(out); // don't think I can do this through template, since char it is a base type?
+  Rcpp::Rcout << "printed\n";
 #endif
-	// try cast to logical first. (in which case I can use char for Out)
-	std::vector<bool> intermed;
-	intermed.assign(out.begin(), out.end());
+  // try cast to logical first. (in which case I can use char for Out)
+  std::vector<bool> intermed;
+  intermed.assign(out.begin(), out.end());
 #ifdef ICD9_DEBUG
-	Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast to R logical vector\n";
+  Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast to R logical vector\n";
 #endif
-	Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed); // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
+  Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed); // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
 #ifdef ICD9_DEBUG
-			Rcpp::Rcout << "wrapped out\n";
+  Rcpp::Rcout << "wrapped out\n";
 #endif
-	mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
-	mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(),
-			out_row_names);
-	// apparently don't need to set class as matrix here
-	Rcpp::Function t("t"); // use R transpose - seems pretty fast
+  mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
+  mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(),
+               out_row_names);
+  // apparently don't need to set class as matrix here
+  Rcpp::Function t("t"); // use R transpose - seems pretty fast
 #ifdef ICD9_DEBUG
-			Rcpp::Rcout << "Ready to transpose and return\n";
+  Rcpp::Rcout << "Ready to transpose and return\n";
 #endif
 #ifdef ICD9_VALGRIND
 #ifdef ICD9_DEBUG_TRACE
   Rcpp::Rcout << "Stopping valgrind instrumentation... ";
 #endif
-CALLGRIND_STOP_INSTRUMENTATION;
-	;
-	//CALLGRIND_DUMP_STATS;
+  CALLGRIND_STOP_INSTRUMENTATION;
+  ;
+  //CALLGRIND_DUMP_STATS;
 #endif
-	return t(mat_out);
+  return t(mat_out);
 }

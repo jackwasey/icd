@@ -281,17 +281,6 @@ Rcpp::CharacterVector icd9DecimalToShortOld(
 	return icd9PartsToShort(icd9DecimalToPartsCpp(icd9Decimal, ""));
 }
 
-// ' //rdname icd9ShortToDecimal
-// ' //export
-// [[//Rcpp::export]]
-//Rcpp::CharacterVector icd9DecimalToShort2(const Rcpp::CharacterVector icd9Decimal) {
-//  SEXP Sexpr_icd9Decimal = icd9Decimal.getSexpr();
-//  if (TYPEOF(Sexpr_icd9Decimal) != STRSXP) Rcpp::stop("icd9DecimalToShort requires string vector input.");
-//  // change in place, or return a copy?
-//  dropdot(Sexpr_icd9Decimal);
-//  return icd9Decimal;
-//}
-
 //' @rdname convert
 //' @export
 // [[Rcpp::export]]
@@ -320,7 +309,7 @@ Rcpp::CharacterVector icd9DecimalToShort(
 #endif
 			// now we assume that the major is snug against the left side, so we can add zero padding
 			thiscode.erase(pos, 1); // remove the decimal point
-			// TODO could do fewer tests on the code by doing this last, but most codes are not V or E...
+			// could do fewer tests on the code by doing this last, but most codes are not V or E...
 			if (pos > 0 && pos < 4 && !icd9IsASingleVE(thiscode_cstr)) {
 #ifdef ICD9_DEBUG_TRACE
 				Rcpp::Rcout << "found numeric\n";
@@ -357,8 +346,8 @@ Rcpp::CharacterVector icd9DecimalToShort(
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector icd9, const bool isShort) {
 	if (isShort) {
-		// TODO: am I casting (or just compiler/syntax checker hinting?) SEXP may be
-		// costly.
+		// am I casting (or just compiler/syntax checker hinting?) SEXP may be
+		// costly, or is it just encapsulating a pointer to some fixed data somewhere?
 
 		// I don't think i need to PROTECT here, because I immediately return the
 		// result via Rcpp

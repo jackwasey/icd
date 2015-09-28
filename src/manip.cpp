@@ -112,12 +112,6 @@ Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
 	return Rcpp::sapply(major, icd9AddLeadingZeroesMajorSingle);
 }
 
-//Rcpp::CharacterVector icd9AddLeadingZeroesMajorStd(std::vector<std::string> major) {
-//	// TODO: unclear whether this returns NA correctly. If not, I might as well loop myself.
-//	Rcpp::CharacterVector major_rcpp(major);
-//	return Rcpp::sapply(major_rcpp, icd9AddLeadingZeroesMajorSingle);
-//}
-
 //' @rdname icd9AddLeadingZeroes
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9AddLeadingZeroesShort(

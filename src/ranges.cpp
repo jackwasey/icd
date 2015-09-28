@@ -22,35 +22,33 @@
 #include <manip.h>
 #include <is.h>
 
-using namespace Rcpp;
-
 // this is simplest just to hard-code
-const CharacterVector vbase = CharacterVector::create("", "0", "1", "2", "3",
+const Rcpp::CharacterVector vbase = Rcpp::CharacterVector::create("", "0", "1", "2", "3",
 		"4", "5", "6", "7", "8", "9", "00");
-const CharacterVector v0 = CharacterVector::create("0", "00", "01", "02", "03",
+const Rcpp::CharacterVector v0 = Rcpp::CharacterVector::create("0", "00", "01", "02", "03",
 		"04", "05", "06", "07", "08", "09");
-const CharacterVector v1 = CharacterVector::create("1", "10", "11", "12", "13",
+const Rcpp::CharacterVector v1 = Rcpp::CharacterVector::create("1", "10", "11", "12", "13",
 		"14", "15", "16", "17", "18", "19");
-const CharacterVector v2 = CharacterVector::create("2", "20", "21", "22", "23",
+const Rcpp::CharacterVector v2 = Rcpp::CharacterVector::create("2", "20", "21", "22", "23",
 		"24", "25", "26", "27", "28", "29");
-const CharacterVector v3 = CharacterVector::create("3", "30", "31", "32", "33",
+const Rcpp::CharacterVector v3 = Rcpp::CharacterVector::create("3", "30", "31", "32", "33",
 		"34", "35", "36", "37", "38", "39");
-const CharacterVector v4 = CharacterVector::create("4", "40", "41", "42", "43",
+const Rcpp::CharacterVector v4 = Rcpp::CharacterVector::create("4", "40", "41", "42", "43",
 		"44", "45", "46", "47", "48", "49");
-const CharacterVector v5 = CharacterVector::create("5", "50", "51", "52", "53",
+const Rcpp::CharacterVector v5 = Rcpp::CharacterVector::create("5", "50", "51", "52", "53",
 		"54", "55", "56", "57", "58", "59");
-const CharacterVector v6 = CharacterVector::create("6", "60", "61", "62", "63",
+const Rcpp::CharacterVector v6 = Rcpp::CharacterVector::create("6", "60", "61", "62", "63",
 		"64", "65", "66", "67", "68", "69");
-const CharacterVector v7 = CharacterVector::create("7", "70", "71", "72", "73",
+const Rcpp::CharacterVector v7 = Rcpp::CharacterVector::create("7", "70", "71", "72", "73",
 		"74", "75", "76", "77", "78", "79");
-const CharacterVector v8 = CharacterVector::create("8", "80", "81", "82", "83",
+const Rcpp::CharacterVector v8 = Rcpp::CharacterVector::create("8", "80", "81", "82", "83",
 		"84", "85", "86", "87", "88", "89");
-const CharacterVector v9 = CharacterVector::create("9", "90", "91", "92", "93",
+const Rcpp::CharacterVector v9 = Rcpp::CharacterVector::create("9", "90", "91", "92", "93",
 		"94", "95", "96", "97", "98", "99");
 
 // horrible one-off code to pre-generate all the minor codes
-CharacterVector MakeAllMinors() {
-	CharacterVector vv = vbase;
+Rcpp::CharacterVector MakeAllMinors() {
+	Rcpp::CharacterVector vv = vbase;
 
 	// create numbers 1 to 99 but cycle 10s first
 	for (int i = 0; i < 10; ++i) {
@@ -64,10 +62,10 @@ CharacterVector MakeAllMinors() {
 	return (vv);
 }
 // generate the lookups
-const CharacterVector vv = MakeAllMinors();
+const Rcpp::CharacterVector vv = MakeAllMinors();
 
 // [[Rcpp::export]]
-CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
+Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 
 	if (!isE) {
 		switch (minor.size()) {
@@ -97,20 +95,20 @@ CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 				return v9;
 			default:
 			  Rcpp::stop("unrecognized minor character");
-				return CharacterVector::create();
+				return Rcpp::CharacterVector::create();
 			}
 			break;
 		case 2:
-			return wrap(minor);
+			return Rcpp::wrap(minor);
 		default:
 		  Rcpp::stop("minor of >2 characters received by icd9ExpandMinor");
-			return CharacterVector::create();
+			return Rcpp::CharacterVector::create();
 		}
 	} else {
 		// is E code, so minor must be just one character
 		switch (minor.size()) {
 		case 0:
-			return CharacterVector::create("", "0", "1", "2", "3", "4", "5",
+			return Rcpp::CharacterVector::create("", "0", "1", "2", "3", "4", "5",
 					"6", "7", "8", "9");
 		case 1:
 			return minor;
@@ -122,53 +120,53 @@ CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 }
 
 // [[Rcpp::export]]
-CharacterVector icd9ChildrenShortCpp(CharacterVector icd9Short, bool onlyReal) {
+Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool onlyReal) {
 	std::set<std::string> out; // we are never going to put NAs in the output?
 	if (icd9Short.size() == 0)
-		return wrap(out);
-	List parts = icd9ShortToPartsCpp(icd9Short, "");
-	CharacterVector major = parts[0];
-	CharacterVector minor = parts[1];
-	CharacterVector::iterator itmajor = major.begin(); // iterator seems to be a CharacterVector of length 1
-	CharacterVector::iterator itminor = minor.begin();
+		return Rcpp::wrap(out);
+	Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
+	Rcpp::CharacterVector major = parts[0];
+	Rcpp::CharacterVector minor = parts[1];
+	Rcpp::CharacterVector::iterator itmajor = major.begin(); // iterator seems to be a Rcpp::CharacterVector of length 1
+	Rcpp::CharacterVector::iterator itminor = minor.begin();
 	for (; itmajor != major.end(); ++itmajor, ++itminor) {
-		std::string thismajor = as<std::string>(*itmajor);
-		std::string thisminor = as<std::string>(*itminor);
+		std::string thismajor = Rcpp::as<std::string>(*itmajor);
+		std::string thisminor = Rcpp::as<std::string>(*itminor);
 
-		CharacterVector newminors = icd9ExpandMinorShim(thisminor,
+		Rcpp::CharacterVector newminors = icd9ExpandMinorShim(thisminor,
 				icd9IsASingleE(thismajor.c_str()));
 
 		// push back slower, but difficult to predict size of output
-		std::vector<std::string> newshort = as<std::vector<std::string> >(
+		std::vector<std::string> newshort = Rcpp::as<std::vector<std::string> >(
 				icd9MajMinToShort(thismajor, newminors));
 
-		// std insert is a thousand times faster than looping through CharacterVector and push_backing
+		// std insert is a thousand times faster than looping through Rcpp::CharacterVector and push_backing
 		out.insert(newshort.begin(), newshort.end());
 	}
 	if (onlyReal) {
-		const Environment env("package:icd9");
-		List icd9Hierarchy = env["icd9Hierarchy"];
+		const Rcpp::Environment env("package:icd9");
+	  Rcpp::List icd9Hierarchy = env["icd9Hierarchy"];
 		std::set<std::string> out_real;
-		std::vector<std::string> tmp = as<std::vector<std::string> >(
+		std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
 				icd9Hierarchy["icd9"]);
 		std::set<std::string> reals(tmp.begin(), tmp.end());
 		std::set_intersection(out.begin(), out.end(), reals.begin(),
 				reals.end(), std::inserter(out_real, out_real.begin()));
-		return wrap(out_real);
+		return Rcpp::wrap(out_real);
 	}
-	return wrap(out);
+	return Rcpp::wrap(out);
 }
 
 // [[Rcpp::export]]
-CharacterVector icd9ChildrenDecimalCpp(CharacterVector icd9Decimal,
+Rcpp::CharacterVector icd9ChildrenDecimalCpp(Rcpp::CharacterVector icd9Decimal,
 		bool onlyReal) {
-	CharacterVector shrt = icd9DecimalToShort(icd9Decimal);
-	CharacterVector kids = icd9ChildrenShortCpp(shrt, onlyReal);
+	Rcpp::CharacterVector shrt = icd9DecimalToShort(icd9Decimal);
+	Rcpp::CharacterVector kids = icd9ChildrenShortCpp(shrt, onlyReal);
 	return icd9ShortToDecimal(kids);
 }
 
 // [[Rcpp::export]]
-CharacterVector icd9ChildrenCpp(CharacterVector icd9, bool isShort,
+Rcpp::CharacterVector icd9ChildrenCpp(Rcpp::CharacterVector icd9, bool isShort,
 		bool onlyReal = true) {
 	if (isShort)
 		return icd9ChildrenShortCpp(icd9, onlyReal);
@@ -185,17 +183,17 @@ CharacterVector icd9ChildrenCpp(CharacterVector icd9, bool isShort,
 //' @return logical vector
 //' @keywords internal
 // [[Rcpp::export]]
-LogicalVector icd9InReferenceCode(CharacterVector icd9,
-		CharacterVector icd9Reference, bool isShort, bool isShortReference =
+Rcpp::LogicalVector icd9InReferenceCode(Rcpp::CharacterVector icd9,
+		Rcpp::CharacterVector icd9Reference, bool isShort, bool isShortReference =
 				true) {
 
-	CharacterVector x = icd9AddLeadingZeroes(icd9, isShort);
+	Rcpp::CharacterVector x = icd9AddLeadingZeroes(icd9, isShort);
 	if (!isShort)
 		x = icd9DecimalToShort(x);
 
-	CharacterVector y = icd9ChildrenCpp(icd9Reference, isShortReference, false);
+	Rcpp::CharacterVector y = icd9ChildrenCpp(icd9Reference, isShortReference, false);
 	if (!isShortReference)
 		y = icd9DecimalToShort(y);
-   LogicalVector res = !is_na(match(x, y));
+	Rcpp::LogicalVector res = !is_na(match(x, y));
 	return res;
 }

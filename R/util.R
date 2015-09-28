@@ -289,20 +289,25 @@ skip_on_travis <- function() {
 
 #' Fast Factor Generation
 #'
-#' This function generates factors more quickly, by leveraging \code{fastmatch::\link{fmatch}}. The speed increase for
-#' ICD-9 codes is about 33% reduction for 10 million codes.
+#' This function generates factors more quickly, by leveraging
+#' \code{fastmatch::\link{fmatch}}. The speed increase for ICD-9 codes is about
+#' 33% reduction for 10 million codes.
 #'
-#' \code{NaN}s are converted to \code{NA} when used on numerics. Extracted from https://github.com/kevinushey/Kmisc.git
+#' \code{NaN}s are converted to \code{NA} when used on numerics. Extracted from
+#' https://github.com/kevinushey/Kmisc.git
 #'
-#' These feature from base R are missing: \code{exclude = NA, ordered = is.ordered(x), nmax = NA}
+#' These feature from base R are missing: \code{exclude = NA, ordered =
+#' is.ordered(x), nmax = NA}
 #' @author Kevin Ushey, adapted by Jack Wasey
 #' @importFrom fastmatch fmatch
-#' @param x An object of atomic type \code{integer}, \code{numeric}, \code{character} or \code{logical}.
-#' @param levels An optional character vector of levels. Is coerced to the same type as \code{x}. By default, we
-#'   compute the levels as \code{sort(unique.default(x))}.
+#' @param x An object of atomic type \code{integer}, \code{numeric},
+#'   \code{character} or \code{logical}.
+#' @param levels An optional character vector of levels. Is coerced to the same
+#'   type as \code{x}. By default, we compute the levels as
+#'   \code{sort(unique.default(x))}.
 #' @param labels A set of labels used to rename the levels, if desired.
-#' @param na.last If \code{TRUE} and there are missing values, the last level is set as \code{NA}; otherwise; they are
-#'   removed.
+#' @param na.last If \code{TRUE} and there are missing values, the last level is
+#'   set as \code{NA}; otherwise; they are removed.
 #' @examples
 #' \dontrun{
 #' pts <- icd9:::randomUnorderedPatients(1e7)
@@ -328,8 +333,9 @@ factor_ <- function(x, levels = NULL, labels = levels, na.last = NA) {
 }
 
 #' @rdname factor_
-#' @details I don't think there is any requirement for factor levels to be sorted in advance, especially not for ICD-9
-#' codes where a simple alphanumeric sorting will likely be completely wrong.
+#' @details I don't think there is any requirement for factor levels to be
+#'   sorted in advance, especially not for ICD-9 codes where a simple
+#'   alphanumeric sorting will likely be completely wrong.
 #' @keywords internal manip
 factor_nosort <- function(x, levels = NULL, labels = levels) {
   # sort may be pre-requisite for fastmatch

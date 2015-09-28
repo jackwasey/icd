@@ -52,8 +52,8 @@ RUN cd /tmp/R-devel \
            R_PRINTCMD=/usr/bin/lpr \
            LIBnn=lib \
            AWK=/usr/bin/awk \
-           CFLAGS="-g -Wall -pedantic -O0" \
-           CXXFLAGS="-g -Wall -pedantic -O0" \
+           CFLAGS="-g -Wall -pedantic -O2" \
+           CXXFLAGS="-g -Wall -pedantic -O2" \
            CC="gcc -std=gnu99 -fsanitize=address,undefined -fno-omit-frame-pointer" \
            CXX="g++ -fsanitize=address,undefined  -fno-omit-frame-pointer -fno-sanitize=object-size,vptr" \
            CXX1X="g++ -fsanitize=address,undefined  -fno-omit-frame-pointer -fno-sanitize=object-size,vptr" \
@@ -73,7 +73,7 @@ RUN cd /tmp/R-devel \
         && make install \
         && make clean
 
-#TODO: remove or keep -O0 flags? Not sure which would be most helpful. Most code in production use is compiled O2, but I don't know whether O0 would uncover the same UBSAN bugs, or just allow them to be characterized more easily.
+# remove or keep -O0 flags? Not sure which would be most helpful. Most code in production use is compiled O2, but I don't know whether O0 would uncover the same UBSAN bugs, or just allow them to be characterized more easily. BDR used -O2 in the memtests he did on this package.
 
 RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "XML", "memoise", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools", "fastmatch"))'
 

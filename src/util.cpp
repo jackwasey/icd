@@ -125,7 +125,7 @@ void debug_parallel() {
 
 // [[Rcpp::export]]
 Rcpp::NumericVector randomMajorCpp(int	n) {
-  // TODO someday this can just be a sprintf like the others.
+  // This could just be a sprintf like the others.
   Rcpp::NumericVector iv = Rcpp::floor(Rcpp::runif(n) * 999);
   return iv;
 }

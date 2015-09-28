@@ -17,7 +17,7 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "local.h"
-#include <stdio.h>
+#include <Rcpp.h>
 #ifdef ICD9_VALGRIND
 #include <valgrind/callgrind.h>
 #endif
@@ -100,7 +100,7 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 		} else {
 #ifdef ICD9_DEBUG
 			if (ragged.size() == 0) {
-				Rcout << "ragged size is ZERO! bailing ou!\n";
+			  Rcpp::Rcout << "ragged size is ZERO! bailing ou!\n";
 				break;
 			}
 #endif
@@ -110,7 +110,7 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 				max_per_pt = len;
 		}
 #ifdef ICD9_DEBUG_TRACE
-		Rcout << "ragged size is " << ragged.size() << "\n";
+		Rcpp::Rcout << "ragged size is " << ragged.size() << "\n";
 #endif
 
 		lastVisitId = vi;
@@ -139,21 +139,21 @@ Rcpp::CharacterVector icd9LongToWideCpp(const SEXP& icd9df,
 	const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 	if (TYPEOF(vsexp) != STRSXP)
 	  Rcpp::stop(
-				"visitIds should be pre-converted to str - which is necessary for matrix rowname output anyway");
+					"visitIds should be pre-converted to str - which is necessary for matrix rowname output anyway");
 	UNPROTECT(1);
 
 	VecStr visitIds; // may be vector of integers or strings
 #ifdef ICD9_DEBUG
-	Rcout << "doing long to ragged\n";
+	Rcpp::Rcout << "doing long to ragged\n";
 #endif
 	max_per_pt = longToRagged(icd9df, ragged, visitIds, visitId, icd9Field,
 			aggregate);
 #ifdef ICD9_DEBUG_TRACE
-	Rcout << "ragged size returned is " << ragged.size() << "\n";
+	Rcpp::Rcout << "ragged size returned is " << ragged.size() << "\n";
 #endif
 
 #ifdef ICD9_DEBUG
-	Rcout << "returning ragged to wide\n";
+	Rcpp::Rcout << "returning ragged to wide\n";
 #endif
 	return raggedToWide(ragged, max_per_pt, visitIds);
 }
