@@ -62,6 +62,7 @@ release_questions <- function() {
     "Are there skipped tests which should be run?",
     "Have tests been run with do_slow_tests turned on?",
     "Does it compile and check fine on travis?",
+    "Is build_install_check_in_docker pointing at the correct branch?",
     "Have you checked on Windows, win_builder (if possible with configure step),
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",

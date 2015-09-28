@@ -45,6 +45,7 @@ void delanychar(char* str, char c) {
 //}
 
 void dropdot(SEXP v) {
+  PROTECT(v);
 	int vlen = length(v);
 	char temp[15]; // TODO: check length, or make buffer bigger? ICD codes should be maximum 6 characters, but could have whitespace or bad data...
 	int i;
@@ -64,5 +65,6 @@ void dropdot(SEXP v) {
 		// we can't write the c string directly to the R structure (but we can read the connsst char *)
 		SET_STRING_ELT(v, i, mkChar(temp));
 	}
+	UNPROTECT(1);
 }
 

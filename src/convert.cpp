@@ -361,7 +361,7 @@ Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector icd9, const bool 
 		// costly.
 
 		// I don't think i need to PROTECT here, because I immediately return the
-		// result via Rcpp.
+		// result via Rcpp
 		SEXP majors = icd9ShortToPartsCpp(icd9, "")[0]; // actually wants to be an Rcpp::List
 		return Rcpp::as<Rcpp::CharacterVector>(majors);
 	}

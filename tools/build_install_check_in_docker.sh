@@ -23,7 +23,7 @@
 : ${GIT_URL:=https://github.com}
 : ${GITHUB_USER:=jackwasey}
 : ${GITHUB_REPO:=$R_PKG_NAME}
-: ${GIT_BRANCH:=issue75}
+: ${GIT_BRANCH:=wmurphyrd-newCharlsonScores2011}
 : ${R_CMD:=R}
 
 cd /tmp
