@@ -29,25 +29,29 @@ extern "C" {
 #include <cstdlib>
 }
 
-//#define ICD9_DEBUG
-//#define ICD9_DEBUG_TRACE
-//#define ICD9_DEBUG_SETUP
-//#define ICD9_DEBUG_SETUP_TRACE
-//#define ICD9_DEBUG_PARALLEL
+// these are requests: if not available they are disabled.
+#define ICD9_OPENMP
+// #define ICD9_DEBUG
+// #define ICD9_DEBUG_TRACE
+// #define ICD9_DEBUG_SETUP
+// #define ICD9_DEBUG_SETUP_TRACE
+// #define ICD9_DEBUG_PARALLEL
 #define ICD9_VALGRIND
+
 
 // enabling this stops the package compiling, but is useful for testing purely
 // in C++. See tools/standalone.sh
-//#define ICD9_STANDALONE
+// #define ICD9_STANDALONE
 
 // not enough to test whether header is available, because it may be disabled in R: #ifdef _OPENMP
 #ifdef HAVE_R_OPENMP
   #include <omp.h>
-  #define ICD9_OPENMP
   // openmp is required for GLIBC standard library parallel alternatives
   #ifdef WORKING_PARALLEL_ALGORITHM
     #define ICD9_STD_PARALLEL
   #endif
+#else
+  #undef ICD9_OPENMP
 #endif
 
 #ifdef ICD9_VALGRIND

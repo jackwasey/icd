@@ -1,4 +1,4 @@
 #!/bin/sh
 
-rm -rf config.src config.log src/Makevars src/config.h a.out.dSYM
+rm -rf config.src config.log src/Makevars src/config.h *.dSYM
 

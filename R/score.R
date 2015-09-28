@@ -23,21 +23,22 @@
 #'   original scores for easier comaprison between studies, even though Quan's
 #'   were more predictive.
 #' @details When used, hierarchy is applied per Quan, "The following comorbid
-#'   conditions were mutually exclusive: diabetes with chronic complications
-#'   and diabetes without chronic complications; mild liver disease and moderate
-#'   or severe liver disease; and any malignancy and metastatic solid tumor."
-#'   The "quan" scoring weights come from the 2011 paper (dx.doi.org/10.1093/aje/kwq433).
-#'   The comorbidity weights were recalculated using updated discharge data, and
-#'   some changes, such as Myocardial Infarcation decreasing from 1 to 0, may reflect
-#'   improved outcomes due to advances in treatment since the original weights
-#'   were determined in 1984.
+#'   conditions were mutually exclusive: diabetes with chronic complications and
+#'   diabetes without chronic complications; mild liver disease and moderate or
+#'   severe liver disease; and any malignancy and metastatic solid tumor." The
+#'   "quan" scoring weights come from the 2011 paper
+#'   (dx.doi.org/10.1093/aje/kwq433). The comorbidity weights were recalculated
+#'   using updated discharge data, and some changes, such as Myocardial
+#'   Infarcation decreasing from 1 to 0, may reflect improved outcomes due to
+#'   advances in treatment since the original weights were determined in 1984.
 #' @param x data frame containing a column of visit or patient identifiers, and
 #'   a column of ICD-9 codes. It may have other columns which will be ignored.
 #'   By default, the first column is the patient identifier and is not counted.
 #'   If \code{visitId} is not specified, the first column is used.
 #' @template visitid
-#' @param scoringSystem Whether to use the original Charlson weights for each
-#'   comorbidity or the upated weights from Quan 2001 (see details)
+#' @param scoringSystem One of \code{original}, \code{charlson}, or \code{quan}.
+#'   The first two will give the original Charlson weights for each comorbidity,
+#'   whereas \code{quan} uses the updated weights from Quan 2001.
 #' @param return.df single logical value, if true, a two column data frame will
 #'   be returned, with the first column named as in input data frame (i.e.
 #'   \code{visitId}), containing all the visits, and the second column
@@ -59,7 +60,7 @@
 #' icd9CharlsonComorbid(cmb)
 #' @export
 icd9Charlson <- function(x, visitId = NULL,
-                         scoringSystem = c("original", "quan"),
+                         scoringSystem = c("original", "charlson", "quan"),
                          return.df = FALSE,
                          stringsAsFactors = getOption("stringsAsFactors"),
                          ...)
@@ -68,7 +69,7 @@ icd9Charlson <- function(x, visitId = NULL,
 #' @describeIn icd9Charlson Charlson scores from data frame of visits and ICD-9 codes
 #' @export
 icd9Charlson.data.frame <- function(x, visitId = NULL,
-                                    scoringSystem = c("original", "quan"),
+                                    scoringSystem = c("original", "charlson", "quan"),
                                     return.df = FALSE,
                                     stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
@@ -93,10 +94,10 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
 #'   drop DM if DMcx is present, etc.
 #' @export
 icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
-                                 scoringSystem = c("original", "quan")) {
+                                 scoringSystem = c("original", "charlson", "quan")) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   stopifnot(ncol(x) - is.data.frame(x) == 17)
-  if(match.arg(scoringSystem)=="quan") {
+  if(match.arg(scoringSystem) == "quan") {
     weights <- c(0, 2, 0, 0, 2, 1, 1, 0, 2, 0,
                  1, 2, 1, 2, 4, 6, 4)
   } else {

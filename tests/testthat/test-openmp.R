@@ -24,16 +24,20 @@ test_that("single icd9 code comorbidity", {
   icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
 })
 
-# test_that("thousands of patients", {
-#   x <- randomPatients(10000)
-#   icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
-# })
+test_that("thousands of patients", {
+  x <- randomPatients(10000)
+  expect_that(
+    icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T),
+    testthat::not(testthat::throws_error())
+  )
+})
 
 test_that("vary everything", {
-  for (pts in c(0, 1, 3, 31, 1013, 10009)) { # primes
-    for (dz_per_patient in c(1, 23)) { # primes, and this is a target dz per pt, not exactly distributed
+  # prime numbers
+  for (pts in c(0, 1, 3, 31, 1013, 10009)) {
+    for (dz_per_patient in c(1, 23)) {
       for (threads in c(1, 5, 9)) {
-        for (chunkSize in c(1, 2, 11, 29, 101, 997, 10007)) { # unity, and prime numbers , 100003, 1000003, 10000019
+        for (chunkSize in c(1, 2, 11, 29, 101, 997, 10007)) {
           options("icd9.threads" = threads)
           options("icd9.chunkSize" = chunkSize)
           # options("icd9.ompChunkSize" = ompChunkSize) # currently not set in CPP code
@@ -49,4 +53,3 @@ test_that("vary everything", {
     }
   }
 })
-
