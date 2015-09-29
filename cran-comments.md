@@ -1,5 +1,5 @@
 ## Note
-* This submission follows fairly quickly after previous because the last one made temporary fix for OpenMP memory access errors (by disabling OpenMP completely). I needed time to fix and test the package in environments more similar to those used by CRAN maintainers. I now see now memory access errors or undefined behaviour.
+* This submission follows fairly quickly after previous because the last one made a temporary fix for OpenMP memory access errors (by disabling OpenMP completely). I needed time to fix and test the package in environments more similar to those used by CRAN maintainers. I now see neither memory access errors nor undefined behaviour.
 
 ## Test environments
 * Ubuntu 15.04 R 3.2.2, clang 3.7.0 and gcc 4.9.2 (4.9.2-10ubuntu13)
