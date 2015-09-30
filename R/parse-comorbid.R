@@ -111,7 +111,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   }
 
   names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
-  if (save) saveInDataDir("ahrqComorbid") # EXCLUDE COVERAGE
+  if (save) saveInDataDir("ahrqComorbid") # nocov
   invisible(ahrqComorbid)
 }
 
