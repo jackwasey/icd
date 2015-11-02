@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-# EXCLUDE COVERAGE START
+# nocov start
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
@@ -76,4 +76,4 @@ release_questions <- function() {
   )
 }
 
-# EXCLUDE COVERAGE END
+# nocov end

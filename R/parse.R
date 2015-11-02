@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-# EXCLUDE COVERAGE START
+# nocov start
 
 utils::globalVariables(c(".", "data_sources"))
 
@@ -54,7 +54,7 @@ parseAndSaveQuick <- function(verbose = FALSE) {
   parseQuanDeyoSas(save = TRUE)
   parseQuanElix(save = TRUE)
 }
-# EXCLUDE COVERAGE END
+# nocov end
 
 #' @title get billable codes from all available years
 #' @description for versions 23 to 32, those which are on the CMS web site, get
@@ -276,7 +276,8 @@ parseIcd9Chapters <- function(year = NULL,
   # level: this would not enable matching an arbitrary code, but this is
   # probably a limited problem for the rare cases of obsolete codes, or new
   # codes, when the coding was done in a different year from this analysis.
-  # EXCLUDE COVERAGE START
+
+  # nocov start
   if (save) {
     # top level chapters are hand-written in data/
     saveInDataDir("icd9ChaptersSub")
@@ -286,7 +287,7 @@ parseIcd9Chapters <- function(year = NULL,
                  icd9ChaptersSub = icd9ChaptersSub,
                  icd9ChaptersMajor = icd9ChaptersMajor))
 }
-# EXCLUDE COVERAGE END
+# nocov end
 
 icd9WebParseStartEndToRange <- function(v)
   paste(v[["start"]], v[["end"]], sep = "-")
@@ -370,7 +371,7 @@ icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   stopifnot(all(icd9IsValidShort(icd9Hierarchy$icd9)))
   stopifnot(!any(sapply(icd9Hierarchy, is.na)))
 
-  if (save) saveInDataDir("icd9Hierarchy") # EXCLUDE COVERAGE
+  if (save) saveInDataDir("icd9Hierarchy") # nocov
 }
 
 fixSubchapterNa <- function(x, start, end) {

@@ -29,8 +29,6 @@ trim <- function (x) {
   x
 }
 
-# EXCLUDE COVERAGE START
-
 allIsNumeric <- function(x, extras = c(".", "NA", NA)) {
   old <- options(warn = - 1)
   on.exit(options(old))
@@ -162,6 +160,8 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c
   out
 }
 
+# nocov start
+
 #' unzip a single file
 #' @keywords internal
 #' @importFrom utils download.file unzip
@@ -184,7 +184,7 @@ zip_single <- function(url, filename, save_path) {
 
   file.copy(file.path(zipdir, filename), save_path, overwrite = TRUE)
 }
-# EXCLUDE COVERAGE END
+# nocov end
 
 getVisitId <- function(x, visitId = NULL) {
   guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
@@ -287,6 +287,9 @@ skip_on_travis <- function() {
   testthat::skip("On Travis")
 }
 
+
+# nocov start
+
 #' Fast Factor Generation
 #'
 #' This function generates factors more quickly, by leveraging
@@ -335,6 +338,8 @@ factor_ <- function(x, levels = NULL, labels = levels, na.last = NA) {
   class(f) <- "factor"
   f
 }
+
+# nocov end
 
 #' @rdname factor_
 #' @details I don't think there is any requirement for factor levels to be
