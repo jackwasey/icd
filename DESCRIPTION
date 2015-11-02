@@ -37,7 +37,8 @@ Suggests:
     ggplot2,
     digest,
     xtable,
-    rmarkdown
+    rmarkdown,
+    roxygen2 (>= 5.0.0)
 LazyData: true
 LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues
@@ -45,3 +46,4 @@ License: GPL-3
 Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
 LinkingTo: Rcpp
+RoxygenNote: 5.0.0

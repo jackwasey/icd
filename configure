@@ -2272,6 +2272,10 @@ CPP=`"${R_BIN}" CMD config CPP`
 CFLAGS=`"${R_BIN}" CMD config CFLAGS`
 CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 CXXFLAGS=`"${R_BIN}" CMD config CXXFLAGS`
+# Writing R Extensions recommends the following, but I don't seem to need it, perhaps because I disable C++11 in some systems when it won't work with OpenMP:
+# CXX1X=`"${R_BIN}" CMD config CXX1X`
+# CXX1XSTD=`"${R_BIN}" CMD config CXX1XSTD`
+CXXFLAGS=`"${R_BIN}" CMD config CXXFLAGS`
 LIBS="${PKG_LIBS}"
 
 ac_ext=c

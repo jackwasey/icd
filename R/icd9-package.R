@@ -15,15 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title tools for working with ICD-9 codes, and finding comorbidities
-#' @description Calculate comorbidities, and perform fast and accurate
-#'   validation, conversion, manipulation, filtering and comparison of ICD-9-CM
-#'   (clinical modification) codes. ICD-9 codes appear numeric but leading and
-#'   trailing zeroes, and both decimal and non-decimal "short" format codes
-#'   exist. The package enables a work flow from raw lists of ICD-9 codes from
-#'   hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
-#'   from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-#'
+#' @details
 #'   \describe{
 #'
 #'   \item{Comorbidities}{ \code{\link{icd9Comorbid}} determines co-morbidities
@@ -79,6 +71,8 @@
 #'   contains definitions of chapters, sub-chapters and three-digit groups.}
 #'
 #'   }
+#'
+"_PACKAGE"
 #' @docType package
 #' @name icd9-package
 #' @aliases icd9 package-icd9
