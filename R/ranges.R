@@ -243,6 +243,29 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
   )
 }
 
+icd10ExpandRangeShort <- function(start, end) {
+  assertScalar(start) # i'll permit numeric but prefer char
+  assertScalar(end)
+  # check whether valid?
+  # check whether real?
+
+  start <- strim(start)
+  end <- strim(end)
+
+  start_char <- substr(start, 1, 1)
+  end_char <- substr(end, 1, 1)
+  stopifnot(start_char <= end_char)
+
+  start_two_digits <- as.integer(substr(start, 2, 3))
+  end_two_digits <- as.integer(substr(end, 2, 3))
+  if (start_char == end_char)
+    stopifnot(start_two_digits <= end_two_digits)
+
+  start_other_chars <- substr(start, 4, 10)
+  end_other_chars <- substr(end, 4, 10)
+
+}
+
 #' @rdname icd9ExpandRange
 #' @export
 "%i9da%" <- function(start, end) {
@@ -325,6 +348,66 @@ icd9ChildrenDecimal <- function(icd9Decimal,
   res
 }
 
+#' Generate children of given ICD-10 codes
+#'
+#' ultimately, this will have to be coding-scheme dependent, e.g. ICD-10-CM for
+#' USA, vs various national or international schemes
+#'
+#' @details This is inefficient due to the large number of combinations of
+#'   possible codes. I've already limited the scope to letters which appear at
+#'   certain positions in ICD-10-CM 2016. Maybe best just to limit to 'real'
+#'   codes, and then, when a user gives a squiffy code, e.g. a known code with
+#'   an additional unknown value, we can: first account for all known codes in a
+#'   list, then for unknown codes, partial match from left for known codes, and
+#'   if we match more than one, then we take the longest matching known code.
+#' @param icd910Short character vector of ICD-10 codes
+#' @import checkmate
+#' @export
+icd10ChildrenShort <- function(icd10Short) {
+# presumption is that we start with at least a major level code. We don't
+# extrapolate from A10 to A10-19 for example.
+
+  # regex pattern for ICD-10 is [[:alpha:]][[:digit:]][[:alnum]]{1,5} (not case sensitive)
+  #
+  # can have x as placeholder: ignoring it will have same effect if making children
+  #
+  # there are very many alphanumeric values possible in last 4 digits (26^4 = 456976) however, hardly any alphas are used.
+  #
+  checkmate::assertCharacter(icd10Short)
+
+  fourth <- unlist(strsplit("0123456789ABCDEFGHIJKXZ", ""))
+  fifth  <- unlist(strsplit("0123456789AXYZ", ""))
+  sixth  <- unlist(strsplit("0123456789X", ""))
+  seventh  <- unlist(strsplit("0123459ABCDEFGHJKMNPQRS", ""))
+
+  minor_chars <- list(fourth, fifth, sixth, seventh)
+  minor_chars <- lapply(minor_chars, append, "")
+
+  # combining using 'outer' and 'paste'
+  # as.vector(outer(fourth, fifth, paste, sep=""))
+
+  # minimum code length is 3: i.e. [[:alpha:]][[:digit:]][[:alnum]]
+  nc <- nchar(icd10Short)
+  out_complete <- icd10Short[nc == 7]
+
+  icd10Short <- icd10Short[nc >= 3 & nc < 7] # TODO: strip whitespace first if expedient
+  if (length(icd10Short) == 0)
+    return(out_complete)
+
+  out <- character(0)
+  for (i in icd10Short) {
+    o <- i
+    n <- nchar(i)
+    for (j in n:6)
+      o <- as.vector(outer(o, minor_chars[[j - 2]], paste, sep = ""))
+
+    out <- c(out, o)
+  }
+
+  sort(c(out_complete, out))
+
+
+}
 
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes
 #' @description Accepts a single number or character input starting point for
