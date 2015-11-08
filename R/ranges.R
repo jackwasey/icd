@@ -243,28 +243,6 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
   )
 }
 
-icd10ExpandRangeShort <- function(start, end) {
-  assertScalar(start) # i'll permit numeric but prefer char
-  assertScalar(end)
-  # check whether valid?
-  # check whether real?
-
-  start <- strim(start)
-  end <- strim(end)
-
-  start_char <- substr(start, 1, 1)
-  end_char <- substr(end, 1, 1)
-  stopifnot(start_char <= end_char)
-
-  start_two_digits <- as.integer(substr(start, 2, 3))
-  end_two_digits <- as.integer(substr(end, 2, 3))
-  if (start_char == end_char)
-    stopifnot(start_two_digits <= end_two_digits)
-
-  start_other_chars <- substr(start, 4, 10)
-  end_other_chars <- substr(end, 4, 10)
-
-}
 
 #' @rdname icd9ExpandRange
 #' @export
