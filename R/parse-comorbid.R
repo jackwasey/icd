@@ -165,6 +165,8 @@ parseQuanDeyoSas <- function(sasPath = NULL,
 parseQuanElix <- function(condense = FALSE,
                           save = FALSE,
                           path = "data") {
+  # TODO: need to deprecate this name so we can switch ICD-9 and ICD-10 (and
+  # their variations)
   quanElixComorbid <- list(
     chf = c("398.91", "402.01", "402.11", "402.91", "404.01", "404.03",
             "404.11", "404.13", "404.91", "404.93", "425.4" %i9da% "425.9",

@@ -9,12 +9,16 @@ icd10ChildrenRealShort <- function(icd10Short) {
 
   icd10Short <- stringr::str_trim(icd10Short)
 
+  matches_bool <- icd10Short %in% icd9::icd10cm2016[["code"]]
   # if the codes are not in the source file, we ignore, warn, drop silently?
-  matches <- match(icd10Short, icd10cm2016[["code"]])
-  icd10Short <- icd10Short[matches]
-  last_row <- nrow(icd10cm2016)
+  if (!all(matches_bool)) warning("some values did not match any ICD-10-CM codes: ",
+                                  paste(icd10Short[!matches_bool], collapse = ", "))
 
-  nc <- nchar(icd10cm2016[["code"]]) # TODO: pre-compute and save in package data
+  icd10Short <- icd10Short[matches_bool]
+  matches <- match(icd10Short, icd9::icd10cm2016[["code"]])
+  last_row <- nrow(icd9::icd10cm2016)
+
+  nc <- nchar(icd9::icd10cm2016[["code"]]) # TODO: pre-compute and save in package data
 
   kids <- character(0)
 
@@ -25,13 +29,12 @@ icd10ChildrenRealShort <- function(icd10Short) {
 
   for (i in seq_along(icd10Short)) {
     # now the children, assuming the source file is sorted logically, will be subsequent codes, until a code of the same length is found
-    i_len <- nchar(icd10Short[i])
     check_row <- matches[i] + 1
     parent_len <- nc[matches[i]]
     while (nc[check_row] > parent_len && check_row != last_row + 1)
       check_row <- check_row + 1
 
-    kids <- c(kids, icd10cm2016[matches[i]:(check_row - 1), "code"])
+    kids <- c(kids, icd9::icd10cm2016[matches[i]:(check_row - 1), "code"])
   }
   kids
 
@@ -98,7 +101,7 @@ icd10ChildrenPossibleShort <- function(icd10Short) {
   sort(c(out_complete, out))
 }
 
-icd10ExpandRangeShort <- function(start, end) {
+icd10ExpandRangeRealShort <- function(start, end) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
   # check whether valid?
@@ -114,7 +117,8 @@ icd10ExpandRangeShort <- function(start, end) {
 
 }
 
-icd10ExpandRangeShortOld <- function(start, end) {
+# WIP
+icd10ExpandRangePossibleShort <- function(start, end) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
   # check whether valid?

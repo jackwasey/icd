@@ -74,11 +74,12 @@ strip <- function(x, pattern = " ", useBytes = TRUE)
 saveInDataDir <- function(var, suffix = "") {
   assertString(suffix)
   var <- as.character(substitute(var))
-  stopifnot(exists(var))
+  stopifnot(exists(var, envir = parent.frame()))
   save(list = var,
        envir = parent.frame(),
        file = file.path("data", strip(paste0(var, suffix, ".RData"))),
        compress = "xz")
+  message("Now reload package to enable updated/new data: ", var)
 }
 
 #' @title encode TRUE as 1, and FALSE as 0 (integers)
