@@ -17,6 +17,7 @@
 
 # nocov start
 
+# data_sources is defined in this file and saved in sysdata.rda
 utils::globalVariables(c(".", "data_sources"))
 
 parseEverythingAndSave <- function(verbose = TRUE) {
@@ -72,8 +73,9 @@ parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FA
   versions <- data_sources$version
   if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
-for (v in versions)     icd9Billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
-                                                                                fromWeb = fromWeb, verbose = verbose)
+for (v in versions)
+  icd9Billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
+                                                    fromWeb = fromWeb, verbose = verbose)
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save) saveInDataDir("icd9Billable")
