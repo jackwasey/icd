@@ -272,6 +272,9 @@ utils::globalVariables(c("%<>%"))
 #' @source \url{http://www.ustur.wsu.edu/database/}
 #' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
 #' @importFrom RODBC sqlFetch
+#' @docType data
+#' @importFrom RODBC odbcConnectAccess2007 sqlFetch
+#' @keywords datasets
 .uranium_pathology <- function() {
 
   file_path <- unzip_to_data_raw(

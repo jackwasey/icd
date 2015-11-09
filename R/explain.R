@@ -30,7 +30,7 @@
 #'   subtypes.
 #' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
 #'   the short description from the canonical CMS descriptions (included in
-#'   \code{extdata}) will be used, otherwise the long description is used.
+#'   \code{data-raw}) will be used, otherwise the long description is used.
 #' @param warn single logical value, default is \code{TRUE}, meaning that codes
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.

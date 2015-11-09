@@ -4,7 +4,7 @@
 
 #' generate ICD-10 Quan/Elixhauser maping
 #'
-#' @details start with Quan's SAS code (in \code{extdata}):
+#' @details start with Quan's SAS code (in \code{data-raw}):
 #` \code{grep %STR\(.*[[:digit:]] ICD10_Elixhauser.sas}
 icd10GenerateMappingQuanElix <- function(save = TRUE) {
   quan_elix_raw <- list(

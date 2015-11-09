@@ -9,13 +9,10 @@
 #' @keywords internal
 icd10cm_get_all_real <- function(save = TRUE) {
 
-  pkg_name <- getPackageName()
-  if (pkg_name == ".GlobalEnv") pkg_name <- "icd9"
-  extdata_path <- system.file("extdata", package = pkg_name)
-  local_path <- file.path(extdata_path, "icd10cm_order_2016.txt")
-  if (!file.exists(local_path))
-    unzip_single(url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
-               filename = "icd10cm_order_2016.txt", save_path = local_path)
+
+  local_path <- unzip_to_data_raw(
+    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
+    file_name = "icd10cm_order_2016.txt")
 
   raw <- readLines(con = local_path)
   icd10cm2016 <- data.frame(id = substr(raw, 1, 5),
@@ -32,15 +29,15 @@ icd10cm_get_all_real <- function(save = TRUE) {
 
   # now some test code to see what permutations there are of ICD-10 codes based
   # on the 2016 CM set.
-  i10 <- icd10cm2016$code
+  #i10 <- icd10cm2016$code
 
   #alpha_in_tail <- grep("[[:alpha:]]", i10tail, value = TRUE)
-  alpha_in_tail_bool <- grepl("[[:alpha:]].*[[:alpha:]].*", x = i10)
-  alpha_in_tail <- i10[alpha_in_tail_bool]
-  unique(gsub("[[:digit:]]", replacement = "", x = alpha_in_tail))
+  #alpha_in_tail_bool <- grepl("[[:alpha:]].*[[:alpha:]].*", x = i10)
+  #alpha_in_tail <- i10[alpha_in_tail_bool]
+  #unique(gsub("[[:digit:]]", replacement = "", x = alpha_in_tail))
 
   # verify, e.g. J in middle?
-  grep("[[:alpha::]].*J.*", i10)
+  #grep("[[:alpha::]].*J.*", i10)
 
   # find unique characters at each position from 4 to 7
   # for (i in 1:7)

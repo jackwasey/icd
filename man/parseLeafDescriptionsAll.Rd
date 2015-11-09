@@ -11,7 +11,7 @@ parseLeafDescriptionsAll(save = FALSE, fromWeb = FALSE, verbose = FALSE)
 }
 \arguments{
 \item{save}{single logical value, if \code{TRUE} the source text or CSV file
-will be saved in \code{inst/extdata}, otherwise (the default) the data is
+will be saved in \code{data-raw}, otherwise (the default) the data is
 simply returned invisibly.}
 }
 \value{

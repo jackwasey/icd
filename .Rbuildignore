@@ -9,10 +9,7 @@ configure.ac
 configure.scan
 .cproject
 cran-comments\.md$
-extdata\/ccs_multi_pr_tool_2014\.csv
-extdata\/comoanaly2012-2013\.txt
-extdata\/ICD10_Charlson\.sas
-extdata\/ICD10_Elixhauser\.sas
+^data-raw$
 .externalToolBuilders
 .*\.gcda$
 .*\.gch$
@@ -50,4 +47,3 @@ V26 I-9 Diagnosis.txt
 V26\.I\.9\.Diagnosis.txt
 V27LONG_SHORT_DX.*\.csv
 wercker.yml
-^data-raw$

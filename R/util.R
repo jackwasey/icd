@@ -15,17 +15,29 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-# assume length is one for strim
+#' Trim leading and trailing whitespace from a single string
+#'
+#' \code{NA} is accepted (and returned as \code{NA_character_})
+#' @param x character vector of length one
+#' @return character vector of length one
+#' @keywords internal
 strim <- function(x) {
+  checkmate::assertString(x, na.ok = TRUE)
   if (!is.na(x[1]))
-    return(.Call("icd9_strimCpp", PACKAGE = "icd9", as.character(x)))
-  return(NA_character_)
+    .Call("icd9_strimCpp", PACKAGE = get_pkg_name(), as.character(x))
+  else
+    return(NA_character_)
 }
 
-# very quick, but drops any encoding labels
+#' Trim leading and trailing whitespace
+#'
+#' \code{NA} is accepted and returned, probably as \code{NA_character_}
+#' @param x character vector
+#' @return character vector
+#' @keywords internal
 trim <- function (x) {
   nax <- is.na(x)
-  x[!nax] <- .Call("icd9_trimCpp", PACKAGE = "icd9", as.character(x[!nax]))
+  x[!nax] <- .Call("icd9_trimCpp", PACKAGE = get_pkg_name(), as.character(x[!nax]))
   x
 }
 
@@ -58,6 +70,13 @@ asCharacterNoWarn <- function(x) {
 "%nin%" <- function(x, table)
   match(x, table, nomatch = 0) == 0
 
+#' Strip character(s) from character vector
+#'
+#' @param x character vector
+#' @param pattern passed to \code{gsub} default is " "
+#' @param useBytes passed to gsub, default is the slightly quicker \code{TRUE}
+#' @return character vector of same length as input
+#' @keywords internal
 strip <- function(x, pattern = " ", useBytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = useBytes)
@@ -206,16 +225,19 @@ unzip_single <- function(url, file_name, save_path) {
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal
 unzip_to_data_raw <- function(url, file_name, force = FALSE) {
-  pkg_name <- getPackageName()
-  if (pkg_name == ".GlobalEnv") pkg_name <- "icd9"
+  pkg_name <- get_pkg_name()
   data_raw_path <- system.file("data-raw", package = pkg_name)
   save_path <- file.path(data_raw_path, file_name)
-  if (force || !file.exists(local_path))
+  if (force || !file.exists(save_path))
     stopifnot(
       unzip_single(url = url, file_name = file_name, save_path = save_path)
     )
-  data_raw_path
+  save_path
 }
+
+# so that I can change to another package name when needed.
+# \code{getPackageName} gives globalenv if running interactively.
+get_pkg_name <- function() "icd9"
 
 # nocov end
 
