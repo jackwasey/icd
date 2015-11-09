@@ -155,3 +155,16 @@ test_that("multiple inputs return ordered results", {
     c(icd10ChildrenPossibleShort("A00"), icd10ChildrenPossibleShort("Z99"))
   )
 })
+
+
+# to move somewhere else:
+test_that("ICD-10 codes in uranium data are okay", {
+  expect_true(
+    all(strip(uranium_pathology$icd10, ".") %in% icd10cm2016$code)
+  )
+  # codes missing from RHS:
+  setdiff(uranium_pathology$icd10  %>%  strip("."), icd10cm2016$code)
+
+  # http://apps.who.int/classifications/icd10/browse/2015/en#!/Y86
+
+})

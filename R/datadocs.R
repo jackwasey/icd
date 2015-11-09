@@ -284,5 +284,11 @@ utils::globalVariables(c("%<>%"))
   channel <- RODBC::odbcConnectAccess2007(file_path)
   uranium_pathology <- RODBC::sqlFetch(channel, "qry_ICD-10")
 
+  uranium_pathology <- uranium_pathology[, c("Case_No", "ICD-10_code")]
+  names(uranium_pathology) <- c("case", "icd10")
+
+  uranium_pathology <- uranium_pathology[order(uranium_pathology["case"]), ]
+  row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
+
   save_in_data_dir(uranium_pathology)
 }
