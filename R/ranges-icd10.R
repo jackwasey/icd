@@ -104,17 +104,34 @@ icd10ChildrenPossibleShort <- function(icd10Short) {
 icd10ExpandRangeRealShort <- function(start, end) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
+
   # check whether valid?
   # check whether real?
+  # minimal check for type:
+  stopifnot(grepl("[^.]", c(start, end)))
+
+  # for ranges, we can semi-legitimately strip any ".x" part ( but other X values CAN appear later). Quan uses x in position 4, but I'm not aware of any ICD-10 code that does this.
+
+  # deliberately not case sensitive, as this is a Quan quirk:
+  if (substr(start, 4, 100) == "x")
+    start <- substr(start, 1, 3)
+
+  if (substr(end, 4, 100) == "x")
+    end <- substr(end, 1, 3)
+
+  # TODO: either search down supposedly well ordered list until substring of end
+  # changes, or find all children, and get pos of last one.
+
+  end_kids <- icd10ChildrenRealShort(end)
+  new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  pos <- match(c(start, end), icd10cm2016[["code"]])
-  stopifnot(!anyNA(pos))
+  pos <- match(c(start, new_end), icd9::icd10cm2016[["code"]])
+  if (is.na(pos[1])) stop(sprintf("start code '%s' not found", pos[1]))
+  if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", pos[2]))
   stopifnot(pos[2] >= pos[1])
 
-  icd10cm2016[pos[1]:pos[2], "code"]
-
-
+  icd9::icd10cm2016[pos[1]:pos[2], "code"]
 }
 
 # WIP

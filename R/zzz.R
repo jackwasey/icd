@@ -55,6 +55,7 @@ release_questions <- function() {
     "Have you linted, including removing commented code?",
     "Are you happy with the code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed?",
+    "Is the naming scheme consistent, with deprecated old style names?",
     # testing and compilation and different platforms:
     "Have you run autoreconf before building and testing?",
     "Has config.h.win been updated to reflect latest configure.ac results?",

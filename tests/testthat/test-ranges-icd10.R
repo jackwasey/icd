@@ -1,3 +1,7 @@
+################################################################################
+# ranges
+################################################################################
+
 context("test icd10 ranges")
 
 test_that("very bad input data fails completely", {
@@ -12,14 +16,21 @@ test_that("simple ranges of real values works", {
 })
 
 test_that("range style used by Quan is accepted", {
+  # quan_ranges <- list(
+  #   c("M31.0", "M31.3"),
+  #   c("M32.x", "M35.x"),
+  #   c("D65", "D68.x"),
+  #   c("M45.x", "M45.x"),
+  #   c("M46.1", "M46.1")
+  # )
   quan_ranges <- list(
-    c("M31.0", "M31.3"),
-    c("M32.x", "M35.x"),
-    c("D65", "D68.x"),
-    c("M45.x", "M45.x"),
-    c("M46.1", "M46.1")
+    c("M310", "M313"),
+    c("M32x", "M35x"),
+    c("D65", "D68x"),
+    c("M45x", "M45x"),
+    c("M461", "M461")
   )
-  for (q in quan_ranges) {
+  for (pair in quan_ranges) {
     # start with a low bar!
       expect_that(
         icd10ExpandRangeRealShort(pair[1], pair[2]),
@@ -28,36 +39,32 @@ test_that("range style used by Quan is accepted", {
         )
 
     # the input values should be in the output? NOT necessarily true for .x numbers
-    stripped_
-    expect_true(
-      all(pair %in% icd10ExpandRangeRealShort(pair[1], pair[2])),
-      info = paste(pair, collapse = "-")
-    )
+    # expect_true(
+    #   all(pair %in% icd10ExpandRangeRealShort(pair[1], pair[2])),
+    #   info = paste(pair, collapse = "-")
+    # )
 
   }
 
 })
 
+################################################################################
+# ranges for real children
+################################################################################
 
 context("test icd10 ranges - children real")
 
 test_that("completely invalid input fails", {
-
   expect_error(icd10ChildrenRealShort(data.frame(a = 1, b = "b")))
-
 })
 
 test_that("single value gives correct range", {
   expect_equal(icd10ChildrenRealShort("A00"), c("A00", "A000", "A001", "A009"))
 })
 
-
-
-
-
-
-
-
+################################################################################
+# ranges for (some) possible children - low priority
+################################################################################
 
 context("test icd10 ranges - children possible")
 
@@ -68,7 +75,7 @@ test_that("completely invalid input fails", {
 })
 
 test_that("single values give all real children", {
-  expect_equal(icd10ChildrenRealShort("A00"))
+  expect_equal(icd10ChildrenRealShort("A00"), c("A00", "A000", "A001", "A009"))
 })
 
 test_that("certainly invalid codes return empty vectors", {
