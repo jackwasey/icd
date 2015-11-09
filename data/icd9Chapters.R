@@ -29,3 +29,31 @@ icd9Chapters <- list(
   "Supplementary Classification Of External Causes Of Injury And Poisoning" =
     c(start = "E000", end = "E999")
 )
+
+icd9_chapters <- icd9Chapters
+
+icd10_chapters <- list(
+
+  "Certain infectious and parasitic diseases (A00-B99)
+  "Neoplasms (C00-D49)
+  "Diseases of the blood and blood-forming organs and certain disorders involving the immune mechanism (D50-D89)
+  "Endocrine, nutritional and metabolic diseases (E00-E89)
+  Mental, Behavioral and Neurodevelopmental disorders (F01-F99)
+  "Diseases of the nervous system (G00-G99)
+  "Diseases of the eye and adnexa (H00-H59)
+  "Diseases of the ear and mastoid process (H60-H95)
+  "Diseases of the circulatory system (I00-I99)
+  "Diseases of the respiratory system (J00-J99)
+  "Diseases of the digestive system (K00-K95)
+  "Diseases of the skin and subcutaneous tissue (L00-L99)
+  "Diseases of the musculoskeletal system and connective tissue (M00-M99)
+  "Diseases of the genitourinary system (N00-N99)
+  "Pregnancy, childbirth and the puerperium (O00-O9A)
+  "Certain conditions originating in the perinatal period (P00-P96)
+  "Congenital malformations, deformations and chromosomal abnormalities (Q00-Q99)
+  "Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified (R00-R99)
+  "Injury, poisoning and certain other consequences of external causes (S00-T88)
+  20 External causes of morbidity (V00-Y99)
+  21 Factors influencing health status and contact with health services (Z00-Z99)
+
+)
