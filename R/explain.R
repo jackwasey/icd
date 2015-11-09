@@ -152,9 +152,9 @@ icd9GuessIsShort <- function(icd9) {
 #'   respective chapters, sub-chapters, etc.. The querying of the web page to
 #'   get these is already done, and the results saved in the lists
 #'   \code{icd9Chapters} etc which define ranges.
-#' @param icd9-any
-#' @param isShort
-#' @param invalid
+#' @template icd9-any
+#' @template isShort
+#' @template verbose
 #' @keywords internal
 icd9GetChapters <- function(icd9, isShort = icd9GuessIsShort(icd9), verbose = FALSE) {
   # set up comorbidity maps for chapters/sub/major group, then loop through each

@@ -243,6 +243,7 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
   )
 }
 
+
 #' @rdname icd9ExpandRange
 #' @export
 "%i9da%" <- function(start, end) {
@@ -324,7 +325,6 @@ icd9ChildrenDecimal <- function(icd9Decimal,
   if (onlyBillable) return(icd9GetBillableDecimal(res))
   res
 }
-
 
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes
 #' @description Accepts a single number or character input starting point for

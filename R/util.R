@@ -62,11 +62,24 @@ strip <- function(x, pattern = " ", useBytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = useBytes)
 
+#' Save given variable in package data directory
+#'
+#' File is named varname.RData with an optional suffix before .RData
+#'
+#' @param var character or symbol, e.g. "myvar" or \code{myvar}, either of which
+#'   would find \code{myvar} in the parent environment, and save it as
+#'   \code{myvar.RData} in \code{package_root/data}.
+#' @param suffix character scalar
+#' @keywords internal
 saveInDataDir <- function(var, suffix = "") {
+  assertString(suffix)
+  var <- as.character(substitute(var))
+  stopifnot(exists(var, envir = parent.frame()))
   save(list = var,
        envir = parent.frame(),
        file = file.path("data", strip(paste0(var, suffix, ".RData"))),
        compress = "xz")
+  message("Now reload package to enable updated/new data: ", var)
 }
 
 #' @title encode TRUE as 1, and FALSE as 0 (integers)
