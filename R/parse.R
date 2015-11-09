@@ -134,9 +134,9 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
     # don't do any fancy encoding stuff, just dump the file
-    zip_single(url, fn_short_orig, path_short)
+    unzip_single(url, fn_short_orig, path_short)
     if (!is.na(fn_long_orig))
-      zip_single(url, fn_long_orig, path_long)
+      unzip_single(url, fn_long_orig, path_long)
   }
   # yes, specify encoding twice, once to declare the source format, and again
   # to tell R to flag (apparently only where necessary), the destination
@@ -205,8 +205,8 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
                        "', and path = '", fp,
                        "'. URL = ", url)
 
-  if (save || fromWeb || !file.exists(fp)) zip_single(url, fn, fp)
-  zip_single(url, fn, fp)
+  if (save || fromWeb || !file.exists(fp)) unzip_single(url, fn, fp)
+  unzip_single(url, fn, fp)
   f <- file(fp, encoding = "latin1")
   icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character", encoding = "latin1")
   close(f)

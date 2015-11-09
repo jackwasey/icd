@@ -14,7 +14,7 @@ icd10cm_get_all_real <- function(save = TRUE) {
   extdata_path <- system.file("extdata", package = pkg_name)
   local_path <- file.path(extdata_path, "icd10cm_order_2016.txt")
   if (!file.exists(local_path))
-    zip_single(url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
+    unzip_single(url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
                filename = "icd10cm_order_2016.txt", save_path = local_path)
 
   raw <- readLines(con = local_path)

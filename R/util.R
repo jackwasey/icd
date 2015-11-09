@@ -178,25 +178,45 @@ strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c
 #' unzip a single file
 #' @keywords internal
 #' @importFrom utils download.file unzip
-zip_single <- function(url, filename, save_path) {
+unzip_single <- function(url, file_name, save_path) {
   zipfile <- tempfile()
   download.file(url = url, destfile = zipfile, quiet = TRUE)
   zipdir <- tempfile()
   dir.create(zipdir)
   unzip(zipfile, exdir = zipdir)  # files="" so extract all
   files <- list.files(zipdir)
-  if (is.null(filename)) {
+  if (is.null(file_name)) {
     if (length(files) == 1) {
-      filename <- files
+      file_name <- files
     } else {
-      stop("multiple files in zip, but no filename specified: ",
+      stop("multiple files in zip, but no file name specified: ",
            paste(files, collapse = ", "))
     }
   } else
-    stopifnot(filename %in% files)
+    stopifnot(file_name %in% files)
 
-  file.copy(file.path(zipdir, filename), save_path, overwrite = TRUE)
+  file.copy(file.path(zipdir, file_name), save_path, overwrite = TRUE)
 }
+
+#' Get a zipped file from a URL, or confirm it is in data-raw already
+#'
+#' @param url url of a zip file
+#' @param file_name file name of a single file in that zip
+#' @param force logical, if TRUE, then download even if already in \code{data-raw}
+#' @return path of unzipped file in \code{data-raw}
+#' @keywords internal
+unzip_to_data_raw <- function(url, file_name, force = FALSE) {
+  pkg_name <- getPackageName()
+  if (pkg_name == ".GlobalEnv") pkg_name <- "icd9"
+  data_raw_path <- system.file("data-raw", package = pkg_name)
+  save_path <- file.path(data_raw_path, file_name)
+  if (force || !file.exists(local_path))
+    stopifnot(
+      unzip_single(url = url, file_name = file_name, save_path = save_path)
+    )
+  data_raw_path
+}
+
 # nocov end
 
 getVisitId <- function(x, visitId = NULL) {
