@@ -71,7 +71,7 @@ strip <- function(x, pattern = " ", useBytes = TRUE)
 #'   \code{myvar.RData} in \code{package_root/data}.
 #' @param suffix character scalar
 #' @keywords internal
-saveInDataDir <- function(var, suffix = "") {
+save_in_data_dir <- function(var, suffix = "") {
   assertString(suffix)
   var <- as.character(substitute(var))
   stopifnot(exists(var, envir = parent.frame()))

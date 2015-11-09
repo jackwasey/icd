@@ -27,7 +27,7 @@ icd10cm_get_all_real <- function(save = TRUE) {
   )
 
   icd10cm2016 <- as.data.frame(lapply(icd10cm2016, stringr::str_trim), stringsAsFactors = FALSE)
-  if (save) saveInDataDir(icd10cm2016)
+  if (save) save_in_data_dir(icd10cm2016)
   return(invisible(icd10cm2016))
 
   # now some test code to see what permutations there are of ICD-10 codes based

@@ -68,7 +68,7 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
     icd9  = out %>% unname %>% icd9DecimalToShort,
     desc = names(out),
     stringsAsFactors = FALSE)
-  if (save) saveInDataDir("icd9Desc")
+  if (save) save_in_data_dir("icd9Desc")
   invisible(icd9Desc)
 }
 

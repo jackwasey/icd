@@ -264,5 +264,30 @@ utils::globalVariables(c("%<>%"))
   names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
   vermont_dx %<>% head(1000)
 
-  saveInDataDir("vermont_dx")
+  save_in_data_dir(vermont_dx)
+}
+
+#' @title United States Transuranium & Uranium Registries
+#' @name uranium_pathology
+#' @source \url{http://www.ustur.wsu.edu/database/}
+#' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+#' @importFrom RODBC sqlFetch
+.uranium_pathology <- function() {
+
+  # TODO: this is duplicated code from parse-icd10
+  pkg_name <- getPackageName()
+  if (pkg_name == ".GlobalEnv") pkg_name <- "icd9"
+  extdata_path <- system.file("extdata", package = pkg_name)
+  file_name <- "Pathology_Office2007.accdb"
+  local_path <- file.path(extdata_path, file_name)
+  if (!file.exists(local_path))
+    stopifnot(
+      zip_single(url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
+               filename = file_name, save_path = local_path)
+    )
+
+  channel <- RODBC::odbcConnectAccess2007(local_path)
+  uranium_pathology <- RODBC::sqlFetch(channel, "qry_ICD-10")
+
+  save_in_data_dir(uranium_pathology)
 }

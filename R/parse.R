@@ -78,7 +78,7 @@ for (v in versions)
                                                     fromWeb = fromWeb, verbose = verbose)
 
   # and in my utils.R  getNonASCII(charactervector)
-  if (save) saveInDataDir("icd9Billable")
+  if (save) save_in_data_dir("icd9Billable")
   invisible(icd9Billable)
 }
 
@@ -282,8 +282,8 @@ parseIcd9Chapters <- function(year = NULL,
   # nocov start
   if (save) {
     # top level chapters are hand-written in data/
-    saveInDataDir("icd9ChaptersSub")
-    saveInDataDir("icd9ChaptersMajor")
+    save_in_data_dir("icd9ChaptersSub")
+    save_in_data_dir("icd9ChaptersMajor")
   }
   invisible(list(icd9Chapters = icd9Chapters,
                  icd9ChaptersSub = icd9ChaptersSub,
@@ -373,7 +373,7 @@ icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   stopifnot(all(icd9IsValidShort(icd9Hierarchy$icd9)))
   stopifnot(!any(sapply(icd9Hierarchy, is.na)))
 
-  if (save) saveInDataDir("icd9Hierarchy") # nocov
+  if (save) save_in_data_dir("icd9Hierarchy") # nocov
 }
 
 fixSubchapterNa <- function(x, start, end) {

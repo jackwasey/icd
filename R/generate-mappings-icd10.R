@@ -50,6 +50,6 @@ icd10GenerateMappingQuanElix <- function(save = TRUE) {
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
-  if (save) saveInDataDir(icd10_map_quan_elix)
+  if (save) save_in_data_dir(icd10_map_quan_elix)
   invisible(icd10_map_quan_elix)
 }
