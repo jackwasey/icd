@@ -45,3 +45,67 @@ icd10cm_get_all_real <- function(save = TRUE) {
   #   substring(alpha_in_tail, i, i) %>% unique %>% sort %>% message
   # }
 }
+
+
+#' scrape WHO web site
+#'
+#' javascript only (at least in recent years)
+#'
+#' also requires phatomjs (which is Mac/Win only?) to render the javascript
+#' @import RSelenium
+#' @keywords internal
+scrape_icd10_who <- function() {
+  url <- "http://apps.who.int/classifications/icd10/browse/2016/en"
+  pJS <- phantom(pjs_cmd = "tools/phantomjs.exe")
+  remDr <- remoteDriver(browserName = "phantomjs")
+  remDr$open()
+  remDr$navigate(url)
+
+  # now what have we got?
+  main_index_src <- remDr$getPageSource()
+  main_index <- read_html(main_index_src[[1]])
+  writeLines(main_index_src[[1]], "temp.html")
+
+  # show all a tags:
+  print(xml2::xml_find_all(main_index, "//a"))
+  # get all those a nodes: (?just at one level)
+  #a_nodes <- html_nodes(main_index, "a")
+
+  # find just the anchors with the given class
+  a_nodes <- html_nodes(a_nodes, xpath = "//a[@class='ygtvlabel  ']") %>%
+    # and clean up:
+    html_text() %>%
+    trim() %>%
+    stringr::str_replace("^[^ ]+ ", "")
+
+  # but we already knew the chapters, we need to click the links...
+
+  # same using selenium/phantom:
+  chapterVII <- remDr$findElement(using = 'xpath', "//a[@data-id='VII']")
+
+  # click a link:
+  # (press enter) chapterVII$sendKeysToElement(list("\uE007"))
+  print(remDr$getCurrentUrl())
+
+    chapterVII$clickElement()
+
+  # did URL change?
+  print(remDr$getCurrentUrl())
+
+  # and see what we have now:
+  chapterVII_clicked <- remDr$getPageSource()[[1]]
+  writeLines(chapterVII_clicked[[1]], "chapter7.html")
+
+  # yes, we now have things like:
+  # <li class="Blocklist1">
+  #   <a href="#/H15-H22" title="Disorders of sclera, cornea, iris and ciliary body" class="code">H15-H22</a>
+  #   <span class="label">Disorders of
+  # sclera, cornea, iris and ciliary body</span>
+  #   </li>
+
+
+  remDr$close()
+  pJS@stop()
+
+
+}
