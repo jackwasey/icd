@@ -24,7 +24,7 @@
 #'   \code{readLines}
 #' @examples
 #'   \dontrun{
-#'   sasFormatExtract(readLines('inst/extdata//comformat2012-2013.txt'))
+#'   sasFormatExtract(readLines('data-raw/comformat2012-2013.txt'))
 #'   }
 #' @references
 #' \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}

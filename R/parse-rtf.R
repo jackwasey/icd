@@ -47,12 +47,12 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
   rtf_dat <- data_sources[data_sources$f_year == year, ]
   url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename
-  fp <- file.path("inst", "extdata", fn)
+  fp <- file.path("data-raw", fn)
   if (!save && !file.exists(fp))
-    fp <- system.file("extdata", fn, package = "icd9")
+    fp <- system.file("data-raw", fn, package = get_pkg_name())
 
   if (fromWeb || !file.exists(fp) || save) {
-    zip_single(url, fn, fp)
+    unzip_single(url, fn, fp)
     lines <- readLines(url, fp)
   } else {
     fp_conn <- file(fp, encoding = "ASCII")
@@ -68,7 +68,7 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
     icd9  = out %>% unname %>% icd9DecimalToShort,
     desc = names(out),
     stringsAsFactors = FALSE)
-  if (save) saveInDataDir("icd9Desc")
+  if (save) save_in_data_dir("icd9Desc")
   invisible(icd9Desc)
 }
 

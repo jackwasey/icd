@@ -300,9 +300,11 @@ icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9),
   assertFactorOrCharacter(icd9)
   assertFlag(isShort)
   assertFlag(onlyReal)
-  res <- .Call("icd9_icd9ChildrenCpp", PACKAGE = "icd9", icd9, isShort, onlyReal)
-  if (onlyBillable) return(icd9GetBillable(res, isShort))
-  res
+  res <- .Call("icd9_icd9ChildrenCpp", PACKAGE = get_pkg_name(), icd9, isShort, onlyReal)
+  if (onlyBillable)
+    icd9GetBillable(res, isShort)
+  else
+    res
 }
 
 #' @rdname icd9Children
@@ -312,18 +314,22 @@ icd9ChildrenShort <- function(icd9Short,
                               onlyReal = TRUE, onlyBillable = FALSE) {
   assertCharacter(icd9Short)
   assertFlag(onlyReal)
-  res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = "icd9", toupper(icd9Short), onlyReal)
-  if (onlyBillable) return(icd9GetBillableShort(res))
-  res
+  res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(icd9Short), onlyReal)
+  if (onlyBillable)
+    icd9GetBillableShort(res)
+  else
+    res
 }
 
 #' @rdname icd9Children
 #' @export
 icd9ChildrenDecimal <- function(icd9Decimal,
                                 onlyReal = TRUE, onlyBillable = FALSE) {
-  res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = "icd9", icd9Decimal, onlyReal)
-  if (onlyBillable) return(icd9GetBillableDecimal(res))
-  res
+  res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), icd9Decimal, onlyReal)
+  if (onlyBillable)
+    icd9GetBillableDecimal(res)
+  else
+    res
 }
 
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes
@@ -347,5 +353,5 @@ icd9ExpandMinor <- function(minor, isE = FALSE) {
   # of string. It SHOULD fail with type error, and that might be an Rcpp
   # problem...
   assertString(minor)
-  .Call("icd9_icd9ExpandMinorShim", PACKAGE = "icd9", minor, isE)
+  .Call("icd9_icd9ExpandMinorShim", PACKAGE = get_pkg_name(), minor, isE)
 }

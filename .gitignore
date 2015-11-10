@@ -11,8 +11,6 @@ configure.scan
 .externalToolBuilders
 i9test.RData
 icd9_*.tar.gz
-inst/extdata/all-covariates.xls
-inst/extdata/Dtab10.RTF
 *.o
 .project
 .RData

@@ -4,7 +4,7 @@
 
 #' generate ICD-10 Quan/Elixhauser maping
 #'
-#' @details start with Quan's SAS code (in \code{extdata}):
+#' @details start with Quan's SAS code (in \code{data-raw}):
 #` \code{grep %STR\(.*[[:digit:]] ICD10_Elixhauser.sas}
 icd10GenerateMappingQuanElix <- function(save = TRUE) {
   quan_elix_raw <- list(
@@ -50,6 +50,6 @@ icd10GenerateMappingQuanElix <- function(save = TRUE) {
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
-  if (save) saveInDataDir(icd10_map_quan_elix)
+  if (save) save_in_data_dir(icd10_map_quan_elix)
   invisible(icd10_map_quan_elix)
 }

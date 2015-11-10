@@ -62,7 +62,7 @@ parseAndSaveQuick <- function(verbose = FALSE) {
 #'   any codes with long or short descriptions. Earlier years only have
 #'   abbreviated descriptions.
 #' @param save single logical value, if \code{TRUE} the source text or CSV file
-#'   will be saved in \code{inst/extdata}, otherwise (the default) the data is
+#'   will be saved in \code{data-raw}, otherwise (the default) the data is
 #'   simply returned invisibly.
 #' @return data frame with icd9, descShort and descLong columns. NA is placed in
 #'   descLong when not available.
@@ -78,7 +78,7 @@ for (v in versions)
                                                     fromWeb = fromWeb, verbose = verbose)
 
   # and in my utils.R  getNonASCII(charactervector)
-  if (save) saveInDataDir("icd9Billable")
+  if (save) save_in_data_dir("icd9Billable")
   invisible(icd9Billable)
 }
 
@@ -91,8 +91,7 @@ for (v in versions)
 #'   The file can be pulled from the zip files on the CMS web site or from
 #'   within the package. Pulled data can be saved to the package development
 #'   tree.
-#' @param icd9path path of the source data which is in /extddata in the
-#'   installed package, but would be in inst/extdata in development tree.
+#' @param icd9path path of the source data which is typically in \code{data-raw}
 #' @param save logical whether to attempt to re-save source files in inst
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
@@ -115,13 +114,13 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
   fn_long_orig <- dat$long_filename
   fn_short <- make.names(fn_short_orig)
   fn_long <- make.names(fn_long_orig)
-  path_short <- file.path("inst", "extdata", fn_short)
-  path_long <- file.path("inst", "extdata", fn_long)
+  path_short <- file.path("data-raw", fn_short)
+  path_long <- file.path("data-raw", fn_long)
 
   if (!save && !file.exists(path_short)) {
     # not saving, so we can read-only get the path from the installed package:
-    path_short <- system.file("extdata", fn_short, package = "icd9")
-    path_long <- system.file("extdata", fn_long, package = "icd9")
+    path_short <- system.file("data-raw", fn_short, package = get_pkg_name())
+    path_long <- system.file("data-raw", fn_long, package = get_pkg_name())
   }
 
   if (verbose) {
@@ -134,9 +133,9 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
     # don't do any fancy encoding stuff, just dump the file
-    zip_single(url, fn_short_orig, path_short)
+    unzip_single(url, fn_short_orig, path_short)
     if (!is.na(fn_long_orig))
-      zip_single(url, fn_long_orig, path_long)
+      unzip_single(url, fn_long_orig, path_long)
   }
   # yes, specify encoding twice, once to declare the source format, and again
   # to tell R to flag (apparently only where necessary), the destination
@@ -195,18 +194,18 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   assertFlag(verbose)
   v27 <- data_sources$version == "27"
   fn <- make.names(data_sources[v27, "other_filename"])
-  fp <- file.path("inst", "extdata", fn)
+  fp <- file.path("data-raw", fn)
   url <- data_sources[v27, "url"]
 
   if (!save && !file.exists(fp))
-    fp <- system.file("extdata", fn, package = "icd9")
+    fp <- system.file("data-raw", fn, package = get_pkg_name())
 
   if (verbose) message("v27 file name = '", fn,
                        "', and path = '", fp,
                        "'. URL = ", url)
 
-  if (save || fromWeb || !file.exists(fp)) zip_single(url, fn, fp)
-  zip_single(url, fn, fp)
+  if (save || fromWeb || !file.exists(fp)) unzip_single(url, fn, fp)
+  unzip_single(url, fn, fp)
   f <- file(fp, encoding = "latin1")
   icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character", encoding = "latin1")
   close(f)
@@ -282,8 +281,8 @@ parseIcd9Chapters <- function(year = NULL,
   # nocov start
   if (save) {
     # top level chapters are hand-written in data/
-    saveInDataDir("icd9ChaptersSub")
-    saveInDataDir("icd9ChaptersMajor")
+    save_in_data_dir("icd9ChaptersSub")
+    save_in_data_dir("icd9ChaptersMajor")
   }
   invisible(list(icd9Chapters = icd9Chapters,
                  icd9ChaptersSub = icd9ChaptersSub,
@@ -373,7 +372,7 @@ icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
   stopifnot(all(icd9IsValidShort(icd9Hierarchy$icd9)))
   stopifnot(!any(sapply(icd9Hierarchy, is.na)))
 
-  if (save) saveInDataDir("icd9Hierarchy") # nocov
+  if (save) save_in_data_dir("icd9Hierarchy") # nocov
 }
 
 fixSubchapterNa <- function(x, start, end) {

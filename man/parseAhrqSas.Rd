@@ -4,18 +4,17 @@
 \alias{parseAhrqSas}
 \title{parse AHRQ data}
 \usage{
-parseAhrqSas(sasPath = system.file("extdata", "comformat2012-2013.txt",
-  package = "icd9"), save = FALSE, path = "data", verbose = FALSE)
+parseAhrqSas(sasPath = system.file("data-raw", "comformat2012-2013.txt",
+  package = get_pkg_name()), save = FALSE, path = "data", verbose = FALSE)
 }
 \arguments{
 \item{sasPath}{single character string containing path or URL for some SAS
-code. The source SAS code is stored in extdata or at the location specified
-in URL. In development mode in \code{devtools}, this is actually
-inst/extdata. This function is internal, since it is used to generate data
-which ends up in the distributed package. However, the package user can
-verify that the code creates the distributed R data. Also, changes to the
-original SAS code can be used to regenerate the R data by the user, without
-waiting for a package release.}
+code. The source SAS code is stored in data-raw or at the location
+specified in URL. This function is internal, since it is used to generate
+data which ends up in the distributed package. However, the package user
+can verify that the code creates the distributed R data. Also, changes to
+the original SAS code can be used to regenerate the R data by the user,
+without waiting for a package release.}
 
 \item{save}{logical whether to save the result in the source tree. Defaults
 to \code{FALSE}.}

@@ -26,7 +26,7 @@
 #'   of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
 #' @template verbose
 #' @keywords internal
-parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.txt", package = "icd9"),
+parseAhrqSas <- function(sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
                          save = FALSE, path = "data", verbose = FALSE) {
   #returnAll = FALSE,
   assertString(sasPath)
@@ -111,7 +111,7 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
   }
 
   names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
-  if (save) saveInDataDir("ahrqComorbid") # nocov
+  if (save) save_in_data_dir("ahrqComorbid") # nocov
   invisible(ahrqComorbid)
 }
 
@@ -133,13 +133,12 @@ parseAhrqSas <- function(sasPath = system.file("extdata", "comformat2012-2013.tx
 #' @template savesas
 #' @template parse-template
 #' @keywords internal
-parseQuanDeyoSas <- function(sasPath = NULL,
+parseQuanDeyoSas <- function(sasPath = system.file("data-raw",
+                                                   "ICD9_E_Charlson.sas",
+                                                   package = get_pkg_name()),
                              condense = FALSE,
                              save = FALSE,
                              path = "data") {
-  if (is.null(sasPath)) sasPath <- system.file("extdata",
-                                               "ICD9_E_Charlson.sas",
-                                               package = "icd9")
 
   quanSas <- readLines(sasPath, warn = FALSE)
   qlets <- sasExtractLetStrings(quanSas)
@@ -155,7 +154,7 @@ parseQuanDeyoSas <- function(sasPath = NULL,
     quanDeyoComorbid <- lapply(quanDeyoComorbid, icd9ChildrenShort, onlyReal = FALSE)
 
   names(quanDeyoComorbid) <- icd9::charlsonComorbidNamesAbbrev
-  if (save) saveInDataDir("quanDeyoComorbid")
+  if (save) save_in_data_dir(quanDeyoComorbid)
   invisible(quanDeyoComorbid)
 }
 
@@ -234,7 +233,7 @@ parseQuanElix <- function(condense = FALSE,
       icd9ChildrenShort, onlyReal = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
-  if (save) saveInDataDir("quanElixComorbid")
+  if (save) save_in_data_dir(quanElixComorbid)
   invisible(quanElixComorbid)
 }
 
@@ -315,6 +314,6 @@ parseElix <- function(condense = FALSE, save = FALSE, path = "data") {
   }
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
-  if (save) saveInDataDir("elixComorbid")
+  if (save) save_in_data_dir(elixComorbid)
   invisible(elixComorbid)
 }

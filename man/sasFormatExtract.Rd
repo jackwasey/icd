@@ -21,7 +21,7 @@ this is modelled entirely on a single chunk of SAS code, but
 }
 \examples{
   \dontrun{
-  sasFormatExtract(readLines('inst/extdata//comformat2012-2013.txt'))
+  sasFormatExtract(readLines('data-raw/comformat2012-2013.txt'))
   }
 }
 \references{

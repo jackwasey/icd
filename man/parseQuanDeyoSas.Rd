@@ -4,18 +4,18 @@
 \alias{parseQuanDeyoSas}
 \title{parse original SAS code defining Quan's update of Deyo comorbidities.}
 \usage{
-parseQuanDeyoSas(sasPath = NULL, condense = FALSE, save = FALSE,
+parseQuanDeyoSas(sasPath = system.file("data-raw", "ICD9_E_Charlson.sas",
+  package = get_pkg_name()), condense = FALSE, save = FALSE,
   path = "data")
 }
 \arguments{
 \item{sasPath}{single character string containing path or URL for some SAS
-code. The source SAS code is stored in extdata or at the location specified
-in URL. In development mode in \code{devtools}, this is actually
-inst/extdata. This function is internal, since it is used to generate data
-which ends up in the distributed package. However, the package user can
-verify that the code creates the distributed R data. Also, changes to the
-original SAS code can be used to regenerate the R data by the user, without
-waiting for a package release.}
+code. The source SAS code is stored in data-raw or at the location
+specified in URL. This function is internal, since it is used to generate
+data which ends up in the distributed package. However, the package user
+can verify that the code creates the distributed R data. Also, changes to
+the original SAS code can be used to regenerate the R data by the user,
+without waiting for a package release.}
 
 \item{condense}{logical whether to condense the result ranges to the minimal
 set of parent ICD-9 codes which exactly define the list. Defaults to

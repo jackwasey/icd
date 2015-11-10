@@ -52,7 +52,7 @@ logical vector
 \description{
 This is different from syntactic validity: it looks it up in the
   canonical list of ICD-9 codes published by the CMS, and which are included
-  in this package under \code{extdata}. Checking syntactic validity using
+  in this package under \code{data-raw}. Checking syntactic validity using
   \code{link{icd9IsValid}} etc. is still useful, with a changing list of
   icd-9 codes over time, and possible imperfections in the master lists
   derived from CMS.

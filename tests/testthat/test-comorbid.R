@@ -184,7 +184,7 @@ test_that("icd9Chapters, etc. as saved in data can be recreated", {
 
 test_that("AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
-  result <- parseAhrqSas(sasPath = system.file("extdata",
+  result <- parseAhrqSas(sasPath = system.file("data-raw",
                                                "comformat2012-2013.txt", package="icd9"), save = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
