@@ -22,5 +22,6 @@ build:
         roxygen2
         XML
     - jimhester/r-check
-    - jimhester/r-lint
+    # hold lint - I may do this in testthat anyway
+#    - jimhester/r-lint
     - jimhester/r-coverage
