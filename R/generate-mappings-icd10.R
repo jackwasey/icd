@@ -48,6 +48,10 @@ icd10GenerateMappingQuanElix <- function(save = TRUE) {
   # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
   icd10_map_quan_elix <- lapply(quan_elix_raw, icd10ChildrenRealShort)
 
+  # set S3 classes (in addition to "list")
+  # this is a comorbidity map first and foremost (after being a list?)
+  class(icd10_map_quan_elix) <- c("list", "comorbidity_map", "icd10")
+
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
   if (save) save_in_data_dir(icd10_map_quan_elix)
