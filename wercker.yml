@@ -5,23 +5,7 @@ box: rocker/hadleyverse
 build:
   steps:
     - jimhester/r-dependencies:
-        Rcpp
-        checkmate
-        stats
-        utils
-        fastmatch
-        testthat
-        devtools
-        knitr
-        magrittr
-        memoise
-        ggplot2
-        digest
-        xtable
-        rmarkdown
-        roxygen2
-        XML
+    Rcpp checkmate stats utils fastmatch testthat devtools knitr magrittr memoise ggplot2 digest xtable rmarkdown roxygen2 XML
     - jimhester/r-check
-    # hold lint - I may do this in testthat anyway
 #    - jimhester/r-lint
     - jimhester/r-coverage
