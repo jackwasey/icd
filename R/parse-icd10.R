@@ -47,9 +47,10 @@ icd10cm_get_all_real <- function(save = TRUE) {
 }
 
 
-#' scrape WHO web site
+#' scrape WHO web site for ICD-10 codes
 #'
-#' javascript only (at least in recent years)
+#' javascript only (at least in recent years), so can't just get the HTML.
+#' Thanks guys.
 #'
 #' also requires phatomjs (which is Mac/Win only?) to render the javascript
 #' @import RSelenium
@@ -102,6 +103,11 @@ scrape_icd10_who <- function() {
   #   <span class="label">Disorders of
   # sclera, cornea, iris and ciliary body</span>
   #   </li>
+
+
+  Hfifteen <- remDr$findElements(using = "xpath", "//li[@class='Blocklist1']")
+  print(j[[1]]$getElementText()) # now we have a subshapter
+  #  "H00-H06\nDisorders of eyelid, lacrimal system and orbit"
 
 
   remDr$close()

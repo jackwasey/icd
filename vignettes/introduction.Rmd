@@ -32,8 +32,8 @@ along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 -->
 ```{r setup, echo = FALSE, cache = FALSE}
 suppressWarnings({
-  suppressMessages({
-    #library(knitr, warn.conflicts = FALSE) # for opts_chunk only
+  suppressPackageStartupMessages({
+    requireNamespace(knitr, warn.conflicts = FALSE) # for opts_chunk only
     library(icd9)
     library(magrittr)
     library(xtable)

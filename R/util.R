@@ -108,13 +108,17 @@ save_in_data_dir <- function(var, suffix = "") {
 #' @param x dataframe which may contain logical fields
 #' @return data frame without logical fields
 #' @keywords internal manip
-logicalToBinary <- function(x) {
-  assertDataFrame(x, min.rows = 1, min.cols = 1)
-  if (any(dim(x) == 0))
-    stop("got zero in at least one dimension in data frame. %d, %d",
-         dim(x)[1], dim(x)[2])
+logical_to_binary <- function(x) {
+  stopifnot(is.data.frame(x) || is.matrix(x))
 
-  # can condense this code into a one-liner, but this is clearer:
+  if (is.matrix(x)) {
+    checkmate::assertMatrix(x, min.rows = 1, min.cols = 1)
+    return(as.logical(x))
+  } else if (is.data.frame(x))
+    checkmate::assertDataFrame(x, min.rows = 1, min.cols = 1)
+  else
+    stop("need a matrix or data.frame")
+
   logical_fields <- names(x)[sapply(x, is.logical)]
   if (is.na(logical_fields) || length(logical_fields) == 0) return(x)
 
