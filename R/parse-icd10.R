@@ -151,22 +151,20 @@ scrape_icd10_who <- function(sleep_secs = 3) {
     # chapter_xml <- xml2::read_html(chapter_html[[1]])
     sub_chapters_xml <- remDr$findElements(using = "xpath", "//li[@class='Blocklist1']")
     message("got sub_chapters")
-    sub_chapters <- lapply(sub_chapters_xml, function(x)
-      strsplit(x$getElementText()[[1]], "\\n")[[1]][1] %>% strsplit("-")
+    sub_chapters <- lapply(
+      sub_chapters_xml,
+      function(x) strsplit(x$getElementText()[[1]], "\\n") %>%
+        magrittr::extract2(1) %>%
+        magrittr::extract(1) %>%
+        strsplit("-") %>%
+        magrittr::extract2(1) %>%
+        magrittr::set_names(c("start", "end"))
     )
     names(sub_chapters) <- lapply(sub_chapters_xml, function(x)
       strsplit(x$getElementText()[[1]], "\\n")[[1]][2]
     )
-    message("starting sub loop")
-    for (sub_chapter_xml in sub_chapters_xml) {
-      message("sub_chapter loop")
-      pair <- strsplit(sub_chapter_xml$getElementText()[[1]], "\\n")[[1]]
 
-      print(pair)
-      sub_chapter_range <- pair[1]
-      sub_chapter_title <- pair[2]
-
-    }
+    # next, look at individual heading and leaf (billing) codes
 
   }
 
