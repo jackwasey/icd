@@ -60,14 +60,20 @@ scrape_icd10_who <- function(sleep_secs = 3) {
   requireNamespace("xml2")
   requireNamespace("rvest")
   url <- "http://apps.who.int/classifications/icd10/browse/2016/en"
-  pJS <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe")
+
+  if (Sys.info()[["sysname"]] == "Windows")
+    phantomjs <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe")
+  else
+    phantomjs <- RSelenium::phantom()
   remDr <- RSelenium::remoteDriver(browserName = "phantomjs")
 
   remDr$open()
 
   on.exit({
+    message("exiting scrape")
     remDr$close()
-    pJS@stop()
+    phantomjs$stop()
+    message("closed and stopped")
   })
 
   remDr$navigate(url)
@@ -98,7 +104,7 @@ scrape_icd10_who <- function(sleep_secs = 3) {
   # (press enter) chapterVII$sendKeysToElement(list("\uE007"))
   print(remDr$getCurrentUrl())
 
-    chapterVII$clickElement()
+  chapterVII$clickElement()
 
   # did URL change?
   print(remDr$getCurrentUrl())
@@ -115,8 +121,8 @@ scrape_icd10_who <- function(sleep_secs = 3) {
   #   </li>
 
 
-  Hfifteen <- remDr$findElements(using = "xpath", "//li[@class='Blocklist1']")
-  print(Hfifteen[[1]]$getElementText()) # now we have a subshapter
+  #Hfifteen <- remDr$findElements(using = "xpath", "//li[@class='Blocklist1']")
+  #print(Hfifteen[[1]]$getElementText()) # now we have a subshapter
   #  "H00-H06\nDisorders of eyelid, lacrimal system and orbit"
 
 
@@ -133,7 +139,7 @@ scrape_icd10_who <- function(sleep_secs = 3) {
   #     scrape sub-chapter names and ranges: e.g. H30-H36 Disorders of choroid and retina
 
   chapter_urls <- paste0("http://apps.who.int/classifications/icd10/browse/2016/en#/",
-                         as.roman(1:22))
+                         as.roman(1:21))
 
   sub_chapters <- list()
 
@@ -141,20 +147,22 @@ scrape_icd10_who <- function(sleep_secs = 3) {
     message(chapter_url)
     # Sys.sleep(sleep_secs) # this seems to hang my Win 7 sporadically
     remDr$navigate(chapter_url)
-    chapter_html <- remDr$getPageSource()
+    #chapter_html <- remDr$getPageSource()
     # chapter_xml <- xml2::read_html(chapter_html[[1]])
     sub_chapters_xml <- remDr$findElements(using = "xpath", "//li[@class='Blocklist1']")
-
+    message("got sub_chapters")
     sub_chapters <- lapply(sub_chapters_xml, function(x)
       strsplit(x$getElementText()[[1]], "\\n")[[1]][1] %>% strsplit("-")
-      )
+    )
     names(sub_chapters) <- lapply(sub_chapters_xml, function(x)
       strsplit(x$getElementText()[[1]], "\\n")[[1]][2]
     )
-
+    message("starting sub loop")
     for (sub_chapter_xml in sub_chapters_xml) {
+      message("sub_chapter loop")
       pair <- strsplit(sub_chapter_xml$getElementText()[[1]], "\\n")[[1]]
 
+      print(pair)
       sub_chapter_range <- pair[1]
       sub_chapter_title <- pair[2]
 

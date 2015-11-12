@@ -46,4 +46,4 @@ License: GPL-3
 Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
 LinkingTo: Rcpp
-RoxygenNote: 5.0.0
+RoxygenNote: 5.0.1

@@ -33,7 +33,7 @@ test_that("thousands of patients", {
 })
 
 test_that("vary everything", {
-  ompChunkSize = 1
+  ompChunkSize <- 1
   # prime numbers
   for (pts in c(0, 1, 3, 31, 1013, 10009)) {
     for (dz_per_patient in c(1, 23)) {

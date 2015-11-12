@@ -4,7 +4,7 @@
 \alias{scrape_icd10_who}
 \title{scrape WHO web site for ICD-10 codes}
 \usage{
-scrape_icd10_who()
+scrape_icd10_who(sleep_secs = 3)
 }
 \description{
 javascript only (at least in recent years), so can't just get the HTML.

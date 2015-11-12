@@ -273,7 +273,7 @@ utils::globalVariables(c("%<>%"))
 #' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
 #' @importFrom RODBC sqlFetch
 #' @docType data
-#' @importFrom RODBC odbcConnectAccess2007 sqlFetch
+#' @import RODBC
 #' @keywords datasets
 .uranium_pathology <- function() {
 
@@ -281,6 +281,7 @@ utils::globalVariables(c("%<>%"))
     url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
     file_name = "Pathology_Office2007.accdb")
 
+  # odbcConnectAccess2007 is only in the Windows version of RODBC
   channel <- RODBC::odbcConnectAccess2007(file_path)
   uranium_pathology <- RODBC::sqlFetch(channel, "qry_ICD-10")
 
