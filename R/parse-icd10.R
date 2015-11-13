@@ -45,6 +45,37 @@ icd10cm_get_all_real <- function(save = TRUE) {
   # }
 }
 
+get_phantom <- function() {
+  if (Sys.info()[["sysname"]] == "Windows")
+    phantomjs <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe")
+  else
+    phantomjs <- RSelenium::phantom()
+}
+
+open_both <- function() {
+
+  selenium_driver <- RSelenium::remoteDriver(browserName = "phantomjs")
+
+  # check whether phantom is already running by trying to open a connection. If
+  # failed to open, could be anything but let's assume it was due to phantomjs
+  # not running
+  tryCatch(
+    selenium_driver$open(),
+    error = {
+      phantomjs <- get_phantom()
+      selenium_driver$open()
+    }
+  )
+  invisible(
+    list(phantomjs = phantomjs,
+         selenium_driver = selenium_driver)
+    )
+}
+
+close_both <- function(both) {
+  both$selenium_driver$close()
+  both$phantomjs$stop()
+}
 
 #' scrape WHO web site for ICD-10 codes
 #'
@@ -54,28 +85,14 @@ icd10cm_get_all_real <- function(save = TRUE) {
 #' also requires phatomjs to render the javascript
 #' @import RSelenium xml2
 #' @keywords internal
-scrape_icd10_who <- function(sleep_secs = 3) {
+scrape_icd10_who <- function(sleep_secs = 1) {
   requireNamespace("RSelenium")
   requireNamespace("magrittr")
   requireNamespace("xml2")
-  requireNamespace("rvest")
+  #requireNamespace("rvest")
 
-  remDr <- RSelenium::remoteDriver(browserName = "phantomjs")
-
-  # check whether phantom is already running by trying to open a connection
-  tryCatch(remDr$open(), error = {
-    # failed to open, could be anything but let's assume it was due to phantomjs not running
-    if (Sys.info()[["sysname"]] == "Windows")
-      phantomjs <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe")
-    else
-      phantomjs <- RSelenium::phantom()
-    remDr$open()
-  })
-
-  on.exit({
-    remDr$close()
-    phantomjs$stop()
-  })
+  #both <- open_both()
+  #on.exit(close_both(both))
 
   who_icd10_url_base <- "http://apps.who.int/classifications/icd10/browse/2016/en#/"
   chapter_urls <- paste0(who_icd10_url_base, as.roman(1:21))
@@ -86,8 +103,11 @@ scrape_icd10_who <- function(sleep_secs = 3) {
 
   for (chapter_url in chapter_urls) {
     message(chapter_url)
-    remDr$navigate(chapter_url)
-    chapter_html <- remDr$getPageSource()
+    both <- open_both()
+    both$selenium_driver$navigate(chapter_url)
+    Sys.sleep(sleep_secs)
+    chapter_html <- both$selenium_driver$getPageSource()
+    close_both(both)
     stopifnot(length(chapter_html) == 1)
     chapter_xml <- xml2::read_html(chapter_html[[1]])
 
@@ -134,10 +154,13 @@ scrape_icd10_who <- function(sleep_secs = 3) {
 
 
     for (sub_chapter in sub_chapters) {
+      both <- open_both()
       sub_chapter_url <- paste0(who_icd10_url_base, sub_chapter["start"], "-", sub_chapter["end"])
       message(sub_chapter_url)
-      remDr$navigate(sub_chapter_url)
-      sub_chapter_html <- remDr$getPageSource()
+      both$selenium_driver$navigate(sub_chapter_url)
+      #Sys.sleep(sleep_secs)
+      sub_chapter_html <- both$selenium_driver$getPageSource()
+      close_both(both)
       sub_chapter_xml <- xml2::read_html(sub_chapter_html[[1]])
 
       sub_chapter_xml %>%
