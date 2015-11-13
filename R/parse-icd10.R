@@ -51,7 +51,7 @@ icd10cm_get_all_real <- function(save = TRUE) {
 #' javascript only (at least in recent years), so can't just get the HTML.
 #' Thanks guys.
 #'
-#' also requires phatomjs (which is Mac/Win only?) to render the javascript
+#' also requires phatomjs to render the javascript
 #' @import RSelenium xml2
 #' @keywords internal
 scrape_icd10_who <- function(sleep_secs = 3) {
@@ -61,19 +61,21 @@ scrape_icd10_who <- function(sleep_secs = 3) {
   requireNamespace("rvest")
   url <- "http://apps.who.int/classifications/icd10/browse/2016/en"
 
-  if (Sys.info()[["sysname"]] == "Windows")
-    phantomjs <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe")
-  else
-    phantomjs <- RSelenium::phantom()
   remDr <- RSelenium::remoteDriver(browserName = "phantomjs")
 
-  remDr$open()
+  # check whether phantom is already running by trying to open a connection
+  tryCatch(remDr$open(), error = {
+    # failed to open, could be anything but let's assume it was due to phantomjs not running
+    if (Sys.info()[["sysname"]] == "Windows")
+      phantomjs <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe")
+    else
+      phantomjs <- RSelenium::phantom()
+    remDr$open()
+  })
 
   on.exit({
-    message("exiting scrape")
     remDr$close()
     phantomjs$stop()
-    message("closed and stopped")
   })
 
   remDr$navigate(url)
