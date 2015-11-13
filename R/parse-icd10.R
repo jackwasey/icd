@@ -45,36 +45,11 @@ icd10cm_get_all_real <- function(save = TRUE) {
   # }
 }
 
-get_phantom <- function() {
+get_phantom <- function(extras = c("--load-images=false", "--disk-cache=true")) {
   if (Sys.info()[["sysname"]] == "Windows")
-    phantomjs <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe")
+    phantomjs <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe", extras = extras)
   else
-    phantomjs <- RSelenium::phantom()
-}
-
-open_both <- function() {
-
-  selenium_driver <- RSelenium::remoteDriver(browserName = "phantomjs")
-
-  # check whether phantom is already running by trying to open a connection. If
-  # failed to open, could be anything but let's assume it was due to phantomjs
-  # not running
-  tryCatch(
-    selenium_driver$open(),
-    error = {
-      phantomjs <- get_phantom()
-      selenium_driver$open()
-    }
-  )
-  invisible(
-    list(phantomjs = phantomjs,
-         selenium_driver = selenium_driver)
-    )
-}
-
-close_both <- function(both) {
-  both$selenium_driver$close()
-  both$phantomjs$stop()
+    phantomjs <- RSelenium::phantom(extras = extras)
 }
 
 #' scrape WHO web site for ICD-10 codes
@@ -85,14 +60,25 @@ close_both <- function(both) {
 #' also requires phatomjs to render the javascript
 #' @import RSelenium xml2
 #' @keywords internal
-scrape_icd10_who <- function(sleep_secs = 1) {
-  requireNamespace("RSelenium")
-  requireNamespace("magrittr")
-  requireNamespace("xml2")
+scrape_icd10_who <- function(sleep_secs = 0) {
+  library("RSelenium")
+  library("magrittr")
+  library("xml2")
   #requireNamespace("rvest")
 
-  #both <- open_both()
-  #on.exit(close_both(both))
+  phantomjs <- get_phantom()
+  on.exit(phantomjs$stop())
+  Sys.sleep(sleep_secs)
+
+  eCap <- list(phantomjs.page.settings.userAgent
+               = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20120101 Firefox/29.0")
+  #selenium_driver <- RSelenium::remoteDriver(
+    #browserName = "phantomjs",
+    #extraCapabilities = eCap)
+  #RSelenium::checkForServer()
+  RSelenium::startServer()
+  selenium_driver <- RSelenium::remoteDriver(browserName = "chrome")
+  selenium_driver$open()
 
   who_icd10_url_base <- "http://apps.who.int/classifications/icd10/browse/2016/en#/"
   chapter_urls <- paste0(who_icd10_url_base, as.roman(1:21))
@@ -101,13 +87,17 @@ scrape_icd10_who <- function(sleep_secs = 1) {
   all_majors <- list()
   all_leaves <- list()
 
+
   for (chapter_url in chapter_urls) {
     message(chapter_url)
-    both <- open_both()
-    both$selenium_driver$navigate(chapter_url)
     Sys.sleep(sleep_secs)
-    chapter_html <- both$selenium_driver$getPageSource()
-    close_both(both)
+    # selenium_driver$open()
+    Sys.sleep(sleep_secs)
+    selenium_driver$navigate(chapter_url)
+    Sys.sleep(sleep_secs)
+    chapter_html <- selenium_driver$getPageSource()
+    # selenium_driver$close()
+
     stopifnot(length(chapter_html) == 1)
     chapter_xml <- xml2::read_html(chapter_html[[1]])
 
@@ -154,13 +144,18 @@ scrape_icd10_who <- function(sleep_secs = 1) {
 
 
     for (sub_chapter in sub_chapters) {
-      both <- open_both()
+
       sub_chapter_url <- paste0(who_icd10_url_base, sub_chapter["start"], "-", sub_chapter["end"])
       message(sub_chapter_url)
-      both$selenium_driver$navigate(sub_chapter_url)
+      Sys.sleep(sleep_secs)
+      #selenium_driver$open()
       #Sys.sleep(sleep_secs)
-      sub_chapter_html <- both$selenium_driver$getPageSource()
-      close_both(both)
+      selenium_driver$navigate(sub_chapter_url)
+      Sys.sleep(sleep_secs)
+      sub_chapter_html <- selenium_driver$getPageSource()
+      #Sys.sleep(sleep_secs)
+      #selenium_driver$close()
+
       sub_chapter_xml <- xml2::read_html(sub_chapter_html[[1]])
 
       sub_chapter_xml %>%
@@ -202,15 +197,16 @@ scrape_icd10_who <- function(sleep_secs = 1) {
 
     # todo sort so that majors come immediately before all of their leaf children
 
-    icd10_who_sub_chapters <- sub_chapters
-    icd10_who_majors <- majors
-    icd10_who_leaves <- leaves
-    save_in_data_dir(icd10_who_sub_chapters)
-    save_in_data_dir(icd10_who_majors)
-    save_in_data_dir(icd10_who_leaves)
 
   }
+  selenium_driver$close()
 
+  icd10_who_sub_chapters <- sub_chapters
+  icd10_who_majors <- majors
+  icd10_who_leaves <- leaves
+  save_in_data_dir(icd10_who_sub_chapters)
+  save_in_data_dir(icd10_who_majors)
+  save_in_data_dir(icd10_who_leaves)
 
 
 }
