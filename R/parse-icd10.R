@@ -77,115 +77,40 @@ scrape_icd10_who <- function(sleep_secs = 3) {
     phantomjs$stop()
   })
 
-
-  if (FALSE)   {
-    url <- "http://apps.who.int/classifications/icd10/browse/2016/en"
-    remDr$navigate(url)
-
-    # now what have we got?
-    main_index_src <- remDr$getPageSource()
-    main_index <- xml2::read_html(main_index_src[[1]])
-    writeLines(main_index_src[[1]], "temp.html")
-
-    # show all a tags:
-    print(xml2::xml_find_all(main_index, "//a"))
-    # get all those a nodes: (?just at one level)
-    a_nodes <- rvest::html_nodes(main_index, "a")
-
-    # find just the anchors with the given class
-    a_nodes <- rvest::html_nodes(a_nodes, xpath = "//a[@class='ygtvlabel  ']") %>%
-      # and clean up:
-      rvest::html_text() %>%
-      trim() %>%
-      stringr::str_replace("^[^ ]+ ", "")
-
-    # but we already knew the chapters, we need to click the links...
-
-    # same using selenium/phantom:
-    chapterVII <- remDr$findElement(using = 'xpath', "//a[@data-id='VII']")
-
-    # click a link:
-    # (press enter) chapterVII$sendKeysToElement(list("\uE007"))
-    print(remDr$getCurrentUrl())
-
-    chapterVII$clickElement()
-
-    # did URL change?
-    print(remDr$getCurrentUrl())
-
-    # and see what we have now:
-    chapterVII_clicked <- remDr$getPageSource()[[1]]
-    writeLines(chapterVII_clicked[[1]], "chapter7.html")
-
-    # yes, we now have things like:
-    # <li class="Blocklist1">
-    #   <a href="#/H15-H22" title="Disorders of sclera, cornea, iris and ciliary body" class="code">H15-H22</a>
-    #   <span class="label">Disorders of
-    # sclera, cornea, iris and ciliary body</span>
-    #   </li>
-
-
-    #Hfifteen <- remDr$findElements(using = "xpath", "//li[@class='Blocklist1']")
-    #print(Hfifteen[[1]]$getElementText()) # now we have a subshapter
-    #  "H00-H06\nDisorders of eyelid, lacrimal system and orbit"
-
-  }
-
-
-
-  ## now do it looping through everything:
-
-  # get the main chapters index
-
-  # for each chapter roman numerals up to XXII
-  #    generate URL from chapter name, e.g.
-  #     http://apps.who.int/classifications/icd10/browse/2016/en#/VII
-  #     scrape sub-chapter names and ranges: e.g. H30-H36 Disorders of choroid and retina
-
   who_icd10_url_base <- "http://apps.who.int/classifications/icd10/browse/2016/en#/"
   chapter_urls <- paste0(who_icd10_url_base, as.roman(1:21))
 
-  sub_chapters <- list()
+  all_sub_chapters <- list()
+  all_majors <- list()
+  all_leaves <- list()
 
   for (chapter_url in chapter_urls) {
     message(chapter_url)
-    # Sys.sleep(sleep_secs) # this seems to hang my Win 7 sporadically
     remDr$navigate(chapter_url)
-    #chapter_html <- remDr$getPageSource()
-    # chapter_xml <- xml2::read_html(chapter_html[[1]])
-    sub_chapters_xml <- remDr$findElements(using = "xpath", "//li[@class='Blocklist1']")
+    chapter_html <- remDr$getPageSource()
+    stopifnot(length(chapter_html) == 1)
+    chapter_xml <- xml2::read_html(chapter_html[[1]])
+
+    stopifnot(length(chapter_xml) > 0)
+
+    # instead of querying via phantomjs (which crashes all the time), get the
+    # whole document, then use xml2 and rvest:
+
+    chapter_xml %>%
+      xml2::xml_find_all("//li[@class='Blocklist1']") %>%
+      xml2::xml_text() %>%
+      stringr::str_trim() %>%
+      stringr::str_replace_all("[[:space:]]+", " ") %>%
+      str_pair_match("([^[:space:]]+) (.+)", swap = TRUE) %>%
+      lapply(
+        function(x) stringr::str_split(x, "-") %>%
+          unlist %>%
+          magrittr::set_names(c("start", "end"))
+      ) -> sub_chapters
+
+    all_sub_chapters <- c(all_sub_chapters, sub_chapters)
+
     message("got sub_chapters")
-    # sub_chapters <- lapply(
-    #   sub_chapters_xml,
-    #   function(x) strsplit(x$getElementText()[[1]], "\\n") %>%
-    #     magrittr::extract2(1) %>%
-    #     magrittr::extract(1) %>%
-    #     strsplit("-") %>%
-    #     magrittr::extract2(1) %>%
-    #     magrittr::set_names(c("start", "end"))
-    # )
-    #names(sub_chapters) <- lapply(sub_chapters_xml, function(x)
-    #  strsplit(x$getElementText()[[1]], "\\n")[[1]][2]
-    #)
-
-    # use for loop for debugging:
-    sub_chapters <- list()
-    for (x in sub_chapters_xml) {
-      Sys.sleep(sleep_secs)
-      sub_chapter_text <- x$getElementText()[[1]]
-      message("working on a new sub chapter ", sub_chapter_text)
-      # if (sub_chapter_text == "A92-A99\nArthropod-borne viral fevers and viral haemorrhagic fevers") browser()
-      split_one <- strsplit(sub_chapter_text, "\\n")
-      range_only <- split_one[[1]][1]
-      name_only <- split_one[[1]][2]
-      split_range <- strsplit(range_only, "-")
-
-      sub_chapters[[name_only]] <- c(start = split_range[[1]][1],
-                                     end = split_range[[1]][2])
-
-    }
-    message("completed sub chapters")
-
 
     # next, look at individual heading and leaf (billing) codes
     # this can be accomplished using constructed URLs, also, e.g.:
@@ -208,40 +133,58 @@ scrape_icd10_who <- function(sleep_secs = 3) {
     # </h5>
 
 
-    majors <- list()
-    leaves <- list()
     for (sub_chapter in sub_chapters) {
-      sub_chapter_url <- paste0(who_icd10_url_base, sub_chapter$start, "-", sub_chapter$end)
+      sub_chapter_url <- paste0(who_icd10_url_base, sub_chapter["start"], "-", sub_chapter["end"])
       message(sub_chapter_url)
       remDr$navigate(sub_chapter_url)
-      majors_code_xml <- remDr$findElements(using = "xpath", "//div[@class='Category1']//a")
-      majors_desc_xml <- remDr$findElements(using = "xpath", "//div[@class='Category1']//span")
-      stopifnot(length(majors_code_xml) == length(majors_desc_xml))
+      sub_chapter_html <- remDr$getPageSource()
+      sub_chapter_xml <- xml2::read_html(sub_chapter_html[[1]])
 
-      #majors <- data.frame(major=c(), desc=c())
-      for (i in length(majors_xml)) {
-        major_code <- majors_code_xml[[i]]$getElementText() %>% unlist
-        major_desc <- majors_desc_xml[[i]]$getElementText() %>% unlist
-        majors[[major_desc]] <- major_code
-      }
+      sub_chapter_xml %>%
+        xml2::xml_find_all("//div[@class='Category1']//a[@class='code']") %>%
+        xml2::xml_text() %>%
+        stringr::str_trim() -> majors
 
-      leaves_code_xml <- remDr$findElements(using = "xpath", "//div[@class='Category2']//a")
-      leaves_desc_xml <- remDr$findElements(using = "xpath", "//div[@class='Category2']//span")
-      stopifnot(length(leaves_code_xml) == length(leaves_desc_xml))
+      sub_chapter_xml %>%
+        xml2::xml_find_all("//div[@class='Category1']//span[@class='label']") %>%
+        xml2::xml_text() %>%
+        stringr::str_trim() %>%
+        stringr::str_replace_all("[[:space:]]+", " ") -> majors_desc
 
-      for (i in length(leaves_code_xml)) {
-        leaf_code <- leaves_code_xml[[i]]$getElementText() %>% unlist
-        leaf_desc <- leaves_desc_xml[[i]]$getElementText() %>% unlist
-        leaves[[leaf_desc]] <- leaf_code
-      }
+      # sanity check
+      stopifnot(length(majors) == length(majors_desc))
+      names(majors) <- majors_desc
+
+      sub_chapter_xml %>%
+        xml2::xml_find_all("//div[@class='Category2']//a[@class='code']") %>%
+        xml2::xml_text() %>%
+        stringr::str_trim() -> leaves
+
+      sub_chapter_xml %>%
+        xml2::xml_find_all("//div[@class='Category2']//span[@class='label']") %>%
+        xml2::xml_text() %>%
+        stringr::str_trim() %>%
+        stringr::str_replace_all("[[:space:]]+", " ") -> leaves_desc
+
+      stopifnot(length(leaves) == length(leaves_desc))
 
       # someday, add the exclusion rubric to the data structure for detailed validation
 
-      print(head(majors))
-      print(head(leaves))
+      all_majors <- c(all_majors, majors)
+      all_leaves <- c(all_leaves, leaves)
+
+      print(tail(majors))
+      print(tail(leaves))
     }
 
     # todo sort so that majors come immediately before all of their leaf children
+
+    icd10_who_sub_chapters <- sub_chapters
+    icd10_who_majors <- majors
+    icd10_who_leaves <- leaves
+    save_in_data_dir(icd10_who_sub_chapters)
+    save_in_data_dir(icd10_who_majors)
+    save_in_data_dir(icd10_who_leaves)
 
   }
 

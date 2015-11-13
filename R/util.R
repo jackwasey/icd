@@ -164,13 +164,13 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 }
 
 #' @rdname strMultiMatch
-#' @description \code{strPaitMatch} differs in that there should only be two
+#' @description \code{str_pair_match} differs in that there should only be two
 #'   pairs of parenthesis, then the first (by default) becomes the name, and the
 #'   second the value.
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
-strPairMatch <- function(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c(1, 2), ...) {
+str_pair_match <- function(text, pattern, swap = FALSE, dropEmpty = FALSE, pos = c(1, 2), ...) {
   assertString(pattern)
   assertCharacter(text, min.len = 1)
   assertFlag(swap)
