@@ -1,6 +1,7 @@
 aclocal.m4
 autom4te.cache
 autoscan.log
+*.bak
 callgrind.*
 config.log
 config.status
@@ -21,6 +22,7 @@ rprof.out
 .Rproj.user
 .settings
 *.so
+*.swp
 src-i386
 src-x64
 *.swp
