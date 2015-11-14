@@ -45,42 +45,39 @@ icd10cm_get_all_real <- function(save = TRUE) {
   # }
 }
 
-get_phantom <- function(extras = c("--load-images=false", "--disk-cache=true")) {
-  if (Sys.info()[["sysname"]] == "Windows")
-    phantomjs <- RSelenium::phantom(pjs_cmd = "tools/phantomjs.exe", extras = extras)
-  else
-    phantomjs <- RSelenium::phantom(extras = extras)
-}
-
 #' scrape WHO web site for ICD-10 codes
 #'
 #' javascript only (at least in recent years), so can't just get the HTML.
 #' Thanks guys.
 #'
-#' also requires phatomjs to render the javascript
-#' @import RSelenium xml2
+#' @details PhantomJS is not required: it can drive a regular firefox browsing
+#'   session directly, although this is not headless, it doesn't crash all the
+#'   time like phantomjs. TODO still: daggers and asterisks after codes. Tests.
+#'   Sorting and structuing output, probably in a denormalized data frame with
+#'   columns: code, (short desc avail?), desc, (notes, e.g. exclusions?), major
+#'   (the parent major code), sub_chapter, chapter. This should be like the
+#'   icd9cm, if possible.
+#'
+#'   Do more sanity checks and testing early on, e.g. for invalid codes, unusual
+#'   characters, vector lengths
 #' @keywords internal
 scrape_icd10_who <- function(sleep_secs = 0) {
+  #library("RJSONIO") # this seems to avoid a lot of errors?
   library("RSelenium")
   library("magrittr")
   library("xml2")
-  #requireNamespace("rvest")
 
-  phantomjs <- get_phantom()
-  on.exit(phantomjs$stop())
-  Sys.sleep(sleep_secs)
-
-  eCap <- list(phantomjs.page.settings.userAgent
-               = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20120101 Firefox/29.0")
-  #selenium_driver <- RSelenium::remoteDriver(
-    #browserName = "phantomjs",
-    #extraCapabilities = eCap)
-  #RSelenium::checkForServer()
   RSelenium::startServer()
-  selenium_driver <- RSelenium::remoteDriver(browserName = "chrome")
+  selenium_driver <- RSelenium::remoteDriver() # default firefox on port 4444
   selenium_driver$open()
 
   who_icd10_url_base <- "http://apps.who.int/classifications/icd10/browse/2016/en#/"
+  # test the connection quickly
+  selenium_driver$navigate(who_icd10_url_base)
+  selenium_driver$getPageSource()
+  print(selenium_driver$getStatus())
+  #
+
   chapter_urls <- paste0(who_icd10_url_base, as.roman(1:21))
 
   all_sub_chapters <- list()
@@ -90,13 +87,8 @@ scrape_icd10_who <- function(sleep_secs = 0) {
 
   for (chapter_url in chapter_urls) {
     message(chapter_url)
-    Sys.sleep(sleep_secs)
-    # selenium_driver$open()
-    Sys.sleep(sleep_secs)
     selenium_driver$navigate(chapter_url)
-    Sys.sleep(sleep_secs)
     chapter_html <- selenium_driver$getPageSource()
-    # selenium_driver$close()
 
     stopifnot(length(chapter_html) == 1)
     chapter_xml <- xml2::read_html(chapter_html[[1]])
@@ -147,7 +139,7 @@ scrape_icd10_who <- function(sleep_secs = 0) {
 
       sub_chapter_url <- paste0(who_icd10_url_base, sub_chapter["start"], "-", sub_chapter["end"])
       message(sub_chapter_url)
-      Sys.sleep(sleep_secs)
+      #Sys.sleep(sleep_secs)
       #selenium_driver$open()
       #Sys.sleep(sleep_secs)
       selenium_driver$navigate(sub_chapter_url)
