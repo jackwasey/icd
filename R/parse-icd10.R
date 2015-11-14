@@ -61,7 +61,7 @@ icd10cm_get_all_real <- function(save = TRUE) {
 #'   Do more sanity checks and testing early on, e.g. for invalid codes, unusual
 #'   characters, vector lengths
 #' @keywords internal
-scrape_icd10_who <- function(sleep_secs = 0.1, debug = FALSE, verbose = FALSE, silent = FALSE) {
+scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
   #library("RJSONIO") # this seems to avoid a lot of errors?
   library("RSelenium")
   library("magrittr")
@@ -76,16 +76,13 @@ scrape_icd10_who <- function(sleep_secs = 0.1, debug = FALSE, verbose = FALSE, s
     extraCapabilities = list(webdriver.firefox.bin = "C:\\FirefoxCollection\\Mozilla Firefox 36.0\\firefox.exe")
   )
   selenium_driver$open()
+  # make sure we always wait for the page to load (or ten seconds), before returning
+  selenium_driver$setTimeout(type = "page load", milliseconds = 10000)
+  selenium_driver$setTimeout(type = "script", milliseconds = 10000)
+  selenium_driver$setTimeout(type = "implicit", milliseconds = 10000)
+  selenium_driver$setImplicitWaitTimeout(milliseconds = 10000)
 
   who_icd10_url_base <- "http://apps.who.int/classifications/icd10/browse/2016/en#/"
-
-  if (debug) {
-    # test the connection quickly
-    selenium_driver$navigate(who_icd10_url_base)
-    Sys.sleep(sleep_secs)
-    selenium_driver$getPageSource()
-    print(selenium_driver$getStatus())
-  }
 
   chapter_urls <- paste0(who_icd10_url_base, as.roman(1:21))
 
@@ -95,36 +92,26 @@ scrape_icd10_who <- function(sleep_secs = 0.1, debug = FALSE, verbose = FALSE, s
 
   for (chapter_url in chapter_urls) {
     if (!silent) message(chapter_url)
-    #Sys.sleep(sleep_secs)
     selenium_driver$navigate(chapter_url)
-    Sys.sleep(sleep_secs)
-    chapter_html <- selenium_driver$getPageSource()
+    #chapter_html <- selenium_driver$getPageSource()
 
-    if (debug)
-      browser(expr = length(chapter_html) != 1)
-    else
-      stopifnot(length(chapter_html) == 1)
-    chapter_xml <- xml2::read_html(chapter_html[[1]])
+    # if (debug)
+    #   browser(expr = length(chapter_html) != 1)
+    # else
+    #   stopifnot(length(chapter_html) == 1)
+    # chapter_xml <- xml2::read_html(chapter_html[[1]])
 
-    if (debug)
-      browser(expr = length(chapter_xml) == 0)
-    else
-      stopifnot(length(chapter_xml) > 0)
+    # if (debug)
+    #   browser(expr = length(chapter_xml) == 0)
+    # else
+    #   stopifnot(length(chapter_xml) > 0)
 
     # instead of querying via phantomjs (which crashes all the time), get the
     # whole document, then use xml2 and rvest:
 
-    chapter_xml %>%
-      xml2::xml_find_all("//li[@class='Blocklist1']") %>%
-      xml2::xml_text() %>%
-      stringr::str_trim() -> sub_chapters_text
-
-    if (debug)
-      browser(expr = length(sub_chapters_text) == 0)
-    else
-      stopifnot(length(sub_chapters_text) > 0)
-
-    sub_chapters_text %>%
+    selenium_driver$findElements(using = "xpath","//li[@class='Blocklist1']") %>%
+      vapply(function(x) unlist(x$getElementText()), character(1)) %>%
+      stringr::str_trim() %>%
       stringr::str_replace_all("[[:space:]]+", " ") %>%
       str_pair_match("([^[:space:]]+) (.+)", swap = TRUE) %>%
       lapply(
@@ -160,9 +147,7 @@ scrape_icd10_who <- function(sleep_secs = 0.1, debug = FALSE, verbose = FALSE, s
 
       sub_chapter_url <- paste0(who_icd10_url_base, sub_chapter["start"], "-", sub_chapter["end"])
       if (verbose && !silent) message(sub_chapter_url)
-      #Sys.sleep(sleep_secs)
       selenium_driver$navigate(sub_chapter_url)
-      Sys.sleep(sleep_secs)
       sub_chapter_html <- selenium_driver$getPageSource()
 
       sub_chapter_xml <- xml2::read_html(sub_chapter_html[[1]])
@@ -202,6 +187,8 @@ scrape_icd10_who <- function(sleep_secs = 0.1, debug = FALSE, verbose = FALSE, s
       else
         stopifnot(length(leaves) == length(leaves_desc))
 
+      names(leaves) <- leaves_desc
+
       # someday, add the exclusion rubric to the data structure for detailed validation
 
       all_majors <- c(all_majors, majors)
@@ -212,18 +199,24 @@ scrape_icd10_who <- function(sleep_secs = 0.1, debug = FALSE, verbose = FALSE, s
         print(tail(leaves))
       }
     }
-
-    # todo sort so that majors come immediately before all of their leaf children
-
-
   }
   selenium_driver$close()
 
   icd10_who_sub_chapters <- all_sub_chapters
   icd10_who_majors <- all_majors
   icd10_who_leaves <- all_leaves
+
+  # temporary saves for testing:
   save_in_data_dir(icd10_who_sub_chapters)
   save_in_data_dir(icd10_who_majors)
   save_in_data_dir(icd10_who_leaves)
+
+  # combine into big data frame like icd9Hierarchy:
+  #names(icd9Hierarchy)
+  #[1] "icd9"       "descShort"  "descLong"   "threedigit" "major"      "subchapter" "chapter"
+
+  #> head(icd9Hierarchy, 1)
+  #icd9 descShort descLong threedigit   major                     subchapter                           chapter
+  #001   Cholera  Cholera        001 Cholera Intestinal Infectious Diseases Infectious And Parasitic Diseases
 
 }
