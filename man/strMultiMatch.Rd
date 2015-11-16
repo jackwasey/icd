@@ -2,12 +2,12 @@
 % Please edit documentation in R/util.R
 \name{strMultiMatch}
 \alias{strMultiMatch}
-\alias{strPairMatch}
+\alias{str_pair_match}
 \title{return the actual matches from a bracketed regex}
 \usage{
 strMultiMatch(pattern, text, dropEmpty = FALSE, ...)
 
-strPairMatch(pattern, text, swap = FALSE, dropEmpty = FALSE, pos = c(1,
+str_pair_match(text, pattern, swap = FALSE, dropEmpty = FALSE, pos = c(1,
   2), ...)
 }
 \arguments{
@@ -35,7 +35,7 @@ Be careful: this may throw funny results for exotic regex, but
   so far, it seems okay. it also drops the first result which always seems to
   be a duplicate or whole-string match.
 
-\code{strPaitMatch} differs in that there should only be two
+\code{str_pair_match} differs in that there should only be two
   pairs of parenthesis, then the first (by default) becomes the name, and the
   second the value.
 }

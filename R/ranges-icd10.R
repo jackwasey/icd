@@ -38,7 +38,7 @@ icd10ChildrenRealShort <- function(icd10Short) {
 
   kids <- character(0)
 
-    if (length(icd10Short) == 0 ) {
+  if (length(icd10Short) == 0 ) {
     warning("none of the provided ICD-10 codes matched the canonical list")
     return(kids)
   }
@@ -117,6 +117,12 @@ icd10ChildrenPossibleShort <- function(icd10Short) {
   sort(c(out_complete, out))
 }
 
+#' expand range of ICD-10 codes returning only defined codes in ICD-10-CM
+#'
+#' This will need generalizing to any list of 'real' codes, e.g. WHO or other
+#' @param start character vector of length one containing a real code
+#' @param end  character vector of length one containing a real code
+#' @keywords internal
 icd10ExpandRangeRealShort <- function(start, end) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
@@ -152,11 +158,10 @@ icd10ExpandRangeRealShort <- function(start, end) {
 
 # WIP
 icd10ExpandRangePossibleShort <- function(start, end) {
-  assertScalar(start) # i'll permit numeric but prefer char
-  assertScalar(end)
+  assertString(start)
+  assertString(end)
   # check whether valid?
-  # check whether real?
-
+  # check whether real? Will error if not.
 
   start <- stringr::str_trim(start)
   end <- stringr::str_trim(end)
@@ -172,5 +177,24 @@ icd10ExpandRangePossibleShort <- function(start, end) {
 
   start_other_chars <- substr(start, 4, 10)
   end_other_chars <- substr(end, 4, 10)
+
+}
+
+# this will need s3 treatment: if 'real', we use a certain lookup table. for now, i'll get all theoretically possible codes:
+icd10_expand_range_major <- function(start, end) {
+  assertString(start)
+  assertString(end)
+
+  start <- stringr::str_trim(start)
+  end <- stringr::str_trim(end)
+
+
+  stopifnot(icd10_is_major(start), icd10_is_major(end))
+  stopifnot(start <= end)
+  start_first <- stringr::str_sub(start, 1, 1) %>% stringr::str_to_upper()
+  end_first <- stringr::str_sub(end, 1, 1) %>% stringr::str_to_upper()
+
+  if (start_first == end_first)
+    paste
 
 }

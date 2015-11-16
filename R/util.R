@@ -81,26 +81,6 @@ strip <- function(x, pattern = " ", useBytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = useBytes)
 
-#' Save given variable in package data directory
-#'
-#' File is named varname.RData with an optional suffix before .RData
-#'
-#' @param var_name character or symbol, e.g. "myvar" or \code{myvar}, either of which
-#'   would find \code{myvar} in the parent environment, and save it as
-#'   \code{myvar.RData} in \code{package_root/data}.
-#' @param suffix character scalar
-#' @keywords internal
-save_in_data_dir <- function(var_name, suffix = "") {
-  assertString(suffix)
-  var_name <- as.character(substitute(var_name))
-  stopifnot(exists(var_name, envir = parent.frame()))
-  save(list = var_name,
-       envir = parent.frame(),
-       file = file.path("data", strip(paste0(var_name, suffix, ".RData"))),
-       compress = "xz")
-  message("Now reload package to enable updated/new data: ", var_name)
-}
-
 #' @title encode TRUE as 1, and FALSE as 0 (integers)
 #' @description when saving data as text files for distribution, printing large
 #'   amounts of text containing TRUE and FALSE is inefficient. Convert to binary
@@ -196,54 +176,6 @@ str_pair_match <- function(text, pattern, swap = FALSE, dropEmpty = FALSE, pos =
   out
 }
 
-# nocov start
-
-#' unzip a single file
-#' @keywords internal
-#' @importFrom utils download.file unzip
-unzip_single <- function(url, file_name, save_path) {
-  zipfile <- tempfile()
-  download.file(url = url, destfile = zipfile, quiet = TRUE)
-  zipdir <- tempfile()
-  dir.create(zipdir)
-  unzip(zipfile, exdir = zipdir)  # files="" so extract all
-  files <- list.files(zipdir)
-  if (is.null(file_name)) {
-    if (length(files) == 1) {
-      file_name <- files
-    } else {
-      stop("multiple files in zip, but no file name specified: ",
-           paste(files, collapse = ", "))
-    }
-  } else
-    stopifnot(file_name %in% files)
-
-  file.copy(file.path(zipdir, file_name), save_path, overwrite = TRUE)
-}
-
-#' Get a zipped file from a URL, or confirm it is in data-raw already
-#'
-#' @param url url of a zip file
-#' @param file_name file name of a single file in that zip
-#' @param force logical, if TRUE, then download even if already in \code{data-raw}
-#' @return path of unzipped file in \code{data-raw}
-#' @keywords internal
-unzip_to_data_raw <- function(url, file_name, force = FALSE) {
-  pkg_name <- get_pkg_name()
-  data_raw_path <- system.file("data-raw", package = pkg_name)
-  save_path <- file.path(data_raw_path, file_name)
-  if (force || !file.exists(save_path))
-    stopifnot(
-      unzip_single(url = url, file_name = file_name, save_path = save_path)
-    )
-  save_path
-}
-
-# so that I can change to another package name when needed.
-# \code{getPackageName} gives globalenv if running interactively.
-get_pkg_name <- function() "icd9"
-
-# nocov end
 
 getVisitId <- function(x, visitId = NULL) {
   guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
@@ -324,9 +256,8 @@ swapNamesWithVals <- function(x) {
 getNonASCII <- function(x)
   x[isNonASCII(x)]
 
-isNonASCII <- function (x) {
+isNonASCII <- function(x)
   is.na(iconv(x, from = "latin1", to = "ASCII"))
-}
 
 utils::globalVariables(c("do_slow_tests", "do_online_tests"))
 
@@ -339,15 +270,6 @@ skip_online_tests <- function(msg = "skipping online test") {
   if (!exists("do_online_tests") || !do_online_tests)
     testthat::skip(msg)
 }
-
-# will be in next release of testthat
-skip_on_travis <- function() {
-  if (!identical(Sys.getenv("TRAVIS"), "true")) return()
-  testthat::skip("On Travis")
-}
-
-
-# nocov start
 
 #' Fast Factor Generation
 #'
@@ -397,8 +319,6 @@ factor_ <- function(x, levels = NULL, labels = levels, na.last = NA) {
   class(f) <- "factor"
   f
 }
-
-# nocov end
 
 #' @rdname factor_
 #' @details I don't think there is any requirement for factor levels to be

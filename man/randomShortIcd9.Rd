@@ -2,12 +2,12 @@
 % Please edit documentation in R/benchmark.R
 \name{randomShortIcd9}
 \alias{randomShortIcd9}
-\title{genereate random short icd9 codes}
+\title{generate random short icd9 codes}
 \usage{
 randomShortIcd9(n = 50000)
 }
 \description{
-genereate random short icd9 codes
+generate random short icd9 codes
 }
 \keyword{internal}
 

@@ -4,14 +4,23 @@
 \alias{scrape_icd10_who}
 \title{scrape WHO web site for ICD-10 codes}
 \usage{
-scrape_icd10_who(sleep_secs = 3)
+scrape_icd10_who(debug = FALSE, verbose = FALSE, silent = FALSE)
 }
 \description{
 javascript only (at least in recent years), so can't just get the HTML.
 Thanks guys.
 }
 \details{
-also requires phatomjs (which is Mac/Win only?) to render the javascript
+PhantomJS is not required: it can drive a regular firefox browsing
+  session directly, although this is not headless, it doesn't crash all the
+  time like phantomjs. TODO still: daggers and asterisks after codes. Tests.
+  Sorting and structuing output, probably in a denormalized data frame with
+  columns: code, (short desc avail?), desc, (notes, e.g. exclusions?), major
+  (the parent major code), sub_chapter, chapter. This should be like the
+  icd9cm, if possible.
+
+  Do more sanity checks and testing early on, e.g. for invalid codes, unusual
+  characters, vector lengths
 }
 \keyword{internal}
 

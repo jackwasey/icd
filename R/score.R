@@ -97,13 +97,13 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
                                  scoringSystem = c("original", "charlson", "quan")) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   stopifnot(ncol(x) - is.data.frame(x) == 17)
-  if(match.arg(scoringSystem) == "quan") {
+  if (match.arg(scoringSystem) == "quan")
     weights <- c(0, 2, 0, 0, 2, 1, 1, 0, 2, 0,
                  1, 2, 1, 2, 4, 6, 4)
-  } else {
+  else
     weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                  2, 2, 2, 2, 3, 6, 6)
-  }
+
   if (applyHierarchy) {
     x[,"DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "LiverMild"] <- x[, "LiverMild"] & !x[, "LiverSevere"]
@@ -161,14 +161,13 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
 #'   library(magrittr)
 #'   wide %>% icd9WideToLong %>% icd9Count
 #' @export
-#' @importFrom stats aggregate
 icd9Count <- function(x, visitId = NULL, return.df = FALSE) {
   stopifnot(is.data.frame(x))
   visitId <- getVisitId(x, visitId)
   stopifnot(is.character(visitId))
   stopifnot(length(visitId) == 1)
 
-  res <- aggregate(x[names(x) %nin% visitId],
+  res <- stats::aggregate(x[names(x) %nin% visitId],
                    by = x[visitId],
                    FUN = length)
   names(res)[names(res) %nin% visitId] <- "icd9Count"
@@ -203,7 +202,6 @@ icd9CountComorbidBin <- function(x, visitId = NULL, return.df = FALSE) {
 #'   rows) of the output will no longer match the input, but duplicate visitIds
 #'   will be counted together.
 #' @export
-#' @importFrom stats aggregate
 icd9CountWide <- function(x,
                           visitId = NULL,
                           return.df = FALSE,
