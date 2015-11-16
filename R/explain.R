@@ -16,9 +16,9 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title explain ICD9 codes
-#' @description convert 'decimal' format (123.45 style) ICD9 codes into the name and
-#'   description for human review there are official ICD9-CM data tables, not
-#'   with conversion to decimal notation, but to the textual format.
+#' @description convert 'decimal' format (123.45 style) ICD9 codes into the name
+#'   and description for human review there are official ICD9-CM data tables,
+#'   not with conversion to decimal notation, but to the textual format.
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
@@ -35,8 +35,12 @@
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.
 #' @examples
-#' icd9ExplainShort(ahrqComorbid[[1]][1:3])
-#' icd9Explain(ahrqComorbid[[1]][1:3], brief = TRUE)
+#' # by default, just show parent code and ignore children (428.0 not shown
+#' # because 428 is present):
+#' icd9ExplainShort(ahrqComorbid$CHF[1:3])
+#' # same without condensing the list. In this case, 428.0 is shown:
+#' icd9ExplainShort(ahrqComorbid$CHF[1:3], condense = TRUE)
+#' icd9Explain(ahrqComorbid$CHF[1:3], brief = TRUE)
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities

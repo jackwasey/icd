@@ -549,6 +549,13 @@ test_that("no NA values in the co-morbidity lists", {
   expect_false(anyNA(unlist(unname(elixComorbid))))
 })
 
+test_that("no duplicate values in the co-morbidity lists", {
+  expect_false(any(as.logical(lapply(ahrqComorbid, anyDuplicated))))
+  expect_false(any(as.logical(lapply(quanDeyoComorbid, anyDuplicated))))
+  expect_false(any(as.logical(lapply(quanElixComorbid, anyDuplicated))))
+  expect_false(any(as.logical(lapply(elixComorbid, anyDuplicated))))
+})
+
 test_that("built-in icd9 to comorbidity mappings are all valid", {
   expect_true(icd9IsValidMappingShort(ahrqComorbid))
   expect_true(icd9IsValidMappingShort(quanDeyoComorbid))
