@@ -128,6 +128,7 @@ logical_to_binary <- function(x) {
 #'   text vector.
 #' @keywords internal
 strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
+  warning("deprecated: TODO: stringr::str_match_all does this better, but result structured differently")
   # unlist puts the name in the first position, which I don't think I ever want.
   result <- lapply(
     text, function(x) unlist(
