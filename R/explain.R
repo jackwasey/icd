@@ -132,22 +132,27 @@ icd9Explain.numeric <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @return single logical value, \code{TRUE} if input data are predominantly
 #'   short type. If there is some uncertainty, then return NA.
 #' @keywords internal
+icd_guess_short <- function(x, test_n = 1000L)
+  UseMethod("icd_guess_short")
+
+#' @describeIn icd_guess_short Guess whether an ICD-10 code is in short form
+icd_guess_short.icd10 <- function(x, test_n)
+  !any(stringr::str_detect(x[1:test_n], ".+\\..+")) # any decimal as first approximation
+
+#' @describeIn icd_guess_short Guess whether an ICD-9 code is in short form
+icd_guess_short.icd9 <- function(x, test_n) {
+  if (is.list(x)) x <- unlist(x, recursive = TRUE)
+  x <- asCharacterNoWarn(x)
+  testend <- min(length(x), test_n)
+  vs <- icd9IsValidShort(x[1:testend])
+  vd <- icd9IsValidDecimal(x[1:testend])
+  sum(vd) <= sum(vs)
+}
+
+#' @describeIn icd_guess_short
 icd9GuessIsShort <- function(icd9) {
-  # don't take responsibility for validation of codes:
-  if (is.list(icd9)) icd9 <- unlist(icd9)
-  icd9 <- asCharacterNoWarn(icd9)
-  if (is.list(icd9)) {
-    if (length(icd9) > 0)
-      icd9 <- icd9[[1]]
-    else
-      return(TRUE)
-  }
-  testend <- length(icd9)
-  if (testend > 100) testend <- 100
-  vs <- icd9IsValidShort(icd9[1:testend])
-  vd <- icd9IsValidDecimal(icd9[1:testend])
-  if (sum(vd) > sum(vs)) return(FALSE)
-  TRUE
+  warning("icd9GuessIsShort is deprecated. Please use icd_guess_short")
+  icd_guess_short(icd9)
 }
 
 #' @title get ICD-9 Chapters from vector of ICD-9 codes

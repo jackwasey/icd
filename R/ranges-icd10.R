@@ -17,13 +17,21 @@
 
 utils::globalVariables("icd10cm2016")
 
-#' real icd10 children based on 2016 list
-#' @importFrom stringr str_trim
-icd10ChildrenRealShort <- function(icd10Short) {
+icd_children_real <- function(x)
+  UseMethod("icd_children_real", x)
 
-  assertCharacter(icd10Short)
+#' real icd10 children based on 2016 ICD-10-CM list
+#'
+#' @keywords internal
+icd_children_real.icd10 <- function(x, short = icd_guess_short(x)) {
 
-  icd10Short <- stringr::str_trim(icd10Short)
+  assertCharacter(x)
+
+  if (inherits(code, "icd10") && !inherits(code, "icd10cm"))
+    warning("This function primarily gives 'real' child codes for ICD-10-CM,
+            which is mostly a superset of ICD-10 WHO")
+
+  icd10Short <- stringr::str_trim(x)
 
   matches_bool <- icd10Short %in% icd9::icd10cm2016[["code"]]
   # if the codes are not in the source file, we ignore, warn, drop silently?
@@ -144,7 +152,7 @@ icd10ExpandRangeRealShort <- function(start, end) {
   # TODO: either search down supposedly well ordered list until substring of end
   # changes, or find all children, and get pos of last one.
 
-  end_kids <- icd10ChildrenRealShort(end)
+  end_kids <- icd10_children_real_short(end)
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
