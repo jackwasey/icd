@@ -6,7 +6,7 @@
 \alias{icd9ChildrenShort}
 \title{Expand ICD-9 codes to all possible sub-codes}
 \usage{
-icd9Children(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = TRUE,
+icd9Children(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE,
   onlyBillable = FALSE)
 
 icd9ChildrenShort(icd9Short, onlyReal = TRUE, onlyBillable = FALSE)

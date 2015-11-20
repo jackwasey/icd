@@ -9,13 +9,13 @@
 \alias{icd9IsRealShort}
 \title{Check whether ICD-9 codes exist}
 \usage{
-icd9IsReal(icd9, isShort = icd9GuessIsShort(icd9), onlyBillable = FALSE)
+icd9IsReal(icd9, isShort = icd_guess_short(icd9), onlyBillable = FALSE)
 
 icd9IsRealShort(icd9Short, onlyBillable = FALSE)
 
 icd9IsRealDecimal(icd9Decimal, onlyBillable = FALSE)
 
-icd9GetReal(icd9, isShort = icd9GuessIsShort(icd9), onlyBillable = FALSE)
+icd9GetReal(icd9, isShort = icd_guess_short(icd9), onlyBillable = FALSE)
 
 icd9GetRealShort(icd9Short, onlyBillable = FALSE)
 

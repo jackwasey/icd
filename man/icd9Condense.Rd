@@ -6,7 +6,7 @@
 \alias{icd9CondenseShort}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
-icd9Condense(icd9, isShort = icd9GuessIsShort(icd9), onlyReal = NULL,
+icd9Condense(icd9, isShort = icd_guess_short(icd9), onlyReal = NULL,
   warn = TRUE)
 
 icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, warn = TRUE)

@@ -12,14 +12,14 @@
 \alias{icd9IsBillableShort}
 \title{Determine whether codes are billable leaf-nodes}
 \usage{
-icd9IsBillable(icd9, isShort = icd9GuessIsShort(icd9),
+icd9IsBillable(icd9, isShort = icd_guess_short(icd9),
   version = getLatestBillableVersion())
 
 icd9IsBillableShort(icd9Short, version = getLatestBillableVersion())
 
 icd9IsBillableDecimal(icd9Decimal, version = getLatestBillableVersion())
 
-icd9GetBillable(icd9, isShort = icd9GuessIsShort(icd9), invert = FALSE,
+icd9GetBillable(icd9, isShort = icd_guess_short(icd9), invert = FALSE,
   version = getLatestBillableVersion())
 
 icd9GetBillableShort(icd9Short, version = getLatestBillableVersion())
@@ -30,7 +30,7 @@ icd9GetNonBillableShort(icd9Short, version = getLatestBillableVersion())
 
 icd9GetNonBillableDecimal(icd9Decimal, version = getLatestBillableVersion())
 
-icd9GetNonBillable(icd9, isShort = icd9GuessIsShort(icd9),
+icd9GetNonBillable(icd9, isShort = icd_guess_short(icd9),
   version = getLatestBillableVersion())
 }
 \arguments{

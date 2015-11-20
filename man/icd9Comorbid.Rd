@@ -19,8 +19,8 @@ icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
   chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE)
 
 icd9Comorbid(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
-  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
+  isShort = icd_guess_short(icd9df[1:100, icd9Field]),
+  isShortMapping = icd_guess_short(icd9Mapping), return.df = FALSE, ...)
 
 icd9ComorbidShort(...)
 

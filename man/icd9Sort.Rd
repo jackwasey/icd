@@ -6,7 +6,7 @@
 \alias{icd9SortShort}
 \title{sort short-form icd9 codes}
 \usage{
-icd9Sort(icd9, isShort = icd9GuessIsShort(icd9))
+icd9Sort(icd9, isShort = icd_guess_short(icd9))
 
 icd9SortShort(icd9Short)
 

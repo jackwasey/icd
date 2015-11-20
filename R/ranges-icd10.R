@@ -17,11 +17,13 @@
 
 utils::globalVariables("icd10cm2016")
 
-icd_children_real <- function(x)
-  UseMethod("icd_children_real", x)
-
 #' real icd10 children based on 2016 ICD-10-CM list
 #'
+#' @keywords internal
+icd_children_real <- function(x)
+  UseMethod("icd_children_real")
+
+#' @describeIn icd_children_real get the children of ICD-10 code(s)
 #' @keywords internal
 icd_children_real.icd10 <- function(x, short = icd_guess_short(x)) {
 
@@ -188,8 +190,10 @@ icd10ExpandRangePossibleShort <- function(start, end) {
 
 }
 
-# this will need s3 treatment: if 'real', we use a certain lookup table. for now, i'll get all theoretically possible codes:
-icd10_expand_range_major <- function(start, end) {
+icd_expand_range_major <- function(start, end)
+  UseMethod("icd_expand_range_major")
+
+icd_expand_range_major.icd10 <- function(start, end) {
   assertString(start)
   assertString(end)
 

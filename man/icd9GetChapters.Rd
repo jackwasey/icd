@@ -4,7 +4,7 @@
 \alias{icd9GetChapters}
 \title{get ICD-9 Chapters from vector of ICD-9 codes}
 \usage{
-icd9GetChapters(icd9, isShort = icd9GuessIsShort(icd9), verbose = FALSE)
+icd9GetChapters(icd9, short = icd_guess_short(icd9), verbose = FALSE)
 }
 \arguments{
 \item{icd9}{is
@@ -13,7 +13,7 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{single logical value which determines whether the ICD-9 code
+\item{short}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 

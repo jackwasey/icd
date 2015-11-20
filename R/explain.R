@@ -45,13 +45,16 @@
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
 #' @export
+
+icd_explain <- function(icd9, short = icd_guess_short(icd9), condense = TRUE, brief = FALSE, warn = TRUE)
+  UseMethod("icd_explain")
+
+
+#' @rdname icd_explain
+#' @export
 icd9Explain <- function(icd9, short = icd_guess_short(icd9), condense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
-  UseMethod("icd9Explain")
-}
-
-icd_explain <- function(icd9, short = icd_guess_short(icd9), condense = TRUE, brief = FALSE, warn = TRUE) {
-  UseMethod("icd9Explain")
+  UseMethod("icd_explain")
 }
 
 #' @rdname icd_explain
@@ -61,25 +64,29 @@ icd9ExplainShort <- function(icd9Short, condense = TRUE, brief = FALSE, warn = T
   icd_explain(icd9Short, short = TRUE, condense = condense, brief = brief, warn = warn)
 }
 
-#' @rdname icd9Explain
+#' @rdname icd_explain
 #' @export
 icd9ExplainDecimal <- function(icd9Decimal, condense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
   icd_explain(icd9Decimal, short = FALSE, condense = condense, brief = brief, warn = warn)
 }
 
-#' @describeIn icd_explain explain all ICD-9 codes in a list of vectors
+#' @describeIn icd_explain explain Explain all ICD-9 codes in a list of vectors
 #' @export
-icd_explain.list <- function(icd9,  short = icd_guess_short(icd9), condense = TRUE, brief = FALSE, warn = TRUE) {
-  lapply(icd9, icd9Explain, short = short, condense = condense, brief = brief, warn = warn)
+icd_explain.list <- function(icd9,  short = icd_guess_short(icd9),
+                             condense = TRUE, brief = FALSE, warn = TRUE) {
+  lapply(icd9, icd9Explain, short = short,
+         condense = condense, brief = brief, warn = warn)
 }
 
-#' @describeIn icd9Explain explain factor of ICD-9 codes
+#' @describeIn icd_explain explain Explain factor of ICD-9 codes
 #' @export
-icd_explain.factor <- function(icd9, short = icd_guess_short(icd9), condense = TRUE, brief = FALSE, warn = TRUE)
-  icd9Explain.character(asCharacterNoWarn(icd9), short = short, condense = condense, brief = brief, warn = warn)
+icd_explain.factor <- function(icd9, short = icd_guess_short(icd9),
+                               condense = TRUE, brief = FALSE, warn = TRUE)
+  icd9Explain.character(asCharacterNoWarn(icd9), short = short,
+                        condense = condense, brief = brief, warn = warn)
 
-#' @describeIn icd9Explain explain character vector of ICD-9 codes
+#' @describeIn icd_explain explain character vector of ICD-9 codes
 #' @export
 icd_explain.character <- function(icd9, short = icd_guess_short(icd9),
                                   condense = TRUE, brief = FALSE, warn = TRUE) {
@@ -116,12 +123,19 @@ icd_explain.character <- function(icd9, short = icd_guess_short(icd9),
   )
 }
 
+#' @rdname icd_explain
+#' @export
+icd9Explain.numeric <- function(icd9, short = icd_guess_short(icd9),
+                                condense = TRUE, brief = FALSE, warn = FALSE) {
+  .Deprecated("icd_explain.numeric")
+  icd_explain.numeric(icd9, short, condense, brief, warn)
+}
 #' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning.
 #'   In general, this is not allowed because of the possible ambiguity of
 #'   numeric decimal codes, but for convenience, this is allowed in this case to
 #'   avoid typing many quotes.
 #' @export
-icd9Explain.numeric <- function(icd9, short = icd_guess_short(icd9),
+icd_explain.numeric <- function(icd9, short = icd_guess_short(icd9),
                                 condense = TRUE, brief = FALSE, warn = FALSE) {
   warnNumericCode()
   icd9Explain.character(as.character(icd9), short = short, condense = condense, brief = brief, warn = warn)
@@ -139,15 +153,16 @@ icd9Explain.numeric <- function(icd9, short = icd_guess_short(icd9),
 #' @return single logical value, \code{TRUE} if input data are predominantly
 #'   short type. If there is some uncertainty, then return NA.
 #' @keywords internal
-icd_guess_short <- function(x, test_n = 1000L) {
+icd_guess_short <- function(x, test_n = 1000L)
   UseMethod("icd_guess_short")
-}
 
 #' @describeIn icd_guess_short Guess whether an ICD-10 code is in short form
+#' @keywords internal
 icd_guess_short.icd10 <- function(x, test_n)
   !any(stringr::str_detect(x[1:test_n], ".+\\..+")) # any decimal as first approximation
 
 #' @describeIn icd_guess_short Guess whether an ICD-9 code is in short form
+#' @keywords internal
 icd_guess_short.icd9 <- function(x, test_n) {
   if (is.list(x)) x <- unlist(x, recursive = TRUE)
   x <- asCharacterNoWarn(x)
@@ -157,7 +172,7 @@ icd_guess_short.icd9 <- function(x, test_n) {
   sum(vd) <= sum(vs)
 }
 
-#' @describeIn icd_guess_short Deprecated
+#' @rdname icd_guess_short
 icd9GuessIsShort <- function(icd9) {
   .Deprecated("icd_guess_short")
   icd_guess_short(icd9)

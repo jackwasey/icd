@@ -12,7 +12,7 @@
 \alias{icd9ExpandRangeShort}
 \title{take two ICD-9 codes and expand range to include all child codes}
 \usage{
-icd9ExpandRange(start, end, isShort = icd9GuessIsShort(c(start, end)),
+icd9ExpandRange(start, end, isShort = icd_guess_short(c(start, end)),
   onlyReal = TRUE, excludeAmbiguousStart = TRUE,
   excludeAmbiguousEnd = TRUE)
 
