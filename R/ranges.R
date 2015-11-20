@@ -28,7 +28,7 @@
 #' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 #' @keywords manip
 #' @export
-icd9Sort <- function(icd9, isShort = icd9GuessIsShort(icd9)) {
+icd9Sort <- function(icd9, isShort = icd_guess_short(icd9)) {
   assertFlag(isShort)
   if (isShort) return(icd9SortShort(icd9))
   icd9SortDecimal(icd9)
@@ -88,7 +88,7 @@ sortOrderShort <- function(icd9Short) {
 #'   E.g. 99.99 to 101.01 would by default exclude 101 and 101.0
 #' @family ICD-9 ranges
 #' @export
-icd9ExpandRange <- function(start, end, isShort = icd9GuessIsShort(c(start, end)), onlyReal = TRUE,
+icd9ExpandRange <- function(start, end, isShort = icd_guess_short(c(start, end)), onlyReal = TRUE,
                             excludeAmbiguousStart = TRUE,
                             excludeAmbiguousEnd = TRUE) {
   if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal,
@@ -295,7 +295,7 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
 #' icd9ChildrenDecimal("100.00")
 #' icd9ChildrenDecimal("2.34")
 #' @export
-icd9Children <- function(icd9, isShort = icd9GuessIsShort(icd9),
+icd9Children <- function(icd9, isShort = icd_guess_short(icd9),
                          onlyReal = TRUE, onlyBillable = FALSE) {
   assertFactorOrCharacter(icd9)
   assertFlag(isShort)

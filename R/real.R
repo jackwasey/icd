@@ -31,7 +31,7 @@
 #'   instead of seeing if they are any leaf or branch node.
 #' @return logical vector
 #' @export
-icd9IsReal <- function(icd9, isShort = icd9GuessIsShort(icd9),
+icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
                        onlyBillable = FALSE) {
   if (isShort) return(icd9IsRealShort(icd9, onlyBillable))
   icd9IsRealDecimal(icd9, onlyBillable)
@@ -60,7 +60,7 @@ icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
 #' @describeIn icd9IsReal Return only those codes which are heading or leaf
 #'   (billable), specifying whether codes are all short-form or all decimal-form
 #' @export
-icd9GetReal <- function(icd9, isShort = icd9GuessIsShort(icd9), onlyBillable = FALSE) {
+icd9GetReal <- function(icd9, isShort = icd_guess_short(icd9), onlyBillable = FALSE) {
   if (isShort) return(icd9GetRealShort(icd9))
   icd9GetRealDecimal(icd9)
 }
@@ -93,7 +93,7 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE)
 #'   revisions within one year, although none currently implemented.
 #' @return logical vector of same length as input
 #' @export
-icd9IsBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
+icd9IsBillable <- function(icd9, isShort = icd_guess_short(icd9),
                            version = getLatestBillableVersion()) {
   assertVector(icd9)
   assertFlag(isShort)
@@ -118,7 +118,7 @@ icd9IsBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersio
 #' @describeIn icd9IsBillable Return only those codes which are leaf (billable)
 #'   codes in the hierarchy.
 #' @export
-icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
+icd9GetBillable <- function(icd9, isShort = icd_guess_short(icd9),
                             invert = FALSE, version = getLatestBillableVersion()) {
   assertVector(icd9)
   assertFlag(isShort)
@@ -159,6 +159,6 @@ icd9GetNonBillableDecimal <- function(icd9Decimal, version = getLatestBillableVe
 #'   (billable) codes in the hierarchy. This would include invalid and heading
 #'   codes. Codes are specified (or guessed) to be all decimal- or short-form.
 #' @export
-icd9GetNonBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
+icd9GetNonBillable <- function(icd9, isShort = icd_guess_short(icd9),
                                version = getLatestBillableVersion())
   icd9GetBillable(icd9, isShort = isShort, invert = TRUE, version = version)

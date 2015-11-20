@@ -25,7 +25,7 @@
 #' @template onlyReal
 #' @family ICD-9 ranges
 #' @export
-icd9Condense <- function(icd9, isShort = icd9GuessIsShort(icd9),
+icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
                          onlyReal = NULL, warn = TRUE) {
   assertFlag(isShort)
   if (isShort) return(icd9CondenseShort(icd9,

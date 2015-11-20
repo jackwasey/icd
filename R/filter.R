@@ -25,7 +25,7 @@
 icd9FilterValid <- function(icd9df, icd9Field = NULL,
                             isShort =  NULL, invert = FALSE) {
   icd9Field <- getIcdField(icd9df, icd9Field)
-  if (is.null(isShort)) isShort <- icd9GuessIsShort(icd9df[[icd9Field]])
+  if (is.null(isShort)) isShort <- icd_guess_short(icd9df[[icd9Field]])
   assertDataFrame(icd9df, min.cols = 1, col.names = "named")
   assertFlag(isShort)
   assertFlag(invert)

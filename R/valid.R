@@ -35,60 +35,91 @@
 #'   a numeric, since there is no ambiguity. Numeric-only codes should be one to
 #'   three digitis, V codes are followed by one or two digits, and E codes
 #'   always by three digits between 800 and 999.
-#' @template major
 #' @details Leading zeroes in the decimal form are not ambiguous. Although
 #'   integer ICD-9 codes could be intended by the user, there is a difference
 #'   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
 #'   is provided
+#' TODO: add default (when there is no class) which detected icd9 vs 10 if
+#' possible. TODO: use "short" or "long" attribute if available to tighten
+#' validation, or guess if missing.
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
-#' @template isShort
-#' @seealso \code{\link{icd9IsValidDecimal}}, \code{\link{icd9IsValidShort}},
+#' @template major
+#' @param icd An ICD-9 or 10 code. If the class is set to \code{'icd9'},
+#'   \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.
+#' @seealso \code{\link{icd_validDecimal}}, \code{\link{icd_validShort}},
 #'   \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
 #'   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @family ICD9 validation
 #' @return logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 #'   provided according to its validity
 #' @examples
-#'   icd9IsValidShort(c("", "1", "22", "333", "4444", "123.45", "V",
+#'   icd_validShort(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
-#'   icd9IsValidMajor(c("", "1", "22", "333", "4444", "123.45", "V",
+#'   icd_validMajor(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 #' @export
-icd9IsValid <- function(icd9, isShort) {
-  assertFlag(isShort)
-  if (isShort) icd9IsValidShort(icd9) else icd9IsValidDecimal(icd9)
+icd_is_valid <- function(x)
+  UseMethod("icd_is_valid")
+
+#' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
+#' @import checkmate stringr
+icd_is_valid.icd10 <- function(icd, short = icd_guess_short(icd)) {
+  assertCharacter(icd)
+  # SOMEDAY: check whether code has 'year' attribute. This is maybe more for testing 'realness'
+  # start with a broad regex
+ 
+  # TODO: test whether icd-10-cm or WHO, if class not otherwise specified.
+  if (short)
+    icd %>% str_trim %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]{1,4}[[:space:]]*$")
+  else
+    icd %>% str_trim %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]\\.[[:alnum:]]{0,4}[[:space:]]*$")
 }
 
-#' @rdname icd9IsValid
+icd_is_valid.icd9 <- function(icd, short) {
+  assertFlag(short)
+  if (short)
+    icd_is_valid_short(icd)
+  else
+    icd_is_valid_decimal(icd)
+}
+
+#' @rdname icd_is_valid
+#' @template isShort
 #' @export
 icd9Valid <- function(icd9, isShort) {
-  warning("icd9Valid is deprecated, please use icd9IsValid")
-  icd9IsValid(icd9, isShort)
+  .Deprecated("icd_is_valid")
+  icd_valid(icd9, isShort)
 }
 
-#' @rdname icd9IsValid
+#' @rdname icd_is_valid
+#' @template isShort
 #' @export
-icd9IsValidDecimal <- function(icd9Decimal) {
-  assertFactorOrCharacter(icd9Decimal)
-  if (length(icd9Decimal) == 0) return(logical())
-
-  icd9IsValidDecimalN(icd9Decimal) |
-    icd9IsValidDecimalV(icd9Decimal) |
-    icd9IsValidDecimalE(icd9Decimal)
+icd9IsValid <- function(icd9, isShort) {
+  .Deprecated("icd_is_valid")
+  icd_valid(icd9, isShort)
 }
 
-#' @rdname icd9IsValid
+#' @rdname icd_is_valid
 #' @export
-icd9ValidDecimal <- function(icd9) {
-  warning("icd9ValidDecimal is deprecated, please use icd9IsValidDecimal")
-  icd9IsValidDecimal(icd9)
+icd_valid_decimal.icd9 <- function(icd) {
+  assertFactorOrCharacter(icd)
+  if (length(icd) == 0) return(logical())
+
+  icd9_valid_decimal_n(icd) |
+    icd9_valid_decimal_v(icd) |
+    icd9_valid_decimal_e(icd)
 }
 
-#' @rdname icd9IsValid
+icd9ValidDecimal <- function(icd9Decimal) {
+  .Deprecated("icd_valid")
+  icd_valid_decimal.icd9(icd9Decimal)
+}
+
+#' @rdname icd_is_valid
 #' @export
-icd9IsValidShort <- function(icd9Short) {
+icd_valid_short.icd9 <- function(icd9Short) {
 
   if (length(icd9Short) == 0) return(logical())
 
@@ -96,51 +127,41 @@ icd9IsValidShort <- function(icd9Short) {
 
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.
-  icd9IsValidShortN(icd9Short) |
-    icd9IsValidShortV(icd9Short) |
-    icd9IsValidShortE(icd9Short)
+  icd9_valid_short_n(icd9Short) |
+    icd9_valid_short_v(icd9Short) |
+    icd9_valid_short_e(icd9Short)
 }
 
-#' @rdname icd9IsValid
+#' @rdname icd_is_valid
 #' @export
 icd9ValidShort <- function(icd9) {
-  warning("icd9ValidShort is deprecated, please use icd9IsValidShort")
-  icd9IsValidShort(icd9)
+  .Deprecated("icd_valid")
+  icd_validShort(icd9)
 }
 
-#' @rdname icd9IsValid
-#' @export
-icd9IsValidShortV <- function(icd9Short) {
-  assertFactorOrCharacter(icd9Short)
+icd9_is_valid_short_v <- function(icd9Short) {
   icd9Short <- asCharacterNoWarn(icd9Short)
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", # nolint
         icd9Short)
 }
 
-#' @rdname icd9IsValid
-#' @export
-icd9IsValidShortE <- function(icd9Short){
-  assertFactorOrCharacter(icd9Short)
+icd9_is_valid_short_e <- function(icd9Short){
   icd9Short <- asCharacterNoWarn(icd9Short)
   grepl("^[[:space:]]*[Ee][[:digit:]]{1,4}[[:space:]]*$", icd9Short)
 }
 
-#' @rdname icd9IsValid
-#' @export
-icd9IsValidShortN <- function(icd9Short) {
-  assertFactorOrCharacter(icd9Short)
+icd9_is_valid_short_n <- function(icd9Short) {
   icd9Short <- asCharacterNoWarn(icd9Short)
   grepl("^[[:space:]]*[[:digit:]]{1,5}[[:space:]]*$", icd9Short)
 }
 
-icd9IsValidDecimalV <- function(icd9Decimal) {
-  assertFactorOrCharacter(icd9Decimal)
+icd9_is_valid_decimal_v <- function(icd9Decimal) {
   icd9Decimal <- asCharacterNoWarn(icd9Decimal)
   grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
         icd9Decimal)
 }
 
-icd9IsValidDecimalE <- function(icd9Decimal) {
+icd9_is_valid_decimal_e <- function(icd9Decimal) {
   #need Perl regex for lookbehind. may even be quicker, according to the docs.
   #grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$",
   #trim(icd9Decimal), perl = TRUE)
@@ -150,85 +171,106 @@ icd9IsValidDecimalE <- function(icd9Decimal) {
         icd9Decimal)
 }
 
-icd9IsValidDecimalN <- function(icd9Decimal) {
+icd9_is_valid_decimal_n <- function(icd9Decimal) {
   assertFactorOrCharacter(icd9Decimal)
   icd9Decimal <- asCharacterNoWarn(icd9Decimal)
   grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
         icd9Decimal)
 }
 
-#' @rdname icd9IsValid
-#' @export
-icd9IsValidMajor <- function(major)
+# do i need to export this?
+icd_is_valid_major <- function(x)
+  UseMethod("icd_valid_major")
+
+icd_is_valid_major.icd9 <- function(major)
   # let grepl do what it can with integers, factors, etc.
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)", # nolint
     x = major
   )
 
-icd9IsValidMajorN <- function(major)
+icd9_is_valid_major_n <- function(major)
   grepl(
     pattern = "^[[:space:]]*[[:digit:]]{1,3}[[:space:]]*$",
     x = major
   )
 
-icd9IsValidMajorV <- function(major)
+icd9_is_valid_major_v <- function(major)
   grepl(
     pattern = "^[[:space:]]*[Vv][[:digit:]]{1,2}[[:space:]]*$",
     x = major
   )
 
-icd9IsValidMajorE <- function(major)
+icd9_is_valid_major_e <- function(major)
   grepl(
     pattern = "^[[:space:]]*[Ee][[:digit:]]{1,3}[[:space:]]*$",
     x = major
   )
 
-#' @title validate an icd9 mapping to comorbidities
+#' validate an icd9 mapping to comorbidities
+#' 
 #' @description takes each item in each vector of the list of vectors and checks
 #'   validity, or returns those items which are valid for each comorbidity.
+#' @template short
 #' @template mapping
-#' @template isShort
 #' @family ICD9 validation
 #' @export
-icd9IsValidMapping <- function(icd9Mapping, isShort) {
-  assertList(icd9Mapping, types = "character", any.missing = FALSE,
+icd_is_valid_map <- function(map, short) {
+  assertList(map, types = "character", any.missing = FALSE,
              min.len = 1, unique = TRUE, names = "named")
-  checkFlag(isShort)
+  checkFlag(short)
   # TOOD: warn/return the invalid labels
   all(unlist(
-    lapply(icd9Mapping, FUN = function(icd9Map) icd9IsValid(icd9Map, isShort)),
+    lapply(map, FUN = function(x) icd_valid(x, short)),
     use.names = FALSE
   ))
 }
 
-#' @rdname icd9IsValidMapping
+#' @rdname icd_is_valid_map
+#' @template mapping-icd9
+#' @remplate isShort
 #' @export
-icd9IsValidMappingShort <- function(icd9Mapping)
-  icd9IsValidMapping(icd9Mapping, TRUE)
+icd9ValidMapping <- function(icd9Mapping, isShort) {
+  .Deprecated("icd_valid_map")
+  icd_valid_map(icd9Mapping, isShort)
+}
 
-#' @rdname icd9IsValidMapping
+#' @rdname icd_is_valid_map
+#' @template mapping-old
 #' @export
-icd9IsValidMappingDecimal <- function(icd9Mapping)
-  icd9IsValidMapping(icd9Mapping, FALSE)
+icd9ValidMappingShort <- function(icd9Mapping) {
+  .Deprecated("icd_valid_map")
+  icd_valid_map(icd9Mapping, TRUE)
+}
 
-#' @rdname icd9IsValidMapping
+#' @rdname icd_is_valid_map
+#' @template mapping-old
+#' @export
+icd9ValidMappingDecimal <- function(icd9Mapping)
+  .Deprecated("icd_valid_map")
+  icd_valid_map(icd9Mapping, FALSE)
+
+#' @rdname icd_is_valid_map
+#' @template mapping-old
 #' @export
 icd9GetInvalidMappingShort <- function(icd9Mapping) {
+  .Deprecated("icd_valid_map")
   x <- lapply(icd9Mapping, FUN = icd9GetInvalidShort)
   x[lapply(x, length) > 0]
 }
 
-7#' @rdname icd9IsValidMapping
+#' @rdname icd_is_valid_map
+#' @template mapping-old
 #' @export
 icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
+  .Deprecated("icd_valid_map")
   x <- lapply(icd9Mapping, FUN = icd9GetInvalidDecimal)
   x[lapply(x, length) > 0]
 }
 
-#' @name icd9GetValid
-#' @title invalid subset of decimal or short ICD-9 codes
-#' @description Given vector of short or decimal ICD-9 codes, return (in the
+#' invalid subset of decimal or short ICD-9 codes
+#'
+#' Given vector of short or decimal ICD-9 codes, return (in the
 #'   same format) those codes which are valid or invalid. Useful for generating
 #'   error messages with the faulty codes if validation fails.
 #' @template icd9-any
@@ -238,59 +280,131 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
 #' @keywords manip
 #' @family ICD-9 validation
 #' @export
-icd9GetValid <- function(icd9, isShort = icd9GuessIsShort(icd9))
-  icd9[icd9IsValid(icd9, isShort = isShort)]
+icd_get_valid <- function(icd, short = icd_guess_short(icd))
+  UseMethod("icd_get_valid")
 
-#' @describeIn icd9GetValid Returns subset of codes which are in valid decimal format, e.g. "100" or "V01.10"
+#' @describeIn icd_get_valid Get valid ICD-9 codes
 #' @export
-icd9GetValidDecimal <- function(icd9Decimal)
-  icd9Decimal[icd9IsValidDecimal(icd9Decimal)]
+icd_get_valid.icd9 <- function(icd, short = icd_guess_short(icd)) {
+  icd[icd_valid.icd9(icd, short = short)]
+}
 
-#' @describeIn icd9GetValid Returns subset of codes which are in valid short format, e.g. "E800" or "41001"
+#' @describeIn icd_get_valid Get valid ICD-10 codes
 #' @export
-icd9GetValidShort <- function(icd9Short)
-  icd9Short[icd9IsValidShort(icd9Short)]
+icd_get_valid.icd10 <- function(icd, short = icd_guess_short(icd)) {
+  icd[icd_valid.icd10(icd, short = short)]
+}
 
-#' @describeIn icd9GetValid Returns subset of codes which are not in valid short or decimal format.
+#' @describeIn icd_get_valid Get valid ICD-10-CM codes
 #' @export
-icd9GetInvalid <- function(icd9, isShort = icd9GuessIsShort(icd9))
-  icd9[!icd9IsValid(icd9, isShort = isShort)]
+icd_get_valid.icd10cm <- function(icd, short = icd_guess_short(icd)) {
+  icd[icd_valid.icd10cm(icd, short = short)]
+}
 
-#' @describeIn icd9GetValid Returns subset of codes which are not in valid decimal format.
+icd9GetValid <- function(icd9, isShort = icd_guess_short(icd9)) {
+  .Deprecated("icd_get_valid")
+  icd_get_valid(icd9, isShort)
+}
+
+#' @describeIn icd_get_valid Returns subset of codes which are in valid decimal format, e.g. "100" or "V01.10"
 #' @export
-icd9GetInvalidDecimal <- function(icd9Decimal)
-  icd9Decimal[!icd9IsValidDecimal(icd9Decimal)]
+icd9GetValidDecimal <- function(icd9Decimal) {
+  .Deprecated("icd_get_valid")
+  icd9Decimal[icd_validDecimal(icd9Decimal)]
+}
 
-#' @describeIn icd9GetValid Returns subset of codes which are not in valid short format.
+#' @describeIn icd_get_valid Returns subset of codes which are in valid short format, e.g. "E800" or "41001"
 #' @export
-icd9GetInvalidShort <- function(icd9Short)
-  icd9Short[!icd9IsValidShort(icd9Short)]
+icd9GetValidShort <- function(icd9Short) {
+  .Deprecated("icd_get_valid")
+  icd9Short[icd_validShort(icd9Short)]
+}
 
-#' @keywords internal
-icd9IsMajor <- function(icd9) {
+#' @describeIn icd_get_valid Returns subset of codes which are not in valid short or decimal format.
+#' @export
+icd9GetInvalid <- function(icd9, isShort = icd_guess_short(icd9)) {
+  .Deprecated("icd_get_invalid")
+}
+
+#' @describeIn icd_get_valid Returns subset of codes which are not in valid short or decimal format.
+#' @export
+icd_get_invalid <- function(x, short = icd_guess_short(icd9)) {
+  icd9[!icd_valid(x, short = short)]
+}
+
+#' @describeIn icd_get_valid Returns subset of codes which are not in valid decimal format.
+#' @export
+icd9GetInvalidDecimal <- function(icd9Decimal) {
+  .Deprecated("icd_get_valid")
+  icd9Decimal[!icd_validDecimal(icd9Decimal)]
+}
+
+#' @describeIn icd_get_valid Returns subset of codes which are not in valid short format.
+#' @export
+icd9GetInvalidShort <- function(icd9Short) {
+  .Deprecated("icd_get_valid")
+  icd9Short[!icd_validShort(icd9Short)]
+}
+
+icd_is_major <- function(x)
+  UseMethod("icd_is_major")
+
+icd_is_major.icd9 <- function(icd9) {
   icd9 <- trim(icd9)
   nchar(icd9) - icd9IsE(icd9) < 4
 }
 
-#' @title do codes belong to numeric, V or E classes?
-#' @description For each code, return \code{TRUE} if numric or \code{FALSE} if a
+icd_is_major.icd10 <- function(x) {
+  stringr::str_detect(x, "[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]][[:space:]]")
+}
+
+icd_is_major.icd10cm <- function(x) {
+  stringr::str_detect(x, "[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]")
+}
+
+#' do ICD-9 codes belong to numeric, V or E classes?
+#' 
+#' For each code, return \code{TRUE} if numric or \code{FALSE} if a
 #'   V or E code.
 #' @template icd9-any
 #' @return logical vector
 #' @export
-icd9IsN <- function(icd9)
+icd9_is_n <- function(icd9) {
   icd9IsA(asCharacterNoWarn(icd9), "VEve", TRUE)
+}
 
-#' @describeIn icd9IsN are the given codes V type?
+#' @describeIn icd9_is_n are the given codes V type?
 #' @export
-icd9IsV <- function(icd9)
+icd9_is_v <- function(icd9) {
   icd9IsA(asCharacterNoWarn(icd9), "Vv")
+}
 
-
-#' @describeIn icd9IsN are the given codes E type?
+#' @describeIn icd9_is_n are the given codes E type?
 #' @export
-icd9IsE <- function(icd9)
+icd9_is_e <- function(icd9) {
   icd9IsA(asCharacterNoWarn(icd9), "Ee")
+}
+
+#' @describeIn icd9_is_n are the given codes numeric type?
+#' @export
+icd9IsN <- function(icd9) {
+  .Deprecated("icd9_is_n")
+  icd9_is_n(icd9)
+}
+
+#' @describeIn icd9_is_n are the given codes V type?
+#' @export
+icd9IsV <- function(icd9) {
+  .Deprecated("icd9_is_v")
+  icd9_is_v(icd9)
+}
+
+#' @describeIn icd9_is_n are the given codes E type?
+#' @export
+icd9IsE <- function(icd9) {
+  .Deprecated("icd9_is_e")
+  icd9_is_e(icd9)
+}
 
 warnNumericCode <- function()
   warning("input data is in numeric format. This can easily lead to errors in short or decimal codes, e.g. short code 1000: is it 10.00 or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10", call. = FALSE) # nolint

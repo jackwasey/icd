@@ -80,8 +80,8 @@ icd9Comorbid <- function(icd9df,
                          icd9Mapping,
                          visitId = NULL,
                          icd9Field = NULL,
-                         isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-                         isShortMapping = icd9GuessIsShort(icd9Mapping),
+                         isShort = icd_guess_short(icd9df[1:100, icd9Field]),
+                         isShortMapping = icd_guess_short(icd9Mapping),
                          return.df = FALSE, ...) {
 
   visitId <- getVisitId(icd9df, visitId)
@@ -379,13 +379,13 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
       if (length(only.x) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     x.title, length(only.x), y.title))
-        lapply(icd9Explain(only.x, doCondense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(icd9Explain(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       if (length(only.y) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     y.title, length(only.y), x.title))
-        lapply(icd9Explain(only.y, doCondense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(icd9Explain(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       cat("\n")

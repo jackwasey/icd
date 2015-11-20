@@ -19,30 +19,20 @@
 #' @description move to C++ or own R file:
 #' @param icd10 character vector
 #' @import checkmate stringr
-icd_is_major <- function(icd10) {
-  assertCharacter(icd10)
-  # this is easier than ICD-9
-  stringr::str_detect(icd10, "^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]*$")
+icd_is_major.icd10 <- function(icd) {
+  assertCharacter(icd)
+  # if not know whether ICD-10-CM, then use broader definition
+  icd_is_major.icd10cm(icd)
 }
 
-
-#' Test whether ICD-9 or ICD-10 codes are valid
-#'
-#' TODO: add default (when there is no class) which detected icd9 vs 10 if
-#' possible. TODO: use "short" or "long" attribute if available to tighten
-#' validation, or guess if missing.
-#' @param icd An ICD-9 or 10 code. If the class is set to \code{'icd9'},
-#'   \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.
-icd_is_valid <- function(x)
-  UseMethod("icd_is_valid")
-
-#' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
-#' @import checkmate stringr
-icd_is_valid.icd10 <- function(icd) {
+icd_is_major.icd10cm <- function(icd) {
   assertCharacter(icd)
-  # SOMEDAY: check whether code has 'year' attribute. This is maybe more for testing 'realness'
-  # start with a broad regex
-  icd %>% str_trim %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]\\.?[[:alnum:]]{0,4}[[:space:]]*$")
+  stringr::str_detect(icd, "^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]*$")
+}
+
+icd_is_major.icd10who <- function(icd) {
+  assertCharacter(icd)
+  stringr::str_detect(icd, "^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]][[:space:]]*$")
 }
 
 #' @details From WHO ICD-10 manual: "The basic ICD is a single coded list of
@@ -79,6 +69,3 @@ icd_is_valid.icd10who <- function(icd, strict = FALSE) {
   }
 }
 
-icd_is_valid.icd10cm <- function(icd) {
-  stop("need to implement. WHO or ICD-10-CM as default? WHO ICD-10 is not actually a subset of ICD-10-CM.")
-}
