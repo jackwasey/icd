@@ -11,23 +11,9 @@ icd9LongToWide(icd9df, visitId = NULL, icd9Field = NULL, prefix = "icd_",
 \item{icd9df}{data.frame of long-form data, one column for visitId and one
 for ICD code}
 
-\item{visitId}{The name of the column in the data frame which contains the
-patient or visit identifier. Typically this is the visit identifier, since
-patients come leave and enter hospital with different ICD-9 codes. It is a
-character vector of length one. If left empty, or \code{NULL}, then an
-attempt is made to guess which field has the ID for the patient encounter
-(not a patient ID, although this can of course be specified directly). The
-guesses proceed until a single match is made. Data frames may be wide with
-many matching fields, so to avoid false positives, anything but a single
-match is rejected. If there are no successful guesses, and \code{visitId}
-was not specified, then the first column of the data frame is used.}
+\item{visitId}{Deprecated. Use \code{visit_name}}
 
-\item{icd9Field}{The column in the data frame which contains the ICD codes.
-This is a character vector of length one. If it is \code{NULL}, \code{icd9}
-will attempt to guess the column name, looking for progressively less
-likely possibilities until it matche a single column. Failing this, it will
-take the first column in the data frame. Specifying the column using this
-argument avoids the guesswork.}
+\item{icd9Field}{Deprecated. Use \code{icd_name}}
 
 \item{prefix}{character, default "icd_" to prefix new columns}
 
@@ -44,6 +30,24 @@ a row in the output data per contiguous block of identical visitIds.}
 with a field for the visitId. This may be more convenient, but the default
 of \code{FALSE} gives the more natural return data of a matrix with
 rownames being the visitIds.}
+
+\item{visit_name}{The name of the column in the data frame which contains the
+patient or visit identifier. Typically this is the visit identifier, since
+patients come leave and enter hospital with different ICD-9 codes. It is a
+character vector of length one. If left empty, or \code{NULL}, then an
+attempt is made to guess which field has the ID for the patient encounter
+(not a patient ID, although this can of course be specified directly). The
+guesses proceed until a single match is made. Data frames may be wide with
+many matching fields, so to avoid false positives, anything but a single
+match is rejected. If there are no successful guesses, and \code{visitId}
+was not specified, then the first column of the data frame is used.}
+
+\item{icd_name}{The column in the data frame which contains the ICD codes.
+This is a character vector of length one. If it is \code{NULL}, \code{icd9}
+will attempt to guess the column name, looking for progressively less
+likely possibilities until it matche a single column. Failing this, it will
+take the first column in the data frame. Specifying the column using this
+argument avoids the guesswork.}
 }
 \description{
 This is more complicated than reshape or reshape2::dcast allows.

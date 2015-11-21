@@ -13,7 +13,13 @@ icd9ComorbidDfToMat(x, visitId = NULL,
 and other columns with flags for comorbidities, as such column names are
 required.}
 
-\item{visitId}{The name of the column in the data frame which contains the
+\item{visitId}{Deprecated. Use \code{visit_name}}
+
+\item{stringsAsFactors}{whether the resulting data frame should have strings,
+i.e. visitId converted to factor. Default is to follow the current session
+option.}
+
+\item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
 patients come leave and enter hospital with different ICD-9 codes. It is a
 character vector of length one. If left empty, or \code{NULL}, then an
@@ -23,10 +29,6 @@ guesses proceed until a single match is made. Data frames may be wide with
 many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visitId}
 was not specified, then the first column of the data frame is used.}
-
-\item{stringsAsFactors}{whether the resulting data frame should have strings,
-i.e. visitId converted to factor. Default is to follow the current session
-option.}
 }
 \examples{
 longdf <- data.frame(visitId = c("a", "b", "b", "c"),

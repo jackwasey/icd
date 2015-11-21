@@ -3,26 +3,33 @@
 \name{icd9FilterPoa}
 \alias{icd9FilterPoa}
 \alias{icd9FilterPoaNo}
-\alias{icd9FilterPoaNotNo}
-\alias{icd9FilterPoaNotYes}
 \alias{icd9FilterPoaYes}
+\alias{icd_filter_poa}
+\alias{icd_filter_poa_no}
+\alias{icd_filter_poa_not_no}
+\alias{icd_filter_poa_not_yes}
+\alias{icd_filter_poa_yes}
 \title{Filters data frame based on present-on-arrival flag}
 \usage{
-icd9FilterPoa(icd9df, poaField = "poa", poa = icd9PoaChoices)
+icd_filter_poa(icd_df, poa_name = "poa", poa = icd9PoaChoices)
+
+icd_filter_poa_yes(icd_df, poa_name = "poa")
+
+icd_filter_poa_no(icd_df, poa_name = "poa")
+
+icd_filter_poa_not_no(icd_df, poa_name = "poa")
+
+icd_filter_poa_not_yes(icd_df, poa_name = "poa")
 
 icd9FilterPoaYes(icd9df, poaField = "poa")
 
 icd9FilterPoaNo(icd9df, poaField = "poa")
-
-icd9FilterPoaNotNo(icd9df, poaField = "poa")
-
-icd9FilterPoaNotYes(icd9df, poaField = "poa")
 }
 \arguments{
-\item{icd9df}{data frame containing columns for visitId (which is the feault
+\item{icd_df}{data frame containing columns for visitId (which is the feault
 name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
-\item{poaField}{The name of column in the data frame which contains the
+\item{poa_name}{The name of column in the data frame which contains the
 Present On Arrival flag. The flag itself is a single character, typically
 one of "Y", "N", "E", "X", "U" or empty. The poaField is a character vector
 of length one.}
@@ -33,6 +40,10 @@ simple binary, since many codes are exempt, unspecified, or unknown.
 \code{poaField} gives the choices: yes, not no, no, not yes. The
 intermediate codes, such as "exempt", "unknown" and \code{NA} mean that
 "yes" is not the same as "not no."}
+
+\item{icd9df}{Deprecated. Use \code{icd_df}}
+
+\item{poaField}{Deprecated. Use poa_name}
 }
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes
@@ -43,21 +54,27 @@ Present On Arrival (POA) is not a simple flag, since many codes
 }
 \section{Functions}{
 \itemize{
+\item \code{icd_filter_poa_yes}: Select rows where Present-on-Arrival flag is
+explicitly "Yes."
+
+\item \code{icd_filter_poa_no}: Select rows where Present-on-Arrival flag is
+explicitly "No."
+
+\item \code{icd_filter_poa_not_no}: Select rows where Present-on-Arrival flag is
+anything but "No." This includes unknown, exempt, other codes, and of
+course all those marked "Yes."
+
+\item \code{icd_filter_poa_not_yes}: Select rows where Present-on-Arrival flag is
+anything byt "Yes." This would group exempt, unknown and other codes under
+"Not POA" which is unlikely to be a good choice, since exempt codes, of
+which there are a quite large number, tend to describe chronic or
+out-of-hospital characteristics.
+
 \item \code{icd9FilterPoaYes}: Select rows where Present-on-Arrival flag is
 explicitly "Yes."
 
 \item \code{icd9FilterPoaNo}: Select rows where Present-on-Arrival flag is
 explicitly "No."
-
-\item \code{icd9FilterPoaNotNo}: Select rows where Present-on-Arrival flag is
-anything but "No." This includes unknown, exempt, other codes, and of
-course all those marked "Yes."
-
-\item \code{icd9FilterPoaNotYes}: Select rows where Present-on-Arrival flag is
-anything byt "Yes." This would group exempt, unknown and other codes under
-"Not POA" which is unlikely to be a good choice, since exempt codes, of
-which there are a quite large number, tend to describe chronic or
-out-of-hospital characteristics.
 }}
 \examples{
 \dontrun{
@@ -71,7 +88,7 @@ myData <- data.frame(
 )
 myData \%>\% icd9FilterPoaNotNo() \%>\% icd9ComorbidAhrq
 # can fill out named fields also:
-myData \%>\% icd9FilterPoaYes(poaField="poa") \%>\%
+myData \%>\% icd9FilterPoaYes(poa_name="poa") \%>\%
   icd9ComorbidAhrq(icd9Field = "diag", visitId = "visitId", isShort = TRUE)
 # can call the core icd9Comorbid function with an arbitrary mapping
 myData \%>\%

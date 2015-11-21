@@ -1,0 +1,71 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
+#' @title guess whether short_code or long
+#' @description partly implemented. Goal is to guess whether codes are short_code or
+#'   decimal form, then to call icd9Explain with the condense argument.
+#'   Currently condense works, but not with the icd9 lookup table currently in
+#'   use. Not exporting this function until it works as intended. Of note,
+#'   validation is a bit different here, since we don't know the type until
+#'   after we guess. We could look for where both short_code and long are invalid,
+#'   and otherwise assume valid, even if the bulk are short_code. However, it may be
+#'   more useful to check validity after the guess.
+#' @return single logical value, \code{TRUE} if input data are predominantly
+#'   short_code type. If there is some uncertainty, then return NA.
+#' @keywords internal
+icd_guess_short <- function(x, test_n = 1000L)
+  UseMethod("icd_guess_short")
+
+#' @describeIn icd_guess_short Guess whether an ICD-10 code is in short_code form
+#' @keywords internal
+icd_guess_short.icd10 <- function(x, test_n = 1000L)
+  !any(stringr::str_detect(x[1:test_n], ".+\\..+")) # any decimal as first approximation
+
+#' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
+#' @keywords internal
+icd_guess_short.icd9 <- function(x, test_n) {
+  if (is.list(x)) x <- unlist(x, recursive = TRUE)
+  x <- asCharacterNoWarn(x)
+  testend <- min(length(x), test_n)
+  vs <- icd_is_valid_short.icd9(x[1:testend])
+  vd <- icd_is_valid_decimal.icd9(x[1:testend])
+  sum(vd) <= sum(vs)
+}
+
+
+
+#' Guess version of ICD
+#'
+#' @keywords internal
+icd_guess_version <- function(...)
+  UseMethod("icd_guess_version")
+
+#' @describeIn icd_guess_version
+icd_guess_version.character <- function(icd, short_code) {
+  icd9 <- sum(icd_is_valid_short.icd9(icd))
+  icd10 <- sum(icd_is_valid.icd10(icd))
+  #icd10cm <- sum(icd_is_valid.icd10cm(icd))
+  icd10who <- sum(icd_is_valid.icd10who(icd))
+  if (icd9 > icd10 && icd9 > icd10who)
+    "icd9"
+  else
+    "icd10"
+}
+
+icd_guess_version.data.frame <- function(icd, icd_name = get_icd_name(icd)) {
+  icd_guess_version.character(icd[[icd_name]])
+}

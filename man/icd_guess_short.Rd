@@ -5,11 +5,11 @@
 \alias{icd_guess_short}
 \alias{icd_guess_short.icd10}
 \alias{icd_guess_short.icd9}
-\title{guess whether short or long}
+\title{guess whether short_code or long}
 \usage{
 icd_guess_short(x, test_n = 1000L)
 
-\method{icd_guess_short}{icd10}(x, test_n)
+\method{icd_guess_short}{icd10}(x, test_n = 1000L)
 
 \method{icd_guess_short}{icd9}(x, test_n)
 
@@ -17,23 +17,23 @@ icd9GuessIsShort(icd9)
 }
 \value{
 single logical value, \code{TRUE} if input data are predominantly
-  short type. If there is some uncertainty, then return NA.
+  short_code type. If there is some uncertainty, then return NA.
 }
 \description{
-partly implemented. Goal is to guess whether codes are short or
+partly implemented. Goal is to guess whether codes are short_code or
   decimal form, then to call icd9Explain with the condense argument.
   Currently condense works, but not with the icd9 lookup table currently in
   use. Not exporting this function until it works as intended. Of note,
   validation is a bit different here, since we don't know the type until
-  after we guess. We could look for where both short and long are invalid,
-  and otherwise assume valid, even if the bulk are short. However, it may be
+  after we guess. We could look for where both short_code and long are invalid,
+  and otherwise assume valid, even if the bulk are short_code. However, it may be
   more useful to check validity after the guess.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd10}: Guess whether an ICD-10 code is in short form
+\item \code{icd10}: Guess whether an ICD-10 code is in short_code form
 
-\item \code{icd9}: Guess whether an ICD-9 code is in short form
+\item \code{icd9}: Guess whether an ICD-9 code is in short_code form
 }}
 \keyword{internal}
 

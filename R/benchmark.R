@@ -64,8 +64,8 @@ runOpenMPVecInt <- function(n = 4, np = 2, threads = 6, chunkSize = 32) {
   icd9df <- randomPatients(n, np = np)
   icd9ComorbidShort(icd9df = icd9df,
                     icd9Mapping = icd9::ahrqComorbid,
-                    visitId = getVisitId(icd9df),
-                    icd9Field = getIcdField(icd9df),
+                    visitId = get_visit_name(icd9df),
+                    icd9Field = get_icd_name(icd9df),
                     threads = threads, chunkSize = chunkSize)
 }
 
@@ -73,24 +73,24 @@ benchOpenMPThreads <- function(n = 2 ^ 18 - 1, np = 7) {
   # if chunk size is <32 (i.e. one word) bits aren't updated correctly by concurrent threads'
   pts <- randomPatients(n, np)
   stopifnot(identical(
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = getVisitId(pts),
-                         icd9Field = getIcdField(pts), threads = 8, chunkSize = 32),
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = getVisitId(pts),
-                         icd9Field = getIcdField(pts), threads = 8, chunkSize = 32)
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = get_visit_name(pts),
+                         icd9Field = get_icd_name(pts), threads = 8, chunkSize = 32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = get_visit_name(pts),
+                         icd9Field = get_icd_name(pts), threads = 8, chunkSize = 32)
   ))
   stopifnot(identical(
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = getVisitId(pts),
-                         icd9Field = getIcdField(pts), threads = 1, chunkSize = 32),
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = getVisitId(pts),
-                         icd9Field = getIcdField(pts), threads = 8, chunkSize = 32)
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = get_visit_name(pts),
+                         icd9Field = get_icd_name(pts), threads = 1, chunkSize = 32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = get_visit_name(pts),
+                         icd9Field = get_icd_name(pts), threads = 8, chunkSize = 32)
   ))
   microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = getVisitId(pts),
-                         icd9Field = getIcdField(pts), threads = 4, chunkSize = 32),
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = getVisitId(pts),
-                         icd9Field = getIcdField(pts), threads = 4, chunkSize = 256),
-    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = getVisitId(pts),
-                         icd9Field = getIcdField(pts), threads = 4, chunkSize = 1024),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = get_visit_name(pts),
+                         icd9Field = get_icd_name(pts), threads = 4, chunkSize = 32),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = get_visit_name(pts),
+                         icd9Field = get_icd_name(pts), threads = 4, chunkSize = 256),
+    icd9ComorbidShortCpp(pts, icd9::ahrqComorbid, visitId = get_visit_name(pts),
+                         icd9Field = get_icd_name(pts), threads = 4, chunkSize = 1024),
     times = 5
   )
 }
@@ -104,8 +104,8 @@ benchVaryn <- function(np = 5, threads = 4, chunkSize = 256, ompChunkSize = 1) {
     pts <- randomOrderedPatients(n, np)
     res <- microbenchmark::microbenchmark(
       icd9ComorbidShortCpp(pts, icd9::ahrqComorbid,
-                           visitId = getVisitId(pts),
-                           icd9Field = getIcdField(pts),
+                           visitId = get_visit_name(pts),
+                           icd9Field = get_icd_name(pts),
                            threads = 4,
                            chunkSize = chunkSize,
                            ompChunkSize = ompChunkSize),

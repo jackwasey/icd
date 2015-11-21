@@ -15,6 +15,48 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+# icd9Children separate from C++ docs so that I can guess isShort
+#' @name icd9Children
+#' @title Expand ICD-9 codes to all possible sub-codes
+#' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
+#' @template isShort
+#' @template onlyReal
+#' @template onlyBillable
+#' @keywords manip
+#' @family ICD-9 ranges
+#' @examples
+#' library(magrittr)
+#' icd9ChildrenShort("10201", FALSE) # no children other than self
+#' icd9Children("0032", FALSE) # guess it was a short, not decimal code
+#' icd9ChildrenShort("10201", TRUE) # empty because 102.01 is not meaningful
+#' icd9ChildrenShort("003", TRUE) %>% icd9ExplainShort(doCondense = FALSE)
+#' icd9ChildrenDecimal("100.0")
+#' icd9ChildrenDecimal("100.00")
+#' icd9ChildrenDecimal("2.34")
+#' @export
+icd_children <- function(icd, ...)
+  UseMethod("icd_children")
+
+#' @describeIn icd_children Get children of ICD-9 codes
+icd_children.icd9 <- function(icd9, short = icd_guess_short(icd9),
+                         real = TRUE, billable = FALSE) {
+  assertFactorOrCharacter(icd9)
+  assertFlag(short)
+  assertFlag(real)
+
+  if (short)
+    res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(icd9), real)
+  else
+    res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), toupper(icd9), real)
+
+  if (billable)
+    icd9GetBillable(res, short)
+  else
+    res
+}
+
 utils::globalVariables("icd10cm2016")
 
 #' real icd10 children based on 2016 ICD-10-CM list
@@ -25,15 +67,16 @@ icd_children_real <- function(x)
 
 #' @describeIn icd_children_real get the children of ICD-10 code(s)
 #' @keywords internal
-icd_children_real.icd10 <- function(x, short = icd_guess_short(x)) {
+icd_children_real.icd10 <- function(icd, short = icd_guess_short(icd)) {
 
-  assertCharacter(x)
+  checkmate::assertCharacter(icd)
+  checkmate::assertFlag(short)
 
-  if (inherits(code, "icd10") && !inherits(code, "icd10cm"))
+  if (inherits(icd, "icd10") && !inherits(icd, "icd10cm"))
     warning("This function primarily gives 'real' child codes for ICD-10-CM,
             which is mostly a superset of ICD-10 WHO")
 
-  icd10Short <- stringr::str_trim(x)
+  icd10Short <- stringr::str_trim(icd)
 
   matches_bool <- icd10Short %in% icd9::icd10cm2016[["code"]]
   # if the codes are not in the source file, we ignore, warn, drop silently?
@@ -90,7 +133,6 @@ icd_children_real.icd10 <- function(x, short = icd_guess_short(x)) {
 #'   456976) however, hardly any alphas are used.
 #'
 #' @param icd910Short character vector of ICD-10 codes
-#' @import checkmate
 #' @export
 icd10ChildrenPossibleShort <- function(icd10Short) {
   checkmate::assertCharacter(icd10Short)
@@ -124,89 +166,26 @@ icd10ChildrenPossibleShort <- function(icd10Short) {
     out <- c(out, o)
   }
 
-  sort(c(out_complete, out))
+  icd_sort.icd10(c(out_complete, out))
 }
 
-#' expand range of ICD-10 codes returning only defined codes in ICD-10-CM
-#'
-#' This will need generalizing to any list of 'real' codes, e.g. WHO or other
-#' @param start character vector of length one containing a real code
-#' @param end  character vector of length one containing a real code
-#' @keywords internal
-icd10ExpandRangeRealShort <- function(start, end) {
-  assertScalar(start) # i'll permit numeric but prefer char
-  assertScalar(end)
-
-  # check whether valid?
-  # check whether real?
-  # minimal check for type:
-  stopifnot(grepl("[^.]", c(start, end)))
-
-  # for ranges, we can semi-legitimately strip any ".x" part ( but other X values CAN appear later). Quan uses x in position 4, but I'm not aware of any ICD-10 code that does this.
-
-  # deliberately not case sensitive, as this is a Quan quirk:
-  if (substr(start, 4, 100) == "x")
-    start <- substr(start, 1, 3)
-
-  if (substr(end, 4, 100) == "x")
-    end <- substr(end, 1, 3)
-
-  # TODO: either search down supposedly well ordered list until substring of end
-  # changes, or find all children, and get pos of last one.
-
-  end_kids <- icd10_children_real_short(end)
-  new_end <- end_kids[length(end_kids)]
-
-  # find the start and end code positions in the master list
-  pos <- match(c(start, new_end), icd9::icd10cm2016[["code"]])
-  if (is.na(pos[1])) stop(sprintf("start code '%s' not found", pos[1]))
-  if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", pos[2]))
-  stopifnot(pos[2] >= pos[1])
-
-  icd9::icd10cm2016[pos[1]:pos[2], "code"]
+#' @rdname icd_children
+#' @export
+icd9Children <- function(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE, onlyBillable = FALSE) {
+  .Deprecated("icd_children")
+  icd_children.icd9(icd9, short = isShort, real = onlyReal, billable = onlyBillable)
 }
 
-# WIP
-icd10ExpandRangePossibleShort <- function(start, end) {
-  assertString(start)
-  assertString(end)
-  # check whether valid?
-  # check whether real? Will error if not.
-
-  start <- stringr::str_trim(start)
-  end <- stringr::str_trim(end)
-
-  start_char <- substr(start, 1, 1)
-  end_char <- substr(end, 1, 1)
-  stopifnot(start_char <= end_char)
-
-  start_two_digits <- as.integer(substr(start, 2, 3))
-  end_two_digits <- as.integer(substr(end, 2, 3))
-  if (start_char == end_char)
-    stopifnot(start_two_digits <= end_two_digits)
-
-  start_other_chars <- substr(start, 4, 10)
-  end_other_chars <- substr(end, 4, 10)
-
+#' @rdname icd_children
+#' @export
+icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE, onlyBillable = FALSE) {
+  .Deprecated("icd_children")
+  icd_children.icd9(icd9Short, short = TRUE, real = onlyReal, billable = onlyBillable)
 }
 
-icd_expand_range_major <- function(start, end)
-  UseMethod("icd_expand_range_major")
-
-icd_expand_range_major.icd10 <- function(start, end) {
-  assertString(start)
-  assertString(end)
-
-  start <- stringr::str_trim(start)
-  end <- stringr::str_trim(end)
-
-
-  stopifnot(icd10_is_major(start), icd10_is_major(end))
-  stopifnot(start <= end)
-  start_first <- stringr::str_sub(start, 1, 1) %>% stringr::str_to_upper()
-  end_first <- stringr::str_sub(end, 1, 1) %>% stringr::str_to_upper()
-
-  if (start_first == end_first)
-    paste
-
+#' @rdname icd_children
+#' @export
+icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE) {
+  .Deprecated("icd_children")
+  icd_children.icd9(icd9Decimal, short = FALSE, real = onlyReal, billable = onlyBillable)
 }

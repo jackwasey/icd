@@ -845,24 +845,24 @@ RcppExport SEXP icd9_icd9ChildrenCpp(SEXP icd9SEXP, SEXP isShortSEXP, SEXP onlyR
     UNPROTECT(1);
     return __result;
 }
-// icd9InReferenceCode
-Rcpp::LogicalVector icd9InReferenceCode(Rcpp::CharacterVector icd9, Rcpp::CharacterVector icd9Reference, bool isShort, bool isShortReference);
-static SEXP icd9_icd9InReferenceCode_try(SEXP icd9SEXP, SEXP icd9ReferenceSEXP, SEXP isShortSEXP, SEXP isShortReferenceSEXP) {
+// icd_in_reference_code
+Rcpp::LogicalVector icd_in_reference_code(Rcpp::CharacterVector icd, Rcpp::CharacterVector icd_reference, bool short_code, bool short_reference);
+static SEXP icd9_icd_in_reference_code_try(SEXP icdSEXP, SEXP icd_referenceSEXP, SEXP short_codeSEXP, SEXP short_referenceSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type icd9(icd9SEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type icd9Reference(icd9ReferenceSEXP);
-    Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP);
-    Rcpp::traits::input_parameter< bool >::type isShortReference(isShortReferenceSEXP);
-    __result = Rcpp::wrap(icd9InReferenceCode(icd9, icd9Reference, isShort, isShortReference));
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type icd(icdSEXP);
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type icd_reference(icd_referenceSEXP);
+    Rcpp::traits::input_parameter< bool >::type short_code(short_codeSEXP);
+    Rcpp::traits::input_parameter< bool >::type short_reference(short_referenceSEXP);
+    __result = Rcpp::wrap(icd_in_reference_code(icd, icd_reference, short_code, short_reference));
     return __result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_icd9InReferenceCode(SEXP icd9SEXP, SEXP icd9ReferenceSEXP, SEXP isShortSEXP, SEXP isShortReferenceSEXP) {
+RcppExport SEXP icd9_icd_in_reference_code(SEXP icdSEXP, SEXP icd_referenceSEXP, SEXP short_codeSEXP, SEXP short_referenceSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9InReferenceCode_try(icd9SEXP, icd9ReferenceSEXP, isShortSEXP, isShortReferenceSEXP));
+        __result = PROTECT(icd9_icd_in_reference_code_try(icdSEXP, icd_referenceSEXP, short_codeSEXP, short_referenceSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1387,7 +1387,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::CharacterVector(*icd9ChildrenShortCpp)(Rcpp::CharacterVector,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9ChildrenDecimalCpp)(Rcpp::CharacterVector,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9ChildrenCpp)(Rcpp::CharacterVector,bool,bool)");
-        signatures.insert("Rcpp::LogicalVector(*icd9InReferenceCode)(Rcpp::CharacterVector,Rcpp::CharacterVector,bool,bool)");
+        signatures.insert("Rcpp::LogicalVector(*icd_in_reference_code)(Rcpp::CharacterVector,Rcpp::CharacterVector,bool,bool)");
         signatures.insert("std::string(*trimLeftCpp)(std::string)");
         signatures.insert("std::string(*strimCpp)(std::string)");
         signatures.insert("std::vector<std::string>(*trimCpp)(std::vector<std::string>)");
@@ -1437,7 +1437,7 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9ChildrenShortCpp", (DL_FUNC)icd9_icd9ChildrenShortCpp_try);
     R_RegisterCCallable("icd9", "icd9_icd9ChildrenDecimalCpp", (DL_FUNC)icd9_icd9ChildrenDecimalCpp_try);
     R_RegisterCCallable("icd9", "icd9_icd9ChildrenCpp", (DL_FUNC)icd9_icd9ChildrenCpp_try);
-    R_RegisterCCallable("icd9", "icd9_icd9InReferenceCode", (DL_FUNC)icd9_icd9InReferenceCode_try);
+    R_RegisterCCallable("icd9", "icd9_icd_in_reference_code", (DL_FUNC)icd9_icd_in_reference_code_try);
     R_RegisterCCallable("icd9", "icd9_trimLeftCpp", (DL_FUNC)icd9_trimLeftCpp_try);
     R_RegisterCCallable("icd9", "icd9_strimCpp", (DL_FUNC)icd9_strimCpp_try);
     R_RegisterCCallable("icd9", "icd9_trimCpp", (DL_FUNC)icd9_trimCpp_try);

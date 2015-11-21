@@ -2,3 +2,6 @@
 R\/benchmark\.R
 tools
 R\/parse.+\.R
+R\/sas\.R
+tests\/testthat\/test-sas\.R
+tests\/testthat\/test-parse\.R

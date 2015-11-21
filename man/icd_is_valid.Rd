@@ -12,27 +12,32 @@
 \alias{icd_is_valid_short.icd9}
 \title{Check whether ICD-9 codes are syntactically valid}
 \usage{
-icd_is_valid(x)
+icd_is_valid(...)
 
 \method{icd_is_valid}{icd10}(icd, short = icd_guess_short(icd))
 
-\method{icd_is_valid}{icd9}(icd, short)
+\method{icd_is_valid}{icd9}(icd, short_code)
+
+\method{icd_is_valid_decimal}{icd9}(icd)
+
+\method{icd_is_valid_short}{icd9}(icd9Short)
 
 icd9Valid(icd9, isShort)
 
 icd9IsValid(icd9, isShort)
 
-\method{icd_is_valid_decimal}{icd9}(icd)
+icd9ValidShort(icd9)
 
 icd9ValidDecimal(icd9Decimal)
-
-\method{icd_is_valid_short}{icd9}(icd9Short)
-
-icd9ValidShort(icd9)
 }
 \arguments{
 \item{icd}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
+
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
+five characters is given in a code, then the digits are greedily assigned
+to hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
 
 \item{icd9}{is
 a character vector or factor of ICD-9 codes. If fewer than five characters
@@ -47,11 +52,6 @@ is guessed from the input data.}
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
-
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
 \item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part

@@ -178,7 +178,7 @@ str_pair_match <- function(text, pattern, swap = FALSE, dropEmpty = FALSE, pos =
 }
 
 
-getVisitId <- function(x, visitId = NULL) {
+get_visit_name <- function(x, visitId = NULL) {
   guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
                "in.*enc", "out.*enc", "visit", "enc")
   checkDataFrame(x, min.cols = 1, col.names = "named")
@@ -203,26 +203,26 @@ getVisitId <- function(x, visitId = NULL) {
 # case-insensitive regex. If there are zero or multiple matches, we move on down
 # the list, meaning some later possibilities are more or less specific regexes
 # than earlier ones.
-getIcdField <- function(x, icd9Field = NULL) {
+get_icd_name <- function(icd_df, icd_name = NULL) {
   guesses <- c("icd.?9", "icd.?9.?Code", "icd", "diagnos", "diag.?code", "diag", "i9")
-  checkDataFrame(x, min.cols = 1, col.names = "named")
-  if (is.null(icd9Field)) {
+  checkmate::assertDataFrame(icd_df, min.cols = 1, col.names = "named")
+  if (is.null(icd_name)) {
     for (guess in guesses) {
-      guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
+      guess_matched <- grep(guess, names(icd_df), ignore.case = TRUE, value = TRUE)
       if (length(guess_matched) == 1) {
-        icd9Field <- guess_matched
+        icd_name <- guess_matched
         break
       }
     }
-    if (is.null(icd9Field))
+    if (is.null(icd_name))
       # still NULL so fallback to second column
-      icd9Field <- names(x)[2]
+      icd_name <- names(icd_df)[2]
     # Could look at contents of the data frame, although this evaluates a
     # promise on potentially a big data frame, so could be costly
   }
-  assertString(icd9Field)
-  stopifnot(icd9Field %in% names(x))
-  icd9Field
+  assertString(icd_name)
+  stopifnot(icd_name %in% names(icd_df))
+  icd_name
 }
 
 getLatestBillableVersion <- function() "32"
@@ -334,4 +334,69 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   levels(f) <- as.character(labels)
   class(f) <- "factor"
   f
+}
+
+#' @title sort short-form icd9 codes
+#' @description Sorts lists of numeric only, V or E codes. Note that a simple
+#'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
+#'   V codes precede E codes.
+#' @details Implementation used fast built-in sort, then shuffles the E codes to
+#'   the end.
+#' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
+#' @template isShort
+#' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
+#' @keywords manip
+#' @export
+icd_sort <- function(icd, ...)
+  UseMethod("icd_sort")
+
+#' @describeIn icd_sort Sort ICD-10 codes, note that setting \code{short} is
+#'   unnecessary and ignored.
+#' @export
+icd_sort.icd10 <- function(icd, short = NULL) {
+  # ignore short, it doesn't matter
+  sort(icd)
+}
+
+#' @describeIn icd_sort sort ICD-9 codes respecting numeric, then V, then E
+#'   codes, and accounting for leading zeroes
+#' @export
+icd_sort.icd9 <- function(icd, short = icd_guess_short(icd)) {
+  assertFactorOrCharacter(icd)
+  assertFlag(short)
+
+  if (short)
+    icd[icd9_sort_order_short(icd)]
+  else
+    icd[icd9_sort_order_short(icd9DecimalToShort(icd))]
+}
+
+icd9_sort_order_short <- function(icd9Short) {
+  x <- icd9Short[order(icd9AddLeadingZeroesShort(icd9Short))]
+  match(
+    x[c(which(icd9_is_n(x)), which(icd9_is_v(x)), which(icd9_is_e(x)))],
+    icd9Short)
+}
+
+#' @rdname icd_short
+#' @export
+icd9Sort <- function(icd9, isShort = icd_guess_short(icd9)) {
+  .Deprecated("icd_sort")
+  icd_sort.icd9(icd9, isShort)
+}
+
+#' @rdname icd_short
+#' @export
+icd9SortShort <- function(icd9Short) {
+  .Deprecated("icd_sort")
+  icd_sort.icd9(icd9Short, short = TRUE)
+}
+
+#' @rdname icd_short
+#' @export
+icd9SortDecimal <- function(icd9Decimal) {
+  .Deprecated("icd_sort")
+  icd_sort.icd9(icd9Decimal, short = FALSE)
 }

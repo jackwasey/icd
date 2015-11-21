@@ -9,7 +9,7 @@
 \alias{icd_is_valid_map}
 \title{validate an icd9 mapping to comorbidities}
 \usage{
-icd_is_valid_map(map, short)
+icd_is_valid_map(map, short_code)
 
 icd9ValidMapping(icd9Mapping, isShort)
 
@@ -29,7 +29,7 @@ comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
 "V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
 c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 
-\item{short}{single logical value which determines whether the ICD-9 code
+\item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 

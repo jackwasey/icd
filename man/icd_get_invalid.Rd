@@ -6,7 +6,7 @@
 \alias{icd_get_invalid}
 \title{Returns subset of codes which are not in valid short or decimal format.}
 \usage{
-icd_get_invalid(x, short = icd_guess_short(icd9))
+icd_get_invalid(icd, short_code = icd_guess_short(icd9))
 
 icd9GetInvalidDecimal(icd9Decimal)
 

@@ -537,17 +537,17 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline Rcpp::LogicalVector icd9InReferenceCode(Rcpp::CharacterVector icd9, Rcpp::CharacterVector icd9Reference, bool isShort, bool isShortReference = true) {
-        typedef SEXP(*Ptr_icd9InReferenceCode)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9InReferenceCode p_icd9InReferenceCode = NULL;
-        if (p_icd9InReferenceCode == NULL) {
-            validateSignature("Rcpp::LogicalVector(*icd9InReferenceCode)(Rcpp::CharacterVector,Rcpp::CharacterVector,bool,bool)");
-            p_icd9InReferenceCode = (Ptr_icd9InReferenceCode)R_GetCCallable("icd9", "icd9_icd9InReferenceCode");
+    inline Rcpp::LogicalVector icd_in_reference_code(Rcpp::CharacterVector icd, Rcpp::CharacterVector icd_reference, bool short_code, bool short_reference = true) {
+        typedef SEXP(*Ptr_icd_in_reference_code)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd_in_reference_code p_icd_in_reference_code = NULL;
+        if (p_icd_in_reference_code == NULL) {
+            validateSignature("Rcpp::LogicalVector(*icd_in_reference_code)(Rcpp::CharacterVector,Rcpp::CharacterVector,bool,bool)");
+            p_icd_in_reference_code = (Ptr_icd_in_reference_code)R_GetCCallable("icd9", "icd9_icd_in_reference_code");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9InReferenceCode(Rcpp::wrap(icd9), Rcpp::wrap(icd9Reference), Rcpp::wrap(isShort), Rcpp::wrap(isShortReference));
+            __result = p_icd_in_reference_code(Rcpp::wrap(icd), Rcpp::wrap(icd_reference), Rcpp::wrap(short_code), Rcpp::wrap(short_reference));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

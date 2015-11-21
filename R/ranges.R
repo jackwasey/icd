@@ -15,44 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title sort short-form icd9 codes
-#' @description Sorts lists of numeric only, V or E codes. Note that a simple
-#'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
-#'   V codes precede E codes.
-#' @details Implementation used fast built-in sort, then shuffles the E codes to
-#'   the end.
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
-#' @template isShort
-#' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
-#' @keywords manip
-#' @export
-icd9Sort <- function(icd9, isShort = icd_guess_short(icd9)) {
-  assertFlag(isShort)
-  if (isShort) return(icd9SortShort(icd9))
-  icd9SortDecimal(icd9)
-}
-
-#' @rdname icd9Sort
-#' @export
-icd9SortShort <- function(icd9Short) {
-  assertFactorOrCharacter(icd9Short)
-  icd9Short[sortOrderShort(icd9Short)]
-}
-
-#' @rdname icd9Sort
-#' @export
-icd9SortDecimal <- function(icd9Decimal)
-  icd9Decimal[sortOrderShort(icd9DecimalToShort(icd9Decimal))]
-
-sortOrderShort <- function(icd9Short) {
-  x <- icd9Short[order(icd9AddLeadingZeroesShort(icd9Short))]
-  match(
-    x[c(which(icd9IsN(x)), which(icd9IsV(x)), which(icd9IsE(x)))],
-    icd9Short)
-}
-
 #' @title take two ICD-9 codes and expand range to include all child codes
 #' @description this is cumbersome code, covering a whole load of edge cases
 #'   relating to the fact that icd9 codes are \strong{not} in numeric order. An
@@ -88,22 +50,166 @@ sortOrderShort <- function(icd9Short) {
 #'   E.g. 99.99 to 101.01 would by default exclude 101 and 101.0
 #' @family ICD-9 ranges
 #' @export
-icd9ExpandRange <- function(start, end, isShort = icd_guess_short(c(start, end)), onlyReal = TRUE,
+icd_expand_range <- function(start, end, ...)
+  UseMethod("icd_expand_range")
+
+#' expand range of ICD-10 codes returning only defined codes in ICD-10-CM
+#'
+#' This will need generalizing to any list of 'real' codes, e.g. WHO or other
+#' @param start character vector of length one containing a real code
+#' @param end  character vector of length one containing a real code
+#' @keywords internal
+icd_expand_range.icd10cm <- function(start, end, short = icd_guess_short.icd10(c(start, end)), real = TRUE) {
+  assertScalar(start) # i'll permit numeric but prefer char
+  assertScalar(end)
+
+  if (!real)
+    stop("expanding ranges of possible (versus real) ICD-10-CM codes is not yet implemented.
+         It will produce a very large number of codes because of permutations.")
+
+  # check whether valid?
+  # check whether real?
+  # minimal check for type:
+  stopifnot(grepl("[^.]", c(start, end)))
+
+  # for ranges, we can semi-legitimately strip any ".x" part ( but other X values CAN appear later). Quan uses x in position 4, but I'm not aware of any ICD-10 code that does this.
+
+  # deliberately not case sensitive, as this is a Quan quirk:
+  if (substr(start, 4, 100) == "x")
+    start <- substr(start, 1, 3)
+
+  if (substr(end, 4, 100) == "x")
+    end <- substr(end, 1, 3)
+
+  # TODO: either search down supposedly well ordered list until substring of end
+  # changes, or find all children, and get pos of last one.
+
+  end_kids <- icd10_children_real_short(end)
+  new_end <- end_kids[length(end_kids)]
+
+  # find the start and end code positions in the master list
+  pos <- match(c(start, new_end), icd9::icd10cm2016[["code"]])
+  if (is.na(pos[1])) stop(sprintf("start code '%s' not found", pos[1]))
+  if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", pos[2]))
+  stopifnot(pos[2] >= pos[1])
+
+  icd9::icd10cm2016[pos[1]:pos[2], "code"]
+}
+
+# WIP
+icd10ExpandRangePossibleShort <- function(start, end) {
+  assertString(start)
+  assertString(end)
+  # check whether valid?
+  # check whether real? Will error if not.
+
+  start <- stringr::str_trim(start)
+  end <- stringr::str_trim(end)
+
+  start_char <- substr(start, 1, 1)
+  end_char <- substr(end, 1, 1)
+  stopifnot(start_char <= end_char)
+
+  start_two_digits <- as.integer(substr(start, 2, 3))
+  end_two_digits <- as.integer(substr(end, 2, 3))
+  if (start_char == end_char)
+    stopifnot(start_two_digits <= end_two_digits)
+
+  start_other_chars <- substr(start, 4, 10)
+  end_other_chars <- substr(end, 4, 10)
+
+}
+
+icd_expand_range_major <- function(start, end)
+  UseMethod("icd_expand_range_major")
+
+icd_expand_range_major.icd10 <- function(start, end) {
+  assertString(start)
+  assertString(end)
+
+  start <- stringr::str_trim(start)
+  end <- stringr::str_trim(end)
+
+
+  stopifnot(icd10_is_major(start), icd10_is_major(end))
+  stopifnot(start <= end)
+  start_first <- stringr::str_sub(start, 1, 1) %>% stringr::str_to_upper()
+  end_first <- stringr::str_sub(end, 1, 1) %>% stringr::str_to_upper()
+
+  stop("not finished")
+  if (start_first == end_first)
+    paste
+
+}
+
+#' @rdname icd_expand_range
+#' @export
+icd9ExpandRange <- function(start, end,
+                            isShort = icd_guess_short(c(start, end)),
+                            onlyReal = TRUE,
                             excludeAmbiguousStart = TRUE,
                             excludeAmbiguousEnd = TRUE) {
-  if (isShort) return(icd9ExpandRangeShort(start, end, onlyReal,
-                                           excludeAmbiguousStart,
-                                           excludeAmbiguousEnd))
-  icd9ExpandRangeDecimal(start, end, onlyReal,
+  .Deprecated("icd_expand_range")
+  icd_expand_range.icd9(start = start, end = end, short = isShort,
+                        real = onlyReal,
+                        excludeAmbiguousStart = excludeAmbiguousStart,
+                        excludeAmbiguousEnd = excludeAmbiguousEnd)
+}
+
+#' @rdname icd_expand_range
+#' @export
+icd9ExpandRangeShort <- function(start, end,
+                                 onlyReal = TRUE,
+                                 excludeAmbiguousStart = TRUE,
+                                 excludeAmbiguousEnd = TRUE) {
+  .Deprecated("icd_expand_range")
+  icd_expand_range.icd9(start = start, end = end, short = TRUE,
+                        real = onlyReal,
+                        excludeAmbiguousStart = excludeAmbiguousStart,
+                        excludeAmbiguousEnd = excludeAmbiguousEnd)
+}
+
+#' @rdname icd_expand_range
+#' @export
+icd9ExpandRangeDecimal <- function(start, end,
+                                   onlyReal = TRUE,
+                                   excludeAmbiguousStart = TRUE,
+                                   excludeAmbiguousEnd = TRUE) {
+  .Deprecated("icd_expand_range")
+  icd_expand_range.icd9(start = start, end = end, short = FALSE,
+                        real = onlyReal,
+                        excludeAmbiguousStart = excludeAmbiguousStart,
+                        excludeAmbiguousEnd = excludeAmbiguousEnd)
+}
+
+#' @rdname icd_expand_range
+#' @export
+icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
+  .Deprecated("icd_expand_range_major")
+  icd_expand_range_major.icd9(start = start, end = end, real = onlyReal)
+}
+
+#' @describeIn icd_expand_range Expand a range of ICD-9 codes
+icd_expand_range.icd9 <- function(start, end,
+                                  short = icd_guess_short(c(start, end)),
+                                  real = TRUE,
+                                  excludeAmbiguousStart = TRUE,
+                                  excludeAmbiguousEnd = TRUE) {
+  if (short)
+    icd9ExpandRangeShort(start, end, real,
                          excludeAmbiguousStart,
                          excludeAmbiguousEnd)
+  else
+    icd9ExpandRangeDecimal(start, end, real,
+                           excludeAmbiguousStart,
+                           excludeAmbiguousEnd)
 }
 
 #' expand range worker function
 #' @keywords internal
 #' @importFrom utils head tail
-expandRangeWorker <- function(start, end, lookup, onlyReal,
-                              excludeAmbiguousStart, excludeAmbiguousEnd) {
+expand_range_worker <- function(start, end, lookup, onlyReal,
+                                excludeAmbiguousStart, excludeAmbiguousEnd) {
   assertString(start)
   assertString(end)
   assertCharacter(lookup, any.missing = FALSE, min.chars = 3)
@@ -127,7 +233,7 @@ expandRangeWorker <- function(start, end, lookup, onlyReal,
   if (excludeAmbiguousStart) {
     # just remove those codes at the beginning which have children not in the output
     # let's take the first 5, to cover cases like 100, 101, 102.1, 102.11, 102.2
-    starts <- tail(out, )
+    starts <- tail(out, 5)
     for (s in starts) {
       if (any(icd9ChildrenShort(s, onlyReal = onlyReal) %nin% out))
         out <- out[-which(out == s)]
@@ -145,34 +251,16 @@ expandRangeWorker <- function(start, end, lookup, onlyReal,
         out <- out[-which(out == o)]
     }
   }
-  icd9SortShort(unique(c(out, icd9ChildrenShort(end, onlyReal = onlyReal))))
+  icd_sort.icd9(unique(c(out, icd9ChildrenShort(end, onlyReal = onlyReal))), short = TRUE)
 }
 
-# horrible kludge for difficult source data
-icd9ExpandRangeForSas <- function(start, end) {
-  if (end == "0449") end <- start # HIV codes changed
-  reals <- icd9ExpandRangeShort(start, end, onlyReal = TRUE,
-                                # hmmm, maybe get the diff and test all children of ambigs present later
-                                excludeAmbiguousStart = FALSE,
-                                excludeAmbiguousEnd = TRUE)
-  real_parents <- icd9CondenseShort(reals, onlyReal = TRUE)
-  merged <- unique(c(reals, real_parents))
-  real_parents_of_merged <- icd9CondenseShort(merged, onlyReal = TRUE)
-  halfway <- icd9ChildrenShort(real_parents_of_merged, onlyReal = FALSE)
-  nonrealrange <- icd9ExpandRangeShort(start, end, onlyReal = FALSE,
-                                       excludeAmbiguousStart = TRUE,
-                                       excludeAmbiguousEnd = TRUE)
-  icd9SortShort(unique(c(halfway, nonrealrange)))
-}
-
-#' @rdname icd9ExpandRange
-#' @export
-icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
-                                 excludeAmbiguousStart = TRUE,
-                                 excludeAmbiguousEnd = TRUE) {
+# Expand range of short-form ICD-9 codes
+icd9_expand_range_short <- function(start, end, real = TRUE,
+                                    excludeAmbiguousStart = TRUE,
+                                    excludeAmbiguousEnd = TRUE) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
-  assertFlag(onlyReal)
+  assertFlag(real)
   assertFlag(excludeAmbiguousStart)
   assertFlag(excludeAmbiguousEnd)
 
@@ -183,50 +271,52 @@ icd9ExpandRangeShort <- function(start, end, onlyReal = TRUE,
   # determine whether we are doing N, V or E
   # then lookup start and end indices in sysdata.rda lookup tables
 
-  if (onlyReal) {
+  if (real) {
     stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
     if (icd9IsN(start) && icd9IsN(end))
-      res <- expandRangeWorker(start, end, icd9NShortReal, onlyReal = TRUE,
-                               excludeAmbiguousStart, excludeAmbiguousEnd)
+      res <- expand_range_worker(start, end, icd9::icd9NShortReal, onlyReal = TRUE,
+                                 excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9IsV(start) && icd9IsV(end))
-      res <- expandRangeWorker(start, end, icd9VShortReal, onlyReal = TRUE,
-                               excludeAmbiguousStart, excludeAmbiguousEnd)
+      res <- expand_range_worker(start, end, icd9::icd9VShortReal, onlyReal = TRUE,
+                                 excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9IsE(start) && icd9IsE(end))
-      res <- expandRangeWorker(start, end, icd9EShortReal, onlyReal = TRUE,
-                               excludeAmbiguousStart, excludeAmbiguousEnd)
+      res <- expand_range_worker(start, end, icd9::icd9EShortReal, onlyReal = TRUE,
+                                 excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")
   } else {
 
     if (icd9IsN(start) && icd9IsN(end))
-      res <- expandRangeWorker(start, end, icd9NShort, onlyReal = FALSE,
-                               excludeAmbiguousStart, excludeAmbiguousEnd)
+      res <- expand_range_worker(start, end, icd9::icd9NShort, onlyReal = FALSE,
+                                 excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9IsV(start) && icd9IsV(end))
-      res <- expandRangeWorker(start, end, icd9VShort, onlyReal = FALSE,
-                               excludeAmbiguousStart, excludeAmbiguousEnd)
+      res <- expand_range_worker(start, end, icd9::icd9VShort, onlyReal = FALSE,
+                                 excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9IsE(start) && icd9IsE(end))
-      res <- expandRangeWorker(start, end, icd9EShort, onlyReal = FALSE,
-                               excludeAmbiguousStart, excludeAmbiguousEnd)
+      res <- expand_range_worker(start, end, icd9::icd9EShort, onlyReal = FALSE,
+                                 excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")
   }
   res
 }
 
-#' @rdname icd9ExpandRange
+#' @describeIn icd_expand_range_major Expand a range of ICD-9 major codes into major codes
 #' @export
-icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
+icd_expand_range_major.icd9 <- function(start, end, real = TRUE) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
-  assertFlag(onlyReal)
+  assertFlag(real)
   c <- icd9ExtractAlphaNumeric(start)
   d <- icd9ExtractAlphaNumeric(end)
   # cannot range between numeric, V and E codes, so ensure same type.
   stopifnot(toupper(c[1]) == toupper(d[1]))
   if (icd9IsV(start)) fmt <- "%02d" else fmt <- "%03d"
   majors <- paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
-  if (onlyReal) return(icd9GetRealShort(majors, onlyBillable = FALSE))
-  majors
+  if (real)
+    icd9GetRealShort(majors, onlyBillable = FALSE)
+  else
+    majors
 }
 
 #' @rdname icd9ExpandRange
@@ -274,64 +364,6 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
   icd9ExpandRangeShort(start, end, onlyReal = TRUE)
 }
 
-# icd9Children separate from C++ docs so that I can guess isShort
-#' @name icd9Children
-#' @title Expand ICD-9 codes to all possible sub-codes
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
-#' @template isShort
-#' @template onlyReal
-#' @template onlyBillable
-#' @keywords manip
-#' @family ICD-9 ranges
-#' @examples
-#' library(magrittr)
-#' icd9ChildrenShort("10201", FALSE) # no children other than self
-#' icd9Children("0032", FALSE) # guess it was a short, not decimal code
-#' icd9ChildrenShort("10201", TRUE) # empty because 102.01 is not meaningful
-#' icd9ChildrenShort("003", TRUE) %>% icd9ExplainShort(doCondense = FALSE)
-#' icd9ChildrenDecimal("100.0")
-#' icd9ChildrenDecimal("100.00")
-#' icd9ChildrenDecimal("2.34")
-#' @export
-icd9Children <- function(icd9, isShort = icd_guess_short(icd9),
-                         onlyReal = TRUE, onlyBillable = FALSE) {
-  assertFactorOrCharacter(icd9)
-  assertFlag(isShort)
-  assertFlag(onlyReal)
-  res <- .Call("icd9_icd9ChildrenCpp", PACKAGE = get_pkg_name(), icd9, isShort, onlyReal)
-  if (onlyBillable)
-    icd9GetBillable(res, isShort)
-  else
-    res
-}
-
-#' @rdname icd9Children
-#' @name icd9Children
-#' @export
-icd9ChildrenShort <- function(icd9Short,
-                              onlyReal = TRUE, onlyBillable = FALSE) {
-  assertCharacter(icd9Short)
-  assertFlag(onlyReal)
-  res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(icd9Short), onlyReal)
-  if (onlyBillable)
-    icd9GetBillableShort(res)
-  else
-    res
-}
-
-#' @rdname icd9Children
-#' @export
-icd9ChildrenDecimal <- function(icd9Decimal,
-                                onlyReal = TRUE, onlyBillable = FALSE) {
-  res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), icd9Decimal, onlyReal)
-  if (onlyBillable)
-    icd9GetBillableDecimal(res)
-  else
-    res
-}
-
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes
 #' @description Accepts a single number or character input starting point for
 #'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
@@ -342,16 +374,17 @@ icd9ChildrenDecimal <- function(icd9Decimal,
 #'   which is two character. Default is \code{FALSE}.
 #' @examples
 #'   # return all possible decimal parts of ICD9 codes (111 in total)
-#'   length(icd9:::icd9ExpandMinor("", isE = FALSE))
-#'   icd9:::icd9ExpandMinor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#'   length(icd9:::expand_minor("", isE = FALSE))
+#'   icd9:::expand_minor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-icd9ExpandMinor <- function(minor, isE = FALSE) {
+expand_minor <- function(minor, is_e = FALSE) {
   # clang 3.6 with address sanitizer seems to fail if a number is passed instead
   # of string. It SHOULD fail with type error, and that might be an Rcpp
   # problem...
   assertString(minor)
-  .Call("icd9_icd9ExpandMinorShim", PACKAGE = get_pkg_name(), minor, isE)
+  assertFlag(is_e)
+  .Call("icd9_expand_minorShim", PACKAGE = get_pkg_name(), minor, isE)
 }

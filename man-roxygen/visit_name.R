@@ -1,4 +1,4 @@
-#' @param visitId The name of the column in the data frame which contains the
+#' @param visit_name The name of the column in the data frame which contains the
 #'   patient or visit identifier. Typically this is the visit identifier, since
 #'   patients come leave and enter hospital with different ICD-9 codes. It is a
 #'   character vector of length one. If left empty, or \code{NULL}, then an
@@ -8,3 +8,4 @@
 #'   many matching fields, so to avoid false positives, anything but a single
 #'   match is rejected. If there are no successful guesses, and \code{visitId}
 #'   was not specified, then the first column of the data frame is used.
+#' @param visitId Deprecated. Use \code{visit_name}

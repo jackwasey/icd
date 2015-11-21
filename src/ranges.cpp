@@ -173,6 +173,7 @@ Rcpp::CharacterVector icd9ChildrenCpp(Rcpp::CharacterVector icd9, bool isShort,
 	return icd9ChildrenDecimalCpp(icd9, onlyReal);
 }
 
+
 //' @title match ICD9 codes
 //' @description Finds children of \code{icd9Reference} and looks for \code{icd9} in the
 //'   resulting vector.
@@ -183,16 +184,16 @@ Rcpp::CharacterVector icd9ChildrenCpp(Rcpp::CharacterVector icd9, bool isShort,
 //' @return logical vector
 //' @keywords internal
 // [[Rcpp::export]]
-Rcpp::LogicalVector icd9InReferenceCode(Rcpp::CharacterVector icd9,
-		Rcpp::CharacterVector icd9Reference, bool isShort, bool isShortReference =
-				true) {
+Rcpp::LogicalVector icd_in_reference_code(Rcpp::CharacterVector icd,
+		Rcpp::CharacterVector icd_reference, bool short_code,
+		bool short_reference = true) {
 
-	Rcpp::CharacterVector x = icd9AddLeadingZeroes(icd9, isShort);
-	if (!isShort)
+	Rcpp::CharacterVector x = icd9AddLeadingZeroes(icd, short_code);
+	if (!short_code)
 		x = icd9DecimalToShort(x);
 
-	Rcpp::CharacterVector y = icd9ChildrenCpp(icd9Reference, isShortReference, false);
-	if (!isShortReference)
+	Rcpp::CharacterVector y = icd9ChildrenCpp(icd_reference, short_reference, false);
+	if (!short_reference)
 		y = icd9DecimalToShort(y);
 	Rcpp::LogicalVector res = !is_na(match(x, y));
 	return res;

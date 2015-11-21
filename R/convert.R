@@ -75,7 +75,7 @@ icd9ChaptersToMap <- function(x) {
 #'   dropped, and everything else kept. No validation of the ICD codes is done.
 #' @param x \code{data.frame} in wide format, i.e. one row per patient, and
 #'   multiple columns containing ICD codes, empty strings or NA.
-#' @template visitid
+#' @template visit_name
 #' @param icdLabels vector of column names in which codes are found. If NULL,
 #'   all columns matching icd or ICD will be included.
 #' @param icdName character vector length one containing the new column name for
@@ -119,7 +119,7 @@ icd9WideToLong <- function(x,
                   min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icdLabels %in% names(x)))
 
-  visitId <- getVisitId(x, visitId)
+  visitId <- get_visit_name(x, visitId)
 
   res <- reshape(x,
                  direction = "long",
@@ -140,8 +140,8 @@ icd9WideToLong <- function(x,
 #'   This is a reasonably simple solution using built-in functions.
 #' @param icd9df data.frame of long-form data, one column for visitId and one
 #'   for ICD code
-#' @template visitid
-#' @template icd9field
+#' @template visit_name
+#' @template icd_name
 #' @param prefix character, default "icd_" to prefix new columns
 #' @param min.width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to
@@ -170,8 +170,8 @@ icd9LongToWide <- function(icd9df,
                            aggregate = TRUE,
                            return.df = FALSE) {
 
-  icd9Field <- getIcdField(icd9df, icd9Field)
-  visitId <- getVisitId(icd9df, visitId)
+  icd9Field <- get_icd_name(icd9df, icd9Field)
+  visitId <- get_visit_name(icd9df, visitId)
 
   assertDataFrame(icd9df, col.names = "named")
   assertString(prefix)
@@ -229,9 +229,9 @@ icd9LongToWide <- function(icd9df,
 #' @export
 icd9ComorbidMatToDf <- function(x, visitId = "visitId",
                                 stringsAsFactors = getOption("stringsAsFactors")) {
-  checkMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
-  checkString(visitId)
-  checkFlag(stringsAsFactors)
+  checkmate::assertMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
+  checkmate::assertString(visitId)
+  checkmate::assertFlag(stringsAsFactors)
   out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors)
   names(out)[1] <- visitId
   out
@@ -242,7 +242,7 @@ icd9ComorbidMatToDf <- function(x, visitId = "visitId",
 #' @param x data frame, with a \code{visitId} column (not necessarily first),
 #'   and other columns with flags for comorbidities, as such column names are
 #'   required.
-#' @template visitid
+#' @template visit_name
 #' @param stringsAsFactors whether the resulting data frame should have strings,
 #'   i.e. visitId converted to factor. Default is to follow the current session
 #'   option.
@@ -260,7 +260,7 @@ icd9ComorbidDfToMat <- function(x, visitId = NULL,
                                 stringsAsFactors = getOption("stringsAsFactors")) {
   checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
   checkFlag(stringsAsFactors)
-  visitId <- getVisitId(x, visitId)
+  visitId <- get_visit_name(x, visitId)
 
   out <- as.matrix.data.frame(x[-which(names(x) == visitId)])
   rownames(out) <- x[[visitId]]

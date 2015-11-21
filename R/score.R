@@ -35,7 +35,7 @@
 #'   a column of ICD-9 codes. It may have other columns which will be ignored.
 #'   By default, the first column is the patient identifier and is not counted.
 #'   If \code{visitId} is not specified, the first column is used.
-#' @template visitid
+#' @template visit_name
 #' @param scoringSystem One of \code{original}, \code{charlson}, or \code{quan}.
 #'   The first two will give the original Charlson weights for each comorbidity,
 #'   whereas \code{quan} uses the updated weights from Quan 2001.
@@ -75,7 +75,7 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assertFlag(return.df)
-  visitId <- getVisitId(x, visitId)
+  visitId <- get_visit_name(x, visitId)
   tmp <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
                               return.df = TRUE, ...)
   res <- icd9CharlsonComorbid(tmp, visitId = visitId, applyHierarchy = FALSE,
@@ -114,7 +114,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
     stopifnot(!any(x[, "Cancer"] & x[, "Mets"]))
   }
   if (is.data.frame(x)) {
-    visitId <- getVisitId(x, visitId)
+    visitId <- get_visit_name(x, visitId)
     visitIdNames <- x[[visitId]]
     x <- as.matrix(x[, names(x) %nin% visitId])
     rownames(x) <- visitIdNames
@@ -135,7 +135,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
 #'   for each column. By default, the first column is the patient identifier and
 #'   is not counted. If \code{visitId} is not specified, the first column is
 #'   used.
-#' @template visitid
+#' @template visit_name
 #' @param return.df single logical, if \code{TRUE}, return the result as a data
 #'   frame with the first column being the \code{visitId}, and the second being
 #'   the count. If \code{visitId} was a factor or named differently in the
@@ -163,7 +163,7 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
 #' @export
 icd9Count <- function(x, visitId = NULL, return.df = FALSE) {
   stopifnot(is.data.frame(x))
-  visitId <- getVisitId(x, visitId)
+  visitId <- get_visit_name(x, visitId)
   stopifnot(is.character(visitId))
   stopifnot(length(visitId) == 1)
 
@@ -183,8 +183,8 @@ icd9Count <- function(x, visitId = NULL, return.df = FALSE) {
 #'   duplicated.
 #' @export
 icd9CountComorbidBin <- function(x, visitId = NULL, return.df = FALSE) {
-  visitId <- getVisitId(x, visitId)
-  visitId <- getVisitId(x, visitId)
+  visitId <- get_visit_name(x, visitId)
+  visitId <- get_visit_name(x, visitId)
   res <- apply(x[, names(x) %nin% visitId],
                MARGIN = 1,
                FUN = sum)
@@ -206,7 +206,7 @@ icd9CountWide <- function(x,
                           visitId = NULL,
                           return.df = FALSE,
                           aggregate = FALSE) {
-  visitId <- getVisitId(x, visitId)
+  visitId <- get_visit_name(x, visitId)
   assertFlag(return.df)
   assertFlag(aggregate)
 
@@ -238,7 +238,7 @@ icd9CountWide <- function(x,
 #'   a column of ICD-9 codes. It may have other columns which will be ignored.
 #'   By default, the first column is the patient identifier and is not counted.
 #'   If \code{visitId} is not specified, the first column is used.
-#' @template visitid
+#' @template visit_name
 #' @param return.df single logical value, if true, a two column data frame will
 #'   be returned, with the first column named as in input data frame (i.e.
 #'   \code{visitId}), containing all the visits, and the second column
@@ -281,7 +281,7 @@ icd9VanWalraven.data.frame <- function(x, visitId = NULL,
                                        ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assertFlag(return.df)
-  visitId <- getVisitId(x, visitId)
+  visitId <- get_visit_name(x, visitId)
   tmp <- icd9ComorbidQuanElix(x, visitId, applyHierarchy = TRUE,
                               return.df = TRUE, ...)
   res <- icd9VanWalravenComorbid(tmp, visitId = visitId, applyHierarchy = FALSE)
@@ -312,7 +312,7 @@ icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
     stopifnot(!any(x[, "Tumor"] & x[, "Mets"]))
   }
   if (is.data.frame(x)) {
-    visitId <- getVisitId(x, visitId)
+    visitId <- get_visit_name(x, visitId)
     visitIdNames <- x[[visitId]]
     x <- as.matrix(x[, names(x) %nin% visitId])
     rownames(x) <- visitIdNames

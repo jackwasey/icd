@@ -172,8 +172,8 @@ icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
 #' @param isShortReference logical, see argument \code{isShort}
 #' @return logical vector
 #' @keywords internal
-icd9InReferenceCode <- function(icd9, icd9Reference, isShort, isShortReference = TRUE) {
-    .Call('icd9_icd9InReferenceCode', PACKAGE = 'icd9', icd9, icd9Reference, isShort, isShortReference)
+icd_in_reference_code <- function(icd, icd_reference, short_code, short_reference = TRUE) {
+    .Call('icd9_icd_in_reference_code', PACKAGE = 'icd9', icd, icd_reference, short_code, short_reference)
 }
 
 trimLeftCpp <- function(s) {

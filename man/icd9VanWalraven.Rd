@@ -20,16 +20,7 @@ a column of ICD-9 codes. It may have other columns which will be ignored.
 By default, the first column is the patient identifier and is not counted.
 If \code{visitId} is not specified, the first column is used.}
 
-\item{visitId}{The name of the column in the data frame which contains the
-patient or visit identifier. Typically this is the visit identifier, since
-patients come leave and enter hospital with different ICD-9 codes. It is a
-character vector of length one. If left empty, or \code{NULL}, then an
-attempt is made to guess which field has the ID for the patient encounter
-(not a patient ID, although this can of course be specified directly). The
-guesses proceed until a single match is made. Data frames may be wide with
-many matching fields, so to avoid false positives, anything but a single
-match is rejected. If there are no successful guesses, and \code{visitId}
-was not specified, then the first column of the data frame is used.}
+\item{visitId}{Deprecated. Use \code{visit_name}}
 
 \item{return.df}{single logical value, if true, a two column data frame will
 be returned, with the first column named as in input data frame (i.e.
@@ -47,6 +38,17 @@ system default or this setting.}
 
 \item{applyHierarchy}{single logical value, default is \code{FALSE}. If
 \code{TRUE}, will drop DM if DMcx is present, etc.}
+
+\item{visit_name}{The name of the column in the data frame which contains the
+patient or visit identifier. Typically this is the visit identifier, since
+patients come leave and enter hospital with different ICD-9 codes. It is a
+character vector of length one. If left empty, or \code{NULL}, then an
+attempt is made to guess which field has the ID for the patient encounter
+(not a patient ID, although this can of course be specified directly). The
+guesses proceed until a single match is made. Data frames may be wide with
+many matching fields, so to avoid false positives, anything but a single
+match is rejected. If there are no successful guesses, and \code{visitId}
+was not specified, then the first column of the data frame is used.}
 }
 \description{
 van Walraven Elixhauser score is calculated from the Quan

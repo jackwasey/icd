@@ -11,28 +11,28 @@
 \alias{icd_explain.list}
 \title{explain ICD9 codes}
 \usage{
-icd_explain(icd9, short = icd_guess_short(icd9), condense = TRUE,
+icd_explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
   brief = FALSE, warn = TRUE)
 
-icd9Explain(icd9, short = icd_guess_short(icd9), condense = TRUE,
+\method{icd_explain}{list}(icd9, short_code = icd_guess_short(icd9),
+  condense = TRUE, brief = FALSE, warn = TRUE)
+
+\method{icd_explain}{factor}(icd9, short_code = icd_guess_short(icd9),
+  condense = TRUE, brief = FALSE, warn = TRUE)
+
+\method{icd_explain}{character}(icd9, short_code = icd_guess_short(icd9),
+  condense = TRUE, brief = FALSE, warn = TRUE)
+
+icd9Explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
   brief = FALSE, warn = TRUE)
+
+icd9Explain.numeric(icd9, short_code = icd_guess_short(icd9),
+  condense = TRUE, brief = FALSE, warn = FALSE)
 
 icd9ExplainShort(icd9Short, condense = TRUE, brief = FALSE, warn = TRUE)
 
 icd9ExplainDecimal(icd9Decimal, condense = TRUE, brief = FALSE,
   warn = TRUE)
-
-\method{icd_explain}{list}(icd9, short = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = TRUE)
-
-\method{icd_explain}{factor}(icd9, short = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = TRUE)
-
-\method{icd_explain}{character}(icd9, short = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = TRUE)
-
-\method{icd9Explain}{numeric}(icd9, short = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = FALSE)
 }
 \arguments{
 \item{icd9}{is
@@ -41,7 +41,7 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{short}{single logical value which determines whether the ICD-9 code
+\item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
