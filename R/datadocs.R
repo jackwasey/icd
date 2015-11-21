@@ -289,7 +289,10 @@ utils::globalVariables(c("%<>%"))
   names(uranium_pathology) <- c("case", "icd10")
 
   uranium_pathology <- uranium_pathology[order(uranium_pathology["case"]), ]
+
   row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
+
+  class(uranium_pathology) <- c("icd10who", "icd10", "icd_long", "icd_decimal", "data.frame")
 
   save_in_data_dir(uranium_pathology)
 }
@@ -371,6 +374,8 @@ generate_elix.R <- function(condense = FALSE, save = FALSE, path = "data") {
   }
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
+  class(elixComorbid) <- c("icd10who", "icd10", "icd_long", "icd_decimal", "data.frame")
+
   if (save) save_in_data_dir(elixComorbid)
   invisible(elixComorbid)
 }
