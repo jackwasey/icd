@@ -1,3 +1,4 @@
 ^COPYING$
 R\/benchmark\.R
 tools
+R\/parse.+\.R
