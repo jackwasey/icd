@@ -24,29 +24,212 @@
 # except for more specific ICD types coming first.
 ######################################################################
 
+# list currently implemented classes for validation
+icd9_sub_classes <- c("icd9cm")
+icd9_classes <- c(icd9_sub_classes, "icd9")
+icd10_sub_classes <- c("icd10who", "icd10cm")
+icd10_classes <- c(icd10_sub_classes, "icd10")
+icd_struct_classes <- c("icd_long_data", "icd_wide_data")
+icd_format_classes <- c("icd_short_code", "icd_decimal_code")
+icd_other_classes <- c("map") # maybe calls this comorbidity_map?
+
+.check_conflict_with_icd9 <- function(x)
+  if (inherits(x, icd9_classes))
+    stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+
+.check_conflict_with_icd10 <- function(x)
+  if (inherits(x, icd10_classes))
+    stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+
+#' prefer an order of classes
+#' 
+#' The order of classes can matter because, for some functions, we'd prefer to decide what to do based on whether the structure is a comorbidity map before caring if it is icd-9 or 10.
+#' I can't see how it matters whether we prioritize long/wide and short/decimal yet, so won't test.
+#' @keywords internal
+.check_class_order <- function(x) {
+
+  system_classes <- c("data.frame", "list", "numeric", "character")
+ 
+  m <- match(class(x), c(icd_other_classes, icd9_classes, icd10_classes, system_classes))
+  if (any(m != cumsum(m)))
+    stop("preferred class order not met.")
+}
+
+.check_class_conflict <- function(x) {
+  if (sum(icd9_sub_classes %in% class(x)) > 1)
+    stop("Conflicting ICD-9 sub-classes")
+  if (sum(icd10_sub_classes %in% class(x)) > 1)
+    stop("Conflicting ICD-10 sub-classes")
+  if (sum(icd_struct_classes %in% class(x)) > 1)
+    stop("Conflicting long/wide structure classes exist")
+  if (sum(icd_format_classes %in% class(x)) > 1)
+    stop("Conflicting short/decimal structure classes exist")
+}
+
+#' set class to ICD-9
+#'
+#' @export
 icd_set_icd9 <- function(x) {
   if (inherits(x, "icd9")) return(x)
-  if (inherits(x, c("icd10", "icd10cm", "icd10who")))
-      stop("Trying to set ICD-9 class on an object which already has an ICD-10 class")
-  icd9cm_pos = match("icd9cm", class(x))
-  if (!is.na(icd9cm_pos)) {
-    # this means there is an icd9cm class, but no icd9 class
-    class(x) <- append(class(x), "icd9", after = icd9cm_pos)
-    return(x)
-  }
-class(x) <- append(class(x), "icd9")
+  .check_conflict_with_icd10(x)
+  after = match("icd9cm", class(x), nomatch = 0)
+  class(x) <- append(class(x), "icd9", after = after)
+  x
 }
 
-
+#' set class to ICD-9-CM
+#'
+#' @export
 icd_set_icd9cm <- function(x) {
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
-  if (inherits(x, c("icd10", "icd10cm", "icd10who")))
-    stop("Trying to set ICD-9 class on an object which already has an ICD-10 class")
+  .check_conflict_with_icd10(x)
   icd9_pos = match("icd9", class(x))
-  if (!is.na(icd9_pos)) {
+  if (!is.na(icd9_pos)) 
     class(x) <- append(class(x), "icd9cm", after = icd9_pos - 1)
-    return(x)
-  }
-  class(x) <- append(class(x), "icd9cm", after = 0) # put the more specific type at beginning
+  else 
+    class(x) <- append(class(x), "icd9cm", after = 0) # put the more specific type at beginning
+  x
 }
+
+#' set class to ICD-10
+#'
+#' @export
+icd_set_icd10 <- function(x) {
+  if (inherits(x, "icd10")) return(x)
+  .check_conflict_with_icd9(x)
+  icd10cm_pos = match("icd10cm", class(x), nomatch = 0)
+  icd10who_pos = match("icd10who", class(x), nomatch = 0)
+  after = max(icd10cm_pos, icd10who_pos)
+  class(x) <- append(class(x), "icd10", after = after)
+  x
+}
+
+#' set class to ICD-10-CM
+#'
+#' @export
+icd_set_icd10cm <- function(x) {
+  if (inherits(x, "icd10cm")) return(x)
+  .check_conflict_with_icd9(x)
+  icd10_pos = match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), "icd10cm", after = 0)
+  x
+}
+
+#' set class to ICD-10 WHO
+#'
+#' @export
+icd_set_icd10who <- function(x) {
+  if (inherits(x, "icd10who")) return(x)
+  .check_conflict_with_icd9(x)
+  icd10_pos = match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), "icd10who", after = 0)
+  x
+}
+
+#' set class to describe long data
+#'
+#' @export
+icd_set_long_data <- function(x) {
+  if (!is.data.frame(x) && !is.matrix(x))
+    stop("Long or Wide structure only makes sense in a matrix or data frame")
+  if (inherits(x, "icd_long_data")) return(x)
+  class(x) <- append(class(x), "icd_long_data")
+  x
+}
+  
+#' set class to describe wide data
+#'
+#' @export
+icd_set_wide_data <- function(x) {
+  if (!is.data.frame(x) && !is.matrix(x))
+    stop("Long or Wide structure only makes sense in a matrix or data frame")
+  if (inherits(x, "icd_wide_data")) return(x)
+  class(x) <- append(class(x), "icd_wide_data")
+  x
+}
+ 
+#' set class to describe short form ICD codes, i.e. with no decimal place 
+#' 
+#' @export
+icd_set_short_code <- function(x) {
+  # TODO consider warning if there are decimals!
+  if (inherits(x, "icd_short_code")) return(x)
+  if (inherits(x, "icd_decimal_code")) {
+    warning("setting class to describe short format ICD codes, but decimal is currently set")
+    class(x) <- class(x)[class(x) %nin% "icd_decimal_code"]
+  }  
+  class(x) <- append(class(x), "icd_short_code")
+  x
+}
+
+#' set class to describe decimal form ICD codes, i.e. with a decimal place 
+#' 
+#' @export
+icd_set_decimal_code <- function(x) {
+  # TODO consider warning if there are decimals!
+  if (inherits(x, "icd_decimal_code")) return(x)
+  if (inherits(x, "icd_short_code")) {
+    warning("setting class to describe decimal format ICD codes, but short is currently set")
+    class(x) <- class(x)[class(x) %nin% "icd_short_code"]
+  }  
+  class(x) <- append(class(x), "icd_decimal_code")
+  x
+}
+
+#' set class to describe a comorbidity map
+#' 
+#' This, I think, should take priority over ICD-9 vs ICD-10 when doing S3 dispatching
+#' Maybe should call this class icd_comorbidity_map instead
+#' @export
+icd_set_map <- function(x) {
+  if (inherits(x, "icd_map")) return(x)
+  if (!is.list(x) || is.null(names(x)))
+    warning("Comorbidity maps are named lists.")
+  class(x) <- append(class(x), "icd_map", after = 0)
+  x
+}
+
+####################
+# per Hadley Wickham, adv R:
+###################
+
+#' test ICD-related classes
+#'
+#' currently no checks on correctness of the classes for these functions
+#' @param x Any object which may have ICD-related classes set
+#' @export
+is.icd9 <- function(x) inherits(x, "icd9")
+#' @rdname is.icd9
+#' @export
+is.icd10 <- function(x) inherits(x, "icd10")
+#' @rdname is.icd9
+#' @export
+is.icd9cm <- function(x) inherits(x, "icd9cm")
+#' @rdname is.icd9
+#' @export
+is.icd10cm <- function(x) inherits(x, "icd10cm")
+#' @rdname is.icd9
+#' @export
+is.icd10who <- function(x) inherits(x, "icd10who")
+#' @rdname is.icd9
+#' @export
+is.icd_long_data <- function(x) inherits(x, "icd_long_data")
+#' @rdname is.icd9
+#' @export
+is.icd_wide_data <- function(x) inherits(x, "icd_wide_data")
+#' @rdname is.icd9
+#' @export
+is.icd_short_code <- function(x) inherits(x, "icd_short_code")
+#' @rdname is.icd9
+#' @export
+is.icd_decimal_code <- function(x) inherits(x, "icd_decimal_code")
+#' @rdname is.icd9
+#' @export
+is.icd_map <- function(x) inherits(x, "icd_map")
 

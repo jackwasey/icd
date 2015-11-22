@@ -30,7 +30,9 @@
 #' \code{NA_character}
 #'
 #' \code{NA} values result in a return value of \code{FALSE}.
-#' @section Three-digit validation: \code{isValidMajor} validates just the
+#' @section Three-digit validation:
+#' 
+#'  \code{isValidMajor} validates just the
 #'   'major' three-digit part of an ICD-9 code. This can in fact be provided as
 #'   a numeric, since there is no ambiguity. Numeric-only codes should be one to
 #'   three digitis, V codes are followed by one or two digits, and E codes
@@ -41,7 +43,9 @@
 #'   is provided TODO: add default (when there is no class) which detected icd9
 #'   vs 10 if possible. TODO: use "short" or "long" attribute if available to
 #'   tighten validation, or guess if missing.
-#' @section Class S3 class of on object in R is just a vector. Attributes are
+#' @section Class
+#' 
+#'  S3 class of on object in R is just a vector. Attributes are
 #'   lost with manipulation, with the exception of class: therefore, elements of
 #'   the class vector are used to describe features of the data. If these are
 #'   not present, the user may specify (e.g. decimal vs short type, ICD-9 vs
