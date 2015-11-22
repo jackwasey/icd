@@ -12,7 +12,7 @@
 \alias{icd_is_valid_short.icd9}
 \title{Check whether ICD-9 codes are syntactically valid}
 \usage{
-icd_is_valid(...)
+icd_is_valid(icd, ...)
 
 \method{icd_is_valid}{icd10}(icd, short = icd_guess_short(icd))
 
@@ -104,6 +104,16 @@ structure
   a numeric, since there is no ambiguity. Numeric-only codes should be one to
   three digitis, V codes are followed by one or two digits, and E codes
   always by three digits between 800 and 999.
+}
+
+\section{Class}{
+ S3 class of on object in R is just a vector. Attributes are
+  lost with manipulation, with the exception of class: therefore, elements of
+  the class vector are used to describe features of the data. If these are
+  not present, the user may specify (e.g. decimal vs short type, ICD-9 vs
+  ICD-10 WHO), but if they are, the correct functions are called without any
+  guess work. There are overlapping namespaces for short vs decimal and ICD-9
+  vs ICD-10 codes, so guessing is never going to be perfect.
 }
 \examples{
   icd_validShort(c("", "1", "22", "333", "4444", "123.45", "V",
