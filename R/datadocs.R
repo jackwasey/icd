@@ -243,7 +243,10 @@ utils::globalVariables(c("%<>%"))
 #' @docType data
 #' @importFrom utils read.csv
 .vermont <- function() {
-  vermont_dx <- read.csv("VTINP13.TXT",
+
+  file_path = unzip_to_data_raw(url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
+                          file_name = "VTINP13.TXT")
+  vermont_dx <- read.csv(file_path,
                          stringsAsFactors = FALSE,
                          strip.white = TRUE,
                          nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
@@ -262,9 +265,11 @@ utils::globalVariables(c("%<>%"))
   vermont_dx$sex <- sex
   vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)
   names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
+  class(vermont_dx) <- c("icd9cm", "icd9", "icd_short_code", "icd_wide_format", "data.frame")
   vermont_dx %<>% head(1000)
 
   save_in_data_dir(vermont_dx)
+  vermont_dx
 }
 
 #' @title United States Transuranium & Uranium Registries
@@ -292,9 +297,10 @@ utils::globalVariables(c("%<>%"))
 
   row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
 
-  class(uranium_pathology) <- c("icd10who", "icd10", "icd_long", "icd_decimal", "data.frame")
+  class(uranium_pathology) <- c("icd10who", "icd10", "icd_long_format", "icd_decimal_code", "data.frame")
 
   save_in_data_dir(uranium_pathology)
+  uranium_pathology
 }
 
 #' @title Generate Elixhauser comorbidities
