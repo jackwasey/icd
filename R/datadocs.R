@@ -212,7 +212,7 @@ NULL
 # we don't ever use magrittr in 'live' package use, just when it is using its
 # own functions for testing and generating its own data: in those cases magrittr
 # will be available, but we don't want CRAN check problems, so:
-utils::globalVariables(c("%<>%"))
+# utils::globalVariables(c("%<>%"))
 
 #' @title de-identified data from public Vermont source for 2013
 #' @name vermont_dx
@@ -242,6 +242,7 @@ utils::globalVariables(c("%<>%"))
 #' @author Vermont Division of Health Care Administration
 #' @docType data
 #' @importFrom utils read.csv
+#' @importFram magrittr %<>%
 .vermont <- function() {
   vermont_dx <- read.csv("VTINP13.TXT",
                          stringsAsFactors = FALSE,
@@ -264,7 +265,10 @@ utils::globalVariables(c("%<>%"))
   names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
   vermont_dx %<>% head(1000)
 
+  class(vermont_dx) <- c("icd9cm", "icd9", "icd_wide", "data.frame")
+
   save_in_data_dir(vermont_dx)
+  invisible(vermont_dx)
 }
 
 #' @title United States Transuranium & Uranium Registries
@@ -374,7 +378,7 @@ generate_elix.R <- function(condense = FALSE, save = FALSE, path = "data") {
   }
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
-  class(elixComorbid) <- c("icd10who", "icd10", "icd_long", "icd_decimal", "data.frame")
+  class(elixComorbid) <- c("icd9", "icd_map", "icd_decimal", "data.frame")
 
   if (save) save_in_data_dir(elixComorbid)
   invisible(elixComorbid)
@@ -456,6 +460,8 @@ generate_quan_elix <- function(condense = FALSE,
       icd9ChildrenShort, onlyReal = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
+  class(quanElixComorbid) <- c("icd9", "icd_map", "icd_decimal", "data.frame")
+
   if (save) save_in_data_dir(quanElixComorbid)
   invisible(quanElixComorbid)
 }
