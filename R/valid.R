@@ -41,6 +41,14 @@
 #'   is provided TODO: add default (when there is no class) which detected icd9
 #'   vs 10 if possible. TODO: use "short" or "long" attribute if available to
 #'   tighten validation, or guess if missing.
+#' @section Class: S3 class of on object in R is just a vector. Attributes are
+#'   lost with manipulation, with the exception of class: therefore, elements of
+#'   the class vector are used to describe features of the data. If these are
+#'   not present, the user may specify (e.g. decimal vs short type, ICD-9 vs
+#'   ICD-10 WHO), but if they are, the correct functions are called without any
+#'   guess work. There are overlapping namespaces for short vs decimal and ICD-9
+#'   vs ICD-10 codes, so guessing is never going to be perfect.
+#'
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
@@ -59,8 +67,14 @@
 #'   icd_validMajor(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 #' @export
-icd_is_valid <- function(...)
-  UseMethod("icd_is_valid")
+icd_is_valid <- function(icd, ...) {
+  if (inherits(icd, what = "icd_short"))
+    UseMethod("icd_is_valid_short")
+  else if (inherits(icd, what = "icd_decimal"))
+    UseMethod("icd_is_valid_decimal")
+  else
+    UseMethod("icd_is_valid")
+}
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
 #' @import checkmate stringr
@@ -82,6 +96,7 @@ icd_is_valid.icd10 <- function(icd, short = icd_guess_short(icd)) {
 #' @export
 icd_is_valid.icd9 <- function(icd, short_code) {
   assertFlag(short_code)
+  assertFactorOrCharacter(icd)
   if (short_code)
     icd_is_valid_short(icd)
   else

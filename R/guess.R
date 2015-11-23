@@ -32,12 +32,15 @@ icd_guess_short <- function(x, test_n = 1000L)
 
 #' @describeIn icd_guess_short Guess whether an ICD-10 code is in short_code form
 #' @keywords internal
-icd_guess_short.icd10 <- function(x, test_n = 1000L)
+icd_guess_short.icd10 <- function(x, test_n = 1000L) {
   !any(stringr::str_detect(x[1:test_n], ".+\\..+")) # any decimal as first approximation
+}
 
 #' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
 #' @keywords internal
 icd_guess_short.icd9 <- function(x, test_n) {
+  if (inherits(x, "icd_short_code")) return(TRUE)
+  if (inherits(x, "icd_decimal_code")) return(FALSE)
   if (is.list(x)) x <- unlist(x, recursive = TRUE)
   x <- asCharacterNoWarn(x)
   testend <- min(length(x), test_n)
@@ -54,7 +57,7 @@ icd_guess_short.icd9 <- function(x, test_n) {
 icd_guess_version <- function(...)
   UseMethod("icd_guess_version")
 
-#' @describeIn icd_guess_version
+#' @describeIn icd_guess_version Guess version of ICD code from character vector
 icd_guess_version.character <- function(icd, short_code) {
   icd9 <- sum(icd_is_valid_short.icd9(icd))
   icd10 <- sum(icd_is_valid.icd10(icd))

@@ -22,8 +22,7 @@
 #' has a dedcimal point to delimit the top-level (henceforth \emph{major}) category, and the
 #' \emph{minor} part containing the subsidiary classifications.
 #'
-#' @section
-#' Structures used in this package are:
+#' @section Structures: Structures used in this package are:
 #' \itemize{
 #'   \item vector (usually character vectors) of \emph{short} or \emph{long} codes
 #'   \item list, containing two elements with equal length vectors called \code{major}

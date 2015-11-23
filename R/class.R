@@ -1,0 +1,342 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
+######################################################################
+#
+# get and set class types this package uses The master list is: icd9 icd9cm icd10
+# icd10cm icd10who icd_long icd_wide icd_decimal icd_short icd_map
+#
+# I'm not sure of the best order, so I think I'll avoid assuming any order,
+# except for more specific ICD types coming first.
+######################################################################
+
+# list currently implemented classes for validation
+icd9_sub_classes <- c("icd9cm")
+icd9_classes <- c(icd9_sub_classes, "icd9")
+icd10_sub_classes <- c("icd10who", "icd10cm")
+icd10_classes <- c(icd10_sub_classes, "icd10")
+icd_struct_classes <- c("icd_long_data", "icd_wide_data")
+icd_format_classes <- c("icd_short_code", "icd_decimal_code")
+icd_other_classes <- c("map") # maybe calls this comorbidity_map?
+
+.check_conflict_with_icd9 <- function(x)
+  if (inherits(x, icd9_classes))
+    stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+
+.check_conflict_with_icd10 <- function(x)
+  if (inherits(x, icd10_classes))
+    stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+
+#' prefer an order of classes
+#'
+#' The order of classes can matter because, for some functions, we'd prefer to
+#' decide what to do based on whether the structure is a comorbidity map before
+#' caring if it is icd-9 or 10. I can't see how it matters whether we prioritize
+#' long/wide and short/decimal yet, so won't test.
+#' @keywords internal
+.check_class_order <- function(x) {
+
+  system_classes <- c("data.frame", "list", "numeric", "character")
+
+  m <- match(class(x), c(icd_other_classes, icd9_classes, icd10_classes, system_classes))
+  if (any(m != cumsum(m)))
+    stop("preferred class order not met.")
+}
+
+.check_class_conflict <- function(x) {
+  if (sum(icd9_sub_classes %in% class(x)) > 1)
+    stop("Conflicting ICD-9 sub-classes")
+  if (sum(icd10_sub_classes %in% class(x)) > 1)
+    stop("Conflicting ICD-10 sub-classes")
+  if (sum(icd_struct_classes %in% class(x)) > 1)
+    stop("Conflicting long/wide structure classes exist")
+  if (sum(icd_format_classes %in% class(x)) > 1)
+    stop("Conflicting short/decimal structure classes exist")
+}
+
+#' set class to ICD-9
+#'
+#' @export
+icd_set_icd9 <- function(x) {
+  if (inherits(x, "icd9")) return(x)
+  .check_conflict_with_icd10(x)
+  after = match("icd9cm", class(x), nomatch = 0)
+  class(x) <- append(class(x), "icd9", after = after)
+  x
+}
+
+#' set class to ICD-9-CM
+#'
+#' @export
+icd_set_icd9cm <- function(x) {
+  if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
+  .check_conflict_with_icd10(x)
+  icd9_pos = match("icd9", class(x))
+  if (!is.na(icd9_pos))
+    class(x) <- append(class(x), "icd9cm", after = icd9_pos - 1)
+  else
+    # put the more specific type at beginning
+    class(x) <- append(class(x), "icd9cm", after = 0)
+  x
+}
+
+#' set class to ICD-10
+#'
+#' @export
+icd_set_icd10 <- function(x) {
+  if (inherits(x, "icd10")) return(x)
+  .check_conflict_with_icd9(x)
+  icd10cm_pos = match("icd10cm", class(x), nomatch = 0)
+  icd10who_pos = match("icd10who", class(x), nomatch = 0)
+  after = max(icd10cm_pos, icd10who_pos)
+  class(x) <- append(class(x), "icd10", after = after)
+  x
+}
+
+#' set class to ICD-10-CM
+#'
+#' @export
+icd_set_icd10cm <- function(x) {
+  if (inherits(x, "icd10cm")) return(x)
+  .check_conflict_with_icd9(x)
+  icd10_pos = match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), "icd10cm", after = 0)
+  x
+}
+
+#' set class to ICD-10 WHO
+#'
+#' @export
+icd_set_icd10who <- function(x) {
+  if (inherits(x, "icd10who")) return(x)
+  .check_conflict_with_icd9(x)
+  icd10_pos = match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), "icd10who", after = 0)
+  x
+}
+
+#' set class to describe long data
+#'
+#' @export
+icd_set_long_data <- function(x) {
+  if (!is.data.frame(x) && !is.matrix(x))
+    stop("Long or Wide structure only makes sense in a matrix or data frame")
+  if (inherits(x, "icd_long_data")) return(x)
+  class(x) <- append(class(x), "icd_long_data")
+  x
+}
+
+#' set class to describe wide data
+#'
+#' @export
+icd_set_wide_data <- function(x) {
+  if (!is.data.frame(x) && !is.matrix(x))
+    stop("Long or Wide structure only makes sense in a matrix or data frame")
+  if (inherits(x, "icd_wide_data")) return(x)
+  class(x) <- append(class(x), "icd_wide_data")
+  x
+}
+
+#' set class to describe short form ICD codes, i.e. with no decimal place
+#'
+#' @export
+icd_set_short_code <- function(x) {
+  # TODO consider warning if there are decimals!
+  if (inherits(x, "icd_short_code")) return(x)
+  if (inherits(x, "icd_decimal_code")) {
+    warning("setting class to describe short format ICD codes, but decimal is currently set")
+    class(x) <- class(x)[class(x) %nin% "icd_decimal_code"]
+  }
+  class(x) <- append(class(x), "icd_short_code")
+  x
+}
+
+#' set class to describe decimal form ICD codes, i.e. with a decimal place
+#'
+#' @export
+icd_set_decimal_code <- function(x) {
+  # TODO consider warning if there are decimals!
+  if (inherits(x, "icd_decimal_code")) return(x)
+  if (inherits(x, "icd_short_code")) {
+    warning("setting class to describe decimal format ICD codes, but short is currently set")
+    class(x) <- class(x)[class(x) %nin% "icd_short_code"]
+  }
+  class(x) <- append(class(x), "icd_decimal_code")
+  x
+}
+
+#' set class to describe a comorbidity map
+#'
+#' This, I think, should take priority over ICD-9 vs ICD-10 when doing S3 dispatching
+#' Maybe should call this class icd_comorbidity_map instead
+#' @export
+icd_set_map <- function(x) {
+  if (inherits(x, "icd_map")) return(x)
+  if (!is.list(x) || is.null(names(x)))
+    warning("Comorbidity maps are named lists.")
+  class(x) <- append(class(x), "icd_map", after = 0)
+  x
+}
+
+# for comorbidity maps, if we subset, we want the result to have icd classes:
+
+
+#' extract elements of an ICD comorbidity map
+#' 
+#' Equivalent to a list, but preserves class of extracted elements
+#' @export
+`[.icd_map` <- function(x, index, ...) {
+  new_classes <- class(x)
+  new_classes <- new_classes[new_classes != "icd_map"]
+  y <- unclass(x)
+  out <- y[index, ...]
+  class(out) <- new_classes
+  out
+}
+
+#' extract vector of codes from an ICD comorbidity map
+#' 
+#' Equivalent to a list, but preserves class of extracted vector
+#' @export
+`[[.icd_map` <- function(x, index, ...) {
+  new_classes <- class(x)
+  new_classes <- new_classes[new_classes != "icd_map"]
+  y <- unclass(x)
+  out <- y[[index, ...]]
+  class(out) <- new_classes
+  out
+}
+
+#' combine ICD codes
+#' 
+#' These function implement combination of lists or vectors of codes, while preserving ICD classes. 
+#' @export
+c.icd9 <- function(...) {
+    args <- list(...)
+    base_class <- class(args[[1]])
+    if (any(is.icd10(unlist(args))))
+      stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
+    if (!all(is.icd9(unlist(args)))) 
+      warning("Combine ICD-9 codes with codes of unknown type")
+    structure(c(unlist(lapply(list(...), unclass))), class = base_class)
+}
+
+c.icd9cm <- function(...) {
+  args <- unlist(list(...))
+  if (any(!inherits(args, "icd9cm")))
+    warning("The first codes given are ICD-9-CM class, but subsequent ones are not.")
+}
+
+c.icd10 <- function(...) {
+    args <- list(...)
+    base_class <- class(args[[1]])
+    if (any(is.icd9(unlist(args))))
+      stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
+    if (!all(is.icd10(unlist(args)))) 
+      warning("Combining ICD-9 codes with codes of unknown type")
+    structure(c(unlist(lapply(args, unclass))), class = base_class)
+}
+
+c.icd10cm <- function(...) {
+  args <- unlist(list(...))
+  if (any(is.icd10who(args)))
+    warning("The first argument is ICD-10-CM, whereas subsequent arguments include ICD-10 WHO codes.")
+  NextMethod()
+}
+
+c.icd10who <- function(...) {
+  args <- unlist(list(...))
+  if (any(is.icd10cm(args)))
+    warning("The first argument is ICD-10-CM, whereas subsequent arguments include ICD-10 WHO codes.")
+  NextMethod()
+}
+
+`[.icd9` <- function(x, ...) {
+  out <- unclass(x)[...]
+  class(out) <- class(x)
+  out
+}
+
+`[[.icd9` <- function(x, ...) {
+  out <- unclass(x)[[...]]
+  class(out) <- class(x)
+  out
+}
+
+`[.icd10` <- function(x, ...) {
+  out <- unclass(x)[...]
+  class(out) <- class(x)
+  out
+}
+
+`[[.icd10` <- function(x, ...) {
+  out <- unclass(x)[[...]]
+  class(out) <- class(x)
+  out
+}
+
+#' test ICD-related classes
+#'
+#' currently no checks on correctness of the classes for these functions
+#' @details TODO: could warn or fix if something is icd10cm or icd10who but not icd10
+#' @param x Any object which may have ICD-related classes set
+#' @export
+is.icd9 <- function(x) inherits(x, c("icd9", "icd9cm"))
+
+#' @rdname is.icd9
+#' @details TODO: could warn or fix if something is icd10cm or icd10who but not icd10
+#' @export
+is.icd10 <- function(x) inherits(x, c("icd10", "icd10cm", "icd10who"))
+
+#' @rdname is.icd9
+#' @export
+is.icd9cm <- function(x) inherits(x, "icd9cm")
+
+#' @rdname is.icd9
+#' @export
+is.icd10cm <- function(x) inherits(x, "icd10cm")
+
+#' @rdname is.icd9
+#' @export
+is.icd10who <- function(x) inherits(x, "icd10who")
+
+#' @rdname is.icd9
+#' @export
+is.icd_long_data <- function(x) inherits(x, "icd_long_data")
+
+#' @rdname is.icd9
+#' @export
+is.icd_wide_data <- function(x) inherits(x, "icd_wide_data")
+
+#' @rdname is.icd9
+#' @export
+is.icd_short_code <- function(x) inherits(x, "icd_short_code")
+
+#' @rdname is.icd9
+#' @export
+is.icd_decimal_code <- function(x) inherits(x, "icd_decimal_code")
+
+#' @rdname is.icd9
+#' @export
+is.icd_map <- function(x) inherits(x, "icd_map")
+
