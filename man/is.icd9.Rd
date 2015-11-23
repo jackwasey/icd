@@ -39,4 +39,9 @@ is.icd_map(x)
 \description{
 currently no checks on correctness of the classes for these functions
 }
+\details{
+TODO: could warn or fix if something is icd10cm or icd10who but not icd10
+
+TODO: could warn or fix if something is icd10cm or icd10who but not icd10
+}
 

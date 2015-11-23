@@ -198,20 +198,115 @@ icd_set_map <- function(x) {
   x
 }
 
-####################
-# per Hadley Wickham, adv R:
-###################
+# for comorbidity maps, if we subset, we want the result to have icd classes:
+
+
+#' extract elements of an ICD comorbidity map
+#' 
+#' Equivalent to a list, but preserves class of extracted elements
+#' @export
+`[.icd_map` <- function(x, index, ...) {
+  new_classes <- class(x)
+  new_classes <- new_classes[new_classes != "icd_map"]
+  y <- unclass(x)
+  out <- y[index, ...]
+  class(out) <- new_classes
+  out
+}
+
+#' extract vector of codes from an ICD comorbidity map
+#' 
+#' Equivalent to a list, but preserves class of extracted vector
+#' @export
+`[[.icd_map` <- function(x, index, ...) {
+  new_classes <- class(x)
+  new_classes <- new_classes[new_classes != "icd_map"]
+  y <- unclass(x)
+  out <- y[[index, ...]]
+  class(out) <- new_classes
+  out
+}
+
+#' combine ICD codes
+#' 
+#' These function implement combination of lists or vectors of codes, while preserving ICD classes. 
+#' @export
+c.icd9 <- function(...) {
+    args <- list(...)
+    base_class <- class(args[[1]])
+    if (any(is.icd10(unlist(args))))
+      stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
+    if (!all(is.icd9(unlist(args)))) 
+      warning("Combine ICD-9 codes with codes of unknown type")
+    structure(c(unlist(lapply(list(...), unclass))), class = base_class)
+}
+
+c.icd9cm <- function(...) {
+  args <- unlist(list(...))
+  if (any(!inherits(args, "icd9cm")))
+    warning("The first codes given are ICD-9-CM class, but subsequent ones are not.")
+}
+
+c.icd10 <- function(...) {
+    args <- list(...)
+    base_class <- class(args[[1]])
+    if (any(is.icd9(unlist(args))))
+      stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
+    if (!all(is.icd10(unlist(args)))) 
+      warning("Combining ICD-9 codes with codes of unknown type")
+    structure(c(unlist(lapply(args, unclass))), class = base_class)
+}
+
+c.icd10cm <- function(...) {
+  args <- unlist(list(...))
+  if (any(is.icd10who(args)))
+    warning("The first argument is ICD-10-CM, whereas subsequent arguments include ICD-10 WHO codes.")
+  NextMethod()
+}
+
+c.icd10who <- function(...) {
+  args <- unlist(list(...))
+  if (any(is.icd10cm(args)))
+    warning("The first argument is ICD-10-CM, whereas subsequent arguments include ICD-10 WHO codes.")
+  NextMethod()
+}
+
+`[.icd9` <- function(x, ...) {
+  out <- unclass(x)[...]
+  class(out) <- class(x)
+  out
+}
+
+`[[.icd9` <- function(x, ...) {
+  out <- unclass(x)[[...]]
+  class(out) <- class(x)
+  out
+}
+
+`[.icd10` <- function(x, ...) {
+  out <- unclass(x)[...]
+  class(out) <- class(x)
+  out
+}
+
+`[[.icd10` <- function(x, ...) {
+  out <- unclass(x)[[...]]
+  class(out) <- class(x)
+  out
+}
 
 #' test ICD-related classes
 #'
 #' currently no checks on correctness of the classes for these functions
+#' @details TODO: could warn or fix if something is icd10cm or icd10who but not icd10
 #' @param x Any object which may have ICD-related classes set
 #' @export
-is.icd9 <- function(x) inherits(x, "icd9")
+is.icd9 <- function(x) inherits(x, c("icd9", "icd9cm"))
 
 #' @rdname is.icd9
+#' @details TODO: could warn or fix if something is icd10cm or icd10who but not icd10
 #' @export
-is.icd10 <- function(x) inherits(x, "icd10")
+is.icd10 <- function(x) inherits(x, c("icd10", "icd10cm", "icd10who"))
 
 #' @rdname is.icd9
 #' @export
