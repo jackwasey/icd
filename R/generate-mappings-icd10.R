@@ -59,7 +59,7 @@ generate_map_quan_elix <- function(save = TRUE) {
 }
 
 #' Generate Quan mapping for Charlson categories of ICD-10 codes
-#'  Based on Quan's SAS lists, transcribed by @wmurphyrd
+#'  Based on Quan's SAS lists, transcribed by wmurphyrd
 #'  @export
 generate_map_quan_charlson <- function() {
     quan_charl_raw <- list(

@@ -241,7 +241,7 @@ NULL
 #' @author Vermont Division of Health Care Administration
 #' @docType data
 #' @importFrom utils read.csv
-#' @importFram magrittr %<>%
+#' @importFrom magrittr %<>%
 .vermont <- function() {
 
   file_path = unzip_to_data_raw(url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",

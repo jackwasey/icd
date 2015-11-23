@@ -3,14 +3,14 @@
 \name{generate_map_quan_charlson}
 \alias{generate_map_quan_charlson}
 \title{Generate Quan mapping for Charlson categories of ICD-10 codes
- Based on Quan's SAS lists, transcribed by @wmurphyrd
+ Based on Quan's SAS lists, transcribed by wmurphyrd
  @export}
 \usage{
 generate_map_quan_charlson()
 }
 \description{
 Generate Quan mapping for Charlson categories of ICD-10 codes
- Based on Quan's SAS lists, transcribed by @wmurphyrd
+ Based on Quan's SAS lists, transcribed by wmurphyrd
  @export
 }
 
