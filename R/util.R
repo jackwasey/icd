@@ -332,7 +332,7 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   # sort may be pre-requisite for fastmatch
   if (is.factor(x)) return(x)
   if (is.null(levels)) levels <- unique.default(x)
-  suppressWarnings(f <- fmatch(x, levels))
+  suppressWarnings(f <- fastmatch::fmatch(x, levels))
   levels(f) <- as.character(labels)
   class(f) <- "factor"
   f

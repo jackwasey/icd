@@ -131,9 +131,9 @@ icd_is_valid_short.icd9 <- function(icd9Short) {
 
   # as explained in details, a numeric short ID has different validity
   # requirements than a string because of leading zeroes.
-  icd9_valid_short_n(icd9Short) |
-    icd9_valid_short_v(icd9Short) |
-    icd9_valid_short_e(icd9Short)
+  icd9_is_valid_short_n(icd9Short) |
+    icd9_is_valid_short_v(icd9Short) |
+    icd9_is_valid_short_e(icd9Short)
 }
 
 icd9_is_valid_short_v <- function(icd) {

@@ -109,11 +109,12 @@ icd_comorbid.icd9 <- function(icd_df,
 
   stopifnot(visit_name %in% names(icd_df))
 
-  if (!short_code) icd_df[[icd_name]] <- icd9DecimalToShort(icd_df[[icd_name]])
+  if (!short_code)
+    icd_df[[icd_name]] <- icd_decimal_to_short.icd9(icd_df[[icd_name]])
 
   map <- lapply(map, asCharacterNoWarn)
 
-  if (!short_map) map <- lapply(map, icd9DecimalToShort)
+  if (!short_map) map <- lapply(map, icd_decimal_to_short.icd9)
 
   # new stragegy is to start with a factor for the icd codes in icd_df, recode (and drop superfluous) icd codes in the
   # mapping, then do very fast match on integer without need for N, V or E distinction. Char to factor conversion in R
@@ -245,7 +246,7 @@ icd_comorbid_quan_deyo.icd9 <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
   checkmate::assertFlag(abbrevNames)
   checkmate::assertFlag(applyHierarchy)
-  cbd <- icd_comorbid(..., map = icd9::quanDeyoComorbid)
+  cbd <- icd_comorbid.icd9(..., map = icd9::quanDeyoComorbid)
   if (applyHierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.

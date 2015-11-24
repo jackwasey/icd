@@ -263,27 +263,19 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
 			minors);
 }
 
-//' @title Convert ICD-9 codes between short and decimal forms
-//' @template icd9-short
-//' @template icd9-decimal
-//' @export
-// [[Rcpp::export(name = "icd_short_to_decimal.icd9")]]
+// [[Rcpp::export]]
 Rcpp::CharacterVector icd9ShortToDecimal(
 		const Rcpp::CharacterVector icd9Short) {
 	return icd9PartsToDecimal(icd9ShortToPartsCpp(icd9Short, ""));
 }
 
-//' @rdname icd9ShortToDecimal
-//' @export
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9DecimalToShortOld(
 		const Rcpp::CharacterVector icd9Decimal) {
 	return icd9PartsToShort(icd9DecimalToPartsCpp(icd9Decimal, ""));
 }
 
-//' @rdname convert
-//' @export
-// [[Rcpp::export(name = "icd_decimal_to_short.icd9")]]
+// [[Rcpp::export]]
 Rcpp::CharacterVector icd9DecimalToShort(
 		const Rcpp::CharacterVector icd9Decimal) {
 	Rcpp::CharacterVector out = clone(icd9Decimal); // clone instead of pushing back thousands of times

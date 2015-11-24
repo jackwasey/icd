@@ -4,7 +4,7 @@
 \alias{expand_range_worker}
 \title{expand range worker function}
 \usage{
-expand_range_worker(start, end, lookup, onlyReal, excludeAmbiguousStart,
+expand_range_worker(start, end, lookup, real, excludeAmbiguousStart,
   excludeAmbiguousEnd)
 }
 \description{

@@ -21,30 +21,43 @@
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
-#' @template isShort
+#' @template short_code
 #' @template onlyReal
 #' @family ICD-9 ranges
 #' @export
-icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
-                         onlyReal = NULL, warn = TRUE) {
-  assertFlag(isShort)
-  if (isShort) return(icd9CondenseShort(icd9,
-                                        onlyReal = onlyReal, warn = warn))
-  icd9CondenseDecimal(icd9, onlyReal)
+
+icd_condense <- function(x, short = icd_guess_short(icd9), real = NULL, warn = TRUE) {
+  UseMethod("icd_condense")
 }
 
-#' @rdname icd9Condense
+#' @rdname icd_condense
 #' @export
+icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
+                         onlyReal = NULL, warn = TRUE) {
+  .Deprecated("icd_condense")
+
+}
+
+#' @describeIn icd_condense Condense a list or vector of ICD-9 codes
+#' @export
+icd_condense.icd9 <- function(x, short = icd_guess_short(icd9),
+                              real = NULL, warn = TRUE) {
+  assertFlag(short)
+  if (short)
+    icd9CondenseShort(icd9,onlyReal = onlyReal, warn = warn)
+  else
+    icd9CondenseDecimal(icd9, onlyReal)
+}
+
 icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE)
   icd9ShortToDecimal(icd9CondenseShort(icd9DecimalToShort(icd9Decimal),
                                        onlyReal = onlyReal, warn = warn))
 
-#' @rdname icd9Condense
+#' @rdname icd_condense
 #' @template warn
 #' @param keepFactorLevels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
-#' @export
 icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   assertFactorOrCharacter(icd9Short)
   assertFlag(warn)
@@ -103,7 +116,7 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
   # was annoying.
 
   # set new variable so we don't change the thing we are looping over...
-  majorParents <- unique(icd9GetMajor(c(out, fout, i9w), isShort = TRUE))
+  majorParents <- unique(icd9GetMajor(c(out, fout, i9w), short = TRUE))
   for (mp in majorParents) {
     test_kids <- icd9ChildrenShort(mp, onlyReal = onlyReal)
     test_kids <- test_kids[nchar(test_kids) < (5 + icd9IsE(mp))] # we've done these already

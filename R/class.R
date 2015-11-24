@@ -187,9 +187,8 @@ icd_decimal_code <- function(x) {
 #' Maybe should call this class icd_comorbidity_map instead
 #' @export
 icd_map <- function(x) {
+  checkmate::assertList(x, any.missing = FALSE, min.len = 1, names = "unique")
   if (inherits(x, "icd_map")) return(x)
-  if (!is.list(x) || is.null(names(x)))
-    warning("Comorbidity maps must be named lists.")
   class(x) <- append(class(x), "icd_map", after = 0)
   x
 }
@@ -233,8 +232,8 @@ c.icd9 <- function(...) {
   base_class <- class(args[[1]])
   if (any(is.icd10(unlist(args))))
     stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
-  if (!all(is.icd9(unlist(args))))
-    warning("Combine ICD-9 codes with codes of unknown type")
+  #if (!all(is.icd9(unlist(args)))) # this breaks icd9_generate_map
+    # warning("Combine ICD-9 codes with codes of unknown type")
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 

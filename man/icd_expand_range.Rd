@@ -109,7 +109,7 @@ Expand range of short-form ICD-9 codes
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{expand_minor}},
-  \code{\link{icd9Condense}}, \code{\link{icd_children}}
+  \code{\link{icd_children}}, \code{\link{icd_condense}}
 }
 \keyword{internal}
 

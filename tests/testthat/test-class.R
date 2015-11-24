@@ -38,7 +38,8 @@ test_that("constructing a comorbidity map works", {
 })
 
 test_that("constructing a comorbidity map with unnamed list, etc. fails", {
-  expect_error(icd_map(unname(x)))
+  expect_error(icd_map(unname(unclass(x))))
+  # and data frames should definitely fail
   expect_error(icd_map(icd9::vermont_dx))
   expect_error(icd_map(icd9::uranium_pathology))
 })

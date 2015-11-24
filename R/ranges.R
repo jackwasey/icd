@@ -202,12 +202,12 @@ icd_expand_range.icd9 <- function(start, end,
                                   excludeAmbiguousEnd = TRUE) {
   if (short)
     icd9_expand_range_short(start, end, real,
-                         excludeAmbiguousStart,
-                         excludeAmbiguousEnd)
+                            excludeAmbiguousStart,
+                            excludeAmbiguousEnd)
   else
     icd9_expand_range_decimal(start, end, real,
-                           excludeAmbiguousStart,
-                           excludeAmbiguousEnd)
+                              excludeAmbiguousStart,
+                              excludeAmbiguousEnd)
 }
 
 #' expand range worker function
@@ -328,14 +328,18 @@ icd_expand_range_major.icd9 <- function(start, end, real = TRUE) {
 #' @rdname icd_expand_range
 #' @keywords internal
 icd9_expand_range_decimal <- function(start, end, real = TRUE,
-                                   excludeAmbiguousStart = TRUE,
-                                   excludeAmbiguousEnd = TRUE) {
-  icd_short_to_decimal(
-    icd_expand_range.icd9(
-      icd_decimal_to_short(start), icd_decimal_to_short(end),
-      short = TRUE, real = real,
-      excludeAmbiguousStart = excludeAmbiguousStart,
-      excludeAmbiguousEnd = excludeAmbiguousEnd
+                                      excludeAmbiguousStart = TRUE,
+                                      excludeAmbiguousEnd = TRUE) {
+  icd9(
+    icd_short_code(
+      icd_short_to_decimal.icd9(
+        icd_expand_range.icd9(
+          icd_decimal_to_short.icd9(start), icd_decimal_to_short.icd9(end),
+          short = TRUE, real = real,
+          excludeAmbiguousStart = excludeAmbiguousStart,
+          excludeAmbiguousEnd = excludeAmbiguousEnd
+        )
+      )
     )
   )
 }

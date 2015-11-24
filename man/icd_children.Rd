@@ -71,7 +71,7 @@ icd9ChildrenDecimal("2.34")
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{expand_minor}},
-  \code{\link{icd9Condense}},
+  \code{\link{icd_condense}},
   \code{\link{icd_expand_range}}
 }
 \keyword{manip}
