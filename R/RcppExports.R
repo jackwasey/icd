@@ -61,7 +61,7 @@ icd9DecimalToPartsCpp <- function(icd9Decimal, minorEmpty) {
 #' @template icd9-short
 #' @template icd9-decimal
 #' @export
-icd9ShortToDecimal <- function(icd9Short) {
+icd_short_to_decimal.icd9 <- function(icd9Short) {
     .Call('icd9_icd9ShortToDecimal', PACKAGE = 'icd9', icd9Short)
 }
 
@@ -73,7 +73,7 @@ icd9DecimalToShortOld <- function(icd9Decimal) {
 
 #' @rdname convert
 #' @export
-icd9DecimalToShort <- function(icd9Decimal) {
+icd_decimal_to_short.icd9 <- function(icd9Decimal) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', icd9Decimal)
 }
 

@@ -189,7 +189,7 @@ icd_decimal_code <- function(x) {
 icd_map <- function(x) {
   if (inherits(x, "icd_map")) return(x)
   if (!is.list(x) || is.null(names(x)))
-    warning("Comorbidity maps are named lists.")
+    warning("Comorbidity maps must be named lists.")
   class(x) <- append(class(x), "icd_map", after = 0)
   x
 }

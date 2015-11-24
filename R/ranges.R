@@ -201,18 +201,18 @@ icd_expand_range.icd9 <- function(start, end,
                                   excludeAmbiguousStart = TRUE,
                                   excludeAmbiguousEnd = TRUE) {
   if (short)
-    icd9ExpandRangeShort(start, end, real,
+    icd9_expand_range_short(start, end, real,
                          excludeAmbiguousStart,
                          excludeAmbiguousEnd)
   else
-    icd9ExpandRangeDecimal(start, end, real,
+    icd9_expand_range_decimal(start, end, real,
                            excludeAmbiguousStart,
                            excludeAmbiguousEnd)
 }
 
 #' expand range worker function
 #' @keywords internal
-expand_range_worker <- function(start, end, lookup, onlyReal,
+expand_range_worker <- function(start, end, lookup, real,
                                 excludeAmbiguousStart, excludeAmbiguousEnd) {
   assertString(start)
   assertString(end)
@@ -231,7 +231,7 @@ expand_range_worker <- function(start, end, lookup, onlyReal,
   if (end_index < start_index)
     stop("end code must be greater than or equal to start code")
 
-  if (start == end) return(icd9ChildrenShort(start, onlyReal = onlyReal))
+  if (start == end) return(icd_children.icd9(start, short = TRUE, real = real))
 
   out <- lookup[start_index:end_index]
   if (excludeAmbiguousStart) {
@@ -239,7 +239,7 @@ expand_range_worker <- function(start, end, lookup, onlyReal,
     # let's take the first 5, to cover cases like 100, 101, 102.1, 102.11, 102.2
     starts <- utils::tail(out, 5)
     for (s in starts) {
-      if (any(icd9ChildrenShort(s, onlyReal = onlyReal) %nin% out))
+      if (any(icd_children.icd9(s, short = TRUE, real = real) %nin% out))
         out <- out[-which(out == s)]
     }
   }
@@ -251,14 +251,16 @@ expand_range_worker <- function(start, end, lookup, onlyReal,
     # kill it, if it spills over.
     out_cp <- out
     for (o in out_cp) {
-      if (any(icd9ChildrenShort(o, onlyReal = onlyReal) %nin% out))
+      if (any(icd_children.icd9(o, short = TRUE, real = real) %nin% out))
         out <- out[-which(out == o)]
     }
   }
-  icd_sort.icd9(unique(c(out, icd9ChildrenShort(end, onlyReal = onlyReal))), short = TRUE)
+  icd_sort.icd9(unique(c(out, icd_children.icd9(end, short = TRUE, real = real))), short = TRUE)
 }
 
-# Expand range of short-form ICD-9 codes
+#' @rdname icd_expand_range
+#' @details  Expand range of short-form ICD-9 codes
+#' @keywords internal
 icd9_expand_range_short <- function(start, end, real = TRUE,
                                     excludeAmbiguousStart = TRUE,
                                     excludeAmbiguousEnd = TRUE) {
@@ -277,27 +279,27 @@ icd9_expand_range_short <- function(start, end, real = TRUE,
 
   if (real) {
     stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
-    if (icd9IsN(start) && icd9IsN(end))
-      res <- expand_range_worker(start, end, icd9::icd9NShortReal, onlyReal = TRUE,
+    if (icd9_is_n(start) && icd9_is_n(end))
+      res <- expand_range_worker(start, end, icd9::icd9NShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
-    else if (icd9IsV(start) && icd9IsV(end))
-      res <- expand_range_worker(start, end, icd9::icd9VShortReal, onlyReal = TRUE,
+    else if (icd9_is_v(start) && icd9_is_v(end))
+      res <- expand_range_worker(start, end, icd9::icd9VShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
-    else if (icd9IsE(start) && icd9IsE(end))
-      res <- expand_range_worker(start, end, icd9::icd9EShortReal, onlyReal = TRUE,
+    else if (icd9_is_e(start) && icd9_is_e(end))
+      res <- expand_range_worker(start, end, icd9::icd9EShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")
   } else {
 
-    if (icd9IsN(start) && icd9IsN(end))
-      res <- expand_range_worker(start, end, icd9::icd9NShort, onlyReal = FALSE,
+    if (icd9_is_n(start) && icd9_is_n(end))
+      res <- expand_range_worker(start, end, icd9::icd9NShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
-    else if (icd9IsV(start) && icd9IsV(end))
-      res <- expand_range_worker(start, end, icd9::icd9VShort, onlyReal = FALSE,
+    else if (icd9_is_v(start) && icd9_is_v(end))
+      res <- expand_range_worker(start, end, icd9::icd9VShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
-    else if (icd9IsE(start) && icd9IsE(end))
-      res <- expand_range_worker(start, end, icd9::icd9EShort, onlyReal = FALSE,
+    else if (icd9_is_e(start) && icd9_is_e(end))
+      res <- expand_range_worker(start, end, icd9::icd9EShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")
@@ -324,48 +326,48 @@ icd_expand_range_major.icd9 <- function(start, end, real = TRUE) {
 }
 
 #' @rdname icd_expand_range
-#' @export
-icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
+#' @keywords internal
+icd9_expand_range_decimal <- function(start, end, real = TRUE,
                                    excludeAmbiguousStart = TRUE,
                                    excludeAmbiguousEnd = TRUE) {
-  icd9ShortToDecimal(
-    icd9ExpandRangeShort(
-      icd9DecimalToShort(start), icd9DecimalToShort(end), onlyReal = onlyReal,
+  icd_short_to_decimal(
+    icd_expand_range.icd9(
+      icd_decimal_to_short(start), icd_decimal_to_short(end),
+      short = TRUE, real = real,
       excludeAmbiguousStart = excludeAmbiguousStart,
       excludeAmbiguousEnd = excludeAmbiguousEnd
     )
   )
 }
 
-
 #' @rdname icd_expand_range
 #' @export
 "%i9da%" <- function(start, end) {
-  icd9ExpandRangeDecimal(start, end, onlyReal = FALSE)
+  icd_expand_range.icd9(start, end, short = FALSE, real = FALSE)
 }
 
 #' @rdname icd_expand_range
 #' @export
 "%i9sa%" <- function(start, end) {
-  icd9ExpandRangeShort(start, end, onlyReal = FALSE)
+  icd_expand_range.icd9(start, end, short = TRUE, real = FALSE)
 }
 
 #' @rdname icd_expand_range
 #' @export
 "%i9d%" <- function(start, end) {
-  icd9ExpandRangeDecimal(start, end, onlyReal = TRUE)
+  icd_expand_range.icd9(start, end, short = FALSE, real = TRUE)
 }
 
 #' @rdname icd_expand_range
 #' @export
 "%i9mj%" <- function(start, end) {
-  icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
+  icd_expand_range_major.icd9(start, end, real = TRUE)
 }
 
 #' @rdname icd_expand_range
 #' @export
 "%i9s%" <- function(start, end) {
-  icd9ExpandRangeShort(start, end, onlyReal = TRUE)
+  icd_expand_range.icd9(start, end, short = TRUE, real = TRUE)
 }
 
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes

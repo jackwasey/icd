@@ -10,6 +10,8 @@
 \alias{icd9ExpandRangeDecimal}
 \alias{icd9ExpandRangeMajor}
 \alias{icd9ExpandRangeShort}
+\alias{icd9_expand_range_decimal}
+\alias{icd9_expand_range_short}
 \alias{icd_expand_range}
 \alias{icd_expand_range.icd9}
 \title{take two ICD-9 codes and expand range to include all child codes}
@@ -32,7 +34,10 @@ icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
   end)), real = TRUE, excludeAmbiguousStart = TRUE,
   excludeAmbiguousEnd = TRUE)
 
-icd9ExpandRangeDecimal(start, end, onlyReal = TRUE,
+icd9_expand_range_short(start, end, real = TRUE,
+  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
+
+icd9_expand_range_decimal(start, end, real = TRUE,
   excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
 
 start \%i9da\% end
@@ -88,6 +93,9 @@ this is cumbersome code, covering a whole load of edge cases
   \code{onlyReal} default is \code{TRUE} (a change from previous versions)
   since this is far more likely to be useful to the end user.
 }
+\details{
+Expand range of short-form ICD-9 codes
+}
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd9}: Expand a range of ICD-9 codes
@@ -103,4 +111,5 @@ this is cumbersome code, covering a whole load of edge cases
 Other ICD-9 ranges: \code{\link{expand_minor}},
   \code{\link{icd9Condense}}, \code{\link{icd_children}}
 }
+\keyword{internal}
 

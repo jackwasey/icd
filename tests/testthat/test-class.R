@@ -32,8 +32,9 @@ test_that("setting conflicting icd data class gives error", {
 x <- icd9::quanElixComorbid
 
 test_that("constructing a comorbidity map works", {
-  expect_equal(icd_map(unclass(x)), x)
   expect_equal(icd_map(x), x)
+  expect_equivalent(as.list(x), x)
+  expect_equivalent(icd_map(as.list(x)), x)
 })
 
 test_that("constructing a comorbidity map with unnamed list, etc. fails", {

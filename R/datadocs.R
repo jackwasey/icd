@@ -308,7 +308,7 @@ NULL
 #'   \code{datadocs.R}.
 #' @template parse-template
 #' @keywords internal
-generate_elix.R <- function(condense = FALSE, save = FALSE, path = "data") {
+generate_elix <- function(save = FALSE, path = "data") {
   elixComorbid <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91",
             "404.93", "428.0" %i9da% "428.9"),
@@ -364,27 +364,18 @@ generate_elix.R <- function(condense = FALSE, save = FALSE, path = "data") {
   )
 
   elixComorbid <- lapply(
-    elixComorbid, function(x)
-      icd9DecimalToShort(x))
+    elixComorbid, function(x) icd_decimal_to_short(x))
 
-  # convert to short form, for consistency with other mappings.
-  if (condense) {
-    elixComorbid <- lapply(
-      elixComorbid,
-      function(x) icd9Condense(x, onlyReal = FALSE))
-  } else {
-    elixComorbid <- lapply(
-      elixComorbid,
-      icd9ChildrenShort, onlyReal = FALSE)
-  }
+  elixComorbid <- lapply(
+    elixComorbid,
+    icd_children.icd9, short = TRUE, real = FALSE)
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
-  class(elixComorbid) <- c("icd9", "icd_map", "icd_decimal", "data.frame")
+  class(elixComorbid) <- c("icd9", "icd_map", "icd_decimal", "list")
 
   if (save) save_in_data_dir(elixComorbid)
   invisible(elixComorbid)
 }
-
 
 #' @title Generate Quan's revised Elixhauser comorbidities
 #' @template parse-template
@@ -449,7 +440,7 @@ generate_quan_elix <- function(condense = FALSE,
 
   quanElixComorbid <- lapply(
     quanElixComorbid,
-    function(x) icd9DecimalToShort(x))
+    function(x) icd_decimal_to_short.icd9(x))
 
   if (condense)
     quanElixComorbid <- lapply(
@@ -461,7 +452,7 @@ generate_quan_elix <- function(condense = FALSE,
       icd9ChildrenShort, onlyReal = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
-  class(quanElixComorbid) <- c("icd9", "icd_map", "icd_decimal", "data.frame")
+  class(quanElixComorbid) <- c("icd9", "icd_map", "icd_decimal", "list")
 
   if (save) save_in_data_dir(quanElixComorbid)
   invisible(quanElixComorbid)
