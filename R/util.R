@@ -382,21 +382,21 @@ icd9_sort_order_short <- function(icd9Short) {
     icd9Short)
 }
 
-#' @rdname icd_short
+#' @rdname icd_sort
 #' @export
 icd9Sort <- function(icd9, isShort = icd_guess_short(icd9)) {
   .Deprecated("icd_sort")
   icd_sort.icd9(icd9, isShort)
 }
 
-#' @rdname icd_short
+#' @rdname icd_sort
 #' @export
 icd9SortShort <- function(icd9Short) {
   .Deprecated("icd_sort")
   icd_sort.icd9(icd9Short, short = TRUE)
 }
 
-#' @rdname icd_short
+#' @rdname icd_sort
 #' @export
 icd9SortDecimal <- function(icd9Decimal) {
   .Deprecated("icd_sort")

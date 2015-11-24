@@ -100,7 +100,7 @@ icd_explain.character <- function(icd9, short_code = icd_guess_short(icd9),
   )
 }
 
-#' @describeIn icd9Explain explain numeric vector of ICD-9 codes, with warning.
+#' @describeIn icd_explain explain numeric vector of ICD-9 codes, with warning.
 #'   In general, this is not allowed because of the possible ambiguity of
 #'   numeric decimal codes, but for convenience, this is allowed in this case to
 #'   avoid typing many quotes.

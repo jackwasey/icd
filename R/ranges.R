@@ -120,9 +120,13 @@ icd10ExpandRangePossibleShort <- function(start, end) {
 
 }
 
+#' @title Expand a pair of major codes into a range of major codes
+#' @keywords internal
 icd_expand_range_major <- function(start, end)
   UseMethod("icd_expand_range_major")
 
+#' @describeIn icd_expand_range_major Expand range of top-level ICD-10 codes
+#' @keywords internal
 icd_expand_range_major.icd10 <- function(start, end) {
   assertString(start)
   assertString(end)
@@ -190,6 +194,7 @@ icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
 }
 
 #' @describeIn icd_expand_range Expand a range of ICD-9 codes
+#' @export
 icd_expand_range.icd9 <- function(start, end,
                                   short = icd_guess_short(c(start, end)),
                                   real = TRUE,
@@ -318,7 +323,7 @@ icd_expand_range_major.icd9 <- function(start, end, real = TRUE) {
     majors
 }
 
-#' @rdname icd9ExpandRange
+#' @rdname icd_expand_range
 #' @export
 icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
                                    excludeAmbiguousStart = TRUE,
@@ -333,31 +338,31 @@ icd9ExpandRangeDecimal <- function(start, end, onlyReal = TRUE,
 }
 
 
-#' @rdname icd9ExpandRange
+#' @rdname icd_expand_range
 #' @export
 "%i9da%" <- function(start, end) {
   icd9ExpandRangeDecimal(start, end, onlyReal = FALSE)
 }
 
-#' @rdname icd9ExpandRange
+#' @rdname icd_expand_range
 #' @export
 "%i9sa%" <- function(start, end) {
   icd9ExpandRangeShort(start, end, onlyReal = FALSE)
 }
 
-#' @rdname icd9ExpandRange
+#' @rdname icd_expand_range
 #' @export
 "%i9d%" <- function(start, end) {
   icd9ExpandRangeDecimal(start, end, onlyReal = TRUE)
 }
 
-#' @rdname icd9ExpandRange
+#' @rdname icd_expand_range
 #' @export
 "%i9mj%" <- function(start, end) {
   icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 }
 
-#' @rdname icd9ExpandRange
+#' @rdname icd_expand_range
 #' @export
 "%i9s%" <- function(start, end) {
   icd9ExpandRangeShort(start, end, onlyReal = TRUE)

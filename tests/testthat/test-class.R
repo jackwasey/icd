@@ -42,11 +42,16 @@ test_that("constructing a comorbidity map with unnamed list, etc. fails", {
   expect_error(icd_map(icd9::uranium_pathology))
 })
 
-test_that("construvting wide or long data works", {
+test_that("constructing wide data works", {
   expect_equal(icd_wide_data(icd9::vermont_dx), icd9::vermont_dx)
-  expect_equal(icd_wide_data(unclass(icd9::vermont_dx)), icd9::vermont_dx)
+  expect_equivalent(icd_wide_data(icd9::vermont_dx), icd9::vermont_dx)
+  expect_equivalent(icd_wide_data(as.data.frame(icd9::vermont_dx)), icd9::vermont_dx)
+})
+
+test_that("constructing long data works", {
   expect_equal(icd_long_data(icd9::uranium_pathology), icd9::uranium_pathology)
-  expect_equal(icd_long_data(unclass(icd9::uranium_pathology)), icd9::uranium_pathology)
+  expect_equivalent(icd_long_data(icd9::uranium_pathology), icd9::uranium_pathology)
+  expect_equivalent(icd_long_data(as.data.frame(icd9::uranium_pathology)), icd9::uranium_pathology)
 })
 
 test_that("constructing wide or long format for non-data frame gives error", {

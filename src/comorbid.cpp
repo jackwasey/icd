@@ -28,7 +28,7 @@
 
 // R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
 
-//' @rdname icd9Comorbid
+//' @rdname icd_comorbid
 //' @description RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
 //'   fast, and most time is now spent setting up the data to be passed in.
 //' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate

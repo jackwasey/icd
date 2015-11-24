@@ -84,7 +84,7 @@ icd9PoaChoices <- icd_poa_choices
 icd_comorbid <- function(...)
   UseMethod("icd_comorbid")
 
-icd_comorbid.generic <- function(icd_df, ...) {
+icd_comorbid.default <- function(icd_df, ...) {
   # don't know whether ICD-9 or ICD-10 so we'll guess
   icd_version <- icd_guess_version(icd_df)
   }
@@ -104,12 +104,12 @@ icd_comorbid.icd9 <- function(icd_df,
   assertDataFrame(icd_df, min.cols = 2)
   assertList(map, any.missing = FALSE, min.len = 1, types = c("character", "factor"), names = "unique")
   assertString(visit_name)
-  assertFlag(short)
+  assertFlag(short_code)
   assertFlag(short_map)
 
   stopifnot(visit_name %in% names(icd_df))
 
-  if (!short) icd_df[[icd_name]] <- icd9DecimalToShort(icd_df[[icd_name]])
+  if (!short_code) icd_df[[icd_name]] <- icd9DecimalToShort(icd_df[[icd_name]])
 
   map <- lapply(map, asCharacterNoWarn)
 
@@ -165,38 +165,38 @@ icd_comorbid.icd9 <- function(icd_df,
   mat
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @export
 icd9ComorbidShort <- function(...) {
   .Deprecated("icd_comorbid")
   icd_comorbid.icd9(..., short = TRUE)
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @export
 icd_comorbid_ahrq <- function(...) {
   UseMethod("icd_comorbid_ahrq")
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @export
 icd_comorbid_quan_elix <- function(...) {
   UseMethod("icd_comorbid_quan_elix")
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @export
 icd_comorbid_quan_deyo <- function(...) {
   UseMethod("icd_comorbid_quan_deyo")
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @export
 icd_comorbid_elix <- function(...) {
   UseMethod("icd_comorbid_elix")
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @param abbrevNames  single locical value that defaults to \code{TRUE}, in
 #'   which case the ishorter human-readable names stored in e.g.
 #'   \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.
@@ -235,7 +235,7 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrevNames = TRUE,
   cbd
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @description For Charlson/Deyo comorbidities, strictly speaking, there is no
 #'   dropping of more e.g. uncomplicated DM if complicated DM exists, however,
 #'   this is probaably useful, in general and is essential when calculating the
@@ -261,7 +261,7 @@ icd_comorbid_quan_deyo.icd9 <- function(..., abbrevNames = TRUE,
   cbd
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @export
 icd_comorbid_quan_elix.icd9 <- function(..., abbrevNames = TRUE,
                                  applyHierarchy = TRUE) {
@@ -298,7 +298,7 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrevNames = TRUE,
   cbd
 }
 
-#' @rdname icd9Comorbid
+#' @rdname icd_comorbid
 #' @export
 icd_comorbid_elix.icd9 <- function(..., abbrevNames = TRUE, applyHierarchy = TRUE) {
   assertFlag(abbrevNames)

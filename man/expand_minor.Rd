@@ -31,8 +31,8 @@ Accepts a single number or character input starting point for
   icd9:::expand_minor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{icd9Children}},
-  \code{\link{icd9Condense}},
+Other ICD-9 ranges: \code{\link{icd9Condense}},
+  \code{\link{icd_children}},
   \code{\link{icd_expand_range}}
 }
 \keyword{internal}

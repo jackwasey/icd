@@ -9,6 +9,7 @@
 \alias{icd_explain.character}
 \alias{icd_explain.factor}
 \alias{icd_explain.list}
+\alias{icd_explain.numeric}
 \title{explain ICD9 codes}
 \usage{
 icd_explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
@@ -22,6 +23,9 @@ icd_explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
 
 \method{icd_explain}{character}(icd9, short_code = icd_guess_short(icd9),
   condense = TRUE, brief = FALSE, warn = TRUE)
+
+\method{icd_explain}{numeric}(icd9, short_code = icd_guess_short(icd9),
+  condense = TRUE, brief = FALSE, warn = FALSE)
 
 icd9Explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
   brief = FALSE, warn = TRUE)
@@ -85,6 +89,11 @@ convert 'decimal' format (123.45 style) ICD9 codes into the name
 \item \code{factor}: explain Explain factor of ICD-9 codes
 
 \item \code{character}: explain character vector of ICD-9 codes
+
+\item \code{numeric}: explain numeric vector of ICD-9 codes, with warning.
+In general, this is not allowed because of the possible ambiguity of
+numeric decimal codes, but for convenience, this is allowed in this case to
+avoid typing many quotes.
 }}
 \examples{
 # by default, just show parent code and ignore children (428.0 not shown

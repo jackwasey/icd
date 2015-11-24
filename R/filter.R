@@ -51,13 +51,13 @@ icd_filter_invalid <- function(icd_df, icd_name = NULL, short_code = NULL, inver
   icd_filter_valid(icd_df = icd_df, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
-#' @name icd9FilterPoa
+#' @name icd_filter
 #' @title Filters data frame based on present-on-arrival flag
 #' @description Present On Arrival (POA) is not a simple flag, since many codes
 #'   are exempt, unspecified, or unknown. Therefore, two options are given: get
 #'   all the comorbidities where the POA flag was definitely -ve, coded as "N"
 #'   or definitely +ve and coded as "Y". Negating one set won't give the other
-#'   set unless all codes were either Y or N. #describeIn icd9Comorbid
+#'   set unless all codes were either Y or N.
 #' @template icd_df
 #' @template poa_name
 #' @template poa
@@ -108,21 +108,21 @@ icd_filter_poa <- function(icd_df, poa_name = "poa", poa = icd9PoaChoices) {
   icd_df[!is.na(p) & p %in% choice, names(icd_df) != poa_name]
 }
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
+#' @describeIn icd_filter Select rows where Present-on-Arrival flag is
 #'   explicitly "Yes."
 #' @export
 icd_filter_poa_yes <- function(icd_df, poa_name = "poa") {
   .icd_filter_poa(icd_df, poa_name, choice = c("Y", "y"), negative = FALSE)
 }
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
+#' @describeIn icd_filter Select rows where Present-on-Arrival flag is
 #'   explicitly "No."
 #' @export
 icd_filter_poa_no <- function(icd_df, poa_name = "poa") {
   .icd_filter_poa(icd_df, poa_name, choice = c("N", "n"), negative = FALSE)
 }
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
+#' @describeIn icd_filter Select rows where Present-on-Arrival flag is
 #'   anything but "No." This includes unknown, exempt, other codes, and of
 #'   course all those marked "Yes."
 #' @export
@@ -130,7 +130,7 @@ icd_filter_poa_not_no <- function(icd_df, poa_name = "poa") {
   .icd_filter_poa(icd_df, poa_name, choice = c("N", "n"), negative = TRUE)
 }
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
+#' @describeIn icd_filter Select rows where Present-on-Arrival flag is
 #'   anything byt "Yes." This would group exempt, unknown and other codes under
 #'   "Not POA" which is unlikely to be a good choice, since exempt codes, of
 #'   which there are a quite large number, tend to describe chronic or
@@ -142,7 +142,7 @@ icd_filter_poa_not_yes <- function(icd_df, poa_name = "poa") {
 
 
 # deprecated functions:
-
+#' @rdname icd_filter
 #' @export
 icd9FilterValid <- function(icd9df, icd9Field = NULL,
                             isShort =  NULL, invert = FALSE) {
@@ -150,40 +150,42 @@ icd9FilterValid <- function(icd9df, icd9Field = NULL,
   icd_filter_valid.icd9(icd_df = icd9df, icd_name = icd9Field, short_code = isShort, invert = invert)
 }
 
+#' @rdname icd_filter
 #' @export
 icd9FilterInvalid <- function(icd9df, icd9Field = NULL, isShort = NULL, invert = FALSE) {
   .Deprecated("icd_filter_valid")
   icd_filter_valid.icd9(icd_df = icd9df, icd_name = icd9Field, short_code = isShort, invert = !invert)
 }
 
+#' @rdname icd_filter
 #' @export
 icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
   .Deprecated("icd_filter_poa")
   icd_filter_poa(icd_df = icd9df, poa_name = poaField, poa = poa)
 }
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
-#'   explicitly "Yes."
+#' @rdname icd_filter
 #' @export
 icd9FilterPoaYes <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_yes")
   icd_filter_poa_yes(icd_df = icd9df, poa_name = poaField)
 }
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
-#'   explicitly "No."
+#' @rdname icd_filter
 #' @export
 icd9FilterPoaNo <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_no")
   icd_filter_poa_no(icd_df = icd9df, poa_name = poaField)
 }
 
+#' @rdname icd_filter
 #' @export
 icd9FilterPoaNotNo <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_not_no")
   icd_filter_poa_not_no(icd_df = icd9df, poa_name = poaField)
 }
 
+#' @rdname icd_filter
 #' @export
 icd9FilterPoaNotYes <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_not_yes")

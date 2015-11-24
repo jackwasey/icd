@@ -15,13 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-# icd9Children separate from C++ docs so that I can guess isShort
-#' @name icd9Children
 #' @title Expand ICD-9 codes to all possible sub-codes
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
-#' @template isShort
+#' @template short_code
 #' @template onlyReal
 #' @template onlyBillable
 #' @keywords manip
@@ -40,6 +38,7 @@ icd_children <- function(icd, ...)
   UseMethod("icd_children")
 
 #' @describeIn icd_children Get children of ICD-9 codes
+#' @export
 icd_children.icd9 <- function(icd9, short = icd_guess_short(icd9),
                          real = TRUE, billable = FALSE) {
   assertFactorOrCharacter(icd9)

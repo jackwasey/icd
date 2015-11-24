@@ -56,7 +56,7 @@ This can be thought of as the inverse operation to
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{expand_minor}},
-  \code{\link{icd9Children}},
+  \code{\link{icd_children}},
   \code{\link{icd_expand_range}}
 }
 

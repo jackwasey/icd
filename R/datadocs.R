@@ -236,7 +236,7 @@ NULL
 #' @source
 #' \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
 #'
-#' @format CSV original, minimally processed into R data.
+#' @format CSV original, minimally processed into R data frame.
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration
 #' @docType data
@@ -264,7 +264,7 @@ NULL
   vermont_dx$sex <- sex
   vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)
   names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
-  class(vermont_dx) <- c("icd9cm", "icd9", "icd_short_code", "icd_wide_format", "data.frame")
+  class(vermont_dx) <- c("icd9cm", "icd9", "icd_short_code", "icd_wide_data", "data.frame")
   vermont_dx %<>% head(1000)
 
   class(vermont_dx) <- c("icd9cm", "icd9", "icd_wide", "data.frame")
@@ -296,7 +296,7 @@ NULL
 
   row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
 
-  class(uranium_pathology) <- c("icd10who", "icd10", "icd_long_format", "icd_decimal_code", "data.frame")
+  class(uranium_pathology) <- c("icd10who", "icd10", "icd_long_data", "icd_decimal_code", "data.frame")
 
   save_in_data_dir(uranium_pathology)
   invisible(uranium_pathology)

@@ -19,7 +19,7 @@ other mapping of codes, such as ICD-10, to comorbidities can be used.
 \details{
 \describe{
 
-  \item{Comorbidities}{ \code{\link{icd9Comorbid}} determines co-morbidities
+  \item{Comorbidities}{ \code{\link{icd_comorbid}} determines co-morbidities
   for a set of patients with one or more ICD-9 codes each.
   \code{\link{icd9Charlson}} calculates Charlson score (Comorbidity Index).
 

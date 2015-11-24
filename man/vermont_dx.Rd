@@ -5,7 +5,7 @@
 \alias{.vermont}
 \alias{vermont_dx}
 \title{de-identified data from public Vermont source for 2013}
-\format{CSV original, minimally processed into R data.}
+\format{CSV original, minimally processed into R data frame.}
 \source{
 \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
 }

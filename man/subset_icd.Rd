@@ -8,16 +8,21 @@
 \alias{subset_icd}
 \title{extract subset from ICD data}
 \usage{
-\method{[}{icd9}(x, ...)
+\method{[}{icd9}(x, ..., drop = TRUE)
 
-\method{[[}{icd9}(x, ...)
+\method{[[}{icd9}(x, ..., exact = TRUE)
 
-\method{[}{icd10}(x, ...)
+\method{[}{icd10}(x, ..., drop = TRUE)
 
-\method{[[}{icd10}(x, ...)
+\method{[[}{icd10}(x, ..., exact = TRUE)
 }
 \description{
 exactly the same as using x[n] or x[[n]] but preserves the ICD
   classes in result
+}
+\details{
+TODO:Potential here to use attributes, since we can (as base R does
+  in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
+  subsetting operation. This would simplify the class system.
 }
 

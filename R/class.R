@@ -29,8 +29,8 @@ icd9_sub_classes <- c("icd9cm")
 icd9_classes <- c(icd9_sub_classes, "icd9")
 icd10_sub_classes <- c("icd10who", "icd10cm")
 icd10_classes <- c(icd10_sub_classes, "icd10")
-icd_struct_classes <- c("icd_long_data", "icd_wide_data")
-icd_format_classes <- c("icd_short_code", "icd_decimal_code")
+icd_data_classes <- c("icd_long_data", "icd_wide_data")
+icd_code_classes <- c("icd_short_code", "icd_decimal_code")
 icd_other_classes <- c("map") # maybe calls this comorbidity_map?
 
 icd_check_conflict_with_icd9 <- function(x)
@@ -63,10 +63,10 @@ icd_check_class_conflict <- function(x) {
     stop("Conflicting ICD-9 sub-classes")
   if (sum(icd10_sub_classes %in% class(x)) > 1)
     stop("Conflicting ICD-10 sub-classes")
-  if (sum(icd_struct_classes %in% class(x)) > 1)
-    stop("Conflicting long/wide structure classes exist")
-  if (sum(icd_format_classes %in% class(x)) > 1)
-    stop("Conflicting short/decimal structure classes exist")
+  if (sum(icd_data_classes %in% class(x)) > 1)
+    stop("Conflicting long/wide data classes exist")
+  if (sum(icd_code_classes %in% class(x)) > 1)
+    stop("Conflicting short/decimal classes exist")
 }
 
 #' @rdname set_icd_class
@@ -280,34 +280,45 @@ c.icd10who <- function(...) {
 #' @title extract subset from ICD data
 #' @description exactly the same as using x[n] or x[[n]] but preserves the ICD
 #'   classes in result
+#' @details TODO:Potential here to use attributes, since we can (as base R does
+#'   in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
+#'   subsetting operation. This would simplify the class system.
 #' @export
-`[.icd9` <- function(x, ...) {
-  out <- unclass(x)[...]
-  class(out) <- class(x)
+`[.icd9` <- function(x, ..., drop = TRUE) {
+  cl <- class(x)
+  class(x) <- cl[cl != "icd9"]
+  out <- NextMethod("[")
+  class(out) <- cl
   out
 }
 
 #' @rdname subset_icd
 #' @export
-`[[.icd9` <- function(x, ...) {
-  out <- unclass(x)[[...]]
-  class(out) <- class(x)
+`[[.icd9` <- function(x, ..., exact = TRUE) {
+  cl <- class(x)
+  class(x) <- cl[cl != "icd9"]
+  out <- NextMethod("[[")
+  class(out) <- cl
   out
 }
 
 #' @rdname subset_icd
 #' @export
-`[.icd10` <- function(x, ...) {
-  out <- unclass(x)[...]
-  class(out) <- class(x)
+`[.icd10` <- function(x, ..., drop = TRUE) {
+  cl <- class(x)
+  class(x) <- cl[cl != "icd9"]
+  out <- NextMethod("[")
+  class(out) <- cl
   out
 }
 
 #' @rdname subset_icd
 #' @export
-`[[.icd10` <- function(x, ...) {
-  out <- unclass(x)[[...]]
-  class(out) <- class(x)
+`[[.icd10` <- function(x, ..., exact = TRUE) {
+  cl <- class(x)
+  class(x) <- cl[cl != "icd9"]
+  out <- NextMethod("[[")
+  class(out) <- cl
   out
 }
 
