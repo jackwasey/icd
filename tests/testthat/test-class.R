@@ -1,5 +1,56 @@
 context("test class functions")
 
 test_that("classes are created and identified correctly", {
-  expect_true()
+  expect_true(is.icd9(icd9("V10")))
+  expect_true(is.icd9cm(icd9cm("V10")))
+  expect_true(is.icd10(icd10("V10")))
+  expect_true(is.icd10cm(icd10cm("V10")))
+  expect_true(is.icd10who(icd10who("V10")))
 })
+
+test_that("subclasses still have parent class", {
+  expect_true(is.icd9(icd9cm("V10")))
+  expect_true(is.icd10(icd10cm("V10")))
+  expect_true(is.icd10(icd10who("V10")))
+})
+
+test_that("setting conflicting icd data class gives error", {
+  expect_error(icd10(icd9("V10")))
+  expect_error(icd10cm(icd9("V10")))
+  expect_error(icd10who(icd9("V10")))
+  expect_error(icd10(icd9cm("V10")))
+  expect_error(icd10cm(icd9cm("V10")))
+  expect_error(icd10who(icd9cm("V10")))
+  expect_error(icd9(icd10("V10")))
+  expect_error(icd9(icd10cm("V10")))
+  expect_error(icd9(icd10who("V10")))
+  expect_error(icd9cm(icd10("V10")))
+  expect_error(icd9cm(icd10cm("V10")))
+  expect_error(icd9cm(icd10who("V10")))
+})
+
+x <- icd9::quanElixComorbid
+
+test_that("constructing a comorbidity map works", {
+  expect_equal(icd_map(unclass(x)), x)
+  expect_equal(icd_map(x), x)
+})
+
+test_that("constructing a comorbidity map with unnamed list, etc. fails", {
+  expect_error(icd_map(unname(x)))
+  expect_error(icd_map(icd9::vermont_dx))
+  expect_error(icd_map(icd9::uranium_pathology))
+})
+
+test_that("construvting wide or long data works", {
+  expect_equal(icd_wide_data(icd9::vermont_dx), icd9::vermont_dx)
+  expect_equal(icd_wide_data(unclass(icd9::vermont_dx)), icd9::vermont_dx)
+  expect_equal(icd_long_data(icd9::uranium_pathology), icd9::uranium_pathology)
+  expect_equal(icd_long_data(unclass(icd9::uranium_pathology)), icd9::uranium_pathology)
+})
+
+test_that("constructing wide or long format for non-data frame gives error", {
+  expect_error(icd_wide_data(e))
+  expect_error(icd_wide_data(letters))
+})
+

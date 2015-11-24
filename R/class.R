@@ -223,7 +223,8 @@ icd_map <- function(x) {
   out
 }
 
-#' combine ICD codes
+#' @title combine ICD codes
+#' @rdname combine
 #'
 #' These function implement combination of lists or vectors of codes, while preserving ICD classes.
 #' @export
@@ -237,12 +238,16 @@ c.icd9 <- function(...) {
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
+#' @rdname combine
+#' @export
 c.icd9cm <- function(...) {
   args <- unlist(list(...))
   if (any(!inherits(args, "icd9cm")))
     warning("The first codes given are ICD-9-CM class, but subsequent ones are not.")
 }
 
+#' @rdname combine
+#' @export
 c.icd10 <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
@@ -253,6 +258,8 @@ c.icd10 <- function(...) {
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
+#' @rdname combine
+#' @export
 c.icd10cm <- function(...) {
   args <- unlist(list(...))
   if (any(is.icd10who(args)))
@@ -260,6 +267,8 @@ c.icd10cm <- function(...) {
   NextMethod()
 }
 
+#' @rdname combine
+#' @export
 c.icd10who <- function(...) {
   args <- unlist(list(...))
   if (any(is.icd10cm(args)))
@@ -267,24 +276,35 @@ c.icd10who <- function(...) {
   NextMethod()
 }
 
+#' @rdname subset_icd
+#' extract subset from ICD data
+#'
+#' exactly the same as using x[n] or x[[n]] but preserves the ICD classes in result
+#' @export
 `[.icd9` <- function(x, ...) {
   out <- unclass(x)[...]
   class(out) <- class(x)
   out
 }
 
+#' @rdname subset_icd
+#' @export
 `[[.icd9` <- function(x, ...) {
   out <- unclass(x)[[...]]
   class(out) <- class(x)
   out
 }
 
+#' @rdname subset_icd
+#' @export
 `[.icd10` <- function(x, ...) {
   out <- unclass(x)[...]
   class(out) <- class(x)
   out
 }
 
+#' @rdname subset_icd
+#' @export
 `[[.icd10` <- function(x, ...) {
   out <- unclass(x)[[...]]
   class(out) <- class(x)
