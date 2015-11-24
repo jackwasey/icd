@@ -19,13 +19,12 @@
 
 #' unzip a single file
 #' @keywords internal
-#' @importFrom utils download.file unzip
 unzip_single <- function(url, file_name, save_path) {
   zipfile <- tempfile()
-  download.file(url = url, destfile = zipfile, quiet = TRUE)
+  utils::download.file(url = url, destfile = zipfile, quiet = TRUE)
   zipdir <- tempfile()
   dir.create(zipdir)
-  unzip(zipfile, exdir = zipdir)  # files="" so extract all
+  utils::unzip(zipfile, exdir = zipdir)  # files="" so extract all
   files <- list.files(zipdir)
   if (is.null(file_name)) {
     if (length(files) == 1) {

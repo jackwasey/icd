@@ -91,8 +91,8 @@ icd9ChaptersToMap <- function(x) {
 #'     icd9_02 = c(NA, "443", NA))
 #'   icd9WideToLong(widedf)
 #' @family ICD-9 convert
+#' @import checkmate
 #' @export
-#' @importFrom stats reshape
 icd9WideToLong <- function(x,
                            visitId = NULL,
                            icdLabels = NULL,
@@ -120,7 +120,7 @@ icd9WideToLong <- function(x,
 
   visitId <- get_visit_name(x, visitId)
 
-  res <- reshape(x,
+  res <- stats::reshape(x,
                  direction = "long",
                  varying = icdLabels,
                  idvar = visitId,

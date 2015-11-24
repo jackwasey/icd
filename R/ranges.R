@@ -207,7 +207,6 @@ icd_expand_range.icd9 <- function(start, end,
 
 #' expand range worker function
 #' @keywords internal
-#' @importFrom utils head tail
 expand_range_worker <- function(start, end, lookup, onlyReal,
                                 excludeAmbiguousStart, excludeAmbiguousEnd) {
   assertString(start)
@@ -233,7 +232,7 @@ expand_range_worker <- function(start, end, lookup, onlyReal,
   if (excludeAmbiguousStart) {
     # just remove those codes at the beginning which have children not in the output
     # let's take the first 5, to cover cases like 100, 101, 102.1, 102.11, 102.2
-    starts <- tail(out, 5)
+    starts <- utils::tail(out, 5)
     for (s in starts) {
       if (any(icd9ChildrenShort(s, onlyReal = onlyReal) %nin% out))
         out <- out[-which(out == s)]

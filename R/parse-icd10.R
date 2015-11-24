@@ -6,6 +6,7 @@
 #'   ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/
 #' @keywords internal
 icd10_get_who_from_cdc <- function() {
+  requireNamespace("magritttr")
   url <- "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/allvalid2011%20%28detailed%20titles%20headings%29.txt"
   file_path <- download_to_data_raw(url = url)$file_path
 
@@ -45,8 +46,6 @@ icd10_get_who_from_cdc <- function() {
 #'
 #' gets all ICD-10-CM codes from an archive on the CDC web site at \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}. Initially, this just grabs 2016.
 #'
-#' @importFrom magrittr %>%
-#' @importFrom stringr str_trim
 #' @references https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
 icd10cm_get_all_real <- function(save = TRUE) {

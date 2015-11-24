@@ -284,7 +284,6 @@ skip_online_tests <- function(msg = "skipping online test") {
 #' These feature from base R are missing: \code{exclude = NA, ordered =
 #' is.ordered(x), nmax = NA}
 #' @author Kevin Ushey, adapted by Jack Wasey
-#' @importFrom fastmatch fmatch
 #' @param x An object of atomic type \code{integer}, \code{numeric},
 #'   \code{character} or \code{logical}.
 #' @param levels An optional character vector of levels. Is coerced to the same
@@ -315,7 +314,10 @@ factor_ <- function(x, levels = NULL, labels = levels, na.last = NA) {
 
   if (is.factor(x)) return(x)
   if (is.null(levels)) levels <- sort(unique.default(x), na.last = na.last)
-  suppressWarnings(f <- fmatch(x, levels, nomatch = if (isTRUE(na.last)) length(levels) else NA_integer_))
+  suppressWarnings(
+    f <- fastmatch::fmatch(x, levels,
+                           nomatch = if (isTRUE(na.last)) length(levels) else NA_integer_)
+  )
   levels(f) <- as.character(labels)
   class(f) <- "factor"
   f

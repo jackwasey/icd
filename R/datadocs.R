@@ -240,24 +240,23 @@ NULL
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration
 #' @docType data
-#' @importFrom utils read.csv
-#' @importFrom magrittr %<>%
 .vermont <- function() {
 
-  file_path = unzip_to_data_raw(url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
-                          file_name = "VTINP13.TXT")
-  vermont_dx <- read.csv(file_path,
-                         stringsAsFactors = FALSE,
-                         strip.white = TRUE,
-                         nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
+  file_path = unzip_to_data_raw(
+    url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
+    file_name = "VTINP13.TXT")
+  vermont_dx <- utils::read.csv(file_path,
+                                stringsAsFactors = FALSE,
+                                strip.white = TRUE,
+                                nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
   age_group <- vermont_dx$intage
   attr(age_group, "class") <- "factor"
   attr(age_group, "levels") <- c("Under 1", "1-17", "18-24",
-                               "25-29", "30-34", "35-39",
-                               "40-44", "45-49", "50-54",
-                               "55-59", "60-64", "65-69",
-                               "70-74", "75 and over",
-                               "Unknown")
+                                 "25-29", "30-34", "35-39",
+                                 "40-44", "45-49", "50-54",
+                                 "55-59", "60-64", "65-69",
+                                 "70-74", "75 and over",
+                                 "Unknown")
   sex <- vermont_dx$sex
   attr(sex, "class") <- "factor"
   attr(sex, "levels") <- c("male", "female", "unknown")
@@ -278,9 +277,7 @@ NULL
 #' @name uranium_pathology
 #' @source \url{http://www.ustur.wsu.edu/database/}
 #' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
-#' @importFrom RODBC sqlFetch
 #' @docType data
-#' @import RODBC
 #' @keywords datasets
 .uranium_pathology <- function() {
 
@@ -393,8 +390,8 @@ generate_elix.R <- function(condense = FALSE, save = FALSE, path = "data") {
 #' @template parse-template
 #' @keywords internal
 generate_quan_elix <- function(condense = FALSE,
-                          save = FALSE,
-                          path = "data") {
+                               save = FALSE,
+                               path = "data") {
   # TODO: need to deprecate this name so we can switch ICD-9 and ICD-10 (and
   # their variations)
   quanElixComorbid <- list(

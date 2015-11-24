@@ -33,22 +33,23 @@ icd_struct_classes <- c("icd_long_data", "icd_wide_data")
 icd_format_classes <- c("icd_short_code", "icd_decimal_code")
 icd_other_classes <- c("map") # maybe calls this comorbidity_map?
 
-.check_conflict_with_icd9 <- function(x)
+icd_check_conflict_with_icd9 <- function(x)
   if (inherits(x, icd9_classes))
     stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
 
-.check_conflict_with_icd10 <- function(x)
+icd_check_conflict_with_icd10 <- function(x)
   if (inherits(x, icd10_classes))
     stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
 
-#' prefer an order of classes
-#'
-#' The order of classes can matter because, for some functions, we'd prefer to
-#' decide what to do based on whether the structure is a comorbidity map before
-#' caring if it is icd-9 or 10. I can't see how it matters whether we prioritize
-#' long/wide and short/decimal yet, so won't test.
+#' @title prefer an order of classes
+#' @description The order of classes can matter because, for some functions,
+#'   we'd prefer to decide what to do based on whether the structure is a
+#'   comorbidity map before caring if it is icd-9 or 10. I can't see how it
+#'   matters whether we prioritize long/wide and short/decimal yet, so won't
+#'   test.
+#' @param x any object which may or may not have classes from this package
 #' @keywords internal
-.check_class_order <- function(x) {
+icd_check_class_order <- function(x) {
 
   system_classes <- c("data.frame", "list", "numeric", "character")
 
@@ -57,7 +58,7 @@ icd_other_classes <- c("map") # maybe calls this comorbidity_map?
     stop("preferred class order not met.")
 }
 
-.check_class_conflict <- function(x) {
+icd_check_class_conflict <- function(x) {
   if (sum(icd9_sub_classes %in% class(x)) > 1)
     stop("Conflicting ICD-9 sub-classes")
   if (sum(icd10_sub_classes %in% class(x)) > 1)
@@ -68,7 +69,6 @@ icd_other_classes <- c("map") # maybe calls this comorbidity_map?
     stop("Conflicting short/decimal structure classes exist")
 }
 
-#' @name Set ICD classes
 #' @rdname set_icd_class
 #' @title construct ICD-9 data types
 #' @description Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
@@ -78,7 +78,7 @@ icd_other_classes <- c("map") # maybe calls this comorbidity_map?
 #' @export
 icd9 <- function(x) {
   if (inherits(x, "icd9")) return(x)
-  .check_conflict_with_icd10(x)
+  icd_check_conflict_with_icd10(x)
   after = match("icd9cm", class(x), nomatch = 0)
   class(x) <- append(class(x), "icd9", after = after)
   x
@@ -88,7 +88,7 @@ icd9 <- function(x) {
 #' @export
 icd9cm <- function(x) {
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
-  .check_conflict_with_icd10(x)
+  icd_check_conflict_with_icd10(x)
   icd9_pos = match("icd9", class(x))
   if (!is.na(icd9_pos))
     class(x) <- append(class(x), "icd9cm", after = icd9_pos - 1)
@@ -102,7 +102,7 @@ icd9cm <- function(x) {
 #' @export
 icd10 <- function(x) {
   if (inherits(x, "icd10")) return(x)
-  .check_conflict_with_icd9(x)
+  icd_check_conflict_with_icd9(x)
   icd10cm_pos = match("icd10cm", class(x), nomatch = 0)
   icd10who_pos = match("icd10who", class(x), nomatch = 0)
   after = max(icd10cm_pos, icd10who_pos)
@@ -114,7 +114,7 @@ icd10 <- function(x) {
 #' @export
 icd10cm <- function(x) {
   if (inherits(x, "icd10cm")) return(x)
-  .check_conflict_with_icd9(x)
+  icd_check_conflict_with_icd9(x)
   icd10_pos = match("icd10", class(x))
   if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
@@ -127,7 +127,7 @@ icd10cm <- function(x) {
 #' @export
 icd10who <- function(x) {
   if (inherits(x, "icd10who")) return(x)
-  .check_conflict_with_icd9(x)
+  icd_check_conflict_with_icd9(x)
   icd10_pos = match("icd10", class(x))
   if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
@@ -224,9 +224,9 @@ icd_map <- function(x) {
 }
 
 #' @title combine ICD codes
-#' @rdname combine
-#'
-#' These function implement combination of lists or vectors of codes, while preserving ICD classes.
+#' @name combine
+#' @description These function implement combination of lists or vectors of
+#'   codes, while preserving ICD classes.
 #' @export
 c.icd9 <- function(...) {
   args <- list(...)
@@ -276,10 +276,10 @@ c.icd10who <- function(...) {
   NextMethod()
 }
 
-#' @rdname subset_icd
-#' extract subset from ICD data
-#'
-#' exactly the same as using x[n] or x[[n]] but preserves the ICD classes in result
+#' @name subset_icd
+#' @title extract subset from ICD data
+#' @description exactly the same as using x[n] or x[[n]] but preserves the ICD
+#'   classes in result
 #' @export
 `[.icd9` <- function(x, ...) {
   out <- unclass(x)[...]
