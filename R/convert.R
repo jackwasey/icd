@@ -303,8 +303,10 @@ icd_short_to_parts.icd9 <- function(icd9Short, minorEmpty = "") {
   .Call("icd9_icd9ShortToPartsCpp", PACKAGE = get_pkg_name(), icd9Short, minorEmpty)
 }
 
-#' @rdname convert
-#' @keywords internal manip
+icd_decimal_to_parts <- function(x, empty_minor = "") {
+  UseMethod("icd_decimal_to_parts")
+}
+
 icd_decimal_to_parts.icd9 <- function(icd9Decimal, minorEmpty = "") {
   .Call("icd9_icd9DecimalToPartsCpp", PACKAGE = get_pkg_name(), icd9Decimal, minorEmpty)
 }
@@ -321,4 +323,9 @@ icd9DecimalToShort <- function(icd9Short) {
 icd9ShortToDecimal <- function(icd9Short) {
   .Deprecated("icd_short_to_decimal")
   icd_short_to_decimal.icd9(icd9Short)
+}
+
+icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
+  .Deprecated("icd_decimal_to_parts")
+  icd9DecimalToParts(icd9Decimal, minorEmpty)
 }

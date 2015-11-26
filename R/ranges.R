@@ -390,11 +390,20 @@ icd9_expand_range_decimal <- function(start, end, real = TRUE,
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-expand_minor <- function(minor, is_e = FALSE) {
+
+icd_expand_minor <- function(minor, ...) {
+  UseMethod("icd_expand_minor")
+}
+
+icd_expand_minor.icd9 <- function(minor, is_e = FALSE) {
   # clang 3.6 with address sanitizer seems to fail if a number is passed instead
   # of string. It SHOULD fail with type error, and that might be an Rcpp
   # problem...
   assertString(minor)
   assertFlag(is_e)
-  .Call("icd9_expand_minorShim", PACKAGE = get_pkg_name(), minor, isE)
+  .Call("icd9_expand_minorShim", PACKAGE = get_pkg_name(), minor, isE = is_e)
+}
+
+icd9_expand_minor.icd10 <- function(x) {
+  stop("not implemented")
 }
