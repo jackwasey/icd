@@ -172,7 +172,7 @@ sasExtractLetStrings <- function(x) {
 # horrible kludge for difficult source data
 icd9ExpandRangeForSas <- function(start, end) {
   if (end == "0449") end <- start # HIV codes changed
-  reals <- icd_expand_range.icd9(start, end, short = TRUE, real = TRUE,
+  reals <- icd_expand_range.icd9(start, end, short_code = TRUE, real = TRUE,
                                 # hmmm, maybe get the diff and test all children of ambigs present later
                                 excludeAmbiguousStart = FALSE,
                                 excludeAmbiguousEnd = TRUE)

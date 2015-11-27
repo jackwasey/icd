@@ -7,7 +7,7 @@
 \usage{
 icd_children_real(x)
 
-\method{icd_children_real}{icd10}(icd, short = icd_guess_short(icd))
+\method{icd_children_real}{icd10}(x, short_code = icd_guess_short(x))
 }
 \description{
 real icd10 children based on 2016 ICD-10-CM list

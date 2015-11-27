@@ -214,17 +214,17 @@ namespace icd9 {
         return Rcpp::as<Rcpp::List >(__result);
     }
 
-    inline Rcpp::CharacterVector icd_short_to_decimal.icd9(const Rcpp::CharacterVector icd9Short) {
-        typedef SEXP(*Ptr_icd_short_to_decimal.icd9)(SEXP);
-        static Ptr_icd_short_to_decimal.icd9 p_icd_short_to_decimal.icd9 = NULL;
-        if (p_icd_short_to_decimal.icd9 == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd_short_to_decimal.icd9)(const Rcpp::CharacterVector)");
-            p_icd_short_to_decimal.icd9 = (Ptr_icd_short_to_decimal.icd9)R_GetCCallable("icd9", "icd9_icd_short_to_decimal.icd9");
+    inline Rcpp::CharacterVector icd_short_to_decimal_icd9(const Rcpp::CharacterVector x) {
+        typedef SEXP(*Ptr_icd_short_to_decimal_icd9)(SEXP);
+        static Ptr_icd_short_to_decimal_icd9 p_icd_short_to_decimal_icd9 = NULL;
+        if (p_icd_short_to_decimal_icd9 == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd_short_to_decimal_icd9)(const Rcpp::CharacterVector)");
+            p_icd_short_to_decimal_icd9 = (Ptr_icd_short_to_decimal_icd9)R_GetCCallable("icd9", "icd9_icd_short_to_decimal_icd9");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd_short_to_decimal.icd9(Rcpp::wrap(icd9Short));
+            __result = p_icd_short_to_decimal_icd9(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -233,7 +233,7 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9DecimalToShortOld(const Rcpp::CharacterVector icd9Decimal) {
+    inline Rcpp::CharacterVector icd9DecimalToShortOld(const Rcpp::CharacterVector x) {
         typedef SEXP(*Ptr_icd9DecimalToShortOld)(SEXP);
         static Ptr_icd9DecimalToShortOld p_icd9DecimalToShortOld = NULL;
         if (p_icd9DecimalToShortOld == NULL) {
@@ -243,7 +243,7 @@ namespace icd9 {
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9DecimalToShortOld(Rcpp::wrap(icd9Decimal));
+            __result = p_icd9DecimalToShortOld(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -252,17 +252,17 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline Rcpp::CharacterVector icd_decimal_to_short.icd9(const Rcpp::CharacterVector icd9Decimal) {
-        typedef SEXP(*Ptr_icd_decimal_to_short.icd9)(SEXP);
-        static Ptr_icd_decimal_to_short.icd9 p_icd_decimal_to_short.icd9 = NULL;
-        if (p_icd_decimal_to_short.icd9 == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd_decimal_to_short.icd9)(const Rcpp::CharacterVector)");
-            p_icd_decimal_to_short.icd9 = (Ptr_icd_decimal_to_short.icd9)R_GetCCallable("icd9", "icd9_icd_decimal_to_short.icd9");
+    inline Rcpp::CharacterVector icd_decimal_to_short_icd9(const Rcpp::CharacterVector x) {
+        typedef SEXP(*Ptr_icd_decimal_to_short_icd9)(SEXP);
+        static Ptr_icd_decimal_to_short_icd9 p_icd_decimal_to_short_icd9 = NULL;
+        if (p_icd_decimal_to_short_icd9 == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd_decimal_to_short_icd9)(const Rcpp::CharacterVector)");
+            p_icd_decimal_to_short_icd9 = (Ptr_icd_decimal_to_short_icd9)R_GetCCallable("icd9", "icd9_icd_decimal_to_short_icd9");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd_decimal_to_short.icd9(Rcpp::wrap(icd9Decimal));
+            __result = p_icd_decimal_to_short_icd9(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -271,17 +271,17 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector icd9, const bool isShort) {
-        typedef SEXP(*Ptr_icd9GetMajor)(SEXP,SEXP);
-        static Ptr_icd9GetMajor p_icd9GetMajor = NULL;
-        if (p_icd9GetMajor == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9GetMajor)(const Rcpp::CharacterVector,const bool)");
-            p_icd9GetMajor = (Ptr_icd9GetMajor)R_GetCCallable("icd9", "icd9_icd9GetMajor");
+    inline Rcpp::CharacterVector icd_get_major_icd9(const Rcpp::CharacterVector x, const bool short_code) {
+        typedef SEXP(*Ptr_icd_get_major_icd9)(SEXP,SEXP);
+        static Ptr_icd_get_major_icd9 p_icd_get_major_icd9 = NULL;
+        if (p_icd_get_major_icd9 == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd_get_major_icd9)(const Rcpp::CharacterVector,const bool)");
+            p_icd_get_major_icd9 = (Ptr_icd_get_major_icd9)R_GetCCallable("icd9", "icd9_icd_get_major_icd9");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9GetMajor(Rcpp::wrap(icd9), Rcpp::wrap(isShort));
+            __result = p_icd_get_major_icd9(Rcpp::wrap(x), Rcpp::wrap(short_code));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -611,25 +611,6 @@ namespace icd9 {
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
         return Rcpp::as<std::vector<std::string> >(__result);
-    }
-
-    inline bool assertFactorOrCharacter(SEXP x) {
-        typedef SEXP(*Ptr_assertFactorOrCharacter)(SEXP);
-        static Ptr_assertFactorOrCharacter p_assertFactorOrCharacter = NULL;
-        if (p_assertFactorOrCharacter == NULL) {
-            validateSignature("bool(*assertFactorOrCharacter)(SEXP)");
-            p_assertFactorOrCharacter = (Ptr_assertFactorOrCharacter)R_GetCCallable("icd9", "icd9_assertFactorOrCharacter");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_assertFactorOrCharacter(Rcpp::wrap(x));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<bool >(__result);
     }
 
     inline int getOmpCores() {

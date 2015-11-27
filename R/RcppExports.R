@@ -61,20 +61,20 @@ icd9DecimalToPartsCpp <- function(icd9Decimal, minorEmpty) {
 #' @template icd9-short
 #' @template icd9-decimal
 #' @export
-icd_short_to_decimal.icd9 <- function(icd9Short) {
-    .Call('icd9_icd9ShortToDecimal', PACKAGE = 'icd9', icd9Short)
+icd_short_to_decimal.icd9 <- function(x) {
+    .Call('icd9_icd9ShortToDecimal', PACKAGE = 'icd9', x)
 }
 
 #' @rdname icd9ShortToDecimal
 #' @export
-icd9DecimalToShortOld <- function(icd9Decimal) {
-    .Call('icd9_icd9DecimalToShortOld', PACKAGE = 'icd9', icd9Decimal)
+icd9DecimalToShortOld <- function(x) {
+    .Call('icd9_icd9DecimalToShortOld', PACKAGE = 'icd9', x)
 }
 
 #' @rdname convert
 #' @export
-icd_decimal_to_short.icd9 <- function(icd9Decimal) {
-    .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', icd9Decimal)
+icd_decimal_to_short.icd9 <- function(x) {
+    .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', x)
 }
 
 #' @title Get major (three-digit) part of ICD-9 codes
@@ -83,8 +83,8 @@ icd_decimal_to_short.icd9 <- function(icd9Decimal) {
 #' @template isShort
 #' @keywords internal manip
 #' @export
-icd9GetMajor <- function(icd9, isShort) {
-    .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', icd9, isShort)
+icd_get_major.icd9 <- function(x, short_code) {
+    .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', x, short_code)
 }
 
 #' @rdname icd9GetMajor
@@ -186,10 +186,6 @@ strimCpp <- function(s) {
 
 trimCpp <- function(sv) {
     .Call('icd9_trimCpp', PACKAGE = 'icd9', sv)
-}
-
-assertFactorOrCharacter <- function(x) {
-    .Call('icd9_assertFactorOrCharacter', PACKAGE = 'icd9', x)
 }
 
 getOmpCores <- function() {

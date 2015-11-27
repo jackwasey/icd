@@ -5,23 +5,23 @@
 \alias{icd9Valid}
 \alias{icd9ValidDecimal}
 \alias{icd9ValidShort}
+\alias{icd9_is_valid_decimal}
+\alias{icd9_is_valid_short}
 \alias{icd_is_valid}
 \alias{icd_is_valid.icd10}
 \alias{icd_is_valid.icd10who}
 \alias{icd_is_valid.icd9}
-\alias{icd_is_valid_decimal.icd9}
-\alias{icd_is_valid_short.icd9}
 \title{Check whether ICD-9 codes are syntactically valid}
 \usage{
 icd_is_valid(icd, ...)
 
-\method{icd_is_valid}{icd10}(icd, short = icd_guess_short(icd))
+\method{icd_is_valid}{icd10}(icd, short_code = icd_guess_short(icd))
 
-\method{icd_is_valid}{icd9}(icd, short_code)
+\method{icd_is_valid}{icd9}(x, short_code)
 
-\method{icd_is_valid_decimal}{icd9}(icd)
+icd9_is_valid_decimal(icd)
 
-\method{icd_is_valid_short}{icd9}(icd9Short)
+icd9_is_valid_short(icd9Short)
 
 \method{icd_is_valid}{icd10who}(icd, strict = FALSE)
 
@@ -69,6 +69,12 @@ logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 \description{
 This does not check whether the code coresponds to a real ICD-9-CM billing
 code, or parent grouping. For that, see \code{\link{icd9IsReal}}.
+
+check whether decimal format ICD-9 codes have a
+  valid structure.
+
+check whether short_code format ICD-9 codes have a valid
+  structure
 }
 \details{
 Factors are accepted, and since the validation is done with \code{grepl}
@@ -86,7 +92,7 @@ Leading zeroes in the decimal form are not ambiguous. Although
   integer ICD-9 codes could be intended by the user, there is a difference
   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
   is provided TODO: add default (when there is no class) which detected icd9
-  vs 10 if possible. TODO: use "short" or "long" attribute if available to
+  vs 10 if possible. TODO: use "short_code" or "long" attribute if available to
   tighten validation, or guess if missing.
 
 From WHO ICD-10 manual: "The basic ICD is a single coded list of
@@ -115,12 +121,6 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
 
 \item \code{icd9}: Test whether generic ICD-10 code is valid
 
-\item \code{icd9}: check whether decimal format ICD-9 codes have a
-valid structure.
-
-\item \code{icd9}: check whether short format ICD-9 codes have a valid
-structure
-
 \item \code{icd10who}: Check whether ICD-10 WHO codes are valid
 }}
 \section{Three-digit validation}{
@@ -135,9 +135,9 @@ structure
  S3 class of on object in R is just a vector. Attributes are
   lost with manipulation, with the exception of class: therefore, elements of
   the class vector are used to describe features of the data. If these are
-  not present, the user may specify (e.g. decimal vs short type, ICD-9 vs
+  not present, the user may specify (e.g. decimal vs short_code type, ICD-9 vs
   ICD-10 WHO), but if they are, the correct functions are called without any
-  guess work. There are overlapping namespaces for short vs decimal and ICD-9
+  guess work. There are overlapping namespaces for short_code vs decimal and ICD-9
   vs ICD-10 codes, so guessing is never going to be perfect.
 }
 \examples{
@@ -147,8 +147,7 @@ structure
                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 }
 \seealso{
-\code{\link{icd_validDecimal}}, \code{\link{icd_validShort}},
-  \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
+\url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 
 Other ICD9 validation: \code{\link{icd_is_valid_map}}

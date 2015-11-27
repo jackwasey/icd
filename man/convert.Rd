@@ -8,7 +8,7 @@
 \alias{icd9PartsToShort}
 \alias{icd9ShortToParts}
 \alias{icd9ShortToPartsCpp}
-\alias{icd_decimal_to_short}
+\alias{icd_decimal_to_short.icd9}
 \title{Convert ICD9 codes between formats and structures.}
 \usage{
 icd9PartsToShort(parts)
@@ -19,7 +19,7 @@ icd9ShortToPartsCpp(icd9Short, minorEmpty)
 
 icd9DecimalToPartsCpp(icd9Decimal, minorEmpty)
 
-icd_decimal_to_short(icd9Decimal)
+icd_decimal_to_short.icd9(x)
 
 icd9ShortToParts(icd9Short, minorEmpty = "")
 

@@ -351,28 +351,28 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
 #' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 #' @keywords manip
 #' @export
-icd_sort <- function(icd, ...)
+icd_sort <- function(x, ...)
   UseMethod("icd_sort")
 
 #' @describeIn icd_sort Sort ICD-10 codes, note that setting \code{short} is
 #'   unnecessary and ignored.
 #' @export
-icd_sort.icd10 <- function(icd, short = NULL) {
+icd_sort.icd10 <- function(x, short_code = NULL) {
   # ignore short, it doesn't matter
-  sort(icd)
+  sort(x)
 }
 
 #' @describeIn icd_sort sort ICD-9 codes respecting numeric, then V, then E
 #'   codes, and accounting for leading zeroes
 #' @export
-icd_sort.icd9 <- function(icd, short = icd_guess_short(icd)) {
-  assertFactorOrCharacter(icd)
-  assertFlag(short)
+icd_sort.icd9 <- function(x, short_code = icd_guess_short(icd)) {
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
+  assertFlag(short_code)
 
-  if (short)
-    icd[icd9_sort_order_short(icd)]
+  if (short_code)
+    x[icd9_sort_order_short(x)]
   else
-    icd[icd9_sort_order_short(icd9DecimalToShort(icd))]
+    x[icd9_sort_order_short(icd_decimal_to_short.icd9(x))]
 }
 
 icd9_sort_order_short <- function(icd9Short) {
@@ -393,12 +393,12 @@ icd9Sort <- function(icd9, isShort = icd_guess_short(icd9)) {
 #' @export
 icd9SortShort <- function(icd9Short) {
   .Deprecated("icd_sort")
-  icd_sort.icd9(icd9Short, short = TRUE)
+  icd_sort.icd9(icd9Short, short_code = TRUE)
 }
 
 #' @rdname icd_sort
 #' @export
 icd9SortDecimal <- function(icd9Decimal) {
   .Deprecated("icd_sort")
-  icd_sort.icd9(icd9Decimal, short = FALSE)
+  icd_sort.icd9(icd9Decimal, short_code = FALSE)
 }

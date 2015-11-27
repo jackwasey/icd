@@ -127,7 +127,7 @@ icd9GetChapters <- function(icd9, short_code = icd_guess_short(icd9), verbose = 
   # that field, then add the factor level for the match. There should be 100%
   # matches.
   assertFlag(short_code)
-  assertFactorOrCharacter(icd9)
+  assert(checkFactor(icd9), checkCharacter(icd9))
   icd9 <- asCharacterNoWarn(icd9)
   majors <- icd9GetMajor(icd9, short_code)
 

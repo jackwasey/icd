@@ -59,7 +59,7 @@ icd_expand_range <- function(start, end, ...)
 #' @param start character vector of length one containing a real code
 #' @param end  character vector of length one containing a real code
 #' @keywords internal
-icd_expand_range.icd10cm <- function(start, end, short = icd_guess_short.icd10(c(start, end)), real = TRUE) {
+icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short_code.icd10(c(start, end)), real = TRUE) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
 
@@ -84,7 +84,7 @@ icd_expand_range.icd10cm <- function(start, end, short = icd_guess_short.icd10(c
   # TODO: either search down supposedly well ordered list until substring of end
   # changes, or find all children, and get pos of last one.
 
-  end_kids <- icd10_children_real_short(end)
+  end_kids <- icd10_children_real_short_code(end)
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
@@ -149,12 +149,12 @@ icd_expand_range_major.icd10 <- function(start, end) {
 #' @rdname icd_expand_range
 #' @export
 icd9ExpandRange <- function(start, end,
-                            isShort = icd_guess_short(c(start, end)),
+                            isShort = icd_guess_short_code(c(start, end)),
                             onlyReal = TRUE,
                             excludeAmbiguousStart = TRUE,
                             excludeAmbiguousEnd = TRUE) {
   .Deprecated("icd_expand_range")
-  icd_expand_range.icd9(start = start, end = end, short = isShort,
+  icd_expand_range.icd9(start = start, end = end, short_code = isShort,
                         real = onlyReal,
                         excludeAmbiguousStart = excludeAmbiguousStart,
                         excludeAmbiguousEnd = excludeAmbiguousEnd)
@@ -167,7 +167,7 @@ icd9ExpandRangeShort <- function(start, end,
                                  excludeAmbiguousStart = TRUE,
                                  excludeAmbiguousEnd = TRUE) {
   .Deprecated("icd_expand_range")
-  icd_expand_range.icd9(start = start, end = end, short = TRUE,
+  icd_expand_range.icd9(start = start, end = end, short_code = TRUE,
                         real = onlyReal,
                         excludeAmbiguousStart = excludeAmbiguousStart,
                         excludeAmbiguousEnd = excludeAmbiguousEnd)
@@ -180,7 +180,7 @@ icd9ExpandRangeDecimal <- function(start, end,
                                    excludeAmbiguousStart = TRUE,
                                    excludeAmbiguousEnd = TRUE) {
   .Deprecated("icd_expand_range")
-  icd_expand_range.icd9(start = start, end = end, short = FALSE,
+  icd_expand_range.icd9(start = start, end = end, short_code = FALSE,
                         real = onlyReal,
                         excludeAmbiguousStart = excludeAmbiguousStart,
                         excludeAmbiguousEnd = excludeAmbiguousEnd)
@@ -196,11 +196,11 @@ icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
 #' @describeIn icd_expand_range Expand a range of ICD-9 codes
 #' @export
 icd_expand_range.icd9 <- function(start, end,
-                                  short = icd_guess_short(c(start, end)),
+                                  short_code = icd_guess_short_code(c(start, end)),
                                   real = TRUE,
                                   excludeAmbiguousStart = TRUE,
                                   excludeAmbiguousEnd = TRUE) {
-  if (short)
+  if (short_code)
     icd9_expand_range_short(start, end, real,
                          excludeAmbiguousStart,
                          excludeAmbiguousEnd)
@@ -231,7 +231,7 @@ expand_range_worker <- function(start, end, lookup, real,
   if (end_index < start_index)
     stop("end code must be greater than or equal to start code")
 
-  if (start == end) return(icd_children.icd9(start, short = TRUE, real = real))
+  if (start == end) return(icd_children.icd9(start, short_code = TRUE, real = real))
 
   out <- lookup[start_index:end_index]
   if (excludeAmbiguousStart) {
@@ -239,7 +239,7 @@ expand_range_worker <- function(start, end, lookup, real,
     # let's take the first 5, to cover cases like 100, 101, 102.1, 102.11, 102.2
     starts <- utils::tail(out, 5)
     for (s in starts) {
-      if (any(icd_children.icd9(s, short = TRUE, real = real) %nin% out))
+      if (any(icd_children.icd9(s, short_code = TRUE, real = real) %nin% out))
         out <- out[-which(out == s)]
     }
   }
@@ -251,15 +251,15 @@ expand_range_worker <- function(start, end, lookup, real,
     # kill it, if it spills over.
     out_cp <- out
     for (o in out_cp) {
-      if (any(icd_children.icd9(o, short = TRUE, real = real) %nin% out))
+      if (any(icd_children.icd9(o, short_code = TRUE, real = real) %nin% out))
         out <- out[-which(out == o)]
     }
   }
-  icd_sort.icd9(unique(c(out, icd_children.icd9(end, short = TRUE, real = real))), short = TRUE)
+  icd_sort.icd9(unique(c(out, icd_children.icd9(end, short_code = TRUE, real = real))), short_code = TRUE)
 }
 
 #' @rdname icd_expand_range
-#' @details  Expand range of short-form ICD-9 codes
+#' @details  Expand range of short_code-form ICD-9 codes
 #' @keywords internal
 icd9_expand_range_short <- function(start, end, real = TRUE,
                                     excludeAmbiguousStart = TRUE,
@@ -330,10 +330,10 @@ icd_expand_range_major.icd9 <- function(start, end, real = TRUE) {
 icd9_expand_range_decimal <- function(start, end, real = TRUE,
                                    excludeAmbiguousStart = TRUE,
                                    excludeAmbiguousEnd = TRUE) {
-  icd_short_to_decimal(
+  icd_short_code_to_decimal(
     icd_expand_range.icd9(
-      icd_decimal_to_short(start), icd_decimal_to_short(end),
-      short = TRUE, real = real,
+      icd_decimal_to_short_code(start), icd_decimal_to_short_code(end),
+      short_code = TRUE, real = real,
       excludeAmbiguousStart = excludeAmbiguousStart,
       excludeAmbiguousEnd = excludeAmbiguousEnd
     )
@@ -343,19 +343,19 @@ icd9_expand_range_decimal <- function(start, end, real = TRUE,
 #' @rdname icd_expand_range
 #' @export
 "%i9da%" <- function(start, end) {
-  icd_expand_range.icd9(start, end, short = FALSE, real = FALSE)
+  icd_expand_range.icd9(start, end, short_code = FALSE, real = FALSE)
 }
 
 #' @rdname icd_expand_range
 #' @export
 "%i9sa%" <- function(start, end) {
-  icd_expand_range.icd9(start, end, short = TRUE, real = FALSE)
+  icd_expand_range.icd9(start, end, short_code = TRUE, real = FALSE)
 }
 
 #' @rdname icd_expand_range
 #' @export
 "%i9d%" <- function(start, end) {
-  icd_expand_range.icd9(start, end, short = FALSE, real = TRUE)
+  icd_expand_range.icd9(start, end, short_code = FALSE, real = TRUE)
 }
 
 #' @rdname icd_expand_range
@@ -367,7 +367,7 @@ icd9_expand_range_decimal <- function(start, end, real = TRUE,
 #' @rdname icd_expand_range
 #' @export
 "%i9s%" <- function(start, end) {
-  icd_expand_range.icd9(start, end, short = TRUE, real = TRUE)
+  icd_expand_range.icd9(start, end, short_code = TRUE, real = TRUE)
 }
 
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes

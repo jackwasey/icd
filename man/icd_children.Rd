@@ -10,8 +10,8 @@
 \usage{
 icd_children(icd, ...)
 
-\method{icd_children}{icd9}(icd9, short = icd_guess_short(icd9),
-  real = TRUE, billable = FALSE)
+\method{icd_children}{icd9}(x, short_code = icd_guess_short(x), real = TRUE,
+  billable = FALSE)
 
 icd9Children(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE,
   onlyBillable = FALSE)
@@ -21,6 +21,10 @@ icd9ChildrenShort(icd9Short, onlyReal = TRUE, onlyBillable = FALSE)
 icd9ChildrenDecimal(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE)
 }
 \arguments{
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
 \item{icd9}{is
 a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
@@ -50,10 +54,6 @@ becomes "010", not "0010"}
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
-
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
 }
 \section{Methods (by class)}{
 \itemize{
@@ -71,7 +71,7 @@ icd9ChildrenDecimal("2.34")
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{expand_minor}},
-  \code{\link{icd9Condense}},
+  \code{\link{icd_condense}},
   \code{\link{icd_expand_range}}
 }
 \keyword{manip}

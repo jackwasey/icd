@@ -9,15 +9,15 @@
 \alias{icd_get_valid.icd10}
 \alias{icd_get_valid.icd10cm}
 \alias{icd_get_valid.icd9}
-\title{invalid subset of decimal or short ICD-9 codes}
+\title{invalid subset of decimal or short_code ICD-9 codes}
 \usage{
-icd_get_valid(icd, short = icd_guess_short(icd))
+icd_get_valid(icd, short_code = icd_guess_short(icd))
 
-\method{icd_get_valid}{icd9}(icd, short = icd_guess_short(icd))
+\method{icd_get_valid}{icd9}(icd, short_code = icd_guess_short(icd))
 
-\method{icd_get_valid}{icd10}(icd, short = icd_guess_short(icd))
+\method{icd_get_valid}{icd10}(icd, short_code = icd_guess_short(icd))
 
-\method{icd_get_valid}{icd10cm}(icd, short = icd_guess_short(icd))
+\method{icd_get_valid}{icd10cm}(icd, short_code = icd_guess_short(icd))
 
 icd9GetValid(icd9, isShort = icd_guess_short(icd9))
 
@@ -49,7 +49,7 @@ to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 }
 \description{
-Given vector of short or decimal ICD-9 codes, return (in the
+Given vector of short_code or decimal ICD-9 codes, return (in the
   same format) those codes which are valid or invalid. Useful for generating
   error messages with the faulty codes if validation fails.
 }

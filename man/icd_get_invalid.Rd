@@ -4,21 +4,21 @@
 \alias{icd9GetInvalidDecimal}
 \alias{icd9GetInvalidShort}
 \alias{icd_get_invalid}
-\title{Returns subset of codes which are not in valid short or decimal format.}
+\title{Returns subset of codes which are not in valid short_code or decimal format.}
 \usage{
-icd_get_invalid(icd, short_code = icd_guess_short(icd9))
+icd_get_invalid(x, short_code = icd_guess_short(icd9))
 
 icd9GetInvalidDecimal(icd9Decimal)
 
 icd9GetInvalidShort(icd9Short)
 }
 \description{
-Returns subset of codes which are not in valid short or decimal format.
+Returns subset of codes which are not in valid short_code or decimal format.
 }
 \section{Functions}{
 \itemize{
 \item \code{icd9GetInvalidDecimal}: Returns subset of codes which are not in valid decimal format.
 
-\item \code{icd9GetInvalidShort}: Returns subset of codes which are not in valid short format.
+\item \code{icd9GetInvalidShort}: Returns subset of codes which are not in valid short_code format.
 }}
 

@@ -25,51 +25,82 @@
 #' @template onlyReal
 #' @family ICD-9 ranges
 #' @export
-icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
-                         onlyReal = NULL, warn = TRUE) {
-  assertFlag(isShort)
-  if (isShort) return(icd9CondenseShort(icd9,
-                                        onlyReal = onlyReal, warn = warn))
-  icd9CondenseDecimal(icd9, onlyReal)
+icd_condense <- function(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE) {
+  UseMethod("icd_condense")
 }
+
+icd_condense.icd9 <- function(x, short_code = icd_guess_short(x),
+                         real = NULL, warn = TRUE) {
+  assert(checkFactor(x), checkCharacter(x))
+  assertFlag(short_code)
+  assert(checkNull(real), checkFlag(real))
+  assertFlag(warn)
+  if (short_code)
+    icd9_condense_short(x, real = real, warn = warn)
+  else
+    icd9_condense_decimal(x, real = real, warn = warn)
+}
+
+#' @rdname icd_condense
+#' @export
+icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
+                        onlyReal = NULL, warn = TRUE) {
+  .Deprecated("icd_condense.icd9")
+  icd_condense.icd9(x = icd9, short_code = isShort, real = onlyReal, warn = warn)
+}
+
+#' @rdname icd_condense
+#' @export
+icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE) {
+  .Deprecated("icd_condense.icd9")
+  icd_condense.icd9(x = icd9, short_code = FALSE, real = onlyReal, warn = warn)
+}
+
+#' @rdname icd_condense
+#' @export
+icd9CondenseShort <- function(icd9, onlyReal = NULL, warn = TRUE) {
+  .Deprecated("icd_condense.icd9")
+  icd_condense.icd9(x = icd9, short_code = TRUE, real = onlyReal, warn = warn)
+}
+
 
 #' @rdname icd9Condense
 #' @export
-icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE)
-  icd9ShortToDecimal(icd9CondenseShort(icd9DecimalToShort(icd9Decimal),
-                                       onlyReal = onlyReal, warn = warn))
+icd9_condense_decimal <- function(x, real = NULL, warn = TRUE)
+  icd_short_to_decimal.icd9(
+    icd9_condense_short(
+      icd_decimal_to_short.icd9(x), real = real, warn = warn))
 
 #' @rdname icd9Condense
 #' @template warn
 #' @param keepFactorLevels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
-#' @export
-icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
-  assertFactorOrCharacter(icd9Short)
+icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE) {
+  assert(checkFactor(x), checkCharacter(x))
+  assert(checkNull(real), checkFlag(real))
   assertFlag(warn)
-  icd9Levels <- levels(icd9Short) # NULL if not a factor
+  assertFlag(keepFactorLevels)
+  icd9Levels <- levels(x) # NULL if not a factor
 
   # we can convert back to factor later. Lots of scope for errors by handling
   # factors and character vectors in this function, so keep simple with
   # character only.
-  icd9Short <- asCharacterNoWarn(icd9Short)
+  x <- asCharacterNoWarn(x)
+  i9w <- unique(icd_get_valid.icd9(x, short_code = TRUE))
 
-  i9w <- unique(icd9GetValidShort(icd9Short))
-
-  if (is.null(onlyReal)) {
+  if (is.null(real)) {
     if (all(icd9IsRealShort(i9w))) {
-      onlyReal <- TRUE
+      real <- TRUE
       message("'onlyReal' not given, but all codes are 'real' so assuming TRUE")
     } else {
-      onlyReal <- FALSE
+      real <- FALSE
       if (warn) warning("onlyReal not given, but not all codes are 'real' so assuming FALSE")
     }
   }
-  assertFlag(onlyReal)
 
-  if (warn && onlyReal && !all(icd9IsRealShort(icd9Short))) {
-    icd9Short <- icd9GetRealShort(icd9Short)
+  if (warn && real && !all(icd9IsRealShort(x))) {
+    x <- icd9GetRealShort(x)
     warning("only real values requested, but some undefined ('non-real') ICD-9 code(s) given, so dropping them")
   }
 
@@ -80,13 +111,14 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
 
   # any major codes are automatically in output (not condensing higher than
   # three digit code) and all their children can be removed from the work list
-  out <- majors <- i9w[areMajor <- icd9IsMajor(i9w)]
+  out <- majors <- i9w[areMajor <- icd_is_major.icd9(i9w)]
   i9w <- i9w[!areMajor]
-  i9w <- i9w[i9w %nin% icd9Children(majors, onlyReal = onlyReal)]
+  i9w <- i9w[i9w %nin% icd_children.icd9(majors, short_code = TRUE, real = real)]
   fout <- c()
-  unique(substr(i9w, 0, 4)) -> four_digit_parents
+  four_digit_parents <- unique(substr(i9w, 0, 4))
   for (fp in four_digit_parents) {
-    test_kids <- icd9ChildrenShort(fp, onlyReal = onlyReal) # onlyBillable at 5th level is same as onlyReal
+    # onlyBillable at 5th level is same as onlyReal
+    test_kids <- icd_children.icd9(fp, real = real, short_code = TRUE, billable = FALSE)
     if (length(test_kids) > 0 && all(test_kids %in% c(fp, i9w))) {
       #if ((length(test_kids) > 1) || (fp %in% i9w)) {
       fout <- c(fout, fp)
@@ -103,17 +135,17 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
   # was annoying.
 
   # set new variable so we don't change the thing we are looping over...
-  majorParents <- unique(icd9GetMajor(c(out, fout, i9w), isShort = TRUE))
+  majorParents <- unique(icd_get_major.icd9(c(out, fout, i9w), short_code = TRUE))
   for (mp in majorParents) {
-    test_kids <- icd9ChildrenShort(mp, onlyReal = onlyReal)
-    test_kids <- test_kids[nchar(test_kids) < (5 + icd9IsE(mp))] # we've done these already
+    test_kids <- icd_children.icd9(mp, short_code = TRUE, real = real)
+    test_kids <- test_kids[nchar(test_kids) < (5 + icd9_is_e(mp))] # we've done these already
     test_kids <- test_kids[-which(test_kids == mp)]
     if (length(test_kids) > 0 && all(test_kids %in% c(out, fout, i9w))) {
       out <- c(out, mp)
       fout <- fout[-which(fout %in% test_kids)]
     }
   }
-  out <- unique(icd9SortShort(c(out, fout, i9w)))
+  out <- unique(icd_sort.icd9(c(out, fout, i9w), short_code = TRUE))
 
   if (!is.null(icd9Levels)) {
     if (keepFactorLevels)
@@ -122,6 +154,8 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
       out <- factor(out)
   }
 
-  if (onlyReal) return(icd9GetRealShort(out)) # should there be any non-real?
-  out
+  if (real)
+    icd9GetRealShort(out) # should there be any non-real?
+  else
+    out
 }

@@ -9,11 +9,11 @@
 \alias{icd_sort.icd9}
 \title{sort short-form icd9 codes}
 \usage{
-icd_sort(icd, ...)
+icd_sort(x, ...)
 
-\method{icd_sort}{icd10}(icd, short = NULL)
+\method{icd_sort}{icd10}(x, short_code = NULL)
 
-\method{icd_sort}{icd9}(icd, short = icd_guess_short(icd))
+\method{icd_sort}{icd9}(x, short_code = icd_guess_short(icd))
 
 icd9Sort(icd9, isShort = icd_guess_short(icd9))
 

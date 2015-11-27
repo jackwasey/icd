@@ -13,7 +13,7 @@ icd_guess_short(x, test_n = 1000L)
 
 \method{icd_guess_short}{icd10}(x, test_n = 1000L)
 
-\method{icd_guess_short}{icd9}(x, test_n)
+\method{icd_guess_short}{icd9}(x, test_n = 1000L)
 }
 \value{
 single logical value, \code{TRUE} if input data are predominantly

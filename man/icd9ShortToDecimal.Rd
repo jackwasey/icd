@@ -3,6 +3,6 @@
 \name{icd9DecimalToShortOld}
 \alias{icd9DecimalToShortOld}
 \usage{
-icd9DecimalToShortOld(icd9Decimal)
+icd9DecimalToShortOld(x)
 }
 

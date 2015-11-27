@@ -18,7 +18,7 @@
 \usage{
 icd_expand_range(start, end, ...)
 
-icd9ExpandRange(start, end, isShort = icd_guess_short(c(start, end)),
+icd9ExpandRange(start, end, isShort = icd_guess_short_code(c(start, end)),
   onlyReal = TRUE, excludeAmbiguousStart = TRUE,
   excludeAmbiguousEnd = TRUE)
 
@@ -30,9 +30,9 @@ icd9ExpandRangeDecimal(start, end, onlyReal = TRUE,
 
 icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 
-\method{icd_expand_range}{icd9}(start, end, short = icd_guess_short(c(start,
-  end)), real = TRUE, excludeAmbiguousStart = TRUE,
-  excludeAmbiguousEnd = TRUE)
+\method{icd_expand_range}{icd9}(start, end,
+  short_code = icd_guess_short_code(c(start, end)), real = TRUE,
+  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
 
 icd9_expand_range_short(start, end, real = TRUE,
   excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
@@ -94,7 +94,7 @@ this is cumbersome code, covering a whole load of edge cases
   since this is far more likely to be useful to the end user.
 }
 \details{
-Expand range of short-form ICD-9 codes
+Expand range of short_code-form ICD-9 codes
 }
 \section{Methods (by class)}{
 \itemize{
@@ -109,7 +109,7 @@ Expand range of short-form ICD-9 codes
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{expand_minor}},
-  \code{\link{icd9Condense}}, \code{\link{icd_children}}
+  \code{\link{icd_children}}, \code{\link{icd_condense}}
 }
 \keyword{internal}
 

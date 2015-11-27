@@ -37,21 +37,32 @@
 icd_children <- function(icd, ...)
   UseMethod("icd_children")
 
+icd_children.character <- function(x, ...) {
+  args = list(...)
+  if (is.null(short_code <- args[["short_code"]])) short_code = icd_guess_short(x)
+  ver <- icd_guess_version(x, short_code = short_code)
+  switch(ver,
+    "icd9" = icd_children.icd9(x, short_code, ...),
+    # "icd10" = icd_children.icd10(x, short_code, ...)
+    NULL)
+}
+
 #' @describeIn icd_children Get children of ICD-9 codes
 #' @export
-icd_children.icd9 <- function(icd9, short = icd_guess_short(icd9),
+icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
                          real = TRUE, billable = FALSE) {
-  assertFactorOrCharacter(icd9)
-  assertFlag(short)
+  assert(checkFactor(x), checkCharacter(x)) # assertFactorOrCharacter(x)
+  assertFlag(short_code)
   assertFlag(real)
+  assertFlag(billable)
 
-  if (short)
-    res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(icd9), real)
+  if (short_code)
+    res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(x), real)
   else
-    res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), toupper(icd9), real)
+    res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), toupper(x), real)
 
   if (billable)
-    icd9GetBillable(res, short)
+    icd9GetBillable(res, short_code)
   else
     res
 }
@@ -66,16 +77,16 @@ icd_children_real <- function(x)
 
 #' @describeIn icd_children_real get the children of ICD-10 code(s)
 #' @keywords internal
-icd_children_real.icd10 <- function(icd, short = icd_guess_short(icd)) {
+icd_children_real.icd10 <- function(x, short_code = icd_guess_short(x)) {
 
-  checkmate::assertCharacter(icd)
-  checkmate::assertFlag(short)
+  checkmate::assertCharacter(x)
+  checkmate::assertFlag(short_code)
 
-  if (inherits(icd, "icd10") && !inherits(icd, "icd10cm"))
+  if (inherits(x, "icd10") && !inherits(x, "icd10cm"))
     warning("This function primarily gives 'real' child codes for ICD-10-CM,
             which is mostly a superset of ICD-10 WHO")
 
-  icd10Short <- stringr::str_trim(icd)
+  icd10Short <- stringr::str_trim(x)
 
   matches_bool <- icd10Short %in% icd9::icd10cm2016[["code"]]
   # if the codes are not in the source file, we ignore, warn, drop silently?
@@ -172,19 +183,19 @@ icd10ChildrenPossibleShort <- function(icd10Short) {
 #' @export
 icd9Children <- function(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
-  icd_children.icd9(icd9, short = isShort, real = onlyReal, billable = onlyBillable)
+  icd_children.icd9(icd9, short_code = isShort, real = onlyReal, billable = onlyBillable)
 }
 
 #' @rdname icd_children
 #' @export
 icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
-  icd_children.icd9(icd9Short, short = TRUE, real = onlyReal, billable = onlyBillable)
+  icd_children.icd9(icd9Short, short_code = TRUE, real = onlyReal, billable = onlyBillable)
 }
 
 #' @rdname icd_children
 #' @export
 icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
-  icd_children.icd9(icd9Decimal, short = FALSE, real = onlyReal, billable = onlyBillable)
+  icd_children.icd9(icd9Decimal, short_code = FALSE, real = onlyReal, billable = onlyBillable)
 }

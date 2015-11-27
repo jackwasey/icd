@@ -33,23 +33,25 @@ icd_guess_short <- function(x, test_n = 1000L)
 #' @describeIn icd_guess_short Guess whether an ICD-10 code is in short_code form
 #' @keywords internal
 icd_guess_short.icd10 <- function(x, test_n = 1000L) {
-  !any(stringr::str_detect(x[1:test_n], ".+\\..+")) # any decimal as first approximation
+  !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE) # any decimal as first approximation
 }
 
 #' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
 #' @keywords internal
-icd_guess_short.icd9 <- function(x, test_n) {
+icd_guess_short.icd9 <- function(x, test_n = 1000L) {
   if (inherits(x, "icd_short_code")) return(TRUE)
   if (inherits(x, "icd_decimal_code")) return(FALSE)
   if (is.list(x)) x <- unlist(x, recursive = TRUE)
   x <- asCharacterNoWarn(x)
   testend <- min(length(x), test_n)
-  vs <- icd_is_valid_short.icd9(x[1:testend])
-  vd <- icd_is_valid_decimal.icd9(x[1:testend])
+  vs <- icd9_is_valid_short(x[1:testend])
+  vd <- icd9_is_valid_decimal(x[1:testend])
   sum(vd) <= sum(vs)
 }
 
-
+icd_guess_short.character <- function(x, test_n = 1000L) {
+  !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE) # any decimal as first approximation
+}
 
 #' Guess version of ICD
 #'
@@ -59,7 +61,7 @@ icd_guess_version <- function(...)
 
 #' @describeIn icd_guess_version Guess version of ICD code from character vector
 icd_guess_version.character <- function(icd, short_code) {
-  icd9 <- sum(icd_is_valid_short.icd9(icd))
+  icd9 <- sum(icd9_is_valid_short(icd))
   icd10 <- sum(icd_is_valid.icd10(icd))
   #icd10cm <- sum(icd_is_valid.icd10cm(icd))
   icd10who <- sum(icd_is_valid.icd10who(icd))

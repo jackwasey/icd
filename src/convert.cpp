@@ -268,30 +268,28 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
 //' @template icd9-decimal
 //' @export
 // [[Rcpp::export(name = "icd_short_to_decimal.icd9")]]
-Rcpp::CharacterVector icd9ShortToDecimal(
-		const Rcpp::CharacterVector icd9Short) {
-	return icd9PartsToDecimal(icd9ShortToPartsCpp(icd9Short, ""));
+Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector x) {
+	return icd9PartsToDecimal(icd9ShortToPartsCpp(x, ""));
 }
 
 //' @rdname icd9ShortToDecimal
 //' @export
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9DecimalToShortOld(
-		const Rcpp::CharacterVector icd9Decimal) {
-	return icd9PartsToShort(icd9DecimalToPartsCpp(icd9Decimal, ""));
+Rcpp::CharacterVector icd9DecimalToShortOld(const Rcpp::CharacterVector x) {
+	return icd9PartsToShort(icd9DecimalToPartsCpp(x, ""));
 }
 
 //' @rdname convert
 //' @export
 // [[Rcpp::export(name = "icd_decimal_to_short.icd9")]]
 Rcpp::CharacterVector icd9DecimalToShort(
-		const Rcpp::CharacterVector icd9Decimal) {
-	Rcpp::CharacterVector out = clone(icd9Decimal); // clone instead of pushing back thousands of times
-  size_t ilen = icd9Decimal.length();
+		const Rcpp::CharacterVector x) {
+	Rcpp::CharacterVector out = clone(x); // clone instead of pushing back thousands of times
+  size_t ilen = x.length();
 	if (ilen == 0)
 		return out;
 	for (size_t i = 0; i != ilen; ++i) {
-		Rcpp::String strna = icd9Decimal[i]; // need to copy here? does it copy?
+		Rcpp::String strna = x[i]; // need to copy here? does it copy?
 		if (strna == NA_STRING || strna == "")
 			continue;
 		// TODO: Rcpp::String doesn't implement many functions, so using STL. A FAST way
@@ -304,27 +302,15 @@ Rcpp::CharacterVector icd9DecimalToShort(
 		// TODO consider rejecting grossly invalid codes as NA:
 		std::size_t pos = thiscode.find_first_of(".");
 		if (pos != std::string::npos) {
-#ifdef ICD9_DEBUG_TRACE
-			Rcpp::Rcout << "found .\n";
-#endif
 			// now we assume that the major is snug against the left side, so we can add zero padding
 			thiscode.erase(pos, 1); // remove the decimal point
 			// could do fewer tests on the code by doing this last, but most codes are not V or E...
 			if (pos > 0 && pos < 4 && !icd9IsASingleVE(thiscode_cstr)) {
-#ifdef ICD9_DEBUG_TRACE
-				Rcpp::Rcout << "found numeric\n";
-#endif
 				thiscode.insert(0, 3 - pos, '0');
 			} else if (pos == 2 && icd9IsASingleV(thiscode_cstr)) {
-#ifdef ICD9_DEBUG_TRACE
-				Rcpp::Rcout << "found V\n";
-#endif
 				thiscode.insert(1, 1, '0');
 				out[i] = thiscode;
 			} else if ((pos == 2 || pos == 3) && icd9IsASingleE(thiscode_cstr)) {
-#ifdef ICD9_DEBUG_TRACE
-				Rcpp::Rcout << "found E\n";
-#endif
 				thiscode.insert(1, 4 - pos, '0');
 			}
 			// otherwise leave the code alone
@@ -343,18 +329,18 @@ Rcpp::CharacterVector icd9DecimalToShort(
 //' @template isShort
 //' @keywords internal manip
 //' @export
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector icd9, const bool isShort) {
-	if (isShort) {
+// [[Rcpp::export(name="icd_get_major.icd9")]]
+Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool short_code) {
+	if (short_code) {
 		// am I casting (or just compiler/syntax checker hinting?) SEXP may be
 		// costly, or is it just encapsulating a pointer to some fixed data somewhere?
 
 		// I don't think i need to PROTECT here, because I immediately return the
 		// result via Rcpp
-		SEXP majors = icd9ShortToPartsCpp(icd9, "")[0]; // actually wants to be an Rcpp::List
+		SEXP majors = icd9ShortToPartsCpp(x, "")[0]; // actually wants to be an Rcpp::List
 		return Rcpp::as<Rcpp::CharacterVector>(majors);
 	}
-	SEXP majors = icd9DecimalToPartsCpp(icd9, "")[0];
+	SEXP majors = icd9DecimalToPartsCpp(x, "")[0];
 	return Rcpp::as<Rcpp::CharacterVector>(majors);
 }
 

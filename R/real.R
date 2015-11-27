@@ -41,7 +41,7 @@ icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
 #'   leaf (billable) level?
 #' @export
 icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
-  assertFactorOrCharacter(icd9Short)
+ assert(checkFactor(icd9Short), checkCharacter(icd9Short))
   assertFlag(onlyBillable)
   if (onlyBillable) return(icd9IsBillableShort(asCharacterNoWarn(icd9Short)))
   icd9AddLeadingZeroesShort(asCharacterNoWarn(icd9Short)) %in% icd9::icd9Hierarchy[["icd9"]]
@@ -51,18 +51,22 @@ icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
 #'   leaf (billable) level?
 #' @export
 icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
-  assertFactorOrCharacter(icd9Decimal)
+  assert(checkFactor(icd9Decimal), checkCharacter(icd9Decimal))
   assertFlag(onlyBillable)
-  if (onlyBillable) return(icd9IsBillableDecimal(icd9Decimal))
-  icd9IsRealShort(icd9DecimalToShort(icd9Decimal))
+  if (onlyBillable) 
+    icd9IsBillableDecimal(icd9Decimal)
+  else
+    icd9IsRealShort(icd9DecimalToShort(icd9Decimal))
 }
 
 #' @describeIn icd9IsReal Return only those codes which are heading or leaf
 #'   (billable), specifying whether codes are all short-form or all decimal-form
 #' @export
 icd9GetReal <- function(icd9, isShort = icd_guess_short(icd9), onlyBillable = FALSE) {
-  if (isShort) return(icd9GetRealShort(icd9))
-  icd9GetRealDecimal(icd9)
+  if (isShort) 
+    icd9GetRealShort(icd9)
+  else
+    icd9GetRealDecimal(icd9)
 }
 
 #' @describeIn icd9IsReal Return only those short-form codes which are heading
@@ -99,8 +103,9 @@ icd9IsBillable <- function(icd9, isShort = icd_guess_short(icd9),
   assertFlag(isShort)
   assertString(version)
   if (isShort)
-    return(icd9 %in% icd9::icd9Billable[[version]][["icd9"]])
-  icd9DecimalToShort(icd9) %in% icd9::icd9Billable[[version]][["icd9"]]
+    icd9 %in% icd9::icd9Billable[[version]][["icd9"]]
+  else
+    icd9DecimalToShort(icd9) %in% icd9::icd9Billable[[version]][["icd9"]]
 }
 
 #' @describeIn icd9IsBillable Are the given short-form codes leaf (billable)
@@ -125,8 +130,9 @@ icd9GetBillable <- function(icd9, isShort = icd_guess_short(icd9),
   assertFlag(invert)
   assertString(version)
   if (isShort)
-    return(icd9[icd9IsBillableShort(icd9, version = version) != invert])
-  icd9[icd9IsBillableDecimal(icd9, version = version) != invert]
+    icd9[icd9IsBillableShort(icd9, version = version) != invert]
+  else
+    icd9[icd9IsBillableDecimal(icd9, version = version) != invert]
 }
 
 #' @describeIn icd9IsBillable Return only those short-form codes which are leaf
