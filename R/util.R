@@ -177,13 +177,12 @@ str_pair_match <- function(text, pattern, swap = FALSE, dropEmpty = FALSE, pos =
   out
 }
 
-
-get_visit_name <- function(x, visitId = NULL) {
+get_visit_name <- function(x, visit_name = NULL) {
   guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
-               "in.*enc", "out.*enc", "visit", "enc")
-  checkDataFrame(x, min.cols = 1, col.names = "named")
+               "in.*enc", "out.*enc", "encounter", "visit", "enc")
+  assertDataFrame(x, min.cols = 1, col.names = "named")
 
-  if (is.null(visitId)) {
+  if (is.null(visit_name)) {
     for (guess in guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
       if (length(guess_matched) == 1) {
@@ -191,6 +190,7 @@ get_visit_name <- function(x, visitId = NULL) {
         break
       }
     }
+    # if still null, then guess the name of the first column
     if (is.null(visitId))
       visitId <- names(x)[1]
   }
@@ -203,12 +203,12 @@ get_visit_name <- function(x, visitId = NULL) {
 # case-insensitive regex. If there are zero or multiple matches, we move on down
 # the list, meaning some later possibilities are more or less specific regexes
 # than earlier ones.
-get_icd_name <- function(icd_df, icd_name = NULL) {
-  guesses <- c("icd.?9", "icd.?9.?Code", "icd", "diagnos", "diag.?code", "diag", "i9")
-  checkmate::assertDataFrame(icd_df, min.cols = 1, col.names = "named")
+get_icd_name <- function(x, icd_name = NULL) {
+  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd", "diagnos", "diag.?code", "diag", "i(9|10)")
+  checkmate::assertDataFrame(x, min.cols = 1, col.names = "named")
   if (is.null(icd_name)) {
     for (guess in guesses) {
-      guess_matched <- grep(guess, names(icd_df), ignore.case = TRUE, value = TRUE)
+      guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
       if (length(guess_matched) == 1) {
         icd_name <- guess_matched
         break
@@ -216,12 +216,12 @@ get_icd_name <- function(icd_df, icd_name = NULL) {
     }
     if (is.null(icd_name))
       # still NULL so fallback to second column
-      icd_name <- names(icd_df)[2]
+      icd_name <- names(x)[2]
     # Could look at contents of the data frame, although this evaluates a
     # promise on potentially a big data frame, so could be costly
   }
   assertString(icd_name)
-  stopifnot(icd_name %in% names(icd_df))
+  stopifnot(icd_name %in% names(x))
   icd_name
 }
 

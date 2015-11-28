@@ -38,7 +38,7 @@ option.}
 longdf <- icd_long_data(
             data.frame(visit = c("a", "b", "b", "c"),
                        icd9 = c("441", "4424", "443", "441")))
-cmbdf <- icd_comorbid_elix(longdf, return.df = TRUE)
+cmbdf <- icd_comorbid_elix(longdf, return_df = TRUE)
 class(cmbdf)
 rownames(cmbdf)
 mat.out <- icd_comorbid_df_to_matrix(cmbdf)

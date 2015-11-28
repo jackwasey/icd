@@ -399,9 +399,9 @@ icd_expand_minor.icd9 <- function(minor, is_e = FALSE) {
   # clang 3.6 with address sanitizer seems to fail if a number is passed instead
   # of string. It SHOULD fail with type error, and that might be an Rcpp
   # problem...
-  assertString(minor)
+  assertString(minor) # or character vector?
   assertFlag(is_e)
-  .Call("icd9_expand_minorShim", PACKAGE = get_pkg_name(), minor, isE = is_e)
+  .Call("icd9_icd9ExpandMinorShim", PACKAGE = get_pkg_name(), minor, isE = is_e)
 }
 
 icd9_expand_minor.icd10 <- function(x) {

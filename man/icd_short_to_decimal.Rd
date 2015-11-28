@@ -3,16 +3,10 @@
 \name{icd_short_to_decimal}
 \alias{icd9DecimalToShort}
 \alias{icd9ShortToDecimal}
-\alias{icd_decimal_to_short}
 \alias{icd_short_to_decimal}
-\alias{icd_short_to_decimal.icd9}
 \title{Convert codes between short and decimal forms}
 \usage{
 icd_short_to_decimal(x)
-
-icd_decimal_to_short(x)
-
-\method{icd_short_to_decimal}{icd9}(x)
 
 icd9DecimalToShort(icd9Short)
 

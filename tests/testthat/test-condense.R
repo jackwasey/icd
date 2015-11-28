@@ -171,42 +171,42 @@ test_that("condense full ranges", {
   expect_equal(icd_condense.icd9Decimal(icd9Children("V12", isShort = FALSE, real = FALSE), real = FALSE), "V12")
   expect_equal(icd_condense.icd9Decimal(icd9ChildrenDecimal("E800", real = FALSE), real = FALSE), "E800")
 
-  expect_equal(icd_condense.icd9(short = TRUE,icd9ChildrenShort("0031", real = FALSE), real = FALSE), "0031")
+  expect_equal(icd_condense.icd9(short_code = TRUE, icd9ChildrenShort("0031", real = FALSE), real = FALSE), "0031")
   # major is alloect_equal(icd_condense.icd9(short = TRUE,c("003", othersalmonella), real = TRUE), "003")
   # major is retupect_equal(icd_condense.icd9(short = TRUE,othersalmonella, real = TRUE), "003")
-  expect_equal(icd_condense.icd9(short = TRUE,othersalmonella, real = FALSE), othersalmonella)
+  expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, real = FALSE), othersalmonella)
   # now do we fining major if all chilren present?
   almostall003 <- icd9ChildrenShort("003", real = FALSE)
   almostall003 <- almostall003[almostall003 != "003"] # drop the major
-  expect_equal(icd_condense.icd9(short = TRUE,almostall003, real = FALSE), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE,almostall003, real = FALSE), "003")
 
-  expect_equal(icd_condense.icd9(short = TRUE,icd9ChildrenShort("0031", real = FALSE),
+  expect_equal(icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("0031", real = FALSE),
                                  real = FALSE), "0031")
   # gives nothing back if a non-billable code provided, but billable requested
 
-  expect_equal(icd_condense.icd9(short = TRUE,c("003", othersalmonella), real = TRUE),
+  expect_equal(icd_condense.icd9(short_code = TRUE,c("003", othersalmonella), real = TRUE),
                "003") # onlyBillable describes input, it doesn't make any sense to describe output when condensing.
   # major is returned
-  expect_equal(icd_condense.icd9(short = TRUE,othersalmonella, real = TRUE), "003")
-  expect_equal(icd_condense.icd9(short = TRUE,othersalmonella, real = FALSE), othersalmonella)
+  expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, real = TRUE), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, real = FALSE), othersalmonella)
   # now do we find a missing major if all chilren present?
-  almostall003 <- icd9ChildrenShort("003", real = FALSE)
+  almostall003 <- icd_children.icd9("003", short_code = TRUE, real = FALSE)
   almostall003 <- almostall003[almostall003 != "003"] # drop the major
-  expect_equal(icd_condense.icd9(short = TRUE,almostall003, real = FALSE), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE, almostall003, real = FALSE), "003")
 
 })
 
 test_that("condense single major and its children", {
-  expect_equal(icd_condense.icd9(short = TRUE,"003"), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE,"003"), "003")
 
   rheum_fever <- "Rheumatic fever with heart involvement"
   expect_equal(icd9ExplainShort("391"), rheum_fever)
-  expect_equal(icd9ExplainShort(icd_children.icd9("391", short = TRUE)), rheum_fever)
-  expect_equal(icd9ExplainShort(icd_children.icd9("391", short = TRUE, real = TRUE)), rheum_fever)
+  expect_equal(icd9ExplainShort(icd_children.icd9("391", short_code = TRUE)), rheum_fever)
+  expect_equal(icd9ExplainShort(icd_children.icd9("391", short_code = TRUE, real = TRUE)), rheum_fever)
 })
 
-vermont_dx %>%
-  icd9WideToLong  %>%
+icd9::vermont_dx %>%
+  icd_wide_to_long  %>%
   extract2("icdCode")  %>%
   icd9SortShort %>%
   unique %>%

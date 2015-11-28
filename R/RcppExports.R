@@ -69,7 +69,9 @@ icd9DecimalToShortOld <- function(x) {
     .Call('icd9_icd9DecimalToShortOld', PACKAGE = 'icd9', x)
 }
 
-icd9DecimalToShort <- function(x) {
+#' @describeIn icd_decimal_to_short Convert Decimal to short-form ICD-9 code
+#' @export
+icd_decimal_to_short.icd9 <- function(x) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', x)
 }
 

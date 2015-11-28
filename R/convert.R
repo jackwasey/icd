@@ -58,7 +58,7 @@ NULL
 #' @keywords internal manip
 icd9ChaptersToMap <- function(x) {
   if (is.character(x)) x <- get(x)
-  checkList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
+  checkmate::assertList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
@@ -94,33 +94,27 @@ icd9ChaptersToMap <- function(x) {
 #' @import checkmate
 #' @export
 icd_wide_to_long <- function(x,
-                           visit_name = NULL,
+                           visit_name =get_visit_name(x),
                            icd_labels = NULL,
                            icd_name = "icdCode",
-                           icd_regex = c("icd", "diag", "dx_", "dx"),
-                           verbose = FALSE) {
+                           icd_regex = c("icd", "diag", "dx_", "dx")) {
   assertDataFrame(x, min.rows = 1, min.cols = 2)
-  assert(checkNull(visit_name), checkString(visit_name))
+  assertString(visit_name)
   assert(checkNull(icd_labels), checkCharacter(icd_labels))
   assertString(icd_name)
   assertCharacter(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
-  assertFlag(verbose)
 
   if (is.null(icd_labels)) {
     re <- length(icd_regex)
     while (re > 0) {
-      if (verbose) message("checking whether regex: '", rev(icd_regex)[re], "' catches ICD columns.")
       icd_labels <- grep(rev(icd_regex)[re], names(x), ignore.case = TRUE, value = TRUE)
-      if (verbose) message("found labels: ", paste(icd_labels, collapse = ", "))
       if (length(icd_labels)) break
       re <- re - 1
     }
   }
-  assertCharacter(icd_labels, any.missing = FALSE, min.chars = 1,
+  checkmate::assertCharacter(icd_labels, any.missing = FALSE, min.chars = 1,
                   min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icd_labels %in% names(x)))
-
-  visit_name <- get_visit_name(x, visit_id)
 
   res <- stats::reshape(x,
                  direction = "long",
@@ -151,7 +145,7 @@ icd_wide_to_long <- function(x,
 #'   time to find out-of-order visit_names, and combine all the codes for each
 #'   unique visit_name. If \code{FALSE}, then out-of-order visit_names will result in
 #'   a row in the output data per contiguous block of identical visit_names.
-#' @param return.df single logical value, if \code{TRUE}, return a data frame
+#' @param return_df single logical value, if \code{TRUE}, return a data frame
 #'   with a field for the visit_name. This may be more convenient, but the default
 #'   of \code{FALSE} gives the more natural return data of a matrix with
 #'   rownames being the visit_names.
@@ -166,12 +160,12 @@ icd_wide_to_long <- function(x,
 icd_long_to_wide <- function(x,
                            visit_name = get_visit_name(x),
                            icd_name = get_icd_name(x),
-                           prefix = "icd",
+                           prefix = "icd_",
                            min.width = 0,
                            aggregate = TRUE,
                            return_df = FALSE) {
 
-#  icd_name <- get_icd_name(x, icd9Field)
+#  icd_name <- get_icd_name(x, icd_name)
 #  visit_name <- get_visit_name(x, visit_name)
 
   assertDataFrame(x, col.names = "named")
@@ -184,9 +178,9 @@ icd_long_to_wide <- function(x,
   icd9VisitWasFactor <- is.factor(x[[visit_name]])
   if (icd9VisitWasFactor) ivLevels <- levels(x[[visit_name]])
   x[[visit_name]] <- asCharacterNoWarn(x[[visit_name]])
-  x[[icd9Field]] <- asCharacterNoWarn(x[[icd9Field]])
-  if (return.df) {
-    mat <- icd9LongToWideCpp(x, visit_name, icd9Field, aggregate)
+  x[[icd_name]] <- asCharacterNoWarn(x[[icd_name]])
+  if (return_df) {
+    mat <- icd9LongToWideCpp(x, visit_name, icd_name, aggregate)
     if (icd9VisitWasFactor)
       rownm <- factor(x = rownames(mat), levels = ivLevels)
     else
@@ -203,7 +197,7 @@ icd_long_to_wide <- function(x,
     names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:nc), sep = "")
     return(df.out)
   }
-  icd9LongToWideCpp(x, visit_name, icd9Field, aggregate)
+  icd9LongToWideCpp(x, visit_name, icd_name, aggregate)
 }
 
 #' @title convert matrix of comorbidities into data frame, preserving visit_name
@@ -252,7 +246,7 @@ icd_comorbid_mat_to_df <- function(x, visit_name = get_visit_name(x),
 #' longdf <- icd_long_data(
 #'             data.frame(visit = c("a", "b", "b", "c"),
 #'                        icd9 = c("441", "4424", "443", "441")))
-#' cmbdf <- icd_comorbid_elix(longdf, return.df = TRUE)
+#' cmbdf <- icd_comorbid_elix(longdf, return_df = TRUE)
 #' class(cmbdf)
 #' rownames(cmbdf)
 #' mat.out <- icd_comorbid_df_to_matrix(cmbdf)
@@ -295,7 +289,10 @@ icd_short_to_decimal <- function(x) {
   UseMethod("icd_short_to_decimal")
 }
 
-#' @rdname icd_short_to_decimal
+#' Convert Decimal format ICD codes to short format
+#'
+#' This usually just entails removing the decimal point, but also does some
+#' limited validation and tidying up.
 #' @export
 icd_decimal_to_short <- function(x) {
   UseMethod("icd_decimal_to_short")
@@ -309,12 +306,6 @@ icd_short_to_parts <- function(x, empty_minor = "") {
   UseMethod("icd_short_to_parts")
 }
 
-#' @rdname icd_short_to_decimal
-#' @export
-icd_short_to_decimal.icd9 <- function(x) {
-  .Call('icd9_icd9ShortToDecimal', PACKAGE = get_pkg_name(), x)
-}
-
 #' @rdname convert
 #' @keywords internal manip
 icd_short_to_parts.icd9 <- function(x, minor_empty = "") {
@@ -326,6 +317,31 @@ icd_short_to_parts.icd9 <- function(x, minor_empty = "") {
 #' @keywords internal manip
 icd_decimal_to_parts.icd9 <- function(x, minor_empty = "") {
   .Call("icd9_icd9DecimalToPartsCpp", PACKAGE = get_pkg_name(), x, minor_empty)
+}
+
+#' @rdname icd_long_to_wide
+#' @export
+icd9LongToWide <- function(icd9df,
+                           visitId = NULL,
+                           icd9Field = NULL,
+                           prefix = "icd_",
+                           min.width = 0,
+                           aggregate = TRUE,
+                           return.df = FALSE) {
+  .Deprecated("icd_long_to_wide")
+  icd_long_to_wide(icd9df, visitId, icd9Field, prefix, min.width, aggregate, return.df)
+}
+
+#' @rdname icd_wide_to_long
+#' @export
+icd9WideToLong <- function(x,
+                           visitId = get_visit_name(x),
+                           icdLabels = NULL,
+                           icdName = "icdCode",
+                           icdRegex = c("icd", "diag", "dx_", "dx"),
+                           verbose = FALSE) {
+  .Deprecated("icd_wide_to_long")
+  icd_wide_to_long(x, visitId, icdLabels, icdName, icdRegex)
 }
 
 icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {

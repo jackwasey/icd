@@ -24,7 +24,7 @@ test_that("extract decimal parts - invalid or empty input", {
   expect_equal( icd_decimal_to_parts.icd9(""), list(major = NA_character_, minor = NA_character_) )
 
   expect_equal(
-    icd_decimal_to_parts.icd9("", minorEmpty = NA_character_),
+    icd_decimal_to_parts.icd9("", minor_empty = NA_character_),
     list(major = NA_character_, minor = NA_character_)
   )
 })
@@ -39,9 +39,9 @@ test_that("extract decimal parts - valid inputs", {
   expect_equal(icd_decimal_to_parts.icd9("022.22"), list(major = "022", minor = "22"))
   expect_equal(icd_decimal_to_parts.icd9("333.3"), list(major = "333", minor = "3"))
   expect_equal(icd_decimal_to_parts.icd9("444"), list(major = "444", minor = ""))
-  expect_equal(icd_decimal_to_parts.icd9("444", minorEmpty = NA_character_),
-               list(major = "444", minor=NA_character_))
-  expect_equal(icd_decimal_to_parts.icd9("444", minorEmpty = ""),
+  expect_equal(icd_decimal_to_parts.icd9("444", minor_empty = NA_character_),
+               list(major = "444", minor = NA_character_))
+  expect_equal(icd_decimal_to_parts.icd9("444", minor_empty = ""),
                list(major = "444", minor = ""))
   expect_equal(icd_decimal_to_parts.icd9(c("9.9", "88.88", "777.6")),
                list(
@@ -56,21 +56,21 @@ test_that("extract decimal parts - valid inputs", {
                  minor = c("9", "88", "6")
                )
   )
-  expect_equal(icd_decimal_to_parts.icd9(c("9.9", "88", "777.6"), minorEmpty = NA_character_),
+  expect_equal(icd_decimal_to_parts.icd9(c("9.9", "88", "777.6"), minor_empty = NA_character_),
                list(
                  major = c("009", "088", "777"),
                  minor = c("9", NA_character_, "6")
                )
   )
 
-  expect_equal(icd_decimal_to_parts.icd9(c("9.9", "88", "777.6"), minorEmpty = ""),
+  expect_equal(icd_decimal_to_parts.icd9(c("9.9", "88", "777.6"), minor_empty = ""),
                list(
                  major = c("009", "088", "777"),
                  minor = c("9", "", "6")
                )
   )
 
-  expect_equal(icd_decimal_to_parts.icd9(c("001", "", "991.23"), minorEmpty = NA_character_),
+  expect_equal(icd_decimal_to_parts.icd9(c("001", "", "991.23"), minor_empty = NA_character_),
                list(
                  major = c("001", NA_character_, "991"),
                  minor = c(NA_character_, NA_character_, "23")
@@ -122,14 +122,14 @@ test_that("short to decimal bad input", {
 })
 
 test_that("icd9 short to major part, E codes", {
-  expect_equal(icd9GetMajor(isShort = TRUE, "E000"), "E000")
-  expect_equal(icd9GetMajor(isShort = TRUE, "E00"), "E000")
-  expect_equal(icd9GetMajor(isShort = TRUE, "E0"), "E000")
-  expect_equal(icd9GetMajor(isShort = TRUE, "E1"), "E001")
-  expect_equal(icd9GetMajor(isShort = TRUE, "E001"), "E001")
-  expect_equal(icd9GetMajor(isShort = TRUE, "E0123"), "E012")
-  expect_equal(icd9GetMajor(isShort = TRUE, "E100"), "E100")
-  expect_equal(icd9GetMajor(isShort = TRUE, "E1234"), "E123")
+  expect_equal(icd_get_major.icd9(short_code = TRUE, "E000"), "E000")
+  expect_equal(icd_get_major.icd9(short_code = TRUE, "E00"), "E000")
+  expect_equal(icd_get_major.icd9(short_code = TRUE, "E0"), "E000")
+  expect_equal(icd_get_major.icd9(short_code = TRUE, "E1"), "E001")
+  expect_equal(icd_get_major.icd9(short_code = TRUE, "E001"), "E001")
+  expect_equal(icd_get_major.icd9(short_code = TRUE, "E0123"), "E012")
+  expect_equal(icd_get_major.icd9(short_code = TRUE, "E100"), "E100")
+  expect_equal(icd_get_major.icd9(short_code = TRUE, "E1234"), "E123")
 
 })
 
