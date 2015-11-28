@@ -4,7 +4,7 @@
 \alias{icd_short_to_decimal.icd9}
 \title{Convert ICD-9 codes between short and decimal forms}
 \usage{
-icd_short_to_decimal.icd9(x)
+\method{icd_short_to_decimal}{icd9}(x)
 }
 \arguments{
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than

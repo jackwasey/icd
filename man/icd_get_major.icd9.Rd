@@ -4,7 +4,7 @@
 \alias{icd_get_major.icd9}
 \title{Get major (three-digit) part of ICD-9 codes}
 \usage{
-icd_get_major.icd9(x, short_code)
+\method{icd_get_major}{icd9}(x, short_code)
 }
 \arguments{
 \item{icd9}{is

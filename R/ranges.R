@@ -202,12 +202,12 @@ icd_expand_range.icd9 <- function(start, end,
                                   excludeAmbiguousEnd = TRUE) {
   if (short_code)
     icd9_expand_range_short(start, end, real,
-                         excludeAmbiguousStart,
-                         excludeAmbiguousEnd)
+                            excludeAmbiguousStart,
+                            excludeAmbiguousEnd)
   else
     icd9_expand_range_decimal(start, end, real,
-                           excludeAmbiguousStart,
-                           excludeAmbiguousEnd)
+                              excludeAmbiguousStart,
+                              excludeAmbiguousEnd)
 }
 
 #' expand range worker function
@@ -328,14 +328,18 @@ icd_expand_range_major.icd9 <- function(start, end, real = TRUE) {
 #' @rdname icd_expand_range
 #' @keywords internal
 icd9_expand_range_decimal <- function(start, end, real = TRUE,
-                                   excludeAmbiguousStart = TRUE,
-                                   excludeAmbiguousEnd = TRUE) {
-  icd_short_code_to_decimal(
-    icd_expand_range.icd9(
-      icd_decimal_to_short_code(start), icd_decimal_to_short_code(end),
-      short_code = TRUE, real = real,
-      excludeAmbiguousStart = excludeAmbiguousStart,
-      excludeAmbiguousEnd = excludeAmbiguousEnd
+                                      excludeAmbiguousStart = TRUE,
+                                      excludeAmbiguousEnd = TRUE) {
+  icd9(
+    icd_short_code(
+      icd_short_to_decimal.icd9(
+        icd_expand_range.icd9(
+          icd_decimal_to_short.icd9(start), icd_decimal_to_short.icd9(end),
+          short_code = TRUE, real = real,
+          excludeAmbiguousStart = excludeAmbiguousStart,
+          excludeAmbiguousEnd = excludeAmbiguousEnd
+        )
+      )
     )
   )
 }
@@ -386,11 +390,20 @@ icd9_expand_range_decimal <- function(start, end, real = TRUE,
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
-expand_minor <- function(minor, is_e = FALSE) {
+
+icd_expand_minor <- function(minor, ...) {
+  UseMethod("icd_expand_minor")
+}
+
+icd_expand_minor.icd9 <- function(minor, is_e = FALSE) {
   # clang 3.6 with address sanitizer seems to fail if a number is passed instead
   # of string. It SHOULD fail with type error, and that might be an Rcpp
   # problem...
   assertString(minor)
   assertFlag(is_e)
-  .Call("icd9_expand_minorShim", PACKAGE = get_pkg_name(), minor, isE)
+  .Call("icd9_expand_minorShim", PACKAGE = get_pkg_name(), minor, isE = is_e)
+}
+
+icd9_expand_minor.icd10 <- function(x) {
+  stop("not implemented")
 }

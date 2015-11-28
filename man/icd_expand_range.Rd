@@ -108,8 +108,9 @@ Expand range of short_code-form ICD-9 codes
 "V80 " \%i9s\% " V810 "
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{expand_minor}},
-  \code{\link{icd_children}}, \code{\link{icd_condense}}
+Other ICD-9 ranges: \code{\link{icd_children}},
+  \code{\link{icd_condense}},
+  \code{\link{icd_expand_minor}}
 }
 \keyword{internal}
 

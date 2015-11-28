@@ -4,6 +4,7 @@
 \alias{icd9Condense}
 \alias{icd9CondenseDecimal}
 \alias{icd9CondenseShort}
+\alias{icd9_condense_short}
 \alias{icd_condense}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
@@ -15,17 +16,23 @@ icd9Condense(icd9, isShort = icd_guess_short(icd9), onlyReal = NULL,
 icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, warn = TRUE)
 
 icd9CondenseShort(icd9, onlyReal = NULL, warn = TRUE)
+
+icd9_condense_short(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE)
 }
 \arguments{
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
+\item{warn}{single logical value, if \code{TRUE}, give warnings when
+there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
+containing undefined codes.}
+
 \item{icd9}{is
 a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
-
-\item{isShort}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
 
 \item{onlyReal}{single logical value, if TRUE, will limit the search to those
 codes which appear in the master list, not just syntactically valid codes.
@@ -39,6 +46,10 @@ characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
+\item{keepFactorLevels}{single logical value, default \code{FALSE}. If
+\code{TRUE}, will reuse the factor levels from the input data for the
+output data. This only applies if a factor is given for the input codes.}
+
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
@@ -49,8 +60,8 @@ This can be thought of as the inverse operation to
   \code{icd9Children}.
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{expand_minor}},
-  \code{\link{icd_children}},
+Other ICD-9 ranges: \code{\link{icd_children}},
+  \code{\link{icd_expand_minor}},
   \code{\link{icd_expand_range}}
 }
 

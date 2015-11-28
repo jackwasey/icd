@@ -47,9 +47,9 @@ decimal form ICD-9 codes are not ambiguous if the leading zeroes
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
-  \code{\link{icd9LongToWide}},
   \code{\link{icd9PartsToShort}},
-  \code{\link{icd9WideToLong}}
+  \code{\link{icd_long_to_wide}},
+  \code{\link{icd_wide_to_long}}
 }
 \keyword{internal}
 \keyword{manip}

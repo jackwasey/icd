@@ -91,11 +91,10 @@ icd_is_valid.icd10 <- function(icd, short_code = icd_guess_short(icd)) {
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
-#' @import checkmate
 #' @export
 icd_is_valid.icd9 <- function(x, short_code) {
-  assert(checkFactor(x), checkCharacter(x))
-  assertFlag(short_code)
+  checkmate::assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
+  checkmate::assertFlag(short_code)
   if (short_code)
     icd9_is_valid_short(x)
   else
@@ -110,9 +109,6 @@ icd_is_valid.character <- function(x, short_code = icd_guess_short(x)) {
   ) 
 }
 
-#' @rdname icd_is_valid
-#' @description  check whether decimal format ICD-9 codes have a
-#'   valid structure.
 icd9_is_valid_decimal <- function(x) {
   assert(checkFactor(x), checkCharacter(x))
   if (length(x) == 0) return(logical())
@@ -122,9 +118,6 @@ icd9_is_valid_decimal <- function(x) {
     icd9_is_valid_decimal_e(x)
 }
 
-#' @rdname icd_is_valid
-#' @description check whether short_code format ICD-9 codes have a valid
-#'   structure
 icd9_is_valid_short <- function(x) {
 
   if (length(x) == 0) return(logical())

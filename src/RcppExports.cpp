@@ -1342,7 +1342,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::List(*icd9DecimalToPartsCpp)(const Rcpp::CharacterVector,const Rcpp::String)");
         signatures.insert("Rcpp::CharacterVector(*icd_short_to_decimal.icd9)(const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd9DecimalToShortOld)(const Rcpp::CharacterVector)");
-        signatures.insert("Rcpp::CharacterVector(*icd_decimal_to_short.icd9)(const Rcpp::CharacterVector)");
+        signatures.insert("Rcpp::CharacterVector(*icd9DecimalToShort)(const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd_get_major.icd9)(const Rcpp::CharacterVector,const bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9GetMajorShort)(const Rcpp::CharacterVector)");
         signatures.insert("std::vector<bool>(*icd9IsA)(const std::vector<std::string>&,const char*,bool)");
@@ -1391,7 +1391,7 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9DecimalToPartsCpp", (DL_FUNC)icd9_icd9DecimalToPartsCpp_try);
     R_RegisterCCallable("icd9", "icd9_icd_short_to_decimal.icd9", (DL_FUNC)icd9_icd9ShortToDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9DecimalToShortOld", (DL_FUNC)icd9_icd9DecimalToShortOld_try);
-    R_RegisterCCallable("icd9", "icd9_icd_decimal_to_short.icd9", (DL_FUNC)icd9_icd9DecimalToShort_try);
+    R_RegisterCCallable("icd9", "icd9_icd9DecimalToShort", (DL_FUNC)icd9_icd9DecimalToShort_try);
     R_RegisterCCallable("icd9", "icd9_icd_get_major.icd9", (DL_FUNC)icd9_icd9GetMajor_try);
     R_RegisterCCallable("icd9", "icd9_icd9GetMajorShort", (DL_FUNC)icd9_icd9GetMajorShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsA", (DL_FUNC)icd9_icd9IsA_try);

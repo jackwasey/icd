@@ -2,19 +2,7 @@
 % Please edit documentation in R/condense.R
 \name{icd9_condense_decimal}
 \alias{icd9_condense_decimal}
-\alias{icd9_condense_short}
 \usage{
 icd9_condense_decimal(x, real = NULL, warn = TRUE)
-
-icd9_condense_short(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE)
-}
-\arguments{
-\item{warn}{single logical value, if \code{TRUE}, give warnings when
-there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
-containing undefined codes.}
-
-\item{keepFactorLevels}{single logical value, default \code{FALSE}. If
-\code{TRUE}, will reuse the factor levels from the input data for the
-output data. This only applies if a factor is given for the input codes.}
 }
 

@@ -216,19 +216,20 @@ icd_long_to_wide <- function(x,
 #'   i.e. visit_name converted to factor. Default is to follow the current session
 #'   option.
 #' @examples
-#' longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
-#'     icd9 = c("441", "4424", "443", "441"))
-#' mat <- icd9ComorbidElix(longdf)
+#' longdf <- icd_long_data(
+#'              data.frame(visit_id = c("a", "b", "b", "c"),
+#'                         icd9 = icd9(c("441", "4424", "443", "441"))))
+#' mat <- icd_comorbid_elix(longdf)
 #' class(mat)
 #' typeof(mat)
 #' rownames(mat)
-#' df.out <- icd9ComorbidMatToDf(mat)
+#' df.out <- icd_comorbid_matrix_to_df(mat)
 #' stopifnot(is.data.frame(df.out))
 #' # output data frame has a factor for the visit_name column
 #' stopifnot(identical(rownames(mat), as.character(df.out$visit_name)))
 #' df.out[, 1:4]
 #' @export
-icd_comorbid_mat_to_df <- function(x, visit_name = "visit_name",
+icd_comorbid_mat_to_df <- function(x, visit_name = get_visit_name(x),
                                 stringsAsFactors = getOption("stringsAsFactors")) {
   checkmate::assertMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
   checkmate::assertString(visit_name)
@@ -248,12 +249,13 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_name",
 #'   i.e. visit_name converted to factor. Default is to follow the current session
 #'   option.
 #' @examples
-#' longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
-#'     icd9 = c("441", "4424", "443", "441"))
-#' cmbdf <- icd9ComorbidElix(longdf, return.df = TRUE)
+#' longdf <- icd_long_data(
+#'             data.frame(visit = c("a", "b", "b", "c"),
+#'                        icd9 = c("441", "4424", "443", "441")))
+#' cmbdf <- icd_comorbid_elix(longdf, return.df = TRUE)
 #' class(cmbdf)
 #' rownames(cmbdf)
-#' mat.out <- icd9ComorbidDfToMat(cmbdf)
+#' mat.out <- icd_comorbid_df_to_matrix(cmbdf)
 #' stopifnot(is.matrix(mat.out))
 #' mat.out[, 1:4]
 #' @export
@@ -285,15 +287,63 @@ icd9ComorbidDfToMat <- function(icd9df, visitId = get_visit_name(icd9df),
   icd_comorbid_df_to_mat(icd9df, visitId, stringsAsFactors)
 }
 
+#' Convert codes between short and decimal forms
+#'
+#' @param x ICD codes
+#' @export
+icd_short_to_decimal <- function(x) {
+  UseMethod("icd_short_to_decimal")
+}
+
+#' @rdname icd_short_to_decimal
+#' @export
+icd_decimal_to_short <- function(x) {
+  UseMethod("icd_decimal_to_short")
+}
+
+icd_decimal_to_parts <- function(x, empty_minor = "") {
+  UseMethod("icd_decimal_to_parts")
+}
+
+icd_short_to_parts <- function(x, empty_minor = "") {
+  UseMethod("icd_short_to_parts")
+}
+
+#' @rdname icd_short_to_decimal
+#' @export
+icd_short_to_decimal.icd9 <- function(x) {
+  .Call('icd9_icd9ShortToDecimal', PACKAGE = get_pkg_name(), x)
+}
+
 #' @rdname convert
 #' @keywords internal manip
-icd_short_to_parts <- function(x, minor_empty = "") {
+icd_short_to_parts.icd9 <- function(x, minor_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a shim here.
   .Call("icd9_icd9ShortToPartsCpp", PACKAGE = get_pkg_name(), x, minor_empty)
 }
 
 #' @rdname convert
 #' @keywords internal manip
-icd_decimal_to_parts <- function(x, minor_empty = "") {
+icd_decimal_to_parts.icd9 <- function(x, minor_empty = "") {
   .Call("icd9_icd9DecimalToPartsCpp", PACKAGE = get_pkg_name(), x, minor_empty)
 }
+
+icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
+  .Deprecated("icd_decimal_to_parts")
+  icd9DecimalToParts(icd9Decimal, minorEmpty)
+}
+
+#' @rdname icd_short_to_decimal
+#' @export
+icd9DecimalToShort <- function(icd9Short) {
+  .Deprecated("icd_decimal_to_short")
+  icd_decimal_to_short.icd9(icd9Short)
+}
+
+#' @rdname icd_short_to_decimal
+#' @export
+icd9ShortToDecimal <- function(icd9Short) {
+  .Deprecated("icd_short_to_decimal")
+  icd_short_to_decimal.icd9(icd9Short)
+}
+

@@ -5,8 +5,6 @@
 \alias{icd9Valid}
 \alias{icd9ValidDecimal}
 \alias{icd9ValidShort}
-\alias{icd9_is_valid_decimal}
-\alias{icd9_is_valid_short}
 \alias{icd_is_valid}
 \alias{icd_is_valid.icd10}
 \alias{icd_is_valid.icd10who}
@@ -18,10 +16,6 @@ icd_is_valid(icd, ...)
 \method{icd_is_valid}{icd10}(icd, short_code = icd_guess_short(icd))
 
 \method{icd_is_valid}{icd9}(x, short_code)
-
-icd9_is_valid_decimal(icd)
-
-icd9_is_valid_short(icd9Short)
 
 \method{icd_is_valid}{icd10who}(icd, strict = FALSE)
 
@@ -36,11 +30,6 @@ icd9ValidDecimal(icd9Decimal)
 \arguments{
 \item{icd}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
-
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
 
 \item{icd9}{is
 a character vector or factor of ICD-9 codes. If fewer than five characters
@@ -57,6 +46,11 @@ characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
+five characters is given in a code, then the digits are greedily assigned
+to hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
 \item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
 which falls before the decimal point, in decimal notation. (In 5 digit
 notation, the 'major' part is be the first three characters (with leading
@@ -69,12 +63,6 @@ logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 \description{
 This does not check whether the code coresponds to a real ICD-9-CM billing
 code, or parent grouping. For that, see \code{\link{icd9IsReal}}.
-
-check whether decimal format ICD-9 codes have a
-  valid structure.
-
-check whether short_code format ICD-9 codes have a valid
-  structure
 }
 \details{
 Factors are accepted, and since the validation is done with \code{grepl}

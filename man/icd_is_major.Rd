@@ -16,7 +16,7 @@ icd_is_major(icd)
 
 \method{icd_is_major}{icd10who}(icd)
 
-\method{icd_is_major}{icd9}(icd9)
+\method{icd_is_major}{icd9}(x)
 }
 \arguments{
 \item{icd}{character vector of ICD codes.}

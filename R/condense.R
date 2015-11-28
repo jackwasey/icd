@@ -21,7 +21,7 @@
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
-#' @template isShort
+#' @template short_code
 #' @template onlyReal
 #' @family ICD-9 ranges
 #' @export
@@ -71,7 +71,7 @@ icd9_condense_decimal <- function(x, real = NULL, warn = TRUE)
     icd9_condense_short(
       icd_decimal_to_short.icd9(x), real = real, warn = warn))
 
-#' @rdname icd9Condense
+#' @rdname icd_condense
 #' @template warn
 #' @param keepFactorLevels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the

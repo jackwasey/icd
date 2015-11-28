@@ -272,16 +272,12 @@ Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector x) {
 	return icd9PartsToDecimal(icd9ShortToPartsCpp(x, ""));
 }
 
-//' @rdname icd9ShortToDecimal
-//' @export
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9DecimalToShortOld(const Rcpp::CharacterVector x) {
 	return icd9PartsToShort(icd9DecimalToPartsCpp(x, ""));
 }
 
-//' @rdname convert
-//' @export
-// [[Rcpp::export(name = "icd_decimal_to_short.icd9")]]
+// [[Rcpp::export]]
 Rcpp::CharacterVector icd9DecimalToShort(
 		const Rcpp::CharacterVector x) {
 	Rcpp::CharacterVector out = clone(x); // clone instead of pushing back thousands of times

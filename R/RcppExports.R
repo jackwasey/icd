@@ -65,15 +65,11 @@ icd_short_to_decimal.icd9 <- function(x) {
     .Call('icd9_icd9ShortToDecimal', PACKAGE = 'icd9', x)
 }
 
-#' @rdname icd9ShortToDecimal
-#' @export
 icd9DecimalToShortOld <- function(x) {
     .Call('icd9_icd9DecimalToShortOld', PACKAGE = 'icd9', x)
 }
 
-#' @rdname convert
-#' @export
-icd_decimal_to_short.icd9 <- function(x) {
+icd9DecimalToShort <- function(x) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', x)
 }
 

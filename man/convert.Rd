@@ -2,13 +2,12 @@
 % Please edit documentation in R/RcppExports.R, R/convert.R
 \name{icd9PartsToShort}
 \alias{convert}
-\alias{icd9DecimalToParts}
 \alias{icd9DecimalToPartsCpp}
 \alias{icd9PartsToDecimal}
 \alias{icd9PartsToShort}
-\alias{icd9ShortToParts}
 \alias{icd9ShortToPartsCpp}
-\alias{icd_decimal_to_short.icd9}
+\alias{icd_decimal_to_parts.icd9}
+\alias{icd_short_to_parts.icd9}
 \title{Convert ICD9 codes between formats and structures.}
 \usage{
 icd9PartsToShort(parts)
@@ -19,11 +18,9 @@ icd9ShortToPartsCpp(icd9Short, minorEmpty)
 
 icd9DecimalToPartsCpp(icd9Decimal, minorEmpty)
 
-icd_decimal_to_short.icd9(x)
+\method{icd_short_to_parts}{icd9}(x, minor_empty = "")
 
-icd9ShortToParts(icd9Short, minorEmpty = "")
-
-icd9DecimalToParts(icd9Decimal, minorEmpty = "")
+\method{icd_decimal_to_parts}{icd9}(x, minor_empty = "")
 }
 \arguments{
 \item{parts}{data.frame with major and minor fields. This can be given
@@ -85,8 +82,8 @@ has a dedcimal point to delimit the top-level (henceforth \emph{major}) category
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
   \code{\link{icd9DropLeadingZeroes}},
-  \code{\link{icd9LongToWide}},
-  \code{\link{icd9WideToLong}}
+  \code{\link{icd_long_to_wide}},
+  \code{\link{icd_wide_to_long}}
 }
 \keyword{internal}
 \keyword{manip}

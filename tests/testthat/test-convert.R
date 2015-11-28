@@ -18,59 +18,59 @@
 context("icd9 type conversions")
 
 test_that("extract decimal parts - invalid or empty input", {
-  expect_equal(icd9DecimalToParts(character()), list(major = character(),
+  expect_equal(icd_decimal_to_parts.icd9(character()), list(major = character(),
                                                      minor = character()))
 
-  expect_equal( icd9DecimalToParts(""), list(major = NA_character_, minor = NA_character_) )
+  expect_equal( icd_decimal_to_parts.icd9(""), list(major = NA_character_, minor = NA_character_) )
 
   expect_equal(
-    icd9DecimalToParts("", minorEmpty = NA_character_),
+    icd_decimal_to_parts.icd9("", minorEmpty = NA_character_),
     list(major = NA_character_, minor = NA_character_)
   )
 })
 
 test_that("extract decimal parts - valid inputs", {
-  expect_equal(icd9DecimalToParts("0"), list(major = "000", minor = ""))
-  expect_equal(icd9DecimalToParts("000"), list(major = "000", minor = ""))
-  expect_equal(icd9DecimalToParts("V1.2"), list(major = "V01", minor = "2"))
-  expect_equal(icd9DecimalToParts("1.1"), list(major = "001", minor = "1"))
-  expect_equal(icd9DecimalToParts("001.1"), list(major = "001", minor = "1"))
-  expect_equal(icd9DecimalToParts("22.22"), list(major = "022", minor = "22"))
-  expect_equal(icd9DecimalToParts("022.22"), list(major = "022", minor = "22"))
-  expect_equal(icd9DecimalToParts("333.3"), list(major = "333", minor = "3"))
-  expect_equal(icd9DecimalToParts("444"), list(major = "444", minor = ""))
-  expect_equal(icd9DecimalToParts("444", minorEmpty = NA_character_),
+  expect_equal(icd_decimal_to_parts.icd9("0"), list(major = "000", minor = ""))
+  expect_equal(icd_decimal_to_parts.icd9("000"), list(major = "000", minor = ""))
+  expect_equal(icd_decimal_to_parts.icd9("V1.2"), list(major = "V01", minor = "2"))
+  expect_equal(icd_decimal_to_parts.icd9("1.1"), list(major = "001", minor = "1"))
+  expect_equal(icd_decimal_to_parts.icd9("001.1"), list(major = "001", minor = "1"))
+  expect_equal(icd_decimal_to_parts.icd9("22.22"), list(major = "022", minor = "22"))
+  expect_equal(icd_decimal_to_parts.icd9("022.22"), list(major = "022", minor = "22"))
+  expect_equal(icd_decimal_to_parts.icd9("333.3"), list(major = "333", minor = "3"))
+  expect_equal(icd_decimal_to_parts.icd9("444"), list(major = "444", minor = ""))
+  expect_equal(icd_decimal_to_parts.icd9("444", minorEmpty = NA_character_),
                list(major = "444", minor=NA_character_))
-  expect_equal(icd9DecimalToParts("444", minorEmpty = ""),
+  expect_equal(icd_decimal_to_parts.icd9("444", minorEmpty = ""),
                list(major = "444", minor = ""))
-  expect_equal(icd9DecimalToParts(c("9.9", "88.88", "777.6")),
+  expect_equal(icd_decimal_to_parts.icd9(c("9.9", "88.88", "777.6")),
                list(
                  major = c("009", "088", "777"),
                  minor = c("9", "88", "6")
                )
   )
 
-  expect_equal(icd9DecimalToParts(c("009.9", "088.88", "777.6")),
+  expect_equal(icd_decimal_to_parts.icd9(c("009.9", "088.88", "777.6")),
                list(
                  major = c("009", "088", "777"),
                  minor = c("9", "88", "6")
                )
   )
-  expect_equal(icd9DecimalToParts(c("9.9", "88", "777.6"), minorEmpty = NA_character_),
+  expect_equal(icd_decimal_to_parts.icd9(c("9.9", "88", "777.6"), minorEmpty = NA_character_),
                list(
                  major = c("009", "088", "777"),
                  minor = c("9", NA_character_, "6")
                )
   )
 
-  expect_equal(icd9DecimalToParts(c("9.9", "88", "777.6"), minorEmpty = ""),
+  expect_equal(icd_decimal_to_parts.icd9(c("9.9", "88", "777.6"), minorEmpty = ""),
                list(
                  major = c("009", "088", "777"),
                  minor = c("9", "", "6")
                )
   )
 
-  expect_equal(icd9DecimalToParts(c("001", "", "991.23"), minorEmpty = NA_character_),
+  expect_equal(icd_decimal_to_parts.icd9(c("001", "", "991.23"), minorEmpty = NA_character_),
                list(
                  major = c("001", NA_character_, "991"),
                  minor = c(NA_character_, NA_character_, "23")
@@ -79,45 +79,45 @@ test_that("extract decimal parts - valid inputs", {
 })
 
 test_that("icd9 decimal to short form, bad codes", {
-  expect_equal(icd9DecimalToShort(character()), character())
+  expect_equal(icd_decimal_to_short.icd9(character()), character())
 })
 
 test_that("icd9 decimal to short form", {
-  expect_equal(icd9DecimalToShort("1"), "001")
-  expect_equal(icd9DecimalToShort("1.1"), "0011")
-  expect_equal(icd9DecimalToShort("1.23"), "00123")
-  expect_equal(icd9DecimalToShort("81"), "081")
-  expect_equal(icd9DecimalToShort("81.1"), "0811")
-  expect_equal(icd9DecimalToShort("81.23"), "08123")
-  expect_equal(icd9DecimalToShort("991"), "991")
-  expect_equal(icd9DecimalToShort("991.1"), "9911")
-  expect_equal(icd9DecimalToShort("991.23"), "99123")
+  expect_equal(icd_decimal_to_short.icd9("1"), "001")
+  expect_equal(icd_decimal_to_short.icd9("1.1"), "0011")
+  expect_equal(icd_decimal_to_short.icd9("1.23"), "00123")
+  expect_equal(icd_decimal_to_short.icd9("81"), "081")
+  expect_equal(icd_decimal_to_short.icd9("81.1"), "0811")
+  expect_equal(icd_decimal_to_short.icd9("81.23"), "08123")
+  expect_equal(icd_decimal_to_short.icd9("991"), "991")
+  expect_equal(icd_decimal_to_short.icd9("991.1"), "9911")
+  expect_equal(icd_decimal_to_short.icd9("991.23"), "99123")
 
-  expect_equal(icd9DecimalToShort(c("1", "991.23")), c("001", "99123"))
-  expect_equal(icd9DecimalToShort(c("1.", "991.23")), c("001", "99123"))
-  expect_equal(icd9DecimalToShort(c("1", NA, "991.23")), c("001", NA, "99123"))
+  expect_equal(icd_decimal_to_short.icd9(c("1", "991.23")), c("001", "99123"))
+  expect_equal(icd_decimal_to_short.icd9(c("1.", "991.23")), c("001", "99123"))
+  expect_equal(icd_decimal_to_short.icd9(c("1", NA, "991.23")), c("001", NA, "99123"))
 
 })
 
 test_that("short to decimal, numbers", {
   # if there is anything after decimal, zeroes must be there!
-  expect_equal(icd9DecimalToShort("1.0"), "0010")
-  expect_equal(icd9DecimalToShort("1"), "001")
-  expect_equal(icd9DecimalToShort("22"), "022")
-  expect_equal(icd9DecimalToShort("345"), "345")
-  expect_equal(icd9ShortToDecimal("013"), "013")
-  expect_equal(icd9ShortToDecimal("V013"), "V01.3")
+  expect_equal(icd_decimal_to_short.icd9("1.0"), "0010")
+  expect_equal(icd_decimal_to_short.icd9("1"), "001")
+  expect_equal(icd_decimal_to_short.icd9("22"), "022")
+  expect_equal(icd_decimal_to_short.icd9("345"), "345")
+  expect_equal(icd_short_to_decimal.icd9("013"), "013")
+  expect_equal(icd_short_to_decimal.icd9("V013"), "V01.3")
 })
 
 test_that("short to decimal bad input", {
-  expect_equal(icd9ShortToDecimal(character()), character())
-  expect_equal(icd9ShortToDecimal("valsalva"), NA_character_)
-  expect_equal(icd9ShortToDecimal("123456"), NA_character_)
-  expect_equal(icd9ShortToDecimal(""), NA_character_)
+  expect_equal(icd_short_to_decimal.icd9(character()), character())
+  expect_equal(icd_short_to_decimal.icd9("valsalva"), NA_character_)
+  expect_equal(icd_short_to_decimal.icd9("123456"), NA_character_)
+  expect_equal(icd_short_to_decimal.icd9(""), NA_character_)
   # NA is not character type, so expect error.
-  expect_equal(icd9ShortToDecimal(NA), NA_character_)
+  expect_equal(icd_short_to_decimal.icd9(NA), NA_character_)
   # NA is not character type, so expect error.
-  expect_equal(icd9ShortToDecimal(c("000000", "0ab1bc2d")),
+  expect_equal(icd_short_to_decimal.icd9(c("000000", "0ab1bc2d")),
                c(NA_character_, NA_character_))
 })
 
@@ -139,7 +139,7 @@ test_that("running short to decimal conversion before and after expansion
             icd9List <- ahrqComorbid #todo SUBSET OR EXTRA MAPPINGS?
             for (i in names(icd9List)) {
               expect_equal(
-                icd9DecimalToShort(icd9ShortToDecimal(icd9List[[i]])),
+                icd_decimal_to_short.icd9(icd_short_to_decimal.icd9(icd9List[[i]])),
                 icd9AddLeadingZeroesShort(icd9List[[i]]),
                 info = paste("in loop:", i)
               )
@@ -149,19 +149,19 @@ test_that("running short to decimal conversion before and after expansion
             set.seed(1441)
             randomDecimalIcd9pad <- paste(
               sprintf("%03d", round(stats::runif(min = 1, max = 199, n = n))),
-              sample(icd9ExpandMinor("", isE = FALSE), replace = TRUE, size = n)[-1],
+              sample(icd_expand_minor.icd9("", is_e = FALSE), replace = TRUE, size = n)[-1],
               sep = "."
             )
             set.seed(1441)
             randomDecimalIcd9 <- paste(
               sprintf("%d", round(stats::runif(min = 1, max = 199, n = n))),
-              sample(icd9ExpandMinor("", isE = FALSE), replace = TRUE, size = n)[-1],
+              sample(icd_expand_minor.icd9("", is_e = FALSE), replace = TRUE, size = n)[-1],
               sep = "."
             )
             randomDecimalIcd9pad <- sub(pattern = "\\.$", replacement = "",
                                         randomDecimalIcd9pad)
             expect_equal(
-              icd9ShortToDecimal(icd9DecimalToShort(randomDecimalIcd9)),
+              icd_short_to_decimal.icd9(icd_decimal_to_short.icd9(randomDecimalIcd9)),
               randomDecimalIcd9pad
             )
             # test without decimal, too... starting with non-zero-spaced shorts
@@ -169,12 +169,12 @@ test_that("running short to decimal conversion before and after expansion
             rd2 <- as.character(round(stats::runif(min = 1, max = 999, n = n)))
             set.seed(1441)
             rd2pad <- sprintf("%03d", round(stats::runif(min = 1, max = 999, n = n)))
-            expect_equal(icd9ShortToDecimal(icd9DecimalToShort(rd2)), rd2pad)
-            expect_equal(icd9DecimalToShort(icd9ShortToDecimal(rd2)), rd2pad)
+            expect_equal(icd_short_to_decimal.icd9(icd_decimal_to_short.icd9(rd2)), rd2pad)
+            expect_equal(icd_decimal_to_short.icd9(icd_short_to_decimal.icd9(rd2)), rd2pad)
 
-            expect_equal(icd9ShortToDecimal(icd9DecimalToShort(rd2pad)), rd2pad)
+            expect_equal(icd_short_to_decimal.icd9(icd_decimal_to_short.icd9(rd2pad)), rd2pad)
 
-            expect_equal(icd9DecimalToShort("123."), "123")
+            expect_equal(icd_decimal_to_short.icd9("123."), "123")
           })
 
 test_that("parts to decimal", {
@@ -272,8 +272,8 @@ test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity 
 # RcppExports is not tested. Also, compare slower functions for identical
 # results as a regression test.
 test_that("code routes through RcppExports.R and slower versions", {
-  expect_equal(icd9ShortToParts("1001"),
+  expect_equal(icd_short_to_parts.icd9("1001"),
                data.frame(major = "100", minor = "1", stringsAsFactors = FALSE))
-  expect_equal(icd9ShortToParts(c("99999", "0011")),
+  expect_equal(icd_short_to_parts.icd9(c("99999", "0011")),
                data.frame(major = c("999", "001"), minor = c("99", "1"), stringsAsFactors = FALSE))
 })
