@@ -73,17 +73,15 @@ icd9DecimalToShort <- function(x) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', x)
 }
 
-#' @title Get major (three-digit) part of ICD-9 codes
-#' @description This is reasonably fast, but calculates all the minors, then throws away the result.
-#' @template icd9-any
-#' @template isShort
+#' @describeIn icd_get_major Get major part of ICD-9 code, i.e. first three
+#' digits of numeric or V code, or first four digits of E code. This is the part
+#' before the decimal, when a decimal point is used.
 #' @keywords internal manip
-#' @export
 icd_get_major.icd9 <- function(x, short_code) {
     .Call('icd9_icd9GetMajor', PACKAGE = 'icd9', x, short_code)
 }
 
-#' @rdname icd9GetMajor
+#' @rdname icd_get_major
 #' @keywords internal manip
 icd9GetMajorShort <- function(icd9Short) {
     .Call('icd9_icd9GetMajorShort', PACKAGE = 'icd9', icd9Short)

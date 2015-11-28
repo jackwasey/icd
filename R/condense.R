@@ -64,8 +64,8 @@ icd9CondenseShort <- function(icd9, onlyReal = NULL, warn = TRUE) {
 }
 
 
-#' @rdname icd9Condense
-#' @export
+#' @rdname icd_condense
+#' @keywords internal manip
 icd9_condense_decimal <- function(x, real = NULL, warn = TRUE)
   icd_short_to_decimal.icd9(
     icd9_condense_short(

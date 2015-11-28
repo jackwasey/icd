@@ -319,13 +319,11 @@ Rcpp::CharacterVector icd9DecimalToShort(
 	return out;
 }
 
-//' @title Get major (three-digit) part of ICD-9 codes
-//' @description This is reasonably fast, but calculates all the minors, then throws away the result.
-//' @template icd9-any
-//' @template isShort
+//' @describeIn icd_get_major Get major part of ICD-9 code, i.e. first three
+//' digits of numeric or V code, or first four digits of E code. This is the part
+//' before the decimal, when a decimal point is used.
 //' @keywords internal manip
-//' @export
-// [[Rcpp::export(name="icd_get_major.icd9")]]
+//[[Rcpp::export(name="icd_get_major.icd9")]]
 Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool short_code) {
 	if (short_code) {
 		// am I casting (or just compiler/syntax checker hinting?) SEXP may be
@@ -340,7 +338,7 @@ Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool sho
 	return Rcpp::as<Rcpp::CharacterVector>(majors);
 }
 
-//' @rdname icd9GetMajor
+//' @rdname icd_get_major
 //' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9GetMajorShort(const Rcpp::CharacterVector icd9Short) {

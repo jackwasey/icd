@@ -106,7 +106,7 @@ icd_is_valid.character <- function(x, short_code = icd_guess_short(x)) {
   switch(ver,
     "icd9" = icd_is_valid.icd9(x, short_code),
     "icd10" = icd_is_valid.icd10(x, short_code)
-  ) 
+  )
 }
 
 icd9_is_valid_decimal <- function(x) {
@@ -255,16 +255,19 @@ icd_get_invalid <- function(x, short_code = icd_guess_short(icd9)) {
   x[!icd_is_valid(x, short_code = short_code)]
 }
 
+#' Returns major component of code (before decimal)
+#' @keywords internal
+icd_get_major <- function(x) {
+  UseMethod("icd_get_major")
+}
+
+
 #' check whether a code is major
 #' @description move to C++ or own R file:
 #' @param icd character vector of ICD codes.
 #' @keywords internal
 icd_is_major <- function(icd) {
   UseMethod("icd_is_major")
-}
-
-icd_get_major <- function(x) {
-  UseMethod("icd_get_major")
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 major

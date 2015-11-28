@@ -4,6 +4,7 @@
 \alias{icd9Condense}
 \alias{icd9CondenseDecimal}
 \alias{icd9CondenseShort}
+\alias{icd9_condense_decimal}
 \alias{icd9_condense_short}
 \alias{icd_condense}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
@@ -16,6 +17,8 @@ icd9Condense(icd9, isShort = icd_guess_short(icd9), onlyReal = NULL,
 icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, warn = TRUE)
 
 icd9CondenseShort(icd9, onlyReal = NULL, warn = TRUE)
+
+icd9_condense_decimal(x, real = NULL, warn = TRUE)
 
 icd9_condense_short(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE)
 }
@@ -64,4 +67,6 @@ Other ICD-9 ranges: \code{\link{icd_children}},
   \code{\link{icd_expand_minor}},
   \code{\link{icd_expand_range}}
 }
+\keyword{internal}
+\keyword{manip}
 
