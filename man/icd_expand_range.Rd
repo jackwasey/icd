@@ -56,7 +56,7 @@ five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
-\item{isShort}{single logical value which determines whether the ICD-9 code
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
@@ -76,6 +76,10 @@ V1009} would by default (\code{FALSE}) include \code{V10} even though
 \item{excludeAmbiguousEnd}{single logical, same as
 \code{excludeAmbiguousStart} but affects codes at the end of the range.
 E.g. 99.99 to 101.01 would by default exclude 101 and 101.0}
+
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 }
 \description{
 this is cumbersome code, covering a whole load of edge cases

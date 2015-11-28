@@ -25,7 +25,7 @@
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
-#' @template isShort
+#' @template short_code
 #' @param onlyBillable single logical value (default \code{FALSE}), if
 #'   \code{TRUE} will divert to test whether the codes are in the billable list
 #'   instead of seeing if they are any leaf or branch node.
@@ -53,7 +53,7 @@ icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
 icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   assert(checkFactor(icd9Decimal), checkCharacter(icd9Decimal))
   assertFlag(onlyBillable)
-  if (onlyBillable) 
+  if (onlyBillable)
     icd9IsBillableDecimal(icd9Decimal)
   else
     icd9IsRealShort(icd9DecimalToShort(icd9Decimal))
@@ -63,7 +63,7 @@ icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
 #'   (billable), specifying whether codes are all short-form or all decimal-form
 #' @export
 icd9GetReal <- function(icd9, isShort = icd_guess_short(icd9), onlyBillable = FALSE) {
-  if (isShort) 
+  if (isShort)
     icd9GetRealShort(icd9)
   else
     icd9GetRealDecimal(icd9)
@@ -87,7 +87,7 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE)
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
-#' @template isShort
+#' @template short_code
 #' @param invert single logical value, if \code{TRUE}, then the non-billable
 #'   codes are returned. For functions with logical result, just negate with
 #'   \code{!}. Default is \code{FALSE}.

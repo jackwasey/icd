@@ -31,13 +31,17 @@ icd9ValidDecimal(icd9Decimal)
 \item{icd}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
 
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
 \item{icd9}{is
 a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{single logical value which determines whether the ICD-9 code
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 

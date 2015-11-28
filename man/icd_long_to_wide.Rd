@@ -6,7 +6,7 @@
 \title{convert ICD data from long to wide format}
 \usage{
 icd_long_to_wide(x, visit_name = get_visit_name(x),
-  icd_name = get_icd_name(x), prefix = "icd", min.width = 0,
+  icd_name = get_icd_name(x), prefix = "icd_", min.width = 0,
   aggregate = TRUE, return_df = FALSE)
 
 icd9LongToWide(icd9df, visitId = NULL, icd9Field = NULL, prefix = "icd_",

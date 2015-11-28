@@ -5,12 +5,12 @@
 \alias{icd_wide_to_long}
 \title{convert ICD data from wide to long format}
 \usage{
-icd_wide_to_long(x, visit_name = NULL, icd_labels = NULL,
-  icd_name = "icdCode", icd_regex = c("icd", "diag", "dx_", "dx"),
-  verbose = FALSE)
+icd_wide_to_long(x, visit_name = get_visit_name(x), icd_labels = NULL,
+  icd_name = "icdCode", icd_regex = c("icd", "diag", "dx_", "dx"))
 
-icd9WideToLong(x, visitId = NULL, icdLabels = NULL, icdName = "icdCode",
-  icdRegex = c("icd", "diag", "dx_", "dx"), verbose = FALSE)
+icd9WideToLong(x, visitId = get_visit_name(x), icdLabels = NULL,
+  icdName = "icdCode", icdRegex = c("icd", "diag", "dx_", "dx"),
+  verbose = FALSE)
 }
 \arguments{
 \item{x}{\code{data.frame} in wide format, i.e. one row per patient, and
@@ -27,8 +27,6 @@ many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visitId}
 was not specified, then the first column of the data frame is used.}
 
-\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
-
 \item{visitId}{Deprecated. Use \code{visit_name}}
 
 \item{icdLabels}{vector of column names in which codes are found. If NULL,
@@ -39,6 +37,8 @@ the ICD codes, defaults to "icdCode"}
 
 \item{icdRegex}{vector of character strings containg a regex to identify ICD-9 diagnosis
 columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}}
+
+\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \value{
 data frame with visit_name column named the same as input, and a column

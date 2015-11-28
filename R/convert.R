@@ -39,7 +39,7 @@
 #'   instead of major and minor vectors
 #' @param minorEmpty vector of length one, to be used in place of
 #' minor part of zero. Defaults to ""
-#' @template isShort
+#' @template short_code
 #' @return Character vector or list. Deliberately returns zero-padded major, because
 #'   otherwise we are creating ambiguous codes (even if we know what we mean)
 #' @import Rcpp

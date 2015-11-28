@@ -179,8 +179,8 @@ Rcpp::CharacterVector icd9ChildrenCpp(Rcpp::CharacterVector icd9, bool isShort,
 //'   resulting vector.
 //' @templateVar icd9AnyName "icd9,icd9Reference"
 //' @template icd9-any
-//' @template isShort
-//' @param isShortReference logical, see argument \code{isShort}
+//' @template short_code
+//' @param isShortReference logical, see argument \code{short_code}
 //' @return logical vector
 //' @keywords internal
 // [[Rcpp::export]]

@@ -61,3 +61,12 @@ test_that("constructing wide or long format for non-data frame gives error", {
   expect_error(icd_wide_data(letters))
 })
 
+test_that("subsetting data frame works", {
+  expect_equal(icd9::vermont_dx[1, 6], "27801")
+  expect_equal(icd9::vermont_dx[[1, 6]], "27801")
+  expect_is(icd9::vermont_dx[1, 6], "icd9")
+  expect_is(icd9::vermont_dx[[1, 6]], "icd9")
+  # columns
+  expect_is(icd9::vermont_dx[6], "icd9")
+  expect_is(icd9::vermont_dx[[6]], "icd9")
+})
