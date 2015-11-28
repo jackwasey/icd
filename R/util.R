@@ -347,7 +347,7 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
-#' @template isShort
+#' @template short_code
 #' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 #' @keywords manip
 #' @export

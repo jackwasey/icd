@@ -39,7 +39,7 @@
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
 #' @template onlyReal
-#' @template isShort
+#' @template short_code
 #' @param excludeAmbiguousStart single logical value, if \code{TRUE} the range
 #'   returned will not include codes which are explicitly listed in the range,
 #'   but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%

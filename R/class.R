@@ -136,13 +136,41 @@ icd10who <- function(x) {
   x
 }
 
+#' If only one ICD code type is defined in columns in a matrix or data.frame,
+#' then update the class of the data frame to relfect that type.
+#' @keywords internal
+update_class_from_columns <- function(x) {
+  i9 <- any(vapply(x, inherits, "icd9", FUN.VALUE = logical(1)))
+  i9cm <- any(vapply(x, inherits, "icd9cm", FUN.VALUE = logical(1)))
+  i10 <- any(vapply(x, inherits, "icd10", FUN.VALUE = logical(1)))
+  i10cm <- any(vapply(x, inherits, "icd10cm", FUN.VALUE = logical(1)))
+  i10who <- any(vapply(x, inherits, "icd10who", FUN.VALUE = logical(1)))
+  if (sum(i9 || i9cm, i10 || i10cm, i10 || i10who) == 1) {
+    if (i9 && "icd9" %nin% class(x))
+      class(x) <- append(class(x), "icd9", 0)
+    if (i9cm && "icdcm" %nin% class(x))
+      class(x) <- append(class(x), c("icd9cm", "icd9"), 0)
+    if (i10 && "icd10" %nin% class(x))
+      class(x) <- append(class(x), "icd10", 0)
+    if (i10cm && "icd10cm" %nin% class(x))
+      class(x) <- append(class(x), c("icd10cm", "icd10"), 0)
+    if (i10who && "icd10who" %nin% class(x))
+      class(x) <- append(class(x), c("icd10who", "icd10"), 0)
+  }
+  x
+}
+
 #' @rdname set_icd_class
 #' @export
 icd_long_data <- function(x) {
   if (!is.data.frame(x) && !is.matrix(x))
     stop("Long or Wide structure only makes sense in a matrix or data frame")
+  # if columns are exclusively either ICD-9 or ICD-10 then this should be type
+  # of the returned structure, too.
+  x <- update_class_from_columns(x)
+
   if (inherits(x, "icd_long_data")) return(x)
-  class(x) <- append(class(x), "icd_long_data")
+  class(x) <- append(class(x), "icd_long_data", 0)
   x
 }
 
@@ -151,8 +179,10 @@ icd_long_data <- function(x) {
 icd_wide_data <- function(x) {
   if (!is.data.frame(x) && !is.matrix(x))
     stop("Long or Wide structure only makes sense in a matrix or data frame")
-  if (inherits(x, "icd_wide_data")) return(x)
-  class(x) <- append(class(x), "icd_wide_data")
+  x <- update_class_from_columns(x)
+  if (inherits(x, "icd_wide_data"))
+    return(x)
+  class(x) <- append(class(x), "icd_wide_data", 0)
   x
 }
 
@@ -233,7 +263,7 @@ c.icd9 <- function(...) {
   if (any(is.icd10(unlist(args))))
     stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
   #if (!all(is.icd9(unlist(args)))) # this breaks icd9_generate_map
-    # warning("Combine ICD-9 codes with codes of unknown type")
+  # warning("Combine ICD-9 codes with codes of unknown type")
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
@@ -283,22 +313,37 @@ c.icd10who <- function(...) {
 #'   in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
 #'   subsetting operation. This would simplify the class system.
 #' @export
-`[.icd9` <- function(x, ..., drop = TRUE) {
+`[.icd9` <- function(x, ...) {
   cl <- class(x)
   class(x) <- cl[cl != "icd9"]
-  out <- NextMethod("[")
-  class(out) <- cl
-  out
+  x <- NextMethod()  #NextMethod("[")
+  class(x) <- cl
+  x
 }
+
+# `[[.icd9test` <- function(x, ...) {
+#   #structure(NextMethod(), class = class(x))
+#   y <- NextMethod()
+#   y
+# }
 
 #' @rdname subset_icd
 #' @export
-`[[.icd9` <- function(x, ..., exact = TRUE) {
+`[[.icd9` <- function(x, ...) {
   cl <- class(x)
   class(x) <- cl[cl != "icd9"]
-  out <- NextMethod("[[")
-  class(out) <- cl
-  out
+  # I'm unclear why this is so complicated, but if I don't do this, then it
+  # recursively calls this function. It might be that I can avoid this with
+  # better use of NextMethod.
+  if (inherits(x, "data.frame")) {
+    # [[.data.frame never returns a data frame itself, and seems to preserve the
+    # underlying class
+    y <- `[[.data.frame`(x, ...)
+    return(y)
+  }
+  NextMethod(object = x)  #NextMethod("[[")
+  class(x) <- cl
+  x
 }
 
 #' @rdname subset_icd
@@ -316,9 +361,16 @@ c.icd10who <- function(...) {
 `[[.icd10` <- function(x, ..., exact = TRUE) {
   cl <- class(x)
   class(x) <- cl[cl != "icd9"]
-  out <- NextMethod("[[")
-  class(out) <- cl
-  out
+  if (inherits(x, "data.frame")) {
+    # [[.data.frame never returns a data frame itself, and seems to preserve the
+    # underlying class
+    y <- `[[.data.frame`(x, ...)
+    return(y)
+  }
+  #out <- NextMethod("[[")
+  x <- NextMethod(object = x)
+  class(x) <- cl
+  x
 }
 
 #' test ICD-related classes
@@ -339,11 +391,11 @@ is.icd9 <- function(x, strict = FALSE)
 #' @details TODO: could warn or fix if something is icd10cm or icd10who but not icd10
 #' @export
 is.icd10 <- function(x, strict = FALSE)
-if (strict) {
-  inherits(x, "icd10")
-} else {
-  inherits(x, c("icd10", "icd10cm", "icd10who"))
-}
+  if (strict) {
+    inherits(x, "icd10")
+  } else {
+    inherits(x, c("icd10", "icd10cm", "icd10who"))
+  }
 
 #' @rdname is.icd9
 #' @export

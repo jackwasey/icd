@@ -19,9 +19,9 @@ context("comorbidity calculations")
 
 test_that("ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
-            res <- icd_comorbid_ahrq.icd9(ahrqTestDat, isShort = TRUE,
-                                    abbrevNames = FALSE,
-                                    applyHierarchy = TRUE, return.df = TRUE)
+            res <- icd_comorbid_ahrq.icd9(ahrqTestDat, short_code = TRUE,
+                                    abbrev_names = FALSE,
+                                    apply_hierarchy = TRUE, return_df = TRUE)
             expect_equal(dim(res), c(1, 30))
             expect_true(setequal(c("visitId", ahrqComorbidNames), names(res)))
             # should not have dm and dmcx, etc

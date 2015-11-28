@@ -37,6 +37,10 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
 \item{onlyReal}{single logical value, if TRUE, will limit the search to those
 codes which appear in the master list, not just syntactically valid codes.
 Since nearly valid, out-dated or new codes may be missed, not limiting to

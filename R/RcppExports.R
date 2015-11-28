@@ -164,8 +164,8 @@ icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
 #'   resulting vector.
 #' @templateVar icd9AnyName "icd9,icd9Reference"
 #' @template icd9-any
-#' @template isShort
-#' @param isShortReference logical, see argument \code{isShort}
+#' @template short_code
+#' @param isShortReference logical, see argument \code{short_code}
 #' @return logical vector
 #' @keywords internal
 icd_in_reference_code <- function(icd, icd_reference, short_code, short_reference = TRUE) {

@@ -40,7 +40,7 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{single logical value which determines whether the ICD-9 code
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
@@ -62,6 +62,10 @@ becomes "010", not "0010"}
 \item{invert}{single logical value, if \code{TRUE}, then the non-billable
 codes are returned. For functions with logical result, just negate with
 \code{!}. Default is \code{FALSE}.}
+
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 }
 \value{
 logical vector of same length as input

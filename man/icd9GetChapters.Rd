@@ -18,6 +18,10 @@ provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
+
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 }
 \description{
 This runs quite slowly. Used too rarely to be worth optimizing

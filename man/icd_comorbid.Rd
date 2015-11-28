@@ -140,6 +140,10 @@ which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
 
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 to \code{icd9ComorbidAhrq}}

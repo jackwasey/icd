@@ -30,6 +30,10 @@ is guessed from the input data.}
 \item{icd9df}{Deprecated. Use \code{icd_df}}
 
 \item{icd9Field}{Deprecated. Use \code{icd_name}}
+
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 }
 \description{
 Filters a data.frame of patients for valid or invalid ICD-9 codes

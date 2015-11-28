@@ -224,7 +224,7 @@ icd_is_valid_map <- function(map, short_code) {
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
-#' @template isShort
+#' @template short_code
 #' @keywords manip
 #' @family ICD-9 validation
 #' @export
@@ -364,7 +364,7 @@ icd_is_valid.icd10who <- function(icd, strict = FALSE) {
 
 #' @rdname icd_is_valid_map
 #' @template mapping-icd9
-#' @template isShort
+#' @template short_code
 #' @export
 icd9ValidMapping <- function(icd9Mapping, isShort) {
   .Deprecated("icd_is_valid_map")
@@ -406,7 +406,7 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
 }
 
 #' @rdname icd_is_valid
-#' @template isShort
+#' @template short_code
 #' @export
 icd9Valid <- function(icd9, isShort) {
   .Deprecated("icd_is_valid")

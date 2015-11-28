@@ -80,13 +80,18 @@ testTwenty <- structure(
   class = "data.frame")
 
 # first and last item from each comorbidity:
-icd9fl <- unlist(unname(c(lapply(icd9::ahrqComorbid, head, n = 1),
-                          lapply(icd9::ahrqComorbid, tail, n = 1))))
+icd9fl <- c(lapply(icd9::ahrqComorbid, head, n = 1),
+            lapply(icd9::ahrqComorbid, tail, n = 1)) %>%
+  unname %>%
+  unlist %>%
+  icd9
+
 ahrqTestDat <- data.frame(
   visitId = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,
   stringsAsFactors = FALSE
-)
+) %>% icd_long_data
+
 icd9fl <- unlist(unname(c(lapply(icd9::elixComorbid, head, n = 1),
                           lapply(icd9::elixComorbid, tail, n = 1))))
 elixTestDat <- data.frame(
@@ -119,7 +124,7 @@ one_of_each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
 
 # two items per map, two codes per item, two codes for two visits
 twoPts <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
-               icd9 = c("040", "000", "100", "000"),
-               stringsAsFactors = FALSE)
+                     icd9 = c("040", "000", "100", "000"),
+                     stringsAsFactors = FALSE)
 twoMap <- list("malady" = c("100", "2000"),
                "ailment" = c("003", "040"))

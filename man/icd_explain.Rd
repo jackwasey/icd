@@ -72,6 +72,10 @@ becomes "010", not "0010"}
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
+
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD9 code, name
