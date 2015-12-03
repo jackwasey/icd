@@ -317,7 +317,10 @@ c.icd10who <- function(...) {
   cl <- class(x)
   class(x) <- cl[cl != "icd9"]
   x <- NextMethod()  #NextMethod("[")
-  class(x) <- cl
+  if (inherits(x, "data.frame"))
+    class(x) <- cl
+  else
+    class(x) <- cl[cl %nin% c("data.frame", icd_data_classes)]
   x
 }
 
@@ -335,11 +338,14 @@ c.icd10who <- function(...) {
   # I'm unclear why this is so complicated, but if I don't do this, then it
   # recursively calls this function. It might be that I can avoid this with
   # better use of NextMethod.
+  y <- NextMethod()
   if (inherits(x, "data.frame")) {
     # [[.data.frame never returns a data frame itself, and seems to preserve the
     # underlying class
-    y <- `[[.data.frame`(x, ...)
-    return(y)
+    #y <- `[[.data.frame`(x, ...)
+    y
+  } else {
+
   }
   NextMethod(object = x)  #NextMethod("[[")
   class(x) <- cl
