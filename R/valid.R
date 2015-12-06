@@ -93,7 +93,12 @@ icd_is_valid.icd10 <- function(icd, short_code = icd_guess_short(icd)) {
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
 #' @export
 icd_is_valid.icd9 <- function(x, short_code) {
-  checkmate::assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
+  checkmate::assert(
+    checkmate::checkFactor(x),
+    checkmate::checkCharacter(x),
+    checkmate::checkClass(x, c("icd9")),
+    checkmate::checkClass(x, c("icd9cm"))
+  )
   checkmate::assertFlag(short_code)
   if (short_code)
     icd9_is_valid_short(x)
@@ -104,8 +109,8 @@ icd_is_valid.icd9 <- function(x, short_code) {
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x)) {
   ver <- icd_guess_version(x)
   switch(ver,
-    "icd9" = icd_is_valid.icd9(x, short_code),
-    "icd10" = icd_is_valid.icd10(x, short_code)
+         "icd9" = icd_is_valid.icd9(x, short_code),
+         "icd10" = icd_is_valid.icd10(x, short_code)
   )
 }
 
@@ -119,9 +124,14 @@ icd9_is_valid_decimal <- function(x) {
 }
 
 icd9_is_valid_short <- function(x) {
-
+  # if input doesn't satisfy these, then it is not just invalid, but deserves an error:
+  checkmate::assert(
+    checkmate::checkFactor(x),
+    checkmate::checkCharacter(x),
+    checkmate::checkClass(x, c("icd9")),
+    checkmate::checkClass(x, c("icd9cm"))
+  )
   if (length(x) == 0) return(logical())
-  assert(checkFactor(x), checkCharacter(x))
 
   # as explained in details, a numeric short_code ID has different validity
   # requirements than a string because of leading zeroes.
@@ -207,7 +217,7 @@ icd9_is_valid_major_e <- function(major)
 #' @export
 icd_is_valid_map <- function(map, short_code) {
   checkmate::assertList(map, types = "character", any.missing = FALSE,
-             min.len = 1, unique = TRUE, names = "named")
+                        min.len = 1, unique = TRUE, names = "named")
   checkmate::assertFlag(short_code)
   # TOOD: warn/return the invalid labels
   all(unlist(
@@ -230,6 +240,14 @@ icd_is_valid_map <- function(map, short_code) {
 #' @export
 icd_get_valid <- function(icd, short_code = icd_guess_short(icd))
   UseMethod("icd_get_valid")
+
+#' @describeIn icd_get_valid get valid ICD codes from character vector, guessing ICD version
+icd_get_valid.character <- function(icd, short_code = icd_guess_short(icd)) {
+  icd_ver <- icd_guess_version.character(icd, short_code)
+  class(icd) <- icd_ver
+  # now, this is risky: dispatch again
+  icd_get_valid(icd, short_code)
+}
 
 #' @describeIn icd_get_valid Get valid ICD-9 codes
 #' @export
@@ -352,8 +370,8 @@ icd_is_valid.icd10who <- function(icd, short_code = icd_guess_short.icd10(icd)) 
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for testing 'realness'
   # start with a broad regex
 
-    icd %>%
-      str_trim %>%
-      str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
+  icd %>%
+    str_trim %>%
+    str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
 
 }

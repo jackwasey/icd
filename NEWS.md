@@ -1,3 +1,10 @@
+# Version 2.0
+ * ICD-10 support, including ICD-10 comorbidity mappings, validation and explanations (code to description)
+ * Automatic etection of ICD version when not specified
+ * Optional class system so data can be described as ICD-9 or ICD-10, so appropriate functions are used
+ * ICD-9 and ICD-10 sub-versions, particularly enabling distinguishing of ICD-9 (WHO) from ICD-9-CM, and same for ICD-10
+ * Soft deprecated all `icd9` prefix functions, now this package equally covers ICD-10. New naming scheme follows Hadley Wickham's coding style, using underscores.
+ * Completely deprecated some previously soft deprecated functions, e.g. `icd9ValidDecimal`
 # Version 1.3
  * With many thanks to @wmurphyrd, Quan's revised scoring system for Charlson comorbidities is now included.
  * Re-enabled OpenMP, and also use GNU C++ standard library parallel extensions (which also use OpenMP) when available. Thoroughly tested with various docker compiler configurations and no memory or undefined behavior problems appear.

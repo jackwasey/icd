@@ -314,7 +314,7 @@ icd9SortDecimal <- function(icd9Decimal) {
 #' @template mapping-icd9
 #' @template short_code
 #' @export
-icd9ValidMapping <- function(icd9Mapping, isShort) {
+icd9IsValidMapping <- function(icd9Mapping, isShort) {
   .Deprecated("icd_is_valid_map")
   icd_is_valid_map(icd9Mapping, isShort)
 }
@@ -322,7 +322,7 @@ icd9ValidMapping <- function(icd9Mapping, isShort) {
 #' @rdname icd_is_valid_map
 #' @template mapping-icd9
 #' @export
-icd9ValidMappingShort <- function(icd9Mapping) {
+icd9IsValidMappingShort <- function(icd9Mapping) {
   .Deprecated("icd_is_valid_map")
   icd_is_valid_map(icd9Mapping, TRUE)
 }
@@ -330,7 +330,7 @@ icd9ValidMappingShort <- function(icd9Mapping) {
 #' @rdname icd_is_valid_map
 #' @template mapping-icd9
 #' @export
-icd9ValidMappingDecimal <- function(icd9Mapping) {
+icd9IsValidMappingDecimal <- function(icd9Mapping) {
   .Deprecated("icd_is_valid_map")
   icd_is_valid_map(icd9Mapping, FALSE)
 }
@@ -356,7 +356,7 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
 #' @rdname icd_is_valid
 #' @template short_code
 #' @export
-icd9Valid <- function(icd9, isShort) {
+icd9IsValid <- function(icd9, isShort) {
   .Deprecated("icd_is_valid")
   icd_is_valid.icd9(icd9, isShort)
 }
@@ -370,14 +370,14 @@ icd9IsValid <- function(icd9, isShort) {
 
 #' @rdname icd_is_valid
 #' @export
-icd9ValidShort <- function(icd9) {
+icd9IsValidShort <- function(icd9) {
   .Deprecated("icd_is_valid")
   icd9_is_valid_short(icd9)
 }
 
 #' @rdname icd_is_valid
 #' @export
-icd9ValidDecimal <- function(icd9Decimal) {
+icd9IsValidDecimal <- function(icd9Decimal) {
   .Deprecated("icd_is_valid")
   icd_is_valid.icd9(icd9Decimal, short_code = FALSE)
 }

@@ -6,6 +6,7 @@
 \alias{icd9GetValidDecimal}
 \alias{icd9GetValidShort}
 \alias{icd_get_valid}
+\alias{icd_get_valid.character}
 \alias{icd_get_valid.icd10}
 \alias{icd_get_valid.icd10cm}
 \alias{icd_get_valid.icd9}
@@ -20,6 +21,8 @@ icd9GetValidShort(icd9Short)
 icd9GetInvalid(icd9, isShort = icd_guess_short(icd9))
 
 icd_get_valid(icd, short_code = icd_guess_short(icd))
+
+\method{icd_get_valid}{character}(icd, short_code = icd_guess_short(icd))
 
 \method{icd_get_valid}{icd9}(icd, short_code = icd_guess_short(icd))
 
@@ -59,6 +62,8 @@ Given vector of short_code or decimal ICD-9 codes, return (in the
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{character}: get valid ICD codes from character vector, guessing ICD version
+
 \item \code{icd9}: Get valid ICD-9 codes
 
 \item \code{icd10}: Get valid ICD-10 codes

@@ -128,3 +128,14 @@ twoPts <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
                      stringsAsFactors = FALSE)
 twoMap <- list("malady" = c("100", "2000"),
                "ailment" = c("003", "040"))
+
+mixInvalidPts <- icd9(
+  icd_long_data(
+    data.frame(
+      visitId = c(1000, 1000, 1001),
+      icd9 = icd9(c("27801", "invalides", "25001")),
+      poa = factor(c("Y", "N", "Y")
+      )
+    )
+  )
+)

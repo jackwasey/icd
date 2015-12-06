@@ -25,30 +25,32 @@
 icd_filter_valid <- function(...)
   UseMethod("icd_filter_valid")
 
+#' @rdname icd_filter_valid
+#' @export
+icd_filter_invalid <- function(...)
+  UseMethod("icd_filter_invalid")
+
 #' @describeIn icd_filter_valid Filter data frame for valid ICD-9 codes
 #' @export
 icd_filter_valid.icd9 <- function(icd_df, icd_name = NULL,
                                   short_code =  NULL, invert = FALSE) {
   assertDataFrame(icd_df, min.cols = 1, col.names = "named")
+  assert(checkNull(icd_name), checkString(icd_name))
+  assert(checkNull(short_code), checkFlag(short_code))
   icd_name <- get_icd_name(icd_df)
-  if (is.null(short_code)) isShort <- icd_guess_short(icd_df[[icd_name]])
+  if (is.null(short_code))
+    short_code <- icd_guess_short(icd_df[[icd_name]])
   assertDataFrame(icd_df, min.cols = 1, col.names = "named")
-  assertFlag(isShort)
+  assertFlag(short_code)
   assertFlag(invert)
-  v <- icd_is_valid.icd9(icd = icd_df[[icd_name]], short_code = short_code) != invert
+  v <- icd_is_valid.icd9(icd_df[[icd_name]], short_code = short_code) != invert
   icd_df[v, ]
 }
 
-#' @title Filter ICD-9 codes by invalidity.
-#' @description Filters a data.frame of patients for valid or invalid ICD-9 codes
-#' @details Unlike \code{icd_filter_valid} this is not an S3 function
-#' @template icd_df
-#' @template icd_name
-#' @template short_code
-#' @param invert single logical value, if TRUE will return valid instead of invalid rows.
+#' @describeIn icd_filter_invalid Filter in (or out) invalid ICD-9 codes
 #' @export
-icd_filter_invalid <- function(icd_df, icd_name = NULL, short_code = NULL, invert = FALSE) {
-  icd_filter_valid(icd_df = icd_df, icd_name = icd_name, short_code = short_code, invert = !invert)
+icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, invert = FALSE) {
+  icd_filter_valid.icd9(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
 #' @name icd_filter
