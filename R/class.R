@@ -327,10 +327,13 @@ c.icd10who <- function(...) {
 
 
   cl <- class(x)
-  #class(x) <- cl[cl != "icd9"]
-  y <- NextMethod("[")  #NextMethod("[")
-  class(y) <- cl
-  y
+  class(x) <- cl[cl != "icd9"]
+  x <- NextMethod()  #NextMethod("[")
+  if (inherits(x, "data.frame"))
+    class(x) <- cl
+  else
+    class(x) <- cl[cl %nin% c("data.frame", icd_data_classes)]
+  x
 }
 
 # `[[.icd9test` <- function(x, ...) {
@@ -349,11 +352,14 @@ c.icd10who <- function(...) {
   # recursively calls this function because of immense complexity of the base
   # data.frame subsetting function. It might be that I can avoid this with
   # better use of NextMethod.
-  if (is.data.frame(x)) {
+  y <- NextMethod()
+  if (inherits(x, "data.frame")) {
     # [[.data.frame never returns a data frame itself, and seems to preserve the
     # underlying class
-    y <- `[[.data.frame`(x, ...)
-    return(y)
+    #y <- `[[.data.frame`(x, ...)
+    y
+  } else {
+
   }
   NextMethod("[[")
   class(x) <- cl
