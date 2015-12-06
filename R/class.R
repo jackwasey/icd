@@ -51,7 +51,7 @@ icd_check_conflict_with_icd10 <- function(x)
 #' @keywords internal
 icd_check_class_order <- function(x) {
 
-  system_classes <- c("data.frame", "list", "numeric", "character")
+  system_classes <- c("data.frame", "list", "numeric", "character", "factor")
 
   m <- match(class(x), c(icd_other_classes, icd9_classes, icd10_classes, system_classes))
   if (any(m != cumsum(m)))
@@ -77,8 +77,8 @@ icd_check_class_conflict <- function(x) {
 #'
 #' @export
 icd9 <- function(x) {
-  if (inherits(x, "icd9")) return(x)
   icd_check_conflict_with_icd10(x)
+  if (inherits(x, "icd9")) return(x)
   after = match("icd9cm", class(x), nomatch = 0)
   class(x) <- append(class(x), "icd9", after = after)
   x
@@ -87,8 +87,8 @@ icd9 <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd9cm <- function(x) {
-  if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
   icd_check_conflict_with_icd10(x)
+  if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
   icd9_pos = match("icd9", class(x))
   if (!is.na(icd9_pos))
     class(x) <- append(class(x), "icd9cm", after = icd9_pos - 1)
@@ -101,8 +101,8 @@ icd9cm <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd10 <- function(x) {
-  if (inherits(x, "icd10")) return(x)
   icd_check_conflict_with_icd9(x)
+  if (inherits(x, "icd10")) return(x)
   icd10cm_pos = match("icd10cm", class(x), nomatch = 0)
   icd10who_pos = match("icd10who", class(x), nomatch = 0)
   after = max(icd10cm_pos, icd10who_pos)
@@ -113,8 +113,8 @@ icd10 <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd10cm <- function(x) {
-  if (inherits(x, "icd10cm")) return(x)
   icd_check_conflict_with_icd9(x)
+  if (inherits(x, "icd10cm")) return(x)
   icd10_pos = match("icd10", class(x))
   if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
@@ -126,8 +126,8 @@ icd10cm <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd10who <- function(x) {
-  if (inherits(x, "icd10who")) return(x)
   icd_check_conflict_with_icd9(x)
+  if (inherits(x, "icd10who")) return(x)
   icd10_pos = match("icd10", class(x))
   if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
@@ -301,7 +301,7 @@ c.icd10cm <- function(...) {
 c.icd10who <- function(...) {
   args <- unlist(list(...))
   if (any(is.icd10cm(args)))
-    warning("The first argument is ICD-10-CM, whereas subsequent arguments include ICD-10 WHO codes.")
+    warning("The first argument is ICD-10 WHO, whereas subsequent arguments include ICD-10-CM codes.")
   NextMethod()
 }
 
@@ -314,11 +314,23 @@ c.icd10who <- function(...) {
 #'   subsetting operation. This would simplify the class system.
 #' @export
 `[.icd9` <- function(x, ...) {
+  message("[.icd9")
+
+  # unfortunately, I need to switch on type here, which somewhat defeats the
+  # purpose of S3, but I can't get NextMethod to do what I want without infinite
+  # recursion in indexing data.frames.
+   if (is.data.frame(x)) {
+    y <- `[.data.frame`(x, ...)
+    class(y) <- append(class(y), "icd9", 0)
+    return(y)
+   }
+
+
   cl <- class(x)
-  class(x) <- cl[cl != "icd9"]
-  x <- NextMethod()  #NextMethod("[")
-  class(x) <- cl
-  x
+  #class(x) <- cl[cl != "icd9"]
+  y <- NextMethod("[")  #NextMethod("[")
+  class(y) <- cl
+  y
 }
 
 # `[[.icd9test` <- function(x, ...) {
@@ -330,18 +342,20 @@ c.icd10who <- function(...) {
 #' @rdname subset_icd
 #' @export
 `[[.icd9` <- function(x, ...) {
+  message("[[.icd9")
   cl <- class(x)
-  class(x) <- cl[cl != "icd9"]
+  #class(x) <- cl[cl != "icd9"]
   # I'm unclear why this is so complicated, but if I don't do this, then it
-  # recursively calls this function. It might be that I can avoid this with
+  # recursively calls this function because of immense complexity of the base
+  # data.frame subsetting function. It might be that I can avoid this with
   # better use of NextMethod.
-  if (inherits(x, "data.frame")) {
+  if (is.data.frame(x)) {
     # [[.data.frame never returns a data frame itself, and seems to preserve the
     # underlying class
     y <- `[[.data.frame`(x, ...)
     return(y)
   }
-  NextMethod(object = x)  #NextMethod("[[")
+  NextMethod("[[")
   class(x) <- cl
   x
 }
