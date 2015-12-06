@@ -10,11 +10,11 @@ icd_filter_valid(...)
 
 icd_filter_invalid(...)
 
-\method{icd_filter_valid}{icd9}(icd_df, icd_name = NULL, short_code = NULL,
+\method{icd_filter_valid}{icd9}(x, icd_name = NULL, short_code = NULL,
   invert = FALSE)
 }
 \arguments{
-\item{icd_df}{data frame containing columns for visitId (which is the feault
+\item{x}{data frame containing columns for visitId (which is the feault
 name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
 \item{icd_name}{The column in the data frame which contains the ICD codes.

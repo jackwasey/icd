@@ -314,7 +314,6 @@ c.icd10who <- function(...) {
 #'   subsetting operation. This would simplify the class system.
 #' @export
 `[.icd9` <- function(x, ...) {
-  message("[.icd9")
 
   # unfortunately, I need to switch on type here, which somewhat defeats the
   # purpose of S3, but I can't get NextMethod to do what I want without infinite
@@ -325,6 +324,25 @@ c.icd10who <- function(...) {
     return(y)
    }
 
+  cl <- class(x)
+  class(x) <- cl[cl != "icd9"]
+  x <- NextMethod()
+  if (inherits(x, "data.frame"))
+    class(x) <- cl
+  else
+    class(x) <- cl[cl %nin% c("data.frame", icd_data_classes)]
+  x
+}
+
+#' @rdname subset_icd
+#' @export
+`[[.icd9` <- function(x, ...) {
+
+  if (is.data.frame(x)) {
+    y <- `[[.data.frame`(x, ...)
+    class(y) <- append(class(y), "icd9", 0)
+    return(y)
+  }
 
   cl <- class(x)
   class(x) <- cl[cl != "icd9"]
@@ -333,36 +351,6 @@ c.icd10who <- function(...) {
     class(x) <- cl
   else
     class(x) <- cl[cl %nin% c("data.frame", icd_data_classes)]
-  x
-}
-
-# `[[.icd9test` <- function(x, ...) {
-#   #structure(NextMethod(), class = class(x))
-#   y <- NextMethod()
-#   y
-# }
-
-#' @rdname subset_icd
-#' @export
-`[[.icd9` <- function(x, ...) {
-  message("[[.icd9")
-  cl <- class(x)
-  #class(x) <- cl[cl != "icd9"]
-  # I'm unclear why this is so complicated, but if I don't do this, then it
-  # recursively calls this function because of immense complexity of the base
-  # data.frame subsetting function. It might be that I can avoid this with
-  # better use of NextMethod.
-  y <- NextMethod()
-  if (inherits(x, "data.frame")) {
-    # [[.data.frame never returns a data frame itself, and seems to preserve the
-    # underlying class
-    #y <- `[[.data.frame`(x, ...)
-    y
-  } else {
-
-  }
-  NextMethod("[[")
-  class(x) <- cl
   x
 }
 
@@ -448,3 +436,6 @@ is.icd_decimal_code <- function(x) inherits(x, "icd_decimal_code")
 #' @rdname is.icd9
 #' @export
 is.icd_map <- function(x) inherits(x, "icd_map")
+
+# TODO, print S3 methods so we can choose to show ICD version, and/or human
+# readable descriptions of the codes

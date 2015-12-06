@@ -92,9 +92,6 @@ then use \code{TRUE}.}
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 to \code{icd9ComorbidAhrq}}
 
-\item{icd_df}{data frame containing columns for visitId (which is the feault
-name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
-
 \item{map}{list (or name of a list if character vector of length one
 is given as argument) of the comorbidities with each top-level list item
 containing a vector of decimal ICD9 codes. This is in the form of a list,
@@ -139,6 +136,9 @@ which case the ishorter human-readable names stored in e.g.
 which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
+
+\item{x}{data frame containing columns for visitId (which is the feault
+name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
 \item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this

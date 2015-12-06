@@ -53,13 +53,13 @@ simple binary, since many codes are exempt, unspecified, or unknown.
 intermediate codes, such as "exempt", "unknown" and \code{NA} mean that
 "yes" is not the same as "not no."}
 
-\item{icd_df}{data frame containing columns for visitId (which is the feault
-name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
-
 \item{poa_name}{The name of column in the data frame which contains the
 Present On Arrival flag. The flag itself is a single character, typically
 one of "Y", "N", "E", "X", "U" or empty. The poaField is a character vector
 of length one.}
+
+\item{x}{data frame containing columns for visitId (which is the feault
+name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 }
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes

@@ -32,25 +32,25 @@ icd_filter_invalid <- function(...)
 
 #' @describeIn icd_filter_valid Filter data frame for valid ICD-9 codes
 #' @export
-icd_filter_valid.icd9 <- function(icd_df, icd_name = NULL,
+icd_filter_valid.icd9 <- function(x, icd_name = NULL,
                                   short_code =  NULL, invert = FALSE) {
-  assertDataFrame(icd_df, min.cols = 1, col.names = "named")
+  assertDataFrame(x, min.cols = 1, col.names = "named")
   assert(checkNull(icd_name), checkString(icd_name))
   assert(checkNull(short_code), checkFlag(short_code))
-  icd_name <- get_icd_name(icd_df)
+  icd_name <- get_icd_name(x)
   if (is.null(short_code))
-    short_code <- icd_guess_short(icd_df[[icd_name]])
-  assertDataFrame(icd_df, min.cols = 1, col.names = "named")
+    short_code <- icd_guess_short(x[[icd_name]])
+  assertDataFrame(x, min.cols = 1, col.names = "named")
   assertFlag(short_code)
   assertFlag(invert)
-  v <- icd_is_valid.icd9(icd_df[[icd_name]], short_code = short_code) != invert
-  icd_df[v, ]
+  v <- icd_is_valid.icd9(x[[icd_name]], short_code = short_code) != invert
+  x[v, ]
 }
 
 #' @describeIn icd_filter_invalid Filter in (or out) invalid ICD-9 codes
 #' @export
 icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, invert = FALSE) {
-  icd_filter_valid.icd9(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
+  icd_filter_valid.icd9(x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
 #' @name icd_filter

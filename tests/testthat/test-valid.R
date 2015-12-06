@@ -352,16 +352,18 @@ test_that("filter valid - data frame input", {
                mixInvalidPts[2, ])
 
   # no non-short so all are invalid:
-  expect_equal(icd_filter_valid.icd9(mixInvalidPts, invert = TRUE, isShort = FALSE),
+  expect_equal(tfinvalid <- icd_filter_valid.icd9(mixInvalidPts, invert = TRUE, short_code = FALSE),
                mixInvalidPts)
+  expect_is(tfinvalid, "icd9")
+  expect_is(tfinvalid, "icd_long_data")
   # arg order irrelevant, but can be mixed up in S3 dispatch.
-  expect_equal(icd_filter_valid.icd9(mixInvalidPts, isShort = FALSE, invert = TRUE),
+  expect_equal(icd_filter_valid.icd9(mixInvalidPts, short_code = FALSE, invert = TRUE),
                mixInvalidPts)
 
   # use invert and isShort args:
-  expect_equal(icd_filter_valid.icd9(mixInvalidPts, isShort = TRUE, invert = TRUE),
+  expect_equal(icd_filter_valid.icd9(mixInvalidPts, short_code = TRUE, invert = TRUE),
                mixInvalidPts[2, ])
-  expect_equal(icd_filter_valid.icd9(mixInvalidPts, isShort = TRUE, invert = FALSE),
+  expect_equal(icd_filter_valid.icd9(mixInvalidPts, short_code = TRUE, invert = FALSE),
                mixInvalidPts[c(1, 3 ), ])
 })
 
