@@ -72,3 +72,9 @@ test_that("subsetting data frame works", {
   expect_is(icd9::vermont_dx[6], "icd9")
   expect_is(icd9::vermont_dx[[6]], "icd9")
 })
+
+test_that("data frame subsetting doesn't incorrectly set class on columns", {
+  expect_is(mixInvalidPts[c(T,T,T), "visitId"], "numeric")
+  expect_false(inherits(mixInvalidPts[c(T,T,T), "visitId"], "icd9"))
+  mixInvalidPts[c(T,T,T),]
+})

@@ -29,9 +29,10 @@ icd9_sub_classes <- c("icd9cm")
 icd9_classes <- c(icd9_sub_classes, "icd9")
 icd10_sub_classes <- c("icd10who", "icd10cm")
 icd10_classes <- c(icd10_sub_classes, "icd10")
+icd_version_classes <- c(icd9_classes, icd10_classes)
 icd_data_classes <- c("icd_long_data", "icd_wide_data")
 icd_code_classes <- c("icd_short_code", "icd_decimal_code")
-icd_other_classes <- c("map") # maybe calls this comorbidity_map?
+icd_other_classes <- c("map") # TODO maybe calls this comorbidity_map? Not limited to ICD codes.
 
 icd_check_conflict_with_icd9 <- function(x)
   if (inherits(x, icd9_classes))
@@ -314,16 +315,15 @@ c.icd10who <- function(...) {
 #'   subsetting operation. This would simplify the class system.
 #' @export
 `[.icd9` <- function(x, ...) {
-
+  message("[.icd9")
   # unfortunately, I need to switch on type here, which somewhat defeats the
   # purpose of S3, but I can't get NextMethod to do what I want without infinite
   # recursion in indexing data.frames.
    if (is.data.frame(x)) {
+     #browser()
     y <- `[.data.frame`(x, ...)
-    class(y) <- append(class(y), "icd9", 0)
-    return(y)
+    return(icd9(y))
    }
-
   cl <- class(x)
   class(x) <- cl[cl != "icd9"]
   x <- NextMethod()
@@ -340,13 +340,12 @@ c.icd10who <- function(...) {
 
   if (is.data.frame(x)) {
     y <- `[[.data.frame`(x, ...)
-    class(y) <- append(class(y), "icd9", 0)
-    return(y)
+    return(icd9(y))
   }
 
   cl <- class(x)
   class(x) <- cl[cl != "icd9"]
-  x <- NextMethod()  #NextMethod("[")
+  x <- NextMethod()
   if (inherits(x, "data.frame"))
     class(x) <- cl
   else

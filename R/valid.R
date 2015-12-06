@@ -96,7 +96,7 @@ icd_is_valid.icd9 <- function(x, short_code) {
   checkmate::assert(
     checkmate::checkFactor(x),
     checkmate::checkCharacter(x),
-    checkmate::checkClass(x, c("icd9")),
+    checkmate::checkClass(x, c("icd9")), # TODO: use icd9_classes
     checkmate::checkClass(x, c("icd9cm"))
   )
   checkmate::assertFlag(short_code)
@@ -115,7 +115,7 @@ icd_is_valid.character <- function(x, short_code = icd_guess_short(x)) {
 }
 
 icd9_is_valid_decimal <- function(x) {
-  assert(checkFactor(x), checkCharacter(x))
+  assert(checkFactor(x), checkCharacter(x), checkClass("icd9"), checkClass("icd9cm"))
   if (length(x) == 0) return(logical())
 
   icd9_is_valid_decimal_n(x) |

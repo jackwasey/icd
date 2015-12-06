@@ -43,8 +43,7 @@ icd_filter_valid.icd9 <- function(x, icd_name = NULL,
   assertDataFrame(x, min.cols = 1, col.names = "named")
   assertFlag(short_code)
   assertFlag(invert)
-  v <- icd_is_valid.icd9(x[[icd_name]], short_code = short_code) != invert
-  x[v, ]
+  x[icd_is_valid.icd9(x[[icd_name]], short_code = short_code) != invert, ]
 }
 
 #' @describeIn icd_filter_invalid Filter in (or out) invalid ICD-9 codes

@@ -43,7 +43,7 @@ icd9PoaChoices <- icd_poa_choices
 #' c("102", "1024","1025") %i9in% c("102", "1024", "1025")
 "%i9in%" <- function(icd9, icd9Reference) {
   icd_in_reference_code(icd = icd9, icd_reference = icd9Reference,
-                      short_code = TRUE, short_reference = TRUE)
+                        short_code = TRUE, short_reference = TRUE)
 }
 
 #' @title find comorbidities from ICD-9 codes.
@@ -84,25 +84,31 @@ icd9PoaChoices <- icd_poa_choices
 icd_comorbid <- function(...)
   UseMethod("icd_comorbid")
 
-icd_comorbid.default <- function(icd_df, ...) {
+icd_comorbid.default <- function(x, ...) {
   # don't know whether ICD-9 or ICD-10 so we'll guess
-  icd_version <- icd_guess_version(icd_df)
-  }
+  icd_version <- icd_guess_version(x)
+  class(x) <- append(icd_version, class(x))
+  # dispatch again now class is set. This may be a bad idea: user may not want a
+  # class, possibly incorrect, set on their data. At least give a message
+  icd_comorbid(x)
+}
 
 #' @describeIn icd_comorbid Get comorbidities from ICD-9 codes
 #' @export
 icd_comorbid.icd9 <- function(icd_df,
-                         map,
-                         visit_name = NULL,
-                         icd_name = NULL,
-                         short_code = icd_guess_short(icd_df[1:100, icd_name]),
-                         short_map = icd_guess_short(map),
-                         return_df = FALSE, ...) {
-
+                              map,
+                              visit_name = NULL,
+                              icd_name = NULL,
+                              short_code = icd_guess_short.icd9(icd_df),
+                              short_map = icd_guess_short.icd9(map),
+                              return_df = FALSE, ...) {
+  assert(checkString(visit_name), checkNull(visit_name))
+  assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(icd_df, visit_name)
   icd_name <- get_icd_name(icd_df, icd_name)
   assertDataFrame(icd_df, min.cols = 2)
-  assertList(map, any.missing = FALSE, min.len = 1, types = c("character", "factor"), names = "unique")
+  assertList(map, any.missing = FALSE, min.len = 1, names = "unique",
+             types = c(icd_version_classes, "character", "factor"))
   assertString(visit_name)
   assertFlag(short_code)
   assertFlag(short_map)
@@ -200,7 +206,7 @@ icd_comorbid_elix <- function(...) {
 #'   flagged.
 #' @export
 icd_comorbid_ahrq.icd9 <- function(..., abbrevNames = TRUE,
-                             applyHierarchy = TRUE) {
+                                   applyHierarchy = TRUE) {
   assertFlag(abbrevNames)
   assertFlag(applyHierarchy)
 
@@ -236,7 +242,7 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrevNames = TRUE,
 #'   Charlson score.
 #' @export
 icd_comorbid_quan_deyo.icd9 <- function(..., abbrevNames = TRUE,
-                                 applyHierarchy = TRUE) {
+                                        applyHierarchy = TRUE) {
   checkmate::assertFlag(abbrevNames)
   checkmate::assertFlag(applyHierarchy)
   cbd <- icd_comorbid.icd9(..., map = icd9::quanDeyoComorbid)
@@ -258,7 +264,7 @@ icd_comorbid_quan_deyo.icd9 <- function(..., abbrevNames = TRUE,
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_quan_elix.icd9 <- function(..., abbrevNames = TRUE,
-                                 applyHierarchy = TRUE) {
+                                        applyHierarchy = TRUE) {
   assertFlag(abbrevNames)
   assertFlag(applyHierarchy)
   cbd <- icd_comorbid(..., map = icd9::quanElixComorbid)
