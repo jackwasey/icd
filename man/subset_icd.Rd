@@ -8,9 +8,9 @@
 \alias{subset_icd}
 \title{extract subset from ICD data}
 \usage{
-\method{[}{icd9}(x, ..., drop = TRUE)
+\method{[}{icd9}(x, ...)
 
-\method{[[}{icd9}(x, ..., exact = TRUE)
+\method{[[}{icd9}(x, ...)
 
 \method{[}{icd10}(x, ..., drop = TRUE)
 

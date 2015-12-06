@@ -265,22 +265,6 @@ icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
   out
 }
 
-#' @rdname icd_comorbid_mat_to_df
-#' @export
-icd9ComorbidMatToDf <- function(icd9df, visitId = "visit_name",
-                                stringsAsFactors = getOption("stringsAsFactors")) {
-  .Deprecated("icd_comorbid_mat_to_df")
-  icd_comorbid_mat_to_df(icd9df, visitId, stringsAsFactors)
-}
-
-#' @rdname icd_comorbid_df_to_mat
-#' @export
-icd9ComorbidDfToMat <- function(icd9df, visitId = get_visit_name(icd9df),
-                                stringsAsFactors = getOption("stringsAsFactors")) {
-  .Deprecated("icd_comorbid_df_to_mat")
-  icd_comorbid_df_to_mat(icd9df, visitId, stringsAsFactors)
-}
-
 #' Convert codes between short and decimal forms
 #'
 #' @param x ICD codes

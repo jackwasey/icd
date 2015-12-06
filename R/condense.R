@@ -41,28 +41,6 @@ icd_condense.icd9 <- function(x, short_code = icd_guess_short(x),
     icd9_condense_decimal(x, real = real, warn = warn)
 }
 
-#' @rdname icd_condense
-#' @export
-icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
-                        onlyReal = NULL, warn = TRUE) {
-  .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9, short_code = isShort, real = onlyReal, warn = warn)
-}
-
-#' @rdname icd_condense
-#' @export
-icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE) {
-  .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9, short_code = FALSE, real = onlyReal, warn = warn)
-}
-
-#' @rdname icd_condense
-#' @export
-icd9CondenseShort <- function(icd9, onlyReal = NULL, warn = TRUE) {
-  .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9, short_code = TRUE, real = onlyReal, warn = warn)
-}
-
 
 #' @rdname icd_condense
 #' @keywords internal manip

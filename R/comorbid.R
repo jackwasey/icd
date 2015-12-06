@@ -168,13 +168,6 @@ icd_comorbid.icd9 <- function(icd_df,
 
 #' @rdname icd_comorbid
 #' @export
-icd9ComorbidShort <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd_comorbid.icd9(..., short = TRUE)
-}
-
-#' @rdname icd_comorbid
-#' @export
 icd_comorbid_ahrq <- function(...) {
   UseMethod("icd_comorbid_ahrq")
 }
@@ -324,82 +317,6 @@ icd_comorbid_elix.icd9 <- function(..., abbrevNames = TRUE, applyHierarchy = TRU
       colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNamesHtn
   }
   cbd
-}
-
-#' @rdname icd_comorbid
-#' @param ... arguments passed to the corresponding function from the alias.
-#'   E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
-#'   to \code{icd9ComorbidAhrq}
-#' @export
-icd9Comorbidities <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9Comorbid(...)
-  }
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbiditiesAhrq <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidAhrq(...)
-  }
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbiditiesElixHauser <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidElix(...)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbiditiesQuanDeyo <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidQuanDeyo(...)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbiditiesQuanElixhauser <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidQuanElix(...)
-}
-
-#' @rdname icd_comorbid
-#' @param ... arguments passed to the corresponding function from the alias.
-#'   E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
-#'   to \code{icd9ComorbidAhrq}
-#' @export
-icd9Comorbid <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9Comorbid(...)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbidAhrq <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidAhrq(...)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbidElixHauser <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidElix(...)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbidQuanDeyo <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidQuanDeyo(...)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbidQuanElixhauser <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidQuanElix(...)
 }
 
 

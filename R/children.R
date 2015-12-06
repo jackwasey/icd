@@ -178,24 +178,3 @@ icd10ChildrenPossibleShort <- function(icd10Short) {
 
   icd_sort.icd10(c(out_complete, out))
 }
-
-#' @rdname icd_children
-#' @export
-icd9Children <- function(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE, onlyBillable = FALSE) {
-  .Deprecated("icd_children")
-  icd_children.icd9(icd9, short_code = isShort, real = onlyReal, billable = onlyBillable)
-}
-
-#' @rdname icd_children
-#' @export
-icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE, onlyBillable = FALSE) {
-  .Deprecated("icd_children")
-  icd_children.icd9(icd9Short, short_code = TRUE, real = onlyReal, billable = onlyBillable)
-}
-
-#' @rdname icd_children
-#' @export
-icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE) {
-  .Deprecated("icd_children")
-  icd_children.icd9(icd9Decimal, short_code = FALSE, real = onlyReal, billable = onlyBillable)
-}

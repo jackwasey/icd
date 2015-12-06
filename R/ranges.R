@@ -146,53 +146,6 @@ icd_expand_range_major.icd10 <- function(start, end) {
 
 }
 
-#' @rdname icd_expand_range
-#' @export
-icd9ExpandRange <- function(start, end,
-                            isShort = icd_guess_short_code(c(start, end)),
-                            onlyReal = TRUE,
-                            excludeAmbiguousStart = TRUE,
-                            excludeAmbiguousEnd = TRUE) {
-  .Deprecated("icd_expand_range")
-  icd_expand_range.icd9(start = start, end = end, short_code = isShort,
-                        real = onlyReal,
-                        excludeAmbiguousStart = excludeAmbiguousStart,
-                        excludeAmbiguousEnd = excludeAmbiguousEnd)
-}
-
-#' @rdname icd_expand_range
-#' @export
-icd9ExpandRangeShort <- function(start, end,
-                                 onlyReal = TRUE,
-                                 excludeAmbiguousStart = TRUE,
-                                 excludeAmbiguousEnd = TRUE) {
-  .Deprecated("icd_expand_range")
-  icd_expand_range.icd9(start = start, end = end, short_code = TRUE,
-                        real = onlyReal,
-                        excludeAmbiguousStart = excludeAmbiguousStart,
-                        excludeAmbiguousEnd = excludeAmbiguousEnd)
-}
-
-#' @rdname icd_expand_range
-#' @export
-icd9ExpandRangeDecimal <- function(start, end,
-                                   onlyReal = TRUE,
-                                   excludeAmbiguousStart = TRUE,
-                                   excludeAmbiguousEnd = TRUE) {
-  .Deprecated("icd_expand_range")
-  icd_expand_range.icd9(start = start, end = end, short_code = FALSE,
-                        real = onlyReal,
-                        excludeAmbiguousStart = excludeAmbiguousStart,
-                        excludeAmbiguousEnd = excludeAmbiguousEnd)
-}
-
-#' @rdname icd_expand_range
-#' @export
-icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
-  .Deprecated("icd_expand_range_major")
-  icd_expand_range_major.icd9(start = start, end = end, real = onlyReal)
-}
-
 #' @describeIn icd_expand_range Expand a range of ICD-9 codes
 #' @export
 icd_expand_range.icd9 <- function(start, end,
