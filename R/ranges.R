@@ -50,8 +50,37 @@
 #'   E.g. 99.99 to 101.01 would by default exclude 101 and 101.0
 #' @family ICD-9 ranges
 #' @export
-icd_expand_range <- function(start, end, ...)
+icd_expand_range <- function(start, end, ...) {
+  checkmate::assertScalar(start) # i'll permit numeric but prefer char
+  checkmate::assertScalar(end)
   UseMethod("icd_expand_range")
+}
+
+#' @describeIn icd_expand_range Expand a range of ICD-9 or ICD-10 codes when the
+#'   class is not known
+#' @details When the class is not known, it must be guessed from the start and
+#'   end codes. If this guessing fails, e.g. start is ICD-9 whereas end is
+#'   ICD-10, then an error is thrown. Otherwise, the appropriate S3 method is
+#'   called.
+#' @export
+icd_expand_range.character <- function(start, end, short_code = NULL, real = TRUE, ...) {
+
+  start_guess <- icd_guess_version.character(start, short_code = short_code)
+  end_guess <- icd_guess_version.character(start, short_code = short_code)
+  if (start_guess != end_guess)
+    stop("Cannot expand range because ICD code version cannot be guessed from ", start,
+         " and ", end, ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
+       S3 method directly, e.g. icd_expand_range.icd9")
+  if (start_guess == "icd9") {
+    if (is.null(short_code)) short_code <- icd_guess_short.icd9(c(start, end))
+    icd_expand_range.icd9(start, end, short_code = short_code, real = real, ...)
+  } else if (start_guess == "icd10") {
+    if (is.null(short_code)) short_code <- icd_guess_short.icd10(c(start, end))
+    icd_expand_range.icd10(start, end, short_code = short_code, real = real, ...)
+  } else {
+    stop("Unknown ICD type")
+  }
+}
 
 #' expand range of ICD-10 codes returning only defined codes in ICD-10-CM
 #'
@@ -59,10 +88,8 @@ icd_expand_range <- function(start, end, ...)
 #' @param start character vector of length one containing a real code
 #' @param end  character vector of length one containing a real code
 #' @keywords internal
-icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short_code.icd10(c(start, end)), real = TRUE) {
-  assertScalar(start) # i'll permit numeric but prefer char
-  assertScalar(end)
-
+icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short_code.icd10(c(start, end)),
+                                     real = TRUE) {
   if (!real)
     stop("expanding ranges of possible (versus real) ICD-10-CM codes is not yet implemented.
          It will produce a very large number of codes because of permutations.")
@@ -149,7 +176,7 @@ icd_expand_range_major.icd10 <- function(start, end) {
 #' @describeIn icd_expand_range Expand a range of ICD-9 codes
 #' @export
 icd_expand_range.icd9 <- function(start, end,
-                                  short_code = icd_guess_short_code(c(start, end)),
+                                  short_code = icd_guess_short.icd9(c(start, end)),
                                   real = TRUE,
                                   excludeAmbiguousStart = TRUE,
                                   excludeAmbiguousEnd = TRUE) {

@@ -25,7 +25,7 @@ icd_is_valid(icd, ...)
 
 \method{icd_is_valid}{icd9}(x, short_code)
 
-\method{icd_is_valid}{icd10who}(icd, strict = FALSE)
+\method{icd_is_valid}{icd10who}(icd, short_code = icd_guess_short.icd10(icd))
 }
 \arguments{
 \item{icd9}{is

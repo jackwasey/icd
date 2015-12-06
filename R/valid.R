@@ -346,17 +346,14 @@ warnNumericCode <- function()
 #'   sanctioned extensions which use additional digits, e.g. neurology,
 #'   pediatrics, and of course ICD-10-CM.
 #' @export
-icd_is_valid.icd10who <- function(icd, strict = FALSE) {
+icd_is_valid.icd10who <- function(icd, short_code = icd_guess_short.icd10(icd)) {
   assertCharacter(icd)
+  assertFlag(short_code)
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for testing 'realness'
   # start with a broad regex
-  if (strict) {
+
     icd %>%
       str_trim %>%
-      str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]])[[:space:]]*$")
-  } else {
-    icd %>%
-      str_trim %>%
-      str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)[[:space:]]*$")
-  }
+      str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
+
 }

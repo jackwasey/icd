@@ -13,10 +13,11 @@
 \alias{icd9_expand_range_decimal}
 \alias{icd9_expand_range_short}
 \alias{icd_expand_range}
+\alias{icd_expand_range.character}
 \alias{icd_expand_range.icd9}
 \title{take two ICD-9 codes and expand range to include all child codes}
 \usage{
-icd9ExpandRange(start, end, isShort = icd_guess_short_code(c(start, end)),
+icd9ExpandRange(start, end, isShort = icd_guess_short.icd9(c(start, end)),
   onlyReal = TRUE, excludeAmbiguousStart = TRUE,
   excludeAmbiguousEnd = TRUE)
 
@@ -29,6 +30,9 @@ icd9ExpandRangeDecimal(start, end, onlyReal = TRUE,
 icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 
 icd_expand_range(start, end, ...)
+
+\method{icd_expand_range}{character}(start, end, short_code = NULL,
+  real = TRUE, ...)
 
 \method{icd_expand_range}{icd9}(start, end,
   short_code = icd_guess_short_code(c(start, end)), real = TRUE,
@@ -98,10 +102,18 @@ this is cumbersome code, covering a whole load of edge cases
   since this is far more likely to be useful to the end user.
 }
 \details{
+When the class is not known, it must be guessed from the start and
+  end codes. If this guessing fails, e.g. start is ICD-9 whereas end is
+  ICD-10, then an error is thrown. Otherwise, the appropriate S3 method is
+  called.
+
 Expand range of short_code-form ICD-9 codes
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{character}: Expand a range of ICD-9 or ICD-10 codes when the
+class is not known
+
 \item \code{icd9}: Expand a range of ICD-9 codes
 }}
 \examples{

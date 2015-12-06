@@ -68,11 +68,39 @@ icd_guess_version <- function(...)
   UseMethod("icd_guess_version")
 
 #' @describeIn icd_guess_version Guess version of ICD code from character vector
-icd_guess_version.character <- function(icd, short_code) {
-  i9 <- sum(icd_is_valid_short.icd9(icd))
-  i10 <- sum(icd_is_valid.icd10(icd))
+icd_guess_version.character <- function(icd, short_code = NULL) {
+  if (!is.null(short_code)) {
+    if (short_code) {
+      i9 <- sum(icd_is_valid.icd9(icd, short_code = TRUE))
+      i10 <- sum(icd_is_valid.icd10(icd, short_code = TRUE))
+      i10who <- sum(icd_is_valid.icd10who(icd, short_code = TRUE))
+          }
+    else {
+      i9 <- sum(icd_is_valid.icd9(icd, short_code = FALSE))
+      i10 <- sum(icd_is_valid.icd10(icd, short_code = FALSE))
+      i10who <- sum(icd_is_valid.icd10who(icd, short_code = FALSE))
+    }
+
+  } else {
+    i9 <- max(
+      sum(icd_is_valid.icd9(icd, short_code = TRUE)),
+      sum(icd_is_valid.icd9(icd, short_code = FALSE))
+    )
+    i10 <- max(
+      sum(icd_is_valid.icd10(icd, short_code = TRUE)),
+      sum(icd_is_valid.icd10(icd, short_code = FALSE))
+    )
+    i10who <- max(
+      sum(icd_is_valid.icd10who(icd, short_code = TRUE)),
+      sum(icd_is_valid.icd10who(icd, short_code = FALSE))
+    )
+  }
+
   #icd10cm <- sum(icd_is_valid.icd10cm(icd))
-  i10who <- sum(icd_is_valid.icd10who(icd))
+
+  # todo: guess ICD-10-CM
+  # TODO: return vector of types, e.g. c("icd10who, "icd10")
+
   if (i9 > i10 && i9 > i10who)
     "icd9"
   else
