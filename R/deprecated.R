@@ -85,9 +85,15 @@ icd9ComorbiditiesQuanElixhauser <- function(...) {
 #'   E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 #'   to \code{icd9ComorbidAhrq}
 #' @export
-icd9Comorbid <- function(...) {
+icd9Comorbid <- function(icd9df,
+                         icd9Mapping,
+                         visitId = NULL,
+                         icd9Field = NULL,
+                         isShort = icd_guess_short.icd9(icd_df),
+                         isShortMapping = icd_guess_short.icd9(map),
+                         return.df = FALSE, ...) {
   .Deprecated("icd_comorbid")
-  icd9Comorbid(...)
+  icd_comorbid(icd_df, map = icd9Mapping, visit_name = visitId, icd_name = icd9Field, short_name = isShort, short_map = isShortMapping, return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid
@@ -108,7 +114,14 @@ icd9ComorbidElixHauser <- function(...) {
 #' @export
 icd9ComorbidQuanDeyo <- function(...) {
   .Deprecated("icd_comorbid")
-  icd9ComorbidQuanDeyo(...)
+  icd_comorbid_quan_deyo.icd9(...)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd9ComorbidQuanElix <- function(...) {
+  .Deprecated("icd_comorbid")
+  icd9ComorbidQuanElix(...)
 }
 
 #' @rdname icd_comorbid
@@ -445,5 +458,66 @@ icd9GetInvalidDecimal <- function(icd9Decimal) {
 icd9GetInvalidShort <- function(icd9Short) {
   .Deprecated("icd_get_valid")
   icd9Short[!icd_is_valid.icd9(icd9Short, short_code = TRUE)]
+}
+
+#' @rdname icd9Charlson
+#' @export
+icd9Charlson <- function(x, visitId = NULL,
+                                    scoringSystem = c("original", "charlson", "quan"),
+                                    return.df = FALSE,
+                                    stringsAsFactors = getOption("stringsAsFactors"),
+                                    ...) {
+  .Deprecated("icd_charlson")
+  icd_charlson(x, visitId, scoringSystem, return.df, stringsAsFactors, ...)
+}
+  
+
+#' @describeIn icd9Charlson get Charlson score from ICD data in data.frame
+#' @export
+icd9Charlson.data.frame <- function(x, visitId = NULL,
+                                    scoringSystem = c("original", "charlson", "quan"),
+                                    return.df = FALSE,
+                                    stringsAsFactors = getOption("stringsAsFactors"),
+                                    ...) {
+  .Deprecated("icd_charlson.data.frame")
+  icd_charlson.data.frame(x, visit_name = visitId, scoring_system = scoringSystem,
+				    return_df = return.df, stringsAsFactors = stringsAsFactors, ...) 
+}
+
+#' @rdname icd_charlson
+#' @param hierarchy single logical value, default is FALSE. If TRUE, will
+#'   drop DM if DMcx is present, etc.
+#' @export
+icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
+                                 scoringSystem = c("original", "charlson", "quan")) {
+  .Deprecated("icd_charlson_from_comorbid")
+  icd_charlson_from_comorbid(x = x, visit_name = visitId, hierarchy = applyHierarchy, scoring_system = scoringSystem)
+}
+
+#' @rdname icd_van_walvaren
+#' @export
+icd9VanWalraven <- function(x, visitId = NULL,
+                            return.df = FALSE,
+                            stringsAsFactors = getOption("stringsAsFactors"),
+                            ...) {
+  .Deprecated("icd_van_walvaren")
+  icd_van_walvaren(x, visitId, return.df, stringsAsFactors, ...)
+}
+
+#' @describeIn icd9VanWalraven van Walraven scores from data frame of visits and ICD-9 codes
+#' @export
+icd9VanWalraven.data.frame <- function(x, visitId = NULL,
+                                       return.df = FALSE,
+                                       stringsAsFactors = getOption("stringsAsFactors"),
+                                       ...) {
+  .Deprecated("icd_van_walvaren.data.frame") # todo: what about icd9 vs icd10 classes?
+  icd_van_walvaren.data.frame(x = x, visit_name = visitId, return_df = return.df, stringsAsFactors = stringsAsFactors, ...)
+}
+
+#' @rdname icd_van_walraven
+#' @export
+icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
+  .Deprecated("icd_van_walvaren_from_comorbid")
+  icd_van_walvaren_from_comorbid(x = x, visit_name = visitId, hierarchy = applyHierarchy)
 }
 

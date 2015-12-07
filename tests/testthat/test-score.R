@@ -21,12 +21,12 @@ test_that("github issue #44 from wmurphyrd", {
   mydf <- data.frame(visitId = c("a", "b", "c", "a", "b", "d"),
                      icd9 = c("441", "412.93", "044.9", "250.0", "250.0", "250.0"),
                      stringsAsFactors = TRUE)
-  expect_that(icd9Charlson(mydf, return.df = TRUE), testthat::not(throws_error()))
+  expect_error(icd_charlson(mydf, return_df = TRUE), NA)
 })
 
 test_that("github issue #46 from wmurphyd", {
   mydf <- data.frame(visitId = "a", icd9 = "250.0")
-  comorbids <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE)
+  comorbids <- icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE)
   set.seed(123)
   # Fill a QuanDeyo comorbidity data frame with random data
   comorbids <- rbind(comorbids, data.frame(
@@ -37,7 +37,7 @@ test_that("github issue #46 from wmurphyd", {
   )
   c2.inv <- cbind(t(comorbids[2,2:18]),c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 6, 6))
   expect_equivalent(
-    icd9CharlsonComorbid(comorbids, applyHierarchy = TRUE)[2],
+    icd_charlson_from_comorbid(comorbids, hierarchy = TRUE)[2],
     sum(apply(c2.inv,1,prod))
   )
 })
@@ -55,16 +55,16 @@ test_that("Charlson score", {
                      icd9 = c("441", "412.93", "044.9"),
                      stringsAsFactors = TRUE)
   expect_equal(
-    icd9CharlsonComorbid(
-      icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE, return.df = TRUE)
+    icd_charlson_from_comorbid(
+      icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, hierarchy = TRUE, return_df = TRUE)
     ),
-    icd9Charlson(mydf, isShort = FALSE, return.df = FALSE)
+    icd_charlson(mydf, short_code = FALSE, return_df = FALSE)
   )
 
-  expect_equivalent(icd9Charlson(mydf,
-                                 return.df = TRUE,
+  expect_equivalent(icd_charlson(mydf,
+                                 return_df = TRUE,
                                  stringsAsFactors = TRUE,
-                                 isShort = FALSE),
+                                 short_name = FALSE),
                     structure(list(visitId = structure(1:3,
                                                        .Label = c("a", "b", "c"),
                                                        class = "factor"),
@@ -78,10 +78,10 @@ test_that("Charlson score", {
                       icd9 = c("441", "412.93", "044.9"),
                       stringsAsFactors = FALSE)
 
-  expect_identical(icd9Charlson(mydff,
-                                return.df = TRUE,
+  expect_identical(icd_charlson(mydff,
+                                return_df = TRUE,
                                 stringsAsFactors = FALSE,
-                                isShort = FALSE),
+                                short_name = FALSE),
                    structure(list(visitId = c("a", "b", "c"),
                                   Charlson = c(1, 1, 6)),
                              .Names = c("visitId", "Charlson"),
@@ -131,13 +131,13 @@ test_that("Charlson - errors?", {
   baddf <- data.frame(visitId = c("d", "d"),
                       icd9 = c("2500", "25042"),
                       stringsAsFactors = TRUE)
-  cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
-  expect_error(icd9CharlsonComorbid(cmb, applyHierarchy = FALSE))
+  cmb <- icd_comorbid_quan_deyo.icd9(baddf, hierarchy = FALSE, short_code = TRUE)
+  expect_error(icd_charlson_from_comorbid(cmb, hierarchy = FALSE))
 
   baddf <- data.frame(visitId = c("d", "d"),
                       icd9 = c("57224", "57345"),
                       stringsAsFactors = TRUE)
-  cmb <- icd9ComorbidQuanDeyo(baddf, applyHierarchy = FALSE, isShort = TRUE)
+  cmb <- icd_comorbid_quan_deyo.icd9(baddf, hierarchy = FALSE, short_code = TRUE)
   expect_error(icd9CharlsonComorbid(cmb, applyHierarchy = FALSE))
 })
 
@@ -150,7 +150,7 @@ test_that("count icd9 codes", {
   )
   expect_equal(icd9Count(mydf), c(2, 1))
 
-  cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE)
+  cmb <- icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE)
   expect_equivalent(icd9CountComorbidBin(cmb), icd9Count(mydf))
 
   wide <- data.frame(visitId = c("r", "s", "t"),

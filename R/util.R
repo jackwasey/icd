@@ -186,17 +186,17 @@ get_visit_name <- function(x, visit_name = NULL) {
     for (guess in guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
       if (length(guess_matched) == 1) {
-        visitId <- guess_matched
+        visit_name <- guess_matched
         break
       }
     }
     # if still null, then guess the name of the first column
-    if (is.null(visitId))
-      visitId <- names(x)[1]
+    if (is.null(visit_name))
+      visit_name <- names(x)[1]
   }
-  assertString(visitId)
-  stopifnot(visitId %in% names(x))
-  visitId
+  assertString(visit_name)
+  stopifnot(visit_name %in% names(x))
+  visit_name
 }
 
 # guess which field contains the (only) ICD code, in order of preference

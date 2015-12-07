@@ -242,11 +242,11 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrevNames = TRUE,
 #'   Charlson score.
 #' @export
 icd_comorbid_quan_deyo.icd9 <- function(..., abbrevNames = TRUE,
-                                        applyHierarchy = TRUE) {
+                                        hierarchy = TRUE) {
   checkmate::assertFlag(abbrevNames)
-  checkmate::assertFlag(applyHierarchy)
+  checkmate::assertFlag(hierarchy)
   cbd <- icd_comorbid.icd9(..., map = icd9::quanDeyoComorbid)
-  if (applyHierarchy) {
+  if (hierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
     cbd[cbd[, "Mets"] > 0, "Cancer"] <- FALSE

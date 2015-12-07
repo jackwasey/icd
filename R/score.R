@@ -59,33 +59,34 @@
 #' icd9Charlson(mydf, isShort = FALSE, return.df = TRUE)
 #' icd9CharlsonComorbid(cmb)
 #' @export
-icd9Charlson <- function(x, visitId = NULL,
-                         scoringSystem = c("original", "charlson", "quan"),
-                         return.df = FALSE,
+
+icd_charlson <- function(x, visit_name = NULL,
+                         scoring_system = c("original", "charlson", "quan"),
+                         return_df = FALSE,
                          stringsAsFactors = getOption("stringsAsFactors"),
-                         ...)
-  UseMethod("icd9Charlson")
+			 ...)
+  UseMethod("icd_charlson")
 
 #' @describeIn icd9Charlson Charlson scores from data frame of visits and ICD-9 codes
 #' @export
-icd9Charlson.data.frame <- function(x, visitId = NULL,
-                                    scoringSystem = c("original", "charlson", "quan"),
-                                    return.df = FALSE,
+icd_charlson.data.frame <- function(x, visit_name = NULL,
+                                    scoring_system = c("original", "charlson", "quan"),
+                                    return_df = FALSE,
                                     stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  assertFlag(return.df)
-  visitId <- get_visit_name(x, visitId)
-  tmp <- icd9ComorbidQuanDeyo(x, visitId, applyHierarchy = TRUE,
-                              return.df = TRUE, ...)
-  res <- icd9CharlsonComorbid(tmp, visitId = visitId, applyHierarchy = FALSE,
-                              scoringSystem = scoringSystem)
+  assert(checkNull(visit_name), checkString(visit_name))
+  assertFlag(return_df)
+  assertFlag(stringsAsFactors)
+  visit_name <- get_visit_name(x, visit_name)
+  tmp <- icd_comorbid_quan_deyo.icd9(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...)
+  res <- icd_charlson_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE, scoring_system = scoring_system)
 
-  if (!return.df) return(res)
+  if (!return_df) return(res)
   out <- cbind(names(res),
                data.frame("Charlson" = unname(res)),
                stringsAsFactors = stringsAsFactors)
-  names(out)[1] <- visitId
+  names(out)[1] <- visit_name
   out
 }
 
@@ -93,18 +94,21 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
 #' @param applyHierarchy single logical value, default is FALSE. If TRUE, will
 #'   drop DM if DMcx is present, etc.
 #' @export
-icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
-                                 scoringSystem = c("original", "charlson", "quan")) {
-  stopifnot(is.data.frame(x) || is.matrix(x))
+icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
+                                 scoring_system = c("original", "charlson", "quan")) {
+  assert(
+    checkDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named"),
+    checkMatrix(x, min.rows = 0, min.cols = 2, col.names = "named")
+  )
   stopifnot(ncol(x) - is.data.frame(x) == 17)
-  if (match.arg(scoringSystem) == "quan")
+  if (match.arg(scoring_system) == "quan")
     weights <- c(0, 2, 0, 0, 2, 1, 1, 0, 2, 0,
                  1, 2, 1, 2, 4, 6, 4)
   else
     weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                  2, 2, 2, 2, 3, 6, 6)
 
-  if (applyHierarchy) {
+  if (hierarchy) {
     x[,"DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "LiverMild"] <- x[, "LiverMild"] & !x[, "LiverSevere"]
     x[, "Cancer"] <- x[, "Cancer"] & !x[, "Mets"]
@@ -114,10 +118,10 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
     stopifnot(!any(x[, "Cancer"] & x[, "Mets"]))
   }
   if (is.data.frame(x)) {
-    visitId <- get_visit_name(x, visitId)
-    visitIdNames <- x[[visitId]]
-    x <- as.matrix(x[, names(x) %nin% visitId])
-    rownames(x) <- visitIdNames
+    visit_name <- get_visit_name(x, visit_name)
+    visit_row_names <- x[[visit_name]]
+    x <- as.matrix(x[, names(x) %nin% visit_name])
+    rownames(x) <- visit_row_names
   }
   rowSums(t(t(x) * weights))
 }
@@ -267,30 +271,31 @@ icd9CountWide <- function(x,
 #'   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
-icd9VanWalraven <- function(x, visitId = NULL,
-                            return.df = FALSE,
+icd_van_walraven <- function(x, visit_name = NULL,
+                            return_df = FALSE,
                             stringsAsFactors = getOption("stringsAsFactors"),
                             ...)
-  UseMethod("icd9VanWalraven")
+  UseMethod("icd_van_walraven")
 
-#' @describeIn icd9VanWalraven van Walraven scores from data frame of visits and ICD-9 codes
+#' @describeIn icd_van_walraven van Walraven scores from data frame of visits and ICD-9 codes
 #' @export
-icd9VanWalraven.data.frame <- function(x, visitId = NULL,
+icd_van_walraven.data.frame <- function(x, visitId = NULL,
                                        return.df = FALSE,
                                        stringsAsFactors = getOption("stringsAsFactors"),
                                        ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  assertFlag(return.df)
-  visitId <- get_visit_name(x, visitId)
-  tmp <- icd9ComorbidQuanElix(x, visitId, applyHierarchy = TRUE,
-                              return.df = TRUE, ...)
-  res <- icd9VanWalravenComorbid(tmp, visitId = visitId, applyHierarchy = FALSE)
+  assert(checkNull(visit_name), checkString(visit_name))
+  assertFlag(return_df)
+  assertFlag(stringsAsFactors)
+  visitId <- get_visit_name(x, visit_name)
+  tmp <- icd_comorbid_quan_elix.icd9(x, visit_name, hierarchy = TRUE, return_df = TRUE, ...)
+  res <- icd_van_walraven_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE)
 
-  if (!return.df) return(res)
+  if (!return_df) return(res)
   out <- cbind(names(res),
                data.frame("vanWalraven" = unname(res)),
                stringsAsFactors = stringsAsFactors)
-  names(out)[1] <- visitId
+  names(out)[1] <- visit_name
   out
 }
 
@@ -298,13 +303,15 @@ icd9VanWalraven.data.frame <- function(x, visitId = NULL,
 #' @param applyHierarchy single logical value, default is \code{FALSE}. If
 #'   \code{TRUE}, will drop DM if DMcx is present, etc.
 #' @export
-icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
-  stopifnot(is.data.frame(x) || is.matrix(x))
+icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
+  assert(checkDataFrame(x), checkMatrix(x))
+  assert(checkNull(visit_name), checkString(visit_name))
+  assertFlag(hierarchy)
   stopifnot(ncol(x) - is.data.frame(x) == 30)
   weights <- c(7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,
                9, 12, 4, 0, 3, -4, 6, 5, -2, -2, 0, -7, 0, -3)
 
-  if (applyHierarchy) {
+  if (hierarchy) {
     x[,"DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "Tumor"] <- x[, "Tumor"] & !x[, "Mets"]
   } else {
@@ -312,10 +319,11 @@ icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
     stopifnot(!any(x[, "Tumor"] & x[, "Mets"]))
   }
   if (is.data.frame(x)) {
-    visitId <- get_visit_name(x, visitId)
-    visitIdNames <- x[[visitId]]
-    x <- as.matrix(x[, names(x) %nin% visitId])
-    rownames(x) <- visitIdNames
+    visit_name <- get_visit_name(x, visit_name)
+    visit_row_names <- x[[visit_name]]
+    x <- as.matrix(x[, names(x) %nin% visit_name])
+    rownames(x) <- visit_row_names
   }
   rowSums(t(t(x) * weights))
 }
+
