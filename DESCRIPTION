@@ -26,7 +26,7 @@ Imports:
     utils,
     fastmatch
 Suggests:
-    testthat (>= 0.11.0.9000),
+    testthat (>= 0.11.0),
     devtools,
     knitr,
     microbenchmark,
