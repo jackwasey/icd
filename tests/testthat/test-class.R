@@ -75,5 +75,8 @@ test_that("subsetting data frame works", {
 test_that("data frame subsetting doesn't incorrectly set class on columns", {
   expect_is(mixInvalidPts[c(T,T,T), "visitId"], "numeric")
   expect_false(inherits(mixInvalidPts[c(T,T,T), "visitId"], "icd9"))
-  mixInvalidPts[c(T,T,T),]
+  expect_equal(sapply(mixInvalidPts[c(T,T,T),], class),
+               structure(list(visitId = "numeric", icd9 = c("icd9", "character"
+               ), poa = "factor"), .Names = c("visitId", "icd9", "poa"))
+  )
 })
