@@ -63,14 +63,13 @@ test_that("constructing wide or long format for non-data frame gives error", {
 
 test_that("subsetting data frame works", {
   expect_equal(unclass(icd9::vermont_dx[1, 6]), "27801")
-  expect_equal(icd9::vermont_dx[1, 6], icd9("27801"))
+  expect_equal(unclass(icd9::vermont_dx[1, "DX1"]), "27801")
+  expect_is(icd9::vermont_dx[1, "DX1"], c("icd9cm", "icd9", "character"))
   expect_equal(unclass(icd9::vermont_dx[[1, 6]]), "27801")
-  expect_equal(icd9::vermont_dx[[1, 6]], icd9("27801"))
-  expect_is(icd9::vermont_dx[1, 6], "icd9")
-  expect_is(icd9::vermont_dx[[1, 6]], "icd9")
+  expect_is(icd9::vermont_dx[[1, "DX1"]], c("icd9cm", "icd9", "character"))
   # columns
-  expect_is(icd9::vermont_dx[6], "icd9")
-  expect_is(icd9::vermont_dx[[6]], "icd9")
+  expect_is(icd9::vermont_dx[6], c("icd9cm", "icd9", "data.frame")) # not necessarily wide anymore...
+  expect_is(icd9::vermont_dx[[6]], c("icd9cm", "icd9", "character"))
 })
 
 test_that("data frame subsetting doesn't incorrectly set class on columns", {

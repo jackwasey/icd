@@ -31,8 +31,8 @@ icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
 icd_comorbid(...)
 
 \method{icd_comorbid}{icd9}(icd_df, map, visit_name = NULL, icd_name = NULL,
-  short_code = icd_guess_short(icd_df[1:100, icd_name]),
-  short_map = icd_guess_short(map), return_df = FALSE, ...)
+  short_code = icd_guess_short.icd9(icd_df),
+  short_map = icd_guess_short.icd9(map), return_df = FALSE, ...)
 
 icd_comorbid_ahrq(...)
 

@@ -2,15 +2,11 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{uranium_pathology}
-\alias{.uranium_pathology}
 \alias{uranium_pathology}
 \title{United States Transuranium & Uranium Registries}
 \source{
 \url{http://www.ustur.wsu.edu/database/}
 \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
-}
-\usage{
-.uranium_pathology()
 }
 \keyword{datasets}
 

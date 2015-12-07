@@ -95,7 +95,7 @@ icd9cm <- function(x) {
     class(x) <- append(class(x), "icd9cm", after = icd9_pos - 1)
   else
     # put the more specific type at beginning
-    class(x) <- append(class(x), "icd9cm", after = 0)
+    class(x) <- append(class(x), c("icd9cm", "icd9"), after = 0)
   x
 }
 
@@ -147,16 +147,16 @@ update_class_from_columns <- function(x) {
   i10cm <- any(vapply(x, inherits, "icd10cm", FUN.VALUE = logical(1)))
   i10who <- any(vapply(x, inherits, "icd10who", FUN.VALUE = logical(1)))
   if (sum(i9 || i9cm, i10 || i10cm, i10 || i10who) == 1) {
-    if (i9 && "icd9" %nin% class(x))
-      class(x) <- append(class(x), "icd9", 0)
-    if (i9cm && "icdcm" %nin% class(x))
-      class(x) <- append(class(x), c("icd9cm", "icd9"), 0)
+    if (i9 && !inherits(x, "icd9"))
+      x <- icd9(x)
+    if (i9cm && !inherits(x, "icd9cm"))
+      x <- icd9cm(x)
     if (i10 && "icd10" %nin% class(x))
       class(x) <- append(class(x), "icd10", 0)
     if (i10cm && "icd10cm" %nin% class(x))
-      class(x) <- append(class(x), c("icd10cm", "icd10"), 0)
+      class(x) <- append(class(x), c("icd10cm"), 0)
     if (i10who && "icd10who" %nin% class(x))
-      class(x) <- append(class(x), c("icd10who", "icd10"), 0)
+      class(x) <- append(class(x), c("icd10who"), 0)
   }
   x
 }
@@ -315,22 +315,44 @@ c.icd10who <- function(...) {
 #'   subsetting operation. This would simplify the class system.
 #' @export
 `[.icd9` <- function(x, ...) {
-  message("[.icd9")
+  #browser()
+  #message("[.icd9")
+  #message("nargs = ", nargs())
   # unfortunately, I need to switch on type here, which somewhat defeats the
   # purpose of S3, but I can't get NextMethod to do what I want without infinite
   # recursion in indexing data.frames.
-   if (is.data.frame(x)) {
-     #browser()
+  if (is.data.frame(x)) {
+    #message("[.icd9 is.data.frame is true")
     y <- `[.data.frame`(x, ...)
-    return(icd9(y))
-   }
+    #cat("y = ")
+    #print(str(y))
+    #cat("icd9(y) = ")
+    #print(str(icd9(y)))
+
+    # we have no idea when a data frame is subsetted, so I don't think we can
+    # legitimately reinstate the class of the whole data frame. The only thing
+    # we can do is, if any of the remaining columns have an icd class (and
+    # none have another class), then we can set the same class on the whole
+    # data frame.
+
+    #args <- list(...)
+    #stopifnot(nargs() - ("drop" %in% names(args)) == 2)
+    # because now we look up the class of the ith or jth column in the input data
+    # (carefully because we are again subsetting, so avoid recursion)
+
+    if (!is.data.frame(y) && any(sapply(x, class) == "icd9"))
+      return(icd9(y))
+    else
+      return(y)
+  }
+  # result is not a data frame, so it is a vector of something. All we need to
+  # do now is preserve the class which the vector had within the data.frame. The
+  # only way to get a non-data.frame response to a `[` subset is to have two
+  # indices: assert this:
+
   cl <- class(x)
-  class(x) <- cl[cl != "icd9"]
   x <- NextMethod()
-  if (inherits(x, "data.frame"))
-    class(x) <- cl
-  else
-    class(x) <- cl[cl %nin% c("data.frame", icd_data_classes)]
+  class(x) <- cl
   x
 }
 

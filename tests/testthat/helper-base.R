@@ -134,8 +134,8 @@ mixInvalidPts <- icd9(
     data.frame(
       visitId = c(1000, 1000, 1001),
       icd9 = icd9(c("27801", "invalides", "25001")),
-      poa = factor(c("Y", "N", "Y")
-      )
+      poa = factor(c("Y", "N", "Y")),
+      stringsAsFactors = FALSE
     )
   )
 )
