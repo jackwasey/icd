@@ -51,7 +51,7 @@ icd9PoaChoices <- icd_poa_choices
 #'   set of ICD-9 codes. This is when some trivial post-processing of the
 #'   comorbidity data is done, e.g. renaming to human-friendly field names, and
 #'   updating fields according to rules. The exact fields from the original
-#'   mappings can be obtained using \code{applyHierarchy = FALSE}, but for
+#'   mappings can be obtained using \code{hierarchy = FALSE}, but for
 #'   comorbidity counting, Charlson Score, etc., the rules should be applied.
 #' @template icd_df
 #' @param map list (or name of a list if character vector of length one
@@ -62,7 +62,7 @@ icd9PoaChoices <- icd_poa_choices
 #'   of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
 #'   No default: user should prefer to use the derivative functions, e.g.
 #'   icd9ComorbidAhrq, since these also provide appropriate naming for the
-#'   fields, and squashing the hierarchy (see \code{applyHierarchy} below)
+#'   fields, and squashing the hierarchy (see \code{hierarchy} below)
 #' @template visit_name
 #' @template icd_name
 #' @template short_code
@@ -107,8 +107,8 @@ icd_comorbid.icd9 <- function(icd_df,
   visit_name <- get_visit_name(icd_df, visit_name)
   icd_name <- get_icd_name(icd_df, icd_name)
   assertDataFrame(icd_df, min.cols = 2)
-  assertList(map, any.missing = FALSE, min.len = 1, names = "unique",
-             types = c(icd_version_classes, "character", "factor"))
+  #TODO: assertList(unclass(map), any.missing = FALSE, min.len = 1, names = "unique")
+             #types = c(icd_version_classes, "character", "factor"))
   assertString(visit_name)
   assertFlag(short_code)
   assertFlag(short_map)
@@ -197,21 +197,21 @@ icd_comorbid_elix <- function(...) {
 }
 
 #' @rdname icd_comorbid
-#' @param abbrevNames  single locical value that defaults to \code{TRUE}, in
+#' @param abbrev_names  single locical value that defaults to \code{TRUE}, in
 #'   which case the ishorter human-readable names stored in e.g.
 #'   \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.
-#' @param applyHierarchy single logical value that defaults to \code{TRUE}, in
+#' @param hierarchy single logical value that defaults to \code{TRUE}, in
 #'   which case the hierarchy defined for the mapping is applied. E.g. in
 #'   Elixhauser, you can't have uncomplicated and complicated diabetes both
 #'   flagged.
 #' @export
-icd_comorbid_ahrq.icd9 <- function(..., abbrevNames = TRUE,
-                                   applyHierarchy = TRUE) {
-  assertFlag(abbrevNames)
-  assertFlag(applyHierarchy)
+icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE,
+                                   hierarchy = TRUE) {
+  assertFlag(abbrev_names)
+  assertFlag(hierarchy)
 
-  cbd <- icd9Comorbid(..., map = icd9::ahrqComorbid)
-  if (applyHierarchy) {
+  cbd <- icd_comorbid.icd9(..., map = icd9::ahrqComorbid)
+  if (hierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
@@ -222,12 +222,12 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrevNames = TRUE,
     # drop HTNcx without converting to vector if matrix only has one row (drop=FALSE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
-    if (abbrevNames)
+    if (abbrev_names)
       colnames(cbd)[cr(cbd)] <- icd9::ahrqComorbidNamesAbbrev
     else
       colnames(cbd)[cr(cbd)] <- icd9::ahrqComorbidNames
   } else {
-    if (abbrevNames)
+    if (abbrev_names)
       colnames(cbd)[cr(cbd)] <- icd9::ahrqComorbidNamesHtnAbbrev
     else
       colnames(cbd)[cr(cbd)] <- icd9::ahrqComorbidNamesHtn
@@ -241,9 +241,9 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrevNames = TRUE,
 #'   this is probaably useful, in general and is essential when calculating the
 #'   Charlson score.
 #' @export
-icd_comorbid_quan_deyo.icd9 <- function(..., abbrevNames = TRUE,
+icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
                                         hierarchy = TRUE) {
-  checkmate::assertFlag(abbrevNames)
+  checkmate::assertFlag(abbrev_names)
   checkmate::assertFlag(hierarchy)
   cbd <- icd_comorbid.icd9(..., map = icd9::quanDeyoComorbid)
   if (hierarchy) {
@@ -253,7 +253,7 @@ icd_comorbid_quan_deyo.icd9 <- function(..., abbrevNames = TRUE,
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
-  if (abbrevNames)
+  if (abbrev_names)
     colnames(cbd)[cr(cbd)] <- icd9::charlsonComorbidNamesAbbrev
   else
     colnames(cbd)[cr(cbd)] <- icd9::charlsonComorbidNames
@@ -263,12 +263,12 @@ icd_comorbid_quan_deyo.icd9 <- function(..., abbrevNames = TRUE,
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_quan_elix.icd9 <- function(..., abbrevNames = TRUE,
-                                        applyHierarchy = TRUE) {
-  assertFlag(abbrevNames)
-  assertFlag(applyHierarchy)
-  cbd <- icd_comorbid(..., map = icd9::quanElixComorbid)
-  if (applyHierarchy) {
+icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
+                                        hierarchy = TRUE) {
+  assertFlag(abbrev_names)
+  assertFlag(hierarchy)
+  cbd <- icd_comorbid.icd9(..., map = icd9::quanElixComorbid)
+  if (hierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     # combine HTN
@@ -285,12 +285,12 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrevNames = TRUE,
     # frame, so these are just dropped, leaving the fields for visit_name and all
     # the comorbidities:
 
-    if (abbrevNames)
+    if (abbrev_names)
       colnames(cbd)[cr(cbd)] <- icd9::quanElixComorbidNamesAbbrev
     else
       colnames(cbd)[cr(cbd)] <- icd9::quanElixComorbidNames
   } else {
-    if (abbrevNames)
+    if (abbrev_names)
       colnames(cbd)[cr(cbd)] <- icd9::quanElixComorbidNamesHtnAbbrev
     else
       colnames(cbd)[cr(cbd)] <- icd9::quanElixComorbidNamesHtn
@@ -300,11 +300,11 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrevNames = TRUE,
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_elix.icd9 <- function(..., abbrevNames = TRUE, applyHierarchy = TRUE) {
-  assertFlag(abbrevNames)
-  assertFlag(applyHierarchy)
-  cbd <- icd_comorbid(..., map = icd9::elixComorbid)
-  if (applyHierarchy) {
+icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
+  assertFlag(abbrev_names)
+  assertFlag(hierarchy)
+  cbd <- icd_comorbid.icd9(..., map = icd9::elixComorbid)
+  if (hierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
@@ -312,12 +312,12 @@ icd_comorbid_elix.icd9 <- function(..., abbrevNames = TRUE, applyHierarchy = TRU
     # drop HTNcx without converting to vector if matrix only has one row (drop=FALSE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
-    if (abbrevNames)
+    if (abbrev_names)
       colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNamesAbbrev
     else
       colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNames
   } else {
-    if (abbrevNames)
+    if (abbrev_names)
       colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNamesHtnAbbrev
     else
       colnames(cbd)[cr(cbd)] <- icd9::elixComorbidNamesHtn

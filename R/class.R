@@ -315,8 +315,8 @@ c.icd10who <- function(...) {
 #'   subsetting operation. This would simplify the class system.
 #' @export
 `[.icd9` <- function(x, ...) {
-  message("[.icd9")
-  print(x)
+  #message("[.icd9")
+  #print(x)
   y <- NextMethod()
   if (!is.data.frame(x))
     class(y) <- class(x)
@@ -326,8 +326,8 @@ c.icd10who <- function(...) {
 #' @rdname subset_icd
 #' @export
 `[[.icd9` <- function(x, ...) {
-  message("[[.icd9")
-  print(x)
+  #message("[[.icd9")
+  #print(x)
   y <- NextMethod()
   if (!is.data.frame(x))
     class(y) <- class(x)

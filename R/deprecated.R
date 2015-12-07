@@ -81,6 +81,13 @@ icd9ComorbiditiesQuanElixhauser <- function(...) {
 }
 
 #' @rdname icd_comorbid
+#' @export
+icd9ComorbidQuanElixhauser <- function(...) {
+  .Deprecated("icd_comorbid_quan_elix")
+  icd9ComorbidQuanElix(...)
+}
+
+#' @rdname icd_comorbid
 #' @param ... arguments passed to the corresponding function from the alias.
 #'   E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 #'   to \code{icd9ComorbidAhrq}
@@ -93,42 +100,56 @@ icd9Comorbid <- function(icd9df,
                          isShortMapping = icd_guess_short.icd9(map),
                          return.df = FALSE, ...) {
   .Deprecated("icd_comorbid")
-  icd_comorbid(icd_df, map = icd9Mapping, visit_name = visitId, icd_name = icd9Field, short_name = isShort, short_map = isShortMapping, return_df = return.df, ...)
+  icd_comorbid(icd_df, map = icd9Mapping, visit_name = visitId, icd_name = icd9Field,
+               short_name = isShort, short_map = isShortMapping, return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd9ComorbidAhrq <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidAhrq(...)
+icd9ComorbidAhrq <- function(icd9df,
+                             icd9Mapping,
+                             visitId = NULL,
+                             icd9Field = NULL,
+                             isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
+                             isShortMapping = icd9GuessIsShort(icd9Mapping),
+                             return.df = FALSE, ...) {
+  .Deprecated("icd_comorbid_ahrq")
+  icd_comorbid_ahrq.icd9(icd9df, map = icd9Mapping, visit_name = visitId,
+                         icd9Field = icd_name, short_code = isShort,
+                         short_map = isShortMapping, abbrevNames = TRUE,
+                         applyHierarchy = TRUE, return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd9ComorbidElixHauser <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidElix(...)
+icd9ComorbidElix <- function(icd9df,
+                             icd9Mapping,
+                             visitId = NULL,
+                             icd9Field = NULL,
+                             isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
+                             isShortMapping = icd9GuessIsShort(icd9Mapping),
+                             return.df = FALSE, ...) {
+  .Deprecated("icd_comorbid_elix")
+  icd_comorbid_elix(icd9df, map = icd9Mapping, visit_name = visitId,
+                    icd9Field = icd_name, short_code = isShort,
+                    short_map = isShortMapping, abbrevNames = TRUE,
+                    applyHierarchy = TRUE, return_df = return.df,...)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd9ComorbidQuanDeyo <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd_comorbid_quan_deyo.icd9(...)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbidQuanElix <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidQuanElix(...)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd9ComorbidQuanElixhauser <- function(...) {
-  .Deprecated("icd_comorbid")
-  icd9ComorbidQuanElix(...)
+icd9ComorbidQuanDeyo <- function(icd9df,
+                                 icd9Mapping,
+                                 visitId = NULL,
+                                 icd9Field = NULL,
+                                 isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
+                                 isShortMapping = icd9GuessIsShort(icd9Mapping),
+                                 return.df = FALSE, ...) {
+  .Deprecated("icd_comorbid_quan_deyo")
+  icd_comorbid_quan_deyo.icd9(icd9df, map = icd9Mapping, visit_name = visitId,
+                              icd9Field = icd_name, short_code = isShort,
+                              short_map = isShortMapping, abbrevNames = TRUE,
+                              applyHierarchy = TRUE, return_df = return.df, ...)
 }
 
 #' @rdname icd_condense
@@ -460,19 +481,19 @@ icd9GetInvalidShort <- function(icd9Short) {
   icd9Short[!icd_is_valid.icd9(icd9Short, short_code = TRUE)]
 }
 
-#' @rdname icd9Charlson
+#' @rdname icd_charlson
 #' @export
 icd9Charlson <- function(x, visitId = NULL,
-                                    scoringSystem = c("original", "charlson", "quan"),
-                                    return.df = FALSE,
-                                    stringsAsFactors = getOption("stringsAsFactors"),
-                                    ...) {
+                         scoringSystem = c("original", "charlson", "quan"),
+                         return.df = FALSE,
+                         stringsAsFactors = getOption("stringsAsFactors"),
+                         ...) {
   .Deprecated("icd_charlson")
-  icd_charlson(x, visitId, scoringSystem, return.df, stringsAsFactors, ...)
+  icd_charlson(x, visit_name = visitId, scoring_system = scoringSystem,
+               return_df = return.df, stringsAsFactors = stringsAsFactors, ...)
 }
-  
 
-#' @describeIn icd9Charlson get Charlson score from ICD data in data.frame
+#' @rdname icd_charlson
 #' @export
 icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     scoringSystem = c("original", "charlson", "quan"),
@@ -481,7 +502,7 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     ...) {
   .Deprecated("icd_charlson.data.frame")
   icd_charlson.data.frame(x, visit_name = visitId, scoring_system = scoringSystem,
-				    return_df = return.df, stringsAsFactors = stringsAsFactors, ...) 
+                          return_df = return.df, stringsAsFactors = stringsAsFactors, ...)
 }
 
 #' @rdname icd_charlson
@@ -494,30 +515,30 @@ icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
   icd_charlson_from_comorbid(x = x, visit_name = visitId, hierarchy = applyHierarchy, scoring_system = scoringSystem)
 }
 
-#' @rdname icd_van_walvaren
+#' @rdname icd_van_walraven
 #' @export
 icd9VanWalraven <- function(x, visitId = NULL,
                             return.df = FALSE,
                             stringsAsFactors = getOption("stringsAsFactors"),
                             ...) {
-  .Deprecated("icd_van_walvaren")
-  icd_van_walvaren(x, visitId, return.df, stringsAsFactors, ...)
+  .Deprecated("icd_van_walraven")
+  icd_van_walraven(x, visitId, return.df, stringsAsFactors, ...)
 }
 
-#' @describeIn icd9VanWalraven van Walraven scores from data frame of visits and ICD-9 codes
+#' @rdname icd_van_walraven
 #' @export
 icd9VanWalraven.data.frame <- function(x, visitId = NULL,
                                        return.df = FALSE,
                                        stringsAsFactors = getOption("stringsAsFactors"),
                                        ...) {
-  .Deprecated("icd_van_walvaren.data.frame") # todo: what about icd9 vs icd10 classes?
-  icd_van_walvaren.data.frame(x = x, visit_name = visitId, return_df = return.df, stringsAsFactors = stringsAsFactors, ...)
+  .Deprecated("icd_van_walraven.data.frame") # todo: what about icd9 vs icd10 classes?
+  icd_van_walraven.data.frame(x = x, visit_name = visitId, return_df = return.df, stringsAsFactors = stringsAsFactors, ...)
 }
 
 #' @rdname icd_van_walraven
 #' @export
 icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
-  .Deprecated("icd_van_walvaren_from_comorbid")
-  icd_van_walvaren_from_comorbid(x = x, visit_name = visitId, hierarchy = applyHierarchy)
+  .Deprecated("icd_van_walraven_from_comorbid")
+  icd_van_walraven_from_comorbid(x = x, visit_name = visitId, hierarchy = applyHierarchy)
 }
 

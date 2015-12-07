@@ -3,7 +3,7 @@
 \name{icd9ComorbidShortCpp}
 \alias{icd9Comorbid}
 \alias{icd9ComorbidAhrq}
-\alias{icd9ComorbidElixHauser}
+\alias{icd9ComorbidElix}
 \alias{icd9ComorbidQuanDeyo}
 \alias{icd9ComorbidQuanElixhauser}
 \alias{icd9ComorbidShort}
@@ -42,17 +42,15 @@ icd_comorbid_quan_deyo(...)
 
 icd_comorbid_elix(...)
 
-\method{icd_comorbid_ahrq}{icd9}(..., abbrevNames = TRUE,
-  applyHierarchy = TRUE)
+\method{icd_comorbid_ahrq}{icd9}(..., abbrev_names = TRUE, hierarchy = TRUE)
 
-\method{icd_comorbid_quan_deyo}{icd9}(..., abbrevNames = TRUE,
-  applyHierarchy = TRUE)
+\method{icd_comorbid_quan_deyo}{icd9}(..., abbrev_names = TRUE,
+  hierarchy = TRUE)
 
-\method{icd_comorbid_quan_elix}{icd9}(..., abbrevNames = TRUE,
-  applyHierarchy = TRUE)
+\method{icd_comorbid_quan_elix}{icd9}(..., abbrev_names = TRUE,
+  hierarchy = TRUE)
 
-\method{icd_comorbid_elix}{icd9}(..., abbrevNames = TRUE,
-  applyHierarchy = TRUE)
+\method{icd_comorbid_elix}{icd9}(..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd9ComorbidShort(...)
 
@@ -66,15 +64,23 @@ icd9ComorbiditiesQuanDeyo(...)
 
 icd9ComorbiditiesQuanElixhauser(...)
 
-icd9Comorbid(...)
-
-icd9ComorbidAhrq(...)
-
-icd9ComorbidElixHauser(...)
-
-icd9ComorbidQuanDeyo(...)
-
 icd9ComorbidQuanElixhauser(...)
+
+icd9Comorbid(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
+  isShort = icd_guess_short.icd9(icd_df),
+  isShortMapping = icd_guess_short.icd9(map), return.df = FALSE, ...)
+
+icd9ComorbidAhrq(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
+  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
+  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
+
+icd9ComorbidElix(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
+  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
+  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
+
+icd9ComorbidQuanDeyo(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
+  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
+  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
 }
 \arguments{
 \item{icd9df}{Deprecated. Use \code{icd_df}}
@@ -100,7 +106,7 @@ or "diabetes") and the contents of each list item being a character vector
 of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
 No default: user should prefer to use the derivative functions, e.g.
 icd9ComorbidAhrq, since these also provide appropriate naming for the
-fields, and squashing the hierarchy (see \code{applyHierarchy} below)}
+fields, and squashing the hierarchy (see \code{hierarchy} below)}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -128,21 +134,21 @@ is guessed from the input data.}
 instead of \code{icd_df}. All the codes in a mapping should be of the same
 type, i.e. short or decimal.}
 
-\item{abbrevNames}{single locical value that defaults to \code{TRUE}, in
+\item{abbrev_names}{single locical value that defaults to \code{TRUE}, in
 which case the ishorter human-readable names stored in e.g.
 \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.}
 
-\item{applyHierarchy}{single logical value that defaults to \code{TRUE}, in
+\item{hierarchy}{single logical value that defaults to \code{TRUE}, in
 which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
 
-\item{x}{data frame containing columns for visitId (which is the feault
-name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
-
 \item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
+
+\item{x}{data frame containing columns for visitId (which is the feault
+name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
@@ -156,7 +162,7 @@ This is the main function which extracts co-morbidities from a
   set of ICD-9 codes. This is when some trivial post-processing of the
   comorbidity data is done, e.g. renaming to human-friendly field names, and
   updating fields according to rules. The exact fields from the original
-  mappings can be obtained using \code{applyHierarchy = FALSE}, but for
+  mappings can be obtained using \code{hierarchy = FALSE}, but for
   comorbidity counting, Charlson Score, etc., the rules should be applied.
 
 For Charlson/Deyo comorbidities, strictly speaking, there is no
