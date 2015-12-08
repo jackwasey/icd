@@ -440,6 +440,15 @@ icd9GetInvalid <- function(icd9, isShort = icd_guess_short(icd9)) {
   icd_get_invalid(icd9, short_code = isShort)
 }
 
+#Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool short_code)
+
+#' @rdname icd_get_major
+#' @export
+icd9GetMajor <- function(x, isShort) {
+  .Deprecated("icd_get_major")
+  icd_get_major.icd9(x, short_code = isShort)
+}
+
 #' @rdname icd9_is_n
 #' @export
 icd9IsN <- function(icd9) {

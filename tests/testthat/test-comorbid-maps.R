@@ -590,13 +590,11 @@ test_that("diff comorbid works", {
   expect_that(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE),
               testthat::not(gives_warning()))
 
-  expect_that(
+  expect_error(
     utils::capture.output(
       resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)
-      ),
-    testthat::not(throws_error())
+      ), NA
   )
-
 })
 
 twoPtsFac <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
