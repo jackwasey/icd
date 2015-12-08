@@ -90,7 +90,7 @@ icd_comorbid.default <- function(x, ...) {
   class(x) <- append(icd_version, class(x))
   # dispatch again now class is set. This may be a bad idea: user may not want a
   # class, possibly incorrect, set on their data. At least give a message
-  icd_comorbid(x)
+  icd_comorbid(x, ...)
 }
 
 #' @describeIn icd_comorbid Get comorbidities from ICD-9 codes

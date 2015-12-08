@@ -62,7 +62,7 @@ icd9ChaptersToMap <- function(x) {
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- icd_expand_range(x[[r]][1], x[[r]][2], short = TRUE, real = FALSE)
+    map[[r]] <- icd_expand_range(x[[r]][1], x[[r]][2], short_code = TRUE, real = FALSE)
   }
   map
 }

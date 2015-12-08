@@ -61,12 +61,11 @@ icd9_generate_map_elix <- function(save = FALSE, path = "data") {
     depression = c("300.4", "301.12", "309.0", "309.1", "311")
   )
 
-  elixComorbid <- lapply(
-    elixComorbid, function(x) icd_decimal_to_short(x))
+  elixComorbid <- lapply(elixComorbid, icd_decimal_to_short.icd9)
 
   elixComorbid <- lapply(
     elixComorbid,
-    icd_children.icd9, short = TRUE, real = FALSE)
+    icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
   class(elixComorbid) <- c("icd9", "icd_map", "icd_decimal", "list")
@@ -147,7 +146,7 @@ icd9_generate_map_quan_elix <- function(condense = FALSE,
   else
     quanElixComorbid <- lapply(
       quanElixComorbid,
-      icd_children.icd9, short = TRUE, real = FALSE)
+      icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
   class(quanElixComorbid) <- c("icd9", "icd_map", "icd_decimal", "list")

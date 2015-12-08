@@ -40,7 +40,7 @@ icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE, onlyBillable = FAL
 #' @export
 icd9ComorbidShort <- function(...) {
   .Deprecated("icd_comorbid")
-  icd_comorbid.icd9(..., short = TRUE)
+  icd_comorbid.icd9(..., short_code = TRUE)
 }
 #' @rdname icd_comorbid
 #' @param ... arguments passed to the corresponding function from the alias.
@@ -92,63 +92,57 @@ icd9ComorbidQuanElixhauser <- function(...) {
 #'   E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 #'   to \code{icd9ComorbidAhrq}
 #' @export
-icd9Comorbid <- function(icd9df,
+icd9Comorbid <- function(icd_df,
                          icd9Mapping,
                          visitId = NULL,
                          icd9Field = NULL,
                          isShort = icd_guess_short.icd9(icd_df),
-                         isShortMapping = icd_guess_short.icd9(map),
+                         isShortMapping = icd_guess_short.icd9(icd9Mapping),
                          return.df = FALSE, ...) {
   .Deprecated("icd_comorbid")
-  icd_comorbid(icd_df, map = icd9Mapping, visit_name = visitId, icd_name = icd9Field,
+  icd_comorbid.icd9(icd_df, map = icd9Mapping, visit_name = visitId, icd_name = icd9Field,
                short_name = isShort, short_map = isShortMapping, return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd9ComorbidAhrq <- function(icd9df,
-                             icd9Mapping,
                              visitId = NULL,
                              icd9Field = NULL,
                              isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-                             isShortMapping = icd9GuessIsShort(icd9Mapping),
                              return.df = FALSE, ...) {
   .Deprecated("icd_comorbid_ahrq")
-  icd_comorbid_ahrq.icd9(icd9df, map = icd9Mapping, visit_name = visitId,
-                         icd9Field = icd_name, short_code = isShort,
-                         short_map = isShortMapping, abbrevNames = TRUE,
+  icd_comorbid_ahrq.icd9(icd9df, visit_name = visitId,
+                         icd_name = icd9Field, short_code = isShort,
+                         abbrevNames = TRUE,
                          applyHierarchy = TRUE, return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd9ComorbidElix <- function(icd9df,
-                             icd9Mapping,
                              visitId = NULL,
                              icd9Field = NULL,
                              isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-                             isShortMapping = icd9GuessIsShort(icd9Mapping),
                              return.df = FALSE, ...) {
   .Deprecated("icd_comorbid_elix")
-  icd_comorbid_elix(icd9df, map = icd9Mapping, visit_name = visitId,
-                    icd9Field = icd_name, short_code = isShort,
-                    short_map = isShortMapping, abbrevNames = TRUE,
+  icd_comorbid_elix(icd9df,visit_name = visitId,
+                    icd_name = icd9Field, short_code = isShort,
+                    abbrevNames = TRUE,
                     applyHierarchy = TRUE, return_df = return.df,...)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd9ComorbidQuanDeyo <- function(icd9df,
-                                 icd9Mapping,
                                  visitId = NULL,
                                  icd9Field = NULL,
                                  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-                                 isShortMapping = icd9GuessIsShort(icd9Mapping),
                                  return.df = FALSE, ...) {
   .Deprecated("icd_comorbid_quan_deyo")
-  icd_comorbid_quan_deyo.icd9(icd9df, map = icd9Mapping, visit_name = visitId,
-                              icd9Field = icd_name, short_code = isShort,
-                              short_map = isShortMapping, abbrevNames = TRUE,
+  icd_comorbid_quan_deyo.icd9(icd9df, visit_name = visitId,
+                              icd_name = icd9Field, short_code = isShort,
+                              abbrevNames = TRUE,
                               applyHierarchy = TRUE, return_df = return.df, ...)
 }
 

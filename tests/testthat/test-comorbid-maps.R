@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("comorbidities")
+context("comorbidity maps")
 
 library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
 
 test_that("try to induce c++ segfault bug", {
-  expect_that(icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE), testthat::not(throws_error()))
+  expect_error(icd_comorbid.icd9(ahrqTestDat, map = ahrqComorbid, short_code = TRUE), NA)
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
@@ -52,9 +52,8 @@ test_that("Quan Elixhauser make sure all the children are listed in the saved da
 })
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
-  ptdf <- icd9Comorbid(icd9df = patientData, isShort = TRUE,
-                       icd9Mapping = ahrqComorbid,
-                       visitId = "visitId", return.df = TRUE)
+  ptdf <- icd_comorbid.icd9(patientData, map = ahrqComorbid, short_code = TRUE,
+                       visit_name = "visitId", return_df = TRUE)
 
   expect_equal(names(ptdf), c("visitId", names(ahrqComorbid)))
 
@@ -102,14 +101,12 @@ test_that("Quan Charlson icd9 mappings are all
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(quanElixComorbid,
-                               parseQuanElix(condense = FALSE, save = FALSE))
+                               icd9_generate_map_quan_elix(condense = FALSE, save = FALSE))
               expect_equivalent(icd9GetInvalidMappingShort(quanElixComorbid), list())
             })
 test_that("Elixhauser icd9 mappings are all
             generated from the current generation code", {
-
-              expect_identical(elixComorbid,
-                               parseElix(condense = FALSE, save = FALSE))
+              expect_identical(elixComorbid, icd9_generate_map_elix(save = FALSE))
               expect_equivalent(icd9GetInvalidMappingShort(elixComorbid), list())
             })
 
@@ -200,16 +197,16 @@ test_that("Charlson Deyo doesn't double count disease with two severities", {
 })
 
 test_that("Elixhauser doesn't double count disease with multiple severities", {
-  expect_false(any(quanElixComorbid[["dm.uncomp"]] %in%
-                     quanElixComorbid[["dm.comp"]] ))
-  expect_false(any(quanElixComorbid[["solid.tumor"]] %in%
-                     quanElixComorbid[["mets"]] ))
-  expect_false(any(elixComorbid[["dm.uncomp"]] %in%
-                     elixComorbid[["dm.comp"]] ))
-  expect_false(any(elixComorbid[["solid.tumor"]] %in%
-                     elixComorbid[["mets"]] ))
-  expect_false(any(ahrqComorbid[["DM"]] %in% ahrqComorbid[["DMCX"]] ))
-  expect_false(any(ahrqComorbid[["TUMOR"]] %in% ahrqComorbid[["METS"]] ))
+  expect_false(any(quanElixComorbid[["DM"]] %in%
+                     quanElixComorbid[["DMcx"]] ))
+  expect_false(any(quanElixComorbid[["Tumor"]] %in%
+                     quanElixComorbid[["Mets"]] ))
+  expect_false(any(elixComorbid[["DM"]] %in%
+                     elixComorbid[["DMcx"]] ))
+  expect_false(any(elixComorbid[["Tumor"]] %in%
+                     elixComorbid[["Mets"]] ))
+  expect_false(any(ahrqComorbid[["DM"]] %in% ahrqComorbid[["DMcx"]] ))
+  expect_false(any(ahrqComorbid[["Tumor"]] %in% ahrqComorbid[["Mets"]] ))
 })
 
 # next couple of tests demonstrate that the interpreted data is correctly
@@ -538,8 +535,8 @@ test_that("github #34 - short and long custom map give different results", {
 
   expect_identical(
     icd9Comorbid(mydf, icd9Mapping = mymaps, isShort = TRUE),
-    icd9Comorbid(mydf, icd9Mapping = mymapd, isShort = FALSE))
-
+    icd9Comorbid(mydf, icd9Mapping = mymapd, isShort = FALSE)
+    )
 })
 
 test_that("no NA values in the co-morbidity lists", {
