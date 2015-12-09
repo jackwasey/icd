@@ -77,7 +77,7 @@ icd_children_real <- function(x)
 
 #' @describeIn icd_children_real get the children of ICD-10 code(s)
 #' @keywords internal
-icd_children_real.icd10 <- function(x, short_code = icd_guess_short(x)) {
+icd_children_real.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
   checkmate::assertCharacter(x)
   checkmate::assertFlag(short_code)

@@ -7,7 +7,7 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
     valvular = c("A520", "I05", "I06", "I07", "I08", "I091", "I098", "I34", "I35", "I36", "I37", "I38", "I39", "Q230", "Q231", "Q232", "Q233", "Z952", "Z953", "Z954"),
     pulmonary_circ = c("I26", "I27", "I280", "I288", "I289"),
     pvd = c("I70", "I71", "I731", "I738", "I739", "I771", "I790", "I792", "K551", "K558", "K559", "Z958", "Z959"),
-    # shoudl htn simple and complex be merged
+    # TODO? shoudl htn simple and complex be merged
     htn = c("I10"),
     htncx = c("I11", "I12", "I13", "I15"),
     paralysis = c("G041", "G114", "G801", "G802", "G81", "G82", "G830", "G831", "G832", "G833", "G834", "G839"),
@@ -35,15 +35,14 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
     psych = c("F20", "F22", "F23", "F24", "F25", "F28", "F29", "F302", "F312", "F315"),
     depression = c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432"))
 
+  # this list is just parent codes, whereas I store, for ICD-10, the icd-10-cm children also.
   for (i in 1:30) {
-    expect_true(
-      all(quan_elix_independent[[i]] %in% icd10_map_quan_elix[[i]]),
-      info = paste("checking quan elix indep in master: ", i, " - ", names(quan_elix_independent)[i])
-    )
-    expect_true(
-      all(icd10_map_quan_elix[[i]] %in% quan_elix_independent[[i]]),
-      info = paste("checking master in quan elix indep: ", i, " - ", names(quan_elix_independent)[i])
-    )
+    indep <- quan_elix_independent[[i]]
+    indep_kids <- quan_elix_independent[[i]] %>% icd_children_real.icd10cm
+    canon <- icd10_map_quan_elix[[i]]
+    expect_equal(setdiff(indep, canon), character(), info = paste("checking quan elix canonical in indep: ", i, " - ", names(quan_elix_independent)[i]))
+    expect_equal(setdiff(indep_kids, canon), character(), info = paste("checking quan elix canonical in indep_kids: ", i, " - ", names(quan_elix_independent)[i]))
+    expect_equal(setdiff(canon, indep_kids), character(), info = paste("checking quan elix indep in canonical: ", i, " - ", names(quan_elix_independent)[i]))
   }
 
 })

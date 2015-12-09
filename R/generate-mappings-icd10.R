@@ -203,11 +203,21 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
 
   # this expansion will only be for 'real' codes (currently the most up-to-date
   # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
-  icd10_map_quan_elix <- lapply(quan_elix_raw, icd10_children_real_short)
+
+  # this function accounts for the fact that some Quan Elixhauser ICD-10 codes
+  # are not in fact defined in ICD-10-CM, and currently generation of ICD-10
+  # children is limited to "real" ones, but only as defined in ICD-10-CM, not
+  # ICD-10 in general.
+  f <- function(x) {
+    icd_children_real.icd10cm(x, short_code = TRUE) %>%
+      c(x) %>% unique %>% icd_sort.icd10
+  }
+
+  icd10_map_quan_elix <- lapply(quan_elix_raw, f)
 
   # set S3 classes (in addition to "list")
   # this is a comorbidity map first and foremost (after being a list?)
-  class(icd10_map_quan_elix) <- c("list", "comorbidity_map", "icd10cm", "icd10")
+  class(icd10_map_quan_elix) <- c("comorbidity_map", "icd10cm", "icd10", "list")
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
