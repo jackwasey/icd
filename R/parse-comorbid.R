@@ -48,12 +48,12 @@ parseAhrqSas <- function(sasPath = system.file("data-raw", "comformat2012-2013.t
     unpaired_items <- sapply(somePairs, length) == 1
     out <- c()
     if (any(unpaired_items))
-      out <- icd9ChildrenShort(unlist(somePairs[unpaired_items]), onlyReal = FALSE)
+      out <- icd_children.icd9(unlist(somePairs[unpaired_items]), real = FALSE, short_code = TRUE)
 
     thePairs <- somePairs[lapply(somePairs, length) == 2]
     out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
     # update ahrqComorbid with full range of icd9 codes:
-    ahrqComorbidAll[[cmb]] <- icd9SortShort(unique(unlist(out)))
+    ahrqComorbidAll[[cmb]] <- out %>% unlist %>% unique 
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
@@ -101,12 +101,12 @@ parseAhrqSas <- function(sasPath = system.file("data-raw", "comformat2012-2013.t
   #   condense to parents, for each parent, if children are all in the list, add the parent
   for (cmb in names(ahrqComorbid)) {
     if (verbose) message("working on ranges for: ", cmb)
-    parents <- icd9CondenseShort(ahrqComorbid[[cmb]], onlyReal = FALSE)
+    parents <- icd_condense.icd9(ahrqComorbid[[cmb]], real = FALSE, short = TRUE)
     for (p in parents) {
-      kids <- icd9ChildrenShort(p, onlyReal = FALSE)
+      kids <- icd_children.icd9(p, real = FALSE, short = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
       if (all(kids %in% ahrqComorbid[[cmb]]))
-        ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], p)
+        ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], p) %>% unique %>% icd_sort.icd9(short_code = TRUE)
     }
   }
 

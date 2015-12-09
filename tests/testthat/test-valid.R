@@ -368,17 +368,17 @@ test_that("filter valid - data frame input", {
 })
 
 test_that("validate mappings", {
-  expect_true(icd9IsValidMappingDecimal(list(a = "100.1", b = "202.3")))
-  expect_true(icd9IsValidMappingShort(list(a = "1001", b = "2023")))
-  expect_false(icd9IsValidMappingDecimal(list(a = "1001", b = "2023")))
-  expect_false(icd9IsValidMappingShort(list(a = "100.1", b = "202.3")))
+  expect_true(icd_is_valid_map.icd9(short_code = FALSE, list(a = "100.1", b = "202.3")))
+  expect_true(icd_is_valid_map.icd9(short_code = TRUE, list(a = "1001", b = "2023")))
+  expect_false(icd_is_valid_map.icd9(short_code = FALSE, list(a = "1001", b = "2023")))
+  expect_false(icd_is_valid_map.icd9(short_code = TRUE, list(a = "100.1", b = "202.3")))
 
   expect_false(icd9IsValidMapping(list(a = "car", b = "et"), isShort = FALSE))
   expect_true(icd9IsValidMapping(list(a = "1001", b = "2023"), isShort = TRUE))
 })
 
 test_that("get invalid decimals", {
-  expect_equal(icd9GetInvalidDecimal(c("10.1", "rhubarb", "3000")), c("rhubarb", "3000"))
+  expect_equal(icd_get_invalid.icd9(c("10.1", "rhubarb", "3000")), c("rhubarb", "3000"), short_code = FALSE)
 })
 
 test_that("get real codes from a longer list", {

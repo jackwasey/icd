@@ -29,7 +29,7 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
   for (i in names(ahrqComorbid))
     expect_true(setequal(icd9ChildrenShort(ahrqComorbid[[i]], onlyReal = FALSE), ahrqComorbid[[i]]),
                 info = paste("missing from saved ahrq comorbid (", i, "): ",
-                             paste(setdiff(icd9ChildrenShort(ahrqComorbid[[i]], onlyReal = FALSE), ahrqComorbid[[i]]),
+                             paste(setdiff(icd_children.icd9(ahrqComorbid[[i]], real = FALSE), ahrqComorbid[[i]]),
                                    collapse = ", "
                              )
                 )
@@ -38,17 +38,17 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
 
 test_that("Elixhauser make sure all the children are listed in the saved data.", {
   for (i in elixComorbid)
-    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+    expect_equal(icd_children.icd9(i, real = FALSE, short_code = TRUE), sort(i))
 })
 
 test_that("Quan Charlson make sure all the children are listed in the saved data.", {
   for (i in quanDeyoComorbid)
-    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+    expect_equal(icd_children.icd9(i, real = FALSE, short_code = TRUE), sort(i))
 })
 
 test_that("Quan Elixhauser make sure all the children are listed in the saved data.", {
   for (i in quanElixComorbid)
-    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+    expect_equal(icd_children.icd9(i, real = FALSE, short_code = TRUE), sort(i))
 })
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
@@ -94,20 +94,21 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
+              skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
               expect_identical(quanDeyoComorbid,
                                parseQuanDeyoSas(condense = FALSE, save = FALSE))
-              expect_equivalent(icd9GetInvalidMappingShort(quanDeyoComorbid), list())
+              expect_equivalent(icd_get_invalid.map(quanDeyoComorbid, short_code = TRUE), list())
             })
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(quanElixComorbid,
                                icd9_generate_map_quan_elix(condense = FALSE, save = FALSE))
-              expect_equivalent(icd9GetInvalidMappingShort(quanElixComorbid), list())
+              expect_equivalent(icd_get_invalid.map(quanElixComorbid, short_code = TRUE), list())
             })
 test_that("Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(elixComorbid, icd9_generate_map_elix(save = FALSE))
-              expect_equivalent(icd9GetInvalidMappingShort(elixComorbid), list())
+              expect_equivalent(icd_get_invalid.map(elixComorbid, short_code = TRUE), list())
             })
 
 test_that("can condense the big lists of comorbidities without errors", {
@@ -120,25 +121,16 @@ test_that("can condense the big lists of comorbidities without errors", {
 
   for (onlyReal in c(TRUE, FALSE)) {
     if (onlyReal) {
-      expect_that(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal = onlyReal),
-                  gives_warning())
-      expect_that(quanDeyo <- lapply(quanDeyoComorbid, icd9Condense, onlyReal),
-                  gives_warning())
-      expect_that(quanElix <- lapply(quanElixComorbid,
-                                     icd9Condense, onlyReal),
-                  gives_warning())
-      expect_that(elix <- lapply(elixComorbid, icd9Condense, onlyReal),
-                  gives_warning())
+      expect_warning(ahrq <- lapply(ahrqComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal))
+      expect_warning(quanDeyo <- lapply(quanDeyoComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal))
+      expect_warning(quanElix <- lapply(quanElixComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal))
+      expect_warning(elix <- lapply(elixComorbid, icd_condense.icd9, real = onlyReal))
     }
     else {
-      expect_that(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal),
-                  testthat::not(gives_warning()))
-      expect_that(quanDeyo <- lapply(quanDeyoComorbid, icd9CondenseShort, onlyReal),
-                  testthat::not(gives_warning()))
-      expect_that(quanElix <- lapply(quanElixComorbid, icd9CondenseShort, onlyReal),
-                  testthat::not(gives_warning()))
-      expect_that(elix <- lapply(elixComorbid, icd9CondenseShort, onlyReal),
-                  testthat::not(gives_warning()))
+      expect_warning(ahrq <- lapply(ahrqComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal), NA)
+      expect_warning(quanDeyo <- lapply(quanElixComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal), NA)
+      expect_warning(quanElix <- lapply(quanDeyoComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal), NA)
+      expect_warning(elix <- lapply(elixComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal), NA)
     }
 
     expect_is(ahrq, class = "list")
@@ -146,14 +138,10 @@ test_that("can condense the big lists of comorbidities without errors", {
     expect_is(quanDeyo, class = "list")
     expect_is(quanElix, class = "list")
     # the comorbidity mappings save in \code{data} should not be condensed.
-    expect_that(ahrq,
-                testthat::not(testthat::equals(ahrqComorbid)))
-    expect_that(elix,
-                testthat::not(testthat::equals(elixComorbid)))
-    expect_that(quanDeyo,
-                testthat::not(testthat::equals(quanDeyoComorbid)))
-    expect_that(quanElix,
-                testthat::not(testthat::equals(quanElixComorbid)))
+    expect_false(isTRUE(all.equal(ahrq, ahrqComorbid)))
+    expect_false(isTRUE(all.equal(elix, elixComorbid)))
+    expect_false(isTRUE(all.equal(quanDeyo, quanDeyoComorbid)))
+    expect_false(isTRUE(all.equal(quanElix, quanElixComorbid)))
   }
 })
 
@@ -531,11 +519,11 @@ test_that("github #34 - short and long custom map give different results", {
                      icd9 = c("1", "010", "10", "20"))
 
   mymaps <- list(jack = c("1", "2", "3"), alf = c("010", "20"))
-  mymapd <- lapply(mymaps, icd9ShortToDecimal)
+  mymapd <- lapply(mymaps, icd_short_to_decimal.icd9)
 
   expect_identical(
-    icd9Comorbid(mydf, icd9Mapping = mymaps, isShort = TRUE),
-    icd9Comorbid(mydf, icd9Mapping = mymapd, isShort = FALSE)
+    icd_comorbid.icd9(mydf, map = mymaps, short_code = TRUE),
+    icd_comorbid.icd9(mydf, map = mymapd, short_code = FALSE)
     )
 })
 
@@ -554,24 +542,26 @@ test_that("no duplicate values in the co-morbidity lists", {
 })
 
 test_that("built-in icd9 to comorbidity mappings are all valid", {
-  expect_true(icd9IsValidMappingShort(ahrqComorbid))
-  expect_true(icd9IsValidMappingShort(quanDeyoComorbid))
-  expect_true(icd9IsValidMappingShort(quanElixComorbid))
-  expect_true(icd9IsValidMappingShort(elixComorbid))
+  expect_true(icd_is_valid_map(ahrqComorbid, short_code = TRUE))
+  expect_true(icd_is_valid_map(quanDeyoComorbid, short_code = TRUE))
+  expect_true(icd_is_valid_map(quanElixComorbid, short_code = TRUE))
+  expect_true(icd_is_valid_map(elixComorbid, short_code = TRUE))
 })
 
 test_that("disordered visit ids", {
   pts <- data.frame(visitId = c("2", "1", "2", "3", "3"),
                     icd9 = c("39891", "40110", "09322", "41514", "39891"))
-  icd9ComorbidShort(pts, ahrqComorbid)
+  icd_comorbid.icd9(pts, ahrqComorbid, short_code = TRUE)
 })
 
 test_that("diff comorbid works", {
-  expect_error(icd9DiffComorbid(bad_input)) # list, but not list of character vectors
-  expect_error(icd9DiffComorbid(bad_input, bad_input))
+# TODO: S3 classes for this
+  expect_error(icd_diff_comorbid(bad_input)) # list, but not list of character vectors
+  expect_error(icd_diff_comorbid(bad_input, bad_input))
 
   # no warning or error for good data
-  expect_that(res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE), testthat::not(gives_warning()))
+# TODO: should be testing correct dispatch here, too, since map is a different class.
+  expect_warning(res <- icd_diff_comorbid.icd9(ahrqComorbid, elixComorbid, show = FALSE), NA)
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
     "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",
@@ -587,14 +577,12 @@ test_that("diff comorbid works", {
   # both, also with elements in either side set diff
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
 
-  expect_that(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE),
-              testthat::not(gives_warning()))
+  expect_warning(resq <- icd_diff_comorbid.icd9(quanElixComorbid, quanDeyoComorbid, show = TRUE), NA)
 
   expect_error(
     utils::capture.output(
-      resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)
-      ), NA
-  )
+      resq <- icd_diff_comorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE), NA)
+    )
 })
 
 twoPtsFac <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
@@ -605,25 +593,25 @@ twoMapFac <- as.list(data.frame("malady" = c("100", "2000"),
                                 stringsAsFactors = TRUE))
 
 test_that("comorbid quick test", {
-  testres <- icd9Comorbid(twoPts, twoMap, return.df = TRUE)
+  testres <- icd_comorbid.icd9(twoPts, twoMap, return_df = TRUE)
   trueres <- data.frame("visitId" = c("v01", "v02"),
                         "malady" = c(FALSE, TRUE),
                         "ailment" = c(TRUE, FALSE),
                         stringsAsFactors = FALSE)
   expect_equal(testres, trueres)
 
-  testmat <- icd9Comorbid(twoPts, twoMap, return.df = FALSE)
+  testmat <- icd_comorbid.icd9(twoPts, twoMap, return_df = FALSE)
   truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE), nrow = 2,
                     dimnames = list(c("v01", "v02"), c("malady", "ailment")))
   expect_equal(testmat, truemat)
 
-  testresfac <- icd9Comorbid(twoPtsFac, twoMapFac, return.df = TRUE)
+  testresfac <- icd_comorbid.icd9(twoPtsFac, twoMapFac, return_df = TRUE)
   trueresfac <- data.frame("visitId" = c("v01", "v02"),
                            "malady" = c(FALSE, TRUE),
                            "ailment" = c(TRUE, FALSE),
                            stringsAsFactors = TRUE)
   expect_equal(testresfac, trueresfac)
-  expect_equal(icd9Comorbid(twoPtsFac, twoMapFac), truemat)
+  expect_equal(icd_comorbid.icd9(twoPtsFac, twoMapFac), truemat)
 
 })
 
@@ -681,19 +669,18 @@ test_that("control params don't affect result of comorbid calc", {
 test_that("failing example", {
   mydf <- data.frame(visitId = c("a", "b", "c"),
                      icd9 = c("441", "412.93", "044.9"))
-  cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)
+  cmb <- icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, hierarchy = TRUE)
   expect_false("names" %in% names(attributes(cmb)))
-  icd9Charlson(mydf, isShort = FALSE)
-  icd9Charlson(mydf, isShort = FALSE, return.df = TRUE)
-  icd9CharlsonComorbid(cmb)
+  icd_charlson(mydf, isShort = FALSE) # TODO: fix S3 classes ehre
+  icd_charlson(mydf, isShort = FALSE, return.df = TRUE)
+  icd_charlson_from_comorbid(cmb)
 })
 
 test_that("disordered visitIds works by default", {
   set.seed(1441)
   dat <- transform(testTwenty, visitId = sample(visitId))
-  cmp <-
-    tres <- icd9Comorbid(dat, ahrqComorbid, icd9Field = "icd9Code")
-  cres <- icd9Comorbid(testTwenty, ahrqComorbid, icd9Field = "icd9Code")
+  tres <- icd_comorbid.icd9(dat, ahrqComorbid, icd9Field = "icd9Code")
+  cres <- icd_comorbid.icd9(testTwenty, ahrqComorbid, icd9Field = "icd9Code")
   expect_equal(dim(tres), dim(cres))
   expect_equal(sum(tres), sum(cres))
   expect_true(setequal(rownames(tres), rownames(cres)))
@@ -702,11 +689,11 @@ test_that("disordered visitIds works by default", {
 })
 
 test_that("comorbidities created from source data frame coded as factors", {
-  v2 <- icd9WideToLong(vermont_dx)
+  v2 <- icd_wide_to_long(vermont_dx) # TODO: correct S3 method?
   v2$visit_id <- as.factor(v2$visit_id)
   v2$icdCode <- as.factor(v2$icdCode)
 
-  res <- icd9ComorbidAhrq(v2)
-  res_nofactor <- vermont_dx %>% icd9WideToLong %>% icd9ComorbidAhrq
+  res <- icd_comorbid_ahrq.icd9(v2)
+  res_nofactor <- vermont_dx %>% icd_wide_to_long %>% icd_comorbid_ahrq.icd9
   expect_identical(res, res_nofactor)
 })

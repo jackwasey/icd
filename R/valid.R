@@ -267,10 +267,25 @@ icd_get_valid.icd10cm <- function(icd, short_code = icd_guess_short(icd)) {
   icd[icd_is_valid.icd10cm(icd, short_code = short_code)]
 }
 
-#' Returns subset of codes which are not in valid short_code or decimal format.
+#' @title Get invalid ICD codes
+#' @description Returns subset of codes which are not in valid short_code or decimal format.
 #' @export
-icd_get_invalid <- function(x, short_code = icd_guess_short(icd9)) {
-  x[!icd_is_valid(x, short_code = short_code)]
+icd_get_invalid <- function(...) 
+  UseMethod("icd_get_invalid")
+
+#' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
+#' @param x vector of ICD codes, or list of vectors of ICD codes forming a comorbidity map
+#' @export
+icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short.icd9(icd9)) {
+  x[!icd_is_valid.icd9(x, short_code = short_code)]
+}
+
+#' @describeIn icd_get_invalid Get invalid elements of a comorbidity map
+#' @export
+icd_get_invalid.map <- function(map, short_code = icd_guess_short(map)) {
+ # todo: may need to switch on ICD code type
+  x <- lapply(map, FUN = icd_get_invalid, short_code = short_code)
+  x[lapply(x, length) > 0]
 }
 
 #' Returns major component of code (before decimal)
@@ -278,7 +293,6 @@ icd_get_invalid <- function(x, short_code = icd_guess_short(icd9)) {
 icd_get_major <- function(x) {
   UseMethod("icd_get_major")
 }
-
 
 #' check whether a code is major
 #' @description move to C++ or own R file:

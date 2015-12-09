@@ -63,16 +63,21 @@ icd_explain.factor <- function(icd9, short_code = icd_guess_short(icd9),
   icd_explain.character(asCharacterNoWarn(icd9), short_code = short_code,
                         condense = condense, brief = brief, warn = warn)
 
-#' @describeIn icd_explain explain character vector of ICD-9 codes
+#' @describeIn icd_explain explain character vector of ICD-9 codes. TODO: actually, this is ICD-9-CM
 #' @export
-icd_explain.character <- function(icd9, short_code = icd_guess_short(icd9),
+icd_explain.icd9 <- function(...)
+  icd_explain.icd9cm(...)
+
+#' @describeIn icd_explain explain character vector of ICD-9-CM codes
+#' @export
+icd_explain.icd9cm <- function(icd9, short_code = icd_guess_short(icd9),
                                   condense = TRUE, brief = FALSE, warn = TRUE) {
   assertCharacter(icd9)
   assertFlag(short_code)
   assertFlag(condense)
   assertFlag(brief)
   assertFlag(warn)
-  if (!short_code) icd9 <- icd9DecimalToShort(icd9)
+  if (!short_code) icd9 <- icd9_decimal_to_short(icd9)
 
   # if there are only real codes, we should condense with this in mind:
   if (condense) {
@@ -84,11 +89,12 @@ icd_explain.character <- function(icd9, short_code = icd_guess_short(icd9),
               paste(unreal[seq(from = 1, to = min(5, length(unreal)))],
                     collapse = " "), call. = FALSE)
     }
-    icd9 <- icd9CondenseShort(
+    icd9 <- icd_condense.icd9(
       icd9GetRealShort(icd9),
-      onlyReal = TRUE)
+      real = TRUE,
+      short_code = TRUE)
   }
-  mj <- unique(icd9GetMajor(icd9, isShort = TRUE))
+  mj <- unique(icd_get_major.icd9(icd9, short_code = TRUE))
 
   mjexplain <- names(icd9::icd9ChaptersMajor)[icd9::icd9ChaptersMajor %in%
                                                 mj[mj %in% icd9]]
@@ -129,7 +135,7 @@ icd9GetChapters <- function(icd9, short_code = icd_guess_short(icd9), verbose = 
   assertFlag(short_code)
   assert(checkFactor(icd9), checkCharacter(icd9))
   icd9 <- asCharacterNoWarn(icd9)
-  majors <- icd9GetMajor(icd9, short_code)
+  majors <- icd_get_major.icd9(icd9, short_code)
 
   cf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9Chapters), NA_character_))

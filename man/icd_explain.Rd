@@ -6,8 +6,9 @@
 \alias{icd9ExplainDecimal}
 \alias{icd9ExplainShort}
 \alias{icd_explain}
-\alias{icd_explain.character}
 \alias{icd_explain.factor}
+\alias{icd_explain.icd9}
+\alias{icd_explain.icd9cm}
 \alias{icd_explain.list}
 \alias{icd_explain.numeric}
 \title{explain ICD9 codes}
@@ -32,7 +33,9 @@ icd_explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
 \method{icd_explain}{factor}(icd9, short_code = icd_guess_short(icd9),
   condense = TRUE, brief = FALSE, warn = TRUE)
 
-\method{icd_explain}{character}(icd9, short_code = icd_guess_short(icd9),
+\method{icd_explain}{icd9}(...)
+
+\method{icd_explain}{icd9cm}(icd9, short_code = icd_guess_short(icd9),
   condense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd_explain}{numeric}(icd9, short_code = icd_guess_short(icd9),
@@ -92,7 +95,9 @@ convert 'decimal' format (123.45 style) ICD9 codes into the name
 
 \item \code{factor}: explain Explain factor of ICD-9 codes
 
-\item \code{character}: explain character vector of ICD-9 codes
+\item \code{icd9}: explain character vector of ICD-9 codes. TODO: actually, this is ICD-9-CM
+
+\item \code{icd9cm}: explain character vector of ICD-9-CM codes
 
 \item \code{numeric}: explain numeric vector of ICD-9 codes, with warning.
 In general, this is not allowed because of the possible ambiguity of

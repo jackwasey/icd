@@ -7,9 +7,13 @@
 \alias{icd9_condense_decimal}
 \alias{icd9_condense_short}
 \alias{icd_condense}
+\alias{icd_condense.character}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
 icd_condense(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE)
+
+\method{icd_condense}{character}(x, short_code = icd_guess_short(x),
+  real = NULL, warn = TRUE)
 
 icd9_condense_decimal(x, real = NULL, warn = TRUE)
 
@@ -66,6 +70,10 @@ becomes "010", not "0010"}
 This can be thought of as the inverse operation to
   \code{icd9Children}.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{character}: Condense a set of ICD codes, guessing ICD version from input data
+}}
 \seealso{
 Other ICD-9 ranges: \code{\link{icd9ExpandRange}},
   \code{\link{icd_children}},

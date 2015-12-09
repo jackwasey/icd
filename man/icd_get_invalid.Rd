@@ -4,21 +4,30 @@
 \alias{icd9GetInvalidDecimal}
 \alias{icd9GetInvalidShort}
 \alias{icd_get_invalid}
-\title{Returns subset of codes which are not in valid short_code or decimal format.}
+\alias{icd_get_invalid.icd9}
+\alias{icd_get_invalid.map}
+\title{Get invalid ICD codes}
 \usage{
 icd9GetInvalidDecimal(icd9Decimal)
 
 icd9GetInvalidShort(icd9Short)
 
-icd_get_invalid(x, short_code = icd_guess_short(icd9))
+icd_get_invalid(...)
+
+\method{icd_get_invalid}{icd9}(x, short_code = icd_guess_short.icd9(icd9))
+
+\method{icd_get_invalid}{map}(map, short_code = icd_guess_short(map))
+}
+\arguments{
+\item{x}{vector of ICD codes, or list of vectors of ICD codes forming a comorbidity map}
 }
 \description{
 Returns subset of codes which are not in valid short_code or decimal format.
 }
-\section{Functions}{
+\section{Methods (by class)}{
 \itemize{
-\item \code{icd9GetInvalidDecimal}: Returns subset of codes which are not in valid decimal format.
+\item \code{icd9}: Get invalid ICD-9 codes from vector of codes
 
-\item \code{icd9GetInvalidShort}: Returns subset of codes which are not in valid short_code format.
+\item \code{map}: Get invalid elements of a comorbidity map
 }}
 

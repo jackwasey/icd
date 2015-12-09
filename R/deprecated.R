@@ -344,7 +344,7 @@ icd9SortDecimal <- function(icd9Decimal) {
 #' @export
 icd9IsValidMapping <- function(icd9Mapping, isShort) {
   .Deprecated("icd_is_valid_map")
-  icd_is_valid_map(icd9Mapping, isShort)
+  icd_is_valid_map(icd9Mapping, short_code = isShort)
 }
 
 #' @rdname icd_is_valid_map
@@ -352,7 +352,7 @@ icd9IsValidMapping <- function(icd9Mapping, isShort) {
 #' @export
 icd9IsValidMappingShort <- function(icd9Mapping) {
   .Deprecated("icd_is_valid_map")
-  icd_is_valid_map(icd9Mapping, TRUE)
+  icd_is_valid_map(icd9Mapping, short_code = TRUE)
 }
 
 #' @rdname icd_is_valid_map
@@ -360,7 +360,7 @@ icd9IsValidMappingShort <- function(icd9Mapping) {
 #' @export
 icd9IsValidMappingDecimal <- function(icd9Mapping) {
   .Deprecated("icd_is_valid_map")
-  icd_is_valid_map(icd9Mapping, FALSE)
+  icd_is_valid_map(icd9Mapping, short_code = FALSE)
 }
 
 #' @rdname icd_is_valid_map
@@ -470,14 +470,14 @@ icd9IsE <- function(icd9) {
   icd9_is_e(icd9)
 }
 
-#' @describeIn icd_get_invalid Returns subset of codes which are not in valid decimal format.
+#' @rdname icd_get_invalid
 #' @export
 icd9GetInvalidDecimal <- function(icd9Decimal) {
   .Deprecated("icd_get_valid")
   icd9Decimal[!icd_is_valid.icd9(icd9Decimal, short_code = FALSE)]
 }
 
-#' @describeIn icd_get_invalid Returns subset of codes which are not in valid short_code format.
+#' @rdname icd_get_invalid
 #' @export
 icd9GetInvalidShort <- function(icd9Short) {
   .Deprecated("icd_get_valid")
@@ -543,5 +543,13 @@ icd9VanWalraven.data.frame <- function(x, visitId = NULL,
 icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
   .Deprecated("icd_van_walraven_from_comorbid")
   icd_van_walraven_from_comorbid(x = x, visit_name = visitId, hierarchy = applyHierarchy)
+}
+
+#' @rdname icd_diff_comorbid
+#' @export
+icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
+                             show = TRUE, explain = TRUE) {
+  .Deprecated("icd_diff_comorbid")
+  icd_diff_comorbid(x = x, y =y, all_names = names, x_names = x.names, y_names = y.names, show = show, explain = explain)
 }
 

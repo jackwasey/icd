@@ -61,7 +61,7 @@ icd9PoaChoices <- icd_poa_choices
 #'   or "diabetes") and the contents of each list item being a character vector
 #'   of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
 #'   No default: user should prefer to use the derivative functions, e.g.
-#'   icd9ComorbidAhrq, since these also provide appropriate naming for the
+#'   \code{icd_comorbid_ahrq}, since these also provide appropriate naming for the
 #'   fields, and squashing the hierarchy (see \code{hierarchy} below)
 #' @template visit_name
 #' @template icd_name
@@ -79,7 +79,7 @@ icd9PoaChoices <- icd_poa_choices
 #' @examples
 #'   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
 #'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
-#'    icd9ComorbidShort(pts, ahrqComorbid) # visit_name is now sorted
+#'    icd_comorbid.icd9(pts, ahrqComorbid, short_code = TRUE) # visit_name is now sorted
 #' @export
 icd_comorbid <- function(...)
   UseMethod("icd_comorbid")
@@ -280,7 +280,7 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
     # HTN separated out:
 
     # assume that the comorbidities are the last 31 fields. At present, the
-    # icd9Comorbid function doesn't attempt to aggregate fields it doesn't
+    # icd_comorbid function doesn't attempt to aggregate fields it doesn't
     # know about, e.g. POA, or anything else the user provides in the data
     # frame, so these are just dropped, leaving the fields for visit_name and all
     # the comorbidities:
@@ -332,10 +332,10 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #'   sensitive) overlapping names are compared.
 #' @param x list of character vectors
 #' @param y list of character vectors
-#' @param names character vector of the comorbidity names
-#' @param x.names character vector of the comorbidity names from \code{x} to
+#' @param all_names character vector of the comorbidity names
+#' @param x_names character vector of the comorbidity names from \code{x} to
 #'   compare
-#' @param y.names character vector of the comorbidity names from \code{y} to
+#' @param y_names character vector of the comorbidity names from \code{y} to
 #'   compare
 #' @param show single logical value. The default is \code{TRUE} which causes a
 #'   report to be printed.
@@ -351,7 +351,12 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #' @return A list, each item of which is another list containing the
 #'   intersections and both asymmetric differences.
 #' @export
-icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
+icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
+                             show = TRUE, explain = TRUE) {
+  UseMethod("icd_diff_comorbid")
+}
+
+icd_diff_comorbid.icd9 <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
                              show = TRUE, explain = TRUE) {
   assertList(x, min.len = 1, any.missing = FALSE,
              types = c("character"), names = "unique")
@@ -359,22 +364,21 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
              types = c("character"), names = "unique")
   assertFlag(show)
   assertFlag(explain)
-  stopifnot(all(x.names %in% names(x)), all(y.names %in% names(y)))
+  stopifnot(all(x_names %in% names(x)), all(y_names %in% names(y)))
 
   lapply(x, function(z) stopifnot(is.character(z)))
   lapply(y, function(z) stopifnot(is.character(z)))
 
-  if (!is.null(names) && (!is.null(x.names) | !is.null(y.names)))
-    stop("if 'names' is specified, 'x.names' and 'y.names' should not be")
+  if (!is.null(names) && (!is.null(x_names) | !is.null(y_names)))
+    stop("if 'all_names' is specified, 'x_names' and 'y_names' should not be")
 
-  if (!is.null(names)) {
-    x.names <- names
-    y.names <- names
-  }
-  if (is.null(x.names)) x.names <- names(x)
-  if (is.null(y.names)) y.names <- names(y)
+  if (!is.null(all_names)) 
+    x_names <- y_names <- all_names
+  
+  if (is.null(x_names)) x_names <- names(x)
+  if (is.null(y_names)) y_names <- names(y)
 
-  common.names <- intersect(x.names, y.names)
+  common.names <- intersect(x_names, y_names)
 
   x.title <- deparse(substitute(x))
   y.title <- deparse(substitute(y))
@@ -398,21 +402,21 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
       if (length(only.x) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     x.title, length(only.x), y.title))
-        lapply(icd_explain(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(icd_explain.icd9(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       if (length(only.y) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     y.title, length(only.y), x.title))
-        lapply(icd_explain(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(icd_explain.icd9(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       cat("\n")
     }
   }
   if (show) {
-    cmb_only_x <- setdiff(x.names, y.names)
-    cmb_only_y <- setdiff(y.names, x.names)
+    cmb_only_x <- setdiff(x_names, y_names)
+    cmb_only_y <- setdiff(y_names, x_names)
 
     if (length(cmb_only_x) > 0) {
       cat(sprintf("Comorbidities only defined in %s are: ", x.title))

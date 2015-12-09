@@ -54,14 +54,17 @@ sasFormatExtract <- function(sasTxt) {
   sasTxt <- grep(pattern = "^VALUE.*", x = sasTxt, value = TRUE)
 
   # put each VALUE declaration in a vector element
-  allAssignments <- strMultiMatch(
+#  allAssignments <- strMultiMatch(
+#    pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
+#    text = sasTxt)
+  allAssignments <- stringr::str_match_all(
     pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
-    text = sasTxt)
+    string = sasTxt)
 
   out <- list()
 
   for (m in allAssignments) {
-    out[m[[1]]] <- list(sasParseAssignments(m[[2]]))
+    out[m[[2]]] <- list(sasParseAssignments(m[[3]]))
   }
 
   out
@@ -79,7 +82,8 @@ sasFormatExtract <- function(sasTxt) {
 #'   "assigned value" pairs
 #' @keywords internal programming list
 sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
-
+  #requireNamespace("magrittr")
+  library("magrittr")
   assertString(x)
   assertFlag(stripWhiteSpace)
   assertFlag(stripQuotes)
@@ -104,16 +108,11 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
     return(out)
   }
 
-  threequarters <- c(
-    halfway[[1]],
-    unlist(
-      strMultiMatch(
-        pattern = '^([^"]|"[^"]*")*? (.*)',
-        text = halfway[seq(2, length(halfway) - 1)]
-      )
-    ),
-    halfway[[length(halfway)]]
-  )
+  threequarters <- halfway[seq(2, length(halfway) - 1)] %>%
+    stringr::str_match_all('^([^"]|"[^"]*")*? (.*)') %>%
+    vapply(extract, FUN.VALUE = character(2), c(2,3)) %>%
+    unlist %>%
+    c(halfway[[1]], .,  halfway[[length(halfway)]])
 
   if (stripQuotes) threequarters <- gsub(pattern = '"',
                                          replacement = "",
@@ -176,12 +175,12 @@ icd9ExpandRangeForSas <- function(start, end) {
                                 # hmmm, maybe get the diff and test all children of ambigs present later
                                 excludeAmbiguousStart = FALSE,
                                 excludeAmbiguousEnd = TRUE)
-  real_parents <- icd9CondenseShort(reals, onlyReal = TRUE)
+  real_parents <- icd_condense.icd9(reals, real = TRUE, short_code = TRUE)
   merged <- unique(c(reals, real_parents))
-  real_parents_of_merged <- icd9CondenseShort(merged, onlyReal = TRUE)
-  halfway <- icd9ChildrenShort(real_parents_of_merged, onlyReal = FALSE)
-  nonrealrange <- icd9ExpandRangeShort(start, end, onlyReal = FALSE,
+  real_parents_of_merged <- icd_condense.icd9(merged, real = TRUE, short_code = TRUE)
+  halfway <- icd_children.icd9(real_parents_of_merged, real = FALSE, short_code = TRUE)
+  nonrealrange <- icd_expand_range.icd9(start, end, real = FALSE, short_code = TRUE,
                                        excludeAmbiguousStart = TRUE,
                                        excludeAmbiguousEnd = TRUE)
-  icd9SortShort(unique(c(halfway, nonrealrange)))
+  icd_sort.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)
 }

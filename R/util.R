@@ -128,7 +128,7 @@ logical_to_binary <- function(x) {
 #'   text vector.
 #' @keywords internal
 strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
-  warning("deprecated: TODO: stringr::str_match_all does this better, but result structured differently")
+  .Deprecated("stringr::str_match_all") #"deprecated: TODO: stringr::str_match_all does this better, but result structured differently")
   # unlist puts the name in the first position, which I don't think I ever want.
   result <- lapply(
     text, function(x) unlist(
@@ -140,8 +140,10 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
         ...)
     )[ -1]
   )
-  if (!dropEmpty) return(result)
-  result[sapply(result, function(x) length(x) != 0)]
+  if (!dropEmpty) 
+    result
+  else
+    result[sapply(result, function(x) length(x) != 0)]
 }
 
 #' @rdname strMultiMatch
@@ -365,7 +367,7 @@ icd_sort.icd10 <- function(x, short_code = NULL) {
 #' @describeIn icd_sort sort ICD-9 codes respecting numeric, then V, then E
 #'   codes, and accounting for leading zeroes
 #' @export
-icd_sort.icd9 <- function(x, short_code = icd_guess_short(icd)) {
+icd_sort.icd9 <- function(x, short_code = icd_guess_short(x)) {
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assertFlag(short_code)
 

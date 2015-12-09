@@ -66,21 +66,22 @@ icd9ComorbiditiesQuanElixhauser(...)
 
 icd9ComorbidQuanElixhauser(...)
 
-icd9Comorbid(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
+icd9Comorbid(icd_df, icd9Mapping, visitId = NULL, icd9Field = NULL,
   isShort = icd_guess_short.icd9(icd_df),
-  isShortMapping = icd_guess_short.icd9(map), return.df = FALSE, ...)
+  isShortMapping = icd_guess_short.icd9(icd9Mapping), return.df = FALSE,
+  ...)
 
-icd9ComorbidAhrq(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
-  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
+icd9ComorbidAhrq(icd9df, visitId = NULL, icd9Field = NULL,
+  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
+  ...)
 
-icd9ComorbidElix(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
-  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
+icd9ComorbidElix(icd9df, visitId = NULL, icd9Field = NULL,
+  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
+  ...)
 
-icd9ComorbidQuanDeyo(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
-  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-  isShortMapping = icd9GuessIsShort(icd9Mapping), return.df = FALSE, ...)
+icd9ComorbidQuanDeyo(icd9df, visitId = NULL, icd9Field = NULL,
+  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
+  ...)
 }
 \arguments{
 \item{icd9df}{Deprecated. Use \code{icd_df}}
@@ -105,7 +106,7 @@ with the names of the items corresponding to the comorbidities (e.g. "HTN",
 or "diabetes") and the contents of each list item being a character vector
 of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
 No default: user should prefer to use the derivative functions, e.g.
-icd9ComorbidAhrq, since these also provide appropriate naming for the
+\code{icd_comorbid_ahrq}, since these also provide appropriate naming for the
 fields, and squashing the hierarchy (see \code{hierarchy} below)}
 
 \item{visit_name}{The name of the column in the data frame which contains the
@@ -186,7 +187,7 @@ There is a change in behavior from previous versions. The visit_name
 \examples{
   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
-   icd9ComorbidShort(pts, ahrqComorbid) # visit_name is now sorted
+   icd_comorbid.icd9(pts, ahrqComorbid, short_code = TRUE) # visit_name is now sorted
 }
 \keyword{internal}
 
