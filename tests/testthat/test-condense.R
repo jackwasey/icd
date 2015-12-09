@@ -119,68 +119,66 @@ test_that("mix of four and five digit with non-billable mid-level four digit cod
 
 test_that("condense short range", {
 
-  expect_equal(icd9ExplainShort(icd9short_code = othersalmonella),
-               "Other salmonella infections")
+  expect_equal(icd_explain.icd9(othersalmonella), "Other salmonella infections")
 
   expect_equal(icd_condense.icd9(short_code = TRUE,othersalmonella, real = TRUE), "003")
-  expect_that(res <- icd_condense.icd9(short_code = TRUE,othersalmonella, real = FALSE), testthat::not(gives_warning()))
+  expect_warning(res <- icd_condense.icd9(short_code = TRUE, othersalmonella, real = FALSE), NA)
   expect_equal(res, othersalmonella)
   # missing this leaf node, we can't condense at all
-  expect_equal(icd_condense.icd9(short_code = TRUE,othersalmonella[-3], real = TRUE),
+  expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella[-3], real = TRUE),
                othersalmonella[-3])
   # if we demand condensing to all possible values, we get the same back
-  expect_equal(icd_condense.icd9(short_code = TRUE,othersalmonella[-3], real = FALSE),
+  expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella[-3], real = FALSE),
                othersalmonella[-3])
 
-  expect_equal(sort(icd9ChildrenShort(icd9short_code = "001", onlyBillable = TRUE)),
+  expect_equal(sort(icd_children.icd9(short_code = TRUE, "001", billable = TRUE)),
                c("0010", "0011", "0019"))
 
-  expect_equal(sort(icd9ChildrenShort(icd9short_code = "001", real = TRUE)),
+  expect_equal(sort(icd_children.icd9(short_code = TRUE, x = "001", real = TRUE)),
                c("001", "0010", "0011", "0019"))
 
-  expect_equal(icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("00320", real = TRUE), real = TRUE), "00320")
+  expect_equal(icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "00320", real = TRUE), real = TRUE), "00320")
   # majors should be okay, even if not 'real'
-  expect_that(dup_res <- icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("003", real = TRUE)),
-              testthat::not(gives_warning()))
+  expect_warning(dup_res <- icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "003", real = TRUE)), NA)
 
-  expect_equal(icd_condense.icd9(short_code = TRUE,c("003", "003"), real = TRUE), "003")
-  expect_equal(icd_condense.icd9(short_code = TRUE,c("003", "003"), real = FALSE), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE, c("003", "003"), real = TRUE), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE, c("003", "003"), real = FALSE), "003")
 })
 
 test_that("condense full ranges", {
   # condensing to "real" means we don't get a lot of majors, which are often not
   # themselves defined.
   # majors:
-  expect_equal(icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("003", real = FALSE), real = FALSE), "003")
-  expect_equal(icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("3", real = FALSE), real = FALSE), "003")
-  expect_equal(icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("410", real = FALSE), real = FALSE), "410")
-  expect_equal(icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("V12", real = FALSE), real = FALSE), "V12")
-  expect_equal(icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("E800", real = FALSE), real = FALSE), "E800")
+  expect_equal(icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "003", real = FALSE), real = FALSE), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "3", real = FALSE), real = FALSE), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "410", real = FALSE), real = FALSE), "410")
+  expect_equal(icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "V12", real = FALSE), real = FALSE), "V12")
+  expect_equal(icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "E800", real = FALSE), real = FALSE), "E800")
   # repeat some tests with decimals instead
-  expect_equal(icd_condense.icd9Decimal(icd9Children("003", isshort_code = FALSE, real = FALSE), real = FALSE), "003")
-  expect_equal(icd_condense.icd9(icd9ChildrenDecimal("3", real = FALSE), isshort_code = FALSE, real = FALSE), "003")
-  expect_equal(icd_condense.icd9Decimal(icd9ChildrenDecimal("410", real = FALSE), real = FALSE), "410")
-  expect_equal(icd_condense.icd9Decimal(icd9Children("V12", isshort_code = FALSE, real = FALSE), real = FALSE), "V12")
-  expect_equal(icd_condense.icd9Decimal(icd9ChildrenDecimal("E800", real = FALSE), real = FALSE), "E800")
+  expect_equal(icd_condense.icd9(short_code = FALSE, icd_children.icd9("003", short_code = FALSE, real = FALSE), real = FALSE), "003")
+  expect_equal(icd_condense.icd9(icd_children.icd9(short_code = FALSE, "3", real = FALSE), short_code = FALSE, real = FALSE), "003")
+  expect_equal(icd_condense.icd9(short_code = FALSE, icd_children.icd9(short_code = FALSE, "410", real = FALSE), real = FALSE), "410")
+  expect_equal(icd_condense.icd9(short_code = FALSE, icd_children.icd9("V12", short_code = FALSE, real = FALSE), real = FALSE), "V12")
+  expect_equal(icd_condense.icd9(short_code = FALSE, icd_children.icd9(short_code = FALSE, "E800", real = FALSE), real = FALSE), "E800")
   # repeat some tests with decimals and smaller codes
-  expect_equal(icd_condense.icd9Decimal(icd9Children("003.2", isshort_code = FALSE, real = FALSE), real = FALSE),
+  expect_equal(icd_condense.icd9(short_code = FALSE, icd_children.icd9("003.2", short_code = FALSE, real = FALSE), real = FALSE),
                "003.2")
-  expect_equal(icd_condense.icd9(icd9ChildrenDecimal("3.2", real = FALSE), isshort_code = FALSE, real = FALSE),
+  expect_equal(icd_condense.icd9(icd_children.icd9(short_code = FALSE, "3.2", real = FALSE), short_code = FALSE, real = FALSE),
                "003.2")
-  expect_equal(icd_condense.icd9Decimal(icd9ChildrenDecimal("410.0", real = FALSE), real = FALSE), "410.0")
-  expect_equal(icd_condense.icd9Decimal(icd9Children("V12", isshort_code = FALSE, real = FALSE), real = FALSE), "V12")
-  expect_equal(icd_condense.icd9Decimal(icd9ChildrenDecimal("E800", real = FALSE), real = FALSE), "E800")
+  expect_equal(icd_condense.icd9(short_code = FALSE, icd_children.icd9(short_code = FALSE, "410.0", real = FALSE), real = FALSE), "410.0")
+  expect_equal(icd_condense.icd9(short_code = FALSE, icd_children.icd9("V12", short_code = FALSE, real = FALSE), real = FALSE), "V12")
+  expect_equal(icd_condense.icd9(short_code = FALSE, icd_children.icd9(short_code = FALSE, "E800", real = FALSE), real = FALSE), "E800")
 
-  expect_equal(icd_condense.icd9(short_code = TRUE, icd9ChildrenShort("0031", real = FALSE), real = FALSE), "0031")
+  expect_equal(icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "0031", real = FALSE), real = FALSE), "0031")
   # major is alloect_equal(icd_condense.icd9(short_code = TRUE,c("003", othersalmonella), real = TRUE), "003")
   # major is retupect_equal(icd_condense.icd9(short_code = TRUE,othersalmonella, real = TRUE), "003")
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, real = FALSE), othersalmonella)
   # now do we fining major if all chilren present?
-  almostall003 <- icd9ChildrenShort("003", real = FALSE)
+  almostall003 <- icd_children.icd9(short_code = TRUE, "003", real = FALSE)
   almostall003 <- almostall003[almostall003 != "003"] # drop the major
   expect_equal(icd_condense.icd9(short_code = TRUE,almostall003, real = FALSE), "003")
 
-  expect_equal(icd_condense.icd9(short_code = TRUE,icd9ChildrenShort("0031", real = FALSE),
+  expect_equal(icd_condense.icd9(short_code = TRUE,icd_children.icd9(short_code = TRUE, "0031", real = FALSE),
                                  real = FALSE), "0031")
   # gives nothing back if a non-billable code provided, but billable requested
 
@@ -200,27 +198,27 @@ test_that("condense single major and its children", {
   expect_equal(icd_condense.icd9(short_code = TRUE,"003"), "003")
 
   rheum_fever <- "Rheumatic fever with heart involvement"
-  expect_equal(icd9ExplainShort("391"), rheum_fever)
-  expect_equal(icd9ExplainShort(icd_children.icd9("391", short_code = TRUE)), rheum_fever)
-  expect_equal(icd9ExplainShort(icd_children.icd9("391", short_code = TRUE, real = TRUE)), rheum_fever)
+  expect_equal(icd_explain.icd9("391"), rheum_fever)
+  expect_equal(icd_explain.icd9(icd_children.icd9("391", short_code = TRUE)), rheum_fever)
+  expect_equal(icd_explain.icd9(icd_children.icd9("391", short_code = TRUE, real = TRUE)), rheum_fever)
 })
 
 icd9::vermont_dx %>%
   icd_wide_to_long  %>%
   extract2("icdCode")  %>%
-  icd9SortShort %>%
+  icd_sort.icd9(short_code = TRUE) %>%
   unique %>%
   utils::head(10) -> vdat
 
 test_that("condense a factor of codes instead of character vector", {
   # this is not a condensable list
   dat <- as.factor(vdat)
-  expect_equal(dat, icd_condense.icd9(short_code = TRUE,dat))
+  expect_equal(dat, icd_condense.icd9(short_code = TRUE, dat))
 
 })
 
 test_that("levels are preserved from source factor", {
   dat <- factor(vdat, levels = c("plastic", vdat))
-  expect_identical(dat, icd_condense.icd9(short_code = TRUE,dat, keepFactorLevels = TRUE))
-  expect_equivalent(dat, icd_condense.icd9(short_code = TRUE,dat, keepFactorLevels = FALSE))
+  expect_identical(dat, icd_condense.icd9(short_code = TRUE, dat, keepFactorLevels = TRUE))
+  expect_equivalent(dat, icd_condense.icd9(short_code = TRUE, dat, keepFactorLevels = FALSE))
 })

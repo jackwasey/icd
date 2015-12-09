@@ -29,15 +29,15 @@ icd_condense <- function(x, short_code = icd_guess_short(x), real = NULL, warn =
   UseMethod("icd_condense")
 }
 
-icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE) {
+icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE, ...) {
   assert(checkFactor(x), checkCharacter(x))
   assertFlag(short_code)
   assert(checkNull(real), checkFlag(real))
   assertFlag(warn)
   if (short_code)
-    icd9_condense_short(x, real = real, warn = warn)
+    icd9_condense_short(x, real = real, warn = warn, ...)
   else
-    icd9_condense_decimal(x, real = real, warn = warn)
+    icd9_condense_decimal(x, real = real, warn = warn, ...)
 }
 
 #' @describeIn icd_condense Condense a set of ICD codes, guessing ICD version from input data
