@@ -16,7 +16,6 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title Calculate Charlson Comorbidity Index (Charlson Score)
-#' @rdname icd9Charlson
 #' @description Charlson score is calculated in the basis of the Quan revision
 #'   of Deyo's ICD-9 mapping. (Peptic Ulcer disease no longer warrants a point.)
 #'   Quan published an updated set of scores, but it seems most people use the
@@ -55,11 +54,10 @@
 #'                    icd9 = c("441", "412.93", "044.9"))
 #' cmb <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, applyHierarchy = TRUE)
 #' cmb
-#' icd9Charlson(mydf, isShort = FALSE)
-#' icd9Charlson(mydf, isShort = FALSE, return.df = TRUE)
-#' icd9CharlsonComorbid(cmb)
+#' icd_charlson(mydf, short_code = FALSE)
+#' icd_charlson(mydf, short_code = FALSE, return_df = TRUE)
+#' icd_charlson_from_comorbid(cmb)
 #' @export
-
 icd_charlson <- function(x, visit_name = NULL,
                          scoring_system = c("original", "charlson", "quan"),
                          return_df = FALSE,
@@ -67,7 +65,7 @@ icd_charlson <- function(x, visit_name = NULL,
 			 ...)
   UseMethod("icd_charlson")
 
-#' @describeIn icd9Charlson Charlson scores from data frame of visits and ICD-9 codes
+#' @describeIn icd_charlson Charlson scores from data frame of visits and ICD-9 codes
 #' @export
 icd_charlson.data.frame <- function(x, visit_name = NULL,
                                     scoring_system = c("original", "charlson", "quan"),
@@ -90,7 +88,7 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
   out
 }
 
-#' @rdname icd9Charlson
+#' @rdname icd_charlson
 #' @param applyHierarchy single logical value, default is FALSE. If TRUE, will
 #'   drop DM if DMcx is present, etc.
 #' @export

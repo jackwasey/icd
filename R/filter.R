@@ -46,7 +46,9 @@ icd_filter_valid.icd9 <- function(x, icd_name = NULL,
   x[icd_is_valid.icd9(x[[icd_name]], short_code = short_code) != invert, ]
 }
 
-#' @describeIn icd_filter_invalid Filter in (or out) invalid ICD-9 codes
+### @describeIn icd_filter_invalid Filter in (or out) invalid ICD-9 codes
+
+#' @rdname icd_filter_valid
 #' @export
 icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, invert = FALSE) {
   icd_filter_valid.icd9(x, icd_name = icd_name, short_code = short_code, invert = !invert)

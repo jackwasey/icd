@@ -2,6 +2,7 @@
 % Please edit documentation in R/filter.R
 \name{icd_filter_valid}
 \alias{icd_filter_invalid}
+\alias{icd_filter_invalid.icd9}
 \alias{icd_filter_valid}
 \alias{icd_filter_valid.icd9}
 \title{Filter ICD-9 codes by validity.}
@@ -11,6 +12,9 @@ icd_filter_valid(...)
 icd_filter_invalid(...)
 
 \method{icd_filter_valid}{icd9}(x, icd_name = NULL, short_code = NULL,
+  invert = FALSE)
+
+\method{icd_filter_invalid}{icd9}(x, icd_name = NULL, short_code = NULL,
   invert = FALSE)
 }
 \arguments{
