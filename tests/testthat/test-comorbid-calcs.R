@@ -306,7 +306,7 @@ test_that("get Charlson/Deyo comorbidities for a single patient", {
                      icd9 = c("044.9"),
                      stringsAsFactors = FALSE)
   expect_equal(
-    icd_comorbid_quan_deyo.icd9(icd_df = mydf, short_code = FALSE, return_df = TRUE),
+    icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE),
     structure(
       list(
         visitId = "a",

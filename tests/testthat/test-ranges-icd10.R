@@ -43,7 +43,7 @@ test_that("very bad input data fails completely", {
 test_that("simple ranges of real values works", {
   expect_equal(icd_expand_range.icd10cm("A00", "A001"),
                c("A00", "A000", "A001"))
-  expect_equal(icd10ExpandRangeRealShort("A00", "A009"),
+  expect_equal(icd_expand_range.icd10cm("A00", "A009", short_code = TRUE),
                c("A00", "A000", "A001", "A009"))
 })
 
@@ -64,9 +64,8 @@ test_that("range style used by Quan is accepted", {
   )
   for (pair in quan_ranges) {
     # start with a low bar!
-      expect_that(
-        icd10ExpandRangeRealShort(pair[1], pair[2]),
-        testthat::not(throws_error()),
+      expect_error(
+        icd_expand_range.icd10cm(pair[1], pair[2], short_code = TRUE), NA,
         info = paste(pair, collapse = "-")
         )
 
@@ -87,11 +86,11 @@ test_that("range style used by Quan is accepted", {
 context("test icd10 ranges - children real")
 
 test_that("completely invalid input fails", {
-  expect_error(icd10_children_real_short(data.frame(a = 1, b = "b")))
+  expect_error(icd_children_real.icd10cm(data.frame(a = 1, b = "b"), short_code = TRUE))
 })
 
 test_that("single value gives correct range", {
-  expect_equal(icd10_children_real_short("A00"), c("A00", "A000", "A001", "A009"))
+  expect_equal(icd_children_real.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
 })
 
 ################################################################################
@@ -107,7 +106,7 @@ test_that("completely invalid input fails", {
 })
 
 test_that("single values give all real children", {
-  expect_equal(icd10_children_real_short("A00"), c("A00", "A000", "A001", "A009"))
+  expect_equal(icd_children_real.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
 })
 
 test_that("certainly invalid codes return empty vectors", {

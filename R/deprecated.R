@@ -575,3 +575,49 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
 icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FALSE) {
   icd9_get_chapters(icd9, isShort, verbose)
 }
+
+#' @rdname icd_long_to_wide
+#' @export
+icd9LongToWide <- function(icd9df,
+                           visitId =  get_visit_name(icd9df),
+                           icd9Field = get_icd_name(icd9df),
+                           prefix = "icd_",
+                           min.width = 0,
+                           aggregate = TRUE,
+                           return.df = FALSE) {
+  .Deprecated("icd_long_to_wide")
+  icd_long_to_wide(x = icd9df, visit_name = visitId, icd_name = icd9Field, prefix = prefix,
+    min_width = min.width, agg = aggregate, return_df = return.df)
+}
+
+#' @rdname icd_wide_to_long
+#' @export
+icd9WideToLong <- function(x,
+                           visitId = get_visit_name(x),
+                           icdLabels = NULL,
+                           icdName = "icdCode",
+                           icdRegex = c("icd", "diag", "dx_", "dx"),
+                           verbose = FALSE) {
+  .Deprecated("icd_wide_to_long")
+  icd_wide_to_long(x = x, visit_name = visitId, icd_labels = icdLabels, icd_name = icdName, icd_regex = icdRegex)
+}
+
+icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
+  .Deprecated("icd_decimal_to_parts")
+  icd9DecimalToParts(icd9Decimal, minorEmpty)
+}
+
+#' @rdname icd_short_to_decimal
+#' @export
+icd9DecimalToShort <- function(icd9Short) {
+  .Deprecated("icd_decimal_to_short")
+  icd_decimal_to_short.icd9(icd9Short)
+}
+
+#' @rdname icd_short_to_decimal
+#' @export
+icd9ShortToDecimal <- function(icd9Short) {
+  .Deprecated("icd_short_to_decimal")
+  icd_short_to_decimal.icd9(icd9Short)
+}
+

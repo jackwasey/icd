@@ -141,8 +141,9 @@ icd_comorbid.icd9 <- function(x,
   x[[visit_name]] <- asCharacterNoWarn(x[[visit_name]])
 
   # again, R is very fast at creating factors from a known set of levels
-  map <- lapply(map, function(x) {
-    f <- factor_nosort(x, levels(x[[icd_name]]))
+  icd_levels <- levels(x[[icd_name]])
+  map <- lapply(map, function(y) {
+    f <- factor_nosort(y, icd_levels)
     f[!is.na(f)]
   })
 
