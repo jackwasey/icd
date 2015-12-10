@@ -215,7 +215,7 @@ icd9_is_valid_major_e <- function(major)
 #' @template mapping
 #' @family ICD9 validation
 #' @export
-icd_is_valid_map <- function(map, short_code) {
+icd_is_valid.map <- function(map, short_code) {
   checkmate::assertList(map, types = "character", any.missing = FALSE,
                         min.len = 1, unique = TRUE, names = "named")
   checkmate::assertFlag(short_code)
@@ -270,13 +270,13 @@ icd_get_valid.icd10cm <- function(icd, short_code = icd_guess_short(icd)) {
 #' @title Get invalid ICD codes
 #' @description Returns subset of codes which are not in valid short_code or decimal format.
 #' @export
-icd_get_invalid <- function(...) 
+icd_get_invalid <- function(...)
   UseMethod("icd_get_invalid")
 
 #' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
 #' @param x vector of ICD codes, or list of vectors of ICD codes forming a comorbidity map
 #' @export
-icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short.icd9(icd9)) {
+icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short.icd9(x)) {
   x[!icd_is_valid.icd9(x, short_code = short_code)]
 }
 

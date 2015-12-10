@@ -2,6 +2,7 @@
 % Please edit documentation in R/deprecated.R, R/explain.R
 \name{icd9Explain}
 \alias{icd9Explain}
+\alias{icd9Explain.list}
 \alias{icd9Explain.numeric}
 \alias{icd9ExplainDecimal}
 \alias{icd9ExplainShort}
@@ -13,21 +14,23 @@
 \alias{icd_explain.numeric}
 \title{explain ICD9 codes}
 \usage{
-icd9Explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
+icd9Explain(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE,
   brief = FALSE, warn = TRUE)
 
-icd9Explain.numeric(icd9, short_code = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = FALSE)
+icd9Explain.numeric(icd9, isShort = icd_guess_short(icd9),
+  doCondense = TRUE, brief = FALSE, warn = FALSE)
 
-icd9ExplainShort(icd9Short, condense = TRUE, brief = FALSE, warn = TRUE)
+icd9Explain.list(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE,
+  brief = FALSE, warn = FALSE)
 
-icd9ExplainDecimal(icd9Decimal, condense = TRUE, brief = FALSE,
+icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE)
+
+icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
   warn = TRUE)
 
-icd_explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
-  brief = FALSE, warn = TRUE)
+icd_explain(...)
 
-\method{icd_explain}{list}(icd9, short_code = icd_guess_short(icd9),
+\method{icd_explain}{list}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd_explain}{factor}(icd9, short_code = icd_guess_short(icd9),
@@ -35,7 +38,7 @@ icd_explain(icd9, short_code = icd_guess_short(icd9), condense = TRUE,
 
 \method{icd_explain}{icd9}(...)
 
-\method{icd_explain}{icd9cm}(icd9, short_code = icd_guess_short(icd9),
+\method{icd_explain}{icd9cm}(x, short_code = icd_guess_short.icd9(x),
   condense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd_explain}{numeric}(icd9, short_code = icd_guess_short(icd9),
@@ -48,15 +51,9 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
-
-\item{condense}{single logical value which indicates whether to condense
-the given set of ICD-9 codes by replacing subsets of codes with 'parent'
-codes which exactly encompass certain subsets. E.g. If all cholera
-diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
-subtypes.}
 
 \item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
 the short description from the canonical CMS descriptions (included in
@@ -76,9 +73,15 @@ characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+\item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
+
+\item{condense}{single logical value which indicates whether to condense
+the given set of ICD-9 codes by replacing subsets of codes with 'parent'
+codes which exactly encompass certain subsets. E.g. If all cholera
+diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
+subtypes.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD9 code, name
@@ -91,7 +94,7 @@ convert 'decimal' format (123.45 style) ICD9 codes into the name
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{list}: explain Explain all ICD-9 codes in a list of vectors
+\item \code{list}: Explain all ICD-9 codes in a list of vectors
 
 \item \code{factor}: explain Explain factor of ICD-9 codes
 

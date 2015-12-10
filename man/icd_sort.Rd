@@ -19,7 +19,7 @@ icd_sort(x, ...)
 
 \method{icd_sort}{icd10}(x, short_code = NULL)
 
-\method{icd_sort}{icd9}(x, short_code = icd_guess_short(icd))
+\method{icd_sort}{icd9}(x, short_code = icd_guess_short(x))
 }
 \arguments{
 \item{icd9}{is

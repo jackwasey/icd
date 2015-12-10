@@ -2,19 +2,19 @@
 % Please edit documentation in R/children.R
 \name{icd_children_real}
 \alias{icd_children_real}
-\alias{icd_children_real.icd10}
+\alias{icd_children_real.icd10cm}
 \title{real icd10 children based on 2016 ICD-10-CM list}
 \usage{
 icd_children_real(x)
 
-\method{icd_children_real}{icd10}(x, short_code = icd_guess_short(x))
+\method{icd_children_real}{icd10cm}(x, short_code = icd_guess_short(x))
 }
 \description{
 real icd10 children based on 2016 ICD-10-CM list
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd10}: get the children of ICD-10 code(s)
+\item \code{icd10cm}: get the children of ICD-10 code(s)
 }}
 \keyword{internal}
 

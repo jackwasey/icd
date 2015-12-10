@@ -200,7 +200,7 @@ icd9Explain.numeric <- function(icd9, isShort = icd_guess_short(icd9),
   icd_explain.numeric(icd9, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
 }
 
-#' @describeIn icd_explain explain Explain all ICD-9 codes in a list of vectors
+#' @rdname icd_explain
 #' @export
 icd9Explain.list <- function(icd9, isShort = icd_guess_short(icd9),
                              doCondense = TRUE, brief = FALSE, warn = FALSE) {
@@ -348,45 +348,45 @@ icd9SortDecimal <- function(icd9Decimal) {
 }
 
 
-#' @rdname icd_is_valid_map
+#' @rdname icd_is_valid
 #' @template mapping-icd9
 #' @template short_code
 #' @export
 icd9IsValidMapping <- function(icd9Mapping, isShort) {
-  .Deprecated("icd_is_valid_map")
-  icd_is_valid_map(icd9Mapping, short_code = isShort)
+  .Deprecated("icd_is_valid.map")
+  icd_is_valid.map(icd9Mapping, short_code = isShort)
 }
 
-#' @rdname icd_is_valid_map
+#' @rdname icd_is_valid
 #' @template mapping-icd9
 #' @export
 icd9IsValidMappingShort <- function(icd9Mapping) {
-  .Deprecated("icd_is_valid_map")
-  icd_is_valid_map(icd9Mapping, short_code = TRUE)
+  .Deprecated("icd_is_valid.map")
+  icd_is_valid.map(icd9Mapping, short_code = TRUE)
 }
 
-#' @rdname icd_is_valid_map
+#' @rdname icd_is_valid
 #' @template mapping-icd9
 #' @export
 icd9IsValidMappingDecimal <- function(icd9Mapping) {
-  .Deprecated("icd_is_valid_map")
-  icd_is_valid_map(icd9Mapping, short_code = FALSE)
+  .Deprecated("icd_is_valid.map")
+  icd_is_valid.map(icd9Mapping, short_code = FALSE)
 }
 
-#' @rdname icd_is_valid_map
+#' @rdname icd_is_valid
 #' @template mapping-icd9
 #' @export
 icd9GetInvalidMappingShort <- function(icd9Mapping) {
-  .Deprecated("icd_is_valid_map")
+  .Deprecated("icd_is_valid.map")
   x <- lapply(icd9Mapping, FUN = icd9GetInvalidShort)
   x[lapply(x, length) > 0]
 }
 
-#' @rdname icd_is_valid_map
+#' @rdname icd_is_valid
 #' @template mapping-icd9
 #' @export
 icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
-  .Deprecated("icd_is_valid_map")
+  .Deprecated("icd_is_valid.map")
   x <- lapply(icd9Mapping, FUN = icd9GetInvalidDecimal)
   x[lapply(x, length) > 0]
 }

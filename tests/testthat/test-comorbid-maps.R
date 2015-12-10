@@ -542,10 +542,10 @@ test_that("no duplicate values in the co-morbidity lists", {
 })
 
 test_that("built-in icd9 to comorbidity mappings are all valid", {
-  expect_true(icd_is_valid_map(ahrqComorbid, short_code = TRUE))
-  expect_true(icd_is_valid_map(quanDeyoComorbid, short_code = TRUE))
-  expect_true(icd_is_valid_map(quanElixComorbid, short_code = TRUE))
-  expect_true(icd_is_valid_map(elixComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.map(ahrqComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.map(quanDeyoComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.map(quanElixComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.map(elixComorbid, short_code = TRUE))
 })
 
 test_that("disordered visit ids", {

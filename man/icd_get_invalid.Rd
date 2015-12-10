@@ -14,7 +14,7 @@ icd9GetInvalidShort(icd9Short)
 
 icd_get_invalid(...)
 
-\method{icd_get_invalid}{icd9}(x, short_code = icd_guess_short.icd9(icd9))
+\method{icd_get_invalid}{icd9}(x, short_code = icd_guess_short.icd9(x))
 
 \method{icd_get_invalid}{map}(map, short_code = icd_guess_short(map))
 }

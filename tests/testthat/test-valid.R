@@ -340,7 +340,7 @@ test_that("get valid - vector input", {
   expect_equal(icd_get_valid.icd9(short_code = FALSE, c("10.0", "100.x")), "10.0")
   expect_equal(icd_get_valid.icd9(short_code = TRUE, "nolk"), character())
   expect_equal(icd_get_valid.icd9(short_code = TRUE, c("V100", "nolk")), "V100")
-  expect_equal(icd9GetInvalid(c("100", "nolk")), "nolk")
+  expect_equal(icd_get_invalid.icd9(c("100", "nolk")), "nolk")
 })
 
 test_that("filter valid - data frame input", {
@@ -368,17 +368,17 @@ test_that("filter valid - data frame input", {
 })
 
 test_that("validate mappings", {
-  expect_true(icd_is_valid_map.icd9(short_code = FALSE, list(a = "100.1", b = "202.3")))
-  expect_true(icd_is_valid_map.icd9(short_code = TRUE, list(a = "1001", b = "2023")))
-  expect_false(icd_is_valid_map.icd9(short_code = FALSE, list(a = "1001", b = "2023")))
-  expect_false(icd_is_valid_map.icd9(short_code = TRUE, list(a = "100.1", b = "202.3")))
+  expect_true(icd_is_valid.map(short_code = FALSE, list(a = "100.1", b = "202.3")))
+  expect_true(icd_is_valid.map(short_code = TRUE, list(a = "1001", b = "2023")))
+  expect_false(icd_is_valid.map(short_code = FALSE, list(a = "1001", b = "2023")))
+  expect_false(icd_is_valid.map(short_code = TRUE, list(a = "100.1", b = "202.3")))
 
-  expect_false(icd9IsValidMapping(list(a = "car", b = "et"), isShort = FALSE))
-  expect_true(icd9IsValidMapping(list(a = "1001", b = "2023"), isShort = TRUE))
+  expect_false(icd_is_valid.map(list(a = "car", b = "et"), short_code = FALSE))
+  expect_true(icd_is_valid.map(list(a = "1001", b = "2023"), short_code = TRUE))
 })
 
 test_that("get invalid decimals", {
-  expect_equal(icd_get_invalid.icd9(c("10.1", "rhubarb", "3000")), c("rhubarb", "3000"), short_code = FALSE)
+  expect_equal(icd_get_invalid.icd9(c("10.1", "rhubarb", "3000"), short_code = FALSE), c("rhubarb", "3000"))
 })
 
 test_that("get real codes from a longer list", {

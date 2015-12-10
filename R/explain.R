@@ -61,7 +61,7 @@ icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief =
   }
 }
 
-#' @describeIn icd_explain explain Explain all ICD-9 codes in a list of vectors
+#' @describeIn icd_explain Explain all ICD-9 codes in a list of vectors
 #' @export
 icd_explain.list <- function(x,  short_code = icd_guess_short(x),
                              condense = TRUE, brief = FALSE, warn = TRUE) {
