@@ -158,6 +158,7 @@ test_that("multiple inputs return ordered results", {
 
 # to move somewhere else:
 test_that("ICD-10 codes in uranium data are okay", {
+  skip("reinstate this test once ICD-10 WHO codes are available for comparison. Uranium Pathology data is not ICD-10-CM, but ICD-10 WHO.")
   expect_true(
     all(strip(uranium_pathology$icd10, ".") %in% icd10cm2016$code)
   )

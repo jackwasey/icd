@@ -107,12 +107,22 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
     out[[halfway[[2]]]] <- unlist(strsplit(x = halfway[[1]], split = ","))
     return(out)
   }
+  threequarters <- c(
+    halfway[[1]],
+    unlist(
+      strMultiMatch(
+        pattern = '^([^"]|"[^"]*")*? (.*)',
+        text = halfway[seq(2, length(halfway) - 1)]
+      )
+    ),
+    halfway[[length(halfway)]]
+  )
 
-  threequarters <- halfway[seq(2, length(halfway) - 1)] %>%
-    stringr::str_match_all('^([^"]|"[^"]*")*? (.*)') %>%
-    vapply(extract, FUN.VALUE = character(2), c(2,3)) %>%
-    unlist %>%
-    c(halfway[[1]], .,  halfway[[length(halfway)]])
+  #threequarters <- halfway[seq(2, length(halfway) - 1)] %>%
+  #  stringr::str_match_all('^([^"]|"[^"]*")*? (.*)') %>%
+  #  vapply(extract, FUN.VALUE = character(2), c(2,3)) %>%
+  #  unlist %>%
+  #  c(halfway[[1]], .,  halfway[[length(halfway)]])
 
   if (stripQuotes) threequarters <- gsub(pattern = '"',
                                          replacement = "",

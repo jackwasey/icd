@@ -279,8 +279,8 @@ icd_van_walraven <- function(x, visit_name = NULL,
 
 #' @describeIn icd_van_walraven van Walraven scores from data frame of visits and ICD-9 codes
 #' @export
-icd_van_walraven.data.frame <- function(x, visitId = NULL,
-                                       return.df = FALSE,
+icd_van_walraven.data.frame <- function(x, visit_name = NULL,
+                                       return_df = FALSE,
                                        stringsAsFactors = getOption("stringsAsFactors"),
                                        ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")

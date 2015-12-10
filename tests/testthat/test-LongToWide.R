@@ -20,8 +20,8 @@ context("compare ordered long to wide methods")
 pts <- randomOrderedPatients(5000, 13)
 
 test_that("ordered and unordered methods on ordered data are identical", {
-  agg <- icd_long_to_wide(pts, aggregate = TRUE)
-  ord <- icd_long_to_wide(pts, aggregate = FALSE)
+  agg <- icd_long_to_wide(pts, aggr = TRUE)
+  ord <- icd_long_to_wide(pts, aggr = FALSE)
   expect_identical(ord, agg)
   expect_true(all(rownames(ord) %in% pts$visitId))
   expect_true(all(rownames(agg) %in% pts$visitId))
