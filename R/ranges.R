@@ -76,7 +76,7 @@ icd_expand_range.character <- function(start, end, short_code = NULL, real = TRU
     icd_expand_range.icd9(start, end, short_code = short_code, real = real, ...)
   } else if (start_guess == "icd10") {
     if (is.null(short_code)) short_code <- icd_guess_short.icd10(c(start, end))
-    icd_expand_range.icd10(start, end, short_code = short_code, real = real, ...)
+    icd_expand_range.icd10cm(start, end, short_code = short_code, real = real, ...)
   } else {
     stop("Unknown ICD type")
   }

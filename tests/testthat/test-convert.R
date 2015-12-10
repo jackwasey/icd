@@ -19,7 +19,7 @@ context("icd9 type conversions")
 
 test_that("extract decimal parts - invalid or empty input", {
   expect_equal(icd_decimal_to_parts.icd9(character()), list(major = character(),
-                                                     minor = character()))
+                                                            minor = character()))
 
   expect_equal( icd_decimal_to_parts.icd9(""), list(major = NA_character_, minor = NA_character_) )
 
@@ -258,11 +258,15 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
 
 test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity map)", {
   skip_on_cran()
-  ooe <- data.frame(visitId = sprintf("pt%02d", seq_along(one_of_each)), icd9 = one_of_each)
+  data.frame(visitId = sprintf("pt%02d", seq_along(one_of_each)),
+             icd9 = one_of_each, stringsAsFactors = TRUE) %>%
+    icd_long_data %>% icd_decimal_code %>% icd9 -> ooe
+  class(ooe[["icd9"]]) <- c("icd9", "icd_decimal_code", "factor")
 
-  test.map <- icd9ChaptersToMap(icd9::icd9Chapters)
-  cmb <- icd9Comorbid(icd9df = ooe, isShort = FALSE, icd9Mapping = test.map,
-                      isShortMapping = TRUE, return.df = TRUE)
+  expect_warning(test.map <- icd9ChaptersToMap(icd9::icd9Chapters), NA)
+  expect_warning(
+    cmb <- icd_comorbid.icd9(x = ooe, short_code = FALSE, map = test.map,
+                             short_map = TRUE, return_df = TRUE), NA)
   cmbcmp <- unname(as.matrix(logical_to_binary(cmb)[-1]))
   expmat <- diag(nrow = length(ooe$icd9))
   expect_equivalent(cmbcmp, expmat)

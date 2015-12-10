@@ -95,54 +95,54 @@ icd_comorbid.default <- function(x, ...) {
 
 #' @describeIn icd_comorbid Get comorbidities from ICD-9 codes
 #' @export
-icd_comorbid.icd9 <- function(icd_df,
+icd_comorbid.icd9 <- function(x,
                               map,
                               visit_name = NULL,
                               icd_name = NULL,
-                              short_code = icd_guess_short.icd9(icd_df),
+                              short_code = icd_guess_short.icd9(x),
                               short_map = icd_guess_short.icd9(map),
                               return_df = FALSE, ...) {
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
-  visit_name <- get_visit_name(icd_df, visit_name)
-  icd_name <- get_icd_name(icd_df, icd_name)
-  assertDataFrame(icd_df, min.cols = 2)
+  visit_name <- get_visit_name(x, visit_name)
+  icd_name <- get_icd_name(x, icd_name)
+  assertDataFrame(x, min.cols = 2)
   #TODO: assertList(unclass(map), any.missing = FALSE, min.len = 1, names = "unique")
              #types = c(icd_version_classes, "character", "factor"))
   assertString(visit_name)
   assertFlag(short_code)
   assertFlag(short_map)
 
-  stopifnot(visit_name %in% names(icd_df))
+  stopifnot(visit_name %in% names(x))
 
   if (!short_code)
-    icd_df[[icd_name]] <- icd_decimal_to_short.icd9(icd_df[[icd_name]])
+    x[[icd_name]] <- icd_decimal_to_short.icd9(x[[icd_name]])
 
   map <- lapply(map, asCharacterNoWarn)
 
   if (!short_map) map <- lapply(map, icd_decimal_to_short.icd9)
 
-  # new stragegy is to start with a factor for the icd codes in icd_df, recode (and drop superfluous) icd codes in the
+  # new stragegy is to start with a factor for the icd codes in x, recode (and drop superfluous) icd codes in the
   # mapping, then do very fast match on integer without need for N, V or E distinction. Char to factor conversion in R
   # is very fast.
 
   # this is a moderately slow step (if needed to be done). Internally, the \code{sort} is slow. Fast match speeds up the
   # subsequent step.
-  if (!is.factor(icd_df[[icd_name]]))
-    icd_df[[icd_name]] <- factor_nosort(icd_df[[icd_name]])
+  if (!is.factor(x[[icd_name]]))
+    x[[icd_name]] <- factor_nosort(x[[icd_name]])
 
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
-  icd9VisitWasFactor <- is.factor(icd_df[[visit_name]])
+  icd9VisitWasFactor <- is.factor(x[[visit_name]])
 
-  if (icd9VisitWasFactor) ivLevels <- levels(icd_df[[visit_name]])
+  if (icd9VisitWasFactor) ivLevels <- levels(x[[visit_name]])
 
   # this may be the slowest step (again, if needed, and many will have character IDs)
-  icd_df[[visit_name]] <- asCharacterNoWarn(icd_df[[visit_name]])
+  x[[visit_name]] <- asCharacterNoWarn(x[[visit_name]])
 
   # again, R is very fast at creating factors from a known set of levels
   map <- lapply(map, function(x) {
-    f <- factor_nosort(x, levels(icd_df[[icd_name]]))
+    f <- factor_nosort(x, levels(x[[icd_name]]))
     f[!is.na(f)]
   })
 
@@ -155,7 +155,7 @@ icd_comorbid.icd9 <- function(icd_df,
   chunkSize <- getOption("icd9.chunkSize", 256L)
   ompChunkSize <- getOption("icd9.ompChunkSize", 1L)
 
-  mat <- icd9ComorbidShortCpp(icd_df, map, visit_name, icd_name,
+  mat <- icd9ComorbidShortCpp(x, map, visit_name, icd_name,
                               threads = threads, chunkSize = chunkSize, ompChunkSize = ompChunkSize)
 
   if (return_df) {
@@ -372,9 +372,9 @@ icd_diff_comorbid.icd9 <- function(x, y, all_names = NULL, x_names = NULL, y_nam
   if (!is.null(names) && (!is.null(x_names) | !is.null(y_names)))
     stop("if 'all_names' is specified, 'x_names' and 'y_names' should not be")
 
-  if (!is.null(all_names)) 
+  if (!is.null(all_names))
     x_names <- y_names <- all_names
-  
+
   if (is.null(x_names)) x_names <- names(x)
   if (is.null(y_names)) y_names <- names(y)
 
