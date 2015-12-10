@@ -88,7 +88,7 @@ icd_expand_range.character <- function(start, end, short_code = NULL, real = TRU
 #' @param start character vector of length one containing a real code
 #' @param end  character vector of length one containing a real code
 #' @keywords internal
-icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short_code.icd10(c(start, end)),
+icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.icd10(c(start, end)),
                                      real = TRUE) {
   if (!real)
     stop("expanding ranges of possible (versus real) ICD-10-CM codes is not yet implemented.
@@ -111,7 +111,7 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short_co
   # TODO: either search down supposedly well ordered list until substring of end
   # changes, or find all children, and get pos of last one.
 
-  end_kids <- icd10_children_real_short_code(end)
+  end_kids <- icd_children_real.icd10cm(end, short_code = TRUE)
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list

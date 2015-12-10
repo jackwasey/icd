@@ -76,7 +76,7 @@ icd9DropLeadingZeroesDecimal <- function(icd9Decimal) {
 #' @template icd9-short
 icd9DropLeadingZeroesShort <- function(icd9Short) {
   assert(checkFactor(icd9Short), checkCharacter(icd9Short))
-  parts <- icd9ShortToParts(icd9Short = icd9Short, minorEmpty = "")
+  parts <- icd_short_to_parts.icd9(x = icd9Short, minor_empty = "")
   # very important: only drop the zero in V codes if the minor part is empty.
   areEmpty <- parts[["minor"]] == ""
 
@@ -90,7 +90,7 @@ icd9DropLeadingZeroesMajor <- function(major) {
   # major can legitimately be an integer
   major <- trim(major) # my trim loses encoding, but this shouldn't matter
   isV <- icd9IsV(major) # not checking validity, necessarily, just quick check
-  isN <- icd9IsValidMajorN(major)
+  isN <- icd9_is_valid_major_n(major)
   major[isV] <- sub(pattern = "^([Vv])0([[:digit:]]{1})$",
                     replacement = "\\1\\2",
                     x = major[isV])

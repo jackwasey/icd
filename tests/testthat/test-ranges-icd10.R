@@ -37,11 +37,11 @@
 context("test icd10 ranges")
 
 test_that("very bad input data fails completely", {
-  expect_error(icd10ExpandRangeRealShort(data.frame(a = 1, b = "b"), factor(1,2,3)))
+  expect_error(icd_expand_range(data.frame(a = 1, b = "b"), factor(1,2,3)))
 })
 
 test_that("simple ranges of real values works", {
-  expect_equal(icd10ExpandRangeRealShort("A00", "A001"),
+  expect_equal(icd_expand_range.icd10cm("A00", "A001"),
                c("A00", "A000", "A001"))
   expect_equal(icd10ExpandRangeRealShort("A00", "A009"),
                c("A00", "A000", "A001", "A009"))
