@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-icd9::skip_slow_tests()
-icd9::skip_online_tests()
+if (!exists("do_slow_tests") || !do_slow_tests) message("Will skip slow tests")
+if (!exists("do_online_tests") || !do_online_tests) message("Will skip online tests")
 
 set.seed(1441)
 n <- 500
