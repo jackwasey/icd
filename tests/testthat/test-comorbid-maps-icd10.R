@@ -42,7 +42,10 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
     canon <- icd10_map_quan_elix[[i]]
     expect_equal(setdiff(indep, canon), character(), info = paste("checking quan elix canonical in indep: ", i, " - ", names(quan_elix_independent)[i]))
     expect_equal(setdiff(indep_kids, canon), character(), info = paste("checking quan elix canonical in indep_kids: ", i, " - ", names(quan_elix_independent)[i]))
-    expect_equal(setdiff(canon, indep_kids), character(), info = paste("checking quan elix indep in canonical: ", i, " - ", names(quan_elix_independent)[i]))
+    # yes, there are non-ICD-10-CM codes which are not in the ICD-10-CM children
+    # (without including the codes themselves)
+
+    #expect_equal(setdiff(canon, indep_kids), character(), info = paste("checking quan elix indep in canonical: ", i, " - ", names(quan_elix_independent)[i]))
   }
 
 })
