@@ -83,39 +83,36 @@ icd_explain.icd9 <- function(...)
 
 #' @describeIn icd_explain explain character vector of ICD-9-CM codes
 #' @export
-icd_explain.icd9cm <- function(icd9, short_code = icd_guess_short(icd9),
+icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
                                   condense = TRUE, brief = FALSE, warn = TRUE) {
-  assertCharacter(icd9)
+  assertCharacter(x)
   assertFlag(short_code)
   assertFlag(condense)
   assertFlag(brief)
   assertFlag(warn)
-  if (!short_code) icd9 <- icd9_decimal_to_short(icd9)
+  if (!short_code) x <- icd_decimal_to_short.icd9(x)
 
   # if there are only real codes, we should condense with this in mind:
   if (condense) {
-    onlyReal <- all(icd9IsRealShort(icd9))
+    onlyReal <- all(icd9IsRealShort(x))
     if (warn && !onlyReal) {
-      unreal <- icd9[!icd9IsRealShort(icd9)]
+      unreal <- x[!icd9IsRealShort(x)]
       warning("Some ICD codes are not 'real' when trying to condense when explaining codes.
               Will drop these and continue. E.g. ",
               paste(unreal[seq(from = 1, to = min(5, length(unreal)))],
                     collapse = " "), call. = FALSE)
     }
-    icd9 <- icd_condense.icd9(
-      icd9GetRealShort(icd9),
-      real = TRUE,
-      short_code = TRUE)
+    x <- icd_condense.icd9(icd9GetRealShort(x), real = TRUE, short_code = TRUE)
   }
-  mj <- unique(icd_get_major.icd9(icd9, short_code = TRUE))
+  mj <- unique(icd_get_major.icd9(x, short_code = TRUE))
 
   mjexplain <- names(icd9::icd9ChaptersMajor)[icd9::icd9ChaptersMajor %in%
-                                                mj[mj %in% icd9]]
+                                                mj[mj %in% x]]
   # don't double count when major is also billable
-  icd9 <- icd9[icd9 %nin% mj]
+  x <- x[x %nin% mj]
   descField <- ifelse(brief, "descShort", "descLong")
   c(mjexplain,
-    icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% icd9, descField]
+    icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% x, descField]
   )
 }
 
@@ -140,7 +137,7 @@ icd_explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
 #' @template short_code
 #' @template verbose
 #' @keywords internal
-icd9GetChapters <- function(icd9, short_code = icd_guess_short(icd9), verbose = FALSE) {
+icd9_get_chapters <- function(icd9, short_code = icd_guess_short.icd9(icd9), verbose = FALSE) {
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%

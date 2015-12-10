@@ -187,18 +187,28 @@ icd9ComorbidDfToMat <- function(icd9df, visitId = get_visit_name(icd9df),
 
 #' @rdname icd_explain
 #' @export
-icd9Explain <- function(icd9, short_code = icd_guess_short(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
+icd9Explain <- function(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
-  icd_explain(icd9, short_code, condense = doCondense, brief, warn)
+  icd_explain(icd9, short_code = isShort, condense = doCondense, brief, warn)
 }
 
 #' @rdname icd_explain
 #' @export
-icd9Explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
+icd9Explain.numeric <- function(icd9, isShort = icd_guess_short(icd9),
                                 doCondense = TRUE, brief = FALSE, warn = FALSE) {
   .Deprecated("icd_explain.numeric")
-  icd_explain.numeric(icd9, short_code, condense = doCondense, brief, warn)
+  icd_explain.numeric(icd9, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
 }
+
+#' @describeIn icd_explain explain Explain all ICD-9 codes in a list of vectors
+#' @export
+icd9Explain.list <- function(icd9, isShort = icd_guess_short(icd9),
+                             doCondense = TRUE, brief = FALSE, warn = FALSE) {
+  .Deprecated("icd_explain.list")
+  icd_explain.list(icd9, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
+
+}
+
 #' @rdname icd_explain
 #' @export
 icd9ExplainShort <- function(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE) {
@@ -216,7 +226,7 @@ icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE, brief = FALSE, wa
 #' @rdname icd_guess_short
 icd9GuessIsShort <- function(icd9) {
   .Deprecated("icd_guess_short")
-  icd_guess_short(icd9)
+  icd_guess_short.icd9(icd9)
 }
 
 #' @rdname icd_filter
@@ -449,6 +459,13 @@ icd9GetMajor <- function(x, isShort) {
   icd_get_major.icd9(x, short_code = isShort)
 }
 
+#' @rdname is_valid_major
+#' @export
+icd9IsValidMajor <- function(icd) {
+  .Deprecated("icd_is_valid_major.icd9")
+  icd_is_valid_major.icd9(icd)
+}
+
 #' @rdname icd9_is_n
 #' @export
 icd9IsN <- function(icd9) {
@@ -553,3 +570,8 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
   icd_diff_comorbid(x = x, y =y, all_names = names, x_names = x.names, y_names = y.names, show = show, explain = explain)
 }
 
+#' @rdname icd9_get_chapters
+#' @export
+icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FALSE) {
+  icd9_get_chapters(icd9, isShort, verbose)
+}

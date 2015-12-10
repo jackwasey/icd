@@ -53,8 +53,13 @@ icd_guess_short.character <- function(x, test_n = 1000L) {
   !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE) # any decimal as first approximation
 }
 
+icd_guess_short.list <- function(x, test_n = 1000L) {
+  y <- unlist(x)
+  icd_guess_short(y, test_n)
+}
+
 icd_guess_short.default <- function(x, test_n = 1000L) {
-  !any(stringr::str_detect(x[1:test_n], ".+\\..+")) # any decimal as first approximation
+  !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE) # any decimal as first approximation
 }
 
 icd_guess_short.icd_short_code <- function(x) TRUE

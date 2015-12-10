@@ -46,22 +46,21 @@ test_that("github issue #41", {
 })
 
 test_that("explain S3 dispatch", {
-  expect_equal(icd9Explain("003.21", isShort = FALSE),
-               "Salmonella meningitis")
+  expect_equal(icd9Explain("003.21", isShort = FALSE), "Salmonella meningitis")
   expect_equal(icd9ExplainDecimal("003.21"),
                icd9Explain("003.21", isShort = FALSE))
   expect_equal(icd9Explain.list(list(a = "003.21"), isShort = FALSE),
-               list(a=icd9Explain("00321", isShort = TRUE)))
-  expect_equal(icd9Explain.list(list(a = "003.21", b= "390"), isShort = FALSE),
-               list(a = icd9Explain("00321", isShort = TRUE),
+               list(a = icd9Explain("00321", isShort = TRUE)))
+  expect_equal(icd9Explain.list(list(a = "003.21", b = "390"), isShort = FALSE),
+               list(a = icd_explain.icd9cm("00321", short_code = TRUE),
                     b = "Rheumatic fever without mention of heart involvement"))
-  expect_warning(res <- icd9Explain(list(a = "not", b = "icd9code"), isShort = TRUE))
-  expect_equal(res, list(a = character(0), b = character(0)))
-  expect_warning(res <- icd9Explain(list(a = "not", b = "icd9code"), isShort = FALSE))
+  expect_warning(res <- icd_explain.icd9(c(a = "not", b = "icd9code"), short_code = TRUE))
+  expect_equal(res, character(0))
+  expect_warning(res <- icd_explain(list(a = icd9("not"), b = icd9("icd9code")), short_code = FALSE))
   expect_equal(res, list(a = character(0), b = character(0)))
 
   expect_warning(res <- icd9Explain.numeric(3.21, isShort = FALSE))
-  expect_equal(res, icd9Explain("00321", isShort = TRUE))
+  expect_equal(res, icd_explain.icd9("00321", short_code = TRUE))
 
 })
 
@@ -78,9 +77,9 @@ test_that("expalin a single top level code without a top level explanation", {
 
 
 test_that("explain a single leaf node" , {
-  expect_equal(icd9ExplainShort("27800", doCondense = FALSE), "Obesity, unspecified")
-  expect_equal(icd9ExplainShort("27800", doCondense = TRUE), "Obesity, unspecified")
-  expect_equal(icd9Explain("00329"), "Other localized salmonella infections")
+  expect_equal(icd_explain.icd9("27800", condense = FALSE), "Obesity, unspecified")
+  expect_equal(icd_explain.icd9("27800", condense = TRUE), "Obesity, unspecified")
+  expect_equal(icd_explain.icd9("00329"), "Other localized salmonella infections")
 })
 
 test_that("explain handles mix of valid and invalid", {
@@ -89,7 +88,7 @@ test_that("explain handles mix of valid and invalid", {
 })
 
 test_that("explain works when none ICD-9 codes are even valid", {
-  expect_equal(icd9Explain(c("radishes", "123123", NA), warn = FALSE), character(0))
+  expect_equal(icd_explain.icd9(c("radishes", "123123", NA), warn = FALSE), character(0))
 })
 
 
@@ -240,7 +239,7 @@ test_that("explain icd9GetChapters bad input", {
 })
 
 test_that("explain icd9GetChapters simple input", {
-  chaps1 <- icd9GetChapters(c("410", "411", "412"), isShort = TRUE)
+  chaps1 <- icd9_get_chapters(c("410", "411", "412"), short_code = TRUE)
   expect_equal(nrow(chaps1), 3)
 
   chaps2 <- icd9GetChapters("418", isShort = TRUE)
@@ -277,10 +276,9 @@ test_that("explain icd9GetChapters simple input", {
 })
 
 test_that("working with named lists of codes, decimal is guessed", {
-  expect_that(icd9ExplainDecimal(list(a = c("001"), b = c("001.1", "001.9"))),
-              testthat::not(gives_warning()))
-  expect_that(icd9Explain(list(a = c("001"), b = c("001.1", "001.9"))),
-              testthat::not(gives_warning()))
+  expect_warning(icd_explain(
+    list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE), NA)
+  expect_warning(icd_explain(list(a = c("001"), b = c("001.1", "001.9"))), NA)
 })
 
 test_that("icd9 descriptions is parsed correctly", {
