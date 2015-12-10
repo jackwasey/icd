@@ -14,8 +14,8 @@ icd9VanWalraven.data.frame(x, visitId = NULL, return.df = FALSE,
 
 icd9VanWalravenComorbid(x, visitId = NULL, applyHierarchy = FALSE)
 
-\method{icd_van_walraven}{data.frame}(x, visitId = NULL, return.df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), ...)
+\method{icd_van_walraven}{data.frame}(x, visit_name = NULL,
+  return_df = FALSE, stringsAsFactors = getOption("stringsAsFactors"), ...)
 }
 \section{Methods (by class)}{
 \itemize{

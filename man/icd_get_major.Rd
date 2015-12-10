@@ -3,6 +3,7 @@
 \name{icd_get_major.icd9}
 \alias{icd9GetMajor}
 \alias{icd9GetMajorShort}
+\alias{icd9IsMajor}
 \alias{icd_get_major}
 \alias{icd_get_major.icd9}
 \title{Returns major component of code (before decimal)}
@@ -12,6 +13,8 @@
 icd9GetMajorShort(icd9Short)
 
 icd9GetMajor(x, isShort)
+
+icd9IsMajor(x)
 
 icd_get_major(x)
 }

@@ -5,6 +5,7 @@
 \alias{icd9ComorbidAhrq}
 \alias{icd9ComorbidElix}
 \alias{icd9ComorbidQuanDeyo}
+\alias{icd9ComorbidQuanElix}
 \alias{icd9ComorbidQuanElixhauser}
 \alias{icd9ComorbidShort}
 \alias{icd9ComorbidShortCpp}
@@ -30,8 +31,8 @@ icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
 
 icd_comorbid(...)
 
-\method{icd_comorbid}{icd9}(icd_df, map, visit_name = NULL, icd_name = NULL,
-  short_code = icd_guess_short.icd9(icd_df),
+\method{icd_comorbid}{icd9}(x, map, visit_name = NULL, icd_name = NULL,
+  short_code = icd_guess_short.icd9(x),
   short_map = icd_guess_short.icd9(map), return_df = FALSE, ...)
 
 icd_comorbid_ahrq(...)
@@ -79,6 +80,10 @@ icd9ComorbidElix(icd9df, visitId = NULL, icd9Field = NULL,
   isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
   ...)
 
+icd9ComorbidQuanElix(icd9df, visitId = NULL, icd9Field = NULL,
+  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
+  ...)
+
 icd9ComorbidQuanDeyo(icd9df, visitId = NULL, icd9Field = NULL,
   isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
   ...)
@@ -98,6 +103,9 @@ then use \code{TRUE}.}
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 to \code{icd9ComorbidAhrq}}
+
+\item{x}{data frame containing columns for visitId (which is the feault
+name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
 \item{map}{list (or name of a list if character vector of length one
 is given as argument) of the comorbidities with each top-level list item
@@ -147,9 +155,6 @@ flagged.}
 \item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
-
-\item{x}{data frame containing columns for visitId (which is the feault
-name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
