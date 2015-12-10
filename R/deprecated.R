@@ -459,6 +459,13 @@ icd9GetMajor <- function(x, isShort) {
   icd_get_major.icd9(x, short_code = isShort)
 }
 
+#' @rdname icd_get_major
+#' @export
+icd9IsMajor <- function(x) {
+  .Deprecated("icd_is_major.icd9")
+  icd_is_major.icd9(x)
+}
+
 #' @rdname is_valid_major
 #' @export
 icd9IsValidMajor <- function(icd) {
