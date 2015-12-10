@@ -29,7 +29,7 @@
 #' icd9ChildrenShort("10201", FALSE) # no children other than self
 #' icd9Children("0032", FALSE) # guess it was a short, not decimal code
 #' icd9ChildrenShort("10201", TRUE) # empty because 102.01 is not meaningful
-#' icd9ChildrenShort("003", TRUE) %>% icd9ExplainShort(doCondense = FALSE)
+#' icd_children.icd9(short_code = TRUE, "003", TRUE) %>% icd_explain(condense = FALSE, short_code = TRUE)
 #' icd9ChildrenDecimal("100.0")
 #' icd9ChildrenDecimal("100.00")
 #' icd9ChildrenDecimal("2.34")

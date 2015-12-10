@@ -187,30 +187,30 @@ icd9ComorbidDfToMat <- function(icd9df, visitId = get_visit_name(icd9df),
 
 #' @rdname icd_explain
 #' @export
-icd9Explain <- function(icd9, short_code = icd_guess_short(icd9), condense = TRUE, brief = FALSE, warn = TRUE) {
+icd9Explain <- function(icd9, short_code = icd_guess_short(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
-  icd_explain(icd9, short_code, condense, brief, warn)
+  icd_explain(icd9, short_code, condense = doCondense, brief, warn)
 }
 
 #' @rdname icd_explain
 #' @export
 icd9Explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
-                                condense = TRUE, brief = FALSE, warn = FALSE) {
+                                doCondense = TRUE, brief = FALSE, warn = FALSE) {
   .Deprecated("icd_explain.numeric")
-  icd_explain.numeric(icd9, short_code, condense, brief, warn)
+  icd_explain.numeric(icd9, short_code, condense = doCondense, brief, warn)
 }
 #' @rdname icd_explain
 #' @export
-icd9ExplainShort <- function(icd9Short, condense = TRUE, brief = FALSE, warn = TRUE) {
+icd9ExplainShort <- function(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
-  icd_explain(icd9Short, short_code = TRUE, condense = condense, brief = brief, warn = warn)
+  icd_explain(icd9Short, short_code = TRUE, condense = doCondense, brief = brief, warn = warn)
 }
 
 #' @rdname icd_explain
 #' @export
-icd9ExplainDecimal <- function(icd9Decimal, condense = TRUE, brief = FALSE, warn = TRUE) {
+icd9ExplainDecimal <- function(icd9Decimal, doCondense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
-  icd_explain(icd9Decimal, short_code = FALSE, condense = condense, brief = brief, warn = warn)
+  icd_explain(icd9Decimal, short_code = FALSE, condense = doCondense, brief = brief, warn = warn)
 }
 
 #' @rdname icd_guess_short
@@ -224,14 +224,14 @@ icd9GuessIsShort <- function(icd9) {
 icd9FilterValid <- function(icd9df, icd9Field = NULL,
                             isShort =  NULL, invert = FALSE) {
   .Deprecated("icd_filter_valid")
-  icd_filter_valid.icd9(icd_df = icd9df, icd_name = icd9Field, short_code = isShort, invert = invert)
+  icd_filter_valid.icd9(x = icd9df, icd_name = icd9Field, short_code = isShort, invert = invert)
 }
 
 #' @rdname icd_filter
 #' @export
 icd9FilterInvalid <- function(icd9df, icd9Field = NULL, isShort = NULL, invert = FALSE) {
   .Deprecated("icd_filter_valid")
-  icd_filter_valid.icd9(icd_df = icd9df, icd_name = icd9Field, short_code = isShort, invert = !invert)
+  icd_filter_valid.icd9(x = icd9df, icd_name = icd9Field, short_code = isShort, invert = !invert)
 }
 
 #' @rdname icd_filter

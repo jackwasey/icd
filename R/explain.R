@@ -45,14 +45,27 @@
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
 #' @export
-icd_explain <- function(icd9, short_code = icd_guess_short(icd9), condense = TRUE, brief = FALSE, warn = TRUE)
+icd_explain <- function(...)
   UseMethod("icd_explain")
+
+icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE) {
+  guess <- icd_guess_version.character(x, short_code = short_code)
+  if (guess == "icd9") {
+    if (is.null(short_code)) short_code <- icd_guess_short.icd9(x)
+    icd_explain.icd9(x = x, short_code = short_code, condense = condense, brief = brief, warn = warn)
+  } else if (guess == "icd10") {
+    if (is.null(short_code)) short_code <- icd_guess_short.icd10(x)
+    stop("icd_explain.icd10 not implemented yet")
+  } else {
+    stop("Unknown ICD type")
+  }
+}
 
 #' @describeIn icd_explain explain Explain all ICD-9 codes in a list of vectors
 #' @export
-icd_explain.list <- function(icd9,  short_code = icd_guess_short(icd9),
+icd_explain.list <- function(x,  short_code = icd_guess_short(x),
                              condense = TRUE, brief = FALSE, warn = TRUE) {
-  lapply(icd9, icd9Explain, short_code = short_code,
+  lapply(x, icd_explain, short_code = short_code,
          condense = condense, brief = brief, warn = warn)
 }
 
