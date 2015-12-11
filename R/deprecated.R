@@ -110,12 +110,13 @@ icd9ComorbidAhrq <- function(icd9df,
                              visitId = NULL,
                              icd9Field = NULL,
                              isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-                             return.df = FALSE, ...) {
+                             return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   .Deprecated("icd_comorbid_ahrq")
   icd_comorbid_ahrq.icd9(icd9df, visit_name = visitId,
                          icd_name = icd9Field, short_code = isShort,
-                         abbrevNames = TRUE,
-                         applyHierarchy = TRUE, return_df = return.df, ...)
+                         abbrev_names = abbrevNames,
+                         hierarchy = applyHierarchy,
+                         return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid
@@ -124,12 +125,12 @@ icd9ComorbidElix <- function(icd9df,
                              visitId = NULL,
                              icd9Field = NULL,
                              isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-                             return.df = FALSE, ...) {
+                             return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   .Deprecated("icd_comorbid_elix")
-  icd_comorbid_elix(icd9df,visit_name = visitId,
+  icd_comorbid_elix.icd9(icd9df,visit_name = visitId,
                     icd_name = icd9Field, short_code = isShort,
-                    abbrevNames = TRUE,
-                    applyHierarchy = TRUE, return_df = return.df,...)
+                    abbrev_names = abbrevNames,
+                    hierarchy = applyHierarchy, return_df = return.df,...)
 }
 
 #' @rdname icd_comorbid
@@ -138,12 +139,12 @@ icd9ComorbidQuanElix <- function(icd9df,
                                  visitId = NULL,
                                  icd9Field = NULL,
                                  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-                                 return.df = FALSE, ...) {
+                                 return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   .Deprecated("icd_comorbid_quan_elix")
   icd_comorbid_quan_elix.icd9(icd9df, visit_name = visitId,
                               icd_name = icd9Field, short_code = isShort,
-                              abbrevNames = TRUE,
-                              applyHierarchy = TRUE, return_df = return.df, ...)
+                              abbrev_names = abbrevNames,
+                              hierarchy = applyHierarchy, return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid
@@ -152,12 +153,12 @@ icd9ComorbidQuanDeyo <- function(icd9df,
                                  visitId = NULL,
                                  icd9Field = NULL,
                                  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
-                                 return.df = FALSE, ...) {
+                                 return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   .Deprecated("icd_comorbid_quan_deyo")
   icd_comorbid_quan_deyo.icd9(icd9df, visit_name = visitId,
                               icd_name = icd9Field, short_code = isShort,
-                              abbrevNames = TRUE,
-                              applyHierarchy = TRUE, return_df = return.df, ...)
+                              abbrev_names = abbrevNames,
+                              hierarchy = applyHierarchy, return_df = return.df, ...)
 }
 
 #' @rdname icd_condense

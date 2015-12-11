@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("comorbidity calculations")
+context("deprecated comorbidity calculations")
 
 test_that("ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
