@@ -35,6 +35,7 @@ suppressWarnings({
   suppressPackageStartupMessages({
     requireNamespace("knitr", warn.conflicts = FALSE) # for opts_chunk only
     library(icd9)
+    library(stringr)
     library(magrittr)
     library(xtable)
     library(utils)
