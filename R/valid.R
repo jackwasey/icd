@@ -84,9 +84,9 @@ icd_is_valid.icd10 <- function(icd, short_code = icd_guess_short(icd)) {
 
   # TODO: test whether icd-10-cm or WHO, if class not otherwise specified.
   if (short_code)
-    icd %>% str_trim %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]{1,4}[[:space:]]*$")
+    icd %>% stringr::str_trim() %>% stringr::str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]{1,4}[[:space:]]*$")
   else
-    icd %>% str_trim %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]\\.[[:alnum:]]{0,4}[[:space:]]*$")
+    icd %>% stringr::str_trim() %>% stringr::str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]\\.[[:alnum:]]{0,4}[[:space:]]*$")
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid

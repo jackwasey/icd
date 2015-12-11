@@ -17,14 +17,14 @@ icd10_get_who_from_cdc <- function() {
 
   # ignore locale issue right now. This set has a lot of the different cases: dat[70:75,]
   readr::read_lines(file_path, skip = 7) %>%
-    str_trim() %>%
-    str_match("(.*\\t)?(.+)\\t+(.+)") -> dat
+    stringr::str_trim() %>%
+    stringr::str_match("(.*\\t)?(.+)\\t+(.+)") -> dat
 
   code_or_range <- dat[, 3]
   desc <- dat[, 4]
 
   # this data set does not explicitly say which codes are leaves or parents.
-  is_range <- str_detect(code_or_range, "-")
+  is_range <- stringr::str_detect(code_or_range, "-")
   # this is a mix of chapters and sub-chapters, and would require processing to
   # figure out which
 
