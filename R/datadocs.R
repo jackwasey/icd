@@ -276,7 +276,7 @@ NULL
 
   # set class on diagnosis columns. Not sure whether this is desirable in
   # general. If parent has a class, it should be irrelevant?
-  # lapply... names(vermont_dx)  %>% str_detect("DX")
+  # lapply... names(vermont_dx)  %>% stringr::str_detect("DX")
 
   # and set class on whole structure
   class(vermont_dx) <- c("icd9cm", "icd9", "icd_wide_data", "data.frame")

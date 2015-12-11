@@ -147,9 +147,6 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
 }
 
 #' @rdname strMultiMatch
-#' @description \code{str_pair_match} differs in that there should only be two
-#'   pairs of parenthesis, then the first (by default) becomes the name, and the
-#'   second the value.
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal

@@ -154,7 +154,7 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
       vapply(function(x) unlist(x$getElementText()), character(1)) %>%
       stringr::str_trim() %>%
       stringr::str_replace_all("[[:space:]]+", " ") %>%
-      str_pair_match("([^[:space:]]+) (.+)", swap = TRUE) %>%
+      icd9:::str_pair_match("([^[:space:]]+) (.+)", swap = TRUE) %>%
       lapply(
         function(x) stringr::str_split(x, "-") %>%
           unlist %>%

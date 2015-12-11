@@ -395,7 +395,7 @@ icd_is_valid.icd10who <- function(icd, short_code = icd_guess_short.icd10(icd)) 
   # start with a broad regex
 
   icd %>%
-    str_trim %>%
-    str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
+    stringr::str_trim() %>%
+    stringr::str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
 
 }
