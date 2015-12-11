@@ -76,28 +76,28 @@ icd_guess_version <- function(...)
 icd_guess_version.character <- function(icd, short_code = NULL) {
   if (!is.null(short_code)) {
     if (short_code) {
-      i9 <- sum(icd_is_valid.icd9(icd, short_code = TRUE))
-      i10 <- sum(icd_is_valid.icd10(icd, short_code = TRUE))
-      i10who <- sum(icd_is_valid.icd10who(icd, short_code = TRUE))
+      i9 <- sum(icd_is_valid.icd9(icd, short_code = TRUE), na.rm = TRUE)
+      i10 <- sum(icd_is_valid.icd10(icd, short_code = TRUE), na.rm = TRUE)
+      i10who <- sum(icd_is_valid.icd10who(icd, short_code = TRUE), na.rm = TRUE)
           }
     else {
-      i9 <- sum(icd_is_valid.icd9(icd, short_code = FALSE))
-      i10 <- sum(icd_is_valid.icd10(icd, short_code = FALSE))
-      i10who <- sum(icd_is_valid.icd10who(icd, short_code = FALSE))
+      i9 <- sum(icd_is_valid.icd9(icd, short_code = FALSE), na.rm = TRUE)
+      i10 <- sum(icd_is_valid.icd10(icd, short_code = FALSE), na.rm = TRUE)
+      i10who <- sum(icd_is_valid.icd10who(icd, short_code = FALSE), na.rm = TRUE)
     }
 
   } else {
     i9 <- max(
-      sum(icd_is_valid.icd9(icd, short_code = TRUE)),
-      sum(icd_is_valid.icd9(icd, short_code = FALSE))
+      sum(icd_is_valid.icd9(icd, short_code = TRUE), na.rm = TRUE),
+      sum(icd_is_valid.icd9(icd, short_code = FALSE), na.rm = TRUE)
     )
     i10 <- max(
-      sum(icd_is_valid.icd10(icd, short_code = TRUE)),
-      sum(icd_is_valid.icd10(icd, short_code = FALSE))
+      sum(icd_is_valid.icd10(icd, short_code = TRUE), na.rm = TRUE),
+      sum(icd_is_valid.icd10(icd, short_code = FALSE), na.rm = TRUE)
     )
     i10who <- max(
-      sum(icd_is_valid.icd10who(icd, short_code = TRUE)),
-      sum(icd_is_valid.icd10who(icd, short_code = FALSE))
+      sum(icd_is_valid.icd10who(icd, short_code = TRUE), na.rm = TRUE),
+      sum(icd_is_valid.icd10who(icd, short_code = FALSE), na.rm = TRUE)
     )
   }
 
