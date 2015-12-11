@@ -48,6 +48,8 @@
 icd_explain <- function(...)
   UseMethod("icd_explain")
 
+#' @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
+#' @export
 icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE) {
   guess <- icd_guess_version.character(x, short_code = short_code)
   if (guess == "icd9") {

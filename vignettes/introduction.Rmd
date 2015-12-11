@@ -175,8 +175,8 @@ icd9Explain(c("43410","43491"), isShort = TRUE)
 ```
 Arbitrary named list(s) of codes:
 ```{r explainArb}
-icd9Explain(list(somecodes = c("001", "391.0"), 
-                 morecodes = c("001.1", "001.9")))
+icd9Explain(list(somecodes = icd9(c("001", "391")), 
+                 morecodes = icd9cm(c("001.1", "001.9"))))
 ```
 `001` (Cholera) isn't itself a diagnostic code, i.e. leaf node in the hierarchy, but `390` (Rheumatic fever without heart involvement) is. Both are explained correctly:
 ```{r cholera}
