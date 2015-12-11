@@ -173,7 +173,7 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
 \item \code{icd10who}: Check whether ICD-10 WHO codes are valid
 }}
 \section{Three-digit validation}{
- \code{isValidMajor} validates just the
+ \code{icd_is_valid_major} validates just the
   'major' three-digit part of an ICD-9 code. This can in fact be provided as
   a numeric, since there is no ambiguity. Numeric-only codes should be one to
   three digitis, V codes are followed by one or two digits, and E codes

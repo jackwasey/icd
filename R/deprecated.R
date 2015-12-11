@@ -480,7 +480,7 @@ icd9IsMajor <- function(x) {
   icd_is_major.icd9(x)
 }
 
-#' @rdname is_valid_major
+#' @rdname icd_is_valid_major
 #' @export
 icd9IsValidMajor <- function(icd) {
   .Deprecated("icd_is_valid_major.icd9")

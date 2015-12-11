@@ -30,7 +30,7 @@
 #' \code{NA_character}
 #'
 #' \code{NA} values result in a return value of \code{FALSE}.
-#' @section Three-digit validation: \code{isValidMajor} validates just the
+#' @section Three-digit validation: \code{icd_is_valid_major} validates just the
 #'   'major' three-digit part of an ICD-9 code. This can in fact be provided as
 #'   a numeric, since there is no ambiguity. Numeric-only codes should be one to
 #'   three digitis, V codes are followed by one or two digits, and E codes
@@ -178,10 +178,15 @@ icd9_is_valid_decimal_n <- function(x) {
         x)
 }
 
-# do i need to export this?
+#' @title test whether codes are of major type
+#' @description codes without real or implied decimal place return TRUE
+#' @param x ICD codes
+#' @export
 icd_is_valid_major <- function(x)
   UseMethod("icd_is_valid_major")
 
+#' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
+#' @keywords internal
 icd_is_valid_major.icd9 <- function(major)
   # let grepl do what it can with integers, factors, etc.
   grepl(
@@ -189,18 +194,24 @@ icd_is_valid_major.icd9 <- function(major)
     x = major
   )
 
+#' @rdname icd_is_valid_major
+#' @keywords internal
 icd9_is_valid_major_n <- function(major)
   grepl(
     pattern = "^[[:space:]]*[[:digit:]]{1,3}[[:space:]]*$",
     x = major
   )
 
+#' @rdname icd_is_valid_major
+#' @keywords internal
 icd9_is_valid_major_v <- function(major)
   grepl(
     pattern = "^[[:space:]]*[Vv][[:digit:]]{1,2}[[:space:]]*$",
     x = major
   )
 
+#' @rdname icd_is_valid_major
+#' @keywords internal
 icd9_is_valid_major_e <- function(major)
   grepl(
     pattern = "^[[:space:]]*[Ee][[:digit:]]{1,3}[[:space:]]*$",
