@@ -92,16 +92,16 @@ icd9ComorbidQuanElixhauser <- function(...) {
 #'   E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 #'   to \code{icd9ComorbidAhrq}
 #' @export
-icd9Comorbid <- function(icd_df,
+icd9Comorbid <- function(icd9df,
                          icd9Mapping,
                          visitId = NULL,
                          icd9Field = NULL,
-                         isShort = icd_guess_short.icd9(icd_df),
+                         isShort = icd_guess_short.icd9(icd9df),
                          isShortMapping = icd_guess_short.icd9(icd9Mapping),
                          return.df = FALSE, ...) {
   .Deprecated("icd_comorbid")
-  icd_comorbid.icd9(icd_df, map = icd9Mapping, visit_name = visitId, icd_name = icd9Field,
-               short_name = isShort, short_map = isShortMapping, return_df = return.df, ...)
+  icd_comorbid.icd9(x = icd9df, map = icd9Mapping, visit_name = visitId, icd_name = icd9Field,
+               short_code = isShort, short_map = isShortMapping, return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid

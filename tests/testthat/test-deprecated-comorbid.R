@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("comorbidities")
+context("deprecated comorbidities")
 
 library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
 
 test_that("try to induce c++ segfault bug", {
-  expect_that(icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE), testthat::not(throws_error()))
+  expect_error(icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE), NA)
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
@@ -566,8 +566,8 @@ test_that("diff comorbid works", {
   expect_error(icd9DiffComorbid(bad_input)) # list, but not list of character vectors
   expect_error(icd9DiffComorbid(bad_input, bad_input))
 
-  # no warning or error for good data
-  expect_that(res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE), testthat::not(gives_warning()))
+  # no warning or error for good data (forgo warning checks with deprecation)
+  expect_error(res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE), NA)
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
     "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",
@@ -583,8 +583,7 @@ test_that("diff comorbid works", {
   # both, also with elements in either side set diff
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
 
-  expect_that(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE),
-              testthat::not(gives_warning()))
+  expect_error(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE), NA)
 
   expect_that(
     utils::capture.output(

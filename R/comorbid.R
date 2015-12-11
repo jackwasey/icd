@@ -357,7 +357,18 @@ icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL, y_names = 
   UseMethod("icd_diff_comorbid")
 }
 
-icd_diff_comorbid.icd9 <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
+# # ' @describeIn icd_diff_comorbid Show difference between comorbidity maps, guessing ICD type
+# # ' @export
+# icd_diff_comorbid.list <- function(x, y, ...) {
+#   if (is.icd9(x) && is.icd9(y))
+#     icd_diff_comorbid.icd9(x, y, ...)
+#   else if (is.)
+#
+# }
+
+#' @describeIn icd_diff_comorbid Show difference between comorbidity maps with ICD-9 codes
+#' @export
+icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
                              show = TRUE, explain = TRUE) {
   assertList(x, min.len = 1, any.missing = FALSE,
              types = c("character"), names = "unique")
@@ -403,13 +414,13 @@ icd_diff_comorbid.icd9 <- function(x, y, all_names = NULL, x_names = NULL, y_nam
       if (length(only.x) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     x.title, length(only.x), y.title))
-        lapply(icd_explain.icd9(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(icd_explain(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       if (length(only.y) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     y.title, length(only.y), x.title))
-        lapply(icd_explain.icd9(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(icd_explain(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       cat("\n")
