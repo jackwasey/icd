@@ -337,6 +337,9 @@ new_since_27 <- setdiff(icd9Billable[["32"]][["icd9"]],
                          icd9Billable[["27"]][["icd9"]]) %>% head
 lost_since_27 <- setdiff(icd9Billable[["27"]][["icd9"]],
                          icd9Billable[["32"]][["icd9"]]) %>% tail
+# we know this is an ICD-9-CM code, so declare this:
+lost_since_27 %<>% icd9cm
+lost_since_27 %<>% icd9
 
 # these are a few which were gained since v27
 data.frame(icd9 = new_since_27, desc = new_since_27 %>% icd9Explain)
