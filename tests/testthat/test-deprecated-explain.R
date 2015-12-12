@@ -277,10 +277,9 @@ test_that("explain icd9GetChapters simple input", {
 })
 
 test_that("working with named lists of codes, decimal is guessed", {
-  expect_that(icd9ExplainDecimal(list(a = c("001"), b = c("001.1", "001.9"))),
-              testthat::not(gives_warning()))
-  expect_that(icd9Explain(list(a = c("001"), b = c("001.1", "001.9"))),
-              testthat::not(gives_warning()))
+  # warnings given for deprecated code
+  expect_error(icd9ExplainDecimal(list(a = c("001"), b = c("001.1", "001.9"))), NA)
+  expect_error(icd9Explain(list(a = c("001"), b = c("001.1", "001.9"))), NA)
 })
 
 test_that("icd9 descriptions is parsed correctly", {

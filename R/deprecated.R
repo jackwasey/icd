@@ -202,9 +202,9 @@ icd9ComorbidDfToMat <- function(icd9df, visitId = get_visit_name(icd9df),
 
 #' @rdname icd_explain
 #' @export
-icd9Explain <- function(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
+icd9Explain <- function(icd9, isShort = icd_guess_short.icd9(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
-  icd_explain.icd9(icd9, short_code = isShort, condense = doCondense, brief, warn)
+  icd_explain(x = icd9, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
 }
 
 #' @rdname icd_explain

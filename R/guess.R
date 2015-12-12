@@ -72,6 +72,10 @@ icd_guess_short.icd_decimal_code <- function(x) FALSE
 icd_guess_version <- function(...)
   UseMethod("icd_guess_version")
 
+icd_guess_version.icd9 <- function(icd, short_code) "icd9"
+
+icd_guess_version.icd10 <- function(icd, short_code) "icd10"
+
 #' @describeIn icd_guess_version Guess version of ICD code from character vector
 icd_guess_version.character <- function(icd, short_code = NULL) {
   if (!is.null(short_code)) {
@@ -79,8 +83,7 @@ icd_guess_version.character <- function(icd, short_code = NULL) {
       i9 <- sum(icd_is_valid.icd9(icd, short_code = TRUE), na.rm = TRUE)
       i10 <- sum(icd_is_valid.icd10(icd, short_code = TRUE), na.rm = TRUE)
       i10who <- sum(icd_is_valid.icd10who(icd, short_code = TRUE), na.rm = TRUE)
-          }
-    else {
+    } else {
       i9 <- sum(icd_is_valid.icd9(icd, short_code = FALSE), na.rm = TRUE)
       i10 <- sum(icd_is_valid.icd10(icd, short_code = FALSE), na.rm = TRUE)
       i10who <- sum(icd_is_valid.icd10who(icd, short_code = FALSE), na.rm = TRUE)
@@ -106,7 +109,7 @@ icd_guess_version.character <- function(icd, short_code = NULL) {
   # todo: guess ICD-10-CM
   # TODO: return vector of types, e.g. c("icd10who, "icd10")
 
-  if (i9 > i10 && i9 > i10who)
+  if (i9 >= i10 && i9 >= i10who)
     "icd9"
   else
     "icd10"
