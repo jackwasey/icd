@@ -16,14 +16,14 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 if (requireNamespace("lintr", quietly = TRUE)) {
-  context("lints")
+  context("deprecated tests - lints")
   test_that("Package Style", {
     skip("skipping linting until lintr bugs are fixed")
     lintr::expect_lint_free()
   })
 }
 
-context("test icd9 package")
+context("test deprecated icd9 package")
 
 test_that("zero pad decimal - bad input", {
   expect_equal(icd9AddLeadingZeroesDecimal(character()), character())

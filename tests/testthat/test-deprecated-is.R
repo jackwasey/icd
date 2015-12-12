@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("tests for type of ICD-9 code")
+context("deprecated tests for type of ICD-9 code")
 
 vs <- c("V1", "V99", " V05", "v19x", " v200 ")
 es <- c("E00", "E9999", " E905", "e901", " e888 ")

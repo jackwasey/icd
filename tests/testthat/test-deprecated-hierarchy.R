@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("icd9Hierarchy was parsed as expected")
+context("deprecated icd9Hierarchy was parsed as expected")
 # at present, icd9::icd9Hierarchy is derived from RTF parsing, a little web
 # scraping, some manually entered data, and (for the short description only)
 # another text file parsing.`

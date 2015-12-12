@@ -171,16 +171,16 @@ icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
 
 #' @rdname icd_condense
 #' @export
-icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE) {
+icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9, short_code = FALSE, real = onlyReal, warn = warn)
+  icd_condense.icd9(x = icd9Decimal, short_code = FALSE, real = onlyReal, warn = warn, keepFactorLevels = keepFactorLevels)
 }
 
 #' @rdname icd_condense
 #' @export
-icd9CondenseShort <- function(icd9, onlyReal = NULL, warn = TRUE) {
+icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9, short_code = TRUE, real = onlyReal, warn = warn)
+  icd_condense.icd9(x = icd9Short, short_code = TRUE, real = onlyReal, warn = warn, keepFactorLevels = keepFactorLevels)
 }
 
 

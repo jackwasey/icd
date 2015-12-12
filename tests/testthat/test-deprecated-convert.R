@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("icd9 type conversions")
+context("deprecated icd9 type conversions")
 
 test_that("extract decimal parts - invalid or empty input", {
   expect_equal(icd9DecimalToParts(character()), list(major = character(),

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("condense")
+context("deprecated tests for condense")
 
 library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
 
@@ -123,7 +123,8 @@ test_that("condense short range", {
                "Other salmonella infections")
 
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
-  expect_that(res <- icd9CondenseShort(othersalmonella, onlyReal = FALSE), testthat::not(gives_warning()))
+  # can't test warning for deprecated function, test error instead.
+  expect_error(res <- icd9CondenseShort(othersalmonella, onlyReal = FALSE), NA)
   expect_equal(res, othersalmonella)
   # missing this leaf node, we can't condense at all
   expect_equal(icd9CondenseShort(othersalmonella[-3], onlyReal = TRUE),
@@ -140,8 +141,7 @@ test_that("condense short range", {
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("00320", onlyReal = TRUE), onlyReal = TRUE), "00320")
   # majors should be okay, even if not 'real'
-  expect_that(dup_res <- icd9CondenseShort(icd9ChildrenShort("003", onlyReal = TRUE)),
-              testthat::not(gives_warning()))
+  expect_error(dup_res <- icd9CondenseShort(icd9ChildrenShort("003", onlyReal = TRUE)), NA)
 
   expect_equal(icd9CondenseShort(c("003", "003"), onlyReal = TRUE), "003")
   expect_equal(icd9CondenseShort(c("003", "003"), onlyReal = FALSE), "003")

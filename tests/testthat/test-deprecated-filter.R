@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test filtering on POA")
+context("test deprecated filtering on POA")
 
 test_that("filter POA - not a data frame", {
   expect_error(icd9FilterPoaNo(list(pollo = "loco")))

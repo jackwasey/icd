@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("icd9 validation")
+context("deprecated icd9 validation")
 
 test_that("warning for deprecation of icd9ValidDecimal", {
   expect_that(icd9ValidDecimal(c("1", "2")), gives_warning())

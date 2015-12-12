@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("compare ordered long to wide methods")
+context("deprecated compare ordered long to wide methods")
 
 pts <- randomOrderedPatients(5000, 13)
 

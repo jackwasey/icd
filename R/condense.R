@@ -58,10 +58,10 @@ icd_condense.character <- function(x, short_code = icd_guess_short(x), real = NU
 
 #' @rdname icd_condense
 #' @keywords internal manip
-icd9_condense_decimal <- function(x, real = NULL, warn = TRUE)
+icd9_condense_decimal <- function(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE)
   icd_short_to_decimal.icd9(
     icd9_condense_short(
-      icd_decimal_to_short.icd9(x), real = real, warn = warn))
+      icd_decimal_to_short.icd9(x), real = real, warn = warn, keepFactorLevels = keepFactorLevels))
 
 #' @rdname icd_condense
 #' @template warn

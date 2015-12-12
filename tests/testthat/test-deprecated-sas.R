@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test SAS interpretation")
+context("test deprecated SAS interpretation")
 
 test_that("basic SAS VALUE declarations can be read into an R list", {
 
