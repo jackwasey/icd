@@ -34,10 +34,6 @@ list of character vectors, list length being the length of the inptu
 Be careful: this may throw funny results for exotic regex, but
   so far, it seems okay. it also drops the first result which always seems to
   be a duplicate or whole-string match.
-
-\code{str_pair_match} differs in that there should only be two
-  pairs of parenthesis, then the first (by default) becomes the name, and the
-  second the value.
 }
 \keyword{internal}
 

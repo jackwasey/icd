@@ -67,26 +67,26 @@ icd9ComorbiditiesQuanElixhauser(...)
 
 icd9ComorbidQuanElixhauser(...)
 
-icd9Comorbid(icd_df, icd9Mapping, visitId = NULL, icd9Field = NULL,
-  isShort = icd_guess_short.icd9(icd_df),
+icd9Comorbid(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
+  isShort = icd_guess_short.icd9(icd9df),
   isShortMapping = icd_guess_short.icd9(icd9Mapping), return.df = FALSE,
   ...)
 
 icd9ComorbidAhrq(icd9df, visitId = NULL, icd9Field = NULL,
   isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
-  ...)
+  abbrevNames = TRUE, applyHierarchy = TRUE, ...)
 
 icd9ComorbidElix(icd9df, visitId = NULL, icd9Field = NULL,
   isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
-  ...)
+  abbrevNames = TRUE, applyHierarchy = TRUE, ...)
 
 icd9ComorbidQuanElix(icd9df, visitId = NULL, icd9Field = NULL,
   isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
-  ...)
+  abbrevNames = TRUE, applyHierarchy = TRUE, ...)
 
 icd9ComorbidQuanDeyo(icd9df, visitId = NULL, icd9Field = NULL,
   isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]), return.df = FALSE,
-  ...)
+  abbrevNames = TRUE, applyHierarchy = TRUE, ...)
 }
 \arguments{
 \item{icd9df}{Deprecated. Use \code{icd_df}}

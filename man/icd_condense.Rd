@@ -15,16 +15,19 @@ icd_condense(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE)
 \method{icd_condense}{character}(x, short_code = icd_guess_short(x),
   real = NULL, warn = TRUE)
 
-icd9_condense_decimal(x, real = NULL, warn = TRUE)
+icd9_condense_decimal(x, real = NULL, warn = TRUE,
+  keepFactorLevels = FALSE)
 
 icd9_condense_short(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE)
 
 icd9Condense(icd9, isShort = icd_guess_short(icd9), onlyReal = NULL,
   warn = TRUE)
 
-icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, warn = TRUE)
+icd9CondenseDecimal(icd9Decimal, onlyReal = NULL, warn = TRUE,
+  keepFactorLevels = FALSE)
 
-icd9CondenseShort(icd9, onlyReal = NULL, warn = TRUE)
+icd9CondenseShort(icd9Short, onlyReal = NULL, warn = TRUE,
+  keepFactorLevels = FALSE)
 }
 \arguments{
 \item{short_code}{single logical value which determines whether the ICD-9 code
