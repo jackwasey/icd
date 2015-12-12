@@ -724,3 +724,21 @@ icd9ShortToDecimal <- function(icd9Short) {
   icd_short_to_decimal.icd9(icd9Short)
 }
 
+#' @rdname icd_in_reference_code
+#' @keywords internal
+icd9InReferenceCode <- function(icd9, icd9Reference, isShort, isShortReference = TRUE) {
+  .Deprecated("icd_in_reference_code")
+  icd_in_reference_code(icd = icd9, icd_reference = icd9Reference,
+                        short_code = isShort, short_reference = isShortReference)
+}
+
+expandRangeWorker <- function(start, end, lookup, onlyReal,
+                              excludeAmbiguousStart, excludeAmbiguousEnd){
+  .Deprecated("expand_range_worker")
+  expand_range_worker(start, end, lookup, real = onlyReal, excludeAmbiguousStart, excludeAmbiguousEnd)
+}
+
+icd9ExpandMinor <- function(minor, isE = FALSE) {
+  .Deprecated("icd_expand_minor")
+  icd_expand_minor.icd9(minor, is_e = isE)
+}

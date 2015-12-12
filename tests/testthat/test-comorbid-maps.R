@@ -561,7 +561,12 @@ test_that("diff comorbid works", {
 
   # no warning or error for good data
 # TODO: should be testing correct dispatch here, too, since map is a different class.
-  expect_warning(res <- icd_diff_comorbid.icd9(ahrqComorbid, elixComorbid, show = FALSE), NA)
+  expect_warning(
+    utils::capture.output(
+      res <- icd_diff_comorbid.icd9(ahrqComorbid, elixComorbid, show = FALSE)
+    ),
+  NA)
+  
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
     "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",

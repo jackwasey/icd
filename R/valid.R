@@ -30,7 +30,7 @@
 #' \code{NA_character}
 #'
 #' \code{NA} values result in a return value of \code{FALSE}.
-#' @section Three-digit validation: \code{icd_is_valid_major} validates just the
+#' @section Three-digit validation: \code{icd9_is_valid_major} validates just the
 #'   'major' three-digit part of an ICD-9 code. This can in fact be provided as
 #'   a numeric, since there is no ambiguity. Numeric-only codes should be one to
 #'   three digitis, V codes are followed by one or two digits, and E codes
