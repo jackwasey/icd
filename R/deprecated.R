@@ -204,7 +204,7 @@ icd9ComorbidDfToMat <- function(icd9df, visitId = get_visit_name(icd9df),
 #' @export
 icd9Explain <- function(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
-  icd_explain(icd9, short_code = isShort, condense = doCondense, brief, warn)
+  icd_explain.icd9(icd9, short_code = isShort, condense = doCondense, brief, warn)
 }
 
 #' @rdname icd_explain
@@ -707,7 +707,7 @@ icd9WideToLong <- function(x,
 
 icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
   .Deprecated("icd_decimal_to_parts")
-  icd9DecimalToParts(icd9Decimal, minorEmpty)
+  icd_decimal_to_parts(icd9Decimal, minorEmpty)
 }
 
 #' @rdname icd_short_to_decimal
@@ -722,6 +722,13 @@ icd9DecimalToShort <- function(icd9Short) {
 icd9ShortToDecimal <- function(icd9Short) {
   .Deprecated("icd_short_to_decimal")
   icd_short_to_decimal.icd9(icd9Short)
+}
+
+#' @rdname icd_short_to_decimal
+#' @export
+icd9ShortToParts <- function(icd9Short) {
+  .Deprecated("icd_short_to_parts")
+  icd_short_to_parts.icd9(icd9Short)
 }
 
 #' @rdname icd_in_reference_code

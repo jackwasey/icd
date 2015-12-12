@@ -302,7 +302,7 @@ icd_short_to_parts.icd9 <- function(x, minor_empty = "") {
 
 #' @rdname convert
 #' @keywords internal manip
-icd_decimal_to_parts.icd9 <- function(x, minor_empty = "") {
+icd_decimal_to_parts <- function(x, minor_empty = "") {
   .Call("icd9_icd9DecimalToPartsCpp", PACKAGE = get_pkg_name(), x, minor_empty)
 }
 

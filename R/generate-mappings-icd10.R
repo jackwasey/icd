@@ -68,7 +68,7 @@ icd9_generate_map_elix <- function(save = FALSE, path = "data") {
     icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
-  class(elixComorbid) <- c("icd9", "icd_map", "icd_decimal", "list")
+  class(elixComorbid) <- c("icd_map", "icd9", "icd_decimal", "list")
 
   if (save) save_in_data_dir(elixComorbid)
   invisible(elixComorbid)
@@ -149,7 +149,7 @@ icd9_generate_map_quan_elix <- function(condense = FALSE,
       icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
-  class(quanElixComorbid) <- c("icd9", "icd_map", "icd_decimal", "list")
+  class(quanElixComorbid) <- c("icd_map", "icd9", "icd_decimal", "list")
 
   if (save) save_in_data_dir(quanElixComorbid)
   invisible(quanElixComorbid)
