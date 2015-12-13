@@ -196,13 +196,13 @@ icd_is_valid_major <- function(x) {
 #' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
 #'   which at present assumes ICD-9 format
 #' @keywords internal
-icd_is_valid_major.default <- function(major) {
-  icd_is_valid_major.icd9(asCharacterNoWarn(major))
+icd_is_valid_major.default <- function(x) {
+  icd_is_valid_major.icd9(asCharacterNoWarn(x))
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
 #' @keywords internal
-icd_is_valid_major.icd9 <- function(major)
+icd_is_valid_major.icd9 <- function(x)
   # let grepl do what it can with integers, factors, etc.
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)", # nolint
@@ -211,26 +211,26 @@ icd_is_valid_major.icd9 <- function(major)
 
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_n <- function(major)
+icd9_is_valid_major_n <- function(x)
   grepl(
     pattern = "^[[:space:]]*[[:digit:]]{1,3}[[:space:]]*$",
-    x = major
+    x = x
   )
 
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_v <- function(major)
+icd9_is_valid_major_v <- function(x)
   grepl(
     pattern = "^[[:space:]]*[Vv][[:digit:]]{1,2}[[:space:]]*$",
-    x = major
+    x = x
   )
 
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_e <- function(major)
+icd9_is_valid_major_e <- function(x)
   grepl(
     pattern = "^[[:space:]]*[Ee][[:digit:]]{1,3}[[:space:]]*$",
-    x = major
+    x = x
   )
 
 #' validate an icd9 mapping to comorbidities
