@@ -229,7 +229,6 @@ icd9CountWide <- function(x,
 }
 
 #' @title Calculate van Walraven Elixhauser Score
-#' @rdname icd9VanWalraven
 #' @description van Walraven Elixhauser score is calculated from the Quan
 #'   revision of Elixhauser's ICD-9 mapping. This function allows for the
 #'   hierarchical exlusion of less severe versions of comorbidities when their
@@ -257,12 +256,12 @@ icd9CountWide <- function(x,
 #'                    icd9 = c("412.93", "441", "044.9"))
 #'
 #' print(
-#'   cmb <- icd9ComorbidQuanElix(mydf, isShort = FALSE, applyHierarchy = TRUE, return.df=TRUE)
+#'   cmb <- icd_comorbid_quan_elix.icd9(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)
 #' )
-#' icd9VanWalravenComorbid(cmb)
+#' icd_van_walraven_from_comorbid(cmb)
 #'
-#' icd9VanWalraven(mydf)
-#' icd9VanWalraven(mydf, return.df = TRUE)
+#' icd_van_walraven(mydf)
+#' icd_van_walraven(mydf, return.df = TRUE)
 #' @author wmurphyrd
 #' @references van Walraven C, Austin PC, Jennings A, Quan H, Forster AJ. A
 #'   Modification to the Elixhauser Comorbidity Measures Into a Point System for
@@ -297,7 +296,7 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL,
   out
 }
 
-#' @rdname icd9VanWalraven
+#' @rdname icd_van_walraven
 #' @param applyHierarchy single logical value, default is \code{FALSE}. If
 #'   \code{TRUE}, will drop DM if DMcx is present, etc.
 #' @export

@@ -178,15 +178,21 @@ icd9_is_valid_decimal_n <- function(x) {
         x)
 }
 
-# do i need to export this?
+#' @title Test whether an ICD code is major
+#' @param x vector of ICD codes
+#' @return logical vector of same length as input, with TRUE when a code is a
+#'   major (not necessarily a real one)
+#' @keywords internal
 icd_is_valid_major <- function(x)
   UseMethod("icd_is_valid_major")
 
-icd_is_valid_major.icd9 <- function(major)
+#' @describeIn icd_is_valid_major Is this ICD-9 code a valid major
+#' @keywords internal
+icd_is_valid_major.icd9 <- function(x)
   # let grepl do what it can with integers, factors, etc.
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)", # nolint
-    x = major
+    x = x
   )
 
 icd9_is_valid_major_n <- function(major)
