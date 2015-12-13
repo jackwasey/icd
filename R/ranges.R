@@ -260,26 +260,26 @@ icd9_expand_range_short <- function(start, end, real = TRUE,
   if (real) {
     stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
     if (icd9_is_n(start) && icd9_is_n(end))
-      res <- expand_range_worker(start, end, icd9::icd9NShortReal, real = TRUE,
+      res <- expand_range_worker(start, end, icd9:::icd9NShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9_is_v(start) && icd9_is_v(end))
-      res <- expand_range_worker(start, end, icd9::icd9VShortReal, real = TRUE,
+      res <- expand_range_worker(start, end, icd9:::icd9VShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9_is_e(start) && icd9_is_e(end))
-      res <- expand_range_worker(start, end, icd9::icd9EShortReal, real = TRUE,
+      res <- expand_range_worker(start, end, icd9:::icd9EShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")
   } else {
 
     if (icd9_is_n(start) && icd9_is_n(end))
-      res <- expand_range_worker(start, end, icd9::icd9NShort, real = FALSE,
+      res <- expand_range_worker(start, end, icd9:::icd9NShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9_is_v(start) && icd9_is_v(end))
-      res <- expand_range_worker(start, end, icd9::icd9VShort, real = FALSE,
+      res <- expand_range_worker(start, end, icd9:::icd9VShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9_is_e(start) && icd9_is_e(end))
-      res <- expand_range_worker(start, end, icd9::icd9EShort, real = FALSE,
+      res <- expand_range_worker(start, end, icd9:::icd9EShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")
@@ -363,9 +363,11 @@ icd9_expand_range_decimal <- function(start, end, real = TRUE,
 #'   code (which is one character), as opposed to a V or numeric-only code,
 #'   which is two character. Default is \code{FALSE}.
 #' @examples
+#' \dontrun{
 #'   # return all possible decimal parts of ICD9 codes (111 in total)
-#'   length(icd9:::expand_minor("", isE = FALSE))
-#'   icd9:::expand_minor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#'   length(icd9:::icd_expand_minor(icd9(""), is_e = FALSE))
+#'   icd9:::icd_expand_minor(icd9("1")) # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#' }
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges

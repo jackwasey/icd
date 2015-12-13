@@ -6,7 +6,8 @@
 #'   \code{datadocs.R}.
 #' @template parse-template
 #' @keywords internal
-icd9_generate_map_elix <- function(save = FALSE, path = "data") {
+icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data") {
+  if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix")
   elixComorbid <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91",
             "404.93", "428.0" %i9da% "428.9"),
@@ -68,7 +69,7 @@ icd9_generate_map_elix <- function(save = FALSE, path = "data") {
     icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
-  class(elixComorbid) <- c("icd9", "icd_map", "icd_decimal", "list")
+  class(elixComorbid) <- c("icd_map", "icd9", "icd_decimal", "list")
 
   if (save) save_in_data_dir(elixComorbid)
   invisible(elixComorbid)
@@ -77,9 +78,11 @@ icd9_generate_map_elix <- function(save = FALSE, path = "data") {
 #' @title Generate Quan's revised Elixhauser comorbidities
 #' @template parse-template
 #' @keywords internal
-icd9_generate_map_quan_elix <- function(condense = FALSE,
+icd9_generate_map_quan_elix <- function(condense = NULL,
                                     save = FALSE,
                                     path = "data") {
+
+  if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix")
   # TODO: need to deprecate this name so we can switch ICD-9 and ICD-10 (and
   # their variations)
   quanElixComorbid <- list(
@@ -139,17 +142,12 @@ icd9_generate_map_quan_elix <- function(condense = FALSE,
     quanElixComorbid,
     function(x) icd_decimal_to_short.icd9(x))
 
-  if (condense)
-    quanElixComorbid <- lapply(
-      quanElixComorbid,
-      function(x) icd_condense.icd9(x, onlyReal = FALSE))
-  else
-    quanElixComorbid <- lapply(
-      quanElixComorbid,
-      icd_children.icd9, short_code = TRUE, real = FALSE)
+  quanElixComorbid <- lapply(
+    quanElixComorbid,
+    icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
-  class(quanElixComorbid) <- c("icd9", "icd_map", "icd_decimal", "list")
+  class(quanElixComorbid) <- c("icd_map", "icd9", "icd_decimal", "list")
 
   if (save) save_in_data_dir(quanElixComorbid)
   invisible(quanElixComorbid)
@@ -295,4 +293,76 @@ icd10_generate_map_quan_charlson <- function() {
     # which are not present (?anymore) in the ICD-10-CM 2016 list.
     if (save) save_in_data_dir(icd10_map_quan_charlson)
     invisible(icd10_map_quan_charlson)
+}
+
+#' generate uranium pathology data
+#' @keywords internal
+generate_uranium_pathology <- function(save_data = FALSE) {
+
+  assertFlag(save_data)
+
+  file_path <- unzip_to_data_raw(
+    url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
+    file_name = "Pathology_Office2007.accdb")
+
+  # odbcConnectAccess2007 is only in the Windows version of RODBC
+  channel <- RODBC::odbcConnectAccess2007(file_path)
+  uranium_pathology <- RODBC::sqlFetch(channel, "qry_ICD-10")
+
+  uranium_pathology <- uranium_pathology[, c("Case_No", "ICD-10_code")]
+  names(uranium_pathology) <- c("case", "icd10")
+
+  uranium_pathology <- uranium_pathology[order(uranium_pathology["case"]), ]
+
+  row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
+
+  class(uranium_pathology) <- c("icd10who", "icd10", "icd_long_data", "icd_decimal_code", "data.frame")
+
+  if (save_data) save_in_data_dir(uranium_pathology)
+  invisible(uranium_pathology)
+}
+
+#' generate vermont_dx data
+#' @keywords internal
+generate_vermont_dx <- function(save_data = FALSE) {
+
+  assertFlag(save_data)
+
+  zip_out = unzip_to_data_raw(
+    url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
+    file_name = "VTINP13.TXT")
+  vermont_dx <- utils::read.csv(zip_out$file_path,
+                                stringsAsFactors = FALSE,
+                                strip.white = TRUE,
+                                nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
+  vermont_dx %<>% head(1000)
+  age_group <- vermont_dx$intage
+  attr(age_group, "class") <- "factor"
+  attr(age_group, "levels") <- c("Under 1", "1-17", "18-24",
+                                 "25-29", "30-34", "35-39",
+                                 "40-44", "45-49", "50-54",
+                                 "55-59", "60-64", "65-69",
+                                 "70-74", "75 and over",
+                                 "Unknown")
+  sex <- vermont_dx$sex
+  attr(sex, "class") <- "factor"
+  attr(sex, "levels") <- c("male", "female", "unknown")
+  vermont_dx$intage <- age_group
+  vermont_dx$sex <- sex
+  vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)
+  names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
+  class(vermont_dx) <- c("icd9cm", "icd9", "icd_short_code", "icd_wide_data", "data.frame")
+  dx_cols <- paste0("DX", 1:20)
+  for (dc in dx_cols)
+    class(vermont_dx[[dc]]) <- c("icd9cm", "icd9", "character")
+
+  # set class on diagnosis columns. Not sure whether this is desirable in
+  # general. If parent has a class, it should be irrelevant?
+  # lapply... names(vermont_dx)  %>% stringr::str_detect("DX")
+
+  # and set class on whole structure
+  class(vermont_dx) <- c("icd9cm", "icd9", "icd_wide_data", "data.frame")
+
+  if (save_data) save_in_data_dir(vermont_dx)
+  invisible(vermont_dx)
 }

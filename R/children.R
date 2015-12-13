@@ -26,23 +26,23 @@
 #' @family ICD-9 ranges
 #' @examples
 #' library(magrittr)
-#' icd9ChildrenShort("10201", FALSE) # no children other than self
+#' icd_children("10201", short_code = TRUE, real = FALSE) # no children other than self
 #' icd9Children("0032", FALSE) # guess it was a short, not decimal code
 #' icd9ChildrenShort("10201", TRUE) # empty because 102.01 is not meaningful
-#' icd_children.icd9(short_code = TRUE, "003", TRUE) %>% icd_explain(condense = FALSE, short_code = TRUE)
-#' icd9ChildrenDecimal("100.0")
-#' icd9ChildrenDecimal("100.00")
-#' icd9ChildrenDecimal("2.34")
+#' icd_children("003", short_code = TRUE, real = TRUE) %>% icd_explain(condense = FALSE, short_code = TRUE)
+#' icd_children(short_code = FALSE, "100.0")
+#' icd_children(short_code = FALSE, "100.00")
+#' icd_children(short_code = FALSE, "2.34")
 #' @export
-icd_children <- function(icd, ...)
+icd_children <- function(x, ...)
   UseMethod("icd_children")
 
+#' @describeIn icd_children Get child codes, guessing ICD version and short versus decimal format
+#' @export
 icd_children.character <- function(x, ...) {
-  args = list(...)
-  if (is.null(short_code <- args[["short_code"]])) short_code = icd_guess_short(x)
-  ver <- icd_guess_version(x, short_code = short_code)
+  ver <- icd_guess_version(x)
   switch(ver,
-    "icd9" = icd_children.icd9(x, short_code, ...),
+    "icd9" = icd_children.icd9(x = x, ...),
     # "icd10" = icd_children.icd10(x, short_code, ...)
     NULL)
 }
@@ -79,8 +79,8 @@ icd_children_real <- function(x)
 #' @keywords internal
 icd_children_real.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
-  checkmate::assertCharacter(x)
-  checkmate::assertFlag(short_code)
+  assertCharacter(x)
+  assertFlag(short_code)
 
   if (inherits(x, "icd10") && !inherits(x, "icd10cm"))
     warning("This function primarily gives 'real' child codes for ICD-10-CM,

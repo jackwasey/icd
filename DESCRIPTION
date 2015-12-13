@@ -22,6 +22,7 @@ Depends:
 Imports:
     Rcpp (>= 0.12.2),
     checkmate (>= 1.5.1),
+    magrittr,
     stats,
     utils,
     fastmatch

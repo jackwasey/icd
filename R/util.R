@@ -140,16 +140,13 @@ strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
         ...)
     )[ -1]
   )
-  if (!dropEmpty) 
+  if (!dropEmpty)
     result
   else
     result[sapply(result, function(x) length(x) != 0)]
 }
 
 #' @rdname strMultiMatch
-#' @description \code{str_pair_match} differs in that there should only be two
-#'   pairs of parenthesis, then the first (by default) becomes the name, and the
-#'   second the value.
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
@@ -180,12 +177,17 @@ str_pair_match <- function(text, pattern, swap = FALSE, dropEmpty = FALSE, pos =
 }
 
 get_visit_name <- function(x, visit_name = NULL) {
-  guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
-               "in.*enc", "out.*enc", "encounter", "visit", "enc")
+  UseMethod("get_visit_name")
+}
+
+.visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
+                         "in.*enc", "out.*enc", "encounter", "visit", "enc")
+
+get_visit_name.data.frame <- function(x, visit_name = NULL) {
   assertDataFrame(x, min.cols = 1, col.names = "named")
 
   if (is.null(visit_name)) {
-    for (guess in guesses) {
+    for (guess in .visit_name_guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
       if (length(guess_matched) == 1) {
         visit_name <- guess_matched
@@ -199,6 +201,10 @@ get_visit_name <- function(x, visit_name = NULL) {
   assertString(visit_name)
   stopifnot(visit_name %in% names(x))
   visit_name
+}
+
+get_visit_name.matrix <- function(x, visit_name = NULL) {
+  stop("matrices of comorbidity data are expected to be of logical type, and have row names corresponding to the visit or patient.")
 }
 
 # guess which field contains the (only) ICD code, in order of preference

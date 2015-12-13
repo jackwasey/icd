@@ -1,9 +1,11 @@
 #box: jackwasey/r-ubsan-clang-3.7-libcxx
 #box: rocker/r-devel-san
-box: rocker/r-devel-ubsan-clang
+#box: rocker/r-devel-ubsan-clang
+box: rocker/hadleyverse
 build:
   steps:
-    - jimhester/r-dependencies
+    - jimhester/r-dependencies:
+        github_packages: hadley/testthat RcppCore/Rcpp
     - jimhester/r-check
     - jimhester/r-lint
     - jimhester/r-coverage

@@ -5,11 +5,21 @@
 \alias{icd9GetInvalidMappingShort}
 \alias{icd9IsValid}
 \alias{icd9IsValidDecimal}
+\alias{icd9IsValidDecimalE}
+\alias{icd9IsValidDecimalN}
+\alias{icd9IsValidDecimalV}
 \alias{icd9IsValidMapping}
 \alias{icd9IsValidMappingDecimal}
 \alias{icd9IsValidMappingShort}
 \alias{icd9IsValidShort}
+\alias{icd9IsValidShortE}
+\alias{icd9IsValidShortN}
+\alias{icd9IsValidShortV}
+\alias{icd9Valid}
+\alias{icd9ValidDecimal}
+\alias{icd9ValidShort}
 \alias{icd_is_valid}
+\alias{icd_is_valid.character}
 \alias{icd_is_valid.icd10}
 \alias{icd_is_valid.icd10who}
 \alias{icd_is_valid.icd9}
@@ -25,19 +35,37 @@ icd9GetInvalidMappingShort(icd9Mapping)
 
 icd9GetInvalidMappingDecimal(icd9Mapping)
 
-icd9IsValid(icd9, isShort)
+icd9Valid(icd9, isShort)
 
 icd9IsValid(icd9, isShort)
+
+icd9ValidShort(icd9)
 
 icd9IsValidShort(icd9)
 
+icd9IsValidShortN(icd9)
+
+icd9IsValidShortV(icd9)
+
+icd9IsValidShortE(icd9)
+
+icd9ValidDecimal(icd9Decimal)
+
 icd9IsValidDecimal(icd9Decimal)
+
+icd9IsValidDecimalN(icd9Decimal)
+
+icd9IsValidDecimalV(icd9Decimal)
+
+icd9IsValidDecimalE(icd9Decimal)
 
 icd_is_valid(icd, ...)
 
 \method{icd_is_valid}{icd10}(icd, short_code = icd_guess_short(icd))
 
 \method{icd_is_valid}{icd9}(x, short_code)
+
+\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x))
 
 \method{icd_is_valid}{icd10who}(icd, short_code = icd_guess_short.icd10(icd))
 }
@@ -107,6 +135,14 @@ is guessed from the input data.}
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
@@ -126,6 +162,8 @@ This does not check whether the code coresponds to a real ICD-9-CM billing
 code, or parent grouping. For that, see \code{\link{icd9IsReal}}.
 }
 \details{
+do the icd9 valid subtypes need to be exported?
+
 Factors are accepted, and since the validation is done with \code{grepl}
 these are handled correctly.
 
@@ -141,8 +179,8 @@ Leading zeroes in the decimal form are not ambiguous. Although
   integer ICD-9 codes could be intended by the user, there is a difference
   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
   is provided TODO: add default (when there is no class) which detected icd9
-  vs 10 if possible. TODO: use "short_code" or "long" attribute if available to
-  tighten validation, or guess if missing.
+  vs 10 if possible. TODO: use "short_code" or "long" attribute if available
+  to tighten validation, or guess if missing.
 
 From WHO ICD-10 manual: "The basic ICD is a single coded list of
   three-character categories, each of which can be further divided into up to
@@ -170,13 +208,16 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
 
 \item \code{icd9}: Test whether generic ICD-10 code is valid
 
+\item \code{character}: Test whether a character vector of ICD vodes is
+valid, guessing both type and version of the ICD codes
+
 \item \code{icd10who}: Check whether ICD-10 WHO codes are valid
 }}
 \section{Three-digit validation}{
- \code{isValidMajor} validates just the
-  'major' three-digit part of an ICD-9 code. This can in fact be provided as
-  a numeric, since there is no ambiguity. Numeric-only codes should be one to
-  three digitis, V codes are followed by one or two digits, and E codes
+ \code{icd9_is_valid_major} validates just
+  the 'major' three-digit part of an ICD-9 code. This can in fact be provided
+  as a numeric, since there is no ambiguity. Numeric-only codes should be one
+  to three digitis, V codes are followed by one or two digits, and E codes
   always by three digits between 800 and 999.
 }
 
@@ -184,16 +225,19 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
  S3 class of on object in R is just a vector. Attributes are
   lost with manipulation, with the exception of class: therefore, elements of
   the class vector are used to describe features of the data. If these are
-  not present, the user may specify (e.g. decimal vs short_code type, ICD-9 vs
-  ICD-10 WHO), but if they are, the correct functions are called without any
-  guess work. There are overlapping namespaces for short_code vs decimal and ICD-9
-  vs ICD-10 codes, so guessing is never going to be perfect.
+  not present, the user may specify (e.g. decimal vs short_code type, ICD-9
+  vs ICD-10 WHO), but if they are, the correct functions are called without
+  any guess work. There are overlapping namespaces for short_code vs decimal
+  and ICD-9 vs ICD-10 codes, so guessing is never going to be perfect.
 }
 \examples{
-  icd_validShort(c("", "1", "22", "333", "4444", "123.45", "V",
+  icd_is_valid(c("", "1", "22", "333", "4444", "123.45", "V",
                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
-  icd_validMajor(c("", "1", "22", "333", "4444", "123.45", "V",
+  # internal function:
+  \dontrun{
+  icd9:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
+  }
 }
 \seealso{
 \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}

@@ -6,7 +6,7 @@
 \title{convert matrix of comorbidities into data frame, preserving visit_name
   information}
 \usage{
-icd_comorbid_mat_to_df(x, visit_name = get_visit_name(x),
+icd_comorbid_mat_to_df(x, visit_name = "visit_id",
   stringsAsFactors = getOption("stringsAsFactors"))
 
 icd9ComorbidMatToDf(icd9df, visitId = "visit_name",
@@ -16,25 +16,27 @@ icd9ComorbidMatToDf(icd9df, visitId = "visit_name",
 \item{x}{Matrix of comorbidities, with row and columns names defined}
 
 \item{visit_name}{Single character string with name for new column in output
-data frame. Everywhere else, \code{visit_name} describes the input data, but
-here it is for output data.}
+data frame. Everywhere else, \code{visit_name} describes the input data,
+but here it is for output data.}
 
 \item{stringsAsFactors}{whether the resulting data frame should have strings,
-i.e. visit_name converted to factor. Default is to follow the current session
-option.}
+i.e. visit_name converted to factor. Default is to follow the current
+session option.}
 }
 \examples{
-longdf <- icd_long_data(
-             data.frame(visit_id = c("a", "b", "b", "c"),
-                        icd9 = icd9(c("441", "4424", "443", "441"))))
+library(magrittr) # as ever, optional, but tidy
+longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
+                     icd9 = icd9(c("441", "4424", "443", "441"))) \%>\% icd_long_data \%>\% icd9
 mat <- icd_comorbid_elix(longdf)
 class(mat)
 typeof(mat)
 rownames(mat)
-df.out <- icd_comorbid_matrix_to_df(mat)
+df.out <- icd_comorbid_mat_to_df(mat)
 stopifnot(is.data.frame(df.out))
 # output data frame has a factor for the visit_name column
-stopifnot(identical(rownames(mat), as.character(df.out$visit_name)))
+stopifnot(identical(rownames(mat), as.character(df.out[["visit_id"]])))
 df.out[, 1:4]
+# when creating a data frame like this, stringsAsFactors uses the system-wide option you have set.
+is.factor(df.out[["visit_id"]])
 }
 

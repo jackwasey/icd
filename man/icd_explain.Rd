@@ -7,6 +7,7 @@
 \alias{icd9ExplainDecimal}
 \alias{icd9ExplainShort}
 \alias{icd_explain}
+\alias{icd_explain.character}
 \alias{icd_explain.factor}
 \alias{icd_explain.icd9}
 \alias{icd_explain.icd9cm}
@@ -14,7 +15,7 @@
 \alias{icd_explain.numeric}
 \title{explain ICD9 codes}
 \usage{
-icd9Explain(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE,
+icd9Explain(icd9, isShort = icd_guess_short.icd9(icd9), doCondense = TRUE,
   brief = FALSE, warn = TRUE)
 
 icd9Explain.numeric(icd9, isShort = icd_guess_short(icd9),
@@ -29,6 +30,9 @@ icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
   warn = TRUE)
 
 icd_explain(...)
+
+\method{icd_explain}{character}(x, short_code = NULL, condense = TRUE,
+  brief = FALSE, warn = TRUE)
 
 \method{icd_explain}{list}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE)
@@ -94,6 +98,8 @@ convert 'decimal' format (123.45 style) ICD9 codes into the name
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{character}: Explain ICD codes from a character vecotr, guessing ICD version
+
 \item \code{list}: Explain all ICD-9 codes in a list of vectors
 
 \item \code{factor}: explain Explain factor of ICD-9 codes
@@ -112,8 +118,8 @@ avoid typing many quotes.
 # because 428 is present):
 icd9ExplainShort(ahrqComorbid$CHF[1:3])
 # same without condensing the list. In this case, 428.0 is shown:
-icd9ExplainShort(ahrqComorbid$CHF[1:3], condense = TRUE)
-icd9Explain(ahrqComorbid$CHF[1:3], brief = TRUE)
+icd9ExplainShort(ahrqComorbid$CHF[1:3] \%>\%  icd_condense)
+icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
 }
 \seealso{
 package comorbidities

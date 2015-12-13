@@ -235,55 +235,12 @@ NULL
 #'   for errors in the data due to coding or processing"
 #' @source
 #' \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
-#'
+
 #' @format CSV original, minimally processed into R data frame.
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration
 #' @docType data
 NULL
-
-#' generate vermont_dx data
-#' @keywords internal
-.vermont <- function() {
-
-  zip_out = unzip_to_data_raw(
-    url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
-    file_name = "VTINP13.TXT")
-  vermont_dx <- utils::read.csv(zip_out$file_path,
-                                stringsAsFactors = FALSE,
-                                strip.white = TRUE,
-                                nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
-  vermont_dx %<>% head(1000)
-  age_group <- vermont_dx$intage
-  attr(age_group, "class") <- "factor"
-  attr(age_group, "levels") <- c("Under 1", "1-17", "18-24",
-                                 "25-29", "30-34", "35-39",
-                                 "40-44", "45-49", "50-54",
-                                 "55-59", "60-64", "65-69",
-                                 "70-74", "75 and over",
-                                 "Unknown")
-  sex <- vermont_dx$sex
-  attr(sex, "class") <- "factor"
-  attr(sex, "levels") <- c("male", "female", "unknown")
-  vermont_dx$intage <- age_group
-  vermont_dx$sex <- sex
-  vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)
-  names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
-  class(vermont_dx) <- c("icd9cm", "icd9", "icd_short_code", "icd_wide_data", "data.frame")
-  dx_cols <- paste0("DX", 1:20)
-  for (dc in dx_cols)
-    class(vermont_dx[[dc]]) <- c("icd9cm", "icd9", "character")
-
-  # set class on diagnosis columns. Not sure whether this is desirable in
-  # general. If parent has a class, it should be irrelevant?
-  # lapply... names(vermont_dx)  %>% str_detect("DX")
-
-  # and set class on whole structure
-  class(vermont_dx) <- c("icd9cm", "icd9", "icd_wide_data", "data.frame")
-
-  save_in_data_dir(vermont_dx)
-  invisible(vermont_dx)
-}
 
 #' @title United States Transuranium & Uranium Registries
 #' @name uranium_pathology
@@ -292,28 +249,3 @@ NULL
 #' @docType data
 #' @keywords datasets
 NULL
-
-#' generate uranium pathology data
-#' @keywords internal
-.uranium_pathology <- function() {
-
-  file_path <- unzip_to_data_raw(
-    url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
-    file_name = "Pathology_Office2007.accdb")
-
-  # odbcConnectAccess2007 is only in the Windows version of RODBC
-  channel <- RODBC::odbcConnectAccess2007(file_path)
-  uranium_pathology <- RODBC::sqlFetch(channel, "qry_ICD-10")
-
-  uranium_pathology <- uranium_pathology[, c("Case_No", "ICD-10_code")]
-  names(uranium_pathology) <- c("case", "icd10")
-
-  uranium_pathology <- uranium_pathology[order(uranium_pathology["case"]), ]
-
-  row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
-
-  class(uranium_pathology) <- c("icd10who", "icd10", "icd_long_data", "icd_decimal_code", "data.frame")
-
-  save_in_data_dir(uranium_pathology)
-  invisible(uranium_pathology)
-}

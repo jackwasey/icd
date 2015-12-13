@@ -5,10 +5,13 @@
 \alias{icd9ChildrenDecimal}
 \alias{icd9ChildrenShort}
 \alias{icd_children}
+\alias{icd_children.character}
 \alias{icd_children.icd9}
 \title{Expand ICD-9 codes to all possible sub-codes}
 \usage{
-icd_children(icd, ...)
+icd_children(x, ...)
+
+\method{icd_children}{character}(x, ...)
 
 \method{icd_children}{icd9}(x, short_code = icd_guess_short(x), real = TRUE,
   billable = FALSE)
@@ -61,17 +64,19 @@ becomes "010", not "0010"}
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{character}: Get child codes, guessing ICD version and short versus decimal format
+
 \item \code{icd9}: Get children of ICD-9 codes
 }}
 \examples{
 library(magrittr)
-icd9ChildrenShort("10201", FALSE) # no children other than self
+icd_children("10201", short_code = TRUE, real = FALSE) # no children other than self
 icd9Children("0032", FALSE) # guess it was a short, not decimal code
 icd9ChildrenShort("10201", TRUE) # empty because 102.01 is not meaningful
-icd_children.icd9(short_code = TRUE, "003", TRUE) \%>\% icd_explain(condense = FALSE, short_code = TRUE)
-icd9ChildrenDecimal("100.0")
-icd9ChildrenDecimal("100.00")
-icd9ChildrenDecimal("2.34")
+icd_children("003", short_code = TRUE, real = TRUE) \%>\% icd_explain(condense = FALSE, short_code = TRUE)
+icd_children(short_code = FALSE, "100.0")
+icd_children(short_code = FALSE, "100.00")
+icd_children(short_code = FALSE, "2.34")
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{icd9ExpandRange}},

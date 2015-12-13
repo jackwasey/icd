@@ -310,7 +310,7 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   }
   li <-  memfun(doc = icd9url, which = 1)
   # swap so descriptions (second on web page) become the vector names
-  v <- str_pair_match(li, "^([VvEe0-9-]*)[[:space:]]*(.*)$", swap = TRUE)
+  v <- icd9:::str_pair_match(li, "^([VvEe0-9-]*)[[:space:]]*(.*)$", swap = TRUE)
   lapply(v,
          FUN = function(x) {
            y <- unlist(strMultiMatch(pattern = "^([VvEe0-9]+)-?([VvEe0-9]+)?$", text = x))

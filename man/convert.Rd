@@ -6,8 +6,6 @@
 \alias{icd9PartsToDecimal}
 \alias{icd9PartsToShort}
 \alias{icd9ShortToPartsCpp}
-\alias{icd_decimal_to_parts.icd9}
-\alias{icd_short_to_parts.icd9}
 \title{Convert ICD9 codes between formats and structures.}
 \usage{
 icd9PartsToShort(parts)
@@ -17,10 +15,6 @@ icd9PartsToDecimal(parts)
 icd9ShortToPartsCpp(icd9Short, minorEmpty)
 
 icd9DecimalToPartsCpp(icd9Decimal, minorEmpty)
-
-\method{icd_short_to_parts}{icd9}(x, minor_empty = "")
-
-\method{icd_decimal_to_parts}{icd9}(x, minor_empty = "")
 }
 \arguments{
 \item{parts}{data.frame with major and minor fields. This can be given

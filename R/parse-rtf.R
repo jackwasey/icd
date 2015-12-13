@@ -158,7 +158,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
     range <- parseRtfFifthDigitRanges(filtered[f])
     filtered[seq(f + 1, f + 37)] %>%
       grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)") -> fourth_suffices
+      icd9:::str_pair_match("([[:digit:]])[[:space:]](.*)") -> fourth_suffices
     re_fourth_defined <- paste(c("\\.[", names(fourth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fourth digit
     range <- grep(re_fourth_defined, range, value = TRUE)
@@ -179,13 +179,13 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   re_fourth_digit_zero <- "Use 0 as fourth digit for category"
   fourth_digit_zero_lines <- grep(re_fourth_digit_zero, filtered)
   filtered[fourth_digit_zero_lines] %>%
-    str_pair_match("(.*category )([[:digit:]]{3})$") %>%
+    icd9:::str_pair_match("(.*category )([[:digit:]]{3})$") %>%
     unname -> fourth_digit_zero_categories
 
   for (categ in fourth_digit_zero_categories) {
     parent_row <- grep(paste0("^", categ, " .+"), filtered, value = TRUE)
     filtered[length(filtered) + 1] <-
-      paste0(categ, ".0 ", str_pair_match(parent_row, "([[:digit:]]{3} )(.+)"))
+      paste0(categ, ".0 ", icd9:::str_pair_match(parent_row, "([[:digit:]]{3} )(.+)"))
   }
 
 
@@ -196,7 +196,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
     range <- parseRtfFifthDigitRanges(filtered[f], verbose = verbose)
     filtered[seq(f + 1, f + 20)] %>%
       grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)") -> fifth_suffices
+      icd9:::str_pair_match("([[:digit:]])[[:space:]](.*)") -> fifth_suffices
 
     re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fifth digit
@@ -220,7 +220,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   stopifnot(length(lines_V30V39) == 1)
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
     grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
-    str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
+    icd9:::str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
   range <- c("V30" %i9da% "V37", icd9ChildrenDecimal("V39"))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
   names(range) <- range
@@ -251,7 +251,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE)
   # "495.7 \"Ventilation\" pneumonitis"
   re_code_desc <- paste0("^(", re_anycode, ") +([ \"[:graph:]]+)")
-  out <- str_pair_match(filtered, re_code_desc, pos = c(1, 6))
+  out <- icd9:::str_pair_match(filtered, re_code_desc, pos = c(1, 6))
 
   # apply fourth digit qualifiers
   for (f in names(lookup_fourth)) {

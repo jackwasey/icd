@@ -42,14 +42,14 @@ icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), real = NULL, w
 
 #' @describeIn icd_condense Condense a set of ICD codes, guessing ICD version from input data
 #' @export
-icd_condense.character <- function(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE) {
+icd_condense.character <- function(x, short_code = icd_guess_short(x), real = NULL, ...) {
 
   guess <- icd_guess_version.character(x, short_code = short_code)
   if (guess == "icd9") {
-    if (is.null(short_code)) short_code <- icd_guess_short.icd9(c(start, end))
-    icd_condense.icd9(start, end, short_code = short_code, real = real, ...)
+    if (is.null(short_code)) short_code <- icd_guess_short.icd9(x)
+    icd_condense.icd9(x, short_code = short_code, real = real, ...)
   } else if (guess == "icd10") {
-    if (is.null(short_code)) short_code <- icd_guess_short.icd10(c(start, end))
+    if (is.null(short_code)) short_code <- icd_guess_short.icd10(x)
     stop("icd_condense.icd10 not implemented yet")
   } else {
     stop("Unknown ICD type")
@@ -58,10 +58,10 @@ icd_condense.character <- function(x, short_code = icd_guess_short(x), real = NU
 
 #' @rdname icd_condense
 #' @keywords internal manip
-icd9_condense_decimal <- function(x, real = NULL, warn = TRUE)
+icd9_condense_decimal <- function(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE)
   icd_short_to_decimal.icd9(
     icd9_condense_short(
-      icd_decimal_to_short.icd9(x), real = real, warn = warn))
+      icd_decimal_to_short.icd9(x), real = real, warn = warn, keepFactorLevels = keepFactorLevels))
 
 #' @rdname icd_condense
 #' @template warn

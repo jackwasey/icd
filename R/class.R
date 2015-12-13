@@ -218,7 +218,7 @@ icd_decimal_code <- function(x) {
 #' Maybe should call this class icd_comorbidity_map instead
 #' @export
 icd_map <- function(x) {
-  checkmate::assertList(x, any.missing = FALSE, min.len = 1, names = "unique")
+  assertList(x, any.missing = FALSE, min.len = 1, names = "unique")
   if (inherits(x, "icd_map")) return(x)
   class(x) <- append(class(x), "icd_map", after = 0)
   x

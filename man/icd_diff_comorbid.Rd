@@ -3,10 +3,14 @@
 \name{icd_diff_comorbid}
 \alias{icd9DiffComorbid}
 \alias{icd_diff_comorbid}
+\alias{icd_diff_comorbid.list}
 \title{show the difference between two comorbidity mappings}
 \usage{
 icd_diff_comorbid(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
   show = TRUE, explain = TRUE)
+
+\method{icd_diff_comorbid}{list}(x, y, all_names = NULL, x_names = NULL,
+  y_names = NULL, show = TRUE, explain = TRUE)
 
 icd9DiffComorbid(x, y, names = NULL, x.names = NULL, y.names = NULL,
   show = TRUE, explain = TRUE)
@@ -40,6 +44,10 @@ Compares two comorbidity:icd9 code mappings. The results are
   returned invisibly as a list. Only those comorbidities with (case
   sensitive) overlapping names are compared.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{list}: Show difference between comorbidity maps with ICD-9 codes
+}}
 \examples{
 icd9DiffComorbid(elixComorbid, ahrqComorbid, "CHF")
 \dontrun{

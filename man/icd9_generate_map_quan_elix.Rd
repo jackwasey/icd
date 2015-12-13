@@ -4,7 +4,7 @@
 \alias{icd9_generate_map_quan_elix}
 \title{Generate Quan's revised Elixhauser comorbidities}
 \usage{
-icd9_generate_map_quan_elix(condense = FALSE, save = FALSE, path = "data")
+icd9_generate_map_quan_elix(condense = NULL, save = FALSE, path = "data")
 }
 \arguments{
 \item{condense}{logical whether to condense the result ranges to the minimal

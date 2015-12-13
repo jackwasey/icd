@@ -30,24 +30,24 @@
 #' \code{NA_character}
 #'
 #' \code{NA} values result in a return value of \code{FALSE}.
-#' @section Three-digit validation: \code{isValidMajor} validates just the
-#'   'major' three-digit part of an ICD-9 code. This can in fact be provided as
-#'   a numeric, since there is no ambiguity. Numeric-only codes should be one to
-#'   three digitis, V codes are followed by one or two digits, and E codes
+#' @section Three-digit validation: \code{icd9_is_valid_major} validates just
+#'   the 'major' three-digit part of an ICD-9 code. This can in fact be provided
+#'   as a numeric, since there is no ambiguity. Numeric-only codes should be one
+#'   to three digitis, V codes are followed by one or two digits, and E codes
 #'   always by three digits between 800 and 999.
 #' @details Leading zeroes in the decimal form are not ambiguous. Although
 #'   integer ICD-9 codes could be intended by the user, there is a difference
 #'   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
 #'   is provided TODO: add default (when there is no class) which detected icd9
-#'   vs 10 if possible. TODO: use "short_code" or "long" attribute if available to
-#'   tighten validation, or guess if missing.
+#'   vs 10 if possible. TODO: use "short_code" or "long" attribute if available
+#'   to tighten validation, or guess if missing.
 #' @section Class: S3 class of on object in R is just a vector. Attributes are
 #'   lost with manipulation, with the exception of class: therefore, elements of
 #'   the class vector are used to describe features of the data. If these are
-#'   not present, the user may specify (e.g. decimal vs short_code type, ICD-9 vs
-#'   ICD-10 WHO), but if they are, the correct functions are called without any
-#'   guess work. There are overlapping namespaces for short_code vs decimal and ICD-9
-#'   vs ICD-10 codes, so guessing is never going to be perfect.
+#'   not present, the user may specify (e.g. decimal vs short_code type, ICD-9
+#'   vs ICD-10 WHO), but if they are, the correct functions are called without
+#'   any guess work. There are overlapping namespaces for short_code vs decimal
+#'   and ICD-9 vs ICD-10 codes, so guessing is never going to be perfect.
 #'
 #' @template icd9-any
 #' @template icd9-short
@@ -61,10 +61,13 @@
 #' @return logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 #'   provided according to its validity
 #' @examples
-#'   icd_validShort(c("", "1", "22", "333", "4444", "123.45", "V",
+#'   icd_is_valid(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
-#'   icd_validMajor(c("", "1", "22", "333", "4444", "123.45", "V",
+#'   # internal function:
+#'   \dontrun{
+#'   icd9:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
+#'   }
 #' @export
 icd_is_valid <- function(icd, ...) {
   if (inherits(icd, what = "icd_short_code"))
@@ -76,7 +79,6 @@ icd_is_valid <- function(icd, ...) {
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
-#' @import checkmate stringr
 #' @export
 icd_is_valid.icd10 <- function(icd, short_code = icd_guess_short(icd)) {
   assertCharacter(icd)
@@ -85,9 +87,9 @@ icd_is_valid.icd10 <- function(icd, short_code = icd_guess_short(icd)) {
 
   # TODO: test whether icd-10-cm or WHO, if class not otherwise specified.
   if (short_code)
-    icd %>% str_trim %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]{1,4}[[:space:]]*$")
+    icd %>% stringr::str_trim() %>% stringr::str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]{1,4}[[:space:]]*$")
   else
-    icd %>% str_trim %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]\\.[[:alnum:]]{0,4}[[:space:]]*$")
+    icd %>% stringr::str_trim() %>% stringr::str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]\\.[[:alnum:]]{0,4}[[:space:]]*$")
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
@@ -106,6 +108,9 @@ icd_is_valid.icd9 <- function(x, short_code) {
     icd9_is_valid_decimal(x)
 }
 
+#' @describeIn icd_is_valid Test whether a character vector of ICD vodes is
+#'   valid, guessing both type and version of the ICD codes
+#' @export
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x)) {
   ver <- icd_guess_version(x)
   switch(ver,
@@ -179,34 +184,49 @@ icd9_is_valid_decimal_n <- function(x) {
 }
 
 #' @title Test whether an ICD code is major
+#' @description codes without real or implied decimal place return TRUE
 #' @param x vector of ICD codes
 #' @return logical vector of same length as input, with TRUE when a code is a
 #'   major (not necessarily a real one)
 #' @keywords internal
-icd_is_valid_major <- function(x)
+icd_is_valid_major <- function(x) {
   UseMethod("icd_is_valid_major")
+}
 
-#' @describeIn icd_is_valid_major Is this ICD-9 code a valid major
+#' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
+#'   which at present assumes ICD-9 format
 #' @keywords internal
-icd_is_valid_major.icd9 <- function(x)
+icd_is_valid_major.default <- function(major) {
+  icd_is_valid_major.icd9(asCharacterNoWarn(major))
+}
+
+#' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
+#' @keywords internal
+icd_is_valid_major.icd9 <- function(major)
   # let grepl do what it can with integers, factors, etc.
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)", # nolint
     x = x
   )
 
+#' @rdname icd_is_valid_major
+#' @keywords internal
 icd9_is_valid_major_n <- function(major)
   grepl(
     pattern = "^[[:space:]]*[[:digit:]]{1,3}[[:space:]]*$",
     x = major
   )
 
+#' @rdname icd_is_valid_major
+#' @keywords internal
 icd9_is_valid_major_v <- function(major)
   grepl(
     pattern = "^[[:space:]]*[Vv][[:digit:]]{1,2}[[:space:]]*$",
     x = major
   )
 
+#' @rdname icd_is_valid_major
+#' @keywords internal
 icd9_is_valid_major_e <- function(major)
   grepl(
     pattern = "^[[:space:]]*[Ee][[:digit:]]{1,3}[[:space:]]*$",
@@ -289,7 +309,7 @@ icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short.icd9(x)) {
 #' @describeIn icd_get_invalid Get invalid elements of a comorbidity map
 #' @export
 icd_get_invalid.map <- function(map, short_code = icd_guess_short(map)) {
- # todo: may need to switch on ICD code type
+  # todo: may need to switch on ICD code type
   x <- lapply(map, FUN = icd_get_invalid, short_code = short_code)
   x[lapply(x, length) > 0]
 }
@@ -391,7 +411,7 @@ icd_is_valid.icd10who <- function(icd, short_code = icd_guess_short.icd10(icd)) 
   # start with a broad regex
 
   icd %>%
-    str_trim %>%
-    str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
+    stringr::str_trim() %>%
+    stringr::str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
 
 }

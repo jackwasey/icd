@@ -221,7 +221,7 @@ icd9CountWide <- function(x,
       return(res)
   }
   rdf <- cbind(x[visitId], "count" = res)
-  rdfagg <- aggregate(rdf["count"], by = rdf[visitId], FUN = sum)
+  rdfagg <- stats::aggregate(rdf["count"], by = rdf[visitId], FUN = sum)
   if (return.df) return(rdfagg)
   vec <- rdfagg[["count"]]
   names(vec) <- rdfagg[[visitId]]
@@ -252,39 +252,37 @@ icd9CountWide <- function(x,
 #' @param ... further arguments to pass on to \code{icd9ComorbidQuanElix}, e.g.
 #'   \code{icd9Field}, \code{applyHeirarchy}
 #' @examples
-#' mydf <- data.frame(visitId = c("a", "b", "c"),
-#'                    icd9 = c("412.93", "441", "044.9"))
+#' mydf <- icd9(data.frame(visitId = c("a", "b", "c"),
+#'                    icd9 = c("412.93", "441", "044.9")))
 #'
 #' print(
-#'   cmb <- icd_comorbid_quan_elix.icd9(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)
+#'   cmb <- icd_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)
 #' )
 #' icd_van_walraven_from_comorbid(cmb)
 #'
 #' icd_van_walraven(mydf)
-#' icd_van_walraven(mydf, return.df = TRUE)
+#' icd_van_walraven(mydf, return_df = TRUE)
 #' @author wmurphyrd
 #' @references van Walraven C, Austin PC, Jennings A, Quan H, Forster AJ. A
 #'   Modification to the Elixhauser Comorbidity Measures Into a Point System for
 #'   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
-icd_van_walraven <- function(x, visit_name = NULL,
-                            return_df = FALSE,
+icd_van_walraven <- function(x, visit_name = NULL, return_df = FALSE,
                             stringsAsFactors = getOption("stringsAsFactors"),
                             ...)
   UseMethod("icd_van_walraven")
 
 #' @describeIn icd_van_walraven van Walraven scores from data frame of visits and ICD-9 codes
 #' @export
-icd_van_walraven.data.frame <- function(x, visit_name = NULL,
-                                       return_df = FALSE,
+icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
                                        stringsAsFactors = getOption("stringsAsFactors"),
                                        ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assert(checkNull(visit_name), checkString(visit_name))
   assertFlag(return_df)
   assertFlag(stringsAsFactors)
-  visitId <- get_visit_name(x, visit_name)
+  visit_name <- get_visit_name(x, visit_name)
   tmp <- icd_comorbid_quan_elix.icd9(x, visit_name, hierarchy = TRUE, return_df = TRUE, ...)
   res <- icd_van_walraven_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE)
 
