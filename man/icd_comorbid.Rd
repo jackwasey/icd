@@ -15,6 +15,7 @@
 \alias{icd9ComorbiditiesQuanDeyo}
 \alias{icd9ComorbiditiesQuanElixhauser}
 \alias{icd_comorbid}
+\alias{icd_comorbid.default}
 \alias{icd_comorbid.icd9}
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_ahrq.icd9}
@@ -30,6 +31,8 @@ icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
   chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE)
 
 icd_comorbid(...)
+
+\method{icd_comorbid}{default}(x, ...)
 
 \method{icd_comorbid}{icd9}(x, map, visit_name = NULL, icd_name = NULL,
   short_code = icd_guess_short.icd9(x),
@@ -107,15 +110,15 @@ to \code{icd9ComorbidAhrq}}
 \item{x}{data frame containing columns for visitId (which is the feault
 name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
-\item{map}{list (or name of a list if character vector of length one
-is given as argument) of the comorbidities with each top-level list item
-containing a vector of decimal ICD9 codes. This is in the form of a list,
-with the names of the items corresponding to the comorbidities (e.g. "HTN",
-or "diabetes") and the contents of each list item being a character vector
-of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
-No default: user should prefer to use the derivative functions, e.g.
-\code{icd_comorbid_ahrq}, since these also provide appropriate naming for the
-fields, and squashing the hierarchy (see \code{hierarchy} below)}
+\item{map}{list (or name of a list if character vector of length one is given
+as argument) of the comorbidities with each top-level list item containing
+a vector of decimal ICD9 codes. This is in the form of a list, with the
+names of the items corresponding to the comorbidities (e.g. "HTN", or
+"diabetes") and the contents of each list item being a character vector of
+short-form (no decimal place but ideally zero left-padded) ICD-9 codes. No
+default: user should prefer to use the derivative functions, e.g.
+\code{icd_comorbid_ahrq}, since these also provide appropriate naming for
+the fields, and squashing the hierarchy (see \code{hierarchy} below)}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -139,9 +142,9 @@ argument avoids the guesswork.}
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{short_map}{Same as short, but applied to \code{map}
-instead of \code{icd_df}. All the codes in a mapping should be of the same
-type, i.e. short or decimal.}
+\item{short_map}{Same as short, but applied to \code{map} instead of
+\code{icd_df}. All the codes in a mapping should be of the same type, i.e.
+short or decimal.}
 
 \item{abbrev_names}{single locical value that defaults to \code{TRUE}, in
 which case the ishorter human-readable names stored in e.g.
@@ -187,12 +190,18 @@ There is a change in behavior from previous versions. The visit_name
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{default}: default method for getting comorbidities, guessing
+ICD version. ICD version can be specified by setting the class of the input
+data directly, or by calling, for example, \code{icd9(your_data_frame)}.
+
 \item \code{icd9}: Get comorbidities from ICD-9 codes
 }}
 \examples{
+  library(magrittr) # optional but often helpful
   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
-                   icd9 = c("39891", "40110", "09322", "41514", "39891"))
-   icd_comorbid.icd9(pts, ahrqComorbid, short_code = TRUE) # visit_name is now sorted
+                   icd9 = c("39891", "40110", "09322", "41514", "39891")) \%>\%
+                   icd_long_data \%>\% icd9
+   icd_comorbid(pts, ahrqComorbid, short_code = TRUE) # visit_name is now sorted
 }
 \keyword{internal}
 

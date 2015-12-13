@@ -352,6 +352,13 @@ test_that("icd9ChildrenShort valid input", {
   expect_equal(icd_children.icd9(short_code = TRUE, "390", real = TRUE), "390")
 })
 
+test_that("is_short doesn't cause error with icd_children when redundantly specified", {
+  expect_identical(
+    icd_children("10201", real = FALSE),
+    icd_children("10201", short_code = TRUE, real = FALSE)
+  )
+})
+
 test_that("icd_in_reference_code deals with bad input", {
   expect_equal(icd_in_reference_code(NA, "123", short_code = TRUE), FALSE) # arguable: could return NA here
   expect_equal(icd_in_reference_code("", "123", short_code = TRUE), FALSE)

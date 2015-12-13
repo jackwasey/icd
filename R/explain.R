@@ -39,8 +39,8 @@
 #' # because 428 is present):
 #' icd9ExplainShort(ahrqComorbid$CHF[1:3])
 #' # same without condensing the list. In this case, 428.0 is shown:
-#' icd9ExplainShort(ahrqComorbid$CHF[1:3], condense = TRUE)
-#' icd9Explain(ahrqComorbid$CHF[1:3], brief = TRUE)
+#' icd9ExplainShort(ahrqComorbid$CHF[1:3] %>%  icd_condense)
+#' icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities

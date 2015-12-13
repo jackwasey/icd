@@ -13,7 +13,7 @@
 icd_condense(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE)
 
 \method{icd_condense}{character}(x, short_code = icd_guess_short(x),
-  real = NULL, warn = TRUE)
+  real = NULL, ...)
 
 icd9_condense_decimal(x, real = NULL, warn = TRUE,
   keepFactorLevels = FALSE)

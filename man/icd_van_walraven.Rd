@@ -74,8 +74,8 @@ van Walraven Elixhauser score is calculated from the Quan
 \item \code{data.frame}: van Walraven scores from data frame of visits and ICD-9 codes
 }}
 \examples{
-mydf <- data.frame(visitId = c("a", "b", "c"),
-                   icd9 = c("412.93", "441", "044.9"))
+mydf <- icd9(data.frame(visitId = c("a", "b", "c"),
+                   icd9 = c("412.93", "441", "044.9")))
 
 print(
   cmb <- icd_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)

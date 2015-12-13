@@ -422,7 +422,7 @@ icd9IsValid <- function(icd9, isShort) {
   icd_is_valid.icd9(icd9, isShort)
 }
 
-#' @rdname icd9_is_valid_major
+#' @rdname icd_is_valid_major
 #' @export
 icd9IsValidMajorN <- function(major) {
   .Deprecated("icd_is_valid_major")
@@ -430,7 +430,7 @@ icd9IsValidMajorN <- function(major) {
 }
 
 
-#' @rdname icd9_is_valid_major
+#' @rdname icd_is_valid_major
 #' @export
 icd9IsValidMajorV <- function(major) {
   .Deprecated("icd_is_valid_major")
@@ -438,7 +438,7 @@ icd9IsValidMajorV <- function(major) {
 }
 
 
-#' @rdname icd9_is_valid_major
+#' @rdname icd_is_valid_major
 #' @export
 icd9IsValidMajorE <- function(major) {
   .Deprecated("icd_is_valid_major")
@@ -705,6 +705,8 @@ icd9WideToLong <- function(x,
   icd_wide_to_long(x = x, visit_name = visitId, icd_labels = icdLabels, icd_name = icdName, icd_regex = icdRegex)
 }
 
+#' @rdname icd_short_to_decimal
+#' @export
 icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
   .Deprecated("icd_decimal_to_parts")
   icd_decimal_to_parts(icd9Decimal, minorEmpty)

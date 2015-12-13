@@ -4,20 +4,20 @@
 \alias{icd9_generate_map_elix}
 \title{Generate Elixhauser comorbidities}
 \usage{
-icd9_generate_map_elix(save = FALSE, path = "data")
+icd9_generate_map_elix(condense = NULL, save = FALSE, path = "data")
 }
 \arguments{
+\item{condense}{logical whether to condense the result ranges to the minimal
+set of parent ICD-9 codes which exactly define the list. Defaults to
+\code{FALSE} so that the saved list will allow rapid look-up of codes
+without further processing. Small memory versus time trade-off.}
+
 \item{save}{logical whether to save the result in the source tree. Defaults
 to \code{FALSE}.}
 
 \item{path}{path to directory to save the data. This is typically the data
 folder in the devleopment source tree. Defaults to \code{"~/icd9/data"}.
 Could possibly avoid hard-coding path with devtools functions.}
-
-\item{condense}{logical whether to condense the result ranges to the minimal
-set of parent ICD-9 codes which exactly define the list. Defaults to
-\code{FALSE} so that the saved list will allow rapid look-up of codes
-without further processing. Small memory versus time trade-off.}
 }
 \value{
 invisibly returns the list of vectors, where a

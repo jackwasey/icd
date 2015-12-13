@@ -363,9 +363,11 @@ icd9_expand_range_decimal <- function(start, end, real = TRUE,
 #'   code (which is one character), as opposed to a V or numeric-only code,
 #'   which is two character. Default is \code{FALSE}.
 #' @examples
+#' \dontrun{
 #'   # return all possible decimal parts of ICD9 codes (111 in total)
-#'   length(icd9:::expand_minor("", isE = FALSE))
-#'   icd9:::expand_minor("1") # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#'   length(icd9:::icd_expand_minor(icd9(""), is_e = FALSE))
+#'   icd9:::icd_expand_minor(icd9("1")) # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#' }
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges

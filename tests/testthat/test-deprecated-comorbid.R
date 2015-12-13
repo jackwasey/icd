@@ -92,12 +92,16 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
   expect_equivalent(icd9GetInvalidMappingShort(ahrqComorbid), list())
 })
 
-test_that("Quan Charlson icd9 mappings are all
-            generated from the current generation code", {
-              expect_identical(quanDeyoComorbid,
-                               parseQuanDeyoSas(condense = FALSE, save = FALSE))
-              expect_equivalent(icd9GetInvalidMappingShort(quanDeyoComorbid), list())
-            })
+test_that("Quan Charlson icd9 mappings are all generated from the current generation code", {
+  if (system.file("data-raw", "ICD9_E_Charlson.sas", package = get_pkg_name()) == "")
+    skip("data-raw/ICD9_E_Charlson.sas not available, so skipping Quan Deyo SAS parsing test.")
+  expect_identical(quanDeyoComorbid, parseQuanDeyoSas(condense = FALSE, save = FALSE))
+})
+
+test_that("Quan Charlson icd9 mappings contains no invalid mappings", {
+  expect_equivalent(icd9GetInvalidMappingShort(quanDeyoComorbid), list())
+})
+
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(quanElixComorbid,
@@ -587,7 +591,7 @@ test_that("diff comorbid works", {
   expect_error(
     utils::capture.output(
       resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)
-      ), NA)
+    ), NA)
 
 })
 

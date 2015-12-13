@@ -54,21 +54,21 @@ icd9PoaChoices <- icd_poa_choices
 #'   mappings can be obtained using \code{hierarchy = FALSE}, but for
 #'   comorbidity counting, Charlson Score, etc., the rules should be applied.
 #' @template icd_df
-#' @param map list (or name of a list if character vector of length one
-#'   is given as argument) of the comorbidities with each top-level list item
-#'   containing a vector of decimal ICD9 codes. This is in the form of a list,
-#'   with the names of the items corresponding to the comorbidities (e.g. "HTN",
-#'   or "diabetes") and the contents of each list item being a character vector
-#'   of short-form (no decimal place but ideally zero left-padded) ICD-9 codes.
-#'   No default: user should prefer to use the derivative functions, e.g.
-#'   \code{icd_comorbid_ahrq}, since these also provide appropriate naming for the
-#'   fields, and squashing the hierarchy (see \code{hierarchy} below)
+#' @param map list (or name of a list if character vector of length one is given
+#'   as argument) of the comorbidities with each top-level list item containing
+#'   a vector of decimal ICD9 codes. This is in the form of a list, with the
+#'   names of the items corresponding to the comorbidities (e.g. "HTN", or
+#'   "diabetes") and the contents of each list item being a character vector of
+#'   short-form (no decimal place but ideally zero left-padded) ICD-9 codes. No
+#'   default: user should prefer to use the derivative functions, e.g.
+#'   \code{icd_comorbid_ahrq}, since these also provide appropriate naming for
+#'   the fields, and squashing the hierarchy (see \code{hierarchy} below)
 #' @template visit_name
 #' @template icd_name
 #' @template short_code
-#' @param short_map Same as short, but applied to \code{map}
-#'   instead of \code{icd_df}. All the codes in a mapping should be of the same
-#'   type, i.e. short or decimal.
+#' @param short_map Same as short, but applied to \code{map} instead of
+#'   \code{icd_df}. All the codes in a mapping should be of the same type, i.e.
+#'   short or decimal.
 #' @details There is a change in behavior from previous versions. The visit_name
 #'   column is (implicitly) sorted by using std::set container. Previously, the
 #'   visit_name output order was whatever R's \code{aggregate} produced.
@@ -77,13 +77,19 @@ icd9PoaChoices <- icd_poa_choices
 #'   \code{option(icd9.threads = 4)}. If it is not set, the number of cores in
 #'   the machine is used.
 #' @examples
+#'   library(magrittr) # optional but often helpful
 #'   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
-#'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
-#'    icd_comorbid.icd9(pts, ahrqComorbid, short_code = TRUE) # visit_name is now sorted
+#'                    icd9 = c("39891", "40110", "09322", "41514", "39891")) %>%
+#'                    icd_long_data %>% icd9
+#'    icd_comorbid(pts, ahrqComorbid, short_code = TRUE) # visit_name is now sorted
 #' @export
 icd_comorbid <- function(...)
   UseMethod("icd_comorbid")
 
+#' @describeIn icd_comorbid default method for getting comorbidities, guessing
+#'   ICD version. ICD version can be specified by setting the class of the input
+#'   data directly, or by calling, for example, \code{icd9(your_data_frame)}.
+#' @export
 icd_comorbid.default <- function(x, ...) {
   # don't know whether ICD-9 or ICD-10 so we'll guess
   icd_version <- icd_guess_version(x)
@@ -325,7 +331,6 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   }
   cbd
 }
-
 
 #' @title show the difference between two comorbidity mappings
 #' @description Compares two comorbidity:icd9 code mappings. The results are
