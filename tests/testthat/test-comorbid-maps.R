@@ -95,14 +95,12 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
               skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
-              expect_identical(quanDeyoComorbid,
-                               parseQuanDeyoSas(condense = FALSE, save = FALSE))
+              expect_identical(quanDeyoComorbid, parseQuanDeyoSas(save = FALSE))
               expect_equivalent(icd_get_invalid.map(quanDeyoComorbid, short_code = TRUE), list())
             })
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
-              expect_identical(quanElixComorbid,
-                               icd9_generate_map_quan_elix(condense = FALSE, save = FALSE))
+              expect_identical(quanElixComorbid, icd9_generate_map_quan_elix(save = FALSE))
               expect_equivalent(icd_get_invalid.map(quanElixComorbid, short_code = TRUE), list())
             })
 test_that("Elixhauser icd9 mappings are all
@@ -170,7 +168,7 @@ test_that("icd9Chapters, etc. as saved in data can be recreated", {
 test_that("AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
   result <- parseAhrqSas(sasPath = system.file("data-raw",
-                                               "comformat2012-2013.txt", package="icd9"), save = FALSE)
+                                               "comformat2012-2013.txt", package = "icd9"), save = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
 })
@@ -563,10 +561,10 @@ test_that("diff comorbid works", {
 # TODO: should be testing correct dispatch here, too, since map is a different class.
   expect_warning(
     utils::capture.output(
-      res <- icd_diff_comorbid.icd9(ahrqComorbid, elixComorbid, show = FALSE)
+      res <- icd_diff_comorbid(ahrqComorbid, elixComorbid, show = FALSE)
     ),
   NA)
-  
+
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
     "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",
@@ -582,7 +580,7 @@ test_that("diff comorbid works", {
   # both, also with elements in either side set diff
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
 
-  expect_warning(resq <- icd_diff_comorbid.icd9(quanElixComorbid, quanDeyoComorbid, show = TRUE), NA)
+  expect_warning(resq <- icd_diff_comorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE), NA)
 
   expect_error(
     utils::capture.output(

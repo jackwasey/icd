@@ -58,9 +58,8 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 
   expect_equal(names(ptdf), c("visitId", names(ahrqComorbid)))
 
-  expect_true(all(sapply(names(ahrqComorbid),
-                         function(x)
-                           class(ptdf[, x])) == "logical"))
+  sapply(names(ahrqComorbid), function(x) expect_equal(class(ptdf[, x]), "logical"))
+
   ptdflogical <- logicalToBinary(ptdf)
   expect_true(all(sapply(names(ahrqComorbid),
                          function(x)
@@ -200,16 +199,16 @@ test_that("Charlson Deyo doesn't double count disease with two severities", {
 })
 
 test_that("Elixhauser doesn't double count disease with multiple severities", {
-  expect_false(any(quanElixComorbid[["dm.uncomp"]] %in%
-                     quanElixComorbid[["dm.comp"]] ))
-  expect_false(any(quanElixComorbid[["solid.tumor"]] %in%
-                     quanElixComorbid[["mets"]] ))
-  expect_false(any(elixComorbid[["dm.uncomp"]] %in%
-                     elixComorbid[["dm.comp"]] ))
-  expect_false(any(elixComorbid[["solid.tumor"]] %in%
-                     elixComorbid[["mets"]] ))
-  expect_false(any(ahrqComorbid[["DM"]] %in% ahrqComorbid[["DMCX"]] ))
-  expect_false(any(ahrqComorbid[["TUMOR"]] %in% ahrqComorbid[["METS"]] ))
+  expect_false(any(quanElixComorbid[["DM"]] %in%
+                     quanElixComorbid[["DMcx"]] ))
+  expect_false(any(quanElixComorbid[["Tumor"]] %in%
+                     quanElixComorbid[["Mets"]] ))
+  expect_false(any(elixComorbid[["DM"]] %in%
+                     elixComorbid[["DMcx"]] ))
+  expect_false(any(elixComorbid[["Tumor"]] %in%
+                     elixComorbid[["Mets"]] ))
+  expect_false(any(ahrqComorbid[["DM"]] %in% ahrqComorbid[["DMcx"]] ))
+  expect_false(any(ahrqComorbid[["Tumor"]] %in% ahrqComorbid[["Mets"]] ))
 })
 
 # next couple of tests demonstrate that the interpreted data is correctly
@@ -567,7 +566,7 @@ test_that("diff comorbid works", {
   expect_error(icd9DiffComorbid(bad_input, bad_input))
 
   # no warning or error for good data (forgo warning checks with deprecation)
-  expect_error(res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE), NA)
+  expect_error(utils::capture.output(res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE)), NA)
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
     "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",
@@ -583,14 +582,12 @@ test_that("diff comorbid works", {
   # both, also with elements in either side set diff
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
 
-  expect_error(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE), NA)
+  expect_error(utils::capture.output(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)), NA)
 
-  expect_that(
+  expect_error(
     utils::capture.output(
       resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)
-      ),
-    testthat::not(throws_error())
-  )
+      ), NA)
 
 })
 

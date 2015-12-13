@@ -749,3 +749,18 @@ icd9ExpandMinor <- function(minor, isE = FALSE) {
   .Deprecated("icd_expand_minor")
   icd_expand_minor.icd9(minor, is_e = isE)
 }
+
+parseQuanElix <- function(...) {
+  .Deprecated("parse_quan_elix")
+  icd9_generate_map_quan_elix(...)
+}
+
+parseElix <- function(...) {
+  .Deprecated("parse_quan_elix")
+  icd9_generate_map_elix(...)
+}
+
+logicalToBinary <- function(...) {
+  .Deprecated("logical_to_binary")
+  logical_to_binary(...)
+}

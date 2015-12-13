@@ -6,7 +6,8 @@
 #'   \code{datadocs.R}.
 #' @template parse-template
 #' @keywords internal
-icd9_generate_map_elix <- function(save = FALSE, path = "data") {
+icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data") {
+  if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix")
   elixComorbid <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91",
             "404.93", "428.0" %i9da% "428.9"),
@@ -77,9 +78,11 @@ icd9_generate_map_elix <- function(save = FALSE, path = "data") {
 #' @title Generate Quan's revised Elixhauser comorbidities
 #' @template parse-template
 #' @keywords internal
-icd9_generate_map_quan_elix <- function(condense = FALSE,
+icd9_generate_map_quan_elix <- function(condense = NULL,
                                     save = FALSE,
                                     path = "data") {
+
+  if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix")
   # TODO: need to deprecate this name so we can switch ICD-9 and ICD-10 (and
   # their variations)
   quanElixComorbid <- list(
@@ -139,14 +142,9 @@ icd9_generate_map_quan_elix <- function(condense = FALSE,
     quanElixComorbid,
     function(x) icd_decimal_to_short.icd9(x))
 
-  if (condense)
-    quanElixComorbid <- lapply(
-      quanElixComorbid,
-      function(x) icd_condense.icd9(x, onlyReal = FALSE))
-  else
-    quanElixComorbid <- lapply(
-      quanElixComorbid,
-      icd_children.icd9, short_code = TRUE, real = FALSE)
+  quanElixComorbid <- lapply(
+    quanElixComorbid,
+    icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
   class(quanElixComorbid) <- c("icd_map", "icd9", "icd_decimal", "list")
