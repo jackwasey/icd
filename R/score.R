@@ -151,7 +151,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #'   icd_count_codes(mydf)
 #'
 #'   cmb <- icd_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
-#'   icd_count_comorbid_bin(cmb)
+#'   icd_count_comorbid(cmb)
 #'
 #'   wide <- data.frame(visit_name = c("r", "s", "t"),
 #'                    icd9_1 = c("0011", "441", "456"),
@@ -178,8 +178,8 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
     res[["icd_count"]]
 }
 
-#' @rdname icd_count_codes
-#' @description \code{icd_count_comorbid_bin} differs from the other counting
+#' @title icd_count_comorbid
+#' @description \code{icd_count_comorbid} differs from the other counting
 #'   functions in that it counts _comorbidities_, not individual diagnoses. It
 #'   accepts any data frame with either logicals or zero/non-zero contents, with
 #'   a single column for visit_name. No checks are made to see whether visit_name is
@@ -199,7 +199,7 @@ icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FA
     res
 }
 
-#' @rdname icd_count_codes
+#' @title Count ICD codes given in wide format
 #' @description For \code{icd_count_codes}, it is assumed that all the columns apart
 #'   from \code{visit_name} represent actual or possible ICD-9 codes. Duplicate
 #'   \code{visit_name}s are repeated as given and aggregated.

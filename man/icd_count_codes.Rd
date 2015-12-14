@@ -3,18 +3,11 @@
 \name{icd9Count}
 \alias{icd9Count}
 \alias{icd_count_codes}
-\alias{icd_count_codes_wide}
-\alias{icd_count_comorbid}
 \title{count ICD codes or comorbidities for each patient}
 \usage{
 icd9Count(x, visitId = get_visit_name(x), return.df = FALSE)
 
 icd_count_codes(x, visit_name = get_visit_name(x), return_df = FALSE)
-
-icd_count_comorbid(x, visit_name = get_visit_name(x), return_df = FALSE)
-
-icd_count_codes_wide(x, visit_name = get_visit_name(x), return_df = FALSE,
-  aggr = FALSE)
 }
 \arguments{
 \item{x}{data frame with one row per patient, and a true/false or 1/0 flag
@@ -39,10 +32,6 @@ was not specified, then the first column of the data frame is used.}
 frame with the first column being the \code{visit_name}, and the second being
 the count. If \code{visit_name} was a factor or named differently in the
 input, this is preserved.}
-
-\item{aggregate, }{single logical, default is FALSE. If TRUE, the length (or
-rows) of the output will no longer match the input, but duplicate visit_names
-will be counted together.}
 }
 \value{
 vector of the count of comorbidities for each patient. This is
@@ -57,16 +46,6 @@ vector of the count of comorbidities for each patient. This is
   The \code{visit_name} field is typically the first column. If there is no column
   called \code{visit_name} and \code{visit_name} is not specified, the first column
   is used.
-
-\code{icd_count_comorbid_bin} differs from the other counting
-  functions in that it counts _comorbidities_, not individual diagnoses. It
-  accepts any data frame with either logicals or zero/non-zero contents, with
-  a single column for visit_name. No checks are made to see whether visit_name is
-  duplicated.
-
-For \code{icd_count_codes}, it is assumed that all the columns apart
-  from \code{visit_name} represent actual or possible ICD-9 codes. Duplicate
-  \code{visit_name}s are repeated as given and aggregated.
 }
 \examples{
   mydf <- data.frame(visit_name = c("r", "r", "s"),
@@ -75,7 +54,7 @@ For \code{icd_count_codes}, it is assumed that all the columns apart
   icd_count_codes(mydf)
 
   cmb <- icd_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
-  icd_count_comorbid_bin(cmb)
+  icd_count_comorbid(cmb)
 
   wide <- data.frame(visit_name = c("r", "s", "t"),
                    icd9_1 = c("0011", "441", "456"),

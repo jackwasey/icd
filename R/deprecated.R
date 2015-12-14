@@ -787,7 +787,7 @@ icd9CountWide <- function(x,
 #' @rdname icd_count_comorbid
 #' @export
 icd9CountComorbidBin <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
-  .Deprecated("icd_count_comorbid_bin")
+  .Deprecated("icd_count_comorbid")
   icd_count_comorbid(x, visit_name = visitId, return_df = return.df)
 }
 

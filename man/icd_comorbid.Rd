@@ -18,12 +18,16 @@
 \alias{icd_comorbid.default}
 \alias{icd_comorbid.icd9}
 \alias{icd_comorbid_ahrq}
+\alias{icd_comorbid_ahrq.default}
 \alias{icd_comorbid_ahrq.icd9}
 \alias{icd_comorbid_elix}
+\alias{icd_comorbid_elix.default}
 \alias{icd_comorbid_elix.icd9}
 \alias{icd_comorbid_quan_deyo}
+\alias{icd_comorbid_quan_deyo.default}
 \alias{icd_comorbid_quan_deyo.icd9}
 \alias{icd_comorbid_quan_elix}
+\alias{icd_comorbid_quan_elix.default}
 \alias{icd_comorbid_quan_elix.icd9}
 \title{find comorbidities from ICD-9 codes.}
 \usage{
@@ -45,6 +49,14 @@ icd_comorbid_quan_elix(...)
 icd_comorbid_quan_deyo(...)
 
 icd_comorbid_elix(...)
+
+\method{icd_comorbid_ahrq}{default}(...)
+
+\method{icd_comorbid_quan_elix}{default}(...)
+
+\method{icd_comorbid_quan_deyo}{default}(...)
+
+\method{icd_comorbid_elix}{default}(...)
 
 \method{icd_comorbid_ahrq}{icd9}(..., abbrev_names = TRUE, hierarchy = TRUE)
 

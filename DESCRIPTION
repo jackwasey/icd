@@ -25,7 +25,8 @@ Imports:
     magrittr,
     stats,
     utils,
-    fastmatch
+    fastmatch,
+    stringr
 Suggests:
     testthat (>= 0.11.0.9000),
     devtools,

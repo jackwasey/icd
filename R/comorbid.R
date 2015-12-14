@@ -203,6 +203,38 @@ icd_comorbid_elix <- function(...) {
   UseMethod("icd_comorbid_elix")
 }
 
+
+# default methods #TODO actually adapt to the input data. ICD10?
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_ahrq.default <- function(...) {
+  icd_comorbid_ahrq.icd9(...)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_quan_elix.default <- function(...) {
+  icd_comorbid_quan_elix.icd9(...)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_quan_deyo.default <- function(...) {
+  icd_comorbid_quan_deyo.icd9(...)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_elix.default <- function(...) {
+  icd_comorbid_elix.icd9(...)
+}
+
+
+
+
+
+
 #' @rdname icd_comorbid
 #' @param abbrev_names  single locical value that defaults to \code{TRUE}, in
 #'   which case the ishorter human-readable names stored in e.g.
