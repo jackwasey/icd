@@ -85,5 +85,5 @@
 #' @useDynLib icd9
 #' @import Rcpp
 #' @importFrom magrittr "%>%" "%<>%"
-#' @importFrom checkmate assert assertList assertDataFrame assertString assertFlag assertCharacter checkFactor checkCharacter assertCount checkString checkNull checkDataFrame checkFlag checkMatrix assertVector assertScalar assertInteger
+#' @importFrom checkmate assert assertList assertDataFrame assertString assertFlag assertCharacter checkFactor checkCharacter assertCount checkString checkNull checkDataFrame checkFlag checkMatrix assertVector assertScalar assertInteger checkMatrix assertMatrix
 NULL

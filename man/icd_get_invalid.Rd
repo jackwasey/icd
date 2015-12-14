@@ -4,6 +4,7 @@
 \alias{icd9GetInvalidDecimal}
 \alias{icd9GetInvalidShort}
 \alias{icd_get_invalid}
+\alias{icd_get_invalid.default}
 \alias{icd_get_invalid.icd9}
 \alias{icd_get_invalid.map}
 \title{Get invalid ICD codes}
@@ -13,6 +14,8 @@ icd9GetInvalidDecimal(icd9Decimal)
 icd9GetInvalidShort(icd9Short)
 
 icd_get_invalid(...)
+
+\method{icd_get_invalid}{default}(x, short_code = NULL)
 
 \method{icd_get_invalid}{icd9}(x, short_code = icd_guess_short.icd9(x))
 
@@ -26,8 +29,12 @@ Returns subset of codes which are not in valid short_code or decimal format.
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{default}: Default method when ICD version or short versus
+decimal not known.
+
 \item \code{icd9}: Get invalid ICD-9 codes from vector of codes
 
 \item \code{map}: Get invalid elements of a comorbidity map
 }}
+\keyword{internal}
 
