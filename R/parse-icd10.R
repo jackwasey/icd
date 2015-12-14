@@ -6,7 +6,6 @@
 #'   ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/
 #' @keywords internal
 icd10_get_who_from_cdc <- function() {
-  requireNamespace("magritttr")
   url <- "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/allvalid2011%20%28detailed%20titles%20headings%29.txt"
   file_path <- download_to_data_raw(url = url)$file_path
 

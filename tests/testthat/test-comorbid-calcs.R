@@ -334,6 +334,6 @@ test_that("get Charlson/Deyo comorbidities for a single patient", {
 
 test_that("if an ICD class is not specified for a data set, but is for a column therein, the correct method is dispatched", {
   mydf <- data.frame(visitId = c("a", "b", "c"), icd9 = c("412.93", "441", "044.9"))
-  expect_error(icd_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE, return_df = TRUE), NA)
+  expect_error(icd_comorbid_quan_elix(icd9(mydf), short_code = FALSE, hierarchy = TRUE, return_df = TRUE), NA)
   # TODO, expand this section
 })

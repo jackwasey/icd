@@ -84,4 +84,6 @@
 #' @concept icd9 ICD-9 comorbidity comorbidities
 #' @useDynLib icd9
 #' @import Rcpp
+#' @importFrom magrittr "%>%" "%<>%"
+#' @importFrom checkmate assert assertList assertDataFrame assertString assertFlag assertCharacter checkFactor checkCharacter assertCount checkString checkNull checkDataFrame checkFlag checkMatrix assertVector assertScalar assertInteger
 NULL

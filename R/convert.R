@@ -89,7 +89,6 @@ icd9ChaptersToMap <- function(x) {
 #'     icd9_02 = c(NA, "443", NA))
 #'   icd9WideToLong(widedf)
 #' @family ICD-9 convert
-#' @import checkmate
 #' @export
 icd_wide_to_long <- function(x,
                            visit_name = get_visit_name(x),

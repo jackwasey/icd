@@ -141,7 +141,7 @@ icd9ComorbidQuanElix <- function(icd9df,
                                  isShort = icd9GuessIsShort(icd9df[1:100, icd9Field]),
                                  return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   .Deprecated("icd_comorbid_quan_elix")
-  icd_comorbid_quan_elix.icd9(icd9df, visit_name = visitId,
+  icd_comorbid_quan_elix.icd9(icd9(icd9df), visit_name = visitId,
                               icd_name = icd9Field, short_code = isShort,
                               abbrev_names = abbrevNames,
                               hierarchy = applyHierarchy, return_df = return.df, ...)
