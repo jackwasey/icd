@@ -29,19 +29,14 @@ icd_van_walraven_from_comorbid(x, visit_name = NULL, hierarchy = FALSE)
 \item{x}{data frame containing a column of visit or patient identifiers, and
 a column of ICD-9 codes. It may have other columns which will be ignored.
 By default, the first column is the patient identifier and is not counted.
-If \code{visitId} is not specified, the first column is used.}
+If \code{visit_name} is not specified, the first column is used.}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
 
-\item{return.df}{single logical value, if true, a two column data frame will
-be returned, with the first column named as in input data frame (i.e.
-\code{visitId}), containing all the visits, and the second column
-containing the Charlson Comorbidity Index.}
-
 \item{stringsAsFactors}{single logical, passed on when constructing
-data.frame if \code{return.df} is \code{TRUE}. If the input data frame
-\code{x} has a factor for the visitId, this is not changed, but a
-non-factor visitId may be converted or not converted according to your
+data.frame if \code{return_df} is \code{TRUE}. If the input data frame
+\code{x} has a factor for the visit_name, this is not changed, but a
+non-factor visit_name may be converted or not converted according to your
 system default or this setting.}
 
 \item{...}{further arguments to pass on to \code{icd9ComorbidQuanElix}, e.g.
@@ -60,6 +55,11 @@ guesses proceed until a single match is made. Data frames may be wide with
 many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visitId}
 was not specified, then the first column of the data frame is used.}
+
+\item{return_df}{single logical value, if true, a two column data frame will
+be returned, with the first column named as in input data frame (i.e.
+\code{visit_name}), containing all the visits, and the second column
+containing the Charlson Comorbidity Index.}
 }
 \description{
 van Walraven Elixhauser score is calculated from the Quan
@@ -74,7 +74,7 @@ van Walraven Elixhauser score is calculated from the Quan
 \item \code{data.frame}: van Walraven scores from data frame of visits and ICD-9 codes
 }}
 \examples{
-mydf <- icd9(data.frame(visitId = c("a", "b", "c"),
+mydf <- icd9(data.frame(visit_name = c("a", "b", "c"),
                    icd9 = c("412.93", "441", "044.9")))
 
 print(

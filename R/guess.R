@@ -147,7 +147,7 @@ icd_guess_both <- function(x, short_code = NULL) {
   UseMethod("icd_guess_both")
 }
 
-#' @describeIn icd_guess_both
+#' @describeIn icd_guess_both default method which converts input to character
 #' @keywords internal
 icd_guess_both.default <- function(x, short_code = NULL) {
   x <- asCharacterNoWarn(x)

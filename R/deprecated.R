@@ -766,3 +766,28 @@ logicalToBinary <- function(...) {
   .Deprecated("logical_to_binary")
   logical_to_binary(...)
 }
+
+#' @rdname icd_count_codes
+#' @export
+icd9Count <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
+  .Deprecated("icd_count_codes")
+  icd_count_codes(x = x, visit_name = visitId, return_df = return.df)
+}
+
+#' @rdname icd_count_codes_wide
+#' @export
+icd9CountWide <- function(x,
+                          visitId = get_visit_name(x),
+                          return.df = FALSE,
+                          aggregate = FALSE) {
+  .Deprecated("icd_count_wide")
+  icd_count_codes_wide(x = x, visit_name = visitId, return_df = return.df, aggr = aggregate)
+}
+
+#' @rdname icd_count_comorbid
+#' @export
+icd9CountComorbidBin <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
+  .Deprecated("icd_count_comorbid_bin")
+  icd_count_comorbid(x, visit_name = visitId, return_df = return.df)
+}
+

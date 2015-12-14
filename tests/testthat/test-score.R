@@ -43,10 +43,10 @@ test_that("github issue #46 from wmurphyd", {
 })
 
 test_that("only matrix or data.frame accepted", {
-  expect_error(icd9Charlson(c(1, 2)))
-  expect_error(icd9Charlson(c(1, 2), visitId = "roam", return.df = TRUE, stringsAsFactors = TRUE))
-  expect_error(icd9Charlson(list(1, 2)))
-  expect_error(icd9Charlson(list(1, 2), visitId = "roam", return.df = TRUE, stringsAsFactors = TRUE))
+  expect_error(icd_charlson(c(1, 2)))
+  expect_error(icd_charlson(c(1, 2), visitId = "roam", return_df = TRUE, stringsAsFactors = TRUE))
+  expect_error(icd_charlson(list(1, 2)))
+  expect_error(icd_charlson(list(1, 2), visitId = "roam", return_df = TRUE, stringsAsFactors = TRUE))
 })
 
 test_that("Charlson score", {
@@ -89,8 +89,8 @@ test_that("Charlson score", {
                              class = "data.frame")
   )
 
-  expect_identical(icd9Charlson(mydff,
-                                return.df = TRUE,
+  expect_identical(icd_charlson(mydff,
+                                return_df = TRUE,
                                 stringsAsFactors = TRUE,
                                 isShort = FALSE),
                    structure(list(visitId = factor(c("a", "b", "c")),
@@ -102,8 +102,8 @@ test_that("Charlson score", {
 
   mydfff <- mydff
   names(mydfff)[1] <- "v"
-  expect_equivalent(icd9Charlson(mydfff,
-                                 return.df = TRUE,
+  expect_equivalent(icd_charlson(mydfff,
+                                 return_df = TRUE,
                                  stringsAsFactors = FALSE,
                                  isShort = FALSE),
                     structure(list(v = c("a", "b", "c"),
@@ -115,10 +115,10 @@ test_that("Charlson score", {
 
   mydffff <- cbind(mydfff, data.frame(v2 = mydfff$v, stringsAsFactors = FALSE))
   mydffff$v <- NULL
-  expect_equivalent(icd9Charlson(mydffff, visitId = "v2",
-                                 return.df = TRUE,
+  expect_equivalent(icd_charlson(mydffff, visit_name = "v2",
+                                 return_df = TRUE,
                                  stringsAsFactors = FALSE,
-                                 isShort = FALSE),
+                                 short_code = FALSE),
                     structure(list(v2 = c("a", "b", "c"),
                                    Charlson = c(1, 1, 6)),
                               .Names = c("v2", "Charlson"),
@@ -138,71 +138,71 @@ test_that("Charlson - errors?", {
                       icd9 = c("57224", "57345"),
                       stringsAsFactors = TRUE)
   cmb <- icd_comorbid_quan_deyo.icd9(baddf, hierarchy = FALSE, short_code = TRUE)
-  expect_error(icd9CharlsonComorbid(cmb, applyHierarchy = FALSE))
+  expect_error(icd_charlson_from_comorbid(cmb, hierarchy = FALSE))
 })
 
 test_that("count icd9 codes", {
-  mydf <- data.frame(visitId = c("r", "r", "s"),
+  mydf <- data.frame(visit_name = c("r", "r", "s"),
                      icd9 = c("441", "412.93", "044.9"))
-  expect_equal(icd9Count(mydf, return.df = TRUE),
+  expect_equal(icd_count_codes(mydf, return_df = TRUE),
                data.frame(visitId = c("r", "s"),
-                          icd9Count = c(2, 1))
+                          icd_count = c(2, 1))
   )
-  expect_equal(icd9Count(mydf), c(2, 1))
+  expect_equal(icd_count_codes(mydf), c(2, 1))
 
   cmb <- icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE)
-  expect_equivalent(icd9CountComorbidBin(cmb), icd9Count(mydf))
+  expect_equivalent(icd_count_comorbid(cmb), icd_count_codes(mydf))
 
   wide <- data.frame(visitId = c("r", "s", "t"),
                      icd9_1 = c("0011", "441", "456"),
                      icd9_2 = c(NA, "442", NA),
                      icd9_3 = c(NA, NA, "510"))
 
-  expect_equal(icd9CountWide(wide),
+  expect_equal(icd_count_codes_wide(wide),
                c("r" = 1, "s" = 2, "t" = 2))
 
   widezero <- data.frame(visitId = c("j"),
                          icd9_a = NA,
                          icd9_b = NA)
-  expect_equal(icd9CountWide(widezero),
+  expect_equal(icd_count_codes_wide(widezero),
                c("j" = 0))
 
   widezero2 <- data.frame(visitId = c("j"),
                           icd9_a = NA)
-  expect_equal(icd9CountWide(widezero2),
+  expect_equal(icd_count_codes_wide(widezero2),
                c("j" = 0))
 
   widezero3 <- data.frame(visitId = c("j", "j"),
                           icd9_a = c(NA, NA))
-  expect_equal(icd9CountWide(widezero3, aggregate = TRUE),
+  expect_equal(icd_count_codes_wide(widezero3, aggr = TRUE),
                c("j" = 0))
 
   widezero4 <- data.frame(visitId = c("j", "j"),
                           icd9_a = c(NA, NA),
                           icd9_b = c(NA, NA))
-  expect_equal(icd9CountWide(widezero4, aggregate = TRUE),
+  expect_equal(icd_count_codes_wide(widezero4, aggr = TRUE),
                c("j" = 0))
 
   widezero3b <- data.frame(visitId = c("j", "j"),
                            icd9_a = c(NA, NA))
-  expect_equal(icd9CountWide(widezero3b, aggregate = FALSE),
+  expect_equal(icd_count_codes_wide(widezero3b, aggr = FALSE),
                c("j" = 0, "j" = 0))
 
   widezero4b <- data.frame(visitId = c("j", "j"),
                            icd9_a = c(NA, NA),
                            icd9_b = c(NA, NA))
-  expect_equal(icd9CountWide(widezero4b, aggregate = FALSE),
+  expect_equal(icd_count_codes_wide(widezero4b, aggr = FALSE),
                c("j" = 0, "j" = 0))
 
   widezero5 <- data.frame(visitId = c("j", "k"),
                           icd9_a = c(NA, NA))
-  expect_equal(icd9CountWide(widezero5),
+  expect_equal(icd_count_codes_wide(widezero5),
                c("j" = 0, "k" = 0))
 
   widezero6 <- data.frame(visitId = c("j", "k"),
                           icd9_a = c(NA, NA),
                           icd9_b = c(NA, NA))
-  expect_equal(icd9CountWide(widezero6),
+  expect_equal(icd_count_codes_wide(widezero6),
                c("j" = 0, "k" = 0))
 
 })
@@ -214,15 +214,15 @@ test_that("count wide directly (old func) same as reshape count", {
                        icd9_02 = c(NA, "443", NA))
 
   # we don't get names back for the vector for 'long'
-  expect_equivalent(icd9CountWide(widedf),
-                    icd9Count(icd9WideToLong(widedf)))
+  expect_equivalent(icd_count_codes_wide(widedf),
+                    icd_count_codes(icd_wide_to_long(widedf)))
 })
 
-test_that("icd9VanWalravenComorbid score calculation", {
+test_that("icd_van_walraven_from_comorbid score calculation", {
 
-  comorbids <- icd9ComorbidQuanElix(
-    mydf <- data.frame(visitId = "a", icd9 = "250.0"),
-    return.df = TRUE)
+  comorbids <- icd_comorbid_quan_elix(
+    mydf <- icd9(data.frame(visitId = "a", icd9 = "250.0")),
+    return_df = TRUE)
   set.seed(123)
   # Fill a QuanElix comorbidity data frame with random data
   comorbids <- rbind(comorbids,
@@ -234,12 +234,12 @@ test_that("icd9VanWalravenComorbid score calculation", {
                   c(7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,
                     9, 12, 4, 0, 3, -4, 6, 5, -2, -2, 0, -7, 0, -3))
   expect_equivalent(
-    icd9VanWalravenComorbid(comorbids, applyHierarchy = TRUE)[2],
+    icd_van_walraven_from_comorbid(comorbids, hierarchy = TRUE)[2],
     sum(apply(c2.inv, 1, prod))
   )
 })
 
-test_that("icd9VanWalraven comodbidity index and score", {
+test_that("icd_van_walraven comodbidity index and score", {
   mydf <- data.frame(id = factor(c(rep(1, 20), rep(2, 20), rep(3, 18))),
                      value = c("324.1", "285.9", "599.70", "038.9", "278.00", "38.97",
                              "V88.01", "112.0", "427.89", "790.4", "401.9", "53.51", "584.9",
@@ -249,34 +249,34 @@ test_that("icd9VanWalraven comodbidity index and score", {
                              "261", "280.9", "275.2", "96.59", "V49.86", "V10.42", "276.8",
                              "710.4", "311", "041.12", "276.0", "790.92", "518.84", "552.21",
                              "V85.41", "278.01", "V15.82", "96.72", "070.70", "285.29", "276.3",
-                             "V66.7", "272.4", "790.92"))
-  expect_equivalent(icd9VanWalraven(mydf, visitId = "id", icd9Field = "value"),
-                    icd9VanWalravenComorbid(
-                      icd9ComorbidQuanElix(mydf, visitId = "id", icd9Field = "value")))
-  expect_equivalent(icd9VanWalraven(mydf, visitId = "id", icd9Field="value", return.df = TRUE),
+                             "V66.7", "272.4", "790.92")) %>% icd9
+  expect_equivalent(icd_van_walraven(mydf, visit_name = "id", icd_name = "value"),
+                    icd_van_walraven_from_comorbid(
+                      icd_comorbid_quan_elix(mydf, visitId = "id", icd9Field = "value")))
+  expect_equivalent(icd_van_walraven(mydf, visit_name = "id", icd_name = "value", return_df = TRUE),
                     data.frame(id = factor(c(1, 2, 3)),
                                    vanWalraven = c(10, 12, -2)))
   expect_equal(
-    icd9VanWalraven(mydf, icd9Field = "value"),
+    icd_van_walraven(mydf, icd9Field = "value"),
                structure(c(10, 12, -2), names = c("1", "2", "3"))
     )
 })
 
 test_that("github issue #64 - quan revised charleson scores", {
-  mydf <- data.frame(visitId = "a", icd9 = "250.0")
-  comorbids <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE)
+  mydf <- data.frame(visitId = "a", icd9 = "250.0") %>% icd9
+  comorbids <- icd_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
 
   ## test against a known score for a single comorbidity
 
   # direct scoring
-  expect_equivalent(icd9CharlsonComorbid(comorbids, scoringSystem = "original"), 1)
-  expect_equivalent(icd9CharlsonComorbid(comorbids, scoringSystem = "charlson"), 1)
-  expect_equivalent(icd9CharlsonComorbid(comorbids, scoringSystem = "quan"), 0)
+  expect_equivalent(icd_charlson_from_comorbid(comorbids, scoring_system = "original"), 1)
+  expect_equivalent(icd_charlson_from_comorbid(comorbids, scoring_system = "charlson"), 1)
+  expect_equivalent(icd_charlson_from_comorbid(comorbids, scoring_system = "quan"), 0)
 
   # pass through from top level function
-  expect_equivalent(icd9Charlson(mydf, scoringSystem = "o"), 1)
-  expect_equivalent(icd9Charlson(mydf, scoringSystem = "c"), 1)
-  expect_equivalent(icd9Charlson(mydf, scoringSystem = "q"), 0)
+  expect_equivalent(icd_charlson(mydf, scoring_system = "o"), 1)
+  expect_equivalent(icd_charlson(mydf, scoring_system = "c"), 1)
+  expect_equivalent(icd_charlson(mydf, scoring_system = "q"), 0)
 
   ## test against randomly generated comorbidities in various conditions
   set.seed(456)
@@ -292,40 +292,40 @@ test_that("github issue #64 - quan revised charleson scores", {
   original_weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 6, 6)
   quan_weights     <- c(0, 2, 0, 0, 2, 1, 1, 0, 2, 0, 1, 2, 1, 2, 4, 6, 4)
 
-  #omitting scoringSystem argument should use original scores
+  #omitting scoring_system argument should use original scores
   expect_equivalent(
-    icd9CharlsonComorbid(comorbids, applyHierarchy = TRUE)[2],
+    icd_charlson_from_comorbid(comorbids, hierarchy = TRUE)[2],
     sum(apply(cbind(t(comorbids[2,2:18]),original_weights),1,prod))
   )
 
   #specify original scores
   expect_equivalent(
-    icd9CharlsonComorbid(comorbids, applyHierarchy = TRUE, scoringSystem = "original")[3],
+    icd_charlson_from_comorbid(comorbids, hierarchy = TRUE, scoring_system = "original")[3],
     sum(apply(cbind(t(comorbids[3,2:18]),original_weights), 1, prod))
   )
   expect_equivalent(
-    icd9CharlsonComorbid(comorbids, applyHierarchy = TRUE, scoringSystem = "charlson")[3],
+    icd_charlson_from_comorbid(comorbids, hierarchy = TRUE, scoring_system = "charlson")[3],
     sum(apply(cbind(t(comorbids[3,2:18]),original_weights), 1, prod))
   )
 
   #specify quan scores
   expect_equivalent(
-    icd9CharlsonComorbid(comorbids, applyHierarchy = TRUE, scoringSystem = "quan")[4],
+    icd_charlson_from_comorbid(comorbids, hierarchy = TRUE, scoring_system = "quan")[4],
     sum(apply(cbind(t(comorbids[4,2:18]),quan_weights), 1, prod))
   )
 
-  #partial matching of scoringSystem argument
+  #partial matching of scoring_system argument
   expect_equivalent(
-    icd9CharlsonComorbid(comorbids, applyHierarchy = TRUE, scoringSystem = "o")[5],
+    icd_charlson_from_comorbid(comorbids, hierarchy = TRUE, scoring_system = "o")[5],
     sum(apply(cbind(t(comorbids[5,2:18]),original_weights), 1, prod))
   )
   expect_equivalent(
-    icd9CharlsonComorbid(comorbids, applyHierarchy = TRUE, scoringSystem = "q")[6],
+    icd_charlson_from_comorbid(comorbids, hierarchy = TRUE, scoring_system = "q")[6],
     sum(apply(cbind(t(comorbids[6,2:18]),quan_weights), 1, prod))
   )
 
-  #invalid scoringSystem argument
-  expect_error(icd9CharlsonComorbid(comorbids,
-                                    applyHierarchy = TRUE, scoringSystem = "z"))
+  #invalid scoring_system argument
+  expect_error(icd_charlson_from_comorbid(comorbids,
+                                    hierarchy = TRUE, scoring_system = "z"))
 
 })

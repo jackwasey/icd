@@ -2,12 +2,19 @@
 % Please edit documentation in R/guess.R
 \name{icd_guess_both}
 \alias{icd_guess_both}
+\alias{icd_guess_both.default}
 \title{Guess both ICD-9 vs ICD-10 or subtype, and whether short of long type.}
 \usage{
 icd_guess_both(x, short_code = NULL)
+
+\method{icd_guess_both}{default}(x, short_code = NULL)
 }
 \description{
 I think these are not quite orthogonal problems.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{default}: default method which converts input to character
+}}
 \keyword{internal}
 
