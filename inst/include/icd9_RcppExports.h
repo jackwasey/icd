@@ -309,7 +309,7 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert = false) {
+    inline std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert) {
         typedef SEXP(*Ptr_icd9IsA)(SEXP,SEXP,SEXP);
         static Ptr_icd9IsA p_icd9IsA = NULL;
         if (p_icd9IsA == NULL) {

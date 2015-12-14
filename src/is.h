@@ -17,10 +17,13 @@
 
 #ifndef IS_H_
 #define IS_H_
+#include <string>
+#include <vector>
 
 bool icd9IsASingle(const char* s, const char* x);
 bool icd9IsASingleV(const char* s);
 bool icd9IsASingleE(const char* s);
 bool icd9IsASingleVE(const char* s);
+std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert = false);
 
 #endif /* IS_H_ */

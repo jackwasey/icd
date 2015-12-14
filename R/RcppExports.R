@@ -99,7 +99,7 @@ icd9GetMajorShort <- function(icd9Short) {
 #' @param sv std::vector<std::string>&
 #' @param x const char* of choices of first character to match
 #' @keywords internal
-icd9IsA <- function(sv, x, invert = FALSE) {
+icd9IsA <- function(sv, x, invert) {
     .Call('icd9_icd9IsA', PACKAGE = 'icd9', sv, x, invert)
 }
 

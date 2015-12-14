@@ -5,7 +5,7 @@
 \title{test whether elements of vector begin with V, E (or any other
   character)}
 \usage{
-icd9IsA(sv, x, invert = FALSE)
+icd9IsA(sv, x, invert)
 }
 \arguments{
 \item{sv}{std::vector<std::string>&}

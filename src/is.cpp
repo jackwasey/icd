@@ -60,8 +60,7 @@ bool icd9IsASingleVE(const char* s) {
 //' @param x const char* of choices of first character to match
 //' @keywords internal
 // [[Rcpp::export]]
-std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x,
-		bool invert = false) {
+std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert) {
 	int len = sv.size();
 	std::vector<bool> out(len);
 	for (int i = 0; i < len; ++i) {
