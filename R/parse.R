@@ -66,6 +66,9 @@ parseAndSaveQuick <- function(verbose = FALSE) {
 #'   simply returned invisibly.
 #' @return data frame with icd9, descShort and descLong columns. NA is placed in
 #'   descLong when not available.
+#' @examples
+#'   # To populate the data-raw directory with the ICD-9 source:
+#'   parseLeafDescriptionsAll(save = TRUE, fromWeb = TRUE)
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
@@ -73,9 +76,9 @@ parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FA
   versions <- data_sources$version
   if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
-for (v in versions)
-  icd9Billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
-                                                    fromWeb = fromWeb, verbose = verbose)
+  for (v in versions)
+    icd9Billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
+                                                      fromWeb = fromWeb, verbose = verbose)
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save) save_in_data_dir("icd9Billable")
@@ -97,7 +100,7 @@ for (v in versions)
 #' @return invisibly return the result
 #' @keywords internal
 parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
-                                             fromWeb = FALSE, verbose = FALSE) {
+                                         fromWeb = FALSE, verbose = FALSE) {
   assertString(version)
   assertFlag(save)
   assertFlag(fromWeb)
@@ -105,8 +108,10 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
 
   if (verbose) message("Fetching billable codes version: ", version)
 
-  if (version == "27") return(invisible(parseIcd9LeafDescriptions27(save = save, fromWeb = fromWeb,
-                                                                    verbose = verbose)))
+  if (version == "27")
+    return(invisible(parseIcd9LeafDescriptions27(save = save,
+                                                 fromWeb = fromWeb,
+                                                 verbose = verbose)))
   stopifnot(version %in% data_sources$version)
   dat <- data_sources[data_sources$version == version, ]
   url <- dat$url
@@ -128,7 +133,7 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
     message("short path = ", path_short, "\n long path = ", path_long)
   }
 
-  assertCharacter(path_short, min.chars = 10, any.missing = FALSE, len = 1)
+  checkmate::assertPathForOutput(path_short, overwrite = TRUE)
 
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
@@ -170,7 +175,7 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
                     stringsAsFactors = FALSE)
 
   # now sort so that E is after V:
-  reorder <- sortOrderShort(out[["icd9"]])
+  reorder <- icd9_sort_order_short(out[["icd9"]])
   out <- out[reorder, ]
 
   # warn as we go:
@@ -211,7 +216,7 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   close(f)
   names(icd9Billable27) <- c("icd9", "descLong", "descShort")
   icd9Billable27 <- icd9Billable27[c(1, 3, 2)] # reorder columns
-  reorder <- sortOrderShort(icd9Billable27[["icd9"]])
+  reorder <- icd9_sort_order_short(icd9Billable27[["icd9"]])
   invisible(icd9Billable27[reorder, ])
 }
 
