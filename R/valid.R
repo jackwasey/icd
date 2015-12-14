@@ -382,13 +382,13 @@ icd9_is_n <- function(icd9) {
 #' @describeIn icd9_is_n are the given codes V type?
 #' @export
 icd9_is_v <- function(icd9) {
-  icd9IsA(asCharacterNoWarn(icd9), "Vv")
+  icd9IsA(asCharacterNoWarn(icd9), "Vv", FALSE)
 }
 
 #' @describeIn icd9_is_n are the given codes E type?
 #' @export
 icd9_is_e <- function(icd9) {
-  icd9IsA(asCharacterNoWarn(icd9), "Ee")
+  icd9IsA(asCharacterNoWarn(icd9), "Ee", FALSE)
 }
 
 warnNumericCode <- function()

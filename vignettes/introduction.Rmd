@@ -133,6 +133,7 @@ These functions generate syntactically valid ICD-9 codes, without including pare
 This is used internally to interpret ranges of ICD-9 codes specified in the literature. Sometimes it is not clear exactly what an ICD-9 range presented in a paper means, but at least we can explicitly decide what should be included in our interpretation, and the ranges can be reused even when the underlying codes may be different, as codes are added and removed from time-to-time, and although the original papers would have been based on their ICD-9 ranges resolving to a specific set of codes, they are likely to be valid for new diagnoses in the given subgroups. Ultimately, this needs detailed attention, but the strategy in \code{icd9} is to give a good best guess, given these limitations.
 
 Another way of specifying ranges are to use function calls. These are exactly equivalent to the `%i9s%` and `%i9d%` range operators. This example shows the result when the user specifies a range which would include parents but not all their children:
+
 ```{r rangeanomaly}
 icd9ExpandRangeShort("4820", "4823") # default, equivalent to %i9s%
 icd9ExpandRangeShort("4820", "4823", onlyReal = FALSE)
