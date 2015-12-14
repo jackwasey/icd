@@ -145,7 +145,7 @@ test_that("count icd9 codes", {
   mydf <- data.frame(visit_name = c("r", "r", "s"),
                      icd9 = c("441", "412.93", "044.9"))
   expect_equal(icd_count_codes(mydf, return_df = TRUE),
-               data.frame(visitId = c("r", "s"),
+               data.frame(visit_name = c("r", "s"),
                           icd_count = c(2, 1))
   )
   expect_equal(icd_count_codes(mydf), c(2, 1))
