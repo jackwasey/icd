@@ -299,6 +299,11 @@ icd_get_valid.icd10cm <- function(icd, short_code = icd_guess_short(icd)) {
 icd_get_invalid <- function(...)
   UseMethod("icd_get_invalid")
 
+icd_get_invalid.default <- function(x, short_code = NULL) {
+  both <- icd_guess_both(x, short_code = short_code)
+
+}
+
 #' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
 #' @param x vector of ICD codes, or list of vectors of ICD codes forming a comorbidity map
 #' @export
