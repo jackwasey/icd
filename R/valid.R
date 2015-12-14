@@ -290,7 +290,8 @@ icd_get_valid.icd10 <- function(icd, short_code = icd_guess_short(icd)) {
 #' @describeIn icd_get_valid Get valid ICD-10-CM codes
 #' @export
 icd_get_valid.icd10cm <- function(icd, short_code = icd_guess_short(icd)) {
-  icd[icd_is_valid.icd10cm(icd, short_code = short_code)]
+  # TODO: make ICD-10-CM specific
+  icd[icd_is_valid.icd10(icd, short_code = short_code)]
 }
 
 #' @title Get invalid ICD codes
@@ -299,9 +300,13 @@ icd_get_valid.icd10cm <- function(icd, short_code = icd_guess_short(icd)) {
 icd_get_invalid <- function(...)
   UseMethod("icd_get_invalid")
 
+#' @describeIn icd_get_invalid Default method when ICD version or short versus
+#'   decimal not known.
+#' @import magrittr
+#' @keywords internal
 icd_get_invalid.default <- function(x, short_code = NULL) {
-  both <- icd_guess_both(x, short_code = short_code)
-
+  # both <- icd_guess_both(x, short_code = short_code)
+  x %>% icd_guess_short_update %>% icd_guess_version_update
 }
 
 #' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
