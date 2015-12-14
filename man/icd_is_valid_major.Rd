@@ -11,7 +11,7 @@
 \alias{icd_is_valid_major}
 \alias{icd_is_valid_major.default}
 \alias{icd_is_valid_major.icd9}
-\title{test whether codes are of major type}
+\title{Test whether an ICD code is major}
 \usage{
 icd9IsValidMajorN(major)
 
@@ -23,18 +23,22 @@ icd9IsValidMajor(icd)
 
 icd_is_valid_major(x)
 
-\method{icd_is_valid_major}{default}(major)
+\method{icd_is_valid_major}{default}(x)
 
-\method{icd_is_valid_major}{icd9}(major)
+\method{icd_is_valid_major}{icd9}(x)
 
-icd9_is_valid_major_n(major)
+icd9_is_valid_major_n(x)
 
-icd9_is_valid_major_v(major)
+icd9_is_valid_major_v(x)
 
-icd9_is_valid_major_e(major)
+icd9_is_valid_major_e(x)
 }
 \arguments{
-\item{x}{ICD codes}
+\item{x}{vector of ICD codes}
+}
+\value{
+logical vector of same length as input, with TRUE when a code is a
+  major (not necessarily a real one)
 }
 \description{
 codes without real or implied decimal place return TRUE

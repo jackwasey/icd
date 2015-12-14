@@ -77,30 +77,31 @@ icd_guess_version.icd9 <- function(icd, short_code) "icd9"
 icd_guess_version.icd10 <- function(icd, short_code) "icd10"
 
 #' @describeIn icd_guess_version Guess version of ICD code from character vector
-icd_guess_version.character <- function(icd, short_code = NULL) {
+icd_guess_version.character <- function(x, short_code = NULL) {
+  assertCharacter(x)
   if (!is.null(short_code)) {
     if (short_code) {
-      i9 <- sum(icd_is_valid.icd9(icd, short_code = TRUE), na.rm = TRUE)
-      i10 <- sum(icd_is_valid.icd10(icd, short_code = TRUE), na.rm = TRUE)
-      i10who <- sum(icd_is_valid.icd10who(icd, short_code = TRUE), na.rm = TRUE)
+      i9 <- sum(icd_is_valid.icd9(x, short_code = TRUE), na.rm = TRUE)
+      i10 <- sum(icd_is_valid.icd10(x, short_code = TRUE), na.rm = TRUE)
+      i10who <- sum(icd_is_valid.icd10who(x, short_code = TRUE), na.rm = TRUE)
     } else {
-      i9 <- sum(icd_is_valid.icd9(icd, short_code = FALSE), na.rm = TRUE)
-      i10 <- sum(icd_is_valid.icd10(icd, short_code = FALSE), na.rm = TRUE)
-      i10who <- sum(icd_is_valid.icd10who(icd, short_code = FALSE), na.rm = TRUE)
+      i9 <- sum(icd_is_valid.icd9(x, short_code = FALSE), na.rm = TRUE)
+      i10 <- sum(icd_is_valid.icd10(x, short_code = FALSE), na.rm = TRUE)
+      i10who <- sum(icd_is_valid.icd10who(x, short_code = FALSE), na.rm = TRUE)
     }
 
   } else {
     i9 <- max(
-      sum(icd_is_valid.icd9(icd, short_code = TRUE), na.rm = TRUE),
-      sum(icd_is_valid.icd9(icd, short_code = FALSE), na.rm = TRUE)
+      sum(icd_is_valid.icd9(x, short_code = TRUE), na.rm = TRUE),
+      sum(icd_is_valid.icd9(x, short_code = FALSE), na.rm = TRUE)
     )
     i10 <- max(
-      sum(icd_is_valid.icd10(icd, short_code = TRUE), na.rm = TRUE),
-      sum(icd_is_valid.icd10(icd, short_code = FALSE), na.rm = TRUE)
+      sum(icd_is_valid.icd10(x, short_code = TRUE), na.rm = TRUE),
+      sum(icd_is_valid.icd10(x, short_code = FALSE), na.rm = TRUE)
     )
     i10who <- max(
-      sum(icd_is_valid.icd10who(icd, short_code = TRUE), na.rm = TRUE),
-      sum(icd_is_valid.icd10who(icd, short_code = FALSE), na.rm = TRUE)
+      sum(icd_is_valid.icd10who(x, short_code = TRUE), na.rm = TRUE),
+      sum(icd_is_valid.icd10who(x, short_code = FALSE), na.rm = TRUE)
     )
   }
 
@@ -115,6 +116,44 @@ icd_guess_version.character <- function(icd, short_code = NULL) {
     "icd10"
 }
 
-icd_guess_version.data.frame <- function(icd, icd_name = get_icd_name(icd)) {
-  icd_guess_version.character(icd[[icd_name]])
+icd_guess_version.data.frame <- function(x, icd_name = get_icd_name(x)) {
+  assertDataFrame(x)
+  icd_guess_version.character(x[[icd_name]])
+}
+
+#' @title Guess version of ICD and update class
+#' @return the input data with appropriate ICD class set
+#' @keywords internal
+icd_guess_version_update <- function(x) {
+  class(x) <- append(icd_guess_version(x), class(x))
+  x
+}
+
+#' @title Guess short vs decimal of ICD and update class
+#' @return the input data with appropriate ICD class set
+#' @keywords internal
+icd_guess_short_update <- function(x, icd_name = get_icd_name(x)) {
+  if (icd_guess_short(x))
+    class(x) <- append("icd_short_code", class(x))
+  else
+    class(x) <- append("icd_decimal_code", class(x))
+  x
+}
+#' Guess both ICD-9 vs ICD-10 or subtype, and whether short of long type.
+#'
+#' I think these are not quite orthogonal problems.
+#' @keywords internal
+icd_guess_both <- function(x, short_code = NULL) {
+  UseMethod("icd_guess_both")
+}
+
+#' @describeIn icd_guess_both
+#' @keywords internal
+icd_guess_both.default <- function(x, short_code = NULL) {
+  x <- asCharacterNoWarn(x)
+  ver <- icd_guess_version.character(x)
+  class(x) <- append(ver, class(x))
+  # now i've set the version I think it is, dispatch on this class to get short vs decimal
+  short_code <- icd_guess_short(x)
+  list(ver, short_code)
 }

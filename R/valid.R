@@ -184,9 +184,11 @@ icd9_is_valid_decimal_n <- function(x) {
         x)
 }
 
-#' @title test whether codes are of major type
+#' @title Test whether an ICD code is major
 #' @description codes without real or implied decimal place return TRUE
-#' @param x ICD codes
+#' @param x vector of ICD codes
+#' @return logical vector of same length as input, with TRUE when a code is a
+#'   major (not necessarily a real one)
 #' @keywords internal
 icd_is_valid_major <- function(x) {
   UseMethod("icd_is_valid_major")
@@ -195,41 +197,41 @@ icd_is_valid_major <- function(x) {
 #' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
 #'   which at present assumes ICD-9 format
 #' @keywords internal
-icd_is_valid_major.default <- function(major) {
-  icd_is_valid_major.icd9(asCharacterNoWarn(major))
+icd_is_valid_major.default <- function(x) {
+  icd_is_valid_major.icd9(asCharacterNoWarn(x))
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
 #' @keywords internal
-icd_is_valid_major.icd9 <- function(major)
+icd_is_valid_major.icd9 <- function(x)
   # let grepl do what it can with integers, factors, etc.
   grepl(
     pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)", # nolint
-    x = major
+    x = x
   )
 
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_n <- function(major)
+icd9_is_valid_major_n <- function(x)
   grepl(
     pattern = "^[[:space:]]*[[:digit:]]{1,3}[[:space:]]*$",
-    x = major
+    x = x
   )
 
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_v <- function(major)
+icd9_is_valid_major_v <- function(x)
   grepl(
     pattern = "^[[:space:]]*[Vv][[:digit:]]{1,2}[[:space:]]*$",
-    x = major
+    x = x
   )
 
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_e <- function(major)
+icd9_is_valid_major_e <- function(x)
   grepl(
     pattern = "^[[:space:]]*[Ee][[:digit:]]{1,3}[[:space:]]*$",
-    x = major
+    x = x
   )
 
 #' validate an icd9 mapping to comorbidities
@@ -289,7 +291,8 @@ icd_get_valid.icd10 <- function(icd, short_code = icd_guess_short(icd)) {
 #' @describeIn icd_get_valid Get valid ICD-10-CM codes
 #' @export
 icd_get_valid.icd10cm <- function(icd, short_code = icd_guess_short(icd)) {
-  icd[icd_is_valid.icd10cm(icd, short_code = short_code)]
+  # TODO: make ICD-10-CM specific
+  icd[icd_is_valid.icd10(icd, short_code = short_code)]
 }
 
 #' @title Get invalid ICD codes
@@ -297,6 +300,15 @@ icd_get_valid.icd10cm <- function(icd, short_code = icd_guess_short(icd)) {
 #' @export
 icd_get_invalid <- function(...)
   UseMethod("icd_get_invalid")
+
+#' @describeIn icd_get_invalid Default method when ICD version or short versus
+#'   decimal not known.
+#' @import magrittr
+#' @keywords internal
+icd_get_invalid.default <- function(x, short_code = NULL) {
+  # both <- icd_guess_both(x, short_code = short_code)
+  x %>% icd_guess_short_update %>% icd_guess_version_update
+}
 
 #' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
 #' @param x vector of ICD codes, or list of vectors of ICD codes forming a comorbidity map
