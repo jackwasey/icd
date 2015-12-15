@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-if (requireNamespace("lintr", quietly = TRUE)) {
+if (loadNamespace("lintr", quietly = TRUE)) {
   context("deprecated tests - lints")
   test_that("Package Style", {
     skip("skipping linting until lintr bugs are fixed")

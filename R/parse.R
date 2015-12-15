@@ -25,7 +25,7 @@ parseEverythingAndSave <- function(verbose = TRUE) {
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from
   # development tree, not as installed package
-
+  loadNamespace("devtools")
   generateSysData()
   devtools::load_data(pkg = ".") # reload the newly saved data
   parseAndSaveQuick(verbose = verbose)
@@ -36,7 +36,8 @@ parseEverythingAndSave <- function(verbose = TRUE) {
 
 #' @title parse almost everything
 #' @keywords internal
-parseAndSaveQuick <- function(verbose = FALSE) {
+parseAndSaveQuick <- function(verbose = TRUE) {
+  loadNamespace("devtools")
   if (verbose) message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
   devtools::load_data(pkg = ".")
 
@@ -175,7 +176,7 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
                     stringsAsFactors = FALSE)
 
   # now sort so that E is after V:
-  reorder <- icd9_sort_order_short(out[["icd9"]])
+  reorder <- icd9_order_short(out[["icd9"]])
   out <- out[reorder, ]
 
   # warn as we go:
@@ -216,7 +217,7 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   close(f)
   names(icd9Billable27) <- c("icd9", "descLong", "descShort")
   icd9Billable27 <- icd9Billable27[c(1, 3, 2)] # reorder columns
-  reorder <- icd9_sort_order_short(icd9Billable27[["icd9"]])
+  reorder <- icd9_order_short(icd9Billable27[["icd9"]])
   invisible(icd9Billable27[reorder, ])
 }
 

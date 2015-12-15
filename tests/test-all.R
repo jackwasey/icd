@@ -16,7 +16,6 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 library("icd9")
-library("magrittr")
 library("testthat")
 do_slow_tests <- FALSE
 do_online_tests <- FALSE
@@ -24,4 +23,5 @@ if (identical(Sys.getenv("COVR"), "true")) {
   do_slow_tests <- TRUE
   do_online_tests <- TRUE
 }
-test_check("icd9", reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
+#test_check("icd9", reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
+test_check("icd9")

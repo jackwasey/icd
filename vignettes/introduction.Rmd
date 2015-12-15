@@ -33,7 +33,7 @@ along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 ```{r setup, echo = FALSE, cache = FALSE}
 suppressWarnings({
   suppressPackageStartupMessages({
-    requireNamespace("knitr", warn.conflicts = FALSE) # for opts_chunk only
+    loadNamespace("knitr") # for opts_chunk only
     library(icd9)
     library(stringr)
     library(magrittr)

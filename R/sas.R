@@ -82,8 +82,6 @@ sasFormatExtract <- function(sasTxt) {
 #'   "assigned value" pairs
 #' @keywords internal programming list
 sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
-  #requireNamespace("magrittr")
-  library("magrittr")
   assertString(x)
   assertFlag(stripWhiteSpace)
   assertFlag(stripQuotes)

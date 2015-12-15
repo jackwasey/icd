@@ -378,12 +378,12 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x)) {
   assertFlag(short_code)
 
   if (short_code)
-    x[icd9_sort_order_short(x)]
+    x[icd9_order_short(x)]
   else
-    x[icd9_sort_order_short(icd_decimal_to_short.icd9(x))]
+    x[icd9_order_short(icd_decimal_to_short.icd9(x))]
 }
 
-icd9_sort_order_short <- function(x) {
+icd9_order_short <- function(x) {
   x <- x[order(icd9AddLeadingZeroesShort(x))]
   match(
     x[c(which(icd9_is_n(x)), which(icd9_is_v(x)), which(icd9_is_e(x)))],

@@ -23,5 +23,9 @@ for versions 23 to 32, those which are on the CMS web site, get
   any codes with long or short descriptions. Earlier years only have
   abbreviated descriptions.
 }
+\examples{
+  # To populate the data-raw directory with the ICD-9 source:
+  parseLeafDescriptionsAll(save = TRUE, fromWeb = TRUE)
+}
 \keyword{internal}
 
