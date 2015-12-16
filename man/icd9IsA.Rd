@@ -2,10 +2,19 @@
 % Please edit documentation in R/RcppExports.R
 \name{icd9IsA}
 \alias{icd9IsA}
+\alias{icd9_is_e_cpp}
+\alias{icd9_is_n_cpp}
+\alias{icd9_is_v_cpp}
 \title{test whether elements of vector begin with V, E (or any other
   character)}
 \usage{
 icd9IsA(sv, x, invert)
+
+icd9_is_n_cpp(sv)
+
+icd9_is_v_cpp(sv)
+
+icd9_is_e_cpp(sv)
 }
 \arguments{
 \item{sv}{std::vector<std::string>&}

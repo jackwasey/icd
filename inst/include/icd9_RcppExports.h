@@ -328,6 +328,63 @@ namespace icd9 {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
+    inline std::vector<bool> icd9_is_n_cpp(const std::vector<std::string>& sv) {
+        typedef SEXP(*Ptr_icd9_is_n_cpp)(SEXP);
+        static Ptr_icd9_is_n_cpp p_icd9_is_n_cpp = NULL;
+        if (p_icd9_is_n_cpp == NULL) {
+            validateSignature("std::vector<bool>(*icd9_is_n_cpp)(const std::vector<std::string>&)");
+            p_icd9_is_n_cpp = (Ptr_icd9_is_n_cpp)R_GetCCallable("icd9", "icd9_icd9_is_n_cpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9_is_n_cpp(Rcpp::wrap(sv));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<bool> >(__result);
+    }
+
+    inline std::vector<bool> icd9_is_v_cpp(const std::vector<std::string>& sv) {
+        typedef SEXP(*Ptr_icd9_is_v_cpp)(SEXP);
+        static Ptr_icd9_is_v_cpp p_icd9_is_v_cpp = NULL;
+        if (p_icd9_is_v_cpp == NULL) {
+            validateSignature("std::vector<bool>(*icd9_is_v_cpp)(const std::vector<std::string>&)");
+            p_icd9_is_v_cpp = (Ptr_icd9_is_v_cpp)R_GetCCallable("icd9", "icd9_icd9_is_v_cpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9_is_v_cpp(Rcpp::wrap(sv));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<bool> >(__result);
+    }
+
+    inline std::vector<bool> icd9_is_e_cpp(const std::vector<std::string>& sv) {
+        typedef SEXP(*Ptr_icd9_is_e_cpp)(SEXP);
+        static Ptr_icd9_is_e_cpp p_icd9_is_e_cpp = NULL;
+        if (p_icd9_is_e_cpp == NULL) {
+            validateSignature("std::vector<bool>(*icd9_is_e_cpp)(const std::vector<std::string>&)");
+            p_icd9_is_e_cpp = (Ptr_icd9_is_e_cpp)R_GetCCallable("icd9", "icd9_icd9_is_e_cpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9_is_e_cpp(Rcpp::wrap(sv));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<bool> >(__result);
+    }
+
     inline Rcpp::CharacterVector icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate = true) {
         typedef SEXP(*Ptr_icd9LongToWideCpp)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9LongToWideCpp p_icd9LongToWideCpp = NULL;

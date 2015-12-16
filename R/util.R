@@ -374,7 +374,7 @@ icd_sort.icd10 <- function(x, short_code = NULL) {
 #'   codes, and accounting for leading zeroes
 #' @export
 icd_sort.icd9 <- function(x, short_code = icd_guess_short(x)) {
-  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
+  assert(checkFactor(x), checkCharacter(x))
   assertFlag(short_code)
 
   if (short_code)
@@ -384,9 +384,9 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x)) {
 }
 
 icd9_order_short <- function(x) {
-  x <- x[order(icd9AddLeadingZeroesShort(x))]
+  y <- x[order(icd9AddLeadingZeroesShort(x))]
   match(
-    x[c(which(icd9_is_n(x)), which(icd9_is_v(x)), which(icd9_is_e(x)))],
+    y[c(which(icd9_is_n(y)), which(icd9_is_v(y)), which(icd9_is_e(y)))],
     x)
 }
 

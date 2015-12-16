@@ -376,7 +376,8 @@ icd_is_major.icd9 <- function(x) {
 #' @return logical vector
 #' @export
 icd9_is_n <- function(icd9) {
-  icd9IsA(asCharacterNoWarn(icd9), "VEve", TRUE)
+  # icd9IsA(asCharacterNoWarn(icd9), "VEve", TRUE)
+  icd9_is_n_cpp(asCharacterNoWarn(icd9))
 }
 
 #' @describeIn icd9_is_n are the given codes V type?

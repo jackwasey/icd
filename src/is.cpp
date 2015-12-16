@@ -68,3 +68,40 @@ std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, boo
 	}
 	return out;
 }
+
+//' @rdname icd9IsA
+//' @keywords internal
+// [[Rcpp::export]]
+std::vector<bool> icd9_is_n_cpp(const std::vector<std::string>& sv) {
+	const int len = sv.size();
+	std::vector<bool> out(len);
+	for (int i = 0; i < len; ++i) {
+		out[i] = !icd9IsASingleVE(sv[i].c_str());
+	}
+	return out;
+}
+
+//' @rdname icd9IsA
+//' @keywords internal
+// [[Rcpp::export]]
+std::vector<bool> icd9_is_v_cpp(const std::vector<std::string>& sv) {
+	const int len = sv.size();
+	std::vector<bool> out(len);
+	for (int i = 0; i < len; ++i) {
+		out[i] = icd9IsASingleV(sv[i].c_str());
+	}
+	return out;
+}
+
+//' @rdname icd9IsA
+//' @keywords internal
+// [[Rcpp::export]]
+std::vector<bool> icd9_is_e_cpp(const std::vector<std::string>& sv) {
+	const int len = sv.size();
+	std::vector<bool> out(len);
+	for (int i = 0; i < len; ++i) {
+		out[i] = icd9IsASingleE(sv[i].c_str());
+	}
+	return out;
+}
+

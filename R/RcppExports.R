@@ -103,6 +103,24 @@ icd9IsA <- function(sv, x, invert) {
     .Call('icd9_icd9IsA', PACKAGE = 'icd9', sv, x, invert)
 }
 
+#' @rdname icd9IsA
+#' @keywords internal
+icd9_is_n_cpp <- function(sv) {
+    .Call('icd9_icd9_is_n_cpp', PACKAGE = 'icd9', sv)
+}
+
+#' @rdname icd9IsA
+#' @keywords internal
+icd9_is_v_cpp <- function(sv) {
+    .Call('icd9_icd9_is_v_cpp', PACKAGE = 'icd9', sv)
+}
+
+#' @rdname icd9IsA
+#' @keywords internal
+icd9_is_e_cpp <- function(sv) {
+    .Call('icd9_icd9_is_e_cpp', PACKAGE = 'icd9', sv)
+}
+
 icd9LongToWideCpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call('icd9_icd9LongToWideCpp', PACKAGE = 'icd9', icd9df, visitId, icd9Field, aggregate)
 }
