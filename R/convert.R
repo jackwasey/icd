@@ -200,7 +200,8 @@ icd_long_to_wide <- function(x,
   }
 }
 
-#' @title convert matrix of comorbidities into data frame, preserving visit_name
+#' @title convert comorbidity data frame from matrix
+#' @description convert matrix of comorbidities into data frame, preserving visit_name
 #'   information
 #' @param x Matrix of comorbidities, with row and columns names defined
 #' @param visit_name Single character string with name for new column in output
@@ -235,7 +236,8 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
   out
 }
 
-#' @title convert matrix of comorbidities into data frame, preserving visit_name
+#' @title convert comorbidity matrix to data frame
+#' @description convert matrix of comorbidities into data frame, preserving visit_name
 #'   information
 #' @param x data frame, with a \code{visit_name} column (not necessarily first),
 #'   and other columns with flags for comorbidities, as such column names are
@@ -267,8 +269,9 @@ icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
   out
 }
 
+#' Convert ICD from short to deimcal forms
+#' 
 #' Convert codes between short and decimal forms
-#'
 #' @param x ICD codes
 #' @export
 icd_short_to_decimal <- function(x) {

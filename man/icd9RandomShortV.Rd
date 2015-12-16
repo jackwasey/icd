@@ -6,5 +6,8 @@
 \usage{
 icd9RandomShortV(n = 5L)
 }
+\description{
+Generate a character vector of random short-form ICD-9 V codes
+}
 \keyword{internal}
 

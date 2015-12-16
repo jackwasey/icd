@@ -7,7 +7,7 @@
 \alias{icd_children}
 \alias{icd_children.character}
 \alias{icd_children.icd9}
-\title{Expand ICD-9 codes to all possible sub-codes}
+\title{Get children of ICD codes}
 \usage{
 icd_children(x, ...)
 
@@ -61,6 +61,9 @@ becomes "010", not "0010"}
 characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
+}
+\description{
+Expand ICD-9 codes to all possible sub-codes
 }
 \section{Methods (by class)}{
 \itemize{

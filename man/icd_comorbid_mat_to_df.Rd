@@ -3,8 +3,7 @@
 \name{icd_comorbid_mat_to_df}
 \alias{icd9ComorbidMatToDf}
 \alias{icd_comorbid_mat_to_df}
-\title{convert matrix of comorbidities into data frame, preserving visit_name
-  information}
+\title{convert comorbidity data frame from matrix}
 \usage{
 icd_comorbid_mat_to_df(x, visit_name = "visit_id",
   stringsAsFactors = getOption("stringsAsFactors"))
@@ -22,6 +21,10 @@ but here it is for output data.}
 \item{stringsAsFactors}{whether the resulting data frame should have strings,
 i.e. visit_name converted to factor. Default is to follow the current
 session option.}
+}
+\description{
+convert matrix of comorbidities into data frame, preserving visit_name
+  information
 }
 \examples{
 library(magrittr) # as ever, optional, but tidy

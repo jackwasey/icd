@@ -4,13 +4,16 @@
 \alias{icd_expand_range_major}
 \alias{icd_expand_range_major.icd10}
 \alias{icd_expand_range_major.icd9}
-\title{Expand a pair of major codes into a range of major codes}
+\title{Expand major codes to range}
 \usage{
 icd_expand_range_major(start, end)
 
 \method{icd_expand_range_major}{icd10}(start, end)
 
 \method{icd_expand_range_major}{icd9}(start, end, real = TRUE)
+}
+\description{
+Expand a pair of major codes into a range of major codes.
 }
 \section{Methods (by class)}{
 \itemize{

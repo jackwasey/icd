@@ -2,9 +2,12 @@
 % Please edit documentation in R/parse.R
 \name{parseAndSaveQuick}
 \alias{parseAndSaveQuick}
-\title{parse almost everything}
+\title{parse quickly parsable source data}
 \usage{
 parseAndSaveQuick()
+}
+\description{
+Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get the 'billable' codes. Also parses the AHRQ and Quan/Deyo comorbidity mappings from the source SAS data. Elixhauser and Quan/Elixhauser mappins are generated from transcribed codes.
 }
 \keyword{internal}
 

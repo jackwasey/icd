@@ -9,5 +9,8 @@ icd_guess_short_update(x, icd_name = get_icd_name(x))
 \value{
 the input data with appropriate ICD class set
 }
+\description{
+Guesses whether the given ICD codes are short or long format, and set the class of the returned data according to the guess.
+}
 \keyword{internal}
 

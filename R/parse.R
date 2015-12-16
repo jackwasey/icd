@@ -34,7 +34,8 @@ parseEverythingAndSave <- function() {
 
 }
 
-#' @title parse almost everything
+#' @title parse quickly parsable source data
+#' @description Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get the 'billable' codes. Also parses the AHRQ and Quan/Deyo comorbidity mappings from the source SAS data. Elixhauser and Quan/Elixhauser mappins are generated from transcribed codes.
 #' @keywords internal
 parseAndSaveQuick <- function() {
   loadNamespace("devtools")

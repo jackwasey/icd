@@ -3,8 +3,7 @@
 \name{icd_comorbid_df_to_mat}
 \alias{icd9ComorbidDfToMat}
 \alias{icd_comorbid_df_to_mat}
-\title{convert matrix of comorbidities into data frame, preserving visit_name
-  information}
+\title{convert comorbidity matrix to data frame}
 \usage{
 icd_comorbid_df_to_mat(x, visit_name = get_visit_name(x),
   stringsAsFactors = getOption("stringsAsFactors"))
@@ -33,6 +32,10 @@ i.e. visit_name converted to factor. Default is to follow the current session
 option.}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
+}
+\description{
+convert matrix of comorbidities into data frame, preserving visit_name
+  information
 }
 \examples{
 longdf <- icd9(icd_long_data(

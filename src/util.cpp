@@ -123,6 +123,7 @@ Rcpp::NumericVector randomMajorCpp(int	n) {
 }
 
 //' @title generate random short-form numeric icd9 codes
+//' @description Generate a character vector of random short-form ICD-9 numeric codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
@@ -137,6 +138,7 @@ std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n 
 }
 
 //' @title generate random short-form icd9 V codes
+//' @description Generate a character vector of random short-form ICD-9 V codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n = 5) {
@@ -151,6 +153,7 @@ std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n 
 }
 
 //' @title generate random short-form icd9 E codes
+//' @description Generate a character vector of random short-form ICD-9 E codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n = 5) {
@@ -191,8 +194,8 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   }
   return out;
 }
-//' @rdname fastIntToString
 //' @title fast convert integer vector to character vector
+//' @description Fast conversion from integer vector to character vector using C++
 //' @param x td::vector<int>
 //' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
 //'   No checks done for speed.

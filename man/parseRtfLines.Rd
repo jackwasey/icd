@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse-rtf.R
 \name{parseRtfLines}
 \alias{parseRtfLines}
-\title{parse a character vector containing RTF strings}
+\title{parse lines of RTF}
 \usage{
 parseRtfLines(lines, verbose = FALSE)
 }
@@ -16,6 +16,9 @@ named character vector, with names being the ICD-9 codes, and the
   contents being the descriptions from the RTF source. Elsewhere I do this
   the other way around, but the tests are now wired for this layout. "Tidy"
   data would favour having an un-named two-column data frame.
+}
+\description{
+parse a character vector containing RTF strings
 }
 \keyword{internal}
 

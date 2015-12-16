@@ -147,7 +147,8 @@ icd10ExpandRangePossibleShort <- function(start, end) {
 
 }
 
-#' @title Expand a pair of major codes into a range of major codes
+#' @title Expand major codes to range
+#' @description Expand a pair of major codes into a range of major codes. 
 #' @keywords internal
 icd_expand_range_major <- function(start, end)
   UseMethod("icd_expand_range_major")

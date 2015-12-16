@@ -72,7 +72,8 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
   invisible(icd9Desc)
 }
 
-#' @title parse a character vector containing RTF strings
+#' @title parse lines of RTF
+#' @description parse a character vector containing RTF strings
 #' @param lines character vector containing RTF. Encoding?
 #' @template verbose
 #' @return named character vector, with names being the ICD-9 codes, and the

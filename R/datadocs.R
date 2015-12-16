@@ -213,7 +213,8 @@ NULL
 # will be available, but we don't want CRAN check problems, so:
 # utils::globalVariables(c("%<>%"))
 
-#' @title de-identified data from public Vermont source for 2013
+#' @description Hospital discharge data from Vermont
+#' @title De-identified data from public Vermont source for 2013
 #' @name vermont_dx
 #' @details Conditions of Release Release of public use data is subject to the
 #'   following conditions, which the requestor agrees to upon accepting copies
@@ -243,6 +244,7 @@ NULL
 NULL
 
 #' @title United States Transuranium & Uranium Registries
+#' @description an ICD-10 data set (not ICD-10-CM) with mortality from the United States Transuranium & Uranium Registries, published in the public domain.
 #' @name uranium_pathology
 #' @source \url{http://www.ustur.wsu.edu/database/}
 #' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}

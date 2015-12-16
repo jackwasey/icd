@@ -219,18 +219,21 @@ randomMajorCpp <- function(n) {
 }
 
 #' @title generate random short-form numeric icd9 codes
+#' @description Generate a character vector of random short-form ICD-9 numeric codes
 #' @keywords internal
 icd9RandomShortN <- function(n = 5L) {
     .Call('icd9_icd9RandomShortN', PACKAGE = 'icd9', n)
 }
 
 #' @title generate random short-form icd9 V codes
+#' @description Generate a character vector of random short-form ICD-9 V codes
 #' @keywords internal
 icd9RandomShortV <- function(n = 5L) {
     .Call('icd9_icd9RandomShortV', PACKAGE = 'icd9', n)
 }
 
 #' @title generate random short-form icd9 E codes
+#' @description Generate a character vector of random short-form ICD-9 E codes
 #' @keywords internal
 icd9RandomShortE <- function(n = 5L) {
     .Call('icd9_icd9RandomShortE', PACKAGE = 'icd9', n)
@@ -243,8 +246,8 @@ icd9RandomShort <- function(n = 5L) {
     .Call('icd9_icd9RandomShort', PACKAGE = 'icd9', n)
 }
 
-#' @rdname fastIntToString
 #' @title fast convert integer vector to character vector
+#' @description Fast conversion from integer vector to character vector using C++
 #' @param x td::vector<int>
 #' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
 #'   No checks done for speed.

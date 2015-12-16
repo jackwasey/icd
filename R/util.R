@@ -236,6 +236,7 @@ get_icd_name <- function(x, icd_name = NULL) {
 getLatestBillableVersion <- function() "32"
 
 #' @title trim null or empty values from a list
+#' @description For a given unnested list, x, return the list without any NA or NULL elements.
 #' @param x list
 #' @return trimmed list
 #' @keywords internal
@@ -250,6 +251,7 @@ listTrimFlat  <-  function(x) {
 }
 
 #' @title swap names and values of a vector
+#' @description swap names and values of a vector
 #' @param x named vector
 #' @return vector
 #' @keywords internal

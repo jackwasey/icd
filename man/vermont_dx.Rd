@@ -3,10 +3,13 @@
 \docType{data}
 \name{vermont_dx}
 \alias{vermont_dx}
-\title{de-identified data from public Vermont source for 2013}
+\title{De-identified data from public Vermont source for 2013}
 \format{CSV original, minimally processed into R data frame.}
 \source{
 \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
+}
+\description{
+Hospital discharge data from Vermont
 }
 \details{
 Conditions of Release Release of public use data is subject to the

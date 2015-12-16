@@ -122,6 +122,7 @@ icd_guess_version.data.frame <- function(x, icd_name = get_icd_name(x)) {
 }
 
 #' @title Guess version of ICD and update class
+#' @description Guesses the version of given ICD codes and sets the class of the returned data according to the guess.
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
 icd_guess_version_update <- function(x) {
@@ -130,6 +131,7 @@ icd_guess_version_update <- function(x) {
 }
 
 #' @title Guess short vs decimal of ICD and update class
+#' @description Guesses whether the given ICD codes are short or long format, and set the class of the returned data according to the guess.
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
 icd_guess_short_update <- function(x, icd_name = get_icd_name(x)) {

@@ -12,5 +12,8 @@ listTrimFlat(x)
 \value{
 trimmed list
 }
+\description{
+For a given unnested list, x, return the list without any NA or NULL elements.
+}
 \keyword{internal}
 
