@@ -230,6 +230,9 @@ icd_map <- function(x) {
 #' extract elements of an ICD comorbidity map
 #'
 #' Equivalent to a list, but preserves class of extracted elements
+#' @param x \code{icd_map} object
+#' @param index index element to index
+#' @param ... arguments to pass to \code{list.[}
 #' @export
 `[.icd_map` <- function(x, index, ...) {
   new_classes <- class(x)
@@ -243,6 +246,9 @@ icd_map <- function(x) {
 #' extract vector of codes from an ICD comorbidity map
 #'
 #' Equivalent to a list, but preserves class of extracted vector
+#' @param x \code{icd_map} object
+#' @param index index element to index
+#' @param ... arguments to pass to \code{list.[[}
 #' @export
 `[[.icd_map` <- function(x, index, ...) {
   new_classes <- class(x)

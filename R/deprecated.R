@@ -263,35 +263,35 @@ icd9FilterInvalid <- function(icd9df, icd9Field = NULL, isShort = NULL, invert =
 #' @export
 icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
   .Deprecated("icd_filter_poa")
-  icd_filter_poa(icd_df = icd9df, poa_name = poaField, poa = poa)
+  icd_filter_poa(x = icd9df, poa_name = poaField, poa = poa)
 }
 
 #' @rdname icd_filter
 #' @export
 icd9FilterPoaYes <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_yes")
-  icd_filter_poa_yes(icd_df = icd9df, poa_name = poaField)
+  icd_filter_poa_yes(x = icd9df, poa_name = poaField)
 }
 
 #' @rdname icd_filter
 #' @export
 icd9FilterPoaNo <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_no")
-  icd_filter_poa_no(icd_df = icd9df, poa_name = poaField)
+  icd_filter_poa_no(x = icd9df, poa_name = poaField)
 }
 
 #' @rdname icd_filter
 #' @export
 icd9FilterPoaNotNo <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_not_no")
-  icd_filter_poa_not_no(icd_df = icd9df, poa_name = poaField)
+  icd_filter_poa_not_no(x = icd9df, poa_name = poaField)
 }
 
 #' @rdname icd_filter
 #' @export
 icd9FilterPoaNotYes <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_not_yes")
-  icd_filter_poa_not_yes(icd_df = icd9df, poa_name = poaField)
+  icd_filter_poa_not_yes(x = icd9df, poa_name = poaField)
 }
 
 

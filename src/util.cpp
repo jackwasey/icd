@@ -194,6 +194,8 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   }
   return out;
 }
+
+//' @rdname fastIntToString
 //' @title fast convert integer vector to character vector
 //' @description Fast conversion from integer vector to character vector using C++
 //' @param x td::vector<int>

@@ -246,6 +246,7 @@ icd9RandomShort <- function(n = 5L) {
     .Call('icd9_icd9RandomShort', PACKAGE = 'icd9', n)
 }
 
+#' @rdname fastIntToString
 #' @title fast convert integer vector to character vector
 #' @description Fast conversion from integer vector to character vector using C++
 #' @param x td::vector<int>

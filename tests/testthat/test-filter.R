@@ -29,11 +29,11 @@ test_that("filter POA - no poa field", {
 })
 
 test_that("filter POA - generic func - invalid poa type", {
-  expect_error(icd9FilterPoa(icd9df = simplePoaPatients,
+  expect_error(icd9FilterPoa(x = simplePoaPatients,
                              poaField = "poa", poa = "not an option"))
-  expect_error(icd9FilterPoa(icd9df = simplePoaPatients,
+  expect_error(icd9FilterPoa(x = simplePoaPatients,
                              poaField = "poa", poa = ""))
-  expect_error(icd9FilterPoa(icd9df = simplePoaPatients,
+  expect_error(icd9FilterPoa(x = simplePoaPatients,
                              poaField = "poa", poa = NA))
 })
 

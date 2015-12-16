@@ -6,6 +6,13 @@
 \usage{
 \method{[[}{icd_map}(x, index, ...)
 }
+\arguments{
+\item{x}{\code{icd_map} object}
+
+\item{index}{index element to index}
+
+\item{...}{arguments to pass to \code{list.[[}}
+}
 \description{
 Equivalent to a list, but preserves class of extracted vector
 }
