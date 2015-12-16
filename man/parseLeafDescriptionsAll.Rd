@@ -7,7 +7,7 @@
 http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 }
 \usage{
-parseLeafDescriptionsAll(save = FALSE, fromWeb = FALSE, verbose = FALSE)
+parseLeafDescriptionsAll(save = FALSE, fromWeb = FALSE)
 }
 \arguments{
 \item{save}{single logical value, if \code{TRUE} the source text or CSV file

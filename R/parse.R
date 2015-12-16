@@ -20,7 +20,7 @@
 # data_sources is defined in this file and saved in sysdata.rda
 utils::globalVariables(c(".", "data_sources"))
 
-parseEverythingAndSave <- function(verbose = TRUE) {
+parseEverythingAndSave <- function() {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from
@@ -28,27 +28,27 @@ parseEverythingAndSave <- function(verbose = TRUE) {
   loadNamespace("devtools")
   generateSysData()
   devtools::load_data(pkg = ".") # reload the newly saved data
-  parseAndSaveQuick(verbose = verbose)
+  parseAndSaveQuick()
   devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9BuildChaptersHierarchy(save = TRUE, verbose = verbose) # depends on icd9Billable
+  icd9BuildChaptersHierarchy(save = TRUE) # depends on icd9Billable
 
 }
 
 #' @title parse almost everything
 #' @keywords internal
-parseAndSaveQuick <- function(verbose = TRUE) {
+parseAndSaveQuick <- function() {
   loadNamespace("devtools")
-  if (verbose) message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
+  message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
   devtools::load_data(pkg = ".")
 
   # plain text billable codes
-  if (verbose) message("Parsing plain text billable codes to create icd9Billable list of
+  message("Parsing plain text billable codes to create icd9Billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
-  parseLeafDescriptionsAll(save = TRUE, verbose = verbose)
+  parseLeafDescriptionsAll(save = TRUE)
   devtools::load_data(pkg = ".")
 
-  if (verbose) message("Parsing comorbidity mappings from SAS and text sources.
+  message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
                        Depends on icd9Hierarchy being updated.")
   parseAhrqSas(save = TRUE)
@@ -76,13 +76,13 @@ parseAndSaveQuick <- function(verbose = TRUE) {
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FALSE) {
+parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE) {
   versions <- data_sources$version
-  if (verbose) message("Available versions of sources are: ", paste(versions, collapse = ", "))
+  message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9Billable <- list()
   for (v in versions)
     icd9Billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
-                                                      fromWeb = fromWeb, verbose = verbose)
+                                                      fromWeb = fromWeb)
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save) save_in_data_dir("icd9Billable")
@@ -104,18 +104,16 @@ parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FA
 #' @return invisibly return the result
 #' @keywords internal
 parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
-                                         fromWeb = FALSE, verbose = FALSE) {
+                                         fromWeb = FALSE) {
   assertString(version)
   assertFlag(save)
   assertFlag(fromWeb)
-  assertFlag(verbose)
 
-  if (verbose) message("Fetching billable codes version: ", version)
+  message("Fetching billable codes version: ", version)
 
   if (version == "27")
     return(invisible(parseIcd9LeafDescriptions27(save = save,
-                                                 fromWeb = fromWeb,
-                                                 verbose = verbose)))
+                                                 fromWeb = fromWeb)))
   stopifnot(version %in% data_sources$version)
   dat <- data_sources[data_sources$version == version, ]
   url <- dat$url
@@ -132,12 +130,10 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
     path_long <- system.file("data-raw", fn_long, package = get_pkg_name())
   }
 
-  if (verbose) {
     message("short filename = ", fn_short, "\n long filename = ", fn_long)
     message("short path = ", path_short, "\n long path = ", path_long)
-  }
 
-  checkmate::assertPathForOutput(path_short, overwrite = TRUE)
+  assertPathForOutput(path_short, overwrite = TRUE)
 
   either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
   if (fromWeb || either_file_missing) {
@@ -185,7 +181,7 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
   # warn as we go:
   oldwarn <- options(warn = 1)
   on.exit(options(oldwarn))
-  if (!is.na(fn_long_orig) && verbose) {
+  if (!is.na(fn_long_orig)) {
     encs <- Encoding(out[["descLong"]])
     message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
     message("non-ASCII rows of long descriptions are: ",
@@ -196,11 +192,10 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
   invisible(out)
 }
 
-parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = FALSE) {
-  if (verbose) message("working on version 27 quirk")
+parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL) {
+  message("working on version 27 quirk")
   assertFlag(save)
   assertFlag(fromWeb)
-  assertFlag(verbose)
   v27 <- data_sources$version == "27"
   fn <- make.names(data_sources[v27, "other_filename"])
   fp <- file.path("data-raw", fn)
@@ -209,7 +204,7 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL, verbose = 
   if (!save && !file.exists(fp))
     fp <- system.file("data-raw", fn, package = get_pkg_name())
 
-  if (verbose) message("v27 file name = '", fn,
+  message("v27 file name = '", fn,
                        "', and path = '", fp,
                        "'. URL = ", url)
 
@@ -331,14 +326,13 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   )
 }
 
-icd9BuildChaptersHierarchy <- function(save = FALSE, verbose = FALSE) {
+icd9BuildChaptersHierarchy <- function(save = FALSE) {
   assertFlag(save)
-  assertFlag(verbose)
 
-  icd9Desc <- parseRtfYear(year = "2011", save = FALSE, verbose = verbose)
+  icd9Desc <- parseRtfYear(year = "2011", save = FALSE, verbose = TRUE)
 
-  if (verbose) message("working on (possibly) slow step of web scrape to build icd9 Chapters Hierarchy.")
-  chaps <- icd9GetChapters(icd9 = icd9Desc$icd9, isShort = TRUE, verbose = verbose)
+  message("working on slow step of web scrape to build icd9 Chapters Hierarchy.")
+  chaps <- icd9GetChapters(icd9 = icd9Desc$icd9, isShort = TRUE, verbose = FALSE)
 
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs
@@ -406,7 +400,7 @@ fixSubchapterNa <- function(x, start, end) {
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
 #' quick, but much too slow when it appears many times in a loop.
 #' @keywords internal
-generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE, verbose = FALSE) {
+generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE) {
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
     icd9NShort <- c(icd9NShort, sort(icd9ChildrenShort(i, onlyReal = FALSE)))
@@ -501,7 +495,6 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
   )
 
   # minimal data_source validation
-  if (verbose)  {
     long_fns <- data_sources[["long_filename"]]
     short_fns <- data_sources[["long_filename"]]
     # make.names is stricter than necessary, but no function to sanitize a file
@@ -510,7 +503,6 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
             paste(long_fns[long_fns != make.names(long_fns)]))
     message("non-portable short file names: ",
             paste(short_fns[short_fns != make.names(short_fns)]))
-  }
 
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an

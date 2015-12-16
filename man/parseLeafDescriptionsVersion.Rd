@@ -6,7 +6,7 @@
   Medicaid Services.}
 \usage{
 parseLeafDescriptionsVersion(version = getLatestBillableVersion(),
-  save = FALSE, fromWeb = FALSE, verbose = FALSE)
+  save = FALSE, fromWeb = FALSE)
 }
 \arguments{
 \item{save}{logical whether to attempt to re-save source files in inst}

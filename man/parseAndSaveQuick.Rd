@@ -4,7 +4,7 @@
 \alias{parseAndSaveQuick}
 \title{parse almost everything}
 \usage{
-parseAndSaveQuick(verbose = TRUE)
+parseAndSaveQuick()
 }
 \keyword{internal}
 
