@@ -69,7 +69,10 @@ parseAndSaveQuick <- function(verbose = TRUE) {
 #'   descLong when not available.
 #' @examples
 #'   # To populate the data-raw directory with the ICD-9 source:
+#'   # not included in installed package, run using the full source from github, e.g. using devtools::load_all()
+#'   \dontrun{
 #'   parseLeafDescriptionsAll(save = TRUE, fromWeb = TRUE)
+#'   }
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal

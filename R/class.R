@@ -313,6 +313,8 @@ c.icd10who <- function(...) {
 #' @details TODO:Potential here to use attributes, since we can (as base R does
 #'   in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
 #'   subsetting operation. This would simplify the class system.
+#' @param x object to extract from
+#' @param ... other arguments to pass to next S3 methods
 #' @export
 `[.icd9` <- function(x, ...) {
   #message("[.icd9")

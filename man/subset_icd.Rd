@@ -16,6 +16,11 @@
 
 \method{[[}{icd10}(x, ..., exact = TRUE)
 }
+\arguments{
+\item{x}{object to extract from}
+
+\item{...}{other arguments to pass to next S3 methods}
+}
 \description{
 exactly the same as using x[n] or x[[n]] but preserves the ICD
   classes in result
