@@ -55,10 +55,6 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
-
 \item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
 the short description from the canonical CMS descriptions (included in
 \code{data-raw}) will be used, otherwise the long description is used.}

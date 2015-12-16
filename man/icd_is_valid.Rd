@@ -77,10 +77,6 @@ comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
 "V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
 c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
-
 \item{icd9}{is
 a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
@@ -127,15 +123,7 @@ comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
 "V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
 c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
-
 \item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
-
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 

@@ -17,10 +17,6 @@ icd9InReferenceCode(icd9, icd9Reference, isShort, isShortReference = TRUE)
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
-
 \item{isShortReference}{logical, see argument \code{short_code}}
 
 \item{"icd9, icd9Reference"}{is

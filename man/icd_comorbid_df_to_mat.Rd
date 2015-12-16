@@ -30,8 +30,6 @@ was not specified, then the first column of the data frame is used.}
 \item{stringsAsFactors}{whether the resulting data frame should have strings,
 i.e. visit_name converted to factor. Default is to follow the current session
 option.}
-
-\item{visitId}{Deprecated. Use \code{visit_name}}
 }
 \description{
 convert matrix of comorbidities into data frame, preserving visit_name

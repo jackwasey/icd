@@ -31,8 +31,6 @@ a column of ICD-9 codes. It may have other columns which will be ignored.
 By default, the first column is the patient identifier and is not counted.
 If \code{visit_name} is not specified, the first column is used.}
 
-\item{visitId}{Deprecated. Use \code{visit_name}}
-
 \item{stringsAsFactors}{single logical, passed on when constructing
 data.frame if \code{return_df} is \code{TRUE}. If the input data frame
 \code{x} has a factor for the visit_name, this is not changed, but a

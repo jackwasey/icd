@@ -51,8 +51,6 @@ with a field for the visit_name. This may be more convenient, but the default
 of \code{FALSE} gives the more natural return data of a matrix with
 rownames being the visit_names.}
 
-\item{visitId}{Deprecated. Use \code{visit_name}}
-
 \item{icd9Field}{Deprecated. Use \code{icd_name}}
 }
 \description{

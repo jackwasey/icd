@@ -15,8 +15,6 @@ for each column. By default, the first column is the patient identifier and
 is not counted. If \code{visit_name} is not specified, the first column is
 used.}
 
-\item{visitId}{Deprecated. Use \code{visit_name}}
-
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
 patients come leave and enter hospital with different ICD-9 codes. It is a

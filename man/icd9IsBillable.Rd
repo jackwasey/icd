@@ -40,10 +40,6 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
-
 \item{version}{single character string, default is "32" which is the latest
 release from CMS. Currently anything from "23" to "32" is accepted. Not
 numeric because there are possible cases with non-numeric names, e.g.

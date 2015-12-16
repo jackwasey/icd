@@ -27,8 +27,6 @@ many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visitId}
 was not specified, then the first column of the data frame is used.}
 
-\item{visitId}{Deprecated. Use \code{visit_name}}
-
 \item{icdLabels}{vector of column names in which codes are found. If NULL,
 all columns matching icd or ICD will be included.}
 

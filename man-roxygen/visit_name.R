@@ -8,4 +8,3 @@
 #'   many matching fields, so to avoid false positives, anything but a single
 #'   match is rejected. If there are no successful guesses, and \code{visitId}
 #'   was not specified, then the first column of the data frame is used.
-#' @param visitId Deprecated. Use \code{visit_name}

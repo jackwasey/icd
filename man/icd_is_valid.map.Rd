@@ -17,10 +17,6 @@ c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 \item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
-
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
 }
 \description{
 takes each item in each vector of the list of vectors and checks

@@ -31,18 +31,18 @@ icd9FilterPoaNotNo(icd9df, poaField = "poa")
 
 icd9FilterPoaNotYes(icd9df, poaField = "poa")
 
-icd_filter_poa(icd_df, poa_name = "poa", poa = icd9PoaChoices)
+icd_filter_poa(x, poa_name = "poa", poa = icd9PoaChoices)
 
-icd_filter_poa_yes(icd_df, poa_name = "poa")
+icd_filter_poa_yes(x, poa_name = "poa")
 
-icd_filter_poa_no(icd_df, poa_name = "poa")
+icd_filter_poa_no(x, poa_name = "poa")
 
-icd_filter_poa_not_no(icd_df, poa_name = "poa")
+icd_filter_poa_not_no(x, poa_name = "poa")
 
-icd_filter_poa_not_yes(icd_df, poa_name = "poa")
+icd_filter_poa_not_yes(x, poa_name = "poa")
 }
 \arguments{
-\item{icd9df}{Deprecated. Use \code{icd_df}}
+\item{icd9df}{Deprecated. Use \code{x}}
 
 \item{poaField}{Deprecated. Use poa_name}
 
@@ -53,13 +53,15 @@ simple binary, since many codes are exempt, unspecified, or unknown.
 intermediate codes, such as "exempt", "unknown" and \code{NA} mean that
 "yes" is not the same as "not no."}
 
+\item{x}{data frame containing columns for visitId (which is the feault
+name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
+
 \item{poa_name}{The name of column in the data frame which contains the
 Present On Arrival flag. The flag itself is a single character, typically
 one of "Y", "N", "E", "X", "U" or empty. The poaField is a character vector
 of length one.}
 
-\item{x}{data frame containing columns for visitId (which is the feault
-name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
+\item{icd_df}{Deprecated. Use \code{x}}
 }
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes
