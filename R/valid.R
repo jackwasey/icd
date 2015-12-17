@@ -422,8 +422,7 @@ icd_is_valid.icd10who <- function(x, short_code = icd_guess_short.icd10(x)) {
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for testing 'realness'
   # start with a broad regex
 
-  icd %>%
-    stringr::str_trim() %>%
-    stringr::str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
+  str_trim(x) %>%
+    str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
 
 }

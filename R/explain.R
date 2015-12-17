@@ -51,11 +51,11 @@ icd_explain <- function(...)
 
 #' @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
 #' @export
-icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE) {
-  guess <- icd_guess_version.character(x, short_code = short_code, ...)
+icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+  guess <- icd_guess_version.character(x, short_code = short_code)
   if (guess == "icd9") {
     if (is.null(short_code)) short_code <- icd_guess_short.icd9(x)
-    icd_explain.icd9(x = x, short_code = short_code, condense = condense, brief = brief, warn = warn)
+    icd_explain.icd9(x = x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...)
   } else if (guess == "icd10") {
     if (is.null(short_code)) short_code <- icd_guess_short.icd10(x)
     stop("icd_explain.icd10 not implemented yet")
