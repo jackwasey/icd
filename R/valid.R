@@ -351,14 +351,14 @@ icd_is_major.icd10 <- function(x) {
 #' @keywords internal
 icd_is_major.icd10cm <- function(x) {
   assertCharacter(x)
-  stringr::str_detect(icd, "^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]*$")
+  stringr::str_detect(x, "^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]*$")
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 WHO major
 #' @keywords internal
 icd_is_major.icd10who <- function(x) {
   assertCharacter(x)
-  stringr::str_detect(icd, "^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]][[:space:]]*$")
+  stringr::str_detect(x, "^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]][[:space:]]*$")
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-9 major
@@ -416,7 +416,7 @@ warnNumericCode <- function()
 #'   sanctioned extensions which use additional digits, e.g. neurology,
 #'   pediatrics, and of course ICD-10-CM.
 #' @export
-icd_is_valid.icd10who <- function(icd, short_code = icd_guess_short.icd10(x)) {
+icd_is_valid.icd10who <- function(x, short_code = icd_guess_short.icd10(x)) {
   assertCharacter(x)
   assertFlag(short_code)
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for testing 'realness'

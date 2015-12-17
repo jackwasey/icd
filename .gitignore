@@ -12,6 +12,7 @@ configure.scan
 .externalToolBuilders
 i9test.RData
 icd9_*.tar.gz
+inst/doc/*
 *.o
 .project
 .RData
