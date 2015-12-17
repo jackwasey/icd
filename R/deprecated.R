@@ -101,7 +101,7 @@ icd9Comorbid <- function(icd9df,
                          return.df = FALSE, ...) {
   .Deprecated("icd_comorbid")
   icd_comorbid.icd9(x = icd9df, map = icd9Mapping, visit_name = visitId, icd_name = icd9Field,
-               short_code = isShort, short_map = isShortMapping, return_df = return.df, ...)
+                    short_code = isShort, short_map = isShortMapping, return_df = return.df, ...)
 }
 
 #' @rdname icd_comorbid
@@ -128,9 +128,9 @@ icd9ComorbidElix <- function(icd9df,
                              return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   .Deprecated("icd_comorbid_elix")
   icd_comorbid_elix.icd9(icd9df,visit_name = visitId,
-                    icd_name = icd9Field, short_code = isShort,
-                    abbrev_names = abbrevNames,
-                    hierarchy = applyHierarchy, return_df = return.df,...)
+                         icd_name = icd9Field, short_code = isShort,
+                         abbrev_names = abbrevNames,
+                         hierarchy = applyHierarchy, return_df = return.df,...)
 }
 
 #' @rdname icd_comorbid
@@ -690,7 +690,7 @@ icd9LongToWide <- function(icd9df,
                            return.df = FALSE) {
   .Deprecated("icd_long_to_wide")
   icd_long_to_wide(x = icd9df, visit_name = visitId, icd_name = icd9Field, prefix = prefix,
-    min_width = min.width, aggr = aggregate, return_df = return.df)
+                   min_width = min.width, aggr = aggregate, return_df = return.df)
 }
 
 #' @rdname icd_wide_to_long
@@ -791,3 +791,71 @@ icd9CountComorbidBin <- function(x, visitId = get_visit_name(x), return.df = FAL
   icd_count_comorbid(x, visit_name = visitId, return_df = return.df)
 }
 
+#' @rdname icd_is_billable
+#' @export
+icd9IsBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                           version = getLatestBillableVersion()) {
+  .Deprecated("icd_is_billable")
+  icd_is_billable.icd9(x = icd9, short_code = isShort, version = version)
+}
+
+#' @rdname icd_is_billable
+#' @export
+icd9IsBillableShort <- function(icd9Short, version = getLatestBillableVersion())
+  icd_is_billable.icd9(icd9Short, short_code = TRUE, version)
+
+#' @rdname icd_is_billable
+#' @export
+icd9IsBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersion())
+  icd_is_billable.icd9(icd9Decimal, short_code = FALSE, version)
+
+#' @rdname icd_get_billable
+#' @export
+icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                            invert = FALSE, version = getLatestBillableVersion()) {
+  assertVector(icd9)
+  assertFlag(isShort)
+  assertFlag(invert)
+  assertString(version)
+  if (isShort)
+    return(icd9[icd9IsBillableShort(icd9, version = version) != invert])
+  icd9[icd9IsBillableDecimal(icd9, version = version) != invert]
+}
+
+#' @rdname icd_get_billable
+#' @export
+icd9GetBillableShort <- function(icd9Short, version = getLatestBillableVersion()) {
+  .Deprecated("icd_get_billable")
+  icd_get_billable.icd9(icd9Short, short_code = TRUE, version = version)
+}
+
+
+#' @rdname icd_get_billable
+#' @export
+icd9GetBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersion()) {
+  .Deprecated("icd_get_billable")
+  icd_get_billable.icd9(icd9Decimal, short_code = FALSE, version = version)
+}
+
+#' @rdname icd_get_billable
+#' @export
+icd9GetNonBillableShort <- function(icd9Short, version = getLatestBillableVersion()) {
+  .Deprecated("icd_get_billable")
+  icd_get_billable.icd9(icd9Short, short_code = TRUE, invert = TRUE, version = version)
+}
+
+
+#' @rdname icd_get_billable
+#' @export
+icd9GetNonBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersion()) {
+  .Deprecated("icd_get_billable")
+icd_get_billable.icd9(icd9Decimal, short_code = FALSE, invert = TRUE, version = version)
+}
+
+#' @rdname icd_get_billable
+#' @export
+icd9GetNonBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                               version = getLatestBillableVersion()) {
+  .Deprecated("icd_get_billable")
+  icd_get_billable.icd9(icd9, short_code = isShort, invert = TRUE, version = version)
+}
