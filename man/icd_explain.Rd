@@ -35,18 +35,18 @@ icd_explain(...)
   brief = FALSE, warn = TRUE)
 
 \method{icd_explain}{list}(x, short_code = icd_guess_short(x),
-  condense = TRUE, brief = FALSE, warn = TRUE)
+  condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
 \method{icd_explain}{factor}(icd9, short_code = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = TRUE)
+  condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
 \method{icd_explain}{icd9}(...)
 
 \method{icd_explain}{icd9cm}(x, short_code = icd_guess_short.icd9(x),
-  condense = TRUE, brief = FALSE, warn = TRUE)
+  condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
 \method{icd_explain}{numeric}(icd9, short_code = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = FALSE)
+  condense = TRUE, brief = FALSE, warn = FALSE, ...)
 }
 \arguments{
 \item{icd9}{is

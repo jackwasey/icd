@@ -4,19 +4,19 @@
 \alias{icd_is_valid.map}
 \title{validate an icd9 mapping to comorbidities}
 \usage{
-\method{icd_is_valid}{map}(map, short_code)
+\method{icd_is_valid}{map}(x, short_code, ...)
 }
 \arguments{
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
 \item{map}{named list containing vectors of icd9 codes. E.g. the AHRQ ICD-9
 comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
 "27803", "V8554", "79391", "64910", "64911", "64912", "64913", "64914",
 "V8530", "V8531", "V8532", "V8533", "V8534", "V8535", "V8536", "V8537",
 "V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
 c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
-
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
 }
 \description{
 takes each item in each vector of the list of vectors and checks

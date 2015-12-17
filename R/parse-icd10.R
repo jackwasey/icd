@@ -103,9 +103,8 @@ icd10cm_get_all_real <- function(save = TRUE) {
 #' @keywords internal
 scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
   #library("RJSONIO") # this seems to avoid a lot of errors?
-  library("RSelenium")
-  library("magrittr")
-  library("xml2")
+  loadNamespace("RSelenium")
+  loadNamespace("xml2")
 
   if (debug)
     RSelenium::startServer(invisible = FALSE, log = FALSE)

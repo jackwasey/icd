@@ -14,7 +14,7 @@ icd_children(x, ...)
 \method{icd_children}{character}(x, ...)
 
 \method{icd_children}{icd9}(x, short_code = icd_guess_short(x), real = TRUE,
-  billable = FALSE)
+  billable = FALSE, ...)
 
 icd9Children(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE,
   onlyBillable = FALSE)

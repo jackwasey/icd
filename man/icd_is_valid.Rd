@@ -59,15 +59,15 @@ icd9IsValidDecimalV(icd9Decimal)
 
 icd9IsValidDecimalE(icd9Decimal)
 
-icd_is_valid(icd, ...)
+icd_is_valid(x, ...)
 
-\method{icd_is_valid}{icd10}(icd, short_code = icd_guess_short(icd))
+\method{icd_is_valid}{icd10}(x, short_code = icd_guess_short(x), ...)
 
-\method{icd_is_valid}{icd9}(x, short_code)
+\method{icd_is_valid}{icd9}(x, short_code = icd_guess_short.icd9(x), ...)
 
-\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x))
+\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x), ...)
 
-\method{icd_is_valid}{icd10who}(icd, short_code = icd_guess_short.icd10(icd))
+\method{icd_is_valid}{icd10who}(icd, short_code = icd_guess_short.icd10(x))
 }
 \arguments{
 \item{icd9Mapping}{named list containing vectors of icd9 codes. E.g. the AHRQ
@@ -88,12 +88,12 @@ characters is given in a code, then the digits are greedily assigned to
 hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
-\item{icd}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
-\code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
-
 \item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
+
+\item{icd}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
+\code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
 
 \item{icd9Mapping}{named list containing vectors of icd9 codes. E.g. the AHRQ
 comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",

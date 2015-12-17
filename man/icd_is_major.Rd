@@ -8,13 +8,13 @@
 \alias{icd_is_major.icd9}
 \title{check whether a code is major}
 \usage{
-icd_is_major(icd)
+icd_is_major(x)
 
-\method{icd_is_major}{icd10}(icd)
+\method{icd_is_major}{icd10}(x)
 
-\method{icd_is_major}{icd10cm}(icd)
+\method{icd_is_major}{icd10cm}(x)
 
-\method{icd_is_major}{icd10who}(icd)
+\method{icd_is_major}{icd10who}(x)
 
 \method{icd_is_major}{icd9}(x)
 }

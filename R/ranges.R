@@ -51,8 +51,8 @@
 #' @family ICD-9 ranges
 #' @export
 icd_expand_range <- function(start, end, ...) {
-  checkmate::assertScalar(start) # i'll permit numeric but prefer char
-  checkmate::assertScalar(end)
+  assertScalar(start) # i'll permit numeric but prefer char
+  assertScalar(end)
   UseMethod("icd_expand_range")
 }
 
@@ -89,7 +89,7 @@ icd_expand_range.character <- function(start, end, short_code = NULL, real = TRU
 #' @param end  character vector of length one containing a real code
 #' @keywords internal
 icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.icd10(c(start, end)),
-                                     real = TRUE) {
+                                     real = TRUE, ...) {
   if (!real)
     stop("expanding ranges of possible (versus real) ICD-10-CM codes is not yet implemented.
          It will produce a very large number of codes because of permutations.")
@@ -180,7 +180,8 @@ icd_expand_range.icd9 <- function(start, end,
                                   short_code = icd_guess_short.icd9(c(start, end)),
                                   real = TRUE,
                                   excludeAmbiguousStart = TRUE,
-                                  excludeAmbiguousEnd = TRUE) {
+                                  excludeAmbiguousEnd = TRUE, 
+                                  ...) {
   if (short_code)
     icd9_expand_range_short(start, end, real,
                             excludeAmbiguousStart,

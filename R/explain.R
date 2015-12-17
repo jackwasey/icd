@@ -52,7 +52,7 @@ icd_explain <- function(...)
 #' @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
 #' @export
 icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE) {
-  guess <- icd_guess_version.character(x, short_code = short_code)
+  guess <- icd_guess_version.character(x, short_code = short_code, ...)
   if (guess == "icd9") {
     if (is.null(short_code)) short_code <- icd_guess_short.icd9(x)
     icd_explain.icd9(x = x, short_code = short_code, condense = condense, brief = brief, warn = warn)
@@ -67,7 +67,7 @@ icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief =
 #' @describeIn icd_explain Explain all ICD-9 codes in a list of vectors
 #' @export
 icd_explain.list <- function(x,  short_code = icd_guess_short(x),
-                             condense = TRUE, brief = FALSE, warn = TRUE) {
+                             condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   lapply(x, icd_explain, short_code = short_code,
          condense = condense, brief = brief, warn = warn)
 }
@@ -75,7 +75,7 @@ icd_explain.list <- function(x,  short_code = icd_guess_short(x),
 #' @describeIn icd_explain explain Explain factor of ICD-9 codes
 #' @export
 icd_explain.factor <- function(icd9, short_code = icd_guess_short(icd9),
-                               condense = TRUE, brief = FALSE, warn = TRUE)
+                               condense = TRUE, brief = FALSE, warn = TRUE, ...)
   icd_explain.character(asCharacterNoWarn(icd9), short_code = short_code,
                         condense = condense, brief = brief, warn = warn)
 
@@ -87,7 +87,7 @@ icd_explain.icd9 <- function(...)
 #' @describeIn icd_explain explain character vector of ICD-9-CM codes
 #' @export
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
-                                  condense = TRUE, brief = FALSE, warn = TRUE) {
+                                  condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assertCharacter(x)
   assertFlag(short_code)
   assertFlag(condense)
@@ -125,7 +125,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
 #'   avoid typing many quotes.
 #' @export
 icd_explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
-                                condense = TRUE, brief = FALSE, warn = FALSE) {
+                                condense = TRUE, brief = FALSE, warn = FALSE, ...) {
   warnNumericCode()
   icd_explain.character(as.character(icd9), short_code = short_code, condense = condense, brief = brief, warn = warn)
 }

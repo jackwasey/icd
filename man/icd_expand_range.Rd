@@ -36,7 +36,7 @@ icd_expand_range(start, end, ...)
 
 \method{icd_expand_range}{icd9}(start, end,
   short_code = icd_guess_short.icd9(c(start, end)), real = TRUE,
-  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
+  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE, ...)
 
 icd9_expand_range_short(start, end, real = TRUE,
   excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)

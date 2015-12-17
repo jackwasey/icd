@@ -39,8 +39,11 @@ Suggests:
     digest,
     xtable,
     rmarkdown,
+    RODBC,
     roxygen2 (>= 5.0.0),
-    readr
+    readr,
+    RSelenium,
+    xml2
 LazyData: true
 LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues

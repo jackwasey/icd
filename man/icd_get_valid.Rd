@@ -20,15 +20,15 @@ icd9GetValidShort(icd9Short)
 
 icd9GetInvalid(icd9, isShort = icd_guess_short(icd9))
 
-icd_get_valid(icd, short_code = icd_guess_short(icd))
+icd_get_valid(x, short_code = icd_guess_short(x))
 
-\method{icd_get_valid}{character}(icd, short_code = icd_guess_short(icd))
+\method{icd_get_valid}{character}(x, short_code = icd_guess_short(x))
 
-\method{icd_get_valid}{icd9}(icd, short_code = icd_guess_short(icd))
+\method{icd_get_valid}{icd9}(x, short_code = icd_guess_short(x))
 
-\method{icd_get_valid}{icd10}(icd, short_code = icd_guess_short(icd))
+\method{icd_get_valid}{icd10}(x, short_code = icd_guess_short(x))
 
-\method{icd_get_valid}{icd10cm}(icd, short_code = icd_guess_short(icd))
+\method{icd_get_valid}{icd10cm}(x, short_code = icd_guess_short(x))
 }
 \arguments{
 \item{icd9}{is

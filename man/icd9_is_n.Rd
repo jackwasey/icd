@@ -15,11 +15,11 @@ icd9IsV(icd9)
 
 icd9IsE(icd9)
 
-icd9_is_n(icd9)
+icd9_is_n(x)
 
-icd9_is_v(icd9)
+icd9_is_v(x)
 
-icd9_is_e(icd9)
+icd9_is_e(x)
 }
 \arguments{
 \item{icd9}{is
