@@ -128,7 +128,7 @@ icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
 # TODO: consider geteting rid of all these:
 
 #' Check whether ICD-9 code(s) is/are billable
-#' 
+#'
 #' Tests ICD-9 codes to see whether they are leaf nodes inthe ICD-9-CM hierarchy
 #' @keywords internal
 icd9cm_is_billable <- function(x, version = getLatestBillableVersion()) {
@@ -144,6 +144,30 @@ icd9cm_is_billable.short_code <- function(x, version = getLatestBillableVersion(
 #'   codes in the hierarchy?
 icd9cm_is_billable.decimal_code <- function(x, version = getLatestBillableVersion())
   icd_is_billable.icd9(x, short_code = FALSE, version)
+
+
+#' @title Get billable ICD codes
+#' @description Get billable ICD codes, implicitly, this refers to an ICD
+#'   implementation which is specialized for a country, typically for billing,
+#'   e.g. ICD-9-CM in the USA.
+#' @export
+icd_get_billable <- function(...) {
+  UseMethod("icd_get_billable")
+}
+
+#' @describeIn icd_get_billable
+icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
+                                    invert = FALSE, version = getLatestBillableVersion(), ...) {
+  if (short_code)
+    icd9cm_get_billable.short_code(x = x, short_code = short_code, invert = invert, version = version)
+  else
+    icd9cm_get_billable.decimal_code(x = x, short_code = short_code, invert = invert, version = version)
+}
+
+#' @describeIn icd_get_billable
+icd_get_billable.icd9 <- function(...) {
+  icd_get_billable.icd9cm(...)
+}
 
 #' @title Get billable ICD-9-CM codes
 #' @description icd9_is_billable Return only those codes which are leaf (billable)
