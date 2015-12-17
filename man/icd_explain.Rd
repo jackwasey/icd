@@ -32,7 +32,7 @@ icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
 icd_explain(...)
 
 \method{icd_explain}{character}(x, short_code = NULL, condense = TRUE,
-  brief = FALSE, warn = TRUE)
+  brief = FALSE, warn = TRUE, ...)
 
 \method{icd_explain}{list}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)

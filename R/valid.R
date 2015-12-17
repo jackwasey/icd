@@ -416,7 +416,7 @@ warnNumericCode <- function()
 #'   sanctioned extensions which use additional digits, e.g. neurology,
 #'   pediatrics, and of course ICD-10-CM.
 #' @export
-icd_is_valid.icd10who <- function(x, short_code = icd_guess_short.icd10(x)) {
+icd_is_valid.icd10who <- function(x, short_code = icd_guess_short.icd10(x), ...) {
   assertCharacter(x)
   assertFlag(short_code)
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for testing 'realness'

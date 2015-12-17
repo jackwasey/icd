@@ -367,7 +367,7 @@ icd_sort <- function(x, ...)
 #' @describeIn icd_sort Sort ICD-10 codes, note that setting \code{short} is
 #'   unnecessary and ignored.
 #' @export
-icd_sort.icd10 <- function(x, short_code = NULL) {
+icd_sort.icd10 <- function(x, short_code = NULL, ...) {
   # ignore short, it doesn't matter
   sort(x)
 }
@@ -375,7 +375,7 @@ icd_sort.icd10 <- function(x, short_code = NULL) {
 #' @describeIn icd_sort sort ICD-9 codes respecting numeric, then V, then E
 #'   codes, and accounting for leading zeroes
 #' @export
-icd_sort.icd9 <- function(x, short_code = icd_guess_short(x)) {
+icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   assert(checkFactor(x), checkCharacter(x))
   assertFlag(short_code)
 

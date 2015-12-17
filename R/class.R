@@ -263,6 +263,7 @@ icd_map <- function(x) {
 #' @name combine
 #' @description These function implement combination of lists or vectors of
 #'   codes, while preserving ICD classes.
+#' @param ... argmuents to cmbine, as in R base function \code{c}
 #' @export
 c.icd9 <- function(...) {
   args <- list(...)

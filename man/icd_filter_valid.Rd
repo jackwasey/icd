@@ -12,10 +12,10 @@ icd_filter_valid(...)
 icd_filter_invalid(...)
 
 \method{icd_filter_valid}{icd9}(x, icd_name = NULL, short_code = NULL,
-  invert = FALSE)
+  invert = FALSE, ...)
 
 \method{icd_filter_invalid}{icd9}(x, icd_name = NULL, short_code = NULL,
-  invert = FALSE)
+  invert = FALSE, ...)
 }
 \arguments{
 \item{x}{data frame containing columns for visitId (which is the feault

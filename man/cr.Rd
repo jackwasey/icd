@@ -2,12 +2,15 @@
 % Please edit documentation in R/comorbid.R
 \name{cr}
 \alias{cr}
-\title{get sequence of column indices of comorbidities}
+\title{sequence columns of comorbidities}
 \usage{
-cr(cbd)
+cr(x)
 }
 \arguments{
 \item{cbd}{matrix or data.frame of comorbidities}
+}
+\description{
+Get sequence of column indices of comorbidity data rame
 }
 \keyword{internal}
 

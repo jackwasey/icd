@@ -11,15 +11,15 @@
 \usage{
 icd9IsReal(icd9, isShort = icd_guess_short(icd9), onlyBillable = FALSE)
 
-icd9IsRealShort(icd9Short, onlyBillable = FALSE)
+icd9IsRealShort(x, onlyBillable = FALSE)
 
-icd9IsRealDecimal(icd9Decimal, onlyBillable = FALSE)
+icd9IsRealDecimal(x, onlyBillable = FALSE)
 
-icd9GetReal(icd9, isShort = icd_guess_short(icd9), onlyBillable = FALSE)
+icd9GetReal(x, isShort = icd_guess_short(x), onlyBillable = FALSE)
 
-icd9GetRealShort(icd9Short, onlyBillable = FALSE)
+icd9GetRealShort(x, onlyBillable = FALSE)
 
-icd9GetRealDecimal(icd9Decimal, onlyBillable = FALSE)
+icd9GetRealDecimal(x, onlyBillable = FALSE)
 }
 \arguments{
 \item{icd9}{is

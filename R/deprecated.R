@@ -690,7 +690,7 @@ icd9LongToWide <- function(icd9df,
                            return.df = FALSE) {
   .Deprecated("icd_long_to_wide")
   icd_long_to_wide(x = icd9df, visit_name = visitId, icd_name = icd9Field, prefix = prefix,
-    min_width = min.width, agg = aggregate, return_df = return.df)
+    min_width = min.width, aggr = aggregate, return_df = return.df)
 }
 
 #' @rdname icd_wide_to_long

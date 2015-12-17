@@ -101,9 +101,9 @@ parseAhrqSas <- function(sasPath = system.file("data-raw", "comformat2012-2013.t
   #   condense to parents, for each parent, if children are all in the list, add the parent
   for (cmb in names(ahrqComorbid)) {
     if (verbose) message("working on ranges for: ", cmb)
-    parents <- icd_condense.icd9(ahrqComorbid[[cmb]], real = FALSE, short = TRUE)
+    parents <- icd_condense.icd9(ahrqComorbid[[cmb]], real = FALSE, short_code = TRUE)
     for (p in parents) {
-      kids <- icd_children.icd9(p, real = FALSE, short = TRUE)
+      kids <- icd_children.icd9(p, real = FALSE, short_code = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
       if (all(kids %in% ahrqComorbid[[cmb]]))
         ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], p) %>% unique %>% icd_sort.icd9(short_code = TRUE)

@@ -392,7 +392,9 @@ test_that("get real codes which are less than two digit major", {
 })
 
 test_that("illable codes are identified", {
-  expect_true(icd9IsBillable("1000"))
-  expect_false(icd9IsBillable("1008"))
-  expect_true(icd9IsBillable("1009"))
+  expect_true(icd_is_billable("1000"))
+  expect_false(icd_is_billable("1008"))
+  expect_true(icd_is_billable("1009"))
 })
+
+# TODO: more billable function tests

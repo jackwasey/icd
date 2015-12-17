@@ -33,7 +33,7 @@ icd_filter_invalid <- function(...)
 #' @describeIn icd_filter_valid Filter data frame for valid ICD-9 codes
 #' @export
 icd_filter_valid.icd9 <- function(x, icd_name = NULL,
-                                  short_code =  NULL, invert = FALSE) {
+                                  short_code =  NULL, invert = FALSE, ...) {
   assertDataFrame(x, min.cols = 1, col.names = "named")
   assert(checkNull(icd_name), checkString(icd_name))
   assert(checkNull(short_code), checkFlag(short_code))
@@ -50,7 +50,7 @@ icd_filter_valid.icd9 <- function(x, icd_name = NULL,
 
 #' @rdname icd_filter_valid
 #' @export
-icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, invert = FALSE) {
+icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, invert = FALSE, ...) {
   icd_filter_valid.icd9(x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
