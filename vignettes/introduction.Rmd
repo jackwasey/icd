@@ -146,7 +146,7 @@ It is easy to find the children of a higher-level ICD-9 code:
 ```{r "childrenReal"}
 icd_children(icd9("391"))
 # mid-level code
-icd_children.icd9("0032")
+icd9:::icd_children.icd9("0032")
 # leaf node has no children
 # be explicit about the type of code:
 test_code <- icd9(icd_short_code("00321"))

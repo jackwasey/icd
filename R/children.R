@@ -69,9 +69,14 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
     res
 }
 
+# this is just lazy package data, but apparently need to declare it to keep CRAN
+# happy.
 utils::globalVariables("icd10cm2016")
 
-#' real icd10 children based on 2016 ICD-10-CM list
+#' real children of ICD codes
+#'
+#' real icd10 children based on 2016 ICD-10-CM list. "real" may be a three digit
+#' code, or a leaf node. This is distinct from 'billable'.
 #'
 #' @keywords internal
 icd_children_real <- function(x)
@@ -88,7 +93,7 @@ icd_children_real.icd10cm <- function(x, short_code = icd_guess_short(x)) {
     warning("This function primarily gives 'real' child codes for ICD-10-CM,
             which is mostly a superset of ICD-10 WHO")
 
-  icd10Short <- stringr::str_trim(x)
+  icd10Short <- str_trim(x)
 
   matches_bool <- icd10Short %in% icd9::icd10cm2016[["code"]]
   # if the codes are not in the source file, we ignore, warn, drop silently?
@@ -147,7 +152,7 @@ icd_children_real.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 #' @param icd910Short character vector of ICD-10 codes
 #' @export
 icd10ChildrenPossibleShort <- function(icd10Short) {
-  checkmate::assertCharacter(icd10Short)
+  assertCharacter(icd10Short)
 
   fourth <- unlist(strsplit("0123456789ABCDEFGHIJKXZ", ""))
   fifth  <- unlist(strsplit("0123456789AXYZ", ""))

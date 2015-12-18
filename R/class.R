@@ -230,9 +230,6 @@ icd_map <- function(x) {
 #' extract elements of an ICD comorbidity map
 #'
 #' Equivalent to a list, but preserves class of extracted elements
-#' @param x \code{icd_map} object
-#' @param index index element to index
-#' @param ... arguments to pass to \code{list.[}
 #' @export
 `[.icd_map` <- function(x, index, ...) {
   new_classes <- class(x)
@@ -246,9 +243,6 @@ icd_map <- function(x) {
 #' extract vector of codes from an ICD comorbidity map
 #'
 #' Equivalent to a list, but preserves class of extracted vector
-#' @param x \code{icd_map} object
-#' @param index index element to index
-#' @param ... arguments to pass to \code{list.[[}
 #' @export
 `[[.icd_map` <- function(x, index, ...) {
   new_classes <- class(x)
@@ -263,7 +257,6 @@ icd_map <- function(x) {
 #' @name combine
 #' @description These function implement combination of lists or vectors of
 #'   codes, while preserving ICD classes.
-#' @param ... argmuents to cmbine, as in R base function \code{c}
 #' @export
 c.icd9 <- function(...) {
   args <- list(...)
@@ -320,8 +313,6 @@ c.icd10who <- function(...) {
 #' @details TODO:Potential here to use attributes, since we can (as base R does
 #'   in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
 #'   subsetting operation. This would simplify the class system.
-#' @param x object to extract from
-#' @param ... other arguments to pass to next S3 methods
 #' @export
 `[.icd9` <- function(x, ...) {
   #message("[.icd9")

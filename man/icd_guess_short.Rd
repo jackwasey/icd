@@ -9,11 +9,11 @@
 \usage{
 icd9GuessIsShort(icd9)
 
-icd_guess_short(x, test_n = 1000L)
+icd_guess_short(x, is_short = NULL, test_n = 1000L)
 
-\method{icd_guess_short}{icd10}(x, test_n = 1000L)
+\method{icd_guess_short}{icd10}(x, is_short = NULL, test_n = 1000L)
 
-\method{icd_guess_short}{icd9}(x, test_n = 1000L)
+\method{icd_guess_short}{icd9}(x, is_short = NULL, test_n = 1000L)
 }
 \value{
 single logical value, \code{TRUE} if input data are predominantly
