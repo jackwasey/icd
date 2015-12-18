@@ -57,7 +57,7 @@ sasFormatExtract <- function(sasTxt) {
 #  allAssignments <- strMultiMatch(
 #    pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
 #    text = sasTxt)
-  allAssignments <- stringr::str_match_all(
+  allAssignments <- str_match_all(
     pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
     string = sasTxt)
 

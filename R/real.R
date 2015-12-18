@@ -155,7 +155,7 @@ icd_get_billable <- function(...) {
   UseMethod("icd_get_billable")
 }
 
-#' @describeIn icd_get_billable
+#' @describeIn icd_get_billable Get billable ICD-9-CM codes
 icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
                                     invert = FALSE, version = getLatestBillableVersion(), ...) {
   if (short_code)
@@ -164,7 +164,7 @@ icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
     icd9cm_get_billable.decimal_code(x = x, short_code = short_code, invert = invert, version = version)
 }
 
-#' @describeIn icd_get_billable
+#' @describeIn icd_get_billable Get billable ICD-9 codes, which is currently implemented assuming ICD-9-CM
 icd_get_billable.icd9 <- function(...) {
   icd_get_billable.icd9cm(...)
 }

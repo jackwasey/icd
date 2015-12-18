@@ -8,6 +8,8 @@
 \alias{icd9GetNonBillableDecimal}
 \alias{icd9GetNonBillableShort}
 \alias{icd_get_billable}
+\alias{icd_get_billable.icd9}
+\alias{icd_get_billable.icd9cm}
 \title{Get billable ICD codes}
 \usage{
 icd9GetBillable(icd9, isShort = icd9GuessIsShort(icd9), invert = FALSE,
@@ -25,10 +27,21 @@ icd9GetNonBillable(icd9, isShort = icd9GuessIsShort(icd9),
   version = getLatestBillableVersion())
 
 icd_get_billable(...)
+
+\method{icd_get_billable}{icd9cm}(x, short_code = icd_guess_short(x),
+  invert = FALSE, version = getLatestBillableVersion(), ...)
+
+\method{icd_get_billable}{icd9}(...)
 }
 \description{
 Get billable ICD codes, implicitly, this refers to an ICD
   implementation which is specialized for a country, typically for billing,
   e.g. ICD-9-CM in the USA.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{icd9cm}: Get billable ICD-9-CM codes
+
+\item \code{icd9}: Get billable ICD-9 codes, which is currently implemented assuming ICD-9-CM
+}}
 

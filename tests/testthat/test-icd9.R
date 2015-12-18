@@ -134,14 +134,15 @@ test_that("add leading zeroes to majors, invalid input", {
 })
 
 test_that("all generated icd9 lookup tables are valid!", {
+# TODO
 
 })
 
-test_that("icd9ExtractAlphaNumeric", {
+test_that("extracting alphabetic and numeric parts from ICD-9 codes works", {
 
-  expect_equal(icd9ExtractAlphaNumeric("V12"),
+  expect_equal(icd_extract_alpha_numeric("V12"),
                matrix(data = c("V", "12"), ncol = 2))
-  expect_equal(icd9ExtractAlphaNumeric(c("V12", 34)),
+  expect_equal(icd_extract_alpha_numeric(c("V12", 34)),
                t(matrix(data = c("V", "12", "", "34"), ncol = 2)))
 
 })

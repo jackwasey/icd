@@ -22,18 +22,14 @@
 #'   containing V, E or "". The second part contains the numeric parts of the
 #'   code, which may include a decimal point.
 #' @keywords internal manip
-icd9ExtractAlphaNumeric <- function(icd9) {
-  assert(checkFactor(icd9), checkCharacter(icd9))
+icd_extract_alpha_numeric <- function(x) {
+  assert(checkFactor(x), checkCharacter(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
-  t(
-    vapply(
-      strMultiMatch(pattern = "([VvEe]?)([[:digit:].]+)",
-                    text = as.character(icd9), dropEmpty = FALSE),
-      function(x) matrix(data = x[1:2], nrow = 1, ncol = 2),
-      FUN.VALUE = rep(NA_character_, times = 2)
-    )
-  )
+  asCharacterNoWarn(x) %>% 
+    str_match_all(pattern = "([VvEe]?)([[:digit:].]+)") %>%
+    vapply(FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
+           FUN.VALUE = rep(NA_character_, times = 2)) %>% t
 }
 
 #' @title drop zero padding from decimal ICD-9 code.
