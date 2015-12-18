@@ -112,40 +112,6 @@ logical_to_binary <- function(x) {
   x
 }
 
-#' @title return the actual matches from a bracketed regex
-#' @description Be careful: this may throw funny results for exotic regex, but
-#'   so far, it seems okay. it also drops the first result which always seems to
-#'   be a duplicate or whole-string match.
-#' @param pattern regular expression: if it has bracketed sections, these
-#'   submatches are returned
-#' @param text is the string to match against. This vector should be the same
-#'   length as the pattern vector, or the patern vector should be length one.
-#' @param ... are additional parameters passed to regexec and regmatches. I
-#'   haven't tried this: it may need two separate variables containing lists of
-#'   params, since this will send everything to both functions.
-#' @param dropEmpty logical whether to drop rows with no matches
-#' @return list of character vectors, list length being the length of the inptu
-#'   text vector.
-#' @keywords internal
-strMultiMatch <- function(pattern, text, dropEmpty = FALSE, ...) {
-  .Deprecated("stringr::str_match_all") #"deprecated: TODO: stringr::str_match_all does this better, but result structured differently")
-  # unlist puts the name in the first position, which I don't think I ever want.
-  result <- lapply(
-    text, function(x) unlist(
-      regmatches(
-        x = x,
-        m = regexec(
-          pattern = pattern,
-          text=x, ...),
-        ...)
-    )[ -1]
-  )
-  if (!dropEmpty)
-    result
-  else
-    result[sapply(result, function(x) length(x) != 0)]
-}
-
 #' @rdname strMultiMatch
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
@@ -154,11 +120,9 @@ str_pair_match <- function(text, pattern, swap = FALSE, dropEmpty = FALSE, pos =
   assertString(pattern)
   assertCharacter(text, min.len = 1)
   assertFlag(swap)
-  assertFlag(dropEmpty)
   assertIntegerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
-  res <- strMultiMatch(pattern = pattern, text = text,
-                       dropEmpty = dropEmpty, ...)
+  text %>% str_match_all(pattern = pattern) %>% lapply(`[`, c(2,3)) -> res
 
   outNames <- vapply(X = res,
                      FUN = "[",
