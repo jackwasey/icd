@@ -59,7 +59,7 @@ sasFormatExtract <- function(sasTxt) {
 #    text = sasTxt)
   allAssignments <- str_match_all(
     pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
-    string = sasTxt)
+    string = sasTxt) %>% lapply(`[`, c(2, 3))
 
   out <- list()
 
@@ -105,26 +105,15 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
     out[[halfway[[2]]]] <- unlist(strsplit(x = halfway[[1]], split = ","))
     return(out)
   }
-  threequarters <- c(
-    halfway[[1]],
-    unlist(
-      strMultiMatch(
-        pattern = '^([^"]|"[^"]*")*? (.*)',
-        text = halfway[seq(2, length(halfway) - 1)]
-      )
-    ),
-    halfway[[length(halfway)]]
-  )
 
-  #threequarters <- halfway[seq(2, length(halfway) - 1)] %>%
-  #  stringr::str_match_all('^([^"]|"[^"]*")*? (.*)') %>%
-  #  vapply(extract, FUN.VALUE = character(2), c(2,3)) %>%
-  #  unlist %>%
-  #  c(halfway[[1]], .,  halfway[[length(halfway)]])
+  halfway[seq(2, length(halfway) - 1)] %>%
+    str_match_all(pattern = '^([^"]|"[^"]*")*? (.*)') %>%
+    lapply(`[`, -1) %>%
+    unlist %>%
+    c(halfway[[1]], halfway[[length(halfway)]]) -> threequarters
 
-  if (stripQuotes) threequarters <- gsub(pattern = '"',
-                                         replacement = "",
-                                         threequarters)
+  if (stripQuotes)
+    threequarters <- gsub(pattern = '"', replacement = "", threequarters)
 
   #spaces may matter still, so don't randomly strip them?
 

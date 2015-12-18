@@ -3,14 +3,15 @@
 \name{icd_children_real}
 \alias{icd_children_real}
 \alias{icd_children_real.icd10cm}
-\title{real icd10 children based on 2016 ICD-10-CM list}
+\title{real children of ICD codes}
 \usage{
 icd_children_real(x)
 
 \method{icd_children_real}{icd10cm}(x, short_code = icd_guess_short(x))
 }
 \description{
-real icd10 children based on 2016 ICD-10-CM list
+real icd10 children based on 2016 ICD-10-CM list. "real" may be a three digit
+code, or a leaf node. This is distinct from 'billable'.
 }
 \section{Methods (by class)}{
 \itemize{

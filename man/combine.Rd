@@ -19,9 +19,6 @@
 
 \method{c}{icd10who}(...)
 }
-\arguments{
-\item{...}{argmuents to cmbine, as in R base function \code{c}}
-}
 \description{
 These function implement combination of lists or vectors of
   codes, while preserving ICD classes.

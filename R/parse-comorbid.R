@@ -24,11 +24,11 @@
 #' @template parse-template
 #' @param returnAll logical which, if TRUE, will result in the invisible return
 #'   of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
-#' @template verbose
 #' @keywords internal
-parseAhrqSas <- function(sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
-                         save = FALSE, path = "data", verbose = FALSE) {
-  #returnAll = FALSE,
+parseAhrqSas <- function(
+  sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
+  save = FALSE, path = "data") {
+
   assertString(sasPath)
   assertString(path)
   assertFlag(save)
@@ -41,7 +41,7 @@ parseAhrqSas <- function(sasPath = system.file("data-raw", "comformat2012-2013.t
   ahrqComorbidAll <- list()
 
   for (cmb in names(ahrqComorbidWork)) {
-    if (verbose) message("parsing AHRQ SAS codes for '", cmb, "'")
+    message("parsing AHRQ SAS codes for '", cmb, "'")
     somePairs <- strsplit(x = ahrqComorbidWork[[cmb]], split = "-")
 
     # non-range values (and their children) just go on list
@@ -53,7 +53,7 @@ parseAhrqSas <- function(sasPath = system.file("data-raw", "comformat2012-2013.t
     thePairs <- somePairs[lapply(somePairs, length) == 2]
     out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
     # update ahrqComorbid with full range of icd9 codes:
-    ahrqComorbidAll[[cmb]] <- out %>% unlist %>% unique 
+    ahrqComorbidAll[[cmb]] <- out %>% unlist %>% unique
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
@@ -100,7 +100,7 @@ parseAhrqSas <- function(sasPath = system.file("data-raw", "comformat2012-2013.t
 
   #   condense to parents, for each parent, if children are all in the list, add the parent
   for (cmb in names(ahrqComorbid)) {
-    if (verbose) message("working on ranges for: ", cmb)
+    message("working on ranges for: ", cmb)
     parents <- icd_condense.icd9(ahrqComorbid[[cmb]], real = FALSE, short_code = TRUE)
     for (p in parents) {
       kids <- icd_children.icd9(p, real = FALSE, short_code = TRUE)
