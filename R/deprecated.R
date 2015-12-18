@@ -859,3 +859,10 @@ icd9GetNonBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
   .Deprecated("icd_get_billable")
   icd_get_billable.icd9(icd9, short_code = isShort, invert = TRUE, version = version)
 }
+
+#' @rdname icd_extract_alpha_numeric
+#' @keywords internal
+icd9ExtractAlphaNumeric <- function(icd9) {
+  .Deprecated("icd_extract_alpha_numeric")
+  icd_extract_alpha_numeric(x)
+}
