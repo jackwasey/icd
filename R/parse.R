@@ -418,9 +418,9 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
 
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
-  icd9NShortBillable <- icd9cm_get_billable.short_code(icd9NShortReal, version = "32") # nolint
-  icd9VShortBillable <- icd9cm_get_billable.short_code(icd9VShortReal, version = "32") # nolint
-  icd9EShortBillable <- icd9cm_get_billable.short_code(icd9EShortReal, version = "32") # nolint
+  icd9NShortBillable <- icd9cm_get_billable.icd_short_code(icd9NShortReal, version = "32") # nolint
+  icd9VShortBillable <- icd9cm_get_billable.icd_short_code(icd9VShortReal, version = "32") # nolint
+  icd9EShortBillable <- icd9cm_get_billable.icd_short_code(icd9EShortReal, version = "32") # nolint
 
   # some very quick sanity checks: (duplicate in a test in test-ranges.R)
   stopifnot(length(icd9NShortBillable) < length(icd9NShortReal))

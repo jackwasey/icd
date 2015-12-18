@@ -43,7 +43,7 @@ icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
 icd9IsRealShort <- function(x, onlyBillable = FALSE) {
  assert(checkFactor(x), checkCharacter(x))
   assertFlag(onlyBillable)
-  if (onlyBillable) return(icd9cm_is_billable.short_code(asCharacterNoWarn(x)))
+  if (onlyBillable) return(icd9cm_is_billable.icd_short_code(asCharacterNoWarn(x)))
   icd9AddLeadingZeroesShort(asCharacterNoWarn(x)) %in% icd9::icd9Hierarchy[["icd9"]]
 }
 
@@ -54,7 +54,7 @@ icd9IsRealDecimal <- function(x, onlyBillable = FALSE) {
   assert(checkFactor(x), checkCharacter(x))
   assertFlag(onlyBillable)
   if (onlyBillable)
-    icd9cm_is_billable.decimal_code(x)
+    icd9cm_is_billable.icd_decimal_code(x)
   else
     icd9IsRealShort(icd_decimal_to_short.icd9(x))
 }
@@ -137,12 +137,12 @@ icd9cm_is_billable <- function(x, version = getLatestBillableVersion()) {
 
 #' @describeIn icd9cm_is_billable Are the given short-form codes leaf (billable)
 #'   codes in the hierarchy?
-icd9cm_is_billable.short_code <- function(x, version = getLatestBillableVersion())
+icd9cm_is_billable.icd_short_code <- function(x, version = getLatestBillableVersion())
   icd_is_billable.icd9(x, short_code = TRUE, version)
 
 #' @describeIn icd9cm_is_billable Are the given decimal-form codes leaf (billable)
 #'   codes in the hierarchy?
-icd9cm_is_billable.decimal_code <- function(x, version = getLatestBillableVersion())
+icd9cm_is_billable.icd_decimal_code <- function(x, version = getLatestBillableVersion())
   icd_is_billable.icd9(x, short_code = FALSE, version)
 
 
@@ -159,9 +159,9 @@ icd_get_billable <- function(...) {
 icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
                                     invert = FALSE, version = getLatestBillableVersion(), ...) {
   if (short_code)
-    icd9cm_get_billable.short_code(x = x, short_code = short_code, invert = invert, version = version)
+    icd9cm_get_billable.icd_short_code(x = x, short_code = short_code, invert = invert, version = version)
   else
-    icd9cm_get_billable.decimal_code(x = x, short_code = short_code, invert = invert, version = version)
+    icd9cm_get_billable.icd_decimal_code(x = x, short_code = short_code, invert = invert, version = version)
 }
 
 #' @describeIn icd_get_billable Get billable ICD-9 codes, which is currently implemented assuming ICD-9-CM
@@ -182,12 +182,12 @@ icd9cm_get_billable <- function(x, short_code = icd_guess_short(x),
 }
 
 #' @describeIn icd9cm_get_billable Get the billable ICD-9-CM codes from vector of short codes
-icd9cm_get_billable.short_code <- function(x, invert = FALSE, version = getLatestBillableVersion()) {
+icd9cm_get_billable.icd_short_code <- function(x, invert = FALSE, version = getLatestBillableVersion()) {
     x[icd_is_billable.icd9(x, short_code = TRUE, version = version) != invert]
 }
 
 #' @describeIn icd9cm_get_billable Get the billable ICD-9-CM codes from vector of decimal codes
-icd9cm_get_billable.decimal_code <- function(x, invert = FALSE, version = getLatestBillableVersion()) {
+icd9cm_get_billable.icd_decimal_code <- function(x, invert = FALSE, version = getLatestBillableVersion()) {
     x[icd_is_billable.icd9(x, short_code = FALSE, version = version) != invert]
 }
 

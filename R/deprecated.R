@@ -864,5 +864,5 @@ icd9GetNonBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @keywords internal
 icd9ExtractAlphaNumeric <- function(icd9) {
   .Deprecated("icd_extract_alpha_numeric")
-  icd_extract_alpha_numeric(x)
+  icd_extract_alpha_numeric(icd9)
 }

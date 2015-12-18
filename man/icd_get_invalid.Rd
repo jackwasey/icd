@@ -22,7 +22,8 @@ icd_get_invalid(...)
 \method{icd_get_invalid}{map}(x, short_code = icd_guess_short(x), ...)
 }
 \arguments{
-\item{x}{vector of ICD codes, or list of vectors of ICD codes forming a comorbidity map}
+\item{x}{vector of ICD codes, or list of vectors of ICD codes forming a
+comorbidity map}
 }
 \description{
 Returns subset of codes which are not in valid short_code or decimal format.

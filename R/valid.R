@@ -79,7 +79,6 @@ icd_is_valid <- function(x, ...) {
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
-#' @import magrittr
 #' @export
 icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x), ...) {
   assertCharacter(x)
@@ -303,7 +302,6 @@ icd_get_invalid <- function(...)
 
 #' @describeIn icd_get_invalid Default method when ICD version or short versus
 #'   decimal not known.
-#' @import magrittr
 #' @keywords internal
 icd_get_invalid.default <- function(x, short_code = NULL, ...) {
   # both <- icd_guess_both(x, short_code = short_code)
@@ -311,7 +309,8 @@ icd_get_invalid.default <- function(x, short_code = NULL, ...) {
 }
 
 #' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
-#' @param x vector of ICD codes, or list of vectors of ICD codes forming a comorbidity map
+#' @param x vector of ICD codes, or list of vectors of ICD codes forming a
+#'   comorbidity map
 #' @export
 icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short.icd9(x), ...) {
   x[!icd_is_valid.icd9(x, short_code = short_code)]

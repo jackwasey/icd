@@ -312,7 +312,7 @@ test_that("icd_expand_minor.icd9: valid", {
 
 })
 
-test_that("icd9ChildrenDecimal valid input", {
+test_that("icd9 children decimal with valid input", {
   expect_equal(
     icd_children.icd9(short_code = FALSE, "V10.0", real = FALSE),
     append("V10.0", paste("V10.0", 0:9, sep = "")))
@@ -331,10 +331,11 @@ test_that("icd9ChildrenDecimal valid input", {
   expect_equal(icd_children.icd9(short_code = FALSE, "010.0"), icd_children.icd9(short_code = FALSE, "10.0"))
 })
 
-test_that("icd9ChildrenShort valid input", {
+test_that("icd9 children short with valid input", {
   expect_equal(icd_children.icd9(short_code = TRUE, "V100", real = FALSE),
                paste("V100", c("", 0:9), sep = ""))
-  expect_equal(icd_children.icd9(short_code = TRUE, "v100"), icd9Children("V100"))
+  expect_equal(icd_children.icd9(short_code = TRUE, "v100"),
+               icd_children.icd9("V100"))
   expect_equal(icd_children.icd9(short_code = TRUE, " V100 ", real = FALSE),
                icd_children.icd9(short_code = TRUE, "V100", real = FALSE))
   expect_equal(icd_children.icd9(short_code = TRUE, "0100", real = FALSE),

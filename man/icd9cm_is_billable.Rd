@@ -2,16 +2,16 @@
 % Please edit documentation in R/real.R
 \name{icd9cm_is_billable}
 \alias{icd9cm_is_billable}
-\alias{icd9cm_is_billable.decimal_code}
-\alias{icd9cm_is_billable.short_code}
+\alias{icd9cm_is_billable.icd_decimal_code}
+\alias{icd9cm_is_billable.icd_short_code}
 \title{Check whether ICD-9 code(s) is/are billable}
 \usage{
 icd9cm_is_billable(x, version = getLatestBillableVersion())
 
-\method{icd9cm_is_billable}{short_code}(x,
+\method{icd9cm_is_billable}{icd_short_code}(x,
   version = getLatestBillableVersion())
 
-\method{icd9cm_is_billable}{decimal_code}(x,
+\method{icd9cm_is_billable}{icd_decimal_code}(x,
   version = getLatestBillableVersion())
 }
 \description{
@@ -19,10 +19,10 @@ Tests ICD-9 codes to see whether they are leaf nodes inthe ICD-9-CM hierarchy
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{short_code}: Are the given short-form codes leaf (billable)
+\item \code{icd_short_code}: Are the given short-form codes leaf (billable)
 codes in the hierarchy?
 
-\item \code{decimal_code}: Are the given decimal-form codes leaf (billable)
+\item \code{icd_decimal_code}: Are the given decimal-form codes leaf (billable)
 codes in the hierarchy?
 }}
 \keyword{internal}

@@ -2,17 +2,17 @@
 % Please edit documentation in R/real.R
 \name{icd9cm_get_billable}
 \alias{icd9cm_get_billable}
-\alias{icd9cm_get_billable.decimal_code}
-\alias{icd9cm_get_billable.short_code}
+\alias{icd9cm_get_billable.icd_decimal_code}
+\alias{icd9cm_get_billable.icd_short_code}
 \title{Get billable ICD-9-CM codes}
 \usage{
 icd9cm_get_billable(x, short_code = icd_guess_short(x), invert = FALSE,
   version = getLatestBillableVersion())
 
-\method{icd9cm_get_billable}{short_code}(x, invert = FALSE,
+\method{icd9cm_get_billable}{icd_short_code}(x, invert = FALSE,
   version = getLatestBillableVersion())
 
-\method{icd9cm_get_billable}{decimal_code}(x, invert = FALSE,
+\method{icd9cm_get_billable}{icd_decimal_code}(x, invert = FALSE,
   version = getLatestBillableVersion())
 }
 \description{
@@ -21,8 +21,8 @@ icd9_is_billable Return only those codes which are leaf (billable)
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{short_code}: Get the billable ICD-9-CM codes from vector of short codes
+\item \code{icd_short_code}: Get the billable ICD-9-CM codes from vector of short codes
 
-\item \code{decimal_code}: Get the billable ICD-9-CM codes from vector of decimal codes
+\item \code{icd_decimal_code}: Get the billable ICD-9-CM codes from vector of decimal codes
 }}
 

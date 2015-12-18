@@ -144,36 +144,40 @@ setdiff(icd9ExpandRangeShort("4820", "4823", onlyReal = FALSE),
 
 It is easy to find the children of a higher-level ICD-9 code:
 ```{r "childrenReal"}
-icd9Children("391")
+icd_children(icd9("391"))
 # mid-level code
-icd9Children("0032")
+icd_children.icd9("0032")
 # leaf node has no children
-icd9Children("00321")
-# pneumococcal pneumonia is a three-digit code with no descendants
-icd9Children("481")
+# be explicit about the type of code:
+test_code <- icd9(icd_short_code("00321"))
+icd_children(test_code)
+# or the same, but guessing the characteristics
+icd_children("00321")
+# pneumococcal pneumonia is a three-digit ICD-9 code with no descendants
+icd_children("481")
 ```
 By adding `onlyReal = TRUE`, all syntactically valid ICD-9 codes are returned, even if not defined by CMS as diagnoses. This is relevant because of minor coding errors, or coding in a different year to the master list. A planned feature is to allow testing of an ICD-9 code against the valid codes for the year it was entered, but at present only the 2014 master list is used. This means that some older valid codes may no longer be on the list. However, there have been very few changes to ICD-9-CM in the last five years with ICD-10-CM in the wings.
 ```{r "childrenAll"}
 # first ten possible ICD-9 child codes from 391
-icd9Children("391", onlyReal = FALSE)[1:10]
+icd_children("391", onlyReal = FALSE)[1:10]
 ```
 
 ## Decoding ICD-9 codes to descriptions
 There are various ways of extracting the description of the condition described by an ICD-9 code. the icd9Explain group of functions return a data frame with a column for the ICD-9 code, a column for the full length Diagnosis, and a column for the short Description.
 ```{r explainSimple}
-icd9Explain("1.0") # 'decimal' format code inferred
-icd9Explain("0019") # 'short' format code inferred
+icd_explain("1.0") # 'decimal' format code inferred
+icd_explain("0019") # 'short' format code inferred
 ```
 
 ```{r explainComplex}
 # we can be explicit about short vs decimal
-icd9Explain("434.00", isShort = FALSE) 
-icd9Explain(c("43410","43491"), isShort = TRUE)
+icd_explain("434.00", short_code = FALSE) 
+icd_explain(c("43410","43491"), short_code = TRUE)
 #explain top level code with children
-"391" %>% icd9Explain # single three-digit code
-"391" %>% icd9Children # let's see the child codes
-"391" %>% icd9Children %>% icd9Explain # children condensed to parent code
-"391" %>% icd9Children %>% icd9Explain(doCondense = FALSE) # prevent condense
+"391" %>% icd_explain # single three-digit code
+"391" %>% icd_children # let's see the child codes
+"391" %>% icd_children %>% icd_explain # children condensed to parent code
+"391" %>% icd_children %>% icd_explain(condense = FALSE) # prevent condense
 ```
 Arbitrary named list(s) of codes:
 ```{r explainArb}
