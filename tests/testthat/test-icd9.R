@@ -156,7 +156,6 @@ test_that("strip leading zeroes: errors", {
 
 test_that("strip leading zero from decimal numeric only", {
 
-  expect_equal(icd9DropLeadingZeroesDecimal(NA_character_), NA_character_)
   expect_equal(icd9DropLeadingZeroesDecimal("1"), "1")
   expect_equal(icd9DropLeadingZeroesDecimal("01"), "1")
   expect_equal(icd9DropLeadingZeroesDecimal("001"), "1")

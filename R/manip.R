@@ -26,7 +26,7 @@ icd_extract_alpha_numeric <- function(x) {
   assert(checkFactor(x), checkCharacter(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
-  asCharacterNoWarn(x) %>% 
+  asCharacterNoWarn(x) %>%
     str_match_all(pattern = "([VvEe]?)([[:digit:].]+)") %>%
     vapply(FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
            FUN.VALUE = rep(NA_character_, times = 2)) %>% t
@@ -58,14 +58,11 @@ icd9DropLeadingZeroes <- function(icd9, isShort) {
 #' @template icd9-decimal
 icd9DropLeadingZeroesDecimal <- function(icd9Decimal) {
   assert(checkFactor(icd9Decimal), checkCharacter(icd9Decimal))
-  out <- vapply(
-    X = strMultiMatch(
-      pattern = "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]+)[[:space:]]*",
-      text = icd9Decimal),
-    FUN = function(x) if (length(x) > 0) sprintf("%s%s", x[1], x[3]) else NA_character_ ,
-    FUN.VALUE = character(1)
-  )
-  out
+
+  icd9Decimal %>%
+    str_match_all(pattern = "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]+)[[:space:]]*") %>%
+    vapply(FUN = function(y) if (length(y) > 0 && !anyNA(y)) sprintf("%s%s", y[2], y[4]) else NA_character_ ,
+           FUN.VALUE = character(1))
 }
 
 #' @rdname icd9DropLeadingZeroes

@@ -120,8 +120,9 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   invalid_qual <- c()
   for (ql in qual_subset_lines) {
     # get prior code
-    strMultiMatch(paste0("(", re_anycode, ") (.*)"), filtered[ql - 1]) %>%
-      unlist %>% magrittr::extract2(1) -> code
+    filtered[ql - 1] %>%
+      str_match_all(pattern = paste0("(", re_anycode, ") (.*)")) %>%
+      unlist %>% magrittr::extract2(2) -> code
     sb <- parseRtfQualifierSubset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
     if (length(inv_sb) == 0) next

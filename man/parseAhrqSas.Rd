@@ -5,7 +5,7 @@
 \title{parse AHRQ data}
 \usage{
 parseAhrqSas(sasPath = system.file("data-raw", "comformat2012-2013.txt",
-  package = get_pkg_name()), save = FALSE, path = "data", verbose = FALSE)
+  package = get_pkg_name()), save = FALSE, path = "data")
 }
 \arguments{
 \item{sasPath}{single character string containing path or URL for some SAS
@@ -22,8 +22,6 @@ to \code{FALSE}.}
 \item{path}{path to directory to save the data. This is typically the data
 folder in the devleopment source tree. Defaults to \code{"~/icd9/data"}.
 Could possibly avoid hard-coding path with devtools functions.}
-
-\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 
 \item{condense}{logical whether to condense the result ranges to the minimal
 set of parent ICD-9 codes which exactly define the list. Defaults to

@@ -54,9 +54,6 @@ sasFormatExtract <- function(sasTxt) {
   sasTxt <- grep(pattern = "^VALUE.*", x = sasTxt, value = TRUE)
 
   # put each VALUE declaration in a vector element
-#  allAssignments <- strMultiMatch(
-#    pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
-#    text = sasTxt)
   allAssignments <- str_match_all(
     pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
     string = sasTxt) %>% lapply(`[`, c(2, 3))
@@ -64,7 +61,7 @@ sasFormatExtract <- function(sasTxt) {
   out <- list()
 
   for (m in allAssignments) {
-    out[m[[2]]] <- list(sasParseAssignments(m[[3]]))
+    out[m[[1]]] <- list(sasParseAssignments(m[[2]]))
   }
 
   out
@@ -106,11 +103,12 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
     return(out)
   }
 
-  halfway[seq(2, length(halfway) - 1)] %>%
-    str_match_all(pattern = '^([^"]|"[^"]*")*? (.*)') %>%
-    lapply(`[`, -1) %>%
-    unlist %>%
-    c(halfway[[1]], halfway[[length(halfway)]]) -> threequarters
+  threequarters <- c(halfway[[1]],
+                     halfway[seq(2, length(halfway) - 1)] %>%
+                       str_match_all(pattern = '^([^"]|"[^"]*")*? (.*)') %>%
+                       lapply(`[`, -1) %>%
+                       unlist,
+                     halfway[[length(halfway)]])
 
   if (stripQuotes)
     threequarters <- gsub(pattern = '"', replacement = "", threequarters)
@@ -154,14 +152,18 @@ sasDropOtherAssignment <- function(x) {
 #'   like \code{readLines(someSasFilePath)}
 #' @keywords internal programming list
 sasExtractLetStrings <- function(x) {
-  a <- strMultiMatch(
+  a <- str_match_all(
     "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)",
-    text = x, dropEmpty = TRUE)
-  vls <- vapply(a, FUN = function(x) x[[2]], FUN.VALUE = "")
+    string = x)
+
+  # drop empty elements after matching
+  a[sapply(a, function(x) length(x) != 0)]
+
+  vls <- vapply(a, FUN = function(x) x[[3]], FUN.VALUE = "")
   splt <- strsplit(vls, split = ",")
   result <- lapply(splt, strip, pattern = "'") # strip single quotes
   result <- lapply(result, strip, pattern = '"') # strip double quotes
-  names(result) <- vapply(a, FUN = function(x) x[[1]], FUN.VALUE = "")
+  names(result) <- vapply(a, FUN = function(x) x[[2]], FUN.VALUE = "")
   result
 }
 

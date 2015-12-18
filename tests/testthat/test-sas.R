@@ -64,12 +64,10 @@ test_that("groups of SAS assignments can be extracted", {
   #       stripWhiteSpace=F),
   #     list(ONE="999  ", TWO='777  -8881 '))
 
-  expect_equal(sasParseAssignments(
-    '"41511"-"41519", "4160 "-"4169 ","4179 " = "PULMCIRC" "5571 ","5579 ",
-    "V434 "= "PERIVASC"'),
-    list(
-      PULMCIRC = c("41511-41519", "4160-4169", "4179"),
-      PERIVASC = c("5571", "5579", "V434")
+  expect_equal(
+    sasParseAssignments('"41511"-"41519", "4160 "-"4169 ","4179 " = "PULMCIRC" "5571 ","5579 ", "V434 "= "PERIVASC"'),
+    list(PULMCIRC = c("41511-41519", "4160-4169", "4179"),
+         PERIVASC = c("5571", "5579", "V434")
     )
   )
 
