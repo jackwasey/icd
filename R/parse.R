@@ -18,7 +18,7 @@
 # nocov start
 
 # data_sources is defined in this file and saved in sysdata.rda
-utils::globalVariables(c(".", "data_sources"))
+utils::globalVariables(c("data_sources"))
 
 parseEverythingAndSave <- function() {
   # this is not strictly a parsing step, but is quite slow. It relies on picking

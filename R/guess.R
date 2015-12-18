@@ -27,20 +27,35 @@
 #' @return single logical value, \code{TRUE} if input data are predominantly
 #'   short_code type. If there is some uncertainty, then return NA.
 #' @keywords internal
-icd_guess_short <- function(x, test_n = 1000L)
+icd_guess_short <- function(x, is_short = NULL, test_n = 1000L) {
+  # if is_short is set, no need to dispatch at all
+  if (!is.null(is_short)) {
+    if (is_short)
+      return(TRUE)
+    else
+      return(FALSE)
+  }
   UseMethod("icd_guess_short")
+}
 
 #' @describeIn icd_guess_short Guess whether an ICD-10 code is in short_code form
 #' @keywords internal
-icd_guess_short.icd10 <- function(x, test_n = 1000L) {
-  NextMethod(x)
+icd_guess_short.icd10 <- function(x, is_short = NULL, test_n = 1000L) {
+  # jump to the simple default (is there a decimal point)
+  NextMethod()
 }
 
 #' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
 #' @keywords internal
-icd_guess_short.icd9 <- function(x, test_n = 1000L) {
+icd_guess_short.icd9 <- function(x, is_short = NULL, test_n = 1000L) {
   if (inherits(x, "icd_short_code")) return(TRUE)
   if (inherits(x, "icd_decimal_code")) return(FALSE)
+  if (!is.null(is_short)) {
+    if (is_short)
+      return(TRUE)
+    else
+      return(FALSE)
+  }
   if (is.list(x)) x <- unlist(x, recursive = TRUE)
   x <- asCharacterNoWarn(x)
   testend <- min(length(x), test_n)
@@ -49,16 +64,19 @@ icd_guess_short.icd9 <- function(x, test_n = 1000L) {
   sum(vd) <= sum(vs)
 }
 
-icd_guess_short.character <- function(x, test_n = 1000L) {
-  !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE) # any decimal as first approximation
-}
-
-icd_guess_short.list <- function(x, test_n = 1000L) {
+icd_guess_short.list <- function(x, is_short = NULL, test_n = 1000L) {
   y <- unlist(x)
-  icd_guess_short(y, test_n)
+  icd_guess_short(y, is_short = is_short, test_n)
 }
 
-icd_guess_short.default <- function(x, test_n = 1000L) {
+icd_guess_short.default <- function(x, is_short = NULL, test_n = 1000L) {
+  # this should have been dealt with by dispatching, but just in case this is called directly:
+  if (!is.null(is_short)) {
+    if (is_short)
+      return(TRUE)
+    else
+      return(FALSE)
+  }
   !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE) # any decimal as first approximation
 }
 

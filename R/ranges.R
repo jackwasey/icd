@@ -148,7 +148,7 @@ icd10ExpandRangePossibleShort <- function(start, end) {
 }
 
 #' @title Expand major codes to range
-#' @description Expand a pair of major codes into a range of major codes. 
+#' @description Expand a pair of major codes into a range of major codes.
 #' @keywords internal
 icd_expand_range_major <- function(start, end)
   UseMethod("icd_expand_range_major")
@@ -163,7 +163,7 @@ icd_expand_range_major.icd10 <- function(start, end) {
   end <- stringr::str_trim(end)
 
 
-  stopifnot(icd10_is_major(start), icd10_is_major(end))
+  stopifnot(icd_is_major.icd10(start), icd_is_major.icd10(end))
   stopifnot(start <= end)
   start_first <- stringr::str_sub(start, 1, 1) %>% stringr::str_to_upper()
   end_first <- stringr::str_sub(end, 1, 1) %>% stringr::str_to_upper()
@@ -180,7 +180,7 @@ icd_expand_range.icd9 <- function(start, end,
                                   short_code = icd_guess_short.icd9(c(start, end)),
                                   real = TRUE,
                                   excludeAmbiguousStart = TRUE,
-                                  excludeAmbiguousEnd = TRUE, 
+                                  excludeAmbiguousEnd = TRUE,
                                   ...) {
   if (short_code)
     icd9_expand_range_short(start, end, real,
