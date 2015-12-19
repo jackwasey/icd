@@ -381,7 +381,7 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #'   the differing codes are attempted to be reduced to their parent codes, in
 #'   order to give a more succinct summary.
 #' @examples
-#' icd_difd_comorbid(elixComorbid, ahrqComorbid, "CHF")
+#' icd_diff_comorbid(elixComorbid, ahrqComorbid, "CHF")
 #' \dontrun{
 #' # give full report on all comorbidities for these mappings
 #' icd_diff_comorbid(elixComorbid, ahrqComorbid)

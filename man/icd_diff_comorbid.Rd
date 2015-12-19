@@ -49,7 +49,7 @@ Compares two comorbidity:icd9 code mappings. The results are
 \item \code{list}: Show difference between comorbidity maps with ICD-9 codes
 }}
 \examples{
-icd_difd_comorbid(elixComorbid, ahrqComorbid, "CHF")
+icd_diff_comorbid(elixComorbid, ahrqComorbid, "CHF")
 \dontrun{
 # give full report on all comorbidities for these mappings
 icd_diff_comorbid(elixComorbid, ahrqComorbid)
