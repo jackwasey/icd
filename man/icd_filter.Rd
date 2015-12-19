@@ -104,10 +104,9 @@ myData \%>\% icd9FilterPoaYes(poa_name="poa") \%>\%
   icd9ComorbidAhrq(icd9Field = "diag", visitId = "visitId", isShort = TRUE)
 # can call the core icd9Comorbid function with an arbitrary mapping
 myData \%>\%
-icd9FilterPoaYes() \%>\%
-icd9Comorbid(icd9Field = "diag", visitId = "visitId",
-  icd9Mapping = quanElixComorbid,
- isShortMapping = TRUE)
+icd_filter_poa_yes \%>\%
+icd_comorbid(icd_name = "diag", visit_name = "visitId",
+  map = quanElixComorbid, short_mapping = TRUE)
 }
 }
 

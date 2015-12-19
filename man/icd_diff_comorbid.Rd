@@ -52,7 +52,7 @@ Compares two comorbidity:icd9 code mappings. The results are
 icd_difd_comorbid(elixComorbid, ahrqComorbid, "CHF")
 \dontrun{
 # give full report on all comorbidities for these mappings
-icd9DiffComorbid(elixComorbid, ahrqComorbid)
+icd_diff_comorbid(elixComorbid, ahrqComorbid)
 }
 }
 

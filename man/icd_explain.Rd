@@ -113,9 +113,9 @@ avoid typing many quotes.
 # by default, just show parent code and ignore children (428.0 not shown
 # because 428 is present):
 library(magrittr) # nice to heave, but not essential
-icd9ExplainShort(ahrqComorbid$CHF[1:3])
+icd_explain(ahrqComorbid$CHF[1:3])
 # same without condensing the list. In this case, 428.0 is shown:
-icd9ExplainShort(ahrqComorbid$CHF[1:3] \%>\%  icd_condense)
+icd_explain(ahrqComorbid$CHF[1:3] \%>\%  icd_condense)
 icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
 }
 \seealso{
