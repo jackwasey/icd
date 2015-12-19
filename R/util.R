@@ -112,7 +112,9 @@ logical_to_binary <- function(x) {
   x
 }
 
-#' @rdname strMultiMatch
+#' Match strings to get named vector
+#'
+#' match a character vector against a regex with a pair of parentheses, returning named vector
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal

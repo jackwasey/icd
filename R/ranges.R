@@ -262,26 +262,26 @@ icd9_expand_range_short <- function(start, end, real = TRUE,
   if (real) {
     stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
     if (icd9_is_n(start) && icd9_is_n(end))
-      res <- expand_range_worker(start, end, icd9:::icd9NShortReal, real = TRUE,
+      res <- expand_range_worker(start, end, icd9NShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9_is_v(start) && icd9_is_v(end))
-      res <- expand_range_worker(start, end, icd9:::icd9VShortReal, real = TRUE,
+      res <- expand_range_worker(start, end, icd9VShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9_is_e(start) && icd9_is_e(end))
-      res <- expand_range_worker(start, end, icd9:::icd9EShortReal, real = TRUE,
+      res <- expand_range_worker(start, end, icd9EShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")
   } else {
 
     if (icd9_is_n(start) && icd9_is_n(end))
-      res <- expand_range_worker(start, end, icd9:::icd9NShort, real = FALSE,
+      res <- expand_range_worker(start, end, icd9NShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9_is_v(start) && icd9_is_v(end))
-      res <- expand_range_worker(start, end, icd9:::icd9VShort, real = FALSE,
+      res <- expand_range_worker(start, end, icd9VShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else if (icd9_is_e(start) && icd9_is_e(end))
-      res <- expand_range_worker(start, end, icd9:::icd9EShort, real = FALSE,
+      res <- expand_range_worker(start, end, icd9EShort, real = FALSE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
     else
       stop("mismatch between numeric, V and E types in start and end")

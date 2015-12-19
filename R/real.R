@@ -156,13 +156,17 @@ icd_get_billable <- function(...) {
 }
 
 #' @describeIn icd_get_billable Get billable ICD-9-CM codes
+#' @export
 icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
                                     invert = FALSE, version = getLatestBillableVersion(), ...) {
+  assertFlag(short_code)
+  assertFlag(invert)
+  assertString(version)
   # would be nicer to dispatch on short_code type here.
   if (short_code)
-    icd9cm_get_billable.icd_short_code(x = x, short_code = TRUE, invert = invert, version = version)
+    icd9cm_get_billable.icd_short_code(x = x, invert = invert, version = version)
   else
-    icd9cm_get_billable.icd_decimal_code(x = x, short_code = FALSE, invert = invert, version = version)
+    icd9cm_get_billable.icd_decimal_code(x = x, invert = invert, version = version)
 }
 
 #' @describeIn icd_get_billable Get billable ICD-9 codes, which is currently implemented assuming ICD-9-CM

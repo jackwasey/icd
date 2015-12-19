@@ -157,9 +157,9 @@ sasExtractLetStrings <- function(x) {
     string = x)
 
   # drop empty elements after matching
-  a[sapply(a, function(x) length(x) != 0)]
+  a <- a[vapply(a, FUN = function(x) length(x) != 0, FUN.VALUE = logical(1))]
 
-  vls <- vapply(a, FUN = function(x) x[[3]], FUN.VALUE = "")
+  vls <- vapply(a, FUN = `[[`, 3, FUN.VALUE = "")
   splt <- strsplit(vls, split = ",")
   result <- lapply(splt, strip, pattern = "'") # strip single quotes
   result <- lapply(result, strip, pattern = '"') # strip double quotes

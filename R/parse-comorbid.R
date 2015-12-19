@@ -149,10 +149,13 @@ parseQuanDeyoSas <- function(sasPath = system.file("data-raw",
   # use validation: takes time, but these are run-once per package creation (and
   # test) tasks.
   if (condense)
-    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd9Condense)
+    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd_condense.icd9)
   else
-    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd9ChildrenShort, onlyReal = FALSE)
+    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd_children.icd9,
+                               short_code = TRUE, real = FALSE)
 
+  # do use icd9:: to refer to a lazy-loaded dataset which is obscurely within
+  # the package, but not in its namespace, or something...
   names(quanDeyoComorbid) <- icd9::charlsonComorbidNamesAbbrev
   if (save) save_in_data_dir(quanDeyoComorbid)
   invisible(quanDeyoComorbid)

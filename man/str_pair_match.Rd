@@ -2,6 +2,7 @@
 % Please edit documentation in R/util.R
 \name{str_pair_match}
 \alias{str_pair_match}
+\title{Match strings to get named vector}
 \usage{
 str_pair_match(text, pattern, swap = FALSE, dropEmpty = FALSE, pos = c(1,
   2), ...)
@@ -9,6 +10,9 @@ str_pair_match(text, pattern, swap = FALSE, dropEmpty = FALSE, pos = c(1,
 \arguments{
 \item{swap}{logical scalar, whether to swap the names and values. Default is
 not to swap, so the first match becomes the name.}
+}
+\description{
+match a character vector against a regex with a pair of parentheses, returning named vector
 }
 \keyword{internal}
 
