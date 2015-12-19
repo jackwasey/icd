@@ -150,11 +150,11 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
 
     selenium_driver$findElements(using = "xpath","//li[@class='Blocklist1']") %>%
       vapply(function(x) unlist(x$getElementText()), character(1)) %>%
-      stringr::str_trim() %>%
-      stringr::str_replace_all("[[:space:]]+", " ") %>%
-      icd9:::str_pair_match("([^[:space:]]+) (.+)", swap = TRUE) %>%
+      str_trim() %>%
+      str_replace_all("[[:space:]]+", " ") %>%
+      str_pair_match("([^[:space:]]+) (.+)", swap = TRUE) %>%
       lapply(
-        function(x) stringr::str_split(x, "-") %>%
+        function(x) str_split(x, "-") %>%
           unlist %>%
           magrittr::set_names(c("start", "end"))
       ) -> sub_chapters
