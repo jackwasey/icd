@@ -163,12 +163,12 @@ icd_expand_range_major.icd10 <- function(start, end) {
   end <- stringr::str_trim(end)
 
 
-  stopifnot(icd_is_major.icd10(start), icd_is_major.icd10(end))
+  stopifnot(icd_is_major(start), icd_is_major(end))
   stopifnot(start <= end)
-  start_first <- stringr::str_sub(start, 1, 1) %>% stringr::str_to_upper()
-  end_first <- stringr::str_sub(end, 1, 1) %>% stringr::str_to_upper()
+  start_first <- stringr::str_sub(start, 1, 1) %>% str_to_upper()
+  end_first <- stringr::str_sub(end, 1, 1) %>% str_to_upper()
 
-  stop("not finished")
+  stop("not finished implementing")
   if (start_first == end_first)
     paste
 
@@ -237,7 +237,14 @@ expand_range_worker <- function(start, end, lookup, real,
         out <- out[-which(out == o)]
     }
   }
-  icd_sort.icd9(unique(c(out, icd_children.icd9(end, short_code = TRUE, real = real))), short_code = TRUE)
+  icd_sort.icd9(
+    unique(
+      c(out,
+        icd_children.icd9(end, short_code = TRUE, real = real)
+      )
+    ),
+    short_code = TRUE
+  )
 }
 
 #' @rdname icd_expand_range

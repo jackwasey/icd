@@ -76,13 +76,18 @@ icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data")
 }
 
 #' @title Generate Quan's revised Elixhauser comorbidities
+#' @description Generate Quan's revised Elixhauser comorbidities, expanded out
+#'   to include all possible ICD-9 codes.
 #' @template parse-template
 #' @keywords internal
 icd9_generate_map_quan_elix <- function(condense = NULL,
-                                    save = FALSE,
-                                    path = "data") {
+                                        save = FALSE,
+                                        path = "data") {
 
-  if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix")
+  if (!missing(condense))
+    warning("'condense' is deprecated in icd9_generate_map_elix, and no longer has any effect.
+                                  The map can be condensed using other functions in the package.",
+            call. = FALSE)
   # TODO: need to deprecate this name so we can switch ICD-9 and ICD-10 (and
   # their variations)
   quanElixComorbid <- list(
@@ -227,36 +232,36 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
 #'  Based on Quan's SAS lists, transcribed by wmurphyrd
 #'  @export
 icd10_generate_map_quan_charlson <- function() {
-    quan_charl_raw <- list(
-      mi = c("I21", "I22", "I252"),
-      chf = c("I43", "I50", "I099", "I110", "I130", "I132",
+  quan_charl_raw <- list(
+    mi = c("I21", "I22", "I252"),
+    chf = c("I43", "I50", "I099", "I110", "I130", "I132",
             "I255", "I420", "I425", "I426", "I427", "I428", "I429", "P290"),
-      pvd = c("I70", "I71", "I731", "I738", "I739", "I771",
+    pvd = c("I70", "I71", "I731", "I738", "I739", "I771",
             "I790", "I792", "K551", "K558", "K559", "Z958", "Z959"),
-      cvd = c("G45", "G46", "I60", "I61", "I62", "I63", "I64", "I65", "I66", "I67", "I68", "I69", "H340"),
-      dementica = c("F00", "F01", "F02", "F03", "G30", "F051", "G311"),
-      copd = c("J40", "J41", "J42", "J43", "J44", "J45", "J46", "J47",
+    cvd = c("G45", "G46", "I60", "I61", "I62", "I63", "I64", "I65", "I66", "I67", "I68", "I69", "H340"),
+    dementica = c("F00", "F01", "F02", "F03", "G30", "F051", "G311"),
+    copd = c("J40", "J41", "J42", "J43", "J44", "J45", "J46", "J47",
              "J60", "J61", "J62", "J63", "J64", "J65", "J66", "J67",
              "I278", "I279", "J684", "J701", "J703"),
-      rheum = c("M05", "M32", "M33", "M34", "M06", "M315", "M351", "M353", "M360"),
-      ulcer = c("K25", "K26", "K27", "K28"),
-      liver_m = c("B18", "K73", "K74", "K700", "K701", "K702", "K703", "K709",
+    rheum = c("M05", "M32", "M33", "M34", "M06", "M315", "M351", "M353", "M360"),
+    ulcer = c("K25", "K26", "K27", "K28"),
+    liver_m = c("B18", "K73", "K74", "K700", "K701", "K702", "K703", "K709",
                 "K717", "K713", "K714", "K715", "K760", "K762", "K763", "K764", "K768", "K769", "Z944"),
-      dm_s = c("E100", "E101", "E106", "E108", "E109", "E110", "E111", "E116", "E118", "E119",
+    dm_s = c("E100", "E101", "E106", "E108", "E109", "E110", "E111", "E116", "E118", "E119",
              "E120", "E121", "E126", "E128", "E129",
              "E130", "E131", "E136", "E138", "E139",
              "E140", "E141", "E146", "E148", "E149"),
-      dm_cx = c("E102", "E103", "E104", "E105", "E107",
+    dm_cx = c("E102", "E103", "E104", "E105", "E107",
               "E112", "E113", "E114", "E115", "E117",
               "E122", "E123", "E124", "E125", "E127",
               "E132", "E133", "E134", "E135", "E137",
               "E142", "E143", "E144", "E145", "E147"),
-      para = c("G81", "G82", "G041", "G114", "G801", "G802",
+    para = c("G81", "G82", "G041", "G114", "G801", "G802",
              "G830", "G831", "G832", "G833", "G834", "G839"),
-      renal = c("N18", "N19", "N052", "N053", "N054", "N055", "N056", "N057",
+    renal = c("N18", "N19", "N052", "N053", "N054", "N055", "N056", "N057",
               "N250", "I120", "I131", "N032", "N033", "N034", "N035", "N036", "N037",
               "Z490", "Z491", "Z492", "Z940", "Z992"),
-      cancer = c("C00", "C01", "C02", "C03", "C04", "C05", "C06", "C07", "C08", "C09",
+    cancer = c("C00", "C01", "C02", "C03", "C04", "C05", "C06", "C07", "C08", "C09",
                "C10", "C11", "C12", "C13", "C14", "C15", "C16", "C17", "C18", "C19",
                "C20", "C21", "C22", "C23", "C24", "C25", "C26",
                "C30", "C31", "C32", "C33", "C34", "C37", "C38", "C39",
@@ -266,33 +271,33 @@ icd10_generate_map_quan_charlson <- function() {
                "C70", "C71", "C72", "C73", "C74", "C75", "C76",
                "C81", "C82", "C83", "C84", "C85", "C88",
                "C90", "C91", "C92", "C93", "C94", "C95", "C96", "C97"),
-      liver_s = c("K704", "K711", "K721", "K729", "K765", "K766", "K767", "I850", "I859", "I864", "I982"),
-      mets = c("C77", "C78", "C79", "C80"),
-      hiv = c("B20", "B21", "B22", "B24")
-    )
+    liver_s = c("K704", "K711", "K721", "K729", "K765", "K766", "K767", "I850", "I859", "I864", "I982"),
+    mets = c("C77", "C78", "C79", "C80"),
+    hiv = c("B20", "B21", "B22", "B24")
+  )
 
-    names(quan_charl_raw) <- charlsonComorbidNamesAbbrev
+  names(quan_charl_raw) <- charlsonComorbidNamesAbbrev
 
-    # this expansion will only be for 'real' codes (currently the most up-to-date
-    # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
+  # this expansion will only be for 'real' codes (currently the most up-to-date
+  # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
 
-    # note that the children real is an ICD-10-CM function. This needs
-    # addressing. I already know that doing string matching is way too slow for
-    # millions of rows, so some compromise of an exhaustive list of
-    # WHO/ICD-10-CM children will likely be needed. Maybe generating a huge
-    # structure is still worth it, even for ICD-10-CM, because I do end up
-    # cutting it back down to size based on the input data before comorbidity
-    # matching.
-    icd10_map_quan_charlson <- lapply(quan_charl_raw, icd10_children_real_short)
+  # note that the children real is an ICD-10-CM function. This needs
+  # addressing. I already know that doing string matching is way too slow for
+  # millions of rows, so some compromise of an exhaustive list of
+  # WHO/ICD-10-CM children will likely be needed. Maybe generating a huge
+  # structure is still worth it, even for ICD-10-CM, because I do end up
+  # cutting it back down to size based on the input data before comorbidity
+  # matching.
+  icd10_map_quan_charlson <- lapply(quan_charl_raw, icd10_children_real_short)
 
-    # set S3 classes (in addition to "list")
-    # this is a comorbidity map first and foremost (after being a list?)
-    class(icd10_map_quan_charlson) <- c("list", "comorbidity_map", "icd10cm", "icd10")
+  # set S3 classes (in addition to "list")
+  # this is a comorbidity map first and foremost (after being a list?)
+  class(icd10_map_quan_charlson) <- c("list", "comorbidity_map", "icd10cm", "icd10")
 
-    # It does appear that there are numerous codes in the Quan Elixhauser scheme
-    # which are not present (?anymore) in the ICD-10-CM 2016 list.
-    if (save) save_in_data_dir(icd10_map_quan_charlson)
-    invisible(icd10_map_quan_charlson)
+  # It does appear that there are numerous codes in the Quan Elixhauser scheme
+  # which are not present (?anymore) in the ICD-10-CM 2016 list.
+  if (save) save_in_data_dir(icd10_map_quan_charlson)
+  invisible(icd10_map_quan_charlson)
 }
 
 #' generate uranium pathology data

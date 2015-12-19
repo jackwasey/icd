@@ -23,5 +23,9 @@ Could possibly avoid hard-coding path with devtools functions.}
 invisibly returns the list of vectors, where a
   co-morbidity name is associated with a character vector of ICD-9 codes.
 }
+\description{
+Generate Quan's revised Elixhauser comorbidities, expanded out
+  to include all possible ICD-9 codes.
+}
 \keyword{internal}
 

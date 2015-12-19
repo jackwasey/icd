@@ -75,7 +75,7 @@
 "_PACKAGE"
 #' @docType package
 #' @name icd9-package
-#' @aliases icd9 package-icd9
+#' @aliases package-icd9
 #' @author Jack O. Wasey \email{jack@@jackwasey.com}
 #' @keywords misc utilities
 #' @references
@@ -86,5 +86,5 @@
 #' @import Rcpp
 #' @import checkmate
 #' @importFrom magrittr "%>%" "%<>%"
-#' @importFrom stringr str_detect str_replace_all str_match str_match_all str_trim
+#' @importFrom stringr str_detect str_replace_all str_match str_match_all str_trim str_to_upper
 NULL
