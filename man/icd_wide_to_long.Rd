@@ -27,16 +27,14 @@ many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visitId}
 was not specified, then the first column of the data frame is used.}
 
-\item{icdLabels}{vector of column names in which codes are found. If NULL,
+\item{icd_labels}{vector of column names in which codes are found. If NULL,
 all columns matching icd or ICD will be included.}
 
-\item{icdName}{character vector length one containing the new column name for
+\item{icd_name}{character vector length one containing the new column name for
 the ICD codes, defaults to "icdCode"}
 
-\item{icdRegex}{vector of character strings containg a regex to identify ICD-9 diagnosis
+\item{icd_regex}{vector of character strings containg a regex to identify ICD-9 diagnosis
 columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}}
-
-\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \value{
 data frame with visit_name column named the same as input, and a column
@@ -53,7 +51,7 @@ This is different enough to \code{dcast} in \code{reshape2} that
   widedf <- data.frame(visit_name = c("a", "b", "c"),
     icd9_01 = c("441", "4424", "441"),
     icd9_02 = c(NA, "443", NA))
-  icd9WideToLong(widedf)
+  icd_wide_to_long(widedf)
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},

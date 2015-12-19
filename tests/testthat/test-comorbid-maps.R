@@ -96,17 +96,21 @@ test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
               skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
               expect_identical(quanDeyoComorbid, parseQuanDeyoSas(save = FALSE))
-              expect_equivalent(icd_get_invalid.map(quanDeyoComorbid, short_code = TRUE), list())
+              expect_equivalent(
+                icd_get_invalid.comorbidity_map(quanDeyoComorbid, short_code = TRUE),
+                list())
             })
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(quanElixComorbid, icd9_generate_map_quan_elix(save = FALSE))
-              expect_equivalent(icd_get_invalid.map(quanElixComorbid, short_code = TRUE), list())
+              expect_equivalent(
+                icd_get_invalid.comorbidity_map(quanElixComorbid, short_code = TRUE),
+                list())
             })
 test_that("Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(elixComorbid, icd9_generate_map_elix(save = FALSE))
-              expect_equivalent(icd_get_invalid.map(elixComorbid, short_code = TRUE), list())
+              expect_equivalent(icd_get_invalid.icd_comorbidity_map(elixComorbid, short_code = TRUE), list())
             })
 
 test_that("can condense the big lists of comorbidities without errors", {
@@ -540,10 +544,10 @@ test_that("no duplicate values in the co-morbidity lists", {
 })
 
 test_that("built-in icd9 to comorbidity mappings are all valid", {
-  expect_true(icd_is_valid.map(ahrqComorbid, short_code = TRUE))
-  expect_true(icd_is_valid.map(quanDeyoComorbid, short_code = TRUE))
-  expect_true(icd_is_valid.map(quanElixComorbid, short_code = TRUE))
-  expect_true(icd_is_valid.map(elixComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.icd_comorbidity_map(ahrqComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.icd_comorbidity_map(quanDeyoComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.icd_comorbidity_map(quanElixComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.icd_comorbidity_map(elixComorbid, short_code = TRUE))
 })
 
 test_that("disordered visit ids", {

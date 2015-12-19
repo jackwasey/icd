@@ -91,7 +91,7 @@ out-of-hospital characteristics.
 \examples{
 \dontrun{
 # using magrittr is beautiful:
-library("magrittr", quietly = TRUE, warn.conflicts = FALSE)
+library("magrittr")
 myData <- data.frame(
   visitId = c("v1", "v2", "v3", "v4"),
   diag = c("39891", "39790", "41791", "4401"),

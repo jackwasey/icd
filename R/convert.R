@@ -73,13 +73,12 @@ icd9ChaptersToMap <- function(x) {
 #' @param x \code{data.frame} in wide format, i.e. one row per patient, and
 #'   multiple columns containing ICD codes, empty strings or NA.
 #' @template visit_name
-#' @param icdLabels vector of column names in which codes are found. If NULL,
+#' @param icd_labels vector of column names in which codes are found. If NULL,
 #'   all columns matching icd or ICD will be included.
-#' @param icdName character vector length one containing the new column name for
+#' @param icd_name character vector length one containing the new column name for
 #'   the ICD codes, defaults to "icdCode"
-#' @param icdRegex vector of character strings containg a regex to identify ICD-9 diagnosis
+#' @param icd_regex vector of character strings containg a regex to identify ICD-9 diagnosis
 #'   columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}
-#' @template verbose
 #' @return data frame with visit_name column named the same as input, and a column
 #'   named by \code{icd.name} containing all the non-NA and non-empty codes
 #'   found in the wide input data.
@@ -87,7 +86,7 @@ icd9ChaptersToMap <- function(x) {
 #'   widedf <- data.frame(visit_name = c("a", "b", "c"),
 #'     icd9_01 = c("441", "4424", "441"),
 #'     icd9_02 = c(NA, "443", NA))
-#'   icd9WideToLong(widedf)
+#'   icd_wide_to_long(widedf)
 #' @family ICD-9 convert
 #' @export
 icd_wide_to_long <- function(x,
@@ -151,8 +150,8 @@ icd_wide_to_long <- function(x,
 #' @examples
 #'   longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
 #'     icd9 = c("441", "4424", "443", "441"))
-#'   icd9LongToWide(longdf)
-#'   icd9LongToWide(longdf, prefix = "ICD10_")
+#'   icd_long_to_wide(longdf)
+#'   icd_long_to_wide(longdf, prefix = "ICD10_")
 #' @family ICD-9 convert
 #' @keywords manip
 #' @export
@@ -270,7 +269,7 @@ icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
 }
 
 #' Convert ICD from short to deimcal forms
-#' 
+#'
 #' Convert codes between short and decimal forms
 #' @param x ICD codes
 #' @export

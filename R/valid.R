@@ -233,15 +233,9 @@ icd9_is_valid_major_e <- function(x)
     x = x
   )
 
-#' validate an icd9 mapping to comorbidities
-#'
-#' @description takes each item in each vector of the list of vectors and checks
-#'   validity, or returns those items which are valid for each comorbidity.
-#' @template short_code
-#' @template mapping
-#' @family ICD9 validation
+#' @describeIn icd_is_valid Validate an icd9 mapping to comorbidities
 #' @export
-icd_is_valid.map <- function(x, short_code, ...) {
+icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
   assertList(x, types = "character", any.missing = FALSE,
                         min.len = 1, unique = TRUE, names = "named")
   assertFlag(short_code)
@@ -318,7 +312,7 @@ icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short.icd9(x), ...) {
 
 #' @describeIn icd_get_invalid Get invalid elements of a comorbidity map
 #' @export
-icd_get_invalid.map <- function(x, short_code = icd_guess_short(x), ...) {
+icd_get_invalid.icd_comorbidity_map <- function(x, short_code = icd_guess_short(x), ...) {
   # todo: may need to switch on ICD code type
   x <- lapply(x, FUN = icd_get_invalid, short_code = short_code)
   x[lapply(x, length) > 0]

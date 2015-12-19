@@ -60,8 +60,8 @@ This is more complicated than reshape or reshape2::dcast allows.
 \examples{
   longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
     icd9 = c("441", "4424", "443", "441"))
-  icd9LongToWide(longdf)
-  icd9LongToWide(longdf, prefix = "ICD10_")
+  icd_long_to_wide(longdf)
+  icd_long_to_wide(longdf, prefix = "ICD10_")
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},

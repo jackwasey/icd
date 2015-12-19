@@ -23,6 +23,7 @@
 \alias{icd_is_valid.icd10}
 \alias{icd_is_valid.icd10who}
 \alias{icd_is_valid.icd9}
+\alias{icd_is_valid.icd_comorbidity_map}
 \title{Check whether ICD-9 codes are syntactically valid}
 \usage{
 icd9IsValidMapping(icd9Mapping, isShort)
@@ -66,6 +67,8 @@ icd_is_valid(x, ...)
 \method{icd_is_valid}{icd9}(x, short_code = icd_guess_short.icd9(x), ...)
 
 \method{icd_is_valid}{character}(x, short_code = icd_guess_short(x), ...)
+
+\method{icd_is_valid}{icd_comorbidity_map}(x, short_code, ...)
 
 \method{icd_is_valid}{icd10who}(x, short_code = icd_guess_short.icd10(x), ...)
 }
@@ -199,6 +202,8 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
 \item \code{character}: Test whether a character vector of ICD vodes is
 valid, guessing both type and version of the ICD codes
 
+\item \code{icd_comorbidity_map}: Validate an icd9 mapping to comorbidities
+
 \item \code{icd10who}: Check whether ICD-10 WHO codes are valid
 }}
 \section{Three-digit validation}{
@@ -230,7 +235,5 @@ valid, guessing both type and version of the ICD codes
 \seealso{
 \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
-
-Other ICD9 validation: \code{\link{icd_is_valid.map}}
 }
 

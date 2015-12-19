@@ -12,9 +12,14 @@
 
 \method{[[}{icd9}(x, ...)
 
-\method{[}{icd10}(x, ..., drop = TRUE)
+\method{[}{icd10}(x, ...)
 
-\method{[[}{icd10}(x, ..., exact = TRUE)
+\method{[[}{icd10}(x, ...)
+}
+\arguments{
+\item{x}{input data with list, vector, factor, and class set to an ICD type.}
+
+\item{...}{other arguments passed to \code{base} subset function}
 }
 \description{
 exactly the same as using x[n] or x[[n]] but preserves the ICD
@@ -24,5 +29,21 @@ exactly the same as using x[n] or x[[n]] but preserves the ICD
 TODO:Potential here to use attributes, since we can (as base R does
   in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
   subsetting operation. This would simplify the class system.
+}
+\examples{
+x <- icd9(list(my_codes = c("V10.1", "441.1")))
+x[1]
+x[[1]]
+x[[1]][2]
+# subsetting a list should give the underlying data structure type,
+# preserving the ICD class
+stopifnot(!inherits(x[[1]], "list"))
+stopifnot(!inherits(x[[1]][2], "list"))
+
+y <- icd10(c("A01", "B0234"))
+y[2]
+y[[2]]
+stopifnot(inherits(y[2], "icd10"))
+stopifnot(inherits(y[[2]], "icd10"))
 }
 

@@ -33,6 +33,8 @@ icd_version_classes <- c(icd9_classes, icd10_classes)
 icd_data_classes <- c("icd_long_data", "icd_wide_data")
 icd_code_classes <- c("icd_short_code", "icd_decimal_code")
 icd_other_classes <- c("icd_comorbidity_map")
+icd_all_classes <- c(icd_version_classes, icd_data_classes,
+                     icd_code_classes, icd_other_classes)
 
 icd_check_conflict_with_icd9 <- function(x)
   if (inherits(x, icd9_classes))
@@ -256,6 +258,12 @@ icd_comorbidity_map <- function(x) {
 #' @name combine
 #' @description These function implement combination of lists or vectors of
 #'   codes, while preserving ICD classes.
+#' @param ... elements to combine
+#' @examples
+#' \dontrun{
+#' # throw an error
+#' c(icd9("E998"), icd10("A10"))
+#' }
 #' @export
 c.icd9 <- function(...) {
   args <- list(...)
@@ -312,6 +320,23 @@ c.icd10who <- function(...) {
 #' @details TODO:Potential here to use attributes, since we can (as base R does
 #'   in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
 #'   subsetting operation. This would simplify the class system.
+#' @param x input data with list, vector, factor, and class set to an ICD type.
+#' @param ... other arguments passed to \code{base} subset function
+#' @examples
+#' x <- icd9(list(my_codes = c("V10.1", "441.1")))
+#' x[1]
+#' x[[1]]
+#' x[[1]][2]
+#' # subsetting a list should give the underlying data structure type,
+#' # preserving the ICD class
+#' stopifnot(!inherits(x[[1]], "list"))
+#' stopifnot(!inherits(x[[1]][2], "list"))
+#'
+#' y <- icd10(c("A01", "B0234"))
+#' y[2]
+#' y[[2]]
+#' stopifnot(inherits(y[2], "icd10"))
+#' stopifnot(inherits(y[[2]], "icd10"))
 #' @export
 `[.icd9` <- function(x, ...) {
   #message("[.icd9")
@@ -325,17 +350,15 @@ c.icd10who <- function(...) {
 #' @rdname subset_icd
 #' @export
 `[[.icd9` <- function(x, ...) {
-  #message("[[.icd9")
-  #print(x)
   y <- NextMethod()
-  if (!is.data.frame(x))
+  if (mode(x) != "list")
     class(y) <- class(x)
   y
 }
 
 #' @rdname subset_icd
 #' @export
-`[.icd10` <- function(x, ..., drop = TRUE) {
+`[.icd10` <- function(x, ...) {
   cl <- class(x)
   class(x) <- cl[cl != "icd9"]
   out <- NextMethod("[")
@@ -345,19 +368,11 @@ c.icd10who <- function(...) {
 
 #' @rdname subset_icd
 #' @export
-`[[.icd10` <- function(x, ..., exact = TRUE) {
-  cl <- class(x)
-  class(x) <- cl[cl != "icd9"]
-  if (inherits(x, "data.frame")) {
-    # [[.data.frame never returns a data frame itself, and seems to preserve the
-    # underlying class
-    y <- `[[.data.frame`(x, ...)
-    return(y)
-  }
-  #out <- NextMethod("[[")
-  x <- NextMethod(object = x)
-  class(x) <- cl
-  x
+`[[.icd10` <- function(x, ...) {
+  y <- NextMethod()
+  if (mode(x) != "list")
+    class(y) <- class(x)
+  y
 }
 
 #' test ICD-related classes

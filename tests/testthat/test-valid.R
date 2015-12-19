@@ -368,13 +368,13 @@ test_that("filter valid - data frame input", {
 })
 
 test_that("validate mappings", {
-  expect_true(icd_is_valid.map(short_code = FALSE, list(a = "100.1", b = "202.3")))
-  expect_true(icd_is_valid.map(short_code = TRUE, list(a = "1001", b = "2023")))
-  expect_false(icd_is_valid.map(short_code = FALSE, list(a = "1001", b = "2023")))
-  expect_false(icd_is_valid.map(short_code = TRUE, list(a = "100.1", b = "202.3")))
+  expect_true(icd_is_valid.icd_comorbidity_map(short_code = FALSE, list(a = "100.1", b = "202.3")))
+  expect_true(icd_is_valid.icd_comorbidity_map(short_code = TRUE, list(a = "1001", b = "2023")))
+  expect_false(icd_is_valid.icd_comorbidity_map(short_code = FALSE, list(a = "1001", b = "2023")))
+  expect_false(icd_is_valid.icd_comorbidity_map(short_code = TRUE, list(a = "100.1", b = "202.3")))
 
-  expect_false(icd_is_valid.map(list(a = "car", b = "et"), short_code = FALSE))
-  expect_true(icd_is_valid.map(list(a = "1001", b = "2023"), short_code = TRUE))
+  expect_false(icd_is_valid.icd_comorbidity_map(list(a = "car", b = "et"), short_code = FALSE))
+  expect_true(icd_is_valid.icd_comorbidity_map(list(a = "1001", b = "2023"), short_code = TRUE))
 })
 
 test_that("get invalid decimals", {

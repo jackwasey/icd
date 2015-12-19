@@ -19,8 +19,17 @@
 
 \method{c}{icd10who}(...)
 }
+\arguments{
+\item{...}{elements to combine}
+}
 \description{
 These function implement combination of lists or vectors of
   codes, while preserving ICD classes.
+}
+\examples{
+\dontrun{
+# throw an error
+c(icd9("E998"), icd10("A10"))
+}
 }
 

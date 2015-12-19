@@ -6,7 +6,7 @@
 \alias{icd_get_invalid}
 \alias{icd_get_invalid.default}
 \alias{icd_get_invalid.icd9}
-\alias{icd_get_invalid.map}
+\alias{icd_get_invalid.icd_comorbidity_map}
 \title{Get invalid ICD codes}
 \usage{
 icd9GetInvalidDecimal(icd9Decimal)
@@ -19,7 +19,8 @@ icd_get_invalid(...)
 
 \method{icd_get_invalid}{icd9}(x, short_code = icd_guess_short.icd9(x), ...)
 
-\method{icd_get_invalid}{map}(x, short_code = icd_guess_short(x), ...)
+\method{icd_get_invalid}{icd_comorbidity_map}(x,
+  short_code = icd_guess_short(x), ...)
 }
 \arguments{
 \item{x}{vector of ICD codes, or list of vectors of ICD codes forming a
@@ -35,7 +36,7 @@ decimal not known.
 
 \item \code{icd9}: Get invalid ICD-9 codes from vector of codes
 
-\item \code{map}: Get invalid elements of a comorbidity map
+\item \code{icd_comorbidity_map}: Get invalid elements of a comorbidity map
 }}
 \keyword{internal}
 

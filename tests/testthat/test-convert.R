@@ -263,9 +263,9 @@ test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity 
     icd_long_data %>% icd_decimal_code %>% icd9 -> ooe
   class(ooe[["icd9"]]) <- c("icd9", "icd_decimal_code", "factor")
 
-  expect_warning(test.map <- icd9ChaptersToMap(icd9::icd9Chapters), NA)
+  expect_warning(test_map <- icd9ChaptersToMap(icd9::icd9Chapters), NA)
   expect_warning(
-    cmb <- icd_comorbid.icd9(x = ooe, short_code = FALSE, map = test.map,
+    cmb <- icd_comorbid.icd9(x = ooe, short_code = FALSE, map = test_map,
                              short_map = TRUE, return_df = TRUE), NA)
   cmbcmp <- unname(as.matrix(logical_to_binary(cmb)[-1]))
   expmat <- diag(nrow = length(ooe$icd9))

@@ -80,3 +80,15 @@ test_that("data frame subsetting doesn't incorrectly set class on columns", {
                ), poa = "factor"), .Names = c("visitId", "icd9", "poa"))
   )
 })
+
+test_that("subset with double bracket doesn't override the underlying class", {
+  x <- icd9(list(my_codes = c("V10.1", "441.1")))
+  expect_false(inherits(x[[1]], "list"))
+  expect_false(inherits(x[[1]][2], "list"))
+
+  y <- icd10(list(thine = icd10cm(c("A01", "B0234"))))
+  expect_true(inherits(y[1], "list"))
+
+  expect_false(inherits(y[[1]], "list"))
+  expect_false(inherits(y[[1]][1], "list"))
+})
