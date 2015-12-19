@@ -83,8 +83,6 @@
 #' @seealso rClinicalCodes comorbidities
 #' @concept icd9 ICD-9 comorbidity comorbidities
 #' @useDynLib icd9
-#' @import Rcpp
-#' @import checkmate
+#' @import Rcpp checkmate stringr
 #' @importFrom magrittr "%>%" "%<>%"
-#' @importFrom stringr str_detect str_replace_all str_match str_match_all str_trim str_to_upper
 NULL

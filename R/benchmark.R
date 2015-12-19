@@ -56,7 +56,7 @@ randomShortAhrq <- function(n = 50000)
 randomDecimalIcd9 <- function(n = 50000)
   paste(
     round(stats::runif(min = 1, max = 999, n = n)),
-    sample(icd9::icd9ExpandMinor(""), replace = TRUE, size = n),
+    sample(icd9ExpandMinor(""), replace = TRUE, size = n),
     sep = "."
   )
 

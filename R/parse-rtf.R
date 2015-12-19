@@ -121,7 +121,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   for (ql in qual_subset_lines) {
     # get prior code
     filtered[ql - 1] %>%
-      str_match_all(pattern = paste0("(", re_anycode, ") (.*)")) %>%
+      str_subset(pattern = paste0("(", re_anycode, ") (.*)")) %>%
       unlist %>% magrittr::extract2(2) -> code
     sb <- parseRtfQualifierSubset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
@@ -326,7 +326,11 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
 
   out <- c()
   # get numbers and number ranges
-  strsplit(row_str, "[, :;]") %>% unlist %>% grep("[VvEe]?[0-9]", ., value = TRUE) -> vals
+  strsplit(row_str, "[, :;]") %>%
+    unlist %>%
+    #grep("[VvEe]?[0-9]", ., value = TRUE) -> vals
+    str_match_all("[VvEe]?[0-9]") -> vals
+
   if (verbose) message("vals are:", paste(vals, collapse = ", "))
 
   # sometimes  we get things like:
@@ -387,7 +391,8 @@ parseRtfQualifierSubset <- function(qual) {
   qual %>% strip %>%
     strsplit("[]\\[,]") %>%
     unlist %>%
-    grep("[[:digit:]]", ., value = TRUE) %>%
+    #grep("[[:digit:]]", ., value = TRUE) %>%
+    str_subset("[[:digit:]]") %>%
     strsplit(",") %>% unlist -> vals
   for (v in vals) {
     if (grepl("-", v)) {

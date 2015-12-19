@@ -97,14 +97,14 @@ test_that("Quan Charlson icd9 mappings are all
               skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
               expect_identical(quanDeyoComorbid, parseQuanDeyoSas(save = FALSE))
               expect_equivalent(
-                icd_get_invalid.comorbidity_map(quanDeyoComorbid, short_code = TRUE),
+                icd_get_invalid.icd_comorbidity_map(quanDeyoComorbid, short_code = TRUE),
                 list())
             })
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(quanElixComorbid, icd9_generate_map_quan_elix(save = FALSE))
               expect_equivalent(
-                icd_get_invalid.comorbidity_map(quanElixComorbid, short_code = TRUE),
+                icd_get_invalid.icd_comorbidity_map(quanElixComorbid, short_code = TRUE),
                 list())
             })
 test_that("Elixhauser icd9 mappings are all
