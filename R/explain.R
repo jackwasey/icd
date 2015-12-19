@@ -38,9 +38,9 @@
 #' # by default, just show parent code and ignore children (428.0 not shown
 #' # because 428 is present):
 #' library(magrittr) # nice to heave, but not essential
-#' icd9ExplainShort(ahrqComorbid$CHF[1:3])
+#' icd_explain(ahrqComorbid$CHF[1:3])
 #' # same without condensing the list. In this case, 428.0 is shown:
-#' icd9ExplainShort(ahrqComorbid$CHF[1:3] %>%  icd_condense)
+#' icd_explain(ahrqComorbid$CHF[1:3] %>%  icd_condense)
 #' icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
@@ -60,7 +60,7 @@ icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief =
     if (is.null(short_code)) short_code <- icd_guess_short.icd10(x)
     stop("icd_explain.icd10 not implemented yet")
   } else {
-    stop("Unknown ICD type")
+    stop("Unable to guess ICD type")
   }
 }
 

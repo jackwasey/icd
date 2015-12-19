@@ -6,9 +6,9 @@
 \alias{icd10who}
 \alias{icd9}
 \alias{icd9cm}
+\alias{icd_comorbidity_map}
 \alias{icd_decimal_code}
 \alias{icd_long_data}
-\alias{icd_map}
 \alias{icd_short_code}
 \alias{icd_wide_data}
 \title{construct ICD-9 data types}
@@ -31,7 +31,7 @@ icd_short_code(x)
 
 icd_decimal_code(x)
 
-icd_map(x)
+icd_comorbidity_map(x)
 }
 \description{
 Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
@@ -40,6 +40,5 @@ class (/code{icd9}) is also set.
 }
 \details{
 This, I think, should take priority over ICD-9 vs ICD-10 when doing S3 dispatching
-Maybe should call this class icd_comorbidity_map instead
 }
 

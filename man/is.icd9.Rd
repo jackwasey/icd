@@ -6,9 +6,9 @@
 \alias{is.icd10who}
 \alias{is.icd9}
 \alias{is.icd9cm}
+\alias{is.icd_comorbidity_map}
 \alias{is.icd_decimal_code}
 \alias{is.icd_long_data}
-\alias{is.icd_map}
 \alias{is.icd_short_code}
 \alias{is.icd_wide_data}
 \title{test ICD-related classes}
@@ -31,7 +31,7 @@ is.icd_short_code(x)
 
 is.icd_decimal_code(x)
 
-is.icd_map(x)
+is.icd_comorbidity_map(x)
 }
 \arguments{
 \item{x}{Any object which may have ICD-related classes set}

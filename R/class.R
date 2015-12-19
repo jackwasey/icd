@@ -18,7 +18,7 @@
 ######################################################################
 #
 # get and set class types this package uses The master list is: icd9 icd9cm icd10
-# icd10cm icd10who icd_long icd_wide icd_decimal icd_short icd_map
+# icd10cm icd10who icd_long icd_wide icd_decimal icd_short icd_comorbidity_map
 #
 # I'm not sure of the best order, so I think I'll avoid assuming any order,
 # except for more specific ICD types coming first.
@@ -32,7 +32,7 @@ icd10_classes <- c(icd10_sub_classes, "icd10")
 icd_version_classes <- c(icd9_classes, icd10_classes)
 icd_data_classes <- c("icd_long_data", "icd_wide_data")
 icd_code_classes <- c("icd_short_code", "icd_decimal_code")
-icd_other_classes <- c("map") # TODO maybe calls this comorbidity_map? Not limited to ICD codes.
+icd_other_classes <- c("icd_comorbidity_map")
 
 icd_check_conflict_with_icd9 <- function(x)
   if (inherits(x, icd9_classes))
@@ -215,12 +215,11 @@ icd_decimal_code <- function(x) {
 
 #' @rdname set_icd_class
 #' @details This, I think, should take priority over ICD-9 vs ICD-10 when doing S3 dispatching
-#' Maybe should call this class icd_comorbidity_map instead
 #' @export
-icd_map <- function(x) {
+icd_comorbidity_map <- function(x) {
   assertList(x, any.missing = FALSE, min.len = 1, names = "unique")
-  if (inherits(x, "icd_map")) return(x)
-  class(x) <- append(class(x), "icd_map", after = 0)
+  if (inherits(x, "icd_comorbidity_map")) return(x)
+  class(x) <- append(class(x), "icd_comorbidity_map", after = 0)
   x
 }
 
@@ -231,9 +230,9 @@ icd_map <- function(x) {
 #'
 #' Equivalent to a list, but preserves class of extracted elements
 #' @export
-`[.icd_map` <- function(x, index, ...) {
+`[.icd_comorbidity_map` <- function(x, index, ...) {
   new_classes <- class(x)
-  new_classes <- new_classes[new_classes != "icd_map"]
+  new_classes <- new_classes[new_classes != "icd_comorbidity_map"]
   y <- unclass(x)
   out <- y[index, ...]
   class(out) <- new_classes
@@ -244,9 +243,9 @@ icd_map <- function(x) {
 #'
 #' Equivalent to a list, but preserves class of extracted vector
 #' @export
-`[[.icd_map` <- function(x, index, ...) {
+`[[.icd_comorbidity_map` <- function(x, index, ...) {
   new_classes <- class(x)
-  new_classes <- new_classes[new_classes != "icd_map"]
+  new_classes <- new_classes[new_classes != "icd_comorbidity_map"]
   y <- unclass(x)
   out <- y[[index, ...]]
   class(out) <- new_classes
@@ -415,7 +414,7 @@ is.icd_decimal_code <- function(x) inherits(x, "icd_decimal_code")
 
 #' @rdname is.icd9
 #' @export
-is.icd_map <- function(x) inherits(x, "icd_map")
+is.icd_comorbidity_map <- function(x) inherits(x, "icd_comorbidity_map")
 
 # TODO, print S3 methods so we can choose to show ICD version, and/or human
 # readable descriptions of the codes

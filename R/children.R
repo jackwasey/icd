@@ -28,8 +28,8 @@
 #' @examples
 #' library(magrittr)
 #' icd_children("10201", short_code = TRUE, real = FALSE) # no children other than self
-#' icd9Children("0032", FALSE) # guess it was a short, not decimal code
-#' icd9ChildrenShort("10201", TRUE) # empty because 102.01 is not meaningful
+#' icd_children("0032", FALSE) # guess it was ICD-9 and a short, not decimal code
+#' icd_children("10201", short_code = TRUE, real = TRUE) # empty because 102.01 is not meaningful
 #' icd_children("003", short_code = TRUE, real = TRUE) %>% icd_explain(condense = FALSE, short_code = TRUE)
 #' icd_children(short_code = FALSE, "100.0")
 #' icd_children(short_code = FALSE, "100.00")

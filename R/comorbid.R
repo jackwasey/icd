@@ -381,10 +381,10 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #'   the differing codes are attempted to be reduced to their parent codes, in
 #'   order to give a more succinct summary.
 #' @examples
-#' icd9DiffComorbid(elixComorbid, ahrqComorbid, "CHF")
+#' icd_difd_comorbid(elixComorbid, ahrqComorbid, "CHF")
 #' \dontrun{
 #' # give full report on all comorbidities for these mappings
-#' icd9DiffComorbid(elixComorbid, ahrqComorbid)
+#' icd_diff_comorbid(elixComorbid, ahrqComorbid)
 #' }
 #' @return A list, each item of which is another list containing the
 #'   intersections and both asymmetric differences.
@@ -393,15 +393,6 @@ icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL, y_names = 
                              show = TRUE, explain = TRUE) {
   UseMethod("icd_diff_comorbid")
 }
-
-# # ' @describeIn icd_diff_comorbid Show difference between comorbidity maps, guessing ICD type
-# # ' @export
-# icd_diff_comorbid.list <- function(x, y, ...) {
-#   if (is.icd9(x) && is.icd9(y))
-#     icd_diff_comorbid.icd9(x, y, ...)
-#   else if (is.)
-#
-# }
 
 #' @describeIn icd_diff_comorbid Show difference between comorbidity maps with ICD-9 codes
 #' @export

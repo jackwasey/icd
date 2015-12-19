@@ -32,16 +32,16 @@ test_that("setting conflicting icd data class gives error", {
 x <- icd9::quanElixComorbid
 
 test_that("constructing a comorbidity map works", {
-  expect_equal(icd_map(x), x)
+  expect_equal(icd_comorbidity_map(x), x)
   expect_equivalent(as.list(x), x)
-  expect_equivalent(icd_map(as.list(x)), x)
+  expect_equivalent(icd_comorbidity_map(as.list(x)), x)
 })
 
 test_that("constructing a comorbidity map with unnamed list, etc. fails", {
-  expect_error(icd_map(unname(unclass(x))))
+  expect_error(icd_comorbidity_map(unname(unclass(x))))
   # and data frames should definitely fail
-  expect_error(icd_map(icd9::vermont_dx))
-  expect_error(icd_map(icd9::uranium_pathology))
+  expect_error(icd_comorbidity_map(icd9::vermont_dx))
+  expect_error(icd_comorbidity_map(icd9::uranium_pathology))
 })
 
 test_that("constructing wide data works", {

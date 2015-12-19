@@ -69,7 +69,7 @@ icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data")
     icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
-  class(elixComorbid) <- c("icd_map", "icd9", "icd_decimal", "list")
+  class(elixComorbid) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
 
   if (save) save_in_data_dir(elixComorbid)
   invisible(elixComorbid)
@@ -152,7 +152,7 @@ icd9_generate_map_quan_elix <- function(condense = NULL,
     icd_children.icd9, short_code = TRUE, real = FALSE)
 
   names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
-  class(quanElixComorbid) <- c("icd_map", "icd9", "icd_decimal", "list")
+  class(quanElixComorbid) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
 
   if (save) save_in_data_dir(quanElixComorbid)
   invisible(quanElixComorbid)
@@ -220,7 +220,7 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
 
   # set S3 classes (in addition to "list")
   # this is a comorbidity map first and foremost (after being a list?)
-  class(icd10_map_quan_elix) <- c("comorbidity_map", "icd10cm", "icd10", "list")
+  class(icd10_map_quan_elix) <- c("icd_comorbidity_map", "icd10cm", "icd10", "list")
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
@@ -292,7 +292,7 @@ icd10_generate_map_quan_charlson <- function() {
 
   # set S3 classes (in addition to "list")
   # this is a comorbidity map first and foremost (after being a list?)
-  class(icd10_map_quan_charlson) <- c("list", "comorbidity_map", "icd10cm", "icd10")
+  class(icd10_map_quan_charlson) <- c("list", "icd_comorbidity_map", "icd10cm", "icd10")
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
