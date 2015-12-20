@@ -220,8 +220,8 @@ test_that("strip leading zero from short numeric only", {
   # check other way
   expect_equal(unclass(res <- icd9_drop_leading_zeroes("1239", short_code = TRUE)), "1239")
   # not sure whether this is wise:
-  expect_is(res, "icd_short_code")
-  expect_is(res, "icd9")
+  # expect_is(res, "icd_short_code")
+  # expect_is(res, "icd9")
 })
 
 test_that("strip leading zero from decimal V and E", {
@@ -245,38 +245,38 @@ test_that("strip leading zero from decimal V and E", {
 test_that("drop leading zeroes from majors: invalid input", {
   # this is a little dangerous. dropping zeroes from a major is only valid for
   # short codes if the minor is empty, but this function is unaware of this.
-  expect_equal(icd9DropLeadingZeroesMajor(""), "")
-  expect_true(is.na(icd9DropLeadingZeroesMajor(NA_character_)))
-  expect_true(is.na(icd9DropLeadingZeroesMajor(NA)))
+  expect_equal(icd9_drop_leading_zeroes_major(""), "")
+  expect_true(is.na(icd9_drop_leading_zeroes_major(NA_character_)))
+  expect_true(is.na(icd9_drop_leading_zeroes_major(NA)))
   # dropping leading zeroes from an invalid code is undefined, so no tests.
 })
 
 test_that("drop leading zeroes from majors: numeric input", {
-  expect_equal(icd9DropLeadingZeroesMajor(1), "1")
-  expect_equal(icd9DropLeadingZeroesMajor(20), "20")
-  expect_equal(icd9DropLeadingZeroesMajor(333), "333")
-  expect_equal(icd9DropLeadingZeroesMajor("1"), "1")
-  expect_equal(icd9DropLeadingZeroesMajor("20"), "20")
-  expect_equal(icd9DropLeadingZeroesMajor("333"), "333")
-  expect_equal(icd9DropLeadingZeroesMajor("01"), "1")
-  expect_equal(icd9DropLeadingZeroesMajor(" 01 "), "1")
-  expect_equal(icd9DropLeadingZeroesMajor("001"), "1")
-  expect_equal(icd9DropLeadingZeroesMajor("020"), "20")
+  expect_equal(icd9_drop_leading_zeroes_major(1), "1")
+  expect_equal(icd9_drop_leading_zeroes_major(20), "20")
+  expect_equal(icd9_drop_leading_zeroes_major(333), "333")
+  expect_equal(icd9_drop_leading_zeroes_major("1"), "1")
+  expect_equal(icd9_drop_leading_zeroes_major("20"), "20")
+  expect_equal(icd9_drop_leading_zeroes_major("333"), "333")
+  expect_equal(icd9_drop_leading_zeroes_major("01"), "1")
+  expect_equal(icd9_drop_leading_zeroes_major(" 01 "), "1")
+  expect_equal(icd9_drop_leading_zeroes_major("001"), "1")
+  expect_equal(icd9_drop_leading_zeroes_major("020"), "20")
 })
 
 test_that("drop leading zeroes from majors: V codes", {
-  expect_equal(icd9DropLeadingZeroesMajor("V1"), "V1")
-  expect_equal(icd9DropLeadingZeroesMajor("V01"), "V1")
-  expect_equal(icd9DropLeadingZeroesMajor(" V12"), "V12")
+  expect_equal(icd9_drop_leading_zeroes_major("V1"), "V1")
+  expect_equal(icd9_drop_leading_zeroes_major("V01"), "V1")
+  expect_equal(icd9_drop_leading_zeroes_major(" V12"), "V12")
 })
 
 test_that("drop leading zeroes from majors: V codes preserves lower case v", {
   # no strong reason to force this, but seems reasonable
-  expect_equal(icd9DropLeadingZeroesMajor(" v01 "), "v1")
-  expect_equal(icd9DropLeadingZeroesMajor(" v9 "), "v9")
+  expect_equal(icd9_drop_leading_zeroes_major(" v01 "), "v1")
+  expect_equal(icd9_drop_leading_zeroes_major(" v9 "), "v9")
 })
 
 test_that("drop leading zeroes from majors: E codes", {
-  expect_equal(icd9DropLeadingZeroesMajor("E800"), "E800")
-  expect_equal(icd9DropLeadingZeroesMajor(" e812 "), "e812")
+  expect_equal(icd9_drop_leading_zeroes_major("E800"), "E800")
+  expect_equal(icd9_drop_leading_zeroes_major(" e812 "), "e812")
 })

@@ -909,7 +909,7 @@ generateSysData <- function(...) {
 
 icd9DropLeadingZeroes <- function(x, isShort) {
   .Deprecated("icd9_drop_leading_zeroes")
-  icd9_drop_leading_zeroes.default(x, short_code = isShort)
+  unclass(icd9_drop_leading_zeroes.default(x, short_code = isShort))
 }
 
 icd9DropLeadingZeroesShort <- function(x) {
@@ -920,6 +920,11 @@ icd9DropLeadingZeroesShort <- function(x) {
 icd9DropLeadingZeroesDecimal <- function(x) {
   .Deprecated("icd9_drop_leading_zeroes")
   icd9_drop_leading_zeroes.icd_decimal_code(x)
+}
+
+icd9DropLeadingZeroesMajor <- function(major)  {
+  .Deprecated("icd9_drop_leading_zeroes_major")
+  icd9_drop_leading_zeroes_major(major)
 }
 
 icd9AddLeadingZeroesShort <- function(x) {

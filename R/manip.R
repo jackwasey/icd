@@ -72,7 +72,7 @@ icd9_drop_leading_zeroes.icd_short_code <- function(x, short_code = NULL) {
   # very important: only drop the zero in V codes if the minor part is empty.
   areEmpty <- parts[["minor"]] == ""
 
-  x[areEmpty] <- icd9DropLeadingZeroesMajor(parts[areEmpty, "major"])
+  x[areEmpty] <- icd9_drop_leading_zeroes_major(parts[areEmpty, "major"])
   x
 }
 
@@ -83,7 +83,7 @@ icd9_drop_leading_zeroes.default <- function(x, short_code = NULL) {
 }
 
 #' @rdname icd9DropLeadingZeroes
-icd9DropLeadingZeroesMajor <- function(major) {
+icd9_drop_leading_zeroes_major <- function(major) {
   # (valid) E codes don't ever have leading zeroes
   # major can legitimately be an integer
   major <- trim(major) # my trim loses encoding, but this shouldn't matter
