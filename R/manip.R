@@ -87,7 +87,7 @@ icd9DropLeadingZeroesMajor <- function(major) {
   # (valid) E codes don't ever have leading zeroes
   # major can legitimately be an integer
   major <- trim(major) # my trim loses encoding, but this shouldn't matter
-  isV <- icd9IsV(major) # not checking validity, necessarily, just quick check
+  isV <- icd9_is_v(major) # not checking validity, necessarily, just quick check
   isN <- icd9_is_valid_major_n(major)
   major[isV] <- sub(pattern = "^([Vv])0([[:digit:]]{1})$",
                     replacement = "\\1\\2",

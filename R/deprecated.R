@@ -907,9 +907,9 @@ generateSysData <- function(...) {
   generate_sysdata(...)
 }
 
-icd9DropLeadingZeroes <- function(x, short_code) {
+icd9DropLeadingZeroes <- function(x, isShort) {
   .Deprecated("icd9_drop_leading_zeroes")
-  icd9_drop_leading_zeroes.default(x, short_code)
+  icd9_drop_leading_zeroes.default(x, short_code = isShort)
 }
 
 icd9DropLeadingZeroesShort <- function(x) {
