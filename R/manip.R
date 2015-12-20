@@ -76,13 +76,15 @@ icd9_drop_leading_zeroes.icd_short_code <- function(x, short_code = NULL) {
   x
 }
 
+#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from ICD-9 codes of
+#'   specified or unknown type.
 icd9_drop_leading_zeroes.default <- function(x, short_code = NULL) {
   x <- asCharacterNoWarn(x)
   x <- icd_guess_short_update(x, short_code = short_code)
   icd9_drop_leading_zeroes(x)
 }
 
-#' @rdname icd9DropLeadingZeroes
+#' @rdname icd9_drop_leading_zeroes
 icd9_drop_leading_zeroes_major <- function(major) {
   # (valid) E codes don't ever have leading zeroes
   # major can legitimately be an integer

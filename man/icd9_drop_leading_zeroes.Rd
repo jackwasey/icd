@@ -2,8 +2,10 @@
 % Please edit documentation in R/manip.R
 \name{icd9_drop_leading_zeroes}
 \alias{icd9_drop_leading_zeroes}
+\alias{icd9_drop_leading_zeroes.default}
 \alias{icd9_drop_leading_zeroes.icd_decimal_code}
 \alias{icd9_drop_leading_zeroes.icd_short_code}
+\alias{icd9_drop_leading_zeroes_major}
 \title{drop zero padding from decimal ICD-9 code.}
 \usage{
 icd9_drop_leading_zeroes(x, short_code = NULL)
@@ -11,6 +13,10 @@ icd9_drop_leading_zeroes(x, short_code = NULL)
 \method{icd9_drop_leading_zeroes}{icd_decimal_code}(x, short_code = NULL)
 
 \method{icd9_drop_leading_zeroes}{icd_short_code}(x, short_code = NULL)
+
+\method{icd9_drop_leading_zeroes}{default}(x, short_code = NULL)
+
+icd9_drop_leading_zeroes_major(major)
 }
 \arguments{
 \item{icd9}{is
@@ -37,6 +43,9 @@ decimal form ICD-9 codes are not ambiguous if the leading zeroes
 \item \code{icd_decimal_code}: Drop leading zeroes from a decimal format ICD-9 code
 
 \item \code{icd_short_code}: Drop leading zeroes from a short format ICD-9 code
+
+\item \code{default}: Drop leading zeroes from ICD-9 codes of
+specified or unknown type.
 }}
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
