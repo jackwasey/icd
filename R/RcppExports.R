@@ -138,13 +138,13 @@ icd9AddLeadingZeroesMajor <- function(major) {
 }
 
 #' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesShort <- function(icd9Short) {
-    .Call('icd9_icd9AddLeadingZeroesShort', PACKAGE = 'icd9', icd9Short)
+icd9_add_leading_zeroes.icd_short_code <- function(x) {
+    .Call('icd9_icd9AddLeadingZeroesShort', PACKAGE = 'icd9', x)
 }
 
 #' @rdname icd9AddLeadingZeroes
-icd9AddLeadingZeroesDecimal <- function(icd9Decimal) {
-    .Call('icd9_icd9AddLeadingZeroesDecimal', PACKAGE = 'icd9', icd9Decimal)
+icd9_add_leading_zeroes.icd_decimal_code <- function(x) {
+    .Call('icd9_icd9AddLeadingZeroesDecimal', PACKAGE = 'icd9', x)
 }
 
 #' @title Add leading zeroes to incomplete ICD codes

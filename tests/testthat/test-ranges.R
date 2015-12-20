@@ -198,7 +198,7 @@ test_that("E code ranges", {
                c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
                  "E9505", "E9506", "E9507", "E9508", "E9509")
   )
-  expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("E9501"), "E9501")
 })
 
 test_that("major ranges", {

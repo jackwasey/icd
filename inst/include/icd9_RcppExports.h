@@ -461,17 +461,17 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9AddLeadingZeroesShort(Rcpp::CharacterVector icd9Short) {
-        typedef SEXP(*Ptr_icd9AddLeadingZeroesShort)(SEXP);
-        static Ptr_icd9AddLeadingZeroesShort p_icd9AddLeadingZeroesShort = NULL;
-        if (p_icd9AddLeadingZeroesShort == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9AddLeadingZeroesShort)(Rcpp::CharacterVector)");
-            p_icd9AddLeadingZeroesShort = (Ptr_icd9AddLeadingZeroesShort)R_GetCCallable("icd9", "icd9_icd9AddLeadingZeroesShort");
+    inline Rcpp::CharacterVector icd9_add_leading_zeroes_icd_short_code(Rcpp::CharacterVector x) {
+        typedef SEXP(*Ptr_icd9_add_leading_zeroes_icd_short_code)(SEXP);
+        static Ptr_icd9_add_leading_zeroes_icd_short_code p_icd9_add_leading_zeroes_icd_short_code = NULL;
+        if (p_icd9_add_leading_zeroes_icd_short_code == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd9_add_leading_zeroes_icd_short_code)(Rcpp::CharacterVector)");
+            p_icd9_add_leading_zeroes_icd_short_code = (Ptr_icd9_add_leading_zeroes_icd_short_code)R_GetCCallable("icd9", "icd9_icd9_add_leading_zeroes_icd_short_code");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9AddLeadingZeroesShort(Rcpp::wrap(icd9Short));
+            __result = p_icd9_add_leading_zeroes_icd_short_code(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -480,17 +480,17 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9AddLeadingZeroesDecimal(Rcpp::CharacterVector icd9Decimal) {
-        typedef SEXP(*Ptr_icd9AddLeadingZeroesDecimal)(SEXP);
-        static Ptr_icd9AddLeadingZeroesDecimal p_icd9AddLeadingZeroesDecimal = NULL;
-        if (p_icd9AddLeadingZeroesDecimal == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9AddLeadingZeroesDecimal)(Rcpp::CharacterVector)");
-            p_icd9AddLeadingZeroesDecimal = (Ptr_icd9AddLeadingZeroesDecimal)R_GetCCallable("icd9", "icd9_icd9AddLeadingZeroesDecimal");
+    inline Rcpp::CharacterVector icd9_add_leading_zeroes_icd_decimal_code(Rcpp::CharacterVector x) {
+        typedef SEXP(*Ptr_icd9_add_leading_zeroes_icd_decimal_code)(SEXP);
+        static Ptr_icd9_add_leading_zeroes_icd_decimal_code p_icd9_add_leading_zeroes_icd_decimal_code = NULL;
+        if (p_icd9_add_leading_zeroes_icd_decimal_code == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd9_add_leading_zeroes_icd_decimal_code)(Rcpp::CharacterVector)");
+            p_icd9_add_leading_zeroes_icd_decimal_code = (Ptr_icd9_add_leading_zeroes_icd_decimal_code)R_GetCCallable("icd9", "icd9_icd9_add_leading_zeroes_icd_decimal_code");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9AddLeadingZeroesDecimal(Rcpp::wrap(icd9Decimal));
+            __result = p_icd9_add_leading_zeroes_icd_decimal_code(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

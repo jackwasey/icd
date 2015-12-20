@@ -259,8 +259,8 @@ icd9_expand_range_short <- function(start, end, real = TRUE,
   assertFlag(excludeAmbiguousStart)
   assertFlag(excludeAmbiguousEnd)
 
-  start <- icd9AddLeadingZeroesShort(trim(start))
-  end <- icd9AddLeadingZeroesShort(trim(end))
+  start <- icd9_add_leading_zeroes.icd_short_code(trim(start))
+  end <- icd9_add_leading_zeroes.icd_short_code(trim(end))
 
   # potentially do some checks on start and end, e.g. start <= end.
   # determine whether we are doing N, V or E

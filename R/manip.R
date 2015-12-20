@@ -36,7 +36,7 @@ icd_extract_alpha_numeric <- function(x) {
 #' @description decimal form ICD-9 codes are not ambiguous if the leading zeroes
 #'   are dropped. Some short-form ICD-9 codes would not be ambiguous, e.g. "1"
 #'   but many would be problematic. This is the inverse of
-#'   \code{icd9AddLeadingZeroesDecimal}.
+#'   \code{icd9_add_leading_zeroes}.
 #'
 #'   Invalid codes have no guaranteed result, and may give NA, or a (possibly
 #'   valid) code in repsonse.
@@ -45,29 +45,41 @@ icd_extract_alpha_numeric <- function(x) {
 #'   part
 #' @family ICD-9 convert
 #' @keywords internal manip
-icd9_drop_leading_zeroes <- function(x, short_code) {
+icd9_drop_leading_zeroes <- function(x, short_code = NULL) {
   UseMethod("icd9_drop_leading_zeroes")
 }
 
+icd9_add_leading_zeroes <- function(x, short_code = NULL) {
+  UseMethod("icd9_add_leading_zeroes")
+}
+
 #' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a decimal format ICD-9 code
-icd9_drop_leading_zeroes.decimal_code <- function(x) {
+icd9_drop_leading_zeroes.icd_decimal_code <- function(x, short_code = NULL) {
   assert(checkFactor(x), checkCharacter(x))
+  assertNull(short_code)
 
   x %>% asCharacterNoWarn %>%
     str_match_all( pattern = "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]+)[[:space:]]*") %>%
-    vapply(FUN = function(y) if (length(y) > 0) sprintf("%s%s", y[2], y[4]) else NA_character_ ,
+    vapply(FUN = function(y) if (length(y) > 0 && !any(is.na(y))) sprintf("%s%s", y[2], y[4]) else NA_character_ ,
            FUN.VALUE = character(1))
 }
 
 #' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a short format ICD-9 code
-icd9_drop_leading_zeroes.short_code <- function(x) {
+icd9_drop_leading_zeroes.icd_short_code <- function(x, short_code = NULL) {
   assert(checkFactor(x), checkCharacter(x))
+  assertNull(short_code)
   parts <- icd_short_to_parts.icd9(x = x, minor_empty = "")
   # very important: only drop the zero in V codes if the minor part is empty.
   areEmpty <- parts[["minor"]] == ""
 
   x[areEmpty] <- icd9DropLeadingZeroesMajor(parts[areEmpty, "major"])
   x
+}
+
+icd9_drop_leading_zeroes.default <- function(x, short_code = NULL) {
+  x <- asCharacterNoWarn(x)
+  x <- icd_guess_short_update(x, short_code = short_code)
+  icd9_drop_leading_zeroes(x)
 }
 
 #' @rdname icd9DropLeadingZeroes

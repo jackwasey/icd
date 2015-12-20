@@ -113,19 +113,19 @@ Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
 }
 
 //' @rdname icd9AddLeadingZeroes
-// [[Rcpp::export]]
+// [[Rcpp::export(icd9_add_leading_zeroes.icd_short_code)]]
 Rcpp::CharacterVector icd9AddLeadingZeroesShort(
-		Rcpp::CharacterVector icd9Short) {
-	Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
+		Rcpp::CharacterVector x) {
+	Rcpp::List parts = icd9ShortToPartsCpp(x, "");
 	parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
 	return icd9PartsToShort(parts);
 }
 
 //' @rdname icd9AddLeadingZeroes
-// [[Rcpp::export]]
+// [[Rcpp::export(icd9_add_leading_zeroes.icd_decimal_code)]]
 Rcpp::CharacterVector icd9AddLeadingZeroesDecimal(
-		Rcpp::CharacterVector icd9Decimal) {
-	Rcpp::List parts = icd9DecimalToPartsCpp(icd9Decimal);
+		Rcpp::CharacterVector x) {
+	Rcpp::List parts = icd9DecimalToPartsCpp(x);
 	parts["major"] = icd9AddLeadingZeroesMajor(
 			Rcpp::as<Rcpp::CharacterVector>(parts["major"]));
 	return icd9PartsToDecimal(parts);

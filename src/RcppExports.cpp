@@ -720,20 +720,20 @@ RcppExport SEXP icd9_icd9AddLeadingZeroesMajor(SEXP majorSEXP) {
     return __result;
 }
 // icd9AddLeadingZeroesShort
-Rcpp::CharacterVector icd9AddLeadingZeroesShort(Rcpp::CharacterVector icd9Short);
-static SEXP icd9_icd9AddLeadingZeroesShort_try(SEXP icd9ShortSEXP) {
+Rcpp::CharacterVector icd9AddLeadingZeroesShort(Rcpp::CharacterVector x);
+static SEXP icd9_icd9AddLeadingZeroesShort_try(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type icd9Short(icd9ShortSEXP);
-    __result = Rcpp::wrap(icd9AddLeadingZeroesShort(icd9Short));
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type x(xSEXP);
+    __result = Rcpp::wrap(icd9AddLeadingZeroesShort(x));
     return __result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_icd9AddLeadingZeroesShort(SEXP icd9ShortSEXP) {
+RcppExport SEXP icd9_icd9AddLeadingZeroesShort(SEXP xSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9AddLeadingZeroesShort_try(icd9ShortSEXP));
+        __result = PROTECT(icd9_icd9AddLeadingZeroesShort_try(xSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -750,20 +750,20 @@ RcppExport SEXP icd9_icd9AddLeadingZeroesShort(SEXP icd9ShortSEXP) {
     return __result;
 }
 // icd9AddLeadingZeroesDecimal
-Rcpp::CharacterVector icd9AddLeadingZeroesDecimal(Rcpp::CharacterVector icd9Decimal);
-static SEXP icd9_icd9AddLeadingZeroesDecimal_try(SEXP icd9DecimalSEXP) {
+Rcpp::CharacterVector icd9AddLeadingZeroesDecimal(Rcpp::CharacterVector x);
+static SEXP icd9_icd9AddLeadingZeroesDecimal_try(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type icd9Decimal(icd9DecimalSEXP);
-    __result = Rcpp::wrap(icd9AddLeadingZeroesDecimal(icd9Decimal));
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type x(xSEXP);
+    __result = Rcpp::wrap(icd9AddLeadingZeroesDecimal(x));
     return __result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd9_icd9AddLeadingZeroesDecimal(SEXP icd9DecimalSEXP) {
+RcppExport SEXP icd9_icd9AddLeadingZeroesDecimal(SEXP xSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_icd9AddLeadingZeroesDecimal_try(icd9DecimalSEXP));
+        __result = PROTECT(icd9_icd9AddLeadingZeroesDecimal_try(xSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1443,8 +1443,8 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::String(*icd9AddLeadingZeroesMajorSingle)(Rcpp::String)");
         signatures.insert("std::string(*icd9AddLeadingZeroesMajorSingleStd)(std::string)");
         signatures.insert("Rcpp::CharacterVector(*icd9AddLeadingZeroesMajor)(Rcpp::CharacterVector)");
-        signatures.insert("Rcpp::CharacterVector(*icd9AddLeadingZeroesShort)(Rcpp::CharacterVector)");
-        signatures.insert("Rcpp::CharacterVector(*icd9AddLeadingZeroesDecimal)(Rcpp::CharacterVector)");
+        signatures.insert("Rcpp::CharacterVector(*icd9_add_leading_zeroes.icd_short_code)(Rcpp::CharacterVector)");
+        signatures.insert("Rcpp::CharacterVector(*icd9_add_leading_zeroes.icd_decimal_code)(Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd9AddLeadingZeroes)(Rcpp::CharacterVector,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9ExpandMinorShim)(std::string,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9ChildrenShortCpp)(Rcpp::CharacterVector,bool)");
@@ -1495,8 +1495,8 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajorSingle", (DL_FUNC)icd9_icd9AddLeadingZeroesMajorSingle_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajorSingleStd", (DL_FUNC)icd9_icd9AddLeadingZeroesMajorSingleStd_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajor", (DL_FUNC)icd9_icd9AddLeadingZeroesMajor_try);
-    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesShort", (DL_FUNC)icd9_icd9AddLeadingZeroesShort_try);
-    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesDecimal", (DL_FUNC)icd9_icd9AddLeadingZeroesDecimal_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_add_leading_zeroes.icd_short_code", (DL_FUNC)icd9_icd9AddLeadingZeroesShort_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_add_leading_zeroes.icd_decimal_code", (DL_FUNC)icd9_icd9AddLeadingZeroesDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroes", (DL_FUNC)icd9_icd9AddLeadingZeroes_try);
     R_RegisterCCallable("icd9", "icd9_icd9ExpandMinorShim", (DL_FUNC)icd9_icd9ExpandMinorShim_try);
     R_RegisterCCallable("icd9", "icd9_icd9ChildrenShortCpp", (DL_FUNC)icd9_icd9ChildrenShortCpp_try);

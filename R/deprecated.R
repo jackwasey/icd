@@ -907,14 +907,29 @@ generateSysData <- function(...) {
   generate_sysdata(...)
 }
 
+icd9DropLeadingZeroes <- function(x, short_code) {
+  .Deprecated("icd9_drop_leading_zeroes")
+  icd9_drop_leading_zeroes.default(x, short_code)
+}
+
 icd9DropLeadingZeroesShort <- function(x) {
   .Deprecated("icd9_drop_leading_zeroes")
-  icd9_drop_leading_zeroes.short_code(x)
+  icd9_drop_leading_zeroes.icd_short_code(x)
 }
 
 icd9DropLeadingZeroesDecimal <- function(x) {
   .Deprecated("icd9_drop_leading_zeroes")
-  icd9_drop_leading_zeroes.decimal_code(x)
+  icd9_drop_leading_zeroes.icd_decimal_code(x)
+}
+
+icd9AddLeadingZeroesShort <- function(x) {
+  .Deprecated("icd9_add_leading_zeroes")
+  icd9_add_leading_zeroes.icd_short_code(x)
+}
+
+icd9AddLeadingZeroesDecimal <- function(x) {
+  .Deprecated("icd9_add_leading_zeroes")
+  icd9_add_leading_zeroes.icd_decimal_code(x)
 }
 
 stripRtf <- function(x) {

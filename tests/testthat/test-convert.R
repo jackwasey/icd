@@ -136,11 +136,11 @@ test_that("icd9 short to major part, E codes", {
 test_that("running short to decimal conversion before and after expansion
           of a ICD-9 base codes gives the same result", {
 
-            icd9List <- ahrqComorbid #todo SUBSET OR EXTRA MAPPINGS?
+            icd9List <- icd9::icd9_map_ahrq #todo SUBSET OR EXTRA MAPPINGS?
             for (i in names(icd9List)) {
               expect_equal(
                 icd_decimal_to_short.icd9(icd_short_to_decimal.icd9(icd9List[[i]])),
-                icd9AddLeadingZeroesShort(icd9List[[i]]),
+                icd9_add_leading_zeroes.icd_short_code(icd9List[[i]]),
                 info = paste("in loop:", i)
               )
             }

@@ -26,80 +26,80 @@ if (requireNamespace("lintr", quietly = TRUE)) {
 context("test icd9 package")
 
 test_that("zero pad decimal - bad input", {
-  expect_equal(icd9AddLeadingZeroesDecimal(character()), character())
-  expect_equal(icd9AddLeadingZeroesDecimal(NA_character_), NA_character_)
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code(character()), character())
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code(NA_character_), NA_character_)
 })
 
 test_that("zero pad decimal, numeric only", {
 
-  expect_equal(icd9AddLeadingZeroesDecimal("1"), "001")
-  expect_equal(icd9AddLeadingZeroesDecimal("01"), "001")
-  expect_equal(icd9AddLeadingZeroesDecimal(" 01 "), "001")
-  expect_equal(icd9AddLeadingZeroesDecimal("1.1"), "001.1")
-  expect_equal(icd9AddLeadingZeroesDecimal("1.99"), "001.99")
-  expect_equal(icd9AddLeadingZeroesDecimal("22"), "022")
-  expect_equal(icd9AddLeadingZeroesDecimal(" 22.34 "), "022.34")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("1"), "001")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("01"), "001")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code(" 01 "), "001")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("1.1"), "001.1")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("1.99"), "001.99")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("22"), "022")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code(" 22.34 "), "022.34")
 
-  expect_equal(icd9AddLeadingZeroesDecimal("333"), "333")
-  expect_equal(icd9AddLeadingZeroesDecimal("333.99"), "333.99")
-  expect_equal(icd9AddLeadingZeroesDecimal("333.1 "), "333.1")
-  expect_equal(icd9AddLeadingZeroesDecimal(
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("333"), "333")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("333.99"), "333.99")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("333.1 "), "333.1")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code(
     c("01", "1.99 ", "22.34", "333", "999.00")),
     c("001", "001.99", "022.34", "333", "999.00"))
 
 })
 
 test_that("zero pad decimel V and E codes", {
-  expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V01")
-  expect_equal(icd9AddLeadingZeroesDecimal(" V1 "), "V01")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.1"), "V01.1")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.99"), "V01.99")
-  expect_equal(icd9AddLeadingZeroesDecimal("V22"), "V22")
-  expect_equal(icd9AddLeadingZeroesDecimal(" V22.34 "), "V22.34")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V01")
-  expect_equal(icd9AddLeadingZeroesDecimal(" V1 "), "V01")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.1"), "V01.1")
-  expect_equal(icd9AddLeadingZeroesDecimal("V1.99"), "V01.99")
-  expect_equal(icd9AddLeadingZeroesDecimal("V22"), "V22")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("V1"), "V01")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code(" V1 "), "V01")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("V1.1"), "V01.1")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("V1.99"), "V01.99")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("V22"), "V22")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code(" V22.34 "), "V22.34")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("V1"), "V01")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code(" V1 "), "V01")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("V1.1"), "V01.1")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("V1.99"), "V01.99")
+  expect_equal(icd9_add_leading_zeroes.icd_decimal_code("V22"), "V22")
   expect_equal(
-    icd9AddLeadingZeroesDecimal(" V22.34 "),
+    icd9_add_leading_zeroes.icd_decimal_code(" V22.34 "),
     "V22.34")
 })
 
 test_that("zero pad short invalid codes", {
 
-  expect_equal(icd9AddLeadingZeroesShort(character()), character())
-  expect_equal(icd9AddLeadingZeroesShort("anything"),
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(character()), character())
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("anything"),
                NA_character_)
-  expect_equal(icd9AddLeadingZeroesShort("anything"), NA_character_)
-  expect_equal(icd9AddLeadingZeroesShort(NA_character_), NA_character_)
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("anything"), NA_character_)
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(NA_character_), NA_character_)
   # this is just re-checking the validation code...
-  expect_equal(icd9AddLeadingZeroesShort("V012"), "V012")
-  expect_equal(icd9AddLeadingZeroesShort("V199"), "V199")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("V012"), "V012")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("V199"), "V199")
 })
 
 test_that("zero pad short", {
-  expect_equal(icd9AddLeadingZeroesShort("1"), "001")
-  expect_equal(icd9AddLeadingZeroesShort("01"), "001")
-  expect_equal(icd9AddLeadingZeroesShort("22"), "022")
-  expect_equal(icd9AddLeadingZeroesShort(" 01 "), "001")
-  expect_equal(icd9AddLeadingZeroesShort("199"), "199")
-  expect_equal(icd9AddLeadingZeroesShort(" 02234 "), "02234")
-  expect_equal(icd9AddLeadingZeroesShort("V1"), "V01")
-  expect_equal(icd9AddLeadingZeroesShort(" V1 "), "V01")
-  expect_equal(icd9AddLeadingZeroesShort("V1"), "V01")
-  expect_equal(icd9AddLeadingZeroesShort(" V1 "), "V01")
-  expect_equal(icd9AddLeadingZeroesShort("V11"), "V11")
-  expect_equal(icd9AddLeadingZeroesShort(" V11 "), "V11")
-  expect_equal(icd9AddLeadingZeroesShort("V11"), "V11")
-  expect_equal(icd9AddLeadingZeroesShort(" V11 "), "V11")
-  expect_equal(icd9AddLeadingZeroesShort(" V2234 "), "V2234")
-  expect_equal(icd9AddLeadingZeroesShort("3331 "), "3331")
-  expect_equal(icd9AddLeadingZeroesShort(
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("1"), "001")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("01"), "001")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("22"), "022")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(" 01 "), "001")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("199"), "199")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(" 02234 "), "02234")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("V1"), "V01")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(" V1 "), "V01")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("V1"), "V01")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(" V1 "), "V01")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("V11"), "V11")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(" V11 "), "V11")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("V11"), "V11")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(" V11 "), "V11")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(" V2234 "), "V2234")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("3331 "), "3331")
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(
     c("9", "01", "0199 ", "02234", "333", "99900")),
     c("009", "001", "0199", "02234", "333", "99900"))
-  expect_equal(icd9AddLeadingZeroesShort(NA_character_), NA_character_)
-  expect_equal(icd9AddLeadingZeroesShort("V12.34"), NA_character_)
+  expect_equal(icd9_add_leading_zeroes.icd_short_code(NA_character_), NA_character_)
+  expect_equal(icd9_add_leading_zeroes.icd_short_code("V12.34"), NA_character_)
 
 })
 
@@ -149,93 +149,92 @@ test_that("extracting alphabetic and numeric parts from ICD-9 codes works", {
 
 test_that("strip leading zeroes: errors", {
 
-  expect_equal(icd9_drop_leading_zeroes.decimal_code(NA_character_), NA_character_)
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code(NA_character_), NA_character_)
   # no guaranteed behaviour when code is invalid: it may or may not match the
   # regex. If the user wants to get the valid codes first, they can do that.
 })
 
 test_that("strip leading zero from decimal numeric only", {
 
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("1"), "1")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("01"), "1")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("001"), "1")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("1."), "1.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("01."), "1.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("001."), "1.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("12"), "12")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("012"), "12")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("12."), "12.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("012."), "12.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("123"), "123")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("123."), "123.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("1.2"), "1.2")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("01.2"), "1.2")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("001.2"), "1.2")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("12.4"), "12.4")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("012.4"), "12.4")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("12.78"), "12.78")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("012.78"), "12.78")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("123.9"), "123.9")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("123.87"), "123.87")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("1"), "1")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("01"), "1")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("001"), "1")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("1."), "1.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("01."), "1.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("001."), "1.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("12"), "12")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("012"), "12")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("12."), "12.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("012."), "12.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("123"), "123")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("123."), "123.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("1.2"), "1.2")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("01.2"), "1.2")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("001.2"), "1.2")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("12.4"), "12.4")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("012.4"), "12.4")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("12.78"), "12.78")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("012.78"), "12.78")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("123.9"), "123.9")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("123.87"), "123.87")
 
   # just double check we can do this the other way:
-  expect_equal(icd9DropLeadingZeroes("012.78", isShort = FALSE), "12.78")
+  expect_equal(icd9_drop_leading_zeroes("012.78", short_code = FALSE), "12.78")
 })
 
 test_that("strip leading zero from decimal V and E", {
 
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V1"), "V1")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V01"), "V1")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V1."), "V1.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V01."), "V1.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V12"), "V12")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V12.3"), "V12.3")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V1.2"), "V1.2")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V01.2"), "V1.2")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("V12.78"), "V12.78")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("E912"), "E912")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("E912."), "E912.")
-  expect_equal(icd9_drop_leading_zeroes.decimal_code("E912.7"), "E912.7")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V1"), "V1")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V01"), "V1")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V1."), "V1.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V01."), "V1.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V12"), "V12")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V12.3"), "V12.3")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V1.2"), "V1.2")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V01.2"), "V1.2")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("V12.78"), "V12.78")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("E912"), "E912")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("E912."), "E912.")
+  expect_equal(icd9_drop_leading_zeroes.icd_decimal_code("E912.7"), "E912.7")
 
   expect_equal(
-    icd9_drop_leading_zeroes.decimal_code(c("V12.78", " E898.", "02", "034.5")),
+    icd9_drop_leading_zeroes.icd_decimal_code(c("V12.78", " E898.", "02", "034.5")),
     c("V12.78", "E898.", "2", "34.5"))
 })
 
 test_that("strip leading zero from short numeric only", {
 
-  expect_equal(icd9DropLeadingZeroesShort(NA_character_), NA_character_)
-  expect_equal(icd9DropLeadingZeroesShort("010"), "10")
-  expect_equal(icd9DropLeadingZeroesShort("009"), "9")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code(NA_character_), NA_character_)
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("010"), "10")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("009"), "9")
 
   # must have zero to be valid (001.2)
-  expect_equal(icd9DropLeadingZeroesShort("0012"), "0012")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("0012"), "0012")
   # must have zero to be valid (001.23)
-  expect_equal(icd9DropLeadingZeroesShort("00123"), "00123")
-  expect_equal(icd9DropLeadingZeroesShort("0124"), "0124")
-  expect_equal(icd9DropLeadingZeroesShort("01278"), "01278")
-  expect_equal(icd9DropLeadingZeroesShort("1239"), "1239")
-  expect_equal(icd9DropLeadingZeroesShort("12387"), "12387")
-
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("00123"), "00123")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("0124"), "0124")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("01278"), "01278")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("1239"), "1239")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("12387"), "12387")
 
   # check other way
-  expect_equal(icd9DropLeadingZeroes("1239", isShort = TRUE), "1239")
+  expect_equal(icd9_drop_leading_zeroes("1239", short_code = TRUE), "1239")
 })
 
 test_that("strip leading zero from decimal V and E", {
 
-  expect_equal(icd9DropLeadingZeroesShort("V1"), "V1")
-  expect_equal(icd9DropLeadingZeroesShort("V12"), "V12")
-  expect_equal(icd9DropLeadingZeroesShort("V123"), "V123")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("V1"), "V1")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("V12"), "V12")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("V123"), "V123")
   # cannot drop zero and be the same code. This is an important test!
-  expect_equal(icd9DropLeadingZeroesShort("V012"), "V012")
-  expect_equal(icd9DropLeadingZeroesShort("V1278"), "V1278")
-  expect_equal(icd9DropLeadingZeroesShort("E912"), "E912")
-  expect_equal(icd9DropLeadingZeroesShort("E9127"), "E9127")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("V012"), "V012")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("V1278"), "V1278")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("E912"), "E912")
+  expect_equal(icd9_drop_leading_zeroes.icd_short_code("E9127"), "E9127")
 
   test_that("mixed vector drop leading zero short", {
     expect_equal(
-      icd9DropLeadingZeroesShort(c("V1278", " E898", "02", "0345")),
+      icd9_drop_leading_zeroes.icd_short_code(c("V1278", " E898", "02", "0345")),
       c("V1278", "E898", "2", "0345"))
   })
 })

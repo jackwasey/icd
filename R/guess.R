@@ -27,10 +27,10 @@
 #' @return single logical value, \code{TRUE} if input data are predominantly
 #'   short_code type. If there is some uncertainty, then return NA.
 #' @keywords internal
-icd_guess_short <- function(x, is_short = NULL, test_n = 1000L) {
-  # if is_short is set, no need to dispatch at all
-  if (!is.null(is_short)) {
-    if (is_short)
+icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
+  # if short_code is set, no need to dispatch at all
+  if (!is.null(short_code)) {
+    if (short_code)
       return(TRUE)
     else
       return(FALSE)
@@ -40,18 +40,18 @@ icd_guess_short <- function(x, is_short = NULL, test_n = 1000L) {
 
 #' @describeIn icd_guess_short Guess whether an ICD-10 code is in short_code form
 #' @keywords internal
-icd_guess_short.icd10 <- function(x, is_short = NULL, test_n = 1000L) {
+icd_guess_short.icd10 <- function(x, short_code = NULL, test_n = 1000L) {
   # jump to the simple default (is there a decimal point)
   NextMethod()
 }
 
 #' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
 #' @keywords internal
-icd_guess_short.icd9 <- function(x, is_short = NULL, test_n = 1000L) {
+icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L) {
   if (inherits(x, "icd_short_code")) return(TRUE)
   if (inherits(x, "icd_decimal_code")) return(FALSE)
-  if (!is.null(is_short)) {
-    if (is_short)
+  if (!is.null(short_code)) {
+    if (short_code)
       return(TRUE)
     else
       return(FALSE)
@@ -64,15 +64,15 @@ icd_guess_short.icd9 <- function(x, is_short = NULL, test_n = 1000L) {
   sum(vd) <= sum(vs)
 }
 
-icd_guess_short.list <- function(x, is_short = NULL, test_n = 1000L) {
+icd_guess_short.list <- function(x, short_code = NULL, test_n = 1000L) {
   y <- unlist(x)
-  icd_guess_short(y, is_short = is_short, test_n)
+  icd_guess_short(y, short_code = short_code, test_n)
 }
 
-icd_guess_short.default <- function(x, is_short = NULL, test_n = 1000L) {
+icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L) {
   # this should have been dealt with by dispatching, but just in case this is called directly:
-  if (!is.null(is_short)) {
-    if (is_short)
+  if (!is.null(short_code)) {
+    if (short_code)
       return(TRUE)
     else
       return(FALSE)
@@ -152,8 +152,9 @@ icd_guess_version_update <- function(x) {
 #' @description Guesses whether the given ICD codes are short or long format, and set the class of the returned data according to the guess.
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
-icd_guess_short_update <- function(x, icd_name = get_icd_name(x)) {
-  if (icd_guess_short(x))
+icd_guess_short_update <- function(x, icd_name = get_icd_name(x), short_code = NULL) {
+
+  if (icd_guess_short(x, short_code = short_code))
     class(x) <- append("icd_short_code", class(x))
   else
     class(x) <- append("icd_decimal_code", class(x))

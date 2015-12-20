@@ -41,10 +41,12 @@ icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
 #'   leaf (billable) level?
 #' @export
 icd9IsRealShort <- function(x, onlyBillable = FALSE) {
- assert(checkFactor(x), checkCharacter(x))
+  assert(checkFactor(x), checkCharacter(x))
   assertFlag(onlyBillable)
-  if (onlyBillable) return(icd9cm_is_billable.icd_short_code(asCharacterNoWarn(x)))
-  icd9AddLeadingZeroesShort(asCharacterNoWarn(x)) %in% icd9::icd9_hierarchy[["icd9"]]
+  if (onlyBillable)
+    icd9cm_is_billable.icd_short_code(asCharacterNoWarn(x))
+  else
+    icd9_add_leading_zeroes.icd_short_code(asCharacterNoWarn(x)) %in% icd9::icd9_hierarchy[["icd9"]]
 }
 
 #' @describeIn icd9IsReal Are the given decimal-form codes defined at heading or
@@ -103,13 +105,13 @@ icd_is_billable <- function(...) {
 
 #' @describeIn icd_is_billable Which of the given ICD-9 codes are leaf nodes in ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
 icd_is_billable.icd9 <- function(x, short_code = icd_guess_short(x),
-                           version = getLatestBillableVersion(), ...) {
+                                 version = getLatestBillableVersion(), ...) {
   icd_is_billable.icd9cm(x = x, short_code = short_code, version = version)
 }
 
 #' @describeIn icd_is_billable Which of the given ICD-9 codes are leaf nodes in ICD-9-CM
 icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
-                           version = getLatestBillableVersion(), ...) {
+                                   version = getLatestBillableVersion(), ...) {
   assertVector(x)
   assertFlag(short_code)
   assertString(version)
@@ -119,7 +121,7 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
 }
 
 icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
-                           version = getLatestBillableVersion(), ...) {
+                                    version = getLatestBillableVersion(), ...) {
   # guess ICD-9 vs ICD-10 and set class to dispatch again
   x = icd_guess_version_update(x)
   icd_is_billable(x)
@@ -178,7 +180,7 @@ icd_get_billable.icd9 <- function(...) {
 #' @description icd9_is_billable Return only those codes which are leaf (billable)
 #'   codes in the hierarchy.
 icd9cm_get_billable <- function(x, short_code = icd_guess_short(x),
-                            invert = FALSE, version = getLatestBillableVersion()) {
+                                invert = FALSE, version = getLatestBillableVersion()) {
   assertVector(x)
   assertFlag(short_code)
   assertFlag(invert)
@@ -188,11 +190,11 @@ icd9cm_get_billable <- function(x, short_code = icd_guess_short(x),
 
 #' @describeIn icd9cm_get_billable Get the billable ICD-9-CM codes from vector of short codes
 icd9cm_get_billable.icd_short_code <- function(x, invert = FALSE, version = getLatestBillableVersion()) {
-    x[icd_is_billable.icd9(x, short_code = TRUE, version = version) != invert]
+  x[icd_is_billable.icd9(x, short_code = TRUE, version = version) != invert]
 }
 
 #' @describeIn icd9cm_get_billable Get the billable ICD-9-CM codes from vector of decimal codes
 icd9cm_get_billable.icd_decimal_code <- function(x, invert = FALSE, version = getLatestBillableVersion()) {
-    x[icd_is_billable.icd9(x, short_code = FALSE, version = version) != invert]
+  x[icd_is_billable.icd9(x, short_code = FALSE, version = version) != invert]
 }
 

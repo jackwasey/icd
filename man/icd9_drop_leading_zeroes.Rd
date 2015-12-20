@@ -2,15 +2,15 @@
 % Please edit documentation in R/manip.R
 \name{icd9_drop_leading_zeroes}
 \alias{icd9_drop_leading_zeroes}
-\alias{icd9_drop_leading_zeroes.decimal_code}
-\alias{icd9_drop_leading_zeroes.short_code}
+\alias{icd9_drop_leading_zeroes.icd_decimal_code}
+\alias{icd9_drop_leading_zeroes.icd_short_code}
 \title{drop zero padding from decimal ICD-9 code.}
 \usage{
-icd9_drop_leading_zeroes(x, short_code)
+icd9_drop_leading_zeroes(x, short_code = NULL)
 
-\method{icd9_drop_leading_zeroes}{decimal_code}(x)
+\method{icd9_drop_leading_zeroes}{icd_decimal_code}(x, short_code = NULL)
 
-\method{icd9_drop_leading_zeroes}{short_code}(x)
+\method{icd9_drop_leading_zeroes}{icd_short_code}(x, short_code = NULL)
 }
 \arguments{
 \item{icd9}{is
@@ -27,16 +27,16 @@ character vector of ICD-9 codes with extra zeroes dropped from major
 decimal form ICD-9 codes are not ambiguous if the leading zeroes
   are dropped. Some short-form ICD-9 codes would not be ambiguous, e.g. "1"
   but many would be problematic. This is the inverse of
-  \code{icd9AddLeadingZeroesDecimal}.
+  \code{icd9_add_leading_zeroes}.
 
   Invalid codes have no guaranteed result, and may give NA, or a (possibly
   valid) code in repsonse.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{decimal_code}: Drop leading zeroes from a decimal format ICD-9 code
+\item \code{icd_decimal_code}: Drop leading zeroes from a decimal format ICD-9 code
 
-\item \code{short_code}: Drop leading zeroes from a short format ICD-9 code
+\item \code{icd_short_code}: Drop leading zeroes from a short format ICD-9 code
 }}
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
