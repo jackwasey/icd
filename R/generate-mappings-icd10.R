@@ -7,8 +7,9 @@
 #' @template parse-template
 #' @keywords internal
 icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data") {
-  if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix")
-  elixComorbid <- list(
+  if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix",
+                                  call. = FALSE)
+  icd9_map_elix <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91",
             "404.93", "428.0" %i9da% "428.9"),
     arrhythmia = c("426.1", "426.11", "426.13", "426.2" %i9da% "426.53",
@@ -62,17 +63,17 @@ icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data")
     depression = c("300.4", "301.12", "309.0", "309.1", "311")
   )
 
-  elixComorbid <- lapply(elixComorbid, icd_decimal_to_short.icd9)
+  icd9_map_elix <- lapply(icd9_map_elix, icd_decimal_to_short.icd9)
 
-  elixComorbid <- lapply(
-    elixComorbid,
+  icd9_map_elix <- lapply(
+    icd9_map_elix,
     icd_children.icd9, short_code = TRUE, real = FALSE)
 
-  names(elixComorbid) <- icd9::elixComorbidNamesHtnAbbrev
-  class(elixComorbid) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
+  names(icd9_map_elix) <- icd9::icd_names_elix_htn_abbrev
+  class(icd9_map_elix) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
 
-  if (save) save_in_data_dir(elixComorbid)
-  invisible(elixComorbid)
+  if (save) save_in_data_dir(icd9_map_elix)
+  invisible(icd9_map_elix)
 }
 
 #' @title Generate Quan's revised Elixhauser comorbidities
@@ -90,7 +91,7 @@ icd9_generate_map_quan_elix <- function(condense = NULL,
             call. = FALSE)
   # TODO: need to deprecate this name so we can switch ICD-9 and ICD-10 (and
   # their variations)
-  quanElixComorbid <- list(
+  icd9_map_quan_elix <- list(
     chf = c("398.91", "402.01", "402.11", "402.91", "404.01", "404.03",
             "404.11", "404.13", "404.91", "404.93", "425.4" %i9da% "425.9",
             "428"),
@@ -143,19 +144,19 @@ icd9_generate_map_quan_elix <- function(condense = NULL,
     depression = c("296.2", "296.3", "296.5", "300.4", "309", "311")
   )
 
-  quanElixComorbid <- lapply(
-    quanElixComorbid,
+  icd9_map_quan_elix <- lapply(
+    icd9_map_quan_elix,
     function(x) icd_decimal_to_short.icd9(x))
 
-  quanElixComorbid <- lapply(
-    quanElixComorbid,
+  icd9_map_quan_elix <- lapply(
+    icd9_map_quan_elix,
     icd_children.icd9, short_code = TRUE, real = FALSE)
 
-  names(quanElixComorbid) <- icd9::quanElixComorbidNamesHtnAbbrev
-  class(quanElixComorbid) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
+  names(icd9_map_quan_elix) <- icd9::icd_names_quan_elix_htn_abbrev
+  class(icd9_map_quan_elix) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
 
-  if (save) save_in_data_dir(quanElixComorbid)
-  invisible(quanElixComorbid)
+  if (save) save_in_data_dir(icd9_map_quan_elix)
+  invisible(icd9_map_quan_elix)
 }
 
 
@@ -166,7 +167,13 @@ icd9_generate_map_quan_elix <- function(condense = NULL,
 #'
 #' @details Started with Quan's SAS code (in \code{data-raw}):
 #` \code{grep %STR\(.*[[:digit:]] ICD10_Elixhauser.sas}
-icd10_generate_map_quan_elix <- function(save = TRUE) {
+icd10_generate_map_quan_elix <- function(condense = NULL, save = TRUE) {
+
+  if (!missing(condense))
+    warning("'condense' is deprecated in icd9_generate_map_quan_elix, and no longer has any effect.
+                                  The map can be condensed using other functions in the package.",
+            call. = FALSE)
+
   quan_elix_raw <- list(
     c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426", "I427", "I428", "I429", "I43", "I50", "P290"),
     c("I441", "I442", "I443", "I456", "I459", "I47", "I48", "I49", "R000", "R001", "R008", "T821", "Z450", "Z950"),
@@ -202,7 +209,7 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
   )
   # there are 31 items in the list: hypertension is typically combined into one
   # category, whereas diabetes is kept as two categories
-  names(quan_elix_raw) <- elixComorbidNamesHtnAbbrev
+  names(quan_elix_raw) <- icd_names_elix_htn_abbrev
 
   # this expansion will only be for 'real' codes (currently the most up-to-date
   # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
@@ -276,7 +283,7 @@ icd10_generate_map_quan_charlson <- function() {
     hiv = c("B20", "B21", "B22", "B24")
   )
 
-  names(quan_charl_raw) <- charlsonComorbidNamesAbbrev
+  names(quan_charl_raw) <- icd_names_charlson_abbrev
 
   # this expansion will only be for 'real' codes (currently the most up-to-date
   # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.

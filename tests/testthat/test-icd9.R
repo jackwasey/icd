@@ -149,34 +149,34 @@ test_that("extracting alphabetic and numeric parts from ICD-9 codes works", {
 
 test_that("strip leading zeroes: errors", {
 
-  expect_equal(icd9DropLeadingZeroesDecimal(NA_character_), NA_character_)
+  expect_equal(icd9_drop_leading_zeroes.decimal_code(NA_character_), NA_character_)
   # no guaranteed behaviour when code is invalid: it may or may not match the
   # regex. If the user wants to get the valid codes first, they can do that.
 })
 
 test_that("strip leading zero from decimal numeric only", {
 
-  expect_equal(icd9DropLeadingZeroesDecimal("1"), "1")
-  expect_equal(icd9DropLeadingZeroesDecimal("01"), "1")
-  expect_equal(icd9DropLeadingZeroesDecimal("001"), "1")
-  expect_equal(icd9DropLeadingZeroesDecimal("1."), "1.")
-  expect_equal(icd9DropLeadingZeroesDecimal("01."), "1.")
-  expect_equal(icd9DropLeadingZeroesDecimal("001."), "1.")
-  expect_equal(icd9DropLeadingZeroesDecimal("12"), "12")
-  expect_equal(icd9DropLeadingZeroesDecimal("012"), "12")
-  expect_equal(icd9DropLeadingZeroesDecimal("12."), "12.")
-  expect_equal(icd9DropLeadingZeroesDecimal("012."), "12.")
-  expect_equal(icd9DropLeadingZeroesDecimal("123"), "123")
-  expect_equal(icd9DropLeadingZeroesDecimal("123."), "123.")
-  expect_equal(icd9DropLeadingZeroesDecimal("1.2"), "1.2")
-  expect_equal(icd9DropLeadingZeroesDecimal("01.2"), "1.2")
-  expect_equal(icd9DropLeadingZeroesDecimal("001.2"), "1.2")
-  expect_equal(icd9DropLeadingZeroesDecimal("12.4"), "12.4")
-  expect_equal(icd9DropLeadingZeroesDecimal("012.4"), "12.4")
-  expect_equal(icd9DropLeadingZeroesDecimal("12.78"), "12.78")
-  expect_equal(icd9DropLeadingZeroesDecimal("012.78"), "12.78")
-  expect_equal(icd9DropLeadingZeroesDecimal("123.9"), "123.9")
-  expect_equal(icd9DropLeadingZeroesDecimal("123.87"), "123.87")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("1"), "1")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("01"), "1")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("001"), "1")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("1."), "1.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("01."), "1.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("001."), "1.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("12"), "12")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("012"), "12")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("12."), "12.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("012."), "12.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("123"), "123")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("123."), "123.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("1.2"), "1.2")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("01.2"), "1.2")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("001.2"), "1.2")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("12.4"), "12.4")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("012.4"), "12.4")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("12.78"), "12.78")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("012.78"), "12.78")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("123.9"), "123.9")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("123.87"), "123.87")
 
   # just double check we can do this the other way:
   expect_equal(icd9DropLeadingZeroes("012.78", isShort = FALSE), "12.78")
@@ -184,21 +184,21 @@ test_that("strip leading zero from decimal numeric only", {
 
 test_that("strip leading zero from decimal V and E", {
 
-  expect_equal(icd9DropLeadingZeroesDecimal("V1"), "V1")
-  expect_equal(icd9DropLeadingZeroesDecimal("V01"), "V1")
-  expect_equal(icd9DropLeadingZeroesDecimal("V1."), "V1.")
-  expect_equal(icd9DropLeadingZeroesDecimal("V01."), "V1.")
-  expect_equal(icd9DropLeadingZeroesDecimal("V12"), "V12")
-  expect_equal(icd9DropLeadingZeroesDecimal("V12.3"), "V12.3")
-  expect_equal(icd9DropLeadingZeroesDecimal("V1.2"), "V1.2")
-  expect_equal(icd9DropLeadingZeroesDecimal("V01.2"), "V1.2")
-  expect_equal(icd9DropLeadingZeroesDecimal("V12.78"), "V12.78")
-  expect_equal(icd9DropLeadingZeroesDecimal("E912"), "E912")
-  expect_equal(icd9DropLeadingZeroesDecimal("E912."), "E912.")
-  expect_equal(icd9DropLeadingZeroesDecimal("E912.7"), "E912.7")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V1"), "V1")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V01"), "V1")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V1."), "V1.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V01."), "V1.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V12"), "V12")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V12.3"), "V12.3")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V1.2"), "V1.2")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V01.2"), "V1.2")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("V12.78"), "V12.78")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("E912"), "E912")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("E912."), "E912.")
+  expect_equal(icd9_drop_leading_zeroes.decimal_code("E912.7"), "E912.7")
 
   expect_equal(
-    icd9DropLeadingZeroesDecimal(c("V12.78", " E898.", "02", "034.5")),
+    icd9_drop_leading_zeroes.decimal_code(c("V12.78", " E898.", "02", "034.5")),
     c("V12.78", "E898.", "2", "34.5"))
 })
 

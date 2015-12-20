@@ -87,7 +87,7 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 test_that("ahrq icd9 mappings generated from the current generation code", {
   skip_on_cran()
   # same but from source data. Should be absolutely identical.
-  expect_equal(ahrqComorbid, parseAhrqSas(save = FALSE))
+  expect_equal(ahrqComorbid, parse_ahrq_sas(save = FALSE))
   # same but from source data. Should be absolutely identical.
   expect_equivalent(icd9GetInvalidMappingShort(ahrqComorbid), list())
 })
@@ -95,7 +95,7 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
               skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
-              expect_identical(quanDeyoComorbid, parseQuanDeyoSas(save = FALSE))
+              expect_identical(quanDeyoComorbid, parse_quan_deyo_sas(save = FALSE))
               expect_equivalent(
                 icd_get_invalid.icd_comorbidity_map(quanDeyoComorbid, short_code = TRUE),
                 list())
@@ -171,8 +171,9 @@ test_that("icd9Chapters, etc. as saved in data can be recreated", {
 
 test_that("AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
-  result <- parseAhrqSas(sasPath = system.file("data-raw",
-                                               "comformat2012-2013.txt", package = "icd9"), save = FALSE)
+  result <- parse_ahrq_sas(sasPath = system.file("data-raw",
+                                               "comformat2012-2013.txt", package = "icd9"),
+                           save = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
 })

@@ -866,3 +866,53 @@ icd9ExtractAlphaNumeric <- function(icd9) {
   .Deprecated("icd_extract_alpha_numeric")
   icd_extract_alpha_numeric(icd9)
 }
+
+parseQuanDeyoSas <- function(...) {
+  .Deprecated("parse_quan_deyo_sas")
+  parse_quan_deyo_sas(...)
+}
+
+parseAhrqSas <- function(...) {
+  .Deprecated("parse_ahrq_sas")
+  parse_ahrq_sas(...)
+}
+
+enable_deprecated_data = TRUE
+
+if (enable_deprecated_data) {
+  icd9Billable <- icd9::icd9cm_billable
+  icd9Hierarchy <- icd9::icd9_hierarchy
+  ahrqComorbid <- icd9::icd9_map_ahrq
+  ahrqComorbidAll <- icd9::icd9_map_ahrq_all
+  quanDeyoComorbid <- icd9::icd9_map_quan_deyo
+  quanElixComorbid <- icd9::icd9_map_quan_elix
+  elixComorbid <- icd9::icd9_map_elix
+  elixComorbidNamesAbbrev <- icd9::icd_names_elix_abbrev
+  elixComorbidNamesHtn <- icd9::icd_names_elix_htn
+  elixComorbidNamesHtnAbbrev <- icd9::icd_names_elix_htn_abbrev
+  quanElixComorbidNames <- icd9::icd_names_quan_elix
+  quanElixComorbidNamesAbbrev <- icd9::icd_names_quan_elix_abbrev
+  quanElixComorbidNamesHtn <- icd9::icd_names_quan_elix_htn
+  quanElixComorbidNamesAbbrev <- icd9::icd_names_quan_elix_htn_abbrev
+  ahrqComorbidNames <- icd9::icd_names_ahrq
+  ahrqComorbidNamesAbbrev <- icd9::icd_names_ahrq_abbrev
+  ahrqComorbidNamesHtn <- icd9::icd_names_ahrq_htn
+  ahrqComorbidNamesHtnAbbrev <- icd9::icd_names_ahrq_htn_abbrev
+  charlsonComorbidNames <- icd9::icd_names_charlson
+  charlsonComorbidNamesAbbrev <- icd9::icd_names_charlson_abbrev
+}
+
+icd9DropLeadingZeroesShort <- function(x) {
+  .Deprecated("icd9_drop_leading_zeroes")
+  icd9_drop_leading_zeroes.short_code(x)
+}
+
+icd9DropLeadingZeroesDecimal <- function(x) {
+  .Deprecated("icd9_drop_leading_zeroes")
+  icd9_drop_leading_zeroes.decimal_code(x)
+}
+
+stripRtf <- function(x) {
+  .Deprecated("strip_rtf")
+  strip_rtf(x)
+}

@@ -16,16 +16,16 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 
-#' @title parse AHRQ data
+#' @title parse AHRQ SAS code to get mapping
 #' @description Takes the raw data taken directly from the AHRQ web site and
 #'   parses into RData. It is then saved in the development tree data directory,
 #'   so this is an internal function, used in generating the package itself!
 #' @template savesas
 #' @template parse-template
 #' @param returnAll logical which, if TRUE, will result in the invisible return
-#'   of ahrqComorbidAll result, otherwise, ahrqComorbid is reutrned.
+#'   of icd9_map_ahrq_all result, otherwise, icd9_map_ahrq is reutrned.
 #' @keywords internal
-parseAhrqSas <- function(
+parse_ahrq_sas <- function(
   sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
   save = FALSE, path = "data") {
 
@@ -36,13 +36,13 @@ parseAhrqSas <- function(
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
 
-  ahrqComorbidWork <- ahrqAll[["$RCOMFMT"]]
+  icd9_map_ahrqWork <- ahrqAll[["$RCOMFMT"]]
 
-  ahrqComorbidAll <- list()
+  icd9_map_ahrq_all <- list()
 
-  for (cmb in names(ahrqComorbidWork)) {
+  for (cmb in names(icd9_map_ahrqWork)) {
     message("parsing AHRQ SAS codes for '", cmb, "'")
-    somePairs <- strsplit(x = ahrqComorbidWork[[cmb]], split = "-")
+    somePairs <- strsplit(x = icd9_map_ahrqWork[[cmb]], split = "-")
 
     # non-range values (and their children) just go on list
     unpaired_items <- sapply(somePairs, length) == 1
@@ -52,45 +52,45 @@ parseAhrqSas <- function(
 
     thePairs <- somePairs[lapply(somePairs, length) == 2]
     out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
-    # update ahrqComorbid with full range of icd9 codes:
-    ahrqComorbidAll[[cmb]] <- out %>% unlist %>% unique
+    # update icd9_map_ahrq with full range of icd9 codes:
+    icd9_map_ahrq_all[[cmb]] <- out %>% unlist %>% unique
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
   # "Other" group
-  ahrqComorbidAll[[" "]] <- NULL
+  icd9_map_ahrq_all[[" "]] <- NULL
 
-  ahrqComorbid <- ahrqComorbidAll
+  icd9_map_ahrq <- icd9_map_ahrq_all
 
-  ahrqComorbid$HTNCX <- c(
-    ahrqComorbid$HTNCX, # some codes already in this category
-    ahrqComorbid$HTNPREG,
-    ahrqComorbid$OHTNPREG,
-    ahrqComorbid$HTNWOCHF,
-    ahrqComorbid$HTNWCHF,
-    ahrqComorbid$HRENWORF,
-    ahrqComorbid$HRENWRF,
-    ahrqComorbid$HHRWOHRF,
-    ahrqComorbid$HHRWCHF,
-    ahrqComorbid$HHRWRF,
-    ahrqComorbid$HHRWHRF)
+  icd9_map_ahrq$HTNCX <- c(
+    icd9_map_ahrq$HTNCX, # some codes already in this category
+    icd9_map_ahrq$HTNPREG,
+    icd9_map_ahrq$OHTNPREG,
+    icd9_map_ahrq$HTNWOCHF,
+    icd9_map_ahrq$HTNWCHF,
+    icd9_map_ahrq$HRENWORF,
+    icd9_map_ahrq$HRENWRF,
+    icd9_map_ahrq$HHRWOHRF,
+    icd9_map_ahrq$HHRWCHF,
+    icd9_map_ahrq$HHRWRF,
+    icd9_map_ahrq$HHRWHRF)
 
-  ahrqComorbid$CHF <- c(
-    ahrqComorbid$CHF, # some codes already in this category
-    ahrqComorbid$HTNWCHF,
-    ahrqComorbid$HHRWCHF,
-    ahrqComorbid$HHRWHRF)
+  icd9_map_ahrq$CHF <- c(
+    icd9_map_ahrq$CHF, # some codes already in this category
+    icd9_map_ahrq$HTNWCHF,
+    icd9_map_ahrq$HHRWCHF,
+    icd9_map_ahrq$HHRWHRF)
 
-  ahrqComorbid$RENLFAIL <- c(
-    ahrqComorbid$RENLFAIL, # some codes already in this category
-    ahrqComorbid$HRENWRF,
-    ahrqComorbid$HHRWRF,
-    ahrqComorbid$HHRWHRF)
+  icd9_map_ahrq$RENLFAIL <- c(
+    icd9_map_ahrq$RENLFAIL, # some codes already in this category
+    icd9_map_ahrq$HRENWRF,
+    icd9_map_ahrq$HHRWRF,
+    icd9_map_ahrq$HHRWHRF)
 
 
-  ahrqComorbid[c("HTNPREG", "OHTNPREG", "HTNWOCHF",
-                 "HTNWCHF", "HRENWORF", "HRENWRF", "HHRWOHRF",
-                 "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
+  icd9_map_ahrq[c("HTNPREG", "OHTNPREG", "HTNWOCHF",
+                  "HTNWCHF", "HRENWORF", "HRENWRF", "HHRWOHRF",
+                  "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
 
   # officially, AHRQ HTN with complications means that HTN on its own should be
   # unset. however, this is not feasible here, since we just package up the data
@@ -99,20 +99,23 @@ parseAhrqSas <- function(
   # more sense to me
 
   #   condense to parents, for each parent, if children are all in the list, add the parent
-  for (cmb in names(ahrqComorbid)) {
+  for (cmb in names(icd9_map_ahrq)) {
     message("working on ranges for: ", cmb)
-    parents <- icd_condense.icd9(ahrqComorbid[[cmb]], real = FALSE, short_code = TRUE)
+    parents <- icd_condense.icd9(icd9_map_ahrq[[cmb]], real = FALSE, short_code = TRUE)
     for (p in parents) {
       kids <- icd_children.icd9(p, real = FALSE, short_code = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
-      if (all(kids %in% ahrqComorbid[[cmb]]))
-        ahrqComorbid[[cmb]] <- c(ahrqComorbid[[cmb]], p) %>% unique %>% icd_sort.icd9(short_code = TRUE)
+      if (all(kids %in% icd9_map_ahrq[[cmb]]))
+        icd9_map_ahrq[[cmb]] <- c(icd9_map_ahrq[[cmb]], p) %>% unique %>% icd_sort.icd9(short_code = TRUE)
     }
   }
 
-  names(ahrqComorbid) <- icd9::ahrqComorbidNamesHtnAbbrev
-  if (save) save_in_data_dir("ahrqComorbid") # nocov
-  invisible(ahrqComorbid)
+  names(icd9_map_ahrq) <- icd9::icd_names_ahrq_htn_abbrev
+  if (save) {
+    save_in_data_dir("icd9_map_ahrq") # nocov
+    save_in_data_dir("icd9_map_ahrq_all") # nocov
+  }
+  invisible(icd9_map_ahrq)
 }
 
 #' @title parse original SAS code defining Quan's update of Deyo comorbidities.
@@ -133,30 +136,36 @@ parseAhrqSas <- function(
 #' @template savesas
 #' @template parse-template
 #' @keywords internal
-parseQuanDeyoSas <- function(sasPath = system.file("data-raw",
-                                                   "ICD9_E_Charlson.sas",
-                                                   package = get_pkg_name()),
-                             condense = FALSE,
-                             save = FALSE,
-                             path = "data") {
+parse_quan_deyo_sas <- function(sasPath = system.file("data-raw",
+                                                      "ICD9_E_Charlson.sas",
+                                                      package = get_pkg_name()),
+                                condense = NULL,
+                                save = FALSE,
+                                path = "data") {
+  assertFile(sasPath)
+  assertFlag(save)
+  assertString(path)
+
+
+  if (!missing(condense))
+    warning("'condense' is deprecated in parse_quan_deyo_sas, and no longer has any effect.
+                                  The map can be condensed using other functions in the package.",
+            call. = FALSE)
 
   quanSas <- readLines(sasPath, warn = FALSE)
   qlets <- sasExtractLetStrings(quanSas)
   qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
-  quanDeyoComorbid <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
-  names(quanDeyoComorbid) <- unlist(unname(qlabels))
+  icd9_map_quan_deyo <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
+  names(icd9_map_quan_deyo) <- unlist(unname(qlabels))
 
   # use validation: takes time, but these are run-once per package creation (and
   # test) tasks.
-  if (condense)
-    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd_condense.icd9)
-  else
-    quanDeyoComorbid <- lapply(quanDeyoComorbid, icd_children.icd9,
+  icd9_map_quan_deyo <- lapply(icd9_map_quan_deyo, icd_children.icd9,
                                short_code = TRUE, real = FALSE)
 
   # do use icd9:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
-  names(quanDeyoComorbid) <- icd9::charlsonComorbidNamesAbbrev
-  if (save) save_in_data_dir(quanDeyoComorbid)
-  invisible(quanDeyoComorbid)
+  names(icd9_map_quan_deyo) <- icd9::icd_names_charlson_abbrev
+  if (save) save_in_data_dir(icd9_map_quan_deyo)
+  invisible(icd9_map_quan_deyo)
 }

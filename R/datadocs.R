@@ -87,8 +87,6 @@ NULL
 #' @name icd9_hierarchy
 NULL
 
-icd9Hierarchy <- icd9_hierarchy
-
 #' @title AHRQ comorbidities
 #' @description This mapping of comorbidities to ICD-9 codes is dervied directly
 #'   from SAS code provided by AHRQ, and translated into this R data structure.
@@ -99,21 +97,17 @@ icd9Hierarchy <- icd9_hierarchy
 #' @format list of character vectors
 #' @source
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
-#' @name icd9_ahrq
-#' @aliases ahrqComorbid ahrq icd_ahrq
+#' @name icd9_map_ahrq
+#' @aliases ahrqComorbid ahrq
 NULL
 
-ahrqComorbid <- icd9_map_ahrq
-
 #' @rdname icd9_ahrq
-#' @name icd9_ahrq_all
+#' @name icd9_map_ahrq_all
 #' @aliases ahrqComorbidAll
 #'   @details Beyond \code{icd9_ahrq}, \code{icd9_ahrq_all} includes all the HTN, CHF and renal subgroups,
 #'   not rolled into their parent categories. This resolution is not needed in
 #'   typical usage: \code{icd9_ahrq} is probably what you want.
 NULL
-
-ahrqComorbidAll <- icd9_map_ahrq_all
 
 #' @title Quan adaptation of Deyo/Charlson comorbidities
 #' @description Derived programmatically from the SAS code used in the original
@@ -135,11 +129,9 @@ ahrqComorbidAll <- icd9_map_ahrq_all
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
-#' @name
+#' @name icd9_map_quan_deyo
 #' @aliases quanDeyoComorbid
 NULL
-
-quanDeyoComorbid <- icd9_map_quan_deyo
 
 #' @title Quan adaptation of Elixhauser comorbidities
 #' @description These were transcribed directly from the Quan paper referenced.
@@ -154,10 +146,9 @@ quanDeyoComorbid <- icd9_map_quan_deyo
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #'
-#' @name quanElixComorbid
+#' @name icd9_map_quan_elix
+#' @aliases quanElixComorbid
 NULL
-
-quanElixComorbid <- icd9_map_quan_elix
 
 #' @title Elixhauser comorbidities
 #' @description The original mapping of Elixhauser's ICD-9-CM to 30
@@ -181,8 +172,6 @@ quanElixComorbid <- icd9_map_quan_elix
 #' @name elixComorbid
 NULL
 
-elixComorbid <- icd9_map_elix
-
 #' @title Comorbidity names
 #' @description These lists provide correctly sorted names of the comorbidities
 #'   and their particular permutations in both full and abbreviated forms.
@@ -190,30 +179,31 @@ elixComorbid <- icd9_map_elix
 #'   In the Elixhauser derived mappings, uncomplicated and complicated
 #'   hypertension are listed separately, but are always combined in the final
 #'   analyses. Uncomplicated and complicated hypertension are list separately
-#'   and as "Hypertension, combined." Abbrev suffix indicates a very short
+#'   and as "Hypertension, combined." _abbrev suffix indicates a very short
 #'   space-free description. Quan's version of Elixhauser is identical. AHRQ's
 #'   update drops the arrythmia field. The naming convention is a root, e.g.
-#'   \code{elixComorbid}, with neither/either/both suffixes \code{Htn} and
-#'   \code{Abbrev}. The Charlson derived mappings do not include hypertension.
-#'   Abbreviated comorbidity names are helpful for interactive work, whereas the
+#'   \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
+#'   \code{_abbrev}. The Charlson derived mappings do not include hypertension.
+#'   _abbreviated comorbidity names are helpful for interactive work, whereas the
 #'   full names might be prefered for plotting.
 #' @format list, with character/numeric code. 'Hypertension, uncomplicated' and
 #'   'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
 #'   and metastasis are counted independently, as in the original paper, giving
 #'   the original 30 groups. "01" to "30"
-#' @name elixComorbidNames
-#' @aliases elixComorbidNamesAbbrev elixComorbidNamesHtn
-#'   elixComorbidNamesHtnAbbrev quanElixComorbidNames
-#'   quanElixComorbidNamesAbbrev quanElixComorbidNamesHtn
-#'   quanElixComorbidNamesHtnAbbrev ahrqComorbidNames ahrqComorbidNamesAbbrev
-#'   ahrqComorbidNamesHtn ahrqComorbidNamesHtnAbbrev charlsonComorbidNames
-#'   charlsonComorbidNamesAbbrev
+#' @name icd_names_elix
+#' @aliases icd_names_elix_abbrev icd_names_elix_htn
+#'   icd_names_elix_htn_abbrev icd_names_quan_elix
+#'   icd_names_quan_elix_abbrev icd_names_quan_elix_htn
+#'   icd_names_quan_elix_htn_abbrev icd_names_ahrq icd_names_ahrq_abbrev
+#'   icd_names_ahrq_htn icd_names_ahrq_htn_abbrev icd_names_charlson
+#'   icd_names_charlson_abbrev
 #' @keywords datasets
 #' @docType data
 NULL
 
 #' @title list of annual versions of billable leaf nodes of ICD-9-CM
 #' @name icd9cm_billable
+#' @aliases icd9Billable
 #' @description These are derived from the CMS published updates, with versions
 #'   23 to 32 currently available going back to 2004/5. The source files back to
 #'   version 27 have short and long descriptions. The short descriptions are in
@@ -230,8 +220,6 @@ NULL
 #'   \code{shortDesc}, and \code{longDesc}.
 #' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 NULL
-
-icd9Billable <- icd9cm_billable
 
 #' @description Hospital discharge data from Vermont
 #' @title De-identified data from public Vermont source for 2013

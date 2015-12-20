@@ -33,7 +33,7 @@
 #'   http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
 #'   and similar files run from 1996 to 2011.
 #' @keywords internal
-parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose = FALSE) {
+parse_rtf_year <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose = FALSE) {
   assertString(year)
   assertFlag(save)
   assertFlag(fromWeb)
@@ -57,7 +57,7 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
   # the file itself is 7 bit ASCII, but has its own internal encoding using CP1252.
   # test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
-  parseRtfLines(lines, verbose) %>% swapNamesWithVals %>% icd9SortDecimal -> out
+  parse_rtf_lines(lines, verbose) %>% swapNamesWithVals %>% icd9SortDecimal -> out
   # make Tidy data: don't like using row names to store things
   icd9Desc <- data.frame(
     icd9  = out %>% unname %>% icd9DecimalToShort,
@@ -76,7 +76,7 @@ parseRtfYear <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose =
 #'   the other way around, but the tests are now wired for this layout. "Tidy"
 #'   data would favour having an un-named two-column data frame.
 #' @keywords internal
-parseRtfLines <- function(lines, verbose = FALSE) {
+parse_rtf_lines <- function(lines, verbose = FALSE) {
 
   assertCharacter(lines)
   assertFlag(verbose)
@@ -105,7 +105,7 @@ parseRtfLines <- function(lines, verbose = FALSE) {
   if (any(longest_lines))
     filtered <- filtered[-c(which(longest_lines))]
 
-  filtered <- stripRtf(filtered)
+  filtered <- strip_rtf(filtered)
 
   filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE) # empty lines
 
@@ -411,7 +411,7 @@ parseRtfQualifierSubset <- function(qual) {
 #' space and eradicate all other RTF symbols
 #' @param x vector of character strings containing RTF
 #' @keywords internal
-stripRtf <- function(x) {
+strip_rtf <- function(x) {
   x %>%
     # just for \tab, replace with space, otherwise, drop rtf tags entirely
     # nolint start

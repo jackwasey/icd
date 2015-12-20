@@ -223,7 +223,7 @@ test_that("parse icd9ChaptersMajor vs those listed
 
 test_that("unsorted hierarchy tests", {
   expect_equal(
-    tolower(icd9::icd9Hierarchy[icd9_hierarchy[["icd9"]] == "00321",
+    tolower(icd9::icd9_hierarchy[icd9_hierarchy[["icd9"]] == "00321",
                                 "descLong"]),
     tolower("Salmonella Meningitis"))
 })

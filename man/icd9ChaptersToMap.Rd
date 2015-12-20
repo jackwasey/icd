@@ -17,8 +17,8 @@ the chapter headings can be converted into the full set of their
   can be converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
 }
 \seealso{
-Other ICD-9 convert: \code{\link{icd9DropLeadingZeroes}},
-  \code{\link{icd9PartsToShort}},
+Other ICD-9 convert: \code{\link{icd9PartsToShort}},
+  \code{\link{icd9_drop_leading_zeroes}},
   \code{\link{icd_long_to_wide}},
   \code{\link{icd_wide_to_long}}
 }

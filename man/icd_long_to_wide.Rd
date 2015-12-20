@@ -65,8 +65,8 @@ This is more complicated than reshape or reshape2::dcast allows.
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
-  \code{\link{icd9DropLeadingZeroes}},
   \code{\link{icd9PartsToShort}},
+  \code{\link{icd9_drop_leading_zeroes}},
   \code{\link{icd_wide_to_long}}
 }
 \keyword{manip}

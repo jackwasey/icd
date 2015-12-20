@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("billable code lists")
+context("deprecated billable code lists")
 
 test_that("billable codes are recreated", {
   # this costs about 30 seconds

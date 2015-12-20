@@ -55,8 +55,8 @@ This is different enough to \code{dcast} in \code{reshape2} that
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
-  \code{\link{icd9DropLeadingZeroes}},
   \code{\link{icd9PartsToShort}},
+  \code{\link{icd9_drop_leading_zeroes}},
   \code{\link{icd_long_to_wide}}
 }
 

@@ -4,7 +4,7 @@
 \alias{icd10_generate_map_quan_elix}
 \title{generate ICD-10 Quan/Elixhauser maping}
 \usage{
-icd10_generate_map_quan_elix(save = TRUE)
+icd10_generate_map_quan_elix(condense = NULL, save = TRUE)
 }
 \description{
 generate ICD-10 Quan/Elixhauser maping

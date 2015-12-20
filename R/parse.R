@@ -26,7 +26,7 @@ parseEverythingAndSave <- function() {
   # but only needs to be done rarely. This is only intended to be run from
   # development tree, not as installed package
   loadNamespace("devtools")
-  generateSysData()
+  generate_sysdata()
   devtools::load_data(pkg = ".") # reload the newly saved data
   parseAndSaveQuick()
   devtools::load_data(pkg = ".") # reload the newly saved data
@@ -52,10 +52,10 @@ parseAndSaveQuick <- function() {
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
                        Depends on icd9_hierarchy being updated.")
-  parseAhrqSas(save = TRUE)
-  parseElix(save = TRUE)
-  parseQuanDeyoSas(save = TRUE)
-  parseQuanElix(save = TRUE)
+  parse_ahrq_sas(save = TRUE)
+  parse_quan_deyo_sas(save = TRUE)
+  icd9_generate_map_quan_elix(save = TRUE)
+  icd9_generate_map_elix(save = TRUE)
 }
 # nocov end
 
@@ -402,14 +402,14 @@ fixSubchapterNa <- function(x, start, end) {
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
 #' quick, but much too slow when it appears many times in a loop.
 #' @keywords internal
-generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE) {
+generate_sysdata <- function(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE) {
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
-    icd9NShort <- c(icd9NShort, sort(icd9ChildrenShort(i, onlyReal = FALSE)))
+    icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, real = FALSE)))
   for (i in as.character(0:99))
-    icd9VShort <- c(icd9VShort, sort(icd9ChildrenShort(paste0("V", i), onlyReal = FALSE)))
+    icd9VShort <- c(icd9VShort, sort(icd_children.icd9(paste0("V", i), short_code = TRUE, real = FALSE)))
   for (i in as.character(0:999))
-    icd9EShort <- c(icd9EShort, sort(icd9ChildrenShort(paste0("E", i), onlyReal = FALSE)))
+    icd9EShort <- c(icd9EShort, sort(icd_children.icd9(paste0("E", i), short_code = TRUE, real = FALSE)))
 
   # we can either use the icd9IsReal functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.

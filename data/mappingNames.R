@@ -1,4 +1,4 @@
-charlsonComorbidNames <- list(
+icd_names_charlson <- list(
   "01" = "Myocardial Infarction",
   "02" = "Congestive Heart Failure",
   "03" = "Periphral Vascular Disease",
@@ -18,7 +18,7 @@ charlsonComorbidNames <- list(
   "17" = "HIV/AIDS"
 )
 
-charlsonComorbidNamesAbbrev <- list(
+icd_names_charlson_abbrev <- list(
   "01" = "MI",
   "02" = "CHF",
   "03" = "PVD",
@@ -40,7 +40,7 @@ charlsonComorbidNamesAbbrev <- list(
 
 # 31 in this list, with two for HTN
 # HTN marked together as combined, but DM not.
-elixComorbidNamesHtn <- list(
+icd_names_elix_htn <- list(
   "01" = "Congestive heart failure",
   "02" = "Cardiac arrhythmias",
   "03" = "Valvular disease",
@@ -75,7 +75,7 @@ elixComorbidNamesHtn <- list(
 )
 
 # HTN marked together as combined, but DM not.
-elixComorbidNamesHtnAbbrev <- list(
+icd_names_elix_htn_abbrev <- list(
   "01" = "CHF",
   "02" = "Arrhythmia",
   "03" = "Valvular",
@@ -110,38 +110,38 @@ elixComorbidNamesHtnAbbrev <- list(
 )
 
 # Elixhauser with HTN combined:
-elixComorbidNames <- elixComorbidNamesHtn
-elixComorbidNames["06b"] <- NULL
-elixComorbidNames["06a"] <- "Hypertension, combined"
-names(elixComorbidNames)[6] <- "06"
+icd_names_elix <- icd_names_elix_htn
+icd_names_elix["06b"] <- NULL
+icd_names_elix["06a"] <- "Hypertension, combined"
+names(icd_names_elix)[6] <- "06"
 # Abbreviated
-elixComorbidNamesAbbrev <- elixComorbidNamesHtnAbbrev
-elixComorbidNamesAbbrev["06b"] <- NULL
-names(elixComorbidNamesAbbrev)[6] <- "06"
+icd_names_elix_abbrev <- icd_names_elix_htn_abbrev
+icd_names_elix_abbrev["06b"] <- NULL
+names(icd_names_elix_abbrev)[6] <- "06"
 
 # Quan Elixhauser identical ot original
-quanElixComorbidNames <- elixComorbidNames
-quanElixComorbidNamesHtn <- elixComorbidNamesHtn
+icd_names_quan_elix <- icd_names_elix
+icd_names_quan_elix_htn <- icd_names_elix_htn
 # Abbreviated
-quanElixComorbidNamesAbbrev <- elixComorbidNamesAbbrev
-quanElixComorbidNamesHtnAbbrev <- elixComorbidNamesHtnAbbrev
+icd_names_quan_elix_abbrev <- icd_names_elix_abbrev
+icd_names_quan_elix_htn_abbrev <- icd_names_elix_htn_abbrev
 
 # AHRQ very similar to Elixhauser (with HTN combined, arrhythmia dropped, giving
 # 29 total)
-ahrqComorbidNames <- elixComorbidNames
-ahrqComorbidNames["02"] <- NULL
-names(ahrqComorbidNames) <- names(elixComorbidNames)[-30]
+icd_names_ahrq <- icd_names_elix
+icd_names_ahrq["02"] <- NULL
+names(icd_names_ahrq) <- names(icd_names_elix)[-30]
 # Abbreviated
-ahrqComorbidNamesAbbrev <- elixComorbidNamesAbbrev
-ahrqComorbidNamesAbbrev["02"] <- NULL
-names(ahrqComorbidNamesAbbrev) <- names(elixComorbidNamesAbbrev)[-30]
+icd_names_ahrq_abbrev <- icd_names_elix_abbrev
+icd_names_ahrq_abbrev["02"] <- NULL
+names(icd_names_ahrq_abbrev) <- names(icd_names_elix_abbrev)[-30]
 # with HTN separated out:
-ahrqComorbidNamesHtn <- elixComorbidNamesHtn
-ahrqComorbidNamesHtn["02"] <- NULL
-names(ahrqComorbidNamesHtn) <- names(elixComorbidNamesHtn)[-30]
+icd_names_ahrq_htn <- icd_names_elix_htn
+icd_names_ahrq_htn["02"] <- NULL
+names(icd_names_ahrq_htn) <- names(icd_names_elix_htn)[-30]
 # Abbreviated
-ahrqComorbidNamesHtnAbbrev <- elixComorbidNamesHtnAbbrev
-ahrqComorbidNamesHtnAbbrev["02"] <- NULL
-names(ahrqComorbidNamesHtnAbbrev) <-
-  names(elixComorbidNamesHtnAbbrev)[-30]
+icd_names_ahrq_htn_abbrev <- icd_names_elix_htn_abbrev
+icd_names_ahrq_htn_abbrev["02"] <- NULL
+names(icd_names_ahrq_htn_abbrev) <-
+  names(icd_names_elix_htn_abbrev)[-30]
 

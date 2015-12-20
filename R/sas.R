@@ -48,7 +48,7 @@ sasFormatExtract <- function(sasTxt) {
   #spaces.
   sasTxt <- gsub(pattern = "\\\\n", "", sasTxt) # nolint
   sasTxt <- gsub(pattern = "[[:space:]]+", " ", sasTxt)
-  sasTxt <- trim(sasTxt)
+  sasTxt <- str_trim(sasTxt)
 
   # drop everything except VALUE statements
   sasTxt <- grep(pattern = "^VALUE.*", x = sasTxt, value = TRUE)

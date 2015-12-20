@@ -75,7 +75,7 @@ has a dedcimal point to delimit the top-level (henceforth \emph{major}) category
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
-  \code{\link{icd9DropLeadingZeroes}},
+  \code{\link{icd9_drop_leading_zeroes}},
   \code{\link{icd_long_to_wide}},
   \code{\link{icd_wide_to_long}}
 }
