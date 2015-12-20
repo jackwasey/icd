@@ -66,7 +66,7 @@
 #'   members of a group are present. \code{\link{icd9DiffComorbid}} allows
 #'   summary of the differences between comorbidity mappings, e.g. to find what
 #'   has changed from year-to-year or between revisions by different authors.
-#'   \code{\link{icd9Hierarchy}} is a \code{data.frame} containing the full
+#'   \code{\link{icd9_hierarchy}} is a \code{data.frame} containing the full
 #'   ICD-9 classification for each diagnosis. \code{\link{icd9Chapters}}
 #'   contains definitions of chapters, sub-chapters and three-digit groups.}
 #'

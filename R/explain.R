@@ -115,7 +115,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
   x <- x[x %nin% mj]
   descField <- ifelse(brief, "descShort", "descLong")
   c(mjexplain,
-    icd9::icd9Hierarchy[ icd9::icd9Hierarchy[["icd9"]] %in% x, descField]
+    icd9::icd9_hierarchy[ icd9::icd9_hierarchy[["icd9"]] %in% x, descField]
   )
 }
 

@@ -20,6 +20,7 @@ I9diagnos.*\.txt
 I9DX_DESC\.txt
 icd9.aux
 icd9Billable[[:digit:]]+\.RData
+icd9cm_billable[[:digit:]]+\.RData
 icd9.out
 icd9\.Rnw$
 icd.*tar\.gz

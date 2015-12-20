@@ -277,15 +277,15 @@ difference$PHTN$only.y %>% icd9GetReal %>% icd9Explain
 
 ### Find cardiac-related ICD-9 codes:
 ```{r cardiacgrep}
-icd9Hierarchy[
+icd9_hHierarchy[
   grepl(pattern = "(heart)|(cardiac)",
-        x = c(icd9Hierarchy$descLong, icd9Hierarchy$descShort),
+        x = c(icd9_hierarchy$descLong, icd9_hierarchy$descShort),
         ignore.case = TRUE),
   "icd9"] %>% unique -> cardiac
 ```
 then explain the list, just showing the first ten:
 ```{r cardiacChainExplainExample}
-cardiac %>% icd9Explain(warn = FALSE) %>% head(10)
+icd9(cardiac) %>% icd_explain(warn = FALSE) %>% head(10)
 ```
 
 ### Find comorbidities for a large number of patients.
@@ -329,7 +329,7 @@ The ICD-9-CM scheme is structured as follows:
  
  For most combinations of 0 to 9, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
 ```{r "find three digit billable"}
-allreal <- icd9::icd9Hierarchy[["icd9"]]
+allreal <- icd9::icd9_hierarchy[["icd9"]]
 # select the non-V and non-E codes with three characters (zeroes already prefixed)
 threedigitreal <- allreal[nchar(allreal) == 3 & icd9IsN(allreal)]
 # display
@@ -339,10 +339,10 @@ print(threedigitdf[1:10, ], row.names = FALSE)
 
 ### Which ICD-9 codes have changed between versions of ICD-9?
 ```{r "compare ICD-9 versions"}
-new_since_27 <- setdiff(icd9Billable[["32"]][["icd9"]],
-                         icd9Billable[["27"]][["icd9"]]) %>% head
-lost_since_27 <- setdiff(icd9Billable[["27"]][["icd9"]],
-                         icd9Billable[["32"]][["icd9"]]) %>% tail
+new_since_27 <- setdiff(icd9_billable[["32"]][["icd9"]],
+                         icd9_billable[["27"]][["icd9"]]) %>% head
+lost_since_27 <- setdiff(icd9_billable[["27"]][["icd9"]],
+                         icd9_billable[["32"]][["icd9"]]) %>% tail
 # we know this is an ICD-9-CM code, so declare this:
 lost_since_27 %<>% icd9cm
 lost_since_27 %<>% icd9
