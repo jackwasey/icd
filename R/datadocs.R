@@ -48,6 +48,19 @@
 #'   each with two element named character vector with start and end codes.
 NULL
 
+#' @title ICD-10 chapters
+#' @name icd10_chapters
+#' @aliases icd9ChaptersSub icd9ChaptersMajor icd9chapters icd9Chapters
+#' @description The WHO ICD-10 scheme chapters. The chapter level is the highest
+#'   in the hierarchy, each chapter containing sets of codes which span multiple
+#'   three-digit 'major' codes, and in some cases also span codes across two
+#'   alphabetic initial characters. E.g. Chapter I spans A00 to B99.
+#' @details TODO: confirm that ICD-10-CM has no variation at this level.
+#' @source http://apps.who.int/classifications/icd10/browse/2016/en
+#' @format list with chapter/usb-chapter or major names stored in list names,
+#'   each with two element named character vector with start and end codes.
+NULL
+
 #' @title ICD9-CM diagnosis code lookup
 #' @description short-form ICD-9 codes with short and long descriptions, and
 #'   description of each hierarchy level containing each code.
