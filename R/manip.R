@@ -26,7 +26,7 @@ icd_extract_alpha_numeric <- function(x) {
   assert(checkFactor(x), checkCharacter(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
-  asCharacterNoWarn(x) %>%
+  asCharacterNoWarn(x) %>% 
     str_match_all(pattern = "([VvEe]?)([[:digit:].]+)") %>%
     vapply(FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
            FUN.VALUE = rep(NA_character_, times = 2)) %>% t
@@ -45,35 +45,28 @@ icd_extract_alpha_numeric <- function(x) {
 #'   part
 #' @family ICD-9 convert
 #' @keywords internal manip
-icd9DropLeadingZeroes <- function(icd9, isShort) {
-  assert(checkFactor(icd9), checkCharacter(icd9))
-  assertFlag(isShort)
-  if (isShort)
-    icd9DropLeadingZeroesShort(icd9Short = icd9)
-  else
-    icd9DropLeadingZeroesDecimal(icd9Decimal = icd9)
+icd9_drop_leading_zeroes <- function(x, short_code) {
+  UseMethod("icd9_drop_leading_zeroes")
 }
 
-#' @rdname icd9DropLeadingZeroes
-#' @template icd9-decimal
-icd9DropLeadingZeroesDecimal <- function(icd9Decimal) {
-  assert(checkFactor(icd9Decimal), checkCharacter(icd9Decimal))
-
-  icd9Decimal %>%
-    str_match_all(pattern = "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]+)[[:space:]]*") %>%
-    vapply(FUN = function(y) if (length(y) > 0 && !anyNA(y)) sprintf("%s%s", y[2], y[4]) else NA_character_ ,
+#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a decimal format ICD-9 code
+icd9_drop_leading_zeroes.decimal_code <- function(x) {
+  assert(checkFactor(x), checkCharacter(x))
+  
+  x %>% asCharacterNoWarn %>% 
+    str_match_all( pattern = "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]+)[[:space:]]*") %>%
+    vapply(FUN = function(y) if (length(y) > 0) sprintf("%s%s", x[2], x[4]) else NA_character_ ,
            FUN.VALUE = character(1))
 }
 
-#' @rdname icd9DropLeadingZeroes
-#' @template icd9-short
-icd9DropLeadingZeroesShort <- function(icd9Short) {
-  assert(checkFactor(icd9Short), checkCharacter(icd9Short))
-  parts <- icd_short_to_parts.icd9(x = icd9Short, minor_empty = "")
+#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a short format ICD-9 code
+icd_drop_leading_zeroes.short_code <- function(x) {
+  assert(checkFactor(x), checkCharacter(x))
+  parts <- icd_short_to_parts.icd9(x = x, minor_empty = "")
   # very important: only drop the zero in V codes if the minor part is empty.
   areEmpty <- parts[["minor"]] == ""
 
-  icd9Short[areEmpty] <- icd9DropLeadingZeroesMajor(parts[areEmpty, "major"])
+  x[areEmpty] <- icd9DropLeadingZeroesMajor(parts[areEmpty, "major"])
   icd9Short
 }
 

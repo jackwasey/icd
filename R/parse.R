@@ -30,7 +30,7 @@ parseEverythingAndSave <- function() {
   devtools::load_data(pkg = ".") # reload the newly saved data
   parseAndSaveQuick()
   devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9BuildChaptersHierarchy(save = TRUE) # depends on icd9Billable
+  icd9BuildChaptersHierarchy(save = TRUE) # depends on icd9cm_billable
 
 }
 
@@ -43,7 +43,7 @@ parseAndSaveQuick <- function() {
   devtools::load_data(pkg = ".")
 
   # plain text billable codes
-  message("Parsing plain text billable codes to create icd9Billable list of
+  message("Parsing plain text billable codes to create icd9cm_billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
   parseLeafDescriptionsAll(save = TRUE)
@@ -51,7 +51,7 @@ parseAndSaveQuick <- function() {
 
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
-                       Depends on icd9Hierarchy being updated.")
+                       Depends on icd9_hierarchy being updated.")
   parseAhrqSas(save = TRUE)
   parseElix(save = TRUE)
   parseQuanDeyoSas(save = TRUE)
@@ -80,14 +80,14 @@ parseAndSaveQuick <- function() {
 parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE) {
   versions <- data_sources$version
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
-  icd9Billable <- list()
+  icd9cm_billable <- list()
   for (v in versions)
-    icd9Billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
+    icd9cm_billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
                                                       fromWeb = fromWeb)
 
   # and in my utils.R  getNonASCII(charactervector)
-  if (save) save_in_data_dir("icd9Billable")
-  invisible(icd9Billable)
+  if (save) save_in_data_dir("icd9cm_billable")
+  invisible(icd9cm_billable)
 }
 
 #' @title read the ICD-9-CM description data as provided by the Center for
@@ -212,12 +212,12 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL) {
   if (save || fromWeb || !file.exists(fp)) unzip_single(url, fn, fp)
   unzip_single(url, fn, fp)
   f <- file(fp, encoding = "latin1")
-  icd9Billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character", encoding = "latin1")
+  icd9cm_billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character", encoding = "latin1")
   close(f)
-  names(icd9Billable27) <- c("icd9", "descLong", "descShort")
-  icd9Billable27 <- icd9Billable27[c(1, 3, 2)] # reorder columns
-  reorder <- icd9_order_short(icd9Billable27[["icd9"]])
-  invisible(icd9Billable27[reorder, ])
+  names(icd9cm_billable27) <- c("icd9", "descLong", "descShort")
+  icd9cm_billable27 <- icd9cm_billable27[c(1, 3, 2)] # reorder columns
+  reorder <- icd9_order_short(icd9cm_billable27[["icd9"]])
+  invisible(icd9cm_billable27[reorder, ])
 }
 
 #' @title Read higher-level ICD-9 structure from a reliable web site
@@ -338,7 +338,7 @@ icd9BuildChaptersHierarchy <- function(save = FALSE) {
 
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs
-  icd9Hierarchy <- cbind(
+  icd9_hierarchy <- cbind(
     data.frame("icd9" = icd9Desc$icd9,
                "descLong" = icd9Desc$desc,
                stringsAsFactors = FALSE),
@@ -348,36 +348,36 @@ icd9BuildChaptersHierarchy <- function(save = FALSE) {
 
   # fix congenital abnormalities not having subchapter defined:
   # ( this might be easier to do when parsing the chapters themselves...)
-  icd9Hierarchy <- fixSubchapterNa(icd9Hierarchy, 740, 759)
+  icd9_hierarchy <- fixSubchapterNa(icd9_hierarchy, 740, 759)
   # and hematopoietic organs
-  icd9Hierarchy <- fixSubchapterNa(icd9Hierarchy, 280, 289)
+  icd9_hierarchy <- fixSubchapterNa(icd9_hierarchy, 280, 289)
 
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
   # just copy the long description over.
 
-  bill32 <- icd9::icd9Billable[["32"]]
+  bill32 <- icd9::icd9cm_billable[["32"]]
 
-  billable_codes <- icd9GetBillableShort(icd9Hierarchy$icd9) # or from bill32
-  billable_rows <- which(icd9Hierarchy$icd9 %in% billable_codes)
-  title_rows <- which(icd9Hierarchy$icd9 %nin% billable_codes)
-  icd9Hierarchy[billable_rows, "descShort"] <- bill32$descShort
+  billable_codes <- icd9GetBillableShort(icd9_hierarchy$icd9) # or from bill32
+  billable_rows <- which(icd9_hierarchy$icd9 %in% billable_codes)
+  title_rows <- which(icd9_hierarchy$icd9 %nin% billable_codes)
+  icd9_hierarchy[billable_rows, "descShort"] <- bill32$descShort
   # for rows without a short description (i.e. titles, non-billable), useexisting long desc
-  icd9Hierarchy[title_rows, "descShort"] <- icd9Hierarchy[title_rows, "descLong"]
+  icd9_hierarchy[title_rows, "descShort"] <- icd9_hierarchy[title_rows, "descLong"]
   # the billable codes list (where available) currently has better long
   # descriptions than the RTF parse. For previous years, there is no long desc
   # in billable, so careful when updating this.
-  icd9Hierarchy[billable_rows, "descLong"] <- bill32$descLong
+  icd9_hierarchy[billable_rows, "descLong"] <- bill32$descLong
 
   # now put the short description in the right column position
-  icd9Hierarchy <- icd9Hierarchy[c("icd9", "descShort", "descLong", "threedigit",
+  icd9_hierarchy <- icd9_hierarchy[c("icd9", "descShort", "descLong", "threedigit",
                                    "major", "subchapter", "chapter")]
 
   # quick sanity checks - full tests in test-parse.R
-  stopifnot(all(icd9IsValidShort(icd9Hierarchy$icd9)))
-  stopifnot(!any(sapply(icd9Hierarchy, is.na)))
+  stopifnot(all(icd9IsValidShort(icd9_hierarchy$icd9)))
+  stopifnot(!any(sapply(icd9_hierarchy, is.na)))
 
-  if (save) save_in_data_dir("icd9Hierarchy") # nocov
+  if (save) save_in_data_dir("icd9_hierarchy") # nocov
 }
 
 fixSubchapterNa <- function(x, start, end) {
@@ -413,9 +413,9 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"), save =
 
   # we can either use the icd9IsReal functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
-  icd9NShortReal <- grep("^[^VE]+", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
-  icd9VShortReal <- grep("V", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
-  icd9EShortReal <- grep("E", icd9::icd9Hierarchy$icd9, value = TRUE) # nolint
+  icd9NShortReal <- grep("^[^VE]+", icd9::icd9_hierarchy$icd9, value = TRUE) # nolint
+  icd9VShortReal <- grep("V", icd9::icd9_hierarchy$icd9, value = TRUE) # nolint
+  icd9EShortReal <- grep("E", icd9::icd9_hierarchy$icd9, value = TRUE) # nolint
 
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.

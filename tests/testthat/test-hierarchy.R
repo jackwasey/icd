@@ -15,37 +15,37 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-context("icd9Hierarchy was parsed as expected")
-# at present, icd9::icd9Hierarchy is derived from RTF parsing, a little web
+context("icd9_hierarchy was parsed as expected")
+# at present, icd9::icd9_hierarchy is derived from RTF parsing, a little web
 # scraping, some manually entered data, and (for the short description only)
 # another text file parsing.`
 
 test_that("no NA or zero-length values", {
-  expect_false(any(sapply(icd9::icd9Hierarchy, is.na)))
-  expect_false(any(nchar(unlist(icd9::icd9Hierarchy)) == 0))
+  expect_false(any(sapply(icd9::icd9_hierarchy, is.na)))
+  expect_false(any(nchar(unlist(icd9::icd9_hierarchy)) == 0))
 })
 
 test_that("factors are in the right place", {
-  expect_is(icd9::icd9Hierarchy$icd9, "character")
-  expect_is(icd9::icd9Hierarchy$descShort, "character")
-  expect_is(icd9::icd9Hierarchy$descLong, "character")
-  expect_is(icd9::icd9Hierarchy$threedigit, "factor")
-  expect_is(icd9::icd9Hierarchy$major, "factor")
-  expect_is(icd9::icd9Hierarchy$subchapter, "factor")
-  expect_is(icd9::icd9Hierarchy$chapter, "factor")
+  expect_is(icd9::icd9_hierarchy$icd9, "character")
+  expect_is(icd9::icd9_hierarchy$descShort, "character")
+  expect_is(icd9::icd9_hierarchy$descLong, "character")
+  expect_is(icd9::icd9_hierarchy$threedigit, "factor")
+  expect_is(icd9::icd9_hierarchy$major, "factor")
+  expect_is(icd9::icd9_hierarchy$subchapter, "factor")
+  expect_is(icd9::icd9_hierarchy$chapter, "factor")
 })
 
 test_that("codes and descriptions are valid and unique", {
-  expect_equal(anyDuplicated(icd9::icd9Hierarchy$icd9), 0)
-  expect_true(all(icd9IsValidShort(icd9::icd9Hierarchy$icd9)))
+  expect_equal(anyDuplicated(icd9::icd9_hierarchy$icd9), 0)
+  expect_true(all(icd9IsValidShort(icd9::icd9_hierarchy$icd9)))
 })
 
 test_that("some chapters are correct", {
-  chaps <- icd9::icd9Hierarchy$chapter %>% asCharacterNoWarn
-  codes <- icd9::icd9Hierarchy$icd9
+  chaps <- icd9::icd9_hierarchy$chapter %>% asCharacterNoWarn
+  codes <- icd9::icd9_hierarchy$icd9
   # first and last rows (E codes should be last)
   expect_equal(chaps[1], "Infectious And Parasitic Diseases")
-  expect_equal(chaps[nrow(icd9::icd9Hierarchy)],
+  expect_equal(chaps[nrow(icd9::icd9_hierarchy)],
                "Supplementary Classification Of External Causes Of Injury And Poisoning")
 
   # first and last rows of a block in the middle
@@ -59,12 +59,12 @@ test_that("some chapters are correct", {
 })
 
 test_that("some subchapters are correct", {
-  subchaps <- icd9::icd9Hierarchy$subchapter %>% asCharacterNoWarn
-  codes <- icd9::icd9Hierarchy$icd9
+  subchaps <- icd9::icd9_hierarchy$subchapter %>% asCharacterNoWarn
+  codes <- icd9::icd9_hierarchy$icd9
 
   # first and last
   expect_equal(subchaps[1], "Intestinal Infectious Diseases")
-  expect_equal(subchaps[nrow(icd9::icd9Hierarchy)], "Injury Resulting From Operations Of War")
+  expect_equal(subchaps[nrow(icd9::icd9_hierarchy)], "Injury Resulting From Operations Of War")
 
   # first and last of a block in the middle
   suicide_rows <- which(codes %in% ("E950" %i9sa% "E959"))
@@ -78,7 +78,7 @@ test_that("some subchapters are correct", {
 
 test_that("some randomly selected rows are correct", {
   expect_equal(
-    icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname,
+    icd9::icd9_hierarchy[icd9::icd9_hierarchy$icd9 == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname,
     c("5060", "Fum/vapor bronc/pneumon", "Bronchitis and pneumonitis due to fumes and vapors",
       "506", "Respiratory conditions due to chemical fumes and vapors",
       "Pneumoconioses And Other Lung Diseases Due To External Agents",
@@ -88,6 +88,6 @@ test_that("some randomly selected rows are correct", {
 
 test_that("tricky v91.9 works", {
   expect_equal(
-    icd9Hierarchy[icd9Hierarchy$icd9 == "V9192", "descLong"],
+    icd9_hierarchy[icd9_hierarchy$icd9 == "V9192", "descLong"],
     "Other specified multiple gestation, with two or more monoamniotic fetuses")
 })

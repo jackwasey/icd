@@ -44,7 +44,7 @@ icd9IsRealShort <- function(x, onlyBillable = FALSE) {
  assert(checkFactor(x), checkCharacter(x))
   assertFlag(onlyBillable)
   if (onlyBillable) return(icd9cm_is_billable.icd_short_code(asCharacterNoWarn(x)))
-  icd9AddLeadingZeroesShort(asCharacterNoWarn(x)) %in% icd9::icd9Hierarchy[["icd9"]]
+  icd9AddLeadingZeroesShort(asCharacterNoWarn(x)) %in% icd9::icd9_hierarchy[["icd9"]]
 }
 
 #' @describeIn icd9IsReal Are the given decimal-form codes defined at heading or
@@ -115,7 +115,7 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
   assertString(version)
   if (!short_code)
     x <- icd_decimal_to_short.icd9(x)
-  x %in% icd9::icd9Billable[[version]][["icd9"]]
+  x %in% icd9::icd9cm_billable[[version]][["icd9"]]
 }
 
 icd_is_billable.default <- function(x, short_code = icd_guess_short(x),

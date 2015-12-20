@@ -24,10 +24,10 @@ test_that("billable codes are recreated", {
   if (Sys.info()[["sysname"]] != "Linux")
     skip("Only do encoding problems on Linux.")
   for (ver in c("27", "28", "29", "30", "31", "32")) {
-    v <- icd9::icd9Billable[[ver]][["descLong"]]
+    v <- icd9::icd9cm_billable[[ver]][["descLong"]]
     cb <- check_billable[[ver]][["descLong"]]
     diff <- v != cb
-    expect_identical(check_billable[[ver]], icd9::icd9Billable[[ver]],
+    expect_identical(check_billable[[ver]], icd9::icd9cm_billable[[ver]],
                      info = paste("descLong differences for version", ver,
                                   "\noriginal: ", paste(v[diff], collapse = ", "),
                                   "\nprocess:", paste(cb[diff], collapse = ", ")
@@ -36,19 +36,19 @@ test_that("billable codes are recreated", {
 })
 
 test_that("billable codes for expected versions exist", {
-  expect_true(all(as.character(23:32) %in% names(icd9Billable)))
-  expect_true(all(sapply(icd9Billable, is.data.frame)))
+  expect_true(all(as.character(23:32) %in% names(icd9cm_billable)))
+  expect_true(all(sapply(icd9cm_billable, is.data.frame)))
 })
 
 test_that("billable codes are all in order", {
   skip_on_cran()
-  for (v in names(icd9Billable)) {
-    i <- icd9::icd9Billable[[v]][["icd9"]]
+  for (v in names(icd9cm_billable)) {
+    i <- icd9::icd9cm_billable[[v]][["icd9"]]
     expect_identical(i, icd_sort.icd9(i, short_code = TRUE),
                      info = paste("version = ", v))
   }
 })
 
 test_that("parsing 27 gives zero-padded digit icd9 codes", {
-  expect_equal(icd9Billable[["27"]][1, "icd9"], "0010")
+  expect_equal(icd9cm_billable[["27"]][1, "icd9"], "0010")
 })

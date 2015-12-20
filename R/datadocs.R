@@ -16,10 +16,10 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title ICD-9-CM chapters
-#' @name icd9Chapters
-#' @aliases icd9ChaptersSub icd9ChaptersMajor icd9chapters icd9Chapters
-#' @description \code{icd9Chapters}, \code{icd9ChaptersSub} and
-#'   \code{icd9ChaptersMajor} contain mappings from the higher level
+#' @name icd9_chapters
+#' @aliases icd9_chapters_sub icd9_chapters_major
+#' @description \code{icd9_chapters}, \code{icd9_chapters_sub} and
+#'   \code{icd9_chapters_major} contain mappings from the higher level
 #'   descriptions of ICD-9 codes to the ranges of ICD-9 codes they describe.
 #'   Helpful in summarizing codes or grouping for human-readable output. These
 #'   can easily be converted to a co-morbidity mapping, as shown in the
@@ -51,9 +51,11 @@ NULL
 #' @title ICD9-CM diagnosis code lookup
 #' @description short-form ICD-9 codes with short and long descriptions, and
 #'   description of each hierarchy level containing each code.
+#' @details \code{icd9Hierarchy} is deprecated in favor of \code{icd9_hierarchy}
 #' @docType data
 #' @keywords datasets
 #' @format data frame
+#' @aliases icd9Hierarchy
 #' @source
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
 #' @source Rich text descriptions here:
@@ -69,8 +71,10 @@ NULL
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icdcm.asp}
 #' @source
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
-#' @name icd9Hierarchy
+#' @name icd9_hierarchy
 NULL
+
+icd9Hierarchy <- icd9_hierarchy
 
 #' @title AHRQ comorbidities
 #' @description This mapping of comorbidities to ICD-9 codes is dervied directly
@@ -82,22 +86,21 @@ NULL
 #' @format list of character vectors
 #' @source
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
-#' @name ahrqComorbid
+#' @name icd9_ahrq
+#' @aliases ahrqComorbid ahrq icd_ahrq
 NULL
 
-#' @title AHRQ comorbidities, with HTN, CHF and renal failure subgroups
-#' @description This mapping of comorbidities to ICD-9 codes is dervied directly
-#'   from SAS code provided by AHRQ, and translated into this R data structure.
-#'   Beyond ahrqComorbid, this includes all the HTN, CHF and renal subgroups,
+ahrqComorbid <- icd9_map_ahrq
+
+#' @rdname icd9_ahrq
+#' @name icd9_ahrq_all
+#' @aliases ahrqComorbidAll
+#'   @details Beyond \code{icd9_ahrq}, \code{icd9_ahrq_all} includes all the HTN, CHF and renal subgroups,
 #'   not rolled into their parent categories. This resolution is not needed in
-#'   typical usage: \code{ahrqComorbid} is probably what you want.
-#' @docType data
-#' @keywords datasets
-#' @format list of character vectors, each named by co-morbidity
-#' @source
-#' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
-#' @name ahrqComorbidAll
+#'   typical usage: \code{icd9_ahrq} is probably what you want.
 NULL
+
+ahrqComorbidAll <- icd9_map_ahrq_all
 
 #' @title Quan adaptation of Deyo/Charlson comorbidities
 #' @description Derived programmatically from the SAS code used in the original
@@ -119,8 +122,11 @@ NULL
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
-#' @name quanDeyoComorbid
+#' @name
+#' @aliases quanDeyoComorbid
 NULL
+
+quanDeyoComorbid <- icd9_map_quan_deyo
 
 #' @title Quan adaptation of Elixhauser comorbidities
 #' @description These were transcribed directly from the Quan paper referenced.
@@ -137,6 +143,8 @@ NULL
 #'
 #' @name quanElixComorbid
 NULL
+
+quanElixComorbid <- icd9_map_quan_elix
 
 #' @title Elixhauser comorbidities
 #' @description The original mapping of Elixhauser's ICD-9-CM to 30
@@ -159,6 +167,8 @@ NULL
 #'   January 1998 36, no. 1 (1998): 8-27.
 #' @name elixComorbid
 NULL
+
+elixComorbid <- icd9_map_elix
 
 #' @title Comorbidity names
 #' @description These lists provide correctly sorted names of the comorbidities
@@ -190,7 +200,7 @@ NULL
 NULL
 
 #' @title list of annual versions of billable leaf nodes of ICD-9-CM
-#' @name icd9Billable
+#' @name icd9cm_billable
 #' @description These are derived from the CMS published updates, with versions
 #'   23 to 32 currently available going back to 2004/5. The source files back to
 #'   version 27 have short and long descriptions. The short descriptions are in
@@ -208,10 +218,7 @@ NULL
 #' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 NULL
 
-# we don't ever use magrittr in 'live' package use, just when it is using its
-# own functions for testing and generating its own data: in those cases magrittr
-# will be available, but we don't want CRAN check problems, so:
-# utils::globalVariables(c("%<>%"))
+icd9Billable <- icd9cm_billable
 
 #' @description Hospital discharge data from Vermont
 #' @title De-identified data from public Vermont source for 2013
@@ -236,7 +243,6 @@ NULL
 #'   for errors in the data due to coding or processing"
 #' @source
 #' \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
-
 #' @format CSV original, minimally processed into R data frame.
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration
