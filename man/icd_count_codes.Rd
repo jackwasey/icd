@@ -61,6 +61,6 @@ vector of the count of comorbidities for each patient. This is
   icd_count_codes_wide(wide)
   # or:
   library(magrittr)
-  wide \%>\% icd9WideToLong \%>\% icd_count_codes
+  wide \%>\% icd_wide_to_long \%>\% icd_count_codes
 }
 

@@ -28,18 +28,18 @@ test_that("long data to wide data", {
   longcmp <- data.frame(visitId = c("a", "b", "c"),
                         icd_001 = c("441", "4424", "441"),
                         icd_002 = c(NA, "443", NA))
-  expect_equal(icd9LongToWide(longdf, return.df = TRUE), longcmp)
+  expect_equal(icd_long_to_wide(longdf, return.df = TRUE), longcmp)
 
   longcmp2 <- data.frame(visitId = c("a", "b", "c"),
                          icd_001 = c("441", "4424", "441"),
                          icd_002 = c(NA, "443", NA),
                          icd_003 = c(NA, NA, NA))
-  expect_equal(icd9LongToWide(longdf, min.width = 3, return.df = TRUE), longcmp2)
+  expect_equal(icd_long_to_wide(longdf, min.width = 3, return.df = TRUE), longcmp2)
 
 
   longdf2 <- data.frame(i = c("441", "4424", "443", "441"),
                         v = c("a", "b", "b", "c"))
-  expect_equal(names(icd9LongToWide(longdf2,
+  expect_equal(names(icd_long_to_wide(longdf2,
                                     visitId = "v",
                                     icd9Field = "i",
                                     prefix = "ICD10_", return.df = TRUE)),
@@ -47,16 +47,16 @@ test_that("long data to wide data", {
 })
 
 test_that("wide data to long data", {
-  expect_equivalent(icd9WideToLong(widedf),
+  expect_equivalent(icd_wide_to_long(widedf),
                     longdf)
 
   widedfempty <- data.frame(visitId = c("a", "b", "c"),
                             icd9_001 = c("441", "4424", "441"),
                             icd9_002 = c("", "443", ""))
 
-  expect_equivalent(icd9WideToLong(widedfempty),
+  expect_equivalent(icd_wide_to_long(widedfempty),
                     longdf)
-  expect_equal(icd9WideToLong(widedfempty),
-               icd9WideToLong(widedfempty))
+  expect_equal(icd_wide_to_long(widedfempty),
+               icd_wide_to_long(widedfempty))
 
 })

@@ -5,6 +5,8 @@
 #' @keywords internal
 generate_deprecated_data <- function() {
 
+  # no particular reason to use assign here; relic of having been trying to
+  # assign to package namespace.
   assign("icd9Billable", icd9::icd9cm_billable)
   assign("icd9Hierarchy", icd9::icd9_hierarchy)
   assign("ahrqComorbid", icd9::icd9_map_ahrq)
