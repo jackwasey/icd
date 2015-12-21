@@ -277,7 +277,7 @@ difference$PHTN$only.y %>% icd9GetReal %>% icd9Explain
 
 ### Find cardiac-related ICD-9 codes:
 ```{r cardiacgrep}
-icd9_hHierarchy[
+icd9_hierarchy[
   grepl(pattern = "(heart)|(cardiac)",
         x = c(icd9_hierarchy$descLong, icd9_hierarchy$descShort),
         ignore.case = TRUE),
