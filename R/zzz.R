@@ -33,35 +33,6 @@ install_github(\"jackwasey/icd9\")
 ")
 }
 
-.onLoad <- function(libname, pkgname) {
-
-  # make assignments we can't do in the data directory before the namespace is
-  # locked
-
-  ns <- getNamespace(pkgname)
-
-  assign("icd9Billable", icd9::icd9cm_billable, pos = ns)
-  assign("icd9Hierarchy", icd9::icd9_hierarchy, pos = ns)
-  assign("ahrqComorbid", icd9::icd9_map_ahrq, pos = ns)
-  assign("ahrqComorbidAll", icd9::icd9_map_ahrq_all, pos = ns)
-  assign("quanDeyoComorbid", icd9::icd9_map_quan_deyo, pos = ns)
-  assign("quanElixComorbid", icd9::icd9_map_quan_elix, pos = ns)
-  assign("elixComorbid", icd9::icd9_map_elix, pos = ns)
-  assign("elixComorbidNamesAbbrev", icd9::icd_names_elix_abbrev, pos = ns)
-  assign("elixComorbidNamesHtn", icd9::icd_names_elix_htn, pos = ns)
-  assign("elixComorbidNamesHtnAbbrev", icd9::icd_names_elix_htn_abbrev, pos = ns)
-  assign("quanElixComorbidNames", icd9::icd_names_quan_elix, pos = ns)
-  assign("quanElixComorbidNamesAbbrev", icd9::icd_names_quan_elix_abbrev, pos = ns)
-  assign("quanElixComorbidNamesHtn", icd9::icd_names_quan_elix_htn, pos = ns)
-  assign("quanElixComorbidNamesHtnAbbrev", icd9::icd_names_quan_elix_htn_abbrev, pos = ns)
-  assign("ahrqComorbidNames", icd9::icd_names_ahrq, pos = ns)
-  assign("ahrqComorbidNamesAbbrev", icd9::icd_names_ahrq_abbrev, pos = ns)
-  assign("ahrqComorbidNamesHtn", icd9::icd_names_ahrq_htn, pos = ns)
-  assign("ahrqComorbidNamesHtnAbbrev", icd9::icd_names_ahrq_htn_abbrev, pos = ns)
-  assign("charlsonComorbidNames", icd9::icd_names_charlson, pos = ns)
-  assign("charlsonComorbidNamesAbbrev", icd9::icd_names_charlson_abbrev, pos = ns)
-}
-
 .onUnload <- function(libpath) {
   library.dynam.unload("icd9", libpath)
 }
