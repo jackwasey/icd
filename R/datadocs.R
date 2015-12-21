@@ -101,7 +101,7 @@ NULL
 #' @aliases ahrqComorbid ahrq
 NULL
 
-#' @rdname icd9_ahrq
+#' @rdname icd9_map_ahrq
 #' @name icd9_map_ahrq_all
 #' @aliases ahrqComorbidAll
 #'   @details Beyond \code{icd9_ahrq}, \code{icd9_ahrq_all} includes all the HTN, CHF and renal subgroups,
