@@ -4,7 +4,9 @@
 \name{icd9_map_ahrq}
 \alias{ahrq}
 \alias{ahrqComorbid}
+\alias{ahrqComorbidAll}
 \alias{icd9_map_ahrq}
+\alias{icd9_map_ahrq_all}
 \title{AHRQ comorbidities}
 \format{list of character vectors}
 \source{
@@ -15,6 +17,12 @@ This mapping of comorbidities to ICD-9 codes is dervied directly
   from SAS code provided by AHRQ, and translated into this R data structure.
   This is a revision of the Elixhauser system, notably exluding cardiac
   arrythmia.
+}
+\details{
+Beyond \code{icd9_ahrq}, \code{icd9_ahrq_all} includes all the HTN,
+  CHF and renal subgroups, not rolled into their parent categories. This
+  resolution is not needed in typical usage: \code{icd9_ahrq} is probably
+  what you want.
 }
 \keyword{datasets}
 
