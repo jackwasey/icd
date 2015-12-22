@@ -160,7 +160,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #'   icd_count_codes_wide(wide)
 #'   # or:
 #'   library(magrittr)
-#'   wide %>% icd9WideToLong %>% icd_count_codes
+#'   wide %>% icd_wide_to_long %>% icd_count_codes
 #' @importFrom stats aggregate
 #' @export
 icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {

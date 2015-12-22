@@ -60,12 +60,12 @@ uranium_pathology[1:10, ]
 We can convert the date from long to wide format easily. Tthis is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using dplyr and friends for this manipulation.
 
 ```{r uranium-wide}
-uranium_pathology %>% icd9LongToWide %>% head
+uranium_pathology %>% icd_long_to_wide %>% head
 ```
 
 Now map these diagnoses to disease groups as defined by Quan et al:
 ```{r comorbidities}
-quan_comorbidities <- icd9Comorbid(uranium_pathology, icd10_map_quan_elix)
+quan_comorbidities <- icd_comorbid(uranium_pathology, icd10_map_quan_elix)
 # see the first few rows and columns:
 quan_comorbidities[1:6, 3:10]
 ```

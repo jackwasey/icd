@@ -103,10 +103,11 @@ NULL
 
 #' @rdname icd9_map_ahrq
 #' @name icd9_map_ahrq_all
+#' @details Beyond \code{icd9_ahrq}, \code{icd9_ahrq_all} includes all the HTN,
+#'   CHF and renal subgroups, not rolled into their parent categories. This
+#'   resolution is not needed in typical usage: \code{icd9_ahrq} is probably
+#'   what you want.
 #' @aliases ahrqComorbidAll
-#'   @details Beyond \code{icd9_ahrq}, \code{icd9_ahrq_all} includes all the HTN, CHF and renal subgroups,
-#'   not rolled into their parent categories. This resolution is not needed in
-#'   typical usage: \code{icd9_ahrq} is probably what you want.
 NULL
 
 #' @title Quan adaptation of Deyo/Charlson comorbidities

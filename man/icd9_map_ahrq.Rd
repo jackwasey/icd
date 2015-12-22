@@ -2,41 +2,11 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_map_ahrq}
-\alias{@details}
-\alias{Beyond}
-\alias{CHF}
-\alias{HTN,}
-\alias{This}
-\alias{\code{icd9_ahrq_all}}
-\alias{\code{icd9_ahrq}}
-\alias{\code{icd9_ahrq},}
 \alias{ahrq}
 \alias{ahrqComorbid}
 \alias{ahrqComorbidAll}
-\alias{all}
-\alias{and}
-\alias{categories.}
 \alias{icd9_map_ahrq}
 \alias{icd9_map_ahrq_all}
-\alias{in}
-\alias{includes}
-\alias{into}
-\alias{is}
-\alias{needed}
-\alias{not}
-\alias{parent}
-\alias{probably}
-\alias{renal}
-\alias{resolution}
-\alias{rolled}
-\alias{subgroups,}
-\alias{the}
-\alias{their}
-\alias{typical}
-\alias{usage:}
-\alias{want.}
-\alias{what}
-\alias{you}
 \title{AHRQ comorbidities}
 \format{list of character vectors}
 \source{
@@ -47,6 +17,12 @@ This mapping of comorbidities to ICD-9 codes is dervied directly
   from SAS code provided by AHRQ, and translated into this R data structure.
   This is a revision of the Elixhauser system, notably exluding cardiac
   arrythmia.
+}
+\details{
+Beyond \code{icd9_ahrq}, \code{icd9_ahrq_all} includes all the HTN,
+  CHF and renal subgroups, not rolled into their parent categories. This
+  resolution is not needed in typical usage: \code{icd9_ahrq} is probably
+  what you want.
 }
 \keyword{datasets}
 

@@ -56,7 +56,7 @@ other mapping of codes, such as ICD-10, to comorbidities can be used.
   \code{\link{icd9Children}} and find a common parent to a set of children
   (or arbitrary list of ICD-9 codes) with \code{\link{icd9Condense}}.
   \code{\link{icd9Sort}} sorts in hierarchical, then numerical order, so
-  100.0 comes before 100.00, for example. \code{\link{icd9WideToLong}} and
+  100.0 comes before 100.00, for example. \code{\link{icd_wide_to_long}} and
   \code{\link{icd9LongToWide}} convert the two most common data structures
   containing patient disease data. This is more sophisticated than standard R
   or Hadleyverse reshaping.}

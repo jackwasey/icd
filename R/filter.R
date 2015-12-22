@@ -21,6 +21,7 @@
 #' @template icd_name
 #' @template short_code
 #' @param invert single logical value, if TRUE will return invalid instead of valid rows.
+#' @param ... arguments passed to the class-specific functions
 #' @export
 icd_filter_valid <- function(...)
   UseMethod("icd_filter_valid")
