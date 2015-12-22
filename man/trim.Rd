@@ -15,5 +15,8 @@ character vector
 \description{
 \code{NA} is accepted and returned, probably as \code{NA_character_}
 }
+\details{
+TODO: replace with str_trim but test speed first.
+}
 \keyword{internal}
 

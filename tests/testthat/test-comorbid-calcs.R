@@ -337,3 +337,7 @@ test_that("if an ICD class is not specified for a data set, but is for a column 
   expect_error(icd_comorbid_quan_elix(icd9(mydf), short_code = FALSE, hierarchy = TRUE, return_df = TRUE), NA)
   # TODO, expand this section
 })
+
+context("test ICD-10 comorbidity calculations")
+# since most of the code is common to ICD-9 and ICD-10, this doesn't need to be very extensive.
+icd_comorbid(uranium_pathology, icd10_map_quan_elix)

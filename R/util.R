@@ -32,24 +32,25 @@ strim <- function(x) {
 #' Trim leading and trailing whitespace
 #'
 #' \code{NA} is accepted and returned, probably as \code{NA_character_}
+#' @details TODO: replace with str_trim but test speed first.
 #' @param x character vector
 #' @return character vector
 #' @keywords internal
-trim <- function (x) {
+trim <- function(x) {
   nax <- is.na(x)
   x[!nax] <- .Call("icd9_trimCpp", PACKAGE = get_pkg_name(), as.character(x[!nax]))
   x
 }
 
 allIsNumeric <- function(x, extras = c(".", "NA", NA)) {
-  old <- options(warn = - 1)
+  old <- options(warn = -1)
   on.exit(options(old))
   xs <- x[x %nin% c("", extras)]
   !anyNA(as.numeric(xs))
 }
 
 asNumericNoWarn <- function(x) {
-  old <- options(warn = - 1)
+  old <- options(warn = -1)
   on.exit(options(old))
   if (is.factor(x)) x <- levels(x)[x]
   as.numeric(x)
@@ -72,6 +73,7 @@ asCharacterNoWarn <- function(x) {
 
 #' Strip character(s) from character vector
 #'
+#' TODO: replace with str_replace
 #' @param x character vector
 #' @param pattern passed to \code{gsub} default is " "
 #' @param useBytes passed to gsub, default is the slightly quicker \code{TRUE}
@@ -358,3 +360,21 @@ icd9_order_short <- function(x) {
     x)
 }
 
+#' wrapper for \code{.Deprecated}
+#'
+#' Don't show warnings when testing deprecated code. I don't really want
+#' deprecated warnings in any testing, with testthat directly, or in CRAN
+#' checks.
+#' @param ... arguments passed to \code{.Deprecated}
+#' @keywords internal
+icd_deprecated <- function(...) {
+  # if NOT_CRAN is set, it means we are running testthat!
+  #if (identical(Sys.getenv("NOT_CRAN"), "true"))
+  #  return()
+
+  test_mode <- unlist(sys.calls()) %>% str_detect("test") %>% any
+
+  if (!test_mode)
+    .Deprecated(...)
+
+}

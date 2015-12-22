@@ -16,10 +16,12 @@
 \alias{icd9ComorbiditiesQuanElixhauser}
 \alias{icd_comorbid}
 \alias{icd_comorbid.default}
+\alias{icd_comorbid.icd10}
 \alias{icd_comorbid.icd9}
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_ahrq.default}
 \alias{icd_comorbid_ahrq.icd9}
+\alias{icd_comorbid_common}
 \alias{icd_comorbid_elix}
 \alias{icd_comorbid_elix.default}
 \alias{icd_comorbid_elix.icd9}
@@ -38,9 +40,16 @@ icd_comorbid(...)
 
 \method{icd_comorbid}{default}(x, ...)
 
+\method{icd_comorbid}{icd10}(x, map, visit_name = NULL, icd_name = NULL,
+  short_code = icd_guess_short(x), short_map = icd_guess_short.list(map),
+  return_df = FALSE, ...)
+
 \method{icd_comorbid}{icd9}(x, map, visit_name = NULL, icd_name = NULL,
   short_code = icd_guess_short.icd9(x),
-  short_map = icd_guess_short.icd9(map), return_df = FALSE, ...)
+  short_map = icd_guess_short.list(map), return_df = FALSE, ...)
+
+icd_comorbid_common(x, map, visit_name = NULL, icd_name, short_code,
+  short_map, return_df = FALSE, ...)
 
 icd_comorbid_ahrq(...)
 
@@ -195,12 +204,18 @@ There is a change in behavior from previous versions. The visit_name
   The threading of the C++ can be controlled using e.g.
   \code{option(icd9.threads = 4)}. If it is not set, the number of cores in
   the machine is used.
+
+The common comorbidity calculation code does not depend on ICD type.
+  There is some type conversion so the map and input codes are all in 'short'
+  format, fast factor generation, then fast comorbidity assignment.
 }
 \section{Methods (by class)}{
 \itemize{
 \item \code{default}: default method for getting comorbidities, guessing
 ICD version. ICD version can be specified by setting the class of the input
 data directly, or by calling, for example, \code{icd9(your_data_frame)}.
+
+\item \code{icd10}: Get comorbidities from ICD-10 codes
 
 \item \code{icd9}: Get comorbidities from ICD-9 codes
 }}

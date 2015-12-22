@@ -33,31 +33,6 @@ install_github(\"jackwasey/icd9\")
 ")
 }
 
-.onLoad <- function(libname, pkgname) {
-  # before sealing the namespace, we need to insert the deprecated data names:
-  assign("icd9Billable", icd9::icd9cm_billable, pos = parent.frame())
-  icd9Billable <- icd9::icd9cm_billable
-  icd9Hierarchy <- icd9::icd9_hierarchy
-  ahrqComorbid <- icd9::icd9_map_ahrq
-  ahrqComorbidAll <- icd9::icd9_map_ahrq_all
-  quanDeyoComorbid <- icd9::icd9_map_quan_deyo
-  quanElixComorbid <- icd9::icd9_map_quan_elix
-  elixComorbid <- icd9::icd9_map_elix
-  elixComorbidNamesAbbrev <- icd9::icd_names_elix_abbrev
-  elixComorbidNamesHtn <- icd9::icd_names_elix_htn
-  elixComorbidNamesHtnAbbrev <- icd9::icd_names_elix_htn_abbrev
-  quanElixComorbidNames <- icd9::icd_names_quan_elix
-  quanElixComorbidNamesAbbrev <- icd9::icd_names_quan_elix_abbrev
-  quanElixComorbidNamesHtn <- icd9::icd_names_quan_elix_htn
-  quanElixComorbidNamesHtnAbbrev <- icd9::icd_names_quan_elix_htn_abbrev
-  ahrqComorbidNames <- icd9::icd_names_ahrq
-  ahrqComorbidNamesAbbrev <- icd9::icd_names_ahrq_abbrev
-  ahrqComorbidNamesHtn <- icd9::icd_names_ahrq_htn
-  ahrqComorbidNamesHtnAbbrev <- icd9::icd_names_ahrq_htn_abbrev
-  charlsonComorbidNames <- icd9::icd_names_charlson
-  charlsonComorbidNamesAbbrev <- icd9::icd_names_charlson_abbrev
-}
-
 .onUnload <- function(libpath) {
   library.dynam.unload("icd9", libpath)
 }

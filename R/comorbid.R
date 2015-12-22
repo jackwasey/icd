@@ -99,6 +99,26 @@ icd_comorbid.default <- function(x, ...) {
   icd_comorbid(x, ...)
 }
 
+#' @describeIn icd_comorbid Get comorbidities from ICD-10 codes
+#' @export
+icd_comorbid.icd10 <- function(x,
+                               map,
+                               visit_name = NULL,
+                               icd_name = NULL,
+                               short_code = icd_guess_short(x),
+                               short_map = icd_guess_short.list(map),
+                               return_df = FALSE, ...) {
+  assert(checkString(icd_name), checkNull(icd_name))
+  icd_name <- get_icd_name(x, icd_name)
+
+  # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
+  # the S3 method was called directly.
+  if (!is.icd10(x[[icd_name]])) x[[icd_name]] <- icd10(x[[icd_name]])
+  icd_comorbid_common(x, map, visit_name, icd_name,
+                      short_code, short_map, return_df, ...)
+
+}
+
 #' @describeIn icd_comorbid Get comorbidities from ICD-9 codes
 #' @export
 icd_comorbid.icd9 <- function(x,
@@ -106,7 +126,29 @@ icd_comorbid.icd9 <- function(x,
                               visit_name = NULL,
                               icd_name = NULL,
                               short_code = icd_guess_short.icd9(x),
-                              short_map = icd_guess_short.icd9(map),
+                              short_map = icd_guess_short.list(map),
+                              return_df = FALSE, ...) {
+  assert(checkString(icd_name), checkNull(icd_name))
+  icd_name <- get_icd_name(x, icd_name)
+  # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
+  # the S3 method was called directly.
+  if (!is.icd9(x[[icd_name]])) x[[icd_name]] <- icd9(x[[icd_name]])
+
+  icd_comorbid_common(x, map, visit_name, icd_name,
+                      short_code, short_map, return_df, ...)
+}
+
+#' @rdname icd_comorbid
+#' @details The common comorbidity calculation code does not depend on ICD type.
+#'   There is some type conversion so the map and input codes are all in 'short'
+#'   format, fast factor generation, then fast comorbidity assignment.
+#' @keywords internal
+icd_comorbid_common <- function(x,
+                              map,
+                              visit_name = NULL,
+                              icd_name,
+                              short_code,
+                              short_map,
                               return_df = FALSE, ...) {
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
@@ -122,11 +164,12 @@ icd_comorbid.icd9 <- function(x,
   stopifnot(visit_name %in% names(x))
 
   if (!short_code)
-    x[[icd_name]] <- icd_decimal_to_short.icd9(x[[icd_name]])
+    x[[icd_name]] <- icd_decimal_to_short(x[[icd_name]])
 
   map <- lapply(map, asCharacterNoWarn)
 
-  if (!short_map) map <- lapply(map, icd_decimal_to_short.icd9)
+  if (!short_map)
+    map <- lapply(map, icd_decimal_to_short)
 
   # new stragegy is to start with a factor for the icd codes in x, recode (and drop superfluous) icd codes in the
   # mapping, then do very fast match on integer without need for N, V or E distinction. Char to factor conversion in R
@@ -139,9 +182,10 @@ icd_comorbid.icd9 <- function(x,
 
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
-  icd9VisitWasFactor <- is.factor(x[[visit_name]])
+  visit_was_factor <- is.factor(x[[visit_name]])
 
-  if (icd9VisitWasFactor) ivLevels <- levels(x[[visit_name]])
+  if (visit_was_factor)
+    ivLevels <- levels(x[[visit_name]])
 
   # this may be the slowest step (again, if needed, and many will have character IDs)
   x[[visit_name]] <- asCharacterNoWarn(x[[visit_name]])
@@ -166,15 +210,15 @@ icd_comorbid.icd9 <- function(x,
                               threads = threads, chunkSize = chunkSize, ompChunkSize = ompChunkSize)
 
   if (return_df) {
-    if (icd9VisitWasFactor)
+    if (visit_was_factor)
       rownm <- factor_nosort(x = rownames(mat), levels = ivLevels)
     else
       rownm <- rownames(mat)
-    df.out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = icd9VisitWasFactor)
-    names(df.out)[1] <- visit_name
+    df_out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = visit_was_factor)
+    names(df_out)[1] <- visit_name
     # perhaps leave (duplicated) rownames which came from the matrix:
-    rownames(df.out) <- NULL
-    return(df.out)
+    rownames(df_out) <- NULL
+    return(df_out)
   }
   mat
 }
@@ -229,11 +273,6 @@ icd_comorbid_quan_deyo.default <- function(...) {
 icd_comorbid_elix.default <- function(...) {
   icd_comorbid_elix.icd9(...)
 }
-
-
-
-
-
 
 #' @rdname icd_comorbid
 #' @param abbrev_names  single locical value that defaults to \code{TRUE}, in

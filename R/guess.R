@@ -38,15 +38,9 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
   UseMethod("icd_guess_short")
 }
 
-#' @describeIn icd_guess_short Guess whether an ICD-10 code is in short_code form
-#' @keywords internal
-icd_guess_short.icd10 <- function(x, short_code = NULL, test_n = 1000L) {
-  # jump to the simple default (is there a decimal point)
-  NextMethod()
-}
-
 #' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
 #' @keywords internal
+#' @export
 icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L) {
   if (inherits(x, "icd_short_code")) return(TRUE)
   if (inherits(x, "icd_decimal_code")) return(FALSE)
@@ -64,11 +58,13 @@ icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L) {
   sum(vd) <= sum(vs)
 }
 
+#' @export
 icd_guess_short.list <- function(x, short_code = NULL, test_n = 1000L) {
   y <- unlist(x)
   icd_guess_short(y, short_code = short_code, test_n)
 }
 
+#' @export
 icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L) {
   # this should have been dealt with by dispatching, but just in case this is called directly:
   if (!is.null(short_code)) {
@@ -80,21 +76,27 @@ icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L) {
   !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE) # any decimal as first approximation
 }
 
+#' @export
 icd_guess_short.icd_short_code <- function(x) TRUE
 
+#' @export
 icd_guess_short.icd_decimal_code <- function(x) FALSE
 
 #' Guess version of ICD
 #'
 #' @keywords internal
+#' @export
 icd_guess_version <- function(...)
   UseMethod("icd_guess_version")
 
+#' @export
 icd_guess_version.icd9 <- function(icd, short_code) "icd9"
 
+#' @export
 icd_guess_version.icd10 <- function(icd, short_code) "icd10"
 
 #' @describeIn icd_guess_version Guess version of ICD code from character vector
+#' @export
 icd_guess_version.character <- function(x, short_code = NULL) {
   assertCharacter(x)
   if (!is.null(short_code)) {

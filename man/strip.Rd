@@ -17,7 +17,7 @@ strip(x, pattern = " ", useBytes = TRUE)
 character vector of same length as input
 }
 \description{
-Strip character(s) from character vector
+TODO: replace with str_replace
 }
 \keyword{internal}
 

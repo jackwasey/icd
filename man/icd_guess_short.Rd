@@ -3,15 +3,12 @@
 \name{icd9GuessIsShort}
 \alias{icd9GuessIsShort}
 \alias{icd_guess_short}
-\alias{icd_guess_short.icd10}
 \alias{icd_guess_short.icd9}
 \title{guess whether short_code or long}
 \usage{
 icd9GuessIsShort(icd9)
 
 icd_guess_short(x, short_code = NULL, test_n = 1000L)
-
-\method{icd_guess_short}{icd10}(x, short_code = NULL, test_n = 1000L)
 
 \method{icd_guess_short}{icd9}(x, short_code = NULL, test_n = 1000L)
 }
@@ -31,8 +28,6 @@ partly implemented. Goal is to guess whether codes are short_code or
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd10}: Guess whether an ICD-10 code is in short_code form
-
 \item \code{icd9}: Guess whether an ICD-9 code is in short_code form
 }}
 \keyword{internal}

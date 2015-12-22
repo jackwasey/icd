@@ -17,4 +17,5 @@ limited validation and tidying up.
 \itemize{
 \item \code{icd9}: Convert Decimal to short-form ICD-9 code
 }}
+\keyword{internal}
 
