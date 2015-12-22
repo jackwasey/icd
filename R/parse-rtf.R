@@ -21,6 +21,9 @@
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
 # approach in python
 
+# magrittr idiom, so the "." replacement doesn't cause check errors
+utils::globalVariables(c("."))
+
 #' @title parse RTF description of entire ICD-9-CM for a specific year
 #' @description Currently only the most recent update is implemented. Note that
 #'   CMS have published additional ICD-9-CM billable code lists since the last

@@ -83,7 +83,7 @@ Jack O. Wasey \email{jack@jackwasey.com}
 rClinicalCodes comorbidities
 }
 \concept{
-icd9 ICD-9 comorbidity comorbidities
+ICD-9 ICD-10 comorbidity comorbidities
 }
 \keyword{misc}
 \keyword{utilities}

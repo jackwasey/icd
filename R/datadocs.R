@@ -185,19 +185,23 @@ NULL
 #'   update drops the arrythmia field. The naming convention is a root, e.g.
 #'   \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
 #'   \code{_abbrev}. The Charlson derived mappings do not include hypertension.
-#'   _abbreviated comorbidity names are helpful for interactive work, whereas the
-#'   full names might be prefered for plotting.
+#'   _abbreviated comorbidity names are helpful for interactive work, whereas
+#'   the full names might be prefered for plotting.
 #' @format list, with character/numeric code. 'Hypertension, uncomplicated' and
 #'   'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
 #'   and metastasis are counted independently, as in the original paper, giving
 #'   the original 30 groups. "01" to "30"
 #' @name icd_names_elix
-#' @aliases icd_names_elix_abbrev icd_names_elix_htn
-#'   icd_names_elix_htn_abbrev icd_names_quan_elix
-#'   icd_names_quan_elix_abbrev icd_names_quan_elix_htn
+#' @aliases icd_names_elix_abbrev icd_names_elix_htn icd_names_elix_htn_abbrev
+#'   icd_names_quan_elix icd_names_quan_elix_abbrev icd_names_quan_elix_htn
 #'   icd_names_quan_elix_htn_abbrev icd_names_ahrq icd_names_ahrq_abbrev
 #'   icd_names_ahrq_htn icd_names_ahrq_htn_abbrev icd_names_charlson
-#'   icd_names_charlson_abbrev
+#'   icd_names_charlson_abbrev elixComorbidNames elixComorbidNamesAbbrev
+#'   elixComorbidNamesHtn elixComorbidNamesHtnAbbrev quanElixComorbidNames
+#'   quanElixComorbidNamesAbbrev quanElixComorbidNamesHtn
+#'   quanElixComorbidNamesHtnAbbrev ahrqComorbidNames ahrqComorbidNamesAbbrev
+#'   ahrqComorbidNamesHtn ahrqComorbidNamesHtnAbbrev charlsonComorbidNames
+#'   charlsonComorbidNamesAbbrev
 #' @keywords datasets
 #' @docType data
 NULL

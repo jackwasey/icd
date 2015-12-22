@@ -81,7 +81,7 @@
 #' @references
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @seealso rClinicalCodes comorbidities
-#' @concept icd9 ICD-9 comorbidity comorbidities
+#' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd9
 #' @import Rcpp checkmate stringr
 #' @importFrom magrittr "%>%" "%<>%"

@@ -2,6 +2,16 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd_names_elix}
+\alias{ahrqComorbidNames}
+\alias{ahrqComorbidNamesAbbrev}
+\alias{ahrqComorbidNamesHtn}
+\alias{ahrqComorbidNamesHtnAbbrev}
+\alias{charlsonComorbidNames}
+\alias{charlsonComorbidNamesAbbrev}
+\alias{elixComorbidNames}
+\alias{elixComorbidNamesAbbrev}
+\alias{elixComorbidNamesHtn}
+\alias{elixComorbidNamesHtnAbbrev}
 \alias{icd_names_ahrq}
 \alias{icd_names_ahrq_abbrev}
 \alias{icd_names_ahrq_htn}
@@ -16,6 +26,10 @@
 \alias{icd_names_quan_elix_abbrev}
 \alias{icd_names_quan_elix_htn}
 \alias{icd_names_quan_elix_htn_abbrev}
+\alias{quanElixComorbidNames}
+\alias{quanElixComorbidNamesAbbrev}
+\alias{quanElixComorbidNamesHtn}
+\alias{quanElixComorbidNamesHtnAbbrev}
 \title{Comorbidity names}
 \format{list, with character/numeric code. 'Hypertension, uncomplicated' and
   'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
@@ -33,8 +47,8 @@ These lists provide correctly sorted names of the comorbidities
   update drops the arrythmia field. The naming convention is a root, e.g.
   \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
   \code{_abbrev}. The Charlson derived mappings do not include hypertension.
-  _abbreviated comorbidity names are helpful for interactive work, whereas the
-  full names might be prefered for plotting.
+  _abbreviated comorbidity names are helpful for interactive work, whereas
+  the full names might be prefered for plotting.
 }
 \keyword{datasets}
 

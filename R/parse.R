@@ -331,7 +331,7 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
 icd9BuildChaptersHierarchy <- function(save = FALSE) {
   assertFlag(save)
 
-  icd9Desc <- parseRtfYear(year = "2011", save = FALSE, verbose = TRUE)
+  icd9Desc <- parse_rtf_year(year = "2011", save = FALSE, verbose = TRUE)
 
   message("working on slow step of web scrape to build icd9 Chapters Hierarchy.")
   chaps <- icd9GetChapters(icd9 = icd9Desc$icd9, isShort = TRUE, verbose = FALSE)

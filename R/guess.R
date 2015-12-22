@@ -35,6 +35,8 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
     else
       return(FALSE)
   }
+  if (inherits(x, "icd_short_code")) return(TRUE)
+  if (inherits(x, "icd_decimal_code")) return(FALSE)
   UseMethod("icd_guess_short")
 }
 
@@ -59,6 +61,12 @@ icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L) {
 }
 
 #' @export
+icd_guess_short.icd10 <- function(x, short_code = NULL, test_n = 1000L) {
+  # would be better to dispatch again with NextMethod, but that was crooked.
+  icd_guess_short.default(x, short_code, test_n)
+}
+
+#' @export
 icd_guess_short.list <- function(x, short_code = NULL, test_n = 1000L) {
   y <- unlist(x)
   icd_guess_short(y, short_code = short_code, test_n)
@@ -66,14 +74,8 @@ icd_guess_short.list <- function(x, short_code = NULL, test_n = 1000L) {
 
 #' @export
 icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L) {
-  # this should have been dealt with by dispatching, but just in case this is called directly:
-  if (!is.null(short_code)) {
-    if (short_code)
-      return(TRUE)
-    else
-      return(FALSE)
-  }
-  !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE) # any decimal as first approximation
+  # any decimal as first approximation
+  !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE)
 }
 
 #' @export
