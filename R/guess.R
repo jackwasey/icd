@@ -88,18 +88,18 @@ icd_guess_short.icd_decimal_code <- function(x) FALSE
 #'
 #' @keywords internal
 #' @export
-icd_guess_version <- function(...)
+icd_guess_version <- function(x, ...)
   UseMethod("icd_guess_version")
 
 #' @export
-icd_guess_version.icd9 <- function(icd, short_code) "icd9"
+icd_guess_version.icd9 <- function(x, short_code, ...) "icd9"
 
 #' @export
-icd_guess_version.icd10 <- function(icd, short_code) "icd10"
+icd_guess_version.icd10 <- function(icd, short_code, ...) "icd10"
 
 #' @describeIn icd_guess_version Guess version of ICD code from character vector
 #' @export
-icd_guess_version.character <- function(x, short_code = NULL) {
+icd_guess_version.character <- function(x, short_code = NULL, ...) {
   assertCharacter(x)
   if (!is.null(short_code)) {
     if (short_code) {
@@ -138,7 +138,7 @@ icd_guess_version.character <- function(x, short_code = NULL) {
     "icd10"
 }
 
-icd_guess_version.data.frame <- function(x, icd_name = get_icd_name(x)) {
+icd_guess_version.data.frame <- function(x, icd_name = get_icd_name(x), ...) {
   assertDataFrame(x)
   icd_guess_version.character(x[[icd_name]])
 }
@@ -164,9 +164,11 @@ icd_guess_short_update <- function(x, icd_name = get_icd_name(x), short_code = N
     class(x) <- append("icd_decimal_code", class(x))
   x
 }
+
 #' Guess both ICD-9 vs ICD-10 or subtype, and whether short of long type.
 #'
-#' I think these are not quite orthogonal problems.
+#' I think these are not quite orthogonal problems, so although this seems like
+#' repetition, one may influence the other. Need to think about this.
 #' @keywords internal
 icd_guess_both <- function(x, short_code = NULL) {
   UseMethod("icd_guess_both")

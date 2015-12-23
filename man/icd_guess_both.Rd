@@ -10,7 +10,8 @@ icd_guess_both(x, short_code = NULL)
 \method{icd_guess_both}{default}(x, short_code = NULL)
 }
 \description{
-I think these are not quite orthogonal problems.
+I think these are not quite orthogonal problems, so although this seems like
+repetition, one may influence the other. Need to think about this.
 }
 \section{Methods (by class)}{
 \itemize{

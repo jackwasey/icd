@@ -159,20 +159,14 @@ icd9_generate_map_quan_elix <- function(condense = NULL,
   invisible(icd9_map_quan_elix)
 }
 
-
-# generate mappings of ICD-10 codes to comorbidities
-
-
 #' generate ICD-10 Quan/Elixhauser maping
 #'
 #' @details Started with Quan's SAS code (in \code{data-raw}):
 #` \code{grep %STR\(.*[[:digit:]] ICD10_Elixhauser.sas}
-icd10_generate_map_quan_elix <- function(condense = NULL, save = TRUE) {
-
-  if (!missing(condense))
-    warning("'condense' is deprecated in icd9_generate_map_quan_elix, and no longer has any effect.
-                                  The map can be condensed using other functions in the package.",
-            call. = FALSE)
+#' @param save logical whether to save the result
+#' @return invisibly return the generated data
+#' @keywords internal
+icd10_generate_map_quan_elix <- function(save = TRUE) {
 
   quan_elix_raw <- list(
     c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426", "I427", "I428", "I429", "I43", "I50", "P290"),

@@ -366,6 +366,7 @@ icd_is_major.icd9 <- function(x) {
 #' For each code, return \code{TRUE} if numric or \code{FALSE} if a
 #'   V or E code.
 #' @template icd9-any
+#' @param x vector of strings or factor to test
 #' @return logical vector
 #' @export
 icd9_is_n <- function(x) {
@@ -376,13 +377,15 @@ icd9_is_n <- function(x) {
 #' @describeIn icd9_is_n are the given codes V type?
 #' @export
 icd9_is_v <- function(x) {
-  icd9IsA(asCharacterNoWarn(x), "Vv", FALSE)
+  icd9_is_v_cpp(asCharacterNoWarn(x))
+  #icd9IsA(asCharacterNoWarn(x), "Vv", FALSE)
 }
 
 #' @describeIn icd9_is_n are the given codes E type?
 #' @export
 icd9_is_e <- function(x) {
-  icd9IsA(asCharacterNoWarn(x), "Ee", FALSE)
+  icd9_is_e_cpp(asCharacterNoWarn(x))
+  #icd9IsA(asCharacterNoWarn(x), "Ee", FALSE)
 }
 
 warnNumericCode <- function()

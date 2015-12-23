@@ -605,6 +605,15 @@ icd9GetInvalidShort <- function(icd9Short) {
 }
 
 #' @rdname icd_charlson
+#' @param scoringSystem Deprecated. Use \code{icd_charlson} with
+#'   \code{scoring_system}. One of \code{original}, \code{charlson}, or
+#'   \code{quan}. The first two will give the original Charlson weights for each
+#'   comorbidity, whereas \code{quan} uses the updated weights from Quan 2001.
+#' @param return.df Deprecated. Use \code{icd_charlson} with \code{return_df}.
+#'   single logical value, if true, a two column data frame will be returned,
+#'   with the first column named as in input data frame (i.e.
+#'   \code{visit_name}), containing all the visits, and the second column
+#'   containing the Charlson Comorbidity Index.
 #' @export
 icd9Charlson <- function(x, visitId = NULL,
                          scoringSystem = c("original", "charlson", "quan"),
@@ -916,3 +925,46 @@ stripRtf <- function(x) {
   .Deprecated("strip_rtf")
   strip_rtf(x)
 }
+
+#' @rdname icd_is_defined
+#' @export
+icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
+                       onlyBillable = FALSE) {
+  .Deprecated("icd_is_defined")
+  icd_is_defined.icd9(x, short_code = isShort, billable = onlyBillable)
+}
+
+
+#' @rdname icd_is_defined
+#' @export
+icd9IsRealShort <- function(x, onlyBillable = FALSE) {
+  .Deprecated("icd_is_defined")
+  icd_is_defined.icd9(x, short_code = TRUE, billable = onlyBillable)
+}
+
+#' @rdname icd_is_defined
+#' @export
+icd9IsRealDecimal <- function(x, onlyBillable = FALSE) {
+  .Deprecated("icd_is_defined")
+  icd_is_defined.icd9(x, short_code = FALSE, billable = onlyBillable)
+}
+
+icd9GetReal <- function(x, isShort = icd_guess_short.icd9(x), onlyBillable = FALSE) {
+  .Deprecated("icd_get_defined")
+  icd_get_defined.icd9(x, short_code = isShort, billable = onlyBillable)
+}
+
+#' @rdname icd_is_defined
+#' @export
+icd9GetRealShort <- function(x, onlyBillable = FALSE) {
+  .Deprecated("icd_get_defined")
+  icd_get_defined.icd9(x, short_code = TRUE, billable = onlyBillable)
+}
+
+#' @rdname icd_is_defined
+#' @export
+icd9GetRealDecimal <- function(x, onlyBillable = FALSE) {
+  .Deprecated("icd_get_defined")
+  icd_get_defined.icd9(x, short_code = FALSE, billable = onlyBillable)
+}
+

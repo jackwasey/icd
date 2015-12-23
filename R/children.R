@@ -151,8 +151,8 @@ icd_children_real.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 #'
 #' @param icd910Short character vector of ICD-10 codes
 #' @export
-icd10ChildrenPossibleShort <- function(icd10Short) {
-  assertCharacter(icd10Short)
+icd10_children_possible_short <- function(x) {
+  assertCharacter(x)
 
   fourth <- unlist(strsplit("0123456789ABCDEFGHIJKXZ", ""))
   fifth  <- unlist(strsplit("0123456789AXYZ", ""))
@@ -166,15 +166,15 @@ icd10ChildrenPossibleShort <- function(icd10Short) {
   # as.vector(outer(fourth, fifth, paste, sep=""))
 
   # minimum code length is 3: i.e. [[:alpha:]][[:digit:]][[:alnum]]
-  nc <- nchar(icd10Short)
-  out_complete <- icd10Short[nc == 7]
+  nc <- nchar(x)
+  out_complete <- x[nc == 7]
 
-  icd10Short <- icd10Short[nc >= 3 & nc < 7] # TODO: strip whitespace first if expedient
-  if (length(icd10Short) == 0)
+  x <- x[nc >= 3 & nc < 7] # TODO: strip whitespace first if expedient
+  if (length(x) == 0)
     return(out_complete)
 
   out <- character(0)
-  for (i in icd10Short) {
+  for (i in x) {
     o <- i
     n <- nchar(i)
     for (j in n:6)

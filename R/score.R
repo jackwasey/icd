@@ -35,7 +35,7 @@
 #'   By default, the first column is the patient identifier and is not counted.
 #'   If \code{visit_name} is not specified, the first column is used.
 #' @template visit_name
-#' @param scoringSystem One of \code{original}, \code{charlson}, or \code{quan}.
+#' @param scoring_system One of \code{original}, \code{charlson}, or \code{quan}.
 #'   The first two will give the original Charlson weights for each comorbidity,
 #'   whereas \code{quan} uses the updated weights from Quan 2001.
 #' @param return_df single logical value, if true, a two column data frame will

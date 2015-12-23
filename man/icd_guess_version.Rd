@@ -5,9 +5,9 @@
 \alias{icd_guess_version.character}
 \title{Guess version of ICD}
 \usage{
-icd_guess_version(...)
+icd_guess_version(x, ...)
 
-\method{icd_guess_version}{character}(x, short_code = NULL)
+\method{icd_guess_version}{character}(x, short_code = NULL, ...)
 }
 \description{
 Guess version of ICD

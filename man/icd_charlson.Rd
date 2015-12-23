@@ -37,9 +37,16 @@ a column of ICD-9 codes. It may have other columns which will be ignored.
 By default, the first column is the patient identifier and is not counted.
 If \code{visit_name} is not specified, the first column is used.}
 
-\item{scoringSystem}{One of \code{original}, \code{charlson}, or \code{quan}.
-The first two will give the original Charlson weights for each comorbidity,
-whereas \code{quan} uses the updated weights from Quan 2001.}
+\item{scoringSystem}{Deprecated. Use \code{icd_charlson} with
+\code{scoring_system}. One of \code{original}, \code{charlson}, or
+\code{quan}. The first two will give the original Charlson weights for each
+comorbidity, whereas \code{quan} uses the updated weights from Quan 2001.}
+
+\item{return.df}{Deprecated. Use \code{icd_charlson} with \code{return_df}.
+single logical value, if true, a two column data frame will be returned,
+with the first column named as in input data frame (i.e.
+\code{visit_name}), containing all the visits, and the second column
+containing the Charlson Comorbidity Index.}
 
 \item{stringsAsFactors}{single logical, passed on when constructing
 data.frame if \code{return_df} is \code{TRUE}. If the input data frame
@@ -63,6 +70,10 @@ guesses proceed until a single match is made. Data frames may be wide with
 many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visitId}
 was not specified, then the first column of the data frame is used.}
+
+\item{scoring_system}{One of \code{original}, \code{charlson}, or \code{quan}.
+The first two will give the original Charlson weights for each comorbidity,
+whereas \code{quan} uses the updated weights from Quan 2001.}
 
 \item{return_df}{single logical value, if true, a two column data frame will
 be returned, with the first column named as in input data frame (i.e.

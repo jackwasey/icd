@@ -4,7 +4,13 @@
 \alias{icd10_generate_map_quan_elix}
 \title{generate ICD-10 Quan/Elixhauser maping}
 \usage{
-icd10_generate_map_quan_elix(condense = NULL, save = TRUE)
+icd10_generate_map_quan_elix(save = TRUE)
+}
+\arguments{
+\item{save}{logical whether to save the result}
+}
+\value{
+invisibly return the generated data
 }
 \description{
 generate ICD-10 Quan/Elixhauser maping
@@ -12,4 +18,5 @@ generate ICD-10 Quan/Elixhauser maping
 \details{
 Started with Quan's SAS code (in \code{data-raw}):
 }
+\keyword{internal}
 

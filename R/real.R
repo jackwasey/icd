@@ -31,57 +31,40 @@
 #'   instead of seeing if they are any leaf or branch node.
 #' @return logical vector
 #' @export
-icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
-                       onlyBillable = FALSE) {
-  if (isShort) return(icd9IsRealShort(icd9, onlyBillable))
-  icd9IsRealDecimal(icd9, onlyBillable)
-}
+icd_is_defined <- function(x, short_code = icd_guess_short(x), ...)
+  UseMethod("icd_is_defined")
 
-#' @describeIn icd9IsReal Are the given short-form codes defined at heading or
-#'   leaf (billable) level?
 #' @export
-icd9IsRealShort <- function(x, onlyBillable = FALSE) {
+icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
+                                billable = FALSE) {
   assert(checkFactor(x), checkCharacter(x))
-  assertFlag(onlyBillable)
-  if (onlyBillable)
+  assertFlag(short_code)
+  assertFlag(billable)
+
+  if (!short_code)
+    x <- icd_decimal_to_short.icd9(x)
+
+  if (billable)
     icd9cm_is_billable.icd_short_code(asCharacterNoWarn(x))
   else
-    icd9_add_leading_zeroes.icd_short_code(asCharacterNoWarn(x)) %in% icd9::icd9_hierarchy[["icd9"]]
+    icd9_add_leading_zeroes.icd_short_code(
+      asCharacterNoWarn(x)) %in% icd9::icd9_hierarchy[["icd9"]]
 }
 
-#' @describeIn icd9IsReal Are the given decimal-form codes defined at heading or
-#'   leaf (billable) level?
+#' Return only those codes which are heading or leaf (billable), specifying
+#' whether codes are all short-form or all decimal-form
+#' @param x
+#' @param short_code
+#' @param billable
 #' @export
-icd9IsRealDecimal <- function(x, onlyBillable = FALSE) {
-  assert(checkFactor(x), checkCharacter(x))
-  assertFlag(onlyBillable)
-  if (onlyBillable)
-    icd9cm_is_billable.icd_decimal_code(x)
-  else
-    icd9IsRealShort(icd_decimal_to_short.icd9(x))
+icd_get_defined <- function(x, short_code = icd_guess_short(x), billable = FALSE) {
+  UseMethod("icd_get_defined")
 }
 
-#' @describeIn icd9IsReal Return only those codes which are heading or leaf
-#'   (billable), specifying whether codes are all short-form or all decimal-form
 #' @export
-icd9GetReal <- function(x, isShort = icd_guess_short(x), onlyBillable = FALSE) {
-  if (isShort)
-    icd9GetRealShort(x)
-  else
-    icd9GetRealDecimal(x)
+icd_get_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x), billable = FALSE) {
+    x[icd_is_defined.icd9(x, short_code = short_code, billable = billable)]
 }
-
-#' @describeIn icd9IsReal Return only those short-form codes which are heading
-#'   or leaf (billable)
-#' @export
-icd9GetRealShort <- function(x, onlyBillable = FALSE)
-  x[icd9IsRealShort(x, onlyBillable)]
-
-#' @describeIn icd9IsReal Return only those decimal-form codes which are heading
-#'   or leaf (billable)
-#' @export
-icd9GetRealDecimal <- function(x, onlyBillable = FALSE)
-  x[icd9IsRealDecimal(x, onlyBillable)]
 
 #' @title Determine whether codes are billable leaf-nodes
 #' @description Codes provided are compared to the most recent version of the
