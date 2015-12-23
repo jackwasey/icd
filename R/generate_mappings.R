@@ -213,7 +213,7 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
   # children is limited to "real" ones, but only as defined in ICD-10-CM, not
   # ICD-10 in general.
   f <- function(x) {
-    icd_children_real.icd10cm(x, short_code = TRUE) %>%
+    icd_children_defined.icd10cm(x, short_code = TRUE) %>%
       c(x) %>% unique %>% icd_sort.icd10
   }
 
@@ -289,7 +289,7 @@ icd10_generate_map_quan_charlson <- function() {
   # structure is still worth it, even for ICD-10-CM, because I do end up
   # cutting it back down to size based on the input data before comorbidity
   # matching.
-  icd10_map_quan_charlson <- lapply(quan_charl_raw, icd10_children_real_short)
+  icd10_map_quan_charlson <- lapply(quan_charl_raw, icd10_children_defined_short)
 
   # set S3 classes (in addition to "list")
   # this is a comorbidity map first and foremost (after being a list?)

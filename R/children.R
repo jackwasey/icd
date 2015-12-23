@@ -79,12 +79,12 @@ utils::globalVariables("icd10cm2016")
 #' code, or a leaf node. This is distinct from 'billable'.
 #'
 #' @keywords internal
-icd_children_real <- function(x)
-  UseMethod("icd_children_real")
+icd_children_defined <- function(x)
+  UseMethod("icd_children_defined")
 
-#' @describeIn icd_children_real get the children of ICD-10 code(s)
+#' @describeIn icd_children_defined get the children of ICD-10 code(s)
 #' @keywords internal
-icd_children_real.icd10cm <- function(x, short_code = icd_guess_short(x)) {
+icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
   assertCharacter(x)
   assertFlag(short_code)

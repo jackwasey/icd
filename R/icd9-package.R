@@ -42,7 +42,7 @@
 #'
 #'   \item{Validation}{\code{\link{icd9IsValid}} checks whether ICD-9 codes are
 #'   syntactically valid (although not necessarily genuine ICD-9 diagnoses). In
-#'   contrast, \code{\link{icd9IsReal}} checks whether ICD-9 codes correspond to
+#'   contrast, \code{\link{icd_is_defined}} checks whether ICD-9 codes correspond to
 #'   diagnoses in the current ICD-9-CM definition from CMS.}
 #'
 #'   \item{Conversion}{ There are many functions to convert ICD-9 codes or their

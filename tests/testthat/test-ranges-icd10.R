@@ -86,11 +86,11 @@ test_that("range style used by Quan is accepted", {
 context("test icd10 ranges - children real")
 
 test_that("completely invalid input fails", {
-  expect_error(icd_children_real.icd10cm(data.frame(a = 1, b = "b"), short_code = TRUE))
+  expect_error(icd_children_defined.icd10cm(data.frame(a = 1, b = "b"), short_code = TRUE))
 })
 
 test_that("single value gives correct range", {
-  expect_equal(icd_children_real.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
+  expect_equal(icd_children_defined.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
 })
 
 ################################################################################
@@ -101,34 +101,34 @@ context("test icd10 ranges - children possible")
 
 test_that("completely invalid input fails", {
 
-  expect_error(icd10ChildrenPossibleShort(data.frame(a = 1, b = "b")))
+  expect_error(icd10_children_possible_short(data.frame(a = 1, b = "b")))
 
 })
 
 test_that("single values give all real children", {
-  expect_equal(icd_children_real.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
+  expect_equal(icd_children_defined.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
 })
 
 test_that("certainly invalid codes return empty vectors", {
-  expect_equal(icd10ChildrenPossibleShort("!"), character(0))
-  expect_equal(icd10ChildrenPossibleShort("H"), character(0))
-  expect_equal(icd10ChildrenPossibleShort("H7"), character(0))
+  expect_equal(icd10_children_possible_short("!"), character(0))
+  expect_equal(icd10_children_possible_short("H"), character(0))
+  expect_equal(icd10_children_possible_short("H7"), character(0))
   # never longer than 7 digits no matter what
-  expect_equal(icd10ChildrenPossibleShort("12345678"), character(0))
-  expect_equal(icd10ChildrenPossibleShort("A2345678"), character(0))
+  expect_equal(icd10_children_possible_short("12345678"), character(0))
+  expect_equal(icd10_children_possible_short("A2345678"), character(0))
 })
 
 test_that("NA values are handled gracefully", {
-  expect_equal(icd10ChildrenPossibleShort(NA_character_), NA_character_)
-  expect_equal(icd10ChildrenPossibleShort(c(NA_character_, NA_character_)),
+  expect_equal(icd10_children_possible_short(NA_character_), NA_character_)
+  expect_equal(icd10_children_possible_short(c(NA_character_, NA_character_)),
                c(NA_character_, NA_character_))
 })
 
 test_that("exact children created for single values", {
-  expect_equal(icd10ChildrenPossibleShort("A234567"), "A234567")
+  expect_equal(icd10_children_possible_short("A234567"), "A234567")
 
   expect_equal(
-    icd10ChildrenPossibleShort("123456"),
+    icd10_children_possible_short("123456"),
     c("123456", "1234560", "1234561", "1234562", "1234563", "1234564",
       "1234565", "1234569", "123456A", "123456B", "123456C", "123456D",
       "123456E", "123456F", "123456G", "123456H", "123456J", "123456K",
@@ -137,21 +137,21 @@ test_that("exact children created for single values", {
 
 test_that("right number of children are made for higher level codes", {
   #sapply(minor_chars, length)  [1] 23 14 11 23 (all +1)
-  expect_equal(length(icd10ChildrenPossibleShort("Z99")), 24 * 15 * 12 * 24)
-  expect_equal(length(icd10ChildrenPossibleShort("Z991")), 15 * 12 * 24)
-  expect_equal(length(icd10ChildrenPossibleShort("Z9921")), 12 * 24)
-  expect_equal(length(icd10ChildrenPossibleShort("Z99321")), 24)
+  expect_equal(length(icd10_children_possible_short("Z99")), 24 * 15 * 12 * 24)
+  expect_equal(length(icd10_children_possible_short("Z991")), 15 * 12 * 24)
+  expect_equal(length(icd10_children_possible_short("Z9921")), 12 * 24)
+  expect_equal(length(icd10_children_possible_short("Z99321")), 24)
 })
 
 test_that("multiple inputs return ordered results", {
   expect_equal(
-    icd10ChildrenPossibleShort(c("A00", "Z99")),
-    c(icd10ChildrenPossibleShort("A00"), icd10ChildrenPossibleShort("Z99"))
+    icd10_children_possible_short(c("A00", "Z99")),
+    c(icd10_children_possible_short("A00"), icd10_children_possible_short("Z99"))
   )
 
   expect_equal(
-    icd10ChildrenPossibleShort(c("Z99", "A00")),
-    c(icd10ChildrenPossibleShort("A00"), icd10ChildrenPossibleShort("Z99"))
+    icd10_children_possible_short(c("Z99", "A00")),
+    c(icd10_children_possible_short("A00"), icd10_children_possible_short("Z99"))
   )
 })
 

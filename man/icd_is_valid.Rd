@@ -150,7 +150,7 @@ logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 }
 \description{
 This does not check whether the code coresponds to a real ICD-9-CM billing
-code, or parent grouping. For that, see \code{\link{icd9IsReal}}.
+code, or parent grouping. For that, see \code{\link{icd_is_defined}}.
 }
 \details{
 do the icd9 valid subtypes need to be exported?

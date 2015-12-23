@@ -111,7 +111,7 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
   # TODO: either search down supposedly well ordered list until substring of end
   # changes, or find all children, and get pos of last one.
 
-  end_kids <- icd_children_real.icd10cm(end, short_code = TRUE)
+  end_kids <- icd_children_defined.icd10cm(end, short_code = TRUE)
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
@@ -124,7 +124,7 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
 }
 
 # WIP
-icd10ExpandRangePossibleShort <- function(start, end) {
+icd10_expand_range_possible_short <- function(start, end) {
   assertString(start)
   assertString(end)
   # check whether valid?
@@ -267,7 +267,7 @@ icd9_expand_range_short <- function(start, end, real = TRUE,
   # then lookup start and end indices in sysdata.rda lookup tables
 
   if (real) {
-    stopifnot(icd9IsRealShort(start), icd9IsRealShort(end))
+    stopifnot(icd_is_defined(start, short_code = TRUE), icd_is_defined(end, short_code = TRUE))
     if (icd9_is_n(start) && icd9_is_n(end))
       res <- expand_range_worker(start, end, icd9NShortReal, real = TRUE,
                                  excludeAmbiguousStart, excludeAmbiguousEnd)
@@ -309,7 +309,7 @@ icd_expand_range_major.icd9 <- function(start, end, real = TRUE) {
   if (icd9IsV(start)) fmt <- "%02d" else fmt <- "%03d"
   majors <- paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
   if (real)
-    icd9GetRealShort(majors, onlyBillable = FALSE)
+    icd_get_defined(majors, short_code = TRUE, billable = FALSE)
   else
     majors
 }

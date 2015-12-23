@@ -18,7 +18,7 @@
 #' Check whether ICD-9 codes are syntactically valid
 #'
 #' This does not check whether the code coresponds to a real ICD-9-CM billing
-#' code, or parent grouping. For that, see \code{\link{icd9IsReal}}.
+#' code, or parent grouping. For that, see \code{\link{icd_is_defined}}.
 #'
 #' Factors are accepted, and since the validation is done with \code{grepl}
 #' these are handled correctly.

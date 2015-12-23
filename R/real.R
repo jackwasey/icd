@@ -51,14 +51,30 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
       asCharacterNoWarn(x)) %in% icd9::icd9_hierarchy[["icd9"]]
 }
 
+#' @export
+icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
+  icd_ver <- icd_guess_version(x)
+  if (icd_ver != "icd9")
+    stop("testing whether ICD codes are defined is currently only implemented for ICD-9-CM")
+  icd_is_defined.icd9(x, short_code, ...)
+}
+
 #' Return only those codes which are heading or leaf (billable), specifying
 #' whether codes are all short-form or all decimal-form
-#' @param x
-#' @param short_code
-#' @param billable
+#' @param x input vector or factor, possibly with an ICD class
+#' @param short_code logical value, whether short-form ICD code
+#' @param billable logical value, default \code{FALSE} whether any defined value, or, if \code{TRUE} only defined codes which are also considered billable, i.e. leaf nodes.
 #' @export
 icd_get_defined <- function(x, short_code = icd_guess_short(x), billable = FALSE) {
   UseMethod("icd_get_defined")
+}
+
+#' @export
+icd_get_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
+  icd_ver <- icd_guess_version(x)
+  if (icd_ver != "icd9")
+    stop("testing whether ICD codes are defined is currently only implemented for ICD-9-CM")
+  x[icd_is_defined.icd9(x, short_code, ...)]
 }
 
 #' @export

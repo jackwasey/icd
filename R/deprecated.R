@@ -931,40 +931,42 @@ stripRtf <- function(x) {
 icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
                        onlyBillable = FALSE) {
   .Deprecated("icd_is_defined")
-  icd_is_defined.icd9(x, short_code = isShort, billable = onlyBillable)
+  icd_is_defined.icd9(icd9, short_code = isShort, billable = onlyBillable)
 }
 
 
 #' @rdname icd_is_defined
 #' @export
-icd9IsRealShort <- function(x, onlyBillable = FALSE) {
+icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
   .Deprecated("icd_is_defined")
-  icd_is_defined.icd9(x, short_code = TRUE, billable = onlyBillable)
+  icd_is_defined.icd9(icd9Short, short_code = TRUE, billable = onlyBillable)
 }
 
 #' @rdname icd_is_defined
 #' @export
-icd9IsRealDecimal <- function(x, onlyBillable = FALSE) {
+icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   .Deprecated("icd_is_defined")
-  icd_is_defined.icd9(x, short_code = FALSE, billable = onlyBillable)
-}
-
-icd9GetReal <- function(x, isShort = icd_guess_short.icd9(x), onlyBillable = FALSE) {
-  .Deprecated("icd_get_defined")
-  icd_get_defined.icd9(x, short_code = isShort, billable = onlyBillable)
+  icd_is_defined.icd9(icd9Decimal, short_code = FALSE, billable = onlyBillable)
 }
 
 #' @rdname icd_is_defined
 #' @export
-icd9GetRealShort <- function(x, onlyBillable = FALSE) {
+icd9GetReal <- function(icd9, isShort = icd_guess_short.icd9(icd9), onlyBillable = FALSE) {
   .Deprecated("icd_get_defined")
-  icd_get_defined.icd9(x, short_code = TRUE, billable = onlyBillable)
+  icd_get_defined.icd9(icd9, short_code = isShort, billable = onlyBillable)
 }
 
 #' @rdname icd_is_defined
 #' @export
-icd9GetRealDecimal <- function(x, onlyBillable = FALSE) {
+icd9GetRealShort <- function(icd9Short, onlyBillable = FALSE) {
   .Deprecated("icd_get_defined")
-  icd_get_defined.icd9(x, short_code = FALSE, billable = onlyBillable)
+  icd_get_defined.icd9(icd9Short, short_code = TRUE, billable = onlyBillable)
+}
+
+#' @rdname icd_is_defined
+#' @export
+icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
+  .Deprecated("icd_get_defined")
+  icd_get_defined.icd9(icd9Decimal, short_code = FALSE, billable = onlyBillable)
 }
 

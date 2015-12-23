@@ -411,7 +411,7 @@ generate_sysdata <- function(sysdata.path = file.path("R", "sysdata.rda"), save 
   for (i in as.character(0:999))
     icd9EShort <- c(icd9EShort, sort(icd_children.icd9(paste0("E", i), short_code = TRUE, real = FALSE)))
 
-  # we can either use the icd9IsReal functions on these lists, or just grep the
+  # we can either use the icd_is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
   icd9NShortReal <- grep("^[^VE]+", icd9::icd9_hierarchy$icd9, value = TRUE) # nolint
   icd9VShortReal <- grep("V", icd9::icd9_hierarchy$icd9, value = TRUE) # nolint

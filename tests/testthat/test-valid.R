@@ -306,20 +306,21 @@ test_that("test major validation", {
 })
 
 test_that("icd-9 code is really in the list, not just syntactically valid", {
-  expect_true(icd9IsRealShort("8027"))
-  expect_true(icd9IsRealShort("E9329"))
-  expect_false(icd9IsRealShort("J8027"))
-  expect_false(icd9IsRealShort("802.7"))
-  expect_true(icd9IsRealDecimal("802.7"))
-  expect_true(icd9IsRealDecimal("E932.9"))
-  expect_false(icd9IsRealDecimal("E9329"))
-  expect_false(icd9IsRealDecimal("J80.27"))
-  expect_false(icd9IsRealDecimal("V802.7"))
-  expect_false(icd9IsReal("V802.7", isShort = FALSE))
+  expect_true(icd_is_defined.icd9(short_code = TRUE, "8027"))
+  expect_true(icd_is_defined.icd9(short_code = TRUE, "E9329"))
+  expect_false(icd_is_defined.icd9(short_code = TRUE, "J8027"))
+  expect_false(icd_is_defined.icd9(short_code = TRUE, "802.7"))
+  expect_true(icd_is_defined.icd9(short_code = FALSE, "802.7"))
+  expect_true(icd_is_defined.icd9(short_code = FALSE, "E932.9"))
+  expect_false(icd_is_defined.icd9(short_code = FALSE, "E9329"))
+  expect_false(icd_is_defined.icd9(short_code = FALSE, "J80.27"))
+  expect_false(icd_is_defined.icd9(short_code = FALSE, "V802.7"))
+  expect_false(icd_is_defined.icd9("V802.7", short_code = FALSE))
+  expect_true(icd_is_defined(icd9("802.7"), short_code = FALSE))
 
-  expect_equal(icd9IsRealDecimal("V802.7"), FALSE)
+  expect_equal(icd_is_defined.icd9(short_code = FALSE, "V802.7"), FALSE)
   expect_equal(
-    icd9IsReal(c("8027", "E9329", "E000", "armitage"), isShort = TRUE),
+    icd_is_defined(c("8027", "E9329", "E000", "armitage"), short_code = TRUE),
     c(TRUE, TRUE, TRUE, FALSE)
   )
 })
@@ -382,13 +383,13 @@ test_that("get invalid decimals", {
 })
 
 test_that("get real codes from a longer list", {
-  expect_equal(icd9GetRealShort(c("003", "0031", "0032"), onlyBillable = TRUE), "0031")
-  expect_equal(icd9GetRealDecimal(c("003", "003.1", "3.2"), onlyBillable = TRUE), "003.1")
+  expect_equal(icd_get_defined(short_code = TRUE, c("003", "0031", "0032"), billable = TRUE), "0031")
+  expect_equal(icd_get_defined(short_code = FALSE, c("003", "003.1", "3.2"), billable = TRUE), "003.1")
 })
 
 test_that("get real codes which are less than two digit major", {
-  expect_equal(icd9GetRealShort(c("3", "11", "V2"), onlyBillable = FALSE), c("3", "11", "V2"))
-  expect_equal(icd9GetRealDecimal(c("3", "11", "V2"), onlyBillable = FALSE), c("3", "11", "V2"))
+  expect_equal(icd_get_defined(short_code = TRUE, c("3", "11", "V2"), billable = FALSE), c("3", "11", "V2"))
+  expect_equal(icd_get_defined(short_code = FALSE, c("3", "11", "V2"), billable = FALSE), c("3", "11", "V2"))
 })
 
 test_that("illable codes are identified", {

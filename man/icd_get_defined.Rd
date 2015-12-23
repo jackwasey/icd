@@ -7,6 +7,13 @@ whether codes are all short-form or all decimal-form}
 \usage{
 icd_get_defined(x, short_code = icd_guess_short(x), billable = FALSE)
 }
+\arguments{
+\item{x}{input vector or factor, possibly with an ICD class}
+
+\item{short_code}{logical value, whether short-form ICD code}
+
+\item{billable}{logical value, default \code{FALSE} whether any defined value, or, if \code{TRUE} only defined codes which are also considered billable, i.e. leaf nodes.}
+}
 \description{
 Return only those codes which are heading or leaf (billable), specifying
 whether codes are all short-form or all decimal-form

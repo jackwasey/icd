@@ -82,7 +82,7 @@ icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = 
   i9w <- unique(icd_get_valid.icd9(x, short_code = TRUE))
 
   if (is.null(real)) {
-    if (all(icd9IsRealShort(i9w))) {
+    if (all(icd_is_defined.icd9(i9w, short_code = TRUE))) {
       real <- TRUE
       message("'onlyReal' not given, but all codes are 'real' so assuming TRUE")
     } else {
@@ -91,8 +91,8 @@ icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = 
     }
   }
 
-  if (warn && real && !all(icd9IsRealShort(x))) {
-    x <- icd9GetRealShort(x)
+  if (warn && real && !all(icd_is_defined.icd9(x, short_code = TRUE))) {
+    x <- icd_get_defined.icd9(x, short_code = TRUE)
     warning("only real values requested, but some undefined ('non-real') ICD-9 code(s) given, so dropping them")
   }
 
@@ -147,7 +147,7 @@ icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = 
   }
 
   if (real)
-    icd9GetRealShort(out) # should there be any non-real?
+    icd_get_defined.icd9(out, short_code = TRUE) # should there be any non-real?
   else
     out
 }

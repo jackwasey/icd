@@ -183,7 +183,7 @@ test_that("condense full ranges", {
   # gives nothing back if a non-billable code provided, but billable requested
 
   expect_equal(icd_condense.icd9(short_code = TRUE,c("003", othersalmonella), real = TRUE),
-               "003") # onlyBillable describes input, it doesn't make any sense to describe output when condensing.
+               "003") # billable describes input, it doesn't make any sense to describe output when condensing.
   # major is returned
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, real = TRUE), "003")
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, real = FALSE), othersalmonella)

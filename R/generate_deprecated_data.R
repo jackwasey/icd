@@ -14,6 +14,7 @@ generate_deprecated_data <- function() {
   assign("quanDeyoComorbid", icd9::icd9_map_quan_deyo)
   assign("quanElixComorbid", icd9::icd9_map_quan_elix)
   assign("elixComorbid", icd9::icd9_map_elix)
+  assign("elixComorbidNames", icd9::icd_names_elix)
   assign("elixComorbidNamesAbbrev", icd9::icd_names_elix_abbrev)
   assign("elixComorbidNamesHtn", icd9::icd_names_elix_htn)
   assign("elixComorbidNamesHtnAbbrev", icd9::icd_names_elix_htn_abbrev)
@@ -30,11 +31,14 @@ generate_deprecated_data <- function() {
 
   save(icd9Billable,
        icd9Hierarchy,
+# comorbidity mappings
        ahrqComorbid,
        ahrqComorbidAll,
        quanDeyoComorbid,
        quanElixComorbid,
        elixComorbid,
+# now the naming
+       elixComorbidNames,
        elixComorbidNamesAbbrev,
        elixComorbidNamesHtn,
        elixComorbidNamesHtnAbbrev,
@@ -50,3 +54,4 @@ generate_deprecated_data <- function() {
        charlsonComorbidNamesAbbrev,
        file = file.path("data", "deprecated.RData"), compress = "xz")
 }
+

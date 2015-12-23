@@ -36,11 +36,11 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 
 test_that("github issue #41", {
   expect_equal(
-    icd_explain.icd9(icd9GetReal(quanDeyoComorbid[["Dementia"]]), condense = TRUE),
+    icd_explain.icd9(icd_get_defined.icd9(quanDeyoComorbid[["Dementia"]]), condense = TRUE),
     icd_explain.icd9(quanDeyoComorbid[["Dementia"]], condense = TRUE, warn = FALSE)
   )
   expect_equal(
-    icd_explain.icd9(icd9GetReal(quanDeyoComorbid[["Dementia"]]), condense = FALSE),
+    icd_explain.icd9(icd_get_defined(quanDeyoComorbid[["Dementia"]]), condense = FALSE),
     icd_explain.icd9(quanDeyoComorbid[["Dementia"]], condense = FALSE)
   )
 })
