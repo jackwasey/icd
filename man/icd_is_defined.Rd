@@ -16,7 +16,8 @@ icd9IsRealShort(icd9Short, onlyBillable = FALSE)
 
 icd9IsRealDecimal(icd9Decimal, onlyBillable = FALSE)
 
-icd9GetReal(icd9, isShort = icd_guess_short.icd9(x), onlyBillable = FALSE)
+icd9GetReal(icd9, isShort = icd_guess_short.icd9(icd9),
+  onlyBillable = FALSE)
 
 icd9GetRealShort(icd9Short, onlyBillable = FALSE)
 

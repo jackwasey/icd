@@ -342,6 +342,10 @@ icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
   icd_expand_range_major.icd9(start = start, end = end, real = onlyReal)
 }
 #' @rdname icd_sort
+#' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
+#' @template isShort
 #' @export
 icd9Sort <- function(icd9, isShort = icd_guess_short(icd9)) {
   .Deprecated("icd_sort")

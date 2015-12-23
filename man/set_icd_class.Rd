@@ -33,6 +33,9 @@ icd_decimal_code(x)
 
 icd_comorbidity_map(x)
 }
+\arguments{
+\item{x}{object to set class \code{icd9}}
+}
 \description{
 Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
 ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (/code{icd9cm}), then an ICD-9

@@ -78,6 +78,7 @@ icd_check_class_conflict <- function(x) {
 #' ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (/code{icd9cm}), then an ICD-9
 #' class (/code{icd9}) is also set.
 #'
+#' @param x object to set class \code{icd9}
 #' @export
 icd9 <- function(x) {
   icd_check_conflict_with_icd10(x)
@@ -231,6 +232,9 @@ icd_comorbidity_map <- function(x) {
 #' extract elements of an ICD comorbidity map
 #'
 #' Equivalent to a list, but preserves class of extracted elements
+#' @param x comorbidity map to be subsetted. This is a named list.
+#' @param index integer
+#' @param ... other arguments passed to the usual \code{[}
 #' @export
 `[.icd_comorbidity_map` <- function(x, index, ...) {
   new_classes <- class(x)
@@ -244,6 +248,9 @@ icd_comorbidity_map <- function(x) {
 #' extract vector of codes from an ICD comorbidity map
 #'
 #' Equivalent to a list, but preserves class of extracted vector
+#' @param x comorbidity map to be subsetted. This is a named list.
+#' @param index integer
+#' @param ... other arguments passed to the usual \code{[}
 #' @export
 `[[.icd_comorbidity_map` <- function(x, index, ...) {
   new_classes <- class(x)
