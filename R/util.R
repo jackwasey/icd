@@ -201,7 +201,13 @@ get_icd_name <- function(x, icd_name = NULL) {
   icd_name
 }
 
-getLatestBillableVersion <- function() "32"
+#' Latest ICD-9-CM edition
+#'
+#' Returns a single character value with the number of the latests edition, currently \strong{32}.
+#'
+#' Implemented as a function to give flexibility to calculate this, or use an option override.
+#' @keywords internal
+icd9cm_latest_edition <- function() "32"
 
 #' @title trim null or empty values from a list
 #' @description For a given unnested list, x, return the list without any NA or NULL elements.

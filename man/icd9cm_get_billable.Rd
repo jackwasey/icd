@@ -7,17 +7,36 @@
 \title{Get billable ICD-9-CM codes}
 \usage{
 icd9cm_get_billable(x, short_code = icd_guess_short(x), invert = FALSE,
-  version = getLatestBillableVersion())
+  icd9cm_edition = icd9cm_latest_edition())
 
 \method{icd9cm_get_billable}{icd_short_code}(x, invert = FALSE,
-  version = getLatestBillableVersion())
+  version = icd9cm_latest_edition())
 
 \method{icd9cm_get_billable}{icd_decimal_code}(x, invert = FALSE,
-  version = getLatestBillableVersion())
+  version = icd9cm_latest_edition())
+}
+\arguments{
+\item{x}{data, e.g. character vector, \code{icd9}, \code{icd9cm}}
+
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
+\item{invert}{logical single value, default is \code{FALSE}, but if
+\code{TRUE} will return all the input data except the billable codes. This
+will include invalid codes, also.}
+
+\item{version}{String containing class name of version of ICD to be tested
+against, e.g. \code{"icd9cm"}. Default is to guess the version.}
 }
 \description{
-icd9_is_billable Return only those codes which are leaf (billable)
-  codes in the hierarchy.
+Return only those codes which are leaf codes in the hierarchy.
+  In contrast to \emph{defined} codes, these are considered \emph{billable}
+  and not super-sets of other codes. The majority have sub-decimal
+  classifications, but some are simply three-digit codes. This particular
+  function is currently restricted to ICD-9-CM codes.
+
+TODO: keep this internal
 }
 \section{Methods (by class)}{
 \itemize{
@@ -25,4 +44,5 @@ icd9_is_billable Return only those codes which are leaf (billable)
 
 \item \code{icd_decimal_code}: Get the billable ICD-9-CM codes from vector of decimal codes
 }}
+\keyword{internal}
 

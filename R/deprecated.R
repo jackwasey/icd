@@ -16,6 +16,12 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @rdname icd_children
+#' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
+#' @template isShort
+#' @template onlyReal
+#' @template onlyBillable
 #' @export
 icd9Children <- function(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
@@ -802,6 +808,13 @@ icd9CountWide <- function(x,
 icd9CountComorbidBin <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
   .Deprecated("icd_count_comorbid")
   icd_count_comorbid(x, visit_name = visitId, return_df = return.df)
+}
+
+#' @rdname icd9cm_latest_edition
+#' @keywords internal
+getLatestBillableVersion <- function() {
+  .Deprecated("icd9cm_latest_edition")
+  icd9cm_latest_edition()
 }
 
 #' @rdname icd_is_billable

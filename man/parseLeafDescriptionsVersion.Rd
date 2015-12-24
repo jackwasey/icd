@@ -5,7 +5,7 @@
 \title{read the ICD-9-CM description data as provided by the Center for
   Medicaid Services.}
 \usage{
-parseLeafDescriptionsVersion(version = getLatestBillableVersion(),
+parseLeafDescriptionsVersion(version = icd9cm_latest_edition(),
   save = FALSE, fromWeb = FALSE)
 }
 \arguments{

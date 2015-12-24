@@ -203,7 +203,7 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
   )
   # there are 31 items in the list: hypertension is typically combined into one
   # category, whereas diabetes is kept as two categories
-  names(quan_elix_raw) <- icd_names_elix_htn_abbrev
+  names(quan_elix_raw) <- icd9::icd_names_elix_htn_abbrev
 
   # this expansion will only be for 'real' codes (currently the most up-to-date
   # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.

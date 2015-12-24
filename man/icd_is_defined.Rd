@@ -32,10 +32,6 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{onlyBillable}{single logical value (default \code{FALSE}), if
-\code{TRUE} will divert to test whether the codes are in the billable list
-instead of seeing if they are any leaf or branch node.}
-
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
@@ -49,6 +45,12 @@ becomes "010", not "0010"}
 \item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
+
+\item{...}{arguments passed on to other functions}
+
+\item{billable}{single logical value (default \code{FALSE}), if
+\code{TRUE} will divert to test whether the codes are in the billable list
+instead of seeing if they are any leaf or branch node. TODO: template}
 }
 \value{
 logical vector

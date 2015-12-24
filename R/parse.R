@@ -104,7 +104,7 @@ parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE) {
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
-parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
+parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save = FALSE,
                                          fromWeb = FALSE) {
   assertString(version)
   assertFlag(save)

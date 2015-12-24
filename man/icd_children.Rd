@@ -13,8 +13,8 @@ icd_children(x, ...)
 
 \method{icd_children}{character}(x, ...)
 
-\method{icd_children}{icd9}(x, short_code = icd_guess_short(x), real = TRUE,
-  billable = FALSE, ...)
+\method{icd_children}{icd9}(x, short_code = icd_guess_short(x),
+  defined = TRUE, billable = FALSE, ...)
 
 icd9Children(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE,
   onlyBillable = FALSE)
@@ -24,15 +24,30 @@ icd9ChildrenShort(icd9Short, onlyReal = TRUE, onlyBillable = FALSE)
 icd9ChildrenDecimal(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE)
 }
 \arguments{
+\item{x}{data, e.g. character vector of ICD codes.}
+
 \item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
+
+\item{defined}{single logical value, whether returned codes should only
+include those which have definitions. Definition is based on the ICD
+version being used, e.g. ICD-9-CM, the WHO version of ICD-10, or other.}
+
+\item{billable}{single logical value, whether to limit return codes also by
+whether they are billable, i.e. leaf nodes. This is really only designed
+for use with ICD-9-CM, iCD-10-CM etc, since the WHO versions are not
+designed for billing, but for public health and death reporting.}
 
 \item{icd9}{is
 a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
+
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 
 \item{onlyReal}{single logical value, if TRUE, will limit the search to those
 codes which appear in the master list, not just syntactically valid codes.
@@ -59,7 +74,8 @@ hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 }
 \description{
-Expand ICD-9 codes to all possible sub-codes
+Expand ICD codes to all possible sub-codes, optionally limiting to those
+codes which are \emph{defined} or \emph{billable} (leaf nodes).
 }
 \section{Methods (by class)}{
 \itemize{
@@ -69,10 +85,10 @@ Expand ICD-9 codes to all possible sub-codes
 }}
 \examples{
 library(magrittr)
-icd_children("10201", short_code = TRUE, real = FALSE) # no children other than self
+icd_children("10201", short_code = TRUE, defined =FALSE) # no children other than self
 icd_children("0032", FALSE) # guess it was ICD-9 and a short, not decimal code
-icd_children("10201", short_code = TRUE, real = TRUE) # empty because 102.01 is not meaningful
-icd_children("003", short_code = TRUE, real = TRUE) \%>\% icd_explain(condense = FALSE, short_code = TRUE)
+icd_children("10201", short_code = TRUE, defined =TRUE) # empty because 102.01 is not meaningful
+icd_children("003", short_code = TRUE, defined =TRUE) \%>\% icd_explain(condense = FALSE, short_code = TRUE)
 icd_children(short_code = FALSE, "100.0")
 icd_children(short_code = FALSE, "100.00")
 icd_children(short_code = FALSE, "2.34")

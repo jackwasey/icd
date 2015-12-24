@@ -3,18 +3,39 @@
 \name{icd_guess_version}
 \alias{icd_guess_version}
 \alias{icd_guess_version.character}
+\alias{icd_guess_version.data.frame}
+\alias{icd_guess_version.icd10}
+\alias{icd_guess_version.icd9}
 \title{Guess version of ICD}
 \usage{
-icd_guess_version(x, ...)
+icd_guess_version(x, short_code, ...)
+
+\method{icd_guess_version}{icd9}(x, short_code, ...)
+
+\method{icd_guess_version}{icd10}(x, short_code, ...)
 
 \method{icd_guess_version}{character}(x, short_code = NULL, ...)
+
+\method{icd_guess_version}{data.frame}(x, short_code = NULL,
+  icd_name = get_icd_name(x), ...)
+}
+\arguments{
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 }
 \description{
 Guess version of ICD
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Guess version of ICD code from character vector
+\item \code{icd9}: Guess version class ICD-9 codes
+
+\item \code{icd10}: Guess version of class ICD-10 codes
+
+\item \code{character}: Guess version of ICD codes in character vector
+
+\item \code{data.frame}: Guess version of ICD codes in a field in a \code{data.frame}
 }}
 \keyword{internal}
 

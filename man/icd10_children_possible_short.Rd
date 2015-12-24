@@ -7,7 +7,7 @@
 icd10_children_possible_short(x)
 }
 \arguments{
-\item{icd910Short}{character vector of ICD-10 codes}
+\item{x}{character vector of ICD-10 codes}
 }
 \description{
 ultimately, this will have to be coding-scheme dependent, e.g. ICD-10-CM for
@@ -16,7 +16,7 @@ USA, vs various national or international schemes
 \details{
 This is inefficient due to the large number of combinations of
   possible codes. I've already limited the scope to letters which appear at
-  certain positions in ICD-10-CM 2016. Maybe best just to limit to 'real'
+  certain positions in ICD-10-CM 2016. Maybe best just to limit to 'defined'
   codes, and then, when a user gives a squiffy code, e.g. a known code with
   an additional unknown value, we can: first account for all known codes in a
   list, then for unknown codes, partial match from left for known codes, and

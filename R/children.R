@@ -15,22 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title Get children of ICD codes
-#' @description Expand ICD-9 codes to all possible sub-codes
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
+#' Get children of ICD codes
+#'
+#' Expand ICD codes to all possible sub-codes, optionally limiting to those
+#' codes which are \emph{defined} or \emph{billable} (leaf nodes).
+#' @param x data, e.g. character vector of ICD codes.
+#' @param defined single logical value, whether returned codes should only
+#'   include those which have definitions. Definition is based on the ICD
+#'   version being used, e.g. ICD-9-CM, the WHO version of ICD-10, or other.
+#' @param billable single logical value, whether to limit return codes also by
+#'   whether they are billable, i.e. leaf nodes. This is really only designed
+#'   for use with ICD-9-CM, iCD-10-CM etc, since the WHO versions are not
+#'   designed for billing, but for public health and death reporting.
 #' @template short_code
-#' @template onlyReal
-#' @template onlyBillable
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @examples
 #' library(magrittr)
-#' icd_children("10201", short_code = TRUE, real = FALSE) # no children other than self
+#' icd_children("10201", short_code = TRUE, defined =FALSE) # no children other than self
 #' icd_children("0032", FALSE) # guess it was ICD-9 and a short, not decimal code
-#' icd_children("10201", short_code = TRUE, real = TRUE) # empty because 102.01 is not meaningful
-#' icd_children("003", short_code = TRUE, real = TRUE) %>% icd_explain(condense = FALSE, short_code = TRUE)
+#' icd_children("10201", short_code = TRUE, defined =TRUE) # empty because 102.01 is not meaningful
+#' icd_children("003", short_code = TRUE, defined =TRUE) %>% icd_explain(condense = FALSE, short_code = TRUE)
 #' icd_children(short_code = FALSE, "100.0")
 #' icd_children(short_code = FALSE, "100.00")
 #' icd_children(short_code = FALSE, "2.34")
@@ -52,16 +57,16 @@ icd_children.character <- function(x, ...) {
 #' @describeIn icd_children Get children of ICD-9 codes
 #' @export
 icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
-                         real = TRUE, billable = FALSE, ...) {
+                         defined =TRUE, billable = FALSE, ...) {
   assert(checkFactor(x), checkCharacter(x)) # assertFactorOrCharacter(x)
   assertFlag(short_code)
-  assertFlag(real)
+  assertFlag(defined)
   assertFlag(billable)
 
   if (short_code)
-    res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(x), real)
+    res <- .Call("icd9_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(x), defined)
   else
-    res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), toupper(x), real)
+    res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), toupper(x), defined)
 
   if (billable)
     icd9GetBillable(res, short_code)
@@ -73,9 +78,9 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
 # happy.
 utils::globalVariables("icd10cm2016")
 
-#' real children of ICD codes
+#' defined children of ICD codes
 #'
-#' real icd10 children based on 2016 ICD-10-CM list. "real" may be a three digit
+#' defined icd10 children based on 2016 ICD-10-CM list. "defined" may be a three digit
 #' code, or a leaf node. This is distinct from 'billable'.
 #'
 #' @keywords internal
@@ -83,6 +88,7 @@ icd_children_defined <- function(x)
   UseMethod("icd_children_defined")
 
 #' @describeIn icd_children_defined get the children of ICD-10 code(s)
+#' @export
 #' @keywords internal
 icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
@@ -90,7 +96,7 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
   assertFlag(short_code)
 
   if (inherits(x, "icd10") && !inherits(x, "icd10cm"))
-    warning("This function primarily gives 'real' child codes for ICD-10-CM,
+    warning("This function primarily gives 'defined' child codes for ICD-10-CM,
             which is mostly a superset of ICD-10 WHO")
 
   icd10Short <- str_trim(x)
@@ -133,7 +139,7 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 #'
 #' @details This is inefficient due to the large number of combinations of
 #'   possible codes. I've already limited the scope to letters which appear at
-#'   certain positions in ICD-10-CM 2016. Maybe best just to limit to 'real'
+#'   certain positions in ICD-10-CM 2016. Maybe best just to limit to 'defined'
 #'   codes, and then, when a user gives a squiffy code, e.g. a known code with
 #'   an additional unknown value, we can: first account for all known codes in a
 #'   list, then for unknown codes, partial match from left for known codes, and
@@ -149,7 +155,7 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 #'   there are very many alphanumeric values possible in last 4 digits (26^4 =
 #'   456976) however, hardly any alphas are used.
 #'
-#' @param icd910Short character vector of ICD-10 codes
+#' @param x character vector of ICD-10 codes
 #' @export
 icd10_children_possible_short <- function(x) {
   assertCharacter(x)

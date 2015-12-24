@@ -29,7 +29,7 @@ icd9GetNonBillable(icd9, isShort = icd9GuessIsShort(icd9),
 icd_get_billable(...)
 
 \method{icd_get_billable}{icd9cm}(x, short_code = icd_guess_short(x),
-  invert = FALSE, version = getLatestBillableVersion(), ...)
+  invert = FALSE, version = icd9cm_latest_edition(), ...)
 
 \method{icd_get_billable}{icd9}(...)
 }

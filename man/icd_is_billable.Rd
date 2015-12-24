@@ -19,10 +19,10 @@ icd9IsBillableDecimal(icd9Decimal, version = getLatestBillableVersion())
 icd_is_billable(...)
 
 \method{icd_is_billable}{icd9}(x, short_code = icd_guess_short(x),
-  version = getLatestBillableVersion(), ...)
+  version = icd9cm_latest_edition(), ...)
 
 \method{icd_is_billable}{icd9cm}(x, short_code = icd_guess_short(x),
-  version = getLatestBillableVersion(), ...)
+  version = icd9cm_latest_edition(), ...)
 }
 \arguments{
 \item{icd9}{is

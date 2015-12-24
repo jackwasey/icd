@@ -86,18 +86,24 @@ icd_guess_short.icd_decimal_code <- function(x) FALSE
 
 #' Guess version of ICD
 #'
+#' @template short_code
 #' @keywords internal
 #' @export
-icd_guess_version <- function(x, ...)
+icd_guess_version <- function(x, short_code, ...)
   UseMethod("icd_guess_version")
 
+#' @describeIn icd_guess_version Guess version class ICD-9 codes
+#' @keywords internal
 #' @export
 icd_guess_version.icd9 <- function(x, short_code, ...) "icd9"
 
+#' @describeIn icd_guess_version Guess version of class ICD-10 codes
+#' @keywords internal
 #' @export
-icd_guess_version.icd10 <- function(icd, short_code, ...) "icd10"
+icd_guess_version.icd10 <- function(x, short_code, ...) "icd10"
 
-#' @describeIn icd_guess_version Guess version of ICD code from character vector
+#' @describeIn icd_guess_version Guess version of ICD codes in character vector
+#' @keywords internal
 #' @export
 icd_guess_version.character <- function(x, short_code = NULL, ...) {
   assertCharacter(x)
@@ -138,7 +144,10 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
     "icd10"
 }
 
-icd_guess_version.data.frame <- function(x, icd_name = get_icd_name(x), ...) {
+#' @describeIn icd_guess_version Guess version of ICD codes in a field in a \code{data.frame}
+#' @keywords internal
+#' @export
+icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_icd_name(x), ...) {
   assertDataFrame(x)
   icd_guess_version.character(x[[icd_name]])
 }
