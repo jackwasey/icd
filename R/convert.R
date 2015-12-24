@@ -206,9 +206,7 @@ icd_long_to_wide <- function(x,
 #' @param visit_name Single character string with name for new column in output
 #'   data frame. Everywhere else, \code{visit_name} describes the input data,
 #'   but here it is for output data.
-#' @param stringsAsFactors whether the resulting data frame should have strings,
-#'   i.e. visit_name converted to factor. Default is to follow the current
-#'   session option.
+#' @template stringsAsFactors
 #' @examples
 #' library(magrittr) # as ever, optional, but tidy
 #' longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
@@ -242,9 +240,7 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #'   and other columns with flags for comorbidities, as such column names are
 #'   required.
 #' @template visit_name
-#' @param stringsAsFactors whether the resulting data frame should have strings,
-#'   i.e. visit_name converted to factor. Default is to follow the current session
-#'   option.
+#' @template stringsAsFactors
 #' @examples
 #' longdf <- icd9(icd_long_data(
 #'             data.frame(visit = c("a", "b", "b", "c"),

@@ -13,7 +13,7 @@
 \title{Get billable ICD codes}
 \usage{
 icd9GetBillable(icd9, isShort = icd9GuessIsShort(icd9), invert = FALSE,
-  version = getLatestBillableVersion())
+  version = icd9cm_latest_edition())
 
 icd9GetBillableShort(icd9Short, version = getLatestBillableVersion())
 
@@ -44,4 +44,5 @@ Get billable ICD codes, implicitly, this refers to an ICD
 
 \item \code{icd9}: Get billable ICD-9 codes, which is currently implemented assuming ICD-9-CM
 }}
+\keyword{internal}
 

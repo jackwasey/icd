@@ -24,4 +24,8 @@ if (identical(Sys.getenv("COVR"), "true")) {
   do_online_tests <- TRUE
 }
 #test_check("icd9", reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
+
+# disable warning, as many deprecated tests do warn, but testthat::expect_warning still works.
+old_warn <- options(warn = -1)
+on.exit(options(old_warn))
 test_check("icd9")

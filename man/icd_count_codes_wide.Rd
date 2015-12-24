@@ -12,6 +12,17 @@ icd_count_codes_wide(x, visit_name = get_visit_name(x), return_df = FALSE,
   aggr = FALSE)
 }
 \arguments{
+\item{visitId}{Deprecated. Use \code{visit_name}}
+
+\item{return.df}{Deprecated. Use return_df isntead. Single logical value, if
+\code{TRUE}, return the result as a data frame with the first column being
+the \code{visitId}, and the second being the count. If \code{visitId} was a
+factor or named differently in the input, this is preserved.}
+
+\item{aggregate, }{single logical, default is FALSE. If TRUE, the length (or
+rows) of the output will no longer match the input, but duplicate visitIds
+will be counted together.}
+
 \item{aggregate, }{single logical, default is FALSE. If TRUE, the length (or
 rows) of the output will no longer match the input, but duplicate visit_names
 will be counted together.}

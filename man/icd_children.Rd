@@ -26,6 +26,8 @@ icd9ChildrenDecimal(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE)
 \arguments{
 \item{x}{data, e.g. character vector of ICD codes.}
 
+\item{...}{arguments passed on to other functions}
+
 \item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}

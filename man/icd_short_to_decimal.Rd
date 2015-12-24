@@ -20,6 +20,24 @@ icd9ShortToParts(icd9Short)
 }
 \arguments{
 \item{x}{ICD codes}
+
+\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
+\item{minorEmpty}{vector of length one, to be used in place of minor part of
+zero. Defaults to ""}
+
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
+five characters is given in a code, then the digits are greedily assigned
+to hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
+
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
+five characters is given in a code, then the digits are greedily assigned
+to hundreds, then tens, then units, before the decimal parts. E.g. "10"
+becomes "010", not "0010"}
 }
 \description{
 Convert codes between short and decimal forms

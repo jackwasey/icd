@@ -49,12 +49,10 @@
 #'   any guess work. There are overlapping namespaces for short_code vs decimal
 #'   and ICD-9 vs ICD-10 codes, so guessing is never going to be perfect.
 #'
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
-#' @template major
-#' @param icd An ICD-9 or 10 code. If the class is set to \code{'icd9'},
+#' @param x An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 #'   \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.
+#' @template major
+#' @template dotdotdot
 #' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
 #'   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @family ICD9 validation
@@ -87,21 +85,21 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x), ...) {
 
   # TODO: test whether icd-10-cm or WHO, if class not otherwise specified.
   if (short_code)
-    x %>% stringr::str_trim() %>% stringr::str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]{1,4}[[:space:]]*$")
+    x %>% str_trim() %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]{1,4}[[:space:]]*$")
   else
-    x %>% stringr::str_trim() %>% stringr::str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]\\.[[:alnum:]]{0,4}[[:space:]]*$")
+    x %>% str_trim() %>% str_detect("^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]]\\.[[:alnum:]]{0,4}[[:space:]]*$")
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
 #' @export
 icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x), ...) {
-  checkmate::assert(
-    checkmate::checkFactor(x),
-    checkmate::checkCharacter(x),
-    checkmate::checkClass(x, c("icd9")), # TODO: use icd9_classes
-    checkmate::checkClass(x, c("icd9cm"))
+  assert(
+    checkFactor(x),
+    checkCharacter(x),
+    checkClass(x, c("icd9")), # TODO: use icd9_classes
+    checkClass(x, c("icd9cm"))
   )
-  checkmate::assertFlag(short_code)
+  assertFlag(short_code)
   if (short_code)
     icd9_is_valid_short(x)
   else
@@ -121,7 +119,8 @@ icd_is_valid.character <- function(x, short_code = icd_guess_short(x), ...) {
 
 icd9_is_valid_decimal <- function(x) {
   assert(checkFactor(x), checkCharacter(x), checkClass("icd9"), checkClass("icd9cm"))
-  if (length(x) == 0) return(logical())
+  if (length(x) == 0)
+    return(logical())
 
   icd9_is_valid_decimal_n(x) |
     icd9_is_valid_decimal_v(x) |
@@ -130,11 +129,11 @@ icd9_is_valid_decimal <- function(x) {
 
 icd9_is_valid_short <- function(x) {
   # if input doesn't satisfy these, then it is not just invalid, but deserves an error:
-  checkmate::assert(
-    checkmate::checkFactor(x),
-    checkmate::checkCharacter(x),
-    checkmate::checkClass(x, c("icd9")),
-    checkmate::checkClass(x, c("icd9cm"))
+  assert(
+    checkFactor(x),
+    checkCharacter(x),
+    checkClass(x, c("icd9")),
+    checkClass(x, c("icd9cm"))
   )
   if (length(x) == 0) return(logical())
 
@@ -195,12 +194,14 @@ icd_is_valid_major <- function(x) {
 
 #' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
 #'   which at present assumes ICD-9 format
+#' @export
 #' @keywords internal
 icd_is_valid_major.default <- function(x) {
   icd_is_valid_major.icd9(asCharacterNoWarn(x))
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
+#' @export
 #' @keywords internal
 icd_is_valid_major.icd9 <- function(x)
   # let grepl do what it can with integers, factors, etc.
@@ -235,6 +236,7 @@ icd9_is_valid_major_e <- function(x)
 
 #' @describeIn icd_is_valid Validate an icd9 mapping to comorbidities
 #' @export
+#' @keywords internal
 icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
   assertList(x, types = "character", any.missing = FALSE,
                         min.len = 1, unique = TRUE, names = "named")
@@ -251,9 +253,7 @@ icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
 #' Given vector of short_code or decimal ICD-9 codes, return (in the
 #'   same format) those codes which are valid or invalid. Useful for generating
 #'   error messages with the faulty codes if validation fails.
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
+#' @param x input vector of ICD codes
 #' @template short_code
 #' @keywords manip
 #' @family ICD-9 validation

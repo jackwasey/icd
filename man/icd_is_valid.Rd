@@ -80,69 +80,23 @@ comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
 "V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
 c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 
-\item{icd9}{is
-a character vector or factor of ICD-9 codes. If fewer than five characters
-is given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010".}
-
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
-characters is given in a code, then the digits are greedily assigned to
-hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
-
-\item{short_code}{single logical value which determines whether the ICD-9 code
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{icd9Mapping}{named list containing vectors of icd9 codes. E.g. the AHRQ
-comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
-"27803", "V8554", "79391", "64910", "64911", "64912", "64913", "64914",
-"V8530", "V8531", "V8532", "V8533", "V8534", "V8535", "V8536", "V8537",
-"V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
-c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
+\item{x}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
+\code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
 
-\item{icd9Mapping}{named list containing vectors of icd9 codes. E.g. the AHRQ
-comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
-"27803", "V8554", "79391", "64910", "64911", "64912", "64913", "64914",
-"V8530", "V8531", "V8532", "V8533", "V8534", "V8535", "V8536", "V8537",
-"V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
-c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
+\item{...}{arguments passed on to other functions}
 
-\item{icd9Mapping}{named list containing vectors of icd9 codes. E.g. the AHRQ
-comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
-"27803", "V8554", "79391", "64910", "64911", "64912", "64913", "64914",
-"V8530", "V8531", "V8532", "V8533", "V8534", "V8535", "V8536", "V8537",
-"V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
-c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
-
-\item{icd9Mapping}{named list containing vectors of icd9 codes. E.g. the AHRQ
-comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
-"27803", "V8554", "79391", "64910", "64911", "64912", "64913", "64914",
-"V8530", "V8531", "V8532", "V8533", "V8534", "V8535", "V8536", "V8537",
-"V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
-c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
-
-\item{short_code}{single logical value which determines whether the ICD-9 code
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
-
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
-
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
 
 \item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
 which falls before the decimal point, in decimal notation. (In 5 digit
 notation, the 'major' part is be the first three characters (with leading
 zeroes), and includes V or E prefix. xyz}
-
-\item{icd}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
-\code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
 }
 \value{
 logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
@@ -236,4 +190,5 @@ valid, guessing both type and version of the ICD codes
 \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 }
+\keyword{internal}
 

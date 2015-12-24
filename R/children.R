@@ -28,6 +28,7 @@
 #'   for use with ICD-9-CM, iCD-10-CM etc, since the WHO versions are not
 #'   designed for billing, but for public health and death reporting.
 #' @template short_code
+#' @template dotdotdot
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @examples

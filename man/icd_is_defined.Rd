@@ -32,6 +32,13 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
+\item{onlyBillable}{single logical value, if \code{TRUE}, describes the input
+data, stating that it only contains billable codes. Usually, the function
+will try to guess this, but if you know in advance what they should be, the
+functions can optionally warn if this is incorrect, and save some
+computation time. The billable codes are derived from the CMS list. The
+most recent version is used by default.}
+
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
 five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"

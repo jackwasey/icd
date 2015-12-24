@@ -328,10 +328,9 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
 #'   V codes precede E codes.
 #' @details Implementation used fast built-in sort, then shuffles the E codes to
 #'   the end.
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
+#' @param x vector of ICD codes to sort
 #' @template short_code
+#' @template dotdotdot
 #' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 #' @keywords manip
 #' @export

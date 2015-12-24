@@ -32,7 +32,7 @@ icd9Children <- function(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE,
 #' @export
 icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
-icd_children.icd9(icd9Short, short_code = TRUE, defined = onlyReal, billable = onlyBillable)
+  icd_children.icd9(icd9Short, short_code = TRUE, defined = onlyReal, billable = onlyBillable)
 }
 
 #' @rdname icd_children
@@ -179,29 +179,30 @@ icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
 #' @export
 icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9Decimal, short_code = FALSE, defined = onlyReal, warn = warn, keepFactorLevels = keepFactorLevels)
+  icd_condense.icd9(x = icd9Decimal, short_code = FALSE, defined = onlyReal,
+                    warn = warn, keepFactorLevels = keepFactorLevels)
 }
 
 #' @rdname icd_condense
 #' @export
 icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9Short, short_code = TRUE, defined = onlyReal, warn = warn, keepFactorLevels = keepFactorLevels)
+  icd_condense.icd9(x = icd9Short, short_code = TRUE, defined = onlyReal,
+                    warn = warn, keepFactorLevels = keepFactorLevels)
 }
 
 
 #' @rdname icd_comorbid_mat_to_df
+#'
+#' @template visitId
 #' @export
-icd9ComorbidMatToDf <- function(icd9df, visitId = "visit_name",
+icd9ComorbidMatToDf <- function(x, visitId = "visit_name",
                                 stringsAsFactors = getOption("stringsAsFactors")) {
   .Deprecated("icd_comorbid_mat_to_df")
-  icd_comorbid_mat_to_df(icd9df, visitId, stringsAsFactors)
+  icd_comorbid_mat_to_df(x, visitId, stringsAsFactors)
 }
 
 #' @rdname icd_comorbid_df_to_mat
-#' @param x data frame, with a \code{visitId} column (not necessarily first),
-#'   and other columns with flags for comorbidities, as such column names are
-#'   required.
 #' @template visitId
 #' @template stringsAsFactors
 #' @export
@@ -212,6 +213,13 @@ icd9ComorbidDfToMat <- function(x, visitId = get_visit_name(x),
 }
 
 #' @rdname icd_explain
+#' @template icd9-any
+#' @template isShort
+#' @param doCondense single logical value which indicates whether to condense
+#'   the given set of ICD-9 codes by replacing subsets of codes with 'parent'
+#'   codes which exactly encompass certain subsets. E.g. If all cholera
+#'   diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
+#'   subtypes.
 #' @export
 icd9Explain <- function(icd9, isShort = icd_guess_short.icd9(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
@@ -377,10 +385,9 @@ icd9SortDecimal <- function(icd9Decimal) {
   icd_sort.icd9(icd9Decimal, short_code = FALSE)
 }
 
-
 #' @rdname icd_is_valid
 #' @template mapping-icd9
-#' @template short_code
+#' @template isShort
 #' @export
 icd9IsValidMapping <- function(icd9Mapping, isShort) {
   .Deprecated("icd_is_valid")
@@ -388,7 +395,6 @@ icd9IsValidMapping <- function(icd9Mapping, isShort) {
 }
 
 #' @rdname icd_is_valid
-#' @template mapping-icd9
 #' @export
 icd9IsValidMappingShort <- function(icd9Mapping) {
   .Deprecated("icd_is_valid")
@@ -396,7 +402,6 @@ icd9IsValidMappingShort <- function(icd9Mapping) {
 }
 
 #' @rdname icd_is_valid
-#' @template mapping-icd9
 #' @export
 icd9IsValidMappingDecimal <- function(icd9Mapping) {
   .Deprecated("icd_is_valid")
@@ -404,7 +409,6 @@ icd9IsValidMappingDecimal <- function(icd9Mapping) {
 }
 
 #' @rdname icd_is_valid
-#' @template mapping-icd9
 #' @export
 icd9GetInvalidMappingShort <- function(icd9Mapping) {
   .Deprecated("icd_is_valid")
@@ -413,7 +417,6 @@ icd9GetInvalidMappingShort <- function(icd9Mapping) {
 }
 
 #' @rdname icd_is_valid
-#' @template mapping-icd9
 #' @export
 icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
   .Deprecated("icd_is_valid")
@@ -422,7 +425,7 @@ icd9GetInvalidMappingDecimal <- function(icd9Mapping) {
 }
 
 #' @rdname icd_is_valid
-#' @template short_code
+#' @template isShort
 #' @export
 icd9Valid <- function(icd9, isShort) {
   .Deprecated("icd_is_valid")
@@ -430,7 +433,6 @@ icd9Valid <- function(icd9, isShort) {
 }
 
 #' @rdname icd_is_valid
-#' @template short_code
 #' @export
 icd9IsValid <- function(icd9, isShort) {
   .Deprecated("icd_is_valid")
@@ -532,12 +534,16 @@ icd9IsValidDecimalE <- function(icd9Decimal) {
 }
 
 #' @rdname icd_get_valid
+#' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
+#' @template isShort
+#' @export
 icd9GetValid <- function(icd9, isShort = icd_guess_short(icd9)) {
   .Deprecated("icd_get_valid")
   icd_get_valid.icd9(icd9, isShort)
 }
 
-# Returns subset of codes which are in valid decimal format, e.g. "100" or "V01.10"
 #' @rdname icd_get_valid
 #' @export
 icd9GetValidDecimal <- function(icd9Decimal) {
@@ -545,7 +551,6 @@ icd9GetValidDecimal <- function(icd9Decimal) {
   icd9Decimal[icd_is_valid.icd9(icd9Decimal, short_code = FALSE)]
 }
 
-# Returns subset of codes which are in valid short_code format, e.g. "E800" or "41001"
 #' @rdname icd_get_valid
 #' @export
 icd9GetValidShort <- function(icd9Short) {
@@ -553,7 +558,6 @@ icd9GetValidShort <- function(icd9Short) {
   icd9Short[icd_is_valid.icd9(icd9Short, short_code = TRUE)]
 }
 
-# Returns subset of codes which are not in valid short_code or decimal format.
 #' @rdname icd_get_valid
 #' @export
 icd9GetInvalid <- function(icd9, isShort = icd_guess_short(icd9)) {
@@ -561,9 +565,8 @@ icd9GetInvalid <- function(icd9, isShort = icd_guess_short(icd9)) {
   icd_get_invalid.icd9(icd9, short_code = isShort)
 }
 
-#Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool short_code)
-
 #' @rdname icd_get_major
+#' @template isShort
 #' @export
 icd9GetMajor <- function(x, isShort) {
   .Deprecated("icd_get_major")
@@ -620,6 +623,8 @@ icd9GetInvalidShort <- function(icd9Short) {
 }
 
 #' @rdname icd_charlson
+#' @param x input data, e.g. \code{data.frame} or \code{matrix} of ICD codes
+#'   with an identifier of visit, hospital ID, etc..
 #' @param scoringSystem Deprecated. Use \code{icd_charlson} with
 #'   \code{scoring_system}. One of \code{original}, \code{charlson}, or
 #'   \code{quan}. The first two will give the original Charlson weights for each
@@ -673,20 +678,33 @@ icd9VanWalraven <- function(x, visitId = NULL,
 }
 
 #' @rdname icd_van_walraven
+#' @template visitId
+#' @template return.df
+#' @template stringsAsFactors
+#' @template dotdotdot
 #' @export
-icd9VanWalraven.data.frame <- function(x, visitId = NULL,
-                                       return.df = FALSE,
-                                       stringsAsFactors = getOption("stringsAsFactors"),
-                                       ...) {
-  .Deprecated("icd_van_walraven.data.frame") # todo: what about icd9 vs icd10 classes?
-  icd_van_walraven.data.frame(x = x, visit_name = visitId, return_df = return.df, stringsAsFactors = stringsAsFactors, ...)
-}
+icd9VanWalraven.data.frame <-
+  function(x, visitId = NULL,
+           return.df = FALSE,
+           stringsAsFactors = getOption("stringsAsFactors"),
+           ...) {
+    # TODO: what about icd9 vs icd10 classes?
+    .Deprecated("icd_van_walraven.data.frame")
+    icd_van_walraven.data.frame(x = x, visit_name = visitId,
+                                return_df = return.df,
+                                stringsAsFactors = stringsAsFactors, ...)
+  }
 
 #' @rdname icd_van_walraven
+#' @param applyHierarchy single logical value that defaults to \code{TRUE}, in
+#'   which case the hierarchy defined for the mapping is applied. E.g. in
+#'   Elixhauser, you can't have uncomplicated and complicated diabetes both
+#'   flagged.
 #' @export
 icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
   .Deprecated("icd_van_walraven_from_comorbid")
-  icd_van_walraven_from_comorbid(x = x, visit_name = visitId, hierarchy = applyHierarchy)
+  icd_van_walraven_from_comorbid(x = x, visit_name = visitId,
+                                 hierarchy = applyHierarchy)
 }
 
 #' @rdname icd_diff_comorbid
@@ -694,7 +712,9 @@ icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
 icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
                              show = TRUE, explain = TRUE) {
   .Deprecated("icd_diff_comorbid")
-  icd_diff_comorbid(x = x, y =y, all_names = names, x_names = x.names, y_names = y.names, show = show, explain = explain)
+  icd_diff_comorbid(x = x, y = y,
+                    all_names = names, x_names = x.names, y_names = y.names,
+                    show = show, explain = explain)
 }
 
 #' @rdname icd9_get_chapters
@@ -713,11 +733,21 @@ icd9LongToWide <- function(icd9df,
                            aggregate = TRUE,
                            return.df = FALSE) {
   .Deprecated("icd_long_to_wide")
-  icd_long_to_wide(x = icd9df, visit_name = visitId, icd_name = icd9Field, prefix = prefix,
-                   min_width = min.width, aggr = aggregate, return_df = return.df)
+  icd_long_to_wide(x = icd9df, visit_name = visitId, icd_name = icd9Field,
+                   prefix = prefix, min_width = min.width,
+                   aggr = aggregate, return_df = return.df)
 }
 
 #' @rdname icd_wide_to_long
+#' @template visitId
+#' @param icdLabels Deprecated. Character vector of column names in which codes
+#'   are found. If NULL, all columns matching icd or ICD will be included.
+#' @param icdName Deprecated. Character vector length one containing the new
+#'   column name for the ICD codes, defaults to "icdCode"
+#' @param icdRegex Deprecated. Vector of character strings containg a regex to
+#'   identify ICD-9 diagnosis columns to try (case-insensitive) in order.
+#'   Default is \code{c("icd", "diag", "dx_", "dx")}
+#' @template verbose
 #' @export
 icd9WideToLong <- function(x,
                            visitId = get_visit_name(x),
@@ -726,10 +756,14 @@ icd9WideToLong <- function(x,
                            icdRegex = c("icd", "diag", "dx_", "dx"),
                            verbose = FALSE) {
   .Deprecated("icd_wide_to_long")
-  icd_wide_to_long(x = x, visit_name = visitId, icd_labels = icdLabels, icd_name = icdName, icd_regex = icdRegex)
+  icd_wide_to_long(x = x, visit_name = visitId, icd_labels = icdLabels,
+                   icd_name = icdName, icd_regex = icdRegex)
 }
 
 #' @rdname icd_short_to_decimal
+#' @template icd9-decimal
+#' @param minorEmpty vector of length one, to be used in place of minor part of
+#'   zero. Defaults to ""
 #' @export
 icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
   .Deprecated("icd_decimal_to_parts")
@@ -737,6 +771,7 @@ icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
 }
 
 #' @rdname icd_short_to_decimal
+#' @template icd9-short
 #' @export
 icd9DecimalToShort <- function(icd9Short) {
   .Deprecated("icd_decimal_to_short")
@@ -744,6 +779,7 @@ icd9DecimalToShort <- function(icd9Short) {
 }
 
 #' @rdname icd_short_to_decimal
+#' @template icd9-short
 #' @export
 icd9ShortToDecimal <- function(icd9Short) {
   .Deprecated("icd_short_to_decimal")
@@ -759,16 +795,19 @@ icd9ShortToParts <- function(icd9Short) {
 
 #' @rdname icd_in_reference_code
 #' @keywords internal
-icd9InReferenceCode <- function(icd9, icd9Reference, isShort, isShortReference = TRUE) {
+icd9InReferenceCode <- function(icd9, icd9Reference,
+                                isShort, isShortReference = TRUE) {
   .Deprecated("icd_in_reference_code")
   icd_in_reference_code(icd = icd9, icd_reference = icd9Reference,
-                        short_code = isShort, short_reference = isShortReference)
+                        short_code = isShort,
+                        short_reference = isShortReference)
 }
 
 expandRangeWorker <- function(start, end, lookup, onlyReal,
                               excludeAmbiguousStart, excludeAmbiguousEnd){
   .Deprecated("expand_range_worker")
-  expand_range_worker(start, end, lookup, defined = onlyReal, excludeAmbiguousStart, excludeAmbiguousEnd)
+  expand_range_worker(start, end, lookup, defined = onlyReal,
+                      excludeAmbiguousStart, excludeAmbiguousEnd)
 }
 
 icd9ExpandMinor <- function(minor, isE = FALSE) {
@@ -799,13 +838,19 @@ icd9Count <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
 }
 
 #' @rdname icd_count_codes_wide
+#' @template visitId
+#' @template return.df
+#' @param aggregate, single logical, default is FALSE. If TRUE, the length (or
+#'   rows) of the output will no longer match the input, but duplicate visitIds
+#'   will be counted together.
 #' @export
 icd9CountWide <- function(x,
                           visitId = get_visit_name(x),
                           return.df = FALSE,
                           aggregate = FALSE) {
   .Deprecated("icd_count_wide")
-  icd_count_codes_wide(x = x, visit_name = visitId, return_df = return.df, aggr = aggregate)
+  icd_count_codes_wide(x = x, visit_name = visitId,
+                       return_df = return.df, aggr = aggregate)
 }
 
 #' @rdname icd_count_comorbid
@@ -816,7 +861,8 @@ icd9CountWide <- function(x,
 #' @template visitId
 #' @template return.df
 #' @export
-icd9CountComorbidBin <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
+icd9CountComorbidBin <- function(x, visitId = get_visit_name(x),
+                                 return.df = FALSE) {
   .Deprecated("icd_count_comorbid")
   icd_count_comorbid(x, visit_name = visitId, return_df = return.df)
 }
@@ -838,18 +884,19 @@ icd9IsBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
 
 #' @rdname icd_is_billable
 #' @export
-icd9IsBillableShort <- function(icd9Short, version = getLatestBillableVersion())
+icd9IsBillableShort <- function(icd9Short, version = icd9cm_latest_edition())
   icd_is_billable.icd9(icd9Short, short_code = TRUE, version)
 
 #' @rdname icd_is_billable
 #' @export
-icd9IsBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersion())
+icd9IsBillableDecimal <- function(icd9Decimal,
+                                  version = icd9cm_latest_edition())
   icd_is_billable.icd9(icd9Decimal, short_code = FALSE, version)
 
 #' @rdname icd_get_billable
 #' @export
 icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
-                            invert = FALSE, version = getLatestBillableVersion()) {
+                            invert = FALSE, version = icd9cm_latest_edition()) {
   assertVector(icd9)
   assertFlag(isShort)
   assertFlag(invert)
@@ -878,7 +925,8 @@ icd9GetBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersi
 #' @export
 icd9GetNonBillableShort <- function(icd9Short, version = getLatestBillableVersion()) {
   .Deprecated("icd_get_billable")
-  icd_get_billable.icd9(icd9Short, short_code = TRUE, invert = TRUE, version = version)
+  icd_get_billable.icd9(icd9Short, short_code = TRUE,
+                        invert = TRUE, version = version)
 }
 
 
@@ -886,7 +934,8 @@ icd9GetNonBillableShort <- function(icd9Short, version = getLatestBillableVersio
 #' @export
 icd9GetNonBillableDecimal <- function(icd9Decimal, version = getLatestBillableVersion()) {
   .Deprecated("icd_get_billable")
-icd_get_billable.icd9(icd9Decimal, short_code = FALSE, invert = TRUE, version = version)
+  icd_get_billable.icd9(icd9Decimal, short_code = FALSE,
+                        invert = TRUE, version = version)
 }
 
 #' @rdname icd_get_billable
@@ -894,7 +943,8 @@ icd_get_billable.icd9(icd9Decimal, short_code = FALSE, invert = TRUE, version = 
 icd9GetNonBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                                version = getLatestBillableVersion()) {
   .Deprecated("icd_get_billable")
-  icd_get_billable.icd9(icd9, short_code = isShort, invert = TRUE, version = version)
+  icd_get_billable.icd9(icd9, short_code = isShort,
+                        invert = TRUE, version = version)
 }
 
 #' @rdname icd_extract_alpha_numeric
@@ -955,6 +1005,7 @@ stripRtf <- function(x) {
 }
 
 #' @rdname icd_is_defined
+#' @template onlyBillable
 #' @export
 icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
                        onlyBillable = FALSE) {
@@ -979,7 +1030,8 @@ icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
 
 #' @rdname icd_is_defined
 #' @export
-icd9GetReal <- function(icd9, isShort = icd_guess_short.icd9(icd9), onlyBillable = FALSE) {
+icd9GetReal <- function(icd9, isShort = icd_guess_short.icd9(icd9),
+                        onlyBillable = FALSE) {
   .Deprecated("icd_get_defined")
   icd_get_defined.icd9(icd9, short_code = isShort, billable = onlyBillable)
 }

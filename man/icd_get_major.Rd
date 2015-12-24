@@ -18,6 +18,11 @@ icd9IsMajor(x)
 
 icd_get_major(x)
 }
+\arguments{
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+}
 \description{
 Returns major component of code (before decimal)
 }

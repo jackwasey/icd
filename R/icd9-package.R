@@ -84,5 +84,5 @@
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd9
 #' @import Rcpp checkmate stringr
-#' @importFrom magrittr "%>%" "%<>%"
+#' @importFrom magrittr "%>%" "%<>%" set_names
 NULL

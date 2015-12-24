@@ -31,17 +31,24 @@ a column of ICD-9 codes. It may have other columns which will be ignored.
 By default, the first column is the patient identifier and is not counted.
 If \code{visit_name} is not specified, the first column is used.}
 
-\item{stringsAsFactors}{single logical, passed on when constructing
-data.frame if \code{return_df} is \code{TRUE}. If the input data frame
-\code{x} has a factor for the visit_name, this is not changed, but a
-non-factor visit_name may be converted or not converted according to your
-system default or this setting.}
+\item{visitId}{Deprecated. Use \code{visit_name}}
 
-\item{...}{further arguments to pass on to \code{icd9ComorbidQuanElix}, e.g.
-\code{icd9Field}, \code{applyHeirarchy}}
+\item{return.df}{Deprecated. Use return_df isntead. Single logical value, if
+\code{TRUE}, return the result as a data frame with the first column being
+the \code{visitId}, and the second being the count. If \code{visitId} was a
+factor or named differently in the input, this is preserved.}
 
-\item{applyHierarchy}{single logical value, default is \code{FALSE}. If
-\code{TRUE}, will drop DM if DMcx is present, etc.}
+\item{stringsAsFactors}{Single logical value, describing whether the
+resulting data frame should have strings, i.e. visitId converted to factor.
+Default is to follow the current session option. This is identical to the
+argument used in, among other base functions \code{as.data.frame}.}
+
+\item{...}{arguments passed on to other functions}
+
+\item{applyHierarchy}{single logical value that defaults to \code{TRUE}, in
+which case the hierarchy defined for the mapping is applied. E.g. in
+Elixhauser, you can't have uncomplicated and complicated diabetes both
+flagged.}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -58,6 +65,20 @@ was not specified, then the first column of the data frame is used.}
 be returned, with the first column named as in input data frame (i.e.
 \code{visit_name}), containing all the visits, and the second column
 containing the Charlson Comorbidity Index.}
+
+\item{hierarchy}{single logical value that defaults to \code{TRUE}, in
+which case the hierarchy defined for the mapping is applied. E.g. in
+Elixhauser, you can't have uncomplicated and complicated diabetes both
+flagged.}
+
+\item{stringsAsFactors}{single logical, passed on when constructing
+data.frame if \code{return_df} is \code{TRUE}. If the input data frame
+\code{x} has a factor for the visit_name, this is not changed, but a
+non-factor visit_name may be converted or not converted according to your
+system default or this setting.}
+
+\item{...}{further arguments to pass on to \code{icd9ComorbidQuanElix}, e.g.
+\code{icd9Field}, \code{applyHeirarchy}}
 }
 \description{
 van Walraven Elixhauser score is calculated from the Quan

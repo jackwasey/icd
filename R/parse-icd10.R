@@ -157,7 +157,7 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
       lapply(
         function(x) str_split(x, "-") %>%
           unlist %>%
-          magrittr::set_names(c("start", "end"))
+          set_names(c("start", "end"))
       ) -> sub_chapters
 
     all_sub_chapters <- c(all_sub_chapters, sub_chapters)

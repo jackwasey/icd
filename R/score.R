@@ -300,8 +300,10 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
 }
 
 #' @rdname icd_van_walraven
-#' @param applyHierarchy single logical value, default is \code{FALSE}. If
-#'   \code{TRUE}, will drop DM if DMcx is present, etc.
+#' @param hierarchy single logical value that defaults to \code{TRUE}, in
+#'   which case the hierarchy defined for the mapping is applied. E.g. in
+#'   Elixhauser, you can't have uncomplicated and complicated diabetes both
+#'   flagged.
 #' @export
 icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
   assert(checkDataFrame(x), checkMatrix(x))

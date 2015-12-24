@@ -27,15 +27,12 @@ many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visitId}
 was not specified, then the first column of the data frame is used.}
 
-\item{stringsAsFactors}{whether the resulting data frame should have strings,
-i.e. visit_name converted to factor. Default is to follow the current session
-option.}
+\item{stringsAsFactors}{Single logical value, describing whether the
+resulting data frame should have strings, i.e. visitId converted to factor.
+Default is to follow the current session option. This is identical to the
+argument used in, among other base functions \code{as.data.frame}.}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
-
-\item{x}{data frame, with a \code{visitId} column (not necessarily first),
-and other columns with flags for comorbidities, as such column names are
-required.}
 
 \item{stringsAsFactors}{Single logical value, describing whether the
 resulting data frame should have strings, i.e. visitId converted to factor.

@@ -55,6 +55,16 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
+\item{doCondense}{single logical value which indicates whether to condense
+the given set of ICD-9 codes by replacing subsets of codes with 'parent'
+codes which exactly encompass certain subsets. E.g. If all cholera
+diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
+subtypes.}
+
 \item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
 the short description from the canonical CMS descriptions (included in
 \code{data-raw}) will be used, otherwise the long description is used.}
@@ -82,6 +92,12 @@ the given set of ICD-9 codes by replacing subsets of codes with 'parent'
 codes which exactly encompass certain subsets. E.g. If all cholera
 diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
 subtypes.}
+
+\item{icd9}{is
+a character vector or factor of ICD-9 codes. If fewer than five characters
+is given in a code, then the digits are greedily assigned to hundreds, then
+tens, then units, before the decimal parts. E.g. "10" becomes "010", not
+"0010".}
 }
 \value{
 data frame, or list of data frames, with fields for ICD9 code, name
