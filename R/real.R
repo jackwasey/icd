@@ -22,9 +22,6 @@
 #'   \code{link{icd9IsValid}} etc. is still useful, with a changing list of
 #'   icd-9 codes over time, and possible imperfections in the master lists
 #'   derived from CMS.
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
 #' @template short_code
 #' @param billable single logical value (default \code{FALSE}), if
 #'   \code{TRUE} will divert to test whether the codes are in the billable list

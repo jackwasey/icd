@@ -249,13 +249,8 @@ icd_count_codes_wide <- function(x,
 #'   be returned, with the first column named as in input data frame (i.e.
 #'   \code{visit_name}), containing all the visits, and the second column
 #'   containing the Charlson Comorbidity Index.
-#' @param stringsAsFactors single logical, passed on when constructing
-#'   data.frame if \code{return_df} is \code{TRUE}. If the input data frame
-#'   \code{x} has a factor for the visit_name, this is not changed, but a
-#'   non-factor visit_name may be converted or not converted according to your
-#'   system default or this setting.
-#' @param ... further arguments to pass on to \code{icd9ComorbidQuanElix}, e.g.
-#'   \code{icd9Field}, \code{applyHeirarchy}
+#' @template stringsAsFactors
+#' @template dotdotdot
 #' @examples
 #' mydf <- icd9(data.frame(visit_name = c("a", "b", "c"),
 #'                    icd9 = c("412.93", "441", "044.9")))

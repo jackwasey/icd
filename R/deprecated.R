@@ -680,8 +680,6 @@ icd9VanWalraven <- function(x, visitId = NULL,
 #' @rdname icd_van_walraven
 #' @template visitId
 #' @template return.df
-#' @template stringsAsFactors
-#' @template dotdotdot
 #' @export
 icd9VanWalraven.data.frame <-
   function(x, visitId = NULL,
@@ -1005,6 +1003,8 @@ stripRtf <- function(x) {
 }
 
 #' @rdname icd_is_defined
+#' @template icd9-any
+#' @template isShort
 #' @template onlyBillable
 #' @export
 icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),

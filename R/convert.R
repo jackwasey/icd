@@ -277,20 +277,24 @@ icd_short_to_decimal <- function(x) {
 #'
 #' This usually just entails removing the decimal point, but also does some
 #' limited validation and tidying up.
+#'
+#' @param x ICD codes
 #' @export
 #' @keywords internal
 icd_decimal_to_short <- function(x) {
   UseMethod("icd_decimal_to_short")
 }
 
-# icd9 version implemented in C++
-
+#' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to
+#'   short format
 #' @export
+#' @keywords internal
 icd_decimal_to_short.default <- function(x) {
   str_trim(str_replace(x, "\\.", ""))
 }
 
 #' Convert decimal ICD codes to component parts
+#'
 #' @keywords internal
 icd_decimal_to_parts <- function(x, empty_minor = "") {
   UseMethod("icd_decimal_to_parts")

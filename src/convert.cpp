@@ -263,9 +263,8 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
 			minors);
 }
 
-//' @title Convert ICD-9 codes between short and decimal forms
-//' @template icd9-short
-//' @template icd9-decimal
+//' @describeIn icd_short_to_decimal Convert ICD-9 codes from short to decimal form
+//' @keywords internal
 //' @export
 // [[Rcpp::export(name = "icd_short_to_decimal.icd9")]]
 Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector x) {
@@ -278,6 +277,7 @@ Rcpp::CharacterVector icd9DecimalToShortOld(const Rcpp::CharacterVector x) {
 }
 
 //' @describeIn icd_decimal_to_short Convert Decimal to short-form ICD-9 code
+//' @keywords internal
 //' @export
 // [[Rcpp::export(name="icd_decimal_to_short.icd9")]]
 Rcpp::CharacterVector icd9DecimalToShort(
