@@ -25,21 +25,21 @@
 #' @export
 icd9Children <- function(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
-  icd_children.icd9(icd9, short_code = isShort, real = onlyReal, billable = onlyBillable)
+  icd_children.icd9(icd9, short_code = isShort, defined = onlyReal, billable = onlyBillable)
 }
 
 #' @rdname icd_children
 #' @export
 icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
-  icd_children.icd9(icd9Short, short_code = TRUE, real = onlyReal, billable = onlyBillable)
+icd_children.icd9(icd9Short, short_code = TRUE, defined = onlyReal, billable = onlyBillable)
 }
 
 #' @rdname icd_children
 #' @export
 icd9ChildrenDecimal <- function(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
-  icd_children.icd9(icd9Decimal, short_code = FALSE, real = onlyReal, billable = onlyBillable)
+  icd_children.icd9(icd9Decimal, short_code = FALSE, defined = onlyReal, billable = onlyBillable)
 }
 
 #' @rdname icd_comorbid
@@ -172,21 +172,21 @@ icd9ComorbidQuanDeyo <- function(icd9df,
 icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
                          onlyReal = NULL, warn = TRUE) {
   .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9, short_code = isShort, real = onlyReal, warn = warn)
+  icd_condense.icd9(x = icd9, short_code = isShort, defined = onlyReal, warn = warn)
 }
 
 #' @rdname icd_condense
 #' @export
 icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9Decimal, short_code = FALSE, real = onlyReal, warn = warn, keepFactorLevels = keepFactorLevels)
+  icd_condense.icd9(x = icd9Decimal, short_code = FALSE, defined = onlyReal, warn = warn, keepFactorLevels = keepFactorLevels)
 }
 
 #' @rdname icd_condense
 #' @export
 icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   .Deprecated("icd_condense.icd9")
-  icd_condense.icd9(x = icd9Short, short_code = TRUE, real = onlyReal, warn = warn, keepFactorLevels = keepFactorLevels)
+  icd_condense.icd9(x = icd9Short, short_code = TRUE, defined = onlyReal, warn = warn, keepFactorLevels = keepFactorLevels)
 }
 
 
@@ -199,11 +199,16 @@ icd9ComorbidMatToDf <- function(icd9df, visitId = "visit_name",
 }
 
 #' @rdname icd_comorbid_df_to_mat
+#' @param x data frame, with a \code{visitId} column (not necessarily first),
+#'   and other columns with flags for comorbidities, as such column names are
+#'   required.
+#' @template visitId
+#' @template stringsAsFactors
 #' @export
-icd9ComorbidDfToMat <- function(icd9df, visitId = get_visit_name(icd9df),
+icd9ComorbidDfToMat <- function(x, visitId = get_visit_name(x),
                                 stringsAsFactors = getOption("stringsAsFactors")) {
   .Deprecated("icd_comorbid_df_to_mat")
-  icd_comorbid_df_to_mat(icd9df, visitId, stringsAsFactors)
+  icd_comorbid_df_to_mat(x, visitId, stringsAsFactors)
 }
 
 #' @rdname icd_explain
@@ -310,7 +315,7 @@ icd9ExpandRange <- function(start, end,
                             excludeAmbiguousEnd = TRUE) {
   .Deprecated("icd_expand_range")
   icd_expand_range.icd9(start = start, end = end, short_code = isShort,
-                        real = onlyReal,
+                        defined = onlyReal,
                         excludeAmbiguousStart = excludeAmbiguousStart,
                         excludeAmbiguousEnd = excludeAmbiguousEnd)
 }
@@ -323,7 +328,7 @@ icd9ExpandRangeShort <- function(start, end,
                                  excludeAmbiguousEnd = TRUE) {
   .Deprecated("icd_expand_range")
   icd_expand_range.icd9(start = start, end = end, short_code = TRUE,
-                        real = onlyReal,
+                        defined = onlyReal,
                         excludeAmbiguousStart = excludeAmbiguousStart,
                         excludeAmbiguousEnd = excludeAmbiguousEnd)
 }
@@ -336,7 +341,7 @@ icd9ExpandRangeDecimal <- function(start, end,
                                    excludeAmbiguousEnd = TRUE) {
   .Deprecated("icd_expand_range")
   icd_expand_range.icd9(start = start, end = end, short_code = FALSE,
-                        real = onlyReal,
+                        defined = onlyReal,
                         excludeAmbiguousStart = excludeAmbiguousStart,
                         excludeAmbiguousEnd = excludeAmbiguousEnd)
 }
@@ -345,7 +350,7 @@ icd9ExpandRangeDecimal <- function(start, end,
 #' @export
 icd9ExpandRangeMajor <- function(start, end, onlyReal = TRUE) {
   .Deprecated("icd_expand_range_major")
-  icd_expand_range_major.icd9(start = start, end = end, real = onlyReal)
+  icd_expand_range_major.icd9(start = start, end = end, defined = onlyReal)
 }
 #' @rdname icd_sort
 #' @template icd9-any
@@ -763,7 +768,7 @@ icd9InReferenceCode <- function(icd9, icd9Reference, isShort, isShortReference =
 expandRangeWorker <- function(start, end, lookup, onlyReal,
                               excludeAmbiguousStart, excludeAmbiguousEnd){
   .Deprecated("expand_range_worker")
-  expand_range_worker(start, end, lookup, real = onlyReal, excludeAmbiguousStart, excludeAmbiguousEnd)
+  expand_range_worker(start, end, lookup, defined = onlyReal, excludeAmbiguousStart, excludeAmbiguousEnd)
 }
 
 icd9ExpandMinor <- function(minor, isE = FALSE) {
@@ -804,6 +809,12 @@ icd9CountWide <- function(x,
 }
 
 #' @rdname icd_count_comorbid
+#' @param x data frame with one row per patient, and a true/false or 1/0 flag
+#'   for each column. By default, the first column is the patient identifier and
+#'   is not counted. If \code{visitId} is not specified, the first column is
+#'   used.
+#' @template visitId
+#' @template return.df
 #' @export
 icd9CountComorbidBin <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
   .Deprecated("icd_count_comorbid")

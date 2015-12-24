@@ -32,16 +32,16 @@ icd9ExpandRangeMajor(start, end, onlyReal = TRUE)
 icd_expand_range(start, end, ...)
 
 \method{icd_expand_range}{character}(start, end, short_code = NULL,
-  real = TRUE, ...)
+  defined = TRUE, ...)
 
 \method{icd_expand_range}{icd9}(start, end,
-  short_code = icd_guess_short.icd9(c(start, end)), real = TRUE,
+  short_code = icd_guess_short.icd9(c(start, end)), defined = TRUE,
   excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE, ...)
 
-icd9_expand_range_short(start, end, real = TRUE,
+icd9_expand_range_short(start, end, defined = TRUE,
   excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
 
-icd9_expand_range_decimal(start, end, real = TRUE,
+icd9_expand_range_decimal(start, end, defined = TRUE,
   excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
 
 start \%i9da\% end

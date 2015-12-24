@@ -47,7 +47,7 @@ icd10_get_who_from_cdc <- function() {
 #'
 #' @references https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
-icd10cm_get_all_real <- function(save = TRUE) {
+icd10cm_get_all_defined <- function(save = TRUE) {
 
   local_path <- unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
@@ -62,8 +62,9 @@ icd10cm_get_all_real <- function(save = TRUE) {
                             stringsAsFactors = FALSE
   )
 
-  icd10cm2016 <- as.data.frame(lapply(icd10cm2016, stringr::str_trim), stringsAsFactors = FALSE)
-  if (save) save_in_data_dir(icd10cm2016)
+  icd10cm2016 <- as.data.frame(lapply(icd10cm2016, str_trim), stringsAsFactors = FALSE)
+  if (save)
+    save_in_data_dir(icd10cm2016)
   return(invisible(icd10cm2016))
 
   # now some test code to see what permutations there are of ICD-10 codes based

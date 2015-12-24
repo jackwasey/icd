@@ -20,7 +20,7 @@ context("icd9 ranges")
 test_that("expand icd9 range definition", {
   expect_equal(
     icd_expand_range(short_code = TRUE, "4012", "40145",
-                         real = FALSE,
+                         defined = FALSE,
                          excludeAmbiguousStart = FALSE,
                          excludeAmbiguousEnd = FALSE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
@@ -29,7 +29,7 @@ test_that("expand icd9 range definition", {
            "40139", "4014", "40140", "40141", "40142", "40143", "40144", "40145")))
   expect_equal(
     icd_expand_range(short_code = TRUE, "4012", "40145",
-                         real = FALSE,
+                         defined = FALSE,
                          excludeAmbiguousStart = TRUE,
                          excludeAmbiguousEnd = TRUE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
@@ -44,9 +44,9 @@ test_that("expand icd9 range definition", {
   #            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
   #            "40139", "40140", "40141", "40142", "40143", "40144", "40145")))
   #
-  expect_equal(icd_expand_range(short_code = TRUE, "40100", "40101", real = FALSE), c("40100", "40101"))
-  expect_equal(icd_expand_range.icd9("40108", "40109", short_code = TRUE, real = FALSE), c("40108", "40109"))
-  expect_equal(icd_expand_range(short_code = TRUE, "40198", "40199", real = FALSE), c("40198", "40199"))
+  expect_equal(icd_expand_range(short_code = TRUE, "40100", "40101", defined = FALSE), c("40100", "40101"))
+  expect_equal(icd_expand_range.icd9("40108", "40109", short_code = TRUE, defined = FALSE), c("40108", "40109"))
+  expect_equal(icd_expand_range(short_code = TRUE, "40198", "40199", defined = FALSE), c("40198", "40199"))
   # must be in ICD9 order, otherwise error:
   expect_error(icd_expand_range(short_code = TRUE, "40109", "40108"))
   expect_error(icd_expand_range(short_code = TRUE, "4019", "4018"))
@@ -57,31 +57,31 @@ test_that("expand icd9 range definition", {
   expect_error(icd_expand_range(short_code = TRUE, "2", "001"))
   expect_error(icd_expand_range(short_code = TRUE, "4010", "401"))
 
-  expect_equal(icd_expand_range(short_code = TRUE, " 4280 ", " 4280 ", real = FALSE),
-               icd_expand_range(short_code = TRUE, "4280", "4280", real = FALSE))
+  expect_equal(icd_expand_range(short_code = TRUE, " 4280 ", " 4280 ", defined = FALSE),
+               icd_expand_range(short_code = TRUE, "4280", "4280", defined = FALSE))
 
 
   # the range 44100-4419 from the AHRQ found a gap in the code.
   expect_equal(
-    sort(icd_expand_range(short_code = TRUE, "4410", "4412", real = FALSE)),
-    sort(c("4410", icd_expand_range(short_code = TRUE, "44100", "4412", real = FALSE)))
+    sort(icd_expand_range(short_code = TRUE, "4410", "4412", defined = FALSE)),
+    sort(c("4410", icd_expand_range(short_code = TRUE, "44100", "4412", defined = FALSE)))
   )
 
-  expect_equal(icd_expand_range(short_code = TRUE, "401", "401", real = FALSE),
-               sort(icd_children.icd9("401", short_code = TRUE, real = FALSE)))
+  expect_equal(icd_expand_range(short_code = TRUE, "401", "401", defined = FALSE),
+               sort(icd_children.icd9("401", short_code = TRUE, defined = FALSE)))
   # expand range should already be sorted. do i want to sort children by default
   # or with an option?
-  expect_equal(icd_expand_range(short_code = TRUE, "401", "402", real = FALSE),
-               sort(icd_children.icd9(c("401", "402"), short_code = TRUE, real = FALSE)))
+  expect_equal(icd_expand_range(short_code = TRUE, "401", "402", defined = FALSE),
+               sort(icd_children.icd9(c("401", "402"), short_code = TRUE, defined = FALSE)))
   # the next two cases cover the HIV ranges in the co-morbidities, wherein the
   # final code is included, in which case the parent ("044" in this case) is
   # implied strongly. CAN'T EXPECT RANGE TO ACCOUNT FOR THIS, but we can make next test work with flag as follows:
-  expect_equal(icd_expand_range(short_code = TRUE, "043", "0449", real = FALSE, excludeAmbiguousEnd = FALSE),
-               icd_expand_range(short_code = TRUE, "043", "044", real = FALSE))
-  expect_equal(icd_expand_range(short_code = TRUE, "043", "04499", real = FALSE),
-               icd_expand_range(short_code = TRUE, "043", "044", real = FALSE))
+  expect_equal(icd_expand_range(short_code = TRUE, "043", "0449", defined = FALSE, excludeAmbiguousEnd = FALSE),
+               icd_expand_range(short_code = TRUE, "043", "044", defined = FALSE))
+  expect_equal(icd_expand_range(short_code = TRUE, "043", "04499", defined = FALSE),
+               icd_expand_range(short_code = TRUE, "043", "044", defined = FALSE))
   expect_equal(
-    icd_expand_range(short_code = TRUE, "401", "402", real = FALSE),
+    icd_expand_range(short_code = TRUE, "401", "402", defined = FALSE),
     sort(c("401", "4010", "4011", "4012", "4013", "4014", "4015", "4016",
            "4017", "4018", "4019", "40100", "40110", "40120", "40130", "40140",
            "40150", "40160", "40170", "40180", "40190", "40101", "40111",
@@ -116,7 +116,7 @@ test_that("expand icd9 range definition", {
            "40299"))
   )
 
-  expect_equal(icd_expand_range(short_code = TRUE, "401", "40102", real = FALSE,
+  expect_equal(icd_expand_range(short_code = TRUE, "401", "40102", defined = FALSE,
                                     excludeAmbiguousStart = FALSE,
                                     excludeAmbiguousEnd = FALSE),
                c("401", "4010", "40100", "40101", "40102"))
@@ -126,14 +126,14 @@ test_that("expand icd9 range definition", {
 
   # found bugs when expanding Injury and Poisoning chapter.
   expect_that(icd_expand_range(short_code = TRUE, "997", "998"), testthat::not(throws_error()))
-  expect_false("999" %in% icd_expand_range(short_code = TRUE, "998", "998", real = FALSE))
-  expect_false("009" %in% icd_expand_range(short_code = TRUE, "8", "8", real = FALSE))
+  expect_false("999" %in% icd_expand_range(short_code = TRUE, "998", "998", defined = FALSE))
+  expect_false("009" %in% icd_expand_range(short_code = TRUE, "8", "8", defined = FALSE))
 
 })
 
 test_that("expand range defined by two four digit codes includes last code", {
-  expect_true("1991" %in% icd_expand_range(short_code = TRUE, "1960", "1991", real = FALSE))
-  expect_true("19919" %in% icd_expand_range(short_code = TRUE, "1960", "1991", real = FALSE))
+  expect_true("1991" %in% icd_expand_range(short_code = TRUE, "1960", "1991", defined = FALSE))
+  expect_true("19919" %in% icd_expand_range(short_code = TRUE, "1960", "1991", defined = FALSE))
 })
 
 test_that("expand range worker gives correct ranges", {
@@ -141,7 +141,7 @@ test_that("expand range worker gives correct ranges", {
   # error to the sub-function
   expect_equal(
     expand_range_worker("V10", "V1001", lookup = icd9:::icd9VShort,
-                      real = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                      defined = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("V10", "V100", "V1000", "V1001"))
 })
 
@@ -154,47 +154,47 @@ test_that("V code with ambiguous parent", {
   # descendants just to reach the specified codes, but not all the children of
   # the higher-level code.
   expect_equal(icd_expand_range.icd9(short_code = TRUE, "V10", "V1001",
-                                    real = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                                    defined = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
                c("V10", "V100", "V1000", "V1001"))
-  expect_equal(icd_expand_range.icd9(short_code = TRUE, "V10", "V1001", real = FALSE),
+  expect_equal(icd_expand_range.icd9(short_code = TRUE, "V10", "V1001", defined = FALSE),
                c("V1000", "V1001"))
 })
 
 test_that("V code ranges", {
-  expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1000", "V1002", real = FALSE),
+  expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1000", "V1002", defined = FALSE),
                c("V1000", "V1001", "V1002"))
   # but we cap off the upper range correctly:
-  expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1009", "V101", real = FALSE),
+  expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1009", "V101", defined = FALSE),
                c("V1009", "V101", "V1010", "V1011",
                  "V1012", "V1013", "V1014", "V1015",
                  "V1016", "V1017", "V1018", "V1019"))
   # and with narrower top end
   expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1009", "V1011",
-                                    real = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
+                                    defined = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
                c("V1009", "V1010", "V1011"))
   expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1009", "V1011",
-                                    real = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                                    defined = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
                c("V1009", "V101", "V1010", "V1011"))
   # but include those pesky parents when requested:
   expect_true(
-    all(c("V10", "V100") %in% icd_expand_range.icd9(short_code = TRUE, "V099", "V1011", real = FALSE,
+    all(c("V10", "V100") %in% icd_expand_range.icd9(short_code = TRUE, "V099", "V1011", defined = FALSE,
                                                    excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE)))
 
   # should fail despite end being 'longer' than start
   expect_error(icd_expand_range.icd9(short_code = TRUE, "V10", " V1 "))
 
-  expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1009", "V101", real = FALSE),
-               icd_expand_range.icd9(short_code = TRUE, "V1009", "V1019", real = FALSE))
+  expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1009", "V101", defined = FALSE),
+               icd_expand_range.icd9(short_code = TRUE, "V1009", "V1019", defined = FALSE))
 
   # failed similar test in Elixhauser mapping generation.
-  expect_false("V11" %in% icd_expand_range.icd9(short_code = FALSE, "V10.89", "V10.9", real = FALSE))
-  expect_false("V11" %in% icd_expand_range.icd9(short_code = FALSE, "V10.89", "V10.99", real = FALSE))
+  expect_false("V11" %in% icd_expand_range.icd9(short_code = FALSE, "V10.89", "V10.9", defined = FALSE))
+  expect_false("V11" %in% icd_expand_range.icd9(short_code = FALSE, "V10.89", "V10.99", defined = FALSE))
 
 })
 
 test_that("E code ranges", {
-  expect_equal(icd_expand_range.icd9(short_code = TRUE, "E9501", "E9502", real = FALSE), c("E9501", "E9502"))
-  expect_equal(icd_expand_range.icd9(short_code = TRUE, "E950", "E9509", real = FALSE),
+  expect_equal(icd_expand_range.icd9(short_code = TRUE, "E9501", "E9502", defined = FALSE), c("E9501", "E9502"))
+  expect_equal(icd_expand_range.icd9(short_code = TRUE, "E950", "E9509", defined = FALSE),
                c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
                  "E9505", "E9506", "E9507", "E9508", "E9509")
   )
@@ -202,12 +202,12 @@ test_that("E code ranges", {
 })
 
 test_that("major ranges", {
-  resall <- icd_expand_range_major.icd9("E000", "E999", real = FALSE)
+  resall <- icd_expand_range_major.icd9("E000", "E999", defined = FALSE)
   expect_equal(length(resall), 1000)
   expect_true("E000" %in% resall)
   expect_true("E123" %in% resall)
   expect_true("E999" %in% resall)
-  resallbut <- icd_expand_range_major.icd9("E001", "E998", real = FALSE)
+  resallbut <- icd_expand_range_major.icd9("E001", "E998", defined = FALSE)
   expect_equal(length(resallbut), 998)
   expect_false("E000" %in% resallbut)
   expect_true("E001" %in% resallbut)
@@ -215,7 +215,7 @@ test_that("major ranges", {
   expect_true("E998" %in% resallbut)
   expect_false("E999" %in% resallbut)
 
-  expect_equal(icd_expand_range_major.icd9("E99", "E101", real = FALSE),
+  expect_equal(icd_expand_range_major.icd9("E99", "E101", defined = FALSE),
                c("E099", "E100", "E101"))
 })
 
@@ -252,16 +252,16 @@ test_that("range doesn't include higher level parent github issue #14", {
 
 test_that("ranges can include ambiguous parents, optionally", {
   expect_equal(
-    icd_expand_range.icd9("01006", "01010", real = TRUE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
+    icd_expand_range.icd9("01006", "01010", defined = TRUE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
     c("01006", "01010"))
   expect_equal(
-    icd_expand_range.icd9("01006", "01010", real = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+    icd_expand_range.icd9("01006", "01010", defined = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("01006", "0101", "01010"))
   expect_equal(
-    icd_expand_range.icd9("01006", "01010", real = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
+    icd_expand_range.icd9("01006", "01010", defined = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
     c("01006", "01007", "01008", "01009", "01010"))
   expect_equal(
-    icd_expand_range.icd9("01006", "01010", real = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+    icd_expand_range.icd9("01006", "01010", defined = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("01006", "01007", "01008", "01009", "0101", "01010"))
 
   # if real codes, then we can tolerate a higher level code if it is billable,
@@ -278,11 +278,11 @@ test_that("ranges can include ambiguous parents, optionally", {
 })
 
 test_that("range abbrevs", {
-  expect_identical(icd_expand_range.icd9("123", "123.6", short_code = FALSE, real = FALSE),
+  expect_identical(icd_expand_range.icd9("123", "123.6", short_code = FALSE, defined = FALSE),
                    "123" %i9da% "123.6")
-  expect_identical(icd_expand_range.icd9("123", "123.6", short_code = FALSE, real = TRUE),
+  expect_identical(icd_expand_range.icd9("123", "123.6", short_code = FALSE, defined = TRUE),
                    "123" %i9d% "123.6")
-  expect_identical(icd_expand_range.icd9("1234", "125", short_code = TRUE, real = FALSE),
+  expect_identical(icd_expand_range.icd9("1234", "125", short_code = TRUE, defined = FALSE),
                    "1234" %i9sa% "125")
 })
 
@@ -314,49 +314,49 @@ test_that("icd_expand_minor.icd9: valid", {
 
 test_that("icd9 children decimal with valid input", {
   expect_equal(
-    icd_children.icd9(short_code = FALSE, "V10.0", real = FALSE),
+    icd_children.icd9(short_code = FALSE, "V10.0", defined = FALSE),
     append("V10.0", paste("V10.0", 0:9, sep = "")))
   expect_equal(
-    toupper(icd_children.icd9(short_code = FALSE, "v10.0", real = FALSE)),
-    icd_children.icd9(short_code = FALSE, "V10.0", real = FALSE))
+    toupper(icd_children.icd9(short_code = FALSE, "v10.0", defined = FALSE)),
+    icd_children.icd9(short_code = FALSE, "V10.0", defined = FALSE))
   expect_equal(
-    icd_children.icd9(short_code = FALSE, " V10.0 ", real = FALSE),
-    icd_children.icd9(short_code = FALSE, "V10.0", real = FALSE))
+    icd_children.icd9(short_code = FALSE, " V10.0 ", defined = FALSE),
+    icd_children.icd9(short_code = FALSE, "V10.0", defined = FALSE))
   expect_equal(
-    icd_children.icd9(short_code = FALSE, "10.0", real = FALSE),
-    icd_children.icd9(short_code = FALSE, "010.0", real = FALSE))
+    icd_children.icd9(short_code = FALSE, "10.0", defined = FALSE),
+    icd_children.icd9(short_code = FALSE, "010.0", defined = FALSE))
   expect_equal(
-    icd_children.icd9(short_code = FALSE, "010.0", real = FALSE),
+    icd_children.icd9(short_code = FALSE, "010.0", defined = FALSE),
     append("010.0", paste("010.0", 0:9, sep = "")))
   expect_equal(icd_children.icd9(short_code = FALSE, "010.0"), icd_children.icd9(short_code = FALSE, "10.0"))
 })
 
 test_that("icd9 children short with valid input", {
-  expect_equal(icd_children.icd9(short_code = TRUE, "V100", real = FALSE),
+  expect_equal(icd_children.icd9(short_code = TRUE, "V100", defined = FALSE),
                paste("V100", c("", 0:9), sep = ""))
   expect_equal(icd_children.icd9(short_code = TRUE, "v100"),
                icd_children.icd9("V100"))
-  expect_equal(icd_children.icd9(short_code = TRUE, " V100 ", real = FALSE),
-               icd_children.icd9(short_code = TRUE, "V100", real = FALSE))
-  expect_equal(icd_children.icd9(short_code = TRUE, "0100", real = FALSE),
+  expect_equal(icd_children.icd9(short_code = TRUE, " V100 ", defined = FALSE),
+               icd_children.icd9(short_code = TRUE, "V100", defined = FALSE))
+  expect_equal(icd_children.icd9(short_code = TRUE, "0100", defined = FALSE),
                paste("0100", c("", 0:9), sep = ""))
-  expect_equal(icd_children.icd9(short_code = TRUE, "1", real = FALSE)[1], "001")
-  expect_equal(icd_children.icd9(short_code = TRUE, "01", real = FALSE)[1], "001")
-  expect_equal(icd_children.icd9(short_code = TRUE, "001", real = FALSE)[1], "001")
-  expect_equal(icd_children.icd9(short_code = TRUE, "023", real = FALSE)[1], "023")
-  expect_equal(icd_children.icd9(short_code = TRUE, "23", real = FALSE)[1], "023")
-  expect_equal(icd_children.icd9(short_code = TRUE, "456", real = FALSE)[1], "456")
+  expect_equal(icd_children.icd9(short_code = TRUE, "1", defined = FALSE)[1], "001")
+  expect_equal(icd_children.icd9(short_code = TRUE, "01", defined = FALSE)[1], "001")
+  expect_equal(icd_children.icd9(short_code = TRUE, "001", defined = FALSE)[1], "001")
+  expect_equal(icd_children.icd9(short_code = TRUE, "023", defined = FALSE)[1], "023")
+  expect_equal(icd_children.icd9(short_code = TRUE, "23", defined = FALSE)[1], "023")
+  expect_equal(icd_children.icd9(short_code = TRUE, "456", defined = FALSE)[1], "456")
   expect_equal(
-    icd_children.icd9(short_code = TRUE, "E100", real = FALSE),
+    icd_children.icd9(short_code = TRUE, "E100", defined = FALSE),
     c("E100", "E1000", "E1001", "E1002", "E1003", "E1004",
       "E1005", "E1006", "E1007", "E1008", "E1009"))
-  expect_equal(icd_children.icd9(short_code = TRUE, "390", real = TRUE), "390")
+  expect_equal(icd_children.icd9(short_code = TRUE, "390", defined = TRUE), "390")
 })
 
 test_that("is_short doesn't cause error with icd_children when redundantly specified", {
   expect_identical(
-    icd_children("10201", real = FALSE),
-    icd_children("10201", short_code = TRUE, real = FALSE)
+    icd_children("10201", defined = FALSE),
+    icd_children("10201", short_code = TRUE, defined = FALSE)
   )
 })
 

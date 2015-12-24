@@ -9,6 +9,19 @@ icd9CountComorbidBin(x, visitId = get_visit_name(x), return.df = FALSE)
 
 icd_count_comorbid(x, visit_name = get_visit_name(x), return_df = FALSE)
 }
+\arguments{
+\item{x}{data frame with one row per patient, and a true/false or 1/0 flag
+for each column. By default, the first column is the patient identifier and
+is not counted. If \code{visitId} is not specified, the first column is
+used.}
+
+\item{visitId}{Deprecated. Use \code{visit_name}}
+
+\item{return.df}{Deprecated. Use return_df isntead. Single logical value, if
+\code{TRUE}, return the result as a data frame with the first column being
+the \code{visitId}, and the second being the count. If \code{visitId} was a
+factor or named differently in the input, this is preserved.}
+}
 \description{
 \code{icd_count_comorbid} differs from the other counting
   functions in that it counts _comorbidities_, not individual diagnoses. It

@@ -67,7 +67,7 @@ icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data")
 
   icd9_map_elix <- lapply(
     icd9_map_elix,
-    icd_children.icd9, short_code = TRUE, real = FALSE)
+    icd_children.icd9, short_code = TRUE, defined = FALSE)
 
   names(icd9_map_elix) <- icd9::icd_names_elix_htn_abbrev
   class(icd9_map_elix) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
@@ -150,7 +150,7 @@ icd9_generate_map_quan_elix <- function(condense = NULL,
 
   icd9_map_quan_elix <- lapply(
     icd9_map_quan_elix,
-    icd_children.icd9, short_code = TRUE, real = FALSE)
+    icd_children.icd9, short_code = TRUE, defined = FALSE)
 
   names(icd9_map_quan_elix) <- icd9::icd_names_quan_elix_htn_abbrev
   class(icd9_map_quan_elix) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
@@ -205,12 +205,12 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
   # category, whereas diabetes is kept as two categories
   names(quan_elix_raw) <- icd9::icd_names_elix_htn_abbrev
 
-  # this expansion will only be for 'real' codes (currently the most up-to-date
+  # this expansion will only be for 'defined' codes (currently the most up-to-date
   # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
 
   # this function accounts for the fact that some Quan Elixhauser ICD-10 codes
   # are not in fact defined in ICD-10-CM, and currently generation of ICD-10
-  # children is limited to "real" ones, but only as defined in ICD-10-CM, not
+  # children is limited to 'defined' ones, but only as defined in ICD-10-CM, not
   # ICD-10 in general.
   f <- function(x) {
     icd_children_defined.icd10cm(x, short_code = TRUE) %>%
@@ -279,16 +279,16 @@ icd10_generate_map_quan_charlson <- function() {
 
   names(quan_charl_raw) <- icd_names_charlson_abbrev
 
-  # this expansion will only be for 'real' codes (currently the most up-to-date
-  # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
+  # this expansion will only be for 'defined' codes (currently the most
+  # up-to-date canonical CMS ICD-10-CM list). Will ultimately need to generalize
+  # this.
 
-  # note that the children real is an ICD-10-CM function. This needs
+  # note that the children is actually an ICD-10-CM function. This needs
   # addressing. I already know that doing string matching is way too slow for
-  # millions of rows, so some compromise of an exhaustive list of
-  # WHO/ICD-10-CM children will likely be needed. Maybe generating a huge
-  # structure is still worth it, even for ICD-10-CM, because I do end up
-  # cutting it back down to size based on the input data before comorbidity
-  # matching.
+  # millions of rows, so some compromise of an exhaustive list of WHO/ICD-10-CM
+  # children will likely be needed. Maybe generating a huge structure is still
+  # worth it, even for ICD-10-CM, because I do end up cutting it back down to
+  # size based on the input data before comorbidity matching.
   icd10_map_quan_charlson <- lapply(quan_charl_raw, icd10_children_defined_short)
 
   # set S3 classes (in addition to "list")

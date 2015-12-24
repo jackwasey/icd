@@ -95,16 +95,16 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
   assertFlag(warn)
   if (!short_code) x <- icd_decimal_to_short.icd9(x)
 
-  # if there are only real codes, we should condense with this in mind:
+  # if there are only defined codes, we should condense with this in mind:
   if (condense) {
     if (warn && !all(icd_is_defined.icd9(x, short_code = TRUE))) {
-      unreal <- x[!icd_is_defined.icd9(x, short_code = TRUE)]
-      warning("Some ICD codes are not 'real' when trying to condense when explaining codes.
+      undefined <- x[!icd_is_defined.icd9(x, short_code = TRUE)]
+      warning("Some ICD codes are not 'defined' when trying to condense when explaining codes.
               Will drop these and continue. E.g. ",
-              paste(unreal[seq(from = 1, to = min(5, length(unreal)))],
+              paste(undefined[seq(from = 1, to = min(5, length(undefined)))],
                     collapse = " "), call. = FALSE)
     }
-    x <- icd_condense.icd9(icd_get_defined.icd9(x, short_code = TRUE), real = TRUE, short_code = TRUE)
+    x <- icd_condense.icd9(icd_get_defined.icd9(x, short_code = TRUE), defined = TRUE, short_code = TRUE)
   }
   mj <- unique(icd_get_major.icd9(x, short_code = TRUE))
 

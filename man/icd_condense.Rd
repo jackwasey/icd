@@ -10,15 +10,17 @@
 \alias{icd_condense.character}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
-icd_condense(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE)
+icd_condense(x, short_code = icd_guess_short(x), defined = NULL,
+  warn = TRUE)
 
 \method{icd_condense}{character}(x, short_code = icd_guess_short(x),
-  real = NULL, ...)
+  defined = NULL, ...)
 
-icd9_condense_decimal(x, real = NULL, warn = TRUE,
+icd9_condense_decimal(x, defined = NULL, warn = TRUE,
   keepFactorLevels = FALSE)
 
-icd9_condense_short(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE)
+icd9_condense_short(x, defined = NULL, warn = TRUE,
+  keepFactorLevels = FALSE)
 
 icd9Condense(icd9, isShort = icd_guess_short(icd9), onlyReal = NULL,
   warn = TRUE)

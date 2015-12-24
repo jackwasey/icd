@@ -8,7 +8,7 @@
 icd_comorbid_df_to_mat(x, visit_name = get_visit_name(x),
   stringsAsFactors = getOption("stringsAsFactors"))
 
-icd9ComorbidDfToMat(icd9df, visitId = get_visit_name(icd9df),
+icd9ComorbidDfToMat(x, visitId = get_visit_name(x),
   stringsAsFactors = getOption("stringsAsFactors"))
 }
 \arguments{
@@ -30,6 +30,17 @@ was not specified, then the first column of the data frame is used.}
 \item{stringsAsFactors}{whether the resulting data frame should have strings,
 i.e. visit_name converted to factor. Default is to follow the current session
 option.}
+
+\item{visitId}{Deprecated. Use \code{visit_name}}
+
+\item{x}{data frame, with a \code{visitId} column (not necessarily first),
+and other columns with flags for comorbidities, as such column names are
+required.}
+
+\item{stringsAsFactors}{Single logical value, describing whether the
+resulting data frame should have strings, i.e. visitId converted to factor.
+Default is to follow the current session option. This is identical to the
+argument used in, among other base functions \code{as.data.frame}.}
 }
 \description{
 convert matrix of comorbidities into data frame, preserving visit_name

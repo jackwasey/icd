@@ -56,11 +56,11 @@ NULL
 #' @keywords internal manip
 icd9ChaptersToMap <- function(x) {
   if (is.character(x) && exists(x)) x <- get(x)
-  checkmate::assertList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
+  assertList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- icd_expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, real = FALSE)
+    map[[r]] <- icd_expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = FALSE)
   }
   map
 }

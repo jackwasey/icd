@@ -48,7 +48,7 @@ parse_ahrq_sas <- function(
     unpaired_items <- sapply(somePairs, length) == 1
     out <- c()
     if (any(unpaired_items))
-      out <- icd_children.icd9(unlist(somePairs[unpaired_items]), real = FALSE, short_code = TRUE)
+      out <- icd_children.icd9(unlist(somePairs[unpaired_items]), defined = FALSE, short_code = TRUE)
 
     thePairs <- somePairs[lapply(somePairs, length) == 2]
     out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
@@ -101,9 +101,9 @@ parse_ahrq_sas <- function(
   #   condense to parents, for each parent, if children are all in the list, add the parent
   for (cmb in names(icd9_map_ahrq)) {
     message("working on ranges for: ", cmb)
-    parents <- icd_condense.icd9(icd9_map_ahrq[[cmb]], real = FALSE, short_code = TRUE)
+    parents <- icd_condense.icd9(icd9_map_ahrq[[cmb]], defined = FALSE, short_code = TRUE)
     for (p in parents) {
-      kids <- icd_children.icd9(p, real = FALSE, short_code = TRUE)
+      kids <- icd_children.icd9(p, defined = FALSE, short_code = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
       if (all(kids %in% icd9_map_ahrq[[cmb]]))
         icd9_map_ahrq[[cmb]] <- c(icd9_map_ahrq[[cmb]], p) %>% unique %>% icd_sort.icd9(short_code = TRUE)
@@ -161,11 +161,12 @@ parse_quan_deyo_sas <- function(sasPath = system.file("data-raw",
   # use validation: takes time, but these are run-once per package creation (and
   # test) tasks.
   icd9_map_quan_deyo <- lapply(icd9_map_quan_deyo, icd_children.icd9,
-                               short_code = TRUE, real = FALSE)
+                               short_code = TRUE, defined = FALSE)
 
   # do use icd9:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
   names(icd9_map_quan_deyo) <- icd9::icd_names_charlson_abbrev
-  if (save) save_in_data_dir(icd9_map_quan_deyo)
+  if (save)
+    save_in_data_dir(icd9_map_quan_deyo)
   invisible(icd9_map_quan_deyo)
 }

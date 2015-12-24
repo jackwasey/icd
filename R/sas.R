@@ -170,15 +170,15 @@ sasExtractLetStrings <- function(x) {
 # horrible kludge for difficult source data
 icd9ExpandRangeForSas <- function(start, end) {
   if (end == "0449") end <- start # HIV codes changed
-  reals <- icd_expand_range.icd9(start, end, short_code = TRUE, real = TRUE,
+reals <- icd_expand_range.icd9(start, end, short_code = TRUE, defined = TRUE,
                                 # hmmm, maybe get the diff and test all children of ambigs present later
                                 excludeAmbiguousStart = FALSE,
                                 excludeAmbiguousEnd = TRUE)
-  real_parents <- icd_condense.icd9(reals, real = TRUE, short_code = TRUE)
+  real_parents <- icd_condense.icd9(reals, defined = TRUE, short_code = TRUE)
   merged <- unique(c(reals, real_parents))
-  real_parents_of_merged <- icd_condense.icd9(merged, real = TRUE, short_code = TRUE)
-  halfway <- icd_children.icd9(real_parents_of_merged, real = FALSE, short_code = TRUE)
-  nonrealrange <- icd_expand_range.icd9(start, end, real = FALSE, short_code = TRUE,
+  real_parents_of_merged <- icd_condense.icd9(merged, defined = TRUE, short_code = TRUE)
+  halfway <- icd_children.icd9(real_parents_of_merged, defined = FALSE, short_code = TRUE)
+  nonrealrange <- icd_expand_range.icd9(start, end, defined = FALSE, short_code = TRUE,
                                        excludeAmbiguousStart = TRUE,
                                        excludeAmbiguousEnd = TRUE)
   icd_sort.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)

@@ -25,29 +25,31 @@
 #' @template onlyReal
 #' @family ICD-9 ranges
 #' @export
-icd_condense <- function(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE) {
+icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE) {
   UseMethod("icd_condense")
 }
 
-icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), real = NULL, warn = TRUE, ...) {
+#' @export
+#' @keywords internal
+icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
   assert(checkFactor(x), checkCharacter(x))
   assertFlag(short_code)
-  assert(checkNull(real), checkFlag(real))
+  assert(checkNull(defined), checkFlag(defined))
   assertFlag(warn)
   if (short_code)
-    icd9_condense_short(x, real = real, warn = warn, ...)
+    icd9_condense_short(x, defined = defined, warn = warn, ...)
   else
-    icd9_condense_decimal(x, real = real, warn = warn, ...)
+    icd9_condense_decimal(x, defined = defined, warn = warn, ...)
 }
 
 #' @describeIn icd_condense Condense a set of ICD codes, guessing ICD version from input data
 #' @export
-icd_condense.character <- function(x, short_code = icd_guess_short(x), real = NULL, ...) {
+icd_condense.character <- function(x, short_code = icd_guess_short(x), defined = NULL, ...) {
 
   guess <- icd_guess_version.character(x, short_code = short_code)
   if (guess == "icd9") {
     if (is.null(short_code)) short_code <- icd_guess_short.icd9(x)
-    icd_condense.icd9(x, short_code = short_code, real = real, ...)
+    icd_condense.icd9(x, short_code = short_code, defined = defined, ...)
   } else if (guess == "icd10") {
     if (is.null(short_code)) short_code <- icd_guess_short.icd10(x)
     stop("icd_condense.icd10 not implemented yet")
@@ -58,19 +60,19 @@ icd_condense.character <- function(x, short_code = icd_guess_short(x), real = NU
 
 #' @rdname icd_condense
 #' @keywords internal manip
-icd9_condense_decimal <- function(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE)
+icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE, keepFactorLevels = FALSE)
   icd_short_to_decimal.icd9(
     icd9_condense_short(
-      icd_decimal_to_short.icd9(x), real = real, warn = warn, keepFactorLevels = keepFactorLevels))
+      icd_decimal_to_short.icd9(x), defined = defined, warn = warn, keepFactorLevels = keepFactorLevels))
 
 #' @rdname icd_condense
 #' @template warn
 #' @param keepFactorLevels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
-icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = FALSE) {
+icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   assert(checkFactor(x), checkCharacter(x))
-  assert(checkNull(real), checkFlag(real))
+  assert(checkNull(defined), checkFlag(defined))
   assertFlag(warn)
   assertFlag(keepFactorLevels)
   icd9Levels <- levels(x) # NULL if not a factor
@@ -81,19 +83,20 @@ icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = 
   x <- asCharacterNoWarn(x)
   i9w <- unique(icd_get_valid.icd9(x, short_code = TRUE))
 
-  if (is.null(real)) {
+  if (is.null(defined)) {
     if (all(icd_is_defined.icd9(i9w, short_code = TRUE))) {
-      real <- TRUE
-      message("'onlyReal' not given, but all codes are 'real' so assuming TRUE")
+      defined <- TRUE
+      message("'defined' not given, but all codes are defined, so assuming TRUE")
     } else {
-      real <- FALSE
-      if (warn) warning("onlyReal not given, but not all codes are 'real' so assuming FALSE")
+      defined <- FALSE
+      if (warn)
+        warning("defined not given, but not all codes are defined so assuming FALSE")
     }
   }
 
-  if (warn && real && !all(icd_is_defined.icd9(x, short_code = TRUE))) {
+  if (warn && defined && !all(icd_is_defined.icd9(x, short_code = TRUE))) {
     x <- icd_get_defined.icd9(x, short_code = TRUE)
-    warning("only real values requested, but some undefined ('non-real') ICD-9 code(s) given, so dropping them")
+    warning("only defined values requested, but some undefined ICD-9 code(s) were given, so dropping them")
   }
 
   # find good four digit parents for five digit codes
@@ -105,12 +108,12 @@ icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = 
   # three digit code) and all their children can be removed from the work list
   out <- majors <- i9w[areMajor <- icd_is_major.icd9(i9w)]
   i9w <- i9w[!areMajor]
-  i9w <- i9w[i9w %nin% icd_children.icd9(majors, short_code = TRUE, real = real)]
+  i9w <- i9w[i9w %nin% icd_children.icd9(majors, short_code = TRUE, defined = defined)]
   fout <- c()
   four_digit_parents <- unique(substr(i9w, 0, 4))
   for (fp in four_digit_parents) {
     # onlyBillable at 5th level is same as onlyReal
-    test_kids <- icd_children.icd9(fp, real = real, short_code = TRUE, billable = FALSE)
+    test_kids <- icd_children.icd9(fp, defined = defined, short_code = TRUE, billable = FALSE)
     if (length(test_kids) > 0 && all(test_kids %in% c(fp, i9w))) {
       #if ((length(test_kids) > 1) || (fp %in% i9w)) {
       fout <- c(fout, fp)
@@ -129,7 +132,7 @@ icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = 
   # set new variable so we don't change the thing we are looping over...
   majorParents <- unique(icd_get_major.icd9(c(out, fout, i9w), short_code = TRUE))
   for (mp in majorParents) {
-    test_kids <- icd_children.icd9(mp, short_code = TRUE, real = real)
+    test_kids <- icd_children.icd9(mp, short_code = TRUE, defined = defined)
     test_kids <- test_kids[nchar(test_kids) < (5 + icd9_is_e(mp))] # we've done these already
     test_kids <- test_kids[-which(test_kids == mp)]
     if (length(test_kids) > 0 && all(test_kids %in% c(out, fout, i9w))) {
@@ -146,8 +149,8 @@ icd9_condense_short <- function(x, real = NULL, warn = TRUE, keepFactorLevels = 
       out <- factor(out)
   }
 
-  if (real)
-    icd_get_defined.icd9(out, short_code = TRUE) # should there be any non-real?
+  if (defined)
+    icd_get_defined.icd9(out, short_code = TRUE) # would there be any undefined?
   else
     out
 }

@@ -405,11 +405,11 @@ fixSubchapterNa <- function(x, start, end) {
 generate_sysdata <- function(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE) {
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
-    icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, real = FALSE)))
+    icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, defined = FALSE)))
   for (i in as.character(0:99))
-    icd9VShort <- c(icd9VShort, sort(icd_children.icd9(paste0("V", i), short_code = TRUE, real = FALSE)))
+    icd9VShort <- c(icd9VShort, sort(icd_children.icd9(paste0("V", i), short_code = TRUE, defined = FALSE)))
   for (i in as.character(0:999))
-    icd9EShort <- c(icd9EShort, sort(icd_children.icd9(paste0("E", i), short_code = TRUE, real = FALSE)))
+    icd9EShort <- c(icd9EShort, sort(icd_children.icd9(paste0("E", i), short_code = TRUE, defined = FALSE)))
 
   # we can either use the icd_is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.

@@ -415,8 +415,11 @@ warnNumericCode <- function()
 icd_is_valid.icd10who <- function(x, short_code = icd_guess_short.icd10(x), ...) {
   assertCharacter(x)
   assertFlag(short_code)
-  # SOMEDAY: check whether code has 'year' attribute. This is maybe more for testing 'realness'
-  # start with a broad regex
+  # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
+  # testing whether a code is defined for a particular set of ICD codes, e.g. an
+  # annual revision of ICD-10-CM
+
+  #  start with a broad regex
 
   str_trim(x) %>%
     str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")

@@ -10,7 +10,7 @@ icd_expand_range_major(start, end)
 
 \method{icd_expand_range_major}{icd10}(start, end)
 
-\method{icd_expand_range_major}{icd9}(start, end, real = TRUE)
+\method{icd_expand_range_major}{icd9}(start, end, defined = TRUE)
 }
 \description{
 Expand a pair of major codes into a range of major codes.

@@ -27,9 +27,9 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
   skip("this is not true because we don't fill in EVERY (unreal) possible code
        when there is odd specification of the range in the SAS code.")
   for (i in names(ahrqComorbid))
-    expect_true(setequal(icd9ChildrenShort(ahrqComorbid[[i]], onlyReal = FALSE), ahrqComorbid[[i]]),
+    expect_true(setequal(icd9ChildrenShort(ahrqComorbid[[i]], onlydefined = FALSE), ahrqComorbid[[i]]),
                 info = paste("missing from saved ahrq comorbid (", i, "): ",
-                             paste(setdiff(icd_children.icd9(ahrqComorbid[[i]], real = FALSE), ahrqComorbid[[i]]),
+                             paste(setdiff(icd_children.icd9(ahrqComorbid[[i]], defined = FALSE), ahrqComorbid[[i]]),
                                    collapse = ", "
                              )
                 )
@@ -38,17 +38,18 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
 
 test_that("Elixhauser make sure all the children are listed in the saved data.", {
   for (i in elixComorbid)
-    expect_equal(icd_children.icd9(i, real = FALSE, short_code = TRUE), sort(i))
+    expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
+
 })
 
 test_that("Quan Charlson make sure all the children are listed in the saved data.", {
   for (i in quanDeyoComorbid)
-    expect_equal(icd_children.icd9(i, real = FALSE, short_code = TRUE), sort(i))
+    expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
 })
 
 test_that("Quan Elixhauser make sure all the children are listed in the saved data.", {
   for (i in quanElixComorbid)
-    expect_equal(icd_children.icd9(i, real = FALSE, short_code = TRUE), sort(i))
+    expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
 })
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
@@ -123,16 +124,16 @@ test_that("can condense the big lists of comorbidities without errors", {
 
   for (onlyReal in c(TRUE, FALSE)) {
     if (onlyReal) {
-      expect_warning(ahrq <- lapply(ahrqComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal))
-      expect_warning(quanDeyo <- lapply(quanDeyoComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal))
-      expect_warning(quanElix <- lapply(quanElixComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal))
-      expect_warning(elix <- lapply(elixComorbid, icd_condense.icd9, real = onlyReal))
+      expect_warning(ahrq <- lapply(ahrqComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
+      expect_warning(quanDeyo <- lapply(quanDeyoComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
+      expect_warning(quanElix <- lapply(quanElixComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
+      expect_warning(elix <- lapply(elixComorbid, icd_condense.icd9, defined = onlyReal))
     }
     else {
-      expect_warning(ahrq <- lapply(ahrqComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal), NA)
-      expect_warning(quanDeyo <- lapply(quanElixComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal), NA)
-      expect_warning(quanElix <- lapply(quanDeyoComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal), NA)
-      expect_warning(elix <- lapply(elixComorbid, icd_condense.icd9, short_code = TRUE, real = onlyReal), NA)
+      expect_warning(ahrq <- lapply(ahrqComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
+      expect_warning(quanDeyo <- lapply(quanElixComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
+      expect_warning(quanElix <- lapply(quanDeyoComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
+      expect_warning(elix <- lapply(elixComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
     }
 
     expect_is(ahrq, class = "list")
