@@ -4,24 +4,18 @@
 \alias{icd9_generate_map_elix}
 \title{Generate Elixhauser comorbidities}
 \usage{
-icd9_generate_map_elix(condense = NULL, save = FALSE, path = "data")
+icd9_generate_map_elix(condense = NULL, save_data = FALSE)
 }
 \arguments{
-\item{condense}{logical whether to condense the result ranges to the minimal
-set of parent ICD-9 codes which exactly define the list. Defaults to
-\code{FALSE} so that the saved list will allow rapid look-up of codes
-without further processing. Small memory versus time trade-off.}
+\item{condense}{Deprecated. The map is not condensed by default. If required,
+it can reduced to a smaller set of codes using \code{icd_condense}.}
 
-\item{save}{logical whether to save the result in the source tree. Defaults
-to \code{FALSE}.}
-
-\item{path}{path to directory to save the data. This is typically the data
-folder in the devleopment source tree. Defaults to \code{"~/icd9/data"}.
-Could possibly avoid hard-coding path with devtools functions.}
+\item{save_data}{logical whether to save the result in the source tree.
+Defaults to \code{FALSE}.}
 }
 \value{
-invisibly returns the list of vectors, where a
-  co-morbidity name is associated with a character vector of ICD-9 codes.
+invisibly returns the list of vectors, where a co-morbidity name is
+  associated with a character vector of ICD-9 codes.
 }
 \description{
 This function uses the \code{\%i9d\%} operator, so cannot be

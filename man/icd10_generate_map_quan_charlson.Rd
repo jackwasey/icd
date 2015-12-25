@@ -2,15 +2,23 @@
 % Please edit documentation in R/generate_mappings.R
 \name{icd10_generate_map_quan_charlson}
 \alias{icd10_generate_map_quan_charlson}
-\title{Generate Quan mapping for Charlson categories of ICD-10 codes
- Based on Quan's SAS lists, transcribed by wmurphyrd
- @export}
+\title{Generate Quan mapping for Charlson categories of ICD-10 codes}
 \usage{
-icd10_generate_map_quan_charlson()
+icd10_generate_map_quan_charlson(save_data = TRUE)
+}
+\arguments{
+\item{save_data}{logical whether to save the result in the source tree.
+Defaults to \code{FALSE}.}
+
+\item{condense}{Deprecated. The map is not condensed by default. If required,
+it can reduced to a smaller set of codes using \code{icd_condense}.}
+}
+\value{
+invisibly returns the list of vectors, where a co-morbidity name is
+  associated with a character vector of ICD-9 codes.
 }
 \description{
-Generate Quan mapping for Charlson categories of ICD-10 codes
- Based on Quan's SAS lists, transcribed by wmurphyrd
- @export
+Based on Quan's SAS lists, transcribed by wmurphyrd
 }
+\keyword{internal}
 

@@ -4,13 +4,18 @@
 \alias{icd10_generate_map_quan_elix}
 \title{generate ICD-10 Quan/Elixhauser maping}
 \usage{
-icd10_generate_map_quan_elix(save = TRUE)
+icd10_generate_map_quan_elix(save_data = TRUE)
 }
 \arguments{
-\item{save}{logical whether to save the result}
+\item{save_data}{logical whether to save the result in the source tree.
+Defaults to \code{FALSE}.}
+
+\item{condense}{Deprecated. The map is not condensed by default. If required,
+it can reduced to a smaller set of codes using \code{icd_condense}.}
 }
 \value{
-invisibly return the generated data
+invisibly returns the list of vectors, where a co-morbidity name is
+  associated with a character vector of ICD-9 codes.
 }
 \description{
 generate ICD-10 Quan/Elixhauser maping

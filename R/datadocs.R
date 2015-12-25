@@ -131,7 +131,7 @@ NULL
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #' @name icd9_map_quan_deyo
-#' @aliases quanDeyoComorbid
+#' @aliases quanDeyoComorbid icd10_map_quan_deyo
 NULL
 
 #' @title Quan adaptation of Elixhauser comorbidities
@@ -147,7 +147,7 @@ NULL
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #'
-#' @name icd9_map_quan_elix
+#' @name icd9_map_quan_elix icd10_map_quan_elix
 #' @aliases quanElixComorbid
 NULL
 
@@ -170,7 +170,8 @@ NULL
 #'   Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna M. Coffey.
 #'   "Comorbidity Measures for Use with Administrative Data." Medical Care
 #'   January 1998 36, no. 1 (1998): 8-27.
-#' @name elixComorbid
+#'   @name icd9_map_elix icd10_map_elix
+#' @aliases elixComorbid
 NULL
 
 #' @title Comorbidity names

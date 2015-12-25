@@ -16,24 +16,18 @@ can verify that the code creates the distributed R data. Also, changes to
 the original SAS code can be used to regenerate the R data by the user,
 without waiting for a package release.}
 
-\item{save}{logical whether to save the result in the source tree. Defaults
-to \code{FALSE}.}
+\item{condense}{Deprecated. The map is not condensed by default. If required,
+it can reduced to a smaller set of codes using \code{icd_condense}.}
 
-\item{path}{path to directory to save the data. This is typically the data
-folder in the devleopment source tree. Defaults to \code{"~/icd9/data"}.
-Could possibly avoid hard-coding path with devtools functions.}
-
-\item{condense}{logical whether to condense the result ranges to the minimal
-set of parent ICD-9 codes which exactly define the list. Defaults to
-\code{FALSE} so that the saved list will allow rapid look-up of codes
-without further processing. Small memory versus time trade-off.}
+\item{save_data}{logical whether to save the result in the source tree.
+Defaults to \code{FALSE}.}
 
 \item{returnAll}{logical which, if TRUE, will result in the invisible return
 of icd9_map_ahrq_all result, otherwise, icd9_map_ahrq is reutrned.}
 }
 \value{
-invisibly returns the list of vectors, where a
-  co-morbidity name is associated with a character vector of ICD-9 codes.
+invisibly returns the list of vectors, where a co-morbidity name is
+  associated with a character vector of ICD-9 codes.
 }
 \description{
 Takes the raw data taken directly from the AHRQ web site and

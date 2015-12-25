@@ -6,7 +6,7 @@
 #'   \code{datadocs.R}.
 #' @template parse-template
 #' @keywords internal
-icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data") {
+icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE) {
   if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix",
                                   call. = FALSE)
   icd9_map_elix <- list(
@@ -72,7 +72,8 @@ icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data")
   names(icd9_map_elix) <- icd9::icd_names_elix_htn_abbrev
   class(icd9_map_elix) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
 
-  if (save) save_in_data_dir(icd9_map_elix)
+  if (save_data)
+    save_in_data_dir(icd9_map_elix)
   invisible(icd9_map_elix)
 }
 
@@ -82,8 +83,7 @@ icd9_generate_map_elix <- function(condense = NULL, save = FALSE, path = "data")
 #' @template parse-template
 #' @keywords internal
 icd9_generate_map_quan_elix <- function(condense = NULL,
-                                        save = FALSE,
-                                        path = "data") {
+                                        save_data = FALSE) {
 
   if (!missing(condense))
     warning("'condense' is deprecated in icd9_generate_map_elix, and no longer has any effect.
@@ -155,7 +155,7 @@ icd9_generate_map_quan_elix <- function(condense = NULL,
   names(icd9_map_quan_elix) <- icd9::icd_names_quan_elix_htn_abbrev
   class(icd9_map_quan_elix) <- c("icd_comorbidity_map", "icd9", "icd_short", "list")
 
-  if (save) save_in_data_dir(icd9_map_quan_elix)
+  if (save_data) save_in_data_dir(icd9_map_quan_elix)
   invisible(icd9_map_quan_elix)
 }
 
@@ -163,10 +163,9 @@ icd9_generate_map_quan_elix <- function(condense = NULL,
 #'
 #' @details Started with Quan's SAS code (in \code{data-raw}):
 #` \code{grep %STR\(.*[[:digit:]] ICD10_Elixhauser.sas}
-#' @param save logical whether to save the result
-#' @return invisibly return the generated data
+#' @template parse-template
 #' @keywords internal
-icd10_generate_map_quan_elix <- function(save = TRUE) {
+icd10_generate_map_quan_elix <- function(save_data = TRUE) {
 
   quan_elix_raw <- list(
     c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426", "I427", "I428", "I429", "I43", "I50", "P290"),
@@ -233,15 +232,17 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
-  if (save)
+  if (save_data)
     save_in_data_dir(icd10_map_quan_elix)
   invisible(icd10_map_quan_elix)
 }
 
 #' Generate Quan mapping for Charlson categories of ICD-10 codes
-#'  Based on Quan's SAS lists, transcribed by wmurphyrd
-#'  @export
-icd10_generate_map_quan_charlson <- function(save = TRUE) {
+#'
+#' Based on Quan's SAS lists, transcribed by wmurphyrd
+#' @template parse-template
+#' @keywords internal
+icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   quan_charl_raw <- list(
     mi = c("I21", "I22", "I252"),
     chf = c("I43", "I50", "I099", "I110", "I130", "I132",
@@ -303,19 +304,22 @@ icd10_generate_map_quan_charlson <- function(save = TRUE) {
       c(x) %>% unique %>% icd_sort.icd10
   }
 
-
-  icd10_map_quan_charlson <-
+  icd10_map_quan_deyo <-
     lapply(quan_charl_raw, f) %>%
     icd10 %>% icd_short_code %>% icd_comorbidity_map
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
-  if (save)
-    save_in_data_dir(icd10_map_quan_charlson)
-  invisible(icd10_map_quan_charlson)
+  if (save_data)
+    save_in_data_dir(icd10_map_quan_deyo)
+  invisible(icd10_map_quan_deyo)
 }
 
 #' generate uranium pathology data
+#'
+#' This is downloaded from WSU where it appears to be provided in the public
+#' domain.
+#' @template parse-template
 #' @keywords internal
 generate_uranium_pathology <- function(save_data = FALSE) {
 
@@ -338,11 +342,15 @@ generate_uranium_pathology <- function(save_data = FALSE) {
 
   class(uranium_pathology) <- c("icd10who", "icd10", "icd_long_data", "icd_decimal_code", "data.frame")
 
-  if (save_data) save_in_data_dir(uranium_pathology)
+  if (save_data)
+    save_in_data_dir(uranium_pathology)
   invisible(uranium_pathology)
 }
 
 #' generate vermont_dx data
+#'
+#' Generate the Veromnt data from healthvermont.gov
+#' @template parse-template
 #' @keywords internal
 generate_vermont_dx <- function(save_data = FALSE) {
 
