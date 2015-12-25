@@ -29,7 +29,7 @@ test_that("setting conflicting icd data class gives error", {
   expect_error(icd9cm(icd10who("V10")))
 })
 
-x <- icd9::quanElixComorbid
+x <- icd9::icd9_map_quan_elix
 
 test_that("constructing a comorbidity map works", {
   expect_equal(icd_comorbidity_map(x), x)
@@ -42,6 +42,28 @@ test_that("constructing a comorbidity map with unnamed list, etc. fails", {
   # and data frames should definitely fail
   expect_error(icd_comorbidity_map(icd9::vermont_dx))
   expect_error(icd_comorbidity_map(icd9::uranium_pathology))
+})
+
+test_that("subsetting a comorbidity map gives the right class", {
+
+  wonky_map <- icd_comorbidity_map(icd_short_code(icd9cm(list(a = icd9cm("100"), b = icd9("V22")))))
+
+  expect_is(wonky_map, "icd_comorbidity_map")
+  expect_is(wonky_map, "icd_short_code")
+  expect_is(wonky_map, "icd9cm")
+  expect_is(wonky_map, "icd9")
+
+  expect_true(!inherits(wonky_map[[1]], "icd_comorbidity_map"))
+  expect_is(wonky_map[[1]], "icd_short_code")
+  expect_is(wonky_map[[1]], "icd9cm")
+  expect_is(wonky_map[[1]], "icd9")
+  expect_is(wonky_map[[1]], "character")
+
+  expect_true(!inherits(wonky_map[[2]], "icd_comorbidity_map"))
+  expect_is(wonky_map[[2]], "icd_short_code")
+  expect_is(wonky_map[[2]], "icd9cm")
+  expect_is(wonky_map[[2]], "icd9")
+  expect_is(wonky_map[[2]], "character")
 })
 
 test_that("constructing wide data works", {

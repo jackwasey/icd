@@ -28,7 +28,9 @@ move to C++ or own R file:
 \itemize{
 \item \code{icd10}: check whether a code is an ICD-10 major
 
-\item \code{icd10cm}: check whether a code is an ICD-10-CM major
+\item \code{icd10cm}: check whether a code is an ICD-10-CM major.
+Currently uses \code{stringr} which uses \code{stringi} which should be
+quite fast, but does suffer from handling unicode, locales, etc.
 
 \item \code{icd10who}: check whether a code is an ICD-10 WHO major
 

@@ -140,10 +140,10 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
   the three-character categories are subdivided by means of a fourth, numeric
   character after a decimal point, allowing up to 10 subcategories. Where a
   three-character category is not subdivided, it is recommended that the
-  letter ‘X’ be used to fill the fourth position, so that the codes are of a
+  letter 'X' be used to fill the fourth position, so that the codes are of a
   standard length for data-processing."
 
-  officially, WHO standard goes to 3+1 digits, but there are officially
+  Officially, WHO standard goes to 3+1 digits, but there are officially
   sanctioned extensions which use additional digits, e.g. neurology,
   pediatrics, and of course ICD-10-CM.
 }

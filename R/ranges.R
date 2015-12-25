@@ -127,11 +127,13 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
 icd10_expand_range_possible_short <- function(start, end) {
   assertString(start)
   assertString(end)
-  # check whether valid?
-  # check whether defined? Will error if not.
 
-  start <- stringr::str_trim(start)
-  end <- stringr::str_trim(end)
+  stopifnot(all(icd_is_valid.icd10(c(start, end))))
+
+  # check whether defined? No: this is specifically for undefined codes?
+
+  start <- str_trim(start)
+  end <- str_trim(end)
 
   start_char <- substr(start, 1, 1)
   end_char <- substr(end, 1, 1)
@@ -144,7 +146,7 @@ icd10_expand_range_possible_short <- function(start, end) {
 
   start_other_chars <- substr(start, 4, 10)
   end_other_chars <- substr(end, 4, 10)
-
+  stop("Not implemented fully", start_other_chars, end_other_chars)
 }
 
 #' @title Expand major codes to range
@@ -159,14 +161,13 @@ icd_expand_range_major.icd10 <- function(start, end) {
   assertString(start)
   assertString(end)
 
-  start <- stringr::str_trim(start)
-  end <- stringr::str_trim(end)
-
+  start <- str_trim(start)
+  end <- str_trim(end)
 
   stopifnot(icd_is_major(start), icd_is_major(end))
   stopifnot(start <= end)
-  start_first <- stringr::str_sub(start, 1, 1) %>% str_to_upper()
-  end_first <- stringr::str_sub(end, 1, 1) %>% str_to_upper()
+  start_first <- str_sub(start, 1, 1) %>% str_to_upper()
+  end_first <- str_sub(end, 1, 1) %>% str_to_upper()
 
   stop("not finished implementing")
   if (start_first == end_first)

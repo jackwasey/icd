@@ -59,7 +59,7 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE) {
 download_to_data_raw <- function(url, file_name = NULL, force = FALSE) {
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
   if (is.null(file_name))
-    file_name <- stringr::str_extract(url, "[^/]*$")
+    file_name <- str_extract(url, "[^/]*$")
   save_path <- file.path(data_raw_path, file_name)
 
   if (force || !file.exists(save_path))

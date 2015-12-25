@@ -340,18 +340,20 @@ icd_is_major.icd10 <- function(x) {
   icd_is_major.icd10cm(x)
 }
 
-#' @describeIn icd_is_major check whether a code is an ICD-10-CM major
+#' @describeIn icd_is_major check whether a code is an ICD-10-CM major.
+#'   Currently uses \code{stringr} which uses \code{stringi} which should be
+#'   quite fast, but does suffer from handling unicode, locales, etc.
 #' @keywords internal
 icd_is_major.icd10cm <- function(x) {
   assertCharacter(x)
-  stringr::str_detect(x, "^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]*$")
+  str_detect(x, "^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]*$")
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 WHO major
 #' @keywords internal
 icd_is_major.icd10who <- function(x) {
   assertCharacter(x)
-  stringr::str_detect(x, "^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]][[:space:]]*$")
+  str_detect(x, "^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]][[:space:]]*$")
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-9 major
@@ -405,10 +407,10 @@ warnNumericCode <- function()
 #'   the three-character categories are subdivided by means of a fourth, numeric
 #'   character after a decimal point, allowing up to 10 subcategories. Where a
 #'   three-character category is not subdivided, it is recommended that the
-#'   letter ‘X’ be used to fill the fourth position, so that the codes are of a
+#'   letter 'X' be used to fill the fourth position, so that the codes are of a
 #'   standard length for data-processing."
 #'
-#'   officially, WHO standard goes to 3+1 digits, but there are officially
+#'   Officially, WHO standard goes to 3+1 digits, but there are officially
 #'   sanctioned extensions which use additional digits, e.g. neurology,
 #'   pediatrics, and of course ICD-10-CM.
 #' @export

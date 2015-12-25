@@ -1,5 +1,25 @@
 context("test content of icd-10 to comorbidity maps")
 
+test_that("the icd-10 quan elix comorbidity map data is exactly as produced by the generator", {
+  expect_identical(icd10_map_quan_elix, icd10_generate_map_quan_elix(save = FALSE))
+})
+
+test_that("the class of the quan elix map is correct", {
+
+})
+
+test_that("the class of each element of the quan elix map is correct", {
+  for (i in names(icd10_map_quan_elix)) {
+    expect_is(icd10_map_quan_elix[[i]], class = c("icd10", "character"), info = i)
+    # although we derive the map from ICD-10-CM, it need not be so, and it may be more broad in the future:
+    expect_false(inherits(icd10_map_quan_elix[[i]], "icd10cm"), info = i)
+    # not a list, it is a character vector
+    expect_false(inherits(icd10_map_quan_elix[[i]], "list"), info = i)
+    # this is the parent class, not the class of the elements
+    expect_false(inherits(icd10_map_quan_elix[[i]], "icd_comorbidity_map"), info = i)
+  }
+})
+
 test_that("independently created list of Quan Elixhauser codes all appear", {
   quan_elix_independent <- list(
     chf = c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426", "I427", "I428", "I429", "I43", "I50", "P290"),
@@ -48,4 +68,9 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
     #expect_equal(setdiff(canon, indep_kids), character(), info = paste("checking quan elix indep in canonical: ", i, " - ", names(quan_elix_independent)[i]))
   }
 
+})
+
+test_that("some hand-picked ICD-10 codes appear in the mapping", {
+  expect_true("M12019" %in% icd10_map_quan_elix$Rheumatic)
+  #TODO more
 })

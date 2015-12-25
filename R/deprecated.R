@@ -734,7 +734,7 @@ icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FAL
 #' @rdname icd_long_to_wide
 #' @param icd9df data.frame of long-form data, one column for visitId and one
 #'   for ICD code
-#' @template visitid
+#' @template visitId
 #' @template icd9field
 #' @param min.width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to

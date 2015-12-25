@@ -217,22 +217,31 @@ icd10_generate_map_quan_elix <- function(save = TRUE) {
       c(x) %>% unique %>% icd_sort.icd10
   }
 
-  icd10_map_quan_elix <- lapply(quan_elix_raw, f)
+  icd10_map_quan_elix <- lapply(quan_elix_raw, f) %>%
+    icd10 %>% icd_short_code %>% icd_comorbidity_map
 
   # set S3 classes (in addition to "list")
   # this is a comorbidity map first and foremost (after being a list?)
-  class(icd10_map_quan_elix) <- c("icd_comorbidity_map", "icd10cm", "icd10", "list")
+  #class(icd10_map_quan_elix) <- c("icd_comorbidity_map", "icd10", "list")
+
+  # icd10_map_quan_elix <- lapply(icd10_map_quan_elix,
+  #                               function(x) {
+  #                                 class(x) <- c("icd10", "character")
+  #                                 x
+  #                               })
+
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
-  if (save) save_in_data_dir(icd10_map_quan_elix)
+  if (save)
+    save_in_data_dir(icd10_map_quan_elix)
   invisible(icd10_map_quan_elix)
 }
 
 #' Generate Quan mapping for Charlson categories of ICD-10 codes
 #'  Based on Quan's SAS lists, transcribed by wmurphyrd
 #'  @export
-icd10_generate_map_quan_charlson <- function() {
+icd10_generate_map_quan_charlson <- function(save = TRUE) {
   quan_charl_raw <- list(
     mi = c("I21", "I22", "I252"),
     chf = c("I43", "I50", "I099", "I110", "I130", "I132",
@@ -277,7 +286,7 @@ icd10_generate_map_quan_charlson <- function() {
     hiv = c("B20", "B21", "B22", "B24")
   )
 
-  names(quan_charl_raw) <- icd_names_charlson_abbrev
+  names(quan_charl_raw) <- icd9::icd_names_charlson_abbrev
 
   # this expansion will only be for 'defined' codes (currently the most
   # up-to-date canonical CMS ICD-10-CM list). Will ultimately need to generalize
@@ -289,15 +298,20 @@ icd10_generate_map_quan_charlson <- function() {
   # children will likely be needed. Maybe generating a huge structure is still
   # worth it, even for ICD-10-CM, because I do end up cutting it back down to
   # size based on the input data before comorbidity matching.
-  icd10_map_quan_charlson <- lapply(quan_charl_raw, icd10_children_defined_short)
+  f <- function(x) {
+    icd_children_defined.icd10cm(x, short_code = TRUE) %>%
+      c(x) %>% unique %>% icd_sort.icd10
+  }
 
-  # set S3 classes (in addition to "list")
-  # this is a comorbidity map first and foremost (after being a list?)
-  class(icd10_map_quan_charlson) <- c("list", "icd_comorbidity_map", "icd10cm", "icd10")
+
+  icd10_map_quan_charlson <-
+    lapply(quan_charl_raw, f) %>%
+    icd10 %>% icd_short_code %>% icd_comorbidity_map
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
-  if (save) save_in_data_dir(icd10_map_quan_charlson)
+  if (save)
+    save_in_data_dir(icd10_map_quan_charlson)
   invisible(icd10_map_quan_charlson)
 }
 

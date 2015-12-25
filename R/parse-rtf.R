@@ -125,7 +125,7 @@ parse_rtf_lines <- function(lines, verbose = FALSE) {
     # get prior code
     filtered[ql - 1] %>%
       str_subset(pattern = paste0("(", re_anycode, ") (.*)")) %>%
-      unlist %>% magrittr::extract2(2) -> code
+      unlist %>% extract2(2) -> code
     sb <- parseRtfQualifierSubset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
     if (length(inv_sb) == 0) next

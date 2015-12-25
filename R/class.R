@@ -221,28 +221,10 @@ icd_decimal_code <- function(x) {
 #' @export
 icd_comorbidity_map <- function(x) {
   assertList(x, any.missing = FALSE, min.len = 1, names = "unique")
-  if (inherits(x, "icd_comorbidity_map")) return(x)
+  if (inherits(x, "icd_comorbidity_map"))
+    return(x)
   class(x) <- append(class(x), "icd_comorbidity_map", after = 0)
   x
-}
-
-# for comorbidity maps, if we subset, we want the result to have icd classes:
-
-
-#' extract elements of an ICD comorbidity map
-#'
-#' Equivalent to a list, but preserves class of extracted elements
-#' @param x comorbidity map to be subsetted. This is a named list.
-#' @param index integer
-#' @param ... other arguments passed to the usual \code{[}
-#' @export
-`[.icd_comorbidity_map` <- function(x, index, ...) {
-  new_classes <- class(x)
-  new_classes <- new_classes[new_classes != "icd_comorbidity_map"]
-  y <- unclass(x)
-  out <- y[index, ...]
-  class(out) <- new_classes
-  out
 }
 
 #' extract vector of codes from an ICD comorbidity map
@@ -253,11 +235,15 @@ icd_comorbidity_map <- function(x) {
 #' @param ... other arguments passed to the usual \code{[}
 #' @export
 `[[.icd_comorbidity_map` <- function(x, index, ...) {
-  new_classes <- class(x)
-  new_classes <- new_classes[new_classes != "icd_comorbidity_map"]
-  y <- unclass(x)
-  out <- y[[index, ...]]
-  class(out) <- new_classes
+  x_cl <- class(x)
+
+  enforce_child_classes <- x_cl[x_cl %in% c(icd_code_classes,
+                                            icd_version_classes,
+                                            icd_data_classes)]
+
+  out <- NextMethod()
+  missing_classes <- setdiff(enforce_child_classes, class(out))
+  class(out) <- append(class(out), missing_classes, 0)
   out
 }
 

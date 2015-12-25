@@ -16,14 +16,14 @@ icd10_get_who_from_cdc <- function() {
 
   # ignore locale issue right now. This set has a lot of the different cases: dat[70:75,]
   readr::read_lines(file_path, skip = 7) %>%
-    stringr::str_trim() %>%
-    stringr::str_match("(.*\\t)?(.+)\\t+(.+)") -> dat
+    str_trim() %>%
+    str_match("(.*\\t)?(.+)\\t+(.+)") -> dat
 
   code_or_range <- dat[, 3]
   desc <- dat[, 4]
 
   # this data set does not explicitly say which codes are leaves or parents.
-  is_range <- stringr::str_detect(code_or_range, "-")
+  is_range <- str_detect(code_or_range, "-")
   # this is a mix of chapters and sub-chapters, and would require processing to
   # figure out which
 
@@ -38,7 +38,7 @@ icd10_get_who_from_cdc <- function() {
   #[1] "*U01"   "*U01.0" "*U01.1" "*U01.2" "*U01.3" "*U01.4" "*U01.5" "*U01.6" "*U01.7" "*U01.8" "*U01.9" "*U02"   "*U03"   "*U03.0"
   #[15] "*U03.9" NA
 
-
+stop("work in progress", codes_desc, desc)
 }
 
 #' get all ICD-10-CM codes
@@ -193,22 +193,22 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
       # new way
       selenium_driver$findElements(using = "xpath", "//div[@class='Category1']//a[@class='code']") %>%
         vapply(function(x) unlist(x$getElementText()), character(1)) %>%
-        stringr::str_trim() -> majors
+        str_trim() -> majors
 
       selenium_driver$findElements(using = "xpath", "//div[@class='Category1']//span[@class='label']") %>%
         vapply(function(x) unlist(x$getElementText()), character(1)) %>%
-        stringr::str_trim()  %>%
-           stringr::str_replace_all("[[:space:]]+", " ") -> majors_desc
+        str_trim()  %>%
+           str_replace_all("[[:space:]]+", " ") -> majors_desc
 
 
       selenium_driver$findElements(using = "xpath", "//div[@class='Category2']//a[@class='code']") %>%
         vapply(function(x) unlist(x$getElementText()), character(1)) %>%
-        stringr::str_trim() -> leaves
+        str_trim() -> leaves
 
       selenium_driver$findElements(using = "xpath", "//div[@class='Category2']//span[@class='label']") %>%
         vapply(function(x) unlist(x$getElementText()), character(1)) %>%
-        stringr::str_trim()  %>%
-        stringr::str_replace_all("[[:space:]]+", " ") -> leaves_desc
+        str_trim()  %>%
+        str_replace_all("[[:space:]]+", " ") -> leaves_desc
 
 
       #sub_chapter_html <- selenium_driver$getPageSource()
@@ -218,13 +218,13 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
       # sub_chapter_xml %>%
       #   xml2::xml_find_all("//div[@class='Category1']//a[@class='code']") %>%
       #   xml2::xml_text() %>%
-      #   stringr::str_trim() -> majors
+      #   str_trim() -> majors
       #
       # sub_chapter_xml %>%
       #   xml2::xml_find_all("//div[@class='Category1']//span[@class='label']") %>%
       #   xml2::xml_text() %>%
-      #   stringr::str_trim() %>%
-      #   stringr::str_replace_all("[[:space:]]+", " ") -> majors_desc
+      #   str_trim() %>%
+      #   str_replace_all("[[:space:]]+", " ") -> majors_desc
 
       # sanity check
       if (debug)
@@ -237,13 +237,13 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
       # sub_chapter_xml %>%
       #   xml2::xml_find_all("//div[@class='Category2']//a[@class='code']") %>%
       #   xml2::xml_text() %>%
-      #   stringr::str_trim() -> leaves
+      #   str_trim() -> leaves
       #
       # sub_chapter_xml %>%
       #   xml2::xml_find_all("//div[@class='Category2']//span[@class='label']") %>%
       #   xml2::xml_text() %>%
-      #   stringr::str_trim() %>%
-      #   stringr::str_replace_all("[[:space:]]+", " ") -> leaves_desc
+      #   str_trim() %>%
+      #   str_replace_all("[[:space:]]+", " ") -> leaves_desc
 
       if (debug)
         browser(expr = length(leaves) != length(leaves_desc))
