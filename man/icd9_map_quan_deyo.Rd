@@ -2,6 +2,7 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_map_quan_deyo}
+\alias{icd10_map_quan_deyo}
 \alias{icd9_map_quan_deyo}
 \alias{quanDeyoComorbid}
 \title{Quan adaptation of Deyo/Charlson comorbidities}

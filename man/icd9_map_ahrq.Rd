@@ -5,6 +5,7 @@
 \alias{ahrq}
 \alias{ahrqComorbid}
 \alias{ahrqComorbidAll}
+\alias{icd10_map_ahrq}
 \alias{icd9_map_ahrq}
 \alias{icd9_map_ahrq_all}
 \title{AHRQ comorbidities}

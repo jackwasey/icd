@@ -98,7 +98,7 @@ NULL
 #' @source
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @name icd9_map_ahrq
-#' @aliases ahrqComorbid ahrq
+#' @aliases ahrqComorbid ahrq icd10_map_ahrq
 NULL
 
 #' @rdname icd9_map_ahrq
@@ -147,8 +147,8 @@ NULL
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #'
-#' @name icd9_map_quan_elix icd10_map_quan_elix
-#' @aliases quanElixComorbid
+#' @name icd9_map_quan_elix
+#' @aliases quanElixComorbid icd10_map_quan_elix
 NULL
 
 #' @title Elixhauser comorbidities
@@ -170,8 +170,8 @@ NULL
 #'   Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna M. Coffey.
 #'   "Comorbidity Measures for Use with Administrative Data." Medical Care
 #'   January 1998 36, no. 1 (1998): 8-27.
-#'   @name icd9_map_elix icd10_map_elix
-#' @aliases elixComorbid
+#' @name icd9_map_elix
+#' @aliases elixComorbid icd10_map_elix
 NULL
 
 #' @title Comorbidity names

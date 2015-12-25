@@ -27,11 +27,11 @@
 #' @keywords internal
 parse_ahrq_sas <- function(
   sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
-  save = FALSE, path = "data") {
+  save_data = FALSE, path = "data") {
 
   assertString(sasPath)
   assertString(path)
-  assertFlag(save)
+  assertFlag(save_data)
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
   close(f)
@@ -111,7 +111,7 @@ parse_ahrq_sas <- function(
   }
 
   names(icd9_map_ahrq) <- icd9::icd_names_ahrq_htn_abbrev
-  if (save) {
+  if (save_data) {
     save_in_data_dir("icd9_map_ahrq") # nocov
     save_in_data_dir("icd9_map_ahrq_all") # nocov
   }
@@ -140,10 +140,10 @@ parse_quan_deyo_sas <- function(sasPath = system.file("data-raw",
                                                       "ICD9_E_Charlson.sas",
                                                       package = get_pkg_name()),
                                 condense = NULL,
-                                save = FALSE,
+                                save_data = FALSE,
                                 path = "data") {
   assertFile(sasPath)
-  assertFlag(save)
+  assertFlag(save_data)
   assertString(path)
 
 
@@ -166,7 +166,7 @@ parse_quan_deyo_sas <- function(sasPath = system.file("data-raw",
   # do use icd9:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
   names(icd9_map_quan_deyo) <- icd9::icd_names_charlson_abbrev
-  if (save)
+  if (save_data)
     save_in_data_dir(icd9_map_quan_deyo)
   invisible(icd9_map_quan_deyo)
 }

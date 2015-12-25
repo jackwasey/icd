@@ -2,6 +2,7 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_map_quan_elix}
+\alias{icd10_map_quan_elix}
 \alias{icd9_map_quan_elix}
 \alias{quanElixComorbid}
 \title{Quan adaptation of Elixhauser comorbidities}

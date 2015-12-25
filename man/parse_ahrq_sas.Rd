@@ -5,7 +5,7 @@
 \title{parse AHRQ SAS code to get mapping}
 \usage{
 parse_ahrq_sas(sasPath = system.file("data-raw", "comformat2012-2013.txt",
-  package = get_pkg_name()), save = FALSE, path = "data")
+  package = get_pkg_name()), save_data = FALSE, path = "data")
 }
 \arguments{
 \item{sasPath}{single character string containing path or URL for some SAS
@@ -16,11 +16,11 @@ can verify that the code creates the distributed R data. Also, changes to
 the original SAS code can be used to regenerate the R data by the user,
 without waiting for a package release.}
 
-\item{condense}{Deprecated. The map is not condensed by default. If required,
-it can reduced to a smaller set of codes using \code{icd_condense}.}
-
 \item{save_data}{logical whether to save the result in the source tree.
 Defaults to \code{FALSE}.}
+
+\item{condense}{Deprecated. The map is not condensed by default. If required,
+it can reduced to a smaller set of codes using \code{icd_condense}.}
 
 \item{returnAll}{logical which, if TRUE, will result in the invisible return
 of icd9_map_ahrq_all result, otherwise, icd9_map_ahrq is reutrned.}
