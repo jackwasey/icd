@@ -19,21 +19,19 @@
 #' @description convert 'decimal' format (123.45 style) ICD9 codes into the name
 #'   and description for human review there are official ICD9-CM data tables,
 #'   not with conversion to decimal notation, but to the textual format.
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
+#' @param x vector or other structure of ICD codes to explain in human language
 #' @template short_code
-#' @param condense single logical value which indicates whether to condense
-#'   the given set of ICD-9 codes by replacing subsets of codes with 'parent'
-#'   codes which exactly encompass certain subsets. E.g. If all cholera
-#'   diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
-#'   subtypes.
+#' @param condense single logical value which indicates whether to condense the
+#'   given set of ICD-9 codes by replacing subsets of codes with 'parent' codes
+#'   which exactly encompass certain subsets. E.g. If all cholera diagnoses are
+#'   provided, only '001 - Cholera' needs to be displayed, not all subtypes.
 #' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
 #'   the short description from the canonical CMS descriptions (included in
 #'   \code{data-raw}) will be used, otherwise the long description is used.
 #' @param warn single logical value, default is \code{TRUE}, meaning that codes
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.
+#' @template dotdotdot
 #' @examples
 #' # by default, just show parent code and ignore children (428.0 not shown
 #' # because 428 is present):

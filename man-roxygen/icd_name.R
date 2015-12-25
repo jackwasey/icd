@@ -4,4 +4,3 @@
 #'   likely possibilities until it matche a single column. Failing this, it will
 #'   take the first column in the data frame. Specifying the column using this
 #'   argument avoids the guesswork.
-#' @param icd9Field Deprecated. Use \code{icd_name}

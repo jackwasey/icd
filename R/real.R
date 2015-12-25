@@ -27,12 +27,15 @@
 #' @param billable single logical value (default \code{FALSE}), if \code{TRUE}
 #'   will divert to test whether the codes are in the billable list instead of
 #'   seeing if they are any leaf or branch node. TODO: template
-#' @param ... arguments passed on to other functions
+#' @template dotdotdot
 #' @return logical vector
 #' @export
-icd_is_defined <- function(x, short_code = icd_guess_short(x), ...)
+icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
   UseMethod("icd_is_defined")
+}
 
+#' @describeIn icd_is_defined Check whether ICD-9 code are defined. (ICD-9-CM by
+#'   defauly)
 #' @export
 #' @keywords internal
 icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
@@ -51,6 +54,8 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
       asCharacterNoWarn(x)) %in% icd9::icd9_hierarchy[["icd9"]]
 }
 
+#' @describeIn icd_is_defined Check whether ICD codes are defined, guessing ICD
+#'   code type.
 #' @export
 #' @keywords internal
 icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {

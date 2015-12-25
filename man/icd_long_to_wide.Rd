@@ -56,7 +56,12 @@ for ICD code}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
 
-\item{icd9Field}{Deprecated. Use \code{icd_name}}
+\item{icd9Field}{The column in the data frame which contains the ICD codes.
+This is a character vector of length one. If it is \code{NULL}, \code{icd9}
+will attempt to guess the column name, looking for progressively less
+likely possibilities until it matche a single column. Failing this, it will
+take the first column in the data frame. Specifying the column using this
+argument avoids the guesswork.}
 
 \item{min.width, }{single integer, if specified, writes out this many columns
 even if no patients have that many codes. Must be greater than or equal to
@@ -71,15 +76,6 @@ a row in the output data per contiguous block of identical visitIds.}
 with a field for the visitId. This may be more convenient, but the default
 of \code{FALSE} gives the more natural return data of a matrix with
 rownames being the visitIds.}
-
-\item{icd9Field}{The column in the data frame which contains the ICD codes.
-This is a character vector of length one. If it is \code{NULL}, \code{icd9}
-will attempt to guess the column name, looking for progressively less
-likely possibilities until it matche a single column. Failing this, it will
-take the first column in the data frame. Specifying the column using this
-argument avoids the guesswork.}
-
-\item{prefix}{character, default "icd_" to prefix new columns}
 }
 \description{
 This is more complicated than reshape or reshape2::dcast allows.

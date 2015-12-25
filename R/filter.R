@@ -55,13 +55,13 @@ icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, inver
   icd_filter_valid.icd9(x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
-#' @name icd_filter
-#' @title Filters data frame based on present-on-arrival flag
-#' @description Present On Arrival (POA) is not a simple flag, since many codes
-#'   are exempt, unspecified, or unknown. Therefore, two options are given: get
-#'   all the comorbidities where the POA flag was definitely -ve, coded as "N"
-#'   or definitely +ve and coded as "Y". Negating one set won't give the other
-#'   set unless all codes were either Y or N.
+#' Filters data frame based on present-on-arrival flag
+#'
+#' Present On Arrival (POA) is not a simple flag, since many codes are exempt,
+#' unspecified, or unknown. Therefore, two options are given: get all the
+#' comorbidities where the POA flag was definitely -ve, coded as "N" or
+#' definitely +ve and coded as "Y". Negating one set won't give the other set
+#' unless all codes were either Y or N.
 #' @param x input vector of ICD codes
 #' @template poa_name
 #' @template poa
@@ -99,46 +99,46 @@ icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
   )
 }
 
-.icd_filter_poa <- function(x, poa_name, choice, negative = FALSE) {
+.icd_filter_poa <- function(x, poa_name, choice, invert = FALSE) {
   assertDataFrame(x, min.cols = 1, col.names = "named")
   assertString(poa_name, na.ok = FALSE)
   assertCharacter(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
-  assertFlag(negative)
+  assertFlag(invert)
   stopifnot(poa_name %in% names(x))
   p <- x[[poa_name]]
-  if (negative)
+  if (invert)
     return(x[is.na(p) | p %nin% choice, names(x) != poa_name])
   x[!is.na(p) & p %in% choice, names(x) != poa_name]
 }
 
-#' @describeIn icd_filter Select rows where Present-on-Arrival flag is
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
 #'   explicitly "Yes."
 #' @export
 icd_filter_poa_yes <- function(x, poa_name = "poa") {
-  .icd_filter_poa(x, poa_name, choice = c("Y", "y"), negative = FALSE)
+  .icd_filter_poa(x, poa_name, choice = c("Y", "y"), invert = FALSE)
 }
 
-#' @describeIn icd_filter Select rows where Present-on-Arrival flag is
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
 #'   explicitly "No."
 #' @export
 icd_filter_poa_no <- function(x, poa_name = "poa") {
-  .icd_filter_poa(x, poa_name, choice = c("N", "n"), negative = FALSE)
+  .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = FALSE)
 }
 
-#' @describeIn icd_filter Select rows where Present-on-Arrival flag is
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
 #'   anything but "No." This includes unknown, exempt, other codes, and of
 #'   course all those marked "Yes."
 #' @export
 icd_filter_poa_not_no <- function(x, poa_name = "poa") {
-  .icd_filter_poa(x, poa_name, choice = c("N", "n"), negative = TRUE)
+  .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = TRUE)
 }
 
-#' @describeIn icd_filter Select rows where Present-on-Arrival flag is
-#'   anything byt "Yes." This would group exempt, unknown and other codes under
-#'   "Not POA" which is unlikely to be a good choice, since exempt codes, of
-#'   which there are a quite large number, tend to describe chronic or
-#'   out-of-hospital characteristics.
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is anything
+#'   byt "Yes." This would group exempt, unknown and other codes under "Not POA"
+#'   which is unlikely to be a good choice, since exempt codes, of which there
+#'   are a quite large number, tend to describe chronic or out-of-hospital
+#'   characteristics.
 #' @export
 icd_filter_poa_not_yes <- function(x, poa_name = "poa") {
-  .icd_filter_poa(x, poa_name, choice = c("Y", "y"), negative = TRUE)
+  .icd_filter_poa(x, poa_name, choice = c("Y", "y"), invert = TRUE)
 }

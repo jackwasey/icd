@@ -8,6 +8,8 @@
 \alias{icd9IsRealDecimal}
 \alias{icd9IsRealShort}
 \alias{icd_is_defined}
+\alias{icd_is_defined.default}
+\alias{icd_is_defined.icd9}
 \title{Check whether ICD-9 codes exist}
 \usage{
 icd9IsReal(icd9, isShort = icd_guess_short(icd9), onlyBillable = FALSE)
@@ -24,6 +26,11 @@ icd9GetRealShort(icd9Short, onlyBillable = FALSE)
 icd9GetRealDecimal(icd9Decimal, onlyBillable = FALSE)
 
 icd_is_defined(x, short_code = icd_guess_short(x), ...)
+
+\method{icd_is_defined}{icd9}(x, short_code = icd_guess_short.icd9(x),
+  billable = FALSE, ...)
+
+\method{icd_is_defined}{default}(x, short_code = icd_guess_short(x), ...)
 }
 \arguments{
 \item{icd9}{is
@@ -76,4 +83,13 @@ This is different from syntactic validity: it looks it up in the
   icd-9 codes over time, and possible imperfections in the master lists
   derived from CMS.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{icd9}: Check whether ICD-9 code are defined. (ICD-9-CM by
+defauly)
+
+\item \code{default}: Check whether ICD codes are defined, guessing ICD
+code type.
+}}
+\keyword{internal}
 

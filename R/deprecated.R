@@ -213,6 +213,8 @@ icd9ComorbidDfToMat <- function(x, visitId = get_visit_name(x),
 
 #' @rdname icd_explain
 #' @template icd9-any
+#' @template icd9-short
+#' @template icd9-decimal
 #' @template isShort
 #' @param doCondense single logical value which indicates whether to condense
 #'   the given set of ICD-9 codes by replacing subsets of codes with 'parent'
@@ -262,11 +264,10 @@ icd9GuessIsShort <- function(icd9) {
   icd_guess_short.icd9(icd9)
 }
 
-#' @rdname icd_filter
+#' @rdname icd_filter_valid
 #' @template icd9df
 #' @template icd9field
 #' @template isShort
-#' @template invert
 #' @export
 icd9FilterValid <- function(icd9df, icd9Field = NULL,
                             isShort =  NULL, invert = FALSE) {
@@ -274,42 +275,44 @@ icd9FilterValid <- function(icd9df, icd9Field = NULL,
   icd_filter_valid.icd9(x = icd9df, icd_name = icd9Field, short_code = isShort, invert = invert)
 }
 
-#' @rdname icd_filter
+#' @rdname icd_filter_valid
 #' @export
 icd9FilterInvalid <- function(icd9df, icd9Field = NULL, isShort = NULL, invert = FALSE) {
   .Deprecated("icd_filter_valid")
   icd_filter_valid.icd9(x = icd9df, icd_name = icd9Field, short_code = isShort, invert = !invert)
 }
 
-#' @rdname icd_filter
+#' @rdname icd_filter_poa
+#' @template icd9df
+#' @template poaField
 #' @export
 icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
   .Deprecated("icd_filter_poa")
   icd_filter_poa(x = icd9df, poa_name = poaField, poa = poa)
 }
 
-#' @rdname icd_filter
+#' @rdname icd_filter_poa
 #' @export
 icd9FilterPoaYes <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_yes")
   icd_filter_poa_yes(x = icd9df, poa_name = poaField)
 }
 
-#' @rdname icd_filter
+#' @rdname icd_filter_poa
 #' @export
 icd9FilterPoaNo <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_no")
   icd_filter_poa_no(x = icd9df, poa_name = poaField)
 }
 
-#' @rdname icd_filter
+#' @rdname icd_filter_poa
 #' @export
 icd9FilterPoaNotNo <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_not_no")
   icd_filter_poa_not_no(x = icd9df, poa_name = poaField)
 }
 
-#' @rdname icd_filter
+#' @rdname icd_filter_poa
 #' @export
 icd9FilterPoaNotYes <- function(icd9df, poaField = "poa") {
   .Deprecated("icd_filter_poa_not_yes")
@@ -733,7 +736,6 @@ icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FAL
 #'   for ICD code
 #' @template visitid
 #' @template icd9field
-#' @param prefix character, default "icd_" to prefix new columns
 #' @param min.width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to
 #'   the maximum number of codes per patient.
@@ -877,10 +879,6 @@ icd9CountWide <- function(x,
 }
 
 #' @rdname icd_count_comorbid
-#' @param x data frame with one row per patient, and a true/false or 1/0 flag
-#'   for each column. By default, the first column is the patient identifier and
-#'   is not counted. If \code{visitId} is not specified, the first column is
-#'   used.
 #' @template visitId
 #' @template return.df
 #' @export
@@ -1037,7 +1035,6 @@ icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
   .Deprecated("icd_is_defined")
   icd_is_defined.icd9(icd9, short_code = isShort, billable = onlyBillable)
 }
-
 
 #' @rdname icd_is_defined
 #' @template icd9-short

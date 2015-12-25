@@ -113,8 +113,6 @@ icd9ComorbidQuanDeyo(icd9df, visitId = NULL, icd9Field = NULL,
   abbrevNames = TRUE, applyHierarchy = TRUE, ...)
 }
 \arguments{
-\item{icd9Field}{Deprecated. Use \code{icd_name}}
-
 \item{aggregate}{single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
 out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
 IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,

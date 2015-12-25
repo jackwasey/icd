@@ -37,8 +37,6 @@ was not specified, then the first column of the data frame is used.}
 data frame with the first column being the \code{visitId}, and the second
 being the count. If \code{visitId} was a factor or named differently in the
 input, this is preserved.}
-
-\item{x}{data frame of comorbidities in 'long' format.}
 }
 \description{
 \code{icd_count_comorbid} differs from the other counting
