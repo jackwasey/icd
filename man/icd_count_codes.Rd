@@ -15,6 +15,13 @@ for each column. By default, the first column is the patient identifier and
 is not counted. If \code{visit_name} is not specified, the first column is
 used.}
 
+\item{visitId}{Deprecated. Use \code{visit_name}}
+
+\item{return.df}{Deprecated. Use return_df isntead. Single logical value, if
+\code{TRUE}, return the result as a data frame with the first column being
+the \code{visitId}, and the second being the count. If \code{visitId} was a
+factor or named differently in the input, this is preserved.}
+
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
 patients come leave and enter hospital with different ICD-9 codes. It is a

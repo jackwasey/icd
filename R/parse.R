@@ -35,7 +35,10 @@ parseEverythingAndSave <- function() {
 }
 
 #' @title parse quickly parsable source data
-#' @description Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get the 'billable' codes. Also parses the AHRQ and Quan/Deyo comorbidity mappings from the source SAS data. Elixhauser and Quan/Elixhauser mappins are generated from transcribed codes.
+#' @description Parses (and downloads if necessary) CDC annual revisions of
+#'   ICD-9-CM to get the 'billable' codes. Also parses the AHRQ and Quan/Deyo
+#'   comorbidity mappings from the source SAS data. Elixhauser and
+#'   Quan/Elixhauser mappins are generated from transcribed codes.
 #' @keywords internal
 parseAndSaveQuick <- function() {
   loadNamespace("devtools")
@@ -70,7 +73,8 @@ parseAndSaveQuick <- function() {
 #'   descLong when not available.
 #' @examples
 #'   # To populate the data-raw directory with the ICD-9 source:
-#'   # not included in installed package, run using the full source from github, e.g. using devtools::load_all()
+#'   # not included in installed package, run using the full source from github,
+#'   # e.g. using devtools::load_all()
 #'   \dontrun{
 #'   parseLeafDescriptionsAll(save = TRUE, fromWeb = TRUE)
 #'   }
@@ -212,7 +216,8 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL) {
   if (save || fromWeb || !file.exists(fp)) unzip_single(url, fn, fp)
   unzip_single(url, fn, fp)
   f <- file(fp, encoding = "latin1")
-  icd9cm_billable27 <- read.csv(fp, stringsAsFactors = FALSE, colClasses = "character", encoding = "latin1")
+  icd9cm_billable27 <- read.csv(fp, stringsAsFactors = FALSE,
+                                colClasses = "character", encoding = "latin1")
   close(f)
   names(icd9cm_billable27) <- c("icd9", "descLong", "descShort")
   icd9cm_billable27 <- icd9cm_billable27[c(1, 3, 2)] # reorder columns
@@ -362,7 +367,8 @@ icd9BuildChaptersHierarchy <- function(save = FALSE) {
   billable_rows <- which(icd9_hierarchy$icd9 %in% billable_codes)
   title_rows <- which(icd9_hierarchy$icd9 %nin% billable_codes)
   icd9_hierarchy[billable_rows, "descShort"] <- bill32$descShort
-  # for rows without a short description (i.e. titles, non-billable), useexisting long desc
+  # for rows without a short description (i.e. titles, non-billable),
+  # useexisting long desc
   icd9_hierarchy[title_rows, "descShort"] <- icd9_hierarchy[title_rows, "descLong"]
   # the billable codes list (where available) currently has better long
   # descriptions than the RTF parse. For previous years, there is no long desc

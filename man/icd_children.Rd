@@ -87,10 +87,18 @@ codes which are \emph{defined} or \emph{billable} (leaf nodes).
 }}
 \examples{
 library(magrittr)
-icd_children("10201", short_code = TRUE, defined =FALSE) # no children other than self
-icd_children("0032", FALSE) # guess it was ICD-9 and a short, not decimal code
-icd_children("10201", short_code = TRUE, defined =TRUE) # empty because 102.01 is not meaningful
-icd_children("003", short_code = TRUE, defined =TRUE) \%>\% icd_explain(condense = FALSE, short_code = TRUE)
+
+# no children other than self
+icd_children("10201", short_code = TRUE, defined =FALSE)
+
+# guess it was ICD-9 and a short, not decimal code
+icd_children("0032", FALSE)
+
+# empty because 102.01 is not meaningful
+icd_children("10201", short_code = TRUE, defined =TRUE)
+icd_children("003", short_code = TRUE, defined =TRUE) \%>\%
+  icd_explain(condense = FALSE, short_code = TRUE)
+
 icd_children(short_code = FALSE, "100.0")
 icd_children(short_code = FALSE, "100.00")
 icd_children(short_code = FALSE, "2.34")

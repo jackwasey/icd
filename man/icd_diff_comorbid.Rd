@@ -34,6 +34,14 @@ report to be printed.}
 \item{explain}{single logical value. The default is \code{TRUE} which means
 the differing codes are attempted to be reduced to their parent codes, in
 order to give a more succinct summary.}
+
+\item{names}{character vector of the comorbidity names}
+
+\item{x.names}{character vector of the comorbidity names from \code{x} to
+compare}
+
+\item{y.names}{character vector of the comorbidity names from \code{y} to
+compare}
 }
 \value{
 A list, each item of which is another list containing the

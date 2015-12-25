@@ -204,7 +204,6 @@ icd9ComorbidMatToDf <- function(x, visitId = "visit_name",
 
 #' @rdname icd_comorbid_df_to_mat
 #' @template visitId
-#' @template stringsAsFactors
 #' @export
 icd9ComorbidDfToMat <- function(x, visitId = get_visit_name(x),
                                 stringsAsFactors = getOption("stringsAsFactors")) {
@@ -627,8 +626,7 @@ icd9GetInvalidShort <- function(icd9Short) {
 }
 
 #' @rdname icd_charlson
-#' @param x input data, e.g. \code{data.frame} or \code{matrix} of ICD codes
-#'   with an identifier of visit, hospital ID, etc..
+#' @template visitId
 #' @param scoringSystem Deprecated. Use \code{icd_charlson} with
 #'   \code{scoring_system}. One of \code{original}, \code{charlson}, or
 #'   \code{quan}. The first two will give the original Charlson weights for each
@@ -710,6 +708,11 @@ icd9VanWalravenComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE) {
 }
 
 #' @rdname icd_diff_comorbid
+#' @param names character vector of the comorbidity names
+#' @param x.names character vector of the comorbidity names from \code{x} to
+#'   compare
+#' @param y.names character vector of the comorbidity names from \code{y} to
+#'   compare
 #' @export
 icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
                              show = TRUE, explain = TRUE) {
@@ -849,6 +852,8 @@ logicalToBinary <- function(...) {
 }
 
 #' @rdname icd_count_codes
+#' @template visitId
+#' @template return.df
 #' @export
 icd9Count <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
   .Deprecated("icd_count_codes")

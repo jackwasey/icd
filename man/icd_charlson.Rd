@@ -32,8 +32,12 @@ icd_charlson_from_comorbid(x, visit_name = NULL, hierarchy = FALSE,
   scoring_system = c("original", "charlson", "quan"))
 }
 \arguments{
-\item{x}{input data, e.g. \code{data.frame} or \code{matrix} of ICD codes
-with an identifier of visit, hospital ID, etc..}
+\item{x}{data frame containing a column of visit or patient identifiers, and
+a column of ICD-9 codes. It may have other columns which will be ignored.
+By default, the first column is the patient identifier and is not counted.
+If \code{visit_name} is not specified, the first column is used.}
+
+\item{visitId}{Deprecated. Use \code{visit_name}}
 
 \item{scoringSystem}{Deprecated. Use \code{icd_charlson} with
 \code{scoring_system}. One of \code{original}, \code{charlson}, or
@@ -80,11 +84,6 @@ containing the Charlson Comorbidity Index.}
 
 \item{hierarchy}{single logical value, default is FALSE. If TRUE, will
 drop DM if DMcx is present, etc.}
-
-\item{x}{data frame containing a column of visit or patient identifiers, and
-a column of ICD-9 codes. It may have other columns which will be ignored.
-By default, the first column is the patient identifier and is not counted.
-If \code{visit_name} is not specified, the first column is used.}
 }
 \description{
 Charlson score is calculated in the basis of the Quan revision

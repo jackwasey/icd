@@ -25,7 +25,8 @@ for versions 23 to 32, those which are on the CMS web site, get
 }
 \examples{
   # To populate the data-raw directory with the ICD-9 source:
-  # not included in installed package, run using the full source from github, e.g. using devtools::load_all()
+  # not included in installed package, run using the full source from github,
+  # e.g. using devtools::load_all()
   \dontrun{
   parseLeafDescriptionsAll(save = TRUE, fromWeb = TRUE)
   }
