@@ -22,9 +22,8 @@ icd9cm_get_billable(x, short_code = icd_guess_short(x), invert = FALSE,
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{invert}{logical single value, default is \code{FALSE}, but if
-\code{TRUE} will return all the input data except the billable codes. This
-will include invalid codes, also.}
+\item{invert}{Single logical value. Returns the inverse of the result. E.g.
+if seeking valid ICD-9 codes, the invalid ones are returned.}
 
 \item{version}{String containing class name of version of ICD to be tested
 against, e.g. \code{"icd9cm"}. Default is to guess the version.}

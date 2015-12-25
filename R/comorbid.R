@@ -53,7 +53,6 @@ icd9PoaChoices <- icd_poa_choices
 #'   updating fields according to rules. The exact fields from the original
 #'   mappings can be obtained using \code{hierarchy = FALSE}, but for
 #'   comorbidity counting, Charlson Score, etc., the rules should be applied.
-#' @template icd_df
 #' @param map list (or name of a list if character vector of length one is given
 #'   as argument) of the comorbidities with each top-level list item containing
 #'   a vector of decimal ICD9 codes. This is in the form of a list, with the

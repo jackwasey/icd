@@ -17,10 +17,10 @@
 
 #' @title Filter ICD-9 codes by validity.
 #' @description Filters a data.frame of patients for valid or invalid ICD-9 codes
-#' @template icd_df
+#' @param x input vector of ICD codes
 #' @template icd_name
 #' @template short_code
-#' @param invert single logical value, if TRUE will return invalid instead of valid rows.
+#' @template invert
 #' @param ... arguments passed to the class-specific functions
 #' @export
 icd_filter_valid <- function(...)
@@ -62,7 +62,7 @@ icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, inver
 #'   all the comorbidities where the POA flag was definitely -ve, coded as "N"
 #'   or definitely +ve and coded as "Y". Negating one set won't give the other
 #'   set unless all codes were either Y or N.
-#' @template icd_df
+#' @param x input vector of ICD codes
 #' @template poa_name
 #' @template poa
 #' @examples

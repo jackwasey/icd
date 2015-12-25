@@ -44,6 +44,20 @@ icd_filter_poa_not_yes(x, poa_name = "poa")
 \arguments{
 \item{icd9df}{Deprecated. Use \code{x}}
 
+\item{icd9Field}{The column in the data frame which contains the ICD codes.
+This is a character vector of length one. If it is \code{NULL}, \code{icd9}
+will attempt to guess the column name, looking for progressively less
+likely possibilities until it matche a single column. Failing this, it will
+take the first column in the data frame. Specifying the column using this
+argument avoids the guesswork.}
+
+\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
+\item{invert}{Single logical value. Returns the inverse of the result. E.g.
+if seeking valid ICD-9 codes, the invalid ones are returned.}
+
 \item{poaField}{Deprecated. Use poa_name}
 
 \item{poa}{single character value, being one of \code{poaChoices} whether to
@@ -61,7 +75,7 @@ Present On Arrival flag. The flag itself is a single character, typically
 one of "Y", "N", "E", "X", "U" or empty. The poaField is a character vector
 of length one.}
 
-\item{icd_df}{Deprecated. Use \code{x}}
+\item{x}{input vector of ICD codes}
 }
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes

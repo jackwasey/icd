@@ -2,12 +2,18 @@
 % Please edit documentation in R/RcppExports.R, R/convert.R
 \name{icd_decimal_to_short.icd9}
 \alias{icd_decimal_to_short}
+\alias{icd_decimal_to_short.default}
 \alias{icd_decimal_to_short.icd9}
 \title{Convert Decimal format ICD codes to short format}
 \usage{
 \method{icd_decimal_to_short}{icd9}(x)
 
 icd_decimal_to_short(x)
+
+\method{icd_decimal_to_short}{default}(x)
+}
+\arguments{
+\item{x}{ICD codes}
 }
 \description{
 This usually just entails removing the decimal point, but also does some
@@ -16,6 +22,9 @@ limited validation and tidying up.
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd9}: Convert Decimal to short-form ICD-9 code
+
+\item \code{default}: Guess ICD version and convert decimal to
+short format
 }}
 \keyword{internal}
 

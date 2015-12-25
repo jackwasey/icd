@@ -264,6 +264,10 @@ icd9GuessIsShort <- function(icd9) {
 }
 
 #' @rdname icd_filter
+#' @template icd9df
+#' @template icd9field
+#' @template isShort
+#' @template invert
 #' @export
 icd9FilterValid <- function(icd9df, icd9Field = NULL,
                             isShort =  NULL, invert = FALSE) {
@@ -722,6 +726,22 @@ icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FAL
 }
 
 #' @rdname icd_long_to_wide
+#' @param icd9df data.frame of long-form data, one column for visitId and one
+#'   for ICD code
+#' @template visitid
+#' @template icd9field
+#' @param prefix character, default "icd_" to prefix new columns
+#' @param min.width, single integer, if specified, writes out this many columns
+#'   even if no patients have that many codes. Must be greater than or equal to
+#'   the maximum number of codes per patient.
+#' @param aggregate single logical value, if TRUE (the default) will take more
+#'   time to find out-of-order visitIds, and combine all the codes for each
+#'   unique visitId. If \code{FALSE}, then out-of-order visitIds will result in
+#'   a row in the output data per contiguous block of identical visitIds.
+#' @param return.df single logical value, if \code{TRUE}, return a data frame
+#'   with a field for the visitId. This may be more convenient, but the default
+#'   of \code{FALSE} gives the more natural return data of a matrix with
+#'   rownames being the visitIds.
 #' @export
 icd9LongToWide <- function(icd9df,
                            visitId =  get_visit_name(icd9df),
@@ -1015,6 +1035,7 @@ icd9IsReal <- function(icd9, isShort = icd_guess_short(icd9),
 
 
 #' @rdname icd_is_defined
+#' @template icd9-short
 #' @export
 icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
   .Deprecated("icd_is_defined")
@@ -1022,6 +1043,7 @@ icd9IsRealShort <- function(icd9Short, onlyBillable = FALSE) {
 }
 
 #' @rdname icd_is_defined
+#' @template icd9-decimal
 #' @export
 icd9IsRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   .Deprecated("icd_is_defined")

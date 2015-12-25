@@ -20,8 +20,7 @@ icd_filter_invalid(...)
 \arguments{
 \item{...}{arguments passed to the class-specific functions}
 
-\item{x}{data frame containing columns for visitId (which is the feault
-name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
+\item{x}{input vector of ICD codes}
 
 \item{icd_name}{The column in the data frame which contains the ICD codes.
 This is a character vector of length one. If it is \code{NULL}, \code{icd9}
@@ -34,11 +33,8 @@ argument avoids the guesswork.}
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{invert}{single logical value, if TRUE will return invalid instead of valid rows.}
-
-\item{icd9df}{Deprecated. Use \code{x}}
-
-\item{icd_df}{Deprecated. Use \code{x}}
+\item{invert}{Single logical value. Returns the inverse of the result. E.g.
+if seeking valid ICD-9 codes, the invalid ones are returned.}
 
 \item{icd9Field}{Deprecated. Use \code{icd_name}}
 }

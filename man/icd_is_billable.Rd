@@ -54,9 +54,8 @@ becomes "010", not "0010"}
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{invert}{single logical value, if \code{TRUE}, then the non-billable
-codes are returned. For functions with logical result, just negate with
-\code{!}. Default is \code{FALSE}.}
+\item{invert}{Single logical value. Returns the inverse of the result. E.g.
+if seeking valid ICD-9 codes, the invalid ones are returned.}
 }
 \value{
 logical vector of same length as input

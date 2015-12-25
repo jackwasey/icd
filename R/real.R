@@ -22,10 +22,11 @@
 #'   \code{link{icd9IsValid}} etc. is still useful, with a changing list of
 #'   icd-9 codes over time, and possible imperfections in the master lists
 #'   derived from CMS.
+#' @param x vector if ICD codes to test whether defined in certain ICD code list
 #' @template short_code
-#' @param billable single logical value (default \code{FALSE}), if
-#'   \code{TRUE} will divert to test whether the codes are in the billable list
-#'   instead of seeing if they are any leaf or branch node. TODO: template
+#' @param billable single logical value (default \code{FALSE}), if \code{TRUE}
+#'   will divert to test whether the codes are in the billable list instead of
+#'   seeing if they are any leaf or branch node. TODO: template
 #' @param ... arguments passed on to other functions
 #' @return logical vector
 #' @export
@@ -91,9 +92,7 @@ icd_get_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x), billab
 #' @template icd9-short
 #' @template icd9-decimal
 #' @template short_code
-#' @param invert single logical value, if \code{TRUE}, then the non-billable
-#'   codes are returned. For functions with logical result, just negate with
-#'   \code{!}. Default is \code{FALSE}.
+#' @template invert
 #' @param version single character string, default is "32" which is the latest
 #'   release from CMS. Currently anything from "23" to "32" is accepted. Not
 #'   numeric because there are possible cases with non-numeric names, e.g.
@@ -198,9 +197,7 @@ icd_get_billable.icd9 <- function(...) {
 #' TODO: keep this internal
 #' @param x data, e.g. character vector, \code{icd9}, \code{icd9cm}
 #' @template short_code
-#' @param invert logical single value, default is \code{FALSE}, but if
-#'   \code{TRUE} will return all the input data except the billable codes. This
-#'   will include invalid codes, also.
+#' @template invert
 #' @param version String containing class name of version of ICD to be tested
 #'   against, e.g. \code{"icd9cm"}. Default is to guess the version.
 #' @keywords internal

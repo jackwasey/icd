@@ -113,8 +113,6 @@ icd9ComorbidQuanDeyo(icd9df, visitId = NULL, icd9Field = NULL,
   abbrevNames = TRUE, applyHierarchy = TRUE, ...)
 }
 \arguments{
-\item{icd9df}{Deprecated. Use \code{x}}
-
 \item{icd9Field}{Deprecated. Use \code{icd_name}}
 
 \item{aggregate}{single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
@@ -125,9 +123,6 @@ then use \code{TRUE}.}
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 to \code{icd9ComorbidAhrq}}
-
-\item{x}{data frame containing columns for visitId (which is the feault
-name), icd9 (default for the icd9 code), and  maybe also a POA flag.}
 
 \item{map}{list (or name of a list if character vector of length one is given
 as argument) of the comorbidities with each top-level list item containing
@@ -173,8 +168,6 @@ which case the ishorter human-readable names stored in e.g.
 which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
-
-\item{icd_df}{Deprecated. Use \code{x}}
 
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on

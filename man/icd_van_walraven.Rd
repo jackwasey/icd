@@ -70,15 +70,6 @@ containing the Charlson Comorbidity Index.}
 which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
-
-\item{stringsAsFactors}{single logical, passed on when constructing
-data.frame if \code{return_df} is \code{TRUE}. If the input data frame
-\code{x} has a factor for the visit_name, this is not changed, but a
-non-factor visit_name may be converted or not converted according to your
-system default or this setting.}
-
-\item{...}{further arguments to pass on to \code{icd9ComorbidQuanElix}, e.g.
-\code{icd9Field}, \code{applyHeirarchy}}
 }
 \description{
 van Walraven Elixhauser score is calculated from the Quan
