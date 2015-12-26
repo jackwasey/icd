@@ -20,7 +20,7 @@ context("billable code lists")
 test_that("billable codes are recreated", {
   skip_online_tests()
   # this costs about 30 seconds
-  check_billable <- parseLeafDescriptionsAll(save = FALSE, fromWeb = TRUE)
+  check_billable <- parseLeafDescriptionsAll(save_data = FALSE, fromWeb = TRUE)
   if (Sys.info()[["sysname"]] != "Linux")
     skip("Only do encoding problems on Linux.")
   for (ver in c("27", "28", "29", "30", "31", "32")) {

@@ -142,7 +142,7 @@ test_that("online parse tests run", {
                                   paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
   })
 
-  v32 <- parseLeafDescriptionsVersion(version = "32", save = FALSE, fromWeb = FALSE)
+  v32 <- parseLeafDescriptionsVersion(version = "32", save_data = FALSE, fromWeb = FALSE)
 
   test_that("all leaf codes from TXT are in RTF extract", {
     v32$icd9 %>% icd9ShortToDecimal -> leaves

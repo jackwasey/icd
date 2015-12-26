@@ -1,7 +1,11 @@
 context("test content of icd-10 to comorbidity maps")
 
 test_that("the icd-10 quan elix comorbidity map data is exactly as produced by the generator", {
-  expect_identical(icd10_map_quan_elix, icd10_generate_map_quan_elix(save = FALSE))
+  expect_identical(icd10_map_quan_elix, icd10_generate_map_quan_elix(save_data = FALSE))
+})
+
+test_that("the icd-10 quan deyo comorbidity map data is exactly as produced by the generator", {
+  expect_identical(icd10_map_quan_elix, icd10_generate_map_quan_deyo(save_data = FALSE))
 })
 
 test_that("the class of the quan elix map is correct", {
@@ -70,7 +74,12 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
 
 })
 
-test_that("some hand-picked ICD-10 codes appear in the mapping", {
+test_that("some hand-picked ICD-10 codes appear in the quan elix map", {
   expect_true("M12019" %in% icd10_map_quan_elix$Rheumatic)
+  #TODO more
+})
+
+test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
+  expect_true("I124" %in% icd10_map_quan_deyo$MI)
   #TODO more
 })
