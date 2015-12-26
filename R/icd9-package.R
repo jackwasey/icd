@@ -92,5 +92,8 @@
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd9
 #' @import Rcpp checkmate stringr
-#' @importFrom magrittr "%>%" "%<>%" set_names extract2
+#' @importFrom magrittr "%<>%" set_names extract2
 NULL
+
+# stringr imports and re-exports %>% so I don't get it from magrittr (otherwise
+# there is a check warning)
