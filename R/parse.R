@@ -30,7 +30,7 @@ parseEverythingAndSave <- function() {
   devtools::load_data(pkg = ".") # reload the newly saved data
   parseAndSaveQuick()
   devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9BuildChaptersHierarchy(save = TRUE) # depends on icd9cm_billable
+  icd9BuildChaptersHierarchy(save_data = TRUE) # depends on icd9cm_billable
 
 }
 
@@ -49,16 +49,16 @@ parseAndSaveQuick <- function() {
   message("Parsing plain text billable codes to create icd9cm_billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
-  parseLeafDescriptionsAll(save = TRUE)
+  parseLeafDescriptionsAll(save_data = TRUE)
   devtools::load_data(pkg = ".")
 
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
                        Depends on icd9_hierarchy being updated.")
-  parse_ahrq_sas(save = TRUE)
-  parse_quan_deyo_sas(save = TRUE)
-  icd9_generate_map_quan_elix(save = TRUE)
-  icd9_generate_map_elix(save = TRUE)
+  parse_ahrq_sas(save_data = TRUE)
+  parse_quan_deyo_sas(save_data = TRUE)
+  icd9_generate_map_quan_elix(save_data = TRUE)
+  icd9_generate_map_elix(save_data = TRUE)
 }
 # nocov end
 
@@ -66,7 +66,7 @@ parseAndSaveQuick <- function() {
 #' @description for versions 23 to 32, those which are on the CMS web site, get
 #'   any codes with long or short descriptions. Earlier years only have
 #'   abbreviated descriptions.
-#' @param save single logical value, if \code{TRUE} the source text or CSV file
+#' @param save_data single logical value, if \code{TRUE} the source text or CSV file
 #'   will be saved in \code{data-raw}, otherwise (the default) the data is
 #'   simply returned invisibly.
 #' @return data frame with icd9, descShort and descLong columns. NA is placed in
@@ -76,21 +76,22 @@ parseAndSaveQuick <- function() {
 #'   # not included in installed package, run using the full source from github,
 #'   # e.g. using devtools::load_all()
 #'   \dontrun{
-#'   parseLeafDescriptionsAll(save = TRUE, fromWeb = TRUE)
+#'   parseLeafDescriptionsAll(save_data = TRUE, fromWeb = TRUE)
 #'   }
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE) {
+parseLeafDescriptionsAll <- function(save_data = FALSE, fromWeb = FALSE) {
   versions <- data_sources$version
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
   for (v in versions)
-    icd9cm_billable[[v]] <- parseLeafDescriptionsVersion(version = v, save = save,
+    icd9cm_billable[[v]] <- parseLeafDescriptionsVersion(version = v, save_data = save_data,
                                                       fromWeb = fromWeb)
 
   # and in my utils.R  getNonASCII(charactervector)
-  if (save) save_in_data_dir("icd9cm_billable")
+  if (save_data)
+    save_in_data_dir("icd9cm_billable")
   invisible(icd9cm_billable)
 }
 
@@ -108,16 +109,16 @@ parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE) {
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
-parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save = FALSE,
+parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save_data = FALSE,
                                          fromWeb = FALSE) {
   assertString(version)
-  assertFlag(save)
+  assertFlag(save_data)
   assertFlag(fromWeb)
 
   message("Fetching billable codes version: ", version)
 
   if (version == "27")
-    return(invisible(parseIcd9LeafDescriptions27(save = save,
+    return(invisible(parseIcd9LeafDescriptions27(save_data = save_data,
                                                  fromWeb = fromWeb)))
   stopifnot(version %in% data_sources$version)
   dat <- data_sources[data_sources$version == version, ]
@@ -129,7 +130,7 @@ parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save
   path_short <- file.path("data-raw", fn_short)
   path_long <- file.path("data-raw", fn_long)
 
-  if (!save && !file.exists(path_short)) {
+  if (!save_data && !file.exists(path_short)) {
     # not saving, so we can read-only get the path from the installed package:
     path_short <- system.file("data-raw", fn_short, package = get_pkg_name())
     path_long <- system.file("data-raw", fn_long, package = get_pkg_name())
@@ -197,23 +198,23 @@ parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save
   invisible(out)
 }
 
-parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL) {
+parseIcd9LeafDescriptions27 <- function(save_data = FALSE, fromWeb = NULL) {
   message("working on version 27 quirk")
-  assertFlag(save)
+  assertFlag(save_data)
   assertFlag(fromWeb)
   v27 <- data_sources$version == "27"
   fn <- make.names(data_sources[v27, "other_filename"])
   fp <- file.path("data-raw", fn)
   url <- data_sources[v27, "url"]
 
-  if (!save && !file.exists(fp))
+  if (!save_data && !file.exists(fp))
     fp <- system.file("data-raw", fn, package = get_pkg_name())
 
   message("v27 file name = '", fn,
                        "', and path = '", fp,
                        "'. URL = ", url)
 
-  if (save || fromWeb || !file.exists(fp)) unzip_single(url, fn, fp)
+  if (save_data || fromWeb || !file.exists(fp)) unzip_single(url, fn, fp)
   unzip_single(url, fn, fp)
   f <- file(fp, encoding = "latin1")
   icd9cm_billable27 <- read.csv(fp, stringsAsFactors = FALSE,
@@ -234,8 +235,8 @@ parseIcd9LeafDescriptions27 <- function(save = FALSE, fromWeb = NULL) {
 #'   and sub-chapter names and ranges, or validation.
 #' @keywords internal
 parseIcd9Chapters <- function(year = NULL,
-                              save = FALSE) {
-  assertFlag(save)
+                              save_data = FALSE) {
+  assertFlag(save_data)
   if (is.null(year))
     year <- "2014"
   else {
@@ -250,7 +251,7 @@ parseIcd9Chapters <- function(year = NULL,
                      any.missing = FALSE, len = 1)
     year <- as.character(year)
   }
-  if (save && format(Sys.time(), "%Y") != year)
+  if (save_data && format(Sys.time(), "%Y") != year)
     warning(sprintf("Getting ICD-9 data for %s which is not the current year.
                     Tests were written to validate extraction of 2014 data.", year))
 
@@ -289,7 +290,7 @@ parseIcd9Chapters <- function(year = NULL,
   # codes, when the coding was done in a different year from this analysis.
 
   # nocov start
-  if (save) {
+  if (save_data) {
     # top level chapters are hand-written in data/
     save_in_data_dir("icd9ChaptersSub")
     save_in_data_dir("icd9ChaptersMajor")
@@ -333,10 +334,10 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   )
 }
 
-icd9BuildChaptersHierarchy <- function(save = FALSE) {
-  assertFlag(save)
+icd9BuildChaptersHierarchy <- function(save_data = FALSE) {
+  assertFlag(save_data)
 
-  icd9Desc <- parse_rtf_year(year = "2011", save = FALSE, verbose = TRUE)
+  icd9Desc <- parse_rtf_year(year = "2011", save_data = FALSE, verbose = TRUE)
 
   message("working on slow step of web scrape to build icd9 Chapters Hierarchy.")
   chaps <- icd9GetChapters(icd9 = icd9Desc$icd9, isShort = TRUE, verbose = FALSE)
@@ -383,7 +384,7 @@ icd9BuildChaptersHierarchy <- function(save = FALSE) {
   stopifnot(all(icd9IsValidShort(icd9_hierarchy$icd9)))
   stopifnot(!any(sapply(icd9_hierarchy, is.na)))
 
-  if (save) save_in_data_dir("icd9_hierarchy") # nocov
+  if (save_data) save_in_data_dir("icd9_hierarchy") # nocov
 }
 
 fixSubchapterNa <- function(x, start, end) {
@@ -408,7 +409,7 @@ fixSubchapterNa <- function(x, start, end) {
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
 #' quick, but much too slow when it appears many times in a loop.
 #' @keywords internal
-generate_sysdata <- function(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE) {
+generate_sysdata <- function(sysdata.path = file.path("R", "sysdata.rda"), save_data = TRUE) {
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
     icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, defined = FALSE)))
@@ -520,7 +521,7 @@ generate_sysdata <- function(sysdata.path = file.path("R", "sysdata.rda"), save 
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
                "data_sources")
 
-  if (save) save(list = lknames,
+  if (save_data) save(list = lknames,
                  file = sysdata.path, compress = "xz")
   invisible(mget(lknames))
 }

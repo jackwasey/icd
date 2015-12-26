@@ -4,7 +4,7 @@
 \alias{parseIcd9Chapters}
 \title{Read higher-level ICD-9 structure from a reliable web site}
 \usage{
-parseIcd9Chapters(year = NULL, save = FALSE)
+parseIcd9Chapters(year = NULL, save_data = FALSE)
 }
 \description{
 This is rather slow, queries a web page repeatedly, which is

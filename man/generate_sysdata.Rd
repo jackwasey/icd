@@ -4,7 +4,8 @@
 \alias{generate_sysdata}
 \title{Generate sysdata.rda}
 \usage{
-generate_sysdata(sysdata.path = file.path("R", "sysdata.rda"), save = TRUE)
+generate_sysdata(sysdata.path = file.path("R", "sysdata.rda"),
+  save_data = TRUE)
 }
 \description{
 Generate correctly ordered look-up tables of numeric-only, V and E codes. This is

@@ -7,10 +7,10 @@
 http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 }
 \usage{
-parseLeafDescriptionsAll(save = FALSE, fromWeb = FALSE)
+parseLeafDescriptionsAll(save_data = FALSE, fromWeb = FALSE)
 }
 \arguments{
-\item{save}{single logical value, if \code{TRUE} the source text or CSV file
+\item{save_data}{single logical value, if \code{TRUE} the source text or CSV file
 will be saved in \code{data-raw}, otherwise (the default) the data is
 simply returned invisibly.}
 }
@@ -28,7 +28,7 @@ for versions 23 to 32, those which are on the CMS web site, get
   # not included in installed package, run using the full source from github,
   # e.g. using devtools::load_all()
   \dontrun{
-  parseLeafDescriptionsAll(save = TRUE, fromWeb = TRUE)
+  parseLeafDescriptionsAll(save_data = TRUE, fromWeb = TRUE)
   }
 }
 \keyword{internal}
