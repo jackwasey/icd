@@ -36,9 +36,9 @@ utils::globalVariables(c("."))
 #'   http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
 #'   and similar files run from 1996 to 2011.
 #' @keywords internal
-parse_rtf_year <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose = FALSE) {
+parse_rtf_year <- function(year = "2011", save_data = FALSE, fromWeb = FALSE, verbose = FALSE) {
   assertString(year)
-  assertFlag(save)
+  assertFlag(save_data)
   assertFlag(fromWeb)
   assertFlag(verbose)
 
@@ -46,10 +46,10 @@ parse_rtf_year <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose
   url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename
   fp <- file.path("data-raw", fn)
-  if (!save && !file.exists(fp))
+  if (!save_data && !file.exists(fp))
     fp <- system.file("data-raw", fn, package = get_pkg_name())
 
-  if (fromWeb || !file.exists(fp) || save) {
+  if (fromWeb || !file.exists(fp) || save_data) {
     unzip_single(url, fn, fp)
     lines <- readLines(url, fp)
   } else {
@@ -66,7 +66,7 @@ parse_rtf_year <- function(year = "2011", save = FALSE, fromWeb = FALSE, verbose
     icd9  = out %>% unname %>% icd9DecimalToShort,
     desc = names(out),
     stringsAsFactors = FALSE)
-  if (save) save_in_data_dir("icd9Desc")
+  if (save_data) save_in_data_dir("icd9Desc")
   invisible(icd9Desc)
 }
 

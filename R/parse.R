@@ -384,7 +384,8 @@ icd9BuildChaptersHierarchy <- function(save_data = FALSE) {
   stopifnot(all(icd9IsValidShort(icd9_hierarchy$icd9)))
   stopifnot(!any(sapply(icd9_hierarchy, is.na)))
 
-  if (save_data) save_in_data_dir("icd9_hierarchy") # nocov
+  if (save_data)
+    save_in_data_dir("icd9_hierarchy") # nocov
 }
 
 fixSubchapterNa <- function(x, start, end) {
