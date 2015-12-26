@@ -5,7 +5,7 @@ test_that("the icd-10 quan elix comorbidity map data is exactly as produced by t
 })
 
 test_that("the class of the quan elix map is correct", {
-
+# TODO:
 })
 
 test_that("the class of each element of the quan elix map is correct", {

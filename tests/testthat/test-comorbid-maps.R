@@ -87,8 +87,10 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 
 test_that("ahrq icd9 mappings generated from the current generation code", {
   skip_on_cran()
-  # same but from source data. Should be absolutely identical.
-  expect_equal(ahrqComorbid, parse_ahrq_sas(save = FALSE))
+  # apparently this runs of wercker but not travis, presumably because one uses --as-cran or equivalent
+
+    # same but from source data. Should be absolutely identical.
+  expect_equal(icd9_map_ahrq, parse_ahrq_sas(save_data = FALSE))
   # same but from source data. Should be absolutely identical.
   expect_equivalent(icd9GetInvalidMappingShort(ahrqComorbid), list())
 })

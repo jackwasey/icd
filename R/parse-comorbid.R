@@ -35,7 +35,6 @@ parse_ahrq_sas <- function(
             call. = FALSE)
 
   assertString(sasPath)
-  assertString(path)
   assertFlag(save_data)
   f <- file(sasPath, "r")
   ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
