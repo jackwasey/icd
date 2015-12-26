@@ -280,3 +280,21 @@ test_that("drop leading zeroes from majors: E codes", {
   expect_equal(icd9_drop_leading_zeroes_major("E800"), "E800")
   expect_equal(icd9_drop_leading_zeroes_major(" e812 "), "e812")
 })
+
+test_that("generating uranium data is identical to saved", {
+  expect_identical(generate_uranium_pathology(save_data = FALSE), uranium_pathology)
+})
+
+test_that("generating vermont data is identical to saved", {
+  expect_identical(generate_vermont_dx(save_data = FALSE), vermont_dx)
+})
+
+test_that("uranium data looks okay", {
+  expect_is(uranium_pathology, c("icd_long_data", "icd10", "icd_decimal_code"))
+  expect_equal(dim(uranium_pathology), c(2376, 2))
+})
+
+test_that("vermont data looks okay", {
+  expect_is(vermont_dx, c("icd9", "icd_wide_data", "icd_short_code"))
+  expect_equal(dim(vermont_dx), c(1000, 25))
+})

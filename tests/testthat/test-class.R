@@ -114,3 +114,10 @@ test_that("subset with double bracket doesn't override the underlying class", {
   expect_false(inherits(y[[1]], "list"))
   expect_false(inherits(y[[1]][1], "list"))
 })
+
+test_that("printing a comorbidity map works very simply", {
+  expect_warning(
+    capture.output(
+      print.icd_comorbidity_map(icd9::icd9_map_quan_elix)
+    ), NA)
+})
