@@ -17,8 +17,6 @@
 
 context("comorbidity maps")
 
-library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
-
 test_that("try to induce c++ segfault bug", {
   expect_error(icd_comorbid.icd9(ahrqTestDat, map = ahrqComorbid, short_code = TRUE), NA)
 })
@@ -27,7 +25,7 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
   skip("this is not true because we don't fill in EVERY (unreal) possible code
        when there is odd specification of the range in the SAS code.")
   for (i in names(ahrqComorbid))
-    expect_true(setequal(icd9ChildrenShort(ahrqComorbid[[i]], onlydefined = FALSE), ahrqComorbid[[i]]),
+    expect_true(setequal(icd_children.icd9(ahrqComorbid[[i]], short_code = TRUE, defined = FALSE), ahrqComorbid[[i]]),
                 info = paste("missing from saved ahrq comorbid (", i, "): ",
                              paste(setdiff(icd_children.icd9(ahrqComorbid[[i]], defined = FALSE), ahrqComorbid[[i]]),
                                    collapse = ", "
