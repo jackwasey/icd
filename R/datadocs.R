@@ -68,7 +68,6 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @format data frame
-#' @aliases icd9Hierarchy
 #' @source
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
 #' @source Rich text descriptions here:
@@ -85,6 +84,25 @@ NULL
 #' @source
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
 #' @name icd9_hierarchy
+#' @aliases icd9Hierarchy
+NULL
+
+#' ICD-10-CM
+#'
+#' The public domain modified ICD-10 classification as published in the public
+#' domain by the US CDC. Currently this has a slightly different structure to
+#' \code{icd9_hierarchy} because the published data helpfully has a \emph{leaf}
+#' flag indicating whether a code is a \emph{billable} leaf node, or a code
+#' higher in the hierarchy which nevertheless will have a description.
+#'
+#' There are annual revisions to this data. Currently, the 2016 edition is
+#' included.
+#' @name icd10cm2016
+#' @source \url{http://www.cdc.gov/nchs/icd/icd10cm.htm}
+#' @docType data
+#' @keywords datasets
+#' @format data frame, with columns for code, leaf status (0 or 1), short and
+#'   long descriptions.
 NULL
 
 #' @title AHRQ comorbidities
@@ -257,10 +275,13 @@ NULL
 NULL
 
 #' @title United States Transuranium & Uranium Registries
-#' @description an ICD-10 data set (not ICD-10-CM) with mortality from the United States Transuranium & Uranium Registries, published in the public domain.
+#' @description an ICD-10 data set (not ICD-10-CM) with mortality from the
+#'   United States Transuranium & Uranium Registries, published in the public
+#'   domain.
 #' @name uranium_pathology
 #' @source \url{http://www.ustur.wsu.edu/database/}
-#' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+#'   \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+#'
 #' @docType data
 #' @keywords datasets
 NULL
