@@ -99,8 +99,8 @@ elixTestDat <- data.frame(
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 )
-icd9fl <- unlist(unname(c(lapply(icd9::quanElixComorbid, head, n = 1),
-                          lapply(icd9::quanElixComorbid, tail, n = 1))))
+icd9fl <- unlist(unname(c(lapply(icd9::icd9_map_quan_elix, head, n = 1),
+                          lapply(icd9::icd9_map_quan_elix, tail, n = 1))))
 quanElixTestDat <- data.frame(
   visitId = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,
