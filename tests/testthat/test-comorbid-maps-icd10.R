@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2015  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 context("test content of icd-10 to comorbidity maps")
 
 test_that("the icd-10 quan elix comorbidity map data is exactly as produced by the generator", {
@@ -5,7 +22,7 @@ test_that("the icd-10 quan elix comorbidity map data is exactly as produced by t
 })
 
 test_that("the icd-10 quan deyo comorbidity map data is exactly as produced by the generator", {
-  expect_identical(icd10_map_quan_elix, icd10_generate_map_quan_deyo(save_data = FALSE))
+  expect_identical(icd10_map_quan_deyo, icd10_generate_map_quan_deyo(save_data = FALSE))
 })
 
 test_that("the class of the quan elix map is correct", {
@@ -80,6 +97,6 @@ test_that("some hand-picked ICD-10 codes appear in the quan elix map", {
 })
 
 test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
-  expect_true("I124" %in% icd10_map_quan_deyo$MI)
+  expect_true("I214" %in% icd10_map_quan_deyo$MI)
   #TODO more
 })
