@@ -18,6 +18,7 @@ cran-comments\.md$
 .git/.*
 I9diagnos.*\.txt
 I9DX_DESC\.txt
+data\/icd10.*
 icd9.aux
 icd9Billable[[:digit:]]+\.RData
 icd9cm_billable[[:digit:]]+\.RData
