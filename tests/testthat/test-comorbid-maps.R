@@ -98,21 +98,21 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
               skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
-              expect_identical(quanDeyoComorbid, parse_quan_deyo_sas(save = FALSE))
+              expect_identical(quanDeyoComorbid, parse_quan_deyo_sas(save_data = FALSE))
               expect_equivalent(
                 icd_get_invalid.icd_comorbidity_map(quanDeyoComorbid, short_code = TRUE),
                 list())
             })
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
-              expect_identical(quanElixComorbid, icd9_generate_map_quan_elix(save = FALSE))
+              expect_identical(quanElixComorbid, icd9_generate_map_quan_elix(save_data = FALSE))
               expect_equivalent(
                 icd_get_invalid.icd_comorbidity_map(quanElixComorbid, short_code = TRUE),
                 list())
             })
 test_that("Elixhauser icd9 mappings are all
             generated from the current generation code", {
-              expect_identical(elixComorbid, icd9_generate_map_elix(save = FALSE))
+              expect_identical(elixComorbid, icd9_generate_map_elix(save_data = FALSE))
               expect_equivalent(icd_get_invalid.icd_comorbidity_map(elixComorbid, short_code = TRUE), list())
             })
 
@@ -155,7 +155,7 @@ test_that("icd9_hierarchy as saved in data can be recreated", {
   skip("this is 15 minutes alone, so skip this and run manually when needed")
   skip_slow_tests()
   skip_online_tests()
-  expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
+  expect_equal(icd9BuildChaptersHierarchy(save_data = FALSE),
                icd9::icd9_hierarchy)
 })
 
@@ -166,7 +166,7 @@ test_that("icd9Chapters, etc. as saved in data can be recreated", {
   skip_on_cran() # and/or skip_on_travis()
   skip_on_travis()
   skip_online_tests()
-  res <- parseIcd9Chapters(year = "2014", save = FALSE)
+  res <- parseIcd9Chapters(year = "2014", save_data = FALSE)
   expect_equal(res$icd9Chapters, icd9::icd9Chapters)
   expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)
   expect_equal(res$icd9ChaptersMajor, icd9::icd9ChaptersMajor)
@@ -176,7 +176,7 @@ test_that("AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
   result <- parse_ahrq_sas(sasPath = system.file("data-raw",
                                                "comformat2012-2013.txt", package = "icd9"),
-                           save = FALSE)
+                           save_data = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
 })
