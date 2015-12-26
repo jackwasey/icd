@@ -86,6 +86,8 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 test_that("ahrq icd9 mappings generated from the current generation code", {
   # skip_on_cran()  # apparently this runs of wercker but not travis, presumably
   # because travis uses --as-cran or equivalent
+  if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) == "")
+    skip("data-raw/comformat2012-2013.txt not available, so skipping AHRQ SAS parsing test.")
 
     # same but from source data. Should be absolutely identical.
   expect_equal(icd9_map_ahrq, parse_ahrq_sas(save_data = FALSE))
@@ -95,12 +97,18 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
-              #skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
+              # skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
+
+              # TODO: could include data-raw in package, or download especially for the test:
+              if (system.file("data-raw", "ICD9_E_Charlson.sas", package = get_pkg_name()) == "")
+                skip("data-raw/ICD9_E_Charlson.sas not available, so skipping Quan Deyo SAS parsing test.")
+
               expect_identical(icd9_map_quan_deyo, parse_quan_deyo_sas(save_data = FALSE))
               expect_equivalent(
                 icd_get_invalid.icd_comorbidity_map(icd9_map_quan_deyo, short_code = TRUE),
                 list())
             })
+
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(icd9_map_quan_elix, icd9_generate_map_quan_elix(save_data = FALSE))
