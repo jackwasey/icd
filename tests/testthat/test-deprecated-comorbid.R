@@ -86,6 +86,8 @@ test_that("deprecated - icd9 comorbidities are created correctly, and logical to
 
 test_that("deprecated - ahrq icd9 mappings generated from the current generation code", {
   skip_on_cran()
+  if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) = "")
+    skip("data-raw/comformat2012-2013.txt not available, so skipping Quan Deyo SAS parsing test.")
   # same but from source data. Should be absolutely identical.
   expect_equal(ahrqComorbid, parseAhrqSas(save = FALSE))
   # same but from source data. Should be absolutely identical.
@@ -707,4 +709,19 @@ test_that("deprecated - comorbidities created from source data frame coded as fa
   res <- icd9ComorbidAhrq(v2)
   res_nofactor <- vermont_dx %>% icd9WideToLong %>% icd9ComorbidAhrq
   expect_identical(res, res_nofactor)
+})
+
+test_that("deprecated data aliases are created", {
+  expect_warning(dep_dat <- generate_deprecated_data(save_data = FALSE), NA)
+  expect_true(
+    setequal(names(dep_dat),
+             c("icd9Billable", "icd9Hierarchy", "ahrqComorbid", "ahrqComorbidAll",
+               "quanDeyoComorbid", "quanElixComorbid", "elixComorbid", "elixComorbidNames",
+               "elixComorbidNamesAbbrev", "elixComorbidNamesHtn", "elixComorbidNamesHtnAbbrev",
+               "quanElixComorbidNames", "quanElixComorbidNamesAbbrev", "quanElixComorbidNamesHtn",
+               "quanElixComorbidNamesHtnAbbrev", "ahrqComorbidNames", "ahrqComorbidNamesAbbrev",
+               "ahrqComorbidNamesHtn", "ahrqComorbidNamesHtnAbbrev", "charlsonComorbidNames",
+               "charlsonComorbidNamesAbbrev")
+    )
+  )
 })
