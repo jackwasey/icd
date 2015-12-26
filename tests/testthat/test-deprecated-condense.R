@@ -19,11 +19,11 @@ context("deprecated tests for condense")
 
 library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
 
-test_that("five digit to five digit code range condenses", {
+test_that("deprecated - five digit to five digit code range condenses", {
   expect_equal(icd9Condense("34500" %i9sa% "34509", onlyReal = FALSE), "3450")
 })
 
-test_that("condensing a single real codes gives themselves", {
+test_that("deprecated - condensing a single real codes gives themselves", {
   expect_that(res <- icd9Condense("61172"), shows_message())
   expect_equal(res, "61172")
   expect_equal(icd9Condense("61172", onlyReal = FALSE), "61172")
@@ -39,7 +39,7 @@ test_that("condensing a single real codes gives themselves", {
   expect_equal(icd9Condense("E030", onlyReal = FALSE), "E030")
 })
 
-test_that("condense an ICD-9 code set to minimal group", {
+test_that("deprecated - condense an ICD-9 code set to minimal group", {
   expect_equal(sort(icd9Condense("98799" %i9sa% "98901", onlyReal = FALSE)),
                sort(c("98799", "988", "98900", "98901")))
   # non-real end of real range
@@ -50,7 +50,7 @@ test_that("condense an ICD-9 code set to minimal group", {
 })
 
 
-test_that("condense ranges which do consense", {
+test_that("deprecated - condense ranges which do consense", {
   expect_equal(
     icd9Condense(icd9ChildrenShort("123", onlyReal = TRUE), onlyReal = TRUE),
     "123")
@@ -75,7 +75,7 @@ test_that("condense ranges which do consense", {
                             onlyReal = FALSE), "V12")
 })
 
-test_that("condense ranges that don't condense at all", {
+test_that("deprecated - condense ranges that don't condense at all", {
   expect_equal(sort(icd9Condense(c("1230", "1232", "1236"), onlyReal = FALSE)), c("1230", "1232", "1236"))
   expect_equal(sort(icd9Condense(c("1230", "1232", "1236"), onlyReal = TRUE)), c("1230", "1232", "1236"))
   # missing 10009
@@ -84,7 +84,7 @@ test_that("condense ranges that don't condense at all", {
                c("1000", as.character(10000:10008)))
 })
 
-test_that("condense range invalid data", {
+test_that("deprecated - condense range invalid data", {
   expect_equal(icd9Condense("turnpike", onlyReal = FALSE), character(0))
   expect_equal(icd9Condense(c("turnpike", "road"), onlyReal = FALSE), character(0))
   expect_equal(icd9Condense(c(""), onlyReal = FALSE), character(0))
@@ -95,14 +95,14 @@ test_that("condense range invalid data", {
   expect_equal(icd9Condense(c("NA", "rotem", "123"), onlyReal = FALSE), "123")
 })
 
-test_that("mix of four and five digit billable codes", {
+test_that("deprecated - mix of four and five digit billable codes", {
   # this is all of leptospirosis, but missing the "1008" non-billable sub-heading
   expect_equal(
     icd9CondenseShort(c("1000", "10081", "10089", "1009")),
     "100")
 })
 
-test_that("mix of four and five digit billable codes over bigger range", {
+test_that("deprecated - mix of four and five digit billable codes over bigger range", {
   # this is all of leptospirosis, but missing the "1008" non-billable sub-heading
   expect_equal(
     icd9CondenseShort(c("1000", "10081", "10089", "1009", "101")),
@@ -110,14 +110,14 @@ test_that("mix of four and five digit billable codes over bigger range", {
 })
 
 
-test_that("mix of four and five digit with non-billable mid-level four digit code", {
+test_that("deprecated - mix of four and five digit with non-billable mid-level four digit code", {
   expect_equal(
     icd9CondenseShort(c("1000", "1008", "10081", "10089", "1009")),
     "100")
 })
 
 
-test_that("condense short range", {
+test_that("deprecated - condense short range", {
 
   expect_equal(icd9ExplainShort(icd9Short = othersalmonella),
                "Other salmonella infections")
@@ -147,7 +147,7 @@ test_that("condense short range", {
   expect_equal(icd9CondenseShort(c("003", "003"), onlyReal = FALSE), "003")
 })
 
-test_that("condense full ranges", {
+test_that("deprecated - condense full ranges", {
   # condensing to "real" means we don't get a lot of majors, which are often not
   # themselves defined.
   # majors:
@@ -196,7 +196,7 @@ test_that("condense full ranges", {
 
 })
 
-test_that("condense single major and its children", {
+test_that("deprecated - condense single major and its children", {
   expect_equal(icd9CondenseShort("003"), "003")
 
   rheum_fever <- "Rheumatic fever with heart involvement"
@@ -212,14 +212,14 @@ vermont_dx %>%
   unique %>%
   utils::head(10) -> vdat
 
-test_that("condense a factor of codes instead of character vector", {
+test_that("deprecated - condense a factor of codes instead of character vector", {
   # this is not a condensable list
   dat <- as.factor(vdat)
   expect_equal(dat, icd9CondenseShort(dat))
 
 })
 
-test_that("levels are preserved from source factor", {
+test_that("deprecated - levels are preserved from source factor", {
   dat <- factor(vdat, levels = c("plastic", vdat))
   expect_identical(dat, icd9CondenseShort(dat, keepFactorLevels = TRUE))
   expect_equivalent(dat, icd9CondenseShort(dat, keepFactorLevels = FALSE))

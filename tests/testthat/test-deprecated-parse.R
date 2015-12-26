@@ -17,9 +17,7 @@
 
 context("deprecated test RTF parsing")
 
-library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
-
-test_that("multiple lines in one fifth digit disciminator", {
+test_that("deprecated - multiple lines in one fifth digit disciminator", {
   # nolint start
   testlines <- c("The following fifth-digit subclassification is for use with category 203:",
                  "\\par }\\pard\\plain \\ltrpar\\s59\\ql \\fi-720\\li2340\\ri0\\widctlpar\\tx180\\tx360\\tx540\\tx720\\tx900\\tx1080\\tx1260\\tx1440\\tx1620\\tx1800\\tx1980\\tx2160\\tx2340\\tx2520\\tx2700\\tx2880\\tx3060\\tx3240\\tx3420\\tx3600\\tx3780\\tx3960\\tx4140\\wrapdefault\\faauto\\rin0\\lin2340\\itap0 ",
@@ -38,17 +36,17 @@ test_that("multiple lines in one fifth digit disciminator", {
 
 })
 
-test_that("bookmark ends only", {
+test_that("deprecated - bookmark ends only", {
   expect_equal(stripRtf("{\\*\\bkmkend 200.05}{\\*\\bkmkend 200.06}{\\*\\bkmkend 200.07}{\\*\\bkmkend 200.08}{\\*\\bkmkend 200.0}\\hich\\af1\\dbch\\af31505\\loch\\f1 200.0\\tab Reticulosarcoma"),
                "200.0 Reticulosarcoma")
 })
 
-test_that("stripRtf bug case with combined line", {
+test_that("deprecated - stripRtf bug case with combined line", {
   expect_equal(stripRtf(x = "\\rtlch\\fcs1 \\af1\\afs20\\alang1025 \\ltrch\\fcs0 \\fs20\\cf1\\lang1033\\langfe1033\\loch\\af1\\hich\\af1\\dbch\\af31505\\cgrid\\langnp1033\\langfenp1033 {\\rtlch\\fcs1 \\af1 \\ltrch\\fcs0 \\insrsid2429293 0\\tab \\hich\\af1\\dbch\\af31505\\loch\\f1 not stated as uncontrolled\\par }\\pard\\plain \\ltrpar\\s30\\ql \\fi-360\\li1440\\ri0\\widctlpar\\tx180\\tx360\\tx540\\tx720\\tx900\\tx1080\\tx1260\\tx1440\\tx1620\\tx1800\\tx1980\\tx2160\\tx2340\\tx2520\\tx2700\\tx2880\\tx3060\\tx3240\\tx3420\\tx3600\\tx3780\\tx3960\\tx4140\\wrapdefault\\faauto\\rin0\\lin1440\\itap0"),
                "0 not stated as uncontrolled")
 })
 
-test_that("stripRtf does what it says on the tin", {
+test_that("deprecated - stripRtf does what it says on the tin", {
   expect_equal(
     stripRtf("\\rtlch\\fcs1 \\af1\\afs20\\alang1025 \\ltrch\\fcs0 \\fs20\\cf1\\lang1033\\langfe1033\\loch\\af1\\hich\\af1\\dbch\\af31505\\cgrid\\langnp1033\\langfenp1033 {\\rtlch\\fcs1 \\ab\\af1 \\ltrch\\fcs0 \\b\\insrsid2429293 0\\tab \\hich\\af1\\dbch\\af31505\\loch\\f1 unspecified"),
     "0 unspecified")
@@ -75,7 +73,7 @@ test_that("stripRtf does what it says on the tin", {
   # nolint end
 })
 
-test_that("extraction from qualifier subset works", {
+test_that("deprecated - extraction from qualifier subset works", {
   all2015 <- c("[0-6]", "[0-3]", "[0-5,9]", "[0-8]", "[0-2]", "[0-1]", "[0-5]",
                "[0,1,3]", "[0-4]", "[0,3]", "[0-1,3]", "[1-2]", "[0, 1, 3]",
                "[0,1,4]", "[0,1]", "[0,2,4]", "[0-2,4]", "[0-9]", "[0,4,9]",
@@ -99,7 +97,7 @@ test_that("extraction from qualifier subset works", {
 
 # The following tests on the RTF parsing get the RTF source over internet, so
 # package doesn't have to include the big RTF source file
-test_that("online parse tests run", {
+test_that("deprecated - online parse tests run", {
   skip_online_tests()
   rtf_dat <- data_sources[data_sources$f_year == "2011", ]
   url <- rtf_dat$rtf_url
@@ -110,26 +108,26 @@ test_that("online parse tests run", {
   rtf <- parseRtfLines(rtf_lines)
   nrtf <- names(rtf)
 
-  test_that("all parsed codes are valid decimals", {
+  test_that("deprecated - all parsed codes are valid decimals", {
     expect_true(all(icd9IsValidDecimal(nrtf)),
                 info = paste("invalid codes are :",
                              paste(icd9GetInvalid(nrtf), collapse = ", ")))
   })
 
-  test_that("no rtf formatting left in descriptions", {
+  test_that("deprecated - no rtf formatting left in descriptions", {
     expect_false(any(grepl("[\\\\{}]", rtf)),
                  info = paste("rtf codes in descriptions:",
                               paste(grep("[\\\\{}]", rtf, value = TRUE))))
 
   })
 
-  test_that("all csv extract codes are in rtf extract", {
+  test_that("deprecated - all csv extract codes are in rtf extract", {
     missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9Hierarchy$icd9), nrtf)
     expect_equal(length(missing_from_rtf), 0,
                  info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
   })
 
-  test_that("majors extracted from web page are the same as those from RTF", {
+  test_that("deprecated - majors extracted from web page are the same as those from RTF", {
     webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
     work <- swapNamesWithVals(rtf)
     rtfmajors <- work[icd9IsMajor(work)]
@@ -144,12 +142,12 @@ test_that("online parse tests run", {
 
   v32 <- parseLeafDescriptionsVersion(version = "32", save = FALSE, fromWeb = FALSE)
 
-  test_that("all leaf codes from TXT are in RTF extract", {
+  test_that("deprecated - all leaf codes from TXT are in RTF extract", {
     v32$icd9 %>% icd9ShortToDecimal -> leaves
     expect_true(all(leaves %in% nrtf))
   })
 
-  test_that("RTF extract has no duplicates", {
+  test_that("deprecated - RTF extract has no duplicates", {
     expect_equal(sum(duplicated(nrtf)),
                  0,
                  info = paste("first few duplicates: ",
@@ -157,13 +155,13 @@ test_that("online parse tests run", {
                  ))
   })
 
-  test_that("mid-level descriptions are in RTF extract", {
+  test_that("deprecated - mid-level descriptions are in RTF extract", {
     expect_equivalent(rtf["611"], "Other disorders of breast")
     expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
     expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
   })
 
-  test_that("manual check to look at description differences between RTF and TXT", {
+  test_that("deprecated - manual check to look at description differences between RTF and TXT", {
     skip("manual check")
     rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
       swapNamesWithVals %>%
@@ -171,7 +169,7 @@ test_that("online parse tests run", {
     print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
   })
 
-  test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
+  test_that("deprecated - we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
     # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
     expect_false("640.02" %in% nrtf)
     # grep "\[[[:digit:]],.*\]" Dtab12.rtf

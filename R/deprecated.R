@@ -838,14 +838,14 @@ icd9ExpandMinor <- function(minor, isE = FALSE) {
   icd_expand_minor.icd9(minor, is_e = isE)
 }
 
-parseQuanElix <- function(...) {
+parseQuanElix <- function(condense = FALSE, save = FALSE, path = NULL) {
   .Deprecated("parse_quan_elix")
-  icd9_generate_map_quan_elix(...)
+  icd9_generate_map_quan_elix(condense = condense, save_data = save, path = path)
 }
 
-parseElix <- function(...) {
+parseElix <- function(condense = FALSE, save = FALSE, path = NULL) {
   .Deprecated("parse_quan_elix")
-  icd9_generate_map_elix(...)
+  icd9_generate_map_elix(condense = condense, save_data = save)
 }
 
 logicalToBinary <- function(...) {
@@ -975,19 +975,25 @@ icd9ExtractAlphaNumeric <- function(icd9) {
   icd_extract_alpha_numeric(icd9)
 }
 
-parseQuanDeyoSas <- function(...) {
+parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE,
+                             path = NULL) {
   .Deprecated("parse_quan_deyo_sas")
-  parse_quan_deyo_sas(...)
+  parse_quan_deyo_sas(sasPath = sasPath, condense = condense, save_data = save, path = path)
 }
 
-parseAhrqSas <- function(...) {
+parseAhrqSas <- function(
+  sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
+  save = FALSE, path = NULL) {
   .Deprecated("parse_ahrq_sas")
-  parse_ahrq_sas(...)
+  parse_ahrq_sas(sasPath = sasPath, save_data = save, path = path)
 }
 
-generateSysData <- function(...) {
+generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"),
+                            save = TRUE, verbose = NULL) {
   .Deprecated("generate_sys")
-  generate_sysdata(...)
+  if (!missing(verbose))
+    warning("verbose is deprecated, always on now for internal package building functions")
+  generate_sysdata(path = sysdata.path, save_data = save)
 }
 
 icd9DropLeadingZeroes <- function(x, isShort) {

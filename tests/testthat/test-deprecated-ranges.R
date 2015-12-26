@@ -17,7 +17,7 @@
 
 context("deprecated icd9 ranges")
 
-test_that("expand icd9 range definition", {
+test_that("deprecated - expand icd9 range definition", {
   expect_equal(
     icd9ExpandRangeShort("4012", "40145",
                          onlyReal = FALSE,
@@ -131,12 +131,12 @@ test_that("expand icd9 range definition", {
 
 })
 
-test_that("expand range defined by two four digit codes includes last code", {
+test_that("deprecated - deprecated - expand range defined by two four digit codes includes last code", {
   expect_true("1991" %in% icd9ExpandRangeShort("1960", "1991", onlyReal = FALSE))
   expect_true("19919" %in% icd9ExpandRangeShort("1960", "1991", onlyReal = FALSE))
 })
 
-test_that("expand range worker gives correct ranges", {
+test_that("deprecated - expand range worker gives correct ranges", {
   # really, the test is against icd9ExpandRange family, but we can isolate an
   # error to the sub-function
   expect_equal(
@@ -145,7 +145,7 @@ test_that("expand range worker gives correct ranges", {
     c("V10", "V100", "V1000", "V1001"))
 })
 
-test_that("V code with ambiguous parent", {
+test_that("deprecated - V code with ambiguous parent", {
   # although we don't usually return parents whose scope overlaps the upper
   # limit, if the range specification already has this 'anomaly', we just roll
   # with it.
@@ -160,7 +160,7 @@ test_that("V code with ambiguous parent", {
                c("V1000", "V1001"))
 })
 
-test_that("V code ranges", {
+test_that("deprecated - V code ranges", {
   expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
                c("V1000", "V1001", "V1002"))
   # but we cap off the upper range correctly:
@@ -193,7 +193,7 @@ test_that("V code ranges", {
 
 })
 
-test_that("E code ranges", {
+test_that("deprecated - E code ranges", {
   expect_equal(icd9ExpandRangeShort("E9501", "E9502", onlyReal = FALSE), c("E9501", "E9502"))
   expect_equal(icd9ExpandRangeShort("E950", "E9509", onlyReal = FALSE),
                c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
@@ -202,7 +202,7 @@ test_that("E code ranges", {
   expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
 })
 
-test_that("major ranges", {
+test_that("deprecated - major ranges", {
   resall <- icd9ExpandRangeMajor("E000", "E999", onlyReal = FALSE)
   expect_equal(length(resall), 1000)
   expect_true("E000" %in% resall)
@@ -220,7 +220,7 @@ test_that("major ranges", {
                c("E099", "E100", "E101"))
 })
 
-test_that("range bugs", {
+test_that("deprecated - range bugs", {
   # these both failed - need zero padding for the first
   expect_equal( ("042 " %i9s% "042 ")[1], "042")
   expect_equal( ("42" %i9s% "042 ")[1], "042")
@@ -233,7 +233,7 @@ test_that("range bugs", {
   expect_equal(unclass("42.11" %i9da% "42.13"), c("042.11", "042.12", "042.13"))
 })
 
-test_that("range doesn't include higher level parent github issue #14", {
+test_that("deprecated - range doesn't include higher level parent github issue #14", {
   # by default, any code returned in a range should also have all of its
   # children, if any, in the range (whether including or excluding non-real.
   expect_false("0101" %in% ("01006" %i9sa% "01010"))
@@ -252,7 +252,7 @@ test_that("range doesn't include higher level parent github issue #14", {
   expect_true("390" %in% ("389.9" %i9da% "391.1"))
 })
 
-test_that("ranges can include ambiguous parents, optionally", {
+test_that("deprecated - ranges can include ambiguous parents, optionally", {
   expect_equal(
     icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
     c("01006", "01010"))
@@ -279,7 +279,7 @@ test_that("ranges can include ambiguous parents, optionally", {
   expect_true("390" %in% ("389.9" %i9da% "391.1"))
 })
 
-test_that("range abbrevs", {
+test_that("deprecated - range abbrevs", {
   expect_identical(icd9ExpandRange("123", "123.6", isShort = FALSE, onlyReal = FALSE),
                    "123" %i9da% "123.6")
   expect_identical(icd9ExpandRange("123", "123.6", isShort = FALSE, onlyReal = TRUE),
@@ -288,7 +288,7 @@ test_that("range abbrevs", {
                    "1234" %i9sa% "125")
 })
 
-test_that("icd9ExpandMinor: invalid", {
+test_that("deprecated - icd9ExpandMinor: invalid", {
   expect_error(icd9ExpandMinor(c(1, 2)))
   expect_error(icd9ExpandMinor("JACK"))
   expect_error(icd9ExpandMinor(c(123)))
@@ -301,7 +301,7 @@ test_that("icd9ExpandMinor: invalid", {
   expect_error(icd9ExpandMinor("99", isE = TRUE))
 })
 
-test_that("icd9ExpandMinor: valid", {
+test_that("deprecated - icd9ExpandMinor: valid", {
   expect_equal(length(icd9ExpandMinor("", isE = FALSE)), 111)
   expect_equal(length(icd9ExpandMinor("", isE = TRUE)), 11)
   expect_identical(icd9ExpandMinor("00", isE = FALSE), "00")
@@ -314,7 +314,7 @@ test_that("icd9ExpandMinor: valid", {
 
 })
 
-test_that("icd9ChildrenDecimal valid input", {
+test_that("deprecated - icd9ChildrenDecimal valid input", {
   expect_equal(
     icd9ChildrenDecimal("V10.0", onlyReal = FALSE),
     append("V10.0", paste("V10.0", 0:9, sep = "")))
@@ -333,7 +333,7 @@ test_that("icd9ChildrenDecimal valid input", {
   expect_equal(icd9ChildrenDecimal("010.0"), icd9ChildrenDecimal("10.0"))
 })
 
-test_that("icd9ChildrenShort valid input", {
+test_that("deprecated - icd9ChildrenShort valid input", {
   expect_equal(icd9ChildrenShort("V100", onlyReal = FALSE),
                paste("V100", c("", 0:9), sep = ""))
   expect_equal(icd9ChildrenShort("v100"), icd9Children("V100"))
@@ -354,23 +354,23 @@ test_that("icd9ChildrenShort valid input", {
   expect_equal(icd9ChildrenShort("390", onlyReal = TRUE), "390")
 })
 
-test_that("icd9InReferenceCode deals with bad input", {
+test_that("deprecated - icd9InReferenceCode deals with bad input", {
   expect_equal(icd9InReferenceCode(NA, "123", isShort = TRUE), FALSE) # arguable: could return NA here
   expect_equal(icd9InReferenceCode("", "123", isShort = TRUE), FALSE)
   expect_equal(icd9InReferenceCode("bratwurst", "123", isShort = TRUE), FALSE)
 })
 
-test_that("icd9InReferenceCode mixing short and decimals", {
+test_that("deprecated - icd9InReferenceCode mixing short and decimals", {
   expect_equal(icd9InReferenceCode("123.45", "12345", isShort = FALSE, isShortReference = TRUE), TRUE)
   expect_equal(icd9InReferenceCode("12345", "123.45", isShort = TRUE, isShortReference = FALSE), TRUE)
 })
 
-test_that("icd9InReferenceCode test code format matches mapping format", {
+test_that("deprecated - icd9InReferenceCode test code format matches mapping format", {
   expect_equal(icd9InReferenceCode("123.45", "123.45", isShort = FALSE, isShortReference = FALSE), TRUE)
   expect_equal(icd9InReferenceCode("12345", "12345", isShort = TRUE, isShortReference = TRUE), TRUE)
 })
 
-test_that("icd9InReferenceCode produces the right length output", {
+test_that("deprecated - icd9InReferenceCode produces the right length output", {
   expect_equal(
     icd9InReferenceCode(c("100", "200"), c("400", "100", "200", "300"), isShort = TRUE),
     c(TRUE, TRUE)
@@ -393,7 +393,7 @@ test_that("icd9InReferenceCode produces the right length output", {
   )
 })
 
-test_that("icd9InReferenceCode", {
+test_that("deprecated - icd9InReferenceCode", {
 
   expect_equal(icd9InReferenceCode(c("421", "123"), c("123", "V"), isShort = FALSE), c(FALSE, TRUE))
   expect_equal(
@@ -407,7 +407,7 @@ test_that("icd9InReferenceCode", {
                    c(TRUE, TRUE, FALSE))
 })
 
-test_that("icd9InReferenceCode works for numeric codes with major < 100", {
+test_that("deprecated - icd9InReferenceCode works for numeric codes with major < 100", {
   expect_true(icd9InReferenceCode("1", "1", isShort = TRUE))
   expect_true(icd9InReferenceCode(" 1", "01", isShort = TRUE))
   expect_true(icd9InReferenceCode("1 ", "001", isShort = TRUE))
@@ -430,7 +430,7 @@ test_that("icd9InReferenceCode works for numeric codes with major < 100", {
                    icd9InReferenceCode("0011", "01", isShort = TRUE))
 })
 
-test_that("sorting char vectors", {
+test_that("deprecated - sorting char vectors", {
   expect_equal(icd9SortShort(c("3", "02", "001", "003")), c("001", "02", "3", "003"))
   expect_equal(icd9Sort(c("1", "V02", "V1", "E003"), isShort = TRUE), c("1", "V1", "V02", "E003"))
   expect_equal(icd9SortShort(c("0032", "0288", "0019", "0031")), c("0019", "0031", "0032", "0288"))
@@ -440,7 +440,7 @@ test_that("sorting char vectors", {
                c("77", "88.8", "999.99", "V02.1", "V2.2", "E001", "E1.1"))
 })
 
-test_that("sorting char factors", {
+test_that("deprecated - sorting char factors", {
   expect_equal(icd9SortShort(factor(c("3", "02", "001", "003"))),
                factor(c("001", "02", "3", "003")))
   expect_equal(icd9Sort(factor(c("1", "V02", "V1", "E003")), isShort = TRUE),
@@ -455,7 +455,7 @@ test_that("sorting char factors", {
                factor(c("77", "88.8", "999.99", "V02.1", "V2.2", "E001", "E1.1")))
 })
 
-test_that("sysdata.rda is okay", {
+test_that("deprecated - sysdata.rda is okay", {
   lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
                "icd9NShortBillable", "icd9VShortBillable", "icd9EShortBillable",
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",

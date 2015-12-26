@@ -27,7 +27,12 @@
 #' @keywords internal
 parse_ahrq_sas <- function(
   sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
-  save_data = FALSE, path = "data") {
+  save_data = FALSE, path = NULL, verbose = NULL) {
+
+  if (!missing(path) || !missing(verbose))
+    warning("'verbose' and 'path' in parse_ahrq_sas are deprecated and no longer has any effect.
+            'path' is now the data dir in the working tree.",
+            call. = FALSE)
 
   assertString(sasPath)
   assertString(path)
@@ -141,15 +146,13 @@ parse_quan_deyo_sas <- function(sasPath = system.file("data-raw",
                                                       package = get_pkg_name()),
                                 condense = NULL,
                                 save_data = FALSE,
-                                path = "data") {
+                                path = NULL) {
   assertFile(sasPath)
   assertFlag(save_data)
-  assertString(path)
 
-
-  if (!missing(condense))
-    warning("'condense' is deprecated in parse_quan_deyo_sas, and no longer has any effect.
-                                  The map can be condensed using other functions in the package.",
+  if (!missing(condense) || !missing(path))
+    warning("'condense' and 'path' are deprecated in parse_quan_deyo_sas, and no longer has any effect.
+            The map can be condensed using other functions in the package. 'path' is now the data dir in the working tree.",
             call. = FALSE)
 
   quanSas <- readLines(sasPath, warn = FALSE)

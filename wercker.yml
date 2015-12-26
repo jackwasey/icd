@@ -5,7 +5,9 @@ box: rocker/hadleyverse
 build:
   steps:
     - jimhester/r-dependencies:
-        github_packages: hadley/testthat RcppCore/Rcpp
+        github_packages: hadley/testthat RcppCore/Rcpp jimhester/covr
     - jimhester/r-check
-    - jimhester/r-lint
-    - jimhester/r-coverage
+    - jimhester/r-coverage:
+      warnings_are_errors: FALSE
+
+#     - jimhester/r-lint

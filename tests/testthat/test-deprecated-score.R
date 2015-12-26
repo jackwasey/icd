@@ -17,14 +17,14 @@
 
 context("test deprecated Charlson and counting")
 
-test_that("github issue #44 from wmurphyrd", {
+test_that("deprecated - github issue #44 from wmurphyrd", {
   mydf <- data.frame(visitId = c("a", "b", "c", "a", "b", "d"),
                      icd9 = c("441", "412.93", "044.9", "250.0", "250.0", "250.0"),
                      stringsAsFactors = TRUE)
   expect_that(icd9Charlson(mydf, return.df = TRUE), testthat::not(throws_error()))
 })
 
-test_that("github issue #46 from wmurphyd", {
+test_that("deprecated - github issue #46 from wmurphyd", {
   mydf <- data.frame(visitId = "a", icd9 = "250.0")
   comorbids <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE)
   set.seed(123)
@@ -42,14 +42,14 @@ test_that("github issue #46 from wmurphyd", {
   )
 })
 
-test_that("only matrix or data.frame accepted", {
+test_that("deprecated - only matrix or data.frame accepted", {
   expect_error(icd9Charlson(c(1, 2)))
   expect_error(icd9Charlson(c(1, 2), visitId = "roam", return.df = TRUE, stringsAsFactors = TRUE))
   expect_error(icd9Charlson(list(1, 2)))
   expect_error(icd9Charlson(list(1, 2), visitId = "roam", return.df = TRUE, stringsAsFactors = TRUE))
 })
 
-test_that("Charlson score", {
+test_that("deprecated - Charlson score", {
 
   mydf <- data.frame(visitId = c("a", "b", "c"),
                      icd9 = c("441", "412.93", "044.9"),
@@ -127,7 +127,7 @@ test_that("Charlson score", {
   )
 })
 
-test_that("Charlson - errors?", {
+test_that("deprecated - Charlson - errors?", {
   baddf <- data.frame(visitId = c("d", "d"),
                       icd9 = c("2500", "25042"),
                       stringsAsFactors = TRUE)
@@ -141,7 +141,7 @@ test_that("Charlson - errors?", {
   expect_error(icd9CharlsonComorbid(cmb, applyHierarchy = FALSE))
 })
 
-test_that("count icd9 codes", {
+test_that("deprecated - count icd9 codes", {
   mydf <- data.frame(visitId = c("r", "r", "s"),
                      icd9 = c("441", "412.93", "044.9"))
   expect_equal(icd9Count(mydf, return.df = TRUE),
@@ -207,7 +207,7 @@ test_that("count icd9 codes", {
 
 })
 
-test_that("count wide directly (old func) same as reshape count", {
+test_that("deprecated - count wide directly (old func) same as reshape count", {
 
   widedf <- data.frame(visitId = c("a", "b", "c"),
                        icd9_01 = c("441", "4424", "441"),
@@ -218,7 +218,7 @@ test_that("count wide directly (old func) same as reshape count", {
                     icd9Count(icd9WideToLong(widedf)))
 })
 
-test_that("icd9VanWalravenComorbid score calculation", {
+test_that("deprecated - icd9VanWalravenComorbid score calculation", {
 
   comorbids <- icd9ComorbidQuanElix(
     mydf <- data.frame(visitId = "a", icd9 = "250.0"),
@@ -239,7 +239,7 @@ test_that("icd9VanWalravenComorbid score calculation", {
   )
 })
 
-test_that("icd9VanWalraven comodbidity index and score", {
+test_that("deprecated - icd9VanWalraven comodbidity index and score", {
   mydf <- data.frame(id = factor(c(rep(1, 20), rep(2, 20), rep(3, 18))),
                      value = c("324.1", "285.9", "599.70", "038.9", "278.00", "38.97",
                              "V88.01", "112.0", "427.89", "790.4", "401.9", "53.51", "584.9",
@@ -262,7 +262,7 @@ test_that("icd9VanWalraven comodbidity index and score", {
     )
 })
 
-test_that("github issue #64 - quan revised charleson scores", {
+test_that("deprecated - github issue #64 - quan revised charleson scores", {
   mydf <- data.frame(visitId = "a", icd9 = "250.0")
   comorbids <- icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE)
 

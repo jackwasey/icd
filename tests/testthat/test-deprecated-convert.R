@@ -17,7 +17,7 @@
 
 context("deprecated icd9 type conversions")
 
-test_that("extract decimal parts - invalid or empty input", {
+test_that("deprecated - extract decimal parts - invalid or empty input", {
   expect_equal(icd9DecimalToParts(character()), list(major = character(),
                                                      minor = character()))
 
@@ -29,7 +29,7 @@ test_that("extract decimal parts - invalid or empty input", {
   )
 })
 
-test_that("extract decimal parts - valid inputs", {
+test_that("deprecated - extract decimal parts - valid inputs", {
   expect_equal(icd9DecimalToParts("0"), list(major = "000", minor = ""))
   expect_equal(icd9DecimalToParts("000"), list(major = "000", minor = ""))
   expect_equal(icd9DecimalToParts("V1.2"), list(major = "V01", minor = "2"))
@@ -78,11 +78,11 @@ test_that("extract decimal parts - valid inputs", {
   )
 })
 
-test_that("icd9 decimal to short form, bad codes", {
+test_that("deprecated - icd9 decimal to short form, bad codes", {
   expect_equal(icd9DecimalToShort(character()), character())
 })
 
-test_that("icd9 decimal to short form", {
+test_that("deprecated - icd9 decimal to short form", {
   expect_equal(icd9DecimalToShort("1"), "001")
   expect_equal(icd9DecimalToShort("1.1"), "0011")
   expect_equal(icd9DecimalToShort("1.23"), "00123")
@@ -99,7 +99,7 @@ test_that("icd9 decimal to short form", {
 
 })
 
-test_that("short to decimal, numbers", {
+test_that("deprecated - short to decimal, numbers", {
   # if there is anything after decimal, zeroes must be there!
   expect_equal(icd9DecimalToShort("1.0"), "0010")
   expect_equal(icd9DecimalToShort("1"), "001")
@@ -109,7 +109,7 @@ test_that("short to decimal, numbers", {
   expect_equal(icd9ShortToDecimal("V013"), "V01.3")
 })
 
-test_that("short to decimal bad input", {
+test_that("deprecated - short to decimal bad input", {
   expect_equal(icd9ShortToDecimal(character()), character())
   expect_equal(icd9ShortToDecimal("valsalva"), NA_character_)
   expect_equal(icd9ShortToDecimal("123456"), NA_character_)
@@ -121,7 +121,7 @@ test_that("short to decimal bad input", {
                c(NA_character_, NA_character_))
 })
 
-test_that("icd9 short to major part, E codes", {
+test_that("deprecated - icd9 short to major part, E codes", {
   expect_equal(icd9GetMajor(isShort = TRUE, "E000"), "E000")
   expect_equal(icd9GetMajor(isShort = TRUE, "E00"), "E000")
   expect_equal(icd9GetMajor(isShort = TRUE, "E0"), "E000")
@@ -133,7 +133,7 @@ test_that("icd9 short to major part, E codes", {
 
 })
 
-test_that("running short to decimal conversion before and after expansion
+test_that("deprecated - running short to decimal conversion before and after expansion
           of a ICD-9 base codes gives the same result", {
 
             icd9List <- ahrqComorbid #todo SUBSET OR EXTRA MAPPINGS?
@@ -177,7 +177,7 @@ test_that("running short to decimal conversion before and after expansion
             expect_equal(icd9DecimalToShort("123."), "123")
           })
 
-test_that("parts to decimal", {
+test_that("deprecated - parts to decimal", {
   expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = NA)), testthat::equals("100"))
   expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "")), testthat::equals("100"))
   expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "1")), testthat::equals("100.1"))
@@ -186,7 +186,7 @@ test_that("parts to decimal", {
   expect_that(icd9MajMinToDecimal("100", "1"), testthat::equals("100.1"))
 })
 
-test_that("parts to short invalid inputs", {
+test_that("deprecated - parts to short invalid inputs", {
   dfempty <- list(major = character(), minor = character())
   dfe2 <- list(major = "", minor = "")
 
@@ -199,7 +199,7 @@ test_that("parts to short invalid inputs", {
 
 })
 
-test_that("parts to valid short with empty or NA minor", {
+test_that("deprecated - parts to valid short with empty or NA minor", {
 
   for (mn in c("", NA)) {
     # leading zeroes should default to true for codes <100 without minor part:
@@ -214,7 +214,7 @@ test_that("parts to valid short with empty or NA minor", {
   }
 })
 
-test_that("parts to valid simple numeric inputs", {
+test_that("deprecated - parts to valid simple numeric inputs", {
   expect_equal(icd9PartsToShort(list(major = "1", minor = "23")),
                "00123")
   expect_equal(icd9PartsToShort(list(major = "01", minor = "23", stringsAsFactors = TRUE)),
@@ -229,7 +229,7 @@ test_that("parts to valid simple numeric inputs", {
                "10023")
 })
 
-test_that("parts to short V code inputs", {
+test_that("deprecated - parts to short V code inputs", {
   # default to zero spacing the V codes
   expect_equal(icd9MajMinToShort("V1", c("0", "1")), c("V010", "V011"))
   # and force zero spacing if required for syntax
@@ -239,24 +239,24 @@ test_that("parts to short V code inputs", {
   expect_equal(icd9MajMinToShort("V01", c("", NA)), c("V01", "V01"))
 })
 
-test_that("icd9 parts to short: don't allow cycling.", {
+test_that("deprecated - icd9 parts to short: don't allow cycling.", {
   expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")))
   # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
   expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
 })
 
-test_that("Windows Rtools 3.2 hang test - also triggers bug #75", {
+test_that("deprecated - Windows Rtools 3.2 hang test - also triggers bug #75", {
   expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
   # see Rcpp issue #276.
 })
 
-test_that("icd9 parts to short form V and E input, mismatched lengths", {
+test_that("deprecated - icd9 parts to short form V and E input, mismatched lengths", {
   expect_equal(icd9MajMinToShort(10L, "20"), "01020")
   expect_equal(icd9MajMinToShort("V10", c("0", "1")), c("V100", "V101"))
   expect_equal(icd9MajMinToShort("V01", c("0", "1")), c("V010", "V011"))
 })
 
-test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity map)", {
+test_that("deprecated - convert list of icd-9 ranges (e.g. chapter defintions to comorbidity map)", {
   skip_on_cran()
   ooe <- data.frame(visitId = sprintf("pt%02d", seq_along(one_of_each)), icd9 = one_of_each)
 
@@ -271,7 +271,7 @@ test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity 
 # some functions are only called via C++ (at present), so the path through
 # RcppExports is not tested. Also, compare slower functions for identical
 # results as a regression test.
-test_that("code routes through RcppExports.R and slower versions", {
+test_that("deprecated - code routes through RcppExports.R and slower versions", {
   expect_equal(icd9ShortToParts("1001"),
                data.frame(major = "100", minor = "1", stringsAsFactors = FALSE))
   expect_equal(icd9ShortToParts(c("99999", "0011")),

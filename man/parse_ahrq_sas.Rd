@@ -5,7 +5,8 @@
 \title{parse AHRQ SAS code to get mapping}
 \usage{
 parse_ahrq_sas(sasPath = system.file("data-raw", "comformat2012-2013.txt",
-  package = get_pkg_name()), save_data = FALSE, path = "data")
+  package = get_pkg_name()), save_data = FALSE, path = NULL,
+  verbose = NULL)
 }
 \arguments{
 \item{sasPath}{single character string containing path or URL for some SAS

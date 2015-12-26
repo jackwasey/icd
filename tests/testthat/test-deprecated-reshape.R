@@ -24,7 +24,7 @@ widedf <- data.frame(visitId = c("a", "b", "c"),
                      icd9_001 = c("441", "4424", "441"),
                      icd9_002 = c(NA, "443", NA))
 
-test_that("long data to wide data", {
+test_that("deprecated - long data to wide data", {
   longcmp <- data.frame(visitId = c("a", "b", "c"),
                         icd_001 = c("441", "4424", "441"),
                         icd_002 = c(NA, "443", NA))
@@ -46,17 +46,14 @@ test_that("long data to wide data", {
                c("v", "ICD10_001", "ICD10_002"))
 })
 
-test_that("wide data to long data", {
-  expect_equivalent(icd9WideToLong(widedf),
-                    longdf)
+test_that("deprecated - wide data to long data", {
+  expect_equivalent(icd9WideToLong(widedf), longdf)
 
   widedfempty <- data.frame(visitId = c("a", "b", "c"),
                             icd9_001 = c("441", "4424", "441"),
                             icd9_002 = c("", "443", ""))
 
-  expect_equivalent(icd9WideToLong(widedfempty),
-                    longdf)
-  expect_equal(icd9WideToLong(widedfempty),
-               icd9WideToLong(widedfempty))
+  expect_equivalent(icd9WideToLong(widedfempty), longdf)
+  expect_equal(icd9WideToLong(widedfempty), icd9WideToLong(widedfempty))
 
 })

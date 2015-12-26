@@ -6,8 +6,9 @@
 #'   \code{datadocs.R}.
 #' @template parse-template
 #' @keywords internal
-icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE) {
-  if (!is.null(condense)) warning("'condense' is deprecated in icd9_generate_map_elix",
+icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE, path = NULL) {
+  if (!missing(condense) || !missing(path))
+    warning("'condense' and 'path' are deprecated in icd9_generate_map_elix",
                                   call. = FALSE)
   icd9_map_elix <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91",
@@ -83,11 +84,11 @@ icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE) {
 #' @template parse-template
 #' @keywords internal
 icd9_generate_map_quan_elix <- function(condense = NULL,
-                                        save_data = FALSE) {
+                                        save_data = FALSE, path = NULL) {
 
-  if (!missing(condense))
-    warning("'condense' is deprecated in icd9_generate_map_elix, and no longer has any effect.
-                                  The map can be condensed using other functions in the package.",
+  if (!missing(condense) || !missing(path))
+    warning("'condense' and 'path' are deprecated in icd9_generate_map_elix, and no longer has any effect.
+The map can be condensed using other functions in the package. 'path' is the data dir in working tree.",
             call. = FALSE)
   # TODO: need to deprecate this name so we can switch ICD-9 and ICD-10 (and
   # their variations)

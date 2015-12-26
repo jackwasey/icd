@@ -4,7 +4,8 @@
 \alias{icd9_generate_map_quan_elix}
 \title{Generate Quan's revised Elixhauser comorbidities}
 \usage{
-icd9_generate_map_quan_elix(condense = NULL, save_data = FALSE)
+icd9_generate_map_quan_elix(condense = NULL, save_data = FALSE,
+  path = NULL)
 }
 \arguments{
 \item{condense}{Deprecated. The map is not condensed by default. If required,

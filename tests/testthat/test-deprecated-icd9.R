@@ -17,7 +17,7 @@
 
 if (requireNamespace("lintr", quietly = TRUE)) {
   context("deprecated tests - lints")
-  test_that("Package Style", {
+  test_that("deprecated - deprecated - Package Style", {
     skip("skipping linting until lintr bugs are fixed")
     lintr::expect_lint_free()
   })
@@ -25,12 +25,12 @@ if (requireNamespace("lintr", quietly = TRUE)) {
 
 context("test deprecated icd9 package")
 
-test_that("zero pad decimal - bad input", {
+test_that("deprecated - zero pad decimal - bad input", {
   expect_equal(icd9AddLeadingZeroesDecimal(character()), character())
   expect_equal(icd9AddLeadingZeroesDecimal(NA_character_), NA_character_)
 })
 
-test_that("zero pad decimal, numeric only", {
+test_that("deprecated - zero pad decimal, numeric only", {
 
   expect_equal(icd9AddLeadingZeroesDecimal("1"), "001")
   expect_equal(icd9AddLeadingZeroesDecimal("01"), "001")
@@ -49,7 +49,7 @@ test_that("zero pad decimal, numeric only", {
 
 })
 
-test_that("zero pad decimel V and E codes", {
+test_that("deprecated - zero pad decimel V and E codes", {
   expect_equal(icd9AddLeadingZeroesDecimal("V1"), "V01")
   expect_equal(icd9AddLeadingZeroesDecimal(" V1 "), "V01")
   expect_equal(icd9AddLeadingZeroesDecimal("V1.1"), "V01.1")
@@ -66,7 +66,7 @@ test_that("zero pad decimel V and E codes", {
     "V22.34")
 })
 
-test_that("zero pad short invalid codes", {
+test_that("deprecated - zero pad short invalid codes", {
 
   expect_equal(icd9AddLeadingZeroesShort(character()), character())
   expect_equal(icd9AddLeadingZeroesShort("anything"),
@@ -78,7 +78,7 @@ test_that("zero pad short invalid codes", {
   expect_equal(icd9AddLeadingZeroesShort("V199"), "V199")
 })
 
-test_that("zero pad short", {
+test_that("deprecated - zero pad short", {
   expect_equal(icd9AddLeadingZeroesShort("1"), "001")
   expect_equal(icd9AddLeadingZeroesShort("01"), "001")
   expect_equal(icd9AddLeadingZeroesShort("22"), "022")
@@ -103,14 +103,14 @@ test_that("zero pad short", {
 
 })
 
-test_that("icd9 parts to short form numeric input", {
+test_that("deprecated - icd9 parts to short form numeric input", {
   expect_equal(icd9AddLeadingZeroesMajor(1L), "001")
   expect_equal(icd9AddLeadingZeroesMajor(10L), "010")
   expect_equal(icd9AddLeadingZeroesMajor(999L), "999")
   expect_equal(icd9AddLeadingZeroesMajor(10.1), NA_character_)
 })
 
-test_that("add leading zeroes to V (and E) majors", {
+test_that("deprecated - add leading zeroes to V (and E) majors", {
 
   expect_equal(icd9AddLeadingZeroesMajor("V1"), "V01")
   expect_equal(icd9AddLeadingZeroesMajor("V2"), "V02")
@@ -120,7 +120,7 @@ test_that("add leading zeroes to V (and E) majors", {
   expect_equal(icd9AddLeadingZeroesMajor("E915"), "E915")
 })
 
-test_that("add leading zeroes to majors, invalid input", {
+test_that("deprecated - add leading zeroes to majors, invalid input", {
   expect_equal(icd9AddLeadingZeroesMajor("E9"), "E009")
   # should be minimally valid code
   expect_equal(icd9AddLeadingZeroesMajor("E"), NA_character_)
@@ -133,11 +133,11 @@ test_that("add leading zeroes to majors, invalid input", {
   expect_equal(icd9AddLeadingZeroesMajor("E9"), "E009")
 })
 
-test_that("all generated icd9 lookup tables are valid!", {
+test_that("deprecated - all generated icd9 lookup tables are valid!", {
 
 })
 
-test_that("icd9ExtractAlphaNumeric", {
+test_that("deprecated - icd9ExtractAlphaNumeric", {
 
   expect_equal(icd9ExtractAlphaNumeric("V12"),
                matrix(data = c("V", "12"), ncol = 2))
@@ -146,14 +146,14 @@ test_that("icd9ExtractAlphaNumeric", {
 
 })
 
-test_that("strip leading zeroes: errors", {
+test_that("deprecated - strip leading zeroes: errors", {
 
   expect_equal(icd9DropLeadingZeroesDecimal(NA_character_), NA_character_)
   # no guaranteed behaviour when code is invalid: it may or may not match the
   # regex. If the user wants to get the valid codes first, they can do that.
 })
 
-test_that("strip leading zero from decimal numeric only", {
+test_that("deprecated - strip leading zero from decimal numeric only", {
 
   expect_equal(icd9DropLeadingZeroesDecimal(NA_character_), NA_character_)
   expect_equal(icd9DropLeadingZeroesDecimal("1"), "1")
@@ -182,7 +182,7 @@ test_that("strip leading zero from decimal numeric only", {
   expect_equal(icd9DropLeadingZeroes("012.78", isShort = FALSE), "12.78")
 })
 
-test_that("strip leading zero from decimal V and E", {
+test_that("deprecated - strip leading zero from decimal V and E", {
 
   expect_equal(icd9DropLeadingZeroesDecimal("V1"), "V1")
   expect_equal(icd9DropLeadingZeroesDecimal("V01"), "V1")
@@ -202,7 +202,7 @@ test_that("strip leading zero from decimal V and E", {
     c("V12.78", "E898.", "2", "34.5"))
 })
 
-test_that("strip leading zero from short numeric only", {
+test_that("deprecated - strip leading zero from short numeric only", {
 
   expect_equal(icd9DropLeadingZeroesShort(NA_character_), NA_character_)
   expect_equal(icd9DropLeadingZeroesShort("010"), "10")
@@ -222,7 +222,7 @@ test_that("strip leading zero from short numeric only", {
   expect_equal(icd9DropLeadingZeroes("1239", isShort = TRUE), "1239")
 })
 
-test_that("strip leading zero from decimal V and E", {
+test_that("deprecated - strip leading zero from decimal V and E", {
 
   expect_equal(icd9DropLeadingZeroesShort("V1"), "V1")
   expect_equal(icd9DropLeadingZeroesShort("V12"), "V12")
@@ -233,14 +233,14 @@ test_that("strip leading zero from decimal V and E", {
   expect_equal(icd9DropLeadingZeroesShort("E912"), "E912")
   expect_equal(icd9DropLeadingZeroesShort("E9127"), "E9127")
 
-  test_that("mixed vector drop leading zero short", {
+  test_that("deprecated - mixed vector drop leading zero short", {
     expect_equal(
       icd9DropLeadingZeroesShort(c("V1278", " E898", "02", "0345")),
       c("V1278", "E898", "2", "0345"))
   })
 })
 
-test_that("drop leading zeroes from majors: invalid input", {
+test_that("deprecated - drop leading zeroes from majors: invalid input", {
   # this is a little dangerous. dropping zeroes from a major is only valid for
   # short codes if the minor is empty, but this function is unaware of this.
   expect_equal(icd9DropLeadingZeroesMajor(""), "")
@@ -249,7 +249,7 @@ test_that("drop leading zeroes from majors: invalid input", {
   # dropping leading zeroes from an invalid code is undefined, so no tests.
 })
 
-test_that("drop leading zeroes from majors: numeric input", {
+test_that("deprecated - drop leading zeroes from majors: numeric input", {
   expect_equal(icd9DropLeadingZeroesMajor(1), "1")
   expect_equal(icd9DropLeadingZeroesMajor(20), "20")
   expect_equal(icd9DropLeadingZeroesMajor(333), "333")
@@ -262,19 +262,19 @@ test_that("drop leading zeroes from majors: numeric input", {
   expect_equal(icd9DropLeadingZeroesMajor("020"), "20")
 })
 
-test_that("drop leading zeroes from majors: V codes", {
+test_that("deprecated - drop leading zeroes from majors: V codes", {
   expect_equal(icd9DropLeadingZeroesMajor("V1"), "V1")
   expect_equal(icd9DropLeadingZeroesMajor("V01"), "V1")
   expect_equal(icd9DropLeadingZeroesMajor(" V12"), "V12")
 })
 
-test_that("drop leading zeroes from majors: V codes preserves lower case v", {
+test_that("deprecated - drop leading zeroes from majors: V codes preserves lower case v", {
   # no strong reason to force this, but seems reasonable
   expect_equal(icd9DropLeadingZeroesMajor(" v01 "), "v1")
   expect_equal(icd9DropLeadingZeroesMajor(" v9 "), "v9")
 })
 
-test_that("drop leading zeroes from majors: E codes", {
+test_that("deprecated - drop leading zeroes from majors: E codes", {
   expect_equal(icd9DropLeadingZeroesMajor("E800"), "E800")
   expect_equal(icd9DropLeadingZeroesMajor(" e812 "), "e812")
 })

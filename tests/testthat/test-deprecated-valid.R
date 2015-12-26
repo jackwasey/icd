@@ -17,13 +17,13 @@
 
 context("deprecated icd9 validation")
 
-test_that("warning for deprecation of icd9ValidDecimal", {
+test_that("deprecated - warning for deprecation of icd9ValidDecimal", {
   expect_that(icd9ValidDecimal(c("1", "2")), gives_warning())
   expect_that(icd9ValidShort(c("1", "2")), gives_warning())
   expect_that(icd9Valid(c("1", "2"), isShort = TRUE), gives_warning())
 })
 
-test_that("icd9IsValidDecimal - rubbish input", {
+test_that("deprecated - icd9IsValidDecimal - rubbish input", {
   expect_error(icd9IsValidDecimal(list(1230, c(12323, 2323), c("nonesnseses"))))
   expect_error(icd9IsValidDecimal(c(10.1, 200)))
   expect_equal(icd9IsValidDecimal(character()), logical())
@@ -34,7 +34,7 @@ test_that("icd9IsValidDecimal - rubbish input", {
   expect_equal(icd9IsValidDecimal(c("two", "things")), c(FALSE, FALSE))
 })
 
-test_that("icd9IsValidDecimal numeric-only", {
+test_that("deprecated - icd9IsValidDecimal numeric-only", {
   expect_false(icd9IsValidDecimal(""))
   expect_true(icd9IsValidDecimal("0"))
   expect_true(icd9IsValidDecimal("00"))
@@ -67,7 +67,7 @@ test_that("icd9IsValidDecimal numeric-only", {
     c(TRUE, TRUE, TRUE, TRUE))
 })
 
-test_that("icd9IsValidDecimal V codes", {
+test_that("deprecated - icd9IsValidDecimal V codes", {
   expect_true(icd9IsValidDecimal("V55.55"))
   expect_true(icd9IsValidDecimal("V99. "))
   expect_true(icd9IsValidDecimal("V1.")) # looks horrible, but not ambiguous
@@ -77,7 +77,7 @@ test_that("icd9IsValidDecimal V codes", {
   expect_false(icd9IsValidDecimal("V123"))
 })
 
-test_that("validate invalid decimal E codes", {
+test_that("deprecated - validate invalid decimal E codes", {
 
   expect_error(icd9IsValidDecimalE(8760))
 
@@ -133,7 +133,7 @@ test_that("validate invalid decimal E codes", {
   expect_false(icd9IsValidDecimal("E00 0 "))
 })
 
-test_that("icd9IsValidDecimal valid E codes", {
+test_that("deprecated - icd9IsValidDecimal valid E codes", {
   expect_true(icd9IsValidDecimal("E0")) #E000 is okay
   expect_true(icd9IsValidDecimal("E00"))
   expect_true(icd9IsValidDecimal("E000"))
@@ -167,7 +167,7 @@ test_that("icd9IsValidDecimal valid E codes", {
   expect_true(icd9IsValidDecimal("E1."))
 })
 
-test_that("icd9IsValidShort", {
+test_that("deprecated - icd9IsValidShort", {
   expect_equal(icd9IsValidShort(character()), logical())
   expect_error(icd9IsValidShort(list(1230, c(12323, 2323), c("nonesnseses"))))
   expect_true(icd9IsValidShort("0"))
@@ -191,7 +191,7 @@ test_that("icd9IsValidShort", {
   expect_false(icd9IsValidShort("11.22")) # am not expecting decimal points
 })
 
-test_that("validate short form V codes - invalid codes", {
+test_that("deprecated - validate short form V codes - invalid codes", {
   expect_false(icd9IsValidShort("V"))
   expect_false(icd9IsValidShort("VV"))
   expect_false(icd9IsValidShort("Vbog"))
@@ -200,12 +200,12 @@ test_that("validate short form V codes - invalid codes", {
   expect_false(icd9IsValidShort("V123456"))
 })
 
-test_that("validate short form V codes - valid codes", {
+test_that("deprecated - validate short form V codes - valid codes", {
   expect_true(icd9IsValidShort("V234"))
   expect_true(icd9IsValidShort(" V45"))
 })
 
-test_that("valid short form E codes - invalid input", {
+test_that("deprecated - valid short form E codes - invalid input", {
   # call the E validation directly for these completely non-E codes
   expect_false(icd9IsValidShortE(NA_character_))
   expect_false(icd9IsValidShortE("NA"))
@@ -256,7 +256,7 @@ test_that("valid short form E codes - invalid input", {
   expect_false(icd9IsValidShort("E98765"))
 })
 
-test_that("valid short form E codes - valid input", {
+test_that("deprecated - valid short form E codes - valid input", {
   # E000 is valid!
   # http://www.icd9data.com/2012/Volume1/E000-E999/E000-E000/E000/default.htm
   expect_true(icd9IsValidShort("E0"))
@@ -279,7 +279,7 @@ test_that("valid short form E codes - valid input", {
   expect_true(icd9IsValidShort("E1"))
 })
 
-test_that("test valid major numeric, valid", {
+test_that("deprecated - test valid major numeric, valid", {
   expect_equal(
     icd9IsValidMajorN(c("1", "22", "333", "4444", "55555",
                         "1.1", "22.22", "333.333")),
@@ -292,7 +292,7 @@ test_that("test valid major numeric, valid", {
   )
 })
 
-test_that("test major validation", {
+test_that("deprecated - test major validation", {
   expect_equal(
     icd9IsValidMajor(c("", "1", "22", "333", "4444", "V", "V2", "V34",
                        "V567", "E", "E1", "E000", "E70", "E300", "E876")),
@@ -311,7 +311,7 @@ test_that("test major validation", {
   )
 })
 
-test_that("icd-9 code is really in the list, not just syntactically valid", {
+test_that("deprecated - icd-9 code is really in the list, not just syntactically valid", {
   expect_true(icd9IsRealShort("8027"))
   expect_true(icd9IsRealShort("E9329"))
   expect_false(icd9IsRealShort("J8027"))
@@ -336,12 +336,12 @@ mixInvalidPts <- data.frame(
   poa = factor(c("Y", "N", "Y"))
 )
 
-test_that("filter valid - bad input", {
+test_that("deprecated - filter valid - bad input", {
   expect_error(icd9FilterValid())
   expect_error(icd9FilterValid(list(j = "k")))
 })
 
-test_that("get valid - vector input", {
+test_that("deprecated - get valid - vector input", {
 
   expect_equal(icd9GetValid("100"), "100")
   expect_equal(icd9GetValid("nolk"), character())
@@ -352,7 +352,7 @@ test_that("get valid - vector input", {
   expect_equal(icd9GetInvalid(c("100", "nolk")), "nolk")
 })
 
-test_that("filter valid - data frame input", {
+test_that("deprecated - filter valid - data frame input", {
 
   expect_equal(icd9FilterValid(mixInvalidPts), mixInvalidPts[c(1, 3), ])
 
@@ -374,7 +374,7 @@ test_that("filter valid - data frame input", {
                mixInvalidPts[c(1, 3 ), ])
 })
 
-test_that("validate mappings", {
+test_that("deprecated - validate mappings", {
   expect_true(icd9IsValidMappingDecimal(list(a = "100.1", b = "202.3")))
   expect_true(icd9IsValidMappingShort(list(a = "1001", b = "2023")))
   expect_false(icd9IsValidMappingDecimal(list(a = "1001", b = "2023")))
@@ -384,21 +384,21 @@ test_that("validate mappings", {
   expect_true(icd9IsValidMapping(list(a = "1001", b = "2023"), isShort = TRUE))
 })
 
-test_that("get invalid decimals", {
+test_that("deprecated - get invalid decimals", {
   expect_equal(icd9GetInvalidDecimal(c("10.1", "rhubarb", "3000")), c("rhubarb", "3000"))
 })
 
-test_that("get real codes from a longer list", {
+test_that("deprecated - get real codes from a longer list", {
   expect_equal(icd9GetRealShort(c("003", "0031", "0032"), onlyBillable = TRUE), "0031")
   expect_equal(icd9GetRealDecimal(c("003", "003.1", "3.2"), onlyBillable = TRUE), "003.1")
 })
 
-test_that("get real codes which are less than two digit major", {
+test_that("deprecated - get real codes which are less than two digit major", {
   expect_equal(icd9GetRealShort(c("3", "11", "V2"), onlyBillable = FALSE), c("3", "11", "V2"))
   expect_equal(icd9GetRealDecimal(c("3", "11", "V2"), onlyBillable = FALSE), c("3", "11", "V2"))
 }
           )
-test_that("illable codes are identified", {
+test_that("deprecated - illable codes are identified", {
   expect_true(icd9IsBillable("1000"))
   expect_false(icd9IsBillable("1008"))
   expect_true(icd9IsBillable("1009"))

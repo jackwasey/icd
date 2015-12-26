@@ -17,7 +17,7 @@
 
 context("test deprecated SAS interpretation")
 
-test_that("basic SAS VALUE declarations can be read into an R list", {
+test_that("deprecated - basic SAS VALUE declarations can be read into an R list", {
 
   # general format from my n=1 sample seems to be:
   # VALUE somename numbers, "ranges"-"ranges", ranges-ranges = "mappinname"
@@ -55,7 +55,7 @@ test_that("basic SAS VALUE declarations can be read into an R list", {
                             otherstuff = list("YES" = "105")))
 })
 
-test_that("groups of SAS assignments can be extracted", {
+test_that("deprecated - groups of SAS assignments can be extracted", {
 
   # this is a single assignment, but of the form of sub-part of
   # multi-assignment, so we should handle it.
@@ -77,7 +77,7 @@ test_that("groups of SAS assignments can be extracted", {
 
 })
 
-test_that("read LET string declarations from SAS code", {
+test_that("deprecated - read LET string declarations from SAS code", {
 
   letStrOne <-  "\t%LET DC16=%STR('196','197','198','199');      "
   resList <- sasExtractLetStrings(letStrOne)

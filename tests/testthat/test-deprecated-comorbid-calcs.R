@@ -17,7 +17,7 @@
 
 context("deprecated comorbidity calculations")
 
-test_that("ahrq comorbidity mapping is applied correctly,
+test_that("deprecated -ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
             res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
                                     abbrevNames = FALSE,
@@ -41,7 +41,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
             expect_false(res[1, "Solid tumor without metastasis"])
           })
 
-test_that("elix comorbidity mapping is applied correctly,
+test_that("deprecated -elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = FALSE,
@@ -65,7 +65,7 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_false(res[1, "Solid tumor without metastasis"])
           })
 
-test_that("elix comorbidity mapping is applied correctly,
+test_that("deprecated -elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, hier", {
             res <- icd9ComorbidElix(elixTestDat,
                                     isShort = TRUE,
@@ -93,7 +93,7 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_false(res[1, "Tumor"])
           })
 
-test_that("elix comorbidity mapping is applied correctly,
+test_that("deprecated -elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, no hier", {
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = FALSE,
@@ -113,7 +113,7 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_true(all(as.logical(res[1, unlist(elixComorbidNamesHtn)])))
           })
 
-test_that("elix comorbidity mapping is applied correctly,
+test_that("deprecated -elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, no hier", {
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
@@ -134,7 +134,7 @@ test_that("elix comorbidity mapping is applied correctly,
 
           })
 
-test_that("qelix comorbidity mapping is applied correctly,
+test_that("deprecated -qelix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
             res <- icd9ComorbidQuanElix(quanElixTestDat,
                                         isShort = TRUE,
@@ -162,7 +162,7 @@ test_that("qelix comorbidity mapping is applied correctly,
             expect_false(res[1, "Solid tumor without metastasis"])
           })
 
-test_that("qelix comorbidity mapping is applied correctly,
+test_that("deprecated -qelix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, hier", {
             res <- icd9ComorbidQuanElix(quanElixTestDat,
                                         isShort = TRUE,
@@ -191,7 +191,7 @@ test_that("qelix comorbidity mapping is applied correctly,
             expect_false(res[1, "Tumor"])
           })
 
-test_that("qelix comorbidity mapping is applied correctly,
+test_that("deprecated -qelix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, no hier", {
             res <- icd9ComorbidQuanElix(quanElixTestDat,
                                         isShort = TRUE,
@@ -216,7 +216,7 @@ test_that("qelix comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(quanElixComorbidNamesHtn)])))
           })
 
-test_that("qelix comorbidity mapping is applied correctly,
+test_that("deprecated -qelix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, no hier", {
             res <- icd9ComorbidQuanElix(quanElixTestDat,
                                         isShort = TRUE,
@@ -237,7 +237,7 @@ test_that("qelix comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(quanElixComorbidNamesHtnAbbrev)])))
           })
 
-test_that("ahrq comorbidity mapping is applied correctly,
+test_that("deprecated -ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, hier", {
             res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
@@ -262,7 +262,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
             expect_false(res[1, "Tumor"])
           })
 
-test_that("ahrq comorbidity mapping is applied correctly,
+test_that("deprecated -ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, no hier", {
             res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
                                     abbrevNames = FALSE,
@@ -282,7 +282,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
             expect_true(all(as.logical(res[1, unlist(ahrqComorbidNamesHtn)])))
           })
 
-test_that("ahrq comorbidity mapping is applied correctly,
+test_that("deprecated -ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, no hier", {
             res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
@@ -302,7 +302,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(ahrqComorbidNamesHtnAbbrev)])))
           })
 
-test_that("get Charlson/Deyo comorbidities for a single patient", {
+test_that("deprecated -get Charlson/Deyo comorbidities for a single patient", {
   mydf <- data.frame(visitId = c("a"),
                      icd9 = c("044.9"),
                      stringsAsFactors = FALSE)

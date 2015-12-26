@@ -8,7 +8,7 @@ http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.z
   and similar files run from 1996 to 2011.
 }
 \usage{
-parse_rtf_year(year = "2011", save = FALSE, fromWeb = FALSE,
+parse_rtf_year(year = "2011", save_data = FALSE, fromWeb = FALSE,
   verbose = FALSE)
 }
 \arguments{

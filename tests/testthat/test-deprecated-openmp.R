@@ -18,13 +18,13 @@
 context("deprecated OpenMP tests")
 # OpenMP already used, if compiled in, bu t need some specific stress tests, e.g for error in bug #75
 
-test_that("single icd9 code comorbidity", {
+test_that("deprecated - single icd9 code comorbidity", {
   # this is enough to segfault with clang 3.7, libc++ and libomp
   x <- data.frame(visitId = "a", icd9 = "441")
   icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
 })
 
-test_that("thousands of patients", {
+test_that("deprecated - thousands of patients", {
   x <- randomPatients(10000)
   expect_that(
     icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T),
@@ -32,7 +32,7 @@ test_that("thousands of patients", {
   )
 })
 
-test_that("vary everything", {
+test_that("deprecated - vary everything", {
   ompChunkSize = 1
   # prime numbers
   for (pts in c(0, 1, 3, 31, 1013, 10009)) {

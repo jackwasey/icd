@@ -409,8 +409,11 @@ fixSubchapterNa <- function(x, start, end) {
 #'
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
 #' quick, but much too slow when it appears many times in a loop.
+#' @param path default is \code{R/sysdata.rda}
+#' @param save_data whether to save the data.
+#' @return invisibly returns the sysdata as a list
 #' @keywords internal
-generate_sysdata <- function(sysdata.path = file.path("R", "sysdata.rda"), save_data = TRUE) {
+generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = TRUE) {
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
     icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, defined = FALSE)))
@@ -522,7 +525,6 @@ generate_sysdata <- function(sysdata.path = file.path("R", "sysdata.rda"), save_
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
                "data_sources")
 
-  if (save_data) save(list = lknames,
-                 file = sysdata.path, compress = "xz")
+  if (save_data) save(list = lknames, file = path, compress = "xz")
   invisible(mget(lknames))
 }

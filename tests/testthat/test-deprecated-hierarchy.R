@@ -20,12 +20,12 @@ context("deprecated icd9Hierarchy was parsed as expected")
 # scraping, some manually entered data, and (for the short description only)
 # another text file parsing.`
 
-test_that("no NA or zero-length values", {
+test_that("deprecated - no NA or zero-length values", {
   expect_false(any(sapply(icd9::icd9Hierarchy, is.na)))
   expect_false(any(nchar(unlist(icd9::icd9Hierarchy)) == 0))
 })
 
-test_that("factors are in the right place", {
+test_that("deprecated - factors are in the right place", {
   expect_is(icd9::icd9Hierarchy$icd9, "character")
   expect_is(icd9::icd9Hierarchy$descShort, "character")
   expect_is(icd9::icd9Hierarchy$descLong, "character")
@@ -35,12 +35,12 @@ test_that("factors are in the right place", {
   expect_is(icd9::icd9Hierarchy$chapter, "factor")
 })
 
-test_that("codes and descriptions are valid and unique", {
+test_that("deprecated - codes and descriptions are valid and unique", {
   expect_equal(anyDuplicated(icd9::icd9Hierarchy$icd9), 0)
   expect_true(all(icd9IsValidShort(icd9::icd9Hierarchy$icd9)))
 })
 
-test_that("some chapters are correct", {
+test_that("deprecated - some chapters are correct", {
   chaps <- icd9::icd9Hierarchy$chapter %>% asCharacterNoWarn
   codes <- icd9::icd9Hierarchy$icd9
   # first and last rows (E codes should be last)
@@ -58,7 +58,7 @@ test_that("some chapters are correct", {
                "Endocrine, Nutritional And Metabolic Diseases, And Immunity Disorders")
 })
 
-test_that("some subchapters are correct", {
+test_that("deprecated - some subchapters are correct", {
   subchaps <- icd9::icd9Hierarchy$subchapter %>% asCharacterNoWarn
   codes <- icd9::icd9Hierarchy$icd9
 
@@ -76,7 +76,7 @@ test_that("some subchapters are correct", {
                "Homicide And Injury Purposely Inflicted By Other Persons")
 })
 
-test_that("some randomly selected rows are correct", {
+test_that("deprecated - some randomly selected rows are correct", {
   expect_equal(
     icd9::icd9Hierarchy[icd9::icd9Hierarchy$icd9 == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname,
     c("5060", "Fum/vapor bronc/pneumon", "Bronchitis and pneumonitis due to fumes and vapors",
@@ -86,7 +86,7 @@ test_that("some randomly selected rows are correct", {
   )
 })
 
-test_that("tricky v91.9 works", {
+test_that("deprecated - tricky v91.9 works", {
   expect_equal(
     icd9Hierarchy[icd9Hierarchy$icd9 == "V9192", "descLong"],
     "Other specified multiple gestation, with two or more monoamniotic fetuses")

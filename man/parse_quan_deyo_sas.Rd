@@ -6,7 +6,7 @@
 \usage{
 parse_quan_deyo_sas(sasPath = system.file("data-raw", "ICD9_E_Charlson.sas",
   package = get_pkg_name()), condense = NULL, save_data = FALSE,
-  path = "data")
+  path = NULL)
 }
 \arguments{
 \item{sasPath}{single character string containing path or URL for some SAS
