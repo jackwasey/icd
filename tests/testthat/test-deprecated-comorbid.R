@@ -86,7 +86,7 @@ test_that("deprecated - icd9 comorbidities are created correctly, and logical to
 
 test_that("deprecated - ahrq icd9 mappings generated from the current generation code", {
   skip_on_cran()
-  if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) = "")
+  if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) == "")
     skip("data-raw/comformat2012-2013.txt not available, so skipping Quan Deyo SAS parsing test.")
   # same but from source data. Should be absolutely identical.
   expect_equal(ahrqComorbid, parseAhrqSas(save = FALSE))
