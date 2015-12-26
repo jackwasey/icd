@@ -975,8 +975,10 @@ icd9ExtractAlphaNumeric <- function(icd9) {
   icd_extract_alpha_numeric(icd9)
 }
 
-parseQuanDeyoSas <- function(sasPath = NULL, condense = FALSE, save = FALSE,
-                             path = NULL) {
+parseQuanDeyoSas <- function(
+  sasPath = system.file("data-raw", "ICD9_E_Charlson.sas", package = "icd9"),
+  condense = FALSE, save = FALSE, path = NULL) {
+
   .Deprecated("parse_quan_deyo_sas")
   parse_quan_deyo_sas(sasPath = sasPath, condense = condense, save_data = save, path = path)
 }

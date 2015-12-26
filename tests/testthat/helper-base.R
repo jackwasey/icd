@@ -23,7 +23,7 @@ n <- 500
 np <- round(n / 20) # icd9 codes per patients
 
 randomShortIcd9 <- as.character(floor(stats::runif(min = 10000, max = 99999, n = n)))
-randomSampleAhrq <- sample(unname(c(icd9::ahrqComorbid, recursive = TRUE)),
+randomSampleAhrq <- sample(unname(c(icd9::icd9_map_ahrq, recursive = TRUE)),
                            replace = TRUE, size = n)
 fewIcd9 <- c("27801", "7208", "25001", "34400", "4011", "4011")
 
@@ -80,8 +80,8 @@ testTwenty <- structure(
   class = "data.frame")
 
 # first and last item from each comorbidity:
-icd9fl <- c(lapply(icd9::ahrqComorbid, head, n = 1),
-            lapply(icd9::ahrqComorbid, tail, n = 1)) %>%
+icd9fl <- c(lapply(icd9::icd9_map_ahrq, head, n = 1),
+            lapply(icd9::icd9_map_ahrq, tail, n = 1)) %>%
   unname %>%
   unlist %>%
   icd9

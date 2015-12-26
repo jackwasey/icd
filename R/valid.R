@@ -299,7 +299,7 @@ icd_get_invalid <- function(...)
 #' @keywords internal
 icd_get_invalid.default <- function(x, short_code = NULL, ...) {
   # both <- icd_guess_both(x, short_code = short_code)
-  x %>% icd_guess_short_update %>% icd_guess_version_update
+  x %>% icd_guess_short_update %>% icd_guess_version_update %>% icd_get_invalid
 }
 
 #' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes

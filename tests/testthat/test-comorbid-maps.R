@@ -18,16 +18,16 @@
 context("comorbidity maps")
 
 test_that("try to induce c++ segfault bug", {
-  expect_error(icd_comorbid.icd9(ahrqTestDat, map = ahrqComorbid, short_code = TRUE), NA)
+  expect_error(icd_comorbid.icd9(ahrqTestDat, map = icd9::icd9_map_ahrq, short_code = TRUE), NA)
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
   skip("this is not true because we don't fill in EVERY (unreal) possible code
        when there is odd specification of the range in the SAS code.")
-  for (i in names(ahrqComorbid))
-    expect_true(setequal(icd_children.icd9(ahrqComorbid[[i]], short_code = TRUE, defined = FALSE), ahrqComorbid[[i]]),
+  for (i in names(icd9::icd9_map_ahrq))
+    expect_true(setequal(icd_children.icd9(icd9::icd9_map_ahrq[[i]], short_code = TRUE, defined = FALSE), icd9::icd9_map_ahrq[[i]]),
                 info = paste("missing from saved ahrq comorbid (", i, "): ",
-                             paste(setdiff(icd_children.icd9(ahrqComorbid[[i]], defined = FALSE), ahrqComorbid[[i]]),
+                             paste(setdiff(icd_children.icd9(icd9::icd9_map_ahrq[[i]], defined = FALSE), icd9::icd9_map_ahrq[[i]]),
                                    collapse = ", "
                              )
                 )
@@ -51,27 +51,27 @@ test_that("Quan Elixhauser make sure all the children are listed in the saved da
 })
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
-  ptdf <- icd_comorbid.icd9(patientData, map = ahrqComorbid, short_code = TRUE,
+  ptdf <- icd_comorbid.icd9(patientData, map = icd9::icd9_map_ahrq, short_code = TRUE,
                        visit_name = "visitId", return_df = TRUE)
 
-  expect_equal(names(ptdf), c("visitId", names(ahrqComorbid)))
+  expect_equal(names(ptdf), c("visitId", names(icd9::icd9_map_ahrq)))
 
-  expect_true(all(sapply(names(ahrqComorbid),
+  expect_true(all(sapply(names(icd9::icd9_map_ahrq),
                          function(x)
                            class(ptdf[, x])) == "logical"))
   ptdflogical <- logical_to_binary(ptdf)
-  expect_true(all(sapply(names(ahrqComorbid),
+  expect_true(all(sapply(names(icd9::icd9_map_ahrq),
                          function(x)
                            class(ptdflogical[, x])) == "integer"))
   # do not expect all the rest of patient data to be returned - we
   # aren't responsible for aggregating other fields by visitId!
   expect_equal(dim(ptdf),
                c(length(unique(patientData[["visitId"]])),
-                 1 + length(ahrqComorbid)))
+                 1 + length(icd9::icd9_map_ahrq)))
   expect_true(
-    setequal(names(ptdf), c("visitId", names(ahrqComorbid))))
+    setequal(names(ptdf), c("visitId", names(icd9::icd9_map_ahrq))))
   expect_true(
-    setequal(names(ptdflogical), c("visitId", names(ahrqComorbid))))
+    setequal(names(ptdflogical), c("visitId", names(icd9::icd9_map_ahrq))))
 
   expect_equal(
     logical_to_binary(data.frame(a = c("jack", "hayley"),
@@ -90,28 +90,28 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
     # same but from source data. Should be absolutely identical.
   expect_equal(icd9_map_ahrq, parse_ahrq_sas(save_data = FALSE))
   # same but from source data. Should be absolutely identical.
-  expect_equivalent(icd9GetInvalidMappingShort(ahrqComorbid), list())
+  expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9::icd9_map_ahrq), list())
 })
 
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
-              skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
-              expect_identical(quanDeyoComorbid, parse_quan_deyo_sas(save_data = FALSE))
+              #skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
+              expect_identical(icd9_map_quan_deyo, parse_quan_deyo_sas(save_data = FALSE))
               expect_equivalent(
-                icd_get_invalid.icd_comorbidity_map(quanDeyoComorbid, short_code = TRUE),
+                icd_get_invalid.icd_comorbidity_map(icd9_map_quan_deyo, short_code = TRUE),
                 list())
             })
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
-              expect_identical(quanElixComorbid, icd9_generate_map_quan_elix(save_data = FALSE))
+              expect_identical(icd9_map_quan_elix, icd9_generate_map_quan_elix(save_data = FALSE))
               expect_equivalent(
-                icd_get_invalid.icd_comorbidity_map(quanElixComorbid, short_code = TRUE),
+                icd_get_invalid.icd_comorbidity_map(icd9_map_quan_elix, short_code = TRUE),
                 list())
             })
 test_that("Elixhauser icd9 mappings are all
             generated from the current generation code", {
-              expect_identical(elixComorbid, icd9_generate_map_elix(save_data = FALSE))
-              expect_equivalent(icd_get_invalid.icd_comorbidity_map(elixComorbid, short_code = TRUE), list())
+              expect_identical(icd9_map_elix, icd9_generate_map_elix(save_data = FALSE))
+              expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9_map_elix, short_code = TRUE), list())
             })
 
 test_that("can condense the big lists of comorbidities without errors", {
@@ -124,13 +124,13 @@ test_that("can condense the big lists of comorbidities without errors", {
 
   for (onlyReal in c(TRUE, FALSE)) {
     if (onlyReal) {
-      expect_warning(ahrq <- lapply(ahrqComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
+      expect_warning(ahrq <- lapply(icd9::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
       expect_warning(quanDeyo <- lapply(quanDeyoComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
       expect_warning(quanElix <- lapply(quanElixComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
       expect_warning(elix <- lapply(elixComorbid, icd_condense.icd9, defined = onlyReal))
     }
     else {
-      expect_warning(ahrq <- lapply(ahrqComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
+      expect_warning(ahrq <- lapply(icd9::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
       expect_warning(quanDeyo <- lapply(quanElixComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
       expect_warning(quanElix <- lapply(quanDeyoComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
       expect_warning(elix <- lapply(elixComorbid, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
@@ -141,7 +141,7 @@ test_that("can condense the big lists of comorbidities without errors", {
     expect_is(quanDeyo, class = "list")
     expect_is(quanElix, class = "list")
     # the comorbidity mappings save in \code{data} should not be condensed.
-    expect_false(isTRUE(all.equal(ahrq, ahrqComorbid)))
+    expect_false(isTRUE(all.equal(ahrq, icd9::icd9_map_ahrq)))
     expect_false(isTRUE(all.equal(elix, elixComorbid)))
     expect_false(isTRUE(all.equal(quanDeyo, quanDeyoComorbid)))
     expect_false(isTRUE(all.equal(quanElix, quanElixComorbid)))
@@ -197,8 +197,8 @@ test_that("Elixhauser doesn't double count disease with multiple severities", {
                      elixComorbid[["DMcx"]] ))
   expect_false(any(elixComorbid[["Tumor"]] %in%
                      elixComorbid[["Mets"]] ))
-  expect_false(any(ahrqComorbid[["DM"]] %in% ahrqComorbid[["DMcx"]] ))
-  expect_false(any(ahrqComorbid[["Tumor"]] %in% ahrqComorbid[["Mets"]] ))
+  expect_false(any(icd9::icd9_map_ahrq[["DM"]] %in% icd9::icd9_map_ahrq[["DMcx"]] ))
+  expect_false(any(icd9::icd9_map_ahrq[["Tumor"]] %in% icd9::icd9_map_ahrq[["Mets"]] ))
 })
 
 # next couple of tests demonstrate that the interpreted data is correctly
@@ -208,28 +208,28 @@ test_that("Elixhauser doesn't double count disease with multiple severities", {
 # mapping 0440 04400 04401 etc. Ahrq
 test_that("ICD-9 codes from SAS source AHRQ exist", {
   # specific codes that have had parsing problems in the past:
-  expect_true("3970" %in% ahrqComorbid$Valvular)
-  expect_true("39706" %in% ahrqComorbid$Valvular)
-  expect_true("3971" %in% ahrqComorbid$Valvular)
-  expect_true("3979" %in% ahrqComorbid$Valvular)
+  expect_true("3970" %in% icd9::icd9_map_ahrq$Valvular)
+  expect_true("39706" %in% icd9::icd9_map_ahrq$Valvular)
+  expect_true("3971" %in% icd9::icd9_map_ahrq$Valvular)
+  expect_true("3979" %in% icd9::icd9_map_ahrq$Valvular)
   # SAS source is "7463 "-"7466 "
-  expect_true("7463" %in% ahrqComorbid$Valvular)
-  expect_true("7466" %in% ahrqComorbid$Valvular)
-  expect_true("74645" %in% ahrqComorbid$Valvular)
+  expect_true("7463" %in% icd9::icd9_map_ahrq$Valvular)
+  expect_true("7466" %in% icd9::icd9_map_ahrq$Valvular)
+  expect_true("74645" %in% icd9::icd9_map_ahrq$Valvular)
   # "3420 "-"3449 ",
   # "43820"-"43853",
   # "78072"         = "PARA"      /* Paralysis */
-  expect_true("43820" %in% ahrqComorbid$Paralysis)
-  expect_true("43822" %in% ahrqComorbid$Paralysis)
-  expect_true("43850" %in% ahrqComorbid$Paralysis)
-  expect_true("43852" %in% ahrqComorbid$Paralysis)
-  expect_true("43853" %in% ahrqComorbid$Paralysis)
+  expect_true("43820" %in% icd9::icd9_map_ahrq$Paralysis)
+  expect_true("43822" %in% icd9::icd9_map_ahrq$Paralysis)
+  expect_true("43850" %in% icd9::icd9_map_ahrq$Paralysis)
+  expect_true("43852" %in% icd9::icd9_map_ahrq$Paralysis)
+  expect_true("43853" %in% icd9::icd9_map_ahrq$Paralysis)
   # although 4385 implies an overly broad range, all its children are in the requested range, so it should appear.
-  expect_true("4383" %in% ahrqComorbid$Paralysis)
-  expect_true("4384" %in% ahrqComorbid$Paralysis)
-  expect_true("4385" %in% ahrqComorbid$Paralysis)
-  expect_false("438" %in% ahrqComorbid$Paralysis)
-  expect_false("4386" %in% ahrqComorbid$Paralysis)
+  expect_true("4383" %in% icd9::icd9_map_ahrq$Paralysis)
+  expect_true("4384" %in% icd9::icd9_map_ahrq$Paralysis)
+  expect_true("4385" %in% icd9::icd9_map_ahrq$Paralysis)
+  expect_false("438" %in% icd9::icd9_map_ahrq$Paralysis)
+  expect_false("4386" %in% icd9::icd9_map_ahrq$Paralysis)
   # neuro other problem codes
   #   "3411 "-"3419 ",
   #   "34500"-"34511",
@@ -237,201 +237,201 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   #   "34540"-"34591",
   #   "34700"-"34701",
   #   "34710"-"34711",
-  expect_true("3337" %in% ahrqComorbid$NeuroOther) # single value
-  expect_true("33371" %in% ahrqComorbid$NeuroOther) # single value sub-code - zero not defined in 2015
-  expect_true("494" %in% ahrqComorbid$Pulmonary) # top-level at start of range
-  expect_true("4940" %in% ahrqComorbid$Pulmonary) # value within range
-  expect_true("49400" %in% ahrqComorbid$Pulmonary) # sub-value within range
-  expect_true("3450" %in% ahrqComorbid$NeuroOther)
-  expect_true("34500" %in% ahrqComorbid$NeuroOther)
-  expect_true("3451" %in% ahrqComorbid$NeuroOther)
-  expect_true("34511" %in% ahrqComorbid$NeuroOther)
-  expect_true("34519" %in% ahrqComorbid$NeuroOther)
-  expect_true("3452" %in% ahrqComorbid$NeuroOther)
-  expect_true("34529" %in% ahrqComorbid$NeuroOther)
-  expect_true("3453" %in% ahrqComorbid$NeuroOther)
-  expect_true("34539" %in% ahrqComorbid$NeuroOther)
-  expect_true("3459" %in% ahrqComorbid$NeuroOther)
-  expect_true("34599" %in% ahrqComorbid$NeuroOther) # by implication
+  expect_true("3337" %in% icd9::icd9_map_ahrq$NeuroOther) # single value
+  expect_true("33371" %in% icd9::icd9_map_ahrq$NeuroOther) # single value sub-code - zero not defined in 2015
+  expect_true("494" %in% icd9::icd9_map_ahrq$Pulmonary) # top-level at start of range
+  expect_true("4940" %in% icd9::icd9_map_ahrq$Pulmonary) # value within range
+  expect_true("49400" %in% icd9::icd9_map_ahrq$Pulmonary) # sub-value within range
+  expect_true("3450" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("34500" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("3451" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("34511" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("34519" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("3452" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("34529" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("3453" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("34539" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("3459" %in% icd9::icd9_map_ahrq$NeuroOther)
+  expect_true("34599" %in% icd9::icd9_map_ahrq$NeuroOther) # by implication
   #   "490  "-"4928 ",
   #   "49300"-"49392", # this is all of asthma
   #   "494  "-"4941 ", # bronchiectasis is just 494, 4940 and 4941
   #   "4950 "-"505  ",
   #   "5064 "         = "CHRNLUNG"  /* Chronic pulmonary disease */
-  expect_true("492" %in% ahrqComorbid$Pulmonary) # implied, and more below
-  expect_true("4929" %in% ahrqComorbid$Pulmonary)
-  expect_true("4920" %in% ahrqComorbid$Pulmonary)
-  expect_true("4928" %in% ahrqComorbid$Pulmonary)
-  expect_true("493" %in% ahrqComorbid$Pulmonary)
-  expect_true("49392" %in% ahrqComorbid$Pulmonary)
-  expect_true("49300" %in% ahrqComorbid$Pulmonary)
-  expect_true("49322" %in% ahrqComorbid$Pulmonary) # implied intermediate
-  expect_true("494" %in% ahrqComorbid$Pulmonary)
-  expect_true("4940" %in% ahrqComorbid$Pulmonary)
-  expect_true("4941" %in% ahrqComorbid$Pulmonary)
-  expect_true("49499" %in% ahrqComorbid$Pulmonary) # implied
+  expect_true("492" %in% icd9::icd9_map_ahrq$Pulmonary) # implied, and more below
+  expect_true("4929" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("4920" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("4928" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("493" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("49392" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("49300" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("49322" %in% icd9::icd9_map_ahrq$Pulmonary) # implied intermediate
+  expect_true("494" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("4940" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("4941" %in% icd9::icd9_map_ahrq$Pulmonary)
+  expect_true("49499" %in% icd9::icd9_map_ahrq$Pulmonary) # implied
   #   "25000"-"25033",
   #   "64800"-"64804",
   #   "24900"-"24931" = "DM"        /* Diabetes w/o chronic complications*/
-  expect_false("249" %in% ahrqComorbid$DM)
-  expect_false("2494" %in% ahrqComorbid$DM)
-  expect_false("24941" %in% ahrqComorbid$DM)
-  expect_true("24900" %in% ahrqComorbid$DM)
-  expect_true("24931" %in% ahrqComorbid$DM)
-  expect_true("24939" %in% ahrqComorbid$DM)
-  expect_true("2493" %in% ahrqComorbid$DM)
-  expect_false("2504" %in% ahrqComorbid$DM)
-  expect_false("25043" %in% ahrqComorbid$DM)
-  expect_false("250" %in% ahrqComorbid$DM)
-  expect_true("25000" %in% ahrqComorbid$DM)
-  expect_true("25029" %in% ahrqComorbid$DM) # implied
-  expect_true("25033" %in% ahrqComorbid$DM)
-  expect_true("2503" %in% ahrqComorbid$DM) # implied
-  expect_true("25039" %in% ahrqComorbid$DM) # implied
+  expect_false("249" %in% icd9::icd9_map_ahrq$DM)
+  expect_false("2494" %in% icd9::icd9_map_ahrq$DM)
+  expect_false("24941" %in% icd9::icd9_map_ahrq$DM)
+  expect_true("24900" %in% icd9::icd9_map_ahrq$DM)
+  expect_true("24931" %in% icd9::icd9_map_ahrq$DM)
+  expect_true("24939" %in% icd9::icd9_map_ahrq$DM)
+  expect_true("2493" %in% icd9::icd9_map_ahrq$DM)
+  expect_false("2504" %in% icd9::icd9_map_ahrq$DM)
+  expect_false("25043" %in% icd9::icd9_map_ahrq$DM)
+  expect_false("250" %in% icd9::icd9_map_ahrq$DM)
+  expect_true("25000" %in% icd9::icd9_map_ahrq$DM)
+  expect_true("25029" %in% icd9::icd9_map_ahrq$DM) # implied
+  expect_true("25033" %in% icd9::icd9_map_ahrq$DM)
+  expect_true("2503" %in% icd9::icd9_map_ahrq$DM) # implied
+  expect_true("25039" %in% icd9::icd9_map_ahrq$DM) # implied
   #   "25040"-"25093",
   #   "7751 ",
   #   "24940"-"24991" = "DMCX"      /* Diabetes w/ chronic complications */
-  expect_false("250" %in% ahrqComorbid$DMcx)
-  expect_false("2503" %in% ahrqComorbid$DMcx)
-  expect_true("2509" %in% ahrqComorbid$DMcx) # implied
-  expect_true("25093" %in% ahrqComorbid$DMcx)
-  expect_true("25099" %in% ahrqComorbid$DMcx) # implied
-  expect_false("249" %in% ahrqComorbid$DMcx)
-  expect_true("2499" %in% ahrqComorbid$DMcx)
-  expect_true("2498" %in% ahrqComorbid$DMcx)
-  expect_true("24999" %in% ahrqComorbid$DMcx)
-  expect_true("24991" %in% ahrqComorbid$DMcx)
+  expect_false("250" %in% icd9::icd9_map_ahrq$DMcx)
+  expect_false("2503" %in% icd9::icd9_map_ahrq$DMcx)
+  expect_true("2509" %in% icd9::icd9_map_ahrq$DMcx) # implied
+  expect_true("25093" %in% icd9::icd9_map_ahrq$DMcx)
+  expect_true("25099" %in% icd9::icd9_map_ahrq$DMcx) # implied
+  expect_false("249" %in% icd9::icd9_map_ahrq$DMcx)
+  expect_true("2499" %in% icd9::icd9_map_ahrq$DMcx)
+  expect_true("2498" %in% icd9::icd9_map_ahrq$DMcx)
+  expect_true("24999" %in% icd9::icd9_map_ahrq$DMcx)
+  expect_true("24991" %in% icd9::icd9_map_ahrq$DMcx)
   #   "243  "-"2442 ",
   #   "2448 ",
   #   "2449 "         = "HYPOTHY"   /* Hypothyroidism */
-  expect_false("244" %in% ahrqComorbid$Hypothyroid) # some children are not included
-  expect_false("2443" %in% ahrqComorbid$Hypothyroid) # explicitly excluded by Quan
-  expect_false("24430" %in% ahrqComorbid$Hypothyroid) # implied exclusion
-  expect_true("2442" %in% ahrqComorbid$Hypothyroid)
-  expect_true("243" %in% ahrqComorbid$Hypothyroid) # top level billable code
-  expect_true("2430" %in% ahrqComorbid$Hypothyroid) # implied, doesn't exist
-  expect_true("24300" %in% ahrqComorbid$Hypothyroid) # implied
-  expect_true("2448" %in% ahrqComorbid$Hypothyroid)
-  expect_true("2449" %in% ahrqComorbid$Hypothyroid)
-  expect_true("24480" %in% ahrqComorbid$Hypothyroid)
-  expect_true("24499" %in% ahrqComorbid$Hypothyroid)
+  expect_false("244" %in% icd9::icd9_map_ahrq$Hypothyroid) # some children are not included
+  expect_false("2443" %in% icd9::icd9_map_ahrq$Hypothyroid) # explicitly excluded by Quan
+  expect_false("24430" %in% icd9::icd9_map_ahrq$Hypothyroid) # implied exclusion
+  expect_true("2442" %in% icd9::icd9_map_ahrq$Hypothyroid)
+  expect_true("243" %in% icd9::icd9_map_ahrq$Hypothyroid) # top level billable code
+  expect_true("2430" %in% icd9::icd9_map_ahrq$Hypothyroid) # implied, doesn't exist
+  expect_true("24300" %in% icd9::icd9_map_ahrq$Hypothyroid) # implied
+  expect_true("2448" %in% icd9::icd9_map_ahrq$Hypothyroid)
+  expect_true("2449" %in% icd9::icd9_map_ahrq$Hypothyroid)
+  expect_true("24480" %in% icd9::icd9_map_ahrq$Hypothyroid)
+  expect_true("24499" %in% icd9::icd9_map_ahrq$Hypothyroid)
   #      "V560 "-"V5632",
-  expect_true("V560" %in% ahrqComorbid$Renal)
-  expect_true("V563" %in% ahrqComorbid$Renal)
-  expect_true("V5632" %in% ahrqComorbid$Renal)
-  expect_true("V568" %in% ahrqComorbid$Renal)
-  expect_false("V56" %in% ahrqComorbid$Renal)
+  expect_true("V560" %in% icd9::icd9_map_ahrq$Renal)
+  expect_true("V563" %in% icd9::icd9_map_ahrq$Renal)
+  expect_true("V5632" %in% icd9::icd9_map_ahrq$Renal)
+  expect_true("V568" %in% icd9::icd9_map_ahrq$Renal)
+  expect_false("V56" %in% icd9::icd9_map_ahrq$Renal)
   #   "20000"-"20238",
   #   "20250"-"20301",
   #   "2386 ",
   #   "2733 ",
   #   "20302"-"20382" = "LYMPH"     /* Lymphoma */
-  expect_true("200" %in% ahrqComorbid$Lymphoma)
-  expect_true("2000" %in% ahrqComorbid$Lymphoma)
-  expect_true("20000" %in% ahrqComorbid$Lymphoma)
-  expect_true("201" %in% ahrqComorbid$Lymphoma)
-  expect_true("20100" %in% ahrqComorbid$Lymphoma)
-  expect_true("20199" %in% ahrqComorbid$Lymphoma)
-  expect_false("202" %in% ahrqComorbid$Lymphoma)
-  expect_false("2024" %in% ahrqComorbid$Lymphoma)
-  expect_false("20240" %in% ahrqComorbid$Lymphoma)
-  expect_false("20248" %in% ahrqComorbid$Lymphoma)
-  expect_false("20249" %in% ahrqComorbid$Lymphoma)
-  expect_true("2025" %in% ahrqComorbid$Lymphoma)
-  expect_true("20250" %in% ahrqComorbid$Lymphoma)
-  expect_true("20258" %in% ahrqComorbid$Lymphoma)
-  expect_true("20259" %in% ahrqComorbid$Lymphoma)
-  expect_true("20298" %in% ahrqComorbid$Lymphoma)
-  expect_true("20299" %in% ahrqComorbid$Lymphoma)
+  expect_true("200" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("2000" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20000" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("201" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20100" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20199" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_false("202" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_false("2024" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_false("20240" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_false("20248" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_false("20249" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("2025" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20250" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20258" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20259" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20298" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20299" %in% icd9::icd9_map_ahrq$Lymphoma)
   # 2030 and 203 are parents: problem because this range is split for some reason
-  expect_true("2031" %in% ahrqComorbid$Lymphoma)
-  expect_true("20310" %in% ahrqComorbid$Lymphoma)
-  expect_true("20300" %in% ahrqComorbid$Lymphoma)
-  expect_true("20301" %in% ahrqComorbid$Lymphoma)
+  expect_true("2031" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20310" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20300" %in% icd9::icd9_map_ahrq$Lymphoma)
+  expect_true("20301" %in% icd9::icd9_map_ahrq$Lymphoma)
   # "1960 "-"1991 ",
-  expect_true("196" %in% ahrqComorbid$Mets)
-  expect_true("1960" %in% ahrqComorbid$Mets)
-  expect_true("19600" %in% ahrqComorbid$Mets)
-  expect_true("1969" %in% ahrqComorbid$Mets)
-  expect_true("19699" %in% ahrqComorbid$Mets)
-  expect_true("197" %in% ahrqComorbid$Mets)
-  expect_true("1970" %in% ahrqComorbid$Mets)
-  expect_true("19700" %in% ahrqComorbid$Mets)
-  expect_true("19799" %in% ahrqComorbid$Mets)
-  expect_true("198" %in% ahrqComorbid$Mets)
-  expect_true("1980" %in% ahrqComorbid$Mets)
-  expect_true("19800" %in% ahrqComorbid$Mets)
-  expect_true("19899" %in% ahrqComorbid$Mets)
-  expect_true("1990" %in% ahrqComorbid$Mets)
-  expect_true("19900" %in% ahrqComorbid$Mets)
-  expect_true("19909" %in% ahrqComorbid$Mets)
-  expect_true("1991" %in% ahrqComorbid$Mets)
-  expect_true("19910" %in% ahrqComorbid$Mets)
-  expect_true("19919" %in% ahrqComorbid$Mets)
-  expect_false("199" %in% ahrqComorbid$Mets)
-  expect_false("1992" %in% ahrqComorbid$Mets)
-  expect_false("19920" %in% ahrqComorbid$Mets)
-  expect_false("19929" %in% ahrqComorbid$Mets)
-  expect_false("1993" %in% ahrqComorbid$Mets) # implied
-  expect_false("19930" %in% ahrqComorbid$Mets) # implied
-  expect_false("19999" %in% ahrqComorbid$Mets) # implied
+  expect_true("196" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("1960" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19600" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("1969" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19699" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("197" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("1970" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19700" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19799" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("198" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("1980" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19800" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19899" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("1990" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19900" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19909" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("1991" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19910" %in% icd9::icd9_map_ahrq$Mets)
+  expect_true("19919" %in% icd9::icd9_map_ahrq$Mets)
+  expect_false("199" %in% icd9::icd9_map_ahrq$Mets)
+  expect_false("1992" %in% icd9::icd9_map_ahrq$Mets)
+  expect_false("19920" %in% icd9::icd9_map_ahrq$Mets)
+  expect_false("19929" %in% icd9::icd9_map_ahrq$Mets)
+  expect_false("1993" %in% icd9::icd9_map_ahrq$Mets) # implied
+  expect_false("19930" %in% icd9::icd9_map_ahrq$Mets) # implied
+  expect_false("19999" %in% icd9::icd9_map_ahrq$Mets) # implied
   #   "179  "-"1958 ",
   #   "20900"-"20924",
   #   "20925"-"2093 ",
   #   "20930"-"20936",
-  expect_true("195" %in% ahrqComorbid$Tumor) # all children, so implied
-  expect_true("1950" %in% ahrqComorbid$Tumor)
-  expect_true("1958" %in% ahrqComorbid$Tumor)
-  expect_true("19589" %in% ahrqComorbid$Tumor)
-  expect_true("1959" %in% ahrqComorbid$Tumor)
-  expect_true("19599" %in% ahrqComorbid$Tumor)
-  expect_false("209" %in% ahrqComorbid$Tumor)
-  expect_false("2094" %in% ahrqComorbid$Tumor)
-  expect_false("20940" %in% ahrqComorbid$Tumor)
-  expect_false("2099" %in% ahrqComorbid$Tumor)
-  expect_false("20999" %in% ahrqComorbid$Tumor)
-  expect_false("2097" %in% ahrqComorbid$Tumor)
-  expect_false("20979" %in% ahrqComorbid$Tumor)
-  expect_true("20936" %in% ahrqComorbid$Tumor)
-  expect_true("2093" %in% ahrqComorbid$Tumor)
-  expect_true("20930" %in% ahrqComorbid$Tumor)
-  expect_true("20939" %in% ahrqComorbid$Tumor)
-  expect_true("2090" %in% ahrqComorbid$Tumor)
-  expect_true("2091" %in% ahrqComorbid$Tumor)
+  expect_true("195" %in% icd9::icd9_map_ahrq$Tumor) # all children, so implied
+  expect_true("1950" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("1958" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("19589" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("1959" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("19599" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_false("209" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_false("2094" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_false("20940" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_false("2099" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_false("20999" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_false("2097" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_false("20979" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20936" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("2093" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20930" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20939" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("2090" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("2091" %in% icd9::icd9_map_ahrq$Tumor)
   # is range split between definitions? ideally this would be included, but it
   # is a corner case e.g. 2092
-  expect_true("20900" %in% ahrqComorbid$Tumor)
-  expect_true("20910" %in% ahrqComorbid$Tumor)
-  expect_true("20920" %in% ahrqComorbid$Tumor)
-  expect_true("20907" %in% ahrqComorbid$Tumor)
-  expect_true("20917" %in% ahrqComorbid$Tumor)
-  expect_true("20927" %in% ahrqComorbid$Tumor)
-  expect_true("20909" %in% ahrqComorbid$Tumor)
-  expect_true("20919" %in% ahrqComorbid$Tumor)
-  expect_true("20929" %in% ahrqComorbid$Tumor)
+  expect_true("20900" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20910" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20920" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20907" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20917" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20927" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20909" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20919" %in% icd9::icd9_map_ahrq$Tumor)
+  expect_true("20929" %in% icd9::icd9_map_ahrq$Tumor)
   #   "2871 ",
   #   "2873 "-"2875 ", # coag
-  expect_true("2871" %in% ahrqComorbid$Coagulopathy)
-  expect_true("28710" %in% ahrqComorbid$Coagulopathy) # doesn't exist but really should work simply
-  expect_true("28719" %in% ahrqComorbid$Coagulopathy) # doesn't exist but really should work simply
-  expect_false("287" %in% ahrqComorbid$Coagulopathy)
-  expect_false("2872" %in% ahrqComorbid$Coagulopathy)
-  expect_false("28720" %in% ahrqComorbid$Coagulopathy)
-  expect_false("28729" %in% ahrqComorbid$Coagulopathy)
-  expect_true("2873" %in% ahrqComorbid$Coagulopathy)
-  expect_true("28730" %in% ahrqComorbid$Coagulopathy)
-  expect_true("28739" %in% ahrqComorbid$Coagulopathy)
-  expect_true("2874" %in% ahrqComorbid$Coagulopathy)
-  expect_true("28741" %in% ahrqComorbid$Coagulopathy)
-  expect_true("28749" %in% ahrqComorbid$Coagulopathy)
-  expect_true("2875" %in% ahrqComorbid$Coagulopathy)
-  expect_true("28759" %in% ahrqComorbid$Coagulopathy)
-  expect_false("2876" %in% ahrqComorbid$Coagulopathy)
-  expect_false("28760" %in% ahrqComorbid$Coagulopathy)
-  expect_false("28769" %in% ahrqComorbid$Coagulopathy)
-  expect_false("2878" %in% ahrqComorbid$Coagulopathy)
-  expect_false("2879" %in% ahrqComorbid$Coagulopathy)
-  expect_false("28799" %in% ahrqComorbid$Coagulopathy)
+  expect_true("2871" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("28710" %in% icd9::icd9_map_ahrq$Coagulopathy) # doesn't exist but really should work simply
+  expect_true("28719" %in% icd9::icd9_map_ahrq$Coagulopathy) # doesn't exist but really should work simply
+  expect_false("287" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("2872" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("28720" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("28729" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("2873" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("28730" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("28739" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("2874" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("28741" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("28749" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("2875" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_true("28759" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("2876" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("28760" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("28769" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("2878" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("2879" %in% icd9::icd9_map_ahrq$Coagulopathy)
+  expect_false("28799" %in% icd9::icd9_map_ahrq$Coagulopathy)
   #   "2910 "-"2913 ",
   #   "2915 ",
   #   "2918 ",
@@ -441,39 +441,39 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   #   "2919 ",
   #   "30300"-"30393",
   #   "30500"-"30503" = "ALCOHOL"   /* Alcohol abuse */
-  expect_true("2910" %in% ahrqComorbid$Alcohol)
-  expect_true("2913" %in% ahrqComorbid$Alcohol)
-  expect_true("2915" %in% ahrqComorbid$Alcohol)
-  expect_true("2918" %in% ahrqComorbid$Alcohol)
-  expect_true("29181" %in% ahrqComorbid$Alcohol)
-  expect_true("29182" %in% ahrqComorbid$Alcohol)
-  expect_true("29189" %in% ahrqComorbid$Alcohol)
-  expect_true("2919" %in% ahrqComorbid$Alcohol)
-  expect_false("291" %in% ahrqComorbid$Alcohol)
-  expect_false("2914" %in% ahrqComorbid$Alcohol)
-  expect_false("29140" %in% ahrqComorbid$Alcohol)
-  expect_false("29149" %in% ahrqComorbid$Alcohol)
+  expect_true("2910" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_true("2913" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_true("2915" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_true("2918" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_true("29181" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_true("29182" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_true("29189" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_true("2919" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_false("291" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_false("2914" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_false("29140" %in% icd9::icd9_map_ahrq$Alcohol)
+  expect_false("29149" %in% icd9::icd9_map_ahrq$Alcohol)
   #   "2920 ",
   #   "29282"-"29289",
   #   "2929 ",
   #   "30400"-"30493",
   #   "30520"-"30593",
   #   "64830"-"64834" = "DRUG"      /* Drug abuse */
-  expect_true("304" %in% ahrqComorbid$Drugs)
-  expect_true("3040" %in% ahrqComorbid$Drugs)
-  expect_true("30400" %in% ahrqComorbid$Drugs)
-  expect_true("3049" %in% ahrqComorbid$Drugs)
-  expect_true("30493" %in% ahrqComorbid$Drugs)
-  expect_false("305" %in% ahrqComorbid$Drugs)
-  expect_false("3050" %in% ahrqComorbid$Drugs)
-  expect_false("30500" %in% ahrqComorbid$Drugs)
-  expect_false("3051" %in% ahrqComorbid$Drugs)
-  expect_false("30510" %in% ahrqComorbid$Drugs)
-  expect_true("3052" %in% ahrqComorbid$Drugs)
-  expect_true("30520" %in% ahrqComorbid$Drugs)
-  expect_true("30523" %in% ahrqComorbid$Drugs)
-  expect_true("3059" %in% ahrqComorbid$Drugs)
-  expect_true("30593" %in% ahrqComorbid$Drugs)
+  expect_true("304" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("3040" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("30400" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("3049" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("30493" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_false("305" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_false("3050" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_false("30500" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_false("3051" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_false("30510" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("3052" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("30520" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("30523" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("3059" %in% icd9::icd9_map_ahrq$Drugs)
+  expect_true("30593" %in% icd9::icd9_map_ahrq$Drugs)
 
 })
 
@@ -532,21 +532,21 @@ test_that("github #34 - short and long custom map give different results", {
 })
 
 test_that("no NA values in the co-morbidity lists", {
-  expect_false(anyNA(unlist(unname(ahrqComorbid))))
+  expect_false(anyNA(unlist(unname(icd9::icd9_map_ahrq))))
   expect_false(anyNA(unlist(unname(quanDeyoComorbid))))
   expect_false(anyNA(unlist(unname(quanElixComorbid))))
   expect_false(anyNA(unlist(unname(elixComorbid))))
 })
 
 test_that("no duplicate values in the co-morbidity lists", {
-  expect_false(any(as.logical(lapply(ahrqComorbid, anyDuplicated))))
+  expect_false(any(as.logical(lapply(icd9::icd9_map_ahrq, anyDuplicated))))
   expect_false(any(as.logical(lapply(quanDeyoComorbid, anyDuplicated))))
   expect_false(any(as.logical(lapply(quanElixComorbid, anyDuplicated))))
   expect_false(any(as.logical(lapply(elixComorbid, anyDuplicated))))
 })
 
 test_that("built-in icd9 to comorbidity mappings are all valid", {
-  expect_true(icd_is_valid.icd_comorbidity_map(ahrqComorbid, short_code = TRUE))
+  expect_true(icd_is_valid.icd_comorbidity_map(icd9::icd9_map_ahrq, short_code = TRUE))
   expect_true(icd_is_valid.icd_comorbidity_map(quanDeyoComorbid, short_code = TRUE))
   expect_true(icd_is_valid.icd_comorbidity_map(quanElixComorbid, short_code = TRUE))
   expect_true(icd_is_valid.icd_comorbidity_map(elixComorbid, short_code = TRUE))
@@ -555,7 +555,7 @@ test_that("built-in icd9 to comorbidity mappings are all valid", {
 test_that("disordered visit ids", {
   pts <- data.frame(visitId = c("2", "1", "2", "3", "3"),
                     icd9 = c("39891", "40110", "09322", "41514", "39891"))
-  icd_comorbid.icd9(pts, ahrqComorbid, short_code = TRUE)
+  icd_comorbid.icd9(pts, icd9::icd9_map_ahrq, short_code = TRUE)
 })
 
 test_that("diff comorbid works", {
@@ -567,7 +567,7 @@ test_that("diff comorbid works", {
 # TODO: should be testing correct dispatch here, too, since map is a different class.
   expect_warning(
     utils::capture.output(
-      res <- icd_diff_comorbid(ahrqComorbid, elixComorbid, show = FALSE)
+      res <- icd_diff_comorbid(icd9::icd9_map_ahrq, elixComorbid, show = FALSE)
     ),
   NA)
 
@@ -629,7 +629,7 @@ test_that("control params don't affect result of comorbid calc", {
   pts$visitId <- asCharacterNoWarn(pts$visitId)
   pts$icd9 <- as.factor(pts$icd9)
   upts <- length(unique(pts$visitId))
-  ac <-  lapply(ahrqComorbid, function(x) {
+  ac <-  lapply(icd9::icd9_map_ahrq, function(x) {
     f <- factor(x, levels(pts[["icd9"]]))
     f[!is.na(f)]
   })
@@ -688,8 +688,8 @@ test_that("failing example", {
 test_that("disordered visitIds works by default", {
   set.seed(1441)
   dat <- transform(testTwenty, visitId = sample(visitId))
-  tres <- icd_comorbid.icd9(dat, ahrqComorbid, icd9Field = "icd9Code")
-  cres <- icd_comorbid.icd9(testTwenty, ahrqComorbid, icd9Field = "icd9Code")
+  tres <- icd_comorbid.icd9(dat, icd9::icd9_map_ahrq, icd9Field = "icd9Code")
+  cres <- icd_comorbid.icd9(testTwenty, icd9::icd9_map_ahrq, icd9Field = "icd9Code")
   expect_equal(dim(tres), dim(cres))
   expect_equal(sum(tres), sum(cres))
   expect_true(setequal(rownames(tres), rownames(cres)))
