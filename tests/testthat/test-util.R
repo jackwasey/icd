@@ -65,3 +65,7 @@ test_that("trim with acceptable inputs" , {
   expect_identical(strim(" a s d f "), strimCpp(" a s d f "))
 
 })
+
+test_that("get visit name from a matrix should fail", {
+  expect_error(get_visit_name(matrix(c(1, 2, 3, 4), nrow = 2)))
+})

@@ -9,7 +9,7 @@
 icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE, path = NULL) {
   if (!missing(condense) || !missing(path))
     warning("'condense' and 'path' are deprecated in icd9_generate_map_elix",
-                                  call. = FALSE)
+            call. = FALSE)
   icd9_map_elix <- list(
     chf = c("398.91", "402.11", "402.91", "404.11", "404.13", "404.91",
             "404.93", "428.0" %i9da% "428.9"),
@@ -323,6 +323,9 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
 #' @template parse-template
 #' @keywords internal
 generate_uranium_pathology <- function(save_data = FALSE) {
+
+  requireNamespace("RODBC")
+  stopifnot(existsFunction("odbcConnectAccess2007"))
 
   assertFlag(save_data)
 

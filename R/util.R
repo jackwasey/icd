@@ -22,7 +22,7 @@
 #' @return character vector of length one
 #' @keywords internal
 strim <- function(x) {
-  checkmate::assertString(x, na.ok = TRUE)
+  assertString(x, na.ok = TRUE)
   if (!is.na(x[1]))
     .Call("icd9_strimCpp", PACKAGE = get_pkg_name(), as.character(x))
   else
@@ -41,23 +41,6 @@ trim <- function(x) {
   x[!nax] <- .Call("icd9_trimCpp", PACKAGE = get_pkg_name(), as.character(x[!nax]))
   x
 }
-
-allIsNumeric <- function(x, extras = c(".", "NA", NA)) {
-  old <- options(warn = -1)
-  on.exit(options(old))
-  xs <- x[x %nin% c("", extras)]
-  !anyNA(as.numeric(xs))
-}
-
-asNumericNoWarn <- function(x) {
-  old <- options(warn = -1)
-  on.exit(options(old))
-  if (is.factor(x)) x <- levels(x)[x]
-  as.numeric(x)
-}
-
-asIntegerNoWarn <- function(x)
-  as.integer(asNumericNoWarn(x))
 
 asCharacterNoWarn <- function(x) {
   if (is.character(x)) return(x)
@@ -94,10 +77,10 @@ logical_to_binary <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
 
   if (is.matrix(x)) {
-    checkmate::assertMatrix(x, min.rows = 1, min.cols = 1)
+    assertMatrix(x, min.rows = 1, min.cols = 1)
     return(as.logical(x))
   } else if (is.data.frame(x))
-    checkmate::assertDataFrame(x, min.rows = 1, min.cols = 1)
+    assertDataFrame(x, min.rows = 1, min.cols = 1)
   else
     stop("need a matrix or data.frame")
 
@@ -181,7 +164,7 @@ get_visit_name.matrix <- function(x, visit_name = NULL) {
 # than earlier ones.
 get_icd_name <- function(x, icd_name = NULL) {
   guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd", "diagnos", "diag.?code", "diag", "i(9|10)")
-  checkmate::assertDataFrame(x, min.cols = 1, col.names = "named")
+  assertDataFrame(x, min.cols = 1, col.names = "named")
   if (is.null(icd_name)) {
     for (guess in guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
@@ -208,21 +191,6 @@ get_icd_name <- function(x, icd_name = NULL) {
 #' Implemented as a function to give flexibility to calculate this, or use an option override.
 #' @keywords internal
 icd9cm_latest_edition <- function() "32"
-
-#' @title trim null or empty values from a list
-#' @description For a given unnested list, x, return the list without any NA or NULL elements.
-#' @param x list
-#' @return trimmed list
-#' @keywords internal
-listTrimFlat  <-  function(x) {
-  suppressWarnings(
-    x[sapply(x, length) != 0 &
-        sapply(x, nchar) != 0 &
-        !sapply(x, function(y) all(is.null(y))) &
-        !sapply(x, function(y) all(is.na(y)))
-      ]
-  )
-}
 
 #' @title swap names and values of a vector
 #' @description swap names and values of a vector
@@ -289,25 +257,10 @@ skip_online_tests <- function(msg = "skipping online test") {
 #'
 #' # without sorting is much faster:
 #' microbenchmark::microbenchmark(factor(pts$icd9),
-#'                                factor_(pts$icd9),
+#'                                # factor_(pts$icd9),
 #'                                factor_nosort(pts$icd9),
-#'                                times=25)
+#'                                times = 25)
 #' }
-#' @keywords internal manip
-factor_ <- function(x, levels = NULL, labels = levels, na.last = NA) {
-
-  if (is.factor(x)) return(x)
-  if (is.null(levels)) levels <- sort(unique.default(x), na.last = na.last)
-  suppressWarnings(
-    f <- fastmatch::fmatch(x, levels,
-                           nomatch = if (isTRUE(na.last)) length(levels) else NA_integer_)
-  )
-  levels(f) <- as.character(labels)
-  class(f) <- "factor"
-  f
-}
-
-#' @rdname factor_
 #' @details I don't think there is any requirement for factor levels to be
 #'   sorted in advance, especially not for ICD-9 codes where a simple
 #'   alphanumeric sorting will likely be completely wrong.

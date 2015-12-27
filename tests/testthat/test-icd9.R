@@ -134,7 +134,7 @@ test_that("add leading zeroes to majors, invalid input", {
 })
 
 test_that("all generated icd9 lookup tables are valid!", {
-# TODO
+  # TODO
 
 })
 
@@ -282,6 +282,10 @@ test_that("drop leading zeroes from majors: E codes", {
 })
 
 test_that("generating uranium data is identical to saved", {
+  suppressWarnings(
+    if (!require("RODBC") || !existsFunction("odbcConnectAccess2007"))
+      skip("only test if RODBC::odbcConnectAccess2007 is available. (Probably just windows.)")
+  )
   expect_identical(generate_uranium_pathology(save_data = FALSE), uranium_pathology)
 })
 
@@ -290,6 +294,7 @@ test_that("generating vermont data is identical to saved", {
 })
 
 test_that("uranium data looks okay", {
+
   expect_is(uranium_pathology, c("icd_long_data", "icd10", "icd_decimal_code"))
   expect_equal(dim(uranium_pathology), c(2376, 2))
 })
