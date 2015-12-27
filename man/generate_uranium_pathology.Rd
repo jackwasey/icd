@@ -4,7 +4,7 @@
 \alias{generate_uranium_pathology}
 \title{generate uranium pathology data}
 \usage{
-generate_uranium_pathology(save_data = FALSE)
+generate_uranium_pathology(save_data = FALSE, offline = FALSE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.
@@ -19,7 +19,10 @@ invisibly returns the list of vectors, where a co-morbidity name is
 }
 \description{
 This is downloaded from WSU where it appears to be provided in the public
-domain.
+domain. It requires the file to be downloadable from source, or already
+stored in the \code{data-raw} directory, and it appears that the function
+\code{odbcConnectAccess2007} is only available in the Windows build of
+\pkg{RODBC}.
 }
 \keyword{internal}
 

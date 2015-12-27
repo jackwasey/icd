@@ -43,17 +43,27 @@ unzip_single <- function(url, file_name, save_path) {
 #'
 #' @param url url of a zip file
 #' @param file_name file name of a single file in that zip
-#' @param force logical, if TRUE, then download even if already in \code{data-raw}
+#' @param force logical, if TRUE, then download even if already in
+#'   \code{data-raw}
+#' @param offline single logical, if \code{TRUE} then only return path and
+#'   filename if the file already exists in data-raw. This is helpful for
+#'   testing.
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal
-unzip_to_data_raw <- function(url, file_name, force = FALSE) {
+unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
+  assertString(url)
+  assertString(file_name)
+  assertFlag(force)
+  assertFlag(offline)
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
-  save_path <- file.path(data_raw_path, file_name)
-  if (force || !file.exists(save_path))
+  file_path <- file.path(data_raw_path, file_name)
+  if (force || !file.exists(file_path))
+    if (offline)
+      return(list(file_path = NULL, file_name = NULL))
     stopifnot(
-      unzip_single(url = url, file_name = file_name, save_path = save_path)
+      unzip_single(url = url, file_name = file_name, save_path = file_path)
     )
-  list(file_path = save_path, file_name = file_name)
+  list(file_path = file_path, file_name = file_name)
 }
 
 download_to_data_raw <- function(url, file_name = NULL, force = FALSE) {

@@ -4,14 +4,19 @@
 \alias{unzip_to_data_raw}
 \title{Get a zipped file from a URL, or confirm it is in data-raw already}
 \usage{
-unzip_to_data_raw(url, file_name, force = FALSE)
+unzip_to_data_raw(url, file_name, force = FALSE, offline = FALSE)
 }
 \arguments{
 \item{url}{url of a zip file}
 
 \item{file_name}{file name of a single file in that zip}
 
-\item{force}{logical, if TRUE, then download even if already in \code{data-raw}}
+\item{force}{logical, if TRUE, then download even if already in
+\code{data-raw}}
+
+\item{offline}{single logical, if \code{TRUE} then only return path and
+filename if the file already exists in data-raw. This is helpful for
+testing.}
 }
 \value{
 path of unzipped file in \code{data-raw}

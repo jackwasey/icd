@@ -316,22 +316,31 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   invisible(icd10_map_quan_deyo)
 }
 
+fetch_uranium_pathology <- function(offline = FALSE) {
+  unzip_to_data_raw(
+    url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
+    file_name = "Pathology_Office2007.accdb",
+    offline = offline)
+}
+
 #' generate uranium pathology data
 #'
 #' This is downloaded from WSU where it appears to be provided in the public
-#' domain.
+#' domain. It requires the file to be downloadable from source, or already
+#' stored in the \code{data-raw} directory, and it appears that the function
+#' \code{odbcConnectAccess2007} is only available in the Windows build of
+#' \pkg{RODBC}.
 #' @template parse-template
 #' @keywords internal
-generate_uranium_pathology <- function(save_data = FALSE) {
+generate_uranium_pathology <- function(save_data = FALSE, offline = FALSE) {
 
   requireNamespace("RODBC")
   stopifnot(existsFunction("odbcConnectAccess2007"))
 
   assertFlag(save_data)
+  assertFlag(offline)
 
-  file_path <- unzip_to_data_raw(
-    url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
-    file_name = "Pathology_Office2007.accdb")
+  file_path <- fetch_uranium_pathology(offline = offline)
 
   # odbcConnectAccess2007 is only in the Windows version of RODBC
   channel <- RODBC::odbcConnectAccess2007(file_path)
@@ -351,19 +360,23 @@ generate_uranium_pathology <- function(save_data = FALSE) {
   invisible(uranium_pathology)
 }
 
+fetch_vermont_dx <- function(offline) {
+  unzip_to_data_raw(
+    url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
+    file_name = "VTINP13.TXT",
+    offline = offline)
+}
+
 #' generate vermont_dx data
 #'
 #' Generate the Veromnt data from healthvermont.gov
 #' @template parse-template
 #' @keywords internal
-generate_vermont_dx <- function(save_data = FALSE) {
+generate_vermont_dx <- function(save_data = FALSE, offline = FALSE) {
 
   assertFlag(save_data)
-
-  zip_out = unzip_to_data_raw(
-    url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
-    file_name = "VTINP13.TXT")
-  vermont_dx <- utils::read.csv(zip_out$file_path,
+  vermont_raw_fp = fetch_vermont_dx(offline = offline)
+  vermont_dx <- utils::read.csv(vermont_raw_fp$file_path,
                                 stringsAsFactors = FALSE,
                                 strip.white = TRUE,
                                 nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
@@ -395,6 +408,7 @@ generate_vermont_dx <- function(save_data = FALSE) {
   # and set class on whole structure
   class(vermont_dx) <- c("icd9cm", "icd9", "icd_wide_data", "data.frame")
 
-  if (save_data) save_in_data_dir(vermont_dx)
+  if (save_data)
+    save_in_data_dir(vermont_dx)
   invisible(vermont_dx)
 }

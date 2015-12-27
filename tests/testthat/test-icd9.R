@@ -282,6 +282,9 @@ test_that("drop leading zeroes from majors: E codes", {
 })
 
 test_that("generating uranium data is identical to saved", {
+  if (is.null(fetch_uranium_pathology(offline = TRUE)$file_path))
+    skip_online_tests("uranium pathology data only available online")
+
   suppressWarnings(
     if (!require("RODBC") || !existsFunction("odbcConnectAccess2007"))
       skip("only test if RODBC::odbcConnectAccess2007 is available. (Probably just windows.)")
@@ -290,6 +293,8 @@ test_that("generating uranium data is identical to saved", {
 })
 
 test_that("generating vermont data is identical to saved", {
+  if (is.null(fetch_vermont_dx(offline = TRUE)$file_path))
+    skip_online_tests("vermont data only available online")
   expect_identical(generate_vermont_dx(save_data = FALSE), vermont_dx)
 })
 
