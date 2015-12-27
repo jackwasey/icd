@@ -4,7 +4,11 @@
 \alias{generate_deprecated_data}
 \title{Generate deprecated data}
 \usage{
-generate_deprecated_data()
+generate_deprecated_data(save_data = TRUE)
+}
+\arguments{
+\item{save_data}{save the data in \code{data/deprecated.RData}, default is
+\code{TRUE}}
 }
 \description{
 Unfortunately, this is easiest (and has a chance of passing CRAN checks) if I
