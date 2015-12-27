@@ -42,4 +42,3 @@ context("test get OMP threads") {
 //     expect_true(all(res >=0));
 //   }
 // }
-}
