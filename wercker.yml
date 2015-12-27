@@ -9,4 +9,4 @@ build:
     - jimhester/r-check:
       warnings_are_errors: FALSE
     - jimhester/r-coverage
-    - jimhester/r-lint
+#    - jimhester/r-lint
