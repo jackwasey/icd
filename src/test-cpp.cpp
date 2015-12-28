@@ -3,6 +3,7 @@
 #include "is.h"
 #include "util.h"
 #include "convert.h"
+#include "../inst/include/icd9.h"
 
 context("C++ Unit Test") {
   test_that("two plus two is four") {
@@ -74,3 +75,11 @@ context("icd9ShortToPartsCpp") {
 
   }
 }
+
+// context("Rcpp exports") {
+//   test_that("Rcpp exports are valid") {
+//
+//     int i = icd9_RcppExport_validate("icd9");
+//     expect_that(i > 0);
+//   }
+// }

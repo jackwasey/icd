@@ -1,6 +1,8 @@
 #box: jackwasey/r-ubsan-clang-3.7-libcxx
 #box: rocker/r-devel-san
 #box: rocker/r-devel-ubsan-clang
+
+# WERCKER_R_COVR_OPTIONS is set in the wercker configuration to do the same
 box: rocker/hadleyverse
 build:
   steps:

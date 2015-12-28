@@ -36,13 +36,13 @@ icd_expand_range(start, end, ...)
 
 \method{icd_expand_range}{icd9}(start, end,
   short_code = icd_guess_short.icd9(c(start, end)), defined = TRUE,
-  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE, ...)
+  ex_ambig_start = TRUE, ex_ambig_end = TRUE, ...)
 
-icd9_expand_range_short(start, end, defined = TRUE,
-  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
+icd9_expand_range_short(start, end, defined = TRUE, ex_ambig_start = TRUE,
+  ex_ambig_end = TRUE)
 
-icd9_expand_range_decimal(start, end, defined = TRUE,
-  excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE)
+icd9_expand_range_decimal(start, end, defined = TRUE, ex_ambig_start = TRUE,
+  ex_ambig_end = TRUE)
 
 start \%i9da\% end
 
@@ -67,19 +67,19 @@ Since nearly valid, out-dated or new codes may be missed, not limiting to
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
 
-\item{excludeAmbiguousStart}{single logical value, if \code{TRUE} the range
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
+
+\item{ex_ambig_start}{single logical value, if \code{TRUE} the range
 returned will not include codes which are explicitly listed in the range,
 but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%
 V1009} would by default (\code{FALSE}) include \code{V10} even though
 \code{V10} itself is parent to everything up to \code{V11}.}
 
-\item{excludeAmbiguousEnd}{single logical, same as
-\code{excludeAmbiguousStart} but affects codes at the end of the range.
+\item{ex_ambig_end}{single logical, same as
+\code{ex_ambig_start} but affects codes at the end of the range.
 E.g. 99.99 to 101.01 would by default exclude 101 and 101.0}
-
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
 }
 \description{
 this is cumbersome code, covering a whole load of edge cases

@@ -4,15 +4,15 @@
 \alias{sasParseAssignments}
 \title{get assignments from a character string strings.}
 \usage{
-sasParseAssignments(x, stripWhiteSpace = TRUE, stripQuotes = TRUE)
+sasParseAssignments(x, strip_whitespace = TRUE, strip_quotes = TRUE)
 }
 \arguments{
 \item{x}{is a character string containing space delimited assignments, in SAS
 declaration format.}
 
-\item{stripWhiteSpace}{will strip all whitespace from the returned values}
+\item{strip_whitespace}{will strip all whitespace from the returned values}
 
-\item{stripQuotes}{will strip all double quotation marks from the returned
+\item{strip_quotes}{will strip all double quotation marks from the returned
 values}
 }
 \value{

@@ -40,13 +40,13 @@
 #' @template icd9-short
 #' @template onlyReal
 #' @template short_code
-#' @param excludeAmbiguousStart single logical value, if \code{TRUE} the range
+#' @param ex_ambig_start single logical value, if \code{TRUE} the range
 #'   returned will not include codes which are explicitly listed in the range,
 #'   but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%
 #'   V1009} would by default (\code{FALSE}) include \code{V10} even though
 #'   \code{V10} itself is parent to everything up to \code{V11}.
-#' @param excludeAmbiguousEnd single logical, same as
-#'   \code{excludeAmbiguousStart} but affects codes at the end of the range.
+#' @param ex_ambig_end single logical, same as
+#'   \code{ex_ambig_start} but affects codes at the end of the range.
 #'   E.g. 99.99 to 101.01 would by default exclude 101 and 101.0
 #' @family ICD-9 ranges
 #' @export
@@ -180,28 +180,28 @@ icd_expand_range_major.icd10 <- function(start, end) {
 icd_expand_range.icd9 <- function(start, end,
                                   short_code = icd_guess_short.icd9(c(start, end)),
                                   defined = TRUE,
-                                  excludeAmbiguousStart = TRUE,
-                                  excludeAmbiguousEnd = TRUE,
+                                  ex_ambig_start = TRUE,
+                                  ex_ambig_end = TRUE,
                                   ...) {
   if (short_code)
     icd9_expand_range_short(start, end, defined,
-                            excludeAmbiguousStart,
-                            excludeAmbiguousEnd)
+                            ex_ambig_start,
+                            ex_ambig_end)
   else
     icd9_expand_range_decimal(start, end, defined,
-                              excludeAmbiguousStart,
-                              excludeAmbiguousEnd)
+                              ex_ambig_start,
+                              ex_ambig_end)
 }
 
 #' expand range worker function
 #' @keywords internal
 expand_range_worker <- function(start, end, lookup, defined,
-                                excludeAmbiguousStart, excludeAmbiguousEnd) {
+                                ex_ambig_start, ex_ambig_end) {
   assertString(start)
   assertString(end)
   assertCharacter(lookup, any.missing = FALSE, min.chars = 3)
-  assertFlag(excludeAmbiguousStart)
-  assertFlag(excludeAmbiguousEnd)
+  assertFlag(ex_ambig_start)
+  assertFlag(ex_ambig_end)
 
   start_index <- match(start, lookup)
   end_index <- match(end, lookup)
@@ -217,7 +217,7 @@ expand_range_worker <- function(start, end, lookup, defined,
   if (start == end) return(icd_children.icd9(start, short_code = TRUE, defined = defined))
 
   out <- lookup[start_index:end_index]
-  if (excludeAmbiguousStart) {
+  if (ex_ambig_start) {
     # just remove those codes at the beginning which have children not in the output
     # let's take the first 5, to cover cases like 100, 101, 102.1, 102.11, 102.2
     starts <- utils::tail(out, 5)
@@ -226,7 +226,7 @@ expand_range_worker <- function(start, end, lookup, defined,
         out <- out[-which(out == s)]
     }
   }
-  if (excludeAmbiguousEnd) {
+  if (ex_ambig_end) {
     # at the end, we don't want any higher-level codes at the end which would
     # have children beyond the range. There could be lots of lower level codes
     # at the end, so we actually have to search the whole list. This means that
@@ -252,13 +252,13 @@ expand_range_worker <- function(start, end, lookup, defined,
 #' @details  Expand range of short_code-form ICD-9 codes
 #' @keywords internal
 icd9_expand_range_short <- function(start, end, defined = TRUE,
-                                    excludeAmbiguousStart = TRUE,
-                                    excludeAmbiguousEnd = TRUE) {
+                                    ex_ambig_start = TRUE,
+                                    ex_ambig_end = TRUE) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
   assertFlag(defined)
-  assertFlag(excludeAmbiguousStart)
-  assertFlag(excludeAmbiguousEnd)
+  assertFlag(ex_ambig_start)
+  assertFlag(ex_ambig_end)
 
   start <- icd9_add_leading_zeroes.icd_short_code(trim(start))
   end <- icd9_add_leading_zeroes.icd_short_code(trim(end))
@@ -271,26 +271,26 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
     stopifnot(icd_is_defined(start, short_code = TRUE), icd_is_defined(end, short_code = TRUE))
     if (icd9_is_n(start) && icd9_is_n(end))
       res <- expand_range_worker(start, end, icd9NShortReal, defined = TRUE,
-                                 excludeAmbiguousStart, excludeAmbiguousEnd)
+                                 ex_ambig_start, ex_ambig_end)
     else if (icd9_is_v(start) && icd9_is_v(end))
       res <- expand_range_worker(start, end, icd9VShortReal, defined = TRUE,
-                                 excludeAmbiguousStart, excludeAmbiguousEnd)
+                                 ex_ambig_start, ex_ambig_end)
     else if (icd9_is_e(start) && icd9_is_e(end))
       res <- expand_range_worker(start, end, icd9EShortReal, defined = TRUE,
-                                 excludeAmbiguousStart, excludeAmbiguousEnd)
+                                 ex_ambig_start, ex_ambig_end)
     else
       stop("mismatch between numeric, V and E types in start and end")
   } else {
 
     if (icd9_is_n(start) && icd9_is_n(end))
       res <- expand_range_worker(start, end, icd9NShort, defined = FALSE,
-                                 excludeAmbiguousStart, excludeAmbiguousEnd)
+                                 ex_ambig_start, ex_ambig_end)
     else if (icd9_is_v(start) && icd9_is_v(end))
       res <- expand_range_worker(start, end, icd9VShort, defined = FALSE,
-                                 excludeAmbiguousStart, excludeAmbiguousEnd)
+                                 ex_ambig_start, ex_ambig_end)
     else if (icd9_is_e(start) && icd9_is_e(end))
       res <- expand_range_worker(start, end, icd9EShort, defined = FALSE,
-                                 excludeAmbiguousStart, excludeAmbiguousEnd)
+                                 ex_ambig_start, ex_ambig_end)
     else
       stop("mismatch between numeric, V and E types in start and end")
   }
@@ -318,16 +318,16 @@ icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
 #' @rdname icd_expand_range
 #' @keywords internal
 icd9_expand_range_decimal <- function(start, end, defined = TRUE,
-                                      excludeAmbiguousStart = TRUE,
-                                      excludeAmbiguousEnd = TRUE) {
+                                      ex_ambig_start = TRUE,
+                                      ex_ambig_end = TRUE) {
   icd9(
     icd_short_code(
       icd_short_to_decimal.icd9(
         icd_expand_range.icd9(
           icd_decimal_to_short.icd9(start), icd_decimal_to_short.icd9(end),
           short_code = TRUE, defined = defined,
-          excludeAmbiguousStart = excludeAmbiguousStart,
-          excludeAmbiguousEnd = excludeAmbiguousEnd
+          ex_ambig_start = ex_ambig_start,
+          ex_ambig_end = ex_ambig_end
         )
       )
     )

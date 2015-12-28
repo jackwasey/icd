@@ -21,8 +21,8 @@ test_that("expand icd9 range definition", {
   expect_equal(
     icd_expand_range(short_code = TRUE, "4012", "40145",
                          defined = FALSE,
-                         excludeAmbiguousStart = FALSE,
-                         excludeAmbiguousEnd = FALSE),
+                         ex_ambig_start = FALSE,
+                         ex_ambig_end = FALSE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
@@ -30,8 +30,8 @@ test_that("expand icd9 range definition", {
   expect_equal(
     icd_expand_range(short_code = TRUE, "4012", "40145",
                          defined = FALSE,
-                         excludeAmbiguousStart = TRUE,
-                         excludeAmbiguousEnd = TRUE),
+                         ex_ambig_start = TRUE,
+                         ex_ambig_end = TRUE),
     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
@@ -76,7 +76,7 @@ test_that("expand icd9 range definition", {
   # the next two cases cover the HIV ranges in the co-morbidities, wherein the
   # final code is included, in which case the parent ("044" in this case) is
   # implied strongly. CAN'T EXPECT RANGE TO ACCOUNT FOR THIS, but we can make next test work with flag as follows:
-  expect_equal(icd_expand_range(short_code = TRUE, "043", "0449", defined = FALSE, excludeAmbiguousEnd = FALSE),
+  expect_equal(icd_expand_range(short_code = TRUE, "043", "0449", defined = FALSE, ex_ambig_end = FALSE),
                icd_expand_range(short_code = TRUE, "043", "044", defined = FALSE))
   expect_equal(icd_expand_range(short_code = TRUE, "043", "04499", defined = FALSE),
                icd_expand_range(short_code = TRUE, "043", "044", defined = FALSE))
@@ -117,8 +117,8 @@ test_that("expand icd9 range definition", {
   )
 
   expect_equal(icd_expand_range(short_code = TRUE, "401", "40102", defined = FALSE,
-                                    excludeAmbiguousStart = FALSE,
-                                    excludeAmbiguousEnd = FALSE),
+                                    ex_ambig_start = FALSE,
+                                    ex_ambig_end = FALSE),
                c("401", "4010", "40100", "40101", "40102"))
 
   # only works with single range
@@ -141,7 +141,7 @@ test_that("expand range worker gives correct ranges", {
   # error to the sub-function
   expect_equal(
     expand_range_worker("V10", "V1001", lookup = icd9:::icd9VShort,
-                      defined = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                      defined = TRUE, ex_ambig_start = FALSE, ex_ambig_end = FALSE),
     c("V10", "V100", "V1000", "V1001"))
 })
 
@@ -154,7 +154,7 @@ test_that("V code with ambiguous parent", {
   # descendants just to reach the specified codes, but not all the children of
   # the higher-level code.
   expect_equal(icd_expand_range.icd9(short_code = TRUE, "V10", "V1001",
-                                    defined = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                                    defined = FALSE, ex_ambig_start = FALSE, ex_ambig_end = FALSE),
                c("V10", "V100", "V1000", "V1001"))
   expect_equal(icd_expand_range.icd9(short_code = TRUE, "V10", "V1001", defined = FALSE),
                c("V1000", "V1001"))
@@ -170,15 +170,15 @@ test_that("V code ranges", {
                  "V1016", "V1017", "V1018", "V1019"))
   # and with narrower top end
   expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1009", "V1011",
-                                    defined = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
+                                    defined = FALSE, ex_ambig_start = TRUE, ex_ambig_end = TRUE),
                c("V1009", "V1010", "V1011"))
   expect_equal(icd_expand_range.icd9(short_code = TRUE, "V1009", "V1011",
-                                    defined = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                                    defined = FALSE, ex_ambig_start = FALSE, ex_ambig_end = FALSE),
                c("V1009", "V101", "V1010", "V1011"))
   # but include those pesky parents when requested:
   expect_true(
     all(c("V10", "V100") %in% icd_expand_range.icd9(short_code = TRUE, "V099", "V1011", defined = FALSE,
-                                                   excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE)))
+                                                   ex_ambig_start = FALSE, ex_ambig_end = FALSE)))
 
   # should fail despite end being 'longer' than start
   expect_error(icd_expand_range.icd9(short_code = TRUE, "V10", " V1 "))
@@ -252,16 +252,16 @@ test_that("range doesn't include higher level parent github issue #14", {
 
 test_that("ranges can include ambiguous parents, optionally", {
   expect_equal(
-    icd_expand_range.icd9("01006", "01010", defined = TRUE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
+    icd_expand_range.icd9("01006", "01010", defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = TRUE),
     c("01006", "01010"))
   expect_equal(
-    icd_expand_range.icd9("01006", "01010", defined = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+    icd_expand_range.icd9("01006", "01010", defined = TRUE, ex_ambig_start = FALSE, ex_ambig_end = FALSE),
     c("01006", "0101", "01010"))
   expect_equal(
-    icd_expand_range.icd9("01006", "01010", defined = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
+    icd_expand_range.icd9("01006", "01010", defined = FALSE, ex_ambig_start = TRUE, ex_ambig_end = TRUE),
     c("01006", "01007", "01008", "01009", "01010"))
   expect_equal(
-    icd_expand_range.icd9("01006", "01010", defined = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+    icd_expand_range.icd9("01006", "01010", defined = FALSE, ex_ambig_start = FALSE, ex_ambig_end = FALSE),
     c("01006", "01007", "01008", "01009", "0101", "01010"))
 
   # if real codes, then we can tolerate a higher level code if it is billable,

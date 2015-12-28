@@ -4,10 +4,10 @@
 \alias{sasFormatExtract}
 \title{extract assignments from a SAS FORMAT definition.}
 \usage{
-sasFormatExtract(sasTxt)
+sasFormatExtract(sas_lines)
 }
 \arguments{
-\item{sasTxt}{is a character vector, with one item per line, e.g. from
+\item{sas_lines}{is a character vector, with one item per line, e.g. from
 \code{readLines}}
 }
 \value{
