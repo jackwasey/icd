@@ -61,7 +61,7 @@ test_that("groups of SAS assignments can be extracted", {
   expect_equal(sasParseAssignments('123-456 = "YES"'), list(YES = "123-456"))
   #   expect_equal(
   #     sasParseAssignments('"999  " = "ONE" "777  "-"8881 " = "TWO"',
-  #       stripWhiteSpace=F),
+  #       strip_whitespace=F),
   #     list(ONE="999  ", TWO='777  -8881 '))
 
   expect_equal(
@@ -76,17 +76,17 @@ test_that("groups of SAS assignments can be extracted", {
 test_that("read LET string declarations from SAS code", {
 
   letStrOne <-  "\t%LET DC16=%STR('196','197','198','199');      "
-  resList <- sasExtractLetStrings(letStrOne)
-  expect_true(is.list(resList))
-  expect_true(names(resList) == "DC16")
-  expect_equal(resList[[1]], c("196", "197", "198", "199"))
+  res_list <- sasExtractLetStrings(letStrOne)
+  expect_true(is.list(res_list))
+  expect_true(names(res_list) == "DC16")
+  expect_equal(res_list[[1]], c("196", "197", "198", "199"))
 
-  resList <- sasExtractLetStrings(c(
+  res_list <- sasExtractLetStrings(c(
     "\t%LET DC16=%STR('196','197','198','199');      ",
     "\t%LET DC17=%STR('042','043','044');"))
 
-  expect_equal(resList[["DC16"]], c("196", "197", "198", "199"))
-  expect_equal(resList[["DC17"]], c("042", "043", "044"))
+  expect_equal(res_list[["DC16"]], c("196", "197", "198", "199"))
+  expect_equal(res_list[["DC17"]], c("042", "043", "044"))
 
   expect_equal(
     sasExtractLetStrings("\t%LET LBL16=%STR(Metastatic Carcinoma);")[["LBL16"]],

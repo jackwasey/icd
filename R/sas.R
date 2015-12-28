@@ -20,7 +20,7 @@
 #'   hopefully will have some generalizability. It relies heavily on lists and
 #'   regex, but, as you will see from the code, R is not a great language with
 #'   which to write a SAS parser.
-#' @param sasTxt is a character vector, with one item per line, e.g. from
+#' @param sas_lines is a character vector, with one item per line, e.g. from
 #'   \code{readLines}
 #' @examples
 #'   \dontrun{
@@ -32,35 +32,35 @@
 #' \url{https://communities.sas.com/message/165945}
 #' @return list (of lists)
 #' @keywords programming list internal
-sasFormatExtract <- function(sasTxt) {
+sasFormatExtract <- function(sas_lines) {
 
   # collapse everything onto one big line, so we can filter multi-line
   # commments. No ability to do multiline regex along a vector.
-  sasTxt <- paste(sasTxt, collapse = " \\n")
+  sas_lines <- paste(sas_lines, collapse = " \\n")
 
   # sas comments are in the form /* ... */ inline/multiline, or * ... ;
-  sasTxt <- gsub(pattern = "/\\*.*?\\*/", replacement = "", x = sasTxt) # nolint
-  sasTxt <- gsub(pattern = "\\n\\*.*?;", replacement = "\\n", x = sasTxt) # nolint
+  sas_lines <- gsub(pattern = "/\\*.*?\\*/", replacement = "", x = sas_lines) # nolint
+  sas_lines <- gsub(pattern = "\\n\\*.*?;", replacement = "\\n", x = sas_lines) # nolint
 
-  sasTxt <- strsplit(sasTxt, split = "\\;")[[1]]
+  sas_lines <- strsplit(sas_lines, split = "\\;")[[1]]
 
   #strip whitespace and ?undetected newline characters, replace with single
   #spaces.
-  sasTxt <- gsub(pattern = "\\\\n", "", sasTxt) # nolint
-  sasTxt <- gsub(pattern = "[[:space:]]+", " ", sasTxt)
-  sasTxt <- str_trim(sasTxt)
+  sas_lines <- gsub(pattern = "\\\\n", "", sas_lines) # nolint
+  sas_lines <- gsub(pattern = "[[:space:]]+", " ", sas_lines)
+  sas_lines <- str_trim(sas_lines)
 
   # drop everything except VALUE statements
-  sasTxt <- grep(pattern = "^VALUE.*", x = sasTxt, value = TRUE)
+  sas_lines <- grep(pattern = "^VALUE.*", x = sas_lines, value = TRUE)
 
   # put each VALUE declaration in a vector element
-  allAssignments <- str_match_all(
+  all_sas_assignments <- str_match_all(
     pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
-    string = sasTxt) %>% lapply(`[`, c(2, 3))
+    string = sas_lines) %>% lapply(`[`, c(2, 3))
 
   out <- list()
 
-  for (m in allAssignments) {
+  for (m in all_sas_assignments) {
     out[m[[1]]] <- list(sasParseAssignments(m[[2]]))
   }
 
@@ -72,16 +72,16 @@ sasFormatExtract <- function(sasTxt) {
 #'   etc. = "anothername" there is no delimiter between each assignment. '
 #' @param x is a character string containing space delimited assignments, in SAS
 #'   declaration format.
-#' @param stripWhiteSpace will strip all whitespace from the returned values
-#' @param stripQuotes will strip all double quotation marks from the returned
+#' @param strip_whitespace will strip all whitespace from the returned values
+#' @param strip_quotes will strip all double quotation marks from the returned
 #'   values
 #' @return list with each list item containing a matrix of "char ranges",
 #'   "assigned value" pairs
 #' @keywords internal programming list
-sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
+sasParseAssignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE) {
   assertString(x)
-  assertFlag(stripWhiteSpace)
-  assertFlag(stripQuotes)
+  assertFlag(strip_whitespace)
+  assertFlag(strip_quotes)
   # splitting with clever regex to separate each pair of assignments seems
   # tricky, so doing it in steps.
   # n.b. this is a list with list per input row.
@@ -94,10 +94,10 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
   if (length(halfway) == 2) {
     # we have just a single name value pair so just set name to value and return
     # list of one item.
-    if (stripWhiteSpace) halfway <- gsub(pattern = "[[:space:]]*",
+    if (strip_whitespace) halfway <- gsub(pattern = "[[:space:]]*",
                                          replacement = "",
                                          halfway)
-    if (stripQuotes) halfway <- gsub(pattern = '"', replacement = "", halfway)
+    if (strip_quotes) halfway <- gsub(pattern = '"', replacement = "", halfway)
     out <- list()
     out[[halfway[[2]]]] <- unlist(strsplit(x = halfway[[1]], split = ","))
     return(out)
@@ -110,7 +110,7 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
                        unlist,
                      halfway[[length(halfway)]])
 
-  if (stripQuotes)
+  if (strip_quotes)
     threequarters <- gsub(pattern = '"', replacement = "", threequarters)
 
   #spaces may matter still, so don't randomly strip them?
@@ -118,7 +118,7 @@ sasParseAssignments <- function(x, stripWhiteSpace = TRUE, stripQuotes = TRUE) {
 
   out <- list()
   for (pair in seq(from = 1, to = length(threequarters), by = 2)) {
-    if (stripWhiteSpace) {
+    if (strip_whitespace) {
       outwhite <- gsub(pattern = "[[:space:]]*",
                        replacement = "",
                        threequarters[pair])
