@@ -44,7 +44,7 @@ r_binary_packages:
 after_success:
  - Rscript -e 'devtools::install()'
  - Rscript -e 'devtools::session_info()'
- - Rscript -e 'library(covr); coveralls(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R", quiet = FALSE))'
+ - Rscript -e 'library(covr); coveralls(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE)'
  #- env: COVR=true
  #- Rscript -e 'library(covr); codecov(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE)'
 

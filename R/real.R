@@ -136,7 +136,7 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
 icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
                                     version = icd9cm_latest_edition(), ...) {
   # guess ICD-9 vs ICD-10 and set class to dispatch again
-  x = icd_guess_version_update(x)
+  x <- icd_guess_version_update(x)
   icd_is_billable(x)
 }
 
