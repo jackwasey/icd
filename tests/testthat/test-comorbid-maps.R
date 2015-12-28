@@ -87,7 +87,7 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
   # skip_on_cran()  # apparently this runs of wercker but not travis, presumably
   # because travis uses --as-cran or equivalent
   if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) == "")
-    skip("data-raw/comformat2012-2013.txt not available, so skipping AHRQ SAS parsing test.")
+    skip_online_tests("data-raw/comformat2012-2013.txt not available, so skipping AHRQ SAS parsing test.")
 
     # same but from source data. Should be absolutely identical.
   expect_equal(icd9_map_ahrq, parse_ahrq_sas(save_data = FALSE))
@@ -101,7 +101,7 @@ test_that("Quan Charlson icd9 mappings are all
 
               # TODO: could include data-raw in package, or download especially for the test:
               if (system.file("data-raw", "ICD9_E_Charlson.sas", package = get_pkg_name()) == "")
-                skip("data-raw/ICD9_E_Charlson.sas not available, so skipping Quan Deyo SAS parsing test.")
+                skip_online_tests("data-raw/ICD9_E_Charlson.sas not available, so skipping Quan Deyo SAS parsing test.")
 
               expect_identical(icd9_map_quan_deyo, parse_quan_deyo_sas(save_data = FALSE))
               expect_equivalent(
@@ -170,7 +170,7 @@ test_that("icd9_hierarchy as saved in data can be recreated", {
 # with this data.
 test_that("icd9Chapters, etc. as saved in data can be recreated", {
   skip_on_cran() # and/or skip_on_travis()
-  skip_on_travis()
+  #skip_on_travis()
   skip_online_tests()
   res <- parseIcd9Chapters(year = "2014", save_data = FALSE)
   expect_equal(res$icd9Chapters, icd9::icd9Chapters)
@@ -180,8 +180,11 @@ test_that("icd9Chapters, etc. as saved in data can be recreated", {
 
 test_that("AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
-  result <- parse_ahrq_sas(sasPath = system.file("data-raw",
-                                               "comformat2012-2013.txt", package = "icd9"),
+  if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) == "")
+    skip_online_tests("data-raw/comformat2012-2013.txt not available, so skipping AHRQ SAS result test.")
+
+  result <- parse_ahrq_sas(sasPath = system.file("data-raw", "comformat2012-2013.txt",
+                                               package = get_pkg_name()),
                            save_data = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
