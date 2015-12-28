@@ -129,7 +129,7 @@ twoPts <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
 twoMap <- list("malady" = c("100", "2000"),
                "ailment" = c("003", "040"))
 
-mixInvalidPts <- icd9(
+pts_invalid_mix <- icd9(
   icd_long_data(
     data.frame(
       visitId = c(1000, 1000, 1001),
