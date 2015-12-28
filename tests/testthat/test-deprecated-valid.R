@@ -330,7 +330,7 @@ test_that("deprecated - icd-9 code is really in the list, not just syntactically
     )
 })
 
-mixInvalidPts <- data.frame(
+pts_invalid_mix <- data.frame(
   visitId = c(1000, 1000, 1001),
   icd9 = c("27801", "invalides", "25001"),
   poa = factor(c("Y", "N", "Y"))
@@ -354,24 +354,24 @@ test_that("deprecated - get valid - vector input", {
 
 test_that("deprecated - filter valid - data frame input", {
 
-  expect_equal(icd9FilterValid(mixInvalidPts), mixInvalidPts[c(1, 3), ])
+  expect_equal(icd9FilterValid(pts_invalid_mix), pts_invalid_mix[c(1, 3), ])
 
-  expect_equal(icd9FilterInvalid(mixInvalidPts), mixInvalidPts[2, ])
-  expect_equal(icd9FilterValid(mixInvalidPts, invert = TRUE),
-               mixInvalidPts[2, ])
+  expect_equal(icd9FilterInvalid(pts_invalid_mix), pts_invalid_mix[2, ])
+  expect_equal(icd9FilterValid(pts_invalid_mix, invert = TRUE),
+               pts_invalid_mix[2, ])
 
   # no non-short so all are invalid:
-  expect_equal(icd9FilterValid(mixInvalidPts, invert = TRUE, isShort = FALSE),
-               mixInvalidPts)
+  expect_equal(icd9FilterValid(pts_invalid_mix, invert = TRUE, isShort = FALSE),
+               pts_invalid_mix)
   # arg order irrelevant, but can be mixed up in S3 dispatch.
-  expect_equal(icd9FilterValid(mixInvalidPts, isShort = FALSE, invert = TRUE),
-               mixInvalidPts)
+  expect_equal(icd9FilterValid(pts_invalid_mix, isShort = FALSE, invert = TRUE),
+               pts_invalid_mix)
 
   # use invert and isShort args:
-  expect_equal(icd9FilterValid(mixInvalidPts, isShort = TRUE, invert = TRUE),
-               mixInvalidPts[2, ])
-  expect_equal(icd9FilterValid(mixInvalidPts, isShort = TRUE, invert = FALSE),
-               mixInvalidPts[c(1, 3 ), ])
+  expect_equal(icd9FilterValid(pts_invalid_mix, isShort = TRUE, invert = TRUE),
+               pts_invalid_mix[2, ])
+  expect_equal(icd9FilterValid(pts_invalid_mix, isShort = TRUE, invert = FALSE),
+               pts_invalid_mix[c(1, 3 ), ])
 })
 
 test_that("deprecated - validate mappings", {
