@@ -2,6 +2,7 @@
 #include <testthat.h>
 #include "is.h"
 #include "util.h"
+#include "convert.h"
 
 context("C++ Unit Test") {
   test_that("two plus two is four") {
@@ -42,3 +43,34 @@ context("test get OMP threads") {
 //     expect_true(all(res >=0));
 //   }
 // }
+
+context("icd9ShortToPartsCpp") {
+  test_that("icd9ShortToPartsCpp gives NA value") {
+    Rcpp::List out = icd9ShortToPartsCpp("E12345678", "");
+
+    Rcpp::CharacterVector j = out["major"];
+    Rcpp::CharacterVector n = out["minor"];
+
+    expect_true(Rcpp::CharacterVector::is_na(j[0]));
+    expect_true(Rcpp::CharacterVector::is_na(n[0]));
+
+  }
+
+  test_that("icd9ShortToPartsCpp multiple inptus gives multiple NA values") {
+    Rcpp::CharacterVector cv = Rcpp::CharacterVector::create("E3417824921",
+                                                             "E375801347",
+                                                             "E8319473422");
+    Rcpp::List out = icd9ShortToPartsCpp(cv, "");
+
+    Rcpp::CharacterVector j = out["major"];
+    Rcpp::CharacterVector n = out["minor"];
+
+    expect_true(Rcpp::CharacterVector::is_na(j[0]));
+    expect_true(Rcpp::CharacterVector::is_na(n[0]));
+    expect_true(Rcpp::CharacterVector::is_na(j[1]));
+    expect_true(Rcpp::CharacterVector::is_na(n[1]));
+    expect_true(Rcpp::CharacterVector::is_na(j[2]));
+    expect_true(Rcpp::CharacterVector::is_na(n[2]));
+
+  }
+}

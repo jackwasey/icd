@@ -157,25 +157,6 @@ namespace icd9 {
         return Rcpp::as<Rcpp::List >(__result);
     }
 
-    inline Rcpp::List icd9MajMinToParts_list(const Rcpp::CharacterVector major, const Rcpp::CharacterVector minor) {
-        typedef SEXP(*Ptr_icd9MajMinToParts_list)(SEXP,SEXP);
-        static Ptr_icd9MajMinToParts_list p_icd9MajMinToParts_list = NULL;
-        if (p_icd9MajMinToParts_list == NULL) {
-            validateSignature("Rcpp::List(*icd9MajMinToParts_list)(const Rcpp::CharacterVector,const Rcpp::CharacterVector)");
-            p_icd9MajMinToParts_list = (Ptr_icd9MajMinToParts_list)R_GetCCallable("icd9", "icd9_icd9MajMinToParts_list");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9MajMinToParts_list(Rcpp::wrap(major), Rcpp::wrap(minor));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<Rcpp::List >(__result);
-    }
-
     inline Rcpp::List icd9ShortToPartsCpp(const Rcpp::CharacterVector icd9Short, const Rcpp::String minorEmpty) {
         typedef SEXP(*Ptr_icd9ShortToPartsCpp)(SEXP,SEXP);
         static Ptr_icd9ShortToPartsCpp p_icd9ShortToPartsCpp = NULL;

@@ -148,14 +148,6 @@ Rcpp::List icd9MajMinToParts(const Rcpp::CharacterVector major,
 	return returned_frame;
 }
 
-// [[Rcpp::export]]
-Rcpp::List icd9MajMinToParts_list(const Rcpp::CharacterVector major,
-		const Rcpp::CharacterVector minor) {
-	Rcpp::List out = Rcpp::List::create(Rcpp::_["major"] = major,
-			Rcpp::_["minor"] = minor);
-	return out;
-}
-
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]

@@ -41,10 +41,6 @@ icd9MajMinToParts <- function(major, minor) {
     .Call('icd9_icd9MajMinToParts', PACKAGE = 'icd9', major, minor)
 }
 
-icd9MajMinToParts_list <- function(major, minor) {
-    .Call('icd9_icd9MajMinToParts_list', PACKAGE = 'icd9', major, minor)
-}
-
 #' @rdname convert
 #' @keywords internal manip
 icd9ShortToPartsCpp <- function(icd9Short, minorEmpty) {
