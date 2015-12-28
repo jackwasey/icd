@@ -6,6 +6,8 @@
 box: rocker/hadleyverse
 build:
   steps:
+    - install-packages:
+        packages: r-cran-rodbc
     - jimhester/r-dependencies:
         github_packages: hadley/testthat RcppCore/Rcpp jimhester/covr
     - jimhester/r-check:
