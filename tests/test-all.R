@@ -26,12 +26,12 @@ if (identical(Sys.getenv("COVR"), "true")) {
   do_online_tests <- TRUE
 }
 
-if (identical(Sys.getenv("ICD_SLOW_TESTS"), "true")) {
+if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
   message("ICD_SLOW_TESTS found to be true, so doing slow tests")
   do_slow_tests <- TRUE
 }
 
-if (identical(Sys.getenv("ICD_ONLINE_TESTS"), "true")) {
+if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
   message("ICD_ONLINE_TESTS found to be true, so doing online tests")
   do_online_tests <- TRUE
 }
