@@ -81,7 +81,11 @@ parseAndSaveQuick <- function() {
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parseLeafDescriptionsAll <- function(save_data = FALSE, fromWeb = FALSE) {
+parseLeafDescriptionsAll <- function(save_data = FALSE, fromWeb = FALSE, save = NULL) {
+  if (!missing(save)) {
+    warning("use save_data instead of save")
+    save_data <- save
+  }
   versions <- data_sources$version
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
@@ -110,7 +114,11 @@ parseLeafDescriptionsAll <- function(save_data = FALSE, fromWeb = FALSE) {
 #' @return invisibly return the result
 #' @keywords internal
 parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save_data = FALSE,
-                                         fromWeb = FALSE) {
+                                         fromWeb = FALSE, save = NULL) {
+  if (!missing(save)) {
+    warning("use save_data instead of save")
+    save_data <- save
+  }
   assertString(version)
   assertFlag(save_data)
   assertFlag(fromWeb)
@@ -235,7 +243,11 @@ parseIcd9LeafDescriptions27 <- function(save_data = FALSE, fromWeb = NULL) {
 #'   and sub-chapter names and ranges, or validation.
 #' @keywords internal
 parseIcd9Chapters <- function(year = NULL,
-                              save_data = FALSE) {
+                              save_data = FALSE, save = NULL) {
+  if (!missing(save)) {
+    warning("use save_data instead of save")
+    save_data <- save
+  }
   assertFlag(save_data)
   if (is.null(year))
     year <- "2014"
@@ -335,6 +347,10 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
 }
 
 icd9BuildChaptersHierarchy <- function(save_data = FALSE) {
+  if (!missing(save)) {
+    warning("use save_data instead of save")
+    save_data <- save
+  }
   assertFlag(save_data)
 
   icd9Desc <- parse_rtf_year(year = "2011", save_data = FALSE, verbose = TRUE)
@@ -414,6 +430,10 @@ fixSubchapterNa <- function(x, start, end) {
 #' @return invisibly returns the sysdata as a list
 #' @keywords internal
 generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = TRUE) {
+  if (!missing(save)) {
+    warning("use save_data instead of save")
+    save_data <- save
+  }
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
     icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, defined = FALSE)))

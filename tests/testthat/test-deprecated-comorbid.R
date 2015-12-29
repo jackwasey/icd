@@ -128,6 +128,7 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
 
   for (onlyReal in c(TRUE, FALSE)) {
     if (onlyReal) {
+      # this is a bit silly now, because deprecated functions always give warnings:
       expect_that(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal = onlyReal),
                   gives_warning())
       expect_that(quanDeyo <- lapply(quanDeyoComorbid, icd9Condense, onlyReal),
@@ -139,14 +140,10 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
                   gives_warning())
     }
     else {
-      expect_that(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal),
-                  testthat::not(gives_warning()))
-      expect_that(quanDeyo <- lapply(quanDeyoComorbid, icd9CondenseShort, onlyReal),
-                  testthat::not(gives_warning()))
-      expect_that(quanElix <- lapply(quanElixComorbid, icd9CondenseShort, onlyReal),
-                  testthat::not(gives_warning()))
-      expect_that(elix <- lapply(elixComorbid, icd9CondenseShort, onlyReal),
-                  testthat::not(gives_warning()))
+      expect_error(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal), NA)
+      expect_error(quanDeyo <- lapply(quanDeyoComorbid, icd9CondenseShort, onlyReal), NA)
+      expect_that(quanElix <- lapply(quanElixComorbid, icd9CondenseShort, onlyReal), NA)
+      expect_that(elix <- lapply(elixComorbid, icd9CondenseShort, onlyReal), NA)
     }
 
     expect_is(ahrq, class = "list")
@@ -190,7 +187,8 @@ test_that("deprecated - icd9Chapters, etc. as saved in data can be recreated", {
 test_that("deprecated - AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
   result <- parseAhrqSas(sasPath = system.file("extdata",
-                                               "comformat2012-2013.txt", package="icd9"), save = FALSE)
+                                               "comformat2012-2013.txt", package = "icd9"),
+                         save = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
 })
