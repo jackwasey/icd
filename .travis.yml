@@ -5,9 +5,7 @@ sudo: required
 warnings_are_errors: false
 
 env:
- - R_CHECK_CRAN_INCOMING_=FALSE
- - ICD_SLOW_TESTS=TRUE
- - ICD_ONLINE_TESTS=TRUE
+ - R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=true ICD_ONLINE_TESTS=TRUE
 
 r_github_packages:
  - jimhester/covr
