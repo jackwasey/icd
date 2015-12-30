@@ -30,7 +30,7 @@ parseEverythingAndSave <- function() {
   devtools::load_data(pkg = ".") # reload the newly saved data
   parseAndSaveQuick()
   devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9BuildChaptersHierarchy(save_data = TRUE) # depends on icd9cm_billable
+  icd9_generate_chapters_hierarchy(save_data = TRUE) # depends on icd9cm_billable
 
 }
 
@@ -82,7 +82,7 @@ parseAndSaveQuick <- function() {
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parse_leaf_descriptions_all <- function(save_file = FALSE, offline = FALSE) {
+parse_leaf_descriptions_all <- function(save_data = FALSE, offline = FALSE) {
   if (!missing(save)) {
     warning("use save_data instead of save")
     save_data <- save
@@ -95,9 +95,9 @@ parse_leaf_descriptions_all <- function(save_file = FALSE, offline = FALSE) {
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
   for (v in versions)
-    icd9cm_billable[[v]] <- parseLeafDescriptionsVersion(version = v,
-                                                         save_data = save_data,
-                                                         offline = offline)
+    icd9cm_billable[[v]] <- parse_leaf_descriptions_version(version = v,
+                                                            save_data = save_data,
+                                                            offline = offline)
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save_data)
@@ -344,11 +344,13 @@ icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
   )
 }
 
-icd9BuildChaptersHierarchy <- function(save_data = FALSE) {
-  if (!missing(save)) {
-    warning("use save_data instead of save")
-    save_data <- save
-  }
+#' generate ICD-9-CM hierarchy
+#'
+#' For each row of billing code, give the chapter, sub-chapter, major code and
+#' description, and short and long descriptions. Currently this is specifically
+#' for the 2011 ICD-9-CM after which there have been minimal changes.
+#' @keywords internal
+icd9_generate_chapters_hierarchy <- function(save_data = FALSE) {
   assertFlag(save_data)
 
   icd9Desc <- parse_rtf_year(year = "2011", save_data = FALSE, verbose = TRUE)

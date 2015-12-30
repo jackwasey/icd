@@ -95,17 +95,6 @@ test_that("extraction from qualifier subset works", {
   expect_true(all(sapply(all2015, FUN = function(f) length(parseRtfQualifierSubset(f)) > 0)))
 })
 
-skip_on_no_rtf <- function(test_year) {
-  rtf_dat <- data_sources[data_sources$f_year == test_year, ]
-  # see whether we have the files already downloaded (and unzipped)
-  f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
-                                    file_name = rtf_dat$rtf_filename,
-                                    offline = TRUE)
-  if (is.null(f_info_short))
-    skip_online_tests(paste(test_year,
-                            "ICD-9-CM codes unavailable offline for testsing"))
-}
-
 # The following tests on the RTF parsing get the RTF source over internet, so
 # package doesn't have to include the big RTF source file
 context("possibly online rtf tests")

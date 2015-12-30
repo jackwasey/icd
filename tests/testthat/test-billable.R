@@ -18,9 +18,14 @@
 context("billable code lists")
 
 test_that("ICD-9-CM billable codes package data is recreated", {
-  skip_online_tests()
-  # this costs about 30 seconds
-  check_billable <- parseLeafDescriptionsAll(save_data = FALSE, fromWeb = TRUE)
+
+  skip_slow_tests() # > 30 seconds
+
+  # we can do this offline if we have all (currently available) versions of the
+  # ICD-9-CM code, otherwise we may have to skip
+  lapply(data_sources$version, skip_flat_icd9_avail)
+
+  check_billable <- parse_leaf_descriptions_all(save_data = FALSE)
   if (Sys.info()[["sysname"]] != "Linux")
     skip("Only do encoding problems on Linux.")
   for (ver in c("27", "28", "29", "30", "31", "32")) {

@@ -239,6 +239,17 @@ skip_online_tests <- function(msg = "skipping online test") {
     testthat::skip(msg)
 }
 
+skip_on_no_rtf <- function(test_year) {
+  rtf_dat <- data_sources[data_sources$f_year == test_year, ]
+  # see whether we have the files already downloaded (and unzipped)
+  f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
+                                    file_name = rtf_dat$rtf_filename,
+                                    offline = TRUE)
+  if (is.null(f_info_short))
+    skip_online_tests(paste(test_year,
+                            "ICD-9-CM codes unavailable offline for testsing"))
+}
+
 skip_flat_icd9_avail <- function(ver = "31",
                                  msg = paste("skipping test because flat file
                                              ICD-9-CM sources not available for
@@ -253,6 +264,11 @@ skip_flat_icd9_avail <- function(ver = "31",
     skip_online_tests(msg)
 
 }
+
+skip_flat_icd9_avail_all <- function() {
+  lapply(data_sources$version, skip_flat_icd9_avail)
+}
+
 #' Fast Factor Generation
 #'
 #' This function generates factors more quickly, by leveraging

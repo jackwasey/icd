@@ -1114,7 +1114,7 @@ sasFormatExtract <- function(sas_lines) {
 parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FALSE) {
   .Deprecated("parse_leaf_descriptions_all")
   warning("verbose is no longer used in parse_leaf_descriptions_all")
-  parse_leaf_descriptions_all(save_file = save, offline = !fromWeb)
+  parse_leaf_descriptions_all(save_data = save, offline = !fromWeb)
 }
 
 parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
@@ -1122,4 +1122,9 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
   .Deprecated("parse_leaf_descriptions_all")
   "verbose is no longer used in parse_leaf_descriptions_version"
   parse_leaf_descriptions_version(version = version, save_data = save, offline = !fromWeb)
+}
+
+icd9BuildChaptersHierarchy <- function(save = FALSE) {
+  .Deprecated("icd9_generate_chapters_hierarchy")
+  icd9_generate_chapters_hierarchy(save_data = save)
 }

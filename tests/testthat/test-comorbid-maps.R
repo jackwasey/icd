@@ -104,7 +104,7 @@ test_that("Quan Charlson icd9 mappings are all
               # skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
 
               if (is.null(fetch_quan_deyo_sas(offline = TRUE)))
-                skip_online_tests("data-raw/ICD9_E_Charlson.sas not available, so skipping Quan Deyo SAS parsing test.")
+                skip_online_tests("data-raw/ICD9_E_Charlson.sas not available.")
 
               expect_identical(icd9_map_quan_deyo, parse_quan_deyo_sas(save_data = FALSE))
               expect_equivalent(
@@ -163,8 +163,9 @@ test_that("can condense the big lists of comorbidities without errors", {
 test_that("icd9_hierarchy as saved in data can be recreated", {
   skip("this is 15 minutes alone, so skip this and run manually when needed")
   skip_slow_tests()
-  skip_online_tests()
-  expect_equal(icd9BuildChaptersHierarchy(save_data = FALSE),
+  skip_flat_icd9_avail_all()
+
+  expect_equal(icd9_generate_chapters_hierarchy(save_data = FALSE),
                icd9::icd9_hierarchy)
 })
 
@@ -173,8 +174,7 @@ test_that("icd9_hierarchy as saved in data can be recreated", {
 # with this data.
 test_that("icd9Chapters, etc. as saved in data can be recreated", {
   skip_on_cran() # and/or skip_on_travis()
-  #skip_on_travis()
-  skip_online_tests()
+  skip_flat_icd9_avail(ver = "32")
   res <- parseIcd9Chapters(year = "2014", save_data = FALSE)
   expect_equal(res$icd9Chapters, icd9::icd9Chapters)
   expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)
@@ -183,8 +183,9 @@ test_that("icd9Chapters, etc. as saved in data can be recreated", {
 
 test_that("AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
-  if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) == "")
-    skip_online_tests("data-raw/comformat2012-2013.txt not available, so skipping AHRQ SAS result test.")
+
+  if (is.null(fetch_ahrq_sas(offline = TRUE)))
+    skip_online_tests("data-raw/comformat2012-2013.txt not available")
 
   result <- parse_ahrq_sas(sas_path = system.file("data-raw", "comformat2012-2013.txt",
                                                   package = get_pkg_name()),
