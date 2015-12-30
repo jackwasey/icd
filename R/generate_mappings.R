@@ -340,7 +340,7 @@ generate_uranium_pathology <- function(save_data = FALSE, offline = FALSE) {
   assertFlag(save_data)
   assertFlag(offline)
 
-  file_path <- fetch_uranium_pathology(offline = offline)
+  stopifnot(!is.null(file_path <- fetch_uranium_pathology(offline = offline)$file_path))
 
   # odbcConnectAccess2007 is only in the Windows version of RODBC
   channel <- RODBC::odbcConnectAccess2007(file_path)
@@ -375,7 +375,8 @@ fetch_vermont_dx <- function(offline) {
 generate_vermont_dx <- function(save_data = FALSE, offline = FALSE) {
 
   assertFlag(save_data)
-  vermont_raw_fp = fetch_vermont_dx(offline = offline)
+  stopifnot(!is.null(vermont_raw_fp <- fetch_vermont_dx(offline = offline)))
+
   vermont_dx <- utils::read.csv(vermont_raw_fp$file_path,
                                 stringsAsFactors = FALSE,
                                 strip.white = TRUE,

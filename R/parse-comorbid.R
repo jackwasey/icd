@@ -164,9 +164,9 @@ parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   stopifnot(!is.null(f_info <- fetch_quan_deyo_sas(offline = offline)))
 
   quanSas <- readLines(f_info$file_path, warn = FALSE)
-  qlets <- sasExtractLetStrings(quanSas)
-  qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
-  icd9_map_quan_deyo <- qlets[grepl("DC[[:digit:]]+", names(qlets))]
+  let_statements <- sasExtractLetStrings(quanSas)
+  qlabels <- let_statements[grepl("LBL[[:digit:]]+", names(let_statements))]
+  icd9_map_quan_deyo <- let_statements[grepl("DC[[:digit:]]+", names(let_statements))]
   names(icd9_map_quan_deyo) <- unlist(unname(qlabels))
 
   # use validation: takes time, but these are run-once per package creation (and

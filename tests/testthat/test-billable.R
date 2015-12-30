@@ -17,7 +17,7 @@
 
 context("billable code lists")
 
-test_that("billable codes are recreated", {
+test_that("ICD-9-CM billable codes package data is recreated", {
   skip_online_tests()
   # this costs about 30 seconds
   check_billable <- parseLeafDescriptionsAll(save_data = FALSE, fromWeb = TRUE)

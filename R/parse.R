@@ -69,6 +69,7 @@ parseAndSaveQuick <- function() {
 #' @param save_data single logical value, if \code{TRUE} the source text or CSV file
 #'   will be saved in \code{data-raw}, otherwise (the default) the data is
 #'   simply returned invisibly.
+#' @template offline
 #' @return data frame with icd9, descShort and descLong columns. NA is placed in
 #'   descLong when not available.
 #' @examples
@@ -76,22 +77,27 @@ parseAndSaveQuick <- function() {
 #'   # not included in installed package, run using the full source from github,
 #'   # e.g. using devtools::load_all()
 #'   \dontrun{
-#'   parseLeafDescriptionsAll(save_data = TRUE, fromWeb = TRUE)
+#'   parseLeafDescriptionsAll(save_data = TRUE, offline = TRUE)
 #'   }
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parseLeafDescriptionsAll <- function(save_data = FALSE, fromWeb = FALSE, save = NULL) {
+parseLeafDescriptionsAll <- function(save_data = FALSE, offline = FALSE, save = NULL) {
+
   if (!missing(save)) {
     warning("use save_data instead of save")
     save_data <- save
   }
+  assertFlag(save_data)
+  assertFlag(offline)
+
+    # data_sources is in sysdata.RData
   versions <- data_sources$version
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
   for (v in versions)
     icd9cm_billable[[v]] <- parseLeafDescriptionsVersion(version = v, save_data = save_data,
-                                                      fromWeb = fromWeb)
+                                                      offline = offline)
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save_data)
@@ -114,14 +120,14 @@ parseLeafDescriptionsAll <- function(save_data = FALSE, fromWeb = FALSE, save = 
 #' @return invisibly return the result
 #' @keywords internal
 parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save_data = FALSE,
-                                         fromWeb = FALSE, save = NULL) {
+                                         offline = FALSE, save = NULL) {
   if (!missing(save)) {
     warning("use save_data instead of save")
     save_data <- save
   }
   assertString(version)
   assertFlag(save_data)
-  assertFlag(fromWeb)
+  assertFlag(offline)
 
   message("Fetching billable codes version: ", version)
 

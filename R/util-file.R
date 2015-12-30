@@ -39,7 +39,9 @@ unzip_single <- function(url, file_name, save_path) {
   file.copy(file.path(zipdir, file_name), save_path, overwrite = TRUE)
 }
 
-#' Get a zipped file from a URL, or confirm it is in data-raw already
+#' Unzip file to \code{data-raw}
+#'
+#' Get a zip file from a URL, extract contents, and save file in \code{data-raw}
 #'
 #' @param url url of a zip file
 #' @param file_name file name of a single file in that zip
