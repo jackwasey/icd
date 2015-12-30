@@ -17,7 +17,10 @@
 
 # nocov start
 
-#' unzip a single file
+#' unzip a single file from URL
+#'
+#' take a single file from zip located at a given URL, unzip into temporary
+#' directory, and copy to the given \code{save_path}
 #' @keywords internal
 unzip_single <- function(url, file_name, save_path) {
   zipfile <- tempfile()
@@ -37,11 +40,15 @@ unzip_single <- function(url, file_name, save_path) {
     stopifnot(file_name %in% files)
 
   file.copy(file.path(zipdir, file_name), save_path, overwrite = TRUE)
+  unlink(file.path(zipdir, file_name))
 }
 
 #' Unzip file to \code{data-raw}
 #'
-#' Get a zip file from a URL, extract contents, and save file in \code{data-raw}
+#' Get a zip file from a URL, extract contents, and save file in
+#' \code{data-raw}. If the file already exists there, it is only retrieved if
+#' \code{force} is set to \code{TRUE}. If \code{offline} is \code{FALSE}, then
+#' \code{NULL} is returned if the file isn't already downloaded.
 #'
 #' @param url url of a zip file
 #' @param file_name file name of a single file in that zip
@@ -55,15 +62,16 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
   assertString(file_name)
   assertFlag(force)
   assertFlag(offline)
-  stopifnot(xor(force, offline))
+  stopifnot(!(force & offline))
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
   file_path <- file.path(data_raw_path, file_name)
-  if (force || !file.exists(file_path))
+  if (force || !file.exists(file_path)) {
     if (offline)
       return(NULL)
-  stopifnot(
-    unzip_single(url = url, file_name = file_name, save_path = file_path)
-  )
+    stopifnot(
+      unzip_single(url = url, file_name = file_name, save_path = file_path)
+    )
+  }
   list(file_path = file_path, file_name = file_name)
 }
 
@@ -101,6 +109,7 @@ get_pkg_name <- function() "icd9"
 #'   would find \code{myvar} in the parent environment, and save it as
 #'   \code{myvar.RData} in \code{package_root/data}.
 #' @param suffix character scalar
+#' @return invisibly returns the data
 #' @keywords internal
 save_in_data_dir <- function(var_name, suffix = "") {
   assertString(suffix)
@@ -111,6 +120,7 @@ save_in_data_dir <- function(var_name, suffix = "") {
        file = file.path("data", strip(paste0(var_name, suffix, ".RData"))),
        compress = "xz")
   message("Now reload package to enable updated/new data: ", var_name)
+  invisible(get(var_name, envir = parent.frame()))
 }
 
 # nocov end

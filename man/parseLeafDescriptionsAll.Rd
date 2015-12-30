@@ -7,12 +7,16 @@
 http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 }
 \usage{
-parseLeafDescriptionsAll(save_data = FALSE, fromWeb = FALSE, save = NULL)
+parseLeafDescriptionsAll(save_data = FALSE, offline = FALSE, save = NULL)
 }
 \arguments{
 \item{save_data}{single logical value, if \code{TRUE} the source text or CSV file
 will be saved in \code{data-raw}, otherwise (the default) the data is
 simply returned invisibly.}
+
+\item{offline}{single logical, if \code{TRUE} then don't pull the file from
+internet, only return path and filename if the file already exists in
+data-raw. This is helpful for testing without using the internet.}
 }
 \value{
 data frame with icd9, descShort and descLong columns. NA is placed in
@@ -28,7 +32,7 @@ for versions 23 to 32, those which are on the CMS web site, get
   # not included in installed package, run using the full source from github,
   # e.g. using devtools::load_all()
   \dontrun{
-  parseLeafDescriptionsAll(save_data = TRUE, fromWeb = TRUE)
+  parseLeafDescriptionsAll(save_data = TRUE, offline = TRUE)
   }
 }
 \keyword{internal}

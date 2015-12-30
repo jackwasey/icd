@@ -17,8 +17,6 @@
 
 context("test RTF parsing")
 
-library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
-
 test_that("multiple lines in one fifth digit disciminator", {
   # nolint start
   testlines <- c("The following fifth-digit subclassification is for use with category 203:",
@@ -97,83 +95,100 @@ test_that("extraction from qualifier subset works", {
   expect_true(all(sapply(all2015, FUN = function(f) length(parseRtfQualifierSubset(f)) > 0)))
 })
 
+skip_on_no_rtf <- function(test_year) {
+  rtf_dat <- data_sources[data_sources$f_year == test_year, ]
+  # see whether we have the files already downloaded (and unzipped)
+  f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
+                                    file_name = rtf_dat$rtf_filename,
+                                    offline = TRUE)
+  if (is.null(f_info_short))
+    skip_online_tests(paste(test_year,
+                            "ICD-9-CM codes unavailable offline for testsing"))
+}
+
 # The following tests on the RTF parsing get the RTF source over internet, so
 # package doesn't have to include the big RTF source file
-test_that("online parse tests run", {
-  skip_online_tests()
-  rtf_dat <- data_sources[data_sources$f_year == "2011", ]
-  url <- rtf_dat$rtf_url
-  fn <- rtf_dat$rtf_filename
-  unzip_single(url, fn, tf <- tempfile())
-  rtf_lines <- readLines(tf, warn = FALSE)
-  unlink(tf)
-  rtf <- parseRtfLines(rtf_lines)
-  nrtf <- names(rtf)
+context("possibly online rtf tests")
 
-  test_that("all parsed codes are valid decimals", {
-    expect_true(all(icd9IsValidDecimal(nrtf)),
-                info = paste("invalid codes are :",
-                             paste(icd9GetInvalid(nrtf), collapse = ", ")))
-  })
+test_year = "2011"
 
-  test_that("no rtf formatting left in descriptions", {
-    expect_false(any(grepl("[\\\\{}]", rtf)),
-                 info = paste("rtf codes in descriptions:",
-                              paste(grep("[\\\\{}]", rtf, value = TRUE))))
+skip_on_no_rtf(test_year) # local test function
 
-  })
+rtf_dat <- data_sources[data_sources$f_year == test_year, ]
+f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
+                                  file_name = rtf_dat$rtf_filename,
+                                  offline = FALSE)
 
-  test_that("all csv extract codes are in rtf extract", {
-    missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9_hierarchy[["icd9"]]), nrtf)
-    expect_equal(length(missing_from_rtf), 0,
-                 info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
-  })
+rtf_lines <- readLines(f_info_short$file_path, warn = FALSE)
+rtf <- parse_rtf_lines(rtf_lines)
+nrtf <- names(rtf)
 
-  test_that("majors extracted from web page are the same as those from RTF", {
-    webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
-    work <- swapNamesWithVals(rtf)
-    rtfmajors <- work[icd9IsMajor(work)]
-
-    expect_identical(setdiff(rtfmajors, webmajors), character(0),
-                     info = paste("these majors are from RTF but not retrieved from web: ",
-                                  paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
-    expect_identical(setdiff(webmajors, rtfmajors), character(0),
-                     info = paste("these majors are on web but not retrieved from RTF: ",
-                                  paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
-  })
-
-  v32 <- parseLeafDescriptionsVersion(version = "32", save_data = FALSE, fromWeb = FALSE)
-
-  test_that("all leaf codes from TXT are in RTF extract", {
-    v32$icd9 %>% icd9ShortToDecimal -> leaves
-    expect_true(all(leaves %in% nrtf))
-  })
-
-  test_that("RTF extract has no duplicates", {
-    expect_equal(sum(duplicated(nrtf)),
-                 0,
-                 info = paste("first few duplicates: ",
-                              paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
-                 ))
-  })
-
-  test_that("mid-level descriptions are in RTF extract", {
-    expect_equivalent(rtf["611"], "Other disorders of breast")
-    expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
-    expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
-  })
-
-  test_that("manual check to look at description differences between RTF and TXT", {
-    skip("manual check")
-    rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
-      swapNamesWithVals %>%
-      sort -> rtf_leaves
-    print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
-  })
-
-  test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
-    # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
-    expect_false("640.02" %in% nrtf)
-    # grep "\[[[:digit:]],.*\]" Dtab12.rtf
-  })
+test_that("all parsed codes are valid decimals", {
+  expect_true(all(icd_is_valid.icd9(nrtf, short_code = FALSE)),
+              info = paste("invalid codes are :",
+                           paste(icd_get_invalid.icd9(nrtf),
+                                 collapse = ", ")))
 })
+
+test_that("no rtf formatting left in descriptions", {
+  expect_false(any(grepl("[\\\\{}]", rtf)),
+               info = paste("rtf codes in descriptions:",
+                            paste(grep("[\\\\{}]", rtf, value = TRUE))))
+
+})
+
+test_that("all csv extract codes are in rtf extract", {
+  missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9_hierarchy[["icd9"]]), nrtf)
+  expect_equal(length(missing_from_rtf), 0,
+               info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
+})
+
+test_that("majors extracted from web page are the same as those from RTF", {
+  webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
+  work <- swapNamesWithVals(rtf)
+  rtfmajors <- work[icd9IsMajor(work)]
+
+  expect_identical(setdiff(rtfmajors, webmajors), character(0),
+                   info = paste("these majors are from RTF but not retrieved from web: ",
+                                paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
+  expect_identical(setdiff(webmajors, rtfmajors), character(0),
+                   info = paste("these majors are on web but not retrieved from RTF: ",
+                                paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
+})
+
+# TODO: offline okay?
+v32 <- parseLeafDescriptionsVersion(version = "32", save_data = FALSE, offline = TRUE)
+
+test_that("all leaf codes from TXT are in RTF extract", {
+  v32$icd9 %>% icd9ShortToDecimal -> leaves
+  expect_true(all(leaves %in% nrtf))
+})
+
+test_that("RTF extract has no duplicates", {
+  expect_equal(sum(duplicated(nrtf)),
+               0,
+               info = paste("first few duplicates: ",
+                            paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
+               ))
+})
+
+test_that("mid-level descriptions are in RTF extract", {
+  expect_equivalent(rtf["611"], "Other disorders of breast")
+  expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
+  expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
+})
+
+test_that("manual check to look at description differences between RTF and TXT", {
+  skip("manual check")
+  rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
+    swapNamesWithVals %>%
+    sort -> rtf_leaves
+  print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
+})
+
+test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
+  # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
+  expect_false("640.02" %in% nrtf)
+  # grep "\[[[:digit:]],.*\]" Dtab12.rtf
+})
+

@@ -13,6 +13,9 @@ would find \code{myvar} in the parent environment, and save it as
 
 \item{suffix}{character scalar}
 }
+\value{
+invisibly returns the data
+}
 \description{
 File is named varname.RData with an optional suffix before .RData
 }

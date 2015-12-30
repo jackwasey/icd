@@ -69,3 +69,27 @@ test_that("trim with acceptable inputs" , {
 test_that("get visit name from a matrix should fail", {
   expect_error(get_visit_name(matrix(c(1, 2, 3, 4), nrow = 2)))
 })
+
+test_that("string pair match extraction" , {
+  expect_error(str_pair_match())
+  expect_error(str_pair_match(pattern = "(abc)def(ghi)"))
+  expect_error(str_pair_match(string = "bougie"))
+  expect_error(str_pair_match(pattern = c("(a)b(c)", "(d)e(f)"),
+                            string = "abc"))
+  expect_error(str_pair_match(pattern = c("(a)b(c)", "(d)e(f)"),
+                            string = c("abc", "def")))
+
+  expect_error(str_pair_match(pattern = "[", string = "abc")) # invalid regex
+  # only one parenthesis
+  expect_error(str_pair_match(pattern = "(a).*", string = "abc"))
+  expect_error(str_pair_match(pattern = ".*(j)", string = "abc"))
+  expect_equal(str_pair_match(pattern = "(a*)b(c*)", string = "abc"), c(a = "c"))
+  expect_equal(str_pair_match(pattern = "([^mackarel]*)(spain)",
+                            string = "togospain"),
+               c(togo = "spain"))
+  expect_equal(str_pair_match(pattern = "([^mackarel]*)(spain)",
+                            string = c("togospain", "djiboutispain")),
+               c(togo = "spain", djibouti = "spain"))
+  expect_equal(str_pair_match(pattern = "(a*)b(c*)", string = c("abc", "aabcc")),
+               c(a = "c", aa = "cc"))
+})

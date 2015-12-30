@@ -91,13 +91,14 @@ parseLeafDescriptionsAll <- function(save_data = FALSE, offline = FALSE, save = 
   assertFlag(save_data)
   assertFlag(offline)
 
-    # data_sources is in sysdata.RData
+  # data_sources is in sysdata.RData
   versions <- data_sources$version
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
   for (v in versions)
-    icd9cm_billable[[v]] <- parseLeafDescriptionsVersion(version = v, save_data = save_data,
-                                                      offline = offline)
+    icd9cm_billable[[v]] <- parseLeafDescriptionsVersion(version = v,
+                                                         save_data = save_data,
+                                                         offline = offline)
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save_data)
@@ -133,59 +134,57 @@ parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save
 
   if (version == "27")
     return(invisible(parseIcd9LeafDescriptions27(save_data = save_data,
-                                                 fromWeb = fromWeb)))
+                                                 fromWeb = !offline)))
   stopifnot(version %in% data_sources$version)
   dat <- data_sources[data_sources$version == version, ]
-  url <- dat$url
   fn_short_orig <- dat$short_filename
   fn_long_orig <- dat$long_filename
   fn_short <- make.names(fn_short_orig)
   fn_long <- make.names(fn_long_orig)
-  path_short <- file.path("data-raw", fn_short)
-  path_long <- file.path("data-raw", fn_long)
+  #path_short <- file.path("data-raw", fn_short)
+  #path_long <- file.path("data-raw", fn_long)
 
-  f_info_short <- unzip_to_data_raw(dat$url, file_name = dat$short_filename, offline = offline)
-  f_info_long <- unzip_to_data_raw(dat$url, file_name = dat$long_filename, offline = offline)
-#    path_short <- f_info_short$file_path
-#    path_long <- f_info_long$file_path
+  f_info_short <- unzip_to_data_raw(dat$url, file_name = fn_short, offline = offline)
+  f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long, offline = offline)
 
-    message("short filename = ", f_info_short$file_name,
-            "\n long filename = ", f_info_long$file_name)
-    message("short path = ", f_info_short$file_path,
-            "\n long path = ", f_info_long$file_name)
-
-  assertPathForOutput(path_short, overwrite = TRUE)
+  message("short filename = ", f_info_short$file_name,
+          "\n long filename = ", f_info_long$file_name)
+  message("short path = ", f_info_short$file_path,
+          "\n long path = ", f_info_long$file_name)
 
   # yes, specify encoding twice, once to declare the source format, and again
   # to tell R to flag (apparently only where necessary), the destination
   # strings: in our case this is about ten accented character in long
   # descriptions of disease names
-  short_conn <- file(path_short)
-  readLines(short_conn) -> shortlines
-  close(short_conn)
+
+  # shortlines should always exist
+  shortlines <- readLines(f_info_short$file_path)
+
+  # longlines may not, and may have more complicated encoding
   if (!is.na(fn_long_orig)) {
-    file_long <- file(path_long, encoding = "latin1")
-    longlines <- readLines(path_long, encoding = "latin1")
+    file_long <- file(f_info_short$file_path, encoding = "latin1")
+    longlines <- readLines(f_info_short$file_path, encoding = "latin1")
     close(file_long)
   } else
     longlines <- NA_character_
 
-  shortlines <- strsplit(shortlines, "[[:space:]]")
-  longlines <- strsplit(longlines, "[[:space:]]")
+  shortlines <- str_split(shortlines, "[[:space:]]")
+  longlines <- str_split(longlines, "[[:space:]]")
 
-  # the encoding was stated, but is dropped by my trim function...
-  trim_regex <- function(x) gsub("(^[[:space:]])|([[:space:]]$)", "", x)
+  # my trim function drops encodings, so let's use stringr::str_trim:
+  short_codes <- lapply(shortlines, FUN = function(x) str_trim(x[1]))
+  short_descs <- lapply(shortlines,
+                        function(x) str_trim(paste(x[-1], collapse = " ")))
 
-  icd9ShortCode <- lapply(shortlines, FUN = function(x) trim_regex(x[1]))
-  icd9ShortDesc <- lapply(shortlines, FUN = function(x) trim_regex(paste(x[-1], collapse = " ")))
   if (!is.na(longlines[1]))
-    icd9LongDesc <- lapply(longlines, FUN = function(x) trim_regex(paste(x[-1], collapse = " ")))
+    long_descs <- lapply(longlines,
+                         function(x) str_trim(paste(x[-1], collapse = " ")))
   else
-    icd9LongDesc <- NA
+    long_descs <- NA
 
-  out <- data.frame(icd9 = unlist(icd9ShortCode),
-                    descShort = unlist(icd9ShortDesc),
-                    descLong = unlist(icd9LongDesc),
+  out <- data.frame(icd9 = unlist(short_codes),
+                    descShort = unlist(short_descs),
+                    descLong = unlist(long_descs),
                     stringsAsFactors = FALSE)
 
   # now sort so that E is after V:
@@ -219,8 +218,8 @@ parseIcd9LeafDescriptions27 <- function(save_data = FALSE, fromWeb = NULL) {
     fp <- system.file("data-raw", fn, package = get_pkg_name())
 
   message("v27 file name = '", fn,
-                       "', and path = '", fp,
-                       "'. URL = ", url)
+          "', and path = '", fp,
+          "'. URL = ", url)
 
   if (save_data || fromWeb || !file.exists(fp)) unzip_single(url, fn, fp)
   unzip_single(url, fn, fp)
@@ -397,7 +396,7 @@ icd9BuildChaptersHierarchy <- function(save_data = FALSE) {
 
   # now put the short description in the right column position
   icd9_hierarchy <- icd9_hierarchy[c("icd9", "descShort", "descLong", "threedigit",
-                                   "major", "subchapter", "chapter")]
+                                     "major", "subchapter", "chapter")]
 
   # quick sanity checks - full tests in test-parse.R
   stopifnot(all(icd9IsValidShort(icd9_hierarchy$icd9)))

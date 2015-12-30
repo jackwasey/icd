@@ -3,7 +3,7 @@
 \name{unzip_to_data_raw}
 \alias{download_to_data_raw}
 \alias{unzip_to_data_raw}
-\title{Get a zipped file from a URL, or confirm it is in data-raw already}
+\title{Unzip file to \code{data-raw}}
 \usage{
 unzip_to_data_raw(url, file_name, force = FALSE, offline = FALSE)
 
@@ -26,7 +26,10 @@ data-raw. This is helpful for testing without using the internet.}
 path of unzipped file in \code{data-raw}
 }
 \description{
-Get a zipped file from a URL, or confirm it is in data-raw already
+Get a zip file from a URL, extract contents, and save file in
+\code{data-raw}. If the file already exists there, it is only retrieved if
+\code{force} is set to \code{TRUE}. If \code{offline} is \code{FALSE}, then
+\code{NULL} is returned if the file isn't already downloaded.
 }
 \keyword{internal}
 

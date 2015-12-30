@@ -2,12 +2,13 @@
 % Please edit documentation in R/util-file.R
 \name{unzip_single}
 \alias{unzip_single}
-\title{unzip a single file}
+\title{unzip a single file from URL}
 \usage{
 unzip_single(url, file_name, save_path)
 }
 \description{
-unzip a single file
+take a single file from zip located at a given URL, unzip into temporary
+directory, and copy to the given \code{save_path}
 }
 \keyword{internal}
 

@@ -36,7 +36,8 @@ utils::globalVariables(c("."))
 #'   http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
 #'   and similar files run from 1996 to 2011.
 #' @keywords internal
-parse_rtf_year <- function(year = "2011", save_data = FALSE, fromWeb = FALSE, verbose = FALSE) {
+parse_rtf_year <- function(year = "2011", save_data = FALSE,
+                           fromWeb = FALSE, verbose = FALSE) {
   assertString(year)
   assertFlag(save_data)
   assertFlag(fromWeb)
@@ -51,52 +52,58 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE, fromWeb = FALSE, ve
 
   if (fromWeb || !file.exists(fp) || save_data) {
     unzip_single(url, fn, fp)
-    lines <- readLines(url, fp)
+    rtf_lines <- readLines(url, fp)
   } else {
     fp_conn <- file(fp, encoding = "ASCII")
     on.exit(close(fp_conn))
-    lines <- readLines(fp_conn, warn = FALSE)
+    rtf_lines <- readLines(fp_conn, warn = FALSE)
   }
   # the file itself is 7 bit ASCII, but has its own internal encoding using CP1252.
   # test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
-  parse_rtf_lines(lines, verbose) %>% swapNamesWithVals %>% icd9SortDecimal -> out
+  parse_rtf_lines(rtf_lines, verbose) %>% swapNamesWithVals %>% icd_sort.icd9(short_code = FALSE) -> out
   # make Tidy data: don't like using row names to store things
   icd9Desc <- data.frame(
     icd9  = out %>% unname %>% icd9DecimalToShort,
     desc = names(out),
     stringsAsFactors = FALSE)
-  if (save_data) save_in_data_dir("icd9Desc")
+  if (save_data)
+    save_in_data_dir("icd9Desc")
   invisible(icd9Desc)
 }
 
 #' @title parse lines of RTF
 #' @description parse a character vector containing RTF strings
-#' @param lines character vector containing RTF. Encoding?
+#' @param rtf_lines character vector containing RTF. Encoding?
 #' @template verbose
 #' @return named character vector, with names being the ICD-9 codes, and the
 #'   contents being the descriptions from the RTF source. Elsewhere I do this
 #'   the other way around, but the tests are now wired for this layout. "Tidy"
 #'   data would favour having an un-named two-column data frame.
 #' @keywords internal
-parse_rtf_lines <- function(lines, verbose = FALSE) {
+parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
 
-  assertCharacter(lines)
+  assertCharacter(rtf_lines)
   assertFlag(verbose)
 
-  # filtered <- iconv(lines, from = "ASCII", to = "UTF-8", mark = TRUE) I think
-  # the first 127 characters of ASCII are the same in Unicode, but we must make
-  # sure R treats the lines as Unicode.
-  filtered <- lines
+  # filtered <- iconv(rtf_lines, from = "ASCII", to = "UTF-8", mark = TRUE) I
+  # think the first 127 characters of ASCII are the same in Unicode, but we must
+  # make sure R treats the lines as Unicode.
+  filtered <- rtf_lines
   # merge any line NOT starting with "\\par" on to previous line
-  non_par_lines <- grep("^\\\\par", filtered, invert = TRUE)
-  # in reverse order, put each non-par line on end of previous, then filter out all non-par lines
+  non_par_lines <- grep(pattern = "^\\\\par", x = filtered, invert = TRUE)
+  # in reverse order, put each non-par line on end of previous, then filter out
+  # all non-par lines
+  if (verbose)
+    message("joining lines split on par")
   for (i in rev(non_par_lines)) {
     filtered[i - 1] <- paste(filtered[i - 1], filtered[i], sep = "")
   }
+
   filtered <- grep("^\\\\par", filtered, value = TRUE)
 
-  # fix ASCII/CP1252/Unicode horror: of course, some char defs are split over lines...
+  # fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
+  # lines...
   filtered <- gsub("\\\\'e8", "\u00e8", filtered)
   filtered <- gsub("\\\\'e9", "\u00e9", filtered)
   filtered <- gsub("\\\\'f1", "\u00f1", filtered)
@@ -159,7 +166,7 @@ parse_rtf_lines <- function(lines, verbose = FALSE) {
       message("working on fourth-digit row:", f)
     range <- parseRtfFifthDigitRanges(filtered[f])
     filtered[seq(f + 1, f + 37)] %>%
-      grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
+      str_subset("^[[:digit:]][[:space:]].*") %>%
       str_pair_match("([[:digit:]])[[:space:]](.*)") -> fourth_suffices
     re_fourth_defined <- paste(c("\\.[", names(fourth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fourth digit
@@ -196,9 +203,9 @@ parse_rtf_lines <- function(lines, verbose = FALSE) {
   for (f in fifth_rows) {
     if (verbose) message("working on fifth-digit row:", f)
     range <- parseRtfFifthDigitRanges(filtered[f], verbose = verbose)
-    filtered[seq(f + 1, f + 20)] %>%
+    fifth_suffices <- filtered[seq(f + 1, f + 20)] %>%
       grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)") -> fifth_suffices
+      str_pair_match("([[:digit:]])[[:space:]](.*)", warn_pattern = TRUE)
 
     re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fifth digit

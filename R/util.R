@@ -99,28 +99,43 @@ logical_to_binary <- function(x) {
 
 #' Match strings to get named vector
 #'
-#' match a character vector against a regex with a pair of parentheses, returning named vector
+#' match a character vector against a regex with a pair of parentheses,
+#' returning named vector
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
+#' @param warn_pattern logical, if the pattern has multiple parentheses,
+#'   optinally don't warn if we are forced to choose just a pair of the sub-matches
 #' @keywords internal
-str_pair_match <- function(text, pattern, swap = FALSE, dropEmpty = FALSE, pos = c(1, 2), ...) {
+str_pair_match <- function(string, pattern, swap = FALSE, dropEmpty = FALSE, pos = c(1, 2), warn_pattern = TRUE, ...) {
+  assertCharacter(string, min.len = 1)
   assertString(pattern)
-  assertCharacter(text, min.len = 1)
   assertFlag(swap)
   assertIntegerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
-  text %>% str_match_all(pattern = pattern) %>% lapply(`[`, c(2,3)) -> res
+  string %>% str_match_all(pattern) -> res_matches
+
+  if (warn_pattern && identical(pos, c(1, 2)) && length(res_matches[[1]]) > 3) {
+    warning("the pair matching has multiple options, so choosing the first
+            (incomplete) match. Either turn off this warning, or set 'pos' to
+            specify positions to detect. If positions 1 and 2 are needed, do not
+            specify explicity, or set 2, 1 and swap. The last, which is in
+            position ", length(res_matches[[1]]))
+    pos <- length(res_matches[[1]])
+  }
+  # with str_match_all, the first match is a redundant complete match of the
+  # whole pattern, so pos + 1 here:
+  lapply(res_matches, FUN = `[`, pos + 1) -> res
 
   outNames <- vapply(X = res,
                      FUN = "[",
                      FUN.VALUE = character(1),
-                     ifelse(swap, pos[2], pos[1]))
+                     ifelse(swap, 2, 1))
   stopifnot(all(!is.na(outNames)))
 
   out <- vapply(X = res,
                 FUN = "[",
                 FUN.VALUE = character(1),
-                ifelse(swap, pos[1], pos[2]))
+                ifelse(swap, 1, 2))
   stopifnot(all(!is.na(out)))
 
   names(out) <- outNames
