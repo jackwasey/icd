@@ -1082,3 +1082,9 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   icd_get_defined.icd9(icd9Decimal, short_code = FALSE, billable = onlyBillable)
 }
 
+#' @rdname parse_rtf_lines
+#' @export
+parseRtfLines <- function(lines, verbose = FALSE) {
+  .Deprecated("parse_rtf_lines")
+  parse_rtf_lines(lines, verbose = verbose)
+}
