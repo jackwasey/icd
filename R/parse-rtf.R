@@ -124,11 +124,12 @@ parse_rtf_lines <- function(lines, verbose = FALSE) {
   for (ql in qual_subset_lines) {
     # get prior code
     filtered[ql - 1] %>%
-      str_subset(pattern = paste0("(", re_anycode, ") (.*)")) %>%
+      str_match_all(paste0("(", re_anycode, ") (.*)")) %>%
       unlist %>% extract2(2) -> code
     sb <- parseRtfQualifierSubset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
-    if (length(inv_sb) == 0) next
+    if (length(inv_sb) == 0)
+      next
     if (grepl("\\.", code))
       invalid_qual <- c(invalid_qual, paste0(code, inv_sb))
     else
@@ -154,7 +155,8 @@ parse_rtf_lines <- function(lines, verbose = FALSE) {
   # lookup_fourth will contain vector of suffices, with names being the codes they augment
   lookup_fourth <- c()
   for (f in fourth_rows) {
-    if (verbose) message("working on fourth-digit row:", f)
+    if (verbose)
+      message("working on fourth-digit row:", f)
     range <- parseRtfFifthDigitRanges(filtered[f])
     filtered[seq(f + 1, f + 37)] %>%
       grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
@@ -329,12 +331,13 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
 
   out <- c()
   # get numbers and number ranges
-  strsplit(row_str, "[, :;]") %>%
+  str_split(row_str, "[, :;]") %>%
     unlist %>%
     #grep("[VvEe]?[0-9]", ., value = TRUE) -> vals
-    str_match_all("[VvEe]?[0-9]") -> vals
+    str_subset("[VvEe]?[0-9]") -> vals
 
-  if (verbose) message("vals are:", paste(vals, collapse = ", "))
+  if (verbose)
+    message("vals are:", paste(vals, collapse = ", "))
 
   # sometimes  we get things like:
   # [1] "345.0" ".1"    ".4-.9"
@@ -343,13 +346,15 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
     base_code <- vals[1] # assume first is the base
     stopifnot(icd9IsValidDecimal(base_code))
     for (dotmnr in vals[-1]) {
-      if (verbose) message("dotmnr is: ", dotmnr)
+      if (verbose)
+        message("dotmnr is: ", dotmnr)
       if (grepl("-", dotmnr)) {
         # range of minors
         strsplit(dotmnr, "-", fixed = TRUE) %>% unlist -> pair
         first <- paste0(icd9GetMajor(base_code, isShort = FALSE), pair[1])
         last <- paste0(icd9GetMajor(base_code, isShort = FALSE), pair[2])
-        if (verbose) message("expanding specified minor range from ", first, " to ", last)
+        if (verbose)
+          message("expanding specified minor range from ", first, " to ", last)
         out <- c(out, first %i9da% last)
       } else {
         single <- paste0(icd9GetMajor(base_code, isShort = FALSE), dotmnr)
@@ -365,7 +370,8 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
       v %>%  strsplit("-", fixed = TRUE) %>% unlist -> pair
       # sanity check
       stopifnot(all(icd9IsValidDecimal(pair)))
-      if (verbose) message("expanding explicit range ", pair[1], " to ", pair[2])
+      if (verbose)
+        message("expanding explicit range ", pair[1], " to ", pair[2])
       # formatting errors can lead to huge range expansions, e.g. "8-679"
 
       # quickly strip off V or E part for comparison

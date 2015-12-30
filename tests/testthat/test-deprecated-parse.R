@@ -102,8 +102,8 @@ test_that("deprecated - online parse tests run", {
   rtf_dat <- data_sources[data_sources$f_year == "2011", ]
   url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename
-  zip_single(url, fn, tf <- tempfile())
-  rtf_lines <- readLines(url, tf)
+  unzip_single(url, fn, tf <- tempfile())
+  rtf_lines <- readLines(tf, warn = FALSE)
   unlink(tf)
   rtf <- parseRtfLines(rtf_lines)
   nrtf <- names(rtf)

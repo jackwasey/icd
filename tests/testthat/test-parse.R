@@ -105,7 +105,7 @@ test_that("online parse tests run", {
   url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename
   unzip_single(url, fn, tf <- tempfile())
-  rtf_lines <- readLines(url, tf)
+  rtf_lines <- readLines(tf, warn = FALSE)
   unlink(tf)
   rtf <- parseRtfLines(rtf_lines)
   nrtf <- names(rtf)
