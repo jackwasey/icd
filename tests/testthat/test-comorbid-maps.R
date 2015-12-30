@@ -89,8 +89,9 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
   # skip this test if either do_online_tests is FALSE, or if the downloaded file
   # is not already in data-raw
-  if (is.null(fetch_ahrq_sas(offline = TRUE)$file_path))
-    skip_online_tests("data-raw/comformat2012-2013.txt not available, so skipping AHRQ SAS parsing test.")
+  if (is.null(fetch_ahrq_sas(offline = TRUE)))
+    skip_online_tests("data-raw/comformat2012-2013.txt not available, so
+                      skipping AHRQ SAS parsing test.")
 
   # same but from source data. Should be absolutely identical.
   expect_equal(icd9_map_ahrq, parse_ahrq_sas(save_data = FALSE))

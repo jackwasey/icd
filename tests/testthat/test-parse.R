@@ -138,7 +138,7 @@ test_that("no rtf formatting left in descriptions", {
 })
 
 test_that("all csv extract codes are in rtf extract", {
-  missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9_hierarchy[["icd9"]]), nrtf)
+  missing_from_rtf <- setdiff(icd_short_to_decimal.icd9(icd9::icd9_hierarchy[["icd9"]]), nrtf)
   expect_equal(length(missing_from_rtf), 0,
                info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
 })
@@ -146,7 +146,7 @@ test_that("all csv extract codes are in rtf extract", {
 test_that("majors extracted from web page are the same as those from RTF", {
   webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
   work <- swapNamesWithVals(rtf)
-  rtfmajors <- work[icd9IsMajor(work)]
+  rtfmajors <- work[icd_is_major.icd9(work)]
 
   expect_identical(setdiff(rtfmajors, webmajors), character(0),
                    info = paste("these majors are from RTF but not retrieved from web: ",
@@ -156,17 +156,29 @@ test_that("majors extracted from web page are the same as those from RTF", {
                                 paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
 })
 
-# TODO: offline okay?
-v32 <- parseLeafDescriptionsVersion(version = "32", save_data = FALSE, offline = TRUE)
 
-test_that("all leaf codes from TXT are in RTF extract", {
-  v32$icd9 %>% icd9ShortToDecimal -> leaves
+test_that("all leaf codes from TXT are in flat file extract", {
+  skip_slow_tests()
+  test_ver = "32"
+  skip_flat_icd9_avail(test_ver)
+
+  v32 <- parse_leaf_descriptions_version(version = test_ver, save_data = FALSE, offline = FALSE)
+  v32$icd9 %>% icd_short_to_decimal.icd9 -> leaves
   expect_true(all(leaves %in% nrtf))
+
+  rtf[nrtf %in% icd_short_to_decimal.icd9(v32$icd9)] %>%
+    swapNamesWithVals %>%
+   sort -> rtf_leaves
+  if (FALSE && interactive()) {
+    assign("manual_compare_descs",
+           data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)),
+           envir = .GlobalEnv)
+    browser()
+  }
 })
 
 test_that("RTF extract has no duplicates", {
-  expect_equal(sum(duplicated(nrtf)),
-               0,
+  expect_false(anyDuplicated(nrtf) > 0,
                info = paste("first few duplicates: ",
                             paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
                ))
@@ -176,14 +188,6 @@ test_that("mid-level descriptions are in RTF extract", {
   expect_equivalent(rtf["611"], "Other disorders of breast")
   expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
   expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
-})
-
-test_that("manual check to look at description differences between RTF and TXT", {
-  skip("manual check")
-  rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
-    swapNamesWithVals %>%
-    sort -> rtf_leaves
-  print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
 })
 
 test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {

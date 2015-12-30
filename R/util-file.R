@@ -50,6 +50,9 @@ unzip_single <- function(url, file_name, save_path) {
 #' \code{force} is set to \code{TRUE}. If \code{offline} is \code{FALSE}, then
 #' \code{NULL} is returned if the file isn't already downloaded.
 #'
+#' The file name is changed to a conservative cross platform name using
+#' \code{make.names}
+#'
 #' @param url url of a zip file
 #' @param file_name file name of a single file in that zip
 #' @param force logical, if TRUE, then download even if already in
@@ -64,7 +67,7 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
   assertFlag(offline)
   stopifnot(!(force & offline))
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
-  file_path <- file.path(data_raw_path, file_name)
+  file_path <- file.path(data_raw_path, make.names(file_name))
   if (force || !file.exists(file_path)) {
     if (offline)
       return(NULL)
@@ -72,7 +75,7 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
       unzip_single(url = url, file_name = file_name, save_path = file_path)
     )
   }
-  list(file_path = file_path, file_name = file_name)
+  list(file_path = file_path, file_name = make.names(file_name))
 }
 
 #' @rdname unzip_to_data_raw

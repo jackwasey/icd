@@ -31,5 +31,9 @@ Get a zip file from a URL, extract contents, and save file in
 \code{force} is set to \code{TRUE}. If \code{offline} is \code{FALSE}, then
 \code{NULL} is returned if the file isn't already downloaded.
 }
+\details{
+The file name is changed to a conservative cross platform name using
+\code{make.names}
+}
 \keyword{internal}
 

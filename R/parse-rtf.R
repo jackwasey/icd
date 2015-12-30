@@ -31,37 +31,42 @@ utils::globalVariables(c("."))
 #'   though. THe last CDC release is Dtab12.rtf from 2011.
 #' @param year from 1996 to 2012 (this is what CDC has published). Only 2012
 #'   implemented thus far
+#' @param save_data logical whether to save the result (otherwise data is just
+#'   returned invisibly)
+#' @template offline
 #' @template verbose
 #' @source
-#'   http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
-#'   and similar files run from 1996 to 2011.
+#' http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
+#' and similar files run from 1996 to 2011.
 #' @keywords internal
 parse_rtf_year <- function(year = "2011", save_data = FALSE,
-                           fromWeb = FALSE, verbose = FALSE) {
+                           offline = TRUE, verbose = FALSE) {
   assertString(year)
   assertFlag(save_data)
-  assertFlag(fromWeb)
+  assertFlag(offline)
   assertFlag(verbose)
 
   rtf_dat <- data_sources[data_sources$f_year == year, ]
   url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename
-  fp <- file.path("data-raw", fn)
-  if (!save_data && !file.exists(fp))
-    fp <- system.file("data-raw", fn, package = get_pkg_name())
 
-  if (fromWeb || !file.exists(fp) || save_data) {
-    unzip_single(url, fn, fp)
-    rtf_lines <- readLines(url, fp)
-  } else {
-    fp_conn <- file(fp, encoding = "ASCII")
-    on.exit(close(fp_conn))
-    rtf_lines <- readLines(fp_conn, warn = FALSE)
-  }
+  f_info_rtf <- unzip_to_data_raw(rtf_dat$url, file_name = fn, offline = offline)
+
+  if (is.null(f_info_rtf))
+    stop("RTF data for year", year, "unavailable.")
+
+  fp <- f_info_rtf$file_path
+  fp_conn <- file(fp, encoding = "ASCII")
+  on.exit(close(fp_conn))
+  rtf_lines <- readLines(fp_conn, warn = FALSE)
+
   # the file itself is 7 bit ASCII, but has its own internal encoding using CP1252.
   # test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
-  parse_rtf_lines(rtf_lines, verbose) %>% swapNamesWithVals %>% icd_sort.icd9(short_code = FALSE) -> out
+  out <- parse_rtf_lines(rtf_lines, verbose) %>%
+    swapNamesWithVals %>%
+    icd_sort.icd9(short_code = FALSE)
+
   # make Tidy data: don't like using row names to store things
   icd9Desc <- data.frame(
     icd9  = out %>% unname %>% icd9DecimalToShort,

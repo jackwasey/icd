@@ -82,8 +82,7 @@ parseAndSaveQuick <- function() {
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parseLeafDescriptionsAll <- function(save_data = FALSE, offline = FALSE, save = NULL) {
-
+parse_leaf_descriptions_all <- function(save_file = FALSE, offline = FALSE) {
   if (!missing(save)) {
     warning("use save_data instead of save")
     save_data <- save
@@ -120,12 +119,9 @@ parseLeafDescriptionsAll <- function(save_data = FALSE, offline = FALSE, save = 
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
-parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save_data = FALSE,
-                                         offline = FALSE, save = NULL) {
-  if (!missing(save)) {
-    warning("use save_data instead of save")
-    save_data <- save
-  }
+parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
+                                            save_data = FALSE,
+                                            offline = FALSE) {
   assertString(version)
   assertFlag(save_data)
   assertFlag(offline)
@@ -404,6 +400,7 @@ icd9BuildChaptersHierarchy <- function(save_data = FALSE) {
 
   if (save_data)
     save_in_data_dir("icd9_hierarchy") # nocov
+  invisible(icd9_hierarchy)
 }
 
 fixSubchapterNa <- function(x, start, end) {

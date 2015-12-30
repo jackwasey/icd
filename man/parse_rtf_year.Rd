@@ -5,15 +5,22 @@
 \title{parse RTF description of entire ICD-9-CM for a specific year}
 \source{
 http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
-  and similar files run from 1996 to 2011.
+and similar files run from 1996 to 2011.
 }
 \usage{
-parse_rtf_year(year = "2011", save_data = FALSE, fromWeb = FALSE,
+parse_rtf_year(year = "2011", save_data = FALSE, offline = TRUE,
   verbose = FALSE)
 }
 \arguments{
 \item{year}{from 1996 to 2012 (this is what CDC has published). Only 2012
 implemented thus far}
+
+\item{save_data}{logical whether to save the result (otherwise data is just
+returned invisibly)}
+
+\item{offline}{single logical, if \code{TRUE} then don't pull the file from
+internet, only return path and filename if the file already exists in
+data-raw. This is helpful for testing without using the internet.}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
