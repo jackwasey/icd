@@ -144,24 +144,18 @@ parseLeafDescriptionsVersion <- function(version = icd9cm_latest_edition(), save
   path_short <- file.path("data-raw", fn_short)
   path_long <- file.path("data-raw", fn_long)
 
-  if (!save_data && !file.exists(path_short)) {
-    # not saving, so we can read-only get the path from the installed package:
-    path_short <- system.file("data-raw", fn_short, package = get_pkg_name())
-    path_long <- system.file("data-raw", fn_long, package = get_pkg_name())
-  }
+  f_info_short <- unzip_to_data_raw(dat$url, file_name = dat$short_filename, offline = offline)
+  f_info_long <- unzip_to_data_raw(dat$url, file_name = dat$long_filename, offline = offline)
+#    path_short <- f_info_short$file_path
+#    path_long <- f_info_long$file_path
 
-    message("short filename = ", fn_short, "\n long filename = ", fn_long)
-    message("short path = ", path_short, "\n long path = ", path_long)
+    message("short filename = ", f_info_short$file_name,
+            "\n long filename = ", f_info_long$file_name)
+    message("short path = ", f_info_short$file_path,
+            "\n long path = ", f_info_long$file_name)
 
   assertPathForOutput(path_short, overwrite = TRUE)
 
-  either_file_missing <- !file.exists(path_short) || !file.exists(path_long)
-  if (fromWeb || either_file_missing) {
-    # don't do any fancy encoding stuff, just dump the file
-    unzip_single(url, fn_short_orig, path_short)
-    if (!is.na(fn_long_orig))
-      unzip_single(url, fn_long_orig, path_long)
-  }
   # yes, specify encoding twice, once to declare the source format, and again
   # to tell R to flag (apparently only where necessary), the destination
   # strings: in our case this is about ten accented character in long
