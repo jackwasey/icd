@@ -83,7 +83,7 @@ icd_check_class_conflict <- function(x) {
 icd9 <- function(x) {
   icd_check_conflict_with_icd10(x)
   if (inherits(x, "icd9")) return(x)
-  after = match("icd9cm", class(x), nomatch = 0)
+  after <- match("icd9cm", class(x), nomatch = 0)
   class(x) <- append(class(x), "icd9", after = after)
   x
 }
@@ -93,7 +93,7 @@ icd9 <- function(x) {
 icd9cm <- function(x) {
   icd_check_conflict_with_icd10(x)
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
-  icd9_pos = match("icd9", class(x))
+  icd9_pos <- match("icd9", class(x))
   if (!is.na(icd9_pos))
     class(x) <- append(class(x), "icd9cm", after = icd9_pos - 1)
   else
@@ -107,9 +107,9 @@ icd9cm <- function(x) {
 icd10 <- function(x) {
   icd_check_conflict_with_icd9(x)
   if (inherits(x, "icd10")) return(x)
-  icd10cm_pos = match("icd10cm", class(x), nomatch = 0)
-  icd10who_pos = match("icd10who", class(x), nomatch = 0)
-  after = max(icd10cm_pos, icd10who_pos)
+  icd10cm_pos <- match("icd10cm", class(x), nomatch = 0)
+  icd10who_pos <- match("icd10who", class(x), nomatch = 0)
+  after <- max(icd10cm_pos, icd10who_pos)
   class(x) <- append(class(x), "icd10", after = after)
   x
 }
@@ -119,7 +119,7 @@ icd10 <- function(x) {
 icd10cm <- function(x) {
   icd_check_conflict_with_icd9(x)
   if (inherits(x, "icd10cm")) return(x)
-  icd10_pos = match("icd10", class(x))
+  icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
   else
@@ -132,7 +132,7 @@ icd10cm <- function(x) {
 icd10who <- function(x) {
   icd_check_conflict_with_icd9(x)
   if (inherits(x, "icd10who")) return(x)
-  icd10_pos = match("icd10", class(x))
+  icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
   else
@@ -263,8 +263,6 @@ c.icd9 <- function(...) {
   base_class <- class(args[[1]])
   if (any(is.icd10(unlist(args))))
     stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
-  #if (!all(is.icd9(unlist(args)))) # this breaks icd9_generate_map
-  # warning("Combine ICD-9 codes with codes of unknown type")
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
@@ -332,8 +330,6 @@ c.icd10who <- function(...) {
 #' stopifnot(inherits(y[[2]], "icd10"))
 #' @export
 `[.icd9` <- function(x, ...) {
-  #message("[.icd9")
-  #print(x)
   y <- NextMethod()
   if (!is.data.frame(x))
     class(y) <- class(x)

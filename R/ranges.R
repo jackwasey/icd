@@ -214,7 +214,8 @@ expand_range_worker <- function(start, end, lookup, defined,
   if (end_index < start_index)
     stop("end code must be greater than or equal to start code")
 
-  if (start == end) return(icd_children.icd9(start, short_code = TRUE, defined = defined))
+  if (start == end)
+    return(icd_children.icd9(start, short_code = TRUE, defined = defined))
 
   out <- lookup[start_index:end_index]
   if (ex_ambig_start) {

@@ -21,18 +21,18 @@ do_slow_tests <- FALSE
 do_online_tests <- FALSE
 
 if (identical(Sys.getenv("COVR"), "true")) {
-  message("COVR found so doing slow and online tests")
+  message("my environment variable COVR found so doing slow and online tests")
   do_slow_tests <- TRUE
   do_online_tests <- TRUE
 }
 
 if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
-  message("ICD_SLOW_TESTS found to be true, so doing slow tests")
+  message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
   do_slow_tests <- TRUE
 }
 
 if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
-  message("ICD_ONLINE_TESTS found to be true, so doing online tests")
+  message("environment variable ICD_ONLINE_TESTS found to be true, so doing online tests")
   do_online_tests <- TRUE
 }
 

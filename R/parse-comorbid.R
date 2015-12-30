@@ -15,6 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+#' get the SAS code from AHRQ
+#'
+#' Get the SAS code from AHRQ and save in data-raw if not already there.
+#' @keywords internal
+fetch_ahrq_sas <- function(offline) {
+  assertFlag(offline)
+  download_to_data_raw(
+    url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat2012-2013.txt",
+    offline = offline)
+}
 
 #' @title parse AHRQ SAS code to get mapping
 #' @description Takes the raw data taken directly from the AHRQ web site and
@@ -22,31 +32,31 @@
 #'   so this is an internal function, used in generating the package itself!
 #' @template savesas
 #' @template parse-template
-#' @param returnAll logical which, if TRUE, will result in the invisible return
-#'   of icd9_map_ahrq_all result, otherwise, icd9_map_ahrq is reutrned.
 #' @keywords internal
 parse_ahrq_sas <- function(
-  sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
-  save_data = FALSE, path = NULL, verbose = NULL) {
+  sas_path = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
+  save_data = FALSE, offline = FALSE, path = NULL, verbose = NULL) {
 
   if (!missing(path) || !missing(verbose))
     warning("'verbose' and 'path' in parse_ahrq_sas are deprecated and no longer has any effect.
             'path' is now the data dir in the working tree.",
             call. = FALSE)
 
-  assertString(sasPath)
+  assertString(sas_path)
   assertFlag(save_data)
-  f <- file(sasPath, "r")
-  ahrqAll <- sasFormatExtract(readLines(f)) # these seem to be ascii encoded
-  close(f)
 
-  icd9_map_ahrqWork <- ahrqAll[["$RCOMFMT"]]
+  # readLines make assumptions or guess about encoding, consider using
+  # Hadleyverse for this in future
+  ahrq_sas_lines <- readLines(fetch_ahrq_sas(offline)$file_path)
+  ahrqAll <- sas_format_extract(ahrq_sas_lines)
+
+  icd9_map_ahrq_working <- ahrqAll[["$RCOMFMT"]]
 
   icd9_map_ahrq_all <- list()
 
-  for (cmb in names(icd9_map_ahrqWork)) {
+  for (cmb in names(icd9_map_ahrq_working)) {
     message("parsing AHRQ SAS codes for '", cmb, "'")
-    somePairs <- strsplit(x = icd9_map_ahrqWork[[cmb]], split = "-")
+    somePairs <- strsplit(x = icd9_map_ahrq_working[[cmb]], split = "-")
 
     # non-range values (and their children) just go on list
     unpaired_items <- sapply(somePairs, length) == 1
@@ -122,13 +132,19 @@ parse_ahrq_sas <- function(
   invisible(icd9_map_ahrq)
 }
 
+#' @keywords internal
+fetch_quan_deyo_sas <- function(offline) {
+  download_to_data_raw(url = "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
+                       file_name = "ICD9_E_Charlson.sas", offline = offline)
+}
+
 #' @title parse original SAS code defining Quan's update of Deyo comorbidities.
 #' @description As with \code{parseAhrqSas}, this function reads SAS code, and
 #'   in, a very limited way, extracts definitions. In this case the code uses
 #'   LET statements, with strings or lists of strings. This saves and invisibly
 #'   returns a list with names corresponding to the comorbidities and values as
 #'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
-#'   \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
+#'   \code{parse_ahrq_sas}, there are no ranges defined, so this interpretation is
 #'   simpler.
 #'
 #'   With thanks to Dr. Quan, I have permission to distribute his SAS code.
@@ -139,22 +155,15 @@ parse_ahrq_sas <- function(
 #'   directly from Dr. Quan, however, the parsing results in identical data.
 #' @template savesas
 #' @template parse-template
+#' @template offline
 #' @keywords internal
-parse_quan_deyo_sas <- function(sasPath = system.file("data-raw",
-                                                      "ICD9_E_Charlson.sas",
-                                                      package = get_pkg_name()),
-                                condense = NULL,
-                                save_data = FALSE,
-                                path = NULL) {
-  assertFile(sasPath)
+parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   assertFlag(save_data)
+  assertFlag(offline)
 
-  if (!missing(condense) || !missing(path))
-    warning("'condense' and 'path' are deprecated in parse_quan_deyo_sas, and no longer has any effect.
-            The map can be condensed using other functions in the package. 'path' is now the data dir in the working tree.",
-            call. = FALSE)
+  stopifnot(!is.null(f_info <- fetch_quan_deyo_sas(offline = offline)))
 
-  quanSas <- readLines(sasPath, warn = FALSE)
+  quanSas <- readLines(f_info$file_path, warn = FALSE)
   qlets <- sasExtractLetStrings(quanSas)
   qlabels <- qlets[grepl("LBL[[:digit:]]+", names(qlets))]
   icd9_map_quan_deyo <- qlets[grepl("DC[[:digit:]]+", names(qlets))]

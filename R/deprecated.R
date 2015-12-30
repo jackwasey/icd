@@ -1,3 +1,4 @@
+
 # Copyright (C) 2014 - 2015  Jack O. Wasey
 #
 # This file is part of icd9.
@@ -980,14 +981,27 @@ parseQuanDeyoSas <- function(
   condense = FALSE, save = FALSE, path = NULL) {
 
   .Deprecated("parse_quan_deyo_sas")
-  parse_quan_deyo_sas(sasPath = sasPath, condense = condense, save_data = save, path = path)
+
+  if (!missing(condense))
+    warning("'condense' is deprecated in parse_quan_deyo_sas, and no longer has any effect.
+            The map can be condensed using other functions in the package.",
+            call. = FALSE)
+  if (!missing(path))
+    warning("'path' is deprecated in parse_quan_deyo_sas, and no longer has any effect.
+            'path' is fixed as the data dir in the working tree.",
+            call. = FALSE)
+  if (!missing(sasPath))
+    warning("'sasPath' is deprecated in parse_quan_deyo_sas, and no longer has any effect.",
+            call. = FALSE)
+
+  parse_quan_deyo_sas(save_data = save)
 }
 
 parseAhrqSas <- function(
   sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
   save = FALSE, path = NULL) {
   .Deprecated("parse_ahrq_sas")
-  parse_ahrq_sas(sasPath = sasPath, save_data = save, path = path)
+  parse_ahrq_sas(sas_path = sasPath, save_data = save, path = path)
 }
 
 generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"),
@@ -995,6 +1009,9 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"),
   .Deprecated("generate_sys")
   if (!missing(verbose))
     warning("verbose is deprecated, always on now for internal package building functions")
+  if (!missing(save))
+    warning("use save_data instead of save")
+
   generate_sysdata(path = sysdata.path, save_data = save)
 }
 
@@ -1087,4 +1104,9 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
 parseRtfLines <- function(lines, verbose = FALSE) {
   .Deprecated("parse_rtf_lines")
   parse_rtf_lines(lines, verbose = verbose)
+}
+
+sasFormatExtract <- function(sas_lines) {
+  .Deprecated("sas_format_extract")
+  sas_format_extract(sas_lines = sas_lines)
 }

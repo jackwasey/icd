@@ -52,7 +52,7 @@ test_that("Quan Elixhauser make sure all the children are listed in the saved da
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
   ptdf <- icd_comorbid.icd9(patientData, map = icd9::icd9_map_ahrq, short_code = TRUE,
-                       visit_name = "visitId", return_df = TRUE)
+                            visit_name = "visitId", return_df = TRUE)
 
   expect_equal(names(ptdf), c("visitId", names(icd9::icd9_map_ahrq)))
 
@@ -75,8 +75,8 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 
   expect_equal(
     logical_to_binary(data.frame(a = c("jack", "hayley"),
-                               b = c(TRUE, FALSE),
-                               f = c(TRUE, TRUE))),
+                                 b = c(TRUE, FALSE),
+                                 f = c(TRUE, TRUE))),
     data.frame(a = c("jack", "hayley"),
                b = c(1, 0),
                f = c(1, 1))
@@ -86,10 +86,13 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 test_that("ahrq icd9 mappings generated from the current generation code", {
   # skip_on_cran()  # apparently this runs of wercker but not travis, presumably
   # because travis uses --as-cran or equivalent
-  if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) == "")
+
+  # skip this test if either do_online_tests is FALSE, or if the downloaded file
+  # is not already in data-raw
+  if (is.null(fetch_ahrq_sas(offline = TRUE)$file_path))
     skip_online_tests("data-raw/comformat2012-2013.txt not available, so skipping AHRQ SAS parsing test.")
 
-    # same but from source data. Should be absolutely identical.
+  # same but from source data. Should be absolutely identical.
   expect_equal(icd9_map_ahrq, parse_ahrq_sas(save_data = FALSE))
   # same but from source data. Should be absolutely identical.
   expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9::icd9_map_ahrq), list())
@@ -99,8 +102,7 @@ test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
               # skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
 
-              # TODO: could include data-raw in package, or download especially for the test:
-              if (system.file("data-raw", "ICD9_E_Charlson.sas", package = get_pkg_name()) == "")
+              if (is.null(fetch_quan_deyo_sas(offline = TRUE)))
                 skip_online_tests("data-raw/ICD9_E_Charlson.sas not available, so skipping Quan Deyo SAS parsing test.")
 
               expect_identical(icd9_map_quan_deyo, parse_quan_deyo_sas(save_data = FALSE))
@@ -183,8 +185,8 @@ test_that("AHRQ interpretation at least returns something reasonable", {
   if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) == "")
     skip_online_tests("data-raw/comformat2012-2013.txt not available, so skipping AHRQ SAS result test.")
 
-  result <- parse_ahrq_sas(sasPath = system.file("data-raw", "comformat2012-2013.txt",
-                                               package = get_pkg_name()),
+  result <- parse_ahrq_sas(sas_path = system.file("data-raw", "comformat2012-2013.txt",
+                                                  package = get_pkg_name()),
                            save_data = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
@@ -539,7 +541,7 @@ test_that("github #34 - short and long custom map give different results", {
   expect_identical(
     icd_comorbid.icd9(mydf, map = mymaps, short_code = TRUE),
     icd_comorbid.icd9(mydf, map = mymapd, short_code = FALSE)
-    )
+  )
 })
 
 test_that("no NA values in the co-morbidity lists", {
@@ -570,17 +572,17 @@ test_that("disordered visit ids", {
 })
 
 test_that("diff comorbid works", {
-# TODO: S3 classes for this
+  # TODO: S3 classes for this
   # list, but not list of character vectors
   expect_error(icd_diff_comorbid(bad_input, bad_input))
 
   # no warning or error for good data
-# TODO: should be testing correct dispatch here, too, since map is a different class.
+  # TODO: should be testing correct dispatch here, too, since map is a different class.
   expect_warning(
     utils::capture.output(
       res <- icd_diff_comorbid(icd9::icd9_map_ahrq, elixComorbid, show = FALSE)
     ),
-  NA)
+    NA)
 
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",

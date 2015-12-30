@@ -45,9 +45,7 @@ unzip_single <- function(url, file_name, save_path) {
 #' @param file_name file name of a single file in that zip
 #' @param force logical, if TRUE, then download even if already in
 #'   \code{data-raw}
-#' @param offline single logical, if \code{TRUE} then only return path and
-#'   filename if the file already exists in data-raw. This is helpful for
-#'   testing.
+#' @template offline
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal
 unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
@@ -55,25 +53,36 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
   assertString(file_name)
   assertFlag(force)
   assertFlag(offline)
+  stopifnot(xor(force, offline))
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
   file_path <- file.path(data_raw_path, file_name)
   if (force || !file.exists(file_path))
     if (offline)
-      return(list(file_path = NULL, file_name = NULL))
-    stopifnot(
-      unzip_single(url = url, file_name = file_name, save_path = file_path)
-    )
+      return(NULL)
+  stopifnot(
+    unzip_single(url = url, file_name = file_name, save_path = file_path)
+  )
   list(file_path = file_path, file_name = file_name)
 }
 
-download_to_data_raw <- function(url, file_name = NULL, force = FALSE) {
+#' @rdname unzip_to_data_raw
+#'
+#' @keywords internal
+download_to_data_raw <- function(url,
+                                 file_name = str_extract(url, "[^/]*$"),
+                                 force = FALSE, offline = FALSE) {
+  assertString(url)
+  assertString(file_name)
+  assertFlag(force)
+  stopifnot(!(force & offline))
+
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
-  if (is.null(file_name))
-    file_name <- str_extract(url, "[^/]*$")
   save_path <- file.path(data_raw_path, file_name)
 
   if (force || !file.exists(save_path))
-    stopifnot(!download.file(url = url, destfile = save_path, quiet = TRUE))
+    if (offline)
+      return(NULL)
+  stopifnot(!download.file(url = url, destfile = save_path, quiet = TRUE))
   list(file_path = save_path, file_name = file_name)
 
 }

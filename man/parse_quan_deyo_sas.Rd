@@ -4,12 +4,17 @@
 \alias{parse_quan_deyo_sas}
 \title{parse original SAS code defining Quan's update of Deyo comorbidities.}
 \usage{
-parse_quan_deyo_sas(sasPath = system.file("data-raw", "ICD9_E_Charlson.sas",
-  package = get_pkg_name()), condense = NULL, save_data = FALSE,
-  path = NULL)
+parse_quan_deyo_sas(save_data = FALSE, offline = FALSE)
 }
 \arguments{
-\item{sasPath}{single character string containing path or URL for some SAS
+\item{save_data}{logical whether to save the result in the source tree.
+Defaults to \code{FALSE}.}
+
+\item{offline}{single logical, if \code{TRUE} then don't pull the file from
+internet, only return path and filename if the file already exists in
+data-raw. This is helpful for testing without using the internet.}
+
+\item{sas_path}{single character string containing path or URL for some SAS
 code. The source SAS code is stored in data-raw or at the location
 specified in URL. This function is internal, since it is used to generate
 data which ends up in the distributed package. However, the package user
@@ -17,11 +22,10 @@ can verify that the code creates the distributed R data. Also, changes to
 the original SAS code can be used to regenerate the R data by the user,
 without waiting for a package release.}
 
+\item{sasPath}{Deprecated. Use the updated function name and \code{sas_path}}
+
 \item{condense}{Deprecated. The map is not condensed by default. If required,
 it can reduced to a smaller set of codes using \code{icd_condense}.}
-
-\item{save_data}{logical whether to save the result in the source tree.
-Defaults to \code{FALSE}.}
 }
 \value{
 invisibly returns the list of vectors, where a co-morbidity name is
@@ -33,7 +37,7 @@ As with \code{parseAhrqSas}, this function reads SAS code, and
   LET statements, with strings or lists of strings. This saves and invisibly
   returns a list with names corresponding to the comorbidities and values as
   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
-  \code{parseAhrqSas}, there are no ranges defined, so this interpretation is
+  \code{parse_ahrq_sas}, there are no ranges defined, so this interpretation is
   simpler.
 
   With thanks to Dr. Quan, I have permission to distribute his SAS code.

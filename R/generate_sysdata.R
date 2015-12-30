@@ -24,10 +24,6 @@
 #' @return invisibly returns the sysdata as a list
 #' @keywords internal
 generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = TRUE) {
-  if (!missing(save)) {
-    warning("use save_data instead of save")
-    save_data <- save
-  }
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
     icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, defined = FALSE)))

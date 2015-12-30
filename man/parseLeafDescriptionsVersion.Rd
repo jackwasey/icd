@@ -6,12 +6,12 @@
   Medicaid Services.}
 \usage{
 parseLeafDescriptionsVersion(version = icd9cm_latest_edition(),
-  save_data = FALSE, fromWeb = FALSE)
+  save_data = FALSE, fromWeb = FALSE, save = NULL)
 }
 \arguments{
-\item{icd9path}{path of the source data which is typically in \code{data-raw}}
-
 \item{save}{logical whether to attempt to re-save source files in inst}
+
+\item{icd9path}{path of the source data which is typically in \code{data-raw}}
 
 \item{path}{Absolute path in which to save parsed data}
 }

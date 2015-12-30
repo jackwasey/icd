@@ -23,28 +23,28 @@ test_that("basic SAS VALUE declarations can be read into an R list", {
   # VALUE somename numbers, "ranges"-"ranges", ranges-ranges = "mappinname"
 
 
-  result <- sasFormatExtract('VALUE JACK 12345 = "TESTTHAT"')
+  result <- sas_format_extract('VALUE JACK 12345 = "TESTTHAT"')
   expect_equal(result, list(JACK = list(TESTTHAT = "12345")))
 
-  result <- sasFormatExtract('VALUE JACK 12345, 22222 = "TESTTHAT"')
+  result <- sas_format_extract('VALUE JACK 12345, 22222 = "TESTTHAT"')
   expect_equal(result, list(JACK = list(TESTTHAT = c("12345", "22222"))))
 
-  result <- sasFormatExtract('VALUE TESTTHAT 100-102 = "YES"')
+  result <- sas_format_extract('VALUE TESTTHAT 100-102 = "YES"')
   expect_equal(result, list(TESTTHAT = list("YES" = "100-102")))
 
-  expect_equal(sasFormatExtract('VALUE $RFRMSOMETHING 100-102 = "HTN" 103,104 = "CHF"'),
+  expect_equal(sas_format_extract('VALUE $RFRMSOMETHING 100-102 = "HTN" 103,104 = "CHF"'),
                list("$RFRMSOMETHING" = list(HTN = "100-102", CHF = c("103", "104")))
   )
 
 
-  result <- sasFormatExtract(c(
+  result <- sas_format_extract(c(
     'VALUE $RFRMSOMETHING 100-102 = "HTN" 103,104 = "CHF";\n',
     ' VALUE otherstuff 105 = "YES"'))
   expect_equal(result, list("$RFRMSOMETHING" = list(HTN = "100-102",
                                                     CHF = c("103", "104")),
                             otherstuff = list("YES" = "105")))
 
-  result <- sasFormatExtract(c(
+  result <- sas_format_extract(c(
     '   VALUE $RFRMSOMETHING 100-102 = "HTN" 103,104 = "CHF";',
     'VALUE  otherstuff   105   =  "  Y E S " '))
   expect_equal(result, list("$RFRMSOMETHING" = list(HTN = "100-102",
