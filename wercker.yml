@@ -5,6 +5,7 @@
 # WERCKER_R_COVR_OPTIONS is set in the wercker configuration to do the same
 box: rocker/hadleyverse
 command-timeout: 30
+no-response-timeout: 30
 build:
   steps:
     - install-packages:
