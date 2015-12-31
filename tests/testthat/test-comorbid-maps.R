@@ -169,18 +169,6 @@ test_that("icd9_hierarchy as saved in data can be recreated", {
                icd9::icd9_hierarchy)
 })
 
-# the following test is dependent on Buildilability and consistency of
-# http://www.icd9data.com because there is no machine readable CDC or CMS file
-# with this data.
-test_that("icd9Chapters, etc. as saved in data can be recreated", {
-  skip_on_cran() # and/or skip_on_travis()
-  skip_flat_icd9_avail(ver = "32")
-  res <- parseIcd9Chapters(year = "2014", save_data = FALSE)
-  expect_equal(res$icd9Chapters, icd9::icd9Chapters)
-  expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)
-  expect_equal(res$icd9ChaptersMajor, icd9::icd9ChaptersMajor)
-})
-
 test_that("AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
 

@@ -237,27 +237,23 @@ parseIcd9LeafDescriptions27 <- function(save_data = FALSE, fromWeb = NULL) {
 #' @details This is not almost obsolete. The only remaining use is the chapter
 #'   and sub-chapter names and ranges, or validation.
 #' @keywords internal
-parseIcd9Chapters <- function(year = NULL,
+parseIcd9Chapters <- function(year = "2014",
                               save_data = FALSE, save = NULL) {
   if (!missing(save)) {
     warning("use save_data instead of save")
     save_data <- save
   }
+
+  .Deprecated("parse_rtf_lines",
+              msg = "This function is replaced by the RTF parsing functions")
   assertFlag(save_data)
-  if (is.null(year))
-    year <- "2014"
-  else {
-    assertScalar(year)
-    if (is.character(year)) {
-      year <- as.integer(year)
-    }
-    # version 23 dates back to 2005, but I don't have access on web for versions
-    # before 23. Where are these?
-    # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
-    assertIntegerish(year, lower = 2005, upper = 2015,
-                     any.missing = FALSE, len = 1)
-    year <- as.character(year)
-  }
+  # version 23 dates back to 2005, but I don't have access on web for versions
+  # before 23. Where are these?
+  # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
+  assertIntegerish(year, lower = 2005, upper = 2015,
+                   any.missing = FALSE, len = 1)
+  year <- as.character(year)
+
   if (save_data && format(Sys.time(), "%Y") != year)
     warning(sprintf("Getting ICD-9 data for %s which is not the current year.
                     Tests were written to validate extraction of 2014 data.", year))
