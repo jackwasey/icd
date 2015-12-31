@@ -240,7 +240,7 @@ skip_online_tests <- function(msg = "skipping online test") {
 }
 
 rtf_year_ok <- function(test_year) {
-  rtf_dat <- data_sources[data_sources$f_year == test_year, ]
+  rtf_dat <- icd9_sources[icd9_sources$f_year == test_year, ]
   # see whether we have the files already downloaded (and unzipped)
   f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
                                     file_name = rtf_dat$rtf_filename,
@@ -258,7 +258,7 @@ skip_flat_icd9_avail <- function(ver = "31",
                                  msg = paste("skipping test because flat file
                                              ICD-9-CM sources not available for
                                              version: ", ver)) {
-  dat <- data_sources[data_sources$version == ver, ]
+  dat <- icd9_sources[icd9_sources$version == ver, ]
   fn_orig <- dat$short_filename
   if (is.na(fn_orig))
     fn_orig <- dat$other_filename
@@ -272,7 +272,7 @@ skip_flat_icd9_avail <- function(ver = "31",
 }
 
 skip_flat_icd9_avail_all <- function() {
-  lapply(data_sources$version, skip_flat_icd9_avail)
+  lapply(icd9_sources$version, skip_flat_icd9_avail)
 }
 
 #' Fast Factor Generation

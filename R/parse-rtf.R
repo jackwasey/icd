@@ -46,7 +46,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
   assertFlag(offline)
   assertFlag(verbose)
 
-  rtf_dat <- data_sources[data_sources$f_year == year, ]
+  rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
   url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename
 

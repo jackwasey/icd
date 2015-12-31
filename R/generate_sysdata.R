@@ -56,7 +56,7 @@ generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = T
   stopifnot(all(icd9EShortReal %in% icd9EShort))
 
   # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
-  data_sources <- data.frame(
+  icd9_sources <- data.frame(
     version = as.character(c(32, 31, 30, 29, 28, 27, 26, 25, 24, 23)),
     f_year = c(as.character(seq(2014, 2005))),
     start_date = c("2014-10-01", "2013-10-01", "2012-10-01", "2011-10-01", "2010-10-01",
@@ -118,8 +118,8 @@ generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = T
   )
 
   # minimal data_source validation
-  long_fns <- data_sources[["long_filename"]]
-  short_fns <- data_sources[["long_filename"]]
+  long_fns <- icd9_sources[["long_filename"]]
+  short_fns <- icd9_sources[["long_filename"]]
   # make.names is stricter than necessary, but no function to sanitize a file
   # name in R, although R CMD check of course can do it...
   message("non-portable long file names: ",
@@ -133,7 +133,7 @@ generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = T
   lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
                "icd9NShortBillable", "icd9VShortBillable", "icd9EShortBillable",
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
-               "data_sources")
+               "icd9_sources")
 
   if (save_data) save(list = lknames, file = path, compress = "xz")
   invisible(mget(lknames))

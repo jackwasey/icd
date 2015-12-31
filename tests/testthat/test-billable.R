@@ -23,7 +23,7 @@ test_that("ICD-9-CM billable codes package data is recreated", {
 
   # we can do this offline if we have all (currently available) versions of the
   # ICD-9-CM code, otherwise we may have to skip
-  lapply(data_sources$version, skip_flat_icd9_avail)
+  lapply(icd9_sources$version, skip_flat_icd9_avail)
 
   check_billable <- parse_leaf_descriptions_all(save_data = FALSE)
   if (Sys.info()[["sysname"]] != "Linux")

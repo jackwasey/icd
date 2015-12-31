@@ -17,8 +17,8 @@
 
 # nocov start
 
-# data_sources is defined in this file and saved in sysdata.rda
-utils::globalVariables(c("data_sources"))
+# icd9_sources is defined in this file and saved in sysdata.rda
+utils::globalVariables(c("icd9_sources"))
 
 parseEverythingAndSave <- function() {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
@@ -86,8 +86,8 @@ parse_leaf_descriptions_all <- function(save_data = FALSE, offline = FALSE) {
   assertFlag(save_data)
   assertFlag(offline)
 
-  # data_sources is in sysdata.RData
-  versions <- data_sources$version
+  # icd9_sources is in sysdata.RData
+  versions <- icd9_sources$version
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
   for (v in versions)
@@ -126,8 +126,8 @@ parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
 
   if (version == "27")
     return(invisible(parse_leaf_desc_icd9cm_v27(offline = offline)))
-  stopifnot(version %in% data_sources$version)
-  dat <- data_sources[data_sources$version == version, ]
+  stopifnot(version %in% icd9_sources$version)
+  dat <- icd9_sources[icd9_sources$version == version, ]
   fn_short_orig <- dat$short_filename
   fn_long_orig <- dat$long_filename
   fn_short <- make.names(fn_short_orig)
@@ -199,7 +199,7 @@ parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
 parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   message("working on version 27 quirk")
   assertFlag(offline)
-  v27_dat <- data_sources[data_sources$version == "27", ]
+  v27_dat <- icd9_sources[icd9_sources$version == "27", ]
   fn_orig <- v27_dat$other_filename
   url <- v27_dat$url
 

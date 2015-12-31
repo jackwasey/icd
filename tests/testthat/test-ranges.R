@@ -465,7 +465,7 @@ test_that("sysdata.rda is okay", {
   lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
                "icd9NShortBillable", "icd9VShortBillable", "icd9EShortBillable",
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
-               "data_sources")
+               "icd9_sources")
 
   expect_error(sysdat <- generate_sysdata(save_data = FALSE), NA)
   expect_equal(names(sysdat), lknames)
