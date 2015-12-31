@@ -125,8 +125,7 @@ parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
   message("Fetching billable codes version: ", version)
 
   if (version == "27")
-    return(invisible(parseIcd9LeafDescriptions27(save_data = save_data,
-                                                 fromWeb = !offline)))
+    return(invisible(parse_leaf_desc_icd9cm_v27(offline = offline)))
   stopifnot(version %in% data_sources$version)
   dat <- data_sources[data_sources$version == version, ]
   fn_short_orig <- dat$short_filename
@@ -197,26 +196,21 @@ parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
   invisible(out)
 }
 
-parseIcd9LeafDescriptions27 <- function(save_data = FALSE, fromWeb = NULL) {
+parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   message("working on version 27 quirk")
-  assertFlag(save_data)
-  assertFlag(fromWeb)
-  v27 <- data_sources$version == "27"
-  fn <- make.names(data_sources[v27, "other_filename"])
-  fp <- file.path("data-raw", fn)
-  url <- data_sources[v27, "url"]
-
-  if (!save_data && !file.exists(fp))
-    fp <- system.file("data-raw", fn, package = get_pkg_name())
+  assertFlag(offline)
+  v27_dat <- data_sources[data_sources$version == "27", ]
+  fn_orig <- v27_dat$other_filename
+  url <- v27_dat$url
 
   message("v27 file name = '", fn,
           "', and path = '", fp,
           "'. URL = ", url)
 
-  if (save_data || fromWeb || !file.exists(fp)) unzip_single(url, fn, fp)
-  unzip_single(url, fn, fp)
-  f <- file(fp, encoding = "latin1")
-  icd9cm_billable27 <- read.csv(fp, stringsAsFactors = FALSE,
+  f27_info <- unzip_to_data_raw(url, fn_orig, offline = offline)
+
+  f <- file(f27_info$file_path, encoding = "latin1")
+  icd9cm_billable27 <- read.csv(f27_info$file_path, stringsAsFactors = FALSE,
                                 colClasses = "character", encoding = "latin1")
   close(f)
   names(icd9cm_billable27) <- c("icd9", "descLong", "descShort")
