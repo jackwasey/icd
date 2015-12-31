@@ -203,7 +203,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   fn_orig <- v27_dat$other_filename
   url <- v27_dat$url
 
-  message("v27 file name = '", fn,
+  message("original v27 file name = '", fn_orig,
           "', and path = '", fp,
           "'. URL = ", url)
 
