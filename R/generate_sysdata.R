@@ -19,11 +19,13 @@
 #'
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
 #' quick, but much too slow when it appears many times in a loop.
-#' @param path default is \code{R/sysdata.rda}
 #' @param save_data whether to save the data.
 #' @return invisibly returns the sysdata as a list
 #' @keywords internal
-generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = TRUE) {
+generate_sysdata <- function(save_data = TRUE) {
+
+  path = file.path("R", "sysdata.rda")
+
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
     icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, defined = FALSE)))
@@ -117,7 +119,7 @@ generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = T
     stringsAsFactors = FALSE
   )
 
-  # minimal data_source validation
+  # minimal data sources validation
   long_fns <- icd9_sources[["long_filename"]]
   short_fns <- icd9_sources[["long_filename"]]
   # make.names is stricter than necessary, but no function to sanitize a file
@@ -135,6 +137,7 @@ generate_sysdata <- function(path = file.path("R", "sysdata.rda"), save_data = T
                "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
                "icd9_sources")
 
-  if (save_data) save(list = lknames, file = path, compress = "xz")
+  if (save_data)
+    save(list = lknames, file = path, compress = "xz")
   invisible(mget(lknames))
 }
