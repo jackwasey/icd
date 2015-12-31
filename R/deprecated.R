@@ -1,4 +1,5 @@
 
+
 # Copyright (C) 2014 - 2015  Jack O. Wasey
 #
 # This file is part of icd9.
@@ -1009,10 +1010,8 @@ generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"),
   .Deprecated("generate_sys")
   if (!missing(verbose))
     warning("verbose is deprecated, always on now for internal package building functions")
-  if (!missing(save))
-    warning("use save_data instead of save")
 
-  generate_sysdata(path = sysdata.path, save_data = save)
+  generate_sysdata(save_data = save)
 }
 
 icd9DropLeadingZeroes <- function(x, isShort) {

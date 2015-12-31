@@ -24,7 +24,10 @@
 #' @keywords internal
 unzip_single <- function(url, file_name, save_path) {
   zipfile <- tempfile()
-  utils::download.file(url = url, destfile = zipfile, quiet = TRUE)
+  # using libcurl because it seems the internal method works inconsistently
+  dl_code <- utils::download.file(url = url, destfile = zipfile,
+                                  quiet = TRUE, method = "libcurl")
+  stopifnot(dl_code == 0)
   zipdir <- tempfile()
   dir.create(zipdir)
   utils::unzip(zipfile, exdir = zipdir)  # files="" so extract all
@@ -62,6 +65,8 @@ unzip_single <- function(url, file_name, save_path) {
 #' @keywords internal
 unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
   assertString(url)
+  if (is.na(file_name))
+    return(NULL)
   assertString(file_name)
   assertFlag(force)
   assertFlag(offline)
@@ -95,13 +100,20 @@ download_to_data_raw <- function(url,
   if (force || !file.exists(save_path))
     if (offline)
       return(NULL)
-  stopifnot(!download.file(url = url, destfile = save_path, quiet = TRUE))
+
+  # using libcurl because it seems the internal method works inconsistently
+  dl_code <- download.file(url = url, destfile = save_path, quiet = TRUE)
+  stopifnot(dl_code == 0)
+
   list(file_path = save_path, file_name = file_name)
 
 }
 
-# so that I can change to another package name when needed.
-# \code{getPackageName} gives globalenv if running interactively.
+#' get name of this package
+#'
+#' so that I can change to another package name when needed.
+#' \code{getPackageName} gives globalenv if running interactively.
+#' @keywords internal
 get_pkg_name <- function() "icd9"
 
 #' Save given variable in package data directory

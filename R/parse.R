@@ -132,11 +132,9 @@ parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
   fn_long_orig <- dat$long_filename
   fn_short <- make.names(fn_short_orig)
   fn_long <- make.names(fn_long_orig)
-  #path_short <- file.path("data-raw", fn_short)
-  #path_long <- file.path("data-raw", fn_long)
 
-  f_info_short <- unzip_to_data_raw(dat$url, file_name = fn_short, offline = offline)
-  f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long, offline = offline)
+  f_info_short <- unzip_to_data_raw(dat$url, file_name = fn_short_orig, offline = offline)
+  f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
 
   message("short filename = ", f_info_short$file_name,
           "\n long filename = ", f_info_long$file_name)
@@ -153,8 +151,8 @@ parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
 
   # longlines may not, and may have more complicated encoding
   if (!is.na(fn_long_orig)) {
-    file_long <- file(f_info_short$file_path, encoding = "latin1")
-    longlines <- readLines(f_info_short$file_path, encoding = "latin1")
+    file_long <- file(f_info_long$file_path, encoding = "latin1")
+    longlines <- readLines(f_info_long$file_path, encoding = "latin1")
     close(file_long)
   } else
     longlines <- NA_character_
