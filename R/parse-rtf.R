@@ -356,7 +356,7 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
   grepl(pattern = "^\\.[[:digit:]]+.*", vals) -> decimal_start
   if (any(decimal_start)) {
     base_code <- vals[1] # assume first is the base
-    stopifnot(icd9IsValidDecimal(base_code))
+    stopifnot(icd_is_valid.icd9(base_code, short_code = FALSE))
     for (dotmnr in vals[-1]) {
       if (verbose)
         message("dotmnr is: ", dotmnr)
@@ -381,7 +381,7 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
     if (grepl("-", v)) {
       v %>%  strsplit("-", fixed = TRUE) %>% unlist -> pair
       # sanity check
-      stopifnot(all(icd9IsValidDecimal(pair)))
+      stopifnot(all(icd_is_valid.icd9(pair, short_code = FALSE)))
       if (verbose)
         message("expanding explicit range ", pair[1], " to ", pair[2])
       # formatting errors can lead to huge range expansions, e.g. "8-679"
@@ -396,8 +396,9 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
       out <- c(out, pair[1] %i9da% pair[2])
     } else {
       # take care of single values
-      if (!icd9IsValidDecimal(v)) stop(paste("invalid code is: ", icd9GetInvalidDecimal(v)))
-      out <- c(out, icd9ChildrenDecimal(v))
+      if (!icd_is_valid.icd9(v, short_code = FALSE))
+        stop(paste("invalid code is: ", icd_get_invalid.icd9(v, short_code = FALSE)))
+      out <- c(out, icd_children.icd9(v, short_code = FALSE))
     }
 
   }

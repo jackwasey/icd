@@ -101,18 +101,19 @@ context("possibly online rtf tests")
 
 test_year = "2011"
 
-skip_on_no_rtf(test_year) # local test function
+if (rtf_year_ok(test_year)) {
+  rtf_dat <- data_sources[data_sources$f_year == test_year, ]
+  f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
+                                    file_name = rtf_dat$rtf_filename,
+                                    offline = FALSE)
 
-rtf_dat <- data_sources[data_sources$f_year == test_year, ]
-f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
-                                  file_name = rtf_dat$rtf_filename,
-                                  offline = FALSE)
-
-rtf_lines <- readLines(f_info_short$file_path, warn = FALSE)
-rtf <- parse_rtf_lines(rtf_lines)
-nrtf <- names(rtf)
+  rtf_lines <- readLines(f_info_short$file_path, warn = FALSE)
+  rtf <- parse_rtf_lines(rtf_lines)
+  nrtf <- names(rtf)
+}
 
 test_that("all parsed codes are valid decimals", {
+  skip_on_no_rtf(test_year)
   expect_true(all(icd_is_valid.icd9(nrtf, short_code = FALSE)),
               info = paste("invalid codes are :",
                            paste(icd_get_invalid.icd9(nrtf),
@@ -120,6 +121,7 @@ test_that("all parsed codes are valid decimals", {
 })
 
 test_that("no rtf formatting left in descriptions", {
+  skip_on_no_rtf(test_year)
   expect_false(any(grepl("[\\\\{}]", rtf)),
                info = paste("rtf codes in descriptions:",
                             paste(grep("[\\\\{}]", rtf, value = TRUE))))
@@ -127,12 +129,14 @@ test_that("no rtf formatting left in descriptions", {
 })
 
 test_that("all csv extract codes are in rtf extract", {
+  skip_on_no_rtf(test_year)
   missing_from_rtf <- setdiff(icd_short_to_decimal.icd9(icd9::icd9_hierarchy[["icd9"]]), nrtf)
   expect_equal(length(missing_from_rtf), 0,
                info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
 })
 
 test_that("majors extracted from web page are the same as those from RTF", {
+  skip_on_no_rtf(test_year)
   webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
   work <- swapNamesWithVals(rtf)
   rtfmajors <- work[icd_is_major.icd9(work)]
@@ -167,6 +171,7 @@ test_that("all leaf codes from TXT are in flat file extract", {
 })
 
 test_that("RTF extract has no duplicates", {
+  skip_on_no_rtf(test_year)
   expect_false(anyDuplicated(nrtf) > 0,
                info = paste("first few duplicates: ",
                             paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
@@ -174,12 +179,14 @@ test_that("RTF extract has no duplicates", {
 })
 
 test_that("mid-level descriptions are in RTF extract", {
+  skip_on_no_rtf(test_year)
   expect_equivalent(rtf["611"], "Other disorders of breast")
   expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
   expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
 })
 
 test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
+  skip_on_no_rtf(test_year)
   # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
   expect_false("640.02" %in% nrtf)
   # grep "\[[[:digit:]],.*\]" Dtab12.rtf

@@ -102,10 +102,13 @@ icd9DecimalToShort(codes)
 
 ## Validation of ICD-9 codes
 ```{r validation}
-icd9IsValidDecimal("V10.2")
-icd9IsValidShort(c("099.17", "-1"))
-icd9IsValidDecimal(c("099.17", "-1.1"))
-icd9IsValidShort(c("1", "001", "100", "123456", "003.21"))
+# guess both ICD version (9, but could be 10?), and decimal vs short form
+icd_is_valid("V10.2")
+
+# state we are using short or decimal codes:
+icd_is_valid(c("099.17", "-1"), short_code = TRUE)
+icd_is_valid(c("099.17", "-1.1"), short_code = FALSE)
+icd_is_valid(c("1", "001", "100", "123456", "003.21"), short_code = TRUE)
 ```
 
 Validation forces the package user to provide character format ICD-9 codes. If great care is taken, passing some integers could be valid, but given the high chance of mistakes, and the simplicity of dealing entirely with character input, character or factor is enforced. Furthermore, integer values could never include V or E codes (and all ICD-10 codes have non-numeric characters).
