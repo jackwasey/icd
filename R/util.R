@@ -227,15 +227,15 @@ getNonASCII <- function(x)
 isNonASCII <- function(x)
   is.na(iconv(x, from = "latin1", to = "ASCII"))
 
-utils::globalVariables(c("do_slow_tests", "do_online_tests"))
-
 skip_slow_tests <- function(msg = "skipping slow test") {
-  if (!exists("do_slow_tests") || !do_slow_tests)
+  do_slow_tests <- getOption("icd9.do_slow_tests")
+  if (is.null(do_slow_tests) || !do_slow_tests)
     testthat::skip(msg)
 }
 
 skip_online_tests <- function(msg = "skipping online test") {
-  if (!exists("do_online_tests") || !do_online_tests)
+  do_online_tests <- getOption("icd9.do_online_tests")
+  if (is.null(do_online_tests) || !do_online_tests)
     testthat::skip(msg)
 }
 
@@ -263,6 +263,7 @@ skip_flat_icd9_avail <- function(ver = "31",
   if (is.na(fn_orig))
     fn_orig <- dat$other_filename
 
+  # don't try to download the file, just check it is there:
   f_info_short <- unzip_to_data_raw(dat$url,
                                     file_name = fn_orig,
                                     offline = TRUE)

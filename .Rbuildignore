@@ -7,7 +7,6 @@ configure.ac
 configure.scan
 .cproject
 cran-comments\.md$
-^data-raw$
 .externalToolBuilders
 .*\.gcda$
 .*\.gch$

@@ -15,8 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-if (!exists("do_slow_tests") || !do_slow_tests) message("Will skip slow tests")
-if (!exists("do_online_tests") || !do_online_tests) message("Will skip online tests")
+local({
+  do_slow_tests <- getOption("icd9.do_slow_tests")
+  if (is.null(do_slow_tests) || !do_slow_tests)
+    message("Will skip slow tests")
+
+  do_online_tests <- getOption("icd9.do_online_tests")
+  if (is.null(do_online_tests) || !do_online_tests)
+    message("Will skip online tests")
+})
 
 set.seed(1441)
 n <- 500

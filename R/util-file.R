@@ -71,6 +71,7 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
   assertFlag(force)
   assertFlag(offline)
   stopifnot(!(force & offline))
+
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
   file_path <- file.path(data_raw_path, make.names(file_name))
   if (force || !file.exists(file_path)) {

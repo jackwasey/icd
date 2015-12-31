@@ -19,6 +19,9 @@ context("billable code lists")
 
 test_that("ICD-9-CM billable codes package data is recreated", {
 
+  if (Sys.info()[["sysname"]] != "Linux")
+    skip("Only do encoding problems on Linux.")
+
   skip_slow_tests() # > 30 seconds
 
   # we can do this offline if we have all (currently available) versions of the
@@ -26,8 +29,7 @@ test_that("ICD-9-CM billable codes package data is recreated", {
   lapply(icd9_sources$version, skip_flat_icd9_avail)
 
   check_billable <- parse_leaf_descriptions_all(save_data = FALSE)
-  if (Sys.info()[["sysname"]] != "Linux")
-    skip("Only do encoding problems on Linux.")
+
   for (ver in c("27", "28", "29", "30", "31", "32")) {
     v <- icd9::icd9cm_billable[[ver]][["descLong"]]
     cb <- check_billable[[ver]][["descLong"]]
@@ -46,7 +48,6 @@ test_that("billable codes for expected versions exist", {
 })
 
 test_that("billable codes are all in order", {
-  skip_on_cran()
   for (v in names(icd9cm_billable)) {
     i <- icd9::icd9cm_billable[[v]][["icd9"]]
     expect_identical(i, icd_sort.icd9(i, short_code = TRUE),

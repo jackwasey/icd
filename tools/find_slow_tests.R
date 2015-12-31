@@ -3,8 +3,8 @@ library(testthat)
 library(devtools)
 load_all()
 
-do_slow_tests = TRUE
-do_online_tests = FALSE
+options("icd9.do_slow_tests" = TRUE)
+options("icd9.do_online_tests" = FALSE)
 test_all_res <- test_package(package = "icd9", reporter = "list")
 as.data.frame(test_all_res) -> resdf
 tail(resdf[order(resdf$user), ])
