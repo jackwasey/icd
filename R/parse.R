@@ -83,10 +83,6 @@ parseAndSaveQuick <- function() {
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
 parse_leaf_descriptions_all <- function(save_data = FALSE, offline = FALSE) {
-  if (!missing(save)) {
-    warning("use save_data instead of save")
-    save_data <- save
-  }
   assertFlag(save_data)
   assertFlag(offline)
 
