@@ -142,8 +142,8 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
     else {
       expect_error(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal), NA)
       expect_error(quanDeyo <- lapply(quanDeyoComorbid, icd9CondenseShort, onlyReal), NA)
-      expect_that(quanElix <- lapply(quanElixComorbid, icd9CondenseShort, onlyReal), NA)
-      expect_that(elix <- lapply(elixComorbid, icd9CondenseShort, onlyReal), NA)
+      expect_error(quanElix <- lapply(quanElixComorbid, icd9CondenseShort, onlyReal), NA)
+      expect_error(elix <- lapply(elixComorbid, icd9CondenseShort, onlyReal), NA)
     }
 
     expect_is(ahrq, class = "list")
