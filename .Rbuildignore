@@ -1,8 +1,6 @@
 aclocal.m4
 autom4te.cache
 .*_cache.*
-ccs_multi_dx_tool_2013\.csv
-CMS.*DESC.*
 config.log
 config.status
 configure.ac
@@ -16,8 +14,6 @@ cran-comments\.md$
 .*\.gcno$
 .*\.gcov$
 .git/.*
-I9diagnos.*\.txt
-I9DX_DESC\.txt
 data\/icd10_who.*
 data-raw\/icd10cdc.txt
 icd9.aux
@@ -39,14 +35,10 @@ man-roxygen
 ^.*\.rprof.*$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-.*\.rtf
 .settings
 src\/autom4te.cache
 .*standalone.*
 todo
 tools$
 \.travis\.yml$
-V26 I-9 Diagnosis.txt
-V26\.I\.9\.Diagnosis.txt
-V27LONG_SHORT_DX.*\.csv
 wercker.yml
