@@ -204,7 +204,6 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   url <- v27_dat$url
 
   message("original v27 file name = '", fn_orig,
-          "', and path = '", fp,
           "'. URL = ", url)
 
   f27_info <- unzip_to_data_raw(url, fn_orig, offline = offline)
