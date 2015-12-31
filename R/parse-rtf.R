@@ -235,7 +235,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
     grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
     str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
-  range <- c("V30" %i9da% "V37", icd9ChildrenDecimal("V39"))
+  range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
   names(range) <- range
   for (fifth in names(suffices_V30V39)) {
@@ -269,8 +269,9 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
 
   # apply fourth digit qualifiers
   for (f in names(lookup_fourth)) {
-    if (verbose) message("applying fourth digits to: ", f)
-    parent_code <- icd9GetMajor(f, isShort = FALSE)
+    if (verbose)
+      message("applying fourth digits to: ", f)
+    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
     if (parent_code %in% names(out)) {
       out <- c(out, lookup_fourth[f])
       out[f] <- paste(out[parent_code], lookup_fourth[f], sep = ", ")
@@ -363,14 +364,14 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
       if (grepl("-", dotmnr)) {
         # range of minors
         strsplit(dotmnr, "-", fixed = TRUE) %>% unlist -> pair
-        first <- paste0(icd9GetMajor(base_code, isShort = FALSE), pair[1])
-        last <- paste0(icd9GetMajor(base_code, isShort = FALSE), pair[2])
+        first <- paste0(icd_get_major.icd9(base_code, short_code = FALSE), pair[1])
+        last <- paste0(icd_get_major.icd9(base_code, short_code = FALSE), pair[2])
         if (verbose)
           message("expanding specified minor range from ", first, " to ", last)
         out <- c(out, first %i9da% last)
       } else {
-        single <- paste0(icd9GetMajor(base_code, isShort = FALSE), dotmnr)
-        out <- c(out, icd9ChildrenDecimal(single, onlyReal = FALSE))
+        single <- paste0(icd_get_major.icd9(base_code, short_code = FALSE), dotmnr)
+        out <- c(out, icd_children.icd9(single, short_code = FALSE, real = FALSE))
       }
     }
     vals <- vals[1] # still need to process the base code

@@ -388,3 +388,14 @@ icd_deprecated <- function(...) {
     .Deprecated(...)
 
 }
+
+get_path_data_raw <- function() {
+  # this is very annoying. Can't do wercker or travis testing with data in
+  # icd9/data-raw because it is not included in the installation, although it
+  # does remain in the source package. Therefore, Have to put it in icd9/inst
+  # after all. Function to get the directory so this is potentially fixable in
+  # the future. I don't want to distribute all the raw data.
+
+  system.file("data-raw", package = get_pkg_name())
+
+}

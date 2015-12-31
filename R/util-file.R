@@ -25,8 +25,12 @@
 unzip_single <- function(url, file_name, save_path) {
   zipfile <- tempfile()
   # using libcurl because it seems the internal method works inconsistently
+  if (capabilities("libcurl"))
+    method = "libcurl"
+  else
+    method = "auto"
   dl_code <- utils::download.file(url = url, destfile = zipfile,
-                                  quiet = TRUE, method = "libcurl")
+                                  quiet = TRUE, method = method)
   stopifnot(dl_code == 0)
   zipdir <- tempfile()
   dir.create(zipdir)
@@ -103,7 +107,12 @@ download_to_data_raw <- function(url,
       return(NULL)
 
   # using libcurl because it seems the internal method works inconsistently
-  dl_code <- download.file(url = url, destfile = save_path, quiet = TRUE)
+  if (capabilities("libcurl"))
+    method = "libcurl"
+  else
+    method = "auto"
+  dl_code <- download.file(url = url, destfile = save_path,
+                           quiet = TRUE, method = method)
   stopifnot(dl_code == 0)
 
   list(file_path = save_path, file_name = file_name)

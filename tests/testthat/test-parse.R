@@ -32,8 +32,6 @@ test_that("multiple lines in one fifth digit disciminator", {
                  "\\par \\hich\\af1\\dbch\\af31505\\loch\\f1 lymphogranulomatosis"
   )
 
-
-
 })
 
 test_that("bookmark ends only", {
