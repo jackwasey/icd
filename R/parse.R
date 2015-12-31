@@ -49,7 +49,7 @@ parseAndSaveQuick <- function() {
   message("Parsing plain text billable codes to create icd9cm_billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
-  parseLeafDescriptionsAll(save_data = TRUE)
+  parse_leaf_descriptions_all(save_data = TRUE)
   devtools::load_data(pkg = ".")
 
   message("Parsing comorbidity mappings from SAS and text sources.
@@ -130,8 +130,6 @@ parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
   dat <- icd9_sources[icd9_sources$version == version, ]
   fn_short_orig <- dat$short_filename
   fn_long_orig <- dat$long_filename
-  fn_short <- make.names(fn_short_orig)
-  fn_long <- make.names(fn_long_orig)
 
   f_info_short <- unzip_to_data_raw(dat$url, file_name = fn_short_orig, offline = offline)
   f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)

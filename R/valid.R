@@ -291,11 +291,13 @@ icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 #' @title Get invalid ICD codes
 #' @description Returns subset of codes which are not in valid short_code or decimal format.
 #' @export
-icd_get_invalid <- function(...)
+icd_get_invalid <- function(...) {
   UseMethod("icd_get_invalid")
+}
 
 #' @describeIn icd_get_invalid Default method when ICD version or short versus
 #'   decimal not known.
+#' @export
 #' @keywords internal
 icd_get_invalid.default <- function(x, short_code = NULL, ...) {
   # both <- icd_guess_both(x, short_code = short_code)
