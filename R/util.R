@@ -327,6 +327,10 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   f
 }
 
+`%fin%` <- function(x, table) {
+  fastmatch::fmatch(x, table, nomatch = 0L) > 0L
+}
+
 #' @title sort short-form icd9 codes
 #' @description Sorts lists of numeric only, V or E codes. Note that a simple
 #'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
@@ -365,6 +369,7 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
 
 icd9_order_short <- function(x) {
   y <- x[order(icd9_add_leading_zeroes.icd_short_code(x))]
+  #fastmatch::fmatch(
   match(
     y[c(which(icd9_is_n(y)), which(icd9_is_v(y)), which(icd9_is_e(y)))],
     x)

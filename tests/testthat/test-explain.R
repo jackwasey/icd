@@ -241,7 +241,7 @@ test_that("explain icd9GetChapters simple input", {
   chaps1 <- icd9_get_chapters(c("410", "411", "412"), short_code = TRUE)
   expect_equal(nrow(chaps1), 3)
 
-  chaps2 <- icd9GetChapters("418", isShort = TRUE)
+  chaps2 <- icd9_get_chapters("418", short_code = TRUE)
   expect_is(chaps2, "data.frame")
   expect_is(chaps2$threedigit, "factor")
   expect_is(chaps2$major, "factor")
@@ -252,7 +252,7 @@ test_that("explain icd9GetChapters simple input", {
   expect_equal(asCharacterNoWarn(chaps2$subchapter), NA_character_)
   expect_equal(asCharacterNoWarn(chaps2$chapter), NA_character_)
 
-  chaps3 <- icd9GetChapters("417", isShort = FALSE)
+  chaps3 <- icd9_get_chapters("417", short_code = FALSE)
   expect_equal(asCharacterNoWarn(chaps3$threedigit), "417")
   expect_equal(asCharacterNoWarn(chaps3$major),
                "Other diseases of pulmonary circulation")
@@ -261,11 +261,11 @@ test_that("explain icd9GetChapters simple input", {
   expect_equal(asCharacterNoWarn(chaps3$chapter),
                "Diseases Of The Circulatory System")
 
-  chaps4 <- icd9GetChapters("417", isShort = TRUE)
-  chaps5 <- icd9GetChapters("417.1", isShort = FALSE)
-  chaps6 <- icd9GetChapters("4171", isShort = TRUE)
-  chaps7 <- icd9GetChapters("417.1", isShort = FALSE)
-  chaps8 <- icd9GetChapters("4171", isShort = TRUE)
+  chaps4 <- icd9_get_chapters("417", short_code = TRUE)
+  chaps5 <- icd9_get_chapters("417.1", short_code = FALSE)
+  chaps6 <- icd9_get_chapters("4171", short_code = TRUE)
+  chaps7 <- icd9_get_chapters("417.1", short_code = FALSE)
+  chaps8 <- icd9_get_chapters("4171", short_code = TRUE)
   expect_equal(chaps3, chaps4)
   expect_equal(chaps3, chaps5)
   expect_equal(chaps3, chaps6)

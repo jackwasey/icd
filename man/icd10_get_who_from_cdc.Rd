@@ -12,7 +12,8 @@ Get ICD-10 (not ICD-10-CM) as published by CDC
 \details{
 There is no copyright notice, and, as I understand it, by default US
   government publications are public domain
-  ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/
+  ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/ and thus
+  this or derivative data can be included in the package distribution
 }
 \keyword{internal}
 

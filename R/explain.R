@@ -85,7 +85,7 @@ icd_explain.icd9 <- function(...)
 #' @describeIn icd_explain explain character vector of ICD-9-CM codes
 #' @export
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
-                                  condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assertCharacter(x)
   assertFlag(short_code)
   assertFlag(condense)
@@ -133,20 +133,21 @@ icd_explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
 #'   respective chapters, sub-chapters, etc.. The querying of the web page to
 #'   get these is already done, and the results saved in the lists
 #'   \code{icd9Chapters} etc which define ranges.
-#' @template icd9-any
+#' @param x vector of ICD-9 codes
 #' @template short_code
 #' @template verbose
 #' @keywords internal
-icd9_get_chapters <- function(icd9, short_code = icd_guess_short.icd9(icd9), verbose = FALSE) {
+icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9), verbose = FALSE) {
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
   assertFlag(short_code)
-  assert(checkFactor(icd9), checkCharacter(icd9))
-  icd9 <- asCharacterNoWarn(icd9)
+  assert(checkFactor(x), checkCharacter(x))
+  icd9 <- asCharacterNoWarn(x)
   majors <- icd_get_major.icd9(icd9, short_code)
 
+  # could consider factor_nosort, but this isn't the main bottleneck
   cf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9Chapters), NA_character_))
   sf <- factor(rep(NA, length(icd9)),
@@ -157,23 +158,26 @@ icd9_get_chapters <- function(icd9, short_code = icd_guess_short.icd9(icd9), ver
   thrdgt <- factor(rep(NA, length(icd9)), levels = c(allmjrs, NA_character_))
   out <- data.frame(threedigit = thrdgt, major = mf,
                     subchapter = sf, chapter = cf)
+
+  chap_lookup <- lapply(icd9::icd9Chapters, function(y)
+    icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
+
+  subchap_lookup <- lapply(icd9::icd9ChaptersSub, function(y)
+    icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
+
+
   for (i in 1:length(majors)) {
-    if (verbose) message("working on major: ", majors[i])
-    for (chap in names(icd9::icd9Chapters)) {
-      if (any(majors[i] %in%
-              (icd9::icd9Chapters[[chap]]["start"] %i9mj%
-               icd9::icd9Chapters[[chap]]["end"])
-      )) {
-        out[i, "chapter"] <- chap
+    if (verbose)
+      message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
+    for (chap_num in 1:length(icd9::icd9Chapters)) {
+      if (majors[i] %fin% chap_lookup[[chap_num]]) {
+        out[i, "chapter"] <- names(icd9::icd9Chapters)[chap_num]
         break
       }
     }
-    for (subchap in names(icd9::icd9ChaptersSub)) {
-      if (any(majors[i] %in%
-              (icd9::icd9ChaptersSub[[subchap]]["start"] %i9mj%
-               icd9::icd9ChaptersSub[[subchap]]["end"])
-      )) {
-        out[i, "subchapter"] <- subchap
+    for (subchap_num in 1:length(icd9::icd9ChaptersSub)) {
+      if (majors[i] %fin% subchap_lookup[[subchap_num]]) {
+        out[i, "subchapter"] <- names(icd9::icd9ChaptersSub)[subchap_num]
         break
       }
     }
@@ -187,4 +191,18 @@ icd9_get_chapters <- function(icd9, short_code = icd_guess_short.icd9(icd9), ver
   out$chapter[is.na(out$major)] <- NA_character_
 
   out
+}
+
+icd9_expand_chapter_majors <- function(chap) {
+  icd_expand_range_major.icd9(
+    icd9::icd9Chapters[[chap]]["start"],
+    icd9::icd9Chapters[[chap]]["end"],
+    defined = FALSE)
+}
+
+icd9_expand_subchapter_majors <- function(subchap) {
+  icd_expand_range_major.icd9(
+    icd9::icd9ChaptersSub[[subchap]]["start"],
+    icd9::icd9ChaptersSub[[subchap]]["end"],
+    defined = FALSE)
 }

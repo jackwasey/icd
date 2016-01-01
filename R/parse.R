@@ -20,27 +20,21 @@
 # icd9_sources is defined in this file and saved in sysdata.rda
 utils::globalVariables(c("icd9_sources"))
 
-parseEverythingAndSave <- function() {
+#' @title generate all package data
+#' @description Parses (and downloads if necessary) CDC annual revisions of
+#'   ICD-9-CM to get the 'billable' codes. Also parses the AHRQ and Quan/Deyo
+#'   comorbidity mappings from the source SAS data. Elixhauser and
+#'   Quan/Elixhauser mappings are generated from transcribed codes.
+#' @keywords internal
+generate_everything <- function() {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from
   # development tree, not as installed package
   loadNamespace("devtools")
   generate_sysdata()
-  devtools::load_data(pkg = ".") # reload the newly saved data
-  parseAndSaveQuick()
-  devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9_generate_chapters_hierarchy(save_data = TRUE) # depends on icd9cm_billable
 
-}
-
-#' @title parse quickly parsable source data
-#' @description Parses (and downloads if necessary) CDC annual revisions of
-#'   ICD-9-CM to get the 'billable' codes. Also parses the AHRQ and Quan/Deyo
-#'   comorbidity mappings from the source SAS data. Elixhauser and
-#'   Quan/Elixhauser mappins are generated from transcribed codes.
-#' @keywords internal
-parseAndSaveQuick <- function() {
+  devtools::load_data(pkg = ".") # reload the newly saved data
   loadNamespace("devtools")
   message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
   devtools::load_data(pkg = ".")
@@ -59,6 +53,9 @@ parseAndSaveQuick <- function() {
   parse_quan_deyo_sas(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
+  devtools::load_data(pkg = ".") # reload the newly saved data
+  icd9_generate_chapters_hierarchy(save_data = TRUE) # depends on icd9cm_billable
+
 }
 # nocov end
 
@@ -214,117 +211,6 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   invisible(icd9cm_billable27[reorder, ])
 }
 
-#' @title Read higher-level ICD-9 structure from a reliable web site
-#' @description This is rather slow, queries a web page repeatedly, which is
-#'   both non-reproducible, and perhaps bad form. Aim to deprecate and replace
-#'   with my own RTF parsing of canonical documents, which is now working
-#'   reasonably well, at least for 'major' codes from 2015.
-#' @details This is not almost obsolete. The only remaining use is the chapter
-#'   and sub-chapter names and ranges, or validation.
-#' @keywords internal
-parseIcd9Chapters <- function(year = "2014",
-                              save_data = FALSE, save = NULL) {
-  if (!missing(save)) {
-    warning("use save_data instead of save")
-    save_data <- save
-  }
-
-  .Deprecated("parse_rtf_lines",
-              msg = "This function is replaced by the RTF parsing functions")
-  assertFlag(save_data)
-  # version 23 dates back to 2005, but I don't have access on web for versions
-  # before 23. Where are these?
-  # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
-  assertIntegerish(year, lower = 2005, upper = 2015,
-                   any.missing = FALSE, len = 1)
-  year <- as.character(year)
-
-  if (save_data && format(Sys.time(), "%Y") != year)
-    warning(sprintf("Getting ICD-9 data for %s which is not the current year.
-                    Tests were written to validate extraction of 2014 data.", year))
-
-  # if either XML or memoise are not installed, an error will be given by R
-  memReadHtmlList <- memoise::memoise(XML::readHTMLList)
-
-  icd9Chapters <- icd9WebParseGetList(year, memfun = memReadHtmlList)
-  icd9ChaptersSub <- list()
-  icd9ChaptersMajor <- list()
-  for (chap in names(icd9Chapters)) {
-    if (chap == "Diseases Of The Blood And Blood-Forming Organs" ||
-        chap == "Congenital Anomalies") {
-      # these have no subchapter, straight into the three-digit codes
-      icd9ChaptersMajor <- c(icd9ChaptersMajor,
-                             icd9WebParseGetList(year, memfun = memReadHtmlList,
-                                                 icd9Chapters[[chap]]))
-    } else {
-      # construct URL for next level and get the sub chapters
-      subchaps <- icd9WebParseGetList(year, memReadHtmlList, icd9Chapters[[chap]])
-      icd9ChaptersSub <- c(icd9ChaptersSub, subchaps)
-      # loop through each subchapter to get the majors:
-      for (subchap in names(subchaps)) {
-        icd9ChaptersMajor <- c(icd9ChaptersMajor,
-                               icd9WebParseGetList(year, memfun = memReadHtmlList,
-                                                   icd9Chapters[[chap]],
-                                                   icd9ChaptersSub[[subchap]]))
-      }
-    }
-  }
-  # there are multiple use-cases to be served here. One is to look up an ICD-9
-  # from the CMS list, and find the higher level groups it belongs to. Another
-  # is to do the same for an arbitrary code. One approach would be to construct
-  # a data frame with a row for each known code, and a factor for each hierarchy
-  # level: this would not enable matching an arbitrary code, but this is
-  # probably a limited problem for the rare cases of obsolete codes, or new
-  # codes, when the coding was done in a different year from this analysis.
-
-  # nocov start
-  if (save_data) {
-    # top level chapters are hand-written in data/
-    save_in_data_dir("icd9ChaptersSub")
-    save_in_data_dir("icd9ChaptersMajor")
-  }
-  invisible(list(icd9Chapters = icd9Chapters,
-                 icd9ChaptersSub = icd9ChaptersSub,
-                 icd9ChaptersMajor = icd9ChaptersMajor))
-}
-# nocov end
-
-icd9WebParseStartEndToRange <- function(v)
-  paste(v[["start"]], v[["end"]], sep = "-")
-
-icd9WebParseGetList <- function(year, memfun, chapter = NULL, subchap = NULL) {
-  icd9url <- NULL
-  if (is.null(chapter)) {
-    icd9url <- sprintf("http://www.icd9data.com/%s/Volume1/default.htm", year)
-  } else {
-    chapter <- icd9WebParseStartEndToRange(chapter)
-    if (is.null(subchap)) {
-      icd9url <- sprintf("http://www.icd9data.com/%s/Volume1/%s/default.htm",
-                         year, chapter)
-    } else {
-      subchap <- icd9WebParseStartEndToRange(subchap)
-      icd9url <- sprintf("http://www.icd9data.com/%s/Volume1/%s/%s/default.htm",
-                         year, chapter, subchap)
-    }
-  }
-  li <-  memfun(doc = icd9url, which = 1)
-  # swap so descriptions (second on web page) become the vector names
-  v <- str_pair_match(li, "^([VvEe0-9-]*)[[:space:]]*(.*)$", swap = TRUE)
-  lapply(v,
-         FUN = function(x) {
-           x %>% str_match_all(pattern = "^([VvEe0-9]+)-?([VvEe0-9]+)?$") %>%
-             lapply(`[`, c(2,3)) %>% unlist -> y
-           if (length(y) != 2)
-             stop("y should be length 2, when processing ", x)
-           names(y) <- c("start", "end")
-           #y <- y[-2]
-           if (y[["end"]] == "")
-             names(y) <- "major"
-           y
-         }
-  )
-}
-
 #' generate ICD-9-CM hierarchy
 #'
 #' For each row of billing code, give the chapter, sub-chapter, major code and
@@ -336,8 +222,9 @@ icd9_generate_chapters_hierarchy <- function(save_data = FALSE) {
 
   icd9Desc <- parse_rtf_year(year = "2011", save_data = FALSE, verbose = TRUE)
 
-  message("working on slow step of web scrape to build icd9 Chapters Hierarchy.")
-  chaps <- icd9GetChapters(icd9 = icd9Desc$icd9, isShort = TRUE, verbose = FALSE)
+  message("working on slow step of building icd9 chapters hierarchy.")
+  chaps <- icd9_get_chapters(x = icd9Desc$icd9,
+                             short_code = TRUE, verbose = TRUE)
 
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs

@@ -1,11 +1,35 @@
+# Copyright (C) 2014 - 2016  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
+# try parsing the RTF, and therefore get subheadings, as well as billable codes.
+# ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/
+#
+# see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
+# approach in python
 
 #' Get ICD-10 (not ICD-10-CM) as published by CDC
 #'
 #' @details There is no copyright notice, and, as I understand it, by default US
 #'   government publications are public domain
-#'   ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/
+#'   ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/ and thus
+#'   this or derivative data can be included in the package distribution
 #' @keywords internal
 icd10_get_who_from_cdc <- function() {
+  # beware, not all download.file methods can handle %20 etc in URLs correctly.
   url <- "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/allvalid2011%20%28detailed%20titles%20headings%29.txt"
   file_path <- download_to_data_raw(url = url)$file_path
 

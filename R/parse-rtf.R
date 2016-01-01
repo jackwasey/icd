@@ -47,7 +47,6 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
   assertFlag(verbose)
 
   rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
-  url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename
 
   f_info_rtf <- unzip_to_data_raw(rtf_dat$url, file_name = fn, offline = offline)
@@ -69,9 +68,11 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
 
   # make Tidy data: don't like using row names to store things
   icd9Desc <- data.frame(
-    icd9  = out %>% unname %>% icd9DecimalToShort,
+    icd9  = out %>% unname %>% icd_decimal_to_short.icd9,
     desc = names(out),
     stringsAsFactors = FALSE)
+
+  # TODO: save the data with year in name
   if (save_data)
     save_in_data_dir("icd9Desc")
   invisible(icd9Desc)
@@ -101,6 +102,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   # all non-par lines
   if (verbose)
     message("joining lines split on par")
+
   for (i in rev(non_par_lines)) {
     filtered[i - 1] <- paste(filtered[i - 1], filtered[i], sep = "")
   }
@@ -267,29 +269,44 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   re_code_desc <- paste0("^(", re_anycode, ") +([ \"[:graph:]]+)")
   out <- str_pair_match(filtered, re_code_desc, pos = c(1, 6))
 
+  out_fourth <- c()
   # apply fourth digit qualifiers
-  for (f in names(lookup_fourth)) {
+  for (f_num in seq_along(lookup_fourth)) {
     if (verbose)
-      message("applying fourth digits to: ", f)
+      message("applying fourth digits to lookup row: ", f_num)
+    lf <- lookup_fourth[f_num]
+    f <- names(lf)
     parent_code <- icd_get_major.icd9(f, short_code = FALSE)
-    if (parent_code %in% names(out)) {
-      out <- c(out, lookup_fourth[f])
-      out[f] <- paste(out[parent_code], lookup_fourth[f], sep = ", ")
+    if (parent_code %fin% names(out)) {
+      pair_fourth <- paste(out[parent_code], lookup_fourth[f_num], sep = ", ")
+      names(pair_fourth) <- f
+      out_fourth <- append(out_fourth, pair_fourth)
     }
   }
+  out <- append(out, out_fourth)
 
+  out_fifth <- c()
   # apply fifth digit qualifiers:
-  for (f in names(lookup_fifth)) {
-    if (verbose) message("applying fifth digits to: ", f)
+  for (f_num in seq_along(lookup_fifth)) {
+    if (verbose)
+      message("applying fifth digits to lookup row: ", f_num)
+    lf <- lookup_fifth[f_num]
+    f <- names(lf)
     parent_code <- substr(f, 0, nchar(f) - 1)
 
-    if (parent_code %in% names(out)) {
+    # repeated lookup in same table, so can benefit from fast match %fin%
+    # instead of %in%
+    if (parent_code %fin% names(out)) {
       # add just the suffix with name being the five digit code
-      out <- c(out, lookup_fifth[f])
-      # then update to have the parent code in description
-      out[f] <- paste(out[parent_code], lookup_fifth[f], sep = ", ")
+      #pair_fifth <- lookup_fifth[f_num] # get the name only?
+      pair_fifth <- paste(out[parent_code], lf, sep = ", ")
+      names(pair_fifth) <- f
+      out_fifth <- append(out_fifth, pair_fifth)
+    } else {
+      warning("parent code ", parent_code, " missing when looking up ", f)
     }
   }
+  out <- append(out, out_fifth)
 
   # clean up duplicates (about 350 in 2015 data), mostly one very brief
   # description and a correct longer one; or, identical descriptions
@@ -434,7 +451,7 @@ parseRtfQualifierSubset <- function(qual) {
 #' space and eradicate all other RTF symbols
 #' @param x vector of character strings containing RTF
 #' @keywords internal
-strip_rtf <- function(x) {
+strip_rtf_orig <- function(x) {
   x %>%
     # just for \tab, replace with space, otherwise, drop rtf tags entirely
     # nolint start
@@ -451,3 +468,22 @@ strip_rtf <- function(x) {
     trim
   # nolint end
 }
+
+str_strip_rtf <- function(x) {
+  x %>%
+    # just for \tab, replace with space, otherwise, drop rtf tags entirely
+    # nolint start
+    str_replace_all("\\\\tab ", " ") %>%
+    str_replace_all("\\\\[[:punct:]]", "") %>% # control symbols only, not control words
+    str_replace_all("\\\\lsdlocked[ [:alnum:]]*;", "") %>% # special case, still needed?
+    #gsub("\\\\[-[:alnum:]]+[ ;:,.]?", "", .) %>%
+    str_replace_all("\\{\\\\bkmkstart.*?\\}", "") %>%
+    str_replace_all("\\{\\\\bkmkend.*?\\}", "") %>%
+    #gsub("\\\\[[:alnum:]]*[ [:punct:]]", "", .) %>%
+    ## no backslash in this next list, others removed from http://www.regular-expressions.info/posixbrackets.html
+    str_replace_all("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "") %>%
+    str_replace_all(" *(\\}|\\{)", "") %>%
+    str_trim
+}
+
+strip_rtf <- str_strip_rtf

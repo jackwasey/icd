@@ -7,17 +7,13 @@
 \usage{
 icd9GetChapters(icd9, isShort = icd_guess_short(icd9), verbose = FALSE)
 
-icd9_get_chapters(icd9, short_code = icd_guess_short.icd9(icd9),
+icd9_get_chapters(x, short_code = icd_guess_short.icd9(icd9),
   verbose = FALSE)
 }
 \arguments{
-\item{icd9}{is
-a character vector or factor of ICD-9 codes. If fewer than five characters
-is given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010".}
-
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
+
+\item{x}{vector of ICD-9 codes}
 
 \item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this

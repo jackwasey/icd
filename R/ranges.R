@@ -308,10 +308,10 @@ icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
   d <- icd_extract_alpha_numeric(end)
   # cannot range between numeric, V and E codes, so ensure same type.
   stopifnot(toupper(c[1]) == toupper(d[1]))
-  if (icd9IsV(start)) fmt <- "%02d" else fmt <- "%03d"
+  fmt <- if (icd9_is_v(start)) "%02d" else "%03d"
   majors <- paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
   if (defined)
-    icd_get_defined(majors, short_code = TRUE, billable = FALSE)
+    icd_get_defined.icd9(majors, short_code = TRUE, billable = FALSE)
   else
     majors
 }
