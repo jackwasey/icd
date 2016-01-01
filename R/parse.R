@@ -54,7 +54,7 @@ generate_everything <- function() {
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
   devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9_generate_chapters_hierarchy(save_data = TRUE) # depends on icd9cm_billable
+  icd9_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
 
 }
 # nocov end
@@ -217,14 +217,14 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
 #' description, and short and long descriptions. Currently this is specifically
 #' for the 2011 ICD-9-CM after which there have been minimal changes.
 #' @keywords internal
-icd9_generate_chapters_hierarchy <- function(save_data = FALSE) {
+icd9_generate_chapters_hierarchy <- function(save_data = FALSE, verbose = FALSE) {
   assertFlag(save_data)
 
-  icd9Desc <- parse_rtf_year(year = "2011", save_data = FALSE, verbose = TRUE)
+  icd9Desc <- parse_rtf_year(year = "2011", save_data = FALSE, verbose = verbose)
 
   message("working on slow step of building icd9 chapters hierarchy.")
   chaps <- icd9_get_chapters(x = icd9Desc$icd9,
-                             short_code = TRUE, verbose = TRUE)
+                             short_code = TRUE, verbose = verbose)
 
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs
@@ -248,8 +248,8 @@ icd9_generate_chapters_hierarchy <- function(save_data = FALSE) {
 
   bill32 <- icd9::icd9cm_billable[["32"]]
 
-  billable_codes <- icd9GetBillableShort(icd9_hierarchy$icd9) # or from bill32
-  billable_rows <- which(icd9_hierarchy$icd9 %in% billable_codes)
+  billable_codes <- icd_get_billable.icd9(icd9_hierarchy$icd9, short_code = TRUE) # or from bill32
+  billable_rows <- which(icd9_hierarchy$icd9 %fin% billable_codes)
   title_rows <- which(icd9_hierarchy$icd9 %nin% billable_codes)
   icd9_hierarchy[billable_rows, "descShort"] <- bill32$descShort
   # for rows without a short description (i.e. titles, non-billable),
@@ -265,7 +265,7 @@ icd9_generate_chapters_hierarchy <- function(save_data = FALSE) {
                                      "major", "subchapter", "chapter")]
 
   # quick sanity checks - full tests in test-parse.R
-  stopifnot(all(icd9IsValidShort(icd9_hierarchy$icd9)))
+  stopifnot(all(icd_is_valid.icd9(icd9_hierarchy$icd9, short_code = TRUE)))
   stopifnot(!any(sapply(icd9_hierarchy, is.na)))
 
   if (save_data)

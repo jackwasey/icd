@@ -17,6 +17,13 @@
 
 library("icd9")
 library("testthat")
+
+# to run all tests:
+if (FALSE) {
+  options("icd9.do_slow_tests" = TRUE)
+  options("icd9.do_online_tests" = TRUE)
+}
+
 if (is.null(options("icd9.do_slow_tests")))
   options("icd9.do_slow_tests" = FALSE)
 if (is.null(options("icd9.do_online_tests")))

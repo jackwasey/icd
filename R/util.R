@@ -51,8 +51,9 @@ asCharacterNoWarn <- function(x) {
   as.character(x)
 }
 
-"%nin%" <- function(x, table)
+"%nin%" <- function(x, table) {
   match(x, table, nomatch = 0) == 0
+}
 
 #' Strip character(s) from character vector
 #'
@@ -329,6 +330,10 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
 
 `%fin%` <- function(x, table) {
   fastmatch::fmatch(x, table, nomatch = 0L) > 0L
+}
+
+`%fnin%` <- function(x, table) {
+  fastmatch::fmatch(x, table, nomatch = 0L) == 0L
 }
 
 #' @title sort short-form icd9 codes
