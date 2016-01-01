@@ -1324,36 +1324,6 @@ RcppExport SEXP icd9_fastIntToStringRcpp(SEXP xSEXP) {
     UNPROTECT(1);
     return __result;
 }
-// callgrindStart
-int callgrindStart(bool zerostats);
-static SEXP icd9_callgrindStart_try(SEXP zerostatsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::traits::input_parameter< bool >::type zerostats(zerostatsSEXP);
-    __result = Rcpp::wrap(callgrindStart(zerostats));
-    return __result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd9_callgrindStart(SEXP zerostatsSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd9_callgrindStart_try(zerostatsSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
 // valgrindCallgrindStart
 int valgrindCallgrindStart(bool zerostats);
 static SEXP icd9_valgrindCallgrindStart_try(SEXP zerostatsSEXP) {
@@ -1369,6 +1339,35 @@ RcppExport SEXP icd9_valgrindCallgrindStart(SEXP zerostatsSEXP) {
     {
         Rcpp::RNGScope __rngScope;
         __result = PROTECT(icd9_valgrindCallgrindStart_try(zerostatsSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// valgrindCallgrindStop
+int valgrindCallgrindStop();
+static SEXP icd9_valgrindCallgrindStop_try() {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    __result = Rcpp::wrap(valgrindCallgrindStop());
+    return __result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd9_valgrindCallgrindStop() {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd9_valgrindCallgrindStop_try());
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1432,8 +1431,8 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("std::vector<std::string>(*icd9RandomShort)(std::vector<std::string>::size_type)");
         signatures.insert("std::vector<std::string>(*fastIntToStringStd)(std::vector<int>)");
         signatures.insert("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector)");
-        signatures.insert("int(*callgrindStart)(bool)");
         signatures.insert("int(*valgrindCallgrindStart)(bool)");
+        signatures.insert("int(*valgrindCallgrindStop)()");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -1483,8 +1482,8 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9RandomShort", (DL_FUNC)icd9_icd9RandomShort_try);
     R_RegisterCCallable("icd9", "icd9_fastIntToStringStd", (DL_FUNC)icd9_fastIntToStringStd_try);
     R_RegisterCCallable("icd9", "icd9_fastIntToStringRcpp", (DL_FUNC)icd9_fastIntToStringRcpp_try);
-    R_RegisterCCallable("icd9", "icd9_callgrindStart", (DL_FUNC)icd9_callgrindStart_try);
     R_RegisterCCallable("icd9", "icd9_valgrindCallgrindStart", (DL_FUNC)icd9_valgrindCallgrindStart_try);
+    R_RegisterCCallable("icd9", "icd9_valgrindCallgrindStop", (DL_FUNC)icd9_valgrindCallgrindStop_try);
     R_RegisterCCallable("icd9", "icd9_RcppExport_validate", (DL_FUNC)icd9_RcppExport_validate);
     return R_NilValue;
 }

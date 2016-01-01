@@ -242,23 +242,6 @@ Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
 }
 
 // [[Rcpp::export]]
-int callgrindStart(bool zerostats = false) {
-#ifdef ICD9_VALGRIND
-#ifdef ICD9_DEBUG
-  Rcpp::Rcout << "Starting callgrind instrumentation...\n";
-#endif
-  CALLGRIND_START_INSTRUMENTATION;
-  if (zerostats) {
-#ifdef ICD9_DEBUG
-    Rcpp::Rcout << "Zeroing callgrind stats.\n";
-#endif
-    CALLGRIND_ZERO_STATS;
-  }
-#endif
-  return 0;
-}
-
-// [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
 #ifdef ICD9_VALGRIND
 #ifdef ICD9_DEBUG
@@ -269,6 +252,18 @@ int valgrindCallgrindStart(bool zerostats = false) {
     Rcpp::Rcout << "Zeroing callgrind stats.\n";
     CALLGRIND_ZERO_STATS;
   }
+#endif
+  return 0;
+}
+
+
+// [[Rcpp::export]]
+int valgrindCallgrindStop() {
+#ifdef ICD9_VALGRIND
+#ifdef ICD9_DEBUG
+  Rcpp::Rcout << "Stopping callgrind instrumentation...\n";
+#endif
+  CALLGRIND_STOP_INSTRUMENTATION;
 #endif
   return 0;
 }

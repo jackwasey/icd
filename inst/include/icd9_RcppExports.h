@@ -841,25 +841,6 @@ namespace icd9 {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline int callgrindStart(bool zerostats = false) {
-        typedef SEXP(*Ptr_callgrindStart)(SEXP);
-        static Ptr_callgrindStart p_callgrindStart = NULL;
-        if (p_callgrindStart == NULL) {
-            validateSignature("int(*callgrindStart)(bool)");
-            p_callgrindStart = (Ptr_callgrindStart)R_GetCCallable("icd9", "icd9_callgrindStart");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_callgrindStart(Rcpp::wrap(zerostats));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<int >(__result);
-    }
-
     inline int valgrindCallgrindStart(bool zerostats = false) {
         typedef SEXP(*Ptr_valgrindCallgrindStart)(SEXP);
         static Ptr_valgrindCallgrindStart p_valgrindCallgrindStart = NULL;
@@ -871,6 +852,25 @@ namespace icd9 {
         {
             RNGScope __rngScope;
             __result = p_valgrindCallgrindStart(Rcpp::wrap(zerostats));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<int >(__result);
+    }
+
+    inline int valgrindCallgrindStop() {
+        typedef SEXP(*Ptr_valgrindCallgrindStop)();
+        static Ptr_valgrindCallgrindStop p_valgrindCallgrindStop = NULL;
+        if (p_valgrindCallgrindStop == NULL) {
+            validateSignature("int(*valgrindCallgrindStop)()");
+            p_valgrindCallgrindStop = (Ptr_valgrindCallgrindStop)R_GetCCallable("icd9", "icd9_valgrindCallgrindStop");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_valgrindCallgrindStop();
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

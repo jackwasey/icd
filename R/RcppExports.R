@@ -271,12 +271,12 @@ fastIntToStringRcpp <- function(x) {
     .Call('icd9_fastIntToStringRcpp', PACKAGE = 'icd9', x)
 }
 
-callgrindStart <- function(zerostats = FALSE) {
-    .Call('icd9_callgrindStart', PACKAGE = 'icd9', zerostats)
-}
-
 valgrindCallgrindStart <- function(zerostats = FALSE) {
     .Call('icd9_valgrindCallgrindStart', PACKAGE = 'icd9', zerostats)
+}
+
+valgrindCallgrindStop <- function() {
+    .Call('icd9_valgrindCallgrindStop', PACKAGE = 'icd9')
 }
 
 # Register entry points for exported C++ functions

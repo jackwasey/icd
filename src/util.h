@@ -29,11 +29,20 @@
 std::string trimLeftCpp(std::string s);
 std::string strimCpp(std::string s);
 
-//#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
 int getOmpCores();
 int getOmpThreads();
 int getOmpMaxThreads();
 void debug_parallel();
-//#endif
+Rcpp::NumericVector randomMajorCpp(int n);
+std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n);
+std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n);
+std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n);
+std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n);
+
+std::vector<std::string> fastIntToStringStd(std::vector<int> x);
+Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x);
+
+int valgrindCallgrindStart(bool zerostats);
+int valgrindCallgrindStop();
 
 #endif /* UTIL_H_ */
