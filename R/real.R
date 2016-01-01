@@ -136,7 +136,7 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
 icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
                                     version = icd9cm_latest_edition(), ...) {
   # guess ICD-9 vs ICD-10 and set class to dispatch again
-  x <- icd_guess_version_update(x)
+  x <- icd_guess_version_update(x) %>% icd_guess_short_update(short_code = short_code)
   icd_is_billable(x)
 }
 
@@ -170,9 +170,19 @@ icd_get_billable <- function(...) {
   UseMethod("icd_get_billable")
 }
 
+#' @export
+#' @keywords internal
+icd_get_billable.default <- function(x, ...) {
+  x %>%
+    icd_guess_version_update %>%
+    icd_guess_short_update %>%
+    icd_get_billable(...)
+}
+
 #' @describeIn icd_get_billable Get billable ICD-9-CM codes
 #' @export
-icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
+#' @keywords internal
+icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
                                     invert = FALSE, version = icd9cm_latest_edition(), ...) {
   assertFlag(short_code)
   assertFlag(invert)
@@ -219,13 +229,13 @@ icd9cm_get_billable <- function(x, short_code = icd_guess_short(x),
 #' @export
 #' @keywords internal
 icd9cm_get_billable.icd_short_code <- function(x, invert = FALSE, version = icd9cm_latest_edition()) {
-  x[icd_is_billable.icd9(x, short_code = TRUE, version = version) != invert]
+  x[icd_is_billable.icd9cm(x, short_code = TRUE, version = version) != invert]
 }
 
 #' @describeIn icd9cm_get_billable Get the billable ICD-9-CM codes from vector of decimal codes
 #' @export
 #' @keywords internal
 icd9cm_get_billable.icd_decimal_code <- function(x, invert = FALSE, version = icd9cm_latest_edition()) {
-  x[icd_is_billable.icd9(x, short_code = FALSE, version = version) != invert]
+  x[icd_is_billable.icd9cm(x, short_code = FALSE, version = version) != invert]
 }
 

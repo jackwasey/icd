@@ -392,10 +392,51 @@ test_that("get real codes which are less than two digit major", {
   expect_equal(icd_get_defined(short_code = FALSE, c("3", "11", "V2"), billable = FALSE), c("3", "11", "V2"))
 })
 
-test_that("illable codes are identified", {
+test_that("billable codes are identified", {
+  # care as this is dependent on year of ICD-9-CM
   expect_true(icd_is_billable("1000"))
   expect_false(icd_is_billable("1008"))
   expect_true(icd_is_billable("1009"))
+
+  expect_true(icd_is_billable(icd9cm("1000")))
+  expect_false(icd_is_billable(icd9cm("1008")))
+  expect_true(icd_is_billable(icd9cm("1009")))
+
+  expect_true(icd9cm_is_billable("410.00"))
+  expect_false(icd9cm_is_billable.icd_short_code("410.00"))
+  expect_true(icd9cm_is_billable.icd_decimal_code("410.00"))
+  expect_false(icd9cm_is_billable("410.6"))
+  expect_false(icd9cm_is_billable("410"))
+  expect_false(icd9cm_is_billable.icd_decimal_code("410"))
+  expect_false(icd9cm_is_billable.icd_short_code("410"))
+
 })
 
-# TODO: more billable function tests
+test_that("get subset of billable codes", {
+  x <- c("410", "410.0", "410.00")
+  expect_equal(icd_get_billable(x), structure("410.00", class = c("icd_decimal_code", "icd9", "character")))
+  expect_equal(icd_get_billable.icd9cm(x) %>% unclass, "410.00")
+  # assume ICD-9 means ICD-9-CM: this may change
+  expect_equal(icd_get_billable.icd9(x) %>% unclass, "410.00")
+})
+
+test_that("get inverted subset of billable codes", {
+  x <- c("410", "410.0", "410.00")
+  expect_equal(icd_get_billable(x, invert = TRUE), structure(c("410", "410.0"), class = c("icd_decimal_code", "icd9", "character")))
+  expect_equal(icd_get_billable.icd9cm(x, invert = TRUE) %>% unclass, c("410", "410.0"))
+  # assume ICD-9 means ICD-9-CM: this may change
+  expect_equal(icd_get_billable.icd9(x, invert = TRUE) %>% unclass, c("410", "410.0"))
+})
+
+test_that("an invalid code is not billable", {
+  expect_false(icd_is_billable("Tukey"))
+  expect_false(icd_is_billable.icd9("Tukey"))
+  expect_false(icd_is_billable.icd9cm("Tukey"))
+})
+
+test_that("an invalid short code is not billable decimal", {
+  expect_false(icd_is_billable("41000", short_code = FALSE))
+  expect_true(icd_is_billable("41000", short_code = TRUE))
+  expect_false(icd_is_billable("410.00", short_code = TRUE))
+  expect_true(icd_is_billable("410.00", short_code = FALSE))
+})

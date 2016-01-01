@@ -129,7 +129,7 @@ Rcpp::NumericVector randomMajorCpp(int	n) {
 std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
-  char buffer[5];
+  char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "%.0f", randoms[i]);
     out[i] = buffer;
