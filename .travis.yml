@@ -4,6 +4,7 @@ sudo: required
 
 warnings_are_errors: false
 
+# seperate lines seems to mean the whole build is repeated each line
 env:
  - R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=true ICD_ONLINE_TESTS=TRUE
 

@@ -79,14 +79,19 @@ icd_stop_classes_disorder <- function(x) {
          which is out of order.")
 }
 
+find_expr <- function(name, env = parent.frame()) {
+  subs <- do.call("substitute", list(as.name(name), env))
+  paste0(deparse(subs, width.cutoff = 500), collapse = "\n")
+}
+
 #' @describeIn icd_classes_ordered \code{testthat} \code{expect} function
 #'   for ICD classes to be in correct order.
 #' @keywords internal
 expect_icd_classes_ordered <- function(object, info = NULL, label = NULL) {
   requireNamespace("testthat")
-  if (is.null(label)) {
-    label <- paste0(deparse(substitute(object), width.cutoff = 500), collapse = "\n")
-  }
+  if (is.null(label))
+    label <- find_expr("object")
+
   testthat::expect_that(object, icd_expectation_classes_ordered(), info, label)
 }
 
@@ -99,6 +104,22 @@ icd_expectation_classes_ordered <- function() {
     testthat::expectation(icd_classes_ordered(x),
                           "are not well ordered", "are well ordered")
   }
+}
+
+#' expect equal, ignoring any ICD classes
+#' @keywords internal
+expect_equal_no_icd <- function(object, expected, ..., info = NULL,
+                                label = NULL, expected.label = NULL) {
+  if (is.null(label))
+    label <- find_expr("object")
+  if (is.null(expected.label))
+    expected.label <- find_expr("expected")
+
+  class(object) <- class(object)[class(object) %nin% icd_all_classes]
+  testthat::expect_that(object,
+                        testthat::equals(
+                          expected, label = expected.label, ...
+                        ), info = info, label = label)
 }
 
 #' #' @describeIn icd_classes_ordered \code{testthat} \code{expectation }for
@@ -118,9 +139,9 @@ icd_expectation_classes_ordered <- function() {
 #' @keywords internal
 icd_check_class_conflict <- function(x) {
   sum(icd9_sub_classes %in% class(x)) > 1 ||
-  sum(icd10_sub_classes %in% class(x)) > 1 ||
-  sum(icd_data_classes %in% class(x)) > 1 ||
-  sum(icd_code_classes %in% class(x)) > 1
+    sum(icd10_sub_classes %in% class(x)) > 1 ||
+    sum(icd_data_classes %in% class(x)) > 1 ||
+    sum(icd_code_classes %in% class(x)) > 1
 }
 
 #' @rdname set_icd_class

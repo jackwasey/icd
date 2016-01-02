@@ -66,16 +66,18 @@ icd_expand_range <- function(start, end, ...) {
 icd_expand_range.character <- function(start, end, short_code = NULL, defined = TRUE, ...) {
 
   start_guess <- icd_guess_version.character(start, short_code = short_code)
-  end_guess <- icd_guess_version.character(start, short_code = short_code)
+  end_guess <- icd_guess_version.character(end, short_code = short_code)
   if (start_guess != end_guess)
     stop("Cannot expand range because ICD code version cannot be guessed from ", start,
          " and ", end, ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
        S3 method directly, e.g. icd_expand_range.icd9")
   if (start_guess == "icd9") {
-    if (is.null(short_code)) short_code <- icd_guess_short.icd9(c(start, end))
+    if (is.null(short_code))
+      short_code <- icd_guess_short.icd9(c(start, end))
     icd_expand_range.icd9(start, end, short_code = short_code, defined = defined, ...)
   } else if (start_guess == "icd10") {
-    if (is.null(short_code)) short_code <- icd_guess_short.icd10(c(start, end))
+    if (is.null(short_code))
+      short_code <- icd_guess_short.icd10(c(start, end))
     icd_expand_range.icd10cm(start, end, short_code = short_code, defined = defined, ...)
   } else {
     stop("Unknown ICD type")
@@ -295,7 +297,7 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
     else
       stop("mismatch between numeric, V and E types in start and end")
   }
-  res
+  icd9(icd_short_code(res))
 }
 
 #' @describeIn icd_expand_range_major Expand a range of ICD-9 major codes into major codes
@@ -309,7 +311,8 @@ icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
   # cannot range between numeric, V and E codes, so ensure same type.
   stopifnot(toupper(c[1]) == toupper(d[1]))
   fmt <- if (icd9_is_v(start)) "%02d" else "%03d"
-  majors <- paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = "")
+  majors <- icd9(paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = ""))
+
   if (defined)
     icd_get_defined.icd9(majors, short_code = TRUE, billable = FALSE)
   else
@@ -322,7 +325,7 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
                                       ex_ambig_start = TRUE,
                                       ex_ambig_end = TRUE) {
   icd9(
-    icd_short_code(
+    icd_decimal_code(
       icd_short_to_decimal.icd9(
         icd_expand_range.icd9(
           icd_decimal_to_short.icd9(start), icd_decimal_to_short.icd9(end),
@@ -397,6 +400,8 @@ icd_expand_minor.icd9 <- function(minor, is_e = FALSE) {
   .Call("icd9_icd9ExpandMinorShim", PACKAGE = get_pkg_name(), minor, isE = is_e)
 }
 
-icd9_expand_minor.icd10 <- function(x) {
+# nocov start
+icd_expand_minor.icd10 <- function(x) {
   stop("not implemented")
 }
+# nocov end

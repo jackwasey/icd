@@ -1397,9 +1397,9 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::List(*icd9MajMinToParts)(const Rcpp::CharacterVector,const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::List(*icd9ShortToPartsCpp)(const Rcpp::CharacterVector,const Rcpp::String)");
         signatures.insert("Rcpp::List(*icd9DecimalToPartsCpp)(const Rcpp::CharacterVector,const Rcpp::String)");
-        signatures.insert("Rcpp::CharacterVector(*icd_short_to_decimal.icd9)(const Rcpp::CharacterVector)");
+        signatures.insert("Rcpp::CharacterVector(*icd9ShortToDecimalCpp)(const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd9DecimalToShortOld)(const Rcpp::CharacterVector)");
-        signatures.insert("Rcpp::CharacterVector(*icd_decimal_to_short.icd9)(const Rcpp::CharacterVector)");
+        signatures.insert("Rcpp::CharacterVector(*icd9DecimalToShortCpp)(const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd_get_major.icd9)(const Rcpp::CharacterVector,const bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9GetMajorShort)(const Rcpp::CharacterVector)");
         signatures.insert("std::vector<bool>(*icd9IsA)(const std::vector<std::string>&,const char*,bool)");
@@ -1448,9 +1448,9 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9MajMinToParts", (DL_FUNC)icd9_icd9MajMinToParts_try);
     R_RegisterCCallable("icd9", "icd9_icd9ShortToPartsCpp", (DL_FUNC)icd9_icd9ShortToPartsCpp_try);
     R_RegisterCCallable("icd9", "icd9_icd9DecimalToPartsCpp", (DL_FUNC)icd9_icd9DecimalToPartsCpp_try);
-    R_RegisterCCallable("icd9", "icd9_icd_short_to_decimal.icd9", (DL_FUNC)icd9_icd9ShortToDecimal_try);
+    R_RegisterCCallable("icd9", "icd9_icd9ShortToDecimalCpp", (DL_FUNC)icd9_icd9ShortToDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9DecimalToShortOld", (DL_FUNC)icd9_icd9DecimalToShortOld_try);
-    R_RegisterCCallable("icd9", "icd9_icd_decimal_to_short.icd9", (DL_FUNC)icd9_icd9DecimalToShort_try);
+    R_RegisterCCallable("icd9", "icd9_icd9DecimalToShortCpp", (DL_FUNC)icd9_icd9DecimalToShort_try);
     R_RegisterCCallable("icd9", "icd9_icd_get_major.icd9", (DL_FUNC)icd9_icd9GetMajor_try);
     R_RegisterCCallable("icd9", "icd9_icd9GetMajorShort", (DL_FUNC)icd9_icd9GetMajorShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9IsA", (DL_FUNC)icd9_icd9IsA_try);

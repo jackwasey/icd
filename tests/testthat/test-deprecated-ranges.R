@@ -18,7 +18,7 @@
 context("deprecated icd9 ranges")
 
 test_that("deprecated - expand icd9 range definition", {
-  expect_equal(
+  expect_equal_no_icd(
     icd9ExpandRangeShort("4012", "40145",
                          onlyReal = FALSE,
                          excludeAmbiguousStart = FALSE,
@@ -27,7 +27,7 @@ test_that("deprecated - expand icd9 range definition", {
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
            "40139", "4014", "40140", "40141", "40142", "40143", "40144", "40145")))
-  expect_equal(
+  expect_equal_no_icd(
     icd9ExpandRangeShort("4012", "40145",
                          onlyReal = FALSE,
                          excludeAmbiguousStart = TRUE,
@@ -44,9 +44,9 @@ test_that("deprecated - expand icd9 range definition", {
   #            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
   #            "40139", "40140", "40141", "40142", "40143", "40144", "40145")))
   #
-  expect_equal(icd9ExpandRangeShort("40100", "40101", onlyReal = FALSE), c("40100", "40101"))
-  expect_equal(icd9ExpandRange("40108", "40109", isShort = TRUE, onlyReal = FALSE), c("40108", "40109"))
-  expect_equal(icd9ExpandRangeShort("40198", "40199", onlyReal = FALSE), c("40198", "40199"))
+  expect_equal_no_icd(icd9ExpandRangeShort("40100", "40101", onlyReal = FALSE), c("40100", "40101"))
+  expect_equal_no_icd(icd9ExpandRange("40108", "40109", isShort = TRUE, onlyReal = FALSE), c("40108", "40109"))
+  expect_equal_no_icd(icd9ExpandRangeShort("40198", "40199", onlyReal = FALSE), c("40198", "40199"))
   # must be in ICD9 order, otherwise error:
   expect_error(icd9ExpandRangeShort("40109", "40108"))
   expect_error(icd9ExpandRangeShort("4019", "4018"))
@@ -62,16 +62,16 @@ test_that("deprecated - expand icd9 range definition", {
 
 
   # the range 44100-4419 from the AHRQ found a gap in the code.
-  expect_equal(
+  expect_equal_no_icd(
     sort(icd9ExpandRangeShort("4410", "4412", onlyReal = FALSE)),
     sort(c("4410", icd9ExpandRangeShort("44100", "4412", onlyReal = FALSE)))
   )
 
-  expect_equal(icd9ExpandRangeShort("401", "401", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ExpandRangeShort("401", "401", onlyReal = FALSE),
                sort(icd9Children("401", isShort = TRUE, onlyReal = FALSE)))
   # expand range should already be sorted. do i want to sort children by default
   # or with an option?
-  expect_equal(icd9ExpandRangeShort("401", "402", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ExpandRangeShort("401", "402", onlyReal = FALSE),
                sort(icd9Children(c("401", "402"), isShort = TRUE, onlyReal = FALSE)))
   # the next two cases cover the HIV ranges in the co-morbidities, wherein the
   # final code is included, in which case the parent ("044" in this case) is
@@ -80,7 +80,7 @@ test_that("deprecated - expand icd9 range definition", {
                icd9ExpandRangeShort("043", "044", onlyReal = FALSE))
   expect_equal(icd9ExpandRangeShort("043", "04499", onlyReal = FALSE),
                icd9ExpandRangeShort("043", "044", onlyReal = FALSE))
-  expect_equal(
+  expect_equal_no_icd(
     icd9ExpandRangeShort("401", "402", onlyReal = FALSE),
     sort(c("401", "4010", "4011", "4012", "4013", "4014", "4015", "4016",
            "4017", "4018", "4019", "40100", "40110", "40120", "40130", "40140",
@@ -116,7 +116,7 @@ test_that("deprecated - expand icd9 range definition", {
            "40299"))
   )
 
-  expect_equal(icd9ExpandRangeShort("401", "40102", onlyReal = FALSE,
+  expect_equal_no_icd(icd9ExpandRangeShort("401", "40102", onlyReal = FALSE,
                                     excludeAmbiguousStart = FALSE,
                                     excludeAmbiguousEnd = FALSE),
                c("401", "4010", "40100", "40101", "40102"))
@@ -153,26 +153,26 @@ test_that("deprecated - V code with ambiguous parent", {
   # the default should be to include the stated higher-level code, and enough
   # descendants just to reach the specified codes, but not all the children of
   # the higher-level code.
-  expect_equal(icd9ExpandRangeShort("V10", "V1001",
+  expect_equal_no_icd(icd9ExpandRangeShort("V10", "V1001",
                                     onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
                c("V10", "V100", "V1000", "V1001"))
-  expect_equal(icd9ExpandRangeShort("V10", "V1001", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ExpandRangeShort("V10", "V1001", onlyReal = FALSE),
                c("V1000", "V1001"))
 })
 
 test_that("deprecated - V code ranges", {
-  expect_equal(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
                c("V1000", "V1001", "V1002"))
   # but we cap off the upper range correctly:
-  expect_equal(icd9ExpandRangeShort("V1009", "V101", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ExpandRangeShort("V1009", "V101", onlyReal = FALSE),
                c("V1009", "V101", "V1010", "V1011",
                  "V1012", "V1013", "V1014", "V1015",
                  "V1016", "V1017", "V1018", "V1019"))
   # and with narrower top end
-  expect_equal(icd9ExpandRangeShort("V1009", "V1011",
+  expect_equal_no_icd(icd9ExpandRangeShort("V1009", "V1011",
                                     onlyReal = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
                c("V1009", "V1010", "V1011"))
-  expect_equal(icd9ExpandRangeShort("V1009", "V1011",
+  expect_equal_no_icd(icd9ExpandRangeShort("V1009", "V1011",
                                     onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
                c("V1009", "V101", "V1010", "V1011"))
   # but include those pesky parents when requested:
@@ -194,8 +194,8 @@ test_that("deprecated - V code ranges", {
 })
 
 test_that("deprecated - E code ranges", {
-  expect_equal(icd9ExpandRangeShort("E9501", "E9502", onlyReal = FALSE), c("E9501", "E9502"))
-  expect_equal(icd9ExpandRangeShort("E950", "E9509", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ExpandRangeShort("E9501", "E9502", onlyReal = FALSE), c("E9501", "E9502"))
+  expect_equal_no_icd(icd9ExpandRangeShort("E950", "E9509", onlyReal = FALSE),
                c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
                  "E9505", "E9506", "E9507", "E9508", "E9509")
   )
@@ -216,14 +216,14 @@ test_that("deprecated - major ranges", {
   expect_true("E998" %in% resallbut)
   expect_false("E999" %in% resallbut)
 
-  expect_equal(icd9ExpandRangeMajor("E99", "E101", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ExpandRangeMajor("E99", "E101", onlyReal = FALSE),
                c("E099", "E100", "E101"))
 })
 
 test_that("deprecated - range bugs", {
   # these both failed - need zero padding for the first
-  expect_equal( ("042 " %i9s% "042 ")[1], "042")
-  expect_equal( ("42" %i9s% "042 ")[1], "042")
+  expect_equal_no_icd( ("042 " %i9s% "042 ")[1], "042")
+  expect_equal_no_icd( ("42" %i9s% "042 ")[1], "042")
   expect_true("345" %nin% ("3420 " %i9s% "3449 "))
 
   # unclass these, because new version of icd9 (aka icd?) will set class on result
@@ -253,16 +253,16 @@ test_that("deprecated - range doesn't include higher level parent github issue #
 })
 
 test_that("deprecated - ranges can include ambiguous parents, optionally", {
-  expect_equal(
+  expect_equal_no_icd(
     icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
     c("01006", "01010"))
-  expect_equal(
+  expect_equal_no_icd(
     icd9ExpandRange("01006", "01010", onlyReal = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("01006", "0101", "01010"))
-  expect_equal(
+  expect_equal_no_icd(
     icd9ExpandRange("01006", "01010", onlyReal = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
     c("01006", "01007", "01008", "01009", "01010"))
-  expect_equal(
+  expect_equal_no_icd(
     icd9ExpandRange("01006", "01010", onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("01006", "01007", "01008", "01009", "0101", "01010"))
 

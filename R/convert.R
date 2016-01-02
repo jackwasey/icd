@@ -90,10 +90,10 @@ icd9ChaptersToMap <- function(x) {
 #' @family ICD-9 convert
 #' @export
 icd_wide_to_long <- function(x,
-                           visit_name = get_visit_name(x),
-                           icd_labels = NULL,
-                           icd_name = "icdCode",
-                           icd_regex = c("icd", "diag", "dx_", "dx")) {
+                             visit_name = get_visit_name(x),
+                             icd_labels = NULL,
+                             icd_name = "icdCode",
+                             icd_regex = c("icd", "diag", "dx_", "dx")) {
   assertDataFrame(x, min.rows = 1, min.cols = 2)
   assertString(visit_name)
   assert(checkNull(icd_labels), checkCharacter(icd_labels))
@@ -111,15 +111,15 @@ icd_wide_to_long <- function(x,
     }
   }
   checkmate::assertCharacter(icd_labels, any.missing = FALSE, min.chars = 1,
-                  min.len = 1, max.len = ncol(x) - 1)
+                             min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icd_labels %in% names(x)))
 
   res <- stats::reshape(x,
-                 direction = "long",
-                 varying = icd_labels,
-                 idvar = visit_name,
-                 timevar = NULL,
-                 v.names = icd_name)
+                        direction = "long",
+                        varying = icd_labels,
+                        idvar = visit_name,
+                        timevar = NULL,
+                        v.names = icd_name)
 
   res <- res[!is.na(res[[icd_name]]), ]
   res <- res[nchar(asCharacterNoWarn(res[[icd_name]])) > 0, ]
@@ -156,15 +156,15 @@ icd_wide_to_long <- function(x,
 #' @keywords manip
 #' @export
 icd_long_to_wide <- function(x,
-                           visit_name = get_visit_name(x),
-                           icd_name = get_icd_name(x),
-                           prefix = "icd_",
-                           min_width = 0,
-                           aggr = TRUE,
-                           return_df = FALSE) {
+                             visit_name = get_visit_name(x),
+                             icd_name = get_icd_name(x),
+                             prefix = "icd_",
+                             min_width = 0,
+                             aggr = TRUE,
+                             return_df = FALSE) {
 
-#  icd_name <- get_icd_name(x, icd_name)
-#  visit_name <- get_visit_name(x, visit_name)
+  #  icd_name <- get_icd_name(x, icd_name)
+  #  visit_name <- get_visit_name(x, visit_name)
 
   assertDataFrame(x, col.names = "named")
   assertString(prefix)
@@ -224,7 +224,7 @@ icd_long_to_wide <- function(x,
 #' is.factor(df.out[["visit_id"]])
 #' @export
 icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
-                                stringsAsFactors = getOption("stringsAsFactors")) {
+                                   stringsAsFactors = getOption("stringsAsFactors")) {
   assertMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
   assertString(visit_name)
   assertFlag(stringsAsFactors)
@@ -254,7 +254,7 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' mat.out[, 1:4]
 #' @export
 icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
-                                stringsAsFactors = getOption("stringsAsFactors")) {
+                                   stringsAsFactors = getOption("stringsAsFactors")) {
   checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
   checkString(visit_name)
   checkFlag(stringsAsFactors)
@@ -274,6 +274,30 @@ icd_short_to_decimal <- function(x) {
   UseMethod("icd_short_to_decimal")
 }
 
+#' @export
+#' @keywords internal
+icd_short_to_decimal.default <- function(x) {
+  # we can only have a shot at guessing this if we first guess the version
+  x %<>% icd_guess_version_update()
+  icd_short_to_decimal(x)
+}
+
+#' @export
+#' @keywords internal
+icd_short_to_decimal.icd9 <- function(x) {
+  icd9ShortToDecimalCpp(x) %>% icd_decimal_code %>% icd9
+}
+
+#' @export
+#' @keywords internal
+icd_short_to_decimal.icd10 <- function(x) {
+  x %<>% str_trim
+  # todo: these could/should be seperate functions
+  majors <- str_sub(x, 0, 3)
+  minors <- str_sub(x, 4)
+  paste0(majors, ".", minors) %>% icd_decimal_code %>% icd10
+}
+
 #' Convert Decimal format ICD codes to short format
 #'
 #' This usually just entails removing the decimal point, but also does some
@@ -286,12 +310,18 @@ icd_decimal_to_short <- function(x) {
   UseMethod("icd_decimal_to_short")
 }
 
+#' @export
+#' @keywords internal
+icd_decimal_to_short.icd9 <- function(x) {
+  icd9DecimalToShortCpp(x) %>% icd_short_code %>% icd9
+}
+
 #' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to
 #'   short format
 #' @export
 #' @keywords internal
 icd_decimal_to_short.default <- function(x) {
-  str_trim(str_replace(x, "\\.", ""))
+  str_trim(str_replace(x, "\\.", "")) %>% icd_short_code
 }
 
 #' Convert decimal ICD codes to component parts

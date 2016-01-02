@@ -53,10 +53,7 @@ icd9DecimalToPartsCpp <- function(icd9Decimal, minorEmpty) {
     .Call('icd9_icd9DecimalToPartsCpp', PACKAGE = 'icd9', icd9Decimal, minorEmpty)
 }
 
-#' @describeIn icd_short_to_decimal Convert ICD-9 codes from short to decimal form
-#' @keywords internal
-#' @export
-icd_short_to_decimal.icd9 <- function(x) {
+icd9ShortToDecimalCpp <- function(x) {
     .Call('icd9_icd9ShortToDecimal', PACKAGE = 'icd9', x)
 }
 
@@ -64,10 +61,7 @@ icd9DecimalToShortOld <- function(x) {
     .Call('icd9_icd9DecimalToShortOld', PACKAGE = 'icd9', x)
 }
 
-#' @describeIn icd_decimal_to_short Convert Decimal to short-form ICD-9 code
-#' @keywords internal
-#' @export
-icd_decimal_to_short.icd9 <- function(x) {
+icd9DecimalToShortCpp <- function(x) {
     .Call('icd9_icd9DecimalToShort', PACKAGE = 'icd9', x)
 }
 

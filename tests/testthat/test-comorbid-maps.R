@@ -159,9 +159,7 @@ test_that("can condense the big lists of comorbidities without errors", {
   }
 })
 
-
 test_that("icd9_hierarchy as saved in data can be recreated", {
-  skip("this is 15 minutes alone, so skip this and run manually when needed")
   skip_slow_tests()
   skip_flat_icd9_avail_all()
 

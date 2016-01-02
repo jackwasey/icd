@@ -87,7 +87,8 @@ logical_to_binary <- function(x) {
     stop("need a matrix or data.frame")
 
   logical_fields <- names(x)[sapply(x, is.logical)]
-  if (is.na(logical_fields) || length(logical_fields) == 0) return(x)
+  if (is.na(logical_fields) || length(logical_fields) == 0)
+    return(x)
 
   #update just the logical fields with integers
   x[, logical_fields] <-
@@ -106,9 +107,11 @@ logical_to_binary <- function(x) {
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @param warn_pattern logical, if the pattern has multiple parentheses,
-#'   optinally don't warn if we are forced to choose just a pair of the sub-matches
+#'   optinally don't warn if we are forced to choose just a pair of the
+#'   sub-matches
 #' @keywords internal
-str_pair_match <- function(string, pattern, swap = FALSE, dropEmpty = FALSE, pos = c(1, 2), warn_pattern = TRUE, ...) {
+str_pair_match <- function(string, pattern, swap = FALSE, dropEmpty = FALSE,
+                           pos = c(1, 2), warn_pattern = TRUE, ...) {
   assertCharacter(string, min.len = 1)
   assertString(pattern)
   assertFlag(swap)

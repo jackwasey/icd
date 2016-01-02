@@ -317,6 +317,4 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
     chapter_desc = character()
   )
   save_in_data_dir(icd10_who_hierarchy)
-
-
 }

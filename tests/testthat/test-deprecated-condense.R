@@ -157,19 +157,19 @@ test_that("deprecated - condense full ranges", {
   expect_equal(icd9CondenseShort(icd9ChildrenShort("V12", onlyReal = FALSE), onlyReal = FALSE), "V12")
   expect_equal(icd9CondenseShort(icd9ChildrenShort("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
   # repeat some tests with decimals instead
-  expect_equal(icd9CondenseDecimal(icd9Children("003", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "003")
-  expect_equal(icd9Condense(icd9ChildrenDecimal("3", onlyReal = FALSE), isShort = FALSE, onlyReal = FALSE), "003")
-  expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("410", onlyReal = FALSE), onlyReal = FALSE), "410")
-  expect_equal(icd9CondenseDecimal(icd9Children("V12", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "V12")
-  expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
+  expect_equal_no_icd(icd9CondenseDecimal(icd9Children("003", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "003")
+  expect_equal_no_icd(icd9Condense(icd9ChildrenDecimal("3", onlyReal = FALSE), isShort = FALSE, onlyReal = FALSE), "003")
+  expect_equal_no_icd(icd9CondenseDecimal(icd9ChildrenDecimal("410", onlyReal = FALSE), onlyReal = FALSE), "410")
+  expect_equal_no_icd(icd9CondenseDecimal(icd9Children("V12", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "V12")
+  expect_equal_no_icd(icd9CondenseDecimal(icd9ChildrenDecimal("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
   # repeat some tests with decimals and smaller codes
-  expect_equal(icd9CondenseDecimal(icd9Children("003.2", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE),
+  expect_equal_no_icd(icd9CondenseDecimal(icd9Children("003.2", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE),
                "003.2")
-  expect_equal(icd9Condense(icd9ChildrenDecimal("3.2", onlyReal = FALSE), isShort = FALSE, onlyReal = FALSE),
+  expect_equal_no_icd(icd9Condense(icd9ChildrenDecimal("3.2", onlyReal = FALSE), isShort = FALSE, onlyReal = FALSE),
                "003.2")
-  expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("410.0", onlyReal = FALSE), onlyReal = FALSE), "410.0")
-  expect_equal(icd9CondenseDecimal(icd9Children("V12", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "V12")
-  expect_equal(icd9CondenseDecimal(icd9ChildrenDecimal("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
+  expect_equal_no_icd(icd9CondenseDecimal(icd9ChildrenDecimal("410.0", onlyReal = FALSE), onlyReal = FALSE), "410.0")
+  expect_equal_no_icd(icd9CondenseDecimal(icd9Children("V12", isShort = FALSE, onlyReal = FALSE), onlyReal = FALSE), "V12")
+  expect_equal_no_icd(icd9CondenseDecimal(icd9ChildrenDecimal("E800", onlyReal = FALSE), onlyReal = FALSE), "E800")
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("0031", onlyReal = FALSE), onlyReal = FALSE), "0031")
   # major is alloect_equal(icd9CondenseShort(c("003", othersalmonella), onlyReal = TRUE), "003")
