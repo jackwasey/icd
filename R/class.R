@@ -35,6 +35,7 @@ icd_code_classes <- c("icd_short_code", "icd_decimal_code")
 icd_other_classes <- c("icd_comorbidity_map")
 icd_all_classes <- c(icd_version_classes, icd_data_classes,
                      icd_code_classes, icd_other_classes)
+icd_system_classes <- c("data.frame", "list", "numeric", "character", "factor")
 
 icd_check_conflict_with_icd9 <- function(x)
   if (inherits(x, icd9_classes))
@@ -46,20 +47,67 @@ icd_check_conflict_with_icd10 <- function(x)
 
 #' @title prefer an order of classes
 #' @description The order of classes can matter because, for some functions,
-#'   we'd prefer to decide what to do based on whether the structure is a
-#'   comorbidity map before caring if it is icd-9 or 10. I can't see how it
-#'   matters whether we prioritize long/wide and short/decimal yet, so won't
-#'   test.
+#'   we'd prefer to decide what to do based on a higher level structure, e.g.
+#'   whether the structure is a comorbidity map before caring if it is ICD-9 or
+#'   ICD-10. I can't see how it matters whether we prioritize long/wide and
+#'   short/decimal yet, so won't test.
 #' @param x any object which may or may not have classes from this package
 #' @keywords internal
-icd_check_class_order <- function(x) {
+icd_classes_ordered <- function(x) {
 
-  system_classes <- c("data.frame", "list", "numeric", "character", "factor")
+  m <- match(class(x), c(icd_other_classes,
+                         icd9_classes,
+                         icd10_classes,
+                         icd_system_classes))
+  out <- all(diff(m) >= 0, na.rm = TRUE)
 
-  m <- match(class(x), c(icd_other_classes, icd9_classes, icd10_classes, system_classes))
-  if (any(m != cumsum(m)))
-    stop("preferred class order not met.")
+  # can do some more specific tests with subsets:
+  # short vs decimal should be after the ICD version, if it exists
+  m <- match(class(x), c(icd9_classes,
+                         icd10_classes,
+                         icd_code_classes,
+                         icd_system_classes))
+
+  out && all(diff(m) >= 0, na.rm = TRUE)
 }
+
+#' @describeIn icd_classes_ordered stop if classes not well ordered
+#' @keywords internal
+icd_stop_classes_disorder <- function(x) {
+  if (!icd_classes_ordered(x))
+    stop("Classes in object are: ", paste(class(x), collapse = ", "), ",
+         which is out of order.")
+}
+
+#' @describeIn icd_classes_ordered \code{testthat} \code{expect} function
+#'   for ICD classes to be in correct order.
+expect_icd_classes_ordered <- function(object, info = NULL, label = NULL) {
+  requireNamespace("testthat")
+  if (is.null(label)) {
+    label <- testthat:::find_expr("object")
+  }
+  testthat::expect_that(object, icd_expectation_classes_ordered(), info, label)
+}
+
+#' @describeIn icd_classes_ordered \code{testthat} \code{expectation }for
+#'   ICD classes to be in correct order.
+icd_expectation_classes_ordered <- function() {
+  requireNamespace("testthat")
+  function(x) {
+    testthat::expectation(icd_classes_ordered(x),
+                          "are not well ordered", "are well ordered")
+  }
+}
+
+#' #' @describeIn icd_classes_ordered \code{testthat} \code{expectation }for
+#' #'   ICD classes to be in correct order.
+#' icd_expectation_classes_disordered <- function() {
+#'   requireNamespace("testthat")
+#'   function(x) {
+#'     testthat::expectation(!icd_classes_ordered(x),
+#'                           "are well ordered", "are not well ordered")
+#'   }
+#' }
 
 icd_check_class_conflict <- function(x) {
   if (sum(icd9_sub_classes %in% class(x)) > 1)
@@ -81,6 +129,7 @@ icd_check_class_conflict <- function(x) {
 #' @param x object to set class \code{icd9}
 #' @export
 icd9 <- function(x) {
+  if (missing(x)) x <- character()
   icd_check_conflict_with_icd10(x)
   if (inherits(x, "icd9")) return(x)
   after <- match("icd9cm", class(x), nomatch = 0)
@@ -91,6 +140,7 @@ icd9 <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd9cm <- function(x) {
+  if (missing(x)) x <- character()
   icd_check_conflict_with_icd10(x)
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
   icd9_pos <- match("icd9", class(x))
@@ -105,6 +155,7 @@ icd9cm <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd10 <- function(x) {
+  if (missing(x)) x <- character()
   icd_check_conflict_with_icd9(x)
   if (inherits(x, "icd10")) return(x)
   icd10cm_pos <- match("icd10cm", class(x), nomatch = 0)
@@ -117,26 +168,28 @@ icd10 <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd10cm <- function(x) {
+  if (missing(x)) x <- character()
   icd_check_conflict_with_icd9(x)
   if (inherits(x, "icd10cm")) return(x)
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
   else
-    class(x) <- append(class(x), "icd10cm", after = 0)
+    class(x) <- append(class(x), c("icd10cm", "icd10"), after = 0)
   x
 }
 
 #' @rdname set_icd_class
 #' @export
 icd10who <- function(x) {
+  if (missing(x)) x <- character()
   icd_check_conflict_with_icd9(x)
   if (inherits(x, "icd10who")) return(x)
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
   else
-    class(x) <- append(class(x), "icd10who", after = 0)
+    class(x) <- append(class(x), c("icd10who", "icd10"), after = 0)
   x
 }
 
@@ -193,26 +246,47 @@ icd_wide_data <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd_short_code <- function(x) {
+  if (missing(x)) x <- character()
   # TODO consider warning if there are decimals!
   if (inherits(x, "icd_short_code")) return(x)
   if (inherits(x, "icd_decimal_code")) {
     warning("setting class to describe short format ICD codes, but decimal is currently set")
     class(x) <- class(x)[class(x) %nin% "icd_decimal_code"]
   }
-  class(x) <- append(class(x), "icd_short_code")
+
+  class(x) <- append(class(x), "icd_short_code",
+                     after = get_pos_short_decimal_class(x))
   x
+}
+
+#' get position to set short or decimal class
+#'
+#' prefer immediately after icd9cm, etc., if not, place before system classes at
+#' end, or at the very end if no system classes
+#' @keywords internal
+get_pos_short_decimal_class <- function(x) {
+  pos_last_icd_type <- which(class(x) %in% c(icd9_classes, icd10_classes))
+  pos_system_type <- which(class(x) %in% icd_system_classes)
+  if (length(pos_last_icd_type) > 0)
+    max(pos_last_icd_type)
+  else if (length(pos_system_type) > 0)
+    max(pos_system_type) - 1
+  else
+    length(class(x))
 }
 
 #' @rdname set_icd_class
 #' @export
 icd_decimal_code <- function(x) {
+  if (missing(x)) x <- character()
   # TODO consider warning if there are decimals!
   if (inherits(x, "icd_decimal_code")) return(x)
   if (inherits(x, "icd_short_code")) {
     warning("setting class to describe decimal format ICD codes, but short is currently set")
     class(x) <- class(x)[class(x) %nin% "icd_short_code"]
   }
-  class(x) <- append(class(x), "icd_decimal_code")
+  class(x) <- append(class(x), "icd_decimal_code",
+                     after = get_pos_short_decimal_class(x))
   x
 }
 
@@ -250,7 +324,11 @@ icd_comorbidity_map <- function(x) {
 #' @title combine ICD codes
 #' @name combine
 #' @description These function implement combination of lists or vectors of
-#'   codes, while preserving ICD classes.
+#'   codes, while preserving ICD classes. Base R \code{c} just drops all user
+#'   defined classes and casts down to lowest common denomintor, e.g. if mixing
+#'   numbers and characters. No attempt here to catch all possible combinations
+#'   of feeding in mixed ICD types and other types. Let R do what it normally
+#'   does, but just try to keep classes of the first item in the list.
 #' @param ... elements to combine
 #' @examples
 #' \dontrun{
@@ -261,17 +339,23 @@ icd_comorbidity_map <- function(x) {
 c.icd9 <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
-  if (any(is.icd10(unlist(args))))
+  if (any(vapply(args, is.icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
+  if (!all(vapply(args, is.icd9, FUN.VALUE = logical(1))))
+    warning("The first codes given are ICD-9-CM class, but subsequent ones are not.")
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
 #' @rdname combine
 #' @export
 c.icd9cm <- function(...) {
-  args <- unlist(list(...))
-  if (any(!inherits(args, "icd9cm")))
+  args <- list(...)
+  base_class <- class(args[[1]])
+  if (any(vapply(args, is.icd10, FUN.VALUE = logical(1))))
+    stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
+  if (!all(vapply(args, is.icd9cm, FUN.VALUE = logical(1))))
     warning("The first codes given are ICD-9-CM class, but subsequent ones are not.")
+  structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
 #' @rdname combine
@@ -279,9 +363,9 @@ c.icd9cm <- function(...) {
 c.icd10 <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
-  if (any(is.icd9(unlist(args))))
+  if (any(vapply(args, is.icd9, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
-  if (!all(is.icd10(unlist(args))))
+  if (!all(vapply(args, is.icd10, FUN.VALUE = logical(1))))
     warning("Combining ICD-9 codes with codes of unknown type")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
@@ -289,19 +373,51 @@ c.icd10 <- function(...) {
 #' @rdname combine
 #' @export
 c.icd10cm <- function(...) {
-  args <- unlist(list(...))
-  if (any(is.icd10who(args)))
-    warning("The first argument is ICD-10-CM, whereas subsequent arguments include ICD-10 WHO codes.")
-  NextMethod()
+  args <- list(...)
+  base_class <- class(args[[1]])
+  if (any(vapply(args, is.icd9, FUN.VALUE = logical(1))))
+    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
+  if (!all(vapply(args, is.icd10cm, FUN.VALUE = logical(1))))
+    warning("The first argument is ICD-10-CM, whereas subsequent arguments are not")
+  structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
 #' @rdname combine
 #' @export
 c.icd10who <- function(...) {
-  args <- unlist(list(...))
-  if (any(is.icd10cm(args)))
+  args <- list(...)
+  base_class <- class(args[[1]])
+  if (any(vapply(args, is.icd9, FUN.VALUE = logical(1))))
+    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
+  if (!all(vapply(args, is.icd10who, FUN.VALUE = logical(1))))
     warning("The first argument is ICD-10 WHO, whereas subsequent arguments include ICD-10-CM codes.")
-  NextMethod()
+  structure(c(unlist(lapply(args, unclass))), class = base_class)
+}
+
+#' @rdname combine
+#' @export
+#' @keywords internal
+c.icd_short_code <- function(...) {
+  args <- list(...)
+  base_class <- class(args[[1]])
+  if (any(vapply(args, is.icd_decimal_code, FUN.VALUE = logical(1))))
+    stop("Do you really want to combine short and decimal format ICD codes? If so, use unclass on some or all the arguments")
+  if (!all(vapply(args, is.icd_short_code, FUN.VALUE = logical(1))))
+    warning("The first argument is in short format, whereas subsequent arguments include codes with no short or decimal designation.")
+  structure(c(unlist(lapply(args, unclass))), class = base_class)
+}
+
+#' @rdname combine
+#' @export
+#' @keywords internal
+c.icd_decimal_code <- function(...) {
+  args <- list(...)
+  base_class <- class(args[[1]])
+  if (any(vapply(args, is.icd_short_code, FUN.VALUE = logical(1))))
+    stop("Do you really want to combine short and decimal format ICD codes? If so, use unclass on some or all the arguments")
+  if (!all(vapply(args, is.icd_decimal_code, FUN.VALUE = logical(1))))
+    warning("The first argument is in short format, whereas subsequent arguments include codes with no short or decimal designation.")
+  structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
 #' @name subset_icd

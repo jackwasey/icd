@@ -29,6 +29,84 @@ test_that("setting conflicting icd data class gives error", {
   expect_error(icd9cm(icd10who("V10")))
 })
 
+test_that("well ordered class lists are created", {
+  expect_icd_classes_ordered(icd9(""))
+  expect_icd_classes_ordered(icd9cm(""))
+  expect_icd_classes_ordered(icd10(""))
+  expect_icd_classes_ordered(icd10cm(""))
+  expect_icd_classes_ordered(icd10who(""))
+
+  expect_icd_classes_ordered(icd_short_code(""))
+  expect_icd_classes_ordered(icd_decimal_code(""))
+})
+
+test_that("well ordered class lists short/decimal ICD combos are created", {
+  expect_icd_classes_ordered(icd_short_code(icd9("V102")))
+  expect_icd_classes_ordered(icd_decimal_code(icd9cm("410.00")))
+  expect_icd_classes_ordered(icd_short_code(icd10("A100")))
+  expect_icd_classes_ordered(icd_decimal_code(icd10cm("B23.1")))
+  expect_icd_classes_ordered(icd_short_code(icd10who("C33")))
+
+  expect_icd_classes_ordered(icd_decimal_code(icd9("V10.2")))
+  expect_icd_classes_ordered(icd_short_code(icd9cm("41000")))
+  expect_icd_classes_ordered(icd_decimal_code(icd10("A10.0")))
+  expect_icd_classes_ordered(icd_short_code(icd10cm("B231")))
+  expect_icd_classes_ordered(icd_decimal_code(icd10who("C33")))
+})
+
+test_that("warn if changing ICD decimal to short or vice versa", {
+  expect_warning(icd_short_code(icd_decimal_code("10.1")))
+  expect_warning(icd_decimal_code(icd_short_code("2222")))
+  expect_warning(icd_short_code(icd_decimal_code(icd9cm("10.1"))))
+  expect_warning(icd_decimal_code(icd_short_code(icd10who("D22"))))
+})
+
+test_that("is short or decimal code", {
+  # todo, somehow clarify that this is not the same is icd_is_valid...
+  expect_true(is.icd_short_code(icd_short_code("1234")))
+  expect_true(is.icd_decimal_code(icd_decimal_code("12.34")))
+  expect_is(icd_short_code("1234"), "icd_short_code")
+  expect_is(icd_decimal_code("12.34"), "icd_decimal_code")
+})
+
+test_that("no warning for combinding same types", {
+  expect_warning(c(icd9cm(""), icd9cm("")), NA)
+  expect_warning(c(icd9(""), icd9("")), NA)
+  expect_warning(c(icd10(""), icd10("")), NA)
+  expect_warning(c(icd10cm(""), icd10cm("")), NA)
+  expect_warning(c(icd10who(""), icd10who("")), NA)
+})
+
+test_that("warn if combining mixed ICD sub-version types", {
+  expect_warning(c(icd9cm(""), icd9("")))
+  expect_warning(c(icd10cm(""), icd10("")))
+  expect_warning(c(icd10who(""), icd10("")))
+  expect_warning(c(icd10who(""), icd10cm("")))
+})
+
+test_that("error if combining mixed ICD version types, e.g. ICD-9 vs ICD-10", {
+  expect_error(c(icd9cm(""), icd10("")))
+  expect_error(c(icd10cm(""), icd9("")))
+  expect_error(c(icd10who(""), icd9cm("")))
+  expect_error(c(icd10who(""), icd9("")))
+})
+
+test_that("combining identity", {
+  expect_identical(c(icd9cm("")), icd9cm(""))
+  expect_identical(c(icd9cm("")), icd9cm(""))
+  expect_identical(c(icd10("")), icd10(""))
+  expect_identical(c(icd10cm("")), icd10cm(""))
+  expect_identical(c(icd10who("")), icd10who(""))
+  expect_identical(c(icd_short_code("")), icd_short_code(""))
+  expect_identical(c(icd_decimal_code("")), icd_decimal_code(""))
+})
+
+test_that("ICD version supertype set", {
+  expect_is(icd9cm(""), "icd9")
+  expect_is(icd10cm(""), "icd10")
+  expect_is(icd10who(""), "icd10")
+})
+
 x <- icd9::icd9_map_quan_elix
 
 test_that("constructing a comorbidity map works", {
@@ -78,6 +156,13 @@ test_that("constructing long data works", {
   expect_equivalent(icd_long_data(as.data.frame(icd9::uranium_pathology)), icd9::uranium_pathology)
 })
 
+test_that("is long or wide data?", {
+  expect_true(is.icd_wide_data(icd_wide_data(icd9::vermont_dx)))
+  expect_true(is.icd_long_data(icd_long_data(icd9::uranium_pathology)))
+  expect_is(icd_wide_data(icd9::vermont_dx), "icd_wide_data")
+  expect_is(icd_long_data(icd9::uranium_pathology), "icd_long_data")
+})
+
 test_that("constructing wide or long format for non-data frame gives error", {
   expect_error(icd_wide_data(e))
   expect_error(icd_wide_data(letters))
@@ -120,4 +205,12 @@ test_that("printing a comorbidity map works very simply", {
     capture.output(
       print.icd_comorbidity_map(icd9::icd9_map_quan_elix)
     ), NA)
+})
+
+test_that("is comorbidity map?", {
+  icd9_map_ahrq  %>%  unclass  %>% icd9  %>% icd_comorbidity_map -> x
+  expect_true(is.icd_comorbidity_map(icd9_map_ahrq))
+  expect_true(is.icd_comorbidity_map(x))
+  expect_is(x, "icd_comorbidity_map")
+  expect_is(icd9_map_ahrq, "icd_comorbidity_map")
 })

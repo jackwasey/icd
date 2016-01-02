@@ -125,6 +125,9 @@ parse_ahrq_sas <- function(
   }
 
   names(icd9_map_ahrq) <- icd9::icd_names_ahrq_htn_abbrev
+  icd9_map_ahrq %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
+  icd9_map_ahrq_all %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
+
   if (save_data) {
     save_in_data_dir("icd9_map_ahrq") # nocov
     save_in_data_dir("icd9_map_ahrq_all") # nocov
@@ -177,6 +180,8 @@ parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   # do use icd9:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
   names(icd9_map_quan_deyo) <- icd9::icd_names_charlson_abbrev
+  icd9_map_quan_deyo %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
+
   if (save_data)
     save_in_data_dir(icd9_map_quan_deyo)
   invisible(icd9_map_quan_deyo)
