@@ -68,12 +68,7 @@
 #'   }
 #' @export
 icd_is_valid <- function(x, ...) {
-  if (inherits(x, what = "icd_short_code"))
-    NextMethod(short_code = TRUE)
-  else if (inherits(x, what = "icd_decimal_code"))
-    NextMethod(short_code = FALSE)
-  else
-    UseMethod("icd_is_valid")
+  UseMethod("icd_is_valid")
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid

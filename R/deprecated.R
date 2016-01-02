@@ -978,34 +978,6 @@ icd9ExtractAlphaNumeric <- function(icd9) {
   icd_extract_alpha_numeric(icd9)
 }
 
-parseQuanDeyoSas <- function(
-  sasPath = system.file("data-raw", "ICD9_E_Charlson.sas", package = "icd9"),
-  condense = FALSE, save = FALSE, path = NULL) {
-
-  .Deprecated("parse_quan_deyo_sas")
-
-  if (!missing(condense))
-    warning("'condense' is deprecated in parse_quan_deyo_sas, and no longer has any effect.
-            The map can be condensed using other functions in the package.",
-            call. = FALSE)
-  if (!missing(path))
-    warning("'path' is deprecated in parse_quan_deyo_sas, and no longer has any effect.
-            'path' is fixed as the data dir in the working tree.",
-            call. = FALSE)
-  if (!missing(sasPath))
-    warning("'sasPath' is deprecated in parse_quan_deyo_sas, and no longer has any effect.",
-            call. = FALSE)
-
-  parse_quan_deyo_sas(save_data = save)
-}
-
-parseAhrqSas <- function(
-  sasPath = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
-  save = FALSE, path = NULL) {
-  .Deprecated("parse_ahrq_sas")
-  parse_ahrq_sas(sas_path = sasPath, save_data = save, path = path)
-}
-
 generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"),
                             save = TRUE, verbose = NULL) {
   .Deprecated("generate_sys")
@@ -1122,9 +1094,4 @@ parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), s
   .Deprecated("parse_leaf_descriptions_all")
   "verbose is no longer used in parse_leaf_descriptions_version"
   parse_leaf_descriptions_version(version = version, save_data = save, offline = !fromWeb)
-}
-
-icd9BuildChaptersHierarchy <- function(save = FALSE) {
-  .Deprecated("icd9_generate_chapters_hierarchy")
-  icd9_generate_chapters_hierarchy(save_data = save)
 }

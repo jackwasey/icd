@@ -79,7 +79,8 @@ logical_to_binary <- function(x) {
 
   if (is.matrix(x)) {
     assertMatrix(x, min.rows = 1, min.cols = 1)
-    return(as.logical(x))
+    mode(x) <- "integer"
+    return(x)
   } else if (is.data.frame(x))
     assertDataFrame(x, min.rows = 1, min.cols = 1)
   else

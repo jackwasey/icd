@@ -161,7 +161,7 @@ test_that("icd9IsValidDecimal valid E codes", {
   expect_true(icd_is_valid.icd9(short_code = FALSE, "E1."))
 })
 
-test_that("icd9IsValidShort", {
+test_that("detect valid short codes", {
   expect_equal(icd_is_valid.icd9(short_code = TRUE, character()), logical())
   expect_error(icd_is_valid.icd9(short_code = TRUE, list(1230, c(12323, 2323), c("nonesnseses"))))
   expect_true(icd_is_valid.icd9(short_code = TRUE, "0"))

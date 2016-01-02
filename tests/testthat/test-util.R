@@ -93,3 +93,12 @@ test_that("string pair match extraction" , {
   expect_equal(str_pair_match(pattern = "(a*)b(c*)", string = c("abc", "aabcc")),
                c(a = "c", aa = "cc"))
 })
+
+test_that("logical to binary for a matrix works", {
+  # matrix is all logical or all not logical by definition, so this is easy
+  m <- matrix(c(T, F, T, F), nrow = 2)
+  n <- matrix(c(1L, 0L, 1L, 0L), nrow = 2)
+
+  expect_identical(logical_to_binary(m), n)
+
+})

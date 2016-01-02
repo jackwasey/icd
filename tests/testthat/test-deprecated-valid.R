@@ -67,6 +67,40 @@ test_that("deprecated - icd9IsValidDecimal numeric-only", {
     c(TRUE, TRUE, TRUE, TRUE))
 })
 
+
+test_that("deprecated - icd9IsValidDecimal numeric-only direct fun", {
+  expect_false(icd9IsValidDecimalN(""))
+  expect_true(icd9IsValidDecimalN("0"))
+  expect_true(icd9IsValidDecimalN("00"))
+  expect_true(icd9IsValidDecimalN("000"))
+  expect_true(icd9IsValidDecimalN("0.00")) # maybe warn for this one?
+  expect_true(icd9IsValidDecimalN("000.00"))
+  expect_false(icd9IsValidDecimalN("0000"))
+  expect_true(icd9IsValidDecimalN("100"))
+  expect_true(icd9IsValidDecimalN("010")) # a bit weird, but should validate
+  # not enough zero padding? but not ambiguous.
+  expect_true(icd9IsValidDecimalN("01"))
+  expect_true(icd9IsValidDecimalN("1.1")) # a subtype of cholera
+  expect_true(icd9IsValidDecimalN("01.1")) # a subtype of cholera
+  expect_true(icd9IsValidDecimalN("001.1")) # a subtype of cholera
+  expect_true(icd9IsValidDecimalN("01.10"))
+  expect_true(icd9IsValidDecimalN("999.99"))
+  expect_true(icd9IsValidDecimalN(" 22.2 "))
+  expect_true(icd9IsValidDecimalN(" 33 "))
+  expect_true(icd9IsValidDecimalN("01.10"))
+  expect_true(icd9IsValidDecimalN("01.10"))
+  expect_true(icd9IsValidDecimalN("100."))
+  expect_equal(
+    icd9IsValidDecimalN(c("100", "200.55", "V01.11")),
+    c(TRUE, TRUE, TRUE))
+  expect_equal(
+    icd9IsValidDecimalN(as.factor(c("0", "100", "222.22", "100", "1", "0"))),
+    c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE))
+  expect_equal(
+    icd9IsValidDecimalN(c("10.1", "100", "999.99", "0.01")),
+    c(TRUE, TRUE, TRUE, TRUE))
+})
+
 test_that("deprecated - icd9IsValidDecimal V codes", {
   expect_true(icd9IsValidDecimal("V55.55"))
   expect_true(icd9IsValidDecimal("V99. "))
@@ -75,6 +109,14 @@ test_that("deprecated - icd9IsValidDecimal V codes", {
   expect_false(icd9IsValidDecimal("V."))
   expect_false(icd9IsValidDecimal("V.1"))
   expect_false(icd9IsValidDecimal("V123"))
+
+  expect_true(icd9IsValidDecimalV("V55.55"))
+  expect_true(icd9IsValidDecimalV("V99. "))
+  expect_true(icd9IsValidDecimalV("V1.")) # looks horrible, but not ambiguous
+  expect_false(icd9IsValidDecimalV("V0"))
+  expect_false(icd9IsValidDecimalV("V."))
+  expect_false(icd9IsValidDecimalV("V.1"))
+  expect_false(icd9IsValidDecimalV("V123"))
 })
 
 test_that("deprecated - validate invalid decimal E codes", {
@@ -430,3 +472,28 @@ test_that("deprecated - test valid alias", {
   expect_identical(icd9Valid(x, isShort = TRUE), icd9IsValid(x, isShort = TRUE))
 
   })
+
+# backported
+#
+test_that("get subset of billable codes", {
+  x <- c("410", "4100", "41000")
+  expect_equal(icd9GetBillable(x) %>% unclass, "41000")
+  expect_equal(icd9GetBillableShort(x) %>% unclass, "41000")
+  expect_equal(icd9GetBillableDecimal(x) %>% unclass, character(0))
+  x <- c("410", "410.0", "410.00")
+  expect_equal(icd9GetBillableDecimal(x) %>% unclass, "410.00")
+})
+
+test_that("get inverted subset of billable codes", {
+  x <- c("410", "410.0", "410.00")
+  expect_equal(icd9GetBillable(x, invert = TRUE) %>% unclass, c("410", "410.0"))
+})
+
+test_that("NonBillable", {
+  x <- c("410", "4100", "41000")
+  expect_equal(icd9GetNonBillable(x) %>% unclass, c("410", "4100"))
+  expect_equal(icd9GetNonBillableShort(x) %>% unclass, c("410", "4100"))
+  expect_equal(icd9GetNonBillableDecimal(x) %>% unclass, x)
+  x <- c("410", "410.0", "410.00")
+  expect_equal(icd9GetNonBillableDecimal(x) %>% unclass, c("410", "410.0"))
+})

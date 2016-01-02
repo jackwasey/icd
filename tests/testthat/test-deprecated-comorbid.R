@@ -17,8 +17,6 @@
 
 context("deprecated comorbidities")
 
-library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
-
 test_that("deprecated - try to induce c++ segfault bug", {
   expect_error(icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE), NA)
 })
@@ -84,37 +82,16 @@ test_that("deprecated - icd9 comorbidities are created correctly, and logical to
   )
 })
 
-test_that("deprecated - ahrq icd9 mappings generated from the current generation code", {
-  skip_on_cran()
-  if (system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()) == "")
-    skip("data-raw/comformat2012-2013.txt not available, so skipping Quan Deyo SAS parsing test.")
-  # same but from source data. Should be absolutely identical.
-  expect_equal(ahrqComorbid, parseAhrqSas(save = FALSE))
-  # same but from source data. Should be absolutely identical.
-  expect_equivalent(icd9GetInvalidMappingShort(ahrqComorbid), list())
-})
-
-test_that("deprecated - Quan Charlson icd9 mappings are all generated from the current generation code", {
-  if (system.file("data-raw", "ICD9_E_Charlson.sas", package = get_pkg_name()) == "")
-    skip("data-raw/ICD9_E_Charlson.sas not available, so skipping Quan Deyo SAS parsing test.")
-  expect_identical(quanDeyoComorbid, parseQuanDeyoSas(condense = FALSE, save = FALSE))
-})
-
 test_that("deprecated - Quan Charlson icd9 mappings contains no invalid mappings", {
   expect_equivalent(icd9GetInvalidMappingShort(quanDeyoComorbid), list())
 })
 
 test_that("deprecated - Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
-              expect_identical(quanElixComorbid,
-                               parseQuanElix(condense = FALSE, save = FALSE))
               expect_equivalent(icd9GetInvalidMappingShort(quanElixComorbid), list())
             })
 test_that("deprecated - Elixhauser icd9 mappings are all
             generated from the current generation code", {
-
-              expect_identical(elixComorbid,
-                               parseElix(condense = FALSE, save = FALSE))
               expect_equivalent(icd9GetInvalidMappingShort(elixComorbid), list())
             })
 
@@ -160,14 +137,6 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
     expect_that(quanElix,
                 testthat::not(testthat::equals(quanElixComorbid)))
   }
-})
-
-test_that("deprecated - icd9Hierarchy as saved in data can be recreated", {
-  skip("this is 15 minutes alone, so skip this and run manually when needed")
-  skip_slow_tests()
-  skip_online_tests()
-  expect_equal(icd9BuildChaptersHierarchy(save = FALSE),
-               icd9::icd9Hierarchy)
 })
 
 # the following test is dependent on Buildilability and consistency of
@@ -737,4 +706,7 @@ test_that("deprecated aliased function names", {
 
   expect_warning(res <- icd9ComorbiditiesQuanElixhauser(randomPatients, return.df = TRUE))
   expect_identical(res, icd9ComorbidQuanElix(randomPatients, return.df = TRUE))
-  })
+
+  expect_warning(res <- icd9ComorbidQuanElixhauser(randomPatients, return.df = TRUE))
+  expect_identical(res, icd9ComorbidQuanElix(randomPatients, return.df = TRUE))
+})
