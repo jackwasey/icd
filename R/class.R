@@ -81,16 +81,18 @@ icd_stop_classes_disorder <- function(x) {
 
 #' @describeIn icd_classes_ordered \code{testthat} \code{expect} function
 #'   for ICD classes to be in correct order.
+#' @keywords internal
 expect_icd_classes_ordered <- function(object, info = NULL, label = NULL) {
   requireNamespace("testthat")
   if (is.null(label)) {
-    label <- testthat:::find_expr("object")
+    label <- paste0(deparse(substitute(object), width.cutoff = 500), collapse = "\n")
   }
   testthat::expect_that(object, icd_expectation_classes_ordered(), info, label)
 }
 
 #' @describeIn icd_classes_ordered \code{testthat} \code{expectation }for
 #'   ICD classes to be in correct order.
+#' @keywords internal
 icd_expectation_classes_ordered <- function() {
   requireNamespace("testthat")
   function(x) {
@@ -109,15 +111,16 @@ icd_expectation_classes_ordered <- function() {
 #'   }
 #' }
 
+#' check whether there are any ICD class conflicts
+#'
+#' E.g. both icd10who and icd10cm
+#' @param x input object to test for class conflicts
+#' @keywords internal
 icd_check_class_conflict <- function(x) {
-  if (sum(icd9_sub_classes %in% class(x)) > 1)
-    stop("Conflicting ICD-9 sub-classes")
-  if (sum(icd10_sub_classes %in% class(x)) > 1)
-    stop("Conflicting ICD-10 sub-classes")
-  if (sum(icd_data_classes %in% class(x)) > 1)
-    stop("Conflicting long/wide data classes exist")
-  if (sum(icd_code_classes %in% class(x)) > 1)
-    stop("Conflicting short/decimal classes exist")
+  sum(icd9_sub_classes %in% class(x)) > 1 ||
+  sum(icd10_sub_classes %in% class(x)) > 1 ||
+  sum(icd_data_classes %in% class(x)) > 1 ||
+  sum(icd_code_classes %in% class(x)) > 1
 }
 
 #' @rdname set_icd_class
