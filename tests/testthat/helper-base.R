@@ -121,6 +121,15 @@ quanDeyoTestDat <- data.frame(
   stringsAsFactors = FALSE
 )
 
+multi_comorbid <- rbind(
+  ahrqTestDat,
+  elixTestDat,
+  quanElixTestDat,
+  quanDeyoTestDat
+)
+test_dat_multi_comorbid$visitId <-
+  sample(c("v1", "v2", "v3", "v4"), size = nrow(multi_comorbid), replace = TRUE)
+
 othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
                      "00323", "00324", "00329", "0038", "0039")
 

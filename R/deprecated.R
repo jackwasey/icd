@@ -917,6 +917,7 @@ icd9IsBillableDecimal <- function(icd9Decimal,
   icd_is_billable.icd9(icd9Decimal, short_code = FALSE, version)
 
 #' @rdname icd_get_billable
+#' @template isShort
 #' @export
 icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                             invert = FALSE, version = icd9cm_latest_edition()) {

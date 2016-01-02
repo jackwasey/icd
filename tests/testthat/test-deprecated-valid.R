@@ -384,6 +384,24 @@ test_that("deprecated - validate mappings", {
   expect_true(icd9IsValidMapping(list(a = "1001", b = "2023"), isShort = TRUE))
 })
 
+test_that("deprecated - get invalid codes in a decimal map", {
+
+  expect_equal(
+    icd9GetInvalidMappingDecimal(list(a = "100.1", b = "2023")),
+    list(b = "2023")
+  )
+
+})
+
+test_that("deprecated - get invalid codes in a short code map", {
+
+  expect_equal(
+    icd9GetInvalidMappingShort(list(a = "100.1", b = "2023")),
+    list(a = "100.1")
+  )
+
+})
+
 test_that("deprecated - get invalid decimals", {
   expect_equal(icd9GetInvalidDecimal(c("10.1", "rhubarb", "3000")), c("rhubarb", "3000"))
 })
@@ -403,3 +421,12 @@ test_that("deprecated - illable codes are identified", {
   expect_false(icd9IsBillable("1008"))
   expect_true(icd9IsBillable("1009"))
 })
+
+test_that("deprecated - test valid alias", {
+  x <- randomDecimalIcd9(200)
+  expect_identical(icd9Valid(x, isShort = FALSE), icd9IsValid(x, isShort = FALSE))
+
+  x <- randomShortIcd9(200)
+  expect_identical(icd9Valid(x, isShort = TRUE), icd9IsValid(x, isShort = TRUE))
+
+  })

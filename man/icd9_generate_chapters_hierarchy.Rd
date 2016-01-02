@@ -4,7 +4,7 @@
 \alias{icd9_generate_chapters_hierarchy}
 \title{generate ICD-9-CM hierarchy}
 \usage{
-icd9_generate_chapters_hierarchy(save_data = FALSE)
+icd9_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE)
 }
 \description{
 For each row of billing code, give the chapter, sub-chapter, major code and

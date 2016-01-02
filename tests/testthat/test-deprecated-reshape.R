@@ -57,3 +57,20 @@ test_that("deprecated - wide data to long data", {
   expect_equal(icd9WideToLong(widedfempty), icd9WideToLong(widedfempty))
 
 })
+
+test_that("matrix to data frame and back", {
+  for (pts in list(randomPatients, testTwenty, multi_comorbid)) {
+    mat <- icd_comorbid_ahrq(pts)
+    df <- icd9ComorbidMatToDf(mat)
+    expect_identical(icd9ComorbidDfToMat(df), mat)
+  }
+})
+
+test_that("dataframe to matrix and back", {
+  for (pts in list(randomPatients, testTwenty, multi_comorbid)) {
+    df2 <- icd_comorbid_ahrq(pts, return_df = TRUE)
+    mat2 <- icd9ComorbidDfToMat(df2)
+    df3 <- icd9ComorbidMatToDf(mat2, visitId = "visitId", stringsAsFactors = FALSE)
+    expect_identical(df2, df3)
+  }
+})

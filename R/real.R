@@ -65,6 +65,8 @@ icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
   icd_is_defined.icd9(x, short_code, ...)
 }
 
+#' Select only defined ICD codes
+#'
 #' Return only those codes which are heading or leaf (billable), specifying
 #' whether codes are all short-form or all decimal-form
 #' @param x input vector or factor, possibly with an ICD class
@@ -165,11 +167,17 @@ icd9cm_is_billable.icd_decimal_code <- function(x, version = icd9cm_latest_editi
 #' @description Get billable ICD codes, implicitly, this refers to an ICD
 #'   implementation which is specialized for a country, typically for billing,
 #'   e.g. ICD-9-CM in the USA.
+#' @param x input vector of ICD codes
+#' @template short_code
+#' @template invert
+#' @param version e.g. "32", not ICD-9 vs ICD-10
 #' @export
 icd_get_billable <- function(...) {
   UseMethod("icd_get_billable")
 }
 
+#' @describeIn icd_get_billable Get billable ICD codes, guessing ICD version,
+#'   and code short vs decimal type.
 #' @export
 #' @keywords internal
 icd_get_billable.default <- function(x, ...) {

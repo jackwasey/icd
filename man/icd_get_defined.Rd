@@ -2,8 +2,7 @@
 % Please edit documentation in R/real.R
 \name{icd_get_defined}
 \alias{icd_get_defined}
-\title{Return only those codes which are heading or leaf (billable), specifying
-whether codes are all short-form or all decimal-form}
+\title{Select only defined ICD codes}
 \usage{
 icd_get_defined(x, short_code = icd_guess_short(x), billable = FALSE)
 }

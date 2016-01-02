@@ -40,9 +40,9 @@ test_that("long data to wide data", {
   longdf2 <- data.frame(i = c("441", "4424", "443", "441"),
                         v = c("a", "b", "b", "c"))
   expect_equal(names(icd_long_to_wide(longdf2,
-                                    visit_name = "v",
-                                    icd_name = "i",
-                                    prefix = "ICD10_", return_df = TRUE)),
+                                      visit_name = "v",
+                                      icd_name = "i",
+                                      prefix = "ICD10_", return_df = TRUE)),
                c("v", "ICD10_001", "ICD10_002"))
 })
 
@@ -59,4 +59,21 @@ test_that("wide data to long data", {
   expect_equal(icd_wide_to_long(widedfempty),
                icd_wide_to_long(widedfempty))
 
+})
+
+test_that("matrix to data frame and back", {
+  for (pts in list(randomPatients, testTwenty, multi_comorbid)) {
+    mat <- icd_comorbid_ahrq(pts)
+    df <- icd_comorbid_mat_to_df(mat)
+    expect_identical(icd_comorbid_df_to_mat(df), mat)
+  }
+})
+
+test_that("dataframe to matrix and back", {
+  for (pts in list(randomPatients, testTwenty, multi_comorbid)) {
+    df2 <- icd_comorbid_ahrq(pts, return_df = TRUE)
+    mat2 <- icd_comorbid_df_to_mat(df2)
+    df3 <- icd_comorbid_mat_to_df(mat2, visit_name = "visitId", stringsAsFactors = FALSE)
+    expect_identical(df2, df3)
+  }
 })

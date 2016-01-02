@@ -230,6 +230,7 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
   assertFlag(stringsAsFactors)
   out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors)
   names(out)[1] <- visit_name
+  rownames(out) <- NULL
   out
 }
 

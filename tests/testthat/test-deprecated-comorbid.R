@@ -721,3 +721,20 @@ test_that("deprecated data aliases are created", {
     )
   )
 })
+
+test_that("deprecated aliased function names", {
+  expect_warning(res <- icd9Comorbidities(randomPatients, icd9::ahrqComorbid, return.df = TRUE))
+  expect_identical(res, icd9Comorbid(randomPatients, icd9::ahrqComorbid, return.df = TRUE))
+
+  expect_warning(res <- icd9ComorbiditiesAhrq(randomPatients, return.df = TRUE))
+  expect_identical(res, icd9ComorbidAhrq(randomPatients, return.df = TRUE))
+
+  expect_warning(res <- icd9ComorbiditiesElixHauser(randomPatients, return.df = TRUE))
+  expect_identical(res, icd9ComorbidElix(randomPatients, return.df = TRUE))
+
+  expect_warning(res <- icd9ComorbiditiesQuanDeyo(randomPatients, return.df = TRUE))
+  expect_identical(res, icd9ComorbidQuanDeyo(randomPatients, return.df = TRUE))
+
+  expect_warning(res <- icd9ComorbiditiesQuanElixhauser(randomPatients, return.df = TRUE))
+  expect_identical(res, icd9ComorbidQuanElix(randomPatients, return.df = TRUE))
+  })
