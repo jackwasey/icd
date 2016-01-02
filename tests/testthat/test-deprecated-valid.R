@@ -92,7 +92,7 @@ test_that("deprecated - icd9IsValidDecimal numeric-only direct fun", {
   expect_true(icd9IsValidDecimalN("100."))
   expect_equal(
     icd9IsValidDecimalN(c("100", "200.55", "V01.11")),
-    c(TRUE, TRUE, TRUE))
+    c(TRUE, TRUE, FALSE))
   expect_equal(
     icd9IsValidDecimalN(as.factor(c("0", "100", "222.22", "100", "1", "0"))),
     c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE))

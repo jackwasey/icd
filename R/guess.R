@@ -44,13 +44,12 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
 #' @keywords internal
 #' @export
 icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L) {
-  if (inherits(x, "icd_short_code")) return(TRUE)
-  if (inherits(x, "icd_decimal_code")) return(FALSE)
+  if (is.icd_short_code(x))
+    return(TRUE)
+  if (is.icd_decimal_code(x))
+    return(FALSE)
   if (!is.null(short_code)) {
-    if (short_code)
-      return(TRUE)
-    else
-      return(FALSE)
+    short_code
   }
   if (is.list(x)) x <- unlist(x, recursive = TRUE)
   x <- asCharacterNoWarn(x)
@@ -79,10 +78,10 @@ icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L) {
 }
 
 #' @export
-icd_guess_short.icd_short_code <- function(x) TRUE
+icd_guess_short.icd_short_code <- function(x) TRUE #nocov
 
 #' @export
-icd_guess_short.icd_decimal_code <- function(x) FALSE
+icd_guess_short.icd_decimal_code <- function(x) FALSE #nocov
 
 #' Guess version of ICD
 #'
@@ -95,12 +94,12 @@ icd_guess_version <- function(x, short_code, ...)
 #' @describeIn icd_guess_version Guess version class ICD-9 codes
 #' @keywords internal
 #' @export
-icd_guess_version.icd9 <- function(x, short_code, ...) "icd9"
+icd_guess_version.icd9 <- function(x, short_code, ...) "icd9" #nocov
 
 #' @describeIn icd_guess_version Guess version of class ICD-10 codes
 #' @keywords internal
 #' @export
-icd_guess_version.icd10 <- function(x, short_code, ...) "icd10"
+icd_guess_version.icd10 <- function(x, short_code, ...) "icd10" #nocov
 
 #' @describeIn icd_guess_version Guess version of ICD codes in character vector
 #' @keywords internal

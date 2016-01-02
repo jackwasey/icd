@@ -15,12 +15,3 @@ SEXP getRListOrDfElement(SEXP list_or_df, const char* element_name) {
 	}
 	return element;
 }
-
-void delanychar(char* str, char c) {
-	char *pread = str, *pwrite = str;
-	while (*pread) {
-		*pwrite = *pread++;
-		pwrite += (*pwrite != c);
-	}
-	*pwrite = '\0';
-}
