@@ -139,27 +139,6 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
   }
 })
 
-# the following test is dependent on Buildilability and consistency of
-# http://www.icd9data.com because there is no machine readable CDC or CMS file
-# with this data.
-test_that("icd9Chapters, etc. as saved in data can be recreated", {
-  skip("this is now deprecated since we don't scrape a web site anymore")
-  skip_flat_icd9_avail(ver = "32")
-  res <- parseIcd9Chapters(year = "2014", save_data = FALSE)
-  expect_equal(res$icd9Chapters, icd9::icd9Chapters)
-  expect_equal(res$icd9ChaptersSub, icd9::icd9ChaptersSub)
-  expect_equal(res$icd9ChaptersMajor, icd9::icd9ChaptersMajor)
-})
-
-test_that("deprecated - AHRQ interpretation at least returns something reasonable", {
-  skip_slow_tests()
-  result <- parseAhrqSas(sasPath = system.file("data-raw",
-                                               "comformat2012-2013.txt", package = "icd9"),
-                         save = FALSE)
-  expect_that(result, is_a("list"))
-  expect_true(length(result) > 10)
-})
-
 test_that("deprecated - Charlson Deyo doesn't double count disease with two severities", {
   expect_false(any(quanDeyoComorbid[["Mild Liver Disease"]] %in%
                      quanDeyoComorbid[["Moderate or Severe Liver Disease"]] ))
