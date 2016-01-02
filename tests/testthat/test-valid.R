@@ -440,3 +440,19 @@ test_that("an invalid short code is not billable decimal", {
   expect_false(icd_is_billable("410.00", short_code = TRUE))
   expect_true(icd_is_billable("410.00", short_code = FALSE))
 })
+
+
+test_that("valid short n", {
+  x <- icd9RandomShortN(100)
+  expect_true(all(icd9_is_valid_short_n(x)))
+})
+
+test_that("valid short v", {
+  x <- icd9RandomShortV(100)
+  expect_true(all(icd9_is_valid_short_v(x)))
+})
+
+test_that("valid short e", {
+  x <- icd9RandomShortE(100)
+  expect_true(all(icd9_is_valid_short_e(x)))
+})

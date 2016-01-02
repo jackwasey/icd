@@ -497,3 +497,19 @@ test_that("NonBillable", {
   x <- c("410", "410.0", "410.00")
   expect_equal(icd9GetNonBillableDecimal(x) %>% unclass, c("410", "410.0"))
 })
+
+test_that("deprecated - valid short n", {
+  x <- icd9RandomShortN(100)
+  expect_true(all(icd9IsValidShortN(x)))
+})
+
+test_that("deprecated - valid short v", {
+  x <- icd9RandomShortV(100)
+  expect_true(all(icd9IsValidShortV(x)))
+})
+
+test_that("deprecated - valid short e", {
+  x <- icd9RandomShortE(100)
+  expect_true(all(icd9IsValidShortE(x)))
+})
+
