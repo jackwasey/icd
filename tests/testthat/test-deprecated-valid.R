@@ -430,3 +430,18 @@ test_that("deprecated - test valid alias", {
   expect_identical(icd9Valid(x, isShort = TRUE), icd9IsValid(x, isShort = TRUE))
 
   })
+
+test_that("deprecated - valid short n", {
+  x <- icd9RandomShortN(100)
+  expect_true(all(icd9IsValidShortN(x)))
+})
+
+test_that("deprecated - valid short v", {
+  x <- icd9RandomShortV(100)
+  expect_true(all(icd9IsValidShortV(x)))
+})
+
+test_that("deprecated - valid short e", {
+  x <- icd9RandomShortE(100)
+  expect_true(all(icd9IsValidShortE(x)))
+})
