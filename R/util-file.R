@@ -93,35 +93,29 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
 #' @keywords internal
 download_to_data_raw <- function(url,
                                  file_name = str_extract(url, "[^/]*$"),
-                                 force = FALSE, offline = FALSE,
-                                 verbose = TRUE) {
+                                 offline = FALSE) {
   assertString(url)
   assertString(file_name)
-  assertFlag(force)
-  stopifnot(!(force & offline))
 
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
   save_path <- file.path(data_raw_path, file_name)
-  if (verbose)
-    message("data_raw_path: ", data_raw_path, "\nsave_path ", save_path)
+  f_info <- list(file_path = save_path, file_name = file_name)
 
-  if ((force || !file.exists(save_path)) && offline) {
-    if (verbose)
-      message("not forcing, or file exists; and offline")
-      return(NULL)
-  }
+  if (file.exists(save_path))
+    return(f_info)
+  else if (offline)
+    return(NULL)
 
   # using libcurl because it seems the internal method works inconsistently?
   #if (capabilities("libcurl"))
     #method = "libcurl"
   #else
   method = "auto"
-
   dl_code <- download.file(url = url, destfile = save_path,
                            quiet = TRUE, method = method)
   stopifnot(dl_code == 0)
 
-  list(file_path = save_path, file_name = file_name)
+  f_info
 
 }
 

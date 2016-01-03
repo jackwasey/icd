@@ -33,17 +33,10 @@ fetch_ahrq_sas <- function(offline) {
 #' @template savesas
 #' @template parse-template
 #' @keywords internal
-parse_ahrq_sas <- function(
-  sas_path = system.file("data-raw", "comformat2012-2013.txt", package = get_pkg_name()),
-  save_data = FALSE, offline = FALSE, path = NULL, verbose = NULL) {
+parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
-  if (!missing(path) || !missing(verbose))
-    warning("'verbose' and 'path' in parse_ahrq_sas are deprecated and no longer has any effect.
-            'path' is now the data dir in the working tree.",
-            call. = FALSE)
-
-  assertString(sas_path)
   assertFlag(save_data)
+  assertFlag(offline)
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
@@ -137,6 +130,7 @@ parse_ahrq_sas <- function(
 
 #' @keywords internal
 fetch_quan_deyo_sas <- function(offline) {
+  assertFlag(offline)
   download_to_data_raw(url = "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
                        file_name = "ICD9_E_Charlson.sas", offline = offline)
 }
@@ -164,6 +158,7 @@ parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   assertFlag(save_data)
   assertFlag(offline)
 
+  # download the file and/or just get the path/filename to it
   stopifnot(!is.null(f_info <- fetch_quan_deyo_sas(offline = offline)))
 
   quanSas <- readLines(f_info$file_path, warn = FALSE)
