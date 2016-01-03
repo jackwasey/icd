@@ -30,7 +30,6 @@ fetch_ahrq_sas <- function(offline) {
 #' @description Takes the raw data taken directly from the AHRQ web site and
 #'   parses into RData. It is then saved in the development tree data directory,
 #'   so this is an internal function, used in generating the package itself!
-#' @template savesas
 #' @template parse-template
 #' @keywords internal
 parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
@@ -150,7 +149,6 @@ fetch_quan_deyo_sas <- function(offline) {
 #'   \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}.
 #'   There are structural differences between this version and the version
 #'   directly from Dr. Quan, however, the parsing results in identical data.
-#' @template savesas
 #' @template parse-template
 #' @template offline
 #' @keywords internal

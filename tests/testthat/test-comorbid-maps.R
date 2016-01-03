@@ -171,10 +171,10 @@ test_that("icd9cm_hierarchy as saved in data can be recreated", {
 test_that("AHRQ interpretation at least returns something reasonable", {
   skip_slow_tests()
 
-  if (is.null(ahrq_f_info <- fetch_ahrq_sas(offline = TRUE)))
+  if (is.null(fetch_ahrq_sas(offline = TRUE)))
     skip_online_tests("data-raw/comformat2012-2013.txt not available")
 
-  result <- parse_ahrq_sas(sas_path = ahrq_f_info$file_name, save_data = FALSE)
+  result <- parse_ahrq_sas(save_data = FALSE)
   expect_that(result, is_a("list"))
   expect_true(length(result) > 10)
 })

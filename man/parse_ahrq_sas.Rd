@@ -4,23 +4,11 @@
 \alias{parse_ahrq_sas}
 \title{parse AHRQ SAS code to get mapping}
 \usage{
-parse_ahrq_sas(sas_path = system.file("data-raw", "comformat2012-2013.txt",
-  package = get_pkg_name()), save_data = FALSE, offline = FALSE,
-  path = NULL, verbose = NULL)
+parse_ahrq_sas(save_data = FALSE, offline = FALSE)
 }
 \arguments{
-\item{sas_path}{single character string containing path or URL for some SAS
-code. The source SAS code is stored in data-raw or at the location
-specified in URL. This function is internal, since it is used to generate
-data which ends up in the distributed package. However, the package user
-can verify that the code creates the distributed R data. Also, changes to
-the original SAS code can be used to regenerate the R data by the user,
-without waiting for a package release.}
-
 \item{save_data}{logical whether to save the result in the source tree.
 Defaults to \code{FALSE}.}
-
-\item{sasPath}{Deprecated. Use the updated function name and \code{sas_path}}
 
 \item{condense}{Deprecated. The map is not condensed by default. If required,
 it can reduced to a smaller set of codes using \code{icd_condense}.}
