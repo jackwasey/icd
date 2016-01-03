@@ -49,7 +49,9 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
   rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
   fn <- rtf_dat$rtf_filename
 
-  f_info_rtf <- unzip_to_data_raw(rtf_dat$url, file_name = fn, offline = offline)
+  f_info_rtf <- unzip_to_data_raw(rtf_dat$url,
+                                  file_name = fn,
+                                  offline = offline)
 
   if (is.null(f_info_rtf))
     stop("RTF data for year", year, "unavailable.")
@@ -59,8 +61,8 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
   on.exit(close(fp_conn))
   rtf_lines <- readLines(fp_conn, warn = FALSE)
 
-  # the file itself is 7 bit ASCII, but has its own internal encoding using CP1252.
-  # test meniere's disease with lines  24821 to 24822 from 2012 RTF
+  # the file itself is 7 bit ASCII, but has its own internal encoding using
+  # CP1252. test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
   out <- parse_rtf_lines(rtf_lines, verbose) %>%
     swapNamesWithVals %>%
@@ -124,9 +126,10 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
 
   filtered <- strip_rtf(filtered)
 
-  filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE) # empty lines
+  filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE)
 
-  re_anycode <- "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
+  re_anycode <-
+    "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
 
   # this is so ghastly: find rows with sequare brackets containing definition of
   # subset of fourth or fifth digit codes. Need to pull code from previous row,
@@ -153,20 +156,23 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   # grab fifth digit ranges now:
   re_fifth_range_other <- "fifth +digit +to +identify +stage"
   re_fifth_range <- "ifth-digit subclas|fifth-digits are for use with codes"
-  re_fifth_range_V30V39 <- "The following two fifths-digits are for use with the fourth-digit \\.0"
-  fifth_rows <- grep(paste(re_fifth_range, re_fifth_range_other, sep = "|"), filtered)
+  re_fifth_range_V30V39 <-
+    "The following two fifths-digits are for use with the fourth-digit \\.0"
+  re_fifth_rows <- paste(re_fifth_range, re_fifth_range_other, sep = "|")
+  filtered %>% str_detect(re_fifth_rows) %>% which -> fifth_rows
 
   # several occurances of "Requires fifth digit", referring back to the previous
   # higher-level definition, without having the parent code in the line itself
   fifth_backref <- grep(re_fifth_range_other, filtered)
   # for these, construct a string which will be captured in the next block
-  filtered[fifth_backref] <- paste(filtered[fifth_backref], filtered[fifth_backref - 1], sep = " ")
+  filtered[fifth_backref] <- paste(filtered[c(fifth_backref, fifth_backref - 1)])
 
   # fourth-digit qualifiers:
   re_fourth_range <- "fourth-digit.+categor"
   fourth_rows <- grep(re_fourth_range, filtered)
 
-  # lookup_fourth will contain vector of suffices, with names being the codes they augment
+  # lookup_fourth will contain vector of suffices, with names being the codes
+  # they augment
   lookup_fourth <- c()
   for (f in fourth_rows) {
     if (verbose)
@@ -249,7 +255,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
 
   # now here we could potentially capture chapter headings, but I can drop
   # excludes easily by removing lines with bracketed codes
-  filtered <- grep(paste0("\\((", re_anycode, ")+[-[:digit:]]*\\)"), filtered, value = TRUE, invert = TRUE)
+  filtered <- grep(paste0("\\((", re_anycode, ")+[-[:digit:]]*\\)"),
+                   filtered, value = TRUE, invert = TRUE)
   filtered <- grep(paste0("Exclude"), filtered, value = TRUE, invert = TRUE)
   # again, we can keep some more information, but we'll just take the primary
   # description for each item, i.e. where a code begins a line. Some codes have
@@ -258,9 +265,12 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   # spaces to single
   filtered <- gsub("[[:space:]]+", " ", filtered)
   # fix a few things, e.g. "040. 1 Rhinoscleroma", "527 .0 Atrophy"
-  filtered <- sub("^([VvEe]?[[:digit:]]+) ?\\. ?([[:digit:]]) (.*)", "\\1\\.\\2 \\3", filtered)
+  filtered <-
+    sub("^([VvEe]?[[:digit:]]+) ?\\. ?([[:digit:]]) (.*)", "\\1\\.\\2 \\3",
+        filtered)
   # and high-level headings like "210-229 Benign neoplasms"
-  filtered <- grep("^[[:space:]]*[[:digit:]]{3}-[[:digit:]]{3}.*", filtered, value = TRUE, invert = TRUE)
+  filtered <- grep("^[[:space:]]*[[:digit:]]{3}-[[:digit:]]{3}.*", filtered,
+                   value = TRUE, invert = TRUE)
   # "707.02Upper back"
   filtered <- sub("([[:digit:]])([[:alpha:]])", "\\1 \\2", filtered)
   # "2009 H1 N1 swine influenza virus"
@@ -298,7 +308,6 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
     # instead of %in%
     if (parent_code %fin% names(out)) {
       # add just the suffix with name being the five digit code
-      #pair_fifth <- lookup_fifth[f_num] # get the name only?
       pair_fifth <- paste(out[parent_code], lf, sep = ", ")
       names(pair_fifth) <- f
       out_fifth <- append(out_fifth, pair_fifth)
@@ -311,7 +320,9 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   # clean up duplicates (about 350 in 2015 data), mostly one very brief
   # description and a correct longer one; or, identical descriptions
 
-  dupes <- out[duplicated(names(out)) | duplicated(names(out), fromLast = TRUE)] %>% names %>% unique
+  out[duplicated(names(out)) | duplicated(names(out), fromLast = TRUE)] %>%
+    names %>%
+    unique -> dupes
 
   for (d in dupes) {
     dupe_rows <- which(names(out) == d)
@@ -321,7 +332,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
     }
     desclengths <- out[dupe_rows] %>% nchar
     longestlength <- desclengths %>% max
-    if (verbose) message("removing differing duplicates: ", paste(out[dupe_rows]))
+    if (verbose)
+      message("removing differing duplicates: ", paste(out[dupe_rows]))
     out <- out[-dupe_rows[-which(desclengths != longestlength)]]
   }
 
@@ -329,17 +341,20 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   # applied over a range of codes.
   out <- out[-which(names(out) %in% invalid_qual)]
 
-  # 2015 quirks (many more are baked into the parsing: try to splinter out the most specific)
-  # some may well apply to other years
+  # 2015 quirks (many more are baked into the parsing: try to splinter out the
+  # most specific) some may well apply to other years
 
-  # 650-659 ( and probably many others don't use whole subset of fourth or fifth digit qualifiers)
-  # going to have to parse these, e.g. [0,1,3], as there are so many...
+  # 650-659 ( and probably many others don't use whole subset of fourth or fifth
+  # digit qualifiers) going to have to parse these, e.g. [0,1,3], as there are
+  # so many...
   out <- out[grep("65[12356789]\\.[[:digit:]][24]", names(out), invert = TRUE)]
 
   #657 just isn't formatted like any other codes
   out["657.0"] <- "Polyhydramnios"
-  out["657.00"] <- "Polyhydramnios, unspecified as to episode of care or not applicable"
-  out["657.01"] <- "Polyhydramnios, delivered, with or without mention of antepartum condition"
+  out["657.00"] <-
+    "Polyhydramnios, unspecified as to episode of care or not applicable"
+  out["657.01"] <-
+    "Polyhydramnios, delivered, with or without mention of antepartum condition"
   out["657.03"] <- "Polyhydramnios, antepartum condition or complication"
 
   out["719.69"] <- "Other symptoms referable to joint, multiple sites"
@@ -361,9 +376,9 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
 
   out <- c()
   # get numbers and number ranges
-  str_split(row_str, "[, :;]") %>%
+  row_str %>%
+    str_split("[, :;]") %>%
     unlist %>%
-    #grep("[VvEe]?[0-9]", ., value = TRUE) -> vals
     str_subset("[VvEe]?[0-9]") -> vals
 
   if (verbose)
@@ -408,14 +423,15 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
       pair_one <- gsub("[^[:digit:]]", "", pair[1])
       pair_two <- gsub("[^[:digit:]]", "", pair[2])
       if (as.integer(pair_two) - as.integer(pair_one) > 10) {
-        warning("probable formatting misinterpretation because huge range expansion is requested")
+        warning("probable formatting misinterpretation: huge range expansion")
       }
 
       out <- c(out, pair[1] %i9da% pair[2])
     } else {
       # take care of single values
       if (!icd_is_valid.icd9(v, short_code = FALSE))
-        stop(paste("invalid code is: ", icd_get_invalid.icd9(v, short_code = FALSE)))
+        stop(paste("invalid code is: ",
+                   icd_get_invalid.icd9(v, short_code = FALSE)))
       out <- c(out, icd_children.icd9(v, short_code = FALSE))
     }
 
@@ -458,15 +474,12 @@ strip_rtf_orig <- function(x) {
     gsub("\\\\tab ", " ", .) %>%
     gsub("\\\\[[:punct:]]", "", .) %>% # control symbols only, not control words
     gsub("\\\\lsdlocked[ [:alnum:]]*;", "", .) %>% # special case, still needed?
-    #gsub("\\\\[-[:alnum:]]+[ ;:,.]?", "", .) %>%
     gsub("\\{\\\\bkmkstart.*?\\}", "", .) %>%
     gsub("\\{\\\\bkmkend.*?\\}", "", .) %>%
-    #gsub("\\\\[[:alnum:]]*[ [:punct:]]", "", .) %>%
-    ## no backslash in this next list, others removed from http://www.regular-expressions.info/posixbrackets.html
     gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", .) %>%
     gsub(" *(\\}|\\{)", "", .) %>%
+    # nolint end
     trim
-  # nolint end
 }
 
 str_strip_rtf <- function(x) {
@@ -476,13 +489,13 @@ str_strip_rtf <- function(x) {
     str_replace_all("\\\\tab ", " ") %>%
     str_replace_all("\\\\[[:punct:]]", "") %>% # control symbols only, not control words
     str_replace_all("\\\\lsdlocked[ [:alnum:]]*;", "") %>% # special case, still needed?
-    #gsub("\\\\[-[:alnum:]]+[ ;:,.]?", "", .) %>%
     str_replace_all("\\{\\\\bkmkstart.*?\\}", "") %>%
     str_replace_all("\\{\\\\bkmkend.*?\\}", "") %>%
-    #gsub("\\\\[[:alnum:]]*[ [:punct:]]", "", .) %>%
-    ## no backslash in this next list, others removed from http://www.regular-expressions.info/posixbrackets.html
+    # no backslash in this next list, others removed from
+    # http://www.regular-expressions.info/posixbrackets.html
     str_replace_all("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "") %>%
     str_replace_all(" *(\\}|\\{)", "") %>%
+    # nolint end
     str_trim
 }
 

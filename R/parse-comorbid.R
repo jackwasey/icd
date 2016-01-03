@@ -104,15 +104,19 @@ parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
   # hard to write an AHRQ specific function to do this if needed, but it makes
   # more sense to me
 
-  #   condense to parents, for each parent, if children are all in the list, add the parent
+  #   condense to parents, for each parent, if children are all in the list, add
+  #   the parent
   for (cmb in names(icd9_map_ahrq)) {
     message("working on ranges for: ", cmb)
-    parents <- icd_condense.icd9(icd9_map_ahrq[[cmb]], defined = FALSE, short_code = TRUE)
+    parents <- icd_condense.icd9(icd9_map_ahrq[[cmb]], defined = FALSE,
+                                 short_code = TRUE)
     for (p in parents) {
       kids <- icd_children.icd9(p, defined = FALSE, short_code = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
       if (all(kids %in% icd9_map_ahrq[[cmb]]))
-        icd9_map_ahrq[[cmb]] <- c(icd9_map_ahrq[[cmb]], p) %>% unique %>% icd_sort.icd9(short_code = TRUE)
+        icd9_map_ahrq[[cmb]] <- c(icd9_map_ahrq[[cmb]], p) %>%
+        unique %>%
+        icd_sort.icd9(short_code = TRUE)
     }
   }
 
@@ -130,8 +134,10 @@ parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 #' @keywords internal
 fetch_quan_deyo_sas <- function(offline) {
   assertFlag(offline)
-  download_to_data_raw(url = "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
-                       file_name = "ICD9_E_Charlson.sas", offline = offline)
+  download_to_data_raw(
+    url =
+      "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
+    file_name = "ICD9_E_Charlson.sas", offline = offline)
 }
 
 #' @title parse original SAS code defining Quan's update of Deyo comorbidities.
