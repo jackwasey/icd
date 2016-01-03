@@ -81,10 +81,9 @@ logical_to_binary <- function(x) {
     assertMatrix(x, min.rows = 1, min.cols = 1)
     mode(x) <- "integer"
     return(x)
-  } else if (is.data.frame(x))
-    assertDataFrame(x, min.rows = 1, min.cols = 1)
-  else
-    stop("need a matrix or data.frame")
+  }
+
+  assertDataFrame(x, min.rows = 1, min.cols = 1)
 
   logical_fields <- names(x)[sapply(x, is.logical)]
   if (is.na(logical_fields) || length(logical_fields) == 0)

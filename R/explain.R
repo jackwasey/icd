@@ -112,7 +112,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
   x <- x[x %nin% mj]
   descField <- ifelse(brief, "descShort", "descLong")
   c(mjexplain,
-    icd9::icd9_hierarchy[ icd9::icd9_hierarchy[["icd9"]] %in% x, descField]
+    icd9::icd9cm_hierarchy[ icd9::icd9cm_hierarchy[["icd9"]] %in% x, descField]
   )
 }
 
@@ -165,7 +165,6 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9), verbos
   subchap_lookup <- lapply(icd9::icd9ChaptersSub, function(y)
     icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
 
-
   for (i in 1:length(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
@@ -185,6 +184,7 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9), verbos
   whch <- match(majors, allmjrs, nomatch = NA_character_)
   out$major[] <- names(allmjrs)[whch]
   out$threedigit[] <- unlist(allmjrs)[whch]
+  out$threedigit <- out$threedigit %>% icd9cm
 
   # many possible three digit codes don't exist. We should return NA for the
   # whole row. Chapter is coded as a range, so picks up these non-existent codes

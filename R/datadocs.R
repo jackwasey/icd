@@ -64,7 +64,7 @@ NULL
 #' @title ICD9-CM diagnosis code lookup
 #' @description short-form ICD-9 codes with short and long descriptions, and
 #'   description of each hierarchy level containing each code.
-#' @details \code{icd9Hierarchy} is deprecated in favor of \code{icd9_hierarchy}
+#' @details \code{icd9Hierarchy} is deprecated in favor of \code{icd9cm_hierarchy}
 #' @docType data
 #' @keywords datasets
 #' @format data frame
@@ -83,7 +83,7 @@ NULL
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icdcm.asp}
 #' @source
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
-#' @name icd9_hierarchy
+#' @name icd9cm_hierarchy
 #' @aliases icd9Hierarchy
 NULL
 
@@ -91,7 +91,7 @@ NULL
 #'
 #' The public domain modified ICD-10 classification as published in the public
 #' domain by the US CDC. Currently this has a slightly different structure to
-#' \code{icd9_hierarchy} because the published data helpfully has a \emph{leaf}
+#' \code{icd9cm_hierarchy} because the published data helpfully has a \emph{leaf}
 #' flag indicating whether a code is a \emph{billable} leaf node, or a code
 #' higher in the hierarchy which nevertheless will have a description.
 #'

@@ -216,14 +216,14 @@ test_that("parse icd9ChaptersMajor vs those listed
           in the other CDC source of the leaf definitions.", {
             # get all the majors from the other list, to compare
 
-            compareMajors <- unique(icd_get_major.icd9(icd9::icd9_hierarchy[["icd9"]], short_code = TRUE))
+            compareMajors <- unique(icd_get_major.icd9(icd9::icd9cm_hierarchy[["icd9"]], short_code = TRUE))
             expect_true(all(compareMajors %in% icd9ChaptersMajor))
             expect_true(all(icd9ChaptersMajor %in% compareMajors))
           })
 
 test_that("unsorted hierarchy tests", {
   expect_equal(
-    tolower(icd9::icd9_hierarchy[icd9_hierarchy[["icd9"]] == "00321",
+    tolower(icd9::icd9cm_hierarchy[icd9cm_hierarchy[["icd9"]] == "00321",
                                 "descLong"]),
     tolower("Salmonella Meningitis"))
 })

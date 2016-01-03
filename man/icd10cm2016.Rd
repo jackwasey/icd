@@ -12,7 +12,7 @@
 \description{
 The public domain modified ICD-10 classification as published in the public
 domain by the US CDC. Currently this has a slightly different structure to
-\code{icd9_hierarchy} because the published data helpfully has a \emph{leaf}
+\code{icd9cm_hierarchy} because the published data helpfully has a \emph{leaf}
 flag indicating whether a code is a \emph{billable} leaf node, or a code
 higher in the hierarchy which nevertheless will have a description.
 }

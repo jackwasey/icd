@@ -68,7 +68,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
 
   # make Tidy data: don't like using row names to store things
   icd9Desc <- data.frame(
-    icd9  = out %>% unname %>% icd_decimal_to_short.icd9,
+    icd9  = out %>% unname %>% icd_decimal_to_short.icd9 %>% icd9cm,
     desc = names(out),
     stringsAsFactors = FALSE)
 
@@ -388,7 +388,7 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
         out <- c(out, first %i9da% last)
       } else {
         single <- paste0(icd_get_major.icd9(base_code, short_code = FALSE), dotmnr)
-        out <- c(out, icd_children.icd9(single, short_code = FALSE, real = FALSE))
+        out <- c(out, icd_children.icd9(single, short_code = FALSE, defined = FALSE))
       }
     }
     vals <- vals[1] # still need to process the base code

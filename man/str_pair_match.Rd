@@ -12,7 +12,8 @@ str_pair_match(string, pattern, swap = FALSE, dropEmpty = FALSE,
 not to swap, so the first match becomes the name.}
 
 \item{warn_pattern}{logical, if the pattern has multiple parentheses,
-optinally don't warn if we are forced to choose just a pair of the sub-matches}
+optinally don't warn if we are forced to choose just a pair of the
+sub-matches}
 }
 \description{
 match a character vector against a regex with a pair of parentheses,

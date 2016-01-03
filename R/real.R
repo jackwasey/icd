@@ -51,7 +51,7 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
     icd9cm_is_billable.icd_short_code(asCharacterNoWarn(x))
   else
     icd9_add_leading_zeroes.icd_short_code(
-      asCharacterNoWarn(x)) %in% icd9::icd9_hierarchy[["icd9"]]
+      asCharacterNoWarn(x)) %in% icd9::icd9cm_hierarchy[["icd9"]]
 }
 
 #' @describeIn icd_is_defined Check whether ICD codes are defined, guessing ICD

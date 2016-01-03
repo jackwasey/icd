@@ -48,13 +48,13 @@ generate_everything <- function() {
 
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
-                       Depends on icd9_hierarchy being updated.")
+                       Depends on icd9cm_hierarchy being updated.")
   parse_ahrq_sas(save_data = TRUE)
   parse_quan_deyo_sas(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
   devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
+  icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
 
 }
 # nocov end
@@ -216,19 +216,26 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
 #' For each row of billing code, give the chapter, sub-chapter, major code and
 #' description, and short and long descriptions. Currently this is specifically
 #' for the 2011 ICD-9-CM after which there have been minimal changes.
+#' Thankfully, ICD-10-CM has machine readable data available.
 #' @keywords internal
-icd9_generate_chapters_hierarchy <- function(save_data = FALSE, verbose = FALSE) {
+icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
+                                               verbose = FALSE) {
   assertFlag(save_data)
+  assertFlag(verbose)
 
-  icd9Desc <- parse_rtf_year(year = "2011", save_data = FALSE, verbose = verbose)
+  message("get column of ICD-9 codes, up to the three digit headings. ~10s")
+  icd9Desc <- parse_rtf_year(year = "2011",
+                             save_data = FALSE,
+                             verbose = verbose)
 
-  message("working on slow step of building icd9 chapters hierarchy.")
+  message("slower step of building icd9 chapters hierarchy from 2011 RTF. ~20s")
   chaps <- icd9_get_chapters(x = icd9Desc$icd9,
-                             short_code = TRUE, verbose = verbose)
+                             short_code = TRUE,
+                             verbose = verbose)
 
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs
-  icd9_hierarchy <- cbind(
+  icd9cm_hierarchy <- cbind(
     data.frame("icd9" = icd9Desc$icd9,
                "descLong" = icd9Desc$desc,
                stringsAsFactors = FALSE),
@@ -238,41 +245,44 @@ icd9_generate_chapters_hierarchy <- function(save_data = FALSE, verbose = FALSE)
 
   # fix congenital abnormalities not having subchapter defined:
   # ( this might be easier to do when parsing the chapters themselves...)
-  icd9_hierarchy <- fixSubchapterNa(icd9_hierarchy, 740, 759)
+  icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, 740, 759)
   # and hematopoietic organs
-  icd9_hierarchy <- fixSubchapterNa(icd9_hierarchy, 280, 289)
+  icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, 280, 289)
 
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
   # just copy the long description over.
-
   bill32 <- icd9::icd9cm_billable[["32"]]
 
-  billable_codes <- icd_get_billable.icd9(icd9_hierarchy$icd9, short_code = TRUE) # or from bill32
-  billable_rows <- which(icd9_hierarchy$icd9 %fin% billable_codes)
-  title_rows <- which(icd9_hierarchy$icd9 %nin% billable_codes)
-  icd9_hierarchy[billable_rows, "descShort"] <- bill32$descShort
+  billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy$icd9, short_code = TRUE) # or from bill32
+  billable_rows <- which(icd9cm_hierarchy$icd9 %fin% billable_codes)
+  title_rows <- which(icd9cm_hierarchy$icd9 %nin% billable_codes)
+  icd9cm_hierarchy[billable_rows, "descShort"] <- bill32$descShort
   # for rows without a short description (i.e. titles, non-billable),
   # useexisting long desc
-  icd9_hierarchy[title_rows, "descShort"] <- icd9_hierarchy[title_rows, "descLong"]
+  icd9cm_hierarchy[title_rows, "descShort"] <- icd9cm_hierarchy[title_rows, "descLong"]
   # the billable codes list (where available) currently has better long
   # descriptions than the RTF parse. For previous years, there is no long desc
   # in billable, so careful when updating this.
-  icd9_hierarchy[billable_rows, "descLong"] <- bill32$descLong
+  icd9cm_hierarchy[billable_rows, "descLong"] <- bill32$descLong
 
   # now put the short description in the right column position
-  icd9_hierarchy <- icd9_hierarchy[c("icd9", "descShort", "descLong", "threedigit",
+  icd9cm_hierarchy <- icd9cm_hierarchy[c("icd9", "descShort", "descLong", "threedigit",
                                      "major", "subchapter", "chapter")]
 
   # quick sanity checks - full tests in test-parse.R
-  stopifnot(all(icd_is_valid.icd9(icd9_hierarchy$icd9, short_code = TRUE)))
-  stopifnot(!any(sapply(icd9_hierarchy, is.na)))
+  stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy$icd9, short_code = TRUE)))
+  stopifnot(!any(sapply(icd9cm_hierarchy, is.na)))
 
   if (save_data)
-    save_in_data_dir("icd9_hierarchy") # nocov
-  invisible(icd9_hierarchy)
+    save_in_data_dir("icd9cm_hierarchy") # nocov
+  invisible(icd9cm_hierarchy)
 }
 
+#' Fix NA subchapters in RTF parsing
+#'
+#' Fixes a couple of corner cases in parsing the 2011 ICD-9-CM RTF
+#' @keywords internal
 fixSubchapterNa <- function(x, start, end) {
   # 740 CONGENITAL ANOMALIES is a chapter with no sub-chapters defined. For
   # consistency, assign the same name to sub-chapters

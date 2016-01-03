@@ -159,13 +159,13 @@ test_that("can condense the big lists of comorbidities without errors", {
   }
 })
 
-test_that("icd9_hierarchy as saved in data can be recreated", {
+test_that("icd9cm_hierarchy as saved in data can be recreated", {
   skip_slow_tests()
   skip_flat_icd9_avail_all()
 
   expect_equal(
-    icd9_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE),
-    icd9::icd9_hierarchy)
+    icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE),
+    icd9::icd9cm_hierarchy)
 })
 
 test_that("AHRQ interpretation at least returns something reasonable", {

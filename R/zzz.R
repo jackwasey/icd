@@ -41,7 +41,7 @@ release_questions <- function() {
   c(
     # data:
     "Have you included updated copies of all offline versions of online data?",
-    "Have you regenerated icd9_hierarchy and other compiled data?",
+    "Have you regenerated icd9cm_hierarchy and other compiled data?",
 
     # documentation:
     "Have you checked all TODO comments",

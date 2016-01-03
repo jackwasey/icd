@@ -36,9 +36,9 @@ generate_sysdata <- function(save_data = TRUE) {
 
   # we can either use the icd_is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
-  icd9NShortReal <- grep("^[^VE]+", icd9::icd9_hierarchy$icd9, value = TRUE) # nolint
-  icd9VShortReal <- grep("V", icd9::icd9_hierarchy$icd9, value = TRUE) # nolint
-  icd9EShortReal <- grep("E", icd9::icd9_hierarchy$icd9, value = TRUE) # nolint
+  icd9NShortReal <- grep("^[^VE]+", icd9::icd9cm_hierarchy$icd9, value = TRUE) # nolint
+  icd9VShortReal <- grep("V", icd9::icd9cm_hierarchy$icd9, value = TRUE) # nolint
+  icd9EShortReal <- grep("E", icd9::icd9cm_hierarchy$icd9, value = TRUE) # nolint
 
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
