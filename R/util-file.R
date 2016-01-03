@@ -106,11 +106,12 @@ download_to_data_raw <- function(url,
     if (offline)
       return(NULL)
 
-  # using libcurl because it seems the internal method works inconsistently
-  if (capabilities("libcurl"))
-    method = "libcurl"
-  else
-    method = "auto"
+  # using libcurl because it seems the internal method works inconsistently?
+  #if (capabilities("libcurl"))
+    #method = "libcurl"
+  #else
+  method = "auto"
+
   dl_code <- download.file(url = url, destfile = save_path,
                            quiet = TRUE, method = method)
   stopifnot(dl_code == 0)

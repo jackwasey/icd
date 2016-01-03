@@ -804,7 +804,6 @@ icd9DecimalToShort <- function(icd9Short) {
 }
 
 #' @rdname icd_short_to_decimal
-#' @template icd9-short
 #' @export
 icd9ShortToDecimal <- function(icd9Short) {
   .Deprecated("icd_short_to_decimal")
