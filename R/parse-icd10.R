@@ -73,23 +73,28 @@ stop("work in progress", codes_desc, desc)
 #' @keywords internal
 icd10cm_get_all_defined <- function(save = TRUE) {
 
-  local_path <- unzip_to_data_raw(
+  f_info <- unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
     file_name = "icd10cm_order_2016.txt")
 
-  raw <- readLines(con = local_path)
-  icd10cm2016 <- data.frame(id = substr(raw, 1, 5),
-                            code = substr(raw, 7, 13),
-                            leaf = substr(raw, 14, 15),
-                            descShort = substr(raw, 16, 76),
-                            descLong = substr(raw, 77, stop = 1e5),
+  x <- readLines(con = f_info$file_path)
+  icd10cm2016 <- data.frame(#id = substr(x, 1, 5),
+                            code = substr(x, 7, 13),
+                            billable = substr(x, 14, 15),
+                            descShort = substr(x, 16, 76),
+                            descLong = substr(x, 77, stop = 1e5),
+                            threedigit = NA,
+                            major = NA,
+                            subchapter = NA,
+                            chapter = NA,
                             stringsAsFactors = FALSE
   )
 
-  icd10cm2016 <- as.data.frame(lapply(icd10cm2016, str_trim), stringsAsFactors = FALSE)
+  icd10cm2016 <- as.data.frame(lapply(icd10cm2016, str_trim),
+                               stringsAsFactors = FALSE)
   if (save)
     save_in_data_dir(icd10cm2016)
-  return(invisible(icd10cm2016))
+  invisible(icd10cm2016)
 
   # now some test code to see what permutations there are of ICD-10 codes based
   # on the 2016 CM set.

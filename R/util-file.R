@@ -46,8 +46,9 @@ unzip_single <- function(url, file_name, save_path) {
   } else
     stopifnot(file_name %in% files)
 
-  file.copy(file.path(zipdir, file_name), save_path, overwrite = TRUE)
+  ret <- file.copy(file.path(zipdir, file_name), save_path, overwrite = TRUE)
   unlink(file.path(zipdir, file_name))
+  ret
 }
 
 #' Unzip file to \code{data-raw}
@@ -67,24 +68,20 @@ unzip_single <- function(url, file_name, save_path) {
 #' @template offline
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal
-unzip_to_data_raw <- function(url, file_name, force = FALSE, offline = FALSE) {
+unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
   assertString(url)
-  if (is.na(file_name))
-    return(NULL)
-  assertString(file_name)
-  assertFlag(force)
+  assertString(file_name, na.ok = FALSE)
   assertFlag(offline)
-  stopifnot(!(force & offline))
 
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
   file_path <- file.path(data_raw_path, make.names(file_name))
-  if (force || !file.exists(file_path)) {
-    if (offline)
-      return(NULL)
-    stopifnot(
-      unzip_single(url = url, file_name = file_name, save_path = file_path)
-    )
-  }
+  if (offline && !file.exists(file_path))
+    return(NULL)
+
+  stopifnot(
+    unzip_single(url = url, file_name = file_name, save_path = file_path)
+  )
+
   list(file_path = file_path, file_name = make.names(file_name))
 }
 
