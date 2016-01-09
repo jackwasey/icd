@@ -165,7 +165,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   # higher-level definition, without having the parent code in the line itself
   fifth_backref <- grep(re_fifth_range_other, filtered)
   # for these, construct a string which will be captured in the next block
-  filtered[fifth_backref] <- paste(filtered[c(fifth_backref, fifth_backref - 1)])
+  filtered[fifth_backref] <- paste(filtered[fifth_backref], filtered[fifth_backref - 1])
 
   # fourth-digit qualifiers:
   re_fourth_range <- "fourth-digit.+categor"

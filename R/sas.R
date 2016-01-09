@@ -152,9 +152,8 @@ sasDropOtherAssignment <- function(x) {
 #'   like \code{readLines(someSasFilePath)}
 #' @keywords internal programming list
 sasExtractLetStrings <- function(x) {
-  a <- str_match_all(
-    "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)",
-    string = x)
+  a <- x %>% str_match_all(
+    "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)")
 
   # drop empty elements after matching
   a <- a[vapply(a, FUN = function(x) length(x) != 0, FUN.VALUE = logical(1))]

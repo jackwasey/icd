@@ -20,8 +20,8 @@ library("testthat")
 
 # to run all tests:
 if (FALSE) {
-  options("icd9.do_slow_tests")
-  options("icd9.do_online_tests")
+  print(options("icd9.do_slow_tests"))
+  print(options("icd9.do_online_tests"))
   options("icd9.do_slow_tests" = TRUE)
   options("icd9.do_online_tests" = TRUE)
 }
