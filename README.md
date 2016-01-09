@@ -45,6 +45,10 @@ New since last CRAN release:
 -   see NEWS.md and github [changelog](https://github.com/jackwasey/icd9/commits/master) for more details
 -   minor update to fix an obscure memory leak found with address sanitizer.
 
+## Work in progress:
+--------------------
+-   ICD-10 support is nearly complete. See the [icd10 branch](https://github.com/jackwasey/icd9/tree/icd10): contributions of tests, code or anything always welcome.
+
 Introduction
 ------------
 
