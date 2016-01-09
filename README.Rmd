@@ -50,7 +50,9 @@ patientData <- data.frame(
 [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9)
 [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master)
 RStudio mirror: [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9)
-icd10: [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=icd10)](https://travis-ci.org/jackwasey/icd9) [![codecov.io](https://codecov.io/github/jackwasey/icd9/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd9?branch=icd10)
+[![wercker status](https://app.wercker.com/status/158c843e8218371b23d1e44072770e92/m/master "wercker status")](https://app.wercker.com/project/bykey/158c843e8218371b23d1e44072770e92)
+
+icd10: [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=icd10)](https://travis-ci.org/jackwasey/icd9) [![codecov.io](https://codecov.io/github/jackwasey/icd9/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd9?branch=icd10) [![wercker status](https://app.wercker.com/status/158c843e8218371b23d1e44072770e92/m/icd10 "wercker status")](https://app.wercker.com/project/bykey/158c843e8218371b23d1e44072770e92)
 
 # ICD comorbidities, manipulation and validation
 

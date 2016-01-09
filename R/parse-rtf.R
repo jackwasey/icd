@@ -57,6 +57,9 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
     stop("RTF data for year", year, "unavailable.")
 
   fp <- f_info_rtf$file_path
+  # the file is basically 7-bit ASCII, but non-ASCII characters are encoded with
+  # escape sequences. There is a code page embedded in the document, in this
+  # case CP-1252.
   fp_conn <- file(fp, encoding = "ASCII")
   on.exit(close(fp_conn))
   rtf_lines <- readLines(fp_conn, warn = FALSE)
@@ -112,11 +115,11 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   filtered <- grep("^\\\\par", filtered, value = TRUE)
 
   # fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
-  # lines...
-  filtered <- gsub("\\\\'e8", "\u00e8", filtered)
-  filtered <- gsub("\\\\'e9", "\u00e9", filtered)
-  filtered <- gsub("\\\\'f1", "\u00f1", filtered)
-  filtered <- gsub("\\\\'f16", "\u00f6", filtered)
+  # lines... This needs care in Windows, or course. Maybe Mac, too?
+  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e grave
+  filtered <- gsub("\\\\'e9", "\u00e9", filtered) # e acute
+  filtered <- gsub("\\\\'f1", "\u00f1", filtered) # n tilde
+  filtered <- gsub("\\\\'f16", "\u00f6", filtered) # o umlaut
 
   # drop stupid long line at end:
   longest_lines <- nchar(filtered) > 3000
