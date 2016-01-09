@@ -321,8 +321,16 @@ icd_get_major <- function(x) {
   UseMethod("icd_get_major")
 }
 
-#' check whether a code is major
-#' @description move to C++ or own R file:
+#' initial implementation via stringr. If speed needed, then can probably reuse
+#' C++ ICD-9 version: i'm just grabbing the first three characters, after all,
+#' and this is much easier in ICD-10 then ICD-9
+#' @export
+#' @keywords internal
+icd_get_major.icd10 <- function(x) {
+  x %>% str_trim %>% str_sub(1, 3)
+}
+
+#' Check whether a code is major
 #' @param icd character vector of ICD codes.
 #' @keywords internal
 icd_is_major <- function(x) {

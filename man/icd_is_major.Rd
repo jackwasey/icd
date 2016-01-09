@@ -6,7 +6,7 @@
 \alias{icd_is_major.icd10cm}
 \alias{icd_is_major.icd10who}
 \alias{icd_is_major.icd9}
-\title{check whether a code is major}
+\title{Check whether a code is major}
 \usage{
 icd_is_major(x)
 
@@ -22,7 +22,7 @@ icd_is_major(x)
 \item{icd}{character vector of ICD codes.}
 }
 \description{
-move to C++ or own R file:
+Check whether a code is major
 }
 \section{Methods (by class)}{
 \itemize{

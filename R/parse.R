@@ -272,6 +272,8 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy <- icd9cm_hierarchy[c("icd9", "descShort", "descLong", "threedigit",
                                      "major", "subchapter", "chapter")]
 
+  #TODO add 'billable' column
+
   # quick sanity checks - full tests in test-parse.R
   stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy$icd9, short_code = TRUE)))
   stopifnot(!any(sapply(icd9cm_hierarchy, is.na)))

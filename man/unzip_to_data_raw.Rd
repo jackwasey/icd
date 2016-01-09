@@ -5,7 +5,7 @@
 \alias{unzip_to_data_raw}
 \title{Unzip file to \code{data-raw}}
 \usage{
-unzip_to_data_raw(url, file_name, force = FALSE, offline = FALSE)
+unzip_to_data_raw(url, file_name, offline = FALSE)
 
 download_to_data_raw(url, file_name = str_extract(url, "[^/]*$"),
   offline = FALSE)
@@ -15,12 +15,12 @@ download_to_data_raw(url, file_name = str_extract(url, "[^/]*$"),
 
 \item{file_name}{file name of a single file in that zip}
 
-\item{force}{logical, if TRUE, then download even if already in
-\code{data-raw}}
-
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
 internet, only return path and filename if the file already exists in
 data-raw. This is helpful for testing without using the internet.}
+
+\item{force}{logical, if TRUE, then download even if already in
+\code{data-raw}}
 }
 \value{
 path of unzipped file in \code{data-raw}
