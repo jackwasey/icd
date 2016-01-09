@@ -129,7 +129,9 @@ parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
   fn_long_orig <- dat$long_filename
 
   f_info_short <- unzip_to_data_raw(dat$url, file_name = fn_short_orig, offline = offline)
-  f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
+  f_info_long <- NULL
+  if (!is.na(fn_long_orig))
+      f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
 
   message("short filename = ", f_info_short$file_name,
           "\n long filename = ", f_info_long$file_name)
