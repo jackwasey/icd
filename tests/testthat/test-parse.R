@@ -159,7 +159,7 @@ test_that("all leaf codes from TXT are in flat file extract", {
 
   rtf[nrtf %in% icd_short_to_decimal.icd9(v32$icd9)] %>%
     swapNamesWithVals %>%
-   sort -> rtf_leaves
+    sort -> rtf_leaves
   if (FALSE && interactive()) {
     assign("manual_compare_descs",
            data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)),
@@ -190,3 +190,33 @@ test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are
   # grep "\[[[:digit:]],.*\]" Dtab12.rtf
 })
 
+lower_to_range <- function(x) {
+  t_i <- which(tolower(names(icd9::icd10_sub_chapters)) == tolower(x))
+  icd9::icd10_sub_chapters[[t_i]]
+}
+
+expect_subchap_equal <- function(x, start, end, ...) {
+  expect_equal(lower_to_range(x), c(start = start, end = end), ...)
+}
+
+test_that("icd10 subchapters were parsed correctly", {
+
+  paste("Persons with potential health hazards related",
+        "to family and personal history and certain",
+        "conditions influencing health status") %>%
+    expect_subchap_equal(start = "Z77", end = "Z99")
+
+  expect_subchap_equal(
+    "Persons encountering health services for examinations",
+    "Z00", "Z13")
+
+  expect_subchap_equal(
+    "Occupant of three-wheeled motor vehicle injured in transport accident",
+    "V30", "V39")
+
+  expect_subchap_equal(
+    "Malignant neuroendocrine tumors", "C7A", "C7A")
+
+  expect_subchap_equal(
+    "Other human herpesviruses", "B10", "B10")
+})

@@ -127,18 +127,21 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALS
 
   # somewhere around here, we can extract sub-chapters:
 
+  re_anycode <-
+    "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
+
   # actually, these are ICD-9-CM subchapters, but I think this is a superset of
   # ICD-9
+  paste0("^[A-Z ]+\\(",
+         re_anycode,"-",
+         re_anycode,"\\)") -> re_subchap_range
+
   filtered %>%
-    str_subset("^[A-Z ]+\\(...-...\\)")  %>%
-    chapter_to_desc_range ->
-    icd9_sub_chapters
+    str_subset(re_subchap_range) %>%
+    chapter_to_desc_range -> icd9_sub_chapters
 
   if (save_sub_chapters)
     save_in_data_dir(icd9_sub_chapters)
-
-  re_anycode <-
-    "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
 
   # this is so ghastly: find rows with sequare brackets containing definition of
   # subset of fourth or fifth digit codes. Need to pull code from previous row,
