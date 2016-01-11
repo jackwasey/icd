@@ -55,7 +55,8 @@ NULL
 #' @family ICD-9 convert
 #' @keywords internal manip
 icd9ChaptersToMap <- function(x) {
-  if (is.character(x) && exists(x)) x <- get(x)
+  if (is.character(x) && exists(x))
+    x <- get(x)
   assertList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
   ranges <- names(x)
   map <- list()

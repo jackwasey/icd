@@ -36,7 +36,8 @@ generate_everything <- function() {
 
   devtools::load_data(pkg = ".") # reload the newly saved data
   loadNamespace("devtools")
-  message("Parsing RTF file(s) to create icd9Desc descriptions of entire hierarchy")
+  message("Parsing RTF file(s) to create descriptions of codes at all
+          levels in the hierarchy, not just leaf nodes")
   devtools::load_data(pkg = ".")
 
   # plain text billable codes

@@ -41,7 +41,6 @@ r_binary_packages:
  - RODBC
  - rmarkdown
  - stringr
- - XML
 
 after_success:
  - Rscript -e 'devtools::install()'

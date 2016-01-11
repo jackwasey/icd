@@ -7,7 +7,7 @@
 \usage{
 parseRtfLines(lines, verbose = FALSE)
 
-parse_rtf_lines(rtf_lines, verbose = FALSE)
+parse_rtf_lines(rtf_lines, verbose = FALSE, save_sub_chapters = FALSE)
 }
 \arguments{
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}

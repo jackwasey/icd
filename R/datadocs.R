@@ -50,7 +50,6 @@ NULL
 
 #' @title ICD-10 chapters
 #' @name icd10_chapters
-#' @aliases icd9ChaptersSub icd9ChaptersMajor icd9chapters icd9Chapters
 #' @description The WHO ICD-10 scheme chapters. The chapter level is the highest
 #'   in the hierarchy, each chapter containing sets of codes which span multiple
 #'   three-digit 'major' codes, and in some cases also span codes across two

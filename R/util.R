@@ -412,3 +412,34 @@ get_path_data_raw <- function() {
   system.file("data-raw", package = get_pkg_name())
 
 }
+
+#' Parse (sub)chapter description with range
+#'
+#' @return list of two-element character vectors, the elements being named
+#'   'start' and 'end'.
+#' @keywords internal manip
+chapter_to_desc_range <- function(x) {
+  assertString(x) # but could vectorize this, at cost of complexity and effort
+
+
+  re_icd10_major <- "[[:alpha:]][[:digit:]][[:alnum:]]"
+  re_code_range <- paste0("(.*)[[:space:]]?\\((",
+                          re_icd10_major, ")-(",
+                          re_icd10_major, ")\\)"
+                          )
+  re_code_single <- paste0("(.*)[[:space:]]?\\((", re_icd10_major, ")\\)")
+  mr <- str_match_all(x, re_code_range)
+  ms <- str_match_all(x, re_code_single)
+  okr <- length(mr[[1]]) == 4
+  oks <- length(ms[[1]]) == 3
+  if (!okr && !oks)
+    stop("Problem matching\n", x)
+  m <- ifelse(okr, mr, ms)
+
+  if (any(vapply(m, length, integer(1)) == 0))
+    stop("didn't get any matches for x = \n", x, "\nMatches were: ", m)
+  out <- lapply(m, function(y) c(start = y[[3]], end = y[[length(m[[1]])]]))
+  names(out) <- vapply(m, function(y) y[[2]] %>% str_to_title %>% str_trim,
+                       FUN.VALUE = character(1))
+  out
+}

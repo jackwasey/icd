@@ -21,6 +21,66 @@
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
 # approach in python
 
+icd10cm_xml_node_to_val <- function(x, name) {
+  xml2::xml_text(x[xml2::xml_name(x) == name])
+}
+
+icd10cm_xml_node_to_code <- function(x) {
+  icd10cm_xml_node_to_val(x, "name")
+}
+
+icd10cm_xml_node_to_desc <- function(x) {
+  icd10cm_xml_node_to_val(x, "desc")
+}
+
+icd10cm_xml_node_to_pair <- function(x) {
+  code <- icd10cm_xml_node_to_code(x)
+  desc <- icd10cm_xml_node_to_desc(x)
+  names(desc) <- code
+  desc
+}
+
+#' Get subchapters from the 2016 XML for ICD-10-CM
+#'
+#' This is a superset of ICD-10 sub-chapters, I think.
+#' @param save_data single logical
+#' @keywords internal
+icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
+  assertFlag(save_data)
+  loadNamespace("xml2")
+  url <- "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP"
+  f_info <- unzip_to_data_raw(url, "Tabular.xml")
+  j <- xml2::read_xml(f_info$file_path)
+  j  %>%  xml2::xml_find_all("//chapter/name")  %>%
+    xml2::xml_text() -> chapter_nums
+
+  j  %>%  xml2::xml_find_all("//chapter/desc")  %>%
+    xml2::xml_text() -> chapter_names
+
+  j  %>% xml_children() %>% xml_name() %>% equals("chapter" ) -> chapter_indices
+  # could do xpath, but harder to loop
+  j  %>% xml_children %>% extract(chapter_indices)  -> chaps
+
+  icd10_sub_chapters <- list()
+  for (chap in chaps) {
+    chap  %>% xml_children -> c_kids
+    c_kids %>% xml_name %>% equals("section") -> subchap_indices
+    c_kids %>% extract(subchap_indices) -> subchaps
+
+    for (subchap in subchaps) {
+      subchap  %>%
+        xml_children  %>%
+        extract(1) %>%
+        xml_text %>%
+        chapter_to_desc_range -> new_sub_chaps
+      icd10_sub_chapters <- append(icd10_sub_chapters, new_sub_chaps)
+
+    } #subchaps
+  } #chapters
+  if (save_data)
+    save_in_data_dir(icd10_sub_chapters)
+}
+
 #' Get ICD-10 (not ICD-10-CM) as published by CDC
 #'
 #' @details There is no copyright notice, and, as I understand it, by default US
@@ -62,14 +122,17 @@ icd10_get_who_from_cdc <- function() {
   #[1] "*U01"   "*U01.0" "*U01.1" "*U01.2" "*U01.3" "*U01.4" "*U01.5" "*U01.6" "*U01.7" "*U01.8" "*U01.9" "*U02"   "*U03"   "*U03.0"
   #[15] "*U03.9" NA
 
-stop("work in progress", codes_desc, desc)
+  stop("work in progress", codes_desc, desc)
 }
 
 #' get all ICD-10-CM codes
 #'
-#' gets all ICD-10-CM codes from an archive on the CDC web site at \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}. Initially, this just grabs 2016.
-#'
-#' @references https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
+#' gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
+#' this just grabs 2016.
+#' @source
+#' \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
+#' @references
+#' https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
 icd10cm_get_all_defined <- function(save = TRUE) {
 
@@ -79,15 +142,15 @@ icd10cm_get_all_defined <- function(save = TRUE) {
 
   x <- readLines(con = f_info$file_path)
   icd10cm2016 <- data.frame(#id = substr(x, 1, 5),
-                            code = substr(x, 7, 13),
-                            billable = substr(x, 14, 15),
-                            descShort = substr(x, 16, 76),
-                            descLong = substr(x, 77, stop = 1e5),
-                            threedigit = NA,
-                            major = NA,
-                            subchapter = NA,
-                            chapter = NA,
-                            stringsAsFactors = FALSE
+    code = substr(x, 7, 13),
+    billable = substr(x, 14, 15),
+    descShort = substr(x, 16, 76),
+    descLong = substr(x, 77, stop = 1e5),
+    threedigit = NA,
+    major = NA,
+    subchapter = NA,
+    chapter = NA,
+    stringsAsFactors = FALSE
   )
 
   icd10cm2016 <- as.data.frame(lapply(icd10cm2016, str_trim),
@@ -241,7 +304,7 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
       selenium_driver$findElements(using = "xpath", "//div[@class='Category1']//span[@class='label']") %>%
         vapply(function(x) unlist(x$getElementText()), character(1)) %>%
         str_trim()  %>%
-           str_replace_all("[[:space:]]+", " ") -> majors_desc
+        str_replace_all("[[:space:]]+", " ") -> majors_desc
 
 
       selenium_driver$findElements(using = "xpath", "//div[@class='Category2']//a[@class='code']") %>%

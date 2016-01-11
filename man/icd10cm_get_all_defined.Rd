@@ -3,11 +3,15 @@
 \name{icd10cm_get_all_defined}
 \alias{icd10cm_get_all_defined}
 \title{get all ICD-10-CM codes}
+\source{
+\url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
+}
 \usage{
 icd10cm_get_all_defined(save = TRUE)
 }
 \description{
-gets all ICD-10-CM codes from an archive on the CDC web site at \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}. Initially, this just grabs 2016.
+gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
+this just grabs 2016.
 }
 \references{
 https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf

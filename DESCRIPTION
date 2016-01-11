@@ -41,7 +41,6 @@ Suggests:
     readr,
     RSelenium,
     testthat (>= 0.11.0.9000),
-    XML,
     xml2,
     xtable
 LazyData: true

@@ -21,9 +21,6 @@
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
 # approach in python
 
-# magrittr idiom, so the "." replacement doesn't cause check errors
-utils::globalVariables(c("."))
-
 #' @title parse RTF description of entire ICD-9-CM for a specific year
 #' @description Currently only the most recent update is implemented. Note that
 #'   CMS have published additional ICD-9-CM billable code lists since the last
@@ -49,7 +46,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
   rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
   fn <- rtf_dat$rtf_filename
 
-  f_info_rtf <- unzip_to_data_raw(rtf_dat$url,
+  f_info_rtf <- unzip_to_data_raw(rtf_dat$rtf_url,
                                   file_name = fn,
                                   offline = offline)
 
@@ -62,25 +59,22 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
   # case CP-1252.
   fp_conn <- file(fp, encoding = "ASCII")
   on.exit(close(fp_conn))
-  rtf_lines <- readLines(fp_conn, warn = FALSE)
+  rtf_lines <- readLines(fp_conn, warn = FALSE, encoding = "ASCII")
 
   # the file itself is 7 bit ASCII, but has its own internal encoding using
   # CP1252. test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
-  out <- parse_rtf_lines(rtf_lines, verbose) %>%
+  out <- parse_rtf_lines(rtf_lines, verbose = verbose,
+                         save_sub_chapters = save_data) %>%
     swapNamesWithVals %>%
     icd_sort.icd9(short_code = FALSE)
 
-  # make Tidy data: don't like using row names to store things
-  icd9Desc <- data.frame(
-    icd9  = out %>% unname %>% icd_decimal_to_short.icd9 %>% icd9cm,
-    desc = names(out),
-    stringsAsFactors = FALSE)
-
-  # TODO: save the data with year in name
-  if (save_data)
-    save_in_data_dir("icd9Desc")
-  invisible(icd9Desc)
+  invisible(
+    data.frame(
+      code  = out %>% unname %>% icd_decimal_to_short.icd9 %>% icd9cm,
+      desc = names(out),
+      stringsAsFactors = FALSE)
+  )
 }
 
 #' @title parse lines of RTF
@@ -92,7 +86,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
 #'   the other way around, but the tests are now wired for this layout. "Tidy"
 #'   data would favour having an un-named two-column data frame.
 #' @keywords internal
-parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
+parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALSE) {
 
   assertCharacter(rtf_lines)
   assertFlag(verbose)
@@ -130,6 +124,18 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE) {
   filtered <- strip_rtf(filtered)
 
   filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE)
+
+  # somewhere around here, we can extract sub-chapters:
+
+  # actually, these are ICD-9-CM subchapters, but I think this is a superset of
+  # ICD-9
+  filtered %>%
+    str_subset("^[A-Z ]+\\(...-...\\)")  %>%
+    chapter_to_desc_range ->
+    icd9_sub_chapters
+
+  if (save_sub_chapters)
+    save_in_data_dir(icd9_sub_chapters)
 
   re_anycode <-
     "(([Ee]?[[:digit:]]{3})|([Vv][[:digit:]]{2}))(\\.[[:digit:]]{1,2})?"
