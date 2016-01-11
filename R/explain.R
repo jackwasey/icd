@@ -137,7 +137,8 @@ icd_explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
 #' @template short_code
 #' @template verbose
 #' @keywords internal
-icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9), verbose = FALSE) {
+icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9),
+                              verbose = FALSE) {
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%

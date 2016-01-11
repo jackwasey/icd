@@ -158,16 +158,15 @@ icd10cm_get_all_defined <- function(save = TRUE) {
   icd10cm2016[["code"]] %<>% icd10cm %>% icd_short_code
   icd10cm2016[["code"]] %>% icd_get_major -> icd10cm2016[["threedigit"]]
 
+  # get description for the major type
   merge(icd10cm2016["threedigit"],
         icd10cm2016[c("code", "descShort")],
         by.x = "threedigit", by.y = "code",
-        all.x = TRUE) %>% extract2(2) ->icd10cm2016[["major"]]
+        all.x = TRUE) %>%
+    extract2(2) %>% as.factor ->
+    icd10cm2016[["major"]]
 
 
-  # set 'major' name from the threedigit
-  for (i in seq_along(icd10cm2016)) {
-
-  }
 
   if (save)
     save_in_data_dir(icd10cm2016)
