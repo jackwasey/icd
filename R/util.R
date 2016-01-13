@@ -442,6 +442,6 @@ chapter_to_desc_range <- function(x, re_major) {
   out
 }
 
-chapter_to_desc_range_icd10 <- function(x) {
+icd10_chapter_to_desc_range <- function(x) {
   chapter_to_desc_range(x, re_major = "[[:alpha:]][[:digit:]][[:alnum:]]")
 }

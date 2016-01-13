@@ -160,13 +160,19 @@ icd_expand_range_major <- function(start, end)
 #' @describeIn icd_expand_range_major Expand range of top-level ICD-10 codes
 #' @keywords internal
 icd_expand_range_major.icd10 <- function(start, end) {
+
+  # codes may have alphabetic characters in 3rd position, so can't just do
+  # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
+  # generating the lookup table of ICD-10-CM codes potentially circular, since
+  # we expand the start to end range of chapter and sub-chapter definitions.
+
   assertString(start)
   assertString(end)
 
   start <- str_trim(start)
   end <- str_trim(end)
 
-  stopifnot(icd_is_major(start), icd_is_major(end))
+  stopifnot(icd_is_major.icd10(start), icd_is_major.icd10(end))
   stopifnot(start <= end)
   start_first <- str_sub(start, 1, 1) %>% str_to_upper()
   end_first <- str_sub(end, 1, 1) %>% str_to_upper()

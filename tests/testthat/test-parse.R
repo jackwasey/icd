@@ -220,3 +220,11 @@ test_that("icd10 subchapters were parsed correctly", {
   expect_subchap_equal(
     "Other human herpesviruses", "B10", "B10")
 })
+
+test_that("Y09 got picked up in sub-chapter parsing", {
+  # this is actually an error in the 2016 CMS XML which declares a range for
+  # Assult from X92-Y08, but has a hanging definition for Y09 with no enclosing
+  # chapter. Will have to manually correct for this until fixed.
+  expect_subchap_equal("Assault", "X92", "Y09")
+  #expect_true("Y09" %in% icd10cm2016$threedigit)
+})

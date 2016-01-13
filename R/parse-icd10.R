@@ -43,6 +43,12 @@ icd10cm_xml_node_to_pair <- function(x) {
 #' Get subchapters from the 2016 XML for ICD-10-CM
 #'
 #' This is a superset of ICD-10 sub-chapters, I think.
+#'
+#' This is complicated by the XML document specifying more hierarchical
+#' levels,e.g. C00-C96, C00-75 are both specified within the chapter Neoplasms
+#' (C00-D49). A way of determining whether there are extra levels would be to
+#' check the XML tree depth for a member of each putative sub-chapter. May be
+#' easier to hard code these in.
 #' @param save_data single logical
 #' @keywords internal
 icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
@@ -57,28 +63,42 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   j  %>%  xml2::xml_find_all("//chapter/desc")  %>%
     xml2::xml_text() -> chapter_names
 
-  j  %>% xml_children() %>% xml_name() %>% equals("chapter" ) -> chapter_indices
+  j  %>% xml2::xml_children() %>%
+    xml2::xml_name() %>%
+    equals("chapter" ) -> chapter_indices
   # could do xpath, but harder to loop
-  j  %>% xml_children %>% extract(chapter_indices)  -> chaps
+  j  %>% xml2::xml_children() %>% extract(chapter_indices)  -> chaps
 
   icd10_sub_chapters <- list()
   for (chap in chaps) {
-    chap  %>% xml_children -> c_kids
-    c_kids %>% xml_name %>% equals("section") -> subchap_indices
+    chap  %>% xml2::xml_children() -> c_kids
+    c_kids %>% xml2::xml_name() %>% equals("section") -> subchap_indices
     c_kids %>% extract(subchap_indices) -> subchaps
 
     for (subchap in subchaps) {
+
+
       subchap  %>%
-        xml_children  %>%
+        xml2::xml_children()  %>%
         extract(1) %>%
-        xml_text %>%
-        chapter_to_desc_range -> new_sub_chaps
+        xml2::xml_text() %>%
+        icd10_chapter_to_desc_range -> new_sub_chaps
+
+      # check that this is a real subchapter, not an extra range defined in the
+      # XML, e.g. C00-C96 is an empty range declaration for some neoplasms.
+
+      if (length(xml2::xml_find_all(subchap, "diag")) == 0) {
+        message("skipping empty range definition for ", new_sub_chaps)
+        next
+      }
+
       icd10_sub_chapters <- append(icd10_sub_chapters, new_sub_chaps)
 
     } #subchaps
   } #chapters
   if (save_data)
     save_in_data_dir(icd10_sub_chapters)
+  invisible(icd10_sub_chapters)
 }
 
 #' Get ICD-10 (not ICD-10-CM) as published by CDC
@@ -134,7 +154,7 @@ icd10_get_who_from_cdc <- function() {
 #' @references
 #' https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
-icd10cm_get_all_defined <- function(save = TRUE) {
+icd10cm_get_all_defined <- function(save = FALSE) {
 
   f_info <- unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
@@ -166,7 +186,74 @@ icd10cm_get_all_defined <- function(save = TRUE) {
     extract2(2) %>% as.factor ->
     icd10cm2016[["major"]]
 
+  # can't use icd_expand_range_major here for ICD-10-CM, because it would use
+  # the output of this function (and it can't just do numeric ranges because
+  # there are some non-numeric characters scattered around)
+  lk_majors <- unique(icd10cm2016[["threedigit"]])
 
+  # generate lookup for sub-chapter
+  sc_lookup <- data.frame(major = NULL, desc = NULL)
+  for (scn in names(icd9::icd10_sub_chapters)) {
+
+    sc <- icd9::icd10_sub_chapters[[scn]]
+    # fix a 2016 error in the CMS XML definitions
+    if (sc["end"] == "Y08")
+      sc["end"] <- "Y09"
+    si <- grep(sc["start"], lk_majors)
+    se <- grep(sc["end"], lk_majors)
+
+    # message("start = ", sc["start"], ", end = ", sc[["end"]], ",
+    #   si = ", si, ", se = ", se)
+    sc_majors <- lk_majors[si:se]
+    sc_lookup <- rbind(sc_lookup,
+                       data.frame(sc_major = sc_majors, sc_desc = scn)
+    )
+  }
+
+  # due diligence:
+  if (any(dupes <- duplicated(sc_lookup$sc_major))) {
+    message("duplicates found:")
+    print(unique(sc_lookup$sc_major[dupes]))
+    stop("should not have duplicates. check subchapter definitions")
+  }
+
+  merge(icd10cm2016["threedigit"], sc_lookup,
+        by.x = "threedigit", by.y = "sc_major", all.x = TRUE) %>%
+    extract2("sc_desc") -> icd10cm2016[["subchapter"]]
+
+
+  # now the same for chapters:
+
+  # generate lookup for sub-chapter
+  chap_lookup <- data.frame(major = NULL, desc = NULL)
+  for (chap_n in names(icd9::icd10_chapters)) {
+
+    chap <- icd9::icd10_chapters[[chap_n]]
+    # fix a 2016 error in the CMS XML definitions
+    if (chap["end"] == "Y08")
+      chap["end"] <- "Y09"
+    si <- grep(chap["start"], lk_majors)
+    se <- grep(chap["end"], lk_majors)
+
+    # message("start = ", sc["start"], ", end = ", sc[["end"]], ",
+    #   si = ", si, ", se = ", se)
+
+    chap_lookup <- rbind(chap_lookup,
+                       data.frame(chap_major = lk_majors[si:se],
+                                  chap_desc = chap_n)
+    )
+  }
+
+  # due diligence:
+  if (any(dupes <- duplicated(chap_lookup$chap_major))) {
+    message("duplicates found:")
+    print(unique(chap_lookup$chap_major[dupes]))
+    stop("should not have duplicates. check subchapter definitions")
+  }
+
+  merge(icd10cm2016["threedigit"], chap_lookup,
+        by.x = "threedigit", by.y = "chap_major", all.x = TRUE) %>%
+    extract2("chap_desc") -> icd10cm2016[["chapter"]]
 
   if (save)
     save_in_data_dir(icd10cm2016)

@@ -30,7 +30,7 @@ unzip_single <- function(url, file_name, save_path) {
   else
     method = "auto"
   dl_code <- utils::download.file(url = url, destfile = zipfile,
-                                  quiet = TRUE, method = method)
+                                  quiet = TRUE, method = method, mode = "wb")
   stopifnot(dl_code == 0)
   zipdir <- tempfile()
   dir.create(zipdir)

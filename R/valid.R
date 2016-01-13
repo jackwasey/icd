@@ -337,7 +337,15 @@ icd_is_major <- function(x) {
   UseMethod("icd_is_major")
 }
 
+#' @export
+#' @keywords internal
+icd_is_major.default <- function(x) {
+  y <- icd_guess_version_update(x)
+  icd_is_major(y)
+}
+
 #' @describeIn icd_is_major check whether a code is an ICD-10 major
+#' @export
 #' @keywords internal
 icd_is_major.icd10 <- function(x) {
   assertCharacter(x)
@@ -348,6 +356,7 @@ icd_is_major.icd10 <- function(x) {
 #' @describeIn icd_is_major check whether a code is an ICD-10-CM major.
 #'   Currently uses \code{stringr} which uses \code{stringi} which should be
 #'   quite fast, but does suffer from handling unicode, locales, etc.
+#' @export
 #' @keywords internal
 icd_is_major.icd10cm <- function(x) {
   assertCharacter(x)
@@ -355,6 +364,7 @@ icd_is_major.icd10cm <- function(x) {
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 WHO major
+#' @export
 #' @keywords internal
 icd_is_major.icd10who <- function(x) {
   assertCharacter(x)
@@ -362,6 +372,7 @@ icd_is_major.icd10who <- function(x) {
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-9 major
+#' @export
 #' @keywords internal
 icd_is_major.icd9 <- function(x) {
   x <- trim(x)

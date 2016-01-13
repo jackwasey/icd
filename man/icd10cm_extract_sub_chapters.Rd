@@ -12,5 +12,12 @@ icd10cm_extract_sub_chapters(save_data = FALSE)
 \description{
 This is a superset of ICD-10 sub-chapters, I think.
 }
+\details{
+This is complicated by the XML document specifying more hierarchical
+levels,e.g. C00-C96, C00-75 are both specified within the chapter Neoplasms
+(C00-D49). A way of determining whether there are extra levels would be to
+check the XML tree depth for a member of each putative sub-chapter. May be
+easier to hard code these in.
+}
 \keyword{internal}
 

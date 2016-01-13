@@ -4,7 +4,7 @@
 \alias{chapter_to_desc_range}
 \title{Parse (sub)chapter description with range}
 \usage{
-chapter_to_desc_range(x)
+chapter_to_desc_range(x, re_major)
 }
 \arguments{
 \item{x}{vector of descriptions followed by ICD code ranges}
