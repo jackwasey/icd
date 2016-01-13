@@ -21,17 +21,17 @@ icd9IsValidMajorE(major)
 
 icd9IsValidMajor(icd)
 
-icd_is_valid_major(x)
+icd_is_valid_major(x, whitespace_ok = TRUE)
 
-\method{icd_is_valid_major}{default}(x)
+\method{icd_is_valid_major}{default}(x, whitespace_ok = TRUE)
 
-\method{icd_is_valid_major}{icd9}(x)
+\method{icd_is_valid_major}{icd9}(x, whitespace_ok = TRUE)
 
-icd9_is_valid_major_n(x)
+icd9_is_valid_major_n(x, whitespace_ok = TRUE)
 
-icd9_is_valid_major_v(x)
+icd9_is_valid_major_v(x, whitespace_ok = TRUE)
 
-icd9_is_valid_major_e(x)
+icd9_is_valid_major_e(x, whitespace_ok = TRUE)
 }
 \arguments{
 \item{x}{vector of ICD codes}

@@ -419,7 +419,12 @@ get_path_data_raw <- function() {
 #' @return list of two-element character vectors, the elements being named
 #'   'start' and 'end'.
 #' @keywords internal manip
-chapter_to_desc_range <- function(x, re_major) {
+chapter_to_desc_range <- function(x) {
+  UseMethod("chapter_to_desc_range")
+}
+
+#' @keywords internal manip
+.chapter_to_desc_range <- function(x, re_major) {
   assertCharacter(x)
   assertString(re_major)
 
@@ -442,6 +447,16 @@ chapter_to_desc_range <- function(x, re_major) {
   out
 }
 
-icd10_chapter_to_desc_range <- function(x) {
-  chapter_to_desc_range(x, re_major = "[[:alpha:]][[:digit:]][[:alnum:]]")
+#' @export
+#' @keywords internal
+chapter_to_desc_range.icd9 <- function(x) {
+  # TODO, duplicated code for identifying parts of ICD codes
+  .chapter_to_desc_range(
+    x, re_major = "[[:digit:]]{1,3}|[Vv][[:digit:]]{1,2}|[Ee][[:digit:]]{1,3}")
+}
+
+#' @export
+#' @keywords internal
+chapter_to_desc_range.icd10 <- function(x) {
+  .chapter_to_desc_range(x, re_major = "[[:alpha:]][[:digit:]][[:alnum:]]")
 }

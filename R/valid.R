@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -14,6 +14,60 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
+re_just <- function(x) {
+  assertString(x)
+  paste0("^", x, "$")
+}
+
+re_ws <- function(x) {
+  paste0("[[:space:]]*", x, "[[:space:]]*", collapse = "|")
+}
+
+re_just_ws <- function(x) {
+  re_just(re_ws(x))
+}
+
+re_icd9_major_n <- "[[:digit:]]{1,3}"
+# "^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
+re_icd9_major_n_strict <- "[[:digit:]]{3}"
+# TODO: think about: "^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", # nolint
+# "^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$"
+re_icd9_major_v <- "[Vv][[:digit:]]{1,2}"
+re_icd9_major_v_strict <- "V[[:digit:]]{2}"
+re_icd9_major_e <- "[Ee][[:digit:]]{1,3}"
+re_icd9_major_e_strict <- "E[[:digit:]]{3}"
+re_icd9_major <- paste0(c(re_icd9_major_n,
+                          re_icd9_major_v,
+                          re_icd9_major_v),
+                        collapse = "|")
+re_icd9_major_strict <- paste0(c(re_icd9_major_n_strict,
+                                 re_icd9_major_v_strict,
+                                 re_icd9_major_v_strict),
+                               collapse = "|")
+re_icd9_minor_nv <- "[[:digit:]]{1,2}"
+re_icd9_minor_e <- "[[:digit:]]{1}"
+
+re_icd9_decimal_n <- paste0(re_icd9_major_n, "\\.", re_icd9_minor_nv)
+re_icd9_decimal_v <- paste0(re_icd9_major_v, "\\.", re_icd9_minor_nv)
+re_icd9_decimal_e <- paste0(re_icd9_major_e, "\\.", re_icd9_minor_e)
+
+re_icd9_short_n <- paste0(re_icd9_major_n, re_icd9_minor_nv)
+re_icd9_short_v <- paste0(re_icd9_major_v, re_icd9_minor_nv)
+re_icd9_short_e <- paste0(re_icd9_major_e, re_icd9_minor_e)
+
+re_icd9_decimal <- paste0(c(re_icd9_decimal_n,
+                            re_icd9_decimal_v,
+                            re_icd9_decimal_e),
+                          collapse = "|")
+
+re_icd9_short <- paste0(c(re_icd9_short_n,
+                          re_icd9_short_v,
+                          re_icd9_short_e),
+                        collapse = "|")
+
+icd10cm_major <- "^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]*$"
+icd10who_re_major <- "^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]][[:space:]]*$"
 
 #' Check whether ICD-9 codes are syntactically valid
 #'
@@ -122,7 +176,7 @@ icd9_is_valid_decimal <- function(x) {
     icd9_is_valid_decimal_e(x)
 }
 
-icd9_is_valid_short <- function(x) {
+icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
   # if input doesn't satisfy these, then it is not just invalid, but deserves an error:
   assert(
     checkFactor(x),
@@ -130,7 +184,8 @@ icd9_is_valid_short <- function(x) {
     checkClass(x, c("icd9")),
     checkClass(x, c("icd9cm"))
   )
-  if (length(x) == 0) return(logical())
+  if (length(x) == 0)
+    return(logical())
 
   # as explained in details, a numeric short_code ID has different validity
   # requirements than a string because of leading zeroes.
@@ -139,42 +194,51 @@ icd9_is_valid_short <- function(x) {
     icd9_is_valid_short_e(x)
 }
 
-icd9_is_valid_short_v <- function(x) {
-  x <- asCharacterNoWarn(x)
-  grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", # nolint
-        x)
+icd9_is_valid_short_n <- function(x, whitespace_ok = TRUE) {
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_n))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_short_n))
 }
 
-icd9_is_valid_short_e <- function(x){
-  x <- asCharacterNoWarn(x)
-  grepl("^[[:space:]]*[Ee][[:digit:]]{1,4}[[:space:]]*$", x)
+icd9_is_valid_short_v <- function(x, whitespace_ok = TRUE) {
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_v))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_short_v))
 }
 
-icd9_is_valid_short_n <- function(x) {
-  x <- asCharacterNoWarn(x)
-  grepl("^[[:space:]]*[[:digit:]]{1,5}[[:space:]]*$", x)
+icd9_is_valid_short_e <- function(x, whitespace_ok = TRUE){
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_e))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_short_e))
 }
 
-icd9_is_valid_decimal_v <- function(x) {
-  x <- asCharacterNoWarn(x)
-  grepl("^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
-        x)
+icd9_is_valid_decimal_n <- function(x, whitespace_ok = TRUE) {
+  assert(checkFactor(x), checkCharacter(x))
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_n))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_decimal_n))
 }
 
-icd9_is_valid_decimal_e <- function(x) {
+icd9_is_valid_decimal_v <- function(x, whitespace_ok = TRUE) {
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_v))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_decimal_v))
+}
+
+icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
   #need Perl regex for lookbehind. may even be quicker, according to the docs.
   #grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$",
   #trim(x), perl = TRUE)
   assert(checkFactor(x), checkCharacter(x))
-  x <- asCharacterNoWarn(x)
-  grepl("^[[:space:]]*[Ee][[:digit:]]{1,3}(\\.[[:digit:]]?)?[[:space:]]*$", x)
-}
-
-icd9_is_valid_decimal_n <- function(x) {
-  assert(checkFactor(x), checkCharacter(x))
-  x <- asCharacterNoWarn(x)
-  grepl("^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
-        x)
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_e))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_decimal_e))
 }
 
 #' @title Test whether an ICD code is major
@@ -183,7 +247,7 @@ icd9_is_valid_decimal_n <- function(x) {
 #' @return logical vector of same length as input, with TRUE when a code is a
 #'   major (not necessarily a real one)
 #' @keywords internal
-icd_is_valid_major <- function(x) {
+icd_is_valid_major <- function(x, whitespace_ok = TRUE) {
   UseMethod("icd_is_valid_major")
 }
 
@@ -191,43 +255,45 @@ icd_is_valid_major <- function(x) {
 #'   which at present assumes ICD-9 format
 #' @export
 #' @keywords internal
-icd_is_valid_major.default <- function(x) {
-  icd_is_valid_major.icd9(asCharacterNoWarn(x))
+icd_is_valid_major.default <- function(x, whitespace_ok = TRUE) {
+  stop("guess type, never assume ICD-9 or ICD-10")
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
 #' @export
 #' @keywords internal
-icd_is_valid_major.icd9 <- function(x)
-  # let grepl do what it can with integers, factors, etc.
-  grepl(
-    pattern = "^[[:space:]]*([[:digit:]]{1,3}[[:space:]]*$)|([Vv][[:digit:]]{1,2}[[:space:]]*$)|([Ee][[:digit:]]{1,3}[[:space:]]*$)", # nolint
-    x = x
-  )
+icd_is_valid_major.icd9 <- function(x, whitespace_ok = TRUE) {
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major))
+}
 
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_n <- function(x)
-  grepl(
-    pattern = "^[[:space:]]*[[:digit:]]{1,3}[[:space:]]*$",
-    x = x
-  )
+icd9_is_valid_major_n <- function(x, whitespace_ok = TRUE) {
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_n))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major_n))
+}
 
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_v <- function(x)
-  grepl(
-    pattern = "^[[:space:]]*[Vv][[:digit:]]{1,2}[[:space:]]*$",
-    x = x
-  )
-
+icd9_is_valid_major_v <- function(x, whitespace_ok = TRUE) {
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_v))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major_v))
+  }
 #' @rdname icd_is_valid_major
 #' @keywords internal
-icd9_is_valid_major_e <- function(x)
-  grepl(
-    pattern = "^[[:space:]]*[Ee][[:digit:]]{1,3}[[:space:]]*$",
-    x = x
-  )
+icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_e))
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major_e))
+}
 
 #' @describeIn icd_is_valid Validate an icd9 mapping to comorbidities
 #' @export
@@ -360,7 +426,7 @@ icd_is_major.icd10 <- function(x) {
 #' @keywords internal
 icd_is_major.icd10cm <- function(x) {
   assertCharacter(x)
-  str_detect(x, "^[[:space:]]*[[:alpha:]][[:digit:]][[:alnum:]][[:space:]]*$")
+  str_detect(x, re_just_ws(icd10cm_major))
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 WHO major
@@ -368,7 +434,7 @@ icd_is_major.icd10cm <- function(x) {
 #' @keywords internal
 icd_is_major.icd10who <- function(x) {
   assertCharacter(x)
-  str_detect(x, "^[[:space:]]*[[:alpha:]][[:digit:]][[:digit:]][[:space:]]*$")
+  str_detect(x, re_just_ws(icd10who_re_major))
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-9 major

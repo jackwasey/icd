@@ -82,7 +82,7 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
         xml2::xml_children()  %>%
         extract(1) %>%
         xml2::xml_text() %>%
-        icd10_chapter_to_desc_range -> new_sub_chaps
+        chapter_to_desc_range.icd10 -> new_sub_chaps
 
       # check that this is a real subchapter, not an extra range defined in the
       # XML, e.g. C00-C96 is an empty range declaration for some neoplasms.
