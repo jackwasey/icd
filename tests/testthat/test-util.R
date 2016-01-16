@@ -102,3 +102,37 @@ test_that("logical to binary for a matrix works", {
   expect_identical(logical_to_binary(m), n)
 
 })
+
+test_that("chapter to desc range works for icd9", {
+  expect_identical(chapter_to_desc_range.icd9("jack (110-120)"),
+    list(Jack = c(start = "110", end = "120"))
+  )
+  expect_identical(chapter_to_desc_range.icd9("jack (V10-V20)"),
+                   list(Jack = c(start = "V10", end = "V20"))
+  )
+  expect_identical(chapter_to_desc_range.icd9("jack (E990-E991)"),
+                   list(Jack = c(start = "E990", end = "E991"))
+  )
+  expect_identical(chapter_to_desc_range.icd9("jack (110)"),
+                   list(Jack = c(start = "110", end = "110"))
+  )
+  expect_identical(chapter_to_desc_range.icd9("jack (V10)"),
+                   list(Jack = c(start = "V10", end = "V10"))
+  )
+  expect_identical(chapter_to_desc_range.icd9("jack (E990)"),
+                   list(Jack = c(start = "E990", end = "E990"))
+  )
+})
+
+test_that("chapter to desc range works for icd10", {
+  expect_identical(chapter_to_desc_range.icd10("jack (A10-A20)"),
+                   list(Jack = c(start = "A10", end = "A20"))
+  )
+  expect_identical(chapter_to_desc_range.icd10("jack (V10-V20)"),
+                   list(Jack = c(start = "V10", end = "V20"))
+  )
+  expect_identical(chapter_to_desc_range.icd10("jack (E99)"),
+                   list(Jack = c(start = "E99", end = "E99"))
+  )
+})
+

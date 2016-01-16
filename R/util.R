@@ -47,8 +47,10 @@ asCharacterNoWarn <- function(x) {
   old <- options(warn = -1)
   on.exit(options(old))
   if (is.integer(x)) fastIntToStringRcpp(x)
-  if (is.factor(x)) return(levels(x)[x])
-  as.character(x)
+  if (is.factor(x))
+    levels(x)[x]
+  else
+    as.character(x)
 }
 
 "%nin%" <- function(x, table) {
@@ -116,32 +118,27 @@ str_pair_match <- function(string, pattern, swap = FALSE, dropEmpty = FALSE,
   assertFlag(swap)
   assertIntegerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
-  string %>% str_match_all(pattern) -> res_matches
+  string %>% str_match(pattern) -> res_matches
 
   if (warn_pattern && identical(pos, c(1, 2)) && length(res_matches[[1]]) > 3) {
-    warning("the pair matching has multiple options, so choosing the first
+    warning("the pair matching has multiple results, so choosing the first
             (incomplete) match. Either turn off this warning, or set 'pos' to
             specify positions to detect. If positions 1 and 2 are needed, do not
             specify explicity, or set 2, 1 and swap. The last, which is in
             position ", length(res_matches[[1]]))
     pos <- length(res_matches[[1]])
   }
-  # with str_match_all, the first match is a redundant complete match of the
+  # with str_match, the first column is a redundant complete match of the
   # whole pattern, so pos + 1 here:
-  lapply(res_matches, FUN = `[`, pos + 1) -> res
 
-  outNames <- vapply(X = res,
-                     FUN = "[",
-                     FUN.VALUE = character(1),
-                     ifelse(swap, 2, 1))
-  stopifnot(all(!is.na(outNames)))
+  outNames <- res_matches[, ifelse(swap, 2, 1) + 1]
+  if (any(is.na(outNames))) {
+    print(string[is.na(outNames)])
+    stop("didn't match some rows.", call. = FALSE)
+  }
 
-  out <- vapply(X = res,
-                FUN = "[",
-                FUN.VALUE = character(1),
-                ifelse(swap, 1, 2))
+  out <- res_matches[, ifelse(swap, 1, 2) + 1]
   stopifnot(all(!is.na(out)))
-
   names(out) <- outNames
   out
 }
@@ -413,19 +410,20 @@ get_path_data_raw <- function() {
 
 }
 
-#' Parse (sub)chapter description with range
+#' Parse a (sub)chapter text description with parenthesised range
 #'
 #' @param x vector of descriptions followed by ICD code ranges
 #' @return list of two-element character vectors, the elements being named
 #'   'start' and 'end'.
 #' @keywords internal manip
 chapter_to_desc_range <- function(x) {
-  UseMethod("chapter_to_desc_range")
+  #UseMethod("chapter_to_desc_range")
+  # should be no need to call this
 }
 
 #' @keywords internal manip
 .chapter_to_desc_range <- function(x, re_major) {
-  assertCharacter(x)
+  assertCharacter(x, min.len = 1)
   assertString(re_major)
 
   re_code_range <- paste0("(.*)[[:space:]]?\\((",
@@ -439,7 +437,7 @@ chapter_to_desc_range <- function(x) {
   oks <- vapply(ms, length, integer(1)) == 3
 
   if (!all(okr || oks))
-    stop("Problem matching\n", x[!(okr || oks)])
+    stop("Problem matching\n", x[!(okr || oks)], call. = FALSE)
   m <- ifelse(okr, mr, ms)
   out <- lapply(m, function(y) c(start = y[[3]], end = y[[length(y)]]))
   names(out) <- vapply(m, function(y) y[[2]] %>% str_to_title %>% str_trim,
@@ -452,11 +450,17 @@ chapter_to_desc_range <- function(x) {
 chapter_to_desc_range.icd9 <- function(x) {
   # TODO, duplicated code for identifying parts of ICD codes
   .chapter_to_desc_range(
-    x, re_major = "[[:digit:]]{1,3}|[Vv][[:digit:]]{1,2}|[Ee][[:digit:]]{1,3}")
+    x, re_major = icd9:::re_icd9_major_bare)
 }
 
 #' @export
 #' @keywords internal
 chapter_to_desc_range.icd10 <- function(x) {
-  .chapter_to_desc_range(x, re_major = "[[:alpha:]][[:digit:]][[:alnum:]]")
+  .chapter_to_desc_range(x, re_major = icd9:::re_icd10_major_bare)
+}
+
+na_to_false <- function(x) {
+  assertLogical(x)
+  x[is.na(x)] <- FALSE
+  x
 }

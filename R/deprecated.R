@@ -973,8 +973,8 @@ icd9GetNonBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
 #' @rdname icd_extract_alpha_numeric
 #' @keywords internal
 icd9ExtractAlphaNumeric <- function(icd9) {
-  .Deprecated("icd_extract_alpha_numeric")
-  icd_extract_alpha_numeric(icd9)
+  .Deprecated("icd9_extract_alpha_numeric")
+  icd9_extract_alpha_numeric(icd9)
 }
 
 generateSysData <- function(sysdata.path = file.path("R", "sysdata.rda"),

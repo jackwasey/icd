@@ -41,9 +41,9 @@ test_that("very bad input data fails completely", {
 })
 
 test_that("simple ranges of real values works", {
-  expect_equal(icd_expand_range.icd10cm("A00", "A001"),
+  expect_equal_no_icd(icd_expand_range.icd10cm("A00", "A001"),
                c("A00", "A000", "A001"))
-  expect_equal(icd_expand_range.icd10cm("A00", "A009", short_code = TRUE),
+  expect_equal_no_icd(icd_expand_range.icd10cm("A00", "A009", short_code = TRUE),
                c("A00", "A000", "A001", "A009"))
 })
 
@@ -154,7 +154,6 @@ test_that("multiple inputs return ordered results", {
     c(icd10_children_possible_short("A00"), icd10_children_possible_short("Z99"))
   )
 })
-
 
 # to move somewhere else:
 test_that("ICD-10 codes in uranium data are okay", {

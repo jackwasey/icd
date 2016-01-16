@@ -312,8 +312,8 @@ icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
   assertFlag(defined)
-  c <- icd_extract_alpha_numeric(start)
-  d <- icd_extract_alpha_numeric(end)
+  c <- icd9_extract_alpha_numeric(start)
+  d <- icd9_extract_alpha_numeric(end)
   # cannot range between numeric, V and E codes, so ensure same type.
   stopifnot(toupper(c[1]) == toupper(d[1]))
   fmt <- if (icd9_is_v(start)) "%02d" else "%03d"

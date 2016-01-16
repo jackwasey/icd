@@ -22,14 +22,14 @@
 #'   containing V, E or "". The second part contains the numeric parts of the
 #'   code, which may include a decimal point.
 #' @keywords internal manip
-icd_extract_alpha_numeric <- function(x) {
+icd9_extract_alpha_numeric <- function(x) {
   assert(checkFactor(x), checkCharacter(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
   asCharacterNoWarn(x) %>%
     str_match_all(pattern = "([VvEe]?)([[:digit:].]+)") %>%
     vapply(FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
-           FUN.VALUE = rep(NA_character_, times = 2)) %>% t
+           FUN.VALUE = c(NA_character_, NA_character_)) %>% t
 }
 
 #' @title drop zero padding from decimal ICD-9 code.
@@ -53,15 +53,11 @@ icd9_add_leading_zeroes <- function(x, short_code = NULL) {
   UseMethod("icd9_add_leading_zeroes")
 }
 
-#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a decimal format ICD-9 code
+#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a decimal format ICD-9 code.
 icd9_drop_leading_zeroes.icd_decimal_code <- function(x, short_code = NULL) {
   assert(checkFactor(x), checkCharacter(x))
   assertNull(short_code)
-
-  x %>% asCharacterNoWarn %>%
-    str_match_all( pattern = "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]+)[[:space:]]*") %>%
-    vapply(FUN = function(y) if (length(y) > 0 && !any(is.na(y))) sprintf("%s%s", y[2], y[4]) else NA_character_ ,
-           FUN.VALUE = character(1))
+  x %>% asCharacterNoWarn %>% str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3")
 }
 
 #' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a short format ICD-9 code
@@ -86,17 +82,14 @@ icd9_drop_leading_zeroes.default <- function(x, short_code = NULL) {
 
 #' @rdname icd9_drop_leading_zeroes
 icd9_drop_leading_zeroes_major <- function(major) {
-  # (valid) E codes don't ever have leading zeroes
-  # major can legitimately be an integer
-  major <- trim(major) # my trim loses encoding, but this shouldn't matter
+  # (valid) E codes from 000 exist. Dropping zeroes from E000 would require a
+  # lot of logic for no current benefit. Defer this until it is a problem.
+  major %<>% str_trim
   isV <- icd9_is_v(major) # not checking validity, necessarily, just quick check
   isN <- icd9_is_valid_major_n(major)
-  major[isV] <- sub(pattern = "^([Vv])0([[:digit:]]{1})$",
-                    replacement = "\\1\\2",
-                    x = major[isV])
+  major[isV] %<>% str_replace("^[[:space:]]*([Vv])0([[:digit:]])[[:space:]]*$",
+                              replacement = "\\1\\2")
   #just replace the FIRST string of zeros everything else is passed through
-  major[isN] <- sub(pattern = "^[[:space:]]*0{1,2}",
-                    replacement = "",
-                    x = major[isN])
+  major[isN] %<>% str_replace("^[[:space:]]*0{1,2}", replacement = "")
   major
 }

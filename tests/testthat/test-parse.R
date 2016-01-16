@@ -226,5 +226,5 @@ test_that("Y09 got picked up in sub-chapter parsing", {
   # Assult from X92-Y08, but has a hanging definition for Y09 with no enclosing
   # chapter. Will have to manually correct for this until fixed.
   expect_subchap_equal("Assault", "X92", "Y09")
-  #expect_true("Y09" %in% icd10cm2016$threedigit)
+
 })

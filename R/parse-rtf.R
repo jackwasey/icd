@@ -129,9 +129,9 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALS
 
   # actually, these are ICD-9-CM subchapters, but I think this is a superset of
   # ICD-9
-  paste0("^[A-Z ]+\\(",
-         re_anycode,"-",
-         re_anycode,"\\)") -> re_subchap_range
+  paste0("^[A-Z ]+\\((",
+         re_icd9_major_bare,")-(",
+         re_icd9_major_bare,")\\)") -> re_subchap_range
 
   filtered %>%
     str_subset(re_subchap_range) %>%
@@ -150,7 +150,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALS
   for (ql in qual_subset_lines) {
     # get prior code
     filtered[ql - 1] %>%
-      str_match_all(paste0("(", re_anycode, ") (.*)")) %>%
+      str_match_all(paste0("(", re_icd9_decimal_bare, ") (.*)")) %>%
       unlist %>% extract2(2) -> code
     sb <- parseRtfQualifierSubset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
@@ -264,13 +264,24 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALS
 
   # now here we could potentially capture chapter headings, but I can drop
   # excludes easily by removing lines with bracketed codes
-  filtered <- grep(paste0("\\((", re_anycode, ")+[-[:digit:]]*\\)"),
+  filtered <- grep(paste0("\\((", re_icd9_decimal_bare, ")-(", re_icd9_decimal_bare, ")\\)"),
                    filtered, value = TRUE, invert = TRUE)
   filtered <- grep(paste0("Exclude"), filtered, value = TRUE, invert = TRUE)
+
+  # fix some odd-balls so they don't get dropped
+  # "707.02Upper back", "066.40West Nile fever, unspecified", etc
+
+  filtered <- sub("((70[[:digit:]]\\.[[:digit:]]{2})|066\\.40)([[:alpha:]])", "\\1 \\2", filtered)
+
+  ##################
+  # next step is the main filter for codes
+  ##################
+
   # again, we can keep some more information, but we'll just take the primary
   # description for each item, i.e. where a code begins a line. Some codes have
   # ten or so alternative descriptions, e.g. 410.0
-  filtered <- grep(paste0("^[[:space:]]*", re_anycode), filtered, value = TRUE)
+  filtered <- grep(paste0("^[[:space:]]*(", re_icd9_decimal_strict_bare, ") "), filtered, value = TRUE)
+
   # spaces to single
   filtered <- gsub("[[:space:]]+", " ", filtered)
   # fix a few things, e.g. "040. 1 Rhinoscleroma", "527 .0 Atrophy"
@@ -280,13 +291,11 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALS
   # and high-level headings like "210-229 Benign neoplasms"
   filtered <- grep("^[[:space:]]*[[:digit:]]{3}-[[:digit:]]{3}.*", filtered,
                    value = TRUE, invert = TRUE)
-  # "707.02Upper back"
-  filtered <- sub("([[:digit:]])([[:alpha:]])", "\\1 \\2", filtered)
   # "2009 H1 N1 swine influenza virus"
   filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE)
   # "495.7 \"Ventilation\" pneumonitis"
-  re_code_desc <- paste0("^(", re_anycode, ") +([ \"[:graph:]]+)")
-  out <- str_pair_match(filtered, re_code_desc, pos = c(1, 6))
+  re_code_desc <- paste0("^(", re_icd9_decimal_bare, ") +([ \"[:graph:]]+)")
+  out <- str_pair_match(filtered, re_code_desc)
 
   out_fourth <- c()
   # apply fourth digit qualifiers
