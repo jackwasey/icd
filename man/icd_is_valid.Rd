@@ -60,13 +60,15 @@ icd9IsValidDecimalV(icd9Decimal)
 
 icd9IsValidDecimalE(icd9Decimal)
 
-icd_is_valid(x, ...)
+icd_is_valid(x, whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd10}(x, short_code = icd_guess_short(x), ...)
 
-\method{icd_is_valid}{icd9}(x, short_code = icd_guess_short.icd9(x), ...)
+\method{icd_is_valid}{icd9}(x, short_code = icd_guess_short.icd9(x),
+  whitespace_ok = TRUE, ...)
 
-\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x), ...)
+\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x),
+  whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd_comorbidity_map}(x, short_code, ...)
 
@@ -86,6 +88,9 @@ is guessed from the input data.}
 
 \item{x}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
+
+\item{whitespace_ok}{Single logical value. Whether a code would be considered
+valid if it also had whitespace surrounding it. Default is \code{TRUE}.}
 
 \item{...}{arguments passed on to other functions}
 

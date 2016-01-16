@@ -2,12 +2,12 @@
 % Please edit documentation in R/deprecated.R, R/manip.R
 \name{icd9ExtractAlphaNumeric}
 \alias{icd9ExtractAlphaNumeric}
-\alias{icd_extract_alpha_numeric}
+\alias{icd9_extract_alpha_numeric}
 \title{extract alphabetic, and numeric part of icd9 code prefix}
 \usage{
 icd9ExtractAlphaNumeric(icd9)
 
-icd_extract_alpha_numeric(x)
+icd9_extract_alpha_numeric(x)
 }
 \arguments{
 \item{icd9}{is

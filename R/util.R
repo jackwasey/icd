@@ -410,17 +410,13 @@ get_path_data_raw <- function() {
 
 }
 
+
 #' Parse a (sub)chapter text description with parenthesised range
 #'
 #' @param x vector of descriptions followed by ICD code ranges
 #' @return list of two-element character vectors, the elements being named
 #'   'start' and 'end'.
-#' @keywords internal manip
-chapter_to_desc_range <- function(x) {
-  #UseMethod("chapter_to_desc_range")
-  # should be no need to call this
-}
-
+#' @name chapter_to_desc_range
 #' @keywords internal manip
 .chapter_to_desc_range <- function(x, re_major) {
   assertCharacter(x, min.len = 1)
@@ -445,7 +441,7 @@ chapter_to_desc_range <- function(x) {
   out
 }
 
-#' @export
+#' @rdname chapter_to_desc_range
 #' @keywords internal
 chapter_to_desc_range.icd9 <- function(x) {
   # TODO, duplicated code for identifying parts of ICD codes
@@ -453,7 +449,7 @@ chapter_to_desc_range.icd9 <- function(x) {
     x, re_major = icd9:::re_icd9_major_bare)
 }
 
-#' @export
+#' @rdname chapter_to_desc_range
 #' @keywords internal
 chapter_to_desc_range.icd10 <- function(x) {
   .chapter_to_desc_range(x, re_major = icd9:::re_icd10_major_bare)

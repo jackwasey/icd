@@ -970,7 +970,7 @@ icd9GetNonBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                         invert = TRUE, version = version)
 }
 
-#' @rdname icd_extract_alpha_numeric
+#' @rdname icd9_extract_alpha_numeric
 #' @keywords internal
 icd9ExtractAlphaNumeric <- function(icd9) {
   .Deprecated("icd9_extract_alpha_numeric")
