@@ -67,12 +67,12 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
     xml2::xml_name() %>%
     equals("chapter" ) -> chapter_indices
   # could do xpath, but harder to loop
-  j  %>% xml2::xml_children() %>% extract(chapter_indices) -> chaps
+  j  %>% xml2::xml_children() %>% magrittr::extract(chapter_indices) -> chaps
 
   icd10_sub_chapters <- list()
   for (chap in chaps) {
     chap  %>% xml2::xml_children() -> c_kids
-    c_kids %>% xml2::xml_name() %>% equals("section") -> subchap_indices
+    c_kids %>% xml2::xml_name() %>% magrittr::equals("section") -> subchap_indices
     c_kids %>% extract(subchap_indices) -> subchaps
 
     for (subchap in subchaps) {
