@@ -273,7 +273,8 @@ skip_flat_icd9_avail <- function(
 }
 
 skip_flat_icd9_avail_all <- function() {
-  lapply(icd9_sources$version, skip_flat_icd9_avail)
+  for (v in icd9_sources$version)
+    skip_flat_icd9_avail(ver = v)
 }
 
 #' Fast Factor Generation
