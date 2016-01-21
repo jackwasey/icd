@@ -2,10 +2,12 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_chapters}
+\alias{icd9Chapters}
+\alias{icd9ChaptersMajor}
+\alias{icd9ChaptersSub}
 \alias{icd9_chapters}
-\alias{icd9_chapters_major}
-\alias{icd9_chapters_sub}
-\title{ICD-9-CM chapters}
+\alias{icd9_sub_chapters}
+\title{ICD-9 chapters}
 \format{list with chapter/usb-chapter or major names stored in list names,
   each with two element named character vector with start and end codes.}
 \source{

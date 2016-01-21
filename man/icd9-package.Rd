@@ -68,7 +68,7 @@ mapping of codes, such as ICD-10, to comorbidities can be used.
   summary of the differences between comorbidity mappings, e.g. to find what
   has changed from year-to-year or between revisions by different authors.
   \code{\link{icd9cm_hierarchy}} is a \code{data.frame} containing the full
-  ICD-9 classification for each diagnosis. \code{\link{icd9Chapters}}
+  ICD-9 classification for each diagnosis. \code{\link{icd9_chapters}}
   contains definitions of chapters, sub-chapters and three-digit groups.}
 
   }

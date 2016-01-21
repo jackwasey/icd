@@ -15,14 +15,24 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-re_just <- function(x) {
+#' limit a regex to just what is given
+#'
+#' update regex to limit by start and end, with or without whitespace
+#' @param x single string containing a regex
+#' @template whitespace_ok
+#' @keywords internal
+re_just <- function(x, whitespace_ok = FALSE) {
   assertString(x)
-  paste0("^", x, "$")
+  assertFlag(whitespace_ok)
+  if (whitespace_ok)
+    paste0("^[[:space:]]*", x, "[[:space:]]*$")
+  else
+    paste0("^", x, "$")
 }
 
+#' @describeIn re_just allow whitespace
 re_just_ws <- function(x) {
-  assertString(x)
-  paste0("^[[:space:]]*", x, "[[:space:]]*$")
+  re_just(x, whitespace_ok = TRUE)
 }
 
 re_icd9_major_n <- "[[:digit:]]{1,3}"
@@ -151,8 +161,7 @@ re_icd10_any <- re_icd10cm_any
 #' @param x An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 #'   \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.
 #' @template major
-#' @param whitespace_ok Single logical value. Whether a code would be considered
-#'   valid if it also had whitespace surrounding it. Default is \code{TRUE}.
+#' @template whitespace_ok
 #' @template dotdotdot
 #' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
 #'   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
@@ -168,14 +177,18 @@ re_icd10_any <- re_icd10cm_any
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 #'   }
 #' @export
-icd_is_valid <- function(x, whitespace_ok = TRUE, ...) {
+icd_is_valid <- function(x, ...) {
   UseMethod("icd_is_valid")
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
 #' @export
-icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x), ...) {
+icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
+                               whitespace_ok = TRUE, ...) {
   assertCharacter(x)
+  assertFlag(short_code)
+  assertFlag(whitespace_ok)
+
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
   # testing 'realness' start with a broad regex
 

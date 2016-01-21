@@ -15,9 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title ICD-9-CM chapters
+#' @title ICD-9 chapters
 #' @name icd9_chapters
-#' @aliases icd9_chapters_sub icd9_chapters_major
+#' @aliases icd9Chapters icd9ChaptersSub icd9ChaptersMajor icd9_sub_chapters
 #' @description \code{icd9_chapters}, \code{icd9_chapters_sub} and
 #'   \code{icd9_chapters_major} contain mappings from the higher level
 #'   descriptions of ICD-9 codes to the ranges of ICD-9 codes they describe.
@@ -56,9 +56,24 @@ NULL
 #'   alphabetic initial characters. E.g. Chapter I spans A00 to B99.
 #' @details TODO: confirm that ICD-10-CM has no variation at this level.
 #' @source http://apps.who.int/classifications/icd10/browse/2016/en
-#' @format list with chapter/usb-chapter or major names stored in list names,
+#' @format list with chapter names stored in list names,
 #'   each with two element named character vector with start and end codes.
 NULL
+
+#' @title ICD-10 sub-chapters
+#' @name icd10_sub_chapters
+#' @description The WHO ICD-10 scheme sub-chapters. N.b. there may be WHO vs CM
+#'   differences: please file bug if noted. In the \code{XML} definition of
+#'   ICD-10-CM there are some intermediate hierarchical levels, e.g. for
+#'   neoplasms. Sub-chapter here is defined as the lowest-level grouping of
+#'   three-digit codes, e.g. C00-C14 "Malignant neoplasms of lip, oral cavity
+#'   and pharynx", not C00-C96 "Malignant neoplasms" which itself is a subset of
+#'   the chapter C00-D49 "Neoplasms"
+#' @source http://apps.who.int/classifications/icd10/browse/2016/en
+#' @format list with sub-chapter or major names stored in list names,
+#'   each with two element named character vector with start and end codes.
+NULL
+
 
 #' @title ICD9-CM diagnosis code lookup
 #' @description short-form ICD-9 codes with short and long descriptions, and
