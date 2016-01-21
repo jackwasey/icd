@@ -133,8 +133,8 @@ str_pair_match <- function(string, pattern, swap = FALSE, dropEmpty = FALSE,
 
   outNames <- res_matches[, ifelse(swap, 2, 1) + 1]
   if (any(is.na(outNames))) {
-    print(string[is.na(outNames)])
-    stop("didn't match some rows.", call. = FALSE)
+    stop("didn't match some rows:", string[is.na(outNames)],
+      call. = FALSE)
   }
 
   out <- res_matches[, ifelse(swap, 1, 2) + 1]
@@ -255,10 +255,9 @@ skip_on_no_rtf <- function(test_year)
                             "ICD-9-CM codes unavailable offline for testsing"))
 
 
-skip_flat_icd9_avail <- function(ver = "31",
-                                 msg = paste("skipping test because flat file
-                                             ICD-9-CM sources not available for
-                                             version: ", ver)) {
+skip_flat_icd9_avail <- function(
+  ver = "31",
+  msg = paste("skipping test because flat file ICD-9-CM sources not available for version: ", ver)) {
   dat <- icd9_sources[icd9_sources$version == ver, ]
   fn_orig <- dat$short_filename
   if (is.na(fn_orig))
