@@ -19,7 +19,7 @@
 #' @name icd9_chapters
 #' @aliases icd9Chapters icd9ChaptersSub icd9ChaptersMajor icd9_sub_chapters
 #' @description \code{icd9_chapters}, \code{icd9_chapters_sub} and
-#'   \code{icd9_chapters_major} contain mappings from the higher level
+#'   \code{icd9_majors} contain mappings from the higher level
 #'   descriptions of ICD-9 codes to the ranges of ICD-9 codes they describe.
 #'   Helpful in summarizing codes or grouping for human-readable output. These
 #'   can easily be converted to a co-morbidity mapping, as shown in the

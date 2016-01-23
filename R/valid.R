@@ -54,11 +54,13 @@ re_icd9_major_bare <- paste0(c(re_icd9_major_n,
                         collapse = "|")
 re_icd9_major_strict <- paste0(c(re_icd9_major_n_strict %>% re_just_ws,
                                  re_icd9_major_v_strict %>% re_just_ws,
-                                 re_icd9_major_v_strict %>% re_just_ws),
+                                 re_icd9_major_v_strict %>% re_just_ws,
+                                 re_icd9_major_e_strict %>% re_just_ws),
                                collapse = "|")
 re_icd9_major_strict_bare <- paste0(c(re_icd9_major_n_strict,
                                  re_icd9_major_v_strict,
-                                 re_icd9_major_v_strict),
+                                 re_icd9_major_v_strict,
+                                 re_icd9_major_e_strict),
                                collapse = "|")
 re_icd9_minor_nv <- "[[:digit:]]{1,2}"
 re_icd9_minor_e <- "[[:digit:]]{1}"

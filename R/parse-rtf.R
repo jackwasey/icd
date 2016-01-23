@@ -65,7 +65,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
   # CP1252. test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
   out <- parse_rtf_lines(rtf_lines, verbose = verbose,
-                         save_sub_chapters = save_data) %>%
+                         save_extras = save_data) %>%
     swapNamesWithVals %>%
     icd_sort.icd9(short_code = FALSE)
 
@@ -86,7 +86,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
 #'   the other way around, but the tests are now wired for this layout. "Tidy"
 #'   data would favour having an un-named two-column data frame.
 #' @keywords internal
-parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALSE) {
+parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   assertCharacter(rtf_lines)
   assertFlag(verbose)
@@ -134,12 +134,27 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALS
          re_icd9_major_bare,")-(",
          re_icd9_major_bare,")\\)") -> re_subchap_range
 
+  paste0("^(", re_icd9_major_strict_bare, ") ") -> re_major_start
   filtered %>%
     str_subset(re_subchap_range) %>%
     chapter_to_desc_range.icd9 -> icd9_sub_chapters
 
-  if (save_sub_chapters)
+  filtered %>%
+    str_subset(re_major_start) %>%
+    str_split_fixed(" ", n = 2) -> majors_matrix
+
+  icd9_majors <- majors_matrix[, 1]
+  names(icd9_majors) <- majors_matrix[, 2]
+
+  if (TRUE) {
+    # save for debug only
+    save(filtered, file = "/tmp/filtered.rda")
+  }
+
+  if (save_extras) {
     save_in_data_dir(icd9_sub_chapters)
+    save_in_data_dir(icd9_majors)
+  }
 
   # this is so ghastly: find rows with sequare brackets containing definition of
   # subset of fourth or fifth digit codes. Need to pull code from previous row,

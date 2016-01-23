@@ -127,42 +127,38 @@ test_that("extract top-level codes from the RTF gives the complete list", {
   # all valid major form.
 
   # pick out the troublemakers found in testing, and some edge cases.
-  expect_equal(icd9ChaptersMajor[["Other poxvirus infections"]],
-               structure("059", .Names = "major"))
-  expect_equal(icd9ChaptersMajor[["Other disorders of stomach and duodenum"]],
-               structure("537", .Names = "major"))
-  expect_equal(icd9ChaptersMajor[["Gastrointestinal mucositis (ulcerative)"]],
-               structure("538", .Names = "major"))
-  expect_equal(icd9ChaptersMajor[["Perinatal disorders of digestive system"]],
-               structure("777", .Names = "major"))
+  expect_equal(icd9_majors[["Other poxvirus infections"]], "059")
+  expect_equal(icd9_majors[["Other disorders of stomach and duodenum"]], "537")
+  expect_equal(icd9_majors[["Gastrointestinal mucositis (ulcerative)"]], "538")
+  expect_equal(icd9_majors[["Perinatal disorders of digestive system"]], "777")
   # some have no subchapter, just major:
   expect_false("280" %in% icd9ChaptersSub)
   expect_false("289" %in% icd9ChaptersSub)
   expect_false("740" %in% icd9ChaptersSub)
   expect_false("759" %in% icd9ChaptersSub)
   expect_equal(
-    icd9ChaptersMajor[["Iron deficiency anemias"]],
+    icd9_majors[["Iron deficiency anemias"]],
     structure("280", .Names = "major"))
   expect_equal(
-    icd9ChaptersMajor[["Other diseases of blood and blood-forming organs"]],
+    icd9_majors[["Other diseases of blood and blood-forming organs"]],
     structure("289", .Names = "major"))
   expect_equal(
-    icd9ChaptersMajor[["Anencephalus and similar anomalies"]],
+    icd9_majors[["Anencephalus and similar anomalies"]],
     structure("740", .Names = "major"))
   expect_equal(
-    icd9ChaptersMajor[["Other and unspecified congenital anomalies"]],
+    icd9_majors[["Other and unspecified congenital anomalies"]],
     structure("759", .Names = "major"))
 
   # format of each hierarchy level:
   expect_equal(names(icd9Chapters[[1]]), c("start", "end"))
   expect_equal(names(icd9ChaptersSub[[1]]), c("start", "end"))
-  expect_equal(names(icd9ChaptersMajor[[1]]), c("major"))
+  expect_equal(names(icd9_majors[[1]]), c("major"))
   # should be no NA values
   expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE = "", 1))))
   expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE = "", 2))))
   expect_true(all(!is.na(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 1))))
   expect_true(all(!is.na(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 2))))
-  expect_true(all(!is.na(vapply(icd9ChaptersMajor, "[[", FUN.VALUE = "", 1))))
+  expect_true(all(!is.na(vapply(icd9_majors, "[[", FUN.VALUE = "", 1))))
 
   # all the range limits and majors should be valid majors
   expect_true(
@@ -174,32 +170,32 @@ test_that("extract top-level codes from the RTF gives the complete list", {
   expect_true(
     all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 2))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9ChaptersMajor, "[[", FUN.VALUE = "", 1))))
+    all(icd9IsValidMajor(vapply(icd9_majors, "[[", FUN.VALUE = "", 1))))
 })
 
-test_that("icd9ChaptersMajor - positive values", {
-  expect_true("001" %in% icd9ChaptersMajor)
-  expect_true("V01" %in% icd9ChaptersMajor)
-  expect_true("V91" %in% icd9ChaptersMajor) # only up to V89 in 2011.
-  expect_true("E000" %in% icd9ChaptersMajor)
-  expect_true("E001" %in% icd9ChaptersMajor)
-  expect_true("E009" %in% icd9ChaptersMajor)
-  expect_true("E013" %in% icd9ChaptersMajor)
-  expect_true("E016" %in% icd9ChaptersMajor)
-  expect_true("E849" %in% icd9ChaptersMajor)
-  expect_true("E917" %in% icd9ChaptersMajor)
+test_that("icd9_majors - positive values", {
+  expect_true("001" %in% icd9_majors)
+  expect_true("V01" %in% icd9_majors)
+  expect_true("V91" %in% icd9_majors) # only up to V89 in 2011.
+  expect_true("E000" %in% icd9_majors)
+  expect_true("E001" %in% icd9_majors)
+  expect_true("E009" %in% icd9_majors)
+  expect_true("E013" %in% icd9_majors)
+  expect_true("E016" %in% icd9_majors)
+  expect_true("E849" %in% icd9_majors)
+  expect_true("E917" %in% icd9_majors)
 })
 
-test_that("icd9ChaptersMajor - negative values", {
+test_that("icd9_majors - negative values", {
   # there are some gaps: just make sure we don't have any spurious codes:
-  expect_false("888" %in% icd9ChaptersMajor)
-  expect_false("889" %in% icd9ChaptersMajor)
-  expect_false("V00" %in% icd9ChaptersMajor)
-  expect_false("V38" %in% icd9ChaptersMajor)
-  expect_false("E777" %in% icd9ChaptersMajor)
+  expect_false("888" %in% icd9_majors)
+  expect_false("889" %in% icd9_majors)
+  expect_false("V00" %in% icd9_majors)
+  expect_false("V38" %in% icd9_majors)
+  expect_false("E777" %in% icd9_majors)
 })
 
-for (i in list("icd9Chapters", "icd9ChaptersSub", "icd9ChaptersMajor")) {
+for (i in list("icd9Chapters", "icd9ChaptersSub", "icd9_majors")) {
   il <- get(i)
   test_that(paste("icd9Chapters... duplication, blanks: ", i), {
     # should be no duplicate names
@@ -212,13 +208,13 @@ for (i in list("icd9Chapters", "icd9ChaptersSub", "icd9ChaptersMajor")) {
   })
 }
 
-test_that("parse icd9ChaptersMajor vs those listed
+test_that("parse icd9_majors vs those listed
           in the other CDC source of the leaf definitions.", {
             # get all the majors from the other list, to compare
 
             compareMajors <- unique(icd_get_major.icd9(icd9::icd9cm_hierarchy[["icd9"]], short_code = TRUE))
-            expect_true(all(compareMajors %in% icd9ChaptersMajor))
-            expect_true(all(icd9ChaptersMajor %in% compareMajors))
+            expect_true(all(compareMajors %in% icd9_majors))
+            expect_true(all(icd9_majors %in% compareMajors))
           })
 
 test_that("unsorted hierarchy tests", {

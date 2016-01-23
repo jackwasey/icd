@@ -106,8 +106,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
   }
   mj <- unique(icd_get_major.icd9(x, short_code = TRUE))
 
-  mjexplain <- names(icd9::icd9ChaptersMajor)[icd9::icd9ChaptersMajor %in%
-                                                mj[mj %in% x]]
+  mjexplain <- names(icd9::icd9_majors)[icd9::icd9_majors %in% mj[mj %in% x]]
   # don't double count when major is also billable
   x <- x[x %nin% mj]
   descField <- ifelse(brief, "descShort", "descLong")
@@ -154,30 +153,30 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9),
   sf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9ChaptersSub), NA_character_))
   mf <- factor(rep(NA, length(icd9)),
-               levels = c(names(icd9::icd9ChaptersMajor), NA_character_))
-  allmjrs <- lapply(icd9::icd9ChaptersMajor, `[[`, "major")
+               levels = c(names(icd9::icd9_majors), NA_character_))
+  allmjrs <- lapply(icd9::icd9_majors, `[[`, "major")
   thrdgt <- factor(rep(NA, length(icd9)), levels = c(allmjrs, NA_character_))
   out <- data.frame(threedigit = thrdgt, major = mf,
                     subchapter = sf, chapter = cf)
 
-  chap_lookup <- lapply(icd9::icd9Chapters, function(y)
+  chap_lookup <- lapply(icd9::icd9_chapters, function(y)
     icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
 
-  subchap_lookup <- lapply(icd9::icd9ChaptersSub, function(y)
+  subchap_lookup <- lapply(icd9::icd9_sub_chapters, function(y)
     icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
 
   for (i in 1:length(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
-    for (chap_num in 1:length(icd9::icd9Chapters)) {
+    for (chap_num in 1:length(icd9::icd9_chapters)) {
       if (majors[i] %fin% chap_lookup[[chap_num]]) {
-        out[i, "chapter"] <- names(icd9::icd9Chapters)[chap_num]
+        out[i, "chapter"] <- names(icd9::icd9_chapters)[chap_num]
         break
       }
     }
-    for (subchap_num in 1:length(icd9::icd9ChaptersSub)) {
+    for (subchap_num in 1:length(icd9::icd9_sub_chapters)) {
       if (majors[i] %fin% subchap_lookup[[subchap_num]]) {
-        out[i, "subchapter"] <- names(icd9::icd9ChaptersSub)[subchap_num]
+        out[i, "subchapter"] <- names(icd9::icd9_sub_chapters)[subchap_num]
         break
       }
     }
@@ -196,14 +195,14 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9),
 
 icd9_expand_chapter_majors <- function(chap) {
   icd_expand_range_major.icd9(
-    icd9::icd9Chapters[[chap]]["start"],
-    icd9::icd9Chapters[[chap]]["end"],
+    icd9::icd9_chapters[[chap]]["start"],
+    icd9::icd9_chapters[[chap]]["end"],
     defined = FALSE)
 }
 
 icd9_expand_subchapter_majors <- function(subchap) {
   icd_expand_range_major.icd9(
-    icd9::icd9ChaptersSub[[subchap]]["start"],
-    icd9::icd9ChaptersSub[[subchap]]["end"],
+    icd9::icd9_sub_chapters[[subchap]]["start"],
+    icd9::icd9_sub_chapters[[subchap]]["end"],
     defined = FALSE)
 }

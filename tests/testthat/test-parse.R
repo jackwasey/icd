@@ -135,7 +135,7 @@ test_that("all csv extract codes are in rtf extract", {
 
 test_that("majors extracted from web page are the same as those from RTF", {
   skip_on_no_rtf(test_year)
-  webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
+  webmajors <- unlist(icd9_majors) # why is this even a list not a named vector?
   work <- swapNamesWithVals(rtf)
   rtfmajors <- work[icd_is_major.icd9(work)]
 
@@ -190,12 +190,21 @@ test_that("we didn't incorrectly assign fifth (or fourth?) digit codes which are
   # grep "\[[[:digit:]],.*\]" Dtab12.rtf
 })
 
+test_that("subchapter parsing went okay", {
+  expect_equal(
+    icd9_sub_chapters[["Accidental Poisoning By Drugs, Medicinal Substances, And Biologicals"]],
+    c(start = "E850", end = "858")
+    )
+})
+
+context("icd10 parse")
+
 lower_to_range <- function(x) {
   t_i <- which(tolower(names(icd9::icd10_sub_chapters)) == tolower(x))
   icd9::icd10_sub_chapters[[t_i]]
 }
 
-expect_subchap_equal <- function(x, start, end, ...) {
+expect_icd10_subchap_equal <- function(x, start, end, ...) {
   expect_equal(lower_to_range(x), c(start = start, end = end), ...)
 }
 
@@ -204,20 +213,20 @@ test_that("icd10 subchapters were parsed correctly", {
   paste("Persons with potential health hazards related",
         "to family and personal history and certain",
         "conditions influencing health status") %>%
-    expect_subchap_equal(start = "Z77", end = "Z99")
+    expect_icd10_subchap_equal(start = "Z77", end = "Z99")
 
-  expect_subchap_equal(
+  expect_icd10_subchap_equal(
     "Persons encountering health services for examinations",
     "Z00", "Z13")
 
-  expect_subchap_equal(
+  expect_icd10_subchap_equal(
     "Occupant of three-wheeled motor vehicle injured in transport accident",
     "V30", "V39")
 
-  expect_subchap_equal(
+  expect_icd10_subchap_equal(
     "Malignant neuroendocrine tumors", "C7A", "C7A")
 
-  expect_subchap_equal(
+  expect_icd10_subchap_equal(
     "Other human herpesviruses", "B10", "B10")
 })
 
@@ -225,6 +234,7 @@ test_that("Y09 got picked up in sub-chapter parsing", {
   # this is actually an error in the 2016 CMS XML which declares a range for
   # Assult from X92-Y08, but has a hanging definition for Y09 with no enclosing
   # chapter. Will have to manually correct for this until fixed.
-  expect_subchap_equal("Assault", "X92", "Y09")
+  expect_icd10_subchap_equal("Assault", "X92", "Y09")
 
 })
+
