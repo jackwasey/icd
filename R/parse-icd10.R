@@ -65,7 +65,7 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
 
   j  %>% xml2::xml_children() %>%
     xml2::xml_name() %>%
-    equals("chapter" ) -> chapter_indices
+    magrittr::equals("chapter" ) -> chapter_indices
   # could do xpath, but harder to loop
   j  %>% xml2::xml_children() %>% magrittr::extract(chapter_indices) -> chaps
 
@@ -73,12 +73,12 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   for (chap in chaps) {
     chap  %>% xml2::xml_children() -> c_kids
     c_kids %>% xml2::xml_name() %>% magrittr::equals("section") -> subchap_indices
-    c_kids %>% extract(subchap_indices) -> subchaps
+    c_kids %>% magrittr::extract(subchap_indices) -> subchaps
 
     for (subchap in subchaps) {
       subchap  %>%
         xml2::xml_children()  %>%
-        extract(1) %>%
+        magrittr::extract(1) %>%
         xml2::xml_text() %>%
         chapter_to_desc_range.icd10 -> new_sub_chap_range
 
@@ -189,7 +189,7 @@ icd10cm_get_all_defined <- function(save = FALSE) {
         icd10cm2016[c("code", "descShort")],
         by.x = "threedigit", by.y = "code",
         all.x = TRUE) %>%
-    extract2(2) %>% as.factor ->
+    magrittr::extract2(2) %>% as.factor ->
     icd10cm2016[["major"]]
 
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
@@ -222,7 +222,7 @@ icd10cm_get_all_defined <- function(save = FALSE) {
 
   merge(icd10cm2016["threedigit"], sc_lookup,
         by.x = "threedigit", by.y = "sc_major", all.x = TRUE) %>%
-    extract2("sc_desc") -> icd10cm2016[["subchapter"]]
+    magrittr::extract2("sc_desc") -> icd10cm2016[["subchapter"]]
 
 
   # now the same for chapters:
@@ -256,7 +256,7 @@ icd10cm_get_all_defined <- function(save = FALSE) {
 
   merge(icd10cm2016["threedigit"], chap_lookup,
         by.x = "threedigit", by.y = "chap_major", all.x = TRUE) %>%
-    extract2("chap_desc") -> icd10cm2016[["chapter"]]
+    magrittr::extract2("chap_desc") -> icd10cm2016[["chapter"]]
 
   if (save)
     save_in_data_dir(icd10cm2016)

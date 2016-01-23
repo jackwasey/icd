@@ -75,13 +75,13 @@ unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
 
   data_raw_path <- system.file("data-raw", package = get_pkg_name())
   file_path <- file.path(data_raw_path, make.names(file_name))
-  if (offline && !file.exists(file_path))
-    return(NULL)
-
-  stopifnot(
-    unzip_single(url = url, file_name = file_name, save_path = file_path)
-  )
-
+  if (!file.exists(file_path)) {
+    if (offline)
+      return(NULL)
+    stopifnot(
+      unzip_single(url = url, file_name = file_name, save_path = file_path)
+    )
+  }
   list(file_path = file_path, file_name = make.names(file_name))
 }
 

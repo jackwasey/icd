@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+# could also be done by test-all.R
+library("magrittr")
+
 local({
   do_slow_tests <- getOption("icd9.do_slow_tests")
   if (is.null(do_slow_tests) || !do_slow_tests)

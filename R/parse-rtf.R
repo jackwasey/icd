@@ -110,7 +110,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_sub_chapters = FALS
 
   # fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
   # lines... This needs care in Windows, or course. Maybe Mac, too?
-  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e grave
+  filtered <- gsub("\\\\'e7", "\u00e7", filtered) # c cedila
+  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e gravel
   filtered <- gsub("\\\\'e9", "\u00e9", filtered) # e acute
   filtered <- gsub("\\\\'f1", "\u00f1", filtered) # n tilde
   filtered <- gsub("\\\\'f16", "\u00f6", filtered) # o umlaut
