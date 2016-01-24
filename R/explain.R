@@ -149,9 +149,9 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9),
 
   # could consider factor_nosort, but this isn't the main bottleneck
   cf <- factor(rep(NA, length(icd9)),
-               levels = c(names(icd9::icd9Chapters), NA_character_))
+               levels = c(names(icd9::icd9_chapters), NA_character_))
   sf <- factor(rep(NA, length(icd9)),
-               levels = c(names(icd9::icd9ChaptersSub), NA_character_))
+               levels = c(names(icd9::icd9_sub_chapters), NA_character_))
   mf <- factor(rep(NA, length(icd9)),
                levels = c(names(icd9::icd9_majors), NA_character_))
   allmjrs <- lapply(icd9::icd9_majors, `[[`, "major")

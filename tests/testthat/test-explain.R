@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -93,61 +93,37 @@ test_that("explain works when none ICD-9 codes are even valid", {
 
 
 test_that("guess icd9 types: short", {
-  expect_true(icd9GuessIsShort("12345"))
-  expect_true(icd9GuessIsShort(c("12345", "234")))
+  expect_true(icd_guess_short.icd9("12345"))
+  expect_true(icd_guess_short.icd9(c("12345", "234")))
   # we only look at first one...
-  expect_true(icd9GuessIsShort(c("12345", "23.4")))
-  expect_true(icd9GuessIsShort("1234"))
+  expect_true(icd_guess_short.icd9(c("12345", "23.4")))
+  expect_true(icd_guess_short.icd9("1234"))
 })
 
 test_that("guess icd9 types: ambiguous, default to short", {
-  expect_equal(icd9GuessIsShort(c("123.4","2345")), TRUE)
-  expect_equal(icd9GuessIsShort(c("123.4", NA, "2345")), TRUE)
+  expect_equal(icd_guess_short.icd9(c("123.4","2345")), TRUE)
+  expect_equal(icd_guess_short.icd9(c("123.4", NA, "2345")), TRUE)
 })
 
 test_that("guess icd9 types: decimal", {
-  expect_false(icd9GuessIsShort("123.45"))
-  expect_false(icd9GuessIsShort("123.4"))
-  expect_false(icd9GuessIsShort("123."))
+  expect_false(icd_guess_short.icd9("123.45"))
+  expect_false(icd_guess_short.icd9("123.4"))
+  expect_false(icd_guess_short.icd9("123."))
 })
 
 test_that("guess icd9 types: invalid", {
-  expect_equal(icd9GuessIsShort(NA_character_), TRUE)
+  expect_equal(icd_guess_short.icd9(NA_character_), TRUE)
 })
 
 test_that("guess with just majors", {
   # it acutally doesn't matter if they are all majors, so we default to 'short'
   # which is usually the most direct route to an answer
-  expect_true(icd9GuessIsShort(c("100", "101", "102")))
+  expect_true(icd_guess_short.icd9(c("100", "101", "102")))
 })
 
 test_that("extract top-level codes from the RTF gives the complete list", {
   # total number of codes
-  # pick out a few at random
   # all valid major form.
-
-  # pick out the troublemakers found in testing, and some edge cases.
-  expect_equal(icd9_majors[["Other poxvirus infections"]], "059")
-  expect_equal(icd9_majors[["Other disorders of stomach and duodenum"]], "537")
-  expect_equal(icd9_majors[["Gastrointestinal mucositis (ulcerative)"]], "538")
-  expect_equal(icd9_majors[["Perinatal disorders of digestive system"]], "777")
-  # some have no subchapter, just major:
-  expect_false("280" %in% icd9ChaptersSub)
-  expect_false("289" %in% icd9ChaptersSub)
-  expect_false("740" %in% icd9ChaptersSub)
-  expect_false("759" %in% icd9ChaptersSub)
-  expect_equal(
-    icd9_majors[["Iron deficiency anemias"]],
-    structure("280", .Names = "major"))
-  expect_equal(
-    icd9_majors[["Other diseases of blood and blood-forming organs"]],
-    structure("289", .Names = "major"))
-  expect_equal(
-    icd9_majors[["Anencephalus and similar anomalies"]],
-    structure("740", .Names = "major"))
-  expect_equal(
-    icd9_majors[["Other and unspecified congenital anomalies"]],
-    structure("759", .Names = "major"))
 
   # format of each hierarchy level:
   expect_equal(names(icd9Chapters[[1]]), c("start", "end"))

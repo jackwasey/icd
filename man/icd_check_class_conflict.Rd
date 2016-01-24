@@ -2,16 +2,7 @@
 % Please edit documentation in R/class.R
 \name{icd_check_class_conflict}
 \alias{icd_check_class_conflict}
-\title{#' @describeIn icd_classes_ordered \code{testthat} \code{expectation }for
-#'   ICD classes to be in correct order.
-icd_expectation_classes_disordered <- function() {
-  requireNamespace("testthat")
-  function(x) {
-    testthat::expectation(!icd_classes_ordered(x),
-                          "are well ordered", "are not well ordered")
-  }
-}
-check whether there are any ICD class conflicts}
+\title{check whether there are any ICD class conflicts}
 \usage{
 icd_check_class_conflict(x)
 }

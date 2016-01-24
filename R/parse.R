@@ -227,20 +227,20 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   assertFlag(verbose)
 
   message("get column of ICD-9 codes, up to the three digit headings. ~10s")
-  icd9Desc <- parse_rtf_year(year = "2011",
+  icd9_rtf <- parse_rtf_year(year = "2011",
                              save_data = FALSE,
                              verbose = verbose)
 
   message("slower step of building icd9 chapters hierarchy from 2011 RTF. ~20s")
-  chaps <- icd9_get_chapters(x = icd9Desc$code,
+  chaps <- icd9_get_chapters(x = icd9_rtf$code,
                              short_code = TRUE,
                              verbose = verbose)
 
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs
   icd9cm_hierarchy <- cbind(
-    data.frame("icd9" = icd9Desc$code,
-               "descLong" = icd9Desc$desc,
+    data.frame("icd9" = icd9_rtf$code,
+               "descLong" = icd9_rtf$desc,
                stringsAsFactors = FALSE),
     # the following can and should be factors:
     chaps

@@ -146,10 +146,11 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   icd9_majors <- majors_matrix[, 1]
   names(icd9_majors) <- majors_matrix[, 2]
 
-  if (TRUE) {
-    # save for debug only
-    save(filtered, file = "/tmp/filtered.rda")
-  }
+  #########################################################
+  # TODO: debug only, delete me.
+  #########################################################
+  if (TRUE) save(filtered, file = "/tmp/filtered.rda")
+  #########################################################
 
   if (save_extras) {
     save_in_data_dir(icd9_sub_chapters)

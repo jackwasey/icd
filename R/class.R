@@ -106,32 +106,6 @@ icd_expectation_classes_ordered <- function() {
   }
 }
 
-#' expect equal, ignoring any ICD classes
-#' @keywords internal
-expect_equal_no_icd <- function(object, expected, ..., info = NULL,
-                                label = NULL, expected.label = NULL) {
-  if (is.null(label))
-    label <- find_expr("object")
-  if (is.null(expected.label))
-    expected.label <- find_expr("expected")
-
-  class(object) <- class(object)[class(object) %nin% icd_all_classes]
-  testthat::expect_that(object,
-                        testthat::equals(
-                          expected, label = expected.label, ...
-                        ), info = info, label = label)
-}
-
-#' #' @describeIn icd_classes_ordered \code{testthat} \code{expectation }for
-#' #'   ICD classes to be in correct order.
-#' icd_expectation_classes_disordered <- function() {
-#'   requireNamespace("testthat")
-#'   function(x) {
-#'     testthat::expectation(!icd_classes_ordered(x),
-#'                           "are well ordered", "are not well ordered")
-#'   }
-#' }
-
 #' check whether there are any ICD class conflicts
 #'
 #' E.g. both icd10who and icd10cm
