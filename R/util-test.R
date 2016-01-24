@@ -41,8 +41,7 @@ expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
     return(res)
 
   t_i <- which(lower_case_names == x)
-  r <- ver_chaps[[t_i]]
-  eval(bquote(testthat::expect_equal(.(r), c(start = .(start), end = .(end)), ...)))
+  eval(bquote(testthat::expect_equal(.(ver_chaps[[t_i]]), c(start = .(start), end = .(end)), ...)))
 }
 
 #' @rdname expect_chap_equal
@@ -189,7 +188,7 @@ expect_icd10_only_sub_chap <- function(x, ...) {
 
 #' expectation for ICD classes to be well-ordered
 #' @return a function, mimicking how \code{testthat} works
-#' @examples expect_that(icd9("V10"), icd_classes_are_ordered())
+#' @examples testthat::expect_that(icd9("V10"), icd_classes_are_ordered())
 #' @keywords internal
 icd_classes_are_ordered <- function() {
   function(x) {
