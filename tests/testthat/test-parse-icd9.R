@@ -28,12 +28,13 @@ test_that("some known sub vs chap confusion", {
     expect_icd9_only_chap(i)
 
   for (i in names(icd9_sub_chapters))
-    expect_icd9_only_sub_chap(i)
+    expect_icd9_only_sub_chap(i, info = i)
 
 })
 
 test_that("sub_chapter parsing went okay, tricky cases", {
 
+  expect_icd9_sub_chap_equal("Tuberculosis", "010", "018") # "TUBERCULOSIS(010-018)"
 
   expect_icd9_sub_chap_equal("Vehicle Accidents Not Elsewhere Classifiable", "E846", "E848") # or with comma: "Vehicle Accidents, Not Elsewhere Classifiable"
   expect_icd9_sub_chap_equal("Accidental Poisoning By Drugs, Medicinal Substances, And Biologicals", "E850", "E858")
@@ -45,14 +46,19 @@ test_that("sub_chapter parsing went okay, tricky cases", {
 
 test_that("majors okay", {
   # pick out some troublemakers found in testing, and some edge cases.
+  expect_icd9_major_equals("Other respiratory tuberculosis", "012")
   expect_icd9_major_equals("Other poxvirus infections", "059")
   expect_icd9_major_equals("Other disorders of stomach and duodenum", "537")
   expect_icd9_major_equals("Gastrointestinal mucositis (ulcerative)", "538")
   expect_icd9_major_equals("Perinatal disorders of digestive system", "777")
+  expect_icd9_major_equals("Iron deficiency anemias", "280")
+  expect_icd9_major_equals("Other diseases of blood and blood-forming organs", "289")
+  expect_icd9_major_equals("Anencephalus and similar anomalies", "740")
+  expect_icd9_major_equals("Other and unspecified congenital anomalies", "759")
 
   # the following is incorrectly specified under vehicle injury in
   # http://www.icd9data.com/2015/Volume1/E000-E999/E846-E849/E849/default.htm
-  expect_icd9_major_equals("Place of occurence", "E849")
+  expect_icd9_major_equals("Place of occurrence", "E849")
 })
 
 test_that("some majors are the same as sub-chapters", {
@@ -62,13 +68,9 @@ test_that("some majors are the same as sub-chapters", {
   # be more consistent to have every code being in a chapter, sub-chapter and
   # major, than some being exceptional.
 
-  expect_icd9_major_is_sub_chap("Iron deficiency anemias", "280")
-  expect_icd9_major_is_sub_chap("Other diseases of blood and blood-forming organs", "289")
-  expect_icd9_major_is_sub_chap("Anencephalus and similar anomalies", "740")
-  expect_icd9_major_is_sub_chap("Other and unspecified congenital anomalies", "759")
 
   # TODO: V85 to V91
 
-  expect_icd9_major_is_sub_chap("External Cause Status", "E000")
+  expect_icd9_major_is_sub_chap("External cause status", "E000")
 
 })

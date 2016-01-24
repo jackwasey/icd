@@ -37,13 +37,22 @@ icd_all_classes <- c(icd_version_classes, icd_data_classes,
                      icd_code_classes, icd_other_classes)
 icd_system_classes <- c("data.frame", "list", "numeric", "character", "factor")
 
-icd_check_conflict_with_icd9 <- function(x)
-  if (inherits(x, icd9_classes))
-    stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+icd_conflicts_with_icd9 <- function(x) inherits(x, icd10_classes)
+icd_conflicts_with_icd10 <- function(x) inherits(x, icd9_classes)
+icd_conflicts_with_icd9cm <- icd_conflicts_with_icd9
 
 icd_check_conflict_with_icd10 <- function(x)
-  if (inherits(x, icd10_classes))
+  if (icd_conflicts_with_icd10(x))
     stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+
+icd_check_conflict_with_icd9 <- function(x)
+  if (icd_conflicts_with_icd9(x))
+    stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+
+# for now, but could be refined:
+icd_check_conflict_with_icd9cm <- icd_check_conflict_with_icd9
+icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
+icd_check_conflict_with_icd10who <- icd_check_conflict_with_icd10
 
 #' @title prefer an order of classes
 #' @description The order of classes can matter because, for some functions,
@@ -128,7 +137,7 @@ icd_check_class_conflict <- function(x) {
 #' @export
 icd9 <- function(x) {
   if (missing(x)) x <- character()
-  icd_check_conflict_with_icd10(x)
+  icd_check_conflict_with_icd9(x)
   if (inherits(x, "icd9")) return(x)
   after <- match("icd9cm", class(x), nomatch = 0)
   class(x) <- append(class(x), "icd9", after = after)
@@ -139,7 +148,7 @@ icd9 <- function(x) {
 #' @export
 icd9cm <- function(x) {
   if (missing(x)) x <- character()
-  icd_check_conflict_with_icd10(x)
+  icd_check_conflict_with_icd9cm(x)
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
   icd9_pos <- match("icd9", class(x))
   if (!is.na(icd9_pos))
@@ -154,7 +163,7 @@ icd9cm <- function(x) {
 #' @export
 icd10 <- function(x) {
   if (missing(x)) x <- character()
-  icd_check_conflict_with_icd9(x)
+  icd_check_conflict_with_icd10(x)
   if (inherits(x, "icd10")) return(x)
   icd10cm_pos <- match("icd10cm", class(x), nomatch = 0)
   icd10who_pos <- match("icd10who", class(x), nomatch = 0)
@@ -167,7 +176,7 @@ icd10 <- function(x) {
 #' @export
 icd10cm <- function(x) {
   if (missing(x)) x <- character()
-  icd_check_conflict_with_icd9(x)
+  icd_check_conflict_with_icd10cm(x)
   if (inherits(x, "icd10cm")) return(x)
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos))
@@ -181,7 +190,7 @@ icd10cm <- function(x) {
 #' @export
 icd10who <- function(x) {
   if (missing(x)) x <- character()
-  icd_check_conflict_with_icd9(x)
+  icd_check_conflict_with_icd10who(x)
   if (inherits(x, "icd10who")) return(x)
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos))
@@ -278,7 +287,8 @@ get_pos_short_decimal_class <- function(x) {
 icd_decimal_code <- function(x) {
   if (missing(x)) x <- character()
   # TODO consider warning if there are decimals!
-  if (inherits(x, "icd_decimal_code")) return(x)
+  if (inherits(x, "icd_decimal_code"))
+    return(x)
   if (inherits(x, "icd_short_code")) {
     warning("setting class to describe decimal format ICD codes, but short is currently set")
     class(x) <- class(x)[class(x) %nin% "icd_short_code"]
@@ -337,10 +347,8 @@ icd_comorbidity_map <- function(x) {
 c.icd9 <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
-  if (any(vapply(args, is.icd10, FUN.VALUE = logical(1))))
+  if (any(vapply(args, icd_conflicts_with_icd9, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
-  if (!all(vapply(args, is.icd9, FUN.VALUE = logical(1))))
-    warning("The first codes given are ICD-9-CM class, but subsequent ones are not.")
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
@@ -349,10 +357,8 @@ c.icd9 <- function(...) {
 c.icd9cm <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
-  if (any(vapply(args, is.icd10, FUN.VALUE = logical(1))))
+  if (any(vapply(args, icd_conflicts_with_icd9cm, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
-  if (!all(vapply(args, is.icd9cm, FUN.VALUE = logical(1))))
-    warning("The first codes given are ICD-9-CM class, but subsequent ones are not.")
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
@@ -361,10 +367,8 @@ c.icd9cm <- function(...) {
 c.icd10 <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
-  if (any(vapply(args, is.icd9, FUN.VALUE = logical(1))))
+  if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
-  if (!all(vapply(args, is.icd10, FUN.VALUE = logical(1))))
-    warning("Combining ICD-9 codes with codes of unknown type")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -373,10 +377,8 @@ c.icd10 <- function(...) {
 c.icd10cm <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
-  if (any(vapply(args, is.icd9, FUN.VALUE = logical(1))))
+  if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
-  if (!all(vapply(args, is.icd10cm, FUN.VALUE = logical(1))))
-    warning("The first argument is ICD-10-CM, whereas subsequent arguments are not")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -385,10 +387,8 @@ c.icd10cm <- function(...) {
 c.icd10who <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
-  if (any(vapply(args, is.icd9, FUN.VALUE = logical(1))))
+  if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
-  if (!all(vapply(args, is.icd10who, FUN.VALUE = logical(1))))
-    warning("The first argument is ICD-10 WHO, whereas subsequent arguments include ICD-10-CM codes.")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 

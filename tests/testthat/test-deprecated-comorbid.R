@@ -36,17 +36,17 @@ test_that("deprecated - ahrq make sure all the children are listed in the saved 
 
 test_that("deprecated - Elixhauser make sure all the children are listed in the saved data.", {
   for (i in elixComorbid)
-    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+    expect_equal_no_icd(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
 })
 
 test_that("deprecated - Quan Charlson make sure all the children are listed in the saved data.", {
   for (i in quanDeyoComorbid)
-    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+    expect_equal_no_icd(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
 })
 
 test_that("deprecated - Quan Elixhauser make sure all the children are listed in the saved data.", {
   for (i in quanElixComorbid)
-    expect_equal(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+    expect_equal_no_icd(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
 })
 
 test_that("deprecated - icd9 comorbidities are created correctly, and logical to binary conversion ok", {

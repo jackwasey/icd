@@ -17,25 +17,25 @@
 
 context("icd10 XML parse")
 
-test_that("icd10 subchapters were parsed correctly", {
+test_that("icd10 sub_chapters were parsed correctly", {
 
   paste("Persons with potential health hazards related",
         "to family and personal history and certain",
         "conditions influencing health status") %>%
-    expect_icd10_subchap_equal(start = "Z77", end = "Z99")
+    expect_icd10_sub_chap_equal(start = "Z77", end = "Z99")
 
-  expect_icd10_subchap_equal(
+  expect_icd10_sub_chap_equal(
     "Persons encountering health services for examinations",
     "Z00", "Z13")
 
-  expect_icd10_subchap_equal(
+  expect_icd10_sub_chap_equal(
     "Occupant of three-wheeled motor vehicle injured in transport accident",
     "V30", "V39")
 
-  expect_icd10_subchap_equal(
+  expect_icd10_sub_chap_equal(
     "Malignant neuroendocrine tumors", "C7A", "C7A")
 
-  expect_icd10_subchap_equal(
+  expect_icd10_sub_chap_equal(
     "Other human herpesviruses", "B10", "B10")
 })
 
@@ -43,7 +43,7 @@ test_that("Y09 got picked up in sub-chapter parsing", {
   # this is actually an error in the 2016 CMS XML which declares a range for
   # Assult from X92-Y08, but has a hanging definition for Y09 with no enclosing
   # chapter. Will have to manually correct for this until fixed.
-  expect_icd10_subchap_equal("Assault", "X92", "Y09")
+  expect_icd10_sub_chap_equal("Assault", "X92", "Y09")
 
 })
 

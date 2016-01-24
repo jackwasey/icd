@@ -78,13 +78,13 @@ test_that("expand icd9 range definition", {
     sort(c("4410", icd_expand_range(short_code = TRUE, "44100", "4412", defined = FALSE)))
   )
 
-  expect_equal_no_icd(
+  expect_equal(
     icd_expand_range(short_code = TRUE, "401", "401", defined = FALSE),
     sort(icd_children.icd9("401", short_code = TRUE, defined = FALSE))
   )
   # expand range should already be sorted. do i want to sort children by default
   # or with an option?
-  expect_equal_no_icd(
+  expect_equal(
     icd_expand_range(short_code = TRUE, "401", "402", defined = FALSE),
     sort(icd_children.icd9(c("401", "402"), short_code = TRUE, defined = FALSE))
   )
@@ -369,7 +369,7 @@ test_that("icd9 expand minor dispatches", {
 })
 
 test_that("icd9 children decimal with valid input", {
-  expect_equal(
+  expect_equal_no_icd(
     icd_children.icd9(short_code = FALSE, "V10.0", defined = FALSE),
     append("V10.0", paste("V10.0", 0:9, sep = "")))
   expect_equal(
@@ -381,32 +381,32 @@ test_that("icd9 children decimal with valid input", {
   expect_equal(
     icd_children.icd9(short_code = FALSE, "10.0", defined = FALSE),
     icd_children.icd9(short_code = FALSE, "010.0", defined = FALSE))
-  expect_equal(
+  expect_equal_no_icd(
     icd_children.icd9(short_code = FALSE, "010.0", defined = FALSE),
     append("010.0", paste("010.0", 0:9, sep = "")))
   expect_equal(icd_children.icd9(short_code = FALSE, "010.0"), icd_children.icd9(short_code = FALSE, "10.0"))
 })
 
 test_that("icd9 children short with valid input", {
-  expect_equal(icd_children.icd9(short_code = TRUE, "V100", defined = FALSE),
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "V100", defined = FALSE),
                paste("V100", c("", 0:9), sep = ""))
   expect_equal(icd_children.icd9(short_code = TRUE, "v100"),
                icd_children.icd9("V100"))
   expect_equal(icd_children.icd9(short_code = TRUE, " V100 ", defined = FALSE),
                icd_children.icd9(short_code = TRUE, "V100", defined = FALSE))
-  expect_equal(icd_children.icd9(short_code = TRUE, "0100", defined = FALSE),
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "0100", defined = FALSE),
                paste("0100", c("", 0:9), sep = ""))
-  expect_equal(icd_children.icd9(short_code = TRUE, "1", defined = FALSE)[1], "001")
-  expect_equal(icd_children.icd9(short_code = TRUE, "01", defined = FALSE)[1], "001")
-  expect_equal(icd_children.icd9(short_code = TRUE, "001", defined = FALSE)[1], "001")
-  expect_equal(icd_children.icd9(short_code = TRUE, "023", defined = FALSE)[1], "023")
-  expect_equal(icd_children.icd9(short_code = TRUE, "23", defined = FALSE)[1], "023")
-  expect_equal(icd_children.icd9(short_code = TRUE, "456", defined = FALSE)[1], "456")
-  expect_equal(
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "1", defined = FALSE)[1], "001")
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "01", defined = FALSE)[1], "001")
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "001", defined = FALSE)[1], "001")
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "023", defined = FALSE)[1], "023")
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "23", defined = FALSE)[1], "023")
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "456", defined = FALSE)[1], "456")
+  expect_equal_no_icd(
     icd_children.icd9(short_code = TRUE, "E100", defined = FALSE),
     c("E100", "E1000", "E1001", "E1002", "E1003", "E1004",
       "E1005", "E1006", "E1007", "E1008", "E1009"))
-  expect_equal(icd_children.icd9(short_code = TRUE, "390", defined = TRUE), "390")
+  expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "390", defined = TRUE), "390")
 })
 
 test_that("is_short doesn't cause error with icd_children when redundantly specified", {

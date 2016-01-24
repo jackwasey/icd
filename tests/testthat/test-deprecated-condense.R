@@ -133,10 +133,10 @@ test_that("deprecated - condense short range", {
   expect_equal(icd9CondenseShort(othersalmonella[-3], onlyReal = FALSE),
                othersalmonella[-3])
 
-  expect_equal(sort(icd9ChildrenShort(icd9Short = "001", onlyBillable = TRUE)),
+  expect_equal_no_icd(sort(icd9ChildrenShort(icd9Short = "001", onlyBillable = TRUE)),
                c("0010", "0011", "0019"))
 
-  expect_equal(sort(icd9ChildrenShort(icd9Short = "001", onlyReal = TRUE)),
+  expect_equal_no_icd(sort(icd9ChildrenShort(icd9Short = "001", onlyReal = TRUE)),
                c("001", "0010", "0011", "0019"))
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("00320", onlyReal = TRUE), onlyReal = TRUE), "00320")

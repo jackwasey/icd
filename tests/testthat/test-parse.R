@@ -189,3 +189,19 @@ test_that("in rtf we didn't incorrectly assign fifth (or fourth?) digit codes wh
   expect_false("640.02" %in% nrtf)
   # grep "\[[[:digit:]],.*\]" Dtab12.rtf
 })
+
+
+test_that("some rtf wierdness single codes should be missing", {
+# i think this is just because I look for all possible sub-codes while parsing;
+# I never matched these codes
+  bad_ones <- c(
+    paste0("010.", 2:7),
+    paste0("854.", 2:7),
+    NULL)
+  expect_true(all(bad_ones %nin% nrtf))
+  expect_true(all(icd_children.icd9(bad_ones) %nin% nrtf))
+
+  expect_true("012.4" %nin% nrtf)
+  expect_true("012.40" %nin% nrtf)
+  expect_true("012.46" %nin% nrtf)
+})

@@ -35,13 +35,12 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
 })
 
 test_that("Elixhauser make sure all the children are listed in the saved data.", {
-  for (i in elixComorbid)
+  for (i in icd9::icd9_map_quan_elix)
     expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
-
 })
 
 test_that("Quan Charlson make sure all the children are listed in the saved data.", {
-  for (i in quanDeyoComorbid)
+  for (i in icd9::icd9_map_quan_deyo)
     expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
 })
 
@@ -587,9 +586,10 @@ test_that("diff comorbid works", {
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
 
   expect_warning(
-    utils::capture.output(
-      resq <- icd_diff_comorbid(icd9_map_quan_elix, icd9_map_elix, show = TRUE)),
-    NA)
+    expect_output(
+      resq <- icd_diff_comorbid(icd9_map_quan_elix, icd9_map_elix, show = TRUE),
+      regexp = "Comorbidity Psychoses"
+    ), NA)
 })
 
 twoPtsFac <- data.frame(visitId = c("v01", "v01", "v02", "v02"),

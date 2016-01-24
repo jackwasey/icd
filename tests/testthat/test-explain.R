@@ -66,12 +66,12 @@ test_that("explain S3 dispatch", {
 
 test_that("explain single top level code which is billable, has no children", {
   # the code "390" is a billable major: good test case.
-  expect_identical(icd9ExplainShort("390"),
+  expect_identical(icd_explain.icd9("390"),
                    "Rheumatic fever without mention of heart involvement")
 })
 
 test_that("expalin a single top level code without a top level explanation", {
-  expect_identical(icd9ExplainShort("391"),
+  expect_identical(icd_explain("391"),
                    "Rheumatic fever with heart involvement")
 })
 
@@ -128,7 +128,6 @@ test_that("extract top-level codes from the RTF gives the complete list", {
   # format of each hierarchy level:
   expect_equal(names(icd9Chapters[[1]]), c("start", "end"))
   expect_equal(names(icd9ChaptersSub[[1]]), c("start", "end"))
-  expect_equal(names(icd9_majors[[1]]), c("major"))
   # should be no NA values
   expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE = "", 1))))
   expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE = "", 2))))
@@ -138,15 +137,15 @@ test_that("extract top-level codes from the RTF gives the complete list", {
 
   # all the range limits and majors should be valid majors
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE = "", 1))))
+    all(icd_is_valid_major.icd9(vapply(icd9Chapters, "[[", FUN.VALUE = "", 1))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9Chapters, "[[", FUN.VALUE = "", 2))))
+    all(icd_is_valid_major.icd9(vapply(icd9Chapters, "[[", FUN.VALUE = "", 2))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 1))))
+    all(icd_is_valid_major.icd9(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 1))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 2))))
+    all(icd_is_valid_major.icd9(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 2))))
   expect_true(
-    all(icd9IsValidMajor(vapply(icd9_majors, "[[", FUN.VALUE = "", 1))))
+    all(icd_is_valid_major.icd9(vapply(icd9_majors, "[[", FUN.VALUE = "", 1))))
 })
 
 test_that("icd9_majors - positive values", {
@@ -171,17 +170,22 @@ test_that("icd9_majors - negative values", {
   expect_false("E777" %in% icd9_majors)
 })
 
-for (i in list("icd9Chapters", "icd9ChaptersSub", "icd9_majors")) {
+for (i in list("icd9_chapters", "icd9_sub_chapters", "icd9_majors")) {
   il <- get(i)
-  test_that(paste("icd9Chapters... duplication, blanks: ", i), {
+  test_that(paste("icd9Chapters... duplication, blanks:", i), {
     # should be no duplicate names
+    expect_equal(anyDuplicated(names(il)), 0)
     expect_equal(length(il), length(unique(names(il))))
     # or duplicate codes
+    expect_equal(anyDuplicated(il), 0)
     expect_equal(length(il), length(unique(il)))
+
     expect_true(all(nchar(names(il) > 0)))
     expect_false(anyNA(il))
     expect_false(anyNA(names(il)))
   })
+  # show the dupes with names (which may differ)
+  # icd9_majors[icd9_majors %in% icd9_majors[duplicated(icd9_majors)]]  %>%  sort
 }
 
 test_that("parse icd9_majors vs those listed

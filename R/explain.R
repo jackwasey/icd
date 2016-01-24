@@ -136,7 +136,7 @@ icd_explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
 #' @template short_code
 #' @template verbose
 #' @keywords internal
-icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9),
+icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(x),
                               verbose = FALSE) {
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
@@ -148,14 +148,13 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9),
   majors <- icd_get_major.icd9(icd9, short_code)
 
   # could consider factor_nosort, but this isn't the main bottleneck
-  cf <- factor(rep(NA, length(icd9)),
+  cf <- factor(rep(NA_character_, length(icd9)),
                levels = c(names(icd9::icd9_chapters), NA_character_))
-  sf <- factor(rep(NA, length(icd9)),
+  sf <- factor(rep(NA_character_, length(icd9)),
                levels = c(names(icd9::icd9_sub_chapters), NA_character_))
-  mf <- factor(rep(NA, length(icd9)),
+  mf <- factor(rep(NA_character_, length(icd9)),
                levels = c(names(icd9::icd9_majors), NA_character_))
-  allmjrs <- lapply(icd9::icd9_majors, `[[`, "major")
-  thrdgt <- factor(rep(NA, length(icd9)), levels = c(allmjrs, NA_character_))
+  thrdgt <- factor(rep(NA_character_, length(icd9)), levels = c(icd9::icd9_majors, NA_character_))
   out <- data.frame(threedigit = thrdgt, major = mf,
                     subchapter = sf, chapter = cf)
 
@@ -181,9 +180,9 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(icd9),
       }
     }
   }
-  whch <- match(majors, allmjrs, nomatch = NA_character_)
-  out$major[] <- names(allmjrs)[whch]
-  out$threedigit[] <- unlist(allmjrs)[whch]
+  whch <- match(majors, icd9::icd9_majors, nomatch = NA_character_)
+  out$major[] <- names(icd9::icd9_majors)[whch]
+  out$threedigit[] <- unlist(icd9::icd9_majors)[whch]
   out$threedigit <- out$threedigit %>% icd9cm
 
   # many possible three digit codes don't exist. We should return NA for the

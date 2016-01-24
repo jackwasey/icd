@@ -132,10 +132,10 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # ICD-9
 
   # either range or a single value (which overlaps with the majors definition)
-  paste0("^[A-Z ]+\\((",
-         re_icd9_major_strict_bare,")(-(",
-         re_icd9_major_strict_bare,"))?\\)") -> re_subchap_either
-
+  paste0("^[-()A-Z,[:space:]]+", "(", "[[:space:]]+\\(", "|", "\\(", ")",
+         "(", re_icd9_major_strict_bare,")",
+         "(-(", re_icd9_major_strict_bare,"))?",
+         "\\)") -> re_subchap_either
 
   paste0("^(", re_icd9_major_strict_bare, ") ") -> re_major_start
 
@@ -144,15 +144,27 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     chapter_to_desc_range.icd9 -> icd9_sub_chapters
 
   # The entire "E" block is incorrectly identified here, so make sure it is gone:
-  icd9_sub_chapters[["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"]] <- NULL
-  icd9_sub_chapters[["Supplementary Classification Of External Causes Of Injury And Poisoning"]] <- NULL
+  icd9_sub_chapters["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"] <- NULL
+  icd9_sub_chapters["Supplementary Classification Of External Causes Of Injury And Poisoning"] <- NULL
 
   filtered %>%
     str_subset(re_major_start) %>%
     str_split_fixed(" ", n = 2) -> majors_matrix
 
-  icd9_majors <- str_trim(majors_matrix[, 1])
-  names(icd9_majors) <- str_trim(majors_matrix[, 2])
+  icd9_majors <- majors_matrix[, 1]
+
+  cap_first <- function(name) {
+    paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name)))
+  }
+
+  names(icd9_majors) <- majors_matrix[, 2] %>% str_trim %>% cap_first
+
+  # this sub-chapter is simply missing from the otherwise consistent RTF way 'major' types are reported:
+  icd9_majors[["Place of occurrence"]] <- "E849"
+
+  # There are some duplicates created by the major search, mostly E001 to E030
+  # which are just listed twice in RTF. Also 199 (with punctuation difference), 209 and 239.
+  icd9_majors <- icd9_majors[!duplicated(icd9_majors)]
 
   #########################################################
   # TODO: debug only, delete me.
@@ -355,7 +367,9 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
       names(pair_fifth) <- f
       out_fifth <- append(out_fifth, pair_fifth)
     } else {
-      warning("parent code ", parent_code, " missing when looking up ", f)
+      # this is really superfluous since we don't expect to match these, keep for debugging
+      if (FALSE)
+        message("parent code ", parent_code, " missing when looking up ", f)
     }
   }
   out <- append(out, out_fifth)

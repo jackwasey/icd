@@ -26,7 +26,7 @@ utils::globalVariables(c("icd9_sources"))
 #'   comorbidity mappings from the source SAS data. Elixhauser and
 #'   Quan/Elixhauser mappings are generated from transcribed codes.
 #' @keywords internal
-generate_everything <- function() {
+icd_update_everything <- function() {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from
@@ -277,7 +277,15 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
 
   # quick sanity checks - full tests in test-parse.R
   stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy$icd9, short_code = TRUE)))
-  stopifnot(!any(sapply(icd9cm_hierarchy, is.na)))
+  if (any(sapply(icd9cm_hierarchy, is.na))) {
+    #diagnose NAs
+    print(colSums(sapply(icd9cm_hierarchy, is.na)))
+    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$major)), ])
+    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$threedigit)), ])
+    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$subchapter))[1:10], ]) # just top ten
+    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$chapter)), ])
+    stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
+  }
 
   if (save_data)
     save_in_data_dir("icd9cm_hierarchy") # nocov

@@ -129,10 +129,10 @@ test_that("condense short range", {
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella[-3], defined = FALSE),
                othersalmonella[-3])
 
-  expect_equal(sort(icd_children.icd9(short_code = TRUE, "001", billable = TRUE)),
+  expect_equal_no_icd(sort(icd_children.icd9(short_code = TRUE, "001", billable = TRUE)),
                c("0010", "0011", "0019"))
 
-  expect_equal(sort(icd_children.icd9(short_code = TRUE, x = "001", defined = TRUE)),
+  expect_equal_no_icd(sort(icd_children.icd9(short_code = TRUE, x = "001", defined = TRUE)),
                c("001", "0010", "0011", "0019"))
 
   expect_equal(icd_condense.icd9(short_code = TRUE, icd_children.icd9(short_code = TRUE, "00320", defined = TRUE), defined = TRUE), "00320")

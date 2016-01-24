@@ -67,11 +67,11 @@ test_that("deprecated - expand icd9 range definition", {
     sort(c("4410", icd9ExpandRangeShort("44100", "4412", onlyReal = FALSE)))
   )
 
-  expect_equal_no_icd(icd9ExpandRangeShort("401", "401", onlyReal = FALSE),
+  expect_equal(icd9ExpandRangeShort("401", "401", onlyReal = FALSE),
                sort(icd9Children("401", isShort = TRUE, onlyReal = FALSE)))
   # expand range should already be sorted. do i want to sort children by default
   # or with an option?
-  expect_equal_no_icd(icd9ExpandRangeShort("401", "402", onlyReal = FALSE),
+  expect_equal(icd9ExpandRangeShort("401", "402", onlyReal = FALSE),
                sort(icd9Children(c("401", "402"), isShort = TRUE, onlyReal = FALSE)))
   # the next two cases cover the HIV ranges in the co-morbidities, wherein the
   # final code is included, in which case the parent ("044" in this case) is
@@ -315,7 +315,7 @@ test_that("deprecated - icd9ExpandMinor: valid", {
 })
 
 test_that("deprecated - icd9ChildrenDecimal valid input", {
-  expect_equal(
+  expect_equal_no_icd(
     icd9ChildrenDecimal("V10.0", onlyReal = FALSE),
     append("V10.0", paste("V10.0", 0:9, sep = "")))
   expect_equal(
@@ -327,31 +327,31 @@ test_that("deprecated - icd9ChildrenDecimal valid input", {
   expect_equal(
     icd9ChildrenDecimal("10.0", onlyReal = FALSE),
     icd9ChildrenDecimal("010.0", onlyReal = FALSE))
-  expect_equal(
+  expect_equal_no_icd(
     icd9ChildrenDecimal("010.0", onlyReal = FALSE),
     append("010.0", paste("010.0", 0:9, sep = "")))
   expect_equal(icd9ChildrenDecimal("010.0"), icd9ChildrenDecimal("10.0"))
 })
 
 test_that("deprecated - icd9ChildrenShort valid input", {
-  expect_equal(icd9ChildrenShort("V100", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ChildrenShort("V100", onlyReal = FALSE),
                paste("V100", c("", 0:9), sep = ""))
   expect_equal(icd9ChildrenShort("v100"), icd9Children("V100"))
   expect_equal(icd9ChildrenShort(" V100 ", onlyReal = FALSE),
                icd9ChildrenShort("V100", onlyReal = FALSE))
-  expect_equal(icd9ChildrenShort("0100", onlyReal = FALSE),
+  expect_equal_no_icd(icd9ChildrenShort("0100", onlyReal = FALSE),
                paste("0100", c("", 0:9), sep = ""))
-  expect_equal(icd9ChildrenShort("1", onlyReal = FALSE)[1], "001")
-  expect_equal(icd9ChildrenShort("01", onlyReal = FALSE)[1], "001")
-  expect_equal(icd9ChildrenShort("001", onlyReal = FALSE)[1], "001")
-  expect_equal(icd9ChildrenShort("023", onlyReal = FALSE)[1], "023")
-  expect_equal(icd9ChildrenShort("23", onlyReal = FALSE)[1], "023")
-  expect_equal(icd9ChildrenShort("456", onlyReal = FALSE)[1], "456")
-  expect_equal(
+  expect_equal_no_icd(icd9ChildrenShort("1", onlyReal = FALSE)[1], "001")
+  expect_equal_no_icd(icd9ChildrenShort("01", onlyReal = FALSE)[1], "001")
+  expect_equal_no_icd(icd9ChildrenShort("001", onlyReal = FALSE)[1], "001")
+  expect_equal_no_icd(icd9ChildrenShort("023", onlyReal = FALSE)[1], "023")
+  expect_equal_no_icd(icd9ChildrenShort("23", onlyReal = FALSE)[1], "023")
+  expect_equal_no_icd(icd9ChildrenShort("456", onlyReal = FALSE)[1], "456")
+  expect_equal_no_icd(
     icd9ChildrenShort("E100", onlyReal = FALSE),
     c("E100", "E1000", "E1001", "E1002", "E1003", "E1004",
       "E1005", "E1006", "E1007", "E1008", "E1009"))
-  expect_equal(icd9ChildrenShort("390", onlyReal = TRUE), "390")
+  expect_equal_no_icd(icd9ChildrenShort("390", onlyReal = TRUE), "390")
 })
 
 test_that("deprecated - icd9InReferenceCode deals with bad input", {

@@ -3,17 +3,20 @@
 \name{expect_chap_equal}
 \alias{expect_chap_equal}
 \alias{expect_icd10_chap_equal}
+\alias{expect_icd10_sub_chap_equal}
 \alias{expect_icd9_chap_equal}
-\alias{expect_icd9_subchap_equal}
+\alias{expect_icd9_sub_chap_equal}
 \title{expect named sub-chapter has a given range, case insensitive}
 \usage{
 expect_chap_equal(x, start, end, ver_chaps, ...)
 
 expect_icd10_chap_equal(x, start, end, ...)
 
-expect_icd9_subchap_equal(x, start, end, ...)
+expect_icd10_sub_chap_equal(x, start, end, ...)
 
 expect_icd9_chap_equal(x, start, end, ...)
+
+expect_icd9_sub_chap_equal(x, start, end, ...)
 }
 \description{
 expect named sub-chapter has a given range, case insensitive

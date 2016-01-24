@@ -77,10 +77,12 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   else
     res <- .Call("icd9_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), toupper(x), defined)
 
+  res <- icd_guess_short_update(res)
+
   if (billable)
-    icd9GetBillable(res, short_code)
+    icd9GetBillable(icd9cm(res), short_code)
   else
-    res
+    icd9(res)
 }
 
 # this is just lazy package data, but apparently need to declare it to keep CRAN

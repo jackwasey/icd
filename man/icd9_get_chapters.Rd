@@ -7,8 +7,7 @@
 \usage{
 icd9GetChapters(icd9, isShort = icd_guess_short(icd9), verbose = FALSE)
 
-icd9_get_chapters(x, short_code = icd_guess_short.icd9(icd9),
-  verbose = FALSE)
+icd9_get_chapters(x, short_code = icd_guess_short.icd9(x), verbose = FALSE)
 }
 \arguments{
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
