@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -14,14 +14,6 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
-
-if (requireNamespace("lintr", quietly = TRUE)) {
-  context("lints")
-  test_that("Package Style", {
-    skip("skipping linting until lintr bugs are fixed")
-    lintr::expect_lint_free()
-  })
-}
 
 context("test icd9 package")
 
@@ -104,38 +96,33 @@ test_that("zero pad short", {
 })
 
 test_that("icd9 parts to short form numeric input", {
-  expect_equal(icd9AddLeadingZeroesMajor(1L), "001")
-  expect_equal(icd9AddLeadingZeroesMajor(10L), "010")
-  expect_equal(icd9AddLeadingZeroesMajor(999L), "999")
-  expect_equal(icd9AddLeadingZeroesMajor(10.1), NA_character_)
+  expect_equal(icd9_add_leading_zeroes_major(1L), "001")
+  expect_equal(icd9_add_leading_zeroes_major(10L), "010")
+  expect_equal(icd9_add_leading_zeroes_major(999L), "999")
+  expect_equal(icd9_add_leading_zeroes_major(10.1), NA_character_)
 })
 
 test_that("add leading zeroes to V (and E) majors", {
 
-  expect_equal(icd9AddLeadingZeroesMajor("V1"), "V01")
-  expect_equal(icd9AddLeadingZeroesMajor("V2"), "V02")
-  expect_equal(icd9AddLeadingZeroesMajor("V03"), "V03")
-  expect_equal(icd9AddLeadingZeroesMajor(c("10", "V05")),
+  expect_equal(icd9_add_leading_zeroes_major("V1"), "V01")
+  expect_equal(icd9_add_leading_zeroes_major("V2"), "V02")
+  expect_equal(icd9_add_leading_zeroes_major("V03"), "V03")
+  expect_equal(icd9_add_leading_zeroes_major(c("10", "V05")),
                c("010", "V05"))
-  expect_equal(icd9AddLeadingZeroesMajor("E915"), "E915")
+  expect_equal(icd9_add_leading_zeroes_major("E915"), "E915")
 })
 
 test_that("add leading zeroes to majors, invalid input", {
-  expect_equal(icd9AddLeadingZeroesMajor("E9"), "E009")
+  expect_equal(icd9_add_leading_zeroes_major("E9"), "E009")
   # should be minimally valid code
-  expect_equal(icd9AddLeadingZeroesMajor("E"), NA_character_)
-  expect_equal(icd9AddLeadingZeroesMajor("V"), NA_character_)
-  expect_equal(icd9AddLeadingZeroesMajor("jasmine"), NA_character_)
+  expect_equal(icd9_add_leading_zeroes_major("E"), NA_character_)
+  expect_equal(icd9_add_leading_zeroes_major("V"), NA_character_)
+  expect_equal(icd9_add_leading_zeroes_major("jasmine"), NA_character_)
   # error if validating
-  expect_equal(icd9AddLeadingZeroesMajor("E"), NA_character_)
-  expect_equal(icd9AddLeadingZeroesMajor("V"), NA_character_)
-  expect_equal(icd9AddLeadingZeroesMajor("jasmine"), NA_character_)
-  expect_equal(icd9AddLeadingZeroesMajor("E9"), "E009")
-})
-
-test_that("all generated icd9 lookup tables are valid!", {
-  # TODO
-
+  expect_equal(icd9_add_leading_zeroes_major("E"), NA_character_)
+  expect_equal(icd9_add_leading_zeroes_major("V"), NA_character_)
+  expect_equal(icd9_add_leading_zeroes_major("jasmine"), NA_character_)
+  expect_equal(icd9_add_leading_zeroes_major("E9"), "E009")
 })
 
 test_that("extracting alphabetic and numeric parts from ICD-9 codes works", {
@@ -279,32 +266,4 @@ test_that("drop leading zeroes from majors: V codes preserves lower case v", {
 test_that("drop leading zeroes from majors: E codes", {
   expect_equal(icd9_drop_leading_zeroes_major("E800"), "E800")
   expect_equal(icd9_drop_leading_zeroes_major(" e812 "), "e812")
-})
-
-test_that("generating uranium data is identical to saved", {
-  if (is.null(fetch_uranium_pathology(offline = TRUE)$file_path))
-    skip_online_tests("uranium pathology data only available online")
-
-  suppressWarnings(
-    if (!require("RODBC") || !existsFunction("odbcConnectAccess2007"))
-      skip("only test if RODBC::odbcConnectAccess2007 is available. (Probably just windows.)")
-  )
-  expect_identical(generate_uranium_pathology(save_data = FALSE), uranium_pathology)
-})
-
-test_that("generating vermont data is identical to saved", {
-  if (is.null(fetch_vermont_dx(offline = TRUE)$file_path))
-    skip_online_tests("vermont data only available online")
-  expect_identical(generate_vermont_dx(save_data = FALSE), vermont_dx)
-})
-
-test_that("uranium data looks okay", {
-
-  expect_is(uranium_pathology, c("icd_long_data", "icd10", "icd_decimal_code"))
-  expect_equal(dim(uranium_pathology), c(2376, 2))
-})
-
-test_that("vermont data looks okay", {
-  expect_is(vermont_dx, c("icd9", "icd_wide_data", "icd_short_code"))
-  expect_equal(dim(vermont_dx), c(1000, 25))
 })

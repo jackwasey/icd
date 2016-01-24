@@ -1016,6 +1016,11 @@ icd9AddLeadingZeroesDecimal <- function(x) {
   icd9_add_leading_zeroes.icd_decimal_code(x)
 }
 
+icd9AddLeadingZeroesMajor <- function(x) {
+  .Deprecated("icd9_add_leading_zeroes_major")
+  icd9_add_leading_zeroes_major(x)
+}
+
 stripRtf <- function(x) {
   .Deprecated("strip_rtf")
   strip_rtf(x)

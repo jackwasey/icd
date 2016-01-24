@@ -107,7 +107,7 @@ std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
 	return "";
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(icd9_add_leading_zeroes_major)]]
 Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
 	return Rcpp::sapply(major, icd9AddLeadingZeroesMajorSingle);
 }
