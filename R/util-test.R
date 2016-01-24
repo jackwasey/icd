@@ -35,39 +35,132 @@ expect_equal_no_icd <- function(object, expected, ..., info = NULL,
 #' @keywords internal
 expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
   x <- tolower(x)
-  lnames <- tolower(names(ver_chaps))
-  if (x %nin% lnames)
-    eval(bquote(testthat::fail(paste(x, " not defined in (sub-)chapter names"))))
-  t_i <- which(tolower(names(ver_chaps)) == x)
-    r <- ver_chaps[[t_i]]
-  eval(bquote(testthat::expect_equal(r, c(start = start, end = end), ...)))
+  lower_case_names <- tolower(names(ver_chaps))
+  res <- eval(bquote(testthat::expect_true(.(x) %in% lower_case_names, ...)))
+  if (!res$passed)
+    return(res)
+
+  t_i <- which(lower_case_names == x)
+  r <- ver_chaps[[t_i]]
+  eval(bquote(testthat::expect_equal(.(r), c(start = .(start), end = .(end)), ...)))
 }
 
 #' @rdname expect_chap_equal
 expect_icd10_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(x, start, end, icd9::icd10_chapters, ...)))
+  eval(bquote(expect_chap_equal(.(x), start, end, ver_chaps = icd9::icd10_chapters, ...)))
 }
 
 #' @rdname expect_chap_equal
-expect_icd9_subchap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(x, start, end, icd9::icd9_sub_chapters, ...)))
+expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
+  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd9::icd10_sub_chapters, ...)))
 }
 
 #' @rdname expect_chap_equal
 expect_icd9_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(x, start, end, icd9::icd9_chapters, ...)))
+  eval(bquote(expect_chap_equal(.(x), start, end, ver_chaps = icd9::icd9_chapters, ...)))
 }
 
-chap_missing <- function() {
-  function(x, ver_chaps, ...) {
+#' @rdname expect_chap_equal
+expect_icd9_sub_chap_equal <- function(x, start, end, ...) {
+  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd9::icd9_sub_chapters, ...)))
+}
+
+expect_icd9_major_equals <- function(x, code, ...) {
+  res <- eval(bquote(expect_true(.(x) %in% names(icd9_majors), ...)))
+  if (res$passed)
+    eval(bquote(expect_equal(icd9_majors[[.(x)]], .(code), ...)))
+  else
+    res
+}
+
+expect_icd9_major_is_sub_chap <- function(x, code, ...) {
+  res <- eval(bquote(expect_icd9_sub_chap_equal(.(x), start = .(code), end = .(code), ...)))
+  if (res$passed)
+    eval(bquote(expect_icd9_major_equals(.(x), .(code), ...)))
+  else
+    res
+}
+
+chap_missing <- function(ver_chaps, ...) {
+  function(x) {
     x <- tolower(x)
     lnames <- tolower(names(ver_chaps))
-    test_that::expectation(x %in% lnames, "should not be present", "is correctly missing")
+    testthat::expectation(x %nin% lnames,
+                          "should not be present",
+                          "is correctly missing")
   }
 }
 
-expect_icd9_subchap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(x, ver_chaps = icd9::icd9_sub_chapters, ...)))
+chap_present <- function(ver_chaps, ...) {
+  function(x) {
+    x <- tolower(x)
+    lnames <- tolower(names(ver_chaps))
+    testthat::expectation(x %in% lnames,
+                          "should not be missing",
+                          "is present")
+  }
+}
+
+expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
+  eval(bquote(expect_that(.(x), chap_missing(ver_chaps = ver_chaps, ...),
+                          info = info, label = label)))
+}
+
+expect_icd9_sub_chap_missing <- function(x, ...) {
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9::icd9_sub_chapters, ...)))
+}
+
+expect_icd9_chap_missing <- function(x, ...) {
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9::icd9_chapters, ...)))
+}
+
+expect_icd10_sub_chap_missing <- function(x, ...) {
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9::icd10_sub_chapters, ...)))
+}
+
+expect_icd10_chap_missing <- function(x, ...) {
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9::icd10_chapters, ...)))
+}
+
+expect_chap_present <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
+  eval(bquote(expect_that(.(x), chap_present(ver_chaps = ver_chaps, ...),
+                          info = NULL, label = NULL)))
+}
+
+expect_icd9_sub_chap_present <- function(x, ...) {
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9::icd9_sub_chapters, ...)))
+}
+
+expect_icd9_chap_present <- function(x, ...) {
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9::icd9_chapters, ...)))
+}
+
+expect_icd10_sub_chap_present <- function(x, ...) {
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9::icd10_sub_chapters, ...)))
+}
+
+expect_icd10_chap_present <- function(x, ...) {
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9::icd10_chapters, ...)))
+}
+
+expect_icd9_only_chap <- function(x, ...) {
+  eval(bquote(expect_icd9_chap_present(.(x), ...)))
+  eval(bquote(expect_icd9_sub_chap_missing(.(x), ...)))
+}
+
+expect_icd9_only_sub_chap <- function(x, ...) {
+  eval(bquote(expect_icd9_sub_chap_present(.(x), ...)))
+  eval(bquote(expect_icd9_chap_missing(.(x), ...)))
+}
+
+expect_icd10_only_chap <- function(x, ...) {
+  eval(bquote(expect_icd10_chap_present(.(x), ...)))
+  eval(bquote(expect_icd10_sub_chap_missing(.(x), ...)))
+}
+
+expect_icd10_only_sub_chap <- function(x, ...) {
+  eval(bquote(expect_icd10_sub_chap_present(.(x), ...)))
+  eval(bquote(expect_icd10_chap_missing(.(x), ...)))
 }
 
 #' expectation for ICD classes to be well-ordered

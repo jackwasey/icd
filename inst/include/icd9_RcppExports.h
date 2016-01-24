@@ -423,17 +423,17 @@ namespace icd9 {
         return Rcpp::as<std::string >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
-        typedef SEXP(*Ptr_icd9AddLeadingZeroesMajor)(SEXP);
-        static Ptr_icd9AddLeadingZeroesMajor p_icd9AddLeadingZeroesMajor = NULL;
-        if (p_icd9AddLeadingZeroesMajor == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9AddLeadingZeroesMajor)(Rcpp::CharacterVector)");
-            p_icd9AddLeadingZeroesMajor = (Ptr_icd9AddLeadingZeroesMajor)R_GetCCallable("icd9", "icd9_icd9AddLeadingZeroesMajor");
+    inline Rcpp::CharacterVector icd9_add_leading_zeroes_major(Rcpp::CharacterVector major) {
+        typedef SEXP(*Ptr_icd9_add_leading_zeroes_major)(SEXP);
+        static Ptr_icd9_add_leading_zeroes_major p_icd9_add_leading_zeroes_major = NULL;
+        if (p_icd9_add_leading_zeroes_major == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd9_add_leading_zeroes_major)(Rcpp::CharacterVector)");
+            p_icd9_add_leading_zeroes_major = (Ptr_icd9_add_leading_zeroes_major)R_GetCCallable("icd9", "icd9_icd9_add_leading_zeroes_major");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9AddLeadingZeroesMajor(Rcpp::wrap(major));
+            __result = p_icd9_add_leading_zeroes_major(Rcpp::wrap(major));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

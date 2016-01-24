@@ -123,7 +123,7 @@ icd9AddLeadingZeroesMajorSingleStd <- function(m) {
     .Call('icd9_icd9AddLeadingZeroesMajorSingleStd', PACKAGE = 'icd9', m)
 }
 
-icd9AddLeadingZeroesMajor <- function(major) {
+icd9_add_leading_zeroes_major <- function(major) {
     .Call('icd9_icd9AddLeadingZeroesMajor', PACKAGE = 'icd9', major)
 }
 

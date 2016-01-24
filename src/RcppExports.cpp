@@ -1409,7 +1409,7 @@ static int icd9_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::CharacterVector(*icd9LongToWideCpp)(const SEXP&,const std::string,const std::string,bool)");
         signatures.insert("Rcpp::String(*icd9AddLeadingZeroesMajorSingle)(Rcpp::String)");
         signatures.insert("std::string(*icd9AddLeadingZeroesMajorSingleStd)(std::string)");
-        signatures.insert("Rcpp::CharacterVector(*icd9AddLeadingZeroesMajor)(Rcpp::CharacterVector)");
+        signatures.insert("Rcpp::CharacterVector(*icd9_add_leading_zeroes_major)(Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd9_add_leading_zeroes.icd_short_code)(Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd9_add_leading_zeroes.icd_decimal_code)(Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd9AddLeadingZeroes)(Rcpp::CharacterVector,bool)");
@@ -1460,7 +1460,7 @@ RcppExport SEXP icd9_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd9", "icd9_icd9LongToWideCpp", (DL_FUNC)icd9_icd9LongToWideCpp_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajorSingle", (DL_FUNC)icd9_icd9AddLeadingZeroesMajorSingle_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajorSingleStd", (DL_FUNC)icd9_icd9AddLeadingZeroesMajorSingleStd_try);
-    R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroesMajor", (DL_FUNC)icd9_icd9AddLeadingZeroesMajor_try);
+    R_RegisterCCallable("icd9", "icd9_icd9_add_leading_zeroes_major", (DL_FUNC)icd9_icd9AddLeadingZeroesMajor_try);
     R_RegisterCCallable("icd9", "icd9_icd9_add_leading_zeroes.icd_short_code", (DL_FUNC)icd9_icd9AddLeadingZeroesShort_try);
     R_RegisterCCallable("icd9", "icd9_icd9_add_leading_zeroes.icd_decimal_code", (DL_FUNC)icd9_icd9AddLeadingZeroesDecimal_try);
     R_RegisterCCallable("icd9", "icd9_icd9AddLeadingZeroes", (DL_FUNC)icd9_icd9AddLeadingZeroes_try);

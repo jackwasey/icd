@@ -17,33 +17,58 @@
 
 context("RTF ICD-9")
 
-test_that("subchapter parsing went okay", {
+test_that("some known sub vs chap confusion", {
+  # some things shouldn't have been called sub-chapters, just chapters. Known troublemakers:
+  expect_icd9_only_chap("Supplementary Classification Of External Causes Of Injury And Poisoning")
+  expect_icd9_only_chap("Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services")
 
-  # some things shouldn't have been called sub-chapters
-  expect_icd9_subchap_missing("Supplementary Classification Of External Causes Of Injury And Poisoning")
+  # and scan all, noting each is tested twice and half the test is circular,
+  # since it looks up with the looped group.
+  for (i in names(icd9_chapters))
+    expect_icd9_only_chap(i)
 
-  expect_icd9_subchap_equal("Accidental Poisoning By Drugs, Medicinal Substances, And Biologicals", "E850", "E858")
-  expect_icd9_subchap_equal("Accidental Poisoning By Other Solid And Liquid Substances, Gases, And Vapors", "E860", "E869")
-  expect_icd9_subchap_equal("External Cause Status", "E000", "E000")
-  expect_icd9_subchap_equal("Injury Resulting From Operations Of War", "E990", "E999")
-  #expect_icd9_subchap_equal("", "", "")
+  for (i in names(icd9_sub_chapters))
+    expect_icd9_only_sub_chap(i)
+
+})
+
+test_that("sub_chapter parsing went okay, tricky cases", {
+
+
+  expect_icd9_sub_chap_equal("Vehicle Accidents Not Elsewhere Classifiable", "E846", "E848") # or with comma: "Vehicle Accidents, Not Elsewhere Classifiable"
+  expect_icd9_sub_chap_equal("Accidental Poisoning By Drugs, Medicinal Substances, And Biologicals", "E850", "E858")
+  expect_icd9_sub_chap_equal("Accidental Poisoning By Other Solid And Liquid Substances, Gases, And Vapors", "E860", "E869")
+  expect_icd9_sub_chap_equal("External Cause Status", "E000", "E000")
+  expect_icd9_sub_chap_equal("Injury Resulting From Operations Of War", "E990", "E999")
+  #expect_icd9_sub_chap_equal("", "", "")
 })
 
 test_that("majors okay", {
   # pick out some troublemakers found in testing, and some edge cases.
-  expect_equal(icd9_majors[["Other poxvirus infections"]], "059")
-  expect_equal(icd9_majors[["Other disorders of stomach and duodenum"]], "537")
-  expect_equal(icd9_majors[["Gastrointestinal mucositis (ulcerative)"]], "538")
-  expect_equal(icd9_majors[["Perinatal disorders of digestive system"]], "777")
+  expect_icd9_major_equals("Other poxvirus infections", "059")
+  expect_icd9_major_equals("Other disorders of stomach and duodenum", "537")
+  expect_icd9_major_equals("Gastrointestinal mucositis (ulcerative)", "538")
+  expect_icd9_major_equals("Perinatal disorders of digestive system", "777")
+
+  # the following is incorrectly specified under vehicle injury in
+  # http://www.icd9data.com/2015/Volume1/E000-E999/E846-E849/E849/default.htm
+  expect_icd9_major_equals("Place of occurence", "E849")
 })
 
-test_that("some have no subchapter, just major:", {
-  expect_false("280" %in% icd9_sub_chapters)
-  expect_false("289" %in% icd9_sub_chapters)
-  expect_false("740" %in% icd9_sub_chapters)
-  expect_false("759" %in% icd9_sub_chapters)
-  expect_equal(icd9_majors[["Iron deficiency anemias"]], "280")
-  expect_equal(icd9_majors[["Other diseases of blood and blood-forming organs"]], "289")
-  expect_equal(icd9_majors[["Anencephalus and similar anomalies"]], "740")
-  expect_equal(icd9_majors[["Other and unspecified congenital anomalies"]], "759")
+test_that("some majors are the same as sub-chapters", {
+  # majors and sub-chapters cannot overlap, and be the same thing? I think this
+  # is right. When we consider 'major' codes, we expect all three-digit (four
+  # for E) codes to be present, even if this is also a sub-chapter. And it would
+  # be more consistent to have every code being in a chapter, sub-chapter and
+  # major, than some being exceptional.
+
+  expect_icd9_major_is_sub_chap("Iron deficiency anemias", "280")
+  expect_icd9_major_is_sub_chap("Other diseases of blood and blood-forming organs", "289")
+  expect_icd9_major_is_sub_chap("Anencephalus and similar anomalies", "740")
+  expect_icd9_major_is_sub_chap("Other and unspecified congenital anomalies", "759")
+
+  # TODO: V85 to V91
+
+  expect_icd9_major_is_sub_chap("External Cause Status", "E000")
+
 })
