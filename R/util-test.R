@@ -188,7 +188,8 @@ expect_icd10_only_sub_chap <- function(x, ...) {
 
 #' expectation for ICD classes to be well-ordered
 #' @return a function, mimicking how \code{testthat} works
-#' @examples testthat::expect_that(icd9("V10"), icd_classes_are_ordered())
+#' @examples
+#'   testthat::expect_that(icd9("V10"), icd9:::icd_classes_are_ordered())
 #' @keywords internal
 icd_classes_are_ordered <- function() {
   function(x) {

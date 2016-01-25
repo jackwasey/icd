@@ -13,7 +13,7 @@ a function, mimicking how \code{testthat} works
 expectation for ICD classes to be well-ordered
 }
 \examples{
-testthat::expect_that(icd9("V10"), icd_classes_are_ordered())
+  testthat::expect_that(icd9("V10"), icd9:::icd_classes_are_ordered())
 }
 \keyword{internal}
 
