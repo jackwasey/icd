@@ -6,6 +6,7 @@
 \alias{icd9ChaptersMajor}
 \alias{icd9ChaptersSub}
 \alias{icd9_chapters}
+\alias{icd9_majors}
 \alias{icd9_sub_chapters}
 \title{ICD-9 chapters}
 \format{list with chapter/usb-chapter or major names stored in list names,
@@ -15,11 +16,10 @@
 }
 \description{
 \code{icd9_chapters}, \code{icd9_chapters_sub} and
-  \code{icd9_majors} contain mappings from the higher level
-  descriptions of ICD-9 codes to the ranges of ICD-9 codes they describe.
-  Helpful in summarizing codes or grouping for human-readable output. These
-  can easily be converted to a co-morbidity mapping, as shown in the
-  vignette.
+  \code{icd9_majors} contain mappings from the higher level descriptions of
+  ICD-9 codes to the ranges of ICD-9 codes they describe. Helpful in
+  summarizing codes or grouping for human-readable output. These can easily
+  be converted to a co-morbidity mapping, as shown in the vignette.
 
   \itemize{ \item 001-139 Infectious And Parasitic Diseases \item 140-239
   Neoplasms \item 240-279 Endocrine, Nutritional And Metabolic Diseases, And

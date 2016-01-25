@@ -26,7 +26,7 @@ test_that("no NA or zero-length values", {
 })
 
 test_that("factors are in the right place", {
-  expect_is(icd9::icd9cm_hierarchy$icd9, "character")
+  expect_is(icd9::icd9cm_hierarchy[["code"]], c("icd9cm", "icd9", "character"))
   expect_is(icd9::icd9cm_hierarchy$descShort, "character")
   expect_is(icd9::icd9cm_hierarchy$descLong, "character")
   expect_is(icd9::icd9cm_hierarchy$threedigit, "factor")
@@ -36,13 +36,13 @@ test_that("factors are in the right place", {
 })
 
 test_that("codes and descriptions are valid and unique", {
-  expect_equal(anyDuplicated(icd9::icd9cm_hierarchy$icd9), 0)
-  expect_true(all(icd9IsValidShort(icd9::icd9cm_hierarchy$icd9)))
+  expect_equal(anyDuplicated(icd9::icd9cm_hierarchy[["code"]]), 0)
+  expect_true(all(icd9IsValidShort(icd9::icd9cm_hierarchy[["code"]])))
 })
 
 test_that("some chapters are correct", {
   chaps <- icd9::icd9cm_hierarchy$chapter %>% asCharacterNoWarn
-  codes <- icd9::icd9cm_hierarchy$icd9
+  codes <- icd9::icd9cm_hierarchy[["code"]]
   # first and last rows (E codes should be last)
   expect_equal(chaps[1], "Infectious And Parasitic Diseases")
   expect_equal(chaps[nrow(icd9::icd9cm_hierarchy)],
@@ -60,7 +60,7 @@ test_that("some chapters are correct", {
 
 test_that("some subchapters are correct", {
   subchaps <- icd9::icd9cm_hierarchy$subchapter %>% asCharacterNoWarn
-  codes <- icd9::icd9cm_hierarchy$icd9
+  codes <- icd9::icd9cm_hierarchy[["code"]]
 
   # first and last
   expect_equal(subchaps[1], "Intestinal Infectious Diseases")
@@ -78,7 +78,7 @@ test_that("some subchapters are correct", {
 
 test_that("some randomly selected rows are correct", {
   expect_equal(
-    icd9::icd9cm_hierarchy[icd9::icd9cm_hierarchy$icd9 == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname,
+    icd9::icd9cm_hierarchy[icd9::icd9cm_hierarchy[["code"]] == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname,
     c("5060", "Fum/vapor bronc/pneumon", "Bronchitis and pneumonitis due to fumes and vapors",
       "506", "Respiratory conditions due to chemical fumes and vapors",
       "Pneumoconioses And Other Lung Diseases Due To External Agents",
@@ -88,6 +88,6 @@ test_that("some randomly selected rows are correct", {
 
 test_that("tricky v91.9 works", {
   expect_equal(
-    icd9cm_hierarchy[icd9cm_hierarchy$icd9 == "V9192", "descLong"],
+    icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "V9192", "descLong"],
     "Other specified multiple gestation, with two or more monoamniotic fetuses")
 })

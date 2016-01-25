@@ -127,7 +127,8 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
 	Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
 	Rcpp::CharacterVector major = parts[0];
 	Rcpp::CharacterVector minor = parts[1];
-	Rcpp::CharacterVector::iterator itmajor = major.begin(); // iterator seems to be a Rcpp::CharacterVector of length 1
+	// the next iterator seems to be a Rcpp::CharacterVector of length 1
+	Rcpp::CharacterVector::iterator itmajor = major.begin();
 	Rcpp::CharacterVector::iterator itminor = minor.begin();
 	for (; itmajor != major.end(); ++itmajor, ++itminor) {
 		std::string thismajor = Rcpp::as<std::string>(*itmajor);
@@ -140,7 +141,8 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
 		std::vector<std::string> newshort = Rcpp::as<std::vector<std::string> >(
 				icd9MajMinToShort(thismajor, newminors));
 
-		// std insert is a thousand times faster than looping through Rcpp::CharacterVector and push_backing
+		// std insert is a thousand times faster than looping through
+		// Rcpp::CharacterVector and push_backing
 		out.insert(newshort.begin(), newshort.end());
 	}
 	if (onlyReal) {
@@ -148,10 +150,12 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
 	  Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
 		std::set<std::string> out_real;
 		std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
-				icd9Hierarchy["icd9"]);
+				icd9Hierarchy["code"]);
+		// 'reals' is the set of majors, intermediate and leaf codes.
 		std::set<std::string> reals(tmp.begin(), tmp.end());
-		std::set_intersection(out.begin(), out.end(), reals.begin(),
-				reals.end(), std::inserter(out_real, out_real.begin()));
+		std::set_intersection(out.begin(), out.end(),
+                        reals.begin(), reals.end(),
+                        std::inserter(out_real, out_real.begin()));
 		return Rcpp::wrap(out_real);
 	}
 	return Rcpp::wrap(out);

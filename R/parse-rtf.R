@@ -289,7 +289,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
     grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
     str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
-  range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE))
+  #TODO: try with defined = FALSE to avoid circular reference with icd9cm_hierarchy
+  range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE, defined = FALSE))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
   names(range) <- range
   for (fifth in names(suffices_V30V39)) {
@@ -489,7 +490,8 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
       if (!icd_is_valid.icd9(v, short_code = FALSE))
         stop(paste("invalid code is: ",
                    icd_get_invalid.icd9(v, short_code = FALSE)))
-      out <- c(out, icd_children.icd9(v, short_code = FALSE))
+      # TODO: remove? attempting defined only to avoid circular reference to icd9cm_hierarchy
+      out <- c(out, icd_children.icd9(v, short_code = FALSE, defined = FALSE))
     }
 
   }

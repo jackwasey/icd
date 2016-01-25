@@ -332,7 +332,7 @@ The ICD-9-CM scheme is structured as follows:
  
  For most combinations of 0 to 9, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
 ```{r "find three digit billable"}
-allreal <- icd9::icd9cm_hierarchy[["icd9"]] # or used icd_get_defined
+allreal <- icd9::icd9cm_hierarchy[["code"]] # or used icd_get_defined
 # select the non-V and non-E codes with three characters (zeroes already prefixed)
 threedigitreal <- allreal[nchar(allreal) == 3 & icd9_is_n(allreal)]
 # display

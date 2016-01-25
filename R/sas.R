@@ -168,11 +168,12 @@ sasExtractLetStrings <- function(x) {
 
 # horrible kludge for difficult source data
 icd9ExpandRangeForSas <- function(start, end) {
-  if (end == "0449") end <- start # HIV codes changed
-reals <- icd_expand_range.icd9(start, end, short_code = TRUE, defined = TRUE,
-                                # hmmm, maybe get the diff and test all children of ambigs present later
-                                ex_ambig_start = FALSE,
-                                ex_ambig_end = TRUE)
+  if (end == "0449")
+    end <- start # HIV codes changed
+
+  reals <- icd_expand_range.icd9(start, end, short_code = TRUE, defined = TRUE,
+                                 # hmmm, maybe get the diff and test all children of ambigs present later
+                                 ex_ambig_start = FALSE, ex_ambig_end = TRUE)
   real_parents <- icd_condense.icd9(reals, defined = TRUE, short_code = TRUE)
   merged <- unique(c(reals, real_parents))
   real_parents_of_merged <- icd_condense.icd9(merged, defined = TRUE, short_code = TRUE)

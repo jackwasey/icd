@@ -11,6 +11,7 @@ generate_deprecated_data <- function(save_data = TRUE) {
   # assign to package namespace.
   icd9Billable <- icd9::icd9cm_billable
   icd9Hierarchy <- icd9::icd9cm_hierarchy
+  names(icd9Hierarchy)[1] <- "icd9"
   ahrqComorbid <- icd9::icd9_map_ahrq
   ahrqComorbidAll <- icd9::icd9_map_ahrq_all
   quanDeyoComorbid <- icd9::icd9_map_quan_deyo

@@ -57,6 +57,8 @@ icd_update_everything <- function() {
   devtools::load_data(pkg = ".") # reload the newly saved data
   icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
 
+  generate_deprecated_data(save_data = TRUE)
+
 }
 # nocov end
 
@@ -239,7 +241,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs
   icd9cm_hierarchy <- cbind(
-    data.frame("icd9" = icd9_rtf$code,
+    data.frame("code" = icd9_rtf$code,
                "descLong" = icd9_rtf$desc,
                stringsAsFactors = FALSE),
     # the following can and should be factors:
@@ -257,9 +259,9 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   # just copy the long description over.
   bill32 <- icd9::icd9cm_billable[["32"]]
 
-  billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy$icd9, short_code = TRUE) # or from bill32
-  billable_rows <- which(icd9cm_hierarchy$icd9 %fin% billable_codes)
-  title_rows <- which(icd9cm_hierarchy$icd9 %nin% billable_codes)
+  billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE) # or from bill32
+  billable_rows <- which(icd9cm_hierarchy[["code"]] %fin% billable_codes)
+  title_rows <- which(icd9cm_hierarchy[["code"]] %nin% billable_codes)
   icd9cm_hierarchy[billable_rows, "descShort"] <- bill32$descShort
   # for rows without a short description (i.e. titles, non-billable),
   # useexisting long desc
@@ -270,13 +272,13 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy[billable_rows, "descLong"] <- bill32$descLong
 
   # now put the short description in the right column position
-  icd9cm_hierarchy <- icd9cm_hierarchy[c("icd9", "descShort", "descLong", "threedigit",
+  icd9cm_hierarchy <- icd9cm_hierarchy[c("code", "descShort", "descLong", "threedigit",
                                      "major", "subchapter", "chapter")]
 
   #TODO add 'billable' column
 
   # quick sanity checks - full tests in test-parse.R
-  stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy$icd9, short_code = TRUE)))
+  stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)))
   if (any(sapply(icd9cm_hierarchy, is.na))) {
     #diagnose NAs
     print(colSums(sapply(icd9cm_hierarchy, is.na)))
@@ -299,7 +301,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
 fixSubchapterNa <- function(x, start, end) {
   # 740 CONGENITAL ANOMALIES is a chapter with no sub-chapters defined. For
   # consistency, assign the same name to sub-chapters
-  congenital <- x$icd9 %in% (start %i9sa% end)
+  congenital <- x[["code"]] %in% (start %i9sa% end)
   # assert all the same:
   stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
   # now some work to insert a new level into the sub-chapter factor in the right place
