@@ -181,12 +181,9 @@ test_that("AHRQ interpretation at least returns something reasonable", {
 })
 
 test_that("Charlson Deyo doesn't double count disease with two severities", {
-  expect_false(any(quanDeyoComorbid[["Mild Liver Disease"]] %in%
-                     quanDeyoComorbid[["Moderate or Severe Liver Disease"]] ))
-  expect_false(any(quanDeyoComorbid[["Cancer"]] %in%
-                     quanDeyoComorbid[["Metastatic Carcinoma"]] ))
-  expect_false(any(quanDeyoComorbid[["Diabetes without complications"]] %in%
-                     quanDeyoComorbid[["Diabetes with complications"]] ))
+  expect_false(any(icd9_map_quan_deyo$LiverMild %in% icd9_map_quan_deyo$LiverSevere))
+  expect_false(any(icd9_map_quan_deyo$Cancer %in% icd9_map_quan_deyo$Mets))
+  expect_false(any(icd9_map_quan_deyo$DM %in% icd9_map_quan_deyo$DMcx))
 })
 
 test_that("Elixhauser doesn't double count disease with multiple severities", {
