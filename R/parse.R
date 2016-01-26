@@ -59,6 +59,9 @@ icd_update_everything <- function() {
 
   generate_deprecated_data(save_data = TRUE)
 
+  # ICD-10
+  icd10cm_get_all_defined(save_data = TRUE)
+  icd10cm_extract_sub_chapters(save_data = TRUE)
 }
 # nocov end
 

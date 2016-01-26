@@ -160,7 +160,7 @@ icd10_get_who_from_cdc <- function() {
 #' @references
 #' https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
-icd10cm_get_all_defined <- function(save = FALSE) {
+icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   f_info <- unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
@@ -258,7 +258,7 @@ icd10cm_get_all_defined <- function(save = FALSE) {
         by.x = "threedigit", by.y = "chap_major", all.x = TRUE) %>%
     magrittr::extract2("chap_desc") -> icd10cm2016[["chapter"]]
 
-  if (save)
+  if (save_data)
     save_in_data_dir(icd10cm2016)
   invisible(icd10cm2016)
 

@@ -15,7 +15,31 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+context("icd10 WHO parse")
+
+test_that("icd10 WHO recreated exactly", {
+  skip("not implemented yet")
+  icd10_get_who_from_cdc()
+})
+
+
+context("icd10 fixed width parse")
+
+test_that("icd10 2016 recreated exactly", {
+  expect_identical(
+    icd10cm_get_all_defined(save_data = FALSE),
+    icd10cm2016
+  )
+})
+
 context("icd10 XML parse")
+
+test_that("icd10 sub-chapters are recreated exactly", {
+  expect_identical(
+    icd10cm_extract_sub_chapters(save_data = FALSE),
+    icd10_sub_chapters
+  )
+})
 
 test_that("icd10 sub_chapters were parsed correctly", {
 
