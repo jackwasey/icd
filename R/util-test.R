@@ -25,6 +25,7 @@ expect_equal_no_icd <- function(object, expected, ..., info = NULL,
     expected.label <- find_expr("expected")
 
   class(object) <- class(object)[class(object) %nin% icd_all_classes]
+  class(expected) <- class(expected)[class(expected) %nin% icd_all_classes]
   eval(bquote(testthat::expect_that(.(object),
                                     testthat::equals(
                                       .(expected), label = expected.label, ...

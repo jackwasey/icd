@@ -314,7 +314,7 @@ icd_decimal_to_short <- function(x) {
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd9 <- function(x) {
-  icd9DecimalToShortCpp(x) %>% icd_short_code %>% icd9
+  icd9DecimalToShortCpp(x) %>% icd_short_code(warn = FALSE) %>% icd9
 }
 
 #' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to

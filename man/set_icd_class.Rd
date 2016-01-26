@@ -27,9 +27,9 @@ icd_long_data(x)
 
 icd_wide_data(x)
 
-icd_short_code(x)
+icd_short_code(x, warn = TRUE)
 
-icd_decimal_code(x)
+icd_decimal_code(x, warn = TRUE)
 
 icd_comorbidity_map(x)
 }

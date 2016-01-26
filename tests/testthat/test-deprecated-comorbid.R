@@ -140,23 +140,16 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
 })
 
 test_that("deprecated - Charlson Deyo doesn't double count disease with two severities", {
-  expect_false(any(quanDeyoComorbid[["Mild Liver Disease"]] %in%
-                     quanDeyoComorbid[["Moderate or Severe Liver Disease"]] ))
-  expect_false(any(quanDeyoComorbid[["Cancer"]] %in%
-                     quanDeyoComorbid[["Metastatic Carcinoma"]] ))
-  expect_false(any(quanDeyoComorbid[["Diabetes without complications"]] %in%
-                     quanDeyoComorbid[["Diabetes with complications"]] ))
+  expect_false(any(quanDeyoComorbid[["LiverMild"]] %in% quanDeyoComorbid[["LiverSevere"]] ))
+  expect_false(any(quanDeyoComorbid[["Cancer"]] %in% quanDeyoComorbid[["Mets"]] ))
+  expect_false(any(quanDeyoComorbid[["DM"]] %in% quanDeyoComorbid[["DMcx"]] ))
 })
 
 test_that("deprecated - Elixhauser doesn't double count disease with multiple severities", {
-  expect_false(any(quanElixComorbid[["DM"]] %in%
-                     quanElixComorbid[["DMcx"]] ))
-  expect_false(any(quanElixComorbid[["Tumor"]] %in%
-                     quanElixComorbid[["Mets"]] ))
-  expect_false(any(elixComorbid[["DM"]] %in%
-                     elixComorbid[["DMcx"]] ))
-  expect_false(any(elixComorbid[["Tumor"]] %in%
-                     elixComorbid[["Mets"]] ))
+  expect_false(any(quanElixComorbid[["DM"]] %in% quanElixComorbid[["DMcx"]] ))
+  expect_false(any(quanElixComorbid[["Tumor"]] %in% quanElixComorbid[["Mets"]] ))
+  expect_false(any(elixComorbid[["DM"]] %in% elixComorbid[["DMcx"]] ))
+  expect_false(any(elixComorbid[["Tumor"]] %in% elixComorbid[["Mets"]] ))
   expect_false(any(ahrqComorbid[["DM"]] %in% ahrqComorbid[["DMcx"]] ))
   expect_false(any(ahrqComorbid[["Tumor"]] %in% ahrqComorbid[["Mets"]] ))
 })
@@ -511,12 +504,15 @@ test_that("deprecated - disordered visit ids", {
   icd9ComorbidShort(pts, ahrqComorbid)
 })
 
-test_that("deprecated - diff comorbid works", {
+test_that("deprecated - diff comorbid errors for bad input", {
   expect_error(icd9DiffComorbid(bad_input)) # list, but not list of character vectors
   expect_error(icd9DiffComorbid(bad_input, bad_input))
+})
 
-  # no warning or error for good data (forgo warning checks with deprecation)
-  expect_error(utils::capture.output(res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE)), NA)
+test_that("deprecated - diff comorbid works", {
+    # no warning or error for good data (forgo warning checks with deprecation)
+  expect_error(utils::capture.output(
+    res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE)), NA)
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
     "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",

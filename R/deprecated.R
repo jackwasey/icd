@@ -34,7 +34,7 @@ icd9Children <- function(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE,
 #' @export
 icd9ChildrenShort <- function(icd9Short, onlyReal = TRUE, onlyBillable = FALSE) {
   .Deprecated("icd_children")
-  icd_children.icd9(icd9Short, short_code = TRUE, defined = onlyReal, billable = onlyBillable)
+  icd_children.icd9(icd9Short, short_code = TRUE, defined = onlyReal, billable = onlyBillable) %>% unclass
 }
 
 #' @rdname icd_children
