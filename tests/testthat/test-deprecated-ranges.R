@@ -336,7 +336,7 @@ test_that("deprecated - icd9ChildrenDecimal valid input", {
 test_that("deprecated - icd9ChildrenShort valid input", {
   expect_equal_no_icd(icd9ChildrenShort("V100", onlyReal = FALSE),
                paste("V100", c("", 0:9), sep = ""))
-  expect_equal(icd9ChildrenShort("v100"), icd9Children("V100"))
+  expect_equal_no_icd(icd9ChildrenShort("v100"), icd9Children("V100"))
   expect_equal(icd9ChildrenShort(" V100 ", onlyReal = FALSE),
                icd9ChildrenShort("V100", onlyReal = FALSE))
   expect_equal_no_icd(icd9ChildrenShort("0100", onlyReal = FALSE),

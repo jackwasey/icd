@@ -13,7 +13,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 <!--
-Copyright (C) 2014 - 2015  Jack O. Wasey
+Copyright (C) 2014 - 2016  Jack O. Wasey
 
 This file is part of icd9.
 
@@ -284,7 +284,7 @@ icd9cm_hierarchy[
   grepl(pattern = "(heart)|(cardiac)",
         x = c(icd9cm_hierarchy$descLong, icd9cm_hierarchy$descShort),
         ignore.case = TRUE),
-  "icd9"] %>% unique -> cardiac
+  "code"] %>% unique -> cardiac
 ```
 then explain the list, just showing the first ten:
 ```{r cardiacChainExplainExample}
