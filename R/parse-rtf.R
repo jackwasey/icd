@@ -166,12 +166,6 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # which are just listed twice in RTF. Also 199 (with punctuation difference), 209 and 239.
   icd9_majors <- icd9_majors[!duplicated(icd9_majors)]
 
-  #########################################################
-  # TODO: debug only, delete me.
-  #########################################################
-  if (TRUE) save(filtered, file = "filtered.rda")
-  #########################################################
-
   if (save_extras) {
     save_in_data_dir(icd9_sub_chapters)
     save_in_data_dir(icd9_majors)
@@ -289,7 +283,6 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
     grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
     str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
-  #TODO: try with defined = FALSE to avoid circular reference with icd9cm_hierarchy
   range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE, defined = FALSE))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
   names(range) <- range
@@ -490,7 +483,6 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
       if (!icd_is_valid.icd9(v, short_code = FALSE))
         stop(paste("invalid code is: ",
                    icd_get_invalid.icd9(v, short_code = FALSE)))
-      # TODO: remove? attempting defined only to avoid circular reference to icd9cm_hierarchy
       out <- c(out, icd_children.icd9(v, short_code = FALSE, defined = FALSE))
     }
 
