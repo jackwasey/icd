@@ -244,7 +244,7 @@ icd9RandomShort <- function(n = 5L) {
 #'   No checks done for speed.
 #' @examples
 #' \dontrun{
-#' pts <- randomPatients(1e7)
+#' pts <- generate_random_pts(1e7)
 #' # conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
 #' microbenchmark::microbenchmark(fastIntToStringStd(pts$visitId, buffer = 8),
 #'                                fastIntToStringStd(pts$visitId, buffer = 16),

@@ -25,7 +25,7 @@ test_that("single icd9 code comorbidity", {
 })
 
 test_that("thousands of patients", {
-  x <- randomPatients(10000)
+  x <- generate_random_pts(10000)
   expect_error(icd_comorbid_quan_deyo.icd9(x, short_code = FALSE, applyHierarchy = TRUE), NA)
 })
 

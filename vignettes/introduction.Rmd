@@ -295,7 +295,7 @@ icd9(cardiac) %>% icd_explain(warn = FALSE) %>% head(10)
 I understand that comorbiditity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
 ```{r speed, cache = TRUE}
 # codes selected from AHRQ mapping
-many_patients <- icd9:::randomPatients(100000) 
+many_patients <- icd9:::generate_random_pts(100000) 
 
 # result in seconds (platform and load dependent, of course)
 system.time(

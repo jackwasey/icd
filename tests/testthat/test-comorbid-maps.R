@@ -622,7 +622,7 @@ test_that("comorbid quick test", {
 })
 
 test_that("control params don't affect result of comorbid calc", {
-  pts <- randomPatients(101, 13)
+  pts <- generate_random_pts(101, 13)
   pts$visitId <- asCharacterNoWarn(pts$visitId)
   pts$icd9 <- as.factor(pts$icd9)
   upts <- length(unique(pts$visitId))

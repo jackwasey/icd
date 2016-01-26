@@ -4,7 +4,7 @@
 # http://www.valgrind.org/docs/manual/manual-core.html#manual-core.pthreads
 # Valgrind may not work well with libomp (most people use libgomp)
 
-RCODE="devnull <- icd9ComorbidQuanDeyo(icd9:::randomPatients(1000000))"
+RCODE="devnull <- icd9ComorbidQuanDeyo(icd9:::generate_random_pts(1000000))"
 INSTR_ATSTART="no"
 
 # run data race detector.

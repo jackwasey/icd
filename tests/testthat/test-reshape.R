@@ -62,7 +62,7 @@ test_that("wide data to long data", {
 })
 
 test_that("matrix to data frame and back", {
-  for (pts in list(randomPatients, testTwenty, multi_comorbid)) {
+  for (pts in list(random_test_patients, testTwenty, multi_comorbid)) {
     mat <- icd_comorbid_ahrq(pts)
     df <- icd_comorbid_mat_to_df(mat)
     expect_identical(icd_comorbid_df_to_mat(df), mat)
@@ -70,7 +70,7 @@ test_that("matrix to data frame and back", {
 })
 
 test_that("dataframe to matrix and back", {
-  for (pts in list(randomPatients, testTwenty, multi_comorbid)) {
+  for (pts in list(random_test_patients, testTwenty, multi_comorbid)) {
     df2 <- icd_comorbid_ahrq(pts, return_df = TRUE)
     mat2 <- icd_comorbid_df_to_mat(df2)
     df3 <- icd_comorbid_mat_to_df(mat2, visit_name = "visitId", stringsAsFactors = FALSE)
