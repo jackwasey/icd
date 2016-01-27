@@ -40,7 +40,7 @@ icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
 #' @keywords internal
 icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
                                 billable = FALSE, ...) {
-  assert(checkFactor(x), checkCharacter(x))
+  # assert(checkFactor(x), checkCharacter(x)) # what if icd10 class, but nothing else? be permissive?
   assertFlag(short_code)
   assertFlag(billable)
 
@@ -54,15 +54,35 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
       asCharacterNoWarn(x)) %in% icd9::icd9cm_hierarchy[["code"]]
 }
 
-#' @describeIn icd_is_defined Check whether ICD codes are defined, guessing ICD
-#'   code type.
+#' @describeIn icd_is_defined Same for ICD-10-CM
 #' @export
 #' @keywords internal
+icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
+                                   billable = FALSE, ...) {
+  if (!short_code)
+    x <- icd_decimal_to_short.icd10(x)
+
+  if (billable)
+    icd_is_billable.icd10cm(x, short_code = short_code)
+  else
+    x %fin% icd9::icd10cm2016[["code"]]
+}
+
+#' @describeIn icd_is_defined Same for ICD-10, temporarilyl using icd-10-cm for lookup
+#' @export
+#' @keywords internal
+icd_is_defined.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
+                                 billable = FALSE, ...) {
+  warning("using ICD-10-CM for testing icd10 definition. Set class to WHO if this is wanted.")
+  icd_is_defined.icd10cm(x = x, short_code = short_code, billable = billable, ...)
+}
+
+# roxygen annotating this causes a roxygen error, issue #448
+# https://github.com/klutometis/roxygen/issues/448
 icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
-  icd_ver <- icd_guess_version(x)
-  if (icd_ver != "icd9")
-    stop("testing whether ICD codes are defined is currently only implemented for ICD-9-CM")
-  icd_is_defined.icd9(x, short_code, ...)
+  # y <- icd_guess_version_update(x) %>% icd_guess_short_update(short_code = short_code)
+  y <- icd_guess_version_update(x)
+  UseMethod("icd_is_defined", y)
 }
 
 #' Select only defined ICD codes
@@ -113,9 +133,30 @@ icd_is_billable <- function(...) {
 #' @describeIn icd_is_billable Which of the given ICD-9 codes are leaf nodes in ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd9 <- function(x, short_code = icd_guess_short(x),
+icd_is_billable.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
                                  version = icd9cm_latest_edition(), ...) {
   icd_is_billable.icd9cm(x = x, short_code = short_code, version = version)
+}
+
+#' @describeIn icd_is_billable Which of the given ICD-10 codes are leaf nodes in ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
+#' @export
+#' @keywords internal
+icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
+                                    version = "2016", ...) {
+  if (version != "2016")
+    stop("curretly only ICD-10-CM 2016 version can be used to check for billable codes")
+  if (!short_code)
+    x <- icd_decimal_to_short.icd10(x)
+
+  x %fin% icd10cm2016[icd10cm2016[["billable"]] == 1, "code"]
+}
+
+#' @describeIn icd_is_billable Which of the given ICD-10 codes are leaf nodes in ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
+#' @export
+#' @keywords internal
+icd_is_billable.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
+                                 version = "2016", ...) {
+  icd_is_billable.icd10cm(x = x, short_code = short_code, version = version)
 }
 
 #' @describeIn icd_is_billable Which of the given ICD-9 codes are leaf nodes in ICD-9-CM

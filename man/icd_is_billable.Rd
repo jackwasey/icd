@@ -6,6 +6,8 @@
 \alias{icd9IsBillableShort}
 \alias{icd_is_billable}
 \alias{icd_is_billable.default}
+\alias{icd_is_billable.icd10}
+\alias{icd_is_billable.icd10cm}
 \alias{icd_is_billable.icd9}
 \alias{icd_is_billable.icd9cm}
 \title{Determine whether codes are billable leaf-nodes}
@@ -19,8 +21,14 @@ icd9IsBillableDecimal(icd9Decimal, version = icd9cm_latest_edition())
 
 icd_is_billable(...)
 
-\method{icd_is_billable}{icd9}(x, short_code = icd_guess_short(x),
+\method{icd_is_billable}{icd9}(x, short_code = icd_guess_short.icd9(x),
   version = icd9cm_latest_edition(), ...)
+
+\method{icd_is_billable}{icd10cm}(x, short_code = icd_guess_short.icd10(x),
+  version = "2016", ...)
+
+\method{icd_is_billable}{icd10}(x, short_code = icd_guess_short.icd10(x),
+  version = "2016", ...)
 
 \method{icd_is_billable}{icd9cm}(x, short_code = icd_guess_short(x),
   version = icd9cm_latest_edition(), ...)
@@ -67,6 +75,10 @@ Codes provided are compared to the most recent version of the
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd9}: Which of the given ICD-9 codes are leaf nodes in ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
+
+\item \code{icd10cm}: Which of the given ICD-10 codes are leaf nodes in ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
+
+\item \code{icd10}: Which of the given ICD-10 codes are leaf nodes in ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 
 \item \code{icd9cm}: Which of the given ICD-9 codes are leaf nodes in ICD-9-CM
 

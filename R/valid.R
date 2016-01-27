@@ -118,9 +118,9 @@ re_icd10cm_major  <- re_icd10cm_major_bare %>% re_just_ws
 re_icd10who_major <- re_icd10who_major_bare %>% re_just_ws
 re_icd10_major <- re_icd10_major_bare %>% re_just_ws
 
-re_icd10cm_short <- paste0(re_icd10_major, "[[:alnum:]]{0,4}")
-re_icd10cm_decimal <- paste0(re_icd10_major, "\\.[[:alnum:]]{0,4}")
-re_icd10cm_any <- paste0(re_icd10_major, "\\.?[[:alnum:]]{0,4}")
+re_icd10cm_short <- paste0(re_icd10_major_bare, "[[:alnum:]]{0,4}")
+re_icd10cm_decimal <- paste0(re_icd10_major_bare, "\\.[[:alnum:]]{0,4}")
+re_icd10cm_any <- paste0(re_icd10_major_bare, "\\.?[[:alnum:]]{0,4}")
 
 re_icd10_short <- re_icd10cm_short
 re_icd10_decimal <- re_icd10cm_decimal
@@ -196,9 +196,9 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
 
   # TODO: test whether icd-10-cm or WHO, if class not otherwise specified.
   if (short_code)
-    x %>% str_trim() %>% str_detect(re_just_ws(re_icd10_short))
+    x %>% str_trim() %>% str_detect(re_icd10_short)
   else
-    x %>% str_trim() %>% str_detect(re_just_ws(re_icd10_decimal))
+    x %>% str_trim() %>% str_detect(re_icd10_decimal)
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
