@@ -350,6 +350,18 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
   icd_expand_range.icd9(start, end, short_code = TRUE, defined = TRUE)
 }
 
+#' @rdname icd_expand_range
+#' @export
+"%i10s" <- function(start, end) {
+  icd_expand_range.icd10cm(start, end, short_code = TRUE)
+}
+
+#' @rdname icd_expand_range
+#' @export
+"%i10d" <- function(start, end) {
+  icd_expand_range.icd10cm(start, end, short_code = FALSE)
+}
+
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes
 #' @description Accepts a single number or character input starting point for
 #'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty

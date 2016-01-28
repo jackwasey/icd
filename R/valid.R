@@ -170,6 +170,7 @@ re_icd10_any <- re_icd10cm_any
 #' @family ICD9 validation
 #' @return logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 #'   provided according to its validity
+#' @rawNamespace S3method(icd_is_valid,character)
 #' @examples
 #'   icd_is_valid(icd9(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E")))

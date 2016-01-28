@@ -31,7 +31,9 @@ test_that("icd10 2016 recreated exactly", {
   # check cols at a time, so I get better error feedback:
   for (n in c("code", "billable", "descShort", "descLong", "threedigit",
               "major", "subchapter", "chapter")) {
-    expect_identical(res[[n]], icd10cm2016[[n]])
+    expect_identical(res[[n]], icd10cm2016[[n]], info = paste("working on ", n))
+    if (is.factor(res[[n]]))
+      expect_identical(levels(res[[n]]), levels(icd10cm2016[[n]]))
   }
 
   expect_identical(
