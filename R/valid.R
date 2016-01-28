@@ -171,8 +171,8 @@ re_icd10_any <- re_icd10cm_any
 #' @return logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 #'   provided according to its validity
 #' @examples
-#'   icd_is_valid(c("", "1", "22", "333", "4444", "123.45", "V",
-#'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
+#'   icd_is_valid(icd9(c("", "1", "22", "333", "4444", "123.45", "V",
+#'                      "V2", "V34", "V567", "E", "E1", "E70", "E")))
 #'   # internal function:
 #'   \dontrun{
 #'   icd9:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
@@ -219,18 +219,15 @@ icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
     icd9_is_valid_decimal(x, whitespace_ok = whitespace_ok)
 }
 
-#' @describeIn icd_is_valid Test whether a character vector of ICD vodes is
+# Test whether a character vector of ICD vodes is
 #'   valid, guessing both type and version of the ICD codes
-#' @export
+#
+# Can't roxygen because of UseMethod bug therein
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
                                    whitespace_ok = TRUE, ...) {
   assertFlag(whitespace_ok)
-  ver <- icd_guess_version(x)
-  # TODO: why not set class on a new object and redispatch?
-  switch(ver,
-         "icd9" = icd_is_valid.icd9(x, short_code = short_code, whitespace_ok = whitespace_ok),
-         "icd10" = icd_is_valid.icd10(x, short_code = short_code, whitespace_ok = whitespace_ok)
-  )
+  x <- icd_guess_version_update(x)
+  UseMethod("icd_is_valid", x)
 }
 
 icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {

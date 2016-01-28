@@ -224,9 +224,16 @@ icd9ComorbidDfToMat <- function(x, visitId = get_visit_name(x),
 #'   diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
 #'   subtypes.
 #' @export
-icd9Explain <- function(icd9, isShort = icd_guess_short.icd9(icd9), doCondense = TRUE, brief = FALSE, warn = TRUE) {
+icd9Explain <- function(icd9, isShort = icd_guess_short.icd9(icd9),
+                        doCondense = TRUE, brief = FALSE, warn = TRUE) {
   .Deprecated("icd_explain")
-  icd_explain(x = icd9, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
+  x <- icd9
+  icd9 <- NULL
+  if (is.list(x))
+    x <- lapply(x, icd9::icd9)
+  else
+    x <- icd9(x)
+  icd_explain(x = x, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
 }
 
 #' @rdname icd_explain

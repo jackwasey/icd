@@ -56,6 +56,7 @@ icd_children <- function(x, ...)
 #' @export
 icd_children.character <- function(x, ...) {
   ver <- icd_guess_version(x)
+  # eventually UseMethod again, but this would be circular until the icd10 method is defined.
   switch(ver,
     "icd9" = icd_children.icd9(x = x, ...),
     "icd10" = stop("icd_children.icd10 not implemented yet"),

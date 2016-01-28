@@ -138,7 +138,7 @@ icd_check_class_conflict <- function(x) {
 icd9 <- function(x) {
   if (missing(x)) x <- character()
   icd_check_conflict_with_icd9(x)
-  if (inherits(x, "icd9")) return(x)
+  if (is.icd9(x)) return(x)
   after <- match("icd9cm", class(x), nomatch = 0)
   class(x) <- append(class(x), "icd9", after = after)
   x
