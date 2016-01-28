@@ -26,6 +26,14 @@ test_that("icd10 WHO recreated exactly", {
 context("icd10 fixed width parse")
 
 test_that("icd10 2016 recreated exactly", {
+
+  res <- icd10cm_get_all_defined(save_data = FALSE)
+  # check cols at a time, so I get better error feedback:
+  for (n in c("code", "billable", "descShort", "descLong", "threedigit",
+              "major", "subchapter", "chapter")) {
+    expect_identical(res[[n]], icd10cm2016[[n]])
+  }
+
   expect_identical(
     icd10cm_get_all_defined(save_data = FALSE),
     icd10cm2016
