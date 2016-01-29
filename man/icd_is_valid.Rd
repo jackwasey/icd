@@ -19,7 +19,6 @@
 \alias{icd9ValidDecimal}
 \alias{icd9ValidShort}
 \alias{icd_is_valid}
-\alias{icd_is_valid.character}
 \alias{icd_is_valid.icd10}
 \alias{icd_is_valid.icd10who}
 \alias{icd_is_valid.icd9}
@@ -66,9 +65,6 @@ icd_is_valid(x, ...)
   whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd9}(x, short_code = icd_guess_short.icd9(x),
-  whitespace_ok = TRUE, ...)
-
-\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x),
   whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd_comorbidity_map}(x, short_code, ...)
@@ -159,9 +155,6 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
 
 \item \code{icd9}: Test whether generic ICD-10 code is valid
 
-\item \code{character}: Test whether a character vector of ICD vodes is
-valid, guessing both type and version of the ICD codes
-
 \item \code{icd_comorbidity_map}: Validate an icd9 mapping to comorbidities
 
 \item \code{icd10who}: Check whether ICD-10 WHO codes are valid
@@ -184,8 +177,8 @@ valid, guessing both type and version of the ICD codes
   and ICD-9 vs ICD-10 codes, so guessing is never going to be perfect.
 }
 \examples{
-  icd_is_valid(c("", "1", "22", "333", "4444", "123.45", "V",
-                     "V2", "V34", "V567", "E", "E1", "E70", "E"))
+  icd_is_valid(icd9(c("", "1", "22", "333", "4444", "123.45", "V",
+                     "V2", "V34", "V567", "E", "E1", "E70", "E")))
   # internal function:
   \dontrun{
   icd9:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",

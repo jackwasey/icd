@@ -15,21 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-# context("icd10 ranges")
-#
-# test_that("top level ICD-10 ranges between different alphabetic groups are not valid", {
-#   # is this valid? injury codes, for example, go through S and T.
-#   expect_error(icd10ExpandRange("A10", "B20"))
-#   expect_error(icd10ExpandRange("C99", "B00"))
-#   expect_error(icd10ExpandRange("G99.x", "H01"))
-#   expect_error(icd10ExpandRange("G99", "H01.x"))
-#   expect_error(icd10ExpandRange("G99.x", "H01.x"))
-# })
-
-# test_that("top level ICD-10 ranges of single code are expanded to real codes", {
-#   #expect_equals(icd10ExpandRange("J11", "J11", onlyReal = TRUE), )
-# })
-
 ################################################################################
 # ranges
 ################################################################################
@@ -39,6 +24,10 @@ context("test icd10 ranges")
 test_that("very bad input data fails completely", {
   expect_error(icd_expand_range(data.frame(a = 1, b = "b"), factor(1,2,3)))
 })
+
+test_that("top level ICD-10 ranges of single code are expanded to real codes", {
+  expect_true(all(icd_is_defined.icd10cm(icd_expand_range(icd10cm("J11"), icd10cm("J11")))))
+ })
 
 test_that("simple ranges of real values works", {
   expect_equal_no_icd(icd_expand_range.icd10cm("A00", "A001"),
@@ -91,68 +80,6 @@ test_that("completely invalid input fails", {
 
 test_that("single value gives correct range", {
   expect_equal(icd_children_defined.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
-})
-
-################################################################################
-# ranges for (some) possible children - low priority
-################################################################################
-
-context("test icd10 ranges - children possible")
-
-test_that("completely invalid input fails", {
-
-  expect_error(icd10_children_possible_short(data.frame(a = 1, b = "b")))
-
-})
-
-test_that("single values give all real children", {
-  expect_equal(icd_children_defined.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
-})
-
-test_that("certainly invalid codes return empty vectors", {
-  expect_equal(icd10_children_possible_short("!"), character(0))
-  expect_equal(icd10_children_possible_short("H"), character(0))
-  expect_equal(icd10_children_possible_short("H7"), character(0))
-  # never longer than 7 digits no matter what
-  expect_equal(icd10_children_possible_short("12345678"), character(0))
-  expect_equal(icd10_children_possible_short("A2345678"), character(0))
-})
-
-test_that("NA values are handled gracefully", {
-  expect_equal(icd10_children_possible_short(NA_character_), NA_character_)
-  expect_equal(icd10_children_possible_short(c(NA_character_, NA_character_)),
-               c(NA_character_, NA_character_))
-})
-
-test_that("exact children created for single values", {
-  expect_equal(icd10_children_possible_short("A234567"), "A234567")
-
-  expect_equal(
-    icd10_children_possible_short("123456"),
-    c("123456", "1234560", "1234561", "1234562", "1234563", "1234564",
-      "1234565", "1234569", "123456A", "123456B", "123456C", "123456D",
-      "123456E", "123456F", "123456G", "123456H", "123456J", "123456K",
-      "123456M", "123456N", "123456P", "123456Q", "123456R", "123456S"))
-})
-
-test_that("right number of children are made for higher level codes", {
-  #sapply(minor_chars, length)  [1] 23 14 11 23 (all +1)
-  expect_equal(length(icd10_children_possible_short("Z99")), 24 * 15 * 12 * 24)
-  expect_equal(length(icd10_children_possible_short("Z991")), 15 * 12 * 24)
-  expect_equal(length(icd10_children_possible_short("Z9921")), 12 * 24)
-  expect_equal(length(icd10_children_possible_short("Z99321")), 24)
-})
-
-test_that("multiple inputs return ordered results", {
-  expect_equal(
-    icd10_children_possible_short(c("A00", "Z99")),
-    c(icd10_children_possible_short("A00"), icd10_children_possible_short("Z99"))
-  )
-
-  expect_equal(
-    icd10_children_possible_short(c("Z99", "A00")),
-    c(icd10_children_possible_short("A00"), icd10_children_possible_short("Z99"))
-  )
 })
 
 # to move somewhere else:

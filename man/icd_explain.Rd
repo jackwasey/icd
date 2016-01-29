@@ -7,8 +7,8 @@
 \alias{icd9ExplainDecimal}
 \alias{icd9ExplainShort}
 \alias{icd_explain}
-\alias{icd_explain.character}
 \alias{icd_explain.factor}
+\alias{icd_explain.icd10}
 \alias{icd_explain.icd9}
 \alias{icd_explain.icd9cm}
 \alias{icd_explain.list}
@@ -31,9 +31,6 @@ icd9ExplainDecimal(icd9Decimal, doCondense = TRUE, brief = FALSE,
 
 icd_explain(...)
 
-\method{icd_explain}{character}(x, short_code = NULL, condense = TRUE,
-  brief = FALSE, warn = TRUE, ...)
-
 \method{icd_explain}{list}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
@@ -43,6 +40,9 @@ icd_explain(...)
 \method{icd_explain}{icd9}(...)
 
 \method{icd_explain}{icd9cm}(x, short_code = icd_guess_short.icd9(x),
+  condense = TRUE, brief = FALSE, warn = TRUE, ...)
+
+\method{icd_explain}{icd10}(x, short_code = icd_guess_short.icd9(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
 \method{icd_explain}{numeric}(icd9, short_code = icd_guess_short(icd9),
@@ -107,8 +107,6 @@ convert 'decimal' format (123.45 style) ICD9 codes into the name
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Explain ICD codes from a character vecotr, guessing ICD version
-
 \item \code{list}: Explain all ICD-9 codes in a list of vectors
 
 \item \code{factor}: explain Explain factor of ICD-9 codes
@@ -116,6 +114,8 @@ convert 'decimal' format (123.45 style) ICD9 codes into the name
 \item \code{icd9}: explain character vector of ICD-9 codes. TODO: actually, this is ICD-9-CM
 
 \item \code{icd9cm}: explain character vector of ICD-9-CM codes
+
+\item \code{icd10}: ICD-10 explaination not implemented yet
 
 \item \code{numeric}: explain numeric vector of ICD-9 codes, with warning.
 In general, this is not allowed because of the possible ambiguity of
@@ -134,4 +134,5 @@ icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
 \seealso{
 package comorbidities
 }
+\keyword{internal}
 

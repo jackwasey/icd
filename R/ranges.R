@@ -87,6 +87,8 @@ icd_expand_range.character <- function(start, end, short_code = NULL, defined = 
 #' expand range of ICD-10 codes returning only defined codes in ICD-10-CM
 #'
 #' This will need generalizing to any list of 'defined' codes, e.g. WHO or other
+#'
+#' There are so many permutations of alphaunmerics after the decimal place thatit would be easy to generate many millions with simple ranges, the vast majority of which would be undefined.
 #' @param start character vector of length one containing an ICD code
 #' @param end  character vector of length one containing an ICD code
 #' @keywords internal
@@ -94,10 +96,10 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
                                      defined = TRUE, ...) {
   if (!defined)
     stop("expanding ranges of possible (versus defined) ICD-10-CM codes is not yet implemented.
-         It will produce a very large number of codes because of permutations.")
+         It will produce a very large number of codes because of permutations of the many
+         alphabetic and numeric possibilities after the decimal place.")
 
   # check whether valid?
-  # check whether defined?
   # minimal check for type:
   stopifnot(grepl("[^.]", c(start, end)))
 
@@ -118,37 +120,11 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
 
   # find the start and end code positions in the master list
   pos <- match(c(start, new_end), icd9::icd10cm2016[["code"]])
-  if (is.na(pos[1])) stop(sprintf("start code '%s' not found", pos[1]))
-  if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", pos[2]))
+  if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
+  if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
 
   icd9::icd10cm2016[pos[1]:pos[2], "code"]
-}
-
-# WIP
-icd10_expand_range_possible_short <- function(start, end) {
-  assertString(start)
-  assertString(end)
-
-  stopifnot(all(icd_is_valid.icd10(c(start, end))))
-
-  # check whether defined? No: this is specifically for undefined codes?
-
-  start <- str_trim(start)
-  end <- str_trim(end)
-
-  start_char <- substr(start, 1, 1)
-  end_char <- substr(end, 1, 1)
-  stopifnot(start_char <= end_char)
-
-  start_two_digits <- as.integer(substr(start, 2, 3))
-  end_two_digits <- as.integer(substr(end, 2, 3))
-  if (start_char == end_char)
-    stopifnot(start_two_digits <= end_two_digits)
-
-  start_other_chars <- substr(start, 4, 10)
-  end_other_chars <- substr(end, 4, 10)
-  stop("Not implemented fully", start_other_chars, end_other_chars)
 }
 
 #' @title Expand major codes to range
@@ -372,6 +348,18 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
 #' @export
 "%i9s%" <- function(start, end) {
   icd_expand_range.icd9(start, end, short_code = TRUE, defined = TRUE)
+}
+
+#' @rdname icd_expand_range
+#' @export
+"%i10s" <- function(start, end) {
+  icd_expand_range.icd10cm(start, end, short_code = TRUE)
+}
+
+#' @rdname icd_expand_range
+#' @export
+"%i10d" <- function(start, end) {
+  icd_expand_range.icd10cm(start, end, short_code = FALSE)
 }
 
 #' @title expand decimal part of ICD-9 code to cover all possible sub-codes

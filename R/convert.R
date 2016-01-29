@@ -317,6 +317,33 @@ icd_decimal_to_short.icd9 <- function(x) {
   icd9DecimalToShortCpp(x) %>% icd_short_code(warn = FALSE) %>% icd9
 }
 
+#' @export
+#' @keywords internal
+icd_decimal_to_short.icd10 <- function(x) {
+  x %>% str_replace("\\.", "") %>% icd_short_code(warn = FALSE) %>% icd10
+}
+
+#' @export
+#' @keywords internal
+icd_decimal_to_short.icd10cm <- function(x) {
+  icd_decimal_to_short.icd10(x) %>% icd10cm
+}
+
+#' @export
+#' @keywords internal
+icd_decimal_to_short.icd10who <- function(x) {
+  icd_decimal_to_short.icd10(x) %>% icd10who
+}
+
+
+#
+# # @export
+# # @keywords internal
+# icd_decimal_to_short.list <- function(x) {
+#   # todo, may need to replicate this elsewhere
+#   lapply(x, icd_decimal_to_short)
+# }
+
 #' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to
 #'   short format
 #' @export

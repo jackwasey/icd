@@ -8,7 +8,8 @@
 \alias{icd9IsRealDecimal}
 \alias{icd9IsRealShort}
 \alias{icd_is_defined}
-\alias{icd_is_defined.default}
+\alias{icd_is_defined.icd10}
+\alias{icd_is_defined.icd10cm}
 \alias{icd_is_defined.icd9}
 \title{Check whether ICD-9 codes exist}
 \usage{
@@ -30,7 +31,11 @@ icd_is_defined(x, short_code = icd_guess_short(x), ...)
 \method{icd_is_defined}{icd9}(x, short_code = icd_guess_short.icd9(x),
   billable = FALSE, ...)
 
-\method{icd_is_defined}{default}(x, short_code = icd_guess_short(x), ...)
+\method{icd_is_defined}{icd10cm}(x, short_code = icd_guess_short.icd10(x),
+  billable = FALSE, ...)
+
+\method{icd_is_defined}{icd10}(x, short_code = icd_guess_short.icd10(x),
+  billable = FALSE, ...)
 }
 \arguments{
 \item{icd9}{is
@@ -88,8 +93,9 @@ This is different from syntactic validity: it looks it up in the
 \item \code{icd9}: Check whether ICD-9 code are defined. (ICD-9-CM by
 defauly)
 
-\item \code{default}: Check whether ICD codes are defined, guessing ICD
-code type.
+\item \code{icd10cm}: Same for ICD-10-CM
+
+\item \code{icd10}: Same for ICD-10, temporarilyl using icd-10-cm for lookup
 }}
 \keyword{internal}
 

@@ -43,23 +43,17 @@
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
+#' @rawNamespace S3method(icd_explain,character)
 #' @export
 icd_explain <- function(...)
   UseMethod("icd_explain")
 
-#' @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
-#' @export
+# @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
+# @rawNamespace S3method(icd_explain,character)
+# @keywords internal
 icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  guess <- icd_guess_version.character(x, short_code = short_code)
-  if (guess == "icd9") {
-    if (is.null(short_code)) short_code <- icd_guess_short.icd9(x)
-    icd_explain.icd9(x = x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...)
-  } else if (guess == "icd10") {
-    if (is.null(short_code)) short_code <- icd_guess_short.icd10(x)
-    stop("icd_explain.icd10 not implemented yet")
-  } else {
-    stop("Unable to guess ICD type")
-  }
+  x <- icd_guess_version_update(x)
+  UseMethod("icd_explain", x)
 }
 
 #' @describeIn icd_explain Explain all ICD-9 codes in a list of vectors
@@ -79,19 +73,23 @@ icd_explain.factor <- function(icd9, short_code = icd_guess_short(icd9),
 
 #' @describeIn icd_explain explain character vector of ICD-9 codes. TODO: actually, this is ICD-9-CM
 #' @export
-icd_explain.icd9 <- function(...)
+icd_explain.icd9 <- function(...) {
   icd_explain.icd9cm(...)
+}
 
 #' @describeIn icd_explain explain character vector of ICD-9-CM codes
 #' @export
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  assertCharacter(x)
+  # TODO, need to figure out how to use checkmate for my classes. ?extend it
+  #
+  # assertCharacter(x)
   assertFlag(short_code)
   assertFlag(condense)
   assertFlag(brief)
   assertFlag(warn)
-  if (!short_code) x <- icd_decimal_to_short.icd9(x)
+  if (!short_code)
+    x <- icd_decimal_to_short.icd9(x)
 
   # if there are only defined codes, we should condense with this in mind:
   if (condense) {
@@ -113,6 +111,13 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
   c(mjexplain,
     icd9::icd9cm_hierarchy[ icd9::icd9cm_hierarchy[["code"]] %in% x, descField]
   )
+}
+
+#' @describeIn icd_explain ICD-10 explaination not implemented yet
+#' @keywords internal
+icd_explain.icd10 <- function(x, short_code = icd_guess_short.icd9(x),
+                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+  stop("icd_explain.icd10 not implemented yet")
 }
 
 #' @describeIn icd_explain explain numeric vector of ICD-9 codes, with warning.

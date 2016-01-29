@@ -32,7 +32,9 @@ icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, war
 #' @export
 #' @keywords internal
 icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
-  assert(checkFactor(x), checkCharacter(x))
+  # TODO, need to figure out how to use checkmate for my classes. ?extend it
+  #
+  #assert(checkFactor(x), checkCharacter(x))
   assertFlag(short_code)
   assert(checkNull(defined), checkFlag(defined))
   assertFlag(warn)
@@ -71,7 +73,7 @@ icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE, keepFactorLeve
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
 icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keepFactorLevels = FALSE) {
-  assert(checkFactor(x), checkCharacter(x))
+  #assert(checkFactor(x), checkCharacter(x))
   assert(checkNull(defined), checkFlag(defined))
   assertFlag(warn)
   assertFlag(keepFactorLevels)
