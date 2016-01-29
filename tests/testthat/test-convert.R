@@ -317,3 +317,18 @@ test_that("code routes through RcppExports.R and slower versions", {
   expect_equal(icd_short_to_parts.icd9(c("99999", "0011")),
                data.frame(major = c("999", "001"), minor = c("99", "1"), stringsAsFactors = FALSE))
 })
+
+
+context("icd10 conversions")
+
+test_that("decimal ICD-10 to parts", {
+  expect_identical(
+    icd_decimal_to_parts("A00.0"),
+    list(major = "A00", minor = "0")
+  )
+  expect_identical(
+    icd_decimal_to_parts("C7A.020"),
+    list(major = "C7A", minor = "020")
+  )
+})
+

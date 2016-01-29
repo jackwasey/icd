@@ -221,7 +221,7 @@ icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
 }
 
 # Test whether a character vector of ICD vodes is
-#'   valid, guessing both type and version of the ICD codes
+#   valid, guessing both type and version of the ICD codes
 #
 # Can't roxygen because of UseMethod bug therein
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x),

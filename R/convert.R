@@ -353,19 +353,21 @@ icd_decimal_to_short.default <- function(x) {
 }
 
 #' Convert decimal ICD codes to component parts
-#'
+#' @export
 #' @keywords internal
 icd_decimal_to_parts <- function(x, empty_minor = "") {
   UseMethod("icd_decimal_to_parts")
 }
 
 #' Convert short format ICD codes to component parts
+#' @export
 #' @keywords internal
 icd_short_to_parts <- function(x, empty_minor = "") {
   UseMethod("icd_short_to_parts")
 }
 
 #' @describeIn icd_short_to_parts Convert short format ICD-9 code to parts
+#' @export
 #' @keywords internal manip
 icd_short_to_parts.icd9 <- function(x, minor_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a shim here.
@@ -373,12 +375,28 @@ icd_short_to_parts.icd9 <- function(x, minor_empty = "") {
 }
 
 #' @describeIn icd_decimal_to_parts Convert decimal ICD-9 code to parts
+#' @export
 #' @keywords internal manip
 icd_decimal_to_parts.icd9 <- function(x, minor_empty = "") {
   .Call("icd9_icd9DecimalToPartsCpp", PACKAGE = get_pkg_name(), x, minor_empty)
 }
 
+#' @describeIn icd_short_to_parts Convert short format ICD-10 code to parts
+#' @export
+#' @keywords internal manip
+icd_short_to_parts.icd10 <- function(x, minor_empty = "") {
+  icd_short_to_parts.icd9(x, minor_empty)
+}
+
+#' @describeIn icd_decimal_to_parts Convert decimal ICD-9 code to parts
+#' @export
+#' @keywords internal manip
+icd_decimal_to_parts.icd10 <- function(x, minor_empty = "") {
+  icd_decimal_to_parts.icd9(x, minor_empty)
+}
+
 #' @describeIn icd_short_to_parts Convert short format ICD code to parts, assuming ICD-9 from character class. TODO: test this works for ICD-10
+#' @export
 #' @keywords internal manip
 icd_short_to_parts.character <- function(x, minor_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a shim here.
@@ -386,6 +404,7 @@ icd_short_to_parts.character <- function(x, minor_empty = "") {
 }
 
 #' @describeIn icd_short_to_parts Convert decimal ICD code to parts, assuming ICD-9 from character class. TODO: test this works for ICD-10
+#' @export
 #' @keywords internal manip
 icd_decimal_to_parts.character <- function(x, minor_empty = "") {
   .Call("icd9_icd9DecimalToPartsCpp", PACKAGE = get_pkg_name(), x, minor_empty)
