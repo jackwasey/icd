@@ -167,7 +167,8 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     file_name = "icd10cm_order_2016.txt")
 
   x <- readLines(con = f_info$file_path)
-  icd10cm2016 <- data.frame(#id = substr(x, 1, 5),
+  icd10cm2016 <- data.frame(
+#id = substr(x, 1, 5),
     code = substr(x, 7, 13),
     billable = substr(x, 14, 15),
     descShort = substr(x, 16, 76),
@@ -191,6 +192,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
         all.x = TRUE) %>%
     magrittr::extract2(2) %>% as.factor ->
     icd10cm2016[["major"]]
+  #stop(paste(head(levels(icd10cm2016$major)), " - ", head(icd10cm2016$major)))
 
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because

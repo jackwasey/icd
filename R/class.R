@@ -134,6 +134,7 @@ icd_check_class_conflict <- function(x) {
 #' class (/code{icd9}) is also set.
 #'
 #' @param x object to set class \code{icd9}
+#' @param warn single logical value, if \code{TRUE} will gives warning when converting between types. ICD-9 to ICD-10 will cause an error regardless.
 #' @export
 icd9 <- function(x) {
   if (missing(x)) x <- character()

@@ -4,12 +4,15 @@
 \alias{icd_decimal_to_parts.character}
 \alias{icd_short_to_parts}
 \alias{icd_short_to_parts.character}
+\alias{icd_short_to_parts.icd10}
 \alias{icd_short_to_parts.icd9}
 \title{Convert short format ICD codes to component parts}
 \usage{
 icd_short_to_parts(x, empty_minor = "")
 
 \method{icd_short_to_parts}{icd9}(x, minor_empty = "")
+
+\method{icd_short_to_parts}{icd10}(x, minor_empty = "")
 
 \method{icd_short_to_parts}{character}(x, minor_empty = "")
 
@@ -21,6 +24,8 @@ Convert short format ICD codes to component parts
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd9}: Convert short format ICD-9 code to parts
+
+\item \code{icd10}: Convert short format ICD-10 code to parts
 
 \item \code{character}: Convert short format ICD code to parts, assuming ICD-9 from character class. TODO: test this works for ICD-10
 

@@ -35,6 +35,8 @@ icd_comorbidity_map(x)
 }
 \arguments{
 \item{x}{object to set class \code{icd9}}
+
+\item{warn}{single logical value, if \code{TRUE} will gives warning when converting between types. ICD-9 to ICD-10 will cause an error regardless.}
 }
 \description{
 Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
