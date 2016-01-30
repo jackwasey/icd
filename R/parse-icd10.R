@@ -116,11 +116,14 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
     file_name = "icd10cm_order_2016.txt")
 
+  # readLines may muck up encoding, resulting in weird factor order generation later?
   x <- readLines(con = f_info$file_path)
 
   # str_trim may do some encoding tricks which result in different factor order
   # on different platforms. Seems to affect "major" which comes from "descShort":
-  descShort = trimws(substr(x, 16, 76))
+  descShort <- trimws(substr(x, 16, 76))
+  descShort_my_trim <- trim(substr(x, 16, 76))
+  descShort_str_trim <- str_trim(substr(x, 16, 76))
   stopifnot(identical(descShort,
                       trim(substr(x, 16, 76))))
   stopifnot(identical(as.factor(descShort),
@@ -137,10 +140,6 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     billable = str_trim(substr(x, 14, 15)) == "1",
     descShort = descShort,
     descLong = str_trim(substr(x, 77, stop = 1e5)),
-    threedigit = NA, # this and onwards will be factors
-    major = NA,
-    subchapter = NA,
-    chapter = NA,
     stringsAsFactors = FALSE
   )
 
@@ -148,12 +147,28 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   icd10cm2016[["code"]] %>% icd_get_major %>% as.factor -> icd10cm2016[["threedigit"]]
 
   # get description for the major type from the descShort field
+  major_merge_y <- cbind(icd10cm2016["code"], descShort = icd10cm2016[["descShort"]])
+  # implicit strings as factors in the cbind, so the rest should work consistently.
   merge(x = icd10cm2016["threedigit"],
-        y = icd10cm2016[c("code", "descShort")],
+        y = major_merge_y,
         by.x = "threedigit", by.y = "code",
         all.x = TRUE) %>%
-    magrittr::extract2(2) %>% as.factor ->
-    icd10cm2016[["major"]]
+    magrittr::extract2(2) -> icd10cm2016[["major"]]
+
+  merge(x = icd10cm2016["threedigit"],
+        y = cbind(icd10cm2016["code"], descShort_my_trim, stringsAsFactors = FALSE),
+        by.x = "threedigit", by.y = "code",
+        all.x = TRUE) %>%
+    magrittr::extract2(2) -> debug_major_my_trim
+
+  merge(x = icd10cm2016["threedigit"],
+        y = cbind(icd10cm2016["code"], descShort_str_trim, stringsAsFactors = FALSE),
+        by.x = "threedigit", by.y = "code",
+        all.x = TRUE) %>%
+    magrittr::extract2(2) -> debug_major_str_trim
+
+  #stopifnot(identical(icd10cm2016[["major"]], debug_major_my_trim))
+  #stopifnot(identical(icd10cm2016[["major"]], debug_major_str_trim))
   #stop(paste(head(levels(icd10cm2016$major)), " - ", head(icd10cm2016$major)))
 
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
@@ -189,10 +204,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
         all.x = TRUE) %>%
     magrittr::extract2("sc_desc") -> icd10cm2016[["subchapter"]]
 
-
   # now the same for chapters:
-
-  # generate lookup for sub-chapter
   chap_lookup <- data.frame(major = NULL, desc = NULL)
   for (chap_n in names(icd9::icd10_chapters)) {
 
