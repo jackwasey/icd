@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -87,7 +87,7 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
 }
 
 # this is just lazy package data, but apparently need to declare it to keep CRAN
-# happy. May not be needed if doing icd:: 
+# happy. May not be needed if doing icd::
 # utils::globalVariables("icd10cm2016")
 
 #' defined children of ICD codes

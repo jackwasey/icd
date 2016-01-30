@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -59,7 +59,6 @@ test_that("deprecated - expand icd9 range definition", {
 
   expect_equal(icd9ExpandRangeShort(" 4280 ", " 4280 ", onlyReal = FALSE),
                icd9ExpandRangeShort("4280", "4280", onlyReal = FALSE))
-
 
   # the range 44100-4419 from the AHRQ found a gap in the code.
   expect_equal_no_icd(

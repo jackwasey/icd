@@ -2,6 +2,50 @@
 
 #nocov start
 
+#' Get ICD-10 (not ICD-10-CM) as published by CDC
+#'
+#' @details There is no copyright notice, and, as I understand it, by default US
+#'   government publications are public domain
+#'   ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/ and thus
+#'   this or derivative data can be included in the package distribution
+#' @keywords internal
+icd10_get_who_from_cdc <- function() {
+  # beware, not all download.file methods can handle %20 etc in URLs correctly.
+  url <- "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/allvalid2011%20%28detailed%20titles%20headings%29.txt"
+  file_path <- download_to_data_raw(url = url)$file_path
+
+  # typically, the file isn't easily machine readable with stupidly placed
+  # annotations, e.g. "Added in 2009	A09.9	Gastroenteritis and colitis of
+  # unspecified origin" I've no idea what those people are thinking when they do
+  # this kind of thing.
+
+  # ignore locale issue right now. This set has a lot of the different cases: dat[70:75,]
+  readr::read_lines(file_path, skip = 7) %>%
+    str_trim() %>%
+    str_match("(.*\\t)?(.+)\\t+(.+)") -> dat
+
+  code_or_range <- dat[, 3]
+  desc <- dat[, 4]
+
+  # this data set does not explicitly say which codes are leaves or parents.
+  is_range <- str_detect(code_or_range, "-")
+  # this is a mix of chapters and sub-chapters, and would require processing to
+  # figure out which
+
+  codes <- dat[!is_range, 3]
+  codes_desc <- dat[!is_range, 4]
+
+  class(codes) <- c("icd10who", "icd10", "character")
+  # do some sanity checks:
+  stopifnot(all(icd_is_valid(codes)))
+
+  #> codes[!icd_is_valid(codes)]
+  #[1] "*U01"   "*U01.0" "*U01.1" "*U01.2" "*U01.3" "*U01.4" "*U01.5" "*U01.6" "*U01.7" "*U01.8" "*U01.9" "*U02"   "*U03"   "*U03.0"
+  #[15] "*U03.9" NA
+
+  stop("work in progress", codes_desc, desc)
+}
+
 #' scrape WHO web site for ICD-10 codes
 #'
 #' javascript only (at least in recent years), so can't just get the HTML.

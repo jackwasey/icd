@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+utils::globalVariables("icd10cm2016")
+
 #' @title Check whether ICD-9 codes exist
 #' @description This is different from syntactic validity: it looks it up in the
 #'   canonical list of ICD-9 codes published by the CMS, and which are included

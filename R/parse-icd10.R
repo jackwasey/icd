@@ -15,12 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-# try parsing the RTF, and therefore get subheadings, as well as billable codes.
-# ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/
-#
-# see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
-# approach in python
-
 icd10cm_xml_node_to_val <- function(x, name) {
   xml2::xml_text(x[xml2::xml_name(x) == name])
 }
@@ -107,50 +101,6 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   invisible(icd10_sub_chapters)
 }
 
-#' Get ICD-10 (not ICD-10-CM) as published by CDC
-#'
-#' @details There is no copyright notice, and, as I understand it, by default US
-#'   government publications are public domain
-#'   ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/ and thus
-#'   this or derivative data can be included in the package distribution
-#' @keywords internal
-icd10_get_who_from_cdc <- function() {
-  # beware, not all download.file methods can handle %20 etc in URLs correctly.
-  url <- "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/allvalid2011%20%28detailed%20titles%20headings%29.txt"
-  file_path <- download_to_data_raw(url = url)$file_path
-
-  # typically, the file isn't easily machine readable with stupidly placed
-  # annotations, e.g. "Added in 2009	A09.9	Gastroenteritis and colitis of
-  # unspecified origin" I've no idea what those people are thinking when they do
-  # this kind of thing.
-
-  # ignore locale issue right now. This set has a lot of the different cases: dat[70:75,]
-  readr::read_lines(file_path, skip = 7) %>%
-    str_trim() %>%
-    str_match("(.*\\t)?(.+)\\t+(.+)") -> dat
-
-  code_or_range <- dat[, 3]
-  desc <- dat[, 4]
-
-  # this data set does not explicitly say which codes are leaves or parents.
-  is_range <- str_detect(code_or_range, "-")
-  # this is a mix of chapters and sub-chapters, and would require processing to
-  # figure out which
-
-  codes <- dat[!is_range, 3]
-  codes_desc <- dat[!is_range, 4]
-
-  class(codes) <- c("icd10who", "icd10", "character")
-  # do some sanity checks:
-  stopifnot(all(icd_is_valid(codes)))
-
-  #> codes[!icd_is_valid(codes)]
-  #[1] "*U01"   "*U01.0" "*U01.1" "*U01.2" "*U01.3" "*U01.4" "*U01.5" "*U01.6" "*U01.7" "*U01.8" "*U01.9" "*U02"   "*U03"   "*U03.0"
-  #[15] "*U03.9" NA
-
-  stop("work in progress", codes_desc, desc)
-}
-
 #' get all ICD-10-CM codes
 #'
 #' gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
@@ -167,11 +117,25 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     file_name = "icd10cm_order_2016.txt")
 
   x <- readLines(con = f_info$file_path)
+
+  # str_trim may do some encoding tricks which result in different factor order
+  # on different platforms. Seems to affect "major" which comes from "descShort":
+  descShort = trimws(substr(x, 16, 76))
+  stopifnot(identical(descShort,
+                      trim(substr(x, 16, 76))))
+  stopifnot(identical(as.factor(descShort),
+                      as.factor(trim(substr(x, 16, 76)))))
+  stopifnot(identical(str_trim(substr(x, 16, 76)),
+                      trim(substr(x, 16, 76))))
+  stopifnot(identical(as.factor(str_trim(substr(x, 16, 76))),
+                      as.factor(trim(substr(x, 16, 76)))))
+
+
   icd10cm2016 <- data.frame(
-#id = substr(x, 1, 5),
+    #id = substr(x, 1, 5),
     code = str_trim(substr(x, 7, 13)),
     billable = str_trim(substr(x, 14, 15)) == "1",
-    descShort = str_trim(substr(x, 16, 76)),
+    descShort = descShort,
     descLong = str_trim(substr(x, 77, stop = 1e5)),
     threedigit = NA, # this and onwards will be factors
     major = NA,
@@ -183,7 +147,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   icd10cm2016[["code"]] %<>% icd10cm %>% icd_short_code
   icd10cm2016[["code"]] %>% icd_get_major %>% as.factor -> icd10cm2016[["threedigit"]]
 
-  # get description for the major type
+  # get description for the major type from the descShort field
   merge(x = icd10cm2016["threedigit"],
         y = icd10cm2016[c("code", "descShort")],
         by.x = "threedigit", by.y = "code",
@@ -263,8 +227,9 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     save_in_data_dir(icd10cm2016)
   invisible(icd10cm2016)
 
-  # now some test code to see what permutations there are of ICD-10 codes based
-  # on the 2016 CM set.
+  #now some development code to see what permutations there are of ICD-10 codes
+  #based on the 2016 CM set.
+
   #i10 <- icd10cm2016$code
 
   #alpha_in_tail <- grep("[[:alpha:]]", i10tail, value = TRUE)

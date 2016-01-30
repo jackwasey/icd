@@ -18,6 +18,9 @@
 library("icd9")
 library("testthat")
 
+message("lib paths are as follows:")
+print(.libPaths())
+
 # to run all tests:
 if (FALSE) {
   print(options("icd9.do_slow_tests"))
