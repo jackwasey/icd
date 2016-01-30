@@ -121,24 +121,13 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   # str_trim may do some encoding tricks which result in different factor order
   # on different platforms. Seems to affect "major" which comes from "descShort":
-  descShort <- trimws(substr(x, 16, 76))
-  descShort_my_trim <- trim(substr(x, 16, 76))
-  descShort_str_trim <- str_trim(substr(x, 16, 76))
-  stopifnot(identical(descShort,
-                      trim(substr(x, 16, 76))))
-  stopifnot(identical(as.factor(descShort),
-                      as.factor(trim(substr(x, 16, 76)))))
-  stopifnot(identical(str_trim(substr(x, 16, 76)),
-                      trim(substr(x, 16, 76))))
-  stopifnot(identical(as.factor(str_trim(substr(x, 16, 76))),
-                      as.factor(trim(substr(x, 16, 76)))))
-
+  # descShort <- trimws(substr(x, 16, 76))
 
   icd10cm2016 <- data.frame(
     #id = substr(x, 1, 5),
     code = str_trim(substr(x, 7, 13)),
     billable = str_trim(substr(x, 14, 15)) == "1",
-    descShort = descShort,
+    descShort = str_trim(substr(x, 16, 76)),
     descLong = str_trim(substr(x, 77, stop = 1e5)),
     stringsAsFactors = FALSE
   )
@@ -155,22 +144,6 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
         all.x = TRUE) %>%
     magrittr::extract2(2) -> icd10cm2016[["major"]]
 
-  merge(x = icd10cm2016["threedigit"],
-        y = cbind(icd10cm2016["code"], descShort_my_trim, stringsAsFactors = FALSE),
-        by.x = "threedigit", by.y = "code",
-        all.x = TRUE) %>%
-    magrittr::extract2(2) -> debug_major_my_trim
-
-  merge(x = icd10cm2016["threedigit"],
-        y = cbind(icd10cm2016["code"], descShort_str_trim, stringsAsFactors = FALSE),
-        by.x = "threedigit", by.y = "code",
-        all.x = TRUE) %>%
-    magrittr::extract2(2) -> debug_major_str_trim
-
-  #stopifnot(identical(icd10cm2016[["major"]], debug_major_my_trim))
-  #stopifnot(identical(icd10cm2016[["major"]], debug_major_str_trim))
-  #stop(paste(head(levels(icd10cm2016$major)), " - ", head(icd10cm2016$major)))
-
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because
   # there are some non-numeric characters scattered around)
@@ -179,13 +152,9 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   # generate lookup for sub-chapter
   sc_lookup <- data.frame(major = NULL, desc = NULL)
   for (scn in names(icd9::icd10_sub_chapters)) {
-
     sc <- icd9::icd10_sub_chapters[[scn]]
     si <- grep(sc["start"], lk_majors)
     se <- grep(sc["end"], lk_majors)
-
-    # message("start = ", sc["start"], ", end = ", sc[["end"]], ",
-    #   si = ", si, ", se = ", se)
     sc_majors <- lk_majors[si:se]
     sc_lookup <- rbind(sc_lookup,
                        data.frame(sc_major = sc_majors, sc_desc = scn)
@@ -237,24 +206,25 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   if (save_data)
     save_in_data_dir(icd10cm2016)
+
   invisible(icd10cm2016)
-
-  #now some development code to see what permutations there are of ICD-10 codes
-  #based on the 2016 CM set.
-
-  #i10 <- icd10cm2016$code
-
-  #alpha_in_tail <- grep("[[:alpha:]]", i10tail, value = TRUE)
-  #alpha_in_tail_bool <- grepl("[[:alpha:]].*[[:alpha:]].*", x = i10)
-  #alpha_in_tail <- i10[alpha_in_tail_bool]
-  #unique(gsub("[[:digit:]]", replacement = "", x = alpha_in_tail))
-
-  # verify, e.g. J in middle?
-  #grep("[[:alpha::]].*J.*", i10)
-
-  # find unique characters at each position from 4 to 7
-  # for (i in 1:7)
-  #   message(i)
-  #   substring(alpha_in_tail, i, i) %>% unique %>% sort %>% message
-  # }
 }
+
+#now some development code to see what permutations there are of ICD-10 codes
+#based on the 2016 CM set.
+
+#i10 <- icd10cm2016$code
+
+#alpha_in_tail <- grep("[[:alpha:]]", i10tail, value = TRUE)
+#alpha_in_tail_bool <- grepl("[[:alpha:]].*[[:alpha:]].*", x = i10)
+#alpha_in_tail <- i10[alpha_in_tail_bool]
+#unique(gsub("[[:digit:]]", replacement = "", x = alpha_in_tail))
+
+# verify, e.g. J in middle?
+#grep("[[:alpha::]].*J.*", i10)
+
+# find unique characters at each position from 4 to 7
+# for (i in 1:7)
+#   message(i)
+#   substring(alpha_in_tail, i, i) %>% unique %>% sort %>% message
+# }

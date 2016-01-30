@@ -55,6 +55,6 @@ if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
 # disable warning, as many deprecated tests do warn, but testthat::expect_warning still works.
 old_warn <- options(warn = -1)
 on.exit(options(old_warn))
-# TODO: remove filter!
-test_check("icd9", filter = "parse-icd10")
+
+test_check("icd9")
 

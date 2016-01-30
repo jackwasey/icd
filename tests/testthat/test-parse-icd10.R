@@ -22,34 +22,32 @@ test_that("icd10 WHO recreated exactly", {
   icd10_get_who_from_cdc()
 })
 
-
 context("icd10 fixed width parse")
 
-test_that("icd10 2016 recreated exactly", {
-
-  res <- icd10cm_get_all_defined(save_data = FALSE)
-
-
+test_that("icd10 2016 flat file details are okay", {
   # check cols at a time, so I get better error feedback:
   col_names <- c("code", "billable", "descShort", "descLong", "threedigit",
               "major", "subchapter", "chapter")
+  expect_warning(res <- icd10cm_get_all_defined(save_data = FALSE), NA)
   expect_identical(colnames(res), col_names)
+
   checkmate::expect_character(res$code, any.missing = FALSE)
   checkmate::expect_logical(res$billable, any.missing = FALSE)
   checkmate::expect_character(res$descShort, any.missing = FALSE)
   checkmate::expect_character(res$descLong, any.missing = FALSE)
-  for (n in col_names) {
-    expect_identical(res[[n]], icd10cm2016[[n]], info = paste("working on ", n))
-    if (n %in% c("threedigit", "major", "subchapter", "chapter")) {
-      checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
-      expect_identical(levels(res[[n]]), levels(icd10cm2016[[n]]))
-    }
-  }
 
-  expect_identical(
-    icd10cm_get_all_defined(save_data = FALSE),
-    icd10cm2016
-  )
+  checkmate::expect_character(icd9::icd10cm2016$code, any.missing = FALSE)
+  checkmate::expect_logical(icd9::icd10cm2016$billable, any.missing = FALSE)
+  checkmate::expect_character(icd9::icd10cm2016$descShort, any.missing = FALSE)
+  checkmate::expect_character(icd9::icd10cm2016$descLong, any.missing = FALSE)
+
+  for (n in c("threedigit", "major", "subchapter", "chapter")) {
+      #checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
+      #checkmate::expect_factor(icd9::icd10cm2016[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
+      expect_identical(levels(res[[n]]), levels(icd9::icd10cm2016[[n]]))
+      expect_identical(res[[n]], icd9::icd10cm2016[[n]], info = paste("working on ", n))
+  }
+  expect_identical(res, icd9::icd10cm2016)
 })
 
 context("icd10 XML parse")
