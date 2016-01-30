@@ -28,12 +28,22 @@ context("icd10 fixed width parse")
 test_that("icd10 2016 recreated exactly", {
 
   res <- icd10cm_get_all_defined(save_data = FALSE)
+
+
   # check cols at a time, so I get better error feedback:
-  for (n in c("code", "billable", "descShort", "descLong", "threedigit",
-              "major", "subchapter", "chapter")) {
+  col_names <- c("code", "billable", "descShort", "descLong", "threedigit",
+              "major", "subchapter", "chapter")
+  expect_identical(colnames(res), col_names)
+  checkmate::expect_character(res$code, any.missing = FALSE)
+  checkmate::expect_logical(res$billable, any.missing = FALSE)
+  checkmate::expect_character(res$descShort, any.missing = FALSE)
+  checkmate::expect_character(res$descLong, any.missing = FALSE)
+  for (n in col_names) {
     expect_identical(res[[n]], icd10cm2016[[n]], info = paste("working on ", n))
-    if (is.factor(res[[n]]))
+    if (n %in% c("threedigit", "major", "subchapter", "chapter")) {
+      checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
       expect_identical(levels(res[[n]]), levels(icd10cm2016[[n]]))
+    }
   }
 
   expect_identical(
@@ -73,11 +83,22 @@ test_that("icd10 sub_chapters were parsed correctly", {
     "Other human herpesviruses", "B10", "B10")
 })
 
+test_that("ICD-10 chapters and subchapters are distinct", {
+  # and for good measure, make sure that sub-chapters and chapters are not
+  # confused. This was really just a problem with RTF parsing for ICD-9, but
+  # there are possible similiar problems with some of the XML hierarchy.
+
+  for (chap in names(icd9::icd10_chapters))
+    expect_icd10_only_chap(chap)
+
+  for (subchap in names(icd9::icd10_sub_chapters))
+    expect_icd10_only_sub_chap(subchap)
+})
+
 test_that("Y09 got picked up in sub-chapter parsing", {
   # this is actually an error in the 2016 CMS XML which declares a range for
   # Assult from X92-Y08, but has a hanging definition for Y09 with no enclosing
   # chapter. Will have to manually correct for this until fixed.
   expect_icd10_sub_chap_equal("Assault", "X92", "Y09")
-
 })
 

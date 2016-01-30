@@ -27,6 +27,7 @@ inst\/standalone\/.*
 Makevars$
 man-roxygen
 ^NEWS\.md$
+parse-icd10-who\.R
 ^README-*\.png$
 ^README\.Rmd$
 ^.*\.RProf.*$

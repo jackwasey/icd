@@ -169,25 +169,23 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   x <- readLines(con = f_info$file_path)
   icd10cm2016 <- data.frame(
 #id = substr(x, 1, 5),
-    code = substr(x, 7, 13),
-    billable = substr(x, 14, 15),
-    descShort = substr(x, 16, 76),
-    descLong = substr(x, 77, stop = 1e5),
-    threedigit = NA,
+    code = str_trim(substr(x, 7, 13)),
+    billable = str_trim(substr(x, 14, 15)) == "1",
+    descShort = str_trim(substr(x, 16, 76)),
+    descLong = str_trim(substr(x, 77, stop = 1e5)),
+    threedigit = NA, # this and onwards will be factors
     major = NA,
     subchapter = NA,
     chapter = NA,
     stringsAsFactors = FALSE
   )
 
-  icd10cm2016 <- as.data.frame(lapply(icd10cm2016, str_trim),
-                               stringsAsFactors = FALSE)
   icd10cm2016[["code"]] %<>% icd10cm %>% icd_short_code
-  icd10cm2016[["code"]] %>% icd_get_major -> icd10cm2016[["threedigit"]]
+  icd10cm2016[["code"]] %>% icd_get_major %>% as.factor -> icd10cm2016[["threedigit"]]
 
   # get description for the major type
-  merge(icd10cm2016["threedigit"],
-        icd10cm2016[c("code", "descShort")],
+  merge(x = icd10cm2016["threedigit"],
+        y = icd10cm2016[c("code", "descShort")],
         by.x = "threedigit", by.y = "code",
         all.x = TRUE) %>%
     magrittr::extract2(2) %>% as.factor ->
@@ -222,8 +220,9 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     stop("should not have duplicates. check subchapter definitions")
   }
 
-  merge(icd10cm2016["threedigit"], sc_lookup,
-        by.x = "threedigit", by.y = "sc_major", all.x = TRUE) %>%
+  merge(x = icd10cm2016["threedigit"], y = sc_lookup,
+        by.x = "threedigit", by.y = "sc_major",
+        all.x = TRUE) %>%
     magrittr::extract2("sc_desc") -> icd10cm2016[["subchapter"]]
 
 
