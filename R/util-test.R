@@ -15,6 +15,58 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+skip_slow_tests <- function(msg = "skipping slow test") {
+  do_slow_tests <- getOption("icd9.do_slow_tests")
+  if (is.null(do_slow_tests) || !do_slow_tests)
+    testthat::skip(msg)
+}
+
+skip_online_tests <- function(msg = "skipping online test") {
+  do_online_tests <- getOption("icd9.do_online_tests")
+  if (is.null(do_online_tests) || !do_online_tests)
+    testthat::skip(msg)
+}
+
+skip_on_no_rtf <- function(test_year) {
+  if (!rtf_year_ok(test_year))
+    skip_online_tests(paste(test_year,
+                            "ICD-9-CM codes unavailable offline for testsing"))
+}
+
+skip_flat_icd9_avail <- function(
+  ver = "31",
+  msg = paste("skipping test because flat file ICD-9-CM sources not available for version: ", ver)) {
+  dat <- icd9_sources[icd9_sources$version == ver, ]
+  fn_orig <- dat$short_filename
+  if (is.na(fn_orig))
+    fn_orig <- dat$other_filename
+
+  # don't try to download the file, just check it is there:
+  f_info_short <- unzip_to_data_raw(dat$url,
+                                    file_name = fn_orig,
+                                    offline = TRUE)
+  if (is.null(f_info_short))
+    skip_online_tests(msg)
+
+}
+
+skip_icd10cm_flat_avail <- function(msg = "skipping test because flat file ICD-10-CM source not available") {
+  f_info <- icd10cm_get_flat_file()
+  if (is.null(f_info))
+    skip_online_tests(msg)
+}
+
+skip_icd10cm_xml_avail <- function(msg = "skipping test because XML file ICD-10-CM source not available") {
+  f_info <- icd10cm_get_flat_file()
+  if (is.null(f_info))
+    skip_online_tests(msg)
+}
+
+skip_flat_icd9_avail_all <- function() {
+  for (v in icd9_sources$version)
+    skip_flat_icd9_avail(ver = v)
+}
+
 #' expect equal, ignoring any ICD classes
 #' @keywords internal
 expect_equal_no_icd <- function(object, expected, ..., info = NULL,
@@ -36,13 +88,12 @@ expect_equal_no_icd <- function(object, expected, ..., info = NULL,
 #' @keywords internal
 expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
   x <- tolower(x)
-  lower_case_names <- tolower(names(ver_chaps))
-  res <- eval(bquote(testthat::expect_true(.(x) %in% lower_case_names, ...)))
+  res <- eval(bquote(testthat::expect_true(.(x) %in% tolower(names(ver_chaps)), ...)))
   if (!res$passed)
     return(res)
 
-  t_i <- which(lower_case_names == x)
-  eval(bquote(testthat::expect_equal(.(ver_chaps[[t_i]]), c(start = .(start), end = .(end)), ...)))
+  eval(bquote(testthat::expect_equal(.(ver_chaps[[which(tolower(names(ver_chaps)) == x)]]),
+                                     c(start = .(start), end = .(end)), ...)))
 }
 
 #' @rdname expect_chap_equal
@@ -198,3 +249,46 @@ icd_classes_are_ordered <- function() {
                           "are not well ordered", "are well ordered")
   }
 }
+
+getSlowestTests <- function(n = 5) {
+  res <- testthat::test_dir(file.path(".", "tests", "testthat"),
+                            reporter = testthat::ListReporter())
+  print(tail(res[order(res$real), "test"], n = n))
+}
+
+generate_random_pts <- function(...)
+  randomOrderedPatients(...)
+
+randomOrderedPatients <- function(...) {
+  x <- randomUnorderedPatients(...)
+  x[order(x$visitId), ]
+}
+
+randomUnorderedPatients <- function(num_patients = 50000, dz_per_patient = 20,
+                                    n = num_patients, np = dz_per_patient) {
+  set.seed(1441)
+  pts <- round(n / np)
+  data.frame(
+    visitId = sample(seq(1, pts), replace = TRUE, size = n),
+    icd9 = c(randomShortIcd9(round(n / 2)), randomShortAhrq(n - round(n / 2))),
+    poa = as.factor(
+      sample(x = c("Y","N", "n", "n", "y", "X", "E", "", NA),
+             replace = TRUE, size = n)),
+    stringsAsFactors = FALSE
+  )
+}
+
+#' generate random short icd9 codes
+#' @keywords internal
+randomShortIcd9 <- function(n = 50000)
+  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
+
+randomShortAhrq <- function(n = 50000)
+  sample(unname(unlist(icd9::ahrqComorbid)), size = n, replace = TRUE)
+
+randomDecimalIcd9 <- function(n = 50000)
+  paste(
+    round(stats::runif(min = 1, max = 999, n = n)),
+    sample(icd9ExpandMinor(""), replace = TRUE, size = n),
+    sep = "."
+  )

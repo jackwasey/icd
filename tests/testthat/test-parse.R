@@ -152,6 +152,7 @@ test_that("all leaf codes from TXT are in flat file extract", {
   skip_slow_tests()
   test_ver = "32"
   skip_flat_icd9_avail(test_ver)
+  skip_on_no_rtf(test_year)
 
   v32 <- parse_leaf_descriptions_version(version = test_ver, save_data = FALSE, offline = FALSE)
   v32$icd9 %>% icd_short_to_decimal.icd9 -> leaves
@@ -194,6 +195,7 @@ test_that("in rtf we didn't incorrectly assign fifth (or fourth?) digit codes wh
 test_that("some rtf wierdness single codes should be missing", {
 # i think this is just because I look for all possible sub-codes while parsing;
 # I never matched these codes
+  skip_on_no_rtf(test_year)
   bad_ones <- c(
     paste0("010.", 2:7),
     paste0("854.", 2:7),

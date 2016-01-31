@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -16,49 +16,6 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 # nocov start
-
-getSlowestTests <- function(n = 5) {
-  res <- testthat::test_dir(file.path(".", "tests", "testthat"),
-                            reporter = testthat::ListReporter())
-  print(tail(res[order(res$real), "test"], n = n))
-}
-
-generate_random_pts <- function(...)
-  randomOrderedPatients(...)
-
-randomOrderedPatients <- function(...) {
-  x <- randomUnorderedPatients(...)
-  x[order(x$visitId), ]
-}
-
-randomUnorderedPatients <- function(num_patients = 50000, dz_per_patient = 20,
-                                    n = num_patients, np = dz_per_patient) {
-  set.seed(1441)
-  pts <- round(n / np)
-  data.frame(
-    visitId = sample(seq(1, pts), replace = TRUE, size = n),
-    icd9 = c(randomShortIcd9(round(n / 2)), randomShortAhrq(n - round(n / 2))),
-    poa = as.factor(
-      sample(x = c("Y","N", "n", "n", "y", "X", "E", "", NA),
-             replace = TRUE, size = n)),
-    stringsAsFactors = FALSE
-  )
-}
-
-#' generate random short icd9 codes
-#' @keywords internal
-randomShortIcd9 <- function(n = 50000)
-  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
-
-randomShortAhrq <- function(n = 50000)
-  sample(unname(unlist(icd9::ahrqComorbid)), size = n, replace = TRUE)
-
-randomDecimalIcd9 <- function(n = 50000)
-  paste(
-    round(stats::runif(min = 1, max = 999, n = n)),
-    sample(icd9ExpandMinor(""), replace = TRUE, size = n),
-    sep = "."
-  )
 
 runOpenMPVecInt <- function(n = 4, np = 2, threads = 6, chunkSize = 32) {
   icd9df <- generate_random_pts(n, np = np)
@@ -321,10 +278,10 @@ icd9Benchmark <- function() {
   ggplot2::ggsave("tmpggplot.jpg", width = 250, height = 5, dpi = 200, limitsize = FALSE)
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep = ""))))
+                                 icd9AddLeadingZeroesMajor(c(1 %i9mj% 999, paste("V", 1:9, sep = ""))))
 
   microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(major = c(1 %i9mj% 999, paste("V", 1:9, sep = ""))))
+                                 icd9AddLeadingZeroesMajor(c(1 %i9mj% 999, paste("V", 1:9, sep = ""))))
 
   #sprintf wins
   microbenchmark::microbenchmark(times = 500000, sprintf("%s%s", "410", "01"))

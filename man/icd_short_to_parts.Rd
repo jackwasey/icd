@@ -8,7 +8,7 @@
 \alias{icd_short_to_parts.icd9}
 \title{Convert short format ICD codes to component parts}
 \usage{
-icd_short_to_parts(x, empty_minor = "")
+icd_short_to_parts(x, minor_empty = "")
 
 \method{icd_short_to_parts}{icd9}(x, minor_empty = "")
 

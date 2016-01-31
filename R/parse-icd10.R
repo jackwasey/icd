@@ -15,6 +15,18 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+icd10cm_get_xml_file <- function() {
+  unzip_to_data_raw(
+    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP",
+    file_name = "Tabular.xml")
+}
+
+icd10cm_get_flat_file <- function() {
+  unzip_to_data_raw(
+    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
+    file_name = "icd10cm_order_2016.txt")
+}
+
 icd10cm_xml_node_to_val <- function(x, name) {
   xml2::xml_text(x[xml2::xml_name(x) == name])
 }
@@ -48,8 +60,7 @@ icd10cm_xml_node_to_pair <- function(x) {
 icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   assertFlag(save_data)
   loadNamespace("xml2")
-  url <- "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP"
-  f_info <- unzip_to_data_raw(url, "Tabular.xml")
+  f_info <- icd10cm_get_xml_file()
   j <- xml2::read_xml(f_info$file_path)
   #j  %>%  xml2::xml_find_all("//chapter/name")  %>%
   #  xml2::xml_text() -> chapter_nums
@@ -113,9 +124,7 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
 #' @keywords internal
 icd10cm_get_all_defined <- function(save_data = FALSE) {
 
-  f_info <- unzip_to_data_raw(
-    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
-    file_name = "icd10cm_order_2016.txt")
+  f_info <- icd10cm_get_flat_file()
 
   # readLines may muck up encoding, resulting in weird factor order generation later?
   x <- readLines(con = f_info$file_path, encoding = "ASCII")

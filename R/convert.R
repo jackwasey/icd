@@ -355,14 +355,14 @@ icd_decimal_to_short.default <- function(x) {
 #' Convert decimal ICD codes to component parts
 #' @export
 #' @keywords internal
-icd_decimal_to_parts <- function(x, empty_minor = "") {
+icd_decimal_to_parts <- function(x, minor_empty = "") {
   UseMethod("icd_decimal_to_parts")
 }
 
 #' Convert short format ICD codes to component parts
 #' @export
 #' @keywords internal
-icd_short_to_parts <- function(x, empty_minor = "") {
+icd_short_to_parts <- function(x, minor_empty = "") {
   UseMethod("icd_short_to_parts")
 }
 

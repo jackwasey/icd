@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+utils::globalVariables(".")
+
 # try parsing the RTF, and therefore get subheadings, as well as billable codes.
 # ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/
 #

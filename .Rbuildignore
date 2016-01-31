@@ -1,5 +1,6 @@
 aclocal.m4
 autom4te.cache
+.*benchmark.*
 .*_cache.*
 config.log
 config.status
@@ -15,6 +16,7 @@ cran-comments\.md$
 .git/.*
 data\/icd10_who.*
 data-raw\/icd10cdc.txt
+icd10_get_who_from_cdc
 icd9.aux
 icd9Billable[[:digit:]]+\.RData
 icd9cm_billable[[:digit:]]+\.RData
@@ -22,6 +24,7 @@ icd9.out
 icd9\.Rnw$
 icd.*tar\.gz
 inst\/standalone\/.*
+inst\/data-raw\/.*
 .lintr
 .*\.log$
 Makevars$
@@ -35,6 +38,7 @@ parse-icd10-who\.R
 ^.*\.rprof.*$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+scrape_icd10_who
 .settings
 src\/autom4te.cache
 .*standalone.*
