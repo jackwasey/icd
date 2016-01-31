@@ -51,14 +51,12 @@ skip_flat_icd9_avail <- function(
 }
 
 skip_icd10cm_flat_avail <- function(msg = "skipping test because flat file ICD-10-CM source not available") {
-  f_info <- icd10cm_get_flat_file()
-  if (is.null(f_info))
+  if (is.null(icd10cm_get_flat_file(offline = TRUE)))
     skip_online_tests(msg)
 }
 
 skip_icd10cm_xml_avail <- function(msg = "skipping test because XML file ICD-10-CM source not available") {
-  f_info <- icd10cm_get_flat_file()
-  if (is.null(f_info))
+  if (is.null(icd10cm_get_flat_file(offline = TRUE)))
     skip_online_tests(msg)
 }
 

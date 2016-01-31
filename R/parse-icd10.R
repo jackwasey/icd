@@ -15,16 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-icd10cm_get_xml_file <- function() {
+icd10cm_get_xml_file <- function(...) {
   unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP",
-    file_name = "Tabular.xml")
+    file_name = "Tabular.xml", ...)
 }
 
-icd10cm_get_flat_file <- function() {
+icd10cm_get_flat_file <- function(...) {
   unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
-    file_name = "icd10cm_order_2016.txt")
+    file_name = "icd10cm_order_2016.txt", ...)
 }
 
 icd10cm_xml_node_to_val <- function(x, name) {

@@ -78,6 +78,77 @@ icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE, path = NU
   invisible(icd9_map_elix)
 }
 
+icd10_geneate_map_elix <- function(save_data = FALSE) {
+  icd10_map_elix <- list(
+    chf = c('I099', 'I110', 'I130', 'I132', 'I255', 'I420', 'I425', 'I426', 'I427', 'I428', 'I429',
+            'I43', 'I50', 'P290'),
+    arrhythmia = c('I441', 'I442', 'I443', 'I456', 'I459', 'I47', 'I48', 'I49', 'R000', 'R001',
+                   'R008', 'T821', 'Z450', 'Z950'),
+    valve = c('A520', 'I05', 'I06', 'I07', 'I08', 'I091', 'I098', 'I34', 'I35', 'I36', 'I37', 'I38',
+              'I39', 'Q230', 'Q231', 'Q232', 'Q233', 'Z952', 'Z953', 'Z954'),
+    pulm.circ = c('I26', 'I27', 'I280', 'I288', 'I289'),
+    pvd = c('I70', 'I71', 'I731', 'I738', 'I739', 'I771', 'I790', 'I792', 'K551', 'K558', 'K559',
+            'Z958', 'Z959'),
+    htn = c('I10'),
+    htncx = c('I11', 'I12', 'I13', 'I15'),
+    paralysis = c('G041', 'G114', 'G801', 'G802', 'G81', 'G82', 'G830', 'G831', 'G832', 'G833',
+                  'G834', 'G839'),
+    neuro.other = c('G10', 'G11', 'G12', 'G13', 'G20', 'G21', 'G22', 'G254', 'G255', 'G312', 'G318',
+                    'G319', 'G32', 'G35', 'G36', 'G37', 'G40', 'G41', 'G931', 'G934', 'R470', 'R56'),
+    chronic.pulm = c('I278', 'I279', 'J40', 'J41', 'J42', 'J43', 'J44', 'J45', 'J46', 'J47', 'J60',
+                     'J61', 'J62', 'J63', 'J64', 'J65', 'J66', 'J67', 'J684', 'J701', 'J703'),
+    dm.uncomp = c('E100', 'E101', 'E109', 'E110', 'E111', 'E119', 'E120', 'E121', 'E129', 'E130',
+                  'E131', 'E139', 'E140', 'E141', 'E149'),
+    dm.comp = c('E102', 'E103', 'E104', 'E105', 'E106', 'E107', 'E108', 'E112', 'E113', 'E114',
+                'E115', 'E116', 'E117', 'E118', 'E122', 'E123', 'E124', 'E125', 'E126', 'E127',
+                'E128', 'E132', 'E133', 'E134', 'E135', 'E136', 'E137', 'E138', 'E142', 'E143',
+                'E144', 'E145', 'E146', 'E147', 'E148'),
+    hypothyroid = c('E00', 'E01', 'E02', 'E03', 'E890'),
+    renal = c('I120', 'I131', 'N18', 'N19', 'N250', 'Z490', 'Z491', 'Z492', 'Z940', 'Z992'),
+    liver = c('B18', 'I85', 'I864', 'I982', 'K70', 'K711', 'K713', 'K714', 'K715', 'K717', 'K72',
+              'K73', 'K74', 'K760', 'K762', 'K763', 'K764', 'K765', 'K766', 'K767', 'K768', 'K769',
+              'Z944'),
+    pud = c('K257', 'K259', 'K267', 'K269', 'K277', 'K279', 'K287', 'K289'),
+    hiv = c('B20', 'B21', 'B22', 'B24'),
+    lymphoma = c('C81', 'C82', 'C83', 'C84', 'C85', 'C88', 'C96', 'C900', 'C902'),
+    mets = c('C77', 'C78', 'C79', 'C80'),
+    solid.tumor = c('C00', 'C01', 'C02', 'C03', 'C04', 'C05', 'C06', 'C07', 'C08', 'C09', 'C10',
+                    'C11', 'C12', 'C13', 'C14', 'C15', 'C16', 'C17', 'C18', 'C19', 'C20', 'C21',
+                    'C22', 'C23', 'C24', 'C25', 'C26', 'C30', 'C31', 'C32', 'C33', 'C34', 'C37',
+                    'C38', 'C39', 'C40', 'C41', 'C43', 'C45', 'C46', 'C47', 'C48', 'C49', 'C50',
+                    'C51', 'C52', 'C53', 'C54', 'C55', 'C56', 'C57', 'C58', 'C60', 'C61', 'C62',
+                    'C63', 'C64', 'C65', 'C66', 'C67', 'C68', 'C69', 'C70', 'C71', 'C72', 'C73',
+                    'C74', 'C75', 'C76', 'C97'),
+    rheum = c('L940', 'L941', 'L943', 'M05', 'M06', 'M08', 'M120', 'M123', 'M30', 'M310', 'M311',
+              'M312', 'M313', 'M32', 'M33', 'M34', 'M35', 'M45', 'M461', 'M468', 'M469'),
+    coag = c('D65', 'D66', 'D67', 'D68', 'D691', 'D693', 'D694', 'D695', 'D696'),
+    obesity = c('E66'),
+    wt.loss = c('E40', 'E41', 'E42', 'E43', 'E44', 'E45', 'E46', 'R634', 'R64'),
+    lytes = c('E222', 'E86', 'E87'),
+    anemia.loss = c('D500'),
+    anemia.def = c('D508', 'D509', 'D51', 'D52', 'D53'),
+    etoh = c('F10', 'E52', 'G621', 'I426', 'K292', 'K700', 'K703', 'K709', 'T51', 'Z502', 'Z714',
+             'Z721'),
+    drugs = c('F11', 'F12', 'F13', 'F14', 'F15', 'F16', 'F18', 'F19', 'Z715', 'Z722'),
+    psychoses = c('F20', 'F22', 'F23', 'F24', 'F25', 'F28', 'F29', 'F302', 'F312', 'F315'),
+    depression = c('F204', 'F313', 'F314', 'F315', 'F32', 'F33', 'F341', 'F412', 'F432')
+  )
+
+  # TODO: either generate children (probably infeasible for ICD-10), or generate comorbid algorithm
+  # which matches against the listed parents
+
+  # icd10_map_elix <- lapply(
+  #   icd10_map_elix,
+  #   icd_children.icd10cm, short_code = TRUE, defined = FALSE)
+
+  names(icd10_map_elix) <- icd9::icd_names_elix_htn_abbrev
+  icd10_map_elix %<>% icd_short_code %>% icd10 %>% icd_comorbidity_map
+
+  if (save_data)
+    save_in_data_dir(icd10_map_elix)
+  invisible(icd10_map_elix)
+}
+
 #' @title Generate Quan's revised Elixhauser comorbidities
 #' @description Generate Quan's revised Elixhauser comorbidities, expanded out
 #'   to include all possible ICD-9 codes.

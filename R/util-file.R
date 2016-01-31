@@ -69,7 +69,7 @@ unzip_single <- function(url, file_name, save_path) {
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal
 unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
-  assertString(url)
+  assertString(url, na.ok = FALSE)
   assertString(file_name, na.ok = FALSE)
   assertFlag(offline)
 
