@@ -103,12 +103,13 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
 
 #' get all ICD-10-CM codes
 #'
-#' gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
-#' this just grabs 2016.
-#' @source
-#' \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
-#' @references
-#' https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
+#' Gets all ICD-10-CM codes from an archive on the CDC web site at Initially, this just grabs 2016.
+#'
+#' The factor generation uses \code{sort.default} which is locale dependent. This meant a lot of
+#' time debugging a problem when whitespace was ignored for sorting on some platforms, but not
+#' others (e.g. travis and wercker).
+#' @source \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
+#' @references https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
 icd10cm_get_all_defined <- function(save_data = FALSE) {
 
@@ -117,7 +118,8 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     file_name = "icd10cm_order_2016.txt")
 
   # readLines may muck up encoding, resulting in weird factor order generation later?
-  x <- readLines(con = f_info$file_path)
+  x <- readLines(con = f_info$file_path, encoding = "ASCII")
+  stopifnot(all(Encoding(x) == "unknown"))
 
   # str_trim may do some encoding tricks which result in different factor order
   # on different platforms. Seems to affect "major" which comes from "descShort":
@@ -133,16 +135,17 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   )
 
   icd10cm2016[["code"]] %<>% icd10cm %>% icd_short_code
-  icd10cm2016[["code"]] %>% icd_get_major %>% as.factor -> icd10cm2016[["threedigit"]]
+  icd10cm2016[["code"]] %>% icd_get_major %>% factor_nosort -> icd10cm2016[["threedigit"]]
 
-  # get description for the major type from the descShort field
-  major_merge_y <- cbind(icd10cm2016["code"], descShort = icd10cm2016[["descShort"]])
-  # implicit strings as factors in the cbind, so the rest should work consistently.
+  # here we must re-factor so we don't have un-used levels in major
   merge(x = icd10cm2016["threedigit"],
-        y = major_merge_y,
+        y = icd10cm2016[c("code", "descShort")],
         by.x = "threedigit", by.y = "code",
         all.x = TRUE) %>%
-    magrittr::extract2(2) -> icd10cm2016[["major"]]
+    magrittr::extract2("descShort") %>% factor_nosort -> icd10cm2016[["major"]]
+
+  #Encoding(mjr) <- "ASCII"
+  #mjr -> as.factor -> icd10cm2016[["major"]]
 
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because
@@ -163,7 +166,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   # due diligence:
   if (any(dupes <- duplicated(sc_lookup$sc_major))) {
-    message("duplicates found:")
+    message("duplicates found in sub-chapters:")
     print(unique(sc_lookup$sc_major[dupes]))
     stop("should not have duplicates. check subchapter definitions")
   }
@@ -195,7 +198,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   # due diligence:
   if (any(dupes <- duplicated(chap_lookup$chap_major))) {
-    message("duplicates found:")
+    message("duplicates found in chapters:")
     print(unique(chap_lookup$chap_major[dupes]))
     stop("should not have duplicates. check subchapter definitions")
   }

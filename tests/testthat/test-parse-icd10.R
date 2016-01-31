@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+test_icd10_most_majors <- outer(LETTERS, sprintf(0:99, fmt = "%02i"), paste0)
+
 context("icd10 WHO parse")
 
 test_that("icd10 WHO recreated exactly", {
@@ -44,7 +46,7 @@ test_that("icd10 2016 flat file details are okay", {
   for (n in c("threedigit", "major", "subchapter", "chapter")) {
       #checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
       #checkmate::expect_factor(icd9::icd10cm2016[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
-      expect_identical(levels(res[[n]]), levels(icd9::icd10cm2016[[n]]))
+      expect_identical(levels(res[[n]]), levels(icd9::icd10cm2016[[n]]), info = paste("working on ", n))
       expect_identical(res[[n]], icd9::icd10cm2016[[n]], info = paste("working on ", n))
   }
   expect_identical(res, icd9::icd10cm2016)
