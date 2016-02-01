@@ -54,6 +54,7 @@ icd_update_everything <- function() {
   parse_quan_deyo_sas(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
+  icd10_generate_map_elix(save_data = TRUE)
   devtools::load_data(pkg = ".") # reload the newly saved data
   icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
 

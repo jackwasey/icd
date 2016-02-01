@@ -78,6 +78,8 @@ icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE, path = NU
   invisible(icd9_map_elix)
 }
 
+#' @rdname icd9_generate_map_elix
+#' @keywords internal
 icd10_geneate_map_elix <- function(save_data = FALSE) {
   icd10_map_elix <- list(
     chf = c('I099', 'I110', 'I130', 'I132', 'I255', 'I420', 'I425', 'I426', 'I427', 'I428', 'I429',
