@@ -50,7 +50,7 @@ icd_update_everything <- function() {
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
                        Depends on icd9cm_hierarchy being updated.")
-  parse_ahrq_sas(save_data = TRUE)
+  icd9_parse_ahrq_sas(save_data = TRUE)
   parse_quan_deyo_sas(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)

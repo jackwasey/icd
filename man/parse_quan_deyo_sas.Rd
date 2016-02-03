@@ -22,20 +22,17 @@ invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.
 }
 \description{
-As with \code{parseAhrqSas}, this function reads SAS code, and
-  in, a very limited way, extracts definitions. In this case the code uses
-  LET statements, with strings or lists of strings. This saves and invisibly
-  returns a list with names corresponding to the comorbidities and values as
-  a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
-  \code{parse_ahrq_sas}, there are no ranges defined, so this interpretation is
-  simpler.
+As with \code{parseAhrqSas}, this function reads SAS code, and in, a very limited
+  way, extracts definitions. In this case the code uses LET statements, with strings or lists of
+  strings. This saves and invisibly returns a list with names corresponding to the comorbidities
+  and values as a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
+  \code{icd9_parse_ahrq_sas}, there are no ranges defined, so this interpretation is simpler.
 
-  With thanks to Dr. Quan, I have permission to distribute his SAS code.
-  Previously, the SAS code would be downloaded from the University of
-  Manitoba at
-  \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}.
-  There are structural differences between this version and the version
-  directly from Dr. Quan, however, the parsing results in identical data.
+  With thanks to Dr. Quan, I have permission to distribute his SAS code. Previously, the SAS code
+  would be downloaded from the University of Manitoba at
+  \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}. There are
+  structural differences between this version and the version directly from Dr. Quan, however,
+  the parsing results in identical data.
 }
 \keyword{internal}
 

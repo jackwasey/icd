@@ -130,8 +130,9 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
 #' @title Expand major codes to range
 #' @description Expand a pair of major codes into a range of major codes.
 #' @keywords internal
-icd_expand_range_major <- function(start, end)
+icd_expand_range_major <- function(start, end) {
   UseMethod("icd_expand_range_major")
+}
 
 #' @describeIn icd_expand_range_major Expand range of top-level ICD-10 codes
 #' @keywords internal

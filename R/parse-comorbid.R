@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -15,6 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
+ahrq_htn <- c("HTNCX", "HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF",
+              "HRENWRF", "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
+ahrq_chf <- c("CHF", "HTNWCHF", "HHRWCHF", "HHRWHRF")
+ahrq_renal <- c("RENLFAIL", "HRENWRF", "HHRWRF", "HHRWHRF")
+ahrq_unused <- c("HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF", "HRENWRF",
+                 "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
 #' get the SAS code from AHRQ
 #'
 #' Get the SAS code from AHRQ and save in data-raw if not already there.
@@ -32,18 +38,19 @@ fetch_ahrq_sas <- function(offline) {
 #'   so this is an internal function, used in generating the package itself!
 #' @template parse-template
 #' @keywords internal
-parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
+icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   assertFlag(save_data)
   assertFlag(offline)
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_sas_lines <- readLines(fetch_ahrq_sas(offline)$file_path)
-  ahrqAll <- sas_format_extract(ahrq_sas_lines)
+  ahrq_info <- fetch_ahrq_sas(offline)
+  if (is.null(ahrq_info))
+    stop("AHRQ SAS source file not found for ICD-9")
 
-  icd9_map_ahrq_working <- ahrqAll[["$RCOMFMT"]]
-
+  ahrq_sas_lines <- readLines(ahrq_info$file_path)
+  icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
   icd9_map_ahrq_all <- list()
 
   for (cmb in names(icd9_map_ahrq_working)) {
@@ -59,7 +66,7 @@ parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
     thePairs <- somePairs[lapply(somePairs, length) == 2]
     out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
-    icd9_map_ahrq_all[[cmb]] <- out %>% unlist %>% unique
+    out %>% unlist %>% unique -> icd9_map_ahrq_all[[cmb]]
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
@@ -68,35 +75,11 @@ parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   icd9_map_ahrq <- icd9_map_ahrq_all
 
-  icd9_map_ahrq$HTNCX <- c(
-    icd9_map_ahrq$HTNCX, # some codes already in this category
-    icd9_map_ahrq$HTNPREG,
-    icd9_map_ahrq$OHTNPREG,
-    icd9_map_ahrq$HTNWOCHF,
-    icd9_map_ahrq$HTNWCHF,
-    icd9_map_ahrq$HRENWORF,
-    icd9_map_ahrq$HRENWRF,
-    icd9_map_ahrq$HHRWOHRF,
-    icd9_map_ahrq$HHRWCHF,
-    icd9_map_ahrq$HHRWRF,
-    icd9_map_ahrq$HHRWHRF)
+  icd9_map_ahrq[ahrq_htn] %>% unlist %>% unname -> icd9_map_ahrq[["HTNCX"]]
+  icd9_map_ahrq[ahrq_chf] %>% unlist %>% unname -> icd9_map_ahrq[["CHF"]]
+  icd9_map_ahrq[ahrq_renal] %>% unlist %>% unname -> icd9_map_ahrq[["RENLFAIL"]]
 
-  icd9_map_ahrq$CHF <- c(
-    icd9_map_ahrq$CHF, # some codes already in this category
-    icd9_map_ahrq$HTNWCHF,
-    icd9_map_ahrq$HHRWCHF,
-    icd9_map_ahrq$HHRWHRF)
-
-  icd9_map_ahrq$RENLFAIL <- c(
-    icd9_map_ahrq$RENLFAIL, # some codes already in this category
-    icd9_map_ahrq$HRENWRF,
-    icd9_map_ahrq$HHRWRF,
-    icd9_map_ahrq$HHRWHRF)
-
-
-  icd9_map_ahrq[c("HTNPREG", "OHTNPREG", "HTNWOCHF",
-                  "HTNWCHF", "HRENWORF", "HRENWRF", "HHRWOHRF",
-                  "HHRWCHF", "HHRWRF", "HHRWHRF")] <- NULL
+  icd9_map_ahrq[ahrq_unused] <- NULL
 
   # officially, AHRQ HTN with complications means that HTN on its own should be
   # unset. however, this is not feasible here, since we just package up the data
@@ -141,20 +124,17 @@ fetch_quan_deyo_sas <- function(offline) {
 }
 
 #' @title parse original SAS code defining Quan's update of Deyo comorbidities.
-#' @description As with \code{parseAhrqSas}, this function reads SAS code, and
-#'   in, a very limited way, extracts definitions. In this case the code uses
-#'   LET statements, with strings or lists of strings. This saves and invisibly
-#'   returns a list with names corresponding to the comorbidities and values as
-#'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
-#'   \code{parse_ahrq_sas}, there are no ranges defined, so this interpretation is
-#'   simpler.
+#' @description As with \code{parseAhrqSas}, this function reads SAS code, and in, a very limited
+#'   way, extracts definitions. In this case the code uses LET statements, with strings or lists of
+#'   strings. This saves and invisibly returns a list with names corresponding to the comorbidities
+#'   and values as a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
+#'   \code{icd9_parse_ahrq_sas}, there are no ranges defined, so this interpretation is simpler.
 #'
-#'   With thanks to Dr. Quan, I have permission to distribute his SAS code.
-#'   Previously, the SAS code would be downloaded from the University of
-#'   Manitoba at
-#'   \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}.
-#'   There are structural differences between this version and the version
-#'   directly from Dr. Quan, however, the parsing results in identical data.
+#'   With thanks to Dr. Quan, I have permission to distribute his SAS code. Previously, the SAS code
+#'   would be downloaded from the University of Manitoba at
+#'   \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}. There are
+#'   structural differences between this version and the version directly from Dr. Quan, however,
+#'   the parsing results in identical data.
 #' @template parse-template
 #' @template offline
 #' @keywords internal

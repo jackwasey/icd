@@ -2,9 +2,12 @@
 % Please edit documentation in R/sas.R
 \name{sas_format_extract}
 \alias{sas_format_extract}
+\alias{sas_format_extract_rcomfmt}
 \title{extract assignments from a SAS FORMAT definition.}
 \usage{
 sas_format_extract(sas_lines)
+
+sas_format_extract_rcomfmt(sas_lines)
 }
 \arguments{
 \item{sas_lines}{is a character vector, with one item per line, e.g. from
@@ -19,6 +22,10 @@ this is modelled entirely on a single chunk of SAS code, but
   regex, but, as you will see from the code, R is not a great language with
   which to write a SAS parser.
 }
+\section{Functions}{
+\itemize{
+\item \code{sas_format_extract_rcomfmt}: Get just the $RCOMFMT assignment, which contains all the ICD (not DRG) data.
+}}
 \examples{
   \dontrun{
   sas_format_extract(readLines('data-raw/comformat2012-2013.txt'))

@@ -20,6 +20,7 @@
 \alias{icd_comorbid.icd9}
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_ahrq.default}
+\alias{icd_comorbid_ahrq.icd10}
 \alias{icd_comorbid_ahrq.icd9}
 \alias{icd_comorbid_common}
 \alias{icd_comorbid_elix}
@@ -68,6 +69,9 @@ icd_comorbid_elix(...)
 \method{icd_comorbid_elix}{default}(...)
 
 \method{icd_comorbid_ahrq}{icd9}(..., abbrev_names = TRUE, hierarchy = TRUE)
+
+\method{icd_comorbid_ahrq}{icd10}(..., abbrev_names = TRUE,
+  hierarchy = TRUE)
 
 \method{icd_comorbid_quan_deyo}{icd9}(..., abbrev_names = TRUE,
   hierarchy = TRUE)

@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -51,11 +51,11 @@ sas_format_extract <- function(sas_lines) {
   sas_lines <- str_trim(sas_lines)
 
   # drop everything except VALUE statements
-  sas_lines <- grep(pattern = "^VALUE.*", x = sas_lines, value = TRUE)
+  sas_lines <- grep(pattern = "^VALUE.*", x = sas_lines, ignore.case = TRUE, value = TRUE)
 
   # put each VALUE declaration in a vector element
   all_sas_assignments <- str_match_all(
-    pattern = "^VALUE[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
+    pattern = "^V(?:ALUE|alue)[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
     string = sas_lines) %>% lapply(`[`, c(2, 3))
 
   out <- list()
@@ -63,8 +63,22 @@ sas_format_extract <- function(sas_lines) {
   for (m in all_sas_assignments) {
     out[m[[1]]] <- list(sasParseAssignments(m[[2]]))
   }
-
   out
+}
+
+#' @describeIn sas_format_extract Get just the $RCOMFMT assignment, which contains all the ICD (not DRG) data.
+#' @keywords internal
+sas_format_extract_rcomfmt <- function(sas_lines) {
+  # ignore DRG assignments
+  sas_format_extract(sas_lines)[["$RCOMFMT"]]
+}
+
+# ICD-10 SAS code seems to be literal with all possible (ICD-10-CM for given year) cihldren listed. No ranges are specified (unlike the ICD-9 equivalentt)
+sas_icd10_assignments_to_list <- function(x) {
+  # TODO: unfortunately, the sorting is alphabeetical now, so I'll have to resort to the original Elixhauser sequence
+  x["NONE"] <- NULL
+  x[" "] <- NULL
+  x
 }
 
 #' @title get assignments from a character string strings.

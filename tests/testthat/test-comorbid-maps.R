@@ -86,6 +86,8 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
   # skip_on_cran()  # apparently this runs of wercker but not travis, presumably
   # because travis uses --as-cran or equivalent
 
+  skip_slow_tests()
+
   # skip this test if either do_online_tests is FALSE, or if the downloaded file
   # is not already in data-raw
   if (is.null(fetch_ahrq_sas(offline = TRUE)))
@@ -93,9 +95,11 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
                       skipping AHRQ SAS parsing test.")
 
   # same but from source data. Should be absolutely identical.
-  expect_equal(icd9_map_ahrq, parse_ahrq_sas(save_data = FALSE))
-  # same but from source data. Should be absolutely identical.
+  expect_equal(result <- icd9_parse_ahrq_sas(save_data = FALSE), icd9_map_ahrq)
+  expect_that(result, is_a("list"))
+  expect_true(length(result) == 30)
   expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9::icd9_map_ahrq), list())
+
 })
 
 test_that("Quan Charlson icd9 mappings are all
@@ -167,17 +171,6 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
   cmh <- icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE)
   for (h in cmh_headings)
     expect_equal(cmh[[h]], icd9::icd9cm_hierarchy[[h]], info = h)
-})
-
-test_that("AHRQ interpretation at least returns something reasonable", {
-  skip_slow_tests()
-
-  if (is.null(fetch_ahrq_sas(offline = TRUE)))
-    skip_online_tests("data-raw/comformat2012-2013.txt not available")
-
-  result <- parse_ahrq_sas(save_data = FALSE)
-  expect_that(result, is_a("list"))
-  expect_true(length(result) > 10)
 })
 
 test_that("Charlson Deyo doesn't double count disease with two severities", {

@@ -1,3 +1,20 @@
+# Copyright (C) 2014 - 2016  Jack O. Wasey
+#
+# This file is part of icd9.
+#
+# icd9 is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd9 is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+
 # some ICD-9 and ICD-10 mappings (others generated from SAS code parsing)
 
 #' @title Generate Elixhauser comorbidities
@@ -80,7 +97,7 @@ icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE, path = NU
 
 #' @rdname icd9_generate_map_elix
 #' @keywords internal
-icd10_geneate_map_elix <- function(save_data = FALSE) {
+icd10_generate_map_elix <- function(save_data = FALSE) {
   icd10_map_elix <- list(
     chf = c('I099', 'I110', 'I130', 'I132', 'I255', 'I420', 'I425', 'I426', 'I427', 'I428', 'I429',
             'I43', 'I50', 'P290'),

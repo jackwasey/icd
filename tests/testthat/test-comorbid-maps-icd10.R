@@ -100,3 +100,7 @@ test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
   expect_true("I214" %in% icd10_map_quan_deyo$MI)
   #TODO more
 })
+
+test_that("ahrq comorbidities found for test data", {
+  expect_true(all(icd_comorbid(icd10_all_elix_one_pt)))
+})

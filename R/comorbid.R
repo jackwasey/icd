@@ -252,24 +252,28 @@ icd_comorbid_elix <- function(...) {
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_ahrq.default <- function(...) {
+  warning("icd9 vs icd10 notspecified, assuming icd9 for testing")
   icd_comorbid_ahrq.icd9(...)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_quan_elix.default <- function(...) {
+  warning("icd9 vs icd10 notspecified, assuming icd9 for testing")
   icd_comorbid_quan_elix.icd9(...)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_quan_deyo.default <- function(...) {
+  warning("icd9 vs icd10 notspecified, assuming icd9 for testing")
   icd_comorbid_quan_deyo.icd9(...)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_elix.default <- function(...) {
+  warning("icd9 vs icd10 notspecified, assuming icd9 for testing")
   icd_comorbid_elix.icd9(...)
 }
 
@@ -288,6 +292,23 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE,
   assertFlag(hierarchy)
 
   cbd <- icd_comorbid.icd9(..., map = icd9::icd9_map_ahrq)
+  icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy) 
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_ahrq.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
+  assertFlag(abbrev_names)
+  assertFlag(hierarchy)
+
+  cbd <- icd_comorbid.icd10(..., map = icd9::icd10_map_ahrq)
+  icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy) 
+}
+
+# lots of duplicated code, need to simplify
+icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+  assertFlag(abbrev_names)
+  assertFlag(hierarchy)
   if (hierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
