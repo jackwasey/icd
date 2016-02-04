@@ -25,10 +25,17 @@ ahrq_unused <- c("HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF", "HREN
 #'
 #' Get the SAS code from AHRQ and save in data-raw if not already there.
 #' @keywords internal
-fetch_ahrq_sas <- function(offline) {
+icd9_fetch_ahrq_sas <- function(offline) {
   assertFlag(offline)
   download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat2012-2013.txt",
+    offline = offline)
+}
+
+icd10_fetch_ahrq_sas <- function(offline) {
+  assertFlag(offline)
+  download_to_data_raw(
+    url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat_icd10cm_2016.txt",
     offline = offline)
 }
 
@@ -45,7 +52,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_info <- fetch_ahrq_sas(offline)
+  ahrq_info <- icd9_fetch_ahrq_sas(offline)
   if (is.null(ahrq_info))
     stop("AHRQ SAS source file not found for ICD-9")
 
@@ -112,6 +119,20 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
     save_in_data_dir("icd9_map_ahrq_all") # nocov
   }
   invisible(icd9_map_ahrq)
+}
+
+icd10_parse_ahrq_sas <- function(save_data = TRUE, offline = FALSE) {
+  assertFlag(save_data)
+  assertFlag(offline)
+
+  ahrq_info <- icd10_fetch_ahrq_sas(offline)
+  if (is.null(ahrq_info))
+    stop("AHRQ SAS source file not found for ICD-10")
+
+  ahrq_sas_lines <- readLines(ahrq_info$file_path)
+  icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
+  icd9_map_ahrq_working
+  #TODO: need to post-process, maybe sharing a lot of code with the ICD-9 version
 }
 
 #' @keywords internal

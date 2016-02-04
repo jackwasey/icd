@@ -90,7 +90,7 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
   # skip this test if either do_online_tests is FALSE, or if the downloaded file
   # is not already in data-raw
-  if (is.null(fetch_ahrq_sas(offline = TRUE)))
+  if (is.null(icd9_fetch_ahrq_sas(offline = TRUE)))
     skip_online_tests("data-raw/comformat2012-2013.txt not available, so
                       skipping AHRQ SAS parsing test.")
 
