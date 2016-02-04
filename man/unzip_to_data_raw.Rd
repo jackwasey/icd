@@ -8,7 +8,7 @@
 unzip_to_data_raw(url, file_name, offline = FALSE)
 
 download_to_data_raw(url, file_name = str_extract(url, "[^/]*$"),
-  offline = FALSE)
+  offline = FALSE, allow_missing = FALSE)
 }
 \arguments{
 \item{url}{url of a zip file}

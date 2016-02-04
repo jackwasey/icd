@@ -41,13 +41,15 @@ icd_comorbid(...)
 
 \method{icd_comorbid}{default}(x, ...)
 
-\method{icd_comorbid}{icd10}(x, map, visit_name = NULL, icd_name = NULL,
-  short_code = icd_guess_short.icd10(x),
-  short_map = icd_guess_short.list(map), return_df = FALSE, ...)
+\method{icd_comorbid}{icd10}(x, map, visit_name = NULL,
+  icd_name = get_icd_name(x), short_code = icd_guess_short.data.frame(x,
+  icd_name = icd_name), short_map = icd_guess_short.list(map),
+  return_df = FALSE, ...)
 
-\method{icd_comorbid}{icd9}(x, map, visit_name = NULL, icd_name = NULL,
-  short_code = icd_guess_short.icd9(x),
-  short_map = icd_guess_short.list(map), return_df = FALSE, ...)
+\method{icd_comorbid}{icd9}(x, map, visit_name = NULL,
+  icd_name = get_icd_name(x), short_code = icd_guess_short.data.frame(x,
+  icd_name = icd_name), short_map = icd_guess_short.list(map),
+  return_df = FALSE, ...)
 
 icd_comorbid_common(x, map, visit_name = NULL, icd_name, short_code,
   short_map, return_df = FALSE, ...)

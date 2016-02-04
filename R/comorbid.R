@@ -98,6 +98,63 @@ icd_comorbid.default <- function(x, ...) {
   icd_comorbid(x, ...)
 }
 
+
+# need a new way of looking up co-morbidity by string matching. This is
+# annoying, but necessary, since there is a very large number of ICD-10-CM (not
+# so much WHO) codes which are too numerous to pre-compute.
+#
+# options are:
+# 1. do recompute, but only after installing package.
+# 2. do string matching looking for target, then successive parents in the comorbidities
+# 2b. use a very fast lookup table for this, don't loop through the comorbidities.
+
+icd_comorbid_parent_search <- function(x,
+                                       map,
+                                       visit_name = NULL,
+                                       icd_name = get_icd_name(x),
+                                       short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+                                       short_map = icd_guess_short.list(map),
+                                       return_df = FALSE, ...) {
+  # as an experiment, just generate an environment (envs have hashed name look-up)
+
+  # i'm sure there is a better way to do this, and certainly not on every call to the function!
+  # lk_env = new.env(hash = TRUE, size = sum(sapply(icd10_map_ahrq, length)))
+  # for (cmb in names(icd10_map_ahrq)) {
+  #   for (cmb_code in icd10_map_ahrq[[cmb]])
+  #     lk_env[[cmb_code]] <- cmb
+  # }
+  #
+
+  test_code <- "I1311B" # doesn't exist, but could be child code of I1311
+
+  # for (cmb in names(icd10_map_ahrq)) {
+  #   j <- test_code
+  #   while (nchar(j) > 3) {
+  #     if (!is.na(fastmatch::fmatch(j, icd10_map_ahrq[[cmb]]))) {
+  #       print(cmb)
+  #       break
+  #     }
+  #     j <- str_sub(j, end = nchar(j) - 1)
+  #   }
+  # }
+  #
+  vapply(x[[icd_name]], function(y) {
+    vapply(names(icd10_map_ahrq),
+           FUN = function(cmb) {
+             j <- y
+             while (nchar(j) > 3) {
+               if (!is.na(fastmatch::fmatch(j, icd10_map_ahrq[[cmb]])))
+                 return(TRUE)
+               j <- str_sub(j, end = nchar(j) - 1)
+             }
+             FALSE
+           },
+           FUN.VALUE = logical(1))
+  },
+  FUN.VALUE = logical(30)) %>% t
+
+}
+
 #' @describeIn icd_comorbid Get comorbidities from ICD-10 codes
 #' @export
 icd_comorbid.icd10 <- function(x,
@@ -140,19 +197,19 @@ icd_comorbid.icd9 <- function(x,
 #'   format, fast factor generation, then fast comorbidity assignment.
 #' @keywords internal
 icd_comorbid_common <- function(x,
-                              map,
-                              visit_name = NULL,
-                              icd_name,
-                              short_code,
-                              short_map,
-                              return_df = FALSE, ...) {
+                                map,
+                                visit_name = NULL,
+                                icd_name,
+                                short_code,
+                                short_map,
+                                return_df = FALSE, ...) {
   assertDataFrame(x, min.cols = 2)
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   #TODO: assertList(unclass(map), any.missing = FALSE, min.len = 1, names = "unique")
-             #types = c(icd_version_classes, "character", "factor"))
+  #types = c(icd_version_classes, "character", "factor"))
   assertString(visit_name)
   assertFlag(short_code)
   assertFlag(short_map)
@@ -289,7 +346,7 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE,
   assertFlag(hierarchy)
 
   cbd <- icd_comorbid.icd9(..., map = icd9::icd9_map_ahrq)
-  icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy) 
+  icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy)
 }
 
 #' @rdname icd_comorbid
@@ -299,7 +356,7 @@ icd_comorbid_ahrq.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) 
   assertFlag(hierarchy)
 
   cbd <- icd_comorbid.icd10(..., map = icd9::icd10_map_ahrq)
-  icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy) 
+  icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy)
 }
 
 # lots of duplicated code, need to simplify
@@ -446,14 +503,14 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #'   intersections and both asymmetric differences.
 #' @export
 icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
-                             show = TRUE, explain = TRUE) {
+                              show = TRUE, explain = TRUE) {
   UseMethod("icd_diff_comorbid")
 }
 
 #' @describeIn icd_diff_comorbid Show difference between comorbidity maps with ICD-9 codes
 #' @export
 icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
-                             show = TRUE, explain = TRUE) {
+                                   show = TRUE, explain = TRUE) {
   assertList(x, min.len = 1, any.missing = FALSE,
              types = c("character"), names = "unique")
   assertList(y, min.len = 1, any.missing = FALSE,

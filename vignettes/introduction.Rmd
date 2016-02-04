@@ -50,7 +50,7 @@ knitr::opts_chunk$set(
 
 patientData <- data.frame(
   visitId = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
-  icd9 = c("40201", "2258", "7208", "25001", "34400", "4011", "4011"),
+  icd9 = icd9(c("40201", "2258", "7208", "25001", "34400", "4011", "4011")),
   poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
   stringsAsFactors = FALSE
   )
@@ -78,7 +78,7 @@ Of course, in real life, there are many problems with the data, such is `NA` ent
 
 The comorbidities can be determined as follows (showing the first few columns for brevity):
 ```{r getcomorbidities}
-icd9ComorbidAhrq(patientData)[, 1:8]
+icd_comorbid_ahrq(patientData)[, 1:8]
 ```
 or
 ```{r getcomorbidities1a}
