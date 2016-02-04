@@ -142,7 +142,7 @@ icd_comorbid_parent_search <- function(x,
     vapply(names(icd10_map_ahrq),
            FUN = function(cmb) {
              j <- y
-             while (nchar(j) > 3) {
+             for (n in 3:nchar(j)) {
                if (!is.na(fastmatch::fmatch(j, icd10_map_ahrq[[cmb]])))
                  return(TRUE)
                j <- str_sub(j, end = nchar(j) - 1)
