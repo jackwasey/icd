@@ -103,12 +103,10 @@ icd_comorbid.default <- function(x, ...) {
 icd_comorbid.icd10 <- function(x,
                                map,
                                visit_name = NULL,
-                               icd_name = NULL,
-                               short_code = icd_guess_short(x),
+                               icd_name = get_icd_name(x),
+                               short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
                                short_map = icd_guess_short.list(map),
                                return_df = FALSE, ...) {
-  assert(checkString(icd_name), checkNull(icd_name))
-  icd_name <- get_icd_name(x, icd_name)
 
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
   # the S3 method was called directly.
@@ -123,12 +121,11 @@ icd_comorbid.icd10 <- function(x,
 icd_comorbid.icd9 <- function(x,
                               map,
                               visit_name = NULL,
-                              icd_name = NULL,
-                              short_code = icd_guess_short.icd9(x),
+                              icd_name = get_icd_name(x),
+                              short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
                               short_map = icd_guess_short.list(map),
                               return_df = FALSE, ...) {
-  assert(checkString(icd_name), checkNull(icd_name))
-  icd_name <- get_icd_name(x, icd_name)
+  assert(checkString(icd_name))
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
   # the S3 method was called directly.
   if (!is.icd9(x[[icd_name]])) x[[icd_name]] <- icd9(x[[icd_name]])
@@ -149,11 +146,11 @@ icd_comorbid_common <- function(x,
                               short_code,
                               short_map,
                               return_df = FALSE, ...) {
+  assertDataFrame(x, min.cols = 2)
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
-  assertDataFrame(x, min.cols = 2)
   #TODO: assertList(unclass(map), any.missing = FALSE, min.len = 1, names = "unique")
              #types = c(icd_version_classes, "character", "factor"))
   assertString(visit_name)

@@ -465,11 +465,11 @@ c.icd_decimal_code <- function(...) {
 #' @rdname subset_icd
 #' @export
 `[.icd10` <- function(x, ...) {
-  cl <- class(x)
-  class(x) <- cl[cl != "icd9"]
-  out <- NextMethod("[")
-  class(out) <- cl
-  out
+  y <- NextMethod()
+  if (!is.data.frame(x))
+    class(y) <- class(x)
+  #class(x) <- cl[cl != "icd9"]
+  y
 }
 
 #' @rdname subset_icd

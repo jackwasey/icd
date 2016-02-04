@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -102,5 +102,5 @@ test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
 })
 
 test_that("ahrq comorbidities found for test data", {
-  expect_true(all(icd_comorbid(icd10_all_elix_one_pt)))
+  expect_true(all(icd_comorbid(icd10_all_elix_one_pt, icd10_map_ahrq)))
 })

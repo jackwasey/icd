@@ -42,8 +42,8 @@ icd_comorbid(...)
 \method{icd_comorbid}{default}(x, ...)
 
 \method{icd_comorbid}{icd10}(x, map, visit_name = NULL, icd_name = NULL,
-  short_code = icd_guess_short(x), short_map = icd_guess_short.list(map),
-  return_df = FALSE, ...)
+  short_code = icd_guess_short.icd10(x),
+  short_map = icd_guess_short.list(map), return_df = FALSE, ...)
 
 \method{icd_comorbid}{icd9}(x, map, visit_name = NULL, icd_name = NULL,
   short_code = icd_guess_short.icd9(x),

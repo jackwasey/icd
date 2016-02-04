@@ -40,17 +40,24 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
   UseMethod("icd_guess_short")
 }
 
+#' @describeIn icd_guess_short Guess whether a data frame has ICD-9 or ICD-10 codes
+#' @keywords internal
+#' @export
+icd_guess_short.data.frame <- function(x, short_code = NULL, test_n = 1000L, icd_name = get_icd_name(x)) {
+  icd_guess_short(x[[icd_name]], short_code = short_code, test_n = test_n)
+}
+
 #' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
 #' @keywords internal
 #' @export
 icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L) {
+  if (!is.null(short_code)) {
+    short_code
+  }
   if (is.icd_short_code(x))
     return(TRUE)
   if (is.icd_decimal_code(x))
     return(FALSE)
-  if (!is.null(short_code)) {
-    short_code
-  }
   if (is.list(x)) x <- unlist(x, recursive = TRUE)
   x <- asCharacterNoWarn(x)
   testend <- min(length(x), test_n)
@@ -148,7 +155,7 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
 #' @export
 icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_icd_name(x), ...) {
   assertDataFrame(x)
-  icd_guess_version.character(x[[icd_name]])
+  icd_guess_version.character(asCharacterNoWarn(x[[icd_name]]))
 }
 
 #' @title Guess version of ICD and update class
