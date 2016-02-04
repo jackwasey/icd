@@ -21,22 +21,36 @@ ahrq_chf <- c("CHF", "HTNWCHF", "HHRWCHF", "HHRWHRF")
 ahrq_renal <- c("RENLFAIL", "HRENWRF", "HHRWRF", "HHRWHRF")
 ahrq_unused <- c("HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF", "HRENWRF",
                  "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
+
+ahrq_order <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "PARA",
+  "NEURO", "CHRNLUNG", "DM", "DMCX", "HYPOTHY", "RENLFAIL", "LIVER",
+  "ULCER", "AIDS", "LYMPH", "METS", "TUMOR", "ARTH", "COAG", "OBESE",
+  "WGHTLOSS", "LYTES", "BLDLOSS", "ANEMDEF", "ALCOHOL", "DRUG",
+  "PSYCH", "DEPRESS")
+
+ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "HTNPREG",
+  "HTNWOCHF", "HTNWCHF", "HRENWORF", "HRENWRF", "HHRWOHRF", "HHRWCHF",
+  "HHRWRF", "HHRWHRF", "OHTNPREG", "PARA", "NEURO", "CHRNLUNG",
+  "DM", "DMCX", "HYPOTHY", "RENLFAIL", "LIVER", "ULCER", "AIDS",
+  "LYMPH", "METS", "TUMOR", "ARTH", "COAG", "OBESE", "WGHTLOSS",
+  "LYTES", "BLDLOSS", "ANEMDEF", "ALCOHOL", "DRUG", "PSYCH", "DEPRESS")
+
 #' get the SAS code from AHRQ
 #'
 #' Get the SAS code from AHRQ and save in data-raw if not already there.
 #' @keywords internal
-icd9_fetch_ahrq_sas <- function(offline) {
+icd9_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
   assertFlag(offline)
   download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat2012-2013.txt",
-    offline = offline)
+    offline = offline, allow_missing = allow_missing)
 }
 
-icd10_fetch_ahrq_sas <- function(offline) {
+icd10_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
   assertFlag(offline)
   download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat_icd10cm_2016.txt",
-    offline = offline)
+    offline = offline, allow_missing = allow_missing)
 }
 
 #' @title parse AHRQ SAS code to get mapping
@@ -52,9 +66,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_info <- icd9_fetch_ahrq_sas(offline)
-  if (is.null(ahrq_info))
-    stop("AHRQ SAS source file not found for ICD-9")
+  ahrq_info <- icd9_fetch_ahrq_sas(offline, allow_missing = FALSE)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
@@ -116,23 +128,40 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   if (save_data) {
     save_in_data_dir("icd9_map_ahrq") # nocov
-    save_in_data_dir("icd9_map_ahrq_all") # nocov
+    #save_in_data_dir("icd9_map_ahrq_all") # nocov
   }
   invisible(icd9_map_ahrq)
 }
 
-icd10_parse_ahrq_sas <- function(save_data = TRUE, offline = FALSE) {
+icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
   assertFlag(save_data)
   assertFlag(offline)
 
-  ahrq_info <- icd10_fetch_ahrq_sas(offline)
-  if (is.null(ahrq_info))
-    stop("AHRQ SAS source file not found for ICD-10")
+  ahrq_info <- icd10_fetch_ahrq_sas(offline, allow_missing = FALSE)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
-  icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
-  icd9_map_ahrq_working
-  #TODO: need to post-process, maybe sharing a lot of code with the ICD-9 version
+  icd10_map_ahrq_all <- sas_format_extract_rcomfmt(ahrq_sas_lines)
+
+  icd10_map_ahrq <- icd10_map_ahrq_all
+  icd10_map_ahrq[ahrq_htn] %>% unlist %>% unname -> icd10_map_ahrq[["HTNCX"]]
+  icd10_map_ahrq[ahrq_chf] %>% unlist %>% unname -> icd10_map_ahrq[["CHF"]]
+  icd10_map_ahrq[ahrq_renal] %>% unlist %>% unname -> icd10_map_ahrq[["RENLFAIL"]]
+
+  icd10_map_ahrq_all[["NONE"]] <- NULL # TODO figure out what NONE means
+  icd10_map_ahrq[ahrq_unused] <- NULL
+
+  # put in the same order as the ICD-9 listings (and the publications)
+  icd10_map_ahrq <- icd10_map_ahrq[match(ahrq_order, names(icd10_map_ahrq))]
+  icd10_map_ahrq_all <- icd10_map_ahrq_all[match(ahrq_order_all, names(icd10_map_ahrq_all))]
+
+    # TODO: maybe need to post-process for children/parents, maybe sharing a lot
+  # of code with the ICD-9 version?
+
+  if (save_data) {
+    save_in_data_dir("icd10_map_ahrq") # nocov
+    #save_in_data_dir("icd10_map_ahrq_all") # nocov
+  }
+  invisible(icd10_map_ahrq)
 }
 
 #' @keywords internal

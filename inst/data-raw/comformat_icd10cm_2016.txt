@@ -6,7 +6,7 @@
 /*    Define all ICD-10-CM codes, V33 MS-DRGS, and labels for    */
 /*     each comorbidity format.                                  */
 /*                                                               */
-/* 09/23/14:   Initial program creation for ICD-10-CM codes      */ 
+/* 09/23/14:   Initial program creation for ICD-10-CM codes      */
 /* 10/20/15:   FY 2016 update to certain DRGs                    */
 /*****************************************************************/
 
@@ -69906,10 +69906,10 @@ Proc format lib=library;
 
 
 
-  /**** ICD-10 MS-DRG V33 Formats ****/    
+  /**** ICD-10 MS-DRG V33 Formats ****/
 
     VALUE CARDDRG                       /* Cardiac */
-        001-002, 215-236, 
+        001-002, 215-236,
         242-252, 253-254, 258-262,
         265-267, 268-274, 280-293, 296-298, 302-303,
         306-313 = "YES" ;
@@ -69922,11 +69922,11 @@ Proc format lib=library;
         682-700 = "YES" ;
 
      VALUE NERVDRG                      /* Nervous system */
-        020-042, 
+        020-042,
         052-103 = "YES" ;
 
      VALUE CEREDRG                      /* Cerebrovascular */
-        020-022, 034-039, 
+        020-022, 034-039,
         064-072 = "YES" ;
 
      VALUE PULMDRG                      /* COPD asthma */
@@ -69937,7 +69937,7 @@ Proc format lib=library;
         637-639 = "YES" ;
 
      VALUE HYPODRG                      /* Thyroid endocrine */
-        625-627, 
+        625-627,
         643-645 = "YES" ;
 
      VALUE RENFDRG                      /* Kidney transp, renal fail/dialysis */
@@ -69952,7 +69952,7 @@ Proc format lib=library;
         377-384 = "YES" ;
 
      VALUE HIVDRG                       /* Human immunodeficiency virus */
-        969-970, 
+        969-970,
         974-977 = "YES" ;
 
      VALUE LEUKDRG                      /* Leukemia/lymphoma */
@@ -69961,9 +69961,9 @@ Proc format lib=library;
 
      VALUE CANCDRG                      /* Cancer, lymphoma */
         054, 055, 146-148, 180-182,
-        374-376, 435-437, 
+        374-376, 435-437,
         542-544, 582-585, 597-599,
-        656-658, 686-688,  
+        656-658, 686-688,
         715-716, 722-724, 736-741,
         754-756, 826-830, 843-849
                 = "YES" ;
@@ -69984,7 +69984,7 @@ Proc format lib=library;
         813     = "YES" ;
 
      VALUE HTNCXDRG                     /*Hypertensive Complicated  */
-        077,078,304 
+        077,078,304
                 = "YES" ;
 
      VALUE HTNDRG                       /*Hypertensive Uncomplicated  */

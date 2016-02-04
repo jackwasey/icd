@@ -102,5 +102,8 @@ test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
 })
 
 test_that("ahrq comorbidities found for test data", {
-  expect_true(all(icd_comorbid(icd10_all_elix_one_pt, icd10_map_ahrq)))
+  expect_warning(res <- icd_comorbid(icd10_all_ahrq_one_pt, icd10_map_ahrq), NA)
+  for (n in colnames(res))
+    expect_true(res[, n], info = n)
+
 })
