@@ -124,12 +124,10 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   names(icd9_map_ahrq) <- icd9::icd_names_ahrq_htn_abbrev
   icd9_map_ahrq %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
-  icd9_map_ahrq_all %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
 
-  if (save_data) {
-    save_in_data_dir("icd9_map_ahrq") # nocov
-    #save_in_data_dir("icd9_map_ahrq_all") # nocov
-  }
+  if (save_data)
+    save_in_data_dir("icd9_map_ahrq")
+
   invisible(icd9_map_ahrq)
 }
 
@@ -157,10 +155,14 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
     # TODO: maybe need to post-process for children/parents, maybe sharing a lot
   # of code with the ICD-9 version?
 
-  if (save_data) {
-    save_in_data_dir("icd10_map_ahrq") # nocov
-    #save_in_data_dir("icd10_map_ahrq_all") # nocov
-  }
+
+  names(icd10_map_ahrq) <- icd9::icd_names_ahrq_htn_abbrev
+  icd10_map_ahrq %<>% icd_short_code %>% icd10 %>% icd_comorbidity_map
+
+
+  if (save_data)
+    save_in_data_dir("icd10_map_ahrq")
+
   invisible(icd10_map_ahrq)
 }
 

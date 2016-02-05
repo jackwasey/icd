@@ -93,24 +93,31 @@ icd_guess_short.icd_decimal_code <- function(x) FALSE #nocov
 #' Guess version of ICD
 #'
 #' @template short_code
-#' @keywords internal
 #' @export
+#' @keywords internal
 icd_guess_version <- function(x, short_code, ...)
   UseMethod("icd_guess_version")
 
 #' @describeIn icd_guess_version Guess version class ICD-9 codes
-#' @keywords internal
 #' @export
+#' @keywords internal
 icd_guess_version.icd9 <- function(x, short_code, ...) "icd9" #nocov
 
 #' @describeIn icd_guess_version Guess version of class ICD-10 codes
-#' @keywords internal
 #' @export
+#' @keywords internal
 icd_guess_version.icd10 <- function(x, short_code, ...) "icd10" #nocov
 
-#' @describeIn icd_guess_version Guess version of ICD codes in character vector
-#' @keywords internal
+#' @describeIn icd_guess_version Guess version of ICD codes in a factor
 #' @export
+#' @keywords internal
+icd_guess_version.factor <- function(x, short_code = NULL, ...) {
+  icd_guess_version.character(asCharacterNoWarn(x), short_code = short_code, ...)
+}
+
+#' @describeIn icd_guess_version Guess version of ICD codes in character vector
+#' @export
+#' @keywords internal
 icd_guess_version.character <- function(x, short_code = NULL, ...) {
   assertCharacter(x)
   if (!is.null(short_code)) {
