@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -17,7 +17,7 @@
 
 AC_PREREQ([2.62])
 AC_INIT(icd9)
-AC_COPYRIGHT(Copyright (C) 2014 - 2015  Jack O. Wasey)
+AC_COPYRIGHT(Copyright (C) 2014 - 2016  Jack O. Wasey)
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([src/config.h:src/config.h.in])
 AC_CONFIG_FILES([src/Makevars])
