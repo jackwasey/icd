@@ -111,10 +111,14 @@ icd_comorbid.default <- function(x, ...) {
 icd_comorbid_parent_search <- function(x,
                                        map,
                                        visit_name = NULL,
-                                       icd_name = get_icd_name(x),
+                                       icd_name = NULL,
                                        short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
                                        short_map = icd_guess_short.list(map),
                                        return_df = FALSE, ...) {
+
+  if (is.null(icd_name))
+    icd_name <- get_icd_name(x)
+
   # as an experiment, just generate an environment (envs have hashed name look-up)
 
   # i'm sure there is a better way to do this, and certainly not on every call to the function!
@@ -160,10 +164,12 @@ icd_comorbid_parent_search <- function(x,
 icd_comorbid.icd10 <- function(x,
                                map,
                                visit_name = NULL,
-                               icd_name = get_icd_name(x),
+                               icd_name = NULL,
                                short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
                                short_map = icd_guess_short.list(map),
                                return_df = FALSE, ...) {
+  if (is.null(icd_name))
+    icd_name <- get_icd_name(x)
 
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
   # the S3 method was called directly.
@@ -178,10 +184,12 @@ icd_comorbid.icd10 <- function(x,
 icd_comorbid.icd9 <- function(x,
                               map,
                               visit_name = NULL,
-                              icd_name = get_icd_name(x),
+                              icd_name = NULL,
                               short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
                               short_map = icd_guess_short.list(map),
                               return_df = FALSE, ...) {
+  if (is.null(icd_name))
+    icd_name <- get_icd_name(x)
   assert(checkString(icd_name))
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
   # the S3 method was called directly.
@@ -300,14 +308,17 @@ icd_comorbid_elix <- function(...) {
   UseMethod("icd_comorbid_elix")
 }
 
-
-# default methods #TODO actually adapt to the input data. ICD10?
-
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_ahrq.default <- function(...) {
-  warning("icd9 vs icd10 notspecified, assuming icd9 for testing")
-  icd_comorbid_ahrq.icd9(...)
+icd_comorbid_ahrq.data.frame <- function(x, ..., icd_name = get_icd_name(x)) {
+
+  icd_ver <- icd_guess_version(x[[icd_name]])
+  if (icd_ver == "icd9")
+    icd_comorbid_ahrq.icd9(x, ..., icd_name = icd_name)
+  else if (icd_ver == "icd10")
+    icd_comorbid_ahrq.icd10(x, ..., icd_name = icd_name)
+  else
+    stop("did not identify ICD code type from map", call. = FALSE)
 }
 
 #' @rdname icd_comorbid

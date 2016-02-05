@@ -19,7 +19,7 @@
 \alias{icd_comorbid.icd10}
 \alias{icd_comorbid.icd9}
 \alias{icd_comorbid_ahrq}
-\alias{icd_comorbid_ahrq.default}
+\alias{icd_comorbid_ahrq.data.frame}
 \alias{icd_comorbid_ahrq.icd10}
 \alias{icd_comorbid_ahrq.icd9}
 \alias{icd_comorbid_common}
@@ -41,15 +41,13 @@ icd_comorbid(...)
 
 \method{icd_comorbid}{default}(x, ...)
 
-\method{icd_comorbid}{icd10}(x, map, visit_name = NULL,
-  icd_name = get_icd_name(x), short_code = icd_guess_short.data.frame(x,
-  icd_name = icd_name), short_map = icd_guess_short.list(map),
-  return_df = FALSE, ...)
+\method{icd_comorbid}{icd10}(x, map, visit_name = NULL, icd_name = NULL,
+  short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+  short_map = icd_guess_short.list(map), return_df = FALSE, ...)
 
-\method{icd_comorbid}{icd9}(x, map, visit_name = NULL,
-  icd_name = get_icd_name(x), short_code = icd_guess_short.data.frame(x,
-  icd_name = icd_name), short_map = icd_guess_short.list(map),
-  return_df = FALSE, ...)
+\method{icd_comorbid}{icd9}(x, map, visit_name = NULL, icd_name = NULL,
+  short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+  short_map = icd_guess_short.list(map), return_df = FALSE, ...)
 
 icd_comorbid_common(x, map, visit_name = NULL, icd_name, short_code,
   short_map, return_df = FALSE, ...)
@@ -62,7 +60,7 @@ icd_comorbid_quan_deyo(...)
 
 icd_comorbid_elix(...)
 
-\method{icd_comorbid_ahrq}{default}(...)
+\method{icd_comorbid_ahrq}{data.frame}(x, ..., icd_name = get_icd_name(x))
 
 \method{icd_comorbid_quan_elix}{default}(...)
 
