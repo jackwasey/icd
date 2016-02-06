@@ -159,7 +159,10 @@ icd_comorbid_parent_search <- function(x,
 
 }
 
-#' @describeIn icd_comorbid Get comorbidities from ICD-10 codes
+#' @describeIn icd_comorbid Get comorbidities from ICD-10 codes. With this method, it relies on
+#'   exact matching, but not every of billions of possible ICD-10/ICD-10-CM codes are included in
+#'   the mappings, so it will likely give incomplete results, without searching for parents of the
+#'   input codes until a match is found in the map. TODO: this is WIP.
 #' @export
 icd_comorbid.icd10 <- function(x,
                                map,

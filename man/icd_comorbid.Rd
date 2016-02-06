@@ -210,7 +210,10 @@ The common comorbidity calculation code does not depend on ICD type.
 ICD version. ICD version can be specified by setting the class of the input
 data directly, or by calling, for example, \code{icd9(your_data_frame)}.
 
-\item \code{icd10}: Get comorbidities from ICD-10 codes
+\item \code{icd10}: Get comorbidities from ICD-10 codes. With this method, it relies on
+exact matching, but not every of billions of possible ICD-10/ICD-10-CM codes are included in
+the mappings, so it will likely give incomplete results, without searching for parents of the
+input codes until a match is found in the map. TODO: this is WIP.
 
 \item \code{icd9}: Get comorbidities from ICD-9 codes
 }}
