@@ -122,10 +122,17 @@ test_that("Quan Elixhauser icd9 mappings are all
                 icd_get_invalid.icd_comorbidity_map(icd9_map_quan_elix, short_code = TRUE),
                 list())
             })
+
 test_that("Elixhauser icd9 mappings are all
             generated from the current generation code", {
               expect_identical(icd9_map_elix, icd9_generate_map_elix(save_data = FALSE))
               expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9_map_elix, short_code = TRUE), list())
+            })
+
+test_that("Elixhauser icd10 mappings are all
+            generated from the current generation code", {
+              expect_identical(icd10_map_elix, icd10_generate_map_elix(save_data = FALSE))
+              expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd10_map_elix, short_code = TRUE), list())
             })
 
 test_that("can condense the big lists of comorbidities without errors", {

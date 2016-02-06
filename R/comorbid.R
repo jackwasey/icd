@@ -129,7 +129,7 @@ icd_comorbid_parent_search <- function(x,
   # }
   #
 
-  test_code <- "I1311B" # doesn't exist, but could be child code of I1311
+  # test_code <- "I1311B" # doesn't exist, but could be child code of I1311
 
   # for (cmb in names(icd10_map_ahrq)) {
   #   j <- test_code
@@ -143,11 +143,11 @@ icd_comorbid_parent_search <- function(x,
   # }
   #
   vapply(x[[icd_name]], function(y) {
-    vapply(names(icd10_map_ahrq),
+    vapply(names(icd9::icd10_map_ahrq),
            FUN = function(cmb) {
              j <- y
              for (n in 3:nchar(j)) {
-               if (!is.na(fastmatch::fmatch(j, icd10_map_ahrq[[cmb]])))
+               if (!is.na(fastmatch::fmatch(j, icd9::icd10_map_ahrq[[cmb]])))
                  return(TRUE)
                j <- str_sub(j, end = nchar(j) - 1)
              }

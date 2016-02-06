@@ -435,32 +435,47 @@ icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
 #' @title Get invalid ICD codes
 #' @description Returns subset of codes which are not in valid short_code or decimal format.
+#' @rawNamespace S3method(icd_get_invalid,default)
 #' @export
 icd_get_invalid <- function(...) {
   UseMethod("icd_get_invalid")
 }
 
-#' @describeIn icd_get_invalid Default method when ICD version or short versus
-#'   decimal not known.
-#' @export
-#' @keywords internal
+# @describeIn icd_get_invalid Default method when ICD version or short versus
+#   decimal not known.
+# @export
+# @keywords internal
 icd_get_invalid.default <- function(x, short_code = NULL, ...) {
   # both <- icd_guess_both(x, short_code = short_code)
-  x %>% icd_guess_short_update %>% icd_guess_version_update %>% icd_get_invalid
+  x %<>% icd_guess_short_update %>% icd_guess_version_update
+  UseMethod("icd_get_invalid", x)
 }
 
 #' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
 #' @param x vector of ICD codes, or list of vectors of ICD codes forming a
 #'   comorbidity map
 #' @export
+#' @keywords internal
 icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short.icd9(x), ...) {
   x[!icd_is_valid.icd9(x, short_code = short_code)]
 }
 
+#' @describeIn icd_get_invalid Get invalid ICD-10 codes from vector of codes
+#' @export
+#' @keywords internal
+icd_get_invalid.icd10 <- function(x, short_code = icd_guess_short.icd10(x), ...) {
+  # this seems like boilerplate code, but avoids infinite recursion
+  x[!icd_is_valid.icd10(x, short_code = short_code)]
+}
+
 #' @describeIn icd_get_invalid Get invalid elements of a comorbidity map
 #' @export
+#' @keywords internal
 icd_get_invalid.icd_comorbidity_map <- function(x, short_code = icd_guess_short(x), ...) {
   # todo: may need to switch on ICD code type
+  print(class(x))
+  class(x) <- class(x)[class(x) != "icd_comorbidity_map"]
+  print(class(x))
   x <- lapply(x, FUN = icd_get_invalid, short_code = short_code)
   x[lapply(x, length) > 0]
 }
