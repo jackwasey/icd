@@ -655,7 +655,7 @@ test_that("deprecated data aliases are created", {
   expect_warning(dep_dat <- generate_deprecated_data(save_data = FALSE), NA)
   expect_true(
     setequal(names(dep_dat),
-             c("icd9Billable", "icd9Hierarchy", "ahrqComorbid", "ahrqComorbidAll",
+             c("icd9Billable", "icd9Hierarchy", "ahrqComorbid",
                "quanDeyoComorbid", "quanElixComorbid", "elixComorbid", "elixComorbidNames",
                "elixComorbidNamesAbbrev", "elixComorbidNamesHtn", "elixComorbidNamesHtnAbbrev",
                "quanElixComorbidNames", "quanElixComorbidNamesAbbrev", "quanElixComorbidNamesHtn",

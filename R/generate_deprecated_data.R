@@ -36,7 +36,6 @@ generate_deprecated_data <- function(save_data = FALSE) {
          icd9Hierarchy,
          # comorbidity mappings
          ahrqComorbid,
-         ahrqComorbidAll,
          quanDeyoComorbid,
          quanElixComorbid,
          elixComorbid,
@@ -67,7 +66,6 @@ generate_deprecated_data <- function(save_data = FALSE) {
                        icd9Hierarchy,
                        # comorbidity mappings
                        ahrqComorbid,
-                       ahrqComorbidAll,
                        quanDeyoComorbid,
                        quanElixComorbid,
                        elixComorbid,

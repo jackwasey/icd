@@ -161,12 +161,11 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 }
 
 #' @keywords internal
-icd9_fetch_quan_deyo_sas <- function(offline) {
-  assertFlag(offline)
+icd9_fetch_quan_deyo_sas <- function(...) {
   download_to_data_raw(
     url =
       "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
-    file_name = "ICD9_E_Charlson.sas", offline = offline)
+    file_name = "ICD9_E_Charlson.sas", ...)
 }
 
 #' @title parse original SAS code defining Quan's update of Deyo comorbidities.
