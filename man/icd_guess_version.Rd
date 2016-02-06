@@ -4,6 +4,7 @@
 \alias{icd_guess_version}
 \alias{icd_guess_version.character}
 \alias{icd_guess_version.data.frame}
+\alias{icd_guess_version.factor}
 \alias{icd_guess_version.icd10}
 \alias{icd_guess_version.icd9}
 \title{Guess version of ICD}
@@ -13,6 +14,8 @@ icd_guess_version(x, short_code, ...)
 \method{icd_guess_version}{icd9}(x, short_code, ...)
 
 \method{icd_guess_version}{icd10}(x, short_code, ...)
+
+\method{icd_guess_version}{factor}(x, short_code = NULL, ...)
 
 \method{icd_guess_version}{character}(x, short_code = NULL, ...)
 
@@ -32,6 +35,8 @@ Guess version of ICD
 \item \code{icd9}: Guess version class ICD-9 codes
 
 \item \code{icd10}: Guess version of class ICD-10 codes
+
+\item \code{factor}: Guess version of ICD codes in a factor
 
 \item \code{character}: Guess version of ICD codes in character vector
 

@@ -70,7 +70,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
-  icd9_map_ahrq_all <- list()
+  icd9_map_ahrq <- list()
 
   for (cmb in names(icd9_map_ahrq_working)) {
     message("parsing AHRQ SAS codes for '", cmb, "'")
@@ -85,15 +85,12 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
     thePairs <- somePairs[lapply(somePairs, length) == 2]
     out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
-    out %>% unlist %>% unique -> icd9_map_ahrq_all[[cmb]]
+    out %>% unlist %>% unique -> icd9_map_ahrq[[cmb]]
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
   # "Other" group
-  icd9_map_ahrq_all[[" "]] <- NULL
-
-  icd9_map_ahrq <- icd9_map_ahrq_all
-
+  icd9_map_ahrq[[" "]] <- NULL
   icd9_map_ahrq[ahrq_htn] %>% unlist %>% unname -> icd9_map_ahrq[["HTNCX"]]
   icd9_map_ahrq[ahrq_chf] %>% unlist %>% unname -> icd9_map_ahrq[["CHF"]]
   icd9_map_ahrq[ahrq_renal] %>% unlist %>% unname -> icd9_map_ahrq[["RENLFAIL"]]
@@ -138,19 +135,16 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
   ahrq_info <- icd10_fetch_ahrq_sas(offline, allow_missing = FALSE)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
-  icd10_map_ahrq_all <- sas_format_extract_rcomfmt(ahrq_sas_lines)
+  icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
 
-  icd10_map_ahrq <- icd10_map_ahrq_all
   icd10_map_ahrq[ahrq_htn] %>% unlist %>% unname -> icd10_map_ahrq[["HTNCX"]]
   icd10_map_ahrq[ahrq_chf] %>% unlist %>% unname -> icd10_map_ahrq[["CHF"]]
   icd10_map_ahrq[ahrq_renal] %>% unlist %>% unname -> icd10_map_ahrq[["RENLFAIL"]]
 
-  icd10_map_ahrq_all[["NONE"]] <- NULL # TODO figure out what NONE means
   icd10_map_ahrq[ahrq_unused] <- NULL
 
   # put in the same order as the ICD-9 listings (and the publications)
   icd10_map_ahrq <- icd10_map_ahrq[match(ahrq_order, names(icd10_map_ahrq))]
-  icd10_map_ahrq_all <- icd10_map_ahrq_all[match(ahrq_order_all, names(icd10_map_ahrq_all))]
 
     # TODO: maybe need to post-process for children/parents, maybe sharing a lot
   # of code with the ICD-9 version?

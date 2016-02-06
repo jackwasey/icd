@@ -13,7 +13,6 @@ generate_deprecated_data <- function(save_data = TRUE) {
   icd9Hierarchy <- icd9::icd9cm_hierarchy
   names(icd9Hierarchy)[1] <- "icd9"
   ahrqComorbid <- icd9::icd9_map_ahrq
-  ahrqComorbidAll <- icd9::icd9_map_ahrq_all
   quanDeyoComorbid <- icd9::icd9_map_quan_deyo
   quanElixComorbid <- icd9::icd9_map_quan_elix
   elixComorbid <- icd9::icd9_map_elix

@@ -18,8 +18,10 @@
 library("icd9")
 library("testthat")
 
-message("lib paths are as follows:")
-print(.libPaths())
+if (FALSE) {
+  message("lib paths are as follows:")
+  print(.libPaths())
+}
 
 # to run all tests:
 if (FALSE) {

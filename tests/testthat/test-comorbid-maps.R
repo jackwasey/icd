@@ -700,5 +700,4 @@ test_that("comorbidities created from source data frame coded as factors", {
 test_that("all AHRQ ICD-9 comorbidities are also in the ICD-10 maps, in same order", {
   # TODO: similar for elix, deyo etc.
   expect_equal_no_icd(names(icd9_map_ahrq), names(icd10_map_ahrq))
-  expect_equal_no_icd(names(icd9_map_ahrq_all), names(icd10_map_ahrq_all))
 })
