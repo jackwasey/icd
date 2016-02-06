@@ -23,7 +23,7 @@
 #'   \code{datadocs.R}.
 #' @template parse-template
 #' @keywords internal
-icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE, path = NULL) {
+icd9_generate_map_elix <- function(condense = NULL, save_data = TRUE, path = NULL) {
   if (!missing(condense) || !missing(path))
     warning("'condense' and 'path' are deprecated in icd9_generate_map_elix",
             call. = FALSE)
@@ -97,7 +97,7 @@ icd9_generate_map_elix <- function(condense = NULL, save_data = FALSE, path = NU
 
 #' @rdname icd9_generate_map_elix
 #' @keywords internal
-icd10_generate_map_elix <- function(save_data = FALSE) {
+icd10_generate_map_elix <- function(save_data = TRUE) {
   icd10_map_elix <- list(
     chf = c('I099', 'I110', 'I130', 'I132', 'I255', 'I420', 'I425', 'I426', 'I427', 'I428', 'I429',
             'I43', 'I50', 'P290'),
@@ -173,8 +173,7 @@ icd10_generate_map_elix <- function(save_data = FALSE) {
 #'   to include all possible ICD-9 codes.
 #' @template parse-template
 #' @keywords internal
-icd9_generate_map_quan_elix <- function(condense = NULL,
-                                        save_data = FALSE, path = NULL) {
+icd9_generate_map_quan_elix <- function(condense = NULL, save_data = TRUE, path = NULL) {
 
   if (!missing(condense) || !missing(path))
     warning("'condense' and 'path' are deprecated in icd9_generate_map_elix, and no longer has any effect.
@@ -428,7 +427,7 @@ fetch_uranium_pathology <- function(offline = FALSE) {
 #' \pkg{RODBC}.
 #' @template parse-template
 #' @keywords internal
-generate_uranium_pathology <- function(save_data = FALSE, offline = FALSE) {
+generate_uranium_pathology <- function(save_data = TRUE, offline = FALSE) {
 
   requireNamespace("RODBC")
   stopifnot(existsFunction("odbcConnectAccess2007"))
@@ -469,7 +468,7 @@ fetch_vermont_dx <- function(offline) {
 #' Generate the Veromnt data from healthvermont.gov
 #' @template parse-template
 #' @keywords internal
-generate_vermont_dx <- function(save_data = FALSE, offline = FALSE) {
+generate_vermont_dx <- function(save_data = TRUE, offline = FALSE) {
 
   assertFlag(save_data)
   stopifnot(!is.null(vermont_raw_fp <- fetch_vermont_dx(offline = offline)))

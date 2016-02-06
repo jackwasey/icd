@@ -20,7 +20,7 @@ context("deprecated billable code lists")
 test_that("billable codes are recreated", {
   # this costs about 30 seconds
   skip_online_tests()
-  check_billable <- parseLeafDescriptionsAll(save = FALSE, fromWeb = TRUE)
+  check_billable <- parse_leaf_descriptions_all(save = FALSE, fromWeb = TRUE)
   if (Sys.info()[["sysname"]] != "Linux")
     skip("Only do encoding problems on Linux.")
   for (ver in c("27", "28", "29", "30", "31", "32")) {

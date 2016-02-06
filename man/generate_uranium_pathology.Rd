@@ -4,7 +4,7 @@
 \alias{generate_uranium_pathology}
 \title{generate uranium pathology data}
 \usage{
-generate_uranium_pathology(save_data = FALSE, offline = FALSE)
+generate_uranium_pathology(save_data = TRUE, offline = FALSE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.

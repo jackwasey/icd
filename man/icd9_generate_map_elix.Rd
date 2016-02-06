@@ -5,9 +5,9 @@
 \alias{icd9_generate_map_elix}
 \title{Generate Elixhauser comorbidities}
 \usage{
-icd9_generate_map_elix(condense = NULL, save_data = FALSE, path = NULL)
+icd9_generate_map_elix(condense = NULL, save_data = TRUE, path = NULL)
 
-icd10_generate_map_elix(save_data = FALSE)
+icd10_generate_map_elix(save_data = TRUE)
 }
 \arguments{
 \item{condense}{Deprecated. The map is not condensed by default. If required,

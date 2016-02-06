@@ -5,7 +5,7 @@
 #' @param save_data save the data in \code{data/deprecated.RData}, default is
 #'   \code{TRUE}
 #' @keywords internal
-generate_deprecated_data <- function(save_data = TRUE) {
+generate_deprecated_data <- function(save_data = FALSE) {
 
   # no particular reason to use assign here; relic of having been trying to
   # assign to package namespace.
@@ -59,7 +59,7 @@ generate_deprecated_data <- function(save_data = TRUE) {
 
   named_list <- function(...) {
     x <- list(...)
-    names(x) <- as.character( match.call()[-1] )
+    names(x) <- as.character(match.call()[-1])
     x
   }
 

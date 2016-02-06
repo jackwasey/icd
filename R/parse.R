@@ -50,19 +50,23 @@ icd_update_everything <- function() {
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
                        Depends on icd9cm_hierarchy being updated.")
+  # ICD-9
   icd9_parse_ahrq_sas(save_data = TRUE)
-  parse_quan_deyo_sas(save_data = TRUE)
+  icd9_parse_quan_deyo_sas(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
-  icd10_generate_map_elix(save_data = TRUE)
-  devtools::load_data(pkg = ".") # reload the newly saved data
-  icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
-
-  generate_deprecated_data(save_data = TRUE)
-
   # ICD-10
+  icd10_parse_ahrq_sas(save_data = TRUE)
+  icd10_generate_map_quan_elix(save_data = TRUE)
+  icd10_generate_map_quan_deyo(save_data = TRUE)
+  icd10_generate_map_elix(save_data = TRUE)
   icd10cm_get_all_defined(save_data = TRUE)
   icd10cm_extract_sub_chapters(save_data = TRUE)
+
+  # reload the newly saved data before generating chapters and deprecated data
+  devtools::load_data(pkg = ".")
+  icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
+  generate_deprecated_data(save_data = TRUE)
 }
 # nocov end
 
@@ -81,12 +85,12 @@ icd_update_everything <- function() {
 #'   # not included in installed package, run using the full source from github,
 #'   # e.g. using devtools::load_all()
 #'   \dontrun{
-#'   parseLeafDescriptionsAll(save_data = TRUE, offline = TRUE)
+#'   parse_leaf_descriptions_all(save_data = TRUE, offline = TRUE)
 #'   }
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parse_leaf_descriptions_all <- function(save_data = FALSE, offline = FALSE) {
+parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
   assertFlag(save_data)
   assertFlag(offline)
 
@@ -95,7 +99,7 @@ parse_leaf_descriptions_all <- function(save_data = FALSE, offline = FALSE) {
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
   for (v in versions)
-    icd9cm_billable[[v]] <- parse_leaf_descriptions_version(version = v,
+    icd9cm_billable[[v]] <- icd9_parse_leaf_desc_ver(version = v,
                                                             save_data = save_data,
                                                             offline = offline)
 
@@ -119,8 +123,8 @@ parse_leaf_descriptions_all <- function(save_data = FALSE, offline = FALSE) {
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
-parse_leaf_descriptions_version <- function(version = icd9cm_latest_edition(),
-                                            save_data = FALSE,
+icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
+                                            save_data = TRUE,
                                             offline = FALSE) {
   assertString(version)
   assertFlag(save_data)

@@ -1081,28 +1081,3 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   .Deprecated("icd_get_defined")
   icd_get_defined.icd9(icd9Decimal, short_code = FALSE, billable = onlyBillable)
 }
-
-#' @rdname parse_rtf_lines
-#' @export
-parseRtfLines <- function(lines, verbose = FALSE) {
-  .Deprecated("parse_rtf_lines")
-  parse_rtf_lines(lines, verbose = verbose)
-}
-
-sasFormatExtract <- function(sas_lines) {
-  .Deprecated("sas_format_extract")
-  sas_format_extract(sas_lines = sas_lines)
-}
-
-parseLeafDescriptionsAll <- function(save = FALSE, fromWeb = FALSE, verbose = FALSE) {
-  .Deprecated("parse_leaf_descriptions_all")
-  warning("verbose is no longer used in parse_leaf_descriptions_all")
-  parse_leaf_descriptions_all(save_data = save, offline = !fromWeb)
-}
-
-parseLeafDescriptionsVersion <- function(version = getLatestBillableVersion(), save = FALSE,
-                                         fromWeb = FALSE, verbose = FALSE) {
-  .Deprecated("parse_leaf_descriptions_all")
-  "verbose is no longer used in parse_leaf_descriptions_version"
-  parse_leaf_descriptions_version(version = version, save_data = save, offline = !fromWeb)
-}

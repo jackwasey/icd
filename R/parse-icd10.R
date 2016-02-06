@@ -62,11 +62,6 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   loadNamespace("xml2")
   f_info <- icd10cm_get_xml_file()
   j <- xml2::read_xml(f_info$file_path)
-  #j  %>%  xml2::xml_find_all("//chapter/name")  %>%
-  #  xml2::xml_text() -> chapter_nums
-
-  #j  %>%  xml2::xml_find_all("//chapter/desc")  %>%
-  #  xml2::xml_text() -> chapter_names
 
   j  %>% xml2::xml_children() %>%
     xml2::xml_name() %>%

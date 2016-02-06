@@ -106,10 +106,10 @@ test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
               # skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
 
-              if (is.null(fetch_quan_deyo_sas(offline = TRUE)))
+              if (is.null(icd9_fetch_quan_deyo_sas(offline = TRUE)))
                 skip_online_tests("data-raw/ICD9_E_Charlson.sas not available.")
 
-              expect_identical(icd9_map_quan_deyo, parse_quan_deyo_sas(save_data = FALSE))
+              expect_identical(icd9_map_quan_deyo, icd9_parse_quan_deyo_sas(save_data = FALSE))
               expect_equivalent(
                 icd_get_invalid.icd_comorbidity_map(icd9_map_quan_deyo, short_code = TRUE),
                 list())

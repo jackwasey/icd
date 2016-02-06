@@ -7,7 +7,7 @@
 http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 }
 \usage{
-parse_leaf_descriptions_all(save_data = FALSE, offline = FALSE)
+parse_leaf_descriptions_all(save_data = TRUE, offline = FALSE)
 }
 \arguments{
 \item{save_data}{single logical value, if \code{TRUE} the source text or CSV file
@@ -32,7 +32,7 @@ for versions 23 to 32, those which are on the CMS web site, get
   # not included in installed package, run using the full source from github,
   # e.g. using devtools::load_all()
   \dontrun{
-  parseLeafDescriptionsAll(save_data = TRUE, offline = TRUE)
+  parse_leaf_descriptions_all(save_data = TRUE, offline = TRUE)
   }
 }
 \keyword{internal}

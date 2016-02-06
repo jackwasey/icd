@@ -161,7 +161,7 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 }
 
 #' @keywords internal
-fetch_quan_deyo_sas <- function(offline) {
+icd9_fetch_quan_deyo_sas <- function(offline) {
   assertFlag(offline)
   download_to_data_raw(
     url =
@@ -184,12 +184,12 @@ fetch_quan_deyo_sas <- function(offline) {
 #' @template parse-template
 #' @template offline
 #' @keywords internal
-parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
+icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   assertFlag(save_data)
   assertFlag(offline)
 
-  # download the file and/or just get the path/filename to it
-  stopifnot(!is.null(f_info <- fetch_quan_deyo_sas(offline = offline)))
+  # download the file and/or just get the path/filename to it, fails if missing by default
+  f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
 
   quanSas <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sasExtractLetStrings(quanSas)

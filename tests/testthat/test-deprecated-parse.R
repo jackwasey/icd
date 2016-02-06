@@ -105,7 +105,7 @@ test_that("deprecated - online parse tests run", {
   unzip_single(url, fn, tf <- tempfile())
   rtf_lines <- readLines(tf, warn = FALSE)
   unlink(tf)
-  rtf <- parseRtfLines(rtf_lines)
+  rtf <- parse_rtf_lines(rtf_lines)
   nrtf <- names(rtf)
 
   test_that("deprecated - all parsed codes are valid decimals", {
@@ -140,7 +140,7 @@ test_that("deprecated - online parse tests run", {
                                   paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
   })
 
-  v32 <- parseLeafDescriptionsVersion(version = "32", save = FALSE, fromWeb = FALSE)
+  v32 <- icd9_parse_leaf_desc_ver(version = "32", save_data = FALSE, offline = TRUE)
 
   test_that("deprecated - all leaf codes from TXT are in RTF extract", {
     v32$icd9 %>% icd9ShortToDecimal -> leaves
