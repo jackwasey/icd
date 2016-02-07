@@ -290,3 +290,16 @@ randomDecimalIcd9 <- function(n = 50000)
     sample(icd9ExpandMinor(""), replace = TRUE, size = n),
     sep = "."
   )
+
+#' generate random strings
+#'
+#' @keywords internal
+random_string <- function(n, max_chars = 4) {
+  rand_ch <- function()
+    sample(c(LETTERS, letters, 0:9, rep("", times = 50)), replace = TRUE, size = n)
+
+  vapply(1:max_chars,
+         FUN = function(x) rand_ch(),
+         FUN.VALUE = character(n)
+  )  %>% apply(1, paste0, collapse = "")
+}

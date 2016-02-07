@@ -24,7 +24,16 @@ this is modelled entirely on a single chunk of SAS code, but
 }
 \section{Functions}{
 \itemize{
-\item \code{sas_format_extract_rcomfmt}: Get just the $RCOMFMT assignment, which contains all the ICD (not DRG) data.
+\item \code{sas_format_extract_rcomfmt}: Get just the $RCOMFMT assignment, which
+  contains all the ICD (not DRG) data. The problem is RENLFAIL appears twice:
+
+  \code{"N183", "N184", "N185", "N186", "N189", "N19", "Z4901", "Z4902",
+  "Z9115", "Z940", "Z992"="RENLFAIL"         /*Dependence on renal dialysis*/
+
+  "Z4931", "Z4932"="RENLFAIL"       /*Encounter for adequacy testing for
+  peritoneal dialysis*/ }
+
+  so RENLFAIL needs special treatment
 }}
 \examples{
   \dontrun{

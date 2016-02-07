@@ -66,7 +66,16 @@ sas_format_extract <- function(sas_lines) {
   out
 }
 
-#' @describeIn sas_format_extract Get just the $RCOMFMT assignment, which contains all the ICD (not DRG) data.
+#' @describeIn sas_format_extract Get just the $RCOMFMT assignment, which
+#'   contains all the ICD (not DRG) data. The problem is RENLFAIL appears twice:
+#'
+#'   \code{"N183", "N184", "N185", "N186", "N189", "N19", "Z4901", "Z4902",
+#'   "Z9115", "Z940", "Z992"="RENLFAIL"         /*Dependence on renal dialysis*/
+#'
+#'   "Z4931", "Z4932"="RENLFAIL"       /*Encounter for adequacy testing for
+#'   peritoneal dialysis*/ }
+#'
+#'   so RENLFAIL needs special treatment
 #' @keywords internal
 sas_format_extract_rcomfmt <- function(sas_lines) {
   # ignore DRG assignments
@@ -139,8 +148,10 @@ sasParseAssignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE)
     } else {
       outwhite <- threequarters[pair]
     }
-    out[[threequarters[pair + 1]]] <- unlist(strsplit(x = outwhite,
-                                                      split = ","))
+    # combine here in case there are duplicate labels, e.g. RENLFAIL twice in ICD-10 AHRQ
+    out[[threequarters[pair + 1]]] <- c(out[[threequarters[pair + 1]]],
+                                        unlist(strsplit(x = outwhite, split = ","))
+    )
   }
   out
 }

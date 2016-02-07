@@ -42,8 +42,8 @@ icd_comorbid(...)
 \method{icd_comorbid}{default}(x, ...)
 
 \method{icd_comorbid}{icd10}(x, map, visit_name = NULL, icd_name = NULL,
-  short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-  short_map = icd_guess_short.list(map), return_df = FALSE, ...)
+  short_code = NULL, short_map = icd_guess_short.list(map),
+  return_df = FALSE, ...)
 
 \method{icd_comorbid}{icd9}(x, map, visit_name = NULL, icd_name = NULL,
   short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
@@ -200,6 +200,13 @@ There is a change in behavior from previous versions. The visit_name
   \code{option(icd9.threads = 4)}. If it is not set, the number of cores in
   the machine is used.
 
+For ICD-10, there are two lookup methods. The classic lookup, as
+  used for ICD-9 codes, assumes any possible code is available to match in
+  the comorbidity map. However, for ICD-10-CM, there are too many possible
+  codes, specifying subsequent encounters, laterality, etc., etc., so this is
+  too bulky. However for some mappings, there are exact definitions, e.g.
+  AHRQ seems to specify everything (for a given ICD-10-CM year)
+
 The common comorbidity calculation code does not depend on ICD type.
   There is some type conversion so the map and input codes are all in 'short'
   format, fast factor generation, then fast comorbidity assignment.
@@ -210,10 +217,11 @@ The common comorbidity calculation code does not depend on ICD type.
 ICD version. ICD version can be specified by setting the class of the input
 data directly, or by calling, for example, \code{icd9(your_data_frame)}.
 
-\item \code{icd10}: Get comorbidities from ICD-10 codes. With this method, it relies on
-exact matching, but not every of billions of possible ICD-10/ICD-10-CM codes are included in
-the mappings, so it will likely give incomplete results, without searching for parents of the
-input codes until a match is found in the map. TODO: this is WIP.
+\item \code{icd10}: Get comorbidities from ICD-10 codes. With this
+method, it relies on exact matching, but not every of billions of possible
+ICD-10/ICD-10-CM codes are included in the mappings, so it will likely give
+incomplete results, without searching for parents of the input codes until
+a match is found in the map. TODO: this is WIP.
 
 \item \code{icd9}: Get comorbidities from ICD-9 codes
 }}

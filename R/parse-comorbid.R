@@ -128,6 +128,8 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
   invisible(icd9_map_ahrq)
 }
 
+# This is in some ways simpler than that ICD-9 equivalent because I make no
+# attempt to find all the child codes.
 icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
   assertFlag(save_data)
   assertFlag(offline)

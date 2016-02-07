@@ -108,68 +108,95 @@ icd_comorbid.default <- function(x, ...) {
 # 2. do string matching looking for target, then successive parents in the comorbidities
 # 2b. use a very fast lookup table for this, don't loop through the comorbidities.
 
-icd_comorbid_parent_search <- function(x,
-                                       map,
-                                       visit_name = NULL,
-                                       icd_name = NULL,
-                                       short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-                                       short_map = icd_guess_short.list(map),
-                                       return_df = FALSE, ...) {
-
-  if (is.null(icd_name))
-    icd_name <- get_icd_name(x)
-
-  # as an experiment, just generate an environment (envs have hashed name look-up)
-
-  # i'm sure there is a better way to do this, and certainly not on every call to the function!
-  # lk_env = new.env(hash = TRUE, size = sum(sapply(icd10_map_ahrq, length)))
-  # for (cmb in names(icd10_map_ahrq)) {
-  #   for (cmb_code in icd10_map_ahrq[[cmb]])
-  #     lk_env[[cmb_code]] <- cmb
-  # }
-  #
-
-  # test_code <- "I1311B" # doesn't exist, but could be child code of I1311
-
-  # for (cmb in names(icd10_map_ahrq)) {
-  #   j <- test_code
-  #   while (nchar(j) > 3) {
-  #     if (!is.na(fastmatch::fmatch(j, icd10_map_ahrq[[cmb]]))) {
-  #       print(cmb)
-  #       break
-  #     }
-  #     j <- str_sub(j, end = nchar(j) - 1)
-  #   }
-  # }
-  #
-  vapply(x[[icd_name]], function(y) {
-    vapply(names(icd9::icd10_map_ahrq),
-           FUN = function(cmb) {
-             j <- y
-             for (n in 3:nchar(j)) {
-               if (!is.na(fastmatch::fmatch(j, icd9::icd10_map_ahrq[[cmb]])))
-                 return(TRUE)
-               j <- str_sub(j, end = nchar(j) - 1)
-             }
-             FALSE
-           },
-           FUN.VALUE = logical(1))
-  },
-  FUN.VALUE = logical(30)) %>% t
-
-}
-
-#' @describeIn icd_comorbid Get comorbidities from ICD-10 codes. With this method, it relies on
-#'   exact matching, but not every of billions of possible ICD-10/ICD-10-CM codes are included in
-#'   the mappings, so it will likely give incomplete results, without searching for parents of the
-#'   input codes until a match is found in the map. TODO: this is WIP.
+#' @describeIn icd_comorbid Get comorbidities from ICD-10 codes. With this
+#'   method, it relies on exact matching, but not every of billions of possible
+#'   ICD-10/ICD-10-CM codes are included in the mappings, so it will likely give
+#'   incomplete results, without searching for parents of the input codes until
+#'   a match is found in the map. TODO: this is WIP.
+#' @details For ICD-10, there are two lookup methods. The classic lookup, as
+#'   used for ICD-9 codes, assumes any possible code is available to match in
+#'   the comorbidity map. However, for ICD-10-CM, there are too many possible
+#'   codes, specifying subsequent encounters, laterality, etc., etc., so this is
+#'   too bulky. However for some mappings, there are exact definitions, e.g.
+#'   AHRQ seems to specify everything (for a given ICD-10-CM year)
 #' @export
 icd_comorbid.icd10 <- function(x,
                                map,
                                visit_name = NULL,
                                icd_name = NULL,
-                               short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+                               short_code = NULL,
                                short_map = icd_guess_short.list(map),
+                               return_df = FALSE, ...) {
+
+  assert_data_frame(x, min.cols = 2, col.names = "unique")
+  assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique", )
+
+  assert(checkString(visit_name), checkNull(visit_name))
+  assert(checkString(icd_name), checkNull(icd_name))
+  visit_name <- get_visit_name(x, visit_name)
+  icd_name <- get_icd_name(x, icd_name)
+  assertString(visit_name)
+  assert(checkFlag(short_code), checkNull(short_code))
+  assertFlag(short_map)
+
+  if (is.null(icd_name))
+    icd_name <- get_icd_name(x)
+
+  if (is.null(short_code))
+    short_code <- icd_guess_short.icd10(x[[icd_name]])
+
+  icd10_comorbid_parent_search(x, map, visit_name, icd_name, short_code, short_map, return_df, ...)
+}
+
+
+#' find ICD-10 comorbidities checking parent matches
+#'
+#' @keywords internal
+icd10_comorbid_parent_search <- function(x,
+                                         map,
+                                         visit_name = NULL,
+                                         icd_name = NULL,
+                                         short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+                                         short_map = icd_guess_short.list(map),
+                                         return_df = FALSE, ...) {
+
+
+  if (!short_code)
+    icd_codes <- x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
+
+  # for each icd code
+  just_cmb <- vapply(icd_codes, function(y) {
+    # look it up in each comorbidity, but TODO: once we have a comorbidity for
+    # one patient, we don't need to search within it again
+    vapply(names(icd9::icd10_map_ahrq),
+           FUN = function(cmb) {
+             # and if not found, slice off last char of test string
+             for (n in nchar(y):3) {
+               if (!is.na(fastmatch::fmatch(str_sub(y, 1, n), icd9::icd10_map_ahrq[[cmb]])))
+                 return(TRUE)
+             }
+             FALSE
+           }, FUN.VALUE = logical(1))
+  }, FUN.VALUE = logical(30))
+
+  res <- aggregate(x = t(just_cmb), by = x[visit_name], FUN = any)
+  if (return_df)
+    return(res)
+
+  out <- as.matrix(res[-1])
+  rownames(out) <- res[[1]]
+  out
+}
+
+#' find ICD-10 comorbidities without checking parent matches
+#'
+#' @keywords internal
+icd10_comorbid_no_parent_search <- function(x,
+                               map,
+                               visit_name = NULL,
+                               icd_name = NULL,
+                               short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+                               short_map = icd_guess_short.icd10(map[[1]]),
                                return_df = FALSE, ...) {
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
@@ -214,7 +241,8 @@ icd_comorbid_common <- function(x,
                                 short_code,
                                 short_map,
                                 return_df = FALSE, ...) {
-  assertDataFrame(x, min.cols = 2)
+  assert_data_frame(x, min.cols = 2, col.names = TRUE)
+  assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique", )
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
