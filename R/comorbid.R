@@ -241,8 +241,8 @@ icd_comorbid_common <- function(x,
                                 short_code,
                                 short_map,
                                 return_df = FALSE, ...) {
-  assert_data_frame(x, min.cols = 2, col.names = TRUE)
-  assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique", )
+  assert_data_frame(x, min.cols = 2, col.names = "unique")
+  assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
