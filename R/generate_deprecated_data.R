@@ -56,12 +56,6 @@ generate_deprecated_data <- function(save_data = FALSE) {
          charlsonComorbidNamesAbbrev,
          file = file.path("data", "deprecated.RData"), compress = "xz")
 
-  named_list <- function(...) {
-    x <- list(...)
-    names(x) <- as.character(match.call()[-1])
-    x
-  }
-
   invisible(named_list(icd9Billable,
                        icd9Hierarchy,
                        # comorbidity mappings

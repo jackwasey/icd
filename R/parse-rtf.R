@@ -185,7 +185,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     filtered[ql - 1] %>%
       str_match_all(paste0("(", re_icd9_decimal_bare, ") (.*)")) %>%
       unlist %>% extract2(2) -> code
-    sb <- parseRtfQualifierSubset(filtered[ql])
+    sb <- rtf_parse_qualifier_subset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
     if (length(inv_sb) == 0)
       next

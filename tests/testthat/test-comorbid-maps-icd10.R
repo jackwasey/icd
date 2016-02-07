@@ -25,8 +25,26 @@ test_that("the icd-10 quan deyo comorbidity map data is exactly as produced by t
   expect_identical(icd10_map_quan_deyo, icd10_generate_map_quan_deyo(save_data = FALSE))
 })
 
-test_that("the class of the quan elix map is correct", {
-# TODO:
+test_that("the icd-10 elix comorbidity map data is exactly as produced by the generator", {
+  expect_identical(icd10_map_elix, icd10_generate_map_elix(save_data = FALSE))
+})
+
+test_that("the icd-10 ahrq comorbidity map data is exactly as produced by the generator", {
+  if (is.null(icd10_fetch_ahrq_sas(offline = TRUE, allow_missing = TRUE)))
+      skip_online_tests("AHRQ ICD-10 SAS not available")
+  expect_identical(icd10_map_ahrq, icd10_parse_ahrq_sas(save_data = FALSE, offline = FALSE))
+})
+
+test_that("the classes of the ICD-10 maps are correct", {
+  maps <- named_list(icd10_map_ahrq, icd10_map_elix, icd10_map_quan_deyo, icd10_map_quan_elix)
+  for (m in names(maps)) {
+    expect_true(is.icd10(maps[[m]]), info = paste("map: ", m))
+    expect_true(is.icd_short_code(m), info = paste("map: ", m))
+    for (y in m) {
+      expect_true(is.icd10(maps[[m]]), info = paste("map: ", m, ", cbd = ", y))
+      expect_true(is.icd_short_code(maps[[m]]), info = paste("map: ", m, ", cbd = ", y))
+    }
+  }
 })
 
 test_that("the class of each element of the quan elix map is correct", {

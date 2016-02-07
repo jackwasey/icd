@@ -420,3 +420,9 @@ na_to_false <- function(x) {
   x[is.na(x)] <- FALSE
   x
 }
+
+named_list <- function(...) {
+  x <- list(...)
+  names(x) <- as.character(match.call()[-1])
+  x
+}
