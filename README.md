@@ -22,7 +22,7 @@ icd9
 
 [![CRAN version](http://www.r-pkg.org/badges/version/icd9)](https://cran.r-project.org/package=icd9) [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9) [![Coverage Status](https://coveralls.io/repos/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/r/jackwasey/icd9?branch=master) RStudio mirror: [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9) [![wercker status](https://app.wercker.com/status/158c843e8218371b23d1e44072770e92/m/master "wercker status")](https://app.wercker.com/project/bykey/158c843e8218371b23d1e44072770e92)
 
-icd10: [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=icd10)](https://travis-ci.org/jackwasey/icd9) [![codecov.io](https://codecov.io/github/jackwasey/icd9/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd9?branch=icd10) [![wercker status](https://app.wercker.com/status/158c843e8218371b23d1e44072770e92/m/icd10 "wercker status")](https://app.wercker.com/project/bykey/158c843e8218371b23d1e44072770e92)
+icd10: [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=icd10)](https://travis-ci.org/jackwasey/icd9) [![codecov.io](https://codecov.io/github/jackwasey/icd9/coverage.svg?branch=icd10)](https://codecov.io/github/jackwasey/icd9?branch=icd10) [![wercker status](https://app.wercker.com/status/158c843e8218371b23d1e44072770e92/m/icd10 "wercker status")](https://app.wercker.com/project/bykey/158c843e8218371b23d1e44072770e92)
 
 ICD comorbidities, manipulation and validation
 ==============================================
@@ -80,6 +80,9 @@ patientData
 
 # reformat input data as needed
 patientData %>% icd9LongToWide # everything works well with magrittr %>%
+#> Warning: 'icd9LongToWide' is deprecated.
+#> Use 'icd_long_to_wide' instead.
+#> See help("Deprecated")
 #>      [,1]    [,2]   [,3]   [,4]   
 #> 1000 "40201" "2258" "7208" "25001"
 #> 1001 "34400" "4011" NA     NA     
@@ -87,6 +90,12 @@ patientData %>% icd9LongToWide # everything works well with magrittr %>%
 
 # get comorbidities:
 icd9ComorbidQuanDeyo(patientData)
+#> Warning: 'icd9ComorbidQuanDeyo' is deprecated.
+#> Use 'icd_comorbid_quan_deyo' instead.
+#> See help("Deprecated")
+#> Warning: 'icd9GuessIsShort' is deprecated.
+#> Use 'icd_guess_short' instead.
+#> See help("Deprecated")
 #>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
 #> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
 #> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
@@ -98,6 +107,9 @@ icd9ComorbidQuanDeyo(patientData)
 
 # find diagnoses present on admission:
 icd9FilterPoa(patientData)
+#> Warning: 'icd9FilterPoa' is deprecated.
+#> Use 'icd_filter_poa' instead.
+#> See help("Deprecated")
 #>   visitId  icd9
 #> 1    1000 40201
 #> 4    1000 25001
