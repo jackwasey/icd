@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd9.
 #
@@ -92,5 +92,43 @@ test_that("ICD-10 codes in uranium data are okay", {
   setdiff(uranium_pathology$icd10  %>%  strip("."), icd10cm2016$code)
 
   # http://apps.who.int/classifications/icd10/browse/2015/en#!/Y86
+
+})
+
+test_that("icd10cm range expansions", {
+  expect_identical(icd_expand_range_major.icd10cm("A00", "A01"),
+                   structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
+  )
+  expect_identical(icd_expand_range_major.icd10cm("A00", "A01"),
+                   icd_expand_range_major(icd10cm("A00"), "A01"))
+
+  expect_equal_no_icd(icd_expand_range_major.icd10cm("A99", "B00"),
+                      icd10cm(c("A99", "B00")))
+  expect_equal_no_icd(icd_expand_range_major.icd10cm("A96", "A96"),
+                      icd10cm("A96"))
+
+
+  expect_identical(icd_expand_range_major.icd10cm("a00", "a01"),
+                   structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
+  )
+  expect_identical(icd_expand_range_major.icd10cm("a00", "a01"),
+                   icd_expand_range_major(icd10cm("a00"), "a01"))
+
+  expect_equal_no_icd(icd_expand_range_major.icd10cm("a99", "b00"),
+                      icd10cm(c("A99", "B00")))
+  expect_equal_no_icd(icd_expand_range_major.icd10cm("a96", "a96"),
+                      icd10cm("A96"))
+})
+
+test_that("icd10cm range errors", {
+  expect_error(icd_expand_range_major.icd10cm("A99", "A96"), "after")
+  expect_error(icd_expand_range_major.icd10cm("B00", "A96"), "after")
+  expect_error(icd_expand_range_major.icd10cm("A10", "A13"), "not found") # neither exist
+  expect_error(icd_expand_range_major.icd10cm("A11", "A99"), "not found") # start missing
+  expect_error(icd_expand_range_major.icd10cm("A00", "A12"), "not found") # end missing
+
+  expect_error(icd_expand_range_major.icd10cm("dsa", "A99"), "is not") # start wrong
+  expect_error(icd_expand_range_major.icd10cm("A00", "zds"), "is not") # end wrong
+  expect_error(icd_expand_range_major.icd10cm("399annc", "611"), "is not") # both wrong
 
 })

@@ -124,7 +124,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   if (any(longest_lines))
     filtered <- filtered[-c(which(longest_lines))]
 
-  filtered <- strip_rtf(filtered)
+  filtered <- rtf_strip(filtered)
 
   filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE)
 
@@ -219,7 +219,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   for (f in fourth_rows) {
     if (verbose)
       message("working on fourth-digit row:", f)
-    range <- parseRtfFifthDigitRanges(filtered[f])
+    range <- rtf_parse_fifth_digit_range(filtered[f])
     filtered[seq(f + 1, f + 37)] %>%
       str_subset("^[[:digit:]][[:space:]].*") %>%
       str_pair_match("([[:digit:]])[[:space:]](.*)") -> fourth_suffices
@@ -257,7 +257,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   lookup_fifth <- c()
   for (f in fifth_rows) {
     if (verbose) message("working on fifth-digit row:", f)
-    range <- parseRtfFifthDigitRanges(filtered[f], verbose = verbose)
+    range <- rtf_parse_fifth_digit_range(filtered[f], verbose = verbose)
     fifth_suffices <- filtered[seq(f + 1, f + 20)] %>%
       grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
       str_pair_match("([[:digit:]])[[:space:]](.*)", warn_pattern = TRUE)
@@ -423,7 +423,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 #'   digits, but we haven't parsed them yet.
 #' @template verbose
 #' @keywords internal
-parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
+rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
   assertString(row_str)
   assertFlag(verbose)
 
@@ -492,7 +492,7 @@ parseRtfFifthDigitRanges <- function(row_str, verbose = FALSE) {
   out
 }
 
-parseRtfQualifierSubset <- function(qual) {
+rtf_parse_qualifier_subset <- function(qual) {
   assertString(qual) # one at a time
 
   out <- c()
@@ -520,22 +520,7 @@ parseRtfQualifierSubset <- function(qual) {
 #' space and eradicate all other RTF symbols
 #' @param x vector of character strings containing RTF
 #' @keywords internal
-strip_rtf_orig <- function(x) {
-  x %>%
-    # just for \tab, replace with space, otherwise, drop rtf tags entirely
-    # nolint start
-    gsub("\\\\tab ", " ", .) %>%
-    gsub("\\\\[[:punct:]]", "", .) %>% # control symbols only, not control words
-    gsub("\\\\lsdlocked[ [:alnum:]]*;", "", .) %>% # special case, still needed?
-    gsub("\\{\\\\bkmkstart.*?\\}", "", .) %>%
-    gsub("\\{\\\\bkmkend.*?\\}", "", .) %>%
-    gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", .) %>%
-    gsub(" *(\\}|\\{)", "", .) %>%
-    # nolint end
-    trim
-}
-
-str_strip_rtf <- function(x) {
+rtf_strip <- function(x) {
   x %>%
     # just for \tab, replace with space, otherwise, drop rtf tags entirely
     # nolint start
@@ -551,5 +536,3 @@ str_strip_rtf <- function(x) {
     # nolint end
     str_trim
 }
-
-strip_rtf <- str_strip_rtf

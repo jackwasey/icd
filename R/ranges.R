@@ -136,28 +136,32 @@ icd_expand_range_major <- function(start, end) {
 
 #' @describeIn icd_expand_range_major Expand range of top-level ICD-10 codes
 #' @keywords internal
-icd_expand_range_major.icd10 <- function(start, end) {
+icd_expand_range_major.icd10cm <- function(start, end) {
 
   # codes may have alphabetic characters in 3rd position, so can't just do
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
 
-  assertString(start)
-  assertString(end)
+  se <- asCharacterNoWarn(c(start, end)) %>% str_trim %>% str_to_upper
 
-  start <- str_trim(start)
-  end <- str_trim(end)
+  # TODO: memoise this, or does fastmatch remember?
+  unique_mjrs <- icd9::icd10cm2016$threedigit  %>% unique
 
-  stopifnot(icd_is_major.icd10(start), icd_is_major.icd10(end))
-  stopifnot(start <= end)
-  start_first <- str_sub(start, 1, 1) %>% str_to_upper()
-  end_first <- str_sub(end, 1, 1) %>% str_to_upper()
+  if (!icd_is_major.icd10cm(se[[1]]))
+    stop("start: ", start, " is not an ICD-10-CM major (three character) code")
+  if (!icd_is_major.icd10cm(se[[2]]))
+    stop("end: ", end, " is not an ICD-10-CM major (three character) code")
 
-  stop("not finished implementing")
-  if (start_first == end_first)
-    paste
+    if (se[[1]] > se[[2]])
+    stop(se[[1]], " is after ", se[[2]])
 
+  pos <- fastmatch::fmatch(se, unique_mjrs)
+  if (is.na(pos[[1]]))
+    stop(se[[1]], " as start not found")
+  if (is.na(pos[[2]]))
+    stop(se[[2]], " as end not found")
+  unique_mjrs[pos[[1]]:pos[[2]]] %>% asCharacterNoWarn %>% icd10cm
 }
 
 #' @describeIn icd_expand_range Expand a range of ICD-9 codes

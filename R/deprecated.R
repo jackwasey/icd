@@ -1028,11 +1028,6 @@ icd9AddLeadingZeroesMajor <- function(x) {
   icd9_add_leading_zeroes_major(x)
 }
 
-stripRtf <- function(x) {
-  .Deprecated("strip_rtf")
-  strip_rtf(x)
-}
-
 #' @rdname icd_is_defined
 #' @template icd9-any
 #' @template isShort

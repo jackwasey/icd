@@ -2,13 +2,13 @@
 % Please edit documentation in R/ranges.R
 \name{icd_expand_range_major}
 \alias{icd_expand_range_major}
-\alias{icd_expand_range_major.icd10}
+\alias{icd_expand_range_major.icd10cm}
 \alias{icd_expand_range_major.icd9}
 \title{Expand major codes to range}
 \usage{
 icd_expand_range_major(start, end)
 
-\method{icd_expand_range_major}{icd10}(start, end)
+\method{icd_expand_range_major}{icd10cm}(start, end)
 
 \method{icd_expand_range_major}{icd9}(start, end, defined = TRUE)
 }
@@ -17,7 +17,7 @@ Expand a pair of major codes into a range of major codes.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd10}: Expand range of top-level ICD-10 codes
+\item \code{icd10cm}: Expand range of top-level ICD-10 codes
 
 \item \code{icd9}: Expand a range of ICD-9 major codes into major codes
 }}
