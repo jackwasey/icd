@@ -31,8 +31,16 @@ re_just <- function(x, whitespace_ok = FALSE) {
 }
 
 #' @describeIn re_just allow whitespace
+#' @keywords internal
 re_just_ws <- function(x) {
   re_just(x, whitespace_ok = TRUE)
+}
+
+#' @describeIn re_just contain any \code{|} options within a regex, e.g. ICD-9 codes without
+#'   \code{^} or \code{$}.
+#' @keywords internal
+re_wrap_or <- function(x) {
+  paste0("(?:", x, ")")
 }
 
 re_icd9_major_n <- "[[:digit:]]{1,3}"
@@ -48,20 +56,18 @@ re_icd9_major <- paste0(c(re_icd9_major_n %>% re_just_ws,
                           re_icd9_major_v %>% re_just_ws,
                           re_icd9_major_e %>% re_just_ws),
                         collapse = "|")
-re_icd9_major_bare <- paste0(c(re_icd9_major_n %>% re_just,
-                          re_icd9_major_v %>% re_just,
-                          re_icd9_major_e %>% re_just),
-                        collapse = "|")
+re_icd9_major_bare <- paste0(c(re_icd9_major_n,
+                          re_icd9_major_v,
+                          re_icd9_major_e),
+                        collapse = "|") %>% re_wrap_or
 re_icd9_major_strict <- paste0(c(re_icd9_major_n_strict %>% re_just_ws,
-                                 re_icd9_major_v_strict %>% re_just_ws,
                                  re_icd9_major_v_strict %>% re_just_ws,
                                  re_icd9_major_e_strict %>% re_just_ws),
                                collapse = "|")
 re_icd9_major_strict_bare <- paste0(c(re_icd9_major_n_strict,
                                  re_icd9_major_v_strict,
-                                 re_icd9_major_v_strict,
                                  re_icd9_major_e_strict),
-                               collapse = "|")
+                               collapse = "|") %>% re_wrap_or
 re_icd9_minor_nv <- "[[:digit:]]{1,2}"
 re_icd9_minor_e <- "[[:digit:]]{1}"
 
