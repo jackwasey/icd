@@ -54,6 +54,20 @@ icd_check_conflict_with_icd9cm <- icd_check_conflict_with_icd9
 icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
 icd_check_conflict_with_icd10who <- icd_check_conflict_with_icd10
 
+#' check whether there are any ICD class conflicts
+#'
+#' E.g. both icd10who and icd10cm
+#' @param x input object to test for class conflicts
+#' @keywords internal
+icd_classes_conflict <- function(x) {
+
+  (is.icd9(x) && is.icd10(x)) ||
+    sum(icd9_sub_classes %in% class(x)) > 1 ||
+    sum(icd10_sub_classes %in% class(x)) > 1 ||
+    sum(icd_data_classes %in% class(x)) > 1 ||
+    sum(icd_code_classes %in% class(x)) > 1
+}
+
 #' @title prefer an order of classes
 #' @description The order of classes can matter because, for some functions,
 #'   we'd prefer to decide what to do based on a higher level structure, e.g.
@@ -113,18 +127,6 @@ icd_expectation_classes_ordered <- function() {
     testthat::expectation(icd_classes_ordered(x),
                           "are not well ordered", "are well ordered")
   }
-}
-
-#' check whether there are any ICD class conflicts
-#'
-#' E.g. both icd10who and icd10cm
-#' @param x input object to test for class conflicts
-#' @keywords internal
-icd_check_class_conflict <- function(x) {
-  sum(icd9_sub_classes %in% class(x)) > 1 ||
-    sum(icd10_sub_classes %in% class(x)) > 1 ||
-    sum(icd_data_classes %in% class(x)) > 1 ||
-    sum(icd_code_classes %in% class(x)) > 1
 }
 
 #' @rdname set_icd_class

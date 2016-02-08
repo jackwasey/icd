@@ -8,8 +8,10 @@
 \alias{icd9_is_valid_major_e}
 \alias{icd9_is_valid_major_n}
 \alias{icd9_is_valid_major_v}
+\alias{icd_is_valid.default}
 \alias{icd_is_valid_major}
 \alias{icd_is_valid_major.default}
+\alias{icd_is_valid_major.icd10}
 \alias{icd_is_valid_major.icd9}
 \title{Test whether an ICD code is major}
 \usage{
@@ -21,11 +23,15 @@ icd9IsValidMajorE(major)
 
 icd9IsValidMajor(icd)
 
+\method{icd_is_valid}{default}(x, whitespace_ok = TRUE)
+
 icd_is_valid_major(x, whitespace_ok = TRUE)
 
 \method{icd_is_valid_major}{default}(x, whitespace_ok = TRUE)
 
 \method{icd_is_valid_major}{icd9}(x, whitespace_ok = TRUE)
+
+\method{icd_is_valid_major}{icd10}(x, whitespace_ok = TRUE)
 
 icd9_is_valid_major_n(x, whitespace_ok = TRUE)
 
@@ -48,7 +54,12 @@ codes without real or implied decimal place return TRUE
 \item \code{default}: Test whether an ICD code is of major type,
 which at present assumes ICD-9 format
 
+\item \code{default}: Test whether an ICD code is of major type,
+which at present assumes ICD-9 format
+
 \item \code{icd9}: Test whether an ICD-9 code is of major type.
+
+\item \code{icd10}: Test whether an ICD-9 code is of major type.
 }}
 \keyword{internal}
 

@@ -296,7 +296,10 @@ icd_short_to_decimal.icd10 <- function(x) {
   # todo: these could/should be seperate functions
   majors <- str_sub(x, 0, 3)
   minors <- str_sub(x, 4)
-  paste0(majors, ".", minors) %>% icd_decimal_code %>% icd10
+  if (minors != "")
+    paste0(majors, ".", minors) %>% icd_decimal_code %>% icd10
+  else
+    paste0(majors) %>% icd_decimal_code %>% icd10
 }
 
 #' Convert Decimal format ICD codes to short format

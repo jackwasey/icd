@@ -209,9 +209,67 @@ test_that("printing a comorbidity map works very simply", {
 })
 
 test_that("is comorbidity map?", {
-  icd9_map_ahrq  %>%  unclass  %>% icd9  %>% icd_comorbidity_map -> x
+  icd9_map_ahrq %>% unclass %>% icd9 %>% icd_comorbidity_map -> x
   expect_true(is.icd_comorbidity_map(icd9_map_ahrq))
   expect_true(is.icd_comorbidity_map(x))
   expect_is(x, "icd_comorbidity_map")
   expect_is(icd9_map_ahrq, "icd_comorbidity_map")
+})
+
+context("class conflicts")
+
+test_that("no conflict for standard classes", {
+  expect_false(icd_classes_conflict(icd9("100.1")))
+  expect_false(icd_classes_conflict(icd9("100.1") %>% icd_decimal_code))
+  expect_false(icd_classes_conflict(icd9("1001") %>% icd_short_code))
+  expect_false(icd_classes_conflict(icd9cm("100.1")))
+  expect_false(icd_classes_conflict(icd9cm("100.1") %>% icd_decimal_code))
+  expect_false(icd_classes_conflict(icd9cm("1001") %>% icd_short_code))
+  expect_false(icd_classes_conflict(icd10("A00.0")))
+  expect_false(icd_classes_conflict(icd10("A00.0") %>% icd_decimal_code))
+  expect_false(icd_classes_conflict(icd10("A000") %>% icd_short_code))
+  expect_false(icd_classes_conflict(icd10cm("A00.0")))
+  expect_false(icd_classes_conflict(icd10cm("A00.0") %>% icd_decimal_code))
+  expect_false(icd_classes_conflict(icd10cm("A000") %>% icd_short_code))
+  expect_false(icd_classes_conflict(icd10who("A00.0")))
+  expect_false(icd_classes_conflict(icd10who("A00.0") %>% icd_decimal_code))
+  expect_false(icd_classes_conflict(icd10who("A000") %>% icd_short_code))
+})
+
+test_that("no conflict for built-in data", {
+  expect_false(icd_classes_conflict(vermont_dx))
+  expect_false(icd_classes_conflict(uranium_pathology))
+  expect_false(icd_classes_conflict(icd9_map_elix))
+  expect_false(icd_classes_conflict(icd9_map_elix[2]))
+  expect_false(icd_classes_conflict(icd9_map_elix[[2]]))
+  expect_false(icd_classes_conflict(icd10_map_quan_deyo[5]))
+  expect_false(icd_classes_conflict(icd10_map_quan_deyo[[5]]))
+})
+
+test_that("conflicting ICD type classes can be found", {
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd9cm", "icd10", "character"))))
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd9", "icd10", "character"))))
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd9cm", "icd10cm", "character"))))
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd10cm", "icd10who", "character"))))
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd10cm", "icd9", "character"))))
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd10cm", "icd9cm", "character"))))
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd10", "icd9", "character"))))
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd10", "icd9cm", "character"))))
+  expect_true(icd_classes_conflict(structure(list("V10", "A20"), class = c("icd9cm", "icd10", "list"))))
+})
+
+test_that("conflicting short vs decimal class asssignment", {
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd_short_code", "icd_decimal_code"))))
+  expect_true(icd_classes_conflict(structure("V10", class = c("icd_decimal_code", "icd_short_code"))))
+})
+
+test_that("long vs wide data conflict identified", {
+  v_bad <- vermont_dx
+  class(v_bad) <- c(class(v_bad), "icd_long_data")
+  u_bad <- uranium_pathology
+  class(u_bad) <- c(class(u_bad), "icd_wide_data")
+ 
+  expect_true(icd_classes_conflict(v_bad))
+  expect_true(icd_classes_conflict(u_bad))
+
 })

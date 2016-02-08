@@ -3,11 +3,14 @@
 \name{re_just}
 \alias{re_just}
 \alias{re_just_ws}
+\alias{re_wrap_or}
 \title{limit a regex to just what is given}
 \usage{
 re_just(x, whitespace_ok = FALSE)
 
 re_just_ws(x)
+
+re_wrap_or(x)
 }
 \arguments{
 \item{x}{single string containing a regex}
@@ -21,6 +24,9 @@ update regex to limit by start and end, with or without whitespace
 \section{Functions}{
 \itemize{
 \item \code{re_just_ws}: allow whitespace
+
+\item \code{re_wrap_or}: contain any \code{|} options within a regex, e.g. ICD-9 codes without
+\code{^} or \code{$}.
 }}
 \keyword{internal}
 

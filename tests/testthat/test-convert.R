@@ -121,6 +121,20 @@ test_that("short to decimal bad input", {
                c(NA_character_, NA_character_))
 })
 
+test_that("icd10 short to decimal", {
+
+  expect_equal(icd_short_to_decimal("A00"), icd10("A00") %>% icd_decimal_code)
+  expect_equal(icd_short_to_decimal.icd10("A00"), icd10("A00") %>% icd_decimal_code)
+  expect_equal(icd_short_to_decimal("A000"), icd10("A00.0") %>% icd_decimal_code)
+  expect_equal(icd_short_to_decimal.icd10("A000"), icd10("A00.0") %>% icd_decimal_code)
+
+})
+
+test_that("icd10 short to decimal and back", {
+  expect_identical(icd_short_to_decimal(icd_decimal_to_short("A00.0")), icd10("A00.0") %>% icd_decimal_code)
+  expect_identical(icd_decimal_to_short(icd_short_to_decimal("A000")), icd10("A000") %>% icd_short_code)
+})
+
 test_that("icd9 short to major part, E codes", {
   expect_equal_no_icd(icd_get_major.icd9(short_code = TRUE, "E000"), "E000")
   expect_equal_no_icd(icd_get_major.icd9(short_code = TRUE, "E00"), "E000")
