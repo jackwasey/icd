@@ -39,7 +39,7 @@ test_that("the classes of the ICD-10 maps are correct", {
   maps <- named_list(icd10_map_ahrq, icd10_map_elix, icd10_map_quan_deyo, icd10_map_quan_elix)
   for (m in names(maps)) {
     expect_true(is.icd10(maps[[m]]), info = paste("map: ", m))
-    expect_true(is.icd_short_code(m), info = paste("map: ", m))
+    expect_true(is.icd_short_code(maps[[m]]), info = paste("map: ", m))
     for (y in m) {
       expect_true(is.icd10(maps[[m]]), info = paste("map: ", m, ", cbd = ", y))
       expect_true(is.icd_short_code(maps[[m]]), info = paste("map: ", m, ", cbd = ", y))

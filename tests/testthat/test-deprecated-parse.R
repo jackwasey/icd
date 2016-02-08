@@ -36,6 +36,8 @@ test_that("deprecated - multiple lines in one fifth digit disciminator", {
 
 })
 
+stripRtf <- rtf_strip
+
 test_that("deprecated - bookmark ends only", {
   expect_equal(stripRtf("{\\*\\bkmkend 200.05}{\\*\\bkmkend 200.06}{\\*\\bkmkend 200.07}{\\*\\bkmkend 200.08}{\\*\\bkmkend 200.0}\\hich\\af1\\dbch\\af31505\\loch\\f1 200.0\\tab Reticulosarcoma"),
                "200.0 Reticulosarcoma")
