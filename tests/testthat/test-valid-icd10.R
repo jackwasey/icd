@@ -15,8 +15,8 @@ test_that("icd10 codes that are billable and do exist", {
     expect_true(icd_is_valid(x, short_code = TRUE), info = x)
     expect_true(icd_is_valid.icd10(x), info = x)
     expect_true(icd_is_valid.icd10(x, short_code = TRUE), info = x)
-   # expect_true(icd_is_valid.icd10cm(x)
-   # expect_true(icd_is_valid.icd10cm(x, short_code = TRUE)
+    # expect_true(icd_is_valid.icd10cm(x)
+    # expect_true(icd_is_valid.icd10cm(x, short_code = TRUE)
     expect_true(icd_is_billable(x), info = x)
     expect_true(icd_is_billable(x, short_code = TRUE), info = x)
     expect_true(icd_is_billable.icd10(x), info = x)
@@ -35,7 +35,7 @@ test_that("icd10 codes that are billable and do exist", {
 test_that("icd10 codes that are not billable but do exist", {
   test_codes <- list("A00", "A01", "R19", "B005",
                      "C7A02", "C7B", "D498", "O9A11", "O9A51", "O9A5", "O9984", "P96",
-                     # TODO: someday, might consider stripping trailing X, but doubt this occur in real life: 
+                     # TODO: someday, might consider stripping trailing X, but doubt this occur in real life:
                      # "V99XXX", "V988XX", "W009XX",
                      "Y99", "Z000")
   test_codes <- append(test_codes, lapply(test_codes, icd10cm))
@@ -44,8 +44,8 @@ test_that("icd10 codes that are not billable but do exist", {
     expect_true(icd_is_valid(x, short_code = TRUE), info = x)
     expect_true(icd_is_valid.icd10(x), info = x)
     expect_true(icd_is_valid.icd10(x, short_code = TRUE), info = x)
-   # expect_true(icd_is_valid.icd10cm(x)
-   # expect_true(icd_is_valid.icd10cm(x, short_code = TRUE)
+    # expect_true(icd_is_valid.icd10cm(x)
+    # expect_true(icd_is_valid.icd10cm(x, short_code = TRUE)
     expect_false(icd_is_billable(x), info = x)
     expect_false(icd_is_billable(x, short_code = TRUE), info = x)
     expect_false(icd_is_billable.icd10(x), info = x)
@@ -61,3 +61,31 @@ test_that("icd10 codes that are not billable but do exist", {
   }
 })
 
+test_that("major dispatch intact", {
+  expect_true(icd_is_valid_major(icd9("V10")))
+  expect_true(icd_is_valid_major(icd9cm("V10")))
+  expect_true(icd_is_valid_major(icd10("V10")))
+  expect_true(icd_is_valid_major(icd10cm("V10")))
+  expect_false(icd_is_valid_major(icd9("A12")))
+  expect_false(icd_is_valid_major(icd9cm("A12")))
+  expect_false(icd_is_valid_major(icd10("999")))
+  expect_false(icd_is_valid_major(icd10cm("999")))
+})
+
+test_that("major dispatch intact, whitespace not okay", {
+  expect_true(icd_is_valid_major(icd9("V10"), whitespace_ok = FALSE))
+  expect_true(icd_is_valid_major(icd9cm("V10"), whitespace_ok = FALSE))
+  expect_true(icd_is_valid_major(icd10("A00"), whitespace_ok = FALSE))
+  expect_true(icd_is_valid_major(icd10cm("A00"), whitespace_ok = FALSE))
+  expect_false(icd_is_valid_major(icd9(" V10"), whitespace_ok = FALSE))
+  expect_false(icd_is_valid_major(icd9cm("V10 "), whitespace_ok = FALSE))
+  expect_false(icd_is_valid_major(icd10(" A00"), whitespace_ok = FALSE))
+  expect_false(icd_is_valid_major(icd10cm("A00 "), whitespace_ok = FALSE))
+})
+
+test_that("valid major of unknown type could be ambiguous", {
+  # TODO: I could guess, and only give an error if really uncertain?
+  expect_error(icd_is_valid_major("V10"))
+  expect_error(icd_is_valid_major(c("V10", "A00")))
+  expect_error(icd_is_valid_major(c("V10", "440")))
+})

@@ -2,7 +2,7 @@
 #box: rocker/r-devel-san
 #box: rocker/r-devel-ubsan-clang
 
-# WERCKER_R_COVR_OPTIONS is set in the wercker configuration to do the same
+# WERCKER_R_COVR_OPTIONS is set in the wercker configuration to do exclusions
 box: rocker/hadleyverse
 command-timeout: 60
 no-response-timeout: 60

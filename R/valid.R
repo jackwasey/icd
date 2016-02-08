@@ -48,9 +48,9 @@ re_icd9_major <- paste0(c(re_icd9_major_n %>% re_just_ws,
                           re_icd9_major_v %>% re_just_ws,
                           re_icd9_major_e %>% re_just_ws),
                         collapse = "|")
-re_icd9_major_bare <- paste0(c(re_icd9_major_n,
-                          re_icd9_major_v,
-                          re_icd9_major_e),
+re_icd9_major_bare <- paste0(c(re_icd9_major_n %>% re_just,
+                          re_icd9_major_v %>% re_just,
+                          re_icd9_major_e %>% re_just),
                         collapse = "|")
 re_icd9_major_strict <- paste0(c(re_icd9_major_n_strict %>% re_just_ws,
                                  re_icd9_major_v_strict %>% re_just_ws,
@@ -182,6 +182,14 @@ re_icd10_any <- re_icd10cm_any
 #' @export
 icd_is_valid <- function(x, ...) {
   UseMethod("icd_is_valid")
+}
+
+#' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
+#'   which at present assumes ICD-9 format
+#' @export
+#' @keywords internal
+icd_is_valid.default <- function(x, whitespace_ok = TRUE) {
+  stop("Specify type for checking validity of ICD-9 or ICD-10 codes, to avoid ambiguity, e.g. V10", call. = FALSE)
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
@@ -336,7 +344,7 @@ icd_is_valid_major <- function(x, whitespace_ok = TRUE) {
 #' @export
 #' @keywords internal
 icd_is_valid_major.default <- function(x, whitespace_ok = TRUE) {
-  stop("guess type, never assume ICD-9 or ICD-10")
+  stop("Specify type for checking validity of ICD-9 or ICD-10 major codes, to avoid ambiguity, e.g. V10", call. = FALSE)
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
@@ -345,9 +353,20 @@ icd_is_valid_major.default <- function(x, whitespace_ok = TRUE) {
 icd_is_valid_major.icd9 <- function(x, whitespace_ok = TRUE) {
   assertFlag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major)) %>% na_to_false
-  else
     str_detect(asCharacterNoWarn(x), re_just(re_icd9_major)) %>% na_to_false
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major_bare)) %>% na_to_false
+}
+
+#' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
+#' @export
+#' @keywords internal
+icd_is_valid_major.icd10 <- function(x, whitespace_ok = TRUE) {
+  assertFlag(whitespace_ok)
+  if (whitespace_ok)
+    str_detect(asCharacterNoWarn(x), re_just(re_icd10_major)) %>% na_to_false
+  else
+    str_detect(asCharacterNoWarn(x), re_just(re_icd10_major_bare)) %>% na_to_false
 }
 
 #' @rdname icd_is_valid_major

@@ -8,11 +8,6 @@ warnings_are_errors: false
 env:
  - R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE
 
-r_github_packages:
- - jimhester/covr
- - hadley/testthat
- - RcppCore/Rcpp
-
 # debian package names: libxml2-dev libssl-dev r-base-core r-cran-xml r-cran-ggplot2 r-cran-rcurl r-cran-bitops r-cran-brew r-cran-rcolorbrewer r-cran-rcpp r-cran-dichromat r-cran-munsell r-cran-checkmate r-cran-evaluate r-cran-plyr r-cran-gtable r-cran-reshape2 r-cran-scales r-cran-proto r-cran-catools r-cran-testthat r-cran-memoise r-cran-digest r-cran-xtable
 # at least some of the following don't have debian packages (at time of writing)
 r_binary_packages:
@@ -42,12 +37,17 @@ r_binary_packages:
  - rmarkdown
  - stringr
 
+r_github_packages:
+ - jimhester/covr
+ - hadley/testthat
+ - RcppCore/Rcpp
+
 after_success:
  - Rscript -e 'devtools::install()'
  - Rscript -e 'devtools::session_info()'
- - Rscript -e 'library(covr); coveralls(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = TRUE)'
+ - Rscript -e 'library(covr); coveralls(exclusions = list("inst/include/icd9_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = TRUE)'
  #- env: COVR=true
- #- Rscript -e 'library(covr); codecov(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE)'
+ #- Rscript -e 'library(covr); codecov(exclusions = list("inst/include/icd9_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE)'
 
 
 notifications:
