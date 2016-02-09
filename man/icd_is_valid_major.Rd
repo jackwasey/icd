@@ -23,7 +23,7 @@ icd9IsValidMajorE(major)
 
 icd9IsValidMajor(icd)
 
-\method{icd_is_valid}{default}(x, whitespace_ok = TRUE)
+\method{icd_is_valid}{default}(x, ...)
 
 icd_is_valid_major(x, whitespace_ok = TRUE)
 
