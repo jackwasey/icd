@@ -194,7 +194,7 @@ icd_is_valid <- function(x, ...) {
 #'   which at present assumes ICD-9 format
 #' @export
 #' @keywords internal
-icd_is_valid.default <- function(x, whitespace_ok = TRUE) {
+icd_is_valid.default <- function(x, ...) {
   stop("Specify type for checking validity of ICD-9 or ICD-10 codes, to avoid ambiguity, e.g. V10", call. = FALSE)
 }
 

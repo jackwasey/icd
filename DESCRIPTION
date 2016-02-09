@@ -1,19 +1,17 @@
 Package: icd9
 Title: Tools for Working with ICD-9 Codes, and Finding Comorbidities
 Description: Calculate comorbidities, Charlson scores, perform fast and accurate
-    validation, conversion, manipulation, filtering and comparison of ICD-9-CM
-    (clinical modification) codes. ICD-9 codes appear numeric but leading and
-    trailing zeroes, and both decimal and non-decimal "short" format codes
-    exist. The package enables a work flow from raw lists of ICD-9 codes from
+    validation, conversion, manipulation, filtering and comparison of ICD-9 and ICD-10
+    codes. Common ambiguities and code formats are supported. This package enables a work flow from raw lists of ICD-9 codes in
     hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
-    from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Any
-    other mapping of codes, such as ICD-10, to comorbidities can be used.
-Version: 1.3.0.9002
-Date: 2015-09-28
+    from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+Version: 1.3.0.9003
+Date: 2016-02-09
 Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
-    person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org"),
-    person("R Core Team", role = c("ctb", "cph"))
+    person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org", comment = "Van Walraven scores"),
+    person("R Core Team", role = c("ctb", "cph"), comment = "m4 macro for OpenMP detection in configure"),
+    person("Kevin Ushey", role = c("ctb", "cph"), comment = "fast factor generation, adapted from package fastmatch")
     )
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd9

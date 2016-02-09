@@ -59,5 +59,8 @@ if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
 old_warn <- options(warn = -1)
 on.exit(options(old_warn))
 
-test_check("icd9")
+# use summary reporter so that covr produces output and doesn't time-out on
+# travis. The code coverage testing is slower than regular testing because of
+# instrumentation.
+test_check("icd9", reporter = "summary")
 

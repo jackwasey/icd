@@ -181,7 +181,7 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
                      "V2", "V34", "V567", "E", "E1", "E70", "E")))
   # internal function:
   \dontrun{
-  icd9:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
+  icd:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
   }
 }

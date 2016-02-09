@@ -37,7 +37,7 @@ I don't think there is any requirement for factor levels to be
 }
 \examples{
 \dontrun{
-pts <- icd9:::randomUnorderedPatients(1e7)
+pts <- icd:::randomUnorderedPatients(1e7)
 u <- unique.default(pts$icd9)
 # this shows that stringr (which uses stringi) sort takes 50\% longer than
 # built-in R sort.
