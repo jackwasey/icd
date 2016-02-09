@@ -3,7 +3,7 @@
 #include "is.h"
 #include "util.h"
 #include "convert.h"
-#include "../inst/include/icd9.h"
+#include "../inst/include/icd.h"
 
 context("C++ Unit Test") {
   test_that("two plus two is four") {

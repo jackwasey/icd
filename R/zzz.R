@@ -34,7 +34,7 @@ install_github(\"jackwasey/icd9\")
 }
 
 .onUnload <- function(libpath) {
-  library.dynam.unload("icd9", libpath)
+  library.dynam.unload("icd", libpath)
 }
 
 release_questions <- function() {

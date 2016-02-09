@@ -1,4 +1,4 @@
-Package: icd9
+Package: icd
 Title: Tools for Working with ICD-9 Codes, and Finding Comorbidities
 Description: Calculate comorbidities, Charlson scores, perform fast and accurate
     validation, conversion, manipulation, filtering and comparison of ICD-9 and ICD-10

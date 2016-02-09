@@ -15,18 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
-#' Tools for Working with ICD-9 Codes, and Finding Comorbidities
-#'
-#' Calculate comorbidities, Charlson scores, perform fast and accurate
-#' validation, conversion, manipulation, filtering and comparison of ICD-9-CM
-#' (clinical modification) codes. ICD-9 codes appear numeric but leading and
-#' trailing zeroes, and both decimal and non-decimal "short" format codes exist.
-#' The package enables a work flow from raw lists of ICD-9 codes from hospital
-#' billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan
-#' (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Any other
-#' mapping of codes, such as ICD-10, to comorbidities can be used.
 #' @details \describe{
-#'
 #'   \item{Comorbidities}{ \code{\link{icd_comorbid}} determines co-morbidities
 #'   for a set of patients with one or more ICD-9 codes each.
 #'   \code{\link{icd9Charlson}} calculates Charlson score (Comorbidity Index).
@@ -81,17 +70,16 @@
 #'   contains definitions of chapters, sub-chapters and three-digit groups.}
 #'
 #'   }
-#'
+"_PACKAGE"
 #' @docType package
-#' @name icd9-package
-#' @aliases package-icd9
+#' @name icd-package
+#' @aliases package-icd9 icd9-package icd10-package package-icd10
 #' @author Jack O. Wasey \email{jack@@jackwasey.com}
 #' @keywords misc utilities
 #' @references
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
-#' @seealso rClinicalCodes comorbidities
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
-#' @useDynLib icd9
+#' @useDynLib icd
 #' @import Rcpp checkmate stringr
 #' @importFrom magrittr "%<>%" set_names extract2
 NULL

@@ -24,7 +24,7 @@
 strim <- function(x) {
   assertString(x, na.ok = TRUE)
   if (!is.na(x[1]))
-    .Call("icd9_strimCpp", PACKAGE = get_pkg_name(), as.character(x))
+    .Call("icd_strimCpp", PACKAGE = get_pkg_name(), as.character(x))
   else
     return(NA_character_)
 }
@@ -38,7 +38,7 @@ strim <- function(x) {
 #' @keywords internal
 trim <- function(x) {
   nax <- is.na(x)
-  x[!nax] <- .Call("icd9_trimCpp", PACKAGE = get_pkg_name(), as.character(x[!nax]))
+  x[!nax] <- .Call("icd_trimCpp", PACKAGE = get_pkg_name(), as.character(x[!nax]))
   x
 }
 

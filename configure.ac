@@ -16,7 +16,7 @@
 # along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 
 AC_PREREQ([2.62])
-AC_INIT(icd9)
+AC_INIT(icd)
 AC_COPYRIGHT(Copyright (C) 2014 - 2016  Jack O. Wasey)
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_HEADERS([src/config.h:src/config.h.in])
