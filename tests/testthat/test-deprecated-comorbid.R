@@ -668,8 +668,8 @@ test_that("deprecated data aliases are created", {
 
 test_that("deprecated aliased function names", {
   # warnings turned off for testing!
-  expect_warning(res <- icd9Comorbidities(random_test_patients, icd9::ahrqComorbid, return.df = TRUE), NA)
-  expect_identical(res, icd9Comorbid(random_test_patients, icd9::ahrqComorbid, return.df = TRUE))
+  expect_warning(res <- icd9Comorbidities(random_test_patients, icd::ahrqComorbid, return.df = TRUE), NA)
+  expect_identical(res, icd9Comorbid(random_test_patients, icd::ahrqComorbid, return.df = TRUE))
 
   expect_warning(res <- icd9ComorbiditiesAhrq(random_test_patients, return.df = TRUE), NA)
   expect_identical(res, icd9ComorbidAhrq(random_test_patients, return.df = TRUE))

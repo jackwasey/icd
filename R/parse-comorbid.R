@@ -119,7 +119,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
     }
   }
 
-  names(icd9_map_ahrq) <- icd9::icd_names_ahrq_htn_abbrev
+  names(icd9_map_ahrq) <- icd::icd_names_ahrq_htn_abbrev
   icd9_map_ahrq %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
 
   if (save_data)
@@ -152,7 +152,7 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
   # of code with the ICD-9 version?
 
 
-  names(icd10_map_ahrq) <- icd9::icd_names_ahrq_htn_abbrev
+  names(icd10_map_ahrq) <- icd::icd_names_ahrq_htn_abbrev
   icd10_map_ahrq %<>% icd_short_code %>% icd10 %>% icd_comorbidity_map
 
 
@@ -201,9 +201,9 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   icd9_map_quan_deyo <- lapply(icd9_map_quan_deyo, icd_children.icd9,
                                short_code = TRUE, defined = FALSE)
 
-  # do use icd9:: to refer to a lazy-loaded dataset which is obscurely within
+  # do use icd:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
-  names(icd9_map_quan_deyo) <- icd9::icd_names_charlson_abbrev
+  names(icd9_map_quan_deyo) <- icd::icd_names_charlson_abbrev
   icd9_map_quan_deyo %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
 
   if (save_data)

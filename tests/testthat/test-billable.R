@@ -31,10 +31,10 @@ test_that("ICD-9-CM billable codes package data is recreated", {
   check_billable <- parse_leaf_descriptions_all(save_data = FALSE)
 
   for (ver in c("27", "28", "29", "30", "31", "32")) {
-    v <- icd9::icd9cm_billable[[ver]][["descLong"]]
+    v <- icd::icd9cm_billable[[ver]][["descLong"]]
     cb <- check_billable[[ver]][["descLong"]]
     diff <- v != cb
-    expect_identical(check_billable[[ver]], icd9::icd9cm_billable[[ver]],
+    expect_identical(check_billable[[ver]], icd::icd9cm_billable[[ver]],
                      info = paste("descLong differences for version", ver,
                                   "\noriginal: ", paste(v[diff], collapse = ", "),
                                   "\nprocess:", paste(cb[diff], collapse = ", ")
@@ -49,7 +49,7 @@ test_that("billable codes for expected versions exist", {
 
 test_that("billable codes are all in order", {
   for (v in names(icd9cm_billable)) {
-    i <- icd9::icd9cm_billable[[v]][["icd9"]]
+    i <- icd::icd9cm_billable[[v]][["icd9"]]
     expect_identical(i, icd_sort.icd9(i, short_code = TRUE),
                      info = paste("version = ", v))
   }

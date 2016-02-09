@@ -119,12 +119,12 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  pos <- match(c(start, new_end), icd9::icd10cm2016[["code"]])
+  pos <- match(c(start, new_end), icd::icd10cm2016[["code"]])
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
 
-  icd9::icd10cm2016[pos[1]:pos[2], "code"]
+  icd::icd10cm2016[pos[1]:pos[2], "code"]
 }
 
 #' @title Expand major codes to range
@@ -146,7 +146,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
   se <- asCharacterNoWarn(c(start, end)) %>% str_trim %>% str_to_upper
 
   # TODO: memoise this, or does fastmatch remember?
-  unique_mjrs <- icd9::icd10cm2016$threedigit  %>% unique
+  unique_mjrs <- icd::icd10cm2016$threedigit  %>% unique
 
   if (!icd_is_major.icd10cm(se[[1]]))
     stop("start: ", start, " is not an ICD-10-CM major (three character) code")
@@ -378,8 +378,8 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
 #' @examples
 #' \dontrun{
 #'   # return all possible decimal parts of ICD9 codes (111 in total)
-#'   length(icd9:::icd_expand_minor(icd9(""), is_e = FALSE))
-#'   icd9:::icd_expand_minor(icd9("1")) # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+#'   length(icd:::icd_expand_minor(icd9(""), is_e = FALSE))
+#'   icd:::icd_expand_minor(icd9("1")) # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 #' }
 #' @return NA for invalid minor, otherwise a vector of all possible (perhaps
 #'   non-existent) sub-divisions.

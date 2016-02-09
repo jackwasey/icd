@@ -139,7 +139,7 @@ test_that("deprecated - expand range worker gives correct ranges", {
   # really, the test is against icd9ExpandRange family, but we can isolate an
   # error to the sub-function
   expect_equal(
-    expandRangeWorker("V10", "V1001", lookup = icd9:::icd9VShort,
+    expandRangeWorker("V10", "V1001", lookup = icd:::icd9VShort,
                       onlyReal = TRUE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
     c("V10", "V100", "V1000", "V1001"))
 })

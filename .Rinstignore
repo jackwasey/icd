@@ -1,6 +1,6 @@
 ^COPYING$
 R\/benchmark\.R
-tools
+^tools$
 R\/parse.+\.R
 R\/sas\.R
 tests\/testthat\/test-sas\.R

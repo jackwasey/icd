@@ -108,7 +108,7 @@ test_that("ICD version supertype set", {
   expect_is(icd10who(""), "icd10")
 })
 
-x <- icd9::icd9_map_quan_elix
+x <- icd::icd9_map_quan_elix
 
 test_that("constructing a comorbidity map works", {
   expect_equal(icd_comorbidity_map(x), x)
@@ -119,8 +119,8 @@ test_that("constructing a comorbidity map works", {
 test_that("constructing a comorbidity map with unnamed list, etc. fails", {
   expect_error(icd_comorbidity_map(unname(unclass(x))))
   # and data frames should definitely fail
-  expect_error(icd_comorbidity_map(icd9::vermont_dx))
-  expect_error(icd_comorbidity_map(icd9::uranium_pathology))
+  expect_error(icd_comorbidity_map(icd::vermont_dx))
+  expect_error(icd_comorbidity_map(icd::uranium_pathology))
 })
 
 test_that("subsetting a comorbidity map gives the right class", {
@@ -146,22 +146,22 @@ test_that("subsetting a comorbidity map gives the right class", {
 })
 
 test_that("constructing wide data works", {
-  expect_equal(icd_wide_data(icd9::vermont_dx), icd9::vermont_dx)
-  expect_equivalent(icd_wide_data(icd9::vermont_dx), icd9::vermont_dx)
-  expect_equivalent(icd_wide_data(as.data.frame(icd9::vermont_dx)), icd9::vermont_dx)
+  expect_equal(icd_wide_data(icd::vermont_dx), icd::vermont_dx)
+  expect_equivalent(icd_wide_data(icd::vermont_dx), icd::vermont_dx)
+  expect_equivalent(icd_wide_data(as.data.frame(icd::vermont_dx)), icd::vermont_dx)
 })
 
 test_that("constructing long data works", {
-  expect_equal(icd_long_data(icd9::uranium_pathology), icd9::uranium_pathology)
-  expect_equivalent(icd_long_data(icd9::uranium_pathology), icd9::uranium_pathology)
-  expect_equivalent(icd_long_data(as.data.frame(icd9::uranium_pathology)), icd9::uranium_pathology)
+  expect_equal(icd_long_data(icd::uranium_pathology), icd::uranium_pathology)
+  expect_equivalent(icd_long_data(icd::uranium_pathology), icd::uranium_pathology)
+  expect_equivalent(icd_long_data(as.data.frame(icd::uranium_pathology)), icd::uranium_pathology)
 })
 
 test_that("is long or wide data?", {
-  expect_true(is.icd_wide_data(icd_wide_data(icd9::vermont_dx)))
-  expect_true(is.icd_long_data(icd_long_data(icd9::uranium_pathology)))
-  expect_is(icd_wide_data(icd9::vermont_dx), "icd_wide_data")
-  expect_is(icd_long_data(icd9::uranium_pathology), "icd_long_data")
+  expect_true(is.icd_wide_data(icd_wide_data(icd::vermont_dx)))
+  expect_true(is.icd_long_data(icd_long_data(icd::uranium_pathology)))
+  expect_is(icd_wide_data(icd::vermont_dx), "icd_wide_data")
+  expect_is(icd_long_data(icd::uranium_pathology), "icd_long_data")
 })
 
 test_that("constructing wide or long format for non-data frame gives error", {
@@ -170,14 +170,14 @@ test_that("constructing wide or long format for non-data frame gives error", {
 })
 
 test_that("subsetting data frame works", {
-  expect_equal(unclass(icd9::vermont_dx[1, 6]), "27801")
-  expect_equal(unclass(icd9::vermont_dx[1, "DX1"]), "27801")
-  expect_is(icd9::vermont_dx[1, "DX1"], c("icd9cm", "icd9", "character"))
-  expect_equal(unclass(icd9::vermont_dx[[1, 6]]), "27801")
-  expect_is(icd9::vermont_dx[[1, "DX1"]], c("icd9cm", "icd9", "character"))
+  expect_equal(unclass(icd::vermont_dx[1, 6]), "27801")
+  expect_equal(unclass(icd::vermont_dx[1, "DX1"]), "27801")
+  expect_is(icd::vermont_dx[1, "DX1"], c("icd9cm", "icd9", "character"))
+  expect_equal(unclass(icd::vermont_dx[[1, 6]]), "27801")
+  expect_is(icd::vermont_dx[[1, "DX1"]], c("icd9cm", "icd9", "character"))
   # columns
-  expect_is(icd9::vermont_dx[6], c("icd9cm", "icd9", "data.frame")) # not necessarily wide anymore...
-  expect_is(icd9::vermont_dx[[6]], c("icd9cm", "icd9", "character"))
+  expect_is(icd::vermont_dx[6], c("icd9cm", "icd9", "data.frame")) # not necessarily wide anymore...
+  expect_is(icd::vermont_dx[[6]], c("icd9cm", "icd9", "character"))
 })
 
 test_that("data frame subsetting doesn't incorrectly set class on columns", {
@@ -204,7 +204,7 @@ test_that("subset with double bracket doesn't override the underlying class", {
 test_that("printing a comorbidity map works very simply", {
   expect_warning(
     capture.output(
-      print.icd_comorbidity_map(icd9::icd9_map_quan_elix)
+      print.icd_comorbidity_map(icd::icd9_map_quan_elix)
     ), NA)
 })
 

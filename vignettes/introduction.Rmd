@@ -149,7 +149,7 @@ It is easy to find the children of a higher-level ICD-9 code:
 ```{r "childrenReal"}
 icd_children(icd9("391"))
 # mid-level code
-icd9:::icd_children.icd9("0032")
+icd:::icd_children.icd9("0032")
 # leaf node has no children
 # be explicit about the type of code:
 test_code <- icd9(icd_short_code("00321"))
@@ -236,7 +236,7 @@ This package contains ICD-9-CM to co-morbidity mappings from several sources, ba
 
 The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code.
 ```{r ahrq}
-#ahrqComorbid <- icd9:::parseAhrqSas() # user doesn't need to do this
+#ahrqComorbid <- icd:::parseAhrqSas() # user doesn't need to do this
 names(ahrqComorbid)
 ```
 
@@ -295,7 +295,7 @@ icd9(cardiac) %>% icd_explain(warn = FALSE) %>% head(10)
 I understand that comorbiditity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
 ```{r speed, cache = TRUE}
 # codes selected from AHRQ mapping
-many_patients <- icd9:::generate_random_pts(100000) 
+many_patients <- icd:::generate_random_pts(100000) 
 
 # result in seconds (platform and load dependent, of course)
 system.time(
@@ -308,7 +308,7 @@ Don't want to stress CRAN, so no larger numbers demonstrated, but I do consisten
 The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd9/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9Chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.
 ```{r "arbitraryMapping"}
 names(icd9Chapters)[c(1:5, 14)]
-myMap <- icd9:::icd9ChaptersToMap(icd9Chapters[c(2, 5, 14)])
+myMap <- icd:::icd9ChaptersToMap(icd9Chapters[c(2, 5, 14)])
 icd9Comorbid(patientData, myMap) # no +ve 
 ```
 
@@ -332,7 +332,7 @@ The ICD-9-CM scheme is structured as follows:
  
  For most combinations of 0 to 9, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
 ```{r "find three digit billable"}
-allreal <- icd9::icd9cm_hierarchy[["code"]] # or used icd_get_defined
+allreal <- icd::icd9cm_hierarchy[["code"]] # or used icd_get_defined
 # select the non-V and non-E codes with three characters (zeroes already prefixed)
 threedigitreal <- allreal[nchar(allreal) == 3 & icd9_is_n(allreal)]
 # display

@@ -259,7 +259,7 @@ rtf_year_ok <- function(test_year) {
 #'   set as \code{NA}; otherwise; they are removed.
 #' @examples
 #' \dontrun{
-#' pts <- icd9:::randomUnorderedPatients(1e7)
+#' pts <- icd:::randomUnorderedPatients(1e7)
 #' u <- unique.default(pts$icd9)
 #' # this shows that stringr (which uses stringi) sort takes 50% longer than
 #' # built-in R sort.

@@ -168,11 +168,11 @@ icd10_comorbid_parent_search <- function(x,
   just_cmb <- vapply(icd_codes, function(y) {
     # look it up in each comorbidity, but TODO: once we have a comorbidity for
     # one patient, we don't need to search within it again
-    vapply(names(icd9::icd10_map_ahrq),
+    vapply(names(icd::icd10_map_ahrq),
            FUN = function(cmb) {
              # and if not found, slice off last char of test string
              for (n in nchar(y):3) {
-               if (!is.na(fastmatch::fmatch(str_sub(y, 1, n), icd9::icd10_map_ahrq[[cmb]])))
+               if (!is.na(fastmatch::fmatch(str_sub(y, 1, n), icd::icd10_map_ahrq[[cmb]])))
                  return(TRUE)
              }
              FALSE
@@ -387,7 +387,7 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE,
   assertFlag(abbrev_names)
   assertFlag(hierarchy)
 
-  cbd <- icd_comorbid.icd9(..., map = icd9::icd9_map_ahrq)
+  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_ahrq)
   icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy)
 }
 
@@ -397,7 +397,7 @@ icd_comorbid_ahrq.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) 
   assertFlag(abbrev_names)
   assertFlag(hierarchy)
 
-  cbd <- icd_comorbid.icd10(..., map = icd9::icd10_map_ahrq)
+  cbd <- icd_comorbid.icd10(..., map = icd::icd10_map_ahrq)
   icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy)
 }
 
@@ -417,14 +417,14 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_ahrq_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_ahrq
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_ahrq_htn_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_ahrq_htn
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn
   }
   cbd
 }
@@ -439,7 +439,7 @@ icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
                                         hierarchy = TRUE) {
   assertFlag(abbrev_names)
   assertFlag(hierarchy)
-  cbd <- icd_comorbid.icd9(..., map = icd9::icd9_map_quan_deyo)
+  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_quan_deyo)
   if (hierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
@@ -448,9 +448,9 @@ icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
   if (abbrev_names)
-    colnames(cbd)[cr(cbd)] <- icd9::charlsonComorbidNamesAbbrev
+    colnames(cbd)[cr(cbd)] <- icd::charlsonComorbidNamesAbbrev
   else
-    colnames(cbd)[cr(cbd)] <- icd9::charlsonComorbidNames
+    colnames(cbd)[cr(cbd)] <- icd::charlsonComorbidNames
 
   cbd
 }
@@ -461,7 +461,7 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
                                         hierarchy = TRUE) {
   assertFlag(abbrev_names)
   assertFlag(hierarchy)
-  cbd <- icd_comorbid.icd9(..., map = icd9::icd9_map_quan_elix)
+  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_quan_elix)
   if (hierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
@@ -480,14 +480,14 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
     # the comorbidities:
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_quan_elix_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_quan_elix
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_quan_elix_htn_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_quan_elix_htn
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_htn
   }
   cbd
 }
@@ -497,7 +497,7 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
 icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   assertFlag(abbrev_names)
   assertFlag(hierarchy)
-  cbd <- icd_comorbid.icd9(..., map = icd9::icd9_map_elix)
+  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_elix)
   if (hierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
@@ -507,14 +507,14 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_elix_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_elix
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_elix_htn_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd9::icd_names_elix_htn
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_htn
   }
   cbd
 }
@@ -536,7 +536,9 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #'   the differing codes are attempted to be reduced to their parent codes, in
 #'   order to give a more succinct summary.
 #' @examples
+#' \donttest{
 #' icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)[["CHF"]]
+#' }
 #' \dontrun{
 #' # show differences for
 #' # give full report on all comorbidities for these mappings

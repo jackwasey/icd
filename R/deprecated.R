@@ -230,7 +230,7 @@ icd9Explain <- function(icd9, isShort = icd_guess_short.icd9(icd9),
   x <- icd9
   icd9 <- NULL
   if (is.list(x))
-    x <- lapply(x, icd9::icd9)
+    x <- lapply(x, icd::icd9)
   else
     x <- icd9(x)
   icd_explain(x = x, short_code = isShort, condense = doCondense, brief = brief, warn = warn)

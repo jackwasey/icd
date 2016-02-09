@@ -96,22 +96,22 @@ expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
 
 #' @rdname expect_chap_equal
 expect_icd10_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(.(x), start, end, ver_chaps = icd9::icd10_chapters, ...)))
+  eval(bquote(expect_chap_equal(.(x), start, end, ver_chaps = icd::icd10_chapters, ...)))
 }
 
 #' @rdname expect_chap_equal
 expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd9::icd10_sub_chapters, ...)))
+  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd::icd10_sub_chapters, ...)))
 }
 
 #' @rdname expect_chap_equal
 expect_icd9_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(.(x), start, end, ver_chaps = icd9::icd9_chapters, ...)))
+  eval(bquote(expect_chap_equal(.(x), start, end, ver_chaps = icd::icd9_chapters, ...)))
 }
 
 #' @rdname expect_chap_equal
 expect_icd9_sub_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd9::icd9_sub_chapters, ...)))
+  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd::icd9_sub_chapters, ...)))
 }
 
 expect_icd9_major_equals <- function(x, code, ...) {
@@ -156,19 +156,19 @@ expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
 }
 
 expect_icd9_sub_chap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9::icd9_sub_chapters, ...)))
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd::icd9_sub_chapters, ...)))
 }
 
 expect_icd9_chap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9::icd9_chapters, ...)))
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd::icd9_chapters, ...)))
 }
 
 expect_icd10_sub_chap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9::icd10_sub_chapters, ...)))
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd::icd10_sub_chapters, ...)))
 }
 
 expect_icd10_chap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9::icd10_chapters, ...)))
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd::icd10_chapters, ...)))
 }
 
 #' expect that a chapter with given title exists, case-insensitive
@@ -181,26 +181,26 @@ expect_chap_present <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
 #' @rdname expect_chap_present
 #' @keywords internal
 expect_icd9_sub_chap_present <- function(x, info = NULL, label = NULL, ...) {
-  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9::icd9_sub_chapters,
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd9_sub_chapters,
                                   info = info, label = label, ...)))
 }
 
 #' @rdname expect_chap_present
 #' @keywords internal
 expect_icd9_chap_present <- function(x, ...) {
-  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9::icd9_chapters, ...)))
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd9_chapters, ...)))
 }
 
 #' @rdname expect_chap_present
 #' @keywords internal
 expect_icd10_sub_chap_present <- function(x, ...) {
-  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9::icd10_sub_chapters, ...)))
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd10_sub_chapters, ...)))
 }
 
 #' @rdname expect_chap_present
 #' @keywords internal
 expect_icd10_chap_present <- function(x, ...) {
-  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9::icd10_chapters, ...)))
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd10_chapters, ...)))
 }
 
 expect_icd9_only_chap <- function(x, ...) {
@@ -239,7 +239,7 @@ expect_icd10_only_sub_chap <- function(x, ...) {
 #' expectation for ICD classes to be well-ordered
 #' @return a function, mimicking how \code{testthat} works
 #' @examples
-#'   testthat::expect_that(icd9("V10"), icd9:::icd_classes_are_ordered())
+#'   testthat::expect_that(icd9("V10"), icd:::icd_classes_are_ordered())
 #' @keywords internal
 icd_classes_are_ordered <- function() {
   function(x) {
@@ -282,7 +282,7 @@ randomShortIcd9 <- function(n = 50000)
   as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
 
 randomShortAhrq <- function(n = 50000)
-  sample(unname(unlist(icd9::ahrqComorbid)), size = n, replace = TRUE)
+  sample(unname(unlist(icd::ahrqComorbid)), size = n, replace = TRUE)
 
 randomDecimalIcd9 <- function(n = 50000)
   paste(

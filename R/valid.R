@@ -182,7 +182,7 @@ re_icd10_any <- re_icd10cm_any
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E")))
 #'   # internal function:
 #'   \dontrun{
-#'   icd9:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
+#'   icd:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 #'   }
 #' @export
@@ -498,9 +498,7 @@ icd_get_invalid.icd10 <- function(x, short_code = icd_guess_short.icd10(x), ...)
 #' @keywords internal
 icd_get_invalid.icd_comorbidity_map <- function(x, short_code = icd_guess_short(x), ...) {
   # todo: may need to switch on ICD code type
-  print(class(x))
   class(x) <- class(x)[class(x) != "icd_comorbidity_map"]
-  print(class(x))
   x <- lapply(x, FUN = icd_get_invalid, short_code = short_code)
   x[lapply(x, length) > 0]
 }

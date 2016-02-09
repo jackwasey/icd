@@ -158,8 +158,8 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   # generate lookup for sub-chapter
   sc_lookup <- data.frame(major = NULL, desc = NULL)
-  for (scn in names(icd9::icd10_sub_chapters)) {
-    sc <- icd9::icd10_sub_chapters[[scn]]
+  for (scn in names(icd::icd10_sub_chapters)) {
+    sc <- icd::icd10_sub_chapters[[scn]]
     si <- grep(sc["start"], lk_majors)
     se <- grep(sc["end"], lk_majors)
     sc_majors <- lk_majors[si:se]
@@ -182,9 +182,9 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   # now the same for chapters:
   chap_lookup <- data.frame(major = NULL, desc = NULL)
-  for (chap_n in names(icd9::icd10_chapters)) {
+  for (chap_n in names(icd::icd10_chapters)) {
 
-    chap <- icd9::icd10_chapters[[chap_n]]
+    chap <- icd::icd10_chapters[[chap_n]]
     # fix a 2016 error in the CMS XML definitions
     if (chap["end"] == "Y08")
       chap["end"] <- "Y09"

@@ -150,7 +150,7 @@ test_that("icd9 short to major part, E codes", {
 test_that("running short to decimal conversion before and after expansion
           of a ICD-9 base codes gives the same result", {
 
-            icd9List <- icd9::icd9_map_ahrq #todo SUBSET OR EXTRA MAPPINGS?
+            icd9List <- icd::icd9_map_ahrq #todo SUBSET OR EXTRA MAPPINGS?
             for (i in names(icd9List)) {
               expect_equal_no_icd(
                 icd_decimal_to_short.icd9(icd_short_to_decimal.icd9(icd9List[[i]])),
@@ -313,7 +313,7 @@ test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity 
     icd_long_data %>% icd_decimal_code %>% icd9 -> ooe
   class(ooe[["icd9"]]) <- c("icd9", "icd_decimal_code", "factor")
 
-  expect_warning(test_map <- icd9ChaptersToMap(icd9::icd9Chapters), NA)
+  expect_warning(test_map <- icd9ChaptersToMap(icd::icd9Chapters), NA)
   expect_warning(
     cmb <- icd_comorbid.icd9(x = ooe, short_code = FALSE, map = test_map,
                              short_map = TRUE, return_df = TRUE), NA)

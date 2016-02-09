@@ -26,7 +26,7 @@
 #include <vector>
 #include <string>
 
-// R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
+// R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd:::runOpenMPVecInt();"
 
 //' @rdname icd_comorbid
 //' @description RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very

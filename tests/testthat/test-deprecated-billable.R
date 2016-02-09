@@ -25,10 +25,10 @@ test_that("billable codes are recreated", {
   if (Sys.info()[["sysname"]] != "Linux")
     skip("Only do encoding problems on Linux.")
   for (ver in c("27", "28", "29", "30", "31", "32")) {
-    v <- icd9::icd9Billable[[ver]][["descLong"]]
+    v <- icd::icd9Billable[[ver]][["descLong"]]
     cb <- check_billable[[ver]][["descLong"]]
     diff <- v != cb
-    expect_identical(check_billable[[ver]], icd9::icd9Billable[[ver]],
+    expect_identical(check_billable[[ver]], icd::icd9Billable[[ver]],
                      info = paste("descLong differences for version", ver,
                                   "\noriginal: ", paste(v[diff], collapse = ", "),
                                   "\nprocess:", paste(cb[diff], collapse = ", ")
@@ -44,7 +44,7 @@ test_that("billable codes for expected versions exist", {
 test_that("billable codes are all in order", {
   skip_on_cran()
   for (v in names(icd9Billable)) {
-    icd9 <- icd9::icd9Billable[[v]][["icd9"]]
+    icd9 <- icd::icd9Billable[[v]][["icd9"]]
     expect_identical(icd9, icd9SortShort(icd9),
                      info = paste("version = ", v))
   }

@@ -110,12 +110,12 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
 })
 
 test_that("some hand-picked ICD-10 codes appear in the quan elix map", {
-  expect_true("M12019" %in% icd9::icd10_map_quan_elix$Rheumatic)
+  expect_true("M12019" %in% icd::icd10_map_quan_elix$Rheumatic)
   #TODO more
 })
 
 test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
-  expect_true("I214" %in% icd9::icd10_map_quan_deyo$MI)
+  expect_true("I214" %in% icd::icd10_map_quan_deyo$MI)
   #TODO more
 })
 
@@ -135,11 +135,11 @@ test_that("ahrq comorbidities found for test data", {
 
   for (test_name in names(td)) {
 
-  expect_warning(res <- icd_comorbid(td[[test_name]], icd9::icd10_map_ahrq), NA)
+  expect_warning(res <- icd_comorbid(td[[test_name]], icd::icd10_map_ahrq), NA)
   for (n in colnames(res))
     expect_true(res[, n], info = paste("method one comorbidity:", n, ", test: ", test_name))
 
-  expect_warning(res <- icd_comorbid.icd10(td[[test_name]], icd9::icd10_map_ahrq), NA)
+  expect_warning(res <- icd_comorbid.icd10(td[[test_name]], icd::icd10_map_ahrq), NA)
   for (n in colnames(res))
     expect_true(res[, n], info = paste("method two comorbidity:", n, ", test: ", test_name))
   }
@@ -160,13 +160,13 @@ test_that("ahrq comorbidities found for test data for multiple patients each wit
   # just checking for a trace matrix of TRUE, but this way lets me find error much more quickly:
   for (test_name in names(td)) {
 
-    expect_warning(res <- icd_comorbid(td[[test_name]], icd9::icd10_map_ahrq), NA)
+    expect_warning(res <- icd_comorbid(td[[test_name]], icd::icd10_map_ahrq), NA)
     for (n in colnames(res))
       expect_equal(sum(res[, n]), 1, info = paste("col method one comorbidity:", n, ", test: ", test_name))
     for (n in rownames(res))
       expect_equal(sum(res[n, ]), 1, info = paste("row method one comorbidity:", n, ", test: ", test_name))
 
-    expect_warning(res <- icd_comorbid.icd10(td[[test_name]], icd9::icd10_map_ahrq), NA)
+    expect_warning(res <- icd_comorbid.icd10(td[[test_name]], icd::icd10_map_ahrq), NA)
     for (n in colnames(res))
       expect_equal(sum(res[, n]), 1, info = paste("method two comorbidity:", n, ", test: ", test_name))
     for (n in rownames(res))

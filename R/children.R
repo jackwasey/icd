@@ -113,16 +113,16 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
   icd10Short <- str_trim(x)
 
-  matches_bool <- icd10Short %in% icd9::icd10cm2016[["code"]]
+  matches_bool <- icd10Short %in% icd::icd10cm2016[["code"]]
   # if the codes are not in the source file, we ignore, warn, drop silently?
   if (!all(matches_bool)) warning("some values did not match any ICD-10-CM codes: ",
                                   paste(icd10Short[!matches_bool], collapse = ", "))
 
   icd10Short <- icd10Short[matches_bool]
-  matches <- match(icd10Short, icd9::icd10cm2016[["code"]])
-  last_row <- nrow(icd9::icd10cm2016)
+  matches <- match(icd10Short, icd::icd10cm2016[["code"]])
+  last_row <- nrow(icd::icd10cm2016)
 
-  nc <- nchar(icd9::icd10cm2016[["code"]]) # TODO: pre-compute and save in package data
+  nc <- nchar(icd::icd10cm2016[["code"]]) # TODO: pre-compute and save in package data
 
   kids <- character(0)
 
@@ -138,7 +138,7 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
     while (nc[check_row] > parent_len && check_row != last_row + 1)
       check_row <- check_row + 1
 
-    kids <- c(kids, icd9::icd10cm2016[matches[i]:(check_row - 1), "code"])
+    kids <- c(kids, icd::icd10cm2016[matches[i]:(check_row - 1), "code"])
   }
   kids
 

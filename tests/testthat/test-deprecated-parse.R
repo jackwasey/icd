@@ -124,7 +124,7 @@ test_that("deprecated - online parse tests run", {
   })
 
   test_that("deprecated - all csv extract codes are in rtf extract", {
-    missing_from_rtf <- setdiff(icd9ShortToDecimal(icd9::icd9Hierarchy$icd9), nrtf)
+    missing_from_rtf <- setdiff(icd9ShortToDecimal(icd::icd9Hierarchy$icd9), nrtf)
     expect_equal(length(missing_from_rtf), 0,
                  info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
   })

@@ -104,12 +104,12 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
   }
   mj <- unique(icd_get_major.icd9(x, short_code = TRUE))
 
-  mjexplain <- names(icd9::icd9_majors)[icd9::icd9_majors %in% mj[mj %in% x]]
+  mjexplain <- names(icd::icd9_majors)[icd::icd9_majors %in% mj[mj %in% x]]
   # don't double count when major is also billable
   x <- x[x %nin% mj]
   descField <- ifelse(brief, "descShort", "descLong")
   c(mjexplain,
-    icd9::icd9cm_hierarchy[ icd9::icd9cm_hierarchy[["code"]] %in% x, descField]
+    icd::icd9cm_hierarchy[ icd::icd9cm_hierarchy[["code"]] %in% x, descField]
   )
 }
 
@@ -154,40 +154,40 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(x),
 
   # could consider factor_nosort, but this isn't the main bottleneck
   cf <- factor(rep(NA_character_, length(icd9)),
-               levels = c(names(icd9::icd9_chapters), NA_character_))
+               levels = c(names(icd::icd9_chapters), NA_character_))
   sf <- factor(rep(NA_character_, length(icd9)),
-               levels = c(names(icd9::icd9_sub_chapters), NA_character_))
+               levels = c(names(icd::icd9_sub_chapters), NA_character_))
   mf <- factor(rep(NA_character_, length(icd9)),
-               levels = c(names(icd9::icd9_majors), NA_character_))
-  thrdgt <- factor(rep(NA_character_, length(icd9)), levels = c(icd9::icd9_majors, NA_character_))
+               levels = c(names(icd::icd9_majors), NA_character_))
+  thrdgt <- factor(rep(NA_character_, length(icd9)), levels = c(icd::icd9_majors, NA_character_))
   out <- data.frame(threedigit = thrdgt, major = mf,
                     subchapter = sf, chapter = cf)
 
-  chap_lookup <- lapply(icd9::icd9_chapters, function(y)
+  chap_lookup <- lapply(icd::icd9_chapters, function(y)
     icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
 
-  subchap_lookup <- lapply(icd9::icd9_sub_chapters, function(y)
+  subchap_lookup <- lapply(icd::icd9_sub_chapters, function(y)
     icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
 
   for (i in 1:length(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
-    for (chap_num in 1:length(icd9::icd9_chapters)) {
+    for (chap_num in 1:length(icd::icd9_chapters)) {
       if (majors[i] %fin% chap_lookup[[chap_num]]) {
-        out[i, "chapter"] <- names(icd9::icd9_chapters)[chap_num]
+        out[i, "chapter"] <- names(icd::icd9_chapters)[chap_num]
         break
       }
     }
-    for (subchap_num in 1:length(icd9::icd9_sub_chapters)) {
+    for (subchap_num in 1:length(icd::icd9_sub_chapters)) {
       if (majors[i] %fin% subchap_lookup[[subchap_num]]) {
-        out[i, "subchapter"] <- names(icd9::icd9_sub_chapters)[subchap_num]
+        out[i, "subchapter"] <- names(icd::icd9_sub_chapters)[subchap_num]
         break
       }
     }
   }
-  whch <- match(majors, icd9::icd9_majors, nomatch = NA_character_)
-  out$major[] <- names(icd9::icd9_majors)[whch]
-  out$threedigit[] <- unlist(icd9::icd9_majors)[whch]
+  whch <- match(majors, icd::icd9_majors, nomatch = NA_character_)
+  out$major[] <- names(icd::icd9_majors)[whch]
+  out$threedigit[] <- unlist(icd::icd9_majors)[whch]
   out$threedigit <- out$threedigit %>% icd9cm
 
   # many possible three digit codes don't exist. We should return NA for the
@@ -199,14 +199,14 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(x),
 
 icd9_expand_chapter_majors <- function(chap) {
   icd_expand_range_major.icd9(
-    icd9::icd9_chapters[[chap]]["start"],
-    icd9::icd9_chapters[[chap]]["end"],
+    icd::icd9_chapters[[chap]]["start"],
+    icd::icd9_chapters[[chap]]["end"],
     defined = FALSE)
 }
 
 icd9_expand_subchapter_majors <- function(subchap) {
   icd_expand_range_major.icd9(
-    icd9::icd9_sub_chapters[[subchap]]["start"],
-    icd9::icd9_sub_chapters[[subchap]]["end"],
+    icd::icd9_sub_chapters[[subchap]]["start"],
+    icd::icd9_sub_chapters[[subchap]]["end"],
     defined = FALSE)
 }

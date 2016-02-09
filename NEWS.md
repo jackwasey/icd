@@ -24,7 +24,7 @@
  * OpenMP and C++11 are now both enabled on platforms which allow this (i.e. everything except Solaris), which gives performance improvements.
  * Van Walvaren comorbidity score (analagous to Charlson score, but based on Elixhauser comorbidities) added by @wmurhpyrd, with thanks.
  * Dropped most included data from the package, as most can be retrieved from reliable web sites. The data is still in the github repo, but is downloaded automatically when needed (which is only working in the package source tree.)
- * stopped exporting 'parts' functions, as these complicate the namespace and are unlikely to end-user, but still available with `icd9:::icd9PartsToShort` etc.
+ * stopped exporting 'parts' functions, as these complicate the namespace and are unlikely to end-user, but still available with `icd:::icd9PartsToShort` etc.
  * code clean-up with excellent `lintr` package from @jimhester
  * bug fixes
  * more tests, with coverage at about 85% with the full test suite

@@ -41,18 +41,18 @@ test_that("icd10 2016 flat file details are okay", {
   checkmate::expect_character(res$descShort, any.missing = FALSE)
   checkmate::expect_character(res$descLong, any.missing = FALSE)
 
-  checkmate::expect_character(icd9::icd10cm2016$code, any.missing = FALSE)
-  checkmate::expect_logical(icd9::icd10cm2016$billable, any.missing = FALSE)
-  checkmate::expect_character(icd9::icd10cm2016$descShort, any.missing = FALSE)
-  checkmate::expect_character(icd9::icd10cm2016$descLong, any.missing = FALSE)
+  checkmate::expect_character(icd::icd10cm2016$code, any.missing = FALSE)
+  checkmate::expect_logical(icd::icd10cm2016$billable, any.missing = FALSE)
+  checkmate::expect_character(icd::icd10cm2016$descShort, any.missing = FALSE)
+  checkmate::expect_character(icd::icd10cm2016$descLong, any.missing = FALSE)
 
   for (n in c("threedigit", "major", "subchapter", "chapter")) {
       #checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
-      #checkmate::expect_factor(icd9::icd10cm2016[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
-      expect_identical(levels(res[[n]]), levels(icd9::icd10cm2016[[n]]), info = paste("working on ", n))
-      expect_identical(res[[n]], icd9::icd10cm2016[[n]], info = paste("working on ", n))
+      #checkmate::expect_factor(icd::icd10cm2016[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
+      expect_identical(levels(res[[n]]), levels(icd::icd10cm2016[[n]]), info = paste("working on ", n))
+      expect_identical(res[[n]], icd::icd10cm2016[[n]], info = paste("working on ", n))
   }
-  expect_identical(res, icd9::icd10cm2016)
+  expect_identical(res, icd::icd10cm2016)
 })
 
 context("icd10 XML parse")
@@ -92,10 +92,10 @@ test_that("ICD-10 chapters and subchapters are distinct", {
   # confused. This was really just a problem with RTF parsing for ICD-9, but
   # there are possible similiar problems with some of the XML hierarchy.
 
-  for (chap in names(icd9::icd10_chapters))
+  for (chap in names(icd::icd10_chapters))
     expect_icd10_only_chap(chap)
 
-  for (subchap in names(icd9::icd10_sub_chapters))
+  for (subchap in names(icd::icd10_sub_chapters))
     expect_icd10_only_sub_chap(subchap)
 })
 

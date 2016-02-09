@@ -87,7 +87,7 @@ icd9_generate_map_elix <- function(condense = NULL, save_data = TRUE, path = NUL
     icd9_map_elix,
     icd_children.icd9, short_code = TRUE, defined = FALSE)
 
-  names(icd9_map_elix) <- icd9::icd_names_elix_htn_abbrev
+  names(icd9_map_elix) <- icd::icd_names_elix_htn_abbrev
   icd9_map_elix %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
 
   if (save_data)
@@ -160,7 +160,7 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
   #   icd10_map_elix,
   #   icd_children.icd10cm, short_code = TRUE, defined = FALSE)
 
-  names(icd10_map_elix) <- icd9::icd_names_elix_htn_abbrev
+  names(icd10_map_elix) <- icd::icd_names_elix_htn_abbrev
   icd10_map_elix %<>% icd_short_code %>% icd10 %>% icd_comorbidity_map
 
   if (save_data)
@@ -242,7 +242,7 @@ The map can be condensed using other functions in the package. 'path' is the dat
     icd9_map_quan_elix,
     icd_children.icd9, short_code = TRUE, defined = FALSE)
 
-  names(icd9_map_quan_elix) <- icd9::icd_names_quan_elix_htn_abbrev
+  names(icd9_map_quan_elix) <- icd::icd_names_quan_elix_htn_abbrev
   icd9_map_quan_elix %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
 
   if (save_data)
@@ -293,7 +293,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   )
   # there are 31 items in the list: hypertension is typically combined into one
   # category, whereas diabetes is kept as two categories
-  names(quan_elix_raw) <- icd9::icd_names_elix_htn_abbrev
+  names(quan_elix_raw) <- icd::icd_names_elix_htn_abbrev
 
   # this expansion will only be for 'defined' codes (currently the most up-to-date
   # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
@@ -381,7 +381,7 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
     hiv = c("B20", "B21", "B22", "B24")
   )
 
-  names(quan_charl_raw) <- icd9::icd_names_charlson_abbrev
+  names(quan_charl_raw) <- icd::icd_names_charlson_abbrev
 
   # this expansion will only be for 'defined' codes (currently the most
   # up-to-date canonical CMS ICD-10-CM list). Will ultimately need to generalize
