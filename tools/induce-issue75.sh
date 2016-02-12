@@ -30,7 +30,7 @@
 git --git-dir=icd9/.git pull \
 && R CMD build --no-build-vignettes \
 && R CMD INSTALL --no-docs --install-tests `ls -tr | grep icd9.*gz$ | tail -1` \
-&& Rscript -e 'library(icd9); icd9ComorbidQuanDeyo(data.frame(visitId = "a", icd9 = "441"), isShort = F, applyHierarchy = T)'
+&& Rscript -e 'library(icd); icd9ComorbidQuanDeyo(data.frame(visitId = "a", icd9 = "441"), isShort = F, applyHierarchy = T)'
 
 
 # same but use openmp tests and devtools

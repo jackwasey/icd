@@ -34,7 +34,7 @@ along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 suppressWarnings({
   suppressPackageStartupMessages({
     loadNamespace("knitr") # for opts_chunk only
-    library(icd9)
+    library(icd)
     library(magrittr)
     library(xtable)
     library(utils)
