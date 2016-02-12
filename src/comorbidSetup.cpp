@@ -47,7 +47,7 @@ void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map) {
 #endif
 }
 
-// R CMD INSTALL --no-build-vignettes icd9 && R -d gdb -e "library(icd);x<-data.frame(visitId=c('a','b'),icd9=c('1','2'));icd9ComorbidAhrq(x)"
+// R CMD INSTALL --no-build-vignettes icd && R -d gdb -e "library(icd);x<-data.frame(visitId=c('a','b'),icd9=c('1','2'));icd9ComorbidAhrq(x)"
 
 // icd9 codes always strings. visitId may be factor or integer, but ultimately it becomes a string vector (as matrix row names)
 void buildVisitCodesVec(const SEXP& icd9df,
