@@ -29,7 +29,7 @@ along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 if (FALSE) rmarkdown::render("README.Rmd")
 
 suppressPackageStartupMessages({
-  library(icd9)
+  library(icd)
   library(magrittr)
 })
 

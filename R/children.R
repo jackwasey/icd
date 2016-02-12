@@ -38,7 +38,7 @@
 #' icd_children("10201", short_code = TRUE, defined =FALSE)
 #'
 #' # guess it was ICD-9 and a short, not decimal code
-#' icd_children("0032", FALSE)
+#' icd_children("0032")
 #'
 #' # empty because 102.01 is not meaningful
 #' icd_children("10201", short_code = TRUE, defined =TRUE)
@@ -74,9 +74,9 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   assertFlag(billable)
 
   if (short_code)
-    res <- .Call("icd_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(x), defined)
+    res <- .Call("icd_icd9ChildrenShortCpp", PACKAGE = "icd", toupper(x), defined)
   else
-    res <- .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), toupper(x), defined)
+    res <- .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = "icd", toupper(x), defined)
 
   res <- icd_guess_short_update(res)
 

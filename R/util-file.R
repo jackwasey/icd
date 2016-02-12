@@ -73,7 +73,7 @@ unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
   assertString(file_name, na.ok = FALSE)
   assertFlag(offline)
 
-  data_raw_path <- system.file("data-raw", package = get_pkg_name())
+  data_raw_path <- system.file("data-raw", package = "icd")
   file_path <- file.path(data_raw_path, make.names(file_name))
   if (!file.exists(file_path)) {
     if (offline)
@@ -97,7 +97,7 @@ download_to_data_raw <- function(url,
   assertFlag(offline)
   assertFlag(allow_missing)
 
-  data_raw_path <- system.file("data-raw", package = get_pkg_name())
+  data_raw_path <- system.file("data-raw", package = "icd")
   save_path <- file.path(data_raw_path, file_name)
   f_info <- list(file_path = save_path, file_name = file_name)
 
@@ -122,13 +122,6 @@ download_to_data_raw <- function(url,
   f_info
 
 }
-
-#' get name of this package
-#'
-#' so that I can change to another package name when needed.
-#' \code{getPackageName} gives globalenv if running interactively.
-#' @keywords internal
-get_pkg_name <- function() "icd9"
 
 #' Save given variable in package data directory
 #'

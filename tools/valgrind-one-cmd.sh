@@ -7,7 +7,7 @@ ${RCODE:="devnull <- icd9ComorbidQuanDeyo(icd:::generate_random_pts(1000000))"}
 INSTR_ATSTART="no"
 VALGRIND_CMD="valgrind --tool=callgrind --simulate-cache=yes --instr-atstart=$INSTR_ATSTART --separate-threads=yes"
 
-R --vanilla --slave -d "$VALGRIND_CMD" -e "library(icd9); message(\"ready to valgrind\"); $RCODE"
+R --vanilla --slave -d "$VALGRIND_CMD" -e "library(icd); message(\"ready to valgrind\"); $RCODE"
 
 
 # other useful options: --instr-atstart=no --separate-threads=yes

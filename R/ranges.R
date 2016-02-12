@@ -396,7 +396,7 @@ icd_expand_minor.icd9 <- function(minor, is_e = FALSE) {
   # problem...
   assertString(minor) # or character vector?
   assertFlag(is_e)
-  .Call("icd_icd9ExpandMinorShim", PACKAGE = get_pkg_name(), minor, isE = is_e)
+  .Call("icd_icd9ExpandMinorShim", PACKAGE = "icd", minor, isE = is_e)
 }
 
 # nocov start

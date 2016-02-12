@@ -80,9 +80,6 @@ patientData
 
 # reformat input data as needed
 patientData %>% icd9LongToWide # everything works well with magrittr %>%
-#> Warning: 'icd9LongToWide' is deprecated.
-#> Use 'icd_long_to_wide' instead.
-#> See help("Deprecated")
 #>      [,1]    [,2]   [,3]   [,4]   
 #> 1000 "40201" "2258" "7208" "25001"
 #> 1001 "34400" "4011" NA     NA     
@@ -90,12 +87,6 @@ patientData %>% icd9LongToWide # everything works well with magrittr %>%
 
 # get comorbidities:
 icd9ComorbidQuanDeyo(patientData)
-#> Warning: 'icd9ComorbidQuanDeyo' is deprecated.
-#> Use 'icd_comorbid_quan_deyo' instead.
-#> See help("Deprecated")
-#> Warning: 'icd9GuessIsShort' is deprecated.
-#> Use 'icd_guess_short' instead.
-#> See help("Deprecated")
 #>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
 #> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
 #> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
@@ -107,9 +98,6 @@ icd9ComorbidQuanDeyo(patientData)
 
 # find diagnoses present on admission:
 icd9FilterPoa(patientData)
-#> Warning: 'icd9FilterPoa' is deprecated.
-#> Use 'icd_filter_poa' instead.
-#> See help("Deprecated")
 #>   visitId  icd9
 #> 1    1000 40201
 #> 4    1000 25001
