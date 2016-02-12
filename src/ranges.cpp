@@ -146,7 +146,7 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
 		out.insert(newshort.begin(), newshort.end());
 	}
 	if (onlyReal) {
-		const Rcpp::Environment env("package:icd9");
+		const Rcpp::Environment env("package:icd");
 	  Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
 		std::set<std::string> out_real;
 		std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
