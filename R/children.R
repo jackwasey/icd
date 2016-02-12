@@ -74,9 +74,9 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   assertFlag(billable)
 
   if (short_code)
-    res <- .Call("icd_icd9ChildrenShortCpp", PACKAGE = get_pkg_name(), toupper(x), defined)
+    res <- .Call("icd_icd9ChildrenShortCpp", PACKAGE = "icd", toupper(x), defined)
   else
-    res <- .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = get_pkg_name(), toupper(x), defined)
+    res <- .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = "icd", toupper(x), defined)
 
   res <- icd_guess_short_update(res)
 

@@ -24,7 +24,7 @@
 strim <- function(x) {
   assertString(x, na.ok = TRUE)
   if (!is.na(x[1]))
-    .Call("icd_strimCpp", PACKAGE = get_pkg_name(), as.character(x))
+    .Call("icd_strimCpp", PACKAGE = "icd", as.character(x))
   else
     return(NA_character_)
 }
@@ -38,7 +38,7 @@ strim <- function(x) {
 #' @keywords internal
 trim <- function(x) {
   nax <- is.na(x)
-  x[!nax] <- .Call("icd_trimCpp", PACKAGE = get_pkg_name(), as.character(x[!nax]))
+  x[!nax] <- .Call("icd_trimCpp", PACKAGE = "icd", as.character(x[!nax]))
   x
 }
 
@@ -366,7 +366,7 @@ get_path_data_raw <- function() {
   # after all. Function to get the directory so this is potentially fixable in
   # the future. I don't want to distribute all the raw data.
 
-  system.file("data-raw", package = get_pkg_name())
+  system.file("data-raw", package = "icd")
 
 }
 

@@ -19,17 +19,17 @@
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
-    "Welcome to the ", get_pkg_name(), " package for finding comorbidities and
+    "Welcome to the \"icd\" package for finding comorbidities and
      interpretation of ICD-9 and ICD-10 codes. Suggestions and contributions are
      welcome at https://github.com/jackwasey/icd9 .
 
 Please cite this package if you find it useful in your published work.
-citation(package = \"icd9\")
+citation(package = \"icd\")
 
 Development version can be installed with
 # install.packages(\"devtools\")
 library(devtools)
-install_github(\"jackwasey/icd9\")
+install_github(\"jackwasey/icd9\") # working on rename from icd9 to icd
 ")
 }
 
