@@ -148,7 +148,7 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
 
   #icd10cm <- sum(icd_is_valid.icd10cm(icd))
 
-  # todo: guess ICD-10-CM
+  # todo: guess ICD-10-CM, if there is any ICD-10-CM code amongst other ICD-10 codes?
   # TODO: return vector of types, e.g. c("icd10who, "icd10")
 
   if (i9 >= i10 && i9 >= i10who)

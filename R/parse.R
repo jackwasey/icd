@@ -185,7 +185,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
                     stringsAsFactors = FALSE)
 
   # now sort so that E is after V:
-  reorder <- icd9_order_short(out[["icd9"]])
+  reorder <- icd9_order_short(out[["code"]])
   out <- out[reorder, ]
 
   # warn as we go:

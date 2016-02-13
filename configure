@@ -584,7 +584,7 @@ PACKAGE_STRING=
 PACKAGE_BUGREPORT=
 PACKAGE_URL=
 
-ac_unique_file="icd9"
+ac_unique_file="icd"
 ac_unique_file="src"
 # Factoring default headers for most tests.
 ac_includes_default="\
