@@ -17,8 +17,6 @@
 
 context("deprecated tests for condense")
 
-library(magrittr, quietly = TRUE, warn.conflicts = FALSE)
-
 test_that("deprecated - five digit to five digit code range condenses", {
   expect_equal(icd9Condense("34500" %i9sa% "34509", onlyReal = FALSE), "3450")
 })

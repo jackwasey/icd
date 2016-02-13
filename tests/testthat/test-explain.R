@@ -200,7 +200,7 @@ test_that("parse icd9_majors vs those listed
 test_that("unsorted hierarchy tests", {
   expect_equal(
     tolower(icd::icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "00321",
-                                "descLong"]),
+                                "long_desc"]),
     tolower("Salmonella Meningitis"))
 })
 
@@ -259,7 +259,7 @@ test_that("working with named lists of codes, decimal is guessed", {
 test_that("icd9 descriptions is parsed correctly", {
   skip_flat_icd9_avail("32")
   x <- icd9_parse_leaf_desc_ver(version = "32", offline = FALSE)
-  expect_equal(names(x), c("icd9", "descShort", "descLong"))
+  expect_equal(names(x), c("icd9", "short_desc", "long_desc"))
   expect_equal(nrow(x), 14567)
   expect_true(is.character(x$icd9))
 })

@@ -163,7 +163,7 @@ test_that("all leaf codes from TXT are in flat file extract", {
     sort -> rtf_leaves
   if (FALSE && interactive()) {
     assign("manual_compare_descs",
-           data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)),
+           data.frame("From TXT" = v32$long_desc, "From RTF = rtf_leaves" = names(rtf_leaves)),
            envir = .GlobalEnv)
     browser()
   }

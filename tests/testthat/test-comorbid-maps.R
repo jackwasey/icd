@@ -173,7 +173,7 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
   skip_slow_tests()
   skip_flat_icd9_avail_all()
 
-  cmh_headings <- c("code", "descShort", "descLong", "threedigit",
+  cmh_headings <- c("code", "short_desc", "long_desc", "threedigit",
                     "major", "subchapter", "chapter")
   cmh <- icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE)
   for (h in cmh_headings)

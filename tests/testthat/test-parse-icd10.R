@@ -31,20 +31,20 @@ test_that("icd10 2016 flat file details are okay", {
   skip_icd10cm_flat_avail()
 
   # check cols at a time, so I get better error feedback:
-  col_names <- c("code", "billable", "descShort", "descLong", "threedigit",
+  col_names <- c("code", "billable", "short_desc", "long_desc", "threedigit",
               "major", "subchapter", "chapter")
   expect_warning(res <- icd10cm_get_all_defined(save_data = FALSE), NA)
   expect_identical(colnames(res), col_names)
 
   checkmate::expect_character(res$code, any.missing = FALSE)
   checkmate::expect_logical(res$billable, any.missing = FALSE)
-  checkmate::expect_character(res$descShort, any.missing = FALSE)
-  checkmate::expect_character(res$descLong, any.missing = FALSE)
+  checkmate::expect_character(res$short_desc, any.missing = FALSE)
+  checkmate::expect_character(res$long_desc, any.missing = FALSE)
 
   checkmate::expect_character(icd::icd10cm2016$code, any.missing = FALSE)
   checkmate::expect_logical(icd::icd10cm2016$billable, any.missing = FALSE)
-  checkmate::expect_character(icd::icd10cm2016$descShort, any.missing = FALSE)
-  checkmate::expect_character(icd::icd10cm2016$descLong, any.missing = FALSE)
+  checkmate::expect_character(icd::icd10cm2016$short_desc, any.missing = FALSE)
+  checkmate::expect_character(icd::icd10cm2016$long_desc, any.missing = FALSE)
 
   for (n in c("threedigit", "major", "subchapter", "chapter")) {
       #checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)

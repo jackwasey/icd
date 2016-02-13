@@ -78,8 +78,8 @@ icd_update_everything <- function() {
 #'   will be saved in \code{data-raw}, otherwise (the default) the data is
 #'   simply returned invisibly.
 #' @template offline
-#' @return data frame with icd9, descShort and descLong columns. NA is placed in
-#'   descLong when not available.
+#' @return data frame with icd9, short_desc and long_desc columns. NA is placed in
+#'   long_desc when not available.
 #' @examples
 #'   # To populate the data-raw directory with the ICD-9 source:
 #'   # not included in installed package, run using the full source from github,
@@ -180,8 +180,8 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
     long_descs <- NA
 
   out <- data.frame(icd9 = unlist(short_codes),
-                    descShort = unlist(short_descs),
-                    descLong = unlist(long_descs),
+                    short_desc = unlist(short_descs),
+                    long_desc = unlist(long_descs),
                     stringsAsFactors = FALSE)
 
   # now sort so that E is after V:
@@ -192,11 +192,11 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   oldwarn <- options(warn = 1)
   on.exit(options(oldwarn))
   if (!is.na(fn_long_orig)) {
-    encs <- Encoding(out[["descLong"]])
+    encs <- Encoding(out[["long_desc"]])
     message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
     message("non-ASCII rows of long descriptions are: ",
-            paste(getNonASCII(out[["descLong"]]), collapse = ", "))
-    message(Encoding(out[["descLong"]][isNonASCII(out[["descLong"]])]))
+            paste(getNonASCII(out[["long_desc"]]), collapse = ", "))
+    message(Encoding(out[["long_desc"]][isNonASCII(out[["long_desc"]])]))
 
   }
   invisible(out)
@@ -218,7 +218,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   icd9cm_billable27 <- read.csv(f27_info$file_path, stringsAsFactors = FALSE,
                                 colClasses = "character", encoding = "latin1")
   close(f)
-  names(icd9cm_billable27) <- c("icd9", "descLong", "descShort")
+  names(icd9cm_billable27) <- c("icd9", "long_desc", "short_desc")
   icd9cm_billable27 <- icd9cm_billable27[c(1, 3, 2)] # reorder columns
   reorder <- icd9_order_short(icd9cm_billable27[["icd9"]])
   invisible(icd9cm_billable27[reorder, ])
@@ -250,7 +250,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   # older ones which only have short descs
   icd9cm_hierarchy <- cbind(
     data.frame("code" = icd9_rtf$code,
-               "descLong" = icd9_rtf$desc,
+               "long_desc" = icd9_rtf$desc,
                stringsAsFactors = FALSE),
     # the following can and should be factors:
     chaps
@@ -270,17 +270,17 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE) # or from bill32
   billable_rows <- which(icd9cm_hierarchy[["code"]] %fin% billable_codes)
   title_rows <- which(icd9cm_hierarchy[["code"]] %nin% billable_codes)
-  icd9cm_hierarchy[billable_rows, "descShort"] <- bill32$descShort
+  icd9cm_hierarchy[billable_rows, "short_desc"] <- bill32$short_desc
   # for rows without a short description (i.e. titles, non-billable),
   # useexisting long desc
-  icd9cm_hierarchy[title_rows, "descShort"] <- icd9cm_hierarchy[title_rows, "descLong"]
+  icd9cm_hierarchy[title_rows, "short_desc"] <- icd9cm_hierarchy[title_rows, "long_desc"]
   # the billable codes list (where available) currently has better long
   # descriptions than the RTF parse. For previous years, there is no long desc
   # in billable, so careful when updating this.
-  icd9cm_hierarchy[billable_rows, "descLong"] <- bill32$descLong
+  icd9cm_hierarchy[billable_rows, "long_desc"] <- bill32$long_desc
 
   # now put the short description in the right column position
-  icd9cm_hierarchy <- icd9cm_hierarchy[c("code", "descShort", "descLong", "threedigit",
+  icd9cm_hierarchy <- icd9cm_hierarchy[c("code", "short_desc", "long_desc", "threedigit",
                                      "major", "subchapter", "chapter")]
 
   #TODO add 'billable' column

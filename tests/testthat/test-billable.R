@@ -31,11 +31,11 @@ test_that("ICD-9-CM billable codes package data is recreated", {
   check_billable <- parse_leaf_descriptions_all(save_data = FALSE)
 
   for (ver in c("27", "28", "29", "30", "31", "32")) {
-    v <- icd::icd9cm_billable[[ver]][["descLong"]]
-    cb <- check_billable[[ver]][["descLong"]]
+    v <- icd::icd9cm_billable[[ver]][["long_desc"]]
+    cb <- check_billable[[ver]][["long_desc"]]
     diff <- v != cb
     expect_identical(check_billable[[ver]], icd::icd9cm_billable[[ver]],
-                     info = paste("descLong differences for version", ver,
+                     info = paste("long_desc differences for version", ver,
                                   "\noriginal: ", paste(v[diff], collapse = ", "),
                                   "\nprocess:", paste(cb[diff], collapse = ", ")
                      ))

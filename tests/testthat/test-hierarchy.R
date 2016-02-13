@@ -27,8 +27,8 @@ test_that("no NA or zero-length values", {
 
 test_that("factors are in the right place", {
   expect_is(icd::icd9cm_hierarchy[["code"]], c("icd9cm", "icd9", "character"))
-  expect_is(icd::icd9cm_hierarchy$descShort, "character")
-  expect_is(icd::icd9cm_hierarchy$descLong, "character")
+  expect_is(icd::icd9cm_hierarchy$short_desc, "character")
+  expect_is(icd::icd9cm_hierarchy$long_desc, "character")
   expect_is(icd::icd9cm_hierarchy$threedigit, "factor")
   expect_is(icd::icd9cm_hierarchy$major, "factor")
   expect_is(icd::icd9cm_hierarchy$subchapter, "factor")
@@ -88,6 +88,6 @@ test_that("some randomly selected rows are correct", {
 
 test_that("tricky v91.9 works", {
   expect_equal(
-    icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "V9192", "descLong"],
+    icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "V9192", "long_desc"],
     "Other specified multiple gestation, with two or more monoamniotic fetuses")
 })

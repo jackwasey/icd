@@ -126,15 +126,15 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   stopifnot(all(Encoding(x) == "unknown"))
 
   # str_trim may do some encoding tricks which result in different factor order
-  # on different platforms. Seems to affect "major" which comes from "descShort":
-  # descShort <- trimws(substr(x, 16, 76))
+  # on different platforms. Seems to affect "major" which comes from "short_desc":
+  # short_desc <- trimws(substr(x, 16, 76))
 
   icd10cm2016 <- data.frame(
     #id = substr(x, 1, 5),
     code = str_trim(substr(x, 7, 13)),
     billable = str_trim(substr(x, 14, 15)) == "1",
-    descShort = str_trim(substr(x, 16, 76)),
-    descLong = str_trim(substr(x, 77, stop = 1e5)),
+    short_desc = str_trim(substr(x, 16, 76)),
+    long_desc = str_trim(substr(x, 77, stop = 1e5)),
     stringsAsFactors = FALSE
   )
 
@@ -143,10 +143,10 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   # here we must re-factor so we don't have un-used levels in major
   merge(x = icd10cm2016["threedigit"],
-        y = icd10cm2016[c("code", "descShort")],
+        y = icd10cm2016[c("code", "short_desc")],
         by.x = "threedigit", by.y = "code",
         all.x = TRUE) %>%
-    magrittr::extract2("descShort") %>% factor_nosort -> icd10cm2016[["major"]]
+    magrittr::extract2("short_desc") %>% factor_nosort -> icd10cm2016[["major"]]
 
   #Encoding(mjr) <- "ASCII"
   #mjr -> as.factor -> icd10cm2016[["major"]]
