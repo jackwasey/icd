@@ -155,10 +155,10 @@ test_that("all leaf codes from TXT are in flat file extract", {
   skip_on_no_rtf(test_year)
 
   v32 <- icd9_parse_leaf_desc_ver(version = test_ver, save_data = FALSE, offline = FALSE)
-  v32$icd9 %>% icd_short_to_decimal.icd9 -> leaves
+  v32$code %>% icd_short_to_decimal.icd9 -> leaves
   expect_true(all(leaves %in% nrtf))
 
-  rtf[nrtf %in% icd_short_to_decimal.icd9(v32$icd9)] %>%
+  rtf[nrtf %in% icd_short_to_decimal.icd9(v32$code)] %>%
     swapNamesWithVals %>%
     sort -> rtf_leaves
   if (FALSE && interactive()) {

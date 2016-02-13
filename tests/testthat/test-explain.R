@@ -219,20 +219,20 @@ test_that("explain icd9GetChapters simple input", {
 
   chaps2 <- icd9_get_chapters("418", short_code = TRUE)
   expect_is(chaps2, "data.frame")
-  expect_is(chaps2$threedigit, "factor")
+  expect_is(chaps2$three_digit, "factor")
   expect_is(chaps2$major, "factor")
-  expect_is(chaps2$subchapter, "factor")
+  expect_is(chaps2$sub_chapter, "factor")
   expect_is(chaps2$chapter, "factor")
-  expect_equal(asCharacterNoWarn(chaps2$threedigit), NA_character_)
+  expect_equal(asCharacterNoWarn(chaps2$three_digit), NA_character_)
   expect_equal(asCharacterNoWarn(chaps2$major), NA_character_)
-  expect_equal(asCharacterNoWarn(chaps2$subchapter), NA_character_)
+  expect_equal(asCharacterNoWarn(chaps2$sub_chapter), NA_character_)
   expect_equal(asCharacterNoWarn(chaps2$chapter), NA_character_)
 
   chaps3 <- icd9_get_chapters("417", short_code = FALSE)
-  expect_equal(asCharacterNoWarn(chaps3$threedigit), "417")
+  expect_equal(asCharacterNoWarn(chaps3$three_digit), "417")
   expect_equal(asCharacterNoWarn(chaps3$major),
                "Other diseases of pulmonary circulation")
-  expect_equal(asCharacterNoWarn(chaps3$subchapter),
+  expect_equal(asCharacterNoWarn(chaps3$sub_chapter),
                "Diseases Of Pulmonary Circulation")
   expect_equal(asCharacterNoWarn(chaps3$chapter),
                "Diseases Of The Circulatory System")
@@ -259,7 +259,7 @@ test_that("working with named lists of codes, decimal is guessed", {
 test_that("icd9 descriptions is parsed correctly", {
   skip_flat_icd9_avail("32")
   x <- icd9_parse_leaf_desc_ver(version = "32", offline = FALSE)
-  expect_equal(names(x), c("icd9", "short_desc", "long_desc"))
+  expect_equal(names(x), c("code", "short_desc", "long_desc"))
   expect_equal(nrow(x), 14567)
-  expect_true(is.character(x$icd9))
+  expect_true(is.character(x$code))
 })

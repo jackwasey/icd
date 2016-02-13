@@ -29,9 +29,9 @@ test_that("factors are in the right place", {
   expect_is(icd::icd9cm_hierarchy[["code"]], c("icd9cm", "icd9", "character"))
   expect_is(icd::icd9cm_hierarchy$short_desc, "character")
   expect_is(icd::icd9cm_hierarchy$long_desc, "character")
-  expect_is(icd::icd9cm_hierarchy$threedigit, "factor")
+  expect_is(icd::icd9cm_hierarchy$three_digit, "factor")
   expect_is(icd::icd9cm_hierarchy$major, "factor")
-  expect_is(icd::icd9cm_hierarchy$subchapter, "factor")
+  expect_is(icd::icd9cm_hierarchy$sub_chapter, "factor")
   expect_is(icd::icd9cm_hierarchy$chapter, "factor")
 })
 
@@ -59,7 +59,7 @@ test_that("some chapters are correct", {
 })
 
 test_that("some subchapters are correct", {
-  subchaps <- icd::icd9cm_hierarchy$subchapter %>% asCharacterNoWarn
+  subchaps <- icd::icd9cm_hierarchy$sub_chapter %>% asCharacterNoWarn
   codes <- icd::icd9cm_hierarchy[["code"]]
 
   # first and last

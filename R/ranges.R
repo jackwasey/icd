@@ -146,7 +146,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
   se <- asCharacterNoWarn(c(start, end)) %>% str_trim %>% str_to_upper
 
   # TODO: memoise this, or does fastmatch remember?
-  unique_mjrs <- icd::icd10cm2016$threedigit  %>% unique
+  unique_mjrs <- icd::icd10cm2016$three_digit  %>% unique
 
   if (!icd_is_major.icd10cm(se[[1]]))
     stop("start: ", start, " is not an ICD-10-CM major (three character) code")

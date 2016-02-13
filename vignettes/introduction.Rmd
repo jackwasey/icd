@@ -342,10 +342,10 @@ print(threedigitdf[1:10, ], row.names = FALSE)
 
 ### Which ICD-9 codes have changed between versions of ICD-9?
 ```{r "compare ICD-9 versions"}
-new_since_27 <- setdiff(icd9cm_billable[["32"]][["icd9"]],
-                         icd9cm_billable[["27"]][["icd9"]]) %>% head
-lost_since_27 <- setdiff(icd9cm_billable[["27"]][["icd9"]],
-                         icd9cm_billable[["32"]][["icd9"]]) %>% tail
+new_since_27 <- setdiff(icd9cm_billable[["32"]][["code"]],
+                         icd9cm_billable[["27"]][["code"]]) %>% head
+lost_since_27 <- setdiff(icd9cm_billable[["27"]][["code"]],
+                         icd9cm_billable[["32"]][["code"]]) %>% tail
 # we know this is an ICD-9-CM code, so declare this using nice magrittr motif:
 lost_since_27 %<>% icd9cm
 lost_since_27 %<>% icd9

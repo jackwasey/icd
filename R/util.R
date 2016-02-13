@@ -260,7 +260,7 @@ rtf_year_ok <- function(test_year) {
 #' @examples
 #' \dontrun{
 #' pts <- icd:::randomUnorderedPatients(1e7)
-#' u <- unique.default(pts$icd9)
+#' u <- unique.default(pts$code)
 #' # this shows that stringr (which uses stringi) sort takes 50% longer than
 #' # built-in R sort.
 #' microbenchmark::microbenchmark(sort(u), stringr::str_sort(u))
@@ -269,9 +269,9 @@ rtf_year_ok <- function(test_year) {
 #' # big vectors of strings
 #'
 #' # without sorting is much faster:
-#' microbenchmark::microbenchmark(factor(pts$icd9),
-#'                                # factor_(pts$icd9),
-#'                                factor_nosort(pts$icd9),
+#' microbenchmark::microbenchmark(factor(pts$code),
+#'                                # factor_(pts$code),
+#'                                factor_nosort(pts$code),
 #'                                times = 25)
 #' }
 #' @details I don't think there is any requirement for factor levels to be

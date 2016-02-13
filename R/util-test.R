@@ -268,7 +268,7 @@ randomUnorderedPatients <- function(num_patients = 50000, dz_per_patient = 20,
   pts <- round(n / np)
   data.frame(
     visitId = sample(seq(1, pts), replace = TRUE, size = n),
-    icd9 = c(randomShortIcd9(round(n / 2)), randomShortAhrq(n - round(n / 2))),
+    code = c(randomShortIcd9(round(n / 2)), randomShortAhrq(n - round(n / 2))),
     poa = as.factor(
       sample(x = c("Y","N", "n", "n", "y", "X", "E", "", NA),
              replace = TRUE, size = n)),

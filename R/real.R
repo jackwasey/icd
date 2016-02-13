@@ -171,7 +171,7 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
   assertString(version)
   if (!short_code)
     x <- icd_decimal_to_short.icd9(x)
-  x %in% icd::icd9cm_billable[[version]][["icd9"]]
+  x %in% icd::icd9cm_billable[[version]][["code"]]
 }
 
 #' @describeIn icd_is_billable Which of the given ICD codes are leaf nodes in

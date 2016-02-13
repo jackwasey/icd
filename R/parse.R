@@ -179,7 +179,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   else
     long_descs <- NA
 
-  out <- data.frame(icd9 = unlist(short_codes),
+  out <- data.frame(code = unlist(short_codes),
                     short_desc = unlist(short_descs),
                     long_desc = unlist(long_descs),
                     stringsAsFactors = FALSE)
@@ -218,9 +218,9 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   icd9cm_billable27 <- read.csv(f27_info$file_path, stringsAsFactors = FALSE,
                                 colClasses = "character", encoding = "latin1")
   close(f)
-  names(icd9cm_billable27) <- c("icd9", "long_desc", "short_desc")
+  names(icd9cm_billable27) <- c("code", "long_desc", "short_desc")
   icd9cm_billable27 <- icd9cm_billable27[c(1, 3, 2)] # reorder columns
-  reorder <- icd9_order_short(icd9cm_billable27[["icd9"]])
+  reorder <- icd9_order_short(icd9cm_billable27[["code"]])
   invisible(icd9cm_billable27[reorder, ])
 }
 
@@ -280,8 +280,8 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy[billable_rows, "long_desc"] <- bill32$long_desc
 
   # now put the short description in the right column position
-  icd9cm_hierarchy <- icd9cm_hierarchy[c("code", "short_desc", "long_desc", "threedigit",
-                                     "major", "subchapter", "chapter")]
+  icd9cm_hierarchy <- icd9cm_hierarchy[c("code", "short_desc", "long_desc", "three_digit",
+                                     "major", "sub_chapter", "chapter")]
 
   #TODO add 'billable' column
 
@@ -291,8 +291,8 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
     #diagnose NAs
     print(colSums(sapply(icd9cm_hierarchy, is.na)))
     print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$major)), ])
-    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$threedigit)), ])
-    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$subchapter))[1:10], ]) # just top ten
+    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$three_digit)), ])
+    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$sub_chapter))[1:10], ]) # just top ten
     print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$chapter)), ])
     stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
   }
@@ -313,12 +313,12 @@ fixSubchapterNa <- function(x, start, end) {
   # assert all the same:
   stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
   # now some work to insert a new level into the sub-chapter factor in the right place
-  previous_sub <- asCharacterNoWarn(x[(which(congenital) - 1)[1], "subchapter"])
-  previous_sub_pos <- which(levels(x$subchapter) == previous_sub)
+  previous_sub <- asCharacterNoWarn(x[(which(congenital) - 1)[1], "sub_chapter"])
+  previous_sub_pos <- which(levels(x$sub_chapter) == previous_sub)
   congenital_title <- asCharacterNoWarn(x[which(congenital)[1], "chapter"])
-  new_subs <- asCharacterNoWarn(x$subchapter)
+  new_subs <- asCharacterNoWarn(x$sub_chapter)
   new_subs[congenital] <- congenital_title
-  new_levels <- append(levels(x$subchapter), congenital_title, previous_sub_pos)
-  x$subchapter <- factor(new_subs, new_levels)
+  new_levels <- append(levels(x$sub_chapter), congenital_title, previous_sub_pos)
+  x$sub_chapter <- factor(new_subs, new_levels)
   x
 }

@@ -7,11 +7,12 @@
 #' @keywords internal
 generate_deprecated_data <- function(save_data = FALSE) {
 
-  # no particular reason to use assign here; relic of having been trying to
-  # assign to package namespace.
   icd9Billable <- icd::icd9cm_billable
+  for (b in seq_along(icd9Billable))
+    names(icd9Billable[[b]]) <- c("icd9", "descShort", "descLong")
+
   icd9Hierarchy <- icd::icd9cm_hierarchy
-  names(icd9Hierarchy)[1] <- "icd9"
+  names(icd9Hierarchy)[1:3] <- c("icd9", "descShort", "descLong")
   ahrqComorbid <- icd::icd9_map_ahrq
   quanDeyoComorbid <- icd::icd9_map_quan_deyo
   quanElixComorbid <- icd::icd9_map_quan_elix
@@ -31,7 +32,7 @@ generate_deprecated_data <- function(save_data = FALSE) {
   charlsonComorbidNames <- icd::icd_names_charlson
   charlsonComorbidNamesAbbrev <- icd::icd_names_charlson_abbrev
 
-  if (save_data)
+  if (save_data) {
     save(icd9Billable,
          icd9Hierarchy,
          # comorbidity mappings
@@ -55,6 +56,8 @@ generate_deprecated_data <- function(save_data = FALSE) {
          charlsonComorbidNames,
          charlsonComorbidNamesAbbrev,
          file = file.path("data", "deprecated.RData"), compress = "xz")
+    message("now reload to update deprecated data")
+}
 
   invisible(named_list(icd9Billable,
                        icd9Hierarchy,

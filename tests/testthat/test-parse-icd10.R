@@ -31,8 +31,8 @@ test_that("icd10 2016 flat file details are okay", {
   skip_icd10cm_flat_avail()
 
   # check cols at a time, so I get better error feedback:
-  col_names <- c("code", "billable", "short_desc", "long_desc", "threedigit",
-              "major", "subchapter", "chapter")
+  col_names <- c("code", "billable", "short_desc", "long_desc", "three_digit",
+              "major", "sub_chapter", "chapter")
   expect_warning(res <- icd10cm_get_all_defined(save_data = FALSE), NA)
   expect_identical(colnames(res), col_names)
 
@@ -46,7 +46,7 @@ test_that("icd10 2016 flat file details are okay", {
   checkmate::expect_character(icd::icd10cm2016$short_desc, any.missing = FALSE)
   checkmate::expect_character(icd::icd10cm2016$long_desc, any.missing = FALSE)
 
-  for (n in c("threedigit", "major", "subchapter", "chapter")) {
+  for (n in c("three_digit", "major", "sub_chapter", "chapter")) {
       #checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
       #checkmate::expect_factor(icd::icd10cm2016[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
       expect_identical(levels(res[[n]]), levels(icd::icd10cm2016[[n]]), info = paste("working on ", n))

@@ -236,10 +236,10 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
 
   # combine into big data frame like icd9Hierarchy:
   #names(icd9Hierarchy)
-  #[1] "icd9"       "short_desc"  "long_desc"   "threedigit" "major"      "subchapter" "chapter"
+  #[1] "code"       "short_desc"  "long_desc"   "three_digit" "major"      "sub_chapter" "chapter"
 
   #> head(icd9Hierarchy, 1)
-  #icd9 short_desc long_desc threedigit   major                     subchapter                           chapter
+  #code short_desc long_desc three_digit   major                     sub_chapter                           chapter
   #001   Cholera  Cholera        001 Cholera Intestinal Infectious Diseases Infectious And Parasitic Diseases
 
   icd10_who_hierarchy <- data.frame(

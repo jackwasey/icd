@@ -173,8 +173,8 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
   skip_slow_tests()
   skip_flat_icd9_avail_all()
 
-  cmh_headings <- c("code", "short_desc", "long_desc", "threedigit",
-                    "major", "subchapter", "chapter")
+  cmh_headings <- c("code", "short_desc", "long_desc", "three_digit",
+                    "major", "sub_chapter", "chapter")
   cmh <- icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE)
   for (h in cmh_headings)
     expect_equal(cmh[[h]], icd::icd9cm_hierarchy[[h]], info = h)
@@ -624,10 +624,10 @@ test_that("comorbid quick test", {
 test_that("control params don't affect result of comorbid calc", {
   pts <- generate_random_pts(101, 13)
   pts$visitId <- asCharacterNoWarn(pts$visitId)
-  pts$icd9 <- as.factor(pts$icd9)
+  pts$code %<>% as.factor
   upts <- length(unique(pts$visitId))
   ac <-  lapply(icd::icd9_map_ahrq, function(x) {
-    f <- factor(x, levels(pts[["icd9"]]))
+    f <- factor(x, levels(pts[["code"]]))
     f[!is.na(f)]
   })
   expect_identical(

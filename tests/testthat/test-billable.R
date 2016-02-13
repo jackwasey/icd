@@ -49,12 +49,12 @@ test_that("billable codes for expected versions exist", {
 
 test_that("billable codes are all in order", {
   for (v in names(icd9cm_billable)) {
-    i <- icd::icd9cm_billable[[v]][["icd9"]]
+    i <- icd::icd9cm_billable[[v]][["code"]]
     expect_identical(i, icd_sort.icd9(i, short_code = TRUE),
                      info = paste("version = ", v))
   }
 })
 
 test_that("parsing 27 gives zero-padded digit icd9 codes", {
-  expect_equal(icd9cm_billable[["27"]][1, "icd9"], "0010")
+  expect_equal(icd9cm_billable[["27"]][1, "code"], "0010")
 })
