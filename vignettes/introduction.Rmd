@@ -1,5 +1,5 @@
 ---
-title: 'Introducing icd: comorbidities and code processing for ICD-9 and ICD-10'
+title: 'Introducing icd: comorbidities and code processing for ICD-9 and ICD-10 codes'
 author: "Jack O. Wasey"
 date: '`r format(Sys.time(), "%Y-%m-%d")`'
 output:
@@ -8,7 +8,7 @@ output:
   pdf_document:
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{Introducing icd9}
+  %\VignetteIndexEntry{Introducing icd: comorbidities and code processing for ICD-9 and ICD-10 codes}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -175,7 +175,7 @@ icd_explain("0019") # 'short' format code inferred
 ```{r explainComplex}
 # we can be explicit about short vs decimal
 icd_explain("434.00", short_code = FALSE) 
-icd_explain(c("43410","43491"), short_code = TRUE)
+icd_explain(c("43410", "43491"), short_code = TRUE)
 #explain top level code with children
 "391" %>% icd_explain # single three-digit code
 "391" %>% icd_children # let's see the child codes
