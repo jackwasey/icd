@@ -32,7 +32,7 @@
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @examples
-#' library(magrittr)
+#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
 #'
 #' # no children other than self
 #' icd_children("10201", short_code = TRUE, defined =FALSE)

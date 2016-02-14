@@ -226,7 +226,9 @@ a match is found in the map. TODO: this is WIP.
 \item \code{icd9}: Get comorbidities from ICD-9 codes
 }}
 \examples{
-  library(magrittr) # optional but often helpful
+  # optional but often helpful
+  library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
+
   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
                    icd9 = c("39891", "40110", "09322", "41514", "39891")) \%>\%
                    icd_long_data \%>\% icd9

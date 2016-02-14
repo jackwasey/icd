@@ -48,8 +48,8 @@ decimal form ICD-9 codes are not ambiguous if the leading zeroes
 specified or unknown type.
 }}
 \seealso{
-Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
-  \code{\link{icd9PartsToShort}},
+Other ICD-9 convert: \code{\link{icd9PartsToShort}},
+  \code{\link{icd9_chapters_to_map}},
   \code{\link{icd_long_to_wide}},
   \code{\link{icd_wide_to_long}}
 }

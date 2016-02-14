@@ -307,18 +307,18 @@ Don't want to stress CRAN, so no larger numbers demonstrated, but I do consisten
 ### Arbitrary ICD-9 mapping
 The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd9/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9Chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.
 ```{r "arbitraryMapping"}
-names(icd9Chapters)[c(1:5, 14)]
-myMap <- icd:::icd9ChaptersToMap(icd9Chapters[c(2, 5, 14)])
-icd9Comorbid(patientData, myMap) # no +ve 
+names(icd9_chapters)[c(1:5, 14)]
+myMap <- icd:::icd9_chapters_to_map(icd9_chapters[c(2, 5, 14)])
+icd_comorbid(patientData, myMap) # no +ve 
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes.
 Suppose we want to exact match only real ICD-9 codes when looking up comorbdities for some patients. E.g. if the coder accidentally omited a trailing zero, e.g. code `003.20` (*Localized salmonella infection, unspecified*) might have been written as `003.2` which has a heading (*Localized salmonella infections*) but is not itself billable. Use of ICD-9 codes for comorbidities generally assumes the codes are either right or wrong. How do we match only real codes, for a strict interpretation of comorbidities? It's one line or R code:
 
 ```{r realmapping}
-ahrqStrict <- lapply(ahrqComorbid, icd9GetReal)
-str(ahrqComorbid[1:5]) # first five of the original:
-str(ahrqStrict[1:5]) # and first five of the result:
+ahrqStrict <- lapply(icd9_map_ahrq, icd_get_defined)
+str(icd9_map_ahrq[1:5]) # first five of the original:
+str(icd9_map_ahrq[1:5]) # and first five of the result:
 ```
 Note the much smaller numbers of codes in each group, now we have discarded all the ones which are not defined as diagnoses.
 

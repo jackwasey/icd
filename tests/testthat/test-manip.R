@@ -1,19 +1,19 @@
 # Copyright (C) 2014 - 2016  Jack O. Wasey
 #
-# This file is part of icd9.
+# This file is part of icd.
 #
-# icd9 is free software: you can redistribute it and/or modify
+# icd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# icd9 is distributed in the hope that it will be useful,
+# icd is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+# along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 context("test icd9 package")
 
@@ -208,7 +208,7 @@ test_that("strip leading zero from short numeric only", {
   expect_equal(unclass(res <- icd9_drop_leading_zeroes("1239", short_code = TRUE)), "1239")
   # not sure whether this is wise:
   # expect_is(res, "icd_short_code")
-  # expect_is(res, "icd9")
+  # expect_is(res, "icd9") # or expect_true(is.icd9(res))
 })
 
 test_that("strip leading zero from decimal V and E", {

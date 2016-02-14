@@ -54,7 +54,7 @@ NULL
 #'   icd9ChaptersSub
 #' @family ICD-9 convert
 #' @keywords internal manip
-icd9ChaptersToMap <- function(x) {
+icd9_chapters_to_map <- function(x) {
   if (is.character(x) && exists(x))
     x <- get(x)
   assertList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
@@ -201,15 +201,15 @@ icd_long_to_wide <- function(x,
 }
 
 #' @title convert comorbidity data frame from matrix
-#' @description convert matrix of comorbidities into data frame, preserving visit_name
-#'   information
+#' @description convert matrix of comorbidities into data frame, preserving visit_name information
 #' @param x Matrix of comorbidities, with row and columns names defined
-#' @param visit_name Single character string with name for new column in output
-#'   data frame. Everywhere else, \code{visit_name} describes the input data,
-#'   but here it is for output data.
+#' @param visit_name Single character string with name for new column in output data frame.
+#'   Everywhere else, \code{visit_name} describes the input data, but here it is for output data.
 #' @template stringsAsFactors
 #' @examples
-#' library(magrittr) # as ever, optional, but tidy
+#'  # as ever, optional, but tidy
+#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
+#'
 #' longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
 #'                      icd9 = icd9(c("441", "4424", "443", "441"))) %>% icd_long_data %>% icd9
 #' mat <- icd_comorbid_elix(longdf)

@@ -13,7 +13,7 @@
 \alias{icd_explain.icd9cm}
 \alias{icd_explain.list}
 \alias{icd_explain.numeric}
-\title{explain ICD9 codes}
+\title{Explain ICD-9 and ICD-10 codes in English}
 \usage{
 icd9Explain(icd9, isShort = icd_guess_short.icd9(icd9), doCondense = TRUE,
   brief = FALSE, warn = TRUE)
@@ -101,7 +101,7 @@ data frame, or list of data frames, with fields for ICD9 code, name
   and description, derived from datamart lookup table
 }
 \description{
-convert 'decimal' format (123.45 style) ICD9 codes into the name
+Convert 'decimal' format (123.45 style) ICD-9 codes into the name
   and description for human review there are official ICD9-CM data tables,
   not with conversion to decimal notation, but to the textual format.
 }
@@ -125,11 +125,12 @@ avoid typing many quotes.
 \examples{
 # by default, just show parent code and ignore children (428.0 not shown
 # because 428 is present):
-library(magrittr) # nice to heave, but not essential
 icd_explain(ahrqComorbid$CHF[1:3])
 # same without condensing the list. In this case, 428.0 is shown:
-icd_explain(ahrqComorbid$CHF[1:3] \%>\%  icd_condense)
 icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
+# nice to have magrittr, but not essential
+library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
+icd_explain(ahrqComorbid$CHF[1:3] \%>\%  icd_condense)
 }
 \seealso{
 package comorbidities

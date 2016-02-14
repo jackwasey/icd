@@ -14,9 +14,8 @@ icd9ComorbidMatToDf(x, visitId = "visit_name",
 \arguments{
 \item{x}{Matrix of comorbidities, with row and columns names defined}
 
-\item{visit_name}{Single character string with name for new column in output
-data frame. Everywhere else, \code{visit_name} describes the input data,
-but here it is for output data.}
+\item{visit_name}{Single character string with name for new column in output data frame.
+Everywhere else, \code{visit_name} describes the input data, but here it is for output data.}
 
 \item{stringsAsFactors}{Single logical value, describing whether the
 resulting data frame should have strings, i.e. visitId converted to factor.
@@ -26,11 +25,12 @@ argument used in, among other base functions \code{as.data.frame}.}
 \item{visitId}{Deprecated. Use \code{visit_name}}
 }
 \description{
-convert matrix of comorbidities into data frame, preserving visit_name
-  information
+convert matrix of comorbidities into data frame, preserving visit_name information
 }
 \examples{
-library(magrittr) # as ever, optional, but tidy
+ # as ever, optional, but tidy
+library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
+
 longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
                      icd9 = icd9(c("441", "4424", "443", "441"))) \%>\% icd_long_data \%>\% icd9
 mat <- icd_comorbid_elix(longdf)

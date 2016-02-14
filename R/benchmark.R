@@ -165,21 +165,21 @@ checkThreadChunk <- function() {
       message("NOT BENCHMARKING HERE, just checking. np = ", np, ", n = ", n)
       # use microbenchmark::microbenchmark to conveniently check the results are all identical
       microbenchmark::microbenchmark(
-        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "icd9",
+        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "code",
                              threads = 1, chunkSize = 1, ompChunkSize = 1),
-        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "icd9",
+        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "code",
                              threads = 1, chunkSize = 1, ompChunkSize = 1024),
-        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "icd9",
+        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "code",
                              threads = 1, chunkSize = 1024, ompChunkSize = 1),
-        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "icd9",
+        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "code",
                              threads = 1, chunkSize = 1024, ompChunkSize = 1024),
-        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "icd9",
+        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "code",
                              threads = 8, chunkSize = 1, ompChunkSize = 1),
-        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "icd9",
+        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "code",
                              threads = 8, chunkSize = 1, ompChunkSize = 1024),
-        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "icd9",
+        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "code",
                              threads = 8, chunkSize = 1024, ompChunkSize = 1),
-        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "icd9",
+        icd9ComorbidShortCpp(pts, icd::ahrqComorbid, visitId = "visitId", icd9Field = "code",
                              threads = 8, chunkSize = 1024, ompChunkSize = 1024),
         check = my_check, times = 1)
     }
@@ -200,21 +200,21 @@ icd9BenchComorbidParallel <- function() {
   pts100000 <- generate_random_pts(100000)
   ptsBig <- generate_random_pts(500000)
   print(microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 0),
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 1),
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 2),
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 4),
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 6),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 0),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 1),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 2),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 4),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 6),
-    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 0),
-    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 1),
-    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 2),
-    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 4),
-    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "icd9", icd::ahrqComorbid, threads = 6),
+    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 0),
+    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 1),
+    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 2),
+    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 4),
+    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 6),
+    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 0),
+    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 1),
+    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 2),
+    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 4),
+    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 6),
+    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 0),
+    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 1),
+    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 2),
+    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 4),
+    icd9ComorbidShortCpp(ptsBig, visitId = "visitId", icd9Field = "code", icd::ahrqComorbid, threads = 6),
     # 8 is very slow (maxes hyperthreading...)
     times = 5))
 }

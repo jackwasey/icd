@@ -88,8 +88,8 @@ This is more complicated than reshape or reshape2::dcast allows.
   icd_long_to_wide(longdf, prefix = "ICD10_")
 }
 \seealso{
-Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
-  \code{\link{icd9PartsToShort}},
+Other ICD-9 convert: \code{\link{icd9PartsToShort}},
+  \code{\link{icd9_chapters_to_map}},
   \code{\link{icd9_drop_leading_zeroes}},
   \code{\link{icd_wide_to_long}}
 }

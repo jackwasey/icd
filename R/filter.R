@@ -68,7 +68,7 @@ icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, inver
 #' @examples
 #' \dontrun{
 #' # using magrittr is beautiful:
-#' library("magrittr")
+#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' myData <- data.frame(
 #'   visitId = c("v1", "v2", "v3", "v4"),
 #'   diag = c("39891", "39790", "41791", "4401"),

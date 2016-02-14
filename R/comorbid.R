@@ -76,7 +76,9 @@ icd9PoaChoices <- icd_poa_choices
 #'   \code{option(icd9.threads = 4)}. If it is not set, the number of cores in
 #'   the machine is used.
 #' @examples
-#'   library(magrittr) # optional but often helpful
+#'   # optional but often helpful
+#'   library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
+#'
 #'   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
 #'                    icd9 = c("39891", "40110", "09322", "41514", "39891")) %>%
 #'                    icd_long_data %>% icd9

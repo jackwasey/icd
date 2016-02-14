@@ -737,7 +737,9 @@ icd9DiffComorbid <- function(x, y, names = NULL, x.names = NULL, y.names = NULL,
 #' @rdname icd9_get_chapters
 #' @export
 icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FALSE) {
-  icd9_get_chapters(icd9, isShort, verbose)
+  out <- icd9_get_chapters(icd9, isShort, verbose)
+  names(out) <- c("threedigit", "major", "subchapter", "chapter")
+  out
 }
 
 #' @rdname icd_long_to_wide

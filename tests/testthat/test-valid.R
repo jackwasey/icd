@@ -1,19 +1,19 @@
 # Copyright (C) 2014 - 2016  Jack O. Wasey
 #
-# This file is part of icd9.
+# This file is part of icd.
 #
-# icd9 is free software: you can redistribute it and/or modify
+# icd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# icd9 is distributed in the hope that it will be useful,
+# icd is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+# along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 context("icd9 validation")
 
@@ -355,6 +355,8 @@ test_that("filter valid - data frame input", {
   # no non-short so all are invalid:
   expect_equal(tfinvalid <- icd_filter_valid.icd9(pts_invalid_mix, invert = TRUE, short_code = FALSE),
                pts_invalid_mix)
+  expect_true(is.icd9(tfinvalid))
+  expect_true(is.icd_long_data(tfinvalid))
   expect_is(tfinvalid, "icd9")
   expect_is(tfinvalid, "icd_long_data")
   # arg order irrelevant, but can be mixed up in S3 dispatch.
@@ -414,18 +416,28 @@ test_that("billable codes are identified", {
 
 test_that("get subset of billable codes", {
   x <- c("410", "410.0", "410.00")
-  expect_equal(icd_get_billable(x), structure("410.00", class = c("icd_decimal_code", "icd9", "character")))
-  expect_equal(icd_get_billable.icd9cm(x) %>% unclass, "410.00")
+  #expect_equal(icd_get_billable(x), structure("410.00", class = c("icd_decimal_code", "icd9", "character")))
+  expect_equal_no_icd(icd_get_billable(x), c("410.00"))
+  expect_true(is.icd_decimal_code(icd_get_billable(x)))
+  # TODO: reasonable to assume that if we're talking billable, we make it ICD-9-CM
+  expect_true(is.icd9(icd_get_billable(x)))
+  expect_true(is.character(icd_get_billable(x)))
+
+    expect_equal_no_icd(icd_get_billable.icd9cm(x), "410.00")
   # assume ICD-9 means ICD-9-CM: this may change
-  expect_equal(icd_get_billable.icd9(x) %>% unclass, "410.00")
+  expect_equal_no_icd(icd_get_billable.icd9(x), "410.00")
 })
 
 test_that("get inverted subset of billable codes", {
-  x <- c("410", "410.0", "410.00")
-  expect_equal(icd_get_billable(x, invert = TRUE), structure(c("410", "410.0"), class = c("icd_decimal_code", "icd9", "character")))
-  expect_equal(icd_get_billable.icd9cm(x, invert = TRUE) %>% unclass, c("410", "410.0"))
+  x_inv <- c("410", "410.0", "410.00")
+  expect_true(is.icd_decimal_code(icd_get_billable(x_inv, invert = TRUE)))
+  # TODO: reasonable to assume that if we're talking billable, we make it ICD-9-CM
+  expect_true(is.icd9(icd_get_billable(x_inv, invert = TRUE)))
+  expect_true(is.character(icd_get_billable(x_inv, invert = TRUE)))
+
+    expect_equal_no_icd(icd_get_billable.icd9cm(x_inv, invert = TRUE), c("410", "410.0"))
   # assume ICD-9 means ICD-9-CM: this may change
-  expect_equal(icd_get_billable.icd9(x, invert = TRUE) %>% unclass, c("410", "410.0"))
+  expect_equal_no_icd(icd_get_billable.icd9(x_inv, invert = TRUE), c("410", "410.0"))
 })
 
 test_that("an invalid code is not billable", {
