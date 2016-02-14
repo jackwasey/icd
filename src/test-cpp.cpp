@@ -79,7 +79,7 @@ context("icd9ShortToPartsCpp") {
 // context("Rcpp exports") {
 //   test_that("Rcpp exports are valid") {
 //
-//     int i = icd9_RcppExport_validate("icd9");
+//     int i = icd_RcppExport_validate("icd");
 //     expect_that(i > 0);
 //   }
 // }
