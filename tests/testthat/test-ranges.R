@@ -494,6 +494,9 @@ test_that("icd_in_reference_code works for numeric codes with major < 100", {
 
 test_that("sorting char vectors", {
   expect_equal(icd_sort.icd9(short_code = TRUE, c("3", "02", "001", "003")), c("001", "02", "3", "003"))
+  # same with dispatch
+  expect_equal(icd_sort(short_code = TRUE, c("3", "02", "001", "003")), c("001", "02", "3", "003"))
+
   expect_equal(icd_sort.icd9(c("1", "V02", "V1", "E003"), short_code = TRUE), c("1", "V1", "V02", "E003"))
   expect_equal(icd_sort.icd9(short_code = TRUE, c("0032", "0288", "0019", "0031")), c("0019", "0031", "0032", "0288"))
   expect_equal(icd_sort.icd9(c("V251", "V25", "E0039", "E003"), short_code = TRUE), c("V25", "V251", "E003", "E0039"))
@@ -545,4 +548,12 @@ test_that("expand ICD-9 range character class deals with short vs long types", {
     res_b <- icd_expand_range("410", "4108"), short_code = TRUE)))
   expect_true(is.icd_decimal_code(res_a))
   expect_true(is.icd_short_code(res_b))
+})
+
+
+test_that("sort icd10", {
+
+  expect_equal(icd_sort(icd10cm(c("Z00", "A99", "J4C"))), icd10cm(c("A99", "J4C", "Z00")))
+  expect_equal(icd_sort(icd10cm("Z04")), icd10cm("Z04"))
+
 })

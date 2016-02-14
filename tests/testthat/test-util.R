@@ -94,6 +94,11 @@ test_that("string pair match extraction" , {
                c(a = "c", aa = "cc"))
 })
 
+test_that("str_pair_match error if more than two outputs", {
+  expect_error(str_pair_match(string = "hadoop", pattern = "(ha)(do)(op)"))
+})
+
+
 test_that("logical to binary for a matrix works", {
   # matrix is all logical or all not logical by definition, so this is easy
   m <- matrix(c(T, F, T, F), nrow = 2)

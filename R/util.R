@@ -111,23 +111,21 @@ logical_to_binary <- function(x) {
 #'   optinally don't warn if we are forced to choose just a pair of the
 #'   sub-matches
 #' @keywords internal
-str_pair_match <- function(string, pattern, swap = FALSE, dropEmpty = FALSE,
-                           pos = c(1, 2), warn_pattern = TRUE, ...) {
+str_pair_match <- function(string, pattern, pos, swap = FALSE, dropEmpty = FALSE, ...) {
   assertCharacter(string, min.len = 1)
   assertString(pattern)
   assertFlag(swap)
+  pos_missing <- missing(pos)
+  if (pos_missing)
+    pos <- c(1, 2)
   assertIntegerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
   string %>% str_match(pattern) -> res_matches
 
-  if (warn_pattern && identical(pos, c(1, 2)) && length(res_matches[[1]]) > 3) {
-    warning("the pair matching has multiple results, so choosing the first
-            (incomplete) match. Either turn off this warning, or set 'pos' to
-            specify positions to detect. If positions 1 and 2 are needed, do not
-            specify explicity, or set 2, 1 and swap. The last, which is in
-            position ", length(res_matches[[1]]))
-    pos <- length(res_matches[[1]])
-  }
+  if (any(vapply(res_matches, length, integer(1)) > 3)) 
+    stop("the pair matching has three or more results but needed two.
+          Use (?: to have a non-grouping regex parenthesis")
+
   # with str_match, the first column is a redundant complete match of the
   # whole pattern, so pos + 1 here:
 
@@ -292,10 +290,6 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   fastmatch::fmatch(x, table, nomatch = 0L) > 0L
 }
 
-`%fnin%` <- function(x, table) {
-  fastmatch::fmatch(x, table, nomatch = 0L) == 0L
-}
-
 #' @title sort short-form icd9 codes
 #' @description Sorts lists of numeric only, V or E codes. Note that a simple
 #'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
@@ -358,18 +352,6 @@ icd_deprecated <- function(...) {
     .Deprecated(...)
 
 }
-
-get_path_data_raw <- function() {
-  # this is very annoying. Can't do wercker or travis testing with data in
-  # icd9/data-raw because it is not included in the installation, although it
-  # does remain in the source package. Therefore, Have to put it in icd9/inst
-  # after all. Function to get the directory so this is potentially fixable in
-  # the future. I don't want to distribute all the raw data.
-
-  system.file("data-raw", package = "icd")
-
-}
-
 
 #' Parse a (sub)chapter text description with parenthesised range
 #'
