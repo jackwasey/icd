@@ -19,8 +19,8 @@ internet, only return path and filename if the file already exists in
 data-raw. This is helpful for testing without using the internet.}
 }
 \value{
-data frame with icd9, descShort and descLong columns. NA is placed in
-  descLong when not available.
+data frame with icd9, short_desc and long_desc columns. NA is placed in
+  long_desc when not available.
 }
 \description{
 for versions 23 to 32, those which are on the CMS web site, get

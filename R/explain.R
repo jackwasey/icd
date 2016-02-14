@@ -1,22 +1,22 @@
 # Copyright (C) 2014 - 2016  Jack O. Wasey
 #
-# This file is part of icd9.
+# This file is part of icd.
 #
-# icd9 is free software: you can redistribute it and/or modify
+# icd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# icd9 is distributed in the hope that it will be useful,
+# icd is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+# along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title explain ICD9 codes
-#' @description convert 'decimal' format (123.45 style) ICD9 codes into the name
+#' @title Explain ICD-9 and ICD-10 codes in English
+#' @description Convert 'decimal' format (123.45 style) ICD-9 codes into the name
 #'   and description for human review there are official ICD9-CM data tables,
 #'   not with conversion to decimal notation, but to the textual format.
 #' @param x vector or other structure of ICD codes to explain in human language
@@ -35,11 +35,12 @@
 #' @examples
 #' # by default, just show parent code and ignore children (428.0 not shown
 #' # because 428 is present):
-#' library(magrittr) # nice to heave, but not essential
 #' icd_explain(ahrqComorbid$CHF[1:3])
 #' # same without condensing the list. In this case, 428.0 is shown:
-#' icd_explain(ahrqComorbid$CHF[1:3] %>%  icd_condense)
 #' icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
+#' # nice to have magrittr, but not essential
+#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
+#' icd_explain(ahrqComorbid$CHF[1:3] %>%  icd_condense)
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
