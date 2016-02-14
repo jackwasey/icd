@@ -4,7 +4,8 @@
 \alias{generate_deprecated_data}
 \title{Generate deprecated data}
 \usage{
-generate_deprecated_data(save_data = FALSE)
+generate_deprecated_data(save_data = FALSE, path = file.path("data",
+  "deprecated.RData"))
 }
 \arguments{
 \item{save_data}{save the data in \code{data/deprecated.RData}, default is

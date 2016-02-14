@@ -53,7 +53,6 @@ if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
   options("icd.do_online_tests" = TRUE)
 }
 
-#test_check("icd", reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
 
 # disable warning, as many deprecated tests do warn, but testthat::expect_warning still works.
 old_warn <- options(warn = -1)
@@ -62,5 +61,7 @@ on.exit(options(old_warn))
 # use summary reporter so that covr produces output and doesn't time-out on
 # travis. The code coverage testing is slower than regular testing because of
 # instrumentation.
-test_check("icd", reporter = "summary")
+
+# test_check("icd", reporter = "summary")
+test_check("icd", reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
 

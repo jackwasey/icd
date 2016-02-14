@@ -5,7 +5,8 @@
 #' @param save_data save the data in \code{data/deprecated.RData}, default is
 #'   \code{TRUE}
 #' @keywords internal
-generate_deprecated_data <- function(save_data = FALSE) {
+generate_deprecated_data <- function(save_data = FALSE,
+                                     path = file.path("data", "deprecated.RData")) {
 
   icd9Billable <- icd::icd9cm_billable
   for (b in seq_along(icd9Billable))
@@ -57,7 +58,7 @@ generate_deprecated_data <- function(save_data = FALSE) {
          ahrqComorbidNamesHtnAbbrev,
          charlsonComorbidNames,
          charlsonComorbidNamesAbbrev,
-         file = file.path("data", "deprecated.RData"), compress = "xz")
+         file = path, compress = "xz")
     message("now reload to update deprecated data")
 }
 
