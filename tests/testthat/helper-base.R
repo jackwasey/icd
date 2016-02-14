@@ -19,11 +19,11 @@
 library("magrittr")
 
 local({
-  do_slow_tests <- getOption("icd9.do_slow_tests")
+  do_slow_tests <- getOption("icd.do_slow_tests")
   if (is.null(do_slow_tests) || !do_slow_tests)
     message("Will skip slow tests")
 
-  do_online_tests <- getOption("icd9.do_online_tests")
+  do_online_tests <- getOption("icd.do_online_tests")
   if (is.null(do_online_tests) || !do_online_tests)
     message("Will skip online tests")
 })
