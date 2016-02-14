@@ -65,3 +65,5 @@ on.exit(options(old_warn))
 # test_check("icd", reporter = "summary")
 test_check("icd", reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
 
+# # get coverage just for vignette, or examples, etc.
+# package_coverage(type = "vignette", quiet = FALSE)
