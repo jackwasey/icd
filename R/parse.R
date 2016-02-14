@@ -205,6 +205,8 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
 #' Parse billable codes for ICD-9-CM version 27
 #'
 #' These have a quirk which needs a different approach
+#' @param offline logical value
+#' @keywords internal
 parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   message("working on version 27 quirk")
   assertFlag(offline)

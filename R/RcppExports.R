@@ -81,12 +81,12 @@ icd9GetMajorShort <- function(icd9Short) {
 
 #' @title test whether elements of vector begin with V, E (or any other
 #'   character)
-#' @description Current returns a std::vector<bool> which is not thread safe,
+#' @description Current returns a vector of \code{bool} which is not thread safe,
 #'   or particularly fast, although it is memory efficient in the standard
 #'   borked implementation. As of icd9 version 1.2, this is not called by
 #'   threaded code, but this could change, so beware! ASCII spaces are trimmed
 #'   from the start of the string before testing, but no other whitesapce
-#' @param sv std::vector<std::string>&
+#' @param sv vector of strings
 #' @param x const char* of choices of first character to match
 #' @keywords internal
 icd9IsA <- function(sv, x, invert) {
@@ -239,7 +239,7 @@ icd9RandomShort <- function(n = 5L) {
 #' @rdname fastIntToString
 #' @title fast convert integer vector to character vector
 #' @description Fast conversion from integer vector to character vector using C++
-#' @param x td::vector<int>
+#' @param x vector of integers
 #' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
 #'   No checks done for speed.
 #' @examples

@@ -10,7 +10,7 @@ fastIntToStringStd(x)
 fastIntToStringRcpp(x)
 }
 \arguments{
-\item{x}{td::vector<int>}
+\item{x}{vector of integers}
 
 \item{bufferSize}{int if any input strings are longer than this number (default 16) there will be memory errors.
 No checks done for speed.}
