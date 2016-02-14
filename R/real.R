@@ -30,6 +30,7 @@ utils::globalVariables("icd10cm2016")
 #'   will divert to test whether the codes are in the billable list instead of
 #'   seeing if they are any leaf or branch node. TODO: template
 #' @template dotdotdot
+#' @rawNamespace S3method(icd_is_defined,default)
 #' @return logical vector
 #' @export
 icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {

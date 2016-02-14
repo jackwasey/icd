@@ -4,16 +4,17 @@
 \alias{str_pair_match}
 \title{Match strings to get named vector}
 \usage{
-str_pair_match(string, pattern, swap = FALSE, dropEmpty = FALSE,
-  pos = c(1, 2), warn_pattern = TRUE, ...)
+str_pair_match(string, pattern, pos, swap = FALSE, ...)
 }
 \arguments{
+\item{string}{vector of strings}
+
+\item{pattern}{vector of regex which should match exactly two strings for each element in \code{stringr}. If \code{pos} is specified, this rule is relaxed.}
+
+\item{pos}{optional pair of integers with positions of the 1st and 2nd desired matches, when multiple matches are made by the regex}
+
 \item{swap}{logical scalar, whether to swap the names and values. Default is
 not to swap, so the first match becomes the name.}
-
-\item{warn_pattern}{logical, if the pattern has multiple parentheses,
-optinally don't warn if we are forced to choose just a pair of the
-sub-matches}
 }
 \description{
 match a character vector against a regex with a pair of parentheses,

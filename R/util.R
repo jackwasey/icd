@@ -105,13 +105,13 @@ logical_to_binary <- function(x) {
 #'
 #' match a character vector against a regex with a pair of parentheses,
 #' returning named vector
+#' @param string vector of strings
+#' @param pattern vector of regex which should match exactly two strings for each element in \code{stringr}. If \code{pos} is specified, this rule is relaxed.
+#' @param pos optional pair of integers with positions of the 1st and 2nd desired matches, when multiple matches are made by the regex
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
-#' @param warn_pattern logical, if the pattern has multiple parentheses,
-#'   optinally don't warn if we are forced to choose just a pair of the
-#'   sub-matches
 #' @keywords internal
-str_pair_match <- function(string, pattern, pos, swap = FALSE, dropEmpty = FALSE, ...) {
+str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
   assertCharacter(string, min.len = 1)
   assertString(pattern)
   assertFlag(swap)
@@ -122,7 +122,7 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, dropEmpty = FALSE
 
   string %>% str_match(pattern) -> res_matches
 
-  if (any(vapply(res_matches, length, integer(1)) > 3)) 
+  if (pos_missing && ncol(res_matches) > 3) 
     stop("the pair matching has three or more results but needed two.
           Use (?: to have a non-grouping regex parenthesis")
 
@@ -300,13 +300,22 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
 #' @template short_code
 #' @template dotdotdot
 #' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
+#' @rawNamespace S3method(icd_sort,default)
 #' @keywords manip
 #' @export
 icd_sort <- function(x, ...)
   UseMethod("icd_sort")
 
+# roxygen annotating this causes a roxygen error, issue #448
+# https://github.com/klutometis/roxygen/issues/448
+icd_sort.default <- function(x, ...) {
+  y <- icd_guess_version_update(x)
+  UseMethod("icd_sort", y)
+}
+
 #' @describeIn icd_sort Sort ICD-10 codes, note that setting \code{short} is
 #'   unnecessary and ignored.
+#' @keywords internal
 #' @export
 icd_sort.icd10 <- function(x, short_code = NULL, ...) {
   # ignore short, it doesn't matter
@@ -315,6 +324,7 @@ icd_sort.icd10 <- function(x, short_code = NULL, ...) {
 
 #' @describeIn icd_sort sort ICD-9 codes respecting numeric, then V, then E
 #'   codes, and accounting for leading zeroes
+#' @keywords internal
 #' @export
 icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   assert(checkFactor(x), checkCharacter(x))

@@ -96,6 +96,8 @@ test_that("string pair match extraction" , {
 
 test_that("str_pair_match error if more than two outputs", {
   expect_error(str_pair_match(string = "hadoop", pattern = "(ha)(do)(op)"))
+  # no error if explicit
+  expect_error(str_pair_match(string = "hadoop", pattern = "(ha)(do)(op)", pos = c(1, 2)), NA)
 })
 
 

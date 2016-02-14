@@ -70,5 +70,6 @@ unnecessary and ignored.
 \item \code{icd9}: sort ICD-9 codes respecting numeric, then V, then E
 codes, and accounting for leading zeroes
 }}
+\keyword{internal}
 \keyword{manip}
 
