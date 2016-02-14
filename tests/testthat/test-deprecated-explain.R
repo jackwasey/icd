@@ -283,10 +283,10 @@ test_that("working with named lists of codes, decimal is guessed", {
   expect_error(icd9Explain(list(a = c("001"), b = c("001.1", "001.9"))), NA)
 })
 
-test_that("icd9 descriptions is parsed correctly", {
+test_that("icd9 descriptions was parsed correctly", {
   skip_online_tests()
   # TODO: only skip online if file not already available.
-  x <- icd9_parse_leaf_desc_ver(version = "32", offline = FALSE)
+  x <- icd9Billable[["32"]]
   expect_equal(names(x), c("icd9", "descShort", "descLong"))
   expect_equal(nrow(x), 14567)
   expect_true(is.character(x$icd9))

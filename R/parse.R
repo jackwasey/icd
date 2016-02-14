@@ -105,7 +105,7 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save_data)
-    save_in_data_dir("icd9cm_billable")
+    save_in_data_dir(icd9cm_billable)
   invisible(icd9cm_billable)
 }
 
@@ -202,6 +202,9 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   invisible(out)
 }
 
+#' Parse billable codes for ICD-9-CM version 27
+#'
+#' These have a quirk which needs a different approach
 parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   message("working on version 27 quirk")
   assertFlag(offline)
@@ -209,8 +212,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   fn_orig <- v27_dat$other_filename
   url <- v27_dat$url
 
-  message("original v27 file name = '", fn_orig,
-          "'. URL = ", url)
+  message("original v27 file name = '", fn_orig, "'. URL = ", url)
 
   f27_info <- unzip_to_data_raw(url, fn_orig, offline = offline)
 

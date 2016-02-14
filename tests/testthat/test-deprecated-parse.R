@@ -143,6 +143,8 @@ test_that("deprecated - online parse tests run", {
   })
 
   v32 <- icd9_parse_leaf_desc_ver(version = "32", save_data = FALSE, offline = TRUE)
+  # use deprecated names
+  names(v32) <- c("icd9", "descShort", "descLong")
 
   test_that("deprecated - all leaf codes from TXT are in RTF extract", {
     v32$icd9 %>% icd9ShortToDecimal -> leaves

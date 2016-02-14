@@ -23,16 +23,14 @@ test_that("billable codes are recreated", {
   # TODO: run test if file is available, even if running in offline
   check_billable <- parse_leaf_descriptions_all(save_data = FALSE, offline = FALSE)
   if (Sys.info()[["sysname"]] != "Linux")
-    skip("Only do encoding problems on Linux.")
+    skip("Only do encoding problems on Linux. Can anyone clear this up?")
   for (ver in c("27", "28", "29", "30", "31", "32")) {
-    v <- icd::icd9Billable[[ver]][["descLong"]]
-    cb <- check_billable[[ver]][["descLong"]]
-    diff <- v != cb
-    expect_identical(check_billable[[ver]], icd::icd9Billable[[ver]],
-                     info = paste("descLong differences for version", ver,
-                                  "\noriginal: ", paste(v[diff], collapse = ", "),
-                                  "\nprocess:", paste(cb[diff], collapse = ", ")
-                     ))
+    names(check_billable[[ver]]) <- c("icd9", "descShort", "descLong")
+    # v <- icd::icd9Billable[[ver]][["descLong"]]
+    # cb <- check_billable[[ver]][["descLong"]]
+    expect_identical(check_billable[[ver]], 
+                     icd::icd9Billable[[ver]],
+                     info = paste("descLong version:", ver))
   }
 })
 
