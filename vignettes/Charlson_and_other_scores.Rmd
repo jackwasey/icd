@@ -1,0 +1,79 @@
+---
+title: "Charlson and other scores from ICD-9 and ICD-10 codes"
+author: "Jack O. Wasey"
+date: '`r format(Sys.time(), "%Y-%m-%d")`'
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{Charlson and other scores from ICD-9 and ICD-10 codes}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+<!--
+Copyright (C) 2014 - 2016  Jack O. Wasey
+
+This file is part of icd.
+
+icd is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+icd is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with icd. If not, see <http:#www.gnu.org/licenses/>.
+-->
+
+```{r setup, include=FALSE}
+
+suppressWarnings({
+  suppressPackageStartupMessages({
+    loadNamespace("knitr") # for opts_chunk only
+    library(icd)
+    library(magrittr)
+#    library(xtable)
+#    library(utils)
+    })
+  })
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+## ICD code scoring systems
+A common use of ICD codes is calculation as a Charlson score, which gives a measure of how well a patient is, albeit based on the limited available in admission and discharge diagnoses. The Charlson scoring system attributes scores based on presence of diseases falling into any of the Charlson comorbidities. Quan et al updated the scores given to each comorbidity to better reflect morbidity and mortality in a more recent population. Van Walraven et al provide a similar scoring methodology for the Elixhauser comorbidities (as used by the US AHRQ).
+
+More complicated scoring systems may use lab values, patient demographic information, and so on. Any contributions to this package for calculations of scoring systems based on comorbidities and other data would be welcome.
+
+## Vermont example data, Charlson scores
+
+The Vermont data are actually discharge, not admission diagnoses, but can be used to demonstrate generating Charlson scores.
+```{r vermont-charlson}
+# typical hospital format data, with many columns for diagnoses
+head(vermont_dx)
+# convert to long format (could use other tools, but the icd version accounts better for known structure of the data.
+head(vermont_dx %>% icd_wide_to_long)
+# calculate charlson scores and summarize
+vermont_dx %>% icd_wide_to_long %>% icd_charlson %>% summary
+# show the first few actual scores: the names are the patient IDs:
+vermont_dx %>% icd_wide_to_long %>% icd_charlson %>% head(25) -> vermont_charlson
+vermont_charlson 
+names(vermont_charlson)
+unname(vermont_charlson)
+```
+
+Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD codes, applies the Charlson scoring system, and returns the Charlson score for each patient.
+
+## Vermont example data, Van Walraven scores
+
+The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.
+
+```
+vermont_dx %>% icd_wide_to_long %>% icd_van_walraven %>% head(25)
+```
+
