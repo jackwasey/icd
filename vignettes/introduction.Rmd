@@ -94,7 +94,7 @@ patientData %>% icd_filter_poa_yes %>% icd_comorbid_ahrq %>% extract(1:8)
 ## Converting ICD-9 codes between types
 ICD-9 codes are usually presented in *decimal* format (beware, for this is not a number), e.g. `003.21`, whereas most electronic records seem to use the *short* form without a decimal place. These are not interchangeable simply by removing the decimal place, and great care is taken to do this correctly. The functions were also designed to deal with the common problem of incorrectly formatted ICD-9 codes. The assumption is made that short codes of three or fewer characters are  describing only the 'major' part: there is no other reasonable interpretation. For example, `020` must be taken to mean `20`, not `2.0` or even `0.20`. In most cases, when *icd9* works on ICD-9 codes, it will convert any codes of fewer than three characters into zero-padded three-digit codes.
 ```{r "conversionSimple"}
-icd9DecimalToShort(c("1", "10.20", "100", "123.45"))
+icd_decimal_to_short(c("1", "10.20", "100", "123.45"))
 icd9ShortToDecimal(c("1", "22", "2244", "1005"))
 
 # similar operations with magrittr, also showing invalid codes
@@ -334,12 +334,12 @@ The ICD-9-CM scheme is structured as follows:
  
  For most combinations of 0 to 9, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
 ```{r "find three digit billable"}
-allreal <- icd::icd9cm_hierarchy[["code"]] # or used icd_get_defined
-# select the non-V and non-E codes with three characters (zeroes already prefixed)
-threedigitreal <- allreal[nchar(allreal) == 3 & icd9_is_n(allreal)]
+icd9cm_hierarchy$code %>% icd_get_defined -> all_real
+# select the non-V and non-E codes
+three_digit_real <- all_real[icd9_is_n(all_real)]
 # display
-threedigitdf <- data.frame(icd9 = threedigitreal,  description = icd9Explain(threedigitreal))
-print(threedigitdf[1:10, ], row.names = FALSE)
+three_digit_df <- data.frame(code = three_digit_real, description = icd_explain(three_digit_real, condense = FALSE))
+print(three_digit_df[1:10, ], row.names = FALSE)
 ```
 
 ### Which ICD-9 codes have changed between versions of ICD-9?
@@ -350,14 +350,14 @@ lost_since_27 <- setdiff(icd9cm_billable[["27"]][["code"]],
                          icd9cm_billable[["32"]][["code"]]) %>% tail
 # we know this is an ICD-9-CM code, so declare this using nice magrittr motif:
 lost_since_27 %<>% icd9cm
-lost_since_27 %<>% icd9
+lost_since_27 %<>% icd9cm
 
 # these are a few which were gained since v27
-data.frame(icd9 = new_since_27, desc = new_since_27 %>% icd_explain)
+data.frame(code = new_since_27, desc = new_since_27 %>% icd_explain)
 # these are a few which were lost since v27
-data.frame(icd9 = lost_since_27, desc = lost_since_27 %>% icd_explain)
+data.frame(code = lost_since_27, desc = lost_since_27 %>% icd_explain)
 ```
 
 ## Conclusion
 
-This package allows fluid, fast and accurate manipulation of ICD-9 codes, especially when combined with [magrittr](https://cran.r-project.org/package=magrittr). Suggestions, contributions and comments are welcome via [github](https://github.com/jackwasey/icd9/issues).
+This package allows fluid, fast and accurate manipulation of ICD-9 and ICD-10 codes, especially when combined with [magrittr](https://cran.r-project.org/package=magrittr). Suggestions, contributions and comments are welcome via [github](https://github.com/jackwasey/icd9/issues).

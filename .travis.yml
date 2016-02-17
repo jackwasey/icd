@@ -47,9 +47,9 @@ after_success:
  - Rscript -e 'devtools::session_info()'
  - Rscript -e 'library(covr); package_coverage(type = "vignette", quiet = TRUE, exclusions = c("inst/include/icd_RcppExports.h", "R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'
 
- - Rscript -e 'library(covr); coveralls(exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE, type = "test")'
+# - Rscript -e 'library(covr); coveralls(exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE, type = "test")'
  # or try travis_wait, but this seems not to report the results to coveralls
- # - travis_wait Rscript -e 'library(covr); coveralls(exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE, type = "test")'
+ - travis_wait Rscript -e 'library(covr); coveralls(exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE, type = "test")'
 
  # # doing codecov on wercker now:
  #- env: COVR=true
