@@ -28,12 +28,10 @@ r_packages:
  - munsell
  - plyr
  - profr
- - profr
  - proto
- - rcolorbrewer
+ - RColorBrewer
  - reshape2
  - rmarkdown
- - RODBC
  - scales
  - stringr
  - xtable
