@@ -40,10 +40,10 @@ utils::globalVariables(".")
 #' @keywords internal
 parse_rtf_year <- function(year = "2011", save_data = FALSE,
                            offline = TRUE, verbose = FALSE) {
-  assertString(year)
-  assertFlag(save_data)
-  assertFlag(offline)
-  assertFlag(verbose)
+  assert_string(year)
+  assert_flag(save_data)
+  assert_flag(offline)
+  assert_flag(verbose)
 
   rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
   fn <- rtf_dat$rtf_filename
@@ -90,8 +90,8 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
 #' @keywords internal
 parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
-  assertCharacter(rtf_lines)
-  assertFlag(verbose)
+  assert_character(rtf_lines)
+  assert_flag(verbose)
 
   # filtered <- iconv(rtf_lines, from = "ASCII", to = "UTF-8", mark = TRUE) I
   # think the first 127 characters of ASCII are the same in Unicode, but we must
@@ -259,7 +259,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     if (verbose) message("working on fifth-digit row:", f)
     range <- rtf_parse_fifth_digit_range(filtered[f], verbose = verbose)
     fifth_suffices <- filtered[seq(f + 1, f + 20)] %>%
-      grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
+      str_subset("^[[:digit:]][[:space:]].*") %>%
       str_pair_match("([[:digit:]])[[:space:]](.*)", warn_pattern = TRUE)
 
     re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
@@ -283,7 +283,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   lines_V30V39 <- grep(re_fifth_range_V30V39, filtered)
   stopifnot(length(lines_V30V39) == 1)
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
-    grep("^[[:digit:]][[:space:]].*", ., value = TRUE) %>%
+    str_subset("^[[:digit:]][[:space:]].*") %>%
     str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
   range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE, defined = FALSE))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
@@ -424,8 +424,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 #' @template verbose
 #' @keywords internal
 rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
-  assertString(row_str)
-  assertFlag(verbose)
+  assert_string(row_str)
+  assert_flag(verbose)
 
   out <- c()
   # get numbers and number ranges
@@ -493,7 +493,7 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
 }
 
 rtf_parse_qualifier_subset <- function(qual) {
-  assertString(qual) # one at a time
+  assert_string(qual) # one at a time
 
   out <- c()
 

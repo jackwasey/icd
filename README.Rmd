@@ -38,8 +38,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-"
 )
-patientData <- data.frame(
-  visitId = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
+patient_data <- data.frame(
+  visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = c("40201", "2258", "7208", "25001", "34400", "4011", "4011"),
   poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
   stringsAsFactors = FALSE
@@ -90,16 +90,16 @@ ICD-9 codes are not numbers, and great care is needed when matching individual c
 See the vignette and code help for many more. Here's a taste: 
 
 ```{r example}
-patientData
+patient_data
 
 # reformat input data as needed
-patientData %>% icd9LongToWide # everything works well with magrittr %>%
+patient_data %>% icd9LongToWide # everything works well with magrittr %>%
 
 # get comorbidities:
-icd9ComorbidQuanDeyo(patientData)
+icd9ComorbidQuanDeyo(patient_data)
 
 # find diagnoses present on admission:
-icd9FilterPoa(patientData)
+icd9FilterPoa(patient_data)
 ```
 
 Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.

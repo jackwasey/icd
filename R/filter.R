@@ -36,18 +36,17 @@ icd_filter_invalid <- function(...)
 icd_filter_valid.icd9 <- function(x, icd_name = NULL,
                                   short_code =  NULL, invert = FALSE, ...) {
   assertDataFrame(x, min.cols = 1, col.names = "named")
-  assert(checkNull(icd_name), checkString(icd_name))
-  assert(checkNull(short_code), checkFlag(short_code))
+  assert(checkmate::checkNull(icd_name), checkmate::checkString(icd_name))
+  assert(checkmate::checkNull(short_code), checkmate::checkFlag(short_code))
   icd_name <- get_icd_name(x)
   if (is.null(short_code))
     short_code <- icd_guess_short(x[[icd_name]])
   assertDataFrame(x, min.cols = 1, col.names = "named")
-  assertFlag(short_code)
-  assertFlag(invert)
+  assert_flag(short_code)
+  assert_flag(invert)
   x[icd_is_valid.icd9(x[[icd_name]], short_code = short_code) != invert, ]
 }
 
-### @describeIn icd_filter_invalid Filter in (or out) invalid ICD-9 codes
 
 #' @rdname icd_filter_valid
 #' @export
@@ -70,7 +69,7 @@ icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, inver
 #' # using magrittr is beautiful:
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' myData <- data.frame(
-#'   visitId = c("v1", "v2", "v3", "v4"),
+#'   visit_id = c("v1", "v2", "v3", "v4"),
 #'   diag = c("39891", "39790", "41791", "4401"),
 #'   poa = c("Y", "N", NA, "Y"),
 #'   stringsAsFactors = FALSE
@@ -78,18 +77,18 @@ icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, inver
 #' myData %>% icd9FilterPoaNotNo() %>% icd9ComorbidAhrq
 #' # can fill out named fields also:
 #' myData %>% icd9FilterPoaYes(poa_name="poa") %>%
-#'   icd9ComorbidAhrq(icd9Field = "diag", visitId = "visitId", isShort = TRUE)
+#'   icd_comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
 #' # can call the core icd9Comorbid function with an arbitrary mapping
 #' myData %>%
 #' icd_filter_poa_yes %>%
-#' icd_comorbid(icd_name = "diag", visit_name = "visitId",
-#'   map = quanElixComorbid, short_mapping = TRUE)
+#' icd_comorbid(icd_name = "diag", visit_name = "visit_id",
+#'   map = icd9_map_quan_elix, short_mapping = TRUE)
 #' }
 #' @export
 icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
   poa <- match.arg(poa)
   assertDataFrame(x, min.cols = 1, col.names = "named")
-  assertString(poa_name)
+  assert_string(poa_name)
   stopifnot(poa_name %in% names(x))
   switch(poa,
           "yes" = icd_filter_poa_yes(x, poa_name = poa_name),
@@ -101,9 +100,9 @@ icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
 
 .icd_filter_poa <- function(x, poa_name, choice, invert = FALSE) {
   assertDataFrame(x, min.cols = 1, col.names = "named")
-  assertString(poa_name, na.ok = FALSE)
-  assertCharacter(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
-  assertFlag(invert)
+  assert_string(poa_name, na.ok = FALSE)
+  assert_character(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
+  assert_flag(invert)
   stopifnot(poa_name %in% names(x))
   p <- x[[poa_name]]
   if (invert)

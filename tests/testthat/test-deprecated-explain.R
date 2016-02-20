@@ -21,7 +21,7 @@ test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
     icd9ExplainShort(icd9ChildrenShort("391", onlyReal = FALSE),
                      doCondense = FALSE),
-    c("Rheumatic fever with heart involvement","Acute rheumatic pericarditis",
+    c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
       "Acute rheumatic heart disease, unspecified")
@@ -103,7 +103,7 @@ test_that("guess icd9 types: short", {
 })
 
 test_that("guess icd9 types: ambiguous, default to short", {
-  expect_equal(icd9GuessIsShort(c("123.4","2345")), TRUE)
+  expect_equal(icd9GuessIsShort(c("123.4", "2345")), TRUE)
   expect_equal(icd9GuessIsShort(c("123.4", NA, "2345")), TRUE)
 })
 

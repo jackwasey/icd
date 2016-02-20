@@ -38,17 +38,17 @@ test_that("deprecated - vary everything", {
   for (pts in c(0, 1, 3, 31, 1013, 10009)) {
     for (dz_per_patient in c(1, 23)) {
       for (threads in c(1, 5, 9)) {
-        for (chunkSize in c(1, 2, 11, 29, 101, 997, 10007)) {
-          options("icd9.threads" = threads)
-          options("icd9.chunkSize" = chunkSize)
+        for (chunk_size in c(1, 2, 11, 29, 101, 997, 10007)) {
+          options("icd.threads" = threads)
+          options("icd.chunk_size" = chunk_size)
           # ompChunkSize is not currently not set in CPP code
-          options("icd9.ompChunkSize" = ompChunkSize)
+          options("icd.omp_chunk_size" = ompChunkSize)
           expect_that(
-            icd9ComorbidQuanDeyo(randomUnorderedPatients(pts, dz_per_patient),
+            icd9ComorbidQuanDeyo(random_unordered_patients(pts, dz_per_patient),
                                  isShort = FALSE, applyHierarchy = TRUE),
             testthat::not(throws_error()),
-            info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunkSize = %i",
-                           pts, dz_per_patient, threads, chunkSize)
+            info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
+                           pts, dz_per_patient, threads, chunk_size)
           )
         }
       }

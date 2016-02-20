@@ -57,7 +57,7 @@ NULL
 icd9_chapters_to_map <- function(x) {
   if (is.character(x) && exists(x))
     x <- get(x)
-  assertList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
+  assert_list(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
@@ -96,10 +96,10 @@ icd_wide_to_long <- function(x,
                              icd_name = "icdCode",
                              icd_regex = c("icd", "diag", "dx_", "dx")) {
   assertDataFrame(x, min.rows = 1, min.cols = 2)
-  assertString(visit_name)
-  assert(checkNull(icd_labels), checkCharacter(icd_labels))
-  assertString(icd_name)
-  assertCharacter(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
+  assert_string(visit_name)
+  assert(checkmate::checkNull(icd_labels), checkCharacter(icd_labels))
+  assert_string(icd_name)
+  assert_character(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
 
   #TODO: make S3
 
@@ -111,7 +111,7 @@ icd_wide_to_long <- function(x,
       re <- re - 1
     }
   }
-  checkmate::assertCharacter(icd_labels, any.missing = FALSE, min.chars = 1,
+  checkmate::assert_character(icd_labels, any.missing = FALSE, min.chars = 1,
                              min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icd_labels %in% names(x)))
 
@@ -168,10 +168,10 @@ icd_long_to_wide <- function(x,
   #  visit_name <- get_visit_name(x, visit_name)
 
   assertDataFrame(x, col.names = "named")
-  assertString(prefix)
+  assert_string(prefix)
   assertCount(min_width, na.ok = FALSE)
-  assertFlag(aggr)
-  assertFlag(return_df)
+  assert_flag(aggr)
+  assert_flag(return_df)
 
   # we're now going to return a matrix
   icd9VisitWasFactor <- is.factor(x[[visit_name]])
@@ -227,8 +227,8 @@ icd_long_to_wide <- function(x,
 icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
                                    stringsAsFactors = getOption("stringsAsFactors")) {
   assertMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
-  assertString(visit_name)
-  assertFlag(stringsAsFactors)
+  assert_string(visit_name)
+  assert_flag(stringsAsFactors)
   out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors)
   names(out)[1] <- visit_name
   rownames(out) <- NULL
@@ -256,10 +256,9 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' @export
 icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
                                    stringsAsFactors = getOption("stringsAsFactors")) {
-  checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
-  checkString(visit_name)
-  checkFlag(stringsAsFactors)
-  # visit_name <- get_visit_name(x, visit_name)
+  assert_data_frame(x, min.rows = 1, min.cols = 2, col.names = "named")
+  assert_string(visit_name)
+  assert_flag(stringsAsFactors)
 
   out <- as.matrix.data.frame(x[-which(names(x) == visit_name)])
   rownames(out) <- x[[visit_name]]
@@ -337,15 +336,6 @@ icd_decimal_to_short.icd10cm <- function(x) {
 icd_decimal_to_short.icd10who <- function(x) {
   icd_decimal_to_short.icd10(x) %>% icd10who
 }
-
-
-#
-# # @export
-# # @keywords internal
-# icd_decimal_to_short.list <- function(x) {
-#   # todo, may need to replicate this elsewhere
-#   lapply(x, icd_decimal_to_short)
-# }
 
 #' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to
 #'   short format

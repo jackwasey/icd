@@ -6,4 +6,3 @@ test_that("some tricky looking codes", {
 
   expect_true("A00" %in% icd10_who["major"])
 })
-

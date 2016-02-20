@@ -1,2 +1,3 @@
 linters: with_defaults(snake_case_linter = NULL, line_length_linter(120))
-exclusions: list("R/RcppExports.R")
+exclusions: list("R/RcppExports.R", "R/deprecated.R", "inst/doc/Charlson_and_other_scores.R", "inst/doc/icd-10.R", "inst/doc/introduction.R")
+cache: TRUE

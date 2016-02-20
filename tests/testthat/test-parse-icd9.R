@@ -20,7 +20,7 @@ context("RTF ICD-9")
 test_that("some known sub vs chap confusion", {
   # some things shouldn't have been called sub-chapters, just chapters. Known troublemakers:
   expect_icd9_only_chap("Supplementary Classification Of External Causes Of Injury And Poisoning")
-  expect_icd9_only_chap("Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services")
+  expect_icd9_only_chap("Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services") # nolint
 
   # and scan all, noting each is tested twice and half the test is circular,
   # since it looks up with the looped group.
@@ -34,14 +34,16 @@ test_that("some known sub vs chap confusion", {
 
 test_that("sub_chapter parsing went okay, tricky cases", {
 
-  expect_icd9_sub_chap_equal("Tuberculosis", "010", "018") # "TUBERCULOSIS(010-018)"
+  # "TUBERCULOSIS(010-018)" # nolint
+  expect_icd9_sub_chap_equal("Tuberculosis", "010", "018")
 
-  expect_icd9_sub_chap_equal("Vehicle Accidents Not Elsewhere Classifiable", "E846", "E848") # or with comma: "Vehicle Accidents, Not Elsewhere Classifiable"
-  expect_icd9_sub_chap_equal("Accidental Poisoning By Drugs, Medicinal Substances, And Biologicals", "E850", "E858")
-  expect_icd9_sub_chap_equal("Accidental Poisoning By Other Solid And Liquid Substances, Gases, And Vapors", "E860", "E869")
+  # or with comma: "Vehicle Accidents, Not Elsewhere Classifiable"
+  expect_icd9_sub_chap_equal("Vehicle Accidents Not Elsewhere Classifiable", "E846", "E848")
+
+  expect_icd9_sub_chap_equal("Accidental Poisoning By Drugs, Medicinal Substances, And Biologicals", "E850", "E858") # nolint
+  expect_icd9_sub_chap_equal("Accidental Poisoning By Other Solid And Liquid Substances, Gases, And Vapors", "E860", "E869") # nolint
   expect_icd9_sub_chap_equal("External Cause Status", "E000", "E000")
   expect_icd9_sub_chap_equal("Injury Resulting From Operations Of War", "E990", "E999")
-  #expect_icd9_sub_chap_equal("", "", "")
 })
 
 test_that("majors okay", {

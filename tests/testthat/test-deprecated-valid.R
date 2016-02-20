@@ -373,7 +373,7 @@ test_that("deprecated - icd-9 code is really in the list, not just syntactically
 })
 
 pts_invalid_mix <- data.frame(
-  visitId = c(1000, 1000, 1001),
+  visit_id = c(1000, 1000, 1001),
   icd9 = c("27801", "invalides", "25001"),
   poa = factor(c("Y", "N", "Y"))
 )

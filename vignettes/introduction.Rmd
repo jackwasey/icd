@@ -49,7 +49,7 @@ knitr::opts_chunk$set(
 )
 
 patientData <- data.frame(
-  visitId = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
+  visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = icd9(c("40201", "2258", "7208", "25001", "34400", "4011", "4011")),
   poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
   stringsAsFactors = FALSE
@@ -76,7 +76,7 @@ or
 ```{r showdatwide,echo=FALSE}
 head(vermont_dx[c(1, 6:15)])
 ```
-Of course, in real life, there are many problems with the data, such is `NA` entries, out-of-order `visitId`s, non-existent or invalid ICD-9 codes, etc.. Tools are provided to clean up the mess, and discover the comorbidities before admission or after discharge for these patients (or simply for any list of patients and ICD-9 codes: there is no requirement to work in the hospital admission paradigm.) The optional `poa` field indicates whether the code was determined to be *present on arrival*. The implicit default is to ignore it, and give ICD-9 code regardless of POA status, but filtering functions are provided and demonstrated later in this vignette.
+Of course, in real life, there are many problems with the data, such is `NA` entries, out-of-order `visit_id`s, non-existent or invalid ICD-9 codes, etc.. Tools are provided to clean up the mess, and discover the comorbidities before admission or after discharge for these patients (or simply for any list of patients and ICD-9 codes: there is no requirement to work in the hospital admission paradigm.) The optional `poa` field indicates whether the code was determined to be *present on arrival*. The implicit default is to ignore it, and give ICD-9 code regardless of POA status, but filtering functions are provided and demonstrated later in this vignette.
 
 The comorbidities can be determined as follows (showing the first few columns for brevity):
 ```{r getcomorbidities}

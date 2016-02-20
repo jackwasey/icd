@@ -75,8 +75,7 @@ test_that("groups of SAS assignments can be extracted", {
 
 test_that("read LET string declarations from SAS code", {
 
-  letStrOne <-  "\t%LET DC16=%STR('196','197','198','199');      "
-  res_list <- sasExtractLetStrings(letStrOne)
+  res_list <- sasExtractLetStrings("\t%LET DC16=%STR('196','197','198','199');      ")
   expect_true(is.list(res_list))
   expect_true(names(res_list) == "DC16")
   expect_equal(res_list[[1]], c("196", "197", "198", "199"))

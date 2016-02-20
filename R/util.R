@@ -22,7 +22,7 @@
 #' @return character vector of length one
 #' @keywords internal
 strim <- function(x) {
-  assertString(x, na.ok = TRUE)
+  assert_string(x, na.ok = TRUE)
   if (!is.na(x[1]))
     .Call("icd_strimCpp", PACKAGE = "icd", as.character(x))
   else
@@ -112,9 +112,9 @@ logical_to_binary <- function(x) {
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
 str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
-  assertCharacter(string, min.len = 1)
-  assertString(pattern)
-  assertFlag(swap)
+  assert_character(string, min.len = 1)
+  assert_string(pattern)
+  assert_flag(swap)
   pos_missing <- missing(pos)
   if (pos_missing)
     pos <- c(1, 2)
@@ -122,7 +122,7 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
 
   string %>% str_match(pattern) -> res_matches
 
-  if (pos_missing && ncol(res_matches) > 3) 
+  if (pos_missing && ncol(res_matches) > 3)
     stop("the pair matching has three or more results but needed two.
           Use (?: to have a non-grouping regex parenthesis")
 
@@ -163,7 +163,7 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
     if (is.null(visit_name))
       visit_name <- names(x)[1]
   }
-  assertString(visit_name)
+  assert_string(visit_name)
   stopifnot(visit_name %in% names(x))
   visit_name
 }
@@ -193,7 +193,7 @@ get_icd_name <- function(x, icd_name = NULL) {
     # Could look at contents of the data frame, although this evaluates a
     # promise on potentially a big data frame, so could be costly
   }
-  assertString(icd_name)
+  assert_string(icd_name)
   stopifnot(icd_name %in% names(x))
   icd_name
 }
@@ -257,7 +257,7 @@ rtf_year_ok <- function(test_year) {
 #'   set as \code{NA}; otherwise; they are removed.
 #' @examples
 #' \dontrun{
-#' pts <- icd:::randomUnorderedPatients(1e7)
+#' pts <- icd:::random_unordered_patients(1e7)
 #' u <- unique.default(pts$code)
 #' # this shows that stringr (which uses stringi) sort takes 50% longer than
 #' # built-in R sort.
@@ -327,8 +327,8 @@ icd_sort.icd10 <- function(x, short_code = NULL, ...) {
 #' @keywords internal
 #' @export
 icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
-  assert(checkFactor(x), checkCharacter(x))
-  assertFlag(short_code)
+  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert_flag(short_code)
 
   if (short_code)
     x[icd9_order_short(x)]
@@ -371,8 +371,8 @@ icd_deprecated <- function(...) {
 #' @name chapter_to_desc_range
 #' @keywords internal manip
 .chapter_to_desc_range <- function(x, re_major) {
-  assertCharacter(x, min.len = 1)
-  assertString(re_major)
+  assert_character(x, min.len = 1)
+  assert_string(re_major)
 
   re_code_range <- paste0("(.*)[[:space:]]?\\((",
                           re_major, ")-(",

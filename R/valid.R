@@ -22,8 +22,8 @@
 #' @template whitespace_ok
 #' @keywords internal
 re_just <- function(x, whitespace_ok = FALSE) {
-  assertString(x)
-  assertFlag(whitespace_ok)
+  assert_string(x)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     paste0("^[[:space:]]*", x, "[[:space:]]*$")
   else
@@ -202,9 +202,9 @@ icd_is_valid.default <- function(x, ...) {
 #' @export
 icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
                                whitespace_ok = TRUE, ...) {
-  assertCharacter(x)
-  assertFlag(short_code)
-  assertFlag(whitespace_ok)
+  assert_character(x)
+  assert_flag(short_code)
+  assert_flag(whitespace_ok)
 
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
   # testing 'realness' start with a broad regex
@@ -221,13 +221,13 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
 icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
                               whitespace_ok = TRUE, ...) {
   assert(
-    checkFactor(x),
+    checkmate::checkFactor(x),
     checkCharacter(x),
     checkClass(x, c("icd9")), # TODO: use icd9_classes
     checkClass(x, c("icd9cm"))
   )
-  assertFlag(short_code)
-  assertFlag(whitespace_ok)
+  assert_flag(short_code)
+  assert_flag(whitespace_ok)
   if (short_code)
     icd9_is_valid_short(x, whitespace_ok = whitespace_ok)
   else
@@ -240,15 +240,15 @@ icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
 # Can't roxygen because of UseMethod bug therein
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
                                    whitespace_ok = TRUE, ...) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   x <- icd_guess_version_update(x)
   UseMethod("icd_is_valid", x)
 }
 
 icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {
-  assert(checkFactor(x), checkCharacter(x),
+  assert(checkmate::checkFactor(x), checkCharacter(x),
          checkClass("icd9"), checkClass("icd9cm"))
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (length(x) == 0)
     return(logical())
 
@@ -261,12 +261,12 @@ icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {
 icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
   # if input doesn't satisfy these, then it is not just invalid, but deserves an error:
   assert(
-    checkFactor(x),
+    checkmate::checkFactor(x),
     checkCharacter(x),
     checkClass(x, c("icd9")),
     checkClass(x, c("icd9cm"))
   )
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
 
   # TODO: do this everywhere or nowhere
   if (length(x) == 0)
@@ -282,7 +282,7 @@ icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
   }
 
 icd9_is_valid_short_n <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_n)) %>% na_to_false
   else
@@ -290,7 +290,7 @@ icd9_is_valid_short_n <- function(x, whitespace_ok = TRUE) {
 }
 
 icd9_is_valid_short_v <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_v)) %>% na_to_false
   else
@@ -298,7 +298,7 @@ icd9_is_valid_short_v <- function(x, whitespace_ok = TRUE) {
 }
 
 icd9_is_valid_short_e <- function(x, whitespace_ok = TRUE){
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_e)) %>% na_to_false
   else
@@ -306,8 +306,8 @@ icd9_is_valid_short_e <- function(x, whitespace_ok = TRUE){
 }
 
 icd9_is_valid_decimal_n <- function(x, whitespace_ok = TRUE) {
-  assert(checkFactor(x), checkCharacter(x))
-  assertFlag(whitespace_ok)
+  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_n)) %>% na_to_false
   else
@@ -315,7 +315,7 @@ icd9_is_valid_decimal_n <- function(x, whitespace_ok = TRUE) {
 }
 
 icd9_is_valid_decimal_v <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_v)) %>% na_to_false
   else
@@ -323,11 +323,11 @@ icd9_is_valid_decimal_v <- function(x, whitespace_ok = TRUE) {
 }
 
 icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   #need Perl regex for lookbehind. may even be quicker, according to the docs.
   #grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$",
   #trim(x), perl = TRUE)
-  assert(checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkCharacter(x))
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_e)) %>% na_to_false
   else
@@ -341,7 +341,7 @@ icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
 #'   major (not necessarily a real one)
 #' @keywords internal
 icd_is_valid_major <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   UseMethod("icd_is_valid_major")
 }
 
@@ -357,7 +357,7 @@ icd_is_valid_major.default <- function(x, whitespace_ok = TRUE) {
 #' @export
 #' @keywords internal
 icd_is_valid_major.icd9 <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just(re_icd9_major)) %>% na_to_false
   else
@@ -368,7 +368,7 @@ icd_is_valid_major.icd9 <- function(x, whitespace_ok = TRUE) {
 #' @export
 #' @keywords internal
 icd_is_valid_major.icd10 <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just(re_icd10_major)) %>% na_to_false
   else
@@ -378,7 +378,7 @@ icd_is_valid_major.icd10 <- function(x, whitespace_ok = TRUE) {
 #' @rdname icd_is_valid_major
 #' @keywords internal
 icd9_is_valid_major_n <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_n)) %>% na_to_false
   else
@@ -388,7 +388,7 @@ icd9_is_valid_major_n <- function(x, whitespace_ok = TRUE) {
 #' @rdname icd_is_valid_major
 #' @keywords internal
 icd9_is_valid_major_v <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_v)) %>% na_to_false
   else
@@ -397,7 +397,7 @@ icd9_is_valid_major_v <- function(x, whitespace_ok = TRUE) {
 #' @rdname icd_is_valid_major
 #' @keywords internal
 icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
-  assertFlag(whitespace_ok)
+  assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_e)) %>% na_to_false
   else
@@ -408,9 +408,9 @@ icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
 #' @export
 #' @keywords internal
 icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
-  assertList(x, types = "character", any.missing = FALSE,
+  assert_list(x, types = "character", any.missing = FALSE,
                         min.len = 1, unique = TRUE, names = "named")
-  assertFlag(short_code)
+  assert_flag(short_code)
   # TOOD: warn/return the invalid labels?
   all(unlist(
     lapply(x, FUN = function(y) icd_is_valid(y, short_code = short_code)),
@@ -536,7 +536,7 @@ icd_is_major.default <- function(x) {
 #' @export
 #' @keywords internal
 icd_is_major.icd10 <- function(x) {
-  assertCharacter(x)
+  assert_character(x)
   # if not know whether ICD-10-CM, then use broader definition
   icd_is_major.icd10cm(x)
 }
@@ -547,7 +547,7 @@ icd_is_major.icd10 <- function(x) {
 #' @export
 #' @keywords internal
 icd_is_major.icd10cm <- function(x) {
-  assertCharacter(x)
+  assert_character(x)
   str_detect(x, re_just_ws(re_icd10cm_major))
 }
 
@@ -555,7 +555,7 @@ icd_is_major.icd10cm <- function(x) {
 #' @export
 #' @keywords internal
 icd_is_major.icd10who <- function(x) {
-  assertCharacter(x)
+  assert_character(x)
   str_detect(x, re_just_ws(re_icd10who_major))
 }
 
@@ -619,8 +619,8 @@ warnNumericCode <- function()
 #'   pediatrics, and of course ICD-10-CM.
 #' @export
 icd_is_valid.icd10who <- function(x, short_code = icd_guess_short.icd10(x), ...) {
-  assertCharacter(x)
-  assertFlag(short_code)
+  assert_character(x)
+  assert_flag(short_code)
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
   # testing whether a code is defined for a particular set of ICD codes, e.g. an
   # annual revision of ICD-10-CM

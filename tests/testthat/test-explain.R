@@ -21,7 +21,7 @@ test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
     icd_explain(icd_children.icd9("391", onlyReal = FALSE, short_code = TRUE),
                      condense = FALSE, short_code = TRUE),
-    c("Rheumatic fever with heart involvement","Acute rheumatic pericarditis",
+    c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
       "Acute rheumatic heart disease, unspecified")
@@ -101,7 +101,7 @@ test_that("guess icd9 types: short", {
 })
 
 test_that("guess icd9 types: ambiguous, default to short", {
-  expect_equal(icd_guess_short.icd9(c("123.4","2345")), TRUE)
+  expect_equal(icd_guess_short.icd9(c("123.4", "2345")), TRUE)
   expect_equal(icd_guess_short.icd9(c("123.4", NA, "2345")), TRUE)
 })
 
@@ -184,17 +184,15 @@ for (i in list("icd9_chapters", "icd9_sub_chapters", "icd9_majors")) {
     expect_false(anyNA(il))
     expect_false(anyNA(names(il)))
   })
-  # show the dupes with names (which may differ)
-  # icd9_majors[icd9_majors %in% icd9_majors[duplicated(icd9_majors)]]  %>%  sort
 }
 
 test_that("parse icd9_majors vs those listed
           in the other CDC source of the leaf definitions.", {
             # get all the majors from the other list, to compare
 
-            compareMajors <- unique(icd_get_major.icd9(icd::icd9cm_hierarchy[["code"]], short_code = TRUE))
-            expect_true(all(compareMajors %in% icd9_majors))
-            expect_true(all(icd9_majors %in% compareMajors))
+            compare_majors <- unique(icd_get_major.icd9(icd::icd9cm_hierarchy[["code"]], short_code = TRUE))
+            expect_true(all(compare_majors %in% icd9_majors))
+            expect_true(all(icd9_majors %in% compare_majors))
           })
 
 test_that("unsorted hierarchy tests", {

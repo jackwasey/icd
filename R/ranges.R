@@ -186,11 +186,11 @@ icd_expand_range.icd9 <- function(start, end,
 #' @keywords internal
 expand_range_worker <- function(start, end, lookup, defined,
                                 ex_ambig_start, ex_ambig_end) {
-  assertString(start)
-  assertString(end)
-  assertCharacter(lookup, any.missing = FALSE, min.chars = 3)
-  assertFlag(ex_ambig_start)
-  assertFlag(ex_ambig_end)
+  assert_string(start)
+  assert_string(end)
+  assert_character(lookup, any.missing = FALSE, min.chars = 3)
+  assert_flag(ex_ambig_start)
+  assert_flag(ex_ambig_end)
 
   start_index <- match(start, lookup)
   end_index <- match(end, lookup)
@@ -246,9 +246,9 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
                                     ex_ambig_end = TRUE) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
-  assertFlag(defined)
-  assertFlag(ex_ambig_start)
-  assertFlag(ex_ambig_end)
+  assert_flag(defined)
+  assert_flag(ex_ambig_start)
+  assert_flag(ex_ambig_end)
 
   start <- icd9_add_leading_zeroes.icd_short_code(trim(start))
   end <- icd9_add_leading_zeroes.icd_short_code(trim(end))
@@ -292,7 +292,7 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
 icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
   assertScalar(start) # i'll permit numeric but prefer char
   assertScalar(end)
-  assertFlag(defined)
+  assert_flag(defined)
   c <- icd9_extract_alpha_numeric(start)
   d <- icd9_extract_alpha_numeric(end)
   # cannot range between numeric, V and E codes, so ensure same type.
@@ -394,8 +394,8 @@ icd_expand_minor.icd9 <- function(minor, is_e = FALSE) {
   # clang 3.6 with address sanitizer seems to fail if a number is passed instead
   # of string. It SHOULD fail with type error, and that might be an Rcpp
   # problem...
-  assertString(minor) # or character vector?
-  assertFlag(is_e)
+  assert_string(minor) # or character vector?
+  assert_flag(is_e)
   .Call("icd_icd9ExpandMinorShim", PACKAGE = "icd", minor, isE = is_e)
 }
 

@@ -82,7 +82,7 @@ characteristics.
 # using magrittr is beautiful:
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 myData <- data.frame(
-  visitId = c("v1", "v2", "v3", "v4"),
+  visit_id = c("v1", "v2", "v3", "v4"),
   diag = c("39891", "39790", "41791", "4401"),
   poa = c("Y", "N", NA, "Y"),
   stringsAsFactors = FALSE
@@ -90,12 +90,12 @@ myData <- data.frame(
 myData \%>\% icd9FilterPoaNotNo() \%>\% icd9ComorbidAhrq
 # can fill out named fields also:
 myData \%>\% icd9FilterPoaYes(poa_name="poa") \%>\%
-  icd9ComorbidAhrq(icd9Field = "diag", visitId = "visitId", isShort = TRUE)
+  icd_comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
 # can call the core icd9Comorbid function with an arbitrary mapping
 myData \%>\%
 icd_filter_poa_yes \%>\%
-icd_comorbid(icd_name = "diag", visit_name = "visitId",
-  map = quanElixComorbid, short_mapping = TRUE)
+icd_comorbid(icd_name = "diag", visit_name = "visit_id",
+  map = icd9_map_quan_elix, short_mapping = TRUE)
 }
 }
 

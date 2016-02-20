@@ -83,12 +83,11 @@ icd_explain.icd9 <- function(...) {
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   # TODO, need to figure out how to use checkmate for my classes. ?extend it
-  #
-  # assertCharacter(x)
-  assertFlag(short_code)
-  assertFlag(condense)
-  assertFlag(brief)
-  assertFlag(warn)
+  assert(checkmate::checkCharacter(unclass(x)), checkmate::checkFactor(unclass(x)))
+  assert_flag(short_code)
+  assert_flag(condense)
+  assert_flag(brief)
+  assert_flag(warn)
   if (!short_code)
     x <- icd_decimal_to_short.icd9(x)
 
@@ -148,8 +147,8 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(x),
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
-  assertFlag(short_code)
-  #assert(checkFactor(x), checkCharacter(x), checkClass(x, c("icd9", "icd9cm")))
+  assert(checkmate::checkCharacter(unclass(x)), checkmate::checkFactor(unclass(x)))
+  assert_flag(short_code)
   icd9 <- asCharacterNoWarn(x)
   majors <- icd_get_major.icd9(icd9, short_code)
 

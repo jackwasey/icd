@@ -37,14 +37,18 @@ randomSampleAhrq <- sample(unname(c(icd::icd9_map_ahrq, recursive = TRUE)),
                            replace = TRUE, size = n)
 fewIcd9 <- c("27801", "7208", "25001", "34400", "4011", "4011")
 
-patientData <- data.frame(
-  visitId = c(1000, 1000, 1000, 1001, 1001, 1002),
+simple_pts <- data.frame(
+  visit_id = c(1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = fewIcd9,
   poa = factor(c("Y", "N", "Y", "N", "Y", "N"))
 )
 
-simplePoaPatients <- data.frame(
-  visitId = c("v1", "v2", "v3", "v4"),
+# to deprecate
+patientData <- simple_pts
+names(patientData)[1] <- "visitId"
+
+simple_poa_pts <- data.frame(
+  visit_id = c("v1", "v2", "v3", "v4"),
   code = c("39891", "39790", "41791", "4401"), # deprecated tests likely need icd9 here
   poa = c("y", "N", "E", NA_character_), # should tolerate mixed case
   stringsAsFactors = FALSE
@@ -52,22 +56,22 @@ simplePoaPatients <- data.frame(
 
 # multiple codes for POA and not POA, bad POA input. Throw in some invalid ICD9
 # codes
-complexPoaPatients <- data.frame(
-  visitId = c("v1", "v1", "v1", "v2", "v2", "v3", "v3"),
+complex_poa_pts <- data.frame(
+  visit_id = c("v1", "v1", "v1", "v2", "v2", "v3", "v3"),
   icd9 = c("39891", "39891", "39790", "41791", "41791", "41791", "4401"),
   poa = c("Y", "n", NA_character_, "E", NA_character_, "paris", ""),
   stringsAsFactors = FALSE
 )
 
 random_test_patients <- data.frame(
-  visitId = sample(seq(1, np), replace = TRUE, size = n),
+  visit_id = sample(seq(1, np), replace = TRUE, size = n),
   icd9 = randomShortIcd9,
   poa = as.factor(sample(x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
                          replace = TRUE, size = n))
 )
 
-testTwenty <- structure(
-  list(visitId = c(207210584L, 207210584L, 207210584L,
+test_twenty <- structure(
+  list(visit_id = c(207210584L, 207210584L, 207210584L,
                    207210584L, 207210584L, 207210600L, 207210600L,
                    207210600L, 207210600L, 207210600L, 207210600L,
                    207210600L, 207210600L, 207210600L, 207210600L,
@@ -81,9 +85,13 @@ testTwenty <- structure(
          class = "factor"),
        poa = c("N", "N", "N", "Y", "Y", "Y", "Y", "Y", "Y", "Y",
                "Y", "Y", "Y", "Y", "E", "E", "Y", "Y", "Y", "N")),
-  .Names = c("visitId", "icd9Code", "poa"),
+  .Names = c("visit_id", "icd9Code", "poa"),
   row.names = 5000000:5000019,
   class = "data.frame")
+
+# to deprecate
+testTwenty <- test_twenty
+names(testTwenty)[1] <- "visitId"
 
 # first and last item from each comorbidity:
 icd9fl <- c(lapply(icd::icd9_map_ahrq, head, n = 1),
@@ -92,41 +100,65 @@ icd9fl <- c(lapply(icd::icd9_map_ahrq, head, n = 1),
   unlist %>%
   icd9
 
-ahrqTestDat <- data.frame(
-  visitId = rep("visit1", times = length(icd9fl)),
+ahrq_test_dat <- data.frame(
+  visit_id = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 ) %>% icd_long_data
 
+# to deprecate with old tests:
+ahrqTestDat <- data.frame(
+  visitId = rep("visit1", times = length(icd9fl)),
+  icd9 = icd9fl,
+  stringsAsFactors = FALSE
+)
+
 icd9fl <- unlist(unname(c(lapply(icd::elixComorbid, head, n = 1),
                           lapply(icd::elixComorbid, tail, n = 1))))
+elix_test_dat <- data.frame(
+  visit_id = rep("visit1", times = length(icd9fl)),
+  icd9 = icd9fl,
+  stringsAsFactors = FALSE
+)
+
+# to deprecate
 elixTestDat <- data.frame(
   visitId = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 )
+
 icd9fl <- unlist(unname(c(lapply(icd::icd9_map_quan_elix, head, n = 1),
                           lapply(icd::icd9_map_quan_elix, tail, n = 1))))
-quanElixTestDat <- data.frame(
-  visitId = rep("visit1", times = length(icd9fl)),
-  icd9 = icd9fl,
-  stringsAsFactors = FALSE
-)
-icd9fl <- unlist(unname(c(lapply(icd::quanDeyoComorbid, head, n = 1),
-                          lapply(icd::quanDeyoComorbid, tail, n = 1))))
-quanDeyoTestDat <- data.frame(
-  visitId = rep("visit1", times = length(icd9fl)),
+quan_elix_test_dat <- data.frame(
+  visit_id = rep("visit1", times = length(icd9fl)),
   icd9 = icd9fl,
   stringsAsFactors = FALSE
 )
 
-multi_comorbid <- rbind(
-  ahrqTestDat,
-  elixTestDat,
-  quanElixTestDat,
-  quanDeyoTestDat
+# to deprecate
+quanElixTestDat <- quan_elix_test_dat
+names(quanElixTestDat)[1] <- "visitId"
+
+icd9fl <- unlist(unname(c(lapply(icd::quanDeyoComorbid, head, n = 1),
+                          lapply(icd::quanDeyoComorbid, tail, n = 1))))
+quan_deyo_test_dat <- data.frame(
+  visit_id = rep("visit1", times = length(icd9fl)),
+  icd9 = icd9fl,
+  stringsAsFactors = FALSE
 )
-multi_comorbid$visitId <-
+
+# to deprecate
+quanDeyoTestDat <- quan_deyo_test_dat
+names(quanDeyoTestDat)[1] <- "visitId"
+
+multi_comorbid <- rbind(
+  ahrq_test_dat,
+  elix_test_dat,
+  quan_elix_test_dat,
+  quan_deyo_test_dat
+)
+multi_comorbid$visit_id <-
   sample(c("v1", "v2", "v3", "v4"), size = nrow(multi_comorbid), replace = TRUE)
 
 othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
@@ -138,16 +170,23 @@ one_of_each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
                  "765", "780.95", "800", "V02.34", "E900.4")
 
 # two items per map, two codes per item, two codes for two visits
+two_pts <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
+                     icd9 = c("040", "000", "100", "000"),
+                     stringsAsFactors = FALSE)
+two_map <- list("malady" = c("100", "2000"),
+               "ailment" = c("003", "040"))
+
+# to deprecate
 twoPts <- data.frame(visitId = c("v01", "v01", "v02", "v02"),
                      icd9 = c("040", "000", "100", "000"),
                      stringsAsFactors = FALSE)
-twoMap <- list("malady" = c("100", "2000"),
-               "ailment" = c("003", "040"))
+# to deprecate
+twoMap <- two_map
 
 pts_invalid_mix <- icd9(
   icd_long_data(
     data.frame(
-      visitId = c(1000, 1000, 1001),
+      visit_id = c(1000, 1000, 1001),
       icd9 = icd9(c("27801", "invalides", "25001")),
       poa = factor(c("Y", "N", "Y")),
       stringsAsFactors = FALSE

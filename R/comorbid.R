@@ -37,10 +37,10 @@ icd9PoaChoices <- icd_poa_choices
 #' @examples
 #' #%i9in% assumes both test code(s) and reference set of codes are \emph{short}
 #' "1024" %i9in% "102"
-#' "1024" %i9in% c("102","1025")
-#' c("102", "1024","1025") %i9in% "102"
-#' c("102", "1024","1025") %i9in% c("1024", "1025")
-#' c("102", "1024","1025") %i9in% c("102", "1024", "1025")
+#' "1024" %i9in% c("102", "1025")
+#' c("102", "1024", "1025") %i9in% "102"
+#' c("102", "1024", "1025") %i9in% c("1024", "1025")
+#' c("102", "1024", "1025") %i9in% c("102", "1024", "1025")
 "%i9in%" <- function(icd9, icd9Reference) {
   icd_in_reference_code(icd = icd9, icd_reference = icd9Reference,
                         short_code = TRUE, short_reference = TRUE)
@@ -73,7 +73,7 @@ icd9PoaChoices <- icd_poa_choices
 #'   visit_name output order was whatever R's \code{aggregate} produced.
 #'
 #'   The threading of the C++ can be controlled using e.g.
-#'   \code{option(icd9.threads = 4)}. If it is not set, the number of cores in
+#'   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
 #'   the machine is used.
 #' @examples
 #'   # optional but often helpful
@@ -82,7 +82,7 @@ icd9PoaChoices <- icd_poa_choices
 #'   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
 #'                    icd9 = c("39891", "40110", "09322", "41514", "39891")) %>%
 #'                    icd_long_data %>% icd9
-#'    icd_comorbid(pts, ahrqComorbid, short_code = TRUE) # visit_name is now sorted
+#'    icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
 #' @export
 icd_comorbid <- function(...)
   UseMethod("icd_comorbid")
@@ -133,13 +133,13 @@ icd_comorbid.icd10 <- function(x,
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique", )
 
-  assert(checkString(visit_name), checkNull(visit_name))
-  assert(checkString(icd_name), checkNull(icd_name))
+  assert(checkmate::checkString(visit_name), checkmate::checkNull(visit_name))
+  assert(checkmate::checkString(icd_name), checkmate::checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
-  assertString(visit_name)
-  assert(checkFlag(short_code), checkNull(short_code))
-  assertFlag(short_map)
+  assert_string(visit_name)
+  assert(checkmate::checkFlag(short_code), checkmate::checkNull(short_code))
+  assert_flag(short_map)
 
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
@@ -167,10 +167,10 @@ icd10_comorbid_parent_search <- function(x,
     icd_codes <- x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
 
   # for each icd code
-  just_cmb <- vapply(icd_codes, function(y) {
+  just_cmb <- vapply(icd_codes, FUN.VALUE = logical(30), FUN = function(y) {
     # look it up in each comorbidity, but TODO: once we have a comorbidity for
     # one patient, we don't need to search within it again
-    vapply(names(icd::icd10_map_ahrq),
+    vapply(names(icd::icd10_map_ahrq), FUN.VALUE = logical(1),
            FUN = function(cmb) {
              # and if not found, slice off last char of test string
              for (n in nchar(y):3) {
@@ -178,8 +178,8 @@ icd10_comorbid_parent_search <- function(x,
                  return(TRUE)
              }
              FALSE
-           }, FUN.VALUE = logical(1))
-  }, FUN.VALUE = logical(30))
+           })
+  })
 
   res <- aggregate(x = t(just_cmb), by = x[visit_name], FUN = any)
   if (return_df)
@@ -222,7 +222,7 @@ icd_comorbid.icd9 <- function(x,
                               return_df = FALSE, ...) {
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
-  assert(checkString(icd_name))
+  assert(checkmate::checkString(icd_name))
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
   # the S3 method was called directly.
   if (!is.icd9(x[[icd_name]])) x[[icd_name]] <- icd9(x[[icd_name]])
@@ -245,15 +245,13 @@ icd_comorbid_common <- function(x,
                                 return_df = FALSE, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
-  assert(checkString(visit_name), checkNull(visit_name))
-  assert(checkString(icd_name), checkNull(icd_name))
+  assert(checkmate::checkString(visit_name), checkmate::checkNull(visit_name))
+  assert(checkmate::checkString(icd_name), checkmate::checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
-  #TODO: assertList(unclass(map), any.missing = FALSE, min.len = 1, names = "unique")
-  #types = c(icd_version_classes, "character", "factor"))
-  assertString(visit_name)
-  assertFlag(short_code)
-  assertFlag(short_map)
+  assert_string(visit_name)
+  assert_flag(short_code)
+  assert_flag(short_map)
 
   stopifnot(visit_name %in% names(x))
 
@@ -296,12 +294,12 @@ icd_comorbid_common <- function(x,
   # can now do pure integer matching for icd9 codes. Only string manip becomes
   # (optionally) defactoring the visit_name for the matrix row names.
 
-  threads <- getOption("icd9.threads", getOmpCores())
-  chunkSize <- getOption("icd9.chunkSize", 256L)
-  ompChunkSize <- getOption("icd9.ompChunkSize", 1L)
+  threads <- getOption("icd.threads", getOmpCores())
+  chunk_size <- getOption("icd.chunk_size", 256L)
+  omp_chunk_size <- getOption("icd.omp_chunk_size", 1L)
 
   mat <- icd9ComorbidShortCpp(x, map, visit_name, icd_name,
-                              threads = threads, chunkSize = chunkSize, ompChunkSize = ompChunkSize)
+                              threads = threads, chunk_size = chunk_size, omp_chunk_size = omp_chunk_size)
 
   if (return_df) {
     if (visit_was_factor)
@@ -386,8 +384,8 @@ icd_comorbid_elix.default <- function(...) {
 #' @export
 icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE,
                                    hierarchy = TRUE) {
-  assertFlag(abbrev_names)
-  assertFlag(hierarchy)
+  assert_flag(abbrev_names)
+  assert_flag(hierarchy)
 
   cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_ahrq)
   icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy)
@@ -396,8 +394,8 @@ icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE,
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_ahrq.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  assertFlag(abbrev_names)
-  assertFlag(hierarchy)
+  assert_flag(abbrev_names)
+  assert_flag(hierarchy)
 
   cbd <- icd_comorbid.icd10(..., map = icd::icd10_map_ahrq)
   icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy)
@@ -405,8 +403,8 @@ icd_comorbid_ahrq.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) 
 
 # lots of duplicated code, need to simplify
 icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
-  assertFlag(abbrev_names)
-  assertFlag(hierarchy)
+  assert_flag(abbrev_names)
+  assert_flag(hierarchy)
   if (hierarchy) {
 
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -439,8 +437,8 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 #' @export
 icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
                                         hierarchy = TRUE) {
-  assertFlag(abbrev_names)
-  assertFlag(hierarchy)
+  assert_flag(abbrev_names)
+  assert_flag(hierarchy)
   cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_quan_deyo)
   if (hierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
@@ -461,8 +459,8 @@ icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
 #' @export
 icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
                                         hierarchy = TRUE) {
-  assertFlag(abbrev_names)
-  assertFlag(hierarchy)
+  assert_flag(abbrev_names)
+  assert_flag(hierarchy)
   cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_quan_elix)
   if (hierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
@@ -497,8 +495,8 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  assertFlag(abbrev_names)
-  assertFlag(hierarchy)
+  assert_flag(abbrev_names)
+  assert_flag(hierarchy)
   cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_elix)
   if (hierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
@@ -558,12 +556,12 @@ icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL, y_names = 
 #' @export
 icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
                                    show = TRUE, explain = TRUE) {
-  assertList(x, min.len = 1, any.missing = FALSE,
+  assert_list(x, min.len = 1, any.missing = FALSE,
              types = c("character"), names = "unique")
-  assertList(y, min.len = 1, any.missing = FALSE,
+  assert_list(y, min.len = 1, any.missing = FALSE,
              types = c("character"), names = "unique")
-  assertFlag(show)
-  assertFlag(explain)
+  assert_flag(show)
+  assert_flag(explain)
   stopifnot(all(x_names %in% names(x)), all(y_names %in% names(y)))
 
   lapply(x, function(z) stopifnot(is.character(z)))

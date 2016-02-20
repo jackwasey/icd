@@ -17,7 +17,8 @@
 
 context("deprecated compare ordered long to wide methods")
 
-pts <- randomOrderedPatients(5000, 13)
+pts <- random_ordered_patients(5000, 13)
+pts$visitId <- pts$visit_id
 
 test_that("deprecated - ordered and unordered methods on ordered data are identical", {
   agg <- icd9LongToWide(pts, aggregate = TRUE)

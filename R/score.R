@@ -73,9 +73,9 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
                                     stringsAsFactors = getOption("stringsAsFactors"),
                                     ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  assert(checkNull(visit_name), checkString(visit_name))
-  assertFlag(return_df)
-  assertFlag(stringsAsFactors)
+  assert(checkmate::checkNull(visit_name), checkmate::checkString(visit_name))
+  assert_flag(return_df)
+  assert_flag(stringsAsFactors)
   visit_name <- get_visit_name(x, visit_name)
   tmp <- icd_comorbid_quan_deyo.icd9(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...)
   res <- icd_charlson_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE, scoring_system = scoring_system)
@@ -165,8 +165,8 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #' @export
 icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assertDataFrame(x) #TODO: more constraints
-  assertString(visit_name)
-  assertFlag(return_df)
+  assert_string(visit_name)
+  assert_flag(return_df)
 
   res <- aggregate(x[names(x) %nin% visit_name],
                    by = x[visit_name],
@@ -192,8 +192,8 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 #' @template return_df
 #' @export
 icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
-  assertString(visit_name)
-  assertFlag(return_df)
+  assert_string(visit_name)
+  assert_flag(return_df)
   # TODO: this could be a logical matrix or a data frame. Should there be a comorbidity df/matrix class?
   res <- apply(x[, names(x) %nin% visit_name],
                MARGIN = 1,
@@ -225,9 +225,9 @@ icd_count_codes_wide <- function(x,
                           return_df = FALSE,
                           aggr = FALSE) {
   assertDataFrame(x)
-  assertString(visit_name)
-  assertFlag(return_df)
-  assertFlag(aggr)
+  assert_string(visit_name)
+  assert_flag(return_df)
+  assert_flag(aggr)
 
   res <- apply(x[names(x) %nin% visit_name], 1, function(x) sum(!is.na(x)))
   names(res) <- x[[visit_name]]
@@ -291,9 +291,9 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
                                        stringsAsFactors = getOption("stringsAsFactors"),
                                        ...) {
   assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  assert(checkNull(visit_name), checkString(visit_name))
-  assertFlag(return_df)
-  assertFlag(stringsAsFactors)
+  assert(checkmate::checkNull(visit_name), checkmate::checkString(visit_name))
+  assert_flag(return_df)
+  assert_flag(stringsAsFactors)
   visit_name <- get_visit_name(x, visit_name)
   tmp <- icd_comorbid_quan_elix.icd9(x, visit_name, hierarchy = TRUE, return_df = TRUE, ...)
   res <- icd_van_walraven_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE)
@@ -314,8 +314,8 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
 #' @export
 icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
   assert(checkDataFrame(x), checkMatrix(x))
-  assert(checkNull(visit_name), checkString(visit_name))
-  assertFlag(hierarchy)
+  assert(checkmate::checkNull(visit_name), checkmate::checkString(visit_name))
+  assert_flag(hierarchy)
   stopifnot(ncol(x) - is.data.frame(x) == 30)
   weights <- c(7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,
                9, 12, 4, 0, 3, -4, 6, 5, -2, -2, 0, -7, 0, -3)

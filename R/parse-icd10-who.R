@@ -109,7 +109,7 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
     # instead of querying via phantomjs (which crashes all the time), get the
     # whole document, then use xml2 and rvest:
 
-    selenium_driver$findElements(using = "xpath","//li[@class='Blocklist1']") %>%
+    selenium_driver$findElements(using = "xpath", "//li[@class='Blocklist1']") %>%
       vapply(function(x) unlist(x$getElementText()), character(1)) %>%
       str_trim() %>%
       str_replace_all("[[:space:]]+", " ") %>%

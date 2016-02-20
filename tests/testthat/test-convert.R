@@ -307,7 +307,7 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
 })
 
 test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity map)", {
-  data.frame(visitId = sprintf("pt%02d", seq_along(one_of_each)),
+  data.frame(visit_id = sprintf("pt%02d", seq_along(one_of_each)),
              code = one_of_each, stringsAsFactors = TRUE) %>%
     icd_long_data %>% icd_decimal_code %>% icd9 -> ooe
   class(ooe[["code"]]) <- c("icd9", "icd_decimal_code", "factor")

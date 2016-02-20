@@ -19,26 +19,26 @@ context("test deprecated filtering on POA")
 
 test_that("deprecated - filter POA - not a data frame", {
   expect_error(icd9FilterPoaNo(list(pollo = "loco")))
-  expect_error(icd9FilterPoaNotYes(visitId=c("1","2"),
-                                   icd9 = c("1","2"),
-                                   poa = c("Y","N")))
+  expect_error(icd9FilterPoaNotYes(visitId = c("1", "2"),
+                                   icd9 = c("1", "2"),
+                                   poa = c("Y", "N")))
 })
 
 test_that("deprecated - filter POA - no poa field", {
-  expect_error(icd9FilterPoaYes(simplePoaPatients[1:2]))
+  expect_error(icd9FilterPoaYes(simple_poa_pts[1:2]))
 })
 
 test_that("deprecated - filter POA - generic func - invalid poa type", {
-  expect_error(icd9FilterPoa(x = simplePoaPatients,
+  expect_error(icd9FilterPoa(x = simple_poa_pts,
                              poaField = "poa", poa = "not an option"))
-  expect_error(icd9FilterPoa(x = simplePoaPatients,
+  expect_error(icd9FilterPoa(x = simple_poa_pts,
                              poaField = "poa", poa = ""))
-  expect_error(icd9FilterPoa(x = simplePoaPatients,
+  expect_error(icd9FilterPoa(x = simple_poa_pts,
                              poaField = "poa", poa = NA))
 })
 
 test_that("deprecated - filter POA - wrong name poa field", {
-  pd <- simplePoaPatients
+  pd <- simple_poa_pts
   names(pd) <- c("visitId", "icd9", "achilleus")
   expect_error(icd9FilterPoaYes(pd, poaField = "poa"))
   expect_error(icd9FilterPoaYes(pd, poaField = "odysseus"))
@@ -53,72 +53,72 @@ test_that("deprecated - filter POA - poa is factor", {
   # thus far.
 
   # just within this closure
-  simplePoaPatients$poa <- factor(simplePoaPatients$poa)
-  names(simplePoaPatients)[3] <- "poa"
+  simple_poa_pts$poa <- factor(simple_poa_pts$poa)
+  names(simple_poa_pts)[3] <- "poa"
   # just within this closure
-  complexPoaPatients$poa <- factor(complexPoaPatients$poa)
-  names(complexPoaPatients)[3] <- "poa"
+  complex_poa_pts$poa <- factor(complex_poa_pts$poa)
+  names(complex_poa_pts)[3] <- "poa"
 
   # row names are preserved here: probably not important, but a little annoying
-  expect_identical(icd9FilterPoaYes(simplePoaPatients),
-                   simplePoaPatients[1, 1:2])
-  expect_identical(icd9FilterPoaNotYes(simplePoaPatients),
-                   simplePoaPatients[-1, 1:2])
-  expect_identical(icd9FilterPoaNo(simplePoaPatients),
-                   simplePoaPatients[2, 1:2])
-  expect_identical(icd9FilterPoaNotNo(simplePoaPatients),
-                   simplePoaPatients[-2, 1:2])
+  expect_identical(icd9FilterPoaYes(simple_poa_pts),
+                   simple_poa_pts[1, 1:2])
+  expect_identical(icd9FilterPoaNotYes(simple_poa_pts),
+                   simple_poa_pts[-1, 1:2])
+  expect_identical(icd9FilterPoaNo(simple_poa_pts),
+                   simple_poa_pts[2, 1:2])
+  expect_identical(icd9FilterPoaNotNo(simple_poa_pts),
+                   simple_poa_pts[-2, 1:2])
 
-  expect_identical(icd9FilterPoaYes(complexPoaPatients),
-                   complexPoaPatients[1, 1:2])
-  expect_identical(icd9FilterPoaNotYes(complexPoaPatients),
-                   complexPoaPatients[-1, 1:2])
-  expect_identical(icd9FilterPoaNo(complexPoaPatients),
-                   complexPoaPatients[2, 1:2])
-  expect_identical(icd9FilterPoaNotNo(complexPoaPatients),
-                   complexPoaPatients[-2, 1:2])
+  expect_identical(icd9FilterPoaYes(complex_poa_pts),
+                   complex_poa_pts[1, 1:2])
+  expect_identical(icd9FilterPoaNotYes(complex_poa_pts),
+                   complex_poa_pts[-1, 1:2])
+  expect_identical(icd9FilterPoaNo(complex_poa_pts),
+                   complex_poa_pts[2, 1:2])
+  expect_identical(icd9FilterPoaNotNo(complex_poa_pts),
+                   complex_poa_pts[-2, 1:2])
 })
 
 test_that("deprecated - filter POA - poa is vector", {
-  expect_identical(icd9FilterPoaYes(simplePoaPatients),
-                   simplePoaPatients[1, 1:2])
-  expect_identical(icd9FilterPoaNotYes(simplePoaPatients),
-                   simplePoaPatients[-1, 1:2])
-  expect_identical(icd9FilterPoaNo(simplePoaPatients),
-                   simplePoaPatients[2, 1:2])
-  expect_identical(icd9FilterPoaNotNo(simplePoaPatients),
-                   simplePoaPatients[-2, 1:2])
+  expect_identical(icd9FilterPoaYes(simple_poa_pts),
+                   simple_poa_pts[1, 1:2])
+  expect_identical(icd9FilterPoaNotYes(simple_poa_pts),
+                   simple_poa_pts[-1, 1:2])
+  expect_identical(icd9FilterPoaNo(simple_poa_pts),
+                   simple_poa_pts[2, 1:2])
+  expect_identical(icd9FilterPoaNotNo(simple_poa_pts),
+                   simple_poa_pts[-2, 1:2])
 
-  expect_identical(icd9FilterPoaYes(complexPoaPatients),
-                   complexPoaPatients[1, 1:2])
-  expect_identical(icd9FilterPoaNotYes(complexPoaPatients),
-                   complexPoaPatients[-1, 1:2])
-  expect_identical(icd9FilterPoaNo(complexPoaPatients),
-                   complexPoaPatients[2, 1:2])
-  expect_identical(icd9FilterPoaNotNo(complexPoaPatients),
-                   complexPoaPatients[-2, 1:2])
+  expect_identical(icd9FilterPoaYes(complex_poa_pts),
+                   complex_poa_pts[1, 1:2])
+  expect_identical(icd9FilterPoaNotYes(complex_poa_pts),
+                   complex_poa_pts[-1, 1:2])
+  expect_identical(icd9FilterPoaNo(complex_poa_pts),
+                   complex_poa_pts[2, 1:2])
+  expect_identical(icd9FilterPoaNotNo(complex_poa_pts),
+                   complex_poa_pts[-2, 1:2])
 
   # same via core function
-  expect_identical(icd9FilterPoa(complexPoaPatients, poa = "yes"),
-                   complexPoaPatients[1, 1:2])
-  expect_identical(icd9FilterPoa(complexPoaPatients, poa = "notYes"),
-                   complexPoaPatients[-1, 1:2])
-  expect_identical(icd9FilterPoa(complexPoaPatients, poa = "no"),
-                   complexPoaPatients[2, 1:2])
-  expect_identical(icd9FilterPoa(complexPoaPatients, poa = "notNo"),
-                   complexPoaPatients[-2, 1:2])
+  expect_identical(icd9FilterPoa(complex_poa_pts, poa = "yes"),
+                   complex_poa_pts[1, 1:2])
+  expect_identical(icd9FilterPoa(complex_poa_pts, poa = "notYes"),
+                   complex_poa_pts[-1, 1:2])
+  expect_identical(icd9FilterPoa(complex_poa_pts, poa = "no"),
+                   complex_poa_pts[2, 1:2])
+  expect_identical(icd9FilterPoa(complex_poa_pts, poa = "notNo"),
+                   complex_poa_pts[-2, 1:2])
 
 })
 
 test_that("deprecated - filter POA - poa upper and lower case", {
-  smpl <- simplePoaPatients
+  smpl <- simple_poa_pts
   smpl[["poa"]] <- c("Y", "n", "e", NA)
-  expect_identical(icd9FilterPoaNo(smpl), icd9FilterPoaNo(simplePoaPatients))
+  expect_identical(icd9FilterPoaNo(smpl), icd9FilterPoaNo(simple_poa_pts))
 })
 
 test_that("deprecated - filter POA - just Y and N should be complementary", {
   # take any data frame to start out:
-  dfrm <- testTwenty;
+  dfrm <- test_twenty;
   dfrm <- dfrm[dfrm[["poa"]] %in% c("Y", "N", "y", "n"),]
   expect_identical(icd9FilterPoaNo(dfrm),  icd9FilterPoaNotYes(dfrm))
   expect_identical(icd9FilterPoaYes(dfrm), icd9FilterPoaNotNo(dfrm))

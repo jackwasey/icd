@@ -416,7 +416,6 @@ test_that("billable codes are identified", {
 
 test_that("get subset of billable codes", {
   x <- c("410", "410.0", "410.00")
-  #expect_equal(icd_get_billable(x), structure("410.00", class = c("icd_decimal_code", "icd9", "character")))
   expect_equal_no_icd(icd_get_billable(x), c("410.00"))
   expect_true(is.icd_decimal_code(icd_get_billable(x)))
   # TODO: reasonable to assume that if we're talking billable, we make it ICD-9-CM

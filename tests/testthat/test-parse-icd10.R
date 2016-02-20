@@ -47,8 +47,8 @@ test_that("icd10 2016 flat file details are okay", {
   checkmate::expect_character(icd::icd10cm2016$long_desc, any.missing = FALSE)
 
   for (n in c("three_digit", "major", "sub_chapter", "chapter")) {
-      #checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
-      #checkmate::expect_factor(icd::icd10cm2016[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
+      checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
+      checkmate::expect_factor(icd::icd10cm2016[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
       expect_identical(levels(res[[n]]), levels(icd::icd10cm2016[[n]]), info = paste("working on ", n))
       expect_identical(res[[n]], icd::icd10cm2016[[n]], info = paste("working on ", n))
   }
@@ -105,4 +105,3 @@ test_that("Y09 got picked up in sub-chapter parsing", {
   # chapter. Will have to manually correct for this until fixed.
   expect_icd10_sub_chap_equal("Assault", "X92", "Y09")
 })
-

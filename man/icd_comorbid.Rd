@@ -35,7 +35,7 @@
 \title{find comorbidities from ICD-9 codes.}
 \usage{
 icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
-  chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE)
+  chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE)
 
 icd_comorbid(...)
 
@@ -136,16 +136,13 @@ default: user should prefer to use the derivative functions, e.g.
 \code{icd_comorbid_ahrq}, since these also provide appropriate naming for
 the fields, and squashing the hierarchy (see \code{hierarchy} below)}
 
-\item{visit_name}{The name of the column in the data frame which contains the
-patient or visit identifier. Typically this is the visit identifier, since
-patients come leave and enter hospital with different ICD-9 codes. It is a
-character vector of length one. If left empty, or \code{NULL}, then an
-attempt is made to guess which field has the ID for the patient encounter
-(not a patient ID, although this can of course be specified directly). The
-guesses proceed until a single match is made. Data frames may be wide with
-many matching fields, so to avoid false positives, anything but a single
-match is rejected. If there are no successful guesses, and \code{visitId}
-was not specified, then the first column of the data frame is used.}
+\item{visit_name}{The name of the column in the data frame which contains the patient or visit identifier. Typically
+this is the visit identifier, since patients come leave and enter hospital with different ICD-9 codes. It is a
+character vector of length one. If left empty, or \code{NULL}, then an attempt is made to guess which field has the
+ID for the patient encounter (not a patient ID, although this can of course be specified directly). The guesses
+proceed until a single match is made. Data frames may be wide with many matching fields, so to avoid false
+positives, anything but a single match is rejected. If there are no successful guesses, and \code{visit_id} was not
+specified, then the first column of the data frame is used.}
 
 \item{icd_name}{The column in the data frame which contains the ICD codes.
 This is a character vector of length one. If it is \code{NULL}, \code{icd9}
@@ -197,7 +194,7 @@ There is a change in behavior from previous versions. The visit_name
   visit_name output order was whatever R's \code{aggregate} produced.
 
   The threading of the C++ can be controlled using e.g.
-  \code{option(icd9.threads = 4)}. If it is not set, the number of cores in
+  \code{option(icd.threads = 4)}. If it is not set, the number of cores in
   the machine is used.
 
 For ICD-10, there are two lookup methods. The classic lookup, as
@@ -232,7 +229,7 @@ a match is found in the map. TODO: this is WIP.
   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
                    icd9 = c("39891", "40110", "09322", "41514", "39891")) \%>\%
                    icd_long_data \%>\% icd9
-   icd_comorbid(pts, ahrqComorbid, short_code = TRUE) # visit_name is now sorted
+   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
 }
 \keyword{internal}
 

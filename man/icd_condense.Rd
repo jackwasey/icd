@@ -17,10 +17,10 @@ icd_condense(x, short_code = icd_guess_short(x), defined = NULL,
   defined = NULL, ...)
 
 icd9_condense_decimal(x, defined = NULL, warn = TRUE,
-  keepFactorLevels = FALSE)
+  keep_factor_levels = FALSE)
 
 icd9_condense_short(x, defined = NULL, warn = TRUE,
-  keepFactorLevels = FALSE)
+  keep_factor_levels = FALSE)
 
 icd9Condense(icd9, isShort = icd_guess_short(icd9), onlyReal = NULL,
   warn = TRUE)
@@ -40,7 +40,7 @@ is guessed from the input data.}
 there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
 containing undefined codes.}
 
-\item{keepFactorLevels}{single logical value, default \code{FALSE}. If
+\item{keep_factor_levels}{single logical value, default \code{FALSE}. If
 \code{TRUE}, will reuse the factor levels from the input data for the
 output data. This only applies if a factor is given for the input codes.}
 

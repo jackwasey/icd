@@ -6,6 +6,8 @@
 \alias{icd9ChildrenShort}
 \alias{icd_children}
 \alias{icd_children.character}
+\alias{icd_children.icd10}
+\alias{icd_children.icd10cm}
 \alias{icd_children.icd9}
 \title{Get children of ICD codes}
 \usage{
@@ -15,6 +17,12 @@ icd_children(x, ...)
 
 \method{icd_children}{icd9}(x, short_code = icd_guess_short(x),
   defined = TRUE, billable = FALSE, ...)
+
+\method{icd_children}{icd10cm}(x, short_code = icd_guess_short(x),
+  billable = FALSE, ...)
+
+\method{icd_children}{icd10}(x, short_code = icd_guess_short(x),
+  billable = FALSE, ...)
 
 icd9Children(icd9, isShort = icd_guess_short(icd9), onlyReal = TRUE,
   onlyBillable = FALSE)
@@ -84,6 +92,10 @@ codes which are \emph{defined} or \emph{billable} (leaf nodes).
 \item \code{character}: Get child codes, guessing ICD version and short versus decimal format
 
 \item \code{icd9}: Get children of ICD-9 codes
+
+\item \code{icd10cm}: Get children of ICD-10-CM codes
+
+\item \code{icd10}: Get children of ICD-10 codes (for now assume ICD-10-CM)
 }}
 \examples{
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
@@ -108,5 +120,6 @@ Other ICD-9 ranges: \code{\link{icd9ExpandRange}},
   \code{\link{icd_condense}},
   \code{\link{icd_expand_minor}}
 }
+\keyword{internal}
 \keyword{manip}
 

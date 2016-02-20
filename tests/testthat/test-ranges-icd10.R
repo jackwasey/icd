@@ -22,7 +22,7 @@
 context("test icd10 ranges")
 
 test_that("very bad input data fails completely", {
-  expect_error(icd_expand_range(data.frame(a = 1, b = "b"), factor(1,2,3)))
+  expect_error(icd_expand_range(data.frame(a = 1, b = "b"), factor(1, 2, 3)))
 })
 
 test_that("top level ICD-10 ranges of single code are expanded to real codes", {
@@ -37,13 +37,6 @@ test_that("simple ranges of real values works", {
 })
 
 test_that("range style used by Quan is accepted", {
-  # quan_ranges <- list(
-  #   c("M31.0", "M31.3"),
-  #   c("M32.x", "M35.x"),
-  #   c("D65", "D68.x"),
-  #   c("M45.x", "M45.x"),
-  #   c("M46.1", "M46.1")
-  # )
   quan_ranges <- list(
     c("M310", "M313"),
     c("M32x", "M35x"),
@@ -57,13 +50,6 @@ test_that("range style used by Quan is accepted", {
         icd_expand_range.icd10cm(pair[1], pair[2], short_code = TRUE), NA,
         info = paste(pair, collapse = "-")
         )
-
-    # the input values should be in the output? NOT necessarily true for .x numbers
-    # expect_true(
-    #   all(pair %in% icd10ExpandRangeRealShort(pair[1], pair[2])),
-    #   info = paste(pair, collapse = "-")
-    # )
-
   }
 
 })
@@ -84,7 +70,8 @@ test_that("single value gives correct range", {
 
 # to move somewhere else:
 test_that("ICD-10 codes in uranium data are okay", {
-  skip("reinstate this test once ICD-10 WHO codes are available for comparison. Uranium Pathology data is not ICD-10-CM, but ICD-10 WHO.")
+  skip("reinstate this test once ICD-10 WHO codes are available for comparison.
+       Uranium Pathology data is not ICD-10-CM, but ICD-10 WHO.")
   expect_true(
     all(strip(uranium_pathology$icd10, ".") %in% icd10cm2016$code)
   )

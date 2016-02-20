@@ -20,7 +20,7 @@ context("OpenMP tests")
 
 test_that("single icd9 code comorbidity", {
   # this is enough to segfault with clang 3.7, libc++ and libomp
-  x <- data.frame(visitId = "a", icd9 = "441")
+  x <- data.frame(visit_id = "a", icd9 = "441")
   icd_comorbid_quan_deyo.icd9(x, short_code = FALSE, applyHierarchy = T)
 })
 
@@ -30,22 +30,22 @@ test_that("thousands of patients", {
 })
 
 test_that("vary everything", {
-  ompChunkSize <- 1
+  omp_chunk_size <- 1
   # prime numbers
   for (pts in c(0, 1, 3, 31, 1013, 10009)) {
     for (dz_per_patient in c(1, 23)) {
-      rand_pts <- randomUnorderedPatients(pts, dz_per_patient)
+      rand_pts <- random_unordered_patients(pts, dz_per_patient)
       for (threads in c(1, 5, 9)) {
-        for (chunkSize in c(1, 2, 11, 29, 101, 997, 10007)) {
-          options("icd9.threads" = threads)
-          options("icd9.chunkSize" = chunkSize)
-          # ompChunkSize is not currently not set in CPP code
-          options("icd9.ompChunkSize" = ompChunkSize)
+        for (chunk_size in c(1, 2, 11, 29, 101, 997, 10007)) {
+          options("icd.threads" = threads)
+          options("icd.chunk_size" = chunk_size)
+          # omp_chunk_size is not currently not set in CPP code
+          options("icd.omp_chunk_size" = omp_chunk_size)
           expect_error(
             icd_comorbid_quan_deyo.icd9(rand_pts, short_code = FALSE, applyHierarchy = TRUE),
             NA,
-            info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunkSize = %i",
-                           pts, dz_per_patient, threads, chunkSize)
+            info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
+                           pts, dz_per_patient, threads, chunk_size)
           )
         }
       }

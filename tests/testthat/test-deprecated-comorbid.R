@@ -570,7 +570,7 @@ test_that("deprecated - comorbid quick test", {
 test_that("deprecated - control params don't affect result of comorbid calc", {
   pts <- generate_random_pts(101, 13)
   names(pts)[2] <- "icd9"
-  pts$visitId <- asCharacterNoWarn(pts$visitId)
+  pts$visitId <- asCharacterNoWarn(pts$visit_id)
   pts$icd9 <- as.factor(pts$icd9)
   upts <- length(unique(pts$visitId))
   ac <-  lapply(ahrqComorbid, function(x) {
@@ -578,44 +578,44 @@ test_that("deprecated - control params don't affect result of comorbid calc", {
     f[!is.na(f)]
   })
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 1, chunkSize = 32),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = 32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 1, chunk_size = 32),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = 32)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 2, chunkSize = 32),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 5, chunkSize = 32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 2, chunk_size = 32),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 5, chunk_size = 32)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = 32)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = 32)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunk_size = upts - 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunk_size = upts)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts + 1)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunk_size = upts - 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunk_size = upts + 1)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts + 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunkSize = upts)
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunk_size = upts + 1),
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 4, chunk_size = upts)
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts - 2, ompChunkSize = 1), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts + 2, ompChunkSize = 1) # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = upts - 2, omp_chunk_size = 1), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = upts + 2, omp_chunk_size = 1) # nolint
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts - 2, ompChunkSize = 11), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts + 2, ompChunkSize = 11) # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = upts - 2, omp_chunk_size = 11), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = upts + 2, omp_chunk_size = 11) # nolint
   )
   expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts, ompChunkSize = 1), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = upts, ompChunkSize = 11) # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = upts, omp_chunk_size = 1), # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = upts, omp_chunk_size = 11) # nolint
   )
   expect_identical(
     icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field"),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunkSize = 3, ompChunkSize = 5) # nolint
+    icd9ComorbidShortCpp(pts, ac, visitId = "visitId", icd9Field = "icd9Field", threads = 3, chunk_size = 3, omp_chunk_size = 5) # nolint
   )
 })
 
@@ -634,7 +634,7 @@ test_that("deprecated - disordered visitIds works by default", {
   dat <- transform(testTwenty, visitId = sample(visitId))
   cmp <-
     tres <- icd9Comorbid(dat, ahrqComorbid, icd9Field = "icd9Code")
-  cres <- icd9Comorbid(testTwenty, ahrqComorbid, icd9Field = "icd9Code")
+  cres <- icd9Comorbid(test_twenty, ahrqComorbid, icd9Field = "icd9Code")
   expect_equal(dim(tres), dim(cres))
   expect_equal(sum(tres), sum(cres))
   expect_true(setequal(rownames(tres), rownames(cres)))

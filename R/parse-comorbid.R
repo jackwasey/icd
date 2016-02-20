@@ -40,14 +40,14 @@ ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "HTN
 #' Get the SAS code from AHRQ and save in data-raw if not already there.
 #' @keywords internal
 icd9_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
-  assertFlag(offline)
+  assert_flag(offline)
   download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat2012-2013.txt",
     offline = offline, allow_missing = allow_missing)
 }
 
 icd10_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
-  assertFlag(offline)
+  assert_flag(offline)
   download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat_icd10cm_2016.txt",
     offline = offline, allow_missing = allow_missing)
@@ -61,8 +61,8 @@ icd10_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
 #' @keywords internal
 icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
-  assertFlag(save_data)
-  assertFlag(offline)
+  assert_flag(save_data)
+  assert_flag(offline)
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
@@ -131,8 +131,8 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 # This is in some ways simpler than that ICD-9 equivalent because I make no
 # attempt to find all the child codes.
 icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
-  assertFlag(save_data)
-  assertFlag(offline)
+  assert_flag(save_data)
+  assert_flag(offline)
 
   ahrq_info <- icd10_fetch_ahrq_sas(offline, allow_missing = FALSE)
 
@@ -186,8 +186,8 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 #' @template offline
 #' @keywords internal
 icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
-  assertFlag(save_data)
-  assertFlag(offline)
+  assert_flag(save_data)
+  assert_flag(offline)
 
   # download the file and/or just get the path/filename to it, fails if missing by default
   f_info <- icd9_fetch_quan_deyo_sas(offline = offline)

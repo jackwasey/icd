@@ -58,7 +58,7 @@ icd10cm_xml_node_to_pair <- function(x) {
 #' @param save_data single logical
 #' @keywords internal
 icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
-  assertFlag(save_data)
+  assert_flag(save_data)
   loadNamespace("xml2")
   f_info <- icd10cm_get_xml_file()
   j <- xml2::read_xml(f_info$file_path)

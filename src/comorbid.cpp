@@ -39,8 +39,8 @@
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                           const std::string visitId, const std::string icd9Field,
-                          const int threads = 8, const int chunkSize = 256,
-                          const int ompChunkSize = 1, bool aggregate = true) {
+                          const int threads = 8, const int chunk_size = 256,
+                          const int omp_chunk_size = 1, bool aggregate = true) {
 #ifdef ICD9_VALGRIND
 #ifdef ICD9_DEBUG
   Rcpp::Rcout << "Starting valgrind instrumentation... ";
@@ -53,7 +53,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #endif
 #if (defined ICD9_DEBUG_SETUP || defined ICD9_SETUP)
   Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
-  Rcpp::Rcout << "chunk size = " << chunkSize << "\n";
+  Rcpp::Rcout << "chunk size = " << chunk_size << "\n";
 #endif
 
 #ifdef ICD9_DEBUG_PARALLEL
@@ -114,8 +114,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   Rcpp::Rcout << num_comorbid << " is num_comorbid\n";
 #endif
 
-  const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunkSize,
-                                                   ompChunkSize);
+  const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunk_size, omp_chunk_size);
 
 #ifdef ICD9_DEBUG
   Rcpp::Rcout << "out length is " << out.size() << "\n";

@@ -43,9 +43,9 @@ icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
 #' @keywords internal
 icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
                                 billable = FALSE, ...) {
-  # assert(checkFactor(x), checkCharacter(x)) # what if icd10 class, but nothing else? be permissive?
-  assertFlag(short_code)
-  assertFlag(billable)
+  # assert(checkmate::checkFactor(x), checkCharacter(x)) # what if icd10 class, but nothing else? be permissive?
+  assert_flag(short_code)
+  assert_flag(billable)
 
   if (!short_code)
     x <- icd_decimal_to_short.icd9(x)
@@ -168,8 +168,8 @@ icd_is_billable.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
 icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
                                    version = icd9cm_latest_edition(), ...) {
   assertVector(x)
-  assertFlag(short_code)
-  assertString(version)
+  assert_flag(short_code)
+  assert_string(version)
   if (!short_code)
     x <- icd_decimal_to_short.icd9(x)
   x %in% icd::icd9cm_billable[[version]][["code"]]
@@ -236,9 +236,9 @@ icd_get_billable.default <- function(x, ...) {
 #' @keywords internal
 icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
                                     invert = FALSE, version = icd9cm_latest_edition(), ...) {
-  assertFlag(short_code)
-  assertFlag(invert)
-  assertString(version)
+  assert_flag(short_code)
+  assert_flag(invert)
+  assert_string(version)
   # would be nicer to dispatch on short_code type here.
   if (short_code)
     icd9cm_get_billable.icd_short_code(x = x, invert = invert, version = version)
@@ -271,9 +271,9 @@ icd_get_billable.icd9 <- function(...) {
 icd9cm_get_billable <- function(x, short_code = icd_guess_short(x),
                                 invert = FALSE, icd9cm_edition = icd9cm_latest_edition()) {
   assertVector(x)
-  assertFlag(short_code)
-  assertFlag(invert)
-  assertString(version)
+  assert_flag(short_code)
+  assert_flag(invert)
+  assert_string(version)
   UseMethod("icd9cm_get_billable")
 }
 

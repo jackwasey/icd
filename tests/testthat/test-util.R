@@ -17,12 +17,12 @@
 
 context("test trim, other utils")
 
-test_that("trim with empty inputs" , {
+test_that("trim with empty inputs", {
   expect_equal(trim(character(0)), character(0))
   expect_equal(trim(""), "")
 })
 
-test_that("trim with acceptable inputs" , {
+test_that("trim with acceptable inputs", {
   expect_equal(trim(NA_character_), NA_character_)
   # not necesarily desirable, but this states the expectation.
   expect_equal(trim(NA_integer_), NA_character_)
@@ -70,7 +70,7 @@ test_that("get visit name from a matrix should fail", {
   expect_error(get_visit_name(matrix(c(1, 2, 3, 4), nrow = 2)))
 })
 
-test_that("string pair match extraction" , {
+test_that("string pair match extraction", {
   expect_error(str_pair_match())
   expect_error(str_pair_match(pattern = "(abc)def(ghi)"))
   expect_error(str_pair_match(string = "bougie"))
@@ -142,4 +142,3 @@ test_that("chapter to desc range works for icd10", {
                    list(Jack = c(start = "E99", end = "E99"))
   )
 })
-

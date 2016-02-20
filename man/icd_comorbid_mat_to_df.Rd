@@ -17,9 +17,8 @@ icd9ComorbidMatToDf(x, visitId = "visit_name",
 \item{visit_name}{Single character string with name for new column in output data frame.
 Everywhere else, \code{visit_name} describes the input data, but here it is for output data.}
 
-\item{stringsAsFactors}{Single logical value, describing whether the
-resulting data frame should have strings, i.e. visitId converted to factor.
-Default is to follow the current session option. This is identical to the
+\item{stringsAsFactors}{Single logical value, describing whether the resulting data frame should have strings, e.g.
+\code{visit_id} converted to factor. Default is to follow the current session option. This is identical to the
 argument used in, among other base functions \code{as.data.frame}.}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}

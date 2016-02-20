@@ -102,9 +102,9 @@ sas_icd10_assignments_to_list <- function(x) {
 #'   "assigned value" pairs
 #' @keywords internal programming list
 sasParseAssignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE) {
-  assertString(x)
-  assertFlag(strip_whitespace)
-  assertFlag(strip_quotes)
+  assert_string(x)
+  assert_flag(strip_whitespace)
+  assert_flag(strip_quotes)
   # splitting with clever regex to separate each pair of assignments seems
   # tricky, so doing it in steps.
   # n.b. this is a list with list per input row.

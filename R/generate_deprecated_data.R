@@ -86,4 +86,3 @@ generate_deprecated_data <- function(save_data = FALSE,
                        charlsonComorbidNamesAbbrev)
   )
 }
-

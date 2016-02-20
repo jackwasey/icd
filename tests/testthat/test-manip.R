@@ -206,9 +206,7 @@ test_that("strip leading zero from short numeric only", {
 
   # check other way
   expect_equal(unclass(res <- icd9_drop_leading_zeroes("1239", short_code = TRUE)), "1239")
-  # not sure whether this is wise:
-  # expect_is(res, "icd_short_code")
-  # expect_is(res, "icd9") # or expect_true(is.icd9(res))
+  # not sure whether I should test for short code or icd9 classes, too.
 })
 
 test_that("strip leading zero from decimal V and E", {

@@ -97,7 +97,7 @@ test_that("extraction from qualifier subset works", {
 # package doesn't have to include the big RTF source file
 context("possibly online rtf tests")
 
-test_year = "2011"
+test_year <- "2011"
 
 if (rtf_year_ok(test_year)) {
   rtf_dat <- icd9_sources[icd9_sources$f_year == test_year, ]
@@ -150,7 +150,7 @@ test_that("majors extracted from web page are the same as those from RTF", {
 
 test_that("all leaf codes from TXT are in flat file extract", {
   skip_slow_tests()
-  test_ver = "32"
+  test_ver <- "32"
   skip_flat_icd9_avail(test_ver)
   skip_on_no_rtf(test_year)
 

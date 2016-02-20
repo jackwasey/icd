@@ -18,7 +18,6 @@
 if (requireNamespace("lintr", quietly = TRUE)) {
   context("lints")
   test_that("Package Style", {
-    skip("skipping linting until lintr bugs are fixed")
     lintr::expect_lint_free()
-  })
+    })
 }

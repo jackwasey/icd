@@ -59,8 +59,7 @@ icd_children.character <- function(x, ...) {
   # eventually UseMethod again, but this would be circular until the icd10 method is defined.
   switch(ver,
     "icd9" = icd_children.icd9(x = x, ...),
-    "icd10" = stop("icd_children.icd10 not implemented yet"),
-    # "icd10" = icd_children.icd10(x, short_code, ...)
+    "icd10" = icd_children.icd10(x, ...),
     NULL)
 }
 
@@ -68,10 +67,10 @@ icd_children.character <- function(x, ...) {
 #' @export
 icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
                          defined = TRUE, billable = FALSE, ...) {
-  assert(checkFactor(x), checkCharacter(x)) # assertFactorOrCharacter(x)
-  assertFlag(short_code)
-  assertFlag(defined)
-  assertFlag(billable)
+  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert_flag(short_code)
+  assert_flag(defined)
+  assert_flag(billable)
 
   if (short_code)
     res <- .Call("icd_icd9ChildrenShortCpp", PACKAGE = "icd", toupper(x), defined)
@@ -85,6 +84,21 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   else
     icd9(res)
 }
+
+#' @describeIn icd_children Get children of ICD-10-CM codes
+#' @export
+#' @keywords internal
+icd_children.icd10cm <- function(x, short_code = icd_guess_short(x), billable = FALSE, ...) {
+  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert_flag(short_code)
+  assert_flag(billable)
+  stop("Finding ICD-10 children is not yet implemented.")
+}
+
+#' @describeIn icd_children Get children of ICD-10 codes (for now assume ICD-10-CM)
+#' @export
+#' @keywords internal
+icd_children.icd10 <- icd_children.icd10cm
 
 # this is just lazy package data, but apparently need to declare it to keep CRAN
 # happy. May not be needed if doing icd::
@@ -104,8 +118,8 @@ icd_children_defined <- function(x)
 #' @keywords internal
 icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
-  assertCharacter(x)
-  assertFlag(short_code)
+  assert_character(x)
+  assert_flag(short_code)
 
   if (inherits(x, "icd10") && !inherits(x, "icd10cm"))
     warning("This function primarily gives 'defined' child codes for ICD-10-CM,
@@ -132,7 +146,8 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
   }
 
   for (i in seq_along(icd10Short)) {
-    # now the children, assuming the source file is sorted logically, will be subsequent codes, until a code of the same length is found
+    # now the children, assuming the source file is sorted logically, will be subsequent codes, until a code of the same
+    # length is found
     check_row <- matches[i] + 1
     parent_len <- nc[matches[i]]
     while (nc[check_row] > parent_len && check_row != last_row + 1)
@@ -143,4 +158,3 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
   kids
 
 }
-

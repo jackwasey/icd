@@ -17,20 +17,20 @@
 
 context("test reshaping wide to long")
 
-longdf <- data.frame(visitId = c("a", "b", "b", "c"),
+longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
                      icd9 = c("441", "4424", "443", "441"))
 
-widedf <- data.frame(visitId = c("a", "b", "c"),
+widedf <- data.frame(visit_id = c("a", "b", "c"),
                      icd9_001 = c("441", "4424", "441"),
                      icd9_002 = c(NA, "443", NA))
 
 test_that("long data to wide data", {
-  longcmp <- data.frame(visitId = c("a", "b", "c"),
+  longcmp <- data.frame(visit_id = c("a", "b", "c"),
                         icd_001 = c("441", "4424", "441"),
                         icd_002 = c(NA, "443", NA))
   expect_equal(icd_long_to_wide(longdf, return_df = TRUE), longcmp)
 
-  longcmp2 <- data.frame(visitId = c("a", "b", "c"),
+  longcmp2 <- data.frame(visit_id = c("a", "b", "c"),
                          icd_001 = c("441", "4424", "441"),
                          icd_002 = c(NA, "443", NA),
                          icd_003 = c(NA, NA, NA))
@@ -50,7 +50,7 @@ test_that("wide data to long data", {
   expect_equivalent(icd_wide_to_long(widedf),
                     longdf)
 
-  widedfempty <- data.frame(visitId = c("a", "b", "c"),
+  widedfempty <- data.frame(visit_id = c("a", "b", "c"),
                             icd9_001 = c("441", "4424", "441"),
                             icd9_002 = c("", "443", ""))
 
@@ -62,7 +62,7 @@ test_that("wide data to long data", {
 })
 
 test_that("matrix to data frame and back", {
-  for (pts in list(random_test_patients, testTwenty, multi_comorbid)) {
+  for (pts in list(random_test_patients, test_twenty, multi_comorbid)) {
     mat <- icd_comorbid_ahrq(pts)
     df <- icd_comorbid_mat_to_df(mat)
     expect_identical(icd_comorbid_df_to_mat(df), mat)
@@ -70,10 +70,10 @@ test_that("matrix to data frame and back", {
 })
 
 test_that("dataframe to matrix and back", {
-  for (pts in list(random_test_patients, testTwenty, multi_comorbid)) {
+  for (pts in list(random_test_patients, test_twenty, multi_comorbid)) {
     df2 <- icd_comorbid_ahrq(pts, return_df = TRUE)
     mat2 <- icd_comorbid_df_to_mat(df2)
-    df3 <- icd_comorbid_mat_to_df(mat2, visit_name = "visitId", stringsAsFactors = FALSE)
+    df3 <- icd_comorbid_mat_to_df(mat2, visit_name = "visit_id", stringsAsFactors = FALSE)
     expect_identical(df2, df3)
   }
 })

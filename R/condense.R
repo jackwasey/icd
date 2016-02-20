@@ -33,11 +33,10 @@ icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, war
 #' @keywords internal
 icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
   # TODO, need to figure out how to use checkmate for my classes. ?extend it
-  #
-  #assert(checkFactor(x), checkCharacter(x))
-  assertFlag(short_code)
-  assert(checkNull(defined), checkFlag(defined))
-  assertFlag(warn)
+  assert(checkmate::checkFactor(unclass(x)), checkCharacter(unclass(x)))
+  assert_flag(short_code)
+  assert(checkmate::checkNull(defined), checkmate::checkFlag(defined))
+  assert_flag(warn)
   if (short_code)
     icd9_condense_short(x, defined = defined, warn = warn, ...)
   else
@@ -62,21 +61,21 @@ icd_condense.character <- function(x, short_code = icd_guess_short(x), defined =
 
 #' @rdname icd_condense
 #' @keywords internal manip
-icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE, keepFactorLevels = FALSE)
+icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE, keep_factor_levels = FALSE)
   icd_short_to_decimal.icd9(
     icd9_condense_short(
-      icd_decimal_to_short.icd9(x), defined = defined, warn = warn, keepFactorLevels = keepFactorLevels))
+      icd_decimal_to_short.icd9(x), defined = defined, warn = warn, keep_factor_levels = keep_factor_levels))
 
 #' @rdname icd_condense
 #' @template warn
-#' @param keepFactorLevels single logical value, default \code{FALSE}. If
+#' @param keep_factor_levels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
-icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keepFactorLevels = FALSE) {
-  #assert(checkFactor(x), checkCharacter(x))
-  assert(checkNull(defined), checkFlag(defined))
-  assertFlag(warn)
-  assertFlag(keepFactorLevels)
+icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_levels = FALSE) {
+  #assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkNull(defined), checkmate::checkFlag(defined))
+  assert_flag(warn)
+  assert_flag(keep_factor_levels)
   icd9Levels <- levels(x) # NULL if not a factor
 
   # we can convert back to factor later. Lots of scope for errors by handling
@@ -145,7 +144,7 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keepFactorLevels
   out <- unique(icd_sort.icd9(c(out, fout, i9w), short_code = TRUE))
 
   if (!is.null(icd9Levels)) {
-    if (keepFactorLevels)
+    if (keep_factor_levels)
       out <- factor(out, icd9Levels)
     else
       out <- factor(out)

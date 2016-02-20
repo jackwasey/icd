@@ -119,7 +119,7 @@ icd_guess_version.factor <- function(x, short_code = NULL, ...) {
 #' @export
 #' @keywords internal
 icd_guess_version.character <- function(x, short_code = NULL, ...) {
-  assertCharacter(x)
+  assert_character(x)
   if (!is.null(short_code)) {
     if (short_code) {
       i9 <- sum(icd_is_valid.icd9(x, short_code = TRUE), na.rm = TRUE)

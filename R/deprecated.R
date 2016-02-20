@@ -930,9 +930,9 @@ icd9IsBillableDecimal <- function(icd9Decimal,
 icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                             invert = FALSE, version = icd9cm_latest_edition()) {
   assertVector(icd9)
-  assertFlag(isShort)
-  assertFlag(invert)
-  assertString(version)
+  assert_flag(isShort)
+  assert_flag(invert)
+  assert_string(version)
   if (isShort)
     return(icd9[icd9IsBillableShort(icd9, version = version) != invert])
   icd9[icd9IsBillableDecimal(icd9, version = version) != invert]

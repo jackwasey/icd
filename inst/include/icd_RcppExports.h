@@ -24,7 +24,7 @@ namespace icd {
         }
     }
 
-    inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunkSize = 256, const int ompChunkSize = 1, bool aggregate = true) {
+    inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
         typedef SEXP(*Ptr_icd9ComorbidShortCpp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortCpp p_icd9ComorbidShortCpp = NULL;
         if (p_icd9ComorbidShortCpp == NULL) {
@@ -34,7 +34,7 @@ namespace icd {
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9ComorbidShortCpp(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize), Rcpp::wrap(aggregate));
+            __result = p_icd9ComorbidShortCpp(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads), Rcpp::wrap(chunk_size), Rcpp::wrap(omp_chunk_size), Rcpp::wrap(aggregate));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

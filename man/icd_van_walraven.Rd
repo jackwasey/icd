@@ -38,9 +38,8 @@ If \code{visit_name} is not specified, the first column is used.}
 the \code{visitId}, and the second being the count. If \code{visitId} was a
 factor or named differently in the input, this is preserved.}
 
-\item{stringsAsFactors}{Single logical value, describing whether the
-resulting data frame should have strings, i.e. visitId converted to factor.
-Default is to follow the current session option. This is identical to the
+\item{stringsAsFactors}{Single logical value, describing whether the resulting data frame should have strings, e.g.
+\code{visit_id} converted to factor. Default is to follow the current session option. This is identical to the
 argument used in, among other base functions \code{as.data.frame}.}
 
 \item{...}{arguments passed on to other functions}
@@ -50,16 +49,13 @@ which case the hierarchy defined for the mapping is applied. E.g. in
 Elixhauser, you can't have uncomplicated and complicated diabetes both
 flagged.}
 
-\item{visit_name}{The name of the column in the data frame which contains the
-patient or visit identifier. Typically this is the visit identifier, since
-patients come leave and enter hospital with different ICD-9 codes. It is a
-character vector of length one. If left empty, or \code{NULL}, then an
-attempt is made to guess which field has the ID for the patient encounter
-(not a patient ID, although this can of course be specified directly). The
-guesses proceed until a single match is made. Data frames may be wide with
-many matching fields, so to avoid false positives, anything but a single
-match is rejected. If there are no successful guesses, and \code{visitId}
-was not specified, then the first column of the data frame is used.}
+\item{visit_name}{The name of the column in the data frame which contains the patient or visit identifier. Typically
+this is the visit identifier, since patients come leave and enter hospital with different ICD-9 codes. It is a
+character vector of length one. If left empty, or \code{NULL}, then an attempt is made to guess which field has the
+ID for the patient encounter (not a patient ID, although this can of course be specified directly). The guesses
+proceed until a single match is made. Data frames may be wide with many matching fields, so to avoid false
+positives, anything but a single match is rejected. If there are no successful guesses, and \code{visit_id} was not
+specified, then the first column of the data frame is used.}
 
 \item{return_df}{single logical value, if true, a two column data frame will
 be returned, with the first column named as in input data frame (i.e.

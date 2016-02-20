@@ -23,7 +23,7 @@
 #'   code, which may include a decimal point.
 #' @keywords internal manip
 icd9_extract_alpha_numeric <- function(x) {
-  assert(checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkCharacter(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
   asCharacterNoWarn(x) %>%
@@ -55,14 +55,14 @@ icd9_add_leading_zeroes <- function(x, short_code = NULL) {
 
 #' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a decimal format ICD-9 code.
 icd9_drop_leading_zeroes.icd_decimal_code <- function(x, short_code = NULL) {
-  assert(checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkCharacter(x))
   assertNull(short_code)
   x %>% asCharacterNoWarn %>% str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3")
 }
 
 #' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a short format ICD-9 code
 icd9_drop_leading_zeroes.icd_short_code <- function(x, short_code = NULL) {
-  assert(checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkCharacter(x))
   assertNull(short_code)
   parts <- icd_short_to_parts.icd9(x = x, minor_empty = "")
   # very important: only drop the zero in V codes if the minor part is empty.

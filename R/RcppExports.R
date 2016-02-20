@@ -9,8 +9,8 @@
 #'   IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
 #'   then use \code{TRUE}.
 #' @keywords internal
-icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunkSize = 256L, ompChunkSize = 1L, aggregate = TRUE) {
-    .Call('icd_icd9ComorbidShortCpp', PACKAGE = 'icd', icd9df, icd9Mapping, visitId, icd9Field, threads, chunkSize, ompChunkSize, aggregate)
+icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call('icd_icd9ComorbidShortCpp', PACKAGE = 'icd', icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
 icd9MajMinToCode <- function(major, minor, isShort) {
@@ -246,14 +246,14 @@ icd9RandomShort <- function(n = 5L) {
 #' \dontrun{
 #' pts <- generate_random_pts(1e7)
 #' # conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
-#' microbenchmark::microbenchmark(fastIntToStringStd(pts$visitId, buffer = 8),
-#'                                fastIntToStringStd(pts$visitId, buffer = 16),
-#'                                fastIntToStringStd(pts$visitId, buffer = 64),
-#'                                fastIntToStringRcpp(pts$visitId, buffer = 8),
-#'                                fastIntToStringRcpp(pts$visitId, buffer = 16),
-#'                                fastIntToStringRcpp(pts$visitId, buffer = 64),
-#'                                as.character(pts$visitId),
-#'                                asCharacterNoWarn(pts$visitId), times = 5)
+#' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
+#'                                fastIntToStringStd(pts$visit_id, buffer = 16),
+#'                                fastIntToStringStd(pts$visit_id, buffer = 64),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
+#'                                as.character(pts$visit_id),
+#'                                asCharacterNoWarn(pts$visit_id), times = 5)
 #' }
 #' @keywords internal
 fastIntToStringStd <- function(x) {

@@ -15,14 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-if (requireNamespace("lintr", quietly = TRUE)) {
-  context("deprecated tests - lints")
-  test_that("deprecated - deprecated - Package Style", {
-    skip("skipping linting until lintr bugs are fixed")
-    lintr::expect_lint_free()
-  })
-}
-
 context("test deprecated icd9 package")
 
 test_that("deprecated - zero pad decimal - bad input", {

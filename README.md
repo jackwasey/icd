@@ -68,25 +68,25 @@ Examples
 See the vignette and code help for many more. Here's a taste:
 
 ``` r
-patientData
-#>   visitId  icd9  poa
-#> 1    1000 40201    Y
-#> 2    1000  2258 <NA>
-#> 3    1000  7208    N
-#> 4    1000 25001    Y
-#> 5    1001 34400    X
-#> 6    1001  4011    Y
-#> 7    1002  4011    E
+patient_data
+#>   visit_id  icd9  poa
+#> 1     1000 40201    Y
+#> 2     1000  2258 <NA>
+#> 3     1000  7208    N
+#> 4     1000 25001    Y
+#> 5     1001 34400    X
+#> 6     1001  4011    Y
+#> 7     1002  4011    E
 
 # reformat input data as needed
-patientData %>% icd9LongToWide # everything works well with magrittr %>%
+patient_data %>% icd9LongToWide # everything works well with magrittr %>%
 #>      [,1]    [,2]   [,3]   [,4]   
 #> 1000 "40201" "2258" "7208" "25001"
 #> 1001 "34400" "4011" NA     NA     
 #> 1002 "4011"  NA     NA     NA
 
 # get comorbidities:
-icd9ComorbidQuanDeyo(patientData)
+icd9ComorbidQuanDeyo(patient_data)
 #>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
 #> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
 #> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
@@ -97,11 +97,11 @@ icd9ComorbidQuanDeyo(patientData)
 #> 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
 
 # find diagnoses present on admission:
-icd9FilterPoa(patientData)
-#>   visitId  icd9
-#> 1    1000 40201
-#> 4    1000 25001
-#> 6    1001  4011
+icd9FilterPoa(patient_data)
+#>   visit_id  icd9
+#> 1     1000 40201
+#> 4     1000 25001
+#> 6     1001  4011
 ```
 
 Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.

@@ -11,7 +11,7 @@ Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
     person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org", comment = "Van Walraven scores"),
     person("R Core Team", role = c("ctb", "cph"), comment = "m4 macro for OpenMP detection in configure"),
-    person("Kevin Ushey", role = c("ctb", "cph"), comment = "fast factor generation, adapted from package fastmatch")
+    person("Kevin Ushey", role = c("ctb", "cph"), comment = "Fast factor creation, adapted from package fastmatch")
     )
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd9
@@ -28,11 +28,10 @@ Imports:
 Suggests:
     devtools,
     digest,
-    knitr,
-    microbenchmark,
-    memoise,
     ggplot2,
-    profr,
+    knitr,
+    lintr,
+    memoise,
     rmarkdown,
     RODBC,
     roxygen2 (>= 5.0.0),

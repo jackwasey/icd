@@ -35,10 +35,10 @@ Finds children of \code{icd9Reference} and looks for \code{icd9} in the
 \examples{
 #\%i9in\% assumes both test code(s) and reference set of codes are \\emph{short}
 "1024" \%i9in\% "102"
-"1024" \%i9in\% c("102","1025")
-c("102", "1024","1025") \%i9in\% "102"
-c("102", "1024","1025") \%i9in\% c("1024", "1025")
-c("102", "1024","1025") \%i9in\% c("102", "1024", "1025")
+"1024" \%i9in\% c("102", "1025")
+c("102", "1024", "1025") \%i9in\% "102"
+c("102", "1024", "1025") \%i9in\% c("1024", "1025")
+c("102", "1024", "1025") \%i9in\% c("102", "1024", "1025")
 }
 \keyword{internal}
 

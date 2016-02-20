@@ -31,6 +31,14 @@ Development version can be installed with
 library(devtools)
 install_github(\"jackwasey/icd9\") # working on rename from icd9 to icd
 ")
+
+  if (!is.null(getOption("icd9.threads")))
+    warning("icd9.threads is deprecated, use icd.threads to control OpenMP")
+  if (!is.null(getOption("icd9.chunkSize")))
+    warning("icd9.chunkSize is deprecated, use icd.chunk_size to control OpenMP")
+  if (!is.null(getOption("icd9.ompChunkSize")))
+    warning("icd9.ompChunkSize is deprecated, use icd.omp_chunk_size to control OpenMP")
+
 }
 
 .onUnload <- function(libpath) {

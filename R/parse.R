@@ -91,8 +91,8 @@ icd_update_everything <- function() {
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
 parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
-  assertFlag(save_data)
-  assertFlag(offline)
+  assert_flag(save_data)
+  assert_flag(offline)
 
   # icd9_sources is in sysdata.RData
   versions <- icd9_sources$version
@@ -126,9 +126,9 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
 icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
                                             save_data = TRUE,
                                             offline = FALSE) {
-  assertString(version)
-  assertFlag(save_data)
-  assertFlag(offline)
+  assert_string(version)
+  assert_flag(save_data)
+  assert_flag(offline)
 
   message("Fetching billable codes version: ", version)
 
@@ -209,7 +209,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
 #' @keywords internal
 parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   message("working on version 27 quirk")
-  assertFlag(offline)
+  assert_flag(offline)
   v27_dat <- icd9_sources[icd9_sources$version == "27", ]
   fn_orig <- v27_dat$other_filename
   url <- v27_dat$url
@@ -237,8 +237,8 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
 #' @keywords internal
 icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
                                                verbose = FALSE) {
-  assertFlag(save_data)
-  assertFlag(verbose)
+  assert_flag(save_data)
+  assert_flag(verbose)
 
   message("get column of ICD-9 codes, up to the three digit headings. ~10s")
   icd9_rtf <- parse_rtf_year(year = "2011",

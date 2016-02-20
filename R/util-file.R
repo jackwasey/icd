@@ -69,9 +69,9 @@ unzip_single <- function(url, file_name, save_path) {
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal
 unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
-  assertString(url, na.ok = FALSE)
-  assertString(file_name, na.ok = FALSE)
-  assertFlag(offline)
+  assert_string(url, na.ok = FALSE)
+  assert_string(file_name, na.ok = FALSE)
+  assert_flag(offline)
 
   data_raw_path <- system.file("data-raw", package = "icd")
   file_path <- file.path(data_raw_path, make.names(file_name))
@@ -92,10 +92,10 @@ download_to_data_raw <- function(url,
                                  file_name = str_extract(url, "[^/]*$"),
                                  offline = FALSE,
                                  allow_missing = FALSE) {
-  assertString(url)
-  assertString(file_name)
-  assertFlag(offline)
-  assertFlag(allow_missing)
+  assert_string(url)
+  assert_string(file_name)
+  assert_flag(offline)
+  assert_flag(allow_missing)
 
   data_raw_path <- system.file("data-raw", package = "icd")
   save_path <- file.path(data_raw_path, file_name)
@@ -134,7 +134,7 @@ download_to_data_raw <- function(url,
 #' @return invisibly returns the data
 #' @keywords internal
 save_in_data_dir <- function(var_name, suffix = "") {
-  assertString(suffix)
+  assert_string(suffix)
   var_name <- as.character(substitute(var_name))
   stopifnot(exists(var_name, envir = parent.frame()))
   save(list = var_name,

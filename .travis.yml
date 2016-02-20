@@ -1,8 +1,9 @@
-language: r
+# https://docs.travis-ci.com/user/languages/r
+language: R
+cache: packages
+r: devel
 
-sudo: required
-
-warnings_are_errors: false
+warnings_are_errors: true
 
 # seperate lines seems to mean the whole build is repeated each line
 env:
@@ -10,32 +11,33 @@ env:
 
 # debian package names: libxml2-dev libssl-dev r-base-core r-cran-xml r-cran-ggplot2 r-cran-rcurl r-cran-bitops r-cran-brew r-cran-rcolorbrewer r-cran-rcpp r-cran-dichromat r-cran-munsell r-cran-checkmate r-cran-evaluate r-cran-plyr r-cran-gtable r-cran-reshape2 r-cran-scales r-cran-proto r-cran-catools r-cran-testthat r-cran-memoise r-cran-digest r-cran-xtable
 # at least some of the following don't have debian packages (at time of writing)
-r_binary_packages:
- - devtools
- - ggplot2
+r_packages:
  - brew
- - rcolorbrewer
- - dichromat
- - munsell
- - checkmate
- - scales
- - proto
  - catools
+ - checkmate
+ - devtools
+ - dichromat
+ - digest
  - evaluate
- - plyr
+ - ggplot2
  - gtable
- - reshape2
  - knitr
- - microbenchmark
- - profr
- - xtable
  - magrittr
  - memoise
+ - microbenchmark
+ - munsell
+ - plyr
  - profr
- - digest
- - RODBC
+ - profr
+ - proto
+ - rcolorbrewer
+ - reshape2
  - rmarkdown
+ - RODBC
+ - scales
  - stringr
+ - xtable
+
 
 r_github_packages:
  - jimhester/covr

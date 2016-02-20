@@ -131,12 +131,12 @@ icd_expectation_classes_ordered <- function() {
 
 #' @rdname set_icd_class
 #' @title construct ICD-9 data types
-#' @description Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
-#' ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (/code{icd9cm}), then an ICD-9
-#' class (/code{icd9}) is also set.
+#' @description Takes an R structure and sets class to an ICD type. In the case of ICD-9 and ICD-10 codes, if a
+#'   particular sub-type is set, e.g. ICD-9-CM (/code{icd9cm}), then an ICD-9 class (/code{icd9}) is also set.
 #'
 #' @param x object to set class \code{icd9}
-#' @param warn single logical value, if \code{TRUE} will gives warning when converting between types. ICD-9 to ICD-10 will cause an error regardless.
+#' @param warn single logical value, if \code{TRUE} will gives warning when converting between types. ICD-9 to ICD-10
+#'   will cause an error regardless.
 #' @export
 icd9 <- function(x) {
   if (missing(x)) x <- character()
@@ -256,7 +256,7 @@ icd_wide_data <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd_short_code <- function(x, warn = TRUE) {
-  assertFlag(warn)
+  assert_flag(warn)
   if (missing(x)) x <- character()
   # TODO consider warning if there are decimals!
   if (inherits(x, "icd_short_code")) return(x)
@@ -289,7 +289,7 @@ get_pos_short_decimal_class <- function(x) {
 #' @rdname set_icd_class
 #' @export
 icd_decimal_code <- function(x, warn = TRUE) {
-  assertFlag(warn)
+  assert_flag(warn)
   if (missing(x)) x <- character()
   # TODO consider warning if there are decimals!
   if (inherits(x, "icd_decimal_code"))
@@ -307,7 +307,7 @@ icd_decimal_code <- function(x, warn = TRUE) {
 #' @details This, I think, should take priority over ICD-9 vs ICD-10 when doing S3 dispatching
 #' @export
 icd_comorbidity_map <- function(x) {
-  assertList(x, any.missing = FALSE, min.len = 1, names = "unique")
+  assert_list(x, any.missing = FALSE, min.len = 1, names = "unique")
   if (inherits(x, "icd_comorbidity_map"))
     return(x)
   class(x) <- append(class(x), "icd_comorbidity_map", after = 0)
@@ -353,7 +353,8 @@ c.icd9 <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
   if (any(vapply(args, icd_conflicts_with_icd9, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
+    stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)?
+         If so, unset the class of the arguments")
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
@@ -363,7 +364,8 @@ c.icd9cm <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
   if (any(vapply(args, icd_conflicts_with_icd9cm, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)? If so, unset the class of the arguments")
+    stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)?
+         If so, unset the class of the arguments")
   structure(c(unlist(lapply(list(...), unclass))), class = base_class)
 }
 
@@ -373,7 +375,8 @@ c.icd10 <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
   if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
+    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)?
+         If so, use unclass on some or all the arguments")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -383,7 +386,8 @@ c.icd10cm <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
   if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
+    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)?
+         If so, use unclass on some or all the arguments")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -393,7 +397,8 @@ c.icd10who <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
   if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)? If so, use unclass on some or all the arguments")
+    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)?
+         If so, use unclass on some or all the arguments")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -404,9 +409,11 @@ c.icd_short_code <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
   if (any(vapply(args, is.icd_decimal_code, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine short and decimal format ICD codes? If so, use unclass on some or all the arguments")
+    stop("Do you really want to combine short and decimal format ICD codes?
+         If so, use unclass on some or all the arguments")
   if (!all(vapply(args, is.icd_short_code, FUN.VALUE = logical(1))))
-    warning("The first argument is in short format, whereas subsequent arguments include codes with no short or decimal designation.")
+    warning("The first argument is in short format, whereas subsequent arguments
+            include codes with no short or decimal designation.")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -417,9 +424,11 @@ c.icd_decimal_code <- function(...) {
   args <- list(...)
   base_class <- class(args[[1]])
   if (any(vapply(args, is.icd_short_code, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine short and decimal format ICD codes? If so, use unclass on some or all the arguments")
+    stop("Do you really want to combine short and decimal format ICD codes?
+         If so, use unclass on some or all the arguments")
   if (!all(vapply(args, is.icd_decimal_code, FUN.VALUE = logical(1))))
-    warning("The first argument is in short format, whereas subsequent arguments include codes with no short or decimal designation.")
+    warning("The first argument is in short format, whereas subsequent arguments
+            include codes with no short or decimal designation.")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -470,7 +479,6 @@ c.icd_decimal_code <- function(...) {
   y <- NextMethod()
   if (!is.data.frame(x))
     class(y) <- class(x)
-  #class(x) <- cl[cl != "icd9"]
   y
 }
 
