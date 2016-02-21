@@ -110,19 +110,17 @@ find_expr <- function(name, env = parent.frame()) {
 #' @describeIn icd_classes_ordered \code{testthat} \code{expect} function
 #'   for ICD classes to be in correct order.
 #' @keywords internal
-expect_icd_classes_ordered <- function(object, info = NULL, label = NULL) {
-  requireNamespace("testthat")
+expect_icd_classes_ordered <- function(x, info = NULL, label = NULL) {
   if (is.null(label))
-    label <- find_expr("object")
+    label <- find_expr("x")
 
-  testthat::expect_that(object, icd_expectation_classes_ordered(), info, label)
+  eval(bquote(testthat::expect_that(.(x), icd_expectation_classes_ordered(), info, label)))
 }
 
 #' @describeIn icd_classes_ordered \code{testthat} \code{expectation }for
 #'   ICD classes to be in correct order.
 #' @keywords internal
 icd_expectation_classes_ordered <- function() {
-  requireNamespace("testthat")
   function(x) {
     testthat::expectation(icd_classes_ordered(x),
                           "are not well ordered", "are well ordered")
