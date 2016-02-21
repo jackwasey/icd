@@ -13,7 +13,7 @@ env:
 # at least some of the following don't have debian packages (at time of writing)
 r_packages:
  - brew
- - catools
+ - caTools
  - checkmate
  - devtools
  - dichromat
