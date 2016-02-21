@@ -102,31 +102,6 @@ icd_stop_classes_disorder <- function(x) {
          which is out of order.")
 }
 
-find_expr <- function(name, env = parent.frame()) {
-  subs <- do.call("substitute", list(as.name(name), env))
-  paste0(deparse(subs, width.cutoff = 500), collapse = "\n")
-}
-
-#' @describeIn icd_classes_ordered \code{testthat} \code{expect} function
-#'   for ICD classes to be in correct order.
-#' @keywords internal
-expect_icd_classes_ordered <- function(x, info = NULL, label = NULL) {
-  if (is.null(label))
-    label <- find_expr("x")
-
-  eval(bquote(testthat::expect_that(.(x), icd_expectation_classes_ordered(), info, label)))
-}
-
-#' @describeIn icd_classes_ordered \code{testthat} \code{expectation }for
-#'   ICD classes to be in correct order.
-#' @keywords internal
-icd_expectation_classes_ordered <- function() {
-  function(x) {
-    testthat::expectation(icd_classes_ordered(x),
-                          "are not well ordered", "are well ordered")
-  }
-}
-
 #' @rdname set_icd_class
 #' @title construct ICD-9 data types
 #' @description Takes an R structure and sets class to an ICD type. In the case of ICD-9 and ICD-10 codes, if a

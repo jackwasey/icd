@@ -217,6 +217,6 @@ test_that("condense a factor of codes instead of character vector", {
 
 test_that("levels are preserved from source factor", {
   dat <- factor(vdat, levels = c("plastic", vdat))
-  expect_identical(dat, icd_condense.icd9(short_code = TRUE, dat, keepFactorLevels = TRUE))
-  expect_equivalent(dat, icd_condense.icd9(short_code = TRUE, dat, keepFactorLevels = FALSE))
+  expect_identical(dat, icd_condense.icd9(short_code = TRUE, dat, keep_factor_levels = TRUE))
+  expect_equivalent(dat, icd_condense.icd9(short_code = TRUE, dat, keep_factor_levels = FALSE))
 })

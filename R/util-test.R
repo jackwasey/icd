@@ -67,20 +67,16 @@ skip_flat_icd9_avail_all <- function() {
 
 #' expect equal, ignoring any ICD classes
 #' @keywords internal
-expect_equal_no_icd <- function(object, expected, ..., info = NULL,
-                                label = NULL, expected.label = NULL) {
-  if (is.null(label))
-    label <- find_expr("object")
-  if (is.null(expected.label))
-    expected.label <- find_expr("expected")
-
+expect_equal_no_icd <- function(object, expected, ...) {
   class(object) <- class(object)[class(object) %nin% icd_all_classes]
   class(expected) <- class(expected)[class(expected) %nin% icd_all_classes]
-  eval(bquote(testthat::expect_that(.(object),
-                                    testthat::equals(
-                                      .(expected), label = expected.label, ...
-                                    ), info = info, label = label)))
-}
+  # eval(bquote(testthat::expect_that(.(object),
+  #                                   testthat::equals(
+  #                                     .(expected), label = expected.label, ...
+  #                                   ), info = info, label = label)))
+
+  eval(bquote(testthat::expect_equal(.(object), .(expected), ...)))
+  }
 
 #' expect named sub-chapter has a given range, case insensitive
 #' @keywords internal
@@ -236,16 +232,11 @@ expect_icd10_only_sub_chap <- function(x, ...) {
 
 }
 
-#' expectation for ICD classes to be well-ordered
-#' @return a function, mimicking how \code{testthat} works
-#' @examples
-#'   testthat::expect_that(icd9("V10"), icd:::icd_classes_are_ordered())
+#' @describeIn icd_classes_ordered \code{testthat} \code{expect} function
+#'   for ICD classes to be in correct order.
 #' @keywords internal
-icd_classes_are_ordered <- function() {
-  function(x) {
-    testthat::expectation(all(icd_classes_ordered(x)),
-                          "are not well ordered", "are well ordered")
-  }
+expect_icd_classes_ordered <- function(x) {
+  eval(bquote(testthat::expect_true(icd_classes_ordered(.(x)))))
 }
 
 getSlowestTests <- function(n = 5) {

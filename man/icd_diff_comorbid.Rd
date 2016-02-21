@@ -58,12 +58,15 @@ Compares two comorbidity:icd9 code mappings. The results are
 }}
 \examples{
 \donttest{
-icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)[["CHF"]]
 }
 \dontrun{
+diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)[["CHF"]]
 # show differences for
 # give full report on all comorbidities for these mappings
-icd_diff_comorbid(elixComorbid, ahrqComorbid)
+diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)
+
+# the following would output a summary to the console:
+# icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)
 }
 }
 

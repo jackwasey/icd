@@ -182,7 +182,7 @@ icd9Condense <- function(icd9, isShort = icd_guess_short(icd9),
 icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   icd_deprecated("icd_condense.icd9")
   icd_condense.icd9(x = icd9Decimal, short_code = FALSE, defined = onlyReal,
-                    warn = warn, keepFactorLevels = keepFactorLevels)
+                    warn = warn, keep_factor_levels = keepFactorLevels)
 }
 
 #' @rdname icd_condense
@@ -190,7 +190,7 @@ icd9CondenseDecimal <- function(icd9Decimal, onlyReal = NULL, warn = TRUE, keepF
 icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFactorLevels = FALSE) {
   icd_deprecated("icd_condense.icd9")
   icd_condense.icd9(x = icd9Short, short_code = TRUE, defined = onlyReal,
-                    warn = warn, keepFactorLevels = keepFactorLevels)
+                    warn = warn, keep_factor_levels = keepFactorLevels)
 }
 
 

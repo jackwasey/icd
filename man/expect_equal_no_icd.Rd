@@ -4,8 +4,7 @@
 \alias{expect_equal_no_icd}
 \title{expect equal, ignoring any ICD classes}
 \usage{
-expect_equal_no_icd(object, expected, ..., info = NULL, label = NULL,
-  expected.label = NULL)
+expect_equal_no_icd(object, expected, ...)
 }
 \description{
 expect equal, ignoring any ICD classes

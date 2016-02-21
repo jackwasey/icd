@@ -537,12 +537,18 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #'   order to give a more succinct summary.
 #' @examples
 #' \donttest{
-#' icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)[["CHF"]]
+#' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)[["CHF"]]
+#' }
+#' \dontrun{
+#' diff_result2 <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)[["CHF"]]
 #' }
 #' \dontrun{
 #' # show differences for
 #' # give full report on all comorbidities for these mappings
-#' icd_diff_comorbid(elixComorbid, ahrqComorbid)
+#' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)
+#'
+#' # the following would output a summary to the console:
+#' # icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)
 #' }
 #' @return A list, each item of which is another list containing the
 #'   intersections and both asymmetric differences.

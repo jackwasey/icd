@@ -33,7 +33,7 @@ icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, war
 #' @keywords internal
 icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
   # TODO, need to figure out how to use checkmate for my classes. ?extend it
-  assert(checkmate::checkFactor(unclass(x)), checkCharacter(unclass(x)))
+  assert(checkmate::checkFactor(x), checkCharacter(unclass(x)))
   assert_flag(short_code)
   assert(checkmate::checkNull(defined), checkmate::checkFlag(defined))
   assert_flag(warn)
@@ -87,11 +87,11 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
   if (is.null(defined)) {
     if (all(icd_is_defined.icd9(i9w, short_code = TRUE))) {
       defined <- TRUE
-      message("'defined' not given, but all codes are defined, so assuming TRUE")
+      message("'defined' not given, but all codes are indeed defined, so assuming TRUE")
     } else {
       defined <- FALSE
       if (warn)
-        warning("defined not given, but not all codes are defined so assuming FALSE")
+        warning("'defined' not given, but not all codes are defined so assuming FALSE")
     }
   }
 
