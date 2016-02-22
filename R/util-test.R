@@ -83,7 +83,8 @@ expect_equal_no_icd <- function(object, expected, ...) {
 expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
   x <- tolower(x)
   res <- eval(bquote(testthat::expect_true(.(x) %in% tolower(names(ver_chaps)), ...)))
-  if (!res$passed)
+  # new testthat doesn't return a result object, but TRUE
+  if (!isTRUE(res) || (is.list(res) && !res$passed))
     return(res)
 
   eval(bquote(testthat::expect_equal(.(ver_chaps[[which(tolower(names(ver_chaps)) == x)]]),
@@ -112,7 +113,7 @@ expect_icd9_sub_chap_equal <- function(x, start, end, ...) {
 
 expect_icd9_major_equals <- function(x, code, ...) {
   res <- eval(bquote(expect_true(.(x) %in% names(icd9_majors), ...)))
-  if (res$passed)
+  if (isTRUE(res) || (is.list(res) && res$passed))
     eval(bquote(expect_equal(icd9_majors[[.(x)]], .(code), ...)))
   else
     res
@@ -120,13 +121,13 @@ expect_icd9_major_equals <- function(x, code, ...) {
 
 expect_icd9_major_is_sub_chap <- function(x, code, ...) {
   res <- eval(bquote(expect_icd9_sub_chap_equal(.(x), start = .(code), end = .(code), ...)))
-  if (res$passed)
+  if (isTRUE(res) || (is.list(res) && res$passed))
     eval(bquote(expect_icd9_major_equals(.(x), .(code), ...)))
   else
     res
 }
 
-chap_missing <- function(ver_chaps, ...) {
+chap_missing_expectation <- function(ver_chaps, ...) {
   function(x) {
     x <- tolower(x)
     lnames <- tolower(names(ver_chaps))
@@ -136,7 +137,7 @@ chap_missing <- function(ver_chaps, ...) {
   }
 }
 
-chap_present <- function(ver_chaps, ...) {
+chap_present_expectation <- function(ver_chaps, ...) {
   function(x) {
     x <- tolower(x)
     lnames <- tolower(names(ver_chaps))
@@ -146,9 +147,21 @@ chap_present <- function(ver_chaps, ...) {
   }
 }
 
+chap_missing <- function(x, ver_chaps, ...) {
+    x <- tolower(x)
+    lnames <- tolower(names(ver_chaps))
+    x %nin% lnames
+}
+
+chap_present <- function(x, ver_chaps, ...) {
+    x <- tolower(x)
+    lnames <- tolower(names(ver_chaps))
+   x %in% lnames
+}
+
 expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
-  eval(bquote(expect_that(.(x), chap_missing(ver_chaps = ver_chaps, ...),
-                          info = info, label = label)))
+  eval(bquote(expect_true(.(chap_missing(x, ver_chaps)),
+                          info = info, label = label, ...)))
 }
 
 expect_icd9_sub_chap_missing <- function(x, ...) {
@@ -170,8 +183,8 @@ expect_icd10_chap_missing <- function(x, ...) {
 #' expect that a chapter with given title exists, case-insensitive
 #' @keywords internal
 expect_chap_present <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
-  eval(bquote(expect_that(.(x), chap_present(ver_chaps = ver_chaps, ...),
-                          info = info, label = label)))
+  eval(bquote(expect_true(.(chap_present(x, ver_chaps = ver_chaps)), 
+                          info = info, label = label, ...)))
 }
 
 #' @rdname expect_chap_present
@@ -201,7 +214,7 @@ expect_icd10_chap_present <- function(x, ...) {
 
 expect_icd9_only_chap <- function(x, ...) {
   res <- eval(bquote(expect_icd9_chap_present(.(x), ...)))
-  if (res$passed)
+  if (isTRUE(res) || (is.list(res) && res$passed))
     eval(bquote(expect_icd9_sub_chap_missing(.(x), ...)))
   else
     res
@@ -209,7 +222,7 @@ expect_icd9_only_chap <- function(x, ...) {
 
 expect_icd9_only_sub_chap <- function(x, info = NULL, label = NULL, ...) {
   res <- eval(bquote(expect_icd9_sub_chap_present(.(x), info = info, label = label, ...)))
-  if (res$passed)
+  if (isTRUE(res) || (is.list(res) && res$passed))
     eval(bquote(expect_icd9_chap_missing(.(x), info = info, label = label, ...)))
   else
     res
@@ -217,7 +230,7 @@ expect_icd9_only_sub_chap <- function(x, info = NULL, label = NULL, ...) {
 
 expect_icd10_only_chap <- function(x, ...) {
   res <- eval(bquote(expect_icd10_chap_present(.(x), ...)))
-  if (res$passed)
+  if (isTRUE(res) || (is.list(res) && res$passed))
     eval(bquote(expect_icd10_sub_chap_missing(.(x), ...)))
   else
     res
@@ -225,7 +238,7 @@ expect_icd10_only_chap <- function(x, ...) {
 
 expect_icd10_only_sub_chap <- function(x, ...) {
   res <- eval(bquote(expect_icd10_sub_chap_present(.(x), ...)))
-  if (res$passed)
+  if (isTRUE(res) || (is.list(res) && res$passed))
     eval(bquote(expect_icd10_chap_missing(.(x), ...)))
   else
     res

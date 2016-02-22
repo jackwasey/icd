@@ -36,19 +36,20 @@ test_that("icd10 2016 flat file details are okay", {
   expect_warning(res <- icd10cm_get_all_defined(save_data = FALSE), NA)
   expect_identical(colnames(res), col_names)
 
-  checkmate::expect_character(res$code, any.missing = FALSE)
-  checkmate::expect_logical(res$billable, any.missing = FALSE)
-  checkmate::expect_character(res$short_desc, any.missing = FALSE)
-  checkmate::expect_character(res$long_desc, any.missing = FALSE)
+  # checkmate tests worked well here, but don't work with latest testthat
+  expect_true(is.character(res$code))
+  expect_true(is.logical(res$billable))
+  expect_true(is.character(res$short_desc))
+  expect_true(is.character(res$long_desc))
 
-  checkmate::expect_character(icd::icd10cm2016$code, any.missing = FALSE)
-  checkmate::expect_logical(icd::icd10cm2016$billable, any.missing = FALSE)
-  checkmate::expect_character(icd::icd10cm2016$short_desc, any.missing = FALSE)
-  checkmate::expect_character(icd::icd10cm2016$long_desc, any.missing = FALSE)
+  expect_true(is.character(icd::icd10cm2016$code))
+  expect_true(is.logical(icd::icd10cm2016$billable))
+  expect_true(is.character(icd::icd10cm2016$short_desc))
+  expect_true(is.character(icd::icd10cm2016$long_desc))
 
   for (n in c("three_digit", "major", "sub_chapter", "chapter")) {
-      checkmate::expect_factor(res[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
-      checkmate::expect_factor(icd::icd10cm2016[[n]], empty.levels.ok = FALSE, any.missing = FALSE)
+      expect_true(is.factor(res[[n]]))
+      expect_true(is.factor(icd::icd10cm2016[[n]]))
       expect_identical(levels(res[[n]]), levels(icd::icd10cm2016[[n]]), info = paste("working on ", n))
       expect_identical(res[[n]], icd::icd10cm2016[[n]], info = paste("working on ", n))
   }

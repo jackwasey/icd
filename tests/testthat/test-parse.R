@@ -179,9 +179,9 @@ test_that("RTF extract has no duplicates", {
 
 test_that("mid-level descriptions are in RTF extract", {
   skip_on_no_rtf(test_year)
-  expect_equivalent(rtf["611"], "Other disorders of breast")
-  expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
-  expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
+  expect_identical(rtf[["611"]], "Other disorders of breast")
+  expect_identical(rtf[["611.7"]], "Signs and symptoms in breast")
+  expect_identical(rtf[["611.8"]], "Other specified disorders of breast")
 })
 
 test_that("in rtf we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {

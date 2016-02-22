@@ -272,10 +272,10 @@ test_that("range bugs", {
   expect_equal_no_icd( ("42" %i9s% "042 ")[1], "042")
   expect_true("345" %nin% ("3420 " %i9s% "3449 "))
 
-  expect_equivalent("042.11" %i9da% "042.13", icd9(c("042.11", "042.12", "042.13")))
+  expect_identical("042.11" %i9da% "042.13", icd9(icd_decimal_code(c("042.11", "042.12", "042.13"))))
 
   # no presumption that missing leading zeroes will be missed on output:
-  expect_equivalent("42.11" %i9da% "42.13", icd9(c("042.11", "042.12", "042.13")))
+  expect_equivalent("42.11" %i9da% "42.13", icd9(icd_decimal_code(c("042.11", "042.12", "042.13"))))
 })
 
 test_that("range doesn't include higher level parent github issue #14", {
