@@ -17,7 +17,7 @@
 
 context("deprecated compare ordered long to wide methods")
 
-pts <- random_ordered_patients(5000, 13)
+pts <- generate_random_ordered_pts(5000, 13)
 pts$visitId <- pts$visit_id
 
 test_that("deprecated - ordered and unordered methods on ordered data are identical", {

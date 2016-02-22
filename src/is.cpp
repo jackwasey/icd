@@ -58,6 +58,7 @@ bool icd9IsASingleVE(const char* s) {
 //'   from the start of the string before testing, but no other whitesapce
 //' @param sv vector of strings
 //' @param x const char* of choices of first character to match
+//' @param invert single logical, if TRUE, negates the condition
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert) {

@@ -3,6 +3,10 @@ language: R
 cache: packages
 r: devel
 
+repos:
+ CRAN: https://cran.rstudio.com
+# Rcpp: http://rcppcore.github.io/drat # github ahead and I need the github version
+
 warnings_are_errors: true
 
 # seperate lines seems to mean the whole build is repeated each line
@@ -33,3 +37,4 @@ notifications:
   email:
     on_success: change
     on_failure: change
+

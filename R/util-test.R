@@ -245,21 +245,44 @@ getSlowestTests <- function(n = 5) {
   print(tail(res[order(res$real), "test"], n = n))
 }
 
-generate_random_pts <- function(...)
-  random_ordered_patients(...)
+#' generate random ICD-9 codes
+#' 
+#' @keywords internal
+generate_random_short_icd9 <- function(n = 50000) {
+  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
+}
 
-random_ordered_patients <- function(...) {
-  x <- random_unordered_patients(...)
+#' @rdname generate_random_short_icd9
+#' @keywords internal
+generate_random_decimal_icd9 <- function(n = 50000)
+  paste(
+    round(stats::runif(min = 1, max = 999, n = n)),
+    sample(icd_expand_minor.icd9(""), replace = TRUE, size = n),
+    sep = "."
+  )
+
+#' @rdname generate_random_short_icd9
+#' @keywords internal
+generate_random_pts <- function(...) {
+  generate_random_ordered_pts(...)
+}
+
+#' @rdname generate_random_short_icd9
+#' @keywords internal
+generate_random_ordered_pts <- function(...) {
+  x <- generate_random_unordered_pts(...)
   x[order(x$visit_id), ]
 }
 
-random_unordered_patients <- function(num_patients = 50000, dz_per_patient = 20,
+#' @rdname generate_random_short_icd9
+#' @keywords internal
+generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient = 20,
                                     n = num_patients, np = dz_per_patient) {
   set.seed(1441)
   pts <- round(n / np)
   data.frame(
     visit_id = sample(seq(1, pts), replace = TRUE, size = n),
-    code = c(randomShortIcd9(round(n / 2)), randomShortAhrq(n - round(n / 2))),
+    code = c(generate_random_short_icd9(round(n / 2)), generate_random_short_ahrq_icd9(n - round(n / 2))),
     poa = as.factor(
       sample(x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
              replace = TRUE, size = n)),
@@ -267,20 +290,10 @@ random_unordered_patients <- function(num_patients = 50000, dz_per_patient = 20,
   )
 }
 
-#' generate random short icd9 codes
+#' @rdname generate_random_short_icd9
 #' @keywords internal
-randomShortIcd9 <- function(n = 50000)
-  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
-
-randomShortAhrq <- function(n = 50000)
-  sample(unname(unlist(icd::ahrqComorbid)), size = n, replace = TRUE)
-
-randomDecimalIcd9 <- function(n = 50000)
-  paste(
-    round(stats::runif(min = 1, max = 999, n = n)),
-    sample(icd9ExpandMinor(""), replace = TRUE, size = n),
-    sep = "."
-  )
+generate_random_short_ahrq_icd9 <- function(n = 50000)
+  sample(unname(unlist(icd9_map_ahrq)), size = n, replace = TRUE)
 
 #' generate random strings
 #'

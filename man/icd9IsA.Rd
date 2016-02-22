@@ -20,6 +20,8 @@ icd9_is_e_cpp(sv)
 \item{sv}{vector of strings}
 
 \item{x}{const char* of choices of first character to match}
+
+\item{invert}{single logical, if TRUE, negates the condition}
 }
 \description{
 Current returns a vector of \code{bool} which is not thread safe,

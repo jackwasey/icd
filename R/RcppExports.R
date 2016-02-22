@@ -88,6 +88,7 @@ icd9GetMajorShort <- function(icd9Short) {
 #'   from the start of the string before testing, but no other whitesapce
 #' @param sv vector of strings
 #' @param x const char* of choices of first character to match
+#' @param invert single logical, if TRUE, negates the condition
 #' @keywords internal
 icd9IsA <- function(sv, x, invert) {
     .Call('icd_icd9IsA', PACKAGE = 'icd', sv, x, invert)

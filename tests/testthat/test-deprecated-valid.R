@@ -465,10 +465,10 @@ test_that("deprecated - illable codes are identified", {
 })
 
 test_that("deprecated - test valid alias", {
-  x <- randomDecimalIcd9(200)
+  x <- generate_random_decimal_icd9(200)
   expect_identical(icd9Valid(x, isShort = FALSE), icd9IsValid(x, isShort = FALSE))
 
-  x <- randomShortIcd9(200)
+  x <- generate_random_short_icd9(200)
   expect_identical(icd9Valid(x, isShort = TRUE), icd9IsValid(x, isShort = TRUE))
 
   })

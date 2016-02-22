@@ -17,7 +17,7 @@
 
 context("compare ordered long to wide methods")
 
-pts <- random_ordered_patients(5000, 13)
+pts <- generate_random_ordered_pts(5000, 13)
 
 test_that("ordered and unordered methods on ordered data are identical", {
   agg <- icd_long_to_wide(pts, aggr = TRUE)

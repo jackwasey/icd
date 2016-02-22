@@ -43,10 +43,10 @@ test_that("deprecated - vary everything", {
           options("icd.chunk_size" = chunk_size)
           # ompChunkSize is not currently not set in CPP code
           options("icd.omp_chunk_size" = ompChunkSize)
-          expect_that(
-            icd9ComorbidQuanDeyo(random_unordered_patients(pts, dz_per_patient),
+          expect_error(
+            icd9ComorbidQuanDeyo(generate_random_unordered_pts(pts, dz_per_patient),
                                  isShort = FALSE, applyHierarchy = TRUE),
-            testthat::not(throws_error()),
+            NA,
             info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
                            pts, dz_per_patient, threads, chunk_size)
           )

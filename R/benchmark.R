@@ -58,7 +58,7 @@ benchVaryn <- function(np = 5, threads = 4, chunk_size = 256, omp_chunk_size = 1
   for (n in c(1e0, 1e3, 1e4, 1e5, 1e6)) {
     #for (n in c(1e0, 1e3)) {
     message("n = ", n)
-    pts <- random_ordered_patients(n, np)
+    pts <- generate_random_ordered_pts(n, np)
     res <- microbenchmark::microbenchmark(
       icd9ComorbidShortCpp(pts, icd::icd9_map_ahrq,
                            visitId = get_visit_name(pts),
@@ -147,7 +147,7 @@ otherbench <- function() {
 }
 
 benchLongToWide <- function(n = 10000, np = 7, times = 10) {
-  pts <- random_ordered_patients(n, np)
+  pts <- generate_random_ordered_pts(n, np)
   #   microbenchmark::microbenchmark(icd9LongToWideMatrixByMap(pts),
   #                  icd9LongToWideMatrixAggregate(pts),
   #                  icd9LongToWideMatrixNoAggregate(pts),
@@ -286,8 +286,9 @@ icd9Benchmark <- function() {
   #sprintf wins
   microbenchmark::microbenchmark(times = 500000, sprintf("%s%s", "410", "01"))
   microbenchmark::microbenchmark(times = 500000, paste("410", "01", sep = ""))
-  microbenchmark::microbenchmark(times = 50, trim(randomShortIcd9))
-  microbenchmark::microbenchmark(times = 50, strip(randomShortIcd9))
+  rsicd9 <- generate_random_short_icd9()
+  microbenchmark::microbenchmark(times = 50, trim(rsicd9))
+  microbenchmark::microbenchmark(times = 50, strip(rsicd9))
 
   # initializing empty data frame
   microbenchmark::microbenchmark(data.frame(matrix(ncol = 2, nrow = 100000)))

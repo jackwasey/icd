@@ -34,7 +34,7 @@ test_that("vary everything", {
   # prime numbers
   for (pts in c(0, 1, 3, 31, 1013, 10009)) {
     for (dz_per_patient in c(1, 23)) {
-      rand_pts <- random_unordered_patients(pts, dz_per_patient)
+      rand_pts <- generate_random_unordered_pts(pts, dz_per_patient)
       for (threads in c(1, 5, 9)) {
         for (chunk_size in c(1, 2, 11, 29, 101, 997, 10007)) {
           options("icd.threads" = threads)

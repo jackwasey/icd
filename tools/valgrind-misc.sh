@@ -22,7 +22,7 @@ R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd); pts<-icd
 R -d "valgrind --tool=callgrind --simulate-cache=yes" -e "library(icd); library(microbenchmark); benchVaryn()"
 
 # useful to install first...
-R CMD INSTALL icd9 && R -d "valgrind --tool=callgrind"  -e "library(icd); pts <- icd:::random_ordered_patients(1000, 10); icd:::icd9LongToWideMatrix(pts)"
+R CMD INSTALL icd9 && R -d "valgrind --tool=callgrind"  -e "library(icd); pts <- icd:::generate_random_ordered_pts(1000, 10); icd:::icd9LongToWideMatrix(pts)"
 
 
 # other useful options: --instr-atstart=no
