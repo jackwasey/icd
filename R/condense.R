@@ -33,7 +33,7 @@ icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, war
 #' @keywords internal
 icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
   # TODO, need to figure out how to use checkmate for my classes. ?extend it
-  assert(checkmate::checkFactor(x), checkCharacter(unclass(x)))
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(unclass(x)))
   assert_flag(short_code)
   assert(checkmate::checkNull(defined), checkmate::checkFlag(defined))
   assert_flag(warn)
@@ -72,7 +72,7 @@ icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE, keep_factor_le
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
 icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_levels = FALSE) {
-  #assert(checkmate::checkFactor(x), checkCharacter(x))
+  # TODO validate input
   assert(checkmate::checkNull(defined), checkmate::checkFlag(defined))
   assert_flag(warn)
   assert_flag(keep_factor_levels)
@@ -107,8 +107,8 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
 
   # any major codes are automatically in output (not condensing higher than
   # three digit code) and all their children can be removed from the work list
-  out <- majors <- i9w[areMajor <- icd_is_major.icd9(i9w)]
-  i9w <- i9w[!areMajor]
+  out <- majors <- i9w[are_major <- icd_is_major.icd9(i9w)]
+  i9w <- i9w[!are_major]
   i9w <- i9w[i9w %nin% icd_children.icd9(majors, short_code = TRUE, defined = defined)]
   fout <- c()
   four_digit_parents <- unique(substr(i9w, 0, 4))
@@ -131,8 +131,8 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
   # was annoying.
 
   # set new variable so we don't change the thing we are looping over...
-  majorParents <- unique(icd_get_major.icd9(c(out, fout, i9w), short_code = TRUE))
-  for (mp in majorParents) {
+  major_parents <- unique(icd_get_major.icd9(c(out, fout, i9w), short_code = TRUE))
+  for (mp in major_parents) {
     test_kids <- icd_children.icd9(mp, short_code = TRUE, defined = defined)
     test_kids <- test_kids[nchar(test_kids) < (5 + icd9_is_e(mp))] # we've done these already
     test_kids <- test_kids[-which(test_kids == mp)]

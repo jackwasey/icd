@@ -26,10 +26,10 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
        when there is odd specification of the range in the SAS code.")
   for (i in names(icd::icd9_map_ahrq))
     expect_true(setequal(icd_children.icd9(icd::icd9_map_ahrq[[i]], short_code = TRUE, defined = FALSE),
- icd::icd9_map_ahrq[[i]]),
+                         icd::icd9_map_ahrq[[i]]),
                 info = paste("missing from saved ahrq comorbid (", i, "): ",
                              paste(setdiff(icd_children.icd9(icd::icd9_map_ahrq[[i]], defined = FALSE),
- icd::icd9_map_ahrq[[i]]),
+                                           icd::icd9_map_ahrq[[i]]),
                                    collapse = ", "
                              )
                 )
@@ -592,11 +592,11 @@ test_that("diff comorbid works", {
 })
 
 two_pts_fac <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
-                        icd9 = c("040", "000", "100", "000"),
-                        stringsAsFactors = TRUE)
+                          icd9 = c("040", "000", "100", "000"),
+                          stringsAsFactors = TRUE)
 two_map_fac <- as.list(data.frame("malady" = c("100", "2000"),
-                                "ailment" = c("003", "040"),
-                                stringsAsFactors = TRUE))
+                                  "ailment" = c("003", "040"),
+                                  stringsAsFactors = TRUE))
 
 test_that("comorbid quick test", {
   testres <- icd_comorbid.icd9(two_pts, two_map, return_df = TRUE)

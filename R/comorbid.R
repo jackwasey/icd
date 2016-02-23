@@ -277,7 +277,7 @@ icd_comorbid_common <- function(x,
   visit_was_factor <- is.factor(x[[visit_name]])
 
   if (visit_was_factor)
-    ivLevels <- levels(x[[visit_name]])
+    iv_levels <- levels(x[[visit_name]])
 
   # this may be the slowest step (again, if needed, and many will have character IDs)
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
@@ -303,7 +303,7 @@ icd_comorbid_common <- function(x,
 
   if (return_df) {
     if (visit_was_factor)
-      rownm <- factor_nosort(x = rownames(mat), levels = ivLevels)
+      rownm <- factor_nosort(x = rownames(mat), levels = iv_levels)
     else
       rownm <- rownames(mat)
     df_out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = visit_was_factor)
@@ -540,15 +540,14 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)[["CHF"]]
 #' }
 #' \dontrun{
-#' diff_result2 <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)[["CHF"]]
-#' }
-#' \dontrun{
 #' # show differences for
 #' # give full report on all comorbidities for these mappings
 #' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)
 #'
-#' # the following would output a summary to the console:
-#' # icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)
+#' # the following outputs a summary to the console:
+#' \donttest{
+#' icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)
+#' }
 #' }
 #' @return A list, each item of which is another list containing the
 #'   intersections and both asymmetric differences.

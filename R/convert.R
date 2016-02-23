@@ -95,9 +95,9 @@ icd_wide_to_long <- function(x,
                              icd_labels = NULL,
                              icd_name = "icd_code",
                              icd_regex = c("icd", "diag", "dx_", "dx")) {
-  assertDataFrame(x, min.rows = 1, min.cols = 2)
+  assert_data_frame(x, min.rows = 1, min.cols = 2)
   assert_string(visit_name)
-  assert(checkmate::checkNull(icd_labels), checkCharacter(icd_labels))
+  assert(checkmate::checkNull(icd_labels), checkmate::checkCharacter(icd_labels))
   assert_string(icd_name)
   assert_character(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
 

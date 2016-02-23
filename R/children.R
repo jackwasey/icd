@@ -67,7 +67,7 @@ icd_children.character <- function(x, ...) {
 #' @export
 icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
                          defined = TRUE, billable = FALSE, ...) {
-  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert_flag(short_code)
   assert_flag(defined)
   assert_flag(billable)
@@ -89,7 +89,7 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
 #' @export
 #' @keywords internal
 icd_children.icd10cm <- function(x, short_code = icd_guess_short(x), billable = FALSE, ...) {
-  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert_flag(short_code)
   assert_flag(billable)
   stop("Finding ICD-10 children is not yet implemented.")
