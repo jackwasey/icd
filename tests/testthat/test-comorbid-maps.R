@@ -18,16 +18,18 @@
 context("comorbidity maps")
 
 test_that("try to induce c++ segfault bug", {
-  expect_error(icd_comorbid.icd9(ahrqTestDat, map = icd::icd9_map_ahrq, short_code = TRUE), NA)
+  expect_error(icd_comorbid.icd9(ahrq_test_dat, map = icd::icd9_map_ahrq, short_code = TRUE), NA)
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
   skip("this is not true because we don't fill in EVERY (unreal) possible code
        when there is odd specification of the range in the SAS code.")
   for (i in names(icd::icd9_map_ahrq))
-    expect_true(setequal(icd_children.icd9(icd::icd9_map_ahrq[[i]], short_code = TRUE, defined = FALSE), icd::icd9_map_ahrq[[i]]),
+    expect_true(setequal(icd_children.icd9(icd::icd9_map_ahrq[[i]], short_code = TRUE, defined = FALSE),
+ icd::icd9_map_ahrq[[i]]),
                 info = paste("missing from saved ahrq comorbid (", i, "): ",
-                             paste(setdiff(icd_children.icd9(icd::icd9_map_ahrq[[i]], defined = FALSE), icd::icd9_map_ahrq[[i]]),
+                             paste(setdiff(icd_children.icd9(icd::icd9_map_ahrq[[i]], defined = FALSE),
+ icd::icd9_map_ahrq[[i]]),
                                    collapse = ", "
                              )
                 )
@@ -83,8 +85,6 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 })
 
 test_that("ahrq icd9 mappings generated from the current generation code", {
-  # skip_on_cran()  # apparently this runs of wercker but not travis, presumably
-  # because travis uses --as-cran or equivalent
 
   skip_slow_tests()
 
@@ -104,7 +104,7 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
-              # skip("generating code from SAS is now not distributed in package. Move this test to pre-build test dir. TODO")
+              # TODO: generating code from SAS is now not distributed in package. Move this test to pre-build test dir?
 
               if (is.null(icd9_fetch_quan_deyo_sas(offline = TRUE, allow_missing = TRUE)))
                 skip_online_tests("data-raw/ICD9_E_Charlson.sas not available.")
@@ -143,28 +143,28 @@ test_that("can condense the big lists of comorbidities without errors", {
   skip_on_cran()
   skip_slow_tests()
 
-  for (onlyReal in c(TRUE, FALSE)) {
-    if (onlyReal) {
-      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
-      expect_warning(quanDeyo <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
-      expect_warning(quanElix <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = onlyReal))
-      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, defined = onlyReal))
+  for (defined_codes in c(TRUE, FALSE)) {
+    if (defined_codes) {
+      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(qe <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, defined = defined_codes))
     }
     else {
-      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
-      expect_warning(quanDeyo <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
-      expect_warning(quanElix <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
-      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, short_code = TRUE, defined = onlyReal), NA)
+      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = defined_codes), NA)
+      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = defined_codes), NA)
+      expect_warning(qe <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), NA)
+      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), NA)
     }
 
     expect_is(ahrq, class = "list")
     expect_is(elix, class = "list")
-    expect_is(quanDeyo, class = "list")
-    expect_is(quanElix, class = "list")
+    expect_is(qd, class = "list")
+    expect_is(qe, class = "list")
     # the comorbidity mappings save in \code{data} should not be condensed.
     expect_false(isTRUE(all.equal(ahrq, icd::icd9_map_ahrq)))
-    expect_false(isTRUE(all.equal(quanDeyo, icd::icd9_map_quan_deyo)))
-    expect_false(isTRUE(all.equal(quanElix, icd::icd9_map_quan_elix)))
+    expect_false(isTRUE(all.equal(qd, icd::icd9_map_quan_deyo)))
+    expect_false(isTRUE(all.equal(qe, icd::icd9_map_quan_elix)))
     expect_false(isTRUE(all.equal(elix, icd::icd9_map_elix)))
   }
 })
@@ -181,7 +181,7 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
 })
 
 test_that("Charlson Deyo doesn't double count disease with two severities", {
-  expect_false(any(icd9_map_quan_deyo$LiverMild %in% icd9_map_quan_deyo$LiverSevere))
+  expect_false(any(icd9_map_quan_deyo[["LiverMild"]] %in% icd9_map_quan_deyo[["LiverSevere"]]))
   expect_false(any(icd9_map_quan_deyo$Cancer %in% icd9_map_quan_deyo$Mets))
   expect_false(any(icd9_map_quan_deyo$DM %in% icd9_map_quan_deyo$DMcx))
 })
@@ -191,10 +191,10 @@ test_that("Elixhauser doesn't double count disease with multiple severities", {
                      icd::icd9_map_quan_elix[["DMcx"]] ))
   expect_false(any(icd::icd9_map_quan_elix[["Tumor"]] %in%
                      icd::icd9_map_quan_elix[["Mets"]] ))
-  expect_false(any(elixComorbid[["DM"]] %in%
-                     elixComorbid[["DMcx"]] ))
-  expect_false(any(elixComorbid[["Tumor"]] %in%
-                     elixComorbid[["Mets"]] ))
+  expect_false(any(icd9_map_elix[["DM"]] %in%
+                     icd9_map_elix[["DMcx"]] ))
+  expect_false(any(icd9_map_elix[["Tumor"]] %in%
+                     icd9_map_elix[["Mets"]] ))
   expect_false(any(icd::icd9_map_ahrq[["DM"]] %in% icd::icd9_map_ahrq[["DMcx"]] ))
   expect_false(any(icd::icd9_map_ahrq[["Tumor"]] %in% icd::icd9_map_ahrq[["Mets"]] ))
 })
@@ -235,22 +235,22 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   #   "34540"-"34591",
   #   "34700"-"34701",
   #   "34710"-"34711",
-  expect_true("3337" %in% icd::icd9_map_ahrq$NeuroOther) # single value
-  expect_true("33371" %in% icd::icd9_map_ahrq$NeuroOther) # single value sub-code - zero not defined in 2015
+  expect_true("3337" %in% icd::icd9_map_ahrq[["NeuroOther"]]) # single value
+  expect_true("33371" %in% icd::icd9_map_ahrq[["NeuroOther"]]) # single value sub-code - zero not defined in 2015
   expect_true("494" %in% icd::icd9_map_ahrq$Pulmonary) # top-level at start of range
   expect_true("4940" %in% icd::icd9_map_ahrq$Pulmonary) # value within range
   expect_true("49400" %in% icd::icd9_map_ahrq$Pulmonary) # sub-value within range
-  expect_true("3450" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("34500" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("3451" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("34511" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("34519" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("3452" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("34529" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("3453" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("34539" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("3459" %in% icd::icd9_map_ahrq$NeuroOther)
-  expect_true("34599" %in% icd::icd9_map_ahrq$NeuroOther) # by implication
+  expect_true("3450" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("34500" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("3451" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("34511" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("34519" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("3452" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("34529" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("3453" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("34539" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("3459" %in% icd::icd9_map_ahrq[["NeuroOther"]])
+  expect_true("34599" %in% icd::icd9_map_ahrq[["NeuroOther"]]) # by implication
   #   "490  "-"4928 ",
   #   "49300"-"49392", # this is all of asthma
   #   "494  "-"4941 ", # bronchiectasis is just 494, 4940 and 4941
@@ -478,19 +478,19 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
 test_that("ICD-9 codes from SAS source for Quan Deyo Charlson exist", {
   # Quan Deyo Charlson
   # top level single value
-  expect_true("410" %in% quanDeyoComorbid$MI)
+  expect_true("410" %in% icd9_map_quan_deyo$MI)
   # this is not included (410 and 412 defined)
-  expect_false("411" %in% quanDeyoComorbid$MI)
+  expect_false("411" %in% icd9_map_quan_deyo$MI)
   # this is not included (410 and 412 defined)
-  expect_false("41199" %in% quanDeyoComorbid$MI)
+  expect_false("41199" %in% icd9_map_quan_deyo$MI)
   # midlevel value, not from range
-  expect_true("4100" %in% quanDeyoComorbid$MI)
+  expect_true("4100" %in% icd9_map_quan_deyo$MI)
   # lower-level value, not from range
-  expect_true("41001" %in% quanDeyoComorbid$MI)
+  expect_true("41001" %in% icd9_map_quan_deyo$MI)
   # midlevel definition
-  expect_true("2504" %in% quanDeyoComorbid$DMcx)
+  expect_true("2504" %in% icd9_map_quan_deyo$DMcx)
   # midlevel definition lower-level code
-  expect_true("25041" %in% quanDeyoComorbid$DMcx)
+  expect_true("25041" %in% icd9_map_quan_deyo$DMcx)
 
 })
 
@@ -502,18 +502,18 @@ test_that("sample of ICD-9 codes from manually specified Quan Elix mapping exist
   expect_true("2500" %in% icd::icd9_map_quan_elix$DM)
   expect_true("2501" %in% icd::icd9_map_quan_elix$DM)
   expect_true("25011" %in% icd::icd9_map_quan_elix$DM)
-  expect_true("276" %in% icd::icd9_map_quan_elix$FluidsLytes)
-  expect_true("2761" %in% icd::icd9_map_quan_elix$FluidsLytes)
-  expect_true("27612" %in% icd::icd9_map_quan_elix$FluidsLytes)
+  expect_true("276" %in% icd::icd9_map_quan_elix[["FluidsLytes"]])
+  expect_true("2761" %in% icd::icd9_map_quan_elix[["FluidsLytes"]])
+  expect_true("27612" %in% icd::icd9_map_quan_elix[["FluidsLytes"]])
   # top level should not be included automatically
-  expect_false("710" %in% icd::icd9_map_quan_elix$FluidsLytes)
+  expect_false("710" %in% icd::icd9_map_quan_elix[["FluidsLytes"]])
 })
 
 test_that("sample of ICD-9 codes from manually specified Elixhauser mapping exist", {
-  expect_true("09320" %in% elixComorbid$Valvular)
-  expect_true("3971" %in% elixComorbid$Valvular)
-  expect_true("V560" %in% elixComorbid$Renal)
-  expect_true("V1090" %in% elixComorbid$Tumor) # child at end of a V range
+  expect_true("09320" %in% icd9_map_elix$Valvular)
+  expect_true("3971" %in% icd9_map_elix$Valvular)
+  expect_true("V560" %in% icd9_map_elix$Renal)
+  expect_true("V1090" %in% icd9_map_elix$Tumor) # child at end of a V range
 })
 
 test_that("github #34 - short and long custom map give different results", {
@@ -565,7 +565,7 @@ test_that("diff comorbid works", {
   # TODO: should be testing correct dispatch here, too, since map is a different class.
   expect_warning(
     utils::capture.output(
-      res <- icd_diff_comorbid(icd::icd9_map_ahrq, elixComorbid, show = FALSE)
+      res <- icd_diff_comorbid(icd::icd9_map_ahrq, icd9_map_elix, show = FALSE)
     ),
     NA)
 
@@ -591,10 +591,10 @@ test_that("diff comorbid works", {
     ), NA)
 })
 
-two_ptsFac <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
+two_pts_fac <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
                         icd9 = c("040", "000", "100", "000"),
                         stringsAsFactors = TRUE)
-two_mapFac <- as.list(data.frame("malady" = c("100", "2000"),
+two_map_fac <- as.list(data.frame("malady" = c("100", "2000"),
                                 "ailment" = c("003", "040"),
                                 stringsAsFactors = TRUE))
 
@@ -611,19 +611,19 @@ test_that("comorbid quick test", {
                     dimnames = list(c("v01", "v02"), c("malady", "ailment")))
   expect_equal(testmat, truemat)
 
-  testresfac <- icd_comorbid.icd9(two_ptsFac, two_mapFac, return_df = TRUE)
+  testresfac <- icd_comorbid.icd9(two_pts_fac, two_map_fac, return_df = TRUE)
   trueresfac <- data.frame("visit_id" = c("v01", "v02"),
                            "malady" = c(FALSE, TRUE),
                            "ailment" = c(TRUE, FALSE),
                            stringsAsFactors = TRUE)
   expect_equal(testresfac, trueresfac)
-  expect_equal(icd_comorbid.icd9(two_ptsFac, two_mapFac), truemat)
+  expect_equal(icd_comorbid.icd9(two_pts_fac, two_map_fac), truemat)
 
 })
 
 test_that("control params don't affect result of comorbid calc", {
   pts <- generate_random_pts(101, 13)
-  pts$visit_id <- asCharacterNoWarn(pts$visit_id)
+  pts$visit_id <- as_char_no_warn(pts$visit_id)
   pts$code %<>% as.factor
   upts <- length(unique(pts$visit_id))
   ac <-  lapply(icd::icd9_map_ahrq, function(x) {
@@ -697,7 +697,7 @@ test_that("disordered visit_ids works by default", {
 test_that("comorbidities created from source data frame coded as factors", {
   v2 <- icd_wide_to_long(vermont_dx) # TODO: correct S3 method?
   v2$visit_id <- as.factor(v2$visit_id)
-  v2$icdCode <- as.factor(v2$icdCode)
+  v2$icd_code <- as.factor(v2$icd_code)
 
   res <- icd_comorbid_ahrq.icd9(v2)
   res_nofactor <- vermont_dx %>% icd_wide_to_long %>% icd_comorbid_ahrq.icd9

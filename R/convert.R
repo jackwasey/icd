@@ -77,7 +77,7 @@ icd9_chapters_to_map <- function(x) {
 #' @param icd_labels vector of column names in which codes are found. If NULL,
 #'   all columns matching icd or ICD will be included.
 #' @param icd_name character vector length one containing the new column name for
-#'   the ICD codes, defaults to "icdCode"
+#'   the ICD codes, defaults to "icd_code"
 #' @param icd_regex vector of character strings containg a regex to identify ICD-9 diagnosis
 #'   columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}
 #' @return data frame with visit_name column named the same as input, and a column
@@ -93,7 +93,7 @@ icd9_chapters_to_map <- function(x) {
 icd_wide_to_long <- function(x,
                              visit_name = get_visit_name(x),
                              icd_labels = NULL,
-                             icd_name = "icdCode",
+                             icd_name = "icd_code",
                              icd_regex = c("icd", "diag", "dx_", "dx")) {
   assertDataFrame(x, min.rows = 1, min.cols = 2)
   assert_string(visit_name)
@@ -123,7 +123,7 @@ icd_wide_to_long <- function(x,
                         v.names = icd_name)
 
   res <- res[!is.na(res[[icd_name]]), ]
-  res <- res[nchar(asCharacterNoWarn(res[[icd_name]])) > 0, ]
+  res <- res[nchar(as_char_no_warn(res[[icd_name]])) > 0, ]
   res <- res[order(res[[visit_name]]), ]
   rownames(res) <- NULL
   res
@@ -176,8 +176,8 @@ icd_long_to_wide <- function(x,
   # we're now going to return a matrix
   icd9VisitWasFactor <- is.factor(x[[visit_name]])
   if (icd9VisitWasFactor) ivLevels <- levels(x[[visit_name]])
-  x[[visit_name]] <- asCharacterNoWarn(x[[visit_name]])
-  x[[icd_name]] <- asCharacterNoWarn(x[[icd_name]])
+  x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
+  x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
   if (return_df) {
     mat <- icd9LongToWideCpp(x, visit_name, icd_name, aggr)
     if (icd9VisitWasFactor)

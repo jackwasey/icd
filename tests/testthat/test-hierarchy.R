@@ -41,7 +41,7 @@ test_that("codes and descriptions are valid and unique", {
 })
 
 test_that("some chapters are correct", {
-  chaps <- icd::icd9cm_hierarchy$chapter %>% asCharacterNoWarn
+  chaps <- icd::icd9cm_hierarchy$chapter %>% as_char_no_warn
   codes <- icd::icd9cm_hierarchy[["code"]]
   # first and last rows (E codes should be last)
   expect_equal(chaps[1], "Infectious And Parasitic Diseases")
@@ -59,7 +59,7 @@ test_that("some chapters are correct", {
 })
 
 test_that("some subchapters are correct", {
-  subchaps <- icd::icd9cm_hierarchy$sub_chapter %>% asCharacterNoWarn
+  subchaps <- icd::icd9cm_hierarchy$sub_chapter %>% as_char_no_warn
   codes <- icd::icd9cm_hierarchy[["code"]]
 
   # first and last
@@ -78,7 +78,7 @@ test_that("some subchapters are correct", {
 
 test_that("some randomly selected rows are correct", {
   expect_equal(
-    icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] == "5060", ]  %>% sapply(asCharacterNoWarn) %>% unname,
+    icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] == "5060", ]  %>% sapply(as_char_no_warn) %>% unname,
     c("5060", "Fum/vapor bronc/pneumon", "Bronchitis and pneumonitis due to fumes and vapors",
       "506", "Respiratory conditions due to chemical fumes and vapors",
       "Pneumoconioses And Other Lung Diseases Due To External Agents",

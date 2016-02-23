@@ -69,7 +69,7 @@ icd_explain.list <- function(x,  short_code = icd_guess_short(x),
 #' @export
 icd_explain.factor <- function(icd9, short_code = icd_guess_short(icd9),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...)
-  icd_explain.character(asCharacterNoWarn(icd9), short_code = short_code,
+  icd_explain.character(as_char_no_warn(icd9), short_code = short_code,
                         condense = condense, brief = brief, warn = warn)
 
 #' @describeIn icd_explain explain character vector of ICD-9 codes. TODO: actually, this is ICD-9-CM
@@ -149,7 +149,7 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(x),
   # matches.
   assert(checkmate::checkCharacter(unclass(x)), checkmate::checkFactor(unclass(x)))
   assert_flag(short_code)
-  icd9 <- asCharacterNoWarn(x)
+  icd9 <- as_char_no_warn(x)
   majors <- icd_get_major.icd9(icd9, short_code)
 
   # could consider factor_nosort, but this isn't the main bottleneck

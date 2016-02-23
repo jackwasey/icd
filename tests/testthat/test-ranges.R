@@ -142,7 +142,7 @@ test_that("expand icd9 range definition", {
   expect_error(icd_expand_range(short_code = TRUE, c("10", "20"), c("11", "21")))
 
   # found bugs when expanding Injury and Poisoning chapter.
-  expect_that(icd_expand_range(short_code = TRUE, "997", "998"), testthat::not(throws_error()))
+  expect_error(icd_expand_range(short_code = TRUE, "997", "998"), NA)
   expect_false("999" %in% icd_expand_range(short_code = TRUE, "998", "998", defined = FALSE))
   expect_false("009" %in% icd_expand_range(short_code = TRUE, "8", "8", defined = FALSE))
 

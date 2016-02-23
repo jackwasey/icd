@@ -258,7 +258,7 @@ icd_comorbid_common <- function(x,
   if (!short_code)
     x[[icd_name]] <- icd_decimal_to_short(x[[icd_name]])
 
-  map <- lapply(map, asCharacterNoWarn)
+  map <- lapply(map, as_char_no_warn)
 
   if (!short_map)
     map <- lapply(map, icd_decimal_to_short)
@@ -280,7 +280,7 @@ icd_comorbid_common <- function(x,
     ivLevels <- levels(x[[visit_name]])
 
   # this may be the slowest step (again, if needed, and many will have character IDs)
-  x[[visit_name]] <- asCharacterNoWarn(x[[visit_name]])
+  x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
 
   # again, R is very fast at creating factors from a known set of levels
   icd_levels <- levels(x[[icd_name]])

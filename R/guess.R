@@ -59,7 +59,7 @@ icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L) {
   if (is.icd_decimal_code(x))
     return(FALSE)
   if (is.list(x)) x <- unlist(x, recursive = TRUE)
-  x <- asCharacterNoWarn(x)
+  x <- as_char_no_warn(x)
   testend <- min(length(x), test_n)
   vs <- icd9_is_valid_short(x[1:testend])
   vd <- icd9_is_valid_decimal(x[1:testend])
@@ -112,7 +112,7 @@ icd_guess_version.icd10 <- function(x, short_code, ...) "icd10" #nocov
 #' @export
 #' @keywords internal
 icd_guess_version.factor <- function(x, short_code = NULL, ...) {
-  icd_guess_version.character(asCharacterNoWarn(x), short_code = short_code, ...)
+  icd_guess_version.character(as_char_no_warn(x), short_code = short_code, ...)
 }
 
 #' @describeIn icd_guess_version Guess version of ICD codes in character vector
@@ -161,8 +161,8 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
 #' @keywords internal
 #' @export
 icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_icd_name(x), ...) {
-  assertDataFrame(x)
-  icd_guess_version.character(asCharacterNoWarn(x[[icd_name]]))
+  assert_data_frame(x)
+  icd_guess_version.character(as_char_no_warn(x[[icd_name]]))
 }
 
 #' @title Guess version of ICD and update class
@@ -199,7 +199,7 @@ icd_guess_both <- function(x, short_code = NULL) {
 #' @describeIn icd_guess_both default method which converts input to character
 #' @keywords internal
 icd_guess_both.default <- function(x, short_code = NULL) {
-  x <- asCharacterNoWarn(x)
+  x <- as_char_no_warn(x)
   ver <- icd_guess_version.character(x)
   class(x) <- append(ver, class(x))
   # now i've set the version I think it is, dispatch on this class to get short vs decimal

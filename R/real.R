@@ -51,10 +51,10 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
     x <- icd_decimal_to_short.icd9(x)
 
   if (billable)
-    icd9cm_is_billable.icd_short_code(asCharacterNoWarn(x))
+    icd9cm_is_billable.icd_short_code(as_char_no_warn(x))
   else
     icd9_add_leading_zeroes.icd_short_code(
-      asCharacterNoWarn(x)) %in% icd::icd9cm_hierarchy[["code"]]
+      as_char_no_warn(x)) %in% icd::icd9cm_hierarchy[["code"]]
 }
 
 #' @describeIn icd_is_defined Same for ICD-10-CM

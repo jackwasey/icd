@@ -253,9 +253,9 @@ icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {
     return(logical())
 
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_decimal)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_decimal)) %>% na_to_false
 }
 
 icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
@@ -276,50 +276,50 @@ icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
   # requirements than a string because of leading zeroes.
 
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_short)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_short)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_short)) %>% na_to_false
   }
 
 icd9_is_valid_short_n <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_n)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_short_n)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_short_n)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_short_n)) %>% na_to_false
 }
 
 icd9_is_valid_short_v <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_v)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_short_v)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_short_v)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_short_v)) %>% na_to_false
 }
 
 icd9_is_valid_short_e <- function(x, whitespace_ok = TRUE){
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_short_e)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_short_e)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_short_e)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_short_e)) %>% na_to_false
 }
 
 icd9_is_valid_decimal_n <- function(x, whitespace_ok = TRUE) {
   assert(checkmate::checkFactor(x), checkCharacter(x))
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_n)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal_n)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_decimal_n)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_decimal_n)) %>% na_to_false
 }
 
 icd9_is_valid_decimal_v <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_v)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal_v)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_decimal_v)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_decimal_v)) %>% na_to_false
 }
 
 icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
@@ -329,9 +329,9 @@ icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
   #trim(x), perl = TRUE)
   assert(checkmate::checkFactor(x), checkCharacter(x))
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_decimal_e)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal_e)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_decimal_e)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_decimal_e)) %>% na_to_false
 }
 
 #' @title Test whether an ICD code is major
@@ -359,9 +359,9 @@ icd_is_valid_major.default <- function(x, whitespace_ok = TRUE) {
 icd_is_valid_major.icd9 <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_major)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major_bare)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_major_bare)) %>% na_to_false
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
@@ -370,9 +370,9 @@ icd_is_valid_major.icd9 <- function(x, whitespace_ok = TRUE) {
 icd_is_valid_major.icd10 <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just(re_icd10_major)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd10_major)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd10_major_bare)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd10_major_bare)) %>% na_to_false
 }
 
 #' @rdname icd_is_valid_major
@@ -380,9 +380,9 @@ icd_is_valid_major.icd10 <- function(x, whitespace_ok = TRUE) {
 icd9_is_valid_major_n <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_n)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_major_n)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major_n)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_major_n)) %>% na_to_false
 }
 
 #' @rdname icd_is_valid_major
@@ -390,18 +390,18 @@ icd9_is_valid_major_n <- function(x, whitespace_ok = TRUE) {
 icd9_is_valid_major_v <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_v)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_major_v)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major_v)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_major_v)) %>% na_to_false
   }
 #' @rdname icd_is_valid_major
 #' @keywords internal
 icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   if (whitespace_ok)
-    str_detect(asCharacterNoWarn(x), re_just_ws(re_icd9_major_e)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just_ws(re_icd9_major_e)) %>% na_to_false
   else
-    str_detect(asCharacterNoWarn(x), re_just(re_icd9_major_e)) %>% na_to_false
+    str_detect(as_char_no_warn(x), re_just(re_icd9_major_e)) %>% na_to_false
 }
 
 #' @describeIn icd_is_valid Validate an icd9 mapping to comorbidities
@@ -576,22 +576,22 @@ icd_is_major.icd9 <- function(x) {
 #' @return logical vector
 #' @export
 icd9_is_n <- function(x) {
-  # icd9IsA(asCharacterNoWarn(x), "VEve", TRUE)
-  icd9_is_n_cpp(asCharacterNoWarn(x))
+  # icd9IsA(as_char_no_warn(x), "VEve", TRUE)
+  icd9_is_n_cpp(as_char_no_warn(x))
 }
 
 #' @describeIn icd9_is_n are the given codes V type?
 #' @export
 icd9_is_v <- function(x) {
-  icd9_is_v_cpp(asCharacterNoWarn(x))
-  #icd9IsA(asCharacterNoWarn(x), "Vv", FALSE)
+  icd9_is_v_cpp(as_char_no_warn(x))
+  #icd9IsA(as_char_no_warn(x), "Vv", FALSE)
 }
 
 #' @describeIn icd9_is_n are the given codes E type?
 #' @export
 icd9_is_e <- function(x) {
-  icd9_is_e_cpp(asCharacterNoWarn(x))
-  #icd9IsA(asCharacterNoWarn(x), "Ee", FALSE)
+  icd9_is_e_cpp(as_char_no_warn(x))
+  #icd9IsA(as_char_no_warn(x), "Ee", FALSE)
 }
 
 warnNumericCode <- function()

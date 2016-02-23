@@ -254,7 +254,7 @@ icd9RandomShort <- function(n = 5L) {
 #'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
 #'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
 #'                                as.character(pts$visit_id),
-#'                                asCharacterNoWarn(pts$visit_id), times = 5)
+#'                                as_char_no_warn(pts$visit_id), times = 5)
 #' }
 #' @keywords internal
 fastIntToStringStd <- function(x) {

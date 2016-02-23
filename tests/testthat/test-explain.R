@@ -36,12 +36,12 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 
 test_that("github issue #41", {
   expect_equal(
-    icd_explain.icd9(icd_get_defined.icd9(quanDeyoComorbid[["Dementia"]]), condense = TRUE),
-    icd_explain.icd9(quanDeyoComorbid[["Dementia"]], condense = TRUE, warn = FALSE)
+    icd_explain.icd9(icd_get_defined.icd9(icd9_map_quan_deyo[["Dementia"]]), condense = TRUE),
+    icd_explain.icd9(icd9_map_quan_deyo[["Dementia"]], condense = TRUE, warn = FALSE)
   )
   expect_equal(
-    icd_explain.icd9(icd_get_defined(quanDeyoComorbid[["Dementia"]]), condense = FALSE),
-    icd_explain.icd9(quanDeyoComorbid[["Dementia"]], condense = FALSE)
+    icd_explain.icd9(icd_get_defined(icd9_map_quan_deyo[["Dementia"]]), condense = FALSE),
+    icd_explain.icd9(icd9_map_quan_deyo[["Dementia"]], condense = FALSE)
   )
 })
 
@@ -126,24 +126,24 @@ test_that("extract top-level codes from the RTF gives the complete list", {
   # all valid major form.
 
   # format of each hierarchy level:
-  expect_equal(names(icd9Chapters[[1]]), c("start", "end"))
-  expect_equal(names(icd9ChaptersSub[[1]]), c("start", "end"))
+  expect_equal(names(icd9_chapters[[1]]), c("start", "end"))
+  expect_equal(names(icd9_sub_chapters[[1]]), c("start", "end"))
   # should be no NA values
-  expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE = "", 1))))
-  expect_true(all(!is.na(vapply(icd9Chapters, "[[", FUN.VALUE = "", 2))))
-  expect_true(all(!is.na(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 1))))
-  expect_true(all(!is.na(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 2))))
+  expect_true(all(!is.na(vapply(icd9_chapters, "[[", FUN.VALUE = "", 1))))
+  expect_true(all(!is.na(vapply(icd9_chapters, "[[", FUN.VALUE = "", 2))))
+  expect_true(all(!is.na(vapply(icd9_sub_chapters, "[[", FUN.VALUE = "", 1))))
+  expect_true(all(!is.na(vapply(icd9_sub_chapters, "[[", FUN.VALUE = "", 2))))
   expect_true(all(!is.na(vapply(icd9_majors, "[[", FUN.VALUE = "", 1))))
 
   # all the range limits and majors should be valid majors
   expect_true(
-    all(icd_is_valid_major.icd9(vapply(icd9Chapters, "[[", FUN.VALUE = "", 1))))
+    all(icd_is_valid_major.icd9(vapply(icd9_chapters, "[[", FUN.VALUE = "", 1))))
   expect_true(
-    all(icd_is_valid_major.icd9(vapply(icd9Chapters, "[[", FUN.VALUE = "", 2))))
+    all(icd_is_valid_major.icd9(vapply(icd9_chapters, "[[", FUN.VALUE = "", 2))))
   expect_true(
-    all(icd_is_valid_major.icd9(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 1))))
+    all(icd_is_valid_major.icd9(vapply(icd9_sub_chapters, "[[", FUN.VALUE = "", 1))))
   expect_true(
-    all(icd_is_valid_major.icd9(vapply(icd9ChaptersSub, "[[", FUN.VALUE = "", 2))))
+    all(icd_is_valid_major.icd9(vapply(icd9_sub_chapters, "[[", FUN.VALUE = "", 2))))
   expect_true(
     all(icd_is_valid_major.icd9(vapply(icd9_majors, "[[", FUN.VALUE = "", 1))))
 })
@@ -221,18 +221,18 @@ test_that("explain icd9GetChapters simple input", {
   expect_is(chaps2$major, "factor")
   expect_is(chaps2$sub_chapter, "factor")
   expect_is(chaps2$chapter, "factor")
-  expect_equal(asCharacterNoWarn(chaps2$three_digit), NA_character_)
-  expect_equal(asCharacterNoWarn(chaps2$major), NA_character_)
-  expect_equal(asCharacterNoWarn(chaps2$sub_chapter), NA_character_)
-  expect_equal(asCharacterNoWarn(chaps2$chapter), NA_character_)
+  expect_equal(as_char_no_warn(chaps2$three_digit), NA_character_)
+  expect_equal(as_char_no_warn(chaps2$major), NA_character_)
+  expect_equal(as_char_no_warn(chaps2$sub_chapter), NA_character_)
+  expect_equal(as_char_no_warn(chaps2$chapter), NA_character_)
 
   chaps3 <- icd9_get_chapters("417", short_code = FALSE)
-  expect_equal(asCharacterNoWarn(chaps3$three_digit), "417")
-  expect_equal(asCharacterNoWarn(chaps3$major),
+  expect_equal(as_char_no_warn(chaps3$three_digit), "417")
+  expect_equal(as_char_no_warn(chaps3$major),
                "Other diseases of pulmonary circulation")
-  expect_equal(asCharacterNoWarn(chaps3$sub_chapter),
+  expect_equal(as_char_no_warn(chaps3$sub_chapter),
                "Diseases Of Pulmonary Circulation")
-  expect_equal(asCharacterNoWarn(chaps3$chapter),
+  expect_equal(as_char_no_warn(chaps3$chapter),
                "Diseases Of The Circulatory System")
 
   chaps4 <- icd9_get_chapters("417", short_code = TRUE)

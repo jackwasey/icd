@@ -81,7 +81,7 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
   # we can convert back to factor later. Lots of scope for errors by handling
   # factors and character vectors in this function, so keep simple with
   # character only.
-  x <- asCharacterNoWarn(x)
+  x <- as_char_no_warn(x)
   i9w <- unique(icd_get_valid.icd9(x, short_code = TRUE))
 
   if (is.null(defined)) {

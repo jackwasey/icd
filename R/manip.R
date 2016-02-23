@@ -26,7 +26,7 @@ icd9_extract_alpha_numeric <- function(x) {
   assert(checkmate::checkFactor(x), checkCharacter(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
-  asCharacterNoWarn(x) %>%
+  as_char_no_warn(x) %>%
     str_match_all(pattern = "([VvEe]?)([[:digit:].]+)") %>%
     vapply(FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
            FUN.VALUE = c(NA_character_, NA_character_)) %>% t
@@ -57,7 +57,7 @@ icd9_add_leading_zeroes <- function(x, short_code = NULL) {
 icd9_drop_leading_zeroes.icd_decimal_code <- function(x, short_code = NULL) {
   assert(checkmate::checkFactor(x), checkCharacter(x))
   assertNull(short_code)
-  x %>% asCharacterNoWarn %>% str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3")
+  x %>% as_char_no_warn %>% str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3")
 }
 
 #' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a short format ICD-9 code
@@ -75,7 +75,7 @@ icd9_drop_leading_zeroes.icd_short_code <- function(x, short_code = NULL) {
 #' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from ICD-9 codes of
 #'   specified or unknown type.
 icd9_drop_leading_zeroes.default <- function(x, short_code = NULL) {
-  x <- asCharacterNoWarn(x)
+  x <- as_char_no_warn(x)
   x <- icd_guess_short_update(x, short_code = short_code)
   icd9_drop_leading_zeroes(x)
 }

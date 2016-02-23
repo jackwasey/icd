@@ -161,22 +161,22 @@ test_that("running short to decimal conversion before and after expansion
 
             n <- 50
             set.seed(1441)
-            randomDecimalIcd9pad <- paste(
+            rd9pad <- paste(
               sprintf("%03d", round(stats::runif(min = 1, max = 199, n = n))),
               sample(icd_expand_minor.icd9("", is_e = FALSE), replace = TRUE, size = n)[-1],
               sep = "."
             )
             set.seed(1441)
-            randomDecimalIcd9 <- paste(
+            rd9 <- paste(
               sprintf("%d", round(stats::runif(min = 1, max = 199, n = n))),
               sample(icd_expand_minor.icd9("", is_e = FALSE), replace = TRUE, size = n)[-1],
               sep = "."
             )
-            randomDecimalIcd9pad <- sub(pattern = "\\.$", replacement = "",
-                                        randomDecimalIcd9pad)
+            rd9pad <- sub(pattern = "\\.$", replacement = "",
+                                        rd9pad)
             expect_equal_no_icd(
-              icd_short_to_decimal.icd9(icd_decimal_to_short.icd9(randomDecimalIcd9)),
-              randomDecimalIcd9pad
+              icd_short_to_decimal.icd9(icd_decimal_to_short.icd9(rd9)),
+              rd9pad
             )
             # test without decimal, too... starting with non-zero-spaced shorts
             set.seed(1441)

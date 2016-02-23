@@ -42,7 +42,7 @@ trim <- function(x) {
   x
 }
 
-asCharacterNoWarn <- function(x) {
+as_char_no_warn <- function(x) {
   if (is.character(x)) return(x)
   old <- options(warn = -1)
   on.exit(options(old))

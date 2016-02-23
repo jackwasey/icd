@@ -17,6 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+asCharacterNoWarn <- function(x) {
+  as_char_no_warn(x)
+}
+
 #' @rdname icd_children
 #' @template icd9-any
 #' @template icd9-short
@@ -1078,3 +1082,5 @@ icd9GetRealDecimal <- function(icd9Decimal, onlyBillable = FALSE) {
   icd_deprecated("icd_get_defined")
   icd_get_defined.icd9(icd9Decimal, short_code = FALSE, billable = onlyBillable)
 }
+
+
