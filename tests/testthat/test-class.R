@@ -268,8 +268,7 @@ test_that("long vs wide data conflict identified", {
   class(v_bad) <- c(class(v_bad), "icd_long_data")
   u_bad <- uranium_pathology
   class(u_bad) <- c(class(u_bad), "icd_wide_data")
- 
+
   expect_true(icd_classes_conflict(v_bad))
   expect_true(icd_classes_conflict(u_bad))
-
 })

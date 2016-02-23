@@ -160,9 +160,9 @@ test_that("deprecated - online parse tests run", {
   })
 
   test_that("deprecated - mid-level descriptions are in RTF extract", {
-    expect_equivalent(rtf["611"], "Other disorders of breast")
-    expect_equivalent(rtf["611.7"], "Signs and symptoms in breast")
-    expect_equivalent(rtf["611.8"], "Other specified disorders of breast")
+    expect_equivalent(rtf[["611"]], "Other disorders of breast")
+    expect_equivalent(rtf[["611.7"]], "Signs and symptoms in breast")
+    expect_equivalent(rtf[["611.8"]], "Other specified disorders of breast")
   })
 
   test_that("deprecated - manual check to look at description differences between RTF and TXT", {

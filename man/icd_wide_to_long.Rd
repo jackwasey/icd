@@ -6,7 +6,7 @@
 \title{convert ICD data from wide to long format}
 \usage{
 icd_wide_to_long(x, visit_name = get_visit_name(x), icd_labels = NULL,
-  icd_name = "icdCode", icd_regex = c("icd", "diag", "dx_", "dx"))
+  icd_name = "icd_code", icd_regex = c("icd", "diag", "dx_", "dx"))
 
 icd9WideToLong(x, visitId = get_visit_name(x), icdLabels = NULL,
   icdName = "icdCode", icdRegex = c("icd", "diag", "dx_", "dx"),
@@ -28,7 +28,7 @@ specified, then the first column of the data frame is used.}
 all columns matching icd or ICD will be included.}
 
 \item{icd_name}{character vector length one containing the new column name for
-the ICD codes, defaults to "icdCode"}
+the ICD codes, defaults to "icd_code"}
 
 \item{icd_regex}{vector of character strings containg a regex to identify ICD-9 diagnosis
 columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}}
