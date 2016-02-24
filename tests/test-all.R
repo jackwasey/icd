@@ -72,7 +72,7 @@ on.exit(options(old_warn))
 # instrumentation.
 
 # test_check("icd", reporter = "summary")
-test_check("icd", filter = "\\-icd\\-", 
+test_check("icd", filter = "icd", 
   reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter()))
 )
 
