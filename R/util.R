@@ -360,7 +360,7 @@ icd_deprecated <- function(...) {
   test_mode <- unlist(sys.calls()) %>% str_detect("test") %>% any
 
   opt <- getOption("icd.warn_deprecated")
-  if (!test_mode || (!is.null(opt) || opt))
+  if (!test_mode || !(is.null(opt) || !opt))
     .Deprecated(...)
 
 }

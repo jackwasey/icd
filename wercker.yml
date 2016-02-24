@@ -14,5 +14,5 @@ build:
         github_packages: hadley/testthat RcppCore/Rcpp jimhester/covr
     - jimhester/r-check:
       warnings_are_errors: TRUE
-    - jimhester/r-coverage
-#    - jimhester/r-lint
+    - jackwasey/r-coverage
+    - jimhester/r-lint
