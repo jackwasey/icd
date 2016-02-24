@@ -39,13 +39,13 @@ if (is.null(options("icd.do_slow_tests")))
 if (is.null(options("icd.do_online_tests")))
   options("icd.do_online_tests" = FALSE)
 if (is.null(options("icd.warn_deprecated")))
-  options("icd.warn_deprecated" = TRUE)
+  options("icd.warn_deprecated" = FALSE)
 
 if (identical(Sys.getenv("COVR"), "true")) {
   message("my environment variable COVR found so doing slow and online tests")
   options("icd.do_slow_tests" = TRUE)
   options("icd.do_online_tests" = TRUE)
-  options("icd.warn_deprecated" = TRUE)
+  options("icd.warn_deprecated" = FALSE)
 }
 
 if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
@@ -72,9 +72,8 @@ on.exit(options(old_warn))
 # instrumentation.
 
 # test_check("icd", reporter = "summary")
-test_check("icd", filter = "\\-icd\\-", 
-  reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter()))
-)
+test_check("icd", filter = "deprecated",
+  reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
 
 # # get coverage just for vignette, or examples, etc.
 # package_coverage(type = "vignette", quiet = FALSE)
