@@ -44,10 +44,7 @@ re_wrap_or <- function(x) {
 }
 
 re_icd9_major_n <- "[[:digit:]]{1,3}"
-# "^[[:space:]]*((0{1,3})|([1-9][[:digit:]]{0,2})|(0[1-9][[:digit:]]?)|(00[1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$", # nolint
 re_icd9_major_n_strict <- "[[:digit:]]{3}"
-# TODO: think about: "^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))[[:digit:]]{0,2}[[:space:]]*$", # nolint
-# "^[[:space:]]*[Vv](([1-9][[:digit:]]?)|([[:digit:]][1-9]))(\\.[[:digit:]]{0,2})?[[:space:]]*$"
 re_icd9_major_v <- "[Vv](?:0[1-9]|[1-9][[:digit:]]?)"
 re_icd9_major_v_strict <- "V(?:0[1-9]|[1-9][[:digit:]])"
 re_icd9_major_e <- "[Ee][[:digit:]]{1,3}"
@@ -222,9 +219,9 @@ icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
                               whitespace_ok = TRUE, ...) {
   assert(
     checkmate::checkFactor(x),
-    checkCharacter(x),
-    checkClass(x, c("icd9")), # TODO: use icd9_classes
-    checkClass(x, c("icd9cm"))
+    checkmate::checkCharacter(x),
+    checkmate::checkClass(x, c("icd9")), # TODO: use icd9_classes
+    checkmate::checkClass(x, c("icd9cm"))
   )
   assert_flag(short_code)
   assert_flag(whitespace_ok)
@@ -246,8 +243,8 @@ icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
 }
 
 icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {
-  assert(checkmate::checkFactor(x), checkCharacter(x),
-         checkClass("icd9"), checkClass("icd9cm"))
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x),
+         checkmate::checkClass("icd9"), checkmate::checkClass("icd9cm"))
   assert_flag(whitespace_ok)
   if (length(x) == 0)
     return(logical())
@@ -262,9 +259,9 @@ icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
   # if input doesn't satisfy these, then it is not just invalid, but deserves an error:
   assert(
     checkmate::checkFactor(x),
-    checkCharacter(x),
-    checkClass(x, c("icd9")),
-    checkClass(x, c("icd9cm"))
+    checkmate::checkCharacter(x),
+    checkmate::checkClass(x, c("icd9")),
+    checkmate::checkClass(x, c("icd9cm"))
   )
   assert_flag(whitespace_ok)
 
@@ -306,7 +303,7 @@ icd9_is_valid_short_e <- function(x, whitespace_ok = TRUE){
 }
 
 icd9_is_valid_decimal_n <- function(x, whitespace_ok = TRUE) {
-  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal_n)) %>% na_to_false
@@ -327,7 +324,7 @@ icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
   #need Perl regex for lookbehind. may even be quicker, according to the docs.
   #grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$",
   #trim(x), perl = TRUE)
-  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   if (whitespace_ok)
     str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal_e)) %>% na_to_false
   else
@@ -471,7 +468,7 @@ icd_get_invalid <- function(...) {
 # @export
 # @keywords internal
 icd_get_invalid.default <- function(x, short_code = NULL, ...) {
-  # both <- icd_guess_both(x, short_code = short_code)
+  # TODO: any value in guessing both in tandem
   x %<>% icd_guess_short_update %>% icd_guess_version_update
   UseMethod("icd_get_invalid", x)
 }
@@ -576,7 +573,6 @@ icd_is_major.icd9 <- function(x) {
 #' @return logical vector
 #' @export
 icd9_is_n <- function(x) {
-  # icd9IsA(as_char_no_warn(x), "VEve", TRUE)
   icd9_is_n_cpp(as_char_no_warn(x))
 }
 
@@ -584,14 +580,12 @@ icd9_is_n <- function(x) {
 #' @export
 icd9_is_v <- function(x) {
   icd9_is_v_cpp(as_char_no_warn(x))
-  #icd9IsA(as_char_no_warn(x), "Vv", FALSE)
 }
 
 #' @describeIn icd9_is_n are the given codes E type?
 #' @export
 icd9_is_e <- function(x) {
   icd9_is_e_cpp(as_char_no_warn(x))
-  #icd9IsA(as_char_no_warn(x), "Ee", FALSE)
 }
 
 warnNumericCode <- function()
