@@ -66,12 +66,12 @@ as_char_no_warn <- function(x) {
 #' TODO: replace with str_replace
 #' @param x character vector
 #' @param pattern passed to \code{gsub} default is " "
-#' @param useBytes passed to gsub, default is the slightly quicker \code{TRUE}
+#' @param use_bytes passed to gsub, default is the slightly quicker \code{TRUE}
 #' @return character vector of same length as input
 #' @keywords internal
-strip <- function(x, pattern = " ", useBytes = TRUE)
+strip <- function(x, pattern = " ", use_bytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
-       fixed = TRUE, useBytes = useBytes)
+       fixed = TRUE, use_bytes = useBytes)
 
 #' @title encode TRUE as 1, and FALSE as 0 (integers)
 #' @description when saving data as text files for distribution, printing large
@@ -84,12 +84,12 @@ logical_to_binary <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
 
   if (is.matrix(x)) {
-    assertMatrix(x, min.rows = 1, min.cols = 1)
+    assert_matrix(x, min.rows = 1, min.cols = 1)
     mode(x) <- "integer"
     return(x)
   }
 
-  assertDataFrame(x, min.rows = 1, min.cols = 1)
+  assert_data_frame(x, min.rows = 1, min.cols = 1)
 
   logical_fields <- names(x)[sapply(x, is.logical)]
   if (is.na(logical_fields) || length(logical_fields) == 0)
@@ -133,15 +133,15 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
   # with str_match, the first column is a redundant complete match of the
   # whole pattern, so pos + 1 here:
 
-  outNames <- res_matches[, ifelse(swap, 2, 1) + 1]
-  if (any(is.na(outNames))) {
-    stop("didn't match some rows:", string[is.na(outNames)],
+  out_names <- res_matches[, ifelse(swap, 2, 1) + 1]
+  if (any(is.na(out_names))) {
+    stop("didn't match some rows:", string[is.na(out_names)],
       call. = FALSE)
   }
 
   out <- res_matches[, ifelse(swap, 1, 2) + 1]
   stopifnot(all(!is.na(out)))
-  names(out) <- outNames
+  names(out) <- out_names
   out
 }
 
@@ -153,7 +153,7 @@ get_visit_name <- function(x, visit_name = NULL) {
                          "in.*enc", "out.*enc", "encounter", "visit", "enc")
 
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
-  assertDataFrame(x, min.cols = 1, col.names = "named")
+  assert_data_frame(x, min.cols = 1, col.names = "named")
 
   if (is.null(visit_name)) {
     for (guess in .visit_name_guesses) {
@@ -216,7 +216,7 @@ icd9cm_latest_edition <- function() "32"
 #' @return vector
 #' @keywords internal
 swapNamesWithVals <- function(x) {
-  assertVector(x, strict = TRUE, any.missing = FALSE, names = "named")
+  assert_vector(x, strict = TRUE, any.missing = FALSE, names = "named")
   new_names <- unname(x)
   x <- names(x)
   names(x) <- new_names
@@ -331,7 +331,7 @@ icd_sort.icd10 <- function(x, short_code = NULL, ...) {
 #' @keywords internal
 #' @export
 icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
-  assert(checkmate::checkFactor(x), checkCharacter(x))
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert_flag(short_code)
 
   if (short_code)
@@ -356,9 +356,7 @@ icd9_order_short <- function(x) {
 #' @param ... arguments passed to \code{.Deprecated}
 #' @keywords internal
 icd_deprecated <- function(...) {
-  # if NOT_CRAN is set, it means we are running testthat!
-  #if (identical(Sys.getenv("NOT_CRAN"), "true"))
-  #  return()
+  # if NOT_CRAN is set, it means we are running testthat?
 
   # try to detect if we are testing:
   test_mode <- unlist(sys.calls()) %>% str_detect("test") %>% any
@@ -414,7 +412,7 @@ chapter_to_desc_range.icd10 <- function(x) {
 }
 
 na_to_false <- function(x) {
-  assertLogical(x)
+  assert_logical(x)
   x[is.na(x)] <- FALSE
   x
 }
