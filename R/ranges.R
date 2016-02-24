@@ -51,8 +51,8 @@
 #' @family ICD-9 ranges
 #' @export
 icd_expand_range <- function(start, end, ...) {
-  assertScalar(start) # i'll permit numeric but prefer char
-  assertScalar(end)
+  assert_scalar(start) # i'll permit numeric but prefer char
+  assert_scalar(end)
   UseMethod("icd_expand_range")
 }
 
@@ -244,8 +244,8 @@ expand_range_worker <- function(start, end, lookup, defined,
 icd9_expand_range_short <- function(start, end, defined = TRUE,
                                     ex_ambig_start = TRUE,
                                     ex_ambig_end = TRUE) {
-  assertScalar(start) # i'll permit numeric but prefer char
-  assertScalar(end)
+  assert_scalar(start) # i'll permit numeric but prefer char
+  assert_scalar(end)
   assert_flag(defined)
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)

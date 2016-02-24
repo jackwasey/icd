@@ -356,9 +356,11 @@ icd_deprecated <- function(...) {
   #if (identical(Sys.getenv("NOT_CRAN"), "true"))
   #  return()
 
+  # try to detect if we are testing:
   test_mode <- unlist(sys.calls()) %>% str_detect("test") %>% any
 
-  if (!test_mode)
+  opt <- getOption("icd.warn_deprecated")
+  if (!test_mode || (!is.null(opt) || opt))
     .Deprecated(...)
 
 }

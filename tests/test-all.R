@@ -28,19 +28,24 @@ if (FALSE) {
 if (FALSE) {
   print(options("icd.do_slow_tests"))
   print(options("icd.do_online_tests"))
+  print(options("icd.warn_deprecated"))
   options("icd.do_slow_tests" = TRUE)
   options("icd.do_online_tests" = TRUE)
+  options("icd.warn_deprecated" = FALSE)
 }
 
 if (is.null(options("icd.do_slow_tests")))
   options("icd.do_slow_tests" = FALSE)
 if (is.null(options("icd.do_online_tests")))
   options("icd.do_online_tests" = FALSE)
+if (is.null(options("icd.warn_deprecated")))
+  options("icd.warn_deprecated" = FALSE)
 
 if (identical(Sys.getenv("COVR"), "true")) {
   message("my environment variable COVR found so doing slow and online tests")
   options("icd.do_slow_tests" = TRUE)
   options("icd.do_online_tests" = TRUE)
+  options("icd.warn_deprecated" = FALSE)
 }
 
 if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
@@ -53,6 +58,10 @@ if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
   options("icd.do_online_tests" = TRUE)
 }
 
+if (identical(tolower(Sys.getenv("ICD_WARN_DEPRECATED")), "true")) {
+  message("environment variable ICD_WARN_DEPRECATE found to be true, so warning for deprecated icd9 function use")
+  options("icd.warn_deprecated" = TRUE)
+}
 
 # disable warning, as many deprecated tests do warn, but testthat::expect_warning still works.
 old_warn <- options(warn = -1)

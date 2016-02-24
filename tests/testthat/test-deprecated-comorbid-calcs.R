@@ -67,8 +67,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
 
 test_that("deprecated -elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, hier", {
-            res <- icd9ComorbidElix(elixTestDat,
-                                    isShort = TRUE,
+            res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
                                     applyHierarchy = TRUE, return.df = TRUE)
             expect_equal(dim(res), c(1,31))
@@ -80,8 +79,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
             expect_false(res[1, "Tumor"])
 
             #matrix
-            res <- icd9ComorbidElix(elixTestDat,
-                                    isShort = TRUE,
+            res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
                                     applyHierarchy = TRUE, return.df = FALSE)
             expect_equal(dim(res), c(1,30))

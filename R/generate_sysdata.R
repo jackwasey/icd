@@ -24,7 +24,7 @@
 #' @keywords internal
 generate_sysdata <- function(save_data = TRUE) {
 
-  path = file.path("R", "sysdata.rda")
+  path <- file.path("R", "sysdata.rda")
 
   c() -> icd9NShort -> icd9VShort -> icd9EShort
   for (i in as.character(1:999))
@@ -81,7 +81,7 @@ generate_sysdata <- function(save_data = TRUE) {
       "CMS29_DESC_SHORT_DX.txt",
       "CMS28_DESC_SHORT_DX.txt",
       NA,
-      "V26 I-9 Diagnosis.txt",
+      "V26 I-9 Diagnosis.txt", # nolint
       "I9diagnosesV25.txt",
       "I9diagnosis.txt",
       "I9DX_DESC.txt"),

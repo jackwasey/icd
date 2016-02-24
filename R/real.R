@@ -43,7 +43,7 @@ icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
 #' @keywords internal
 icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
                                 billable = FALSE, ...) {
-  # assert(checkmate::checkFactor(x), checkCharacter(x)) # what if icd10 class, but nothing else? be permissive?
+  # TODO: check input x
   assert_flag(short_code)
   assert_flag(billable)
 
@@ -83,7 +83,6 @@ icd_is_defined.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
 # roxygen annotating this causes a roxygen error, issue #448
 # https://github.com/klutometis/roxygen/issues/448
 icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
-  # y <- icd_guess_version_update(x) %>% icd_guess_short_update(short_code = short_code)
   y <- icd_guess_version_update(x)
   UseMethod("icd_is_defined", y)
 }

@@ -85,40 +85,40 @@ test_twenty <- structure(
   row.names = 5000000:5000019,
   class = "data.frame")
 
-# first and last item from each comorbidity:
-icd9fl <- c(lapply(icd::icd9_map_ahrq, head, n = 1),
+# first and last item from each AHRQ comorbidity:
+ahrq_end_codes <- c(lapply(icd::icd9_map_ahrq, head, n = 1),
             lapply(icd::icd9_map_ahrq, tail, n = 1)) %>%
   unname %>%
   unlist %>%
   icd9
 
 ahrq_test_dat <- data.frame(
-  visit_id = rep("visit1", times = length(icd9fl)),
-  icd9 = icd9fl,
+  visit_id = rep("visit1", times = length(ahrq_end_codes)),
+  icd9 = ahrq_end_codes,
   stringsAsFactors = FALSE
 ) %>% icd_long_data
 
-icd9fl <- unlist(unname(c(lapply(icd::elixComorbid, head, n = 1),
+elix_end_codes <- unlist(unname(c(lapply(icd::elixComorbid, head, n = 1),
                           lapply(icd::elixComorbid, tail, n = 1))))
 elix_test_dat <- data.frame(
-  visit_id = rep("visit1", times = length(icd9fl)),
-  icd9 = icd9fl,
+  visit_id = rep("visit1", times = length(elix_end_codes)),
+  icd9 = elix_end_codes,
   stringsAsFactors = FALSE
 )
 
-icd9fl <- unlist(unname(c(lapply(icd::icd9_map_quan_elix, head, n = 1),
+quan_elix_end_codes <- unlist(unname(c(lapply(icd::icd9_map_quan_elix, head, n = 1),
                           lapply(icd::icd9_map_quan_elix, tail, n = 1))))
 quan_elix_test_dat <- data.frame(
-  visit_id = rep("visit1", times = length(icd9fl)),
-  icd9 = icd9fl,
+  visit_id = rep("visit1", times = length(quan_elix_end_codes)),
+  icd9 = quan_elix_end_codes,
   stringsAsFactors = FALSE
 )
 
-icd9fl <- unlist(unname(c(lapply(icd::quanDeyoComorbid, head, n = 1),
+quan_deyo_end_codes <- unlist(unname(c(lapply(icd::quanDeyoComorbid, head, n = 1),
                           lapply(icd::quanDeyoComorbid, tail, n = 1))))
 quan_deyo_test_dat <- data.frame(
-  visit_id = rep("visit1", times = length(icd9fl)),
-  icd9 = icd9fl,
+  visit_id = rep("visit1", times = length(quan_deyo_end_codes)),
+  icd9 = quan_deyo_end_codes,
   stringsAsFactors = FALSE
 )
 

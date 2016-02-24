@@ -128,8 +128,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   stopifnot(all(Encoding(x) == "unknown"))
 
   # str_trim may do some encoding tricks which result in different factor order
-  # on different platforms. Seems to affect "major" which comes from "short_desc":
-  # short_desc <- trimws(substr(x, 16, 76))
+  # on different platforms. Seems to affect "major" which comes from "short_desc"
 
   icd10cm2016 <- data.frame(
     #id = substr(x, 1, 5),
@@ -150,8 +149,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
         all.x = TRUE) %>%
     magrittr::extract2("short_desc") %>% factor_nosort -> icd10cm2016[["major"]]
 
-  #Encoding(mjr) <- "ASCII"
-  #mjr -> as.factor -> icd10cm2016[["major"]]
+  # TODO: set encoding to ASCII?
 
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because

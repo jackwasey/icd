@@ -74,15 +74,15 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   for (cmb in names(icd9_map_ahrq_working)) {
     message("parsing AHRQ SAS codes for '", cmb, "'")
-    somePairs <- strsplit(x = icd9_map_ahrq_working[[cmb]], split = "-")
+    some_pairs <- strsplit(x = icd9_map_ahrq_working[[cmb]], split = "-")
 
     # non-range values (and their children) just go on list
-    unpaired_items <- sapply(somePairs, length) == 1
+    unpaired_items <- sapply(some_pairs, length) == 1
     out <- c()
     if (any(unpaired_items))
-      out <- icd_children.icd9(unlist(somePairs[unpaired_items]), defined = FALSE, short_code = TRUE)
+      out <- icd_children.icd9(unlist(some_pairs[unpaired_items]), defined = FALSE, short_code = TRUE)
 
-    thePairs <- somePairs[lapply(somePairs, length) == 2]
+    thePairs <- some_pairs[lapply(some_pairs, length) == 2]
     out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
     out %>% unlist %>% unique -> icd9_map_ahrq[[cmb]]
@@ -192,8 +192,8 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   # download the file and/or just get the path/filename to it, fails if missing by default
   f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
 
-  quanSas <- readLines(f_info$file_path, warn = FALSE)
-  let_statements <- sasExtractLetStrings(quanSas)
+  quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
+  let_statements <- sasExtractLetStrings(quan_sas_lines)
   icd9_map_quan_deyo <- let_statements[grepl("DC[[:digit:]]+", names(let_statements))]
 
   # use validation: takes time, but these are run-once per package creation (and

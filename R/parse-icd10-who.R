@@ -4,10 +4,9 @@
 
 #' Get ICD-10 (not ICD-10-CM) as published by CDC
 #'
-#' @details There is no copyright notice, and, as I understand it, by default US
-#'   government publications are public domain
-#'   ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/ and thus
-#'   this or derivative data can be included in the package distribution
+#' @details There is no copyright notice, and, as I understand it, by default US government publications are public
+#'   domain ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/ and thus this or derivative data can be
+#'   included in the package distribution
 #' @keywords internal
 icd10_get_who_from_cdc <- function() {
   # beware, not all download.file methods can handle %20 etc in URLs correctly.
@@ -80,7 +79,7 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
   #selenium_driver$setTimeout(type = "page load", milliseconds = 10000)
   #selenium_driver$setTimeout(type = "script", milliseconds = 10000)
   #selenium_driver$setTimeout(type = "implicit", milliseconds = 10000)
-  selenium_driver$setImplicitWaitTimeout(milliseconds = 10000)
+  selenium_driver[["setImplicitWaitTimeout"]](milliseconds = 10000)
 
   who_icd10_url_base <- "http://apps.who.int/classifications/icd10/browse/2016/en#/"
 
@@ -110,7 +109,7 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
     # whole document, then use xml2 and rvest:
 
     selenium_driver$findElements(using = "xpath", "//li[@class='Blocklist1']") %>%
-      vapply(function(x) unlist(x$getElementText()), character(1)) %>%
+      vapply(function(x) unlist(x[["getElementText"]]()), character(1)) %>%
       str_trim() %>%
       str_replace_all("[[:space:]]+", " ") %>%
       str_pair_match("([^[:space:]]+) (.+)", swap = TRUE) %>%
@@ -152,21 +151,21 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
 
       # new way
       selenium_driver$findElements(using = "xpath", "//div[@class='Category1']//a[@class='code']") %>%
-        vapply(function(x) unlist(x$getElementText()), character(1)) %>%
+        vapply(function(x) unlist(x[["getElementText"]]()), character(1)) %>%
         str_trim() -> majors
 
       selenium_driver$findElements(using = "xpath", "//div[@class='Category1']//span[@class='label']") %>%
-        vapply(function(x) unlist(x$getElementText()), character(1)) %>%
+        vapply(function(x) unlist(x[["getElementText"]]()), character(1)) %>%
         str_trim()  %>%
         str_replace_all("[[:space:]]+", " ") -> majors_desc
 
 
       selenium_driver$findElements(using = "xpath", "//div[@class='Category2']//a[@class='code']") %>%
-        vapply(function(x) unlist(x$getElementText()), character(1)) %>%
+        vapply(function(x) unlist(x[["getElementText"]]()), character(1)) %>%
         str_trim() -> leaves
 
       selenium_driver$findElements(using = "xpath", "//div[@class='Category2']//span[@class='label']") %>%
-        vapply(function(x) unlist(x$getElementText()), character(1)) %>%
+        vapply(function(x) unlist(x[["getElementText"]]()), character(1)) %>%
         str_trim()  %>%
         str_replace_all("[[:space:]]+", " ") -> leaves_desc
 

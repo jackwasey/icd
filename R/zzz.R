@@ -33,12 +33,26 @@ install_github(\"jackwasey/icd9\") # working on rename from icd9 to icd
 ")
 
   if (!is.null(getOption("icd9.threads")))
-    warning("icd9.threads is deprecated, use icd.threads to control OpenMP")
+    packageStartupMessage("icd9.threads is deprecated, use icd.threads to control OpenMP")
   if (!is.null(getOption("icd9.chunkSize")))
-    warning("icd9.chunkSize is deprecated, use icd.chunk_size to control OpenMP")
+    packageStartupMessage("icd9.chunkSize is deprecated, use icd.chunk_size to control OpenMP")
   if (!is.null(getOption("icd9.ompChunkSize")))
-    warning("icd9.ompChunkSize is deprecated, use icd.omp_chunk_size to control OpenMP")
+    packageStartupMessage("icd9.ompChunkSize is deprecated, use icd.omp_chunk_size to control OpenMP")
 
+  if (!is.null(warn_deprecated <- getOption("icd.warn_deprecated"))) {
+    if (warn_deprecated)
+      packageStartupMessage("Deprecated function names from the old 'icd9' package will generate warnings.
+                            Sometimes many warnings are generated for one call. To turn this off, use:
+                            option(icd.warn_deprecated = FALSE)")
+    else
+      packageStartupMessage("Deprecated function names from the old 'icd9' package will not generate warnings.
+                            This can result in conflicts with the old package (if still installed), and these
+                            functions will be removed. The new function names were needed for consistency when
+                            adding icd10 support, and conform to the popular coding style used by Hadley Wickham:
+                            http://adv-r.had.co.nz/Style.html . To warn for deprecated functions, use:
+                            option(icd.warn_deprecated = TRUE)")
+
+  }
 }
 
 .onUnload <- function(libpath) {

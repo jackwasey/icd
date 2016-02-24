@@ -344,4 +344,3 @@ test_that("decimal ICD-10 to parts", {
     list(major = "C7A", minor = "020")
   )
 })
-
