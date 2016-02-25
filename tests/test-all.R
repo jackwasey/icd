@@ -63,7 +63,8 @@ if (identical(tolower(Sys.getenv("ICD_WARN_DEPRECATED")), "true")) {
   options("icd.warn_deprecated" = TRUE)
 }
 
-# disable warning, as many deprecated tests do warn, but testthat::expect_warning still works.
+# try to disable warning, as many deprecated tests do warn. This appears not to
+# work when test that runs the tests.
 old_warn <- options(warn = -1)
 on.exit(options(old_warn))
 
@@ -72,7 +73,7 @@ on.exit(options(old_warn))
 # instrumentation.
 
 # test_check("icd", reporter = "summary")
-test_check("icd", filter = "icd", 
+test_check("icd", filter = "icd",
   reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter()))
 )
 

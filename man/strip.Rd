@@ -4,14 +4,14 @@
 \alias{strip}
 \title{Strip character(s) from character vector}
 \usage{
-strip(x, pattern = " ", useBytes = TRUE)
+strip(x, pattern = " ", use_bytes = TRUE)
 }
 \arguments{
 \item{x}{character vector}
 
 \item{pattern}{passed to \code{gsub} default is " "}
 
-\item{useBytes}{passed to gsub, default is the slightly quicker \code{TRUE}}
+\item{use_bytes}{passed to gsub, default is the slightly quicker \code{TRUE}}
 }
 \value{
 character vector of same length as input

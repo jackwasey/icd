@@ -71,7 +71,7 @@ as_char_no_warn <- function(x) {
 #' @keywords internal
 strip <- function(x, pattern = " ", use_bytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
-       fixed = TRUE, use_bytes = useBytes)
+       fixed = TRUE, useBytes = use_bytes)
 
 #' @title encode TRUE as 1, and FALSE as 0 (integers)
 #' @description when saving data as text files for distribution, printing large

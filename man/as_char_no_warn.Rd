@@ -9,6 +9,9 @@ as_char_no_warn(x)
 \arguments{
 \item{x}{vector, typically numeric or a factor}
 }
+\value{
+character vector
+}
 \description{
 convert to character vector without warning
 }
