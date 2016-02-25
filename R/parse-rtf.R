@@ -131,7 +131,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # somewhere around here, we can extract sub-chapters:
 
   # actually, these are ICD-9-CM subchapters, but I think this is a superset of
-  # ICD-9
+  # ICD 9
 
   # either range or a single value (which overlaps with the majors definition)
   paste0("^[-()A-Z,[:space:]]+", "(", "[[:space:]]+\\(", "|", "\\(", ")",

@@ -75,4 +75,3 @@ icd10_all_ahrq_one_pt <- data.frame(pt_id = rep(1, 30), icd10_code = icd10_each_
 icd10_tricky <- icd10cm(c("V97.33XD", "W51.XXXA", "V00.01XD", "Y93.D", "Z99.89", "Y92.146",
                   "S10.87XA", "W55.41XA", "W61.62XD", "Z63.1", "Y93.D", "V91.07XD",
                   "W55.29XA", "V95.43XS", "W61.12XA", "R46.1"))
-
