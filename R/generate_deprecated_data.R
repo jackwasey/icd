@@ -60,7 +60,7 @@ generate_deprecated_data <- function(save_data = FALSE,
          charlsonComorbidNamesAbbrev,
          file = path, compress = "xz")
     message("now reload to update deprecated data")
-}
+  }
 
   invisible(named_list(icd9Billable,
                        icd9Hierarchy,

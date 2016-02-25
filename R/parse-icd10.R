@@ -195,8 +195,8 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     #   si = ", si, ", se = ", se)
 
     chap_lookup <- rbind(chap_lookup,
-                       data.frame(chap_major = lk_majors[si:se],
-                                  chap_desc = chap_n)
+                         data.frame(chap_major = lk_majors[si:se],
+                                    chap_desc = chap_n)
     )
   }
 
@@ -216,4 +216,3 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 
   invisible(icd10cm2016)
 }
-

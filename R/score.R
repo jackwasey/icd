@@ -283,7 +283,7 @@ icd_count_codes_wide <- function(x,
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
 icd_van_walraven <- function(x, visit_name = NULL, return_df = FALSE,
-                            stringsAsFactors = getOption("stringsAsFactors"),
+                            stringsAsFactors = getOption("stringsAsFactors"), # nolint
                             ...)
   UseMethod("icd_van_walraven")
 
@@ -337,4 +337,3 @@ icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FAL
   }
   rowSums(t(t(x) * weights))
 }
-

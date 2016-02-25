@@ -194,12 +194,12 @@ icd10_comorbid_parent_search <- function(x,
 #'
 #' @keywords internal
 icd10_comorbid_no_parent_search <- function(x,
-                               map,
-                               visit_name = NULL,
-                               icd_name = NULL,
-                               short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-                               short_map = icd_guess_short.icd10(map[[1]]),
-                               return_df = FALSE, ...) {
+                                            map,
+                                            visit_name = NULL,
+                                            icd_name = NULL,
+                                            short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+                                            short_map = icd_guess_short.icd10(map[[1]]),
+                                            return_df = FALSE, ...) {
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
 
@@ -562,9 +562,9 @@ icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL, y_names = 
 icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
                                    show = TRUE, explain = TRUE) {
   assert_list(x, min.len = 1, any.missing = FALSE,
-             types = c("character"), names = "unique")
+              types = c("character"), names = "unique")
   assert_list(y, min.len = 1, any.missing = FALSE,
-             types = c("character"), names = "unique")
+              types = c("character"), names = "unique")
   assert_flag(show)
   assert_flag(explain)
   stopifnot(all(x_names %in% names(x)), all(y_names %in% names(y)))

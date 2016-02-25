@@ -74,8 +74,6 @@ on.exit(options(old_warn))
 
 # standard reporter to use is Summary
 test_check("icd", filter = "icd",
-  reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter()))
+           reporter = testthat::MultiReporter(reporters = list(testthat::SummaryReporter(),
+                                                               testthat::StopReporter()))
 )
-
-# # get coverage just for vignette, or examples, etc.
-# package_coverage(type = "vignette", quiet = FALSE)

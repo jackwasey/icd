@@ -53,4 +53,5 @@ old_warn <- options(warn = -1)
 on.exit(options(old_warn))
 
 test_check("icd", filter = "deprecated",
-  reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
+           reporter = testthat::MultiReporter(reporters = list(testthat::SummaryReporter(),
+                                                               testthat::StopReporter())))

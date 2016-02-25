@@ -88,7 +88,7 @@ icd9_drop_leading_zeroes_major <- function(major) {
   is_v <- icd9_is_v(major) # not checking validity, necessarily, just quick check
   is_n <- icd9_is_valid_major_n(major)
   major[is_v] %<>% str_replace("^[[:space:]]*([Vv])0([[:digit:]])[[:space:]]*$",
-                              replacement = "\\1\\2")
+                               replacement = "\\1\\2")
   #just replace the FIRST string of zeros everything else is passed through
   major[is_n] %<>% str_replace("^[[:space:]]*0{1,2}", replacement = "")
   major

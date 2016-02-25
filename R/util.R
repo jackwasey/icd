@@ -136,7 +136,7 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
   out_names <- res_matches[, ifelse(swap, 2, 1) + 1]
   if (any(is.na(out_names))) {
     stop("didn't match some rows:", string[is.na(out_names)],
-      call. = FALSE)
+         call. = FALSE)
   }
 
   out <- res_matches[, ifelse(swap, 1, 2) + 1]
@@ -381,7 +381,7 @@ icd_deprecated <- function(...) {
   re_code_range <- paste0("(.*)[[:space:]]?\\((",
                           re_major, ")-(",
                           re_major, ")\\)"
-                          )
+  )
   re_code_single <- paste0("(.*)[[:space:]]?\\((", re_major, ")\\)")
   mr <- str_match_all(x, re_code_range)
   ms <- str_match_all(x, re_code_single)

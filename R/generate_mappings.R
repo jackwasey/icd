@@ -495,7 +495,7 @@ generate_vermont_dx <- function(save_data = TRUE, offline = FALSE) {
   vermont_dx$sex <- sex
   vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)
   names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
-  # vermont_dx %<>% icd_short_code %>% icd_wide_data %>% icd9cm # TODO: what is preferred order?
+  # TODO: or use class functions
   class(vermont_dx) <- c("icd9cm", "icd9", "icd_short_code", "icd_wide_data", "data.frame")
   dx_cols <- paste0("DX", 1:20)
   for (dc in dx_cols)

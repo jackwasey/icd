@@ -157,7 +157,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
   if (!icd_is_major.icd10cm(se[[2]]))
     stop("end: ", end, " is not an ICD-10-CM major (three character) code")
 
-    if (se[[1]] > se[[2]])
+  if (se[[1]] > se[[2]])
     stop(se[[1]], " is after ", se[[2]])
 
   pos <- fastmatch::fmatch(se, unique_mjrs)
@@ -198,10 +198,10 @@ expand_range_worker <- function(start, end, lookup, defined,
 
   start_index <- match(start, lookup)
   end_index <- match(end, lookup)
-  assertInteger(start_index, len = 1)
+  assert_integer(start_index, len = 1)
   if (is.na(start_index[1]))
     stop(sprintf("start value '%s' not found in look-up table of ICD-9 codes.", start))
-  assertInteger(end_index, len = 1)
+  assert_integer(end_index, len = 1)
   if (is.na(end_index[1]))
     stop(sprintf("end value '%s' not found in look-up table of ICD-9 codes.", end))
   if (end_index < start_index)
@@ -294,8 +294,8 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
 #' @describeIn icd_expand_range_major Expand a range of ICD-9 major codes into major codes
 #' @export
 icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
-  assertScalar(start) # i'll permit numeric but prefer char
-  assertScalar(end)
+  assert_scalar(start) # i'll permit numeric but prefer char
+  assert_scalar(end)
   assert_flag(defined)
   c <- icd9_extract_alpha_numeric(start)
   d <- icd9_extract_alpha_numeric(end)

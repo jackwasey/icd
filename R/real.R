@@ -111,7 +111,7 @@ icd_get_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
 #' @export
 #' @keywords internal
 icd_get_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x), billable = FALSE) {
-    x[icd_is_defined.icd9(x, short_code = short_code, billable = billable)]
+  x[icd_is_defined.icd9(x, short_code = short_code, billable = billable)]
 }
 
 #' @title Determine whether codes are billable leaf-nodes
@@ -157,7 +157,7 @@ icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
 #' @export
 #' @keywords internal
 icd_is_billable.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
-                                 version = "2016", ...) {
+                                  version = "2016", ...) {
   icd_is_billable.icd10cm(x = x, short_code = short_code, version = version)
 }
 

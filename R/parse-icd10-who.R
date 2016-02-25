@@ -1,6 +1,6 @@
 # Obtain WHO ICD-10 codes, experimental, incomplete.
 
-#nocov start
+# nocov start
 
 #' Get ICD-10 (not ICD-10-CM) as published by CDC
 #'
@@ -44,6 +44,8 @@ icd10_get_who_from_cdc <- function() {
 
   stop("work in progress", codes_desc, desc)
 }
+
+# nolint start
 
 #' scrape WHO web site for ICD-10 codes
 #'
@@ -236,4 +238,5 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
   )
   save_in_data_dir(icd10_who_hierarchy)
 }
-#nocov end
+# nocov end
+# nolint end

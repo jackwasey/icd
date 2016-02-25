@@ -100,8 +100,8 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
   icd9cm_billable <- list()
   for (v in versions)
     icd9cm_billable[[v]] <- icd9_parse_leaf_desc_ver(version = v,
-                                                            save_data = save_data,
-                                                            offline = offline)
+                                                     save_data = save_data,
+                                                     offline = offline)
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save_data)
@@ -124,8 +124,8 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
 #' @return invisibly return the result
 #' @keywords internal
 icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
-                                            save_data = TRUE,
-                                            offline = FALSE) {
+                                     save_data = TRUE,
+                                     offline = FALSE) {
   assert_string(version)
   assert_flag(save_data)
   assert_flag(offline)
@@ -142,7 +142,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   f_info_short <- unzip_to_data_raw(dat$url, file_name = fn_short_orig, offline = offline)
   f_info_long <- NULL
   if (!is.na(fn_long_orig))
-      f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
+    f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
 
   message("short filename = ", f_info_short$file_name,
           "\n long filename = ", f_info_long$file_name)
@@ -285,7 +285,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
 
   # now put the short description in the right column position
   icd9cm_hierarchy <- icd9cm_hierarchy[c("code", "short_desc", "long_desc", "three_digit",
-                                     "major", "sub_chapter", "chapter")]
+                                         "major", "sub_chapter", "chapter")]
 
   #TODO add 'billable' column
 

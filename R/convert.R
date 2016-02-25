@@ -172,13 +172,13 @@ icd_long_to_wide <- function(x,
 
   # we're now going to return a matrix
   icd9_name_was_factor <- is.factor(x[[visit_name]])
-  if (icd9_name_was_factor) ivLevels <- levels(x[[visit_name]])
+  if (icd9_name_was_factor) iv_levels <- levels(x[[visit_name]])
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
   x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
   if (return_df) {
     mat <- icd9LongToWideCpp(x, visit_name, icd_name, aggr)
     if (icd9_name_was_factor)
-      rownm <- factor(x = rownames(mat), levels = ivLevels)
+      rownm <- factor(x = rownames(mat), levels = iv_levels)
     else
       rownm <- rownames(mat)
     df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9_name_was_factor)
@@ -222,11 +222,11 @@ icd_long_to_wide <- function(x,
 #' is.factor(df.out[["visit_id"]])
 #' @export
 icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
-                                   stringsAsFactors = getOption("stringsAsFactors")) {
-  assertMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
+                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+  assert_matrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
   assert_string(visit_name)
-  assert_flag(stringsAsFactors)
-  out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors)
+  assert_flag(stringsAsFactors) # nolint
+  out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors) # nolint
   names(out)[1] <- visit_name
   rownames(out) <- NULL
   out
@@ -252,10 +252,10 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' mat.out[, 1:4]
 #' @export
 icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
-                                   stringsAsFactors = getOption("stringsAsFactors")) {
+                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
   assert_data_frame(x, min.rows = 1, min.cols = 2, col.names = "named")
   assert_string(visit_name)
-  assert_flag(stringsAsFactors)
+  assert_flag(stringsAsFactors) # nolint
 
   out <- as.matrix.data.frame(x[-which(names(x) == visit_name)])
   rownames(out) <- x[[visit_name]]
