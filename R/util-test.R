@@ -76,7 +76,7 @@ expect_equal_no_icd <- function(object, expected, ...) {
   #                                   ), info = info, label = label)))
 
   eval(bquote(testthat::expect_equal(.(object), .(expected), ...)))
-  }
+}
 
 #' expect named sub-chapter has a given range, case insensitive
 #' @keywords internal
@@ -148,15 +148,15 @@ chap_present_expectation <- function(ver_chaps, ...) {
 }
 
 chap_missing <- function(x, ver_chaps, ...) {
-    x <- tolower(x)
-    lnames <- tolower(names(ver_chaps))
-    x %nin% lnames
+  x <- tolower(x)
+  lnames <- tolower(names(ver_chaps))
+  x %nin% lnames
 }
 
 chap_present <- function(x, ver_chaps, ...) {
-    x <- tolower(x)
-    lnames <- tolower(names(ver_chaps))
-   x %in% lnames
+  x <- tolower(x)
+  lnames <- tolower(names(ver_chaps))
+  x %in% lnames
 }
 
 expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
@@ -183,7 +183,7 @@ expect_icd10_chap_missing <- function(x, ...) {
 #' expect that a chapter with given title exists, case-insensitive
 #' @keywords internal
 expect_chap_present <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
-  eval(bquote(expect_true(.(chap_present(x, ver_chaps = ver_chaps)), 
+  eval(bquote(expect_true(.(chap_present(x, ver_chaps = ver_chaps)),
                           info = info, label = label, ...)))
 }
 
@@ -259,7 +259,7 @@ getSlowestTests <- function(n = 5) {
 }
 
 #' generate random ICD-9 codes
-#' 
+#'
 #' @keywords internal
 generate_random_short_icd9 <- function(n = 50000) {
   as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
@@ -290,7 +290,7 @@ generate_random_ordered_pts <- function(...) {
 #' @rdname generate_random_short_icd9
 #' @keywords internal
 generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient = 20,
-                                    n = num_patients, np = dz_per_patient) {
+                                          n = num_patients, np = dz_per_patient) {
   set.seed(1441)
   pts <- round(n / np)
   data.frame(
@@ -306,7 +306,7 @@ generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient =
 #' @rdname generate_random_short_icd9
 #' @keywords internal
 generate_random_short_ahrq_icd9 <- function(n = 50000)
-  sample(unname(unlist(icd9_map_ahrq)), size = n, replace = TRUE)
+  sample(unname(unlist(icd::icd9_map_ahrq)), size = n, replace = TRUE)
 
 #' generate random strings
 #'

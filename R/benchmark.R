@@ -58,7 +58,7 @@ benchVaryn <- function(np = 5, threads = 4, chunk_size = 256, omp_chunk_size = 1
   for (n in c(1e0, 1e3, 1e4, 1e5, 1e6)) {
     #for (n in c(1e0, 1e3)) {
     message("n = ", n)
-    pts <- generate_random_ordered_pts(n, np)
+    pts <- icd::generate_random_ordered_pts(n, np)
     res <- microbenchmark::microbenchmark(
       icd9ComorbidShortCpp(pts, icd::icd9_map_ahrq,
                            visitId = get_visit_name(pts),

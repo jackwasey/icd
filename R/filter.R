@@ -35,13 +35,13 @@ icd_filter_invalid <- function(...)
 #' @export
 icd_filter_valid.icd9 <- function(x, icd_name = NULL,
                                   short_code =  NULL, invert = FALSE, ...) {
-  assertDataFrame(x, min.cols = 1, col.names = "named")
+  assert_data_frame(x, min.cols = 1, col.names = "named")
   assert(checkmate::checkNull(icd_name), checkmate::checkString(icd_name))
   assert(checkmate::checkNull(short_code), checkmate::checkFlag(short_code))
   icd_name <- get_icd_name(x)
   if (is.null(short_code))
     short_code <- icd_guess_short(x[[icd_name]])
-  assertDataFrame(x, min.cols = 1, col.names = "named")
+  assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_flag(short_code)
   assert_flag(invert)
   x[icd_is_valid.icd9(x[[icd_name]], short_code = short_code) != invert, ]
@@ -87,7 +87,7 @@ icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, inver
 #' @export
 icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
   poa <- match.arg(poa)
-  assertDataFrame(x, min.cols = 1, col.names = "named")
+  assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(poa_name)
   stopifnot(poa_name %in% names(x))
   switch(poa,
@@ -99,7 +99,7 @@ icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
 }
 
 .icd_filter_poa <- function(x, poa_name, choice, invert = FALSE) {
-  assertDataFrame(x, min.cols = 1, col.names = "named")
+  assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(poa_name, na.ok = FALSE)
   assert_character(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
   assert_flag(invert)

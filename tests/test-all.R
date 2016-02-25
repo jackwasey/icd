@@ -72,7 +72,7 @@ on.exit(options(old_warn))
 # travis. The code coverage testing is slower than regular testing because of
 # instrumentation.
 
-# test_check("icd", reporter = "summary")
+# standard reporter to use is Summary
 test_check("icd", filter = "icd",
   reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter()))
 )

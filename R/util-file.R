@@ -26,9 +26,9 @@ unzip_single <- function(url, file_name, save_path) {
   zipfile <- tempfile()
   # using libcurl because it seems the internal method works inconsistently
   if (capabilities("libcurl"))
-    method = "libcurl"
+    method <- "libcurl"
   else
-    method = "auto"
+    method <- "auto"
   dl_code <- utils::download.file(url = url, destfile = zipfile,
                                   quiet = TRUE, method = method, mode = "wb")
   stopifnot(dl_code == 0)
@@ -111,11 +111,7 @@ download_to_data_raw <- function(url,
       stop(paste(file_name, "not available offline."))
   }
 
-  # using libcurl because it seems the internal method works inconsistently?
-  #if (capabilities("libcurl"))
-    #method = "libcurl"
-  #else
-
+  # consider libcurl, but seems to work without now
   if (download.file(url = url, destfile = save_path, quiet = TRUE, method = "auto") != 0)
     stop(paste(url, " not downloaded successfully."))
 

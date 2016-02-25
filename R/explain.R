@@ -107,9 +107,9 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
   mjexplain <- names(icd::icd9_majors)[icd::icd9_majors %in% mj[mj %in% x]]
   # don't double count when major is also billable
   x <- x[x %nin% mj]
-  descField <- ifelse(brief, "short_desc", "long_desc")
+  desc_field <- ifelse(brief, "short_desc", "long_desc")
   c(mjexplain,
-    icd::icd9cm_hierarchy[ icd::icd9cm_hierarchy[["code"]] %in% x, descField]
+    icd::icd9cm_hierarchy[ icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
 }
 

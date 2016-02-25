@@ -166,7 +166,7 @@ icd_is_billable.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
 #' @keywords internal
 icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
                                    version = icd9cm_latest_edition(), ...) {
-  assertVector(x)
+  assert_vector(x)
   assert_flag(short_code)
   assert_string(version)
   if (!short_code)
@@ -269,7 +269,7 @@ icd_get_billable.icd9 <- function(...) {
 #' @keywords internal
 icd9cm_get_billable <- function(x, short_code = icd_guess_short(x),
                                 invert = FALSE, icd9cm_edition = icd9cm_latest_edition()) {
-  assertVector(x)
+  assert_vector(x)
   assert_flag(short_code)
   assert_flag(invert)
   assert_string(version)
@@ -289,4 +289,3 @@ icd9cm_get_billable.icd_short_code <- function(x, invert = FALSE, version = icd9
 icd9cm_get_billable.icd_decimal_code <- function(x, invert = FALSE, version = icd9cm_latest_edition()) {
   x[icd_is_billable.icd9cm(x, short_code = FALSE, version = version) != invert]
 }
-

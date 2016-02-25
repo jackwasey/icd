@@ -122,7 +122,7 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
   pos_missing <- missing(pos)
   if (pos_missing)
     pos <- c(1, 2)
-  assertIntegerish(pos, len = 2, lower = 1, any.missing = FALSE)
+  assert_integerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
   string %>% str_match(pattern) -> res_matches
 
@@ -181,8 +181,8 @@ get_visit_name.matrix <- function(x, visit_name = NULL) {
 # the list, meaning some later possibilities are more or less specific regexes
 # than earlier ones.
 get_icd_name <- function(x, icd_name = NULL) {
-  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd", "diagnos", "diag.?code", "diag", "i(9|10)")
-  assertDataFrame(x, min.cols = 1, col.names = "named")
+  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd", "diagnos", "diag.?code", "diag", "i(9|10)", "code")
+  assert_data_frame(x, min.cols = 1, col.names = "named")
   if (is.null(icd_name)) {
     for (guess in guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)

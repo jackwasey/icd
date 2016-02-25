@@ -933,7 +933,7 @@ icd9IsBillableDecimal <- function(icd9Decimal,
 #' @export
 icd9GetBillable <- function(icd9, isShort = icd9GuessIsShort(icd9),
                             invert = FALSE, version = icd9cm_latest_edition()) {
-  assertVector(icd9)
+  assert_vector(icd9)
   assert_flag(isShort)
   assert_flag(invert)
   assert_string(version)

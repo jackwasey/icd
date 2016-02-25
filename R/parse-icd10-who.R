@@ -14,7 +14,7 @@ icd10_get_who_from_cdc <- function() {
   file_path <- download_to_data_raw(url = url)$file_path
 
   # typically, the file isn't easily machine readable with stupidly placed
-  # annotations, e.g. "Added in 2009	A09.9	Gastroenteritis and colitis of
+  # annotations, e.g. "Added in 2009 A09.9 Gastroenteritis and colitis of
   # unspecified origin" I've no idea what those people are thinking when they do
   # this kind of thing.
 
@@ -62,7 +62,7 @@ icd10_get_who_from_cdc <- function() {
 #'   characters, vector lengths
 #' @keywords internal
 scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
-  #library("RJSONIO") # this seems to avoid a lot of errors?
+  # consider RJSONIO library, this seems to avoid a lot of errors?
   loadNamespace("RSelenium")
   loadNamespace("xml2")
 
@@ -76,10 +76,11 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
   )
   selenium_driver$open()
   # make sure we always wait for the page to load (or ten seconds), before returning
-  #selenium_driver$setTimeout(type = "page load", milliseconds = 10000)
-  #selenium_driver$setTimeout(type = "script", milliseconds = 10000)
-  #selenium_driver$setTimeout(type = "implicit", milliseconds = 10000)
-  selenium_driver[["setImplicitWaitTimeout"]](milliseconds = 10000)
+  selenium_driver$setTimeout(type = "page load", milliseconds = 10000)
+  selenium_driver$setTimeout(type = "script", milliseconds = 10000)
+  selenium_driver$setTimeout(type = "implicit", milliseconds = 10000)
+  sel_wait_fun <- selenium_driver[["setImplicitWaitTimeout"]]
+  sel_wait_fun(milliseconds = 10000)
 
   who_icd10_url_base <- "http://apps.who.int/classifications/icd10/browse/2016/en#/"
 
@@ -90,20 +91,9 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
   all_leaves <- list()
 
   for (chapter_url in chapter_urls) {
-    if (!silent) message(chapter_url)
+    if (!silent)
+      message(chapter_url)
     selenium_driver$navigate(chapter_url)
-    #chapter_html <- selenium_driver$getPageSource()
-
-    # if (debug)
-    #   browser(expr = length(chapter_html) != 1)
-    # else
-    #   stopifnot(length(chapter_html) == 1)
-    # chapter_xml <- xml2::read_html(chapter_html[[1]])
-
-    # if (debug)
-    #   browser(expr = length(chapter_xml) == 0)
-    # else
-    #   stopifnot(length(chapter_xml) > 0)
 
     # instead of querying via phantomjs (which crashes all the time), get the
     # whole document, then use xml2 and rvest:
@@ -124,7 +114,6 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
     # next, look at individual heading and leaf (billing) codes
     # this can be accomplished using constructed URLs, also, e.g.:
     # http://apps.who.int/classifications/icd10/browse/2016/en#/A92-A99
-
 
     # now in a new loop, we can generate the drilled down URLs from the subchapter
     # ranges without mucking around by 'clicking' on links
@@ -234,12 +223,6 @@ scrape_icd10_who <- function(debug = FALSE, verbose = FALSE, silent = FALSE) {
   save_in_data_dir(icd10_who_leaves)
 
   # combine into big data frame like icd9Hierarchy:
-  #names(icd9Hierarchy)
-  #[1] "code"       "short_desc"  "long_desc"   "three_digit" "major"      "sub_chapter" "chapter"
-
-  #> head(icd9Hierarchy, 1)
-  #code short_desc long_desc three_digit   major                     sub_chapter                           chapter
-  #001   Cholera  Cholera        001 Cholera Intestinal Infectious Diseases Infectious And Parasitic Diseases
 
   icd10_who_hierarchy <- data.frame(
     icd10 = character(),

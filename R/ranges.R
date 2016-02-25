@@ -88,7 +88,9 @@ icd_expand_range.character <- function(start, end, short_code = NULL, defined = 
 #'
 #' This will need generalizing to any list of 'defined' codes, e.g. WHO or other
 #'
-#' There are so many permutations of alphaunmerics after the decimal place thatit would be easy to generate many millions with simple ranges, the vast majority of which would be undefined.
+#' There are so many permutations of alphaunmerics after the decimal place
+#' thatit would be easy to generate many millions with simple ranges, the vast
+#' majority of which would be undefined.
 #' @param start character vector of length one containing an ICD code
 #' @param end  character vector of length one containing an ICD code
 #' @keywords internal
@@ -103,7 +105,9 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
   # minimal check for type:
   stopifnot(grepl("[^.]", c(start, end)))
 
-  # for ranges, we can semi-legitimately strip any ".x" part ( but other X values CAN appear later). Quan uses x in position 4, but I'm not aware of any ICD-10 code that does this.
+  # for ranges, we can semi-legitimately strip any ".x" part ( but other X
+  # values CAN appear later). Quan uses x in position 4, but I'm not aware of
+  # any ICD-10 code that does this.
 
   # deliberately not case sensitive, as this is a Quan quirk:
   if (substr(start, 4, 100) == "x")

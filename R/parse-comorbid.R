@@ -82,8 +82,8 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
     if (any(unpaired_items))
       out <- icd_children.icd9(unlist(some_pairs[unpaired_items]), defined = FALSE, short_code = TRUE)
 
-    thePairs <- some_pairs[lapply(some_pairs, length) == 2]
-    out <- c(out, lapply(thePairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
+    the_pairs <- some_pairs[lapply(some_pairs, length) == 2]
+    out <- c(out, lapply(the_pairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
     out %>% unlist %>% unique -> icd9_map_ahrq[[cmb]]
   }

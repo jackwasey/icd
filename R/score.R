@@ -61,7 +61,7 @@
 icd_charlson <- function(x, visit_name = NULL,
                          scoring_system = c("original", "charlson", "quan"),
                          return_df = FALSE,
-                         stringsAsFactors = getOption("stringsAsFactors"),
+                         stringsAsFactors = getOption("stringsAsFactors"), # nolint
 			 ...)
   UseMethod("icd_charlson")
 
@@ -70,12 +70,12 @@ icd_charlson <- function(x, visit_name = NULL,
 icd_charlson.data.frame <- function(x, visit_name = NULL,
                                     scoring_system = c("original", "charlson", "quan"),
                                     return_df = FALSE,
-                                    stringsAsFactors = getOption("stringsAsFactors"),
+                                    stringsAsFactors = getOption("stringsAsFactors"), # nolint
                                     ...) {
-  assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
+  assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assert(checkmate::checkNull(visit_name), checkmate::checkString(visit_name))
   assert_flag(return_df)
-  assert_flag(stringsAsFactors)
+  assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   tmp <- icd_comorbid_quan_deyo.icd9(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...)
   res <- icd_charlson_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE, scoring_system = scoring_system)
@@ -83,7 +83,7 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
   if (!return_df) return(res)
   out <- cbind(names(res),
                data.frame("Charlson" = unname(res)),
-               stringsAsFactors = stringsAsFactors)
+               stringsAsFactors = stringsAsFactors) # nolint
   names(out)[1] <- visit_name
   out
 }
@@ -95,8 +95,8 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
 icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
                                  scoring_system = c("original", "charlson", "quan")) {
   assert(
-    checkDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named"),
-    checkMatrix(x, min.rows = 0, min.cols = 2, col.names = "named")
+    checkmate::checkDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named"),
+    checkmate::checkMatrix(x, min.rows = 0, min.cols = 2, col.names = "named")
   )
   stopifnot(ncol(x) - is.data.frame(x) == 17)
   if (match.arg(scoring_system) == "quan")
@@ -164,7 +164,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #' @importFrom stats aggregate
 #' @export
 icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
-  assertDataFrame(x) #TODO: more constraints
+  assert_data_frame(x) #TODO: more constraints
   assert_string(visit_name)
   assert_flag(return_df)
 
@@ -224,7 +224,7 @@ icd_count_codes_wide <- function(x,
                           visit_name = get_visit_name(x),
                           return_df = FALSE,
                           aggr = FALSE) {
-  assertDataFrame(x)
+  assert_data_frame(x)
   assert_string(visit_name)
   assert_flag(return_df)
   assert_flag(aggr)
@@ -290,12 +290,12 @@ icd_van_walraven <- function(x, visit_name = NULL, return_df = FALSE,
 #' @describeIn icd_van_walraven van Walraven scores from data frame of visits and ICD-9 codes
 #' @export
 icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
-                                       stringsAsFactors = getOption("stringsAsFactors"),
+                                       stringsAsFactors = getOption("stringsAsFactors"), # nolint
                                        ...) {
-  assertDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named")
+  assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assert(checkmate::checkNull(visit_name), checkmate::checkString(visit_name))
   assert_flag(return_df)
-  assert_flag(stringsAsFactors)
+  assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   tmp <- icd_comorbid_quan_elix.icd9(x, visit_name, hierarchy = TRUE, return_df = TRUE, ...)
   res <- icd_van_walraven_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE)
@@ -303,7 +303,7 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
   if (!return_df) return(res)
   out <- cbind(names(res),
                data.frame("vanWalraven" = unname(res)),
-               stringsAsFactors = stringsAsFactors)
+               stringsAsFactors = stringsAsFactors) # nolint
   names(out)[1] <- visit_name
   out
 }
@@ -315,7 +315,7 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
 #'   flagged.
 #' @export
 icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
-  assert(checkDataFrame(x), checkMatrix(x))
+  assert(checkmate::checkDataFrame(x), checkmate::checkMatrix(x))
   assert(checkmate::checkNull(visit_name), checkmate::checkString(visit_name))
   assert_flag(hierarchy)
   stopifnot(ncol(x) - is.data.frame(x) == 30)

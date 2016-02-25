@@ -19,21 +19,6 @@ library("icd")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 
-if (FALSE) {
-  message("lib paths are as follows:")
-  print(.libPaths())
-}
-
-# to run all tests:
-if (FALSE) {
-  print(options("icd.do_slow_tests"))
-  print(options("icd.do_online_tests"))
-  print(options("icd.warn_deprecated"))
-  options("icd.do_slow_tests" = TRUE)
-  options("icd.do_online_tests" = TRUE)
-  options("icd.warn_deprecated" = FALSE)
-}
-
 if (is.null(options("icd.do_slow_tests")))
   options("icd.do_slow_tests" = FALSE)
 if (is.null(options("icd.do_online_tests")))
@@ -67,13 +52,5 @@ if (identical(tolower(Sys.getenv("ICD_WARN_DEPRECATED")), "true")) {
 old_warn <- options(warn = -1)
 on.exit(options(old_warn))
 
-# use summary reporter so that covr produces output and doesn't time-out on
-# travis. The code coverage testing is slower than regular testing because of
-# instrumentation.
-
-# test_check("icd", reporter = "summary")
 test_check("icd", filter = "deprecated",
   reporter = MultiReporter(reporters = list(SummaryReporter(), StopReporter())))
-
-# # get coverage just for vignette, or examples, etc.
-# package_coverage(type = "vignette", quiet = FALSE)

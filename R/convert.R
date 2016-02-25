@@ -164,27 +164,24 @@ icd_long_to_wide <- function(x,
                              aggr = TRUE,
                              return_df = FALSE) {
 
-  #  icd_name <- get_icd_name(x, icd_name)
-  #  visit_name <- get_visit_name(x, visit_name)
-
-  assertDataFrame(x, col.names = "named")
+  assert_data_frame(x, col.names = "named")
   assert_string(prefix)
-  assertCount(min_width, na.ok = FALSE)
+  assert_count(min_width, na.ok = FALSE)
   assert_flag(aggr)
   assert_flag(return_df)
 
   # we're now going to return a matrix
-  icd9VisitWasFactor <- is.factor(x[[visit_name]])
-  if (icd9VisitWasFactor) ivLevels <- levels(x[[visit_name]])
+  icd9_name_was_factor <- is.factor(x[[visit_name]])
+  if (icd9_name_was_factor) ivLevels <- levels(x[[visit_name]])
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
   x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
   if (return_df) {
     mat <- icd9LongToWideCpp(x, visit_name, icd_name, aggr)
-    if (icd9VisitWasFactor)
+    if (icd9_name_was_factor)
       rownm <- factor(x = rownames(mat), levels = ivLevels)
     else
       rownm <- rownames(mat)
-    df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9VisitWasFactor)
+    df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9_name_was_factor)
     names(df.out)[1] <- visit_name
     # perhaps leave (duplicated) rownames which came from the matrix:
     rownames(df.out) <- NULL
