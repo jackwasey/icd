@@ -18,9 +18,9 @@ cran-comments\.md$
 data\/icd10_who.*
 data-raw\/icd10cdc\.txt$
 icd10_get_who_from_cdc
-^icd.*\.aux$
-^icd.*\.so$
-^icd.*\.dll$
+icd.*\.aux$
+icd.*\.so$
+icd.*\.dll$
 icd9Billable[[:digit:]]+\.RData
 icd9cm_billable[[:digit:]]+\.RData
 ^icd.*\.out$
