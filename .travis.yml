@@ -11,7 +11,7 @@ warnings_are_errors: true
 
 # seperate lines seems to mean the whole build is repeated each line
 env:
- - R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+ - R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 # debian package names: libxml2-dev libssl-dev r-base-core r-cran-xml r-cran-ggplot2 r-cran-rcurl r-cran-bitops r-cran-brew r-cran-rcolorbrewer r-cran-rcpp r-cran-dichromat r-cran-munsell r-cran-checkmate r-cran-evaluate r-cran-plyr r-cran-gtable r-cran-reshape2 r-cran-scales r-cran-proto r-cran-catools r-cran-testthat r-cran-memoise r-cran-digest r-cran-xtable
 # at least some of the following don't have debian packages (at time of writing)
