@@ -22,6 +22,7 @@ library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 
 icd:::setup_test_check()
+options("icd.warn_deprecated" = TRUE)
 
-icd:::my_test_check("icd")
+icd:::my_test_check("deprecated")
 

@@ -10,3 +10,5 @@ as.data.frame(test_all_res) -> resdf
 print(tail(resdf[order(resdf$user), ]))
 
 # Rscript tools/find_slow_tests.R
+slow_by_file <-  aggregate(real ~ file, data = resdf, FUN = sum)
+print(slow_by_file)
