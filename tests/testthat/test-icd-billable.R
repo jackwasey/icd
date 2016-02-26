@@ -48,6 +48,7 @@ test_that("billable codes for expected versions exist", {
 })
 
 test_that("billable codes are all in order", {
+  skip_slow_tests()
   for (v in names(icd9cm_billable)) {
     i <- icd::icd9cm_billable[[v]][["code"]]
     expect_identical(i, icd_sort.icd9(i, short_code = TRUE),
