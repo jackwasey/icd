@@ -72,8 +72,14 @@ on.exit(options(old_warn))
 # travis. The code coverage testing is slower than regular testing because of
 # instrumentation.
 
-# standard reporter to use is Summary
+message("icd tests")
 test_check("icd", filter = "icd",
            reporter = testthat::MultiReporter(reporters = list(testthat::SummaryReporter(),
                                                                testthat::StopReporter()))
 )
+message("deprecated tests")
+test_check("icd", filter = "deprecated",
+           reporter = testthat::MultiReporter(reporters = list(testthat::SummaryReporter(),
+                                                               testthat::StopReporter()))
+)
+
