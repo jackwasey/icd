@@ -18,7 +18,7 @@
 # nocov start
 
 # icd9_sources is defined in this file and saved in sysdata.rda
-utils::globalVariables(c("icd9_sources"))
+utils::globalVariables(c("icd9_sources", "icd9cm_billable"))
 
 #' @title generate all package data
 #' @description Parses (and downloads if necessary) CDC annual revisions of
@@ -31,21 +31,14 @@ icd_update_everything <- function() {
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from
   # development tree, not as installed package
-  loadNamespace("devtools")
   generate_sysdata()
-
-  devtools::load_data(pkg = ".") # reload the newly saved data
-  loadNamespace("devtools")
-  message("Parsing RTF file(s) to create descriptions of codes at all
-          levels in the hierarchy, not just leaf nodes")
-  devtools::load_data(pkg = ".")
+  load(file.path("R", "sysdata.rda"))
 
   # plain text billable codes
   message("Parsing plain text billable codes to create icd9cm_billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
-  parse_leaf_descriptions_all(save_data = TRUE)
-  devtools::load_data(pkg = ".")
+  icd9cm_billable <- parse_leaf_descriptions_all(save_data = TRUE) # nolint
 
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
@@ -64,7 +57,6 @@ icd_update_everything <- function() {
   icd10cm_extract_sub_chapters(save_data = TRUE)
 
   # reload the newly saved data before generating chapters and deprecated data
-  devtools::load_data(pkg = ".")
   icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
   generate_deprecated_data(save_data = TRUE)
 }
@@ -269,7 +261,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
   # just copy the long description over.
-  bill32 <- icd::icd9cm_billable[["32"]]
+  bill32 <- icd9cm_billable[["32"]]
 
   billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE) # or from bill32
   billable_rows <- which(icd9cm_hierarchy[["code"]] %fin% billable_codes)

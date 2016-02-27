@@ -26,20 +26,12 @@ Imports:
     stringr,
     utils
 Suggests:
-    devtools,
-    digest,
-    ggplot2,
     knitr,
     lintr,
     memoise,
-    rmarkdown,
     RODBC,
     roxygen2 (>= 5.0.0),
-    readr,
-    RSelenium,
-    testthat (>= 0.11.0.9000),
-    xml2,
-    xtable
+    testthat (>= 0.11.0.9000)
 LazyData: true
 LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues

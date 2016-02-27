@@ -37,7 +37,6 @@ suppressWarnings({
     library(icd)
     library(stringr)
     library(magrittr)
-    library(xtable)
     library(utils)
     })
   })

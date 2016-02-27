@@ -21,6 +21,14 @@ library("icd")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 
-icd:::setup_test_check()
-icd:::show_test_options()
-icd:::my_test_check("icd")
+# we now rely on a testthat version with backwards-incompatible changes, the whole of the expectation setup has changed,
+# and there are many deprecations. For now, only run tests if testthat version is high enough:
+#
+if (packageVersion("testthat") >= package_version("0.11.0.9000")) {
+  icd:::setup_test_check()
+  icd:::show_test_options()
+  icd:::my_test_check("icd")
+} else {
+  message("testthat version is less than 0.11.0.9000, so not running tests. Consider using:
+          devtools::install_github('hadley/testthat')")
+}
