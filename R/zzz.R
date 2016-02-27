@@ -32,6 +32,13 @@ library(devtools)
 install_github(\"jackwasey/icd9\") # working on rename from icd9 to icd
 ")
 
+  if (system.file(package = "icd9") != "")
+    warning("The 'icd9' package is now deprecated, and should be removed to avoid conflicts with 'icd'.
+The new 'icd' package contains tested versions of all the deprecated function names which overlap with those in the old
+'icd9' package, e.g. 'icd9ComorbidAhrq'. It is strongly recommended to run the command:
+
+            remove.packages(\"icd9\")")
+
   if (!is.null(getOption("icd9.threads")))
     packageStartupMessage("icd9.threads is deprecated, use icd.threads to control OpenMP")
   if (!is.null(getOption("icd9.chunkSize")))
