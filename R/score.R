@@ -108,7 +108,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
                  2, 2, 2, 2, 3, 6, 6)
 
   if (hierarchy) {
-    x[,"DM"] <- x[, "DM"] & !x[, "DMcx"]
+    x[, "DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "LiverMild"] <- x[, "LiverMild"] & !x[, "LiverSevere"]
     x[, "Cancer"] <- x[, "Cancer"] & !x[, "Mets"]
   } else {
@@ -324,7 +324,7 @@ icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FAL
                9, 12, 4, 0, 3, -4, 6, 5, -2, -2, 0, -7, 0, -3)
 
   if (hierarchy) {
-    x[,"DM"] <- x[, "DM"] & !x[, "DMcx"]
+    x[, "DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "Tumor"] <- x[, "Tumor"] & !x[, "Mets"]
   } else {
     stopifnot(!any(x[, "DM"] & x[, "DMcx"]))

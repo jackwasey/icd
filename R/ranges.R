@@ -302,7 +302,7 @@ icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
   # cannot range between numeric, V and E codes, so ensure same type.
   stopifnot(toupper(c[1]) == toupper(d[1]))
   fmt <- if (icd9_is_v(start)) "%02d" else "%03d"
-  majors <- icd9(paste(c[,1], sprintf(fmt = fmt, c[,2]:d[,2]), sep  = ""))
+  majors <- icd9(paste(c[, 1], sprintf(fmt = fmt, c[, 2]:d[, 2]), sep = ""))
 
   if (defined)
     icd_get_defined.icd9(majors, short_code = TRUE, billable = FALSE)

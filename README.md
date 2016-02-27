@@ -117,3 +117,10 @@ The latest version is available in [github](https://github.com/jackwasey/icd9) a
     install.packages("magrittr") # recommended, but not required
 
 The *master* branch at github should always build and pass all tests and R CMD check, and will be similar or identical to the most recent CRAN release. The CRAN releases are stable milestones. Contributions and bug reports are encouraged.
+
+Advanced
+--------
+
+In the spirit of reproducible research, all the R data files in this package can be recreated from source. The size of the source files makes it cumbersome to include them in the R package available on CRAN. Using the [github](https://github.com/jackwasey/icd9) source, you can pull the source data, too, and rebuild the data, or use the tools to update the data using new source data files, e.g. when ICD-10-CM 2017 is released.
+
+Doing the parsing requires additional dependencies, which are not gratuitously included in the package requirements, since most users won't need them. Benchmarking this package also has additional requirements. These are: - devtools - digest - ggplot2 - rmarkdown - readr - RSelenium - xml2 - xtable
