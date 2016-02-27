@@ -96,21 +96,21 @@ test_that("condense range invalid data", {
 test_that("mix of four and five digit billable codes", {
   # this is all of leptospirosis, but missing the "1008" non-billable sub-heading
   expect_equal(
-    icd_condense.icd9(short_code = TRUE,c("1000", "10081", "10089", "1009")),
+    icd_condense.icd9(short_code = TRUE, c("1000", "10081", "10089", "1009")),
     "100")
 })
 
 test_that("mix of four and five digit billable codes over bigger range", {
   # this is all of leptospirosis, but missing the "1008" non-billable sub-heading
   expect_equal(
-    icd_condense.icd9(short_code = TRUE,c("1000", "10081", "10089", "1009", "101")),
+    icd_condense.icd9(short_code = TRUE, c("1000", "10081", "10089", "1009", "101")),
     c("100", "101"))
 })
 
 
 test_that("mix of four and five digit with non-billable mid-level four digit code", {
   expect_equal(
-    icd_condense.icd9(short_code = TRUE,c("1000", "1008", "10081", "10089", "1009")),
+    icd_condense.icd9(short_code = TRUE, c("1000", "1008", "10081", "10089", "1009")),
     "100")
 })
 
@@ -119,7 +119,7 @@ test_that("condense short range", {
 
   expect_equal(icd_explain.icd9(othersalmonella), "Other salmonella infections")
 
-  expect_equal(icd_condense.icd9(short_code = TRUE,othersalmonella, defined = TRUE), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, defined = TRUE), "003")
   expect_warning(res <- icd_condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), NA)
   expect_equal(res, othersalmonella)
   # missing this leaf node, we can't condense at all
@@ -211,7 +211,7 @@ icd_children.icd9(short_code = TRUE, "0031", defined = FALSE), defined = FALSE),
 })
 
 test_that("condense single major and its children", {
-  expect_equal(icd_condense.icd9(short_code = TRUE,"003"), "003")
+  expect_equal(icd_condense.icd9(short_code = TRUE, "003"), "003")
 
   rheum_fever <- "Rheumatic fever with heart involvement"
   expect_equal(icd_explain.icd9("391"), rheum_fever)

@@ -76,7 +76,7 @@ test_that("expalin a single top level code without a top level explanation", {
 })
 
 
-test_that("explain a single leaf node" , {
+test_that("explain a single leaf node", {
   expect_equal(icd_explain.icd9("27800", condense = FALSE), "Obesity, unspecified")
   expect_equal(icd_explain.icd9("27800", condense = TRUE), "Obesity, unspecified")
   expect_equal(icd_explain.icd9("00329"), "Other localized salmonella infections")

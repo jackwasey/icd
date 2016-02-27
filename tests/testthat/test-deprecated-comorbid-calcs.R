@@ -46,7 +46,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = FALSE,
                                     applyHierarchy = TRUE, return.df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visitId", elixComorbidNames), names(res)))
             # should not have dm and dmcx, etc
             expect_false(all(as.logical(res[1, unlist(elixComorbidNames)])))
@@ -57,7 +57,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = FALSE,
                                     applyHierarchy = TRUE, return.df = FALSE)
-            expect_equal(dim(res), c(1,30))
+            expect_equal(dim(res), c(1, 30))
             expect_true(setequal(elixComorbidNames, colnames(res)))
             # should not have dm and dmcx, etc
             expect_false(all(as.logical(res[1, unlist(elixComorbidNames)])))
@@ -70,7 +70,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
                                     applyHierarchy = TRUE, return.df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visitId", elixComorbidNamesAbbrev), names(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -82,7 +82,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
                                     applyHierarchy = TRUE, return.df = FALSE)
-            expect_equal(dim(res), c(1,30))
+            expect_equal(dim(res), c(1, 30))
             expect_true(setequal(elixComorbidNamesAbbrev, colnames(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -96,7 +96,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = FALSE,
                                     applyHierarchy = FALSE, return.df = TRUE)
-            expect_equal(dim(res), c(1,32)) #longer because 2x htn
+            expect_equal(dim(res), c(1, 32)) #longer because 2x htn
             expect_true(setequal(c("visitId", elixComorbidNamesHtn), names(res)))
             # not applying hierarchy, so dm and dmcx can both be true
             expect_true(all(as.logical(res[1, unlist(elixComorbidNamesHtn)])))
@@ -116,7 +116,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
                                     applyHierarchy = FALSE, return.df = TRUE)
-            expect_equal(dim(res), c(1,32))
+            expect_equal(dim(res), c(1, 32))
             expect_true(setequal(c("visitId", elixComorbidNamesHtnAbbrev), names(res)))
             expect_true(
               all(as.logical(res[1, unlist(elixComorbidNamesHtnAbbrev)])))
@@ -125,7 +125,7 @@ test_that("deprecated -elix comorbidity mapping is applied correctly,
             res <- icd9ComorbidElix(elixTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
                                     applyHierarchy = FALSE, return.df = FALSE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(elixComorbidNamesHtnAbbrev, colnames(res)))
             expect_true(
               all(as.logical(res[1, unlist(elixComorbidNamesHtnAbbrev)])))
@@ -138,7 +138,7 @@ test_that("deprecated -qelix comorbidity mapping is applied correctly,
                                         isShort = TRUE,
                                         abbrevNames = FALSE,
                                         applyHierarchy = TRUE, return.df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visitId", quanElixComorbidNames), names(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -151,7 +151,7 @@ test_that("deprecated -qelix comorbidity mapping is applied correctly,
                                         isShort = TRUE,
                                         abbrevNames = FALSE,
                                         applyHierarchy = TRUE, return.df = FALSE)
-            expect_equal(dim(res), c(1,30))
+            expect_equal(dim(res), c(1, 30))
             expect_true(setequal(quanElixComorbidNames, colnames(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -166,7 +166,7 @@ test_that("deprecated -qelix comorbidity mapping is applied correctly,
                                         isShort = TRUE,
                                         abbrevNames = TRUE,
                                         applyHierarchy = TRUE, return.df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visitId", quanElixComorbidNamesAbbrev), colnames(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -196,7 +196,7 @@ test_that("deprecated -qelix comorbidity mapping is applied correctly,
                                         abbrevNames = FALSE,
                                         applyHierarchy = FALSE, return.df = TRUE)
             #longer because 2x htn
-            expect_equal(dim(res), c(1,32))
+            expect_equal(dim(res), c(1, 32))
             # not applying hierarchy, so dm and dmcx can both be true
             expect_true(setequal(c("visitId", quanElixComorbidNamesHtn), names(res)))
             expect_true(
@@ -207,7 +207,7 @@ test_that("deprecated -qelix comorbidity mapping is applied correctly,
                                         isShort = TRUE,
                                         abbrevNames = FALSE,
                                         applyHierarchy = FALSE, return.df = FALSE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             # not applying hierarchy, so dm and dmcx can both be true
             expect_true(setequal(quanElixComorbidNamesHtn, colnames(res)))
             expect_true(
@@ -220,7 +220,7 @@ test_that("deprecated -qelix comorbidity mapping is applied correctly,
                                         isShort = TRUE,
                                         abbrevNames = TRUE,
                                         applyHierarchy = FALSE, return.df = TRUE)
-            expect_equal(dim(res), c(1,32))
+            expect_equal(dim(res), c(1, 32))
             expect_true(setequal(c("visitId", quanElixComorbidNamesHtnAbbrev), names(res)))
             expect_true(
               all(as.logical(res[1, unlist(quanElixComorbidNamesHtnAbbrev)])))
@@ -229,7 +229,7 @@ test_that("deprecated -qelix comorbidity mapping is applied correctly,
                                         isShort = TRUE,
                                         abbrevNames = TRUE,
                                         applyHierarchy = FALSE, return.df = FALSE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(quanElixComorbidNamesHtnAbbrev, colnames(res)))
             expect_true(
               all(as.logical(res[1, unlist(quanElixComorbidNamesHtnAbbrev)])))
@@ -285,7 +285,7 @@ test_that("deprecated -ahrq comorbidity mapping is applied correctly,
             res <- icd9ComorbidAhrq(ahrqTestDat, isShort = TRUE,
                                     abbrevNames = TRUE,
                                     applyHierarchy = FALSE, return.df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visitId", ahrqComorbidNamesHtnAbbrev), names(res)))
             expect_true(
               all(as.logical(res[1, unlist(ahrqComorbidNamesHtnAbbrev)])))

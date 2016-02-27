@@ -119,7 +119,7 @@ test_that("filter POA - poa upper and lower case", {
 test_that("filter POA - just Y and N should be complementary", {
   # take any data frame to start out:
   dfrm <- test_twenty;
-  dfrm <- dfrm[dfrm[["poa"]] %in% c("Y", "N", "y", "n"),]
+  dfrm <- dfrm[dfrm[["poa"]] %in% c("Y", "N", "y", "n"), ]
   expect_identical(icd9FilterPoaNo(dfrm),  icd9FilterPoaNotYes(dfrm))
   expect_identical(icd9FilterPoaYes(dfrm), icd9FilterPoaNotNo(dfrm))
 })

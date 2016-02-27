@@ -1,9 +1,11 @@
 #include <Rcpp.h>
-#include <testthat.h>
 #include "is.h"
 #include "util.h"
 #include "convert.h"
 #include "../inst/include/icd.h"
+
+#ifdef TESTTHAT_HPP
+#include <testthat.h>
 
 context("C++ Unit Test") {
   test_that("two plus two is four") {
@@ -205,3 +207,4 @@ context("fast int to string") {
   }
 
   }
+#endif

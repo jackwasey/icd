@@ -46,7 +46,7 @@ test_that("elix comorbidity mapping is applied correctly,
             res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = TRUE, return_df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visit_id", icd_names_elix), names(res)))
             # should not have dm and dmcx, etc
             expect_false(all(as.logical(res[1, unlist(icd_names_elix)])))
@@ -57,7 +57,7 @@ test_that("elix comorbidity mapping is applied correctly,
             res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = TRUE, return_df = FALSE)
-            expect_equal(dim(res), c(1,30))
+            expect_equal(dim(res), c(1, 30))
             expect_true(setequal(icd_names_elix, colnames(res)))
             # should not have dm and dmcx, etc
             expect_false(all(as.logical(res[1, unlist(icd_names_elix)])))
@@ -71,7 +71,7 @@ test_that("elix comorbidity mapping is applied correctly,
                                           short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = TRUE, return_df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visit_id", icd_names_elix_abbrev), names(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -84,7 +84,7 @@ test_that("elix comorbidity mapping is applied correctly,
                                           short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = TRUE, return_df = FALSE)
-            expect_equal(dim(res), c(1,30))
+            expect_equal(dim(res), c(1, 30))
             expect_true(setequal(icd_names_elix_abbrev, colnames(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -98,7 +98,7 @@ test_that("elix comorbidity mapping is applied correctly,
             res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = FALSE, return_df = TRUE)
-            expect_equal(dim(res), c(1,32)) #longer because 2x htn
+            expect_equal(dim(res), c(1, 32)) #longer because 2x htn
             expect_true(setequal(c("visit_id", icd_names_elix_htn), names(res)))
             # not applying hierarchy, so dm and dmcx can both be true
             expect_true(all(as.logical(res[1, unlist(icd_names_elix_htn)])))
@@ -118,7 +118,7 @@ test_that("elix comorbidity mapping is applied correctly,
             res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = FALSE, return_df = TRUE)
-            expect_equal(dim(res), c(1,32))
+            expect_equal(dim(res), c(1, 32))
             expect_true(setequal(c("visit_id", icd_names_elix_htn_abbrev), names(res)))
             expect_true(
               all(as.logical(res[1, unlist(icd_names_elix_htn_abbrev)])))
@@ -127,7 +127,7 @@ test_that("elix comorbidity mapping is applied correctly,
             res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = FALSE, return_df = FALSE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(icd_names_elix_htn_abbrev, colnames(res)))
             expect_true(
               all(as.logical(res[1, unlist(icd_names_elix_htn_abbrev)])))
@@ -139,7 +139,7 @@ test_that("qelix comorbidity mapping is applied correctly,
             res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
                                                short_code = TRUE, abbrev_names = FALSE,
                                                hierarchy = TRUE, return_df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visit_id", icd_names_quan_elix), names(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -152,7 +152,7 @@ test_that("qelix comorbidity mapping is applied correctly,
                                                short_code = TRUE,
                                                abbrev_names = FALSE,
                                                hierarchy = TRUE, return_df = FALSE)
-            expect_equal(dim(res), c(1,30))
+            expect_equal(dim(res), c(1, 30))
             expect_true(setequal(icd_names_quan_elix, colnames(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -167,7 +167,7 @@ test_that("qelix comorbidity mapping is applied correctly,
                                                short_code = TRUE,
                                                abbrev_names = TRUE,
                                                hierarchy = TRUE, return_df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visit_id", icd_names_quan_elix_abbrev), colnames(res)))
             # should not have dm and dmcx, etc
             expect_false(
@@ -197,7 +197,7 @@ test_that("qelix comorbidity mapping is applied correctly,
                                                abbrev_names = FALSE,
                                                hierarchy = FALSE, return_df = TRUE)
             #longer because 2x htn
-            expect_equal(dim(res), c(1,32))
+            expect_equal(dim(res), c(1, 32))
             # not applying hierarchy, so dm and dmcx can both be true
             expect_true(setequal(c("visit_id", icd_names_quan_elix_htn), names(res)))
             expect_true(
@@ -208,7 +208,7 @@ test_that("qelix comorbidity mapping is applied correctly,
                                                short_code = TRUE,
                                                abbrev_names = FALSE,
                                                hierarchy = FALSE, return_df = FALSE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             # not applying hierarchy, so dm and dmcx can both be true
             expect_true(setequal(icd_names_quan_elix_htn, colnames(res)))
             expect_true(
@@ -221,7 +221,7 @@ test_that("qelix comorbidity mapping is applied correctly,
                                                short_code = TRUE,
                                                abbrev_names = TRUE,
                                                hierarchy = FALSE, return_df = TRUE)
-            expect_equal(dim(res), c(1,32))
+            expect_equal(dim(res), c(1, 32))
             expect_true(setequal(c("visit_id", icd_names_quan_elix_htn_abbrev), names(res)))
             expect_true(
               all(as.logical(res[1, unlist(icd_names_quan_elix_htn_abbrev)])))
@@ -230,7 +230,7 @@ test_that("qelix comorbidity mapping is applied correctly,
                                                short_code = TRUE,
                                                abbrev_names = TRUE,
                                                hierarchy = FALSE, return_df = FALSE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(icd_names_quan_elix_htn_abbrev, colnames(res)))
             expect_true(
               all(as.logical(res[1, unlist(icd_names_quan_elix_htn_abbrev)])))
@@ -253,7 +253,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
             res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = TRUE, return_df = FALSE)
-            expect_equal(dim(res), c(1,29))
+            expect_equal(dim(res), c(1, 29))
             expect_true(setequal(icd_names_ahrq_abbrev, colnames(res)))
             expect_false(
               all(as.logical(res[1, unlist(icd_names_ahrq_abbrev)])))
@@ -286,7 +286,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
             res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = FALSE, return_df = TRUE)
-            expect_equal(dim(res), c(1,31))
+            expect_equal(dim(res), c(1, 31))
             expect_true(setequal(c("visit_id", icd_names_ahrq_htn_abbrev), names(res)))
             expect_true(
               all(as.logical(res[1, unlist(icd_names_ahrq_htn_abbrev)])))

@@ -135,8 +135,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   # either range or a single value (which overlaps with the majors definition)
   paste0("^[-()A-Z,[:space:]]+", "(", "[[:space:]]+\\(", "|", "\\(", ")",
-         "(", re_icd9_major_strict_bare,")",
-         "(-(", re_icd9_major_strict_bare,"))?",
+         "(", re_icd9_major_strict_bare, ")",
+         "(-(", re_icd9_major_strict_bare, "))?",
          "\\)") -> re_subchap_either
 
   paste0("^(", re_icd9_major_strict_bare, ") ") -> re_major_start

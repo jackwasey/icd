@@ -18,7 +18,7 @@ icd10_get_who_from_cdc <- function() {
   # unspecified origin" I've no idea what those people are thinking when they do
   # this kind of thing.
 
-  # ignore locale issue right now. This set has a lot of the different cases: dat[70:75,]
+  # ignore locale issue right now. Rows 70 to 75 have a lot of the different cases.
   readr::read_lines(file_path, skip = 7) %>%
     str_trim() %>%
     str_match("(.*\\t)?(.+)\\t+(.+)") -> dat

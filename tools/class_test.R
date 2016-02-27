@@ -25,7 +25,7 @@ class(j$speed)
 class(j$dist)
 
 class(j[1])
-class(j[1,])
+class(j[1, ])
 class(j[1, 1])
 class(j[[1]])
 class(j[[2]])
