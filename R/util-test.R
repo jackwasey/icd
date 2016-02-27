@@ -399,4 +399,3 @@ my_test_check <- function(pattern, msg) {
                                                                            testthat::StopReporter()))
   )
 }
-

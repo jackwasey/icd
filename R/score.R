@@ -62,8 +62,9 @@ icd_charlson <- function(x, visit_name = NULL,
                          scoring_system = c("original", "charlson", "quan"),
                          return_df = FALSE,
                          stringsAsFactors = getOption("stringsAsFactors"), # nolint
-			 ...)
+                         ...) {
   UseMethod("icd_charlson")
+}
 
 #' @describeIn icd_charlson Charlson scores from data frame of visits and ICD-9 codes
 #' @export
@@ -93,7 +94,7 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
 #'   drop DM if DMcx is present, etc.
 #' @export
 icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
-                                 scoring_system = c("original", "charlson", "quan")) {
+                                       scoring_system = c("original", "charlson", "quan")) {
   assert(
     checkmate::checkDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named"),
     checkmate::checkMatrix(x, min.rows = 0, min.cols = 2, col.names = "named")
@@ -221,9 +222,9 @@ icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FA
 #' @importFrom stats aggregate
 #' @export
 icd_count_codes_wide <- function(x,
-                          visit_name = get_visit_name(x),
-                          return_df = FALSE,
-                          aggr = FALSE) {
+                                 visit_name = get_visit_name(x),
+                                 return_df = FALSE,
+                                 aggr = FALSE) {
   assert_data_frame(x)
   assert_string(visit_name)
   assert_flag(return_df)
@@ -283,15 +284,15 @@ icd_count_codes_wide <- function(x,
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
 icd_van_walraven <- function(x, visit_name = NULL, return_df = FALSE,
-                            stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                            ...)
+                             stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                             ...)
   UseMethod("icd_van_walraven")
 
 #' @describeIn icd_van_walraven van Walraven scores from data frame of visits and ICD-9 codes
 #' @export
 icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
-                                       stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                                       ...) {
+                                        stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                                        ...) {
   assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assert(checkmate::checkNull(visit_name), checkmate::checkString(visit_name))
   assert_flag(return_df)
