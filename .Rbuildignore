@@ -14,9 +14,9 @@ cran-comments\.md$
 .*\.gch$
 .*\.gcno$
 .*\.gcov$
-.git/.*
-data\/icd10_who.*
-data-raw\/icd10cdc\.txt$
+^\.git/.*
+^data\/icd10_who.*$
+^inst\/data-raw\/.*$
 icd10_get_who_from_cdc
 icd.*\.aux$
 icd.*\.so$
