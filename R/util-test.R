@@ -334,34 +334,37 @@ show_and_set_test_options <- function() {
 }
 
 setup_test_check <- function() {
-if (is.null(options("icd.do_slow_tests")))
-  options("icd.do_slow_tests" = FALSE)
-if (is.null(options("icd.do_online_tests")))
-  options("icd.do_online_tests" = FALSE)
-if (is.null(options("icd.warn_deprecated")))
-  options("icd.warn_deprecated" = TRUE)
 
-if (identical(Sys.getenv("COVR"), "true")) {
-  message("my environment variable COVR found so doing slow and online tests")
-  options("icd.do_slow_tests" = TRUE)
-  options("icd.do_online_tests" = TRUE)
-  options("icd.warn_deprecated" = TRUE)
-}
+  # basic defaults if nothing else is set: skip slow and online tests and warn deprecated
+  if (is.null(options("icd.do_slow_tests")))
+    options("icd.do_slow_tests" = FALSE)
+  if (is.null(options("icd.do_online_tests")))
+    options("icd.do_online_tests" = FALSE)
+  if (is.null(options("icd.warn_deprecated")))
+    options("icd.warn_deprecated" = TRUE)
 
-if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
-  message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
-  options("icd.do_slow_tests" = TRUE)
-}
+  # pre-set options if covr is running
+  if (identical(Sys.getenv("COVR"), "true")) {
+    message("my environment variable COVR found so doing slow and online tests")
+    options("icd.do_slow_tests" = TRUE)
+    options("icd.do_online_tests" = TRUE)
+    options("icd.warn_deprecated" = FALSE)
+  }
 
-if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
-  message("environment variable ICD_ONLINE_TESTS found to be true, so doing online tests")
-  options("icd.do_online_tests" = TRUE)
-}
+  if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
+    message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
+    options("icd.do_slow_tests" = TRUE)
+  }
 
-if (identical(tolower(Sys.getenv("ICD_WARN_DEPRECATED")), "true")) {
-  message("environment variable ICD_WARN_DEPRECATE found to be true, so warning for deprecated icd9 function use")
-  options("icd.warn_deprecated" = TRUE)
-}
+  if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
+    message("environment variable ICD_ONLINE_TESTS found to be true, so doing online tests")
+    options("icd.do_online_tests" = TRUE)
+  }
+
+  if (identical(tolower(Sys.getenv("ICD_WARN_DEPRECATED")), "true")) {
+    message("environment variable ICD_WARN_DEPRECATE found to be true, so warning for deprecated icd9 function use")
+    options("icd.warn_deprecated" = TRUE)
+  }
 }
 
 # use summary reporter so that covr produces output and doesn't time-out on
@@ -373,9 +376,10 @@ my_test_check <- function(pattern, msg) {
     msg <- pattern
 
   message(msg)
-  test_check("icd", filter = pattern, perl = TRUE,
-             reporter = testthat::MultiReporter(reporters = list(testthat::SummaryReporter(),
-                                                                 testthat::StopReporter()))
+  # use perl for grepl to interpret the regex which can then include negative backrefs to exclude things.
+  testthat::test_check("icd", filter = pattern, perl = TRUE,
+                       reporter = testthat::MultiReporter(reporters = list(testthat::SummaryReporter(),
+                                                                           testthat::StopReporter()))
   )
 }
 
