@@ -27,5 +27,6 @@ options("icd.warn_deprecated" = FALSE)
 old_warn <- options(warn = -1)
 on.exit(options(old_warn))
 
+icd:::show_test_options()
 icd:::my_test_check("deprecated")
 

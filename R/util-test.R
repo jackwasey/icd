@@ -321,16 +321,23 @@ random_string <- function(n, max_chars = 4) {
   )  %>% apply(1, paste0, collapse = "")
 }
 
-# to run all tests:
-show_and_set_test_options <- function() {
-  message("current test settings")
+show_test_options <- function() {
   print(options("icd.do_slow_tests"))
   print(options("icd.do_online_tests"))
   print(options("icd.warn_deprecated"))
+}
+
+# to run all tests:
+show_and_set_test_options <- function() {
+
+  message("current test options:")
+  show_test_options()
+
   message("now setting defaults")
   options("icd.do_slow_tests" = TRUE)
   options("icd.do_online_tests" = TRUE)
   options("icd.warn_deprecated" = FALSE)
+  show_test_options()
 }
 
 setup_test_check <- function() {

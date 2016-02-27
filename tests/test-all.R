@@ -22,6 +22,6 @@ library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 
 icd:::setup_test_check()
-
+icd:::show_test_options()
 icd:::my_test_check("icd")
 
