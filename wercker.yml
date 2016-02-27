@@ -1,7 +1,3 @@
-#box: jackwasey/r-ubsan-clang-3.7-libcxx
-#box: rocker/r-devel-san
-#box: rocker/r-devel-ubsan-clang
-
 # WERCKER_R_COVR_OPTIONS is set in the wercker configuration to do exclusions
 box: rocker/hadleyverse
 command-timeout: 60
@@ -15,5 +11,5 @@ build:
     - jimhester/r-check:
 # I think this has false positives for latex warnings, even if R CMD check is okay
       warnings_are_errors: FALSE
-    - jackwasey/r-coverage
-    - jimhester/r-lint
+#    - jackwasey/r-coverage # fails with obscure error (jimhester and jackwasey versions)
+#    - jimhester/r-lint # now done in tests
