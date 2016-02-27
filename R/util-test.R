@@ -321,19 +321,26 @@ random_string <- function(n, max_chars = 4) {
   )  %>% apply(1, paste0, collapse = "")
 }
 
+#' Show options which control testing
+#' @keywords internal
 show_test_options <- function() {
   print(options("icd.do_slow_tests"))
   print(options("icd.do_online_tests"))
   print(options("icd.warn_deprecated"))
 }
 
-# to run all tests:
-show_and_set_test_options <- function() {
+#' Set test options to do everything
+#'
+#' Default without setting options is for slow and online tests to be skipped, and warnings to be generated for
+#' deprecated functions. This function explicitly sets options to do slow and online tests, and not to warn for
+#' deprecated functions. This is intended for local testing.
+#' @keywords internal
+set_full_test_options <- function() {
 
   message("current test options:")
   show_test_options()
 
-  message("now setting defaults")
+  message("now setting full test options")
   options("icd.do_slow_tests" = TRUE)
   options("icd.do_online_tests" = TRUE)
   options("icd.warn_deprecated" = FALSE)
@@ -356,6 +363,9 @@ setup_test_check <- function() {
     options("icd.do_slow_tests" = TRUE)
     options("icd.do_online_tests" = TRUE)
     options("icd.warn_deprecated" = FALSE)
+
+    # also turn off all other warnings, e.g. testthat 'info' deprecation
+    options("warn" = -1)
   }
 
   if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
