@@ -27,9 +27,11 @@ Convert short format ICD codes to component parts
 
 \item \code{icd10}: Convert short format ICD-10 code to parts
 
-\item \code{character}: Convert short format ICD code to parts, assuming ICD-9 from character class. TODO: test this works for ICD-10
+\item \code{character}: Convert short format ICD code to parts,
+assuming ICD-9 from character class. TODO: test this works for ICD-10
 
-\item \code{character}: Convert decimal ICD code to parts, assuming ICD-9 from character class. TODO: test this works for ICD-10
+\item \code{character}: Convert decimal ICD code to parts, assuming
+ICD-9 from character class. TODO: test this works for ICD-10
 }}
 \keyword{internal}
 \keyword{manip}

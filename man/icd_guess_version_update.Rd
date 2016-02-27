@@ -10,7 +10,8 @@ icd_guess_version_update(x)
 the input data with appropriate ICD class set
 }
 \description{
-Guesses the version of given ICD codes and sets the class of the returned data according to the guess.
+Guesses the version of given ICD codes and sets the class of the
+  returned data according to the guess.
 }
 \keyword{internal}
 

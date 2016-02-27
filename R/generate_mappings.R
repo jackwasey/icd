@@ -153,8 +153,8 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
     depression = c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432")
   )
 
-  # TODO: either generate children (probably infeasible for ICD-10), or generate comorbid algorithm
-  # which matches against the listed parents
+  # TODO: either generate children (probably infeasible for ICD-10), or generate
+  # comorbid algorithm which matches against the listed parents
 
   # icd10_map_elix <- lapply(
   #   icd10_map_elix,
@@ -308,8 +308,9 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   # category, whereas diabetes is kept as two categories
   names(quan_elix_raw) <- icd::icd_names_elix_htn_abbrev
 
-  # this expansion will only be for 'defined' codes (currently the most up-to-date
-  # canonical CMS ICD-10-CM list). Will ultimately need to generalize this.
+  # this expansion will only be for 'defined' codes (currently the most
+  # up-to-date canonical CMS ICD-10-CM list). Will ultimately need to generalize
+  # this.
 
   # this function accounts for the fact that some Quan Elixhauser ICD-10 codes
   # are not in fact defined in ICD-10-CM, and currently generation of ICD-10

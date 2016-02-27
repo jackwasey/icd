@@ -73,7 +73,8 @@ This can be thought of as the inverse operation to
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Condense a set of ICD codes, guessing ICD version from input data
+\item \code{character}: Condense a set of ICD codes, guessing ICD version
+from input data
 }}
 \seealso{
 Other ICD-9 ranges: \code{\link{icd9ExpandRange}},

@@ -52,21 +52,23 @@
 icd_children <- function(x, ...)
   UseMethod("icd_children")
 
-#' @describeIn icd_children Get child codes, guessing ICD version and short versus decimal format
+#' @describeIn icd_children Get child codes, guessing ICD version and short
+#'   versus decimal format
 #' @export
 icd_children.character <- function(x, ...) {
   ver <- icd_guess_version(x)
-  # eventually UseMethod again, but this would be circular until the icd10 method is defined.
+  # eventually UseMethod again, but this would be circular until the icd10
+  # method is defined.
   switch(ver,
-    "icd9" = icd_children.icd9(x = x, ...),
-    "icd10" = icd_children.icd10(x, ...),
-    NULL)
+         "icd9" = icd_children.icd9(x = x, ...),
+         "icd10" = icd_children.icd10(x, ...),
+         NULL)
 }
 
 #' @describeIn icd_children Get children of ICD-9 codes
 #' @export
 icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
-                         defined = TRUE, billable = FALSE, ...) {
+                              defined = TRUE, billable = FALSE, ...) {
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert_flag(short_code)
   assert_flag(defined)
@@ -95,7 +97,8 @@ icd_children.icd10cm <- function(x, short_code = icd_guess_short(x), billable = 
   stop("Finding ICD-10 children is not yet implemented.")
 }
 
-#' @describeIn icd_children Get children of ICD-10 codes (for now assume ICD-10-CM)
+#' @describeIn icd_children Get children of ICD-10 codes (for now assume
+#'   ICD-10-CM)
 #' @export
 #' @keywords internal
 icd_children.icd10 <- icd_children.icd10cm
@@ -106,8 +109,8 @@ utils::globalVariables("icd10cm2016")
 
 #' defined children of ICD codes
 #'
-#' defined icd10 children based on 2016 ICD-10-CM list. "defined" may be a three digit
-#' code, or a leaf node. This is distinct from 'billable'.
+#' defined icd10 children based on 2016 ICD-10-CM list. "defined" may be a three
+#' digit code, or a leaf node. This is distinct from 'billable'.
 #'
 #' @keywords internal
 icd_children_defined <- function(x)
@@ -136,7 +139,8 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
   matches <- match(icd10Short, icd::icd10cm2016[["code"]])
   last_row <- nrow(icd::icd10cm2016)
 
-  nc <- nchar(icd::icd10cm2016[["code"]]) # TODO: pre-compute and save in package data
+  # TODO: pre-compute and save in package data?
+  nc <- nchar(icd::icd10cm2016[["code"]])
 
   kids <- character(0)
 
@@ -146,8 +150,8 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
   }
 
   for (i in seq_along(icd10Short)) {
-    # now the children, assuming the source file is sorted logically, will be subsequent codes, until a code of the same
-    # length is found
+    # now the children, assuming the source file is sorted logically, will be
+    # subsequent codes, until a code of the same length is found
     check_row <- matches[i] + 1
     parent_len <- nc[matches[i]]
     while (nc[check_row] > parent_len && check_row != last_row + 1)

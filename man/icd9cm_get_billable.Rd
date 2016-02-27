@@ -39,9 +39,11 @@ TODO: keep this internal
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd_short_code}: Get the billable ICD-9-CM codes from vector of short codes
+\item \code{icd_short_code}: Get the billable ICD-9-CM codes from vector
+of short codes
 
-\item \code{icd_decimal_code}: Get the billable ICD-9-CM codes from vector of decimal codes
+\item \code{icd_decimal_code}: Get the billable ICD-9-CM codes from vector
+of decimal codes
 }}
 \keyword{internal}
 

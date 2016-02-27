@@ -36,8 +36,8 @@ re_just_ws <- function(x) {
   re_just(x, whitespace_ok = TRUE)
 }
 
-#' @describeIn re_just contain any \code{|} options within a regex, e.g. ICD-9 codes without
-#'   \code{^} or \code{$}.
+#' @describeIn re_just contain any \code{|} options within a regex, e.g. ICD-9
+#'   codes without \code{^} or \code{$}.
 #' @keywords internal
 re_wrap_or <- function(x) {
   paste0("(?:", x, ")")
@@ -54,17 +54,17 @@ re_icd9_major <- paste0(c(re_icd9_major_n %>% re_just_ws,
                           re_icd9_major_e %>% re_just_ws),
                         collapse = "|")
 re_icd9_major_bare <- paste0(c(re_icd9_major_n,
-                          re_icd9_major_v,
-                          re_icd9_major_e),
-                        collapse = "|") %>% re_wrap_or
+                               re_icd9_major_v,
+                               re_icd9_major_e),
+                             collapse = "|") %>% re_wrap_or
 re_icd9_major_strict <- paste0(c(re_icd9_major_n_strict %>% re_just_ws,
                                  re_icd9_major_v_strict %>% re_just_ws,
                                  re_icd9_major_e_strict %>% re_just_ws),
                                collapse = "|")
 re_icd9_major_strict_bare <- paste0(c(re_icd9_major_n_strict,
-                                 re_icd9_major_v_strict,
-                                 re_icd9_major_e_strict),
-                               collapse = "|") %>% re_wrap_or
+                                      re_icd9_major_v_strict,
+                                      re_icd9_major_e_strict),
+                                    collapse = "|") %>% re_wrap_or
 re_icd9_minor_nv <- "[[:digit:]]{1,2}"
 re_icd9_minor_e <- "[[:digit:]]{1}"
 
@@ -89,14 +89,14 @@ re_icd9_any_v <- paste0(re_icd9_major_v, "\\.?(?:", re_icd9_minor_nv, ")?") %>% 
 re_icd9_any_e <- paste0(re_icd9_major_e, "\\.?(?:", re_icd9_minor_e, ")?") %>% re_just_ws
 
 re_icd9_decimal <- paste0(c(re_icd9_decimal_n,
-                          re_icd9_decimal_v,
-                          re_icd9_decimal_e),
+                            re_icd9_decimal_v,
+                            re_icd9_decimal_e),
                           collapse = "|")
 
 re_icd9_decimal_bare <- paste0(c(re_icd9_decimal_n_bare,
-                            re_icd9_decimal_v_bare,
-                            re_icd9_decimal_e_bare),
-                          collapse = "|")
+                                 re_icd9_decimal_v_bare,
+                                 re_icd9_decimal_e_bare),
+                               collapse = "|")
 
 re_icd9_decimal_strict_bare <- paste0(c(re_icd9_decimal_n_strict_bare,
                                         re_icd9_decimal_v_strict_bare,
@@ -109,9 +109,9 @@ re_icd9_short <- paste0(c(re_icd9_short_n,
                         collapse = "|")
 
 re_icd9_any <- paste0(c(re_icd9_any_n,
-                          re_icd9_any_v,
-                          re_icd9_any_e),
-                        collapse = "|")
+                        re_icd9_any_v,
+                        re_icd9_any_e),
+                      collapse = "|")
 
 
 re_icd10cm_major_bare  <- "[[:alpha:]][[:digit:]][[:alnum:]]"
@@ -256,7 +256,8 @@ icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {
 }
 
 icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
-  # if input doesn't satisfy these, then it is not just invalid, but deserves an error:
+  # if input doesn't satisfy these, then it is not just invalid, but deserves an
+  # error:
   assert(
     checkmate::checkFactor(x),
     checkmate::checkCharacter(x),
@@ -276,7 +277,7 @@ icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
     str_detect(as_char_no_warn(x), re_just_ws(re_icd9_short)) %>% na_to_false
   else
     str_detect(as_char_no_warn(x), re_just(re_icd9_short)) %>% na_to_false
-  }
+}
 
 icd9_is_valid_short_n <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
@@ -390,7 +391,7 @@ icd9_is_valid_major_v <- function(x, whitespace_ok = TRUE) {
     str_detect(as_char_no_warn(x), re_just_ws(re_icd9_major_v)) %>% na_to_false
   else
     str_detect(as_char_no_warn(x), re_just(re_icd9_major_v)) %>% na_to_false
-  }
+}
 #' @rdname icd_is_valid_major
 #' @keywords internal
 icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
@@ -406,7 +407,7 @@ icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
 #' @keywords internal
 icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
   assert_list(x, types = "character", any.missing = FALSE,
-                        min.len = 1, unique = TRUE, names = "named")
+              min.len = 1, unique = TRUE, names = "named")
   assert_flag(short_code)
   # TOOD: warn/return the invalid labels?
   all(unlist(
@@ -456,7 +457,8 @@ icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 }
 
 #' @title Get invalid ICD codes
-#' @description Returns subset of codes which are not in valid short_code or decimal format.
+#' @description Returns subset of codes which are not in valid short_code or
+#'   decimal format.
 #' @rawNamespace S3method(icd_get_invalid,default)
 #' @export
 icd_get_invalid <- function(...) {

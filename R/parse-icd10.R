@@ -63,8 +63,9 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   f_info <- icd10cm_get_xml_file()
   j <- xml2::read_xml(f_info$file_path)
 
-  # using magrittr::equals and extract because I don't want to import them. See \code{icd-package.R}
-  # for what is imported. No harm in being explicit, since :: will do an implicit requireNamespace.
+  # using magrittr::equals and extract because I don't want to import them. See
+  # \code{icd-package.R} for what is imported. No harm in being explicit, since
+  # :: will do an implicit requireNamespace.
   j  %>% xml2::xml_children() %>%
     xml2::xml_name() %>%
     magrittr::equals("chapter" ) -> chapter_indices
@@ -111,13 +112,17 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
 
 #' get all ICD-10-CM codes
 #'
-#' Gets all ICD-10-CM codes from an archive on the CDC web site at Initially, this just grabs 2016.
+#' Gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
+#' this just grabs 2016.
 #'
-#' The factor generation uses \code{sort.default} which is locale dependent. This meant a lot of
-#' time debugging a problem when whitespace was ignored for sorting on some platforms, but not
-#' others (e.g. travis and wercker).
-#' @source \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
-#' @references https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
+#' The factor generation uses \code{sort.default} which is locale dependent.
+#' This meant a lot of time debugging a problem when whitespace was ignored for
+#' sorting on some platforms, but not others (e.g. travis and wercker).
+#' @source
+#'   \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
+#'
+#' @references
+#'   https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
 icd10cm_get_all_defined <- function(save_data = FALSE) {
 

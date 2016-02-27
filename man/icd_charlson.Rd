@@ -53,11 +53,11 @@ containing the Charlson Comorbidity Index.}
 \item{stringsAsFactors}{single logical, passed on when constructing
 data.frame if \code{return_df} is \code{TRUE}. If the input data frame
 \code{x} has a factor for the \code{visit_name}, this is not changed, but a
-non-factor \code{visit_name} may be converted or not converted according to your
-system default or this setting.}
+non-factor \code{visit_name} may be converted or not converted according to
+your system default or this setting.}
 
-\item{...}{further arguments to pass on to \code{icd_comorbid_quan_deyo}, e.g.
-\code{icd_name}}
+\item{...}{further arguments to pass on to \code{icd_comorbid_quan_deyo},
+e.g. \code{icd_name}}
 
 \item{applyHierarchy}{single logical value, default is FALSE. If TRUE, will
 drop DM if DMcx is present, etc.}
@@ -70,9 +70,9 @@ proceed until a single match is made. Data frames may be wide with many matching
 positives, anything but a single match is rejected. If there are no successful guesses, and \code{visit_id} was not
 specified, then the first column of the data frame is used.}
 
-\item{scoring_system}{One of \code{original}, \code{charlson}, or \code{quan}.
-The first two will give the original Charlson weights for each comorbidity,
-whereas \code{quan} uses the updated weights from Quan 2001.}
+\item{scoring_system}{One of \code{original}, \code{charlson}, or
+\code{quan}. The first two will give the original Charlson weights for each
+comorbidity, whereas \code{quan} uses the updated weights from Quan 2001.}
 
 \item{return_df}{single logical value, if true, a two column data frame will
 be returned, with the first column named as in input data frame (i.e.

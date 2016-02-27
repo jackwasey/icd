@@ -15,9 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-print.icd_comorbidity_map <- function(x, summary = TRUE, n_comorbidities = 7, n_codes = 7) {
+print.icd_comorbidity_map <- function(x, summary = TRUE,
+                                      n_comorbidities = 7, n_codes = 7) {
   if (summary) {
-    message("Showing first ", n_comorbidities, "comorbidities, and ", n_codes, "of each one.")
+    message("Showing first ",
+            n_comorbidities, "comorbidities, and ",
+            n_codes, "of each one.")
     x %>%
       lapply(function(x) get_n_or_len(x, n_codes)) %>%
       get_n_or_len(n_comorbidities) %>%

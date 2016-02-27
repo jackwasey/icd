@@ -82,7 +82,8 @@ sas_format_extract_rcomfmt <- function(sas_lines) {
   sas_format_extract(sas_lines)[["$RCOMFMT"]]
 }
 
-# ICD-10 SAS code seems to be literal with all possible (ICD-10-CM for given year) cihldren listed. No ranges are specified (unlike the ICD-9 equivalentt)
+# ICD-10 SAS code seems to be literal with all possible (ICD-10-CM for given
+# year) cihldren listed. No ranges are specified (unlike the ICD-9 equivalentt)
 sas_icd10_assignments_to_list <- function(x) {
   # TODO: unfortunately, the sorting is alphabeetical now, so I'll have to resort to the original Elixhauser sequence
   x["NONE"] <- NULL
@@ -118,8 +119,8 @@ sasParseAssignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE)
     # we have just a single name value pair so just set name to value and return
     # list of one item.
     if (strip_whitespace) halfway <- gsub(pattern = "[[:space:]]*",
-                                         replacement = "",
-                                         halfway)
+                                          replacement = "",
+                                          halfway)
     if (strip_quotes) halfway <- gsub(pattern = '"', replacement = "", halfway)
     out <- list()
     out[[halfway[[2]]]] <- unlist(strsplit(x = halfway[[1]], split = ","))
@@ -148,7 +149,8 @@ sasParseAssignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE)
     } else {
       outwhite <- threequarters[pair]
     }
-    # combine here in case there are duplicate labels, e.g. RENLFAIL twice in ICD-10 AHRQ
+    # combine here in case there are duplicate labels, e.g. RENLFAIL twice in
+    # ICD-10 AHRQ
     out[[threequarters[pair + 1]]] <- c(out[[threequarters[pair + 1]]],
                                         unlist(strsplit(x = outwhite, split = ","))
     )
@@ -204,7 +206,7 @@ icd9ExpandRangeForSas <- function(start, end) {
   real_parents_of_merged <- icd_condense.icd9(merged, defined = TRUE, short_code = TRUE)
   halfway <- icd_children.icd9(real_parents_of_merged, defined = FALSE, short_code = TRUE)
   nonrealrange <- icd_expand_range.icd9(start, end, defined = FALSE, short_code = TRUE,
-                                       ex_ambig_start = TRUE,
-                                       ex_ambig_end = TRUE)
+                                        ex_ambig_start = TRUE,
+                                        ex_ambig_end = TRUE)
   icd_sort.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)
 }

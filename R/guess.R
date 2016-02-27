@@ -40,7 +40,8 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
   UseMethod("icd_guess_short")
 }
 
-#' @describeIn icd_guess_short Guess whether a data frame has ICD-9 or ICD-10 codes
+#' @describeIn icd_guess_short Guess whether a data frame has ICD-9 or ICD-10
+#'   codes
 #' @keywords internal
 #' @export
 icd_guess_short.data.frame <- function(x, short_code = NULL, test_n = 1000L, icd_name = get_icd_name(x)) {
@@ -155,7 +156,8 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
     "icd10"
 }
 
-#' @describeIn icd_guess_version Guess version of ICD codes in a field in a \code{data.frame}
+#' @describeIn icd_guess_version Guess version of ICD codes in a field in a
+#'   \code{data.frame}
 #' @keywords internal
 #' @export
 icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_icd_name(x), ...) {
@@ -164,7 +166,8 @@ icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_ic
 }
 
 #' @title Guess version of ICD and update class
-#' @description Guesses the version of given ICD codes and sets the class of the returned data according to the guess.
+#' @description Guesses the version of given ICD codes and sets the class of the
+#'   returned data according to the guess.
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
 icd_guess_version_update <- function(x) {
@@ -173,7 +176,8 @@ icd_guess_version_update <- function(x) {
 }
 
 #' @title Guess short vs decimal of ICD and update class
-#' @description Guesses whether the given ICD codes are short or long format, and set the class of the returned data according to the guess.
+#' @description Guesses whether the given ICD codes are short or long format,
+#'   and set the class of the returned data according to the guess.
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
 icd_guess_short_update <- function(x, icd_name = get_icd_name(x), short_code = NULL) {
@@ -200,7 +204,8 @@ icd_guess_both.default <- function(x, short_code = NULL) {
   x <- as_char_no_warn(x)
   ver <- icd_guess_version.character(x)
   class(x) <- append(ver, class(x))
-  # now i've set the version I think it is, dispatch on this class to get short vs decimal
+  # now i've set the version I think it is, dispatch on this class to get short
+  # vs decimal
   short_code <- icd_guess_short(x)
   list(ver, short_code)
 }

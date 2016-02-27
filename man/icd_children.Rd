@@ -89,13 +89,15 @@ codes which are \emph{defined} or \emph{billable} (leaf nodes).
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Get child codes, guessing ICD version and short versus decimal format
+\item \code{character}: Get child codes, guessing ICD version and short
+versus decimal format
 
 \item \code{icd9}: Get children of ICD-9 codes
 
 \item \code{icd10cm}: Get children of ICD-10-CM codes
 
-\item \code{icd10}: Get children of ICD-10 codes (for now assume ICD-10-CM)
+\item \code{icd10}: Get children of ICD-10 codes (for now assume
+ICD-10-CM)
 }}
 \examples{
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional

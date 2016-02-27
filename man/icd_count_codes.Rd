@@ -31,9 +31,9 @@ positives, anything but a single match is rejected. If there are no successful g
 specified, then the first column of the data frame is used.}
 
 \item{return_df}{single logical, if \code{TRUE}, return the result as a data
-frame with the first column being the \code{visit_name}, and the second being
-the count. If \code{visit_name} was a factor or named differently in the
-input, this is preserved.}
+frame with the first column being the \code{visit_name}, and the second
+being the count. If \code{visit_name} was a factor or named differently in
+the input, this is preserved.}
 }
 \value{
 vector of the count of comorbidities for each patient. This is
@@ -45,9 +45,9 @@ vector of the count of comorbidities for each patient. This is
   \code{visit_name} and another for ICD-9 code, and returns the number of
   distinct codes for each patient.
 
-  The \code{visit_name} field is typically the first column. If there is no column
-  called \code{visit_name} and \code{visit_name} is not specified, the first column
-  is used.
+  The \code{visit_name} field is typically the first column. If there is no
+  column called \code{visit_name} and \code{visit_name} is not specified, the
+  first column is used.
 }
 \examples{
   mydf <- data.frame(visit_name = c("r", "r", "s"),

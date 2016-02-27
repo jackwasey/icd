@@ -43,7 +43,8 @@ icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL
     icd9_condense_decimal(x, defined = defined, warn = warn, ...)
 }
 
-#' @describeIn icd_condense Condense a set of ICD codes, guessing ICD version from input data
+#' @describeIn icd_condense Condense a set of ICD codes, guessing ICD version
+#'   from input data
 #' @export
 icd_condense.character <- function(x, short_code = icd_guess_short(x), defined = NULL, ...) {
 

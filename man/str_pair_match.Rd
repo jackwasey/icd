@@ -9,9 +9,12 @@ str_pair_match(string, pattern, pos, swap = FALSE, ...)
 \arguments{
 \item{string}{vector of strings}
 
-\item{pattern}{vector of regex which should match exactly two strings for each element in \code{stringr}. If \code{pos} is specified, this rule is relaxed.}
+\item{pattern}{vector of regex which should match exactly two strings for
+each element in \code{stringr}. If \code{pos} is specified, this rule is
+relaxed.}
 
-\item{pos}{optional pair of integers with positions of the 1st and 2nd desired matches, when multiple matches are made by the regex}
+\item{pos}{optional pair of integers with positions of the 1st and 2nd
+desired matches, when multiple matches are made by the regex}
 
 \item{swap}{logical scalar, whether to swap the names and values. Default is
 not to swap, so the first match becomes the name.}

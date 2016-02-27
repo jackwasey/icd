@@ -27,7 +27,8 @@ icd_get_invalid(...)
 comorbidity map}
 }
 \description{
-Returns subset of codes which are not in valid short_code or decimal format.
+Returns subset of codes which are not in valid short_code or
+  decimal format.
 }
 \section{Methods (by class)}{
 \itemize{

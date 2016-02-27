@@ -101,9 +101,9 @@ data frame, or list of data frames, with fields for ICD9 code, name
   and description, derived from datamart lookup table
 }
 \description{
-Convert 'decimal' format (123.45 style) ICD-9 codes into the name
-  and description for human review there are official ICD9-CM data tables,
-  not with conversion to decimal notation, but to the textual format.
+Convert 'decimal' format (123.45 style) ICD-9 codes into the
+  name and description for human review there are official ICD9-CM data
+  tables, not with conversion to decimal notation, but to the textual format.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -111,7 +111,8 @@ Convert 'decimal' format (123.45 style) ICD-9 codes into the name
 
 \item \code{factor}: explain Explain factor of ICD-9 codes
 
-\item \code{icd9}: explain character vector of ICD-9 codes. TODO: actually, this is ICD-9-CM
+\item \code{icd9}: explain character vector of ICD-9 codes. TODO:
+actually, this is ICD-9-CM
 
 \item \code{icd9cm}: explain character vector of ICD-9-CM codes
 

@@ -19,7 +19,8 @@ Expand a pair of major codes into a range of major codes.
 \itemize{
 \item \code{icd10cm}: Expand range of top-level ICD-10 codes
 
-\item \code{icd9}: Expand a range of ICD-9 major codes into major codes
+\item \code{icd9}: Expand a range of ICD-9 major codes into
+major codes
 }}
 \keyword{internal}
 

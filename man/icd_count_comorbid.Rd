@@ -38,7 +38,7 @@ input, this is preserved.}
 \code{icd_count_comorbid} differs from the other counting
   functions in that it counts _comorbidities_, not individual diagnoses. It
   accepts any data frame with either logicals or zero/non-zero contents, with
-  a single column for visit_name. No checks are made to see whether visit_name is
-  duplicated.
+  a single column for visit_name. No checks are made to see whether
+  visit_name is duplicated.
 }
 

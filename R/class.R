@@ -15,14 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-######################################################################
-#
-# get and set class types this package uses The master list is: icd9 icd9cm icd10
-# icd10cm icd10who icd_long icd_wide icd_decimal icd_short icd_comorbidity_map
+# get and set class types this package uses The master list is: icd9 icd9cm
+# icd10 icd10cm icd10who icd_long icd_wide icd_decimal icd_short
+# icd_comorbidity_map
 #
 # I'm not sure of the best order, so I think I'll avoid assuming any order,
 # except for more specific ICD types coming first.
-######################################################################
 
 # list currently implemented classes for validation
 icd9_sub_classes <- c("icd9cm")
@@ -104,12 +102,13 @@ icd_stop_classes_disorder <- function(x) {
 
 #' @rdname set_icd_class
 #' @title construct ICD-9 data types
-#' @description Takes an R structure and sets class to an ICD type. In the case of ICD-9 and ICD-10 codes, if a
-#'   particular sub-type is set, e.g. ICD-9-CM (/code{icd9cm}), then an ICD-9 class (/code{icd9}) is also set.
+#' @description Takes an R structure and sets class to an ICD type. In the case
+#'   of ICD-9 and ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM
+#'   (/code{icd9cm}), then an ICD-9 class (/code{icd9}) is also set.
 #'
 #' @param x object to set class \code{icd9}
-#' @param warn single logical value, if \code{TRUE} will gives warning when converting between types. ICD-9 to ICD-10
-#'   will cause an error regardless.
+#' @param warn single logical value, if \code{TRUE} will gives warning when
+#'   converting between types. ICD-9 to ICD-10 will cause an error regardless.
 #' @export
 icd9 <- function(x) {
   if (missing(x)) x <- character()
@@ -277,7 +276,8 @@ icd_decimal_code <- function(x, warn = TRUE) {
 }
 
 #' @rdname set_icd_class
-#' @details This, I think, should take priority over ICD-9 vs ICD-10 when doing S3 dispatching
+#' @details This, I think, should take priority over ICD-9 vs ICD-10 when doing
+#'   S3 dispatching
 #' @export
 icd_comorbidity_map <- function(x) {
   assert_list(x, any.missing = FALSE, min.len = 1, names = "unique")
@@ -467,9 +467,11 @@ c.icd_decimal_code <- function(...) {
 #' test ICD-related classes
 #'
 #' currently no checks on correctness of the classes for these functions
-#' @details TODO: could warn or fix if something is icd10cm or icd10who but not icd10
+#' @details TODO: could warn or fix if something is icd10cm or icd10who but not
+#'   icd10
 #' @param x Any object which may have ICD-related classes set
-#' @param strict logical value, if TRUE, will only match the type exactly; if \code{FALSE}
+#' @param strict logical value, if TRUE, will only match the type exactly; if
+#'   \code{FALSE}
 #' @export
 is.icd9 <- function(x, strict = FALSE)
   if (strict) {
@@ -479,7 +481,8 @@ is.icd9 <- function(x, strict = FALSE)
   }
 
 #' @rdname is.icd9
-#' @details TODO: could warn or fix if something is icd10cm or icd10who but not icd10
+#' @details TODO: could warn or fix if something is icd10cm or icd10who but not
+#'   icd10
 #' @export
 is.icd10 <- function(x, strict = FALSE)
   if (strict) {

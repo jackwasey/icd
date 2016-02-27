@@ -14,8 +14,8 @@ icd9LongToWide(icd9df, visitId = get_visit_name(icd9df),
   aggregate = TRUE, return.df = FALSE)
 }
 \arguments{
-\item{x}{data.frame of long-form data, one column for visit_name and one
-for ICD code}
+\item{x}{data.frame of long-form data, one column for visit_name and one for
+ICD code}
 
 \item{visit_name}{The name of the column in the data frame which contains the patient or visit identifier. Typically
 this is the visit identifier, since patients come leave and enter hospital with different ICD-9 codes. It is a
@@ -38,14 +38,14 @@ argument avoids the guesswork.}
 even if no patients have that many codes. Must be greater than or equal to
 the maximum number of codes per patient.}
 
-\item{aggr}{single logical value, if TRUE (the default) will take more
-time to find out-of-order visit_names, and combine all the codes for each
-unique visit_name. If \code{FALSE}, then out-of-order visit_names will result in
-a row in the output data per contiguous block of identical visit_names.}
+\item{aggr}{single logical value, if TRUE (the default) will take more time
+to find out-of-order visit_names, and combine all the codes for each unique
+visit_name. If \code{FALSE}, then out-of-order visit_names will result in a
+row in the output data per contiguous block of identical visit_names.}
 
 \item{return_df}{single logical value, if \code{TRUE}, return a data frame
-with a field for the visit_name. This may be more convenient, but the default
-of \code{FALSE} gives the more natural return data of a matrix with
+with a field for the visit_name. This may be more convenient, but the
+default of \code{FALSE} gives the more natural return data of a matrix with
 rownames being the visit_names.}
 
 \item{icd9df}{data.frame of long-form data, one column for visitId and one

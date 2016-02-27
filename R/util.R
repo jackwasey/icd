@@ -110,8 +110,11 @@ logical_to_binary <- function(x) {
 #' match a character vector against a regex with a pair of parentheses,
 #' returning named vector
 #' @param string vector of strings
-#' @param pattern vector of regex which should match exactly two strings for each element in \code{stringr}. If \code{pos} is specified, this rule is relaxed.
-#' @param pos optional pair of integers with positions of the 1st and 2nd desired matches, when multiple matches are made by the regex
+#' @param pattern vector of regex which should match exactly two strings for
+#'   each element in \code{stringr}. If \code{pos} is specified, this rule is
+#'   relaxed.
+#' @param pos optional pair of integers with positions of the 1st and 2nd
+#'   desired matches, when multiple matches are made by the regex
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
@@ -204,9 +207,11 @@ get_icd_name <- function(x, icd_name = NULL) {
 
 #' Latest ICD-9-CM edition
 #'
-#' Returns a single character value with the number of the latests edition, currently \strong{32}.
+#' Returns a single character value with the number of the latests edition,
+#' currently \strong{32}.
 #'
-#' Implemented as a function to give flexibility to calculate this, or use an option override.
+#' Implemented as a function to give flexibility to calculate this, or use an
+#' option override.
 #' @keywords internal
 icd9cm_latest_edition <- function() "32"
 

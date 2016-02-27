@@ -4,9 +4,10 @@
 
 #' Get ICD-10 (not ICD-10-CM) as published by CDC
 #'
-#' @details There is no copyright notice, and, as I understand it, by default US government publications are public
-#'   domain ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/ and thus this or derivative data can be
-#'   included in the package distribution
+#' @details There is no copyright notice, and, as I understand it, by default US
+#'   government publications are public domain
+#'   ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD10/ and thus
+#'   this or derivative data can be included in the package distribution
 #' @keywords internal
 icd10_get_who_from_cdc <- function() {
   # beware, not all download.file methods can handle %20 etc in URLs correctly.
@@ -18,7 +19,8 @@ icd10_get_who_from_cdc <- function() {
   # unspecified origin" I've no idea what those people are thinking when they do
   # this kind of thing.
 
-  # ignore locale issue right now. Rows 70 to 75 have a lot of the different cases.
+  # ignore locale issue right now. Rows 70 to 75 have a lot of the different
+  # cases.
   readr::read_lines(file_path, skip = 7) %>%
     str_trim() %>%
     str_match("(.*\\t)?(.+)\\t+(.+)") -> dat

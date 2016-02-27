@@ -71,11 +71,11 @@ explicitly "No."
 anything but "No." This includes unknown, exempt, other codes, and of
 course all those marked "Yes."
 
-\item \code{icd_filter_poa_not_yes}: Select rows where Present-on-Arrival flag is anything
-byt "Yes." This would group exempt, unknown and other codes under "Not POA"
-which is unlikely to be a good choice, since exempt codes, of which there
-are a quite large number, tend to describe chronic or out-of-hospital
-characteristics.
+\item \code{icd_filter_poa_not_yes}: Select rows where Present-on-Arrival flag is
+anything byt "Yes." This would group exempt, unknown and other codes under
+"Not POA" which is unlikely to be a good choice, since exempt codes, of
+which there are a quite large number, tend to describe chronic or
+out-of-hospital characteristics.
 }}
 \examples{
 \dontrun{

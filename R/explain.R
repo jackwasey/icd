@@ -16,9 +16,9 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title Explain ICD-9 and ICD-10 codes in English
-#' @description Convert 'decimal' format (123.45 style) ICD-9 codes into the name
-#'   and description for human review there are official ICD9-CM data tables,
-#'   not with conversion to decimal notation, but to the textual format.
+#' @description Convert 'decimal' format (123.45 style) ICD-9 codes into the
+#'   name and description for human review there are official ICD9-CM data
+#'   tables, not with conversion to decimal notation, but to the textual format.
 #' @param x vector or other structure of ICD codes to explain in human language
 #' @template short_code
 #' @param condense single logical value which indicates whether to condense the
@@ -72,7 +72,8 @@ icd_explain.factor <- function(icd9, short_code = icd_guess_short(icd9),
   icd_explain.character(as_char_no_warn(icd9), short_code = short_code,
                         condense = condense, brief = brief, warn = warn)
 
-#' @describeIn icd_explain explain character vector of ICD-9 codes. TODO: actually, this is ICD-9-CM
+#' @describeIn icd_explain explain character vector of ICD-9 codes. TODO:
+#'   actually, this is ICD-9-CM
 #' @export
 icd_explain.icd9 <- function(...) {
   icd_explain.icd9cm(...)
@@ -116,7 +117,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
 #' @describeIn icd_explain ICD-10 explaination not implemented yet
 #' @keywords internal
 icd_explain.icd10 <- function(x, short_code = icd_guess_short.icd9(x),
-                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+                              condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   stop("icd_explain.icd10 not implemented yet")
 }
 

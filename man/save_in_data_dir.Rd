@@ -7,8 +7,8 @@
 save_in_data_dir(var_name, suffix = "")
 }
 \arguments{
-\item{var_name}{character or symbol, e.g. "myvar" or \code{myvar}, either of which
-would find \code{myvar} in the parent environment, and save it as
+\item{var_name}{character or symbol, e.g. "myvar" or \code{myvar}, either of
+which would find \code{myvar} in the parent environment, and save it as
 \code{myvar.RData} in \code{package_root/data}.}
 
 \item{suffix}{character scalar}

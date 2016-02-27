@@ -31,8 +31,8 @@ argument used in, among other base functions \code{as.data.frame}.}
 \item{visitId}{Deprecated. Use \code{visit_name}}
 }
 \description{
-convert matrix of comorbidities into data frame, preserving visit_name
-  information
+convert matrix of comorbidities into data frame, preserving
+  visit_name information
 }
 \examples{
 longdf <- icd9(icd_long_data(

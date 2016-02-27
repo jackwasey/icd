@@ -331,8 +331,9 @@ show_test_options <- function() {
 
 #' Set test options to do everything
 #'
-#' Default without setting options is for slow and online tests to be skipped, and warnings to be generated for
-#' deprecated functions. This function explicitly sets options to do slow and online tests, and not to warn for
+#' Default without setting options is for slow and online tests to be skipped,
+#' and warnings to be generated for deprecated functions. This function
+#' explicitly sets options to do slow and online tests, and not to warn for
 #' deprecated functions. This is intended for local testing.
 #' @keywords internal
 set_full_test_options <- function() {
@@ -349,7 +350,8 @@ set_full_test_options <- function() {
 
 setup_test_check <- function() {
 
-  # basic defaults if nothing else is set: skip slow and online tests and warn deprecated
+  # basic defaults if nothing else is set: skip slow and online tests and warn
+  # deprecated
   if (is.null(options("icd.do_slow_tests")))
     options("icd.do_slow_tests" = FALSE)
   if (is.null(options("icd.do_online_tests")))
@@ -393,7 +395,8 @@ my_test_check <- function(pattern, msg) {
     msg <- pattern
 
   message(msg)
-  # use perl for grepl to interpret the regex which can then include negative backrefs to exclude things.
+  # use perl for grepl to interpret the regex which can then include negative
+  # backrefs to exclude things.
   testthat::test_check("icd", filter = pattern, perl = TRUE,
                        reporter = testthat::MultiReporter(reporters = list(testthat::SummaryReporter(),
                                                                            testthat::StopReporter()))

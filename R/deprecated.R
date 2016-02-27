@@ -1,5 +1,3 @@
-
-
 # Copyright (C) 2014 - 2016  Jack O. Wasey
 #
 # This file is part of icd.

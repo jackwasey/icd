@@ -17,19 +17,18 @@
 
 #' @name convert
 #' @title Convert ICD9 codes between formats and structures.
-#' @description ICD-9 codes are represented in \emph{short} and \emph{decimal} forms.
-#' The short form has up to 5 digits, or V or E followed by up to four digits. The decimal form
-#' has a dedcimal point to delimit the top-level (henceforth \emph{major}) category, and the
-#' \emph{minor} part containing the subsidiary classifications.
+#' @description ICD-9 codes are represented in \emph{short} and \emph{decimal}
+#'   forms. The short form has up to 5 digits, or V or E followed by up to four
+#'   digits. The decimal form has a dedcimal point to delimit the top-level
+#'   (henceforth \emph{major}) category, and the \emph{minor} part containing
+#'   the subsidiary classifications.
 #'
-#' @section Structures: Structures used in this package are:
-#' \itemize{
-#'   \item vector (usually character vectors) of \emph{short} or \emph{long} codes
-#'   \item list, containing two elements with equal length vectors called \code{major}
-#'   \code{minor}. Yes, this is very like a data frame, but we do not need the overhead
-#'   of structuring it that way.
-#'   \item two vectors of separated major and minor parts
-#'   }
+#' @section Structures: Structures used in this package are: \itemize{ \item
+#'   vector (usually character vectors) of \emph{short} or \emph{long} codes
+#'   \item list, containing two elements with equal length vectors called
+#'   \code{major} \code{minor}. Yes, this is very like a data frame, but we do
+#'   not need the overhead of structuring it that way. \item two vectors of
+#'   separated major and minor parts }
 #' @template major
 #' @template minor
 #' @template icd9-any
@@ -37,11 +36,12 @@
 #' @template icd9-decimal
 #' @param parts data.frame with major and minor fields. This can be given
 #'   instead of major and minor vectors
-#' @param minorEmpty vector of length one, to be used in place of
-#' minor part of zero. Defaults to ""
+#' @param minorEmpty vector of length one, to be used in place of minor part of
+#'   zero. Defaults to ""
 #' @template short_code
-#' @return Character vector or list. Deliberately returns zero-padded major, because
-#'   otherwise we are creating ambiguous codes (even if we know what we mean)
+#' @return Character vector or list. Deliberately returns zero-padded major,
+#'   because otherwise we are creating ambiguous codes (even if we know what we
+#'   mean)
 #' @family ICD-9 convert
 NULL
 
@@ -76,13 +76,14 @@ icd9_chapters_to_map <- function(x) {
 #' @template visit_name
 #' @param icd_labels vector of column names in which codes are found. If NULL,
 #'   all columns matching icd or ICD will be included.
-#' @param icd_name character vector length one containing the new column name for
-#'   the ICD codes, defaults to "icd_code"
-#' @param icd_regex vector of character strings containg a regex to identify ICD-9 diagnosis
-#'   columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}
-#' @return data frame with visit_name column named the same as input, and a column
-#'   named by \code{icd.name} containing all the non-NA and non-empty codes
-#'   found in the wide input data.
+#' @param icd_name character vector length one containing the new column name
+#'   for the ICD codes, defaults to "icd_code"
+#' @param icd_regex vector of character strings containg a regex to identify
+#'   ICD-9 diagnosis columns to try (case-insensitive) in order. Default is
+#'   \code{c("icd", "diag", "dx_", "dx")}
+#' @return data frame with visit_name column named the same as input, and a
+#'   column named by \code{icd.name} containing all the non-NA and non-empty
+#'   codes found in the wide input data.
 #' @examples
 #'   widedf <- data.frame(visit_name = c("a", "b", "c"),
 #'     icd9_01 = c("441", "4424", "441"),
@@ -112,7 +113,7 @@ icd_wide_to_long <- function(x,
     }
   }
   checkmate::assert_character(icd_labels, any.missing = FALSE, min.chars = 1,
-                             min.len = 1, max.len = ncol(x) - 1)
+                              min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icd_labels %in% names(x)))
 
   res <- stats::reshape(x,
@@ -132,21 +133,21 @@ icd_wide_to_long <- function(x,
 #' @title convert ICD data from long to wide format
 #' @description This is more complicated than reshape or reshape2::dcast allows.
 #'   This is a reasonably simple solution using built-in functions.
-#' @param x data.frame of long-form data, one column for visit_name and one
-#'   for ICD code
+#' @param x data.frame of long-form data, one column for visit_name and one for
+#'   ICD code
 #' @template visit_name
 #' @template icd_name
 #' @param prefix character, default "icd_" to prefix new columns
 #' @param min_width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to
 #'   the maximum number of codes per patient.
-#' @param aggr single logical value, if TRUE (the default) will take more
-#'   time to find out-of-order visit_names, and combine all the codes for each
-#'   unique visit_name. If \code{FALSE}, then out-of-order visit_names will result in
-#'   a row in the output data per contiguous block of identical visit_names.
+#' @param aggr single logical value, if TRUE (the default) will take more time
+#'   to find out-of-order visit_names, and combine all the codes for each unique
+#'   visit_name. If \code{FALSE}, then out-of-order visit_names will result in a
+#'   row in the output data per contiguous block of identical visit_names.
 #' @param return_df single logical value, if \code{TRUE}, return a data frame
-#'   with a field for the visit_name. This may be more convenient, but the default
-#'   of \code{FALSE} gives the more natural return data of a matrix with
+#'   with a field for the visit_name. This may be more convenient, but the
+#'   default of \code{FALSE} gives the more natural return data of a matrix with
 #'   rownames being the visit_names.
 #' @examples
 #'   longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
@@ -198,10 +199,12 @@ icd_long_to_wide <- function(x,
 }
 
 #' @title convert comorbidity data frame from matrix
-#' @description convert matrix of comorbidities into data frame, preserving visit_name information
+#' @description convert matrix of comorbidities into data frame, preserving
+#'   visit_name information
 #' @param x Matrix of comorbidities, with row and columns names defined
-#' @param visit_name Single character string with name for new column in output data frame.
-#'   Everywhere else, \code{visit_name} describes the input data, but here it is for output data.
+#' @param visit_name Single character string with name for new column in output
+#'   data frame. Everywhere else, \code{visit_name} describes the input data,
+#'   but here it is for output data.
 #' @template stringsAsFactors
 #' @examples
 #'  # as ever, optional, but tidy
@@ -233,8 +236,8 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 }
 
 #' @title convert comorbidity matrix to data frame
-#' @description convert matrix of comorbidities into data frame, preserving visit_name
-#'   information
+#' @description convert matrix of comorbidities into data frame, preserving
+#'   visit_name information
 #' @param x data frame, with a \code{visit_name} column (not necessarily first),
 #'   and other columns with flags for comorbidities, as such column names are
 #'   required.
@@ -360,7 +363,8 @@ icd_short_to_parts <- function(x, minor_empty = "") {
 #' @export
 #' @keywords internal manip
 icd_short_to_parts.icd9 <- function(x, minor_empty = "") {
-  # Cannot specify default values in both header and C++ function body, so use a shim here.
+  # Cannot specify default values in both header and C++ function body, so use a
+  # shim here.
   .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, minor_empty)
 }
 
@@ -385,15 +389,18 @@ icd_decimal_to_parts.icd10 <- function(x, minor_empty = "") {
   icd_decimal_to_parts.icd9(x, minor_empty)
 }
 
-#' @describeIn icd_short_to_parts Convert short format ICD code to parts, assuming ICD-9 from character class. TODO: test this works for ICD-10
+#' @describeIn icd_short_to_parts Convert short format ICD code to parts,
+#'   assuming ICD-9 from character class. TODO: test this works for ICD-10
 #' @export
 #' @keywords internal manip
 icd_short_to_parts.character <- function(x, minor_empty = "") {
-  # Cannot specify default values in both header and C++ function body, so use a shim here.
+  # Cannot specify default values in both header and C++ function body, so use a
+  # shim here.
   .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, minor_empty)
 }
 
-#' @describeIn icd_short_to_parts Convert decimal ICD code to parts, assuming ICD-9 from character class. TODO: test this works for ICD-10
+#' @describeIn icd_short_to_parts Convert decimal ICD code to parts, assuming
+#'   ICD-9 from character class. TODO: test this works for ICD-10
 #' @export
 #' @keywords internal manip
 icd_decimal_to_parts.character <- function(x, minor_empty = "") {

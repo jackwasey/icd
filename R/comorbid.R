@@ -106,9 +106,14 @@ icd_comorbid.default <- function(x, ...) {
 # so much WHO) codes which are too numerous to pre-compute.
 #
 # options are:
+#
 # 1. do recompute, but only after installing package.
-# 2. do string matching looking for target, then successive parents in the comorbidities
-# 2b. use a very fast lookup table for this, don't loop through the comorbidities.
+#
+# 2. do string matching looking for target, then successive parents in the
+# comorbidities
+#
+# 2b. use a very fast lookup table for this, don't loop through the
+# comorbidities.
 
 #' @describeIn icd_comorbid Get comorbidities from ICD-10 codes. With this
 #'   method, it relies on exact matching, but not every of billions of possible
@@ -131,7 +136,7 @@ icd_comorbid.icd10 <- function(x,
                                return_df = FALSE, ...) {
 
   assert_data_frame(x, min.cols = 2, col.names = "unique")
-  assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique", )
+  assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
 
   assert(checkmate::checkString(visit_name), checkmate::checkNull(visit_name))
   assert(checkmate::checkString(icd_name), checkmate::checkNull(icd_name))
@@ -264,11 +269,11 @@ icd_comorbid_common <- function(x,
     map <- lapply(map, icd_decimal_to_short)
 
   # new stragegy is to start with a factor for the icd codes in x, recode (and drop superfluous) icd codes in the
-  # mapping, then do very fast match on integer without need for N, V or E distinction. Char to factor conversion in R
-  # is very fast.
+  # mapping, then do very fast match on integer without need for N, V or E
+  # distinction. Char to factor conversion in R is very fast.
 
-  # this is a moderately slow step (if needed to be done). Internally, the \code{sort} is slow. Fast match speeds up the
-  # subsequent step.
+  # this is a moderately slow step (if needed to be done). Internally, the
+  # \code{sort} is slow. Fast match speeds up the subsequent step.
   if (!is.factor(x[[icd_name]]))
     x[[icd_name]] <- factor_nosort(x[[icd_name]])
 
@@ -279,7 +284,8 @@ icd_comorbid_common <- function(x,
   if (visit_was_factor)
     iv_levels <- levels(x[[visit_name]])
 
-  # this may be the slowest step (again, if needed, and many will have character IDs)
+  # this may be the slowest step (again, if needed, and many will have character
+  # IDs)
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
 
   # again, R is very fast at creating factors from a known set of levels
@@ -413,7 +419,8 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
 
-    # drop HTNcx without converting to vector if matrix only has one row (drop=FALSE)
+    # drop HTNcx without converting to vector if matrix only has one row
+    # (drop=FALSE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
@@ -467,17 +474,18 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     # combine HTN
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
-    # drop HTNcx without converting to vector if matrix only has one row (drop=FALSE)
+    # drop HTNcx without converting to vector if matrix only has one row
+    # (drop=FALSE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     # if we didn't apply the hierarchy, we have to use the naming scheme with
     # HTN separated out:
 
     # assume that the comorbidities are the last 31 fields. At present, the
-    # icd_comorbid function doesn't attempt to aggregate fields it doesn't
-    # know about, e.g. POA, or anything else the user provides in the data
-    # frame, so these are just dropped, leaving the fields for visit_name and all
-    # the comorbidities:
+    # icd_comorbid function doesn't attempt to aggregate fields it doesn't know
+    # about, e.g. POA, or anything else the user provides in the data frame, so
+    # these are just dropped, leaving the fields for visit_name and all the
+    # comorbidities:
 
     if (abbrev_names)
       colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_abbrev
@@ -503,7 +511,8 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
 
-    # drop HTNcx without converting to vector if matrix only has one row (drop=FALSE)
+    # drop HTNcx without converting to vector if matrix only has one row
+    # (drop=FALSE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
@@ -557,7 +566,8 @@ icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL, y_names = 
   UseMethod("icd_diff_comorbid")
 }
 
-#' @describeIn icd_diff_comorbid Show difference between comorbidity maps with ICD-9 codes
+#' @describeIn icd_diff_comorbid Show difference between comorbidity maps with
+#'   ICD-9 codes
 #' @export
 icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
                                    show = TRUE, explain = TRUE) {

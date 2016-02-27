@@ -10,8 +10,8 @@ generate_deprecated_data <- function(save_data = FALSE,
 
   icd9Billable <- icd::icd9cm_billable
   for (b in seq_along(icd9Billable))
-    # deprecated column names also differ; changed so icd9 as a class name is not constantly
-    # confused with a column of the same name
+    # deprecated column names also differ; changed so icd9 as a class name is
+    # not constantly confused with a column of the same name
     names(icd9Billable[[b]]) <- c("icd9", "descShort", "descLong")
 
   icd9Hierarchy <- icd::icd9cm_hierarchy

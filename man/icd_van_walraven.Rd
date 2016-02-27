@@ -77,7 +77,8 @@ van Walraven Elixhauser score is calculated from the Quan
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: van Walraven scores from data frame of visits and ICD-9 codes
+\item \code{data.frame}: van Walraven scores from data frame of visits
+and ICD-9 codes
 }}
 \examples{
 mydf <- icd9(data.frame(visit_name = c("a", "b", "c"),

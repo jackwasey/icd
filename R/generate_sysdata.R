@@ -17,8 +17,8 @@
 
 #' Generate sysdata.rda
 #'
-#' Generate correctly ordered look-up tables of numeric-only, V and E codes. This is
-#' quick, but much too slow when it appears many times in a loop.
+#' Generate correctly ordered look-up tables of numeric-only, V and E codes.
+#' This is quick, but much too slow when it appears many times in a loop.
 #' @param save_data whether to save the data.
 #' @return invisibly returns the sysdata as a list
 #' @keywords internal

@@ -161,11 +161,13 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   names(icd9_majors) <- majors_matrix[, 2] %>% str_trim %>% cap_first
 
-  # this sub-chapter is simply missing from the otherwise consistent RTF way 'major' types are reported:
+  # this sub-chapter is simply missing from the otherwise consistent RTF way
+  # 'major' types are reported:
   icd9_majors[["Place of occurrence"]] <- "E849"
 
   # There are some duplicates created by the major search, mostly E001 to E030
-  # which are just listed twice in RTF. Also 199 (with punctuation difference), 209 and 239.
+  # which are just listed twice in RTF. Also 199 (with punctuation difference),
+  # 209 and 239.
   icd9_majors <- icd9_majors[!duplicated(icd9_majors)]
 
   if (save_extras) {
@@ -253,7 +255,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   }
 
 
-  # lookup_fifth will contain vector of suffices, with names being the codes they augment
+  # lookup_fifth will contain vector of suffices, with names being the codes
+  # they augment
   lookup_fifth <- c()
   for (f in fifth_rows) {
     if (verbose) message("working on fifth-digit row:", f)
@@ -277,7 +280,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     lookup_fifth <- c(lookup_fifth, range)
   }
 
-  # V30-39 are a special case because combination of both fourth and fifth digits are specified
+  # V30-39 are a special case because combination of both fourth and fifth
+  # digits are specified
   re_V30V39_fifth <- "V3[[:digit:]]\\.0[01]$"
 
   lines_V30V39 <- grep(re_fifth_range_V30V39, filtered)
@@ -289,7 +293,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   range <- grep(re_V30V39_fifth, range, value = TRUE)
   names(range) <- range
   for (fifth in names(suffices_V30V39)) {
-    # only applies to .0x (in 2015 at least), but .1 also exists without 5th digit
+    # only applies to .0x (in 2015 at least), but .1 also exists without 5th
+    # digit
     re_fifth <- paste0("\\.0", fifth, "$")
     range[grep(re_fifth, range)] <- suffices_V30V39[fifth]
   }
@@ -363,7 +368,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
       names(pair_fifth) <- f
       out_fifth <- append(out_fifth, pair_fifth)
     } else {
-      # this is really superfluous since we don't expect to match these, keep for debugging
+      # this is really superfluous since we don't expect to match these, keep
+      # for debugging
       if (FALSE)
         message("parent code ", parent_code, " missing when looking up ", f)
     }

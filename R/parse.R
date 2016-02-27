@@ -66,12 +66,12 @@ icd_update_everything <- function() {
 #' @description for versions 23 to 32, those which are on the CMS web site, get
 #'   any codes with long or short descriptions. Earlier years only have
 #'   abbreviated descriptions.
-#' @param save_data single logical value, if \code{TRUE} the source text or CSV file
-#'   will be saved in \code{data-raw}, otherwise (the default) the data is
+#' @param save_data single logical value, if \code{TRUE} the source text or CSV
+#'   file will be saved in \code{data-raw}, otherwise (the default) the data is
 #'   simply returned invisibly.
 #' @template offline
-#' @return data frame with icd9, short_desc and long_desc columns. NA is placed in
-#'   long_desc when not available.
+#' @return data frame with icd9, short_desc and long_desc columns. NA is placed
+#'   in long_desc when not available.
 #' @examples
 #'   # To populate the data-raw directory with the ICD-9 source:
 #'   # not included in installed package, run using the full source from github,

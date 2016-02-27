@@ -10,12 +10,13 @@
 icd10cm_get_all_defined(save_data = FALSE)
 }
 \description{
-Gets all ICD-10-CM codes from an archive on the CDC web site at Initially, this just grabs 2016.
+Gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
+this just grabs 2016.
 }
 \details{
-The factor generation uses \code{sort.default} which is locale dependent. This meant a lot of
-time debugging a problem when whitespace was ignored for sorting on some platforms, but not
-others (e.g. travis and wercker).
+The factor generation uses \code{sort.default} which is locale dependent.
+This meant a lot of time debugging a problem when whitespace was ignored for
+sorting on some platforms, but not others (e.g. travis and wercker).
 }
 \references{
 https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf

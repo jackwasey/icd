@@ -49,18 +49,23 @@ icd9_drop_leading_zeroes <- function(x, short_code = NULL) {
   UseMethod("icd9_drop_leading_zeroes")
 }
 
+#' @keywords internal manip
 icd9_add_leading_zeroes <- function(x, short_code = NULL) {
   UseMethod("icd9_add_leading_zeroes")
 }
 
-#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a decimal format ICD-9 code.
+#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a decimal
+#'   format ICD-9 code.
+#' @keywords internal manip
 icd9_drop_leading_zeroes.icd_decimal_code <- function(x, short_code = NULL) {
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert_null(short_code)
   x %>% as_char_no_warn %>% str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3")
 }
 
-#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a short format ICD-9 code
+#' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from a short format
+#'   ICD-9 code
+#' @keywords internal manip
 icd9_drop_leading_zeroes.icd_short_code <- function(x, short_code = NULL) {
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert_null(short_code)
@@ -74,6 +79,7 @@ icd9_drop_leading_zeroes.icd_short_code <- function(x, short_code = NULL) {
 
 #' @describeIn icd9_drop_leading_zeroes Drop leading zeroes from ICD-9 codes of
 #'   specified or unknown type.
+#' @keywords internal manip
 icd9_drop_leading_zeroes.default <- function(x, short_code = NULL) {
   x <- as_char_no_warn(x)
   x <- icd_guess_short_update(x, short_code = short_code)
@@ -81,11 +87,13 @@ icd9_drop_leading_zeroes.default <- function(x, short_code = NULL) {
 }
 
 #' @rdname icd9_drop_leading_zeroes
+#' @keywords internal manip
 icd9_drop_leading_zeroes_major <- function(major) {
   # (valid) E codes from 000 exist. Dropping zeroes from E000 would require a
   # lot of logic for no current benefit. Defer this until it is a problem.
   major %<>% str_trim
-  is_v <- icd9_is_v(major) # not checking validity, necessarily, just quick check
+  # not checking validity, necessarily, just quick check
+  is_v <- icd9_is_v(major)
   is_n <- icd9_is_valid_major_n(major)
   major[is_v] %<>% str_replace("^[[:space:]]*([Vv])0([[:digit:]])[[:space:]]*$",
                                replacement = "\\1\\2")

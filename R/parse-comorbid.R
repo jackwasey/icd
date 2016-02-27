@@ -171,17 +171,20 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 }
 
 #' @title parse original SAS code defining Quan's update of Deyo comorbidities.
-#' @description As with \code{parseAhrqSas}, this function reads SAS code, and in, a very limited
-#'   way, extracts definitions. In this case the code uses LET statements, with strings or lists of
-#'   strings. This saves and invisibly returns a list with names corresponding to the comorbidities
-#'   and values as a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
-#'   \code{icd9_parse_ahrq_sas}, there are no ranges defined, so this interpretation is simpler.
+#' @description As with \code{parseAhrqSas}, this function reads SAS code, and
+#'   in, a very limited way, extracts definitions. In this case the code uses
+#'   LET statements, with strings or lists of strings. This saves and invisibly
+#'   returns a list with names corresponding to the comorbidities and values as
+#'   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
+#'   \code{icd9_parse_ahrq_sas}, there are no ranges defined, so this
+#'   interpretation is simpler.
 #'
-#'   With thanks to Dr. Quan, I have permission to distribute his SAS code. Previously, the SAS code
-#'   would be downloaded from the University of Manitoba at
-#'   \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}. There are
-#'   structural differences between this version and the version directly from Dr. Quan, however,
-#'   the parsing results in identical data.
+#'   With thanks to Dr. Quan, I have permission to distribute his SAS code.
+#'   Previously, the SAS code would be downloaded from the University of
+#'   Manitoba at
+#'   \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}.
+#'   There are structural differences between this version and the version
+#'   directly from Dr. Quan, however, the parsing results in identical data.
 #' @template parse-template
 #' @template offline
 #' @keywords internal
@@ -189,7 +192,8 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   assert_flag(save_data)
   assert_flag(offline)
 
-  # download the file and/or just get the path/filename to it, fails if missing by default
+  # download the file and/or just get the path/filename to it, fails if missing
+  # by default
   f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
 
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)

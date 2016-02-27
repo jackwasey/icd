@@ -32,7 +32,8 @@ TODO: Partly implemented. Goal is to guess whether codes are
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: Guess whether a data frame has ICD-9 or ICD-10 codes
+\item \code{data.frame}: Guess whether a data frame has ICD-9 or ICD-10
+codes
 
 \item \code{icd9}: Guess whether an ICD-9 code is in short_code form
 }}

@@ -35,9 +35,9 @@
 #'   By default, the first column is the patient identifier and is not counted.
 #'   If \code{visit_name} is not specified, the first column is used.
 #' @template visit_name
-#' @param scoring_system One of \code{original}, \code{charlson}, or \code{quan}.
-#'   The first two will give the original Charlson weights for each comorbidity,
-#'   whereas \code{quan} uses the updated weights from Quan 2001.
+#' @param scoring_system One of \code{original}, \code{charlson}, or
+#'   \code{quan}. The first two will give the original Charlson weights for each
+#'   comorbidity, whereas \code{quan} uses the updated weights from Quan 2001.
 #' @param return_df single logical value, if true, a two column data frame will
 #'   be returned, with the first column named as in input data frame (i.e.
 #'   \code{visit_name}), containing all the visits, and the second column
@@ -45,10 +45,10 @@
 #' @param stringsAsFactors single logical, passed on when constructing
 #'   data.frame if \code{return_df} is \code{TRUE}. If the input data frame
 #'   \code{x} has a factor for the \code{visit_name}, this is not changed, but a
-#'   non-factor \code{visit_name} may be converted or not converted according to your
-#'   system default or this setting.
-#' @param ... further arguments to pass on to \code{icd_comorbid_quan_deyo}, e.g.
-#'   \code{icd_name}
+#'   non-factor \code{visit_name} may be converted or not converted according to
+#'   your system default or this setting.
+#' @param ... further arguments to pass on to \code{icd_comorbid_quan_deyo},
+#'   e.g. \code{icd_name}
 #' @examples
 #' mydf <- data.frame(visit_name = c("a", "b", "c"),
 #'                    icd9 = c("441", "412.93", "044.9"))
@@ -130,18 +130,18 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #'   \code{visit_name} and another for ICD-9 code, and returns the number of
 #'   distinct codes for each patient.
 #'
-#'   The \code{visit_name} field is typically the first column. If there is no column
-#'   called \code{visit_name} and \code{visit_name} is not specified, the first column
-#'   is used.
+#'   The \code{visit_name} field is typically the first column. If there is no
+#'   column called \code{visit_name} and \code{visit_name} is not specified, the
+#'   first column is used.
 #' @param x data frame with one row per patient, and a true/false or 1/0 flag
 #'   for each column. By default, the first column is the patient identifier and
 #'   is not counted. If \code{visit_name} is not specified, the first column is
 #'   used.
 #' @template visit_name
 #' @param return_df single logical, if \code{TRUE}, return the result as a data
-#'   frame with the first column being the \code{visit_name}, and the second being
-#'   the count. If \code{visit_name} was a factor or named differently in the
-#'   input, this is preserved.
+#'   frame with the first column being the \code{visit_name}, and the second
+#'   being the count. If \code{visit_name} was a factor or named differently in
+#'   the input, this is preserved.
 #' @return vector of the count of comorbidities for each patient. This is
 #'   sometimes used as a metric of comorbidity load, instead of, or inaddition
 #'   to metrics like the Charlson Comorbidity Index (aka Charlson Score)
@@ -183,8 +183,8 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 #' @description \code{icd_count_comorbid} differs from the other counting
 #'   functions in that it counts _comorbidities_, not individual diagnoses. It
 #'   accepts any data frame with either logicals or zero/non-zero contents, with
-#'   a single column for visit_name. No checks are made to see whether visit_name is
-#'   duplicated.
+#'   a single column for visit_name. No checks are made to see whether
+#'   visit_name is duplicated.
 #' @param x data frame with one row per patient, and a true/false or 1/0 flag
 #'   for each column. By default, the first column is the patient identifier and
 #'   is not counted. If \code{visitId} is not specified, the first column is
@@ -195,7 +195,8 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assert_string(visit_name)
   assert_flag(return_df)
-  # TODO: this could be a logical matrix or a data frame. Should there be a comorbidity df/matrix class?
+  # TODO: this could be a logical matrix or a data frame. Should there be a
+  # comorbidity df/matrix class?
   res <- apply(x[, names(x) %nin% visit_name],
                MARGIN = 1,
                FUN = sum)
@@ -288,7 +289,8 @@ icd_van_walraven <- function(x, visit_name = NULL, return_df = FALSE,
                              ...)
   UseMethod("icd_van_walraven")
 
-#' @describeIn icd_van_walraven van Walraven scores from data frame of visits and ICD-9 codes
+#' @describeIn icd_van_walraven van Walraven scores from data frame of visits
+#'   and ICD-9 codes
 #' @export
 icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
                                         stringsAsFactors = getOption("stringsAsFactors"), # nolint

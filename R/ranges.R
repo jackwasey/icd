@@ -212,8 +212,9 @@ expand_range_worker <- function(start, end, lookup, defined,
 
   out <- lookup[start_index:end_index]
   if (ex_ambig_start) {
-    # just remove those codes at the beginning which have children not in the output
-    # let's take the first 5, to cover cases like 100, 101, 102.1, 102.11, 102.2
+    # just remove those codes at the beginning which have children not in the
+    # output let's take the first 5, to cover cases like 100, 101, 102.1,
+    # 102.11, 102.2
     starts <- utils::tail(out, 5)
     for (s in starts) {
       if (any(icd_children.icd9(s, short_code = TRUE, defined = defined) %nin% out))
@@ -291,7 +292,8 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
   icd9(icd_short_code(res))
 }
 
-#' @describeIn icd_expand_range_major Expand a range of ICD-9 major codes into major codes
+#' @describeIn icd_expand_range_major Expand a range of ICD-9 major codes into
+#'   major codes
 #' @export
 icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
   assert_scalar(start) # i'll permit numeric but prefer char

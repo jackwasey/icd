@@ -16,7 +16,8 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title Filter ICD-9 codes by validity.
-#' @description Filters a data.frame of patients for valid or invalid ICD-9 codes
+#' @description Filters a data.frame of patients for valid or invalid ICD-9
+#'   codes
 #' @param x input vector of ICD codes
 #' @template icd_name
 #' @template short_code
@@ -91,10 +92,10 @@ icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
   assert_string(poa_name)
   stopifnot(poa_name %in% names(x))
   switch(poa,
-          "yes" = icd_filter_poa_yes(x, poa_name = poa_name),
-          "no" = icd_filter_poa_no(x, poa_name = poa_name),
-          "notYes" = icd_filter_poa_not_yes(x, poa_name = poa_name),
-          "notNo" = icd_filter_poa_not_no(x, poa_name = poa_name)
+         "yes" = icd_filter_poa_yes(x, poa_name = poa_name),
+         "no" = icd_filter_poa_no(x, poa_name = poa_name),
+         "notYes" = icd_filter_poa_not_yes(x, poa_name = poa_name),
+         "notNo" = icd_filter_poa_not_no(x, poa_name = poa_name)
   )
 }
 
@@ -132,11 +133,11 @@ icd_filter_poa_not_no <- function(x, poa_name = "poa") {
   .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = TRUE)
 }
 
-#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is anything
-#'   byt "Yes." This would group exempt, unknown and other codes under "Not POA"
-#'   which is unlikely to be a good choice, since exempt codes, of which there
-#'   are a quite large number, tend to describe chronic or out-of-hospital
-#'   characteristics.
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#'   anything byt "Yes." This would group exempt, unknown and other codes under
+#'   "Not POA" which is unlikely to be a good choice, since exempt codes, of
+#'   which there are a quite large number, tend to describe chronic or
+#'   out-of-hospital characteristics.
 #' @export
 icd_filter_poa_not_yes <- function(x, poa_name = "poa") {
   .icd_filter_poa(x, poa_name, choice = c("Y", "y"), invert = TRUE)

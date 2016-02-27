@@ -10,10 +10,12 @@ getLatestBillableVersion()
 icd9cm_latest_edition()
 }
 \description{
-Returns a single character value with the number of the latests edition, currently \strong{32}.
+Returns a single character value with the number of the latests edition,
+currently \strong{32}.
 }
 \details{
-Implemented as a function to give flexibility to calculate this, or use an option override.
+Implemented as a function to give flexibility to calculate this, or use an
+option override.
 }
 \keyword{internal}
 

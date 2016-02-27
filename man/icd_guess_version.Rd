@@ -40,7 +40,8 @@ Guess version of ICD
 
 \item \code{character}: Guess version of ICD codes in character vector
 
-\item \code{data.frame}: Guess version of ICD codes in a field in a \code{data.frame}
+\item \code{data.frame}: Guess version of ICD codes in a field in a
+\code{data.frame}
 }}
 \keyword{internal}
 

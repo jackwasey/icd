@@ -57,7 +57,8 @@ provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 }
 \description{
-Filters a data.frame of patients for valid or invalid ICD-9 codes
+Filters a data.frame of patients for valid or invalid ICD-9
+  codes
 }
 \section{Methods (by class)}{
 \itemize{

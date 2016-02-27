@@ -74,13 +74,17 @@ Codes provided are compared to the most recent version of the
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd9}: Which of the given ICD-9 codes are leaf nodes in ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
+\item \code{icd9}: Which of the given ICD-9 codes are leaf nodes in
+ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
 
-\item \code{icd10cm}: Which of the given ICD-10 codes are leaf nodes in ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
+\item \code{icd10cm}: Which of the given ICD-10 codes are leaf nodes in
+ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 
-\item \code{icd10}: Which of the given ICD-10 codes are leaf nodes in ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
+\item \code{icd10}: Which of the given ICD-10 codes are leaf nodes in
+ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 
-\item \code{icd9cm}: Which of the given ICD-9 codes are leaf nodes in ICD-9-CM
+\item \code{icd9cm}: Which of the given ICD-9 codes are leaf nodes in
+ICD-9-CM
 
 \item \code{default}: Which of the given ICD codes are leaf nodes in
 ICD version guessed from the codes themselves.

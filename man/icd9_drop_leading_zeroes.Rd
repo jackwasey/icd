@@ -40,9 +40,11 @@ decimal form ICD-9 codes are not ambiguous if the leading zeroes
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd_decimal_code}: Drop leading zeroes from a decimal format ICD-9 code.
+\item \code{icd_decimal_code}: Drop leading zeroes from a decimal
+format ICD-9 code.
 
-\item \code{icd_short_code}: Drop leading zeroes from a short format ICD-9 code
+\item \code{icd_short_code}: Drop leading zeroes from a short format
+ICD-9 code
 
 \item \code{default}: Drop leading zeroes from ICD-9 codes of
 specified or unknown type.

@@ -267,9 +267,9 @@ icd9Benchmark <- function() {
                      icd9 = c("441", "412.93", "044.9"),
                      stringsAsFactors = TRUE)
   prof_charl <- profr::profr(icd9Charlson(mydf,
-                                        return.df = TRUE,
-                                        stringsAsFactors = TRUE,
-                                        isShort = FALSE))
+                                          return.df = TRUE,
+                                          stringsAsFactors = TRUE,
+                                          isShort = FALSE))
   ggplot2::ggplot(prof_charl, minlabel = 0.04)
 
   rng <- "300" %i9s% "450"

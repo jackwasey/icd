@@ -64,7 +64,8 @@ and code short vs decimal type.
 
 \item \code{icd9cm}: Get billable ICD-9-CM codes
 
-\item \code{icd9}: Get billable ICD-9 codes, which is currently implemented assuming ICD-9-CM
+\item \code{icd9}: Get billable ICD-9 codes, which is currently
+implemented assuming ICD-9-CM
 }}
 \keyword{internal}
 

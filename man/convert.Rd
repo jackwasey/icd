@@ -25,8 +25,8 @@ five characters is given in a code, then the digits are greedily assigned
 to hundreds, then tens, then units, before the decimal parts. E.g. "10"
 becomes "010", not "0010"}
 
-\item{minorEmpty}{vector of length one, to be used in place of
-minor part of zero. Defaults to ""}
+\item{minorEmpty}{vector of length one, to be used in place of minor part of
+zero. Defaults to ""}
 
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
 characters is given in a code, then the digits are greedily assigned to
@@ -54,24 +54,24 @@ provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 }
 \value{
-Character vector or list. Deliberately returns zero-padded major, because
-  otherwise we are creating ambiguous codes (even if we know what we mean)
+Character vector or list. Deliberately returns zero-padded major,
+  because otherwise we are creating ambiguous codes (even if we know what we
+  mean)
 }
 \description{
-ICD-9 codes are represented in \emph{short} and \emph{decimal} forms.
-The short form has up to 5 digits, or V or E followed by up to four digits. The decimal form
-has a dedcimal point to delimit the top-level (henceforth \emph{major}) category, and the
-\emph{minor} part containing the subsidiary classifications.
+ICD-9 codes are represented in \emph{short} and \emph{decimal}
+  forms. The short form has up to 5 digits, or V or E followed by up to four
+  digits. The decimal form has a dedcimal point to delimit the top-level
+  (henceforth \emph{major}) category, and the \emph{minor} part containing
+  the subsidiary classifications.
 }
 \section{Structures}{
- Structures used in this package are:
-\itemize{
-  \item vector (usually character vectors) of \emph{short} or \emph{long} codes
-  \item list, containing two elements with equal length vectors called \code{major}
-  \code{minor}. Yes, this is very like a data frame, but we do not need the overhead
-  of structuring it that way.
-  \item two vectors of separated major and minor parts
-  }
+ Structures used in this package are: \itemize{ \item
+  vector (usually character vectors) of \emph{short} or \emph{long} codes
+  \item list, containing two elements with equal length vectors called
+  \code{major} \code{minor}. Yes, this is very like a data frame, but we do
+  not need the overhead of structuring it that way. \item two vectors of
+  separated major and minor parts }
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9_chapters_to_map}},

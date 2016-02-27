@@ -25,8 +25,8 @@ update regex to limit by start and end, with or without whitespace
 \itemize{
 \item \code{re_just_ws}: allow whitespace
 
-\item \code{re_wrap_or}: contain any \code{|} options within a regex, e.g. ICD-9 codes without
-\code{^} or \code{$}.
+\item \code{re_wrap_or}: contain any \code{|} options within a regex, e.g. ICD-9
+codes without \code{^} or \code{$}.
 }}
 \keyword{internal}
 

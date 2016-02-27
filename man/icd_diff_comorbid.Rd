@@ -54,7 +54,8 @@ Compares two comorbidity:icd9 code mappings. The results are
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{list}: Show difference between comorbidity maps with ICD-9 codes
+\item \code{list}: Show difference between comorbidity maps with
+ICD-9 codes
 }}
 \examples{
 \donttest{

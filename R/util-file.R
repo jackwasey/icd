@@ -123,8 +123,8 @@ download_to_data_raw <- function(url,
 #'
 #' File is named varname.RData with an optional suffix before .RData
 #'
-#' @param var_name character or symbol, e.g. "myvar" or \code{myvar}, either of which
-#'   would find \code{myvar} in the parent environment, and save it as
+#' @param var_name character or symbol, e.g. "myvar" or \code{myvar}, either of
+#'   which would find \code{myvar} in the parent environment, and save it as
 #'   \code{myvar.RData} in \code{package_root/data}.
 #' @param suffix character scalar
 #' @return invisibly returns the data
