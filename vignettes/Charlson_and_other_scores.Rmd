@@ -34,8 +34,6 @@ suppressWarnings({
     loadNamespace("knitr") # for opts_chunk only
     library(icd)
     library(magrittr)
-#    library(xtable)
-#    library(utils)
     })
   })
 
