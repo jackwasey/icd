@@ -1,5 +1,4 @@
 ^COPYING$
-^tools$
 tests\/testthat\/test-sas\.R
 tests\/testthat\/test-parse\.R
 man\/fixSubchapterNa

@@ -29,4 +29,3 @@ src-i386
 src-x64
 *.swp
 todo
-tools/r-devel-ubsan*/build_install_check_in_docker.sh

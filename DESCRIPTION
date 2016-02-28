@@ -7,7 +7,7 @@ Description: Calculate comorbidities, Charlson scores, perform fast and accurate
     billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan
     (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 Version: 1.3.0.9004
-Date: 2016-02-09
+Date: 2016-02-18
 Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
     person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org", comment = "Van Walraven scores"),
