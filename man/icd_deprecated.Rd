@@ -10,9 +10,7 @@ icd_deprecated(...)
 \item{...}{arguments passed to \code{.Deprecated}}
 }
 \description{
-Don't show warnings when testing deprecated code. I don't really want
-deprecated warnings in any testing, with testthat directly, or in CRAN
-checks.
+Don't show warnings when testing deprecated code.
 }
 \keyword{internal}
 

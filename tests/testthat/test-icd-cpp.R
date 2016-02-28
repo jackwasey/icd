@@ -15,9 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("C++")
+context("Pure C++ Catch tests")
 
 test_that("C++ tests all pass", {
   # this does require a recent version of testthat > 0.11.0.9000
-  testthat::expect_cpp_tests_pass("icd")
+  catch_avail <- tryCatch(
+    getNativeSymbolInfo("run_testthat_tests", PACKAGE = "icd") != "",
+    error = function(e) FALSE
+  )
+  if (!catch_avail)
+    skip("recent testthat with C++ Catch not available")
+  else
+    testthat::expect_cpp_tests_pass("icd")
 })

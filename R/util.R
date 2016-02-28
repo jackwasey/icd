@@ -47,10 +47,12 @@ trim <- function(x) {
 #' @return character vector
 #' @keywords internal
 as_char_no_warn <- function(x) {
-  if (is.character(x)) return(x)
+  if (is.character(x))
+    return(x)
   old <- options(warn = -1)
   on.exit(options(old))
-  if (is.integer(x)) fastIntToStringRcpp(x)
+  if (is.integer(x))
+    fastIntToStringRcpp(x)
   if (is.factor(x))
     levels(x)[x]
   else
@@ -355,21 +357,13 @@ icd9_order_short <- function(x) {
 
 #' wrapper for \code{.Deprecated}
 #'
-#' Don't show warnings when testing deprecated code. I don't really want
-#' deprecated warnings in any testing, with testthat directly, or in CRAN
-#' checks.
+#' Don't show warnings when testing deprecated code.
 #' @param ... arguments passed to \code{.Deprecated}
 #' @keywords internal
 icd_deprecated <- function(...) {
-  # if NOT_CRAN is set, it means we are running testthat?
-
-  # try to detect if we are testing:
-  test_mode <- unlist(sys.calls()) %>% str_detect("test") %>% any
-
   opt <- getOption("icd.warn_deprecated")
-  if (!test_mode || !(is.null(opt) || !opt))
+  if (!(is.null(opt) || !opt))
     .Deprecated(...)
-
 }
 
 #' Parse a (sub)chapter text description with parenthesised range

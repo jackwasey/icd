@@ -75,7 +75,7 @@ of \code{FALSE} gives the more natural return data of a matrix with
 rownames being the visitIds.}
 }
 \description{
-This is more complicated than reshape or reshape2::dcast allows.
+This is more complicated than reshape or reshape2  dcast allows.
   This is a reasonably simple solution using built-in functions.
 }
 \examples{

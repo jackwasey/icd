@@ -75,7 +75,7 @@ RUN cd /tmp/R-devel \
 
 # remove or keep -O0 flags? Not sure which would be most helpful. Most code in production use is compiled O2, but I don't know whether O0 would uncover the same UBSAN bugs, or just allow them to be characterized more easily. BDR used -O2 in the memtests he did on this package.
 
-RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "XML", "memoise", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools", "fastmatch"))'
+RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools", "fastmatch"))'
 
 # can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
 ADD build_install_check_in_docker.sh /tmp/

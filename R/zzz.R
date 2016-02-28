@@ -87,6 +87,7 @@ release_questions <- function() {
     "Is every SEXP PROTECT()ed and UNPROTECT()ed?",
     "Is the naming scheme consistent, with deprecated old style names?",
     # testing and compilation and different platforms:
+    "Have you run with testthat <= and > 0.11.0?",
     "Have you run autoreconf before building and testing?",
     "Has config.h.win been updated to reflect latest configure.ac results?",
     "Are there skipped tests which should be run?",

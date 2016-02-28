@@ -15,7 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+#' @rdname as_char_no_warn
+#' @keywords internal
 asCharacterNoWarn <- function(x) {
+  icd_deprecated("as_char_no_warn")
   as_char_no_warn(x)
 }
 

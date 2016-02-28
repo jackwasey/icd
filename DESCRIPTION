@@ -5,7 +5,7 @@ Description: Calculate comorbidities, Charlson scores, perform fast and accurate
     codes. Common ambiguities and code formats are supported. This package enables a work flow from raw lists of ICD-9 codes in
     hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
     from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-Version: 1.3.0.9003
+Version: 1.3.0.9004
 Date: 2016-02-09
 Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
@@ -28,16 +28,16 @@ Imports:
 Suggests:
     knitr,
     lintr,
-    memoise,
     RODBC,
     roxygen2 (>= 5.0.0),
-    testthat (>= 0.11.0.9000)
+    testthat
 LazyData: true
 LazyDataCompression: xz
 BugReports: https://github.com/jackwasey/icd9/issues
 License: GPL-3
 Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
-LinkingTo: Rcpp,
+LinkingTo:
+    Rcpp,
     testthat
 RoxygenNote: 5.0.1

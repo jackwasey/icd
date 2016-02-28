@@ -3,8 +3,8 @@
 #include "util.h"
 #include "convert.h"
 #include "../inst/include/icd.h"
-
-#ifdef TESTTHAT_HPP
+#include "config.h"
+#ifdef HAVE_TESTTHAT_H
 #include <testthat.h>
 
 context("C++ Unit Test") {
