@@ -11,5 +11,5 @@ build:
     - jimhester/r-check:
 # I think this has false positives for latex warnings, even if R CMD check is okay
       warnings_are_errors: FALSE
-#    - jackwasey/r-coverage # fails with obscure error (jimhester and jackwasey versions)
-#    - jimhester/r-lint # now done in tests
+    - jackwasey/r-coverage # may fail with obscure error (jimhester and jackwasey versions)
+    - jimhester/r-lint
