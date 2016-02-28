@@ -420,7 +420,6 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
 
     # drop HTNcx without converting to vector if matrix only has one row
-    # (drop=FALSE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
@@ -475,7 +474,6 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
     # combine HTN
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
     # drop HTNcx without converting to vector if matrix only has one row
-    # (drop=FALSE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     # if we didn't apply the hierarchy, we have to use the naming scheme with
@@ -512,7 +510,6 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
 
     # drop HTNcx without converting to vector if matrix only has one row
-    # (drop=FALSE)
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)

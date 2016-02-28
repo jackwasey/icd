@@ -19,7 +19,7 @@ context("test filtering on POA")
 
 test_that("filter POA - not a data frame", {
   expect_error(icd9FilterPoaNo(list(pollo = "loco")))
-  expect_error(icd9FilterPoaNotYes(visit_id=c("1", "2"),
+  expect_error(icd9FilterPoaNotYes(visit_id = c("1", "2"),
                                    icd9 = c("1", "2"),
                                    poa = c("Y", "N")))
 })
