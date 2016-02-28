@@ -14,7 +14,6 @@ build:
             export ICD_SLOW_TESTS=true
             rm .Rinstignore  # install everything for testing
             sed -i '/data/d' .Rbuildignore # do include data for testing
-            # working dir is /pipeline/source
     - jimhester/r-dependencies:
         github_packages:
          - hadley/testthat
