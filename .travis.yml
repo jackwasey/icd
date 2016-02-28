@@ -3,6 +3,14 @@ language: R
 cache: packages
 r: devel
 
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+  - clang
+
 repos:
  CRAN: https://cran.rstudio.com
 # Rcpp: http://rcppcore.github.io/drat # github ahead and I need the github version
