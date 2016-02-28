@@ -494,7 +494,8 @@ generate_vermont_dx <- function(save_data = TRUE, offline = FALSE) {
   attr(sex, "levels") <- c("male", "female", "unknown")
   vermont_dx$intage <- age_group
   vermont_dx$sex <- sex
-  vermont_dx$dstat <- vermont_dx$dstat == 8 # death (other codes are for various discharge statuses)
+  # death = 8 (other codes are for various discharge statuses)
+  vermont_dx$dstat <- vermont_dx$dstat == 8
   names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
   # TODO: or use class functions
   class(vermont_dx) <- c("icd9cm", "icd9", "icd_short_code", "icd_wide_data", "data.frame")
