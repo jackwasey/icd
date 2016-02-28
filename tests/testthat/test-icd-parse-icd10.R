@@ -21,7 +21,6 @@ context("icd10 WHO parse")
 
 test_that("icd10 WHO recreated exactly", {
   skip("not implemented yet")
-  icd10_get_who_from_cdc()
 })
 
 context("icd10 fixed width parse")

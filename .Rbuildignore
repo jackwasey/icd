@@ -17,7 +17,7 @@ cran-comments\.md$
 ^\.git/.*
 ^data\/icd10_who.*$
 data-raw\/.*$
-icd10_get_who_from_cdc
+man\/icd10_get_who_from_cdc.Rd
 icd.*\.aux$
 icd.*\.so$
 icd.*\.dll$
@@ -32,6 +32,7 @@ inst\/standalone\/.*
 Makevars$
 man-roxygen
 ^NEWS\.md$
+^R\/parse-icd10-who\.R$
 ^README-*\.png$
 ^README\.Rmd$
 ^.*\.RProf.*$

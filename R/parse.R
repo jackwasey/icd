@@ -38,7 +38,8 @@ icd_update_everything <- function() {
   message("Parsing plain text billable codes to create icd9cm_billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
-  icd9cm_billable <- parse_leaf_descriptions_all(save_data = TRUE) # nolint
+  parse_leaf_descriptions_all(save_data = TRUE) # nolint
+  load(system.file("data", "icd9cm_billable"))
 
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
