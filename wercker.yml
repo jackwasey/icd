@@ -1,4 +1,4 @@
-# WERCKER_R_COVR_OPTIONS is set in the wercker configuration to do exclusions
+# WERCKER_R_COVR_OPTIONS etc can also be set in the wercker configuration to do exclusions
 box: rocker/hadleyverse
 command-timeout: 60
 no-response-timeout: 60
@@ -6,8 +6,21 @@ build:
   steps:
     - install-packages:
         packages: r-cran-rodbc
+    - script:
+        name: setup environment
+        code: |
+            export WERCKER_R_COVR_OPTIONS="exclusions=list('inst/include/icd_RcppExports.h','R/RcppExports.R','src/RcppExports.cpp','R/benchmark.R')"
+            export ICD_ONLINE_TESTS=false
+            export ICD_SLOW_TESTS=true
+            echo "$PWD"
+            ls
+            rm .Rinstignore  # install everything for testing
+            sed -i '/data/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
-        github_packages: hadley/testthat RcppCore/Rcpp jimhester/covr
+        github_packages:
+         - hadley/testthat
+         - RcppCore/Rcpp
+         - jimhester/covr
     - jimhester/r-check:
 # I think this has false positives for latex warnings, even if R CMD check is okay
       warnings_are_errors: FALSE
