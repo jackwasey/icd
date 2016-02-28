@@ -4,8 +4,16 @@ pack <- available.packages()
 tools::package_dependencies("icd9", which = c("Depends", "Imports", "LinkingTo"), db = pack, recursive = TRUE, reverse = FALSE)
 
 # for my suggested packages, what are the hard dependencies of those packages?
-sug_pkgs <- tools::package_dependencies("icd9", which = c("Suggests"), db = pack, recursive = FALSE, reverse = FALSE)[[1]]
-tools::package_dependencies(sug_pkgs, which = c("Depends", "Imports", "LinkingTo"), db = pack, recursive = TRUE, reverse = FALSE)
+cran_sug_pkgs <- tools::package_dependencies("icd9", which = c("Suggests"), db = pack, recursive = FALSE, reverse = FALSE)[[1]]
+tools::package_dependencies(cran_sug_pkgs, which = c("Depends", "Imports", "LinkingTo"), db = pack, recursive = TRUE, reverse = FALSE) %>% unlist %>% unname %>% unique
+
+
+# same but using the current install local 'icd' package, not the CRAN version:
+imports <- packageDescription("icd", fields = "Imports") %>% str_split(",|\n") %>% extract2(1) %>% str_subset(".+") %>% str_replace(" .*$", "")
+suggests <- packageDescription("icd", fields = "Suggests") %>% str_split(",|\n") %>% extract2(1) %>% str_subset(".+") %>% str_replace(" .*$", "")
+tools::package_dependencies(imports, which = c("Depends", "Imports", "LinkingTo"), db = pack, recursive = TRUE, reverse = FALSE) %>% unlist %>% unname %>% unique %>% sort
+tools::package_dependencies(suggests, which = c("Depends", "Imports", "LinkingTo"), db = pack, recursive = TRUE, reverse = FALSE) %>% unlist %>% unname %>% unique %>% sort
+# lintr is very heavy on dependencies...
 
 # check dependencies of packages on which I depend or suggest
 

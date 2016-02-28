@@ -402,14 +402,3 @@ my_test_check <- function(pattern, msg) {
                                                                            testthat::StopReporter()))
   )
 }
-
-#' Test for no lints
-#' @keywords internal
-expect_no_lints <- function(...) {
-  lints <- lintr::lint_package(...)
-  if (is.null(lints))
-    lints <- list()
-  else
-    lints <- unclass(lints)
-  eval(bquote(testthat::expect_identical(lints, list())))
-}

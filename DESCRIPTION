@@ -27,7 +27,6 @@ Imports:
     utils
 Suggests:
     knitr,
-    lintr,
     RODBC,
     roxygen2 (>= 5.0.0),
     testthat
