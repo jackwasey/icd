@@ -141,4 +141,16 @@ save_in_data_dir <- function(var_name, suffix = "") {
   invisible(get(var_name, envir = parent.frame()))
 }
 
+icd10cm_get_xml_file <- function(...) {
+  unzip_to_data_raw(
+    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP",
+    file_name = "Tabular.xml", ...)
+}
+
+icd10cm_get_flat_file <- function(...) {
+  unzip_to_data_raw(
+    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
+    file_name = "icd10cm_order_2016.txt", ...)
+}
+
 # nocov end
