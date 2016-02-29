@@ -26,7 +26,7 @@ warnings_are_errors: true
 
 # seperate lines seems to mean the whole build is repeated each line
 env:
-  - OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+  - OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
   - OMP_NUM_THREADS=1 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE  ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 # debian package names for some primary and secondary dependencies:
@@ -46,7 +46,7 @@ before_script:
 after_success:
   # slow tests has dropped off environment?
   - export
-  - export OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+  - export OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
   - Rscript -e 'library(covr); coveralls(type = "test", quiet = FALSE,
         exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"))'
   - Rscript -e 'library(covr); package_coverage(type = "vignette", quiet = FALSE,
