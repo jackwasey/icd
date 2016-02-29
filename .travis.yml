@@ -19,15 +19,15 @@ matrix:
     - r: oldrel
 
 repos:
- CRAN: https://cran.rstudio.com
+  CRAN: https://cran.rstudio.com
 # Rcpp: http://rcppcore.github.io/drat # github ahead and I need the github version
 
 warnings_are_errors: true
 
 # seperate lines seems to mean the whole build is repeated each line
 env:
- - OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
- - OMP_NUM_THREADS=1 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE  ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+  - OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+  - OMP_NUM_THREADS=1 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE  ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 # debian package names for some primary and secondary dependencies:
 #  - libxml2-dev libssl-dev r-base-core r-cran-rcurl r-cran-bitops r-cran-rcolorbrewer
@@ -35,19 +35,22 @@ env:
 #  - r-cran-scales r-cran-proto r-cran-catools r-cran-testthat
 
 r_github_packages:
- - jimhester/covr
- - hadley/testthat
- - RcppCore/Rcpp
+  - jimhester/covr
+  - hadley/testthat
+  - RcppCore/Rcpp
 
 before_script:
- - rm .Rinstignore  # install everything for testing
- - sed -i '/data/d' .Rbuildignore # do include data for testing
+  - rm .Rinstignore  # install everything for testing
+  - sed -i '/data/d' .Rbuildignore # do include data for testing
 
 after_success:
- # vignette coverage, don't submit to coveralls!
- - Rscript -e 'library(covr); package_coverage(type = "vignette", quiet = FALSE, exclusions = c("inst/include/icd_RcppExports.h", "R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'
- - Rscript -e 'library(covr); coveralls(type = "test", exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE)'
- # or try travis_wait for slow running blocks with no output
+  # slow tests has dropped off environment?
+  - export
+  - export OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+  - Rscript -e 'library(covr); coveralls(type = "test", quiet = FALSE,
+        exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"))'
+  - Rscript -e 'library(covr); package_coverage(type = "vignette", quiet = FALSE,
+      exclusions = c("inst/include/icd_RcppExports.h", "R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'
 
 notifications:
   email:
