@@ -197,10 +197,9 @@ icd_is_valid.default <- function(x, ...) {
 
 #' @describeIn icd_is_valid Test whether a character vector of ICD codes is
 #'   valid, guessing ICD version (of all the elements of the vector at once)
-#' @details Currently \code{roxygen2} gets confused by a second \code{UseMethod}
-#'   hence declaring method here
+#'   Currently \code{roxygen2} gets confused by a second \code{UseMethod} hence
+#'   declaring method here
 #' @export
-#' @keywords internal
 #' @method icd_is_valid character
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
                                    whitespace_ok = TRUE, ...) {
@@ -444,18 +443,21 @@ icd_get_valid.character <- function(x, short_code = icd_guess_short(x)) {
 
 #' @describeIn icd_get_valid Get valid ICD-9 codes
 #' @export
+#' @keywords internal
 icd_get_valid.icd9 <- function(x, short_code = icd_guess_short(x)) {
   x[icd_is_valid.icd9(x, short_code = short_code)]
 }
 
 #' @describeIn icd_get_valid Get valid ICD-10 codes
 #' @export
+#' @keywords internal
 icd_get_valid.icd10 <- function(x, short_code = icd_guess_short(x)) {
   x[icd_is_valid.icd10(x, short_code = short_code)]
 }
 
 #' @describeIn icd_get_valid Get valid ICD-10-CM codes
 #' @export
+#' @keywords internal
 icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
   # TODO: make ICD-10-CM specific
   x[icd_is_valid.icd10(x, short_code = short_code)]
@@ -472,7 +474,6 @@ icd_get_invalid <- function(...) {
 #' @describeIn icd_get_invalid Default method when ICD version or short versus
 #'   decimal not known.
 #' @export
-#' @keywords internal
 #' @method icd_get_invalid default
 icd_get_invalid.default <- function(x, short_code = NULL, ...) {
   # TODO: any value in guessing both in tandem

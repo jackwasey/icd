@@ -319,7 +319,6 @@ icd_sort <- function(x, ...)
 #' @describeIn icd_sort Guess whether ICD-9 or ICD-10 (or possibly sub-type in
 #'   the future) then sort based on that type. ICD-10 codes, note that setting
 #'   \code{short} is unnecessary and ignored.
-#' @keywords internal
 #' @export
 #' @details roxygen annotating this causes a roxygen error, issue #448
 #'   https://github.com/klutometis/roxygen/issues/448
