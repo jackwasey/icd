@@ -15,10 +15,7 @@ build:
             rm .Rinstignore  # install everything for testing
             sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
-        github_packages:
-         - hadley/testthat
-         - RcppCore/Rcpp
-         - jimhester/covr
+        github_packages: hadley/testthat RcppCore/Rcpp jimhester/covr
     - jimhester/r-check:
         warnings_are_errors: FALSE # I think this has false positives for latex warnings, even if R CMD check is okay
     - jackwasey/r-coverage
