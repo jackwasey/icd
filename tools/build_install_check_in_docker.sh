@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-# This file should be run within the container. It is placed there by rocker-icd9.sh
+# This file should be run within the container. It is placed there by rocker-icd.sh
 
 : ${R_PKG_NAME:=icd}
 : ${GIT_URL:=https://github.com}

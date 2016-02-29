@@ -39,7 +39,7 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstab
 # use Rdevel (from the rocker image, because R is the standard g++ unsanitized one)
 RUN Rdevel -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'knitr', 'rmarkdown', 'fastmatch'))"
 
-# can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
+# can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd.sh
 ADD build_install_check_in_docker.sh /tmp/
 ENV R_CMD Rdevel
 CMD ["/tmp/build_install_check_in_docker.sh"]

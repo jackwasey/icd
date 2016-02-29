@@ -52,7 +52,7 @@ benchOpenMPThreads <- function(n = 2 ^ 18 - 1, np = 7) {
   )
 }
 
-benchVaryn <- function(np = 5, threads = 4, chunk_size = 256, omp_chunk_size = 1) {
+bench_vary_n <- function(np = 5, threads = 4, chunk_size = 256, omp_chunk_size = 1) {
   # default to good options from other tests
   mbr <- NULL
   for (n in c(1e0, 1e3, 1e4, 1e5, 1e6)) {
@@ -195,7 +195,7 @@ my_check <- function(values) {
   all(sapply(values[-1], function(x) identical(values[[1]], x)))
 }
 
-icd9BenchComorbidParallel <- function() {
+icd_bench_comorbid_parallel <- function() {
   pts10000 <- generate_random_pts(10000)
   pts100000 <- generate_random_pts(100000)
   pts_big <- generate_random_pts(500000)
