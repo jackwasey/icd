@@ -1,5 +1,5 @@
 # https://docs.travis-ci.com/user/languages/r
-language: R
+language: r
 cache: packages
 r:
   - oldrel
@@ -22,7 +22,8 @@ warnings_are_errors: true
 
 # seperate lines seems to mean the whole build is repeated each line
 env:
- - R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+ - OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+ - OMP_NUM_THREADS=1 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE  ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 # debian package names for some primary and secondary dependencies:
 #  - libxml2-dev libssl-dev r-base-core r-cran-rcurl r-cran-bitops r-cran-rcolorbrewer
