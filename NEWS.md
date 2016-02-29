@@ -22,7 +22,7 @@
  * Condense and range functions has been completely reworked now that all the intermediate heading codes are available. This means there will be slight differences in the results produced, and there are still very minor quirks, but the tests cover thoroughly all known ICD-9-CM codes in existence from any available version.
  * The package data was refreshed with comorbidities derived from source ranges specified by the original authors. These deliberately produce valid but non-existent codes, and these are now slightly different with the range work. This should not have any impact on comorbidity assignmentments from real ICD-9 codes, but keeps the package consistent with itself.
  * OpenMP and C++11 are now both enabled on platforms which allow this (i.e. everything except Solaris), which gives performance improvements.
- * Van Walvaren comorbidity score (analagous to Charlson score, but based on Elixhauser comorbidities) added by @wmurhpyrd, with thanks.
+ * Van Walraven comorbidity score (analagous to Charlson score, but based on Elixhauser comorbidities) added by @wmurhpyrd, with thanks.
  * Dropped most included data from the package, as most can be retrieved from reliable web sites. The data is still in the github repo, but is downloaded automatically when needed (which is only working in the package source tree.)
  * stopped exporting 'parts' functions, as these complicate the namespace and are unlikely to end-user, but still available with `icd:::icd9PartsToShort` etc.
  * code clean-up with excellent `lintr` package from @jimhester

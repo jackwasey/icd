@@ -61,7 +61,7 @@ icd10: [![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=icd10)](
  * assignment of patients to high level comorbidities based on admission or discharge ICD-9 codes
      * several mappings of ICD-9 codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
      * very fast assignment of ICD-9 codes to comorbidities (using C and C++ internally, with automatic parallel execution using OpenMP when available)
- * Charlson and Van Walvaren score calculations
+ * Charlson and Van Walraven score calculations
  * validation of ICD-9 codes from different annual revisions of ICD-9-CM
  * summarizing ICD-9 codes into groups, and to human-readable descriptions
  * correct conversion between different representations of ICD-9 codes, with and without a decimal point
