@@ -10,9 +10,13 @@ os:
   - linux
 #  - osx
 
-compiler:
-  - gcc
-  - clang
+# compiler:
+#   - gcc
+#   - clang
+
+matrix:
+  allow_failures:
+    - r: oldrel
 
 repos:
  CRAN: https://cran.rstudio.com
