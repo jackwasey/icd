@@ -44,14 +44,14 @@
 #' @return data frame, or list of data frames, with fields for ICD9 code, name
 #'   and description, derived from datamart lookup table
 #' @seealso package comorbidities
-#' @rawNamespace S3method(icd_explain,character)
 #' @export
 icd_explain <- function(...)
   UseMethod("icd_explain")
 
-# @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
-# @rawNamespace S3method(icd_explain,character)
-# @keywords internal
+#' @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
+#' @export
+#' @keywords internal
+#' @method icd_explain character
 icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   x <- icd_guess_version_update(x)
   UseMethod("icd_explain", x)

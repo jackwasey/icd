@@ -311,14 +311,19 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
 #' @template short_code
 #' @template dotdotdot
 #' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
-#' @rawNamespace S3method(icd_sort,default)
 #' @keywords manip
 #' @export
 icd_sort <- function(x, ...)
   UseMethod("icd_sort")
 
-# roxygen annotating this causes a roxygen error, issue #448
-# https://github.com/klutometis/roxygen/issues/448
+#' @describeIn icd_sort Guess whether ICD-9 or ICD-10 (or possibly sub-type in
+#'   the future) then sort based on that type. ICD-10 codes, note that setting
+#'   \code{short} is unnecessary and ignored.
+#' @keywords internal
+#' @export
+#' @details roxygen annotating this causes a roxygen error, issue #448
+#'   https://github.com/klutometis/roxygen/issues/448
+#' @method icd_sort default
 icd_sort.default <- function(x, ...) {
   y <- icd_guess_version_update(x)
   UseMethod("icd_sort", y)

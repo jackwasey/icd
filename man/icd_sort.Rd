@@ -5,6 +5,7 @@
 \alias{icd9SortDecimal}
 \alias{icd9SortShort}
 \alias{icd_sort}
+\alias{icd_sort.default}
 \alias{icd_sort.icd10}
 \alias{icd_sort.icd9}
 \title{sort short-form icd9 codes}
@@ -16,6 +17,8 @@ icd9SortShort(icd9Short)
 icd9SortDecimal(icd9Decimal)
 
 icd_sort(x, ...)
+
+\method{icd_sort}{default}(x, ...)
 
 \method{icd_sort}{icd10}(x, short_code = NULL, ...)
 
@@ -61,9 +64,16 @@ Sorts lists of numeric only, V or E codes. Note that a simple
 \details{
 Implementation used fast built-in sort, then shuffles the E codes to
   the end.
+
+roxygen annotating this causes a roxygen error, issue #448
+  https://github.com/klutometis/roxygen/issues/448
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{default}: Guess whether ICD-9 or ICD-10 (or possibly sub-type in
+the future) then sort based on that type. ICD-10 codes, note that setting
+\code{short} is unnecessary and ignored.
+
 \item \code{icd10}: Sort ICD-10 codes, note that setting \code{short} is
 unnecessary and ignored.
 

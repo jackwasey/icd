@@ -19,6 +19,7 @@
 \alias{icd9ValidDecimal}
 \alias{icd9ValidShort}
 \alias{icd_is_valid}
+\alias{icd_is_valid.character}
 \alias{icd_is_valid.icd10}
 \alias{icd_is_valid.icd10who}
 \alias{icd_is_valid.icd9}
@@ -65,6 +66,9 @@ icd_is_valid(x, ...)
   whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd9}(x, short_code = icd_guess_short.icd9(x),
+  whitespace_ok = TRUE, ...)
+
+\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x),
   whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd_comorbidity_map}(x, short_code, ...)
@@ -129,6 +133,9 @@ Leading zeroes in the decimal form are not ambiguous. Although
   vs 10 if possible. TODO: use "short_code" or "long" attribute if available
   to tighten validation, or guess if missing.
 
+Currently \code{roxygen2} gets confused by a second \code{UseMethod}
+  hence declaring method here
+
 From WHO ICD-10 manual: "The basic ICD is a single coded list of
   three-character categories, each of which can be further divided into up to
   10 four-character subcategories. In place of the purely numeric coding
@@ -154,6 +161,9 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
 \item \code{icd10}: Test whether generic ICD-10 code is valid
 
 \item \code{icd9}: Test whether generic ICD-10 code is valid
+
+\item \code{character}: Test whether a character vector of ICD codes is
+valid, guessing ICD version (of all the elements of the vector at once)
 
 \item \code{icd_comorbidity_map}: Validate an icd9 mapping to comorbidities
 

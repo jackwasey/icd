@@ -8,6 +8,7 @@
 \alias{icd9IsRealDecimal}
 \alias{icd9IsRealShort}
 \alias{icd_is_defined}
+\alias{icd_is_defined.default}
 \alias{icd_is_defined.icd10}
 \alias{icd_is_defined.icd10cm}
 \alias{icd_is_defined.icd9}
@@ -36,6 +37,8 @@ icd_is_defined(x, short_code = icd_guess_short(x), ...)
 
 \method{icd_is_defined}{icd10}(x, short_code = icd_guess_short.icd10(x),
   billable = FALSE, ...)
+
+\method{icd_is_defined}{default}(x, short_code = icd_guess_short(x), ...)
 }
 \arguments{
 \item{icd9}{is
@@ -88,6 +91,10 @@ This is different from syntactic validity: it looks it up in the
   icd-9 codes over time, and possible imperfections in the master lists
   derived from CMS.
 }
+\details{
+roxygen annotating this causes a roxygen error, issue #448
+  https://github.com/klutometis/roxygen/issues/448
+}
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd9}: Check whether ICD-9 code are defined. (ICD-9-CM by
@@ -95,7 +102,11 @@ defauly)
 
 \item \code{icd10cm}: Same for ICD-10-CM
 
-\item \code{icd10}: Same for ICD-10, temporarilyl using icd-10-cm for lookup
+\item \code{icd10}: Same for ICD-10, temporarily using icd-10-cm for lookup
+
+\item \code{default}: default method which will guess the ICD version (9
+vs 10, maybe WHO vs CM or other in the future) and redispatches on that
+type.
 }}
 \keyword{internal}
 

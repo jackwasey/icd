@@ -30,7 +30,6 @@ utils::globalVariables("icd10cm2016")
 #'   will divert to test whether the codes are in the billable list instead of
 #'   seeing if they are any leaf or branch node. TODO: template
 #' @template dotdotdot
-#' @rawNamespace S3method(icd_is_defined,default)
 #' @return logical vector
 #' @export
 icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
@@ -71,7 +70,7 @@ icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
     x %fin% icd::icd10cm2016[["code"]]
 }
 
-#' @describeIn icd_is_defined Same for ICD-10, temporarilyl using icd-10-cm for lookup
+#' @describeIn icd_is_defined Same for ICD-10, temporarily using icd-10-cm for lookup
 #' @export
 #' @keywords internal
 icd_is_defined.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
@@ -80,8 +79,14 @@ icd_is_defined.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
   icd_is_defined.icd10cm(x = x, short_code = short_code, billable = billable, ...)
 }
 
-# roxygen annotating this causes a roxygen error, issue #448
-# https://github.com/klutometis/roxygen/issues/448
+#' @describeIn icd_is_defined default method which will guess the ICD version (9
+#'   vs 10, maybe WHO vs CM or other in the future) and redispatches on that
+#'   type.
+#' @export
+#' @keywords internal
+#' @details roxygen annotating this causes a roxygen error, issue #448
+#'   https://github.com/klutometis/roxygen/issues/448
+#' @method icd_is_defined default
 icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
   y <- icd_guess_version_update(x)
   UseMethod("icd_is_defined", y)

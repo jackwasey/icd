@@ -173,7 +173,6 @@ re_icd10_any <- re_icd10cm_any
 #' @family ICD9 validation
 #' @return logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 #'   provided according to its validity
-#' @rawNamespace S3method(icd_is_valid,character)
 #' @examples
 #'   icd_is_valid(icd9(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E")))
@@ -197,6 +196,7 @@ icd_is_valid.default <- function(x, ...) {
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
 #' @export
+#' @keywords internal
 icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
                                whitespace_ok = TRUE, ...) {
   assert_character(x)
@@ -215,6 +215,7 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
 #' @export
+#' @keywords internal
 icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
                               whitespace_ok = TRUE, ...) {
   assert(
@@ -234,7 +235,15 @@ icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
 # Test whether a character vector of ICD vodes is
 #   valid, guessing both type and version of the ICD codes
 #
-# Can't roxygen because of UseMethod bug therein
+# Can't roxygen because of UseMethod bug therein?
+
+#' @describeIn icd_is_valid Test whether a character vector of ICD codes is
+#'   valid, guessing ICD version (of all the elements of the vector at once)
+#' @details Currently \code{roxygen2} gets confused by a second \code{UseMethod}
+#'   hence declaring method here
+#' @export
+#' @keywords internal
+#' @method icd_is_valid character
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
                                    whitespace_ok = TRUE, ...) {
   assert_flag(whitespace_ok)
@@ -459,16 +468,16 @@ icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 #' @title Get invalid ICD codes
 #' @description Returns subset of codes which are not in valid short_code or
 #'   decimal format.
-#' @rawNamespace S3method(icd_get_invalid,default)
 #' @export
 icd_get_invalid <- function(...) {
   UseMethod("icd_get_invalid")
 }
 
-# @describeIn icd_get_invalid Default method when ICD version or short versus
-#   decimal not known.
-# @export
-# @keywords internal
+#' @describeIn icd_get_invalid Default method when ICD version or short versus
+#'   decimal not known.
+#' @export
+#' @keywords internal
+#' @method icd_get_invalid default
 icd_get_invalid.default <- function(x, short_code = NULL, ...) {
   # TODO: any value in guessing both in tandem
   x %<>% icd_guess_short_update %>% icd_guess_version_update
