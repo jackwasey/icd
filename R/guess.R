@@ -171,8 +171,17 @@ icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_ic
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
 icd_guess_version_update <- function(x) {
-  class(x) <- append(icd_guess_version(x), class(x))
-  x
+  # could either return a method from the guess version function (nice and
+  # functional), use the returned string as a function name to invoke, or switch
+  # on the string. Just adding the class is bad, e.g. would miss icd10cm if
+  # added
+  ver <- icd_guess_version(x)
+  if (ver == "icd9")
+    icd9(x)
+  else if (ver == "icd10")
+    icd10(x)
+  else
+    stop("unknown type returned when guessing ICD version")
 }
 
 #' @title Guess short vs decimal of ICD and update class
@@ -180,13 +189,12 @@ icd_guess_version_update <- function(x) {
 #'   and set the class of the returned data according to the guess.
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
-icd_guess_short_update <- function(x, icd_name = get_icd_name(x), short_code = NULL) {
-
-  if (icd_guess_short(x, short_code = short_code))
-    class(x) <- append("icd_short_code", class(x))
+icd_guess_short_update <- function(x, icd_name = get_icd_name(x),
+                                   short_code = icd_guess_short(x)) {
+  if (short_code)
+    icd_short_code(x)
   else
-    class(x) <- append("icd_decimal_code", class(x))
-  x
+    icd_decimal_code(x)
 }
 
 #' Guess both ICD-9 vs ICD-10 or subtype, and whether short of long type.

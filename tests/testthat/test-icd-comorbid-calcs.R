@@ -325,21 +325,51 @@ test_that("get Charlson/Deyo comorbidities for a single patient", {
   mydf <- data.frame(visit_id = c("a", "a"),
                      icd9 = c("044.9", "044.9"),
                      stringsAsFactors = FALSE)
-  expect_error(icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE), NA)
+  expect_error(
+    icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE), NA)
 
   mydf <- data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93"))
-  expect_error(icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE), NA)
+  expect_error(
+    icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE), NA)
 
 })
 
-test_that("if an ICD class is not specified for a data set,
-          but is for a column therein, the correct method is dispatched", {
-  mydf <- data.frame(visit_id = c("a", "b", "c"), icd9 = c("412.93", "441", "044.9"))
-  expect_error(icd_comorbid_quan_elix(icd9(mydf), short_code = FALSE, hierarchy = TRUE, return_df = TRUE),
-               NA)
-  # TODO, expand this section
+test_that("correct comorbidities when the whole data frame has a class for ICD type", {
+  mydf <- data.frame(visit_id = c("a", "b", "c"),
+                     icd9 = c("412.93", "441", "044.9"))
+  expect_warning(icd_comorbid_quan_elix(icd9(mydf)), NA)
+  expect_warning(icd_comorbid_quan_deyo(icd9(mydf)), NA)
+  expect_warning(icd_comorbid_elix(icd9(mydf)), NA)
+  expect_warning(icd_comorbid_ahrq(icd9(mydf)), NA)
 })
+
+test_that("if an ICD class is not specified for a data set, but is for a column therein,
+          the correct method is dispatched", {
+            mydf <- data.frame(visit_id = c("a", "b", "c"),
+                               icd9 = icd9cm(c("412.93", "441", "044.9")))
+            expect_warning(icd_comorbid_quan_elix(mydf), NA)
+            expect_warning(icd_comorbid_quan_deyo(mydf), NA)
+            expect_warning(icd_comorbid_elix(mydf), NA)
+            expect_warning(icd_comorbid_ahrq(mydf), NA)
+          })
+
+test_that("if an ICD class is not specified for a data set, and is not set for a column therein,
+          the correct method is dispatched", {
+            mydf <- data.frame(visit_id = c("a", "b", "c"),
+                               icd9 = c("412.93", "441", "044.9"))
+            expect_warning(icd_comorbid_quan_elix(mydf), NA)
+            expect_warning(icd_comorbid_quan_deyo(mydf), NA)
+            expect_warning(icd_comorbid_elix(mydf), NA)
+            expect_warning(icd_comorbid_ahrq(mydf), NA)
+          })
 
 context("test ICD-10 comorbidity calculations")
 # since most of the code is common to ICD-9 and ICD-10, this doesn't need to be very extensive.
-icd_comorbid(uranium_pathology, icd10_map_quan_elix)
+
+test_that("ICD-10 comorbidities from uranium are calculated", {
+  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_elix), NA)
+  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_deyo), NA)
+  expect_warning(icd_comorbid(uranium_pathology, icd10_map_elix), NA)
+  expect_warning(icd_comorbid(uranium_pathology, icd10_map_ahrq), NA)
+  # TODO much more here
+})

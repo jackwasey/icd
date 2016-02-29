@@ -4,9 +4,10 @@
 \alias{icd10_comorbid_no_parent_search}
 \title{find ICD-10 comorbidities without checking parent matches}
 \usage{
-icd10_comorbid_no_parent_search(x, map, visit_name = NULL, icd_name = NULL,
-  short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-  short_map = icd_guess_short.icd10(map[[1]]), return_df = FALSE, ...)
+icd10_comorbid_no_parent_search(x, map, visit_name = NULL,
+  icd_name = get_icd_name(x), short_code = icd_guess_short.data.frame(x,
+  icd_name = icd_name), short_map = icd_guess_short.icd10(map[[1]]),
+  return_df = FALSE, ...)
 }
 \description{
 find ICD-10 comorbidities without checking parent matches

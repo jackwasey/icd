@@ -175,27 +175,59 @@ icd10who <- function(x) {
   x
 }
 
+#' Update the ICD version class of data.frame if there is an unambiguous version
+#' column therein
+#'
 #' If only one ICD code type is defined in columns in a matrix or data.frame,
 #' then update the class of the data frame to relfect that type.
+#' @param x data.frame of patient data
+#' @template icd_name
+#' @param must_work single logical, if \code{TRUE} (the default) will stop if a
+#'   single ICD version class cannot be applied
 #' @keywords internal
-update_class_from_columns <- function(x) {
+update_data_frame_class <- function(x, icd_name = get_icd_name(x), must_work = TRUE) {
+
+  assert_data_frame(x, min.cols = 2, col.names = "unique")
+  assert_string(icd_name)
+  assert_flag(must_work)
+
   i9 <- any(vapply(x, inherits, "icd9", FUN.VALUE = logical(1)))
   i9cm <- any(vapply(x, inherits, "icd9cm", FUN.VALUE = logical(1)))
   i10 <- any(vapply(x, inherits, "icd10", FUN.VALUE = logical(1)))
   i10cm <- any(vapply(x, inherits, "icd10cm", FUN.VALUE = logical(1)))
   i10who <- any(vapply(x, inherits, "icd10who", FUN.VALUE = logical(1)))
-  if (sum(i9 || i9cm, i10 || i10cm, i10 || i10who) == 1) {
-    if (i9 && !inherits(x, "icd9"))
-      x <- icd9(x)
-    if (i9cm && !inherits(x, "icd9cm"))
-      x <- icd9cm(x)
-    if (i10 && "icd10" %nin% class(x))
-      class(x) <- append(class(x), "icd10", 0)
-    if (i10cm && "icd10cm" %nin% class(x))
-      class(x) <- append(class(x), c("icd10cm"), 0)
-    if (i10who && "icd10who" %nin% class(x))
-      class(x) <- append(class(x), c("icd10who"), 0)
+
+  # now if none of the columns inherit from an ICD version class, then we should guess ourselves:
+  if (!i9 && !i9cm && !i10 && !i10cm && !i10who) {
+
+    icd_ver <- icd_guess_version(x[[icd_name]])
+    if (icd_ver == "icd9")
+      return(icd9(x))
+    else if (icd_ver == "icd10")
+      return(icd10(x))
+    else
+      if (must_work)
+        stop("no columns with ICD version class found in input data frame, and",
+             " unable to guess ICD version from the data in column '", icd_name,
+             "' of the input data frame", call. = FALSE)
   }
+
+  if (sum(i9 || i9cm, i10 || i10cm, i10 || i10who) == 1) {
+    if (i9 && !is.icd9(x))
+      return(icd9(x))
+    if (i9cm && !is.icd9cm(x))
+      return(icd9cm(x))
+    if (i10 && !is.icd10(x))
+      return(icd10(x))
+    if (i10cm && !is.icd10cm(x))
+      return(icd10cm(x))
+    if (i10who && !is.icd10who(x))
+      return(icd10who(x))
+  }
+
+  if (must_work)
+    stop("found columns of differing ICD version classes, so unable to ",
+         " assign a single class to the whole data frame.")
   x
 }
 
@@ -204,11 +236,8 @@ update_class_from_columns <- function(x) {
 icd_long_data <- function(x) {
   if (!is.data.frame(x) && !is.matrix(x))
     stop("Long or Wide structure only makes sense in a matrix or data frame")
-  # if columns are exclusively either ICD-9 or ICD-10 then this should be type
-  # of the returned structure, too.
-  x <- update_class_from_columns(x)
-
-  if (inherits(x, "icd_long_data")) return(x)
+  if (inherits(x, "icd_long_data"))
+    return(x)
   class(x) <- append(class(x), "icd_long_data", 0)
   x
 }
@@ -218,7 +247,6 @@ icd_long_data <- function(x) {
 icd_wide_data <- function(x) {
   if (!is.data.frame(x) && !is.matrix(x))
     stop("Long or Wide structure only makes sense in a matrix or data frame")
-  x <- update_class_from_columns(x)
   if (inherits(x, "icd_wide_data"))
     return(x)
   class(x) <- append(class(x), "icd_wide_data", 0)

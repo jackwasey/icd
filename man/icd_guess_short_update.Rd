@@ -4,7 +4,8 @@
 \alias{icd_guess_short_update}
 \title{Guess short vs decimal of ICD and update class}
 \usage{
-icd_guess_short_update(x, icd_name = get_icd_name(x), short_code = NULL)
+icd_guess_short_update(x, icd_name = get_icd_name(x),
+  short_code = icd_guess_short(x))
 }
 \value{
 the input data with appropriate ICD class set

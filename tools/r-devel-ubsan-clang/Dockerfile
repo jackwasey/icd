@@ -37,7 +37,7 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstab
 ## now we can pre-install a load of packages we know we'll need, or alternatively, devtools can do this based on the DESCRIPTION file once the package source is available (but this wouldn't be preserved in the docker image)
 
 # use Rdevel (from the rocker image, because R is the standard g++ unsanitized one)
-RUN Rdevel -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'plyr', 'knitr', 'microbenchmark', 'profr', 'rmarkdown', 'fastmatch'))"
+RUN Rdevel -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'knitr', 'rmarkdown', 'fastmatch'))"
 
 # can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
 ADD build_install_check_in_docker.sh /tmp/

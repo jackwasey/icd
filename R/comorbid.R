@@ -159,14 +159,14 @@ icd_comorbid.icd10 <- function(x,
 #' find ICD-10 comorbidities checking parent matches
 #'
 #' @keywords internal
-icd10_comorbid_parent_search <- function(x,
-                                         map,
-                                         visit_name = NULL,
-                                         icd_name = NULL,
-                                         short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-                                         short_map = icd_guess_short.list(map),
-                                         return_df = FALSE, ...) {
-
+icd10_comorbid_parent_search <- function(
+  x,
+  map,
+  visit_name = NULL,
+  icd_name = get_icd_name(x),
+  short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+  short_map = icd_guess_short.list(map),
+  return_df = FALSE, ...) {
 
   if (!short_code)
     icd_codes <- x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
@@ -198,15 +198,14 @@ icd10_comorbid_parent_search <- function(x,
 #' find ICD-10 comorbidities without checking parent matches
 #'
 #' @keywords internal
-icd10_comorbid_no_parent_search <- function(x,
-                                            map,
-                                            visit_name = NULL,
-                                            icd_name = NULL,
-                                            short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-                                            short_map = icd_guess_short.icd10(map[[1]]),
-                                            return_df = FALSE, ...) {
-  if (is.null(icd_name))
-    icd_name <- get_icd_name(x)
+icd10_comorbid_no_parent_search <- function(
+  x,
+  map,
+  visit_name = NULL,
+  icd_name = get_icd_name(x),
+  short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
+  short_map = icd_guess_short.icd10(map[[1]]),
+  return_df = FALSE, ...) {
 
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
   # the S3 method was called directly.
@@ -216,7 +215,8 @@ icd10_comorbid_no_parent_search <- function(x,
 
 }
 
-#' @describeIn icd_comorbid Get comorbidities from ICD-9 codes
+#' @describeIn icd_comorbid Get comorbidities from \code{data.frame} of ICD-9
+#'   codes
 #' @export
 icd_comorbid.icd9 <- function(x,
                               map,
@@ -225,9 +225,16 @@ icd_comorbid.icd9 <- function(x,
                               short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
                               short_map = icd_guess_short.list(map),
                               return_df = FALSE, ...) {
-  if (is.null(icd_name))
-    icd_name <- get_icd_name(x)
-  assert(checkmate::checkString(icd_name))
+  assert_data_frame(x, min.cols = 2, col.names = "unique")
+  assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
+  assert(checkmate::checkString(visit_name), checkmate::checkNull(visit_name))
+  assert(checkmate::checkString(icd_name), checkmate::checkNull(icd_name))
+  visit_name <- get_visit_name(x, visit_name)
+  icd_name <- get_icd_name(x, icd_name)
+  assert_string(visit_name)
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(short_map)
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
   # the S3 method was called directly.
   if (!is.icd9(x[[icd_name]])) x[[icd_name]] <- icd9(x[[icd_name]])
@@ -268,9 +275,10 @@ icd_comorbid_common <- function(x,
   if (!short_map)
     map <- lapply(map, icd_decimal_to_short)
 
-  # new stragegy is to start with a factor for the icd codes in x, recode (and drop superfluous) icd codes in the
-  # mapping, then do very fast match on integer without need for N, V or E
-  # distinction. Char to factor conversion in R is very fast.
+  # new stragegy is to start with a factor for the icd codes in x, recode (and
+  # drop superfluous) icd codes in the mapping, then do very fast match on
+  # integer without need for N, V or E distinction. Char to factor conversion in
+  # R is very fast.
 
   # this is a moderately slow step (if needed to be done). Internally, the
   # \code{sort} is slow. Fast match speeds up the subsequent step.
@@ -305,7 +313,8 @@ icd_comorbid_common <- function(x,
   omp_chunk_size <- getOption("icd.omp_chunk_size", 1L)
 
   mat <- icd9ComorbidShortCpp(x, map, visit_name, icd_name,
-                              threads = threads, chunk_size = chunk_size, omp_chunk_size = omp_chunk_size)
+                              threads = threads, chunk_size = chunk_size,
+                              omp_chunk_size = omp_chunk_size)
 
   if (return_df) {
     if (visit_was_factor)
@@ -347,40 +356,38 @@ icd_comorbid_elix <- function(...) {
 
 #' @rdname icd_comorbid
 #' @export
+#' @method icd_comorbid_ahrq data.frame
 icd_comorbid_ahrq.data.frame <- function(x, ..., icd_name = get_icd_name(x)) {
-
-  icd_ver <- icd_guess_version(x[[icd_name]])
-  if (icd_ver == "icd9")
-    icd_comorbid_ahrq.icd9(x, ..., icd_name = icd_name)
-  else if (icd_ver == "icd10")
-    icd_comorbid_ahrq.icd10(x, ..., icd_name = icd_name)
-  else
-    stop("did not identify ICD code type from map", call. = FALSE)
+  x <- update_data_frame_class(x, icd_name, must_work = TRUE)
+  UseMethod("icd_comorbid_ahrq", x)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_quan_elix.default <- function(...) {
-  warning("icd9 vs icd10 notspecified, assuming icd9 for testing")
-  icd_comorbid_quan_elix.icd9(...)
+#' @method icd_comorbid_elix data.frame
+icd_comorbid_elix.data.frame <- function(x, ..., icd_name = get_icd_name(x)) { # nolint # false +ve
+  x <- update_data_frame_class(x, icd_name, must_work = TRUE)
+  UseMethod("icd_comorbid_elix", x)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_quan_deyo.default <- function(...) {
-  warning("icd9 vs icd10 notspecified, assuming icd9 for testing")
-  icd_comorbid_quan_deyo.icd9(...)
+#' @method icd_comorbid_quan_elix data.frame
+icd_comorbid_quan_elix.data.frame <- function(x, ..., icd_name = get_icd_name(x)) { # nolint # false +ve
+  x <- update_data_frame_class(x, icd_name, must_work = TRUE)
+  UseMethod("icd_comorbid_quan_elix", x)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_elix.default <- function(...) {
-  warning("icd9 vs icd10 notspecified, assuming icd9 for testing")
-  icd_comorbid_elix.icd9(...)
+#' @method icd_comorbid_quan_deyo data.frame
+icd_comorbid_quan_deyo.data.frame <- function(x, ..., icd_name = get_icd_name(x)) {# nolint # false +ve
+  x <- update_data_frame_class(x, icd_name, must_work = TRUE)
+  UseMethod("icd_comorbid_quan_deyo", x)
 }
 
 #' @rdname icd_comorbid
-#' @param abbrev_names  single locical value that defaults to \code{TRUE}, in
+#' @param abbrev_names  single logical value that defaults to \code{TRUE}, in
 #'   which case the ishorter human-readable names stored in e.g.
 #'   \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.
 #' @param hierarchy single logical value that defaults to \code{TRUE}, in
@@ -558,16 +565,16 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #' @return A list, each item of which is another list containing the
 #'   intersections and both asymmetric differences.
 #' @export
-icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
-                              show = TRUE, explain = TRUE) {
+icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL,
+                              y_names = NULL, show = TRUE, explain = TRUE) {
   UseMethod("icd_diff_comorbid")
 }
 
 #' @describeIn icd_diff_comorbid Show difference between comorbidity maps with
 #'   ICD-9 codes
 #' @export
-icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
-                                   show = TRUE, explain = TRUE) {
+icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
+                                   y_names = NULL, show = TRUE, explain = TRUE) {
   assert_list(x, min.len = 1, any.missing = FALSE,
               types = c("character"), names = "unique")
   assert_list(y, min.len = 1, any.missing = FALSE,

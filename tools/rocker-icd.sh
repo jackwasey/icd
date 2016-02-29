@@ -19,24 +19,24 @@
 
 
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
-: ${ICD9_HOME:=$HOME/Documents/RProjects/icd9}
-: ${ICD9_DOCKER_IMAGE:=$1}
-: ${ICD9_DOCKER_SCRIPT:=build_install_check_in_docker.sh}
+: ${ICD_HOME:=$HOME/Documents/RProjects/icd}
+: ${ICD_DOCKER_IMAGE:=$1}
+: ${ICD_DOCKER_SCRIPT:=build_install_check_in_docker.sh}
 
 # strip directory symbol to get the docker image name from a dir with trailing slash
-IM_NM=`echo $ICD9_DOCKER_IMAGE | tr -d "/"`
+IM_NM=`echo $ICD_DOCKER_IMAGE | tr -d "/"`
 
-IM=$ICD9_HOME/tools/$IM_NM
-SC=$ICD9_HOME/tools/$ICD9_DOCKER_SCRIPT
+IM=$ICD_HOME/tools/$IM_NM
+SC=$ICD_HOME/tools/$ICD_DOCKER_SCRIPT
 
 if [ ! -d "$IM" ]; then
-  echo "Docker image should be a directory under tools in the icd9 project."
+  echo "Docker image should be a directory under tools in the icd/icd9 project."
   exit 1
 fi
 
 cp $SC $IM
 docker build -t $IM_NM $IM
-rm -f $IM/$ICD9_DOCKER_SCRIPT
+rm -f $IM/$ICD_DOCKER_SCRIPT
 docker run --rm -ti $IM_NM
 
 

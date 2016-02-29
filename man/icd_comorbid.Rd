@@ -24,13 +24,13 @@
 \alias{icd_comorbid_ahrq.icd9}
 \alias{icd_comorbid_common}
 \alias{icd_comorbid_elix}
-\alias{icd_comorbid_elix.default}
+\alias{icd_comorbid_elix.data.frame}
 \alias{icd_comorbid_elix.icd9}
 \alias{icd_comorbid_quan_deyo}
-\alias{icd_comorbid_quan_deyo.default}
+\alias{icd_comorbid_quan_deyo.data.frame}
 \alias{icd_comorbid_quan_deyo.icd9}
 \alias{icd_comorbid_quan_elix}
-\alias{icd_comorbid_quan_elix.default}
+\alias{icd_comorbid_quan_elix.data.frame}
 \alias{icd_comorbid_quan_elix.icd9}
 \title{find comorbidities from ICD-9 codes.}
 \usage{
@@ -62,11 +62,13 @@ icd_comorbid_elix(...)
 
 \method{icd_comorbid_ahrq}{data.frame}(x, ..., icd_name = get_icd_name(x))
 
-\method{icd_comorbid_quan_elix}{default}(...)
+\method{icd_comorbid_elix}{data.frame}(x, ..., icd_name = get_icd_name(x))
 
-\method{icd_comorbid_quan_deyo}{default}(...)
+\method{icd_comorbid_quan_elix}{data.frame}(x, ...,
+  icd_name = get_icd_name(x))
 
-\method{icd_comorbid_elix}{default}(...)
+\method{icd_comorbid_quan_deyo}{data.frame}(x, ...,
+  icd_name = get_icd_name(x))
 
 \method{icd_comorbid_ahrq}{icd9}(..., abbrev_names = TRUE, hierarchy = TRUE)
 
@@ -159,7 +161,7 @@ is guessed from the input data.}
 \code{icd_df}. All the codes in a mapping should be of the same type, i.e.
 short or decimal.}
 
-\item{abbrev_names}{single locical value that defaults to \code{TRUE}, in
+\item{abbrev_names}{single logical value that defaults to \code{TRUE}, in
 which case the ishorter human-readable names stored in e.g.
 \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.}
 
@@ -220,7 +222,8 @@ ICD-10/ICD-10-CM codes are included in the mappings, so it will likely give
 incomplete results, without searching for parents of the input codes until
 a match is found in the map. TODO: this is WIP.
 
-\item \code{icd9}: Get comorbidities from ICD-9 codes
+\item \code{icd9}: Get comorbidities from \code{data.frame} of ICD-9
+codes
 }}
 \examples{
   # optional but often helpful

@@ -19,7 +19,7 @@
 
 # This file should be run within the container. It is placed there by rocker-icd9.sh
 
-: ${R_PKG_NAME:=icd9}
+: ${R_PKG_NAME:=icd}
 : ${GIT_URL:=https://github.com}
 : ${GITHUB_USER:=jackwasey}
 : ${GITHUB_REPO:=$R_PKG_NAME}

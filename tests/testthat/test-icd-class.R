@@ -160,6 +160,8 @@ test_that("constructing long data works", {
 test_that("is long or wide data?", {
   expect_true(is.icd_wide_data(icd_wide_data(icd::vermont_dx)))
   expect_true(is.icd_long_data(icd_long_data(icd::uranium_pathology)))
+  expect_true(is.icd_wide_data(icd::vermont_dx))
+  expect_true(is.icd_long_data(icd::uranium_pathology))
   expect_is(icd_wide_data(icd::vermont_dx), "icd_wide_data")
   expect_is(icd_long_data(icd::uranium_pathology), "icd_long_data")
 })
