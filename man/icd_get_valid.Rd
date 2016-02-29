@@ -72,5 +72,6 @@ Given vector of short_code or decimal ICD-9 codes, return (in the
 
 \item \code{icd10cm}: Get valid ICD-10-CM codes
 }}
+\keyword{internal}
 \keyword{manip}
 

@@ -320,8 +320,7 @@ icd_sort <- function(x, ...)
 #'   the future) then sort based on that type. ICD-10 codes, note that setting
 #'   \code{short} is unnecessary and ignored.
 #' @export
-#' @details roxygen annotating this causes a roxygen error, issue #448
-#'   https://github.com/klutometis/roxygen/issues/448
+#' @keywords internal
 #' @method icd_sort default
 icd_sort.default <- function(x, ...) {
   y <- icd_guess_version_update(x)

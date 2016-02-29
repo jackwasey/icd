@@ -64,9 +64,6 @@ Sorts lists of numeric only, V or E codes. Note that a simple
 \details{
 Implementation used fast built-in sort, then shuffles the E codes to
   the end.
-
-roxygen annotating this causes a roxygen error, issue #448
-  https://github.com/klutometis/roxygen/issues/448
 }
 \section{Methods (by class)}{
 \itemize{

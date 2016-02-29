@@ -133,9 +133,6 @@ Leading zeroes in the decimal form are not ambiguous. Although
   vs 10 if possible. TODO: use "short_code" or "long" attribute if available
   to tighten validation, or guess if missing.
 
-Currently \code{roxygen2} gets confused by a second \code{UseMethod}
-  hence declaring method here
-
 From WHO ICD-10 manual: "The basic ICD is a single coded list of
   three-character categories, each of which can be further divided into up to
   10 four-character subcategories. In place of the purely numeric coding
@@ -160,6 +157,8 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
 \itemize{
 \item \code{character}: Test whether a character vector of ICD codes is
 valid, guessing ICD version (of all the elements of the vector at once)
+Currently \code{roxygen2} gets confused by a second \code{UseMethod} hence
+declaring method here
 
 \item \code{icd10}: Test whether generic ICD-10 code is valid
 

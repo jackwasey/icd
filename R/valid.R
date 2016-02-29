@@ -190,7 +190,6 @@ icd_is_valid <- function(x, ...) {
 #'   which at present assumes ICD-9 format. Converts to character than calls
 #'   \code{icd_is_valid.character}
 #' @export
-#' @keywords internal
 icd_is_valid.default <- function(x, ...) {
   icd_is_valid.character(as_char_no_warn(x), ...)
 }
@@ -200,6 +199,7 @@ icd_is_valid.default <- function(x, ...) {
 #'   Currently \code{roxygen2} gets confused by a second \code{UseMethod} hence
 #'   declaring method here
 #' @export
+#' @keywords internal
 #' @method icd_is_valid character
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
                                    whitespace_ok = TRUE, ...) {
@@ -474,6 +474,7 @@ icd_get_invalid <- function(...) {
 #' @describeIn icd_get_invalid Default method when ICD version or short versus
 #'   decimal not known.
 #' @export
+#' @keywords internal
 #' @method icd_get_invalid default
 icd_get_invalid.default <- function(x, short_code = NULL, ...) {
   # TODO: any value in guessing both in tandem

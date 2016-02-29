@@ -91,10 +91,6 @@ This is different from syntactic validity: it looks it up in the
   icd-9 codes over time, and possible imperfections in the master lists
   derived from CMS.
 }
-\details{
-roxygen annotating this causes a roxygen error, issue #448
-  https://github.com/klutometis/roxygen/issues/448
-}
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd9}: Check whether ICD-9 code are defined. (ICD-9-CM by

@@ -50,6 +50,7 @@ icd_explain <- function(...)
 
 #' @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
 #' @export
+#' @keywords internal
 #' @method icd_explain character
 icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   x <- icd_guess_version_update(x)

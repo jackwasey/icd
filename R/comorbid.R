@@ -356,6 +356,7 @@ icd_comorbid_elix <- function(...) {
 
 #' @rdname icd_comorbid
 #' @export
+#' @keywords internal
 #' @method icd_comorbid_ahrq data.frame
 icd_comorbid_ahrq.data.frame <- function(x, ..., icd_name = get_icd_name(x)) {
   x <- update_data_frame_class(x, icd_name, must_work = TRUE)
@@ -364,6 +365,7 @@ icd_comorbid_ahrq.data.frame <- function(x, ..., icd_name = get_icd_name(x)) {
 
 #' @rdname icd_comorbid
 #' @export
+#' @keywords internal
 #' @method icd_comorbid_elix data.frame
 icd_comorbid_elix.data.frame <- function(x, ..., icd_name = get_icd_name(x)) { # nolint # false +ve
   x <- update_data_frame_class(x, icd_name, must_work = TRUE)
@@ -372,6 +374,7 @@ icd_comorbid_elix.data.frame <- function(x, ..., icd_name = get_icd_name(x)) { #
 
 #' @rdname icd_comorbid
 #' @export
+#' @keywords internal
 #' @method icd_comorbid_quan_elix data.frame
 icd_comorbid_quan_elix.data.frame <- function(x, ..., icd_name = get_icd_name(x)) { # nolint # false +ve
   x <- update_data_frame_class(x, icd_name, must_work = TRUE)
@@ -380,6 +383,7 @@ icd_comorbid_quan_elix.data.frame <- function(x, ..., icd_name = get_icd_name(x)
 
 #' @rdname icd_comorbid
 #' @export
+#' @keywords internal
 #' @method icd_comorbid_quan_deyo data.frame
 icd_comorbid_quan_deyo.data.frame <- function(x, ..., icd_name = get_icd_name(x)) {# nolint # false +ve
   x <- update_data_frame_class(x, icd_name, must_work = TRUE)

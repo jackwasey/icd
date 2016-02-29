@@ -83,8 +83,7 @@ icd_is_defined.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
 #'   vs 10, maybe WHO vs CM or other in the future) and redispatches on that
 #'   type.
 #' @export
-#' @details roxygen annotating this causes a roxygen error, issue #448
-#'   https://github.com/klutometis/roxygen/issues/448
+#' @keywords internal
 #' @method icd_is_defined default
 icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
   y <- icd_guess_version_update(x)

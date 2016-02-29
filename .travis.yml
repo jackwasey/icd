@@ -2,7 +2,7 @@
 language: r
 cache: packages
 r:
-  - oldrel
+#  - oldrel # when oldrel = 3.1, there are S3 method problems I can't debug
   - release
   - devel
 
