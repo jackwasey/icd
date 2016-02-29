@@ -187,11 +187,26 @@ icd_is_valid <- function(x, ...) {
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
-#'   which at present assumes ICD-9 format
+#'   which at present assumes ICD-9 format. Converts to character than calls
+#'   \code{icd_is_valid.character}
 #' @export
 #' @keywords internal
 icd_is_valid.default <- function(x, ...) {
-  stop("Specify type for checking validity of ICD-9 or ICD-10 codes, to avoid ambiguity, e.g. V10", call. = FALSE)
+  icd_is_valid.character(as_char_no_warn(x), ...)
+}
+
+#' @describeIn icd_is_valid Test whether a character vector of ICD codes is
+#'   valid, guessing ICD version (of all the elements of the vector at once)
+#' @details Currently \code{roxygen2} gets confused by a second \code{UseMethod}
+#'   hence declaring method here
+#' @export
+#' @keywords internal
+#' @method icd_is_valid character
+icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
+                                   whitespace_ok = TRUE, ...) {
+  assert_flag(whitespace_ok)
+  x <- icd_guess_version_update(x)
+  UseMethod("icd_is_valid", x)
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
@@ -230,25 +245,6 @@ icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
     icd9_is_valid_short(x, whitespace_ok = whitespace_ok)
   else
     icd9_is_valid_decimal(x, whitespace_ok = whitespace_ok)
-}
-
-# Test whether a character vector of ICD vodes is
-#   valid, guessing both type and version of the ICD codes
-#
-# Can't roxygen because of UseMethod bug therein?
-
-#' @describeIn icd_is_valid Test whether a character vector of ICD codes is
-#'   valid, guessing ICD version (of all the elements of the vector at once)
-#' @details Currently \code{roxygen2} gets confused by a second \code{UseMethod}
-#'   hence declaring method here
-#' @export
-#' @keywords internal
-#' @method icd_is_valid character
-icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
-                                   whitespace_ok = TRUE, ...) {
-  assert_flag(whitespace_ok)
-  x <- icd_guess_version_update(x)
-  UseMethod("icd_is_valid", x)
 }
 
 icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {

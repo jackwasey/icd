@@ -62,13 +62,13 @@ icd9IsValidDecimalE(icd9Decimal)
 
 icd_is_valid(x, ...)
 
+\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x),
+  whitespace_ok = TRUE, ...)
+
 \method{icd_is_valid}{icd10}(x, short_code = icd_guess_short(x),
   whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd9}(x, short_code = icd_guess_short.icd9(x),
-  whitespace_ok = TRUE, ...)
-
-\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x),
   whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd_comorbidity_map}(x, short_code, ...)
@@ -158,12 +158,12 @@ From WHO ICD-10 manual: "The basic ICD is a single coded list of
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{character}: Test whether a character vector of ICD codes is
+valid, guessing ICD version (of all the elements of the vector at once)
+
 \item \code{icd10}: Test whether generic ICD-10 code is valid
 
 \item \code{icd9}: Test whether generic ICD-10 code is valid
-
-\item \code{character}: Test whether a character vector of ICD codes is
-valid, guessing ICD version (of all the elements of the vector at once)
 
 \item \code{icd_comorbidity_map}: Validate an icd9 mapping to comorbidities
 

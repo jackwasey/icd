@@ -52,7 +52,8 @@ codes without real or implied decimal place return TRUE
 \section{Methods (by class)}{
 \itemize{
 \item \code{default}: Test whether an ICD code is of major type,
-which at present assumes ICD-9 format
+which at present assumes ICD-9 format. Converts to character than calls
+\code{icd_is_valid.character}
 
 \item \code{default}: Test whether an ICD code is of major type,
 which at present assumes ICD-9 format
