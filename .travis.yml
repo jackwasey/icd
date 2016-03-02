@@ -36,15 +36,15 @@ env:
 
 r_github_packages:
   - jimhester/covr
-  - hadley/testthat
-  - RcppCore/Rcpp
+#  - hadley/testthat
+#  - RcppCore/Rcpp
 
 before_script:
   - rm .Rinstignore  # install everything for testing
   - sed -i '/data/d' .Rbuildignore # do include data for testing
 
 after_success:
-  # slow tests has dropped off environment?
+  # slow tests has dropped off environment? Show the env:
   - export
   - export OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
   - Rscript -e 'library(covr); coveralls(type = "test", quiet = FALSE,
