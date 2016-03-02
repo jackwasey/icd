@@ -128,7 +128,9 @@ TESTTHAT_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -q -e "suppressWarnings(try(c
 # maybe a better way, but I need to have the testthat package include dir in the pre-processor include directories:
 CPPFLAGS="$CPPFLAGS -I$TESTTHAT_INCLUDE_DIR"
 AC_LANG_PUSH([C++])
-AC_CHECK_HEADERS([testthat.h])
+# this gives a config var with full path in it when built via check: AC_CHECK_HEADERS([testthat.h])
+AC_CHECK_HEADER(testthat.h, [AC_DEFINE(HAVE_TESTTHAT_H, 1, [define as 1 if testthat catch available])],
+  [AC_MSG_NOTICE([testthat headers for Catch tests not found])])
 AC_LANG_POP([C++])
 # end testthat test
 

@@ -212,7 +212,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   f27_info <- unzip_to_data_raw(url, fn_orig, offline = offline)
 
   f <- file(f27_info$file_path, encoding = "latin1")
-  icd9cm_billable27 <- read.csv(f27_info$file_path, stringsAsFactors = FALSE,
+  icd9cm_billable27 <- utils::read.csv(f27_info$file_path, stringsAsFactors = FALSE,
                                 colClasses = "character", encoding = "latin1")
   close(f)
   names(icd9cm_billable27) <- c("code", "long_desc", "short_desc")

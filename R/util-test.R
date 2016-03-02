@@ -252,12 +252,6 @@ expect_icd_classes_ordered <- function(x) {
   eval(bquote(testthat::expect_true(icd_classes_ordered(.(x)))))
 }
 
-getSlowestTests <- function(n = 5) {
-  res <- testthat::test_dir(file.path(".", "tests", "testthat"),
-                            reporter = testthat::ListReporter())
-  print(tail(res[order(res$real), "test"], n = n))
-}
-
 #' generate random ICD-9 codes
 #'
 #' @keywords internal

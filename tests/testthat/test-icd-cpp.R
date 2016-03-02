@@ -20,7 +20,7 @@ context("Pure C++ Catch tests")
 test_that("C++ tests all pass", {
   # this does require a recent version of testthat > 0.11.0.9000
   catch_avail <- tryCatch(
-    getNativeSymbolInfo("run_testthat_tests", PACKAGE = "icd") != "",
+    is.list(getNativeSymbolInfo("run_testthat_tests", PACKAGE = "icd")),
     error = function(e) FALSE
   )
   if (!catch_avail)

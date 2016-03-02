@@ -32,14 +32,19 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstab
   pandoc \
   pandoc-citeproc \
   qpdf \
-  texlive-base
+  texlive-base \
+  unixodbc-dev
 
 ## now we can pre-install a load of packages we know we'll need, or alternatively, devtools can do this based on the DESCRIPTION file once the package source is available (but this wouldn't be preserved in the docker image)
 
 # use Rdevel (from the rocker image, because R is the standard g++ unsanitized one)
-RUN Rdevel -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'knitr', 'rmarkdown', 'fastmatch'))"
+RUN Rdevel -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'knitr', 'rmarkdown', 'xtable', 'fastmatch', 'roxygen2', 'RODBC', 'xml2'))"
+
+# doesn't work for Rdevel: RUN apt-get install -y r-cran-rodbc
 
 # can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd.sh
 ADD build_install_check_in_docker.sh /tmp/
 ENV R_CMD Rdevel
+ENV GIT_BRANCH icd10
 CMD ["/tmp/build_install_check_in_docker.sh"]
+

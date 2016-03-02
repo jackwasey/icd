@@ -433,7 +433,7 @@ fetch_uranium_pathology <- function(offline = FALSE) {
 generate_uranium_pathology <- function(save_data = TRUE, offline = FALSE) {
 
   requireNamespace("RODBC")
-  stopifnot(existsFunction("odbcConnectAccess2007"))
+  stopifnot(length(utils::find("odbcConnectAccess2007")) > 0)
 
   assert_flag(save_data)
   assert_flag(offline)
@@ -474,13 +474,14 @@ fetch_vermont_dx <- function(offline) {
 generate_vermont_dx <- function(save_data = TRUE, offline = FALSE) {
 
   assert_flag(save_data)
+  assert_flag(offline)
   stopifnot(!is.null(vermont_raw_fp <- fetch_vermont_dx(offline = offline)))
 
   vermont_dx <- utils::read.csv(vermont_raw_fp$file_path,
                                 stringsAsFactors = FALSE,
                                 strip.white = TRUE,
                                 nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
-  vermont_dx %<>% head(1000)
+  vermont_dx <- vermont_dx[1:1000, ]
   age_group <- vermont_dx$intage
   attr(age_group, "class") <- "factor"
   attr(age_group, "levels") <- c("Under 1", "1-17", "18-24",

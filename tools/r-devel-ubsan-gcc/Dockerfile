@@ -30,7 +30,8 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstab
   pandoc \
   pandoc-citeproc \
   qpdf \
-  texlive-base
+  texlive-base \
+  unixodbc-dev
 
  RUN cd /tmp \
         && svn co http://svn.r-project.org/R/trunk R-devel
@@ -75,12 +76,13 @@ RUN cd /tmp/R-devel \
 
 # remove or keep -O0 flags? Not sure which would be most helpful. Most code in production use is compiled O2, but I don't know whether O0 would uncover the same UBSAN bugs, or just allow them to be characterized more easily. BDR used -O2 in the memtests he did on this package.
 
-RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "profr", "ggplot2", "digest", "xtable", "rmarkdown", "codetools", "fastmatch"))'
+# alternatively use littelr or devtools to install the current dependencies
+RUN Rscript -e 'install.packages(c("Rcpp", "checkmate", "testthat", "devtools", "knitr", "microbenchmark", "magrittr", "digest", "rmarkdown", "fastmatch", "roxygen2", "RODBC"))'
 
 # can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
 ADD build_install_check_in_docker.sh /tmp/
-# set environment variables that I will use in the added script:
 ENV LD_PRELOAD /usr/lib/x86_64-linux-gnu/libasan.so.2
 ENV R_CMD Rdevel
+ENV GIT_BRANCH icd10
 CMD ["/tmp/build_install_check_in_docker.sh"]
 

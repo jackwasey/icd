@@ -4941,17 +4941,17 @@ ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
-for ac_header in testthat.h
-do :
-  ac_fn_cxx_check_header_mongrel "$LINENO" "testthat.h" "ac_cv_header_testthat_h" "$ac_includes_default"
+# this gives a config var with full path in it when built via check: AC_CHECK_HEADERS([testthat.h])
+ac_fn_cxx_check_header_mongrel "$LINENO" "testthat.h" "ac_cv_header_testthat_h" "$ac_includes_default"
 if test "x$ac_cv_header_testthat_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_TESTTHAT_H 1
-_ACEOF
 
+$as_echo "#define HAVE_TESTTHAT_H 1" >>confdefs.h
+
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: testthat headers for Catch tests not found" >&5
+$as_echo "$as_me: testthat headers for Catch tests not found" >&6;}
 fi
 
-done
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
