@@ -1,5 +1,6 @@
 # WERCKER_R_COVR_OPTIONS etc can also be set in the wercker configuration to do exclusions
-box: rocker/hadleyverse
+#box: rocker/hadleyverse
+box: jackwasey/r-devel-ubsan-gcc
 command-timeout: 60
 no-response-timeout: 60
 build:
