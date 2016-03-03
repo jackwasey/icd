@@ -25,7 +25,7 @@ test_that("C++ tests all pass", {
   )
   if (!catch_avail)
     skip("recent testthat with C++ Catch not available")
-  
+
   # further check that we have this testthat function available
   if (length(find("expect_cpp_tests_pass", mode = "function")) > 0)
     testthat::expect_cpp_tests_pass("icd")
