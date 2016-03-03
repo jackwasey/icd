@@ -16,10 +16,10 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 ## start with the local build, until up on docker hub
-FROM r-devel-ubsan-clang-3.7-libcxx
+FROM jackwasey/r-devel-ubsan-clang-3.8
 
 ## install some libraries and supporting binaries, some of which must come from unstable (sid), and not the testing repo which is the default in the r-devel base rocker image.
-RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstable \
+RUN apt-get install -y -t unstable \
   fonts-inconsolata \
   git \
   libcurl4-openssl-dev \
@@ -33,11 +33,10 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstab
   unixodbc-dev
 
 # use R (I didn't build my image to use Rdevel)
-RUN R -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'knitr', 'microbenchmark', 'profr', 'rmarkdown', 'fastmatch', 'roxygen2', 'RODBC'))"
+RUN R -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'plyr', 'knitr', 'microbenchmark', 'profr', 'xtable', 'rmarkdown', 'fastmatch', 'roxygen2', 'RODBC'))"
 
 # can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
 ADD build_install_check_in_docker.sh /tmp/
 ENV GIT_BRANCH icd10
 ENV R_CMD R
 CMD ["/tmp/build_install_check_in_docker.sh"]
-
