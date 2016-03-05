@@ -80,6 +80,7 @@ release_questions <- function() {
     "Is README.Rmd updated and recompiled into README.md?",
     "Does every file have correct licence information?",
     "Are github pages site refreshed from latest documentation?",
+    "Is spelling correct everywhere? E.g. aspell_package_Rd_files(\".\")",
     # code quality:
     "Has the development branch been merged/rebased into master?",
     "Are you happy with the code coverage?",
