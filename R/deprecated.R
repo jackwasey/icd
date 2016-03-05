@@ -236,6 +236,15 @@ icd9Explain <- function(icd9, isShort = icd_guess_short.icd9(icd9),
 
 #' @rdname icd_explain
 #' @export
+icd9Explain.character <- function(icd9, isShort = icd9GuessIsShort(icd9),
+                                  doCondense = TRUE, brief = FALSE, warn = TRUE) {
+  icd_deprecated("icd_explain")
+  icd_explain.character(icd9, short_code = isShort,
+                        condense = doCondense, brief = brief, warn = warn)
+}
+
+#' @rdname icd_explain
+#' @export
 #' @keywords internal
 icd9Explain.numeric <- function(icd9, isShort = icd_guess_short(icd9),
                                 doCondense = TRUE, brief = FALSE, warn = FALSE) {
@@ -247,10 +256,9 @@ icd9Explain.numeric <- function(icd9, isShort = icd_guess_short(icd9),
 #' @export
 #' @keywords internal
 icd9Explain.list <- function(icd9, isShort = icd_guess_short(icd9),
-                             doCondense = TRUE, brief = FALSE, warn = FALSE) {
+                             doCondense = TRUE, brief = FALSE, warn = TRUE) {
   icd_deprecated("icd_explain")
-  icd_explain.list(icd9, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
-
+  lapply(icd9, icd_explain.icd9cm, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
 }
 
 #' @rdname icd_explain

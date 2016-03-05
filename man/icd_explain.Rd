@@ -2,6 +2,7 @@
 % Please edit documentation in R/deprecated.R, R/explain.R
 \name{icd9Explain}
 \alias{icd9Explain}
+\alias{icd9Explain.character}
 \alias{icd9Explain.list}
 \alias{icd9Explain.numeric}
 \alias{icd9ExplainDecimal}
@@ -18,6 +19,9 @@
 \usage{
 icd9Explain(icd9, isShort = icd_guess_short.icd9(icd9), doCondense = TRUE,
   brief = FALSE, warn = TRUE)
+
+\method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 \method{icd9Explain}{numeric}(icd9, isShort = icd_guess_short(icd9),
   doCondense = TRUE, brief = FALSE, warn = FALSE)
