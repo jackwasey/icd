@@ -13,7 +13,10 @@ icd_expand_range_major(start, end)
 \method{icd_expand_range_major}{icd9}(start, end, defined = TRUE)
 }
 \description{
-Expand a pair of major codes into a range of major codes.
+Expand a pair of major codes into a range of major codes. This was previously
+exported, but is now going to be available only with \code{:::}, and
+icd_expand_range will follow. This was never supposed to be a user facing
+function.
 }
 \section{Methods (by class)}{
 \itemize{

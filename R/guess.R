@@ -215,24 +215,3 @@ icd_guess_short_update <- function(x, icd_name = get_icd_name(x),
   else
     icd_decimal_code(x)
 }
-
-#' Guess both ICD-9 vs ICD-10 or subtype, and whether short of long type.
-#'
-#' I think these are not quite orthogonal problems, so although this seems like
-#' repetition, one may influence the other. Need to think about this.
-#' @keywords internal
-icd_guess_both <- function(x, short_code = NULL) {
-  UseMethod("icd_guess_both")
-}
-
-#' @describeIn icd_guess_both default method which converts input to character
-#' @keywords internal
-icd_guess_both.default <- function(x, short_code = NULL) {
-  x <- as_char_no_warn(x)
-  ver <- icd_guess_version.character(x)
-  class(x) <- append(ver, class(x))
-  # now i've set the version I think it is, dispatch on this class to get short
-  # vs decimal
-  short_code <- icd_guess_short(x)
-  list(ver, short_code)
-}

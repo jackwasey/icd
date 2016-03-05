@@ -71,6 +71,7 @@ release_questions <- function() {
     # data:
     "Have you included updated copies of all offline versions of online data?",
     "Have you regenerated icd9cm_hierarchy and other compiled data?",
+    "Have you run tools::checkRdaFiles(\"data\") to check everything is optimally compressed?",
 
     # documentation:
     "Have you checked all TODO comments",
@@ -86,6 +87,7 @@ release_questions <- function() {
     "Are you happy with the code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed?",
     "Is the naming scheme consistent, with deprecated old style names?",
+    "Are all public S3 classes all exported? use devtools::missing_s3()",
     # testing and compilation and different platforms:
     "Have you run with testthat <= and > 0.11.0?",
     "Have you run autoreconf before building and testing?",

@@ -64,6 +64,7 @@ icd_expand_range <- function(start, end, ...) {
 #'   ICD-10, then an error is thrown. Otherwise, the appropriate S3 method is
 #'   called.
 #' @export
+#' @keywords internal
 icd_expand_range.character <- function(start, end, short_code = NULL, defined = TRUE, ...) {
 
   start_guess <- icd_guess_version.character(start, short_code = short_code)
@@ -94,6 +95,7 @@ icd_expand_range.character <- function(start, end, short_code = NULL, defined = 
 #' majority of which would be undefined.
 #' @param start character vector of length one containing an ICD code
 #' @param end  character vector of length one containing an ICD code
+#' @export
 #' @keywords internal
 icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.icd10(c(start, end)),
                                      defined = TRUE, ...) {
@@ -134,7 +136,10 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
 
 #' Expand major codes to range
 #'
-#' Expand a pair of major codes into a range of major codes.
+#' Expand a pair of major codes into a range of major codes. This was previously
+#' exported, but is now going to be available only with \code{:::}, and
+#' icd_expand_range will follow. This was never supposed to be a user facing
+#' function.
 #' @keywords internal
 icd_expand_range_major <- function(start, end) {
   UseMethod("icd_expand_range_major")

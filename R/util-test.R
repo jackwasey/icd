@@ -393,3 +393,11 @@ my_test_check <- function(pattern, msg) {
   # backrefs to exclude things.
   testthat::test_check("icd", filter = pattern, perl = TRUE, reporter = "summary")
 }
+
+do_slow_tests <- function(x = TRUE) {
+  options("icd.do_slow_tests" = x)
+}
+
+do_online_tests <- function(x = TRUE) {
+  options("icd.do_online_tests" = x)
+}
