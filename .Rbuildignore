@@ -16,7 +16,8 @@ cran-comments\.md$
 .*\.gcov$
 ^\.git/.*
 ^data\/icd10_who.*$
-data-raw\/.*$
+^data-raw$
+^data-raw\/.*$
 icd.*\.aux$
 icd.*\.so$
 icd.*\.dll$
@@ -28,7 +29,7 @@ icd.*tar\.gz
 inst\/standalone\/.*
 \.lintr$
 .*\.log$
-Makevars$
+^src\/Makevars$
 ^man-roxygen$
 ^NEWS\.md$
 ^README-*\.png$

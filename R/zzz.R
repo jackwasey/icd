@@ -69,12 +69,10 @@ The new 'icd' package contains tested versions of all the deprecated function na
 release_questions <- function() {
   c(
     # data:
-    "Have you included updated copies of all offline versions of online data?",
     "Have you regenerated icd9cm_hierarchy and other compiled data?",
     "Have you run tools::checkRdaFiles(\"data\") to check everything is optimally compressed?",
-
     # documentation:
-    "Have you checked all TODO comments",
+    "Have you checked all TODO comments, made into github issues where appropriate",
     "Do all examples look ok (not just run without errors)?",
     "Anything to add to vignette?",
     "Have all the fixed github issues been closed",
@@ -83,9 +81,9 @@ release_questions <- function() {
     "Does every file have correct licence information?",
     "Are github pages site refreshed from latest documentation?",
     # code quality:
-    "Have you linted, including removing commented code?",
+    "Has the development branch been merged/rebased into master?",
     "Are you happy with the code coverage?",
-    "Is every SEXP PROTECT()ed and UNPROTECT()ed?",
+    "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
     "Is the naming scheme consistent, with deprecated old style names?",
     "Are all public S3 classes all exported? use devtools::missing_s3()",
     # testing and compilation and different platforms:
@@ -94,7 +92,7 @@ release_questions <- function() {
     "Has config.h.win been updated to reflect latest configure.ac results?",
     "Are there skipped tests which should be run?",
     "Have tests been run with slow and online tests turned on?",
-    "Does it compile and check fine on travis?",
+    "Does it compile and check fine on travis and wercker?",
     "Is build_install_check_in_docker pointing at the correct branch?",
     "Have you checked on Windows, win_builder (if possible with configure step),
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which

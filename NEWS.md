@@ -1,10 +1,19 @@
 # Version 2.0
- * ICD-10 support, including ICD-10 comorbidity mappings, validation and explanations (code to description)
- * Automatic etection of ICD version when not specified
- * Optional class system so data can be described as ICD-9 or ICD-10, so appropriate functions are used
- * ICD-9 and ICD-10 sub-versions, particularly enabling distinguishing of ICD-9 (WHO) from ICD-9-CM, and same for ICD-10
- * Soft deprecated all `icd9` prefix functions, now this package equally covers ICD-10. New naming scheme follows Hadley Wickham's coding style, using underscores.
+ * ICD-10 support, including ICD-10 comorbidity mappings, validation and explanations (code to description). ICD-10-CM 2016 is included.
+ * Extended the already comprehensive test suite to cover ICD-10 and fixed various bugs. Thanks to @wmurphyrd for providing some Elixhauser test data.
+ * Simplify functions
+  - Automatic detection of ICD version when not specified
+  - Automatic detection of use of short or decimal format codes
+  - e.g. `icd9ExplainShort` becomes `icd_explain`
+ * Optional class system so data can be described as ICD-9 or ICD-10, so appropriate functions are used without the heuristics. This means that you can optionally label your data with the appropriate class, e.g. `icd10("A01")` or `icd9cm("0101")`. This will help avoid mistakes when working with mixed data.
+ * ICD-9 and ICD-10 sub-versions, particularly for distinguishing of ICD-9 (WHO) from ICD-9-CM, and same for ICD-10. This can also be extended to other countries, e.g. ICD-10-CA, or other code types altogether.
+ * Soft deprecated all `icd9` prefix functions, now this package equally covers ICD-10. New naming scheme follows Hadley Wickham's coding style, using underscores. All functions begin with `icd_`. Package data is named according to it's type, and begins with `icd_`, `icd9_`, `icd10_`, etc.. E.g. `icd10_chapters` and `icd9cm_hierarchy`. All deprecated functions will still work, but gives warnings (sometimes many). The original test suite from `icd9` runs and passes on the `icd` package, with only structural changes.
  * Completely deprecated some previously soft deprecated functions, e.g. `icd9ValidDecimal`
+ * `icd9` should now be uninstalled.
+ * Works with very latest `testthat` which has backward-incompatible changes
+ * Minimized dependencies, but `icd` does import `stringi` via `stringr` to give better string processing. `magrittr` is now too useful not to import, has no dependencies of its own, and is imported by `stringr` anyway. CRAN now seems to need base packages to be listed as imports.
+ * More automated testing with Travis and Wercker.
+
 # Version 1.3
  * With many thanks to @wmurphyrd, Quan's revised scoring system for Charlson comorbidities is now included.
  * Re-enabled OpenMP, and also use GNU C++ standard library parallel extensions (which also use OpenMP) when available. Thoroughly tested with various docker compiler configurations and no memory or undefined behavior problems appear.
