@@ -469,7 +469,9 @@ test_that("valid short e", {
 })
 
 
-test_that("icd9 and icd10 get valid guessed type", {
-  expect_equal(icd_get_valid(c("invalid", "100")), icd9("100"))
-  expect_equal(icd_get_valid(c("invalid", "A01")), icd10("A01"))
+test_that("icd9 and icd10 get valid gives same type as input", {
+  expect_equal(icd_get_valid(c("invalid", "100")), "100")
+  expect_equal(icd_get_valid(icd9(c("invalid", "100"))), icd9("100"))
+  expect_equal(icd_get_valid(c("invalid", "A01")), "A01")
+  expect_equal(icd_get_valid(icd10(c("invalid", "A01"))), icd10("A01"))
 })
