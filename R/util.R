@@ -282,7 +282,7 @@ rtf_year_ok <- function(test_year) {
 #' u <- unique.default(pts$code)
 #' # this shows that stringr (which uses stringi) sort takes 50% longer than
 #' # built-in R sort.
-#' microbenchmark::microbenchmark(sort(u), stringr::str_sort(u))
+#' microbenchmark::microbenchmark(sort(u), str_sort(u))
 #'
 #' # this shows that \code{factor_} is about 50% faster than \code{factor} for
 #' # big vectors of strings

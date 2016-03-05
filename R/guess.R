@@ -88,7 +88,7 @@ icd_guess_short.list <- function(x, short_code = NULL, test_n = 1000L) {
 #' @keywords internal
 icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L) {
   # any decimal as first approximation
-  !any(stringr::str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE)
+  !any(str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE)
 }
 
 #' @describeIn icd_guess_short Guess short when type is short

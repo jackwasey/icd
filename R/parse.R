@@ -164,7 +164,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   shortlines <- str_split(shortlines, "[[:space:]]")
   longlines <- str_split(longlines, "[[:space:]]")
 
-  # my trim function drops encodings, so let's use stringr::str_trim:
+  # my trim function drops encodings, so let's use stringr str_trim:
   short_codes <- lapply(shortlines, FUN = function(x) str_trim(x[1]))
   short_descs <- lapply(shortlines,
                         function(x) str_trim(paste(x[-1], collapse = " ")))
