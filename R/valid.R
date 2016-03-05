@@ -442,9 +442,13 @@ icd_get_valid <- function(x, short_code = icd_guess_short(x))
 #' @keywords internal
 #' @method icd_get_valid character
 icd_get_valid.character <- function(x, short_code = icd_guess_short(x)) {
+  # partly for backward compatibility, let's return the same class codes as we
+  # received, instead of updating to our guess. No perfect way here: we'd like
+  # to tell the user if the guess was not a very good one, maybe? This could be
+  # done in the guess function.
   icd_ver <- icd_guess_version.character(x, short_code)
   class(x) <- icd_ver
-  UseMethod("icd_get_valid", x)
+  x[icd_is_valid.character(x, short_code = short_code)]
 }
 
 #' @describeIn icd_get_valid Get valid ICD-9 codes
