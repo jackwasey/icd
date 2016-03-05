@@ -4,7 +4,12 @@
 \alias{icd9GuessIsShort}
 \alias{icd_guess_short}
 \alias{icd_guess_short.data.frame}
+\alias{icd_guess_short.default}
+\alias{icd_guess_short.icd10}
 \alias{icd_guess_short.icd9}
+\alias{icd_guess_short.icd_decimal_code}
+\alias{icd_guess_short.icd_short_code}
+\alias{icd_guess_short.list}
 \title{guess whether codes are \code{short_code} or \code{decimal_code}}
 \usage{
 icd9GuessIsShort(icd9)
@@ -15,20 +20,29 @@ icd_guess_short(x, short_code = NULL, test_n = 1000L)
   icd_name = get_icd_name(x))
 
 \method{icd_guess_short}{icd9}(x, short_code = NULL, test_n = 1000L)
+
+\method{icd_guess_short}{icd10}(x, short_code = NULL, test_n = 1000L)
+
+\method{icd_guess_short}{list}(x, short_code = NULL, test_n = 1000L)
+
+\method{icd_guess_short}{default}(x, short_code = NULL, test_n = 1000L)
+
+\method{icd_guess_short}{icd_short_code}(x)
+
+\method{icd_guess_short}{icd_decimal_code}(x)
 }
 \value{
 single logical value, \code{TRUE} if input data are predominantly
   short_code type. If there is some uncertainty, then return NA.
 }
 \description{
-TODO: Partly implemented. Goal is to guess whether codes are
-  short_code or decimal form. Currently condense works, but not with the icd9
-  lookup table currently in use. Not exporting this function until it works
-  as intended. Of note, validation is a bit different here, since we don't
-  know the type until after we guess. We could look for where both short_code
-  and long are invalid, and otherwise assume valid, even if the bulk are
-  short_code. However, it may be more useful to check validity after the
-  guess.
+TODO: Partly implemented. Goal is to guess whether codes are short_code or
+decimal form. Currently condense works, but not with the icd9 lookup table
+currently in use. Not exporting this function until it works as intended. Of
+note, validation is a bit different here, since we don't know the type until
+after we guess. We could look for where both short_code and long are invalid,
+and otherwise assume valid, even if the bulk are short_code. However, it may
+be more useful to check validity after the guess.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -36,6 +50,16 @@ TODO: Partly implemented. Goal is to guess whether codes are
 codes
 
 \item \code{icd9}: Guess whether an ICD-9 code is in short_code form
+
+\item \code{icd10}: Guess short when icd10 type is known
+
+\item \code{list}: Guess short from a list
+
+\item \code{default}: Guess short naive default method
+
+\item \code{icd_short_code}: Guess short when type is short
+
+\item \code{icd_decimal_code}: Guess short when type is decimal
 }}
 \keyword{internal}
 

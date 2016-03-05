@@ -22,8 +22,8 @@
 \item{...}{other arguments passed to \code{base} subset function}
 }
 \description{
-exactly the same as using x[n] or x[[n]] but preserves the ICD
-  classes in result
+exactly the same as using x[n] or x[[n]] but preserves the ICD classes in
+result
 }
 \details{
 TODO:Potential here to use attributes, since we can (as base R does

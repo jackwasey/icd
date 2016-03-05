@@ -86,7 +86,6 @@ unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
 }
 
 #' @rdname unzip_to_data_raw
-#'
 #' @keywords internal
 download_to_data_raw <- function(url,
                                  file_name = str_extract(url, "[^/]*$"),

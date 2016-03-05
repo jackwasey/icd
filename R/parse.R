@@ -20,11 +20,12 @@
 # icd9_sources is defined in this file and saved in sysdata.rda
 utils::globalVariables(c("icd9_sources", "icd9cm_billable"))
 
-#' @title generate all package data
-#' @description Parses (and downloads if necessary) CDC annual revisions of
-#'   ICD-9-CM to get the 'billable' codes. Also parses the AHRQ and Quan/Deyo
-#'   comorbidity mappings from the source SAS data. Elixhauser and
-#'   Quan/Elixhauser mappings are generated from transcribed codes.
+#' generate all package data
+#'
+#' Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get
+#' the 'billable' codes. Also parses the AHRQ and Quan/Deyo comorbidity mappings
+#' from the source SAS data. Elixhauser and Quan/Elixhauser mappings are
+#' generated from transcribed codes.
 #' @keywords internal
 icd_update_everything <- function() {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
@@ -63,8 +64,9 @@ icd_update_everything <- function() {
 }
 # nocov end
 
-#' @title get billable codes from all available years
-#' @description for versions 23 to 32, those which are on the CMS web site, get
+#' get billable codes from all available years
+#'
+#' for versions 23 to 32, those which are on the CMS web site, get
 #'   any codes with long or short descriptions. Earlier years only have
 #'   abbreviated descriptions.
 #' @param save_data single logical value, if \code{TRUE} the source text or CSV
@@ -102,9 +104,10 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
   invisible(icd9cm_billable)
 }
 
-#' @title read the ICD-9-CM description data as provided by the Center for
+#' read the ICD-9-CM description data as provided by the Center for
+#'
 #'   Medicaid Services.
-#' @description ICD9-CM data unfortunately has no comma separation, so have to
+#' ICD9-CM data unfortunately has no comma separation, so have to
 #'   pre-process. Note that this canonical data doesn't specify non-diagnostic
 #'   higher-level codes, just the specific diagnostic 'child' codes.
 #'

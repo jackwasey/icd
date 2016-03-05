@@ -195,9 +195,8 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   return out;
 }
 
-//' @rdname fastIntToString
-//' @title fast convert integer vector to character vector
-//' @description Fast conversion from integer vector to character vector using C++
+//' Fast convert integer vector to character vector
+//' Fast conversion from integer vector to character vector using C++
 //' @param x vector of integers
 //' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
 //'   No checks done for speed.
@@ -214,6 +213,7 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
 //'                                as.character(pts$visit_id),
 //'                                asCharacterNoWarn(pts$visit_id), times = 5)
 //' }
+//' @rdname fastIntToString
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> fastIntToStringStd(std::vector<int> x) {

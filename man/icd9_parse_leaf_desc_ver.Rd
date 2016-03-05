@@ -2,8 +2,7 @@
 % Please edit documentation in R/parse.R
 \name{icd9_parse_leaf_desc_ver}
 \alias{icd9_parse_leaf_desc_ver}
-\title{read the ICD-9-CM description data as provided by the Center for
-  Medicaid Services.}
+\title{read the ICD-9-CM description data as provided by the Center for}
 \usage{
 icd9_parse_leaf_desc_ver(version = icd9cm_latest_edition(),
   save_data = TRUE, offline = FALSE)
@@ -19,11 +18,13 @@ icd9_parse_leaf_desc_ver(version = icd9cm_latest_edition(),
 invisibly return the result
 }
 \description{
+Medicaid Services.
 ICD9-CM data unfortunately has no comma separation, so have to
   pre-process. Note that this canonical data doesn't specify non-diagnostic
   higher-level codes, just the specific diagnostic 'child' codes.
-
-  The file can be pulled from the zip files on the CMS web site or from
+}
+\details{
+The file can be pulled from the zip files on the CMS web site or from
   within the package. Pulled data can be saved to the package development
   tree.
 }

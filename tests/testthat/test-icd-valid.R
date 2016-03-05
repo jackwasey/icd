@@ -467,3 +467,9 @@ test_that("valid short e", {
   x <- icd9RandomShortE(100)
   expect_true(all(icd9_is_valid_short_e(x)))
 })
+
+
+test_that("icd9 and icd10 get valid guessed type", {
+  expect_equal(icd_get_valid(c("invalid", "100")), icd9("100"))
+  expect_equal(icd_get_valid(c("invalid", "A01")), icd10("A01"))
+})

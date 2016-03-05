@@ -13,9 +13,9 @@ logical_to_binary(x)
 data frame without logical fields
 }
 \description{
-when saving data as text files for distribution, printing large
-  amounts of text containing TRUE and FALSE is inefficient. Convert to binary
-  takes more R memory, but allows more compact output
+when saving data as text files for distribution, printing large amounts of
+text containing TRUE and FALSE is inefficient. Convert to binary takes more R
+memory, but allows more compact output
 }
 \keyword{internal}
 \keyword{manip}

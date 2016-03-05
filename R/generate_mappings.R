@@ -17,8 +17,9 @@
 
 # some ICD-9 and ICD-10 mappings (others generated from SAS code parsing)
 
-#' @title Generate Elixhauser comorbidities
-#' @description This function uses the \code{\%i9d\%} operator, so cannot be
+#' Generate Elixhauser comorbidities
+#'
+#' This function uses the \code{\%i9d\%} operator, so cannot be
 #'   done as an R file in the \code{data} directory. The data is documented in
 #'   \code{datadocs.R}.
 #' @template parse-template
@@ -168,8 +169,9 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
   invisible(icd10_map_elix)
 }
 
-#' @title Generate Quan's revised Elixhauser comorbidities
-#' @description Generate Quan's revised Elixhauser comorbidities, expanded out
+#' Generate Quan's revised Elixhauser comorbidities
+#'
+#' Generate Quan's revised Elixhauser comorbidities, expanded out
 #'   to include all possible ICD-9 codes.
 #' @template parse-template
 #' @keywords internal

@@ -3,33 +3,32 @@
 \docType{data}
 \name{vermont_dx}
 \alias{vermont_dx}
-\title{De-identified data from public Vermont source for 2013}
+\title{Hospital discharge data from Vermont}
 \format{CSV original, minimally processed into R data frame.}
 \source{
 \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
 }
 \description{
-Hospital discharge data from Vermont
+De-identified data from public Vermont source for 2013
 }
 \details{
-Conditions of Release Release of public use data is subject to the
-  following conditions, which the requestor agrees to upon accepting copies
-  of the data:
+Conditions of Release Release of public use data is subject to the following
+conditions, which the requestor agrees to upon accepting copies of the data:
 
-  1. The data may not be used in any manner that attempts to or does
-  identify, directly or indirectly, any individual patient or physician.
+1. The data may not be used in any manner that attempts to or does identify,
+directly or indirectly, any individual patient or physician.
 
-  2. The requestor agrees to incorporate the following, or a substantially
-  similar, disclaimer in all reports or publications that include public use
-  data: "Hospital discharge data for use in this study were supplied by the
-  Vermont Association of Hospitals and Health Systems-Network Services
-  Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
-  Securities and Health Care Administration (BISHCA). All analyses,
-  interpretations or conclusions based on these data are solely that of [the
-  requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
-  analyses, interpretations or conclusions. In addition, as the data have
-  been edited and processed by VAHHS-NSO, BISHCA assumes no responsibility
-  for errors in the data due to coding or processing"
+2. The requestor agrees to incorporate the following, or a substantially
+similar, disclaimer in all reports or publications that include public use
+data: "Hospital discharge data for use in this study were supplied by the
+Vermont Association of Hospitals and Health Systems-Network Services
+Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
+Securities and Health Care Administration (BISHCA). All analyses,
+interpretations or conclusions based on these data are solely that of [the
+requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
+analyses, interpretations or conclusions. In addition, as the data have been
+edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
+errors in the data due to coding or processing"
 }
 \author{
 Vermont Division of Health Care Administration

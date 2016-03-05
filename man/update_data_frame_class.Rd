@@ -8,7 +8,7 @@ column therein}
 update_data_frame_class(x, icd_name = get_icd_name(x), must_work = TRUE)
 }
 \arguments{
-\item{x}{data.frame of patient data}
+\item{x}{\code{data.frame} of patient data}
 
 \item{icd_name}{The column in the data frame which contains the ICD codes.
 This is a character vector of length one. If it is \code{NULL}, \code{icd9}

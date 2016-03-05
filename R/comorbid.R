@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title present-on-admission flags
-#' @description Present-on-admission (POA) is not simply true or false. It can
+#' present-on-admission flags
+#'
+#' Present-on-admission (POA) is not simply true or false. It can
 #'   be one of a number of indeterminate values, including \code{NA}, or "Y" or
 #'   "N". "Present-on-arrival" in this context will mean a positive "Y" flag and
 #'   nothing else. Other interpretations are to include all ICD-9 codes not
@@ -46,8 +47,9 @@ icd9PoaChoices <- icd_poa_choices
                         short_code = TRUE, short_reference = TRUE)
 }
 
-#' @title find comorbidities from ICD-9 codes.
-#' @description This is the main function which extracts co-morbidities from a
+#' find comorbidities from ICD-9 codes.
+#'
+#' This is the main function which extracts co-morbidities from a
 #'   set of ICD-9 codes. This is when some trivial post-processing of the
 #'   comorbidity data is done, e.g. renaming to human-friendly field names, and
 #'   updating fields according to rules. The exact fields from the original
@@ -447,7 +449,7 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 }
 
 #' @rdname icd_comorbid
-#' @description For Charlson/Deyo comorbidities, strictly speaking, there is no
+#' For Charlson/Deyo comorbidities, strictly speaking, there is no
 #'   dropping of more e.g. uncomplicated DM if complicated DM exists, however,
 #'   this is probaably useful, in general and is essential when calculating the
 #'   Charlson score.
@@ -536,8 +538,9 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   cbd
 }
 
-#' @title show the difference between two comorbidity mappings
-#' @description Compares two comorbidity:icd9 code mappings. The results are
+#' show the difference between two comorbidity mappings
+#'
+#' Compares two comorbidity:icd9 code mappings. The results are
 #'   returned invisibly as a list. Only those comorbidities with (case
 #'   sensitive) overlapping names are compared.
 #' @param x list of character vectors
@@ -654,8 +657,9 @@ icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
   invisible(out)
 }
 
-#' @title sequence columns of comorbidities
-#' @description Get sequence of column indices of comorbidity data rame
+#' sequence columns of comorbidities
+#'
+#' Get sequence of column indices of comorbidity data rame
 #' @param cbd matrix or data.frame of comorbidities
 #' @keywords internal
 cr <- function(x)

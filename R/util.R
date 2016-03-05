@@ -75,10 +75,11 @@ strip <- function(x, pattern = " ", use_bytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = use_bytes)
 
-#' @title encode TRUE as 1, and FALSE as 0 (integers)
-#' @description when saving data as text files for distribution, printing large
-#'   amounts of text containing TRUE and FALSE is inefficient. Convert to binary
-#'   takes more R memory, but allows more compact output
+#' encode TRUE as 1, and FALSE as 0 (integers)
+#'
+#' when saving data as text files for distribution, printing large amounts of
+#' text containing TRUE and FALSE is inefficient. Convert to binary takes more R
+#' memory, but allows more compact output
 #' @param x dataframe which may contain logical fields
 #' @return data frame without logical fields
 #' @keywords internal manip
@@ -150,6 +151,14 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
   out
 }
 
+#' Get or guess the name of the visit ID column
+#'
+#' The guess depends on the data, working through a list of likely candidates.
+#' If the visit ID is known, it should be specified, ideally instead of calling
+#' this function, but if unavoidable, using the \code{visit_name} parameter.
+#' @param x input data, typically a data frame
+#' @template visit_name
+#' @keywords internal
 get_visit_name <- function(x, visit_name = NULL) {
   UseMethod("get_visit_name")
 }
@@ -217,8 +226,9 @@ get_icd_name <- function(x, icd_name = NULL) {
 #' @keywords internal
 icd9cm_latest_edition <- function() "32"
 
-#' @title swap names and values of a vector
-#' @description swap names and values of a vector
+#' swap names and values of a vector
+#'
+#' swap names and values of a vector
 #' @param x named vector
 #' @return vector
 #' @keywords internal
@@ -297,14 +307,22 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   f
 }
 
+#' Fast find which \code{x} are \emph{not} in \code{table}
+#'
+#' Uses \code{\link[fastmatch]{fmatch}} which creates hash table, and re-uses if
+#' \code{table} is re-used.
+#' @param x vector
+#' @param table vector
+#' @keywords internal
 `%fin%` <- function(x, table) {
   fastmatch::fmatch(x, table, nomatch = 0L) > 0L
 }
 
-#' @title sort short-form icd9 codes
-#' @description Sorts lists of numeric only, V or E codes. Note that a simple
-#'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
-#'   V codes precede E codes.
+#' sort short-form icd9 codes
+#'
+#' Sorts lists of numeric only, V or E codes. Note that a simple numeric sort
+#' does not work for ICD-9 codes, since "162" > "1620", and also V codes precede
+#' E codes.
 #' @details Implementation used fast built-in sort, then shuffles the E codes to
 #'   the end.
 #' @param x vector of ICD codes to sort

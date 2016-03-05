@@ -23,8 +23,9 @@ utils::globalVariables(".")
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
 # approach in python
 
-#' @title parse RTF description of entire ICD-9-CM for a specific year
-#' @description Currently only the most recent update is implemented. Note that
+#' parse RTF description of entire ICD-9-CM for a specific year
+#'
+#' Currently only the most recent update is implemented. Note that
 #'   CMS have published additional ICD-9-CM billable code lists since the last
 #'   one from the CDC: I think these have been the same every year since 2011,
 #'   though. THe last CDC release is Dtab12.rtf from 2011.
@@ -79,8 +80,9 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
   )
 }
 
-#' @title parse lines of RTF
-#' @description parse a character vector containing RTF strings
+#' parse lines of RTF
+#'
+#' parse a character vector containing RTF strings
 #' @param rtf_lines character vector containing RTF. Encoding?
 #' @template verbose
 #' @return named character vector, with names being the ICD-9 codes, and the
@@ -422,9 +424,10 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   out
 }
 
-#' @title parse a row of RTF source data for ranges to apply fifth digit
+#' parse a row of RTF source data for ranges to apply fifth digit
+#'
 #'   sub-classifications
-#' @description returns all the possible 5 digit codes encompassed by the given
+#' returns all the possible 5 digit codes encompassed by the given
 #'   definition. This needs to be whittled down to just those matching fifth
 #'   digits, but we haven't parsed them yet.
 #' @template verbose

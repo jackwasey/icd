@@ -11,10 +11,10 @@ icd9_chapters_to_map(x)
 icd9ChaptersSub}
 }
 \description{
-the chapter headings can be converted into the full set of their
-  children, and then used to look-up which chapter, sub-chapter, or 'major' a
-  given code belongs. Always returns a map with short-form icd-9 codes. These
-  can be converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
+the chapter headings can be converted into the full set of their children,
+and then used to look-up which chapter, sub-chapter, or 'major' a given code
+belongs. Always returns a map with short-form icd-9 codes. These can be
+converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9PartsToShort}},

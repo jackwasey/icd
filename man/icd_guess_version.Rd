@@ -28,7 +28,7 @@ provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 }
 \description{
-Guess version of ICD
+param x input data
 }
 \section{Methods (by class)}{
 \itemize{

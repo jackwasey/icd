@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title extract assignments from a SAS FORMAT definition.
-#' @description this is modelled entirely on a single chunk of SAS code, but
-#'   hopefully will have some generalizability. It relies heavily on lists and
-#'   regex, but, as you will see from the code, R is not a great language with
-#'   which to write a SAS parser.
+#' extract assignments from a SAS FORMAT definition.
+#'
+#' this is modelled entirely on a single chunk of SAS code, but hopefully will
+#' have some generalizability. It relies heavily on lists and regex, but, as you
+#' will see from the code, R is not a great language with which to write a SAS
+#' parser.
 #' @param sas_lines is a character vector, with one item per line, e.g. from
 #'   \code{readLines}
 #' @examples
@@ -91,9 +92,10 @@ sas_icd10_assignments_to_list <- function(x) {
   x
 }
 
-#' @title get assignments from a character string strings.
-#' @description   #form is aaa-bbb, ccc-ddd, eee, etc. = "name" abc-def, ghi,
-#'   etc. = "anothername" there is no delimiter between each assignment. '
+#' get assignments from a character string strings.
+#'
+#' #form is aaa-bbb, ccc-ddd, eee, etc. = "name" abc-def, ghi, etc. =
+#' "anothername" there is no delimiter between each assignment. '
 #' @param x is a character string containing space delimited assignments, in SAS
 #'   declaration format.
 #' @param strip_whitespace will strip all whitespace from the returned values
@@ -158,10 +160,10 @@ sasParseAssignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE)
   out
 }
 
-#' @title drop superfluous assignment name when the name is already defined.
-#' @description this is happening in the DRG definitions for AHRQ comorbidities.
-#'   We have data like: "HTNDRG" 079,305 = "YES" I would like this to be
-#'   list(HTNDRG="079,305")
+#' drop superfluous assignment name when the name is already defined.
+#'
+#' this is happening in the DRG definitions for AHRQ comorbidities. We have data
+#' like: "HTNDRG" 079,305 = "YES" I would like this to be list(HTNDRG="079,305")
 #' @param x in this case is '079,305 = "YES"' (quotes may be present in the
 #'   string itself)
 #' @keywords internal manip util
@@ -170,8 +172,9 @@ sasDropOtherAssignment <- function(x) {
   lapply(x, function(y) strsplit(y, split = "[[:space:]]*=")[[1]][1])
 }
 
-#' @title extract quoted or unquoted SAS string definitions
-#' @description Finds all the LET statements in some SAS code and writes them to
+#' extract quoted or unquoted SAS string definitions
+#'
+#' Finds all the LET statements in some SAS code and writes them to
 #'   an R list. The list item name is the SAS variable name, and each list item
 #'   is a character vector of the contents. This is specifically for string
 #'   assignements, but probably easy to adapter to numbers if ever needed.

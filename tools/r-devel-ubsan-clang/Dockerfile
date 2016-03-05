@@ -38,7 +38,9 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstab
 ## now we can pre-install a load of packages we know we'll need, or alternatively, devtools can do this based on the DESCRIPTION file once the package source is available (but this wouldn't be preserved in the docker image)
 
 # use Rdevel (from the rocker image, because R is the standard g++ unsanitized one)
-RUN Rdevel -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'knitr', 'rmarkdown', 'xtable', 'fastmatch', 'roxygen2', 'RODBC', 'xml2'))"
+# I think this forces rebuild every time, even if the added package hasn't changed.
+ADD install_r_packages.R /tmp/
+RUN RScriptdevel install_r_packages.R
 
 # doesn't work for Rdevel: RUN apt-get install -y r-cran-rodbc
 

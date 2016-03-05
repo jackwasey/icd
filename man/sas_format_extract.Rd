@@ -17,10 +17,10 @@ sas_format_extract_rcomfmt(sas_lines)
 list (of lists)
 }
 \description{
-this is modelled entirely on a single chunk of SAS code, but
-  hopefully will have some generalizability. It relies heavily on lists and
-  regex, but, as you will see from the code, R is not a great language with
-  which to write a SAS parser.
+this is modelled entirely on a single chunk of SAS code, but hopefully will
+have some generalizability. It relies heavily on lists and regex, but, as you
+will see from the code, R is not a great language with which to write a SAS
+parser.
 }
 \section{Functions}{
 \itemize{

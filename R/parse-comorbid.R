@@ -53,8 +53,9 @@ icd10_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
     offline = offline, allow_missing = allow_missing)
 }
 
-#' @title parse AHRQ SAS code to get mapping
-#' @description Takes the raw data taken directly from the AHRQ web site and
+#' parse AHRQ SAS code to get mapping
+#'
+#' Takes the raw data taken directly from the AHRQ web site and
 #'   parses into RData. It is then saved in the development tree data directory,
 #'   so this is an internal function, used in generating the package itself!
 #' @template parse-template
@@ -170,8 +171,9 @@ icd9_fetch_quan_deyo_sas <- function(...) {
     file_name = "ICD9_E_Charlson.sas", ...)
 }
 
-#' @title parse original SAS code defining Quan's update of Deyo comorbidities.
-#' @description As with \code{parseAhrqSas}, this function reads SAS code, and
+#' parse original SAS code defining Quan's update of Deyo comorbidities.
+#'
+#' As with \code{parseAhrqSas}, this function reads SAS code, and
 #'   in, a very limited way, extracts definitions. In this case the code uses
 #'   LET statements, with strings or lists of strings. This saves and invisibly
 #'   returns a list with names corresponding to the comorbidities and values as

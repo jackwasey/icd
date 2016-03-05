@@ -8,15 +8,14 @@
 \title{Quan adaptation of Deyo/Charlson comorbidities}
 \format{list of character vectors, each named by co-morbidity}
 \description{
-Derived programmatically from the SAS code used in the original
-  publication. According to the referenced study, this provides the best
-  presdictor of in-patient to <30d mortality. Of note, Deyo drops the
-  distinction between leukemia, lymphoma and non-metastatic cancer. As far as
-  I have looked into this, in the rare cases where someone had two or three
-  of leukemia, lymphoma and non-metastatic cancer, the Quan adaptation would
-  give a lower Charlson score than the original scheme. The Deyo original
-  Charlson to ICD-9-CM groups does include distinct categories for these
-  things.
+Derived programmatically from the SAS code used in the original publication.
+According to the referenced study, this provides the best presdictor of
+in-patient to <30d mortality. Of note, Deyo drops the distinction between
+leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
+this, in the rare cases where someone had two or three of leukemia, lymphoma
+and non-metastatic cancer, the Quan adaptation would give a lower Charlson
+score than the original scheme. The Deyo original Charlson to ICD-9-CM groups
+does include distinct categories for these things.
 }
 \references{
 Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew Fong,

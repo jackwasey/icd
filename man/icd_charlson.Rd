@@ -13,8 +13,8 @@ icd9Charlson(x, visitId = NULL, scoringSystem = c("original", "charlson",
   "quan"), return.df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
-icd9Charlson.data.frame(x, visitId = NULL, scoringSystem = c("original",
-  "charlson", "quan"), return.df = FALSE,
+\method{icd9Charlson}{data.frame}(x, visitId = NULL,
+  scoringSystem = c("original", "charlson", "quan"), return.df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 icd9CharlsonComorbid(x, visitId = NULL, applyHierarchy = FALSE,
@@ -113,4 +113,5 @@ icd_charlson(mydf, short_code = FALSE)
 icd_charlson(mydf, short_code = FALSE, return_df = TRUE)
 icd_charlson_from_comorbid(cmb)
 }
+\keyword{internal}
 

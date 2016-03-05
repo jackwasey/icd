@@ -66,12 +66,13 @@ icd_classes_conflict <- function(x) {
     sum(icd_code_classes %in% class(x)) > 1
 }
 
-#' @title prefer an order of classes
-#' @description The order of classes can matter because, for some functions,
-#'   we'd prefer to decide what to do based on a higher level structure, e.g.
-#'   whether the structure is a comorbidity map before caring if it is ICD-9 or
-#'   ICD-10. I can't see how it matters whether we prioritize long/wide and
-#'   short/decimal yet, so won't test.
+#' prefer an order of classes
+#'
+#' The order of classes can matter because, for some functions, we'd prefer to
+#' decide what to do based on a higher level structure, e.g. whether the
+#' structure is a comorbidity map before caring if it is ICD-9 or ICD-10. I
+#' can't see how it matters whether we prioritize long/wide and short/decimal
+#' yet, so won't test.
 #' @param x any object which may or may not have classes from this package
 #' @keywords internal
 icd_classes_ordered <- function(x) {
@@ -100,15 +101,16 @@ icd_stop_classes_disorder <- function(x) {
          which is out of order.")
 }
 
-#' @rdname set_icd_class
-#' @title construct ICD-9 data types
-#' @description Takes an R structure and sets class to an ICD type. In the case
+#' construct ICD-9 data types
+#'
+#' Takes an R structure and sets class to an ICD type. In the case
 #'   of ICD-9 and ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM
 #'   (/code{icd9cm}), then an ICD-9 class (/code{icd9}) is also set.
 #'
 #' @param x object to set class \code{icd9}
 #' @param warn single logical value, if \code{TRUE} will gives warning when
 #'   converting between types. ICD-9 to ICD-10 will cause an error regardless.
+#' @name set_icd_class
 #' @export
 icd9 <- function(x) {
   if (missing(x)) x <- character()
@@ -180,7 +182,7 @@ icd10who <- function(x) {
 #'
 #' If only one ICD code type is defined in columns in a matrix or data.frame,
 #' then update the class of the data frame to relfect that type.
-#' @param x data.frame of patient data
+#' @param x \code{data.frame} of patient data
 #' @template icd_name
 #' @param must_work single logical, if \code{TRUE} (the default) will stop if a
 #'   single ICD version class cannot be applied
@@ -335,9 +337,9 @@ icd_comorbidity_map <- function(x) {
   out
 }
 
-#' @title combine ICD codes
-#' @name combine
-#' @description These function implement combination of lists or vectors of
+#' combine ICD codes
+#'
+#' These function implement combination of lists or vectors of
 #'   codes, while preserving ICD classes. Base R \code{c} just drops all user
 #'   defined classes and casts down to lowest common denomintor, e.g. if mixing
 #'   numbers and characters. No attempt here to catch all possible combinations
@@ -349,6 +351,7 @@ icd_comorbidity_map <- function(x) {
 #' # throw an error
 #' c(icd9("E998"), icd10("A10"))
 #' }
+#' @name combine
 #' @export
 c.icd9 <- function(...) {
   args <- list(...)
@@ -433,10 +436,10 @@ c.icd_decimal_code <- function(...) {
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
-#' @name subset_icd
-#' @title extract subset from ICD data
-#' @description exactly the same as using x[n] or x[[n]] but preserves the ICD
-#'   classes in result
+#' extract subset from ICD data
+#'
+#' exactly the same as using x[n] or x[[n]] but preserves the ICD classes in
+#' result
 #' @details TODO:Potential here to use attributes, since we can (as base R does
 #'   in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
 #'   subsetting operation. This would simplify the class system.
@@ -457,6 +460,7 @@ c.icd_decimal_code <- function(...) {
 #' y[[2]]
 #' stopifnot(inherits(y[2], "icd10"))
 #' stopifnot(inherits(y[[2]], "icd10"))
+#' @name subset_icd
 #' @export
 `[.icd9` <- function(x, ...) {
   y <- NextMethod()

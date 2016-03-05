@@ -32,8 +32,9 @@ RUN apt-get install -y -t unstable \
   texlive-base \
   unixodbc-dev
 
+ADD build_install_check_in_docker.sh /tmp/
 # use R (I didn't build my image to use Rdevel)
-RUN R -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'plyr', 'knitr', 'microbenchmark', 'profr', 'xtable', 'rmarkdown', 'fastmatch', 'roxygen2', 'RODBC'))"
+RUN Rscript install_r_packages.R
 
 # can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
 ADD build_install_check_in_docker.sh /tmp/

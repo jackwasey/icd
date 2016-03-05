@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title take two ICD-9 codes and expand range to include all child codes
-#' @description this is cumbersome code, covering a whole load of edge cases
+#' take two ICD-9 codes and expand range to include all child codes
+#'
+#' this is cumbersome code, covering a whole load of edge cases
 #'   relating to the fact that icd9 codes are \strong{not} in numeric order. An
 #'   alternative strategy would be to list all the ICD9 codes, then a range
 #'   would just pick out start and finish positions, and return subset of the
@@ -131,8 +132,9 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
   icd::icd10cm2016[pos[1]:pos[2], "code"]
 }
 
-#' @title Expand major codes to range
-#' @description Expand a pair of major codes into a range of major codes.
+#' Expand major codes to range
+#'
+#' Expand a pair of major codes into a range of major codes.
 #' @keywords internal
 icd_expand_range_major <- function(start, end) {
   UseMethod("icd_expand_range_major")
@@ -373,8 +375,9 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
   icd_expand_range.icd10cm(start, end, short_code = FALSE)
 }
 
-#' @title expand decimal part of ICD-9 code to cover all possible sub-codes
-#' @description Accepts a single number or character input starting point for
+#' expand decimal part of ICD-9 code to cover all possible sub-codes
+#'
+#' Accepts a single number or character input starting point for
 #'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
 #'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
 #' @template minor

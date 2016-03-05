@@ -20,8 +20,8 @@ list with each list item containing a matrix of "char ranges",
   "assigned value" pairs
 }
 \description{
-#form is aaa-bbb, ccc-ddd, eee, etc. = "name" abc-def, ghi,
-  etc. = "anothername" there is no delimiter between each assignment. '
+#form is aaa-bbb, ccc-ddd, eee, etc. = "name" abc-def, ghi, etc. =
+"anothername" there is no delimiter between each assignment. '
 }
 \keyword{internal}
 \keyword{list}

@@ -190,6 +190,7 @@ icd_is_valid <- function(x, ...) {
 #'   which at present assumes ICD-9 format. Converts to character than calls
 #'   \code{icd_is_valid.character}
 #' @export
+#' @keywords internal
 icd_is_valid.default <- function(x, ...) {
   icd_is_valid.character(as_char_no_warn(x), ...)
 }
@@ -247,8 +248,10 @@ icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
 }
 
 icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {
-  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x),
-         checkmate::checkClass("icd9"), checkmate::checkClass("icd9cm"))
+  assert(checkmate::checkFactor(x),
+         checkmate::checkCharacter(x),
+         checkmate::checkClass("icd9"),
+         checkmate::checkClass("icd9cm"))
   assert_flag(whitespace_ok)
   if (length(x) == 0)
     return(logical())
@@ -336,8 +339,9 @@ icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
     str_detect(as_char_no_warn(x), re_just(re_icd9_decimal_e)) %>% na_to_false
 }
 
-#' @title Test whether an ICD code is major
-#' @description codes without real or implied decimal place return TRUE
+#' Test whether an ICD code is major
+#'
+#' codes without real or implied decimal place return TRUE
 #' @param x vector of ICD codes
 #' @return logical vector of same length as input, with TRUE when a code is a
 #'   major (not necessarily a real one)
@@ -434,11 +438,13 @@ icd_get_valid <- function(x, short_code = icd_guess_short(x))
   UseMethod("icd_get_valid")
 
 #' @describeIn icd_get_valid get valid ICD codes from character vector, guessing ICD version
+#' @export
+#' @keywords internal
+#' @method icd_get_valid character
 icd_get_valid.character <- function(x, short_code = icd_guess_short(x)) {
   icd_ver <- icd_guess_version.character(x, short_code)
   class(x) <- icd_ver
-  # now, this is risky: dispatch again
-  icd_get_valid(x, short_code)
+  UseMethod("icd_get_valid", x)
 }
 
 #' @describeIn icd_get_valid Get valid ICD-9 codes
@@ -463,8 +469,9 @@ icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
   x[icd_is_valid.icd10(x, short_code = short_code)]
 }
 
-#' @title Get invalid ICD codes
-#' @description Returns subset of codes which are not in valid short_code or
+#' Get invalid ICD codes
+#'
+#' Returns subset of codes which are not in valid short_code or
 #'   decimal format.
 #' @export
 icd_get_invalid <- function(...) {

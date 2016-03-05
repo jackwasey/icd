@@ -2,8 +2,7 @@
 % Please edit documentation in R/parse-rtf.R
 \name{rtf_parse_fifth_digit_range}
 \alias{rtf_parse_fifth_digit_range}
-\title{parse a row of RTF source data for ranges to apply fifth digit
-  sub-classifications}
+\title{parse a row of RTF source data for ranges to apply fifth digit}
 \usage{
 rtf_parse_fifth_digit_range(row_str, verbose = FALSE)
 }
@@ -11,6 +10,7 @@ rtf_parse_fifth_digit_range(row_str, verbose = FALSE)
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \description{
+sub-classifications
 returns all the possible 5 digit codes encompassed by the given
   definition. This needs to be whittled down to just those matching fifth
   digits, but we haven't parsed them yet.

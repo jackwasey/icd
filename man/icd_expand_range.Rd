@@ -95,15 +95,15 @@ this is cumbersome code, covering a whole load of edge cases
   list. Not all ICD-9 codes are valid, including some parent codes which have
   valid children. However, I expect at least some of these have been used in
   some billing databases.
-
-  As with \code{link{icd9ExpandRangeShort}} great care is taken not to
+}
+\details{
+As with \code{link{icd9ExpandRangeShort}} great care is taken not to
   include codes which have children not in the range. E.g. "100.9" to "101.1"
   would _not_ include code "101".
 
-  \code{onlyReal} default is \code{TRUE} (a change from previous versions)
+\code{onlyReal} default is \code{TRUE} (a change from previous versions)
   since this is far more likely to be useful to the end user.
-}
-\details{
+
 When the class is not known, it must be guessed from the start and
   end codes. If this guessing fails, e.g. start is ICD-9 whereas end is
   ICD-10, then an error is thrown. Otherwise, the appropriate S3 method is

@@ -391,8 +391,5 @@ my_test_check <- function(pattern, msg) {
   message(msg)
   # use perl for grepl to interpret the regex which can then include negative
   # backrefs to exclude things.
-  testthat::test_check("icd", filter = pattern, perl = TRUE,
-                       reporter = testthat::MultiReporter(reporters = list(testthat::SummaryReporter(),
-                                                                           testthat::StopReporter()))
-  )
+  testthat::test_check("icd", filter = pattern, perl = TRUE, reporter = "summary")
 }

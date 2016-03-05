@@ -15,13 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @name convert
-#' @title Convert ICD9 codes between formats and structures.
-#' @description ICD-9 codes are represented in \emph{short} and \emph{decimal}
-#'   forms. The short form has up to 5 digits, or V or E followed by up to four
-#'   digits. The decimal form has a dedcimal point to delimit the top-level
-#'   (henceforth \emph{major}) category, and the \emph{minor} part containing
-#'   the subsidiary classifications.
+#' Convert ICD9 codes between formats and structures.
+#'
+#' ICD-9 codes are represented in \emph{short} and \emph{decimal} forms. The
+#' short form has up to 5 digits, or V or E followed by up to four digits. The
+#' decimal form has a dedcimal point to delimit the top-level (henceforth
+#' \emph{major}) category, and the \emph{minor} part containing the subsidiary
+#' classifications.
 #'
 #' @section Structures: Structures used in this package are: \itemize{ \item
 #'   vector (usually character vectors) of \emph{short} or \emph{long} codes
@@ -43,13 +43,15 @@
 #'   because otherwise we are creating ambiguous codes (even if we know what we
 #'   mean)
 #' @family ICD-9 convert
+#' @name convert
 NULL
 
-#' @title convert the chapter headings to lists of codes
-#' @description the chapter headings can be converted into the full set of their
-#'   children, and then used to look-up which chapter, sub-chapter, or 'major' a
-#'   given code belongs. Always returns a map with short-form icd-9 codes. These
-#'   can be converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
+#' convert the chapter headings to lists of codes
+#'
+#' the chapter headings can be converted into the full set of their children,
+#' and then used to look-up which chapter, sub-chapter, or 'major' a given code
+#' belongs. Always returns a map with short-form icd-9 codes. These can be
+#' converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
 #'   icd9ChaptersSub
 #' @family ICD-9 convert
@@ -66,11 +68,12 @@ icd9_chapters_to_map <- function(x) {
   map
 }
 
-#' @title convert ICD data from wide to long format
-#' @description This is different enough to \code{dcast} in \code{reshape2} that
-#'   it needs writing again specifically for ICD codes. This function packages
-#'   the core \code{reshape} function. Empty strings and NA values will be
-#'   dropped, and everything else kept. No validation of the ICD codes is done.
+#' convert ICD data from wide to long format
+#'
+#' This is different enough to \code{dcast} in \code{reshape2} that it needs
+#' writing again specifically for ICD codes. This function packages the core
+#' \code{reshape} function. Empty strings and NA values will be dropped, and
+#' everything else kept. No validation of the ICD codes is done.
 #' @param x \code{data.frame} in wide format, i.e. one row per patient, and
 #'   multiple columns containing ICD codes, empty strings or NA.
 #' @template visit_name
@@ -130,9 +133,10 @@ icd_wide_to_long <- function(x,
   res
 }
 
-#' @title convert ICD data from long to wide format
-#' @description This is more complicated than reshape or reshape2  dcast allows.
-#'   This is a reasonably simple solution using built-in functions.
+#' convert ICD data from long to wide format
+#'
+#' This is more complicated than reshape or reshape2  dcast allows. This is a
+#' reasonably simple solution using built-in functions.
 #' @param x data.frame of long-form data, one column for visit_name and one for
 #'   ICD code
 #' @template visit_name
@@ -198,9 +202,10 @@ icd_long_to_wide <- function(x,
   }
 }
 
-#' @title convert comorbidity data frame from matrix
-#' @description convert matrix of comorbidities into data frame, preserving
-#'   visit_name information
+#' convert comorbidity data frame from matrix
+#'
+#' convert matrix of comorbidities into data frame, preserving visit_name
+#' information
 #' @param x Matrix of comorbidities, with row and columns names defined
 #' @param visit_name Single character string with name for new column in output
 #'   data frame. Everywhere else, \code{visit_name} describes the input data,
@@ -235,9 +240,10 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
   out
 }
 
-#' @title convert comorbidity matrix to data frame
-#' @description convert matrix of comorbidities into data frame, preserving
-#'   visit_name information
+#' convert comorbidity matrix to data frame
+#'
+#' convert matrix of comorbidities into data frame, preserving visit_name
+#' information
 #' @param x data frame, with a \code{visit_name} column (not necessarily first),
 #'   and other columns with flags for comorbidities, as such column names are
 #'   required.

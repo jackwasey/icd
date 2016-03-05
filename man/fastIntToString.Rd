@@ -3,7 +3,8 @@
 \name{fastIntToStringStd}
 \alias{fastIntToStringRcpp}
 \alias{fastIntToStringStd}
-\title{fast convert integer vector to character vector}
+\title{Fast convert integer vector to character vector
+Fast conversion from integer vector to character vector using C++}
 \usage{
 fastIntToStringStd(x)
 
@@ -16,6 +17,7 @@ fastIntToStringRcpp(x)
 No checks done for speed.}
 }
 \description{
+Fast convert integer vector to character vector
 Fast conversion from integer vector to character vector using C++
 }
 \examples{

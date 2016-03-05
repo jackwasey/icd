@@ -19,11 +19,11 @@
 icd9Explain(icd9, isShort = icd_guess_short.icd9(icd9), doCondense = TRUE,
   brief = FALSE, warn = TRUE)
 
-icd9Explain.numeric(icd9, isShort = icd_guess_short(icd9),
+\method{icd9Explain}{numeric}(icd9, isShort = icd_guess_short(icd9),
   doCondense = TRUE, brief = FALSE, warn = FALSE)
 
-icd9Explain.list(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE,
-  brief = FALSE, warn = FALSE)
+\method{icd9Explain}{list}(icd9, isShort = icd_guess_short(icd9),
+  doCondense = TRUE, brief = FALSE, warn = FALSE)
 
 icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE)
 

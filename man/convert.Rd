@@ -59,11 +59,11 @@ Character vector or list. Deliberately returns zero-padded major,
   mean)
 }
 \description{
-ICD-9 codes are represented in \emph{short} and \emph{decimal}
-  forms. The short form has up to 5 digits, or V or E followed by up to four
-  digits. The decimal form has a dedcimal point to delimit the top-level
-  (henceforth \emph{major}) category, and the \emph{minor} part containing
-  the subsidiary classifications.
+ICD-9 codes are represented in \emph{short} and \emph{decimal} forms. The
+short form has up to 5 digits, or V or E followed by up to four digits. The
+decimal form has a dedcimal point to delimit the top-level (henceforth
+\emph{major}) category, and the \emph{minor} part containing the subsidiary
+classifications.
 }
 \section{Structures}{
  Structures used in this package are: \itemize{ \item

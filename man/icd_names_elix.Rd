@@ -36,19 +36,20 @@
   and metastasis are counted independently, as in the original paper, giving
   the original 30 groups. "01" to "30"}
 \description{
-These lists provide correctly sorted names of the comorbidities
-  and their particular permutations in both full and abbreviated forms.
-
-  In the Elixhauser derived mappings, uncomplicated and complicated
-  hypertension are listed separately, but are always combined in the final
-  analyses. Uncomplicated and complicated hypertension are list separately
-  and as "Hypertension, combined." _abbrev suffix indicates a very short
-  space-free description. Quan's version of Elixhauser is identical. AHRQ's
-  update drops the arrythmia field. The naming convention is a root, e.g.
-  \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
-  \code{_abbrev}. The Charlson derived mappings do not include hypertension.
-  _abbreviated comorbidity names are helpful for interactive work, whereas
-  the full names might be prefered for plotting.
+These lists provide correctly sorted names of the comorbidities and their
+particular permutations in both full and abbreviated forms.
+}
+\details{
+In the Elixhauser derived mappings, uncomplicated and complicated
+hypertension are listed separately, but are always combined in the final
+analyses. Uncomplicated and complicated hypertension are list separately and
+as "Hypertension, combined." _abbrev suffix indicates a very short space-free
+description. Quan's version of Elixhauser is identical. AHRQ's update drops
+the arrythmia field. The naming convention is a root, e.g.
+\code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
+\code{_abbrev}. The Charlson derived mappings do not include hypertension.
+_abbreviated comorbidity names are helpful for interactive work, whereas the
+full names might be prefered for plotting.
 }
 \keyword{datasets}
 

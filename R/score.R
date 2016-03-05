@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title Calculate Charlson Comorbidity Index (Charlson Score)
-#' @description Charlson score is calculated in the basis of the Quan revision
+#' Calculate Charlson Comorbidity Index (Charlson Score)
+#'
+#' Charlson score is calculated in the basis of the Quan revision
 #'   of Deyo's ICD-9 mapping. (Peptic Ulcer disease no longer warrants a point.)
 #'   Quan published an updated set of scores, but it seems most people use the
 #'   original scores for easier comaprison between studies, even though Quan's
@@ -125,8 +126,9 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
   rowSums(t(t(x) * weights))
 }
 
-#' @title count ICD codes or comorbidities for each patient
-#' @description \code{icd_count_codes} takes a data frame with a column for
+#' count ICD codes or comorbidities for each patient
+#'
+#' \code{icd_count_codes} takes a data frame with a column for
 #'   \code{visit_name} and another for ICD-9 code, and returns the number of
 #'   distinct codes for each patient.
 #'
@@ -179,8 +181,9 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
     res[["icd_count"]]
 }
 
-#' @title icd_count_comorbid
-#' @description \code{icd_count_comorbid} differs from the other counting
+#' icd_count_comorbid
+#'
+#' \code{icd_count_comorbid} differs from the other counting
 #'   functions in that it counts _comorbidities_, not individual diagnoses. It
 #'   accepts any data frame with either logicals or zero/non-zero contents, with
 #'   a single column for visit_name. No checks are made to see whether
@@ -207,8 +210,9 @@ icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FA
     res
 }
 
-#' @title Count ICD codes given in wide format
-#' @description For \code{icd_count_codes}, it is assumed that all the columns
+#' Count ICD codes given in wide format
+#'
+#' For \code{icd_count_codes}, it is assumed that all the columns
 #'   apart from \code{visit_name} represent actual or possible ICD-9 codes.
 #'   Duplicate \code{visit_name}s are repeated as given and aggregated.
 #' @param x \code{data.frame} with one row per patient, hospital visit,
@@ -247,8 +251,9 @@ icd_count_codes_wide <- function(x,
   vec
 }
 
-#' @title Calculate van Walraven Elixhauser Score
-#' @description van Walraven Elixhauser score is calculated from the Quan
+#' Calculate van Walraven Elixhauser Score
+#'
+#' van Walraven Elixhauser score is calculated from the Quan
 #'   revision of Elixhauser's ICD-9 mapping. This function allows for the
 #'   hierarchical exlusion of less severe versions of comorbidities when their
 #'   more severe version is also present via the applyHeirarchy argument. For

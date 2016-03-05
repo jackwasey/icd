@@ -29,8 +29,9 @@ As with \code{parseAhrqSas}, this function reads SAS code, and
   a vector of 'short' form (i.e. non-decimal) ICD9 codes. Unlike
   \code{icd9_parse_ahrq_sas}, there are no ranges defined, so this
   interpretation is simpler.
-
-  With thanks to Dr. Quan, I have permission to distribute his SAS code.
+}
+\details{
+With thanks to Dr. Quan, I have permission to distribute his SAS code.
   Previously, the SAS code would be downloaded from the University of
   Manitoba at
   \url{http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt}.

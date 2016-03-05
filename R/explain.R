@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title Explain ICD-9 and ICD-10 codes in English
-#' @description Convert 'decimal' format (123.45 style) ICD-9 codes into the
+#' Explain ICD-9 and ICD-10 codes in English
+#'
+#' Convert 'decimal' format (123.45 style) ICD-9 codes into the
 #'   name and description for human review there are official ICD9-CM data
 #'   tables, not with conversion to decimal notation, but to the textual format.
 #' @param x vector or other structure of ICD codes to explain in human language
@@ -132,8 +133,9 @@ icd_explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
   icd_explain.character(as.character(icd9), short_code = short_code, condense = condense, brief = brief, warn = warn)
 }
 
-#' @title get ICD-9 Chapters from vector of ICD-9 codes
-#' @description This runs quite slowly. Used too rarely to be worth optimizing
+#' get ICD-9 Chapters from vector of ICD-9 codes
+#'
+#' This runs quite slowly. Used too rarely to be worth optimizing
 #'   now. This is used to build a master list of ICD-9 codes with their
 #'   respective chapters, sub-chapters, etc.. The querying of the web page to
 #'   get these is already done, and the results saved in the lists

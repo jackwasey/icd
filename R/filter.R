@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title Filter ICD-9 codes by validity.
-#' @description Filters a data.frame of patients for valid or invalid ICD-9
+#' Filter ICD-9 codes by validity.
+#'
+#' Filters a data.frame of patients for valid or invalid ICD-9
 #'   codes
 #' @param x input vector of ICD codes
 #' @template icd_name

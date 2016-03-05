@@ -28,7 +28,6 @@
 \alias{icd_comorbid_elix.icd9}
 \alias{icd_comorbid_quan_deyo}
 \alias{icd_comorbid_quan_deyo.data.frame}
-\alias{icd_comorbid_quan_deyo.icd9}
 \alias{icd_comorbid_quan_elix}
 \alias{icd_comorbid_quan_elix.data.frame}
 \alias{icd_comorbid_quan_elix.icd9}
@@ -73,9 +72,6 @@ icd_comorbid_elix(...)
 \method{icd_comorbid_ahrq}{icd9}(..., abbrev_names = TRUE, hierarchy = TRUE)
 
 \method{icd_comorbid_ahrq}{icd10}(..., abbrev_names = TRUE,
-  hierarchy = TRUE)
-
-\method{icd_comorbid_quan_deyo}{icd9}(..., abbrev_names = TRUE,
   hierarchy = TRUE)
 
 \method{icd_comorbid_quan_elix}{icd9}(..., abbrev_names = TRUE,
@@ -184,11 +180,6 @@ This is the main function which extracts co-morbidities from a
   updating fields according to rules. The exact fields from the original
   mappings can be obtained using \code{hierarchy = FALSE}, but for
   comorbidity counting, Charlson Score, etc., the rules should be applied.
-
-For Charlson/Deyo comorbidities, strictly speaking, there is no
-  dropping of more e.g. uncomplicated DM if complicated DM exists, however,
-  this is probaably useful, in general and is essential when calculating the
-  Charlson score.
 }
 \details{
 There is a change in behavior from previous versions. The visit_name

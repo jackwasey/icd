@@ -16,11 +16,11 @@ expect_icd_classes_ordered(x)
 \item{x}{any object which may or may not have classes from this package}
 }
 \description{
-The order of classes can matter because, for some functions,
-  we'd prefer to decide what to do based on a higher level structure, e.g.
-  whether the structure is a comorbidity map before caring if it is ICD-9 or
-  ICD-10. I can't see how it matters whether we prioritize long/wide and
-  short/decimal yet, so won't test.
+The order of classes can matter because, for some functions, we'd prefer to
+decide what to do based on a higher level structure, e.g. whether the
+structure is a comorbidity map before caring if it is ICD-9 or ICD-10. I
+can't see how it matters whether we prioritize long/wide and short/decimal
+yet, so won't test.
 }
 \section{Functions}{
 \itemize{

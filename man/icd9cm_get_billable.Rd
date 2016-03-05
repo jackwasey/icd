@@ -34,7 +34,8 @@ Return only those codes which are leaf codes in the hierarchy.
   and not super-sets of other codes. The majority have sub-decimal
   classifications, but some are simply three-digit codes. This particular
   function is currently restricted to ICD-9-CM codes.
-
+}
+\details{
 TODO: keep this internal
 }
 \section{Methods (by class)}{

@@ -54,10 +54,10 @@ data frame with visit_name column named the same as input, and a
   codes found in the wide input data.
 }
 \description{
-This is different enough to \code{dcast} in \code{reshape2} that
-  it needs writing again specifically for ICD codes. This function packages
-  the core \code{reshape} function. Empty strings and NA values will be
-  dropped, and everything else kept. No validation of the ICD codes is done.
+This is different enough to \code{dcast} in \code{reshape2} that it needs
+writing again specifically for ICD codes. This function packages the core
+\code{reshape} function. Empty strings and NA values will be dropped, and
+everything else kept. No validation of the ICD codes is done.
 }
 \examples{
   widedf <- data.frame(visit_name = c("a", "b", "c"),

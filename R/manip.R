@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title extract alphabetic, and numeric part of icd9 code prefix
-#' @description removes whitespace and separates V or E if present.
+#' extract alphabetic, and numeric part of icd9 code prefix
+#'
+#' removes whitespace and separates V or E if present.
 #' @template icd9-any
 #' @return vector or matrix, with first item of each row (or whole vector)
 #'   containing V, E or "". The second part contains the numeric parts of the
@@ -32,8 +33,9 @@ icd9_extract_alpha_numeric <- function(x) {
            FUN.VALUE = c(NA_character_, NA_character_)) %>% t
 }
 
-#' @title drop zero padding from decimal ICD-9 code.
-#' @description decimal form ICD-9 codes are not ambiguous if the leading zeroes
+#' drop zero padding from decimal ICD-9 code.
+#'
+#' decimal form ICD-9 codes are not ambiguous if the leading zeroes
 #'   are dropped. Some short-form ICD-9 codes would not be ambiguous, e.g. "1"
 #'   but many would be problematic. This is the inverse of
 #'   \code{icd9_add_leading_zeroes}.

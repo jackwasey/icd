@@ -15,8 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title Condense ICD-9 code by replacing complete families with parent codes
-#' @description This can be thought of as the inverse operation to
+#' Condense ICD-9 code by replacing complete families with parent codes
+#'
+#' This can be thought of as the inverse operation to
 #'   \code{icd9Children}.
 #' @template icd9-any
 #' @template icd9-short

@@ -12,7 +12,7 @@
 icd9VanWalraven(x, visitId = NULL, return.df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
-icd9VanWalraven.data.frame(x, visitId = NULL, return.df = FALSE,
+\method{icd9VanWalraven}{data.frame}(x, visitId = NULL, return.df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 icd9VanWalravenComorbid(x, visitId = NULL, applyHierarchy = FALSE)
@@ -103,4 +103,5 @@ van Walraven C, Austin PC, Jennings A, Quan H, Forster AJ. A
   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 }
+\keyword{internal}
 

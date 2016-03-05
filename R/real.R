@@ -17,8 +17,9 @@
 
 utils::globalVariables("icd10cm2016")
 
-#' @title Check whether ICD-9 codes exist
-#' @description This is different from syntactic validity: it looks it up in the
+#' Check whether ICD-9 codes exist
+#'
+#' This is different from syntactic validity: it looks it up in the
 #'   canonical list of ICD-9 codes published by the CMS, and which are included
 #'   in this package under \code{data-raw}. Checking syntactic validity using
 #'   \code{link{icd9IsValid}} etc. is still useful, with a changing list of
@@ -119,8 +120,9 @@ icd_get_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x), billab
   x[icd_is_defined.icd9(x, short_code = short_code, billable = billable)]
 }
 
-#' @title Determine whether codes are billable leaf-nodes
-#' @description Codes provided are compared to the most recent version of the
+#' Determine whether codes are billable leaf-nodes
+#'
+#' Codes provided are compared to the most recent version of the
 #'   CMS list of billable codes, or another version if specified.
 #' @template icd9-any
 #' @template icd9-short
@@ -206,17 +208,22 @@ icd9cm_is_billable <- function(x, version = icd9cm_latest_edition()) {
 
 #' @describeIn icd9cm_is_billable Are the given short-form codes leaf (billable)
 #'   codes in the hierarchy?
+#' @export
+#' @keywords internal
 icd9cm_is_billable.icd_short_code <- function(x, version = icd9cm_latest_edition())
   icd_is_billable.icd9(x, short_code = TRUE, version)
 
 #' @describeIn icd9cm_is_billable Are the given decimal-form codes leaf (billable)
 #'   codes in the hierarchy?
+#' @export
+#' @keywords internal
 icd9cm_is_billable.icd_decimal_code <- function(x, version = icd9cm_latest_edition())
   icd_is_billable.icd9(x, short_code = FALSE, version)
 
 
-#' @title Get billable ICD codes
-#' @description Get billable ICD codes, implicitly, this refers to an ICD
+#' Get billable ICD codes
+#'
+#' Get billable ICD codes, implicitly, this refers to an ICD
 #'   implementation which is specialized for a country, typically for billing,
 #'   e.g. ICD-9-CM in the USA.
 #' @param x input vector of ICD codes
@@ -264,7 +271,7 @@ icd_get_billable.icd9 <- function(...) {
 
 #' Get billable ICD-9-CM codes
 #'
-#' @description Return only those codes which are leaf codes in the hierarchy.
+#' Return only those codes which are leaf codes in the hierarchy.
 #'   In contrast to \emph{defined} codes, these are considered \emph{billable}
 #'   and not super-sets of other codes. The majority have sub-decimal
 #'   classifications, but some are simply three-digit codes. This particular

@@ -198,7 +198,6 @@ icd9CondenseShort <- function(icd9Short, onlyReal = NULL, warn = TRUE, keepFacto
                     warn = warn, keep_factor_levels = keepFactorLevels)
 }
 
-
 #' @rdname icd_comorbid_mat_to_df
 #'
 #' @template visitId
@@ -232,28 +231,24 @@ icd9ComorbidDfToMat <- function(x, visitId = get_visit_name(x),
 icd9Explain <- function(icd9, isShort = icd_guess_short.icd9(icd9),
                         doCondense = TRUE, brief = FALSE, warn = TRUE) {
   icd_deprecated("icd_explain")
-  x <- icd9
-  icd9 <- NULL
-  if (is.list(x))
-    x <- lapply(x, icd::icd9)
-  else
-    x <- icd9(x)
-  icd_explain(x = x, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
+  UseMethod("icd9Explain")
 }
 
 #' @rdname icd_explain
 #' @export
+#' @keywords internal
 icd9Explain.numeric <- function(icd9, isShort = icd_guess_short(icd9),
                                 doCondense = TRUE, brief = FALSE, warn = FALSE) {
-  icd_deprecated("icd_explain.numeric")
+  icd_deprecated("icd_explain")
   icd_explain.numeric(icd9, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
 }
 
 #' @rdname icd_explain
 #' @export
+#' @keywords internal
 icd9Explain.list <- function(icd9, isShort = icd_guess_short(icd9),
                              doCondense = TRUE, brief = FALSE, warn = FALSE) {
-  icd_deprecated("icd_explain.list")
+  icd_deprecated("icd_explain")
   icd_explain.list(icd9, short_code = isShort, condense = doCondense, brief = brief, warn = warn)
 
 }
@@ -660,12 +655,12 @@ icd9Charlson <- function(x, visitId = NULL,
                          stringsAsFactors = getOption("stringsAsFactors"),
                          ...) {
   icd_deprecated("icd_charlson")
-  icd_charlson(x, visit_name = visitId, scoring_system = scoringSystem,
-               return_df = return.df, stringsAsFactors = stringsAsFactors, ...)
+  UseMethod("icd9Charlson")
 }
 
 #' @rdname icd_charlson
 #' @export
+#' @keywords internal
 icd9Charlson.data.frame <- function(x, visitId = NULL,
                                     scoringSystem = c("original", "charlson", "quan"),
                                     return.df = FALSE,
@@ -693,13 +688,14 @@ icd9VanWalraven <- function(x, visitId = NULL,
                             stringsAsFactors = getOption("stringsAsFactors"),
                             ...) {
   icd_deprecated("icd_van_walraven")
-  icd_van_walraven(x, visitId, return.df, stringsAsFactors, ...)
+  UseMethod("icd9VanWalraven")
 }
 
 #' @rdname icd_van_walraven
 #' @template visitId
 #' @template return.df
 #' @export
+#' @keywords internal
 icd9VanWalraven.data.frame <-
   function(x, visitId = NULL,
            return.df = FALSE,

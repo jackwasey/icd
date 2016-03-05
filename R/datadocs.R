@@ -15,72 +15,77 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title ICD-9 chapters
-#' @name icd9_chapters
-#' @aliases icd9Chapters icd9ChaptersSub icd9ChaptersMajor icd9_sub_chapters
-#'   icd9_majors
-#' @description \code{icd9_chapters}, \code{icd9_chapters_sub} and
-#'   \code{icd9_majors} contain mappings from the higher level descriptions of
-#'   ICD-9 codes to the ranges of ICD-9 codes they describe. Helpful in
-#'   summarizing codes or grouping for human-readable output. These can easily
-#'   be converted to a co-morbidity mapping, as shown in the vignette.
+#' ICD-9 chapters
 #'
-#'   \itemize{ \item 001-139 Infectious And Parasitic Diseases \item 140-239
-#'   Neoplasms \item 240-279 Endocrine, Nutritional And Metabolic Diseases, And
-#'   Immunity Disorders \item 280-289 Diseases Of The Blood And Blood-Forming
-#'   Organs \item 290-319 Mental Disorders \item 320-389 Diseases Of The Nervous
-#'   System And Sense Organs \item 390-459 Diseases Of The Circulatory System
-#'   \item 460-519 Diseases Of The Respiratory System \item 520-579 Diseases Of
-#'   The Digestive System \item 580-629 Diseases Of The Genitourinary System
-#'   \item 630-679 Complications Of Pregnancy, Childbirth, And The Puerperium
-#'   \item 680-709 Diseases Of The Skin And Subcutaneous Tissue \item 710-739
-#'   Diseases Of The Musculoskeletal System And Connective Tissue \item 740-759
-#'   Congenital Anomalies \item 760-779 Certain Conditions Originating In The
-#'   Perinatal Period \item 780-799 Symptoms, Signs, And Ill-Defined Conditions
-#'   \item 800-999 Injury And Poisoning \item V01-V91 Supplementary
-#'   Classification Of Factors Influencing Health Status And Contact With Health
-#'   Services \item E000-E999 Supplementary Classification Of External Causes Of
-#'   Injury And Poisoning }
+#' \code{icd9_chapters}, \code{icd9_chapters_sub} and \code{icd9_majors} contain
+#' mappings from the higher level descriptions of ICD-9 codes to the ranges of
+#' ICD-9 codes they describe. Helpful in summarizing codes or grouping for
+#' human-readable output. These can easily be converted to a co-morbidity
+#' mapping, as shown in the vignette.
+#'
+#' \itemize{ \item 001-139 Infectious And Parasitic Diseases \item 140-239
+#' Neoplasms \item 240-279 Endocrine, Nutritional And Metabolic Diseases, And
+#' Immunity Disorders \item 280-289 Diseases Of The Blood And Blood-Forming
+#' Organs \item 290-319 Mental Disorders \item 320-389 Diseases Of The Nervous
+#' System And Sense Organs \item 390-459 Diseases Of The Circulatory System
+#' \item 460-519 Diseases Of The Respiratory System \item 520-579 Diseases Of
+#' The Digestive System \item 580-629 Diseases Of The Genitourinary System \item
+#' 630-679 Complications Of Pregnancy, Childbirth, And The Puerperium \item
+#' 680-709 Diseases Of The Skin And Subcutaneous Tissue \item 710-739 Diseases
+#' Of The Musculoskeletal System And Connective Tissue \item 740-759 Congenital
+#' Anomalies \item 760-779 Certain Conditions Originating In The Perinatal
+#' Period \item 780-799 Symptoms, Signs, And Ill-Defined Conditions \item
+#' 800-999 Injury And Poisoning \item V01-V91 Supplementary Classification Of
+#' Factors Influencing Health Status And Contact With Health Services \item
+#' E000-E999 Supplementary Classification Of External Causes Of Injury And
+#' Poisoning }
 #' @keywords datasets list category
 #' @docType data
 #' @source
-#'   \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+#' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 #'
 #' @format list with chapter/usb-chapter or major names stored in list names,
 #'   each with two element named character vector with start and end codes.
+#' @name icd9_chapters
+#' @aliases icd9Chapters icd9ChaptersSub icd9ChaptersMajor icd9_sub_chapters
+#'   icd9_majors
 NULL
 
-#' @title ICD-10 chapters
-#' @name icd10_chapters
-#' @description The WHO ICD-10 scheme chapters. The chapter level is the highest
-#'   in the hierarchy, each chapter containing sets of codes which span multiple
-#'   three-digit 'major' codes, and in some cases also span codes across two
-#'   alphabetic initial characters. E.g. Chapter I spans A00 to B99.
+#' ICD-10 chapters
+#'
+#' The WHO ICD-10 scheme chapters. The chapter level is the highest in the
+#' hierarchy, each chapter containing sets of codes which span multiple
+#' three-digit 'major' codes, and in some cases also span codes across two
+#' alphabetic initial characters. E.g. Chapter I spans A00 to B99.
 #' @details TODO: confirm that ICD-10-CM has no variation at this level.
 #' @source http://apps.who.int/classifications/icd10/browse/2016/en
-#' @format list with chapter names stored in list names,
-#'   each with two element named character vector with start and end codes.
+#' @format list with chapter names stored in list names, each with two element
+#'   named character vector with start and end codes.
+#' @name icd10_chapters
 NULL
 
-#' @title ICD-10 sub-chapters
-#' @name icd10_sub_chapters
-#' @description The WHO ICD-10 scheme sub-chapters. N.b. there may be WHO vs CM
-#'   differences: please file bug if noted. In the \code{XML} definition of
-#'   ICD-10-CM there are some intermediate hierarchical levels, e.g. for
-#'   neoplasms. Sub-chapter here is defined as the lowest-level grouping of
-#'   three-digit codes, e.g. C00-C14 "Malignant neoplasms of lip, oral cavity
-#'   and pharynx", not C00-C96 "Malignant neoplasms" which itself is a subset of
-#'   the chapter C00-D49 "Neoplasms"
+#' ICD-10 sub-chapters
+#'
+#' The WHO ICD-10 scheme sub-chapters. N.b. there may be WHO vs CM differences:
+#' please file bug if noted. In the \code{XML} definition of ICD-10-CM there are
+#' some intermediate hierarchical levels, e.g. for neoplasms. Sub-chapter here
+#' is defined as the lowest-level grouping of three-digit codes, e.g. C00-C14
+#' "Malignant neoplasms of lip, oral cavity and pharynx", not C00-C96 "Malignant
+#' neoplasms" which itself is a subset of the chapter C00-D49 "Neoplasms"
 #' @source http://apps.who.int/classifications/icd10/browse/2016/en
-#' @format list with sub-chapter or major names stored in list names,
-#'   each with two element named character vector with start and end codes.
+#' @format list with sub-chapter or major names stored in list names, each with
+#'   two element named character vector with start and end codes.
+#' @name icd10_sub_chapters
 NULL
 
 
-#' @title ICD9-CM diagnosis code lookup
-#' @description short-form ICD-9 codes with short and long descriptions, and
+#' ICD9-CM diagnosis code lookup
+#'
+#' short-form ICD-9 codes with short and long descriptions, and
 #'   description of each hierarchy level containing each code.
-#' @details \code{icd9Hierarchy} is deprecated in favor of \code{icd9cm_hierarchy}
+#'
+#' \code{icd9Hierarchy} is deprecated in favor of \code{icd9cm_hierarchy}
+#'
 #' @docType data
 #' @keywords datasets
 #' @format data frame
@@ -107,9 +112,9 @@ NULL
 #'
 #' The public domain modified ICD-10 classification as published in the public
 #' domain by the US CDC. Currently this has a slightly different structure to
-#' \code{icd9cm_hierarchy} because the published data helpfully has a \emph{leaf}
-#' flag indicating whether a code is a \emph{billable} leaf node, or a code
-#' higher in the hierarchy which nevertheless will have a description.
+#' \code{icd9cm_hierarchy} because the published data helpfully has a
+#' \emph{leaf} flag indicating whether a code is a \emph{billable} leaf node, or
+#' a code higher in the hierarchy which nevertheless will have a description.
 #'
 #' There are annual revisions to this data. Currently, the 2016 edition is
 #' included.
@@ -121,11 +126,11 @@ NULL
 #'   long descriptions.
 NULL
 
-#' @title AHRQ comorbidities
-#' @description This mapping of comorbidities to ICD-9 codes is dervied directly
-#'   from SAS code provided by AHRQ, and translated into this R data structure.
-#'   This is a revision of the Elixhauser system, notably exluding cardiac
-#'   arrythmia.
+#' AHRQ comorbidities
+#'
+#' This mapping of comorbidities to ICD-9 codes is dervied directly from SAS
+#' code provided by AHRQ, and translated into this R data structure. This is a
+#' revision of the Elixhauser system, notably exluding cardiac arrythmia.
 #' @docType data
 #' @keywords datasets
 #' @format list of character vectors
@@ -135,32 +140,16 @@ NULL
 #' @aliases ahrqComorbid ahrq icd10_map_ahrq
 NULL
 
-#' @title Quan adaptation of Deyo/Charlson comorbidities
-#' @description Derived programmatically from the SAS code used in the original
-#'   publication. According to the referenced study, this provides the best
-#'   presdictor of in-patient to <30d mortality. Of note, Deyo drops the
-#'   distinction between leukemia, lymphoma and non-metastatic cancer. As far as
-#'   I have looked into this, in the rare cases where someone had two or three
-#'   of leukemia, lymphoma and non-metastatic cancer, the Quan adaptation would
-#'   give a lower Charlson score than the original scheme. The Deyo original
-#'   Charlson to ICD-9-CM groups does include distinct categories for these
-#'   things.
-#' @docType data
-#' @keywords datasets
-#' @format list of character vectors, each named by co-morbidity
-#' @references Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew Fong,
-#'   Bernard Burnand, Jean-Christophe Luthi, L. Duncan Saunders, Cynthia A.
-#'   Beck, Thomas E. Feasby, and William A. Ghali. "Coding Algorithms for
-#'   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
-#'   Care 43, no. 11 (November 1, 2005): 1130-39.
-#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
-#'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
-#' @name icd9_map_quan_deyo
-#' @aliases quanDeyoComorbid icd10_map_quan_deyo
-NULL
-
-#' @title Quan adaptation of Elixhauser comorbidities
-#' @description These were transcribed directly from the Quan paper referenced.
+#' Quan adaptation of Deyo/Charlson comorbidities
+#'
+#' Derived programmatically from the SAS code used in the original publication.
+#' According to the referenced study, this provides the best presdictor of
+#' in-patient to <30d mortality. Of note, Deyo drops the distinction between
+#' leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
+#' this, in the rare cases where someone had two or three of leukemia, lymphoma
+#' and non-metastatic cancer, the Quan adaptation would give a lower Charlson
+#' score than the original scheme. The Deyo original Charlson to ICD-9-CM groups
+#' does include distinct categories for these things.
 #' @docType data
 #' @keywords datasets
 #' @format list of character vectors, each named by co-morbidity
@@ -172,17 +161,36 @@ NULL
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #'
+#' @name icd9_map_quan_deyo
+#' @aliases quanDeyoComorbid icd10_map_quan_deyo
+NULL
+
+#' Quan adaptation of Elixhauser comorbidities
+#'
+#' These were transcribed directly from the Quan paper referenced.
+#' @docType data
+#' @keywords datasets
+#' @format list of character vectors, each named by co-morbidity
+#' @references Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew Fong,
+#'   Bernard Burnand, Jean-Christophe Luthi, L. Duncan Saunders, Cynthia A.
+#'   Beck, Thomas E. Feasby, and William A. Ghali. "Coding Algorithms for
+#'   Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
+#'   Care 43, no. 11 (November 1, 2005): 1130-39.
+#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
+#'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+#'
+#'
 #' @name icd9_map_quan_elix
 #' @aliases quanElixComorbid icd10_map_quan_elix
 NULL
 
-#' @title Elixhauser comorbidities
-#' @description The original mapping of Elixhauser's ICD-9-CM to 30
-#'   comorbidities. According to Sharabiani et al, this mapping provides the
-#'   best long-term mortality prediction. The weaknesses of this mapping are
-#'   that it is based on slightly out-dated ICD-9 codes. I have not yet verified
-#'   what changes to the ICD-9-CM specification between 1998 and now would
-#'   impact this mapping.
+#' Elixhauser comorbidities
+#'
+#' The original mapping of Elixhauser's ICD-9-CM to 30 comorbidities. According
+#' to Sharabiani et al, this mapping provides the best long-term mortality
+#' prediction. The weaknesses of this mapping are that it is based on slightly
+#' out-dated ICD-9 codes. I have not yet verified what changes to the ICD-9-CM
+#' specification between 1998 and now would impact this mapping.
 #' @docType data
 #' @keywords datasets
 #' @format list of character vectors, each named by co-morbidity
@@ -199,20 +207,21 @@ NULL
 #' @aliases elixComorbid icd10_map_elix
 NULL
 
-#' @title Comorbidity names
-#' @description These lists provide correctly sorted names of the comorbidities
-#'   and their particular permutations in both full and abbreviated forms.
+#' Comorbidity names
 #'
-#'   In the Elixhauser derived mappings, uncomplicated and complicated
-#'   hypertension are listed separately, but are always combined in the final
-#'   analyses. Uncomplicated and complicated hypertension are list separately
-#'   and as "Hypertension, combined." _abbrev suffix indicates a very short
-#'   space-free description. Quan's version of Elixhauser is identical. AHRQ's
-#'   update drops the arrythmia field. The naming convention is a root, e.g.
-#'   \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
-#'   \code{_abbrev}. The Charlson derived mappings do not include hypertension.
-#'   _abbreviated comorbidity names are helpful for interactive work, whereas
-#'   the full names might be prefered for plotting.
+#' These lists provide correctly sorted names of the comorbidities and their
+#' particular permutations in both full and abbreviated forms.
+#'
+#' In the Elixhauser derived mappings, uncomplicated and complicated
+#' hypertension are listed separately, but are always combined in the final
+#' analyses. Uncomplicated and complicated hypertension are list separately and
+#' as "Hypertension, combined." _abbrev suffix indicates a very short space-free
+#' description. Quan's version of Elixhauser is identical. AHRQ's update drops
+#' the arrythmia field. The naming convention is a root, e.g.
+#' \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
+#' \code{_abbrev}. The Charlson derived mappings do not include hypertension.
+#' _abbreviated comorbidity names are helpful for interactive work, whereas the
+#' full names might be prefered for plotting.
 #' @format list, with character/numeric code. 'Hypertension, uncomplicated' and
 #'   'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
 #'   and metastasis are counted independently, as in the original paper, giving
@@ -232,10 +241,9 @@ NULL
 #' @docType data
 NULL
 
-#' @title list of annual versions of billable leaf nodes of ICD-9-CM
-#' @name icd9cm_billable
-#' @aliases icd9Billable
-#' @description These are derived from the CMS published updates, with versions
+#' list of annual versions of billable leaf nodes of ICD-9-CM
+#'
+#' These are derived from the CMS published updates, with versions
 #'   23 to 32 currently available going back to 2004/5. The source files back to
 #'   version 27 have short and long descriptions. The short descriptions are in
 #'   ASCII with no special characters, whereas the long descriptions contain
@@ -250,45 +258,47 @@ NULL
 #'   string, e.g. "32". The constituent data frames have columns \code{icd9},
 #'   \code{shortDesc}, and \code{longDesc}.
 #' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+#' @name icd9cm_billable
+#' @aliases icd9Billable
 NULL
 
-#' @description Hospital discharge data from Vermont
-#' @title De-identified data from public Vermont source for 2013
-#' @name vermont_dx
-#' @details Conditions of Release Release of public use data is subject to the
-#'   following conditions, which the requestor agrees to upon accepting copies
-#'   of the data:
+#' Hospital discharge data from Vermont
 #'
-#'   1. The data may not be used in any manner that attempts to or does
-#'   identify, directly or indirectly, any individual patient or physician.
+#' De-identified data from public Vermont source for 2013
 #'
-#'   2. The requestor agrees to incorporate the following, or a substantially
-#'   similar, disclaimer in all reports or publications that include public use
-#'   data: "Hospital discharge data for use in this study were supplied by the
-#'   Vermont Association of Hospitals and Health Systems-Network Services
-#'   Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
-#'   Securities and Health Care Administration (BISHCA). All analyses,
-#'   interpretations or conclusions based on these data are solely that of [the
-#'   requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
-#'   analyses, interpretations or conclusions. In addition, as the data have
-#'   been edited and processed by VAHHS-NSO, BISHCA assumes no responsibility
-#'   for errors in the data due to coding or processing"
+#' Conditions of Release Release of public use data is subject to the following
+#' conditions, which the requestor agrees to upon accepting copies of the data:
+#'
+#' 1. The data may not be used in any manner that attempts to or does identify,
+#' directly or indirectly, any individual patient or physician.
+#'
+#' 2. The requestor agrees to incorporate the following, or a substantially
+#' similar, disclaimer in all reports or publications that include public use
+#' data: "Hospital discharge data for use in this study were supplied by the
+#' Vermont Association of Hospitals and Health Systems-Network Services
+#' Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
+#' Securities and Health Care Administration (BISHCA). All analyses,
+#' interpretations or conclusions based on these data are solely that of [the
+#' requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
+#' analyses, interpretations or conclusions. In addition, as the data have been
+#' edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
+#' errors in the data due to coding or processing"
 #' @source
 #' \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
 #' @format CSV original, minimally processed into R data frame.
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration
 #' @docType data
+#' @name vermont_dx
 NULL
 
-#' @title United States Transuranium & Uranium Registries
-#' @description an ICD-10 data set (not ICD-10-CM) with mortality from the
-#'   United States Transuranium & Uranium Registries, published in the public
-#'   domain.
+#' United States Transuranium & Uranium Registries
+#'
+#' an ICD-10 data set (not ICD-10-CM) with mortality from the United States
+#' Transuranium & Uranium Registries, published in the public domain.
 #' @name uranium_pathology
 #' @source \url{http://www.ustur.wsu.edu/database/}
 #'   \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
-#'
 #' @docType data
 #' @keywords datasets
 NULL

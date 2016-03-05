@@ -11,9 +11,8 @@ sasDropOtherAssignment(x)
 string itself)}
 }
 \description{
-this is happening in the DRG definitions for AHRQ comorbidities.
-  We have data like: "HTNDRG" 079,305 = "YES" I would like this to be
-  list(HTNDRG="079,305")
+this is happening in the DRG definitions for AHRQ comorbidities. We have data
+like: "HTNDRG" 079,305 = "YES" I would like this to be list(HTNDRG="079,305")
 }
 \keyword{internal}
 \keyword{manip}
