@@ -33,7 +33,7 @@ If \code{visit_name} is not specified, the first column is used.}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
 
-\item{return.df}{Deprecated. Use return_df isntead. Single logical value, if
+\item{return.df}{Deprecated. Use return_df instead. Single logical value, if
 \code{TRUE}, return the result as a data frame with the first column being
 the \code{visitId}, and the second being the count. If \code{visitId} was a
 factor or named differently in the input, this is preserved.}

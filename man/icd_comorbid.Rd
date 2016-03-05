@@ -162,7 +162,7 @@ is guessed from the input data.}
 short or decimal.}
 
 \item{abbrev_names}{single logical value that defaults to \code{TRUE}, in
-which case the ishorter human-readable names stored in e.g.
+which case the shorter human-readable names stored in e.g.
 \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.}
 
 \item{hierarchy}{single logical value that defaults to \code{TRUE}, in

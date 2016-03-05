@@ -46,7 +46,7 @@ version being used, e.g. ICD-9-CM, the WHO version of ICD-10, or other.}
 
 \item{billable}{single logical value, whether to limit return codes also by
 whether they are billable, i.e. leaf nodes. This is really only designed
-for use with ICD-9-CM, iCD-10-CM etc, since the WHO versions are not
+for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not
 designed for billing, but for public health and death reporting.}
 
 \item{icd9}{is

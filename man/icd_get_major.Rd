@@ -5,6 +5,7 @@
 \alias{icd9GetMajorShort}
 \alias{icd9IsMajor}
 \alias{icd_get_major}
+\alias{icd_get_major.icd10}
 \alias{icd_get_major.icd9}
 \title{Returns major component of code (before decimal)}
 \usage{
@@ -17,6 +18,8 @@ icd9GetMajor(x, isShort)
 icd9IsMajor(x)
 
 icd_get_major(x)
+
+\method{icd_get_major}{icd10}(x)
 }
 \arguments{
 \item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
@@ -26,11 +29,18 @@ is guessed from the input data.}
 \description{
 Returns major component of code (before decimal)
 }
+\details{
+For ICD-10, this is an initial implementation with stringr. If speed needed, then can re-use
+C++ ICD-9 version: just grabbing the first three characters, after all,
+and this is much easier in ICD-10 then ICD-9
+}
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd9}: Get major part of ICD-9 code, i.e. first three
 digits of numeric or V code, or first four digits of E code. This is the part
 before the decimal, when a decimal point is used.
+
+\item \code{icd10}: Get major part of an ICD-10 code
 }}
 \keyword{internal}
 \keyword{manip}

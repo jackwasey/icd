@@ -2,7 +2,7 @@
 % Please edit documentation in R/util.R
 \name{trim}
 \alias{trim}
-\title{Trim leading and trailing whitespace}
+\title{Trim leading and trailing white space}
 \usage{
 trim(x)
 }

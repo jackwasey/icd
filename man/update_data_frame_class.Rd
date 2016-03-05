@@ -22,7 +22,7 @@ single ICD version class cannot be applied}
 }
 \description{
 If only one ICD code type is defined in columns in a matrix or data.frame,
-then update the class of the data frame to relfect that type.
+then update the class of the data frame to reflect that type.
 }
 \keyword{internal}
 

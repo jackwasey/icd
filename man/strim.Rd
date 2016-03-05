@@ -2,7 +2,7 @@
 % Please edit documentation in R/util.R
 \name{strim}
 \alias{strim}
-\title{Trim leading and trailing whitespace from a single string}
+\title{Trim leading and trailing white space from a single string}
 \usage{
 strim(x)
 }

@@ -15,12 +15,12 @@ file will be saved in \code{data-raw}, otherwise (the default) the data is
 simply returned invisibly.}
 
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and filename if the file already exists in
+internet, only return path and file name if the file already exists in
 data-raw. This is helpful for testing without using the internet.}
 }
 \value{
-data frame with icd9, short_desc and long_desc columns. NA is placed
-  in long_desc when not available.
+data frame with \code{icd9}, \code{short_desc} and \code{long_desc} columns. \code{NA} is placed
+  in \code{long_desc} when not available.
 }
 \description{
 for versions 23 to 32, those which are on the CMS web site, get

@@ -394,7 +394,7 @@ icd_comorbid_quan_deyo.data.frame <- function(x, ..., icd_name = get_icd_name(x)
 
 #' @rdname icd_comorbid
 #' @param abbrev_names  single logical value that defaults to \code{TRUE}, in
-#'   which case the ishorter human-readable names stored in e.g.
+#'   which case the shorter human-readable names stored in e.g.
 #'   \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.
 #' @param hierarchy single logical value that defaults to \code{TRUE}, in
 #'   which case the hierarchy defined for the mapping is applied. E.g. in
@@ -659,7 +659,7 @@ icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
 
 #' sequence columns of comorbidities
 #'
-#' Get sequence of column indices of comorbidity data rame
+#' Get sequence of column indices of comorbidity data frame
 #' @param cbd matrix or data.frame of comorbidities
 #' @keywords internal
 cr <- function(x)

@@ -19,11 +19,11 @@ re_wrap_or(x)
 ICD codes will accept leading and trailing whitespace.}
 }
 \description{
-update regex to limit by start and end, with or without whitespace
+update regex to limit by start and end, with or without white space
 }
 \section{Functions}{
 \itemize{
-\item \code{re_just_ws}: allow whitespace
+\item \code{re_just_ws}: allow white space
 
 \item \code{re_wrap_or}: contain any \code{|} options within a regex, e.g. ICD-9
 codes without \code{^} or \code{$}.

@@ -15,7 +15,7 @@ this just grabs 2016.
 }
 \details{
 The factor generation uses \code{sort.default} which is locale dependent.
-This meant a lot of time debugging a problem when whitespace was ignored for
+This meant a lot of time debugging a problem when white space was ignored for
 sorting on some platforms, but not others (e.g. travis and wercker).
 }
 \references{

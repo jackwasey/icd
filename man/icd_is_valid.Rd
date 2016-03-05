@@ -172,7 +172,7 @@ declaring method here
  \code{icd9_is_valid_major} validates just
   the 'major' three-digit part of an ICD-9 code. This can in fact be provided
   as a numeric, since there is no ambiguity. Numeric-only codes should be one
-  to three digitis, V codes are followed by one or two digits, and E codes
+  to three digits, V codes are followed by one or two digits, and E codes
   always by three digits between 800 and 999.
 }
 

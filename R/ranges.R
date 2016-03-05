@@ -91,7 +91,7 @@ icd_expand_range.character <- function(start, end, short_code = NULL, defined = 
 #' This will need generalizing to any list of 'defined' codes, e.g. WHO or other
 #'
 #' There are so many permutations of alphaunmerics after the decimal place
-#' thatit would be easy to generate many millions with simple ranges, the vast
+#' that it would be easy to generate many millions with simple ranges, the vast
 #' majority of which would be undefined.
 #' @param start character vector of length one containing an ICD code
 #' @param end  character vector of length one containing an ICD code

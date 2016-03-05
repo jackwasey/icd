@@ -115,7 +115,7 @@ Convert 'decimal' format (123.45 style) ICD-9 codes into the
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Explain ICD codes from a character vecotr, guessing ICD version
+\item \code{character}: Explain ICD codes from a character vector, guessing ICD version
 
 \item \code{list}: Explain all ICD-9 codes in a list of vectors
 
@@ -126,7 +126,7 @@ actually, this is ICD-9-CM
 
 \item \code{icd9cm}: explain character vector of ICD-9-CM codes
 
-\item \code{icd10}: ICD-10 explaination not implemented yet
+\item \code{icd10}: ICD-10 explanation not implemented yet
 
 \item \code{numeric}: explain numeric vector of ICD-9 codes, with warning.
 In general, this is not allowed because of the possible ambiguity of

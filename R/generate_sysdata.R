@@ -69,7 +69,7 @@ generate_sysdata <- function(save_data = TRUE) {
       "CMS30_DESC_LONG_DX 080612.txt",
       "CMS29_DESC_LONG_DX.101111.txt",
       "CMS28_DESC_LONG_DX.txt",
-      NA, # see other_filename
+      NA, # see other filename
       NA, # no long descriptions available for these years
       NA,
       NA,

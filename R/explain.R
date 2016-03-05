@@ -49,7 +49,7 @@
 icd_explain <- function(...)
   UseMethod("icd_explain")
 
-#' @describeIn icd_explain Explain ICD codes from a character vecotr, guessing ICD version
+#' @describeIn icd_explain Explain ICD codes from a character vector, guessing ICD version
 #' @export
 #' @keywords internal
 #' @method icd_explain character
@@ -115,7 +115,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
   )
 }
 
-#' @describeIn icd_explain ICD-10 explaination not implemented yet
+#' @describeIn icd_explain ICD-10 explanation not implemented yet
 #' @keywords internal
 icd_explain.icd10 <- function(x, short_code = icd_guess_short.icd9(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {

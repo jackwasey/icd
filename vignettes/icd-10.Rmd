@@ -55,7 +55,7 @@ The sample data is in the 'long' format, i.e. multiple rows per case
 uranium_pathology[1:10, ]
 ```
 
-We can convert the date from long to wide format easily. Tthis is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using dplyr and friends for this manipulation.
+We can convert the date from long to wide format easily. This is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using dplyr and friends for this manipulation.
 
 ```{r uranium-wide}
 uranium_pathology %>% icd_long_to_wide %>% head

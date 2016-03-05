@@ -72,7 +72,7 @@ test_that("major dispatch intact", {
   expect_false(icd_is_valid_major(icd10cm("999")))
 })
 
-test_that("major dispatch intact, whitespace not okay", {
+test_that("major dispatch intact, white space not okay", {
   expect_true(icd_is_valid_major(icd9("V10"), whitespace_ok = FALSE))
   expect_true(icd_is_valid_major(icd9cm("V10"), whitespace_ok = FALSE))
   expect_true(icd_is_valid_major(icd10("A00"), whitespace_ok = FALSE))

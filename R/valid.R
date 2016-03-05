@@ -17,7 +17,7 @@
 
 #' limit a regex to just what is given
 #'
-#' update regex to limit by start and end, with or without whitespace
+#' update regex to limit by start and end, with or without white space
 #' @param x single string containing a regex
 #' @template whitespace_ok
 #' @keywords internal
@@ -30,7 +30,7 @@ re_just <- function(x, whitespace_ok = FALSE) {
     paste0("^", x, "$")
 }
 
-#' @describeIn re_just allow whitespace
+#' @describeIn re_just allow white space
 #' @keywords internal
 re_just_ws <- function(x) {
   re_just(x, whitespace_ok = TRUE)
@@ -147,7 +147,7 @@ re_icd10_any <- re_icd10cm_any
 #' @section Three-digit validation: \code{icd9_is_valid_major} validates just
 #'   the 'major' three-digit part of an ICD-9 code. This can in fact be provided
 #'   as a numeric, since there is no ambiguity. Numeric-only codes should be one
-#'   to three digitis, V codes are followed by one or two digits, and E codes
+#'   to three digits, V codes are followed by one or two digits, and E codes
 #'   always by three digits between 800 and 999.
 #' @details Leading zeroes in the decimal form are not ambiguous. Although
 #'   integer ICD-9 codes could be intended by the user, there is a difference
@@ -525,8 +525,9 @@ icd_get_major <- function(x) {
   UseMethod("icd_get_major")
 }
 
-#' initial implementation via stringr. If speed needed, then can probably reuse
-#' C++ ICD-9 version: i'm just grabbing the first three characters, after all,
+#' @describeIn icd_get_major Get major part of an ICD-10 code
+#' @details For ICD-10, this is an initial implementation with stringr. If speed needed, then can re-use
+#' C++ ICD-9 version: just grabbing the first three characters, after all,
 #' and this is much easier in ICD-10 then ICD-9
 #' @export
 #' @keywords internal

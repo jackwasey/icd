@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' Trim leading and trailing whitespace from a single string
+#' Trim leading and trailing white space from a single string
 #'
 #' \code{NA} is accepted (and returned as \code{NA_character_})
 #' @param x character vector of length one
@@ -29,7 +29,7 @@ strim <- function(x) {
     return(NA_character_)
 }
 
-#' Trim leading and trailing whitespace
+#' Trim leading and trailing white space
 #'
 #' \code{NA} is accepted and returned, probably as \code{NA_character_}
 #' @details TODO: replace with str_trim but test speed first.
@@ -68,7 +68,7 @@ as_char_no_warn <- function(x) {
 #' TODO: replace with str_replace
 #' @param x character vector
 #' @param pattern passed to \code{gsub} default is " "
-#' @param use_bytes passed to gsub, default is the slightly quicker \code{TRUE}
+#' @param use_bytes single logical passed to 'gsub', default is the slightly quicker \code{TRUE}
 #' @return character vector of same length as input
 #' @keywords internal
 strip <- function(x, pattern = " ", use_bytes = TRUE)
@@ -116,8 +116,8 @@ logical_to_binary <- function(x) {
 #' @param pattern vector of regex which should match exactly two strings for
 #'   each element in \code{stringr}. If \code{pos} is specified, this rule is
 #'   relaxed.
-#' @param pos optional pair of integers with positions of the 1st and 2nd
-#'   desired matches, when multiple matches are made by the regex
+#' @param pos optional pair of integers with positions of the first and second
+#'   desired matches, when multiple matches are made by the regular expression
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal

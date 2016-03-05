@@ -22,7 +22,7 @@ vector or matrix, with first item of each row (or whole vector)
   code, which may include a decimal point.
 }
 \description{
-removes whitespace and separates V or E if present.
+removes white space and separates V or E if present.
 }
 \keyword{internal}
 \keyword{manip}

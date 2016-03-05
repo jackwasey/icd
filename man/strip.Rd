@@ -11,7 +11,7 @@ strip(x, pattern = " ", use_bytes = TRUE)
 
 \item{pattern}{passed to \code{gsub} default is " "}
 
-\item{use_bytes}{passed to gsub, default is the slightly quicker \code{TRUE}}
+\item{use_bytes}{single logical passed to 'gsub', default is the slightly quicker \code{TRUE}}
 }
 \value{
 character vector of same length as input

@@ -17,7 +17,7 @@ This will need generalizing to any list of 'defined' codes, e.g. WHO or other
 }
 \details{
 There are so many permutations of alphaunmerics after the decimal place
-thatit would be easy to generate many millions with simple ranges, the vast
+that it would be easy to generate many millions with simple ranges, the vast
 majority of which would be undefined.
 }
 \keyword{internal}

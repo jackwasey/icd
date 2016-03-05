@@ -200,7 +200,7 @@ icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
 
 #' Check whether ICD-9 code(s) is/are billable
 #'
-#' Tests ICD-9 codes to see whether they are leaf nodes inthe ICD-9-CM hierarchy
+#' Tests ICD-9 codes to see whether they are leaf nodes in the ICD-9-CM hierarchy
 #' @keywords internal
 icd9cm_is_billable <- function(x, version = icd9cm_latest_edition()) {
   UseMethod("icd_is_billable")

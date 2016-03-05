@@ -194,7 +194,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   assert_flag(save_data)
   assert_flag(offline)
 
-  # download the file and/or just get the path/filename to it, fails if missing
+  # download the file and/or just get the path or file name, fails if missing
   # by default
   f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
 

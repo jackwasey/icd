@@ -130,7 +130,7 @@ NULL
 #'
 #' This mapping of comorbidities to ICD-9 codes is dervied directly from SAS
 #' code provided by AHRQ, and translated into this R data structure. This is a
-#' revision of the Elixhauser system, notably exluding cardiac arrythmia.
+#' revision of the Elixhauser system, notably excluding cardiac arrythmia.
 #' @docType data
 #' @keywords datasets
 #' @format list of character vectors

@@ -16,7 +16,7 @@ download_to_data_raw(url, file_name = str_extract(url, "[^/]*$"),
 \item{file_name}{file name of a single file in that zip}
 
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and filename if the file already exists in
+internet, only return path and file name if the file already exists in
 data-raw. This is helpful for testing without using the internet.}
 
 \item{force}{logical, if TRUE, then download even if already in

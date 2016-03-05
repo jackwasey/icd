@@ -314,7 +314,7 @@ icd_comorbid(patientData, myMap) # no +ve
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes.
-Suppose we want to exact match only real ICD-9 codes when looking up comorbdities for some patients. E.g. if the coder accidentally omited a trailing zero, e.g. code `003.20` (*Localized salmonella infection, unspecified*) might have been written as `003.2` which has a heading (*Localized salmonella infections*) but is not itself billable. Use of ICD-9 codes for comorbidities generally assumes the codes are either right or wrong. How do we match only real codes, for a strict interpretation of comorbidities? It's one line or R code:
+Suppose we want to exact match only real ICD-9 codes when looking up comorbdities for some patients. E.g. if the coder accidentally omitted a trailing zero, e.g. code `003.20` (*Localized salmonella infection, unspecified*) might have been written as `003.2` which has a heading (*Localized salmonella infections*) but is not itself billable. Use of ICD-9 codes for comorbidities generally assumes the codes are either right or wrong. How do we match only real codes, for a strict interpretation of comorbidities? It's one line or R code:
 
 ```{r realmapping}
 ahrqStrict <- lapply(icd9_map_ahrq, icd_get_defined)
@@ -323,15 +323,15 @@ str(icd9_map_ahrq[1:5]) # and first five of the result:
 ```
 Note the much smaller numbers of codes in each group, now we have discarded all the ones which are not defined as diagnoses.
 
-### Which three-character ICD-9 codes have no subcodes
+### Which three-character ICD-9 codes have no child codes
 The ICD-9-CM scheme is structured as follows:
  - Chapter
  - Sub-chapter
- - Major part (3 digit codes)
- - sub-division (1st decimal place)
- - sub-sub-division (2nd decimal place)
+ - Major part (three-digit codes)
+ - sub-division (first decimal place)
+ - sub-sub-division (second decimal place)
  
- For most combinations of 0 to 9, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
+ For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
 ```{r "find three digit billable"}
 icd9cm_hierarchy$code %>% icd_get_defined -> all_real
 # select the non-V and non-E codes

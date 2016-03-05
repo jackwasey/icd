@@ -10,7 +10,7 @@ cr(x)
 \item{cbd}{matrix or data.frame of comorbidities}
 }
 \description{
-Get sequence of column indices of comorbidity data rame
+Get sequence of column indices of comorbidity data frame
 }
 \keyword{internal}
 

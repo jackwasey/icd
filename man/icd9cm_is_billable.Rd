@@ -15,7 +15,7 @@ icd9cm_is_billable(x, version = icd9cm_latest_edition())
   version = icd9cm_latest_edition())
 }
 \description{
-Tests ICD-9 codes to see whether they are leaf nodes inthe ICD-9-CM hierarchy
+Tests ICD-9 codes to see whether they are leaf nodes in the ICD-9-CM hierarchy
 }
 \section{Methods (by class)}{
 \itemize{

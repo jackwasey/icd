@@ -19,7 +19,7 @@ implemented thus far}
 returned invisibly)}
 
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and filename if the file already exists in
+internet, only return path and file name if the file already exists in
 data-raw. This is helpful for testing without using the internet.}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}

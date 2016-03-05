@@ -13,8 +13,8 @@ str_pair_match(string, pattern, pos, swap = FALSE, ...)
 each element in \code{stringr}. If \code{pos} is specified, this rule is
 relaxed.}
 
-\item{pos}{optional pair of integers with positions of the 1st and 2nd
-desired matches, when multiple matches are made by the regex}
+\item{pos}{optional pair of integers with positions of the first and second
+desired matches, when multiple matches are made by the regular expression}
 
 \item{swap}{logical scalar, whether to swap the names and values. Default is
 not to swap, so the first match becomes the name.}

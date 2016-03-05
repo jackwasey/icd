@@ -86,7 +86,7 @@ drop DM if DMcx is present, etc.}
 Charlson score is calculated in the basis of the Quan revision
   of Deyo's ICD-9 mapping. (Peptic Ulcer disease no longer warrants a point.)
   Quan published an updated set of scores, but it seems most people use the
-  original scores for easier comaprison between studies, even though Quan's
+  original scores for easier comparison between studies, even though Quan's
   were more predictive.
 }
 \details{
@@ -94,7 +94,7 @@ When used, hierarchy is applied per Quan, "The following comorbid
   conditions were mutually exclusive: diabetes with chronic complications and
   diabetes without chronic complications; mild liver disease and moderate or
   severe liver disease; and any malignancy and metastatic solid tumor." The
-  "quan" scoring weights come from the 2011 paper
+  Quan scoring weights come from the 2011 paper
   (dx.doi.org/10.1093/aje/kwq433). The comorbidity weights were recalculated
   using updated discharge data, and some changes, such as Myocardial
   Infarcation decreasing from 1 to 0, may reflect improved outcomes due to

@@ -11,7 +11,7 @@ icd9_parse_quan_deyo_sas(save_data = FALSE, offline = FALSE)
 Defaults to \code{FALSE}.}
 
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and filename if the file already exists in
+internet, only return path and file name if the file already exists in
 data-raw. This is helpful for testing without using the internet.}
 
 \item{condense}{Deprecated. The map is not condensed by default. If required,

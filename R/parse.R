@@ -73,8 +73,8 @@ icd_update_everything <- function() {
 #'   file will be saved in \code{data-raw}, otherwise (the default) the data is
 #'   simply returned invisibly.
 #' @template offline
-#' @return data frame with icd9, short_desc and long_desc columns. NA is placed
-#'   in long_desc when not available.
+#' @return data frame with \code{icd9}, \code{short_desc} and \code{long_desc} columns. \code{NA} is placed
+#'   in \code{long_desc} when not available.
 #' @examples
 #'   # To populate the data-raw directory with the ICD-9 source:
 #'   # not included in installed package, run using the full source from github,

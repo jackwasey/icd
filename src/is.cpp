@@ -53,7 +53,7 @@ bool icd9IsASingleVE(const char* s) {
 //'   character)
 //' @description Current returns a vector of \code{bool} which is not thread safe,
 //'   or particularly fast, although it is memory efficient in the standard
-//'   borked implementation. As of icd9 version 1.2, this is not called by
+//'   implementation. As of icd9 version 1.2, this is not called by
 //'   threaded code, but this could change, so beware! ASCII spaces are trimmed
 //'   from the start of the string before testing, but no other whitesapce
 //' @param sv vector of strings

@@ -17,7 +17,7 @@
 
 #' extract alphabetic, and numeric part of icd9 code prefix
 #'
-#' removes whitespace and separates V or E if present.
+#' removes white space and separates V or E if present.
 #' @template icd9-any
 #' @return vector or matrix, with first item of each row (or whole vector)
 #'   containing V, E or "". The second part contains the numeric parts of the

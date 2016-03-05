@@ -181,7 +181,7 @@ icd10who <- function(x) {
 #' column therein
 #'
 #' If only one ICD code type is defined in columns in a matrix or data.frame,
-#' then update the class of the data frame to relfect that type.
+#' then update the class of the data frame to reflect that type.
 #' @param x \code{data.frame} of patient data
 #' @template icd_name
 #' @param must_work single logical, if \code{TRUE} (the default) will stop if a

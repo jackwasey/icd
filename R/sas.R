@@ -45,7 +45,7 @@ sas_format_extract <- function(sas_lines) {
 
   sas_lines <- strsplit(sas_lines, split = "\\;")[[1]]
 
-  #strip whitespace and ?undetected newline characters, replace with single
+  #strip white space and ?undetected newline characters, replace with single
   #spaces.
   sas_lines <- gsub(pattern = "\\\\n", "", sas_lines) # nolint
   sas_lines <- gsub(pattern = "[[:space:]]+", " ", sas_lines)
@@ -94,8 +94,7 @@ sas_icd10_assignments_to_list <- function(x) {
 
 #' get assignments from a character string strings.
 #'
-#' #form is aaa-bbb, ccc-ddd, eee, etc. = "name" abc-def, ghi, etc. =
-#' "anothername" there is no delimiter between each assignment. '
+#' The format of assignments is best seen in the SAS source files.
 #' @param x is a character string containing space delimited assignments, in SAS
 #'   declaration format.
 #' @param strip_whitespace will strip all whitespace from the returned values
