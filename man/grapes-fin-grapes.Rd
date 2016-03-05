@@ -6,8 +6,14 @@
 \usage{
 x \%fin\% table
 }
+\arguments{
+\item{x}{vector}
+
+\item{table}{vector}
+}
 \description{
 Uses \code{\link[fastmatch]{fmatch}} which creates hash table, and re-uses if
 \code{table} is re-used.
 }
+\keyword{internal}
 

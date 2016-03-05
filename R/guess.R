@@ -184,14 +184,16 @@ icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_ic
 #'
 #' Guesses the version of given ICD codes and sets the class of the
 #'   returned data according to the guess.
+#' @param x vector of ICD codes of some type
+#' @template short_code
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
-icd_guess_version_update <- function(x) {
+icd_guess_version_update <- function(x, short_code = icd_guess_short(x)) {
   # could either return a method from the guess version function (nice and
   # functional), use the returned string as a function name to invoke, or switch
   # on the string. Just adding the class is bad, e.g. would miss icd10cm if
   # added
-  ver <- icd_guess_version(x)
+  ver <- icd_guess_version(x, short_code)
   if (ver == "icd9")
     icd9(x)
   else if (ver == "icd10")

@@ -4,7 +4,14 @@
 \alias{icd_guess_version_update}
 \title{Guess version of ICD and update class}
 \usage{
-icd_guess_version_update(x)
+icd_guess_version_update(x, short_code = icd_guess_short(x))
+}
+\arguments{
+\item{x}{vector of ICD codes of some type}
+
+\item{short_code}{single logical value which determines whether the ICD-9 code
+provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
+is guessed from the input data.}
 }
 \value{
 the input data with appropriate ICD class set

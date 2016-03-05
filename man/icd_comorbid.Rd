@@ -28,6 +28,7 @@
 \alias{icd_comorbid_elix.icd9}
 \alias{icd_comorbid_quan_deyo}
 \alias{icd_comorbid_quan_deyo.data.frame}
+\alias{icd_comorbid_quan_deyo.icd9}
 \alias{icd_comorbid_quan_elix}
 \alias{icd_comorbid_quan_elix.data.frame}
 \alias{icd_comorbid_quan_elix.icd9}
@@ -72,6 +73,9 @@ icd_comorbid_elix(...)
 \method{icd_comorbid_ahrq}{icd9}(..., abbrev_names = TRUE, hierarchy = TRUE)
 
 \method{icd_comorbid_ahrq}{icd10}(..., abbrev_names = TRUE,
+  hierarchy = TRUE)
+
+\method{icd_comorbid_quan_deyo}{icd9}(..., abbrev_names = TRUE,
   hierarchy = TRUE)
 
 \method{icd_comorbid_quan_elix}{icd9}(..., abbrev_names = TRUE,
@@ -200,6 +204,11 @@ For ICD-10, there are two lookup methods. The classic lookup, as
 The common comorbidity calculation code does not depend on ICD type.
   There is some type conversion so the map and input codes are all in 'short'
   format, fast factor generation, then fast comorbidity assignment.
+
+For Charlson/Deyo comorbidities, strictly speaking, there is no
+  dropping of more e.g. uncomplicated DM if complicated DM exists, however,
+  this is probaably useful, in general and is essential when calculating the
+  Charlson score.
 }
 \section{Methods (by class)}{
 \itemize{
