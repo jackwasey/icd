@@ -136,8 +136,8 @@ icd_wide_to_long <- function(x,
 
 #' Convert ICD data from long to wide format
 #'
-#' This is more complicated than reshape or \link{reshape2:dcast} allows. This
-#' is a reasonably simple solution using built-in functions.
+#' This is more complicated than reshape or \link{reshape2}'s \code{dcast}
+#' allows. This is a reasonably simple solution using built-in functions.
 #' @param x data.frame of long-form data, one column for visit_name and one for
 #'   ICD code
 #' @template visit_name
