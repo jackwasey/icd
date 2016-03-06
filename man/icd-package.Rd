@@ -18,10 +18,10 @@ billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan
 (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 }
 \details{
-\describe{
-  \item{Comorbidities}{ \code{\link{icd_comorbid}} determines co-morbidities
-  for a set of patients with one or more ICD-9 codes each.
-  \code{\link{icd9Charlson}} calculates Charlson score (Comorbidity Index).
+\describe{ \item{Comorbidities}{ \code{\link{icd_comorbid}}
+  determines co-morbidities for a set of patients with one or more ICD-9
+  codes each. \code{\link{icd9Charlson}} calculates Charlson score
+  (Comorbidity Index).
 
   \itemize{
 
@@ -59,8 +59,9 @@ billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan
   \code{\link{icd_sort}} sorts in hierarchical, then numerical order, so
   100.0 comes before 100.00, for example. \code{\link{icd_wide_to_long}} and
   \code{\link{icd9LongToWide}} convert the two most common data structures
-  containing patient disease data. This is more sophisticated than standard R
-  or Hadleyverse reshaping.}
+  containing patient disease data. This is more sophisticated and tailored to
+  the problem than base reshaping or extension packages, although these could
+  no doubt be used.}
 
   \item{Explanation, or decoding}{Use \code{\link{icd_explain}} to convert a
   list of codes into human-readable descriptions. This function can

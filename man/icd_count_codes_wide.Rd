@@ -19,22 +19,26 @@ format.}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
 
-\item{return.df}{Deprecated. Use return_df instead. Single logical value, if
-\code{TRUE}, return the result as a data frame with the first column being
-the \code{visitId}, and the second being the count. If \code{visitId} was a
-factor or named differently in the input, this is preserved.}
+\item{return.df}{Deprecated. Use \code{return_df} instead. Single logical
+value, if \code{TRUE}, return the result as a data frame with the first
+column being the \code{visitId}, and the second being the count. If
+\code{visitId} was a factor or named differently in the input, this is
+preserved.}
 
 \item{aggregate, }{single logical, default is FALSE. If TRUE, the length (or
 rows) of the output will no longer match the input, but duplicate visitIds
 will be counted together.}
 
-\item{visit_name}{The name of the column in the data frame which contains the patient or visit identifier. Typically
-this is the visit identifier, since patients come leave and enter hospital with different ICD-9 codes. It is a
-character vector of length one. If left empty, or \code{NULL}, then an attempt is made to guess which field has the
-ID for the patient encounter (not a patient ID, although this can of course be specified directly). The guesses
-proceed until a single match is made. Data frames may be wide with many matching fields, so to avoid false
-positives, anything but a single match is rejected. If there are no successful guesses, and \code{visit_id} was not
-specified, then the first column of the data frame is used.}
+\item{visit_name}{The name of the column in the data frame which contains the
+patient or visit identifier. Typically this is the visit identifier, since
+patients come leave and enter hospital with different ICD-9 codes. It is a
+character vector of length one. If left empty, or \code{NULL}, then an
+attempt is made to guess which field has the ID for the patient encounter
+(not a patient ID, although this can of course be specified directly). The
+guesses proceed until a single match is made. Data frames may be wide with
+many matching fields, so to avoid false positives, anything but a single
+match is rejected. If there are no successful guesses, and \code{visit_id}
+was not specified, then the first column of the data frame is used.}
 
 \item{return_df}{single logical value, if \code{TRUE}, return the result as a data frame with the first column being
 the \code{visit_id}, and the second being the count. If \code{visit_id} was a factor or named differently in the

@@ -7,15 +7,15 @@
 logical_to_binary(x)
 }
 \arguments{
-\item{x}{dataframe which may contain logical fields}
+\item{x}{\code{data.frame} which may contain logical fields}
 }
 \value{
-data frame without logical fields
+\code{data.frame} without logical fields
 }
 \description{
-when saving data as text files for distribution, printing large amounts of
-text containing TRUE and FALSE is inefficient. Convert to binary takes more R
-memory, but allows more compact output
+When saving data as text files for distribution, printing large amounts of
+text containing \code{TRUE} and \code{FALSE} is inefficient. Convert to
+binary takes more R memory, but allows more compact output
 }
 \keyword{internal}
 \keyword{manip}

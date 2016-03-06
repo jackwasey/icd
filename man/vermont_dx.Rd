@@ -9,7 +9,7 @@
 \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
 }
 \description{
-De-identified data from public Vermont source for 2013
+Anonymous data from public Vermont source for 2013
 }
 \details{
 Conditions of Release Release of public use data is subject to the following
