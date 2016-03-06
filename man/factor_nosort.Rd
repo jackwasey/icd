@@ -25,8 +25,8 @@ This function generates factors more quickly, by leveraging
 33% reduction for 10 million codes.
 }
 \details{
-\code{NaN}s are converted to \code{NA} when used on numerics. Extracted from
-https://github.com/kevinushey/Kmisc.git
+\code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
+from https://github.com/kevinushey/Kmisc.git
 
 These feature from base R are missing: \code{exclude = NA, ordered =
 is.ordered(x), nmax = NA}

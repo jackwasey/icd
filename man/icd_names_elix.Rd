@@ -44,7 +44,7 @@ In the Elixhauser derived mappings, uncomplicated and complicated
 hypertension are listed separately, but are always combined in the final
 analyses. Uncomplicated and complicated hypertension are list separately and
 as "Hypertension, combined." _abbrev suffix indicates a very short space-free
-description. Quan's version of Elixhauser is identical. AHRQ's update drops
+description. Quan's version of Elixhauser is identical. AHRQ updates drops
 the arrythmia field. The naming convention is a root, e.g.
 \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
 \code{_abbrev}. The Charlson derived mappings do not include hypertension.

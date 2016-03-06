@@ -17,20 +17,20 @@
 
 #' take two ICD-9 codes and expand range to include all child codes
 #'
-#' this is cumbersome code, covering a whole load of edge cases
-#'   relating to the fact that icd9 codes are \strong{not} in numeric order. An
-#'   alternative strategy would be to list all the ICD9 codes, then a range
-#'   would just pick out start and finish positions, and return subset of the
-#'   list. Not all ICD-9 codes are valid, including some parent codes which have
-#'   valid children. However, I expect at least some of these have been used in
-#'   some billing databases.
+#' this is cumbersome code, covering a whole load of edge cases relating to the
+#' fact that ICD-9 codes are \strong{not} in numeric order. An alternative
+#' strategy would be to list all the ICD9 codes, then a range would just pick
+#' out start and finish positions, and return subset of the list. Not all ICD-9
+#' codes are valid, including some parent codes which have valid children.
+#' However, I expect at least some of these have been used in some billing
+#' databases.
 #'
-#'   As with \code{link{icd9ExpandRangeShort}} great care is taken not to
-#'   include codes which have children not in the range. E.g. "100.9" to "101.1"
-#'   would _not_ include code "101".
+#' As with \code{link{icd9ExpandRangeShort}} great care is taken not to include
+#' codes which have children not in the range. E.g. "100.9" to "101.1" would
+#' _not_ include code "101".
 #'
-#'   \code{onlyReal} default is \code{TRUE} (a change from previous versions)
-#'   since this is far more likely to be useful to the end user.
+#' \code{onlyReal} default is \code{TRUE} (a change from previous versions)
+#' since this is far more likely to be useful to the end user.
 #' @examples
 #' "4280 " %i9s% "4289 "
 #' "4280 " %i9s% "42821"
@@ -41,14 +41,14 @@
 #' @template icd9-short
 #' @template onlyReal
 #' @template short_code
-#' @param ex_ambig_start single logical value, if \code{TRUE} the range
-#'   returned will not include codes which are explicitly listed in the range,
-#'   but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%
-#'   V1009} would by default (\code{FALSE}) include \code{V10} even though
-#'   \code{V10} itself is parent to everything up to \code{V11}.
-#' @param ex_ambig_end single logical, same as
-#'   \code{ex_ambig_start} but affects codes at the end of the range.
-#'   E.g. 99.99 to 101.01 would by default exclude 101 and 101.0
+#' @param ex_ambig_start single logical value, if \code{TRUE} the range returned
+#'   will not include codes which are explicitly listed in the range, but would
+#'   imply a broader range than specified. E.g. \code{V10 \%i9sa\% V1009} would
+#'   by default (\code{FALSE}) include \code{V10} even though \code{V10} itself
+#'   is parent to everything up to \code{V11}.
+#' @param ex_ambig_end single logical, same as \code{ex_ambig_start} but affects
+#'   codes at the end of the range. E.g. 99.99 to 101.01 would by default
+#'   exclude 101 and 101.0
 #' @family ICD-9 ranges
 #' @export
 icd_expand_range <- function(start, end, ...) {
@@ -86,13 +86,12 @@ icd_expand_range.character <- function(start, end, short_code = NULL, defined = 
   }
 }
 
-#' expand range of ICD-10 codes returning only defined codes in ICD-10-CM
+#' Expand range of ICD-10 codes returning only defined codes in ICD-10-CM
 #'
-#' This will need generalizing to any list of 'defined' codes, e.g. WHO or other
-#'
-#' There are so many permutations of alphaunmerics after the decimal place
-#' that it would be easy to generate many millions with simple ranges, the vast
-#' majority of which would be undefined.
+#' This will need generalizing to any list of officially defined codes, e.g. WHO
+#' or other. There are so many permutations of alphanumeric characters after the
+#' decimal place that it would be easy to generate many millions with simple
+#' ranges, the vast majority of which would be undefined.
 #' @param start character vector of length one containing an ICD code
 #' @param end  character vector of length one containing an ICD code
 #' @export
@@ -138,8 +137,8 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
 #'
 #' Expand a pair of major codes into a range of major codes. This was previously
 #' exported, but is now going to be available only with \code{:::}, and
-#' icd_expand_range will follow. This was never supposed to be a user facing
-#' function.
+#' \code{icd_expand_range} will follow. This was never supposed to be a user
+#' facing function.
 #' @keywords internal
 icd_expand_range_major <- function(start, end) {
   UseMethod("icd_expand_range_major")

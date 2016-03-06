@@ -79,18 +79,18 @@ be returned, with the first column named as in input data frame (i.e.
 \code{visit_name}), containing all the visits, and the second column
 containing the Charlson Comorbidity Index.}
 
-\item{hierarchy}{single logical value, default is FALSE. If TRUE, will
-drop DM if DMcx is present, etc.}
+\item{hierarchy}{single logical value, default is FALSE. If TRUE, will drop
+\code{DM} if \code{DMcx} is present, etc.}
 
 \item{hierarchy}{single logical value, default is \code{FALSE}. If
-\code{TRUE}, will drop 'DM' if 'DMcx' is present, etc.}
+\code{TRUE}, will drop \code{DM} if \code{DMcx} is present, etc.}
 }
 \description{
-Charlson score is calculated in the basis of the Quan revision
-  of Deyo's ICD-9 mapping. (Peptic Ulcer disease no longer warrants a point.)
-  Quan published an updated set of scores, but it seems most people use the
-  original scores for easier comparison between studies, even though Quan's
-  were more predictive.
+Charlson score is calculated in the basis of the Quan revision of Deyo's
+ICD-9 mapping. (peptic ulcer disease no longer warrants a point.) Quan
+published an updated set of scores, but it seems most people use the original
+scores for easier comparison between studies, even though Quan's were more
+predictive.
 }
 \details{
 When used, hierarchy is applied per Quan, "The following comorbid
@@ -100,7 +100,7 @@ When used, hierarchy is applied per Quan, "The following comorbid
   Quan scoring weights come from the 2011 paper
   (dx.doi.org/10.1093/aje/kwq433). The comorbidity weights were recalculated
   using updated discharge data, and some changes, such as Myocardial
-  Infarcation decreasing from 1 to 0, may reflect improved outcomes due to
+  Infarction decreasing from 1 to 0, may reflect improved outcomes due to
   advances in treatment since the original weights were determined in 1984.
 }
 \section{Methods (by class)}{

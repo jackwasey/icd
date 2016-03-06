@@ -500,7 +500,6 @@ icd9IsValidShort <- function(icd9) {
 }
 
 #' @rdname icd_is_valid
-#' @details do the icd9 valid sub-types need to be exported?
 #' @export
 icd9IsValidShortN <- function(icd9) {
   icd_deprecated("icd_is_valid")
@@ -680,8 +679,8 @@ icd9Charlson.data.frame <- function(x, visitId = NULL,
 }
 
 #' @rdname icd_charlson
-#' @param hierarchy single logical value, default is FALSE. If TRUE, will
-#'   drop DM if DMcx is present, etc.
+#' @param hierarchy single logical value, default is FALSE. If TRUE, will drop
+#'   \code{DM} if \code{DMcx} is present, etc.
 #' @export
 icd9CharlsonComorbid <- function(x, visitId = NULL, applyHierarchy = FALSE,
                                  scoringSystem = c("original", "charlson", "quan")) {
@@ -759,7 +758,7 @@ icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FAL
 #' @param min.width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to
 #'   the maximum number of codes per patient.
-#' @param aggregate single logical value, if TRUE (the default) will take more
+#' @param aggregate single logical value, if \code{TRUE} (the default) will take more
 #'   time to find out-of-order \code{visitId}s, and combine all the codes for
 #'   each unique \code{visitId}. If \code{FALSE}, then out-of-order
 #'   \code{visitId}s will result in a row in the output data per contiguous
@@ -785,9 +784,9 @@ icd9LongToWide <- function(icd9df,
 #' @rdname icd_wide_to_long
 #' @template visitId
 #' @param icdLabels Deprecated. Character vector of column names in which codes
-#'   are found. If NULL, all columns matching icd or ICD will be included.
+#'   are found. If \code{NULL}, all columns matching \code{icdRegex} will be included.
 #' @param icdName Deprecated. Character vector length one containing the new
-#'   column name for the ICD codes, defaults to "icdCode"
+#'   column name for the ICD codes, defaults to \code{"icdCode"}
 #' @param icdRegex Deprecated. Vector of character strings containing a regular
 #'   expression to identify ICD-9 diagnosis columns to try (case-insensitive) in
 #'   order. Default is \code{c("icd", "diag", "dx_", "dx")}
@@ -886,8 +885,8 @@ icd9Count <- function(x, visitId = get_visit_name(x), return.df = FALSE) {
 #' @template visitId
 #' @template return.df
 #' @param aggregate, single logical, default is FALSE. If TRUE, the length (or
-#'   rows) of the output will no longer match the input, but duplicate visitIds
-#'   will be counted together.
+#'   rows) of the output will no longer match the input, but duplicate
+#'   \code{visitId}s will be counted together.
 #' @export
 icd9CountWide <- function(x,
                           visitId = get_visit_name(x),

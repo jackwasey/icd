@@ -39,9 +39,9 @@ single logical value, \code{TRUE} if input data are predominantly
 \description{
 TODO: Partly implemented. Goal is to guess whether codes are
 \code{short_code} or \code{decimal_code} form. Currently condense works, but
-not with the \code{icd} lookup table currently in use. Of note, validation is
-a bit different here, since we don't know the type until after we guess. We
-could look for where both short_code and long are invalid, and otherwise
+not with the \code{icd} look-up table currently in use. Of note, validation
+is a bit different here, since we don't know the type until after we guess.
+We could look for where both short_code and long are invalid, and otherwise
 assume valid, even if the bulk are short_code. However, it may be more useful
 to check validity after the guess.
 }
@@ -52,7 +52,7 @@ codes
 
 \item \code{icd9}: Guess whether an ICD-9 code is in short_code form
 
-\item \code{icd10}: Guess short when icd10 type is known
+\item \code{icd10}: Guess short when ICD-10 type is known
 
 \item \code{list}: Guess short from a list
 

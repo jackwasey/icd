@@ -36,9 +36,9 @@ icd9ChildrenDecimal(icd9Decimal, onlyReal = TRUE, onlyBillable = FALSE)
 
 \item{...}{arguments passed on to other functions}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 
 \item{defined}{single logical value, whether returned codes should only
 include those which have definitions. Definition is based on the ICD
@@ -54,16 +54,16 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{isShort}{Deprecated. Single logical value which determines whether the
+ICD-9 code provided is in short (\code{TRUE}) or decimal (\code{FALSE})
+form. Where reasonable, this is guessed from the input data.}
 
-\item{onlyReal}{single logical value, if TRUE, will limit the search to those
-codes which appear in the master list, not just syntactically valid codes.
-Since nearly valid, out-dated or new codes may be missed, not limiting to
-'real' values will be useful. Ultimately, there will need to be annual (and
-all-time) master lists of codes and the ability to test against a given
-master list given the year of the ICD-9 coding.}
+\item{onlyReal}{single logical value, if \code{TRUE}, will limit the search
+to those codes which appear in the master list, not just syntactically
+valid codes. Since nearly valid, out-dated or new codes may be missed, not
+limiting to officially defined values will be useful. Ultimately, there
+will need to be annual (and all-time) master lists of codes and the ability
+to test against a given master list given the year of the ICD-9 coding.}
 
 \item{onlyBillable}{single logical value, if \code{TRUE}, describes the input
 data, stating that it only contains billable codes. Usually, the function

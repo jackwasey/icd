@@ -5,11 +5,11 @@
 #' @description \link{Rcpp} approach to comorbidity assignment with OpenMP and
 #'   vector of integers strategy. It is very fast, and most time is now spent
 #'   setting up the data to be passed in.
-#' @param aggregate single logical value, if /code{TRUE}, then take (possible
-#'   much) more time to aggregate out-of-sequence visit IDs in the icd9df
+#' @param aggregate single logical value, if \code{TRUE}, then take (possible
+#'   much) more time to aggregate out-of-sequence visit IDs in the input
 #'   data.frame. If this is \code{FALSE}, then each contiguous group of visit
 #'   IDs will result in a row of comorbidities in the output data. If you know
-#'   your visitIds are possible disordered, then use \code{TRUE}.
+#'   whether your visit IDs are disordered, then use \code{TRUE}.
 #' @keywords internal
 icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
     .Call('icd_icd9ComorbidShortCpp', PACKAGE = 'icd', icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
@@ -81,16 +81,16 @@ icd9GetMajorShort <- function(icd9Short) {
     .Call('icd_icd9GetMajorShort', PACKAGE = 'icd', icd9Short)
 }
 
-#' @title do elements of vector begin with V, E (or any other character)?
+#' Do elements of vector begin with V, E (or any other character)?
 #'
-#' @description Current returns a vector of \code{bool} which is not thread
-#'   safe, or particularly fast, although it is memory efficient in the
-#'   standard implementation. As of \code{icd9} (now known as \code{icd})
-#'   version 1.2, this is not called by threaded code, but this could change,
-#'   so beware! ASCII spaces are trimmed from the start of the string before
-#'   testing, but no other white space
+#' Current returns a vector of \code{bool} which is not thread safe, or
+#' particularly fast, although it is memory efficient in the standard
+#' implementation. As of \code{icd9} (now known as \code{icd}) version 1.2,
+#' this is not called by threaded code, but this could change, so beware! ASCII
+#' spaces are trimmed from the start of the string before testing, but no other
+#' white space
 #' @param sv vector of strings
-#' @param x const char* of choices of first character to match
+#' @param x \code{const char*} of choices of first character to match
 #' @param invert single logical, if TRUE, negates the condition
 #' @keywords internal
 icd9IsA <- function(sv, x, invert) {
@@ -212,44 +212,50 @@ randomMajorCpp <- function(n) {
     .Call('icd_randomMajorCpp', PACKAGE = 'icd', n)
 }
 
-#' @title generate random short-form numeric icd9 codes
-#' @description Generate a character vector of random short-form ICD-9 numeric codes
+#' Generate random short-form numeric ICD-9 codes
+#'
+#' Generate a character vector of random short-form ICD-9 numeric codes
 #' @keywords internal
 icd9RandomShortN <- function(n = 5L) {
     .Call('icd_icd9RandomShortN', PACKAGE = 'icd', n)
 }
 
-#' @title generate random short-form icd9 V codes
-#' @description Generate a character vector of random short-form ICD-9 V codes
+#' Generate random short-form ICD-9 V codes
+#'
+#' Generate a character vector of random short-form ICD-9 V codes
 #' @keywords internal
 icd9RandomShortV <- function(n = 5L) {
     .Call('icd_icd9RandomShortV', PACKAGE = 'icd', n)
 }
 
-#' @title generate random short-form icd9 E codes
-#' @description Generate a character vector of random short-form ICD-9 E codes
+#' Generate random short-form ICD-9 E codes
+#'
+#' Generate a character vector of random short-form ICD-9 E codes
 #' @keywords internal
 icd9RandomShortE <- function(n = 5L) {
     .Call('icd_icd9RandomShortE', PACKAGE = 'icd', n)
 }
 
-#' @title generate random short-form icd9 E codes
-#' @description Very dirty pseudo-random by picking numeric, V or E based on
-#'   modulo 3 of the number
+#' Generate random short-form ICD-9 E codes
+#'
+#' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
+#' the number
 #' @keywords internal
 icd9RandomShort <- function(n = 5L) {
     .Call('icd_icd9RandomShort', PACKAGE = 'icd', n)
 }
 
 #' Fast convert integer vector to character vector
+#'
 #' Fast conversion from integer vector to character vector using C++
 #' @param x vector of integers
-#' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
-#'   No checks done for speed.
+#' @param bufferSize int if any input strings are longer than this number
+#'   (default 16) there will be memory errors. No checks done for speed.
 #' @examples
 #' \dontrun{
 #' pts <- generate_random_pts(1e7)
-#' # conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
+#' # conclusion: buffer size matters little (so default to be more generous),
+#' # and Rcpp version fastest.
 #' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
 #'                                fastIntToStringStd(pts$visit_id, buffer = 16),
 #'                                fastIntToStringStd(pts$visit_id, buffer = 64),

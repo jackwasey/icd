@@ -16,7 +16,7 @@ These are derived from the CMS published updates, with versions 23 to 32
 currently available going back to 2004/5. The source files back to version 27
 have short and long descriptions. The short descriptions are in ASCII with no
 special characters, whereas the long descriptions contain accented characters
-which seem to be interpretable as Unicode, \code{latin-1} or \code{cp1252}.
+which seem to be interpreted as Unicode, \code{latin-1} or \code{cp1252}.
 This all done during package creation, but can be repeated by package users,
 including pulling the data from the web pages directly. Despite my best
 efforts, current locale can give different results, but this packaged data is

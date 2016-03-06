@@ -3,7 +3,7 @@
 \name{icd_long_to_wide}
 \alias{icd9LongToWide}
 \alias{icd_long_to_wide}
-\title{convert ICD data from long to wide format}
+\title{Convert ICD data from long to wide format}
 \usage{
 icd_long_to_wide(x, visit_name = get_visit_name(x),
   icd_name = get_icd_name(x), prefix = "icd_", min_width = 0,
@@ -35,7 +35,7 @@ progressively less likely possibilities until it matches a single column.
 Failing this, it will take the first column in the data frame. Specifying
 the column using this argument avoids the guesswork.}
 
-\item{prefix}{character, default "icd_" to prefix new columns}
+\item{prefix}{character, default \code{icd_} to prefix new columns}
 
 \item{min_width, }{single integer, if specified, writes out this many columns
 even if no patients have that many codes. Must be greater than or equal to
@@ -67,7 +67,7 @@ this argument avoids the guesswork.}
 even if no patients have that many codes. Must be greater than or equal to
 the maximum number of codes per patient.}
 
-\item{aggregate}{single logical value, if TRUE (the default) will take more
+\item{aggregate}{single logical value, if \code{TRUE} (the default) will take more
 time to find out-of-order \code{visitId}s, and combine all the codes for
 each unique \code{visitId}. If \code{FALSE}, then out-of-order
 \code{visitId}s will result in a row in the output data per contiguous
@@ -79,8 +79,8 @@ default of \code{FALSE} gives the more natural return data of a matrix with
 row names being the \code{visitId}s.}
 }
 \description{
-This is more complicated than reshape or reshape2  dcast allows. This is a
-reasonably simple solution using built-in functions.
+This is more complicated than reshape or \link{reshape2:dcast} allows. This
+is a reasonably simple solution using built-in functions.
 }
 \examples{
   longdf <- data.frame(visit_name = c("a", "b", "b", "c"),

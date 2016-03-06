@@ -2,15 +2,17 @@
 % Please edit documentation in R/parse.R
 \name{icd9_parse_leaf_desc_ver}
 \alias{icd9_parse_leaf_desc_ver}
-\title{read the ICD-9-CM description data as provided by the Center for}
+\title{Read the ICD-9-CM description data as provided by the Center for Medicaid
+Services (CMS).}
 \usage{
 icd9_parse_leaf_desc_ver(version = icd9cm_latest_edition(),
   save_data = TRUE, offline = FALSE)
 }
 \arguments{
-\item{icd9path}{path of the source data which is typically in \code{data-raw}}
+\item{version}{character vector of length one containing the ICD-9 version,
+e.g. \code{"32"} which is the default.}
 
-\item{save}{logical whether to attempt to re-save source files in inst}
+\item{save_data}{logical whether to attempt to re-save source files in inst}
 
 \item{path}{Absolute path in which to save parsed data}
 }
@@ -18,15 +20,14 @@ icd9_parse_leaf_desc_ver(version = icd9cm_latest_edition(),
 invisibly return the result
 }
 \description{
-Medicaid Services.
-ICD9-CM data unfortunately has no comma separation, so have to
-  pre-process. Note that this canonical data doesn't specify non-diagnostic
-  higher-level codes, just the specific diagnostic 'child' codes.
+The full ICD-9 specification is in an RTF file, but CMS also distributes a
+space-separated text file with just the definitions for 'defined', 'billable'
+codes. Note that this canonical data doesn't specify non-diagnostic
+higher-level codes, just the specific diagnostic 'child' codes.
 }
 \details{
-The file can be pulled from the zip files on the CMS web site or from
-  within the package. Pulled data can be saved to the package development
-  tree.
+The file can be pulled from the zip files on the CMS web site or from within
+the package.
 }
 \keyword{internal}
 

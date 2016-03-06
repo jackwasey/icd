@@ -60,8 +60,8 @@ icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, inver
 #'
 #' Present On Arrival (POA) is not a simple flag, since many codes are exempt,
 #' unspecified, or unknown. Therefore, two options are given: get all the
-#' comorbidities where the POA flag was definitely negative, coded as "N" or
-#' definitely +ve and coded as "Y". Negating one set won't give the other set
+#' comorbidities where the POA flag was definitely negative, coded as 'N' or
+#' definitely positive and coded as 'Y'. Negating one set won't give the other set
 #' unless all codes were either Y or N.
 #' @param x input vector of ICD codes
 #' @template poa_name
@@ -113,30 +113,30 @@ icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
 }
 
 #' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
-#'   explicitly "Yes."
+#'   explicitly 'Yes.'
 #' @export
 icd_filter_poa_yes <- function(x, poa_name = "poa") {
   .icd_filter_poa(x, poa_name, choice = c("Y", "y"), invert = FALSE)
 }
 
 #' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
-#'   explicitly "No."
+#'   explicitly 'No.'
 #' @export
 icd_filter_poa_no <- function(x, poa_name = "poa") {
   .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = FALSE)
 }
 
 #' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
-#'   anything but "No." This includes unknown, exempt, other codes, and of
-#'   course all those marked "Yes."
+#'   anything but 'No.' This includes unknown, exempt, other codes, and of
+#'   course all those marked 'Yes.'
 #' @export
 icd_filter_poa_not_no <- function(x, poa_name = "poa") {
   .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = TRUE)
 }
 
 #' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
-#'   anything byt "Yes." This would group exempt, unknown and other codes under
-#'   "Not POA" which is unlikely to be a good choice, since exempt codes, of
+#'   anything but 'Yes.' This would group exempt, unknown and other codes under
+#'   'Not POA' which is unlikely to be a good choice, since exempt codes, of
 #'   which there are a quite large number, tend to describe chronic or
 #'   out-of-hospital characteristics.
 #' @export

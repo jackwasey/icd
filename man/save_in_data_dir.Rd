@@ -17,7 +17,7 @@ it as \code{myvar.RData} in \code{package_root/data}.}
 invisibly returns the data
 }
 \description{
-File will be named \code{\emph{var_name}.RData} with an optional suffix
+File will be named \emph{var_name}\code{.RData} with an optional suffix
 before \code{.RData}
 }
 \keyword{internal}

@@ -19,12 +19,12 @@ utils::globalVariables("icd10cm2016")
 
 #' Check whether ICD-9 codes exist
 #'
-#' This is different from syntactic validity: it looks it up in the
-#'   canonical list of ICD-9 codes published by the CMS, and which are included
-#'   in this package under \code{data-raw}. Checking syntactic validity using
-#'   \code{link{icd9IsValid}} etc. is still useful, with a changing list of
-#'   icd-9 codes over time, and possible imperfections in the master lists
-#'   derived from CMS.
+#' This is different from syntactic validity: it looks it up in the canonical
+#' list of ICD-9 codes published by the CMS, and which are included in this
+#' package under \code{data-raw}. Checking syntactic validity using
+#' \code{link{icd_is_valid}} etc. is still useful, with a changing list of ICD-9
+#' codes over time, and possible imperfections in the master lists derived from
+#' CMS.
 #' @param x vector if ICD codes to test whether defined in certain ICD code list
 #' @template short_code
 #' @param billable single logical value (default \code{FALSE}), if \code{TRUE}
@@ -71,7 +71,7 @@ icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
     x %fin% icd::icd10cm2016[["code"]]
 }
 
-#' @describeIn icd_is_defined Same for ICD-10, temporarily using icd-10-cm for lookup
+#' @describeIn icd_is_defined Same for ICD-10, temporarily using ICD-10-CM
 #' @export
 #' @keywords internal
 icd_is_defined.icd10 <- function(x, short_code = icd_guess_short.icd10(x),

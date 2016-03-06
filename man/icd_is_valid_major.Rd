@@ -43,11 +43,11 @@ icd9_is_valid_major_e(x, whitespace_ok = TRUE)
 \item{x}{vector of ICD codes}
 }
 \value{
-logical vector of same length as input, with TRUE when a code is a
-  major (not necessarily a real one)
+logical vector of same length as input, with \code{TRUE} when a code
+  is a major (not necessarily a real one)
 }
 \description{
-codes without real or implied decimal place return TRUE
+Codes without real or implied decimal place return \code{TRUE}
 }
 \section{Methods (by class)}{
 \itemize{

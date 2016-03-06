@@ -32,9 +32,9 @@ icd9CondenseShort(icd9Short, onlyReal = NULL, warn = TRUE,
   keepFactorLevels = FALSE)
 }
 \arguments{
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 
 \item{warn}{single logical value, if \code{TRUE}, give warnings when
 there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
@@ -49,12 +49,12 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{onlyReal}{single logical value, if TRUE, will limit the search to those
-codes which appear in the master list, not just syntactically valid codes.
-Since nearly valid, out-dated or new codes may be missed, not limiting to
-'real' values will be useful. Ultimately, there will need to be annual (and
-all-time) master lists of codes and the ability to test against a given
-master list given the year of the ICD-9 coding.}
+\item{onlyReal}{single logical value, if \code{TRUE}, will limit the search
+to those codes which appear in the master list, not just syntactically
+valid codes. Since nearly valid, out-dated or new codes may be missed, not
+limiting to officially defined values will be useful. Ultimately, there
+will need to be annual (and all-time) master lists of codes and the ability
+to test against a given master list given the year of the ICD-9 coding.}
 
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
 code, then the digits are greedily assigned to hundreds, then tens, then

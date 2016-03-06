@@ -2,7 +2,7 @@
 % Please edit documentation in R/util.R
 \name{logical_to_binary}
 \alias{logical_to_binary}
-\title{encode TRUE as 1, and FALSE as 0 (integers)}
+\title{Encode \code{TRUE} as 1, and \code{FALSE} as 0 (integers)}
 \usage{
 logical_to_binary(x)
 }

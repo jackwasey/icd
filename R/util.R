@@ -32,7 +32,6 @@ strim <- function(x) {
 #' Trim leading and trailing white space
 #'
 #' \code{NA} is accepted and returned, probably as \code{NA_character_}
-#' @details TODO: replace with str_trim but test speed first.
 #' @param x character vector
 #' @return character vector
 #' @keywords internal
@@ -65,17 +64,22 @@ as_char_no_warn <- function(x) {
 
 #' Strip character(s) from character vector
 #'
-#' TODO: replace with str_replace
+#' \code{gsub} is probably quicker than \code{stringr}/\code{stringi}. For
+#' comorbidity processing, this package prefers the faster \link{base}
+#' functions, whereas \code{stringr} is used for tasks which are not time
+#' critical, e.g. parsing source data to be included in the distributed
+#' \code{icd} package.
 #' @param x character vector
 #' @param pattern passed to \code{gsub} default is " "
-#' @param use_bytes single logical passed to 'gsub', default is the slightly quicker \code{TRUE}
+#' @param use_bytes single logical passed to \code{base::gsub}, default is the
+#'   slightly quicker \code{TRUE}
 #' @return character vector of same length as input
 #' @keywords internal
 strip <- function(x, pattern = " ", use_bytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = use_bytes)
 
-#' encode TRUE as 1, and FALSE as 0 (integers)
+#' Encode \code{TRUE} as 1, and \code{FALSE} as 0 (integers)
 #'
 #' When saving data as text files for distribution, printing large amounts of
 #' text containing \code{TRUE} and \code{FALSE} is inefficient. Convert to
@@ -98,7 +102,7 @@ logical_to_binary <- function(x) {
   if (is.na(logical_fields) || length(logical_fields) == 0)
     return(x)
 
-  #update just the logical fields with integers
+  # update just the logical fields with integers
   x[, logical_fields] <-
     vapply(
       X         = x[, logical_fields],
@@ -263,8 +267,8 @@ rtf_year_ok <- function(test_year) {
 #' \code{fastmatch::\link{fmatch}}. The speed increase for ICD-9 codes is about
 #' 33% reduction for 10 million codes.
 #'
-#' \code{NaN}s are converted to \code{NA} when used on numerics. Extracted from
-#' https://github.com/kevinushey/Kmisc.git
+#' \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
+#' from https://github.com/kevinushey/Kmisc.git
 #'
 #' These feature from base R are missing: \code{exclude = NA, ordered =
 #' is.ordered(x), nmax = NA}
@@ -319,7 +323,7 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   fastmatch::fmatch(x, table, nomatch = 0L) > 0L
 }
 
-#' sort short-form icd9 codes
+#' Sort short-form ICD-9 codes
 #'
 #' Sorts lists of numeric only, V or E codes. Note that a simple numeric sort
 #' does not work for ICD-9 codes, since "162" > "1620", and also V codes precede
@@ -355,7 +359,7 @@ icd_sort.icd10 <- function(x, short_code = NULL, ...) {
   sort(x)
 }
 
-#' @describeIn icd_sort sort ICD-9 codes respecting numeric, then V, then E
+#' @describeIn icd_sort sort ICD-9 codes respecting numeric, then 'V', then 'E'
 #'   codes, and accounting for leading zeroes
 #' @keywords internal
 #' @export
@@ -379,8 +383,15 @@ icd9_order_short <- function(x) {
 
 #' wrapper for \code{.Deprecated}
 #'
-#' Don't show warnings when testing deprecated code.
+#' Don't show warnings when using deprecated code. This allows people to
+#' continue using their \code{icd9} code without any modifications, and without
+#' flooding the user with warnings.
 #' @param ... arguments passed to \code{.Deprecated}
+#' @examples
+#' \dontrun{
+#' # turn off all deprecated warnings for this package
+#' options("icd.warn_deprecated" = FALSE)
+#' }
 #' @keywords internal
 icd_deprecated <- function(...) {
   opt <- getOption("icd.warn_deprecated")

@@ -32,11 +32,11 @@
 //' @description \link{Rcpp} approach to comorbidity assignment with OpenMP and
 //'   vector of integers strategy. It is very fast, and most time is now spent
 //'   setting up the data to be passed in.
-//' @param aggregate single logical value, if /code{TRUE}, then take (possible
-//'   much) more time to aggregate out-of-sequence visit IDs in the icd9df
+//' @param aggregate single logical value, if \code{TRUE}, then take (possible
+//'   much) more time to aggregate out-of-sequence visit IDs in the input
 //'   data.frame. If this is \code{FALSE}, then each contiguous group of visit
 //'   IDs will result in a row of comorbidities in the output data. If you know
-//'   your visitIds are possible disordered, then use \code{TRUE}.
+//'   whether your visit IDs are disordered, then use \code{TRUE}.
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,

@@ -75,7 +75,7 @@ flagged.}
 van Walraven Elixhauser score is calculated from the Quan revision of
 Elixhauser's ICD-9 mapping. This function allows for the hierarchical
 exclusion of less severe versions of comorbidities when their more severe
-version is also present via the applyHeirarchy argument. For the Elixhauser
+version is also present via the \code{heirarchy} argument. For the Elixhauser
 comorbidities, this is diabetes v. complex diabetes and solid tumor v.
 metastatic tumor
 }

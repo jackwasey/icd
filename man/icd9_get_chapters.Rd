@@ -14,9 +14,9 @@ icd9_get_chapters(x, short_code = icd_guess_short.icd9(x), verbose = FALSE)
 
 \item{x}{vector of ICD-9 codes}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 }
 \description{
 This runs quite slowly. Used too rarely to be worth optimizing

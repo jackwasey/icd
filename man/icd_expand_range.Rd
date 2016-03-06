@@ -66,43 +66,43 @@ given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010"}
 
-\item{onlyReal}{single logical value, if TRUE, will limit the search to those
-codes which appear in the master list, not just syntactically valid codes.
-Since nearly valid, out-dated or new codes may be missed, not limiting to
-'real' values will be useful. Ultimately, there will need to be annual (and
-all-time) master lists of codes and the ability to test against a given
-master list given the year of the ICD-9 coding.}
+\item{onlyReal}{single logical value, if \code{TRUE}, will limit the search
+to those codes which appear in the master list, not just syntactically
+valid codes. Since nearly valid, out-dated or new codes may be missed, not
+limiting to officially defined values will be useful. Ultimately, there
+will need to be annual (and all-time) master lists of codes and the ability
+to test against a given master list given the year of the ICD-9 coding.}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 
-\item{ex_ambig_start}{single logical value, if \code{TRUE} the range
-returned will not include codes which are explicitly listed in the range,
-but would imply a broader range than specified. E.g. \code{V10 %%i9sa%%
-V1009} would by default (\code{FALSE}) include \code{V10} even though
-\code{V10} itself is parent to everything up to \code{V11}.}
+\item{ex_ambig_start}{single logical value, if \code{TRUE} the range returned
+will not include codes which are explicitly listed in the range, but would
+imply a broader range than specified. E.g. \code{V10 \%i9sa\% V1009} would
+by default (\code{FALSE}) include \code{V10} even though \code{V10} itself
+is parent to everything up to \code{V11}.}
 
-\item{ex_ambig_end}{single logical, same as
-\code{ex_ambig_start} but affects codes at the end of the range.
-E.g. 99.99 to 101.01 would by default exclude 101 and 101.0}
+\item{ex_ambig_end}{single logical, same as \code{ex_ambig_start} but affects
+codes at the end of the range. E.g. 99.99 to 101.01 would by default
+exclude 101 and 101.0}
 }
 \description{
-this is cumbersome code, covering a whole load of edge cases
-  relating to the fact that icd9 codes are \strong{not} in numeric order. An
-  alternative strategy would be to list all the ICD9 codes, then a range
-  would just pick out start and finish positions, and return subset of the
-  list. Not all ICD-9 codes are valid, including some parent codes which have
-  valid children. However, I expect at least some of these have been used in
-  some billing databases.
+this is cumbersome code, covering a whole load of edge cases relating to the
+fact that ICD-9 codes are \strong{not} in numeric order. An alternative
+strategy would be to list all the ICD9 codes, then a range would just pick
+out start and finish positions, and return subset of the list. Not all ICD-9
+codes are valid, including some parent codes which have valid children.
+However, I expect at least some of these have been used in some billing
+databases.
 }
 \details{
-As with \code{link{icd9ExpandRangeShort}} great care is taken not to
-  include codes which have children not in the range. E.g. "100.9" to "101.1"
-  would _not_ include code "101".
+As with \code{link{icd9ExpandRangeShort}} great care is taken not to include
+codes which have children not in the range. E.g. "100.9" to "101.1" would
+_not_ include code "101".
 
 \code{onlyReal} default is \code{TRUE} (a change from previous versions)
-  since this is far more likely to be useful to the end user.
+since this is far more likely to be useful to the end user.
 
 When the class is not known, it must be guessed from the start and
   end codes. If this guessing fails, e.g. start is ICD-9 whereas end is

@@ -44,7 +44,7 @@
 #' @source
 #' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 #'
-#' @format list with chapter/usb-chapter or major names stored in list names,
+#' @format list with chapter/sub-chapter or major names stored in list names,
 #'   each with two element named character vector with start and end codes.
 #' @name icd9_chapters
 #' @aliases icd9Chapters icd9ChaptersSub icd9ChaptersMajor icd9_sub_chapters
@@ -79,10 +79,10 @@ NULL
 NULL
 
 
-#' ICD9-CM diagnosis code lookup
+#' Latest ICD-9-CM diagnosis codes, in flat \code{data.frame} format
 #'
-#' short-form ICD-9 codes with short and long descriptions, and
-#'   description of each hierarchy level containing each code.
+#' Short-form ICD-9 codes with short and long descriptions, and description of
+#' each hierarchy level containing each code.
 #'
 #' \code{icd9Hierarchy} is deprecated in favor of \code{icd9cm_hierarchy}
 #'
@@ -142,7 +142,7 @@ NULL
 
 #' Quan adaptation of Deyo/Charlson comorbidities
 #'
-#' Derived programmatically from the SAS code used in the original publication.
+#' Derived automatically from the SAS code used in the original publication.
 #' According to the referenced study, this provides the best predictor of
 #' in-patient to <30d mortality. Of note, Deyo drops the distinction between
 #' leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
@@ -160,7 +160,6 @@ NULL
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
-#'
 #'
 #' @name icd9_map_quan_deyo
 #' @aliases quanDeyoComorbid icd10_map_quan_deyo
@@ -188,9 +187,9 @@ NULL
 #' Elixhauser comorbidities
 #'
 #' The original mapping of Elixhauser's ICD-9-CM to 30 comorbidities. According
-#' to Sharabiani et al, this mapping provides the best long-term mortality
-#' prediction. The weaknesses of this mapping are that it is based on slightly
-#' out-dated ICD-9 codes. I have not yet verified what changes to the ICD-9-CM
+#' to Sharabiani, this mapping provides the best long-term mortality prediction.
+#' The weaknesses of this mapping are that it is based on slightly out-dated
+#' ICD-9 codes. I have not yet verified what changes to the ICD-9-CM
 #' specification between 1998 and now would impact this mapping.
 #' @docType data
 #' @keywords datasets
@@ -217,7 +216,7 @@ NULL
 #' hypertension are listed separately, but are always combined in the final
 #' analyses. Uncomplicated and complicated hypertension are list separately and
 #' as "Hypertension, combined." _abbrev suffix indicates a very short space-free
-#' description. Quan's version of Elixhauser is identical. AHRQ's update drops
+#' description. Quan's version of Elixhauser is identical. AHRQ updates drops
 #' the arrythmia field. The naming convention is a root, e.g.
 #' \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
 #' \code{_abbrev}. The Charlson derived mappings do not include hypertension.
@@ -248,7 +247,7 @@ NULL
 #' currently available going back to 2004/5. The source files back to version 27
 #' have short and long descriptions. The short descriptions are in ASCII with no
 #' special characters, whereas the long descriptions contain accented characters
-#' which seem to be interpretable as Unicode, \code{latin-1} or \code{cp1252}.
+#' which seem to be interpreted as Unicode, \code{latin-1} or \code{cp1252}.
 #' This all done during package creation, but can be repeated by package users,
 #' including pulling the data from the web pages directly. Despite my best
 #' efforts, current locale can give different results, but this packaged data is

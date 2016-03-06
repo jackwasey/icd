@@ -53,7 +53,7 @@ NULL
 #' belongs. Always returns a map with short-form ICD-9 codes. These can be
 #' converted in bulk with \code{lapply} and \code{icd9ShortToDecimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
-#'   "icd9_sub_chapters"
+#'   \code{icd9_sub_chapters}
 #' @family ICD-9 convert
 #' @keywords internal manip
 icd9_chapters_to_map <- function(x) {
@@ -78,11 +78,11 @@ icd9_chapters_to_map <- function(x) {
 #'   multiple columns containing ICD codes, empty strings or NA.
 #' @template visit_name
 #' @param icd_labels vector of column names in which codes are found. If NULL,
-#'   all columns matching icd or ICD will be included.
-#' @param icd_name character vector length one containing the new column name
-#'   for the ICD codes, defaults to "icd_code"
-#' @param icd_regex vector of character strings containg a reguglar expression
-#'   to identify ICD-9 diagnosis columns to try (case-insensitive) in order.
+#'   all columns matching the regular expression \code{icd_regex} will be
+#'   included.
+#' @template icd_name
+#' @param icd_regex vector of character strings containing a regular expression to
+#'   identify ICD-9 diagnosis columns to try (case-insensitive) in order.
 #'   Default is \code{c("icd", "diag", "dx_", "dx")}
 #' @return \code{data.frame} with visit_name column named the same as input, and
 #'   a column named by \code{icd.name} containing all the non-NA and non-empty
@@ -101,7 +101,8 @@ icd_wide_to_long <- function(x,
                              icd_regex = c("icd", "diag", "dx_", "dx")) {
   assert_data_frame(x, min.rows = 1, min.cols = 2)
   assert_string(visit_name)
-  assert(checkmate::checkNull(icd_labels), checkmate::checkCharacter(icd_labels))
+  assert(checkmate::checkNull(icd_labels),
+         checkmate::checkCharacter(icd_labels, min.len = 1))
   assert_string(icd_name)
   assert_character(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
 
@@ -133,15 +134,15 @@ icd_wide_to_long <- function(x,
   res
 }
 
-#' convert ICD data from long to wide format
+#' Convert ICD data from long to wide format
 #'
-#' This is more complicated than reshape or reshape2  dcast allows. This is a
-#' reasonably simple solution using built-in functions.
+#' This is more complicated than reshape or \link{reshape2:dcast} allows. This
+#' is a reasonably simple solution using built-in functions.
 #' @param x data.frame of long-form data, one column for visit_name and one for
 #'   ICD code
 #' @template visit_name
 #' @template icd_name
-#' @param prefix character, default "icd_" to prefix new columns
+#' @param prefix character, default \code{icd_} to prefix new columns
 #' @param min_width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to
 #'   the maximum number of codes per patient.

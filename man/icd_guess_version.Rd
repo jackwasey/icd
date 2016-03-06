@@ -25,9 +25,9 @@ icd_guess_version(x, short_code, ...)
 \arguments{
 \item{x}{input data}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 }
 \description{
 The guess is indeed a guess and can be wrong. There are some codes which

@@ -32,7 +32,7 @@
 \alias{icd_comorbid_quan_elix}
 \alias{icd_comorbid_quan_elix.data.frame}
 \alias{icd_comorbid_quan_elix.icd9}
-\title{find comorbidities from ICD-9 codes.}
+\title{Find comorbidities from ICD-9 codes.}
 \usage{
 icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
   chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE)
@@ -119,11 +119,11 @@ icd9ComorbidQuanDeyo(icd9df, visitId = NULL, icd9Field = NULL,
   abbrevNames = TRUE, applyHierarchy = TRUE, ...)
 }
 \arguments{
-\item{aggregate}{single logical value, if /code{TRUE}, then take (possible
-much) more time to aggregate out-of-sequence visit IDs in the icd9df
+\item{aggregate}{single logical value, if \code{TRUE}, then take (possible
+much) more time to aggregate out-of-sequence visit IDs in the input
 data.frame. If this is \code{FALSE}, then each contiguous group of visit
 IDs will result in a row of comorbidities in the output data. If you know
-your visitIds are possible disordered, then use \code{TRUE}.}
+whether your visit IDs are disordered, then use \code{TRUE}.}
 
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
@@ -157,9 +157,9 @@ progressively less likely possibilities until it matches a single column.
 Failing this, it will take the first column in the data frame. Specifying
 the column using this argument avoids the guesswork.}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 
 \item{short_map}{Same as short, but applied to \code{map} instead of
 \code{icd_df}. All the codes in a mapping should be of the same type, i.e.
@@ -183,7 +183,7 @@ to \code{icd9ComorbidAhrq}}
   vector of integers strategy. It is very fast, and most time is now spent
   setting up the data to be passed in.
 
-This is the main function which extracts co-morbidities from a set of ICD-9
+This is the main function which extracts comorbidities from a set of ICD-9
 codes. This is when some trivial post-processing of the comorbidity data is
 done, e.g. renaming to human-friendly field names, and updating fields
 according to rules. The exact fields from the original mappings can be
@@ -199,7 +199,7 @@ There is a change in behavior from previous versions. The visit_name
   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
   the machine is used.
 
-For ICD-10, there are two lookup methods. The classic lookup, as
+For ICD-10, there are two look-up methods. The classic look-up, as
   used for ICD-9 codes, assumes any possible code is available to match in
   the comorbidity map. However, for ICD-10-CM, there are too many possible
   codes, specifying subsequent encounters, laterality, etc., etc., so this is
@@ -211,8 +211,8 @@ The common comorbidity calculation code does not depend on ICD type.
   format, fast factor generation, then fast comorbidity assignment.
 
 For Deyo's Charlson comorbidities, strictly speaking, there is no
-  dropping of more e.g. uncomplicated 'DM' if complicated 'DM' exists,
-  however, this is probably useful, in general and is essential when
+  dropping of more e.g. uncomplicated \code{DM} if complicated \code{DM}
+  exists, however, this is probably useful, in general and is essential when
   calculating the Charlson score.
 }
 \section{Methods (by class)}{

@@ -62,9 +62,9 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{isShort}{Deprecated. Single logical value which determines whether the
+ICD-9 code provided is in short (\code{TRUE}) or decimal (\code{FALSE})
+form. Where reasonable, this is guessed from the input data.}
 
 \item{doCondense}{single logical value which indicates whether to condense
 the given set of ICD-9 codes by replacing subsets of codes with 'parent'
@@ -93,9 +93,9 @@ units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
 
 \item{x}{vector or other structure of ICD codes to explain in human language}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 
 \item{condense}{single logical value which indicates whether to condense the
 given set of ICD-9 codes by replacing subsets of codes with 'parent' codes

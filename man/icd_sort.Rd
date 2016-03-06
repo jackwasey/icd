@@ -8,7 +8,7 @@
 \alias{icd_sort.default}
 \alias{icd_sort.icd10}
 \alias{icd_sort.icd9}
-\title{sort short-form icd9 codes}
+\title{Sort short-form ICD-9 codes}
 \usage{
 icd9Sort(icd9, isShort = icd_guess_short(icd9))
 
@@ -30,9 +30,9 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{isShort}{Deprecated. Single logical value which determines whether the
+ICD-9 code provided is in short (\code{TRUE}) or decimal (\code{FALSE})
+form. Where reasonable, this is guessed from the input data.}
 
 \item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five characters is
 given in a code, then the digits are greedily assigned to hundreds, then
@@ -47,9 +47,9 @@ units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
 
 \item{...}{arguments passed on to other functions}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 }
 \value{
 sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
@@ -72,7 +72,7 @@ the future) then sort based on that type. ICD-10 codes, note that setting
 \item \code{icd10}: Sort ICD-10 codes, note that setting \code{short} is
 unnecessary and ignored.
 
-\item \code{icd9}: sort ICD-9 codes respecting numeric, then V, then E
+\item \code{icd9}: sort ICD-9 codes respecting numeric, then 'V', then 'E'
 codes, and accounting for leading zeroes
 }}
 \keyword{internal}

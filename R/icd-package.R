@@ -16,16 +16,16 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @details \describe{ \item{Comorbidities}{ \code{\link{icd_comorbid}}
-#'   determines co-morbidities for a set of patients with one or more ICD-9
+#'   determines comorbidities for a set of patients with one or more ICD-9
 #'   codes each. \code{\link{icd9Charlson}} calculates Charlson score
 #'   (Comorbidity Index).
 #'
 #'   \itemize{
 #'
 #'   \item AHRQ comorbidity mapping is provided, and a function to read the raw
-#'   SAS code from AHRQ into R data structures. The pre-processed data is
-#'   available by lazy-loading in \code{\link{icd9_map_ahrq}}. AHRQ releases new
-#'   mappings annually.
+#'   SAS code from AHRQ into R data structures. The data is available by
+#'   lazy-loading in \code{\link{icd9_map_ahrq}}. AHRQ releases new mappings
+#'   annually.
 #'
 #'   \item Quan revised both Deyo/Charlson and Elixhauser ICD-9 to comorbidity
 #'   mappings. These are presented as: \code{link{icd9_map_quan_deyo}} (which is

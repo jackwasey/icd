@@ -12,7 +12,7 @@
 \alias{icd_short_code}
 \alias{icd_wide_data}
 \alias{set_icd_class}
-\title{construct ICD-9 data types}
+\title{Construct ICD-9 data types}
 \usage{
 icd9(x)
 
@@ -41,9 +41,9 @@ icd_comorbidity_map(x)
 converting between types. ICD-9 to ICD-10 will cause an error regardless.}
 }
 \description{
-Takes an R structure and sets class to an ICD type. In the case
-  of ICD-9 and ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM
-  (/code{icd9cm}), then an ICD-9 class (/code{icd9}) is also set.
+Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
+ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (\code{icd9cm}),
+then an ICD-9 class (\code{icd9}) is also set.
 }
 \details{
 This, I think, should take priority over ICD-9 vs ICD-10 when doing

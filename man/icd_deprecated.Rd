@@ -10,7 +10,15 @@ icd_deprecated(...)
 \item{...}{arguments passed to \code{.Deprecated}}
 }
 \description{
-Don't show warnings when testing deprecated code.
+Don't show warnings when using deprecated code. This allows people to
+continue using their \code{icd9} code without any modifications, and without
+flooding the user with warnings.
+}
+\examples{
+\dontrun{
+# turn off all deprecated warnings for this package
+options("icd.warn_deprecated" = FALSE)
+}
 }
 \keyword{internal}
 

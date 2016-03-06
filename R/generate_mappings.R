@@ -426,13 +426,13 @@ fetch_uranium_pathology <- function(offline = FALSE) {
 #' generate uranium pathology data
 #'
 #' This is downloaded from \href{https://wsu.edu}{WSU} where it appears to be
-#' provided in the public domain. It requires the file to be downloadable from
+#' provided in the public domain. It requires the file to be downloaded from
 #' source, or already stored in the \code{data-raw} directory, and it appears
 #' that the function \code{odbcConnectAccess2007} is only available in the
 #' Windows build of \pkg{RODBC}.
 #' @template parse-template
 #' @source
-#'   \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+#' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
 #'
 #' @keywords internal
 generate_uranium_pathology <- function(save_data = TRUE, offline = FALSE) {

@@ -11,13 +11,18 @@ strip(x, pattern = " ", use_bytes = TRUE)
 
 \item{pattern}{passed to \code{gsub} default is " "}
 
-\item{use_bytes}{single logical passed to 'gsub', default is the slightly quicker \code{TRUE}}
+\item{use_bytes}{single logical passed to \code{base::gsub}, default is the
+slightly quicker \code{TRUE}}
 }
 \value{
 character vector of same length as input
 }
 \description{
-TODO: replace with str_replace
+\code{gsub} is probably quicker than \code{stringr}/\code{stringi}. For
+comorbidity processing, this package prefers the faster \link{base}
+functions, whereas \code{stringr} is used for tasks which are not time
+critical, e.g. parsing source data to be included in the distributed
+\code{icd} package.
 }
 \keyword{internal}
 

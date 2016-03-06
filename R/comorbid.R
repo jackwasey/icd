@@ -15,21 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' present-on-admission flags
+#' Present-on-admission flags
 #'
-#' Present-on-admission (POA) is not simply true or false. It can be one of a
-#' number of indeterminate values, including \code{NA}, or "Y" or "N".
-#' "Present-on-arrival" in this context will mean a positive "Y" flag and
-#' nothing else. Other interpretations are to include all ICD-9 codes not
-#' flagged 'N': but this would include many unknowns. Conversely, when looking
-#' for definite new diagnoses, we should only find 'N' flagged codes, and ignore
-#' anything marked "Y" or indeterminate. This gives four options: poa == "Y" ,
-#' poa == "N", poa != "N" , poa != "Y".
+#' See \link{icd_filter_poa} for more details.
 #' @keywords character
+#' @examples
+#'   icd_poa_choices
 #' @export
 icd_poa_choices <- c("yes", "no", "notYes", "notNo")
 
 #' @rdname icd_poa_choices
+#' @details \code{icd9PoaChoices} is deprecated. Use \code{icd_poa_choices}.
 #' @export
 icd9PoaChoices <- icd_poa_choices
 
@@ -47,9 +43,9 @@ icd9PoaChoices <- icd_poa_choices
                         short_code = TRUE, short_reference = TRUE)
 }
 
-#' find comorbidities from ICD-9 codes.
+#' Find comorbidities from ICD-9 codes.
 #'
-#' This is the main function which extracts co-morbidities from a set of ICD-9
+#' This is the main function which extracts comorbidities from a set of ICD-9
 #' codes. This is when some trivial post-processing of the comorbidity data is
 #' done, e.g. renaming to human-friendly field names, and updating fields
 #' according to rules. The exact fields from the original mappings can be
@@ -123,7 +119,7 @@ icd_comorbid.default <- function(x, ...) {
 #'   ICD-10/ICD-10-CM codes are included in the mappings, so it will likely give
 #'   incomplete results, without searching for parents of the input codes until
 #'   a match is found in the map. TODO: this is incomplete!
-#' @details For ICD-10, there are two lookup methods. The classic lookup, as
+#' @details For ICD-10, there are two look-up methods. The classic look-up, as
 #'   used for ICD-9 codes, assumes any possible code is available to match in
 #'   the comorbidity map. However, for ICD-10-CM, there are too many possible
 #'   codes, specifying subsequent encounters, laterality, etc., etc., so this is
@@ -452,8 +448,8 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 
 #' @rdname icd_comorbid
 #' @details For Deyo's Charlson comorbidities, strictly speaking, there is no
-#'   dropping of more e.g. uncomplicated 'DM' if complicated 'DM' exists,
-#'   however, this is probably useful, in general and is essential when
+#'   dropping of more e.g. uncomplicated \code{DM} if complicated \code{DM}
+#'   exists, however, this is probably useful, in general and is essential when
 #'   calculating the Charlson score.
 #' @export
 icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
@@ -542,9 +538,9 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 
 #' show the difference between two comorbidity mappings
 #'
-#' Compares two comorbidity:icd9 code mappings. The results are
-#'   returned invisibly as a list. Only those comorbidities with (case
-#'   sensitive) overlapping names are compared.
+#' Compares two comorbidity to ICD code mappings. The results are returned
+#' invisibly as a list. Only those comorbidities with (case sensitive)
+#' overlapping names are compared.
 #' @param x list of character vectors
 #' @param y list of character vectors
 #' @param all_names character vector of the comorbidity names
@@ -559,7 +555,8 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #'   order to give a more succinct summary.
 #' @examples
 #' \donttest{
-#' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)[["CHF"]]
+#' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid,
+#'                                  show = TRUE)[["CHF"]]
 #' }
 #' \dontrun{
 #' # show differences for

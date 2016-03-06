@@ -33,7 +33,7 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 logical vector
 }
 \description{
-For each code, return \code{TRUE} if numric or \code{FALSE} if a
+For each code, return \code{TRUE} if numeric or \code{FALSE} if a
   V or E code.
 }
 \section{Functions}{

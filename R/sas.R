@@ -15,12 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' extract assignments from a SAS FORMAT definition.
+#' Extract assignments from a SAS FORMAT definition
 #'
-#' this is modelled entirely on a single chunk of SAS code, but hopefully will
-#' have some generalizability. It relies heavily on lists and regular
-#' expression, but, as you will see from the code, R is not a great language
-#' with which to write a SAS parser.
+#' This is modelled entirely on a single chunk of SAS code, but hopefully can be
+#' generalised. It relies heavily on lists and regular expression, but, as you
+#' will see from the code, R is not a great language with which to write a SAS
+#' parser.
 #' @param sas_lines is a character vector, with one item per line, e.g. from
 #'   \code{readLines}
 #' @examples
@@ -62,13 +62,14 @@ sas_format_extract <- function(sas_lines) {
   out <- list()
 
   for (m in all_sas_assignments) {
-    out[m[[1]]] <- list(sasParseAssignments(m[[2]]))
+    out[m[[1]]] <- list(sas_parse_assignments(m[[2]]))
   }
   out
 }
 
 #' @describeIn sas_format_extract Get just the \code{$RCOMFMT} assignment, which
-#'   contains all the ICD (not DRG) data. The problem is RENLFAIL appears twice:
+#'   contains all the ICD (not DRG) data. The problem is \code{RENLFAIL} appears
+#'   twice:
 #'
 #'   \code{"N183", "N184", "N185", "N186", "N189", "N19", "Z4901", "Z4902",
 #'   "Z9115", "Z940", "Z992"="RENLFAIL"         /*Dependence on renal dialysis*/
@@ -76,7 +77,7 @@ sas_format_extract <- function(sas_lines) {
 #'   "Z4931", "Z4932"="RENLFAIL"       /*Encounter for adequacy testing for
 #'   peritoneal dialysis*/ }
 #'
-#'   so 'RENLFAIL' needs special treatment
+#'   so \code{RENLFAIL} needs special treatment
 #' @keywords internal
 sas_format_extract_rcomfmt <- function(sas_lines) {
   # ignore DRG assignments
@@ -92,18 +93,18 @@ sas_icd10_assignments_to_list <- function(x) {
   x
 }
 
-#' get assignments from a character string strings.
+#' Get assignments from a character string strings
 #'
 #' The format of assignments is best seen in the SAS source files.
 #' @param x is a character string containing space delimited assignments, in SAS
 #'   declaration format.
-#' @param strip_whitespace will strip all whitespace from the returned values
+#' @param strip_whitespace will strip all white space from the returned values
 #' @param strip_quotes will strip all double quotation marks from the returned
 #'   values
 #' @return list with each list item containing a matrix of "char ranges",
 #'   "assigned value" pairs
 #' @keywords internal programming list
-sasParseAssignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE) {
+sas_parse_assignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE) {
   assert_string(x)
   assert_flag(strip_whitespace)
   assert_flag(strip_quotes)
@@ -159,28 +160,16 @@ sasParseAssignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE)
   out
 }
 
-#' drop superfluous assignment name when the name is already defined.
+#' Extract quoted or unquoted SAS string definitions
 #'
-#' this is happening in the DRG definitions for AHRQ comorbidities. We have data
-#' like: "HTNDRG" 079,305 = "YES" I would like this to be list(HTNDRG="079,305")
-#' @param x in this case is '079,305 = "YES"' (quotes may be present in the
-#'   string itself)
-#' @keywords internal manip util
-sasDropOtherAssignment <- function(x) {
-  stopifnot(sapply(regmatches(x, gregexpr("=", x)), length) == 1)
-  lapply(x, function(y) strsplit(y, split = "[[:space:]]*=")[[1]][1])
-}
-
-#' extract quoted or unquoted SAS string definitions
-#'
-#' Finds all the LET statements in some SAS code and writes them to
-#'   an R list. The list item name is the SAS variable name, and each list item
-#'   is a character vector of the contents. This is specifically for string
-#'   assignements, but probably easy to adapter to numbers if ever needed.
+#' Finds all the LET statements in some SAS code and writes them to an R list.
+#' The list item name is the SAS variable name, and each list item is a
+#' character vector of the contents. This is specifically for string
+#' assignments, but probably easy to adapter to numbers if ever needed.
 #' @param x is a vector of character strings, typically taken from something
-#'   like \code{readLines(someSasFilePath)}
+#'   like \code{readLines(some_sas_file_path)}
 #' @keywords internal programming list
-sasExtractLetStrings <- function(x) {
+sas_extract_let_strings <- function(x) {
   a <- x %>% str_match_all(
     "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)")
 
@@ -196,7 +185,7 @@ sasExtractLetStrings <- function(x) {
 }
 
 # horrible kludge for difficult source data
-icd9ExpandRangeForSas <- function(start, end) {
+sas_expand_range <- function(start, end) {
   if (end == "0449")
     end <- start # HIV codes changed
 

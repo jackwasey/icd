@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' limit a regex to just what is given
+#' Limit a regular expression to just what is given
 #'
 #' update regular expression to limit by start and end, with or without white
 #' space
@@ -153,7 +153,7 @@ re_icd10_any <- re_icd10cm_any
 #' @details Leading zeroes in the decimal form are not ambiguous. Although
 #'   integer ICD-9 codes could be intended by the user, there is a difference
 #'   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
-#'   is provided TODO: add default (when there is no class) which detected icd9
+#'   is provided TODO: add default (when there is no class) which detected ICD-9
 #'   vs 10 if possible. TODO: use "short_code" or "long" attribute if available
 #'   to tighten validation, or guess if missing.
 #' @section Class: S3 class of on object in R is just a vector. Attributes are
@@ -161,8 +161,9 @@ re_icd10_any <- re_icd10cm_any
 #'   the class vector are used to describe features of the data. If these are
 #'   not present, the user may specify (e.g. decimal vs short_code type, ICD-9
 #'   vs ICD-10 WHO), but if they are, the correct functions are called without
-#'   any guess work. There are overlapping namespaces for short_code vs decimal
-#'   and ICD-9 vs ICD-10 codes, so guessing is never going to be perfect.
+#'   any guess work. There is overlap between sets with combinations of
+#'   \code{short_code} or \code{decimal_code}, and ICD-9 or ICD-10 codes, so
+#'   guessing is never going to be perfect.
 #'
 #' @param x An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 #'   \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.
@@ -172,7 +173,7 @@ re_icd10_any <- re_icd10cm_any
 #' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
 #'   \url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @family ICD9 validation
-#' @return logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
+#' @return logical vector with \code{TRUE} or \code{FALSE} for each ICD code
 #'   provided according to its validity
 #' @examples
 #'   icd_is_valid(icd9(c("", "1", "22", "333", "4444", "123.45", "V",
@@ -220,9 +221,9 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
   assert_flag(whitespace_ok)
 
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
-  # testing 'realness' start with a broad regex
+  # testing 'realness' start with a broad regular expression
 
-  # TODO: test whether icd-10-cm or WHO, if class not otherwise specified.
+  # TODO: test whether ICD-10-CM or WHO, if class not otherwise specified.
   if (short_code)
     x %>% str_trim() %>% str_detect(re_icd10_short)
   else
@@ -330,9 +331,6 @@ icd9_is_valid_decimal_v <- function(x, whitespace_ok = TRUE) {
 
 icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
-  #need Perl regex for lookbehind. may even be quicker, according to the docs.
-  #grepl("^E(?!0+($|\\.))[[:digit:]][[:digit:]]{0,2}(\\.[[:digit:]]?)?$",
-  #trim(x), perl = TRUE)
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   if (whitespace_ok)
     str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal_e)) %>% na_to_false
@@ -342,10 +340,10 @@ icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
 
 #' Test whether an ICD code is major
 #'
-#' codes without real or implied decimal place return TRUE
+#' Codes without real or implied decimal place return \code{TRUE}
 #' @param x vector of ICD codes
-#' @return logical vector of same length as input, with TRUE when a code is a
-#'   major (not necessarily a real one)
+#' @return logical vector of same length as input, with \code{TRUE} when a code
+#'   is a major (not necessarily a real one)
 #' @keywords internal
 icd_is_valid_major <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
@@ -411,7 +409,7 @@ icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
     str_detect(as_char_no_warn(x), re_just(re_icd9_major_e)) %>% na_to_false
 }
 
-#' @describeIn icd_is_valid Validate an icd9 mapping to comorbidities
+#' @describeIn icd_is_valid Validate a mapping of ICD codes to comorbidities.
 #' @export
 #' @keywords internal
 icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
@@ -588,7 +586,7 @@ icd_is_major.icd9 <- function(x) {
 
 #' do ICD-9 codes belong to numeric, V or E classes?
 #'
-#' For each code, return \code{TRUE} if numric or \code{FALSE} if a
+#' For each code, return \code{TRUE} if numeric or \code{FALSE} if a
 #'   V or E code.
 #' @template icd9-any
 #' @param x vector of strings or factor to test
@@ -617,7 +615,7 @@ warnNumericCode <- function()
 #' @details From WHO ICD-10 manual: "The basic ICD is a single coded list of
 #'   three-character categories, each of which can be further divided into up to
 #'   10 four-character subcategories. In place of the purely numeric coding
-#'   system of previous revisions, the 10th revision uses an alphanumeric code
+#'   system of previous revisions, the tenth revision uses an alphanumeric code
 #'   with a letter in the first position and a number in the second, third and
 #'   fourth positions. The fourth character follows a decimal point. Possible
 #'   code numbers therefore range from A00.0 to Z99.9. The letter U is not used

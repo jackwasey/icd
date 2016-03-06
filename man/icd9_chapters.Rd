@@ -9,7 +9,7 @@
 \alias{icd9_majors}
 \alias{icd9_sub_chapters}
 \title{ICD-9 chapters}
-\format{list with chapter/usb-chapter or major names stored in list names,
+\format{list with chapter/sub-chapter or major names stored in list names,
   each with two element named character vector with start and end codes.}
 \source{
 \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}

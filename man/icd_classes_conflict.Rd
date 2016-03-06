@@ -2,7 +2,7 @@
 % Please edit documentation in R/class.R
 \name{icd_classes_conflict}
 \alias{icd_classes_conflict}
-\title{check whether there are any ICD class conflicts}
+\title{Check whether there are any ICD class conflicts}
 \usage{
 icd_classes_conflict(x)
 }
@@ -10,7 +10,16 @@ icd_classes_conflict(x)
 \item{x}{input object to test for class conflicts}
 }
 \description{
-E.g. both icd10who and icd10cm
+Some classes cannot be simultaneously true for one vector of ICD codes, e.g.
+ICD-9-CM and ICD-9 from the WHO. This function returns \code{TRUE} if there
+are any such combinations of incompatible classes. If the constructor
+functions such as \code{icd9cm()} and \code{icd10()} are used, this should
+never happen.
+}
+\examples{
+bad_codes <- c("100", "A01", "V100", "E999.0")
+class(bad_codes) <- c("icd9", "icd10cm", "icd_short_code", "icd_decimal_code")
+stopifnot(icd_classes_conflict(bad_codes))
 }
 \keyword{internal}
 

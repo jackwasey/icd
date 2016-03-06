@@ -36,13 +36,15 @@ icd_filter_poa_not_yes(x, poa_name = "poa")
 \arguments{
 \item{icd9df}{Deprecated. Use \code{x} to provide a data frame input}
 
-\item{poaField}{Deprecated. Use poa_name and the icd_filter_poa family of functions.}
+\item{poaField}{Deprecated. Use \code{poa_name} and the \code{icd_filter_poa}
+family of functions.}
 
-\item{poa}{single character value, being one of "Yes", "No", "NotYes", and
-"NotNo", indicating whether to account for co-morbidities flagged as
-present-on-arrival. This is not a simple flag, because many codes are
-exempt, unspecified, or unknown. The intermediate codes, such as "exempt", "unknown"
-and \code{NA} mean that "yes" is not the same as "not no."}
+\item{poa}{single character value, being one of \code{Yes}, \code{No},
+\code{NotYes}, and \code{NotNo}, indicating whether to account for
+comorbidities flagged as present-on-arrival. This is not a simple flag,
+because many codes are exempt, unspecified, or unknown. The intermediate
+codes, such as "exempt", "unknown" and \code{NA} mean that "yes" is not the
+same as "not no."}
 
 \item{x}{input vector of ICD codes}
 
@@ -53,25 +55,25 @@ one of "Y", "N", "E", "X", "U" or empty.}
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes are exempt,
 unspecified, or unknown. Therefore, two options are given: get all the
-comorbidities where the POA flag was definitely negative, coded as "N" or
-definitely +ve and coded as "Y". Negating one set won't give the other set
+comorbidities where the POA flag was definitely negative, coded as 'N' or
+definitely positive and coded as 'Y'. Negating one set won't give the other set
 unless all codes were either Y or N.
 }
 \section{Functions}{
 \itemize{
 \item \code{icd_filter_poa_yes}: Select rows where Present-on-Arrival flag is
-explicitly "Yes."
+explicitly 'Yes.'
 
 \item \code{icd_filter_poa_no}: Select rows where Present-on-Arrival flag is
-explicitly "No."
+explicitly 'No.'
 
 \item \code{icd_filter_poa_not_no}: Select rows where Present-on-Arrival flag is
-anything but "No." This includes unknown, exempt, other codes, and of
-course all those marked "Yes."
+anything but 'No.' This includes unknown, exempt, other codes, and of
+course all those marked 'Yes.'
 
 \item \code{icd_filter_poa_not_yes}: Select rows where Present-on-Arrival flag is
-anything byt "Yes." This would group exempt, unknown and other codes under
-"Not POA" which is unlikely to be a good choice, since exempt codes, of
+anything but 'Yes.' This would group exempt, unknown and other codes under
+'Not POA' which is unlikely to be a good choice, since exempt codes, of
 which there are a quite large number, tend to describe chronic or
 out-of-hospital characteristics.
 }}

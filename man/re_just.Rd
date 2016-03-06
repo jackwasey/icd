@@ -4,7 +4,7 @@
 \alias{re_just}
 \alias{re_just_ws}
 \alias{re_wrap_or}
-\title{limit a regex to just what is given}
+\title{Limit a regular expression to just what is given}
 \usage{
 re_just(x, whitespace_ok = FALSE)
 

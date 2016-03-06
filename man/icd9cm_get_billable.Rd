@@ -18,9 +18,9 @@ icd9cm_get_billable(x, short_code = icd_guess_short(x), invert = FALSE,
 \arguments{
 \item{x}{data, e.g. character vector, \code{icd9}, \code{icd9cm}}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 
 \item{invert}{Single logical value. Returns the inverse of the result. E.g.
 if seeking valid ICD-9 codes, the invalid ones are returned.}

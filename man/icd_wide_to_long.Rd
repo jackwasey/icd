@@ -28,22 +28,27 @@ match is rejected. If there are no successful guesses, and \code{visit_id}
 was not specified, then the first column of the data frame is used.}
 
 \item{icd_labels}{vector of column names in which codes are found. If NULL,
-all columns matching icd or ICD will be included.}
+all columns matching the regular expression \code{icd_regex} will be
+included.}
 
-\item{icd_name}{character vector length one containing the new column name
-for the ICD codes, defaults to "icd_code"}
+\item{icd_name}{The column in the \code{data.frame} which contains the ICD
+codes. This is a character vector of length one. If it is \code{NULL},
+\code{icd9} will attempt to guess the column name, looking for
+progressively less likely possibilities until it matches a single column.
+Failing this, it will take the first column in the data frame. Specifying
+the column using this argument avoids the guesswork.}
 
-\item{icd_regex}{vector of character strings containg a reguglar expression
-to identify ICD-9 diagnosis columns to try (case-insensitive) in order.
+\item{icd_regex}{vector of character strings containing a regular expression to
+identify ICD-9 diagnosis columns to try (case-insensitive) in order.
 Default is \code{c("icd", "diag", "dx_", "dx")}}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
 
 \item{icdLabels}{Deprecated. Character vector of column names in which codes
-are found. If NULL, all columns matching icd or ICD will be included.}
+are found. If \code{NULL}, all columns matching \code{icdRegex} will be included.}
 
 \item{icdName}{Deprecated. Character vector length one containing the new
-column name for the ICD codes, defaults to "icdCode"}
+column name for the ICD codes, defaults to \code{"icdCode"}}
 
 \item{icdRegex}{Deprecated. Vector of character strings containing a regular
 expression to identify ICD-9 diagnosis columns to try (case-insensitive) in

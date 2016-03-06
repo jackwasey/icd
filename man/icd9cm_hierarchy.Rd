@@ -4,7 +4,7 @@
 \name{icd9cm_hierarchy}
 \alias{icd9Hierarchy}
 \alias{icd9cm_hierarchy}
-\title{ICD9-CM diagnosis code lookup}
+\title{Latest ICD-9-CM diagnosis codes, in flat \code{data.frame} format}
 \format{data frame}
 \source{
 \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
@@ -24,8 +24,8 @@ Rich text descriptions here:
 \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
 }
 \description{
-short-form ICD-9 codes with short and long descriptions, and
-  description of each hierarchy level containing each code.
+Short-form ICD-9 codes with short and long descriptions, and description of
+each hierarchy level containing each code.
 }
 \details{
 \code{icd9Hierarchy} is deprecated in favor of \code{icd9cm_hierarchy}

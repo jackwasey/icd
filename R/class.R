@@ -52,10 +52,18 @@ icd_check_conflict_with_icd9cm <- icd_check_conflict_with_icd9
 icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
 icd_check_conflict_with_icd10who <- icd_check_conflict_with_icd10
 
-#' check whether there are any ICD class conflicts
+#' Check whether there are any ICD class conflicts
 #'
-#' E.g. both icd10who and icd10cm
+#' Some classes cannot be simultaneously true for one vector of ICD codes, e.g.
+#' ICD-9-CM and ICD-9 from the WHO. This function returns \code{TRUE} if there
+#' are any such combinations of incompatible classes. If the constructor
+#' functions such as \code{icd9cm()} and \code{icd10()} are used, this should
+#' never happen.
 #' @param x input object to test for class conflicts
+#' @examples
+#' bad_codes <- c("100", "A01", "V100", "E999.0")
+#' class(bad_codes) <- c("icd9", "icd10cm", "icd_short_code", "icd_decimal_code")
+#' stopifnot(icd_classes_conflict(bad_codes))
 #' @keywords internal
 icd_classes_conflict <- function(x) {
 
@@ -101,11 +109,11 @@ icd_stop_classes_disorder <- function(x) {
          which is out of order.")
 }
 
-#' construct ICD-9 data types
+#' Construct ICD-9 data types
 #'
-#' Takes an R structure and sets class to an ICD type. In the case
-#'   of ICD-9 and ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM
-#'   (/code{icd9cm}), then an ICD-9 class (/code{icd9}) is also set.
+#' Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
+#' ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (\code{icd9cm}),
+#' then an ICD-9 class (\code{icd9}) is also set.
 #'
 #' @param x object to set class \code{icd9}
 #' @param warn single logical value, if \code{TRUE} will gives warning when
@@ -317,10 +325,10 @@ icd_comorbidity_map <- function(x) {
   x
 }
 
-#' extract vector of codes from an ICD comorbidity map
+#' Extract vector of codes from an ICD comorbidity map
 #'
-#' Equivalent to a list, but preserves class of extracted vector
-#' @param x comorbidity map to be sub-setted. This is a named list.
+#' Equivalent to a list, but preserves class of extracted vector.
+#' @param x comorbidity map, which is a named list
 #' @param index integer
 #' @template dotdotdot
 #' @export

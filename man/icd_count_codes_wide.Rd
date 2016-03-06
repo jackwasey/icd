@@ -26,8 +26,8 @@ column being the \code{visitId}, and the second being the count. If
 preserved.}
 
 \item{aggregate, }{single logical, default is FALSE. If TRUE, the length (or
-rows) of the output will no longer match the input, but duplicate visitIds
-will be counted together.}
+rows) of the output will no longer match the input, but duplicate
+\code{visitId}s will be counted together.}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since

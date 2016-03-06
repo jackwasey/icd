@@ -56,16 +56,14 @@ test_that("groups of SAS assignments can be extracted", {
 
   # this is a single assignment, but of the form of sub-part of
   # multi-assignment, so we should handle it.
-  expect_equal(sasParseAssignments('"123" = "YES"'), list(YES = "123"))
-  expect_equal(sasParseAssignments('"123-456" = "YES"'), list(YES = "123-456"))
-  expect_equal(sasParseAssignments('123-456 = "YES"'), list(YES = "123-456"))
-  #   expect_equal(
-  #     sasParseAssignments('"999  " = "ONE" "777  "-"8881 " = "TWO"',
-  #       strip_whitespace=F),
-  #     list(ONE="999  ", TWO='777  -8881 '))
+  expect_equal(sas_parse_assignments('"123" = "YES"'), list(YES = "123"))
+  expect_equal(sas_parse_assignments('"123-456" = "YES"'), list(YES = "123-456"))
+  expect_equal(sas_parse_assignments('123-456 = "YES"'), list(YES = "123-456"))
 
   expect_equal(
-    sasParseAssignments('"41511"-"41519", "4160 "-"4169 ","4179 " = "PULMCIRC" "5571 ","5579 ", "V434 "= "PERIVASC"'),
+    sas_parse_assignments(
+      paste('"41511"-"41519", "4160 "-"4169 ","4179 " = "PULMCIRC"',
+            '"5571 ","5579 ", "V434 "= "PERIVASC"')),
     list(PULMCIRC = c("41511-41519", "4160-4169", "4179"),
          PERIVASC = c("5571", "5579", "V434")
     )
@@ -75,12 +73,12 @@ test_that("groups of SAS assignments can be extracted", {
 
 test_that("read LET string declarations from SAS code", {
 
-  res_list <- sasExtractLetStrings("\t%LET DC16=%STR('196','197','198','199');      ")
+  res_list <- sas_extract_let_strings("\t%LET DC16=%STR('196','197','198','199');      ")
   expect_true(is.list(res_list))
   expect_true(names(res_list) == "DC16")
   expect_equal(res_list[[1]], c("196", "197", "198", "199"))
 
-  res_list <- sasExtractLetStrings(c(
+  res_list <- sas_extract_let_strings(c(
     "\t%LET DC16=%STR('196','197','198','199');      ",
     "\t%LET DC17=%STR('042','043','044');"))
 
@@ -88,11 +86,11 @@ test_that("read LET string declarations from SAS code", {
   expect_equal(res_list[["DC17"]], c("042", "043", "044"))
 
   expect_equal(
-    sasExtractLetStrings("\t%LET LBL16=%STR(Metastatic Carcinoma);")[["LBL16"]],
+    sas_extract_let_strings("\t%LET LBL16=%STR(Metastatic Carcinoma);")[["LBL16"]],
     "Metastatic Carcinoma")
 
   expect_equal(
-    sasExtractLetStrings('\t%LET ABC=%STR("123");")[["ABC"]]'),
+    sas_extract_let_strings('\t%LET ABC=%STR("123");")[["ABC"]]'),
     list(ABC = "123"))
 
 })

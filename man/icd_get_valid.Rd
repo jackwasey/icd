@@ -36,9 +36,9 @@ is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{isShort}{Deprecated. Single logical value which determines whether the
+ICD-9 code provided is in short (\code{TRUE}) or decimal (\code{FALSE})
+form. Where reasonable, this is guessed from the input data.}
 
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
 code, then the digits are greedily assigned to hundreds, then tens, then
@@ -51,9 +51,9 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 
 \item{x}{input vector of ICD codes}
 
-\item{short_code}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 }
 \description{
 Given vector of short_code or decimal ICD-9 codes, return (in the

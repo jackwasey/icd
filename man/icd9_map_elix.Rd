@@ -9,9 +9,9 @@
 \format{list of character vectors, each named by co-morbidity}
 \description{
 The original mapping of Elixhauser's ICD-9-CM to 30 comorbidities. According
-to Sharabiani et al, this mapping provides the best long-term mortality
-prediction. The weaknesses of this mapping are that it is based on slightly
-out-dated ICD-9 codes. I have not yet verified what changes to the ICD-9-CM
+to Sharabiani, this mapping provides the best long-term mortality prediction.
+The weaknesses of this mapping are that it is based on slightly out-dated
+ICD-9 codes. I have not yet verified what changes to the ICD-9-CM
 specification between 1998 and now would impact this mapping.
 }
 \references{

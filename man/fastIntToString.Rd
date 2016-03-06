@@ -3,8 +3,7 @@
 \name{fastIntToStringStd}
 \alias{fastIntToStringRcpp}
 \alias{fastIntToStringStd}
-\title{Fast convert integer vector to character vector
-Fast conversion from integer vector to character vector using C++}
+\title{Fast convert integer vector to character vector}
 \usage{
 fastIntToStringStd(x)
 
@@ -13,17 +12,17 @@ fastIntToStringRcpp(x)
 \arguments{
 \item{x}{vector of integers}
 
-\item{bufferSize}{int if any input strings are longer than this number (default 16) there will be memory errors.
-No checks done for speed.}
+\item{bufferSize}{int if any input strings are longer than this number
+(default 16) there will be memory errors. No checks done for speed.}
 }
 \description{
-Fast convert integer vector to character vector
 Fast conversion from integer vector to character vector using C++
 }
 \examples{
 \dontrun{
 pts <- generate_random_pts(1e7)
-# conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
+# conclusion: buffer size matters little (so default to be more generous),
+# and Rcpp version fastest.
 microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
                                fastIntToStringStd(pts$visit_id, buffer = 16),
                                fastIntToStringStd(pts$visit_id, buffer = 64),

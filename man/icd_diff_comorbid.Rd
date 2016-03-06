@@ -48,9 +48,9 @@ A list, each item of which is another list containing the
   intersections and both asymmetric differences.
 }
 \description{
-Compares two comorbidity:icd9 code mappings. The results are
-  returned invisibly as a list. Only those comorbidities with (case
-  sensitive) overlapping names are compared.
+Compares two comorbidity to ICD code mappings. The results are returned
+invisibly as a list. Only those comorbidities with (case sensitive)
+overlapping names are compared.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -59,7 +59,8 @@ ICD-9 codes
 }}
 \examples{
 \donttest{
-diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)[["CHF"]]
+diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid,
+                                 show = TRUE)[["CHF"]]
 }
 \dontrun{
 # show differences for

@@ -2,18 +2,18 @@
 % Please edit documentation in R/class.R
 \name{[[.icd_comorbidity_map}
 \alias{[[.icd_comorbidity_map}
-\title{extract vector of codes from an ICD comorbidity map}
+\title{Extract vector of codes from an ICD comorbidity map}
 \usage{
 \method{[[}{icd_comorbidity_map}(x, index, ...)
 }
 \arguments{
-\item{x}{comorbidity map to be sub-setted. This is a named list.}
+\item{x}{comorbidity map, which is a named list}
 
 \item{index}{integer}
 
 \item{...}{arguments passed on to other functions}
 }
 \description{
-Equivalent to a list, but preserves class of extracted vector
+Equivalent to a list, but preserves class of extracted vector.
 }
 

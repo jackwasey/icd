@@ -56,7 +56,7 @@ test_that("deprecated - basic SAS VALUE declarations can be read into an R list"
 })
 
 test_that("deprecated - groups of SAS assignments can be extracted", {
-
+  sasParseAssignments <- sas_parse_assignments
   # this is a single assignment, but of the form of sub-part of
   # multi-assignment, so we should handle it.
   expect_equal(sasParseAssignments('"123" = "YES"'), list(YES = "123"))
@@ -78,6 +78,7 @@ test_that("deprecated - groups of SAS assignments can be extracted", {
 })
 
 test_that("deprecated - read LET string declarations from SAS code", {
+  sasExtractLetStrings <- sas_extract_let_strings
 
   letStrOne <-  "\t%LET DC16=%STR('196','197','198','199');      "
   res_list <- sasExtractLetStrings(letStrOne)

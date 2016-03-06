@@ -3,7 +3,7 @@
 \name{icd9CountComorbidBin}
 \alias{icd9CountComorbidBin}
 \alias{icd_count_comorbid}
-\title{icd_count_comorbid}
+\title{Count number of comorbidities per patient}
 \usage{
 icd9CountComorbidBin(x, visitId = get_visit_name(x), return.df = FALSE)
 

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' extract alphabetic, and numeric part of icd9 code prefix
+#' extract alphabetic, and numeric part of ICD-9 code prefix
 #'
 #' removes white space and separates V or E if present.
 #' @template icd9-any

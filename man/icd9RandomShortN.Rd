@@ -2,7 +2,7 @@
 % Please edit documentation in R/RcppExports.R
 \name{icd9RandomShortN}
 \alias{icd9RandomShortN}
-\title{generate random short-form numeric icd9 codes}
+\title{Generate random short-form numeric ICD-9 codes}
 \usage{
 icd9RandomShortN(n = 5L)
 }

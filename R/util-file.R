@@ -120,7 +120,7 @@ download_to_data_raw <- function(url,
 
 #' Save given variable in package data directory
 #'
-#' File will be named \code{\emph{var_name}.RData} with an optional suffix
+#' File will be named \emph{var_name}\code{.RData} with an optional suffix
 #' before \code{.RData}
 #'
 #' @param var_name character or symbol, e.g. \code{"myvar"} or \code{myvar},

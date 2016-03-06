@@ -76,16 +76,16 @@ icd_is_valid(x, ...)
 \method{icd_is_valid}{icd10who}(x, short_code = icd_guess_short.icd10(x), ...)
 }
 \arguments{
-\item{icd9Mapping}{named list containing vectors of icd9 codes. E.g. the AHRQ
-comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
+\item{icd9Mapping}{named list containing vectors of ICD-9 codes. E.g. the
+AHRQ comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
 "27803", "V8554", "79391", "64910", "64911", "64912", "64913", "64914",
 "V8530", "V8531", "V8532", "V8533", "V8534", "V8535", "V8536", "V8537",
 "V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
 c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{isShort}{Deprecated. Single logical value which determines whether the
+ICD-9 code provided is in short (\code{TRUE}) or decimal (\code{FALSE})
+form. Where reasonable, this is guessed from the input data.}
 
 \item{x}{An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.}
@@ -95,9 +95,9 @@ is guessed from the input data.}
 \item{whitespace_ok}{Single logical, if \code{TRUE}, the default, matches for
 ICD codes will accept leading and trailing white space.}
 
-\item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{isShort}{Deprecated. Single logical value which determines whether the
+ICD-9 code provided is in short (\code{TRUE}) or decimal (\code{FALSE})
+form. Where reasonable, this is guessed from the input data.}
 
 \item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
 which falls before the decimal point, in decimal notation. (In five digit
@@ -105,7 +105,7 @@ notation, the 'major' part is be the first three characters (with leading
 zeroes), and includes V or E prefix.}
 }
 \value{
-logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
+logical vector with \code{TRUE} or \code{FALSE} for each ICD code
   provided according to its validity
 }
 \description{
@@ -113,8 +113,6 @@ This does not check whether the code corresponds to a real ICD-9-CM billing
 code, or parent grouping. For that, see \code{\link{icd_is_defined}}.
 }
 \details{
-do the icd9 valid sub-types need to be exported?
-
 Factors are accepted, and since the validation is done with \code{grepl}
 these are handled correctly.
 
@@ -129,14 +127,14 @@ part of a character vector of codes, and will therefore be cast already to
 Leading zeroes in the decimal form are not ambiguous. Although
   integer ICD-9 codes could be intended by the user, there is a difference
   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
-  is provided TODO: add default (when there is no class) which detected icd9
+  is provided TODO: add default (when there is no class) which detected ICD-9
   vs 10 if possible. TODO: use "short_code" or "long" attribute if available
   to tighten validation, or guess if missing.
 
 From WHO ICD-10 manual: "The basic ICD is a single coded list of
   three-character categories, each of which can be further divided into up to
   10 four-character subcategories. In place of the purely numeric coding
-  system of previous revisions, the 10th revision uses an alphanumeric code
+  system of previous revisions, the tenth revision uses an alphanumeric code
   with a letter in the first position and a number in the second, third and
   fourth positions. The fourth character follows a decimal point. Possible
   code numbers therefore range from A00.0 to Z99.9. The letter U is not used
@@ -164,7 +162,7 @@ declaring method here
 
 \item \code{icd9}: Test whether generic ICD-10 code is valid
 
-\item \code{icd_comorbidity_map}: Validate an icd9 mapping to comorbidities
+\item \code{icd_comorbidity_map}: Validate a mapping of ICD codes to comorbidities.
 
 \item \code{icd10who}: Check whether ICD-10 WHO codes are valid
 }}
@@ -182,8 +180,9 @@ declaring method here
   the class vector are used to describe features of the data. If these are
   not present, the user may specify (e.g. decimal vs short_code type, ICD-9
   vs ICD-10 WHO), but if they are, the correct functions are called without
-  any guess work. There are overlapping namespaces for short_code vs decimal
-  and ICD-9 vs ICD-10 codes, so guessing is never going to be perfect.
+  any guess work. There is overlap between sets with combinations of
+  \code{short_code} or \code{decimal_code}, and ICD-9 or ICD-10 codes, so
+  guessing is never going to be perfect.
 }
 \examples{
   icd_is_valid(icd9(c("", "1", "22", "333", "4444", "123.45", "V",

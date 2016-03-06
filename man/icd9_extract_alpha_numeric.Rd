@@ -3,7 +3,7 @@
 \name{icd9ExtractAlphaNumeric}
 \alias{icd9ExtractAlphaNumeric}
 \alias{icd9_extract_alpha_numeric}
-\title{extract alphabetic, and numeric part of icd9 code prefix}
+\title{extract alphabetic, and numeric part of ICD-9 code prefix}
 \usage{
 icd9ExtractAlphaNumeric(icd9)
 

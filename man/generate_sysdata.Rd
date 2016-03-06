@@ -10,7 +10,7 @@ generate_sysdata(save_data = TRUE)
 \item{save_data}{whether to save the data.}
 }
 \value{
-invisibly returns the sysdata as a list
+invisibly returns the data as a list
 }
 \description{
 Generate correctly ordered look-up tables of numeric-only, V and E codes.

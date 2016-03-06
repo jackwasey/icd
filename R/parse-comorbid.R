@@ -84,7 +84,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
       out <- icd_children.icd9(unlist(some_pairs[unpaired_items]), defined = FALSE, short_code = TRUE)
 
     the_pairs <- some_pairs[lapply(some_pairs, length) == 2]
-    out <- c(out, lapply(the_pairs, function(x) icd9ExpandRangeForSas(x[1], x[2])))
+    out <- c(out, lapply(the_pairs, function(x) sas_expand_range(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
     out %>% unlist %>% unique -> icd9_map_ahrq[[cmb]]
   }
@@ -199,7 +199,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
 
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
-  let_statements <- sasExtractLetStrings(quan_sas_lines)
+  let_statements <- sas_extract_let_strings(quan_sas_lines)
   icd9_map_quan_deyo <- let_statements[grepl("DC[[:digit:]]+", names(let_statements))]
 
   # use validation: takes time, but these are run-once per package creation (and

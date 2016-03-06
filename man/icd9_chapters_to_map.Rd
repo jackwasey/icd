@@ -8,7 +8,7 @@ icd9_chapters_to_map(x)
 }
 \arguments{
 \item{x}{Either a chapter list itself, or the name of one, e.g.
-"icd9_sub_chapters"}
+\code{icd9_sub_chapters}}
 }
 \description{
 the chapter headings can be converted into the full set of their children,

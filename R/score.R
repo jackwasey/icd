@@ -17,11 +17,11 @@
 
 #' Calculate Charlson Comorbidity Index (Charlson Score)
 #'
-#' Charlson score is calculated in the basis of the Quan revision
-#'   of Deyo's ICD-9 mapping. (Peptic Ulcer disease no longer warrants a point.)
-#'   Quan published an updated set of scores, but it seems most people use the
-#'   original scores for easier comparison between studies, even though Quan's
-#'   were more predictive.
+#' Charlson score is calculated in the basis of the Quan revision of Deyo's
+#' ICD-9 mapping. (peptic ulcer disease no longer warrants a point.) Quan
+#' published an updated set of scores, but it seems most people use the original
+#' scores for easier comparison between studies, even though Quan's were more
+#' predictive.
 #' @details When used, hierarchy is applied per Quan, "The following comorbid
 #'   conditions were mutually exclusive: diabetes with chronic complications and
 #'   diabetes without chronic complications; mild liver disease and moderate or
@@ -29,7 +29,7 @@
 #'   Quan scoring weights come from the 2011 paper
 #'   (dx.doi.org/10.1093/aje/kwq433). The comorbidity weights were recalculated
 #'   using updated discharge data, and some changes, such as Myocardial
-#'   Infarcation decreasing from 1 to 0, may reflect improved outcomes due to
+#'   Infarction decreasing from 1 to 0, may reflect improved outcomes due to
 #'   advances in treatment since the original weights were determined in 1984.
 #' @param x data frame containing a column of visit or patient identifiers, and
 #'   a column of ICD-9 codes. It may have other columns which will be ignored.
@@ -92,7 +92,7 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
 
 #' @rdname icd_charlson
 #' @param hierarchy single logical value, default is \code{FALSE}. If
-#'   \code{TRUE}, will drop 'DM' if 'DMcx' is present, etc.
+#'   \code{TRUE}, will drop \code{DM} if \code{DMcx} is present, etc.
 #' @export
 icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
                                        scoring_system = c("original", "charlson", "quan")) {
@@ -181,7 +181,7 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
     res[["icd_count"]]
 }
 
-#' icd_count_comorbid
+#' Count number of comorbidities per patient
 #'
 #' \code{icd_count_comorbid} differs from the other counting functions in that
 #' it counts \emph{comorbidities}, not individual diagnoses. It accepts any
@@ -257,7 +257,7 @@ icd_count_codes_wide <- function(x,
 #' van Walraven Elixhauser score is calculated from the Quan revision of
 #' Elixhauser's ICD-9 mapping. This function allows for the hierarchical
 #' exclusion of less severe versions of comorbidities when their more severe
-#' version is also present via the applyHeirarchy argument. For the Elixhauser
+#' version is also present via the \code{heirarchy} argument. For the Elixhauser
 #' comorbidities, this is diabetes v. complex diabetes and solid tumor v.
 #' metastatic tumor
 #' @param x data frame containing a column of visit or patient identifiers, and

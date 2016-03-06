@@ -106,18 +106,19 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
   invisible(icd9cm_billable)
 }
 
-#' read the ICD-9-CM description data as provided by the Center for
+#' Read the ICD-9-CM description data as provided by the Center for Medicaid
+#' Services (CMS).
 #'
-#'   Medicaid Services.
-#' ICD9-CM data unfortunately has no comma separation, so have to
-#'   pre-process. Note that this canonical data doesn't specify non-diagnostic
-#'   higher-level codes, just the specific diagnostic 'child' codes.
+#' The full ICD-9 specification is in an RTF file, but CMS also distributes a
+#' space-separated text file with just the definitions for 'defined', 'billable'
+#' codes. Note that this canonical data doesn't specify non-diagnostic
+#' higher-level codes, just the specific diagnostic 'child' codes.
 #'
-#'   The file can be pulled from the zip files on the CMS web site or from
-#'   within the package. Pulled data can be saved to the package development
-#'   tree.
-#' @param icd9path path of the source data which is typically in \code{data-raw}
-#' @param save logical whether to attempt to re-save source files in inst
+#' The file can be pulled from the zip files on the CMS web site or from within
+#' the package.
+#' @param version character vector of length one containing the ICD-9 version,
+#'   e.g. \code{"32"} which is the default.
+#' @param save_data logical whether to attempt to re-save source files in inst
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal
