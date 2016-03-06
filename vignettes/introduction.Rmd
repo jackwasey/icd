@@ -47,7 +47,7 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 
-patientData <- data.frame(
+patients <- data.frame(
   visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = icd9(c("40201", "2258", "7208", "25001", "34400", "4011", "4011")),
   poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
@@ -69,7 +69,7 @@ from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 
 When calcuating which patients have which comorbidities, the input data is typically structured as follows:
 ```{r showdatlong,echo=FALSE}
-patientData
+patients
 ```
 or
 ```{r showdatwide,echo=FALSE}
@@ -79,15 +79,15 @@ Of course, in real life, there are many problems with the data, such is `NA` ent
 
 The comorbidities can be determined as follows (showing the first few columns for brevity):
 ```{r getcomorbidities}
-icd_comorbid_ahrq(patientData)[, 1:8]
+icd_comorbid_ahrq(patients)[, 1:8]
 ```
 or
 ```{r getcomorbidities1a}
-icd_comorbid_quan_deyo(patientData)[, 1:8]
+icd_comorbid_quan_deyo(patients)[, 1:8]
 ```
 and things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. This is not a dependency for this package, but is recommended because of the frequent need to chain together icd9 commands, and greater clarity.
 ```{r getcomorbidities2}
-patientData %>% icd_filter_poa_yes %>% icd_comorbid_ahrq %>% extract(1:8)
+patients %>% icd_filter_poa_yes %>% icd_comorbid_ahrq %>% extract(1:8)
 ```
 
 ## Converting ICD-9 codes between types
@@ -221,11 +221,11 @@ icd9PoaChoices
 ```
 Filter for present-on-arrival being "Y"
 ```{r simplepoa}
-patientData %>% icd9FilterPoaYes
+patients %>% icd9FilterPoaYes
 ```
 Show that *yes* is not equal to *not no* (e.g. due to NA in `poa` field)
 ```{r notnopoa}
-patientData %>% icd9FilterPoaNotNo
+patients %>% icd9FilterPoaNotNo
 ```
 
 ## Comorbidities
@@ -259,7 +259,7 @@ names(quanElixComorbid)
 ### Filter patients and create comorbidities
 Take my patients, find the ones where there definitely or maybe was a diagnosis present on admission, then generate comorbidities based on the AHRQ mapping. N.b. `NotNo` is not the same as `Yes` because of some exempt, unclassifiable conditions, or `NA` values for `poa`.
 ```{r chainpoatocomorbid}
-patientData %>%
+patients %>%
   icd_filter_poa_not_no %>%
   icd_comorbid_ahrq %>%
   extract(1:9)
@@ -294,23 +294,21 @@ icd9(cardiac) %>% icd_explain(warn = FALSE) %>% head(10)
 
 ### Find comorbidities for a large number of patients.
 I understand that comorbiditity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
-```{r speed, cache = TRUE}
+```{r speed, cache = TRUE, eval = FALSE}
 # codes selected from AHRQ mapping
-many_patients <- icd:::generate_random_pts(100000) 
-
-# result in seconds (platform and load dependent, of course)
+many_patients <- icd:::generate_random_pts(1e7) 
 system.time(
-  icd9ComorbidAhrq(many_patients)
+  icd_comorbid_ahrq(many_patients)
   )[["elapsed"]] 
 ```
-Don't want to stress CRAN, so no larger numbers demonstrated, but I do consistently get  about 5 seconds for 10 million rows of comorbidities on a moderately powerful workstation.
+This is not run to avoid unnecessary load when CRAN builds the package. I get about 5 seconds for 10 million rows of comorbidities on a moderately powerful workstation.
 
 ### Arbitrary ICD-9 mapping
-The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd9/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9Chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.
+The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd9/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9_chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.
 ```{r "arbitraryMapping"}
 names(icd9_chapters)[c(1:5, 14)]
 myMap <- icd:::icd9_chapters_to_map(icd9_chapters[c(2, 5, 14)])
-icd_comorbid(patientData, myMap) # no +ve 
+icd_comorbid(patients, myMap) # no +ve 
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes.
