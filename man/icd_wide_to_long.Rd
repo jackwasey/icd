@@ -62,8 +62,10 @@ order. Default is \code{c("icd", "diag", "dx_", "dx")}}
   codes found in the wide input data.
 }
 \description{
-Reshaping data is a common task, and is made easier here by knowing more about the underlying structure of the data.   This function wraps the
-\code{\link{[stats]{reshape}}} function with specific behavior and checks related to ICD codes. Empty strings and NA values will be dropped, and
+Reshaping data is a common task, and is made easier here by knowing more about
+the underlying structure of the data. This function wraps the
+\code{\link[stats]{reshape}} function with specific behavior and checks
+related to ICD codes. Empty strings and NA values will be dropped, and
 everything else kept. No validation of the ICD codes is done.
 }
 \examples{

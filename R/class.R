@@ -388,7 +388,7 @@ c.icd10 <- function(...) {
   base_class <- class(args[[1]])
   if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)?
-         If so, use unclass on some or all the arguments")
+         If so, use 'unclass' on some or all the arguments")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -399,7 +399,7 @@ c.icd10cm <- function(...) {
   base_class <- class(args[[1]])
   if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)?
-         If so, use unclass on some or all the arguments")
+         If so, use 'unclass' on some or all the arguments")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -410,7 +410,7 @@ c.icd10who <- function(...) {
   base_class <- class(args[[1]])
   if (any(vapply(args, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)?
-         If so, use unclass on some or all the arguments")
+         If so, use 'unclass' on some or all the arguments")
   structure(c(unlist(lapply(args, unclass))), class = base_class)
 }
 
@@ -422,7 +422,7 @@ c.icd_short_code <- function(...) {
   base_class <- class(args[[1]])
   if (any(vapply(args, is.icd_decimal_code, FUN.VALUE = logical(1))))
     stop("Do you really want to combine short and decimal format ICD codes?
-         If so, use unclass on some or all the arguments")
+         If so, use 'unclass' on some or all the arguments")
   if (!all(vapply(args, is.icd_short_code, FUN.VALUE = logical(1))))
     warning("The first argument is in short format, whereas subsequent arguments
             include codes with no short or decimal designation.")
@@ -437,7 +437,7 @@ c.icd_decimal_code <- function(...) {
   base_class <- class(args[[1]])
   if (any(vapply(args, is.icd_short_code, FUN.VALUE = logical(1))))
     stop("Do you really want to combine short and decimal format ICD codes?
-         If so, use unclass on some or all the arguments")
+         If so, use 'unclass' on some or all the arguments")
   if (!all(vapply(args, is.icd_decimal_code, FUN.VALUE = logical(1))))
     warning("The first argument is in short format, whereas subsequent arguments
             include codes with no short or decimal designation.")

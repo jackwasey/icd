@@ -138,7 +138,7 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
 
   if (pos_missing && ncol(res_matches) > 3)
     stop("the pair matching has three or more results but needed two.
-          Use (?: to have a non-grouping regex parenthesis")
+          Use (?: to have a non-grouping regular expression parenthesis")
 
   # with str_match, the first column is a redundant complete match of the
   # whole pattern, so pos + 1 here:
