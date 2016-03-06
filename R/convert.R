@@ -68,11 +68,10 @@ icd9_chapters_to_map <- function(x) {
   map
 }
 
-#' convert ICD data from wide to long format
+#' Convert ICD data from wide to long format
 #'
-#' This is different enough to \code{dcast} in \code{reshape2} that it needs
-#' writing again specifically for ICD codes. This function packages the core
-#' \code{reshape} function. Empty strings and NA values will be dropped, and
+#' Reshaping data is a common task, and is made easier here by knowing more about the underlying structure of the data.   This function wraps the
+#' \code{\link{[stats]{reshape} function with specific behavior and checks related to ICD codes. Empty strings and NA values will be dropped, and
 #' everything else kept. No validation of the ICD codes is done.
 #' @param x \code{data.frame} in wide format, i.e. one row per patient, and
 #'   multiple columns containing ICD codes, empty strings or NA.

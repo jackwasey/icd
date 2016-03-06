@@ -3,7 +3,7 @@
 \name{icd_wide_to_long}
 \alias{icd9WideToLong}
 \alias{icd_wide_to_long}
-\title{convert ICD data from wide to long format}
+\title{Convert ICD data from wide to long format}
 \usage{
 icd_wide_to_long(x, visit_name = get_visit_name(x), icd_labels = NULL,
   icd_name = "icd_code", icd_regex = c("icd", "diag", "dx_", "dx"))
@@ -60,12 +60,6 @@ order. Default is \code{c("icd", "diag", "dx_", "dx")}}
 \code{data.frame} with visit_name column named the same as input, and
   a column named by \code{icd.name} containing all the non-NA and non-empty
   codes found in the wide input data.
-}
-\description{
-This is different enough to \code{dcast} in \code{reshape2} that it needs
-writing again specifically for ICD codes. This function packages the core
-\code{reshape} function. Empty strings and NA values will be dropped, and
-everything else kept. No validation of the ICD codes is done.
 }
 \examples{
   widedf <- data.frame(visit_name = c("a", "b", "c"),
