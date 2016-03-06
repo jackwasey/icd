@@ -91,8 +91,8 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
 }
 
 #' @rdname icd_charlson
-#' @param applyHierarchy single logical value, default is FALSE. If TRUE, will
-#'   drop DM if DMcx is present, etc.
+#' @param hierarchy single logical value, default is \code{FALSE}. If
+#'   \code{TRUE}, will drop 'DM' if 'DMcx' is present, etc.
 #' @export
 icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
                                        scoring_system = c("original", "charlson", "quan")) {
@@ -126,7 +126,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
   rowSums(t(t(x) * weights))
 }
 
-#' count ICD codes or comorbidities for each patient
+#' Count ICD codes or comorbidities for each patient
 #'
 #' \code{icd_count_codes} takes a data frame with a column for \code{visit_name}
 #' and another for ICD-9 code, and returns the number of distinct codes for each
@@ -254,12 +254,12 @@ icd_count_codes_wide <- function(x,
 
 #' Calculate van Walraven Elixhauser Score
 #'
-#' van Walraven Elixhauser score is calculated from the Quan
-#'   revision of Elixhauser's ICD-9 mapping. This function allows for the
-#'   hierarchical exlusion of less severe versions of comorbidities when their
-#'   more severe version is also present via the applyHeirarchy argument. For
-#'   the Elixhauser comorbidities, this is diabetes v. complex diabetes and
-#'   solid tumor v. metastatic tumor
+#' van Walraven Elixhauser score is calculated from the Quan revision of
+#' Elixhauser's ICD-9 mapping. This function allows for the hierarchical
+#' exclusion of less severe versions of comorbidities when their more severe
+#' version is also present via the applyHeirarchy argument. For the Elixhauser
+#' comorbidities, this is diabetes v. complex diabetes and solid tumor v.
+#' metastatic tumor
 #' @param x data frame containing a column of visit or patient identifiers, and
 #'   a column of ICD-9 codes. It may have other columns which will be ignored.
 #'   By default, the first column is the patient identifier and is not counted.

@@ -31,8 +31,7 @@ icd_get_valid(x, short_code = icd_guess_short(x))
 \method{icd_get_valid}{icd10cm}(x, short_code = icd_guess_short(x))
 }
 \arguments{
-\item{icd9}{is
-a character vector or factor of ICD-9 codes. If fewer than five characters
+\item{icd9}{is a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
@@ -41,15 +40,14 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
-characters is given in a code, then the digits are greedily assigned to
-hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
+\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
+code, then the digits are greedily assigned to hundreds, then tens, then
+units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
 
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five characters is
+given in a code, then the digits are greedily assigned to hundreds, then
+tens, then units, before the decimal parts. E.g. "10" becomes "010", not
+"0010"}
 
 \item{x}{input vector of ICD codes}
 

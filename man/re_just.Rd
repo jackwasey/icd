@@ -13,20 +13,21 @@ re_just_ws(x)
 re_wrap_or(x)
 }
 \arguments{
-\item{x}{single string containing a regex}
+\item{x}{single string containing a regular expression}
 
 \item{whitespace_ok}{Single logical, if \code{TRUE}, the default, matches for
 ICD codes will accept leading and trailing white space.}
 }
 \description{
-update regex to limit by start and end, with or without white space
+update regular expression to limit by start and end, with or without white
+space
 }
 \section{Functions}{
 \itemize{
 \item \code{re_just_ws}: allow white space
 
-\item \code{re_wrap_or}: contain any \code{|} options within a regex, e.g. ICD-9
-codes without \code{^} or \code{$}.
+\item \code{re_wrap_or}: contain any \code{|} options within a regular expression,
+e.g. ICD-9 codes without \code{^} or \code{$}.
 }}
 \keyword{internal}
 

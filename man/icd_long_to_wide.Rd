@@ -25,12 +25,12 @@ proceed until a single match is made. Data frames may be wide with many matching
 positives, anything but a single match is rejected. If there are no successful guesses, and \code{visit_id} was not
 specified, then the first column of the data frame is used.}
 
-\item{icd_name}{The column in the data frame which contains the ICD codes.
-This is a character vector of length one. If it is \code{NULL}, \code{icd9}
-will attempt to guess the column name, looking for progressively less
-likely possibilities until it matche a single column. Failing this, it will
-take the first column in the data frame. Specifying the column using this
-argument avoids the guesswork.}
+\item{icd_name}{The column in the \code{data.frame} which contains the ICD
+codes. This is a character vector of length one. If it is \code{NULL},
+\code{icd9} will attempt to guess the column name, looking for
+progressively less likely possibilities until it matches a single column.
+Failing this, it will take the first column in the data frame. Specifying
+the column using this argument avoids the guesswork.}
 
 \item{prefix}{character, default "icd_" to prefix new columns}
 

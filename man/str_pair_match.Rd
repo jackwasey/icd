@@ -2,16 +2,16 @@
 % Please edit documentation in R/util.R
 \name{str_pair_match}
 \alias{str_pair_match}
-\title{Match strings to get named vector}
+\title{Match pairs of strings to get named vector}
 \usage{
 str_pair_match(string, pattern, pos, swap = FALSE, ...)
 }
 \arguments{
 \item{string}{vector of strings}
 
-\item{pattern}{vector of regex which should match exactly two strings for
-each element in \code{stringr}. If \code{pos} is specified, this rule is
-relaxed.}
+\item{pattern}{vector of regular expression which should match exactly two
+strings for each element in \code{stringr}. If \code{pos} is specified,
+this rule is relaxed.}
 
 \item{pos}{optional pair of integers with positions of the first and second
 desired matches, when multiple matches are made by the regular expression}
@@ -20,8 +20,8 @@ desired matches, when multiple matches are made by the regular expression}
 not to swap, so the first match becomes the name.}
 }
 \description{
-match a character vector against a regex with a pair of parentheses,
-returning named vector
+Match a character vector against a regular expression with at least two
+parenthetic groupings, returning named vector.
 }
 \keyword{internal}
 

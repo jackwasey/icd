@@ -13,7 +13,7 @@ generate_deprecated_data(save_data = FALSE, path = file.path("data",
 }
 \description{
 Unfortunately, this is easiest (and has a chance of passing CRAN checks) if I
-just duplicate data rather than trying to change the namespace
+just duplicate data rather than trying to change the \code{NAMESPACE}.
 }
 \keyword{internal}
 

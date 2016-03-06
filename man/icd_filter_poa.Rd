@@ -38,19 +38,17 @@ icd_filter_poa_not_yes(x, poa_name = "poa")
 
 \item{poaField}{Deprecated. Use poa_name and the icd_filter_poa family of functions.}
 
-\item{poa}{single character value, being one of \code{poaChoices} whether to
-account for co-morbidities flagged as present-on-arrival. This is not a
-simple binary, since many codes are exempt, unspecified, or unknown.
-\code{poaField} gives the choices: yes, not no, no, not yes. The
-intermediate codes, such as "exempt", "unknown" and \code{NA} mean that
-"yes" is not the same as "not no."}
+\item{poa}{single character value, being one of "Yes", "No", "NotYes", and
+"NotNo", indicating whether to account for co-morbidities flagged as
+present-on-arrival. This is not a simple flag, because many codes are
+exempt, unspecified, or unknown. The intermediate codes, such as "exempt", "unknown"
+and \code{NA} mean that "yes" is not the same as "not no."}
 
 \item{x}{input vector of ICD codes}
 
 \item{poa_name}{The name of column in the data frame which contains the
-Present On Arrival flag. The flag itself is a single character, typically
-one of "Y", "N", "E", "X", "U" or empty. The poaField is a character vector
-of length one.}
+Present On Arrival (POA) flag. The flag itself is a single character, typically
+one of "Y", "N", "E", "X", "U" or empty.}
 }
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes are exempt,

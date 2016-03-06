@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_sysdata.R
 \name{generate_sysdata}
 \alias{generate_sysdata}
-\title{Generate sysdata.rda}
+\title{Generate \code{sysdata.rda}}
 \usage{
 generate_sysdata(save_data = TRUE)
 }

@@ -17,8 +17,9 @@
 
 #' limit a regex to just what is given
 #'
-#' update regex to limit by start and end, with or without white space
-#' @param x single string containing a regex
+#' update regular expression to limit by start and end, with or without white
+#' space
+#' @param x single string containing a regular expression
 #' @template whitespace_ok
 #' @keywords internal
 re_just <- function(x, whitespace_ok = FALSE) {
@@ -36,8 +37,8 @@ re_just_ws <- function(x) {
   re_just(x, whitespace_ok = TRUE)
 }
 
-#' @describeIn re_just contain any \code{|} options within a regex, e.g. ICD-9
-#'   codes without \code{^} or \code{$}.
+#' @describeIn re_just contain any \code{|} options within a regular expression,
+#'   e.g. ICD-9 codes without \code{^} or \code{$}.
 #' @keywords internal
 re_wrap_or <- function(x) {
   paste0("(?:", x, ")")
@@ -561,7 +562,7 @@ icd_is_major.icd10 <- function(x) {
 
 #' @describeIn icd_is_major check whether a code is an ICD-10-CM major.
 #'   Currently uses \code{stringr} which uses \code{stringi} which should be
-#'   quite fast, but does suffer from handling unicode, locales, etc.
+#'   quite fast, but does suffer from handling Unicode, locales, etc.
 #' @export
 #' @keywords internal
 icd_is_major.icd10cm <- function(x) {

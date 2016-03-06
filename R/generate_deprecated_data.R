@@ -1,7 +1,7 @@
 #' Generate deprecated data
 #'
 #' Unfortunately, this is easiest (and has a chance of passing CRAN checks) if I
-#' just duplicate data rather than trying to change the namespace
+#' just duplicate data rather than trying to change the \code{NAMESPACE}.
 #' @param save_data save the data in \code{data/deprecated.RData}, default is
 #'   \code{TRUE}
 #' @keywords internal
