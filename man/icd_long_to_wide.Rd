@@ -46,19 +46,19 @@ row in the output data per contiguous block of identical visit_names.}
 \item{return_df}{single logical value, if \code{TRUE}, return a data frame
 with a field for the visit_name. This may be more convenient, but the
 default of \code{FALSE} gives the more natural return data of a matrix with
-rownames being the visit_names.}
+row names being the visit IDs from \code{visit_name}s.}
 
-\item{icd9df}{data.frame of long-form data, one column for visitId and one
-for ICD code}
+\item{icd9df}{\code{data.frame} of long-form data, one column for
+\code{visitId} and one for ICD code}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
 
 \item{icd9Field}{The column in the data frame which contains the ICD codes.
 This is a character vector of length one. If it is \code{NULL}, \code{icd9}
 will attempt to guess the column name, looking for progressively less
-likely possibilities until it matche a single column. Failing this, it will
-take the first column in the data frame. Specifying the column using this
-argument avoids the guesswork.}
+likely possibilities until it matches a single column. Failing this, it
+will take the first column in the data frame. Specifying the column using
+this argument avoids the guesswork.}
 
 \item{min.width, }{single integer, if specified, writes out this many columns
 even if no patients have that many codes. Must be greater than or equal to
@@ -66,13 +66,14 @@ the maximum number of codes per patient.}
 
 \item{aggregate}{single logical value, if TRUE (the default) will take more
 time to find out-of-order visitIds, and combine all the codes for each
-unique visitId. If \code{FALSE}, then out-of-order visitIds will result in
-a row in the output data per contiguous block of identical visitIds.}
+unique \code{visitId}. If \code{FALSE}, then out-of-order \code{visitId}s
+will result in a row in the output data per contiguous block of identical
+\code{visitId}s.}
 
 \item{return.df}{single logical value, if \code{TRUE}, return a data frame
-with a field for the visitId. This may be more convenient, but the default
-of \code{FALSE} gives the more natural return data of a matrix with
-rownames being the visitIds.}
+with a field for the \code{visitId}. This may be more convenient, but the
+default of \code{FALSE} gives the more natural return data of a matrix with
+row names being the \code{visitId}s.}
 }
 \description{
 This is more complicated than reshape or reshape2  dcast allows. This is a

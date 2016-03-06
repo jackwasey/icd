@@ -143,7 +143,7 @@ NULL
 #' Quan adaptation of Deyo/Charlson comorbidities
 #'
 #' Derived programmatically from the SAS code used in the original publication.
-#' According to the referenced study, this provides the best presdictor of
+#' According to the referenced study, this provides the best predictor of
 #' in-patient to <30d mortality. Of note, Deyo drops the distinction between
 #' leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
 #' this, in the rare cases where someone had two or three of leukemia, lymphoma
@@ -160,6 +160,7 @@ NULL
 #'   Care 43, no. 11 (November 1, 2005): 1130-39.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+#'
 #'
 #' @name icd9_map_quan_deyo
 #' @aliases quanDeyoComorbid icd10_map_quan_deyo
@@ -221,7 +222,7 @@ NULL
 #' \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
 #' \code{_abbrev}. The Charlson derived mappings do not include hypertension.
 #' _abbreviated comorbidity names are helpful for interactive work, whereas the
-#' full names might be prefered for plotting.
+#' full names might be preferred for plotting.
 #' @format list, with character/numeric code. 'Hypertension, uncomplicated' and
 #'   'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
 #'   and metastasis are counted independently, as in the original paper, giving

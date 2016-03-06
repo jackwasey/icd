@@ -168,7 +168,8 @@ std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n 
 }
 
 //' @title generate random short-form icd9 E codes
-//' @description Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
+//' @description Very dirty pseudo-random by picking numeric, V or E based on
+//'   modulo 3 of the number
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n = 5) {

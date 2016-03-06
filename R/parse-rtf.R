@@ -26,7 +26,7 @@
 #' Currently only the most recent update is implemented. Note that
 #'   CMS have published additional ICD-9-CM billable code lists since the last
 #'   one from the CDC: I think these have been the same every year since 2011,
-#'   though. THe last CDC release is Dtab12.rtf from 2011.
+#'   though. The last CDC release is \code{Dtab12.rtf} from 2011.
 #' @param year from 1996 to 2012 (this is what CDC has published). Only 2012
 #'   implemented thus far
 #' @param save_data logical whether to save the result (otherwise data is just
@@ -130,7 +130,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   # somewhere around here, we can extract sub-chapters:
 
-  # actually, these are ICD-9-CM subchapters, but I think this is a superset of
+  # actually, these are ICD-9-CM sub-chapters, but I think this is a superset of
   # ICD 9
 
   # either range or a single value (which overlaps with the majors definition)

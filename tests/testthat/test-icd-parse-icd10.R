@@ -87,7 +87,7 @@ test_that("icd10 sub_chapters were parsed correctly", {
     "Other human herpesviruses", "B10", "B10")
 })
 
-test_that("ICD-10 chapters and subchapters are distinct", {
+test_that("ICD-10 chapters and sub-chapters are distinct", {
   # and for good measure, make sure that sub-chapters and chapters are not
   # confused. This was really just a problem with RTF parsing for ICD-9, but
   # there are possible similiar problems with some of the XML hierarchy.

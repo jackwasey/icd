@@ -218,11 +218,12 @@ get_icd_name <- function(x, icd_name = NULL) {
 
 #' Latest ICD-9-CM edition
 #'
-#' Returns a single character value with the number of the latests edition,
+#' Returns a single character value with the number of the latest edition,
 #' currently \strong{32}.
 #'
 #' Implemented as a function to give flexibility to calculate this, or use an
 #' option override.
+#'
 #' @keywords internal
 icd9cm_latest_edition <- function() "32"
 

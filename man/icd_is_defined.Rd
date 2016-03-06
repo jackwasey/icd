@@ -101,7 +101,7 @@ defauly)
 \item \code{icd10}: Same for ICD-10, temporarily using icd-10-cm for lookup
 
 \item \code{default}: default method which will guess the ICD version (9
-vs 10, maybe WHO vs CM or other in the future) and redispatches on that
+vs 10, maybe WHO vs CM or other in the future) and dispatches again on that
 type.
 }}
 \keyword{internal}

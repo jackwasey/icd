@@ -7,7 +7,7 @@
 \alias{icd_guess_version.factor}
 \alias{icd_guess_version.icd10}
 \alias{icd_guess_version.icd9}
-\title{Guess version of ICD}
+\title{Guess version of ICD codes}
 \usage{
 icd_guess_version(x, short_code, ...)
 
@@ -23,12 +23,20 @@ icd_guess_version(x, short_code, ...)
   icd_name = get_icd_name(x), ...)
 }
 \arguments{
+\item{x}{input data}
+
 \item{short_code}{single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 }
 \description{
-param x input data
+The guess is indeed a guess and can be wrong. There are some codes which
+could be either ICD-9 or ICD-10. The current implementation doesn't check
+whether the codes exist in any defintions (ICD-9 CM or WHO, for example),
+just whether they are valid. Thus it is quicker.
+}
+\details{
+TOOD: consider adding warning depending on degree of uncertainty.
 }
 \section{Methods (by class)}{
 \itemize{

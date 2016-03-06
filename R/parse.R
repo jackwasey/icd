@@ -35,6 +35,8 @@ icd_update_everything <- function() {
   generate_sysdata()
   load(file.path("R", "sysdata.rda"))
 
+  generate_spelling()
+
   # plain text billable codes
   message("Parsing plain text billable codes to create icd9cm_billable list of
                        data frames with descriptions of billable codes only.
@@ -256,8 +258,8 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
     chaps
   )
 
-  # fix congenital abnormalities not having subchapter defined:
-  # ( this might be easier to do when parsing the chapters themselves...)
+  # fix congenital abnormalities not having sub-chapter defined: (this might be
+  # easier to do when parsing the chapters themselves...)
   icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, 740, 759)
   # and hematopoietic organs
   icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, 280, 289)
@@ -302,7 +304,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   invisible(icd9cm_hierarchy)
 }
 
-#' Fix NA subchapters in RTF parsing
+#' Fix NA sub-chapters in RTF parsing
 #'
 #' Fixes a couple of corner cases in parsing the 2011 ICD-9-CM RTF
 #' @keywords internal

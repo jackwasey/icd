@@ -58,7 +58,7 @@ test_that("some chapters are correct", {
                "Endocrine, Nutritional And Metabolic Diseases, And Immunity Disorders")
 })
 
-test_that("some subchapters are correct", {
+test_that("some sub-chapters are correct", {
   subchaps <- icd::icd9cm_hierarchy$sub_chapter %>% as_char_no_warn
   codes <- icd::icd9cm_hierarchy[["code"]]
 

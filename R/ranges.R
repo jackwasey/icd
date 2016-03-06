@@ -265,9 +265,8 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
   start <- icd9_add_leading_zeroes.icd_short_code(trim(start))
   end <- icd9_add_leading_zeroes.icd_short_code(trim(end))
 
-  # potentially do some checks on start and end, e.g. start <= end.
-  # determine whether we are doing N, V or E
-  # then lookup start and end indices in sysdata.rda lookup tables
+  # potentially do some checks on start and end. Determine whether we are doing
+  # N, V or E then lookup start and end indices in sysdata.rda lookup tables
 
   if (defined) {
     stopifnot(icd_is_defined(start, short_code = TRUE), icd_is_defined(end, short_code = TRUE))

@@ -49,7 +49,7 @@ the arrythmia field. The naming convention is a root, e.g.
 \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
 \code{_abbrev}. The Charlson derived mappings do not include hypertension.
 _abbreviated comorbidity names are helpful for interactive work, whereas the
-full names might be prefered for plotting.
+full names might be preferred for plotting.
 }
 \keyword{datasets}
 

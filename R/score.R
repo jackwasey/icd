@@ -183,11 +183,12 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 
 #' icd_count_comorbid
 #'
-#' \code{icd_count_comorbid} differs from the other counting
-#'   functions in that it counts _comorbidities_, not individual diagnoses. It
-#'   accepts any data frame with either logicals or zero/non-zero contents, with
-#'   a single column for visit_name. No checks are made to see whether
-#'   visit_name is duplicated.
+#' \code{icd_count_comorbid} differs from the other counting functions in that
+#' it counts \emph{comorbidities}, not individual diagnoses. It accepts any
+#' \code{data.frame} with either logical or binary contents, with a single
+#' column for visit_name. No checks are made to see whether visit_name is
+#' duplicated.
+#'
 #' @param x data frame with one row per patient, and a true/false or 1/0 flag
 #'   for each column. By default, the first column is the patient identifier and
 #'   is not counted. If \code{visitId} is not specified, the first column is

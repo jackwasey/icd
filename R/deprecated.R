@@ -226,7 +226,7 @@ icd9ComorbidDfToMat <- function(x, visitId = get_visit_name(x),
 #'   the given set of ICD-9 codes by replacing subsets of codes with 'parent'
 #'   codes which exactly encompass certain subsets. E.g. If all cholera
 #'   diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
-#'   subtypes.
+#'   sub-types.
 #' @export
 icd9Explain <- function(icd9, isShort = icd_guess_short.icd9(icd9),
                         doCondense = TRUE, brief = FALSE, warn = TRUE) {
@@ -500,7 +500,7 @@ icd9IsValidShort <- function(icd9) {
 }
 
 #' @rdname icd_is_valid
-#' @details do the icd9 valid subtypes need to be exported?
+#' @details do the icd9 valid sub-types need to be exported?
 #' @export
 icd9IsValidShortN <- function(icd9) {
   icd_deprecated("icd_is_valid")
@@ -752,8 +752,8 @@ icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FAL
 }
 
 #' @rdname icd_long_to_wide
-#' @param icd9df data.frame of long-form data, one column for visitId and one
-#'   for ICD code
+#' @param icd9df \code{data.frame} of long-form data, one column for
+#'   \code{visitId} and one for ICD code
 #' @template visitId
 #' @template icd9field
 #' @param min.width, single integer, if specified, writes out this many columns
@@ -761,12 +761,13 @@ icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FAL
 #'   the maximum number of codes per patient.
 #' @param aggregate single logical value, if TRUE (the default) will take more
 #'   time to find out-of-order visitIds, and combine all the codes for each
-#'   unique visitId. If \code{FALSE}, then out-of-order visitIds will result in
-#'   a row in the output data per contiguous block of identical visitIds.
+#'   unique \code{visitId}. If \code{FALSE}, then out-of-order \code{visitId}s
+#'   will result in a row in the output data per contiguous block of identical
+#'   \code{visitId}s.
 #' @param return.df single logical value, if \code{TRUE}, return a data frame
-#'   with a field for the visitId. This may be more convenient, but the default
-#'   of \code{FALSE} gives the more natural return data of a matrix with
-#'   rownames being the visitIds.
+#'   with a field for the \code{visitId}. This may be more convenient, but the
+#'   default of \code{FALSE} gives the more natural return data of a matrix with
+#'   row names being the \code{visitId}s.
 #' @export
 icd9LongToWide <- function(icd9df,
                            visitId =  get_visit_name(icd9df),

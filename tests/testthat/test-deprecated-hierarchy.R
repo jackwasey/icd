@@ -58,7 +58,7 @@ test_that("deprecated - some chapters are correct", {
                "Endocrine, Nutritional And Metabolic Diseases, And Immunity Disorders")
 })
 
-test_that("deprecated - some subchapters are correct", {
+test_that("deprecated - some sub-chapters are correct", {
   subchaps <- icd::icd9Hierarchy$subchapter %>% asCharacterNoWarn
   codes <- icd::icd9Hierarchy$icd9
 

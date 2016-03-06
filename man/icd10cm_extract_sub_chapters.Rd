@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse-icd10.R
 \name{icd10cm_extract_sub_chapters}
 \alias{icd10cm_extract_sub_chapters}
-\title{Get subchapters from the 2016 XML for ICD-10-CM}
+\title{Get sub-chapters from the 2016 XML for ICD-10-CM}
 \usage{
 icd10cm_extract_sub_chapters(save_data = FALSE)
 }
@@ -14,10 +14,10 @@ This is a superset of ICD-10 sub-chapters, I think.
 }
 \details{
 This is complicated by the XML document specifying more hierarchical
-levels,e.g. C00-C96, C00-75 are both specified within the chapter Neoplasms
-(C00-D49). A way of determining whether there are extra levels would be to
-check the XML tree depth for a member of each putative sub-chapter. May be
-easier to hard code these in.
+levels,e.g. \code{C00-C96}, \code{C00-75} are both specified within the
+chapter Neoplasms (\code{C00-D49}). A way of determining whether there are
+extra levels would be to check the XML tree depth for a member of each
+putative sub-chapter.
 }
 \keyword{internal}
 

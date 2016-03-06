@@ -130,9 +130,9 @@ to \code{icd9ComorbidAhrq}}
 
 \item{map}{list (or name of a list if character vector of length one is given
 as argument) of the comorbidities with each top-level list item containing
-a vector of decimal ICD9 codes. This is in the form of a list, with the
-names of the items corresponding to the comorbidities (e.g. "HTN", or
-"diabetes") and the contents of each list item being a character vector of
+a vector of decimal ICD-9 codes. This is in the form of a list, with the
+names of the items corresponding to the comorbidities (e.g. 'HTN', or
+'diabetes') and the contents of each list item being a character vector of
 short-form (no decimal place but ideally zero left-padded) ICD-9 codes. No
 default: user should prefer to use the derivative functions, e.g.
 \code{icd_comorbid_ahrq}, since these also provide appropriate naming for
@@ -178,12 +178,12 @@ to \code{icd9ComorbidAhrq}}
 RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
   fast, and most time is now spent setting up the data to be passed in.
 
-This is the main function which extracts co-morbidities from a
-  set of ICD-9 codes. This is when some trivial post-processing of the
-  comorbidity data is done, e.g. renaming to human-friendly field names, and
-  updating fields according to rules. The exact fields from the original
-  mappings can be obtained using \code{hierarchy = FALSE}, but for
-  comorbidity counting, Charlson Score, etc., the rules should be applied.
+This is the main function which extracts co-morbidities from a set of ICD-9
+codes. This is when some trivial post-processing of the comorbidity data is
+done, e.g. renaming to human-friendly field names, and updating fields
+according to rules. The exact fields from the original mappings can be
+obtained using \code{hierarchy = FALSE}, but for comorbidity counting,
+Charlson Score, etc., the rules should be applied.
 }
 \details{
 There is a change in behavior from previous versions. The visit_name
@@ -205,9 +205,9 @@ The common comorbidity calculation code does not depend on ICD type.
   There is some type conversion so the map and input codes are all in 'short'
   format, fast factor generation, then fast comorbidity assignment.
 
-For Charlson/Deyo comorbidities, strictly speaking, there is no
+For Deyo's Charlson comorbidities, strictly speaking, there is no
   dropping of more e.g. uncomplicated DM if complicated DM exists, however,
-  this is probaably useful, in general and is essential when calculating the
+  this is probably useful, in general and is essential when calculating the
   Charlson score.
 }
 \section{Methods (by class)}{
@@ -220,7 +220,7 @@ data directly, or by calling, for example, \code{icd9(your_data_frame)}.
 method, it relies on exact matching, but not every of billions of possible
 ICD-10/ICD-10-CM codes are included in the mappings, so it will likely give
 incomplete results, without searching for parents of the input codes until
-a match is found in the map. TODO: this is WIP.
+a match is found in the map. TODO: this is incomplete!
 
 \item \code{icd9}: Get comorbidities from \code{data.frame} of ICD-9
 codes

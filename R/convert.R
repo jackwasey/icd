@@ -152,7 +152,7 @@ icd_wide_to_long <- function(x,
 #' @param return_df single logical value, if \code{TRUE}, return a data frame
 #'   with a field for the visit_name. This may be more convenient, but the
 #'   default of \code{FALSE} gives the more natural return data of a matrix with
-#'   rownames being the visit_names.
+#'   row names being the visit IDs from \code{visit_name}s.
 #' @examples
 #'   longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
 #'     icd9 = c("441", "4424", "443", "441"))

@@ -71,7 +71,7 @@ is guessed from the input data.}
 the given set of ICD-9 codes by replacing subsets of codes with 'parent'
 codes which exactly encompass certain subsets. E.g. If all cholera
 diagnoses are provided, only '001 - Cholera' needs to be displayed, not all
-subtypes.}
+sub-types.}
 
 \item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
 the short description from the canonical CMS descriptions (included in
@@ -102,7 +102,7 @@ is guessed from the input data.}
 \item{condense}{single logical value which indicates whether to condense the
 given set of ICD-9 codes by replacing subsets of codes with 'parent' codes
 which exactly encompass certain subsets. E.g. If all cholera diagnoses are
-provided, only '001 - Cholera' needs to be displayed, not all subtypes.}
+provided, only '001 - Cholera' needs to be displayed, not all sub-types.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD9 code, name

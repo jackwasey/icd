@@ -7,7 +7,8 @@
 icd9RandomShort(n = 5L)
 }
 \description{
-Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
+Very dirty pseudo-random by picking numeric, V or E based on
+  modulo 3 of the number
 }
 \keyword{internal}
 

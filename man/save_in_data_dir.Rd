@@ -7,9 +7,9 @@
 save_in_data_dir(var_name, suffix = "")
 }
 \arguments{
-\item{var_name}{character or symbol, e.g. "myvar" or \code{myvar}, either of
-which would find \code{myvar} in the parent environment, and save it as
-\code{myvar.RData} in \code{package_root/data}.}
+\item{var_name}{character or symbol, e.g. \code{"myvar"} or \code{myvar},
+either of which would find \code{myvar} in the parent environment, and save
+it as \code{myvar.RData} in \code{package_root/data}.}
 
 \item{suffix}{character scalar}
 }
@@ -17,7 +17,8 @@ which would find \code{myvar} in the parent environment, and save it as
 invisibly returns the data
 }
 \description{
-File is named varname.RData with an optional suffix before .RData
+File will be named \code{\emph{var_name}.RData} with an optional suffix
+before \code{.RData}
 }
 \keyword{internal}
 

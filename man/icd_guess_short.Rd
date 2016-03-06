@@ -36,13 +36,13 @@ single logical value, \code{TRUE} if input data are predominantly
   short_code type. If there is some uncertainty, then return NA.
 }
 \description{
-TODO: Partly implemented. Goal is to guess whether codes are short_code or
-decimal form. Currently condense works, but not with the icd9 lookup table
-currently in use. Not exporting this function until it works as intended. Of
-note, validation is a bit different here, since we don't know the type until
-after we guess. We could look for where both short_code and long are invalid,
-and otherwise assume valid, even if the bulk are short_code. However, it may
-be more useful to check validity after the guess.
+TODO: Partly implemented. Goal is to guess whether codes are
+\code{short_code} or \code{decimal_code} form. Currently condense works, but
+not with the \code{icd} lookup table currently in use. Of note, validation is
+a bit different here, since we don't know the type until after we guess. We
+could look for where both short_code and long are invalid, and otherwise
+assume valid, even if the bulk are short_code. However, it may be more useful
+to check validity after the guess.
 }
 \section{Methods (by class)}{
 \itemize{

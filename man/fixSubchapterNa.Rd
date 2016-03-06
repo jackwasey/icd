@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse.R
 \name{fixSubchapterNa}
 \alias{fixSubchapterNa}
-\title{Fix NA subchapters in RTF parsing}
+\title{Fix NA sub-chapters in RTF parsing}
 \usage{
 fixSubchapterNa(x, start, end)
 }

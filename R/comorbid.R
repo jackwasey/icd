@@ -17,14 +17,14 @@
 
 #' present-on-admission flags
 #'
-#' Present-on-admission (POA) is not simply true or false. It can
-#'   be one of a number of indeterminate values, including \code{NA}, or "Y" or
-#'   "N". "Present-on-arrival" in this context will mean a positive "Y" flag and
-#'   nothing else. Other interpretations are to include all ICD-9 codes not
-#'   flagged 'N': but this would include many unknowns. Conversely, when looking
-#'   for definite new diagnoses, we should only find 'N' flagged codes, and
-#'   ignore anything marked "Y" or indeterminate. This gives four options: poa
-#'   == "Y" , poa == "N", poa != "N" , poa != "Y".
+#' Present-on-admission (POA) is not simply true or false. It can be one of a
+#' number of indeterminate values, including \code{NA}, or "Y" or "N".
+#' "Present-on-arrival" in this context will mean a positive "Y" flag and
+#' nothing else. Other interpretations are to include all ICD-9 codes not
+#' flagged 'N': but this would include many unknowns. Conversely, when looking
+#' for definite new diagnoses, we should only find 'N' flagged codes, and ignore
+#' anything marked "Y" or indeterminate. This gives four options: poa == "Y" ,
+#' poa == "N", poa != "N" , poa != "Y".
 #' @keywords character
 #' @export
 icd_poa_choices <- c("yes", "no", "notYes", "notNo")
@@ -49,17 +49,18 @@ icd9PoaChoices <- icd_poa_choices
 
 #' find comorbidities from ICD-9 codes.
 #'
-#' This is the main function which extracts co-morbidities from a
-#'   set of ICD-9 codes. This is when some trivial post-processing of the
-#'   comorbidity data is done, e.g. renaming to human-friendly field names, and
-#'   updating fields according to rules. The exact fields from the original
-#'   mappings can be obtained using \code{hierarchy = FALSE}, but for
-#'   comorbidity counting, Charlson Score, etc., the rules should be applied.
+#' This is the main function which extracts co-morbidities from a set of ICD-9
+#' codes. This is when some trivial post-processing of the comorbidity data is
+#' done, e.g. renaming to human-friendly field names, and updating fields
+#' according to rules. The exact fields from the original mappings can be
+#' obtained using \code{hierarchy = FALSE}, but for comorbidity counting,
+#' Charlson Score, etc., the rules should be applied.
+#'
 #' @param map list (or name of a list if character vector of length one is given
 #'   as argument) of the comorbidities with each top-level list item containing
-#'   a vector of decimal ICD9 codes. This is in the form of a list, with the
-#'   names of the items corresponding to the comorbidities (e.g. "HTN", or
-#'   "diabetes") and the contents of each list item being a character vector of
+#'   a vector of decimal ICD-9 codes. This is in the form of a list, with the
+#'   names of the items corresponding to the comorbidities (e.g. 'HTN', or
+#'   'diabetes') and the contents of each list item being a character vector of
 #'   short-form (no decimal place but ideally zero left-padded) ICD-9 codes. No
 #'   default: user should prefer to use the derivative functions, e.g.
 #'   \code{icd_comorbid_ahrq}, since these also provide appropriate naming for
@@ -121,7 +122,7 @@ icd_comorbid.default <- function(x, ...) {
 #'   method, it relies on exact matching, but not every of billions of possible
 #'   ICD-10/ICD-10-CM codes are included in the mappings, so it will likely give
 #'   incomplete results, without searching for parents of the input codes until
-#'   a match is found in the map. TODO: this is WIP.
+#'   a match is found in the map. TODO: this is incomplete!
 #' @details For ICD-10, there are two lookup methods. The classic lookup, as
 #'   used for ICD-9 codes, assumes any possible code is available to match in
 #'   the comorbidity map. However, for ICD-10-CM, there are too many possible
@@ -449,9 +450,9 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 }
 
 #' @rdname icd_comorbid
-#' @details For Charlson/Deyo comorbidities, strictly speaking, there is no
+#' @details For Deyo's Charlson comorbidities, strictly speaking, there is no
 #'   dropping of more e.g. uncomplicated DM if complicated DM exists, however,
-#'   this is probaably useful, in general and is essential when calculating the
+#'   this is probably useful, in general and is essential when calculating the
 #'   Charlson score.
 #' @export
 icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,

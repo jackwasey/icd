@@ -34,15 +34,15 @@ icd10cm_xml_node_to_pair <- function(x) {
   desc
 }
 
-#' Get subchapters from the 2016 XML for ICD-10-CM
+#' Get sub-chapters from the 2016 XML for ICD-10-CM
 #'
 #' This is a superset of ICD-10 sub-chapters, I think.
 #'
 #' This is complicated by the XML document specifying more hierarchical
-#' levels,e.g. C00-C96, C00-75 are both specified within the chapter Neoplasms
-#' (C00-D49). A way of determining whether there are extra levels would be to
-#' check the XML tree depth for a member of each putative sub-chapter. May be
-#' easier to hard code these in.
+#' levels,e.g. \code{C00-C96}, \code{C00-75} are both specified within the
+#' chapter Neoplasms (\code{C00-D49}). A way of determining whether there are
+#' extra levels would be to check the XML tree depth for a member of each
+#' putative sub-chapter.
 #' @param save_data single logical
 #' @keywords internal
 icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
@@ -76,7 +76,7 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
       # should only match one at a time
       stopifnot(length(new_sub_chap_range) == 1)
 
-      # check that this is a real subchapter, not an extra range defined in the
+      # check that this is a real sub-chapter, not an extra range defined in the
       # XML, e.g. C00-C96 is an empty range declaration for some neoplasms.
 
       ndiags <- length(xml2::xml_find_all(subchap, "diag"))
@@ -105,7 +105,7 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
 #'
 #' The factor generation uses \code{sort.default} which is locale dependent.
 #' This meant a lot of time debugging a problem when white space was ignored for
-#' sorting on some platforms, but not others (e.g. travis and wercker).
+#' sorting on some platforms, but not others (e.g. Travis and Wercker).
 #' @source
 #'   \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
 #'
@@ -165,7 +165,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   if (any(dupes <- duplicated(sc_lookup$sc_major))) {
     message("duplicates found in sub-chapters:")
     print(unique(sc_lookup$sc_major[dupes]))
-    stop("should not have duplicates. check subchapter definitions")
+    stop("should not have duplicates. check sub-chapter definitions")
   }
 
   merge(x = icd10cm2016["three_digit"], y = sc_lookup,
@@ -197,7 +197,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   if (any(dupes <- duplicated(chap_lookup$chap_major))) {
     message("duplicates found in chapters:")
     print(unique(chap_lookup$chap_major[dupes]))
-    stop("should not have duplicates. check subchapter definitions")
+    stop("should not have duplicates. check sub-chapter definitions")
   }
 
   merge(icd10cm2016["three_digit"], chap_lookup,

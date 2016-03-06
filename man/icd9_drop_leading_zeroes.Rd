@@ -30,14 +30,13 @@ character vector of ICD-9 codes with extra zeroes dropped from major
   part
 }
 \description{
-decimal form ICD-9 codes are not ambiguous if the leading zeroes
-  are dropped. Some short-form ICD-9 codes would not be ambiguous, e.g. "1"
-  but many would be problematic. This is the inverse of
-  \code{icd9_add_leading_zeroes}.
+decimal form ICD-9 codes are not ambiguous if the leading zeroes are dropped.
+Some short-form ICD-9 codes would not be ambiguous, e.g. "1" but many would
+be problematic. This is the inverse of \code{icd9_add_leading_zeroes}.
 }
 \details{
 Invalid codes have no guaranteed result, and may give NA, or a (possibly
-  valid) code in repsonse.
+valid) code in response.
 }
 \section{Methods (by class)}{
 \itemize{

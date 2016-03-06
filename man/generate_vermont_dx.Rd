@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_mappings.R
 \name{generate_vermont_dx}
 \alias{generate_vermont_dx}
-\title{generate vermont_dx data}
+\title{generate \code{vermont_dx} data}
 \usage{
 generate_vermont_dx(save_data = TRUE, offline = FALSE)
 }
@@ -18,7 +18,7 @@ invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.
 }
 \description{
-Generate the Veromnt data from healthvermont.gov
+Process data from \href{healthvermont.gov}{Health Vermont}
 }
 \keyword{internal}
 

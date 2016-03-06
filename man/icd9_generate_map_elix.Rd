@@ -21,9 +21,9 @@ invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.
 }
 \description{
-This function uses the \code{\%i9d\%} operator, so cannot be
-  done as an R file in the \code{data} directory. The data is documented in
-  \code{datadocs.R}.
+This function uses the \code{\%i9d\%} operator, so cannot be done as an R
+file in the \code{data} directory. The data is documented in
+\code{datadocs.R}.
 }
 \keyword{internal}
 

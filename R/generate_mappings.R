@@ -19,9 +19,9 @@
 
 #' Generate Elixhauser comorbidities
 #'
-#' This function uses the \code{\%i9d\%} operator, so cannot be
-#'   done as an R file in the \code{data} directory. The data is documented in
-#'   \code{datadocs.R}.
+#' This function uses the \code{\%i9d\%} operator, so cannot be done as an R
+#' file in the \code{data} directory. The data is documented in
+#' \code{datadocs.R}.
 #' @template parse-template
 #' @keywords internal
 icd9_generate_map_elix <- function(condense = NULL, save_data = TRUE, path = NULL) {
@@ -468,9 +468,9 @@ fetch_vermont_dx <- function(offline) {
     offline = offline)
 }
 
-#' generate vermont_dx data
+#' generate \code{vermont_dx} data
 #'
-#' Generate the Veromnt data from healthvermont.gov
+#' Process data from \href{healthvermont.gov}{Health Vermont}
 #' @template parse-template
 #' @keywords internal
 generate_vermont_dx <- function(save_data = TRUE, offline = FALSE) {
@@ -506,9 +506,8 @@ generate_vermont_dx <- function(save_data = TRUE, offline = FALSE) {
   for (dc in dx_cols)
     class(vermont_dx[[dc]]) <- c("icd9cm", "icd9", "character")
 
-  # set class on diagnosis columns. Not sure whether this is desirable in
-  # general. If parent has a class, it should be irrelevant?
-  # lapply... names(vermont_dx)  %>% str_detect("DX")
+  # TODO: maybe set class on diagnosis columns. Not sure whether this is
+  # desirable in general. If parent has a class, it should be irrelevant
 
   # and set class on whole structure
   vermont_dx %<>% icd_short_code %>% icd_wide_data %>% icd9 %>% icd9cm

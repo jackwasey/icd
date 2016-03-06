@@ -25,7 +25,7 @@
 #' @param condense single logical value which indicates whether to condense the
 #'   given set of ICD-9 codes by replacing subsets of codes with 'parent' codes
 #'   which exactly encompass certain subsets. E.g. If all cholera diagnoses are
-#'   provided, only '001 - Cholera' needs to be displayed, not all subtypes.
+#'   provided, only '001 - Cholera' needs to be displayed, not all sub-types.
 #' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
 #'   the short description from the canonical CMS descriptions (included in
 #'   \code{data-raw}) will be used, otherwise the long description is used.

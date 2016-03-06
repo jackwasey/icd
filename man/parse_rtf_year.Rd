@@ -28,7 +28,7 @@ data-raw. This is helpful for testing without using the internet.}
 Currently only the most recent update is implemented. Note that
   CMS have published additional ICD-9-CM billable code lists since the last
   one from the CDC: I think these have been the same every year since 2011,
-  though. THe last CDC release is Dtab12.rtf from 2011.
+  though. The last CDC release is \code{Dtab12.rtf} from 2011.
 }
 \keyword{internal}
 

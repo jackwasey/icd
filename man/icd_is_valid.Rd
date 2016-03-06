@@ -113,7 +113,7 @@ This does not check whether the code coresponds to a real ICD-9-CM billing
 code, or parent grouping. For that, see \code{\link{icd_is_defined}}.
 }
 \details{
-do the icd9 valid subtypes need to be exported?
+do the icd9 valid sub-types need to be exported?
 
 Factors are accepted, and since the validation is done with \code{grepl}
 these are handled correctly.

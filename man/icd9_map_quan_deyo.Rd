@@ -9,7 +9,7 @@
 \format{list of character vectors, each named by co-morbidity}
 \description{
 Derived programmatically from the SAS code used in the original publication.
-According to the referenced study, this provides the best presdictor of
+According to the referenced study, this provides the best predictor of
 in-patient to <30d mortality. Of note, Deyo drops the distinction between
 leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
 this, in the rare cases where someone had two or three of leukemia, lymphoma

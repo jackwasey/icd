@@ -17,13 +17,13 @@
 
 #' guess whether codes are \code{short_code} or \code{decimal_code}
 #'
-#' TODO: Partly implemented. Goal is to guess whether codes are short_code or
-#' decimal form. Currently condense works, but not with the icd9 lookup table
-#' currently in use. Not exporting this function until it works as intended. Of
-#' note, validation is a bit different here, since we don't know the type until
-#' after we guess. We could look for where both short_code and long are invalid,
-#' and otherwise assume valid, even if the bulk are short_code. However, it may
-#' be more useful to check validity after the guess.
+#' TODO: Partly implemented. Goal is to guess whether codes are
+#' \code{short_code} or \code{decimal_code} form. Currently condense works, but
+#' not with the \code{icd} lookup table currently in use. Of note, validation is
+#' a bit different here, since we don't know the type until after we guess. We
+#' could look for where both short_code and long are invalid, and otherwise
+#' assume valid, even if the bulk are short_code. However, it may be more useful
+#' to check validity after the guess.
 #' @return single logical value, \code{TRUE} if input data are predominantly
 #'   short_code type. If there is some uncertainty, then return NA.
 #' @keywords internal
@@ -35,8 +35,10 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
     else
       return(FALSE)
   }
-  if (inherits(x, "icd_short_code")) return(TRUE)
-  if (inherits(x, "icd_decimal_code")) return(FALSE)
+  if (inherits(x, "icd_short_code"))
+    return(TRUE)
+  if (inherits(x, "icd_decimal_code"))
+    return(FALSE)
   UseMethod("icd_guess_short")
 }
 
@@ -101,9 +103,16 @@ icd_guess_short.icd_short_code <- function(x) TRUE #nocov
 #' @keywords internal
 icd_guess_short.icd_decimal_code <- function(x) FALSE #nocov
 
-#' Guess version of ICD
+#' Guess version of ICD codes
 #'
-#' param x input data
+#' The guess is indeed a guess and can be wrong. There are some codes which
+#' could be either ICD-9 or ICD-10. The current implementation doesn't check
+#' whether the codes exist in any defintions (ICD-9 CM or WHO, for example),
+#' just whether they are valid. Thus it is quicker.
+#'
+#' @details TOOD: consider adding warning depending on degree of uncertainty.
+#'
+#' @param x input data
 #' @template short_code
 #' @export
 #' @keywords internal

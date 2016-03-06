@@ -35,13 +35,12 @@ icd9_extract_alpha_numeric <- function(x) {
 
 #' drop zero padding from decimal ICD-9 code.
 #'
-#' decimal form ICD-9 codes are not ambiguous if the leading zeroes
-#'   are dropped. Some short-form ICD-9 codes would not be ambiguous, e.g. "1"
-#'   but many would be problematic. This is the inverse of
-#'   \code{icd9_add_leading_zeroes}.
+#' decimal form ICD-9 codes are not ambiguous if the leading zeroes are dropped.
+#' Some short-form ICD-9 codes would not be ambiguous, e.g. "1" but many would
+#' be problematic. This is the inverse of \code{icd9_add_leading_zeroes}.
 #'
-#'   Invalid codes have no guaranteed result, and may give NA, or a (possibly
-#'   valid) code in repsonse.
+#' Invalid codes have no guaranteed result, and may give NA, or a (possibly
+#' valid) code in response.
 #' @template icd9-any
 #' @return character vector of ICD-9 codes with extra zeroes dropped from major
 #'   part
