@@ -431,6 +431,9 @@ fetch_uranium_pathology <- function(offline = FALSE) {
 #' that the function \code{odbcConnectAccess2007} is only available in the
 #' Windows build of \pkg{RODBC}.
 #' @template parse-template
+#' @source
+#'   \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+#'
 #' @keywords internal
 generate_uranium_pathology <- function(save_data = TRUE, offline = FALSE) {
 

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' Generate sysdata.rda
+#' Generate \code{sysdata.rda}
 #'
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes.
 #' This is quick, but much too slow when it appears many times in a loop.

@@ -18,9 +18,9 @@
 #' extract assignments from a SAS FORMAT definition.
 #'
 #' this is modelled entirely on a single chunk of SAS code, but hopefully will
-#' have some generalizability. It relies heavily on lists and regex, but, as you
-#' will see from the code, R is not a great language with which to write a SAS
-#' parser.
+#' have some generalizability. It relies heavily on lists and regular
+#' expression, but, as you will see from the code, R is not a great language
+#' with which to write a SAS parser.
 #' @param sas_lines is a character vector, with one item per line, e.g. from
 #'   \code{readLines}
 #' @examples
@@ -67,7 +67,7 @@ sas_format_extract <- function(sas_lines) {
   out
 }
 
-#' @describeIn sas_format_extract Get just the $RCOMFMT assignment, which
+#' @describeIn sas_format_extract Get just the \code{$RCOMFMT} assignment, which
 #'   contains all the ICD (not DRG) data. The problem is RENLFAIL appears twice:
 #'
 #'   \code{"N183", "N184", "N185", "N186", "N189", "N19", "Z4901", "Z4902",
@@ -76,7 +76,7 @@ sas_format_extract <- function(sas_lines) {
 #'   "Z4931", "Z4932"="RENLFAIL"       /*Encounter for adequacy testing for
 #'   peritoneal dialysis*/ }
 #'
-#'   so RENLFAIL needs special treatment
+#'   so 'RENLFAIL' needs special treatment
 #' @keywords internal
 sas_format_extract_rcomfmt <- function(sas_lines) {
   # ignore DRG assignments

@@ -42,9 +42,9 @@ are found. If NULL, all columns matching icd or ICD will be included.}
 \item{icdName}{Deprecated. Character vector length one containing the new
 column name for the ICD codes, defaults to "icdCode"}
 
-\item{icdRegex}{Deprecated. Vector of character strings containing a regex to
-identify ICD-9 diagnosis columns to try (case-insensitive) in order.
-Default is \code{c("icd", "diag", "dx_", "dx")}}
+\item{icdRegex}{Deprecated. Vector of character strings containing a regular
+expression to identify ICD-9 diagnosis columns to try (case-insensitive) in
+order. Default is \code{c("icd", "diag", "dx_", "dx")}}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }

@@ -10,8 +10,8 @@ icd_children_defined(x)
 \method{icd_children_defined}{icd10cm}(x, short_code = icd_guess_short(x))
 }
 \description{
-defined icd10 children based on 2016 ICD-10-CM list. "defined" may be a three
-digit code, or a leaf node. This is distinct from 'billable'.
+defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
+three digit code, or a leaf node. This is distinct from 'billable'.
 }
 \section{Methods (by class)}{
 \itemize{

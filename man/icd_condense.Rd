@@ -44,8 +44,7 @@ containing undefined codes.}
 \code{TRUE}, will reuse the factor levels from the input data for the
 output data. This only applies if a factor is given for the input codes.}
 
-\item{icd9}{is
-a character vector or factor of ICD-9 codes. If fewer than five characters
+\item{icd9}{is a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
@@ -57,15 +56,14 @@ Since nearly valid, out-dated or new codes may be missed, not limiting to
 all-time) master lists of codes and the ability to test against a given
 master list given the year of the ICD-9 coding.}
 
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
-characters is given in a code, then the digits are greedily assigned to
-hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
+\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
+code, then the digits are greedily assigned to hundreds, then tens, then
+units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
 
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five characters is
+given in a code, then the digits are greedily assigned to hundreds, then
+tens, then units, before the decimal parts. E.g. "10" becomes "010", not
+"0010"}
 }
 \description{
 This can be thought of as the inverse operation to

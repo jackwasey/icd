@@ -30,7 +30,7 @@ Check whether a code is major
 
 \item \code{icd10cm}: check whether a code is an ICD-10-CM major.
 Currently uses \code{stringr} which uses \code{stringi} which should be
-quite fast, but does suffer from handling unicode, locales, etc.
+quite fast, but does suffer from handling Unicode, locales, etc.
 
 \item \code{icd10who}: check whether a code is an ICD-10 WHO major
 

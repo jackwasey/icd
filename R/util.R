@@ -77,11 +77,11 @@ strip <- function(x, pattern = " ", use_bytes = TRUE)
 
 #' encode TRUE as 1, and FALSE as 0 (integers)
 #'
-#' when saving data as text files for distribution, printing large amounts of
-#' text containing TRUE and FALSE is inefficient. Convert to binary takes more R
-#' memory, but allows more compact output
-#' @param x dataframe which may contain logical fields
-#' @return data frame without logical fields
+#' When saving data as text files for distribution, printing large amounts of
+#' text containing \code{TRUE} and \code{FALSE} is inefficient. Convert to
+#' binary takes more R memory, but allows more compact output
+#' @param x \code{data.frame} which may contain logical fields
+#' @return \code{data.frame} without logical fields
 #' @keywords internal manip
 logical_to_binary <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
@@ -108,14 +108,14 @@ logical_to_binary <- function(x) {
   x
 }
 
-#' Match strings to get named vector
+#' Match pairs of strings to get named vector
 #'
-#' match a character vector against a regex with a pair of parentheses,
-#' returning named vector
+#' Match a character vector against a regular expression with at least two
+#' parenthetic groupings, returning named vector.
 #' @param string vector of strings
-#' @param pattern vector of regex which should match exactly two strings for
-#'   each element in \code{stringr}. If \code{pos} is specified, this rule is
-#'   relaxed.
+#' @param pattern vector of regular expression which should match exactly two
+#'   strings for each element in \code{stringr}. If \code{pos} is specified,
+#'   this rule is relaxed.
 #' @param pos optional pair of integers with positions of the first and second
 #'   desired matches, when multiple matches are made by the regular expression
 #' @param swap logical scalar, whether to swap the names and values. Default is

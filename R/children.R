@@ -109,8 +109,8 @@ utils::globalVariables("icd10cm2016")
 
 #' defined children of ICD codes
 #'
-#' defined icd10 children based on 2016 ICD-10-CM list. "defined" may be a three
-#' digit code, or a leaf node. This is distinct from 'billable'.
+#' defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
+#' three digit code, or a leaf node. This is distinct from 'billable'.
 #'
 #' @keywords internal
 icd_children_defined <- function(x)

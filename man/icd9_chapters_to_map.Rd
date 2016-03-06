@@ -8,13 +8,13 @@ icd9_chapters_to_map(x)
 }
 \arguments{
 \item{x}{Either a chapter list itself, or the name of one, e.g.
-icd9ChaptersSub}
+"icd9_sub_chapters"}
 }
 \description{
 the chapter headings can be converted into the full set of their children,
 and then used to look-up which chapter, sub-chapter, or 'major' a given code
-belongs. Always returns a map with short-form icd-9 codes. These can be
-converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
+belongs. Always returns a map with short-form ICD-9 codes. These can be
+converted in bulk with \code{lapply} and \code{icd9ShortToDecimal}.
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9PartsToShort}},

@@ -788,9 +788,9 @@ icd9LongToWide <- function(icd9df,
 #'   are found. If NULL, all columns matching icd or ICD will be included.
 #' @param icdName Deprecated. Character vector length one containing the new
 #'   column name for the ICD codes, defaults to "icdCode"
-#' @param icdRegex Deprecated. Vector of character strings containing a regex to
-#'   identify ICD-9 diagnosis columns to try (case-insensitive) in order.
-#'   Default is \code{c("icd", "diag", "dx_", "dx")}
+#' @param icdRegex Deprecated. Vector of character strings containing a regular
+#'   expression to identify ICD-9 diagnosis columns to try (case-insensitive) in
+#'   order. Default is \code{c("icd", "diag", "dx_", "dx")}
 #' @template verbose
 #' @export
 icd9WideToLong <- function(x,

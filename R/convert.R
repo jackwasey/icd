@@ -19,7 +19,7 @@
 #'
 #' ICD-9 codes are represented in \emph{short} and \emph{decimal} forms. The
 #' short form has up to 5 digits, or V or E followed by up to four digits. The
-#' decimal form has a dedcimal point to delimit the top-level (henceforth
+#' decimal form has a decimal point to delimit the top-level (henceforth
 #' \emph{major}) category, and the \emph{minor} part containing the subsidiary
 #' classifications.
 #'
@@ -50,10 +50,10 @@ NULL
 #'
 #' the chapter headings can be converted into the full set of their children,
 #' and then used to look-up which chapter, sub-chapter, or 'major' a given code
-#' belongs. Always returns a map with short-form icd-9 codes. These can be
-#' converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
+#' belongs. Always returns a map with short-form ICD-9 codes. These can be
+#' converted in bulk with \code{lapply} and \code{icd9ShortToDecimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
-#'   icd9ChaptersSub
+#'   "icd9_sub_chapters"
 #' @family ICD-9 convert
 #' @keywords internal manip
 icd9_chapters_to_map <- function(x) {

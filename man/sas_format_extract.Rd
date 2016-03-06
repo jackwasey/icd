@@ -18,13 +18,13 @@ list (of lists)
 }
 \description{
 this is modelled entirely on a single chunk of SAS code, but hopefully will
-have some generalizability. It relies heavily on lists and regex, but, as you
-will see from the code, R is not a great language with which to write a SAS
-parser.
+have some generalizability. It relies heavily on lists and regular
+expression, but, as you will see from the code, R is not a great language
+with which to write a SAS parser.
 }
 \section{Functions}{
 \itemize{
-\item \code{sas_format_extract_rcomfmt}: Get just the $RCOMFMT assignment, which
+\item \code{sas_format_extract_rcomfmt}: Get just the \code{$RCOMFMT} assignment, which
   contains all the ICD (not DRG) data. The problem is RENLFAIL appears twice:
 
   \code{"N183", "N184", "N185", "N186", "N189", "N19", "Z4901", "Z4902",
@@ -33,7 +33,7 @@ parser.
   "Z4931", "Z4932"="RENLFAIL"       /*Encounter for adequacy testing for
   peritoneal dialysis*/ }
 
-  so RENLFAIL needs special treatment
+  so 'RENLFAIL' needs special treatment
 }}
 \examples{
   \dontrun{

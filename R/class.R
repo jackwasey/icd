@@ -274,8 +274,8 @@ icd_short_code <- function(x, warn = TRUE) {
 
 #' get position to set short or decimal class
 #'
-#' prefer immediately after icd9cm, etc., if not, place before system classes at
-#' end, or at the very end if no system classes
+#' prefer immediately after \code{icd9cm}, etc., if not, place before system
+#' classes at end, or at the very end if no system classes
 #' @keywords internal
 get_pos_short_decimal_class <- function(x) {
   pos_last_icd_type <- which(class(x) %in% c(icd9_classes, icd10_classes))
@@ -496,11 +496,12 @@ c.icd_decimal_code <- function(...) {
 #' test ICD-related classes
 #'
 #' currently no checks on correctness of the classes for these functions
-#' @details TODO: could warn or fix if something is icd10cm or icd10who but not
-#'   icd10
+#'
+#' @details TODO: could warn or fix if something is \code{icd10cm} or
+#'   \code{icd10who} but not \code{icd10}
 #' @param x Any object which may have ICD-related classes set
-#' @param strict logical value, if TRUE, will only match the type exactly; if
-#'   \code{FALSE}
+#' @param strict logical value, if \code{TRUE}, will only match the type
+#'   exactly; if \code{FALSE}
 #' @export
 is.icd9 <- function(x, strict = FALSE)
   if (strict) {
@@ -510,8 +511,8 @@ is.icd9 <- function(x, strict = FALSE)
   }
 
 #' @rdname is.icd9
-#' @details TODO: could warn or fix if something is icd10cm or icd10who but not
-#'   icd10
+#' @details TODO: could warn or fix if something is \code{icd10cm} or
+#'   \code{icd10who} but not \code{icd10}
 #' @export
 is.icd10 <- function(x, strict = FALSE)
   if (strict) {

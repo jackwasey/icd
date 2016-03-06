@@ -267,7 +267,7 @@ NULL
 
 #' Hospital discharge data from Vermont
 #'
-#' De-identified data from public Vermont source for 2013
+#' Anonymous data from public Vermont source for 2013
 #'
 #' Conditions of Release Release of public use data is subject to the following
 #' conditions, which the requestor agrees to upon accepting copies of the data:

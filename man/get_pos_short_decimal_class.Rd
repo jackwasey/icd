@@ -7,8 +7,8 @@
 get_pos_short_decimal_class(x)
 }
 \description{
-prefer immediately after icd9cm, etc., if not, place before system classes at
-end, or at the very end if no system classes
+prefer immediately after \code{icd9cm}, etc., if not, place before system
+classes at end, or at the very end if no system classes
 }
 \keyword{internal}
 

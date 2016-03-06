@@ -452,9 +452,9 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 
 #' @rdname icd_comorbid
 #' @details For Deyo's Charlson comorbidities, strictly speaking, there is no
-#'   dropping of more e.g. uncomplicated DM if complicated DM exists, however,
-#'   this is probably useful, in general and is essential when calculating the
-#'   Charlson score.
+#'   dropping of more e.g. uncomplicated 'DM' if complicated 'DM' exists,
+#'   however, this is probably useful, in general and is essential when
+#'   calculating the Charlson score.
 #' @export
 icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
                                         hierarchy = TRUE) {

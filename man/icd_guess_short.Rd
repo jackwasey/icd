@@ -33,7 +33,8 @@ icd_guess_short(x, short_code = NULL, test_n = 1000L)
 }
 \value{
 single logical value, \code{TRUE} if input data are predominantly
-  short_code type. If there is some uncertainty, then return NA.
+  \code{short_code} type. If there is some uncertainty, then return
+  \code{NA}.
 }
 \description{
 TODO: Partly implemented. Goal is to guess whether codes are

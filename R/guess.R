@@ -25,7 +25,8 @@
 #' assume valid, even if the bulk are short_code. However, it may be more useful
 #' to check validity after the guess.
 #' @return single logical value, \code{TRUE} if input data are predominantly
-#'   short_code type. If there is some uncertainty, then return NA.
+#'   \code{short_code} type. If there is some uncertainty, then return
+#'   \code{NA}.
 #' @keywords internal
 icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
   # if short_code is set, no need to dispatch at all

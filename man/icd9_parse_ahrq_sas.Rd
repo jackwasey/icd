@@ -18,9 +18,9 @@ invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.
 }
 \description{
-Takes the raw data taken directly from the AHRQ web site and
-  parses into RData. It is then saved in the development tree data directory,
-  so this is an internal function, used in generating the package itself!
+Raw data taken directly from the AHRQ web site and parsed. It is then saved
+in the development tree data directory, so this is an internal function, used
+in generating the package itself.
 }
 \keyword{internal}
 

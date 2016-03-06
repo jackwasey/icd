@@ -36,17 +36,17 @@ is.icd_comorbidity_map(x)
 \arguments{
 \item{x}{Any object which may have ICD-related classes set}
 
-\item{strict}{logical value, if TRUE, will only match the type exactly; if
-\code{FALSE}}
+\item{strict}{logical value, if \code{TRUE}, will only match the type
+exactly; if \code{FALSE}}
 }
 \description{
 currently no checks on correctness of the classes for these functions
 }
 \details{
-TODO: could warn or fix if something is icd10cm or icd10who but not
-  icd10
+TODO: could warn or fix if something is \code{icd10cm} or
+  \code{icd10who} but not \code{icd10}
 
-TODO: could warn or fix if something is icd10cm or icd10who but not
-  icd10
+TODO: could warn or fix if something is \code{icd10cm} or
+  \code{icd10who} but not \code{icd10}
 }
 

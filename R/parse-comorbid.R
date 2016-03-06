@@ -55,9 +55,9 @@ icd10_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
 
 #' parse AHRQ SAS code to get mapping
 #'
-#' Takes the raw data taken directly from the AHRQ web site and
-#'   parses into RData. It is then saved in the development tree data directory,
-#'   so this is an internal function, used in generating the package itself!
+#' Raw data taken directly from the AHRQ web site and parsed. It is then saved
+#' in the development tree data directory, so this is an internal function, used
+#' in generating the package itself.
 #' @template parse-template
 #' @keywords internal
 icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
