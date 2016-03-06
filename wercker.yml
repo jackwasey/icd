@@ -6,7 +6,7 @@ no-response-timeout: 60
 build:
   steps:
     - install-packages:
-        packages: r-cran-rodbc
+        packages: r-cran-rodbc r-cran-codetools
     - script:
         name: icd test environment
         code: |
