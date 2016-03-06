@@ -16,7 +16,8 @@ generate_spelling <- function(out = ".aspell/words.pws") {
                 "POA", "HTN", "ICD",
                 "RTF", "SAS", "VAHHS", "NSO", "WSU")
   other <- c("comorbidity", "comorbidities", "comorbid",
-             "unclassifiable", "requestor", "Transuranium", "TODO")
+             "unclassifiable", "requestor", "Transuranium", "TODO",
+             "MERCHANTABILITY")
   # "requestor" in Vermont data licence
   words <- c(medical, proper_nouns, acronyms, other)
   aspell_write_personal_dictionary_file(words, out = out)

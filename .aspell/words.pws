@@ -1,4 +1,4 @@
-personal_ws-1.1 en 52 UTF-8
+personal_ws-1.1 en 55 UTF-8
 arrythmia
 Musculoskeletal
 Myocardial
@@ -16,6 +16,7 @@ Travis
 Walraven
 Wasey
 Wercker
+Wickham
 wmurphyrd
 Charlson's
 Deyo's
@@ -28,6 +29,7 @@ Travis's
 Walraven's
 Wasey's
 Wercker's
+Wickham's
 wmurphyrd's
 AHRQ
 BISHCA
@@ -51,3 +53,4 @@ unclassifiable
 requestor
 Transuranium
 TODO
+MERCHANTABILITY

@@ -20,6 +20,7 @@ build:
           #- hadley/testthat # in the throes
           #- RcppCore/Rcpp # CRAN version up-to-date for my purposes
           - jimhester/covr
+          - kevinushey/rex
     - jimhester/r-check:
         warnings_are_errors: FALSE # I think this has false positives for latex warnings, even if R CMD check is okay
     - jackwasey/r-coverage

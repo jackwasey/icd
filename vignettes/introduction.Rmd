@@ -67,7 +67,7 @@ exist. The package enables a work flow from raw lists of ICD-9 codes from
 hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
 from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 
-When calcuating which patients have which comorbidities, the input data is typically structured as follows:
+When calculating which patients have which comorbidities, the input data is typically structured as follows:
 ```{r showdatlong,echo=FALSE}
 patients
 ```
@@ -85,16 +85,16 @@ or
 ```{r getcomorbidities1a}
 icd_comorbid_quan_deyo(patients)[, 1:8]
 ```
-and things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. This is not a dependency for this package, but is recommended because of the frequent need to chain together icd9 commands, and greater clarity.
+and things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. This is not a dependency for this package, but is recommended because of the frequent need to chain together *icd* commands, and greater clarity.
 ```{r getcomorbidities2}
 patients %>% icd_filter_poa_yes %>% icd_comorbid_ahrq %>% extract(1:8)
 ```
 
 ## Converting ICD-9 codes between types
-ICD-9 codes are usually presented in *decimal* format (beware, for this is not a number), e.g. `003.21`, whereas most electronic records seem to use the *short* form without a decimal place. These are not interchangeable simply by removing the decimal place, and great care is taken to do this correctly. The functions were also designed to deal with the common problem of incorrectly formatted ICD-9 codes. The assumption is made that short codes of three or fewer characters are  describing only the 'major' part: there is no other reasonable interpretation. For example, `020` must be taken to mean `20`, not `2.0` or even `0.20`. In most cases, when *icd9* works on ICD-9 codes, it will convert any codes of fewer than three characters into zero-padded three-digit codes.
+ICD-9 codes are usually presented in *decimal* format (beware, for this is not a number), e.g. `003.21`, whereas most electronic records seem to use the *short* form without a decimal place. These are not interchangeable simply by removing the decimal place, and great care is taken to do this correctly. The functions were also designed to deal with the common problem of incorrectly formatted ICD-9 codes. The assumption is made that short codes of three or fewer characters are  describing only the 'major' part: there is no other reasonable interpretation. For example, `020` must be taken to mean `20`, not `2.0` or even `0.20`. In most cases, when *icd* works on ICD-9 codes, it will convert any codes of fewer than three characters into zero-padded three-digit codes.
 ```{r "conversionSimple"}
 icd_decimal_to_short(c("1", "10.20", "100", "123.45"))
-icd9ShortToDecimal(c("1", "22", "2244", "1005"))
+icd_short_to_decimal(c("1", "22", "2244", "1005"))
 
 # similar operations with magrittr, also showing invalid codes
 codes <- icd9(c("87.65", "9999", "Aesop", -100, "", NA))
@@ -215,49 +215,51 @@ The warnings here are irrelevant because we know that `%i9da% produces codes whi
 
 This flag is recorded with each ICD-9 code, indicating whether that diagnosis was present on admission. With some caution, codes flagged specifically not *POA* can be treated as new diseases during an admission.
 
-Present-on-arrival (POA) is typically a factor, or vector of values such as "Y", "N", "X", "E", or NA. Intermediate codes, such as "exempt", "unknown" and NA mean that "yes" is not the same as "not no." This requires four functions to cover the possibilities stored in icd9PoaChoices:
+Present-on-arrival (POA) is typically a factor, or vector of values such as "Y", "N", "X", "E", or NA. Intermediate codes, such as "exempt", "unknown" and NA mean that "yes" is not the same as "not no." This requires four functions to cover the possibilities stored in `icd_poa_choices`:
 ```{r ShowPoaChoices, echo=FALSE}
-icd9PoaChoices
+icd_poa_choices
 ```
 Filter for present-on-arrival being "Y"
 ```{r simplepoa}
-patients %>% icd9FilterPoaYes
+patients %>% icd_filter_poa_yes
 ```
 Show that *yes* is not equal to *not no* (e.g. due to NA in `poa` field)
 ```{r notnopoa}
-patients %>% icd9FilterPoaNotNo
+patients %>% icd_filter_poa_not_no
 ```
 
 ## Comorbidities
 The comorbidities from different sources are provided as lists. At present only the most recent mapping of ICD-9 codes to comorbidities is provided. See these [github](https://github.com/jackwasey/icd9/issues/6) [issues](https://github.com/jackwasey/icd9/issues/7).
 
-This package contains ICD-9-CM to co-morbidity mappings from several sources, based on either the Charlson or Elixhauser lists of co-morbidities. Updated versions of these lists from [AHRQ](http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp) and [Quan et al](http://www.ncbi.nlm.nih.gov/pubmed/16224307) are included, along with the original Elixhauser mapping . Since some data is provided in SAS source code format, this package has internalfunctions to parse this SAS source code and generate R data structures. This processing is limited to what is needed for this purpose, although may be generalizable and useful in other contexts. Other lists are transcribed directly from the published articles, but interpretation of SAS code used for the original publications is prefererable.
+This package contains ICD-9-CM to comorbidity mappings from several sources, based on either the Charlson or Elixhauser lists of comorbidities. Updated versions of these lists from [AHRQ](http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp) and [Quan et al](http://www.ncbi.nlm.nih.gov/pubmed/16224307) are included, along with the original Elixhauser mapping . Since some data is provided in SAS source code format, this package has internal functions to parse this SAS source code and generate R data structures. This processing is limited to what is needed for this purpose, although may be generalizable and useful in other contexts. Other lists are transcribed directly from the published articles, but interpretation of SAS code used for the original publications is preferable.
 
 ### AHRQ comorbidity classification
 
-The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code.
+The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. The names of the comorbidities derived from ICD-9 and ICD-10 codes are the same. Maps contain the ICD code to comorbidity mappings; the functions that apply those mappings are called things like `icd10_comorbid_ahrq`.
 ```{r ahrq}
-#ahrqComorbid <- icd:::parseAhrqSas() # user doesn't need to do this
-names(ahrqComorbid)
+#ahrqComorbid <- icd:::sas_parse_ahrq() # user doesn't need to do this
+names(icd9_map_ahrq)
+icd9_map_ahrq$CHF[1:5]
+icd10_map_ahrq$CHF[1:5]
 ```
 
-### Elixhauser co-morbidities
-Elixhauser originally devleoped this set of co-morbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
+### Elixhauser comorbidities
+Elixhauser originally devleoped this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
 ```{r elix}
-names(elixComorbid)
+names(icd9_map_elix)
 ```
 
 ### Quan
-Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's co-morbidities. Thus there are two 'Quan' comorbidity mappings.
+Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's comorbidities. Thus there are two 'Quan' comorbidity mappings.
 ```{r quanElix}
-names(quanDeyoComorbid)
-names(quanElixComorbid)
+names(icd10_map_quan_deyo)
+names(icd10_map_quan_elix)
 ```
 
 ## Examples
 
 ### Filter patients and create comorbidities
-Take my patients, find the ones where there definitely or maybe was a diagnosis present on admission, then generate comorbidities based on the AHRQ mapping. N.b. `NotNo` is not the same as `Yes` because of some exempt, unclassifiable conditions, or `NA` values for `poa`.
+Take my patients, find the ones where there definitely or maybe was a diagnosis present on admission, then generate comorbidities based on the AHRQ mapping. N.b. `NotNo` is not the same as `Yes` because of some exempt, unclassifiable conditions, or `NA` values for the present-on-admission flag.
 ```{r chainpoatocomorbid}
 patients %>%
   icd_filter_poa_not_no %>%
@@ -294,7 +296,7 @@ icd9(cardiac) %>% icd_explain(warn = FALSE) %>% head(10)
 
 ### Find comorbidities for a large number of patients.
 I understand that comorbiditity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
-```{r speed, cache = TRUE, eval = FALSE}
+```{r speed, eval = FALSE}
 # codes selected from AHRQ mapping
 many_patients <- icd:::generate_random_pts(1e7) 
 system.time(

@@ -68,7 +68,7 @@ quan_comorbidities <- icd_comorbid(uranium_pathology, icd10_map_quan_elix)
 quan_comorbidities[1:6, 3:10]
 ```
 
-The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings in this package. The ICD-9 mappings included all possible permutations of child codes. Since ICD-10 codes contain letters, and are seven characters long, this became impractical. Therefore, the current mappings include only codes for the most recent update of ICD-10-CM. This means that slightly miscoded diseases, e.g. with a spurious additional number, will not be counted.
+The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings in this package. The ICD-9 mappings included all possible permutations of child codes. Since ICD-10 codes contain letters, and are seven characters long, this became impractical. Therefore, the current mappings include only codes for the most recent update of ICD-10-CM. This means that slightly incorrectly coded diseases, e.g. with a spurious additional number, will not be counted.
 
 For example, here are the codes for hypertension with complications from Quan et al:
 ```{r htncx}

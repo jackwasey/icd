@@ -44,7 +44,7 @@ knitr::opts_chunk$set(
 )
 ```
 ## ICD code scoring systems
-A common use of ICD codes is calculation as a Charlson score, which gives a measure of how well a patient is, albeit based on the limited available in admission and discharge diagnoses. The Charlson scoring system attributes scores based on presence of diseases falling into any of the Charlson comorbidities. Quan et al updated the scores given to each comorbidity to better reflect morbidity and mortality in a more recent population. Van Walraven et al provide a similar scoring methodology for the Elixhauser comorbidities (as used by the US AHRQ).
+A common use of ICD codes is calculation as a Charlson score, which gives a measure of how well a patient is, albeit based on the limited available in admission and discharge diagnoses. The Charlson scoring system attributes scores based on presence of diseases falling into any of the Charlson comorbidities. Quan updated the scores given to each comorbidity to better reflect morbidity and mortality in a more recent population. Van Walraven provides a similar scoring methodology for the Elixhauser comorbidities (as used by the US AHRQ).
 
 More complicated scoring systems may use lab values, patient demographic information, and so on. Any contributions to this package for calculations of scoring systems based on comorbidities and other data would be welcome.
 
