@@ -320,9 +320,9 @@ icd_comorbidity_map <- function(x) {
 #' extract vector of codes from an ICD comorbidity map
 #'
 #' Equivalent to a list, but preserves class of extracted vector
-#' @param x comorbidity map to be subsetted. This is a named list.
+#' @param x comorbidity map to be sub-setted. This is a named list.
 #' @param index integer
-#' @param ... other arguments passed to the usual \code{[}
+#' @template dotdotdot
 #' @export
 `[[.icd_comorbidity_map` <- function(x, index, ...) {
   x_cl <- class(x)
@@ -339,12 +339,12 @@ icd_comorbidity_map <- function(x) {
 
 #' combine ICD codes
 #'
-#' These function implement combination of lists or vectors of
-#'   codes, while preserving ICD classes. Base R \code{c} just drops all user
-#'   defined classes and casts down to lowest common denomintor, e.g. if mixing
-#'   numbers and characters. No attempt here to catch all possible combinations
-#'   of feeding in mixed ICD types and other types. Let R do what it normally
-#'   does, but just try to keep classes of the first item in the list.
+#' These function implement combination of lists or vectors of codes, while
+#' preserving ICD classes. Base R \code{c} just drops all user defined classes
+#' and casts down to lowest common denominator, e.g. if mixing numbers and
+#' characters. No attempt here to catch all possible combinations of feeding in
+#' mixed ICD types and other types. Let R do what it normally does, but just try
+#' to keep classes of the first item in the list.
 #' @param ... elements to combine
 #' @examples
 #' \dontrun{
@@ -440,11 +440,8 @@ c.icd_decimal_code <- function(...) {
 #'
 #' exactly the same as using x[n] or x[[n]] but preserves the ICD classes in
 #' result
-#' @details TODO:Potential here to use attributes, since we can (as base R does
-#'   in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
-#'   subsetting operation. This would simplify the class system.
 #' @param x input data with list, vector, factor, and class set to an ICD type.
-#' @param ... other arguments passed to \code{base} subset function
+#' @template dotdotdot
 #' @examples
 #' x <- icd9(list(my_codes = c("V10.1", "441.1")))
 #' x[1]

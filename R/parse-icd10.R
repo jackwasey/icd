@@ -36,7 +36,8 @@ icd10cm_xml_node_to_pair <- function(x) {
 
 #' Get sub-chapters from the 2016 XML for ICD-10-CM
 #'
-#' This is a superset of ICD-10 sub-chapters, I think.
+#' This is not quite a super-set of ICD-10 sub-chapters: many more codes than
+#' ICD-10, but some are abbreviated, notably HIV.
 #'
 #' This is complicated by the XML document specifying more hierarchical
 #' levels,e.g. \code{C00-C96}, \code{C00-75} are both specified within the

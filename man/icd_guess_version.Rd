@@ -32,11 +32,11 @@ is guessed from the input data.}
 \description{
 The guess is indeed a guess and can be wrong. There are some codes which
 could be either ICD-9 or ICD-10. The current implementation doesn't check
-whether the codes exist in any defintions (ICD-9 CM or WHO, for example),
+whether the codes exist in any definitions (ICD-9 CM or WHO, for example),
 just whether they are valid. Thus it is quicker.
 }
 \details{
-TOOD: consider adding warning depending on degree of uncertainty.
+TODO: consider adding warning depending on degree of uncertainty.
 }
 \section{Methods (by class)}{
 \itemize{

@@ -37,18 +37,18 @@ the input, this is preserved.}
 }
 \value{
 vector of the count of comorbidities for each patient. This is
-  sometimes used as a metric of comorbidity load, instead of, or inaddition
+  sometimes used as a metric of comorbidity load, instead of, or in addition
   to metrics like the Charlson Comorbidity Index (aka Charlson Score)
 }
 \description{
-\code{icd_count_codes} takes a data frame with a column for
-  \code{visit_name} and another for ICD-9 code, and returns the number of
-  distinct codes for each patient.
+\code{icd_count_codes} takes a data frame with a column for \code{visit_name}
+and another for ICD-9 code, and returns the number of distinct codes for each
+patient.
 }
 \details{
 The \code{visit_name} field is typically the first column. If there is no
-  column called \code{visit_name} and \code{visit_name} is not specified, the
-  first column is used.
+column called \code{visit_name} and \code{visit_name} is not specified, the
+first column is used.
 }
 \examples{
   mydf <- data.frame(visit_name = c("r", "r", "s"),

@@ -6,7 +6,7 @@
 \alias{icd9ShortToDecimal}
 \alias{icd9ShortToParts}
 \alias{icd_short_to_decimal}
-\title{Convert ICD from short to deimcal forms}
+\title{Convert ICD from short to decimal forms}
 \usage{
 icd_short_to_decimal(x)
 

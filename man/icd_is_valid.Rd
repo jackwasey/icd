@@ -93,23 +93,23 @@ is guessed from the input data.}
 \item{...}{arguments passed on to other functions}
 
 \item{whitespace_ok}{Single logical, if \code{TRUE}, the default, matches for
-ICD codes will accept leading and trailing whitespace.}
+ICD codes will accept leading and trailing white space.}
 
 \item{isShort}{Deprecated. Single logical value which determines whether the ICD-9 code
 provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
 is guessed from the input data.}
 
 \item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
-which falls before the decimal point, in decimal notation. (In 5 digit
+which falls before the decimal point, in decimal notation. (In five digit
 notation, the 'major' part is be the first three characters (with leading
-zeroes), and includes V or E prefix. xyz}
+zeroes), and includes V or E prefix.}
 }
 \value{
 logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
   provided according to its validity
 }
 \description{
-This does not check whether the code coresponds to a real ICD-9-CM billing
+This does not check whether the code corresponds to a real ICD-9-CM billing
 code, or parent grouping. For that, see \code{\link{icd_is_defined}}.
 }
 \details{
@@ -196,7 +196,7 @@ declaring method here
 }
 \seealso{
 \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
-  url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
+  \url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 }
 \keyword{internal}
 

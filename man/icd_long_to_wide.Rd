@@ -65,10 +65,10 @@ even if no patients have that many codes. Must be greater than or equal to
 the maximum number of codes per patient.}
 
 \item{aggregate}{single logical value, if TRUE (the default) will take more
-time to find out-of-order visitIds, and combine all the codes for each
-unique \code{visitId}. If \code{FALSE}, then out-of-order \code{visitId}s
-will result in a row in the output data per contiguous block of identical
-\code{visitId}s.}
+time to find out-of-order \code{visitId}s, and combine all the codes for
+each unique \code{visitId}. If \code{FALSE}, then out-of-order
+\code{visitId}s will result in a row in the output data per contiguous
+block of identical \code{visitId}s.}
 
 \item{return.df}{single logical value, if \code{TRUE}, return a data frame
 with a field for the \code{visitId}. This may be more convenient, but the

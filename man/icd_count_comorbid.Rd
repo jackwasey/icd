@@ -12,7 +12,7 @@ icd_count_comorbid(x, visit_name = get_visit_name(x), return_df = FALSE)
 \arguments{
 \item{x}{data frame with one row per patient, and a true/false or 1/0 flag
 for each column. By default, the first column is the patient identifier and
-is not counted. If \code{visitId} is not specified, the first column is
+is not counted. If \code{visit_name} is not specified, the first column is
 used.}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}

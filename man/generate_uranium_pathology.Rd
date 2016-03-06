@@ -18,11 +18,11 @@ invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.
 }
 \description{
-This is downloaded from WSU where it appears to be provided in the public
-domain. It requires the file to be downloadable from source, or already
-stored in the \code{data-raw} directory, and it appears that the function
-\code{odbcConnectAccess2007} is only available in the Windows build of
-\pkg{RODBC}.
+This is downloaded from \href{https://wsu.edu}{WSU} where it appears to be
+provided in the public domain. It requires the file to be downloadable from
+source, or already stored in the \code{data-raw} directory, and it appears
+that the function \code{odbcConnectAccess2007} is only available in the
+Windows build of \pkg{RODBC}.
 }
 \keyword{internal}
 

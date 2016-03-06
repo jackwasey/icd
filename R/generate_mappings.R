@@ -252,7 +252,7 @@ The map can be condensed using other functions in the package. 'path' is the dat
   invisible(icd9_map_quan_elix)
 }
 
-#' generate ICD-10 Quan/Elixhauser maping
+#' generate ICD-10 Quan/Elixhauser mapping
 #'
 #' @details Started with Quan's SAS code (in \code{data-raw}):
 #` \code{grep %STR\(.*[[:digit:]] ICD10_Elixhauser.sas}
@@ -425,11 +425,11 @@ fetch_uranium_pathology <- function(offline = FALSE) {
 
 #' generate uranium pathology data
 #'
-#' This is downloaded from WSU where it appears to be provided in the public
-#' domain. It requires the file to be downloadable from source, or already
-#' stored in the \code{data-raw} directory, and it appears that the function
-#' \code{odbcConnectAccess2007} is only available in the Windows build of
-#' \pkg{RODBC}.
+#' This is downloaded from \href{https://wsu.edu}{WSU} where it appears to be
+#' provided in the public domain. It requires the file to be downloadable from
+#' source, or already stored in the \code{data-raw} directory, and it appears
+#' that the function \code{odbcConnectAccess2007} is only available in the
+#' Windows build of \pkg{RODBC}.
 #' @template parse-template
 #' @keywords internal
 generate_uranium_pathology <- function(save_data = TRUE, offline = FALSE) {

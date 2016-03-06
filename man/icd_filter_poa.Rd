@@ -55,7 +55,7 @@ of length one.}
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes are exempt,
 unspecified, or unknown. Therefore, two options are given: get all the
-comorbidities where the POA flag was definitely -ve, coded as "N" or
+comorbidities where the POA flag was definitely negative, coded as "N" or
 definitely +ve and coded as "Y". Negating one set won't give the other set
 unless all codes were either Y or N.
 }
@@ -93,9 +93,9 @@ myData \%>\% icd9FilterPoaYes(poa_name="poa") \%>\%
   icd_comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
 # can call the core icd9Comorbid function with an arbitrary mapping
 myData \%>\%
-icd_filter_poa_yes \%>\%
-icd_comorbid(icd_name = "diag", visit_name = "visit_id",
-  map = icd9_map_quan_elix, short_mapping = TRUE)
+  icd_filter_poa_yes \%>\%
+  icd_comorbid(icd_name = "diag", visit_name = "visit_id",
+    map = icd9_map_quan_elix, short_mapping = TRUE)
 }
 }
 

@@ -105,13 +105,13 @@ which exactly encompass certain subsets. E.g. If all cholera diagnoses are
 provided, only '001 - Cholera' needs to be displayed, not all sub-types.}
 }
 \value{
-data frame, or list of data frames, with fields for ICD9 code, name
-  and description, derived from datamart lookup table
+data frame, or list of data frames, with fields for ICD-9 code, name
+  and description
 }
 \description{
-Convert 'decimal' format (123.45 style) ICD-9 codes into the
-  name and description for human review there are official ICD9-CM data
-  tables, not with conversion to decimal notation, but to the textual format.
+Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
+description for human review there are official ICD9-CM data tables, not with
+conversion to decimal notation, but to the textual format.
 }
 \section{Methods (by class)}{
 \itemize{

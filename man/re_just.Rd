@@ -16,7 +16,7 @@ re_wrap_or(x)
 \item{x}{single string containing a regex}
 
 \item{whitespace_ok}{Single logical, if \code{TRUE}, the default, matches for
-ICD codes will accept leading and trailing whitespace.}
+ICD codes will accept leading and trailing white space.}
 }
 \description{
 update regex to limit by start and end, with or without white space

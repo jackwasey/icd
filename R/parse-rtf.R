@@ -85,8 +85,8 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
 #' @template verbose
 #' @return named character vector, with names being the ICD-9 codes, and the
 #'   contents being the descriptions from the RTF source. Elsewhere I do this
-#'   the other way around, but the tests are now wired for this layout. "Tidy"
-#'   data would favour having an un-named two-column data frame.
+#'   the other way around, but the tests are now wired for this layout. 'Tidy'
+#'   data would favour having an unnamed two-column data frame.
 #' @keywords internal
 parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 

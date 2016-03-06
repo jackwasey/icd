@@ -128,7 +128,7 @@ NULL
 
 #' AHRQ comorbidities
 #'
-#' This mapping of comorbidities to ICD-9 codes is dervied directly from SAS
+#' This mapping of comorbidities to ICD-9 codes is derived directly from SAS
 #' code provided by AHRQ, and translated into this R data structure. This is a
 #' revision of the Elixhauser system, notably excluding cardiac arrythmia.
 #' @docType data
@@ -244,21 +244,23 @@ NULL
 
 #' list of annual versions of billable leaf nodes of ICD-9-CM
 #'
-#' These are derived from the CMS published updates, with versions
-#'   23 to 32 currently available going back to 2004/5. The source files back to
-#'   version 27 have short and long descriptions. The short descriptions are in
-#'   ASCII with no special characters, whereas the long descriptions contain
-#'   accented characters which seem to be interpretable as unicode, latin-1 or
-#'   cp1252. This all done during package creation, but can be repeated by
-#'   package users, including pulling the data from the web pages directly.
-#'   Despite my best efforts, current locale can give different results, but
-#'   this packaged data is correct, with some UTF-8 encoded strings.
+#' These are derived from the CMS published updates, with versions 23 to 32
+#' currently available going back to 2004/5. The source files back to version 27
+#' have short and long descriptions. The short descriptions are in ASCII with no
+#' special characters, whereas the long descriptions contain accented characters
+#' which seem to be interpretable as Unicode, \code{latin-1} or \code{cp1252}.
+#' This all done during package creation, but can be repeated by package users,
+#' including pulling the data from the web pages directly. Despite my best
+#' efforts, current locale can give different results, but this packaged data is
+#' correct, with some \code{UTF-8} encoded strings.
 #' @docType data
 #' @keywords datasets
 #' @format list of data frames. Each list item is named by the version as a
 #'   string, e.g. "32". The constituent data frames have columns \code{icd9},
 #'   \code{shortDesc}, and \code{longDesc}.
-#' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+#' @source
+#' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+#'
 #' @name icd9cm_billable
 #' @aliases icd9Billable
 NULL

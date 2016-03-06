@@ -11,8 +11,8 @@ generate_spelling(out = ".aspell/words.pws")
 }
 \description{
 This is a bit painful, but defining known spellings of names and technical
-terms makes the aspell checks useful (and removes a NOTE in the R CMD check
-which at least some of the CRAN people use.
+terms makes the aspell checks useful (and removes a NOTE in the \code{R CMD
+check} which at least some of the CRAN people use.
 }
 \keyword{internal}
 

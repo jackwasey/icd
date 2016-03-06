@@ -38,7 +38,7 @@ icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
 }
 
 #' @describeIn icd_is_defined Check whether ICD-9 code are defined. (ICD-9-CM by
-#'   defauly)
+#'   default)
 #' @export
 #' @keywords internal
 icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),

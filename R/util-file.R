@@ -61,7 +61,7 @@ unzip_single <- function(url, file_name, save_path) {
 #' The file name is changed to a conservative cross platform name using
 #' \code{make.names}
 #'
-#' @param url url of a zip file
+#' @param url URL of a zip file
 #' @param file_name file name of a single file in that zip
 #' @param force logical, if TRUE, then download even if already in
 #'   \code{data-raw}

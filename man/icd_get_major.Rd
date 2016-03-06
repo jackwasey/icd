@@ -30,9 +30,10 @@ is guessed from the input data.}
 Returns major component of code (before decimal)
 }
 \details{
-For ICD-10, this is an initial implementation with stringr. If speed needed, then can re-use
-C++ ICD-9 version: just grabbing the first three characters, after all,
-and this is much easier in ICD-10 then ICD-9
+For ICD-10, this is an initial implementation with
+  \code{\link{stringr}}. If speed needed, then can re-use C++ ICD-9 version:
+  just grabbing the first three characters, after all, and this is much
+  easier in ICD-10 then ICD-9
 }
 \section{Methods (by class)}{
 \itemize{

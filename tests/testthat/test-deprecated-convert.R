@@ -258,7 +258,7 @@ test_that("deprecated - icd9 parts to short form V and E input, mismatched lengt
 
 icd9ChaptersToMap <- icd9_chapters_to_map
 
-test_that("deprecated - convert list of icd-9 ranges (e.g. chapter defintions to comorbidity map)", {
+test_that("deprecated - convert list of icd-9 ranges (e.g. chapter definitions to comorbidity map)", {
   skip_slow_tests()
   ooe <- data.frame(visitId = sprintf("pt%02d", seq_along(one_of_each)), icd9 = one_of_each)
 

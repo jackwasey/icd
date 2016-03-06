@@ -10,7 +10,8 @@ icd10cm_extract_sub_chapters(save_data = FALSE)
 \item{save_data}{single logical}
 }
 \description{
-This is a superset of ICD-10 sub-chapters, I think.
+This is not quite a super-set of ICD-10 sub-chapters: many more codes than
+ICD-10, but some are abbreviated, notably HIV.
 }
 \details{
 This is complicated by the XML document specifying more hierarchical

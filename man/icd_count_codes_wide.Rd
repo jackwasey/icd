@@ -14,7 +14,7 @@ icd_count_codes_wide(x, visit_name = get_visit_name(x), return_df = FALSE,
 \arguments{
 \item{x}{\code{data.frame} with one row per patient, hospital visit,
 encounter, etc., and multiple columns containing any ICD codes attributed
-to that encounter or patient. I.e. data frame with ICD codes in wide
+to that encounter or patient. i.e. data frame with ICD codes in wide
 format.}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
@@ -40,13 +40,13 @@ specified, then the first column of the data frame is used.}
 the \code{visit_id}, and the second being the count. If \code{visit_id} was a factor or named differently in the
 input, this is preserved.}
 
-\item{aggr, }{single logical, default is FALSE. If TRUE, the length (or rows)
-of the output will no longer match the input, but duplicate visit_names
-will be counted together.}
+\item{aggr}{single logical, default is \code{FALSE}. If \code{TRUE}, the
+length (or rows) of the output will no longer match the input, but
+duplicate \code{visit_name}s will be counted together.}
 }
 \description{
-For \code{icd_count_codes}, it is assumed that all the columns
-  apart from \code{visit_name} represent actual or possible ICD-9 codes.
-  Duplicate \code{visit_name}s are repeated as given and aggregated.
+For \code{icd_count_codes}, it is assumed that all the columns apart from
+\code{visit_name} represent actual or possible ICD-9 codes. Duplicate
+\code{visit_name}s are repeated as given and aggregated.
 }
 

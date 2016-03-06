@@ -128,13 +128,13 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 
 #' count ICD codes or comorbidities for each patient
 #'
-#' \code{icd_count_codes} takes a data frame with a column for
-#'   \code{visit_name} and another for ICD-9 code, and returns the number of
-#'   distinct codes for each patient.
+#' \code{icd_count_codes} takes a data frame with a column for \code{visit_name}
+#' and another for ICD-9 code, and returns the number of distinct codes for each
+#' patient.
 #'
-#'   The \code{visit_name} field is typically the first column. If there is no
-#'   column called \code{visit_name} and \code{visit_name} is not specified, the
-#'   first column is used.
+#' The \code{visit_name} field is typically the first column. If there is no
+#' column called \code{visit_name} and \code{visit_name} is not specified, the
+#' first column is used.
 #' @param x data frame with one row per patient, and a true/false or 1/0 flag
 #'   for each column. By default, the first column is the patient identifier and
 #'   is not counted. If \code{visit_name} is not specified, the first column is
@@ -145,7 +145,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #'   being the count. If \code{visit_name} was a factor or named differently in
 #'   the input, this is preserved.
 #' @return vector of the count of comorbidities for each patient. This is
-#'   sometimes used as a metric of comorbidity load, instead of, or inaddition
+#'   sometimes used as a metric of comorbidity load, instead of, or in addition
 #'   to metrics like the Charlson Comorbidity Index (aka Charlson Score)
 #' @examples
 #'   mydf <- data.frame(visit_name = c("r", "r", "s"),
@@ -191,7 +191,7 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 #'
 #' @param x data frame with one row per patient, and a true/false or 1/0 flag
 #'   for each column. By default, the first column is the patient identifier and
-#'   is not counted. If \code{visitId} is not specified, the first column is
+#'   is not counted. If \code{visit_name} is not specified, the first column is
 #'   used.
 #' @template visit_name
 #' @template return_df
@@ -213,18 +213,18 @@ icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FA
 
 #' Count ICD codes given in wide format
 #'
-#' For \code{icd_count_codes}, it is assumed that all the columns
-#'   apart from \code{visit_name} represent actual or possible ICD-9 codes.
-#'   Duplicate \code{visit_name}s are repeated as given and aggregated.
+#' For \code{icd_count_codes}, it is assumed that all the columns apart from
+#' \code{visit_name} represent actual or possible ICD-9 codes. Duplicate
+#' \code{visit_name}s are repeated as given and aggregated.
 #' @param x \code{data.frame} with one row per patient, hospital visit,
 #'   encounter, etc., and multiple columns containing any ICD codes attributed
-#'   to that encounter or patient. I.e. data frame with ICD codes in wide
+#'   to that encounter or patient. i.e. data frame with ICD codes in wide
 #'   format.
 #' @template visit_name
 #' @template return_df
-#' @param aggr, single logical, default is FALSE. If TRUE, the length (or rows)
-#'   of the output will no longer match the input, but duplicate visit_names
-#'   will be counted together.
+#' @param aggr single logical, default is \code{FALSE}. If \code{TRUE}, the
+#'   length (or rows) of the output will no longer match the input, but
+#'   duplicate \code{visit_name}s will be counted together.
 #' @importFrom stats aggregate
 #' @export
 icd_count_codes_wide <- function(x,

@@ -2,12 +2,14 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' @rdname icd_comorbid
-#' @description RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
-#'   fast, and most time is now spent setting up the data to be passed in.
-#' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
-#'   out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
-#'   IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
-#'   then use \code{TRUE}.
+#' @description \link{Rcpp} approach to comorbidity assignment with OpenMP and
+#'   vector of integers strategy. It is very fast, and most time is now spent
+#'   setting up the data to be passed in.
+#' @param aggregate single logical value, if /code{TRUE}, then take (possible
+#'   much) more time to aggregate out-of-sequence visit IDs in the icd9df
+#'   data.frame. If this is \code{FALSE}, then each contiguous group of visit
+#'   IDs will result in a row of comorbidities in the output data. If you know
+#'   your visitIds are possible disordered, then use \code{TRUE}.
 #' @keywords internal
 icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
     .Call('icd_icd9ComorbidShortCpp', PACKAGE = 'icd', icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)

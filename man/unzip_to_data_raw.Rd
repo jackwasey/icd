@@ -11,7 +11,7 @@ download_to_data_raw(url, file_name = str_extract(url, "[^/]*$"),
   offline = FALSE, allow_missing = FALSE)
 }
 \arguments{
-\item{url}{url of a zip file}
+\item{url}{URL of a zip file}
 
 \item{file_name}{file name of a single file in that zip}
 

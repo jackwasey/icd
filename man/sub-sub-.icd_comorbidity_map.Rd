@@ -7,11 +7,11 @@
 \method{[[}{icd_comorbidity_map}(x, index, ...)
 }
 \arguments{
-\item{x}{comorbidity map to be subsetted. This is a named list.}
+\item{x}{comorbidity map to be sub-setted. This is a named list.}
 
 \item{index}{integer}
 
-\item{...}{other arguments passed to the usual \code{[}}
+\item{...}{arguments passed on to other functions}
 }
 \description{
 Equivalent to a list, but preserves class of extracted vector

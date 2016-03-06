@@ -265,7 +265,7 @@ patientData %>%
   extract(1:9)
 ```
 
-### Compare two comorbidity defintions
+### Compare two comorbidity definitions
 We will find the differences between some categories of the original Elixhauser and the updated version by Quan. Just taking the select few comorbidity groups for brevity:
 ```{r elixvsquanelix}
 difference <- icd9DiffComorbid(elixComorbid, quanElixComorbid, 

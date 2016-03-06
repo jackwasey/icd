@@ -19,16 +19,11 @@
 \arguments{
 \item{x}{input data with list, vector, factor, and class set to an ICD type.}
 
-\item{...}{other arguments passed to \code{base} subset function}
+\item{...}{arguments passed on to other functions}
 }
 \description{
 exactly the same as using x[n] or x[[n]] but preserves the ICD classes in
 result
-}
-\details{
-TODO:Potential here to use attributes, since we can (as base R does
-  in \code{datediff}, \code{POSIXct}, etc.) recreate the attributes after a
-  subsetting operation. This would simplify the class system.
 }
 \examples{
 x <- icd9(list(my_codes = c("V10.1", "441.1")))

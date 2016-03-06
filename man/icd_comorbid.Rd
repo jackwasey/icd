@@ -119,10 +119,11 @@ icd9ComorbidQuanDeyo(icd9df, visitId = NULL, icd9Field = NULL,
   abbrevNames = TRUE, applyHierarchy = TRUE, ...)
 }
 \arguments{
-\item{aggregate}{single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
-out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
-IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
-then use \code{TRUE}.}
+\item{aggregate}{single logical value, if /code{TRUE}, then take (possible
+much) more time to aggregate out-of-sequence visit IDs in the icd9df
+data.frame. If this is \code{FALSE}, then each contiguous group of visit
+IDs will result in a row of comorbidities in the output data. If you know
+your visitIds are possible disordered, then use \code{TRUE}.}
 
 \item{...}{arguments passed to the corresponding function from the alias.
 E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
@@ -175,8 +176,9 @@ E.g. all the arguments passed to \code{icd9ComorbiditiesAhrq} are passed on
 to \code{icd9ComorbidAhrq}}
 }
 \description{
-RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
-  fast, and most time is now spent setting up the data to be passed in.
+\link{Rcpp} approach to comorbidity assignment with OpenMP and
+  vector of integers strategy. It is very fast, and most time is now spent
+  setting up the data to be passed in.
 
 This is the main function which extracts co-morbidities from a set of ICD-9
 codes. This is when some trivial post-processing of the comorbidity data is

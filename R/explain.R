@@ -17,9 +17,9 @@
 
 #' Explain ICD-9 and ICD-10 codes in English
 #'
-#' Convert 'decimal' format (123.45 style) ICD-9 codes into the
-#'   name and description for human review there are official ICD9-CM data
-#'   tables, not with conversion to decimal notation, but to the textual format.
+#' Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
+#' description for human review there are official ICD9-CM data tables, not with
+#' conversion to decimal notation, but to the textual format.
 #' @param x vector or other structure of ICD codes to explain in human language
 #' @template short_code
 #' @param condense single logical value which indicates whether to condense the
@@ -42,8 +42,8 @@
 #' # nice to have magrittr, but not essential
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' icd_explain(ahrqComorbid$CHF[1:3] %>%  icd_condense)
-#' @return data frame, or list of data frames, with fields for ICD9 code, name
-#'   and description, derived from datamart lookup table
+#' @return data frame, or list of data frames, with fields for ICD-9 code, name
+#'   and description
 #' @seealso package comorbidities
 #' @export
 icd_explain <- function(...)

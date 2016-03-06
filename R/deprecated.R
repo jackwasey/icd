@@ -760,10 +760,10 @@ icd9GetChapters <- function(icd9, isShort = icd_guess_short(icd9), verbose = FAL
 #'   even if no patients have that many codes. Must be greater than or equal to
 #'   the maximum number of codes per patient.
 #' @param aggregate single logical value, if TRUE (the default) will take more
-#'   time to find out-of-order visitIds, and combine all the codes for each
-#'   unique \code{visitId}. If \code{FALSE}, then out-of-order \code{visitId}s
-#'   will result in a row in the output data per contiguous block of identical
-#'   \code{visitId}s.
+#'   time to find out-of-order \code{visitId}s, and combine all the codes for
+#'   each unique \code{visitId}. If \code{FALSE}, then out-of-order
+#'   \code{visitId}s will result in a row in the output data per contiguous
+#'   block of identical \code{visitId}s.
 #' @param return.df single logical value, if \code{TRUE}, return a data frame
 #'   with a field for the \code{visitId}. This may be more convenient, but the
 #'   default of \code{FALSE} gives the more natural return data of a matrix with
@@ -788,7 +788,7 @@ icd9LongToWide <- function(icd9df,
 #'   are found. If NULL, all columns matching icd or ICD will be included.
 #' @param icdName Deprecated. Character vector length one containing the new
 #'   column name for the ICD codes, defaults to "icdCode"
-#' @param icdRegex Deprecated. Vector of character strings containg a regex to
+#' @param icdRegex Deprecated. Vector of character strings containing a regex to
 #'   identify ICD-9 diagnosis columns to try (case-insensitive) in order.
 #'   Default is \code{c("icd", "diag", "dx_", "dx")}
 #' @template verbose

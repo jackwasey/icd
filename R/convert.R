@@ -81,11 +81,11 @@ icd9_chapters_to_map <- function(x) {
 #'   all columns matching icd or ICD will be included.
 #' @param icd_name character vector length one containing the new column name
 #'   for the ICD codes, defaults to "icd_code"
-#' @param icd_regex vector of character strings containg a regex to identify
-#'   ICD-9 diagnosis columns to try (case-insensitive) in order. Default is
-#'   \code{c("icd", "diag", "dx_", "dx")}
-#' @return data frame with visit_name column named the same as input, and a
-#'   column named by \code{icd.name} containing all the non-NA and non-empty
+#' @param icd_regex vector of character strings containg a reguglar expression
+#'   to identify ICD-9 diagnosis columns to try (case-insensitive) in order.
+#'   Default is \code{c("icd", "diag", "dx_", "dx")}
+#' @return \code{data.frame} with visit_name column named the same as input, and
+#'   a column named by \code{icd.name} containing all the non-NA and non-empty
 #'   codes found in the wide input data.
 #' @examples
 #'   widedf <- data.frame(visit_name = c("a", "b", "c"),
@@ -271,7 +271,7 @@ icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
   out
 }
 
-#' Convert ICD from short to deimcal forms
+#' Convert ICD from short to decimal forms
 #'
 #' Convert codes between short and decimal forms
 #' @param x ICD codes

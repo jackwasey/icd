@@ -306,7 +306,7 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
   expect_equal(icd9MajMinToShort("V01", c("0", "1")), c("V010", "V011"))
 })
 
-test_that("convert list of icd-9 ranges (e.g. chapter defintions to comorbidity map)", {
+test_that("convert list of icd-9 ranges (e.g. chapter definitions to comorbidity map)", {
   skip_slow_tests()
   data.frame(visit_id = sprintf("pt%02d", seq_along(one_of_each)),
              code = one_of_each, stringsAsFactors = TRUE) %>%

@@ -29,12 +29,12 @@
 \item{...}{elements to combine}
 }
 \description{
-These function implement combination of lists or vectors of
-  codes, while preserving ICD classes. Base R \code{c} just drops all user
-  defined classes and casts down to lowest common denomintor, e.g. if mixing
-  numbers and characters. No attempt here to catch all possible combinations
-  of feeding in mixed ICD types and other types. Let R do what it normally
-  does, but just try to keep classes of the first item in the list.
+These function implement combination of lists or vectors of codes, while
+preserving ICD classes. Base R \code{c} just drops all user defined classes
+and casts down to lowest common denominator, e.g. if mixing numbers and
+characters. No attempt here to catch all possible combinations of feeding in
+mixed ICD types and other types. Let R do what it normally does, but just try
+to keep classes of the first item in the list.
 }
 \examples{
 \dontrun{

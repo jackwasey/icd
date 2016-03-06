@@ -131,7 +131,7 @@ re_icd10_any <- re_icd10cm_any
 
 #' Check whether ICD-9 codes are syntactically valid
 #'
-#' This does not check whether the code coresponds to a real ICD-9-CM billing
+#' This does not check whether the code corresponds to a real ICD-9-CM billing
 #' code, or parent grouping. For that, see \code{\link{icd_is_defined}}.
 #'
 #' Factors are accepted, and since the validation is done with \code{grepl}
@@ -169,7 +169,7 @@ re_icd10_any <- re_icd10cm_any
 #' @template whitespace_ok
 #' @template dotdotdot
 #' @seealso \url{http://www.stata.com/users/wgould/icd9/icd9.hlp}
-#'   url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
+#'   \url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 #' @family ICD9 validation
 #' @return logical vector with \code{TRUE} or \code{FALSE} for each icd9 code
 #'   provided according to its validity
@@ -417,7 +417,7 @@ icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
   assert_list(x, types = "character", any.missing = FALSE,
               min.len = 1, unique = TRUE, names = "named")
   assert_flag(short_code)
-  # TOOD: warn/return the invalid labels?
+  # TODO: warn/return the invalid labels?
   all(unlist(
     lapply(x, FUN = function(y) icd_is_valid(y, short_code = short_code)),
     use.names = FALSE
@@ -526,9 +526,10 @@ icd_get_major <- function(x) {
 }
 
 #' @describeIn icd_get_major Get major part of an ICD-10 code
-#' @details For ICD-10, this is an initial implementation with stringr. If speed needed, then can re-use
-#' C++ ICD-9 version: just grabbing the first three characters, after all,
-#' and this is much easier in ICD-10 then ICD-9
+#' @details For ICD-10, this is an initial implementation with
+#'   \code{\link{stringr}}. If speed needed, then can re-use C++ ICD-9 version:
+#'   just grabbing the first three characters, after all, and this is much
+#'   easier in ICD-10 then ICD-9
 #' @export
 #' @keywords internal
 icd_get_major.icd10 <- function(x) {

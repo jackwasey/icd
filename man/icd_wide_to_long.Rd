@@ -30,9 +30,9 @@ all columns matching icd or ICD will be included.}
 \item{icd_name}{character vector length one containing the new column name
 for the ICD codes, defaults to "icd_code"}
 
-\item{icd_regex}{vector of character strings containg a regex to identify
-ICD-9 diagnosis columns to try (case-insensitive) in order. Default is
-\code{c("icd", "diag", "dx_", "dx")}}
+\item{icd_regex}{vector of character strings containg a reguglar expression
+to identify ICD-9 diagnosis columns to try (case-insensitive) in order.
+Default is \code{c("icd", "diag", "dx_", "dx")}}
 
 \item{visitId}{Deprecated. Use \code{visit_name}}
 
@@ -42,15 +42,15 @@ are found. If NULL, all columns matching icd or ICD will be included.}
 \item{icdName}{Deprecated. Character vector length one containing the new
 column name for the ICD codes, defaults to "icdCode"}
 
-\item{icdRegex}{Deprecated. Vector of character strings containg a regex to
+\item{icdRegex}{Deprecated. Vector of character strings containing a regex to
 identify ICD-9 diagnosis columns to try (case-insensitive) in order.
 Default is \code{c("icd", "diag", "dx_", "dx")}}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \value{
-data frame with visit_name column named the same as input, and a
-  column named by \code{icd.name} containing all the non-NA and non-empty
+\code{data.frame} with visit_name column named the same as input, and
+  a column named by \code{icd.name} containing all the non-NA and non-empty
   codes found in the wide input data.
 }
 \description{

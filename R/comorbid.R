@@ -353,6 +353,7 @@ icd_comorbid_quan_deyo <- function(...) {
 
 #' @rdname icd_comorbid
 #' @export
+
 icd_comorbid_elix <- function(...) {
   UseMethod("icd_comorbid_elix")
 }

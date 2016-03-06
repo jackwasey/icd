@@ -94,7 +94,7 @@ This is different from syntactic validity: it looks it up in the
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd9}: Check whether ICD-9 code are defined. (ICD-9-CM by
-defauly)
+default)
 
 \item \code{icd10cm}: Same for ICD-10-CM
 
