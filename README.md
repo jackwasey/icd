@@ -17,6 +17,11 @@ You should have received a copy of the GNU General Public License
 along with icd9. If not, see <http:#www.gnu.org/licenses/>.
 -->
 <!-- README.md is generated from README.Rmd. Please edit that file and render with rmarkdown::render("README.Rmd")-->
+Coming soon: `icd` to replace `icd9` which will support both ICD-9 and ICD-10
+=============================================================================
+
+See the [icd10 branch](https://github.com/jackwasey/icd9/tree/icd10) for current work. Soon, everything will be renamed to `icd` and new code will only be available in the new repo. The new package will have all of the functions currently available in `icd9`. Since function names mostly included `icd9` there was a lot of function renaming and deprecation, but `icd` will still be a drop-in replacement for `icd9`.
+
 icd9
 ====
 
@@ -45,9 +50,10 @@ New since last CRAN release:
 -   see NEWS.md and github [changelog](https://github.com/jackwasey/icd9/commits/master) for more details
 -   minor update to fix an obscure memory leak found with address sanitizer.
 
-## Work in progress:
---------------------
--   ICD-10 support is nearly complete. See the [icd10 branch](https://github.com/jackwasey/icd9/tree/icd10): contributions of tests, code or anything always welcome.
+Work in progress:
+-----------------
+
+-   ICD-10 support is nearly complete. See the : contributions of tests, code or anything always welcome.
 
 Introduction
 ------------
