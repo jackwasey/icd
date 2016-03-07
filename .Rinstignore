@@ -1,6 +1,4 @@
 ^COPYING$
-tests\/testthat\/test-sas\.R
-tests\/testthat\/test-parse\.R
 man\/fixSubchapterNa
 man\/icd10cm_extract_sub_chapters
 man\/icd10cm_get_all_defined
@@ -10,7 +8,3 @@ man\/icd_update_everything
 man\/parse_leaf_descriptions_all
 man\/parse_leaf_desc_icd9cm_v27
 R\/benchmark\.R
-R\/parse\.R$
-R\/parse-icd10\.R$
-R\/parse-icd10-who\.R$
-R\/sas\.R
