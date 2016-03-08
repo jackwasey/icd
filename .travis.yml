@@ -45,7 +45,7 @@ after_success:
 #  - export ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE 
   - export
   - find .
-  - Rscript -e 'library(covr); options(warn = -1); icd:::do_slow_tests(); coveralls(quiet = FALSE, exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"))'
+  - Rscript -e 'library(covr); options(warn = -1, icd.do_slow_tests = TRUE); coveralls(quiet = FALSE, exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"))'
 # do vignettes once regular coverage is working fully 
 # - Rscript -e 'library(covr); options(warn = -1);  package_coverage(type = "vignette", quiet = FALSE, exclusions = c("inst/include/icd_RcppExports.h", "R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'
 
