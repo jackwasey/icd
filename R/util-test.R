@@ -354,7 +354,8 @@ setup_test_check <- function() {
     options("icd.warn_deprecated" = TRUE)
 
   # pre-set options if covr is running
-  if (identical(Sys.getenv("COVR"), "true")) {
+  # covr runs tests in a completely different R process, so seem like options are not preserved.. An alternative might be to add an expression to be run.
+  if (identical(tolower(Sys.getenv("COVR")), "true")) {
     message("my environment variable COVR found so doing slow and online tests")
     options("icd.do_slow_tests" = TRUE)
     options("icd.do_online_tests" = TRUE)
@@ -363,7 +364,6 @@ setup_test_check <- function() {
     # also turn off all other warnings, e.g. testthat 'info' deprecation
     options("warn" = -1)
   }
-
   if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
     message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
     options("icd.do_slow_tests" = TRUE)
