@@ -354,14 +354,16 @@ setup_test_check <- function() {
     options("icd.warn_deprecated" = TRUE)
 
   # pre-set options if covr is running
-  # covr runs tests in a completely different R process, so seem like options are not preserved.. An alternative might be to add an expression to be run.
+  # covr runs tests in a completely different R process, so seem like options are not
+  # preserved.. An alternative might be to add an expression to be run.
   if (identical(tolower(Sys.getenv("COVR")), "true")) {
     message("my environment variable COVR found so doing slow and online tests")
     options("icd.do_slow_tests" = TRUE)
     options("icd.do_online_tests" = TRUE)
     options("icd.warn_deprecated" = FALSE)
 
-    # also turn off all other warnings, e.g. testthat 'info' deprecation
+    # also try to turn off all other warnings, e.g. testthat 'info' deprecation.
+    # However, it seems that options are not propogated to the testing subprocess.
     options("warn" = -1)
   }
   if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
@@ -380,10 +382,15 @@ setup_test_check <- function() {
   }
 }
 
-# use summary reporter so that covr produces output and doesn't time-out on
-# travis. The code coverage testing is slower than regular testing because of
-# instrumentation.
-
+#' run testtthat test_check with a regular expression filter
+#' 
+#' Use 'summary' reporter so that covr produces output and doesn't time-out on
+#' travis. The code coverage testing is slower than regular testing because of
+#' instrumentation.
+#' @param pattern regular expression to match tests
+#' @param msg character, if given will give this message, otherwise,
+#'   messages the regular expression
+#' @keywords internal
 my_test_check <- function(pattern, msg) {
   if (missing(msg))
     msg <- pattern
