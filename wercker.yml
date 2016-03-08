@@ -10,7 +10,7 @@ build:
     - script:
         name: icd test environment
         code: |
-            export WERCKER_R_COVR_OPTIONS="expression('options(icd.do_slow_tests = TRUE)'), exclusions=list('inst/include/icd_RcppExports.h','R/RcppExports.R','src/RcppExports.cpp','R/benchmark.R')"
+            export WERCKER_R_COVR_OPTIONS="path=\".\", expression('options(icd.do_slow_tests = TRUE)'), exclusions=list('inst/include/icd_RcppExports.h','R/RcppExports.R','src/RcppExports.cpp','R/benchmark.R')"
             export ICD_ONLINE_TESTS=false
             export ICD_SLOW_TESTS=true
             rm .Rinstignore  # install everything for testing
