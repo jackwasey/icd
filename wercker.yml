@@ -32,7 +32,8 @@ build:
             ls -R
             echo $ICD_SLOW_TESTS
             cat ./icd.Rcheck/tests/test-all.Rout
-    - jimhester/r-coverage
+# need my r-coverage so I can not be quiet with codecov call
+    - jackwasey/r-coverage
     - script:
         name: debug information after codecov with covr
         code: |
