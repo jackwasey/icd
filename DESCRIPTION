@@ -16,7 +16,7 @@ Authors@R: c(
     person("Kevin Ushey", role = c("ctb", "cph"), comment = "Fast factor creation, adapted from package fastmatch")
     )
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
-URL: https://github.com/jackwasey/icd9
+URL: https://github.com/jackwasey/icd
 Depends:
     R (>= 3.2.0)
 Imports:
@@ -36,7 +36,7 @@ Suggests:
     xml2
 LazyData: true
 LazyDataCompression: xz
-BugReports: https://github.com/jackwasey/icd9/issues
+BugReports: https://github.com/jackwasey/icd/issues
 License: GPL-3
 Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr

@@ -50,16 +50,18 @@ patient_data <- data.frame(
   )
 ```
 # icd
-###### icd9
+###### icd (formerly icd9)
+[![CRAN version](http://www.r-pkg.org/badges/version/icd)](https://cran.r-project.org/package=icd)
 [![CRAN version](http://www.r-pkg.org/badges/version/icd9)](https://cran.r-project.org/package=icd9)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9)
-[![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=master)](https://travis-ci.org/jackwasey/icd9)
-[![codecov.io](https://codecov.io/github/jackwasey/icd9/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd9?branch=master)
-[![Coverage Status](https://coveralls.io/repos/github/jackwasey/icd9/badge.svg?branch=master)](https://coveralls.io/github/jackwasey/icd9?branch=master)
+[![Build Status](https://travis-ci.org/jackwasey/icd.svg?branch=master)](https://travis-ci.org/jackwasey/icd)
+[![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/jackwasey/icd/badge.svg?branch=master)](https://coveralls.io/github/jackwasey/icd?branch=master)
 
 ###### icd10 development
-[![Build Status](https://travis-ci.org/jackwasey/icd9.svg?branch=icd10)](https://travis-ci.org/jackwasey/icd9) [![codecov.io](https://codecov.io/github/jackwasey/icd9/coverage.svg?branch=icd10)](https://codecov.io/github/jackwasey/icd9?branch=icd10)
-[![Coverage Status](https://coveralls.io/repos/github/jackwasey/icd9/badge.svg?branch=icd10)](https://coveralls.io/github/jackwasey/icd9?branch=icd10)
+[![Build Status](https://travis-ci.org/jackwasey/icd.svg?branch=icd10)](https://travis-ci.org/jackwasey/icd) [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=icd10)](https://codecov.io/github/jackwasey/icd?branch=icd10)
+[![Coverage Status](https://coveralls.io/repos/github/jackwasey/icd/badge.svg?branch=icd10)](https://coveralls.io/github/jackwasey/icd?branch=icd10)
 
 # ICD-9 and ICD-10 comorbidities, manipulation and validation
 
@@ -80,7 +82,7 @@ patient_data <- data.frame(
  * Major update to all function names following [Hadley Wickham](http://adv-r.had.co.nz/Style.html), [google](https://google.github.io/styleguide/Rguide.xml) and [lintr](https://github.com/jimhester/lintr).
    + All function and variable names with *snakeCase* are now deprecated in favor of underscore seperators
  * Use of basic S3 classes to allow users the option of distinguishing the type of their data. E.g. `icd9(c("0010", "0011"))` defines two ICD-9 codes, `icd10cm(c("A01", "A011"))` defines two ICD-10-CM codes (which are implicitly ICD-10 codes also). This can be extended to add other variants, such as ICD-10 WHO (work in progress), and national variations.
- * see NEWS.md and github [changelog](https://github.com/jackwasey/icd9/commits/master) for more details
+ * see NEWS.md and github [changelog](https://github.com/jackwasey/icd/commits/master) for more details
 
 ## Introduction
 
@@ -132,18 +134,15 @@ Note that reformatting from wide to long and back is not as straightforward as u
 
 ## Install
 
-The latest version is available in [github icd9](https://github.com/jackwasey/icd9), which will move to [github icd](https://github.com/jackwasey/icd) in the fututre, and can be installed with:
+The latest version is available in [github icd9](https://github.com/jackwasey/icd), which will move to [github icd](https://github.com/jackwasey/icd) in the fututre, and can be installed with:
 ```{r show install, eval = FALSE, echo = TRUE}
 
     install.packages("magrittr") # recommended, but not required
     install.packages("devtools")
-    devtools::install_github("jackwasey/icd9")
-    
-    # When the package name changes to 'icd', this will become
     devtools::install_github("jackwasey/icd")
     
     # an alternative to install the current icd10 development branch is to use.
-    devtools::install_github("jackwasey/icd9@icd10")
+    devtools::install_github("jackwasey/icd@icd10")
     
 ```
 
@@ -167,11 +166,11 @@ One of the strengths of this package is a thorough test suite, including over 10
 find tests -type f -exec cat '{}' + | wc -l
 10098
 ```
-A better metric of testing and code quality is code coverage, for which [codecov](https://codecov.io/github/jackwasey/icd9) and [coveralls](https://coveralls.io/github/jackwasey/icd9) are used. The automated [wercker](https://app.wercker.com/#applications/5609d41e71f137d02f0a1069) builds report test coverage results to [codecov](https://codecov.io/github/jackwasey/icd9), whereas the [travis](https://travis-ci.org/jackwasey/icd9) builds report coverage to [coveralls](https://coveralls.io/github/jackwasey/icd9).
+A better metric of testing and code quality is code coverage, for which [codecov](https://codecov.io/github/jackwasey/icd) and [coveralls](https://coveralls.io/github/jackwasey/icd) are used. The automated [wercker](https://app.wercker.com/#applications/5609d41e71f137d02f0a1069) builds report test coverage results to [codecov](https://codecov.io/github/jackwasey/icd), whereas the [travis](https://travis-ci.org/jackwasey/icd) builds report coverage to [coveralls](https://coveralls.io/github/jackwasey/icd).
 The parsing code is a significant chunk of code, and may or may not be included in the automated builds depending on whether the source data is available. With the data available, test coverage is >95%.
 Current coverage for development branch is:
-[![codecov.io](https://codecov.io/github/jackwasey/icd9/coverage.svg?branch=icd10)](https://codecov.io/github/jackwasey/icd9?branch=icd10)
-[![Coverage Status](https://coveralls.io/repos/github/jackwasey/icd9/badge.svg?branch=icd10)](https://coveralls.io/github/jackwasey/icd9?branch=icd10) 
+[![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=icd10)](https://codecov.io/github/jackwasey/icd?branch=icd10)
+[![Coverage Status](https://coveralls.io/repos/github/jackwasey/icd/badge.svg?branch=icd10)](https://coveralls.io/github/jackwasey/icd?branch=icd10) 
 
 ### Wercker build status
 

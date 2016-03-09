@@ -12,7 +12,7 @@
  * `icd9` should now be uninstalled.
  * Works with very latest `testthat` which has backward-incompatible changes
  * Minimized dependencies, but `icd` does import `stringi` via `stringr` to give better string processing. `magrittr` is now too useful not to import, has no dependencies of its own, and is imported by `stringr` anyway. CRAN now seems to need base packages to be listed as imports.
- * More automated testing with Travis and Wercker.
+ * More automated testing with Travis and Wercker, Codecov and Coveralls, all now renamed to `icd` from `icd9`
 
 # Version 1.3
  * With many thanks to @wmurphyrd, Quan's revised scoring system for Charlson comorbidities is now included.
@@ -59,7 +59,7 @@
 * Simplified handling validation of codes. No longer done in every function.
 * Most functions now guess the ICD-9 code type automatically (e.g. 00321 vs 003.21)
 * Reduced external dependencies down to Rcpp and checkmate (a very lightweight and fast function argument checker)
-* Bug fixes (see [github](https://github.com/jackwasey/icd9/issues?q=is%3Aissue+is%3Aclosed))
+* Bug fixes (see [github](https://github.com/jackwasey/icd/issues?q=is%3Aissue+is%3Aclosed))
 * API changes
     - no more validation except in the icd9IsValidXxx functions. Removed stopIfInvalidIcd9, icd9InvalidActions
     - internalized utility functions. They are also packaged and tested in [jwutil](https://github.com/jackwasey/jwutil)

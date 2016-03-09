@@ -229,7 +229,7 @@ patients %>% icd_filter_poa_not_no
 ```
 
 ## Comorbidities
-The comorbidities from different sources are provided as lists. At present only the most recent mapping of ICD-9 codes to comorbidities is provided. See these [github](https://github.com/jackwasey/icd9/issues/6) [issues](https://github.com/jackwasey/icd9/issues/7).
+The comorbidities from different sources are provided as lists. At present only the most recent mapping of ICD-9 codes to comorbidities is provided. See these [github](https://github.com/jackwasey/icd/issues/6) [issues](https://github.com/jackwasey/icd/issues/7).
 
 This package contains ICD-9-CM to comorbidity mappings from several sources, based on either the Charlson or Elixhauser lists of comorbidities. Updated versions of these lists from [AHRQ](http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp) and [Quan et al](http://www.ncbi.nlm.nih.gov/pubmed/16224307) are included, along with the original Elixhauser mapping . Since some data is provided in SAS source code format, this package has internal functions to parse this SAS source code and generate R data structures. This processing is limited to what is needed for this purpose, although may be generalizable and useful in other contexts. Other lists are transcribed directly from the published articles, but interpretation of SAS code used for the original publications is preferable.
 
@@ -306,7 +306,7 @@ system.time(
 This is not run to avoid unnecessary load when CRAN builds the package. I get about 5 seconds for 10 million rows of comorbidities on a moderately powerful workstation.
 
 ### Arbitrary ICD-9 mapping
-The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd9/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9_chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.
+The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9_chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.
 ```{r "arbitraryMapping"}
 names(icd9_chapters)[c(1:5, 14)]
 myMap <- icd:::icd9_chapters_to_map(icd9_chapters[c(2, 5, 14)])
@@ -359,4 +359,4 @@ data.frame(code = lost_since_27, desc = lost_since_27 %>% icd_explain)
 
 ## Conclusion
 
-This package allows fluid, fast and accurate manipulation of ICD-9 and ICD-10 codes, especially when combined with [magrittr](https://cran.r-project.org/package=magrittr). Suggestions, contributions and comments are welcome via [github](https://github.com/jackwasey/icd9/issues).
+This package allows fluid, fast and accurate manipulation of ICD-9 and ICD-10 codes, especially when combined with [magrittr](https://cran.r-project.org/package=magrittr). Suggestions, contributions and comments are welcome via [github](https://github.com/jackwasey/icd/issues).

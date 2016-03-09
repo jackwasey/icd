@@ -10,7 +10,7 @@ build:
     - script:
         name: icd test environment
         code: |
-            export WERCKER_R_COVR_OPTIONS="path='.',expression('options(icd.do_slow_tests=TRUE)'),exclusions=list('inst/include/icd_RcppExports.h','R/RcppExports.R','src/RcppExports.cpp','R/benchmark.R')"
+            export WERCKER_R_COVR_OPTIONS="exclusions = list('inst/include/icd_RcppExports.h', 'R/RcppExports.R', 'src/RcppExports.cpp', 'R/benchmark.R')"
             # covr should be detected within package when it is tested, and shell env is not propogated to covr subprocess
             export ICD_ONLINE_TESTS=false
             export ICD_SLOW_TESTS=true
