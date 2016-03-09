@@ -27,6 +27,15 @@ skip_online_tests <- function(msg = "skipping online test") {
     testthat::skip(msg)
 }
 
+rtf_year_ok <- function(test_year) {
+  rtf_dat <- icd9_sources[icd9_sources$f_year == test_year, ]
+  # see whether we have the files already downloaded (and unzipped)
+  f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
+                                    file_name = rtf_dat$rtf_filename,
+                                    offline = TRUE)
+  !is.null(f_info_short)
+}
+
 skip_on_no_rtf <- function(test_year) {
   if (!rtf_year_ok(test_year))
     skip_online_tests(paste(test_year,

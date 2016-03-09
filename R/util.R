@@ -252,15 +252,6 @@ getNonASCII <- function(x)
 isNonASCII <- function(x)
   is.na(iconv(x, from = "latin1", to = "ASCII"))
 
-rtf_year_ok <- function(test_year) {
-  rtf_dat <- icd9_sources[icd9_sources$f_year == test_year, ]
-  # see whether we have the files already downloaded (and unzipped)
-  f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
-                                    file_name = rtf_dat$rtf_filename,
-                                    offline = TRUE)
-  !is.null(f_info_short)
-}
-
 #' Fast Factor Generation
 #'
 #' This function generates factors more quickly, by leveraging
