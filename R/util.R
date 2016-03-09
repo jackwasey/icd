@@ -233,11 +233,13 @@ icd9cm_latest_edition <- function() "32"
 
 #' swap names and values of a vector
 #'
-#' swap names and values of a vector
+#' Swap names and values of a vector. Non-character values are implicitly 
+#' converted to names.
 #' @param x named vector
-#' @return vector
+#' @return vector, with values being the names of the input vector, and names
+#' being the previous values.
 #' @keywords internal
-swapNamesWithVals <- function(x) {
+swap_names_vals <- function(x) {
   assert_vector(x, strict = TRUE, any.missing = FALSE, names = "named")
   new_names <- unname(x)
   x <- names(x)

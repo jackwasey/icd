@@ -122,9 +122,7 @@ Rcpp::NumericVector randomMajorCpp(int	n) {
   return iv;
 }
 
-//' Generate random short-form numeric ICD-9 codes
-//'
-//' Generate a character vector of random short-form ICD-9 numeric codes
+//' @rdname icd9RandomShort
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
@@ -138,9 +136,7 @@ std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' Generate random short-form ICD-9 V codes
-//'
-//' Generate a character vector of random short-form ICD-9 V codes
+//' @rdname icd9RandomShort
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n = 5) {
@@ -154,9 +150,7 @@ std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' Generate random short-form ICD-9 E codes
-//'
-//' Generate a character vector of random short-form ICD-9 E codes
+//' @rdname icd9RandomShort
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n = 5) {
@@ -170,7 +164,7 @@ std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' Generate random short-form ICD-9 E codes
+//' Generate random short-form ICD-9 codes
 //'
 //' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
 //' the number

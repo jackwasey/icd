@@ -67,7 +67,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
 
   out <- parse_rtf_lines(rtf_lines, verbose = verbose,
                          save_extras = save_data) %>%
-    swapNamesWithVals %>%
+    swap_names_vals %>%
     icd_sort.icd9(short_code = FALSE)
 
   invisible(

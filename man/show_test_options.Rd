@@ -7,7 +7,7 @@
 show_test_options()
 }
 \description{
-Show options which control testing
+Get the options for all currently used \code{icd} testing options.
 }
 \keyword{internal}
 

@@ -212,31 +212,25 @@ randomMajorCpp <- function(n) {
     .Call('icd_randomMajorCpp', PACKAGE = 'icd', n)
 }
 
-#' Generate random short-form numeric ICD-9 codes
-#'
-#' Generate a character vector of random short-form ICD-9 numeric codes
+#' @rdname icd9RandomShort
 #' @keywords internal
 icd9RandomShortN <- function(n = 5L) {
     .Call('icd_icd9RandomShortN', PACKAGE = 'icd', n)
 }
 
-#' Generate random short-form ICD-9 V codes
-#'
-#' Generate a character vector of random short-form ICD-9 V codes
+#' @rdname icd9RandomShort
 #' @keywords internal
 icd9RandomShortV <- function(n = 5L) {
     .Call('icd_icd9RandomShortV', PACKAGE = 'icd', n)
 }
 
-#' Generate random short-form ICD-9 E codes
-#'
-#' Generate a character vector of random short-form ICD-9 E codes
+#' @rdname icd9RandomShort
 #' @keywords internal
 icd9RandomShortE <- function(n = 5L) {
     .Call('icd_icd9RandomShortE', PACKAGE = 'icd', n)
 }
 
-#' Generate random short-form ICD-9 E codes
+#' Generate random short-form ICD-9 codes
 #'
 #' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
 #' the number
