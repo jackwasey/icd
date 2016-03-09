@@ -10,11 +10,11 @@ build:
     - script:
         name: icd test environment
         code: |
-            export WERCKER_R_COVR_OPTIONS="path=\".\", expression('options(icd.do_slow_tests = TRUE)'), exclusions=list('inst/include/icd_RcppExports.h','R/RcppExports.R','src/RcppExports.cpp','R/benchmark.R')"
-            export ICD_ONLINE_TESTS=false
-            export ICD_SLOW_TESTS=true
-            rm .Rinstignore  # install everything for testing
-            sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
+            export WERCKER_R_COVR_OPTIONS="path='.',expression('options(icd.do_slow_tests=TRUE)'),exclusions=list('inst/include/icd_RcppExports.h','R/RcppExports.R','src/RcppExports.cpp','R/benchmark.R')"
+            #export ICD_ONLINE_TESTS=false
+            #export ICD_SLOW_TESTS=true
+            #rm .Rinstignore  # install everything for testing
+            #sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
         github_packages: kevinushey/rex jimhester/covr
 #- hadley/testthat # in the throes
@@ -24,7 +24,8 @@ build:
     - jimhester/r-check:
         warnings_are_errors: FALSE
 # I think this has false positives for latex warnings, even if R CMD check is okay
-    - jackwasey/r-coverage
+#    - jackwasey/r-coverage
+    - jimhester/r-coverage
     - script:
         name: re-check with CRAN testthat
         code: Rscript -e 'install.packages("testthat"); print(packageVersion("testthat"))'

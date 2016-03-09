@@ -316,6 +316,8 @@ random_string <- function(n, max_chars = 4) {
 }
 
 #' Show options which control testing
+#' 
+#' Get the options for all currently used \code{icd} testing options.
 #' @keywords internal
 show_test_options <- function() {
   print(options("icd.do_slow_tests"))
@@ -342,6 +344,13 @@ set_full_test_options <- function() {
   show_test_options()
 }
 
+#' Set-up test options
+#'
+#' Checks shell environment for whether to do slow or online tests.
+#' Checks whether we should warn for deprecated functions (usually not
+#' when testing). If \code{covr} is detected (an option is set), then
+#' we may be in a subprocess and not see any shell environment or options
+#' from the calling process, so try to set slow tests on and warnings off.
 setup_test_check <- function() {
 
   # basic defaults if nothing else is set: skip slow and online tests and warn
@@ -353,19 +362,23 @@ setup_test_check <- function() {
   if (is.null(options("icd.warn_deprecated")))
     options("icd.warn_deprecated" = TRUE)
 
-  # pre-set options if covr is running
   # covr runs tests in a completely different R process, so seem like options are not
-  # preserved.. An alternative might be to add an expression to be run.
-  if (identical(tolower(Sys.getenv("COVR")), "true")) {
-    message("my environment variable COVR found so doing slow and online tests")
-    options("icd.do_slow_tests" = TRUE)
-    options("icd.do_online_tests" = TRUE)
+  # preserved.. An alternative might be to add an expression to be run to covr
+  # package_coverage command (or caller).
+  if (!is.null(getOption("covr.exclude_pattern"))) {
+    message("covr detected so doing slow tests")
+    show_test_options()
+    if (!is.null(getOption("icd.do_slow_tests")))
+      options("icd.do_slow_tests" = TRUE)
+    if (!is.null(getOption("icd.do_online_tests")))
+      options("icd.do_online_tests" = FALSE)
     options("icd.warn_deprecated" = FALSE)
+    show_test_options()
 
     # also try to turn off all other warnings, e.g. testthat 'info' deprecation.
-    # However, it seems that options are not propogated to the testing subprocess.
     options("warn" = -1)
   }
+
   if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
     message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
     options("icd.do_slow_tests" = TRUE)
@@ -408,3 +421,4 @@ do_slow_tests <- function(x = TRUE) {
 do_online_tests <- function(x = TRUE) {
   options("icd.do_online_tests" = x)
 }
+
