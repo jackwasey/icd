@@ -2,12 +2,9 @@
 % Please edit documentation in R/RcppExports.R, R/convert.R
 \name{icd9PartsToShort}
 \alias{convert}
-\alias{icd9DecimalToParts}
 \alias{icd9DecimalToPartsCpp}
-\alias{icd9DecimalToShort}
 \alias{icd9PartsToDecimal}
 \alias{icd9PartsToShort}
-\alias{icd9ShortToParts}
 \alias{icd9ShortToPartsCpp}
 \title{Convert ICD9 codes between formats and structures.}
 \usage{
@@ -18,75 +15,68 @@ icd9PartsToDecimal(parts)
 icd9ShortToPartsCpp(icd9Short, minorEmpty)
 
 icd9DecimalToPartsCpp(icd9Decimal, minorEmpty)
-
-icd9DecimalToShort(icd9Decimal)
-
-icd9ShortToParts(icd9Short, minorEmpty = "")
-
-icd9DecimalToParts(icd9Decimal, minorEmpty = "")
 }
 \arguments{
 \item{parts}{data.frame with major and minor fields. This can be given
 instead of major and minor vectors}
 
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than
-five characters is given in a code, then the digits are greedily assigned
-to hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five characters is
+given in a code, then the digits are greedily assigned to hundreds, then
+tens, then units, before the decimal parts. E.g. "10" becomes "010", not
+"0010"}
 
-\item{minorEmpty}{vector of length one, to be used in place of
-minor part of zero. Defaults to ""}
+\item{minorEmpty}{vector of length one, to be used in place of minor part of
+zero. Defaults to ""}
 
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five
-characters is given in a code, then the digits are greedily assigned to
-hundreds, then tens, then units, before the decimal parts. E.g. "10"
-becomes "010", not "0010"}
+\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
+code, then the digits are greedily assigned to hundreds, then tens, then
+units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
 
 \item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
-which falls before the decimal point, in decimal notation. (In 5 digit
+which falls before the decimal point, in decimal notation. (In five digit
 notation, the 'major' part is be the first three characters (with leading
-zeroes), and includes V or E prefix. xyz}
+zeroes), and includes V or E prefix.}
 
 \item{minor}{character vector of 'minor' part of ICD-9 codes, i.e. that part
-which falls after the decimal point, in decimal notation. (In 5 digit
-notation, the 'major' part is be xyz, even when x and y are zero, thus the
-last two characters represent the 'minor' part, in this case.)}
+which falls after the decimal point, in decimal notation. (In 'short' five
+digit notation, the 'major' part is the first three characters including
+leading zeroes which may be inferred; the last two characters represent the
+'minor' part.)}
 
-\item{icd9}{is
-a character vector or factor of ICD-9 codes. If fewer than five characters
+\item{icd9}{is a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
 
-\item{isShort}{single logical value which determines whether the ICD-9 code
-provided is in short (TRUE) or decimal (FALSE) form. Where reasonable, this
-is guessed from the input data.}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 }
 \value{
-Character vector or list. Deliberately returns zero-padded major, because
-  otherwise we are creating ambiguous codes (even if we know what we mean)
+Character vector or list. Deliberately returns zero-padded major,
+  because otherwise we are creating ambiguous codes (even if we know what we
+  mean)
 }
 \description{
-ICD-9 codes are represented in \emph{short} and \emph{decimal} forms.
-The short form has up to 5 digits, or V or E followed by up to four digits. The decimal form
-has a dedcimal point to delimit the top-level (henceforth \emph{major}) category, and the
-\emph{minor} part containing the subsidiary classifications.
+ICD-9 codes are represented in \emph{short} and \emph{decimal} forms. The
+short form has up to 5 digits, or V or E followed by up to four digits. The
+decimal form has a decimal point to delimit the top-level (henceforth
+\emph{major}) category, and the \emph{minor} part containing the subsidiary
+classifications.
 }
-\section{Structures used in this package are}{
-
-\itemize{
-  \item vector (usually character vectors) of \emph{short} or \emph{long} codes
-  \item list, containing two elements with equal length vectors called \code{major}
-  \code{minor}. Yes, this is very like a data frame, but we do not need the overhead
-  of structuring it that way.
-  \item two vectors of separated major and minor parts
-  }
+\section{Structures}{
+ Structures used in this package are: \itemize{ \item
+  vector (usually character vectors) of \emph{short} or \emph{long} codes
+  \item list, containing two elements with equal length vectors called
+  \code{major} \code{minor}. Yes, this is very like a data frame, but we do
+  not need the overhead of structuring it that way. \item two vectors of
+  separated major and minor parts }
 }
 \seealso{
-Other ICD-9 convert: \code{\link{icd9ChaptersToMap}},
-  \code{\link{icd9DropLeadingZeroes}},
-  \code{\link{icd9LongToWide}},
-  \code{\link{icd9WideToLong}}
+Other ICD-9 convert: \code{\link{icd9_chapters_to_map}},
+  \code{\link{icd9_drop_leading_zeroes}},
+  \code{\link{icd_long_to_wide}},
+  \code{\link{icd_wide_to_long}}
 }
 \keyword{internal}
 \keyword{manip}

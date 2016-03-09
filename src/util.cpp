@@ -1,19 +1,19 @@
-// Copyright (C) 2014 - 2015  Jack O. Wasey
+// Copyright (C) 2014 - 2016  Jack O. Wasey
 //
-// This file is part of icd9.
+// This file is part of icd.
 //
-// icd9 is free software: you can redistribute it and/or modify
+// icd is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// icd9 is distributed in the hope that it will be useful,
+// icd is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "util.h"
@@ -62,14 +62,6 @@ std::vector<std::string> trimCpp(std::vector<std::string> sv) {
   for (std::vector<std::string>::iterator i = sv.begin(); i != sv.end(); ++i)
     *i = strimCpp(*i);
   return sv;
-}
-
-// [[Rcpp::export]]
-bool assertFactorOrCharacter(SEXP x) {
-  if (!Rf_isString(x) && !Rf_isFactor(x)) {
-    Rcpp::stop("Must be a factor or character");
-  }
-  return true;
 }
 
 #ifdef ICD9_DEBUG
@@ -130,13 +122,15 @@ Rcpp::NumericVector randomMajorCpp(int	n) {
   return iv;
 }
 
-//' @title generate random short-form numeric icd9 codes
+//' Generate random short-form numeric ICD-9 codes
+//'
+//' Generate a character vector of random short-form ICD-9 numeric codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
-  char buffer[5];
+  char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "%.0f", randoms[i]);
     out[i] = buffer;
@@ -144,13 +138,15 @@ std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' @title generate random short-form icd9 V codes
+//' Generate random short-form ICD-9 V codes
+//'
+//' Generate a character vector of random short-form ICD-9 V codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
-  char buffer[5];
+  char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "V%.0f", randoms[i]);
     out[i] = buffer;
@@ -158,13 +154,15 @@ std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' @title generate random short-form icd9 E codes
+//' Generate random short-form ICD-9 E codes
+//'
+//' Generate a character vector of random short-form ICD-9 E codes
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
-  char buffer[5];
+  char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "E%.0f", randoms[i]);
     out[i] = buffer;
@@ -172,14 +170,16 @@ std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' @title generate random short-form icd9 E codes
-//' @description Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
+//' Generate random short-form ICD-9 E codes
+//'
+//' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
+//' the number
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
-  char buffer[5];
+  char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     // N, V or E?
     switch ((int)randoms[i] % 3) {
@@ -199,24 +199,28 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   }
   return out;
 }
-//' @rdname fastIntToString
-//' @title fast convert integer vector to character vector
-//' @param x td::vector<int>
-//' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
-//'   No checks done for speed.
+
+//' Fast convert integer vector to character vector
+//'
+//' Fast conversion from integer vector to character vector using C++
+//' @param x vector of integers
+//' @param bufferSize int if any input strings are longer than this number
+//'   (default 16) there will be memory errors. No checks done for speed.
 //' @examples
 //' \dontrun{
-//' pts <- randomPatients(1e7)
-//' # conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
-//' microbenchmark::microbenchmark(fastIntToStringStd(pts$visitId, buffer = 8),
-//'                                fastIntToStringStd(pts$visitId, buffer = 16),
-//'                                fastIntToStringStd(pts$visitId, buffer = 64),
-//'                                fastIntToStringRcpp(pts$visitId, buffer = 8),
-//'                                fastIntToStringRcpp(pts$visitId, buffer = 16),
-//'                                fastIntToStringRcpp(pts$visitId, buffer = 64),
-//'                                as.character(pts$visitId),
-//'                                asCharacterNoWarn(pts$visitId), times = 5)
+//' pts <- generate_random_pts(1e7)
+//' # conclusion: buffer size matters little (so default to be more generous),
+//' # and Rcpp version fastest.
+//' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
+//'                                fastIntToStringStd(pts$visit_id, buffer = 16),
+//'                                fastIntToStringStd(pts$visit_id, buffer = 64),
+//'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
+//'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
+//'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
+//'                                as.character(pts$visit_id),
+//'                                asCharacterNoWarn(pts$visit_id), times = 5)
 //' }
+//' @rdname fastIntToString
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> fastIntToStringStd(std::vector<int> x) {
@@ -245,23 +249,6 @@ Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
 }
 
 // [[Rcpp::export]]
-int callgrindStart(bool zerostats = false) {
-#ifdef ICD9_VALGRIND
-#ifdef ICD9_DEBUG
-  Rcpp::Rcout << "Starting callgrind instrumentation...\n";
-#endif
-  CALLGRIND_START_INSTRUMENTATION;
-  if (zerostats) {
-#ifdef ICD9_DEBUG
-    Rcpp::Rcout << "Zeroing callgrind stats.\n";
-#endif
-    CALLGRIND_ZERO_STATS;
-  }
-#endif
-  return 0;
-}
-
-// [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
 #ifdef ICD9_VALGRIND
 #ifdef ICD9_DEBUG
@@ -272,6 +259,18 @@ int valgrindCallgrindStart(bool zerostats = false) {
     Rcpp::Rcout << "Zeroing callgrind stats.\n";
     CALLGRIND_ZERO_STATS;
   }
+#endif
+  return 0;
+}
+
+
+// [[Rcpp::export]]
+int valgrindCallgrindStop() {
+#ifdef ICD9_VALGRIND
+#ifdef ICD9_DEBUG
+  Rcpp::Rcout << "Stopping callgrind instrumentation...\n";
+#endif
+  CALLGRIND_STOP_INSTRUMENTATION;
 #endif
   return 0;
 }

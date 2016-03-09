@@ -3,30 +3,34 @@
 \name{fastIntToStringStd}
 \alias{fastIntToStringRcpp}
 \alias{fastIntToStringStd}
-\title{fast convert integer vector to character vector}
+\title{Fast convert integer vector to character vector}
 \usage{
 fastIntToStringStd(x)
 
 fastIntToStringRcpp(x)
 }
 \arguments{
-\item{x}{td::vector<int>}
+\item{x}{vector of integers}
 
-\item{bufferSize}{int if any input strings are longer than this number (default 16) there will be memory errors.
-No checks done for speed.}
+\item{bufferSize}{int if any input strings are longer than this number
+(default 16) there will be memory errors. No checks done for speed.}
+}
+\description{
+Fast conversion from integer vector to character vector using C++
 }
 \examples{
 \dontrun{
-pts <- randomPatients(1e7)
-# conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
-microbenchmark::microbenchmark(fastIntToStringStd(pts$visitId, buffer = 8),
-                               fastIntToStringStd(pts$visitId, buffer = 16),
-                               fastIntToStringStd(pts$visitId, buffer = 64),
-                               fastIntToStringRcpp(pts$visitId, buffer = 8),
-                               fastIntToStringRcpp(pts$visitId, buffer = 16),
-                               fastIntToStringRcpp(pts$visitId, buffer = 64),
-                               as.character(pts$visitId),
-                               asCharacterNoWarn(pts$visitId), times = 5)
+pts <- generate_random_pts(1e7)
+# conclusion: buffer size matters little (so default to be more generous),
+# and Rcpp version fastest.
+microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
+                               fastIntToStringStd(pts$visit_id, buffer = 16),
+                               fastIntToStringStd(pts$visit_id, buffer = 64),
+                               fastIntToStringRcpp(pts$visit_id, buffer = 8),
+                               fastIntToStringRcpp(pts$visit_id, buffer = 16),
+                               fastIntToStringRcpp(pts$visit_id, buffer = 64),
+                               as.character(pts$visit_id),
+                               asCharacterNoWarn(pts$visit_id), times = 5)
 }
 }
 \keyword{internal}

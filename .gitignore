@@ -1,6 +1,7 @@
 aclocal.m4
 autom4te.cache
 autoscan.log
+*.bak
 callgrind.*
 config.log
 config.status
@@ -10,9 +11,9 @@ configure.scan
 .DS_Store
 .externalToolBuilders
 i9test.RData
+icd_*.tar.gz
 icd9_*.tar.gz
-inst/extdata/all-covariates.xls
-inst/extdata/Dtab10.RTF
+inst/doc/*
 *.o
 .project
 .RData
@@ -23,8 +24,9 @@ rprof.out
 .Rproj.user
 .settings
 *.so
+*.swp
 src-i386
 src-x64
 *.swp
 todo
-tools/r-devel-ubsan*/build_install_check_in_docker.sh
+README.html

@@ -1,54 +1,57 @@
+# https://docs.travis-ci.com/user/languages/r
 language: r
+sudo: false
+cache: packages
+r:
+#  - oldrel # when oldrel = 3.1, there are S3 method problems I can't debug
+  - release
+  - devel
 
-sudo: required
+os:
+  - linux
+#  - osx
 
-warnings_are_errors: false
+# compiler:
+#   - gcc
+#   - clang
 
-env: R_CHECK_CRAN_INCOMING_=FALSE
+matrix:
+  allow_failures:
+    - r: oldrel
+
+repos:
+  CRAN: https://cran.rstudio.com
+# Rcpp: http://rcppcore.github.io/drat # github ahead and I need the github version
+
+warnings_are_errors: true
+
+# seperate lines seems to mean the whole build is repeated each line
+env:
+  - OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+  - OMP_NUM_THREADS=1 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 r_github_packages:
- - jimhester/covr
- - hadley/testthat
+  - jimhester/covr
+#  - hadley/testthat
+#  - RcppCore/Rcpp
 
-# debian package names: libxml2-dev libssl-dev r-base-core r-cran-xml r-cran-ggplot2 r-cran-rcurl r-cran-bitops r-cran-brew r-cran-rcolorbrewer r-cran-rcpp r-cran-dichromat r-cran-munsell r-cran-checkmate r-cran-evaluate r-cran-plyr r-cran-gtable r-cran-reshape2 r-cran-scales r-cran-proto r-cran-catools r-cran-testthat r-cran-memoise r-cran-digest r-cran-xtable
-# at least some of the following don't have debian packages (at time of writing)
-r_binary_packages:
- - devtools
- - XML
- - testthat
- - Rcpp
- - ggplot2
- - brew
- - rcolorbrewer
- - dichromat
- - munsell
- - checkmate
- - scales
- - proto
- - catools
- - evaluate
- - plyr
- - gtable
- - reshape2
- - knitr
- - microbenchmark
- - profr
- - xtable
- - magrittr
- - memoise
- - profr
- - digest
- - rmarkdown
+before_script:
+ - ls -R
+ - rm .Rinstignore  # install everything for testing
+ - sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
 
 after_success:
- - Rscript -e 'devtools::install()'
- - Rscript -e 'devtools::session_info()'
- - env: COVR=true
- #- Rscript -e 'library(covr); coveralls(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R", quiet = FALSE)'
- - Rscript -e 'library(covr); codecov(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE)'
-
+# environment is copied forward from previous, so slow tests are on. Repeat anyway while not working!
+# coverage does re-install the package (it needs to rebuild with debugging/coverage compilation), so there is potential to change .Rinstignore and .Rbuildignore
+#  - export ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE
+  - ls -R
+  - cat ./icd.Rcheck/tests/test-all.Rout
+  - Rscript -e 'library(covr); cov <- package_coverage(quiet = FALSE, exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R")); coveralls(cov)'
+# do vignettes once regular coverage is working fully
+# - Rscript -e 'library(covr); options(warn = -1);  package_coverage(type = "vignette", quiet = FALSE, exclusions = c("inst/include/icd_RcppExports.h", "R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'
 
 notifications:
   email:
     on_success: change
     on_failure: change
+

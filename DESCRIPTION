@@ -1,49 +1,46 @@
-Package: icd9
+Package: icd
 Title: Tools for Working with ICD-9 Codes, and Finding Comorbidities
 Description: Calculate comorbidities, Charlson scores, perform fast and accurate
-    validation, conversion, manipulation, filtering and comparison of ICD-9-CM
-    (clinical modification) codes. ICD-9 codes appear numeric but leading and
-    trailing zeroes, and both decimal and non-decimal "short" format codes
-    exist. The package enables a work flow from raw lists of ICD-9 codes from
-    hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
-    from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Any
-    other mapping of codes, such as ICD-10, to comorbidities can be used.
-Version: 1.3.0.9000
-Date: 2015-09-28
+    validation, conversion, manipulation, filtering and comparison of ICD-9 and
+    ICD-10 codes. Common ambiguities and code formats are supported. This
+    package enables a work flow from raw lists of ICD-9 codes in hospital
+    billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan
+    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+Classification/ACM-2012: Social and professional topics~Medical records, Applied computing~Health care information systems, Applied computing~Health informatics, Applied computing~Bioinformatics
+Version: 1.3.0.9004
+Date: 2016-02-18
 Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
-    person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org"),
-    person("R Core Team", role = c("ctb", "cph"))
+    person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org", comment = "Van Walraven scores"),
+    person("R Core Team", role = c("ctb", "cph"), comment = "m4 macro for OpenMP detection in configure"),
+    person("Kevin Ushey", role = c("ctb", "cph"), comment = "Fast factor creation, adapted from package fastmatch")
     )
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
-URL: https://github.com/jackwasey/icd9
+URL: https://github.com/jackwasey/icd
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.2.0)
 Imports:
-    Rcpp (>= 0.12.0),
     checkmate (>= 1.5.1),
-    stats,
-    utils,
-    fastmatch
-Suggests:
-    testthat,
-    devtools,
-    knitr,
-    microbenchmark,
+    fastmatch,
     magrittr,
-    XML,
-    memoise,
-    profr,
-    ggplot2,
-    digest,
-    xtable,
+    stats,
+    Rcpp (>= 0.12.3),
+    stringr,
+    utils
+Suggests:
+    knitr,
+    RODBC,
+    roxygen2 (>= 5.0.0),
     rmarkdown,
-    roxygen2 (>= 5.0.0)
+    testthat,
+    xml2
 LazyData: true
 LazyDataCompression: xz
-BugReports: https://github.com/jackwasey/icd9/issues
+BugReports: https://github.com/jackwasey/icd/issues
 License: GPL-3
 Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
-LinkingTo: Rcpp
-RoxygenNote: 5.0.0
+LinkingTo:
+    Rcpp,
+    testthat
+RoxygenNote: 5.0.1

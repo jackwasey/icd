@@ -1,0 +1,24 @@
+Version: 1.0
+
+RestoreWorkspace: Default
+SaveWorkspace: Default
+AlwaysSaveHistory: Default
+
+EnableCodeIndexing: Yes
+UseSpacesForTab: Yes
+NumSpacesForTab: 2
+Encoding: UTF-8
+
+RnwWeave: knitr
+LaTeX: pdfLaTeX
+
+AutoAppendNewline: Yes
+StripTrailingWhitespace: Yes
+
+BuildType: Package
+PackageUseDevtools: Yes
+PackageInstallArgs: --with-keep.source --install-tests --data-compress=none
+PackageBuildArgs: --compact-vignettes=no --resave-data=no
+PackageBuildBinaryArgs: --install-tests
+PackageCheckArgs: --as-cran --install-args="--data-compress=none"
+PackageRoxygenize: rd,namespace

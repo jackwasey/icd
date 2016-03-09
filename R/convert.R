@@ -1,36 +1,34 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
-# This file is part of icd9.
+# This file is part of icd.
 #
-# icd9 is free software: you can redistribute it and/or modify
+# icd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# icd9 is distributed in the hope that it will be useful,
+# icd is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+# along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @name convert
-#' @title Convert ICD9 codes between formats and structures.
-#' @description ICD-9 codes are represented in \emph{short} and \emph{decimal} forms.
-#' The short form has up to 5 digits, or V or E followed by up to four digits. The decimal form
-#' has a dedcimal point to delimit the top-level (henceforth \emph{major}) category, and the
-#' \emph{minor} part containing the subsidiary classifications.
+#' Convert ICD9 codes between formats and structures.
 #'
-#' @section
-#' Structures used in this package are:
-#' \itemize{
-#'   \item vector (usually character vectors) of \emph{short} or \emph{long} codes
-#'   \item list, containing two elements with equal length vectors called \code{major}
-#'   \code{minor}. Yes, this is very like a data frame, but we do not need the overhead
-#'   of structuring it that way.
-#'   \item two vectors of separated major and minor parts
-#'   }
+#' ICD-9 codes are represented in \emph{short} and \emph{decimal} forms. The
+#' short form has up to 5 digits, or V or E followed by up to four digits. The
+#' decimal form has a decimal point to delimit the top-level (henceforth
+#' \emph{major}) category, and the \emph{minor} part containing the subsidiary
+#' classifications.
+#'
+#' @section Structures: Structures used in this package are: \itemize{ \item
+#'   vector (usually character vectors) of \emph{short} or \emph{long} codes
+#'   \item list, containing two elements with equal length vectors called
+#'   \code{major} \code{minor}. Yes, this is very like a data frame, but we do
+#'   not need the overhead of structuring it that way. \item two vectors of
+#'   separated major and minor parts }
 #' @template major
 #' @template minor
 #' @template icd9-any
@@ -38,244 +36,382 @@
 #' @template icd9-decimal
 #' @param parts data.frame with major and minor fields. This can be given
 #'   instead of major and minor vectors
-#' @param minorEmpty vector of length one, to be used in place of
-#' minor part of zero. Defaults to ""
-#' @template isShort
-#' @return Character vector or list. Deliberately returns zero-padded major, because
-#'   otherwise we are creating ambiguous codes (even if we know what we mean)
-#' @import Rcpp
+#' @param minorEmpty vector of length one, to be used in place of minor part of
+#'   zero. Defaults to ""
+#' @template short_code
+#' @return Character vector or list. Deliberately returns zero-padded major,
+#'   because otherwise we are creating ambiguous codes (even if we know what we
+#'   mean)
 #' @family ICD-9 convert
+#' @name convert
 NULL
 
-#' @title convert the chapter headings to lists of codes
-#' @description the chapter headings can be converted into the full set of their
-#'   children, and then used to look-up which chapter, sub-chapter, or 'major' a
-#'   given code belongs. Always returns a map with short-form icd-9 codes. These
-#'   can be converted en masse with \code{lapply} and \code{icd9ShortToDecimal}.
+#' convert the chapter headings to lists of codes
+#'
+#' the chapter headings can be converted into the full set of their children,
+#' and then used to look-up which chapter, sub-chapter, or 'major' a given code
+#' belongs. Always returns a map with short-form ICD-9 codes. These can be
+#' converted in bulk with \code{lapply} and \code{icd9ShortToDecimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
-#'   icd9ChaptersSub
+#'   \code{icd9_sub_chapters}
 #' @family ICD-9 convert
-#' @import checkmate
 #' @keywords internal manip
-icd9ChaptersToMap <- function(x) {
-  if (is.character(x)) x <- get(x)
-  checkList(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
+icd9_chapters_to_map <- function(x) {
+  if (is.character(x) && exists(x))
+    x <- get(x)
+  assert_list(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- icd9ExpandRangeShort(x[[r]][1], x[[r]][2], onlyReal = FALSE)
+    map[[r]] <- icd_expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = FALSE)
   }
   map
 }
 
-#' @title convert ICD data from wide to long format
-#' @description This is different enough to \code{dcast} in \code{reshape2} that
-#'   it needs writing again specifically for ICD codes. This function packages
-#'   the core \code{reshape} function. Empty strings and NA values will be
-#'   dropped, and everything else kept. No validation of the ICD codes is done.
+#' Convert ICD data from wide to long format
+#'
+#' Reshaping data is a common task, and is made easier here by knowing more about
+#' the underlying structure of the data. This function wraps the
+#' \code{\link[stats]{reshape}} function with specific behavior and checks
+#' related to ICD codes. Empty strings and NA values will be dropped, and
+#' everything else kept. No validation of the ICD codes is done.
+#'
 #' @param x \code{data.frame} in wide format, i.e. one row per patient, and
 #'   multiple columns containing ICD codes, empty strings or NA.
-#' @template visitid
-#' @param icdLabels vector of column names in which codes are found. If NULL,
-#'   all columns matching icd or ICD will be included.
-#' @param icdName character vector length one containing the new column name for
-#'   the ICD codes, defaults to "icdCode"
-#' @param icdRegex vector of character strings containg a regex to identify ICD-9 diagnosis
-#'   columns to try (case-insensitive) in order. Default is \code{c("icd", "diag", "dx_", "dx")}
-#' @template verbose
-#' @return data frame with visitId column named the same as input, and a column
-#'   named by \code{icd.name} containing all the non-NA and non-empty codes
-#'   found in the wide input data.
+#' @template visit_name
+#' @param icd_labels vector of column names in which codes are found. If NULL,
+#'   all columns matching the regular expression \code{icd_regex} will be
+#'   included.
+#' @template icd_name
+#' @param icd_regex vector of character strings containing a regular expression to
+#'   identify ICD-9 diagnosis columns to try (case-insensitive) in order.
+#'   Default is \code{c("icd", "diag", "dx_", "dx")}
+#' @return \code{data.frame} with visit_name column named the same as input, and
+#'   a column named by \code{icd.name} containing all the non-NA and non-empty
+#'   codes found in the wide input data.
 #' @examples
-#'   widedf <- data.frame(visitId = c("a", "b", "c"),
+#'   widedf <- data.frame(visit_name = c("a", "b", "c"),
 #'     icd9_01 = c("441", "4424", "441"),
 #'     icd9_02 = c(NA, "443", NA))
-#'   icd9WideToLong(widedf)
+#'   icd_wide_to_long(widedf)
 #' @family ICD-9 convert
 #' @export
-#' @importFrom stats reshape
-icd9WideToLong <- function(x,
-                           visitId = NULL,
-                           icdLabels = NULL,
-                           icdName = "icdCode",
-                           icdRegex = c("icd", "diag", "dx_", "dx"),
-                           verbose = FALSE) {
-  assertDataFrame(x, min.rows = 1, min.cols = 2)
-  assertString(icdName)
-  assertCharacter(icdRegex, min.chars = 1, any.missing = FALSE, min.len = 1)
-  assertFlag(verbose)
+icd_wide_to_long <- function(x,
+                             visit_name = get_visit_name(x),
+                             icd_labels = NULL,
+                             icd_name = "icd_code",
+                             icd_regex = c("icd", "diag", "dx_", "dx")) {
+  assert_data_frame(x, min.rows = 1, min.cols = 2)
+  assert_string(visit_name)
+  assert(checkmate::checkNull(icd_labels),
+         checkmate::checkCharacter(icd_labels, min.len = 1))
+  assert_string(icd_name)
+  assert_character(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
 
-  if (is.null(icdLabels)) {
-    re <- length(icdRegex)
+  #TODO: make S3
+
+  if (is.null(icd_labels)) {
+    re <- length(icd_regex)
     while (re > 0) {
-      if (verbose) message("checking whether regex: '", rev(icdRegex)[re], "' catches ICD columns.")
-      icdLabels <- grep(rev(icdRegex)[re], names(x), ignore.case = TRUE, value = TRUE)
-      if (verbose) message("found labels: ", paste(icdLabels, collapse = ", "))
-      if (length(icdLabels)) break
+      icd_labels <- grep(rev(icd_regex)[re], names(x), ignore.case = TRUE, value = TRUE)
+      if (length(icd_labels)) break
       re <- re - 1
     }
   }
-  assertCharacter(icdLabels, any.missing = FALSE, min.chars = 1,
-                  min.len = 1, max.len = ncol(x) - 1)
-  stopifnot(all(icdLabels %in% names(x)))
+  checkmate::assert_character(icd_labels, any.missing = FALSE, min.chars = 1,
+                              min.len = 1, max.len = ncol(x) - 1)
+  stopifnot(all(icd_labels %in% names(x)))
 
-  visitId <- getVisitId(x, visitId)
+  res <- stats::reshape(x,
+                        direction = "long",
+                        varying = icd_labels,
+                        idvar = visit_name,
+                        timevar = NULL,
+                        v.names = icd_name)
 
-  res <- reshape(x,
-                 direction = "long",
-                 varying = icdLabels,
-                 idvar = visitId,
-                 timevar = NULL,
-                 v.names = icdName)
-
-  res <- res[!is.na(res[[icdName]]), ]
-  res <- res[nchar(asCharacterNoWarn(res[[icdName]])) > 0, ]
-  res <- res[order(res[[visitId]]), ]
+  res <- res[!is.na(res[[icd_name]]), ]
+  res <- res[nchar(as_char_no_warn(res[[icd_name]])) > 0, ]
+  res <- res[order(res[[visit_name]]), ]
   rownames(res) <- NULL
   res
 }
 
-#' @title convert ICD data from long to wide format
-#' @description This is more complicated than reshape or reshape2::dcast allows.
-#'   This is a reasonably simple solution using built-in functions.
-#' @param icd9df data.frame of long-form data, one column for visitId and one
-#'   for ICD code
-#' @template visitid
-#' @template icd9field
-#' @param prefix character, default "icd_" to prefix new columns
-#' @param min.width, single integer, if specified, writes out this many columns
+#' Convert ICD data from long to wide format
+#'
+#' This is more complicated than reshape or \link[reshape2]{dcast} allows. This
+#' is a reasonably simple solution using built-in functions.
+#' @param x data.frame of long-form data, one column for visit_name and one for
+#'   ICD code
+#' @template visit_name
+#' @template icd_name
+#' @param prefix character, default \code{icd_} to prefix new columns
+#' @param min_width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to
 #'   the maximum number of codes per patient.
-#' @param aggregate single logical value, if TRUE (the default) will take more
-#'   time to find out-of-order visitIds, and combine all the codes for each
-#'   unique visitId. If \code{FALSE}, then out-of-order visitIds will result in
-#'   a row in the output data per contiguous block of identical visitIds.
-#' @param return.df single logical value, if \code{TRUE}, return a data frame
-#'   with a field for the visitId. This may be more convenient, but the default
-#'   of \code{FALSE} gives the more natural return data of a matrix with
-#'   rownames being the visitIds.
+#' @param aggr single logical value, if TRUE (the default) will take more time
+#'   to find out-of-order visit_names, and combine all the codes for each unique
+#'   visit_name. If \code{FALSE}, then out-of-order visit_names will result in a
+#'   row in the output data per contiguous block of identical visit_names.
+#' @param return_df single logical value, if \code{TRUE}, return a data frame
+#'   with a field for the visit_name. This may be more convenient, but the
+#'   default of \code{FALSE} gives the more natural return data of a matrix with
+#'   row names being the visit IDs from \code{visit_name}s.
 #' @examples
-#'   longdf <- data.frame(visitId = c("a", "b", "b", "c"),
+#'   longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
 #'     icd9 = c("441", "4424", "443", "441"))
-#'   icd9LongToWide(longdf)
-#'   icd9LongToWide(longdf, prefix = "ICD10_")
+#'   icd_long_to_wide(longdf)
+#'   icd_long_to_wide(longdf, prefix = "ICD10_")
 #' @family ICD-9 convert
 #' @keywords manip
 #' @export
-icd9LongToWide <- function(icd9df,
-                           visitId = NULL,
-                           icd9Field = NULL,
-                           prefix = "icd_",
-                           min.width = 0,
-                           aggregate = TRUE,
-                           return.df = FALSE) {
+icd_long_to_wide <- function(x,
+                             visit_name = get_visit_name(x),
+                             icd_name = get_icd_name(x),
+                             prefix = "icd_",
+                             min_width = 0,
+                             aggr = TRUE,
+                             return_df = FALSE) {
 
-  icd9Field <- getIcdField(icd9df, icd9Field)
-  visitId <- getVisitId(icd9df, visitId)
-
-  assertDataFrame(icd9df, col.names = "named")
-  assertString(prefix)
-  assertCount(min.width, na.ok = FALSE)
-  assertFlag(aggregate)
-  assertFlag(return.df)
+  assert_data_frame(x, col.names = "named")
+  assert_string(prefix)
+  assert_count(min_width, na.ok = FALSE)
+  assert_flag(aggr)
+  assert_flag(return_df)
 
   # we're now going to return a matrix
-  icd9VisitWasFactor <- is.factor(icd9df[[visitId]])
-  if (icd9VisitWasFactor) ivLevels <- levels(icd9df[[visitId]])
-  icd9df[[visitId]] <- asCharacterNoWarn(icd9df[[visitId]])
-  icd9df[[icd9Field]] <- asCharacterNoWarn(icd9df[[icd9Field]])
-  if (return.df) {
-    mat <- icd9LongToWideCpp(icd9df, visitId, icd9Field, aggregate)
-    if (icd9VisitWasFactor)
-      rownm <- factor(x = rownames(mat), levels = ivLevels)
+  icd9_name_was_factor <- is.factor(x[[visit_name]])
+  if (icd9_name_was_factor) iv_levels <- levels(x[[visit_name]])
+  x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
+  x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
+  if (return_df) {
+    mat <- icd9LongToWideCpp(x, visit_name, icd_name, aggr)
+    if (icd9_name_was_factor)
+      rownm <- factor(x = rownames(mat), levels = iv_levels)
     else
       rownm <- rownames(mat)
-    df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9VisitWasFactor)
-    names(df.out)[1] <- visitId
+    df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9_name_was_factor)
+    names(df.out)[1] <- visit_name
     # perhaps leave (duplicated) rownames which came from the matrix:
     rownames(df.out) <- NULL
     nc <- ncol(df.out) - 1
-    if (nc < min.width) {
-      df.out <- cbind(df.out, matrix(rep(NA, min.width - nc), nrow = 1))
-      nc <- min.width
+    if (nc < min_width) {
+      df.out <- cbind(df.out, matrix(rep(NA, min_width - nc), nrow = 1))
+      nc <- min_width
     }
     names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:nc), sep = "")
-    return(df.out)
+    df.out
+  } else {
+    icd9LongToWideCpp(x, visit_name, icd_name, aggr)
   }
-  icd9LongToWideCpp(icd9df, visitId, icd9Field, aggregate)
 }
 
-#' @title convert matrix of comorbidities into data frame, preserving visitId
-#'   information
+#' convert comorbidity data frame from matrix
+#'
+#' convert matrix of comorbidities into data frame, preserving visit_name
+#' information
 #' @param x Matrix of comorbidities, with row and columns names defined
-#' @param visitId Single character string with name for new column in output
-#'   data frame. Everywhere else, \code{visitId} describes the input data, but
-#'   here it is for output data.
-#' @param stringsAsFactors whether the resulting data frame should have strings,
-#'   i.e. visitId converted to factor. Default is to follow the current session
-#'   option.
+#' @param visit_name Single character string with name for new column in output
+#'   data frame. Everywhere else, \code{visit_name} describes the input data,
+#'   but here it is for output data.
+#' @template stringsAsFactors
 #' @examples
-#' longdf <- data.frame(visitId = c("a", "b", "b", "c"),
-#'     icd9 = c("441", "4424", "443", "441"))
-#' mat <- icd9ComorbidElix(longdf)
+#'  # as ever, optional, but tidy
+#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
+#'
+#' longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
+#'                      icd9 = icd9(c("441", "4424", "443", "441"))) %>% icd_long_data %>% icd9
+#' mat <- icd_comorbid_elix(longdf)
 #' class(mat)
 #' typeof(mat)
 #' rownames(mat)
-#' df.out <- icd9ComorbidMatToDf(mat)
+#' df.out <- icd_comorbid_mat_to_df(mat)
 #' stopifnot(is.data.frame(df.out))
-#' # output data frame has a factor for the visitId column
-#' stopifnot(identical(rownames(mat), as.character(df.out$visitId)))
+#' # output data frame has a factor for the visit_name column
+#' stopifnot(identical(rownames(mat), as.character(df.out[["visit_id"]])))
 #' df.out[, 1:4]
+#' # when creating a data frame like this, stringsAsFactors uses the system-wide option you have set.
+#' is.factor(df.out[["visit_id"]])
 #' @export
-icd9ComorbidMatToDf <- function(x, visitId = "visitId",
-                                stringsAsFactors = getOption("stringsAsFactors")) {
-  checkMatrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
-  checkString(visitId)
-  checkFlag(stringsAsFactors)
-  out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors)
-  names(out)[1] <- visitId
+icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
+                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+  assert_matrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
+  assert_string(visit_name)
+  assert_flag(stringsAsFactors) # nolint
+  out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors) # nolint
+  names(out)[1] <- visit_name
+  rownames(out) <- NULL
   out
 }
 
-#' @title convert matrix of comorbidities into data frame, preserving visitId
-#'   information
-#' @param x data frame, with a \code{visitId} column (not necessarily first),
+#' convert comorbidity matrix to data frame
+#'
+#' convert matrix of comorbidities into data frame, preserving visit_name
+#' information
+#' @param x data frame, with a \code{visit_name} column (not necessarily first),
 #'   and other columns with flags for comorbidities, as such column names are
 #'   required.
-#' @template visitid
-#' @param stringsAsFactors whether the resulting data frame should have strings,
-#'   i.e. visitId converted to factor. Default is to follow the current session
-#'   option.
+#' @template visit_name
+#' @template stringsAsFactors
 #' @examples
-#' longdf <- data.frame(visitId = c("a", "b", "b", "c"),
-#'     icd9 = c("441", "4424", "443", "441"))
-#' cmbdf <- icd9ComorbidElix(longdf, return.df = TRUE)
+#' longdf <- icd9(icd_long_data(
+#'             data.frame(visit = c("a", "b", "b", "c"),
+#'                        icd9 = c("441", "4424", "443", "441"))))
+#' cmbdf <- icd_comorbid_elix(longdf, return_df = TRUE)
 #' class(cmbdf)
 #' rownames(cmbdf)
-#' mat.out <- icd9ComorbidDfToMat(cmbdf)
+#' mat.out <- icd_comorbid_df_to_mat(cmbdf)
 #' stopifnot(is.matrix(mat.out))
 #' mat.out[, 1:4]
 #' @export
-icd9ComorbidDfToMat <- function(x, visitId = NULL,
-                                stringsAsFactors = getOption("stringsAsFactors")) {
-  checkDataFrame(x, min.rows = 1, min.cols = 2, col.names = "named")
-  checkFlag(stringsAsFactors)
-  visitId <- getVisitId(x, visitId)
+icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
+                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+  assert_data_frame(x, min.rows = 1, min.cols = 2, col.names = "named")
+  assert_string(visit_name)
+  assert_flag(stringsAsFactors) # nolint
 
-  out <- as.matrix.data.frame(x[-which(names(x) == visitId)])
-  rownames(out) <- x[[visitId]]
+  out <- as.matrix.data.frame(x[-which(names(x) == visit_name)])
+  rownames(out) <- x[[visit_name]]
   out
 }
 
-#' @rdname convert
-#' @keywords internal manip
-icd9ShortToParts <- function(icd9Short, minorEmpty = "") {
-  # Cannot specify default values in both header and C++ function body, so use a shim here.
-  .Call("icd9_icd9ShortToPartsCpp", PACKAGE = "icd9", icd9Short, minorEmpty)
+#' Convert ICD from short to decimal forms
+#'
+#' Convert codes between short and decimal forms
+#' @param x ICD codes
+#' @export
+icd_short_to_decimal <- function(x) {
+  UseMethod("icd_short_to_decimal")
 }
 
-#' @rdname convert
+#' @export
+#' @keywords internal
+icd_short_to_decimal.default <- function(x) {
+  # we can only have a shot at guessing this if we first guess the version
+  x %<>% icd_guess_version_update()
+  icd_short_to_decimal(x)
+}
+
+#' @export
+#' @keywords internal
+icd_short_to_decimal.icd9 <- function(x) {
+  icd9ShortToDecimalCpp(x) %>% icd_decimal_code %>% icd9
+}
+
+#' @export
+#' @keywords internal
+icd_short_to_decimal.icd10 <- function(x) {
+  x %<>% str_trim
+  # todo: these could/should be seperate functions
+  majors <- str_sub(x, 0, 3)
+  minors <- str_sub(x, 4)
+  if (minors != "")
+    paste0(majors, ".", minors) %>% icd_decimal_code %>% icd10
+  else
+    paste0(majors) %>% icd_decimal_code %>% icd10
+}
+
+#' Convert Decimal format ICD codes to short format
+#'
+#' This usually just entails removing the decimal point, but also does some
+#' limited validation and tidying up.
+#'
+#' @param x ICD codes
+#' @export
+#' @keywords internal
+icd_decimal_to_short <- function(x) {
+  UseMethod("icd_decimal_to_short")
+}
+
+#' @export
+#' @keywords internal
+icd_decimal_to_short.icd9 <- function(x) {
+  icd9DecimalToShortCpp(x) %>% icd_short_code(warn = FALSE) %>% icd9
+}
+
+#' @export
+#' @keywords internal
+icd_decimal_to_short.icd10 <- function(x) {
+  x %>% str_replace("\\.", "") %>% icd_short_code(warn = FALSE) %>% icd10
+}
+
+#' @export
+#' @keywords internal
+icd_decimal_to_short.icd10cm <- function(x) {
+  icd_decimal_to_short.icd10(x) %>% icd10cm
+}
+
+#' @export
+#' @keywords internal
+icd_decimal_to_short.icd10who <- function(x) {
+  icd_decimal_to_short.icd10(x) %>% icd10who
+}
+
+#' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to
+#'   short format
+#' @export
+#' @keywords internal
+icd_decimal_to_short.default <- function(x) {
+  str_trim(str_replace(x, "\\.", "")) %>% icd_short_code
+}
+
+#' Convert decimal ICD codes to component parts
+#' @export
+#' @keywords internal
+icd_decimal_to_parts <- function(x, minor_empty = "") {
+  UseMethod("icd_decimal_to_parts")
+}
+
+#' Convert short format ICD codes to component parts
+#' @export
+#' @keywords internal
+icd_short_to_parts <- function(x, minor_empty = "") {
+  UseMethod("icd_short_to_parts")
+}
+
+#' @describeIn icd_short_to_parts Convert short format ICD-9 code to parts
+#' @export
 #' @keywords internal manip
-icd9DecimalToParts <- function(icd9Decimal, minorEmpty = "") {
-  .Call("icd9_icd9DecimalToPartsCpp", PACKAGE = "icd9", icd9Decimal, minorEmpty)
+icd_short_to_parts.icd9 <- function(x, minor_empty = "") {
+  # Cannot specify default values in both header and C++ function body, so use a
+  # shim here.
+  .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, minor_empty)
+}
+
+#' @describeIn icd_decimal_to_parts Convert decimal ICD-9 code to parts
+#' @export
+#' @keywords internal manip
+icd_decimal_to_parts.icd9 <- function(x, minor_empty = "") {
+  .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, minor_empty)
+}
+
+#' @describeIn icd_short_to_parts Convert short format ICD-10 code to parts
+#' @export
+#' @keywords internal manip
+icd_short_to_parts.icd10 <- function(x, minor_empty = "") {
+  icd_short_to_parts.icd9(x, minor_empty)
+}
+
+#' @describeIn icd_decimal_to_parts Convert decimal ICD-9 code to parts
+#' @export
+#' @keywords internal manip
+icd_decimal_to_parts.icd10 <- function(x, minor_empty = "") {
+  icd_decimal_to_parts.icd9(x, minor_empty)
+}
+
+#' @describeIn icd_short_to_parts Convert short format ICD code to parts,
+#'   assuming ICD-9 from character class. TODO: test this works for ICD-10
+#' @export
+#' @keywords internal manip
+icd_short_to_parts.character <- function(x, minor_empty = "") {
+  # Cannot specify default values in both header and C++ function body, so use a
+  # shim here.
+  .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, minor_empty)
+}
+
+#' @describeIn icd_short_to_parts Convert decimal ICD code to parts, assuming
+#'   ICD-9 from character class. TODO: test this works for ICD-10
+#' @export
+#' @keywords internal manip
+icd_decimal_to_parts.character <- function(x, minor_empty = "") {
+  .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, minor_empty)
 }

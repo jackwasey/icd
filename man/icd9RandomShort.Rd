@@ -2,12 +2,13 @@
 % Please edit documentation in R/RcppExports.R
 \name{icd9RandomShort}
 \alias{icd9RandomShort}
-\title{generate random short-form icd9 E codes}
+\title{Generate random short-form ICD-9 E codes}
 \usage{
 icd9RandomShort(n = 5L)
 }
 \description{
-Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
+Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
+the number
 }
 \keyword{internal}
 

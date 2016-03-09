@@ -1,19 +1,19 @@
-// Copyright (C) 2014 - 2015  Jack O. Wasey
+// Copyright (C) 2014 - 2016  Jack O. Wasey
 //
-// This file is part of icd9.
+// This file is part of icd.
 //
-// icd9 is free software: you can redistribute it and/or modify
+// icd is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// icd9 is distributed in the hope that it will be useful,
+// icd is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
@@ -26,21 +26,23 @@
 #include <vector>
 #include <string>
 
-// R CMD INSTALL --no-docs icd9 && R -e "library(icd9); icd9:::runOpenMPVecInt();"
+// R CMD INSTALL --no-docs icd && R -e "library(icd); icd:::runOpenMPVecInt();"
 
-//' @rdname icd9Comorbid
-//' @description RcppParallel approach to comorbidity assignment with OpenMP and vector of integers strategy. It is very
-//'   fast, and most time is now spent setting up the data to be passed in.
-//' @param aggregate single logical value, if /code{TRUE}, then take (possible much) more time to aggregate
-//'   out-of-sequence visit IDs in the icd9df data.frame. If this is \code{FALSE}, then each contiguous group of visit
-//'   IDs will result in a row of comorbidities in the output data. If you know your visitIds are possible disordered,
-//'   then use \code{TRUE}.
+//' @rdname icd_comorbid
+//' @description \link{Rcpp} approach to comorbidity assignment with OpenMP and
+//'   vector of integers strategy. It is very fast, and most time is now spent
+//'   setting up the data to be passed in.
+//' @param aggregate single logical value, if \code{TRUE}, then take (possible
+//'   much) more time to aggregate out-of-sequence visit IDs in the input
+//'   data.frame. If this is \code{FALSE}, then each contiguous group of visit
+//'   IDs will result in a row of comorbidities in the output data. If you know
+//'   whether your visit IDs are disordered, then use \code{TRUE}.
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                           const std::string visitId, const std::string icd9Field,
-                          const int threads = 8, const int chunkSize = 256,
-                          const int ompChunkSize = 1, bool aggregate = true) {
+                          const int threads = 8, const int chunk_size = 256,
+                          const int omp_chunk_size = 1, bool aggregate = true) {
 #ifdef ICD9_VALGRIND
 #ifdef ICD9_DEBUG
   Rcpp::Rcout << "Starting valgrind instrumentation... ";
@@ -53,7 +55,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #endif
 #if (defined ICD9_DEBUG_SETUP || defined ICD9_SETUP)
   Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
-  Rcpp::Rcout << "chunk size = " << chunkSize << "\n";
+  Rcpp::Rcout << "chunk size = " << chunk_size << "\n";
 #endif
 
 #ifdef ICD9_DEBUG_PARALLEL
@@ -114,8 +116,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   Rcpp::Rcout << num_comorbid << " is num_comorbid\n";
 #endif
 
-  const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunkSize,
-                                                   ompChunkSize);
+  const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunk_size, omp_chunk_size);
 
 #ifdef ICD9_DEBUG
   Rcpp::Rcout << "out length is " << out.size() << "\n";

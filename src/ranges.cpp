@@ -1,19 +1,19 @@
-// Copyright (C) 2014 - 2015  Jack O. Wasey
+// Copyright (C) 2014 - 2016  Jack O. Wasey
 //
-// This file is part of icd9.
+// This file is part of icd.
 //
-// icd9 is free software: you can redistribute it and/or modify
+// icd is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// icd9 is distributed in the hope that it will be useful,
+// icd is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
@@ -127,7 +127,8 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
 	Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
 	Rcpp::CharacterVector major = parts[0];
 	Rcpp::CharacterVector minor = parts[1];
-	Rcpp::CharacterVector::iterator itmajor = major.begin(); // iterator seems to be a Rcpp::CharacterVector of length 1
+	// the next iterator seems to be a Rcpp::CharacterVector of length 1
+	Rcpp::CharacterVector::iterator itmajor = major.begin();
 	Rcpp::CharacterVector::iterator itminor = minor.begin();
 	for (; itmajor != major.end(); ++itmajor, ++itminor) {
 		std::string thismajor = Rcpp::as<std::string>(*itmajor);
@@ -140,18 +141,21 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
 		std::vector<std::string> newshort = Rcpp::as<std::vector<std::string> >(
 				icd9MajMinToShort(thismajor, newminors));
 
-		// std insert is a thousand times faster than looping through Rcpp::CharacterVector and push_backing
+		// std insert is a thousand times faster than looping through
+		// Rcpp::CharacterVector and push_backing
 		out.insert(newshort.begin(), newshort.end());
 	}
 	if (onlyReal) {
-		const Rcpp::Environment env("package:icd9");
-	  Rcpp::List icd9Hierarchy = env["icd9Hierarchy"];
+		const Rcpp::Environment env("package:icd");
+	  Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
 		std::set<std::string> out_real;
 		std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
-				icd9Hierarchy["icd9"]);
+				icd9Hierarchy["code"]);
+		// 'reals' is the set of majors, intermediate and leaf codes.
 		std::set<std::string> reals(tmp.begin(), tmp.end());
-		std::set_intersection(out.begin(), out.end(), reals.begin(),
-				reals.end(), std::inserter(out_real, out_real.begin()));
+		std::set_intersection(out.begin(), out.end(),
+                        reals.begin(), reals.end(),
+                        std::inserter(out_real, out_real.begin()));
 		return Rcpp::wrap(out_real);
 	}
 	return Rcpp::wrap(out);
@@ -173,26 +177,27 @@ Rcpp::CharacterVector icd9ChildrenCpp(Rcpp::CharacterVector icd9, bool isShort,
 	return icd9ChildrenDecimalCpp(icd9, onlyReal);
 }
 
+
 //' @title match ICD9 codes
 //' @description Finds children of \code{icd9Reference} and looks for \code{icd9} in the
 //'   resulting vector.
 //' @templateVar icd9AnyName "icd9,icd9Reference"
 //' @template icd9-any
-//' @template isShort
-//' @param isShortReference logical, see argument \code{isShort}
+//' @template short_code
+//' @param isShortReference logical, see argument \code{short_code}
 //' @return logical vector
 //' @keywords internal
 // [[Rcpp::export]]
-Rcpp::LogicalVector icd9InReferenceCode(Rcpp::CharacterVector icd9,
-		Rcpp::CharacterVector icd9Reference, bool isShort, bool isShortReference =
-				true) {
+Rcpp::LogicalVector icd_in_reference_code(Rcpp::CharacterVector icd,
+		Rcpp::CharacterVector icd_reference, bool short_code,
+		bool short_reference = true) {
 
-	Rcpp::CharacterVector x = icd9AddLeadingZeroes(icd9, isShort);
-	if (!isShort)
+	Rcpp::CharacterVector x = icd9AddLeadingZeroes(icd, short_code);
+	if (!short_code)
 		x = icd9DecimalToShort(x);
 
-	Rcpp::CharacterVector y = icd9ChildrenCpp(icd9Reference, isShortReference, false);
-	if (!isShortReference)
+	Rcpp::CharacterVector y = icd9ChildrenCpp(icd_reference, short_reference, false);
+	if (!short_reference)
 		y = icd9DecimalToShort(y);
 	Rcpp::LogicalVector res = !is_na(match(x, y));
 	return res;

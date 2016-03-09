@@ -1,19 +1,19 @@
-// Copyright (C) 2014 - 2015  Jack O. Wasey
+// Copyright (C) 2014 - 2016  Jack O. Wasey
 //
-// This file is part of icd9.
+// This file is part of icd.
 //
-// icd9 is free software: you can redistribute it and/or modify
+// icd is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// icd9 is distributed in the hope that it will be useful,
+// icd is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "convert.h"
@@ -148,14 +148,6 @@ Rcpp::List icd9MajMinToParts(const Rcpp::CharacterVector major,
 	return returned_frame;
 }
 
-// [[Rcpp::export]]
-Rcpp::List icd9MajMinToParts_list(const Rcpp::CharacterVector major,
-		const Rcpp::CharacterVector minor) {
-	Rcpp::List out = Rcpp::List::create(Rcpp::_["major"] = major,
-			Rcpp::_["minor"] = minor);
-	return out;
-}
-
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
@@ -263,35 +255,25 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
 			minors);
 }
 
-//' @title Convert ICD-9 codes between short and decimal forms
-//' @template icd9-short
-//' @template icd9-decimal
-//' @export
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9ShortToDecimal(
-		const Rcpp::CharacterVector icd9Short) {
-	return icd9PartsToDecimal(icd9ShortToPartsCpp(icd9Short, ""));
+// [[Rcpp::export(name = "icd9ShortToDecimalCpp")]]
+Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector x) {
+	return icd9PartsToDecimal(icd9ShortToPartsCpp(x, ""));
 }
 
-//' @rdname icd9ShortToDecimal
-//' @export
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9DecimalToShortOld(
-		const Rcpp::CharacterVector icd9Decimal) {
-	return icd9PartsToShort(icd9DecimalToPartsCpp(icd9Decimal, ""));
+Rcpp::CharacterVector icd9DecimalToShortOld(const Rcpp::CharacterVector x) {
+	return icd9PartsToShort(icd9DecimalToPartsCpp(x, ""));
 }
 
-//' @rdname convert
-//' @export
-// [[Rcpp::export]]
+// [[Rcpp::export(name="icd9DecimalToShortCpp")]]
 Rcpp::CharacterVector icd9DecimalToShort(
-		const Rcpp::CharacterVector icd9Decimal) {
-	Rcpp::CharacterVector out = clone(icd9Decimal); // clone instead of pushing back thousands of times
-  size_t ilen = icd9Decimal.length();
+		const Rcpp::CharacterVector x) {
+	Rcpp::CharacterVector out = clone(x); // clone instead of pushing back thousands of times
+  size_t ilen = x.length();
 	if (ilen == 0)
 		return out;
 	for (size_t i = 0; i != ilen; ++i) {
-		Rcpp::String strna = icd9Decimal[i]; // need to copy here? does it copy?
+		Rcpp::String strna = x[i]; // need to copy here? does it copy?
 		if (strna == NA_STRING || strna == "")
 			continue;
 		// TODO: Rcpp::String doesn't implement many functions, so using STL. A FAST way
@@ -304,27 +286,15 @@ Rcpp::CharacterVector icd9DecimalToShort(
 		// TODO consider rejecting grossly invalid codes as NA:
 		std::size_t pos = thiscode.find_first_of(".");
 		if (pos != std::string::npos) {
-#ifdef ICD9_DEBUG_TRACE
-			Rcpp::Rcout << "found .\n";
-#endif
 			// now we assume that the major is snug against the left side, so we can add zero padding
 			thiscode.erase(pos, 1); // remove the decimal point
 			// could do fewer tests on the code by doing this last, but most codes are not V or E...
 			if (pos > 0 && pos < 4 && !icd9IsASingleVE(thiscode_cstr)) {
-#ifdef ICD9_DEBUG_TRACE
-				Rcpp::Rcout << "found numeric\n";
-#endif
 				thiscode.insert(0, 3 - pos, '0');
 			} else if (pos == 2 && icd9IsASingleV(thiscode_cstr)) {
-#ifdef ICD9_DEBUG_TRACE
-				Rcpp::Rcout << "found V\n";
-#endif
 				thiscode.insert(1, 1, '0');
 				out[i] = thiscode;
 			} else if ((pos == 2 || pos == 3) && icd9IsASingleE(thiscode_cstr)) {
-#ifdef ICD9_DEBUG_TRACE
-				Rcpp::Rcout << "found E\n";
-#endif
 				thiscode.insert(1, 4 - pos, '0');
 			}
 			// otherwise leave the code alone
@@ -337,28 +307,26 @@ Rcpp::CharacterVector icd9DecimalToShort(
 	return out;
 }
 
-//' @title Get major (three-digit) part of ICD-9 codes
-//' @description This is reasonably fast, but calculates all the minors, then throws away the result.
-//' @template icd9-any
-//' @template isShort
+//' @describeIn icd_get_major Get major part of ICD-9 code, i.e. first three
+//' digits of numeric or V code, or first four digits of E code. This is the part
+//' before the decimal, when a decimal point is used.
 //' @keywords internal manip
-//' @export
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector icd9, const bool isShort) {
-	if (isShort) {
+//[[Rcpp::export(name="icd_get_major.icd9")]]
+Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool short_code) {
+	if (short_code) {
 		// am I casting (or just compiler/syntax checker hinting?) SEXP may be
 		// costly, or is it just encapsulating a pointer to some fixed data somewhere?
 
 		// I don't think i need to PROTECT here, because I immediately return the
 		// result via Rcpp
-		SEXP majors = icd9ShortToPartsCpp(icd9, "")[0]; // actually wants to be an Rcpp::List
+		SEXP majors = icd9ShortToPartsCpp(x, "")[0]; // actually wants to be an Rcpp::List
 		return Rcpp::as<Rcpp::CharacterVector>(majors);
 	}
-	SEXP majors = icd9DecimalToPartsCpp(icd9, "")[0];
+	SEXP majors = icd9DecimalToPartsCpp(x, "")[0];
 	return Rcpp::as<Rcpp::CharacterVector>(majors);
 }
 
-//' @rdname icd9GetMajor
+//' @rdname icd_get_major
 //' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9GetMajorShort(const Rcpp::CharacterVector icd9Short) {

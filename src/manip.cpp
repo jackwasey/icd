@@ -1,19 +1,19 @@
-// Copyright (C) 2014 - 2015  Jack O. Wasey
+// Copyright (C) 2014 - 2016  Jack O. Wasey
 //
-// This file is part of icd9.
+// This file is part of icd.
 //
-// icd9 is free software: you can redistribute it and/or modify
+// icd is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// icd9 is distributed in the hope that it will be useful,
+// icd is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
@@ -107,25 +107,25 @@ std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
 	return "";
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(icd9_add_leading_zeroes_major)]]
 Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
 	return Rcpp::sapply(major, icd9AddLeadingZeroesMajorSingle);
 }
 
 //' @rdname icd9AddLeadingZeroes
-// [[Rcpp::export]]
+// [[Rcpp::export(icd9_add_leading_zeroes.icd_short_code)]]
 Rcpp::CharacterVector icd9AddLeadingZeroesShort(
-		Rcpp::CharacterVector icd9Short) {
-	Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
+		Rcpp::CharacterVector x) {
+	Rcpp::List parts = icd9ShortToPartsCpp(x, "");
 	parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
 	return icd9PartsToShort(parts);
 }
 
 //' @rdname icd9AddLeadingZeroes
-// [[Rcpp::export]]
+// [[Rcpp::export(icd9_add_leading_zeroes.icd_decimal_code)]]
 Rcpp::CharacterVector icd9AddLeadingZeroesDecimal(
-		Rcpp::CharacterVector icd9Decimal) {
-	Rcpp::List parts = icd9DecimalToPartsCpp(icd9Decimal);
+		Rcpp::CharacterVector x) {
+	Rcpp::List parts = icd9DecimalToPartsCpp(x);
 	parts["major"] = icd9AddLeadingZeroesMajor(
 			Rcpp::as<Rcpp::CharacterVector>(parts["major"]));
 	return icd9PartsToDecimal(parts);

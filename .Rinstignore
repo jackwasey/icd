@@ -1,3 +1,10 @@
 ^COPYING$
+man\/fixSubchapterNa
+man\/icd10cm_extract_sub_chapters
+man\/icd10cm_get_all_defined
+man\/icd9_parse_leaf_desc_ver
+man\/icd9cm_generate_chapters_hierarchy
+man\/icd_update_everything
+man\/parse_leaf_descriptions_all
+man\/parse_leaf_desc_icd9cm_v27
 R\/benchmark\.R
-tools

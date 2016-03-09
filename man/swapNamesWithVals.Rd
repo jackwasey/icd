@@ -12,5 +12,8 @@ swapNamesWithVals(x)
 \value{
 vector
 }
+\description{
+swap names and values of a vector
+}
 \keyword{internal}
 
