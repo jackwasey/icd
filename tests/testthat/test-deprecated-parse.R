@@ -129,6 +129,8 @@ test_that("deprecated - online parse tests run", {
                  info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
   })
 
+  swapNamesWithVals <- swap_names_vals
+
   test_that("deprecated - majors extracted from web page are the same as those from RTF", {
     webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
     work <- swapNamesWithVals(rtf)

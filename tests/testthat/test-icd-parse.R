@@ -136,7 +136,7 @@ test_that("all defined codes from csv are in rtf extract", {
 test_that("majors extracted from web page are the same as those from RTF", {
   skip_on_no_rtf(test_year)
   webmajors <- unlist(icd9_majors) # why is this even a list not a named vector?
-  work <- swapNamesWithVals(rtf)
+  work <- swap_names_vals(rtf)
   rtfmajors <- work[icd_is_major.icd9(work)]
 
   expect_identical(setdiff(rtfmajors, webmajors), character(0),
@@ -159,7 +159,7 @@ test_that("all leaf codes from TXT are in flat file extract", {
   expect_true(all(leaves %in% nrtf))
 
   rtf[nrtf %in% icd_short_to_decimal.icd9(v32$code)] %>%
-    swapNamesWithVals %>%
+    swap_names_vals %>%
     sort -> rtf_leaves
   if (FALSE && interactive()) {
     assign("manual_compare_descs",
