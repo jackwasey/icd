@@ -12,8 +12,8 @@ build:
         code: |
             export WERCKER_R_COVR_OPTIONS="path='.',expression('options(icd.do_slow_tests=TRUE)'),exclusions=list('inst/include/icd_RcppExports.h','R/RcppExports.R','src/RcppExports.cpp','R/benchmark.R')"
             # covr should be detected within package when it is tested, and shell env is not propogated to covr subprocess
-            # export ICD_ONLINE_TESTS=false
-            # export ICD_SLOW_TESTS=true
+            export ICD_ONLINE_TESTS=false
+            export ICD_SLOW_TESTS=true
             rm .Rinstignore  # install everything for testing
             sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
@@ -26,9 +26,17 @@ build:
         warnings_are_errors: FALSE
 # I think this has false positives for latex warnings, even if R CMD check is okay
 #    - jackwasey/r-coverage
+    - script:
+        name: debug information before codecov with covr
+        code: |
+            find .
+            export
     - jimhester/r-coverage
     - script:
         name: re-check with CRAN testthat
-        code: Rscript -e 'install.packages("testthat"); print(packageVersion("testthat"))'
+        code: |
+            find .
+            export
+            Rscript -e 'install.packages("testthat"); print(packageVersion("testthat"))'
     - jimhester/r-check:
         warnings_are_errors: FALSE
