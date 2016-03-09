@@ -35,6 +35,7 @@ r_github_packages:
 #  - RcppCore/Rcpp
 
 before_script:
+ - ls -R
  - rm .Rinstignore  # install everything for testing
  - sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
 
@@ -42,7 +43,8 @@ after_success:
 # environment is copied forward from previous, so slow tests are on. Repeat anyway while not working!
 # coverage does re-install the package (it needs to rebuild with debugging/coverage compilation), so there is potential to change .Rinstignore and .Rbuildignore
 #  - export ICD_SLOW_TESTS=TRUE ICD_ONLINE_TESTS=FALSE
-  - find .
+  - ls -R
+  - cat ./icd.Rcheck/tests/test-all.Rout
   - Rscript -e 'library(covr); coveralls(path = ".", expression("options(icd.do_slow_tests = TRUE)"), quiet = FALSE, exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"))'
 # do vignettes once regular coverage is working fully
 # - Rscript -e 'library(covr); options(warn = -1);  package_coverage(type = "vignette", quiet = FALSE, exclusions = c("inst/include/icd_RcppExports.h", "R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'

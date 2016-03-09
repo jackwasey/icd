@@ -29,14 +29,19 @@ build:
     - script:
         name: debug information before codecov with covr
         code: |
-            find .
-            export
+            ls -R
+            echo $ICD_SLOW_TESTS
+            cat ./icd.Rcheck/tests/test-all.Rout
     - jimhester/r-coverage
+    - script:
+        name: debug information after codecov with covr
+        code: |
+            ls -R
+            echo $ICD_SLOW_TESTS
+            cat ./icd.Rcheck/tests/test-all.Rout
     - script:
         name: re-check with CRAN testthat
         code: |
-            find .
-            export
             Rscript -e 'install.packages("testthat"); print(packageVersion("testthat"))'
     - jimhester/r-check:
         warnings_are_errors: FALSE
