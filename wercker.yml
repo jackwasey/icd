@@ -1,4 +1,3 @@
-# WERCKER_R_COVR_OPTIONS etc can also be set in the wercker configuration to do exclusions
 box: rocker/hadleyverse
 #box: jackwasey/r-devel-ubsan-gcc
 command-timeout: 60
@@ -10,7 +9,7 @@ build:
     - script:
         name: icd test environment
         code: |
-            export WERCKER_R_COVR_OPTIONS="path = '.', exclusions = list('inst/include/icd_RcppExports.h', 'R/RcppExports.R', 'src/RcppExports.cpp', 'R/benchmark.R')"
+            export WERCKER_R_COVR_OPTIONS="exclusions = list('inst/include/icd_RcppExports.h', 'R/RcppExports.R', 'src/RcppExports.cpp', 'R/benchmark.R')"
             # covr should be detected within package when it is tested, and shell env is not propogated to covr subprocess
             export ICD_ONLINE_TESTS=false
             export ICD_SLOW_TESTS=true
@@ -46,3 +45,4 @@ build:
             Rscript -e 'install.packages("testthat"); print(packageVersion("testthat"))'
     - jimhester/r-check:
         warnings_are_errors: FALSE
+
