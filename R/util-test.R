@@ -404,12 +404,12 @@ setup_test_check <- function() {
   }
 }
 
-#' run testtthat test_check with a regular expression filter
+#' run \code{testtthat::test_check} with a Perl regular expression filter
 #' 
-#' Use 'summary' reporter so that covr produces output and doesn't time-out on
-#' travis. The code coverage testing is slower than regular testing because of
+#' Use 'summary' reporter so that \code{covr} produces output and doesn't time-out on
+#' Travis. The code coverage testing is slower than regular testing because of
 #' instrumentation.
-#' @param pattern regular expression to match tests
+#' @param pattern PERL regular expression to match tests
 #' @param msg character, if given will give this message, otherwise,
 #'   messages the regular expression
 #' @keywords internal
@@ -418,7 +418,7 @@ my_test_check <- function(pattern, msg) {
     msg <- pattern
 
   message(msg)
-  # use perl for grepl to interpret the regex which can then include negative
+  # use Perl for grepl to interpret the regex which can then include negative
   # backrefs to exclude things.
   testthat::test_check("icd", filter = pattern, perl = TRUE, reporter = "summary")
 }
@@ -430,4 +430,3 @@ do_slow_tests <- function(x = TRUE) {
 do_online_tests <- function(x = TRUE) {
   options("icd.do_online_tests" = x)
 }
-

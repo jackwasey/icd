@@ -17,7 +17,7 @@
 
 # nocov start
 
-runOpenMPVecInt <- function(n = 4, np = 2, threads = 6, chunk_size = 32) {
+bench_omp_vec_int <- function(n = 4, np = 2, threads = 6, chunk_size = 32) {
   icd9df <- generate_random_pts(n, np = np)
   icd9ComorbidShort(icd9df = icd9df,
                     icd9Mapping = icd::icd9_map_ahrq,
@@ -26,7 +26,7 @@ runOpenMPVecInt <- function(n = 4, np = 2, threads = 6, chunk_size = 32) {
                     threads = threads, chunk_size = chunk_size)
 }
 
-benchOpenMPThreads <- function(n = 2 ^ 18 - 1, np = 7) {
+bench_omp_threads <- function(n = 2 ^ 18 - 1, np = 7) {
   # if chunk size is <32 (i.e. one word) bits aren't updated correctly by concurrent threads'
   pts <- generate_random_pts(n, np)
   stopifnot(identical(
@@ -146,7 +146,7 @@ otherbench <- function() {
   ))
 }
 
-benchLongToWide <- function(n = 10000, np = 7, times = 10) {
+bench_long_to_wide <- function(n = 10000, np = 7, times = 10) {
   pts <- generate_random_ordered_pts(n, np)
   #   microbenchmark::microbenchmark(icd9LongToWideMatrixByMap(pts),
   #                  icd9LongToWideMatrixAggregate(pts),
@@ -158,7 +158,7 @@ benchLongToWide <- function(n = 10000, np = 7, times = 10) {
   )
 }
 
-checkThreadChunk <- function() {
+bench_thread_chunk <- function() {
   for (n in c(1, 12345)) {
     for (np in c(1, 30)) {
       pts <- generate_random_pts(n, np);
@@ -226,7 +226,7 @@ icd_bench_comorbid_parallel <- function() {
 #' importance, after correctness. R package test code is for correctness,
 #' whereas this script stresses the core functions, and looks for bottlenecks.
 #' @keywords internal
-icd9Benchmark <- function() {
+icd9_benchmark <- function() {
   # generate large data set: this is copied from test-ICD9.R for now...
   set.seed(1441)
   n <- 1E7 # 10 million rows
@@ -234,26 +234,26 @@ icd9Benchmark <- function() {
   rpts <- generate_random_pts(n)
 
   # run slow tests (these are now much much faster with C++ implementations)
-  res <- testthat::test_dir("tests/testthat/", filter = "slow", reporter = testthat::ListReporter())
+  res <- testthat::test_dir("tests/testthat/", filter = "slow", reporter = "list")
   res <- as.data.frame(res)
   print(res[order(res$real), c("test", "real")])
 
   tmp <- tempfile(fileext = ".Rprof")
   utils::Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = TRUE)
-  utils::capture.output(icd9ComorbidAhrq(rpts, isShort = TRUE))
+  utils::capture.output(icd_comorbid_ahrq.icd9(rpts, isShort = TRUE))
   utils::Rprof(NULL)
   utils::summaryRprof(filename = tmp, memory = "both", lines = "show")
 
   # see how we do scaling up:
   set.seed(1441)
   microbenchmark::microbenchmark(
-    icd9ComorbidAhrq(generate_random_pts(1), isShort = TRUE),
-    icd9ComorbidAhrq(generate_random_pts(10), isShort = TRUE),
-    icd9ComorbidAhrq(generate_random_pts(100), isShort = TRUE),
-    icd9ComorbidAhrq(generate_random_pts(1000), isShort = TRUE),
+    icd_comorbid_ahrq.icd9(generate_random_pts(1), isShort = TRUE),
+    icd_comorbid_ahrq.icd9(generate_random_pts(10), isShort = TRUE),
+    icd_comorbid_ahrq.icd9(generate_random_pts(100), isShort = TRUE),
+    icd_comorbid_ahrq.icd9(generate_random_pts(1000), isShort = TRUE),
     # argh, we fall off a cliff between 1000 and 10000 and get much slower.
-    icd9ComorbidAhrq(generate_random_pts(10000), isShort = TRUE),
-    icd9ComorbidAhrq(generate_random_pts(100000), isShort = TRUE),
+    icd_comorbid_ahrq.icd9(generate_random_pts(10000), isShort = TRUE),
+    icd_comorbid_ahrq.icd9(generate_random_pts(100000), isShort = TRUE),
     times = 5
   )
 
@@ -304,4 +304,15 @@ icd9Benchmark <- function() {
 
   microbenchmark::microbenchmark(times = 3, grepl(pattern = "[EeVv]", rpts))
 }
+
+icd9Benchmark <- function() {
+  icd_deprecated("icd9_benchmark")
+  icd9_benchmark()
+}
+
+runOpenMPVecInt <- bench_omp_vec_int # nolint
+benchOpenMPThreads <- bench_omp_threads # nolint
+benchLongToWide <- bench_long_to_wide # nolint
+checkThreadChunk <- bench_thread_chunk # nolint
+
 # nocov end

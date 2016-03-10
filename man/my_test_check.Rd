@@ -2,19 +2,19 @@
 % Please edit documentation in R/util-test.R
 \name{my_test_check}
 \alias{my_test_check}
-\title{run testtthat test_check with a regular expression filter}
+\title{run \code{testtthat::test_check} with a Perl regular expression filter}
 \usage{
 my_test_check(pattern, msg)
 }
 \arguments{
-\item{pattern}{regular expression to match tests}
+\item{pattern}{PERL regular expression to match tests}
 
 \item{msg}{character, if given will give this message, otherwise,
 messages the regular expression}
 }
 \description{
-Use 'summary' reporter so that covr produces output and doesn't time-out on
-travis. The code coverage testing is slower than regular testing because of
+Use 'summary' reporter so that \code{covr} produces output and doesn't time-out on
+Travis. The code coverage testing is slower than regular testing because of
 instrumentation.
 }
 \keyword{internal}
