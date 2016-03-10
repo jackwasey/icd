@@ -15,5 +15,6 @@ character vector of length one
 \description{
 \code{NA} is accepted (and returned as \code{NA_character_})
 }
+\keyword{character}
 \keyword{internal}
 

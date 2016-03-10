@@ -46,19 +46,15 @@ overlapping names are compared.
 ICD-9 codes
 }}
 \examples{
-\donttest{
+\dontrun{
 diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid,
                                  show = TRUE)[["CHF"]]
-}
-\dontrun{
 # show differences for
 # give full report on all comorbidities for these mappings
 diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)
 
 # the following outputs a summary to the console:
-\donttest{
-icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)
-}
+icd_diff_comorbid(elixComorbid, ahrqComorbid)
 }
 }
 

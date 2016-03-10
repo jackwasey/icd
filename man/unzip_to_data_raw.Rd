@@ -35,5 +35,6 @@ Get a zip file from a URL, extract contents, and save file in
 The file name is changed to a conservative cross platform name using
 \code{make.names}
 }
+\keyword{file}
 \keyword{internal}
 

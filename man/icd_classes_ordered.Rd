@@ -29,5 +29,6 @@ yet, so won't test.
 \item \code{expect_icd_classes_ordered}: \code{testthat} \code{expect} function
 for ICD classes to be in correct order.
 }}
+\keyword{debugging}
 \keyword{internal}
 

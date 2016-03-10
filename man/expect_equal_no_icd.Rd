@@ -7,7 +7,8 @@
 expect_equal_no_icd(object, expected, ...)
 }
 \description{
-expect equal, ignoring any ICD classes
+Strips any \code{icd} classes (but not others) before making comparison
 }
+\keyword{debugging}
 \keyword{internal}
 

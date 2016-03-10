@@ -13,4 +13,6 @@ when testing). If \code{covr} is detected (an option is set), then
 we may be in a subprocess and not see any shell environment or options
 from the calling process, so try to set slow tests on and warnings off.
 }
+\keyword{debugging}
+\keyword{internal}
 

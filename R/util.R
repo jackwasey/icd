@@ -20,7 +20,7 @@
 #' \code{NA} is accepted (and returned as \code{NA_character_})
 #' @param x character vector of length one
 #' @return character vector of length one
-#' @keywords internal
+#' @keywords internal character 
 strim <- function(x) {
   assert_string(x, na.ok = TRUE)
   if (!is.na(x[1]))
@@ -86,7 +86,7 @@ strip <- function(x, pattern = " ", use_bytes = TRUE)
 #' binary takes more R memory, but allows more compact output
 #' @param x \code{data.frame} which may contain logical fields
 #' @return \code{data.frame} without logical fields
-#' @keywords internal manip
+#' @keywords internal manip logical
 logical_to_binary <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
 

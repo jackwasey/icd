@@ -21,5 +21,6 @@ expect_icd10_chap_present(x, ...)
 \description{
 expect that a chapter with given title exists, case-insensitive
 }
+\keyword{debugging}
 \keyword{internal}
 

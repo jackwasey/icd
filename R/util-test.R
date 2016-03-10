@@ -75,7 +75,9 @@ skip_flat_icd9_avail_all <- function() {
 }
 
 #' expect equal, ignoring any ICD classes
-#' @keywords internal
+#'
+#' Strips any \code{icd} classes (but not others) before making comparison
+#' @keywords internal debugging
 expect_equal_no_icd <- function(object, expected, ...) {
   class(object) <- class(object)[class(object) %nin% icd_all_classes]
   class(expected) <- class(expected)[class(expected) %nin% icd_all_classes]
@@ -88,7 +90,17 @@ expect_equal_no_icd <- function(object, expected, ...) {
 }
 
 #' expect named sub-chapter has a given range, case insensitive
-#' @keywords internal
+#'
+#' First checks that the given name is indeed in \code{ver_chaps},
+#' and if so, checks whether that entry in \code{ver_chaps} matches
+#' the given \code{start} and \code{end}.
+#' @param x name of a chapter
+#' @param start ICD code
+#' @param end ICD code
+#' @param ver_chaps list with each member being a start-end pair, and names
+#'   being the chapter names
+#' @param ... arguments passed to \code{\link[testthat]{expect_true}}
+#' @keywords internal debugging
 expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
   x <- tolower(x)
   res <- eval(bquote(testthat::expect_true(.(x) %in% tolower(names(ver_chaps)), ...)))
@@ -190,33 +202,33 @@ expect_icd10_chap_missing <- function(x, ...) {
 }
 
 #' expect that a chapter with given title exists, case-insensitive
-#' @keywords internal
+#' @keywords internal debugging
 expect_chap_present <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
   eval(bquote(expect_true(.(chap_present(x, ver_chaps = ver_chaps)),
                           info = info, label = label, ...)))
 }
 
 #' @rdname expect_chap_present
-#' @keywords internal
+#' @keywords internal debugging
 expect_icd9_sub_chap_present <- function(x, info = NULL, label = NULL, ...) {
   eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd9_sub_chapters,
                                   info = info, label = label, ...)))
 }
 
 #' @rdname expect_chap_present
-#' @keywords internal
+#' @keywords internal debugging
 expect_icd9_chap_present <- function(x, ...) {
   eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd9_chapters, ...)))
 }
 
 #' @rdname expect_chap_present
-#' @keywords internal
+#' @keywords internal debugging
 expect_icd10_sub_chap_present <- function(x, ...) {
   eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd10_sub_chapters, ...)))
 }
 
 #' @rdname expect_chap_present
-#' @keywords internal
+#' @keywords internal debugging
 expect_icd10_chap_present <- function(x, ...) {
   eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd10_chapters, ...)))
 }
@@ -256,20 +268,29 @@ expect_icd10_only_sub_chap <- function(x, ...) {
 
 #' @describeIn icd_classes_ordered \code{testthat} \code{expect} function
 #'   for ICD classes to be in correct order.
-#' @keywords internal
+#' @keywords internal debugging
 expect_icd_classes_ordered <- function(x) {
   eval(bquote(testthat::expect_true(icd_classes_ordered(.(x)))))
 }
 
 #' generate random ICD-9 codes
 #'
-#' @keywords internal
+#' @keywords internal debugging datagen
 generate_random_short_icd9 <- function(n = 50000) {
   as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
 }
 
+#' generate random ICD-9 codes
+#'
+#' Uses billable ICD-10-CM codes from current master list
+#' @param n number to select, passed to \code{sample}
+#' @keywords internal debugging datagen
+generate_random_short_icd10cm_billable <- function(n = 10) {
+  sample(unlist(icd10cm2016[icd10cm2016$billable, "code"]), replace = TRUE, size = n)
+}
+
 #' @rdname generate_random_short_icd9
-#' @keywords internal
+#' @keywords internal debugging datagen
 generate_random_decimal_icd9 <- function(n = 50000)
   paste(
     round(stats::runif(min = 1, max = 999, n = n)),
@@ -278,20 +299,20 @@ generate_random_decimal_icd9 <- function(n = 50000)
   )
 
 #' @rdname generate_random_short_icd9
-#' @keywords internal
+#' @keywords internal debugging datagen
 generate_random_pts <- function(...) {
   generate_random_ordered_pts(...)
 }
 
 #' @rdname generate_random_short_icd9
-#' @keywords internal
+#' @keywords internal debugging datagen
 generate_random_ordered_pts <- function(...) {
   x <- generate_random_unordered_pts(...)
   x[order(x$visit_id), ]
 }
 
 #' @rdname generate_random_short_icd9
-#' @keywords internal
+#' @keywords internal debugging datagen
 generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient = 20,
                                           n = num_patients, np = dz_per_patient) {
   set.seed(1441)
@@ -307,13 +328,14 @@ generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient =
 }
 
 #' @rdname generate_random_short_icd9
-#' @keywords internal
+#' @keywords internal debugging datagen
 generate_random_short_ahrq_icd9 <- function(n = 50000)
   sample(unname(unlist(icd::icd9_map_ahrq)), size = n, replace = TRUE)
 
 #' generate random strings
 #'
-#' @keywords internal
+#' Mixed upper and lower case, with replacement
+#' @keywords internal debugging datagen
 random_string <- function(n, max_chars = 4) {
   rand_ch <- function()
     sample(c(LETTERS, letters, 0:9, rep("", times = 50)), replace = TRUE, size = n)
@@ -327,7 +349,7 @@ random_string <- function(n, max_chars = 4) {
 #' Show options which control testing
 #' 
 #' Get the options for all currently used \code{icd} testing options.
-#' @keywords internal
+#' @keywords internal debugging
 show_test_options <- function() {
   print(options("icd.do_slow_tests"))
   print(options("icd.do_online_tests"))
@@ -340,7 +362,7 @@ show_test_options <- function() {
 #' and warnings to be generated for deprecated functions. This function
 #' explicitly sets options to do slow and online tests, and not to warn for
 #' deprecated functions. This is intended for local testing.
-#' @keywords internal
+#' @keywords internal debugging
 set_full_test_options <- function() {
 
   message("current test options:")
@@ -360,6 +382,7 @@ set_full_test_options <- function() {
 #' when testing). If \code{covr} is detected (an option is set), then
 #' we may be in a subprocess and not see any shell environment or options
 #' from the calling process, so try to set slow tests on and warnings off.
+#' @keywords internal debugging
 setup_test_check <- function() {
 
   # basic defaults if nothing else is set: skip slow and online tests and warn
@@ -412,7 +435,7 @@ setup_test_check <- function() {
 #' @param pattern PERL regular expression to match tests
 #' @param msg character, if given will give this message, otherwise,
 #'   messages the regular expression
-#' @keywords internal
+#' @keywords internal debugging
 my_test_check <- function(pattern, msg) {
   if (missing(msg))
     msg <- pattern

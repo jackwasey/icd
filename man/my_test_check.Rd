@@ -17,5 +17,6 @@ Use 'summary' reporter so that \code{covr} produces output and doesn't time-out 
 Travis. The code coverage testing is slower than regular testing because of
 instrumentation.
 }
+\keyword{debugging}
 \keyword{internal}
 

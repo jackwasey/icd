@@ -7,7 +7,9 @@
 random_string(n, max_chars = 4)
 }
 \description{
-generate random strings
+Mixed upper and lower case, with replacement
 }
+\keyword{datagen}
+\keyword{debugging}
 \keyword{internal}
 

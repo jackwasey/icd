@@ -554,19 +554,15 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #'   the differing codes are attempted to be reduced to their parent codes, in
 #'   order to give a more succinct summary.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid,
 #'                                  show = TRUE)[["CHF"]]
-#' }
-#' \dontrun{
 #' # show differences for
 #' # give full report on all comorbidities for these mappings
 #' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)
 #'
 #' # the following outputs a summary to the console:
-#' \donttest{
-#' icd_diff_comorbid(elixComorbid, ahrqComorbid, show = TRUE)
-#' }
+#' icd_diff_comorbid(elixComorbid, ahrqComorbid)
 #' }
 #' @return A list, each item of which is another list containing the
 #'   intersections and both asymmetric differences.

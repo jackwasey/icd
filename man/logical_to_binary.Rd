@@ -18,5 +18,6 @@ text containing \code{TRUE} and \code{FALSE} is inefficient. Convert to
 binary takes more R memory, but allows more compact output
 }
 \keyword{internal}
+\keyword{logical}
 \keyword{manip}
 

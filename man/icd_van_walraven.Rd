@@ -65,7 +65,7 @@ mydf <- icd9(data.frame(visit_name = c("a", "b", "c"),
                    icd9 = c("412.93", "441", "044.9")))
 
 cmb <- icd_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)
-\donttest{
+\dontrun{
 print(cmb)
 }
 

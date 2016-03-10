@@ -25,5 +25,7 @@ generate_random_short_ahrq_icd9(n = 50000)
 \description{
 generate random ICD-9 codes
 }
+\keyword{datagen}
+\keyword{debugging}
 \keyword{internal}
 

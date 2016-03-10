@@ -18,8 +18,23 @@ expect_icd9_chap_equal(x, start, end, ...)
 
 expect_icd9_sub_chap_equal(x, start, end, ...)
 }
-\description{
-expect named sub-chapter has a given range, case insensitive
+\arguments{
+\item{x}{name of a chapter}
+
+\item{start}{ICD code}
+
+\item{end}{ICD code}
+
+\item{ver_chaps}{list with each member being a start-end pair, and names
+being the chapter names}
+
+\item{...}{arguments passed to \code{\link[testthat]{expect_true}}}
 }
+\description{
+First checks that the given name is indeed in \code{ver_chaps},
+and if so, checks whether that entry in \code{ver_chaps} matches
+the given \code{start} and \code{end}.
+}
+\keyword{debugging}
 \keyword{internal}
 

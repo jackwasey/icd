@@ -12,5 +12,6 @@ and warnings to be generated for deprecated functions. This function
 explicitly sets options to do slow and online tests, and not to warn for
 deprecated functions. This is intended for local testing.
 }
+\keyword{debugging}
 \keyword{internal}
 

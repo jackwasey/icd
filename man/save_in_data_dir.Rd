@@ -20,5 +20,6 @@ invisibly returns the data
 File will be named \emph{var_name}\code{.RData} with an optional suffix
 before \code{.RData}
 }
+\keyword{file}
 \keyword{internal}
 

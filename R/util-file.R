@@ -21,7 +21,7 @@
 #'
 #' take a single file from zip located at a given URL, unzip into temporary
 #' directory, and copy to the given \code{save_path}
-#' @keywords internal
+#' @keywords internal file
 unzip_single <- function(url, file_name, save_path) {
   zipfile <- tempfile()
   # using libcurl because it seems the internal method works inconsistently
@@ -67,7 +67,7 @@ unzip_single <- function(url, file_name, save_path) {
 #'   \code{data-raw}
 #' @template offline
 #' @return path of unzipped file in \code{data-raw}
-#' @keywords internal
+#' @keywords internal file
 unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
   assert_string(url, na.ok = FALSE)
   assert_string(file_name, na.ok = FALSE)
@@ -86,7 +86,7 @@ unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
 }
 
 #' @rdname unzip_to_data_raw
-#' @keywords internal
+#' @keywords internal file
 download_to_data_raw <- function(url,
                                  file_name = str_extract(url, "[^/]*$"),
                                  offline = FALSE,
@@ -128,7 +128,7 @@ download_to_data_raw <- function(url,
 #'   it as \code{myvar.RData} in \code{package_root/data}.
 #' @param suffix character scalar
 #' @return invisibly returns the data
-#' @keywords internal
+#' @keywords internal file
 save_in_data_dir <- function(var_name, suffix = "") {
   assert_string(suffix)
   var_name <- as.character(substitute(var_name))
