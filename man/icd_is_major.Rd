@@ -2,6 +2,7 @@
 % Please edit documentation in R/valid.R
 \name{icd_is_major}
 \alias{icd_is_major}
+\alias{icd_is_major.default}
 \alias{icd_is_major.icd10}
 \alias{icd_is_major.icd10cm}
 \alias{icd_is_major.icd10who}
@@ -9,6 +10,8 @@
 \title{Check whether a code is major}
 \usage{
 icd_is_major(x)
+
+\method{icd_is_major}{default}(x)
 
 \method{icd_is_major}{icd10}(x)
 
@@ -26,6 +29,8 @@ Check whether a code is major
 }
 \section{Methods (by class)}{
 \itemize{
+\item \code{default}: Default method which guesses version
+
 \item \code{icd10}: check whether a code is an ICD-10 major
 
 \item \code{icd10cm}: check whether a code is an ICD-10-CM major.

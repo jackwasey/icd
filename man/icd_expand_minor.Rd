@@ -34,8 +34,9 @@ Accepts a single number or character input starting point for
 }
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{icd9ExpandRange}},
-  \code{\link{icd_children}}, \code{\link{icd_condense}}
+Other ICD-9 ranges: \code{\link{icd_children}},
+  \code{\link{icd_condense}},
+  \code{\link{icd_expand_range}}
 }
 \keyword{internal}
 \keyword{manip}

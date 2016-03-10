@@ -20,6 +20,6 @@ generate_spelling <- function(out = ".aspell/words.pws") {
              "MERCHANTABILITY")
   # "requestor" in Vermont data licence
   words <- c(medical, proper_nouns, acronyms, other)
-  aspell_write_personal_dictionary_file(words, out = out)
+  utils::aspell_write_personal_dictionary_file(words, out = out)
   invisible(words)
 }

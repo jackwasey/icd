@@ -21,15 +21,14 @@
   packageStartupMessage(
     "Welcome to the \"icd\" package for finding comorbidities and
      interpretation of ICD-9 and ICD-10 codes. Suggestions and contributions are
-     welcome at https://github.com/jackwasey/icd9 .
+     welcome at https://github.com/jackwasey/icd .
 
 Please cite this package if you find it useful in your published work.
 citation(package = \"icd\")
 
 Development version can be installed with
 # install.packages(\"devtools\")
-library(devtools)
-install_github(\"jackwasey/icd9\") # working on rename from icd9 to icd
+devtools::install_github(\"jackwasey/icd\")
 ")
 
   if (system.file(package = "icd9") != "")

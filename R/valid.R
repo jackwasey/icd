@@ -518,7 +518,10 @@ icd_get_invalid.icd_comorbidity_map <- function(x, short_code = icd_guess_short(
   x[lapply(x, length) > 0]
 }
 
-#' Returns major component of code (before decimal)
+#' Get major part of an ICD code
+#' 
+#' Returns major component of codes, i.e. the part before the decimal,
+#' or where the decimal would be.
 #' @keywords internal
 icd_get_major <- function(x) {
   UseMethod("icd_get_major")
@@ -529,7 +532,6 @@ icd_get_major <- function(x) {
 #'   \code{\link{stringr}}. If speed needed, then can re-use C++ ICD-9 version:
 #'   just grabbing the first three characters, after all, and this is much
 #'   easier in ICD-10 then ICD-9
-#' @export
 #' @keywords internal
 icd_get_major.icd10 <- function(x) {
   x %>% str_trim %>% str_sub(1, 3)
@@ -542,15 +544,15 @@ icd_is_major <- function(x) {
   UseMethod("icd_is_major")
 }
 
-#' @export
+#' @describeIn icd_is_major Default method which guesses version
+#' @method icd_is_major default
 #' @keywords internal
 icd_is_major.default <- function(x) {
   y <- icd_guess_version_update(x)
-  icd_is_major(y)
+  UseMethod("icd_is_major", y)
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 major
-#' @export
 #' @keywords internal
 icd_is_major.icd10 <- function(x) {
   assert_character(x)
@@ -561,7 +563,6 @@ icd_is_major.icd10 <- function(x) {
 #' @describeIn icd_is_major check whether a code is an ICD-10-CM major.
 #'   Currently uses \code{stringr} which uses \code{stringi} which should be
 #'   quite fast, but does suffer from handling Unicode, locales, etc.
-#' @export
 #' @keywords internal
 icd_is_major.icd10cm <- function(x) {
   assert_character(x)
@@ -569,7 +570,6 @@ icd_is_major.icd10cm <- function(x) {
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 WHO major
-#' @export
 #' @keywords internal
 icd_is_major.icd10who <- function(x) {
   assert_character(x)
@@ -577,18 +577,16 @@ icd_is_major.icd10who <- function(x) {
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-9 major
-#' @export
 #' @keywords internal
 icd_is_major.icd9 <- function(x) {
   x <- trim(x)
   nchar(x) - icd9_is_e(x) < 4
 }
 
-#' do ICD-9 codes belong to numeric, V or E classes?
+#' do ICD-9 codes belong to numeric, V or E sub-types?
 #'
 #' For each code, return \code{TRUE} if numeric or \code{FALSE} if a
 #'   V or E code.
-#' @template icd9-any
 #' @param x vector of strings or factor to test
 #' @return logical vector
 #' @export
