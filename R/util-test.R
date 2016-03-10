@@ -148,26 +148,6 @@ expect_icd9_major_is_sub_chap <- function(x, code, ...) {
     res
 }
 
-chap_missing_expectation <- function(ver_chaps, ...) {
-  function(x) {
-    x <- tolower(x)
-    lnames <- tolower(names(ver_chaps))
-    testthat::expectation(x %nin% lnames,
-                          "should not be present",
-                          "is correctly missing")
-  }
-}
-
-chap_present_expectation <- function(ver_chaps, ...) {
-  function(x) {
-    x <- tolower(x)
-    lnames <- tolower(names(ver_chaps))
-    testthat::expectation(x %in% lnames,
-                          "should not be missing",
-                          "is present")
-  }
-}
-
 chap_missing <- function(x, ver_chaps, ...) {
   x <- tolower(x)
   lnames <- tolower(names(ver_chaps))
