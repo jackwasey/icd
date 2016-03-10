@@ -284,9 +284,14 @@ generate_random_short_icd9 <- function(n = 50000) {
 #'
 #' Uses billable ICD-10-CM codes from current master list
 #' @param n number to select, passed to \code{sample}
+#' @template short_code
 #' @keywords internal debugging datagen
-generate_random_short_icd10cm_bill <- function(n = 10) {
-  sample(unlist(icd10cm2016[icd10cm2016$billable, "code"]), replace = TRUE, size = n)
+generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
+  x <- sample(unlist(icd10cm2016[icd10cm2016$billable, "code"]), replace = TRUE, size = n)
+  if (short_code)
+    x
+  else
+    icd_short_to_decimal(x)
 }
 
 #' @rdname generate_random_short_icd9
