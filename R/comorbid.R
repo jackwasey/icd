@@ -168,7 +168,9 @@ icd10_comorbid_parent_search <- function(
   return_df = FALSE, ...) {
 
   if (!short_code)
-    icd_codes <- x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
+    x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
+
+  icd_codes <- x[[icd_name]]
 
   # for each icd code
   just_cmb <- vapply(icd_codes, FUN.VALUE = logical(30), FUN = function(y) {

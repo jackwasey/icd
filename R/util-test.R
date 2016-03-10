@@ -285,7 +285,7 @@ generate_random_short_icd9 <- function(n = 50000) {
 #' Uses billable ICD-10-CM codes from current master list
 #' @param n number to select, passed to \code{sample}
 #' @keywords internal debugging datagen
-generate_random_short_icd10cm_billable <- function(n = 10) {
+generate_random_short_icd10cm_bill <- function(n = 10) {
   sample(unlist(icd10cm2016[icd10cm2016$billable, "code"]), replace = TRUE, size = n)
 }
 
@@ -314,12 +314,13 @@ generate_random_ordered_pts <- function(...) {
 #' @rdname generate_random_short_icd9
 #' @keywords internal debugging datagen
 generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient = 20,
-                                          n = num_patients, np = dz_per_patient) {
+                                          n = num_patients, np = dz_per_patient,
+                                          fun = generate_random_short_icd9) {
   set.seed(1441)
   pts <- round(n / np)
   data.frame(
     visit_id = sample(seq(1, pts), replace = TRUE, size = n),
-    code = c(generate_random_short_icd9(round(n / 2)), generate_random_short_ahrq_icd9(n - round(n / 2))),
+    code = fun(n),
     poa = as.factor(
       sample(x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
              replace = TRUE, size = n)),
@@ -329,8 +330,9 @@ generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient =
 
 #' @rdname generate_random_short_icd9
 #' @keywords internal debugging datagen
-generate_random_short_ahrq_icd9 <- function(n = 50000)
+generate_random_short_ahrq_icd9 <- function(n = 50000) {
   sample(unname(unlist(icd::icd9_map_ahrq)), size = n, replace = TRUE)
+}
 
 #' generate random strings
 #'
