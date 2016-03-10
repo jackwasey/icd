@@ -21,14 +21,15 @@ library("icd")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 
-if (packageVersion("testthat") >= package_version("0.11.0.9000")) {
-  message("testthat version is less than 0.11.0.9000. Consider using:
+if (packageVersion("testthat") < package_version("0.11.0.9000")) {
+  message("testthat version is less than 0.11.0.9000, so not running Catch tests. Consider using:
           devtools::install_github('hadley/testthat')")
 }
+
 options("icd.warn_deprecated" = FALSE)
 old_warn <- options(warn = -1)
 on.exit(options(old_warn))
 
 icd:::setup_test_check()
 icd:::show_test_options()
-icd:::my_test_check("deprecated")
+icd:::my_test_check("deprecated", "Running deprecated tests")
