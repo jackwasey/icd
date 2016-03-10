@@ -170,7 +170,7 @@ icd_explain("0019") # 'short' format code inferred
 
 ```{r explain complex}
 # we can be explicit about short vs decimal
-icd_explain("434.00", short_code = FALSE) 
+icd_explain("434.00", short_code = FALSE)
 icd_explain(c("43410", "43491"), short_code = TRUE)
 #explain top level code with children
 "391" %>% icd_explain # single three-digit code
@@ -180,7 +180,7 @@ icd_explain(c("43410", "43491"), short_code = TRUE)
 ```
 Arbitrary named list(s) of codes:
 ```{r explain arbitrary}
-icd_explain(list(somecodes = icd9(c("001", "391")), 
+icd_explain(list(somecodes = icd9(c("001", "391")),
                  morecodes = icd9cm(c("001.1", "001.9"))))
 ```
 `001` (Cholera) isn't itself a diagnostic code, i.e. leaf node in the hierarchy, but `390` (Rheumatic fever without heart involvement) is. Both are explained correctly:
@@ -266,7 +266,7 @@ patients %>%
 ### Compare two comorbidity definitions
 We will find the differences between some categories of the original Elixhauser and the updated version by Quan. Just taking the select few comorbidity groups for brevity:
 ```{r elixvsquanelix}
-difference <- icd_diff_comorbid(icd9_map_elix, icd9_map_quan_elix, 
+difference <- icd_diff_comorbid(icd9_map_elix, icd9_map_quan_elix,
                  all_names = c("CHF", "PHTN", "HTN", "Valvular"))
 # reuslts also returned as data
 str(difference)
@@ -306,7 +306,7 @@ The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities th
 ```{r arbitrary Mapping}
 names(icd9_chapters)[c(1:5, 14)]
 my_map <- icd:::icd9_chapters_to_map(icd9_chapters[c(2, 5, 14)])
-icd_comorbid(patients, my_map) # no +ve 
+icd_comorbid(patients, my_map) # no positive 
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes.

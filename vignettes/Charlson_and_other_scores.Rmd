@@ -60,7 +60,7 @@ head(vermont_dx %>% icd_wide_to_long)
 vermont_dx %>% icd_wide_to_long %>% icd_charlson %>% summary
 # show the first few actual scores: the names are the patient IDs:
 vermont_dx %>% icd_wide_to_long %>% icd_charlson %>% head(25) -> vermont_charlson
-vermont_charlson 
+vermont_charlson
 names(vermont_charlson)
 unname(vermont_charlson)
 ```
@@ -74,4 +74,3 @@ The same principle can be used to calculate the Van Walraven score, which is the
 ```
 vermont_dx %>% icd_wide_to_long %>% icd_van_walraven %>% head(25)
 ```
-
