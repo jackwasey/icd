@@ -32,8 +32,7 @@ env:
 
 r_github_packages:
   - jimhester/covr
-#  - hadley/testthat
-#  - RcppCore/Rcpp
+  - hadley/testthat
 
 before_script:
  - ls -R
