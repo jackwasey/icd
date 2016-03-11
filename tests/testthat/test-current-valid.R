@@ -17,6 +17,32 @@
 
 context("icd9 validation")
 
+test_that("is ICD-9 code valid, factor or character", {
+  expect_identical(
+    icd_is_valid(c("1001", "E999", "V01")),
+    icd_is_valid(factor(c("1001", "E999", "V01")))
+  )
+  expect_identical(
+    icd_is_valid(icd9(c("1001", "E999", "V01"))),
+    icd_is_valid(factor(c("1001", "E999", "V01")))
+  )
+
+  pts <- generate_random_short_icd9()
+  expect_identical(icd_is_valid(pts), icd_is_valid(factor(pts))) 
+  expect_identical(icd_is_valid(icd9(pts)), icd_is_valid(factor(pts))) 
+})
+
+test_that("mixed decimal and short codes can't all be valid", {
+  pts <- generate_random_short_icd9()
+  expect_true(!all(icd_is_valid(c(pts, "123.45"))))
+})
+
+test_that("mixed ICD-9 and ICD-10 codes can't all be valid", {
+  pts <- generate_random_short_icd9()
+  expect_true(!all(icd_is_valid(c(pts, "A01"))))
+})
+
+
 test_that("icd9IsValidDecimal - rubbish input", {
   expect_error(icd_is_valid.icd9(short_code = FALSE, list(1230, c(12323, 2323), c("nonesnseses"))))
   expect_error(icd_is_valid.icd9(short_code = FALSE, c(10.1, 200)))

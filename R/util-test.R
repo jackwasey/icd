@@ -113,18 +113,8 @@ expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
 }
 
 #' @rdname expect_chap_equal
-expect_icd10_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(.(x), start, end, ver_chaps = icd::icd10_chapters, ...)))
-}
-
-#' @rdname expect_chap_equal
 expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
   eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd::icd10_sub_chapters, ...)))
-}
-
-#' @rdname expect_chap_equal
-expect_icd9_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(.(x), start, end, ver_chaps = icd::icd9_chapters, ...)))
 }
 
 #' @rdname expect_chap_equal
@@ -343,6 +333,8 @@ show_test_options <- function() {
   print(options("icd.warn_deprecated"))
 }
 
+# nocov start
+
 #' Set test options to do everything
 #'
 #' Default without setting options is for slow and online tests to be skipped,
@@ -361,6 +353,15 @@ set_full_test_options <- function() {
   options("icd.warn_deprecated" = FALSE)
   show_test_options()
 }
+
+do_slow_tests <- function(x = TRUE) {
+  options("icd.do_slow_tests" = x)
+}
+
+do_online_tests <- function(x = TRUE) {
+  options("icd.do_online_tests" = x)
+}
+# nocov end
 
 #' Set-up test options
 #'
@@ -431,12 +432,4 @@ my_test_check <- function(pattern, msg) {
   # use Perl for grepl to interpret the regex which can then include negative
   # backrefs to exclude things.
   testthat::test_check("icd", filter = pattern, perl = TRUE, reporter = "summary")
-}
-
-do_slow_tests <- function(x = TRUE) {
-  options("icd.do_slow_tests" = x)
-}
-
-do_online_tests <- function(x = TRUE) {
-  options("icd.do_online_tests" = x)
 }

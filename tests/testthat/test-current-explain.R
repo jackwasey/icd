@@ -31,7 +31,22 @@ test_that("explain a large set of ICD-9 codes succinctly", {
     icd_explain.icd9(icd_children.icd9(icd_short_code("391")), condense = TRUE, short_code = TRUE),
     "Rheumatic fever with heart involvement"
   )
+})
 
+test_that("explain a large set of ICD-9 codes succinctly, using factors", {
+  expect_identical(
+    icd_explain(factor(icd_children.icd9("391", onlyReal = FALSE, short_code = TRUE),
+                     condense = FALSE, short_code = TRUE)),
+    c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
+      "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
+      "Other acute rheumatic heart disease",
+      "Acute rheumatic heart disease, unspecified")
+  )
+
+  expect_identical(
+    icd_explain.icd9(factor(icd_children.icd9(icd_short_code("391")), condense = TRUE, short_code = TRUE)),
+    "Rheumatic fever with heart involvement"
+  )
 })
 
 test_that("github issue #41", {

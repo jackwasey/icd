@@ -566,3 +566,24 @@ test_that("sort icd10", {
   expect_equal(icd_sort(icd10cm("Z04")), icd10cm("Z04"))
 
 })
+
+test_that("chapter major expansion works for basic test", {
+  expect_equal(
+    icd9_expand_chapter_majors("Diseases Of The Respiratory System"),
+    icd9(c("460", "461", "462", "463", "464", "465", "466",
+    "467", "468", "469", "470", "471", "472", "473", "474", "475",
+    "476", "477", "478", "479", "480", "481", "482", "483", "484",
+    "485", "486", "487", "488", "489", "490", "491", "492", "493",
+    "494", "495", "496", "497", "498", "499", "500", "501", "502",
+    "503", "504", "505", "506", "507", "508", "509", "510", "511",
+    "512", "513", "514", "515", "516", "517", "518", "519"))
+  )
+})
+
+test_that("chapter major expansion works for basic test", {
+  expect_equal(
+    icd9_expand_sub_chapter_majors("Other Accidents"),
+    icd9(c("E916", "E917", "E918", "E919", "E920", "E921", "E922",
+    "E923", "E924", "E925", "E926", "E927", "E928"))
+  )
+})
