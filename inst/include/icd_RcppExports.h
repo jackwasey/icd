@@ -290,25 +290,6 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert) {
-        typedef SEXP(*Ptr_icd9IsA)(SEXP,SEXP,SEXP);
-        static Ptr_icd9IsA p_icd9IsA = NULL;
-        if (p_icd9IsA == NULL) {
-            validateSignature("std::vector<bool>(*icd9IsA)(const std::vector<std::string>&,const char*,bool)");
-            p_icd9IsA = (Ptr_icd9IsA)R_GetCCallable("icd", "icd_icd9IsA");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9IsA(Rcpp::wrap(sv), Rcpp::wrap(x), Rcpp::wrap(invert));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<std::vector<bool> >(__result);
-    }
-
     inline std::vector<bool> icd9_is_n_cpp(const std::vector<std::string>& sv) {
         typedef SEXP(*Ptr_icd9_is_n_cpp)(SEXP);
         static Ptr_icd9_is_n_cpp p_icd9_is_n_cpp = NULL;

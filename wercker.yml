@@ -16,11 +16,8 @@ build:
             rm .Rinstignore  # install everything for testing
             sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
-        github_packages: kevinushey/rex jimhester/covr
-#- hadley/testthat # in the throes
-#- RcppCore/Rcpp # CRAN version up-to-date for my purposes
-# try lint before check, so I get annotated github warnings before check fails
-#    - jimhester/r-lint # lint currently has some strange bug, skip for now.
+        github_packages: kevinushey/rex jimhester/covr hadley/testthat
+    - jimhester/r-lint 
     - jimhester/r-check:
         warnings_are_errors: FALSE
 # I think this has false positives for latex warnings, even if R CMD check is okay
@@ -28,6 +25,7 @@ build:
     - script:
         name: debug information before codecov with covr
         code: |
+            Rscript -e 'library(testthat); message("testthat version = :", packageVersion("testthat")); devtools::session_info()'
             ls -R
             echo $ICD_SLOW_TESTS
             cat ./icd.Rcheck/tests/test-all.Rout
@@ -42,7 +40,7 @@ build:
     - script:
         name: re-check with CRAN testthat
         code: |
-            Rscript -e 'install.packages("testthat"); print(packageVersion("testthat"))'
+            Rscript -e 'library(testthat); message("testthat version = :", packageVersion("testthat")); devtools::session_info()'
     - jimhester/r-check:
         warnings_are_errors: FALSE
 

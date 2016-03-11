@@ -15,10 +15,30 @@ context("C++ Unit Test") {
 }
 
 context("test internal 'is' functions") {
-  test_that("is a basic") {
+  test_that("is v") {
     std::vector<std::string> v;
     v.push_back("V10");
-    std::vector<bool> result = icd9IsA(v, "V", false);
+    v.push_back("V0");
+    v.push_back("V10.");
+    v.push_back("V10.9");
+    v.push_back("V99.99");
+    v.push_back("V9999");
+    v.push_back("v1");
+    std::vector<bool> result = icd9_is_v_cpp(v);
+    for (std::vector<bool>::iterator i = result.begin(); i != result.end(); ++i) {
+      expect_true(*i);
+    }
+  }
+
+  test_that("is e basic") {
+    std::vector<std::string> v;
+    v.push_back("E999");
+    v.push_back("E0");
+    v.push_back("E999.");
+    v.push_back("E999.9");
+    v.push_back("E9999");
+    v.push_back("e000");
+    std::vector<bool> result = icd9_is_e_cpp(v);
     for (std::vector<bool>::iterator i = result.begin(); i != result.end(); ++i) {
       expect_true(*i);
     }
@@ -97,14 +117,12 @@ context("test parallel debug") {
 
 context("random data") {
   test_that("random numeric vector of major codes is ok") {
-    NumericVector nv = randomMajorCpp(1);
+    Rcpp::NumericVector nv = randomMajorCpp(1);
     // minimal test:
     expect_true(nv.size() == 1);
-
-    NumericVector nv = randomMajorCpp(10);
+    nv = randomMajorCpp(10);
     expect_true(nv.size() == 10);
-
-    NumericVector nv = randomMajorCpp(10000);
+    nv = randomMajorCpp(10000);
     expect_true(nv.size() == 10000);
 
     Rcpp::NumericVector v = randomMajorCpp(10);

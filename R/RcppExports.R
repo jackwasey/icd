@@ -93,23 +93,17 @@ icd9GetMajorShort <- function(icd9Short) {
 #' @param x \code{const char*} of choices of first character to match
 #' @param invert single logical, if TRUE, negates the condition
 #' @keywords internal
-icd9IsA <- function(sv, x, invert) {
-    .Call('icd_icd9IsA', PACKAGE = 'icd', sv, x, invert)
-}
-
-#' @rdname icd9IsA
-#' @keywords internal
 icd9_is_n_cpp <- function(sv) {
     .Call('icd_icd9_is_n_cpp', PACKAGE = 'icd', sv)
 }
 
-#' @rdname icd9IsA
+#' @rdname icd9_is_n_cpp
 #' @keywords internal
 icd9_is_v_cpp <- function(sv) {
     .Call('icd_icd9_is_v_cpp', PACKAGE = 'icd', sv)
 }
 
-#' @rdname icd9IsA
+#' @rdname icd9_is_n_cpp
 #' @keywords internal
 icd9_is_e_cpp <- function(sv) {
     .Call('icd_icd9_is_e_cpp', PACKAGE = 'icd', sv)

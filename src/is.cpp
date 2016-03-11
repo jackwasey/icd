@@ -62,18 +62,6 @@ bool icd9IsASingleVE(const char* s) {
 //' @param invert single logical, if TRUE, negates the condition
 //' @keywords internal
 // [[Rcpp::export]]
-std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert) {
-	int len = sv.size();
-	std::vector<bool> out(len);
-	for (int i = 0; i < len; ++i) {
-		out[i] = invert != (icd9IsASingle(sv[i].c_str(), x));
-	}
-	return out;
-}
-
-//' @rdname icd9IsA
-//' @keywords internal
-// [[Rcpp::export]]
 std::vector<bool> icd9_is_n_cpp(const std::vector<std::string>& sv) {
 	const int len = sv.size();
 	std::vector<bool> out(len);
@@ -83,7 +71,7 @@ std::vector<bool> icd9_is_n_cpp(const std::vector<std::string>& sv) {
 	return out;
 }
 
-//' @rdname icd9IsA
+//' @rdname icd9_is_n_cpp
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<bool> icd9_is_v_cpp(const std::vector<std::string>& sv) {
@@ -95,7 +83,7 @@ std::vector<bool> icd9_is_v_cpp(const std::vector<std::string>& sv) {
 	return out;
 }
 
-//' @rdname icd9IsA
+//' @rdname icd9_is_n_cpp
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<bool> icd9_is_e_cpp(const std::vector<std::string>& sv) {

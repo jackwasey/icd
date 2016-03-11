@@ -124,11 +124,15 @@ fi
 AC_SUBST(ICD9_CXX11_FLAG)
 
 AC_MSG_NOTICE([getting path to test for testthat Catch headers])
-TESTTHAT_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -q -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='testthat','include','tests',mustWork=FALSE))),silent=TRUE))"`
+TESTTHAT_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -q -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='testthat','include','testthat',mustWork=FALSE))),silent=TRUE))"`
 # maybe a better way, but I need to have the testthat package include dir in the pre-processor include directories:
 CPPFLAGS="$CPPFLAGS -I$TESTTHAT_INCLUDE_DIR"
 AC_LANG_PUSH([C++])
 # this gives a config var with full path in it when built via check: AC_CHECK_HEADERS([testthat.h])
+# these don't work:
+## AC_CHECK_HEADERS([testthat])
+## AC_CHECK_HEADERS([testthat.h])
+
 AC_CHECK_HEADER(testthat.h, [AC_DEFINE(HAVE_TESTTHAT_H, 1, [define as 1 if testthat catch available])],
   [AC_MSG_NOTICE([testthat headers for Catch tests not found])])
 AC_LANG_POP([C++])

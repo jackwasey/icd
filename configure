@@ -4932,7 +4932,7 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: getting path to test for testthat Catch headers" >&5
 $as_echo "$as_me: getting path to test for testthat Catch headers" >&6;}
-TESTTHAT_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -q -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='testthat','include','tests',mustWork=FALSE))),silent=TRUE))"`
+TESTTHAT_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -q -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='testthat','include','testthat',mustWork=FALSE))),silent=TRUE))"`
 # maybe a better way, but I need to have the testthat package include dir in the pre-processor include directories:
 CPPFLAGS="$CPPFLAGS -I$TESTTHAT_INCLUDE_DIR"
 ac_ext=cpp
@@ -4942,6 +4942,10 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 # this gives a config var with full path in it when built via check: AC_CHECK_HEADERS([testthat.h])
+# these don't work:
+## AC_CHECK_HEADERS([testthat])
+## AC_CHECK_HEADERS([testthat.h])
+
 ac_fn_cxx_check_header_mongrel "$LINENO" "testthat.h" "ac_cv_header_testthat_h" "$ac_includes_default"
 if test "x$ac_cv_header_testthat_h" = xyes; then :
 

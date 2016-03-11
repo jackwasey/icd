@@ -24,6 +24,8 @@ bool icd9IsASingle(const char* s, const char* x);
 bool icd9IsASingleV(const char* s);
 bool icd9IsASingleE(const char* s);
 bool icd9IsASingleVE(const char* s);
-std::vector<bool> icd9IsA(const std::vector<std::string>& sv, const char* x, bool invert = false);
+std::vector<bool> icd9_is_n_cpp(const std::vector<std::string>& sv);
+std::vector<bool> icd9_is_v_cpp(const std::vector<std::string>& sv);
+std::vector<bool> icd9_is_e_cpp(const std::vector<std::string>& sv);
 
 #endif /* IS_H_ */
