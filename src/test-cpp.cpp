@@ -15,6 +15,25 @@ context("C++ Unit Test") {
 }
 
 context("test internal 'is' functions") {
+  test_that("is n") {
+    std::vector<std::string> v;
+    v.push_back("10");
+    v.push_back("0");
+    v.push_back("10.");
+    v.push_back("10.9");
+    v.push_back("100.99");
+    v.push_back("9999");
+    v.push_back("1");
+    std::vector<bool> result = icd9_is_n_cpp(v);
+    std::vector<bool> result2 = icd9_is_v_cpp(v);
+    std::vector<bool> result3 = icd9_is_e_cpp(v);
+    for (std::vector<bool>::size_type i = 0; i != result.size(); ++i) {
+      expect_true(result[i]);
+      expect_false(result2[i]);
+      expect_false(result3[i]);
+    }
+  }
+
   test_that("is v") {
     std::vector<std::string> v;
     v.push_back("V10");
@@ -24,9 +43,13 @@ context("test internal 'is' functions") {
     v.push_back("V99.99");
     v.push_back("V9999");
     v.push_back("v1");
+    std::vector<bool> result2 = icd9_is_n_cpp(v);
     std::vector<bool> result = icd9_is_v_cpp(v);
-    for (std::vector<bool>::iterator i = result.begin(); i != result.end(); ++i) {
-      expect_true(*i);
+    std::vector<bool> result3 = icd9_is_e_cpp(v);
+    for (std::vector<bool>::size_type i = 0; i != result.size(); ++i) {
+      expect_true(result[i]);
+      expect_false(result2[i]);
+      expect_false(result3[i]);
     }
   }
 
@@ -38,9 +61,13 @@ context("test internal 'is' functions") {
     v.push_back("E999.9");
     v.push_back("E9999");
     v.push_back("e000");
+    std::vector<bool> result3 = icd9_is_n_cpp(v);
+    std::vector<bool> result2 = icd9_is_v_cpp(v);
     std::vector<bool> result = icd9_is_e_cpp(v);
-    for (std::vector<bool>::iterator i = result.begin(); i != result.end(); ++i) {
-      expect_true(*i);
+    for (std::vector<bool>::size_type i = 0; i != result.size(); ++i) {
+      expect_true(result[i]);
+      expect_false(result2[i]);
+      expect_false(result3[i]);
     }
   }
 }
