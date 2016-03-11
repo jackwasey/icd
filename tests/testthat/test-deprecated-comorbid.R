@@ -18,7 +18,7 @@
 context("deprecated comorbidities")
 
 test_that("deprecated - try to induce c++ segfault bug", {
-  expect_error(icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE), NA)
+  icd9Comorbid(ahrqTestDat, ahrqComorbid, isShort = TRUE)
 })
 
 test_that("deprecated - ahrq make sure all the children are listed in the saved data.", {
@@ -117,10 +117,10 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
                   gives_warning())
     }
     else {
-      expect_error(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal), NA)
-      expect_error(quanDeyo <- lapply(quanDeyoComorbid, icd9CondenseShort, onlyReal), NA)
-      expect_error(quanElix <- lapply(quanElixComorbid, icd9CondenseShort, onlyReal), NA)
-      expect_error(elix <- lapply(elixComorbid, icd9CondenseShort, onlyReal), NA)
+      ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal)
+      quanDeyo <- lapply(quanDeyoComorbid, icd9CondenseShort, onlyReal)
+      quanElix <- lapply(quanElixComorbid, icd9CondenseShort, onlyReal)
+      elix <- lapply(elixComorbid, icd9CondenseShort, onlyReal)
     }
 
     expect_is(ahrq, class = "list")
@@ -511,8 +511,8 @@ test_that("deprecated - diff comorbid errors for bad input", {
 
 test_that("deprecated - diff comorbid works", {
     # no warning or error for good data (forgo warning checks with deprecation)
-  expect_error(utils::capture.output(
-    res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE)), NA)
+  utils::capture.output(
+    res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE))
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
     "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",
@@ -528,12 +528,12 @@ test_that("deprecated - diff comorbid works", {
   # both, also with elements in either side set diff
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
 
-  expect_error(utils::capture.output(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)), NA)
+  utils::capture.output(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE))
 
-  expect_error(
-    utils::capture.output(
-      resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)
-    ), NA)
+  
+  utils::capture.output(
+    resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)
+  )
 
 })
 
@@ -659,7 +659,7 @@ test_that("deprecated data aliases are created", {
   tmp_file_path <- tempfile()
   on.exit(unlink(tmp_file_path))
   generate_deprecated_data(save_data = TRUE, path = tmp_file_path)
-  expect_error(get(load(tmp_file_path)), NA)
+  get(load(tmp_file_path))
 
   expect_true(
     setequal(names(dep_dat),

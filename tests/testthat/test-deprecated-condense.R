@@ -122,7 +122,7 @@ test_that("deprecated - condense short range", {
 
   expect_equal(icd9CondenseShort(othersalmonella, onlyReal = TRUE), "003")
   # can't test warning for deprecated function, test error instead.
-  expect_error(res <- icd9CondenseShort(othersalmonella, onlyReal = FALSE), NA)
+  res <- icd9CondenseShort(othersalmonella, onlyReal = FALSE)
   expect_equal(res, othersalmonella)
   # missing this leaf node, we can't condense at all
   expect_equal(icd9CondenseShort(othersalmonella[-3], onlyReal = TRUE),
@@ -139,7 +139,7 @@ test_that("deprecated - condense short range", {
 
   expect_equal(icd9CondenseShort(icd9ChildrenShort("00320", onlyReal = TRUE), onlyReal = TRUE), "00320")
   # majors should be okay, even if not 'real'
-  expect_error(dup_res <- icd9CondenseShort(icd9ChildrenShort("003", onlyReal = TRUE)), NA)
+  dup_res <- icd9CondenseShort(icd9ChildrenShort("003", onlyReal = TRUE))
 
   expect_equal(icd9CondenseShort(c("003", "003"), onlyReal = TRUE), "003")
   expect_equal(icd9CondenseShort(c("003", "003"), onlyReal = FALSE), "003")

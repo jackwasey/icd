@@ -43,13 +43,21 @@ test_that("deprecated - vary everything", {
           options("icd.chunk_size" = chunk_size)
           # ompChunkSize is not currently not set in CPP code
           options("icd.omp_chunk_size" = ompChunkSize)
-          expect_error(
-            icd9ComorbidQuanDeyo(generate_random_unordered_pts(pts, dz_per_patient),
-                                 isShort = FALSE, applyHierarchy = TRUE),
-            NA,
-            info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
-                           pts, dz_per_patient, threads, chunk_size)
-          )
+          if (packageVersion("testthat") >= package_version("0.11.0.9000")) {
+            expect_error(
+              icd9ComorbidQuanDeyo(generate_random_unordered_pts(pts, dz_per_patient),
+                                   isShort = FALSE, applyHierarchy = TRUE),
+              NA
+            )
+          } else {
+            expect_that(
+              icd9ComorbidQuanDeyo(generate_random_unordered_pts(pts, dz_per_patient),
+                                   isShort = FALSE, applyHierarchy = TRUE),
+              testthat::not(testthat::throws_error()),
+              info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
+                             pts, dz_per_patient, threads, chunk_size)
+            )
+          }
         }
       }
     }

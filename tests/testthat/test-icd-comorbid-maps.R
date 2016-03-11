@@ -18,7 +18,7 @@
 context("comorbidity maps")
 
 test_that("try to induce c++ segfault bug", {
-  expect_error(icd_comorbid.icd9(ahrq_test_dat, map = icd::icd9_map_ahrq, short_code = TRUE), NA)
+  icd_comorbid.icd9(ahrq_test_dat, map = icd::icd9_map_ahrq, short_code = TRUE)
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {

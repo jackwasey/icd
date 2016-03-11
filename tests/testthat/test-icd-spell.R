@@ -20,7 +20,7 @@ context("dictionary compiles for spelling check")
 test_that("dictionary created", {
   f <- tempfile()
   on.exit(unlink(f))
-  expect_error(words <- generate_spelling(out = f), NA)
+  words <- generate_spelling(out = f)
   expect_true(file.exists(f))
   expect_true(is.character(words))
 })
