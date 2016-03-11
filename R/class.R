@@ -217,27 +217,27 @@ update_data_frame_class <- function(x, icd_name = get_icd_name(x), must_work = T
       return(icd10(x))
     else
       if (must_work)
-        stop("no columns with ICD version class found in input data frame, and",
+        stop(paste("no columns with ICD version class found in input data frame, and",
              " unable to guess ICD version from the data in column '", icd_name,
-             "' of the input data frame", call. = FALSE)
+             "' of the input data frame", sep = ""))
   }
 
-  if (sum(i9 || i9cm, i10 || i10cm, i10 || i10who) == 1) {
-    if (i9 && !is.icd9(x))
-      return(icd9(x))
+  if (sum(i9 || i9cm, i10 || i10cm) == 1) {
     if (i9cm && !is.icd9cm(x))
       return(icd9cm(x))
-    if (i10 && !is.icd10(x))
-      return(icd10(x))
+    if (i9 && !is.icd9(x))
+      return(icd9(x))
     if (i10cm && !is.icd10cm(x))
       return(icd10cm(x))
     if (i10who && !is.icd10who(x))
       return(icd10who(x))
+    if (i10 && !is.icd10(x))
+      return(icd10(x))
   }
 
   if (must_work)
-    stop("found columns of differing ICD version classes, so unable to ",
-         " assign a single class to the whole data frame.")
+    stop(paste("found columns of differing ICD version classes, so unable to",
+         "assign a single class to the whole data frame."), call. = FALSE)
   x
 }
 

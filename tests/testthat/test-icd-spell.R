@@ -23,4 +23,4 @@ test_that("dictionary created", {
   expect_error(words <- generate_spelling(out = f), NA)
   expect_true(file.exists(f))
   expect_true(is.character(words))
-}
+})

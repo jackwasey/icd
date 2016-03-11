@@ -274,3 +274,23 @@ test_that("long vs wide data conflict identified", {
   expect_true(icd_classes_conflict(v_bad))
   expect_true(icd_classes_conflict(u_bad))
 })
+
+
+context("class updates")
+
+test_that("update data frame class for simple cases", {
+
+  expect_updated_class <- function(fun_name) {
+
+    x <- data.frame(visit_id = c(1, 2, 3),
+                    code = do.call(fun_name, list(c("V10", "V10", "V10"))),
+                    stringsAsFactors = FALSE)
+
+    eval(bquote(expect_true(inherits(update_data_frame_class(.(x)), fun_name))))
+  }
+
+  for (cl in c("icd9", "icd9cm", "icd10", "icd10cm")) {
+    message(cl)
+    expect_updated_class(cl)
+  }
+})
