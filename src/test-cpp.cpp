@@ -29,6 +29,7 @@ context("test get OMP max threads") {
   test_that("max threads give a semi-sensible number") {
     int i = getOmpMaxThreads();
     expect_true(i >= 0);
+    debug_parallel();
   }
 }
 
@@ -36,6 +37,7 @@ context("test get OMP threads") {
   test_that("threads give a semi-sensible number") {
     int i = getOmpThreads();
     expect_true(i >= 0);
+    debug_parallel();
   }
 }
 
@@ -95,6 +97,16 @@ context("test parallel debug") {
 
 context("random data") {
   test_that("random numeric vector of major codes is ok") {
+    NumericVector nv = randomMajorCpp(1);
+    // minimal test:
+    expect_true(nv.size() == 1);
+
+    NumericVector nv = randomMajorCpp(10);
+    expect_true(nv.size() == 10);
+
+    NumericVector nv = randomMajorCpp(10000);
+    expect_true(nv.size() == 10000);
+
     Rcpp::NumericVector v = randomMajorCpp(10);
     expect_true(v.size() == 10);
     bool gt_zero = is_true(Rcpp::all(v > 0));
@@ -144,7 +156,6 @@ context("random data") {
     expect_true(c[0].size() >= 3);
     expect_true(c[0].size() <= 5);
   }
-
 }
 
 context("valgrind hooks") {
@@ -206,5 +217,8 @@ context("fast int to string") {
     expect_true(fastIntToStringStd(iv) == cv);
   }
 
-  }
+}
+
+
+// endif have testthat
 #endif
