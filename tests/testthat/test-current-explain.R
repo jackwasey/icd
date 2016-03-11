@@ -19,7 +19,7 @@ context("explain ICD-9: code to human-readable")
 
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
-    icd_explain(icd_children.icd9("391", onlyReal = FALSE, short_code = TRUE),
+    icd_explain(icd_children.icd9("391", defined = FALSE, short_code = TRUE),
                      condense = FALSE, short_code = TRUE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
@@ -35,8 +35,8 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 
 test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   expect_identical(
-    icd_explain(factor(icd_children.icd9("391", onlyReal = FALSE, short_code = TRUE),
-                     condense = FALSE, short_code = TRUE)),
+    icd_explain(factor(icd_children.icd9("391", defined = FALSE, short_code = TRUE)),
+                     condense = FALSE, short_code = TRUE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
@@ -44,7 +44,7 @@ test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   )
 
   expect_identical(
-    icd_explain.icd9(factor(icd_children.icd9(icd_short_code("391")), condense = TRUE, short_code = TRUE)),
+    icd_explain.icd9(factor(icd_children.icd9(icd_short_code("391"))), condense = TRUE, short_code = TRUE),
     "Rheumatic fever with heart involvement"
   )
 })

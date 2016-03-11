@@ -85,7 +85,7 @@ icd_explain.icd9 <- function(...) {
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   # TODO, need to figure out how to use checkmate for my classes. ?extend it
-  assert(checkmate::checkCharacter(unclass(x)), checkmate::checkFactor(unclass(x)))
+  assert(checkmate::checkCharacter(unclass(x)), checkmate::checkFactor(x))
   assert_flag(short_code)
   assert_flag(condense)
   assert_flag(brief)
