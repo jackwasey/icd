@@ -362,14 +362,3 @@ test_that("if an ICD class is not specified for a data set, and is not set for a
             expect_warning(icd_comorbid_elix(mydf), NA)
             expect_warning(icd_comorbid_ahrq(mydf), NA)
           })
-
-context("test ICD-10 comorbidity calculations")
-# since most of the code is common to ICD-9 and ICD-10, this doesn't need to be very extensive.
-
-test_that("ICD-10 comorbidities from uranium are calculated", {
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_elix), NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_deyo), NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_elix), NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_ahrq), NA)
-  # TODO much more here
-})
