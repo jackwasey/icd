@@ -5,7 +5,7 @@
 #' \code{R CMD check} which at least some of the CRAN people use.
 #' @param out character scalar with path to save the \code{aspell} word list
 #' @keywords internal
-generate_spelling <- function(out = ".aspell/words.pws") {
+generate_spelling <- function(out = ".aspell/words.pws", save_data = TRUE) {
   medical <- c("arrythmia", "Musculoskeletal", "Myocardial",
                "Puerperium", "laterality", "Infarction")
   proper_nouns <- c("Charlson", "Deyo", "Elixhauser", "Mansour", "OpenMP", "Quan",
@@ -20,6 +20,7 @@ generate_spelling <- function(out = ".aspell/words.pws") {
              "MERCHANTABILITY")
   # "requestor" in Vermont data licence
   words <- c(medical, proper_nouns, acronyms, other)
-  utils::aspell_write_personal_dictionary_file(words, out = out)
+  if (save_data)
+    utils::aspell_write_personal_dictionary_file(words, out = out)
   invisible(words)
 }

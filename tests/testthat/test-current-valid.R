@@ -28,8 +28,8 @@ test_that("is ICD-9 code valid, factor or character", {
   )
 
   pts <- generate_random_short_icd9()
-  expect_identical(icd_is_valid(pts), icd_is_valid(factor(pts))) 
-  expect_identical(icd_is_valid(icd9(pts)), icd_is_valid(factor(pts))) 
+  expect_identical(icd_is_valid(pts), icd_is_valid(factor(pts)))
+  expect_identical(icd_is_valid(icd9(pts)), icd_is_valid(factor(pts)))
 })
 
 test_that("mixed decimal and short codes can't all be valid", {

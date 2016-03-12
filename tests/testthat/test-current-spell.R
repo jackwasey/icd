@@ -18,9 +18,6 @@
 context("dictionary compiles for spelling check")
 
 test_that("dictionary created", {
-  f <- tempfile()
-  on.exit(unlink(f))
-  words <- generate_spelling(out = f)
-  expect_true(file.exists(f))
+  words <- generate_spelling(out = f, save_data = FALSE)
   expect_true(is.character(words))
 })
