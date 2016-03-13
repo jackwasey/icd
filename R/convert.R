@@ -172,8 +172,10 @@ icd_long_to_wide <- function(x,
                              aggr = TRUE,
                              return_df = FALSE) {
 
-  assert_data_frame(x, col.names = "named")
-  assert_string(prefix)
+  assert_data_frame(x, col.names = "uniqe")
+  visit_name <- as_char_no_warn(visit_name)
+  icd_name <- as_char_no_warn(icd_name)
+  assert_string(prefix, min.chars = 1)
   assert_count(min_width, na.ok = FALSE)
   assert_flag(aggr)
   assert_flag(return_df)
@@ -184,7 +186,7 @@ icd_long_to_wide <- function(x,
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
   x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
   if (return_df) {
-    mat <- icd9LongToWideCpp(x, visit_name, icd_name, aggr)
+    mat <- icd_long_to_wide_cpp(x, visit_name, icd_name, aggr)
     if (icd9_name_was_factor)
       rownm <- factor(x = rownames(mat), levels = iv_levels)
     else
@@ -201,7 +203,7 @@ icd_long_to_wide <- function(x,
     names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:nc), sep = "")
     df.out
   } else {
-    icd9LongToWideCpp(x, visit_name, icd_name, aggr)
+    icd_long_to_wide_cpp(x, visit_name, icd_name, aggr)
   }
 }
 

@@ -17,14 +17,27 @@
 
 context("generate defined child codes for ICD-10-CM")
 
-expect_icd10cm_child_is_self <- function(x) {
-  for (i in x)
+expect_icd10cm_child_is_self <- function(...) {
+  dots <- unlist(list(...))
+  for (i in dots) {
     eval(bquote(expect_identical(icd_children(icd10cm(.(i))), icd10cm(.(i)))))
+    eval(bquote(expect_identical(icd_children(icd10(.(i))), icd10(.(i)))))
+    eval(bquote(expect_identical(icd_children(.(i)), .(i)))) # ?should set code
+
+    eval(bquote(expect_identical(icd_children.icd10cm(.(i)), icd10cm(.(i)))))
+    eval(bquote(expect_identical(icd_children.icd10cm(icd10(.(i))), icd10cm(.(i)))))
+    eval(bquote(expect_identical(icd_children.icd10cm(icd10cm(.(i))), icd10cm(.(i)))))
+
+    eval(bquote(expect_identical(icd_children.icd10(icd10(.(i))), icd10(.(i)))))
+    eval(bquote(expect_inherits(icd_children.icd10(icd10cm(.(i))), "icd10")))
+    eval(bquote(expect_identical(icd_children.icd10(.(i)), icd10(.(i)))))
+    eval(bquote(expect_identical(unclass(icd_children(icd10(.(i)))), .(i))))
+  }
 }
 
 test_that("children of a leaf node returns itself", {
 
-  expect_icd10cm_child_is_self(c("O9A119", "O9A53", "S00.00XA", "T3299", "P150", "P159", "Z9989", "Z950", "C7A098", "C7A8"))
+  expect_icd10cm_child_is_self("O9A119", "O9A53", "S00.00XA", "T3299", "P150", "P159", "Z9989", "Z950", "C7A098", "C7A8")
 
   rand_icd10cm <- generate_random_icd10cm_bill(50)
   expect_icd10cm_child_is_self(rand_icd10cm)

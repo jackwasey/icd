@@ -309,17 +309,17 @@ namespace icd {
         return Rcpp::as<std::vector<bool> >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate = true) {
-        typedef SEXP(*Ptr_icd9LongToWideCpp)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9LongToWideCpp p_icd9LongToWideCpp = NULL;
-        if (p_icd9LongToWideCpp == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9LongToWideCpp)(const SEXP&,const std::string,const std::string,bool)");
-            p_icd9LongToWideCpp = (Ptr_icd9LongToWideCpp)R_GetCCallable("icd", "icd_icd9LongToWideCpp");
+    inline Rcpp::CharacterVector icd_long_to_wide_cpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate = true) {
+        typedef SEXP(*Ptr_icd_long_to_wide_cpp)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd_long_to_wide_cpp p_icd_long_to_wide_cpp = NULL;
+        if (p_icd_long_to_wide_cpp == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd_long_to_wide_cpp)(const SEXP&,const std::string,const std::string,bool)");
+            p_icd_long_to_wide_cpp = (Ptr_icd_long_to_wide_cpp)R_GetCCallable("icd", "icd_icd_long_to_wide_cpp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9LongToWideCpp(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(aggregate));
+            __result = p_icd_long_to_wide_cpp(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(aggregate));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

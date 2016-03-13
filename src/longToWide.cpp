@@ -65,7 +65,7 @@ Rcpp::CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 
 int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 		const std::string visitId, const std::string icd9Field =
-				"icd9", bool aggregate = true) {
+				"code", bool aggregate = true) {
 #ifdef ICD9_VALGRIND
 	CALLGRIND_START_INSTRUMENTATION;
 #endif
@@ -76,11 +76,6 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 	visitIds.reserve(vlen / approx_cmb_per_visit);
 	ragged.reserve(vlen / approx_cmb_per_visit);
 	int max_per_pt = 1;
-	if (TYPEOF(vsexp) != STRSXP)
-	  Rcpp::stop("need string input to longToRagged\n");
-#ifdef ICD9_DEBUG
-	Rcpp::Rcout << "longToRagged SEXP is STR\n";
-#endif
 
 	const char* lastVisitId = "";
 	for (int i = 0; i < vlen; ++i) {
@@ -124,7 +119,7 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 	return max_per_pt;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(icd_long_to_wide_cpp)]]
 Rcpp::CharacterVector icd9LongToWideCpp(const SEXP& icd9df,
 		const std::string visitId, const std::string icd9Field,
 		bool aggregate = true) {
@@ -139,7 +134,7 @@ Rcpp::CharacterVector icd9LongToWideCpp(const SEXP& icd9df,
 	const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
 	if (TYPEOF(vsexp) != STRSXP)
 	  Rcpp::stop(
-					"visitIds should be pre-converted to str - which is necessary for matrix rowname output anyway");
+					"The contents of the visit ID column should be converted to character.");
 	UNPROTECT(1);
 
 	VecStr visitIds; // may be vector of integers or strings

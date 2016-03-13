@@ -99,7 +99,7 @@ icd9_is_e_cpp <- function(sv) {
     .Call('icd_icd9_is_e_cpp', PACKAGE = 'icd', sv)
 }
 
-icd9LongToWideCpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
+icd_long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call('icd_icd9LongToWideCpp', PACKAGE = 'icd', icd9df, visitId, icd9Field, aggregate)
 }
 
