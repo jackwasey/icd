@@ -28,7 +28,7 @@ build:
             Rscript -e 'library(testthat); message("testthat version = :", packageVersion("testthat")); devtools::session_info()'
             ls -R
             echo $ICD_SLOW_TESTS
-            cat ./icd.Rcheck/tests/test-all.Rout
+            cat ./icd.Rcheck/tests/test-*.Rout*
 # need my r-coverage so I can not be quiet with codecov call
     - jackwasey/r-coverage
     - script:
