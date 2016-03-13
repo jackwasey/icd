@@ -4,6 +4,7 @@
 #' terms makes the \code{aspell} checks useful (and removes a NOTE in the
 #' \code{R CMD check} which at least some of the CRAN people use.
 #' @param out character scalar with path to save the \code{aspell} word list
+#' @template save_data
 #' @keywords internal
 generate_spelling <- function(out = ".aspell/words.pws", save_data = TRUE) {
   medical <- c("arrythmia", "Musculoskeletal", "Myocardial",

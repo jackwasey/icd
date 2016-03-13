@@ -29,8 +29,7 @@
 #'   though. The last CDC release is \code{Dtab12.rtf} from 2011.
 #' @param year from 1996 to 2012 (this is what CDC has published). Only 2012
 #'   implemented thus far
-#' @param save_data logical whether to save the result (otherwise data is just
-#'   returned invisibly)
+#' @template save_data
 #' @template offline
 #' @template verbose
 #' @source

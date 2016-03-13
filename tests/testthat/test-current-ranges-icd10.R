@@ -19,7 +19,7 @@
 # ranges
 ################################################################################
 
-context("test icd10 ranges")
+context("ICD-10 ranges")
 
 test_that("very bad input data fails completely", {
   expect_error(icd_expand_range(data.frame(a = 1, b = "b"), factor(1, 2, 3)))
@@ -58,7 +58,7 @@ test_that("range style used by Quan is accepted", {
 # ranges for real children
 ################################################################################
 
-context("test icd10 ranges - children real")
+context("ICD-10 ranges - defined children")
 
 test_that("completely invalid input fails", {
   expect_error(icd_children_defined.icd10cm(data.frame(a = 1, b = "b"), short_code = TRUE))

@@ -47,7 +47,7 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 
-patients <- data.frame(
+patients_icd9 <- data.frame(
   visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = icd9(c("40201", "2258", "7208", "25001", "34400", "4011", "4011")),
   poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
@@ -57,37 +57,85 @@ patients <- data.frame(
 
 ## Introduction
 
-_TODO: copy first paragraph from DESCRIPTION_
+<!-- _TODO: update with first paragraph from DESCRIPTION_ -->
 
-Calculate comorbidities, and perform fast and accurate
-validation, conversion, manipulation, filtering and comparison of ICD-9 and ICD-10
-codes. ICD-9 codes appear numeric but leading and
-trailing zeroes, and both decimal and non-decimal "short" format codes
-exist. The package enables a work flow from raw lists of ICD-9 codes from
-hospital billing databases to comorbidities. ICD-9 to comorbidity mappings
-from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+Calculate comorbidities, Charlson scores, perform fast and accurate
+validation, conversion, manipulation, filtering and comparison of ICD-9 and
+ICD-10 codes. Common ambiguities and code formats are supported. This
+package enables a work flow from raw lists of ICD-9 codes in hospital
+billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan
+(Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 
-When calculating which patients have which comorbidities, the input data is typically structured as follows:
-```{r showdatlong,echo=FALSE}
-patients
+When calculating which patients have which comorbidities, the data are typically structured in long or wide formats:
+```{r show data formats, echo=TRUE}
+# long format ICD-9-CM codes, with present-on-arrival flags
+patients_icd9
+
+# long format ICD-10 codes, real mortality data
+uranium_pathology[1:5, ]
+
+# wide format, real ICD-9 discharge diagnoses
+vermont_dx[1:5, c(1, 6:15)]
 ```
-or
-```{r showdatwide,echo=FALSE}
-head(vermont_dx[c(1, 6:15)])
-```
-Of course, in real life, there are many problems with the data, such is `NA` entries, out-of-order `visit_id`s, non-existent or invalid ICD-9 codes, etc.. Tools are provided to clean up the mess, and discover the comorbidities before admission or after discharge for these patients (or simply for any list of patients and ICD-9 codes: there is no requirement to work in the hospital admission paradigm.) The optional `poa` field indicates whether the code was determined to be *present on arrival*. The implicit default is to ignore it, and give ICD-9 code regardless of POA status, but filtering functions are provided and demonstrated later in this vignette.
 
-The comorbidities can be determined as follows (showing the first few columns for brevity):
+In real life, there are often problems with the data, such is `NA` entries, out-of-order `visit_id`s, non-existent or invalid ICD codes, etc.. Although standard R tools can be used to clean the data, knowing the specific validation rules for ICD-9 and ICD-10 codes, as well as the standardized structure of the data enables faster and more accurate data cleaning.
+
+One use of this package is to identify diagnoses present on admission to hospital (POA). If a POA field is present in the data, it can be used to filter the diagnosis codes. Let's walk through an example for some ICD-9 data:
+
 ```{r getcomorbidities}
-icd_comorbid_ahrq(patients)[, 1:8]
+# use AHRQ revision of Elixhauser comorbidities, show only first eight columns
+icd_comorbid_ahrq(patients_icd9)[, 1:8]
 ```
-or
-```{r getcomorbidities1a}
-icd_comorbid_quan_deyo(patients)[, 1:8]
-```
-and things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. This is not a dependency for this package, but is recommended because of the frequent need to chain together *icd* commands, and greater clarity.
+
+Things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. I use `magrittr` in the package itself, and I recommend trying it to clarify chains of commands, such as the following:
 ```{r getcomorbidities2}
-patients %>% icd_filter_poa_yes %>% icd_comorbid_ahrq %>% extract(1:8)
+# find Elixhauser comorbidities present-on-arrival
+patients_icd9 %>% icd_filter_poa %>% icd_comorbid_elix %>% head
+
+# same as above, then summarize first five:
+patients_icd9 %>% 
+  icd_filter_poa %>% 
+  icd_comorbid_elix %>% 
+  extract(, 1:5) %>% 
+  apply(2, as.integer) %>% 
+  summary
+
+# convert vermont discharge data to wide format, 
+# find comorbidities, convert TRUE to 1 and show first few
+vermont_dx %>% icd_wide_to_long  %>% icd_comorbid_quan_deyo  %>% apply(2, as.integer) %>%  head
+```
+
+The above can be rewritten in classic R with many parentheses:
+```{r lots of brackets, eval = FALSE}
+head(apply(icd_comorbid_quan_deyo(icd_wide_to_long(vermont_dx)), 2, as.integer))
+```
+
+## Specifying data types
+
+`icd` will guess the type and form of input data when possible, but there are ambiguities:
+```{r type guessing}
+icd_is_valid("100") # valid ICD-9 code
+icd_is_valid("A1001") # valid ICD-10 code
+icd_is_valid(c("100", "A1001")) # they can't both be valid
+```
+
+You can let `icd` guess types, or specify the type of your data explicitly:
+```{r set type}
+# decimal format ICD-10 codes
+codes <- c("A10.01", "L40.50", "Z77.098")
+# set class to be icd10cm (and implicitly icd10)
+icd10cm(codes)
+# set class to indicate decimal code and icd10 (not necessarily icd10cm)
+codes %>% icd_decimal_code %>% icd10
+```
+Doing this avoids mistakes in guessing type. For example code `V10` is valid in both ICD-9 and ICD-10.
+
+Vectors of codes, data frames and matrices can have a class set. Conflicting classes are not allowed, e.g. if a data frame has columns with both ICD-9 and ICD-10 codes, it doesn't make sense to set an ICD version for the data frame.
+```{r mixed ICD-9 and ICD-10 data}
+df <- data.frame(i9 = icd9(c("100", "001")), 
+                 i10 = icd10(c("Z771", "Z87820")))
+
+try(df %>% icd9 %>% icd10)
 ```
 
 ## Converting ICD-9 codes between types
@@ -217,11 +265,11 @@ icd_poa_choices
 ```
 Filter for present-on-arrival being "Y"
 ```{r simplepoa}
-patients %>% icd_filter_poa_yes
+patients_icd9 %>% icd_filter_poa_yes
 ```
 Show that *yes* is not equal to *not no* (e.g. due to NA in `poa` field)
 ```{r notnopoa}
-patients %>% icd_filter_poa_not_no
+patients_icd9 %>% icd_filter_poa_not_no
 ```
 
 ## Comorbidities
@@ -242,7 +290,12 @@ icd10_map_ahrq$CHF[1:5]
 ### Elixhauser comorbidities
 Elixhauser originally devleoped this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
 ```{r elix}
-names(icd9_map_elix)
+# the names of the comorbidities in each map are available as named lists:
+icd_names_elix[1:5]
+unlist(unname(icd_names_elix))
+# The map contents have ICD codes with the class set
+icd9_map_elix$HTNcx
+icd10_map_elix$HTNcx
 ```
 
 ### Quan
@@ -257,7 +310,7 @@ names(icd10_map_quan_elix)
 ### Filter patients and create comorbidities
 Take my patients, find the ones where there definitely or maybe was a diagnosis present on admission, then generate comorbidities based on the AHRQ mapping. N.b. `NotNo` is not the same as `Yes` because of some exempt, unclassifiable conditions, or `NA` values for the present-on-admission flag.
 ```{r chainpoatocomorbid}
-patients %>%
+patients_icd9 %>%
   icd_filter_poa_not_no %>%
   icd_comorbid_ahrq %>%
   extract(1:9)
@@ -306,7 +359,7 @@ The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities th
 ```{r arbitrary Mapping}
 names(icd9_chapters)[c(1:5, 14)]
 my_map <- icd:::icd9_chapters_to_map(icd9_chapters[c(2, 5, 14)])
-icd_comorbid(patients, my_map) # no positive 
+icd_comorbid(patients_icd9, my_map) # no positive 
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes.

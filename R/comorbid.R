@@ -173,14 +173,14 @@ icd10_comorbid_parent_search <- function(
   icd_codes <- x[[icd_name]]
 
   # for each icd code
-  just_cmb <- vapply(icd_codes, FUN.VALUE = logical(30), FUN = function(y) {
+  just_cmb <- vapply(icd_codes, FUN.VALUE = logical(length(map)), FUN = function(y) {
     # look it up in each comorbidity, but TODO: once we have a comorbidity for
     # one patient, we don't need to search within it again
-    vapply(names(icd::icd10_map_ahrq), FUN.VALUE = logical(1),
+    vapply(names(map), FUN.VALUE = logical(1),
            FUN = function(cmb) {
              # and if not found, slice off last char of test string
              for (n in nchar(y):3) {
-               if (!is.na(fastmatch::fmatch(str_sub(y, 1, n), icd::icd10_map_ahrq[[cmb]])))
+               if (!is.na(fastmatch::fmatch(str_sub(y, 1, n), map[[cmb]])))
                  return(TRUE)
              }
              FALSE
@@ -333,26 +333,25 @@ icd_comorbid_common <- function(x,
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_ahrq <- function(...) {
+icd_comorbid_ahrq <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   UseMethod("icd_comorbid_ahrq")
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_quan_elix <- function(...) {
+icd_comorbid_quan_elix <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   UseMethod("icd_comorbid_quan_elix")
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_quan_deyo <- function(...) {
+icd_comorbid_quan_deyo <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   UseMethod("icd_comorbid_quan_deyo")
 }
 
 #' @rdname icd_comorbid
 #' @export
-
-icd_comorbid_elix <- function(...) {
+icd_comorbid_elix <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   UseMethod("icd_comorbid_elix")
 }
 
@@ -393,59 +392,19 @@ icd_comorbid_quan_deyo.data.frame <- function(x, ..., icd_name = get_icd_name(x)
 }
 
 #' @rdname icd_comorbid
-#' @param abbrev_names  single logical value that defaults to \code{TRUE}, in
-#'   which case the shorter human-readable names stored in e.g.
-#'   \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.
-#' @param hierarchy single logical value that defaults to \code{TRUE}, in
-#'   which case the hierarchy defined for the mapping is applied. E.g. in
-#'   Elixhauser, you can't have uncomplicated and complicated diabetes both
-#'   flagged.
+#' @template abbrev_names
+#' @template hierarchy
 #' @export
-icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE,
-                                   hierarchy = TRUE) {
-  assert_flag(abbrev_names)
-  assert_flag(hierarchy)
-
+icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_ahrq)
-  icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy)
+  apply_hier_ahrq(cbd, abbrev_names, hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_ahrq.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  assert_flag(abbrev_names)
-  assert_flag(hierarchy)
-
-  cbd <- icd_comorbid.icd10(..., map = icd::icd10_map_ahrq)
-  icd_comorbid_ahrq_worker(cbd, abbrev_names, hierarchy)
-}
-
-# lots of duplicated code, need to simplify
-icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
-  assert_flag(abbrev_names)
-  assert_flag(hierarchy)
-  if (hierarchy) {
-
-    # Use >0 rather than logical - apparently faster, and future proof against
-    # change to binary from logical values in the matirx.
-    cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
-    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
-    cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
-
-    # drop HTNcx without converting to vector if matrix only has one row
-    cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
-
-    if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_abbrev
-    else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq
-  } else {
-    if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn_abbrev
-    else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn
-  }
-  cbd
+  icd_comorbid.icd10(..., map = icd::icd10_map_ahrq) %>%
+    apply_hier_ahrq(abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
@@ -456,31 +415,82 @@ icd_comorbid_ahrq_worker <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 #' @export
 icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
                                         hierarchy = TRUE) {
-  assert_flag(abbrev_names)
-  assert_flag(hierarchy)
-  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_quan_deyo)
-  if (hierarchy) {
-    # Use >0 rather than logical - apparently faster, and future proof against
-    # change to binary from logical values in the matirx.
-    cbd[cbd[, "Mets"] > 0, "Cancer"] <- FALSE
-    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
-    cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
-  }
-  if (abbrev_names)
-    colnames(cbd)[cr(cbd)] <- icd::charlsonComorbidNamesAbbrev
-  else
-    colnames(cbd)[cr(cbd)] <- icd::charlsonComorbidNames
+  icd_comorbid.icd9(..., map = icd::icd9_map_quan_deyo) %>%
+    apply_hier_quan_deyo(abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
 
-  cbd
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_quan_deyo.icd10 <- function(..., abbrev_names = TRUE,
+                                        hierarchy = TRUE) {
+  icd_comorbid.icd10(..., map = icd::icd10_map_quan_deyo) %>%
+    apply_hier_quan_deyo(abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
                                         hierarchy = TRUE) {
-  assert_flag(abbrev_names)
-  assert_flag(hierarchy)
-  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_quan_elix)
+  icd_comorbid.icd9(..., map = icd::icd9_map_quan_elix) %>%
+    apply_hier_quan_elix(abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_quan_elix.icd10 <- function(..., abbrev_names = TRUE,
+                                        hierarchy = TRUE) {
+  icd_comorbid.icd10(..., map = icd::icd10_map_quan_elix) %>%
+    apply_hier_quan_elix(abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_elix)
+  apply_hier_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_elix.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
+  icd_comorbid.icd10(..., map = icd::icd10_map_elix) %>%
+    apply_hier_elix(abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' Apply hierarchy and choose naming for each comorbidity map
+#'
+#' Re-used by ICD-9 and ICD-10 versions which have the same rules.
+#' @param cbd matrix or data.frame of comorbidities
+#' @template abbrev_names
+#' @template hierarchy
+#' @rdname apply_hier
+#' @keywords internal manip
+apply_hier_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+  if (hierarchy) {
+    cbd[cbd[, which(colnames(cbd) == "Mets")] > 0, "Tumor"] <- FALSE
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
+    cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+
+    # drop HTNcx without converting to vector if matrix only has one row
+    cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
+
+    if (abbrev_names)
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_abbrev
+    else
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix
+  } else {
+    if (abbrev_names)
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_htn_abbrev
+    else
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_htn
+  }
+  cbd
+}
+
+
+#' @rdname apply_hier
+#' @keywords internal manip
+apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
   if (hierarchy) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
@@ -511,13 +521,31 @@ icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
   cbd
 }
 
-#' @rdname icd_comorbid
-#' @export
-icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  assert_flag(abbrev_names)
-  assert_flag(hierarchy)
-  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_elix)
+#' @rdname apply_hier
+#' @keywords internal manip
+apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
   if (hierarchy) {
+    # Use >0 rather than logical - apparently faster, and future proof against
+    # change to binary from logical values in the matirx.
+    cbd[cbd[, "Mets"] > 0, "Cancer"] <- FALSE
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
+    cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
+  }
+  if (abbrev_names)
+    colnames(cbd)[cr(cbd)] <- icd::charlsonComorbidNamesAbbrev
+  else
+    colnames(cbd)[cr(cbd)] <- icd::charlsonComorbidNames
+
+  cbd
+}
+
+#' @rdname apply_hier
+#' @keywords internal manip
+apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+  if (hierarchy) {
+
+    # Use >0 rather than logical - apparently faster, and future proof against
+    # change to binary from logical values in the matirx.
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
@@ -526,132 +554,16 @@ icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_htn_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_htn
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn
   }
   cbd
-}
-
-#' show the difference between two comorbidity mappings
-#'
-#' Compares two comorbidity to ICD code mappings. The results are returned
-#' invisibly as a list. Only those comorbidities with (case sensitive)
-#' overlapping names are compared.
-#' @param x list of character vectors
-#' @param y list of character vectors
-#' @param all_names character vector of the comorbidity names
-#' @param x_names character vector of the comorbidity names from \code{x} to
-#'   compare
-#' @param y_names character vector of the comorbidity names from \code{y} to
-#'   compare
-#' @param show single logical value. The default is \code{TRUE} which causes a
-#'   report to be printed.
-#' @param explain single logical value. The default is \code{TRUE} which means
-#'   the differing codes are attempted to be reduced to their parent codes, in
-#'   order to give a more succinct summary.
-#' @examples
-#' \dontrun{
-#' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid,
-#'                                  show = TRUE)[["CHF"]]
-#' # show differences for
-#' # give full report on all comorbidities for these mappings
-#' diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)
-#'
-#' # the following outputs a summary to the console:
-#' icd_diff_comorbid(elixComorbid, ahrqComorbid)
-#' }
-#' @return A list, each item of which is another list containing the
-#'   intersections and both asymmetric differences.
-#' @export
-icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL,
-                              y_names = NULL, show = TRUE, explain = TRUE) {
-  UseMethod("icd_diff_comorbid")
-}
-
-#' @describeIn icd_diff_comorbid Show difference between comorbidity maps with
-#'   ICD-9 codes
-#' @export
-icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
-                                   y_names = NULL, show = TRUE, explain = TRUE) {
-  assert_list(x, min.len = 1, any.missing = FALSE,
-              types = c("character"), names = "unique")
-  assert_list(y, min.len = 1, any.missing = FALSE,
-              types = c("character"), names = "unique")
-  assert_flag(show)
-  assert_flag(explain)
-  stopifnot(all(x_names %in% names(x)), all(y_names %in% names(y)))
-
-  lapply(x, function(z) stopifnot(is.character(z)))
-  lapply(y, function(z) stopifnot(is.character(z)))
-
-  if (!is.null(names) && (!is.null(x_names) | !is.null(y_names)))
-    stop("if 'all_names' is specified, 'x_names' and 'y_names' should not be")
-
-  if (!is.null(all_names))
-    x_names <- y_names <- all_names
-
-  if (is.null(x_names)) x_names <- names(x)
-  if (is.null(y_names)) y_names <- names(y)
-
-  common.names <- intersect(x_names, y_names)
-
-  x.title <- deparse(substitute(x))
-  y.title <- deparse(substitute(y))
-
-  out <- list();
-
-  for (n in common.names) {
-    both <- intersect(x[[n]], y[[n]])
-    only.x <- setdiff(x[[n]], y[[n]])
-    only.y <- setdiff(y[[n]], x[[n]])
-    out[[n]] <- list(both = both, only.x = only.x, only.y = only.y)
-    if (show) {
-      cat(sprintf("Comorbidity %s: ", n))
-      if (length(both) == 0) {
-        cat("no common codes. ")
-      }
-      if (length(only.x) == 0 && length(only.y) == 0) {
-        cat("match.\n")
-        next
-      }
-      if (length(only.x) > 0) {
-        cat(sprintf("\n%s has %d codes not in %s. First few are: ",
-                    x.title, length(only.x), y.title))
-        lapply(icd_explain(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
-               function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
-      }
-      if (length(only.y) > 0) {
-        cat(sprintf("\n%s has %d codes not in %s. First few are: ",
-                    y.title, length(only.y), x.title))
-        lapply(icd_explain(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
-               function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
-      }
-      cat("\n")
-    }
-  }
-  if (show) {
-    cmb_only_x <- setdiff(x_names, y_names)
-    cmb_only_y <- setdiff(y_names, x_names)
-
-    if (length(cmb_only_x) > 0) {
-      cat(sprintf("Comorbidities only defined in %s are: ", x.title))
-      lapply(cmb_only_x, function(s) cat(sprintf("%s ", s)))
-      cat("\n")
-    }
-
-    if (length(cmb_only_y) > 0) {
-      cat(sprintf("Comorbidities only defined in %s are: ", y.title))
-      lapply(cmb_only_y, function(s) cat(sprintf("%s ", s)))
-      cat("\n")
-    }
-  }
-  invisible(out)
 }
 
 #' sequence columns of comorbidities

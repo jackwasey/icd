@@ -7,7 +7,8 @@
 icd10cm_extract_sub_chapters(save_data = FALSE)
 }
 \arguments{
-\item{save_data}{single logical}
+\item{save_data}{single logical value, if \code{TRUE} will save the generated
+data}
 }
 \description{
 This is not quite a super-set of ICD-10 sub-chapters: many more codes than

@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("Pure C++ Catch tests")
+context("C++")
 
 test_that("C++ tests all pass", {
   # this does require a recent version of testthat > 0.11.0.9000

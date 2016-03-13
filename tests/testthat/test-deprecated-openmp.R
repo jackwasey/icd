@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("deprecated OpenMP tests")
+context("deprecated OpenMP")
 # OpenMP already used, if compiled in, bu t need some specific stress tests, e.g for error in bug #75
 
 test_that("deprecated - single icd9 code comorbidity", {

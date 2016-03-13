@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("deprecated test RTF parsing")
+context("deprecated RTF parsing")
 
 test_that("deprecated - multiple lines in one fifth digit disciminator", {
   # nolint start

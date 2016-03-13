@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test reshaping wide to long")
+context("reshaping wide to long")
 
 longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
                      icd9 = c("441", "4424", "443", "441"))

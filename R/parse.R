@@ -118,7 +118,7 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
 #' the package.
 #' @param version character vector of length one containing the ICD-9 version,
 #'   e.g. \code{"32"} which is the default.
-#' @param save_data logical whether to attempt to re-save source files in inst
+#' @template save_data
 #' @param path Absolute path in which to save parsed data
 #' @return invisibly return the result
 #' @keywords internal

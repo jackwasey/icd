@@ -8,8 +8,8 @@ generate_deprecated_data(save_data = FALSE, path = file.path("data",
   "deprecated.RData"))
 }
 \arguments{
-\item{save_data}{save the data in \code{data/deprecated.RData}, default is
-\code{TRUE}}
+\item{save_data}{single logical value, if \code{TRUE} will save the generated
+data}
 }
 \description{
 Unfortunately, this is easiest (and has a chance of passing CRAN checks) if I

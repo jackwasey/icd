@@ -7,7 +7,8 @@
 generate_sysdata(save_data = TRUE)
 }
 \arguments{
-\item{save_data}{whether to save the data.}
+\item{save_data}{single logical value, if \code{TRUE} will save the generated
+data}
 }
 \value{
 invisibly returns the data as a list

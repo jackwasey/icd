@@ -13,12 +13,15 @@
 \alias{icd_comorbid_common}
 \alias{icd_comorbid_elix}
 \alias{icd_comorbid_elix.data.frame}
+\alias{icd_comorbid_elix.icd10}
 \alias{icd_comorbid_elix.icd9}
 \alias{icd_comorbid_quan_deyo}
 \alias{icd_comorbid_quan_deyo.data.frame}
+\alias{icd_comorbid_quan_deyo.icd10}
 \alias{icd_comorbid_quan_deyo.icd9}
 \alias{icd_comorbid_quan_elix}
 \alias{icd_comorbid_quan_elix.data.frame}
+\alias{icd_comorbid_quan_elix.icd10}
 \alias{icd_comorbid_quan_elix.icd9}
 \title{Find comorbidities from ICD-9 codes.}
 \usage{
@@ -40,13 +43,13 @@ icd_comorbid(...)
 icd_comorbid_common(x, map, visit_name = NULL, icd_name, short_code,
   short_map, return_df = FALSE, ...)
 
-icd_comorbid_ahrq(...)
+icd_comorbid_ahrq(..., abbrev_names = TRUE, hierarchy = TRUE)
 
-icd_comorbid_quan_elix(...)
+icd_comorbid_quan_elix(..., abbrev_names = TRUE, hierarchy = TRUE)
 
-icd_comorbid_quan_deyo(...)
+icd_comorbid_quan_deyo(..., abbrev_names = TRUE, hierarchy = TRUE)
 
-icd_comorbid_elix(...)
+icd_comorbid_elix(..., abbrev_names = TRUE, hierarchy = TRUE)
 
 \method{icd_comorbid_ahrq}{data.frame}(x, ..., icd_name = get_icd_name(x))
 
@@ -66,10 +69,19 @@ icd_comorbid_elix(...)
 \method{icd_comorbid_quan_deyo}{icd9}(..., abbrev_names = TRUE,
   hierarchy = TRUE)
 
+\method{icd_comorbid_quan_deyo}{icd10}(..., abbrev_names = TRUE,
+  hierarchy = TRUE)
+
 \method{icd_comorbid_quan_elix}{icd9}(..., abbrev_names = TRUE,
   hierarchy = TRUE)
 
+\method{icd_comorbid_quan_elix}{icd10}(..., abbrev_names = TRUE,
+  hierarchy = TRUE)
+
 \method{icd_comorbid_elix}{icd9}(..., abbrev_names = TRUE, hierarchy = TRUE)
+
+\method{icd_comorbid_elix}{icd10}(..., abbrev_names = TRUE,
+  hierarchy = TRUE)
 }
 \arguments{
 \item{aggregate}{single logical value, if \code{TRUE}, then take (possible
@@ -118,10 +130,9 @@ short or decimal.}
 which case the shorter human-readable names stored in e.g.
 \code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.}
 
-\item{hierarchy}{single logical value that defaults to \code{TRUE}, in
-which case the hierarchy defined for the mapping is applied. E.g. in
-Elixhauser, you can't have uncomplicated and complicated diabetes both
-flagged.}
+\item{hierarchy}{single logical value that defaults to \code{TRUE}, in which
+case the hierarchy defined for the mapping is applied. E.g. in Elixhauser,
+you can't have uncomplicated and complicated diabetes both flagged.}
 }
 \description{
 \link{Rcpp} approach to comorbidity assignment with OpenMP and

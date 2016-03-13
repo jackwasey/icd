@@ -44,7 +44,7 @@ icd10cm_xml_node_to_pair <- function(x) {
 #' chapter Neoplasms (\code{C00-D49}). A way of determining whether there are
 #' extra levels would be to check the XML tree depth for a member of each
 #' putative sub-chapter.
-#' @param save_data single logical
+#' @template save_data
 #' @keywords internal
 icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   assert_flag(save_data)

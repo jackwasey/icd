@@ -1,4 +1,4 @@
-context("test class functions")
+context("S3 class functions")
 
 test_that("classes are created and identified correctly", {
   expect_true(is.icd9(icd9("V10")))

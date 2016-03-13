@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test content of icd-10 to comorbidity maps")
+context("content of icd-10 to comorbidity maps")
 
 test_that("the icd-10 quan elix comorbidity map data is exactly as produced by the generator", {
   expect_identical(icd10_map_quan_elix, icd10_generate_map_quan_elix(save_data = FALSE))

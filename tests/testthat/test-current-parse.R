@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test RTF parsing")
+context("RTF parsing")
 
 test_that("multiple lines in one fifth digit disciminator", {
   # nolint start
@@ -95,7 +95,7 @@ test_that("extraction from qualifier subset works", {
 
 # The following tests on the RTF parsing get the RTF source over internet, so
 # package doesn't have to include the big RTF source file
-context("possibly online rtf tests")
+context("RTF tests, sources optinally downloaded when required")
 
 test_year <- "2011"
 

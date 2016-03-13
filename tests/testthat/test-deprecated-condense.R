@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("deprecated tests for condense")
+context("deprecated condense ICD ranges")
 
 test_that("deprecated - five digit to five digit code range condenses", {
   expect_equal(icd9Condense("34500" %i9sa% "34509", onlyReal = FALSE), "3450")

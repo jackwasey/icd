@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test deprecated Charlson and counting")
+context("deprecated Charlson and comorbidity counting")
 
 test_that("deprecated - github issue #44 from wmurphyrd", {
   mydf <- data.frame(visitId = c("a", "b", "c", "a", "b", "d"),

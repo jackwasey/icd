@@ -19,7 +19,7 @@
 #'
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes.
 #' This is quick, but much too slow when it appears many times in a loop.
-#' @param save_data whether to save the data.
+#' @template save_data
 #' @return invisibly returns the data as a list
 #' @keywords internal
 generate_sysdata <- function(save_data = TRUE) {

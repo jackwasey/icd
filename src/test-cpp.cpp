@@ -7,14 +7,14 @@
 #ifdef HAVE_TESTTHAT_H
 #include <testthat.h>
 
-context("C++ Unit Test") {
+context("C++ Catch") {
   test_that("two plus two is four") {
     int result = 2 + 2;
     expect_true(result == 4);
   }
 }
 
-context("test internal 'is' functions") {
+context("internal 'is' functions") {
   test_that("is n") {
     std::vector<std::string> v;
     v.push_back("10");
@@ -72,7 +72,7 @@ context("test internal 'is' functions") {
   }
 }
 
-context("test get OMP max threads") {
+context("get OMP max threads") {
   test_that("max threads give a semi-sensible number") {
     int i = getOmpMaxThreads();
     expect_true(i >= 0);
@@ -80,21 +80,13 @@ context("test get OMP max threads") {
   }
 }
 
-context("test get OMP threads") {
+context("get OMP current threads") {
   test_that("threads give a semi-sensible number") {
     int i = getOmpThreads();
     expect_true(i >= 0);
     debug_parallel();
   }
 }
-
-// context("test randomMajorCpp") {
-//   test_that("random majors looks okay") {
-//     Rcpp::NumericVector res = randomMajorCpp(5L);
-//     expect_true(res.size() == 5);
-//     expect_true(all(res >=0));
-//   }
-// }
 
 context("icd9ShortToPartsCpp") {
   test_that("icd9ShortToPartsCpp gives NA value") {
@@ -135,7 +127,7 @@ context("icd9ShortToPartsCpp") {
 //   }
 // }
 
-context("test parallel debug") {
+context("parallel debug") {
   test_that("debug parallel runs without error") {
     debug_parallel();
     expect_true(true);

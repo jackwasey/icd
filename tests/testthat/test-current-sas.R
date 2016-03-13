@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test SAS interpretation")
+context("SAS format file data interpretation")
 
 test_that("basic SAS VALUE declarations can be read into an R list", {
 

@@ -15,8 +15,8 @@ parse_rtf_year(year = "2011", save_data = FALSE, offline = TRUE,
 \item{year}{from 1996 to 2012 (this is what CDC has published). Only 2012
 implemented thus far}
 
-\item{save_data}{logical whether to save the result (otherwise data is just
-returned invisibly)}
+\item{save_data}{single logical value, if \code{TRUE} will save the generated
+data}
 
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
 internet, only return path and file name if the file already exists in

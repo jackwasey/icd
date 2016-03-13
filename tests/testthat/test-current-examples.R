@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test examples as testthat test")
+context("function examples")
 
 # this is essentially duplicated by R CMD check, which runs the examples, but
 # doing this here allows test coverage to include more code, and perhaps to make

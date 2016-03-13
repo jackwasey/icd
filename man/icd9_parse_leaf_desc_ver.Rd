@@ -12,7 +12,8 @@ icd9_parse_leaf_desc_ver(version = icd9cm_latest_edition(),
 \item{version}{character vector of length one containing the ICD-9 version,
 e.g. \code{"32"} which is the default.}
 
-\item{save_data}{logical whether to attempt to re-save source files in inst}
+\item{save_data}{single logical value, if \code{TRUE} will save the generated
+data}
 
 \item{path}{Absolute path in which to save parsed data}
 }

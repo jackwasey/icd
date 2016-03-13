@@ -4,10 +4,13 @@
 \alias{generate_spelling}
 \title{Generate spelling exceptions}
 \usage{
-generate_spelling(out = ".aspell/words.pws")
+generate_spelling(out = ".aspell/words.pws", save_data = TRUE)
 }
 \arguments{
 \item{out}{character scalar with path to save the \code{aspell} word list}
+
+\item{save_data}{single logical value, if \code{TRUE} will save the generated
+data}
 }
 \description{
 This is a bit painful, but defining known spellings of names and technical

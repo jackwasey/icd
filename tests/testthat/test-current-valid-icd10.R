@@ -1,4 +1,4 @@
-context("test whether ICD-10 codes are valid")
+context("ICD-10 codes are valid, defined, billable")
 
 test_that("tricky ICD-10 codes", {
 })

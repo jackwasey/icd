@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("test some basic ICD-9 manipulations")
+context("basic ICD-9 manipulations")
 
 test_that("zero pad decimal - bad input", {
   expect_equal(icd9_add_leading_zeroes.icd_decimal_code(character()), character())
