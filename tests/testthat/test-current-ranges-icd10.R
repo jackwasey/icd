@@ -68,32 +68,15 @@ test_that("single value gives correct range", {
   expect_equal(icd_children_defined.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
 })
 
-# to move somewhere else:
-test_that("ICD-10 codes in uranium data are okay", {
-  skip("reinstate this test once ICD-10 WHO codes are available for comparison.
-       Uranium Pathology data is not ICD-10-CM, but ICD-10 WHO.")
-  expect_true(
-    all(strip(uranium_pathology$icd10, ".") %in% icd10cm2016$code)
-  )
-  # codes missing from RHS:
-  setdiff(uranium_pathology$icd10  %>%  strip("."), icd10cm2016$code)
-
-  # http://apps.who.int/classifications/icd10/browse/2015/en#!/Y86
-
-})
-
-test_that("icd10cm range expansions", {
+test_that("icd10 range major expansions", {
   expect_identical(icd_expand_range_major.icd10cm("A00", "A01"),
                    structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
   )
   expect_identical(icd_expand_range_major.icd10cm("A00", "A01"),
                    icd_expand_range_major(icd10cm("A00"), "A01"))
 
-  expect_equal_no_icd(icd_expand_range_major.icd10cm("A99", "B00"),
-                      icd10cm(c("A99", "B00")))
-  expect_equal_no_icd(icd_expand_range_major.icd10cm("A96", "A96"),
-                      icd10cm("A96"))
-
+  expect_equal(icd_expand_range_major.icd10cm("A99", "B00"), icd10cm(c("A99", "B00")))
+  expect_equal(icd_expand_range_major.icd10cm("A96", "A96"), icd10cm("A96"))
 
   expect_identical(icd_expand_range_major.icd10cm("a00", "a01"),
                    structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
@@ -101,10 +84,11 @@ test_that("icd10cm range expansions", {
   expect_identical(icd_expand_range_major.icd10cm("a00", "a01"),
                    icd_expand_range_major(icd10cm("a00"), "a01"))
 
-  expect_equal_no_icd(icd_expand_range_major.icd10cm("a99", "b00"),
-                      icd10cm(c("A99", "B00")))
-  expect_equal_no_icd(icd_expand_range_major.icd10cm("a96", "a96"),
-                      icd10cm("A96"))
+  expect_equal(icd_expand_range_major.icd10cm("a99", "b00"), icd10cm(c("A99", "B00")))
+  expect_equal(icd_expand_range_major.icd10cm("a96", "a96"), icd10cm("A96"))
+
+  expect_equal_no_icd(icd_expand_range_major("a99", "b00"), c("A99", "B00"))
+  expect_equal_no_icd(icd_expand_range_major("a96", "a96"), "A96")
 })
 
 test_that("icd10cm range errors", {

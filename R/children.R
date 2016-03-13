@@ -87,21 +87,28 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
     icd9(res)
 }
 
+#' @describeIn icd_children Get children of ICD-10 codes (warns because this
+#'   only applies to ICD-10-CM for now)
+#' @export
+#' @keywords internal
+icd_children.icd10 <- function(x, short_code = icd_guess_short.icd10(x), defined, billable = FALSE, ...) {
+  warning("Finding children of ICD-10 codes currently assumes ICD-10-CM (2016)")
+  icd_children.icd10cm(x, short_code, defined, billable, ...)
+}
+
 #' @describeIn icd_children Get children of ICD-10-CM codes
 #' @export
 #' @keywords internal
-icd_children.icd10cm <- function(x, short_code = icd_guess_short(x), billable = FALSE, ...) {
-  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
+icd_children.icd10cm <- function(x, short_code = icd_guess_short.icd10(x), defined, billable = FALSE, ...) {
+  assert(checkmate::checkFactor(x), checkmate::checkCharacter(unclass(x)))
   assert_flag(short_code)
   assert_flag(billable)
-  stop("Finding ICD-10 children is not yet implemented.")
-}
 
-#' @describeIn icd_children Get children of ICD-10 codes (for now assume
-#'   ICD-10-CM)
-#' @export
-#' @keywords internal
-icd_children.icd10 <- icd_children.icd10cm
+  if (!missing(defined) && !defined)
+    stop("Finding children of anything but defined ICD-10-CM codes is current not supported.")
+
+  icd_children_defined.icd10cm(x = x, short_code = short_code)
+}
 
 # this is just lazy package data, but apparently need to declare it to keep CRAN
 # happy. May not be needed if doing icd::
@@ -119,7 +126,7 @@ icd_children_defined <- function(x)
 #' @describeIn icd_children_defined get the children of ICD-10 code(s)
 #' @export
 #' @keywords internal
-icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
+icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x)) {
 
   assert_character(x)
   assert_flag(short_code)

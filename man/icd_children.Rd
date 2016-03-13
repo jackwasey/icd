@@ -15,11 +15,11 @@ icd_children(x, ...)
 \method{icd_children}{icd9}(x, short_code = icd_guess_short(x),
   defined = TRUE, billable = FALSE, ...)
 
-\method{icd_children}{icd10cm}(x, short_code = icd_guess_short(x),
-  billable = FALSE, ...)
+\method{icd_children}{icd10}(x, short_code = icd_guess_short.icd10(x),
+  defined, billable = FALSE, ...)
 
-\method{icd_children}{icd10}(x, short_code = icd_guess_short(x),
-  billable = FALSE, ...)
+\method{icd_children}{icd10cm}(x, short_code = icd_guess_short.icd10(x),
+  defined, billable = FALSE, ...)
 }
 \arguments{
 \item{x}{data, e.g. character vector of ICD codes.}
@@ -50,10 +50,10 @@ versus decimal format
 
 \item \code{icd9}: Get children of ICD-9 codes
 
-\item \code{icd10cm}: Get children of ICD-10-CM codes
+\item \code{icd10}: Get children of ICD-10 codes (warns because this
+only applies to ICD-10-CM for now)
 
-\item \code{icd10}: Get children of ICD-10 codes (for now assume
-ICD-10-CM)
+\item \code{icd10cm}: Get children of ICD-10-CM codes
 }}
 \examples{
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional

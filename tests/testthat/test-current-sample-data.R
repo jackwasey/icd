@@ -26,6 +26,19 @@ test_that("generating uranium data is identical to saved", {
   expect_identical(generate_uranium_pathology(save_data = FALSE), uranium_pathology)
 })
 
+test_that("ICD-10 codes in uranium data are okay", {
+  skip("reinstate this test once ICD-10 WHO codes are available for comparison.
+       Uranium Pathology data is not ICD-10-CM, but ICD-10 WHO.")
+  expect_true(
+    all(strip(uranium_pathology$icd10, ".") %in% icd10cm2016$code)
+  )
+  # codes missing from RHS:
+  setdiff(uranium_pathology$icd10  %>%  strip("."), icd10cm2016$code)
+
+  # http://apps.who.int/classifications/icd10/browse/2015/en#!/Y86
+
+})
+
 test_that("generating vermont data is identical to saved", {
   if (is.null(fetch_vermont_dx(offline = TRUE)$file_path))
     skip_online_tests("vermont data only available online")

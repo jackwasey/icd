@@ -225,3 +225,22 @@ icd_guess_short_update <- function(x, icd_name = get_icd_name(x),
   else
     icd_decimal_code(x)
 }
+
+#' Guess the ICD version (9 or 10) from a pair of codes
+#'
+#' Designed for guessing version of codes given to delineate a range
+#' @param start ICD code
+#' @param end ICD code
+#' @template short_code
+#' @return Type of codes as single character \code{"icd9"} or \code{"icd10"}, or
+#'   error if conflicting results
+#' @keywords internal
+icd_guess_pair_version <- function(start, end, short_code = NULL) {
+  start_guess <- icd_guess_version.character(as_char_no_warn(start), short_code = short_code)
+  end_guess <- icd_guess_version.character(as_char_no_warn(end), short_code = short_code)
+  if (start_guess != end_guess)
+    stop("Cannot expand range because ICD code version cannot be guessed from ", start,
+         " and ", end, ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
+       S3 method directly, e.g. icd_expand_range.icd9")
+  start_guess
+}

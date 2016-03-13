@@ -1,5 +1,6 @@
 #include <Rcpp.h>
 #include "is.h"
+#include "manip.h"
 #include "util.h"
 #include "convert.h"
 #include "../inst/include/icd.h"
@@ -275,6 +276,20 @@ context("MajMin to code") {
     mn = Rcpp::CharacterVector::create("01", "02");
     mj = Rcpp::CharacterVector::create("100", "101", "102");
     expect_error(icd9MajMinToCode(mj, mn, true));
+  }
+}
+
+context("add leading zeroes to major") {
+  test_that("when major len is 0, result is empty") {
+    expect_true(icd9AddLeadingZeroesMajorSingleStd("") == "");
+  }
+
+  test_that("E code with two char major works") {
+    expect_true(icd9AddLeadingZeroesMajorSingleStd("E1") == "E001");
+  }
+
+  test_that("E code with three char major works") {
+    expect_true(icd9AddLeadingZeroesMajorSingleStd("E01") == "E001");
   }
 }
 

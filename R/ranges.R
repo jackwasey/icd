@@ -67,22 +67,16 @@ icd_expand_range <- function(start, end, ...) {
 #' @keywords internal
 icd_expand_range.character <- function(start, end, short_code = NULL, defined = TRUE, ...) {
 
-  start_guess <- icd_guess_version.character(start, short_code = short_code)
-  end_guess <- icd_guess_version.character(end, short_code = short_code)
-  if (start_guess != end_guess)
-    stop("Cannot expand range because ICD code version cannot be guessed from ", start,
-         " and ", end, ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
-       S3 method directly, e.g. icd_expand_range.icd9")
-  if (start_guess == "icd9") {
+  icd_ver <- icd_guess_pair_version(start = start, end = end, short_code = short_code)
+  if (icd_ver == "icd9") {
     if (is.null(short_code))
       short_code <- icd_guess_short.icd9(c(start, end))
     icd_expand_range.icd9(start, end, short_code = short_code, defined = defined, ...)
-  } else if (start_guess == "icd10") {
+  } else {
+    # if not ICD-9, must be ICD-10 (for now)
     if (is.null(short_code))
       short_code <- icd_guess_short.icd10(c(start, end))
     icd_expand_range.icd10cm(start, end, short_code = short_code, defined = defined, ...)
-  } else {
-    stop("Unknown ICD type")
   }
 }
 
@@ -142,6 +136,17 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.ic
 #' @keywords internal
 icd_expand_range_major <- function(start, end) {
   UseMethod("icd_expand_range_major")
+}
+
+#' @describeIn icd_expand_range_major Expand range of top-level, 'major' codes
+#'   of unknown type
+#' @keywords internal
+icd_expand_range_major.default <- function(start, end) {
+  icd_ver <- icd_guess_pair_version(start, end, short_code = TRUE)
+  if (icd_ver == "icd9")
+    icd_expand_range_major.icd9(start, end)
+  else
+    icd_expand_range_major.icd10cm(start, end)
 }
 
 #' @describeIn icd_expand_range_major Expand range of top-level ICD-10 codes
