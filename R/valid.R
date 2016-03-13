@@ -44,6 +44,7 @@ re_wrap_or <- function(x) {
   paste0("(?:", x, ")")
 }
 
+# nolint start
 set_re_globals <- function(env = parent.frame()) {
 
   re_icd9_major_n <- "[[:digit:]]{1,3}"
@@ -132,7 +133,7 @@ set_re_globals <- function(env = parent.frame()) {
   re_icd10_decimal <- re_icd10cm_decimal
   re_icd10_any <- re_icd10cm_any
 
-  cur_env = environment()
+  cur_env <- environment()
   for (re in ls(envir = cur_env, pattern = "re_.+"))
     assign(re, get(re, envir = cur_env), envir = env)
 
@@ -140,6 +141,7 @@ set_re_globals <- function(env = parent.frame()) {
 }
 # and put these in the package namespace
 set_re_globals()
+# nolint end
 
 #' Check whether ICD-9 codes are syntactically valid
 #'

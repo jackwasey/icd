@@ -38,6 +38,7 @@ before_script:
  - ls -R
  - rm .Rinstignore  # install everything for testing
  - sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
+ - sed -i 's/3\.2\.0/3\.0\.2/' DESCRIPTION # backdate version so we can actually test it in travis matrix with old-rel
  - Rscript -e 'library(testthat); message("testthat version = :", packageVersion("testthat")); devtools::session_info()'
 
 after_success:
