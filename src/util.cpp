@@ -176,7 +176,7 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     // N, V or E?
-    switch ((int)randoms[i] % 3) {
+    switch (((int) randoms[i]) % 3) {
     case 0:
       sprintf(buffer, "%.0f", randoms[i]);
       break;
