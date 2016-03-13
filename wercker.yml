@@ -36,8 +36,7 @@ build:
         code: |
             ls -R
             echo $ICD_SLOW_TESTS
-            cat ./icd.Rcheck/tests/test-all.Rout*
-            cat ./icd.Rcheck/tests/test-deprecated.Rout*
+            cat ./icd.Rcheck/tests/test-*.Rout*
     - script:
         name: re-check with CRAN testthat
         code: |

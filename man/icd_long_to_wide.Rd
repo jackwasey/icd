@@ -47,7 +47,7 @@ default of \code{FALSE} gives the more natural return data of a matrix with
 row names being the visit IDs from \code{visit_name}s.}
 }
 \description{
-This is more complicated than reshape or \link[reshape2]{dcast} allows. This
+This is more complicated than reshape or \code{reshape2::dcast} allows. This
 is a reasonably simple solution using built-in functions.
 }
 \examples{
