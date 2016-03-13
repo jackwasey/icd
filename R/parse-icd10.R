@@ -15,25 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-icd10cm_xml_node_to_val <- function(x, name) {
-  xml2::xml_text(x[xml2::xml_name(x) == name])
-}
-
-icd10cm_xml_node_to_code <- function(x) {
-  icd10cm_xml_node_to_val(x, "name")
-}
-
-icd10cm_xml_node_to_desc <- function(x) {
-  icd10cm_xml_node_to_val(x, "desc")
-}
-
-icd10cm_xml_node_to_pair <- function(x) {
-  code <- icd10cm_xml_node_to_code(x)
-  desc <- icd10cm_xml_node_to_desc(x)
-  names(desc) <- code
-  desc
-}
-
 #' Get sub-chapters from the 2016 XML for ICD-10-CM
 #'
 #' This is not quite a super-set of ICD-10 sub-chapters: many more codes than

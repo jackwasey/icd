@@ -44,91 +44,102 @@ re_wrap_or <- function(x) {
   paste0("(?:", x, ")")
 }
 
-re_icd9_major_n <- "[[:digit:]]{1,3}"
-re_icd9_major_n_strict <- "[[:digit:]]{3}"
-re_icd9_major_v <- "[Vv](?:0[1-9]|[1-9][[:digit:]]?)"
-re_icd9_major_v_strict <- "V(?:0[1-9]|[1-9][[:digit:]])"
-re_icd9_major_e <- "[Ee][[:digit:]]{1,3}"
-re_icd9_major_e_strict <- "E[[:digit:]]{3}"
-re_icd9_major <- paste0(c(re_icd9_major_n %>% re_just_ws,
-                          re_icd9_major_v %>% re_just_ws,
-                          re_icd9_major_e %>% re_just_ws),
-                        collapse = "|")
-re_icd9_major_bare <- paste0(c(re_icd9_major_n,
-                               re_icd9_major_v,
-                               re_icd9_major_e),
-                             collapse = "|") %>% re_wrap_or
-re_icd9_major_strict <- paste0(c(re_icd9_major_n_strict %>% re_just_ws,
-                                 re_icd9_major_v_strict %>% re_just_ws,
-                                 re_icd9_major_e_strict %>% re_just_ws),
-                               collapse = "|")
-re_icd9_major_strict_bare <- paste0(c(re_icd9_major_n_strict,
-                                      re_icd9_major_v_strict,
-                                      re_icd9_major_e_strict),
-                                    collapse = "|") %>% re_wrap_or
-re_icd9_minor_nv <- "[[:digit:]]{1,2}"
-re_icd9_minor_e <- "[[:digit:]]{1}"
+set_re_globals <- function(env = parent.frame()) {
 
-re_icd9_decimal_n_bare <- paste0(re_icd9_major_n, "(?:\\.(?:", re_icd9_minor_nv, ")?)?")
-re_icd9_decimal_v_bare <- paste0(re_icd9_major_v, "(?:\\.(?:", re_icd9_minor_nv, ")?)?")
-re_icd9_decimal_e_bare <- paste0(re_icd9_major_e, "(?:\\.(?:", re_icd9_minor_e, ")?)?")
+  re_icd9_major_n <- "[[:digit:]]{1,3}"
+  re_icd9_major_n_strict <- "[[:digit:]]{3}"
+  re_icd9_major_v <- "[Vv](?:0[1-9]|[1-9][[:digit:]]?)"
+  re_icd9_major_v_strict <- "V(?:0[1-9]|[1-9][[:digit:]])"
+  re_icd9_major_e <- "[Ee][[:digit:]]{1,3}"
+  re_icd9_major_e_strict <- "E[[:digit:]]{3}"
+  re_icd9_major <- paste0(c(re_icd9_major_n %>% re_just_ws,
+                            re_icd9_major_v %>% re_just_ws,
+                            re_icd9_major_e %>% re_just_ws),
+                          collapse = "|")
+  re_icd9_major_bare <- paste0(c(re_icd9_major_n,
+                                 re_icd9_major_v,
+                                 re_icd9_major_e),
+                               collapse = "|") %>% re_wrap_or
+  re_icd9_major_strict <- paste0(c(re_icd9_major_n_strict %>% re_just_ws,
+                                   re_icd9_major_v_strict %>% re_just_ws,
+                                   re_icd9_major_e_strict %>% re_just_ws),
+                                 collapse = "|")
+  re_icd9_major_strict_bare <- paste0(c(re_icd9_major_n_strict,
+                                        re_icd9_major_v_strict,
+                                        re_icd9_major_e_strict),
+                                      collapse = "|") %>% re_wrap_or
+  re_icd9_minor_nv <- "[[:digit:]]{1,2}"
+  re_icd9_minor_e <- "[[:digit:]]{1}"
 
-re_icd9_decimal_n_strict_bare <- paste0(re_icd9_major_n_strict, "(?:\\.(?:", re_icd9_minor_nv, ")?)?")
-re_icd9_decimal_v_strict_bare <- paste0(re_icd9_major_v_strict, "(?:\\.(?:", re_icd9_minor_nv, ")?)?")
-re_icd9_decimal_e_strict_bare <- paste0(re_icd9_major_e_strict, "(?:\\.(?:", re_icd9_minor_e, ")?)?")
+  re_icd9_decimal_n_bare <- paste0(re_icd9_major_n, "(?:\\.(?:", re_icd9_minor_nv, ")?)?")
+  re_icd9_decimal_v_bare <- paste0(re_icd9_major_v, "(?:\\.(?:", re_icd9_minor_nv, ")?)?")
+  re_icd9_decimal_e_bare <- paste0(re_icd9_major_e, "(?:\\.(?:", re_icd9_minor_e, ")?)?")
 
-re_icd9_decimal_n <- re_icd9_decimal_n_bare %>% re_just_ws
-re_icd9_decimal_v <- re_icd9_decimal_v_bare %>% re_just_ws
-re_icd9_decimal_e <- re_icd9_decimal_e_bare %>% re_just_ws
+  re_icd9_decimal_n_strict_bare <- paste0(re_icd9_major_n_strict, "(?:\\.(?:", re_icd9_minor_nv, ")?)?")
+  re_icd9_decimal_v_strict_bare <- paste0(re_icd9_major_v_strict, "(?:\\.(?:", re_icd9_minor_nv, ")?)?")
+  re_icd9_decimal_e_strict_bare <- paste0(re_icd9_major_e_strict, "(?:\\.(?:", re_icd9_minor_e, ")?)?")
 
-re_icd9_short_n <- paste0(re_icd9_major_n, "(?:", re_icd9_minor_nv, ")?") %>% re_just_ws
-re_icd9_short_v <- paste0(re_icd9_major_v, "(?:", re_icd9_minor_nv, ")?") %>% re_just_ws
-re_icd9_short_e <- paste0(re_icd9_major_e, "(?:", re_icd9_minor_e, ")?") %>% re_just_ws
+  re_icd9_decimal_n <- re_icd9_decimal_n_bare %>% re_just_ws
+  re_icd9_decimal_v <- re_icd9_decimal_v_bare %>% re_just_ws
+  re_icd9_decimal_e <- re_icd9_decimal_e_bare %>% re_just_ws
 
-re_icd9_any_n <- paste0(re_icd9_major_n, "\\.?(?:", re_icd9_minor_nv, ")?") %>% re_just_ws
-re_icd9_any_v <- paste0(re_icd9_major_v, "\\.?(?:", re_icd9_minor_nv, ")?") %>% re_just_ws
-re_icd9_any_e <- paste0(re_icd9_major_e, "\\.?(?:", re_icd9_minor_e, ")?") %>% re_just_ws
+  re_icd9_short_n <- paste0(re_icd9_major_n, "(?:", re_icd9_minor_nv, ")?") %>% re_just_ws
+  re_icd9_short_v <- paste0(re_icd9_major_v, "(?:", re_icd9_minor_nv, ")?") %>% re_just_ws
+  re_icd9_short_e <- paste0(re_icd9_major_e, "(?:", re_icd9_minor_e, ")?") %>% re_just_ws
 
-re_icd9_decimal <- paste0(c(re_icd9_decimal_n,
-                            re_icd9_decimal_v,
-                            re_icd9_decimal_e),
+  re_icd9_any_n <- paste0(re_icd9_major_n, "\\.?(?:", re_icd9_minor_nv, ")?") %>% re_just_ws
+  re_icd9_any_v <- paste0(re_icd9_major_v, "\\.?(?:", re_icd9_minor_nv, ")?") %>% re_just_ws
+  re_icd9_any_e <- paste0(re_icd9_major_e, "\\.?(?:", re_icd9_minor_e, ")?") %>% re_just_ws
+
+  re_icd9_decimal <- paste0(c(re_icd9_decimal_n,
+                              re_icd9_decimal_v,
+                              re_icd9_decimal_e),
+                            collapse = "|")
+
+  re_icd9_decimal_bare <- paste0(c(re_icd9_decimal_n_bare,
+                                   re_icd9_decimal_v_bare,
+                                   re_icd9_decimal_e_bare),
+                                 collapse = "|")
+
+  re_icd9_decimal_strict_bare <- paste0(c(re_icd9_decimal_n_strict_bare,
+                                          re_icd9_decimal_v_strict_bare,
+                                          re_icd9_decimal_e_strict_bare),
+                                        collapse = "|")
+
+  re_icd9_short <- paste0(c(re_icd9_short_n,
+                            re_icd9_short_v,
+                            re_icd9_short_e),
                           collapse = "|")
 
-re_icd9_decimal_bare <- paste0(c(re_icd9_decimal_n_bare,
-                                 re_icd9_decimal_v_bare,
-                                 re_icd9_decimal_e_bare),
-                               collapse = "|")
-
-re_icd9_decimal_strict_bare <- paste0(c(re_icd9_decimal_n_strict_bare,
-                                        re_icd9_decimal_v_strict_bare,
-                                        re_icd9_decimal_e_strict_bare),
-                                      collapse = "|")
-
-re_icd9_short <- paste0(c(re_icd9_short_n,
-                          re_icd9_short_v,
-                          re_icd9_short_e),
+  re_icd9_any <- paste0(c(re_icd9_any_n,
+                          re_icd9_any_v,
+                          re_icd9_any_e),
                         collapse = "|")
 
-re_icd9_any <- paste0(c(re_icd9_any_n,
-                        re_icd9_any_v,
-                        re_icd9_any_e),
-                      collapse = "|")
 
+  re_icd10cm_major_bare  <- "[[:alpha:]][[:digit:]][[:alnum:]]"
+  re_icd10who_major_bare <- "[[:alpha:]][[:digit:]][[:digit:]]"
+  re_icd10_major_bare <- re_icd10cm_major_bare # use slightly broader definition for generic
+  re_icd10cm_major  <- re_icd10cm_major_bare %>% re_just_ws
+  re_icd10who_major <- re_icd10who_major_bare %>% re_just_ws
+  re_icd10_major <- re_icd10_major_bare %>% re_just_ws
 
-re_icd10cm_major_bare  <- "[[:alpha:]][[:digit:]][[:alnum:]]"
-re_icd10who_major_bare <- "[[:alpha:]][[:digit:]][[:digit:]]"
-re_icd10_major_bare <- re_icd10cm_major_bare # use slightly broader definition for generic
-re_icd10cm_major  <- re_icd10cm_major_bare %>% re_just_ws
-re_icd10who_major <- re_icd10who_major_bare %>% re_just_ws
-re_icd10_major <- re_icd10_major_bare %>% re_just_ws
+  re_icd10cm_short <- paste0(re_icd10_major_bare, "[[:alnum:]]{0,4}")
+  re_icd10cm_decimal <- paste0(re_icd10_major_bare, "\\.[[:alnum:]]{0,4}")
+  re_icd10cm_any <- paste0(re_icd10_major_bare, "\\.?[[:alnum:]]{0,4}")
 
-re_icd10cm_short <- paste0(re_icd10_major_bare, "[[:alnum:]]{0,4}")
-re_icd10cm_decimal <- paste0(re_icd10_major_bare, "\\.[[:alnum:]]{0,4}")
-re_icd10cm_any <- paste0(re_icd10_major_bare, "\\.?[[:alnum:]]{0,4}")
+  re_icd10_short <- re_icd10cm_short
+  re_icd10_decimal <- re_icd10cm_decimal
+  re_icd10_any <- re_icd10cm_any
 
-re_icd10_short <- re_icd10cm_short
-re_icd10_decimal <- re_icd10cm_decimal
-re_icd10_any <- re_icd10cm_any
+  cur_env = environment()
+  for (re in ls(envir = cur_env, pattern = "re_.+"))
+    assign(re, get(re, envir = cur_env), envir = env)
+
+  invisible(cur_env)
+}
+# and put these in the package namespace
+set_re_globals()
 
 #' Check whether ICD-9 codes are syntactically valid
 #'
@@ -519,7 +530,7 @@ icd_get_invalid.icd_comorbidity_map <- function(x, short_code = icd_guess_short(
 }
 
 #' Get major part of an ICD code
-#' 
+#'
 #' Returns major component of codes, i.e. the part before the decimal,
 #' or where the decimal would be.
 #' @keywords internal

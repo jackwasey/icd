@@ -13,9 +13,9 @@
 \alias{is.icd_wide_data}
 \title{test ICD-related classes}
 \usage{
-is.icd9(x, strict = FALSE)
+is.icd9(x)
 
-is.icd10(x, strict = FALSE)
+is.icd10(x)
 
 is.icd9cm(x)
 
@@ -35,9 +35,6 @@ is.icd_comorbidity_map(x)
 }
 \arguments{
 \item{x}{Any object which may have ICD-related classes set}
-
-\item{strict}{logical value, if \code{TRUE}, will only match the type
-exactly; if \code{FALSE}}
 }
 \description{
 currently no checks on correctness of the classes for these functions

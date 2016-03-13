@@ -214,25 +214,6 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9DecimalToShortOld(const Rcpp::CharacterVector x) {
-        typedef SEXP(*Ptr_icd9DecimalToShortOld)(SEXP);
-        static Ptr_icd9DecimalToShortOld p_icd9DecimalToShortOld = NULL;
-        if (p_icd9DecimalToShortOld == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9DecimalToShortOld)(const Rcpp::CharacterVector)");
-            p_icd9DecimalToShortOld = (Ptr_icd9DecimalToShortOld)R_GetCCallable("icd", "icd_icd9DecimalToShortOld");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9DecimalToShortOld(Rcpp::wrap(x));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<Rcpp::CharacterVector >(__result);
-    }
-
     inline Rcpp::CharacterVector icd9DecimalToShortCpp(const Rcpp::CharacterVector x) {
         typedef SEXP(*Ptr_icd9DecimalToShortCpp)(SEXP);
         static Ptr_icd9DecimalToShortCpp p_icd9DecimalToShortCpp = NULL;
@@ -263,25 +244,6 @@ namespace icd {
         {
             RNGScope __rngScope;
             __result = p_icd_get_major_icd9(Rcpp::wrap(x), Rcpp::wrap(short_code));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<Rcpp::CharacterVector >(__result);
-    }
-
-    inline Rcpp::CharacterVector icd9GetMajorShort(const Rcpp::CharacterVector icd9Short) {
-        typedef SEXP(*Ptr_icd9GetMajorShort)(SEXP);
-        static Ptr_icd9GetMajorShort p_icd9GetMajorShort = NULL;
-        if (p_icd9GetMajorShort == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9GetMajorShort)(const Rcpp::CharacterVector)");
-            p_icd9GetMajorShort = (Ptr_icd9GetMajorShort)R_GetCCallable("icd", "icd_icd9GetMajorShort");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_icd9GetMajorShort(Rcpp::wrap(icd9Short));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -3,12 +3,9 @@
 \name{icd_classes_ordered}
 \alias{expect_icd_classes_ordered}
 \alias{icd_classes_ordered}
-\alias{icd_stop_classes_disorder}
 \title{prefer an order of classes}
 \usage{
 icd_classes_ordered(x)
-
-icd_stop_classes_disorder(x)
 
 expect_icd_classes_ordered(x)
 }
@@ -24,8 +21,6 @@ yet, so won't test.
 }
 \section{Functions}{
 \itemize{
-\item \code{icd_stop_classes_disorder}: stop if classes not well ordered
-
 \item \code{expect_icd_classes_ordered}: \code{testthat} \code{expect} function
 for ICD classes to be in correct order.
 }}

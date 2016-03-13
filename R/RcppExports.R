@@ -59,10 +59,6 @@ icd9ShortToDecimalCpp <- function(x) {
     .Call('icd_icd9ShortToDecimal', PACKAGE = 'icd', x)
 }
 
-icd9DecimalToShortOld <- function(x) {
-    .Call('icd_icd9DecimalToShortOld', PACKAGE = 'icd', x)
-}
-
 icd9DecimalToShortCpp <- function(x) {
     .Call('icd_icd9DecimalToShort', PACKAGE = 'icd', x)
 }
@@ -73,12 +69,6 @@ icd9DecimalToShortCpp <- function(x) {
 #' @keywords internal manip
 icd_get_major.icd9 <- function(x, short_code) {
     .Call('icd_icd9GetMajor', PACKAGE = 'icd', x, short_code)
-}
-
-#' @rdname icd_get_major
-#' @keywords internal manip
-icd9GetMajorShort <- function(icd9Short) {
-    .Call('icd_icd9GetMajorShort', PACKAGE = 'icd', icd9Short)
 }
 
 #' Do elements of vector begin with V, E (or any other character)?

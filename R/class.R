@@ -101,14 +101,6 @@ icd_classes_ordered <- function(x) {
   out && all(diff(m) >= 0, na.rm = TRUE)
 }
 
-#' @describeIn icd_classes_ordered stop if classes not well ordered
-#' @keywords internal
-icd_stop_classes_disorder <- function(x) {
-  if (!icd_classes_ordered(x))
-    stop("Classes in object are: ", paste(class(x), collapse = ", "), ",
-         which is out of order.")
-}
-
 #' Construct ICD-9 data types
 #'
 #' Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
@@ -508,26 +500,14 @@ c.icd_decimal_code <- function(...) {
 #' @details TODO: could warn or fix if something is \code{icd10cm} or
 #'   \code{icd10who} but not \code{icd10}
 #' @param x Any object which may have ICD-related classes set
-#' @param strict logical value, if \code{TRUE}, will only match the type
-#'   exactly; if \code{FALSE}
 #' @export
-is.icd9 <- function(x, strict = FALSE)
-  if (strict) {
-    inherits(x, "icd9")
-  } else {
-    inherits(x, c("icd9", "icd9cm"))
-  }
+is.icd9 <- function(x) inherits(x, c("icd9", "icd9cm"))
 
 #' @rdname is.icd9
 #' @details TODO: could warn or fix if something is \code{icd10cm} or
 #'   \code{icd10who} but not \code{icd10}
 #' @export
-is.icd10 <- function(x, strict = FALSE)
-  if (strict) {
-    inherits(x, "icd10")
-  } else {
-    inherits(x, c("icd10", "icd10cm", "icd10who"))
-  }
+is.icd10 <- function(x) inherits(x, c("icd10", "icd10cm", "icd10who"))
 
 #' @rdname is.icd9
 #' @export

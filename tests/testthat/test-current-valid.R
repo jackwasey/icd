@@ -448,7 +448,7 @@ test_that("get subset of billable codes", {
   expect_true(is.icd9(icd_get_billable(x)))
   expect_true(is.character(icd_get_billable(x)))
 
-    expect_equal_no_icd(icd_get_billable.icd9cm(x), "410.00")
+  expect_equal_no_icd(icd_get_billable.icd9cm(x), "410.00")
   # assume ICD-9 means ICD-9-CM: this may change
   expect_equal_no_icd(icd_get_billable.icd9(x), "410.00")
 })
@@ -460,7 +460,7 @@ test_that("get inverted subset of billable codes", {
   expect_true(is.icd9(icd_get_billable(x_inv, invert = TRUE)))
   expect_true(is.character(icd_get_billable(x_inv, invert = TRUE)))
 
-    expect_equal_no_icd(icd_get_billable.icd9cm(x_inv, invert = TRUE), c("410", "410.0"))
+  expect_equal_no_icd(icd_get_billable.icd9cm(x_inv, invert = TRUE), c("410", "410.0"))
   # assume ICD-9 means ICD-9-CM: this may change
   expect_equal_no_icd(icd_get_billable.icd9(x_inv, invert = TRUE), c("410", "410.0"))
 })
@@ -494,10 +494,19 @@ test_that("valid short e", {
   expect_true(all(icd9_is_valid_short_e(x)))
 })
 
-
 test_that("icd9 and icd10 get valid gives same type as input", {
   expect_equal(icd_get_valid(c("invalid", "100")), "100")
   expect_equal(icd_get_valid(icd9(c("invalid", "100"))), icd9("100"))
   expect_equal(icd_get_valid(c("invalid", "A01")), "A01")
   expect_equal(icd_get_valid(icd10(c("invalid", "A01"))), icd10("A01"))
+})
+
+test_that("regexes are made and set in package", {
+  re_env <- set_re_globals()
+  for (re in ls(envir = re_env, pattern = "re_.+")) {
+    expect_identical(
+      get(re, envir = re_env),
+      get(re)
+    )
+  }
 })

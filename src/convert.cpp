@@ -260,11 +260,6 @@ Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector x) {
 	return icd9PartsToDecimal(icd9ShortToPartsCpp(x, ""));
 }
 
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9DecimalToShortOld(const Rcpp::CharacterVector x) {
-	return icd9PartsToShort(icd9DecimalToPartsCpp(x, ""));
-}
-
 // [[Rcpp::export(name="icd9DecimalToShortCpp")]]
 Rcpp::CharacterVector icd9DecimalToShort(
 		const Rcpp::CharacterVector x) {
@@ -324,12 +319,4 @@ Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool sho
 	}
 	SEXP majors = icd9DecimalToPartsCpp(x, "")[0];
 	return Rcpp::as<Rcpp::CharacterVector>(majors);
-}
-
-//' @rdname icd_get_major
-//' @keywords internal manip
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9GetMajorShort(const Rcpp::CharacterVector icd9Short) {
-	// compiles with or without the (SEXP) cast, but Eclipse can't resolve without the SEXP
-	return Rcpp::as<Rcpp::CharacterVector>((SEXP)icd9ShortToPartsCpp(icd9Short, "")[0]);
 }

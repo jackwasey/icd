@@ -180,11 +180,11 @@ context("random data") {
     expect_true(e.size() == 1);
     expect_true(e[0].substr(0, 1) == "E");
 
-   e = icd9RandomShortE(999);
-   expect_true(e.size() == 999);
-   expect_true(e[998].substr(0, 1) == "E");
-   expect_true(e[0].size() >= 4);
-   expect_true(e[0].size() <= 5);
+    e = icd9RandomShortE(999);
+    expect_true(e.size() == 999);
+    expect_true(e[998].substr(0, 1) == "E");
+    expect_true(e[0].size() >= 4);
+    expect_true(e[0].size() <= 5);
   }
 
   test_that("random any code") {
@@ -223,9 +223,9 @@ context("fast int to string") {
     Rcpp::CharacterVector cv = Rcpp::CharacterVector::create("2", "33", "444", "5555", "66666", "123456");
     expect_true(Rcpp::is_true(Rcpp::all(fastIntToStringRcpp(iv) == cv)));
 
-      }
+  }
 
-// duplicated code...
+  // duplicated code...
   test_that("std version works") {
     std::vector<int> iv;
     iv.push_back(1);
@@ -256,6 +256,27 @@ context("fast int to string") {
 
 }
 
+context("MajMin to code") {
+  test_that("differing lengths gives error") {
+    Rcpp::CharacterVector mj = Rcpp::CharacterVector::create("100");
+    Rcpp::CharacterVector mn = Rcpp::CharacterVector::create("01");
+    Rcpp::CharacterVector rs = Rcpp::CharacterVector::create("10001");
+    expect_true(Rcpp::is_true(Rcpp::all(icd9MajMinToCode(mj, mn, true) == rs)));
+
+    mj = Rcpp::CharacterVector::create("101", "102");
+    mn = Rcpp::CharacterVector::create("01", "02");
+    rs = Rcpp::CharacterVector::create("10101", "10202");
+    expect_true(Rcpp::is_true(Rcpp::all(icd9MajMinToCode(mj, mn, true) == rs)));
+
+    mj = Rcpp::CharacterVector::create("100");
+    mn = Rcpp::CharacterVector::create("01", "02");
+    expect_error(icd9MajMinToCode(mj, mn, true));
+
+    mn = Rcpp::CharacterVector::create("01", "02");
+    mj = Rcpp::CharacterVector::create("100", "101", "102");
+    expect_error(icd9MajMinToCode(mj, mn, true));
+  }
+}
 
 // endif have testthat
 #endif

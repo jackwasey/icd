@@ -20,17 +20,6 @@
 #include <string>
 #include <vector>
 
-bool icd9IsASingle(const char* s, const char* x) {
-	while (*s == ' ')
-		++s;
-	while (*x) {
-		if (*s == *x)
-			return true;
-		++x;
-	}
-	return false;
-}
-
 bool icd9IsASingleV(const char* s) {
 	while (*s == ' ')
 		++s;

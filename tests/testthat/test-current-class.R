@@ -294,3 +294,12 @@ test_that("update data frame class for simple cases", {
     expect_updated_class(cl)
   }
 })
+
+test_that("fail to update data frame class with conflicting cols", {
+  x <- data.frame(visit_id = c(1, 2, 3),
+                  code.icd9 = icd9(c("100", "V10", "V10")),
+                  code.icd10 = icd10(c("A01", "V10", "V10")),
+                  stringsAsFactors = FALSE)
+  expect_error(update_data_frame_class(x, must_work = TRUE))
+  expect_identical(update_data_frame_class(x, must_work = FALSE), x)
+})
