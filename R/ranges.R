@@ -418,6 +418,6 @@ icd_expand_minor.icd9 <- function(minor, is_e = FALSE) {
 
 # nocov start
 icd_expand_minor.icd10 <- function(x) {
-  stop("not implemented")
+  .NotYetImplemented()
 }
 # nocov end

@@ -119,7 +119,8 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
 #' @keywords internal
 icd_explain.icd10 <- function(x, short_code = icd_guess_short.icd9(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  stop("icd_explain.icd10 not implemented yet")
+  .NotYetImplemented()
+  # TODO: this will be a fairly straightforward lookup from the icd2016cm data frame
 }
 
 #' @describeIn icd_explain explain numeric vector of ICD-9 codes, with warning.
