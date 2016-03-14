@@ -2,8 +2,10 @@
 % Please edit documentation in R/convert.R
 \name{icd_short_to_decimal}
 \alias{icd_short_to_decimal}
+\alias{icd_short_to_decimal.character}
 \alias{icd_short_to_decimal.default}
 \alias{icd_short_to_decimal.icd10}
+\alias{icd_short_to_decimal.icd10cm}
 \alias{icd_short_to_decimal.icd9}
 \title{Convert ICD codes from short to decimal forms}
 \usage{
@@ -11,11 +13,13 @@ icd_short_to_decimal(x)
 
 \method{icd_short_to_decimal}{default}(x)
 
+\method{icd_short_to_decimal}{default}(x)
+
 \method{icd_short_to_decimal}{icd9}(x)
 
 \method{icd_short_to_decimal}{icd10}(x)
 
-\method{icd_short_to_decimal}{icd10}(x)
+\method{icd_short_to_decimal}{icd10cm}(x)
 }
 \arguments{
 \item{x}{ICD codes}
@@ -28,11 +32,14 @@ Convert codes between short and decimal forms
 \item \code{default}: convert ICD codes of unknown type from short
 to decimal format
 
+\item \code{default}: convert ICD codes of character type, with
+unknown version, from short to decimal format
+
 \item \code{icd9}: convert ICD-9 codes from short to decimal format
 
 \item \code{icd10}: convert ICD-10 codes from short to decimal format
 
-\item \code{icd10}: convert ICD-10-CM code from short to decimal format
+\item \code{icd10cm}: convert ICD-10-CM code from short to decimal format
 }}
 \keyword{internal}
 
