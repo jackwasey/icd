@@ -61,7 +61,7 @@ icd_children.character <- function(x, ...) {
   # method is defined.
   switch(ver,
          "icd9" = icd_children.icd9(x = x, ...),
-         "icd10" = icd_children.icd10(x, ...),
+         "icd10" = icd_children.icd10(x = x, ...),
          NULL)
 }
 
@@ -82,7 +82,7 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   res <- icd_guess_short_update(res)
 
   if (billable)
-    icd9GetBillable(icd9cm(res), short_code)
+    icd_get_billable.icd9cm(icd9cm(res), short_code)
   else
     icd9(res)
 }
@@ -124,18 +124,14 @@ icd_children_defined <- function(x)
   UseMethod("icd_children_defined")
 
 #' @describeIn icd_children_defined get the children of ICD-10 code(s)
-#' @export
 #' @keywords internal
 icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x)) {
 
   assert_character(x)
   assert_flag(short_code)
 
-  if (inherits(x, "icd10") && !inherits(x, "icd10cm"))
-    warning("This function primarily gives 'defined' child codes for ICD-10-CM,
-            which is mostly a superset of ICD-10 WHO")
-
-  icd10Short <- str_trim(x)
+  x <- str_trim(x)
+  icd10Short <- if (short_code) x else icd_decimal_to_short.icd10cm(x)
 
   matches_bool <- icd10Short %in% icd::icd10cm2016[["code"]]
   # if the codes are not in the source file, we ignore, warn, drop silently?
@@ -153,7 +149,7 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x
 
   if (length(icd10Short) == 0 ) {
     warning("none of the provided ICD-10 codes matched the canonical list")
-    return(kids)
+    return(icd9cm(character(0)))
   }
 
   for (i in seq_along(icd10Short)) {
@@ -166,6 +162,9 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x
 
     kids <- c(kids, icd::icd10cm2016[matches[i]:(check_row - 1), "code"])
   }
-  kids
 
+  if (short_code)
+    icd10cm(icd_short_code(kids))
+  else
+    icd10cm(icd_decimal_code(kids))
 }

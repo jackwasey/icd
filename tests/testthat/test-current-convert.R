@@ -130,6 +130,34 @@ test_that("icd10 short to decimal", {
 
 })
 
+test_that("icd10 short to decimal for multiple codes", {
+  # pick up specific bug where a warning was given for muliple codes
+  if (packageVersion("testthat") >= package_version("0.11.0.9000"))
+    expect_warning(res <- icd_short_to_decimal(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
+                         "Z9989", "Z950", "C7A098", "C7A8")))
+  else
+    expect_that(res <- icd_short_to_decimal(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
+                                                 "Z9989", "Z950", "C7A098", "C7A8")),
+                testthat::not(testtthat::gives_warning()))
+
+  expect_identical(unclass(res), c("O9A.119", "O9A.53", "S00.00XA", "T32.99", "P15.0", "P15.9",
+                                   "Z99.89", "Z95.0", "C7A.098", "C7A.8"))
+  expect_true(is.icd_decimal_code(res))
+
+  # is the icd10cm class preserved?
+  if (packageVersion("testthat") >= package_version("0.11.0.9000"))
+    expect_warning(res <- icd_short_to_decimal(icd10cm(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
+                                                 "Z9989", "Z950", "C7A098", "C7A8"))))
+  else
+    expect_that(res <- icd_short_to_decimal(icd10cm(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
+                                              "Z9989", "Z950", "C7A098", "C7A8"))),
+                testthat::not(testtthat::gives_warning()))
+
+  expect_true(is.icd_decimal_code(res))
+  expect_true(is.icd10cm(res))
+
+})
+
 test_that("icd10 short to decimal and back", {
   expect_identical(icd_short_to_decimal(icd_decimal_to_short("A00.0")), icd10("A00.0") %>% icd_decimal_code)
   expect_identical(icd_decimal_to_short(icd_short_to_decimal("A000")), icd10("A000") %>% icd_short_code)

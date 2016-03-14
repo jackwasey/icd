@@ -172,7 +172,7 @@ icd_long_to_wide <- function(x,
                              aggr = TRUE,
                              return_df = FALSE) {
 
-  assert_data_frame(x, col.names = "uniqe")
+  assert_data_frame(x, col.names = "unique")
   visit_name <- as_char_no_warn(visit_name)
   icd_name <- as_char_no_warn(icd_name)
   assert_string(prefix, min.chars = 1)
@@ -276,7 +276,7 @@ icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
   out
 }
 
-#' Convert ICD from short to decimal forms
+#' Convert ICD codes from short to decimal forms
 #'
 #' Convert codes between short and decimal forms
 #' @param x ICD codes
@@ -285,21 +285,23 @@ icd_short_to_decimal <- function(x) {
   UseMethod("icd_short_to_decimal")
 }
 
-#' @export
+#' @describeIn icd_short_to_decimal convert ICD codes of unknown type from short
+#'   to decimal format
+#' @method icd_short_to_decimal default
 #' @keywords internal
 icd_short_to_decimal.default <- function(x) {
   # we can only have a shot at guessing this if we first guess the version
-  x %<>% icd_guess_version_update()
-  icd_short_to_decimal(x)
+  x %>% as_char_no_warn %>% icd_guess_version_update -> y
+  UseMethod("icd_short_to_decimal", y)
 }
 
-#' @export
+#' @describeIn icd_short_to_decimal convert ICD-9 codes from short to decimal format
 #' @keywords internal
 icd_short_to_decimal.icd9 <- function(x) {
   icd9ShortToDecimalCpp(x) %>% icd_decimal_code %>% icd9
 }
 
-#' @export
+#' @describeIn icd_short_to_decimal convert ICD-10 codes from short to decimal format
 #' @keywords internal
 icd_short_to_decimal.icd10 <- function(x) {
   x %<>% str_trim
@@ -310,6 +312,12 @@ icd_short_to_decimal.icd10 <- function(x) {
     paste0(majors, ".", minors) %>% icd_decimal_code %>% icd10
   else
     paste0(majors) %>% icd_decimal_code %>% icd10
+}
+
+#' @describeIn icd_short_to_decimal convert ICD-10-CM code from short to decimal format
+#' @keywords internal
+icd_short_to_decimal.icd10 <- function(x) {
+  icd_short_to_decimal.icd10(x) %>% icd10cm
 }
 
 #' Convert Decimal format ICD codes to short format

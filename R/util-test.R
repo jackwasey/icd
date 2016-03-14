@@ -257,7 +257,7 @@ generate_random_short_icd9 <- function(n = 50000) {
 #' @template short_code
 #' @keywords internal debugging datagen
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  x <- sample(unlist(icd10cm2016[icd10cm2016$billable, "code"]), replace = TRUE, size = n)
+  x <- sample(unlist(icd10cm2016[icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
   if (short_code)
     x
   else
@@ -324,7 +324,7 @@ random_string <- function(n, max_chars = 4) {
 }
 
 #' Show options which control testing
-#' 
+#'
 #' Get the options for all currently used \code{icd} testing options.
 #' @keywords internal debugging
 show_test_options <- function() {
@@ -416,7 +416,7 @@ setup_test_check <- function() {
 }
 
 #' run \code{testtthat::test_check} with a Perl regular expression filter
-#' 
+#'
 #' Use 'summary' reporter so that \code{covr} produces output and doesn't time-out on
 #' Travis. The code coverage testing is slower than regular testing because of
 #' instrumentation.
