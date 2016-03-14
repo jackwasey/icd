@@ -65,7 +65,11 @@ test_that("completely invalid input fails", {
 })
 
 test_that("single value gives correct range", {
-  expect_equal(icd_children_defined.icd10cm("A00", short_code = TRUE), c("A00", "A000", "A001", "A009"))
+  expect_equal(unclass(res <- icd_children_defined.icd10cm("A00", short_code = TRUE)),
+               c("A00", "A000", "A001", "A009"))
+  expect_true(is.icd10cm(res))
+  expect_true(is.icd10(res))
+  expect_true(is.icd_short_code(res))
 })
 
 test_that("icd10 range major expansions", {
