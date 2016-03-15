@@ -153,7 +153,7 @@ set_re_globals <- function(env = parent.frame()) {
   for (re in ls(envir = cur_env, pattern = "re_.+"))
     assign(re, get(re, envir = cur_env), envir = env)
 
-  invisible(list(re_icd10_any, re_icd10_decimal, re_icd10_short, re_icd10cm_any, 
+  invisible(list(re_icd10_any, re_icd10_decimal, re_icd10_short, re_icd10cm_any,
 re_icd10cm_decimal, re_icd10cm_short, re_icd10_major, re_icd10who_major,
 re_icd10cm_major, re_icd10_major_bare, re_icd10who_major_bare,
 re_icd10cm_major_bare, re_icd9_any, re_icd9_short, re_icd9_decimal_strict_bare,
@@ -495,21 +495,21 @@ icd_get_valid.character <- function(x, short_code = icd_guess_short(x)) {
 #' @describeIn icd_get_valid Get valid ICD-9 codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd9 <- function(x, short_code = icd_guess_short(x)) {
+icd_get_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x)) {
   x[icd_is_valid.icd9(x, short_code = short_code)]
 }
 
 #' @describeIn icd_get_valid Get valid ICD-10 codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd10 <- function(x, short_code = icd_guess_short(x)) {
+icd_get_valid.icd10 <- function(x, short_code = icd_guess_short.icd10(x)) {
   x[icd_is_valid.icd10(x, short_code = short_code)]
 }
 
 #' @describeIn icd_get_valid Get valid ICD-10-CM codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
+icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short.icd10cm(x)) {
   # TODO: make ICD-10-CM specific
   x[icd_is_valid.icd10(x, short_code = short_code)]
 }

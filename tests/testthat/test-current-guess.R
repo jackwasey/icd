@@ -60,8 +60,8 @@ class(pts$code) <- "character"
 
 expect_true(icd_guess_short(pts))
 
-no_pts <- structure(list(visit_id = integer(0), 
-                         code = character(0), 
+no_pts <- structure(list(visit_id = integer(0),
+                         code = character(0),
                          poa = structure(integer(0),
                                          .Label = character(0), class = "factor")),
                     .Names = c("visit_id", "code", "poa"), row.names = integer(0), class = "data.frame")

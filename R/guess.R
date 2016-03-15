@@ -48,28 +48,19 @@ icd_guess_short.data.frame <- function(x, short_code = NULL, test_n = 1000L, icd
   UseMethod("icd_guess_short", x[[icd_name]])
 }
 
-.guess_warn <- function() {
-  message("gw")
-  opt <- getOption("icd.warn_guess_short")
-  if (is.null(opt))
-    return()
-  assert_flag(opt)
-  if (opt)
-    warning("all codes used for guessing are 'major' part, i.e. before decimal place would be, ",
-            "therefore unable to guess whether codes are 'short' or 'decimal'. ",
-            "The default is to assume 'short'.")
-}
-
-# this works when the type of 'x' is known, icd9 vs icd10 
-.guess_short <- function(x, short_code, test_n) {
+# this works when the type of 'x' is known, icd9 vs icd10
+icd_guess_short_ <- function(x, short_code, test_n) {
   if (is.list(x))
     x <- unlist(x, recursive = TRUE)
   x <- as_char_no_warn(x) # preserves class (except factor)
   testend <- min(length(x), test_n)
   vm <- icd_is_valid_major(x[1:testend])
   if (all(vm, na.rm = TRUE)) {
-    .guess_warn()
-    return(TRUE)
+    opt <- getOption("icd.warn_guess_short")
+    if (!is.null(opt) && opt)
+      warning("all codes used for guessing are 'major' part, i.e. before decimal place would be, ",
+              "therefore unable to guess whether codes are 'short' or 'decimal'. ",
+              "The default is to assume 'short'.")
   }
   vs <- icd_is_valid(x[1:testend], short_code = TRUE) & !vm
   vd <- icd_is_valid(x[1:testend], short_code = FALSE) & !vm
@@ -80,21 +71,21 @@ icd_guess_short.data.frame <- function(x, short_code = NULL, test_n = 1000L, icd
 #' @export
 #' @keywords internal
 icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L, ...) {
-  .guess_short(x, short_code, test_n)
+  icd_guess_short_(x, short_code, test_n)
 }
 
 #' @describeIn icd_guess_short Guess short when ICD-10 type is known
 #' @export
 #' @keywords internal
 icd_guess_short.icd10 <- function(x, short_code = NULL, test_n = 1000L, ...) {
-  .guess_short(x, short_code, test_n)
+  icd_guess_short_(x, short_code, test_n)
 }
 
 #' @describeIn icd_guess_short Guess short when ICD-10 type is known
 #' @export
 #' @keywords internal
 icd_guess_short.icd10cm <- function(x, short_code = NULL, test_n = 1000L, ...) {
-  .guess_short(x, short_code, test_n)
+  icd_guess_short_(x, short_code, test_n)
 }
 
 #' @describeIn icd_guess_short Guess short from a list
@@ -111,7 +102,7 @@ icd_guess_short.list <- function(x, short_code = NULL, test_n = 1000L) {
 icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L, ...) {
 
   # if all the codes are major, we should warn the user
-  .guess_short(x, short_code, test_n)
+  icd_guess_short_(x, short_code, test_n)
 }
 
 #' @describeIn icd_guess_short Guess short when type is short

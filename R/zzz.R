@@ -18,7 +18,7 @@
 # nocov start
 
 .onAttach <- function(libname, pkgname) {
-# nocov start
+  # nolint start
   packageStartupMessage(
     "Welcome to the \"icd\" package for finding comorbidities and interpretation of ICD-9 and ICD-10 codes. Suggestions and contributions are welcome at https://github.com/jackwasey/icd .
 
@@ -31,7 +31,7 @@ Please cite this package if you find it useful in your published work.
 citation(package = \"icd\")
 
 ")
-# nocov end
+  # nolint end
 
   if (system.file(package = "icd9") != "")
     warning("The 'icd9' package is now deprecated, and should be removed to avoid conflicts with 'icd'.
