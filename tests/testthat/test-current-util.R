@@ -142,3 +142,13 @@ test_that("chapter to desc range works for icd10", {
                    list(Jack = c(start = "E99", end = "E99"))
   )
 })
+
+test_that("good random ICD-9 codes are made", {
+  rs <- icd9RandomShort(1000);
+  expect_true(all(nchar(rs) >= 2))
+  expect_true(all(nchar(rs) <= 5))
+  expect_true(any(grepl(pattern = "[0-9]+", rs)))
+  expect_true(any(grepl(pattern = "V.+", rs)))
+  expect_true(any(grepl(pattern = "E.+", rs)))
+})
+

@@ -171,12 +171,15 @@ std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n 
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n = 5) {
+
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
+  std::vector<double> randoms2 = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 3));
+
   char buffer[6];
-  for (std::vector<double>::size_type i = 0; i != n; ++i) {
+  for (std::vector<char>::size_type i = 0; i != n; ++i) {
     // N, V or E?
-    switch (((int) randoms[i]) % 3) {
+    switch (((short) randoms2[i]) % 3) {
     case 0:
       sprintf(buffer, "%.0f", randoms[i]);
       break;

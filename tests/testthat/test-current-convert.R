@@ -317,6 +317,11 @@ test_that("parts to short V code inputs", {
   expect_equal(icd9MajMinToShort("V01", c("", NA)), c("V01", "V01"))
 })
 
+test_that("maj min to short for multiple majors", {
+  expect_identical(icd9MajMinToShort(c("100", "200"), c("10", "20")),
+                   c("10010", "20020"))
+})
+
 test_that("icd9 parts to short: don't allow cycling.", {
   expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")))
   # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit

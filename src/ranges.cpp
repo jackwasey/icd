@@ -101,7 +101,7 @@ Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 		case 2:
 			return Rcpp::wrap(minor);
 		default:
-		  Rcpp::stop("minor of >2 characters received by icd9ExpandMinor");
+		  Rcpp::stop("minor of more than two characters");
 			return Rcpp::CharacterVector::create();
 		}
 	} else {
@@ -113,7 +113,7 @@ Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 		case 1:
 			return minor;
 		default:
-		  Rcpp::stop("too many characters for an E code minor part\n");
+		  Rcpp::stop("too many characters for an E code minor\n");
 		}
 	}
 	return (NA_STRING); // should never get here

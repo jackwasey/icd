@@ -79,9 +79,6 @@ void buildVisitCodesVec(const SEXP& icd9df,
   // 2094967295 is a random number less than 2^31 (to avoid 32bit R build
   // warning) just to initialize: should always been initialized, though.
   VecVecIntSz vcdb_last_idx = 2094967295;
-  if (TYPEOF(vsexp) != STRSXP) {
-    Rcpp::stop("buildVisitCodesVec requires STRSXP");
-  }
 #ifdef ICD9_DEBUG_SETUP
   Rcpp::Rcout << "buildVisitCodes SEXP is STR\n";
 #endif

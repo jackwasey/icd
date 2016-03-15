@@ -918,21 +918,6 @@ icd9ExpandMinor <- function(minor, isE = FALSE) {
   icd_expand_minor.icd9(minor, is_e = isE)
 }
 
-parseQuanElix <- function(condense = FALSE, save = FALSE, path = NULL) {
-  icd_deprecated("parse_quan_elix")
-  icd9_generate_map_quan_elix(condense = condense, save_data = save, path = path)
-}
-
-parseElix <- function(condense = FALSE, save = FALSE, path = NULL) {
-  icd_deprecated("parse_quan_elix")
-  icd9_generate_map_elix(condense = condense, save_data = save)
-}
-
-logicalToBinary <- function(...) {
-  icd_deprecated("logical_to_binary")
-  logical_to_binary(...)
-}
-
 #' Deprecated: count number of ICD codes per patient
 #'
 #' Use \code{icd_count_codes} instead.

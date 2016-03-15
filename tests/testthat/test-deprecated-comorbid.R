@@ -58,7 +58,7 @@ test_that("deprecated - icd9 comorbidities are created correctly, and logical to
 
   sapply(names(ahrqComorbid), function(x) expect_equal(class(ptdf[, x]), "logical"))
 
-  ptdflogical <- logicalToBinary(ptdf)
+  ptdflogical <- logical_to_binary(ptdf)
   expect_true(all(sapply(names(ahrqComorbid),
                          function(x)
                            class(ptdflogical[, x])) == "integer"))
@@ -73,7 +73,7 @@ test_that("deprecated - icd9 comorbidities are created correctly, and logical to
     setequal(names(ptdflogical), c("visitId", names(ahrqComorbid))))
 
   expect_equal(
-    logicalToBinary(data.frame(a = c("jack", "hayley"),
+    logical_to_binary(data.frame(a = c("jack", "hayley"),
                                b = c(TRUE, FALSE),
                                f = c(TRUE, TRUE))),
     data.frame(a = c("jack", "hayley"),

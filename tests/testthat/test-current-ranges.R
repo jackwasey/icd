@@ -339,7 +339,10 @@ test_that("icd_expand_minor.icd9: invalid", {
   expect_error(icd_expand_minor.icd9(c(123)))
   expect_error(icd_expand_minor.icd9(c("123")))
   expect_error(icd_expand_minor.icd9(c(1, 2), is_e = TRUE))
-  expect_error(icd_expand_minor.icd9("JACK"), is_e = TRUE)
+  # just do convenient, not comprehensive validation here:
+  expect_error(icd_expand_minor.icd9("999", is_e = FALSE), "minor of more than two characters")
+  expect_error(icd_expand_minor.icd9("JACK", is_e = TRUE), "characters")
+  expect_error(icd_expand_minor.icd9("J", is_e = FALSE), "unrecognized minor")
   expect_error(icd_expand_minor.icd9(c(123), is_e = TRUE))
   expect_error(icd_expand_minor.icd9("00", is_e = TRUE))
   expect_error(icd_expand_minor.icd9("E0000", is_e = TRUE))

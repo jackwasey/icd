@@ -621,15 +621,24 @@ test_that("comorbid quick test", {
 
 })
 
+pts <- generate_random_pts(101, 13)
+ac <-  lapply(icd::icd9_map_ahrq, function(x) {
+  f <- factor(x, levels(pts[["code"]]))
+  f[!is.na(f)]
+})
+
+test_that("give factor instead of char to icd9ComorbidShortCpp", {
+  pts$visit_id <- factor(pts$visit_id)
+  expect_error(
+    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field"),
+    "character vector"
+  )
+})
+
 test_that("control params don't affect result of comorbid calc", {
-  pts <- generate_random_pts(101, 13)
   pts$visit_id <- as_char_no_warn(pts$visit_id)
   pts$code %<>% as.factor
   upts <- length(unique(pts$visit_id))
-  ac <-  lapply(icd::icd9_map_ahrq, function(x) {
-    f <- factor(x, levels(pts[["code"]]))
-    f[!is.na(f)]
-  })
   expect_identical(
     icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 1, chunk_size = 32),
     icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 32)

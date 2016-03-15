@@ -265,7 +265,7 @@ test_that("deprecated - convert list of icd-9 ranges (e.g. chapter definitions t
   test_map <- icd9ChaptersToMap(icd::icd9Chapters)
   cmb <- icd9Comorbid(icd9df = ooe, isShort = FALSE, icd9Mapping = test_map,
                       isShortMapping = TRUE, return.df = TRUE)
-  cmbcmp <- unname(as.matrix(logicalToBinary(cmb)[-1]))
+  cmbcmp <- unname(as.matrix(logical_to_binary(cmb)[-1]))
   expmat <- diag(nrow = length(ooe$icd9))
   expect_equivalent(cmbcmp, expmat)
 })
