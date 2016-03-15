@@ -188,12 +188,13 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
 #' @describeIn icd_is_billable Which of the given ICD codes are leaf nodes in
 #'   ICD version guessed from the codes themselves.
 #' @export
+#' @method icd_is_billable default
 #' @keywords internal
 icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
                                     version = icd9cm_latest_edition(), ...) {
   # guess ICD-9 vs ICD-10 and set class to dispatch again
-  x <- icd_guess_version_update(x) %>% icd_guess_short_update(short_code = short_code)
-  icd_is_billable(x)
+  x <- icd_guess_version_update(x, short_code = short_code) %>% icd_guess_short_update(short_code = short_code)
+  UseMethod("icd_is_billable", x)
 }
 
 # TODO: consider geteting rid of all these:
@@ -203,7 +204,8 @@ icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
 #' Tests ICD-9 codes to see whether they are leaf nodes in the ICD-9-CM hierarchy
 #' @keywords internal
 icd9cm_is_billable <- function(x, version = icd9cm_latest_edition()) {
-  UseMethod("icd_is_billable")
+  x <- icd9cm(x)
+  UseMethod("icd_is_billable", x)
 }
 
 #' @describeIn icd9cm_is_billable Are the given short-form codes leaf (billable)
@@ -211,14 +213,14 @@ icd9cm_is_billable <- function(x, version = icd9cm_latest_edition()) {
 #' @export
 #' @keywords internal
 icd9cm_is_billable.icd_short_code <- function(x, version = icd9cm_latest_edition())
-  icd_is_billable.icd9(x, short_code = TRUE, version)
+  icd_is_billable(x, short_code = TRUE, version = version)
 
 #' @describeIn icd9cm_is_billable Are the given decimal-form codes leaf (billable)
 #'   codes in the hierarchy?
 #' @export
 #' @keywords internal
 icd9cm_is_billable.icd_decimal_code <- function(x, version = icd9cm_latest_edition())
-  icd_is_billable.icd9(x, short_code = FALSE, version)
+  icd_is_billable(x, short_code = FALSE, version = version)
 
 
 #' Get billable ICD codes

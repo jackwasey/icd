@@ -329,3 +329,37 @@ test_that("deprecated - github issue #64 - quan revised charleson scores", {
                                     applyHierarchy = TRUE, scoringSystem = "z"))
 
 })
+
+test_that("guess when there are NA values", {
+  expect_true(icd_guess_short(c("1000", NA, "41000")))
+})
+
+test_that("guess works for a factor", {
+  expect_true(icd_guess_short(factor(c("1000", NA, "41000"))))
+  expect_true(icd_guess_short(factor(c("1000", NA, "41000"), exclude = NULL)))
+  expect_true(icd_guess_short(factor(c("1000", rep(NA, 10), "41000"))))
+  expect_true(icd_guess_short(factor(c("1000", rep(NA, 10), "41000"), exclude = NULL)))
+})
+
+test_that("guess works for some difficult ICD-9 NA data", {
+dat <- structure(c(20L, 17L, 35L, 1L, 13L, 21L, 56L, 5L, 25L, 38L, 22L,
+31L, 34L, 23L, 44L, 45L, 40L, 49L, 51L, 11L, 29L, 47L, 37L, 53L,
+24L, 55L, 18L, 41L, 33L, 3L, 27L, 26L, 48L, 28L, 6L, 15L, 8L,
+42L, 50L, 46L, 12L, 36L, 19L, 2L, 9L, 39L, 30L, 32L, 54L, 14L,
+48L, 43L, 4L, 16L, 10L, 52L, 7L, 39L, NA, NA, NA, NA, NA, NA,
+NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+NA, NA, NA, NA), .Label = c("038.9", "041.12", "041.49", "070.70",
+"112.0", "261", "272.4", "275.2", "276.0", "276.3", "276.69",
+"276.8", "278.00", "278.01", "280.9", "285.29", "285.9", "300",
+"311", "324.1", "38.97", "401.9", "415.12", "427.31", "427.89",
+"45.62", "486", "496", "515", "518.84", "53.51", "552.21", "569.81",
+"584.9", "599.70", "710.4", "784.0", "790.4", "790.92", "83.39",
+"86.28", "96.59", "96.72", "995.91", "996.69", "V10.42", "V14.6",
+"V15.82", "V46.2", "V49.86", "V58.61", "V66.7", "V85.1", "V85.41",
+"V85.44", "V88.01"), class = "factor")
+
+expect_false(icd_guess_short(dat))
+expect_false(icd_guess_short.icd9(dat))
+
+})

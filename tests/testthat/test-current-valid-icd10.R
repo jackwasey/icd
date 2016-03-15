@@ -82,10 +82,3 @@ test_that("major dispatch intact, white space not okay", {
   expect_false(icd_is_valid_major(icd10(" A00"), whitespace_ok = FALSE))
   expect_false(icd_is_valid_major(icd10cm("A00 "), whitespace_ok = FALSE))
 })
-
-test_that("valid major of unknown type could be ambiguous", {
-  # TODO: I could guess, and only give an error if really uncertain?
-  expect_error(icd_is_valid_major("V10"))
-  expect_error(icd_is_valid_major(c("V10", "A00")))
-  expect_error(icd_is_valid_major(c("V10", "440")))
-})

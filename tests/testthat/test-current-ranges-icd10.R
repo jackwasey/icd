@@ -34,6 +34,11 @@ test_that("simple ranges of real values works", {
                c("A00", "A000", "A001"))
   expect_equal_no_icd(icd_expand_range.icd10cm("A00", "A009", short_code = TRUE),
                c("A00", "A000", "A001", "A009"))
+  # same with S3 dispatch
+  expect_equal_no_icd(icd_expand_range("A00", "A001"),
+               c("A00", "A000", "A001"))
+  expect_equal_no_icd(icd_expand_range("A00", "A009", short_code = TRUE),
+               c("A00", "A000", "A001", "A009"))
 })
 
 test_that("range style used by Quan is accepted", {

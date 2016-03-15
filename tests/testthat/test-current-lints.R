@@ -18,6 +18,7 @@
 if (requireNamespace("lintr", quietly = TRUE)) {
   context("lints, if lintr available")
   test_that("there are no lints", {
-    lintr::expect_lint_free()
+    lints <- lintr::lint_package()
+    expect_true(length(lints) == 0)
   })
 }

@@ -28,17 +28,13 @@
 #'   \code{short_code} type. If there is some uncertainty, then return
 #'   \code{NA}.
 #' @keywords internal
-icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
+icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, ...) {
   # if short_code is set, no need to dispatch at all
-  if (!is.null(short_code)) {
-    if (short_code)
-      return(TRUE)
-    else
-      return(FALSE)
-  }
-  if (inherits(x, "icd_short_code"))
+  if (!is.null(short_code)) 
+    return(short_code)
+  if (is.icd_short_code(x))
     return(TRUE)
-  if (inherits(x, "icd_decimal_code"))
+  if (is.icd_decimal_code(x))
     return(FALSE)
   UseMethod("icd_guess_short")
 }
@@ -46,52 +42,76 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L) {
 #' @describeIn icd_guess_short Guess whether a data frame has ICD-9 or ICD-10
 #'   codes
 #' @export
+#' @method icd_guess_short data.frame
 #' @keywords internal
 icd_guess_short.data.frame <- function(x, short_code = NULL, test_n = 1000L, icd_name = get_icd_name(x)) {
-  icd_guess_short(x[[icd_name]], short_code = short_code, test_n = test_n)
+  UseMethod("icd_guess_short", x[[icd_name]]) 
+}
+
+.guess_warn <- function() {
+  message("gw")
+  opt <- getOption("icd.warn_guess_short")
+  if (is.null(opt))
+    return()
+  assert_flag(opt)
+  if (opt)
+    warning("all codes used for guessing are 'major' part, i.e. before decimal place would be, ",
+            "therefore unable to guess whether codes are 'short' or 'decimal'. ",
+            "The default is to assume 'short'.")
+}
+
+# this works when the type of 'x' is known, icd9 vs icd10 
+.guess_short <- function(x, short_code, test_n) {
+  if (is.list(x))
+    x <- unlist(x, recursive = TRUE)
+  x <- as_char_no_warn(x) # preserves class (except factor)
+  testend <- min(length(x), test_n)
+  vm <- icd_is_valid_major(x[1:testend])
+  if (all(vm, na.rm = TRUE)) {
+    .guess_warn()
+    return(TRUE)
+  }
+  vs <- icd_is_valid(x[1:testend], short_code = TRUE) & !vm
+  vd <- icd_is_valid(x[1:testend], short_code = FALSE) & !vm
+  sum(vd, na.rm = TRUE) <= sum(vs, na.rm = TRUE)
 }
 
 #' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
 #' @export
 #' @keywords internal
-icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L) {
-  if (!is.null(short_code)) {
-    short_code
-  }
-  if (is.icd_short_code(x))
-    return(TRUE)
-  if (is.icd_decimal_code(x))
-    return(FALSE)
-  if (is.list(x)) x <- unlist(x, recursive = TRUE)
-  x <- as_char_no_warn(x)
-  testend <- min(length(x), test_n)
-  vs <- icd9_is_valid_short(x[1:testend])
-  vd <- icd9_is_valid_decimal(x[1:testend])
-  sum(vd) <= sum(vs)
+icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L, ...) {
+  .guess_short(x, short_code, test_n)
 }
 
 #' @describeIn icd_guess_short Guess short when ICD-10 type is known
 #' @export
 #' @keywords internal
-icd_guess_short.icd10 <- function(x, short_code = NULL, test_n = 1000L) {
-  # would be better to dispatch again with NextMethod, but that was crooked.
-  icd_guess_short.default(x, short_code, test_n)
+icd_guess_short.icd10 <- function(x, short_code = NULL, test_n = 1000L, ...) {
+  .guess_short(x, short_code, test_n)
+}
+
+#' @describeIn icd_guess_short Guess short when ICD-10 type is known
+#' @export
+#' @keywords internal
+icd_guess_short.icd10cm <- function(x, short_code = NULL, test_n = 1000L, ...) {
+  .guess_short(x, short_code, test_n)
 }
 
 #' @describeIn icd_guess_short Guess short from a list
 #' @export
+#' @method icd_guess_short list
 #' @keywords internal
 icd_guess_short.list <- function(x, short_code = NULL, test_n = 1000L) {
-  y <- unlist(x)
-  icd_guess_short(y, short_code = short_code, test_n)
+  UseMethod("icd_guess_short", unlist(x, recursive = TRUE))
 }
 
 #' @describeIn icd_guess_short Guess short naive default method
 #' @export
 #' @keywords internal
-icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L) {
-  # any decimal as first approximation
-  !any(str_detect(x[1:test_n], ".+\\..+"), na.rm = TRUE)
+icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L, ...) {
+
+  # if all the codes are major, we should warn the user
+  .guess_short(x, short_code, test_n)
 }
 
 #' @describeIn icd_guess_short Guess short when type is short

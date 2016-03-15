@@ -95,7 +95,7 @@ test_that("extraction from qualifier subset works", {
 
 # The following tests on the RTF parsing get the RTF source over internet, so
 # package doesn't have to include the big RTF source file
-context("RTF tests, sources optinally downloaded when required")
+context("RTF tests, sources optionally downloaded when required")
 
 test_year <- "2011"
 

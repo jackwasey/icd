@@ -153,7 +153,18 @@ set_re_globals <- function(env = parent.frame()) {
   for (re in ls(envir = cur_env, pattern = "re_.+"))
     assign(re, get(re, envir = cur_env), envir = env)
 
-  invisible(cur_env)
+  invisible(list(re_icd10_any, re_icd10_decimal, re_icd10_short, re_icd10cm_any, 
+re_icd10cm_decimal, re_icd10cm_short, re_icd10_major, re_icd10who_major,
+re_icd10cm_major, re_icd10_major_bare, re_icd10who_major_bare,
+re_icd10cm_major_bare, re_icd9_any, re_icd9_short, re_icd9_decimal_strict_bare,
+re_icd9_decimal_bare, re_icd9_decimal, re_icd9_any_e, re_icd9_any_v,
+re_icd9_any_n, re_icd9_short_e, re_icd9_short_v, re_icd9_short_n,
+re_icd9_decimal_e, re_icd9_decimal_v, re_icd9_decimal_n,
+re_icd9_decimal_e_strict_bare, re_icd9_decimal_v_strict_bare, re_icd9_decimal_n_strict_bare,
+re_icd9_decimal_e_bare, re_icd9_decimal_v_bare, re_icd9_decimal_n_bare, re_icd9_minor_e,
+re_icd9_minor_nv, re_icd9_major_strict_bare, re_icd9_major_strict, re_icd9_major_bare,
+re_icd9_major, re_icd9_major_e_strict, re_icd9_major_e, re_icd9_major_v_strict,
+re_icd9_major_v, re_icd9_major_n_strict, re_icd9_major_n))
 }
 # and put these in the package namespace
 set_re_globals()
@@ -236,7 +247,7 @@ icd_is_valid.default <- function(x, ...) {
 icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
                                    whitespace_ok = TRUE, ...) {
   assert_flag(whitespace_ok)
-  x <- icd_guess_version_update(x)
+  x <- icd_guess_version_update(x, short_code = short_code)
   UseMethod("icd_is_valid", x)
 }
 
@@ -254,9 +265,9 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
 
   # TODO: test whether ICD-10-CM or WHO, if class not otherwise specified.
   if (short_code)
-    x %>% str_trim() %>% str_detect(re_icd10_short)
+    x %>% str_trim() %>% str_detect(re_just(re_icd10_short))
   else
-    x %>% str_trim() %>% str_detect(re_icd10_decimal)
+    x %>% str_trim() %>% str_detect(re_just(re_icd10_decimal))
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
@@ -384,7 +395,10 @@ icd_is_valid_major <- function(x, whitespace_ok = TRUE) {
 #' @export
 #' @keywords internal
 icd_is_valid_major.default <- function(x, whitespace_ok = TRUE) {
-  stop("Specify type for checking validity of ICD-9 or ICD-10 major codes, to avoid ambiguity, e.g. V10", call. = FALSE)
+  assert_flag(whitespace_ok)
+  # check ICD-9 or ICD-10 majors: big regex, probably slow
+  icd_is_valid_major.icd9(x, whitespace_ok) | 
+    icd_is_valid_major.icd10(x, whitespace_ok)
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.

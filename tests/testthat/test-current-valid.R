@@ -352,8 +352,12 @@ test_that("icd-9 code is really in the list, not just syntactically valid", {
 })
 
 test_that("filter valid - bad input", {
+  expect_error(icd_filter_valid())
+  expect_error(icd_filter_valid(list(j = "k")))
   expect_error(icd_filter_valid.icd9())
-  expect_error(icd_filter_valid.icd9(list(j = "k")))
+  expect_error(icd_filter_valid.icd9())
+  expect_error(icd_filter_valid.icd10(list(j = "k")))
+  expect_error(icd_filter_valid.icd10(list(j = "k")))
 })
 
 test_that("get valid - vector input", {
@@ -373,27 +377,27 @@ test_that("get valid - vector input", {
 test_that("filter valid - data frame input", {
 
   expect_equal(icd_filter_valid.icd9(pts_invalid_mix), pts_invalid_mix[c(1, 3), ])
-
   expect_equal(icd_filter_invalid.icd9(pts_invalid_mix), pts_invalid_mix[2, ])
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, invert = TRUE),
-               pts_invalid_mix[2, ])
+  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, invert = TRUE), pts_invalid_mix[2, ])
+  # same with S3
+  expect_equal(icd_filter_valid(pts_invalid_mix), pts_invalid_mix[c(1, 3), ])
+  expect_equal(icd_filter_invalid(pts_invalid_mix), pts_invalid_mix[2, ])
+  expect_equal(icd_filter_valid(pts_invalid_mix, invert = TRUE), pts_invalid_mix[2, ])
 
   # no non-short so all are invalid:
-  expect_equal(tfinvalid <- icd_filter_valid.icd9(pts_invalid_mix, invert = TRUE, short_code = FALSE),
-               pts_invalid_mix)
+  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, invert = TRUE, short_code = FALSE), pts_invalid_mix)
+  # same with S3 dispatch
+  expect_equal(tfinvalid <- icd_filter_valid(pts_invalid_mix, invert = TRUE, short_code = FALSE), pts_invalid_mix)
   expect_true(is.icd9(tfinvalid))
   expect_true(is.icd_long_data(tfinvalid))
   expect_is(tfinvalid, "icd9")
   expect_is(tfinvalid, "icd_long_data")
   # arg order irrelevant, but can be mixed up in S3 dispatch.
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = FALSE, invert = TRUE),
-               pts_invalid_mix)
+  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = FALSE, invert = TRUE), pts_invalid_mix)
 
   # use invert and isShort args:
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = TRUE, invert = TRUE),
-               pts_invalid_mix[2, ])
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = TRUE, invert = FALSE),
-               pts_invalid_mix[c(1, 3 ), ])
+  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = TRUE, invert = TRUE), pts_invalid_mix[2, ])
+  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = TRUE, invert = FALSE), pts_invalid_mix[c(1, 3 ), ])
 })
 
 test_that("validate mappings", {

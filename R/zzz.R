@@ -19,16 +19,16 @@
 
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
-    "Welcome to the \"icd\" package for finding comorbidities and
-     interpretation of ICD-9 and ICD-10 codes. Suggestions and contributions are
-     welcome at https://github.com/jackwasey/icd .
+    "Welcome to the \"icd\" package for finding comorbidities and interpretation of ICD-9 and ICD-10 codes. Suggestions and contributions are welcome at https://github.com/jackwasey/icd .
+
+Available options are:
+\"icd.warn_guess_short\" which will cause ambiguous guesses of decimal versus short codes to warn the user.
+\"icd.warn_deprecated\" which will warn if deprecated functions from the old \"icd9\" package are used.
+See the vignettes for examples.
 
 Please cite this package if you find it useful in your published work.
 citation(package = \"icd\")
 
-Development version can be installed with
-# install.packages(\"devtools\")
-devtools::install_github(\"jackwasey/icd\")
 ")
 
   if (system.file(package = "icd9") != "")

@@ -694,8 +694,8 @@ test_that("failing example", {
 test_that("disordered visit_ids works by default", {
   set.seed(1441)
   dat <- transform(test_twenty, visit_id = sample(visit_id))
-  tres <- icd_comorbid.icd9(dat, icd::icd9_map_ahrq, icd9Field = "icd9Code")
-  cres <- icd_comorbid.icd9(test_twenty, icd::icd9_map_ahrq, icd9Field = "icd9Code")
+  tres <- icd_comorbid.icd9(dat, icd::icd9_map_ahrq, icd_name = "icd9Code")
+  cres <- icd_comorbid.icd9(test_twenty, icd::icd9_map_ahrq, icd_name = "icd9Code")
   expect_equal(dim(tres), dim(cres))
   expect_equal(sum(tres), sum(cres))
   expect_true(setequal(rownames(tres), rownames(cres)))

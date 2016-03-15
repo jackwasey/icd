@@ -30,6 +30,7 @@ test_that("thousands of patients", {
 })
 
 test_that("vary everything", {
+  old_opts <- options("icd.threads", "icd.chunk_size", "icd.omp_chunk_size")
   omp_chunk_size <- 1
   # prime numbers
   for (pts in c(0, 1, 3, 31, 1013, 10009)) {
@@ -41,14 +42,16 @@ test_that("vary everything", {
           options("icd.chunk_size" = chunk_size)
           # omp_chunk_size is not currently not set in CPP code
           options("icd.omp_chunk_size" = omp_chunk_size)
-          expect_error(
-            icd_comorbid_quan_deyo.icd9(rand_pts, short_code = FALSE, applyHierarchy = TRUE),
-            NA,
-            info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
-                           pts, dz_per_patient, threads, chunk_size)
-          )
+          if (packageVersion("testthat") < package_version("0.11.0.9000")) 
+            expect_that( icd_comorbid_quan_deyo.icd9(rand_pts, short_code = FALSE, hierarchy = TRUE),
+              condition = testthat::not(testthat::throws_error()),
+              info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
+                             pts, dz_per_patient, threads, chunk_size))
+          else
+            expect_error(icd_comorbid_quan_deyo.icd9(rand_pts, short_code = FALSE, hierarchy = TRUE), NA)
         }
       }
     }
   }
+  options(old_opts)
 })

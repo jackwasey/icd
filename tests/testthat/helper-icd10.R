@@ -36,12 +36,12 @@ icd10_each_quan_elix_cmb <- icd10cm(c(
     "F31.31"))
 
 icd10_each_ahrq_cmb <- icd10cm(c(
-  "I509", # CHF I42.6 not in AHRQ, but in Quan Elix
+  "I50.9", # CHF I42.6 not in AHRQ, but in Quan Elix
   "Z95.3",
   "I27.81",
   "K55.8",
   "I10", # I10.x in Quan et al, but I10 is a lead node in ICD-10-CM
-  "O119", #htncx, use pregnancy HTN, so I don't also get CHF, renal or DM
+  "O11.9", #htncx, use pregnancy HTN, so I don't also get CHF, renal or DM
   "G82.50", # paralysis
   "R56.00",
   "J45.998", # pulm
@@ -65,7 +65,7 @@ icd10_each_ahrq_cmb <- icd10cm(c(
   "F10.959",
   "F11.988",
   "F29",
-  "F4321")) # depression F31.31 not in AHRQ, but appears in Quan Elix
+  "F43.21")) # depression F31.31 not in AHRQ, but appears in Quan Elix
 icd10_all_quan_elix <- data.frame(pt_id = 1:31, icd10_code = icd10_each_quan_elix_cmb, stringsAsFactors = FALSE) %>% icd10cm
 icd10_all_quan_elix_one_pt <- data.frame(pt_id = rep(1, 31), icd10_code = icd10_each_quan_elix_cmb)
 

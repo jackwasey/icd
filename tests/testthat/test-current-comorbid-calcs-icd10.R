@@ -21,10 +21,10 @@ context("ICD-10 comorbidity calculations")
 
 test_that("ICD-10 comorbidities from uranium are calculated without warnings or errors", {
   skip_slow_tests("icd10 comorbidity calcs are unfortunatley slow")
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_elix), NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_deyo), NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_elix), NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_ahrq), NA)
+  icd_comorbid(uranium_pathology, icd10_map_quan_elix)
+  icd_comorbid(uranium_pathology, icd10_map_quan_deyo)
+  icd_comorbid(uranium_pathology, icd10_map_elix)
+  icd_comorbid(uranium_pathology, icd10_map_ahrq)
   # TODO much more here
 })
 
@@ -44,11 +44,11 @@ test_that("ahrq comorbidities found for test data", {
 
   for (test_name in names(td)) {
 
-    expect_warning(res <- icd_comorbid(td[[test_name]], icd::icd10_map_ahrq), NA)
+    res <- icd_comorbid(td[[test_name]], icd::icd10_map_ahrq)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method one comorbidity:", n, ", test: ", test_name))
 
-    expect_warning(res <- icd_comorbid.icd10(td[[test_name]], icd::icd10_map_ahrq), NA)
+    res <- icd_comorbid.icd10(td[[test_name]], icd::icd10_map_ahrq)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method two comorbidity:", n, ", test: ", test_name))
   }
@@ -68,13 +68,13 @@ test_that("ahrq comorbidities found for test data for multiple patients each wit
   # just checking for a trace matrix of TRUE, but this way lets me find error much more quickly:
   for (test_name in names(td)) {
 
-    expect_warning(res <- icd_comorbid(td[[test_name]], icd::icd10_map_ahrq), NA)
+    res <- icd_comorbid(td[[test_name]], icd::icd10_map_ahrq)
     for (n in colnames(res))
       expect_equal(sum(res[, n]), 1, info = paste("col method one comorbidity:", n, ", test: ", test_name))
     for (n in rownames(res))
       expect_equal(sum(res[n, ]), 1, info = paste("row method one comorbidity:", n, ", test: ", test_name))
 
-    expect_warning(res <- icd_comorbid.icd10(td[[test_name]], icd::icd10_map_ahrq), NA)
+    res <- icd_comorbid.icd10(td[[test_name]], icd::icd10_map_ahrq)
     for (n in colnames(res))
       expect_equal(sum(res[, n]), 1, info = paste("method two comorbidity:", n, ", test: ", test_name))
     for (n in rownames(res))
@@ -87,7 +87,6 @@ test_that("comorbidity from single ICD-10 leaf or non-leaf code doesn't cause in
     for (class_fun in c("as.character", "icd10", "icd10cm")) {
       for (map_fun in c("icd_comorbid_elix", "icd_comorbid_quan_elix",
                          "icd_comorbid_quan_deyo", "icd_comorbid_ahrq")) {
-        message(code, class_fun, map_fun)
         code_with_class <- do.call(class_fun, list(code))
         df <- data.frame(visit = 1, code = code_with_class,
                          stringsAsFactors = FALSE) # TODO: allow factors
