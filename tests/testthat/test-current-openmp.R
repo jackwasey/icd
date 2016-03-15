@@ -42,7 +42,7 @@ test_that("vary everything", {
           options("icd.chunk_size" = chunk_size)
           # omp_chunk_size is not currently not set in CPP code
           options("icd.omp_chunk_size" = omp_chunk_size)
-          if (packageVersion("testthat") < package_version("0.11.0.9000")) 
+          if (packageVersion("testthat") < package_version("0.11.0.9000"))
             expect_that( icd_comorbid_quan_deyo.icd9(rand_pts, short_code = FALSE, hierarchy = TRUE),
               condition = testthat::not(testthat::throws_error()),
               info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",

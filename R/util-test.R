@@ -403,7 +403,7 @@ setup_test_check <- function() {
     message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
     options("icd.do_slow_tests" = TRUE)
   }
-
+# nocov start
   if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
     message("environment variable ICD_ONLINE_TESTS found to be true, so doing online tests")
     options("icd.do_online_tests" = TRUE)
@@ -413,6 +413,7 @@ setup_test_check <- function() {
     message("environment variable ICD_WARN_DEPRECATE found to be true, so warning for deprecated icd9 function use")
     options("icd.warn_deprecated" = TRUE)
   }
+# nocov end
 }
 
 #' run \code{testtthat::test_check} with a Perl regular expression filter

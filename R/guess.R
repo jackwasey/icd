@@ -30,7 +30,7 @@
 #' @keywords internal
 icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, ...) {
   # if short_code is set, no need to dispatch at all
-  if (!is.null(short_code)) 
+  if (!is.null(short_code))
     return(short_code)
   if (is.icd_short_code(x))
     return(TRUE)
@@ -45,7 +45,7 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, ...) {
 #' @method icd_guess_short data.frame
 #' @keywords internal
 icd_guess_short.data.frame <- function(x, short_code = NULL, test_n = 1000L, icd_name = get_icd_name(x)) {
-  UseMethod("icd_guess_short", x[[icd_name]]) 
+  UseMethod("icd_guess_short", x[[icd_name]])
 }
 
 .guess_warn <- function() {

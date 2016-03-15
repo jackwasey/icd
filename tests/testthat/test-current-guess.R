@@ -10,7 +10,7 @@ expect_guess_no_warning <- function(...) {
 
   old_opt <- options("icd.warn_guess_short" = TRUE)
   on.exit(options(old_opt))
-  
+
   if (packageVersion("testthat") < package_version("0.11.0.9000"))
     expect_that(..., condition = testthat::gives_warning())
   else
@@ -60,8 +60,11 @@ class(pts$code) <- "character"
 
 expect_true(icd_guess_short(pts))
 
-no_pts <- structure(list(visit_id = integer(0), code = character(0), poa = structure(integer(0), .Label = character(0), class = "factor")), .Names = c("visit_id",
-"code", "poa"), row.names = integer(0), class = "data.frame")
+no_pts <- structure(list(visit_id = integer(0), 
+                         code = character(0), 
+                         poa = structure(integer(0),
+                                         .Label = character(0), class = "factor")),
+                    .Names = c("visit_id", "code", "poa"), row.names = integer(0), class = "data.frame")
 
 # no error?
 icd_guess_short(no_pts)

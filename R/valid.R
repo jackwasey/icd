@@ -397,7 +397,7 @@ icd_is_valid_major <- function(x, whitespace_ok = TRUE) {
 icd_is_valid_major.default <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
   # check ICD-9 or ICD-10 majors: big regex, probably slow
-  icd_is_valid_major.icd9(x, whitespace_ok) | 
+  icd_is_valid_major.icd9(x, whitespace_ok) |
     icd_is_valid_major.icd10(x, whitespace_ok)
 }
 
