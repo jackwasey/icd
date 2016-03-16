@@ -150,7 +150,7 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x
   if (length(icd10Short) == 0) {
     if (length(x) > 0)
       warning("none of the provided ICD-10 codes matched the canonical list")
-    return(icd9cm(character(0)))
+    return(icd10cm(character(0)))
   }
 
   for (i in seq_along(icd10Short)) {

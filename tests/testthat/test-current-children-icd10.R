@@ -61,9 +61,9 @@ test_that("zero length ICD-10-CM children", {
   expect_identical(icd_children_defined(icd10cm("%!^#&<>?,./")), icd10cm(character(0)))
 
   if (packageVersion("testthat") < package_version("0.11.0.9000"))
-    expect_that(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)), 
+    expect_that(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)),
       testthat::throws_warning())
   else
-    expect_warning(icd_children_defined(icd10cm(icharacter(0))), icd10cm(character(0)), regex = NA)
+    expect_warning(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)), regex = NA)
 
 })
