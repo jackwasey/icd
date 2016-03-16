@@ -36,11 +36,13 @@ test_that("well ordered class lists are created", {
   expect_icd_classes_ordered(icd10cm(""))
   expect_icd_classes_ordered(icd10who(""))
 
+  skip("this is time consuming, and we should probably tolerate mixed order anyway")
   expect_icd_classes_ordered(icd_short_code(""))
   expect_icd_classes_ordered(icd_decimal_code(""))
 })
 
 test_that("well ordered class lists short/decimal ICD combos are created", {
+  skip("this is time consuming, and we should probably tolerate mixed order anyway")
   expect_icd_classes_ordered(icd_short_code(icd9("V102")))
   expect_icd_classes_ordered(icd_decimal_code(icd9cm("410.00")))
   expect_icd_classes_ordered(icd_short_code(icd10("A100")))
@@ -55,10 +57,10 @@ test_that("well ordered class lists short/decimal ICD combos are created", {
 })
 
 test_that("warn if changing ICD decimal to short or vice versa", {
-  expect_warning(icd_short_code(icd_decimal_code("10.1")))
-  expect_warning(icd_decimal_code(icd_short_code("2222")))
-  expect_warning(icd_short_code(icd_decimal_code(icd9cm("10.1"))))
-  expect_warning(icd_decimal_code(icd_short_code(icd10who("D22"))))
+  expect_warning(icd_short_code(icd_decimal_code("10.1"), warn = TRUE))
+  expect_warning(icd_decimal_code(icd_short_code("2222"), warn = TRUE))
+  expect_warning(icd_short_code(icd_decimal_code(icd9cm("10.1")), warn = TRUE))
+  expect_warning(icd_decimal_code(icd_short_code(icd10who("D22")), warn = TRUE))
 })
 
 test_that("is short or decimal code", {

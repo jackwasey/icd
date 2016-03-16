@@ -257,7 +257,7 @@ icd_wide_data <- function(x) {
 
 #' @rdname set_icd_class
 #' @export
-icd_short_code <- function(x, warn = TRUE) {
+icd_short_code <- function(x, warn = FALSE) {
   assert_flag(warn)
   if (missing(x)) x <- character()
   # TODO consider warning if there are decimals!
@@ -290,18 +290,18 @@ get_pos_short_decimal_class <- function(x) {
 
 #' @rdname set_icd_class
 #' @export
-icd_decimal_code <- function(x, warn = TRUE) {
+icd_decimal_code <- function(x, warn = FALSE) {
   assert_flag(warn)
   if (missing(x)) x <- character()
+  cl <- class(x)
   # TODO consider warning if there are decimals!
   if (inherits(x, "icd_decimal_code"))
     return(x)
   if (inherits(x, "icd_short_code")) {
     if (warn) warning("setting class to describe decimal format ICD codes, but short is currently set")
-    class(x) <- class(x)[class(x) %nin% "icd_short_code"]
+    class(x) <- cl[cl != "icd_short_code"]
   }
-  class(x) <- append(class(x), "icd_decimal_code",
-                     after = get_pos_short_decimal_class(x))
+  class(x) <- append(cl, "icd_decimal_code")
   x
 }
 
