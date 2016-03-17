@@ -20,7 +20,7 @@
 #' \code{NA} is accepted (and returned as \code{NA_character_})
 #' @param x character vector of length one
 #' @return character vector of length one
-#' @keywords internal character 
+#' @keywords internal character
 strim <- function(x) {
   assert_string(x, na.ok = TRUE)
   if (!is.na(x[1]))
@@ -35,6 +35,11 @@ strim <- function(x) {
 #' @param x character vector
 #' @return character vector
 #' @keywords internal
+#' @examples
+#' \dontrun{
+#' s <- random_string(250);
+#' microbenchmark::microbenchmark(trim(s), trimws(s))
+#' }
 trim <- function(x) {
   nax <- is.na(x)
   x[!nax] <- .Call("icd_trimCpp", PACKAGE = "icd", as.character(x[!nax]))
@@ -75,6 +80,16 @@ as_char_no_warn <- function(x) {
 #'   slightly quicker \code{TRUE}
 #' @return character vector of same length as input
 #' @keywords internal
+#' @examples
+#' \dontrun{
+#' x <- random_string(25000);
+#' microbenchmark::microbenchmark(
+#'   gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE),
+#'   gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE, perl = TRUE),
+#'   gsub(x = x, pattern = "A", replacement = ""),
+#'   stringr::str_replace_all(x, "A", "")
+#'   )
+#' }
 strip <- function(x, pattern = " ", use_bytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = use_bytes)
@@ -233,7 +248,7 @@ icd9cm_latest_edition <- function() "32"
 
 #' swap names and values of a vector
 #'
-#' Swap names and values of a vector. Non-character values are implicitly 
+#' Swap names and values of a vector. Non-character values are implicitly
 #' converted to names.
 #' @param x named vector
 #' @return vector, with values being the names of the input vector, and names

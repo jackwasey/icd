@@ -14,7 +14,7 @@ vector, with values being the names of the input vector, and names
 being the previous values.
 }
 \description{
-Swap names and values of a vector. Non-character values are implicitly 
+Swap names and values of a vector. Non-character values are implicitly
 converted to names.
 }
 \keyword{internal}

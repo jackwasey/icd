@@ -255,37 +255,37 @@ icd_wide_data <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
-#' @export
-icd_short_code <- function(x, warn = FALSE) {
-  assert_flag(warn)
-  if (missing(x)) x <- character()
-  # TODO consider warning if there are decimals!
-  if (inherits(x, "icd_short_code")) return(x)
-  if (inherits(x, "icd_decimal_code")) {
-    if (warn) warning("setting class to describe short format ICD codes, but decimal is currently set")
-    class(x) <- class(x)[class(x) %nin% "icd_decimal_code"]
-  }
-
-  class(x) <- append(class(x), "icd_short_code",
-                     after = get_pos_short_decimal_class(x))
-  x
-}
-
 #' get position to set short or decimal class
 #'
 #' prefer immediately after \code{icd9cm}, etc., if not, place before system
 #' classes at end, or at the very end if no system classes
 #' @keywords internal
 get_pos_short_decimal_class <- function(x) {
-  pos_last_icd_type <- which(class(x) %in% c(icd9_classes, icd10_classes))
-  pos_system_type <- which(class(x) %in% icd_system_classes)
+  cl <- class(x)
+  pos_last_icd_type <- which(cl %in% c(icd9_classes, icd10_classes))
+  pos_system_type <- which(cl %in% icd_system_classes)
   if (length(pos_last_icd_type) > 0)
     max(pos_last_icd_type)
   else if (length(pos_system_type) > 0)
     max(pos_system_type) - 1
   else
-    length(class(x))
+    length(cl)
+}
+
+#' @rdname set_icd_class
+#' @export
+icd_short_code <- function(x, warn = FALSE) {
+  assert_flag(warn)
+  cl <- class(x)
+  # TODO consider warning if there are decimals, but this needs to be fast
+  if (inherits(x, "icd_short_code")) return(x)
+  if (inherits(x, "icd_decimal_code")) {
+    if (warn) warning("setting class to describe short format ICD codes, but decimal is currently set")
+    class(x) <- cl[cl %nin% "icd_decimal_code"]
+  }
+
+  class(x) <- append(cl, "icd_short_code")
+  x
 }
 
 #' @rdname set_icd_class

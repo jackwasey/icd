@@ -24,5 +24,16 @@ functions, whereas \code{stringr} is used for tasks which are not time
 critical, e.g. parsing source data to be included in the distributed
 \code{icd} package.
 }
+\examples{
+\dontrun{
+x <- random_string(25000);
+microbenchmark::microbenchmark(
+  gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE),
+  gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE, perl = TRUE),
+  gsub(x = x, pattern = "A", replacement = ""),
+  stringr::str_replace_all(x, "A", "")
+  )
+}
+}
 \keyword{internal}
 
