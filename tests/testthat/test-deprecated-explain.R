@@ -103,6 +103,7 @@ test_that("guess icd9 types: short", {
 })
 
 test_that("guess icd9 types: ambiguous, default to short", {
+  skip("this is no longer expected functionality")
   expect_equal(icd9GuessIsShort(c("123.4", "2345")), TRUE)
   expect_equal(icd9GuessIsShort(c("123.4", NA, "2345")), TRUE)
 })

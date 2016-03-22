@@ -12,9 +12,9 @@ icd_get_invalid(...)
 
 \method{icd_get_invalid}{default}(x, short_code = NULL, ...)
 
-\method{icd_get_invalid}{icd9}(x, short_code = icd_guess_short.icd9(x), ...)
+\method{icd_get_invalid}{icd9}(x, short_code = icd_guess_short(x), ...)
 
-\method{icd_get_invalid}{icd10}(x, short_code = icd_guess_short.icd10(x), ...)
+\method{icd_get_invalid}{icd10}(x, short_code = icd_guess_short(x), ...)
 
 \method{icd_get_invalid}{icd_comorbidity_map}(x,
   short_code = icd_guess_short(x), ...)

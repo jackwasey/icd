@@ -1,4 +1,6 @@
 #!/bin/sh
+set -euo pipefail
+IFS=$'\n\t'
 
 #--use-c++=/usr/local/bin/clang++ \
 #--use-cc=/usr/local/bin/clang \

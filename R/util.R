@@ -382,7 +382,7 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
 }
 
 icd9_order_short <- function(x) {
-  y <- x[order(icd9_add_leading_zeroes.icd_short_code(x))]
+  y <- x[order(icd9_add_leading_zeroes(x, short_code = TRUE))]
   #fastmatch::fmatch(
   match(
     y[c(which(icd9_is_n(y)), which(icd9_is_v(y)), which(icd9_is_e(y)))],

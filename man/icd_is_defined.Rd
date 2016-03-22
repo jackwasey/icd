@@ -10,13 +10,13 @@
 \usage{
 icd_is_defined(x, short_code = icd_guess_short(x), ...)
 
-\method{icd_is_defined}{icd9}(x, short_code = icd_guess_short.icd9(x),
+\method{icd_is_defined}{icd9}(x, short_code = icd_guess_short(x),
   billable = FALSE, ...)
 
-\method{icd_is_defined}{icd10cm}(x, short_code = icd_guess_short.icd10(x),
+\method{icd_is_defined}{icd10cm}(x, short_code = icd_guess_short(x),
   billable = FALSE, ...)
 
-\method{icd_is_defined}{icd10}(x, short_code = icd_guess_short.icd10(x),
+\method{icd_is_defined}{icd10}(x, short_code = icd_guess_short(x),
   billable = FALSE, ...)
 
 \method{icd_is_defined}{default}(x, short_code = icd_guess_short(x), ...)

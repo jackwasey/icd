@@ -7,7 +7,7 @@
 \alias{icd9ExpandRangeShort}
 \title{Deprecated: expand range of ICD-9 codes}
 \usage{
-icd9ExpandRange(start, end, isShort = icd_guess_short.icd9(c(start, end)),
+icd9ExpandRange(start, end, isShort = icd_guess_short(c(start, end)),
   onlyReal = TRUE, excludeAmbiguousStart = TRUE,
   excludeAmbiguousEnd = TRUE)
 

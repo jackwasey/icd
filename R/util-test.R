@@ -89,6 +89,11 @@ expect_equal_no_icd <- function(object, expected, ...) {
   eval(bquote(testthat::expect_equal(.(object), .(expected), ...)))
 }
 
+expect_equal_no_class_order <- function(object, expected, ...) {
+ eval(bquote(testthat::expect_true(all(class(.(object)) %in% class(.(expected))), ...)))
+ eval(bquote(testthat::expect_equal(unclass(.(object)), unclass(.(expected)), ...)))
+}
+
 #' expect named sub-chapter has a given range, case insensitive
 #'
 #' First checks that the given name is indeed in \code{ver_chaps},

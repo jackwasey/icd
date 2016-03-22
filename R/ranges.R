@@ -70,12 +70,12 @@ icd_expand_range.character <- function(start, end, short_code = NULL, defined = 
   icd_ver <- icd_guess_pair_version(start = start, end = end, short_code = short_code)
   if (icd_ver == "icd9") {
     if (is.null(short_code))
-      short_code <- icd_guess_short.icd9(c(start, end))
+      short_code <- icd_guess_short(c(start, end))
     icd_expand_range.icd9(start, end, short_code = short_code, defined = defined, ...)
   } else {
     # if not ICD-9, must be ICD-10 (for now)
     if (is.null(short_code))
-      short_code <- icd_guess_short.icd10(c(start, end))
+      short_code <- icd_guess_short(c(start, end))
     icd_expand_range.icd10cm(start, end, short_code = short_code, defined = defined, ...)
   }
 }
@@ -90,7 +90,7 @@ icd_expand_range.character <- function(start, end, short_code = NULL, defined = 
 #' @param end  character vector of length one containing an ICD code
 #' @export
 #' @keywords internal
-icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short.icd10(c(start, end)),
+icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short(c(start, end)),
                                      defined = TRUE, ...) {
   if (!defined)
     stop("expanding ranges of possible (versus defined) ICD-10-CM codes is not yet implemented.
@@ -176,13 +176,13 @@ icd_expand_range_major.icd10cm <- function(start, end) {
     stop(se[[1]], " as start not found")
   if (is.na(pos[[2]]))
     stop(se[[2]], " as end not found")
-  unique_mjrs[pos[[1]]:pos[[2]]] %>% as_char_no_warn %>% icd10cm
+  unique_mjrs[pos[[1]]:pos[[2]]] %>% as_char_no_warn %>% as.icd10cm
 }
 
 #' @describeIn icd_expand_range Expand a range of ICD-9 codes
 #' @export
 icd_expand_range.icd9 <- function(start, end,
-                                  short_code = icd_guess_short.icd9(c(start, end)),
+                                  short_code = icd_guess_short(c(start, end)),
                                   defined = TRUE,
                                   ex_ambig_start = TRUE,
                                   ex_ambig_end = TRUE,
@@ -266,8 +266,8 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
 
-  start <- icd9_add_leading_zeroes.icd_short_code(trim(start))
-  end <- icd9_add_leading_zeroes.icd_short_code(trim(end))
+  start <- icd9_add_leading_zeroes(trim(start), short_code = TRUE)
+  end <- icd9_add_leading_zeroes(trim(end), short_code = TRUE)
 
   # potentially do some checks on start and end. Determine whether we are doing
   # N, V or E then lookup start and end indices in sysdata.rda lookup tables

@@ -350,25 +350,19 @@ icd_decimal_to_short <- function(x) {
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd9 <- function(x) {
-  icd9DecimalToShortCpp(x) %>% icd_short_code(warn = FALSE) %>% icd9
+  icd9DecimalToShortCpp(x) %>% icd_short_code %>% icd9
 }
 
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd10 <- function(x) {
-  x %>% str_replace("\\.", "") %>% icd_short_code(warn = FALSE) %>% icd10
+  x %>% str_replace("\\.", "") %>% icd_short_code %>% icd10
 }
 
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd10cm <- function(x) {
   icd_decimal_to_short.icd10(x) %>% icd10cm
-}
-
-#' @export
-#' @keywords internal
-icd_decimal_to_short.icd10who <- function(x) {
-  icd_decimal_to_short.icd10(x) %>% icd10who
 }
 
 #' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to

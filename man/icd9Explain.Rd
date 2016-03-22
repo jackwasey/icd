@@ -6,7 +6,7 @@
 \alias{icd9ExplainShort}
 \title{Deprecated: explain ICD codes in words}
 \usage{
-icd9Explain(icd9, isShort = icd_guess_short.icd9(icd9), doCondense = TRUE,
+icd9Explain(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE,
   brief = FALSE, warn = TRUE)
 
 icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE)

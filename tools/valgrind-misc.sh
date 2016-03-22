@@ -1,4 +1,8 @@
 #!/bin/bash
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+IFS=$'\n\t'
+
 # R -d valgrind -e "library(icd); library(testthat); source('tests/testthat/helper-base.R');
 # R -d valgrind -e "library(icd); library(testthat); test_package('icd', reporter=VeryVerboseReporter())"
 R -d "valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -v" -e "library(icd); library(testthat); test_package('icd')"

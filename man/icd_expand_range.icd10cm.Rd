@@ -5,7 +5,7 @@
 \title{Expand range of ICD-10 codes returning only defined codes in ICD-10-CM}
 \usage{
 \method{icd_expand_range}{icd10cm}(start, end,
-  short_code = icd_guess_short.icd10(c(start, end)), defined = TRUE, ...)
+  short_code = icd_guess_short(c(start, end)), defined = TRUE, ...)
 }
 \arguments{
 \item{start}{character vector of length one containing an ICD code}

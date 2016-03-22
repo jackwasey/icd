@@ -82,7 +82,7 @@ icd_explain.icd9 <- function(...) {
 
 #' @describeIn icd_explain explain character vector of ICD-9-CM codes
 #' @export
-icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
+icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   # TODO, need to figure out how to use checkmate for my classes. ?extend it
   assert(checkmate::checkCharacter(unclass(x)), checkmate::checkFactor(x))
@@ -117,7 +117,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
 
 #' @describeIn icd_explain ICD-10 explanation not implemented yet
 #' @keywords internal
-icd_explain.icd10 <- function(x, short_code = icd_guess_short.icd9(x),
+icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   .NotYetImplemented()
   # TODO: this will be a fairly straightforward lookup from the icd2016cm data frame
@@ -128,10 +128,10 @@ icd_explain.icd10 <- function(x, short_code = icd_guess_short.icd9(x),
 #'   numeric decimal codes, but for convenience, this is allowed in this case to
 #'   avoid typing many quotes.
 #' @export
-icd_explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
+icd_explain.numeric <- function(x, short_code = icd_guess_short(icd9),
                                 condense = TRUE, brief = FALSE, warn = FALSE, ...) {
-  warnNumericCode()
-  icd_explain.character(as.character(icd9), short_code = short_code, condense = condense, brief = brief, warn = warn)
+  warn_numeric_code()
+  icd_explain.character(as.character(x), short_code = short_code, condense = condense, brief = brief, warn = warn)
 }
 
 #' get ICD-9 Chapters from vector of ICD-9 codes
@@ -145,7 +145,7 @@ icd_explain.numeric <- function(icd9, short_code = icd_guess_short(icd9),
 #' @template short_code
 #' @template verbose
 #' @keywords internal
-icd9_get_chapters <- function(x, short_code = icd_guess_short.icd9(x),
+icd9_get_chapters <- function(x, short_code = icd_guess_short(x),
                               verbose = FALSE) {
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for

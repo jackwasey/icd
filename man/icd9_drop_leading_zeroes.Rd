@@ -2,19 +2,10 @@
 % Please edit documentation in R/manip.R
 \name{icd9_drop_leading_zeroes}
 \alias{icd9_drop_leading_zeroes}
-\alias{icd9_drop_leading_zeroes.default}
-\alias{icd9_drop_leading_zeroes.icd_decimal_code}
-\alias{icd9_drop_leading_zeroes.icd_short_code}
 \alias{icd9_drop_leading_zeroes_major}
 \title{drop zero padding from decimal ICD-9 code.}
 \usage{
 icd9_drop_leading_zeroes(x, short_code = NULL)
-
-\method{icd9_drop_leading_zeroes}{icd_decimal_code}(x, short_code = NULL)
-
-\method{icd9_drop_leading_zeroes}{icd_short_code}(x, short_code = NULL)
-
-\method{icd9_drop_leading_zeroes}{default}(x, short_code = NULL)
 
 icd9_drop_leading_zeroes_major(major)
 }
@@ -37,17 +28,19 @@ be problematic. This is the inverse of \code{icd9_add_leading_zeroes}.
 Invalid codes have no guaranteed result, and may give NA, or a (possibly
 valid) code in response.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{icd_decimal_code}: Drop leading zeroes from a decimal
-format ICD-9 code.
-
-\item \code{icd_short_code}: Drop leading zeroes from a short format
-ICD-9 code
-
-\item \code{default}: Drop leading zeroes from ICD-9 codes of
-specified or unknown type.
-}}
+\examples{
+\dontrun{
+library(microbenchmark)
+library(stringr)
+x <- generate_random_decimal_icd9(1e6)
+microbenchmark(
+  x \%>\% as_char_no_warn \%>\% str_replace("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
+  str_replace(as_char_no_warn(x), "[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
+  gsub("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3", x),
+  times = 1000
+  )
+}
+}
 \seealso{
 Other ICD-9 convert: \code{\link{icd9PartsToShort}},
   \code{\link{icd9_chapters_to_map}},

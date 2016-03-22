@@ -5,29 +5,9 @@ test_that("tricky ICD-10 codes", {
   expect_equal(icd_guess_version("C7A024"), "icd10")
 })
 
-# gives and doesn't give warning based on flag
-expect_guess_no_warning <- function(...) {
-
-  old_opt <- options("icd.warn_guess_short" = TRUE)
-  on.exit(options(old_opt))
-
-  if (packageVersion("testthat") < package_version("0.11.0.9000"))
-    expect_that(..., condition = testthat::gives_warning())
-  else
-    expect_warning(...)
-
-  options("icd.warn_guess_short" = FALSE)
-  if (packageVersion("testthat") < package_version("0.11.0.9000"))
-    expect_that(..., condition = testthat::not(testthat::gives_warning()))
-  else
-    expect_warning(..., regex = NA)
-}
-
 test_that("default guess of short code if major - ICD-9", {
   # if major is given, we can't tell if it is short or long. Give warning and pick short.
-  expect_guess_no_warning(icd_guess_short("101"))
   expect_true(icd_guess_short("101"))
-  expect_guess_no_warning(icd_guess_short(c("101", "441")))
   expect_true(icd_guess_short(c("101", "441")))
 })
 
@@ -36,13 +16,10 @@ test_that("guess if major and decimal- ICD-9", {
 })
 
 test_that("default guess of short code if major - ICD-10", {
-  expect_guess_no_warning(icd_guess_short("A01"))
   expect_true(icd_guess_short("A01"))
-  expect_guess_no_warning(icd_guess_short(c("A01", "R20")))
   expect_true(icd_guess_short(c("A01", "R20")))
 })
 test_that("guess if major and decimal - ICD-10", {
-  expect_guess_no_warning(icd_guess_short(c("A01", "R20")))
   expect_false(icd_guess_short(c("A01", "R20.1")))
 })
 

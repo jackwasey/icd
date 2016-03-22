@@ -15,11 +15,11 @@ icd_children(x, ...)
 \method{icd_children}{icd9}(x, short_code = icd_guess_short(x),
   defined = TRUE, billable = FALSE, ...)
 
-\method{icd_children}{icd10}(x, short_code = icd_guess_short.icd10(x),
-  defined, billable = FALSE, ...)
+\method{icd_children}{icd10}(x, short_code = icd_guess_short(x), defined,
+  billable = FALSE, ...)
 
-\method{icd_children}{icd10cm}(x, short_code = icd_guess_short.icd10(x),
-  defined, billable = FALSE, ...)
+\method{icd_children}{icd10cm}(x, short_code = icd_guess_short(x), defined,
+  billable = FALSE, ...)
 }
 \arguments{
 \item{x}{data, e.g. character vector of ICD codes.}

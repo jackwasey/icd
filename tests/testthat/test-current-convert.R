@@ -122,10 +122,16 @@ test_that("short to decimal bad input", {
 })
 
 test_that("icd10 short to decimal", {
+  expect_true(is.icd_decimal_code(icd_short_to_decimal("A00")))
+  expect_true(is.icd_decimal_code(icd_short_to_decimal.icd10("A00")))
+  expect_true(is.icd_decimal_code(icd_short_to_decimal.icd10cm("A00")))
+  expect_true(is.icd_decimal_code(icd_short_to_decimal("A009")))
+  expect_true(is.icd_decimal_code(icd_short_to_decimal.icd10("A009")))
+  expect_true(is.icd_decimal_code(icd_short_to_decimal.icd10cm("A009")))
 
-  expect_equal(icd_short_to_decimal("A00"), icd10("A00") %>% icd_decimal_code)
-  expect_equal(icd_short_to_decimal.icd10("A00"), icd10("A00") %>% icd_decimal_code)
-  expect_equal(icd_short_to_decimal("A000"), icd10("A00.0") %>% icd_decimal_code)
+  expect_equal(icd_short_to_decimal("A00"), as.icd10("A00") %>% icd_decimal_code)
+  expect_equal(icd_short_to_decimal.icd10("A00"), as.icd10("A00") %>% icd_decimal_code)
+  expect_equal(icd_short_to_decimal("A000"), as.icd10("A00.0") %>% icd_decimal_code)
   expect_equal(icd_short_to_decimal.icd10("A000"), icd10("A00.0") %>% icd_decimal_code)
 
 })
@@ -182,7 +188,7 @@ test_that("running short to decimal conversion before and after expansion
             for (i in names(icd9List)) {
               expect_equal_no_icd(
                 icd_decimal_to_short.icd9(icd_short_to_decimal.icd9(icd9List[[i]])),
-                icd9_add_leading_zeroes.icd_short_code(icd9List[[i]]),
+                icd9_add_leading_zeroes(icd9List[[i]], short_code = TRUE),
                 info = paste("in loop:", i)
               )
             }

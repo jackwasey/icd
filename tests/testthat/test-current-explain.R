@@ -108,32 +108,27 @@ test_that("explain works when none ICD-9 codes are even valid", {
 
 
 test_that("guess icd9 types: short", {
-  expect_true(icd_guess_short.icd9("12345"))
-  expect_true(icd_guess_short.icd9(c("12345", "234")))
+  expect_true(icd_guess_short("12345"))
+  expect_true(icd_guess_short(c("12345", "234")))
   # we only look at first one...
-  expect_true(icd_guess_short.icd9(c("12345", "23.4")))
-  expect_true(icd_guess_short.icd9("1234"))
-})
-
-test_that("guess icd9 types: ambiguous, default to short", {
-  expect_equal(icd_guess_short.icd9(c("123.4", "2345")), TRUE)
-  expect_equal(icd_guess_short.icd9(c("123.4", NA, "2345")), TRUE)
+  expect_true(icd_guess_short(c("12345", "23.4")))
+  expect_true(icd_guess_short("1234"))
 })
 
 test_that("guess icd9 types: decimal", {
-  expect_false(icd_guess_short.icd9("123.45"))
-  expect_false(icd_guess_short.icd9("123.4"))
-  expect_false(icd_guess_short.icd9("123."))
+  expect_false(icd_guess_short("123.45"))
+  expect_false(icd_guess_short("123.4"))
+  expect_false(icd_guess_short("123."))
 })
 
 test_that("guess icd9 types: invalid", {
-  expect_equal(icd_guess_short.icd9(NA_character_), TRUE)
+  expect_equal(icd_guess_short(NA_character_), TRUE)
 })
 
 test_that("guess with just majors", {
   # it acutally doesn't matter if they are all majors, so we default to 'short'
   # which is usually the most direct route to an answer
-  expect_true(icd_guess_short.icd9(c("100", "101", "102")))
+  expect_true(icd_guess_short(c("100", "101", "102")))
 })
 
 test_that("extract top-level codes from the RTF gives the complete list", {

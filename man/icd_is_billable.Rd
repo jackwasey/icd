@@ -9,24 +9,27 @@
 \alias{icd_is_billable.icd9cm}
 \title{Determine whether codes are billable leaf-nodes}
 \usage{
-icd_is_billable(...)
+icd_is_billable(x, short_code = icd_guess_short(x),
+  version = icd9cm_latest_edition())
 
-\method{icd_is_billable}{icd9}(x, short_code = icd_guess_short.icd9(x),
-  version = icd9cm_latest_edition(), ...)
+\method{icd_is_billable}{icd9}(x, short_code = icd_guess_short(x),
+  version = icd9cm_latest_edition())
 
-\method{icd_is_billable}{icd10cm}(x, short_code = icd_guess_short.icd10(x),
-  version = "2016", ...)
+\method{icd_is_billable}{icd10cm}(x, short_code = icd_guess_short(x),
+  version = "2016")
 
-\method{icd_is_billable}{icd10}(x, short_code = icd_guess_short.icd10(x),
-  version = "2016", ...)
+\method{icd_is_billable}{icd10}(x, short_code = icd_guess_short(x),
+  version = "2016")
 
 \method{icd_is_billable}{icd9cm}(x, short_code = icd_guess_short(x),
-  version = icd9cm_latest_edition(), ...)
+  version = icd9cm_latest_edition())
 
 \method{icd_is_billable}{default}(x, short_code = icd_guess_short(x),
-  version = icd9cm_latest_edition(), ...)
+  version = icd9cm_latest_edition())
 }
 \arguments{
+\item{x}{input vector to test}
+
 \item{short_code}{single logical value which determines whether the ICD-9
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
@@ -35,23 +38,6 @@ Where reasonable, this is guessed from the input data.}
 release from CMS. Currently anything from "23" to "32" is accepted. Not
 numeric because there are possible cases with non-numeric names, e.g.
 revisions within one year, although none currently implemented.}
-
-\item{icd9}{is a character vector or factor of ICD-9 codes. If fewer than five characters
-is given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010".}
-
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five characters is
-given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010"}
-
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
-code, then the digits are greedily assigned to hundreds, then tens, then
-units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
-
-\item{invert}{Single logical value. Returns the inverse of the result. E.g.
-if seeking valid ICD-9 codes, the invalid ones are returned.}
 }
 \value{
 logical vector of same length as input

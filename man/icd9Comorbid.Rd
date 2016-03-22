@@ -16,9 +16,8 @@
 \title{Deprecated: get comorbidities from patient data}
 \usage{
 icd9Comorbid(icd9df, icd9Mapping, visitId = NULL, icd9Field = NULL,
-  isShort = icd_guess_short.icd9(icd9df),
-  isShortMapping = icd_guess_short.icd9(icd9Mapping), return.df = FALSE,
-  ...)
+  isShort = icd_guess_short(icd9df),
+  isShortMapping = icd_guess_short(icd9Mapping), return.df = FALSE, ...)
 
 icd9ComorbidShort(...)
 

@@ -41,29 +41,29 @@ icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
 #'   default)
 #' @export
 #' @keywords internal
-icd_is_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
+icd_is_defined.icd9 <- function(x, short_code = icd_guess_short(x),
                                 billable = FALSE, ...) {
   # TODO: check input x
   assert_flag(short_code)
   assert_flag(billable)
 
   if (!short_code)
-    x <- icd_decimal_to_short.icd9(x)
+    x <- icd_decimal_to_short(x)
 
   if (billable)
-    icd9cm_is_billable.icd_short_code(as_char_no_warn(x))
+    icd9cm_is_billable(short_code = TRUE,as_char_no_warn(x))
   else
-    icd9_add_leading_zeroes.icd_short_code(
+    icd9_add_leading_zeroes(short_code = TRUE,
       as_char_no_warn(x)) %in% icd::icd9cm_hierarchy[["code"]]
 }
 
 #' @describeIn icd_is_defined Same for ICD-10-CM
 #' @export
 #' @keywords internal
-icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
+icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short(x),
                                    billable = FALSE, ...) {
   if (!short_code)
-    x <- icd_decimal_to_short.icd10(x)
+    x <- icd_decimal_to_short(x)
 
   if (billable)
     icd_is_billable.icd10cm(x, short_code = short_code)
@@ -74,7 +74,7 @@ icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
 #' @describeIn icd_is_defined Same for ICD-10, temporarily using ICD-10-CM
 #' @export
 #' @keywords internal
-icd_is_defined.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
+icd_is_defined.icd10 <- function(x, short_code = icd_guess_short(x),
                                  billable = FALSE, ...) {
   warning("using ICD-10-CM for testing icd10 definition. Set class to WHO if this is wanted.")
   icd_is_defined.icd10cm(x = x, short_code = short_code, billable = billable, ...)
@@ -116,7 +116,7 @@ icd_get_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
 
 #' @export
 #' @keywords internal
-icd_get_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x), billable = FALSE) {
+icd_get_defined.icd9 <- function(x, short_code = icd_guess_short(x), billable = FALSE) {
   x[icd_is_defined.icd9(x, short_code = short_code, billable = billable)]
 }
 
@@ -124,18 +124,15 @@ icd_get_defined.icd9 <- function(x, short_code = icd_guess_short.icd9(x), billab
 #'
 #' Codes provided are compared to the most recent version of the
 #'   CMS list of billable codes, or another version if specified.
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
+#' @param x input vector to test
 #' @template short_code
-#' @template invert
 #' @param version single character string, default is "32" which is the latest
 #'   release from CMS. Currently anything from "23" to "32" is accepted. Not
 #'   numeric because there are possible cases with non-numeric names, e.g.
 #'   revisions within one year, although none currently implemented.
 #' @return logical vector of same length as input
 #' @export
-icd_is_billable <- function(...) {
+icd_is_billable <- function(x, short_code = icd_guess_short(x), version = icd9cm_latest_edition()) {
   UseMethod("icd_is_billable")
 }
 
@@ -143,8 +140,8 @@ icd_is_billable <- function(...) {
 #'   ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
-                                 version = icd9cm_latest_edition(), ...) {
+icd_is_billable.icd9 <- function(x, short_code = icd_guess_short(x),
+                                 version = icd9cm_latest_edition()) {
   icd_is_billable.icd9cm(x = x, short_code = short_code, version = version)
 }
 
@@ -152,12 +149,11 @@ icd_is_billable.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
-                                    version = "2016", ...) {
+icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), version = "2016") {
   if (version != "2016")
     stop("curretly only ICD-10-CM 2016 version can be used to check for billable codes")
   if (!short_code)
-    x <- icd_decimal_to_short.icd10(x)
+    x <- icd_decimal_to_short(x)
 
   x %fin% icd10cm2016[icd10cm2016[["billable"]] == 1, "code"]
 }
@@ -166,8 +162,7 @@ icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short.icd10(x),
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
-                                  version = "2016", ...) {
+icd_is_billable.icd10 <- function(x, short_code = icd_guess_short(x), version = "2016") {
   icd_is_billable.icd10cm(x = x, short_code = short_code, version = version)
 }
 
@@ -175,13 +170,12 @@ icd_is_billable.icd10 <- function(x, short_code = icd_guess_short.icd10(x),
 #'   ICD-9-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
-                                   version = icd9cm_latest_edition(), ...) {
+icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x), version = icd9cm_latest_edition()) {
   assert_vector(x)
   assert_flag(short_code)
   assert_string(version)
   if (!short_code)
-    x <- icd_decimal_to_short.icd9(x)
+    x <- icd_decimal_to_short(x)
   x %in% icd::icd9cm_billable[[version]][["code"]]
 }
 
@@ -190,38 +184,11 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
 #' @export
 #' @method icd_is_billable default
 #' @keywords internal
-icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
-                                    version = icd9cm_latest_edition(), ...) {
+icd_is_billable.default <- function(x, short_code = icd_guess_short(x), version = icd9cm_latest_edition()) {
   # guess ICD-9 vs ICD-10 and set class to dispatch again
-  x <- icd_guess_version_update(x, short_code = short_code) %>% icd_guess_short_update(short_code = short_code)
+  x <- icd_guess_version_update(x, short_code = short_code)
   UseMethod("icd_is_billable", x)
 }
-
-# TODO: consider geteting rid of all these:
-
-#' Check whether ICD-9 code(s) is/are billable
-#'
-#' Tests ICD-9 codes to see whether they are leaf nodes in the ICD-9-CM hierarchy
-#' @keywords internal
-icd9cm_is_billable <- function(x, version = icd9cm_latest_edition()) {
-  x <- icd9cm(x)
-  UseMethod("icd_is_billable", x)
-}
-
-#' @describeIn icd9cm_is_billable Are the given short-form codes leaf (billable)
-#'   codes in the hierarchy?
-#' @export
-#' @keywords internal
-icd9cm_is_billable.icd_short_code <- function(x, version = icd9cm_latest_edition())
-  icd_is_billable(x, short_code = TRUE, version = version)
-
-#' @describeIn icd9cm_is_billable Are the given decimal-form codes leaf (billable)
-#'   codes in the hierarchy?
-#' @export
-#' @keywords internal
-icd9cm_is_billable.icd_decimal_code <- function(x, version = icd9cm_latest_edition())
-  icd_is_billable(x, short_code = FALSE, version = version)
-
 
 #' Get billable ICD codes
 #'
@@ -251,16 +218,13 @@ icd_get_billable.default <- function(x, ...) {
 #' @describeIn icd_get_billable Get billable ICD-9-CM codes
 #' @export
 #' @keywords internal
-icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short.icd9(x),
-                                    invert = FALSE, version = icd9cm_latest_edition(), ...) {
+icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
+                                    invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...) {
   assert_flag(short_code)
   assert_flag(invert)
   assert_string(version)
   # would be nicer to dispatch on short_code type here.
-  if (short_code)
-    icd9cm_get_billable.icd_short_code(x = x, invert = invert, version = version)
-  else
-    icd9cm_get_billable.icd_decimal_code(x = x, invert = invert, version = version)
+  icd9cm_get_billable(x = x, short_code = short_code, invert = invert, icd9cm_edition = icd9cm_edition)
 }
 
 #' @describeIn icd_get_billable Get billable ICD-9 codes, which is currently

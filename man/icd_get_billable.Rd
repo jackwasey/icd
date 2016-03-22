@@ -11,8 +11,8 @@ icd_get_billable(...)
 
 \method{icd_get_billable}{default}(x, ...)
 
-\method{icd_get_billable}{icd9cm}(x, short_code = icd_guess_short.icd9(x),
-  invert = FALSE, version = icd9cm_latest_edition(), ...)
+\method{icd_get_billable}{icd9cm}(x, short_code = icd_guess_short(x),
+  invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)
 
 \method{icd_get_billable}{icd9}(...)
 }

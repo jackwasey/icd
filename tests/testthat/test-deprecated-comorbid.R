@@ -675,22 +675,22 @@ test_that("deprecated data aliases are created", {
 })
 
 test_that("deprecated aliased function names", {
-  # warnings turned off for testing!
-  expect_warning(res <- icd9Comorbidities(random_test_patients, icd::ahrqComorbid, return.df = TRUE), NA)
+  # testthat now shows warnings, so no need for explicit test
+  res <- icd9Comorbidities(random_test_patients, icd::ahrqComorbid, return.df = TRUE)
   expect_identical(res, icd9Comorbid(random_test_patients, icd::ahrqComorbid, return.df = TRUE))
 
-  expect_warning(res <- icd9ComorbiditiesAhrq(random_test_patients, return.df = TRUE), NA)
+  res <- icd9ComorbiditiesAhrq(random_test_patients, return.df = TRUE)
   expect_identical(res, icd9ComorbidAhrq(random_test_patients, return.df = TRUE))
 
-  expect_warning(res <- icd9ComorbiditiesElixHauser(random_test_patients, return.df = TRUE), NA)
+  res <- icd9ComorbiditiesElixHauser(random_test_patients, return.df = TRUE)
   expect_identical(res, icd9ComorbidElix(random_test_patients, return.df = TRUE))
 
-  expect_warning(res <- icd9ComorbiditiesQuanDeyo(random_test_patients, return.df = TRUE), NA)
+  res <- icd9ComorbiditiesQuanDeyo(random_test_patients, return.df = TRUE)
   expect_identical(res, icd9ComorbidQuanDeyo(random_test_patients, return.df = TRUE))
 
-  expect_warning(res <- icd9ComorbiditiesQuanElixhauser(random_test_patients, return.df = TRUE), NA)
+  res <- icd9ComorbiditiesQuanElixhauser(random_test_patients, return.df = TRUE)
   expect_identical(res, icd9ComorbidQuanElix(random_test_patients, return.df = TRUE))
 
-  expect_warning(res <- icd9ComorbidQuanElixhauser(random_test_patients, return.df = TRUE), NA)
+  res <- icd9ComorbidQuanElixhauser(random_test_patients, return.df = TRUE)
   expect_identical(res, icd9ComorbidQuanElix(random_test_patients, return.df = TRUE))
 })

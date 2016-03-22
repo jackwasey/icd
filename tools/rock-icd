@@ -35,8 +35,8 @@ if [ ! -d "$IM" ]; then
 fi
 
 cp $SC $IM
+cp $ICD_HOME/tools/install_r_packages.R $IM
 docker build -t $IM_NM $IM
 rm -f $IM/$ICD_DOCKER_SCRIPT
+rm -f $IM/install_r_packages.R
 docker run --rm -ti $IM_NM
-
-

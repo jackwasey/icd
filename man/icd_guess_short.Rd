@@ -2,34 +2,9 @@
 % Please edit documentation in R/guess.R
 \name{icd_guess_short}
 \alias{icd_guess_short}
-\alias{icd_guess_short.data.frame}
-\alias{icd_guess_short.default}
-\alias{icd_guess_short.icd10}
-\alias{icd_guess_short.icd10cm}
-\alias{icd_guess_short.icd9}
-\alias{icd_guess_short.icd_decimal_code}
-\alias{icd_guess_short.icd_short_code}
-\alias{icd_guess_short.list}
 \title{guess whether codes are \code{short_code} or \code{decimal_code}}
 \usage{
-icd_guess_short(x, short_code = NULL, test_n = 1000L, ...)
-
-\method{icd_guess_short}{data.frame}(x, short_code = NULL, test_n = 1000L,
-  icd_name = get_icd_name(x))
-
-\method{icd_guess_short}{icd9}(x, short_code = NULL, test_n = 1000L, ...)
-
-\method{icd_guess_short}{icd10}(x, short_code = NULL, test_n = 1000L, ...)
-
-\method{icd_guess_short}{icd10cm}(x, short_code = NULL, test_n = 1000L, ...)
-
-\method{icd_guess_short}{list}(x, short_code = NULL, test_n = 1000L)
-
-\method{icd_guess_short}{default}(x, short_code = NULL, test_n = 1000L, ...)
-
-\method{icd_guess_short}{icd_short_code}(x)
-
-\method{icd_guess_short}{icd_decimal_code}(x)
+icd_guess_short(x, short_code = NULL, test_n = 1000L, icd_name = NULL)
 }
 \value{
 single logical value, \code{TRUE} if input data are predominantly
@@ -45,24 +20,5 @@ We could look for where both short_code and long are invalid, and otherwise
 assume valid, even if the bulk are short_code. However, it may be more useful
 to check validity after the guess.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{data.frame}: Guess whether a data frame has ICD-9 or ICD-10
-codes
-
-\item \code{icd9}: Guess whether an ICD-9 code is in short_code form
-
-\item \code{icd10}: Guess short when ICD-10 type is known
-
-\item \code{icd10cm}: Guess short when ICD-10 type is known
-
-\item \code{list}: Guess short from a list
-
-\item \code{default}: Guess short naive default method
-
-\item \code{icd_short_code}: Guess short when type is short
-
-\item \code{icd_decimal_code}: Guess short when type is decimal
-}}
 \keyword{internal}
 

@@ -96,7 +96,7 @@ ahrq_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(ahrq_end_codes)),
   icd9 = ahrq_end_codes,
   stringsAsFactors = FALSE
-) %>% icd_long_data
+) %>% as.icd_long_data
 
 elix_end_codes <- unlist(unname(c(lapply(icd::elixComorbid, head, n = 1),
                           lapply(icd::elixComorbid, tail, n = 1))))
@@ -147,7 +147,7 @@ two_map <- list("malady" = c("100", "2000"),
                "ailment" = c("003", "040"))
 
 pts_invalid_mix <- icd9(
-  icd_long_data(
+  as.icd_long_data(
     data.frame(
       visit_id = c(1000, 1000, 1001),
       icd9 = icd9(c("27801", "invalides", "25001")),

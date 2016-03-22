@@ -51,10 +51,10 @@ icd_condense.character <- function(x, short_code = icd_guess_short(x), defined =
 
   guess <- icd_guess_version.character(x, short_code = short_code)
   if (guess == "icd9") {
-    if (is.null(short_code)) short_code <- icd_guess_short.icd9(x)
+    if (is.null(short_code)) short_code <- icd_guess_short(x)
     icd_condense.icd9(x, short_code = short_code, defined = defined, ...)
   } else if (guess == "icd10") {
-    if (is.null(short_code)) short_code <- icd_guess_short.icd10(x)
+    if (is.null(short_code)) short_code <- icd_guess_short(x)
     stop("icd_condense.icd10 not implemented yet")
   } else {
     stop("Unknown ICD type")

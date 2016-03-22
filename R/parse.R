@@ -27,7 +27,7 @@ utils::globalVariables(c("icd9_sources", "icd9cm_billable"))
 #' from the source SAS data. Elixhauser and Quan/Elixhauser mappings are
 #' generated from transcribed codes.
 #' @keywords internal
-icd_update_everything <- function() {
+update_everything <- function() {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from

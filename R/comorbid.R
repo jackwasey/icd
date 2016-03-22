@@ -131,7 +131,7 @@ icd_comorbid.icd10 <- function(x,
                                visit_name = NULL,
                                icd_name = NULL,
                                short_code = NULL,
-                               short_map = icd_guess_short.list(map),
+                               short_map = icd_guess_short(map),
                                return_df = FALSE, ...) {
 
   assert_data_frame(x, min.cols = 2, col.names = "unique")
@@ -149,7 +149,7 @@ icd_comorbid.icd10 <- function(x,
     icd_name <- get_icd_name(x)
 
   if (is.null(short_code))
-    short_code <- icd_guess_short.icd10(x[[icd_name]])
+    short_code <- icd_guess_short(x[[icd_name]])
 
   icd10_comorbid_parent_search(x, map, visit_name, icd_name, short_code, short_map, return_df, ...)
 }
@@ -163,8 +163,8 @@ icd10_comorbid_parent_search <- function(
   map,
   visit_name = NULL,
   icd_name = get_icd_name(x),
-  short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-  short_map = icd_guess_short.list(map),
+  short_code = icd_guess_short(x, icd_name = icd_name),
+  short_map = icd_guess_short(map),
   return_df = FALSE, ...) {
 
   if (!short_code)
@@ -204,8 +204,8 @@ icd10_comorbid_no_parent_search <- function(
   map,
   visit_name = NULL,
   icd_name = get_icd_name(x),
-  short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-  short_map = icd_guess_short.icd10(map[[1]]),
+  short_code = icd_guess_short(x, icd_name = icd_name),
+  short_map = icd_guess_short(map[[1]]),
   return_df = FALSE, ...) {
 
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
@@ -223,8 +223,8 @@ icd_comorbid.icd9 <- function(x,
                               map,
                               visit_name = NULL,
                               icd_name = NULL,
-                              short_code = icd_guess_short.data.frame(x, icd_name = icd_name),
-                              short_map = icd_guess_short.list(map),
+                              short_code = icd_guess_short(x, icd_name = icd_name),
+                              short_map = icd_guess_short(map),
                               return_df = FALSE, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
@@ -333,8 +333,14 @@ icd_comorbid_common <- function(x,
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_ahrq <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  UseMethod("icd_comorbid_ahrq")
+icd_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  f <- icd_comorbid.idc
+  if (is.icd9(x))
+    f <-
+  else
+
+    cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_ahrq)
+  apply_hier_ahrq(cbd, abbrev_names, hierarchy)
 }
 
 #' @rdname icd_comorbid
@@ -353,42 +359,6 @@ icd_comorbid_quan_deyo <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
 #' @export
 icd_comorbid_elix <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
   UseMethod("icd_comorbid_elix")
-}
-
-#' @rdname icd_comorbid
-#' @export
-#' @keywords internal
-#' @method icd_comorbid_ahrq data.frame
-icd_comorbid_ahrq.data.frame <- function(x, ..., icd_name = get_icd_name(x)) {
-  x <- update_data_frame_class(x, icd_name, must_work = TRUE)
-  UseMethod("icd_comorbid_ahrq", x)
-}
-
-#' @rdname icd_comorbid
-#' @export
-#' @keywords internal
-#' @method icd_comorbid_elix data.frame
-icd_comorbid_elix.data.frame <- function(x, ..., icd_name = get_icd_name(x)) { # nolint # false +ve
-  x <- update_data_frame_class(x, icd_name, must_work = TRUE)
-  UseMethod("icd_comorbid_elix", x)
-}
-
-#' @rdname icd_comorbid
-#' @export
-#' @keywords internal
-#' @method icd_comorbid_quan_elix data.frame
-icd_comorbid_quan_elix.data.frame <- function(x, ..., icd_name = get_icd_name(x)) { # nolint # false +ve
-  x <- update_data_frame_class(x, icd_name, must_work = TRUE)
-  UseMethod("icd_comorbid_quan_elix", x)
-}
-
-#' @rdname icd_comorbid
-#' @export
-#' @keywords internal
-#' @method icd_comorbid_quan_deyo data.frame
-icd_comorbid_quan_deyo.data.frame <- function(x, ..., icd_name = get_icd_name(x)) {# nolint # false +ve
-  x <- update_data_frame_class(x, icd_name, must_work = TRUE)
-  UseMethod("icd_comorbid_quan_deyo", x)
 }
 
 #' @rdname icd_comorbid

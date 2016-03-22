@@ -2,28 +2,13 @@
 % Please edit documentation in R/class.R
 \name{combine}
 \alias{c.icd10}
-\alias{c.icd10cm}
-\alias{c.icd10who}
 \alias{c.icd9}
-\alias{c.icd9cm}
-\alias{c.icd_decimal_code}
-\alias{c.icd_short_code}
 \alias{combine}
 \title{combine ICD codes}
 \usage{
-\method{c}{icd9}(...)
+\method{c}{icd9}(..., warn = FALSE)
 
-\method{c}{icd9cm}(...)
-
-\method{c}{icd10}(...)
-
-\method{c}{icd10cm}(...)
-
-\method{c}{icd10who}(...)
-
-\method{c}{icd_short_code}(...)
-
-\method{c}{icd_decimal_code}(...)
+\method{c}{icd10}(..., warn = FALSE)
 }
 \arguments{
 \item{...}{elements to combine}
@@ -40,7 +25,18 @@ to keep classes of the first item in the list.
 \dontrun{
 # throw an error
 c(icd9("E998"), icd10("A10"))
+
+# benchmark subsetting to justify using .subset2 (5\% faster)
+library(microbenchmark)
+j <- list(as.icd9cm("E990"), as.icd9cm("10010"))
+k <- list(rep(as.icd9cm("E990"), times = 500))
+microbenchmark(j[[1]], .subset2(j, 1),
+               k[[1]], .subset2(k, 1),
+               times = 1e6)
+
+# logical list to vector
+a <- list(T,T)
+microbenchmark(as.logical(a), c(a, recursive = TRUE), times = 1e6)
 }
 }
-\keyword{internal}
 

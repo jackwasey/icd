@@ -112,39 +112,25 @@ Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
 	return Rcpp::sapply(major, icd9AddLeadingZeroesMajorSingle);
 }
 
-//' @rdname icd9AddLeadingZeroes
-// [[Rcpp::export(icd9_add_leading_zeroes.icd_short_code)]]
-Rcpp::CharacterVector icd9AddLeadingZeroesShort(
-		Rcpp::CharacterVector x) {
-	Rcpp::List parts = icd9ShortToPartsCpp(x, "");
-	parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
-	return icd9PartsToShort(parts);
-}
 
-//' @rdname icd9AddLeadingZeroes
-// [[Rcpp::export(icd9_add_leading_zeroes.icd_decimal_code)]]
-Rcpp::CharacterVector icd9AddLeadingZeroesDecimal(
-		Rcpp::CharacterVector x) {
-	Rcpp::List parts = icd9DecimalToPartsCpp(x);
-	parts["major"] = icd9AddLeadingZeroesMajor(
-			Rcpp::as<Rcpp::CharacterVector>(parts["major"]));
-	return icd9PartsToDecimal(parts);
-}
-
-//' @title Add leading zeroes to incomplete ICD codes
+//' @title Add leading zeroes to incomplete ICD-9 codes
 //' @description Non-decimal ICD-9 codes with length<5 are often ambiguous. E.g.
 //'   100 could be 1.00 10.0 or 100 if coded incorrectly. We must assume 100 is
 //'   really 100
-//' @template icd9-any
-//' @template icd9-short
-//' @template icd9-decimal
-//' @template major
-//' @return character vector of ICD codes (or major part thereof)
+//' @param x Character vector of ICD-9 codes
+//' @template short_code
+//' @return character vector of ICD-9 codes with leading zeroes
 //' @keywords internal manip
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector icd9,
-		bool isShort) {
-	if (isShort)
-		return icd9AddLeadingZeroesShort(icd9);
-	return icd9AddLeadingZeroesDecimal(icd9);
+// [[Rcpp::export(icd9_add_leading_zeroes_cpp)]]
+Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector x, bool short_code) {
+  if (short_code) {
+    Rcpp::List parts = icd9ShortToPartsCpp(x, "");
+    parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
+    return icd9PartsToShort(parts);
+  }
+  else {
+    Rcpp::List parts = icd9DecimalToPartsCpp(x);
+    parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
+    return icd9PartsToDecimal(parts);
+  }
 }

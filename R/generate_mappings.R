@@ -89,7 +89,7 @@ icd9_generate_map_elix <- function(condense = NULL, save_data = TRUE, path = NUL
     icd_children.icd9, short_code = TRUE, defined = FALSE)
 
   names(icd9_map_elix) <- icd::icd_names_elix_htn_abbrev
-  icd9_map_elix %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
+  icd9_map_elix %<>% as.icd_short_code %>% as.icd9 %>% as.icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd9_map_elix)
@@ -162,7 +162,7 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
   #   icd_children.icd10cm, short_code = TRUE, defined = FALSE)
 
   names(icd10_map_elix) <- icd::icd_names_elix_htn_abbrev
-  icd10_map_elix %<>% icd_short_code %>% icd10 %>% icd_comorbidity_map
+  icd10_map_elix %<>% as.icd_short_code %>% as.icd10 %>% as.icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd10_map_elix)
@@ -245,7 +245,7 @@ The map can be condensed using other functions in the package. 'path' is the dat
     icd_children.icd9, short_code = TRUE, defined = FALSE)
 
   names(icd9_map_quan_elix) <- icd::icd_names_quan_elix_htn_abbrev
-  icd9_map_quan_elix %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
+  icd9_map_quan_elix %<>% as.icd_short_code %>% as.icd9 %>% as.icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd9_map_quan_elix)
@@ -324,12 +324,12 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   }
 
   icd10_map_quan_elix <- lapply(quan_elix_raw, f) %>%
-    icd_short_code %>% icd10 %>% icd_comorbidity_map
+    icd_short_code %>% as.icd10 %>% as.icd_comorbidity_map
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
 
-  icd10_map_quan_elix %<>% icd_short_code %>% icd10 %>% icd_comorbidity_map
+  icd10_map_quan_elix %<>% as.icd_short_code %>% as.icd10 %>% as.icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd10_map_quan_elix)
@@ -405,9 +405,9 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
 
   icd10_map_quan_deyo <-
     lapply(quan_charl_raw, f) %>%
-    icd_short_code %>% icd10 %>% icd_comorbidity_map
+    icd_short_code %>% as.icd10 %>% as.icd_comorbidity_map
 
-  icd10_map_quan_deyo %<>% icd_short_code %>% icd10 %>% icd_comorbidity_map
+  icd10_map_quan_deyo %<>% as.icd_short_code %>% as.icd10 %>% as.icd_comorbidity_map
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
@@ -456,8 +456,7 @@ generate_uranium_pathology <- function(save_data = TRUE, offline = FALSE) {
 
   row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
 
-  class(uranium_pathology) <- c("icd10who", "icd10", "icd_long_data", "icd_decimal_code", "data.frame")
-  uranium_pathology %<>% icd_decimal_code %>% icd_long_data %>% icd10who
+  uranium_pathology %<>% as.icd_decimal_code %>% as.icd_long_data %>% as.icd10
 
   if (save_data)
     save_in_data_dir(uranium_pathology)
@@ -513,7 +512,7 @@ generate_vermont_dx <- function(save_data = TRUE, offline = FALSE) {
   # desirable in general. If parent has a class, it should be irrelevant
 
   # and set class on whole structure
-  vermont_dx %<>% icd_short_code %>% icd_wide_data %>% icd9 %>% icd9cm
+  vermont_dx %<>% as.icd_short_code %>% as.icd_wide_data %>% as.icd9 %>% as.icd9cm
 
   if (save_data)
     save_in_data_dir(vermont_dx)

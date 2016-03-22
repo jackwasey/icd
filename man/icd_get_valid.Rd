@@ -12,11 +12,11 @@ icd_get_valid(x, short_code = icd_guess_short(x))
 
 \method{icd_get_valid}{character}(x, short_code = icd_guess_short(x))
 
-\method{icd_get_valid}{icd9}(x, short_code = icd_guess_short.icd9(x))
+\method{icd_get_valid}{icd9}(x, short_code = icd_guess_short(x))
 
-\method{icd_get_valid}{icd10}(x, short_code = icd_guess_short.icd10(x))
+\method{icd_get_valid}{icd10}(x, short_code = icd_guess_short(x))
 
-\method{icd_get_valid}{icd10cm}(x, short_code = icd_guess_short.icd10cm(x))
+\method{icd_get_valid}{icd10cm}(x, short_code = icd_guess_short(x))
 }
 \arguments{
 \item{x}{input vector of ICD codes}

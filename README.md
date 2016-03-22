@@ -49,7 +49,7 @@ New since last CRAN release:
 -   major new release, version 2.0, with addition of ICD-10 processing, and therefore renaming to `icd`
 -   functions simplified so they apply to ICD-9 and ICD-10, e.g. `icd9ComorbidAhrq` becomes `icd_comorbid_ahrq`, and the input data is used to guess whether the codes are ICD-9 or ICD-10, and whether they are decimal format.
 -   major update to all function names following [Hadley Wickham](http://adv-r.had.co.nz/Style.html), [google](https://google.github.io/styleguide/Rguide.xml) and [lintr](https://github.com/jimhester/lintr).
--   All function and variable names with *snakeCase* are now deprecated in favor of underscore seperators
+-   All function and variable names with *camelCase* are now deprecated in favor of *snake\_case*. SnakeCase function names still work, but will give deprecated warnings (which can be muted)
 -   use of basic S3 classes to allow users the option of distinguishing the type of their data. E.g. `icd9(c("0010", "0011"))` defines two ICD-9 codes, `icd10cm(c("A01", "A011"))` defines two ICD-10-CM codes (which are implicitly ICD-10 codes also). This can be extended to add other variants, such as ICD-10 WHO (work in progress), and national variations.
 -   see NEWS.md and github [changelog](https://github.com/jackwasey/icd/commits/master) for more details
 

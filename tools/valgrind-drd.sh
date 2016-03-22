@@ -1,4 +1,7 @@
 #!/bin/bash
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+IFS=$'\n\t'
 
 # thread-related valgrind runs
 # http://www.valgrind.org/docs/manual/manual-core.html#manual-core.pthreads

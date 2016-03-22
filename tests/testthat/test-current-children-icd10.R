@@ -21,26 +21,29 @@ expect_icd10cm_child_is_self <- function(...) {
   dots <- unlist(list(...))
   for (i in dots) {
     eval(bquote(expect_identical(icd_children(icd10cm(.(i))),
-                                 icd10cm(icd_short_code(.(i))))))
-    eval(bquote(expect_warning(warn_res <- icd_children(icd10(.(i))))))
+                                 as.icd10cm(as.icd_short_code(.(i))))))
+    icd_children(icd10(i))
+    eval(bquote(expect_warning(warn_res <- icd_children(as.icd10(.(i))))))
     eval(bquote(expect_is(warn_res, "icd10")))
 
     eval(bquote(expect_warning(warn_res <- icd_children(.(i)))))
     eval(bquote(expect_identical(warn_res,
-                                 icd10cm(icd_short_code(.(i))))))
+                                 as.icd10cm(as.icd_short_code(.(i))))))
 
     eval(bquote(expect_identical(icd_children.icd10cm(.(i)),
-                                 icd10cm(icd_short_code(.(i))))))
-    eval(bquote(expect_identical(icd_children.icd10cm(icd10(.(i))), icd10cm(icd_short_code(.(i))))))
-    eval(bquote(expect_identical(icd_children.icd10cm(icd10cm(.(i))), icd10cm(icd_short_code(.(i))))))
+                                 as.icd10cm(as.icd_short_code(.(i))))))
+    eval(bquote(expect_identical(icd_children.icd10cm(as.icd10(.(i))), as.icd10cm(as.icd_short_code(.(i))))))
+    eval(bquote(expect_identical(icd_children.icd10cm(as.icd10cm(.(i))), as.icd10cm(as.icd_short_code(.(i))))))
 
     # at present, the children are only even icd10cm, but we should not enforce this:
-    eval(bquote(expect_warning(warn_res <- icd_children.icd10(icd10(.(i))))))
+    icd_children.icd10(icd10(i)) # should not warn
+    eval(bquote(expect_warning(warn_res <- icd_children.icd10(as.icd10(.(i))))))
     eval(bquote(expect_true(is.icd10(warn_res))))
-    eval(bquote(expect_warning(warn_res <- icd_children.icd10(icd10(.(i))))))
-    eval(bquote(expect_true(is.icd10(warn_res))))
+    eval(bquote(expect_identical(unclass(.(warn_res)), .(i))))
 
-    eval(bquote(expect_warning(warn_res <- icd_children(icd10(.(i))))))
+    icd_children(icd10(i)) # should not warn
+    eval(bquote(expect_warning(warn_res <- icd_children(as.icd10(.(i))))))
+    eval(bquote(expect_true(is.icd10(warn_res))))
     eval(bquote(expect_identical(unclass(.(warn_res)), .(i))))
   }
 }

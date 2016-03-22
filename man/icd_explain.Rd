@@ -24,13 +24,13 @@ icd_explain(...)
 
 \method{icd_explain}{icd9}(...)
 
-\method{icd_explain}{icd9cm}(x, short_code = icd_guess_short.icd9(x),
+\method{icd_explain}{icd9cm}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
-\method{icd_explain}{icd10}(x, short_code = icd_guess_short.icd9(x),
+\method{icd_explain}{icd10}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
-\method{icd_explain}{numeric}(icd9, short_code = icd_guess_short(icd9),
+\method{icd_explain}{numeric}(x, short_code = icd_guess_short(icd9),
   condense = TRUE, brief = FALSE, warn = FALSE, ...)
 }
 \arguments{

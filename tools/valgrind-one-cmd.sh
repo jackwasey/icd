@@ -1,4 +1,8 @@
 #!/bin/bash
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+IFS=$'\n\t'
+
 ICD_HOME=$HOME/Documents/RProjects/icd
 cd $ICD_HOME
 #R --vanilla --slave -d "valgrind --tool=callgrind --simulate-cache=yes --instr-atstart=no -v" -e "library(devtools); library(testthat); load_all(); icd_comorbid_quan_deyo(icd:::generate_random_pts(1000))"

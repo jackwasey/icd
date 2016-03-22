@@ -3,7 +3,6 @@
 \name{is.icd9}
 \alias{is.icd10}
 \alias{is.icd10cm}
-\alias{is.icd10who}
 \alias{is.icd9}
 \alias{is.icd9cm}
 \alias{is.icd_comorbidity_map}
@@ -21,8 +20,6 @@ is.icd9cm(x)
 
 is.icd10cm(x)
 
-is.icd10who(x)
-
 is.icd_long_data(x)
 
 is.icd_wide_data(x)
@@ -38,12 +35,5 @@ is.icd_comorbidity_map(x)
 }
 \description{
 currently no checks on correctness of the classes for these functions
-}
-\details{
-TODO: could warn or fix if something is \code{icd10cm} or
-  \code{icd10who} but not \code{icd10}
-
-TODO: could warn or fix if something is \code{icd10cm} or
-  \code{icd10who} but not \code{icd10}
 }
 

@@ -28,92 +28,23 @@
 #'   \code{short_code} type. If there is some uncertainty, then return
 #'   \code{NA}.
 #' @keywords internal
-icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, ...) {
-  # if short_code is set, no need to dispatch at all
+icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, icd_name = NULL) {
   if (!is.null(short_code))
     return(short_code)
   if (is.icd_short_code(x))
     return(TRUE)
   if (is.icd_decimal_code(x))
     return(FALSE)
-  UseMethod("icd_guess_short")
-}
-
-#' @describeIn icd_guess_short Guess whether a data frame has ICD-9 or ICD-10
-#'   codes
-#' @export
-#' @method icd_guess_short data.frame
-#' @keywords internal
-icd_guess_short.data.frame <- function(x, short_code = NULL, test_n = 1000L, icd_name = get_icd_name(x)) {
-  UseMethod("icd_guess_short", x[[icd_name]])
-}
-
-# this works when the type of 'x' is known, icd9 vs icd10
-icd_guess_short_ <- function(x, short_code, test_n) {
+  if (is.data.frame(x)) {
+    if (is.null(icd_name)) icd_name = get_icd_name(x)
+    x <- .subset2(x, icd_name) # this is v fast equiv to [[icd_name]]
+  }
   if (is.list(x))
     x <- unlist(x, recursive = TRUE)
-  x <- as_char_no_warn(x) # preserves class (except factor)
-  testend <- min(length(x), test_n)
-  vm <- icd_is_valid_major(x[1:testend])
-  if (all(vm, na.rm = TRUE)) {
-    opt <- getOption("icd.warn_guess_short")
-    if (!is.null(opt) && opt)
-      warning("all codes used for guessing are 'major' part, i.e. before decimal place would be, ",
-              "therefore unable to guess whether codes are 'short' or 'decimal'. ",
-              "The default is to assume 'short'.")
-  }
-  vs <- icd_is_valid(x[1:testend], short_code = TRUE) & !vm
-  vd <- icd_is_valid(x[1:testend], short_code = FALSE) & !vm
-  sum(vd, na.rm = TRUE) <= sum(vs, na.rm = TRUE)
+  # don't need to convert to character, and it is likely to be quicker
+  # to look for decimal codes in a factor than the whole char vector anyway
+  guessShortPlusFactorCpp(x, test_n)
 }
-
-#' @describeIn icd_guess_short Guess whether an ICD-9 code is in short_code form
-#' @export
-#' @keywords internal
-icd_guess_short.icd9 <- function(x, short_code = NULL, test_n = 1000L, ...) {
-  icd_guess_short_(x, short_code, test_n)
-}
-
-#' @describeIn icd_guess_short Guess short when ICD-10 type is known
-#' @export
-#' @keywords internal
-icd_guess_short.icd10 <- function(x, short_code = NULL, test_n = 1000L, ...) {
-  icd_guess_short_(x, short_code, test_n)
-}
-
-#' @describeIn icd_guess_short Guess short when ICD-10 type is known
-#' @export
-#' @keywords internal
-icd_guess_short.icd10cm <- function(x, short_code = NULL, test_n = 1000L, ...) {
-  icd_guess_short_(x, short_code, test_n)
-}
-
-#' @describeIn icd_guess_short Guess short from a list
-#' @export
-#' @method icd_guess_short list
-#' @keywords internal
-icd_guess_short.list <- function(x, short_code = NULL, test_n = 1000L) {
-  UseMethod("icd_guess_short", unlist(x, recursive = TRUE))
-}
-
-#' @describeIn icd_guess_short Guess short naive default method
-#' @export
-#' @keywords internal
-icd_guess_short.default <- function(x, short_code = NULL, test_n = 1000L, ...) {
-
-  # if all the codes are major, we should warn the user
-  icd_guess_short_(x, short_code, test_n)
-}
-
-#' @describeIn icd_guess_short Guess short when type is short
-#' @export
-#' @keywords internal
-icd_guess_short.icd_short_code <- function(x) TRUE #nocov
-
-#' @describeIn icd_guess_short Guess short when type is decimal
-#' @export
-#' @keywords internal
-icd_guess_short.icd_decimal_code <- function(x) FALSE #nocov
 
 #' Guess version of ICD codes
 #'
@@ -155,17 +86,21 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
   # TODO: this is too complicated. The short test can really just be looking for
   # the decimal place, maybe in C/C++, but doesn't need anything special extra,
   # and I can't see how ICD version would make a difference
+
   assert_character(x)
   assert(checkmate::checkFlag(short_code), checkmate::checkNull(short_code))
+
+  # TODO: make this an option
+  n <- 10
+  x <- x[1:n]
+
   if (!is.null(short_code)) {
     if (short_code) {
       i9 <- sum(icd_is_valid.icd9(x, short_code = TRUE), na.rm = TRUE)
       i10 <- sum(icd_is_valid.icd10(x, short_code = TRUE), na.rm = TRUE)
-      i10who <- sum(icd_is_valid.icd10who(x, short_code = TRUE), na.rm = TRUE)
     } else {
       i9 <- sum(icd_is_valid.icd9(x, short_code = FALSE), na.rm = TRUE)
       i10 <- sum(icd_is_valid.icd10(x, short_code = FALSE), na.rm = TRUE)
-      i10who <- sum(icd_is_valid.icd10who(x, short_code = FALSE), na.rm = TRUE)
     }
 
   } else {
@@ -177,16 +112,12 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
       sum(icd_is_valid.icd10(x, short_code = TRUE), na.rm = TRUE),
       sum(icd_is_valid.icd10(x, short_code = FALSE), na.rm = TRUE)
     )
-    i10who <- max(
-      sum(icd_is_valid.icd10who(x, short_code = TRUE), na.rm = TRUE),
-      sum(icd_is_valid.icd10who(x, short_code = FALSE), na.rm = TRUE)
-    )
   }
 
   # todo: guess ICD-10-CM, if there is any ICD-10-CM code amongst other ICD-10 codes?
-  # TODO: return vector of types, e.g. c("icd10who, "icd10")
+  # TODO: maybe return vector of types, e.g. c("icd10cm, "icd10")
 
-  if (i9 >= i10 && i9 >= i10who)
+  if (i9 >= i10)
     "icd9"
   else
     "icd10"

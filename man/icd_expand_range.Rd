@@ -19,7 +19,7 @@ icd_expand_range(start, end, ...)
   defined = TRUE, ...)
 
 \method{icd_expand_range}{icd9}(start, end,
-  short_code = icd_guess_short.icd9(c(start, end)), defined = TRUE,
+  short_code = icd_guess_short(c(start, end)), defined = TRUE,
   ex_ambig_start = TRUE, ex_ambig_end = TRUE, ...)
 
 icd9_expand_range_short(start, end, defined = TRUE, ex_ambig_start = TRUE,

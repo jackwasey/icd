@@ -47,8 +47,8 @@ re_wrap_or <- function(x) {
 utils::globalVariables(
   c("re_icd10_any", "re_icd10_decimal", "re_icd10_short",
     "re_icd10cm_any", "re_icd10cm_decimal", "re_icd10cm_short", "re_icd10_major",
-    "re_icd10who_major", "re_icd10cm_major", "re_icd10_major_bare",
-    "re_icd10who_major_bare", "re_icd10cm_major_bare", "re_icd9_any",
+    "re_icd10cm_major", "re_icd10_major_bare",
+    "re_icd10cm_major_bare", "re_icd9_any",
     "re_icd9_short", "re_icd9_decimal_strict_bare", "re_icd9_decimal_bare",
     "re_icd9_decimal", "re_icd9_any_e", "re_icd9_any_v", "re_icd9_any_n",
     "re_icd9_short_e", "re_icd9_short_v", "re_icd9_short_n", "re_icd9_decimal_e",
@@ -135,10 +135,8 @@ set_re_globals <- function(env = parent.frame()) {
 
 
   re_icd10cm_major_bare  <- "[[:alpha:]][[:digit:]][[:alnum:]]"
-  re_icd10who_major_bare <- "[[:alpha:]][[:digit:]][[:digit:]]"
   re_icd10_major_bare <- re_icd10cm_major_bare # use slightly broader definition for generic
   re_icd10cm_major  <- re_icd10cm_major_bare %>% re_just_ws
-  re_icd10who_major <- re_icd10who_major_bare %>% re_just_ws
   re_icd10_major <- re_icd10_major_bare %>% re_just_ws
 
   re_icd10cm_short <- paste0(re_icd10_major_bare, "[[:alnum:]]{0,4}")
@@ -154,8 +152,8 @@ set_re_globals <- function(env = parent.frame()) {
     assign(re, get(re, envir = cur_env), envir = env)
 
   identity(list(re_icd10_any, re_icd10_decimal, re_icd10_short, re_icd10cm_any,
-                re_icd10cm_decimal, re_icd10cm_short, re_icd10_major, re_icd10who_major,
-                re_icd10cm_major, re_icd10_major_bare, re_icd10who_major_bare,
+                re_icd10cm_decimal, re_icd10cm_short, re_icd10_major,
+                re_icd10cm_major, re_icd10_major_bare,
                 re_icd10cm_major_bare, re_icd9_any, re_icd9_short, re_icd9_decimal_strict_bare,
                 re_icd9_decimal_bare, re_icd9_decimal, re_icd9_any_e, re_icd9_any_v,
                 re_icd9_any_n, re_icd9_short_e, re_icd9_short_v, re_icd9_short_n,
@@ -274,7 +272,7 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
 #' @export
 #' @keywords internal
-icd_is_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x),
+icd_is_valid.icd9 <- function(x, short_code = icd_guess_short(x),
                               whitespace_ok = TRUE, ...) {
   assert(
     checkmate::checkFactor(x),
@@ -496,21 +494,21 @@ icd_get_valid.character <- function(x, short_code = icd_guess_short(x)) {
 #' @describeIn icd_get_valid Get valid ICD-9 codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd9 <- function(x, short_code = icd_guess_short.icd9(x)) {
+icd_get_valid.icd9 <- function(x, short_code = icd_guess_short(x)) {
   x[icd_is_valid.icd9(x, short_code = short_code)]
 }
 
 #' @describeIn icd_get_valid Get valid ICD-10 codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd10 <- function(x, short_code = icd_guess_short.icd10(x)) {
+icd_get_valid.icd10 <- function(x, short_code = icd_guess_short(x)) {
   x[icd_is_valid.icd10(x, short_code = short_code)]
 }
 
 #' @describeIn icd_get_valid Get valid ICD-10-CM codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short.icd10cm(x)) {
+icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
   # TODO: make ICD-10-CM specific
   x[icd_is_valid.icd10(x, short_code = short_code)]
 }
@@ -540,14 +538,14 @@ icd_get_invalid.default <- function(x, short_code = NULL, ...) {
 #'   comorbidity map
 #' @export
 #' @keywords internal
-icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short.icd9(x), ...) {
+icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   x[!icd_is_valid.icd9(x, short_code = short_code)]
 }
 
 #' @describeIn icd_get_invalid Get invalid ICD-10 codes from vector of codes
 #' @export
 #' @keywords internal
-icd_get_invalid.icd10 <- function(x, short_code = icd_guess_short.icd10(x), ...) {
+icd_get_invalid.icd10 <- function(x, short_code = icd_guess_short(x), ...) {
   # this seems like boilerplate code, but avoids infinite recursion
   x[!icd_is_valid.icd10(x, short_code = short_code)]
 }
@@ -613,13 +611,6 @@ icd_is_major.icd10cm <- function(x) {
   str_detect(x, re_just_ws(re_icd10cm_major))
 }
 
-#' @describeIn icd_is_major check whether a code is an ICD-10 WHO major
-#' @keywords internal
-icd_is_major.icd10who <- function(x) {
-  assert_character(x)
-  str_detect(x, re_just_ws(re_icd10who_major))
-}
-
 #' @describeIn icd_is_major check whether a code is an ICD-9 major
 #' @keywords internal
 icd_is_major.icd9 <- function(x) {
@@ -650,40 +641,8 @@ icd9_is_e <- function(x) {
   icd9_is_e_cpp(as_char_no_warn(x))
 }
 
-warnNumericCode <- function()
-  warning("input data is in numeric format. This can easily lead to errors in short_code or decimal codes, e.g. short_code code 1000: is it 10.00 or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10", call. = FALSE) # nolint
-
-#' @describeIn icd_is_valid Check whether ICD-10 WHO codes are valid
-#' @details From WHO ICD-10 manual: "The basic ICD is a single coded list of
-#'   three-character categories, each of which can be further divided into up to
-#'   10 four-character subcategories. In place of the purely numeric coding
-#'   system of previous revisions, the tenth revision uses an alphanumeric code
-#'   with a letter in the first position and a number in the second, third and
-#'   fourth positions. The fourth character follows a decimal point. Possible
-#'   code numbers therefore range from A00.0 to Z99.9. The letter U is not used
-#'   (see Section 2.4.7)."
-#'
-#'   "Although not mandatory for reporting at the international level, most of
-#'   the three-character categories are subdivided by means of a fourth, numeric
-#'   character after a decimal point, allowing up to 10 subcategories. Where a
-#'   three-character category is not subdivided, it is recommended that the
-#'   letter 'X' be used to fill the fourth position, so that the codes are of a
-#'   standard length for data-processing."
-#'
-#'   Officially, WHO standard goes to 3+1 digits, but there are officially
-#'   sanctioned extensions which use additional digits, e.g. neurology,
-#'   pediatrics, and of course ICD-10-CM.
-#' @export
-icd_is_valid.icd10who <- function(x, short_code = icd_guess_short.icd10(x), ...) {
-  assert_character(x)
-  assert_flag(short_code)
-  # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
-  # testing whether a code is defined for a particular set of ICD codes, e.g. an
-  # annual revision of ICD-10-CM
-
-  #  start with a broad regex
-
-  str_trim(x) %>%
-    str_detect("^[[:alpha:]][[:digit:]][[:digit:]]\\.?(X|[[:digit:]]*)$")
-
-}
+warn_numeric_code <- function()
+  warning("input data is in numeric format. This can easily lead to errors in ",
+          "short_code or decimal codes, e.g. short_code code 1000: is it 10.00 ",
+          "or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10 .",
+          call. = FALSE)

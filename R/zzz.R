@@ -23,7 +23,6 @@
     "Welcome to the \"icd\" package for finding comorbidities and interpretation of ICD-9 and ICD-10 codes. Suggestions and contributions are welcome at https://github.com/jackwasey/icd .
 
 Available options are:
-options(\"icd.warn_guess_short\" = TRUE) which will cause ambiguous guesses of decimal versus short codes to warn the user.
 options(\"icd.warn_deprecated\" = TRUE) which will warn if deprecated functions from the old \"icd9\" package are used.
 See the vignettes for examples.
 

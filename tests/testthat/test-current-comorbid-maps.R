@@ -38,17 +38,17 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
 
 test_that("Elixhauser make sure all the children are listed in the saved data.", {
   for (i in icd::icd9_map_quan_elix)
-    expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
+    expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
 
 test_that("Quan Charlson make sure all the children are listed in the saved data.", {
   for (i in icd::icd9_map_quan_deyo)
-    expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
+    expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
 })
 
 test_that("Quan Elixhauser make sure all the children are listed in the saved data.", {
   for (i in icd::icd9_map_quan_elix)
-    expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
+    expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
 })
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
@@ -95,7 +95,7 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
                       skipping AHRQ SAS parsing test.")
 
   # same but from source data. Should be absolutely identical.
-  expect_equal(result <- icd9_parse_ahrq_sas(save_data = FALSE), icd9_map_ahrq)
+  expect_identical(result <- icd9_parse_ahrq_sas(save_data = FALSE), icd9_map_ahrq)
   expect_that(result, is_a("list"))
   expect_true(length(result) == 30)
   expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd::icd9_map_ahrq), list())

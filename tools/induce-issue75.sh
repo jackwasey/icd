@@ -1,4 +1,7 @@
 #!/bin/bash
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+IFS=$'\n\t'
 
 # Copyright (C) 2014 - 2016  Jack O. Wasey
 #

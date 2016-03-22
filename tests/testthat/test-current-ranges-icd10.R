@@ -84,8 +84,8 @@ test_that("icd10 range major expansions", {
   expect_identical(icd_expand_range_major.icd10cm("A00", "A01"),
                    icd_expand_range_major(icd10cm("A00"), "A01"))
 
-  expect_equal(icd_expand_range_major.icd10cm("A99", "B00"), icd10cm(c("A99", "B00")))
-  expect_equal(icd_expand_range_major.icd10cm("A96", "A96"), icd10cm("A96"))
+  expect_equal(icd_expand_range_major.icd10cm("A99", "B00"), as.icd10cm(c("A99", "B00")))
+  expect_equal(icd_expand_range_major.icd10cm("A96", "A96"), as.icd10cm("A96"))
 
   expect_identical(icd_expand_range_major.icd10cm("a00", "a01"),
                    structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
@@ -93,8 +93,8 @@ test_that("icd10 range major expansions", {
   expect_identical(icd_expand_range_major.icd10cm("a00", "a01"),
                    icd_expand_range_major(icd10cm("a00"), "a01"))
 
-  expect_equal(icd_expand_range_major.icd10cm("a99", "b00"), icd10cm(c("A99", "B00")))
-  expect_equal(icd_expand_range_major.icd10cm("a96", "a96"), icd10cm("A96"))
+  expect_equal(icd_expand_range_major.icd10cm("a99", "b00"), as.icd10cm(c("A99", "B00")))
+  expect_equal(icd_expand_range_major.icd10cm("a96", "a96"), as.icd10cm("A96"))
 
   expect_equal_no_icd(icd_expand_range_major("a99", "b00"), c("A99", "B00"))
   expect_equal_no_icd(icd_expand_range_major("a96", "a96"), "A96")

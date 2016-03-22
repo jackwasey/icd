@@ -20,6 +20,16 @@ never happen.
 bad_codes <- c("100", "A01", "V100", "E999.0")
 class(bad_codes) <- c("icd9", "icd10cm", "icd_short_code", "icd_decimal_code")
 stopifnot(icd:::icd_classes_conflict(bad_codes))
+\dontrun{
+# benchmark attributes vs attr for getting and setting
+rp <- "a"
+new_attr <- list(k = "b")
+times <- 5e6
+microbenchmark::microbenchmark(attr(rp, "k") <- "b", attributes(rp) <- new_attr, times = times)
+microbenchmark::microbenchmark(attr(rp, "k"), attributes(rp)[["k"]], times = times)
+microbenchmark::microbenchmark(attr(rp, "k"), attributes(rp), times = times)
+microbenchmark::microbenchmark(attr(rp, "k", exact = TRUE), attributes(rp), times = times)
+}
 }
 \keyword{internal}
 

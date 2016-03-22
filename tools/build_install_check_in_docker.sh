@@ -1,4 +1,6 @@
 #!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
 
 # Copyright (C) 2014 - 2015  Jack O. Wasey
 #

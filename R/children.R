@@ -84,14 +84,14 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   if (billable)
     icd_get_billable.icd9cm(icd9cm(res), short_code)
   else
-    icd9(res)
+    as.icd9(res)
 }
 
 #' @describeIn icd_children Get children of ICD-10 codes (warns because this
 #'   only applies to ICD-10-CM for now)
 #' @export
 #' @keywords internal
-icd_children.icd10 <- function(x, short_code = icd_guess_short.icd10(x), defined, billable = FALSE, ...) {
+icd_children.icd10 <- function(x, short_code = icd_guess_short(x), defined, billable = FALSE, ...) {
   warning("Finding children of ICD-10 codes currently assumes ICD-10-CM (2016)")
   icd_children.icd10cm(x, short_code, defined, billable, ...)
 }
@@ -99,7 +99,7 @@ icd_children.icd10 <- function(x, short_code = icd_guess_short.icd10(x), defined
 #' @describeIn icd_children Get children of ICD-10-CM codes
 #' @export
 #' @keywords internal
-icd_children.icd10cm <- function(x, short_code = icd_guess_short.icd10(x), defined, billable = FALSE, ...) {
+icd_children.icd10cm <- function(x, short_code = icd_guess_short(x), defined, billable = FALSE, ...) {
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(unclass(x)))
   assert_flag(short_code)
   assert_flag(billable)
@@ -125,7 +125,7 @@ icd_children_defined <- function(x)
 
 #' @describeIn icd_children_defined get the children of ICD-10 code(s)
 #' @keywords internal
-icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x)) {
+icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
   assert_character(x)
   assert_flag(short_code)
@@ -164,8 +164,5 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short.icd10(x
     kids <- c(kids, icd::icd10cm2016[matches[i]:(check_row - 1), "code"])
   }
 
-  if (short_code)
-    icd10cm(icd_short_code(kids))
-  else
-    icd10cm(icd_decimal_code(kids))
+    as.icd10cm(kids, short_code)
 }

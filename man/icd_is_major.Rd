@@ -5,7 +5,6 @@
 \alias{icd_is_major.default}
 \alias{icd_is_major.icd10}
 \alias{icd_is_major.icd10cm}
-\alias{icd_is_major.icd10who}
 \alias{icd_is_major.icd9}
 \title{Check whether a code is major}
 \usage{
@@ -16,8 +15,6 @@ icd_is_major(x)
 \method{icd_is_major}{icd10}(x)
 
 \method{icd_is_major}{icd10cm}(x)
-
-\method{icd_is_major}{icd10who}(x)
 
 \method{icd_is_major}{icd9}(x)
 }
@@ -36,8 +33,6 @@ Check whether a code is major
 \item \code{icd10cm}: check whether a code is an ICD-10-CM major.
 Currently uses \code{stringr} which uses \code{stringi} which should be
 quite fast, but does suffer from handling Unicode, locales, etc.
-
-\item \code{icd10who}: check whether a code is an ICD-10 WHO major
 
 \item \code{icd9}: check whether a code is an ICD-9 major
 }}
