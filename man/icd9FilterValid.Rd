@@ -10,10 +10,11 @@
 \alias{icd9FilterValid}
 \title{Deprecated: filter valid ICD-9 codes in or out}
 \usage{
-icd9FilterValid(icd9df, icd9Field = NULL, isShort = NULL, invert = FALSE)
+icd9FilterValid(icd9df, icd9Field = get_icd_name(icd9df),
+  isShort = icd_guess_short(icd9df[[icd9Field]]), invert = FALSE)
 
-icd9FilterInvalid(icd9df, icd9Field = NULL, isShort = NULL,
-  invert = FALSE)
+icd9FilterInvalid(icd9df, icd9Field = get_icd_name(icd9df),
+  isShort = icd_guess_short(icd9df[[icd9Field]]), invert = FALSE)
 
 icd9FilterPoa(icd9df, poaField = "poa", poa = icd9PoaChoices)
 

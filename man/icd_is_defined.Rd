@@ -52,7 +52,8 @@ default)
 
 \item \code{icd10cm}: Same for ICD-10-CM
 
-\item \code{icd10}: Same for ICD-10, temporarily using ICD-10-CM
+\item \code{icd10}: Same for ICD-10, temporarily using ICD-10-CM until
+ICD-10 WHO is available in this package
 
 \item \code{default}: default method which will guess the ICD version (9
 vs 10, maybe WHO vs CM or other in the future) and dispatches again on that

@@ -31,12 +31,12 @@
 icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, icd_name = NULL) {
   if (!is.null(short_code))
     return(short_code)
-  if (is.icd_short_code(x))
+  if (is.icd_short_diag(x, must_work = TRUE))
     return(TRUE)
-  if (is.icd_decimal_code(x))
+  if (is.icd_decimal_diag(x, must_work = TRUE))
     return(FALSE)
   if (is.data.frame(x)) {
-    if (is.null(icd_name)) icd_name = get_icd_name(x)
+    icd_name <- get_icd_name(x, icd_name = icd_name)
     x <- .subset2(x, icd_name) # this is v fast equiv to [[icd_name]]
   }
   if (is.list(x))
@@ -45,6 +45,7 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, icd_name = NUL
   # to look for decimal codes in a factor than the whole char vector anyway
   guessShortPlusFactorCpp(x, test_n)
 }
+
 
 #' Guess version of ICD codes
 #'
@@ -82,7 +83,7 @@ icd_guess_version.factor <- function(x, short_code = NULL, ...) {
 #' @describeIn icd_guess_version Guess version of ICD codes in character vector
 #' @export
 #' @keywords internal
-icd_guess_version.character <- function(x, short_code = NULL, ...) {
+icd_guess_version.character <- function(x, short_code = NULL, test_n = 10, ...) {
   # TODO: this is too complicated. The short test can really just be looking for
   # the decimal place, maybe in C/C++, but doesn't need anything special extra,
   # and I can't see how ICD version would make a difference
@@ -90,9 +91,7 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
   assert_character(x)
   assert(checkmate::checkFlag(short_code), checkmate::checkNull(short_code))
 
-  # TODO: make this an option
-  n <- 10
-  x <- x[1:n]
+  x <- x[1:test_n]
 
   if (!is.null(short_code)) {
     if (short_code) {
@@ -125,11 +124,12 @@ icd_guess_version.character <- function(x, short_code = NULL, ...) {
 
 #' @describeIn icd_guess_version Guess version of ICD codes in a field in a
 #'   \code{data.frame}
+#' @method icd_guess_version data.frame
 #' @keywords internal
 #' @export
 icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_icd_name(x), ...) {
   assert_data_frame(x)
-  icd_guess_version.character(as_char_no_warn(x[[icd_name]]))
+  icd_guess_version(x[[icd_name]])
 }
 
 #' Guess version of ICD and update class
@@ -163,9 +163,9 @@ icd_guess_version_update <- function(x, short_code = icd_guess_short(x)) {
 icd_guess_short_update <- function(x, icd_name = get_icd_name(x),
                                    short_code = icd_guess_short(x)) {
   if (short_code)
-    icd_short_code(x)
+    as.icd_short_diag(x)
   else
-    icd_decimal_code(x)
+    as.icd_decimal_diag(x)
 }
 
 #' Guess the ICD version (9 or 10) from a pair of codes

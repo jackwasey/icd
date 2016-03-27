@@ -48,13 +48,13 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short(x),
   assert_flag(billable)
 
   if (!short_code)
-    x <- icd_decimal_to_short(x)
+    x <- icd_decimal_to_short.icd9(x)
 
   if (billable)
-    icd9cm_is_billable(short_code = TRUE,as_char_no_warn(x))
+    icd_is_billable.icd9cm(short_code = TRUE, as_char_no_warn(x))
   else
     icd9_add_leading_zeroes(short_code = TRUE,
-      as_char_no_warn(x)) %in% icd::icd9cm_hierarchy[["code"]]
+                            as_char_no_warn(x)) %in% icd::icd9cm_hierarchy[["code"]]
 }
 
 #' @describeIn icd_is_defined Same for ICD-10-CM
@@ -71,12 +71,12 @@ icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short(x),
     x %fin% icd::icd10cm2016[["code"]]
 }
 
-#' @describeIn icd_is_defined Same for ICD-10, temporarily using ICD-10-CM
+#' @describeIn icd_is_defined Same for ICD-10, temporarily using ICD-10-CM until
+#'   ICD-10 WHO is available in this package
 #' @export
 #' @keywords internal
 icd_is_defined.icd10 <- function(x, short_code = icd_guess_short(x),
                                  billable = FALSE, ...) {
-  warning("using ICD-10-CM for testing icd10 definition. Set class to WHO if this is wanted.")
   icd_is_defined.icd10cm(x = x, short_code = short_code, billable = billable, ...)
 }
 
@@ -122,17 +122,19 @@ icd_get_defined.icd9 <- function(x, short_code = icd_guess_short(x), billable = 
 
 #' Determine whether codes are billable leaf-nodes
 #'
-#' Codes provided are compared to the most recent version of the
-#'   CMS list of billable codes, or another version if specified.
+#' Codes provided are compared to the most recent edition of the CMS list of
+#' billable codes, or another edition if specified.
 #' @param x input vector to test
 #' @template short_code
-#' @param version single character string, default is "32" which is the latest
-#'   release from CMS. Currently anything from "23" to "32" is accepted. Not
-#'   numeric because there are possible cases with non-numeric names, e.g.
+#' @param icd9cm_edition single character string, default is "32" which is the
+#'   latest release from CMS. Currently anything from "23" to "32" is accepted.
+#'   Not numeric because there are possible cases with non-numeric names, e.g.
 #'   revisions within one year, although none currently implemented.
+#' @param icd10cm_edition single character string. ICD-10-CM editions are
+#'   currently just the year of release.
 #' @return logical vector of same length as input
 #' @export
-icd_is_billable <- function(x, short_code = icd_guess_short(x), version = icd9cm_latest_edition()) {
+icd_is_billable <- function(x, short_code = icd_guess_short(x), ...) {
   UseMethod("icd_is_billable")
 }
 
@@ -141,17 +143,17 @@ icd_is_billable <- function(x, short_code = icd_guess_short(x), version = icd9cm
 #' @export
 #' @keywords internal
 icd_is_billable.icd9 <- function(x, short_code = icd_guess_short(x),
-                                 version = icd9cm_latest_edition()) {
-  icd_is_billable.icd9cm(x = x, short_code = short_code, version = version)
+                                 icd9cm_edition = icd9cm_latest_edition()) {
+  icd_is_billable.icd9cm(x = x, short_code = short_code, icd9cm_edition = icd9cm_edition)
 }
 
 #' @describeIn icd_is_billable Which of the given ICD-10 codes are leaf nodes in
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), version = "2016") {
-  if (version != "2016")
-    stop("curretly only ICD-10-CM 2016 version can be used to check for billable codes")
+icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), icd10cm_edition = "2016") {
+  if (icd10cm_edition != "2016")
+    stop("curretly only ICD-10-CM 2016 edition can be used to check for billable codes")
   if (!short_code)
     x <- icd_decimal_to_short(x)
 
@@ -162,31 +164,33 @@ icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), version 
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd10 <- function(x, short_code = icd_guess_short(x), version = "2016") {
-  icd_is_billable.icd10cm(x = x, short_code = short_code, version = version)
+icd_is_billable.icd10 <- function(x, short_code = icd_guess_short(x), icd10cm_edition = "2016") {
+  icd_is_billable.icd10cm(x = x, short_code = short_code, icd10cm_edition = icd10cm_edition)
 }
 
 #' @describeIn icd_is_billable Which of the given ICD-9 codes are leaf nodes in
 #'   ICD-9-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x), version = icd9cm_latest_edition()) {
+icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x), icd9cm_edition = icd9cm_latest_edition()) {
   assert_vector(x)
   assert_flag(short_code)
-  assert_string(version)
+  assert_string(icd9cm_edition)
   if (!short_code)
-    x <- icd_decimal_to_short(x)
-  x %in% icd::icd9cm_billable[[version]][["code"]]
+    x <- icd_decimal_to_short.icd9(x)
+  x %in% icd::icd9cm_billable[[icd9cm_edition]][["code"]]
 }
 
 #' @describeIn icd_is_billable Which of the given ICD codes are leaf nodes in
-#'   ICD version guessed from the codes themselves.
+#'   ICD version (9 vs 10) guessed from the codes themselves.
 #' @export
 #' @method icd_is_billable default
 #' @keywords internal
-icd_is_billable.default <- function(x, short_code = icd_guess_short(x), version = icd9cm_latest_edition()) {
+icd_is_billable.default <- function(x, short_code = icd_guess_short(x), icd9cm_edition = icd9cm_latest_edition()) {
   # guess ICD-9 vs ICD-10 and set class to dispatch again
   x <- icd_guess_version_update(x, short_code = short_code)
+  # TODO: think about this: UseMethod doesn't send the new 'x', but uses the
+  # class of the updated 'x' to dispatch the original 'x'
   UseMethod("icd_is_billable", x)
 }
 
@@ -198,21 +202,22 @@ icd_is_billable.default <- function(x, short_code = icd_guess_short(x), version 
 #' @param x input vector of ICD codes
 #' @template short_code
 #' @template invert
-#' @param version e.g. "32", not ICD-9 vs ICD-10
+#' @param icd9cm_edition e.g. "32", not ICD-9 vs ICD-10
 #' @export
 icd_get_billable <- function(...) {
   UseMethod("icd_get_billable")
 }
 
-#' @describeIn icd_get_billable Get billable ICD codes, guessing ICD version,
-#'   and code short vs decimal type.
+#' @describeIn icd_get_billable Get billable ICD codes, guessing whether ICD-9
+#'   or ICD-10, and code short vs decimal type.
+#' @method icd_get_billable default
 #' @export
 #' @keywords internal
 icd_get_billable.default <- function(x, ...) {
-  x %>%
+  x %<>%
     icd_guess_version_update %>%
-    icd_guess_short_update %>%
-    icd_get_billable(...)
+    icd_guess_short_update
+  UseMethod("icd_get_billable", x)
 }
 
 #' @describeIn icd_get_billable Get billable ICD-9-CM codes
@@ -222,7 +227,7 @@ icd_get_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
                                     invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...) {
   assert_flag(short_code)
   assert_flag(invert)
-  assert_string(version)
+  assert_string(icd9cm_edition)
   # would be nicer to dispatch on short_code type here.
   icd9cm_get_billable(x = x, short_code = short_code, invert = invert, icd9cm_edition = icd9cm_edition)
 }
@@ -237,40 +242,26 @@ icd_get_billable.icd9 <- function(...) {
 
 #' Get billable ICD-9-CM codes
 #'
-#' Return only those codes which are leaf codes in the hierarchy.
-#'   In contrast to \emph{defined} codes, these are considered \emph{billable}
-#'   and not super-sets of other codes. The majority have sub-decimal
-#'   classifications, but some are simply three-digit codes. This particular
-#'   function is currently restricted to ICD-9-CM codes.
+#' Return only those codes which are leaf codes in the hierarchy. In contrast to
+#' \emph{defined} codes, these are considered \emph{billable} and not super-sets
+#' of other codes. The majority have sub-decimal classifications, but some are
+#' simply three-digit codes. This particular function is currently restricted to
+#' ICD-9-CM codes.
 #'
-#' TODO: keep this internal
 #' @param x data, e.g. character vector, \code{icd9}, \code{icd9cm}
 #' @template short_code
 #' @template invert
-#' @param version String containing class name of version of ICD to be tested
-#'   against, e.g. \code{"icd9cm"}. Default is to guess the version.
 #' @keywords internal
 icd9cm_get_billable <- function(x, short_code = icd_guess_short(x),
                                 invert = FALSE, icd9cm_edition = icd9cm_latest_edition()) {
   assert_vector(x)
   assert_flag(short_code)
   assert_flag(invert)
-  assert_string(version)
-  UseMethod("icd9cm_get_billable")
-}
+  assert_string(icd9cm_edition)
+  x <- as.icd_short_diag(as.icd9cm(x), short_code)
 
-#' @describeIn icd9cm_get_billable Get the billable ICD-9-CM codes from vector
-#'   of short codes
-#' @export
-#' @keywords internal
-icd9cm_get_billable.icd_short_code <- function(x, invert = FALSE, version = icd9cm_latest_edition()) {
-  x[icd_is_billable.icd9cm(x, short_code = TRUE, version = version) != invert]
-}
-
-#' @describeIn icd9cm_get_billable Get the billable ICD-9-CM codes from vector
-#'   of decimal codes
-#' @export
-#' @keywords internal
-icd9cm_get_billable.icd_decimal_code <- function(x, invert = FALSE, version = icd9cm_latest_edition()) {
-  x[icd_is_billable.icd9cm(x, short_code = FALSE, version = version) != invert]
+  if (short_code)
+    x[icd_is_billable.icd9cm(x, short_code = TRUE, icd9cm_edition = icd9cm_edition) != invert]
+  else
+    x[icd_is_billable.icd9cm(x, short_code = FALSE, icd9cm_edition = icd9cm_edition) != invert]
 }

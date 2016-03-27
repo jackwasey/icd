@@ -12,6 +12,9 @@
 }
 \arguments{
 \item{...}{elements to combine}
+
+\item{warn}{single logical value, if TRUE, will give warnings when
+incompatible types are combined using \code{c}}
 }
 \description{
 These function implement combination of lists or vectors of codes, while

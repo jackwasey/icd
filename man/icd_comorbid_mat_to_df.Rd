@@ -23,11 +23,10 @@ convert matrix of comorbidities into data frame, preserving visit_name
 information
 }
 \examples{
- # as ever, optional, but tidy
-library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
-
-longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
-                     icd9 = icd9(c("441", "4424", "443", "441"))) \%>\% icd_long_data \%>\% icd9
+longdf <- as.icd_long_data(
+  data.frame(visit_id = c("a", "b", "b", "c"),
+             icd9 = icd9(c("441", "4424", "443", "441")))
+)
 mat <- icd_comorbid_elix(longdf)
 class(mat)
 typeof(mat)

@@ -28,7 +28,7 @@ test_that("explain a large set of ICD-9 codes succinctly", {
   )
 
   expect_identical(
-    icd_explain.icd9(icd_children.icd9(icd_short_code("391")), condense = TRUE, short_code = TRUE),
+    icd_explain.icd9(icd_children.icd9(as.icd_short_diag("391")), condense = TRUE, short_code = TRUE),
     "Rheumatic fever with heart involvement"
   )
 })
@@ -44,7 +44,7 @@ test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   )
 
   expect_identical(
-    icd_explain.icd9(factor(icd_children.icd9(icd_short_code("391"))), condense = TRUE, short_code = TRUE),
+    icd_explain.icd9(factor(icd_children.icd9(as.icd_short_diag("391"))), condense = TRUE, short_code = TRUE),
     "Rheumatic fever with heart involvement"
   )
 })

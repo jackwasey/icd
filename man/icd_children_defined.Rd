@@ -7,7 +7,12 @@
 \usage{
 icd_children_defined(x)
 
-\method{icd_children_defined}{icd10cm}(x, short_code = icd_guess_short(x))
+\method{icd_children_defined}{icd10cm}(x, short_code = icd_guess_short(x),
+  warn = FALSE)
+}
+\arguments{
+\item{warn}{single logical value, if \code{TRUE} will generate warnings when
+some input codes are not known ICD-10-CM codes}
 }
 \description{
 defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a

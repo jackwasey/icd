@@ -42,7 +42,7 @@ update_everything <- function() {
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
   parse_leaf_descriptions_all(save_data = TRUE) # nolint
-  load(system.file("data", "icd9cm_billable"))
+  load(system.file("data", "icd9cm_billable.RData", package = "icd"))
 
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)

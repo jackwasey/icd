@@ -26,7 +26,7 @@ Where reasonable, this is guessed from the input data.}
 \item{invert}{Single logical value. Returns the inverse of the result. E.g.
 if seeking valid ICD-9 codes, the invalid ones are returned.}
 
-\item{version}{e.g. "32", not ICD-9 vs ICD-10}
+\item{icd9cm_edition}{e.g. "32", not ICD-9 vs ICD-10}
 }
 \description{
 Get billable ICD codes, implicitly, this refers to an ICD
@@ -35,8 +35,8 @@ Get billable ICD codes, implicitly, this refers to an ICD
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: Get billable ICD codes, guessing ICD version,
-and code short vs decimal type.
+\item \code{default}: Get billable ICD codes, guessing whether ICD-9
+or ICD-10, and code short vs decimal type.
 
 \item \code{icd9cm}: Get billable ICD-9-CM codes
 

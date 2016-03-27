@@ -114,7 +114,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     stringsAsFactors = FALSE
   )
 
-  icd10cm2016[["code"]] %<>% icd10cm %>% icd_short_code
+  icd10cm2016[["code"]] %<>% as.icd10cm %>% as.icd_short_diag
   icd10cm2016[["code"]] %>% icd_get_major %>% factor_nosort -> icd10cm2016[["three_digit"]]
 
   # here we must re-factor so we don't have un-used levels in major

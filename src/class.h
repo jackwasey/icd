@@ -23,4 +23,9 @@
 #include <vector>
 #include <string>
 
+void setDecimalDiag(Rcpp::RObject& x, bool value = true);
+void setDecimalDiag(Rcpp::CharacterVector& x, bool);
+void setShortDiag(Rcpp::RObject& x, bool value = true);
+void setShortDiag(Rcpp::CharacterVector& x, bool);
+
 #endif /* CLASS_H_ */

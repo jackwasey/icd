@@ -79,8 +79,6 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   else
     res <- .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = "icd", toupper(x), defined)
 
-  res <- icd_guess_short_update(res)
-
   if (billable)
     icd_get_billable.icd9cm(icd9cm(res), short_code)
   else
@@ -88,11 +86,10 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
 }
 
 #' @describeIn icd_children Get children of ICD-10 codes (warns because this
-#'   only applies to ICD-10-CM for now)
+#'   only applies to ICD-10-CM for now).
 #' @export
 #' @keywords internal
 icd_children.icd10 <- function(x, short_code = icd_guess_short(x), defined, billable = FALSE, ...) {
-  warning("Finding children of ICD-10 codes currently assumes ICD-10-CM (2016)")
   icd_children.icd10cm(x, short_code, defined, billable, ...)
 }
 
@@ -124,8 +121,10 @@ icd_children_defined <- function(x)
   UseMethod("icd_children_defined")
 
 #' @describeIn icd_children_defined get the children of ICD-10 code(s)
+#' @param warn single logical value, if \code{TRUE} will generate warnings when
+#'   some input codes are not known ICD-10-CM codes
 #' @keywords internal
-icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
+icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x), warn = FALSE) {
 
   assert_character(x)
   assert_flag(short_code)
@@ -135,8 +134,9 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 
   matches_bool <- icd10Short %in% icd::icd10cm2016[["code"]]
   # if the codes are not in the source file, we ignore, warn, drop silently?
-  if (!all(matches_bool)) warning("some values did not match any ICD-10-CM codes: ",
-                                  paste(icd10Short[!matches_bool], collapse = ", "))
+  if (warn && !all(matches_bool))
+    warning("some values did not match any ICD-10-CM codes: ",
+            paste(icd10Short[!matches_bool], collapse = ", "))
 
   icd10Short <- icd10Short[matches_bool]
   matches <- match(icd10Short, icd::icd10cm2016[["code"]])
@@ -164,5 +164,5 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x)) {
     kids <- c(kids, icd::icd10cm2016[matches[i]:(check_row - 1), "code"])
   }
 
-    as.icd10cm(kids, short_code)
+  as.icd10cm(kids, short_code)
 }

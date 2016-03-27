@@ -34,7 +34,7 @@ np <- round(n / 20) # icd9 codes per patients
 
 random_short_icd9_codes <- as.character(floor(stats::runif(min = 10000, max = 99999, n = n)))
 random_sample_ahrq_codes <- sample(unname(c(icd::icd9_map_ahrq, recursive = TRUE)),
-                           replace = TRUE, size = n)
+                                   replace = TRUE, size = n)
 few_icd9_codes <- c("27801", "7208", "25001", "34400", "4011", "4011")
 
 simple_pts <- data.frame(
@@ -68,10 +68,10 @@ random_test_patients <- data.frame(
 
 test_twenty <- structure(
   list(visit_id = c(207210584L, 207210584L, 207210584L,
-                   207210584L, 207210584L, 207210600L, 207210600L,
-                   207210600L, 207210600L, 207210600L, 207210600L,
-                   207210600L, 207210600L, 207210600L, 207210600L,
-                   207210600L, 207210600L, 207210600L, 207210618L, 207210618L),
+                    207210584L, 207210584L, 207210600L, 207210600L,
+                    207210600L, 207210600L, 207210600L, 207210600L,
+                    207210600L, 207210600L, 207210600L, 207210600L,
+                    207210600L, 207210600L, 207210600L, 207210618L, 207210618L),
        icd9Code = structure(
          c(17L, 1L, 14L, 10L, 13L, 11L, 8L, 6L,
            18L, 2L, 7L, 19L, 3L, 5L, 20L, 16L, 12L, 4L, 15L, 9L),
@@ -87,7 +87,7 @@ test_twenty <- structure(
 
 # first and last item from each AHRQ comorbidity:
 ahrq_end_codes <- c(lapply(icd::icd9_map_ahrq, head, n = 1),
-            lapply(icd::icd9_map_ahrq, tail, n = 1)) %>%
+                    lapply(icd::icd9_map_ahrq, tail, n = 1)) %>%
   unname %>%
   unlist %>%
   icd9
@@ -99,7 +99,7 @@ ahrq_test_dat <- data.frame(
 ) %>% as.icd_long_data
 
 elix_end_codes <- unlist(unname(c(lapply(icd::elixComorbid, head, n = 1),
-                          lapply(icd::elixComorbid, tail, n = 1))))
+                                  lapply(icd::elixComorbid, tail, n = 1))))
 elix_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(elix_end_codes)),
   icd9 = elix_end_codes,
@@ -107,7 +107,7 @@ elix_test_dat <- data.frame(
 )
 
 quan_elix_end_codes <- unlist(unname(c(lapply(icd::icd9_map_quan_elix, head, n = 1),
-                          lapply(icd::icd9_map_quan_elix, tail, n = 1))))
+                                       lapply(icd::icd9_map_quan_elix, tail, n = 1))))
 quan_elix_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(quan_elix_end_codes)),
   icd9 = quan_elix_end_codes,
@@ -115,7 +115,7 @@ quan_elix_test_dat <- data.frame(
 )
 
 quan_deyo_end_codes <- unlist(unname(c(lapply(icd::quanDeyoComorbid, head, n = 1),
-                          lapply(icd::quanDeyoComorbid, tail, n = 1))))
+                                       lapply(icd::quanDeyoComorbid, tail, n = 1))))
 quan_deyo_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(quan_deyo_end_codes)),
   icd9 = quan_deyo_end_codes,
@@ -141,18 +141,13 @@ one_of_each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
 
 # two items per map, two codes per item, two codes for two visits
 two_pts <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
-                     icd9 = c("040", "000", "100", "000"),
-                     stringsAsFactors = FALSE)
+                      icd9 = c("040", "000", "100", "000"),
+                      stringsAsFactors = FALSE)
 two_map <- list("malady" = c("100", "2000"),
-               "ailment" = c("003", "040"))
+                "ailment" = c("003", "040"))
 
-pts_invalid_mix <- icd9(
-  as.icd_long_data(
-    data.frame(
-      visit_id = c(1000, 1000, 1001),
-      icd9 = icd9(c("27801", "invalides", "25001")),
-      poa = factor(c("Y", "N", "Y")),
-      stringsAsFactors = FALSE
-    )
-  )
-)
+pts_invalid_mix <- icd_long_data(
+  visit_id = c(1000, 1000, 1001),
+  icd9 = icd9(c("27801", "invalides", "25001")),
+  poa = factor(c("Y", "N", "Y")),
+  stringsAsFactors = FALSE)

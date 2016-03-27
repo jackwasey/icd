@@ -27,18 +27,18 @@ test_that("very bad input data fails completely", {
 
 test_that("top level ICD-10 ranges of single code are expanded to real codes", {
   expect_true(all(icd_is_defined.icd10cm(icd_expand_range(icd10cm("J11"), icd10cm("J11")))))
- })
+})
 
 test_that("simple ranges of real values works", {
   expect_equal_no_icd(icd_expand_range.icd10cm("A00", "A001"),
-               c("A00", "A000", "A001"))
+                      c("A00", "A000", "A001"))
   expect_equal_no_icd(icd_expand_range.icd10cm("A00", "A009", short_code = TRUE),
-               c("A00", "A000", "A001", "A009"))
+                      c("A00", "A000", "A001", "A009"))
   # same with S3 dispatch
   expect_equal_no_icd(icd_expand_range("A00", "A001"),
-               c("A00", "A000", "A001"))
+                      c("A00", "A000", "A001"))
   expect_equal_no_icd(icd_expand_range("A00", "A009", short_code = TRUE),
-               c("A00", "A000", "A001", "A009"))
+                      c("A00", "A000", "A001", "A009"))
 })
 
 test_that("range style used by Quan is accepted", {
@@ -51,10 +51,10 @@ test_that("range style used by Quan is accepted", {
   )
   for (pair in quan_ranges) {
     # start with a low bar!
-      expect_error(
-        icd_expand_range.icd10cm(pair[1], pair[2], short_code = TRUE), NA,
-        info = paste(pair, collapse = "-")
-        )
+    expect_error(
+      icd_expand_range.icd10cm(pair[1], pair[2], short_code = TRUE), NA,
+      info = paste(pair, collapse = "-")
+    )
   }
 
 })
@@ -70,11 +70,14 @@ test_that("completely invalid input fails", {
 })
 
 test_that("single value gives correct range", {
-  expect_equal(unclass(res <- icd_children_defined.icd10cm("A00", short_code = TRUE)),
-               c("A00", "A000", "A001", "A009"))
+  expect_equal(res <- icd_children_defined.icd10cm("A00", short_code = TRUE),
+               structure(c("A00", "A000", "A001", "A009"),
+                         class = c("icd10cm", "icd10", "character"),
+                         icd_short_diag = TRUE)
+  )
   expect_true(is.icd10cm(res))
   expect_true(is.icd10(res))
-  expect_true(is.icd_short_code(res))
+  expect_true(is.icd_short_diag(res))
 })
 
 test_that("icd10 range major expansions", {

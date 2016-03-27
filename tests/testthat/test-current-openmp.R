@@ -21,12 +21,12 @@ context("OpenMP thread and chunk parameters")
 test_that("single icd9 code comorbidity", {
   # this is enough to segfault with clang 3.7, libc++ and libomp
   x <- data.frame(visit_id = "a", icd9 = "441")
-  icd_comorbid_quan_deyo.icd9(x, short_code = FALSE, applyHierarchy = T)
+  icd9_comorbid_quan_deyo(x, short_code = FALSE, applyHierarchy = T)
 })
 
 test_that("thousands of patients", {
   x <- generate_random_pts(10000)
-  icd_comorbid_quan_deyo.icd9(x, short_code = FALSE, applyHierarchy = TRUE)
+  icd9_comorbid_quan_deyo(x, short_code = FALSE, applyHierarchy = TRUE)
 })
 
 test_that("vary everything", {
@@ -43,12 +43,12 @@ test_that("vary everything", {
           # omp_chunk_size is not currently not set in CPP code
           options("icd.omp_chunk_size" = omp_chunk_size)
           if (packageVersion("testthat") < package_version("0.11.0.9000"))
-            expect_that( icd_comorbid_quan_deyo.icd9(rand_pts, short_code = FALSE, hierarchy = TRUE),
+            expect_that( icd9_comorbid_quan_deyo(rand_pts, short_code = FALSE, hierarchy = TRUE),
               condition = testthat::not(testthat::throws_error()),
               info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
                              pts, dz_per_patient, threads, chunk_size))
           else
-            expect_error(icd_comorbid_quan_deyo.icd9(rand_pts, short_code = FALSE, hierarchy = TRUE), NA)
+            expect_error(icd9_comorbid_quan_deyo(rand_pts, short_code = FALSE, hierarchy = TRUE), NA)
         }
       }
     }

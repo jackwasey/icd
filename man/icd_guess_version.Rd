@@ -17,7 +17,8 @@ icd_guess_version(x, short_code, ...)
 
 \method{icd_guess_version}{factor}(x, short_code = NULL, ...)
 
-\method{icd_guess_version}{character}(x, short_code = NULL, ...)
+\method{icd_guess_version}{character}(x, short_code = NULL, test_n = 10,
+  ...)
 
 \method{icd_guess_version}{data.frame}(x, short_code = NULL,
   icd_name = get_icd_name(x), ...)

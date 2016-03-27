@@ -272,10 +272,10 @@ test_that("range bugs", {
   expect_equal_no_icd( ("42" %i9s% "042 ")[1], "042")
   expect_true("345" %nin% ("3420 " %i9s% "3449 "))
 
-  expect_identical("042.11" %i9da% "042.13", icd9(icd_decimal_code(c("042.11", "042.12", "042.13"))))
+  expect_identical("042.11" %i9da% "042.13", icd9(as.icd_decimal_diag(c("042.11", "042.12", "042.13"))))
 
   # no presumption that missing leading zeroes will be missed on output:
-  expect_equivalent("42.11" %i9da% "42.13", icd9(icd_decimal_code(c("042.11", "042.12", "042.13"))))
+  expect_equivalent("42.11" %i9da% "42.13", icd9(as.icd_decimal_diag(c("042.11", "042.12", "042.13"))))
 })
 
 test_that("range doesn't include higher level parent github issue #14", {
@@ -558,8 +558,8 @@ test_that("expand ICD-9 range character class deals with short vs long types", {
     res_a <- icd_expand_range("410", "410.8"), short_code = FALSE)))
   expect_true(all(icd_is_valid.icd9(
     res_b <- icd_expand_range("410", "4108"), short_code = TRUE)))
-  expect_true(is.icd_decimal_code(res_a))
-  expect_true(is.icd_short_code(res_b))
+  expect_true(is.icd_decimal_diag(res_a))
+  expect_true(is.icd_short_diag(res_b))
 })
 
 

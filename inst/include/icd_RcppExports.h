@@ -24,17 +24,17 @@ namespace icd {
         }
     }
 
-    inline void setDecimalCodeInPlace(Rcpp::RObject& x) {
-        typedef SEXP(*Ptr_setDecimalCodeInPlace)(SEXP);
-        static Ptr_setDecimalCodeInPlace p_setDecimalCodeInPlace = NULL;
-        if (p_setDecimalCodeInPlace == NULL) {
-            validateSignature("void(*setDecimalCodeInPlace)(Rcpp::RObject&)");
-            p_setDecimalCodeInPlace = (Ptr_setDecimalCodeInPlace)R_GetCCallable("icd", "icd_setDecimalCodeInPlace");
+    inline void _attr_decimal_diag(Rcpp::RObject& x, bool value) {
+        typedef SEXP(*Ptr__attr_decimal_diag)(SEXP,SEXP);
+        static Ptr__attr_decimal_diag p__attr_decimal_diag = NULL;
+        if (p__attr_decimal_diag == NULL) {
+            validateSignature("void(*_attr_decimal_diag)(Rcpp::RObject&,bool)");
+            p__attr_decimal_diag = (Ptr__attr_decimal_diag)R_GetCCallable("icd", "icd__attr_decimal_diag");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_setDecimalCodeInPlace(Rcpp::wrap(x));
+            __result = p__attr_decimal_diag(Rcpp::wrap(x), Rcpp::wrap(value));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -42,17 +42,35 @@ namespace icd {
             throw Rcpp::exception(as<std::string>(__result).c_str());
     }
 
-    inline Rcpp::RObject setDecimalCode(Rcpp::RObject& x) {
-        typedef SEXP(*Ptr_setDecimalCode)(SEXP);
-        static Ptr_setDecimalCode p_setDecimalCode = NULL;
-        if (p_setDecimalCode == NULL) {
-            validateSignature("Rcpp::RObject(*setDecimalCode)(Rcpp::RObject&)");
-            p_setDecimalCode = (Ptr_setDecimalCode)R_GetCCallable("icd", "icd_setDecimalCode");
+    inline void _attr_short_diag(Rcpp::RObject& x, bool value) {
+        typedef SEXP(*Ptr__attr_short_diag)(SEXP,SEXP);
+        static Ptr__attr_short_diag p__attr_short_diag = NULL;
+        if (p__attr_short_diag == NULL) {
+            validateSignature("void(*_attr_short_diag)(Rcpp::RObject&,bool)");
+            p__attr_short_diag = (Ptr__attr_short_diag)R_GetCCallable("icd", "icd__attr_short_diag");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_setDecimalCode(Rcpp::wrap(x));
+            __result = p__attr_short_diag(Rcpp::wrap(x), Rcpp::wrap(value));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+    }
+
+    inline Rcpp::RObject as_icd_short_diag(Rcpp::RObject& x, bool value = true) {
+        typedef SEXP(*Ptr_as_icd_short_diag)(SEXP,SEXP);
+        static Ptr_as_icd_short_diag p_as_icd_short_diag = NULL;
+        if (p_as_icd_short_diag == NULL) {
+            validateSignature("Rcpp::RObject(*as_icd_short_diag)(Rcpp::RObject&,bool)");
+            p_as_icd_short_diag = (Ptr_as_icd_short_diag)R_GetCCallable("icd", "icd_as_icd_short_diag");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_as_icd_short_diag(Rcpp::wrap(x), Rcpp::wrap(value));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -61,22 +79,23 @@ namespace icd {
         return Rcpp::as<Rcpp::RObject >(__result);
     }
 
-    inline void icd_set_short_code(Rcpp::RObject& x) {
-        typedef SEXP(*Ptr_icd_set_short_code)(SEXP);
-        static Ptr_icd_set_short_code p_icd_set_short_code = NULL;
-        if (p_icd_set_short_code == NULL) {
-            validateSignature("void(*icd_set_short_code)(Rcpp::RObject&)");
-            p_icd_set_short_code = (Ptr_icd_set_short_code)R_GetCCallable("icd", "icd_icd_set_short_code");
+    inline Rcpp::RObject as_icd_decimal_diag(Rcpp::RObject& x, bool value = true) {
+        typedef SEXP(*Ptr_as_icd_decimal_diag)(SEXP,SEXP);
+        static Ptr_as_icd_decimal_diag p_as_icd_decimal_diag = NULL;
+        if (p_as_icd_decimal_diag == NULL) {
+            validateSignature("Rcpp::RObject(*as_icd_decimal_diag)(Rcpp::RObject&,bool)");
+            p_as_icd_decimal_diag = (Ptr_as_icd_decimal_diag)R_GetCCallable("icd", "icd_as_icd_decimal_diag");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd_set_short_code(Rcpp::wrap(x));
+            __result = p_as_icd_decimal_diag(Rcpp::wrap(x), Rcpp::wrap(value));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<Rcpp::RObject >(__result);
     }
 
     inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
@@ -250,17 +269,17 @@ namespace icd {
         return Rcpp::as<Rcpp::List >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9ShortToDecimalCpp(const Rcpp::CharacterVector x) {
-        typedef SEXP(*Ptr_icd9ShortToDecimalCpp)(SEXP);
-        static Ptr_icd9ShortToDecimalCpp p_icd9ShortToDecimalCpp = NULL;
-        if (p_icd9ShortToDecimalCpp == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9ShortToDecimalCpp)(const Rcpp::CharacterVector)");
-            p_icd9ShortToDecimalCpp = (Ptr_icd9ShortToDecimalCpp)R_GetCCallable("icd", "icd_icd9ShortToDecimalCpp");
+    inline Rcpp::CharacterVector icd9_short_to_decimal_cpp(const Rcpp::CharacterVector x) {
+        typedef SEXP(*Ptr_icd9_short_to_decimal_cpp)(SEXP);
+        static Ptr_icd9_short_to_decimal_cpp p_icd9_short_to_decimal_cpp = NULL;
+        if (p_icd9_short_to_decimal_cpp == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd9_short_to_decimal_cpp)(const Rcpp::CharacterVector)");
+            p_icd9_short_to_decimal_cpp = (Ptr_icd9_short_to_decimal_cpp)R_GetCCallable("icd", "icd_icd9_short_to_decimal_cpp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9ShortToDecimalCpp(Rcpp::wrap(x));
+            __result = p_icd9_short_to_decimal_cpp(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -269,17 +288,17 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline Rcpp::CharacterVector icd9DecimalToShortCpp(const Rcpp::CharacterVector x) {
-        typedef SEXP(*Ptr_icd9DecimalToShortCpp)(SEXP);
-        static Ptr_icd9DecimalToShortCpp p_icd9DecimalToShortCpp = NULL;
-        if (p_icd9DecimalToShortCpp == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd9DecimalToShortCpp)(const Rcpp::CharacterVector)");
-            p_icd9DecimalToShortCpp = (Ptr_icd9DecimalToShortCpp)R_GetCCallable("icd", "icd_icd9DecimalToShortCpp");
+    inline Rcpp::CharacterVector icd9_decimal_to_short_cpp(const Rcpp::CharacterVector x) {
+        typedef SEXP(*Ptr_icd9_decimal_to_short_cpp)(SEXP);
+        static Ptr_icd9_decimal_to_short_cpp p_icd9_decimal_to_short_cpp = NULL;
+        if (p_icd9_decimal_to_short_cpp == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd9_decimal_to_short_cpp)(const Rcpp::CharacterVector)");
+            p_icd9_decimal_to_short_cpp = (Ptr_icd9_decimal_to_short_cpp)R_GetCCallable("icd", "icd_icd9_decimal_to_short_cpp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9DecimalToShortCpp(Rcpp::wrap(x));
+            __result = p_icd9_decimal_to_short_cpp(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

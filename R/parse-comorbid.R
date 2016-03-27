@@ -121,7 +121,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
   }
 
   names(icd9_map_ahrq) <- icd::icd_names_ahrq_htn_abbrev
-  icd9_map_ahrq %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
+  icd9_map_ahrq %<>% as.icd_short_diag %>% icd9 %>% icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir("icd9_map_ahrq")
@@ -152,10 +152,10 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
   # TODO: maybe need to post-process for children/parents, maybe sharing a lot
   # of code with the ICD-9 version?
 
-
   names(icd10_map_ahrq) <- icd::icd_names_ahrq_htn_abbrev
-  icd10_map_ahrq %<>% icd_short_code %>% icd10 %>% icd_comorbidity_map
-
+  icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd_short_diag)
+  icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd10)
+  icd10_map_ahrq %<>% icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir("icd10_map_ahrq")
@@ -210,7 +210,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
   # do use icd:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
   names(icd9_map_quan_deyo) <- icd::icd_names_charlson_abbrev
-  icd9_map_quan_deyo %<>% icd_short_code %>% icd9 %>% icd_comorbidity_map
+  icd9_map_quan_deyo %<>% as.icd_short_diag %>% icd9 %>% icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd9_map_quan_deyo)

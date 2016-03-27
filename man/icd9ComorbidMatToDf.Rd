@@ -21,6 +21,6 @@ icd9ComorbidDfToMat(x, visitId = get_visit_name(x),
 argument used in, among other base functions \code{as.data.frame}.}
 }
 \description{
-Use \code{icd_comorbid_mat_to_df} or \code{icd_comorbid_df_to_mat} instead.
+Use \code{icd9_comorbid_mat_to_df} or \code{icd9_comorbid_df_to_mat} instead.
 }
 

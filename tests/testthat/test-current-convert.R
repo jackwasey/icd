@@ -96,7 +96,14 @@ test_that("icd9 decimal to short form", {
   expect_equal_no_icd(icd_decimal_to_short.icd9(c("1", "991.23")), c("001", "99123"))
   expect_equal_no_icd(icd_decimal_to_short.icd9(c("1.", "991.23")), c("001", "99123"))
   expect_equal_no_icd(icd_decimal_to_short.icd9(c("1", NA, "991.23")), c("001", NA, "99123"))
+})
 
+test_that("icd9 decimal to short with factor input", {
+  expect_is(icd_decimal_to_short(factor(c("1.", "991.23"))), "factor")
+})
+
+test_that("icd10 decimal to short with factor input", {
+  expect_is(icd_decimal_to_short(factor(c("A10.1", "Z11.9AX"))), "factor")
 })
 
 test_that("short to decimal, numbers", {
@@ -118,55 +125,45 @@ test_that("short to decimal bad input", {
   expect_equal_no_icd(icd_short_to_decimal.icd9(NA), NA_character_)
   # NA is not character type, so expect error.
   expect_equal_no_icd(icd_short_to_decimal.icd9(c("000000", "0ab1bc2d")),
-               c(NA_character_, NA_character_))
+                      c(NA_character_, NA_character_))
 })
 
 test_that("icd10 short to decimal", {
-  expect_true(is.icd_decimal_code(icd_short_to_decimal("A00")))
-  expect_true(is.icd_decimal_code(icd_short_to_decimal.icd10("A00")))
-  expect_true(is.icd_decimal_code(icd_short_to_decimal.icd10cm("A00")))
-  expect_true(is.icd_decimal_code(icd_short_to_decimal("A009")))
-  expect_true(is.icd_decimal_code(icd_short_to_decimal.icd10("A009")))
-  expect_true(is.icd_decimal_code(icd_short_to_decimal.icd10cm("A009")))
+  expect_true(is.icd_decimal_diag(icd_short_to_decimal("A00")))
+  expect_true(is.icd_decimal_diag(icd_short_to_decimal.icd10("A00")))
+  expect_true(is.icd_decimal_diag(icd_short_to_decimal.icd10cm("A00")))
+  expect_true(is.icd_decimal_diag(icd_short_to_decimal("A009")))
+  expect_true(is.icd_decimal_diag(icd_short_to_decimal.icd10("A009")))
+  expect_true(is.icd_decimal_diag(icd_short_to_decimal.icd10cm("A009")))
 
-  expect_equal(icd_short_to_decimal("A00"), as.icd10("A00") %>% icd_decimal_code)
-  expect_equal(icd_short_to_decimal.icd10("A00"), as.icd10("A00") %>% icd_decimal_code)
-  expect_equal(icd_short_to_decimal("A000"), as.icd10("A00.0") %>% icd_decimal_code)
-  expect_equal(icd_short_to_decimal.icd10("A000"), icd10("A00.0") %>% icd_decimal_code)
+  expect_equal(icd_short_to_decimal("A00"), as.icd10("A00") %>% as.icd_decimal_diag)
+  expect_equal(icd_short_to_decimal.icd10("A00"), as.icd10("A00") %>% as.icd_decimal_diag)
+  expect_equal(icd_short_to_decimal("A000"), as.icd10("A00.0") %>% as.icd_decimal_diag)
+  expect_equal(icd_short_to_decimal.icd10("A000"), icd10("A00.0") %>% as.icd_decimal_diag)
 
 })
 
 test_that("icd10 short to decimal for multiple codes", {
   # pick up specific bug where a warning was given for muliple codes
-  if (packageVersion("testthat") >= package_version("0.11.0.9000"))
-    expect_warning(res <- icd_short_to_decimal(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-                         "Z9989", "Z950", "C7A098", "C7A8")))
-  else
-    expect_that(res <- icd_short_to_decimal(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-                                                 "Z9989", "Z950", "C7A098", "C7A8")),
-                testthat::not(testtthat::gives_warning()))
+  expect_warning(res <- icd_short_to_decimal(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
+                                               "Z9989", "Z950", "C7A098", "C7A8")), regex = NA)
 
-  expect_identical(unclass(res), c("O9A.119", "O9A.53", "S00.00XA", "T32.99", "P15.0", "P15.9",
-                                   "Z99.89", "Z95.0", "C7A.098", "C7A.8"))
-  expect_true(is.icd_decimal_code(res))
+  expect_equal(as.vector(res), c("O9A.119", "O9A.53", "S00.00XA", "T32.99", "P15.0", "P15.9",
+                                 "Z99.89", "Z95.0", "C7A.098", "C7A.8"))
+  expect_true(is.icd_decimal_diag(res))
 
   # is the icd10cm class preserved?
-  if (packageVersion("testthat") >= package_version("0.11.0.9000"))
-    expect_warning(res <- icd_short_to_decimal(icd10cm(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-                                                 "Z9989", "Z950", "C7A098", "C7A8"))))
-  else
-    expect_that(res <- icd_short_to_decimal(icd10cm(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-                                              "Z9989", "Z950", "C7A098", "C7A8"))),
-                testthat::not(testtthat::gives_warning()))
+  expect_warning(res <- icd_short_to_decimal(icd10cm(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
+                                                       "Z9989", "Z950", "C7A098", "C7A8"))), regex = NA)
 
-  expect_true(is.icd_decimal_code(res))
+  expect_true(is.icd_decimal_diag(res))
   expect_true(is.icd10cm(res))
 
 })
 
 test_that("icd10 short to decimal and back", {
-  expect_identical(icd_short_to_decimal(icd_decimal_to_short("A00.0")), icd10("A00.0") %>% icd_decimal_code)
-  expect_identical(icd_decimal_to_short(icd_short_to_decimal("A000")), icd10("A000") %>% icd_short_code)
+  expect_identical(icd_short_to_decimal(icd_decimal_to_short("A00.0")), icd10("A00.0") %>% as.icd_decimal_diag)
+  expect_identical(icd_decimal_to_short(icd_short_to_decimal("A000")), icd10("A000") %>% as.icd_short_diag)
 })
 
 test_that("icd9 short to major part, E codes", {
@@ -207,7 +204,7 @@ test_that("running short to decimal conversion before and after expansion
               sep = "."
             )
             rd9pad <- sub(pattern = "\\.$", replacement = "",
-                                        rd9pad)
+                          rd9pad)
             expect_equal_no_icd(
               icd_short_to_decimal.icd9(icd_decimal_to_short.icd9(rd9)),
               rd9pad
@@ -228,33 +225,33 @@ test_that("running short to decimal conversion before and after expansion
 test_that("short to decimal conversions also convert class", {
 
   expect_true(
-    is.icd_short_code(
+    is.icd_short_diag(
       icd_decimal_to_short(
-        icd_decimal_code("12.34")
+        as.icd_decimal_diag("12.34")
       )
     )
   )
 
   expect_true(
-    is.icd_decimal_code(
+    is.icd_decimal_diag(
       icd_short_to_decimal(
-        icd_short_code("1234")
-      )
-    )
-  )
-
-    expect_true(
-    is.icd_short_code(
-      icd_decimal_to_short.icd9(
-        icd_decimal_code("12.34")
+        as.icd_short_diag("1234")
       )
     )
   )
 
   expect_true(
-    is.icd_decimal_code(
+    is.icd_short_diag(
+      icd_decimal_to_short.icd9(
+        as.icd_decimal_diag("12.34")
+      )
+    )
+  )
+
+  expect_true(
+    is.icd_decimal_diag(
       icd_short_to_decimal.icd9(
-        icd_short_code("1234")
+        as.icd_short_diag("1234")
       )
     )
   )
@@ -347,10 +344,11 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
 
 test_that("convert list of icd-9 ranges (e.g. chapter definitions to comorbidity map)", {
   skip_slow_tests()
-  data.frame(visit_id = sprintf("pt%02d", seq_along(one_of_each)),
-             code = one_of_each, stringsAsFactors = TRUE) %>%
-    icd_long_data %>% icd_decimal_code %>% icd9 -> ooe
-  class(ooe[["code"]]) <- c("icd9", "icd_decimal_code", "factor")
+  ooe <- icd_long_data(visit_id = sprintf("pt%02d", seq_along(one_of_each)),
+                       code = one_of_each,
+                       stringsAsFactors = TRUE)
+
+  class(ooe[["code"]]) <- c("icd9", "icd_decimal_diag", "factor")
 
   expect_warning(test_map <- icd9_chapters_to_map(icd::icd9Chapters), NA)
   expect_warning(

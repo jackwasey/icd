@@ -35,7 +35,7 @@ icd10_each_quan_elix_cmb <- icd10cm(c(
     "F29",
     "F31.31"))
 
-icd10_each_ahrq_cmb <- icd10cm(c(
+icd10_each_ahrq_cmb <- as.icd10cm(c(
   "I50.9", # CHF I42.6 not in AHRQ, but in Quan Elix
   "Z95.3",
   "I27.81",

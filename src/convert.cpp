@@ -255,12 +255,12 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
 			minors);
 }
 
-// [[Rcpp::export(name = "icd9ShortToDecimalCpp")]]
+// [[Rcpp::export(name = "icd9_short_to_decimal_cpp")]]
 Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector x) {
 	return icd9PartsToDecimal(icd9ShortToPartsCpp(x, ""));
 }
 
-// [[Rcpp::export(name="icd9DecimalToShortCpp")]]
+// [[Rcpp::export(name="icd9_decimal_to_short_cpp")]]
 Rcpp::CharacterVector icd9DecimalToShort(
 		const Rcpp::CharacterVector x) {
 	Rcpp::CharacterVector out = clone(x); // clone instead of pushing back thousands of times

@@ -59,7 +59,7 @@ icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
 #' @param x input object to test for class conflicts
 #' @examples
 #' bad_codes <- c("100", "A01", "V100", "E999.0")
-#' class(bad_codes) <- c("icd9", "icd10cm", "icd_short_code", "icd_decimal_code")
+#' class(bad_codes) <- c("icd9", "icd10cm")
 #' stopifnot(icd:::icd_classes_conflict(bad_codes))
 #' \dontrun{
 #' # benchmark attributes vs attr for getting and setting
@@ -73,7 +73,7 @@ icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
 #' }
 #' @keywords internal
 icd_classes_conflict <- function(x) {
-  FALSE
+  return(is.icd9(x) && is.icd10(x))
   # TODO: define rules. Maybe just have minimal set of conflicts.
 }
 
@@ -120,10 +120,10 @@ icd_classes_ordered <- function(x) {
 #' @name set_icd_class
 #' @examples
 #' x = as.icd10("A1009")
-#' attr(x, "icd_short_code") <- TRUE
-#' print(x)
-#' attributes(x) <- list(icd_short_code = NULL)
-#' print(x)
+#' attr(x, "icd_short_diag") <- TRUE
+#' x
+#' attributes(x) <- list(icd_short_diag = NULL)
+#' x
 #' @keywords internal
 icd9 <- function(x) {
   cl <- class(x)
@@ -199,7 +199,7 @@ as.icd10cm <- function(x, short_code = NULL) {
   else
     class(x) <- append(class(x), c("icd10cm", "icd10"), after = 0)
   if (!is.null(short_code))
-    attr(x, "icd_short_code") <- short_code
+    attr(x, "icd_short_diag") <- short_code
   x
 }
 
@@ -244,6 +244,23 @@ as.icd_wide_data <- function(x) {
 }
 
 #' @rdname set_icd_class
+#' @param ... arguments passed on to create a \code{data.frame}
+#' @description \code{icd_long_data} and \code{icd_short_data} create
+#'   \code{data.frame}s using all the arguments, and sets the class, whereas
+#'   \code{as.icd_long_data} and \code{as.icd_wide_data} just set the class of
+#'   an existing \code{data.frame}.
+#' @export
+icd_long_data <- function(...) {
+  as.icd_long_data(data.frame(...))
+}
+
+#' @rdname set_icd_class
+#' @export
+icd_wide_data <- function(...) {
+  as.icd_wide_data(data.frame(...))
+}
+
+#' @rdname set_icd_class
 #' @details Using \code{attributes} instead of \code{class} is a better fit for
 #'   the data. It simplifies S3 dispatch, and appears to be very fast to get or
 #'   set using the built-in R functions.
@@ -276,8 +293,6 @@ as.icd_comorbidity_map <- function(x) {
 #' @template dotdotdot
 #' @export
 `[[.icd_comorbidity_map` <- function(x, index, ...) {
-  x_cl <- class(x)
-
   out <- NextMethod()
   # TODO: restore attributes
   out
@@ -292,6 +307,8 @@ as.icd_comorbidity_map <- function(x) {
 #' mixed ICD types and other types. Let R do what it normally does, but just try
 #' to keep classes of the first item in the list.
 #' @param ... elements to combine
+#' @param warn single logical value, if TRUE, will give warnings when
+#'   incompatible types are combined using \code{c}
 #' @examples
 #' \dontrun{
 #' # throw an error
@@ -320,13 +337,13 @@ c.icd9 <- function(..., warn = FALSE) {
   out <- structure(c(unlist(lapply(dots, unclass))), class = base_class)
   # only set this attribute if all the consituent terms have the same attribute
   # present. One NULL or one conflict will mean the attribute is not set
-  attribs <- lapply(dots, attr, which = "icd_short_code")
+  attribs <- lapply(dots, attr, which = "icd_short_diag")
   if (!any(lapply(attribs, is.null))) {
     n <- sum(as.logical(attribs))
     if (n == 0)
-      attr(out, "icd_short_code") <- FALSE
+      attr(out, "icd_short_diag") <- FALSE
     else if (n == length(out))
-      attr(out, "icd_short_code") <- TRUE
+      attr(out, "icd_short_diag") <- TRUE
   }
   out
 }
@@ -339,16 +356,16 @@ c.icd10 <- function(..., warn = FALSE) {
   if (warn && any(vapply(dots, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)?
          If so, use 'unclass' on some or all the arguments")
-  out <- structure(c(unlist(lapply(dots, unclass))), class = base_class)
+  out <- structure(c(unlist(dots)), class = base_class)
   # only set this attribute if all the consituent terms have the same attribute
   # present. One NULL or one conflict will mean the attribute is not set
-  attribs <- lapply(dots, attr, which = "icd_short_code")
-  if (!any(lapply(attribs, is.null))) {
+  attribs <- lapply(dots, attr, which = "icd_short_diag")
+  if (!any(vapply(attribs, is.null, logical(1)))) {
     n <- sum(as.logical(attribs))
     if (n == 0)
-      attr(out, "icd_short_code") <- FALSE
+      attr(out, "icd_short_diag") <- FALSE
     else if (n == length(out))
-      attr(out, "icd_short_code") <- TRUE
+      attr(out, "icd_short_diag") <- TRUE
   }
   out
 }
@@ -378,8 +395,8 @@ c.icd10 <- function(..., warn = FALSE) {
 #' @export
 `[.icd9` <- function(x, ...) {
   y <- NextMethod()
-  if (!is.data.frame(x))
-    class(y) <- class(x)
+  attr(y, "icd_short_diag") <- attr(x, "icd_short_diag")
+  class(y) <- class(x)
   y
 }
 
@@ -387,6 +404,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' @export
 `[[.icd9` <- function(x, ...) {
   y <- NextMethod()
+  attr(y, "icd_short_diag") <- attr(x, "icd_short_diag")
   if (mode(x) != "list")
     class(y) <- class(x)
   y
@@ -396,8 +414,8 @@ c.icd10 <- function(..., warn = FALSE) {
 #' @export
 `[.icd10` <- function(x, ...) {
   y <- NextMethod()
-  if (!is.data.frame(x))
-    class(y) <- class(x)
+  attr(y, "icd_short_diag") <- attr(x, "icd_short_diag")
+  class(y) <- class(x)
   y
 }
 
@@ -405,6 +423,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' @export
 `[[.icd10` <- function(x, ...) {
   y <- NextMethod()
+  attr(y, "icd_short_diag") <- attr(x, "icd_short_diag")
   if (mode(x) != "list")
     class(y) <- class(x)
   y
@@ -437,17 +456,6 @@ is.icd_long_data <- function(x) inherits(x, "icd_long_data")
 #' @rdname is.icd9
 #' @export
 is.icd_wide_data <- function(x) inherits(x, "icd_wide_data")
-
-#' @rdname is.icd9
-#' @export
-is.icd_short_code <- function(x) isTRUE(attr(x, "icd_short_code", exact = TRUE))
-
-#' @rdname is.icd9
-#' @export
-is.icd_decimal_code <- function(x) {
-  res <- attr(x, "icd_decimal_code", exact = TRUE)
-  !is.null(res) && !res
-}
 
 #' @rdname is.icd9
 #' @export

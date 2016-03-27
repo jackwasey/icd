@@ -354,8 +354,8 @@ test_that("icd-9 code is really in the list, not just syntactically valid", {
 test_that("filter valid - bad input", {
   expect_error(icd_filter_valid())
   expect_error(icd_filter_valid(list(j = "k")))
-  expect_error(icd_filter_valid.icd9())
-  expect_error(icd_filter_valid.icd9())
+  expect_error(icd9_filter_valid())
+  expect_error(icd9_filter_valid())
   expect_error(icd_filter_valid.icd10(list(j = "k")))
   expect_error(icd_filter_valid.icd10(list(j = "k")))
 })
@@ -376,28 +376,25 @@ test_that("get valid - vector input", {
 
 test_that("filter valid - data frame input", {
 
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix), pts_invalid_mix[c(1, 3), ])
-  expect_equal(icd_filter_invalid.icd9(pts_invalid_mix), pts_invalid_mix[2, ])
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, invert = TRUE), pts_invalid_mix[2, ])
+  expect_equal(icd9_filter_valid(pts_invalid_mix), pts_invalid_mix[c(1, 3), ])
+  expect_equal(icd9_filter_invalid(pts_invalid_mix), pts_invalid_mix[2, ])
+  expect_equal(icd9_filter_valid(pts_invalid_mix, invert = TRUE), pts_invalid_mix[2, ])
   # same with S3
   expect_equal(icd_filter_valid(pts_invalid_mix), pts_invalid_mix[c(1, 3), ])
   expect_equal(icd_filter_invalid(pts_invalid_mix), pts_invalid_mix[2, ])
   expect_equal(icd_filter_valid(pts_invalid_mix, invert = TRUE), pts_invalid_mix[2, ])
 
   # no non-short so all are invalid:
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, invert = TRUE, short_code = FALSE), pts_invalid_mix)
+  expect_equal(icd9_filter_valid(pts_invalid_mix, invert = TRUE, short_code = FALSE), pts_invalid_mix)
   # same with S3 dispatch
   expect_equal(tfinvalid <- icd_filter_valid(pts_invalid_mix, invert = TRUE, short_code = FALSE), pts_invalid_mix)
-  expect_true(is.icd9(tfinvalid))
   expect_true(is.icd_long_data(tfinvalid))
-  expect_is(tfinvalid, "icd9")
-  expect_is(tfinvalid, "icd_long_data")
   # arg order irrelevant, but can be mixed up in S3 dispatch.
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = FALSE, invert = TRUE), pts_invalid_mix)
+  expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = FALSE, invert = TRUE), pts_invalid_mix)
 
   # use invert and isShort args:
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = TRUE, invert = TRUE), pts_invalid_mix[2, ])
-  expect_equal(icd_filter_valid.icd9(pts_invalid_mix, short_code = TRUE, invert = FALSE), pts_invalid_mix[c(1, 3 ), ])
+  expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = TRUE), pts_invalid_mix[2, ])
+  expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = FALSE), pts_invalid_mix[c(1, 3 ), ])
 })
 
 test_that("validate mappings", {
@@ -434,20 +431,16 @@ test_that("billable codes are identified", {
   expect_false(icd_is_billable(icd9cm("1008")))
   expect_true(icd_is_billable(icd9cm("1009")))
 
-  expect_true(icd9cm_is_billable("410.00"))
-  expect_false(icd9cm_is_billable.icd_short_code("410.00"))
-  expect_true(icd9cm_is_billable.icd_decimal_code("410.00"))
-  expect_false(icd9cm_is_billable("410.6"))
-  expect_false(icd9cm_is_billable("410"))
-  expect_false(icd9cm_is_billable.icd_decimal_code("410"))
-  expect_false(icd9cm_is_billable.icd_short_code("410"))
+  expect_true(icd_is_billable.icd9cm("410.00"))
+  expect_false(icd_is_billable.icd9cm("410.6"))
+  expect_false(icd_is_billable.icd9cm("410"))
 
 })
 
 test_that("get subset of billable codes", {
   x <- c("410", "410.0", "410.00")
   expect_equal_no_icd(icd_get_billable(x), c("410.00"))
-  expect_true(is.icd_decimal_code(icd_get_billable(x)))
+  expect_true(is.icd_decimal_diag(icd_get_billable(x)))
   # TODO: reasonable to assume that if we're talking billable, we make it ICD-9-CM
   expect_true(is.icd9(icd_get_billable(x)))
   expect_true(is.character(icd_get_billable(x)))
@@ -459,7 +452,7 @@ test_that("get subset of billable codes", {
 
 test_that("get inverted subset of billable codes", {
   x_inv <- c("410", "410.0", "410.00")
-  expect_true(is.icd_decimal_code(icd_get_billable(x_inv, invert = TRUE)))
+  expect_true(is.icd_decimal_diag(icd_get_billable(x_inv, invert = TRUE)))
   # TODO: reasonable to assume that if we're talking billable, we make it ICD-9-CM
   expect_true(is.icd9(icd_get_billable(x_inv, invert = TRUE)))
   expect_true(is.character(icd_get_billable(x_inv, invert = TRUE)))

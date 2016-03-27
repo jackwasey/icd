@@ -14,11 +14,17 @@ generate_deprecated_data <- function(save_data = FALSE,
     names(icd9Billable[[b]]) <- c("icd9", "descShort", "descLong")
 
   icd9Hierarchy <- icd::icd9cm_hierarchy
-  names(icd9Hierarchy)[1:3] <- c("icd9", "descShort", "descLong")
-  ahrqComorbid <- icd::icd9_map_ahrq
-  quanDeyoComorbid <- icd::icd9_map_quan_deyo
-  quanElixComorbid <- icd::icd9_map_quan_elix
-  elixComorbid <- icd::icd9_map_elix
+  names(icd9Hierarchy)[1:6] <- c("icd9", "descShort", "descLong", "threedigit", "major", "subchapter")
+  ahrqComorbid <- lapply(icd::icd9_map_ahrq, unclass)
+  quanDeyoComorbid <- lapply(icd::icd9_map_quan_deyo, unclass)
+  quanElixComorbid <- lapply(icd::icd9_map_quan_elix, unclass)
+  elixComorbid <- lapply(icd::icd9_map_elix, unclass)
+
+  ahrqComorbid <- lapply(icd::icd9_map_ahrq, as.vector)
+  quanDeyoComorbid <- lapply(icd::icd9_map_quan_deyo, as.vector)
+  quanElixComorbid <- lapply(icd::icd9_map_quan_elix, as.vector)
+  elixComorbid <- lapply(icd::icd9_map_elix, as.vector)
+
   elixComorbidNames <- icd::icd_names_elix
   elixComorbidNamesAbbrev <- icd::icd_names_elix_abbrev
   elixComorbidNamesHtn <- icd::icd_names_elix_htn

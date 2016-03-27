@@ -8,20 +8,21 @@
 
 using namespace Rcpp;
 
-// setDecimalCodeInPlace
-void setDecimalCodeInPlace(Rcpp::RObject& x);
-static SEXP icd_setDecimalCodeInPlace_try(SEXP xSEXP) {
+// setDecimalDiag
+void setDecimalDiag(Rcpp::RObject& x, bool value);
+static SEXP icd_setDecimalDiag_try(SEXP xSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
-    setDecimalCodeInPlace(x);
+    Rcpp::traits::input_parameter< bool >::type value(valueSEXP);
+    setDecimalDiag(x, value);
     return R_NilValue;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd_setDecimalCodeInPlace(SEXP xSEXP) {
+RcppExport SEXP icd_setDecimalDiag(SEXP xSEXP, SEXP valueSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd_setDecimalCodeInPlace_try(xSEXP));
+        __result = PROTECT(icd_setDecimalDiag_try(xSEXP, valueSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -37,21 +38,52 @@ RcppExport SEXP icd_setDecimalCodeInPlace(SEXP xSEXP) {
     UNPROTECT(1);
     return __result;
 }
-// setDecimalCode
-Rcpp::RObject setDecimalCode(Rcpp::RObject& x);
-static SEXP icd_setDecimalCode_try(SEXP xSEXP) {
+// setShortDiag
+void setShortDiag(Rcpp::RObject& x, bool value);
+static SEXP icd_setShortDiag_try(SEXP xSEXP, SEXP valueSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type value(valueSEXP);
+    setShortDiag(x, value);
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd_setShortDiag(SEXP xSEXP, SEXP valueSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd_setShortDiag_try(xSEXP, valueSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// asShortDiag
+Rcpp::RObject asShortDiag(Rcpp::RObject& x, bool value);
+static SEXP icd_asShortDiag_try(SEXP xSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
-    __result = Rcpp::wrap(setDecimalCode(x));
+    Rcpp::traits::input_parameter< bool >::type value(valueSEXP);
+    __result = Rcpp::wrap(asShortDiag(x, value));
     return __result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd_setDecimalCode(SEXP xSEXP) {
+RcppExport SEXP icd_asShortDiag(SEXP xSEXP, SEXP valueSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd_setDecimalCode_try(xSEXP));
+        __result = PROTECT(icd_asShortDiag_try(xSEXP, valueSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -67,20 +99,22 @@ RcppExport SEXP icd_setDecimalCode(SEXP xSEXP) {
     UNPROTECT(1);
     return __result;
 }
-// setShortCode
-void setShortCode(Rcpp::RObject& x);
-static SEXP icd_setShortCode_try(SEXP xSEXP) {
+// asDecimalDiag
+Rcpp::RObject asDecimalDiag(Rcpp::RObject& x, bool value);
+static SEXP icd_asDecimalDiag_try(SEXP xSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject __result;
     Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
-    setShortCode(x);
-    return R_NilValue;
+    Rcpp::traits::input_parameter< bool >::type value(valueSEXP);
+    __result = Rcpp::wrap(asDecimalDiag(x, value));
+    return __result;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP icd_setShortCode(SEXP xSEXP) {
+RcppExport SEXP icd_asDecimalDiag(SEXP xSEXP, SEXP valueSEXP) {
     SEXP __result;
     {
         Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd_setShortCode_try(xSEXP));
+        __result = PROTECT(icd_asDecimalDiag_try(xSEXP, valueSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1386,9 +1420,10 @@ RcppExport SEXP icd_valgrindCallgrindStop() {
 static int icd_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
-        signatures.insert("void(*setDecimalCodeInPlace)(Rcpp::RObject&)");
-        signatures.insert("Rcpp::RObject(*setDecimalCode)(Rcpp::RObject&)");
-        signatures.insert("void(*icd_set_short_code)(Rcpp::RObject&)");
+        signatures.insert("void(*.attr_decimal_diag)(Rcpp::RObject&,bool)");
+        signatures.insert("void(*.attr_short_diag)(Rcpp::RObject&,bool)");
+        signatures.insert("Rcpp::RObject(*as.icd_short_diag)(Rcpp::RObject&,bool)");
+        signatures.insert("Rcpp::RObject(*as.icd_decimal_diag)(Rcpp::RObject&,bool)");
         signatures.insert("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9MajMinToCode)(const Rcpp::CharacterVector,const Rcpp::CharacterVector,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9MajMinToShort)(const Rcpp::CharacterVector,const Rcpp::CharacterVector)");
@@ -1398,8 +1433,8 @@ static int icd_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::List(*icd9MajMinToParts)(const Rcpp::CharacterVector,const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::List(*icd9ShortToPartsCpp)(const Rcpp::CharacterVector,const Rcpp::String)");
         signatures.insert("Rcpp::List(*icd9DecimalToPartsCpp)(const Rcpp::CharacterVector,const Rcpp::String)");
-        signatures.insert("Rcpp::CharacterVector(*icd9ShortToDecimalCpp)(const Rcpp::CharacterVector)");
-        signatures.insert("Rcpp::CharacterVector(*icd9DecimalToShortCpp)(const Rcpp::CharacterVector)");
+        signatures.insert("Rcpp::CharacterVector(*icd9_short_to_decimal_cpp)(const Rcpp::CharacterVector)");
+        signatures.insert("Rcpp::CharacterVector(*icd9_decimal_to_short_cpp)(const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd_get_major.icd9)(const Rcpp::CharacterVector,const bool)");
         signatures.insert("bool(*guessShortCpp)(Rcpp::CharacterVector,int)");
         signatures.insert("bool(*guessShortPlusFactorCpp)(SEXP,int)");
@@ -1437,9 +1472,10 @@ static int icd_RcppExport_validate(const char* sig) {
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP icd_RcppExport_registerCCallable() { 
-    R_RegisterCCallable("icd", "icd_setDecimalCodeInPlace", (DL_FUNC)icd_setDecimalCodeInPlace_try);
-    R_RegisterCCallable("icd", "icd_setDecimalCode", (DL_FUNC)icd_setDecimalCode_try);
-    R_RegisterCCallable("icd", "icd_icd_set_short_code", (DL_FUNC)icd_setShortCode_try);
+    R_RegisterCCallable("icd", "icd_.attr_decimal_diag", (DL_FUNC)icd_setDecimalDiag_try);
+    R_RegisterCCallable("icd", "icd_.attr_short_diag", (DL_FUNC)icd_setShortDiag_try);
+    R_RegisterCCallable("icd", "icd_as.icd_short_diag", (DL_FUNC)icd_asShortDiag_try);
+    R_RegisterCCallable("icd", "icd_as.icd_decimal_diag", (DL_FUNC)icd_asDecimalDiag_try);
     R_RegisterCCallable("icd", "icd_icd9ComorbidShortCpp", (DL_FUNC)icd_icd9ComorbidShortCpp_try);
     R_RegisterCCallable("icd", "icd_icd9MajMinToCode", (DL_FUNC)icd_icd9MajMinToCode_try);
     R_RegisterCCallable("icd", "icd_icd9MajMinToShort", (DL_FUNC)icd_icd9MajMinToShort_try);
@@ -1449,8 +1485,8 @@ RcppExport SEXP icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "icd_icd9MajMinToParts", (DL_FUNC)icd_icd9MajMinToParts_try);
     R_RegisterCCallable("icd", "icd_icd9ShortToPartsCpp", (DL_FUNC)icd_icd9ShortToPartsCpp_try);
     R_RegisterCCallable("icd", "icd_icd9DecimalToPartsCpp", (DL_FUNC)icd_icd9DecimalToPartsCpp_try);
-    R_RegisterCCallable("icd", "icd_icd9ShortToDecimalCpp", (DL_FUNC)icd_icd9ShortToDecimal_try);
-    R_RegisterCCallable("icd", "icd_icd9DecimalToShortCpp", (DL_FUNC)icd_icd9DecimalToShort_try);
+    R_RegisterCCallable("icd", "icd_icd9_short_to_decimal_cpp", (DL_FUNC)icd_icd9ShortToDecimal_try);
+    R_RegisterCCallable("icd", "icd_icd9_decimal_to_short_cpp", (DL_FUNC)icd_icd9DecimalToShort_try);
     R_RegisterCCallable("icd", "icd_icd_get_major.icd9", (DL_FUNC)icd_icd9GetMajor_try);
     R_RegisterCCallable("icd", "icd_guessShortCpp", (DL_FUNC)icd_guessShortCpp_try);
     R_RegisterCCallable("icd", "icd_guessShortPlusFactorCpp", (DL_FUNC)icd_guessShortPlusFactorCpp_try);

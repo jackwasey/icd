@@ -26,7 +26,7 @@ test_that("github issue #44 from wmurphyrd", {
 
 test_that("github issue #46 from wmurphyd", {
   mydf <- data.frame(visit_id = "a", icd9 = "250.0")
-  comorbids <- icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE)
+  comorbids <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
   set.seed(123)
   # Fill a QuanDeyo comorbidity data frame with random data
   use_ncol_cmb <- ncol(comorbids) - 1
@@ -57,7 +57,7 @@ test_that("Charlson score", {
                      stringsAsFactors = TRUE)
   expect_equal(
     icd_charlson_from_comorbid(
-      icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, hierarchy = TRUE, return_df = TRUE)
+      icd9_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE, return_df = TRUE)
     ),
     icd_charlson(mydf, short_code = FALSE, return_df = FALSE)
   )
@@ -132,13 +132,13 @@ test_that("Charlson - errors?", {
   baddf <- data.frame(visit_id = c("d", "d"),
                       icd9 = c("2500", "25042"),
                       stringsAsFactors = TRUE)
-  cmb <- icd_comorbid_quan_deyo.icd9(baddf, hierarchy = FALSE, short_code = TRUE)
+  cmb <- icd9_comorbid_quan_deyo(baddf, hierarchy = FALSE, short_code = TRUE)
   expect_error(icd_charlson_from_comorbid(cmb, hierarchy = FALSE))
 
   baddf <- data.frame(visit_id = c("d", "d"),
                       icd9 = c("57224", "57345"),
                       stringsAsFactors = TRUE)
-  cmb <- icd_comorbid_quan_deyo.icd9(baddf, hierarchy = FALSE, short_code = TRUE)
+  cmb <- icd9_comorbid_quan_deyo(baddf, hierarchy = FALSE, short_code = TRUE)
   expect_error(icd_charlson_from_comorbid(cmb, hierarchy = FALSE))
 })
 
@@ -151,7 +151,7 @@ test_that("count icd9 codes", {
   )
   expect_equal(icd_count_codes(mydf), c(2, 1))
 
-  cmb <- icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE)
+  cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
   expect_equivalent(icd_count_comorbid(cmb), icd_count_codes(mydf))
 
   wide <- data.frame(visit_id = c("r", "s", "t"),

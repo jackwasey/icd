@@ -35,9 +35,11 @@ to decimal format
 \item \code{default}: convert ICD codes of character type, with
 unknown version, from short to decimal format
 
-\item \code{icd9}: convert ICD-9 codes from short to decimal format
+\item \code{icd9}: convert ICD-9 codes from short to decimal
+format
 
-\item \code{icd10}: convert ICD-10 codes from short to decimal format
+\item \code{icd10}: convert ICD-10 codes from short to decimal
+format
 
 \item \code{icd10cm}: convert ICD-10-CM code from short to decimal format
 }}

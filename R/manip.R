@@ -62,7 +62,7 @@ icd9_drop_leading_zeroes <- function(x, short_code = NULL) {
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert(checkmate::checkNull(short_code), checkmate::checkFlag(short_code))
   if (is.null(short_code))
-    short_code <- attr(x, "icd_short_code")
+    short_code <- attr(x, "icd_short_diag")
   if (is.null(short_code))
     short_code <- icd_guess_short(x)
 

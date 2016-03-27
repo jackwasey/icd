@@ -18,7 +18,7 @@
 context("comorbidity maps")
 
 test_that("try to induce c++ segfault bug", {
-  icd_comorbid.icd9(ahrq_test_dat, map = icd::icd9_map_ahrq, short_code = TRUE)
+  icd9_comorbid(ahrq_test_dat, map = icd::icd9_map_ahrq, short_code = TRUE)
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
@@ -52,8 +52,8 @@ test_that("Quan Elixhauser make sure all the children are listed in the saved da
 })
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
-  ptdf <- icd_comorbid.icd9(simple_pts, map = icd::icd9_map_ahrq, short_code = TRUE,
-                            visit_name = "visit_id", return_df = TRUE)
+  ptdf <- icd9_comorbid(simple_pts, map = icd::icd9_map_ahrq, short_code = TRUE,
+                        visit_name = "visit_id", return_df = TRUE)
 
   expect_equal(names(ptdf), c("visit_id", names(icd::icd9_map_ahrq)))
 
@@ -104,12 +104,15 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
-              # TODO: generating code from SAS is now not distributed in package. Move this test to pre-build test dir?
+              # TODO: generating code from SAS is now not distributed in
+              # package. Move this test to pre-build test dir?
 
               if (is.null(icd9_fetch_quan_deyo_sas(offline = TRUE, allow_missing = TRUE)))
                 skip_online_tests("data-raw/ICD9_E_Charlson.sas not available.")
-
-              expect_identical(icd9_map_quan_deyo, icd9_parse_quan_deyo_sas(save_data = FALSE))
+              # just test equivalence because we can test class and short vs
+              # decimal independently, and fastmatch adds an attribute during
+              # testing pointing to the hash table.
+              expect_equivalent(icd9_map_quan_deyo, icd9_parse_quan_deyo_sas(save_data = FALSE))
               expect_equivalent(
                 icd_get_invalid.icd_comorbidity_map(icd9_map_quan_deyo, short_code = TRUE),
                 list())
@@ -117,7 +120,7 @@ test_that("Quan Charlson icd9 mappings are all
 
 test_that("Quan Elixhauser icd9 mappings are all
             generated from the current generation code", {
-              expect_identical(icd9_map_quan_elix, icd9_generate_map_quan_elix(save_data = FALSE))
+              expect_equivalent(icd9_map_quan_elix, icd9_generate_map_quan_elix(save_data = FALSE))
               expect_equivalent(
                 icd_get_invalid.icd_comorbidity_map(icd9_map_quan_elix, short_code = TRUE),
                 list())
@@ -125,13 +128,13 @@ test_that("Quan Elixhauser icd9 mappings are all
 
 test_that("Elixhauser icd9 mappings are all
             generated from the current generation code", {
-              expect_identical(icd9_map_elix, icd9_generate_map_elix(save_data = FALSE))
+              expect_equivalent(icd9_map_elix, icd9_generate_map_elix(save_data = FALSE))
               expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9_map_elix, short_code = TRUE), list())
             })
 
 test_that("Elixhauser icd10 mappings are all
             generated from the current generation code", {
-              expect_identical(icd10_map_elix, icd10_generate_map_elix(save_data = FALSE))
+              expect_equivalent(icd10_map_elix, icd10_generate_map_elix(save_data = FALSE))
               expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd10_map_elix, short_code = TRUE), list())
             })
 
@@ -524,8 +527,8 @@ test_that("github #34 - short and long custom map give different results", {
   mymapd <- lapply(mymaps, icd_short_to_decimal.icd9)
 
   expect_identical(
-    icd_comorbid.icd9(mydf, map = mymaps, short_code = TRUE),
-    icd_comorbid.icd9(mydf, map = mymapd, short_code = FALSE)
+    icd9_comorbid(mydf, map = mymaps, short_code = TRUE),
+    icd9_comorbid(mydf, map = mymapd, short_code = FALSE)
   )
 })
 
@@ -553,7 +556,7 @@ test_that("built-in icd9 to comorbidity mappings are all valid", {
 test_that("disordered visit ids", {
   pts <- data.frame(visit_id = c("2", "1", "2", "3", "3"),
                     icd9 = c("39891", "40110", "09322", "41514", "39891"))
-  icd_comorbid.icd9(pts, icd::icd9_map_ahrq, short_code = TRUE)
+  icd9_comorbid(pts, icd::icd9_map_ahrq, short_code = TRUE)
 })
 
 test_that("diff comorbid works", {
@@ -599,25 +602,25 @@ two_map_fac <- as.list(data.frame("malady" = c("100", "2000"),
                                   stringsAsFactors = TRUE))
 
 test_that("comorbid quick test", {
-  testres <- icd_comorbid.icd9(two_pts, two_map, return_df = TRUE)
+  testres <- icd9_comorbid(two_pts, two_map, return_df = TRUE)
   trueres <- data.frame("visit_id" = c("v01", "v02"),
                         "malady" = c(FALSE, TRUE),
                         "ailment" = c(TRUE, FALSE),
                         stringsAsFactors = FALSE)
   expect_equal(testres, trueres)
 
-  testmat <- icd_comorbid.icd9(two_pts, two_map, return_df = FALSE)
+  testmat <- icd9_comorbid(two_pts, two_map, return_df = FALSE)
   truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE), nrow = 2,
                     dimnames = list(c("v01", "v02"), c("malady", "ailment")))
   expect_equal(testmat, truemat)
 
-  testresfac <- icd_comorbid.icd9(two_pts_fac, two_map_fac, return_df = TRUE)
+  testresfac <- icd9_comorbid(two_pts_fac, two_map_fac, return_df = TRUE)
   trueresfac <- data.frame("visit_id" = c("v01", "v02"),
                            "malady" = c(FALSE, TRUE),
                            "ailment" = c(TRUE, FALSE),
                            stringsAsFactors = TRUE)
   expect_equal(testresfac, trueresfac)
-  expect_equal(icd_comorbid.icd9(two_pts_fac, two_map_fac), truemat)
+  expect_equal(icd9_comorbid(two_pts_fac, two_map_fac), truemat)
 
 })
 
@@ -684,7 +687,7 @@ test_that("control params don't affect result of comorbid calc", {
 test_that("failing example", {
   mydf <- data.frame(visit_id = c("a", "b", "c"),
                      icd9 = c("441", "412.93", "044.9"))
-  cmb <- icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, hierarchy = TRUE)
+  cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE)
   expect_false("names" %in% names(attributes(cmb)))
   icd_charlson(mydf, isShort = FALSE) # TODO: fix S3 classes ehre
   icd_charlson(mydf, isShort = FALSE, return.df = TRUE)
@@ -694,8 +697,8 @@ test_that("failing example", {
 test_that("disordered visit_ids works by default", {
   set.seed(1441)
   dat <- transform(test_twenty, visit_id = sample(visit_id))
-  tres <- icd_comorbid.icd9(dat, icd::icd9_map_ahrq, icd_name = "icd9Code")
-  cres <- icd_comorbid.icd9(test_twenty, icd::icd9_map_ahrq, icd_name = "icd9Code")
+  tres <- icd9_comorbid(dat, icd::icd9_map_ahrq, icd_name = "icd9Code")
+  cres <- icd9_comorbid(test_twenty, icd::icd9_map_ahrq, icd_name = "icd9Code")
   expect_equal(dim(tres), dim(cres))
   expect_equal(sum(tres), sum(cres))
   expect_true(setequal(rownames(tres), rownames(cres)))
@@ -708,8 +711,8 @@ test_that("comorbidities created from source data frame coded as factors", {
   v2$visit_id <- as.factor(v2$visit_id)
   v2$icd_code <- as.factor(v2$icd_code)
 
-  res <- icd_comorbid_ahrq.icd9(v2)
-  res_nofactor <- vermont_dx %>% icd_wide_to_long %>% icd_comorbid_ahrq.icd9
+  res <- icd9_comorbid_ahrq(v2)
+  res_nofactor <- vermont_dx %>% icd_wide_to_long %>% icd9_comorbid_ahrq
   expect_identical(res, res_nofactor)
 })
 

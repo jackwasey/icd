@@ -18,7 +18,7 @@ never happen.
 }
 \examples{
 bad_codes <- c("100", "A01", "V100", "E999.0")
-class(bad_codes) <- c("icd9", "icd10cm", "icd_short_code", "icd_decimal_code")
+class(bad_codes) <- c("icd9", "icd10cm")
 stopifnot(icd:::icd_classes_conflict(bad_codes))
 \dontrun{
 # benchmark attributes vs attr for getting and setting

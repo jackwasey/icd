@@ -47,15 +47,11 @@ test_that("generating vermont data is identical to saved", {
 
 test_that("uranium data looks okay", {
 
-  expect_is(uranium_pathology, c("icd_long_data", "icd10", "icd_decimal_code"))
+  expect_is(uranium_pathology, c("icd_long_data", "icd10", "icd_decimal_diag"))
   expect_equal(dim(uranium_pathology), c(2376, 2))
 })
 
 test_that("vermont data looks okay", {
-  expect_is(vermont_dx, c("icd9cm", "icd9", "icd_wide_data", "icd_short_code", "data.frame"))
-  expect_true(is.icd9cm(vermont_dx))
-  expect_true(is.icd9(vermont_dx))
   expect_true(is.icd_wide_data(vermont_dx))
-  expect_true(is.icd_short_code(vermont_dx))
   expect_equal(dim(vermont_dx), c(1000, 25))
 })

@@ -38,11 +38,12 @@ test_that("the icd-10 ahrq comorbidity map data is exactly as produced by the ge
 test_that("the classes of the ICD-10 maps are correct", {
   maps <- named_list(icd10_map_ahrq, icd10_map_elix, icd10_map_quan_deyo, icd10_map_quan_elix)
   for (m in names(maps)) {
-    expect_true(is.icd10(maps[[m]]), info = paste("map: ", m))
-    expect_true(is.icd_short_code(maps[[m]]), info = paste("map: ", m))
-    for (y in m) {
-      expect_true(is.icd10(maps[[m]]), info = paste("map: ", m, ", cbd = ", y))
-      expect_true(is.icd_short_code(maps[[m]]), info = paste("map: ", m, ", cbd = ", y))
+    # for each map, verify it has class map, and that all it's elements are ICD-10 short diag format
+    expect_identical(class(maps[[m]]), c("icd_comorbidity_map", "list"), info = paste("map: ", m))
+    for (cbd in names(maps[[m]])) {
+      y <- maps[[m]][[cbd]]
+      expect_true(is.icd10(y), info = paste("map: ", m, " cbd = ", cbd))
+      expect_true(is.icd_short_diag(y), info = paste("map: ", m, " cbd = ", cbd))
     }
   }
 })

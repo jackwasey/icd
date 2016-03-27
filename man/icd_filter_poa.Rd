@@ -78,4 +78,5 @@ myData \%>\%
     map = icd9_map_quan_elix, short_mapping = TRUE)
 }
 }
+\keyword{manip}
 

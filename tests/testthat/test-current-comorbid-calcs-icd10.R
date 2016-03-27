@@ -36,21 +36,22 @@ test_that("ahrq comorbidities found for test data", {
   test_three <- icd10_all_ahrq_one_pt
   test_three$icd10_code <- paste0(icd10_all_ahrq_one_pt$icd10_code,
                                   random_string(nrow(test_three), max_chars = 5))
-  td <- list(
-    icd10_all_ahrq_one_pt = icd10_all_ahrq_one_pt,
-    test_two = test_two,
-    test_three = test_three
-  )
+  td <- named_list(icd10_all_ahrq_one_pt, test_two = test_two, test_three)
 
   for (test_name in names(td)) {
 
-    res <- icd_comorbid(td[[test_name]], icd::icd10_map_ahrq)
+    res <- icd_comorbid(td[[test_name]], map = icd::icd10_map_ahrq)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method one comorbidity:", n, ", test: ", test_name))
 
-    res <- icd_comorbid.icd10(td[[test_name]], icd::icd10_map_ahrq)
+    res <- icd10_comorbid(td[[test_name]], map = icd::icd10_map_ahrq)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method two comorbidity:", n, ", test: ", test_name))
+
+    res <- icd10_comorbid_ahrq(td[[test_name]], hierarchy = FALSE)
+    for (n in colnames(res))
+      expect_true(res[, n], info = paste("method three comorbidity:", n, ", test: ", test_name))
+
   }
 })
 
@@ -74,7 +75,7 @@ test_that("ahrq comorbidities found for test data for multiple patients each wit
     for (n in rownames(res))
       expect_equal(sum(res[n, ]), 1, info = paste("row method one comorbidity:", n, ", test: ", test_name))
 
-    res <- icd_comorbid.icd10(td[[test_name]], icd::icd10_map_ahrq)
+    res <- icd10_comorbid(td[[test_name]], icd::icd10_map_ahrq)
     for (n in colnames(res))
       expect_equal(sum(res[, n]), 1, info = paste("method two comorbidity:", n, ", test: ", test_name))
     for (n in rownames(res))
@@ -83,14 +84,15 @@ test_that("ahrq comorbidities found for test data for multiple patients each wit
 })
 
 test_that("comorbidity from single ICD-10 leaf or non-leaf code doesn't cause infinite recursion with Elix", {
+  # this code I5020 is in all the maps for ICD-10
   for (code in c("I5020")) {
-    for (class_fun in c("as.character", "icd10", "icd10cm")) {
+    for (class_fun in c("as.character", "as.icd10", "as.icd10cm")) {
       for (map_fun in c("icd_comorbid_elix", "icd_comorbid_quan_elix",
                          "icd_comorbid_quan_deyo", "icd_comorbid_ahrq")) {
         code_with_class <- do.call(class_fun, list(code))
         df <- data.frame(visit = 1, code = code_with_class,
                          stringsAsFactors = FALSE) # TODO: allow factors
-        res <- do.call(map_fun, list(df))
+        res <- do.call(map_fun, list(x = df))
         expect_true(res[, "CHF"])
         expect_false("HTNcx" %in% names(res))
 

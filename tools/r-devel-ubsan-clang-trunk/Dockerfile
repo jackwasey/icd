@@ -1,5 +1,6 @@
 # Copyright (C) 2014 - 2016  Jack O. Wasey
 #
+
 # This file is part of icd.
 #
 # icd is free software: you can redistribute it and/or modify
@@ -16,7 +17,8 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 ## start with the local build, until up on docker hub
-FROM jackwasey/r-devel-ubsan-clang-trunk
+# FROM jackwasey/r-devel-ubsan-clang-trunk
+FROM r-clang-trunk
 
 ## install some libraries and supporting binaries, some of which must come from unstable (sid), and not the testing repo which is the default in the r-devel base rocker image.
 RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstable \
@@ -32,11 +34,12 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstab
   texlive-base \
   unixodbc-dev
 
+ADD install_r_packages.R /tmp
+ADD build_install_check_in_docker.sh /tmp
 # use R (I didn't build my image to use Rdevel)
-RUN R -e "install.packages(c('devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'plyr', 'knitr', 'microbenchmark', 'profr', 'xtable', 'rmarkdown', 'fastmatch', 'roxygen2', 'RODBC'))"
+RUN Rscript /tmp/install_r_packages.R
 
-# can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd9.sh
-ADD build_install_check_in_docker.sh /tmp/
-ENV GIT_BRANCH icd10
+ENV GIT_BRANCH master
 ENV R_CMD R
 CMD ["/tmp/build_install_check_in_docker.sh"]
+

@@ -21,30 +21,28 @@ expect_icd10cm_child_is_self <- function(...) {
   dots <- unlist(list(...))
   for (i in dots) {
     eval(bquote(expect_identical(icd_children(icd10cm(.(i))),
-                                 as.icd10cm(as.icd_short_code(.(i))))))
+                                 as.icd10cm(as.icd_short_diag(.(i))))))
     icd_children(icd10(i))
-    eval(bquote(expect_warning(warn_res <- icd_children(as.icd10(.(i))))))
+    eval(bquote(expect_warning(warn_res <- icd_children(as.icd10(.(i))), regex = NA)))
     eval(bquote(expect_is(warn_res, "icd10")))
 
-    eval(bquote(expect_warning(warn_res <- icd_children(.(i)))))
+    eval(bquote(expect_warning(warn_res <- icd_children(.(i)), regex = NA)))
     eval(bquote(expect_identical(warn_res,
-                                 as.icd10cm(as.icd_short_code(.(i))))))
+                                 as.icd10cm(as.icd_short_diag(.(i))))))
 
     eval(bquote(expect_identical(icd_children.icd10cm(.(i)),
-                                 as.icd10cm(as.icd_short_code(.(i))))))
-    eval(bquote(expect_identical(icd_children.icd10cm(as.icd10(.(i))), as.icd10cm(as.icd_short_code(.(i))))))
-    eval(bquote(expect_identical(icd_children.icd10cm(as.icd10cm(.(i))), as.icd10cm(as.icd_short_code(.(i))))))
+                                 as.icd10cm(as.icd_short_diag(.(i))))))
+    eval(bquote(expect_identical(icd_children.icd10cm(as.icd10(.(i))), as.icd10cm(as.icd_short_diag(.(i))))))
+    eval(bquote(expect_identical(icd_children.icd10cm(as.icd10cm(.(i))), as.icd10cm(as.icd_short_diag(.(i))))))
 
     # at present, the children are only even icd10cm, but we should not enforce this:
     icd_children.icd10(icd10(i)) # should not warn
-    eval(bquote(expect_warning(warn_res <- icd_children.icd10(as.icd10(.(i))))))
     eval(bquote(expect_true(is.icd10(warn_res))))
-    eval(bquote(expect_identical(unclass(.(warn_res)), .(i))))
+    eval(bquote(expect_equivalent(unclass(.(warn_res)), .(i))))
 
     icd_children(icd10(i)) # should not warn
-    eval(bquote(expect_warning(warn_res <- icd_children(as.icd10(.(i))))))
     eval(bquote(expect_true(is.icd10(warn_res))))
-    eval(bquote(expect_identical(unclass(.(warn_res)), .(i))))
+    eval(bquote(expect_equivalent(unclass(.(warn_res)), .(i))))
   }
 }
 
@@ -55,18 +53,10 @@ test_that("children of a leaf node returns itself", {
 
   rand_icd10cm <- generate_random_short_icd10cm_bill(50)
   expect_icd10cm_child_is_self(rand_icd10cm)
-
-  expect_warning(icd_children(icd10("A01")))
-
 })
 
 test_that("zero length ICD-10-CM children", {
   expect_identical(icd_children_defined(icd10cm("%!^#&<>?,./")), icd10cm(character(0)))
 
-  if (packageVersion("testthat") < package_version("0.11.0.9000"))
-    expect_that(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)),
-      testthat::throws_warning())
-  else
-    expect_warning(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)), regex = NA)
-
+  expect_warning(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)), regex = NA)
 })

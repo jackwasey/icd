@@ -19,7 +19,7 @@ context("comorbidity calculations")
 
 test_that("ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
-            res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           apply_hierarchy = TRUE, return_df = TRUE)
             expect_equal(dim(res), c(1, 30))
@@ -30,7 +30,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
             expect_false(res[1, "Solid tumor without metastasis"])
 
             #matrix
-            res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = TRUE, return_df = FALSE)
             expect_equal(dim(res), c(1, 29))
@@ -43,7 +43,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
 
 test_that("elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
-            res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = TRUE, return_df = TRUE)
             expect_equal(dim(res), c(1, 31))
@@ -54,7 +54,7 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_false(res[1, "Solid tumor without metastasis"])
 
             #matrix
-            res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = TRUE, return_df = FALSE)
             expect_equal(dim(res), c(1, 30))
@@ -67,7 +67,7 @@ test_that("elix comorbidity mapping is applied correctly,
 
 test_that("elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, hier", {
-            res <- icd_comorbid_elix.icd9(elix_test_dat,
+            res <- icd9_comorbid_elix(elix_test_dat,
                                           short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = TRUE, return_df = TRUE)
@@ -80,7 +80,7 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_false(res[1, "Tumor"])
 
             #matrix
-            res <- icd_comorbid_elix.icd9(elix_test_dat,
+            res <- icd9_comorbid_elix(elix_test_dat,
                                           short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = TRUE, return_df = FALSE)
@@ -95,7 +95,7 @@ test_that("elix comorbidity mapping is applied correctly,
 
 test_that("elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, no hier", {
-            res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = FALSE, return_df = TRUE)
             expect_equal(dim(res), c(1, 32)) #longer because 2x htn
@@ -104,7 +104,7 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_true(all(as.logical(res[1, unlist(icd_names_elix_htn)])))
 
             # same for matrix result
-            res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = FALSE, return_df = FALSE)
             expect_equal(dim(res), c(1, 31)) #longer because 2x htn
@@ -115,7 +115,7 @@ test_that("elix comorbidity mapping is applied correctly,
 
 test_that("elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, no hier", {
-            res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = FALSE, return_df = TRUE)
             expect_equal(dim(res), c(1, 32))
@@ -124,7 +124,7 @@ test_that("elix comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(icd_names_elix_htn_abbrev)])))
 
             #matrix
-            res <- icd_comorbid_elix.icd9(elix_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = FALSE, return_df = FALSE)
             expect_equal(dim(res), c(1, 31))
@@ -136,7 +136,7 @@ test_that("elix comorbidity mapping is applied correctly,
 
 test_that("qelix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
-            res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
+            res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                                short_code = TRUE, abbrev_names = FALSE,
                                                hierarchy = TRUE, return_df = TRUE)
             expect_equal(dim(res), c(1, 31))
@@ -148,7 +148,7 @@ test_that("qelix comorbidity mapping is applied correctly,
             expect_false(res[1, "Solid tumor without metastasis"])
 
             #matrix
-            res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
+            res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                                short_code = TRUE,
                                                abbrev_names = FALSE,
                                                hierarchy = TRUE, return_df = FALSE)
@@ -163,7 +163,7 @@ test_that("qelix comorbidity mapping is applied correctly,
 
 test_that("qelix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, hier", {
-            res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
+            res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                                short_code = TRUE,
                                                abbrev_names = TRUE,
                                                hierarchy = TRUE, return_df = TRUE)
@@ -176,7 +176,7 @@ test_that("qelix comorbidity mapping is applied correctly,
             expect_false(res[1, "Tumor"])
 
             #same for matrix
-            res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
+            res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                                short_code = TRUE,
                                                abbrev_names = TRUE,
                                                hierarchy = TRUE, return_df = FALSE)
@@ -192,7 +192,7 @@ test_that("qelix comorbidity mapping is applied correctly,
 
 test_that("qelix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, no hier", {
-            res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
+            res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                                short_code = TRUE,
                                                abbrev_names = FALSE,
                                                hierarchy = FALSE, return_df = TRUE)
@@ -204,7 +204,7 @@ test_that("qelix comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(icd_names_quan_elix_htn)])))
 
             #matrix
-            res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
+            res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                                short_code = TRUE,
                                                abbrev_names = FALSE,
                                                hierarchy = FALSE, return_df = FALSE)
@@ -217,7 +217,7 @@ test_that("qelix comorbidity mapping is applied correctly,
 
 test_that("qelix comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, no hier", {
-            res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
+            res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                                short_code = TRUE,
                                                abbrev_names = TRUE,
                                                hierarchy = FALSE, return_df = TRUE)
@@ -226,7 +226,7 @@ test_that("qelix comorbidity mapping is applied correctly,
             expect_true(
               all(as.logical(res[1, unlist(icd_names_quan_elix_htn_abbrev)])))
             # same for matrix
-            res <- icd_comorbid_quan_elix.icd9(quan_elix_test_dat,
+            res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                                short_code = TRUE,
                                                abbrev_names = TRUE,
                                                hierarchy = FALSE, return_df = FALSE)
@@ -238,7 +238,7 @@ test_that("qelix comorbidity mapping is applied correctly,
 
 test_that("ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, hier", {
-            res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = TRUE, return_df = TRUE)
             expect_equal(dim(res), c(1, 30))
@@ -250,7 +250,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
             expect_false(res[1, "Tumor"])
 
             #same for matrix
-            res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = TRUE, return_df = FALSE)
             expect_equal(dim(res), c(1, 29))
@@ -263,7 +263,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
 
 test_that("ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, no hier", {
-            res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = FALSE, return_df = TRUE)
             #longer because 2x htn
@@ -273,7 +273,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
             expect_true(all(as.logical(res[1, unlist(icd_names_ahrq_htn)])))
 
             #same for matrix:
-            res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = FALSE,
                                           hierarchy = FALSE, return_df = FALSE)
             expect_equal(dim(res), c(1, 30))
@@ -283,7 +283,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
 
 test_that("ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, abbrev, no hier", {
-            res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = FALSE, return_df = TRUE)
             expect_equal(dim(res), c(1, 31))
@@ -292,7 +292,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(icd_names_ahrq_htn_abbrev)])))
 
             #matrix
-            res <- icd_comorbid_ahrq.icd9(ahrq_test_dat, short_code = TRUE,
+            res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                           abbrev_names = TRUE,
                                           hierarchy = FALSE, return_df = FALSE)
             expect_equal(dim(res), c(1, 30))
@@ -306,7 +306,7 @@ test_that("get Charlson/Deyo comorbidities for a single patient", {
                      icd9 = c("044.9"),
                      stringsAsFactors = FALSE)
   expect_equal(
-    icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE),
+    icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE),
     structure(
       list(
         visit_id = "a",
@@ -326,39 +326,39 @@ test_that("get Charlson/Deyo comorbidities for a single patient", {
                      icd9 = c("044.9", "044.9"),
                      stringsAsFactors = FALSE)
   expect_error(
-    icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE), NA)
+    icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE), NA)
 
   mydf <- data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93"))
   expect_error(
-    icd_comorbid_quan_deyo.icd9(mydf, short_code = FALSE, return_df = TRUE), NA)
+    icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE), NA)
 
 })
 
 test_that("correct comorbidities when the whole data frame has a class for ICD type", {
   mydf <- data.frame(visit_id = c("a", "b", "c"),
                      icd9 = c("412.93", "441", "044.9"))
-  expect_warning(icd_comorbid_quan_elix(icd9(mydf)), NA)
-  expect_warning(icd_comorbid_quan_deyo(icd9(mydf)), NA)
-  expect_warning(icd_comorbid_elix(icd9(mydf)), NA)
-  expect_warning(icd_comorbid_ahrq(icd9(mydf)), NA)
+  icd9_comorbid_quan_elix(mydf)
+  icd9_comorbid_quan_deyo(mydf)
+  icd9_comorbid_elix(mydf)
+  icd9_comorbid_ahrq(mydf)
 })
 
 test_that("if an ICD class is not specified for a data set, but is for a column therein,
           the correct method is dispatched", {
             mydf <- data.frame(visit_id = c("a", "b", "c"),
                                icd9 = icd9cm(c("412.93", "441", "044.9")))
-            expect_warning(icd_comorbid_quan_elix(mydf), NA)
-            expect_warning(icd_comorbid_quan_deyo(mydf), NA)
-            expect_warning(icd_comorbid_elix(mydf), NA)
-            expect_warning(icd_comorbid_ahrq(mydf), NA)
+            expect_warning(icd9_comorbid_quan_elix(mydf), regex = NA)
+            expect_warning(icd9_comorbid_quan_deyo(mydf), regex = NA)
+            expect_warning(icd9_comorbid_elix(mydf), regex = NA)
+            expect_warning(icd9_comorbid_ahrq(mydf), regex = NA)
           })
 
 test_that("if an ICD class is not specified for a data set, and is not set for a column therein,
           the correct method is dispatched", {
             mydf <- data.frame(visit_id = c("a", "b", "c"),
                                icd9 = c("412.93", "441", "044.9"))
-            expect_warning(icd_comorbid_quan_elix(mydf), NA)
-            expect_warning(icd_comorbid_quan_deyo(mydf), NA)
-            expect_warning(icd_comorbid_elix(mydf), NA)
-            expect_warning(icd_comorbid_ahrq(mydf), NA)
+            expect_warning(icd9_comorbid_quan_elix(mydf), regex = NA)
+            expect_warning(icd9_comorbid_quan_deyo(mydf), regex = NA)
+            expect_warning(icd9_comorbid_elix(mydf), regex = NA)
+            expect_warning(icd9_comorbid_ahrq(mydf), regex = NA)
           })

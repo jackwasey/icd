@@ -126,7 +126,7 @@ codes <- c("A10.01", "L40.50", "Z77.098")
 # set class to be icd10cm (and implicitly icd10)
 icd10cm(codes)
 # set class to indicate decimal code and icd10 (not necessarily icd10cm)
-codes %>% icd_decimal_code %>% icd10
+codes %>% as.icd_decimal_diag %>% icd10
 ```
 Doing this avoids mistakes in guessing type. For example code `V10` is valid in both ICD-9 and ICD-10.
 
@@ -196,7 +196,7 @@ icd_children(icd9("391"))
 icd:::icd_children.icd9("0032")
 # leaf node has no children
 # be explicit about the type of code:
-test_code <- icd9(icd_short_code("00321"))
+test_code <- icd9(icd_short_diag("00321"))
 icd_children(test_code)
 # or the same, but guessing the characteristics
 icd_children("00321")

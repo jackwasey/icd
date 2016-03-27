@@ -80,9 +80,10 @@ When used, hierarchy is applied per Quan, "The following comorbid
 \examples{
 mydf <- data.frame(visit_name = c("a", "b", "c"),
                    icd9 = c("441", "412.93", "044.9"))
-cmb <- icd_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE)
+cmb <- icd_comorbid_quan_deyo(mydf)
 cmb
-icd_charlson(mydf, short_code = FALSE)
+icd_charlson(mydf)
+# can specify short_code directly instead of guessing
 icd_charlson(mydf, short_code = FALSE, return_df = TRUE)
 icd_charlson_from_comorbid(cmb)
 }

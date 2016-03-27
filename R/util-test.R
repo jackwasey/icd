@@ -81,17 +81,12 @@ skip_flat_icd9_avail_all <- function() {
 expect_equal_no_icd <- function(object, expected, ...) {
   class(object) <- class(object)[class(object) %nin% icd_all_classes]
   class(expected) <- class(expected)[class(expected) %nin% icd_all_classes]
-  # eval(bquote(testthat::expect_that(.(object),
-  #                                   testthat::equals(
-  #                                     .(expected), label = expected.label, ...
-  #                                   ), info = info, label = label)))
-
-  eval(bquote(testthat::expect_equal(.(object), .(expected), ...)))
+  eval(bquote(testthat::expect_equivalent(.(object), .(expected), ...)))
 }
 
 expect_equal_no_class_order <- function(object, expected, ...) {
  eval(bquote(testthat::expect_true(all(class(.(object)) %in% class(.(expected))), ...)))
- eval(bquote(testthat::expect_equal(unclass(.(object)), unclass(.(expected)), ...)))
+ eval(bquote(testthat::expect_equivalent(unclass(.(object)), unclass(.(expected)), ...)))
 }
 
 #' expect named sub-chapter has a given range, case insensitive

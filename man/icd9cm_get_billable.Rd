@@ -2,18 +2,10 @@
 % Please edit documentation in R/real.R
 \name{icd9cm_get_billable}
 \alias{icd9cm_get_billable}
-\alias{icd9cm_get_billable.icd_decimal_code}
-\alias{icd9cm_get_billable.icd_short_code}
 \title{Get billable ICD-9-CM codes}
 \usage{
 icd9cm_get_billable(x, short_code = icd_guess_short(x), invert = FALSE,
   icd9cm_edition = icd9cm_latest_edition())
-
-\method{icd9cm_get_billable}{icd_short_code}(x, invert = FALSE,
-  version = icd9cm_latest_edition())
-
-\method{icd9cm_get_billable}{icd_decimal_code}(x, invert = FALSE,
-  version = icd9cm_latest_edition())
 }
 \arguments{
 \item{x}{data, e.g. character vector, \code{icd9}, \code{icd9cm}}
@@ -24,27 +16,13 @@ Where reasonable, this is guessed from the input data.}
 
 \item{invert}{Single logical value. Returns the inverse of the result. E.g.
 if seeking valid ICD-9 codes, the invalid ones are returned.}
-
-\item{version}{String containing class name of version of ICD to be tested
-against, e.g. \code{"icd9cm"}. Default is to guess the version.}
 }
 \description{
-Return only those codes which are leaf codes in the hierarchy.
-  In contrast to \emph{defined} codes, these are considered \emph{billable}
-  and not super-sets of other codes. The majority have sub-decimal
-  classifications, but some are simply three-digit codes. This particular
-  function is currently restricted to ICD-9-CM codes.
+Return only those codes which are leaf codes in the hierarchy. In contrast to
+\emph{defined} codes, these are considered \emph{billable} and not super-sets
+of other codes. The majority have sub-decimal classifications, but some are
+simply three-digit codes. This particular function is currently restricted to
+ICD-9-CM codes.
 }
-\details{
-TODO: keep this internal
-}
-\section{Methods (by class)}{
-\itemize{
-\item \code{icd_short_code}: Get the billable ICD-9-CM codes from vector
-of short codes
-
-\item \code{icd_decimal_code}: Get the billable ICD-9-CM codes from vector
-of decimal codes
-}}
 \keyword{internal}
 

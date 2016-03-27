@@ -17,7 +17,7 @@
 
 ## start with the local build, until up on docker hub
 #FROM jackwasey/r-devel-ubsan-clang-3.8
-FROM r-devel-ubsan-clang-3.8
+FROM r-clang-3.8
 
 ## install some libraries and supporting binaries, some of which must come from unstable (sid), and not the testing repo which is the default in the r-devel base rocker image.
 RUN apt-get install -y -t unstable \
@@ -33,9 +33,10 @@ RUN apt-get install -y -t unstable \
   texlive-base \
   unixodbc-dev
 
-ADD *.sh 
+ADD install_r_packages.R /tmp
+ADD build_install_check_in_docker.sh /tmp
 # use R (I didn't build my image to use Rdevel)
-RUN Rscript install_r_packages.R
+RUN Rscript /tmp/install_r_packages.R
 
 ENV GIT_BRANCH master
 ENV R_CMD R

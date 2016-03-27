@@ -240,7 +240,7 @@ icd9_benchmark <- function() {
 
   tmp <- tempfile(fileext = ".Rprof")
   utils::Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = TRUE)
-  utils::capture.output(icd_comorbid_ahrq.icd9(rpts, isShort = TRUE))
+  utils::capture.output(icd9_comorbid_ahrq(rpts, isShort = TRUE))
   utils::Rprof(NULL)
   utils::summaryRprof(filename = tmp, memory = "both", lines = "show")
 

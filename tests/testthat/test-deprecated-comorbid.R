@@ -35,8 +35,11 @@ test_that("deprecated - ahrq make sure all the children are listed in the saved 
 })
 
 test_that("deprecated - Elixhauser make sure all the children are listed in the saved data.", {
-  for (i in elixComorbid)
-    expect_equal_no_icd(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+  for (i in elixComorbid) {
+icd9ChildrenShort(i, onlyReal = FALSE)
+#    expect_equal_no_icd(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+    expect_equivalent(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+  }
 })
 
 test_that("deprecated - Quan Charlson make sure all the children are listed in the saved data.", {

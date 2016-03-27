@@ -299,7 +299,7 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
     else
       stop("mismatch between numeric, V and E types in start and end")
   }
-  icd9(icd_short_code(res))
+  icd9(as.icd_short_diag(res))
 }
 
 #' @describeIn icd_expand_range_major Expand a range of ICD-9 major codes into
@@ -327,8 +327,8 @@ icd_expand_range_major.icd9 <- function(start, end, defined = TRUE) {
 icd9_expand_range_decimal <- function(start, end, defined = TRUE,
                                       ex_ambig_start = TRUE,
                                       ex_ambig_end = TRUE) {
-  icd9(
-    icd_decimal_code(
+  as.icd_decimal_diag(
+    icd9(
       icd_short_to_decimal.icd9(
         icd_expand_range.icd9(
           icd_decimal_to_short.icd9(start), icd_decimal_to_short.icd9(end),

@@ -24,36 +24,60 @@
 #' @template short_code
 #' @template invert
 #' @param ... arguments passed to the class-specific functions
+#' @keywords manip
 #' @export
-icd_filter_valid <- function(...)
-  UseMethod("icd_filter_valid")
+icd_filter_valid <- function(x, icd_name = get_icd_name(x),
+                             short_code = icd_guess_short(.subset2(x, icd_name)), invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  # don't UseMethod because the data frame itself doesn't have an ICD version class
+  icd_ver <- icd_guess_version(.subset2(x, icd_name))
+  if (icd_ver == "icd9")
+    icd9_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = invert)
+  else if (icd_ver == "icd10")
+    icd10_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = invert)
+  else
+    stop("could not identify ICD code type")
+}
 
-#' @rdname icd_filter_valid
+#' @describeIn icd_filter_valid Filter invalid rows from data frame of patients with ICD codes.
+#'   This can also be achieved with \code{icd_filter_valid} and \code{invert = TRUE}
 #' @export
-icd_filter_invalid <- function(...)
-  UseMethod("icd_filter_invalid")
+icd_filter_invalid <- function(x, icd_name = get_icd_name(x), short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
+  icd_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
+}
 
 #' @describeIn icd_filter_valid Filter data frame for valid ICD-9 codes
 #' @export
-icd_filter_valid.icd9 <- function(x, icd_name = NULL,
-                                  short_code =  NULL, invert = FALSE, ...) {
+icd9_filter_valid <- function(x, icd_name = get_icd_name(x), short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
-  assert(checkmate::checkNull(icd_name), checkmate::checkString(icd_name))
-  assert(checkmate::checkNull(short_code), checkmate::checkFlag(short_code))
-  icd_name <- get_icd_name(x)
-  if (is.null(short_code))
-    short_code <- icd_guess_short(x[[icd_name]])
-  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(invert)
-  x[icd_is_valid.icd9(x[[icd_name]], short_code = short_code) != invert, ]
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  x[icd_is_valid.icd9(.subset2(x, icd_name), short_code = short_code) != invert, ]
 }
-
 
 #' @rdname icd_filter_valid
 #' @export
-icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, invert = FALSE, ...) {
-  icd_filter_valid.icd9(x, icd_name = icd_name, short_code = short_code, invert = !invert)
+icd10_filter_valid <- function(x, icd_name = get_icd_name(x),
+                                   short_code = icd_guess_short(x[[icd_name]]),
+                                   invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  x[icd_is_valid.icd10(.subset2(x, icd_name), short_code = short_code) != invert, ]
+
+}
+
+#' @rdname icd_filter_valid
+#' @export
+icd9_filter_invalid <- function(x, icd_name = get_icd_name(x),
+                                    short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
+  icd9_filter_valid(x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
 #' Filters data frame based on present-on-arrival flag
@@ -86,6 +110,7 @@ icd_filter_invalid.icd9 <- function(x, icd_name = NULL, short_code = NULL, inver
 #'   icd_comorbid(icd_name = "diag", visit_name = "visit_id",
 #'     map = icd9_map_quan_elix, short_mapping = TRUE)
 #' }
+#' @keywords manip
 #' @export
 icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
   poa <- match.arg(poa)

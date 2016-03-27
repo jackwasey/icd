@@ -477,25 +477,25 @@ test_that("deprecated - test valid alias", {
 #
 test_that("get subset of billable codes", {
   x <- c("410", "4100", "41000")
-  expect_equal(icd9GetBillable(x) %>% unclass, "41000")
-  expect_equal(icd9GetBillableShort(x) %>% unclass, "41000")
-  expect_equal(icd9GetBillableDecimal(x) %>% unclass, character(0))
+  expect_equivalent(icd9GetBillable(x) %>% unclass, "41000")
+  expect_equivalent(icd9GetBillableShort(x) %>% unclass, "41000")
+  expect_equivalent(icd9GetBillableDecimal(x) %>% unclass, character(0))
   x <- c("410", "410.0", "410.00")
-  expect_equal(icd9GetBillableDecimal(x) %>% unclass, "410.00")
+  expect_equivalent(icd9GetBillableDecimal(x) %>% unclass, "410.00")
 })
 
 test_that("get inverted subset of billable codes", {
   x <- c("410", "410.0", "410.00")
-  expect_equal(icd9GetBillable(x, invert = TRUE) %>% unclass, c("410", "410.0"))
+  expect_equivalent(icd9GetBillable(x, invert = TRUE) %>% unclass, c("410", "410.0"))
 })
 
 test_that("NonBillable", {
   x <- c("410", "4100", "41000")
-  expect_equal(icd9GetNonBillable(x) %>% unclass, c("410", "4100"))
-  expect_equal(icd9GetNonBillableShort(x) %>% unclass, c("410", "4100"))
-  expect_equal(icd9GetNonBillableDecimal(x) %>% unclass, x)
+  expect_equal(icd9GetNonBillable(x), as.icd9cm(as.icd_short_diag(c("410", "4100"))))
+  expect_equal(icd9GetNonBillableShort(x), as.icd9cm(as.icd_short_diag(c("410", "4100"))))
+  expect_equivalent(icd9GetNonBillableDecimal(x), as.icd9cm(as.icd_short_diag(x)))
   x <- c("410", "410.0", "410.00")
-  expect_equal(icd9GetNonBillableDecimal(x) %>% unclass, c("410", "410.0"))
+  expect_equivalent(icd9GetNonBillableDecimal(x), as.icd9cm(as.icd_short_diag(c("410", "410.0"))))
 })
 
 test_that("deprecated - valid short n", {

@@ -13,6 +13,8 @@
 \alias{icd9}
 \alias{icd9cm}
 \alias{icd_comorbidity_map}
+\alias{icd_long_data}
+\alias{icd_wide_data}
 \alias{set_icd_class}
 \title{Construct ICD-9 data types}
 \usage{
@@ -36,12 +38,18 @@ as.icd_long_data(x)
 
 as.icd_wide_data(x)
 
+icd_long_data(...)
+
+icd_wide_data(...)
+
 icd_comorbidity_map(x)
 
 as.icd_comorbidity_map(x)
 }
 \arguments{
 \item{x}{object to set class \code{icd9}}
+
+\item{...}{arguments passed on to create a \code{data.frame}}
 
 \item{warn}{single logical value, if \code{TRUE} will gives warning when
 converting between types. ICD-9 to ICD-10 will cause an error regardless.}
@@ -50,6 +58,11 @@ converting between types. ICD-9 to ICD-10 will cause an error regardless.}
 Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
 ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (\code{icd9cm}),
 then an ICD-9 class (\code{icd9}) is also set.
+
+\code{icd_long_data} and \code{icd_short_data} create
+  \code{data.frame}s using all the arguments, and sets the class, whereas
+  \code{as.icd_long_data} and \code{as.icd_wide_data} just set the class of
+  an existing \code{data.frame}.
 }
 \details{
 The \code{as.} function e.g. \code{as.icd9}, do checking and try to put
@@ -79,10 +92,10 @@ Using \code{attributes} instead of \code{class} is a better fit for
 }
 \examples{
 x = as.icd10("A1009")
-attr(x, "icd_short_code") <- TRUE
-print(x)
-attributes(x) <- list(icd_short_code = NULL)
-print(x)
+attr(x, "icd_short_diag") <- TRUE
+x
+attributes(x) <- list(icd_short_diag = NULL)
+x
 }
 \keyword{internal}
 

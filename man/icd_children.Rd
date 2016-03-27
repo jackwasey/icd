@@ -51,7 +51,7 @@ versus decimal format
 \item \code{icd9}: Get children of ICD-9 codes
 
 \item \code{icd10}: Get children of ICD-10 codes (warns because this
-only applies to ICD-10-CM for now)
+only applies to ICD-10-CM for now).
 
 \item \code{icd10cm}: Get children of ICD-10-CM codes
 }}

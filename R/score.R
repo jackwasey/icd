@@ -53,9 +53,10 @@
 #' @examples
 #' mydf <- data.frame(visit_name = c("a", "b", "c"),
 #'                    icd9 = c("441", "412.93", "044.9"))
-#' cmb <- icd_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE)
+#' cmb <- icd_comorbid_quan_deyo(mydf)
 #' cmb
-#' icd_charlson(mydf, short_code = FALSE)
+#' icd_charlson(mydf)
+#' # can specify short_code directly instead of guessing
 #' icd_charlson(mydf, short_code = FALSE, return_df = TRUE)
 #' icd_charlson_from_comorbid(cmb)
 #' @export
@@ -79,7 +80,7 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
-  tmp <- icd_comorbid_quan_deyo.icd9(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...)
+  tmp <- icd9_comorbid_quan_deyo(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...)
   res <- icd_charlson_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE, scoring_system = scoring_system)
 
   if (!return_df) return(res)
@@ -276,9 +277,7 @@ icd_count_codes_wide <- function(x,
 #'                    icd9 = c("412.93", "441", "044.9")))
 #'
 #' cmb <- icd_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)
-#' \dontrun{
-#' print(cmb)
-#' }
+#' cmb
 #'
 #' icd_van_walraven_from_comorbid(cmb)
 #'
@@ -306,7 +305,7 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
-  tmp <- icd_comorbid_quan_elix.icd9(x, visit_name, hierarchy = TRUE, return_df = TRUE, ...)
+  tmp <- icd9_comorbid_quan_elix(x, visit_name, hierarchy = TRUE, return_df = TRUE, ...)
   res <- icd_van_walraven_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE)
 
   if (!return_df) return(res)

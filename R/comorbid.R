@@ -52,6 +52,17 @@ icd9PoaChoices <- icd_poa_choices
 #' obtained using \code{hierarchy = FALSE}, but for comorbidity counting,
 #' Charlson Score, etc., the rules should be applied.
 #'
+#' For ICD-10 codes, this method, it relies on exact matching, but not every of
+#' billions of possible ICD-10/ICD-10-CM codes are included in the mappings, so
+#' it will likely give incomplete results, without searching for parents of the
+#' input codes until a match is found in the map. TODO: this is incomplete! For
+#' ICD-10, there are two look-up methods. The classic look-up, as used for ICD-9
+#' codes, assumes any possible code is available to match in the comorbidity
+#' map. However, for ICD-10-CM, there are too many possible codes, specifying
+#' subsequent encounters, laterality, etc., etc., so this is too bulky. However
+#' for some mappings, there are exact definitions, e.g. AHRQ seems to specify
+#' everything (for a given ICD-10-CM year)
+#'
 #' @param map list (or name of a list if character vector of length one is given
 #'   as argument) of the comorbidities with each top-level list item containing
 #'   a vector of decimal ICD-9 codes. This is in the form of a list, with the
@@ -75,30 +86,29 @@ icd9PoaChoices <- icd_poa_choices
 #'   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
 #'   the machine is used.
 #' @examples
-#'   # optional but often helpful
-#'   library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
-#'
-#'   pts <- data.frame(visit_name = c("2", "1", "2", "3", "3"),
-#'                    icd9 = c("39891", "40110", "09322", "41514", "39891")) %>%
-#'                    icd_long_data %>% icd9
-#'    icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
+#'   pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
+#'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
+#'   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
 #' @export
-icd_comorbid <- function(...)
-  UseMethod("icd_comorbid")
-
-#' @describeIn icd_comorbid default method for getting comorbidities, guessing
-#'   ICD version. ICD version can be specified by setting the class of the input
-#'   data directly, or by calling, for example, \code{icd9(your_data_frame)}.
-#' @export
-icd_comorbid.default <- function(x, ...) {
-  # don't know whether ICD-9 or ICD-10 so we'll guess
-  icd_version <- icd_guess_version(x)
-  class(x) <- append(icd_version, class(x))
-  # dispatch again now class is set. This may be a bad idea: user may not want a
-  # class, possibly incorrect, set on their data. At least give a message
-  icd_comorbid(x, ...)
+icd_comorbid <- function(x, map, ...) {
+  ver <- icd_guess_version.character(map[[1]])
+  if (ver == "icd9")
+    icd9_comorbid(x, map = map, ...)
+  else if (ver == "icd10")
+    icd10_comorbid(x, map = map, ...)
+  else
+    stop("could not guess the ICD version")
 }
 
+#' @describeIn icd_comorbid ICD-10 comorbidities
+#' @export
+icd10_comorbid <- function(x,
+                               map,
+                               visit_name = NULL,
+                               icd_name = NULL,
+                               short_code = NULL,
+                               short_map = icd_guess_short(map),
+                               return_df = FALSE, ...) {
 
 # need a new way of looking up co-morbidity by string matching. This is
 # annoying, but necessary, since there is a very large number of ICD-10-CM (not
@@ -113,26 +123,6 @@ icd_comorbid.default <- function(x, ...) {
 #
 # 2b. use a very fast lookup table for this, don't loop through the
 # comorbidities.
-
-#' @describeIn icd_comorbid Get comorbidities from ICD-10 codes. With this
-#'   method, it relies on exact matching, but not every of billions of possible
-#'   ICD-10/ICD-10-CM codes are included in the mappings, so it will likely give
-#'   incomplete results, without searching for parents of the input codes until
-#'   a match is found in the map. TODO: this is incomplete!
-#' @details For ICD-10, there are two look-up methods. The classic look-up, as
-#'   used for ICD-9 codes, assumes any possible code is available to match in
-#'   the comorbidity map. However, for ICD-10-CM, there are too many possible
-#'   codes, specifying subsequent encounters, laterality, etc., etc., so this is
-#'   too bulky. However for some mappings, there are exact definitions, e.g.
-#'   AHRQ seems to specify everything (for a given ICD-10-CM year)
-#' @export
-icd_comorbid.icd10 <- function(x,
-                               map,
-                               visit_name = NULL,
-                               icd_name = NULL,
-                               short_code = NULL,
-                               short_map = icd_guess_short(map),
-                               return_df = FALSE, ...) {
 
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
@@ -151,7 +141,8 @@ icd_comorbid.icd10 <- function(x,
   if (is.null(short_code))
     short_code <- icd_guess_short(x[[icd_name]])
 
-  icd10_comorbid_parent_search(x, map, visit_name, icd_name, short_code, short_map, return_df, ...)
+  icd10_comorbid_parent_search(x = x, map = map, visit_name = visit_name, icd_name = icd_name,
+                               short_code = short_code, short_map = short_map, return_df = return_df, ...)
 }
 
 
@@ -172,14 +163,24 @@ icd10_comorbid_parent_search <- function(
 
   icd_codes <- x[[icd_name]]
 
+  # TODO: unclear whether the hash map is retained by fastmatch: "The first
+  # match against a table results in a hash table to be computed from the table.
+  # This table is then attached as the '.match.hash' attribute of the table so
+  # that it can be re-used on subsequent calls to fmatch with the same table."
+  # May need to pre-compute this when building package. May still be faster even
+  # if calculating hash map each time.
+
   # for each icd code
   just_cmb <- vapply(icd_codes, FUN.VALUE = logical(length(map)), FUN = function(y) {
     # look it up in each comorbidity, but TODO: once we have a comorbidity for
     # one patient, we don't need to search within it again
+
+
+    char_count <- nchar(as.character(y)):3
     vapply(names(map), FUN.VALUE = logical(1),
            FUN = function(cmb) {
              # and if not found, slice off last char of test string
-             for (n in nchar(y):3) {
+             for (n in char_count) {
                if (!is.na(fastmatch::fmatch(str_sub(y, 1, n), map[[cmb]])))
                  return(TRUE)
              }
@@ -219,7 +220,7 @@ icd10_comorbid_no_parent_search <- function(
 #' @describeIn icd_comorbid Get comorbidities from \code{data.frame} of ICD-9
 #'   codes
 #' @export
-icd_comorbid.icd9 <- function(x,
+icd9_comorbid <- function(x,
                               map,
                               visit_name = NULL,
                               icd_name = NULL,
@@ -236,18 +237,22 @@ icd_comorbid.icd9 <- function(x,
   assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(short_map)
-  # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
-  # the S3 method was called directly.
-  if (!is.icd9(x[[icd_name]])) x[[icd_name]] <- icd9(x[[icd_name]])
 
-  icd_comorbid_common(x, map, visit_name, icd_name,
-                      short_code, short_map, return_df, ...)
+  # confirm class is ICD-9 so we dispatch correctly.
+  if (!is.icd9(x[[icd_name]]))
+    x[[icd_name]] <- icd9(x[[icd_name]])
+
+  icd_comorbid_common(x = x, map = map, visit_name = visit_name,
+                      icd_name = icd_name, short_code = short_code,
+                      short_map = short_map, return_df = return_df, ...)
 }
 
 #' @rdname icd_comorbid
 #' @details The common comorbidity calculation code does not depend on ICD type.
 #'   There is some type conversion so the map and input codes are all in 'short'
 #'   format, fast factor generation, then fast comorbidity assignment.
+#' @template abbrev_names
+#' @template hierarchy
 #' @keywords internal
 icd_comorbid_common <- function(x,
                                 map,
@@ -312,10 +317,7 @@ icd_comorbid_common <- function(x,
   threads <- getOption("icd.threads", getOmpCores())
   chunk_size <- getOption("icd.chunk_size", 256L)
   omp_chunk_size <- getOption("icd.omp_chunk_size", 1L)
-
-  mat <- icd9ComorbidShortCpp(x, map, visit_name, icd_name,
-                              threads = threads, chunk_size = chunk_size,
-                              omp_chunk_size = omp_chunk_size)
+  mat <- icd9ComorbidShortCpp(icd9df = x, icd9Mapping = map, visitId = visit_name, icd9Field = icd_name, threads = threads, chunk_size = chunk_size, omp_chunk_size = omp_chunk_size, aggregate = TRUE) # nolint
 
   if (return_df) {
     if (visit_was_factor)
@@ -332,129 +334,145 @@ icd_comorbid_common <- function(x,
 }
 
 #' @rdname icd_comorbid
+#' @details \code{data.frame}s of patient data may have columns within them which are of class \code{icd9}, \code{icd10} etc.,
+#' but do not themselves have a class: therefore, the S3 mechanism for dispatch is not suitable. I may add a wrapper function which
+#' looks inside a \code{data.frame} of comorbidities, and dispatches to the appropriate function, but right now the user must
+#' call the \code{icd9_} or \code{icd10_} prefixed function directly.
 #' @export
-icd_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  f <- icd_comorbid.idc
-  if (is.icd9(x))
-    f <-
-  else
-
-    cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_ahrq)
-  apply_hier_ahrq(cbd, abbrev_names, hierarchy)
+icd9_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd9_comorbid(x, map = icd::icd9_map_ahrq, short_map = TRUE, ...)
+  apply_hier_ahrq(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_quan_elix <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  UseMethod("icd_comorbid_quan_elix")
+icd10_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_ahrq, short_map = TRUE, ...)
+  apply_hier_ahrq(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_quan_deyo <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  UseMethod("icd_comorbid_quan_deyo")
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd_comorbid_elix <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  UseMethod("icd_comorbid_elix")
-}
-
-#' @rdname icd_comorbid
-#' @template abbrev_names
-#' @template hierarchy
-#' @export
-icd_comorbid_ahrq.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_ahrq)
-  apply_hier_ahrq(cbd, abbrev_names, hierarchy)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd_comorbid_ahrq.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  icd_comorbid.icd10(..., map = icd::icd10_map_ahrq) %>%
-    apply_hier_ahrq(abbrev_names = abbrev_names, hierarchy = hierarchy)
-}
-
-#' @rdname icd_comorbid
-#' @details For Deyo's Charlson comorbidities, strictly speaking, there is no
-#'   dropping of more e.g. uncomplicated \code{DM} if complicated \code{DM}
-#'   exists, however, this is probably useful, in general and is essential when
-#'   calculating the Charlson score.
-#' @export
-icd_comorbid_quan_deyo.icd9 <- function(..., abbrev_names = TRUE,
-                                        hierarchy = TRUE) {
-  icd_comorbid.icd9(..., map = icd::icd9_map_quan_deyo) %>%
-    apply_hier_quan_deyo(abbrev_names = abbrev_names, hierarchy = hierarchy)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd_comorbid_quan_deyo.icd10 <- function(..., abbrev_names = TRUE,
-                                        hierarchy = TRUE) {
-  icd_comorbid.icd10(..., map = icd::icd10_map_quan_deyo) %>%
-    apply_hier_quan_deyo(abbrev_names = abbrev_names, hierarchy = hierarchy)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd_comorbid_quan_elix.icd9 <- function(..., abbrev_names = TRUE,
-                                        hierarchy = TRUE) {
-  icd_comorbid.icd9(..., map = icd::icd9_map_quan_elix) %>%
-    apply_hier_quan_elix(abbrev_names = abbrev_names, hierarchy = hierarchy)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd_comorbid_quan_elix.icd10 <- function(..., abbrev_names = TRUE,
-                                        hierarchy = TRUE) {
-  icd_comorbid.icd10(..., map = icd::icd10_map_quan_elix) %>%
-    apply_hier_quan_elix(abbrev_names = abbrev_names, hierarchy = hierarchy)
-}
-
-#' @rdname icd_comorbid
-#' @export
-icd_comorbid_elix.icd9 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd_comorbid.icd9(..., map = icd::icd9_map_elix)
+icd9_comorbid_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  print(list(...))
+  cbd <- icd9_comorbid(x, map = icd::icd9_map_elix, short_map = TRUE, ...)
   apply_hier_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
-icd_comorbid_elix.icd10 <- function(..., abbrev_names = TRUE, hierarchy = TRUE) {
-  icd_comorbid.icd10(..., map = icd::icd10_map_elix) %>%
-    apply_hier_elix(abbrev_names = abbrev_names, hierarchy = hierarchy)
+icd10_comorbid_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_elix, short_map = TRUE, ...)
+  apply_hier_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd9_comorbid_quan_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd9_comorbid(x, map = icd::icd9_map_quan_elix, short_map = TRUE, ...)
+  apply_hier_quan_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd10_comorbid_quan_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_elix, short_map = TRUE, ...)
+  apply_hier_quan_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd9_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd9_comorbid(x, map = icd::icd9_map_quan_deyo, short_map = TRUE, ...)
+  apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_deyo, short_map = TRUE, ...)
+  apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_deyo, short_map = TRUE, ...)
+  apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+icd_comorbid_ahrq <- function(x, icd_name = get_icd_name(x), ...) {
+  ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
+  if (ver == "icd9")
+    icd9_comorbid_ahrq(x, icd_name = icd_name, ...)
+  else if (ver == "icd10")
+    icd10_comorbid_ahrq(x, icd_name = icd_name, ...)
+  else
+    stop("could not guess the ICD version using icd_name = ", icd_name)
+}
+
+icd_comorbid_elix <- function(x, icd_name = get_icd_name(x), ...) {
+  ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
+  if (ver == "icd9")
+    icd9_comorbid_elix(x, icd_name = icd_name, ...)
+  else if (ver == "icd10")
+    icd10_comorbid_elix(x, icd_name = icd_name, ...)
+  else
+    stop("could not guess the ICD version using icd_name = ", icd_name)
+}
+
+icd_comorbid_quan_elix <- function(x, icd_name = get_icd_name(x), ...) {
+  ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
+  if (ver == "icd9")
+    icd9_comorbid_quan_elix(x, icd_name = icd_name, ...)
+  else if (ver == "icd10")
+    icd10_comorbid_quan_elix(x, icd_name = icd_name, ...)
+  else
+    stop("could not guess the ICD version using icd_name = ", icd_name)
+}
+
+icd_comorbid_quan_deyo <- function(x, icd_name = get_icd_name(x), ...) {
+  ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
+  if (ver == "icd9")
+    icd9_comorbid_quan_deyo(x, icd_name = icd_name, ...)
+  else if (ver == "icd10")
+    icd10_comorbid_quan_deyo(x, icd_name = icd_name, ...)
+  else
+    stop("could not guess the ICD version using icd_name = ", icd_name)
 }
 
 #' Apply hierarchy and choose naming for each comorbidity map
 #'
 #' Re-used by ICD-9 and ICD-10 versions which have the same rules.
-#' @param cbd matrix or data.frame of comorbidities
+#' @param x matrix or data.frame of comorbidities
+#' @details For Deyo's Charlson comorbidities, strictly speaking, there is no
+#'   dropping of more e.g. uncomplicated \code{DM} if complicated \code{DM}
+#'   exists, however, this is probably useful, in general and is essential when
+#'   calculating the Charlson score.
 #' @template abbrev_names
 #' @template hierarchy
-#' @rdname apply_hier
+#' @name apply_hier
 #' @keywords internal manip
-apply_hier_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
   if (hierarchy) {
-    cbd[cbd[, which(colnames(cbd) == "Mets")] > 0, "Tumor"] <- FALSE
-    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
-    cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    x[x[, which(colnames(x) == "Mets")] > 0, "Tumor"] <- FALSE
+    x[x[, "DMcx"] > 0, "DM"] <- FALSE
+    x[, "HTN"] <- (x[, "HTN"] + x[, "HTNcx"]) > 0
 
     # drop HTNcx without converting to vector if matrix only has one row
-    cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
+    x <- x[, -which(colnames(x) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_abbrev
+      colnames(x)[cr(x)] <- icd::icd_names_elix_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix
+      colnames(x)[cr(x)] <- icd::icd_names_elix
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_htn_abbrev
+      colnames(x)[cr(x)] <- icd::icd_names_elix_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_elix_htn
+      colnames(x)[cr(x)] <- icd::icd_names_elix_htn
   }
-  cbd
+  x
 }
 
 

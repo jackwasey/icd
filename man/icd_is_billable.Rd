@@ -9,23 +9,22 @@
 \alias{icd_is_billable.icd9cm}
 \title{Determine whether codes are billable leaf-nodes}
 \usage{
-icd_is_billable(x, short_code = icd_guess_short(x),
-  version = icd9cm_latest_edition())
+icd_is_billable(x, short_code = icd_guess_short(x), ...)
 
 \method{icd_is_billable}{icd9}(x, short_code = icd_guess_short(x),
-  version = icd9cm_latest_edition())
+  icd9cm_edition = icd9cm_latest_edition())
 
 \method{icd_is_billable}{icd10cm}(x, short_code = icd_guess_short(x),
-  version = "2016")
+  icd10cm_edition = "2016")
 
 \method{icd_is_billable}{icd10}(x, short_code = icd_guess_short(x),
-  version = "2016")
+  icd10cm_edition = "2016")
 
 \method{icd_is_billable}{icd9cm}(x, short_code = icd_guess_short(x),
-  version = icd9cm_latest_edition())
+  icd9cm_edition = icd9cm_latest_edition())
 
 \method{icd_is_billable}{default}(x, short_code = icd_guess_short(x),
-  version = icd9cm_latest_edition())
+  icd9cm_edition = icd9cm_latest_edition())
 }
 \arguments{
 \item{x}{input vector to test}
@@ -34,17 +33,20 @@ icd_is_billable(x, short_code = icd_guess_short(x),
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
-\item{version}{single character string, default is "32" which is the latest
-release from CMS. Currently anything from "23" to "32" is accepted. Not
-numeric because there are possible cases with non-numeric names, e.g.
+\item{icd9cm_edition}{single character string, default is "32" which is the
+latest release from CMS. Currently anything from "23" to "32" is accepted.
+Not numeric because there are possible cases with non-numeric names, e.g.
 revisions within one year, although none currently implemented.}
+
+\item{icd10cm_edition}{single character string. ICD-10-CM editions are
+currently just the year of release.}
 }
 \value{
 logical vector of same length as input
 }
 \description{
-Codes provided are compared to the most recent version of the
-  CMS list of billable codes, or another version if specified.
+Codes provided are compared to the most recent edition of the CMS list of
+billable codes, or another edition if specified.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -61,7 +63,7 @@ ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 ICD-9-CM
 
 \item \code{default}: Which of the given ICD codes are leaf nodes in
-ICD version guessed from the codes themselves.
+ICD version (9 vs 10) guessed from the codes themselves.
 }}
 \keyword{internal}
 

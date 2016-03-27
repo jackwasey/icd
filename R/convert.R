@@ -217,11 +217,10 @@ icd_long_to_wide <- function(x,
 #'   but here it is for output data.
 #' @template stringsAsFactors
 #' @examples
-#'  # as ever, optional, but tidy
-#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
-#'
-#' longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
-#'                      icd9 = icd9(c("441", "4424", "443", "441"))) %>% icd_long_data %>% icd9
+#' longdf <- as.icd_long_data(
+#'   data.frame(visit_id = c("a", "b", "b", "c"),
+#'              icd9 = icd9(c("441", "4424", "443", "441")))
+#' )
 #' mat <- icd_comorbid_elix(longdf)
 #' class(mat)
 #' typeof(mat)
@@ -255,7 +254,7 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' @template visit_name
 #' @template stringsAsFactors
 #' @examples
-#' longdf <- icd9(icd_long_data(
+#' longdf <- icd9(as.icd_long_data(
 #'             data.frame(visit = c("a", "b", "b", "c"),
 #'                        icd9 = c("441", "4424", "443", "441"))))
 #' cmbdf <- icd_comorbid_elix(longdf, return_df = TRUE)
@@ -307,25 +306,25 @@ icd_short_to_decimal.character <- function(x) {
   UseMethod("icd_short_to_decimal", y)
 }
 
-#' @describeIn icd_short_to_decimal convert ICD-9 codes from short to decimal format
+#' @describeIn icd_short_to_decimal convert ICD-9 codes from short to decimal
+#'   format
 #' @export
 #' @keywords internal
 icd_short_to_decimal.icd9 <- function(x) {
-  icd9ShortToDecimalCpp(x) %>% icd_decimal_code %>% icd9
+  icd9(as.icd_decimal_diag(icd9_short_to_decimal_cpp(x)))
 }
 
-#' @describeIn icd_short_to_decimal convert ICD-10 codes from short to decimal format
+#' @describeIn icd_short_to_decimal convert ICD-10 codes from short to decimal
+#'   format
 #' @export
 #' @keywords internal
 icd_short_to_decimal.icd10 <- function(x) {
-  x %<>% str_trim
+  x <- trim(x)
   # todo: these could/should be seperate functions
-  majors <- str_sub(x, 0, 3)
+  out <- str_sub(x, 0, 3) # majors
   minors <- str_sub(x, 4)
-  if (minors != "")
-    paste0(majors, ".", minors) %>% icd_decimal_code %>% icd10
-  else
-    paste0(majors) %>% icd_decimal_code %>% icd10
+  out[minors != ""] <- paste0(out, ".", minors)
+  icd10(as.icd_decimal_diag(out))
 }
 
 #' @describeIn icd_short_to_decimal convert ICD-10-CM code from short to decimal format
@@ -350,19 +349,27 @@ icd_decimal_to_short <- function(x) {
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd9 <- function(x) {
-  icd9DecimalToShortCpp(x) %>% icd_short_code %>% icd9
+  if (is.factor(x)) {
+    levels(x) <- icd9(as.icd_short_diag(icd9_decimal_to_short_cpp(levels(x))))
+    return(x)
+  }
+  icd9(as.icd_short_diag(icd9_decimal_to_short_cpp(x)))
 }
 
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd10 <- function(x) {
-  x %>% str_replace("\\.", "") %>% icd_short_code %>% icd10
+  if (is.factor(x)) {
+    levels(x) <- gsub("\\.", "", levels(x))
+    return(icd10(as.icd_short_diag(x)))
+  }
+  icd10(as.icd_short_diag(gsub("\\.", "", x)))
 }
 
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd10cm <- function(x) {
-  icd_decimal_to_short.icd10(x) %>% icd10cm
+  as.icd10cm(icd_decimal_to_short.icd10(x))
 }
 
 #' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to
@@ -370,7 +377,11 @@ icd_decimal_to_short.icd10cm <- function(x) {
 #' @export
 #' @keywords internal
 icd_decimal_to_short.default <- function(x) {
-  str_trim(str_replace(x, "\\.", "")) %>% icd_short_code
+  if (is.factor(x)) {
+    levels(x) <- as.icd_short_diag(trim(gsub("\\.", "", levels(x))))
+    return(x)
+  }
+  as.icd_short_diag(trim(gsub("\\.", "", x)))
 }
 
 #' Convert decimal ICD codes to component parts

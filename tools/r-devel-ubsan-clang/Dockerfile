@@ -40,13 +40,9 @@ RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstab
 # use Rdevel (from the rocker image, because R is the standard g++ unsanitized one)
 # I think this forces rebuild every time, even if the added package hasn't changed.
 ADD install_r_packages.R /tmp/
+ADD build_install_check_in_docker.sh /tmp/
 RUN RScriptdevel install_r_packages.R
 
-# doesn't work for Rdevel: RUN apt-get install -y r-cran-rodbc
-
-# can only add files inside the docker directory: the following script is copied from parent directory by rocker-icd.sh
-ADD build_install_check_in_docker.sh /tmp/
 ENV R_CMD Rdevel
-ENV GIT_BRANCH icd10
+ENV GIT_BRANCH master
 CMD ["/tmp/build_install_check_in_docker.sh"]
-

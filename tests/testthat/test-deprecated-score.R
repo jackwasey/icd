@@ -360,6 +360,5 @@ NA, NA, NA, NA), .Label = c("038.9", "041.12", "041.49", "070.70",
 "V85.44", "V88.01"), class = "factor")
 
 expect_false(icd_guess_short(dat))
-expect_false(icd_guess_short.icd9(dat))
 
 })
