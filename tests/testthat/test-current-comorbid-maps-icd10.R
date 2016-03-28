@@ -18,21 +18,21 @@
 context("content of icd-10 to comorbidity maps")
 
 test_that("the icd-10 quan elix comorbidity map data is exactly as produced by the generator", {
-  expect_identical(icd10_map_quan_elix, icd10_generate_map_quan_elix(save_data = FALSE))
+  expect_equivalent(icd10_map_quan_elix, icd10_generate_map_quan_elix(save_data = FALSE))
 })
 
 test_that("the icd-10 quan deyo comorbidity map data is exactly as produced by the generator", {
-  expect_identical(icd10_map_quan_deyo, icd10_generate_map_quan_deyo(save_data = FALSE))
+  expect_equivalent(icd10_map_quan_deyo, icd10_generate_map_quan_deyo(save_data = FALSE))
 })
 
 test_that("the icd-10 elix comorbidity map data is exactly as produced by the generator", {
-  expect_identical(icd10_map_elix, icd10_generate_map_elix(save_data = FALSE))
+  expect_equivalent(icd10_map_elix, icd10_generate_map_elix(save_data = FALSE))
 })
 
 test_that("the icd-10 ahrq comorbidity map data is exactly as produced by the generator", {
   if (is.null(icd10_fetch_ahrq_sas(offline = TRUE, allow_missing = TRUE)))
     skip_online_tests("AHRQ ICD-10 SAS not available")
-  expect_identical(icd10_map_ahrq, icd10_parse_ahrq_sas(save_data = FALSE, offline = FALSE))
+  expect_equivalent(icd10_map_ahrq, icd10_parse_ahrq_sas(save_data = FALSE, offline = FALSE))
 })
 
 test_that("the classes of the ICD-10 maps are correct", {

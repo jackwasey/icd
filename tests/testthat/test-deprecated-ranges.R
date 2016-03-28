@@ -226,10 +226,10 @@ test_that("deprecated - range bugs", {
   expect_true("345" %nin% ("3420 " %i9s% "3449 "))
 
   # unclass these, because new version of icd9 (aka icd?) will set class on result
-  expect_equal(unclass("042.11" %i9da% "042.13"), c("042.11", "042.12", "042.13"))
+  expect_equivalent(unclass("042.11" %i9da% "042.13"), c("042.11", "042.12", "042.13"))
 
   # no presumption that missing leading zeroes will be missed on output:
-  expect_equal(unclass("42.11" %i9da% "42.13"), c("042.11", "042.12", "042.13"))
+  expect_equivalent(unclass("42.11" %i9da% "42.13"), c("042.11", "042.12", "042.13"))
 })
 
 test_that("deprecated - range doesn't include higher level parent github issue #14", {

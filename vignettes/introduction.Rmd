@@ -49,7 +49,7 @@ knitr::opts_chunk$set(
 
 patients_icd9 <- data.frame(
   visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
-  icd9 = icd9(c("40201", "2258", "7208", "25001", "34400", "4011", "4011")),
+  icd9 = as.icd9(c("40201", "2258", "7208", "25001", "34400", "4011", "4011")),
   poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
   stringsAsFactors = FALSE
   )
@@ -132,8 +132,8 @@ Doing this avoids mistakes in guessing type. For example code `V10` is valid in 
 
 Vectors of codes, data frames and matrices can have a class set. Conflicting classes are not allowed, e.g. if a data frame has columns with both ICD-9 and ICD-10 codes, it doesn't make sense to set an ICD version for the data frame.
 ```{r mixed ICD-9 and ICD-10 data}
-df <- data.frame(i9 = icd9(c("100", "001")), 
-                 i10 = icd10(c("Z771", "Z87820")))
+df <- data.frame(i9 = as.icd9(c("100", "001")), 
+                 i10 = as.icd10(c("Z771", "Z87820")))
 
 try(df %>% icd9 %>% icd10)
 ```
@@ -145,7 +145,7 @@ icd_decimal_to_short(c("1", "10.20", "100", "123.45"))
 icd_short_to_decimal(c("1", "22", "2244", "1005"))
 
 # similar operations with magrittr, also showing invalid codes
-codes <- icd9(c("87.65", "9999", "Aesop", -100, "", NA))
+codes <- as.icd9(c("87.65", "9999", "Aesop", -100, "", NA))
 icd_decimal_to_short(codes)
 ```
 
