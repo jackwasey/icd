@@ -221,8 +221,8 @@ test_that("count wide directly (old func) same as reshape count", {
 
 test_that("icd_van_walraven_from_comorbid score calculation", {
 
-  comorbids <- icd_comorbid_quan_elix(
-    mydf <- icd9(data.frame(visit_id = "a", icd9 = "250.0")),
+  comorbids <- icd9_comorbid_quan_elix(
+    mydf <- data.frame(visit_id = "a", icd9 = "250.0"),
     return_df = TRUE)
   set.seed(123)
   # Fill a QuanElix comorbidity data frame with random data
@@ -255,7 +255,7 @@ test_that("icd_van_walraven comodbidity index and score", {
                              "V66.7", "272.4", "790.92")) %>% icd9
   expect_equivalent(icd_van_walraven(mydf, visit_name = "id", icd_name = "value"),
                     icd_van_walraven_from_comorbid(
-                      icd_comorbid_quan_elix(mydf, visit_id = "id", icd9Field = "value")))
+                      icd9_comorbid_quan_elix(mydf, visit_id = "id", icd9Field = "value")))
   expect_equivalent(icd_van_walraven(mydf, visit_name = "id", icd_name = "value", return_df = TRUE),
                     data.frame(id = factor(c(1, 2, 3)),
                                    vanWalraven = c(10, 12, -2)))

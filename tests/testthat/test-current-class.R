@@ -64,23 +64,23 @@ test_that("is short or decimal code", {
   expect_true(is.icd_decimal_diag(as.icd_decimal_diag("12.34")))
 })
 
-test_that("no warning for combinding same types", {
-  c(icd9cm(""), icd9cm(""))
-  c(icd9(""), icd9(""))
-  c(icd10(""), icd10(""))
-  c(icd10cm(""), icd10cm(""))
+test_that("no warning or error for combining same types", {
+  expect_warning(c(as.icd9cm(""), as.icd9cm("")), regex = NA)
+  expect_warning(c(as.icd9(""), as.icd9("")), regex = NA)
+  expect_warning(c(as.icd10(""), as.icd10("")), regex = NA)
+  expect_warning(c(as.icd10cm(""), as.icd10cm("")), regex = NA)
 })
 
 test_that("warn if combining mixed ICD sub-version types", {
   skip("hold off this for now")
-  c(icd9cm(""), icd9(""))
-  c(icd10cm(""), icd10(""))
+  c(as.icd9cm(""), as.icd9(""))
+  c(as.icd10cm(""), as.icd10(""))
 })
 
 test_that("error if combining mixed ICD version types, e.g. ICD-9 vs ICD-10", {
   skip("this is nice to have, but adds weight to 'c'")
-  expect_error(c(icd9cm(""), icd10("")))
-  expect_error(c(icd10cm(""), icd9("")))
+  expect_error(c(as.icd9cm(""), as.icd10("")))
+  expect_error(c(as.icd10cm(""), as.icd9("")))
 })
 
 test_that("combining identity", {
@@ -90,14 +90,12 @@ test_that("combining identity", {
   expect_identical(c(as.icd10cm("")), as.icd10cm(""))
 })
 
-test_that("attributes preserved for ICD classes", {
+test_that("attributes set and queried", {
   no_short_code <- z <- y <- x <- icd9("")
   attr(x, "icd_short_diag") <- TRUE
   attr(y, "icd_short_diag") <- TRUE
   attr(z, "icd_short_diag") <- FALSE
   expect_true(is.icd_short_diag(x))
-  expect_true(is.icd_short_diag(c(x)))
-  expect_true(is.icd_short_diag(c(x, y)))
   expect_null(is.icd_short_diag(no_short_code))
 })
 
@@ -198,31 +196,19 @@ test_that("data frame subsetting doesn't incorrectly set class on columns", {
   )
 })
 
-test_that("subset with double bracket doesn't override the underlying class", {
-  x <- icd9(list(my_codes = c("V10.1", "441.1")))
-  expect_false(inherits(x[[1]], "list"))
-  expect_false(inherits(x[[1]][2], "list"))
-
-  y <- icd10(list(thine = icd10cm(c("A01", "B0234"))))
-  expect_true(inherits(y[1], "list"))
-
-  expect_false(inherits(y[[1]], "list"))
-  expect_false(inherits(y[[1]][1], "list"))
-})
-
 test_that("printing a comorbidity map works very simply", {
   expect_warning(
     capture.output(
       print.icd_comorbidity_map(icd::icd9_map_quan_elix)
-    ), NA)
+    ), regex = NA)
 })
 
 test_that("is comorbidity map?", {
-  icd9_map_ahrq %>% unclass %>% icd9 %>% icd_comorbidity_map -> x
+  icd9_map_ahrq %>% unclass %>% icd_comorbidity_map -> x
   expect_true(is.icd_comorbidity_map(icd9_map_ahrq))
   expect_true(is.icd_comorbidity_map(x))
-  expect_is(x, "icd_comorbidity_map")
   expect_is(icd9_map_ahrq, "icd_comorbidity_map")
+  expect_is(x, "icd_comorbidity_map")
 })
 
 context("class conflicts")

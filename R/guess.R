@@ -149,7 +149,7 @@ icd_guess_version_update <- function(x, short_code = icd_guess_short(x)) {
   if (ver == "icd9")
     icd9(x)
   else if (ver == "icd10")
-    icd10(x)
+    icd10(x) # use the fast version, not as.icd10
   else
     stop("unknown type returned when guessing ICD version")
 }

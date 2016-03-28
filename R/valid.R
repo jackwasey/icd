@@ -215,7 +215,7 @@ set_re_globals()
 #' @return logical vector with \code{TRUE} or \code{FALSE} for each ICD code
 #'   provided according to its validity
 #' @examples
-#'   icd_is_valid(icd9(c("", "1", "22", "333", "4444", "123.45", "V",
+#'   icd_is_valid(as.icd9(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E")))
 #'   # internal function:
 #'   \dontrun{

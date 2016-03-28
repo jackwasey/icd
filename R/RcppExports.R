@@ -21,23 +21,25 @@
 #' # Rcpp cleverer than R, and doesn't return a copy of the data
 #' }
 #' @keywords internal attribute
-#' @name as_short_diag
+#' @rdname as.icd_short_diag
 .attr_decimal_diag <- function(x, value) {
     invisible(.Call('icd_setDecimalDiag', PACKAGE = 'icd', x, value))
 }
 
+#' @rdname as.icd_short_diag
 #' @keywords internal attribute
 .attr_short_diag <- function(x, value) {
     invisible(.Call('icd_setShortDiag', PACKAGE = 'icd', x, value))
 }
 
+#' @rdname as.icd_short_diag
 #' @keywords attribute
 #' @export
 as.icd_short_diag <- function(x, value = TRUE) {
     .Call('icd_asShortDiag', PACKAGE = 'icd', x, value)
 }
 
-#' @rdname as_short_diag
+#' @rdname as.icd_short_diag
 #' @keywords attribute
 #' @export
 as.icd_decimal_diag <- function(x, value = TRUE) {

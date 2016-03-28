@@ -43,7 +43,7 @@
 //' # Rcpp cleverer than R, and doesn't return a copy of the data
 //' }
 //' @keywords internal attribute
-//' @name as_short_diag
+//' @rdname as.icd_short_diag
 // [[Rcpp::export(.attr_decimal_diag)]]
 void setDecimalDiag(Rcpp::RObject& x, bool value) {
   x.attr("icd_short_diag") = !value;
@@ -53,7 +53,7 @@ void setDecimalDiag(Rcpp::CharacterVector& x) {
   x.attr("icd_short_diag") = false;
 }
 
-// @rdname as_short_diag
+//' @rdname as.icd_short_diag
 //' @keywords internal attribute
 // [[Rcpp::export(.attr_short_diag)]]
 void setShortDiag(Rcpp::RObject& x, bool value) {
@@ -64,7 +64,7 @@ void setShortDiag(Rcpp::CharacterVector& x) {
   x.attr("icd_short_diag") = true;
 }
 
-// @rdname as.icd_short_diag
+//' @rdname as.icd_short_diag
 //' @keywords attribute
 //' @export
 // [[Rcpp::export(as.icd_short_diag)]]
@@ -73,7 +73,7 @@ Rcpp::RObject asShortDiag(Rcpp::RObject& x, bool value = true) {
   return x;
 }
 
-//' @rdname as_short_diag
+//' @rdname as.icd_short_diag
 //' @keywords attribute
 //' @export
 // [[Rcpp::export(as.icd_decimal_diag)]]

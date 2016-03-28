@@ -103,26 +103,26 @@ icd_comorbid <- function(x, map, ...) {
 #' @describeIn icd_comorbid ICD-10 comorbidities
 #' @export
 icd10_comorbid <- function(x,
-                               map,
-                               visit_name = NULL,
-                               icd_name = NULL,
-                               short_code = NULL,
-                               short_map = icd_guess_short(map),
-                               return_df = FALSE, ...) {
+                           map,
+                           visit_name = NULL,
+                           icd_name = NULL,
+                           short_code = NULL,
+                           short_map = icd_guess_short(map),
+                           return_df = FALSE, ...) {
 
-# need a new way of looking up co-morbidity by string matching. This is
-# annoying, but necessary, since there is a very large number of ICD-10-CM (not
-# so much WHO) codes which are too numerous to pre-compute.
-#
-# options are:
-#
-# 1. do recompute, but only after installing package.
-#
-# 2. do string matching looking for target, then successive parents in the
-# comorbidities
-#
-# 2b. use a very fast lookup table for this, don't loop through the
-# comorbidities.
+  # need a new way of looking up co-morbidity by string matching. This is
+  # annoying, but necessary, since there is a very large number of ICD-10-CM (not
+  # so much WHO) codes which are too numerous to pre-compute.
+  #
+  # options are:
+  #
+  # 1. do recompute, but only after installing package.
+  #
+  # 2. do string matching looking for target, then successive parents in the
+  # comorbidities
+  #
+  # 2b. use a very fast lookup table for this, don't loop through the
+  # comorbidities.
 
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
@@ -211,7 +211,7 @@ icd10_comorbid_no_parent_search <- function(
 
   # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
   # the S3 method was called directly.
-  if (!is.icd10(x[[icd_name]])) x[[icd_name]] <- icd10(x[[icd_name]])
+  if (!is.icd10(x[[icd_name]])) x[[icd_name]] <- icd10(x[[icd_name]]) # no as.icd10
   icd_comorbid_common(x, map, visit_name, icd_name,
                       short_code, short_map, return_df, ...)
 
@@ -221,12 +221,12 @@ icd10_comorbid_no_parent_search <- function(
 #'   codes
 #' @export
 icd9_comorbid <- function(x,
-                              map,
-                              visit_name = NULL,
-                              icd_name = NULL,
-                              short_code = icd_guess_short(x, icd_name = icd_name),
-                              short_map = icd_guess_short(map),
-                              return_df = FALSE, ...) {
+                          map,
+                          visit_name = NULL,
+                          icd_name = NULL,
+                          short_code = icd_guess_short(x, icd_name = icd_name),
+                          short_map = icd_guess_short(map),
+                          return_df = FALSE, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
   assert(checkmate::checkString(visit_name), checkmate::checkNull(visit_name))

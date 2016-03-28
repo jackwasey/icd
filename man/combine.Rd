@@ -26,8 +26,8 @@ to keep classes of the first item in the list.
 }
 \examples{
 \dontrun{
-# throw an error
-c(icd9("E998"), icd10("A10"))
+# throw an error? or assign type according to first argument?
+c(as.icd9("E998"), as.icd10("A10"))
 
 # benchmark subsetting to justify using .subset2 (5\% faster)
 library(microbenchmark)
@@ -40,6 +40,14 @@ microbenchmark(j[[1]], .subset2(j, 1),
 # logical list to vector
 a <- list(T,T)
 microbenchmark(as.logical(a), c(a, recursive = TRUE), times = 1e6)
+
+# c(..., recursive = TRUE) vs unlist
+l = list(c("100", "440", "999"), c("123", "234"))
+microbenchmark::microbenchmark(c(l, recursive = TRUE),
+                               c(unlist(l)),
+                               times = 1e6)
+stopifnot(identical(c(l, recursive = TRUE), c(unlist(l))))
+
 }
 }
 

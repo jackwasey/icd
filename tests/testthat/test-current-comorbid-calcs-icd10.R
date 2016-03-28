@@ -87,8 +87,8 @@ test_that("comorbidity from single ICD-10 leaf or non-leaf code doesn't cause in
   # this code I5020 is in all the maps for ICD-10
   for (code in c("I5020")) {
     for (class_fun in c("as.character", "as.icd10", "as.icd10cm")) {
-      for (map_fun in c("icd_comorbid_elix", "icd_comorbid_quan_elix",
-                         "icd_comorbid_quan_deyo", "icd_comorbid_ahrq")) {
+      for (map_fun in c("icd10_comorbid_elix", "icd10_comorbid_quan_elix",
+                         "icd10_comorbid_quan_deyo", "icd10_comorbid_ahrq")) {
         code_with_class <- do.call(class_fun, list(code))
         df <- data.frame(visit = 1, code = code_with_class,
                          stringsAsFactors = FALSE) # TODO: allow factors

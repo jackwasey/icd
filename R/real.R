@@ -143,7 +143,7 @@ icd_is_billable <- function(x, short_code = icd_guess_short(x), ...) {
 #' @export
 #' @keywords internal
 icd_is_billable.icd9 <- function(x, short_code = icd_guess_short(x),
-                                 icd9cm_edition = icd9cm_latest_edition()) {
+                                 icd9cm_edition = icd9cm_latest_edition(), ...) {
   icd_is_billable.icd9cm(x = x, short_code = short_code, icd9cm_edition = icd9cm_edition)
 }
 
@@ -151,7 +151,7 @@ icd_is_billable.icd9 <- function(x, short_code = icd_guess_short(x),
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), icd10cm_edition = "2016") {
+icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), icd10cm_edition = "2016", ...) {
   if (icd10cm_edition != "2016")
     stop("curretly only ICD-10-CM 2016 edition can be used to check for billable codes")
   if (!short_code)
@@ -164,7 +164,7 @@ icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), icd10cm_
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd10 <- function(x, short_code = icd_guess_short(x), icd10cm_edition = "2016") {
+icd_is_billable.icd10 <- function(x, short_code = icd_guess_short(x), icd10cm_edition = "2016", ...) {
   icd_is_billable.icd10cm(x = x, short_code = short_code, icd10cm_edition = icd10cm_edition)
 }
 
@@ -172,7 +172,8 @@ icd_is_billable.icd10 <- function(x, short_code = icd_guess_short(x), icd10cm_ed
 #'   ICD-9-CM
 #' @export
 #' @keywords internal
-icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x), icd9cm_edition = icd9cm_latest_edition()) {
+icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
+                                   icd9cm_edition = icd9cm_latest_edition(), ...) {
   assert_vector(x)
   assert_flag(short_code)
   assert_string(icd9cm_edition)
@@ -186,7 +187,8 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x), icd9cm_ed
 #' @export
 #' @method icd_is_billable default
 #' @keywords internal
-icd_is_billable.default <- function(x, short_code = icd_guess_short(x), icd9cm_edition = icd9cm_latest_edition()) {
+icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
+                                    icd9cm_edition = icd9cm_latest_edition(), ...) {
   # guess ICD-9 vs ICD-10 and set class to dispatch again
   x <- icd_guess_version_update(x, short_code = short_code)
   # TODO: think about this: UseMethod doesn't send the new 'x', but uses the

@@ -207,8 +207,12 @@ as.icd10cm <- function(x, short_code = NULL) {
 #' @keywords internal
 icd10cm <- function(x) {
   cl <- class(x)
-  if ("icd10cm" %in% cl) return(x)
-  class(x) <- c("icd10cm", cl)
+  if ("icd10cm" %in% cl)
+    return(x)
+  if ("icd10" %in% cl)
+    class(x) <- c("icd10cm", cl)
+  else
+    class(x) <- c("icd10cm", "icd10", cl)
   x
 }
 
@@ -311,8 +315,8 @@ as.icd_comorbidity_map <- function(x) {
 #'   incompatible types are combined using \code{c}
 #' @examples
 #' \dontrun{
-#' # throw an error
-#' c(icd9("E998"), icd10("A10"))
+#' # throw an error? or assign type according to first argument?
+#' c(as.icd9("E998"), as.icd10("A10"))
 #'
 #' # benchmark subsetting to justify using .subset2 (5% faster)
 #' library(microbenchmark)
@@ -325,27 +329,25 @@ as.icd_comorbidity_map <- function(x) {
 #' # logical list to vector
 #' a <- list(T,T)
 #' microbenchmark(as.logical(a), c(a, recursive = TRUE), times = 1e6)
+#'
+#' # c(..., recursive = TRUE) vs unlist
+#' l = list(c("100", "440", "999"), c("123", "234"))
+#' microbenchmark::microbenchmark(c(l, recursive = TRUE),
+#'                                c(unlist(l)),
+#'                                times = 1e6)
+#' stopifnot(identical(c(l, recursive = TRUE), c(unlist(l))))
+#'
 #' }
 #' @name combine
 #' @export
 c.icd9 <- function(..., warn = FALSE) {
   dots <- list(...)
-  base_class <- class(.subset2(dots, 1)) # may be icd9 or icd9+icd9cm
+
   if (warn && any(vapply(dots, icd_conflicts_with_icd9, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)?
          If so, unset the class of the arguments")
-  out <- structure(c(unlist(lapply(dots, unclass))), class = base_class)
-  # only set this attribute if all the consituent terms have the same attribute
-  # present. One NULL or one conflict will mean the attribute is not set
-  attribs <- lapply(dots, attr, which = "icd_short_diag")
-  if (!any(lapply(attribs, is.null))) {
-    n <- sum(as.logical(attribs))
-    if (n == 0)
-      attr(out, "icd_short_diag") <- FALSE
-    else if (n == length(out))
-      attr(out, "icd_short_diag") <- TRUE
-  }
-  out
+  structure(c(lapply(dots, unclass), recursive = TRUE), class = class(.subset2(dots, 1)))
+  # SOMEDAY: would be nice to set the attribute, but by default, R's 'c' drops attributes.
 }
 
 #' @rdname combine
@@ -377,7 +379,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' @param x input data with list, vector, factor, and class set to an ICD type.
 #' @template dotdotdot
 #' @examples
-#' x <- icd9(list(my_codes = c("V10.1", "441.1")))
+#' x <- as.icd9(list(my_codes = c("V10.1", "441.1")))
 #' x[1]
 #' x[[1]]
 #' x[[1]][2]
@@ -386,7 +388,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' stopifnot(!inherits(x[[1]], "list"))
 #' stopifnot(!inherits(x[[1]][2], "list"))
 #'
-#' y <- icd10(c("A01", "B0234"))
+#' y <- as.icd10(c("A01", "B0234"))
 #' y[2]
 #' y[[2]]
 #' stopifnot(inherits(y[2], "icd10"))

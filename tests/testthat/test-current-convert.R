@@ -139,7 +139,7 @@ test_that("icd10 short to decimal", {
   expect_equal(icd_short_to_decimal("A00"), as.icd10("A00") %>% as.icd_decimal_diag)
   expect_equal(icd_short_to_decimal.icd10("A00"), as.icd10("A00") %>% as.icd_decimal_diag)
   expect_equal(icd_short_to_decimal("A000"), as.icd10("A00.0") %>% as.icd_decimal_diag)
-  expect_equal(icd_short_to_decimal.icd10("A000"), icd10("A00.0") %>% as.icd_decimal_diag)
+  expect_equal(icd_short_to_decimal.icd10("A000"), as.icd10("A00.0") %>% as.icd_decimal_diag)
 
 })
 
@@ -162,8 +162,8 @@ test_that("icd10 short to decimal for multiple codes", {
 })
 
 test_that("icd10 short to decimal and back", {
-  expect_identical(icd_short_to_decimal(icd_decimal_to_short("A00.0")), icd10("A00.0") %>% as.icd_decimal_diag)
-  expect_identical(icd_decimal_to_short(icd_short_to_decimal("A000")), icd10("A000") %>% as.icd_short_diag)
+  expect_identical(icd_short_to_decimal(icd_decimal_to_short("A00.0")), as.icd10("A00.0") %>% as.icd_decimal_diag)
+  expect_identical(icd_decimal_to_short(icd_short_to_decimal("A000")), as.icd10("A000") %>% as.icd_short_diag)
 })
 
 test_that("icd9 short to major part, E codes", {

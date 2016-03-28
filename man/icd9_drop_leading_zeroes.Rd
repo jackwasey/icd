@@ -5,7 +5,7 @@
 \alias{icd9_drop_leading_zeroes_major}
 \title{drop zero padding from decimal ICD-9 code.}
 \usage{
-icd9_drop_leading_zeroes(x, short_code = NULL)
+icd9_drop_leading_zeroes(x, short_code = icd_guess_short(x))
 
 icd9_drop_leading_zeroes_major(major)
 }
@@ -34,8 +34,12 @@ library(microbenchmark)
 library(stringr)
 x <- generate_random_decimal_icd9(1e6)
 microbenchmark(
-  x \%>\% as_char_no_warn \%>\% str_replace("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
-  str_replace(as_char_no_warn(x), "[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
+  x \%>\% as_char_no_warn \%>\%
+  str_replace("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
+
+  str_replace(as_char_no_warn(x),
+              "[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
+
   gsub("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3", x),
   times = 1000
   )

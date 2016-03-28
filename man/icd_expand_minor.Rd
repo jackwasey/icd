@@ -29,8 +29,8 @@ Accepts a single number or character input starting point for
 \examples{
 \dontrun{
   # return all possible decimal parts of ICD9 codes (111 in total)
-  length(icd:::icd_expand_minor(icd9(""), is_e = FALSE))
-  icd:::icd_expand_minor(icd9("1")) # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+  length(icd:::icd_expand_minor(as.icd9(""), is_e = FALSE))
+  icd:::icd_expand_minor(as.icd9("1")) # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 }
 }
 \seealso{

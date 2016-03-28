@@ -26,7 +26,7 @@ exactly the same as using x[n] or x[[n]] but preserves the ICD classes in
 result
 }
 \examples{
-x <- icd9(list(my_codes = c("V10.1", "441.1")))
+x <- as.icd9(list(my_codes = c("V10.1", "441.1")))
 x[1]
 x[[1]]
 x[[1]][2]
@@ -35,7 +35,7 @@ x[[1]][2]
 stopifnot(!inherits(x[[1]], "list"))
 stopifnot(!inherits(x[[1]][2], "list"))
 
-y <- icd10(c("A01", "B0234"))
+y <- as.icd10(c("A01", "B0234"))
 y[2]
 y[[2]]
 stopifnot(inherits(y[2], "icd10"))

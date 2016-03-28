@@ -47,8 +47,12 @@ icd9_extract_alpha_numeric <- function(x) {
 #' library(stringr)
 #' x <- generate_random_decimal_icd9(1e6)
 #' microbenchmark(
-#'   x %>% as_char_no_warn %>% str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
-#'   str_replace(as_char_no_warn(x), "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
+#'   x %>% as_char_no_warn %>%
+#'   str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
+#'
+#'   str_replace(as_char_no_warn(x),
+#'               "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
+#'
 #'   gsub("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3", x),
 #'   times = 1000
 #'   )
@@ -58,13 +62,9 @@ icd9_extract_alpha_numeric <- function(x) {
 #'   part
 #' @family ICD-9 convert
 #' @keywords internal manip
-icd9_drop_leading_zeroes <- function(x, short_code = NULL) {
+icd9_drop_leading_zeroes <- function(x, short_code = icd_guess_short(x)) {
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert(checkmate::checkNull(short_code), checkmate::checkFlag(short_code))
-  if (is.null(short_code))
-    short_code <- attr(x, "icd_short_diag")
-  if (is.null(short_code))
-    short_code <- icd_guess_short(x)
 
   if (short_code) {
     parts <- icd_short_to_parts.icd9(x = x, minor_empty = "")

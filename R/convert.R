@@ -217,11 +217,10 @@ icd_long_to_wide <- function(x,
 #'   but here it is for output data.
 #' @template stringsAsFactors
 #' @examples
-#' longdf <- as.icd_long_data(
-#'   data.frame(visit_id = c("a", "b", "b", "c"),
-#'              icd9 = icd9(c("441", "4424", "443", "441")))
-#' )
-#' mat <- icd_comorbid_elix(longdf)
+#' longdf <- icd_long_data(
+#'             visit_id = c("a", "b", "b", "c"),
+#'             icd9 = as.icd9(c("441", "4424", "443", "441")))
+#' mat <- icd9_comorbid_elix(longdf)
 #' class(mat)
 #' typeof(mat)
 #' rownames(mat)
@@ -254,10 +253,11 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' @template visit_name
 #' @template stringsAsFactors
 #' @examples
-#' longdf <- icd9(as.icd_long_data(
-#'             data.frame(visit = c("a", "b", "b", "c"),
-#'                        icd9 = c("441", "4424", "443", "441"))))
-#' cmbdf <- icd_comorbid_elix(longdf, return_df = TRUE)
+#' longdf <- icd_long_data(
+#'             visit = c("a", "b", "b", "c"),
+#'             icd9 = c("441", "4424", "443", "441")
+#'             )
+#' cmbdf <- icd9_comorbid_elix(longdf, return_df = TRUE)
 #' class(cmbdf)
 #' rownames(cmbdf)
 #' mat.out <- icd_comorbid_df_to_mat(cmbdf)
@@ -324,14 +324,14 @@ icd_short_to_decimal.icd10 <- function(x) {
   out <- str_sub(x, 0, 3) # majors
   minors <- str_sub(x, 4)
   out[minors != ""] <- paste0(out, ".", minors)
-  icd10(as.icd_decimal_diag(out))
+  icd10(as.icd_decimal_diag(out)) # not as.icd10
 }
 
 #' @describeIn icd_short_to_decimal convert ICD-10-CM code from short to decimal format
 #' @export
 #' @keywords internal
 icd_short_to_decimal.icd10cm <- function(x) {
-  icd_short_to_decimal.icd10(x) %>% icd10cm
+  icd_short_to_decimal.icd10(x) %>% as.icd10cm
 }
 
 #' Convert Decimal format ICD codes to short format
@@ -363,7 +363,7 @@ icd_decimal_to_short.icd10 <- function(x) {
     levels(x) <- gsub("\\.", "", levels(x))
     return(icd10(as.icd_short_diag(x)))
   }
-  icd10(as.icd_short_diag(gsub("\\.", "", x)))
+  icd10(as.icd_short_diag(gsub("\\.", "", x))) # not as.icd10
 }
 
 #' @export

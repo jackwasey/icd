@@ -273,10 +273,10 @@ icd_count_codes_wide <- function(x,
 #' @template stringsAsFactors
 #' @template dotdotdot
 #' @examples
-#' mydf <- icd9(data.frame(visit_name = c("a", "b", "c"),
+#' mydf <- as.icd9(data.frame(visit_name = c("a", "b", "c"),
 #'                    icd9 = c("412.93", "441", "044.9")))
 #'
-#' cmb <- icd_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)
+#' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)
 #' cmb
 #'
 #' icd_van_walraven_from_comorbid(cmb)
