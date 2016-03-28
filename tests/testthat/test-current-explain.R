@@ -260,8 +260,8 @@ test_that("explain icd9GetChapters simple input", {
 
 test_that("working with named lists of codes, decimal is guessed", {
   expect_warning(icd_explain(
-    list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE), NA)
-  expect_warning(icd_explain(list(a = c("001"), b = c("001.1", "001.9"))), NA)
+    list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE), regex = NA)
+  expect_warning(icd_explain(list(a = c("001"), b = c("001.1", "001.9"))), regex = NA)
 })
 
 test_that("icd9 descriptions is parsed correctly", {

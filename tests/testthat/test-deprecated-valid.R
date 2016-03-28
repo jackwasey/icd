@@ -18,9 +18,9 @@
 context("deprecated icd9 validation")
 
 test_that("deprecated - warning for deprecation of icd9ValidDecimal, not given in test mode!", {
-  expect_warning(icd9ValidDecimal(c("1", "2")), NA)
-  expect_warning(icd9ValidShort(c("1", "2")), NA)
-  expect_warning(icd9Valid(c("1", "2"), isShort = TRUE), NA)
+  expect_warning(icd9ValidDecimal(c("1", "2")), regex = NA)
+  expect_warning(icd9ValidShort(c("1", "2")), regex = NA)
+  expect_warning(icd9Valid(c("1", "2"), isShort = TRUE), regex = NA)
 })
 
 test_that("deprecated - icd9IsValidDecimal - rubbish input", {

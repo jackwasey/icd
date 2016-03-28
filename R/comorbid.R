@@ -354,7 +354,6 @@ icd10_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
 #' @rdname icd_comorbid
 #' @export
 icd9_comorbid_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  print(list(...))
   cbd <- icd9_comorbid(x, map = icd::icd9_map_elix, short_map = TRUE, ...)
   apply_hier_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }

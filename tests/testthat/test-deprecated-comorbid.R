@@ -533,7 +533,7 @@ test_that("deprecated - diff comorbid works", {
 
   utils::capture.output(resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE))
 
-  
+
   utils::capture.output(
     resq <- icd9DiffComorbid(quanElixComorbid, quanDeyoComorbid, show = TRUE)
   )
@@ -656,7 +656,7 @@ test_that("deprecated - comorbidities created from source data frame coded as fa
 })
 
 test_that("deprecated data aliases are created", {
-  expect_warning(dep_dat <- generate_deprecated_data(save_data = FALSE), NA)
+  expect_warning(dep_dat <- generate_deprecated_data(save_data = FALSE), regex = NA)
 
   # actually save the deprecated data somewhere, and reload it
   tmp_file_path <- tempfile()

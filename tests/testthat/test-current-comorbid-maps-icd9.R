@@ -154,10 +154,10 @@ test_that("can condense the big lists of comorbidities without errors", {
       expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, defined = defined_codes))
     }
     else {
-      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = defined_codes), NA)
-      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = defined_codes), NA)
-      expect_warning(qe <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), NA)
-      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), NA)
+      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regex = NA)
+      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regex = NA)
+      expect_warning(qe <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regex = NA)
+      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regex = NA)
     }
 
     expect_is(ahrq, class = "list")
@@ -570,7 +570,7 @@ test_that("diff comorbid works", {
     utils::capture.output(
       res <- icd_diff_comorbid(icd::icd9_map_ahrq, icd9_map_elix, show = FALSE)
     ),
-    NA)
+    regex = NA)
 
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
@@ -591,7 +591,7 @@ test_that("diff comorbid works", {
     expect_output(
       resq <- icd_diff_comorbid(icd9_map_quan_elix, icd9_map_elix, show = TRUE),
       regexp = "Comorbidity Psychoses"
-    ), NA)
+    ), regex = NA)
 })
 
 two_pts_fac <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),

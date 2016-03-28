@@ -120,7 +120,7 @@ test_that("condense short range", {
   expect_equal(icd_explain.icd9(othersalmonella), "Other salmonella infections")
 
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, defined = TRUE), "003")
-  expect_warning(res <- icd_condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), NA)
+  expect_warning(res <- icd_condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), regex = NA)
   expect_equal(res, othersalmonella)
   # missing this leaf node, we can't condense at all
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella[-3], defined = TRUE),
@@ -139,7 +139,7 @@ test_that("condense short range", {
  icd_children.icd9(short_code = TRUE, "00320", defined = TRUE), defined = TRUE), "00320")
   # majors should be okay, even if not 'real'
   expect_warning(dup_res <- icd_condense.icd9(short_code = TRUE,
-icd_children.icd9(short_code = TRUE, "003", defined = TRUE)), NA)
+icd_children.icd9(short_code = TRUE, "003", defined = TRUE)), regex = NA)
 
   expect_equal(icd_condense.icd9(short_code = TRUE, c("003", "003"), defined = TRUE), "003")
   expect_equal(icd_condense.icd9(short_code = TRUE, c("003", "003"), defined = FALSE), "003")

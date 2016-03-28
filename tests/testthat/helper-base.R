@@ -16,16 +16,20 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 # could also be done by test-all.R
-library("magrittr", quietly = TRUE, warn.conflict = FALSE)
+library("magrittr", quietly = TRUE, warn.conflicts = FALSE)
 
 local({
   do_slow_tests <- getOption("icd.do_slow_tests")
   if (is.null(do_slow_tests) || !do_slow_tests)
     message("Will skip slow tests")
+  else
+    message("Doing slow tests")
 
   do_online_tests <- getOption("icd.do_online_tests")
   if (is.null(do_online_tests) || !do_online_tests)
     message("Will skip online tests")
+  else
+    message("Doing online tests")
 })
 
 set.seed(1441)
