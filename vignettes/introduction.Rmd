@@ -84,30 +84,30 @@ One use of this package is to identify diagnoses present on admission to hospita
 
 ```{r getcomorbidities}
 # use AHRQ revision of Elixhauser comorbidities, show only first eight columns
-icd_comorbid_ahrq(patients_icd9)[, 1:8]
+icd9_comorbid_ahrq(patients_icd9)[, 1:8]
 ```
 
 Things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. I use `magrittr` in the package itself, and I recommend trying it to clarify chains of commands, such as the following:
 ```{r getcomorbidities2}
 # find Elixhauser comorbidities present-on-arrival
-patients_icd9 %>% icd_filter_poa %>% icd_comorbid_elix %>% head
+patients_icd9 %>% icd_filter_poa %>% icd9_comorbid_elix %>% head
 
 # same as above, then summarize first five:
 patients_icd9 %>% 
   icd_filter_poa %>% 
-  icd_comorbid_elix %>% 
+  icd9_comorbid_elix %>% 
   extract(, 1:5) %>% 
   apply(2, as.integer) %>% 
   summary
 
 # convert vermont discharge data to wide format, 
 # find comorbidities, convert TRUE to 1 and show first few
-vermont_dx %>% icd_wide_to_long  %>% icd_comorbid_quan_deyo  %>% apply(2, as.integer) %>%  head
+vermont_dx %>% icd_wide_to_long  %>% icd9_comorbid_quan_deyo  %>% apply(2, as.integer) %>%  head
 ```
 
 The above can be rewritten in classic R with many parentheses:
 ```{r lots of brackets, eval = FALSE}
-head(apply(icd_comorbid_quan_deyo(icd_wide_to_long(vermont_dx)), 2, as.integer))
+head(apply(icd9_comorbid_quan_deyo(icd_wide_to_long(vermont_dx)), 2, as.integer))
 ```
 
 ## Specifying data types
@@ -124,9 +124,9 @@ You can let `icd` guess types, or specify the type of your data explicitly:
 # decimal format ICD-10 codes
 codes <- c("A10.01", "L40.50", "Z77.098")
 # set class to be icd10cm (and implicitly icd10)
-icd10cm(codes)
+as.icd10cm(codes)
 # set class to indicate decimal code and icd10 (not necessarily icd10cm)
-codes %>% as.icd_decimal_diag %>% icd10
+codes %>% as.icd_decimal_diag %>% as.icd10
 ```
 Doing this avoids mistakes in guessing type. For example code `V10` is valid in both ICD-9 and ICD-10.
 
@@ -135,7 +135,7 @@ Vectors of codes, data frames and matrices can have a class set. Conflicting cla
 df <- data.frame(i9 = as.icd9(c("100", "001")), 
                  i10 = as.icd10(c("Z771", "Z87820")))
 
-try(df %>% icd9 %>% icd10)
+try(df %>% as.icd9 %>% as.icd10)
 ```
 
 ## Converting ICD-9 codes between types
@@ -191,12 +191,12 @@ setdiff(icd_expand_range("4820", "4823", defined = FALSE),
 
 It is easy to find the children of a higher-level ICD-9 code:
 ```{r "childrenReal"}
-icd_children(icd9("391"))
+icd_children(as.icd9("391"))
 # mid-level code
 icd:::icd_children.icd9("0032")
 # leaf node has no children
 # be explicit about the type of code:
-test_code <- icd9(icd_short_diag("00321"))
+test_code <- as.icd9(as.icd_short_diag("00321"))
 icd_children(test_code)
 # or the same, but guessing the characteristics
 icd_children("00321")
@@ -228,8 +228,8 @@ icd_explain(c("43410", "43491"), short_code = TRUE)
 ```
 Arbitrary named list(s) of codes:
 ```{r explain arbitrary}
-icd_explain(list(somecodes = icd9(c("001", "391")),
-                 morecodes = icd9cm(c("001.1", "001.9"))))
+icd_explain(list(somecodes = as.icd9(c("001", "391")),
+                 morecodes = as.icd9cm(c("001.1", "001.9"))))
 ```
 `001` (Cholera) isn't itself a diagnostic code, i.e. leaf node in the hierarchy, but `390` (Rheumatic fever without heart involvement) is. Both are explained correctly:
 ```{r cholera}
@@ -312,7 +312,7 @@ Take my patients, find the ones where there definitely or maybe was a diagnosis 
 ```{r chainpoatocomorbid}
 patients_icd9 %>%
   icd_filter_poa_not_no %>%
-  icd_comorbid_ahrq %>%
+  icd9_comorbid_ahrq %>%
   extract(1:9)
 ```
 
@@ -340,7 +340,7 @@ icd9cm_hierarchy[
 ```
 then explain the list, just showing the first ten:
 ```{r cardiac Chain Explain Example}
-icd9(cardiac) %>% icd_explain(warn = FALSE) %>% head(10)
+as.icd9(cardiac) %>% icd_explain(warn = FALSE) %>% head(10)
 ```
 
 ### Find comorbidities for a large number of patients.
@@ -349,7 +349,7 @@ I understand that comorbiditity assignment using SAS is a lengthy business. Let'
 # codes selected from AHRQ mapping
 many_patients <- icd:::generate_random_pts(1e7) 
 system.time(
-  icd_comorbid_ahrq(many_patients)
+  icd999999999_comorbid_ahrq(many_patients)
   )[["elapsed"]] 
 ```
 This is not run to avoid unnecessary load when CRAN builds the package. I get about 5 seconds for 10 million rows of comorbidities on a moderately powerful workstation.
@@ -359,7 +359,7 @@ The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities th
 ```{r arbitrary Mapping}
 names(icd9_chapters)[c(1:5, 14)]
 my_map <- icd:::icd9_chapters_to_map(icd9_chapters[c(2, 5, 14)])
-icd_comorbid(patients_icd9, my_map) # no positive 
+icd9_comorbid(patients_icd9, my_map) # no positive 
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes.
@@ -397,8 +397,8 @@ new_since_27 <- setdiff(icd9cm_billable[["32"]][["code"]],
 lost_since_27 <- setdiff(icd9cm_billable[["27"]][["code"]],
                          icd9cm_billable[["32"]][["code"]]) %>% tail
 # we know this is an ICD-9-CM code, so declare this using nice magrittr motif:
-lost_since_27 %<>% icd9cm
-lost_since_27 %<>% icd9cm
+lost_since_27 %<>% as.icd9cm
+lost_since_27 %<>% as.icd9cm
 
 # these are a few which were gained since v27
 data.frame(code = new_since_27, desc = new_since_27 %>% icd_explain)

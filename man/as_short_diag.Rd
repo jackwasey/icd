@@ -2,10 +2,13 @@
 % Please edit documentation in R/RcppExports.R
 \name{as_short_diag}
 \alias{.attr_decimal_diag}
+\alias{as.icd_decimal_diag}
 \alias{as_short_diag}
 \title{Set icd_short_diag attribute in-place}
 \usage{
 .attr_decimal_diag(x, value)
+
+as.icd_decimal_diag(x, value = TRUE)
 }
 \description{
 Doing this in an R function doesn't work for 'void' equivalent, and does a

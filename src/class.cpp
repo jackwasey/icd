@@ -65,15 +65,17 @@ void setShortDiag(Rcpp::CharacterVector& x) {
 }
 
 // @rdname as.icd_short_diag
-//' @keywords internal attribute
+//' @keywords attribute
+//' @export
 // [[Rcpp::export(as.icd_short_diag)]]
 Rcpp::RObject asShortDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = value;
   return x;
 }
 
-// @rdname as_short_diag
-//' @keywords internal attribute
+//' @rdname as_short_diag
+//' @keywords attribute
+//' @export
 // [[Rcpp::export(as.icd_decimal_diag)]]
 Rcpp::RObject asDecimalDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = !value;

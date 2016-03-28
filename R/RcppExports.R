@@ -31,12 +31,15 @@
     invisible(.Call('icd_setShortDiag', PACKAGE = 'icd', x, value))
 }
 
-#' @keywords internal attribute
+#' @keywords attribute
+#' @export
 as.icd_short_diag <- function(x, value = TRUE) {
     .Call('icd_asShortDiag', PACKAGE = 'icd', x, value)
 }
 
-#' @keywords internal attribute
+#' @rdname as_short_diag
+#' @keywords attribute
+#' @export
 as.icd_decimal_diag <- function(x, value = TRUE) {
     .Call('icd_asDecimalDiag', PACKAGE = 'icd', x, value)
 }
