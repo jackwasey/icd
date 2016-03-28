@@ -49,7 +49,7 @@ first column is used.
   icd_count_codes(mydf, return_df = TRUE)
   icd_count_codes(mydf)
 
-  cmb <- icd_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
+  cmb <- icd9_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
   icd_count_comorbid(cmb)
 
   wide <- data.frame(visit_name = c("r", "s", "t"),

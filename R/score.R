@@ -48,12 +48,12 @@
 #'   \code{x} has a factor for the \code{visit_name}, this is not changed, but a
 #'   non-factor \code{visit_name} may be converted or not converted according to
 #'   your system default or this setting.
-#' @param ... further arguments to pass on to \code{icd_comorbid_quan_deyo},
+#' @param ... further arguments to pass on to \code{icd9_comorbid_quan_deyo},
 #'   e.g. \code{icd_name}
 #' @examples
 #' mydf <- data.frame(visit_name = c("a", "b", "c"),
 #'                    icd9 = c("441", "412.93", "044.9"))
-#' cmb <- icd_comorbid_quan_deyo(mydf)
+#' cmb <- icd9_comorbid_quan_deyo(mydf)
 #' cmb
 #' icd_charlson(mydf)
 #' # can specify short_code directly instead of guessing
@@ -154,7 +154,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #'   icd_count_codes(mydf, return_df = TRUE)
 #'   icd_count_codes(mydf)
 #'
-#'   cmb <- icd_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
+#'   cmb <- icd9_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
 #'   icd_count_comorbid(cmb)
 #'
 #'   wide <- data.frame(visit_name = c("r", "s", "t"),

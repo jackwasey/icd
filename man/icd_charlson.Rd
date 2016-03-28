@@ -49,7 +49,7 @@ data.frame if \code{return_df} is \code{TRUE}. If the input data frame
 non-factor \code{visit_name} may be converted or not converted according to
 your system default or this setting.}
 
-\item{...}{further arguments to pass on to \code{icd_comorbid_quan_deyo},
+\item{...}{further arguments to pass on to \code{icd9_comorbid_quan_deyo},
 e.g. \code{icd_name}}
 
 \item{hierarchy}{single logical value, default is \code{FALSE}. If
@@ -80,7 +80,7 @@ When used, hierarchy is applied per Quan, "The following comorbid
 \examples{
 mydf <- data.frame(visit_name = c("a", "b", "c"),
                    icd9 = c("441", "412.93", "044.9"))
-cmb <- icd_comorbid_quan_deyo(mydf)
+cmb <- icd9_comorbid_quan_deyo(mydf)
 cmb
 icd_charlson(mydf)
 # can specify short_code directly instead of guessing
