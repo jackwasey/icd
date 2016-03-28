@@ -15,31 +15,41 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-get_n_or_len <- function(x, n)
-  x[1:ifelse(length(x) < n, length(x), n)]
-
 #' Print a comorbidity map
 #'
 #' The default is to summarize by printing the first seven comorbidities, and
 #' the first seven codes for each. To print the whole thing, just convert it to
 #' a list.
+#' @param x a list optionally with class \code{icd_comorbidity_map}
+#' @param n_comorbidities single integer, number of comorbidities to print
+#' @param n_codes single integer, number of codes per comorbidity to print
+#' @param ... further arguments are passed to \code{print}
 #' @examples
+#' icd9_map_ahrq
+#' \dontrun{
 #' print(icd9_map_ahrq)
 #' print(icd9_map_ahrq, n_comorbidities = 3, n_codes = 3)
-#' \dontrun{
 #' print.list(icd9_map_ahrq)
 #' print(list(icd9_map_ahrq))
 #' }
 #' @export
-print.icd_comorbidity_map <- function(x, n_comorbidities = 7, n_codes = 7) {
+#' @method print icd_comorbidity_map
+print.icd_comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
+  assert_list(x, min.len = 1, names = "unique", any.missing = FALSE, types = "character")
+  assert_int(n_comorbidities)
+  assert_int(n_codes)
+
+  get_n_or_len <- function(x, n) {
+    x[1:ifelse(length(x) < n, length(x), n)]
+  }
+
   message("Showing first ",
-          n_comorbidities, "comorbidities, and ",
-          n_codes, "of each one.")
-  x %>%
-    lapply(function(x) get_n_or_len(x, n_codes)) %>%
+          n_comorbidities, "comorbidities, and first",
+          n_codes, "of each.")
+  lapply(x, get_n_or_len, n_codes) %>%
     get_n_or_len(n_comorbidities) %>%
-    as.list %>% print
-  # not beautiful
+    print(...)
+
   if (length(x) > n_comorbidities)
     writeLines("...")
 }
