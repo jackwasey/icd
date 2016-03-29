@@ -67,7 +67,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_info <- icd9_fetch_ahrq_sas(offline, allow_missing = FALSE)
+  ahrq_info <- icd9_fetch_ahrq_sas(offline = offline, allow_missing = FALSE)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)

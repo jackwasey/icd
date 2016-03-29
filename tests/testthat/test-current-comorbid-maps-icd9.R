@@ -18,7 +18,8 @@
 context("comorbidity maps")
 
 test_that("try to induce c++ segfault bug", {
-  icd9_comorbid(ahrq_test_dat, map = icd::icd9_map_ahrq, short_code = TRUE)
+  expect_error(icd9_comorbid(ahrq_test_dat, map = icd::icd9_map_ahrq, short_code = TRUE),
+               regex = NA)
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
@@ -90,10 +91,12 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
   # skip this test if either do_online_tests is FALSE, or if the downloaded file
   # is not already in data-raw
+  message("thjere")
   if (is.null(icd9_fetch_ahrq_sas(offline = TRUE)))
     skip_online_tests("data-raw/comformat2012-2013.txt not available, so
                       skipping AHRQ SAS parsing test.")
 
+  message("here")
   # same but from source data. Should be absolutely identical.
   expect_identical(result <- icd9_parse_ahrq_sas(save_data = FALSE), icd9_map_ahrq)
   expect_that(result, is_a("list"))
@@ -175,6 +178,7 @@ test_that("can condense the big lists of comorbidities without errors", {
 test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
   skip_slow_tests()
   skip_flat_icd9_avail_all()
+  skip_on_no_rtf("2011")
 
   cmh_headings <- c("code", "short_desc", "long_desc", "three_digit",
                     "major", "sub_chapter", "chapter")

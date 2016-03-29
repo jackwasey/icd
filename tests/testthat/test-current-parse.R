@@ -99,7 +99,10 @@ context("RTF tests, sources optionally downloaded when required")
 
 test_year <- "2011"
 
+# if we are in offline mode, and the data is not available, we can't proceed.
+# test whether the RTF is available offline. N.b. we skip in a 'context' so all subsequent tests are skipped.
 if (rtf_year_ok(test_year)) {
+
   rtf_dat <- icd9_sources[icd9_sources$f_year == test_year, ]
   f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
                                     file_name = rtf_dat$rtf_filename,
@@ -108,102 +111,94 @@ if (rtf_year_ok(test_year)) {
   rtf_lines <- readLines(f_info_short$file_path, warn = FALSE)
   rtf <- parse_rtf_lines(rtf_lines)
   nrtf <- names(rtf)
+
+  test_that("all parsed codes are valid decimals", {
+    expect_true(all(icd_is_valid.icd9(nrtf, short_code = FALSE)),
+                info = paste("invalid codes are :",
+                             paste(icd_get_invalid.icd9(nrtf),
+                                   collapse = ", ")))
+  })
+
+  test_that("no rtf formatting left in descriptions", {
+    expect_false(any(grepl("[\\\\{}]", rtf)),
+                 info = paste("rtf codes in descriptions:",
+                              paste(grep("[\\\\{}]", rtf, value = TRUE))))
+
+  })
+
+  test_that("all defined codes from csv are in rtf extract", {
+    missing_from_rtf <- setdiff(icd_short_to_decimal.icd9(icd::icd9cm_hierarchy[["code"]]), nrtf)
+    expect_equal(length(missing_from_rtf), 0,
+                 info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
+  })
+
+  test_that("majors extracted from web page are the same as those from RTF", {
+    webmajors <- unlist(icd9_majors) # why is this even a list not a named vector?
+    work <- swap_names_vals(rtf)
+    rtfmajors <- work[icd_is_major.icd9(work)]
+
+    expect_identical(setdiff(rtfmajors, webmajors), character(0),
+                     info = paste("these majors are from RTF but not retrieved from web: ",
+                                  paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
+    expect_identical(setdiff(webmajors, rtfmajors), character(0),
+                     info = paste("these majors are on web but not retrieved from RTF: ",
+                                  paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
+  })
+
+
+  test_that("all leaf codes from TXT are in flat file extract", {
+    skip_slow_tests()
+    test_ver <- "32"
+    skip_flat_icd9_avail(test_ver)
+
+    v32 <- icd9_parse_leaf_desc_ver(version = test_ver, save_data = FALSE, offline = FALSE)
+    v32$code %>% icd_short_to_decimal.icd9 -> leaves
+    expect_true(all(leaves %in% nrtf))
+
+    rtf[nrtf %in% icd_short_to_decimal.icd9(v32$code)] %>%
+      swap_names_vals %>%
+      sort -> rtf_leaves
+    if (FALSE && interactive()) {
+      assign("manual_compare_descs",
+             data.frame("From TXT" = v32$long_desc, "From RTF = rtf_leaves" = names(rtf_leaves)),
+             envir = .GlobalEnv)
+      browser()
+    }
+  })
+
+  test_that("RTF extract has no duplicates", {
+    expect_false(anyDuplicated(nrtf) > 0,
+                 info = paste("first few duplicates: ",
+                              paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
+                 ))
+  })
+
+  test_that("mid-level descriptions are in RTF extract", {
+    skip_on_no_rtf(test_year)
+    expect_identical(rtf[["611"]], "Other disorders of breast")
+    expect_identical(rtf[["611.7"]], "Signs and symptoms in breast")
+    expect_identical(rtf[["611.8"]], "Other specified disorders of breast")
+  })
+
+  test_that("in rtf we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
+    # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
+    expect_false("640.02" %in% nrtf)
+    # grep "\[[[:digit:]],.*\]" Dtab12.rtf
+  })
+
+
+  test_that("some rtf wierdness single codes should be missing", {
+    # i think this is just because I look for all possible sub-codes while parsing;
+    # I never matched these codes
+    bad_ones <- c(
+      paste0("010.", 2:7),
+      paste0("854.", 2:7),
+      NULL)
+    expect_true(all(bad_ones %nin% nrtf))
+    expect_true(all(icd_children.icd9(bad_ones) %nin% nrtf))
+
+    expect_true("012.4" %nin% nrtf)
+    expect_true("012.40" %nin% nrtf)
+    expect_true("012.46" %nin% nrtf)
+  })
 }
-
-test_that("all parsed codes are valid decimals", {
-  skip_on_no_rtf(test_year)
-  expect_true(all(icd_is_valid.icd9(nrtf, short_code = FALSE)),
-              info = paste("invalid codes are :",
-                           paste(icd_get_invalid.icd9(nrtf),
-                                 collapse = ", ")))
-})
-
-test_that("no rtf formatting left in descriptions", {
-  skip_on_no_rtf(test_year)
-  expect_false(any(grepl("[\\\\{}]", rtf)),
-               info = paste("rtf codes in descriptions:",
-                            paste(grep("[\\\\{}]", rtf, value = TRUE))))
-
-})
-
-test_that("all defined codes from csv are in rtf extract", {
-  skip_on_no_rtf(test_year)
-  missing_from_rtf <- setdiff(icd_short_to_decimal.icd9(icd::icd9cm_hierarchy[["code"]]), nrtf)
-  expect_equal(length(missing_from_rtf), 0,
-               info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
-})
-
-test_that("majors extracted from web page are the same as those from RTF", {
-  skip_on_no_rtf(test_year)
-  webmajors <- unlist(icd9_majors) # why is this even a list not a named vector?
-  work <- swap_names_vals(rtf)
-  rtfmajors <- work[icd_is_major.icd9(work)]
-
-  expect_identical(setdiff(rtfmajors, webmajors), character(0),
-                   info = paste("these majors are from RTF but not retrieved from web: ",
-                                paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
-  expect_identical(setdiff(webmajors, rtfmajors), character(0),
-                   info = paste("these majors are on web but not retrieved from RTF: ",
-                                paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
-})
-
-
-test_that("all leaf codes from TXT are in flat file extract", {
-  skip_slow_tests()
-  test_ver <- "32"
-  skip_flat_icd9_avail(test_ver)
-  skip_on_no_rtf(test_year)
-
-  v32 <- icd9_parse_leaf_desc_ver(version = test_ver, save_data = FALSE, offline = FALSE)
-  v32$code %>% icd_short_to_decimal.icd9 -> leaves
-  expect_true(all(leaves %in% nrtf))
-
-  rtf[nrtf %in% icd_short_to_decimal.icd9(v32$code)] %>%
-    swap_names_vals %>%
-    sort -> rtf_leaves
-  if (FALSE && interactive()) {
-    assign("manual_compare_descs",
-           data.frame("From TXT" = v32$long_desc, "From RTF = rtf_leaves" = names(rtf_leaves)),
-           envir = .GlobalEnv)
-    browser()
-  }
-})
-
-test_that("RTF extract has no duplicates", {
-  skip_on_no_rtf(test_year)
-  expect_false(anyDuplicated(nrtf) > 0,
-               info = paste("first few duplicates: ",
-                            paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
-               ))
-})
-
-test_that("mid-level descriptions are in RTF extract", {
-  skip_on_no_rtf(test_year)
-  expect_identical(rtf[["611"]], "Other disorders of breast")
-  expect_identical(rtf[["611.7"]], "Signs and symptoms in breast")
-  expect_identical(rtf[["611.8"]], "Other specified disorders of breast")
-})
-
-test_that("in rtf we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
-  skip_on_no_rtf(test_year)
-  # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
-  expect_false("640.02" %in% nrtf)
-  # grep "\[[[:digit:]],.*\]" Dtab12.rtf
-})
-
-
-test_that("some rtf wierdness single codes should be missing", {
-# i think this is just because I look for all possible sub-codes while parsing;
-# I never matched these codes
-  skip_on_no_rtf(test_year)
-  bad_ones <- c(
-    paste0("010.", 2:7),
-    paste0("854.", 2:7),
-    NULL)
-  expect_true(all(bad_ones %nin% nrtf))
-  expect_true(all(icd_children.icd9(bad_ones) %nin% nrtf))
-
-  expect_true("012.4" %nin% nrtf)
-  expect_true("012.40" %nin% nrtf)
-  expect_true("012.46" %nin% nrtf)
-})

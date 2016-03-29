@@ -16,14 +16,12 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 skip_slow_tests <- function(msg = "skipping slow test") {
-  do_slow_tests <- getOption("icd.do_slow_tests")
-  if (is.null(do_slow_tests) || !do_slow_tests)
+  if (identical(getOption("icd.do_online_tests"), FALSE))
     testthat::skip(msg)
 }
 
 skip_online_tests <- function(msg = "skipping online test") {
-  do_online_tests <- getOption("icd.do_online_tests")
-  if (is.null(do_online_tests) || !do_online_tests)
+  if (identical(getOption("icd.do_online_tests"), FALSE))
     testthat::skip(msg)
 }
 

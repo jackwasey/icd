@@ -19,14 +19,15 @@ context("billable code lists")
 
 test_that("ICD-9-CM billable codes package data is recreated", {
 
-  if (Sys.info()[["sysname"]] != "Linux")
-    skip("Only do encoding problems on Linux.")
+  skip_on_os(c("windows", "mac", "solaris"))
+  # Do encoding problems on Linux. It is unpredictable at the best of times.
 
   skip_slow_tests() # > 30 seconds
 
   # we can do this offline if we have all (currently available) versions of the
   # ICD-9-CM code, otherwise we may have to skip
-  lapply(icd9_sources$version, skip_flat_icd9_avail)
+  for (v in icd9_sources$version)
+    skip_flat_icd9_avail(v)
 
   check_billable <- parse_leaf_descriptions_all(save_data = FALSE)
 

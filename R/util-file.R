@@ -65,16 +65,27 @@ unzip_single <- function(url, file_name, save_path) {
 #' @param file_name file name of a single file in that zip
 #' @param force logical, if TRUE, then download even if already in
 #'   \code{data-raw}
+#'   @template verbose
 #' @template offline
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal file
-unzip_to_data_raw <- function(url, file_name, offline = FALSE) {
+unzip_to_data_raw <- function(url, file_name, offline = FALSE, verbose = FALSE) {
   assert_string(url, na.ok = FALSE)
   assert_string(file_name, na.ok = FALSE)
   assert_flag(offline)
 
+  # for testing, .Rbuildignore may or may not have hidden 'data-raw'. We should
+  # download to a temporary directory if this happens, but careful not to do
+  # this with CRAN testing as temporary files would have to be cleaned up.
   data_raw_path <- system.file("data-raw", package = "icd")
+  if (!dir.exists(data_raw_path))
+    data_raw_path <- tempdir()
+
   file_path <- file.path(data_raw_path, make.names(file_name))
+  if (verbose) {
+    message("file path = ", file_path)
+    message("file name = ", file_name)
+  }
   if (!file.exists(file_path)) {
     if (offline)
       return(NULL)
@@ -97,6 +108,9 @@ download_to_data_raw <- function(url,
   assert_flag(allow_missing)
 
   data_raw_path <- system.file("data-raw", package = "icd")
+  if (!dir.exists(data_raw_path))
+    data_raw_path <- tempdir()
+
   save_path <- file.path(data_raw_path, file_name)
   f_info <- list(file_path = save_path, file_name = file_name)
 
