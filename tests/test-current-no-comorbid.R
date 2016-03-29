@@ -34,4 +34,6 @@ if (packageVersion("testthat") < package_version("0.11.0.9000")) {
 
 icd:::setup_test_check()
 icd:::show_test_options()
-icd:::my_test_check("current", "Running current tests")
+# http://stackoverflow.com/questions/406230/regular-expression-to-match-line-that-doesnt-contain-a-word
+icd:::my_test_check("current-((?!comorbid).)*$", "Running current tests without comorbid")
+

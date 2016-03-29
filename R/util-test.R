@@ -15,6 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+do_slow_tests <- function(x = TRUE) {
+  options("icd.do_slow_tests" = x)
+}
+
+do_online_tests <- function(x = TRUE) {
+  options("icd.do_online_tests" = x)
+}
+
 doing_slow_tests <- function() {
   identical(getOption("icd.do_online_tests"), FALSE)
 }
@@ -358,14 +366,6 @@ set_full_test_options <- function() {
   options("icd.do_online_tests" = TRUE)
   options("icd.warn_deprecated" = FALSE)
   show_test_options()
-}
-
-do_slow_tests <- function(x = TRUE) {
-  options("icd.do_slow_tests" = x)
-}
-
-do_online_tests <- function(x = TRUE) {
-  options("icd.do_online_tests" = x)
 }
 # nocov end
 
