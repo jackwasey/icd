@@ -4,7 +4,18 @@
 \alias{icd9cm_generate_chapters_hierarchy}
 \title{generate ICD-9-CM hierarchy}
 \usage{
-icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE)
+icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE,
+  offline = FALSE)
+}
+\arguments{
+\item{save_data}{single logical value, if \code{TRUE} will save the generated
+data}
+
+\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
+
+\item{offline}{single logical, if \code{TRUE} then don't pull the file from
+internet, only return path and file name if the file already exists in
+data-raw. This is helpful for testing without using the internet.}
 }
 \description{
 For each row of billing code, give the chapter, sub-chapter, major code and

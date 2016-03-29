@@ -51,7 +51,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE,
                                   offline = offline)
 
   if (is.null(f_info_rtf))
-    stop("RTF data for year", year, "unavailable.")
+    stop("RTF data for year ", year, " unavailable.")
 
   fp <- f_info_rtf$file_path
   # the file is basically 7-bit ASCII, but non-ASCII characters are encoded with

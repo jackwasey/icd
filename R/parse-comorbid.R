@@ -49,7 +49,7 @@ icd9_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
 icd10_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
   assert_flag(offline)
   download_to_data_raw(
-    url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat_icd10cm_2016.txt",
+    url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comformat_icd10cm_2016.txt",
     offline = offline, allow_missing = allow_missing)
 }
 

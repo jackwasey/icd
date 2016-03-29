@@ -120,6 +120,7 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
 #'   e.g. \code{"32"} which is the default.
 #' @template save_data
 #' @param path Absolute path in which to save parsed data
+#' @template offline
 #' @return invisibly return the result
 #' @keywords internal
 icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
@@ -204,7 +205,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
 #' Parse billable codes for ICD-9-CM version 27
 #'
 #' These have a quirk which needs a different approach
-#' @param offline logical value
+#' @template offline
 #' @keywords internal
 parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
   message("working on version 27 quirk")
@@ -233,17 +234,22 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
 #' description, and short and long descriptions. Currently this is specifically
 #' for the 2011 ICD-9-CM after which there have been minimal changes.
 #' Thankfully, ICD-10-CM has machine readable data available.
+#' @template save_data
+#' @template verbose
+#' @template offline
 #' @keywords internal
 icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
-                                               verbose = FALSE) {
+                                               verbose = FALSE, offline = FALSE) {
   assert_flag(save_data)
   assert_flag(verbose)
+  assert_flag(offline)
 
   message("get column of ICD-9 codes, up to the three digit headings. ~10s")
   icd9_rtf <- parse_rtf_year(year = "2011",
                              save_data = FALSE,
-                             verbose = verbose)
+                             verbose = verbose, offline = offline)
 
+  # TODO online flag for icd(-get_chapters
   message("slower step of building icd9 chapters hierarchy from 2011 RTF. ~20s")
   chaps <- icd9_get_chapters(x = icd9_rtf$code,
                              short_code = TRUE,

@@ -15,13 +15,21 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+doing_slow_tests <- function() {
+  identical(getOption("icd.do_online_tests"), FALSE)
+}
+
+doing_online_tests <- function() {
+  identical(getOption("icd.do_online_tests"), FALSE)
+}
+
 skip_slow_tests <- function(msg = "skipping slow test") {
-  if (identical(getOption("icd.do_online_tests"), FALSE))
+  if (doing_slow_tests())
     testthat::skip(msg)
 }
 
 skip_online_tests <- function(msg = "skipping online test") {
-  if (identical(getOption("icd.do_online_tests"), FALSE))
+  if (doing_online_tests())
     testthat::skip(msg)
 }
 

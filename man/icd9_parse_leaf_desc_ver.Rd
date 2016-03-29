@@ -15,6 +15,10 @@ e.g. \code{"32"} which is the default.}
 \item{save_data}{single logical value, if \code{TRUE} will save the generated
 data}
 
+\item{offline}{single logical, if \code{TRUE} then don't pull the file from
+internet, only return path and file name if the file already exists in
+data-raw. This is helpful for testing without using the internet.}
+
 \item{path}{Absolute path in which to save parsed data}
 }
 \value{

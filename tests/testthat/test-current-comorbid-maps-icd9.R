@@ -182,7 +182,7 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
 
   cmh_headings <- c("code", "short_desc", "long_desc", "three_digit",
                     "major", "sub_chapter", "chapter")
-  cmh <- icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE)
+  cmh <- icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE, offline = doing_online_tests())
   for (h in cmh_headings)
     expect_equal(cmh[[h]], icd::icd9cm_hierarchy[[h]], info = h)
 })
