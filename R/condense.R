@@ -24,9 +24,10 @@
 #' @template icd9-decimal
 #' @template short_code
 #' @template onlyReal
+#' @template dots
 #' @family ICD-9 ranges
 #' @export
-icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE) {
+icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
   UseMethod("icd_condense")
 }
 
@@ -47,6 +48,7 @@ icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL
 #' @describeIn icd_condense Condense a set of ICD codes, guessing ICD version
 #'   from input data
 #' @export
+#' @keywords internal
 icd_condense.character <- function(x, short_code = icd_guess_short(x), defined = NULL, ...) {
 
   guess <- icd_guess_version.character(x, short_code = short_code)

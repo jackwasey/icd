@@ -35,6 +35,13 @@ test_that("condensing a single real codes gives themselves", {
   expect_equal(icd_condense.icd9("E8280", defined = FALSE), "E8280")
   expect_equal(icd_condense.icd9("E030"), "E030")
   expect_equal(icd_condense.icd9("E030", defined = FALSE), "E030")
+
+})
+
+test_that("dispatch character vector for condense", {
+  expect_equal(icd_condense("E8280"), "E8280")
+  expect_equal(sort(icd_condense(as.character("98799" %i9sa% "98901"), defined = FALSE)),
+               sort(c("98799", "988", "98900", "98901")))
 })
 
 test_that("condense an ICD-9 code set to minimal group", {
