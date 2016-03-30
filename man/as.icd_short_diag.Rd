@@ -26,7 +26,7 @@ j
 attr(j, "icd_short_diag") <- FALSE
 j
 icd:::.attr_decimal_diag(j)
-as_decimal_diag(j)
+as.icd_decimal_diag(j)
 \dontrun{
 library(pryr)
 j <- 1
@@ -37,7 +37,7 @@ attr(j, "icd_short_diag") <- FALSE
 c(address(j), refs(j))
 icd:::.attr_decimal_diag(j)
 c(address(j), refs(j))
-j <- as_decimal_diag(j, TRUE)
+j <- as.icd_decimal_diag(j, TRUE)
 c(address(j), refs(j))
 # Rcpp cleverer than R, and doesn't return a copy of the data
 }

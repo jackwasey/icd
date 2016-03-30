@@ -34,7 +34,7 @@
 //' attr(j, "icd_short_diag") <- FALSE
 //' j
 //' icd:::.attr_decimal_diag(j)
-//' as_decimal_diag(j)
+//' as.icd_decimal_diag(j)
 //' \dontrun{
 //' library(pryr)
 //' j <- 1
