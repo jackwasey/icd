@@ -29,13 +29,13 @@
 #' }
 #' @keywords internal attribute
 #' @rdname as.icd_short_diag
-.attr_decimal_diag <- function(x, value) {
+.attr_decimal_diag <- function(x, value = TRUE) {
     invisible(.Call('icd_setDecimalDiag', PACKAGE = 'icd', x, value))
 }
 
 #' @rdname as.icd_short_diag
 #' @keywords internal attribute
-.attr_short_diag <- function(x, value) {
+.attr_short_diag <- function(x, value = TRUE) {
     invisible(.Call('icd_setShortDiag', PACKAGE = 'icd', x, value))
 }
 

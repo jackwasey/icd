@@ -7,9 +7,9 @@
 \alias{as.icd_short_diag}
 \title{Set icd_short_diag attribute in-place}
 \usage{
-.attr_decimal_diag(x, value)
+.attr_decimal_diag(x, value = TRUE)
 
-.attr_short_diag(x, value)
+.attr_short_diag(x, value = TRUE)
 
 as.icd_short_diag(x, value = TRUE)
 

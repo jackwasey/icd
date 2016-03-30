@@ -52,14 +52,14 @@
 //' @keywords internal attribute
 //' @rdname as.icd_short_diag
 // [[Rcpp::export(.attr_decimal_diag)]]
-void setDecimalDiag(Rcpp::RObject& x, bool value) {
+void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = !value;
 }
 
 //' @rdname as.icd_short_diag
 //' @keywords internal attribute
 // [[Rcpp::export(.attr_short_diag)]]
-void setShortDiag(Rcpp::RObject& x, bool value) {
+void setShortDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = value;
 }
 

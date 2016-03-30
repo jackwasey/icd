@@ -24,7 +24,7 @@ namespace icd {
         }
     }
 
-    inline void _attr_decimal_diag(Rcpp::RObject& x, bool value) {
+    inline void _attr_decimal_diag(Rcpp::RObject& x, bool value = true) {
         typedef SEXP(*Ptr__attr_decimal_diag)(SEXP,SEXP);
         static Ptr__attr_decimal_diag p__attr_decimal_diag = NULL;
         if (p__attr_decimal_diag == NULL) {
@@ -42,7 +42,7 @@ namespace icd {
             throw Rcpp::exception(as<std::string>(__result).c_str());
     }
 
-    inline void _attr_short_diag(Rcpp::RObject& x, bool value) {
+    inline void _attr_short_diag(Rcpp::RObject& x, bool value = true) {
         typedef SEXP(*Ptr__attr_short_diag)(SEXP,SEXP);
         static Ptr__attr_short_diag p__attr_short_diag = NULL;
         if (p__attr_short_diag == NULL) {
