@@ -3,7 +3,7 @@ library(testthat)
 library(devtools)
 load_all()
 
-filter = "comorbid"
+filter = NULL
 
 options("icd.do_slow_tests" = TRUE)
 options("icd.do_online_tests" = FALSE)

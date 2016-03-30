@@ -11,6 +11,7 @@ configure.scan
 .DS_Store
 .externalToolBuilders
 i9test.RData
+icd\.Rcheck
 icd_*.tar.gz
 icd9_*.tar.gz
 inst/doc/*
