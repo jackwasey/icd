@@ -36,4 +36,3 @@ icd:::setup_test_check()
 icd:::show_test_options()
 # http://stackoverflow.com/questions/406230/regular-expression-to-match-line-that-doesnt-contain-a-word
 icd:::my_test_check("current-((?!comorbid).)*$", "Running current tests without comorbid")
-
