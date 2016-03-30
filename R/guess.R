@@ -43,7 +43,7 @@ icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, icd_name = NUL
     x <- unlist(x, recursive = TRUE)
   # don't need to convert to character, and it is likely to be quicker
   # to look for decimal codes in a factor than the whole char vector anyway
-  guessShortPlusFactorCpp(x, test_n)
+  guess_short_cpp(x, test_n)
 }
 
 

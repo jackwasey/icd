@@ -140,7 +140,7 @@ set_re_globals <- function(env = parent.frame()) {
   re_icd10_major <- re_icd10_major_bare %>% re_just_ws
 
   re_icd10cm_short <- paste0(re_icd10_major_bare, "[[:alnum:]]{0,4}")
-  re_icd10cm_decimal <- paste0(re_icd10_major_bare, "\\.[[:alnum:]]{0,4}")
+  re_icd10cm_decimal <- paste0(re_icd10_major_bare, "(?:\\.[[:alnum:]]{0,4})?")
   re_icd10cm_any <- paste0(re_icd10_major_bare, "\\.?[[:alnum:]]{0,4}")
 
   re_icd10_short <- re_icd10cm_short

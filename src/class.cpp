@@ -28,20 +28,18 @@
 //' Doing this in an R function doesn't work for 'void' equivalent, and does a
 //' copy if the updated object is returned.
 //' @examples
-//' \dontrun{
 //' library(pryr)
 //' j <- 1
 //' c(address(j), refs(j))
 //' attr(j, "icd_short_diag") <- TRUE
 //' c(address(j), refs(j))
-//' .attr(j, "icd_short_diag") <- FALSE
+//' attr(j, "icd_short_diag") <- FALSE
 //' c(address(j), refs(j))
-//' .attr_decimal_diag(j)
+//' icd:::.attr_decimal_diag(j)
 //' c(address(j), refs(j))
 //' j <- as_decimal_diag(j)
 //' c(address(j), refs(j))
 //' # Rcpp cleverer than R, and doesn't return a copy of the data
-//' }
 //' @keywords internal attribute
 //' @rdname as.icd_short_diag
 // [[Rcpp::export(.attr_decimal_diag)]]
@@ -49,19 +47,11 @@ void setDecimalDiag(Rcpp::RObject& x, bool value) {
   x.attr("icd_short_diag") = !value;
 }
 
-void setDecimalDiag(Rcpp::CharacterVector& x) {
-  x.attr("icd_short_diag") = false;
-}
-
 //' @rdname as.icd_short_diag
 //' @keywords internal attribute
 // [[Rcpp::export(.attr_short_diag)]]
 void setShortDiag(Rcpp::RObject& x, bool value) {
   x.attr("icd_short_diag") = value;
-}
-
-void setShortDiag(Rcpp::CharacterVector& x) {
-  x.attr("icd_short_diag") = true;
 }
 
 //' @rdname as.icd_short_diag

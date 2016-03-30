@@ -326,36 +326,17 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline bool guessShortCpp(Rcpp::CharacterVector x, int n = 100L) {
-        typedef SEXP(*Ptr_guessShortCpp)(SEXP,SEXP);
-        static Ptr_guessShortCpp p_guessShortCpp = NULL;
-        if (p_guessShortCpp == NULL) {
-            validateSignature("bool(*guessShortCpp)(Rcpp::CharacterVector,int)");
-            p_guessShortCpp = (Ptr_guessShortCpp)R_GetCCallable("icd", "icd_guessShortCpp");
+    inline bool guess_short_cpp(SEXP x_, int n = 100L) {
+        typedef SEXP(*Ptr_guess_short_cpp)(SEXP,SEXP);
+        static Ptr_guess_short_cpp p_guess_short_cpp = NULL;
+        if (p_guess_short_cpp == NULL) {
+            validateSignature("bool(*guess_short_cpp)(SEXP,int)");
+            p_guess_short_cpp = (Ptr_guess_short_cpp)R_GetCCallable("icd", "icd_guess_short_cpp");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_guessShortCpp(Rcpp::wrap(x), Rcpp::wrap(n));
-        }
-        if (__result.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (__result.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(__result).c_str());
-        return Rcpp::as<bool >(__result);
-    }
-
-    inline bool guessShortPlusFactorCpp(SEXP x_, int n = 100L) {
-        typedef SEXP(*Ptr_guessShortPlusFactorCpp)(SEXP,SEXP);
-        static Ptr_guessShortPlusFactorCpp p_guessShortPlusFactorCpp = NULL;
-        if (p_guessShortPlusFactorCpp == NULL) {
-            validateSignature("bool(*guessShortPlusFactorCpp)(SEXP,int)");
-            p_guessShortPlusFactorCpp = (Ptr_guessShortPlusFactorCpp)R_GetCCallable("icd", "icd_guessShortPlusFactorCpp");
-        }
-        RObject __result;
-        {
-            RNGScope __rngScope;
-            __result = p_guessShortPlusFactorCpp(Rcpp::wrap(x_), Rcpp::wrap(n));
+            __result = p_guess_short_cpp(Rcpp::wrap(x_), Rcpp::wrap(n));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

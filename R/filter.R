@@ -77,7 +77,23 @@ icd10_filter_valid <- function(x, icd_name = get_icd_name(x),
 #' @export
 icd9_filter_invalid <- function(x, icd_name = get_icd_name(x),
                                     short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
-  icd9_filter_valid(x, icd_name = icd_name, short_code = short_code, invert = !invert)
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  icd9_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
+}
+
+#' @rdname icd_filter_valid
+#' @export
+icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
+                                   short_code = icd_guess_short(x[[icd_name]]),
+                                   invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  icd10_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
 #' Filters data frame based on present-on-arrival flag

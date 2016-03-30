@@ -20,20 +20,18 @@ Doing this in an R function doesn't work for 'void' equivalent, and does a
 copy if the updated object is returned.
 }
 \examples{
-\dontrun{
 library(pryr)
 j <- 1
 c(address(j), refs(j))
 attr(j, "icd_short_diag") <- TRUE
 c(address(j), refs(j))
-.attr(j, "icd_short_diag") <- FALSE
+attr(j, "icd_short_diag") <- FALSE
 c(address(j), refs(j))
 .attr_decimal_diag(j)
 c(address(j), refs(j))
 j <- as_decimal_diag(j)
 c(address(j), refs(j))
 # Rcpp cleverer than R, and doesn't return a copy of the data
-}
 }
 \keyword{attribute}
 \keyword{internal}

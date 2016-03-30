@@ -505,37 +505,6 @@ RcppExport SEXP icd_icd9GetMajor(SEXP xSEXP, SEXP short_codeSEXP) {
     UNPROTECT(1);
     return __result;
 }
-// guessShortCpp
-bool guessShortCpp(Rcpp::CharacterVector x, int n);
-static SEXP icd_guessShortCpp_try(SEXP xSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    __result = Rcpp::wrap(guessShortCpp(x, n));
-    return __result;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP icd_guessShortCpp(SEXP xSEXP, SEXP nSEXP) {
-    SEXP __result;
-    {
-        Rcpp::RNGScope __rngScope;
-        __result = PROTECT(icd_guessShortCpp_try(xSEXP, nSEXP));
-    }
-    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
-    if (__isInterrupt) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean __isError = Rf_inherits(__result, "try-error");
-    if (__isError) {
-        SEXP __msgSEXP = Rf_asChar(__result);
-        UNPROTECT(1);
-        Rf_error(CHAR(__msgSEXP));
-    }
-    UNPROTECT(1);
-    return __result;
-}
 // guessShortPlusFactorCpp
 bool guessShortPlusFactorCpp(SEXP x_, int n);
 static SEXP icd_guessShortPlusFactorCpp_try(SEXP x_SEXP, SEXP nSEXP) {
@@ -1436,8 +1405,7 @@ static int icd_RcppExport_validate(const char* sig) {
         signatures.insert("Rcpp::CharacterVector(*icd9_short_to_decimal_cpp)(const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd9_decimal_to_short_cpp)(const Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd_get_major.icd9)(const Rcpp::CharacterVector,const bool)");
-        signatures.insert("bool(*guessShortCpp)(Rcpp::CharacterVector,int)");
-        signatures.insert("bool(*guessShortPlusFactorCpp)(SEXP,int)");
+        signatures.insert("bool(*guess_short_cpp)(SEXP,int)");
         signatures.insert("std::vector<bool>(*icd9_is_n_cpp)(const std::vector<std::string>&)");
         signatures.insert("std::vector<bool>(*icd9_is_v_cpp)(const std::vector<std::string>&)");
         signatures.insert("std::vector<bool>(*icd9_is_e_cpp)(const std::vector<std::string>&)");
@@ -1488,8 +1456,7 @@ RcppExport SEXP icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "icd_icd9_short_to_decimal_cpp", (DL_FUNC)icd_icd9ShortToDecimal_try);
     R_RegisterCCallable("icd", "icd_icd9_decimal_to_short_cpp", (DL_FUNC)icd_icd9DecimalToShort_try);
     R_RegisterCCallable("icd", "icd_icd_get_major.icd9", (DL_FUNC)icd_icd9GetMajor_try);
-    R_RegisterCCallable("icd", "icd_guessShortCpp", (DL_FUNC)icd_guessShortCpp_try);
-    R_RegisterCCallable("icd", "icd_guessShortPlusFactorCpp", (DL_FUNC)icd_guessShortPlusFactorCpp_try);
+    R_RegisterCCallable("icd", "icd_guess_short_cpp", (DL_FUNC)icd_guessShortPlusFactorCpp_try);
     R_RegisterCCallable("icd", "icd_icd9_is_n_cpp", (DL_FUNC)icd_icd9_is_n_cpp_try);
     R_RegisterCCallable("icd", "icd_icd9_is_v_cpp", (DL_FUNC)icd_icd9_is_v_cpp_try);
     R_RegisterCCallable("icd", "icd_icd9_is_e_cpp", (DL_FUNC)icd_icd9_is_e_cpp_try);

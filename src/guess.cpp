@@ -45,24 +45,7 @@
 //'                                times = 100L)
 //' }
 //' @keywords internal
-// [[Rcpp::export]]
-bool guessShortCpp(Rcpp::CharacterVector x, int n = 100L) {
-  n = std::min((int)x.length(), n);
-  const char * b;
-  Rcpp::String bs;
-  for (R_xlen_t i = 0; i != n; ++i) {
-    bs = x[i];
-    b = bs.get_cstring();
-    while (*b) {
-      if (*b == '.')
-        return false;
-      ++b;
-    }
-  } 
-  return true;
-}
-
-// [[Rcpp::export]]
+// [[Rcpp::export(guess_short_cpp)]]
 bool guessShortPlusFactorCpp(SEXP x_, int n = 100L) {
   Rcpp::CharacterVector x;
         switch(TYPEOF(x_)) {
