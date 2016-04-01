@@ -120,17 +120,20 @@ utils::globalVariables("icd10cm2016")
 icd_children_defined <- function(x)
   UseMethod("icd_children_defined")
 
-#' @describeIn icd_children_defined get the children of ICD-10 code(s)
+#' @describeIn icd_children_defined Internal function to get the children of ICD-10 code(s)
 #' @param warn single logical value, if \code{TRUE} will generate warnings when
 #'   some input codes are not known ICD-10-CM codes
 #' @param use_cpp single logical flag, whehter to use CPP version
 #' @examples
+#' \dontrun{
+#' library(microbenchmark)
 #' microbenchmark::microbenchmark(
-#'   icd_children_defined.icd10cm("A01"),
-#'   icd_children_defined_r.icd10cm("A01")
+#'   icd:::icd_children_defined.icd10cm("A01"),
+#'   icd:::icd_children_defined_r.icd10cm("A01")
 #' )
-#' stopifnot(identical(icd_children_defined.icd10cm("A10", use_cpp = TRUE),
-#'   icd_children_defined.icd10cm("A10", use_cpp = FALSE)))
+#' }
+#' stopifnot(identical(icd:::icd_children_defined.icd10cm("A00"),
+#'   icd:::icd_children_defined_r.icd10cm("A00")))
 #' @keywords internal
 icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x), warn = FALSE) {
 

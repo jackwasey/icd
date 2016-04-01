@@ -4,5 +4,5 @@
 OLDWD=`pwd`
 cd /tmp
 R CMD build --no-build-vignettes ~/icd
-ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE R CMD check  --no-build-vignettes `ls -t /tmp/icd*.tar.gz | head -1`
+ICD_SLOW_TESTS=FALSE ICD_ONLINE_TESTS=FALSE R CMD check --no-build-vignettes `ls -t /tmp/icd*.tar.gz | head -1`
 cd $OLDWD

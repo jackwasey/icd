@@ -22,15 +22,18 @@ three digit code, or a leaf node. This is distinct from 'billable'.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd10cm}: get the children of ICD-10 code(s)
+\item \code{icd10cm}: Internal function to get the children of ICD-10 code(s)
 }}
 \examples{
+\dontrun{
+library(microbenchmark)
 microbenchmark::microbenchmark(
-  icd_children_defined.icd10cm("A01"),
-  icd_children_defined_r.icd10cm("A01")
+  icd:::icd_children_defined.icd10cm("A01"),
+  icd:::icd_children_defined_r.icd10cm("A01")
 )
-stopifnot(identical(icd_children_defined.icd10cm("A10", use_cpp = TRUE),
-  icd_children_defined.icd10cm("A10", use_cpp = FALSE)))
+}
+stopifnot(identical(icd:::icd_children_defined.icd10cm("A00"),
+  icd:::icd_children_defined_r.icd10cm("A00")))
 }
 \keyword{internal}
 
