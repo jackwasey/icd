@@ -136,6 +136,7 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x), war
 
   assert_character(x)
   assert_flag(short_code)
+  assert_flag(warn)
 
   x <- trim(x)
   x <- toupper(x)

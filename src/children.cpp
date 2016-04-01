@@ -39,10 +39,12 @@
 // [[Rcpp::export(icd10cm_children_defined_cpp)]]
 Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector &x) {
 
-  const Rcpp::Environment env("package:icd");
-  const Rcpp::List &icd10cm2016 = env["icd10cm2016"];
-  const Rcpp::CharacterVector &allCodes = icd10cm2016["code"];
-  const Rcpp::IntegerVector &nc = env[".nc"];
+  // need namespace for sysdata (.nc) and package env for lazy data
+  Rcpp::Environment env("package:icd"); // only works when package is loaded
+  Rcpp::Environment ns = Rcpp::Environment::namespace_env("icd");
+  Rcpp::List icd10cm2016 = env["icd10cm2016"];
+  Rcpp::CharacterVector allCodes = icd10cm2016["code"];
+  Rcpp::IntegerVector nc = ns[".nc"];
   Rcpp::IntegerVector matchesNa = Rcpp::match(x, allCodes);
   // now drop NA rows, Rcpp match doesn't do this, yet.
   // match(x, table, nomatch = 0L) > 0L
@@ -57,7 +59,6 @@ Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector &x) {
     return(Rcpp::CharacterVector(0));
   }
 
-
   kids.reserve(x.length() * 10);
 
   Rcpp::CharacterVector tmp = icd10cm2016[0];
@@ -71,9 +72,9 @@ Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector &x) {
     while (check_row < last_row && nc[check_row] > parent_len)
       ++check_row;
 
-    Rcpp::CharacterVector::const_iterator it = allCodes.begin();
+    Rcpp::CharacterVector::iterator it = allCodes.begin();
     std::advance(it, matches[i] - 1);
-    Rcpp::CharacterVector::const_iterator it2 = allCodes.begin();
+    Rcpp::CharacterVector::iterator it2 = allCodes.begin();
     std::advance(it2, check_row);
     kids.insert(kids.end(), it, it2);
   }
