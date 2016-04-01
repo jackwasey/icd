@@ -462,7 +462,7 @@ test_that("deprecated - sysdata.rda is okay", {
                "icd9_sources")
 
   sysdat <- generateSysData(save = FALSE)
-  expect_equal(names(sysdat), lknames)
+  expect_true(all(lknames %in% names(sysdat))
 
   expect_less_than(length(icd9NShortBillable), length(icd9NShortReal))
   expect_less_than(length(icd9VShortBillable), length(icd9VShortReal))
