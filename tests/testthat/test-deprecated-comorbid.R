@@ -105,6 +105,7 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
 
   skip_on_cran()
   skip_slow_tests()
+  skip_on_travis()
 
   for (onlyReal in c(TRUE, FALSE)) {
     if (onlyReal) {

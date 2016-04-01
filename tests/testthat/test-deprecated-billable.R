@@ -22,8 +22,7 @@ test_that("billable codes are recreated", {
   skip_online_tests()
   # TODO: run test if file is available, even if running in offline
   check_billable <- parse_leaf_descriptions_all(save_data = FALSE, offline = FALSE)
-  if (Sys.info()[["sysname"]] != "Linux")
-    skip("Only do encoding problems on Linux. Can anyone clear this up?")
+  skip_on_os(c("windows", "mac", "solaris"))
   for (ver in c("27", "28", "29", "30", "31", "32")) {
     names(check_billable[[ver]]) <- c("icd9", "descShort", "descLong")
     # v <- icd::icd9Billable[[ver]][["descLong"]]

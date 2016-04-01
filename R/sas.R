@@ -29,8 +29,6 @@
 #'   }
 #' @references
 #' \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}
-#' \url{https://communities.sas.com/thread/47571?start=0&tstart=0}
-#' \url{https://communities.sas.com/message/165945}
 #' @return list (of lists)
 #' @keywords programming list internal
 sas_format_extract <- function(sas_lines) {

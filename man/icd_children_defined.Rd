@@ -13,6 +13,8 @@ icd_children_defined(x)
 \arguments{
 \item{warn}{single logical value, if \code{TRUE} will generate warnings when
 some input codes are not known ICD-10-CM codes}
+
+\item{use_cpp}{single logical flag, whehter to use CPP version}
 }
 \description{
 defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
@@ -22,5 +24,13 @@ three digit code, or a leaf node. This is distinct from 'billable'.
 \itemize{
 \item \code{icd10cm}: get the children of ICD-10 code(s)
 }}
+\examples{
+microbenchmark::microbenchmark(
+  icd_children_defined.icd10cm("A01"),
+  icd_children_defined_r.icd10cm("A01")
+)
+stopifnot(identical(icd_children_defined.icd10cm("A10", use_cpp = TRUE),
+  icd_children_defined.icd10cm("A10", use_cpp = FALSE)))
+}
 \keyword{internal}
 
