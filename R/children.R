@@ -152,7 +152,7 @@ icd_children_defined_r.icd10cm <- function(x, short_code = icd_guess_short(x), w
   assert_flag(short_code)
 
   x <- trim(x)
-  if (!short_code) 
+  if (!short_code)
     x <- icd_decimal_to_short.icd10cm(x)
 
   # we match twice here, once with %in% and once with match...
