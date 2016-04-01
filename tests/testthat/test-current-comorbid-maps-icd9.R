@@ -88,6 +88,7 @@ test_that("icd9 comorbidities are created correctly, and logical to binary conve
 test_that("ahrq icd9 mappings generated from the current generation code", {
 
   skip_slow_tests()
+  skip_on_travis() # don't want timeout
 
   # skip this test if either do_online_tests is FALSE, or if the downloaded file
   # is not already in data-raw
@@ -177,6 +178,7 @@ test_that("can condense the big lists of comorbidities without errors", {
 
 test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
   skip_slow_tests()
+  skip_on_travis() # travis times out so easily...
   skip_flat_icd9_avail_all()
   skip_on_no_rtf("2011")
 

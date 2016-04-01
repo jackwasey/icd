@@ -65,7 +65,7 @@ Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector &x) {
   int check_row; // zero-based index
   int parent_len; // number of characters in original parent code
 
-  for (int i = 0; i != x.length(); ++i) {
+  for (int i = 0; i != matches.length(); ++i) {
     check_row = matches[i] + 1 - 1; // check the row after the parent (may be off end of vector)
     parent_len = nc[matches[i] - 1];
     while (check_row < last_row && nc[check_row] > parent_len)

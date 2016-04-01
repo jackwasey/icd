@@ -321,9 +321,11 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   # are not in fact defined in ICD-10-CM, and currently generation of ICD-10
   # children is limited to 'defined' ones, but only as defined in ICD-10-CM, not
   # ICD-10 in general.
-  f <- function(x) {
-    icd_children_defined.icd10cm(x, short_code = TRUE) %>%
-      c(x) %>% unique %>% icd_sort.icd10
+  f <- function(x, verbose = TRUE) {
+    if (verbose)
+      message("f working on: ", paste(x, collapse = " "))
+    kids <- icd_children_defined.icd10cm(x, short_code = TRUE)
+    c(kids, x) %>% unique %>% icd_sort.icd10
   }
 
   icd10_map_quan_elix <- lapply(quan_elix_raw, f)

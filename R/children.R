@@ -130,7 +130,7 @@ icd_children_defined <- function(x)
 #' @examples
 #' microbenchmark::microbenchmark(
 #'   icd_children_defined.icd10cm("A01"),
-#'   icd_children_defined_nocpp.icd10cm("A01")
+#'   icd_children_defined_r.icd10cm("A01")
 #' )
 #' stopifnot(identical(icd_children_defined.icd10cm("A10", use_cpp = TRUE),
 #'   icd_children_defined.icd10cm("A10", use_cpp = FALSE)))
@@ -143,19 +143,20 @@ icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x), war
   x <- trim(x)
   x <- toupper(x)
   if (!short_code)
-    x = icd_decimal_to_short.icd10cm(x)
+    x <- icd_decimal_to_short.icd10cm(x)
 
   kids <- icd10cm_children_defined_cpp(x)
   as.icd10cm(kids, short_code)
 }
 
-icd_children_defined_nocpp.icd10cm <- function(x, short_code = icd_guess_short(x), warn = FALSE) {
+icd_children_defined_r.icd10cm <- function(x, short_code = icd_guess_short(x), warn = FALSE) {
 
   assert_character(x)
   assert_flag(short_code)
 
   x <- trim(x)
-  if (!short_code) x = icd_decimal_to_short.icd10cm(x)
+  if (!short_code) 
+    x <- icd_decimal_to_short.icd10cm(x)
 
   # we match twice here, once with %in% and once with match...
   matches_bool <- x %in% icd::icd10cm2016[["code"]]
@@ -188,4 +189,3 @@ icd_children_defined_nocpp.icd10cm <- function(x, short_code = icd_guess_short(x
   }
   as.icd10cm(kids, short_code)
 }
-

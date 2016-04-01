@@ -129,18 +129,20 @@ generate_sysdata <- function(save_data = TRUE) {
   message("non-portable short file names: ",
           paste(short_fns[short_fns != make.names(short_fns)]))
 
-  
   .nc <- nchar(icd::icd10cm2016[["code"]])
 
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.
-  lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
-               "icd9NShortBillable", "icd9VShortBillable", "icd9EShortBillable",
-               "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
-               "icd9_sources", ".nc")
 
   if (save_data)
-    save(list = lknames, file = path, compress = "xz")
-  invisible(mget(lknames))
+    save(icd9NShort, icd9VShort, icd9EShort,
+         icd9NShortBillable, icd9VShortBillable, icd9EShortBillable,
+         icd9NShortReal, icd9VShortReal, icd9EShortReal,
+         icd9_sources, .nc, file = path, compress = "xz")
+
+  invisible(named_list(icd9NShort, icd9VShort, icd9EShort,
+         icd9NShortBillable, icd9VShortBillable, icd9EShortBillable,
+         icd9NShortReal, icd9VShortReal, icd9EShortReal,
+         icd9_sources, .nc))
 }

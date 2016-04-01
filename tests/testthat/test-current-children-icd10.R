@@ -71,3 +71,15 @@ test_that("zero length ICD-10-CM children", {
 
   expect_warning(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)), regex = NA)
 })
+
+test_that("icd10cm children with one of several missing should not segfault", {
+expect_identical(
+  icd_children.icd10cm(c("I792", "K551")),
+  icd_children.icd10cm("K551")
+)
+expect_identical(
+  icd_children.icd10cm(c("I790", "I792")),
+  icd_children.icd10cm(c("I790"))
+)
+
+})

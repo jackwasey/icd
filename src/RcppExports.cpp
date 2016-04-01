@@ -8,17 +8,6 @@
 
 using namespace Rcpp;
 
-// icd10cmChildrenDefined
-Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector& x);
-RcppExport SEXP icd_icd10cmChildrenDefined(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector& >::type x(xSEXP);
-    __result = Rcpp::wrap(icd10cmChildrenDefined(x));
-    return __result;
-END_RCPP
-}
 // setDecimalDiag
 void setDecimalDiag(Rcpp::RObject& x, bool value);
 static SEXP icd_setDecimalDiag_try(SEXP xSEXP, SEXP valueSEXP) {
@@ -126,6 +115,46 @@ RcppExport SEXP icd_asDecimalDiag(SEXP xSEXP, SEXP valueSEXP) {
     {
         Rcpp::RNGScope __rngScope;
         __result = PROTECT(icd_asDecimalDiag_try(xSEXP, valueSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd10cmChildrenDefined
+Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector& x);
+RcppExport SEXP icd_icd10cmChildrenDefined(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector& >::type x(xSEXP);
+    __result = Rcpp::wrap(icd10cmChildrenDefined(x));
+    return __result;
+END_RCPP
+}
+// setClassIcd10cm
+void setClassIcd10cm(Rcpp::RObject& x);
+static SEXP icd_setClassIcd10cm_try(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
+    setClassIcd10cm(x);
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd_setClassIcd10cm(SEXP xSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd_setClassIcd10cm_try(xSEXP));
     }
     Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
     if (__isInterrupt) {
@@ -1404,6 +1433,7 @@ static int icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*.attr_short_diag)(Rcpp::RObject&,bool)");
         signatures.insert("Rcpp::RObject(*as.icd_short_diag)(Rcpp::RObject&,bool)");
         signatures.insert("Rcpp::RObject(*as.icd_decimal_diag)(Rcpp::RObject&,bool)");
+        signatures.insert("void(*.set_class_icd10cm)(Rcpp::RObject&)");
         signatures.insert("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9MajMinToCode)(const Rcpp::CharacterVector,const Rcpp::CharacterVector,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9MajMinToShort)(const Rcpp::CharacterVector,const Rcpp::CharacterVector)");
@@ -1455,6 +1485,7 @@ RcppExport SEXP icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "icd_.attr_short_diag", (DL_FUNC)icd_setShortDiag_try);
     R_RegisterCCallable("icd", "icd_as.icd_short_diag", (DL_FUNC)icd_asShortDiag_try);
     R_RegisterCCallable("icd", "icd_as.icd_decimal_diag", (DL_FUNC)icd_asDecimalDiag_try);
+    R_RegisterCCallable("icd", "icd_.set_class_icd10cm", (DL_FUNC)icd_setClassIcd10cm_try);
     R_RegisterCCallable("icd", "icd_icd9ComorbidShortCpp", (DL_FUNC)icd_icd9ComorbidShortCpp_try);
     R_RegisterCCallable("icd", "icd_icd9MajMinToCode", (DL_FUNC)icd_icd9MajMinToCode_try);
     R_RegisterCCallable("icd", "icd_icd9MajMinToShort", (DL_FUNC)icd_icd9MajMinToShort_try);
