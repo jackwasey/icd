@@ -24,7 +24,7 @@
 #' @template icd9-decimal
 #' @template short_code
 #' @template onlyReal
-#' @template dots
+#' @template dotdotdot
 #' @family ICD-9 ranges
 #' @export
 icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {

@@ -49,14 +49,25 @@ expect_icd10cm_child_is_self <- function(...) {
 test_that("children of a leaf node returns itself", {
 
   expect_icd10cm_child_is_self("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-                               "Z9989", "Z950", "C7A098", "C7A8")
+                               "Z9981", "Z9989", "Z950", "C7A098", "C7A8")
 
   rand_icd10cm <- generate_random_short_icd10cm_bill(50)
   expect_icd10cm_child_is_self(rand_icd10cm)
 })
 
 test_that("zero length ICD-10-CM children", {
-  expect_identical(icd_children_defined(icd10cm("%!^#&<>?,./")), icd10cm(character(0)))
+  expect_empty_icd10cm_kids <- function(x, has_warning = TRUE) {
+    if (has_warning)
+      eval(bquote(expect_warning(res <- icd_children_defined.icd10cm(x))))
+    else
+      eval(bquote(expect_warning(res <- icd_children_defined.icd10cm(x), regex = NA)))
+    eval(bquote(expect_equivalent(res, as.icd10cm(character(0)))))
+  }
+  expect_empty_icd10cm_kids("%!^#&<>?,./")
+  expect_empty_icd10cm_kids("")
+  expect_empty_icd10cm_kids(c("%!^#&<>?,./", ""))
+  expect_empty_icd10cm_kids(c("", ""))
+  expect_empty_icd10cm_kids(character(0), has_warning = FALSE)
 
   expect_warning(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)), regex = NA)
 })

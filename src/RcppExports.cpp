@@ -8,6 +8,17 @@
 
 using namespace Rcpp;
 
+// icd10cmChildrenDefined
+Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector& x);
+RcppExport SEXP icd_icd10cmChildrenDefined(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector& >::type x(xSEXP);
+    __result = Rcpp::wrap(icd10cmChildrenDefined(x));
+    return __result;
+END_RCPP
+}
 // setDecimalDiag
 void setDecimalDiag(Rcpp::RObject& x, bool value);
 static SEXP icd_setDecimalDiag_try(SEXP xSEXP, SEXP valueSEXP) {
