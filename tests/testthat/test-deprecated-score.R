@@ -21,7 +21,7 @@ test_that("deprecated - github issue #44 from wmurphyrd", {
   mydf <- data.frame(visitId = c("a", "b", "c", "a", "b", "d"),
                      icd9 = c("441", "412.93", "044.9", "250.0", "250.0", "250.0"),
                      stringsAsFactors = TRUE)
-  expect_that(icd9Charlson(mydf, return.df = TRUE), testthat::not(throws_error()))
+  expect_error(icd9Charlson(mydf, return.df = TRUE), regex = NA)
 })
 
 test_that("deprecated - github issue #46 from wmurphyd", {

@@ -105,7 +105,6 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
 
   skip_on_cran()
   skip_slow_tests()
-  skip_on_travis()
 
   for (onlyReal in c(TRUE, FALSE)) {
     if (onlyReal) {
@@ -132,14 +131,10 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
     expect_is(quanDeyo, class = "list")
     expect_is(quanElix, class = "list")
     # the comorbidity mappings save in \code{data} should not be condensed.
-    expect_that(ahrq,
-                testthat::not(testthat::equals(ahrqComorbid)))
-    expect_that(elix,
-                testthat::not(testthat::equals(elixComorbid)))
-    expect_that(quanDeyo,
-                testthat::not(testthat::equals(quanDeyoComorbid)))
-    expect_that(quanElix,
-                testthat::not(testthat::equals(quanElixComorbid)))
+    expect_false(identical(ahrq, ahrqComorbid))
+    expect_false(identical(elix, elixComorbid))
+    expect_false(identical(quanElix, quanElixComorbid))
+    expect_false(identical(quanDeyo, quanDeyoComorbid))
   }
 })
 
