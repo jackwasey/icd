@@ -120,9 +120,6 @@ utils::globalVariables("icd10cm2016")
 icd_children_defined <- function(x)
   UseMethod("icd_children_defined")
 
-
-.nc <- nchar(icd::icd10cm2016[["code"]])
-
 #' @describeIn icd_children_defined get the children of ICD-10 code(s)
 #' @param warn single logical value, if \code{TRUE} will generate warnings when
 #'   some input codes are not known ICD-10-CM codes
