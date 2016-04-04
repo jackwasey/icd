@@ -52,7 +52,7 @@ icd_sort.icd10 <- function(x, short_code = NULL, ...) {
 }
 
 #' @describeIn icd_sort sort ICD-9 codes respecting numeric, then 'V', then 'E'
-#'   codes, and accounting for leading zeroes
+#'   codes, and accounting for leading zeroes. Will return a factor if a factor is given.
 #' @keywords internal
 #' @export
 icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
@@ -60,8 +60,14 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   assert_flag(short_code)
 
   if (!short_code)
-    x <- icd_decimal_to_short.icd9(x)
-  icd9_sort_cpp(x)
+    y <- icd_decimal_to_short.icd9(x)
+  else
+    y <- icd9_add_leading_zeroes(x)
+
+  if (is.factor(x)) 
+    return(x[icd9_order_cpp(as_char_no_warn(y))])
+    
+  x[icd9_order_cpp(y)]
 }
 #' Get order of short-form ICD-9 codes
 #'

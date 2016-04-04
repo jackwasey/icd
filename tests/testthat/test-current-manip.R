@@ -125,6 +125,10 @@ test_that("add leading zeroes to majors, invalid input", {
   expect_equal(icd9_add_leading_zeroes_major("E9"), "E009")
 })
 
+test_that("add leading zeroes to a factor", {
+  expect_equal(icd9_add_leading_zeroes(factor(c("02", "300.4"))), factor(c("003", "300.4")))
+})
+
 test_that("extracting alphabetic and numeric parts from ICD-9 codes works", {
 
   expect_equal(icd9_extract_alpha_numeric("V12"),
