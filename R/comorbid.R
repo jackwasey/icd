@@ -175,7 +175,7 @@ icd10_comorbid <- function(x,
 #'   times = 3)
 #' }
 #' @keywords internal
-icd10_comorbid_parent_search_str <- function(
+icd10_comorbid_parent_search <- function(
   x,
   map,
   visit_name = NULL,

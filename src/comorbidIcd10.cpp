@@ -148,6 +148,9 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
   // res <- aggregate(x = t(just_cmb), by = x[visit_name], FUN = any)
   //aggregate.data.frame()
 
-  // UNPROTECT(1); // test_str
+   // UNPROTECT(1); // test_str
+  // haven't aggregated yet, so there is a row for each row of the input data  
+  intermed.attr("dimnames") = Rcpp::List::create(x[visit_name], map.names());
+
   return intermed;
 }
