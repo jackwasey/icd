@@ -171,7 +171,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
   if (se[[1]] > se[[2]])
     stop(se[[1]], " is after ", se[[2]])
 
-  pos <- fastmatch::fmatch(se, unique_mjrs)
+  pos <- fmatch(se, unique_mjrs)
   if (is.na(pos[[1]]))
     stop(se[[1]], " as start not found")
   if (is.na(pos[[2]]))

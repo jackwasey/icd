@@ -21,7 +21,7 @@ set as \code{NA}; otherwise; they are removed.}
 }
 \description{
 This function generates factors more quickly, by leveraging
-\code{fastmatch::\link{fmatch}}. The speed increase for ICD-9 codes is about
+\code{fastmatch}. The speed increase for ICD-9 codes is about
 33% reduction for 10 million codes.
 }
 \details{
