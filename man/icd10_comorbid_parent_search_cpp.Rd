@@ -4,8 +4,7 @@
 \alias{icd10_comorbid_parent_search_cpp}
 \title{Internal function to find ICD-10 parents}
 \usage{
-icd10_comorbid_parent_search_cpp(x, map, visit_name, icd_name, short_code,
-  short_map)
+icd10_comorbid_parent_search_cpp(x, map, visit_name, icd_name)
 }
 \arguments{
 \item{x}{Character vector (not factor)}

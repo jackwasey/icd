@@ -272,7 +272,7 @@ isNonASCII <- function(x)
 #' Fast Factor Generation
 #'
 #' This function generates factors more quickly, by leveraging
-#' \code{fastmatch::\link{fmatch}}. The speed increase for ICD-9 codes is about
+#' \code{fastmatch}. The speed increase for ICD-9 codes is about
 #' 33% reduction for 10 million codes.
 #'
 #' \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
@@ -314,7 +314,7 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   # sort may be pre-requisite for fastmatch
   if (is.factor(x)) return(x)
   if (is.null(levels)) levels <- unique.default(x)
-  suppressWarnings(f <- fastmatch::fmatch(x, levels))
+  suppressWarnings(f <- fmatch(x, levels))
   levels(f) <- as.character(labels)
   class(f) <- "factor"
   f
