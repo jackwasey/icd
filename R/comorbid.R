@@ -240,7 +240,7 @@ icd10_comorbid_parent_search_use_cpp <- function(x,
   if (!short_code)
     x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
 
-  intermed = icd10_comorbid_parent_search_cpp(x = x, map = map, visit_name = visit_name, icd_name = icd_name)
+  intermed <- icd10_comorbid_parent_search_cpp(x = x, map = map, visit_name = visit_name, icd_name = icd_name)
 
   res <- aggregate(x = intermed, by = x[visit_name], FUN = any)
   if (return_df)
@@ -313,8 +313,6 @@ icd10_comorbid_parent_search_no_loop <- function(x,
     # look it up in each comorbidity, but TODO: once we have a comorbidity for
     # one patient, we don't need to search within it again
 
-
-    char_count <- nchar(as.character(y)):3
     vapply(names(map), FUN.VALUE = logical(1),
            FUN = function(cmb) {
              # instead of loop, just declare the substring length
