@@ -38,7 +38,7 @@ using Rcpp::as;
 //' Written in C++ for speed. Takes short code, short map, and pre-defined
 //' visit_name and icd_name.
 //' @param x Character vector (not factor)
-//' @seealso \link{\url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}}
+//' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,

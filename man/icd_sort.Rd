@@ -46,7 +46,7 @@ the future) then sort based on that type. ICD-10 codes, note that setting
 unnecessary and ignored.
 
 \item \code{icd9}: sort ICD-9 codes respecting numeric, then 'V', then 'E'
-codes, and accounting for leading zeroes
+codes, and accounting for leading zeroes. Will return a factor if a factor is given.
 }}
 \keyword{internal}
 \keyword{manip}

@@ -76,8 +76,8 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
 #' @param x vector or factor of ICD-9 codes
 #' @examples
 #' x <- icd:::generate_random_decimal_icd9(1e4)
-#' system.time(icd9_sort_cpp(x)) # vastly quicker
-#' system.time(icd9_order_short(x))
+#' system.time(icd:::icd9_sort_cpp(x)) # vastly quicker
+#' system.time(icd:::icd9_order_short(x))
 #' \dontrun{
 #' # fastmatch is fractionally faster, but either is very slow
 #' library(microbenchmark)

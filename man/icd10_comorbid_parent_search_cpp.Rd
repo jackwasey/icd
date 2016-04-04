@@ -14,7 +14,7 @@ Written in C++ for speed. Takes short code, short map, and pre-defined
 visit_name and icd_name.
 }
 \seealso{
-\link{\url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}}
+\url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 }
 \keyword{internal}
 

@@ -13,9 +13,9 @@ find ICD-10 comorbidities checking parent matches
 }
 \examples{
 stopifnot(identical(
-icd10_comorbid_parent_search_orig(uranium_pathology, icd10_map_ahrq,
+icd:::icd10_comorbid_parent_search_orig(uranium_pathology, icd10_map_ahrq,
   visit_name = "case", icd_name = "icd10", short_code = FALSE, short_map = TRUE, return_df = FALSE),
-icd10_comorbid_parent_search_use_cpp(uranium_pathology, icd10_map_ahrq,
+icd:::icd10_comorbid_parent_search_use_cpp(uranium_pathology, icd10_map_ahrq,
   visit_name = "case", icd_name = "icd10", short_code = FALSE, short_map = TRUE, return_df = FALSE)
 ))
 \dontrun{

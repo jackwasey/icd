@@ -90,7 +90,7 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
 #' Written in C++ for speed. Takes short code, short map, and pre-defined
 #' visit_name and icd_name.
 #' @param x Character vector (not factor)
-#' @seealso \link{\url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}}
+#' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 #' @keywords internal
 icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)

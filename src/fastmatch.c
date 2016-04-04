@@ -24,9 +24,6 @@
 /* for hashing for pointers we need intptr_t */
 #include <stdint.h>
 
-/* match5 to fall-back to R's internal match for types we don't support */
-SEXP match5(SEXP itable, SEXP ix, int nmatch, SEXP incomp, SEXP env);
-
 /* ".match.hash" symbol - cached on first use */
 SEXP hs;
 
@@ -245,8 +242,7 @@ SEXP fmatch_core(SEXP x, SEXP y, int nmv) {
 
   /* we only support INT/REAL/STR */
   if (type != INTSXP && type != REALSXP && type != STRSXP) {
-    Rf_warning("incompatible type, fastmatch() is falling back to match()");
-    return match5(y, x, nmv, NULL, R_BaseEnv);
+    Rf_error("incompatible type, fastmatch() is falling back to match()");
   }
 
   if (y_to_char && type != STRSXP) /* y = factor -> character -> type must be STRSXP */
