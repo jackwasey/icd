@@ -27,7 +27,6 @@ test_that("deprecated - single icd9 code comorbidity", {
 test_that("deprecated - thousands of patients", {
   x <- generate_random_pts(10000)
   expect_error(icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T), regex = NA)
-  )
 })
 
 test_that("deprecated - vary everything", {

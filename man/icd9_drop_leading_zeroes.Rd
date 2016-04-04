@@ -32,7 +32,7 @@ valid) code in response.
 \dontrun{
 library(microbenchmark)
 library(stringr)
-x <- generate_random_decimal_icd9(1e6)
+x <- icd:::generate_random_decimal_icd9(1e6)
 microbenchmark(
   x \%>\% as_char_no_warn \%>\%
   str_replace("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),

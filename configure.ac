@@ -114,14 +114,13 @@ AC_CHECK_HEADERS([valgrind/valgrind.h])
 # https://www.gnu.org/software/autoconf-archive/ax_cxx_compile_stdcxx_11.html
 AX_CXX_COMPILE_STDCXX_11(noext,optional)
 
-ICD9_CXX11_FLAG=''
+ICD_CXX11_FLAG=''
 if test "${HAVE_CXX11}" = 1; then
   AC_MSG_CHECKING([Have C++11, so set Makevars flag for R])
-  # ICD9_CXX11_FLAG="AS_ESCAPE([${CXX1XSTD}])"
   # the following 'switch' variable is created by the AC CXX test. This is how R configure gets the flag itself.
-  ICD9_CXX11_FLAG=${switch}
+  ICD_CXX11_FLAG=${switch}
 fi
-AC_SUBST(ICD9_CXX11_FLAG)
+AC_SUBST(ICD_CXX11_FLAG)
 
 AC_MSG_NOTICE([getting path to test for testthat Catch headers])
 TESTTHAT_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -q -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='testthat','include','testthat',mustWork=FALSE))),silent=TRUE))"`

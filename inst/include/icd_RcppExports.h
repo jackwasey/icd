@@ -135,6 +135,25 @@ namespace icd {
         return Rcpp::as<SEXP >(__result);
     }
 
+    inline Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x, Rcpp::List map, std::string visit_name, std::string icd_name) {
+        typedef SEXP(*Ptr_icd10_comorbid_parent_search_cpp)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd10_comorbid_parent_search_cpp p_icd10_comorbid_parent_search_cpp = NULL;
+        if (p_icd10_comorbid_parent_search_cpp == NULL) {
+            validateSignature("Rcpp::LogicalMatrix(*icd10_comorbid_parent_search_cpp)(Rcpp::DataFrame,Rcpp::List,std::string,std::string)");
+            p_icd10_comorbid_parent_search_cpp = (Ptr_icd10_comorbid_parent_search_cpp)R_GetCCallable("icd", "icd_icd10_comorbid_parent_search_cpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd10_comorbid_parent_search_cpp(Rcpp::wrap(x), Rcpp::wrap(map), Rcpp::wrap(visit_name), Rcpp::wrap(icd_name));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<Rcpp::LogicalMatrix >(__result);
+    }
+
     inline Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major, const Rcpp::CharacterVector minor, bool isShort) {
         typedef SEXP(*Ptr_icd9MajMinToCode)(SEXP,SEXP,SEXP);
         static Ptr_icd9MajMinToCode p_icd9MajMinToCode = NULL;
@@ -893,6 +912,44 @@ namespace icd {
         if (__result.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(__result).c_str());
         return Rcpp::as<int >(__result);
+    }
+
+    inline std::vector<std::string> icd9_sort_cpp(std::vector<std::string> x) {
+        typedef SEXP(*Ptr_icd9_sort_cpp)(SEXP);
+        static Ptr_icd9_sort_cpp p_icd9_sort_cpp = NULL;
+        if (p_icd9_sort_cpp == NULL) {
+            validateSignature("std::vector<std::string>(*icd9_sort_cpp)(std::vector<std::string>)");
+            p_icd9_sort_cpp = (Ptr_icd9_sort_cpp)R_GetCCallable("icd", "icd_icd9_sort_cpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9_sort_cpp(Rcpp::wrap(x));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<std::string> >(__result);
+    }
+
+    inline std::vector<std::size_t> icd9_order_cpp(std::vector<std::string> x) {
+        typedef SEXP(*Ptr_icd9_order_cpp)(SEXP);
+        static Ptr_icd9_order_cpp p_icd9_order_cpp = NULL;
+        if (p_icd9_order_cpp == NULL) {
+            validateSignature("std::vector<std::size_t>(*icd9_order_cpp)(std::vector<std::string>)");
+            p_icd9_order_cpp = (Ptr_icd9_order_cpp)R_GetCCallable("icd", "icd_icd9_order_cpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9_order_cpp(Rcpp::wrap(x));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<std::vector<std::size_t> >(__result);
     }
 
 }

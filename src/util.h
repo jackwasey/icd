@@ -22,9 +22,12 @@
 #include <Rcpp.h>
 #include <vector>
 #include <string>
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
 #include <omp.h>
 #endif
+
+
+typedef std::pair<std::string, std::size_t> pas;
 
 std::string trimLeftCpp(std::string s);
 std::string strimCpp(std::string s);
@@ -44,5 +47,8 @@ Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x);
 
 int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
+
+bool icd9CompareStrings(std::string a, std::string b);
+std::vector<std::size_t> icd9OrderCpp(std::vector<std::string> x);
 
 #endif /* UTIL_H_ */

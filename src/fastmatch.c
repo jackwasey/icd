@@ -41,18 +41,18 @@ typedef struct hash {
 } hash_t;
 
 /* create a new hash table with the given source and length.
-   we store only the index - values are picked from the source
-   so you must make sure the source is still alive when used */
+ we store only the index - values are picked from the source
+ so you must make sure the source is still alive when used */
 static hash_t *new_hash(void *src, hash_index_t len) {
   hash_t *h;
   hash_index_t m = 2, k = 1, desired = len * 2; /* we want a maximal load of 50% */
-  while (m < desired) { m *= 2; k++; }
-  h = (hash_t*) calloc(1, sizeof(hash_t) + (sizeof(hash_index_t) * m));
-  if (!h) Rf_error("unable to allocate %.2Mb for a hash table", (double) sizeof(hash_index_t) * (double) m / (1024.0 * 1024.0));
-  h->m = m;
-  h->k = k;
-  h->src = src;
-  return h;
+while (m < desired) { m *= 2; k++; }
+h = (hash_t*) calloc(1, sizeof(hash_t) + (sizeof(hash_index_t) * m));
+if (!h) Rf_error("unable to allocate %.2Mb for a hash table", (double) sizeof(hash_index_t) * (double) m / (1024.0 * 1024.0));
+h->m = m;
+h->k = k;
+h->src = src;
+return h;
 }
 
 /* free the hash table (and all chained hash tables as well) */
@@ -206,28 +206,20 @@ static SEXP asCharacter(SEXP s, SEXP env)
   return r;
 }
 
-
-/* the only externally visible function to be called from R */
-SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch, SEXP incomp) {
+SEXP fmatch_core(SEXP x, SEXP y, int nmv) {
   SEXP a;
   SEXPTYPE type;
   hash_t *h = 0;
-  int nmv = asInteger(nonmatch), n = LENGTH(x), np = 0, y_to_char = 0, y_factor = 0;
+  int n = LENGTH(x), np = 0, y_to_char = 0, y_factor = 0;
 
   /* edge-cases of 0 length */
   if (n == 0) return allocVector(INTSXP, 0);
   if (LENGTH(y) == 0) { /* empty table -> vector full of nmv */
-    int *ai;
+  int *ai;
     a = allocVector(INTSXP, n);
     ai = INTEGER(a);
     for (np = 0; np < n; np++) ai[np] = nmv;
     return a;
-  }
-
-  /* if incomparables are used we fall back straight to match() */
-  if (incomp != R_NilValue && !(isLogical(incomp) && LENGTH(incomp) == 1 && LOGICAL(incomp)[0] == 0)) {
-    Rf_warning("incomparables used in fmatch(), falling back to match()");
-    return match5(y, x, nmv, incomp, R_BaseEnv);
   }
 
   /* implicitly convert factors/POSIXlt to character */
@@ -237,7 +229,7 @@ SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch, SEXP incomp) {
       np++;
     } else if (inherits(x, "POSIXlt")) {
       x = PROTECT(asCharacter(x, R_GlobalEnv)); /* FIXME: match() uses env properly - should we switch to .External ? */
-      np++;
+  np++;
     }
   }
 
@@ -258,7 +250,7 @@ SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch, SEXP incomp) {
   }
 
   if (y_to_char && type != STRSXP) /* y = factor -> character -> type must be STRSXP */
-    type = STRSXP;
+  type = STRSXP;
 
   /* coerce x - not y yet because we may get away with the existing cache */
   if (TYPEOF(x) != type) {
@@ -270,7 +262,7 @@ SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch, SEXP incomp) {
   if (!hs) hs = Rf_install(".match.hash");
   a = Rf_getAttrib(y, hs);
   if (a != R_NilValue) { /* if there is a cache, try to find the matching type */
-    h = (hash_t*) EXTPTR_PTR(a);
+  h = (hash_t*) EXTPTR_PTR(a);
     /* could the object be out of sync ? If so, better remove the hash and ignore it */
     if (h->parent != y) {
 #if HASH_VERBOSE
@@ -290,12 +282,12 @@ SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch, SEXP incomp) {
     Rprintf(" - creating new hash for type %d\n", type);
 #endif
     if (a == R_NilValue) { /* if there is no cache attribute, create one */
-      a = R_MakeExternalPtr(h, R_NilValue, R_NilValue);
+  a = R_MakeExternalPtr(h, R_NilValue, R_NilValue);
       Rf_setAttrib(y, hs, a);
       Rf_setAttrib(a, R_ClassSymbol, Rf_mkString("match.hash"));
       R_RegisterCFinalizer(a, hash_fin);
     } else { /* otherwise append the new cache */
-      hash_t *lh = (hash_t*) EXTPTR_PTR(a);
+  hash_t *lh = (hash_t*) EXTPTR_PTR(a);
       while (lh->next) lh = lh->next;
       lh->next = h;
 #if HASH_VERBOSE
@@ -306,14 +298,14 @@ SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch, SEXP incomp) {
     if (TYPEOF(y) != type) {
 #if HASH_VERBOSE
       if (y_to_char)
-	Rprintf("   (need to convert table factor/POSIXlt to strings\n");
+        Rprintf("   (need to convert table factor/POSIXlt to strings\n");
       else
-	Rprintf("   (need to coerce table to %d)\n", type);
+        Rprintf("   (need to coerce table to %d)\n", type);
 #endif
       y = y_to_char ? (y_factor ? asCharacterFactor(y) : asCharacter(y, R_GlobalEnv)) : coerceVector(y, type);
       h->src = DATAPTR(y); /* this is ugly, but we need to adjust the source since we changed it */
-      h->prot = y; /* since the coerced object is temporary, we let the hash table handle its life span */
-      R_PreserveObject(y);
+  h->prot = y; /* since the coerced object is temporary, we let the hash table handle its life span */
+  R_PreserveObject(y);
     }
     /* make sure y doesn't go away while we create the hash */
     /* R_PreserveObject(y);     */
@@ -321,16 +313,16 @@ SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch, SEXP incomp) {
     /* nope - so far we do it serially */
 
     { /* create the hash table */
-      int i, n = LENGTH(y);
+    int i, n = LENGTH(y);
       if (type == INTSXP)
-	for(i = 0; i < n; i++)
-	  add_hash_int(h, i);
+        for(i = 0; i < n; i++)
+          add_hash_int(h, i);
       else if (type == REALSXP)
-	for(i = 0; i < n; i++)
-	  add_hash_real(h, i);
+        for(i = 0; i < n; i++)
+          add_hash_real(h, i);
       else
-	for(i = 0; i < n; i++)
-	  add_hash_ptr(h, i);
+        for(i = 0; i < n; i++)
+          add_hash_ptr(h, i);
     }
   }
 
@@ -341,17 +333,210 @@ SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch, SEXP incomp) {
     if (type == INTSXP) {
       int *k = INTEGER(x);
       for (i = 0; i < n; i++)
-	  v[i] = get_hash_int(h, k[i], nmv);
+        v[i] = get_hash_int(h, k[i], nmv);
     } else if (type == REALSXP) {
       double *k = REAL(x);
       for (i = 0; i < n; i++)
-	  v[i] = get_hash_real(h, k[i], nmv);
+        v[i] = get_hash_real(h, k[i], nmv);
     } else {
       SEXP *k = (SEXP*) DATAPTR(x);
       for (i = 0; i < n; i++)
-	  v[i] = get_hash_ptr(h, k[i], nmv);
+        v[i] = get_hash_ptr(h, k[i], nmv);
     }
     if (np) UNPROTECT(np);
     return r;
+  }
+}
+
+SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch) {
+  int nmv = asInteger(nonmatch);
+  return fmatch_core(x, y, nmv);
+}
+
+SEXP fmatch_zero(SEXP x, SEXP y) {
+  return fmatch_core(x, y, 0L);
+}
+
+SEXP fmatch_str(SEXP x, SEXP y) {
+  SEXP a;
+  hash_t *h = 0;
+  int n = LENGTH(x), np = 0, y_to_char = 0, y_factor = 0;
+  const int nmv = 0L;
+
+  /* edge-cases of 0 length */
+  if (n == 0) return allocVector(INTSXP, 0);
+  if (LENGTH(y) == 0) { // empty table -> vector full of nmv
+    int *ai;
+    a = allocVector(INTSXP, n);
+    ai = INTEGER(a);
+    for (np = 0; np < n; np++) ai[np] = nmv;
+    return a;
+  }
+
+  /* find existing cache(s) */
+  if (!hs) hs = Rf_install(".match.hash");
+  a = Rf_getAttrib(y, hs);
+  if (a != R_NilValue) { /* if there is a cache, try to find the matching type */
+  h = (hash_t*) EXTPTR_PTR(a);
+    /* could the object be out of sync ? If so, better remove the hash and ignore it */
+    if (h->parent != y) {
+      h = 0;
+      Rf_setAttrib(y, hs, R_NilValue);
+    }
+    while (h && h->type != STRSXP) h = h->next;
+  }
+  /* if there is no cache or not of the needed coerced type, create one */
+  if (a == R_NilValue || !h) {
+    h = new_hash(DATAPTR(y), LENGTH(y));
+    h->type = STRSXP;
+    h->parent = y;
+    if (a == R_NilValue) { /* if there is no cache attribute, create one */
+  a = R_MakeExternalPtr(h, R_NilValue, R_NilValue);
+      Rf_setAttrib(y, hs, a);
+      Rf_setAttrib(a, R_ClassSymbol, Rf_mkString("match.hash"));
+      R_RegisterCFinalizer(a, hash_fin);
+    } else { /* otherwise append the new cache */
+  hash_t *lh = (hash_t*) EXTPTR_PTR(a);
+      while (lh->next) lh = lh->next;
+      lh->next = h;
+    }
+
+    /* create the hash table */
+    {
+      int i, n = LENGTH(y);
+      for(i = 0; i != n; i++)
+        add_hash_ptr(h, i);
+    }
+  }
+
+  /* query the hash table */
+  {
+    int i, n = LENGTH(x);
+    SEXP r = allocVector(INTSXP, n);
+    int *v = INTEGER(r);
+    SEXP *k = (SEXP*) DATAPTR(x);
+    for (i = 0; i != n; ++i)
+      v[i] = get_hash_ptr(h, k[i], nmv);
+
+    if (np) UNPROTECT(np);
+    return r;
+  }
+}
+
+// cut down to just find string and return boolean as soon as it is found,
+// basically doing a hashed %in% for strings.
+//
+//  No bool in C! 0 = false 1 = true
+int ffind_str(SEXP x, SEXP y) {
+  SEXP a;
+  hash_t *h = 0;
+  int n = LENGTH(x), np = 0, y_to_char = 0, y_factor = 0;
+
+  /* edge-cases of 0 length */
+  if (n == 0) return 0;
+  if (LENGTH(y) == 0) return 0;
+
+  /* find existing cache(s) */
+  if (!hs) hs = Rf_install(".match.hash");
+  a = Rf_getAttrib(y, hs);
+  if (a != R_NilValue) { /* if there is a cache, try to find the matching type */
+  h = (hash_t*) EXTPTR_PTR(a);
+    /* could the object be out of sync ? If so, better remove the hash and ignore it */
+    if (h->parent != y) {
+      h = 0;
+      Rf_setAttrib(y, hs, R_NilValue);
+    }
+    while (h && h->type != STRSXP) h = h->next;
+  }
+  /* if there is no cache or not of the needed coerced type, create one */
+  if (a == R_NilValue || !h) {
+    h = new_hash(DATAPTR(y), LENGTH(y));
+    h->type = STRSXP;
+    h->parent = y;
+    if (a == R_NilValue) { /* if there is no cache attribute, create one */
+  a = R_MakeExternalPtr(h, R_NilValue, R_NilValue);
+      Rf_setAttrib(y, hs, a);
+      Rf_setAttrib(a, R_ClassSymbol, Rf_mkString("match.hash"));
+      R_RegisterCFinalizer(a, hash_fin);
+    } else { /* otherwise append the new cache */
+  hash_t *lh = (hash_t*) EXTPTR_PTR(a);
+      while (lh->next) lh = lh->next;
+      lh->next = h;
+    }
+
+    /* create the hash table */
+    {
+      int i, n = LENGTH(y);
+      for(i = 0; i != n; i++)
+        add_hash_ptr(h, i);
+    }
+  } // end created hash table
+
+  /* query the hash table */
+  {
+    int i = 0, n = LENGTH(x);
+    SEXP *k = (SEXP*) DATAPTR(x);
+    //for (i = 0; i != n; ++i) {
+    while (i != n && get_hash_ptr(h, k[i], 0L) == 0L) ++i;
+
+    if (np) UNPROTECT(np);
+
+    //SEXP r = allocVector(LGLSXP, 1);
+    //LOGICAL(r)[0] = i != n;
+    //return r;
+    //Rprintf("i = %u, n = %u\n", i, n);
+    return i != n;
+  }
+}
+
+// now assume x is length 1
+int ffind_one_str(SEXP x, SEXP y) {
+  SEXP a;
+  hash_t *h = 0;
+  int y_to_char = 0, y_factor = 0;
+
+  /* edge-cases of 0 length */
+  if (LENGTH(y) == 0) return 0;
+
+  /* find existing cache(s) */
+  if (!hs) hs = Rf_install(".match.hash");
+  a = Rf_getAttrib(y, hs);
+  if (a != R_NilValue) { /* if there is a cache, try to find the matching type */
+  h = (hash_t*) EXTPTR_PTR(a);
+    /* could the object be out of sync ? If so, better remove the hash and ignore it */
+    if (h->parent != y) {
+      h = 0;
+      Rf_setAttrib(y, hs, R_NilValue);
+    }
+    while (h && h->type != STRSXP) h = h->next;
+  }
+  /* if there is no cache or not of the needed coerced type, create one */
+  if (a == R_NilValue || !h) {
+    h = new_hash(DATAPTR(y), LENGTH(y));
+    h->type = STRSXP;
+    h->parent = y;
+    if (a == R_NilValue) { /* if there is no cache attribute, create one */
+  a = R_MakeExternalPtr(h, R_NilValue, R_NilValue);
+      Rf_setAttrib(y, hs, a);
+      Rf_setAttrib(a, R_ClassSymbol, Rf_mkString("match.hash"));
+      R_RegisterCFinalizer(a, hash_fin);
+    } else { /* otherwise append the new cache */
+  hash_t *lh = (hash_t*) EXTPTR_PTR(a);
+      while (lh->next) lh = lh->next;
+      lh->next = h;
+    }
+
+    /* create the hash table */
+    {
+      int i, n = LENGTH(y);
+      for(i = 0; i != n; i++)
+        add_hash_ptr(h, i);
+    }
+  } // end created hash table
+
+  /* query the hash table */
+  {
+    SEXP *k = (SEXP*) DATAPTR(x);
+    return get_hash_ptr(h, k[0], 0L);
   }
 }

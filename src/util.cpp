@@ -21,9 +21,9 @@
 #include <Rcpp.h>
 #include <vector>
 #include <string>
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
 #include <omp.h>
-#ifdef ICD9_STD_PARALLEL
+#ifdef ICD_STD_PARALLEL
 #include <parallel/algorithm>
 #else
 #include <algorithm>
@@ -64,7 +64,7 @@ std::vector<std::string> trimCpp(std::vector<std::string> sv) {
   return sv;
 }
 
-#ifdef ICD9_DEBUG
+#ifdef ICD_DEBUG
 void printCharVec(Rcpp::CharacterVector cv) {
   for (Rcpp::CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {
     Rcpp::String s = *i;
@@ -78,7 +78,7 @@ void printCharVec(Rcpp::CharacterVector cv) {
 // [[Rcpp::export]]
 int getOmpCores() {
   int cores = 0;
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
   cores = omp_get_num_procs();
 #endif
   return cores;
@@ -87,7 +87,7 @@ int getOmpCores() {
 // [[Rcpp::export]]
 int getOmpMaxThreads() {
   int maxthreads = 0;
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
   maxthreads = omp_get_max_threads();
 #endif
   return maxthreads;
@@ -96,7 +96,7 @@ int getOmpMaxThreads() {
 // [[Rcpp::export]]
 int getOmpThreads() {
   int threads = 0;
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
   omp_sched_t sched;
   omp_get_schedule(&sched, &threads);
 #endif
@@ -104,14 +104,14 @@ int getOmpThreads() {
 }
 
 void debug_parallel() {
-#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
+#if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
   Rcpp::Rcout << "max threads per omp_get_schedule = " << getOmpMaxThreads() << ". ";
   Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
   Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << ". ";
   Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
 #else
-  Rcpp::Rcout << "ICD9_OPENMP is not defined\n";
+  Rcpp::Rcout << "ICD_OPENMP is not defined\n";
 #endif
 }
 
@@ -247,8 +247,8 @@ Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
 
 // [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
-#ifdef ICD9_VALGRIND
-#ifdef ICD9_DEBUG
+#ifdef ICD_VALGRIND
+#ifdef ICD_DEBUG
   Rcpp::Rcout << "Starting callgrind instrumentation...\n";
 #endif
   CALLGRIND_START_INSTRUMENTATION;
@@ -263,11 +263,60 @@ int valgrindCallgrindStart(bool zerostats = false) {
 
 // [[Rcpp::export]]
 int valgrindCallgrindStop() {
-#ifdef ICD9_VALGRIND
-#ifdef ICD9_DEBUG
+#ifdef ICD_VALGRIND
+#ifdef ICD_DEBUG
   Rcpp::Rcout << "Stopping callgrind instrumentation...\n";
 #endif
   CALLGRIND_STOP_INSTRUMENTATION;
 #endif
   return 0;
+}
+
+bool icd9CompareStrings(std::string a, std::string b) {
+  const char * acs = a.c_str();
+  const char * bcs = b.c_str();
+  // most common is numeric, so deal with that first:
+  if (*acs < 'A')
+    return strcmp(acs, bcs) < 0;
+  // if the second char is now  a number, then we can immediately return false
+  if (*bcs < 'A')
+    return false;
+  // V vs E as first or both characters is next
+  if (*acs == 'V' && *bcs == 'E')
+    return true;
+  if (*acs == 'E' && *bcs == 'V')
+    return false;
+  // now cover both V codes or both E codes
+  return strcmp(acs, bcs) < 0;
+}
+
+bool icd9ComparePair(pas a, pas b) {
+  std::string af = a.first;
+  std::string bf = b.first;
+  //return icd9Comp(af, bf);
+  return icd9CompareStrings(af, bf);
+}
+
+// [[Rcpp::export(icd9_sort_cpp)]]
+std::vector<std::string> icd9SortCpp(std::vector<std::string> x) {
+  std::sort(x.begin(), x.end(), icd9CompareStrings);
+  return x;
+}
+
+// add one because R indexes from 1, not 0
+std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) { return p.second + 1; }
+
+// [[Rcpp::export(icd9_order_cpp)]]
+std::vector<std::size_t> icd9OrderCpp(std::vector<std::string> x) {
+
+  std::vector<std::pair<std::string, std::size_t> > vp;
+  std::vector<std::size_t> out;
+  out.reserve(x.size());
+  vp.reserve(x.size());
+  for (std::size_t i = 0; i != x.size(); ++i) {
+    vp.push_back(std::make_pair(x[i], i));
+  }
+  std::sort(vp.begin(), vp.end(), icd9ComparePair);
+  std::transform(vp.begin(), vp.end(), std::back_inserter(out), getSecondPlusOne);
+  return out;
 }

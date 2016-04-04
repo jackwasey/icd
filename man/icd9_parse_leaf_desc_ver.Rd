@@ -34,5 +34,16 @@ higher-level codes, just the specific diagnostic 'child' codes.
 The file can be pulled from the zip files on the CMS web site or from within
 the package.
 }
+\examples{
+\dontrun{
+library(stringr)
+library(microbenchmark)
+# str_split is faster
+x <- icd:::generate_random_decimal_icd9(10)
+microbenchmark(strsplit(x, "\\\\."), str_split(x, "\\\\."))
+# str_trim is faster with nothing to trim
+microbenchmark(trim(x), str_trim(x))
+}
+}
 \keyword{internal}
 

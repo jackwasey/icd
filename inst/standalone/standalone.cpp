@@ -1,4 +1,4 @@
-#ifdef ICD9_STANDALONE
+#ifdef ICD_STANDALONE
 
 // don't include my source files: this is like an external application so link against my Rcpp generated headers.
 #include "../include/icd.h"

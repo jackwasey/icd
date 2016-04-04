@@ -18,7 +18,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include "local.h"
 #include <Rcpp.h>
-#ifdef ICD9_STD_PARALLEL
+#ifdef ICD_STD_PARALLEL
 #include <parallel/algorithm>
 #else
 #include <algorithm>
@@ -33,16 +33,16 @@ void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map) {
     // parallel execution or just starts the heuristics which may invoke
     // parallel execution:
     //__gnu_parallel::sort(vec.begin(), vec.end());
-#ifdef ICD9_DEBUG_SETUP_TRACE
+#ifdef ICD_DEBUG_SETUP_TRACE
     Rcpp::Rcout << "pushing back vec of length: " << vec.size() << "\n";
 #endif
     map.push_back(vec);
-#ifdef ICD9_DEBUG_SETUP_TRACE
+#ifdef ICD_DEBUG_SETUP_TRACE
     Rcpp::Rcout << "last vec pushed back has length: "
                 << map[map.size() - 1].size() << "\n";
 #endif
   }
-#ifdef ICD9_DEBUG_SETUP
+#ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "reference comorbidity mapping STL structure created\n";
 #endif
 }
@@ -61,7 +61,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
   const int approx_cmb_per_visit = 15; // just an estimate
   int vlen = Rf_length(icds); // or vsexp
 
-#ifdef ICD9_DEBUG
+#ifdef ICD_DEBUG
 #ifdef HAVE_CXX11
   Rcpp::Rcout << "unordered_map is available (or at least C++11 is in some form)\n";
 #else
@@ -70,7 +70,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
 #endif
   VisLk vis_lookup;
 
-#ifdef ICD9_DEBUG
+#ifdef ICD_DEBUG
   Rcpp::Rcout << "vcdb resized to length vlen = " << vlen << "\n";
 #endif
   vcdb.resize(vlen); // over-estimate and allocate all at once (alternative is to reserve)
@@ -79,7 +79,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
   // 2094967295 is a random number less than 2^31 (to avoid 32bit R build
   // warning) just to initialize: should always been initialized, though.
   VecVecIntSz vcdb_last_idx = 2094967295;
-#ifdef ICD9_DEBUG_SETUP
+#ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "buildVisitCodes SEXP is STR\n";
 #endif
   visitIds.resize(vlen); // resize and trim at end, as alternative to reserve
@@ -88,7 +88,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
   for (int i = 0; i != vlen; ++i) {
     const char* vi = CHAR(STRING_ELT(vsexp, i));
     n = INTEGER(icds)[i];
-#ifdef ICD9_DEBUG_SETUP_TRACE
+#ifdef ICD_DEBUG_SETUP_TRACE
     Rcpp::Rcout << "building visit: it = " << i << ", id = " << vi << "\n";
     Rcpp::Rcout << "length vcdb = " << vcdb.size() << "\n";
 #endif
@@ -99,19 +99,19 @@ void buildVisitCodesVec(const SEXP& icd9df,
         VisLk::iterator found = vis_lookup.find(vi); // TODO make const?
         if (found != vis_lookup.end()) {
           vcdb[found->second].push_back(n);
-#ifdef ICD9_DEBUG_SETUP_TRACE
+#ifdef ICD_DEBUG_SETUP_TRACE
           Rcpp::Rcout << "repeat key " << vi << " found at position " << vcdb_new_idx << "\n";
 #endif
           continue;
         } else {
           vis_lookup.insert(
             std::make_pair(vi, vcdb_new_idx)); // new visit, with associated position in vcdb
-#ifdef ICD9_DEBUG_SETUP_TRACE
+#ifdef ICD_DEBUG_SETUP_TRACE
           Rcpp::Rcout << "(aggregating) new key " << vi << "\n";
 #endif
         }
       } else {
-#ifdef ICD9_DEBUG_SETUP_TRACE
+#ifdef ICD_DEBUG_SETUP_TRACE
         Rcpp::Rcout << "(not aggregating) new key " << vi << "\n";
 #endif
       }
@@ -124,12 +124,12 @@ void buildVisitCodesVec(const SEXP& icd9df,
       ++vcdb_max_idx;
     } else {
       vcdb[vcdb_last_idx].push_back(n);
-#ifdef ICD9_DEBUG_SETUP_TRACE
+#ifdef ICD_DEBUG_SETUP_TRACE
       Rcpp::Rcout << "repeat id found on next row: " << vi << "\n";
 #endif
     }
   } // end loop through all visit-code input data
-#ifdef ICD9_DEBUG_SETUP
+#ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "visit map created\n";
 #endif
   UNPROTECT(2);

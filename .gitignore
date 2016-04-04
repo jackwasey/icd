@@ -3,9 +3,13 @@ autom4te.cache
 autoscan.log
 *.bak
 callgrind.*
+confdefs.h
 config.log
 config.status
 configure.scan
+conftest.c
+conftest.cpp
+conftest.err
 .cproject
 *.dll
 .DS_Store
@@ -19,6 +23,7 @@ inst/doc/*
 .project
 .RData
 .Rhistory
+Rplot.png
 .Rprofile
 Rprof.out
 rprof.out

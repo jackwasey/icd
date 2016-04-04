@@ -40,15 +40,15 @@ test_that("ahrq comorbidities found for test data", {
 
   for (test_name in names(td)) {
 
-    res <- icd_comorbid(td[[test_name]], map = icd::icd10_map_ahrq)
+    expect_error(res <- icd_comorbid(td[[test_name]], map = icd::icd10_map_ahrq), regex = NA)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method one comorbidity:", n, ", test: ", test_name))
 
-    res <- icd10_comorbid(td[[test_name]], map = icd::icd10_map_ahrq)
+    expect_error(res <- icd10_comorbid(td[[test_name]], map = icd::icd10_map_ahrq), regex = NA)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method two comorbidity:", n, ", test: ", test_name))
 
-    res <- icd10_comorbid_ahrq(td[[test_name]], hierarchy = FALSE)
+    expect_error(res <- icd10_comorbid_ahrq(td[[test_name]], hierarchy = FALSE), regex = NA)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method three comorbidity:", n, ", test: ", test_name))
 

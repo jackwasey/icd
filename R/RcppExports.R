@@ -85,6 +85,17 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
     .Call('icd_icd9ComorbidShortCpp', PACKAGE = 'icd', icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
+#' Internal function to find ICD-10 parents
+#'
+#' Written in C++ for speed. Takes short code, short map, and pre-defined
+#' visit_name and icd_name.
+#' @param x Character vector (not factor)
+#' @seealso \link{\url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}}
+#' @keywords internal
+icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
+    .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
+}
+
 icd9MajMinToCode <- function(major, minor, isShort) {
     .Call('icd_icd9MajMinToCode', PACKAGE = 'icd', major, minor, isShort)
 }
@@ -343,6 +354,14 @@ valgrindCallgrindStart <- function(zerostats = FALSE) {
 
 valgrindCallgrindStop <- function() {
     .Call('icd_valgrindCallgrindStop', PACKAGE = 'icd')
+}
+
+icd9_sort_cpp <- function(x) {
+    .Call('icd_icd9SortCpp', PACKAGE = 'icd', x)
+}
+
+icd9_order_cpp <- function(x) {
+    .Call('icd_icd9OrderCpp', PACKAGE = 'icd', x)
 }
 
 # Register entry points for exported C++ functions

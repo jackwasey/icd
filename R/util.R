@@ -328,65 +328,7 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
 #' @param table vector
 #' @keywords internal
 `%fin%` <- function(x, table) {
-  fastmatch::fmatch(x, table, nomatch = 0L) > 0L
-}
-
-#' Sort short-form ICD-9 codes
-#'
-#' Sorts lists of numeric only, V or E codes. Note that a simple numeric sort
-#' does not work for ICD-9 codes, since "162" > "1620", and also V codes precede
-#' E codes.
-#' @details Implementation used fast built-in sort, then shuffles the E codes to
-#'   the end.
-#' @param x vector of ICD codes to sort
-#' @template short_code
-#' @template dotdotdot
-#' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
-#' @keywords manip
-#' @export
-icd_sort <- function(x, ...)
-  UseMethod("icd_sort")
-
-#' @describeIn icd_sort Guess whether ICD-9 or ICD-10 (or possibly sub-type in
-#'   the future) then sort based on that type. ICD-10 codes, note that setting
-#'   \code{short} is unnecessary and ignored.
-#' @export
-#' @keywords internal
-#' @method icd_sort default
-icd_sort.default <- function(x, ...) {
-  y <- icd_guess_version_update(x)
-  UseMethod("icd_sort", y)
-}
-
-#' @describeIn icd_sort Sort ICD-10 codes, note that setting \code{short} is
-#'   unnecessary and ignored.
-#' @keywords internal
-#' @export
-icd_sort.icd10 <- function(x, short_code = NULL, ...) {
-  # ignore short, it doesn't matter
-  sort(x)
-}
-
-#' @describeIn icd_sort sort ICD-9 codes respecting numeric, then 'V', then 'E'
-#'   codes, and accounting for leading zeroes
-#' @keywords internal
-#' @export
-icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
-  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
-  assert_flag(short_code)
-
-  if (short_code)
-    x[icd9_order_short(x)]
-  else
-    x[icd9_order_short(icd_decimal_to_short.icd9(x))]
-}
-
-icd9_order_short <- function(x) {
-  y <- x[order(icd9_add_leading_zeroes(x, short_code = TRUE))]
-  #fastmatch::fmatch(
-  match(
-    y[c(which(icd9_is_n(y)), which(icd9_is_v(y)), which(icd9_is_e(y)))],
-    x)
+  fmatch(x, table, nomatch = 0L) > 0L
 }
 
 #' wrapper for \code{.Deprecated}
@@ -461,4 +403,8 @@ named_list <- function(...) {
   x <- list(...)
   names(x) <- as.character(match.call()[-1])
   x
+}
+
+fmatch <- function(x, table, nomatch = NA_integer_, incomparables = NULL) {
+  .Call("fmatch", PACKAGE = "icd", x, table, nomatch, incomparables)
 }

@@ -26,7 +26,7 @@
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
 		const Rcpp::CharacterVector minor, bool isShort) {
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "icd9MajMinToCode: major.size() = " << major.size()
 			<< " and minor.size() = " << minor.size() << "\n";
 #endif
@@ -34,7 +34,7 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
 	if (major.size() != minor.size())
 		Rcpp::stop("major and minor lengths differ");
 
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
 	Rcpp::Rcout << "major and minor are the same?\n";
 #endif
 
@@ -93,7 +93,7 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector major,
 		const Rcpp::CharacterVector minor) {
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "icd9MajMinToShort: major.size() = " << major.size()
 			<< " and minor.size() = " << minor.size() << "\n";
 #endif
@@ -103,7 +103,7 @@ Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector major,
 				"icd9MajMinToShort, length of majors and minors must be equal, unless majors length is one.");
 	}
 	if (major.size() == 1) {
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
 	  Rcpp::Rcout << "icd9MajMinToShort: major.size() = 1\n";
 #endif
 		Rcpp::CharacterVector newmajor(minor.size(), major[0]);

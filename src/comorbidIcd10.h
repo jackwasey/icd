@@ -15,14 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef FASTMATCH_H_
-#define FASTMATCH_H_
+#ifndef COMORBIDICD10_H_H
+#define COMORBIDICD10_H_H
 
-#include <Rinternals.h>
-SEXP fmatch(SEXP x, SEXP y, SEXP nonmatch);
-SEXP fmatch_zero(SEXP x, SEXP y);
-SEXP fmatch_core(SEXP x, SEXP y, int nmv);
-SEXP fmatch_str(SEXP x, SEXP y);
-int ffind_str(SEXP x, SEXP y);
-int ffind_one_str(SEXP x, SEXP y);
-#endif /* FASTMATCH_H_ */
+#include <Rcpp.h> // includes Rinternals
+extern "C" {
+#include "fastmatch.h"
+#include <cstdlib>
+}
+
+#endif /* COMORBIDICD10_H_H */

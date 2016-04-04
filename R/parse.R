@@ -95,10 +95,12 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
   versions <- icd9_sources$version
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
-  for (v in versions)
+  for (v in versions) {
+    message("working on version: ", v)
     icd9cm_billable[[v]] <- icd9_parse_leaf_desc_ver(version = v,
                                                      save_data = save_data,
                                                      offline = offline)
+  }
 
   # and in my utils.R  getNonASCII(charactervector)
   if (save_data)
@@ -121,6 +123,16 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
 #' @template save_data
 #' @param path Absolute path in which to save parsed data
 #' @template offline
+#' @examples
+#' \dontrun{
+#' library(stringr)
+#' library(microbenchmark)
+#' # str_split is faster
+#' x <- icd:::generate_random_decimal_icd9(10)
+#' microbenchmark(strsplit(x, "\\."), str_split(x, "\\."))
+#' # str_trim is faster with nothing to trim
+#' microbenchmark(trim(x), str_trim(x))
+#' }
 #' @return invisibly return the result
 #' @keywords internal
 icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
@@ -144,10 +156,8 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   if (!is.na(fn_long_orig))
     f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
 
-  message("short filename = ", f_info_short$file_name,
-          "\n long filename = ", f_info_long$file_name)
-  message("short path = ", f_info_short$file_path,
-          "\n long path = ", f_info_long$file_name)
+  message("short filename = ", f_info_short$file_name, "\n long filename = ", f_info_long$file_name)
+  message("short path = ", f_info_short$file_path, "\n long path = ", f_info_long$file_name)
 
   # yes, specify encoding twice, once to declare the source format, and again
   # to tell R to flag (apparently only where necessary), the destination
@@ -156,37 +166,48 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
 
   # shortlines should always exist
   shortlines <- readLines(f_info_short$file_path)
+  message("got short lines")
 
   # longlines may not, and may have more complicated encoding
   if (!is.na(fn_long_orig)) {
     file_long <- file(f_info_long$file_path, encoding = "latin1")
     longlines <- readLines(f_info_long$file_path, encoding = "latin1")
     close(file_long)
-  } else
-    longlines <- NA_character_
+    message("got long lines")
+  } else longlines <- NA_character_
 
-  shortlines <- str_split(shortlines, "[[:space:]]")
-  longlines <- str_split(longlines, "[[:space:]]")
+  shortlines <- str_split(shortlines, "[[:space:]]+")
+  longlines <- str_split(longlines, "[[:space:]]+")
+  message("split done")
 
-  # my trim function drops encodings, so let's use stringr str_trim:
-  short_codes <- lapply(shortlines, FUN = function(x) str_trim(x[1]))
-  short_descs <- lapply(shortlines,
-                        function(x) str_trim(paste(x[-1], collapse = " ")))
-
+  # no need to trim: we just split on "space', so there can't be any extra spaces
+  short_codes <- vapply(shortlines, FUN = function(x) x[1], FUN.VALUE = character(1))
+  short_descs <- vapply(shortlines, FUN = function(x) paste(x[-1], collapse = " "), FUN.VALUE = character(1))
   if (!is.na(longlines[1]))
-    long_descs <- lapply(longlines,
-                         function(x) str_trim(paste(x[-1], collapse = " ")))
-  else
-    long_descs <- NA
+    long_descs <- vapply(longlines, function(x) paste(x[-1], collapse = " "), FUN.VALUE = character(1))
+  else long_descs <- NA
 
-  out <- data.frame(code = unlist(short_codes),
-                    short_desc = unlist(short_descs),
-                    long_desc = unlist(long_descs),
+  message("codes and descs separated")
+
+  out <- data.frame(code = short_codes,
+                    short_desc = short_descs,
+                    long_desc = long_descs,
                     stringsAsFactors = FALSE)
 
-  # now sort so that E is after V:
+  message("now sort so that E is after V")
   reorder <- icd9_order_short(out[["code"]])
+  stopifnot(!anyNA(out[["code"]]))
+  stopifnot(!anyNA(reorder))
+  stopifnot(!any(str_detect(out[["code"]], "[[:space:]]")))
+  stopifnot(!anyDuplicated(reorder))
+  stopifnot(all(1:nrow(out)) %in% reorder)
+  # catches a mistaken zero-indexed reorder result
+  stopifnot(length(setdiff(1:nrow(out), reorder)) == 0)
+  stopifnot(length(setdiff(reorder, 1:nrow(out))) == 0)
+
+  message("order found")
   out <- out[reorder, ]
+  message("reordered")
 
   # warn as we go:
   oldwarn <- options(warn = 1)
@@ -196,8 +217,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
     message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
     message("non-ASCII rows of long descriptions are: ",
             paste(getNonASCII(out[["long_desc"]]), collapse = ", "))
-    message(Encoding(out[["long_desc"]][isNonASCII(out[["long_desc"]])]))
-
+    message("Encodings found: ", unique(Encoding(out[["long_desc"]][isNonASCII(out[["long_desc"]])])))
   }
   invisible(out)
 }
@@ -220,7 +240,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
 
   f <- file(f27_info$file_path, encoding = "latin1")
   icd9cm_billable27 <- utils::read.csv(f27_info$file_path, stringsAsFactors = FALSE,
-                                colClasses = "character", encoding = "latin1")
+                                       colClasses = "character", encoding = "latin1")
   close(f)
   names(icd9cm_billable27) <- c("code", "long_desc", "short_desc")
   icd9cm_billable27 <- icd9cm_billable27[c(1, 3, 2)] # reorder columns
