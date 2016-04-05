@@ -3,6 +3,7 @@ autom4te\.cache
 .*benchmark.*
 ^vignettes\/\.build\.timestamp$
 .*_cache.*
+callgrind\.out
 ^config\.log$
 ^config\.status$
 ^configure\.ac$
