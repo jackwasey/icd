@@ -64,9 +64,9 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   else
     y <- icd9_add_leading_zeroes(x)
 
-  if (is.factor(x)) 
+  if (is.factor(x))
     return(x[icd9_order_cpp(as_char_no_warn(y))])
-    
+
   x[icd9_order_cpp(y)]
 }
 #' Get order of short-form ICD-9 codes

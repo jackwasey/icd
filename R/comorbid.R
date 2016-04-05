@@ -149,29 +149,38 @@ icd10_comorbid <- function(x,
 #' find ICD-10 comorbidities checking parent matches
 #'
 #' @examples
+#' up <- uranium_pathology[1:50, ]
 #' stopifnot(identical(
-#' icd:::icd10_comorbid_parent_search_orig(uranium_pathology, icd10_map_ahrq,
-#'   visit_name = "case", icd_name = "icd10", short_code = FALSE, short_map = TRUE, return_df = FALSE),
-#' icd:::icd10_comorbid_parent_search_use_cpp(uranium_pathology, icd10_map_ahrq,
-#'   visit_name = "case", icd_name = "icd10", short_code = FALSE, short_map = TRUE, return_df = FALSE)
+#' icd:::icd10_comorbid_parent_search_orig(up, icd10_map_ahrq,
+#'   visit_name = "case", icd_name = "icd10",
+#'   short_code = FALSE, short_map = TRUE, return_df = FALSE),
+#' icd:::icd10_comorbid_parent_search_use_cpp(up, icd10_map_ahrq,
+#'   visit_name = "case", icd_name = "icd10",
+#'   short_code = FALSE, short_map = TRUE, return_df = FALSE)
 #' ))
 #' \dontrun{
 #' library(microbenchmark)
 #' library(stringr)
-#' microbenchmark(substr("12345", 1, 4), substring("12345", 1, 4), str_sub("12345", 1, 4), times = 1e5)
+#' microbenchmark(substr("12345", 1, 4), substring("12345", 1, 4),
+#'                str_sub("12345", 1, 4), times = 1e5)
 #' # substr is fastest by a good margin
 #'
 #' microbenchmark(
-#'   icd10_comorbid_parent_search_str(uranium_pathology, icd10_map_ahrq, visit_name = "case", icd_name = "icd10",
-#'   short_code = FALSE, short_map = TRUE, return_df = FALSE),
-#'   icd10_comorbid_parent_search_use_cpp(uranium_pathology, icd10_map_ahrq, visit_name = "case", icd_name = "icd10",
-#'   short_code = FALSE, short_map = TRUE, return_df = FALSE),
-#'   icd10_comorbid_parent_search_all_at_once(uranium_pathology, icd10_map_ahrq, visit_name = "case", icd_name = "icd10",
-#'   short_code = FALSE, short_map = TRUE, return_df = FALSE),
-#'   icd10_comorbid_parent_search_no_loop(uranium_pathology, icd10_map_ahrq, visit_name = "case", icd_name = "icd10",
-#'   short_code = FALSE, short_map = TRUE, return_df = FALSE),
-#'   icd10_comorbid_parent_search_orig(uranium_pathology, icd10_map_ahrq, visit_name = "case", icd_name = "icd10",
-#'   short_code = FALSE, short_map = TRUE, return_df = FALSE),
+#'   icd10_comorbid_parent_search_str(uranium_pathology, icd10_map_ahrq,
+#'     visit_name = "case", icd_name = "icd10",
+#'     short_code = FALSE, short_map = TRUE, return_df = FALSE),
+#'   icd10_comorbid_parent_search_use_cpp(uranium_pathology, icd10_map_ahrq,
+#'     visit_name = "case", icd_name = "icd10",
+#'     short_code = FALSE, short_map = TRUE, return_df = FALSE),
+#'   icd10_comorbid_parent_search_all_at_once(uranium_pathology, icd10_map_ahrq,
+#'     visit_name = "case", icd_name = "icd10",
+#'     short_code = FALSE, short_map = TRUE, return_df = FALSE),
+#'   icd10_comorbid_parent_search_no_loop(uranium_pathology, icd10_map_ahrq,
+#'     visit_name = "case", icd_name = "icd10",
+#'     short_code = FALSE, short_map = TRUE, return_df = FALSE),
+#'   icd10_comorbid_parent_search_orig(uranium_pathology, icd10_map_ahrq,
+#'     visit_name = "case", icd_name = "icd10",
+#'     short_code = FALSE, short_map = TRUE, return_df = FALSE),
 #'   times = 3)
 #' }
 #' @keywords internal
