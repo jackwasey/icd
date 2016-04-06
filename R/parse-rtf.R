@@ -56,7 +56,6 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE, verbose = FALSE, of
   assert_flag(save_data)
   assert_flag(verbose)
 
-  rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
   f_info_rtf <- fetch_rtf_year(year, offline = offline)
 
   if (is.null(f_info_rtf))

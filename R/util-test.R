@@ -35,13 +35,12 @@ rtf_year_ok <- function(year) {
 skip_on_no_rtf <- function(test_year) {
   if (!rtf_year_ok(test_year))
     testthat::skip(paste(test_year,
-                            "ICD-9-CM codes unavailable offline for testsing"))
+                         "ICD-9-CM codes unavailable offline for testsing"))
 }
 
-skip_flat_icd9_avail <- function(
-  ver = "31",
+skip_flat_icd9_avail <- function(ver = "31") {
   msg = paste("skipping test because flat file ICD-9-CM",
-              "sources not available for version: ", ver)) {
+              "sources not available for version: ", ver)
   dat <- icd9_sources[icd9_sources$version == ver, ]
   fn_orig <- dat$short_filename
   if (is.na(fn_orig))
@@ -53,7 +52,11 @@ skip_flat_icd9_avail <- function(
                                     offline = TRUE)
   if (is.null(f_info_short))
     testthat::skip(msg)
+}
 
+skip_flat_icd9_all_avail <- function() {
+  for (v in icd9_sources$version)
+    skip_flat_icd9_avail(v)
 }
 
 skip_icd10cm_flat_avail <- function(msg = "skipping test because flat file ICD-10-CM source not available") {
@@ -82,8 +85,8 @@ expect_equal_no_icd <- function(object, expected, ...) {
 }
 
 expect_equal_no_class_order <- function(object, expected, ...) {
- eval(bquote(testthat::expect_true(all(class(.(object)) %in% class(.(expected))), ...)))
- eval(bquote(testthat::expect_equivalent(unclass(.(object)), unclass(.(expected)), ...)))
+  eval(bquote(testthat::expect_true(all(class(.(object)) %in% class(.(expected))), ...)))
+  eval(bquote(testthat::expect_equivalent(unclass(.(object)), unclass(.(expected)), ...)))
 }
 
 #' expect named sub-chapter has a given range, case insensitive
@@ -386,12 +389,12 @@ setup_test_check <- function() {
     message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
     options("icd.do_slow_tests" = TRUE)
   }
-# nocov start
+  # nocov start
   if (identical(tolower(Sys.getenv("ICD_WARN_DEPRECATED")), "true")) {
     message("environment variable ICD_WARN_DEPRECATE found to be true, so warning for deprecated icd9 function use")
     options("icd.warn_deprecated" = TRUE)
   }
-# nocov end
+  # nocov end
 }
 
 #' run \code{testtthat::test_check} with a Perl regular expression filter
