@@ -62,7 +62,7 @@ skip_icd10cm_flat_avail <- function(msg = "skipping test because flat file ICD-1
 }
 
 skip_icd10cm_xml_avail <- function(msg = "skipping test because XML file ICD-10-CM source not available") {
-  if (is.null(icd10cm_get_flat_file(offline = TRUE)))
+  if (is.null(icd10cm_get_xml_file(offline = TRUE)))
     testthat::skip(msg)
 }
 
