@@ -19,15 +19,15 @@ context("deprecated billable code lists")
 
 test_that("billable codes are recreated", {
   # this costs about 30 seconds
-  skip_online_tests()
+  skip_slow_tests()
   # TODO: run test if file is available, even if running in offline
-  check_billable <- parse_leaf_descriptions_all(save_data = FALSE, offline = FALSE)
+  check_billable <- parse_leaf_descriptions_all(save_data = FALSE, offline = TRUE)
   skip_on_os(c("windows", "mac", "solaris"))
   for (ver in c("27", "28", "29", "30", "31", "32")) {
     names(check_billable[[ver]]) <- c("icd9", "descShort", "descLong")
     # v <- icd::icd9Billable[[ver]][["descLong"]]
     # cb <- check_billable[[ver]][["descLong"]]
-    expect_identical(check_billable[[ver]], 
+    expect_identical(check_billable[[ver]],
                      icd::icd9Billable[[ver]],
                      info = paste("descLong version:", ver))
   }

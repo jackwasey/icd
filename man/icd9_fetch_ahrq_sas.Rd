@@ -4,7 +4,7 @@
 \alias{icd9_fetch_ahrq_sas}
 \title{get the SAS code from AHRQ}
 \usage{
-icd9_fetch_ahrq_sas(offline, allow_missing = TRUE)
+icd9_fetch_ahrq_sas(offline)
 }
 \description{
 Get the SAS code from AHRQ and save in data-raw if not already there.

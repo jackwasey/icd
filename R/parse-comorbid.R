@@ -39,18 +39,16 @@ ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "HTN
 #'
 #' Get the SAS code from AHRQ and save in data-raw if not already there.
 #' @keywords internal
-icd9_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
-  assert_flag(offline)
+icd9_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat2012-2013.txt",
-    offline = offline, allow_missing = allow_missing)
+    offline = offline)
 }
 
-icd10_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
-  assert_flag(offline)
+icd10_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comformat_icd10cm_2016.txt",
-    offline = offline, allow_missing = allow_missing)
+    offline = offline)
 }
 
 #' parse AHRQ SAS code to get mapping
@@ -60,14 +58,12 @@ icd10_fetch_ahrq_sas <- function(offline, allow_missing = TRUE) {
 #' in generating the package itself.
 #' @template parse-template
 #' @keywords internal
-icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
-
+icd9_parse_ahrq_sas <- function(save_data = FALSE) {
   assert_flag(save_data)
-  assert_flag(offline)
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_info <- icd9_fetch_ahrq_sas(offline = offline, allow_missing = FALSE)
+  ahrq_info <- icd9_fetch_ahrq_sas(offline = TRUE)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
@@ -131,11 +127,10 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
 
 # This is in some ways simpler than that ICD-9 equivalent because I make no
 # attempt to find all the child codes.
-icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = FALSE) {
+icd10_parse_ahrq_sas <- function(save_data = FALSE) {
   assert_flag(save_data)
-  assert_flag(offline)
 
-  ahrq_info <- icd10_fetch_ahrq_sas(offline, allow_missing = FALSE)
+  ahrq_info <- icd10_fetch_ahrq_sas(offline = TRUE)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
@@ -190,13 +185,12 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 #' @template parse-template
 #' @template offline
 #' @keywords internal
-icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = FALSE) {
+icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
   assert_flag(save_data)
-  assert_flag(offline)
 
   # download the file and/or just get the path or file name, fails if missing
   # by default
-  f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
+  f_info <- icd9_fetch_quan_deyo_sas(offline = TRUE)
 
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sas_extract_let_strings(quan_sas_lines)

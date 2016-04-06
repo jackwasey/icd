@@ -6,7 +6,6 @@ load_all()
 filter = NULL
 
 options("icd.do_slow_tests" = TRUE)
-options("icd.do_online_tests" = FALSE)
 test_all_res <- test_package(package = "icd", reporter = "list", filter = filter)
 as.data.frame(test_all_res) -> resdf
 print(tail(resdf[order(resdf$user), ]))

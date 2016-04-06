@@ -5,10 +5,10 @@
 \alias{unzip_to_data_raw}
 \title{Unzip file to \code{data-raw}}
 \usage{
-unzip_to_data_raw(url, file_name, offline = FALSE, verbose = FALSE)
+unzip_to_data_raw(url, file_name, offline = TRUE, verbose = FALSE)
 
 download_to_data_raw(url, file_name = str_extract(url, "[^/]*$"),
-  offline = FALSE, allow_missing = FALSE)
+  offline = TRUE)
 }
 \arguments{
 \item{url}{URL of a zip file}

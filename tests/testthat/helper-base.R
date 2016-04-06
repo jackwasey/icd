@@ -24,12 +24,6 @@ local({
     message("Will skip slow tests")
   else
     message("Doing slow tests")
-
-  do_online_tests <- getOption("icd.do_online_tests")
-  if (is.null(do_online_tests) || !do_online_tests)
-    message("Will skip online tests")
-  else
-    message("Doing online tests")
 })
 
 set.seed(1441)

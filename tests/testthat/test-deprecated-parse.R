@@ -97,10 +97,10 @@ test_that("deprecated - extraction from qualifier subset works", {
   expect_true(all(sapply(all2015, FUN = function(f) length(rtf_parse_qualifier_subset(f)) > 0)))
 })
 
-# The following tests on the RTF parsing get the RTF source over internet, so
-# package doesn't have to include the big RTF source file
 test_that("deprecated - online parse tests run", {
-  skip_online_tests()
+
+  if (!rtf_year_ok("2011"))
+    skip("RTF for 2011 not available")
   rtf_dat <- icd9_sources[icd9_sources$f_year == "2011", ]
   url <- rtf_dat$rtf_url
   fn <- rtf_dat$rtf_filename

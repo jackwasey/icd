@@ -266,7 +266,7 @@ test_that("working with named lists of codes, decimal is guessed", {
 
 test_that("icd9 descriptions is parsed correctly", {
   skip_flat_icd9_avail("32")
-  x <- icd9_parse_leaf_desc_ver(version = "32", offline = FALSE)
+  x <- icd9_parse_leaf_desc_ver(version = "32", offline = TRUE)
   expect_equal(names(x), c("code", "short_desc", "long_desc"))
   expect_equal(nrow(x), 14567)
   expect_true(is.character(x$code))

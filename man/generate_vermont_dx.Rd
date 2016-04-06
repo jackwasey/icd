@@ -4,7 +4,7 @@
 \alias{generate_vermont_dx}
 \title{generate \code{vermont_dx} data}
 \usage{
-generate_vermont_dx(save_data = TRUE, offline = FALSE)
+generate_vermont_dx(save_data = TRUE, offline = TRUE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.

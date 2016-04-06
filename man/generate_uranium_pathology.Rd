@@ -7,7 +7,7 @@
 \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
 }
 \usage{
-generate_uranium_pathology(save_data = TRUE, offline = FALSE)
+generate_uranium_pathology(save_data = TRUE, offline = TRUE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.

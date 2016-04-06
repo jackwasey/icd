@@ -69,7 +69,7 @@ unzip_single <- function(url, file_name, save_path) {
 #' @template offline
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal file
-unzip_to_data_raw <- function(url, file_name, offline = FALSE, verbose = FALSE) {
+unzip_to_data_raw <- function(url, file_name, offline = TRUE, verbose = FALSE) {
   assert_string(url, na.ok = FALSE)
   assert_string(file_name, na.ok = FALSE)
   assert_flag(offline)
@@ -100,12 +100,10 @@ unzip_to_data_raw <- function(url, file_name, offline = FALSE, verbose = FALSE) 
 #' @keywords internal file
 download_to_data_raw <- function(url,
                                  file_name = str_extract(url, "[^/]*$"),
-                                 offline = FALSE,
-                                 allow_missing = FALSE) {
+                                 offline = TRUE) {
   assert_string(url)
   assert_string(file_name)
   assert_flag(offline)
-  assert_flag(allow_missing)
 
   data_raw_path <- system.file("data-raw", package = "icd")
   if (!dir.exists(data_raw_path))
@@ -117,12 +115,8 @@ download_to_data_raw <- function(url,
   if (file.exists(save_path))
     return(f_info)
 
-  if (offline) {
-    if (allow_missing)
+  if (offline)
       return(NULL)
-    else
-      stop(paste(file_name, "not available offline."))
-  }
 
   # consider libcurl, but seems to work without now
   if (utils::download.file(url = url, destfile = save_path, quiet = TRUE, method = "auto") != 0)

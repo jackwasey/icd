@@ -21,6 +21,22 @@
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
 # approach in python
 
+#' Fetch RTF for a given year
+#'
+#' Will return NULL if offline and not available
+#' @param year character vector of length one, e.g. "2011"
+#' @param offline single logical value
+#' @keywords internal
+fetch_rtf_year <- function(year, offline = TRUE) {
+  assert_string(year)
+  assert_flag(offline)
+
+  rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
+  fn <- rtf_dat$rtf_filename
+
+  unzip_to_data_raw(rtf_dat$rtf_url, file_name = fn, offline = offline)
+}
+
 #' parse RTF description of entire ICD-9-CM for a specific year
 #'
 #' Currently only the most recent update is implemented. Note that
@@ -30,25 +46,18 @@
 #' @param year from 1996 to 2012 (this is what CDC has published). Only 2012
 #'   implemented thus far
 #' @template save_data
-#' @template offline
 #' @template verbose
 #' @source
 #' http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
 #' and similar files run from 1996 to 2011.
 #' @keywords internal
-parse_rtf_year <- function(year = "2011", save_data = FALSE,
-                           offline = TRUE, verbose = FALSE) {
+parse_rtf_year <- function(year = "2011", save_data = FALSE, verbose = FALSE, offline = TRUE) {
   assert_string(year)
   assert_flag(save_data)
-  assert_flag(offline)
   assert_flag(verbose)
 
   rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
-  fn <- rtf_dat$rtf_filename
-
-  f_info_rtf <- unzip_to_data_raw(rtf_dat$rtf_url,
-                                  file_name = fn,
-                                  offline = offline)
+  f_info_rtf <- fetch_rtf_year(year, offline = offline)
 
   if (is.null(f_info_rtf))
     stop("RTF data for year ", year, " unavailable.")

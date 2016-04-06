@@ -30,9 +30,9 @@ test_that("the icd-10 elix comorbidity map data is exactly as produced by the ge
 })
 
 test_that("the icd-10 ahrq comorbidity map data is exactly as produced by the generator", {
-  if (is.null(icd10_fetch_ahrq_sas(offline = TRUE, allow_missing = TRUE)))
-    skip_online_tests("AHRQ ICD-10 SAS not available")
-  expect_equivalent(icd10_map_ahrq, icd10_parse_ahrq_sas(save_data = FALSE, offline = FALSE))
+  if (is.null(icd10_fetch_ahrq_sas(offline = TRUE)))
+    skip("AHRQ ICD-10 SAS must be downloaded with icd10_fetch_ahrq_sas")
+  expect_equivalent(icd10_map_ahrq, icd10_parse_ahrq_sas(save_data = FALSE))
 })
 
 test_that("the classes of the ICD-10 maps are correct", {

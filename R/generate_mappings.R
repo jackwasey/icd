@@ -421,7 +421,7 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   invisible(icd10_map_quan_deyo)
 }
 
-fetch_uranium_pathology <- function(offline = FALSE) {
+fetch_uranium_pathology <- function(offline = TRUE) {
   unzip_to_data_raw(
     url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
     file_name = "Pathology_Office2007.accdb",
@@ -440,7 +440,7 @@ fetch_uranium_pathology <- function(offline = FALSE) {
 #' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
 #'
 #' @keywords internal
-generate_uranium_pathology <- function(save_data = TRUE, offline = FALSE) {
+generate_uranium_pathology <- function(save_data = TRUE, offline = TRUE) {
 
   requireNamespace("RODBC")
   stopifnot(length(utils::find("odbcConnectAccess2007")) > 0)
@@ -480,7 +480,7 @@ fetch_vermont_dx <- function(offline) {
 #' Process data from \href{healthvermont.gov}{Health Vermont}
 #' @template parse-template
 #' @keywords internal
-generate_vermont_dx <- function(save_data = TRUE, offline = FALSE) {
+generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
 
   assert_flag(save_data)
   assert_flag(offline)

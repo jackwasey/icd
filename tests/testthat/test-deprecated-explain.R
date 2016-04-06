@@ -285,7 +285,6 @@ test_that("working with named lists of codes, decimal is guessed", {
 })
 
 test_that("icd9 descriptions was parsed correctly", {
-  skip_online_tests()
   # TODO: only skip online if file not already available.
   x <- icd9Billable[["32"]]
   expect_equal(names(x), c("icd9", "descShort", "descLong"))

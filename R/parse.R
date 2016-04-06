@@ -87,7 +87,7 @@ update_everything <- function() {
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 #' @keywords internal
-parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
+parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
   assert_flag(save_data)
   assert_flag(offline)
 
@@ -137,7 +137,7 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = FALSE) {
 #' @keywords internal
 icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
                                      save_data = TRUE,
-                                     offline = FALSE) {
+                                     offline = TRUE) {
   assert_string(version)
   assert_flag(save_data)
   assert_flag(offline)
@@ -227,7 +227,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
 #' These have a quirk which needs a different approach
 #' @template offline
 #' @keywords internal
-parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
+parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
   message("working on version 27 quirk")
   assert_flag(offline)
   v27_dat <- icd9_sources[icd9_sources$version == "27", ]
@@ -259,7 +259,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = FALSE) {
 #' @template offline
 #' @keywords internal
 icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
-                                               verbose = FALSE, offline = FALSE) {
+                                               verbose = FALSE, offline = TRUE) {
   assert_flag(save_data)
   assert_flag(verbose)
   assert_flag(offline)

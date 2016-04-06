@@ -106,7 +106,7 @@ if (rtf_year_ok(test_year)) {
   rtf_dat <- icd9_sources[icd9_sources$f_year == test_year, ]
   f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
                                     file_name = rtf_dat$rtf_filename,
-                                    offline = FALSE)
+                                    offline = TRUE)
 
   rtf_lines <- readLines(f_info_short$file_path, warn = FALSE)
   rtf <- parse_rtf_lines(rtf_lines)
@@ -151,7 +151,7 @@ if (rtf_year_ok(test_year)) {
     test_ver <- "32"
     skip_flat_icd9_avail(test_ver)
 
-    v32 <- icd9_parse_leaf_desc_ver(version = test_ver, save_data = FALSE, offline = FALSE)
+    v32 <- icd9_parse_leaf_desc_ver(version = test_ver, save_data = FALSE, offline = TRUE)
     v32$code %>% icd_short_to_decimal.icd9 -> leaves
     expect_true(all(leaves %in% nrtf))
 

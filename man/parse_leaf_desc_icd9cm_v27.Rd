@@ -4,7 +4,7 @@
 \alias{parse_leaf_desc_icd9cm_v27}
 \title{Parse billable codes for ICD-9-CM version 27}
 \usage{
-parse_leaf_desc_icd9cm_v27(offline = FALSE)
+parse_leaf_desc_icd9cm_v27(offline = TRUE)
 }
 \arguments{
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from

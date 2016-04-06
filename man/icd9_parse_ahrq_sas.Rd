@@ -4,7 +4,7 @@
 \alias{icd9_parse_ahrq_sas}
 \title{parse AHRQ SAS code to get mapping}
 \usage{
-icd9_parse_ahrq_sas(save_data = FALSE, offline = FALSE)
+icd9_parse_ahrq_sas(save_data = FALSE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.

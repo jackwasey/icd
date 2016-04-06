@@ -19,16 +19,8 @@ do_slow_tests <- function(x = TRUE) {
   options("icd.do_slow_tests" = x)
 }
 
-do_online_tests <- function(x = TRUE) {
-  options("icd.do_online_tests" = x)
-}
-
 doing_slow_tests <- function() {
-  identical(getOption("icd.do_online_tests"), FALSE)
-}
-
-doing_online_tests <- function() {
-  identical(getOption("icd.do_online_tests"), FALSE)
+  identical(getOption("icd.do_slow_tests"), FALSE)
 }
 
 skip_slow_tests <- function(msg = "skipping slow test") {
@@ -36,29 +28,20 @@ skip_slow_tests <- function(msg = "skipping slow test") {
     testthat::skip(msg)
 }
 
-skip_online_tests <- function(msg = "skipping online test") {
-  if (doing_online_tests())
-    testthat::skip(msg)
-}
-
-rtf_year_ok <- function(test_year) {
-  rtf_dat <- icd9_sources[icd9_sources$f_year == test_year, ]
-  # see whether we have the files already downloaded (and unzipped)
-  f_info_short <- unzip_to_data_raw(rtf_dat$rtf_url,
-                                    file_name = rtf_dat$rtf_filename,
-                                    offline = TRUE)
-  !is.null(f_info_short)
+rtf_year_ok <- function(year) {
+  !is.null(fetch_rtf_year(year, offline = TRUE))
 }
 
 skip_on_no_rtf <- function(test_year) {
   if (!rtf_year_ok(test_year))
-    skip_online_tests(paste(test_year,
+    testthat::skip(paste(test_year,
                             "ICD-9-CM codes unavailable offline for testsing"))
 }
 
 skip_flat_icd9_avail <- function(
   ver = "31",
-  msg = paste("skipping test because flat file ICD-9-CM sources not available for version: ", ver)) {
+  msg = paste("skipping test because flat file ICD-9-CM",
+              "sources not available for version: ", ver)) {
   dat <- icd9_sources[icd9_sources$version == ver, ]
   fn_orig <- dat$short_filename
   if (is.na(fn_orig))
@@ -69,18 +52,18 @@ skip_flat_icd9_avail <- function(
                                     file_name = fn_orig,
                                     offline = TRUE)
   if (is.null(f_info_short))
-    skip_online_tests(msg)
+    testthat::skip(msg)
 
 }
 
 skip_icd10cm_flat_avail <- function(msg = "skipping test because flat file ICD-10-CM source not available") {
   if (is.null(icd10cm_get_flat_file(offline = TRUE)))
-    skip_online_tests(msg)
+    testthat::skip(msg)
 }
 
 skip_icd10cm_xml_avail <- function(msg = "skipping test because XML file ICD-10-CM source not available") {
   if (is.null(icd10cm_get_flat_file(offline = TRUE)))
-    skip_online_tests(msg)
+    testthat::skip(msg)
 }
 
 skip_flat_icd9_avail_all <- function() {
@@ -343,7 +326,6 @@ random_string <- function(n, max_chars = 4) {
 #' @keywords internal debugging
 show_test_options <- function() {
   print(options("icd.do_slow_tests"))
-  print(options("icd.do_online_tests"))
   print(options("icd.warn_deprecated"))
 }
 
@@ -363,7 +345,6 @@ set_full_test_options <- function() {
 
   message("now setting full test options")
   options("icd.do_slow_tests" = TRUE)
-  options("icd.do_online_tests" = TRUE)
   options("icd.warn_deprecated" = FALSE)
   show_test_options()
 }
@@ -383,8 +364,6 @@ setup_test_check <- function() {
   # deprecated
   if (is.null(options("icd.do_slow_tests")))
     options("icd.do_slow_tests" = FALSE)
-  if (is.null(options("icd.do_online_tests")))
-    options("icd.do_online_tests" = FALSE)
   if (is.null(options("icd.warn_deprecated")))
     options("icd.warn_deprecated" = TRUE)
 
@@ -396,8 +375,6 @@ setup_test_check <- function() {
     show_test_options()
     if (!is.null(getOption("icd.do_slow_tests")))
       options("icd.do_slow_tests" = TRUE)
-    if (!is.null(getOption("icd.do_online_tests")))
-      options("icd.do_online_tests" = FALSE)
     options("icd.warn_deprecated" = FALSE)
     show_test_options()
 
@@ -410,11 +387,6 @@ setup_test_check <- function() {
     options("icd.do_slow_tests" = TRUE)
   }
 # nocov start
-  if (identical(tolower(Sys.getenv("ICD_ONLINE_TESTS")), "true")) {
-    message("environment variable ICD_ONLINE_TESTS found to be true, so doing online tests")
-    options("icd.do_online_tests" = TRUE)
-  }
-
   if (identical(tolower(Sys.getenv("ICD_WARN_DEPRECATED")), "true")) {
     message("environment variable ICD_WARN_DEPRECATE found to be true, so warning for deprecated icd9 function use")
     options("icd.warn_deprecated" = TRUE)

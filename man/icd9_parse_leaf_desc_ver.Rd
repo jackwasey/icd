@@ -6,7 +6,7 @@
 Services (CMS).}
 \usage{
 icd9_parse_leaf_desc_ver(version = icd9cm_latest_edition(),
-  save_data = TRUE, offline = FALSE)
+  save_data = TRUE, offline = TRUE)
 }
 \arguments{
 \item{version}{character vector of length one containing the ICD-9 version,

@@ -17,7 +17,7 @@
 
 test_that("generating uranium data is identical to saved", {
   if (is.null(fetch_uranium_pathology(offline = TRUE)$file_path))
-    skip_online_tests("uranium pathology data only available online")
+    skip("uranium pathology data must be downloaded with fetch_uranium_pathology")
 
   suppressWarnings(
     if (!require("RODBC") || !existsFunction("odbcConnectAccess2007"))
@@ -41,7 +41,7 @@ test_that("ICD-10 codes in uranium data are okay", {
 
 test_that("generating vermont data is identical to saved", {
   if (is.null(fetch_vermont_dx(offline = TRUE)$file_path))
-    skip_online_tests("vermont data only available online")
+    skip("vermont data must be downloaded with fetch_vermont_dx")
   expect_identical(generate_vermont_dx(save_data = FALSE), vermont_dx)
 })
 
