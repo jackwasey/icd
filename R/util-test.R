@@ -39,7 +39,7 @@ skip_on_no_rtf <- function(test_year) {
 }
 
 skip_flat_icd9_avail <- function(ver = "31") {
-  msg = paste("skipping test because flat file ICD-9-CM",
+  msg <- paste("skipping test because flat file ICD-9-CM",
               "sources not available for version: ", ver)
   dat <- icd9_sources[icd9_sources$version == ver, ]
   fn_orig <- dat$short_filename
