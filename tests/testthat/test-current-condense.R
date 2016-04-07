@@ -75,9 +75,9 @@ test_that("condense ranges which do consense", {
     }
   }
   expect_equal(icd_condense.icd9(icd_children.icd9("V12", short_code = TRUE, defined = TRUE),
-                            defined = TRUE), "V12")
+                                 defined = TRUE), "V12")
   expect_equal(icd_condense.icd9(icd_children.icd9("V12", short_code = TRUE, defined = FALSE),
-                            defined = FALSE), "V12")
+                                 defined = FALSE), "V12")
 })
 
 test_that("condense ranges that don't condense at all", {
@@ -85,7 +85,7 @@ test_that("condense ranges that don't condense at all", {
   expect_equal(sort(icd_condense.icd9(c("1230", "1232", "1236"), defined = TRUE)), c("1230", "1232", "1236"))
   # missing 10009
   expect_equal(sort(icd_condense.icd9(c("1000", as.character(10000:10008)),
-                                 defined = FALSE)),
+                                      defined = FALSE)),
                c("1000", as.character(10000:10008)))
 })
 
@@ -127,7 +127,7 @@ test_that("condense short range", {
   expect_equal(icd_explain.icd9(othersalmonella), "Other salmonella infections")
 
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, defined = TRUE), "003")
-  expect_warning(res <- icd_condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), regex = NA)
+  expect_warning(res <- icd_condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), regexp = NA)
   expect_equal(res, othersalmonella)
   # missing this leaf node, we can't condense at all
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella[-3], defined = TRUE),
@@ -137,16 +137,16 @@ test_that("condense short range", {
                othersalmonella[-3])
 
   expect_equal_no_icd(sort(icd_children.icd9(short_code = TRUE, "001", billable = TRUE)),
-               c("0010", "0011", "0019"))
+                      c("0010", "0011", "0019"))
 
   expect_equal_no_icd(sort(icd_children.icd9(short_code = TRUE, x = "001", defined = TRUE)),
-               c("001", "0010", "0011", "0019"))
+                      c("001", "0010", "0011", "0019"))
 
   expect_equal(icd_condense.icd9(short_code = TRUE,
- icd_children.icd9(short_code = TRUE, "00320", defined = TRUE), defined = TRUE), "00320")
+                                 icd_children.icd9(short_code = TRUE, "00320", defined = TRUE), defined = TRUE), "00320")
   # majors should be okay, even if not 'real'
   expect_warning(dup_res <- icd_condense.icd9(short_code = TRUE,
-icd_children.icd9(short_code = TRUE, "003", defined = TRUE)), regex = NA)
+                                              icd_children.icd9(short_code = TRUE, "003", defined = TRUE)), regexp = NA)
 
   expect_equal(icd_condense.icd9(short_code = TRUE, c("003", "003"), defined = TRUE), "003")
   expect_equal(icd_condense.icd9(short_code = TRUE, c("003", "003"), defined = FALSE), "003")
@@ -157,42 +157,42 @@ test_that("condense full ranges", {
   # themselves defined.
   # majors:
   expect_equal(icd_condense.icd9(short_code = TRUE,
-icd_children.icd9(short_code = TRUE, "003", defined = FALSE), defined = FALSE), "003")
+                                 icd_children.icd9(short_code = TRUE, "003", defined = FALSE), defined = FALSE), "003")
   expect_equal(icd_condense.icd9(short_code = TRUE,
- icd_children.icd9(short_code = TRUE, "3", defined = FALSE), defined = FALSE), "003")
+                                 icd_children.icd9(short_code = TRUE, "3", defined = FALSE), defined = FALSE), "003")
   expect_equal(icd_condense.icd9(short_code = TRUE,
-icd_children.icd9(short_code = TRUE, "410", defined = FALSE), defined = FALSE), "410")
+                                 icd_children.icd9(short_code = TRUE, "410", defined = FALSE), defined = FALSE), "410")
   expect_equal(icd_condense.icd9(short_code = TRUE,
- icd_children.icd9(short_code = TRUE, "V12", defined = FALSE), defined = FALSE), "V12")
+                                 icd_children.icd9(short_code = TRUE, "V12", defined = FALSE), defined = FALSE), "V12")
   expect_equal(icd_condense.icd9(short_code = TRUE,
-icd_children.icd9(short_code = TRUE, "E800", defined = FALSE), defined = FALSE), "E800")
+                                 icd_children.icd9(short_code = TRUE, "E800", defined = FALSE), defined = FALSE), "E800")
   # repeat some tests with decimals instead
   expect_equal_no_icd(icd_condense.icd9(short_code = FALSE,
- icd_children.icd9("003", short_code = FALSE, defined = FALSE), defined = FALSE), "003")
+                                        icd_children.icd9("003", short_code = FALSE, defined = FALSE), defined = FALSE), "003")
   expect_equal_no_icd(icd_condense.icd9(
-icd_children.icd9(short_code = FALSE, "3", defined = FALSE), short_code = FALSE, defined = FALSE), "003")
+    icd_children.icd9(short_code = FALSE, "3", defined = FALSE), short_code = FALSE, defined = FALSE), "003")
   expect_equal_no_icd(icd_condense.icd9(short_code = FALSE,
-icd_children.icd9(short_code = FALSE, "410", defined = FALSE), defined = FALSE), "410")
+                                        icd_children.icd9(short_code = FALSE, "410", defined = FALSE), defined = FALSE), "410")
   expect_equal_no_icd(icd_condense.icd9(short_code = FALSE,
- icd_children.icd9("V12", short_code = FALSE, defined = FALSE), defined = FALSE), "V12")
+                                        icd_children.icd9("V12", short_code = FALSE, defined = FALSE), defined = FALSE), "V12")
   expect_equal_no_icd(icd_condense.icd9(short_code = FALSE,
- icd_children.icd9(short_code = FALSE, "E800", defined = FALSE), defined = FALSE), "E800")
+                                        icd_children.icd9(short_code = FALSE, "E800", defined = FALSE), defined = FALSE), "E800")
   # repeat some tests with decimals and smaller codes
   expect_equal_no_icd(icd_condense.icd9(short_code = FALSE,
- icd_children.icd9("003.2", short_code = FALSE, defined = FALSE), defined = FALSE),
-               "003.2")
+                                        icd_children.icd9("003.2", short_code = FALSE, defined = FALSE), defined = FALSE),
+                      "003.2")
   expect_equal_no_icd(icd_condense.icd9(
-icd_children.icd9(short_code = FALSE, "3.2", defined = FALSE), short_code = FALSE, defined = FALSE),
-               "003.2")
+    icd_children.icd9(short_code = FALSE, "3.2", defined = FALSE), short_code = FALSE, defined = FALSE),
+    "003.2")
   expect_equal_no_icd(icd_condense.icd9(short_code = FALSE,
-icd_children.icd9(short_code = FALSE, "410.0", defined = FALSE), defined = FALSE), "410.0")
+                                        icd_children.icd9(short_code = FALSE, "410.0", defined = FALSE), defined = FALSE), "410.0")
   expect_equal_no_icd(icd_condense.icd9(short_code = FALSE,
-icd_children.icd9("V12", short_code = FALSE, defined = FALSE), defined = FALSE), "V12")
+                                        icd_children.icd9("V12", short_code = FALSE, defined = FALSE), defined = FALSE), "V12")
   expect_equal_no_icd(icd_condense.icd9(short_code = FALSE,
- icd_children.icd9(short_code = FALSE, "E800", defined = FALSE), defined = FALSE), "E800")
+                                        icd_children.icd9(short_code = FALSE, "E800", defined = FALSE), defined = FALSE), "E800")
 
   expect_equal(icd_condense.icd9(short_code = TRUE,
-icd_children.icd9(short_code = TRUE, "0031", defined = FALSE), defined = FALSE), "0031")
+                                 icd_children.icd9(short_code = TRUE, "0031", defined = FALSE), defined = FALSE), "0031")
   # major is alloect_equal(icd_condense.icd9(short_code = TRUE,c("003", othersalmonella), defined = TRUE), "003")
   # major is retupect_equal(icd_condense.icd9(short_code = TRUE,othersalmonella, defined = TRUE), "003")
   expect_equal(icd_condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), othersalmonella)

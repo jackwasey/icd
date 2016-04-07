@@ -146,7 +146,7 @@ test_that("icd10 short to decimal", {
 test_that("icd10 short to decimal for multiple codes", {
   # pick up specific bug where a warning was given for muliple codes
   expect_warning(res <- icd_short_to_decimal(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-                                               "Z9989", "Z950", "C7A098", "C7A8")), regex = NA)
+                                               "Z9989", "Z950", "C7A098", "C7A8")), regexp = NA)
 
   expect_equal(as.vector(res), c("O9A.119", "O9A.53", "S00.00XA", "T32.99", "P15.0", "P15.9",
                                  "Z99.89", "Z95.0", "C7A.098", "C7A.8"))
@@ -154,7 +154,7 @@ test_that("icd10 short to decimal for multiple codes", {
 
   # is the icd10cm class preserved?
   expect_warning(res <- icd_short_to_decimal(icd10cm(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-                                                       "Z9989", "Z950", "C7A098", "C7A8"))), regex = NA)
+                                                       "Z9989", "Z950", "C7A098", "C7A8"))), regexp = NA)
 
   expect_true(is.icd_decimal_diag(res))
   expect_true(is.icd10cm(res))
@@ -350,10 +350,10 @@ test_that("convert list of icd-9 ranges (e.g. chapter definitions to comorbidity
 
   class(ooe[["code"]]) <- c("icd9", "icd_decimal_diag", "factor")
 
-  expect_warning(test_map <- icd9_chapters_to_map(icd::icd9Chapters), regex = NA)
+  expect_warning(test_map <- icd9_chapters_to_map(icd::icd9Chapters), regexp = NA)
   expect_warning(
     cmb <- icd9_comorbid(x = ooe, short_code = FALSE, map = test_map,
-                         short_map = TRUE, return_df = TRUE), regex = NA)
+                         short_map = TRUE, return_df = TRUE), regexp = NA)
   cmbcmp <- unname(as.matrix(logical_to_binary(cmb)[-1]))
   expmat <- diag(nrow = length(ooe$code))
   expect_equivalent(cmbcmp, expmat)

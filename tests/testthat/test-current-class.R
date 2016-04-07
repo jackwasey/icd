@@ -65,10 +65,10 @@ test_that("is short or decimal code", {
 })
 
 test_that("no warning or error for combining same types", {
-  expect_warning(c(as.icd9cm(""), as.icd9cm("")), regex = NA)
-  expect_warning(c(as.icd9(""), as.icd9("")), regex = NA)
-  expect_warning(c(as.icd10(""), as.icd10("")), regex = NA)
-  expect_warning(c(as.icd10cm(""), as.icd10cm("")), regex = NA)
+  expect_warning(c(as.icd9cm(""), as.icd9cm("")), regexp = NA)
+  expect_warning(c(as.icd9(""), as.icd9("")), regexp = NA)
+  expect_warning(c(as.icd10(""), as.icd10("")), regexp = NA)
+  expect_warning(c(as.icd10cm(""), as.icd10cm("")), regexp = NA)
 })
 
 test_that("warn if combining mixed ICD sub-version types", {
@@ -200,7 +200,7 @@ test_that("printing a comorbidity map works very simply", {
   expect_warning(
     capture.output(
       print.icd_comorbidity_map(icd::icd9_map_quan_elix)
-    ), regex = NA)
+    ), regexp = NA)
 })
 
 test_that("is comorbidity map?", {

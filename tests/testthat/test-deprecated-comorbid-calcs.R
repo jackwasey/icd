@@ -324,9 +324,9 @@ test_that("deprecated -get Charlson/Deyo comorbidities for a single patient", {
   mydf <- data.frame(visitId = c("a", "a"),
                      icd9 = c("044.9", "044.9"),
                      stringsAsFactors = FALSE)
-  expect_error(icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE), regex = NA)
+  expect_error(icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE), regexp = NA)
 
   mydf <- data.frame(visitId = c("a", "a"), icd9 = c("441", "412.93"))
-  expect_error(icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE), regex = NA)
+  expect_error(icd9ComorbidQuanDeyo(mydf, isShort = FALSE, return.df = TRUE), regexp = NA)
 
 })

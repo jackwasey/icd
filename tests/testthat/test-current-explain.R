@@ -20,7 +20,7 @@ context("explain ICD-9: code to human-readable")
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
     icd_explain(icd_children.icd9("391", defined = FALSE, short_code = TRUE),
-                     condense = FALSE, short_code = TRUE),
+                condense = FALSE, short_code = TRUE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
@@ -36,7 +36,7 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   expect_identical(
     icd_explain(factor(icd_children.icd9("391", defined = FALSE, short_code = TRUE)),
-                     condense = FALSE, short_code = TRUE),
+                condense = FALSE, short_code = TRUE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
@@ -208,7 +208,7 @@ test_that("parse icd9_majors vs those listed
 test_that("unsorted hierarchy tests", {
   expect_equal(
     tolower(icd::icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "00321",
-                                "long_desc"]),
+                                  "long_desc"]),
     tolower("Salmonella Meningitis"))
 })
 
@@ -260,8 +260,8 @@ test_that("explain icd9GetChapters simple input", {
 
 test_that("working with named lists of codes, decimal is guessed", {
   expect_warning(icd_explain(
-    list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE), regex = NA)
-  expect_warning(icd_explain(list(a = c("001"), b = c("001.1", "001.9"))), regex = NA)
+    list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE), regexp = NA)
+  expect_warning(icd_explain(list(a = c("001"), b = c("001.1", "001.9"))), regexp = NA)
 })
 
 test_that("icd9 descriptions is parsed correctly", {

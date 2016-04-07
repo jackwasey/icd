@@ -36,8 +36,8 @@ test_that("deprecated - ahrq make sure all the children are listed in the saved 
 
 test_that("deprecated - Elixhauser make sure all the children are listed in the saved data.", {
   for (i in elixComorbid) {
-icd9ChildrenShort(i, onlyReal = FALSE)
-#    expect_equal_no_icd(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
+    icd9ChildrenShort(i, onlyReal = FALSE)
+    #    expect_equal_no_icd(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
     expect_equivalent(icd9ChildrenShort(i, onlyReal = FALSE), sort(i))
   }
 })
@@ -77,8 +77,8 @@ test_that("deprecated - icd9 comorbidities are created correctly, and logical to
 
   expect_equal(
     logical_to_binary(data.frame(a = c("jack", "hayley"),
-                               b = c(TRUE, FALSE),
-                               f = c(TRUE, TRUE))),
+                                 b = c(TRUE, FALSE),
+                                 f = c(TRUE, TRUE))),
     data.frame(a = c("jack", "hayley"),
                b = c(1, 0),
                f = c(1, 1))
@@ -509,7 +509,7 @@ test_that("deprecated - diff comorbid errors for bad input", {
 })
 
 test_that("deprecated - diff comorbid works", {
-    # no warning or error for good data (forgo warning checks with deprecation)
+  # no warning or error for good data (forgo warning checks with deprecation)
   utils::capture.output(
     res <- icd9DiffComorbid(ahrqComorbid, elixComorbid, show = FALSE))
   expect_true(all(names(res) %in% c(
@@ -652,7 +652,7 @@ test_that("deprecated - comorbidities created from source data frame coded as fa
 })
 
 test_that("deprecated data aliases are created", {
-  expect_warning(dep_dat <- generate_deprecated_data(save_data = FALSE), regex = NA)
+  expect_warning(dep_dat <- generate_deprecated_data(save_data = FALSE), regexp = NA)
 
   # actually save the deprecated data somewhere, and reload it
   tmp_file_path <- tempfile()

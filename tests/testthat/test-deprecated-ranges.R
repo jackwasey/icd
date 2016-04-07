@@ -116,15 +116,15 @@ test_that("deprecated - expand icd9 range definition", {
   )
 
   expect_equal_no_icd(icd9ExpandRangeShort("401", "40102", onlyReal = FALSE,
-                                    excludeAmbiguousStart = FALSE,
-                                    excludeAmbiguousEnd = FALSE),
-               c("401", "4010", "40100", "40101", "40102"))
+                                           excludeAmbiguousStart = FALSE,
+                                           excludeAmbiguousEnd = FALSE),
+                      c("401", "4010", "40100", "40101", "40102"))
 
   # only works with single range
   expect_error(icd9ExpandRangeShort(c("10", "20"), c("11", "21")))
 
   # found bugs when expanding Injury and Poisoning chapter.
-  expect_error(icd9ExpandRangeShort("997", "998"), regex = NA)
+  expect_error(icd9ExpandRangeShort("997", "998"), regexp = NA)
   expect_false("999" %in% icd9ExpandRangeShort("998", "998", onlyReal = FALSE))
   expect_false("009" %in% icd9ExpandRangeShort("8", "8", onlyReal = FALSE))
 
@@ -153,27 +153,27 @@ test_that("deprecated - V code with ambiguous parent", {
   # descendants just to reach the specified codes, but not all the children of
   # the higher-level code.
   expect_equal_no_icd(icd9ExpandRangeShort("V10", "V1001",
-                                    onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
-               c("V10", "V100", "V1000", "V1001"))
+                                           onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                      c("V10", "V100", "V1000", "V1001"))
   expect_equal_no_icd(icd9ExpandRangeShort("V10", "V1001", onlyReal = FALSE),
-               c("V1000", "V1001"))
+                      c("V1000", "V1001"))
 })
 
 test_that("deprecated - V code ranges", {
   expect_equal_no_icd(icd9ExpandRangeShort("V1000", "V1002", onlyReal = FALSE),
-               c("V1000", "V1001", "V1002"))
+                      c("V1000", "V1001", "V1002"))
   # but we cap off the upper range correctly:
   expect_equal_no_icd(icd9ExpandRangeShort("V1009", "V101", onlyReal = FALSE),
-               c("V1009", "V101", "V1010", "V1011",
-                 "V1012", "V1013", "V1014", "V1015",
-                 "V1016", "V1017", "V1018", "V1019"))
+                      c("V1009", "V101", "V1010", "V1011",
+                        "V1012", "V1013", "V1014", "V1015",
+                        "V1016", "V1017", "V1018", "V1019"))
   # and with narrower top end
   expect_equal_no_icd(icd9ExpandRangeShort("V1009", "V1011",
-                                    onlyReal = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
-               c("V1009", "V1010", "V1011"))
+                                           onlyReal = FALSE, excludeAmbiguousStart = TRUE, excludeAmbiguousEnd = TRUE),
+                      c("V1009", "V1010", "V1011"))
   expect_equal_no_icd(icd9ExpandRangeShort("V1009", "V1011",
-                                    onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
-               c("V1009", "V101", "V1010", "V1011"))
+                                           onlyReal = FALSE, excludeAmbiguousStart = FALSE, excludeAmbiguousEnd = FALSE),
+                      c("V1009", "V101", "V1010", "V1011"))
   # but include those pesky parents when requested:
   expect_true(
     all(c("V10", "V100") %in% icd9ExpandRangeShort("V099", "V1011", onlyReal = FALSE,
@@ -195,8 +195,8 @@ test_that("deprecated - V code ranges", {
 test_that("deprecated - E code ranges", {
   expect_equal_no_icd(icd9ExpandRangeShort("E9501", "E9502", onlyReal = FALSE), c("E9501", "E9502"))
   expect_equal_no_icd(icd9ExpandRangeShort("E950", "E9509", onlyReal = FALSE),
-               c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
-                 "E9505", "E9506", "E9507", "E9508", "E9509")
+                      c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
+                        "E9505", "E9506", "E9507", "E9508", "E9509")
   )
   expect_equal(icd9AddLeadingZeroesShort("E9501"), "E9501")
 })
@@ -216,7 +216,7 @@ test_that("deprecated - major ranges", {
   expect_false("E999" %in% resallbut)
 
   expect_equal_no_icd(icd9ExpandRangeMajor("E99", "E101", onlyReal = FALSE),
-               c("E099", "E100", "E101"))
+                      c("E099", "E100", "E101"))
 })
 
 test_that("deprecated - range bugs", {
@@ -334,12 +334,12 @@ test_that("deprecated - icd9ChildrenDecimal valid input", {
 
 test_that("deprecated - icd9ChildrenShort valid input", {
   expect_equal_no_icd(icd9ChildrenShort("V100", onlyReal = FALSE),
-               paste("V100", c("", 0:9), sep = ""))
+                      paste("V100", c("", 0:9), sep = ""))
   expect_equal_no_icd(icd9ChildrenShort("v100"), icd9Children("V100"))
   expect_equal(icd9ChildrenShort(" V100 ", onlyReal = FALSE),
                icd9ChildrenShort("V100", onlyReal = FALSE))
   expect_equal_no_icd(icd9ChildrenShort("0100", onlyReal = FALSE),
-               paste("0100", c("", 0:9), sep = ""))
+                      paste("0100", c("", 0:9), sep = ""))
   expect_equal_no_icd(icd9ChildrenShort("1", onlyReal = FALSE)[1], "001")
   expect_equal_no_icd(icd9ChildrenShort("01", onlyReal = FALSE)[1], "001")
   expect_equal_no_icd(icd9ChildrenShort("001", onlyReal = FALSE)[1], "001")

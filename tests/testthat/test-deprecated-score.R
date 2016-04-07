@@ -21,7 +21,7 @@ test_that("deprecated - github issue #44 from wmurphyrd", {
   mydf <- data.frame(visitId = c("a", "b", "c", "a", "b", "d"),
                      icd9 = c("441", "412.93", "044.9", "250.0", "250.0", "250.0"),
                      stringsAsFactors = TRUE)
-  expect_error(icd9Charlson(mydf, return.df = TRUE), regex = NA)
+  expect_error(icd9Charlson(mydf, return.df = TRUE), regexp = NA)
 })
 
 test_that("deprecated - github issue #46 from wmurphyd", {
@@ -242,24 +242,24 @@ test_that("deprecated - icd9VanWalravenComorbid score calculation", {
 test_that("deprecated - icd9VanWalraven comodbidity index and score", {
   mydf <- data.frame(id = factor(c(rep(1, 20), rep(2, 20), rep(3, 18))),
                      value = c("324.1", "285.9", "599.70", "038.9", "278.00", "38.97",
-                             "V88.01", "112.0", "427.89", "790.4", "401.9", "53.51", "584.9",
-                             "415.12", "995.91", "996.69", "83.39", "V46.2", "V58.61", "276.69",
-                             "515", "V14.6", "784.0", "V85.1", "427.31", "V85.44", "300",
-                             "86.28", "569.81", "041.49", "486", "45.62", "V15.82", "496",
-                             "261", "280.9", "275.2", "96.59", "V49.86", "V10.42", "276.8",
-                             "710.4", "311", "041.12", "276.0", "790.92", "518.84", "552.21",
-                             "V85.41", "278.01", "V15.82", "96.72", "070.70", "285.29", "276.3",
-                             "V66.7", "272.4", "790.92"))
+                               "V88.01", "112.0", "427.89", "790.4", "401.9", "53.51", "584.9",
+                               "415.12", "995.91", "996.69", "83.39", "V46.2", "V58.61", "276.69",
+                               "515", "V14.6", "784.0", "V85.1", "427.31", "V85.44", "300",
+                               "86.28", "569.81", "041.49", "486", "45.62", "V15.82", "496",
+                               "261", "280.9", "275.2", "96.59", "V49.86", "V10.42", "276.8",
+                               "710.4", "311", "041.12", "276.0", "790.92", "518.84", "552.21",
+                               "V85.41", "278.01", "V15.82", "96.72", "070.70", "285.29", "276.3",
+                               "V66.7", "272.4", "790.92"))
   expect_equivalent(icd9VanWalraven(mydf, visitId = "id", icd9Field = "value"),
                     icd9VanWalravenComorbid(
                       icd9ComorbidQuanElix(mydf, visitId = "id", icd9Field = "value")))
   expect_equivalent(icd9VanWalraven(mydf, visitId = "id", icd9Field="value", return.df = TRUE),
                     data.frame(id = factor(c(1, 2, 3)),
-                                   vanWalraven = c(10, 12, -2)))
+                               vanWalraven = c(10, 12, -2)))
   expect_equal(
     icd9VanWalraven(mydf, icd9Field = "value"),
-               structure(c(10, 12, -2), names = c("1", "2", "3"))
-    )
+    structure(c(10, 12, -2), names = c("1", "2", "3"))
+  )
 })
 
 test_that("deprecated - github issue #64 - quan revised charleson scores", {
@@ -342,23 +342,23 @@ test_that("guess works for a factor", {
 })
 
 test_that("guess works for some difficult ICD-9 NA data", {
-dat <- structure(c(20L, 17L, 35L, 1L, 13L, 21L, 56L, 5L, 25L, 38L, 22L,
-31L, 34L, 23L, 44L, 45L, 40L, 49L, 51L, 11L, 29L, 47L, 37L, 53L,
-24L, 55L, 18L, 41L, 33L, 3L, 27L, 26L, 48L, 28L, 6L, 15L, 8L,
-42L, 50L, 46L, 12L, 36L, 19L, 2L, 9L, 39L, 30L, 32L, 54L, 14L,
-48L, 43L, 4L, 16L, 10L, 52L, 7L, 39L, NA, NA, NA, NA, NA, NA,
-NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
-NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
-NA, NA, NA, NA), .Label = c("038.9", "041.12", "041.49", "070.70",
-"112.0", "261", "272.4", "275.2", "276.0", "276.3", "276.69",
-"276.8", "278.00", "278.01", "280.9", "285.29", "285.9", "300",
-"311", "324.1", "38.97", "401.9", "415.12", "427.31", "427.89",
-"45.62", "486", "496", "515", "518.84", "53.51", "552.21", "569.81",
-"584.9", "599.70", "710.4", "784.0", "790.4", "790.92", "83.39",
-"86.28", "96.59", "96.72", "995.91", "996.69", "V10.42", "V14.6",
-"V15.82", "V46.2", "V49.86", "V58.61", "V66.7", "V85.1", "V85.41",
-"V85.44", "V88.01"), class = "factor")
+  dat <- structure(c(20L, 17L, 35L, 1L, 13L, 21L, 56L, 5L, 25L, 38L, 22L,
+                     31L, 34L, 23L, 44L, 45L, 40L, 49L, 51L, 11L, 29L, 47L, 37L, 53L,
+                     24L, 55L, 18L, 41L, 33L, 3L, 27L, 26L, 48L, 28L, 6L, 15L, 8L,
+                     42L, 50L, 46L, 12L, 36L, 19L, 2L, 9L, 39L, 30L, 32L, 54L, 14L,
+                     48L, 43L, 4L, 16L, 10L, 52L, 7L, 39L, NA, NA, NA, NA, NA, NA,
+                     NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+                     NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,
+                     NA, NA, NA, NA), .Label = c("038.9", "041.12", "041.49", "070.70",
+                                                 "112.0", "261", "272.4", "275.2", "276.0", "276.3", "276.69",
+                                                 "276.8", "278.00", "278.01", "280.9", "285.29", "285.9", "300",
+                                                 "311", "324.1", "38.97", "401.9", "415.12", "427.31", "427.89",
+                                                 "45.62", "486", "496", "515", "518.84", "53.51", "552.21", "569.81",
+                                                 "584.9", "599.70", "710.4", "784.0", "790.4", "790.92", "83.39",
+                                                 "86.28", "96.59", "96.72", "995.91", "996.69", "V10.42", "V14.6",
+                                                 "V15.82", "V46.2", "V49.86", "V58.61", "V66.7", "V85.1", "V85.41",
+                                                 "V85.44", "V88.01"), class = "factor")
 
-expect_false(icd_guess_short(dat))
+  expect_false(icd_guess_short(dat))
 
 })

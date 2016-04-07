@@ -23,10 +23,10 @@ expect_icd10cm_child_is_self <- function(...) {
     eval(bquote(expect_identical(icd_children(icd10cm(.(i))),
                                  as.icd10cm(as.icd_short_diag(.(i))))))
     icd_children(icd10(i))
-    eval(bquote(expect_warning(warn_res <- icd_children(as.icd10(.(i))), regex = NA)))
+    eval(bquote(expect_warning(warn_res <- icd_children(as.icd10(.(i))), regexp = NA)))
     eval(bquote(expect_is(warn_res, "icd10")))
 
-    eval(bquote(expect_warning(warn_res <- icd_children(.(i)), regex = NA)))
+    eval(bquote(expect_warning(warn_res <- icd_children(.(i)), regexp = NA)))
     eval(bquote(expect_identical(warn_res,
                                  as.icd10cm(as.icd_short_diag(.(i))))))
 
@@ -60,7 +60,7 @@ test_that("zero length ICD-10-CM children", {
     if (has_warning)
       eval(bquote(expect_warning(res <- icd_children_defined.icd10cm(x))))
     else
-      eval(bquote(expect_warning(res <- icd_children_defined.icd10cm(x), regex = NA)))
+      eval(bquote(expect_warning(res <- icd_children_defined.icd10cm(x), regexp = NA)))
     eval(bquote(expect_equivalent(res, as.icd10cm(character(0)))))
   }
   expect_empty_icd10cm_kids("%!^#&<>?,./")
@@ -69,17 +69,17 @@ test_that("zero length ICD-10-CM children", {
   expect_empty_icd10cm_kids(c("", ""))
   expect_empty_icd10cm_kids(character(0), has_warning = FALSE)
 
-  expect_warning(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)), regex = NA)
+  expect_warning(icd_children_defined(icd10cm(character(0))), icd10cm(character(0)), regexp = NA)
 })
 
 test_that("icd10cm children with one of several missing should not segfault", {
-expect_identical(
-  icd_children.icd10cm(c("I792", "K551")),
-  icd_children.icd10cm("K551")
-)
-expect_identical(
-  icd_children.icd10cm(c("I790", "I792")),
-  icd_children.icd10cm(c("I790"))
-)
+  expect_identical(
+    icd_children.icd10cm(c("I792", "K551")),
+    icd_children.icd10cm("K551")
+  )
+  expect_identical(
+    icd_children.icd10cm(c("I790", "I792")),
+    icd_children.icd10cm(c("I790"))
+  )
 
 })

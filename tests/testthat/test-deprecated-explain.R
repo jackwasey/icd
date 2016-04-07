@@ -61,7 +61,7 @@ test_that("explain S3 dispatch", {
   expect_equal(res, list(a = character(0), b = character(0)))
 
   expect_warning(res <- icd9Explain.numeric(3.21, isShort = FALSE),
-                 regex = "input data is in numeric format")
+                 regexp = "input data is in numeric format")
   expect_equal(res, icd9Explain("00321", isShort = TRUE))
 
 })
@@ -228,7 +228,7 @@ test_that("parse icd9ChaptersMajor vs those listed
 test_that("unsorted hierarchy tests", {
   expect_equal(
     tolower(icd::icd9Hierarchy[icd9Hierarchy[["icd9"]] == "00321",
-                                "descLong"]),
+                               "descLong"]),
     tolower("Salmonella Meningitis"))
 })
 

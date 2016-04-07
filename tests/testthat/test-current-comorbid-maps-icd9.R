@@ -19,7 +19,7 @@ context("comorbidity maps")
 
 test_that("try to induce c++ segfault bug", {
   expect_error(icd9_comorbid(ahrq_test_dat, map = icd::icd9_map_ahrq, short_code = TRUE),
-               regex = NA)
+               regexp = NA)
 })
 
 test_that("ahrq make sure all the children are listed in the saved data.", {
@@ -153,10 +153,10 @@ test_that("can condense the big lists of comorbidities without errors", {
       expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, defined = defined_codes))
     }
     else {
-      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regex = NA)
-      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regex = NA)
-      expect_warning(qe <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regex = NA)
-      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regex = NA)
+      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(qe <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
     }
 
     expect_is(ahrq, class = "list")
@@ -570,7 +570,7 @@ test_that("diff comorbid works", {
     utils::capture.output(
       res <- icd_diff_comorbid(icd::icd9_map_ahrq, icd9_map_elix, show = FALSE)
     ),
-    regex = NA)
+    regexp = NA)
 
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
@@ -591,7 +591,7 @@ test_that("diff comorbid works", {
     expect_output(
       resq <- icd_diff_comorbid(icd9_map_quan_elix, icd9_map_elix, show = TRUE),
       regexp = "Comorbidity Psychoses"
-    ), regex = NA)
+    ), regexp = NA)
 })
 
 two_pts_fac <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),

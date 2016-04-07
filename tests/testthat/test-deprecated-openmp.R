@@ -21,12 +21,12 @@ context("deprecated OpenMP")
 test_that("deprecated - single icd9 code comorbidity", {
   # this is enough to segfault with clang 3.7, libc++ and libomp
   x <- data.frame(visitId = "a", icd9 = "441")
-  icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T)
+  icd9ComorbidQuanDeyo(x, isShort = FALSE, applyHierarchy = TRUE)
 })
 
 test_that("deprecated - thousands of patients", {
   x <- generate_random_pts(10000)
-  expect_error(icd9ComorbidQuanDeyo(x, isShort = F, applyHierarchy = T), regex = NA)
+  expect_error(icd9ComorbidQuanDeyo(x, isShort = FALSE, applyHierarchy = TRUE), regexp = NA)
 })
 
 test_that("deprecated - vary everything", {
@@ -50,7 +50,7 @@ test_that("deprecated - vary everything", {
             expect_error(
               icd9ComorbidQuanDeyo(generate_random_unordered_pts(pts, dz_per_patient),
                                    isShort = FALSE, applyHierarchy = TRUE),
-              regex = NA,
+              regexp = NA,
               info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
                              pts, dz_per_patient, threads, chunk_size)
             )

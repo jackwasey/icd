@@ -18,9 +18,9 @@
 context("deprecated icd9 validation")
 
 test_that("deprecated - warning for deprecation of icd9ValidDecimal, not given in test mode!", {
-  expect_warning(icd9ValidDecimal(c("1", "2")), regex = NA)
-  expect_warning(icd9ValidShort(c("1", "2")), regex = NA)
-  expect_warning(icd9Valid(c("1", "2"), isShort = TRUE), regex = NA)
+  expect_warning(icd9ValidDecimal(c("1", "2")), regexp = NA)
+  expect_warning(icd9ValidShort(c("1", "2")), regexp = NA)
+  expect_warning(icd9Valid(c("1", "2"), isShort = TRUE), regexp = NA)
 })
 
 test_that("deprecated - icd9IsValidDecimal - rubbish input", {
@@ -369,7 +369,7 @@ test_that("deprecated - icd-9 code is really in the list, not just syntactically
   expect_equal(
     icd9IsReal(c("8027", "E9329", "E000", "armitage"), isShort = TRUE),
     c(TRUE, TRUE, TRUE, FALSE)
-    )
+  )
 })
 
 pts_invalid_mix <- data.frame(
@@ -457,7 +457,7 @@ test_that("deprecated - get real codes which are less than two digit major", {
   expect_equal(icd9GetRealShort(c("3", "11", "V2"), onlyBillable = FALSE), c("3", "11", "V2"))
   expect_equal(icd9GetRealDecimal(c("3", "11", "V2"), onlyBillable = FALSE), c("3", "11", "V2"))
 }
-          )
+)
 test_that("deprecated - illable codes are identified", {
   expect_true(icd9IsBillable("1000"))
   expect_false(icd9IsBillable("1008"))
@@ -471,7 +471,7 @@ test_that("deprecated - test valid alias", {
   x <- generate_random_short_icd9(200)
   expect_identical(icd9Valid(x, isShort = TRUE), icd9IsValid(x, isShort = TRUE))
 
-  })
+})
 
 # backported
 #

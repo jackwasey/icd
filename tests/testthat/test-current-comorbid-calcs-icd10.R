@@ -21,10 +21,10 @@ context("ICD-10 comorbidity calculations")
 
 test_that("ICD-10 comorbidities from uranium are calculated without warnings or errors", {
   skip_slow_tests("icd10 comorbidity calcs are unfortunatley slow")
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_elix), regex = NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_deyo), regex = NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_elix), regex = NA)
-  expect_warning(icd_comorbid(uranium_pathology, icd10_map_ahrq), regex = NA)
+  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_elix), regexp = NA)
+  expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_deyo), regexp = NA)
+  expect_warning(icd_comorbid(uranium_pathology, icd10_map_elix), regexp = NA)
+  expect_warning(icd_comorbid(uranium_pathology, icd10_map_ahrq), regexp = NA)
   # TODO much more here
 })
 
@@ -40,15 +40,15 @@ test_that("ahrq comorbidities found for test data", {
 
   for (test_name in names(td)) {
 
-    expect_error(res <- icd_comorbid(td[[test_name]], map = icd::icd10_map_ahrq), regex = NA)
+    expect_error(res <- icd_comorbid(td[[test_name]], map = icd::icd10_map_ahrq), regexp = NA)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method one comorbidity:", n, ", test: ", test_name))
 
-    expect_error(res <- icd10_comorbid(td[[test_name]], map = icd::icd10_map_ahrq), regex = NA)
+    expect_error(res <- icd10_comorbid(td[[test_name]], map = icd::icd10_map_ahrq), regexp = NA)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method two comorbidity:", n, ", test: ", test_name))
 
-    expect_error(res <- icd10_comorbid_ahrq(td[[test_name]], hierarchy = FALSE), regex = NA)
+    expect_error(res <- icd10_comorbid_ahrq(td[[test_name]], hierarchy = FALSE), regexp = NA)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method three comorbidity:", n, ", test: ", test_name))
 

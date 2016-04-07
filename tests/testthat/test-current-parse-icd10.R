@@ -32,7 +32,7 @@ test_that("icd10 2016 flat file details are okay", {
   # check cols at a time, so I get better error feedback:
   col_names <- c("code", "billable", "short_desc", "long_desc", "three_digit",
               "major", "sub_chapter", "chapter")
-  expect_warning(res <- icd10cm_get_all_defined(save_data = FALSE), regex = NA)
+  expect_warning(res <- icd10cm_get_all_defined(save_data = FALSE), regexp = NA)
   expect_identical(colnames(res), col_names)
 
   # checkmate tests worked well here, but don't work with latest testthat

@@ -43,9 +43,9 @@ test_that("vary everything", {
           # omp_chunk_size is not currently not set in CPP code
           options("icd.omp_chunk_size" = omp_chunk_size)
           expect_error(icd9_comorbid_quan_deyo(rand_pts, short_code = FALSE, hierarchy = TRUE),
-            regex = NA,
-            info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
-                           pts, dz_per_patient, threads, chunk_size))
+                       regexp = NA,
+                       info = sprintf("pts = %i, dz_per_patient = %i, threads = %i, chunk_size = %i",
+                                      pts, dz_per_patient, threads, chunk_size))
         }
       }
     }
