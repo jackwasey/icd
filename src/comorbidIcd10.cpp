@@ -45,8 +45,6 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
                                                      Rcpp::List map,
                                                      std::string visit_name,
                                                      std::string icd_name) {
-  // LogicalMatrix out;
-  // TOOD: resize to length of unique patients, and width of comorbid map
 
   CharacterVector icd_codes = x[icd_name];
   LogicalMatrix intermed(icd_codes.size(), map.size()); // zero-filled
@@ -60,6 +58,9 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
   String code;
   std::size_t codeNchar; // or char? we know it'll be short
   CharacterVector oneCbd;
+  // this must be longer than any code plus one for zero terminator. Some risk
+  // of buffer overflow here.
+  char codeCur[16];
 
   //char code_cstring[12]; // 12 should be enough. TOOD: test length
   // SEXP test_str = PROTECT(Rf_allocVector(STRSXP, 1));
@@ -80,6 +81,8 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
     code = icd_codes[i];
     const char * code_cstring = code.get_cstring();
     codeNchar = strlen(code_cstring);
+    if (codeNchar > 15)
+      Rcpp::stop("ICD-10 codes must all be less than 16 characters long.");
     size_t codeCurChar;
 
     for (std::size_t j = 0; j != map.size(); ++j) {
@@ -96,11 +99,11 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
       // would be quicker.
       //
       // Or Rcpp: Rcpp::match sugar function actually uses a hashmap, but does
-      // it recreate the hashmap each time? Maybe even a linear search is faster sometimes
-      // as there are only a handful of comorbidities (but can be many).
+      // it recreate the hashmap each time? Maybe even a linear search is faster
+      // sometimes as there are only a handful of comorbidities (but can be
+      // many).
 
       // copy the const char * code to a writeable buffer
-      char codeCur[codeNchar + 1]; // null terminator is the extra one
       // strcpy(codeCur, code_cstring); // copy here for the moving null terminator reverse method
       //for (codeCurChar = codeNchar; codeCurChar != 2; --codeCurChar) {
       for (codeCurChar = 3; codeCurChar != codeNchar + 1; ++codeCurChar) {
@@ -130,7 +133,8 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
 #endif
           intermed(i, j) = true; // the rest are zero filled
           UNPROTECT(1);
-          // we've found the comorbidity for the current code, so break out of comorbidity loop
+          // we've found the comorbidity for the current code, so break out of
+          // comorbidity loop
           goto got_comorbid;
         }
         UNPROTECT(1);
@@ -149,7 +153,7 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
   //aggregate.data.frame()
 
    // UNPROTECT(1); // test_str
-  // haven't aggregated yet, so there is a row for each row of the input data  
+  // haven't aggregated yet, so there is a row for each row of the input data
   intermed.attr("dimnames") = Rcpp::List::create(x[visit_name], map.names());
 
   return intermed;
