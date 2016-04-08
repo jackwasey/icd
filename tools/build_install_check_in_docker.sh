@@ -30,6 +30,7 @@ IFS=$'\n\t'
 
 cd /tmp
 git clone -b $GIT_BRANCH $GIT_URL/$GITHUB_USER/$GITHUB_REPO.git
+
 # actually, we need to build based on the directory name, not the package name:
 $R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)
 R_PKG_TAR_GZ=`ls -t $R_PKG_NAME*tar.gz | tail -1`
