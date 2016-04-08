@@ -65,7 +65,7 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
   //char code_cstring[12]; // 12 should be enough. TOOD: test length
   // SEXP test_str = PROTECT(Rf_allocVector(STRSXP, 1));
 
-  for (std::size_t i = 0; i != icd_codes.size(); ++i) {
+  for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
     // look backwards from length of current code in characters. This seems
     // terrible, but when there are so many miniscule subdivisions of ICD-10-CM,
     // we can't easily or efficiently extrapolate all these current and future
@@ -85,7 +85,7 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
       Rcpp::stop("ICD-10 codes must all be less than 16 characters long.");
     size_t codeCurChar;
 
-    for (std::size_t j = 0; j != map.size(); ++j) {
+    for (R_xlen_t j = 0; j != map.size(); ++j) {
 #ifdef ICD_DEBUG
       sprintf(debug_buf, "%u", (unsigned)j);
       Rcpp::Rcout << "icd10 cmbd working on comorbidity " << debug_buf << " from map\n";

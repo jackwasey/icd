@@ -356,7 +356,7 @@ SEXP fmatch_zero(SEXP x, SEXP y) {
 SEXP fmatch_str(SEXP x, SEXP y) {
   SEXP a;
   hash_t *h = 0;
-  int n = LENGTH(x), np = 0, y_to_char = 0, y_factor = 0;
+  int n = LENGTH(x), np = 0;
   const int nmv = 0L;
 
   /* edge-cases of 0 length */
@@ -426,7 +426,7 @@ SEXP fmatch_str(SEXP x, SEXP y) {
 int ffind_str(SEXP x, SEXP y) {
   SEXP a;
   hash_t *h = 0;
-  int n = LENGTH(x), np = 0, y_to_char = 0, y_factor = 0;
+  int n = LENGTH(x), np = 0;
 
   /* edge-cases of 0 length */
   if (n == 0) return 0;
@@ -489,7 +489,6 @@ int ffind_str(SEXP x, SEXP y) {
 int ffind_one_str(SEXP x, SEXP y) {
   SEXP a;
   hash_t *h = 0;
-  int y_to_char = 0, y_factor = 0;
 
   /* edge-cases of 0 length */
   if (LENGTH(y) == 0) return 0;
