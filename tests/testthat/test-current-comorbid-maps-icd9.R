@@ -172,6 +172,9 @@ test_that("can condense the big lists of comorbidities without errors", {
 })
 
 test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
+  # avoid encoding problems by just doing this on Linux.
+  skip_on_os(c("windows", "mac", "solaris"))
+
   skip_slow_tests()
   skip_flat_icd9_avail_all()
   skip_on_no_rtf("2011")
