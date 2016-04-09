@@ -35,7 +35,8 @@ RUN apt-get install -y -t unstable \
 
 ADD install_r_packages.R /tmp
 ADD build_install_check_in_docker.sh /tmp
-# use R (I didn't build my image to use Rdevel)
+
+# use "R" as name of binary (I didn't build my image to use Rdevel)
 RUN Rscript /tmp/install_r_packages.R
 
 ENV GIT_BRANCH master

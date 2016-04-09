@@ -15,6 +15,6 @@ three-digit 'major' codes, and in some cases also span codes across two
 alphabetic initial characters. E.g. Chapter I spans A00 to B99.
 }
 \details{
-TODO: confirm that ICD-10-CM has no variation at this level.
+TODO: confirm that ICD-10-CM is identical to ICD-10 at this level
 }
 

@@ -59,3 +59,19 @@ test_that("lists of ICD-10 decimal codes are identified correctly as decimal", {
   expect_false(icd_guess_short(icd10_each_ahrq_cmb))
   expect_false(icd_guess_short(unclass(icd10_each_ahrq_cmb)))
 })
+
+test_that("guessing type of NA values defaults to short, and doesn't error", {
+  expect_true(icd_guess_short(icd9(NA)))
+  expect_true(icd_guess_short(icd9cm(NA)))
+  expect_true(icd_guess_short(icd10(NA)))
+  expect_true(icd_guess_short(icd10cm(NA)))
+  expect_true(icd_guess_short(icd9(c(NA, NA))))
+  expect_true(icd_guess_short(icd9cm(c(NA, NA))))
+  expect_true(icd_guess_short(icd10(c(NA, NA))))
+  expect_true(icd_guess_short(icd10cm(c(NA, NA))))
+
+  expect_error(icd_guess_short(icd9(c(NA, TRUE))))
+  expect_error(icd_guess_short(icd9cm(c(NA, TRUE))))
+  expect_error(icd_guess_short(icd10(c(NA, TRUE))))
+  expect_error(icd_guess_short(icd10cm(c(NA, TRUE))))
+})

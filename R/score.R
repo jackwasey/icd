@@ -168,7 +168,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #' @importFrom stats aggregate
 #' @export
 icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
-  assert_data_frame(x) #TODO: more constraints
+  assert_data_frame(x, min.cols = 2, col.names = "named")
   assert_string(visit_name)
   assert_flag(return_df)
 
@@ -200,8 +200,7 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assert_string(visit_name)
   assert_flag(return_df)
-  # TODO: this could be a logical matrix or a data frame. Should there be a
-  # comorbidity df/matrix class?
+  assert(checkmate::assertDataFrame(x), checkmate::assertMatrix(x))
   res <- apply(x[, names(x) %nin% visit_name],
                MARGIN = 1,
                FUN = sum)

@@ -71,12 +71,13 @@ multiple classes in a nice order. Calling the bare constructor, e.g.
 latter is much faster, but for most uses, \code{as.icd9} and siblings would
 be better.
 
-Some features make more sense as attributes. E.g.
-  setting code type to \code{short} or \code{decimal}.
+Some features make more sense as attributes. E.g. setting code type to
+\code{short} or \code{decimal}.
 
-TODO: From Wickham: "When implementing a vector class, you should
+SOMEDAY: From Wickham: "When implementing a vector class, you should
   implement these methods: length, [, [<-, [[, [[<-, c. (If [ is implemented
-  rev, head, and tail should all work)."
+  rev, head, and tail should all work)." But see examples, as this may not be
+  needed.
 
 long or wide format data is always a data frame. It does not
   carry any other ICD classes, even if it only contains one type of code.
@@ -96,6 +97,15 @@ attr(x, "icd_short_diag") <- TRUE
 x
 attributes(x) <- list(icd_short_diag = NULL)
 x
+
+# despite exhortation to implement [<- etc, the following seems to work:
+j <- as.icd_short_diag(as.icd10(c("A11", "B2222")))
+j[2] <- "C33"
+stopifnot(is.icd_short_diag(j))
+stopifnot(is.icd10(j), is.icd10(j[1]), is.icd10(j[[1]]))
+j[[1]] <- "D44001"
+stopifnot(is.icd_short_diag(j))
+stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
 }
 \keyword{internal}
 

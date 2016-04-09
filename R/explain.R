@@ -73,8 +73,7 @@ icd_explain.factor <- function(icd9, short_code = icd_guess_short(icd9),
   icd_explain.character(as_char_no_warn(icd9), short_code = short_code,
                         condense = condense, brief = brief, warn = warn)
 
-#' @describeIn icd_explain explain character vector of ICD-9 codes. TODO:
-#'   actually, this is ICD-9-CM
+#' @describeIn icd_explain explain character vector of ICD-9 codes.
 #' @export
 icd_explain.icd9 <- function(...) {
   icd_explain.icd9cm(...)
@@ -84,8 +83,7 @@ icd_explain.icd9 <- function(...) {
 #' @export
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  # TODO, need to figure out how to use checkmate for my classes. ?extend it
-  assert(checkmate::checkCharacter(unclass(x)), checkmate::checkFactor(x))
+  assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
   assert_flag(short_code)
   assert_flag(condense)
   assert_flag(brief)
@@ -111,16 +109,29 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
   c(mjexplain,
-    icd::icd9cm_hierarchy[ icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
+    icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
 }
 
-#' @describeIn icd_explain ICD-10 explanation not implemented yet
-#' @keywords internal
+#' @describeIn icd_explain ICD-10 explanation, current a minimal implementation
+#' @export
 icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  .NotYetImplemented()
-  # TODO: this will be a fairly straightforward lookup from the icd2016cm data frame
+  assert_vector(x)
+  assert_flag(short_code)
+  assert_flag(brief)
+  if (!missing(condense))
+    .NotYetUsed("condense", error = FALSE)
+  if (!missing(brief))
+    .NotYetUsed("condense", error = FALSE)
+  if (!missing(brief))
+    .NotYetUsed("warn", error = FALSE)
+
+  if (!short_code)
+    x <- icd_decimal_to_short.icd10(x)
+
+  icd::icd10cm2016[icd::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
+                   ifelse(brief, "short_desc", "long_desc")]
 }
 
 #' @describeIn icd_explain explain numeric vector of ICD-9 codes, with warning.

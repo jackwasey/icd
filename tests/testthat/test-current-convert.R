@@ -371,6 +371,7 @@ test_that("code routes through RcppExports.R and slower versions", {
 
 
 context("icd10 conversions")
+# TODO: this needs fleshing out
 
 test_that("decimal ICD-10 to parts", {
   expect_identical(
@@ -381,4 +382,16 @@ test_that("decimal ICD-10 to parts", {
     icd_decimal_to_parts("C7A.020"),
     list(major = "C7A", minor = "020")
   )
+  expect_identical(
+    icd_decimal_to_parts(icd10cm("E89.89")),
+    list(major = "E89", minor = "89")
+  )
+})
+
+test_that("icd10 short to parts", {
+  expect_equal(icd_short_to_parts("A0101"),
+              data.frame(major = "A01", minor = "01", stringsAsFactors = FALSE))
+  # for V and E codes, we can't just assume ICD-10 will work with the ICD-9 function:
+  expect_equal(icd_short_to_parts(as.icd10cm("E8989")),
+               data.frame(major = "E89", minor = "89", stringsAsFactors = FALSE))
 })

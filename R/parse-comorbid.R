@@ -144,9 +144,6 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE) {
   # put in the same order as the ICD-9 listings (and the publications)
   icd10_map_ahrq <- icd10_map_ahrq[match(ahrq_order, names(icd10_map_ahrq))]
 
-  # TODO: maybe need to post-process for children/parents, maybe sharing a lot
-  # of code with the ICD-9 version?
-
   names(icd10_map_ahrq) <- icd::icd_names_ahrq_htn_abbrev
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd_short_diag)
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd10)

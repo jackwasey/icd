@@ -16,7 +16,7 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include "class.h"
+#include "guess.h"
 #include "local.h"
 #include <Rcpp.h>
 #include <vector>
@@ -24,44 +24,79 @@
 #include <algorithm>
 #include <Rinternals.h>
 
-//' Quickly guess whether codes are short form, as opposed to decimal 
+using Rcpp::LogicalVector;
+
+//' Guess whether codes are \code{short_code} or \code{decimal_code}
 //'
-//' Very quick heuristic, ploughs through ten million codes in less than one second
-//' and will stop more quickly if it finds a '.'.
-//'
-//' TODO: a factor version would be faster
-//' @examples
-//' \dontrun{
-//' codes <- generate_random_short_icd9(1e7)
-//' codes_factor <- factor_nosort(codes)
-//' system.time(guessShortCpp(codes, 1e7))
-//' codes[1] <- "100.1"
-//' system.time(guessShortCpp(codes, 1e7))
-//' microbenchmark::microbenchmark(icd:::icd_guess_short(codes),
-//'                                icd:::guessShortCpp(codes),
-//'                                icd:::guessShortPlusFactorCpp(codes),
-//'                                # icd:::icd_guess_short_fast(codes_factor),
-//'                                icd:::icd_guess_short_fast(codes),
-//'                                times = 100L)
-//' }
+//' The goal is to guess whether codes are \code{short_code} or
+//' \code{decimal_code} form. Currently condense works, but not with the
+//' \code{icd} look-up table currently in use. Of note, validation is a bit
+//' different here, since we don't know the type until after we guess. We could
+//' look for where both short_code and long are invalid, and otherwise assume
+//' valid, even if the bulk are short_code. However, it may be more useful to
+//' check validity after the guess.
+//' @details Very quick heuristic, ploughs through ten million codes in less
+//'   than one second and will stop more quickly if it finds a '.'.
+//' @return single logical value, \code{TRUE} if input data are predominantly
+//'   \code{short_code} type. If there is some uncertainty, then return
+//'   \code{NA}.
 //' @keywords internal
-// [[Rcpp::export(guess_short_cpp)]]
-bool guessShortPlusFactorCpp(SEXP x_, int n = 100L) {
+// [[Rcpp::export(icd_guess_short)]]
+bool guessShortCompleteCpp(SEXP x_,
+                           SEXP short_code = R_NilValue,
+                           int n = 1000L,
+                           SEXP icd_name = R_NilValue) {
+
+  // if short_code is set, just return that. Do it using C API because of Rcpp
+  // argument weirdness with NULL values
+  if (!Rf_isNull(short_code))
+    return Rf_asLogical(x_);
+
+  if (Rf_getAttrib(x_, Rf_install("icd_short_diag")) != R_NilValue)
+    return Rf_asLogical(x_);
+
+  if (Rf_inherits(x_, "data.frame")) {
+    Rcpp::Function get_icd_name("get_icd_name");
+    Rcpp::DataFrame rdf(x_);
+    SEXP icd_name_not_null(get_icd_name(rdf, icd_name));
+    return guessShortPlusFactorCpp(getRListOrDfElement(x_, CHAR(STRING_ELT(icd_name_not_null, 0))), n);
+  }
+
+  if (TYPEOF(x_) == VECSXP) {
+    // don't unlist (it's complicated), just guess based on first element
+    return guessShortPlusFactorCpp(VECTOR_ELT(x_, 0));
+  }
+
+  return guessShortPlusFactorCpp(x_, n);;
+}
+
+// [[Rcpp::export]]
+bool guessShortPlusFactorCpp(SEXP x_, int n) {
   Rcpp::CharacterVector x;
-        switch(TYPEOF(x_)) {
-            case STRSXP: {
-                x = Rcpp::as<Rcpp::CharacterVector>(x_);
-		break;    
-            }
-      	    case INTSXP: {
-                if (Rf_isFactor(x_))
-                x = Rf_getAttrib(x_, R_LevelsSymbol);
-                break;
-      	    }
-      	    default: {
-                Rcpp::stop("Character vectors and factors are accepted");
-      	    }
-       }
+  switch(TYPEOF(x_)) {
+  case STRSXP: {
+    x = Rcpp::as<Rcpp::CharacterVector>(x_);
+    break;
+  }
+  case INTSXP: {
+    if (Rf_isFactor(x_))
+      x = Rf_getAttrib(x_, R_LevelsSymbol);
+    break;
+  }
+  case LGLSXP: {
+    // we will accept all logical values, if all are NA, which defauts to
+    // logical unless otherwise specified. And we obviously don't know whether
+    // these NAs would have been short or long, just default to short.
+    Rcpp::LogicalVector xl = Rcpp::LogicalVector(x_);
+
+    if (Rcpp::all(is_na(xl)))
+      return true;
+    // don't break, because if there were non-NA logicals, this is an error
+  }
+  default: {
+    Rcpp::stop("Character vectors and factors are accepted");
+  }
+  }
   n = std::min((int)x.length(), n);
   const char * b;
   const char * ob;
@@ -76,6 +111,6 @@ bool guessShortPlusFactorCpp(SEXP x_, int n = 100L) {
     }
     // stop when we first get a five digit code. There are four digit major E codes.
     if ((b - ob) == 5) return true;
-  } 
+  }
   return true;
 }

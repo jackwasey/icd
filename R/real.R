@@ -27,9 +27,7 @@ utils::globalVariables("icd10cm2016")
 #' CMS.
 #' @param x vector if ICD codes to test whether defined in certain ICD code list
 #' @template short_code
-#' @param billable single logical value (default \code{FALSE}), if \code{TRUE}
-#'   will divert to test whether the codes are in the billable list instead of
-#'   seeing if they are any leaf or branch node. TODO: template
+#' @template billable
 #' @template dotdotdot
 #' @return logical vector
 #' @export
@@ -43,7 +41,7 @@ icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
 #' @keywords internal
 icd_is_defined.icd9 <- function(x, short_code = icd_guess_short(x),
                                 billable = FALSE, ...) {
-  # TODO: check input x
+  assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
   assert_flag(short_code)
   assert_flag(billable)
 
@@ -62,6 +60,7 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short(x),
 #' @keywords internal
 icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short(x),
                                    billable = FALSE, ...) {
+  assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
   if (!short_code)
     x <- icd_decimal_to_short(x)
 
@@ -97,9 +96,7 @@ icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
 #' whether codes are all short-form or all decimal-form
 #' @param x input vector or factor, possibly with an ICD class
 #' @param short_code logical value, whether short-form ICD code
-#' @param billable logical value, default \code{FALSE} whether any defined
-#'   value, or, if \code{TRUE} only defined codes which are also considered
-#'   billable, i.e. leaf nodes.
+#' @template billable
 #' @export
 icd_get_defined <- function(x, short_code = icd_guess_short(x), billable = FALSE) {
   UseMethod("icd_get_defined")
@@ -191,7 +188,7 @@ icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
                                     icd9cm_edition = icd9cm_latest_edition(), ...) {
   # guess ICD-9 vs ICD-10 and set class to dispatch again
   x <- icd_guess_version_update(x, short_code = short_code)
-  # TODO: think about this: UseMethod doesn't send the new 'x', but uses the
+  # UseMethod doesn't send the new 'x', but uses the
   # class of the updated 'x' to dispatch the original 'x'
   UseMethod("icd_is_billable", x)
 }

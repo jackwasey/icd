@@ -73,8 +73,7 @@ icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
 #' }
 #' @keywords internal
 icd_classes_conflict <- function(x) {
-  return(is.icd9(x) && is.icd10(x))
-  # TODO: define rules. Maybe just have minimal set of conflicts.
+  is.icd9(x) && is.icd10(x)
 }
 
 #' prefer an order of classes
@@ -108,12 +107,13 @@ icd_classes_ordered <- function(x) {
 #' latter is much faster, but for most uses, \code{as.icd9} and siblings would
 #' be better.
 #'
-#' Some features make more sense as attributes. E.g.
-#'   setting code type to \code{short} or \code{decimal}.
+#' Some features make more sense as attributes. E.g. setting code type to
+#' \code{short} or \code{decimal}.
 #'
-#' @details TODO: From Wickham: "When implementing a vector class, you should
+#' @details SOMEDAY: From Wickham: "When implementing a vector class, you should
 #'   implement these methods: length, [, [<-, [[, [[<-, c. (If [ is implemented
-#'   rev, head, and tail should all work)."
+#'   rev, head, and tail should all work)." But see examples, as this may not be
+#'   needed.
 #' @param x object to set class \code{icd9}
 #' @param warn single logical value, if \code{TRUE} will gives warning when
 #'   converting between types. ICD-9 to ICD-10 will cause an error regardless.
@@ -124,6 +124,15 @@ icd_classes_ordered <- function(x) {
 #' x
 #' attributes(x) <- list(icd_short_diag = NULL)
 #' x
+#'
+#' # despite exhortation to implement [<- etc, the following seems to work:
+#' j <- as.icd_short_diag(as.icd10(c("A11", "B2222")))
+#' j[2] <- "C33"
+#' stopifnot(is.icd_short_diag(j))
+#' stopifnot(is.icd10(j), is.icd10(j[1]), is.icd10(j[[1]]))
+#' j[[1]] <- "D44001"
+#' stopifnot(is.icd_short_diag(j))
+#' stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
 #' @keywords internal
 icd9 <- function(x) {
   cl <- class(x)
@@ -295,10 +304,13 @@ as.icd_comorbidity_map <- function(x) {
 #' @param x comorbidity map, which is a named list
 #' @param index integer
 #' @template dotdotdot
+#' @examples
+#' # show that attributes are preserved when subsetting
+#' stopifnot(is.icd_short_diag(icd10_map_ahrq[[1]]))
 #' @export
 `[[.icd_comorbidity_map` <- function(x, index, ...) {
   out <- NextMethod()
-  # TODO: restore attributes
+  # no need to reset attributes?
   out
 }
 
@@ -462,6 +474,3 @@ is.icd_wide_data <- function(x) inherits(x, "icd_wide_data")
 #' @rdname is.icd9
 #' @export
 is.icd_comorbidity_map <- function(x) inherits(x, "icd_comorbidity_map")
-
-# TODO, print S3 methods so we can choose to show ICD version, and/or human
-# readable descriptions of the codes

@@ -756,7 +756,6 @@ icd9VanWalraven.data.frame <-
            return.df = FALSE,
            stringsAsFactors = getOption("stringsAsFactors"),
            ...) {
-    # TODO: what about icd9 vs icd10 classes?
     icd_deprecated("icd_van_walraven.data.frame")
     icd_van_walraven.data.frame(x = x, visit_name = visitId,
                                 return_df = return.df,

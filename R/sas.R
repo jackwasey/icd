@@ -85,7 +85,6 @@ sas_format_extract_rcomfmt <- function(sas_lines) {
 # ICD-10 SAS code seems to be literal with all possible (ICD-10-CM for given
 # year) cihldren listed. No ranges are specified (unlike the ICD-9 equivalentt)
 sas_icd10_assignments_to_list <- function(x) {
-  # TODO: unfortunately, the sorting is alphabeetical now, so I'll have to resort to the original Elixhauser sequence
   x["NONE"] <- NULL
   x[" "] <- NULL
   x

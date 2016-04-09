@@ -62,7 +62,7 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   if (!short_code)
     y <- icd_decimal_to_short.icd9(x)
   else
-    y <- icd9_add_leading_zeroes(x)
+    y <- icd9_add_leading_zeroes(x, short_code = short_code)
 
   if (is.factor(x))
     return(x[icd9_order_cpp(as_char_no_warn(y))])

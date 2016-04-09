@@ -130,10 +130,26 @@ icd9ShortToPartsCpp <- function(icd9Short, minorEmpty) {
     .Call('icd_icd9ShortToPartsCpp', PACKAGE = 'icd', icd9Short, minorEmpty)
 }
 
+#' @describeIn icd_decimal_to_parts Convert short ICD-10 code to parts
+#' @export
+#' @keywords internal manip
+icd_short_to_parts.icd10 <- function(icd10Short, minorEmpty = "") {
+    .Call('icd_icd10ShortToPartsCpp', PACKAGE = 'icd', icd10Short, minorEmpty)
+}
+
 #' @rdname convert
 #' @keywords internal manip
 icd9DecimalToPartsCpp <- function(icd9Decimal, minorEmpty) {
     .Call('icd_icd9DecimalToPartsCpp', PACKAGE = 'icd', icd9Decimal, minorEmpty)
+}
+
+#' @describeIn icd_decimal_to_parts Convert decimal ICD-10 code to parts. This
+#'   shares almost 100% code with the ICD-9 version: someday combine the common
+#'   code.
+#' @export
+#' @keywords internal manip
+icd_decimal_to_parts.icd10 <- function(icd10Decimal, minorEmpty = "") {
+    .Call('icd_icd10DecimalToPartsCpp', PACKAGE = 'icd', icd10Decimal, minorEmpty)
 }
 
 icd9_short_to_decimal_cpp <- function(x) {
@@ -152,28 +168,26 @@ icd_get_major.icd9 <- function(x, short_code) {
     .Call('icd_icd9GetMajor', PACKAGE = 'icd', x, short_code)
 }
 
-#' Quickly guess whether codes are short form, as opposed to decimal 
+#' Guess whether codes are \code{short_code} or \code{decimal_code}
 #'
-#' Very quick heuristic, ploughs through ten million codes in less than one second
-#' and will stop more quickly if it finds a '.'.
-#'
-#' TODO: a factor version would be faster
-#' @examples
-#' \dontrun{
-#' codes <- generate_random_short_icd9(1e7)
-#' codes_factor <- factor_nosort(codes)
-#' system.time(guessShortCpp(codes, 1e7))
-#' codes[1] <- "100.1"
-#' system.time(guessShortCpp(codes, 1e7))
-#' microbenchmark::microbenchmark(icd:::icd_guess_short(codes),
-#'                                icd:::guessShortCpp(codes),
-#'                                icd:::guessShortPlusFactorCpp(codes),
-#'                                # icd:::icd_guess_short_fast(codes_factor),
-#'                                icd:::icd_guess_short_fast(codes),
-#'                                times = 100L)
-#' }
+#' The goal is to guess whether codes are \code{short_code} or
+#' \code{decimal_code} form. Currently condense works, but not with the
+#' \code{icd} look-up table currently in use. Of note, validation is a bit
+#' different here, since we don't know the type until after we guess. We could
+#' look for where both short_code and long are invalid, and otherwise assume
+#' valid, even if the bulk are short_code. However, it may be more useful to
+#' check validity after the guess.
+#' @details Very quick heuristic, ploughs through ten million codes in less
+#'   than one second and will stop more quickly if it finds a '.'.
+#' @return single logical value, \code{TRUE} if input data are predominantly
+#'   \code{short_code} type. If there is some uncertainty, then return
+#'   \code{NA}.
 #' @keywords internal
-guess_short_cpp <- function(x_, n = 100L) {
+icd_guess_short <- function(x_, short_code = NULL, n = 1000L, icd_name = NULL) {
+    .Call('icd_guessShortCompleteCpp', PACKAGE = 'icd', x_, short_code, n, icd_name)
+}
+
+guessShortPlusFactorCpp <- function(x_, n) {
     .Call('icd_guessShortPlusFactorCpp', PACKAGE = 'icd', x_, n)
 }
 

@@ -69,7 +69,8 @@ The new 'icd' package contains tested versions of all the deprecated function na
 release_questions <- function() {
   c(
     # data:
-    "Have you regenerated icd9cm_hierarchy and other compiled data?",
+    "Have you regenerated icd9cm_hierarchy and other compiled data on Linux?",
+    "Uranium data requires rebuild on Windows for RODBC to extract raw data",
     "Have you run tools::checkRdaFiles(\"data\") to check everything is optimally compressed?",
     # documentation:
     "Have you checked all TODO comments, made into github issues where appropriate",

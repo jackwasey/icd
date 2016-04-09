@@ -124,8 +124,6 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
         all.x = TRUE) %>%
     magrittr::extract2("short_desc") %>% factor_nosort -> icd10cm2016[["major"]]
 
-  # TODO: set encoding to ASCII?
-
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because
   # there are some non-numeric characters scattered around)

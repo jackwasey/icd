@@ -23,4 +23,5 @@
 #include <vector>
 #include <string>
 
+bool guessShortPlusFactorCpp(SEXP x_, int n = 1000L);
 #endif /* GUESS_H_ */

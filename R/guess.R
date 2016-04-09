@@ -15,46 +15,16 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' guess whether codes are \code{short_code} or \code{decimal_code}
-#'
-#' TODO: Partly implemented. Goal is to guess whether codes are
-#' \code{short_code} or \code{decimal_code} form. Currently condense works, but
-#' not with the \code{icd} look-up table currently in use. Of note, validation
-#' is a bit different here, since we don't know the type until after we guess.
-#' We could look for where both short_code and long are invalid, and otherwise
-#' assume valid, even if the bulk are short_code. However, it may be more useful
-#' to check validity after the guess.
-#' @return single logical value, \code{TRUE} if input data are predominantly
-#'   \code{short_code} type. If there is some uncertainty, then return
-#'   \code{NA}.
-#' @keywords internal
-icd_guess_short <- function(x, short_code = NULL, test_n = 1000L, icd_name = NULL) {
-  if (!is.null(short_code))
-    return(short_code)
-  if (is.icd_short_diag(x, must_work = TRUE))
-    return(TRUE)
-  if (is.icd_decimal_diag(x, must_work = TRUE))
-    return(FALSE)
-  if (is.data.frame(x)) {
-    icd_name <- get_icd_name(x, icd_name = icd_name)
-    x <- .subset2(x, icd_name) # this is v fast equiv to [[icd_name]]
-  }
-  if (is.list(x))
-    x <- unlist(x, recursive = TRUE)
-  # don't need to convert to character, and it is likely to be quicker
-  # to look for decimal codes in a factor than the whole char vector anyway
-  guess_short_cpp(x, test_n)
-}
-
-
 #' Guess version of ICD codes
 #'
 #' The guess is indeed a guess and can be wrong. There are some codes which
 #' could be either ICD-9 or ICD-10. The current implementation doesn't check
 #' whether the codes exist in any definitions (ICD-9 CM or WHO, for example),
-#' just whether they are valid. Thus it is quicker.
+#' just whether they are valid.
 #'
-#' @details TODO: consider adding warning depending on degree of uncertainty.
+#' Currently, ambiguous codes are guessed true or false, with no indication of
+#' uncertainty. Possible solutions are adding an attribute, warning, or
+#' optionally throwing an error.
 #'
 #' @param x input data
 #' @template short_code
@@ -84,9 +54,9 @@ icd_guess_version.factor <- function(x, short_code = NULL, ...) {
 #' @export
 #' @keywords internal
 icd_guess_version.character <- function(x, short_code = NULL, test_n = 10, ...) {
-  # TODO: this is too complicated. The short test can really just be looking for
-  # the decimal place, maybe in C/C++, but doesn't need anything special extra,
-  # and I can't see how ICD version would make a difference
+  # TODO: this is too complicated, but tolerant of invalid codes. If we assume
+  # all the codes are valid ICD-9 or ICD-10, then we can just look for the first
+  # code which starts with a number, which would be simpler and much faster.
 
   assert_character(x)
   assert(checkmate::checkFlag(short_code), checkmate::checkNull(short_code))
@@ -113,9 +83,8 @@ icd_guess_version.character <- function(x, short_code = NULL, test_n = 10, ...) 
     )
   }
 
-  # todo: guess ICD-10-CM, if there is any ICD-10-CM code amongst other ICD-10 codes?
-  # TODO: maybe return vector of types, e.g. c("icd10cm, "icd10")
-
+  # no attempt at distinguishing ICD sub-types, e.g. ICD-10-CM, although this is
+  # possible, it would slow down and complicate this function
   if (i9 >= i10)
     "icd9"
   else

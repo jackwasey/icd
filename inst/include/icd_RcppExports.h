@@ -287,6 +287,25 @@ namespace icd {
         return Rcpp::as<Rcpp::List >(__result);
     }
 
+    inline Rcpp::List icd_short_to_parts_icd10(const Rcpp::CharacterVector icd10Short, const Rcpp::String minorEmpty = "") {
+        typedef SEXP(*Ptr_icd_short_to_parts_icd10)(SEXP,SEXP);
+        static Ptr_icd_short_to_parts_icd10 p_icd_short_to_parts_icd10 = NULL;
+        if (p_icd_short_to_parts_icd10 == NULL) {
+            validateSignature("Rcpp::List(*icd_short_to_parts_icd10)(const Rcpp::CharacterVector,const Rcpp::String)");
+            p_icd_short_to_parts_icd10 = (Ptr_icd_short_to_parts_icd10)R_GetCCallable("icd", "icd_icd_short_to_parts_icd10");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd_short_to_parts_icd10(Rcpp::wrap(icd10Short), Rcpp::wrap(minorEmpty));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<Rcpp::List >(__result);
+    }
+
     inline Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String minorEmpty) {
         typedef SEXP(*Ptr_icd9DecimalToPartsCpp)(SEXP,SEXP);
         static Ptr_icd9DecimalToPartsCpp p_icd9DecimalToPartsCpp = NULL;
@@ -298,6 +317,25 @@ namespace icd {
         {
             RNGScope __rngScope;
             __result = p_icd9DecimalToPartsCpp(Rcpp::wrap(icd9Decimal), Rcpp::wrap(minorEmpty));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<Rcpp::List >(__result);
+    }
+
+    inline Rcpp::List icd_decimal_to_parts_icd10(const Rcpp::CharacterVector icd10Decimal, const Rcpp::String minorEmpty = "") {
+        typedef SEXP(*Ptr_icd_decimal_to_parts_icd10)(SEXP,SEXP);
+        static Ptr_icd_decimal_to_parts_icd10 p_icd_decimal_to_parts_icd10 = NULL;
+        if (p_icd_decimal_to_parts_icd10 == NULL) {
+            validateSignature("Rcpp::List(*icd_decimal_to_parts_icd10)(const Rcpp::CharacterVector,const Rcpp::String)");
+            p_icd_decimal_to_parts_icd10 = (Ptr_icd_decimal_to_parts_icd10)R_GetCCallable("icd", "icd_icd_decimal_to_parts_icd10");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd_decimal_to_parts_icd10(Rcpp::wrap(icd10Decimal), Rcpp::wrap(minorEmpty));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -363,17 +401,36 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
-    inline bool guess_short_cpp(SEXP x_, int n = 100L) {
-        typedef SEXP(*Ptr_guess_short_cpp)(SEXP,SEXP);
-        static Ptr_guess_short_cpp p_guess_short_cpp = NULL;
-        if (p_guess_short_cpp == NULL) {
-            validateSignature("bool(*guess_short_cpp)(SEXP,int)");
-            p_guess_short_cpp = (Ptr_guess_short_cpp)R_GetCCallable("icd", "icd_guess_short_cpp");
+    inline bool icd_guess_short(SEXP x_, SEXP short_code = R_NilValue, int n = 1000L, SEXP icd_name = R_NilValue) {
+        typedef SEXP(*Ptr_icd_guess_short)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd_guess_short p_icd_guess_short = NULL;
+        if (p_icd_guess_short == NULL) {
+            validateSignature("bool(*icd_guess_short)(SEXP,SEXP,int,SEXP)");
+            p_icd_guess_short = (Ptr_icd_guess_short)R_GetCCallable("icd", "icd_icd_guess_short");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_guess_short_cpp(Rcpp::wrap(x_), Rcpp::wrap(n));
+            __result = p_icd_guess_short(Rcpp::wrap(x_), Rcpp::wrap(short_code), Rcpp::wrap(n), Rcpp::wrap(icd_name));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<bool >(__result);
+    }
+
+    inline bool guessShortPlusFactorCpp(SEXP x_, int n) {
+        typedef SEXP(*Ptr_guessShortPlusFactorCpp)(SEXP,SEXP);
+        static Ptr_guessShortPlusFactorCpp p_guessShortPlusFactorCpp = NULL;
+        if (p_guessShortPlusFactorCpp == NULL) {
+            validateSignature("bool(*guessShortPlusFactorCpp)(SEXP,int)");
+            p_guessShortPlusFactorCpp = (Ptr_guessShortPlusFactorCpp)R_GetCCallable("icd", "icd_guessShortPlusFactorCpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_guessShortPlusFactorCpp(Rcpp::wrap(x_), Rcpp::wrap(n));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

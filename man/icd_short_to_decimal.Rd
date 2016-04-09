@@ -41,7 +41,8 @@ format
 \item \code{icd10}: convert ICD-10 codes from short to decimal
 format
 
-\item \code{icd10cm}: convert ICD-10-CM code from short to decimal format
+\item \code{icd10cm}: convert ICD-10-CM code from short to decimal
+format
 }}
 \keyword{internal}
 

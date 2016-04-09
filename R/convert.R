@@ -108,8 +108,6 @@ icd_wide_to_long <- function(x,
   assert_string(icd_name)
   assert_character(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
 
-  #TODO: make S3
-
   if (is.null(icd_labels)) {
     re <- length(icd_regex)
     while (re > 0) {
@@ -122,6 +120,8 @@ icd_wide_to_long <- function(x,
                               min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icd_labels %in% names(x)))
 
+  # could definitely do this with non-base functions, but this is quick enough
+  # and reliable.
   res <- stats::reshape(x,
                         direction = "long",
                         varying = icd_labels,
@@ -229,11 +229,13 @@ icd_long_to_wide <- function(x,
 #' # output data frame has a factor for the visit_name column
 #' stopifnot(identical(rownames(mat), as.character(df.out[["visit_id"]])))
 #' df.out[, 1:4]
-#' # when creating a data frame like this, stringsAsFactors uses the system-wide option you have set.
+#' # when creating a data frame like this, stringsAsFactors uses
+#' # the system-wide option you may have set e.g. with
+#' # options("stringsAsFactors" = FALSE).
 #' is.factor(df.out[["visit_id"]])
 #' @export
 icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
-                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+                                   stringsAsFactors = getOption("stringsAsFactors")) {
   assert_matrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint
@@ -265,7 +267,7 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' mat.out[, 1:4]
 #' @export
 icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
-                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+                                   stringsAsFactors = getOption("stringsAsFactors")) {
   assert_data_frame(x, min.rows = 1, min.cols = 2, col.names = "named")
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint
@@ -327,7 +329,8 @@ icd_short_to_decimal.icd10 <- function(x) {
   icd10(as.icd_decimal_diag(out)) # not as.icd10
 }
 
-#' @describeIn icd_short_to_decimal convert ICD-10-CM code from short to decimal format
+#' @describeIn icd_short_to_decimal convert ICD-10-CM code from short to decimal
+#'   format
 #' @export
 #' @keywords internal
 icd_short_to_decimal.icd10cm <- function(x) {
@@ -414,34 +417,32 @@ icd_decimal_to_parts.icd9 <- function(x, minor_empty = "") {
   .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, minor_empty)
 }
 
-#' @describeIn icd_short_to_parts Convert short format ICD-10 code to parts
-#' @export
-#' @keywords internal manip
-icd_short_to_parts.icd10 <- function(x, minor_empty = "") {
-  icd_short_to_parts.icd9(x, minor_empty)
-}
-
-#' @describeIn icd_decimal_to_parts Convert decimal ICD-9 code to parts
-#' @export
-#' @keywords internal manip
-icd_decimal_to_parts.icd10 <- function(x, minor_empty = "") {
-  icd_decimal_to_parts.icd9(x, minor_empty)
-}
-
 #' @describeIn icd_short_to_parts Convert short format ICD code to parts,
-#'   assuming ICD-9 from character class. TODO: test this works for ICD-10
+#'   guessing whether ICD-9 or ICD-10
 #' @export
 #' @keywords internal manip
 icd_short_to_parts.character <- function(x, minor_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a
   # shim here.
-  .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, minor_empty)
+  icd_ver <- icd_guess_version(x)
+  if (icd_ver == "icd9")
+    .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, minor_empty)
+  else if (icd_ver == "icd10")
+    icd_short_to_parts.icd10(icd10Short = x, minorEmpty = minor_empty)
+  else
+    stop("Unknown ICD version guessed from input")
 }
 
-#' @describeIn icd_short_to_parts Convert decimal ICD code to parts, assuming
-#'   ICD-9 from character class. TODO: test this works for ICD-10
+#' @describeIn icd_short_to_parts Convert decimal ICD code to parts, guessing
+#'   ICD version
 #' @export
 #' @keywords internal manip
 icd_decimal_to_parts.character <- function(x, minor_empty = "") {
-  .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, minor_empty)
+  icd_ver <- icd_guess_version(x)
+  if (icd_ver == "icd9")
+    .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, minor_empty)
+  else if (icd_ver == "icd10")
+    icd_decimal_to_parts.icd10(icd10Decimal = x, minorEmpty = minor_empty)
+  else
+    stop("Unknown ICD version guessed from input")
 }

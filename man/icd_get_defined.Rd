@@ -11,9 +11,10 @@ icd_get_defined(x, short_code = icd_guess_short(x), billable = FALSE)
 
 \item{short_code}{logical value, whether short-form ICD code}
 
-\item{billable}{logical value, default \code{FALSE} whether any defined
-value, or, if \code{TRUE} only defined codes which are also considered
-billable, i.e. leaf nodes.}
+\item{billable}{single logical value, whether to limit return codes also by
+whether they are billable, i.e. leaf nodes. This is really only designed
+for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not
+designed for billing, but for public health and death reporting.}
 }
 \description{
 Return only those codes which are heading or leaf (billable), specifying

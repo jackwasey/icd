@@ -269,7 +269,6 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
                              save_data = FALSE,
                              verbose = verbose, offline = offline)
 
-  # TODO online flag for icd(-get_chapters
   message("slower step of building icd9 chapters hierarchy from 2011 RTF. ~20s")
   chaps <- icd9_get_chapters(x = icd9_rtf$code,
                              short_code = TRUE,

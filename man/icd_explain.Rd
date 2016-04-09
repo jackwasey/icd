@@ -72,12 +72,11 @@ conversion to decimal notation, but to the textual format.
 
 \item \code{factor}: explain Explain factor of ICD-9 codes
 
-\item \code{icd9}: explain character vector of ICD-9 codes. TODO:
-actually, this is ICD-9-CM
+\item \code{icd9}: explain character vector of ICD-9 codes.
 
 \item \code{icd9cm}: explain character vector of ICD-9-CM codes
 
-\item \code{icd10}: ICD-10 explanation not implemented yet
+\item \code{icd10}: ICD-10 explanation, current a minimal implementation
 
 \item \code{numeric}: explain numeric vector of ICD-9 codes, with warning.
 In general, this is not allowed because of the possible ambiguity of

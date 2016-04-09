@@ -34,10 +34,12 @@ Where reasonable, this is guessed from the input data.}
 The guess is indeed a guess and can be wrong. There are some codes which
 could be either ICD-9 or ICD-10. The current implementation doesn't check
 whether the codes exist in any definitions (ICD-9 CM or WHO, for example),
-just whether they are valid. Thus it is quicker.
+just whether they are valid.
 }
 \details{
-TODO: consider adding warning depending on degree of uncertainty.
+Currently, ambiguous codes are guessed true or false, with no indication of
+uncertainty. Possible solutions are adding an attribute, warning, or
+optionally throwing an error.
 }
 \section{Methods (by class)}{
 \itemize{

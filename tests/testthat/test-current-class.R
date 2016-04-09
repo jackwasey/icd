@@ -297,3 +297,10 @@ test_that("fail to update data frame class with conflicting cols", {
   expect_error(update_data_frame_class(x, must_work = TRUE))
   expect_identical(update_data_frame_class(x, must_work = FALSE), x)
 })
+
+test_that("can create NA valued ICD code types", {
+  expect_true(is.na(as.icd9(NA)))
+  expect_true(is.na(as.icd9cm(NA)))
+  expect_true(is.na(as.icd10(NA)))
+  expect_true(is.na(as.icd10cm(NA)))
+})

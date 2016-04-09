@@ -382,15 +382,13 @@ icd_deprecated <- function(...) {
 #' @rdname chapter_to_desc_range
 #' @keywords internal
 chapter_to_desc_range.icd9 <- function(x) {
-  # TODO, duplicated code for identifying parts of ICD codes
-  .chapter_to_desc_range(
-    x, re_major = re_icd9_major_bare)
+  .chapter_to_desc_range(x, re_major = icd::re_icd9_major_bare)
 }
 
 #' @rdname chapter_to_desc_range
 #' @keywords internal
 chapter_to_desc_range.icd10 <- function(x) {
-  .chapter_to_desc_range(x, re_major = re_icd10_major_bare)
+  .chapter_to_desc_range(x, re_major = icd::re_icd10_major_bare)
 }
 
 na_to_false <- function(x) {

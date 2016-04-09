@@ -30,9 +30,10 @@ Where reasonable, this is guessed from the input data.}
 
 \item{...}{arguments passed on to other functions}
 
-\item{billable}{single logical value (default \code{FALSE}), if \code{TRUE}
-will divert to test whether the codes are in the billable list instead of
-seeing if they are any leaf or branch node. TODO: template}
+\item{billable}{single logical value, whether to limit return codes also by
+whether they are billable, i.e. leaf nodes. This is really only designed
+for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not
+designed for billing, but for public health and death reporting.}
 }
 \value{
 logical vector

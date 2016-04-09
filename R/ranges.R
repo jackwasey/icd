@@ -112,14 +112,11 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short(c(
   if (substr(end, 4, 100) == "x")
     end <- substr(end, 1, 3)
 
-  # TODO: either search down supposedly well ordered list until substring of end
-  # changes, or find all children, and get pos of last one.
-
   end_kids <- icd_children_defined.icd10cm(end, short_code = TRUE)
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  pos <- match(c(start, new_end), icd::icd10cm2016[["code"]])
+  pos <- fmatch(c(start, new_end), icd::icd10cm2016[["code"]])
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
@@ -160,8 +157,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
 
   se <- as_char_no_warn(c(start, end)) %>% str_trim %>% str_to_upper
 
-  # TODO: memoise this, or does fastmatch remember?
-  unique_mjrs <- icd::icd10cm2016$three_digit  %>% unique
+  unique_mjrs <- icd::icd10cm2016$three_digit %>% unique
 
   if (!icd_is_major.icd10cm(se[[1]]))
     stop("start: ", start, " is not an ICD-10-CM major (three character) code")
@@ -171,6 +167,9 @@ icd_expand_range_major.icd10cm <- function(start, end) {
   if (se[[1]] > se[[2]])
     stop(se[[1]], " is after ", se[[2]])
 
+  # fastmatch will add attribute to the variable with scope in this block, so
+  # it'll get garbage collected. If this ever matters, can call fmatch on the
+  # whole three_digit vector, and then unique the results to dedupe.
   pos <- fmatch(se, unique_mjrs)
   if (is.na(pos[[1]]))
     stop(se[[1]], " as start not found")
