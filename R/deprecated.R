@@ -130,7 +130,7 @@ icd9ComorbidQuanElixhauser <- function(...) {
 icd9ComorbidAhrq <- function(icd9df,
                              visitId = NULL,
                              icd9Field = NULL,
-                             isShort = icd_guess_short(icd9df, test_n = 100, icd_name = icd9Field),
+                             isShort = icd_guess_short(icd9df, n = 100, icd_name = icd9Field),
                              return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   icd_deprecated("icd9_comorbid_ahrq")
   icd9_comorbid_ahrq(icd9df, visit_name = visitId,
@@ -145,7 +145,7 @@ icd9ComorbidAhrq <- function(icd9df,
 icd9ComorbidElix <- function(icd9df,
                              visitId = NULL,
                              icd9Field = NULL,
-                             isShort = icd_guess_short(icd9df, test_n = 100, icd_name = icd9Field),
+                             isShort = icd_guess_short(icd9df, n = 100, icd_name = icd9Field),
                              return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   icd_deprecated("icd9_comorbid_elix")
   icd9_comorbid_elix(icd9df,visit_name = visitId,
@@ -159,7 +159,7 @@ icd9ComorbidElix <- function(icd9df,
 icd9ComorbidQuanElix <- function(icd9df,
                                  visitId = NULL,
                                  icd9Field = NULL,
-                             isShort = icd_guess_short(icd9df, test_n = 100, icd_name = icd9Field),
+                             isShort = icd_guess_short(icd9df, n = 100, icd_name = icd9Field),
                                  return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   icd_deprecated("icd9_comorbid_quan_elix")
   icd9_comorbid_quan_elix(icd9(icd9df), visit_name = visitId,
@@ -173,7 +173,7 @@ icd9ComorbidQuanElix <- function(icd9df,
 icd9ComorbidQuanDeyo <- function(icd9df,
                                  visitId = NULL,
                                  icd9Field = NULL,
-                             isShort = icd_guess_short(icd9df, test_n = 100, icd_name = icd9Field),
+                             isShort = icd_guess_short(icd9df, n = 100, icd_name = icd9Field),
                                  return.df = FALSE, abbrevNames = TRUE, applyHierarchy = TRUE, ...) {
   icd_deprecated("icd9_comorbid_quan_deyo")
   icd9_comorbid_quan_deyo(icd9df, visit_name = visitId,

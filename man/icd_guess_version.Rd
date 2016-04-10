@@ -17,8 +17,7 @@ icd_guess_version(x, short_code, ...)
 
 \method{icd_guess_version}{factor}(x, short_code = NULL, ...)
 
-\method{icd_guess_version}{character}(x, short_code = NULL, test_n = 10,
-  ...)
+\method{icd_guess_version}{character}(x, short_code = NULL, n = 10, ...)
 
 \method{icd_guess_version}{data.frame}(x, short_code = NULL,
   icd_name = get_icd_name(x), ...)
@@ -29,6 +28,15 @@ icd_guess_version(x, short_code, ...)
 \item{short_code}{single logical value which determines whether the ICD-9
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
+
+\item{n}{number of elements or rows to sample}
+
+\item{icd_name}{The column in the \code{data.frame} which contains the ICD
+codes. This is a character vector of length one. If it is \code{NULL},
+\code{icd9} will attempt to guess the column name, looking for
+progressively less likely possibilities until it matches a single column.
+Failing this, it will take the first column in the data frame. Specifying
+the column using this argument avoids the guesswork.}
 }
 \description{
 The guess is indeed a guess and can be wrong. There are some codes which

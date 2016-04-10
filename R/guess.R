@@ -28,6 +28,7 @@
 #'
 #' @param x input data
 #' @template short_code
+#' @param n number of elements or rows to sample
 #' @export
 #' @keywords internal
 icd_guess_version <- function(x, short_code, ...)
@@ -53,7 +54,7 @@ icd_guess_version.factor <- function(x, short_code = NULL, ...) {
 #' @describeIn icd_guess_version Guess version of ICD codes in character vector
 #' @export
 #' @keywords internal
-icd_guess_version.character <- function(x, short_code = NULL, test_n = 10, ...) {
+icd_guess_version.character <- function(x, short_code = NULL, n = 10, ...) {
   # TODO: this is too complicated, but tolerant of invalid codes. If we assume
   # all the codes are valid ICD-9 or ICD-10, then we can just look for the first
   # code which starts with a number, which would be simpler and much faster.
@@ -61,7 +62,7 @@ icd_guess_version.character <- function(x, short_code = NULL, test_n = 10, ...) 
   assert_character(x)
   assert(checkmate::checkFlag(short_code), checkmate::checkNull(short_code))
 
-  x <- x[1:test_n]
+  x <- x[1:n]
 
   if (!is.null(short_code)) {
     if (short_code) {
@@ -94,6 +95,7 @@ icd_guess_version.character <- function(x, short_code = NULL, test_n = 10, ...) 
 #' @describeIn icd_guess_version Guess version of ICD codes in a field in a
 #'   \code{data.frame}
 #' @method icd_guess_version data.frame
+#' @template icd_name
 #' @keywords internal
 #' @export
 icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_icd_name(x), ...) {
