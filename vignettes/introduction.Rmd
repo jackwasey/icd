@@ -113,10 +113,11 @@ head(apply(icd9_comorbid_quan_deyo(icd_wide_to_long(vermont_dx)), 2, as.integer)
 ## Specifying data types
 
 ```{r testing oldrel}
+# TODO: delete me! use trycatch?
 icd_is_valid.character("100") # valid ICD-9 code
 ```
 
-```{r testing oldrel}
+```{r testing oldrel2}
 icd:::icd_is_valid("100") # valid ICD-9 code
 ```
 
