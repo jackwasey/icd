@@ -56,7 +56,8 @@ bool guessShortCompleteCpp(SEXP x_,
     return Rf_asLogical(x_);
 
   if (Rf_inherits(x_, "data.frame")) {
-    Rcpp::Function get_icd_name("get_icd_name");
+    std::string ns("icd");
+    Rcpp::Function get_icd_name("get_icd_name", ns);
     Rcpp::DataFrame rdf(x_);
     SEXP icd_name_not_null(get_icd_name(rdf, icd_name));
     return guessShortPlusFactorCpp(getRListOrDfElement(x_, CHAR(STRING_ELT(icd_name_not_null, 0))), n);

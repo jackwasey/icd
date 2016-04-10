@@ -200,7 +200,7 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assert_string(visit_name)
   assert_flag(return_df)
-  assert(checkmate::assertDataFrame(x), checkmate::assertMatrix(x))
+  assert(checkmate::checkDataFrame(x), checkmate::checkMatrix(x))
   res <- apply(x[, names(x) %nin% visit_name],
                MARGIN = 1,
                FUN = sum)
