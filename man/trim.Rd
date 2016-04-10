@@ -18,7 +18,7 @@ character vector
 \examples{
 \dontrun{
 s <- random_string(250);
-microbenchmark::microbenchmark(trim(s), trimws(s))
+microbenchmark::microbenchmark(trim(s), trimws(s)) # trimws from R version 3.2
 }
 }
 \keyword{internal}
