@@ -17,7 +17,7 @@
 
 ## start with the local build, until up on docker hub
 #FROM jackwasey/r-devel-ubsan-clang-3.8
-FROM r-clang-3.8
+FROM jackwasey/r-clang-3.8
 
 ## install some libraries and supporting binaries, some of which must come from unstable (sid), and not the testing repo which is the default in the r-devel base rocker image.
 RUN apt-get install -y -t unstable \

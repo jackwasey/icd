@@ -46,15 +46,17 @@ overlapping names are compared.
 ICD-9 codes
 }}
 \examples{
+# compare CHF for ICD-10 mappings from Elixhauser and AHRQ
+icd_diff_comorbid(icd10_map_elix, icd10_map_ahrq, show = FALSE)[["CHF"]]
 \dontrun{
-diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid,
-                                 show = TRUE)[["CHF"]]
+# default is to show the results in a human readable manner:
+diff_result <- icd_diff_comorbid(icd9_map_elix, icd9_map_ahrq)[["CHF"]]
 # show differences for
 # give full report on all comorbidities for these mappings
-diff_result <- icd_diff_comorbid(elixComorbid, ahrqComorbid, show = FALSE)
+diff_result <- icd_diff_comorbid(icd9_map_elix, icd9_map_ahrq, show = FALSE)
 
 # the following outputs a summary to the console:
-icd_diff_comorbid(elixComorbid, ahrqComorbid)
+icd_diff_comorbid(icd9_map_elix, icd9_map_ahrq)
 }
 }
 

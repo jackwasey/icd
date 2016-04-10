@@ -38,10 +38,12 @@
 #' # because 428 is present):
 #' icd_explain(ahrqComorbid$CHF[1:3])
 #' # same without condensing the list. In this case, 428.0 is shown:
-#' icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
+#' icd_explain(icd9_map_ahrq$CHF[1:3], brief = TRUE)
+#' # The first three in the ICD-10 equivalent are a little different:
+#' icd_explain(icd10_map_ahrq$CHF[1:3], brief = TRUE)
 #' # nice to have magrittr, but not essential
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
-#' icd_explain(ahrqComorbid$CHF[1:3] %>%  icd_condense)
+#' icd_explain(icd9_map_ahrq$CHF[1:3] %>% icd_condense)
 #' @return data frame, or list of data frames, with fields for ICD-9 code, name
 #'   and description
 #' @export
@@ -55,7 +57,7 @@ icd_explain.default <- function(x, short_code = icd_guess_short(x), condense = T
   switch(
     icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
     "icd9" = icd_explain.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
-    "icd10" = icd_explain.icd10(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
+    "icd10" = icd_explain.icd10(x, short_code = short_code, brief = brief, ...),
     stop("Unknown ICD version.")
   )
 }
@@ -117,11 +119,10 @@ icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
   assert_vector(x)
   assert_flag(short_code)
   assert_flag(brief)
+
   if (!missing(condense))
     .NotYetUsed("condense", error = FALSE)
-  if (!missing(brief))
-    .NotYetUsed("condense", error = FALSE)
-  if (!missing(brief))
+  if (!missing(warn))
     .NotYetUsed("warn", error = FALSE)
 
   if (!short_code)
