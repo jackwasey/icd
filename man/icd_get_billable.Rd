@@ -3,6 +3,8 @@
 \name{icd_get_billable}
 \alias{icd_get_billable}
 \alias{icd_get_billable.default}
+\alias{icd_get_billable.icd10}
+\alias{icd_get_billable.icd10cm}
 \alias{icd_get_billable.icd9}
 \alias{icd_get_billable.icd9cm}
 \title{Get billable ICD codes}
@@ -15,6 +17,12 @@ icd_get_billable(...)
   invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)
 
 \method{icd_get_billable}{icd9}(...)
+
+\method{icd_get_billable}{icd10cm}(x, short_code = icd_guess_short(x),
+  invert = FALSE, icd10cm_edition = "2016", ...)
+
+\method{icd_get_billable}{icd10}(x, short_code = icd_guess_short(x),
+  invert = FALSE, icd10cm_edition = "2016", ...)
 }
 \arguments{
 \item{x}{input vector of ICD codes}
@@ -42,6 +50,10 @@ or ICD-10, and code short vs decimal type.
 
 \item \code{icd9}: Get billable ICD-9 codes, which is currently
 implemented assuming ICD-9-CM
+
+\item \code{icd10cm}: Get billable, i.e. leaf nodes from ICD-10-CM
+
+\item \code{icd10}: Get billable, i.e. leaf nodes from ICD-10-CM
 }}
 \keyword{internal}
 

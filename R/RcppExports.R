@@ -122,14 +122,14 @@ icd9ShortToPartsCpp <- function(icd9Short, minorEmpty) {
 #' @describeIn icd_decimal_to_parts Convert short ICD-10 code to parts
 #' @export
 #' @keywords internal manip
-icd_short_to_parts.icd10 <- function(icd10Short, minorEmpty = "") {
-    .Call('icd_icd10ShortToPartsCpp', PACKAGE = 'icd', icd10Short, minorEmpty)
+icd_short_to_parts.icd10 <- function(x, minor_empty = "") {
+    .Call('icd_icd10ShortToPartsCpp', PACKAGE = 'icd', x, minor_empty)
 }
 
 #' @rdname convert
 #' @keywords internal manip
-icd9DecimalToPartsCpp <- function(icd9Decimal, minorEmpty) {
-    .Call('icd_icd9DecimalToPartsCpp', PACKAGE = 'icd', icd9Decimal, minorEmpty)
+icd9DecimalToPartsCpp <- function(icd9Decimal, minor_empty) {
+    .Call('icd_icd9DecimalToPartsCpp', PACKAGE = 'icd', icd9Decimal, minor_empty)
 }
 
 #' @describeIn icd_decimal_to_parts Convert decimal ICD-10 code to parts. This
@@ -137,8 +137,8 @@ icd9DecimalToPartsCpp <- function(icd9Decimal, minorEmpty) {
 #'   code.
 #' @export
 #' @keywords internal manip
-icd_decimal_to_parts.icd10 <- function(icd10Decimal, minorEmpty = "") {
-    .Call('icd_icd10DecimalToPartsCpp', PACKAGE = 'icd', icd10Decimal, minorEmpty)
+icd_decimal_to_parts.icd10 <- function(x, minor_empty = "") {
+    .Call('icd_icd10DecimalToPartsCpp', PACKAGE = 'icd', x, minor_empty)
 }
 
 icd9_short_to_decimal_cpp <- function(x) {

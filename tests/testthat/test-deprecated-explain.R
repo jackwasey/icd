@@ -60,8 +60,6 @@ test_that("explain S3 dispatch", {
   expect_warning(res <- icd9Explain(list(a = "not", b = "icd9code"), isShort = FALSE))
   expect_equal(res, list(a = character(0), b = character(0)))
 
-  expect_warning(res <- icd9Explain.numeric(3.21, isShort = FALSE),
-                 regexp = "input data is in numeric format")
   expect_equal(res, icd9Explain("00321", isShort = TRUE))
 
 })

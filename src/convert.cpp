@@ -213,16 +213,16 @@ Rcpp::List icd9ShortToPartsCpp(const Rcpp::CharacterVector icd9Short, const Rcpp
 //' @export
 //' @keywords internal manip
 // [[Rcpp::export(icd_short_to_parts.icd10)]]
-Rcpp::List icd10ShortToPartsCpp(const Rcpp::CharacterVector icd10Short, const Rcpp::String minorEmpty = "") {
+Rcpp::List icd10ShortToPartsCpp(const Rcpp::CharacterVector x, const Rcpp::String minor_empty = "") {
 
-  R_xlen_t i10sz = icd10Short.size();
+  R_xlen_t i10sz = x.size();
 
   Rcpp::CharacterVector major(i10sz);
   Rcpp::CharacterVector minor(i10sz);
   std::string::size_type sz;
 
   for (R_xlen_t i = 0; i != i10sz; ++i) {
-    Rcpp::String thisShort = icd10Short[i];
+    Rcpp::String thisShort = x[i];
     if (thisShort == NA_STRING) {
       minor[i] = NA_STRING;
       continue;
@@ -234,7 +234,7 @@ Rcpp::List icd10ShortToPartsCpp(const Rcpp::CharacterVector icd10Short, const Rc
 
     if (sz <= 3 && sz > 0) {
       major[i] = s.substr(0, sz);
-      minor[minorEmpty];
+      minor[minor_empty];
     } else if (sz > 3) {
       major[i] = s.substr(0, 3);
       minor[i] = s.substr(3, sz - 3);
@@ -250,7 +250,7 @@ Rcpp::List icd10ShortToPartsCpp(const Rcpp::CharacterVector icd10Short, const Rc
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String minorEmpty) {
+Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String minor_empty) {
   Rcpp::CharacterVector majors;
   Rcpp::CharacterVector minors;
   int ilen = icd9Decimal.length();
@@ -284,7 +284,7 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
       minorout = thiscode.substr(pos + 1);
     } else {
       majorin = thiscode;
-      minorout = minorEmpty;
+      minorout = minor_empty;
     }
     majors.push_back(icd9AddLeadingZeroesMajorSingle(majorin));
     minors.push_back(minorout);
@@ -300,10 +300,10 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
 //' @export
 //' @keywords internal manip
 // [[Rcpp::export(icd_decimal_to_parts.icd10)]]
-Rcpp::List icd10DecimalToPartsCpp(const Rcpp::CharacterVector icd10Decimal, const Rcpp::String minorEmpty = "") {
+Rcpp::List icd10DecimalToPartsCpp(const Rcpp::CharacterVector x, const Rcpp::String minor_empty = "") {
   Rcpp::CharacterVector majors;
   Rcpp::CharacterVector minors;
-  R_xlen_t ilen = icd10Decimal.length();
+  R_xlen_t ilen = x.length();
 
   if (ilen == 0) {
     return Rcpp::List::create(Rcpp::_["major"] =
@@ -311,8 +311,8 @@ Rcpp::List icd10DecimalToPartsCpp(const Rcpp::CharacterVector icd10Decimal, cons
                               Rcpp::CharacterVector::create());
   }
 
-  for (Rcpp::CharacterVector::const_iterator it = icd10Decimal.begin();
-       it != icd10Decimal.end(); ++it) {
+  for (Rcpp::CharacterVector::const_iterator it = x.begin();
+       it != x.end(); ++it) {
     Rcpp::String strna = *it;
     if (strna == NA_STRING || strna == "") {
       majors.push_back(NA_STRING);
@@ -334,7 +334,7 @@ Rcpp::List icd10DecimalToPartsCpp(const Rcpp::CharacterVector icd10Decimal, cons
       minorout = thiscode.substr(pos + 1);
     } else {
       majorin = thiscode;
-      minorout = minorEmpty;
+      minorout = minor_empty;
     }
     majors.push_back(majorin);
     minors.push_back(minorout);

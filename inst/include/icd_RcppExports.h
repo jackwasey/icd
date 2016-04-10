@@ -269,7 +269,7 @@ namespace icd {
         return Rcpp::as<Rcpp::List >(__result);
     }
 
-    inline Rcpp::List icd_short_to_parts_icd10(const Rcpp::CharacterVector icd10Short, const Rcpp::String minorEmpty = "") {
+    inline Rcpp::List icd_short_to_parts_icd10(const Rcpp::CharacterVector x, const Rcpp::String minor_empty = "") {
         typedef SEXP(*Ptr_icd_short_to_parts_icd10)(SEXP,SEXP);
         static Ptr_icd_short_to_parts_icd10 p_icd_short_to_parts_icd10 = NULL;
         if (p_icd_short_to_parts_icd10 == NULL) {
@@ -279,7 +279,7 @@ namespace icd {
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd_short_to_parts_icd10(Rcpp::wrap(icd10Short), Rcpp::wrap(minorEmpty));
+            __result = p_icd_short_to_parts_icd10(Rcpp::wrap(x), Rcpp::wrap(minor_empty));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -288,7 +288,7 @@ namespace icd {
         return Rcpp::as<Rcpp::List >(__result);
     }
 
-    inline Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String minorEmpty) {
+    inline Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String minor_empty) {
         typedef SEXP(*Ptr_icd9DecimalToPartsCpp)(SEXP,SEXP);
         static Ptr_icd9DecimalToPartsCpp p_icd9DecimalToPartsCpp = NULL;
         if (p_icd9DecimalToPartsCpp == NULL) {
@@ -298,7 +298,7 @@ namespace icd {
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd9DecimalToPartsCpp(Rcpp::wrap(icd9Decimal), Rcpp::wrap(minorEmpty));
+            __result = p_icd9DecimalToPartsCpp(Rcpp::wrap(icd9Decimal), Rcpp::wrap(minor_empty));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -307,7 +307,7 @@ namespace icd {
         return Rcpp::as<Rcpp::List >(__result);
     }
 
-    inline Rcpp::List icd_decimal_to_parts_icd10(const Rcpp::CharacterVector icd10Decimal, const Rcpp::String minorEmpty = "") {
+    inline Rcpp::List icd_decimal_to_parts_icd10(const Rcpp::CharacterVector x, const Rcpp::String minor_empty = "") {
         typedef SEXP(*Ptr_icd_decimal_to_parts_icd10)(SEXP,SEXP);
         static Ptr_icd_decimal_to_parts_icd10 p_icd_decimal_to_parts_icd10 = NULL;
         if (p_icd_decimal_to_parts_icd10 == NULL) {
@@ -317,7 +317,7 @@ namespace icd {
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p_icd_decimal_to_parts_icd10(Rcpp::wrap(icd10Decimal), Rcpp::wrap(minorEmpty));
+            __result = p_icd_decimal_to_parts_icd10(Rcpp::wrap(x), Rcpp::wrap(minor_empty));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

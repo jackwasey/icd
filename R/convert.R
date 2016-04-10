@@ -415,13 +415,12 @@ icd_decimal_to_parts.icd9 <- function(x, minor_empty = "") {
 icd_short_to_parts.character <- function(x, minor_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a
   # shim here.
-  icd_ver <- icd_guess_version(x)
-  if (icd_ver == "icd9")
-    .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, minor_empty)
-  else if (icd_ver == "icd10")
-    icd_short_to_parts.icd10(icd10Short = x, minorEmpty = minor_empty)
-  else
+  switch(
+    icd_guess_version(x, short_code = TRUE),
+    "icd9" = .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, minor_empty),
+    "icd10" = icd_short_to_parts.icd10(x, minor_empty = minor_empty),
     stop("Unknown ICD version guessed from input")
+  )
 }
 
 #' @describeIn icd_short_to_parts Convert decimal ICD code to parts, guessing
@@ -429,11 +428,10 @@ icd_short_to_parts.character <- function(x, minor_empty = "") {
 #' @export
 #' @keywords internal manip
 icd_decimal_to_parts.character <- function(x, minor_empty = "") {
-  icd_ver <- icd_guess_version(x)
-  if (icd_ver == "icd9")
-    .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, minor_empty)
-  else if (icd_ver == "icd10")
-    icd_decimal_to_parts.icd10(icd10Decimal = x, minorEmpty = minor_empty)
-  else
+  switch(
+    icd_guess_version(x, short_code = FALSE),
+    "icd9" = .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, minor_empty),
+    "icd10" = icd_decimal_to_parts.icd10(x, minor_empty = minor_empty),
     stop("Unknown ICD version guessed from input")
+  )
 }

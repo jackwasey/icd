@@ -14,7 +14,7 @@ icd9PartsToDecimal(parts)
 
 icd9ShortToPartsCpp(icd9Short, minorEmpty)
 
-icd9DecimalToPartsCpp(icd9Decimal, minorEmpty)
+icd9DecimalToPartsCpp(icd9Decimal, minor_empty)
 }
 \arguments{
 \item{parts}{data.frame with major and minor fields. This can be given

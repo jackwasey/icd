@@ -41,6 +41,9 @@ revisions within one year, although none currently implemented.}
 currently just the year of release.}
 
 \item{nomatch}{integer value, passed to \code{match} default is 0.}
+
+\item{icd10cm_edition}{single character string. ICD-10-CM editions are
+currently just the year of release.}
 }
 \value{
 logical vector of same length as input

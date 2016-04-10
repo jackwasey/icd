@@ -52,7 +52,7 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short(x),
     icd_is_billable.icd9cm(short_code = TRUE, as_char_no_warn(x))
   else
     icd9_add_leading_zeroes(short_code = TRUE, as_char_no_warn(x)) %in%
-          icd::icd9cm_hierarchy[["code"]]
+    icd::icd9cm_hierarchy[["code"]]
 }
 
 #' @describeIn icd_is_defined Same for ICD-10-CM
@@ -151,6 +151,8 @@ icd_is_billable.icd9 <- function(x, short_code = icd_guess_short(x),
 
 #' @describeIn icd_is_billable Which of the given ICD-10 codes are leaf nodes in
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
+#' @param icd10cm_edition single character string. ICD-10-CM editions are
+#'   currently just the year of release.
 #' @export
 #' @keywords internal
 icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), icd10cm_edition = "2016", ...) {
@@ -265,8 +267,26 @@ icd9cm_get_billable <- function(x, short_code = icd_guess_short(x),
   assert_string(icd9cm_edition)
   x <- as.icd_short_diag(as.icd9cm(x), short_code)
 
-  if (short_code)
-    x[icd_is_billable.icd9cm(x, short_code = TRUE, icd9cm_edition = icd9cm_edition) != invert]
-  else
-    x[icd_is_billable.icd9cm(x, short_code = FALSE, icd9cm_edition = icd9cm_edition) != invert]
+  x[icd_is_billable.icd9cm(x, short_code = short_code, icd9cm_edition = icd9cm_edition) != invert]
+}
+
+#' @describeIn icd_get_billable Get billable, i.e. leaf nodes from ICD-10-CM
+#' @export
+#' @keywords internal
+icd_get_billable.icd10cm <- function(x, short_code = icd_guess_short(x),
+                                     invert = FALSE, icd10cm_edition = "2016", ...) {
+  assert_vector(x)
+  assert_flag(short_code)
+  assert_flag(invert)
+  assert_string(icd10cm_edition)
+  x <- as.icd_short_diag(as.icd10cm(x), short_code)
+  x[icd_is_billable.icd10cm(x, short_code = short_code, icd10cm_edition = icd10cm_edition) != invert]
+}
+
+#' @describeIn icd_get_billable Get billable, i.e. leaf nodes from ICD-10-CM
+#' @export
+#' @keywords internal
+icd_get_billable.icd10 <- function(x, short_code = icd_guess_short(x),
+                                   invert = FALSE, icd10cm_edition = "2016", ...) {
+  icd_get_billable.icd10cm(x = x, short_code = short_code, invert = invert, icd10cm_edition = icd10cm_edition)
 }
