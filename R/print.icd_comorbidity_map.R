@@ -33,7 +33,6 @@
 #' print(list(icd9_map_ahrq))
 #' }
 #' @export
-#' @method print icd_comorbidity_map
 print.icd_comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
   assert_list(x, min.len = 1, names = "unique", any.missing = FALSE, types = "character")
   assert_int(n_comorbidities)

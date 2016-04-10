@@ -24,16 +24,16 @@
 #include <Rinternals.h>
 
 //' Set class to icd10cm and icd10 in C__
-//' 
+//'
 //' Assume either of those classes not already set
 //' @param x R object
 //' @examples
 //' j <- "100"
-//' icd:::.set_class_icd10cm(j)
+//' icd:::set_class_icd10cm(j)
 //' stopifnot(is.icd10(j))
 //' stopifnot(is.icd10cm(j))
 //' @keywords internal
-// [[Rcpp::export(.set_class_icd10cm)]]
+// [[Rcpp::export(set_class_icd10cm)]]
 void setClassIcd10cm(Rcpp::RObject& x) {
   // for now, just assume no other class already set
   Rcpp::CharacterVector cl = x.attr("class");

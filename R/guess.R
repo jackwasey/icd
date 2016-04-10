@@ -94,7 +94,6 @@ icd_guess_version.character <- function(x, short_code = NULL, n = 10, ...) {
 
 #' @describeIn icd_guess_version Guess version of ICD codes in a field in a
 #'   \code{data.frame}
-#' @method icd_guess_version data.frame
 #' @template icd_name
 #' @keywords internal
 #' @export

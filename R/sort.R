@@ -36,10 +36,13 @@ icd_sort <- function(x, ...)
 #'   \code{short} is unnecessary and ignored.
 #' @export
 #' @keywords internal
-#' @method icd_sort default
-icd_sort.default <- function(x, ...) {
-  y <- icd_guess_version_update(x)
-  UseMethod("icd_sort", y)
+icd_sort.default <- function(x, short_code = NULL, ...) {
+  icd_ver <- icd_guess_version(x, short_code = short_code)
+  if (icd_ver == "icd9")
+    icd_sort.icd9(x, short_code)
+  else if (icd_ver == "icd10")
+    icd_sort.icd10(x, short_code)
+  stop("ICD version not known")
 }
 
 #' @describeIn icd_sort Sort ICD-10 codes, note that setting \code{short} is

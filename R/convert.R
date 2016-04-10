@@ -288,24 +288,15 @@ icd_short_to_decimal <- function(x) {
 
 #' @describeIn icd_short_to_decimal convert ICD codes of unknown type from short
 #'   to decimal format
-#' @method icd_short_to_decimal default
 #' @export
 #' @keywords internal
 icd_short_to_decimal.default <- function(x) {
-  # we can only have a shot at guessing this if we first guess the version
-  x %>% as_char_no_warn %>% icd_guess_version_update -> y
-  UseMethod("icd_short_to_decimal", y)
-}
-
-#' @describeIn icd_short_to_decimal convert ICD codes of character type, with
-#'   unknown version, from short to decimal format
-#' @method icd_short_to_decimal default
-#' @export
-#' @keywords internal
-icd_short_to_decimal.character <- function(x) {
-  # we can only have a shot at guessing this if we first guess the version
-  x %>% icd_guess_version_update -> y
-  UseMethod("icd_short_to_decimal", y)
+  switch(
+    icd_guess_version.character(as_char_no_warn(x), short_code = TRUE),
+    "icd9" = icd_short_to_decimal.icd9(x),
+    "icd10" =icd_short_to_decimal.icd10(x),
+    stop("ICD type not known")
+  )
 }
 
 #' @describeIn icd_short_to_decimal convert ICD-9 codes from short to decimal

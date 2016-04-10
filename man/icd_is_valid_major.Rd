@@ -11,7 +11,7 @@
 \alias{icd_is_valid_major.icd9}
 \title{Test whether an ICD code is major}
 \usage{
-\method{icd_is_valid}{default}(x, ...)
+\method{icd_is_valid}{default}(x, short_code = icd_guess_short(x), ...)
 
 icd_is_valid_major(x, whitespace_ok = TRUE)
 

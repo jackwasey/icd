@@ -84,10 +84,13 @@ icd_is_defined.icd10 <- function(x, short_code = icd_guess_short(x),
 #'   type.
 #' @export
 #' @keywords internal
-#' @method icd_is_defined default
 icd_is_defined.default <- function(x, short_code = icd_guess_short(x), ...) {
-  y <- icd_guess_version_update(x)
-  UseMethod("icd_is_defined", y)
+  switch(
+    icd_guess_version(x, short_code = short_code),
+    "icd9" = icd_is_defined.icd9(x, short_code = short_code, ...),
+    "icd10" = icd_is_defined.icd10(x, short_code = short_code, ...),
+    stop("ICD version not known")
+  )
 }
 
 #' Select only defined ICD codes
@@ -182,15 +185,14 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
 #' @describeIn icd_is_billable Which of the given ICD codes are leaf nodes in
 #'   ICD version (9 vs 10) guessed from the codes themselves.
 #' @export
-#' @method icd_is_billable default
 #' @keywords internal
-icd_is_billable.default <- function(x, short_code = icd_guess_short(x),
-                                    icd9cm_edition = icd9cm_latest_edition(), ...) {
-  # guess ICD-9 vs ICD-10 and set class to dispatch again
-  x <- icd_guess_version_update(x, short_code = short_code)
-  # UseMethod doesn't send the new 'x', but uses the
-  # class of the updated 'x' to dispatch the original 'x'
-  UseMethod("icd_is_billable", x)
+icd_is_billable.default <- function(x, short_code = icd_guess_short(x), ...) {
+  switch(
+    icd_guess_version(x, short_code = short_code),
+    "icd9" = icd_is_billable.icd9(x, short_code = short_code, ...),
+    "icd10" = icd_is_billable.icd10(x, short_code = short_code, ...),
+    stop("Unknown ICD version.")
+  )
 }
 
 #' Get billable ICD codes
@@ -209,14 +211,15 @@ icd_get_billable <- function(...) {
 
 #' @describeIn icd_get_billable Get billable ICD codes, guessing whether ICD-9
 #'   or ICD-10, and code short vs decimal type.
-#' @method icd_get_billable default
 #' @export
 #' @keywords internal
-icd_get_billable.default <- function(x, ...) {
-  x %<>%
-    icd_guess_version_update %>%
-    icd_guess_short_update
-  UseMethod("icd_get_billable", x)
+icd_get_billable.default <- function(x, short_code = icd_guess_short(x), ...) {
+  switch(
+    icd_guess_version(x, short_code = short_code),
+    "icd9" = icd_get_billable.icd9(x, short_code = short_code, ...),
+    "icd10" = icd_get_billable.icd10(x, short_code = short_code, ...),
+    stop("Unknown ICD version.")
+  )
 }
 
 #' @describeIn icd_get_billable Get billable ICD-9-CM codes

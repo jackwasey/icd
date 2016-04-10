@@ -232,22 +232,13 @@ icd_is_valid <- function(x, ...) {
 #'   \code{icd_is_valid.character}
 #' @export
 #' @keywords internal
-icd_is_valid.default <- function(x, ...) {
-  icd_is_valid.character(as_char_no_warn(x), ...)
-}
-
-#' @describeIn icd_is_valid Test whether a character vector of ICD codes is
-#'   valid, guessing ICD version (of all the elements of the vector at once)
-#'   Currently \code{roxygen2} gets confused by a second \code{UseMethod} hence
-#'   declaring method here
-#' @export
-#' @keywords internal
-#' @method icd_is_valid character
-icd_is_valid.character <- function(x, short_code = icd_guess_short(x),
-                                   whitespace_ok = TRUE, ...) {
-  assert_flag(whitespace_ok)
-  x <- icd_guess_version_update(x, short_code = short_code)
-  UseMethod("icd_is_valid", x)
+icd_is_valid.default <- function(x, short_code = icd_guess_short(x), ...) {
+  switch(
+    icd_guess_version.character(x, short_code = short_code),
+    "icd9" = icd_is_valid.icd9(x, short_code = short_code, ...),
+    "icd10" = icd_is_valid.icd10(x, short_code = short_code, ...),
+    stop("ICD type not known")
+  )
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
@@ -481,14 +472,13 @@ icd_get_valid <- function(x, short_code = icd_guess_short(x))
 #' @describeIn icd_get_valid get valid ICD codes from character vector, guessing ICD version
 #' @export
 #' @keywords internal
-#' @method icd_get_valid character
 icd_get_valid.character <- function(x, short_code = icd_guess_short(x)) {
-  # partly for backward compatibility, let's return the same class codes as we
-  # received, instead of updating to our guess. No perfect way here: we'd like
-  # to tell the user if the guess was not a very good one, maybe? This could be
-  # done in the guess function.
-  y <- icd_guess_version_update(x, short_code)
-  x[icd_is_valid.character(y, short_code = short_code)]
+  switch(
+    icd_guess_version.character(x, short_code = short_code),
+    "icd9" = icd_get_valid.icd9(x, short_code = short_code),
+    "icd10" = icd_get_valid.icd10(x, short_code = short_code),
+    stop("ICD type not known")
+  )
 }
 
 #' @describeIn icd_get_valid Get valid ICD-9 codes
@@ -526,11 +516,13 @@ icd_get_invalid <- function(...) {
 #'   decimal not known.
 #' @export
 #' @keywords internal
-#' @method icd_get_invalid default
-icd_get_invalid.default <- function(x, short_code = NULL, ...) {
-  # TODO: any value in guessing both in tandem
-  x %<>% icd_guess_short_update %>% icd_guess_version_update
-  UseMethod("icd_get_invalid", x)
+icd_get_invalid.default <- function(x, short_code = icd_guess_short(x), ...) {
+  switch(
+    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
+    "icd9" = icd_get_invalid.icd9(x, short_code = short_code),
+    "icd10" = icd_get_invalid.icd10(x, short_code = short_code),
+    stop("ICD type not known")
+  )
 }
 
 #' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
@@ -587,12 +579,14 @@ icd_is_major <- function(x) {
 }
 
 #' @describeIn icd_is_major Default method which guesses version
-#' @method icd_is_major default
 #' @keywords internal
 icd_is_major.default <- function(x) {
-  y <- icd_guess_version_update(x)
-  UseMethod("icd_is_major", y)
-}
+  icd_ver <- icd_guess_version(x)
+  if (icd_ver == "icd9")
+    icd_is_major.icd9(x)
+  else if (icd_ver == "icd10")
+    icd_is_major.icd10(x)
+  stop("ICD version not known")}
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 major
 #' @keywords internal

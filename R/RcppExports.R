@@ -58,16 +58,16 @@ icd10cm_children_defined_cpp <- function(x) {
 }
 
 #' Set class to icd10cm and icd10 in C__
-#' 
+#'
 #' Assume either of those classes not already set
 #' @param x R object
 #' @examples
 #' j <- "100"
-#' icd:::.set_class_icd10cm(j)
+#' icd:::set_class_icd10cm(j)
 #' stopifnot(is.icd10(j))
 #' stopifnot(is.icd10cm(j))
 #' @keywords internal
-.set_class_icd10cm <- function(x) {
+set_class_icd10cm <- function(x) {
     invisible(.Call('icd_setClassIcd10cm', PACKAGE = 'icd', x))
 }
 

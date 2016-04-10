@@ -2,7 +2,7 @@
 % Please edit documentation in R/explain.R
 \name{icd_explain}
 \alias{icd_explain}
-\alias{icd_explain.character}
+\alias{icd_explain.default}
 \alias{icd_explain.factor}
 \alias{icd_explain.icd10}
 \alias{icd_explain.icd9}
@@ -13,7 +13,7 @@
 \usage{
 icd_explain(...)
 
-\method{icd_explain}{character}(x, short_code = NULL, condense = TRUE,
+\method{icd_explain}{default}(x, short_code = NULL, condense = TRUE,
   brief = FALSE, warn = TRUE, ...)
 
 \method{icd_explain}{list}(x, short_code = icd_guess_short(x),
@@ -66,7 +66,7 @@ conversion to decimal notation, but to the textual format.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Explain ICD codes from a character vector, guessing ICD version
+\item \code{default}: Explain ICD codes from a character vector, guessing ICD version
 
 \item \code{list}: Explain all ICD-9 codes in a list of vectors
 

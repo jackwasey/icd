@@ -2,16 +2,12 @@
 % Please edit documentation in R/valid.R
 \name{icd_is_valid}
 \alias{icd_is_valid}
-\alias{icd_is_valid.character}
 \alias{icd_is_valid.icd10}
 \alias{icd_is_valid.icd9}
 \alias{icd_is_valid.icd_comorbidity_map}
 \title{Check whether ICD-9 codes are syntactically valid}
 \usage{
 icd_is_valid(x, ...)
-
-\method{icd_is_valid}{character}(x, short_code = icd_guess_short(x),
-  whitespace_ok = TRUE, ...)
 
 \method{icd_is_valid}{icd10}(x, short_code = icd_guess_short(x),
   whitespace_ok = TRUE, ...)
@@ -64,11 +60,6 @@ Leading zeroes in the decimal form are not ambiguous. Although
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Test whether a character vector of ICD codes is
-valid, guessing ICD version (of all the elements of the vector at once)
-Currently \code{roxygen2} gets confused by a second \code{UseMethod} hence
-declaring method here
-
 \item \code{icd10}: Test whether generic ICD-10 code is valid
 
 \item \code{icd9}: Test whether generic ICD-10 code is valid

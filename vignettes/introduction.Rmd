@@ -112,15 +112,6 @@ head(apply(icd9_comorbid_quan_deyo(icd_wide_to_long(vermont_dx)), 2, as.integer)
 
 ## Specifying data types
 
-```{r testing oldrel}
-# TODO: delete me! use trycatch?
-icd_is_valid.character("100") # valid ICD-9 code
-```
-
-```{r testing oldrel2}
-icd:::icd_is_valid("100") # valid ICD-9 code
-```
-
 `icd` will guess the type and form of input data when possible, but there are ambiguities:
 ```{r type guessing}
 icd_is_valid("100") # valid ICD-9 code

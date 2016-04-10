@@ -23,8 +23,7 @@ icd_is_billable(x, short_code = icd_guess_short(x), ...)
 \method{icd_is_billable}{icd9cm}(x, short_code = icd_guess_short(x),
   icd9cm_edition = icd9cm_latest_edition(), ...)
 
-\method{icd_is_billable}{default}(x, short_code = icd_guess_short(x),
-  icd9cm_edition = icd9cm_latest_edition(), ...)
+\method{icd_is_billable}{default}(x, short_code = icd_guess_short(x), ...)
 }
 \arguments{
 \item{x}{input vector to test}

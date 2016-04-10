@@ -8,7 +8,7 @@ Description: Calculate comorbidities, Charlson scores, perform fast and accurate
     (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 Classification/ACM-2012: Social and professional topics~Medical records, Applied computing~Health care information systems, Applied computing~Health informatics, Applied computing~Bioinformatics
 Version: 1.3.0.9005
-Date: 2016-03-09
+Date: 2016-04-10
 Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
     person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org", comment = "Van Walraven scores"),

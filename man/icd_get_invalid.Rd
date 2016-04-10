@@ -10,7 +10,7 @@
 \usage{
 icd_get_invalid(...)
 
-\method{icd_get_invalid}{default}(x, short_code = NULL, ...)
+\method{icd_get_invalid}{default}(x, short_code = icd_guess_short(x), ...)
 
 \method{icd_get_invalid}{icd9}(x, short_code = icd_guess_short(x), ...)
 

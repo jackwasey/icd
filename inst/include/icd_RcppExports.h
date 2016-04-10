@@ -98,17 +98,17 @@ namespace icd {
         return Rcpp::as<Rcpp::RObject >(__result);
     }
 
-    inline void _set_class_icd10cm(Rcpp::RObject& x) {
-        typedef SEXP(*Ptr__set_class_icd10cm)(SEXP);
-        static Ptr__set_class_icd10cm p__set_class_icd10cm = NULL;
-        if (p__set_class_icd10cm == NULL) {
-            validateSignature("void(*_set_class_icd10cm)(Rcpp::RObject&)");
-            p__set_class_icd10cm = (Ptr__set_class_icd10cm)R_GetCCallable("icd", "icd__set_class_icd10cm");
+    inline void set_class_icd10cm(Rcpp::RObject& x) {
+        typedef SEXP(*Ptr_set_class_icd10cm)(SEXP);
+        static Ptr_set_class_icd10cm p_set_class_icd10cm = NULL;
+        if (p_set_class_icd10cm == NULL) {
+            validateSignature("void(*set_class_icd10cm)(Rcpp::RObject&)");
+            p_set_class_icd10cm = (Ptr_set_class_icd10cm)R_GetCCallable("icd", "icd_set_class_icd10cm");
         }
         RObject __result;
         {
             RNGScope __rngScope;
-            __result = p__set_class_icd10cm(Rcpp::wrap(x));
+            __result = p_set_class_icd10cm(Rcpp::wrap(x));
         }
         if (__result.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

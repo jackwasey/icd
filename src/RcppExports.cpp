@@ -1621,7 +1621,7 @@ static int icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*.attr_short_diag)(Rcpp::RObject&,bool)");
         signatures.insert("Rcpp::RObject(*as.icd_short_diag)(Rcpp::RObject&,bool)");
         signatures.insert("Rcpp::RObject(*as.icd_decimal_diag)(Rcpp::RObject&,bool)");
-        signatures.insert("void(*.set_class_icd10cm)(Rcpp::RObject&)");
+        signatures.insert("void(*set_class_icd10cm)(Rcpp::RObject&)");
         signatures.insert("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
         signatures.insert("Rcpp::LogicalMatrix(*icd10_comorbid_parent_search_cpp)(Rcpp::DataFrame,Rcpp::List,std::string,std::string)");
         signatures.insert("Rcpp::CharacterVector(*icd9MajMinToCode)(const Rcpp::CharacterVector,const Rcpp::CharacterVector,bool)");
@@ -1679,7 +1679,7 @@ RcppExport SEXP icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "icd_.attr_short_diag", (DL_FUNC)icd_setShortDiag_try);
     R_RegisterCCallable("icd", "icd_as.icd_short_diag", (DL_FUNC)icd_asShortDiag_try);
     R_RegisterCCallable("icd", "icd_as.icd_decimal_diag", (DL_FUNC)icd_asDecimalDiag_try);
-    R_RegisterCCallable("icd", "icd_.set_class_icd10cm", (DL_FUNC)icd_setClassIcd10cm_try);
+    R_RegisterCCallable("icd", "icd_set_class_icd10cm", (DL_FUNC)icd_setClassIcd10cm_try);
     R_RegisterCCallable("icd", "icd_icd9ComorbidShortCpp", (DL_FUNC)icd_icd9ComorbidShortCpp_try);
     R_RegisterCCallable("icd", "icd_icd10_comorbid_parent_search_cpp", (DL_FUNC)icd_icd10_comorbid_parent_search_cpp_try);
     R_RegisterCCallable("icd", "icd_icd9MajMinToCode", (DL_FUNC)icd_icd9MajMinToCode_try);

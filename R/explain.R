@@ -52,10 +52,13 @@ icd_explain <- function(...)
 #' @describeIn icd_explain Explain ICD codes from a character vector, guessing ICD version
 #' @export
 #' @keywords internal
-#' @method icd_explain character
-icd_explain.character <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  x <- icd_guess_version_update(x)
-  UseMethod("icd_explain", x)
+icd_explain.default <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+  switch(
+    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
+    "icd9" = icd_explain.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
+    "icd10" = icd_explain.icd10(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
+    stop("Unknown ICD version.")
+  )
 }
 
 #' @describeIn icd_explain Explain all ICD-9 codes in a list of vectors
