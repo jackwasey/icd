@@ -12,7 +12,7 @@
 
 # R CMD check results
 
-There are three notes:
+There are four notes:
 
 * checking installed package size ... NOTE
   installed size is 13.0Mb
@@ -21,7 +21,8 @@ There are three notes:
     doc    2.2Mb
     libs   7.8Mb
 
-The included data is maximally compressed with xz.
+The included data is maximally compressed with xz, and the source package is
+only 2.8M.
 
 Found the following (possibly) invalid URLs:
   URL: https://cran.r-project.org/package=icd
@@ -36,3 +37,9 @@ This will be valid when accepted by CRAN.
   Note: found 96 marked UTF-8 strings
 
 These are required to describe disease names with accented characters correctly.
+
+* checking DESCRIPTION meta-information ... NOTE
+'LinkingTo' for ‘testthat’ is unused as it has no 'include' directory
+
+The forthcoming 'testthat' package does have an include directory. 
+I use the 'configure' script to identify its presence and act accordingly.
