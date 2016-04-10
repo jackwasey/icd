@@ -38,7 +38,7 @@ strim <- function(x) {
 #' @examples
 #' \dontrun{
 #' s <- random_string(250);
-#' microbenchmark::microbenchmark(trim(s), trimws(s))
+#' microbenchmark::microbenchmark(trim(s), trimws(s)) # R >3.2
 #' }
 trim <- function(x) {
   nax <- is.na(x)
@@ -405,4 +405,10 @@ named_list <- function(...) {
 
 fmatch <- function(x, table, nomatch = NA_integer_, incomparables = NULL) {
   .Call("fmatch", PACKAGE = "icd", x, table, nomatch, incomparables)
+}
+
+# allows R 3.1 to work
+dir.exists = function(paths) {
+  x = file.info(paths)$isdir
+  !is.na(x) & x
 }

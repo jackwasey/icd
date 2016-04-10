@@ -184,7 +184,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   short_codes <- vapply(shortlines, FUN = function(x) x[1], FUN.VALUE = character(1))
   short_descs <- vapply(shortlines, FUN = function(x) paste(x[-1], collapse = " "), FUN.VALUE = character(1))
   if (!is.na(longlines[1]))
-    long_descs <- trimws(vapply(longlines, function(x) paste(x[-1], collapse = " "), FUN.VALUE = character(1)))
+    long_descs <- str_trim(vapply(longlines, function(x) paste(x[-1], collapse = " "), FUN.VALUE = character(1)))
   else long_descs <- NA
 
   message("codes and descs separated")
