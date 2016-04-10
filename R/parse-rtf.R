@@ -55,6 +55,7 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE, verbose = FALSE, of
   assert_string(year)
   assert_flag(save_data)
   assert_flag(verbose)
+  assert_flag(offline)
 
   f_info_rtf <- fetch_rtf_year(year, offline = offline)
 

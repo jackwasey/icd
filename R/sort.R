@@ -36,13 +36,13 @@ icd_sort <- function(x, ...)
 #'   \code{short} is unnecessary and ignored.
 #' @export
 #' @keywords internal
-icd_sort.default <- function(x, short_code = NULL, ...) {
-  icd_ver <- icd_guess_version(x, short_code = short_code)
-  if (icd_ver == "icd9")
-    icd_sort.icd9(x, short_code)
-  else if (icd_ver == "icd10")
-    icd_sort.icd10(x, short_code)
-  stop("ICD version not known")
+icd_sort.default <- function(x, short_code = icd_guess_short(x), ...) {
+  switch(
+    icd_guess_version(x, short_code = short_code),
+    "icd9" = icd_sort.icd9(x, short_code),
+    "icd10" = icd_sort.icd10(x, short_code),
+    stop("ICD version not known")
+  )
 }
 
 #' @describeIn icd_sort Sort ICD-10 codes, note that setting \code{short} is
@@ -62,15 +62,19 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
   assert_flag(short_code)
 
-  if (!short_code)
-    y <- icd_decimal_to_short.icd9(x)
+  y <- if (short_code)
+    icd9_add_leading_zeroes(x, short_code = short_code)
   else
-    y <- icd9_add_leading_zeroes(x, short_code = short_code)
+    icd_decimal_to_short.icd9(x)
 
-  if (is.factor(x))
-    return(x[icd9_order_cpp(as_char_no_warn(y))])
+  res <- if (is.factor(x))
+    x[icd9_order_cpp(as_char_no_warn(y))]
+  else
+    x[icd9_order_cpp(y)]
 
-  x[icd9_order_cpp(y)]
+  class(res) <- class(x)
+  attributes(res) <- attributes(x)
+  res
 }
 #' Get order of short-form ICD-9 codes
 #'

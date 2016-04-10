@@ -20,8 +20,8 @@ context("deprecated filtering on POA")
 test_that("deprecated - filter POA - not a data frame", {
   expect_error(icd9FilterPoaNo(list(pollo = "loco")))
   expect_error(icd9FilterPoaNotYes(visitId = c("1", "2"),
-                                   icd9 = c("1", "2"),
-                                   poa = c("Y", "N")))
+                                   code = c("1", "2"),
+                                   presentonarrival = c("Y", "N")))
 })
 
 test_that("deprecated - filter POA - no poa field", {

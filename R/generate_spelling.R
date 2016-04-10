@@ -18,7 +18,7 @@ generate_spelling <- function(out = ".aspell/words.pws", save_data = TRUE) {
                 "RTF", "SAS", "VAHHS", "NSO", "WSU")
   other <- c("comorbidity", "comorbidities", "comorbid",
              "unclassifiable", "requestor", "Transuranium", "TODO",
-             "MERCHANTABILITY")
+             "MERCHANTABILITY", "prepend", "prepends")
   # "requestor" in Vermont data licence
   words <- c(medical, proper_nouns, acronyms, other)
   if (save_data)

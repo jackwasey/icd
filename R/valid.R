@@ -234,7 +234,7 @@ icd_is_valid <- function(x, ...) {
 #' @keywords internal
 icd_is_valid.default <- function(x, short_code = icd_guess_short(x), ...) {
   switch(
-    icd_guess_version.character(x, short_code = short_code),
+    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
     "icd9" = icd_is_valid.icd9(x, short_code = short_code, ...),
     "icd10" = icd_is_valid.icd10(x, short_code = short_code, ...),
     stop("ICD type not known")
@@ -581,12 +581,13 @@ icd_is_major <- function(x) {
 #' @describeIn icd_is_major Default method which guesses version
 #' @keywords internal
 icd_is_major.default <- function(x) {
-  icd_ver <- icd_guess_version(x)
-  if (icd_ver == "icd9")
-    icd_is_major.icd9(x)
-  else if (icd_ver == "icd10")
-    icd_is_major.icd10(x)
-  stop("ICD version not known")}
+  switch(
+    icd_guess_version(x),
+    "icd9" = icd_is_major.icd9(x),
+    "icd10" = icd_is_major.icd10(x),
+    stop("ICD version not known")
+  )
+}
 
 #' @describeIn icd_is_major check whether a code is an ICD-10 major
 #' @keywords internal

@@ -103,17 +103,13 @@ icd_classes_ordered <- function(x) {
 #'
 #' The \code{as.} function e.g. \code{as.icd9}, do checking and try to put
 #' multiple classes in a nice order. Calling the bare constructor, e.g.
-#' \code{icd9} just pre-pends the new class and returns without any checks. The
+#' \code{icd9} just prepends the new class and returns without any checks. The
 #' latter is much faster, but for most uses, \code{as.icd9} and siblings would
 #' be better.
 #'
 #' Some features make more sense as attributes. E.g. setting code type to
 #' \code{short} or \code{decimal}.
 #'
-#' @details SOMEDAY: From Wickham: "When implementing a vector class, you should
-#'   implement these methods: length, [, [<-, [[, [[<-, c. (If [ is implemented
-#'   rev, head, and tail should all work)." But see examples, as this may not be
-#'   needed.
 #' @param x object to set class \code{icd9}
 #' @param warn single logical value, if \code{TRUE} will gives warning when
 #'   converting between types. ICD-9 to ICD-10 will cause an error regardless.
@@ -135,6 +131,10 @@ icd_classes_ordered <- function(x) {
 #' stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
 #' @keywords internal
 icd9 <- function(x) {
+  # SOMEDAY: From Wickham: "When implementing a vector class, you should
+  # implement these methods: length, [, [<-, [[, [[<-, c. (If [ is implemented
+  # rev, head, and tail should all work)." But see examples, as this may not be
+  # needed.
   cl <- class(x)
   if ("icd9" %in% cl) return(x)
   class(x) <- c("icd9", cl)
@@ -147,7 +147,7 @@ as.icd9 <- function(x) {
   if (missing(x)) x <- character()
   icd_check_conflict_with_icd9(x)
   if (is.icd9(x)) return(x)
-  after <- match("icd9cm", class(x), nomatch = 0)
+  after <- match("icd9cm", class(x), nomatch = 0L)
   class(x) <- append(class(x), "icd9", after = after)
   x
 }
@@ -182,7 +182,7 @@ as.icd10 <- function(x) {
   if (missing(x)) x <- character()
   icd_check_conflict_with_icd10(x)
   if (inherits(x, "icd10")) return(x)
-  icd10cm_pos <- match("icd10cm", class(x), nomatch = 0)
+  icd10cm_pos <- match("icd10cm", class(x), nomatch = 0L)
   class(x) <- append(class(x), "icd10", after = icd10cm_pos)
   x
 }
@@ -228,13 +228,12 @@ icd10cm <- function(x) {
 #' @rdname set_icd_class
 #' @details long or wide format data is always a data frame. It does not
 #'   carry any other ICD classes, even if it only contains one type of code.
-#'
-#'   Also from Wickham: "When implementing a matrix/array class, you should
-#'   implement these methods: dim (gets you nrow and ncol), t, dimnames (gets
-#'   you rownames and colnames), dimnames<- (gets you colnames<-, rownames<-),
-#'   cbind, rbind."
 #' @export
 as.icd_long_data <- function(x) {
+  # Also from Wickham: "When implementing a matrix/array class, you should
+  # implement these methods: dim (gets you nrow and ncol), t, dimnames (gets you
+  # rownames and colnames), dimnames<- (gets you colnames<-, rownames<-), cbind,
+  # rbind."
   assert_data_frame(x)
   if (is.icd_wide_data(x))
     warning("Setting 'icd_long_data' on a data.frame or matrix which already has 'icd_wide_data' class")

@@ -2,11 +2,16 @@
 % Please edit documentation in R/deprecated.R
 \name{icd9Charlson}
 \alias{icd9Charlson}
+\alias{icd9Charlson.data.frame}
 \alias{icd9CharlsonComorbid}
 \title{Deprecated: calculate ICD-9 Charlson score}
 \usage{
 icd9Charlson(x, visitId = NULL, scoringSystem = c("original", "charlson",
   "quan"), return.df = FALSE,
+  stringsAsFactors = getOption("stringsAsFactors"), ...)
+
+\method{icd9Charlson}{data.frame}(x, visitId = NULL,
+  scoringSystem = c("original", "charlson", "quan"), return.df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 icd9CharlsonComorbid(x, visitId = NULL, applyHierarchy = FALSE,
@@ -40,4 +45,9 @@ argument used in, among other base functions \code{as.data.frame}.}
 \description{
 Use \code{icd_charlson} instead.
 }
+\section{Methods (by class)}{
+\itemize{
+\item \code{data.frame}: \code{data.frame} method
+}}
+\keyword{internal}
 

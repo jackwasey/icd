@@ -82,15 +82,15 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
     the_pairs <- some_pairs[lapply(some_pairs, length) == 2]
     out <- c(out, lapply(the_pairs, function(x) sas_expand_range(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
-    out %>% unlist %>% unique -> icd9_map_ahrq[[cmb]]
+    out %>% unlist %>% unique %>% as.icd9 %>% as.icd_short_diag -> icd9_map_ahrq[[cmb]]
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
   # "Other" group
   icd9_map_ahrq[[" "]] <- NULL
-  icd9_map_ahrq[ahrq_htn] %>% unlist %>% unname -> icd9_map_ahrq[["HTNCX"]]
-  icd9_map_ahrq[ahrq_chf] %>% unlist %>% unname -> icd9_map_ahrq[["CHF"]]
-  icd9_map_ahrq[ahrq_renal] %>% unlist %>% unname -> icd9_map_ahrq[["RENLFAIL"]]
+  icd9_map_ahrq[ahrq_htn] %>% unlist %>% unname %>% as.icd9 %>% as.icd_short_diag -> icd9_map_ahrq[["HTNCX"]]
+  icd9_map_ahrq[ahrq_chf] %>% unlist %>% unname %>% as.icd9 %>% as.icd_short_diag -> icd9_map_ahrq[["CHF"]]
+  icd9_map_ahrq[ahrq_renal] %>% unlist %>% unname %>% as.icd9 %>% as.icd_short_diag -> icd9_map_ahrq[["RENLFAIL"]]
 
   icd9_map_ahrq[ahrq_unused] <- NULL
 
@@ -112,12 +112,13 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
       if (all(kids %in% icd9_map_ahrq[[cmb]]))
         icd9_map_ahrq[[cmb]] <- c(icd9_map_ahrq[[cmb]], p) %>%
         unique %>%
-        icd_sort.icd9(short_code = TRUE)
+        icd_sort.icd9(short_code = TRUE) %>%
+        as.icd9 %>% as.icd_short_diag
     }
   }
 
   names(icd9_map_ahrq) <- icd::icd_names_ahrq_htn_abbrev
-  icd9_map_ahrq %<>% as.icd_short_diag %>% icd9 %>% icd_comorbidity_map
+  icd9_map_ahrq %<>% icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir("icd9_map_ahrq")

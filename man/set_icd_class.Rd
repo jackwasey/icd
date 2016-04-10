@@ -67,25 +67,15 @@ then an ICD-9 class (\code{icd9}) is also set.
 \details{
 The \code{as.} function e.g. \code{as.icd9}, do checking and try to put
 multiple classes in a nice order. Calling the bare constructor, e.g.
-\code{icd9} just pre-pends the new class and returns without any checks. The
+\code{icd9} just prepends the new class and returns without any checks. The
 latter is much faster, but for most uses, \code{as.icd9} and siblings would
 be better.
 
 Some features make more sense as attributes. E.g. setting code type to
 \code{short} or \code{decimal}.
 
-SOMEDAY: From Wickham: "When implementing a vector class, you should
-  implement these methods: length, [, [<-, [[, [[<-, c. (If [ is implemented
-  rev, head, and tail should all work)." But see examples, as this may not be
-  needed.
-
 long or wide format data is always a data frame. It does not
   carry any other ICD classes, even if it only contains one type of code.
-
-  Also from Wickham: "When implementing a matrix/array class, you should
-  implement these methods: dim (gets you nrow and ncol), t, dimnames (gets
-  you rownames and colnames), dimnames<- (gets you colnames<-, rownames<-),
-  cbind, rbind."
 
 Using \code{attributes} instead of \code{class} is a better fit for
   the data. It simplifies S3 dispatch, and appears to be very fast to get or

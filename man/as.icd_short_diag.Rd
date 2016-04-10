@@ -5,7 +5,7 @@
 \alias{.attr_short_diag}
 \alias{as.icd_decimal_diag}
 \alias{as.icd_short_diag}
-\title{Set icd_short_diag attribute in-place}
+\title{Set ICD short-form diagnosis code attribute}
 \usage{
 .attr_decimal_diag(x, value = TRUE)
 

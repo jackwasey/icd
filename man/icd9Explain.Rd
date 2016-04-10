@@ -2,12 +2,24 @@
 % Please edit documentation in R/deprecated.R
 \name{icd9Explain}
 \alias{icd9Explain}
+\alias{icd9Explain.character}
+\alias{icd9Explain.list}
+\alias{icd9Explain.numeric}
 \alias{icd9ExplainDecimal}
 \alias{icd9ExplainShort}
 \title{Deprecated: explain ICD codes in words}
 \usage{
 icd9Explain(icd9, isShort = icd_guess_short(icd9), doCondense = TRUE,
   brief = FALSE, warn = TRUE)
+
+\method{icd9Explain}{character}(icd9, isShort = icd9GuessIsShort(icd9),
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
+
+\method{icd9Explain}{numeric}(icd9, isShort = icd_guess_short(icd9),
+  doCondense = TRUE, brief = FALSE, warn = FALSE)
+
+\method{icd9Explain}{list}(icd9, isShort = icd_guess_short(icd9),
+  doCondense = TRUE, brief = FALSE, warn = TRUE)
 
 icd9ExplainShort(icd9Short, doCondense = TRUE, brief = FALSE, warn = TRUE)
 
@@ -48,4 +60,5 @@ units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
 \description{
 Use \code{icd_explain} instead.
 }
+\keyword{internal}
 

@@ -269,7 +269,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
                              save_data = FALSE,
                              verbose = verbose, offline = offline)
 
-  message("slower step of building icd9 chapters hierarchy from 2011 RTF. ~20s")
+  message("slow step of building icd9 chapters hierarchy from 2011 RTF. ~10s")
   chaps <- icd9_get_chapters(x = icd9_rtf$code,
                              short_code = TRUE,
                              verbose = verbose)
@@ -295,9 +295,10 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   # just copy the long description over.
   bill32 <- icd9cm_billable[["32"]]
 
-  billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE) # or from bill32
+  billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)
   billable_rows <- which(icd9cm_hierarchy[["code"]] %fin% billable_codes)
   title_rows <- which(icd9cm_hierarchy[["code"]] %nin% billable_codes)
+  stopifnot(setdiff(c(billable_rows, title_rows), seq_along(icd9cm_hierarchy$code)) == integer(0))
   icd9cm_hierarchy[billable_rows, "short_desc"] <- bill32$short_desc
   # for rows without a short description (i.e. titles, non-billable),
   # useexisting long desc

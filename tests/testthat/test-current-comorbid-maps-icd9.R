@@ -37,20 +37,24 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
     )
 })
 
+test_that("AHRQ make sure all the children are listed in the saved data.", {
+  for (i in icd::icd9_map_ahrq)
+    expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
+})
+
 test_that("Elixhauser make sure all the children are listed in the saved data.", {
   for (i in icd::icd9_map_quan_elix)
-    expect_equal(as.character(icd_children.icd9(i, defined = FALSE, short_code = TRUE)),
-                 as.character(icd_sort.icd9(i)))
+    expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
 # TODO: icd_sort vs plain sort
 test_that("Quan Charlson make sure all the children are listed in the saved data.", {
   for (i in icd::icd9_map_quan_deyo)
-    expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
+    expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
 
 test_that("Quan Elixhauser make sure all the children are listed in the saved data.", {
   for (i in icd::icd9_map_quan_elix)
-    expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), sort(i))
+    expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
 
 test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
@@ -104,8 +108,6 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
 test_that("Quan Charlson icd9 mappings are all
             generated from the current generation code", {
-              # TODO: generating code from SAS is now not distributed in
-              # package. Move this test to pre-build test dir?
 
               if (is.null(icd9_fetch_quan_deyo_sas(offline = TRUE)))
                 skip("data-raw/ICD9_E_Charlson.sas must be downloaded with icd9_fetch_quan_deyo_sas")

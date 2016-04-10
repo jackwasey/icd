@@ -75,13 +75,13 @@ release_questions <- function() {
     # documentation:
     "Have you checked all TODO comments, made into github issues where appropriate",
     "Do all examples look ok (not just run without errors)?",
-    "Anything to add to vignette?",
+    "Vignette has updated description paragraph, in sync with DESCRIPTION",
     "Have all the fixed github issues been closed",
     "Is NEWS.md updated and contributors credited?",
     "Is README.Rmd updated and recompiled into README.md?",
     "Does every file have correct licence information?",
     "Are github pages site refreshed from latest documentation?",
-    "Is spelling correct everywhere? E.g. aspell_package_Rd_files(\".\")",
+    "Is spelling correct everywhere? E.g. aspell_package_Rd_files('.')",
     # code quality:
     "Has the development branch been merged/rebased into master?",
     "Are you happy with the code coverage?",
@@ -99,7 +99,7 @@ release_questions <- function() {
     "Have you checked on Windows, win_builder (if possible with configure step),
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",
-    "Have you compiled with clang and gcc with full warnings
+    "Have you compiled with clang and gcc with full warnings and pedantic
       (normally done by UBSAN builds anyway)?",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",

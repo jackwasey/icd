@@ -10,7 +10,7 @@ setup_test_check()
 Checks shell environment for whether to do slow or online tests.
 Checks whether we should warn for deprecated functions (usually not
 when testing). If \code{covr} is detected (an option is set), then
-we may be in a subprocess and not see any shell environment or options
+we may be in a sub-process and not see any shell environment or options
 from the calling process, so try to set slow tests on and warnings off.
 }
 \keyword{debugging}

@@ -21,7 +21,7 @@ icd_is_billable(x, short_code = icd_guess_short(x), ...)
   icd10cm_edition = "2016", ...)
 
 \method{icd_is_billable}{icd9cm}(x, short_code = icd_guess_short(x),
-  icd9cm_edition = icd9cm_latest_edition(), ...)
+  icd9cm_edition = icd9cm_latest_edition(), nomatch = 0L, ...)
 
 \method{icd_is_billable}{default}(x, short_code = icd_guess_short(x), ...)
 }
@@ -39,6 +39,8 @@ revisions within one year, although none currently implemented.}
 
 \item{icd10cm_edition}{single character string. ICD-10-CM editions are
 currently just the year of release.}
+
+\item{nomatch}{integer value, passed to \code{match} default is 0.}
 }
 \value{
 logical vector of same length as input

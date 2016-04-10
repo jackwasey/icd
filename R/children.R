@@ -110,7 +110,7 @@ utils::globalVariables("icd10cm2016")
 
 #' defined children of ICD codes
 #'
-#' defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
+#' Find defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
 #' three digit code, or a leaf node. This is distinct from 'billable'.
 #'
 #' @keywords internal
@@ -120,7 +120,7 @@ icd_children_defined <- function(x)
 #' @describeIn icd_children_defined Internal function to get the children of ICD-10 code(s)
 #' @param warn single logical value, if \code{TRUE} will generate warnings when
 #'   some input codes are not known ICD-10-CM codes
-#' @param use_cpp single logical flag, whehter to use CPP version
+#' @param use_cpp single logical flag, whether to use C++ version
 #' @examples
 #' \dontrun{
 #' library(microbenchmark)

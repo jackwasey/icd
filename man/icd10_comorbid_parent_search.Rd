@@ -2,14 +2,14 @@
 % Please edit documentation in R/comorbid.R
 \name{icd10_comorbid_parent_search}
 \alias{icd10_comorbid_parent_search}
-\title{find ICD-10 comorbidities checking parent matches}
+\title{find ICD-10 comorbidities by checking parents}
 \usage{
 icd10_comorbid_parent_search(x, map, visit_name = NULL,
   icd_name = get_icd_name(x), short_code = icd_guess_short(x, icd_name =
   icd_name), short_map = icd_guess_short(map), return_df = FALSE, ...)
 }
 \description{
-find ICD-10 comorbidities checking parent matches
+find ICD-10 comorbidities by checking parents
 }
 \examples{
 up <- uranium_pathology[1:50, ]

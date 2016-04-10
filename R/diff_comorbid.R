@@ -64,9 +64,6 @@ icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
   assert_flag(explain)
   stopifnot(all(x_names %in% names(x)), all(y_names %in% names(y)))
 
-  lapply(x, function(z) stopifnot(is.character(z)))
-  lapply(y, function(z) stopifnot(is.character(z)))
-
   if (!is.null(names) && (!is.null(x_names) | !is.null(y_names)))
     stop("if 'all_names' is specified, 'x_names' and 'y_names' should not be")
 

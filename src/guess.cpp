@@ -50,7 +50,7 @@ bool guessShortCompleteCpp(SEXP x_,
   // if short_code is set, just return that. Do it using C API because of Rcpp
   // argument weirdness with NULL values
   if (!Rf_isNull(short_code))
-    return Rf_asLogical(x_);
+    return Rf_asLogical(short_code);
 
   if (Rf_getAttrib(x_, Rf_install("icd_short_diag")) != R_NilValue)
     return Rf_asLogical(x_);

@@ -35,9 +35,12 @@ using Rcpp::as;
 
 //' Internal function to find ICD-10 parents
 //'
-//' Written in C++ for speed. Takes short code, short map, and pre-defined
-//' visit_name and icd_name.
+//' Written in C++ for speed. There are no default arguments and there is no
+//' value guessing.
 //' @param x Character vector (not factor)
+//' @template mapping
+//' @template visit_name
+//' @template icd_name
 //' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 //' @keywords internal
 // [[Rcpp::export]]

@@ -3,24 +3,18 @@
 \name{icd_explain}
 \alias{icd_explain}
 \alias{icd_explain.default}
-\alias{icd_explain.factor}
 \alias{icd_explain.icd10}
 \alias{icd_explain.icd9}
 \alias{icd_explain.icd9cm}
 \alias{icd_explain.list}
-\alias{icd_explain.numeric}
 \title{Explain ICD-9 and ICD-10 codes in English}
 \usage{
 icd_explain(...)
 
-\method{icd_explain}{default}(x, short_code = NULL, condense = TRUE,
-  brief = FALSE, warn = TRUE, ...)
-
-\method{icd_explain}{list}(x, short_code = icd_guess_short(x),
+\method{icd_explain}{default}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
-\method{icd_explain}{factor}(icd9, short_code = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = TRUE, ...)
+\method{icd_explain}{list}(x, ...)
 
 \method{icd_explain}{icd9}(...)
 
@@ -29,9 +23,6 @@ icd_explain(...)
 
 \method{icd_explain}{icd10}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
-
-\method{icd_explain}{numeric}(x, short_code = icd_guess_short(icd9),
-  condense = TRUE, brief = FALSE, warn = FALSE, ...)
 }
 \arguments{
 \item{...}{arguments passed on to other functions}
@@ -70,18 +61,11 @@ conversion to decimal notation, but to the textual format.
 
 \item \code{list}: Explain all ICD-9 codes in a list of vectors
 
-\item \code{factor}: explain Explain factor of ICD-9 codes
-
 \item \code{icd9}: explain character vector of ICD-9 codes.
 
 \item \code{icd9cm}: explain character vector of ICD-9-CM codes
 
 \item \code{icd10}: ICD-10 explanation, current a minimal implementation
-
-\item \code{numeric}: explain numeric vector of ICD-9 codes, with warning.
-In general, this is not allowed because of the possible ambiguity of
-numeric decimal codes, but for convenience, this is allowed in this case to
-avoid typing many quotes.
 }}
 \examples{
 # by default, just show parent code and ignore children (428.0 not shown
@@ -92,9 +76,6 @@ icd_explain(ahrqComorbid$CHF[1:3], brief = TRUE)
 # nice to have magrittr, but not essential
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 icd_explain(ahrqComorbid$CHF[1:3] \%>\%  icd_condense)
-}
-\seealso{
-package comorbidities
 }
 \keyword{internal}
 

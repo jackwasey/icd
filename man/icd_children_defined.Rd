@@ -14,10 +14,10 @@ icd_children_defined(x)
 \item{warn}{single logical value, if \code{TRUE} will generate warnings when
 some input codes are not known ICD-10-CM codes}
 
-\item{use_cpp}{single logical flag, whehter to use CPP version}
+\item{use_cpp}{single logical flag, whether to use C++ version}
 }
 \description{
-defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
+Find defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
 three digit code, or a leaf node. This is distinct from 'billable'.
 }
 \section{Methods (by class)}{

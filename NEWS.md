@@ -1,18 +1,18 @@
 # Version 2.0
  * ICD-10 support, including ICD-10 comorbidity mappings, validation and explanations (code to description). ICD-10-CM 2016 is included.
  * Extended the already comprehensive test suite to cover ICD-10 and fixed various bugs. Thanks to @wmurphyrd for providing some Elixhauser test data.
+ * Package `icd9` should now be uninstalled.
  * Simplify functions
   - Automatic detection of ICD version when not specified
   - Automatic detection of use of short or decimal format codes
   - e.g. `icd9ExplainShort` becomes `icd_explain`
- * Optional class system so data can be described as ICD-9 or ICD-10, so appropriate functions are used without the heuristics. This means that you can optionally label your data with the appropriate class, e.g. `icd10("A01")` or `icd9cm("0101")`. This will help avoid mistakes when working with mixed data.
+ * Optional use of the S3 class system so data can be described as ICD-9 or ICD-10, so appropriate functions are used without guesswork. This means that you can optionally label your data with the appropriate class, e.g. `as.icd10("A01")` or `as.icd9cm("0101")`. This will help avoid mistakes when working with mixed data.
  * ICD-9 and ICD-10 sub-versions, particularly for distinguishing of ICD-9 (WHO) from ICD-9-CM, and same for ICD-10. This can also be extended to other countries, e.g. ICD-10-CA, or other code types altogether.
- * Soft deprecated all `icd9` prefix functions, now this package equally covers ICD-10. New naming scheme follows Hadley Wickham's coding style, using underscores. All functions begin with `icd_`. Package data is named according to it's type, and begins with `icd_`, `icd9_`, `icd10_`, etc.. E.g. `icd10_chapters` and `icd9cm_hierarchy`. All deprecated functions will still work, but gives warnings (sometimes many). The original test suite from `icd9` runs and passes on the `icd` package, with only structural changes.
+ * Soft deprecated all `icd9` prefix functions, now this package equally covers ICD-10. New naming scheme follows Hadley Wickham's preferred coding style, using underscores. Most public functions begin with `icd_`. Package data, and version specific functions, are named with `icd_`, `icd9_`, `icd10_`, prefixes. E.g. `icd10_chapters` and `icd9cm_hierarchy`. All deprecated functions will still work, but they give warnings (sometimes many). The warnings can be turned off with an option. The original test suite from `icd9` runs and passes on the `icd` package, with only minimal changes.
  * Completely deprecated some previously soft deprecated functions, e.g. `icd9ValidDecimal`
- * `icd9` should now be uninstalled.
  * Works with very latest `testthat` which has backward-incompatible changes
- * Minimized dependencies, but `icd` does import `stringi` via `stringr` to give better string processing. `magrittr` is now too useful not to import, has no dependencies of its own, and is imported by `stringr` anyway. CRAN now seems to need base packages to be listed as imports.
- * More automated testing with Travis and Wercker, Codecov and Coveralls, all now renamed to `icd` from `icd9`
+ * Minimized dependencies, but `icd` does import `stringi` via `stringr` to give cleaner string processing. Base string processing is still used as it is often faster. `magrittr` is now too useful not to import, has no dependencies of its own, and is imported by `stringr` anyway. CRAN now also seems to need base packages to be listed as imports.
+ * More automated testing with Travis and Wercker, Codecov and Coveralls.
 
 # Version 1.3
  * With many thanks to @wmurphyrd, Quan's revised scoring system for Charlson comorbidities is now included.

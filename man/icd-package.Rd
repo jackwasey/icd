@@ -12,10 +12,10 @@
 \description{
 Calculate comorbidities, Charlson scores, perform fast and accurate
 validation, conversion, manipulation, filtering and comparison of ICD-9 and
-ICD-10 codes. Common ambiguities and code formats are supported. This
+ICD-10 codes. Common ambiguities and code formats are handled. This
 package enables a work flow from raw lists of ICD-9 codes in hospital
-billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan
-(Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+billing databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings
+from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{icd_comorbid}}

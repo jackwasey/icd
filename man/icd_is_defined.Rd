@@ -14,7 +14,7 @@ icd_is_defined(x, short_code = icd_guess_short(x), ...)
   billable = FALSE, ...)
 
 \method{icd_is_defined}{icd10cm}(x, short_code = icd_guess_short(x),
-  billable = FALSE, ...)
+  billable = FALSE, nomatch = 0L, ...)
 
 \method{icd_is_defined}{icd10}(x, short_code = icd_guess_short(x),
   billable = FALSE, ...)
@@ -34,6 +34,9 @@ Where reasonable, this is guessed from the input data.}
 whether they are billable, i.e. leaf nodes. This is really only designed
 for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not
 designed for billing, but for public health and death reporting.}
+
+\item{nomatch}{integer value, passed to \code{fmatch} default is 0. Setting
+this to \code{NA_integer_} would stop NA values being treated as undefined.}
 }
 \value{
 logical vector

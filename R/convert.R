@@ -235,7 +235,7 @@ icd_long_to_wide <- function(x,
 #' is.factor(df.out[["visit_id"]])
 #' @export
 icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
-                                   stringsAsFactors = getOption("stringsAsFactors")) {
+                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
   assert_matrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint
@@ -267,7 +267,7 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' mat.out[, 1:4]
 #' @export
 icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
-                                   stringsAsFactors = getOption("stringsAsFactors")) {
+                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
   assert_data_frame(x, min.rows = 1, min.cols = 2, col.names = "named")
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint
@@ -294,7 +294,7 @@ icd_short_to_decimal.default <- function(x) {
   switch(
     icd_guess_version.character(as_char_no_warn(x), short_code = TRUE),
     "icd9" = icd_short_to_decimal.icd9(x),
-    "icd10" =icd_short_to_decimal.icd10(x),
+    "icd10" = icd_short_to_decimal.icd10(x),
     stop("ICD type not known")
   )
 }

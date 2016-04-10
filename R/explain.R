@@ -44,7 +44,6 @@
 #' icd_explain(ahrqComorbid$CHF[1:3] %>%  icd_condense)
 #' @return data frame, or list of data frames, with fields for ICD-9 code, name
 #'   and description
-#' @seealso package comorbidities
 #' @export
 icd_explain <- function(...)
   UseMethod("icd_explain")
@@ -52,7 +51,7 @@ icd_explain <- function(...)
 #' @describeIn icd_explain Explain ICD codes from a character vector, guessing ICD version
 #' @export
 #' @keywords internal
-icd_explain.default <- function(x, short_code = NULL, condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+icd_explain.default <- function(x, short_code = icd_guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   switch(
     icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
     "icd9" = icd_explain.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
@@ -63,27 +62,21 @@ icd_explain.default <- function(x, short_code = NULL, condense = TRUE, brief = F
 
 #' @describeIn icd_explain Explain all ICD-9 codes in a list of vectors
 #' @export
-icd_explain.list <- function(x,  short_code = icd_guess_short(x),
-                             condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  lapply(x, icd_explain, short_code = short_code,
-         condense = condense, brief = brief, warn = warn)
+#' @keywords internal
+icd_explain.list <- function(x, ...) {
+  lapply(x, icd_explain, ...)
 }
-
-#' @describeIn icd_explain explain Explain factor of ICD-9 codes
-#' @export
-icd_explain.factor <- function(icd9, short_code = icd_guess_short(icd9),
-                               condense = TRUE, brief = FALSE, warn = TRUE, ...)
-  icd_explain.character(as_char_no_warn(icd9), short_code = short_code,
-                        condense = condense, brief = brief, warn = warn)
 
 #' @describeIn icd_explain explain character vector of ICD-9 codes.
 #' @export
+#' @keywords internal
 icd_explain.icd9 <- function(...) {
   icd_explain.icd9cm(...)
 }
 
 #' @describeIn icd_explain explain character vector of ICD-9-CM codes
 #' @export
+#' @keywords internal
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
@@ -118,6 +111,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
 
 #' @describeIn icd_explain ICD-10 explanation, current a minimal implementation
 #' @export
+#' @keywords internal
 icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert_vector(x)
@@ -137,17 +131,6 @@ icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
                    ifelse(brief, "short_desc", "long_desc")]
 }
 
-#' @describeIn icd_explain explain numeric vector of ICD-9 codes, with warning.
-#'   In general, this is not allowed because of the possible ambiguity of
-#'   numeric decimal codes, but for convenience, this is allowed in this case to
-#'   avoid typing many quotes.
-#' @export
-icd_explain.numeric <- function(x, short_code = icd_guess_short(icd9),
-                                condense = TRUE, brief = FALSE, warn = FALSE, ...) {
-  warn_numeric_code()
-  icd_explain.character(as.character(x), short_code = short_code, condense = condense, brief = brief, warn = warn)
-}
-
 #' get ICD-9 Chapters from vector of ICD-9 codes
 #'
 #' This runs quite slowly. Used too rarely to be worth optimizing
@@ -165,7 +148,7 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x),
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
-  assert(checkmate::checkCharacter(unclass(x)), checkmate::checkFactor(unclass(x)))
+  assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
   assert_flag(short_code)
   icd9 <- as_char_no_warn(x)
   majors <- icd_get_major.icd9(icd9, short_code)

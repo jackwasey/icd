@@ -74,8 +74,7 @@ test_that("explain S3 dispatch", {
   expect_warning(res <- icd_explain(list(a = icd9("not"), b = icd9("icd9code")), short_code = FALSE))
   expect_equal(res, list(a = character(0), b = character(0)))
 
-  expect_warning(res <- icd_explain.numeric(3.21, short_code = FALSE))
-  expect_equal(res, icd_explain.icd9("00321", short_code = TRUE))
+  expect_equal(icd_explain.icd9("00321", short_code = TRUE), "Salmonella meningitis")
 
 })
 

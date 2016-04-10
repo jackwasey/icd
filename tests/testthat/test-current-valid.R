@@ -18,14 +18,9 @@
 context("icd9 validation")
 
 test_that("is ICD-9 code valid, factor or character", {
-  expect_identical(
-    icd_is_valid(c("1001", "E999", "V01")),
-    icd_is_valid(factor(c("1001", "E999", "V01")))
-  )
-  expect_identical(
-    icd_is_valid(icd9(c("1001", "E999", "V01"))),
-    icd_is_valid(factor(c("1001", "E999", "V01")))
-  )
+  x <- c("1001", "E999", "V01")
+  expect_identical(icd_is_valid(x), icd_is_valid(factor(x)))
+  expect_identical(icd_is_valid(icd9(x)), icd_is_valid(factor(x)))
 
   pts <- generate_random_short_icd9()
   expect_identical(icd_is_valid(pts), icd_is_valid(factor(pts)))

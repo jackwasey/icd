@@ -9,7 +9,7 @@
 \usage{
 icd_sort(x, ...)
 
-\method{icd_sort}{default}(x, short_code = NULL, ...)
+\method{icd_sort}{default}(x, short_code = icd_guess_short(x), ...)
 
 \method{icd_sort}{icd10}(x, short_code = NULL, ...)
 

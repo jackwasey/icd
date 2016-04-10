@@ -146,7 +146,7 @@ icd10_comorbid <- function(x,
 }
 
 
-#' find ICD-10 comorbidities checking parent matches
+#' find ICD-10 comorbidities by checking parents
 #'
 #' @examples
 #' up <- uranium_pathology[1:50, ]

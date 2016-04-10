@@ -23,7 +23,7 @@
 #include <string>
 #include <Rinternals.h>
 
-//' Set icd_short_diag attribute in-place
+//' Set ICD short-form diagnosis code attribute
 //'
 //' Doing this in an R function doesn't work for 'void' equivalent, and does a
 //' copy if the updated object is returned.
