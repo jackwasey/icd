@@ -1,6 +1,5 @@
 ## Note
-* This package now handles both ICD-9 and ICD-10 codes, as it was formerly called icd9, I would like to rename it to
-  'icd'. I plan to leave 'icd9' in place for bug-fix updates only, and to direct people to 'icd', then drop it in about a year.
+* No longer warns when the deprecated package 'icd9' is installed.
 
 ## Test environments
 * Ubuntu 15.10 R 3.2.4, clang 3.7.0 and gcc 4.9.2 (4.9.2-10ubuntu13)
