@@ -2,12 +2,10 @@
 * No longer warns when the deprecated package 'icd9' is installed.
 
 ## Test environments
-* Ubuntu 15.10 R 3.2.4, clang 3.7.0 and gcc 4.9.2 (4.9.2-10ubuntu13)
-* Ubuntu 12.04 (on travis-ci) R 3.2.4 patched, gcc 4.6.3
-* Wercker
+* Ubuntu 16.04 R 3.2.4, clang 3.8.0 and gcc 5.3.1
+* Ubuntu 14.04 (on travis-ci) R 3.2.4 patched, gcc 4.6.3
+* Wercker Debian (rocker/hadleyverse) GCC 5.3.1, R 3.2.4 patched
 * Debian testing/unstable in docker with R-devel, ASAN+UBSAN GCC, 3.8 and 3.9 trunk
-* Windows 7 64 bit R 3.3 devel with gcc from latest Rtools33
-* OS X with R-devel and LLVM Clang 3.7
 
 # R CMD check results
 
