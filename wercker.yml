@@ -9,8 +9,6 @@ build:
     - script:
         name: icd test environment
         code: |
-            export WERCKER_R_COVR_OPTIONS="quiet = FALSE, exclusions = list('inst/include/icd_RcppExports.h', 'R/RcppExports.R', 'src/RcppExports.cpp', 'R/benchmark.R')"
-            # covr should be detected within package when it is tested, and shell env is not propogated to covr subprocess
             export ICD_SLOW_TESTS=true
             rm .Rinstignore  # install everything for testing
             sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
@@ -26,9 +24,10 @@ build:
             ls -R
             echo $ICD_SLOW_TESTS
             cat ./icd.Rcheck/tests/test-*.Rout*
-    # need to use my r-coverage so I can not be quiet with codecov call (because of time outs)
-    # - jackwasey/r-coverage
-    - jimhester/r-coverage
+    - script:
+        name: run covr for codecov.io
+        code: |
+            Rscript -e "covr::codecov(quiet = FALSE, exclusions = list('inst/include/icd_RcppExports.h', 'R/RcppExports.R', 'src/RcppExports.cpp', 'R/benchmark.R'))"
     - script:
         name: debug information after codecov with covr
         code: |
