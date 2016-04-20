@@ -81,7 +81,7 @@ icd_explain.icd9 <- function(...) {
 #' @keywords internal
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
+  assert(checkCharacter(x), checkFactor(x))
   assert_flag(short_code)
   assert_flag(condense)
   assert_flag(brief)
@@ -149,7 +149,7 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x),
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
-  assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
+  assert(checkCharacter(x), checkFactor(x))
   assert_flag(short_code)
   icd9 <- as_char_no_warn(x)
   majors <- icd_get_major.icd9(icd9, short_code)

@@ -34,9 +34,9 @@ icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, war
 #' @export
 #' @keywords internal
 icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
-  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
+  assert(checkFactor(x), checkCharacter(x))
   assert_flag(short_code)
-  assert(checkmate::checkNull(defined), checkmate::checkFlag(defined))
+  assert(checkNull(defined), checkFlag(defined))
   assert_flag(warn)
   if (short_code)
     icd9_condense_short(x, defined = defined, warn = warn, ...)
@@ -75,7 +75,7 @@ icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE, keep_factor_le
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
 icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_levels = FALSE) {
-  assert(checkmate::checkNull(defined), checkmate::checkFlag(defined))
+  assert(checkNull(defined), checkFlag(defined))
   assert_flag(warn)
   assert_flag(keep_factor_levels)
   icd9Levels <- levels(x) # NULL if not a factor

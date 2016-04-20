@@ -266,10 +266,10 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
 icd_is_valid.icd9 <- function(x, short_code = icd_guess_short(x),
                               whitespace_ok = TRUE, ...) {
   assert(
-    checkmate::checkFactor(x),
-    checkmate::checkCharacter(x),
-    checkmate::checkClass(x, c("icd9")), # TODO: use icd9_classes
-    checkmate::checkClass(x, c("icd9cm"))
+    checkFactor(x),
+    checkCharacter(x),
+    checkClass(x, c("icd9")), # TODO: use icd9_classes
+    checkClass(x, c("icd9cm"))
   )
   assert_flag(short_code)
   assert_flag(whitespace_ok)
@@ -280,10 +280,10 @@ icd_is_valid.icd9 <- function(x, short_code = icd_guess_short(x),
 }
 
 icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {
-  assert(checkmate::checkFactor(x),
-         checkmate::checkCharacter(x),
-         checkmate::checkClass("icd9"),
-         checkmate::checkClass("icd9cm"))
+  assert(checkFactor(x),
+         checkCharacter(x),
+         checkClass("icd9"),
+         checkClass("icd9cm"))
   assert_flag(whitespace_ok)
   if (length(x) == 0)
     return(logical())
@@ -298,10 +298,10 @@ icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
   # if input doesn't satisfy these, then it is not just invalid, but deserves an
   # error:
   assert(
-    checkmate::checkFactor(x),
-    checkmate::checkCharacter(x),
-    checkmate::checkClass(x, c("icd9")),
-    checkmate::checkClass(x, c("icd9cm"))
+    checkFactor(x),
+    checkCharacter(x),
+    checkClass(x, c("icd9")),
+    checkClass(x, c("icd9cm"))
   )
   assert_flag(whitespace_ok)
 
@@ -343,7 +343,7 @@ icd9_is_valid_short_e <- function(x, whitespace_ok = TRUE){
 }
 
 icd9_is_valid_decimal_n <- function(x, whitespace_ok = TRUE) {
-  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
+  assert(checkFactor(x), checkCharacter(x))
   assert_flag(whitespace_ok)
   if (whitespace_ok)
     str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal_n)) %>% na_to_false
@@ -361,7 +361,7 @@ icd9_is_valid_decimal_v <- function(x, whitespace_ok = TRUE) {
 
 icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
-  assert(checkmate::checkFactor(x), checkmate::checkCharacter(x))
+  assert(checkFactor(x), checkCharacter(x))
   if (whitespace_ok)
     str_detect(as_char_no_warn(x), re_just_ws(re_icd9_decimal_e)) %>% na_to_false
   else

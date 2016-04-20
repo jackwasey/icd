@@ -127,12 +127,12 @@ icd10_comorbid <- function(x,
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
 
-  assert(checkmate::checkString(visit_name), checkmate::checkNull(visit_name))
-  assert(checkmate::checkString(icd_name), checkmate::checkNull(icd_name))
+  assert(checkString(visit_name), checkNull(visit_name))
+  assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)
-  assert(checkmate::checkFlag(short_code), checkmate::checkNull(short_code))
+  assert(checkFlag(short_code), checkNull(short_code))
   assert_flag(short_map)
 
   if (is.null(icd_name))
@@ -417,8 +417,8 @@ icd9_comorbid <- function(x,
                           return_df = FALSE, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
-  assert(checkmate::checkString(visit_name), checkmate::checkNull(visit_name))
-  assert(checkmate::checkString(icd_name), checkmate::checkNull(icd_name))
+  assert(checkString(visit_name), checkNull(visit_name))
+  assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)
@@ -451,8 +451,8 @@ icd_comorbid_common <- function(x,
                                 return_df = FALSE, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
-  assert(checkmate::checkString(visit_name), checkmate::checkNull(visit_name))
-  assert(checkmate::checkString(icd_name), checkmate::checkNull(icd_name))
+  assert(checkString(visit_name), checkNull(visit_name))
+  assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)

@@ -60,7 +60,7 @@ icd_guess_version.character <- function(x, short_code = NULL, n = 10, ...) {
   # code which starts with a number, which would be simpler and much faster.
 
   assert_character(x)
-  assert(checkmate::checkFlag(short_code), checkmate::checkNull(short_code))
+  assert(checkFlag(short_code), checkNull(short_code))
 
   x <- x[1:n]
 

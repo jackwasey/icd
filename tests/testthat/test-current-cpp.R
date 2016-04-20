@@ -18,7 +18,9 @@
 context("C++")
 
 test_that("C++ tests all pass", {
-  # this does require a recent version of testthat > 0.11.0.9000
+  # this does require a recent version of testthat > 1.0, which is now on CRAN,
+  # but leaving this test in because I can easily see that some platforms may
+  # not be able to do this
   catch_avail <- tryCatch(
     is.list(getNativeSymbolInfo("run_testthat_tests", PACKAGE = "icd")),
     error = function(e) FALSE

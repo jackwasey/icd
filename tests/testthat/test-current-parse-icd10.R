@@ -36,7 +36,7 @@ test_that("icd10 2016 flat file details are okay", {
   expect_identical(colnames(res), col_names)
 
   # checkmate tests worked well here, but don't work with latest testthat
-  expect_true(is.character(res$code))
+  expect_character(res$code)
   expect_true(is.logical(res$billable))
   expect_true(is.character(res$short_desc))
   expect_true(is.character(res$long_desc))

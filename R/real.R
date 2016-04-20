@@ -41,7 +41,7 @@ icd_is_defined <- function(x, short_code = icd_guess_short(x), ...) {
 #' @keywords internal
 icd_is_defined.icd9 <- function(x, short_code = icd_guess_short(x),
                                 billable = FALSE, ...) {
-  assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
+  assert(checkCharacter(x), checkFactor(x))
   assert_flag(short_code)
   assert_flag(billable)
 
@@ -62,7 +62,7 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short(x),
 #' @keywords internal
 icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short(x),
                                    billable = FALSE, nomatch = 0L, ...) {
-  assert(checkmate::checkCharacter(x), checkmate::checkFactor(x))
+  assert(checkCharacter(x), checkFactor(x))
   if (!short_code)
     x <- icd_decimal_to_short(x)
 

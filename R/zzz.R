@@ -90,7 +90,6 @@ release_questions <- function() {
     "Are all public S3 classes all exported? use devtools::missing_s3()",
     "use LLVM scan build by adding 'scan-build before compiler path in .R/Makevars",
     # testing and compilation and different platforms:
-    "Have you run with testthat <= and > 0.11.0?",
     "Have you run autoreconf before building and testing?",
     "Has config.h.win been updated to reflect latest configure.ac results?",
     "Are there skipped tests which should be run?",
