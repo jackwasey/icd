@@ -8,14 +8,15 @@
 \alias{icd9-package}
 \alias{package-icd10}
 \alias{package-icd9}
-\title{Tools for Working with ICD-9 Codes, and Finding Comorbidities}
+\title{Tools for Working with ICD-9 and ICD-10 Codes, and Finding Comorbidities}
 \description{
 Calculate comorbidities, Charlson scores, perform fast and accurate
 validation, conversion, manipulation, filtering and comparison of ICD-9 and
 ICD-10 codes. Common ambiguities and code formats are handled. This
-package enables a work flow from raw lists of ICD-9 codes in hospital
+package enables a work flow from raw lists of ICD codes in hospital
 billing databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings
-from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. This
+package replaces 'icd9', which can now be uninstalled.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{icd_comorbid}}

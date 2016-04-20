@@ -13,7 +13,11 @@
 \alias{icd9_comorbid_quan_deyo}
 \alias{icd9_comorbid_quan_elix}
 \alias{icd_comorbid}
+\alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_common}
+\alias{icd_comorbid_elix}
+\alias{icd_comorbid_quan_deyo}
+\alias{icd_comorbid_quan_elix}
 \title{Find comorbidities from ICD-9 codes.}
 \usage{
 icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
@@ -49,6 +53,14 @@ icd9_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
+
+icd_comorbid_ahrq(x, icd_name = get_icd_name(x), ...)
+
+icd_comorbid_elix(x, icd_name = get_icd_name(x), ...)
+
+icd_comorbid_quan_elix(x, icd_name = get_icd_name(x), ...)
+
+icd_comorbid_quan_deyo(x, icd_name = get_icd_name(x), ...)
 }
 \arguments{
 \item{aggregate}{single logical value, if \code{TRUE}, then take (possible

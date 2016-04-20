@@ -588,6 +588,8 @@ icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TR
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
+#' @rdname icd_comorbid
+#' @export
 icd_comorbid_ahrq <- function(x, icd_name = get_icd_name(x), ...) {
   ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
   if (ver == "icd9")
@@ -598,6 +600,8 @@ icd_comorbid_ahrq <- function(x, icd_name = get_icd_name(x), ...) {
     stop("could not guess the ICD version using icd_name = ", icd_name)
 }
 
+#' @rdname icd_comorbid
+#' @export
 icd_comorbid_elix <- function(x, icd_name = get_icd_name(x), ...) {
   ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
   if (ver == "icd9")
@@ -608,6 +612,8 @@ icd_comorbid_elix <- function(x, icd_name = get_icd_name(x), ...) {
     stop("could not guess the ICD version using icd_name = ", icd_name)
 }
 
+#' @rdname icd_comorbid
+#' @export
 icd_comorbid_quan_elix <- function(x, icd_name = get_icd_name(x), ...) {
   ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
   if (ver == "icd9")
@@ -618,6 +624,8 @@ icd_comorbid_quan_elix <- function(x, icd_name = get_icd_name(x), ...) {
     stop("could not guess the ICD version using icd_name = ", icd_name)
 }
 
+#' @rdname icd_comorbid
+#' @export
 icd_comorbid_quan_deyo <- function(x, icd_name = get_icd_name(x), ...) {
   ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
   if (ver == "icd9")
