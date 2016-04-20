@@ -15,7 +15,7 @@ build:
             rm .Rinstignore  # install everything for testing
             sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
-        github_packages: kevinushey/rex jimhester/covr hadley/testthat
+        github_packages: jimhester/covr
     - jimhester/r-lint
     - jimhester/r-check:
         warnings_are_errors: FALSE
