@@ -19,26 +19,19 @@ build:
     - jimhester/r-lint
     - jimhester/r-check:
         warnings_are_errors: FALSE
-# I think this has false positives for latex warnings, even if R CMD check is okay
-#    - jackwasey/r-coverage
+# I think making warnings into errors gives false positives for latex warnings, even if R CMD check is okay
     - script:
         name: debug information before codecov with covr
         code: |
-            Rscript -e 'library(testthat); message("testthat version = :", packageVersion("testthat")); devtools::session_info()'
             ls -R
             echo $ICD_SLOW_TESTS
             cat ./icd.Rcheck/tests/test-*.Rout*
-# need my r-coverage so I can not be quiet with codecov call, but this may change in newer covr
-    - jackwasey/r-coverage
+    # need to use my r-coverage so I can not be quiet with codecov call (because of time outs)
+    # - jackwasey/r-coverage
+    - jimhester/r-coverage
     - script:
         name: debug information after codecov with covr
         code: |
             ls -R
             echo $ICD_SLOW_TESTS
             cat ./icd.Rcheck/tests/test-*.Rout*
-    - script:
-        name: re-check with CRAN testthat
-        code: |
-            Rscript -e 'library(testthat); message("testthat version = :", packageVersion("testthat")); devtools::session_info()'
-    - jimhester/r-check:
-        warnings_are_errors: FALSE
