@@ -103,10 +103,22 @@ test_that("deprecated - online parse tests run", {
     skip("RTF for 2011 not available")
   rtf_dat <- icd9_sources[icd9_sources$f_year == "2011", ]
   url <- rtf_dat$rtf_url
-  fn <- rtf_dat$rtf_filename
-  unzip_single(url, fn, tf <- tempfile())
+  tf <- tempfile()
+
+  # double check the tempfile is writeable (? failure on R 3.1, current old-rel)
+  file_writable <- function(fn, rm = FALSE) {
+    tryCatch(
+      {
+        is.null(suppressWarnings(write.table(1, fn)))
+      }, error = function(e) FALSE
+    )
+  }
+  stopifnot(file_writable(tf))
+  on.exit(unlink(tf), add = TRUE)
+  unzip_single(url = url,
+               file_name = rtf_dat$rtf_filename,
+               save_path = tf)
   rtf_lines <- readLines(tf, warn = FALSE)
-  unlink(tf)
   rtf <- parse_rtf_lines(rtf_lines)
   nrtf <- names(rtf)
 
@@ -120,7 +132,6 @@ test_that("deprecated - online parse tests run", {
     expect_false(any(grepl("[\\\\{}]", rtf)),
                  info = paste("rtf codes in descriptions:",
                               paste(grep("[\\\\{}]", rtf, value = TRUE))))
-
   })
 
   test_that("deprecated - all csv extract codes are in rtf extract", {
