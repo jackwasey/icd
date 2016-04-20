@@ -48,9 +48,9 @@ test_that("condense an ICD-9 code set to minimal group", {
   expect_equal(sort(icd_condense.icd9("98799" %i9sa% "98901", defined = FALSE)),
                sort(c("98799", "988", "98900", "98901")))
   # non-real end of real range
-  expect_that(res <- icd_condense.icd9("988" %i9sa% "98899", defined = TRUE), gives_warning())
+  expect_warning(res <- icd_condense.icd9("988" %i9sa% "98899", defined = TRUE))
   expect_equal(res, "988")
-  expect_that(res <- icd_condense.icd9("9879" %i9sa% "9891", defined = TRUE), gives_warning())
+  expect_warning(res <- icd_condense.icd9("9879" %i9sa% "9891", defined = TRUE))
   expect_equal(res, c("9879", "988", "9890", "9891"))
 })
 

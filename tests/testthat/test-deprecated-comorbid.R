@@ -109,15 +109,10 @@ test_that("deprecated - can condense the big lists of comorbidities without erro
   for (onlyReal in c(TRUE, FALSE)) {
     if (onlyReal) {
       # this is a bit silly now, because deprecated functions always give warnings:
-      expect_that(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal = onlyReal),
-                  gives_warning())
-      expect_that(quanDeyo <- lapply(quanDeyoComorbid, icd9Condense, onlyReal),
-                  gives_warning())
-      expect_that(quanElix <- lapply(quanElixComorbid,
-                                     icd9Condense, onlyReal),
-                  gives_warning())
-      expect_that(elix <- lapply(elixComorbid, icd9Condense, onlyReal),
-                  gives_warning())
+      expect_warning(ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal = onlyReal))
+      expect_warning(quanDeyo <- lapply(quanDeyoComorbid, icd9Condense, onlyReal))
+      expect_warning(quanElix <- lapply(quanElixComorbid, icd9Condense, onlyReal))
+      expect_warning(elix <- lapply(elixComorbid, icd9Condense, onlyReal))
     }
     else {
       ahrq <- lapply(ahrqComorbid, icd9CondenseShort, onlyReal)

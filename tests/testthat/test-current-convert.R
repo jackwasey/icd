@@ -259,12 +259,12 @@ test_that("short to decimal conversions also convert class", {
 })
 
 test_that("parts to decimal", {
-  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = NA)), testthat::equals("100"))
-  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "")), testthat::equals("100"))
-  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "1")), testthat::equals("100.1"))
-  expect_that(icd9MajMinToDecimal("100", NA), testthat::equals("100"))
-  expect_that(icd9MajMinToDecimal("100", ""), testthat::equals("100"))
-  expect_that(icd9MajMinToDecimal("100", "1"), testthat::equals("100.1"))
+  expect_equal(icd9PartsToDecimal(data.frame(major = "100", minor = NA)), "100")
+  expect_equal(icd9PartsToDecimal(data.frame(major = "100", minor = "")), "100")
+  expect_equal(icd9PartsToDecimal(data.frame(major = "100", minor = "1")), "100.1")
+  expect_equal(icd9MajMinToDecimal("100", NA), "100")
+  expect_equal(icd9MajMinToDecimal("100", ""), "100")
+  expect_equal(icd9MajMinToDecimal("100", "1"), "100.1")
 })
 
 test_that("parts to short invalid inputs", {
@@ -390,7 +390,7 @@ test_that("decimal ICD-10 to parts", {
 
 test_that("icd10 short to parts", {
   expect_equal(icd_short_to_parts("A0101"),
-              data.frame(major = "A01", minor = "01", stringsAsFactors = FALSE))
+               data.frame(major = "A01", minor = "01", stringsAsFactors = FALSE))
   # for V and E codes, we can't just assume ICD-10 will work with the ICD-9 function:
   expect_equal(icd_short_to_parts(as.icd10cm("E8989")),
                data.frame(major = "E89", minor = "89", stringsAsFactors = FALSE))

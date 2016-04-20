@@ -120,14 +120,6 @@ context("icd9ShortToPartsCpp") {
   }
 }
 
-// context("Rcpp exports") {
-//   test_that("Rcpp exports are valid") {
-//
-//     int i = icd_RcppExport_validate("icd");
-//     expect_that(i > 0);
-//   }
-// }
-
 context("parallel debug") {
   test_that("debug parallel runs without error") {
     debug_parallel();

@@ -118,7 +118,7 @@ test_that("deprecated - short to decimal bad input", {
   expect_equal_no_icd(icd9ShortToDecimal(NA), NA_character_)
   # NA is not character type, so expect error.
   expect_equal_no_icd(icd9ShortToDecimal(c("000000", "0ab1bc2d")),
-               c(NA_character_, NA_character_))
+                      c(NA_character_, NA_character_))
 })
 
 test_that("deprecated - icd9 short to major part, E codes", {
@@ -178,12 +178,12 @@ test_that("deprecated - running short to decimal conversion before and after exp
           })
 
 test_that("deprecated - parts to decimal", {
-  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = NA)), testthat::equals("100"))
-  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "")), testthat::equals("100"))
-  expect_that(icd9PartsToDecimal(data.frame(major = "100", minor = "1")), testthat::equals("100.1"))
-  expect_that(icd9MajMinToDecimal("100", NA), testthat::equals("100"))
-  expect_that(icd9MajMinToDecimal("100", ""), testthat::equals("100"))
-  expect_that(icd9MajMinToDecimal("100", "1"), testthat::equals("100.1"))
+  expect_equal(icd9PartsToDecimal(data.frame(major = "100", minor = NA)), "100")
+  expect_equal(icd9PartsToDecimal(data.frame(major = "100", minor = "")), "100")
+  expect_equal(icd9PartsToDecimal(data.frame(major = "100", minor = "1")), "100.1")
+  expect_equal(icd9MajMinToDecimal("100", NA), "100")
+  expect_equal(icd9MajMinToDecimal("100", ""), "100")
+  expect_equal(icd9MajMinToDecimal("100", "1"), "100.1")
 })
 
 test_that("deprecated - parts to short invalid inputs", {

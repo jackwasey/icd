@@ -229,7 +229,7 @@ test_that("unsorted hierarchy tests", {
 
 test_that("explain gives appropriate warnings by default", {
   # if we ask for real codes, we should expect all real codes as input:
-  expect_that(icd9CondenseShort("E7777", onlyReal = TRUE, warn = TRUE), gives_warning())
+  expect_warning(icd9CondenseShort("E7777", onlyReal = TRUE, warn = TRUE))
 })
 
 test_that("explain icd9GetChapters bad input", {

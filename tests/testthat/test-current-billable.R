@@ -40,6 +40,7 @@ test_that("ICD-9-CM billable codes package data is recreated", {
 
   # make specific quick tests for previously known problems:
   b32 <- check_billable[["32"]]
+  expect_data_frame(b32, nrows = 14567L, any.missing = FALSE, ncols = 3L, types = "character")
   expect_identical(b32[b32$code == "9999", "short_desc"], "Complic med care NEC/NOS")
   expect_identical(b32[b32$code == "E0000", "short_desc"], "Civilian activity-income")
   expect_identical(b32[b32$code == "E9991", "short_desc"], "Late effect, terrorism")
@@ -56,6 +57,7 @@ test_that("ICD-9-CM billable codes package data is recreated", {
                      ))
   }
 })
+
 
 test_that("billable codes for expected versions exist", {
   expect_true(all(as.character(23:32) %in% names(icd9cm_billable)))

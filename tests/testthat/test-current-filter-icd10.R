@@ -22,6 +22,5 @@ pts[1, "icd10_code"] <- "invalid"
 
 test_that("filter an invalid row", {
   expect_warning(res <- icd10_filter_invalid(pts), regexp = NA)
-  expect_true(is.data.frame(res))
-  expect_equal(nrow(res), 1)
+  expect_data_frame(res, nrows = 1)
 })

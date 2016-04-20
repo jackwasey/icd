@@ -31,26 +31,26 @@ test_that("icd10 2016 flat file details are okay", {
 
   # check cols at a time, so I get better error feedback:
   col_names <- c("code", "billable", "short_desc", "long_desc", "three_digit",
-              "major", "sub_chapter", "chapter")
+                 "major", "sub_chapter", "chapter")
   expect_warning(res <- icd10cm_get_all_defined(save_data = FALSE), regexp = NA)
   expect_identical(colnames(res), col_names)
 
   # checkmate tests worked well here, but don't work with latest testthat
   expect_character(res$code)
-  expect_true(is.logical(res$billable))
-  expect_true(is.character(res$short_desc))
-  expect_true(is.character(res$long_desc))
+  expect_logical(res$billable)
+  expect_character(res$short_desc)
+  expect_character(res$long_desc)
 
-  expect_true(is.character(icd::icd10cm2016$code))
-  expect_true(is.logical(icd::icd10cm2016$billable))
-  expect_true(is.character(icd::icd10cm2016$short_desc))
-  expect_true(is.character(icd::icd10cm2016$long_desc))
+  expect_character(icd::icd10cm2016$code)
+  expect_logical(icd::icd10cm2016$billable)
+  expect_character(icd::icd10cm2016$short_desc)
+  expect_character(icd::icd10cm2016$long_desc)
 
   for (n in c("three_digit", "major", "sub_chapter", "chapter")) {
-      expect_true(is.factor(res[[n]]))
-      expect_true(is.factor(icd::icd10cm2016[[n]]))
-      expect_identical(levels(res[[n]]), levels(icd::icd10cm2016[[n]]), info = paste("working on ", n))
-      expect_identical(res[[n]], icd::icd10cm2016[[n]], info = paste("working on ", n))
+    expect_factor(res[[n]])
+    expect_factor(icd::icd10cm2016[[n]])
+    expect_identical(levels(res[[n]]), levels(icd::icd10cm2016[[n]]), info = paste("working on ", n))
+    expect_identical(res[[n]], icd::icd10cm2016[[n]], info = paste("working on ", n))
   }
   expect_identical(res, icd::icd10cm2016)
 })

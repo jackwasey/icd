@@ -32,24 +32,25 @@ test_that("short_code is respected even if code is opposite", {
 })
 
 test_that("guess type from a data frame with no class set on column", {
-pts <- generate_random_pts(5)
-class(pts$code) <- "character"
+  pts <- generate_random_pts(5)
+  class(pts$code) <- "character"
 
-expect_true(icd_guess_short(pts))
+  expect_true(icd_guess_short(pts))
 
-no_pts <- structure(list(visit_id = integer(0),
-                         code = character(0),
-                         poa = structure(integer(0),
-                                         .Label = character(0), class = "factor")),
-                    .Names = c("visit_id", "code", "poa"), row.names = integer(0), class = "data.frame")
+  no_pts <- structure(list(visit_id = integer(0),
+                           code = character(0),
+                           poa = structure(integer(0),
+                                           .Label = character(0), class = "factor")),
+                      .Names = c("visit_id", "code", "poa"), row.names = integer(0), class = "data.frame")
 
-# no error?
-icd_guess_short(no_pts)
+  # no error?
+  icd_guess_short(no_pts)
 
 })
 
 test_that("guess on a zero length character vector works", {
- expect_true(is.logical(icd_guess_short(character(0))))
+  # we always give a true or false response even if we have no data
+  expect_logical(icd_guess_short(character(0)), len = 1L)
 })
 
 test_that("lists of ICD-10 decimal codes are identified correctly as decimal", {

@@ -22,7 +22,7 @@ test_that("deprecated - five digit to five digit code range condenses", {
 })
 
 test_that("deprecated - condensing a single real codes gives themselves", {
-  expect_that(res <- icd9Condense("61172"), shows_message())
+  expect_message(res <- icd9Condense("61172"))
   expect_equal(res, "61172")
   expect_equal(icd9Condense("61172", onlyReal = FALSE), "61172")
   expect_equal(icd9Condense("143"), "143")
@@ -41,9 +41,9 @@ test_that("deprecated - condense an ICD-9 code set to minimal group", {
   expect_equal(sort(icd9Condense("98799" %i9sa% "98901", onlyReal = FALSE)),
                sort(c("98799", "988", "98900", "98901")))
   # non-real end of real range
-  expect_that(res <- icd9Condense("988" %i9sa% "98899", onlyReal = TRUE), gives_warning())
+  expect_warning(res <- icd9Condense("988" %i9sa% "98899", onlyReal = TRUE))
   expect_equal(res, "988")
-  expect_that(res <- icd9Condense("9879" %i9sa% "9891", onlyReal = TRUE), gives_warning())
+  expect_warning(res <- icd9Condense("9879" %i9sa% "9891", onlyReal = TRUE))
   expect_equal(res, c("9879", "988", "9890", "9891"))
 })
 
