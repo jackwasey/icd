@@ -23,6 +23,9 @@
 #' directory, and copy to the given \code{save_path}
 #' @keywords internal file
 unzip_single <- function(url, file_name, save_path) {
+  assert_character(url, len = 1)
+  assert_character(file_name, len = 1)
+  assert_character(save_path, len = 1)
   zipfile <- tempfile()
   # using libcurl because it seems the internal method works inconsistently
   if (capabilities("libcurl"))

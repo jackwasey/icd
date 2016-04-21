@@ -19,6 +19,9 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <!-- README.md is generated from README.Rmd. Please edit that file and render with 
 rmarkdown::render("README.Rmd")
 -->
+    ## Warning in .doLoadActions(where, attach): trying to execute load actions
+    ## without 'methods' package
+
 icd
 ===
 
@@ -39,13 +42,13 @@ Features
 --------
 
 -   find comorbidities of patients based on admission or discharge ICD-9 or ICD-10 codes, e.g. Cancer, Heart Disease
-    -   several standard mappings of ICD-9 codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
+    -   several standard mappings of ICD codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
     -   very fast assignment of ICD codes to comorbidities (using C and C++ internally, with automatic parallel execution using OpenMP when available), assigning millions of comorbidities in a few seconds
 -   Charlson and Van Walraven score calculations
 -   validation of ICD codes from different annual revisions of ICD-9-CM and ICD-10-CM
 -   summarizing ICD codes into groups, and to human-readable descriptions
 -   correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 conversion is left as an exercise for the user!
--   comprehensive test suite to increase confidence in accurate processing of ICD-9 codes
+-   comprehensive test suite to increase confidence in accurate processing of ICD codes
 
 New since last CRAN release:
 ----------------------------
@@ -54,7 +57,7 @@ New since last CRAN release:
 -   functions simplified so they apply to ICD-9 and ICD-10, e.g. `icd9ComorbidAhrq` becomes `icd_comorbid_ahrq` (alongside `icd9_comorbid_ahrq` and `icd10_comorbid_ahrq` which skip the step to guess the ICD version).
 -   major update to all function names following [Hadley Wickham](http://adv-r.had.co.nz/Style.html), [google](https://google.github.io/styleguide/Rguide.xml) and [lintr](https://github.com/jimhester/lintr).
 -   All function and variable names with *camelCase* are now deprecated in favor of *snake\_case*. SnakeCase function names still work, but will give deprecated warnings (which can be muted)
--   use of basic S3 classes to allow users the option of distinguishing the type of their data. E.g. `icd9(c("0010", "0011"))` defines two ICD-9 codes, `icd10cm(c("A01", "A011"))` defines two ICD-10-CM codes (which are implicitly ICD-10 codes also). This can be extended to add other variants, such as ICD-10 WHO (work in progress), and national variations.
+-   use of basic S3 classes to allow users the option of distinguishing the type of their data. E.g. `as.icd9(c("0010", "0011"))` defines two ICD-9 codes, `as.icd10cm(c("A01", "A011"))` defines two ICD-10-CM codes (which are implicitly ICD-10 codes also). This can be extended to add other variants, such as ICD-10 WHO (work in progress), and national variations.
 -   see NEWS.md, vignettes and github [changelog](https://github.com/jackwasey/icd/commits/master) for more details
 
 Introduction
@@ -148,7 +151,6 @@ Install
 The latest version is available in [github icd](https://github.com/jackwasey/icd), and can be installed with:
 
 ``` r
-    install.packages("magrittr") # recommended, but not required
     install.packages("devtools")
     devtools::install_github("jackwasey/icd")
 ```
