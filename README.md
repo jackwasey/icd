@@ -39,13 +39,13 @@ Features
 --------
 
 -   find comorbidities of patients based on admission or discharge ICD-9 or ICD-10 codes, e.g. Cancer, Heart Disease
-    -   several standard mappings of ICD-9 codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
+    -   several standard mappings of ICD codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
     -   very fast assignment of ICD codes to comorbidities (using C and C++ internally, with automatic parallel execution using OpenMP when available), assigning millions of comorbidities in a few seconds
 -   Charlson and Van Walraven score calculations
 -   validation of ICD codes from different annual revisions of ICD-9-CM and ICD-10-CM
 -   summarizing ICD codes into groups, and to human-readable descriptions
 -   correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 conversion is left as an exercise for the user!
--   comprehensive test suite to increase confidence in accurate processing of ICD-9 codes
+-   comprehensive test suite to increase confidence in accurate processing of ICD codes
 
 New since last CRAN release:
 ----------------------------
