@@ -10,7 +10,7 @@ r:
 
 os:
   - linux
-#  - osx
+  - osx
 
 # compiler:
 #   - gcc
@@ -19,28 +19,26 @@ os:
 matrix:
   allow_failures:
     - r: oldrel
+    - os: osx
 
 repos:
-  CRAN: https://cran.rstudio.com
-# Rcpp: http://rcppcore.github.io/drat # github ahead and I need the github version
+  CRAN: https://cloud.r-project.org
 
 warnings_are_errors: true
 
-# seperate lines seems to mean the whole build is repeated each line
+# seperate lines seems to mean the whole build is repeated each line.
+# As of 2013 at least, travis offers ~1.5 cores per process
 env:
-  - OMP_NUM_THREADS=4 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE _R_CHECK_FORCE_SUGGESTS_=FALSE
-  - OMP_NUM_THREADS=1 R_CHECK_CRAN_INCOMING_=FALSE ICD_SLOW_TESTS=TRUE _R_CHECK_FORCE_SUGGESTS_=FALSE
-
-r_github_packages:
-  - jimhester/covr
+  - OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable"
+  - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native"
 
 before_script:
  - ls -R
- - rm .Rinstignore  # install everything for testing
+ - rm .Rinstignore  # do install everything for testing
  - sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
- - sed -i 's/3\.2\.0/3\.0\.2/' DESCRIPTION # backdate version so we can actually test it in travis matrix with old-rel
- - Rscript -e 'library(testthat); message("testthat version = :", packageVersion("testthat")); devtools::session_info()'
- - export CXXFLAGS+=" -Wall"
+ - export R_CHECK_CRAN_INCOMING_=FALSE
+ - export ICD_SLOW_TESTS=TRUE
+ - export _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 after_success:
 # environment is copied forward from previous, so slow tests are on. Repeat anyway while not working!
@@ -56,4 +54,3 @@ notifications:
   email:
     on_success: change
     on_failure: change
-
