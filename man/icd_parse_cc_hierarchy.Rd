@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse-hcc.R
 \name{icd_parse_cc_hierarchy}
 \alias{icd_parse_cc_hierarchy}
-\title{Import the CMS HCC Rules}
+\title{Import CMS HCC Rules}
 \usage{
 icd_parse_cc_hierarchy(save_data = FALSE)
 }
@@ -21,7 +21,7 @@ invisibly returns the list of vectors, where a co-morbidity name is
 The CMS Hierarchical Condition Categories are created by applying a series of rules to the Condition Categories (CC)
 These rules were obtained from CMS \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
 Due to the complex file structure of the original data (many nested zip files), they have
-been organized in the folder data/icd_hcc_rawdata/hierarchy
+been organized in the folder data/icd_hcc_rawdata/hierarchy.
 This function creates an .RData file containing rules for converting CCs to HCC
 }
 \keyword{internal}

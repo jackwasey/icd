@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse-hcc.R
 \name{icd_parse_cc_labels}
 \alias{icd_parse_cc_labels}
-\title{Import the CMS CC Labels}
+\title{Import CMS CC Labels}
 \usage{
 icd_parse_cc_labels(save_data = FALSE)
 }
@@ -20,7 +20,7 @@ invisibly returns the list of vectors, where a co-morbidity name is
 \description{
 The CMS Condition Category labels were obtained from CMS \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
 Due to the complex file structure of the original data (many nested zip files), they have
-been organized in the folder data/icd_hcc_rawdata/labels
+been organized in the folder data/icd_hcc_rawdata/labels.
 This function creates an .RData file containing labels for CC and HCCs
 }
 \keyword{internal}
