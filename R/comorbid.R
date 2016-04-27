@@ -655,11 +655,9 @@ icd_comorbid_hcc <- function(x, date, icd_version = icd_guess_version.data.frame
     } else {icd_version <- icd_version}
   }
   icd_map <- icd::icd_map_cc[icd_map_cc$icdversion==icd_version,]
-  # remove this later
-  names(x) <- c("id", "date", "icd_code")
   # Convert date and add column for year
-  x$date <- as.Date(x$date)
-  x$year <- as.numeric(format(x$date, '%Y'))
+  x[[date]] <- as.Date(x[[date]])
+  x$year <- as.numeric(format(x[[date]], '%Y'))
 
   # merge CCs to patient data based on ICD/year/version, and drop ICD info
   x <- merge(x, icd_map, all.x=T)
@@ -707,7 +705,7 @@ icd_comorbid_hcc <- function(x, date, icd_version = icd_guess_version.data.frame
 
   # drop flagged patients and keep columns of interest
   x <- x[is.na(x$todrop), ]
-  x <- x[,c("id", "admtdate", "cc")]
+  x <- x[,c("id", "admtdate", "hcc")]
 }
 
 #' Apply hierarchy and choose naming for each comorbidity map
