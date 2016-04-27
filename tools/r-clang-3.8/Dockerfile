@@ -19,19 +19,8 @@
 #FROM jackwasey/r-devel-ubsan-clang-3.8
 FROM jackwasey/r-clang-3.8
 
-## install some libraries and supporting binaries, some of which must come from unstable (sid), and not the testing repo which is the default in the r-devel base rocker image.
-RUN apt-get install -y -t unstable \
-  fonts-inconsolata \
-  git \
-  libcurl4-openssl-dev \
-  libssl-dev/unstable \
-  libxml2-dev/unstable \
-  libssh2-1-dev \
-  pandoc \
-  pandoc-citeproc \
-  qpdf \
-  texlive-base \
-  unixodbc-dev
+## install some libraries and supporting binaries, some of which must come from unstable (sid). Most deps are already in jackwasey/clang-3.8
+RUN apt-get install -y -t unstable unixodbc-dev
 
 ADD install_r_packages.R /tmp
 ADD build_install_check_in_docker.sh /tmp
