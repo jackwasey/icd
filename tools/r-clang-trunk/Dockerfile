@@ -18,21 +18,10 @@
 
 ## start with the local build, until up on docker hub
 # FROM jackwasey/r-devel-ubsan-clang-trunk
-FROM r-clang-trunk
+FROM jackwasey/r-clang-trunk
 
 ## install some libraries and supporting binaries, some of which must come from unstable (sid), and not the testing repo which is the default in the r-devel base rocker image.
-RUN apt-get update -y && apt-get dist-upgrade -y && apt-get install -y -t unstable \
-  fonts-inconsolata \
-  git \
-  libcurl4-openssl-dev \
-  libssl-dev/unstable \
-  libxml2-dev/unstable \
-  libssh2-1-dev \
-  pandoc \
-  pandoc-citeproc \
-  qpdf \
-  texlive-base \
-  unixodbc-dev
+RUN apt-get install -y -t unstable unixodbc-dev
 
 ADD install_r_packages.R /tmp
 ADD build_install_check_in_docker.sh /tmp
