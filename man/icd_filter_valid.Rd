@@ -7,7 +7,7 @@
 \alias{icd9_filter_valid}
 \alias{icd_filter_invalid}
 \alias{icd_filter_valid}
-\title{Filter ICD-9 codes by validity.}
+\title{Filter ICD codes by validity.}
 \usage{
 icd_filter_valid(x, icd_name = get_icd_name(x),
   short_code = icd_guess_short(.subset2(x, icd_name)), invert = FALSE)
@@ -55,7 +55,7 @@ Filters a data.frame of patients for valid or invalid ICD-9
 \item \code{icd_filter_invalid}: Filter invalid rows from data frame of patients with ICD codes.
 This can also be achieved with \code{icd_filter_valid} and \code{invert = TRUE}
 
-\item \code{icd9_filter_valid}: Filter data frame for valid ICD-9 codes
+\item \code{icd9_filter_valid}: Filter data frame for valid ICD codes
 }}
 \keyword{manip}
 

@@ -59,7 +59,6 @@ out-of-hospital characteristics.
 }}
 \examples{
 \dontrun{
-# using magrittr is beautiful:
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 myData <- data.frame(
   visit_id = c("v1", "v2", "v3", "v4"),
@@ -67,15 +66,15 @@ myData <- data.frame(
   poa = c("Y", "N", NA, "Y"),
   stringsAsFactors = FALSE
 )
-myData \%>\% icd9FilterPoaNotNo() \%>\% icd9ComorbidAhrq
+myData \%>\% icd_filter_poa_not_no() \%>\% icd_comorbid_ahrq()
 # can fill out named fields also:
-myData \%>\% icd9FilterPoaYes(poa_name="poa") \%>\%
+myData \%>\% icd_filter_poa_yes(poa_name="poa") \%>\%
   icd_comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
-# can call the core icd9Comorbid function with an arbitrary mapping
+# can call the core icd_comorbid() function with an arbitrary mapping
 myData \%>\%
   icd_filter_poa_yes \%>\%
   icd_comorbid(icd_name = "diag", visit_name = "visit_id",
-    map = icd9_map_quan_elix, short_mapping = TRUE)
+    map = icd_map_quan_elix, short_mapping = TRUE)
 }
 }
 \keyword{manip}

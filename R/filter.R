@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' Filter ICD-9 codes by validity.
+#' Filter ICD codes by validity.
 #'
 #' Filters a data.frame of patients for valid or invalid ICD-9
 #'   codes
@@ -49,7 +49,7 @@ icd_filter_invalid <- function(x, icd_name = get_icd_name(x), short_code = icd_g
   icd_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
-#' @describeIn icd_filter_valid Filter data frame for valid ICD-9 codes
+#' @describeIn icd_filter_valid Filter data frame for valid ICD codes
 #' @export
 icd9_filter_valid <- function(x, icd_name = get_icd_name(x), short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
@@ -108,7 +108,6 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #' @template poa
 #' @examples
 #' \dontrun{
-#' # using magrittr is beautiful:
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' myData <- data.frame(
 #'   visit_id = c("v1", "v2", "v3", "v4"),
@@ -116,15 +115,15 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #'   poa = c("Y", "N", NA, "Y"),
 #'   stringsAsFactors = FALSE
 #' )
-#' myData %>% icd9FilterPoaNotNo() %>% icd9ComorbidAhrq
+#' myData %>% icd_filter_poa_not_no() %>% icd_comorbid_ahrq()
 #' # can fill out named fields also:
-#' myData %>% icd9FilterPoaYes(poa_name="poa") %>%
+#' myData %>% icd_filter_poa_yes(poa_name="poa") %>%
 #'   icd_comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
-#' # can call the core icd9Comorbid function with an arbitrary mapping
+#' # can call the core icd_comorbid() function with an arbitrary mapping
 #' myData %>%
 #'   icd_filter_poa_yes %>%
 #'   icd_comorbid(icd_name = "diag", visit_name = "visit_id",
-#'     map = icd9_map_quan_elix, short_mapping = TRUE)
+#'     map = icd_map_quan_elix, short_mapping = TRUE)
 #' }
 #' @keywords manip
 #' @export
