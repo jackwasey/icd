@@ -16,6 +16,7 @@
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_common}
 \alias{icd_comorbid_elix}
+\alias{icd_comorbid_hcc}
 \alias{icd_comorbid_quan_deyo}
 \alias{icd_comorbid_quan_elix}
 \title{Find comorbidities from ICD-9 codes.}
@@ -61,6 +62,8 @@ icd_comorbid_elix(x, icd_name = get_icd_name(x), ...)
 icd_comorbid_quan_elix(x, icd_name = get_icd_name(x), ...)
 
 icd_comorbid_quan_deyo(x, icd_name = get_icd_name(x), ...)
+
+icd_comorbid_hcc(x, date, icd_version = icd_guess_version.data.frame(x))
 }
 \arguments{
 \item{aggregate}{single logical value, if \code{TRUE}, then take (possible
@@ -112,6 +115,8 @@ which case the shorter human-readable names stored in e.g.
 \item{hierarchy}{single logical value that defaults to \code{TRUE}, in which
 case the hierarchy defined for the mapping is applied. E.g. in Elixhauser,
 you can't have uncomplicated and complicated diabetes both flagged.}
+
+\item{date}{column representing the date field (each year there is a different ICD9/10 to CC mapping)}
 }
 \description{
 \link{Rcpp} approach to comorbidity assignment with OpenMP and
@@ -153,6 +158,11 @@ The common comorbidity calculation code does not depend on ICD type.
 but do not themselves have a class: therefore, the S3 mechanism for dispatch is not suitable. I may add a wrapper function which
 looks inside a \code{data.frame} of comorbidities, and dispatches to the appropriate function, but right now the user must
 call the \code{icd9_} or \code{icd10_} prefixed function directly.
+
+Applying CMS Hierarchical Condition Categories \code{icd_comorbid_hcc} functions differently from the
+rest of the comorbidity assignment functions. This is because CMS publishes a specific
+ICD to Condition Category mapping including all child ICDs. In addition, while these
+mappings were the same for 2007-2012, in 2013 there are annual versions.
 }
 \section{Functions}{
 \itemize{
@@ -165,6 +175,8 @@ codes
   pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
+  pt_ccs <- icd_comorbid_hcc(pt, admitdate, 9) # if you do not specify an ICD version (9 or 10),
+  the function will attempt to guess
 }
 \keyword{internal}
 
