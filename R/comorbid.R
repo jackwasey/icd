@@ -647,20 +647,20 @@ icd_comorbid_quan_deyo <- function(x, icd_name = get_icd_name(x), ...) {
 #' @param date column representing the date field (each year there is a different ICD9/10 to CC mapping)
 #' @export
 icd_comorbid_hcc <- function(x, date, icd_version = icd_guess_version.data.frame(x)) {
-  if(icd_version=="icd9"){
+  if(icd_version == "icd9"){
     icd_version <- 9
   } else {
-    if(icd_version=="icd10"){
+    if(icd_version == "icd10"){
       icd_version <- 10
     } else {icd_version <- icd_version}
   }
-  icd_map <- icd::icd_map_cc[icd_map_cc$icdversion==icd_version,]
+  icd_map <- icd::icd_map_cc[icd_map_cc$icdversion == icd_version,]
   # Convert date and add column for year
   x[[date]] <- as.Date(x[[date]])
-  x$year <- as.numeric(format(x[[date]], '%Y'))
+  x$year <- as.numeric(format(x[[date]], "%Y"))
 
   # merge CCs to patient data based on ICD/year/version, and drop ICD info
-  x <- merge(x, icd_map, all.x=T)
+  x <- merge(x, icd_map, all.x = T)
 
   # Convert CC to numeric and drop those with missing CC
   # not all ICDs resolve to a CC by definition
@@ -681,7 +681,7 @@ icd_comorbid_hcc <- function(x, date, icd_version = icd_guess_version.data.frame
   # create a list of dataframes that contain the CCs that will be zero'd out
   todrop <- list()
   for (i in 1:6) {
-    todrop[[i]] <- x[!is.na(x$ifcc),c(3,4,5+i)]
+    todrop[[i]] <- x[!is.na(x$ifcc), c(3, 4, 5+i)]
   }
   rm(i)
 
@@ -694,7 +694,7 @@ icd_comorbid_hcc <- function(x, date, icd_version = icd_guess_version.data.frame
   todrop <- do.call(rbind, todrop)
 
   # remove all NAs from CC field
-  todrop <- todrop[!is.na(todrop$cc),]
+  todrop <- todrop[!is.na(todrop$cc), ]
 
   # set flag, all of these CCs will be dropped
   todrop$todrop <- T
@@ -705,8 +705,10 @@ icd_comorbid_hcc <- function(x, date, icd_version = icd_guess_version.data.frame
 
   # drop flagged patients and keep columns of interest
   x <- x[is.na(x$todrop), ]
-  x <- x[,c("id", "admtdate", "hcc")]
-}
+  x <- x[,c("id", "admtdate", "cc")]
+  names(x) <- c("id", date, "hcc")
+  return(x)
+  }
 
 #' Apply hierarchy and choose naming for each comorbidity map
 #'
