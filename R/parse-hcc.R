@@ -98,54 +98,6 @@ icd_parse_cc <- function(save_data = FALSE) {
   invisible(icd_map_cc)
 }
 
-#' Import CMS CC Labels
-#'
-#' The CMS Condition Category labels were obtained from CMS \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
-#' Due to the complex file structure of the original data (many nested zip files), they have
-#' been organized in the folder data/icd_hcc_rawdata/labels.
-
-#' This function creates an .RData file containing labels for CC and HCCs
-#' @template parse-template
-#' @keywords internal
-
-icd_parse_cc_labels <- function(save_data = FALSE) {
-  assert_flag(save_data)
-  # Import Labels
-  # Import HCC labels from all years
-  icd_map_cc_labels <- apply(data.frame(paste("data/icd_hcc_rawdata/labels/",list.files("data/icd_hcc_rawdata/labels/"),sep="")), 1, FUN=readLines)
-
-  # Convert a single dataframe
-  icd_map_cc_labels <- lapply(icd_map_cc_labels, as.data.frame, stringsAsFactors=F)
-  icd_map_cc_labels <- do.call(rbind, icd_map_cc_labels)
-
-  # Extract HCC numbers
-  hccnum <- str_match(icd_map_cc_labels[,1], "HCC([:digit:]*)")[,2]
-
-  # Extract HCC names
-  hccname <- substr(icd_map_cc_labels[,1], regexpr("=", icd_map_cc_labels[,1])+2, nchar(icd_map_cc_labels[,1])-1)
-
-  # Combine numbers and names into dataframe of labels
-  icd_map_cc_labels <- data.frame(hccnum, hccname, stringsAsFactors = F, row.names = NULL)
-  rm(hccnum, hccname)
-
-  # Drop lines with NA/out of range HCC numbers
-  icd_map_cc_labels$hccnum <- as.numeric(icd_map_cc_labels$hccnum)
-  icd_map_cc_labels <- icd_map_cc_labels[!is.na(icd_map_cc_labels$hccnum),]
-
-  # Drop duplicated HCC numbers
-  icd_map_cc_labels <- icd_map_cc_labels[!duplicated(icd_map_cc_labels$hccnum),]
-
-  # Remove whitespace from hccnames
-  icd_map_cc_labels$hccname <- trimws(icd_map_cc_labels$hccname)
-
-  # Order in ascending order of HCC number
-  icd_map_cc_labels <- icd_map_cc_labels[order(icd_map_cc_labels$hccnum),]
-
-   if (save_data)
-    save_in_data_dir(icd_map_cc_labels)
-  invisible(icd_map_cc_labels)
-}
-
 #' Import CMS HCC Rules
 #'
 #' The CMS Hierarchical Condition Categories are created by applying a series of rules to the Condition Categories (CC)
