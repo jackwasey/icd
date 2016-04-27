@@ -89,6 +89,9 @@ icd9PoaChoices <- icd_poa_choices
 #'   pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
 #'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
 #'   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
+#'   pt_ccs <- icd_comorbid_hcc(pt, admitdate, 9) # if you do not specify an ICD version (9 or 10),
+#'   the function will attempt to guess
+
 #' @export
 icd_comorbid <- function(x, map, ...) {
   ver <- icd_guess_version.character(map[[1]])
@@ -634,6 +637,77 @@ icd_comorbid_quan_deyo <- function(x, icd_name = get_icd_name(x), ...) {
     icd10_comorbid_quan_deyo(x, icd_name = icd_name, ...)
   else
     stop("could not guess the ICD version using icd_name = ", icd_name)
+}
+
+#' @details Applying CMS Hierarchical Condition Categories \code{icd_comorbid_hcc} functions differently from the
+#' rest of the comorbidity assignment functions. This is because CMS publishes a specific
+#' ICD to Condition Category mapping including all child ICDs. In addition, while these
+#' mappings were the same for 2007-2012, in 2013 there are annual versions.
+#' @rdname icd_comorbid
+#' @param date column representing the date field (each year there is a different ICD9/10 to CC mapping)
+#' @export
+icd_comorbid_hcc <- function(x, date, icd_version = icd_guess_version.data.frame(x)) {
+  if(icd_version=="icd9"){
+    icd_version <- 9
+  } else {
+    if(icd_version=="icd10"){
+      icd_version <- 10
+    } else {icd_version <- icd_version}
+  }
+  icd_map <- icd::icd_map_cc[icd_map_cc$icdversion==icd_version,]
+  # remove this later
+  names(x) <- c("id", "date", "icd_code")
+  # Convert date and add column for year
+  x$date <- as.Date(x$date)
+  x$year <- as.numeric(format(x$date, '%Y'))
+
+  # merge CCs to patient data based on ICD/year/version, and drop ICD info
+  x <- merge(x, icd_map, all.x=T)
+
+  # Convert CC to numeric and drop those with missing CC
+  # not all ICDs resolve to a CC by definition
+  x <- x[!is.na(x$cc),]
+  x$cc <- as.numeric(x$cc)
+
+  # keep id, admtdate, and cc columns only
+  x <- x[,c("id", date, "year", "cc")]
+
+  # Keep only unique records (multiple ICDs for a patient can resolve to same CC)
+  x <- unique(x)
+  hierarchy <- icd_map_cc_hcc
+  hierarchy$cc <- hierarchy$ifcc
+
+  # Merge hierarchy rules with patient data
+  x <- merge(x, hierarchy, all.x = TRUE)
+
+  # create a list of dataframes that contain the CCs that will be zero'd out
+  todrop <- list()
+  for (i in 1:6) {
+    todrop[[i]] <- x[!is.na(x$ifcc),c(3,4,5+i)]
+  }
+  rm(i)
+
+  # rename all dfs in list to same column names, rbind into one df
+  todrop <- lapply(1:length(todrop), function(x) {
+    names(todrop[[x]]) <- c("id", "admtdate", "cc")
+    return(todrop[[x]])
+  }
+  )
+  todrop <- do.call(rbind, todrop)
+
+  # remove all NAs from CC field
+  todrop <- todrop[!is.na(todrop$cc),]
+
+  # set flag, all of these CCs will be dropped
+  todrop$todrop <- T
+
+  # merge drop flags with pt data
+  x <- merge(x, todrop, all.x=T)
+  rm(todrop)
+
+  # drop flagged patients and keep columns of interest
+  x <- x[is.na(x$todrop), ]
+  x <- x[,c("id", "admtdate", "cc")]
 }
 
 #' Apply hierarchy and choose naming for each comorbidity map
