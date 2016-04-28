@@ -347,11 +347,10 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   # import raw hierarchy files from CMS
   icd_map_cc_hcc <- apply(
     data.frame(
-     paste("data/icd_hcc_rawdata/hierarchy/", 
+     paste("data/icd_hcc_rawdata/hierarchy/",
       list.files("data/icd_hcc_rawdata/hierarchy/"), sep = "")
      ),
-    1, FUN = readLines
-    )
+    1, FUN = readLines)
 
   # Create a vector of year names based on the file names in the icd folders
   years <- substr(list.files("data/icd_hcc_rawdata/hierarchy/"), 0, 4)
@@ -370,7 +369,7 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
 
   # only keep the lines that are logical hierarchy statements
   # removes comments, empty lines, additional code and rename variables
-  icd_map_cc_hcc <- icd_map_cc_hcc[grepl("if hcc|%SET0", icd_map_cc_hcc$V1),]
+  icd_map_cc_hcc <- icd_map_cc_hcc[grepl("if hcc|%SET0", icd_map_cc_hcc$V1), ]
   colnames(icd_map_cc_hcc)[1] <- "condition"
 
   # Extract the HCC that is used in the if condition statement
@@ -391,14 +390,14 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   todrop <- as.data.frame(lapply(todrop, as.numeric))
 
   # combine CC requirements with CCs to zero
-  icd_map_cc_hcc <- cbind(icd_map_cc_hcc[,c("year", "ifcc")], todrop)
+  icd_map_cc_hcc <- cbind(icd_map_cc_hcc[, c("year", "ifcc")], todrop)
   rm(todrop)
 
   # Remove columns that are completely NA
   # Intially, we set up hierchy to allow for up to 10 possible conditions
   # In current data, maximum is 6 conditions to zero, however we left room
   # in case these are expanded in the future. Now remove extra columns
-  icd_map_cc_hcc <- icd_map_cc_hcc[,colSums(is.na(icd_map_cc_hcc))
+  icd_map_cc_hcc <- icd_map_cc_hcc[, colSums(is.na(icd_map_cc_hcc))
     < nrow(icd_map_cc_hcc)]
 
   if (save_data)
