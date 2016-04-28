@@ -251,10 +251,10 @@ icd9_parse_cc <- function(save_data = FALSE) {
   extracodes$e1 <- c("40403", "40413", "40493")
   extracodes$e1 <- expand.grid(extracodes$e1, 80, 2007:2012, stringsAsFactors = F)
   # icd9 40401, 40403, 40411, 40413, 40491, 40493 are assigned to CC85 in 2013
-  extracodes$e2 <- c("40401","40403","40411","40413","40491","40493")
+  extracodes$e2 <- c("40401", "40403", "40411", "40413", "40491", "40493")
   extracodes$e2 <- expand.grid(extracodes$e2, 85, 2013, stringsAsFactors = F)
   # icd9 40403, 40413, 40493 are assigned to CC85 in 2014-2015
-  extracodes$e3 <- c("40403","40413","40493")
+  extracodes$e3 <- c("40403", "40413", "40493")
   extracodes$e3 <- expand.grid(extracodes$e3, 85, 2014:2015, stringsAsFactors = F)
   # icd9 3572 and 36202 are assigned to CC18 in 2013
   extracodes$e4 <- c("3572", "36202")
