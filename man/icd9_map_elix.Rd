@@ -16,8 +16,8 @@ specification between 1998 and now would impact this mapping.
 }
 \references{
 Sharabiani, Mansour T. A., Paul Aylin, and Alex Bottle.
-  "Systematic Review of Comorbidity Indices for Administrative Data." Medical
-  Care December 2012 50, no. 12 (2012): 1109-18.
+  "Systematic Review of Comorbidity Indices for Administrative Data."
+	 Medical Care December 2012 50, no. 12 (2012): 1109-18.
   doi:10.1097/MLR.0b013e31825f64d0.
   \url{http://www.ncbi.nlm.nih.gov/pubmed/22929993}
 

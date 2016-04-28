@@ -8,7 +8,7 @@ update_everything()
 }
 \description{
 Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get
-the 'billable' codes. Also parses the AHRQ and Quan/Deyo comorbidity mappings
+the 'billable' codes. Also parses the AHRQ, Quan/Deyo, and CMS HCC comorbidity mappings
 from the source SAS data. Elixhauser and Quan/Elixhauser mappings are
 generated from transcribed codes.
 }

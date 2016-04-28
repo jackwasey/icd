@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse.R
 \name{parse_leaf_descriptions_all}
 \alias{parse_leaf_descriptions_all}
-\title{get billable codes from all available years}
+\title{Get billable codes from all available years}
 \source{
 http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
 }
@@ -23,7 +23,7 @@ data frame with \code{icd9}, \code{short_desc} and \code{long_desc} columns. \co
   in \code{long_desc} when not available.
 }
 \description{
-for versions 23 to 32, those which are on the CMS web site, get
+For versions 23 to 32, those which are on the CMS web site, get
   any codes with long or short descriptions. Earlier years only have
   abbreviated descriptions.
 }

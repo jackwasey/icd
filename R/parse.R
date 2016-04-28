@@ -23,7 +23,7 @@ utils::globalVariables(c("icd9_sources", "icd9cm_billable"))
 #' generate all package data
 #'
 #' Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get
-#' the 'billable' codes. Also parses the AHRQ and Quan/Deyo comorbidity mappings
+#' the 'billable' codes. Also parses the AHRQ, Quan/Deyo, and CMS HCC comorbidity mappings
 #' from the source SAS data. Elixhauser and Quan/Elixhauser mappings are
 #' generated from transcribed codes.
 #' @keywords internal
@@ -50,10 +50,12 @@ update_everything <- function() {
   # ICD 9
   icd9_parse_ahrq_sas(save_data = TRUE)
   icd9_parse_quan_deyo_sas(save_data = TRUE)
+  icd9_parse_hcc(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
   # ICD 10
   icd10_parse_ahrq_sas(save_data = TRUE)
+  icd10_parse_hcc(save_data = TRUE)
   icd10_generate_map_quan_elix(save_data = TRUE)
   icd10_generate_map_quan_deyo(save_data = TRUE)
   icd10_generate_map_elix(save_data = TRUE)
@@ -66,9 +68,9 @@ update_everything <- function() {
 }
 # nocov end
 
-#' get billable codes from all available years
+#' Get billable codes from all available years
 #'
-#' for versions 23 to 32, those which are on the CMS web site, get
+#' For versions 23 to 32, those which are on the CMS web site, get
 #'   any codes with long or short descriptions. Earlier years only have
 #'   abbreviated descriptions.
 #' @param save_data single logical value, if \code{TRUE} the source text or CSV

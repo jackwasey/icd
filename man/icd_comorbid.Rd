@@ -4,12 +4,14 @@
 \alias{icd10_comorbid}
 \alias{icd10_comorbid_ahrq}
 \alias{icd10_comorbid_elix}
+\alias{icd10_comorbid_hcc}
 \alias{icd10_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_elix}
 \alias{icd9ComorbidShortCpp}
 \alias{icd9_comorbid}
 \alias{icd9_comorbid_ahrq}
 \alias{icd9_comorbid_elix}
+\alias{icd9_comorbid_hcc}
 \alias{icd9_comorbid_quan_deyo}
 \alias{icd9_comorbid_quan_elix}
 \alias{icd_comorbid}
@@ -55,6 +57,10 @@ icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
+icd9_comorbid_hcc(x, visit_name = NULL, icd_name = NULL, date = "date")
+
+icd10_comorbid_hcc(x, visit_name = NULL, icd_name = NULL, date = "date")
+
 icd_comorbid_ahrq(x, icd_name = get_icd_name(x), ...)
 
 icd_comorbid_elix(x, icd_name = get_icd_name(x), ...)
@@ -63,7 +69,7 @@ icd_comorbid_quan_elix(x, icd_name = get_icd_name(x), ...)
 
 icd_comorbid_quan_deyo(x, icd_name = get_icd_name(x), ...)
 
-icd_comorbid_hcc(x, date, icd_version = icd_guess_version.data.frame(x))
+icd_comorbid_hcc(x, icd_name = get_icd_name(x), ...)
 }
 \arguments{
 \item{aggregate}{single logical value, if \code{TRUE}, then take (possible
@@ -116,7 +122,8 @@ which case the shorter human-readable names stored in e.g.
 case the hierarchy defined for the mapping is applied. E.g. in Elixhauser,
 you can't have uncomplicated and complicated diabetes both flagged.}
 
-\item{date}{column representing the date field (each year there is a different ICD9/10 to CC mapping)}
+\item{date}{column representing,  the date each record took place, as in each year there is a different ICD9/10 to CC mapping). 
+This is only necessary for HCC mappings.}
 }
 \description{
 \link{Rcpp} approach to comorbidity assignment with OpenMP and
@@ -162,7 +169,9 @@ call the \code{icd9_} or \code{icd10_} prefixed function directly.
 Applying CMS Hierarchical Condition Categories \code{icd_comorbid_hcc} functions differently from the
 rest of the comorbidity assignment functions. This is because CMS publishes a specific
 ICD to Condition Category mapping including all child ICDs. In addition, while these
-mappings were the same for 2007-2012, in 2013 there are annual versions.
+mappings were the same for 2007-2012, after 2013 there are annual versions.
+In addition, there is a many:many linkage between ICD and Condition Categories (CC).
+Once CCs are assigned, a series of hierarchy rules (which can also change annually) are applied to create HCCs.
 }
 \section{Functions}{
 \itemize{
@@ -175,8 +184,7 @@ codes
   pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
-  pt_ccs <- icd_comorbid_hcc(pt, admitdate, 9) # if you do not specify an ICD version (9 or 10),
-  the function will attempt to guess
+  pt_hccs <- icd_comorbid_hcc(pt, date)
 }
 \keyword{internal}
 
