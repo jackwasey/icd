@@ -688,7 +688,7 @@ icd10_comorbid_hcc <- function(x,
   x <- merge(x, icd_map, all.x = T)
 
   # Drop missing CC and convert to numeric
-  @ as not all ICDs resolve to a CC by definition
+  # as not all ICDs resolve to a CC by definition
   x <- x[!is.na(x$cc),]
   x$cc <- as.numeric(x$cc)
 
