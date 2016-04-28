@@ -50,12 +50,12 @@ update_everything <- function() {
   # ICD 9
   icd9_parse_ahrq_sas(save_data = TRUE)
   icd9_parse_quan_deyo_sas(save_data = TRUE)
-  icd9_parse_hcc(save_data = TRUE)
+  icd9_parse_cc(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
   # ICD 10
   icd10_parse_ahrq_sas(save_data = TRUE)
-  icd10_parse_hcc(save_data = TRUE)
+  icd10_parse_cc(save_data = TRUE)
   icd10_generate_map_quan_elix(save_data = TRUE)
   icd10_generate_map_quan_deyo(save_data = TRUE)
   icd10_generate_map_elix(save_data = TRUE)

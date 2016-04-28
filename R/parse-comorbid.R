@@ -211,7 +211,8 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
 
 #' Generate ICD to HCC Crosswalks from CMS
 #'
-#' The ICD/HCC mappings were obtained from CMS \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
+#' The ICD/HCC mappings were obtained from CMS 
+#' \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
 #' Due to the complex file structure of the original data (many nested zip files), they have
 #' been organized in the folder data/icd_hcc_rawdata/.
 #' This function creates an .RData file containing icd9/10 to CC crosswalks.
@@ -223,16 +224,20 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
 icd9_parse_cc <- function(save_data = FALSE) {
   assert_flag(save_data)
   # Import raw CMS data for ICD9
-  icd9_map_cc <- apply(data.frame(
-    paste("inst/data-raw/icd_hcc_rawdata/icd9/", list.files("inst/data-raw/icd_hcc_rawdata/icd9/"), sep = "")), 1,
-    FUN = read.fwf, width = c(7, 4), header = F, stringsAsFactors = F)
+  icd9_map_cc <- apply(
+    data.frame(paste("inst/data-raw/icd_hcc_rawdata/icd9/",
+      list.files("inst/data-raw/icd_hcc_rawdata/icd9/"), sep = "")),
+      1, FUN = read.fwf, width = c(7, 4), header = F, stringsAsFactors = F)
 
   # Create a vector of year names based on the file names in the icd folders
   years <- list()
-  years$icd9 <- as.numeric(substr(list.files("inst/data-raw/icd_hcc_rawdata/icd9/"), 0, 4))
+  years$icd9 <- as.numeric(
+    substr(list.files("inst/data-raw/icd_hcc_rawdata/icd9/"), 0, 4)
+    )
 
   # Assign year to each dataframe within the list of dataframes
-  icd9_map_cc <- mapply(cbind, icd9_map_cc, "year" = years$icd9, SIMPLIFY = F)
+  icd9_map_cc <- mapply(
+    cbind, icd9_map_cc, "year" = years$icd9, SIMPLIFY = F)
   rm(years)
 
   # Combine lsit of DFs into a single DF
@@ -245,23 +250,28 @@ icd9_parse_cc <- function(save_data = FALSE) {
   icd9_map_cc$cc <- as.numeric(icd9_map_cc$cc)
   icd9_map_cc$icd_code <- trimws(icd9_map_cc$icd_code)
 
-  # Per CMS instructions, certain ICD9s have to be manually assigned additional CCs
+  # Per CMS instructions, some ICD9s have to be manually assigned additional CCs
   extracodes <- list()
   # icd9 40403, 40413, and 40493 are assigned to CC 80 in 2007-2012
   extracodes$e1 <- c("40403", "40413", "40493")
-  extracodes$e1 <- expand.grid(extracodes$e1, 80, 2007:2012, stringsAsFactors = F)
+  extracodes$e1 <- expand.grid(
+    extracodes$e1, 80, 2007:2012, stringsAsFactors = F)
   # icd9 40401, 40403, 40411, 40413, 40491, 40493 are assigned to CC85 in 2013
   extracodes$e2 <- c("40401", "40403", "40411", "40413", "40491", "40493")
-  extracodes$e2 <- expand.grid(extracodes$e2, 85, 2013, stringsAsFactors = F)
+  extracodes$e2 <- expand.grid(
+    extracodes$e2, 85, 2013, stringsAsFactors = F)
   # icd9 40403, 40413, 40493 are assigned to CC85 in 2014-2015
   extracodes$e3 <- c("40403", "40413", "40493")
-  extracodes$e3 <- expand.grid(extracodes$e3, 85, 2014:2015, stringsAsFactors = F)
+  extracodes$e3 <- expand.grid(
+    extracodes$e3, 85, 2014:2015, stringsAsFactors = F)
   # icd9 3572 and 36202 are assigned to CC18 in 2013
   extracodes$e4 <- c("3572", "36202")
-  extracodes$e4 <- expand.grid(extracodes$e4, 18, 2013, stringsAsFactors = F)
+  extracodes$e4 <- expand.grid(
+    extracodes$e4, 18, 2013, stringsAsFactors = F)
   # icd9 36202 is assigned to CC18 in 2014-2015
   extracodes$e5 <- "36202"
-  extracodes$e5 <- expand.grid(extracodes$e5, 18, 2014:2015, stringsAsFactors = F)
+  extracodes$e5 <- expand.grid(
+    extracodes$e5, 18, 2014:2015, stringsAsFactors = F)
 
   # Combine into one DF
   extracodes <- do.call(rbind, extracodes)
@@ -285,16 +295,19 @@ icd9_parse_cc <- function(save_data = FALSE) {
 icd10_parse_cc <- function(save_data = FALSE) {
   assert_flag(save_data)
   # Import raw CMS data for ICD9
-  icd10_map_cc <- apply(data.frame(
-    paste("inst/data-raw/icd_hcc_rawdata/icd10/", list.files("inst/data-raw/icd_hcc_rawdata/icd10/"), sep = "")), 1,
-    FUN = read.fwf, width = c(7, 4), header = F, stringsAsFactors = F)
+  icd10_map_cc <- apply(
+    data.frame(paste("inst/data-raw/icd_hcc_rawdata/icd10/",
+      list.files("inst/data-raw/icd_hcc_rawdata/icd10/"), sep = "")),
+    1, FUN = read.fwf, width = c(7, 4), header = F, stringsAsFactors = F)
 
   # Create a vector of year names based on the file names in the icd folders
   years <- list()
-  years$icd10 <- as.numeric(substr(list.files("inst/data-raw/icd_hcc_rawdata/icd10/"), 0, 4))
+  years$icd10 <- as.numeric(
+    substr(list.files("inst/data-raw/icd_hcc_rawdata/icd10/"), 0, 4))
 
   # Assign year to each dataframe within the list of dataframes
-  icd10_map_cc <- mapply(cbind, icd10_map_cc, "year" = years$icd10, SIMPLIFY = F)
+  icd10_map_cc <- mapply(
+    cbind, icd10_map_cc, "year" = years$icd10, SIMPLIFY = F)
   rm(years)
 
   # Combine lsit of DFs into a single DF
@@ -307,8 +320,9 @@ icd10_parse_cc <- function(save_data = FALSE) {
   icd10_map_cc$cc <- as.numeric(icd10_map_cc$cc)
   icd10_map_cc$icd_code <- trimws(icd10_map_cc$icd_code)
 
-  # Per CMS instructions, certain ICDs may to be manually assigned additional CCs
-  # Currently, no manual rules exist for ICD10, but if they need to be added, can adapt the code from icd9_map_cc()
+  # Per CMS instructions, some ICDs may to be manually assigned additional CCs
+  # Currently, no rules exist for ICD10, but if they need to be added,
+  # can adapt the code from icd9_map_cc()
 
   if (save_data)
     save_in_data_dir(icd10_map_cc)
@@ -331,8 +345,13 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
 
   # Define Hierarchy
   # import raw hierarchy files from CMS
-  icd_map_cc_hcc <- apply(data.frame(paste("data/icd_hcc_rawdata/hierarchy/",list.files("data/icd_hcc_rawdata/hierarchy/"), sep = "")), 1,
-    FUN=readLines)
+  icd_map_cc_hcc <- apply(
+    data.frame(
+     paste("data/icd_hcc_rawdata/hierarchy/", 
+      list.files("data/icd_hcc_rawdata/hierarchy/"), sep = "")
+     ),
+    1, FUN = readLines
+    )
 
   # Create a vector of year names based on the file names in the icd folders
   years <- substr(list.files("data/icd_hcc_rawdata/hierarchy/"), 0, 4)
@@ -341,26 +360,33 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   icd_map_cc_hcc <- mapply(cbind, icd_map_cc_hcc, "year" = years, SIMPLIFY = F)
   rm(years)
 
-  # convert each item in the list of icd_map_cc_hcc objects into a data.frame and combine into a single DF
+  # Convert each item in the list of icd_map_cc_hcc objects into a dataframe
+  # and combine into a single DF
   icd_map_cc_hcc <- lapply(icd_map_cc_hcc, as.data.frame, stringsAsFactors = F)
   icd_map_cc_hcc <- do.call(rbind, icd_map_cc_hcc)
 
   # convert years to numeric
   icd_map_cc_hcc$year <- as.numeric(icd_map_cc_hcc$year)
 
-  # only keep the lines that are logical hierarchy statements (removes comments, empty lines, additional code) and rename variable
+  # only keep the lines that are logical hierarchy statements
+  # removes comments, empty lines, additional code and rename variables
   icd_map_cc_hcc <- icd_map_cc_hcc[grepl("if hcc|%SET0", icd_map_cc_hcc$V1),]
   colnames(icd_map_cc_hcc)[1] <- "condition"
 
   # Extract the HCC that is used in the if condition statement
-  icd_map_cc_hcc$ifcc <- as.numeric(str_extract(icd_map_cc_hcc$condition, "(?<=hcc)([0-9]*)|(?<=CC\\=)([0-9]*)"))
+  icd_map_cc_hcc$ifcc <- as.numeric(
+    str_extract(icd_map_cc_hcc$condition, "(?<=hcc)([0-9]*)|(?<=CC\\=)([0-9]*)")
+    )
 
   # Extract the HCCs that should be set to zero if the above condition is met
-  todrop <- str_extract(icd_map_cc_hcc$condition,
-                        "(?<=i\\=)([:print:]*)(?=;hcc)|(?<=STR\\()([:print:]*)(?= \\)\\);)")
+  todrop <- str_extract(
+    icd_map_cc_hcc$condition,
+    "(?<=i\\=)([:print:]*)(?=;hcc)|(?<=STR\\()([:print:]*)(?= \\)\\);)"
+    )
 
   # convert it to a dataframe and bind it with the original icd_map_cc_ data
-  todrop <- as.data.frame(str_split_fixed(todrop, ",", n = 10), stringsAsFactors = F)
+  todrop <- as.data.frame(
+    str_split_fixed(todrop, ",", n = 10), stringsAsFactors = F)
   # convert to numeric
   todrop <- as.data.frame(lapply(todrop, as.numeric))
 
@@ -370,9 +396,10 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
 
   # Remove columns that are completely NA
   # Intially, we set up hierchy to allow for up to 10 possible conditions
-  # In current data, maximum is 6 conditions to zero, however leaving room in case these are expanded in the future
-  # Now remove extra columns
-  icd_map_cc_hcc <- icd_map_cc_hcc[,colSums(is.na(icd_map_cc_hcc)) < nrow(icd_map_cc_hcc)]
+  # In current data, maximum is 6 conditions to zero, however we left room
+  # in case these are expanded in the future. Now remove extra columns
+  icd_map_cc_hcc <- icd_map_cc_hcc[,colSums(is.na(icd_map_cc_hcc))
+    < nrow(icd_map_cc_hcc)]
 
   if (save_data)
     save_in_data_dir(icd_map_cc_hcc)

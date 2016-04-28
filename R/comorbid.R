@@ -614,11 +614,11 @@ icd9_comorbid_hcc <- function(x,
 
   # Drop missing CC and convert to numeric
   # Not all ICDs resolve to a CC by definition
-  x <- x[!is.na(x$cc),]
+  x <- x[!is.na(x$cc), ]
   x$cc <- as.numeric(x$cc)
 
   # keep id, admtdate, and cc columns only, reorder
-  x <- x[,c("id", date, "year", "cc")]
+  x <- x[, c("id", date, "year", "cc")]
 
   # Keep only unique records
   # Multiple ICDs for a patient can resolve to same CC
@@ -655,12 +655,12 @@ icd9_comorbid_hcc <- function(x,
   todrop$todrop <- T
 
   # Merge drop flags with patient data
-  x <- merge(x, todrop, all.x=T)
+  x <- merge(x, todrop, all.x = T)
   rm(todrop)
 
   # Drop flagged patients and keep columns of interest
   x <- x[is.na(x$todrop), ]
-  x <- x[,c("id", date, "cc")]
+  x <- x[, c("id", date, "cc")]
   names(x) <- c("id", date, "hcc")
   return(x)
   }
@@ -689,11 +689,11 @@ icd10_comorbid_hcc <- function(x,
 
   # Drop missing CC and convert to numeric
   # as not all ICDs resolve to a CC by definition
-  x <- x[!is.na(x$cc),]
+  x <- x[!is.na(x$cc), ]
   x$cc <- as.numeric(x$cc)
 
   # keep id, admtdate, and cc columns only, reorder
-  x <- x[,c("id", date, "year", "cc")]
+  x <- x[, c("id", date, "year", "cc")]
 
   # Keep only unique records
   # multiple ICDs for a patient can resolve to same CC
@@ -730,12 +730,12 @@ icd10_comorbid_hcc <- function(x,
   todrop$todrop <- T
 
   # Merge drop flags with patient data
-  x <- merge(x, todrop, all.x=T)
+  x <- merge(x, todrop, all.x = T)
   rm(todrop)
 
   # Drop flagged patients and keep columns of interest
   x <- x[is.na(x$todrop), ]
-  x <- x[,c("id", date, "cc")]
+  x <- x[, c("id", date, "cc")]
   names(x) <- c("id", date, "hcc")
   return(x)
   }
@@ -794,8 +794,8 @@ icd_comorbid_quan_deyo <- function(x, icd_name = get_icd_name(x), ...) {
 #' In addition, there is a many:many linkage between ICD and Condition Categories (CC).
 #' Once CCs are assigned, a series of hierarchy rules (which can also change annually) are applied to create HCCs.
 #' @rdname icd_comorbid
-#' @param date column representing,  the date each record took place, as in each year there is a different ICD9/10 to CC mapping). 
-#' This is only necessary for HCC mappings.
+#' @param date column representing,  the date each record took place, as in each year there is a different ICD9/10
+#' to CC mapping). This is only necessary for HCC mappings.
 #' @export
 icd_comorbid_hcc <- function(x, icd_name = get_icd_name(x), ...) {
   ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
