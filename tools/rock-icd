@@ -21,31 +21,45 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+TMP="/tmp/icd-docker"
+mkdir -p $TMP
+
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 : ${ICD_HOME:=$HOME/Documents/RProjects/icd}
-ICD_DOCKER_IMAGE=${1:-}
-if [[ -z "$ICD_DOCKER_IMAGE" ]]; then
+DOCKER_IMAGE=${1:-}
+if [[ -z "$DOCKER_IMAGE" ]]; then
    echo "usage: $0 docker directory to build and run"
    exit 1
 fi
-: ${ICD_DOCKER_SCRIPT:=build_install_check_in_docker.sh}
 
-ICD_ALT_CMD=${2:-}
+ALT_CMD=${2:-}
 
 # strip directory symbol to get the docker image name from a dir with trailing slash
-IM_NM=`echo $ICD_DOCKER_IMAGE | tr -d "/"`
+IM_NM=`echo $DOCKER_IMAGE | tr -d "/"`
 
-IM=$ICD_HOME/tools/$IM_NM
-SC=$ICD_HOME/tools/$ICD_DOCKER_SCRIPT
+DOCKER_IMAGE_FULL_NAME=jackwasey/$IM_NM
+
+TOOLS_DIR=$ICD_HOME/tools
+IM=$TMP
+DOCKER_SCRIPT=build_install_check_in_docker.sh
+INSTALL_R_SCRIPT=install_r_packages.R
 
 if [ ! -d "$IM" ]; then
   echo "Docker image should be a directory under tools in the icd/icd9 project."
   exit 1
 fi
 
-cp -v $SC $IM
-cp -v $ICD_HOME/tools/install_r_packages.R $IM
-docker build -t $IM_NM $IM
-rm -f $IM/$ICD_DOCKER_SCRIPT
-rm -f $IM/install_r_packages.R
-docker run --rm -ti $IM_NM $ICD_ALT_CMD
+cp -v $TOOLS_DIR/Dockerfile.template $IM/Dockerfile
+# https://stackoverflow.com/questions/584894/sed-scripting-environment-variable-substitution
+sed -i 's@DOCKER_IMAGE_FULL_NAME@'"$DOCKER_IMAGE_FULL_NAME"'@' $IM/Dockerfile
+cp -v $TOOLS_DIR/$DOCKER_SCRIPT $IM
+cp -v $TOOLS_DIR/$INSTALL_R_SCRIPT $IM
+docker build -t $IM_NM $IM || {
+  rm -f $IM/$DOCKER_SCRIPT
+  rm -f $IM/install_r_packages.R
+}
+rm -f $IM/Dockerfile
+rm -f $IM/$DOCKER_SCRIPT
+rm -f $IM/$INSTALL_R_SCRIPT
+rmdir $TMP
+docker run --rm -ti $IM_NM $ALT_CMD
