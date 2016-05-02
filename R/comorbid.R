@@ -89,7 +89,7 @@ icd9PoaChoices <- icd_poa_choices
 #'   pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
 #'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
 #'   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
-#'   pt_hccs <- icd_comorbid_hcc(pt, date)
+#'   pt_hccs <- icd_comorbid_hcc(ptdata, date)
 
 #' @export
 icd_comorbid <- function(x, map, ...) {
