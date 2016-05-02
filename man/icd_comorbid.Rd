@@ -57,9 +57,11 @@ icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
-icd9_comorbid_hcc(x, visit_name = NULL, icd_name = NULL, date = "date")
+icd9_comorbid_hcc(x, visit_date = "date", visit_name = NULL,
+  icd_name = NULL)
 
-icd10_comorbid_hcc(x, visit_name = NULL, icd_name = NULL, date = "date")
+icd10_comorbid_hcc(x, visit_date = "date", visit_name = NULL,
+  icd_name = NULL)
 
 icd_comorbid_ahrq(x, icd_name = get_icd_name(x), ...)
 
@@ -122,8 +124,8 @@ which case the shorter human-readable names stored in e.g.
 case the hierarchy defined for the mapping is applied. E.g. in Elixhauser,
 you can't have uncomplicated and complicated diabetes both flagged.}
 
-\item{date}{column representing,  the date each record took place, as in each year there is a different ICD9/10 to CC mapping). 
-This is only necessary for HCC mappings.}
+\item{date}{column representing,  the date each record took place, as in each year there is a different ICD9/10
+to CC mapping). This is only necessary for HCC mappings.}
 }
 \description{
 \link{Rcpp} approach to comorbidity assignment with OpenMP and
@@ -184,7 +186,12 @@ codes
   pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
-  pt_hccs <- icd_comorbid_hcc(pt, date)
+  pts <- icd_long_data(
+             visit_name = c("2", "1", "2", "3", "3"),
+             icd9 = c("20084", "1742", "30410", "41514", "95893"), 
+             date = as.Date(c("2011-01-01", "2011-05-01", "2011-03-01", 
+               "2011-02-01", "2011-02-01")))
+  pt_hccs <- icd_comorbid_hcc(pts, visit_date="date")
 }
 \keyword{internal}
 

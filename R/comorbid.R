@@ -89,7 +89,12 @@ icd9PoaChoices <- icd_poa_choices
 #'   pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
 #'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
 #'   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
-#'   pt_hccs <- icd_comorbid_hcc(ptdata, date)
+#'   pts <- icd_long_data(
+#'              visit_name = c("2", "1", "2", "3", "3"),
+#'              icd9 = c("20084", "1742", "30410", "41514", "95893"), 
+#'              date = as.Date(c("2011-01-01", "2011-05-01", "2011-03-01", 
+#'                "2011-02-01", "2011-02-01")))
+#'   pt_hccs <- icd_comorbid_hcc(pts, visit_date="date")
 
 #' @export
 icd_comorbid <- function(x, map, ...) {
@@ -593,21 +598,22 @@ icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TR
 #' @rdname icd_comorbid
 #' @export
 icd9_comorbid_hcc <- function(x,
-                              visit_name=NULL,
-                              icd_name = NULL,
-                              date = "date") {
+                              visit_date = "date",
+                              visit_name = NULL,
+                              icd_name = NULL
+                              ) {
   assert_data_frame(x, min.cols = 3, col.names = "unique")
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
+  assert_string(visit_date)
   assert_string(visit_name)
   assert_string(icd_name)
 
   icd_map <- icd::icd9_map_cc
-  # Convert date and add column for year
-  x[[date]] <- as.Date(x[[date]])
-  x$year <- as.numeric(format(x[[date]], "%Y"))
+  # Add column for year
+  x$year <- as.numeric(format(x[[visit_date]], "%Y"))
 
   # merge CCs to patient data based on ICD and year drop ICD info
   x <- merge(x, icd_map, all.x = T)
@@ -617,8 +623,8 @@ icd9_comorbid_hcc <- function(x,
   x <- x[!is.na(x$cc), ]
   x$cc <- as.numeric(x$cc)
 
-  # keep id, admtdate, and cc columns only, reorder
-  x <- x[, c("id", date, "year", "cc")]
+  # keep id, date, and cc columns only, reorder
+  x <- x[, c(visit_name, visit_date, "year", "cc")]
 
   # Keep only unique records
   # Multiple ICDs for a patient can resolve to same CC
@@ -626,7 +632,7 @@ icd9_comorbid_hcc <- function(x,
 
   # Import hierarchy mappings, and duplicate the ifcc column
   # needed for future matching
-  hierarchy <- icd::icd_map_cc_hcc
+  hierarchy <- icd_map_cc_hcc
   hierarchy$cc <- hierarchy$ifcc
 
   # Merge hierarchy rules with patient data
@@ -642,7 +648,7 @@ icd9_comorbid_hcc <- function(x,
   # Rename all dataframes in list to same column names
   # rbind into a single dataframe
   todrop <- lapply(1:length(todrop), function(x) {
-    names(todrop[[x]]) <- c("id", date, "cc")
+    names(todrop[[x]]) <- c(visit_name, visit_date, "cc")
     return(todrop[[x]])
     }
   )
@@ -660,54 +666,55 @@ icd9_comorbid_hcc <- function(x,
 
   # Drop flagged patients and keep columns of interest
   x <- x[is.na(x$todrop), ]
-  x <- x[, c("id", date, "cc")]
-  names(x) <- c("id", date, "hcc")
+  x <- x[, c(visit_name, visit_date, "cc")]
+  names(x) <- c(visit_name, visit_date, "hcc")
   return(x)
   }
 
 #' @rdname icd_comorbid
 #' @export
 icd10_comorbid_hcc <- function(x,
-                              visit_name=NULL,
-                              icd_name = NULL,
-                              date = "date") {
+                              visit_date = "date",
+                              visit_name = NULL,
+                              icd_name = NULL
+                              ) {
   assert_data_frame(x, min.cols = 3, col.names = "unique")
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
+  assert_string(visit_date)
   assert_string(visit_name)
   assert_string(icd_name)
 
   icd_map <- icd::icd10_map_cc
-  # Convert date and add column for year
-  x[[date]] <- as.Date(x[[date]])
-  x$year <- as.numeric(format(x[[date]], "%Y"))
+  # Add column for year
+  x$year <- as.numeric(format(x[[visit_date]], "%Y"))
 
   # merge CCs to patient data based on ICD and year drop ICD info
   x <- merge(x, icd_map, all.x = T)
 
   # Drop missing CC and convert to numeric
-  # as not all ICDs resolve to a CC by definition
+  # Not all ICDs resolve to a CC by definition
   x <- x[!is.na(x$cc), ]
   x$cc <- as.numeric(x$cc)
 
-  # keep id, admtdate, and cc columns only, reorder
-  x <- x[, c("id", date, "year", "cc")]
+  # keep id, date, and cc columns only, reorder
+  x <- x[, c(visit_name, visit_date, "year", "cc")]
 
   # Keep only unique records
-  # multiple ICDs for a patient can resolve to same CC
+  # Multiple ICDs for a patient can resolve to same CC
   x <- unique(x)
 
   # Import hierarchy mappings, and duplicate the ifcc column
   # needed for future matching
-  hierarchy <- icd::icd_map_cc_hcc
+  hierarchy <- icd_map_cc_hcc
   hierarchy$cc <- hierarchy$ifcc
 
   # Merge hierarchy rules with patient data
   x <- merge(x, hierarchy, all.x = TRUE)
 
-  # Create a list of dataframes that contain the CCs that will be zero'd out
+  # Create a list of dataframes that contain the CCs that will be zeroed out
   todrop <- list()
   for (i in 1:6) {
     todrop[[i]] <- x[!is.na(x$ifcc), c(3, 4, 5 + i)]
@@ -717,7 +724,7 @@ icd10_comorbid_hcc <- function(x,
   # Rename all dataframes in list to same column names
   # rbind into a single dataframe
   todrop <- lapply(1:length(todrop), function(x) {
-    names(todrop[[x]]) <- c("id", date, "cc")
+    names(todrop[[x]]) <- c(visit_name, visit_date, "cc")
     return(todrop[[x]])
     }
   )
@@ -735,10 +742,11 @@ icd10_comorbid_hcc <- function(x,
 
   # Drop flagged patients and keep columns of interest
   x <- x[is.na(x$todrop), ]
-  x <- x[, c("id", date, "cc")]
-  names(x) <- c("id", date, "hcc")
+  x <- x[, c(visit_name, visit_date, "cc")]
+  names(x) <- c(visit_name, visit_date, "hcc")
   return(x)
   }
+
 #' @rdname icd_comorbid
 #' @export
 icd_comorbid_ahrq <- function(x, icd_name = get_icd_name(x), ...) {

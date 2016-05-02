@@ -18,7 +18,8 @@ invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.
 }
 \description{
-The ICD/HCC mappings were obtained from CMS \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
+The ICD/HCC mappings were obtained from CMS 
+\url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
 Due to the complex file structure of the original data (many nested zip files), they have
 been organized in the folder data/icd_hcc_rawdata/.
 This function creates an .RData file containing icd9/10 to CC crosswalks.
