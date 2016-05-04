@@ -3,14 +3,16 @@ language: r
 dist: trusty
 sudo: false
 cache: packages
+
+addons:
+  apt:
+    packages:
+      r-cran-rodbc
+
 r:
   - oldrel # when oldrel = 3.1, there are S3 method problems I can't debug
   - release
   - devel
-
-os:
-  - linux
-  - osx
 
 # compiler:
 #   - gcc
