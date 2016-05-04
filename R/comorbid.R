@@ -632,7 +632,7 @@ icd9_comorbid_hcc <- function(x,
 
   # Import hierarchy mappings, and duplicate the ifcc column
   # needed for future matching
-  hierarchy <- icd_map_cc_hcc
+  hierarchy <- icd::icd_map_cc_hcc
   hierarchy$cc <- hierarchy$ifcc
 
   # Merge hierarchy rules with patient data
@@ -708,7 +708,7 @@ icd10_comorbid_hcc <- function(x,
 
   # Import hierarchy mappings, and duplicate the ifcc column
   # needed for future matching
-  hierarchy <- icd_map_cc_hcc
+  hierarchy <- icd::icd_map_cc_hcc
   hierarchy$cc <- hierarchy$ifcc
 
   # Merge hierarchy rules with patient data
