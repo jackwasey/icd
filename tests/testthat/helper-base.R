@@ -149,3 +149,26 @@ pts_invalid_mix <- icd_long_data(
   icd9 = icd9(c("27801", "invalides", "25001")),
   poa = factor(c("Y", "N", "Y")),
   stringsAsFactors = FALSE)
+
+###
+# Sample datasets for HCC tests
+# 4 patients, some with ICDs that do not exist in CC crosswalk
+# One of the patients with multiple visit dates, all valid ICDs
+hcc_test_simple <- icd_long_data(
+              visit_name = c("1", "2", "3", "4", "4"),
+              icd_name = c("20084", "1742", "30410", "41514", "95893"),
+              date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
+                "2011-01-04", "2011-01-04")))
+
+# Only one record
+hcc_test_single <- icd_long_data(
+              visit_name = c("1"),
+              icd_name = c("20084"),
+              date = as.Date(c("2011-01-01")))
+
+# Mix of valid and invalid ICD Codes
+hcc_test_invalid <- icd_long_data(
+              visit_name = c("1", "2", "3", "4", "4"),
+              icd_name = c("20084", "174242", "aB30410", "41514", "95893"),
+              date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
+                "2011-01-04", "2011-01-04")))
