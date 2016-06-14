@@ -57,7 +57,7 @@ icd9_filter_valid <- function(x, icd_name = get_icd_name(x), short_code = icd_gu
   assert_flag(short_code)
   assert_flag(invert)
   assert_data_frame(x, min.cols = 1, col.names = "named")
-  x[icd_is_valid.icd9(.subset2(x, icd_name), short_code = short_code) != invert, ]
+  x[icd_is_valid.icd9(as_char_no_warn(.subset2(x, icd_name)), short_code = short_code) != invert, ]
 }
 
 #' @rdname icd_filter_valid
@@ -69,7 +69,7 @@ icd10_filter_valid <- function(x, icd_name = get_icd_name(x),
   assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(invert)
-  x[icd_is_valid.icd10(.subset2(x, icd_name), short_code = short_code) != invert, ]
+  x[icd_is_valid.icd10(as_char_no_warn(.subset2(x, icd_name)), short_code = short_code) != invert, ]
 
 }
 
