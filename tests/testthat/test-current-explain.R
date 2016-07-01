@@ -17,6 +17,16 @@
 
 context("explain ICD-9: code to human-readable")
 
+test_that("icd_explain of vectors returns same length vector? ", {
+
+  testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
+
+  expect_equal(length (icd_explain(testcodes)), length(testcodes))
+
+  expect_equal( unlist(icd:::icd_explain.list(testcodes)),  icd_explain(testcodes) )
+
+})
+
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
     icd_explain(icd_children.icd9("391", defined = FALSE, short_code = TRUE),
