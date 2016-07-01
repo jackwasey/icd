@@ -415,4 +415,3 @@ test_that("icd_short_to_decimal.icd10 short to decimal, vector input vs. single 
                  as.vector)
 
 })
-
