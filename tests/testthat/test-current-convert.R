@@ -395,3 +395,24 @@ test_that("icd10 short to parts", {
   expect_equal(icd_short_to_parts(as.icd10cm("E8989")),
                data.frame(major = "E89", minor = "89", stringsAsFactors = FALSE))
 })
+
+test_that("icd_short_to_decimal.icd10 short to decimal, vector input vs. single input", {
+
+  # This checks vector of decimal output consistent with a vector input.
+  # in icd_short_to_decimal.icd10
+
+  # get the test data
+  icd10test <- icd::icd10cm2016
+  icd10test$codedecimal <- icd:::icd_short_to_decimal.icd10(icd10test$code)  # convert vector of short codes to decimal
+
+  # Test a row corresponding to Acute kidney Failure and Chronic Kidney Disease...
+  testrow <- icd10test %>% dplyr::filter(code == "N189")  # Filter on the short code.
+
+  # It should yield the right decimal code.
+  expect_equal(testrow$codedecimal %>% as.vector, "N18.9")
+
+  expect_equal(testrow$codedecimal %>% as.vector, icd:::icd_short_to_decimal.icd10("N189") %>%
+                 as.vector)
+
+})
+
