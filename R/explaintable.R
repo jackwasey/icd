@@ -95,12 +95,12 @@ icd_explain_table.icd9cm <- function(x, short_code = icd:::icd_guess_short(x),
   assert_flag(warn)
 
   # build desired columns
-  outcols = c("input", "shortcode", "three_digit", "majorcode", "ismajor",
+  outcols <- c("input", "shortcode", "three_digit", "majorcode", "ismajor",
                 "major_desc", "long_desc", "short_desc") %>%
     (function(x) if(!brief) {c(x,  "chapter", "sub_chapter") } else {x}) %>%
     (function(x) if(condense) {c(x, "numcondensed") } else {x})
 
-  exptable = lookup_icd9(x) %>%
+  exptable <- lookup_icd9(x) %>%
     mutate(majorcode = icd:::icd_get_major.icd9(shortcode, short_code = TRUE)) %>%
     mutate(ismajor = input == majorcode)
 
@@ -115,14 +115,14 @@ condense_explain_table <- function(lookup) {
 
   # must have major code.
   # add description column of the major codes to lookup df
-  add_majordesc_cols = function(lookup) {
-    majorlookup = lookup_icd9(lookup$majorcode)
-    lookup$major_shortdesc =  majorlookup$short_desc
-    lookup$major_longdesc =  majorlookup$long_desc
+  add_majordesc_cols <- function(lookup) {
+    majorlookup <- lookup_icd9(lookup$majorcode)
+    lookup$major_shortdesc <-  majorlookup$short_desc
+    lookup$major_longdesc <-  majorlookup$long_desc
     lookup
   }
 
-  out_condensed = lookup %>% group_by(majorcode) %>%
+  out_condensed <- lookup %>% group_by(majorcode) %>%
     mutate(condensedcodes = paste(input, collapse = ", ") ) %>% # concatenation of codes
     mutate(numcondensed = n()) %>% # number of condensed rows
     mutate(input = ifelse(numcondensed>1, majorcode, input)) %>%
@@ -136,7 +136,6 @@ condense_explain_table <- function(lookup) {
     filter(!duplicated(shortcode))
   out_condensed
 }
-
 
 #' @describeIn icd_explain ICD-10 explanation, current a minimal implementation
 #' @export

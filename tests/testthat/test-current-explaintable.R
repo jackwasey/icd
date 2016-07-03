@@ -29,8 +29,8 @@ test_that("icd_explain_table reproduces icd_explain.list (element-by-element) wi
   # The major code in this case is 414 (last element) below
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
 
-  method1 = unlist(icd:::icd_explain.list(testcodes)) # icd_explain element by element.
-  method2 = icd_explain_table(testcodes, condense = F) %>%
+  method1 <- unlist(icd:::icd_explain.list(testcodes)) # icd_explain element by element.
+  method2 <- icd_explain_table(testcodes, condense = F) %>%
     mutate(testout = ifelse(ismajor, major_desc, long_desc)) %$%  # this replicates how icd_explain picks which description to use.
     testout # extract the testout column for testing
 
@@ -48,15 +48,15 @@ test_that("icd_explain_table can reproduce icd_explain's output that uses major 
   # Note the test major codeis 414, the last element below
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414", "584")
 
-  method1 = icd_explain(testcodes, condense = F)
+  method1 <- icd_explain(testcodes, condense = F)
 
   # Find row indices in icd9cm_hierarchy that the input testcodes correspond to
-  add_source_index_col = function(df) {
+  add_source_index_col <- function(df) {
     df$sourceindex = match( df$shortcode, (icd::icd9cm_hierarchy$code %>% as.vector))
     df
   }
 
-  method2 = icd_explain_table(testcodes, condense = F) %>%
+  method2 <- icd_explain_table(testcodes, condense = F) %>%
     mutate(testout = ifelse(ismajor, major_desc, long_desc)) %>%
     add_source_index_col %>%
     arrange(desc(ismajor), sourceindex) %$%  # arrange by the order icd9cm_hierarchy (alphabetic up to VXX and EXX codes)
@@ -71,7 +71,7 @@ test_that("icd_explain_table can handle invalid icd9 by filling with NAs.", {
   # Note the major code in this case is 414 (last element) below
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414", "bogus code")
 
-  method1 = icd_explain_table(testcodes, condense = T)
+  method1 <- icd_explain_table(testcodes, condense = T)
 
   expect_equal(sum(is.na(method1$major_desc)), 1)
 
@@ -114,7 +114,7 @@ test_that("icd_explain_table can handle mixed ICD9 and ICD10", {
   test_icd10 <- 'N18.3'
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
 
-  method1 = icd_explain_table(c(test_icd10, testcodes), condense = F)
+  method1 <- icd_explain_table(c(test_icd10, testcodes), condense = F)
 
 })
 
