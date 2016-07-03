@@ -71,6 +71,8 @@ shortcode_icd9 = function(x, short_code = icd:::icd_guess_short(x)) {
   }
 }
 
+#' @importFrom magrittr %>%
+#' @import dplyr
 lookup_icd9 <- function(x) {
 
   # must have major code.
@@ -107,6 +109,8 @@ icd_explain_table.icd9cm <- function(x, short_code = icd:::icd_guess_short(x),
       select_(., .dots = outcols)
 }
 
+#' @importFrom magrittr %>%
+#' @import dplyr
 condense_explain_table <- function(lookup) {
 
   # must have major code.

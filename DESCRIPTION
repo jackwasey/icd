@@ -23,6 +23,7 @@ Depends:
 Imports:
     checkmate (>= 1.7.0),
     magrittr,
+    dplyr,
     stats,
     Rcpp (>= 0.12.3),
     stringr,
