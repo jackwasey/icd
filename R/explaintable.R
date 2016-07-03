@@ -97,15 +97,15 @@ icd_explain_table.icd9cm <- function(x, short_code = icd:::icd_guess_short(x),
   # build desired columns
   outcols <- c("input", "shortcode", "three_digit", "majorcode", "ismajor",
                 "major_desc", "long_desc", "short_desc") %>%
-    (function(x) if(!brief) {c(x,  "chapter", "sub_chapter") } else {x}) %>%
-    (function(x) if(condense) {c(x, "numcondensed") } else {x})
+    (function(x) if(!brief) c(x,  "chapter", "sub_chapter") else x) %>%
+    (function(x) if(condense) c(x, "numcondensed") else x)
 
   exptable <- lookup_icd9(x) %>%
     mutate(majorcode = icd:::icd_get_major.icd9(shortcode, short_code = TRUE)) %>%
     mutate(ismajor = input == majorcode)
 
   exptable %>%
-      (function(x) if(condense){condense_explain_table(x)} else {x}) %>%
+      (function(x) if(condense) condense_explain_table(x) else x) %>%
       select_(., .dots = outcols)
 }
 
@@ -125,9 +125,9 @@ condense_explain_table <- function(lookup) {
   out_condensed <- lookup %>% group_by(majorcode) %>%
     mutate(condensedcodes = paste(input, collapse = ", ") ) %>% # concatenation of codes
     mutate(numcondensed = n()) %>% # number of condensed rows
-    mutate(input = ifelse(numcondensed>1, majorcode, input)) %>%
-    mutate(shortcode = ifelse(numcondensed>1, majorcode, shortcode)) %>%
-    mutate(ismajor = ifelse(numcondensed>1, T, F)) %>%
+    mutate(input = ifelse(numcondensed > 1, majorcode, input)) %>%
+    mutate(shortcode = ifelse(numcondensed > 1, majorcode, shortcode)) %>%
+    mutate(ismajor = ifelse(numcondensed > 1, T, F)) %>%
     data.frame %>% # convert to data.frame because next transformation don't want to mutate on group level.
     add_majordesc_cols %>%
     mutate(short_desc = ifelse(numcondensed > 1, major_shortdesc, short_desc) ) %>%

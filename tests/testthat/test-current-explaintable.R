@@ -79,39 +79,9 @@ test_that("icd_explain_table can handle invalid icd9 by filling with NAs.", {
 
 })
 
-# test_that("icd_explain_table filter where major_desc and long_desc are quite different.", {
-#
-#   # This helps identify where icd_explain might not have informative description
-#
-#   # install.packages("RecordLinkage")
-#   library(RecordLinkage)
-#
-#   # Below helps identify where icd_explain may produce explanations that are hard to understand
-#   # We calculate similarity score between major and long description. Idea is that
-#   # The long description should have some words that are related to broader major.
-#   # Similarity score < 0.2 seems to be right threshold to find totally confusing explanations
-#
-#   icd9_short_to_decimal_cpp(icd::icd9cm_hierarchy$code)
-#   test = icd_explain_table(icd9_short_to_decimal_cpp(icd::icd9cm_hierarchy$code), condense = F, brief = T)
-#   test$simscore = levenshteinSim(test$major_desc, test$long_desc)
-#   test$chardiff =  nchar(test$short_desc) - nchar(test$major_desc)
-#
-#   test %>% filter(simscore < 0.1 & chardiff < -10 & ismajor == F) %>%
-#     select(-three_digit, -long_desc) %>% tail(50)
-#
-#   test %>% filter(simscore > 0.2 & simscore < 0.5 ) %>%
-#     select(-long_desc, -three_digit) %>% head(50)
-#
-#   # icd_explain("0110") # this will produce non-information explanation
-#   # icd_explain("098.5") # this will produce non-information explanation
-#   # icd_explain("157") # this will produce non-information explanation
-# #   icd_explain("173.3")
-# #   icd_explain("082.4")
-# })
-
 test_that("icd_explain_table can handle mixed ICD9 and ICD10", {
 
-  test_icd10 <- 'N18.3'
+  test_icd10 <- "N18.3"
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
 
   method1 <- icd_explain_table(c(test_icd10, testcodes), condense = F)
@@ -121,9 +91,9 @@ test_that("icd_explain_table can handle mixed ICD9 and ICD10", {
 test_that("icd_explain_table, condense = T, sum of condensed == length of input: ", {
 
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
-  expect_equal( icd_explain_table(testcodes, condense = T) %$% numcondensed %>% sum , length(testcodes))
+  expect_equal( icd_explain_table(testcodes, condense = T) %$% numcondensed %>% sum, length(testcodes))
 
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414", "bogus code")
-  expect_equal( icd_explain_table(testcodes, condense = T) %$% numcondensed %>% sum , length(testcodes))
+  expect_equal( icd_explain_table(testcodes, condense = T) %$% numcondensed %>% sum, length(testcodes))
 
 })
