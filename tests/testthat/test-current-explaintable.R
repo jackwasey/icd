@@ -31,11 +31,10 @@ test_that("icd_explain_table reproduces icd_explain.list (element-by-element) wi
 
   method1 <- unlist(icd:::icd_explain.list(testcodes)) # icd_explain element by element.
   method2 <- icd_explain_table(testcodes, condense = F) %>%
-    mutate(testout = ifelse(ismajor, major_desc, long_desc)) %$%  # this replicates how icd_explain picks which description to use.
-    testout # extract the testout column for testing
+    mutate(testout = ifelse(ismajor, major_desc, long_desc)) %$%
+    testout # extract testout column for testing
 
   expect_equal(method1,  method2)
-
 })
 
 test_that("icd_explain_table can reproduce icd_explain's output that uses major first ordering", {
@@ -56,11 +55,11 @@ test_that("icd_explain_table can reproduce icd_explain's output that uses major 
     df
   }
 
+  # arrange by the order icd9cm_hierarchy (alphabetic up to VXX and EXX codes)
   method2 <- icd_explain_table(testcodes, condense = F) %>%
     mutate(testout = ifelse(ismajor, major_desc, long_desc)) %>%
     add_source_index_col %>%
-    arrange(desc(ismajor), sourceindex) %$%  # arrange by the order icd9cm_hierarchy (alphabetic up to VXX and EXX codes)
-    testout
+    arrange(desc(ismajor), sourceindex) %$% testout
 
   expect_equal(method1,  method2)
 

@@ -64,11 +64,7 @@ icd_explain_table.icd9 <- function(...) {
 }
 
 shortcode_icd9 <- function(x, short_code = icd:::icd_guess_short(x)) {
-  if (!short_code){  # short code is false
-    icd:::icd_decimal_to_short.icd9(x)
-  }else{
-    x
-  }
+  if (!short_code) icd:::icd_decimal_to_short.icd9(x) else x
 }
 
 #' @importFrom magrittr %>%
