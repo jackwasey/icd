@@ -63,8 +63,8 @@ icd_explain_table.icd9 <- function(...) {
   icd_explain_table.icd9cm(...)
 }
 
-shortcode_icd9 = function(x, short_code = icd:::icd_guess_short(x)) {
-  if (!short_code) {  # short code is false
+shortcode_icd9 <- function(x, short_code = icd:::icd_guess_short(x)) {
+  if (!short_code){  # short code is false
     icd:::icd_decimal_to_short.icd9(x)
   }else{
     x
@@ -77,7 +77,7 @@ lookup_icd9 <- function(x) {
 
   # must have major code.
   data.frame(input = x, shortcode = shortcode_icd9(x), stringsAsFactors = F) %>%
-    left_join(.,icd::icd9cm_hierarchy, by = c("shortcode" = "code") ) %>%
+    left_join(., icd::icd9cm_hierarchy, by = c("shortcode" = "code") ) %>%
     rename(major_desc = major ) %>%
     mutate(major_desc = as.character(major_desc))
 }
@@ -97,15 +97,15 @@ icd_explain_table.icd9cm <- function(x, short_code = icd:::icd_guess_short(x),
   # build desired columns
   outcols <- c("input", "shortcode", "three_digit", "majorcode", "ismajor",
                 "major_desc", "long_desc", "short_desc") %>%
-    (function(x) if(!brief) c(x,  "chapter", "sub_chapter") else x) %>%
-    (function(x) if(condense) c(x, "numcondensed") else x)
+    (function(x) if (!brief) c(x,  "chapter", "sub_chapter") else x) %>%
+    (function(x) if (condense) c(x, "numcondensed") else x)
 
   exptable <- lookup_icd9(x) %>%
     mutate(majorcode = icd:::icd_get_major.icd9(shortcode, short_code = TRUE)) %>%
     mutate(ismajor = input == majorcode)
 
   exptable %>%
-      (function(x) if(condense) condense_explain_table(x) else x) %>%
+      (function(x) if (condense) condense_explain_table(x) else x) %>%
       select_(., .dots = outcols)
 }
 

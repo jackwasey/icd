@@ -52,7 +52,7 @@ test_that("icd_explain_table can reproduce icd_explain's output that uses major 
 
   # Find row indices in icd9cm_hierarchy that the input testcodes correspond to
   add_source_index_col <- function(df) {
-    df$sourceindex = match( df$shortcode, (icd::icd9cm_hierarchy$code %>% as.vector))
+    df$sourceindex <- match( df$shortcode, (icd::icd9cm_hierarchy$code %>% as.vector))
     df
   }
 

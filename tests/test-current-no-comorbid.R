@@ -33,8 +33,11 @@ if (packageVersion("testthat") < package_version("0.11.0.9000")) {
 # when covr runs tests, it installs the package with source, and sources the files in the test directory.
 # This means that /data-raw would be absent, so it should be in inst/data-raw for testing.
 
+print("TEST - NO COMORBID")
+message("TEST - NO COMORBID")
+
 icd:::setup_test_check()
 icd:::show_test_options()
 # http://stackoverflow.com/questions/406230/regular-expression-to-match-line-that-doesnt-contain-a-word
-testout = icd:::my_test_check("current-((?!comorbid).)*$", "Running current tests without comorbid")
+testout <- icd:::my_test_check("current-((?!comorbid).)*$", "Running current tests without comorbid")
 print(testout)
