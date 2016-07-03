@@ -20,6 +20,7 @@
 library("icd")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
+library("dplyr", warn.conflicts = FALSE, quietly = TRUE)
 
 # we now rely on a testthat version with backwards-incompatible changes, the whole of the expectation setup has changed,
 # and there are many deprecations. For now, only run tests if testthat version is high enough:
