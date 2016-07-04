@@ -19,9 +19,6 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <!-- README.md is generated from README.Rmd. Please edit that file and render with 
 rmarkdown::render("README.Rmd")
 -->
-    ## Warning in .doLoadActions(where, attach): trying to execute load actions
-    ## without 'methods' package
-
 icd
 ===
 
