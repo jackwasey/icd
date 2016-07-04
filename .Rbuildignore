@@ -9,6 +9,7 @@ callgrind\.out
 ^config\.status$
 ^configure\.ac$
 ^configure\.scan$
+^CONTRIBUTING\.md$
 \.cproject$
 cran-comments\.md$
 \.externalToolBuilders$
