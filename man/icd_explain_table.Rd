@@ -3,14 +3,26 @@
 \name{icd_explain_table}
 \alias{icd_explain_table}
 \alias{icd_explain_table.default}
+\alias{icd_explain_table.icd10}
+\alias{icd_explain_table.icd10cm}
+\alias{icd_explain_table.icd9}
+\alias{icd_explain_table.icd9cm}
 \title{Explain ICD-9 and ICD-10 codes in English from decimal  (123.45 style),
-Tabulates the decimal format alongside converted short form (cms format)
-with a boolean column to indicate if the code is parent.
-A column for source year may be added in the future.}
+Tabulates the decimal format alongside converted non-decimal format.}
 \usage{
 icd_explain_table(...)
 
 \method{icd_explain_table}{default}(x, short_code = icd_guess_short(x),
+  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+
+\method{icd_explain_table}{icd9}(...)
+
+\method{icd_explain_table}{icd10}(...)
+
+\method{icd_explain_table}{icd9cm}(x, short_code = icd:::icd_guess_short(x),
+  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+
+\method{icd_explain_table}{icd10cm}(x, short_code = icd:::icd_guess_short(x),
   condense = FALSE, brief = TRUE, warn = TRUE, ...)
 }
 \arguments{
@@ -40,13 +52,32 @@ data frame, or list of data frames, with fields for ICD-9 code, name
   and description. The ordering is in the same order as input.
 }
 \description{
-Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
-description for human review there are official ICD9-CM data tables, not with
-conversion to decimal notation, but to the textual format.
+Output is ordered in the same order as the input. A boolean column ismajor
+indicates if the code is a parent Category.
+}
+\details{
+A column for source year may be added in the future.
+
+If the input x is of mixed type it will choose to convert by
+
+majority of icd9 vs. icd19
 }
 \section{Methods (by class)}{
 \itemize{
 \item \code{default}: explaining ICD codes from a character vector, guessing ICD version
+
+\item \code{icd9}: from vector of ICD-9 codes.
+
+\item \code{icd10}: from vector of ICD-10 codes.
+
+\item \code{icd9cm}: explain character vector of ICD-9-CM codes
+
+\item \code{icd10cm}: explain character vector of ICD1-10-CM codes
 }}
+\author{
+Ed Lee
+
+Ed Lee
+}
 \keyword{internal}
 
