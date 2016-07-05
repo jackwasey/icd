@@ -16,11 +16,13 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 
-test_that("icd_explain_table, condense = F returns same length vector: ", {
+test_that("icd_explain_table, condense = F, T returns expected length vector: ", {
 
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
 
-  expect_equal(dim (icd_explain_table(testcodes, condense = F))[1], length(testcodes))
+  expect_equal( dim(icd_explain_table(testcodes, condense = F))[1], 7)
+
+  expect_equal( dim(icd_explain_table(testcodes, condense = T))[1], 6)
 
 })
 
@@ -65,7 +67,7 @@ test_that("icd_explain_table can reproduce icd_explain's output that uses major 
 
 })
 
-test_that("icd_explain_table can handle invalid icd9 by filling with NAs.", {
+test_that("icd_explain_table can handle invalid icd by filling with NAs.", {
 
   # Note the major code in this case is 414 (last element) below
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414", "bogus code")
@@ -74,25 +76,51 @@ test_that("icd_explain_table can handle invalid icd9 by filling with NAs.", {
 
   expect_equal(sum(is.na(method1$major_desc)), 1)
 
-  print("Note icd_explain does not warn if about invalid code and return a output vector shorter than input length")
+  print("TODO icd_explain_table does not warn of invalid codes, but returns NAs")
 
 })
 
 test_that("icd_explain_table can handle mixed ICD9 and ICD10", {
 
-  test_icd10 <- "N18.3"
-  testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
+  testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414", "N18.3", "I10")
 
-  method1 <- icd_explain_table(c(test_icd10, testcodes), condense = F)
+  expect_equal( icd_explain_table(testcodes, condense = F)$valid_icd10 %>% sum, 2)
+
+  expect_equal( icd_explain_table(testcodes, condense = F)$valid_icd9 %>% sum, 7)
 
 })
 
-test_that("icd_explain_table, condense = T, sum of condensed == length of input: ", {
+test_that("icd_explain_table, condense = T, sum  numcondensed == length of original input: ", {
 
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
-  expect_equal( icd_explain_table(testcodes, condense = T) %$% numcondensed %>% sum, length(testcodes))
+  expect_equal( icd_explain_table(testcodes, condense = T) %$% numcondensed %>% sum(na.rm = T), 7)
 
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414", "bogus code")
-  expect_equal( icd_explain_table(testcodes, condense = T) %$% numcondensed %>% sum, length(testcodes))
+  expect_equal( icd_explain_table(testcodes, condense = T) %$% numcondensed %>% sum(na.rm = T), 7)
+
+})
+
+test_that("icd_explain_table, appropriately convert mixed code character vector,
+          casted icd9, and casted icd10 vectors: ", {
+
+  # Mixed codes icd9 and icd10 (character vector)
+  testcodes <- c("N18.3", "414", "362.5")
+  test2 <- icd_explain_table(testcodes)
+  expect_equal(test2$short_desc %>% is.na, c(F, F, F) )
+
+  # If we explicitly cast as ICD9
+  testcodes <- as.icd9(c("N18.3", "414", "362.5"))
+  test1 <- icd_explain_table(testcodes)
+  expect_equal(test1$short_desc %>% is.na, c(T, F, F) )
+
+  # If we explicitly cast as ICD10
+  testcodes <- as.icd10(c("N18.3", "414", "362.5"))
+  test1 <- icd_explain_table(testcodes)
+  expect_equal(test1$short_desc %>% is.na, c(F, T, T) )
+
+  # Note if the code is ambiguous and is both valid icd9 and icd10,
+  # provides a warning
+  # it defaults to the description of the ICD10
+  # TODO warning.
 
 })

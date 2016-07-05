@@ -16,13 +16,12 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 #' Explain ICD-9 and ICD-10 codes in English from decimal  (123.45 style),
-#' Tabulates the decimal format alongside converted short form (cms format)
-#' with a boolean column to indicate if the code is parent.
+#' Tabulates the decimal format alongside converted non-decimal format.
+#'
+#' Output is ordered in the same order as the input. A boolean column ismajor
+#' indicates if the code is a parent Category.
 #' A column for source year may be added in the future.
 #'
-#' Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
-#' description for human review there are official ICD9-CM data tables, not with
-#' conversion to decimal notation, but to the textual format.
 #' @param x vector or other structure of ICD codes to explain in human language
 #' @template short_code
 #' @param condense single logical value which indicates whether to condense the
@@ -44,16 +43,25 @@ icd_explain_table <- function(...)
     UseMethod("icd_explain_table")
 
 #' @describeIn icd_explain_table explaining ICD codes from a character vector, guessing ICD version
+#' @details If the input x is of mixed type it will choose to convert by
+#' @details majority of icd9 vs. icd19
 #' @export
 #' @keywords internal
 icd_explain_table.default <- function(x, short_code = icd_guess_short(x), condense = FALSE, brief = TRUE, warn = TRUE, ...) {
 
-  switch(
-    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
-    "icd9" = icd_explain_table.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
-    "icd10" = icd_explain_table.icd10(x, short_code = short_code, brief = brief, ...),
-    stop("Unknown ICD version.")
-  )
+  if (!(is.icd9(x) | is.icd10(x))) {
+    icd_explain_table.character(x,
+                                condense = condense,
+                                brief = brief,
+                                warn = warn)
+  } else {
+    switch(
+      icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
+      "icd9" = icd_explain_table.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
+      "icd10" = icd_explain_table.icd10(x, short_code = short_code, brief = brief, ...),
+      stop("Unknown ICD version.")
+    )
+  }
 }
 
 #' @describeIn icd_explain explain character vector of ICD-9 codes.
@@ -63,10 +71,19 @@ icd_explain_table.icd9 <- function(...) {
   icd_explain_table.icd9cm(...)
 }
 
+icd_explain_table.icd10 <- function(...) {
+  icd_explain_table.icd10cm(...)
+}
+
 shortcode_icd9 <- function(x, short_code = icd:::icd_guess_short(x)) {
   if (!short_code) icd:::icd_decimal_to_short.icd9(x) else x
 }
 
+shortcode_icd10 <- function(x, short_code = icd:::icd_guess_short(x)) {
+  if (!short_code) icd:::icd_decimal_to_short.icd10(x) else x
+}
+
+#' Convert ICD9 to short_code from decimal and lookup the explanation info
 #' @importFrom magrittr %>%
 #' @import dplyr
 lookup_icd9 <- function(x) {
@@ -78,12 +95,93 @@ lookup_icd9 <- function(x) {
     mutate(major_desc = as.character(major_desc))
 }
 
+lookup_icd_any <- function(x) {
+
+  # must have major code.
+  data.frame(input = x,
+             shortcodeicd9 = shortcode_icd9(x),
+             shortcodeicd10 = shortcode_icd10(x),
+             stringsAsFactors = F) %>%
+    left_join(., icd::icd9cm_hierarchy, by = c("shortcodeicd9" = "code")) %>%
+    left_join(., icd::icd10cm2016, by = c("shortcodeicd10" = "code")) %>%
+    rename(major_desc = major ) %>%
+    mutate(major_desc = as.character(major_desc))
+}
+
+#' Convert ICD10 to short_code from decimal and lookup the explanation info
+#' @importFrom magrittr %>%
+#' @import dplyr
+lookup_icd10 <- function(x) {
+
+  # must have major code.
+  data.frame(input = x, shortcode = shortcode_icd10(x), stringsAsFactors = F) %>%
+    left_join(., icd::icd10cm2016, by = c("shortcode" = "code") ) %>%
+    rename(major_desc = major ) %>%
+    mutate(major_desc = as.character(major_desc))
+}
+
+#' @describeIn icd_explain explain character vector of ICD-9-CM codes
+#' @param tiebreak_icd9 boolean.. If a code is both valid icd9 and icd10 it will choose icd9 if T.
+#' @details will automatically detect if shortcode or not
+#' @author Ed Lee
+#' @export
+#' @keywords internal
+icd_explain_table.character <- function(x,
+                                     condense = FALSE,
+                                     brief = TRUE,
+                                     warn = TRUE,
+                                     tiebreak_icd10 = T,
+                                     ...) {
+  assert(checkCharacter(x), checkFactor(x))
+  assert_flag(condense)
+  assert_flag(brief)
+  assert_flag(warn)
+
+  st_codes <- data.frame(input = x,
+           shortcodeicd9 = shortcode_icd9(x),
+           shortcodeicd10 = shortcode_icd10(x),
+           stringsAsFactors = F) %>%
+    mutate(valid_icd9 = icd_is_valid.icd9(shortcodeicd9)) %>%
+    mutate(valid_icd10 = icd_is_valid.icd10(shortcodeicd10)) %>%
+    mutate(majorcode9 = icd:::icd_get_major.icd9(shortcodeicd9, short_code = TRUE)) %>%
+    mutate(majorcode10 = icd:::icd_get_major.icd10(shortcodeicd10))
+
+   st_codes9 <- st_codes %>% filter(valid_icd9 == T & valid_icd10 == F)
+   st_codes10 <- st_codes %>% filter(valid_icd10 == T) # if also a valid_icd9 will return icd10
+
+   out9 <- icd_explain_table.icd9(st_codes9$input,
+                                  brief = brief,
+                                  condense = condense)
+
+   out10 <- icd_explain_table.icd10(st_codes10$input,
+                                   brief = brief,
+                                   condense = condense)
+
+   if (!condense) {
+     st_codes %>%
+       select(input) %>%
+       left_join(., rbind(out9, out10), by = c("input"))
+   } else {
+     # collapse short codes and left_join on explanation table
+     st_codes %>% group_by(majorcode9) %>%
+       mutate(numcondensed = n()) %>%
+       data.frame %>%
+       filter(!duplicated(majorcode9)) %>% # majorcode9 regardless if icd10
+       mutate(input = ifelse(numcondensed > 1, majorcode9, input)) %>%
+       select(input) %>%
+       left_join(., rbind(out1, out2), by = c("input"))
+   }
+}
+
 #' @describeIn icd_explain explain character vector of ICD-9-CM codes
 #' @author Ed Lee
 #' @export
 #' @keywords internal
-icd_explain_table.icd9cm <- function(x, short_code = icd:::icd_guess_short(x),
-                                condense = FALSE, brief = TRUE, warn = TRUE, ...) {
+icd_explain_table.icd9cm <- function(x,
+                                short_code = icd:::icd_guess_short(x),
+                                condense = FALSE,
+                                brief = TRUE,
+                                warn = TRUE, ...) {
   assert(checkCharacter(x), checkFactor(x))
   assert_flag(short_code)
   assert_flag(condense)
@@ -92,17 +190,45 @@ icd_explain_table.icd9cm <- function(x, short_code = icd:::icd_guess_short(x),
 
   # build desired columns
   outcols <- c("input", "shortcode", "three_digit", "majorcode", "ismajor",
-                "major_desc", "long_desc", "short_desc") %>%
+               "major_desc", "long_desc", "short_desc", "valid_icd9", "valid_icd10") %>%
     (function(x) if (!brief) c(x,  "chapter", "sub_chapter") else x) %>%
-    (function(x) if (condense) c(x, "numcondensed") else x)
+    (function(x) if (condense) c(x, "condensedcodes", "numcondensed") else x)
+
 
   exptable <- lookup_icd9(x) %>%
     mutate(majorcode = icd:::icd_get_major.icd9(shortcode, short_code = TRUE)) %>%
-    mutate(ismajor = input == majorcode)
+    mutate(ismajor = input == majorcode) %>%
+    mutate(valid_icd9 = icd_is_valid.icd9(shortcode)) %>%
+    mutate(valid_icd10 = icd_is_valid.icd10(shortcode))
 
   exptable %>%
       (function(x) if (condense) condense_explain_table(x) else x) %>%
       select_(., .dots = outcols)
+}
+
+icd_explain_table.icd10cm <- function(x, short_code = icd:::icd_guess_short(x),
+                                     condense = FALSE, brief = TRUE, warn = TRUE, ...) {
+  assert(checkCharacter(x), checkFactor(x))
+  assert_flag(short_code)
+  assert_flag(condense)
+  assert_flag(brief)
+  assert_flag(warn)
+
+  # build desired columns
+  outcols <- c("input", "shortcode", "three_digit", "majorcode", "ismajor",
+               "major_desc", "long_desc", "short_desc", "valid_icd9", "valid_icd10") %>%
+    (function(x) if (!brief) c(x,  "chapter", "sub_chapter") else x) %>%
+    (function(x) if (condense) c(x, "condensedcodes", "numcondensed") else x)
+
+  exptable <- lookup_icd10(x) %>%
+    mutate(majorcode = icd:::icd_get_major.icd10(shortcode)) %>%
+    mutate(ismajor = input == majorcode) %>%
+    mutate(valid_icd9 = icd_is_valid.icd9(shortcode)) %>%
+    mutate(valid_icd10 = icd_is_valid.icd10(shortcode))
+
+  exptable %>%
+    (function(x) if (condense) condense_explain_table(x) else x) %>%
+    select_(., .dots = outcols)
 }
 
 #' @importFrom magrittr %>%
@@ -118,38 +244,19 @@ condense_explain_table <- function(lookup) {
     lookup
   }
 
+  # Groups by major code then concatenates them into condensedcodes column.
+  # For those condensed rows will overwrite descriptions with major descriptions
   out_condensed <- lookup %>% group_by(majorcode) %>%
-    mutate(condensedcodes = paste(input, collapse = ", ") ) %>% # concatenation of codes
+    mutate(condensedcodes = paste(input, collapse = ", ") ) %>%
     mutate(numcondensed = n()) %>% # number of condensed rows
     mutate(input = ifelse(numcondensed > 1, majorcode, input)) %>%
     mutate(shortcode = ifelse(numcondensed > 1, majorcode, shortcode)) %>%
     mutate(ismajor = ifelse(numcondensed > 1, T, F)) %>%
-    data.frame %>% # convert to data.frame because next transformation don't want to mutate on group level.
+    data.frame %>% # convert to data.frame to ungroup
     add_majordesc_cols %>%
-    mutate(short_desc = ifelse(numcondensed > 1, major_shortdesc, short_desc) ) %>%
-    mutate(long_desc = ifelse(numcondensed > 1, major_longdesc, long_desc) ) %>%
+    mutate(short_desc = ifelse(numcondensed > 1, major_shortdesc, short_desc)) %>%
+    mutate(long_desc = ifelse(numcondensed > 1, major_longdesc, long_desc)) %>%
     select(-major_shortdesc, -major_longdesc) %>%
     filter(!duplicated(shortcode))
   out_condensed
-}
-
-#' @describeIn icd_explain ICD-10 explanation, current a minimal implementation
-#' @export
-#' @keywords internal
-icd_explain_table.icd10 <- function(x, short_code = icd_guess_short(x),
-                                    condense = FALSE, brief = TRUE, warn = TRUE, ...) {
-  assert_vector(x)
-  assert_flag(short_code)
-  assert_flag(brief)
-
-  if (!missing(condense))
-    .NotYetUsed("condense", error = FALSE)
-  if (!missing(warn))
-    .NotYetUsed("warn", error = FALSE)
-
-  if (!short_code)
-    x <- icd_decimal_to_short.icd10(x)
-
-  icd::icd10cm2016[icd::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
-                   ifelse(brief, "short_desc", "long_desc")]
 }
