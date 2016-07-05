@@ -84,9 +84,9 @@ test_that("icd_explain_table can handle mixed ICD9 and ICD10", {
 
   testcodes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414", "N18.3", "I10")
 
-  expect_equal( icd_explain_table(testcodes, condense = F)$valid_icd10 %>% sum, 2)
+  expect_equal( icd_explain_table(testcodes, condense = F)$validicd10 %>% sum, 2)
 
-  expect_equal( icd_explain_table(testcodes, condense = F)$valid_icd9 %>% sum, 7)
+  expect_equal( icd_explain_table(testcodes, condense = F)$validicd9 %>% sum, 7)
 
 })
 
