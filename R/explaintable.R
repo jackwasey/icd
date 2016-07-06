@@ -198,7 +198,7 @@ icd_explain_table.character <- function(x,
 #' @export
 #' @keywords internal
 icd_explain_table.icd9cm <- function(x,
-                                short_code = icd::icd_guess_short(x),
+                                short_code = icd_guess_short(x),
                                 condense = FALSE,
                                 brief = TRUE,
                                 warn = TRUE, ...) {
