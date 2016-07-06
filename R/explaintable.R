@@ -102,12 +102,12 @@ icd_explain_table.icd10 <- function(...) {
   icd_explain_table.icd10cm(...)
 }
 
-shortcode_icd9 <- function(x, short_code = icd::icd_guess_short(x)) {
-  if (!short_code) icd::icd_decimal_to_short.icd9(x) else x
+shortcode_icd9 <- function(x, short_code = icd_guess_short(x)) {
+  if (!short_code) icd_decimal_to_short.icd9(x) else x
 }
 
-shortcode_icd10 <- function(x, short_code = icd::icd_guess_short(x)) {
-  if (!short_code) icd::icd_decimal_to_short.icd10(x) else x
+shortcode_icd10 <- function(x, short_code = icd_guess_short(x)) {
+  if (!short_code) icd_decimal_to_short.icd10(x) else x
 }
 
 #' Lookup ICD9 decimal from source data in icd9cm_hierarchy
@@ -159,10 +159,10 @@ icd_explain_table.character <- function(x,
            shortcodeicd9 = shortcode_icd9(x),
            shortcodeicd10 = shortcode_icd10(x),
            stringsAsFactors = F) %>%
-    mutate(validicd9 = icd::icd_is_valid.icd9(shortcodeicd9)) %>%
-    mutate(validicd10 = icd::icd_is_valid.icd10(shortcodeicd10)) %>%
-    mutate(majorcode9 = icd::icd_get_major.icd9(shortcodeicd9, short_code = TRUE)) %>%
-    mutate(majorcode10 = icd::icd_get_major.icd10(shortcodeicd10))
+    mutate(validicd9 = icd_is_valid.icd9(shortcodeicd9)) %>%
+    mutate(validicd10 = icd_is_valid.icd10(shortcodeicd10)) %>%
+    mutate(majorcode9 = icd_get_major.icd9(shortcodeicd9, short_code = TRUE)) %>%
+    mutate(majorcode10 = icd_get_major.icd10(shortcodeicd10))
 
    st_codes9 <- st_codes %>% dplyr::filter(validicd9 == T & validicd10 == F)
    st_codes10 <- st_codes %>% dplyr::filter(validicd10 == T)  # if also a validicd9 will return icd10
@@ -215,7 +215,7 @@ icd_explain_table.icd9cm <- function(x,
     (function(x) if (condense) c(x, "condensedcodes", "numcondensed") else x)
 
   exptable <- lookup_icd9(x) %>%
-    mutate( majorcode = icd::icd_get_major.icd9(shortcode, short_code = TRUE)) %>%
+    mutate( majorcode = icd_get_major.icd9(shortcode, short_code = TRUE)) %>%
     mutate( ismajor = input == majorcode) %>%
     mutate( validicd9 = icd_is_valid.icd9(shortcode)) %>%
     mutate( validicd10 = icd_is_valid.icd10(shortcode))
@@ -231,7 +231,7 @@ icd_explain_table.icd9cm <- function(x,
 #' @import magrittr
 #' @export
 #' @keywords internal
-icd_explain_table.icd10cm <- function(x, short_code = icd::icd_guess_short(x),
+icd_explain_table.icd10cm <- function(x, short_code = icd_guess_short(x),
                                      condense = FALSE, brief = TRUE, warn = TRUE, ...) {
   assert(checkCharacter(x), checkFactor(x))
   assert_flag(short_code)
@@ -246,7 +246,7 @@ icd_explain_table.icd10cm <- function(x, short_code = icd::icd_guess_short(x),
     (function(x) if (condense) c(x, "condensedcodes", "numcondensed") else x)
 
   exptable <- lookup_icd10(x) %>%
-    mutate( majorcode = icd::icd_get_major.icd10(shortcode)) %>%
+    mutate( majorcode = icd_get_major.icd10(shortcode)) %>%
     mutate( ismajor = input == majorcode) %>%
     mutate( validicd9 = icd_is_valid.icd9(shortcode)) %>%
     mutate( validicd10 = icd_is_valid.icd10(shortcode))
