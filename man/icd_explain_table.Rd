@@ -22,7 +22,7 @@ icd_explain_table(...)
 \method{icd_explain_table}{icd9cm}(x, short_code = icd_guess_short(x),
   condense = FALSE, brief = TRUE, warn = TRUE, ...)
 
-\method{icd_explain_table}{icd10cm}(x, short_code = icd::icd_guess_short(x),
+\method{icd_explain_table}{icd10cm}(x, short_code = icd_guess_short(x),
   condense = FALSE, brief = TRUE, warn = TRUE, ...)
 }
 \arguments{
