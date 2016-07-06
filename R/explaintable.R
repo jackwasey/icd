@@ -21,6 +21,13 @@ globalVariables(c("major_desc",
                   "validicd10",
                   "ismajor",
                   "major",
+                  "majorcode",
+                  "numcondensed",
+                  "shortcode",
+                  "major_shortdesc",
+                  "major_longdesc",
+                  "shortcodeicd9",
+                  "shortcodeicd10",
                   "majorcode9",
                   "majorcode10",
                   "input",
@@ -105,7 +112,7 @@ shortcode_icd10 <- function(x, short_code = icd::icd_guess_short(x)) {
 
 #' Lookup ICD9 decimal from source data in icd9cm_hierarchy
 #' @param x a vector of icd9 codes
-#' @importFrom magrittr "%>%"
+#' @import magrittr
 #' @import dplyr
 lookup_icd9 <- function(x) {
 
@@ -118,7 +125,7 @@ lookup_icd9 <- function(x) {
 
 #' Lookup ICD10 decimal from source data in icd10cm2016
 #' @param x a vector of icd9 codes
-#' @importFrom magrittr "%>%"
+#' @import magrittr
 #' @import dplyr
 lookup_icd10 <- function(x) {
 
@@ -136,7 +143,7 @@ lookup_icd10 <- function(x) {
 #' @export
 #' @keywords internal
 #' @import dplyr
-#' @importFrom magrittr "%>%"
+#' @import magrittr
 icd_explain_table.character <- function(x,
                                      condense = FALSE,
                                      brief = TRUE,
@@ -187,7 +194,7 @@ icd_explain_table.character <- function(x,
 #' @describeIn icd_explain_table explain character vector of ICD-9-CM codes
 #' @author Ed Lee
 #' @import dplyr
-#' @importFrom magrittr "%>%"
+#' @import magrittr
 #' @export
 #' @keywords internal
 icd_explain_table.icd9cm <- function(x,
@@ -221,7 +228,7 @@ icd_explain_table.icd9cm <- function(x,
 #' @describeIn icd_explain_table explain character vector of ICD1-10-CM codes
 #' @author Ed Lee
 #' @import dplyr
-#' @importFrom magrittr "%>%"
+#' @import magrittr
 #' @export
 #' @keywords internal
 icd_explain_table.icd10cm <- function(x, short_code = icd::icd_guess_short(x),
@@ -249,7 +256,7 @@ icd_explain_table.icd10cm <- function(x, short_code = icd::icd_guess_short(x),
     select_(.dots = outcols)
 }
 
-#' @importFrom magrittr "%>%"
+#' @import magrittr
 #' @import dplyr
 condense_explain_table <- function(lookup) {
 
