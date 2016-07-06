@@ -6,6 +6,9 @@
 \usage{
 lookup_icd9(x)
 }
+\arguments{
+\item{x}{a vector of icd9 codes}
+}
 \description{
 Lookup ICD9 decimal from source data in icd9cm_hierarchy
 }

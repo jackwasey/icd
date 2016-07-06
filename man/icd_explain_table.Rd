@@ -19,10 +19,10 @@ icd_explain_table(...)
 
 \method{icd_explain_table}{icd10}(...)
 
-\method{icd_explain_table}{icd9cm}(x, short_code = icd:::icd_guess_short(x),
+\method{icd_explain_table}{icd9cm}(x, short_code = icd::icd_guess_short(x),
   condense = FALSE, brief = TRUE, warn = TRUE, ...)
 
-\method{icd_explain_table}{icd10cm}(x, short_code = icd:::icd_guess_short(x),
+\method{icd_explain_table}{icd10cm}(x, short_code = icd::icd_guess_short(x),
   condense = FALSE, brief = TRUE, warn = TRUE, ...)
 }
 \arguments{
@@ -43,7 +43,7 @@ provided, only '001 - Cholera' needs to be displayed, not all sub-types.}
 the short description from the canonical CMS descriptions (included in
 \code{data-raw}) will be used, otherwise the long description is used.}
 
-\item{warn}{single logical value, default is \code{TRUE}, meaning that codes
+\item{warn}{single logical value, default is \code{TRUE}, meaning that codesÏ
 which do not correspond to diagnoses, or to three-digit codes, will trigger
 a warning.}
 }

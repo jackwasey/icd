@@ -59,7 +59,7 @@ test_that("icd_explain_table can reproduce icd_explain's output that uses major 
 
   # arrange by the order icd9cm_hierarchy (alphabetic up to VXX and EXX codes)
   method2 <- icd_explain_table(testcodes, condense = F) %>%
-    mutate(testout = ifelse(ismajor, major_desc, long_desc)) %>%
+    mutate( testout = ifelse(ismajor, major_desc, long_desc)) %>%
     add_source_index_col %>%
     arrange(desc(ismajor), sourceindex) %$% testout
 
