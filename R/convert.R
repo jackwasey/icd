@@ -340,6 +340,7 @@ icd_decimal_to_short <- function(x) {
   UseMethod("icd_decimal_to_short")
 }
 
+#' @describeIn Convert icd9 object in decimal form to non-decimal form
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd9 <- function(x) {
@@ -350,6 +351,7 @@ icd_decimal_to_short.icd9 <- function(x) {
   icd9(as.icd_short_diag(icd9_decimal_to_short_cpp(x)))
 }
 
+#' @describeIn Convert icd10 object in decimal form to non-decimal form
 #' @export
 #' @keywords internal
 icd_decimal_to_short.icd10 <- function(x) {
