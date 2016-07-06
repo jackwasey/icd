@@ -7,9 +7,7 @@
 \alias{icd_explain.icd9}
 \alias{icd_explain.icd9cm}
 \alias{icd_explain.list}
-\alias{icd_explain_table.icd10}
-\alias{icd_explain_table.icd9}
-\alias{icd_explain_table.icd9cm}
+\alias{icd_explain_table.character}
 \title{Explain ICD-9 and ICD-10 codes in English}
 \usage{
 icd_explain(...)
@@ -27,13 +25,8 @@ icd_explain(...)
 \method{icd_explain}{icd10}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
-\method{icd_explain_table}{icd9}(...)
-
-\method{icd_explain_table}{icd9cm}(x, short_code = icd:::icd_guess_short(x),
-  condense = FALSE, brief = TRUE, warn = TRUE, ...)
-
-\method{icd_explain_table}{icd10}(x, short_code = icd_guess_short(x),
-  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+\method{icd_explain_table}{character}(x, condense = FALSE, brief = TRUE,
+  warn = TRUE, tiebreak_icd10 = T, ...)
 }
 \arguments{
 \item{...}{arguments passed on to other functions}
@@ -56,6 +49,8 @@ the short description from the canonical CMS descriptions (included in
 \item{warn}{single logical value, default is \code{TRUE}, meaning that codes
 which do not correspond to diagnoses, or to three-digit codes, will trigger
 a warning.}
+
+\item{tiebreak_icd9}{boolean.. If a code is both valid icd9 and icd10 it will choose icd9 if T.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD-9 code, name
@@ -65,6 +60,9 @@ data frame, or list of data frames, with fields for ICD-9 code, name
 Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
 description for human review there are official ICD9-CM data tables, not with
 conversion to decimal notation, but to the textual format.
+}
+\details{
+will automatically detect if shortcode or not
 }
 \section{Methods (by class)}{
 \itemize{
@@ -78,11 +76,7 @@ conversion to decimal notation, but to the textual format.
 
 \item \code{icd10}: ICD-10 explanation, current a minimal implementation
 
-\item \code{icd9}: explain character vector of ICD-9 codes.
-
-\item \code{icd9cm}: explain character vector of ICD-9-CM codes
-
-\item \code{icd10}: ICD-10 explanation, current a minimal implementation
+\item \code{character}: explain character vector of ICD-9-CM codes
 }}
 \examples{
 # by default, just show parent code and ignore children (428.0 not shown
