@@ -14,6 +14,17 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
+
+# library(magrittr) a real hack for 1) to get devtools::check to work.
+# and travis.
+# RStudio devtools::check works at console but not via RStudio 'Build' -> 'Test
+# otherwise i get....
+# in Travis get:
+#    $ for name in $(find "${RCHECK_DIR}" -type f -name "*fail");do echo ">>> Filename: ${name} <<<";cat ${name};done
+# Package is fine in wercker, and in theory should know magrittr from NAMESPACE and DESCRIPTION
+library(magrittr)
+
+
 # globalVariables
 
 globalVariables(c("major_desc",

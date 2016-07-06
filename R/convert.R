@@ -46,6 +46,8 @@
 #' @name convert
 NULL
 
+library(magrittr)
+
 #' convert the chapter headings to lists of codes
 #'
 #' the chapter headings can be converted into the full set of their children,
