@@ -56,6 +56,10 @@ Output is ordered in the same order as the input. A boolean column ismajor
 indicates if the code is a parent Category.
 }
 \details{
+If the code is both a valid ICD9 and a ICD10 the output will default
+the descriptions to ICD10.  The code would otherwise have to be explicitly
+casted to get ICD9 descriptions.
+
 A column for source year may be added in the future.
 
 If the input x is of mixed type it will choose to convert by

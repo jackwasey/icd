@@ -16,10 +16,7 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 # Package is fine in wercker, and in theory should know magrittr from NAMESPACE and DESCRIPTION
-# The below 'library(magrittr)' is a real hack for to get RStudio's devtools::check to work.
-# RStudio devtools::check works at console but not via RStudio 'Build' -> 'Test
-# in Travis get:
-#    $ for name in $(find "${RCHECK_DIR}" -type f -name "*fail");do echo ">>> Filename: ${name} <<<";cat ${name};done
+# The below 'library(magrittr)' is a hack for to get RStudio's devtools::check to work.
 library(magrittr)
 
 
@@ -53,6 +50,10 @@ globalVariables(c("major_desc",
 #' Output is ordered in the same order as the input. A boolean column ismajor
 #' indicates if the code is a parent Category.
 #'
+#' If the code is both a valid ICD9 and a ICD10 the output will default
+#' the descriptions to ICD10.  The code would otherwise have to be explicitly
+#' casted to get ICD9 descriptions.
+#'
 #' A column for source year may be added in the future.
 #'
 #' @param x vector or other structure of ICD codes to explain in human language
@@ -64,7 +65,7 @@ globalVariables(c("major_desc",
 #' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
 #'   the short description from the canonical CMS descriptions (included in
 #'   \code{data-raw}) will be used, otherwise the long description is used.
-#' @param warn single logical value, default is \code{TRUE}, meaning that codesÏ
+#' @param warn single logical value, default is \code{TRUE}, meaning that codes
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.
 #' @template dotdotdot
