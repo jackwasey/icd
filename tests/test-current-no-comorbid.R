@@ -40,6 +40,5 @@ icd:::setup_test_check()
 icd:::show_test_options()
 # http://stackoverflow.com/questions/406230/regular-expression-to-match-line-that-doesnt-contain-a-word
 testout <- icd:::my_test_check("current-((?!comorbid).)*$", "Running current tests without comorbid")
-testout = testout %>% as.data.frame
+testout <- testout %>% as.data.frame
 print(testout[, c("file", "test", "nb", "failed")])
-
