@@ -1,25 +1,25 @@
-// Copyright (C) 2014 - 2015  Jack O. Wasey
+// Copyright (C) 2014 - 2016  Jack O. Wasey
 //
-// This file is part of icd9.
+// This file is part of icd.
 //
-// icd9 is free software: you can redistribute it and/or modify
+// icd is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// icd9 is distributed in the hope that it will be useful,
+// icd is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 #include "local.h"
 #include "util.h"
-//#ifdef ICD9_STD_PARALLEL
+//#ifdef ICD_STD_PARALLEL
 // this will probably make things worse if already in an OpenMP block, unless I
 // can dynamically see how many threads are available or active.
 //#include <parallel/algorithm>
@@ -37,7 +37,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   const VecVecIntSz last_i = num_visits - 1;
   VecVecIntSz chunk_end_i;
   VecVecIntSz vis_i;
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
@@ -45,11 +45,11 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   // http://stackoverflow.com/questions/32572966/did-i-misuse-a-reference-variable-in-a-simple-openmp-for-loop-or-is-it-a-clang
   // const VecVecInt *vcdb = &_vcdb;
   // const VecVecInt *map = &_map;
-#ifdef ICD9_DEBUG_PARALLEL
+#ifdef ICD_DEBUG_PARALLEL
   debug_parallel();
 #endif
 
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
   // I think const values are automatically shared, if default(none) is not used. Different compilers respond differently.
 #pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout, vcdb, map) private(chunk_end_i, vis_i)
   // TODO: need to consider other processes using multiple cores, see Writing R Extensions.
@@ -58,17 +58,17 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 #endif
   // loop through chunks at a time
   for (vis_i = 0; vis_i < num_visits; vis_i += chunkSize) {
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "vis_i = " << vis_i << "\n";
 #endif
-#ifdef ICD9_DEBUG_PARALLEL
+#ifdef ICD_DEBUG_PARALLEL
     debug_parallel();
 #endif
     chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
     if (chunk_end_i > last_i)
       chunk_end_i = last_i; // indices
     ComorbidOut chunk;
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
     // this gives size 0 with OMP enabled. bug #75 unravelling: this isn't zero!
     Rcpp::Rcout << "OMP vcdb.size() = " << vcdb.size() << "\n";
     Rcpp::Rcout << "OMP map.size() = " << map.size() << "\n";
@@ -81,19 +81,19 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
     VecVecIntSz begin = vis_i;
     VecVecIntSz end = chunk_end_i;
 
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
 #endif
     const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin),
                                          false);
     chunk = falseComorbidChunk;
     for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
       // with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
       Rcpp::Rcout << "row: " << 1 + urow - begin << " of " << 1 + end - begin << "\n";
 #endif
       for (VecVecIntSz cmb = 0; cmb < num_comorbid; ++cmb) { // loop through icd codes for this visitId
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
         Rcpp::Rcout << "cmb = " << cmb << "\n";
         // with OpenMP, vcdb.size() gives massive number, but the correct value without OpenMP.
         Rcpp::Rcout << "vcdb length in lookupOneChunk = " << vcdb.size() << "\n";
@@ -112,7 +112,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
           if (found_it) {
             const ComorbidOut::size_type chunk_idx = num_comorbid
             * (urow - begin) + cmb;
-#ifdef ICD9_DEBUG
+#ifdef ICD_DEBUG
             chunk.at(chunk_idx) = true;
 #else
             chunk[chunk_idx] = true;
@@ -122,16 +122,16 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
         } // end loop through codes in one comorbidity
       } // end loop through all comorbidities
     } // end loop through visits
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "finished with one chunk\n";
 #endif
 
     // next block doesn't need to be single threaded(?), but doing so improves cache contention
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
 #pragma omp critical
 #endif
 {
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "writing a chunk beginning at: " << vis_i << "\n";
 #endif
   // write out calculated data to the output matrix (must sync threads here, hence omp critical
@@ -140,7 +140,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 }
   } // end parallel for
 
-#ifdef ICD9_DEBUG
+#ifdef ICD_DEBUG
   Rcpp::Rcout << "finished looking up all chunks in for loop\n";
 #endif
 }
@@ -151,7 +151,7 @@ ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
                                      const VecVecInt& map, const int chunkSize, const int ompChunkSize) {
   // initialize output matrix with all false for all comorbidities
   ComorbidOut out(vcdb.size() * map.size(), false);
-#ifdef ICD9_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "top level vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "top level map.size() = " << map.size() << "\n";
 #endif

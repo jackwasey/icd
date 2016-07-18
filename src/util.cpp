@@ -1,19 +1,19 @@
-// Copyright (C) 2014 - 2015  Jack O. Wasey
+// Copyright (C) 2014 - 2016  Jack O. Wasey
 //
-// This file is part of icd9.
+// This file is part of icd.
 //
-// icd9 is free software: you can redistribute it and/or modify
+// icd is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// icd9 is distributed in the hope that it will be useful,
+// icd is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "util.h"
@@ -21,9 +21,9 @@
 #include <Rcpp.h>
 #include <vector>
 #include <string>
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
 #include <omp.h>
-#ifdef ICD9_STD_PARALLEL
+#ifdef ICD_STD_PARALLEL
 #include <parallel/algorithm>
 #else
 #include <algorithm>
@@ -64,15 +64,7 @@ std::vector<std::string> trimCpp(std::vector<std::string> sv) {
   return sv;
 }
 
-// [[Rcpp::export]]
-bool assertFactorOrCharacter(SEXP x) {
-  if (!Rf_isString(x) && !Rf_isFactor(x)) {
-    Rcpp::stop("Must be a factor or character");
-  }
-  return true;
-}
-
-#ifdef ICD9_DEBUG
+#ifdef ICD_DEBUG
 void printCharVec(Rcpp::CharacterVector cv) {
   for (Rcpp::CharacterVector::iterator i=cv.begin(); i!=cv.end(); ++i) {
     Rcpp::String s = *i;
@@ -86,7 +78,7 @@ void printCharVec(Rcpp::CharacterVector cv) {
 // [[Rcpp::export]]
 int getOmpCores() {
   int cores = 0;
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
   cores = omp_get_num_procs();
 #endif
   return cores;
@@ -95,7 +87,7 @@ int getOmpCores() {
 // [[Rcpp::export]]
 int getOmpMaxThreads() {
   int maxthreads = 0;
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
   maxthreads = omp_get_max_threads();
 #endif
   return maxthreads;
@@ -104,7 +96,7 @@ int getOmpMaxThreads() {
 // [[Rcpp::export]]
 int getOmpThreads() {
   int threads = 0;
-#ifdef ICD9_OPENMP
+#ifdef ICD_OPENMP
   omp_sched_t sched;
   omp_get_schedule(&sched, &threads);
 #endif
@@ -112,14 +104,14 @@ int getOmpThreads() {
 }
 
 void debug_parallel() {
-#if defined(ICD9_OPENMP) && defined(ICD9_DEBUG_PARALLEL)
+#if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
   Rcpp::Rcout << "max threads per omp_get_schedule = " << getOmpMaxThreads() << ". ";
   Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
   Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << ". ";
   Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
 #else
-  Rcpp::Rcout << "ICD9_OPENMP is not defined\n";
+  Rcpp::Rcout << "ICD_OPENMP is not defined\n";
 #endif
 }
 
@@ -130,13 +122,13 @@ Rcpp::NumericVector randomMajorCpp(int	n) {
   return iv;
 }
 
-//' @title generate random short-form numeric icd9 codes
+//' @rdname icd9RandomShort
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
-  char buffer[5];
+  char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "%.0f", randoms[i]);
     out[i] = buffer;
@@ -144,13 +136,13 @@ std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' @title generate random short-form icd9 V codes
+//' @rdname icd9RandomShort
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
-  char buffer[5];
+  char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "V%.0f", randoms[i]);
     out[i] = buffer;
@@ -158,13 +150,13 @@ std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' @title generate random short-form icd9 E codes
+//' @rdname icd9RandomShort
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n = 5) {
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
-  char buffer[5];
+  char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "E%.0f", randoms[i]);
     out[i] = buffer;
@@ -172,17 +164,22 @@ std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n 
   return out;
 }
 
-//' @title generate random short-form icd9 E codes
-//' @description Very dirty pseudorandom by picking numeric, V or E based on modulo 3 of the number
+//' Generate random short-form ICD-9 codes
+//'
+//' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
+//' the number
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n = 5) {
+
   VecStr out(n);
   std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
-  char buffer[5];
-  for (std::vector<double>::size_type i = 0; i != n; ++i) {
+  std::vector<double> randoms2 = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 3));
+
+  char buffer[6];
+  for (std::vector<char>::size_type i = 0; i != n; ++i) {
     // N, V or E?
-    switch ((int)randoms[i] % 3) {
+    switch (((short) randoms2[i]) % 3) {
     case 0:
       sprintf(buffer, "%.0f", randoms[i]);
       break;
@@ -199,24 +196,28 @@ std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n =
   }
   return out;
 }
-//' @rdname fastIntToString
-//' @title fast convert integer vector to character vector
-//' @param x td::vector<int>
-//' @param bufferSize int if any input strings are longer than this number (default 16) there will be memory errors.
-//'   No checks done for speed.
+
+//' Fast convert integer vector to character vector
+//'
+//' Fast conversion from integer vector to character vector using C++
+//' @param x vector of integers
+//' @param bufferSize int if any input strings are longer than this number
+//'   (default 16) there will be memory errors. No checks done for speed.
 //' @examples
 //' \dontrun{
-//' pts <- randomPatients(1e7)
-//' # conclusion: buffer size matters little (so default to be more generous), and Rcpp version fastest.
-//' microbenchmark::microbenchmark(fastIntToStringStd(pts$visitId, buffer = 8),
-//'                                fastIntToStringStd(pts$visitId, buffer = 16),
-//'                                fastIntToStringStd(pts$visitId, buffer = 64),
-//'                                fastIntToStringRcpp(pts$visitId, buffer = 8),
-//'                                fastIntToStringRcpp(pts$visitId, buffer = 16),
-//'                                fastIntToStringRcpp(pts$visitId, buffer = 64),
-//'                                as.character(pts$visitId),
-//'                                asCharacterNoWarn(pts$visitId), times = 5)
+//' pts <- generate_random_pts(1e7)
+//' # conclusion: buffer size matters little (so default to be more generous),
+//' # and Rcpp version fastest.
+//' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
+//'                                fastIntToStringStd(pts$visit_id, buffer = 16),
+//'                                fastIntToStringStd(pts$visit_id, buffer = 64),
+//'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
+//'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
+//'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
+//'                                as.character(pts$visit_id),
+//'                                asCharacterNoWarn(pts$visit_id), times = 5)
 //' }
+//' @rdname fastIntToString
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> fastIntToStringStd(std::vector<int> x) {
@@ -245,33 +246,77 @@ Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
 }
 
 // [[Rcpp::export]]
-int callgrindStart(bool zerostats = false) {
-#ifdef ICD9_VALGRIND
-#ifdef ICD9_DEBUG
+int valgrindCallgrindStart(bool zerostats = false) {
+#ifdef ICD_VALGRIND
+#ifdef ICD_DEBUG
   Rcpp::Rcout << "Starting callgrind instrumentation...\n";
 #endif
   CALLGRIND_START_INSTRUMENTATION;
   if (zerostats) {
-#ifdef ICD9_DEBUG
     Rcpp::Rcout << "Zeroing callgrind stats.\n";
-#endif
     CALLGRIND_ZERO_STATS;
   }
 #endif
   return 0;
 }
 
+
 // [[Rcpp::export]]
-int valgrindCallgrindStart(bool zerostats = false) {
-#ifdef ICD9_VALGRIND
-#ifdef ICD9_DEBUG
-  Rcpp::Rcout << "Starting callgrind instrumentation...\n";
+int valgrindCallgrindStop() {
+#ifdef ICD_VALGRIND
+#ifdef ICD_DEBUG
+  Rcpp::Rcout << "Stopping callgrind instrumentation...\n";
 #endif
-  CALLGRIND_START_INSTRUMENTATION;
-  if (zerostats) {
-    Rcpp::Rcout << "Zeroing callgrind stats.\n";
-    CALLGRIND_ZERO_STATS;
-  }
+  CALLGRIND_STOP_INSTRUMENTATION;
 #endif
   return 0;
+}
+
+bool icd9CompareStrings(std::string a, std::string b) {
+  const char * acs = a.c_str();
+  const char * bcs = b.c_str();
+  // most common is numeric, so deal with that first:
+  if (*acs < 'A')
+    return strcmp(acs, bcs) < 0;
+  // if the second char is now  a number, then we can immediately return false
+  if (*bcs < 'A')
+    return false;
+  // V vs E as first or both characters is next
+  if (*acs == 'V' && *bcs == 'E')
+    return true;
+  if (*acs == 'E' && *bcs == 'V')
+    return false;
+  // now cover both V codes or both E codes
+  return strcmp(acs, bcs) < 0;
+}
+
+bool icd9ComparePair(pas a, pas b) {
+  std::string af = a.first;
+  std::string bf = b.first;
+  //return icd9Comp(af, bf);
+  return icd9CompareStrings(af, bf);
+}
+
+// [[Rcpp::export(icd9_sort_cpp)]]
+std::vector<std::string> icd9SortCpp(std::vector<std::string> x) {
+  std::sort(x.begin(), x.end(), icd9CompareStrings);
+  return x;
+}
+
+// add one because R indexes from 1, not 0
+std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) { return p.second + 1; }
+
+// [[Rcpp::export(icd9_order_cpp)]]
+std::vector<std::size_t> icd9OrderCpp(std::vector<std::string> x) {
+
+  std::vector<std::pair<std::string, std::size_t> > vp;
+  std::vector<std::size_t> out;
+  out.reserve(x.size());
+  vp.reserve(x.size());
+  for (std::size_t i = 0; i != x.size(); ++i) {
+    vp.push_back(std::make_pair(x[i], i));
+  }
+  std::sort(vp.begin(), vp.end(), icd9ComparePair);
+  std::transform(vp.begin(), vp.end(), std::back_inserter(out), getSecondPlusOne);
+  return out;
 }

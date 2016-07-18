@@ -1,6 +1,10 @@
 #!/bin/bash
-ICD9_HOME=$HOME/Documents/RProjects/icd9
-cd $ICD9_HOME
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+IFS=$'\n\t'
+
+ICD_HOME=$HOME/Documents/RProjects/icd
+cd $ICD_HOME
 R -d "valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -v" -e "library(devtools); library(testthat); test()"
 #R -d "valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -v" -e "library(devtools); library(testthat); check(cran = TRUE)"
 

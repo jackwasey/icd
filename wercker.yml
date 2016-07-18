@@ -1,10 +1,36 @@
-#box: jackwasey/r-ubsan-clang-3.7-libcxx
-#box: rocker/r-devel-san
-#box: rocker/r-devel-ubsan-clang
 box: rocker/hadleyverse
+#box: jackwasey/r-devel-ubsan-gcc
+command-timeout: 60
+no-response-timeout: 60
 build:
   steps:
-    - jimhester/r-dependencies
-    - jimhester/r-check
-#    - jimhester/r-lint
-    - jimhester/r-coverage
+    - install-packages:
+        packages: r-cran-codetools
+    - script:
+        name: icd test environment
+        code: |
+            export ICD_SLOW_TESTS=true
+            rm .Rinstignore  # install everything for testing
+            sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
+    - jimhester/r-dependencies:
+        github_packages: jimhester/covr
+    - jimhester/r-lint
+    - jimhester/r-check:
+        warnings_are_errors: FALSE
+# I think making warnings into errors gives false positives for latex warnings, even if R CMD check is okay
+    - script:
+        name: debug information before codecov with covr
+        code: |
+            ls -R
+            echo $ICD_SLOW_TESTS
+            cat ./icd.Rcheck/tests/test-*.Rout*
+    - script:
+        name: run covr for codecov.io
+        code: |
+            Rscript -e "library(covr); codecov(quiet = FALSE, line_exclusions = list('inst/include/icd_RcppExports.h', 'R/RcppExports.R', 'src/RcppExports.cpp', 'R/benchmark.R'))"
+    - script:
+        name: debug information after codecov with covr
+        code: |
+            ls -R
+            echo $ICD_SLOW_TESTS
+            cat ./icd.Rcheck/tests/test-*.Rout*

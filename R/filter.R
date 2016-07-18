@@ -1,129 +1,185 @@
-# Copyright (C) 2014 - 2015  Jack O. Wasey
+# Copyright (C) 2014 - 2016  Jack O. Wasey
 #
-# This file is part of icd9.
+# This file is part of icd.
 #
-# icd9 is free software: you can redistribute it and/or modify
+# icd is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
-# icd9 is distributed in the hope that it will be useful,
+# icd is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 # GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License
-# along with icd9. If not, see <http:#www.gnu.org/licenses/>.
+# along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @title Filter ICD-9 codes by validity.
-#' @description Filters a data.frame of patients for valid or invalid ICD-9 codes
-#' @template icd9df
-#' @template icd9field
-#' @template isShort
-#' @param invert single logical value, if TRUE will return invalid instead of valid rows.
+#' Filter ICD codes by validity.
+#'
+#' Filters a data.frame of patients for valid or invalid ICD-9
+#'   codes
+#' @param x input vector of ICD codes
+#' @template icd_name
+#' @template short_code
+#' @template invert
+#' @param ... arguments passed to the class-specific functions
+#' @keywords manip
 #' @export
-icd9FilterValid <- function(icd9df, icd9Field = NULL,
-                            isShort =  NULL, invert = FALSE) {
-  icd9Field <- getIcdField(icd9df, icd9Field)
-  if (is.null(isShort)) isShort <- icd9GuessIsShort(icd9df[[icd9Field]])
-  assertDataFrame(icd9df, min.cols = 1, col.names = "named")
-  assertFlag(isShort)
-  assertFlag(invert)
-  v <- icd9IsValid(icd9 = icd9df[[icd9Field]], isShort = isShort) != invert
-  icd9df[v, ]
+icd_filter_valid <- function(x, icd_name = get_icd_name(x),
+                             short_code = icd_guess_short(.subset2(x, icd_name)), invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  # don't UseMethod because the data frame itself doesn't have an ICD version class
+  icd_ver <- icd_guess_version(.subset2(x, icd_name))
+  if (icd_ver == "icd9")
+    icd9_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = invert)
+  else if (icd_ver == "icd10")
+    icd10_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = invert)
+  else
+    stop("could not identify ICD code type")
 }
 
-#' @title Filter ICD-9 codes by invalidity.
-#' @description Filters a data.frame of patients for valid or invalid ICD-9 codes
-#' @template icd9df
-#' @template icd9field
-#' @template isShort
-#' @param invert single logical value, if TRUE will return valid instead of invalid rows.
+#' @describeIn icd_filter_valid Filter invalid rows from data frame of patients with ICD codes.
+#'   This can also be achieved with \code{icd_filter_valid} and \code{invert = TRUE}
 #' @export
-icd9FilterInvalid <- function(icd9df, icd9Field = NULL, isShort = NULL, invert = FALSE)
-  icd9FilterValid(icd9df, icd9Field, isShort, invert = !invert)
+icd_filter_invalid <- function(x, icd_name = get_icd_name(x), short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
+  icd_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
+}
 
+#' @describeIn icd_filter_valid Filter data frame for valid ICD codes
+#' @export
+icd9_filter_valid <- function(x, icd_name = get_icd_name(x), short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  x[icd_is_valid.icd9(as_char_no_warn(.subset2(x, icd_name)), short_code = short_code) != invert, ]
+}
 
-#' @name icd9FilterPoa
-#' @title Filters data frame based on present-on-arrival flag
-#' @description Present On Arrival (POA) is not a simple flag, since many codes
-#'   are exempt, unspecified, or unknown. Therefore, two options are given: get
-#'   all the comorbidities where the POA flag was definitely -ve, coded as "N"
-#'   or definitely +ve and coded as "Y". Negating one set won't give the other
-#'   set unless all codes were either Y or N. #describeIn icd9Comorbid
-#' @template icd9df
-#' @template poaField
+#' @rdname icd_filter_valid
+#' @export
+icd10_filter_valid <- function(x, icd_name = get_icd_name(x),
+                                   short_code = icd_guess_short(x[[icd_name]]),
+                                   invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  x[icd_is_valid.icd10(as_char_no_warn(.subset2(x, icd_name)), short_code = short_code) != invert, ]
+
+}
+
+#' @rdname icd_filter_valid
+#' @export
+icd9_filter_invalid <- function(x, icd_name = get_icd_name(x),
+                                    short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  icd9_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
+}
+
+#' @rdname icd_filter_valid
+#' @export
+icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
+                                   short_code = icd_guess_short(x[[icd_name]]),
+                                   invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(icd_name)
+  assert_flag(short_code)
+  assert_flag(invert)
+  icd10_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
+}
+
+#' Filters data frame based on present-on-arrival flag
+#'
+#' Present On Arrival (POA) is not a simple flag, since many codes are exempt,
+#' unspecified, or unknown. Therefore, two options are given: get all the
+#' comorbidities where the POA flag was definitely negative, coded as 'N' or
+#' definitely positive and coded as 'Y'. Negating one set won't give the other set
+#' unless all codes were either Y or N.
+#' @param x input vector of ICD codes
+#' @template poa_name
 #' @template poa
 #' @examples
 #' \dontrun{
-#' # using magrittr is beautiful:
-#' library("magrittr", quietly = TRUE, warn.conflicts = FALSE)
+#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' myData <- data.frame(
-#'   visitId = c("v1", "v2", "v3", "v4"),
+#'   visit_id = c("v1", "v2", "v3", "v4"),
 #'   diag = c("39891", "39790", "41791", "4401"),
 #'   poa = c("Y", "N", NA, "Y"),
 #'   stringsAsFactors = FALSE
 #' )
-#' myData %>% icd9FilterPoaNotNo() %>% icd9ComorbidAhrq
+#' myData %>% icd_filter_poa_not_no() %>% icd_comorbid_ahrq()
 #' # can fill out named fields also:
-#' myData %>% icd9FilterPoaYes(poaField="poa") %>%
-#'   icd9ComorbidAhrq(icd9Field = "diag", visitId = "visitId", isShort = TRUE)
-#' # can call the core icd9Comorbid function with an arbitrary mapping
+#' myData %>% icd_filter_poa_yes(poa_name="poa") %>%
+#'   icd_comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
+#' # can call the core icd_comorbid() function with an arbitrary mapping
 #' myData %>%
-#' icd9FilterPoaYes() %>%
-#' icd9Comorbid(icd9Field = "diag", visitId = "visitId",
-#'   icd9Mapping = quanElixComorbid,
-#'  isShortMapping = TRUE)
+#'   icd_filter_poa_yes %>%
+#'   icd_comorbid(icd_name = "diag", visit_name = "visit_id",
+#'     map = icd_map_quan_elix, short_mapping = TRUE)
 #' }
+#' @keywords manip
 #' @export
-icd9FilterPoa <- function(icd9df, poaField = "poa", poa = icd9PoaChoices) {
+icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
   poa <- match.arg(poa)
-  assertDataFrame(icd9df, min.cols = 1, col.names = "named")
-  assertString(poaField, na.ok = FALSE)
-  stopifnot(poaField %in% names(icd9df))
-  if (poa == "yes") return(icd9FilterPoaYes(icd9df, poaField = poaField))
-  if (poa == "no") return(icd9FilterPoaNo(icd9df, poaField = poaField))
-  if (poa == "notYes") return(icd9FilterPoaNotYes(icd9df, poaField = poaField))
-  #if (poa == "notNo")
-  icd9FilterPoaNotNo(icd9df, poaField = poaField)
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(poa_name)
+  stopifnot(poa_name %in% names(x))
+  switch(poa,
+         "yes" = icd_filter_poa_yes(x, poa_name = poa_name),
+         "no" = icd_filter_poa_no(x, poa_name = poa_name),
+         "notYes" = icd_filter_poa_not_yes(x, poa_name = poa_name),
+         "notNo" = icd_filter_poa_not_no(x, poa_name = poa_name)
+  )
 }
 
-.icd9FilterPoa <- function(icd9df, poaField, choice, negative = FALSE) {
-  assertDataFrame(icd9df, min.cols = 1, col.names = "named")
-  assertString(poaField, na.ok = FALSE)
-  assertCharacter(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
-  assertFlag(negative)
-  stopifnot(poaField %in% names(icd9df))
-  p <- icd9df[[poaField]]
-  if (negative)
-    return(icd9df[is.na(p) | p %nin% choice, names(icd9df) != poaField])
-  icd9df[!is.na(p) & p %in% choice, names(icd9df) != poaField]
+.icd_filter_poa <- function(x, poa_name, choice, invert = FALSE) {
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_string(poa_name, na.ok = FALSE)
+  assert_character(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
+  assert_flag(invert)
+  stopifnot(poa_name %in% names(x))
+  p <- x[[poa_name]]
+  if (invert)
+    return(x[is.na(p) | p %nin% choice, names(x) != poa_name])
+  x[!is.na(p) & p %in% choice, names(x) != poa_name]
 }
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
-#'   explicitly "Yes."
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#'   explicitly 'Yes.'
 #' @export
-icd9FilterPoaYes <- function(icd9df, poaField = "poa")
-  .icd9FilterPoa(icd9df, poaField, choice = c("Y", "y"), negative = FALSE)
+icd_filter_poa_yes <- function(x, poa_name = "poa") {
+  .icd_filter_poa(x, poa_name, choice = c("Y", "y"), invert = FALSE)
+}
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
-#'   explicitly "No."
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#'   explicitly 'No.'
 #' @export
-icd9FilterPoaNo <- function(icd9df, poaField = "poa")
-  .icd9FilterPoa(icd9df, poaField, choice = c("N", "n"), negative = FALSE)
+icd_filter_poa_no <- function(x, poa_name = "poa") {
+  .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = FALSE)
+}
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
-#'   anything but "No." This includes unknown, exempt, other codes, and of
-#'   course all those marked "Yes."
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#'   anything but 'No.' This includes unknown, exempt, other codes, and of
+#'   course all those marked 'Yes.'
 #' @export
-icd9FilterPoaNotNo <- function(icd9df, poaField = "poa")
-  .icd9FilterPoa(icd9df, poaField, choice = c("N", "n"), negative = TRUE)
+icd_filter_poa_not_no <- function(x, poa_name = "poa") {
+  .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = TRUE)
+}
 
-#' @describeIn icd9FilterPoa Select rows where Present-on-Arrival flag is
-#'   anything byt "Yes." This would group exempt, unknown and other codes under
-#'   "Not POA" which is unlikely to be a good choice, since exempt codes, of
+#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#'   anything but 'Yes.' This would group exempt, unknown and other codes under
+#'   'Not POA' which is unlikely to be a good choice, since exempt codes, of
 #'   which there are a quite large number, tend to describe chronic or
 #'   out-of-hospital characteristics.
 #' @export
-icd9FilterPoaNotYes <- function(icd9df, poaField = "poa")
-  .icd9FilterPoa(icd9df, poaField, choice = c("Y", "y"), negative = TRUE)
+icd_filter_poa_not_yes <- function(x, poa_name = "poa") {
+  .icd_filter_poa(x, poa_name, choice = c("Y", "y"), invert = TRUE)
+}

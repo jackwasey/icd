@@ -1,19 +1,19 @@
-// Copyright (C) 2014 - 2015  Jack O. Wasey
+// Copyright (C) 2014 - 2016  Jack O. Wasey
 //
-// This file is part of icd9.
+// This file is part of icd.
 //
-// icd9 is free software: you can redistribute it and/or modify
+// icd is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// icd9 is distributed in the hope that it will be useful,
+// icd is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with icd9. If not, see <http://www.gnu.org/licenses/>.
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 #ifndef LOCAL_H_
 #define LOCAL_H_
@@ -30,20 +30,20 @@ extern "C" {
 }
 
 // these are feature requests: if not available they are disabled.
-#define ICD9_OPENMP
-// #define ICD9_STD_PARALLEL // don't use right now: see comment below
+#define ICD_OPENMP
+// #define ICD_STD_PARALLEL // don't use right now: see comment below
 
 // debugging:
-// #define ICD9_DEBUG
-// #define ICD9_DEBUG_TRACE
-// #define ICD9_DEBUG_SETUP
-// #define ICD9_DEBUG_SETUP_TRACE
-// #define ICD9_DEBUG_PARALLEL
-// #define ICD9_VALGRIND
+// #define ICD_DEBUG
+// #define ICD_DEBUG_TRACE
+// #define ICD_DEBUG_SETUP
+// #define ICD_DEBUG_SETUP_TRACE
+// #define ICD_DEBUG_PARALLEL
+// #define ICD_VALGRIND
 
 // enabling this stops the package compiling, but is useful for testing purely
 // in C++. See tools/standalone.sh
-// #define ICD9_STANDALONE
+// #define ICD_STANDALONE
 
 // not enough to test whether header is available, because it may be disabled in
 // R: #ifdef _OPENMP
@@ -51,25 +51,25 @@ extern "C" {
   #include <omp.h>
   // openmp is required for GLIBC standard library parallel alternatives:
   // now was parallel mode STL requested?
-  #ifdef ICD9_STD_PARALLEL
+  #ifdef ICD_STD_PARALLEL
   // WORKING_PARALLEL_ALGORITHM is defined by configure script, but at present
   // always disabled because it leads to ?false positive 'abort' and 'printf'
   // found during R CMD check --as-cran
     #ifndef WORKING_PARALLEL_ALGORITHM
   // but not available, so disable
-      #undef ICD9_STD_PARALLEL
+      #undef ICD_STD_PARALLEL
     #endif
   #endif
 #else
   // OpenMP requested, but not available
-  #undef ICD9_OPENMP
+  #undef ICD_OPENMP
 #endif
 
-#ifdef ICD9_VALGRIND
+#ifdef ICD_VALGRIND
   #ifdef HAVE_VALGRIND_VALGRIND_H
     #include <valgrind/callgrind.h>
   #else
-    #undef ICD9_VALGRIND
+    #undef ICD_VALGRIND
   #endif
 #endif
 
@@ -101,7 +101,7 @@ void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
 ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
 		const VecVecInt& map, const int chunkSize, const int ompChunkSize);
 
-#if (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
+#if (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #include <iostream>
 // only include Rcpp::Rcout if debugging: R won't like cout so we should not do
 // this unless debugging. not so easy to get an iterator for any std container
@@ -138,7 +138,7 @@ void printIt(std::map<MK,MV> v) {
 	Rcpp::Rcout.flush();
 }
 
-#endif // end (defined ICD9_DEBUG || defined ICD9_DEBUG_SETUP)
+#endif // end (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 
 #endif // LOCAL_H_
 

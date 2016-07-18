@@ -14,6 +14,4 @@
 
 SEXP getRListOrDfElement(SEXP list, const char *str);
 
-void delanychar(char* str, char c);
-
 #endif // CUTIL_H_

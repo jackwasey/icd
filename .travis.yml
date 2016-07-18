@@ -1,52 +1,56 @@
+# https://docs.travis-ci.com/user/languages/r
 language: r
+dist: trusty
+sudo: false
+cache: packages
 
-sudo: required
+addons:
+  apt:
+    packages:
+      r-cran-rodbc
 
-warnings_are_errors: false
+r:
+  - oldrel # when oldrel = 3.1, there are S3 method problems I can't debug
+  - release
+  - devel
 
-env: R_CHECK_CRAN_INCOMING_=FALSE
+# compiler:
+#   - gcc
+#   - clang
 
-r_github_packages:
- - jimhester/covr
- - hadley/testthat
+matrix:
+  allow_failures:
+    - r: oldrel
+    - os: osx
 
-# debian package names: libxml2-dev libssl-dev r-base-core r-cran-xml r-cran-ggplot2 r-cran-rcurl r-cran-bitops r-cran-brew r-cran-rcolorbrewer r-cran-rcpp r-cran-dichromat r-cran-munsell r-cran-checkmate r-cran-evaluate r-cran-plyr r-cran-gtable r-cran-reshape2 r-cran-scales r-cran-proto r-cran-catools r-cran-testthat r-cran-memoise r-cran-digest r-cran-xtable
-# at least some of the following don't have debian packages (at time of writing)
-r_binary_packages:
- - devtools
- - XML
- - testthat
- - Rcpp
- - ggplot2
- - brew
- - rcolorbrewer
- - dichromat
- - munsell
- - checkmate
- - scales
- - proto
- - catools
- - evaluate
- - plyr
- - gtable
- - reshape2
- - knitr
- - microbenchmark
- - profr
- - xtable
- - magrittr
- - memoise
- - profr
- - digest
- - rmarkdown
+repos:
+  CRAN: https://cloud.r-project.org
+
+warnings_are_errors: true
+
+# seperate lines seems to mean the whole build is repeated each line.
+# As of 2013 at least, travis offers ~1.5 cores per process
+env:
+  - OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable"
+  - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native"
+
+before_script:
+ - ls -R
+ - rm .Rinstignore  # do install everything for testing
+ - sed -i.old '/[Dd]ata/d' .Rbuildignore # do include data for testing
+ - export R_CHECK_CRAN_INCOMING_=FALSE
+ - export ICD_SLOW_TESTS=TRUE
+ - export _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 after_success:
- - Rscript -e 'devtools::install()'
- - Rscript -e 'devtools::session_info()'
- - env: COVR=true
- #- Rscript -e 'library(covr); coveralls(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R", quiet = FALSE)'
- - Rscript -e 'library(covr); codecov(exclusions = list("R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"), quiet = FALSE)'
-
+# environment is copied forward from previous, so slow tests are on. Repeat anyway while not working!
+# coverage does re-install the package (it needs to rebuild with debugging/coverage compilation), so there is potential to change .Rinstignore and .Rbuildignore
+#  - export ICD_SLOW_TESTS=TRUE
+  - ls -R
+  - cat ./icd.Rcheck/tests/test-all.Rout
+  - Rscript -e 'library(covr); coveralls(quiet = FALSE, line_exclusions = list("inst/include/icd_RcppExports.h", "R/RcppExports.R", "src/RcppExports.cpp", "R/benchmark.R"))'
+# TODO automatically show vignettes coverage once regular coverage is working fully
+# - Rscript -e 'library(covr); options(warn = -1);  package_coverage(type = "vignette", quiet = FALSE, exclusions = c("inst/include/icd_RcppExports.h", "R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'
 
 notifications:
   email:

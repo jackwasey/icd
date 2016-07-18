@@ -1,0 +1,89 @@
+---
+title: "ICD-10 comorbidities"
+author: "Jack O. Wasey"
+date: '`r format(Sys.time(), "%Y-%m-%d")`'
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{ICD-10 comorbidities}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+<!--
+Copyright (C) 2014 - 2016  Jack O. Wasey
+
+This file is part of icd.
+
+icd is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+icd is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with icd. If not, see <http:#www.gnu.org/licenses/>.
+-->
+
+
+
+```{r setup, include=FALSE}
+
+suppressWarnings({
+  suppressPackageStartupMessages({
+    loadNamespace("knitr") # for opts_chunk only
+    library(icd)
+    library(magrittr)
+    })
+  })
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+
+```
+
+This package now includes ICD-10 support, with some sample ICD-10-CM codes, and comorbidity mappings from ICD-10 codes to comorbidities. The sample data are from http://www.ustur.wsu.edu/database/ where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
+
+The sample data is in the 'long' format, i.e. multiple rows per case
+
+```{r uranium-long}
+uranium_pathology[1:10, ]
+```
+
+We can convert the date from long to wide format easily. This is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using dplyr and friends for this manipulation.
+
+```{r uranium-wide}
+uranium_pathology %>% icd_long_to_wide %>% head
+```
+
+Now map these diagnoses to disease groups as defined by Quan et al:
+```{r comorbidities}
+quan_comorbidities <- icd_comorbid(uranium_pathology, icd10_map_quan_elix)
+# see the first few rows and columns:
+quan_comorbidities[1:6, 3:10]
+```
+
+The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings in this package. The ICD-9 mappings included all possible permutations of child codes. Since ICD-10 codes contain letters, and are seven characters long, this became impractical. Therefore, the current mappings include only codes for the most recent update of ICD-10-CM. The code which assigns comorbidities for ICD-10 therefore doesn't rely on all the possible codes being listed in the mappings, so it will (more slowly) search for each possible parent of the given code, up to the three digit 'major' (e.g. if Cholera was in the comorbidity mapping, then A0034212647 would eventually match A00)
+
+```{r cholera}
+# create trivial comorbidity map:
+cholera_typhoid_map <- list(cholera = "A00", typhoid = "A01")
+patients <- data.frame(patient = c("0001", "0001", "0002"), code = c("A001234567", "A01", "A019"))
+icd_comorbid(patients , map = cholera_typhoid_map)
+```
+
+Here are the codes for hypertension with complications from Quan et al. Note that the vector has class `icd10` and has the attribute `icd_short_diag` indicating there are no decimal point delimiters in the codes.
+```{r htncx}
+icd10_map_quan_elix$HTNcx
+```
+
+For more information on working with ICD-10 codes, see the introduction vignette, and function examples. E.g.
+```
+?icd_comorbid
+?icd_explain
+```

@@ -4,4 +4,6 @@
 *.tex
 *.synctex.gz
 *.log
-
+.build.timestamp
+*.R
+*.html

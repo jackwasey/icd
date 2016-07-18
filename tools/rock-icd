@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Copyright (C) 2014 - 2016  Jack O. Wasey
+#
+# This file is part of icd.
+#
+# icd is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd. If not, see <http:#www.gnu.org/licenses/>.
+
+# http://redsymbol.net/articles/unofficial-bash-strict-mode/
+set -euo pipefail
+IFS=$'\n\t'
+
+TMP="/tmp/icd-docker"
+mkdir -p $TMP
+
+# check package using given (local) docker image. Won't work with straight rocker/r-base etc.
+: ${ICD_HOME:=$HOME/Documents/RProjects/icd}
+DOCKER_IMAGE=${1:-}
+if [[ -z "$DOCKER_IMAGE" ]]; then
+   echo "usage: $0 docker directory to build and run"
+   exit 1
+fi
+
+ALT_CMD=${2:-}
+
+# strip directory symbol to get the docker image name from a dir with trailing slash
+IM_NM=`echo $DOCKER_IMAGE | tr -d "/"`
+
+DOCKER_IMAGE_FULL_NAME=jackwasey/$IM_NM
+
+TOOLS_DIR=$ICD_HOME/tools
+IM=$TMP
+DOCKER_SCRIPT=build_install_check_in_docker.sh
+INSTALL_R_SCRIPT=install_r_packages.R
+
+if [ ! -d "$IM" ]; then
+  echo "Docker image should be a directory under tools in the icd/icd9 project."
+  exit 1
+fi
+
+cp -v $TOOLS_DIR/Dockerfile.template $IM/Dockerfile
+# https://stackoverflow.com/questions/584894/sed-scripting-environment-variable-substitution
+sed -i 's@DOCKER_IMAGE_FULL_NAME@'"$DOCKER_IMAGE_FULL_NAME"'@' $IM/Dockerfile
+cp -v $TOOLS_DIR/$DOCKER_SCRIPT $IM
+cp -v $TOOLS_DIR/$INSTALL_R_SCRIPT $IM
+docker build -t $IM_NM $IM || {
+  rm -f $IM/$DOCKER_SCRIPT
+  rm -f $IM/install_r_packages.R
+}
+rm -f $IM/Dockerfile
+rm -f $IM/$DOCKER_SCRIPT
+rm -f $IM/$INSTALL_R_SCRIPT
+rmdir $TMP
+docker run --rm -ti $IM_NM $ALT_CMD
