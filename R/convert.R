@@ -316,7 +316,7 @@ icd_short_to_decimal.icd10 <- function(x) {
   # todo: these could/should be seperate functions
   out <- str_sub(x, 0, 3) # majors
   minors <- str_sub(x, 4)
-  out[minors != ""] <- paste0(out, ".", minors)
+  out <- ifelse(minors != "", paste0(out, ".", minors), out)
   icd10(as.icd_decimal_diag(out)) # not as.icd10
 }
 
