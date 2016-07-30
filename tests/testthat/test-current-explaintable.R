@@ -51,35 +51,35 @@ test_that("condensing icd_explain_table generates correct columns", {
                     stringsAsFactors = FALSE)
 
   expect_identical(
-    condense_explain_table_to_majors_worker(dat),
+    condense_explain_table_worker(dat),
     structure(
       list(code = structure(1L, .Label = "123", class = "factor"), condensed_codes = "123, 123.4", condensed_num = 2L),
       .Names = c("three_digit", "condensed_codes", "condensed_num"),
       row.names = c(NA, -1L), class = "data.frame")
   )
-  expect_identical(condense_explain_table_to_majors_worker(dat)$condensed_num, 2L)
+  expect_identical(condense_explain_table_worker(dat)$condensed_num, 2L)
 
   dat <- data.frame(code = c("123", "123.4"),
                     three_digit = factor(c("123", "123")),
                     stringsAsFactors = FALSE)
-  expect_identical(condense_explain_table_to_majors_worker(dat)$condensed_num, 2L)
+  expect_identical(condense_explain_table_worker(dat)$condensed_num, 2L)
 
   dat <- data.frame(code = c("123.3", "123.4"),
                     three_digit = factor(c("123", "123")),
                     stringsAsFactors = FALSE)
-  expect_identical(condense_explain_table_to_majors_worker(dat)$condensed_num, 2L)
+  expect_identical(condense_explain_table_worker(dat)$condensed_num, 2L)
 
   dat <- data.frame(code = c("789.0", "123.4"),
                     three_digit = factor(c("789", "123")),
                     stringsAsFactors = FALSE)
-  res <- condense_explain_table_to_majors_worker(dat)
+  res <- condense_explain_table_worker(dat)
   expect_is(res$condensed_num, "integer")
   expect_identical(dim(res), c(0L, 3L))
 
   dat <- data.frame(code = c("radish", "feral"),
                     three_digit = factor(c("goniatite", "slalom")),
                     stringsAsFactors = FALSE)
-  res <- condense_explain_table_to_majors_worker(dat)
+  res <- condense_explain_table_worker(dat)
   expect_is(res$condensed_num, "integer")
   expect_identical(dim(res), c(0L, 3L))
 
@@ -87,12 +87,12 @@ test_that("condensing icd_explain_table generates correct columns", {
   dat <- data.frame(code = c("radish", NA),
                     three_digit = factor(c("goniatite", NA)),
                     stringsAsFactors = FALSE)
-  expect_identical(dim(condense_explain_table_to_majors_worker(dat)), c(0L, 3L))
+  expect_identical(dim(condense_explain_table_worker(dat)), c(0L, 3L))
 
   dat <- data.frame(code = c("carvedilol", NA),
                     three_digit = factor(c(NA, NA)),
                     stringsAsFactors = FALSE)
-  expect_identical(nrow(condense_explain_table_to_majors_worker(dat)), 0L)
+  expect_identical(nrow(condense_explain_table_worker(dat)), 0L)
 })
 
 test_that("icd_explain_table num_condense sum after condense equals input length", {

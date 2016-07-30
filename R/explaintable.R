@@ -78,7 +78,7 @@ icd_explain_table.icd10 <- function(...) {
   icd_explain_table.icd10cm(...)
 }
 
-# JW: these highlight the need for as.icd_short_code to convert if not already
+# TODO: these highlight the need for as.icd_short_code to convert if not already
 # short. icd_short_code(x) can just set the attr
 shortcode_icd9 <- function(x, short_code = icd_guess_short(x)) {
   if (!short_code) icd_decimal_to_short.icd9(x) else x
@@ -101,16 +101,11 @@ icd_explain_table_worker <- function(x, hierarchy, short_code, condense,
   assert_flag(condense)
   assert_flag(brief)
   assert_flag(warn)
-  #
-  #   outcols <- c("code", "shortcode", "three_digit", "majorcode", "ismajor",
-  #                "major_desc", "long_desc", "short_desc", "validicd9", "validicd10")
-  #   if (!brief) outcols <- c(outcols,  "chapter", "sub_chapter")
-  #   if (condense) outcols <- c(outcols, "condensedcodes", "numcondensed")
 
   xs <- if (!short_code) icd_decimal_to_short.icd9(x) else x
 
   exptable <- merge(data.frame(code = xs, stringsAsFactors = FALSE), hierarchy, all.x = TRUE)
-  # merge has reordered... exptable[["code"]] <- x
+  # merge has reordered...
   exptable[["is_major"]] <- exptable[["three_digit"]] == exptable[["code"]]
   exptable[["valid_icd9"]] <- icd_is_valid.icd9(xs, short_code = TRUE)
   exptable[["valid_icd10"]] <- icd_is_valid.icd10(xs, short_code = TRUE)
@@ -154,7 +149,7 @@ icd_explain_table.icd10cm <- function(x, short_code = icd_guess_short(x),
 #' input. Size of the output will also be different if any condensing was done.
 #' @keywords internal
 condense_explain_table <- function(x) {
-  condensed_majors <- condense_explain_table_to_majors_worker(x)
+  condensed_majors <- condense_explain_table_worker(x)
   if (nrow(condensed_majors) == 0) {
     x[["condensed_codes"]] <- x[["code"]]
     x[["condensed_num"]] <- 1L
@@ -170,20 +165,11 @@ condense_explain_table <- function(x) {
   out
 }
 
-#' condense to only major codes
-#'
-#' condense to major codes, even when major not present in the input data
-#' @keywords internal
-condense_explain_table_to_majors <- function(x, hierarchy) {
-  condensed <- condense_explain_table_to_majors_worker(x)
-  merge(hierarchy, condensed, by = "code")
-}
-
 #' generate condensed code and condensed number columns
 #'
 #' @return details for condesable rows
 #' @keywords internal
-condense_explain_table_to_majors_worker <- function(x) {
+condense_explain_table_worker <- function(x) {
   # we can only condense when we have three_digit major
   x <- x[!is.na(x[["three_digit"]]), ]
   if (nrow(x) == 0) return(data.frame())
