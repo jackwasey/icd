@@ -45,12 +45,15 @@
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' icd_explain(icd9_map_ahrq$CHF[1:3] %>% icd_condense)
 #' @return data frame, or list of data frames, with fields for ICD-9 code, name
-#'   and description
+#'   and description. There is no guarantee on the order of the returned
+#'   descriptions. \code{icd_explain_table} is designed to provide results in a
+#'   reliable order (when not condensing codes, at least).
 #' @export
 icd_explain <- function(...)
   UseMethod("icd_explain")
 
-#' @describeIn icd_explain Explain ICD codes from a character vector, guessing ICD version
+#' @describeIn icd_explain Explain ICD codes from a character vector, guessing
+#'   ICD version
 #' @export
 #' @keywords internal
 icd_explain.default <- function(x, short_code = icd_guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
