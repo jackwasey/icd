@@ -23,10 +23,10 @@ FROM DOCKER_IMAGE_FULL_NAME
 ## install some libraries and supporting binaries, some of which must come from unstable (sid), and not the testing repo which is the default in the r-devel base rocker image.
 RUN apt-get install -y -t unstable unixodbc-dev
 
-ADD install_r_packages.R /tmp
+# Use R, not R-devel
+RUN Rscript -e "install.packages(c('codetools', 'devtools', 'testthat', 'Rcpp', 'rcolorbrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'catools', 'evaluate', 'plyr', 'knitr', 'microbenchmark', 'profr', 'xtable', 'rmarkdown', 'fastmatch', 'roxygen2', 'RODBC', 'xml2'), INSTALL_opts = '--no-byte-compile')"
+
 ADD build_install_check_in_docker.sh /tmp
-# use R (I didn't build my image to use Rdevel)
-RUN Rscript /tmp/install_r_packages.R
 
 ENV GIT_BRANCH master
 ENV R_CMD R

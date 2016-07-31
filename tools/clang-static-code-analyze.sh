@@ -5,6 +5,8 @@ IFS=$'\n\t'
 #--use-c++=/usr/local/bin/clang++ \
 #--use-cc=/usr/local/bin/clang \
 
+# alternative is to set CXX and CC to scan-build
+
 scan-build -analyze-headers \
 	clang++ -g \
 		-I/usr/share/R/include \
