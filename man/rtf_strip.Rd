@@ -13,5 +13,9 @@ rtf_strip(x)
 Take a vector of character strings containing RTF, replace each \\tab with a
 space and eradicate all other RTF symbols
 }
+\details{
+just for \\tab, replace with space, otherwise, drop rtf tags entirely
+}
 \keyword{internal}
+\keyword{manip}
 

@@ -102,9 +102,10 @@ unzip_to_data_raw <- function(url, file_name, offline = TRUE, verbose = FALSE) {
 
 #' @rdname unzip_to_data_raw
 #' @keywords internal file
-download_to_data_raw <- function(url,
-                                 file_name = str_extract(url, "[^/]*$"),
-                                 offline = TRUE) {
+download_to_data_raw <- function(
+  url,
+  file_name = regmatches(url, regexpr("[^/]*$", url)),
+  offline = TRUE) {
   assert_string(url)
   assert_string(file_name)
   assert_flag(offline)

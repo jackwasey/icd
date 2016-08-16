@@ -31,13 +31,12 @@ valid) code in response.
 \examples{
 \dontrun{
 library(microbenchmark)
-library(stringr)
 x <- icd:::generate_random_decimal_icd9(1e6)
 microbenchmark(
   x \%>\% as_char_no_warn \%>\%
-  str_replace("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
+  stringr::str_replace("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
 
-  str_replace(as_char_no_warn(x),
+  stringr::str_replace(as_char_no_warn(x),
               "[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
 
   gsub("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3", x),

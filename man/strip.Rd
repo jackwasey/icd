@@ -26,6 +26,8 @@ critical, e.g. parsing source data to be included in the distributed
 }
 \examples{
 \dontrun{
+requireNamespace("microbenchmark")
+requireNamespace("stringr")
 x <- random_string(25000);
 microbenchmark::microbenchmark(
   gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE),

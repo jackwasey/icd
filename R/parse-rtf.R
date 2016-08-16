@@ -149,17 +149,15 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   paste0("^(", re_icd9_major_strict_bare, ") ") -> re_major_start
 
-  filtered %>%
-    str_subset(re_subchap_either) %>%
+  grep(re_subchap_either, filtered, value = TRUE) %>%
     chapter_to_desc_range.icd9 -> icd9_sub_chapters
 
   # The entire "E" block is incorrectly identified here, so make sure it is gone:
   icd9_sub_chapters["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"] <- NULL
   icd9_sub_chapters["Supplementary Classification Of External Causes Of Injury And Poisoning"] <- NULL
 
-  filtered %>%
-    str_subset(re_major_start) %>%
-    str_split_fixed(" ", n = 2) -> majors_matrix
+  grep(re_major_start, filtered, value = TRUE) %>%
+    strsplit(" ", fixed = TRUE) -> majors_matrix
 
   icd9_majors <- majors_matrix[, 1]
 
@@ -167,7 +165,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name)))
   }
 
-  names(icd9_majors) <- majors_matrix[, 2] %>% str_trim %>% cap_first
+  names(icd9_majors) <- majors_matrix[, 2] %>% trim %>% cap_first
 
   # this sub-chapter is simply missing from the otherwise consistent RTF way
   # 'major' types are reported:
@@ -211,7 +209,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   re_fifth_range_V30V39 <-
     "The following two fifths-digits are for use with the fourth-digit \\.0"
   re_fifth_rows <- paste(re_fifth_range, re_fifth_range_other, sep = "|")
-  filtered %>% str_detect(re_fifth_rows) %>% which -> fifth_rows
+  filtered %>% grepl(pattern = re_fifth_rows) %>% which -> fifth_rows
 
   # several occurances of "Requires fifth digit", referring back to the previous
   # higher-level definition, without having the parent code in the line itself
@@ -231,7 +229,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
       message("working on fourth-digit row:", f)
     range <- rtf_parse_fifth_digit_range(filtered[f])
     filtered[seq(f + 1, f + 37)] %>%
-      str_subset("^[[:digit:]][[:space:]].*") %>%
+      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
       str_pair_match("([[:digit:]])[[:space:]](.*)") -> fourth_suffices
     re_fourth_defined <- paste(c("\\.[", names(fourth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fourth digit
@@ -270,8 +268,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     if (verbose) message("working on fifth-digit row:", f)
     range <- rtf_parse_fifth_digit_range(filtered[f], verbose = verbose)
     fifth_suffices <- filtered[seq(f + 1, f + 20)] %>%
-      str_subset("^[[:digit:]][[:space:]].*") %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)", warn_pattern = TRUE)
+      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
+      str_pair_match("([[:digit:]])[[:space:]](.*)")
 
     re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fifth digit
@@ -295,7 +293,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   lines_V30V39 <- grep(re_fifth_range_V30V39, filtered)
   stopifnot(length(lines_V30V39) == 1)
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
-    str_subset("^[[:digit:]][[:space:]].*") %>%
+    grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
     str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
   range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE, defined = FALSE))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
@@ -445,9 +443,9 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
   out <- c()
   # get numbers and number ranges
   row_str %>%
-    str_split("[, :;]") %>%
+    strsplit("[, :;]") %>%
     unlist %>%
-    str_subset("[VvEe]?[0-9]") -> vals
+    grep(pattern = "[VvEe]?[0-9]", value = TRUE) -> vals
 
   if (verbose)
     message("vals are:", paste(vals, collapse = ", "))
@@ -515,8 +513,7 @@ rtf_parse_qualifier_subset <- function(qual) {
   qual %>% strip %>%
     strsplit("[]\\[,]") %>%
     unlist %>%
-    #grep("[[:digit:]]", ., value = TRUE) %>%
-    str_subset("[[:digit:]]") %>%
+    grep(pattern = "[[:digit:]]", value = TRUE) %>%
     strsplit(",") %>% unlist -> vals
   for (v in vals) {
     if (grepl("-", v)) {
@@ -533,21 +530,21 @@ rtf_parse_qualifier_subset <- function(qual) {
 #'
 #' Take a vector of character strings containing RTF, replace each \\tab with a
 #' space and eradicate all other RTF symbols
+#'
+#' just for \\tab, replace with space, otherwise, drop rtf tags entirely
 #' @param x vector of character strings containing RTF
-#' @keywords internal
+#' @keywords internal manip
 rtf_strip <- function(x) {
-  x %>%
-    # just for \tab, replace with space, otherwise, drop rtf tags entirely
-    # nolint start
-    str_replace_all("\\\\tab ", " ") %>%
-    str_replace_all("\\\\[[:punct:]]", "") %>% # control symbols only, not control words
-    str_replace_all("\\\\lsdlocked[ [:alnum:]]*;", "") %>% # special case, still needed?
-    str_replace_all("\\{\\\\bkmkstart.*?\\}", "") %>%
-    str_replace_all("\\{\\\\bkmkend.*?\\}", "") %>%
-    # no backslash in this next list, others removed from
-    # http://www.regular-expressions.info/posixbrackets.html
-    str_replace_all("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "") %>%
-    str_replace_all(" *(\\}|\\{)", "") %>%
-    # nolint end
-    str_trim
+  #nolint start
+  x <- gsub("\\\\tab ", " ", x)
+  x <- gsub("\\\\[[:punct:]]", "", x)  # control symbols only, not control words
+  x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x)  # special case, still needed?
+  x <- gsub("\\{\\\\bkmkstart.*?\\}", "", x)
+  x <- gsub("\\{\\\\bkmkend.*?\\}", "", x)
+  # no backslash in this next list, others removed from
+  # http://www.regular-expressions.info/posixbrackets.html
+  x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x)
+  x <- gsub(" *(\\}|\\{)", "", x)
+  trim(x)
+  #nolint end
 }

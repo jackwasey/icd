@@ -23,9 +23,8 @@ icd:::icd10_comorbid_parent_search_use_cpp(up, icd10_map_ahrq,
 ))
 \dontrun{
 library(microbenchmark)
-library(stringr)
 microbenchmark(substr("12345", 1, 4), substring("12345", 1, 4),
-               str_sub("12345", 1, 4), times = 1e5)
+               stringr::str_sub("12345", 1, 4), times = 1e5)
 # substr is fastest by a good margin
 
 microbenchmark(

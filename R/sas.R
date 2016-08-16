@@ -47,15 +47,16 @@ sas_format_extract <- function(sas_lines) {
   #spaces.
   sas_lines <- gsub(pattern = "\\\\n", "", sas_lines) # nolint
   sas_lines <- gsub(pattern = "[[:space:]]+", " ", sas_lines)
-  sas_lines <- str_trim(sas_lines)
+  sas_lines <- trim(sas_lines)
 
   # drop everything except VALUE statements
   sas_lines <- grep(pattern = "^VALUE.*", x = sas_lines, ignore.case = TRUE, value = TRUE)
 
   # put each VALUE declaration in a vector element
   all_sas_assignments <- str_match_all(
-    pattern = "^V(?:ALUE|alue)[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$",
-    string = sas_lines) %>% lapply(`[`, c(2, 3))
+    x = sas_lines,
+    pattern = "^V(?:ALUE|alue)[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$"
+  ) %>% lapply(`[`, c(2, 3))
 
   out <- list()
 
@@ -167,10 +168,10 @@ sas_parse_assignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRU
 #'   like \code{readLines(some_sas_file_path)}
 #' @keywords internal programming list
 sas_extract_let_strings <- function(x) {
-  a <- x %>% str_match_all(
-    "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)")
-
-  # drop empty elements after matching
+  let_rex <-
+    "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)"
+  a <- str_match_all(x, let_rex)
+  a <- lapply(a, trim)
   a <- a[vapply(a, FUN = function(x) length(x) != 0, FUN.VALUE = logical(1))]
 
   vls <- vapply(a, FUN = `[[`, 3, FUN.VALUE = "")

@@ -84,17 +84,14 @@ test_twenty <- structure(
   class = "data.frame")
 
 # first and last item from each AHRQ comorbidity:
-ahrq_end_codes <- c(lapply(icd::icd9_map_ahrq, head, n = 1),
-                    lapply(icd::icd9_map_ahrq, tail, n = 1)) %>%
-  unname %>%
-  unlist %>%
-  icd9
+ahrq_end_codes <- icd9(unlist(unname(c(lapply(icd::icd9_map_ahrq, head, n = 1),
+                    lapply(icd::icd9_map_ahrq, tail, n = 1)))))
 
-ahrq_test_dat <- data.frame(
+ahrq_test_dat <- as.icd_long_data(data.frame(
   visit_id = rep("visit1", times = length(ahrq_end_codes)),
   icd9 = ahrq_end_codes,
   stringsAsFactors = FALSE
-) %>% as.icd_long_data
+))
 
 elix_end_codes <- unlist(unname(c(lapply(icd::elixComorbid, head, n = 1),
                                   lapply(icd::elixComorbid, tail, n = 1))))

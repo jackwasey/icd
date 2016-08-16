@@ -36,13 +36,13 @@ the package.
 }
 \examples{
 \dontrun{
-library(stringr)
 library(microbenchmark)
-# str_split is faster
+requireNamepsace("stringr")
+# stringr::str_split is faster this time
 x <- icd:::generate_random_decimal_icd9(10)
-microbenchmark(strsplit(x, "\\\\."), str_split(x, "\\\\."))
+microbenchmark(strsplit(x, "\\\\."), stringr::str_split(x, "\\\\."))
 # str_trim is faster with nothing to trim
-microbenchmark(trim(x), str_trim(x))
+microbenchmark(trim(x), stringr::str_trim(x))
 }
 }
 \keyword{internal}

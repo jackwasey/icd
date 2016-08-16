@@ -82,6 +82,8 @@ as_char_no_warn <- function(x) {
 #' @keywords internal
 #' @examples
 #' \dontrun{
+#' requireNamespace("microbenchmark")
+#' requireNamespace("stringr")
 #' x <- random_string(25000);
 #' microbenchmark::microbenchmark(
 #'   gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE),
@@ -140,31 +142,39 @@ logical_to_binary <- function(x) {
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
-str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
-  assert_character(string, min.len = 1)
-  assert_string(pattern)
+str_pair_match <- function(string, pattern, pos, swap = FALSE) {
+  assert_character(string, min.len = 1L)
+  assert_string(pattern, min.chars = 5L)
   assert_flag(swap)
   pos_missing <- missing(pos)
   if (pos_missing)
     pos <- c(1, 2)
-  assert_integerish(pos, len = 2, lower = 1, any.missing = FALSE)
+  else
+    assert_integerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
-  string %>% str_match(pattern) -> res_matches
+  result <- lapply(
+    string, function(x) unlist(
+      regmatches(
+        x = x,
+        m = regexec(
+          pattern = pattern,
+          text = x))
+    )[-1]
+  )
+  result <- result[vapply(result, function(x) length(x) != 0, logical(1))]
+  result <- do.call(rbind, result)
 
-  if (pos_missing && ncol(res_matches) > 3)
+  if (pos_missing && ncol(result) > max(pos))
     stop("the pair matching has three or more results but needed two.
           Use (?: to have a non-grouping regular expression parenthesis")
 
-  # with str_match, the first column is a redundant complete match of the
-  # whole pattern, so pos + 1 here:
-
-  out_names <- res_matches[, ifelse(swap, 2, 1) + 1]
+  out_names <- result[, ifelse(swap, 2, 1)]
   if (any(is.na(out_names))) {
     stop("didn't match some rows:", string[is.na(out_names)],
          call. = FALSE)
   }
 
-  out <- res_matches[, ifelse(swap, 1, 2) + 1]
+  out <- result[, ifelse(swap, 1, 2)]
   stopifnot(all(!is.na(out)))
   names(out) <- out_names
   out
@@ -322,8 +332,8 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
 
 #' Fast find which \code{x} are \emph{not} in \code{table}
 #'
-#' Uses \code{\link[fastmatch]{fmatch}} which creates hash table, and re-uses if
-#' \code{table} is re-used.
+#' Uses \code{fmatch} taken from the \code{fastmatch} package which creates hash
+#' table, and re-uses if \code{table} is re-used.
 #' @param x vector
 #' @param table vector
 #' @keywords internal
@@ -357,7 +367,7 @@ icd_deprecated <- function(...) {
 #' @name chapter_to_desc_range
 #' @keywords internal manip
 .chapter_to_desc_range <- function(x, re_major) {
-  assert_character(x, min.len = 1)
+  assert_character(x, min.len = 1L)
   assert_string(re_major)
 
   re_code_range <- paste0("(.*)[[:space:]]?\\((",
@@ -367,14 +377,14 @@ icd_deprecated <- function(...) {
   re_code_single <- paste0("(.*)[[:space:]]?\\((", re_major, ")\\)")
   mr <- str_match_all(x, re_code_range)
   ms <- str_match_all(x, re_code_single)
-  okr <- vapply(mr, length, integer(1)) == 4
-  oks <- vapply(ms, length, integer(1)) == 3
+  okr <- vapply(mr, length, integer(1)) == 4L
+  oks <- vapply(ms, length, integer(1)) == 3L
 
   if (!all(okr || oks))
     stop("Problem matching\n", x[!(okr || oks)], call. = FALSE)
   m <- ifelse(okr, mr, ms)
   out <- lapply(m, function(y) c(start = y[[3]], end = y[[length(y)]]))
-  names(out) <- vapply(m, function(y) y[[2]] %>% str_to_title %>% str_trim,
+  names(out) <- vapply(m, function(y) y[[2]] %>% to_title_case %>% trim,
                        FUN.VALUE = character(1))
   out
 }
@@ -411,4 +421,53 @@ fmatch <- function(x, table, nomatch = NA_integer_, incomparables = NULL) {
 dir.exists <- function(paths) {
   x <- file.info(paths)$isdir
   !is.na(x) & x
+}
+
+# substitute for removed stringr function
+str_match_all <- function(x, pattern) {
+  x <- as.character(x)
+  regmatches(x, regexec(pattern, x))
+}
+
+to_title_case <- function (text) {
+  lpat <- "^(a|an|and|are|as|at|be|but|by|en|for|if|in|is|nor|not|of|on|or|per|so|the|to|v[.]?|via|vs[.]?|from|into|than|that|with)$"
+  either <- c("all", "above", "after", "along", "also", "among",
+              "any", "both", "can", "few", "it", "less", "log", "many",
+              "may", "more", "over", "some", "their", "then", "this",
+              "under", "until", "using", "von", "when", "where", "which",
+              "will", "without", "yet", "you", "your")
+  titleCase1 <- function(x) {
+    do1 <- function(x) {
+      x1 <- substring(x, 1L, 1L)
+      if (nchar(x) >= 3L && x1 %in% c("'", "\""))
+        paste0(x1, toupper(substring(x, 2L, 2L)), tolower(substring(x,
+                                                                    3L)))
+      else paste0(toupper(x1), tolower(substring(x, 2L)))
+    }
+    xx <- strsplit(x, " -/\"()\n")
+    alone <- c("2D", "3D", "AIC", "BayesX", "GoF", "HTML", "LaTeX",
+               "MonetDB", "OpenBUGS", "TeX", "U.S.", "U.S.A.", "WinBUGS",
+               "aka", "et", "al.", "ggplot2", "i.e.", "jar", "jars",
+               "ncdf", "netCDF", "rgl", "rpart", "xls", "xlsx")
+    alone <- xx %in% c(alone, either)
+    alone <- alone | grepl("^'.*'$", xx)
+    havecaps <- grepl("^[[:alpha:]].*[[:upper:]]+", xx)
+    l <- grepl(lpat, xx, ignore.case = TRUE)
+    l[1L] <- FALSE
+    ind <- grep("[-:]$", xx)
+    ind <- ind[ind + 2L <= length(l)]
+    ind <- ind[(xx[ind + 1L] == " ") & grepl("^['[:alnum:]]",
+                                             xx[ind + 2L])]
+    l[ind + 2L] <- FALSE
+    ind <- which(xx == "\"")
+    ind <- ind[ind + 1L <= length(l)]
+    l[ind + 1L] <- FALSE
+    xx[l] <- tolower(xx[l])
+    keep <- havecaps | l | (nchar(xx) == 1L) | alone
+    xx[!keep] <- sapply(xx[!keep], do1)
+    paste(xx, collapse = "")
+  }
+  if (typeof(text) != "character")
+    stop("'text' must be a character vector")
+  sapply(text, titleCase1, USE.NAMES = FALSE)
 }

@@ -314,8 +314,8 @@ icd_short_to_decimal.icd9 <- function(x) {
 icd_short_to_decimal.icd10 <- function(x) {
   x <- trim(x)
   # todo: these could/should be seperate functions
-  out <- str_sub(x, 0, 3) # majors
-  minors <- str_sub(x, 4)
+  out <- substr(x, 0, 3) # majors
+  minors <- substr(x, 4, 100L)
   out[minors != ""] <- paste0(out[minors != ""], ".", minors[minors != ""])
   icd10(as.icd_decimal_diag(out)) # not as.icd10
 }

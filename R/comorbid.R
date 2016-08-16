@@ -160,9 +160,8 @@ icd10_comorbid <- function(x,
 #' ))
 #' \dontrun{
 #' library(microbenchmark)
-#' library(stringr)
 #' microbenchmark(substr("12345", 1, 4), substring("12345", 1, 4),
-#'                str_sub("12345", 1, 4), times = 1e5)
+#'                stringr::str_sub("12345", 1, 4), times = 1e5)
 #' # substr is fastest by a good margin
 #'
 #' microbenchmark(
@@ -370,7 +369,7 @@ icd10_comorbid_parent_search_orig <- function(x,
            FUN = function(cmb) {
              # and if not found, slice off last char of test string
              for (n in char_count) {
-               if (!is.na(fmatch(str_sub(y, 1, n), map[[cmb]])))
+               if (!is.na(fmatch(substr(y, 1, n), map[[cmb]])))
                  return(TRUE)
              }
              FALSE

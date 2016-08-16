@@ -44,13 +44,12 @@ icd9_extract_alpha_numeric <- function(x) {
 #' @examples
 #' \dontrun{
 #' library(microbenchmark)
-#' library(stringr)
 #' x <- icd:::generate_random_decimal_icd9(1e6)
 #' microbenchmark(
 #'   x %>% as_char_no_warn %>%
-#'   str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
+#'   stringr::str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
 #'
-#'   str_replace(as_char_no_warn(x),
+#'   stringr::str_replace(as_char_no_warn(x),
 #'               "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
 #'
 #'   gsub("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3", x),
@@ -92,13 +91,17 @@ icd9_add_leading_zeroes <- function(x, short_code = icd_guess_short(x)) {
 icd9_drop_leading_zeroes_major <- function(major) {
   # (valid) E codes from 000 exist. Dropping zeroes from E000 would require a
   # lot of logic for no current benefit. Defer this until it is a problem.
-  major %<>% str_trim
+  major <- trim(major)
   # not checking validity, necessarily, just quick check
   is_v <- icd9_is_v(major)
   is_n <- icd9_is_valid_major_n(major)
-  major[is_v] %<>% str_replace("^[[:space:]]*([Vv])0([[:digit:]])[[:space:]]*$",
-                               replacement = "\\1\\2")
+  major[is_v] <- sub(
+    pattern = "^[[:space:]]*([Vv])0([[:digit:]])[[:space:]]*$",
+    replacement = "\\1\\2",
+    x = major[is_v])
   #just replace the FIRST string of zeros everything else is passed through
-  major[is_n] %<>% str_replace("^[[:space:]]*0{1,2}", replacement = "")
+  major[is_n] <- sub(pattern = "^[[:space:]]*0{1,2}",
+                       replacement = "",
+                       x = major[is_n])
   major
 }
