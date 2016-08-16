@@ -471,3 +471,7 @@ to_title_case <- function (text) {
     stop("'text' must be a character vector")
   sapply(text, titleCase1, USE.NAMES = FALSE)
 }
+
+capitalize_first <- function(name) {
+  trim(paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name))))
+}

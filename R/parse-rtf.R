@@ -73,10 +73,9 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE, verbose = FALSE, of
   # the file itself is 7 bit ASCII, but has its own internal encoding using
   # CP1252. test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
-  out <- parse_rtf_lines(rtf_lines, verbose = verbose,
-                         save_extras = save_data) %>%
-    swap_names_vals %>%
-    icd_sort.icd9(short_code = FALSE)
+  out <- parse_rtf_lines(rtf_lines, verbose = verbose, save_extras = save_data)
+  out <- swap_names_vals(out)
+  out <- icd_sort.icd9(out, short_code = FALSE)
 
   invisible(
     data.frame(
@@ -118,16 +117,10 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   filtered <- grep("^\\\\par", filtered, value = TRUE)
 
-  # fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
-  # lines... This needs care in Windows, or course. Maybe Mac, too?
-  filtered <- gsub("\\\\'e7", "\u00e7", filtered) # c cedila
-  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e gravel
-  filtered <- gsub("\\\\'e9", "\u00e9", filtered) # e acute
-  filtered <- gsub("\\\\'f1", "\u00f1", filtered) # n tilde
-  filtered <- gsub("\\\\'f16", "\u00f6", filtered) # o umlaut
+  filtered <- fix_unicode(filtered)
 
   # drop stupid long line at end:
-  longest_lines <- nchar(filtered) > 3000
+  longest_lines <- nchar(filtered) > 3000L
   # if none, then -c() returns no rows, so we have to test first
   if (any(longest_lines))
     filtered <- filtered[-c(which(longest_lines))]
@@ -156,16 +149,10 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   icd9_sub_chapters["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"] <- NULL
   icd9_sub_chapters["Supplementary Classification Of External Causes Of Injury And Poisoning"] <- NULL
 
-  grep(re_major_start, filtered, value = TRUE) %>%
-    strsplit(" ", fixed = TRUE) -> majors_matrix
-
-  icd9_majors <- majors_matrix[, 1]
-
-  cap_first <- function(name) {
-    paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name)))
-  }
-
-  names(icd9_majors) <- majors_matrix[, 2] %>% trim %>% cap_first
+  major_lines <- grep(re_major_start, filtered, value = TRUE)
+  re_major_split <- "([^[:space:]]+)[[:space:]]+(.+)"
+  icd9_majors <- gsub(pattern = re_major_split, replacement = "\\1", x = major_lines, perl = TRUE)
+  names(icd9_majors) <- gsub(pattern = re_major_split, replacement = "\\2", x = major_lines, perl = TRUE)
 
   # this sub-chapter is simply missing from the otherwise consistent RTF way
   # 'major' types are reported:
@@ -382,12 +369,39 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   }
   out <- append(out, out_fifth)
 
-  # clean up duplicates (about 350 in 2015 data), mostly one very brief
-  # description and a correct longer one; or, identical descriptions
+  out <- fix_rtf_duplicates(out, verbose)
 
-  out[duplicated(names(out)) | duplicated(names(out), fromLast = TRUE)] %>%
-    names %>%
-    unique -> dupes
+  # drop all the codes not specified by 5th digits in square brackets, which are
+  # applied over a range of codes.
+  out <- out[-which(names(out) %in% invalid_qual)]
+
+  fix_rtf_quirks_2015(out)
+}
+
+#' Fix unicode characters in RTF
+#'
+#' fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
+#' lines... This needs care in Windows, or course. Maybe Mac, too?
+#' @keywords internal
+fix_unicode <- function(filtered) {
+  #
+  filtered <- gsub("\\\\'e7", "\u00e7", filtered) # c cedila
+  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e gravel
+  filtered <- gsub("\\\\'e9", "\u00e9", filtered) # e acute
+  filtered <- gsub("\\\\'f1", "\u00f1", filtered) # n tilde
+  filtered <- gsub("\\\\'f16", "\u00f6", filtered) # o umlaut
+  filtered
+}
+
+#' fix duplicates detected in RTF parsing
+#'
+#' clean up duplicates (about 350 in 2015 data), mostly one very brief
+#' description and a correct longer one; or, identical descriptions
+#' @keywords internal
+fix_rtf_duplicates <- function(out, verbose) {
+
+  dupes <- out[duplicated(names(out)) | duplicated(names(out), fromLast = TRUE)]
+  dupes <- unique(names(dupes))
 
   for (d in dupes) {
     dupe_rows <- which(names(out) == d)
@@ -395,17 +409,16 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
       out <- out[-dupe_rows[-1]]
       next
     }
-    desclengths <- out[dupe_rows] %>% nchar
-    longestlength <- desclengths %>% max
+    desclengths <- nchar(out[dupe_rows])
+    max_len <- max(desclengths)
     if (verbose)
       message("removing differing duplicates: ", paste(out[dupe_rows]))
-    out <- out[-dupe_rows[-which(desclengths != longestlength)]]
+    out <- out[-dupe_rows[-which(desclengths != max_len)]]
   }
+  out
+}
 
-  # drop all the codes not specified by 5th digits in square brackets, which are
-  # applied over a range of codes.
-  out <- out[-which(names(out) %in% invalid_qual)]
-
+fix_rtf_quirks_2015 <- function(out) {
   # 2015 quirks (many more are baked into the parsing: try to splinter out the
   # most specific) some may well apply to other years
 

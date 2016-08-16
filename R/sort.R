@@ -59,7 +59,7 @@ icd_sort.icd10 <- function(x, short_code = NULL, ...) {
 #' @keywords internal
 #' @export
 icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
-  assert(checkFactor(x), checkCharacter(x))
+  assert(check_factor(x), check_character(x))
   assert_flag(short_code)
 
   y <- if (short_code)
