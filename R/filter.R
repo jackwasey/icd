@@ -63,8 +63,8 @@ icd9_filter_valid <- function(x, icd_name = get_icd_name(x), short_code = icd_gu
 #' @rdname icd_filter_valid
 #' @export
 icd10_filter_valid <- function(x, icd_name = get_icd_name(x),
-                                   short_code = icd_guess_short(x[[icd_name]]),
-                                   invert = FALSE) {
+                               short_code = icd_guess_short(x[[icd_name]]),
+                               invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(icd_name)
   assert_flag(short_code)
@@ -76,7 +76,7 @@ icd10_filter_valid <- function(x, icd_name = get_icd_name(x),
 #' @rdname icd_filter_valid
 #' @export
 icd9_filter_invalid <- function(x, icd_name = get_icd_name(x),
-                                    short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
+                                short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(icd_name)
   assert_flag(short_code)
@@ -87,8 +87,8 @@ icd9_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #' @rdname icd_filter_valid
 #' @export
 icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
-                                   short_code = icd_guess_short(x[[icd_name]]),
-                                   invert = FALSE) {
+                                 short_code = icd_guess_short(x[[icd_name]]),
+                                 invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(icd_name)
   assert_flag(short_code)

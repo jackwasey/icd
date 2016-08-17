@@ -44,7 +44,7 @@ which at present assumes ICD-9 format. Converts to character than calls
 \code{icd_is_valid.character}
 
 \item \code{default}: Test whether an ICD code is of major type,
-which at present assumes ICD-9 format
+either ICD-9 or ICD-10
 
 \item \code{icd9}: Test whether an ICD-9 code is of major type.
 

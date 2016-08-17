@@ -117,7 +117,7 @@ icd_wide_to_long <- function(x,
     }
   }
   assert_character(icd_labels, any.missing = FALSE, min.chars = 1,
-                              min.len = 1, max.len = ncol(x) - 1)
+                   min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icd_labels %in% names(x)))
 
   # could definitely do this with non-base functions, but this is quick enough
@@ -314,8 +314,8 @@ icd_short_to_decimal.icd9 <- function(x) {
 icd_short_to_decimal.icd10 <- function(x) {
   x <- trim(x)
   # todo: these could/should be seperate functions
-  out <- str_sub(x, 0, 3) # majors
-  minors <- str_sub(x, 4)
+  out <- substr(x, 0, 3) # majors
+  minors <- substr(x, 4, 100L)
   out[minors != ""] <- paste0(out[minors != ""], ".", minors[minors != ""])
   icd10(as.icd_decimal_diag(out)) # not as.icd10
 }

@@ -73,10 +73,9 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE, verbose = FALSE, of
   # the file itself is 7 bit ASCII, but has its own internal encoding using
   # CP1252. test meniere's disease with lines  24821 to 24822 from 2012 RTF
 
-  out <- parse_rtf_lines(rtf_lines, verbose = verbose,
-                         save_extras = save_data) %>%
-    swap_names_vals %>%
-    icd_sort.icd9(short_code = FALSE)
+  out <- parse_rtf_lines(rtf_lines, verbose = verbose, save_extras = save_data)
+  out <- swap_names_vals(out)
+  out <- icd_sort.icd9(out, short_code = FALSE)
 
   invisible(
     data.frame(
@@ -118,16 +117,10 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   filtered <- grep("^\\\\par", filtered, value = TRUE)
 
-  # fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
-  # lines... This needs care in Windows, or course. Maybe Mac, too?
-  filtered <- gsub("\\\\'e7", "\u00e7", filtered) # c cedila
-  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e gravel
-  filtered <- gsub("\\\\'e9", "\u00e9", filtered) # e acute
-  filtered <- gsub("\\\\'f1", "\u00f1", filtered) # n tilde
-  filtered <- gsub("\\\\'f16", "\u00f6", filtered) # o umlaut
+  filtered <- fix_unicode(filtered)
 
   # drop stupid long line at end:
-  longest_lines <- nchar(filtered) > 3000
+  longest_lines <- nchar(filtered) > 3000L
   # if none, then -c() returns no rows, so we have to test first
   if (any(longest_lines))
     filtered <- filtered[-c(which(longest_lines))]
@@ -149,25 +142,17 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   paste0("^(", re_icd9_major_strict_bare, ") ") -> re_major_start
 
-  filtered %>%
-    str_subset(re_subchap_either) %>%
+  grep(re_subchap_either, filtered, value = TRUE) %>%
     chapter_to_desc_range.icd9 -> icd9_sub_chapters
 
   # The entire "E" block is incorrectly identified here, so make sure it is gone:
   icd9_sub_chapters["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"] <- NULL
   icd9_sub_chapters["Supplementary Classification Of External Causes Of Injury And Poisoning"] <- NULL
 
-  filtered %>%
-    str_subset(re_major_start) %>%
-    str_split_fixed(" ", n = 2) -> majors_matrix
-
-  icd9_majors <- majors_matrix[, 1]
-
-  cap_first <- function(name) {
-    paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name)))
-  }
-
-  names(icd9_majors) <- majors_matrix[, 2] %>% str_trim %>% cap_first
+  major_lines <- grep(re_major_start, filtered, value = TRUE)
+  re_major_split <- "([^[:space:]]+)[[:space:]]+(.+)"
+  icd9_majors <- gsub(pattern = re_major_split, replacement = "\\1", x = major_lines, perl = TRUE)
+  names(icd9_majors) <- gsub(pattern = re_major_split, replacement = "\\2", x = major_lines, perl = TRUE)
 
   # this sub-chapter is simply missing from the otherwise consistent RTF way
   # 'major' types are reported:
@@ -211,7 +196,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   re_fifth_range_V30V39 <-
     "The following two fifths-digits are for use with the fourth-digit \\.0"
   re_fifth_rows <- paste(re_fifth_range, re_fifth_range_other, sep = "|")
-  filtered %>% str_detect(re_fifth_rows) %>% which -> fifth_rows
+  filtered %>% grepl(pattern = re_fifth_rows) %>% which -> fifth_rows
 
   # several occurances of "Requires fifth digit", referring back to the previous
   # higher-level definition, without having the parent code in the line itself
@@ -231,7 +216,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
       message("working on fourth-digit row:", f)
     range <- rtf_parse_fifth_digit_range(filtered[f])
     filtered[seq(f + 1, f + 37)] %>%
-      str_subset("^[[:digit:]][[:space:]].*") %>%
+      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
       str_pair_match("([[:digit:]])[[:space:]](.*)") -> fourth_suffices
     re_fourth_defined <- paste(c("\\.[", names(fourth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fourth digit
@@ -270,8 +255,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     if (verbose) message("working on fifth-digit row:", f)
     range <- rtf_parse_fifth_digit_range(filtered[f], verbose = verbose)
     fifth_suffices <- filtered[seq(f + 1, f + 20)] %>%
-      str_subset("^[[:digit:]][[:space:]].*") %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)", warn_pattern = TRUE)
+      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
+      str_pair_match("([[:digit:]])[[:space:]](.*)")
 
     re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fifth digit
@@ -295,7 +280,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   lines_V30V39 <- grep(re_fifth_range_V30V39, filtered)
   stopifnot(length(lines_V30V39) == 1)
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
-    str_subset("^[[:digit:]][[:space:]].*") %>%
+    grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
     str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
   range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE, defined = FALSE))
   range <- grep(re_V30V39_fifth, range, value = TRUE)
@@ -384,12 +369,39 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   }
   out <- append(out, out_fifth)
 
-  # clean up duplicates (about 350 in 2015 data), mostly one very brief
-  # description and a correct longer one; or, identical descriptions
+  out <- fix_rtf_duplicates(out, verbose)
 
-  out[duplicated(names(out)) | duplicated(names(out), fromLast = TRUE)] %>%
-    names %>%
-    unique -> dupes
+  # drop all the codes not specified by 5th digits in square brackets, which are
+  # applied over a range of codes.
+  out <- out[-which(names(out) %in% invalid_qual)]
+
+  fix_rtf_quirks_2015(out)
+}
+
+#' Fix unicode characters in RTF
+#'
+#' fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
+#' lines... This needs care in Windows, or course. Maybe Mac, too?
+#' @keywords internal
+fix_unicode <- function(filtered) {
+  #
+  filtered <- gsub("\\\\'e7", "\u00e7", filtered) # c cedila
+  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e gravel
+  filtered <- gsub("\\\\'e9", "\u00e9", filtered) # e acute
+  filtered <- gsub("\\\\'f1", "\u00f1", filtered) # n tilde
+  filtered <- gsub("\\\\'f16", "\u00f6", filtered) # o umlaut
+  filtered
+}
+
+#' fix duplicates detected in RTF parsing
+#'
+#' clean up duplicates (about 350 in 2015 data), mostly one very brief
+#' description and a correct longer one; or, identical descriptions
+#' @keywords internal
+fix_rtf_duplicates <- function(out, verbose) {
+
+  dupes <- out[duplicated(names(out)) | duplicated(names(out), fromLast = TRUE)]
+  dupes <- unique(names(dupes))
 
   for (d in dupes) {
     dupe_rows <- which(names(out) == d)
@@ -397,17 +409,16 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
       out <- out[-dupe_rows[-1]]
       next
     }
-    desclengths <- out[dupe_rows] %>% nchar
-    longestlength <- desclengths %>% max
+    desclengths <- nchar(out[dupe_rows])
+    max_len <- max(desclengths)
     if (verbose)
       message("removing differing duplicates: ", paste(out[dupe_rows]))
-    out <- out[-dupe_rows[-which(desclengths != longestlength)]]
+    out <- out[-dupe_rows[-which(desclengths != max_len)]]
   }
+  out
+}
 
-  # drop all the codes not specified by 5th digits in square brackets, which are
-  # applied over a range of codes.
-  out <- out[-which(names(out) %in% invalid_qual)]
-
+fix_rtf_quirks_2015 <- function(out) {
   # 2015 quirks (many more are baked into the parsing: try to splinter out the
   # most specific) some may well apply to other years
 
@@ -445,9 +456,9 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
   out <- c()
   # get numbers and number ranges
   row_str %>%
-    str_split("[, :;]") %>%
+    strsplit("[, :;]") %>%
     unlist %>%
-    str_subset("[VvEe]?[0-9]") -> vals
+    grep(pattern = "[VvEe]?[0-9]", value = TRUE) -> vals
 
   if (verbose)
     message("vals are:", paste(vals, collapse = ", "))
@@ -515,8 +526,7 @@ rtf_parse_qualifier_subset <- function(qual) {
   qual %>% strip %>%
     strsplit("[]\\[,]") %>%
     unlist %>%
-    #grep("[[:digit:]]", ., value = TRUE) %>%
-    str_subset("[[:digit:]]") %>%
+    grep(pattern = "[[:digit:]]", value = TRUE) %>%
     strsplit(",") %>% unlist -> vals
   for (v in vals) {
     if (grepl("-", v)) {
@@ -533,21 +543,21 @@ rtf_parse_qualifier_subset <- function(qual) {
 #'
 #' Take a vector of character strings containing RTF, replace each \\tab with a
 #' space and eradicate all other RTF symbols
+#'
+#' just for \\tab, replace with space, otherwise, drop rtf tags entirely
 #' @param x vector of character strings containing RTF
-#' @keywords internal
+#' @keywords internal manip
 rtf_strip <- function(x) {
-  x %>%
-    # just for \tab, replace with space, otherwise, drop rtf tags entirely
-    # nolint start
-    str_replace_all("\\\\tab ", " ") %>%
-    str_replace_all("\\\\[[:punct:]]", "") %>% # control symbols only, not control words
-    str_replace_all("\\\\lsdlocked[ [:alnum:]]*;", "") %>% # special case, still needed?
-    str_replace_all("\\{\\\\bkmkstart.*?\\}", "") %>%
-    str_replace_all("\\{\\\\bkmkend.*?\\}", "") %>%
-    # no backslash in this next list, others removed from
-    # http://www.regular-expressions.info/posixbrackets.html
-    str_replace_all("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "") %>%
-    str_replace_all(" *(\\}|\\{)", "") %>%
-    # nolint end
-    str_trim
+  #nolint start
+  x <- gsub("\\\\tab ", " ", x)
+  x <- gsub("\\\\[[:punct:]]", "", x)  # control symbols only, not control words
+  x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x)  # special case, still needed?
+  x <- gsub("\\{\\\\bkmkstart.*?\\}", "", x)
+  x <- gsub("\\{\\\\bkmkend.*?\\}", "", x)
+  # no backslash in this next list, others removed from
+  # http://www.regular-expressions.info/posixbrackets.html
+  x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x)
+  x <- gsub(" *(\\}|\\{)", "", x)
+  trim(x)
+  #nolint end
 }

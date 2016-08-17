@@ -155,7 +155,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
 
-  se <- as_char_no_warn(c(start, end)) %>% str_trim %>% str_to_upper
+  se <- as_char_no_warn(c(start, end)) %>% trim %>% toupper
 
   unique_mjrs <- icd::icd10cm2016$three_digit %>% unique
 

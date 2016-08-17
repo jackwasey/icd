@@ -125,13 +125,13 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
 #' @template offline
 #' @examples
 #' \dontrun{
-#' library(stringr)
 #' library(microbenchmark)
-#' # str_split is faster
+#' requireNamepsace("stringr")
+#' # stringr::str_split is faster this time
 #' x <- icd:::generate_random_decimal_icd9(10)
-#' microbenchmark(strsplit(x, "\\."), str_split(x, "\\."))
+#' microbenchmark(strsplit(x, "\\."), stringr::str_split(x, "\\."))
 #' # str_trim is faster with nothing to trim
-#' microbenchmark(trim(x), str_trim(x))
+#' microbenchmark(trim(x), stringr::str_trim(x))
 #' }
 #' @return invisibly return the result
 #' @keywords internal
@@ -176,16 +176,16 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
     message("got long lines")
   } else longlines <- NA_character_
 
-  shortlines <- str_split(shortlines, "[[:space:]]+")
-  longlines <- str_split(longlines, "[[:space:]]+")
+  shortlines <- strsplit(shortlines, "[[:space:]]+")
+  longlines <- strsplit(longlines, "[[:space:]]+")
   message("split done")
 
   # no need to trim: we just split on "space', so there can't be any extra spaces
   short_codes <- vapply(shortlines, FUN = function(x) x[1], FUN.VALUE = character(1))
   short_descs <- vapply(shortlines, FUN = function(x) paste(x[-1], collapse = " "), FUN.VALUE = character(1))
   if (!is.na(longlines[1]))
-    long_descs <- str_trim(vapply(longlines, function(x) paste(x[-1], collapse = " "), FUN.VALUE = character(1)))
-  else long_descs <- NA
+    long_descs <- trim(vapply(longlines, function(x) paste(x[-1], collapse = " "), FUN.VALUE = character(1)))
+  else long_descs <- NA_character_
 
   message("codes and descs separated")
 
@@ -198,7 +198,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   reorder <- icd9_order_short(out[["code"]])
   stopifnot(!anyNA(out[["code"]]))
   stopifnot(!anyNA(reorder))
-  stopifnot(!any(str_detect(out[["code"]], "[[:space:]]")))
+  stopifnot(!any(grepl(out[["code"]], pattern = "[[:space:]]")))
   stopifnot(!anyDuplicated(reorder))
   stopifnot(all(1:nrow(out)) %in% reorder)
   # catches a mistaken zero-indexed reorder result

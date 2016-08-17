@@ -12,8 +12,8 @@ x \%fin\% table
 \item{table}{vector}
 }
 \description{
-Uses \code{\link[fastmatch]{fmatch}} which creates hash table, and re-uses if
-\code{table} is re-used.
+Uses \code{fmatch} taken from the \code{fastmatch} package which creates hash
+table, and re-uses if \code{table} is re-used.
 }
 \keyword{internal}
 

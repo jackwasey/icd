@@ -66,10 +66,10 @@ icd10_each_ahrq_cmb <- as.icd10cm(c(
   "F11.988",
   "F29",
   "F43.21")) # depression F31.31 not in AHRQ, but appears in Quan Elix
-icd10_all_quan_elix <- data.frame(pt_id = 1:31, icd10_code = icd10_each_quan_elix_cmb, stringsAsFactors = FALSE) %>% icd10cm
+icd10_all_quan_elix <- data.frame(pt_id = 1:31, icd10_code = icd10_each_quan_elix_cmb, stringsAsFactors = FALSE)
 icd10_all_quan_elix_one_pt <- data.frame(pt_id = rep(1, 31), icd10_code = icd10_each_quan_elix_cmb)
 
-icd10_all_ahrq <- data.frame(pt_id = 1:30, icd10_code = icd10_each_ahrq_cmb, stringsAsFactors = FALSE) %>% icd10cm
+icd10_all_ahrq <- data.frame(pt_id = 1:30, icd10_code = icd10_each_ahrq_cmb, stringsAsFactors = FALSE)
 icd10_all_ahrq_one_pt <- data.frame(pt_id = rep(1, 30), icd10_code = icd10_each_ahrq_cmb)
 
 icd10_tricky <- icd10cm(c("V97.33XD", "W51.XXXA", "V00.01XD", "Y93.D", "Z99.89", "Y92.146",

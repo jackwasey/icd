@@ -7,7 +7,7 @@
 \usage{
 unzip_to_data_raw(url, file_name, offline = TRUE, verbose = FALSE)
 
-download_to_data_raw(url, file_name = str_extract(url, "[^/]*$"),
+download_to_data_raw(url, file_name = regmatches(url, regexpr("[^/]*$", url)),
   offline = TRUE)
 }
 \arguments{
