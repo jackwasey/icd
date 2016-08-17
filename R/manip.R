@@ -101,7 +101,7 @@ icd9_drop_leading_zeroes_major <- function(major) {
     x = major[is_v])
   #just replace the FIRST string of zeros everything else is passed through
   major[is_n] <- sub(pattern = "^[[:space:]]*0{1,2}",
-                       replacement = "",
-                       x = major[is_n])
+                     replacement = "",
+                     x = major[is_n])
   major
 }

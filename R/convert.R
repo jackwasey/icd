@@ -117,7 +117,7 @@ icd_wide_to_long <- function(x,
     }
   }
   assert_character(icd_labels, any.missing = FALSE, min.chars = 1,
-                              min.len = 1, max.len = ncol(x) - 1)
+                   min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icd_labels %in% names(x)))
 
   # could definitely do this with non-base functions, but this is quick enough
