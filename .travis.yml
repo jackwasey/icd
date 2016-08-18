@@ -14,10 +14,6 @@ r:
   - release
   - devel
 
-# compiler:
-#   - gcc
-#   - clang
-
 matrix:
   allow_failures:
     - r: oldrel
