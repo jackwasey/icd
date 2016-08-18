@@ -26,6 +26,9 @@ matrix:
 repos:
   CRAN: https://cloud.r-project.org
 
+r_github_packages:
+  - jimhester/covr
+
 warnings_are_errors: true
 
 # seperate lines seems to mean the whole build is repeated each line.
