@@ -101,16 +101,3 @@ icd9_order_short <- function(x) {
   icd9_order_cpp(x)
 }
 
-icd9_order_short_fm <- function(x) {
-  y <- x[order(icd9_add_leading_zeroes(x, short_code = TRUE))]
-  fmatch(
-    y[c(which(icd9_is_n(y)), which(icd9_is_v(y)), which(icd9_is_e(y)))],
-    x)
-}
-
-icd9_order_short_r <- function(x) {
-  y <- x[order(icd9_add_leading_zeroes(x, short_code = TRUE))]
-  match(
-    y[c(which(icd9_is_n(y)), which(icd9_is_v(y)), which(icd9_is_e(y)))],
-    x)
-}
