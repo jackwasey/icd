@@ -154,13 +154,6 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
     depression = c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432")
   )
 
-  # TODO: either generate children (probably infeasible for ICD-10), or generate
-  # comorbid algorithm which matches against the listed parents
-
-  # icd10_map_elix <- lapply(
-  #   icd10_map_elix,
-  #   icd_children.icd10cm, short_code = TRUE, defined = FALSE)
-
   names(icd10_map_elix) <- icd::icd_names_elix_htn_abbrev
 
   icd10_map_elix <- lapply(icd10_map_elix, as.icd_short_diag)
