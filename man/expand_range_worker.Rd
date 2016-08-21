@@ -4,7 +4,8 @@
 \alias{expand_range_worker}
 \title{expand range worker function}
 \usage{
-expand_range_worker(start, end, lookup, defined, ex_ambig_start, ex_ambig_end)
+expand_range_worker(start, end, lookup, defined, ex_ambig_start, ex_ambig_end,
+  alt_match = fmatch)
 }
 \description{
 expand range worker function

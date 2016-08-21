@@ -206,13 +206,13 @@ expand_range_worker <- function(start, end, lookup, defined,
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
 
-  start_index <- match(start, lookup)
-  end_index <- match(end, lookup)
-  assert_integer(start_index, len = 1)
+  start_index <- fmatch(start, lookup)
+  end_index <- fmatch(end, lookup)
+  assert_integer(start_index, len = 1L)
   if (is.na(start_index[1]))
     stop(sprintf("start value '%s' not found in look-up table of ICD-9 codes.", start))
-  assert_integer(end_index, len = 1)
-  if (is.na(end_index[1]))
+  assert_integer(end_index, len = 1L)
+  if (is.na(end_index[1L]))
     stop(sprintf("end value '%s' not found in look-up table of ICD-9 codes.", end))
   if (end_index < start_index)
     stop("end code must be greater than or equal to start code")
@@ -227,7 +227,7 @@ expand_range_worker <- function(start, end, lookup, defined,
     # 102.11, 102.2
     starts <- utils::tail(out, 5)
     for (s in starts) {
-      if (any(icd_children.icd9(s, short_code = TRUE, defined = defined) %nin% out))
+      if (any(icd_children.icd9(s, short_code = TRUE, defined = defined) %fnin% out))
         out <- out[-which(out == s)]
     }
   }
@@ -239,7 +239,7 @@ expand_range_worker <- function(start, end, lookup, defined,
     # kill it, if it spills over.
     out_cp <- out
     for (o in out_cp) {
-      if (any(icd_children.icd9(o, short_code = TRUE, defined = defined) %nin% out))
+      if (any(icd_children.icd9(o, short_code = TRUE, defined = defined) %fnin% out))
         out <- out[-which(out == o)]
     }
   }

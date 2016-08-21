@@ -341,6 +341,12 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   fmatch(x, table, nomatch = 0L) > 0L
 }
 
+#' @rdname grapes-fin-grapes
+#' @keywords internal
+`%fnin%` <- function(x, table) {
+  fmatch(x, table, nomatch = 0L) == 0L
+}
+
 #' wrapper for \code{.Deprecated}
 #'
 #' Don't show warnings when using deprecated code. This allows people to

@@ -2,9 +2,12 @@
 % Please edit documentation in R/util.R
 \name{\%fin\%}
 \alias{\%fin\%}
+\alias{\%fnin\%}
 \title{Fast find which \code{x} are \emph{not} in \code{table}}
 \usage{
 x \%fin\% table
+
+x \%fnin\% table
 }
 \arguments{
 \item{x}{vector}
