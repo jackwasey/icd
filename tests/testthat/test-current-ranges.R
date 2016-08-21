@@ -547,10 +547,9 @@ test_that("sysdata.rda is okay", {
   expect_lt(length(icd9NShortReal), length(icd9NShort))
   expect_lt(length(icd9VShortReal), length(icd9VShort))
   expect_lt(length(icd9EShortReal), length(icd9EShort))
-  expect_true(all(icd9NShortReal %in% icd9NShort))
-  expect_true(all(icd9VShortReal %in% icd9VShort))
-  expect_true(all(icd9EShortReal %in% icd9EShort))
-
+  expect_true(all(icd9NShortReal %fin% icd9NShort))
+  expect_true(all(icd9VShortReal %fin% icd9VShort))
+  expect_true(all(icd9EShortReal %fin% icd9EShort))
 })
 
 test_that("expand ICD-9 range character class deals with short vs long types", {
