@@ -1,5 +1,9 @@
-# Version 2.1
- * removed stringr family dependencies: it was slower on benchmarking than built-ins, and no clear benefits other than internally consistent syntax.
+# Version 2.0.1
+ * removed stringr family dependencies: it was slower on benchmarking than built-ins, and no clear benefits other than internally consistent syntax, and stringr updates caused CRAN warnings due to a documentation change.
+ * Fixes #86, thanks to @anobel
+ * Fixes #91
+ * Fixes #93 thanks to @nancyorgan
+ * Fixes #97, thanks to @michaelgao8
 
 # Version 2.0
  * ICD-10 support, including ICD-10 comorbidity mappings, validation and explanations (code to description). ICD-10-CM 2016 is included.

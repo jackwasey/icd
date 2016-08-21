@@ -115,80 +115,89 @@ test_that("deprecated - online parse tests run", {
   }
   stopifnot(file_writable(tf))
   on.exit(unlink(tf), add = TRUE)
-  unzip_single(url = url,
-               file_name = rtf_dat$rtf_filename,
-               save_path = tf)
-  rtf_lines <- readLines(tf, warn = FALSE)
-  rtf <- parse_rtf_lines(rtf_lines)
-  nrtf <- names(rtf)
 
-  test_that("deprecated - all parsed codes are valid decimals", {
-    expect_true(all(icd9IsValidDecimal(nrtf)),
-                info = paste("invalid codes are :",
-                             paste(icd9GetInvalid(nrtf), collapse = ", ")))
-  })
+  # we may be offline, so just skip everything if unzip file fails with an error)
+  online <- tryCatch({
+    suppressWarnings(unzip_single(url = url,
+                 file_name = rtf_dat$rtf_filename,
+                 save_path = tf))
+  }, error = function(e) FALSE)
 
-  test_that("deprecated - no rtf formatting left in descriptions", {
-    expect_false(any(grepl("[\\\\{}]", rtf)),
-                 info = paste("rtf codes in descriptions:",
-                              paste(grep("[\\\\{}]", rtf, value = TRUE))))
-  })
+  if (online) {
 
-  test_that("deprecated - all csv extract codes are in rtf extract", {
-    missing_from_rtf <- setdiff(icd9ShortToDecimal(icd::icd9Hierarchy$icd9), nrtf)
-    expect_equal(length(missing_from_rtf), 0,
-                 info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
-  })
+    rtf_lines <- readLines(tf, warn = FALSE)
+    rtf <- parse_rtf_lines(rtf_lines)
+    nrtf <- names(rtf)
 
-  swapNamesWithVals <- swap_names_vals
+    test_that("deprecated - all parsed codes are valid decimals", {
+      expect_true(all(icd9IsValidDecimal(nrtf)),
+                  info = paste("invalid codes are :",
+                               paste(icd9GetInvalid(nrtf), collapse = ", ")))
+    })
 
-  test_that("deprecated - majors extracted from web page are the same as those from RTF", {
-    webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
-    work <- swapNamesWithVals(rtf)
-    rtfmajors <- work[icd9IsMajor(work)]
+    test_that("deprecated - no rtf formatting left in descriptions", {
+      expect_false(any(grepl("[\\\\{}]", rtf)),
+                   info = paste("rtf codes in descriptions:",
+                                paste(grep("[\\\\{}]", rtf, value = TRUE))))
+    })
 
-    expect_identical(setdiff(rtfmajors, webmajors), character(0),
-                     info = paste("these majors are from RTF but not retrieved from web: ",
-                                  paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
-    expect_identical(setdiff(webmajors, rtfmajors), character(0),
-                     info = paste("these majors are on web but not retrieved from RTF: ",
-                                  paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
-  })
+    test_that("deprecated - all csv extract codes are in rtf extract", {
+      missing_from_rtf <- setdiff(icd9ShortToDecimal(icd::icd9Hierarchy$icd9), nrtf)
+      expect_equal(length(missing_from_rtf), 0,
+                   info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
+    })
 
-  v32 <- icd9_parse_leaf_desc_ver(version = "32", save_data = FALSE, offline = TRUE)
-  # use deprecated names
-  names(v32) <- c("icd9", "descShort", "descLong")
+    swapNamesWithVals <- swap_names_vals
 
-  test_that("deprecated - all leaf codes from TXT are in RTF extract", {
-    v32$icd9 %>% icd9ShortToDecimal -> leaves
-    expect_true(all(leaves %in% nrtf))
-  })
+    test_that("deprecated - majors extracted from web page are the same as those from RTF", {
+      webmajors <- unlist(icd9ChaptersMajor) # why is this even a list not a named vector?
+      work <- swapNamesWithVals(rtf)
+      rtfmajors <- work[icd9IsMajor(work)]
 
-  test_that("deprecated - RTF extract has no duplicates", {
-    expect_equal(sum(duplicated(nrtf)),
-                 0,
-                 info = paste("first few duplicates: ",
-                              paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
-                 ))
-  })
+      expect_identical(setdiff(rtfmajors, webmajors), character(0),
+                       info = paste("these majors are from RTF but not retrieved from web: ",
+                                    paste(setdiff(rtfmajors, webmajors), collapse = ", ")))
+      expect_identical(setdiff(webmajors, rtfmajors), character(0),
+                       info = paste("these majors are on web but not retrieved from RTF: ",
+                                    paste(setdiff(webmajors, rtfmajors), collapse = ", ")))
+    })
 
-  test_that("deprecated - mid-level descriptions are in RTF extract", {
-    expect_equivalent(rtf[["611"]], "Other disorders of breast")
-    expect_equivalent(rtf[["611.7"]], "Signs and symptoms in breast")
-    expect_equivalent(rtf[["611.8"]], "Other specified disorders of breast")
-  })
+    v32 <- icd9_parse_leaf_desc_ver(version = "32", save_data = FALSE, offline = TRUE)
+    # use deprecated names
+    names(v32) <- c("icd9", "descShort", "descLong")
 
-  test_that("deprecated - manual check to look at description differences between RTF and TXT", {
-    skip("manual check")
-    rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
-      swapNamesWithVals %>%
-      sort -> rtf_leaves
-    print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
-  })
+    test_that("deprecated - all leaf codes from TXT are in RTF extract", {
+      v32$icd9 %>% icd9ShortToDecimal -> leaves
+      expect_true(all(leaves %in% nrtf))
+    })
 
-  test_that("deprecated - we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
-    # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
-    expect_false("640.02" %in% nrtf)
-    # grep "\[[[:digit:]],.*\]" Dtab12.rtf
-  })
+    test_that("deprecated - RTF extract has no duplicates", {
+      expect_equal(sum(duplicated(nrtf)),
+                   0,
+                   info = paste("first few duplicates: ",
+                                paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
+                   ))
+    })
+
+    test_that("deprecated - mid-level descriptions are in RTF extract", {
+      expect_equivalent(rtf[["611"]], "Other disorders of breast")
+      expect_equivalent(rtf[["611.7"]], "Signs and symptoms in breast")
+      expect_equivalent(rtf[["611.8"]], "Other specified disorders of breast")
+    })
+
+    test_that("deprecated - manual check to look at description differences between RTF and TXT", {
+      skip("manual check")
+      rtf[nrtf %in% icd9ShortToDecimal(v32$icd9)] %>%
+        swapNamesWithVals %>%
+        sort -> rtf_leaves
+      print(data.frame("From TXT" = v32$descLong, "From RTF = rtf_leaves" = names(rtf_leaves)))
+    })
+
+    test_that("deprecated - we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
+      # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
+      expect_false("640.02" %in% nrtf)
+      # grep "\[[[:digit:]],.*\]" Dtab12.rtf
+    })
+
+  } # online online
 })
