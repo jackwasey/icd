@@ -123,6 +123,7 @@ Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool onlyReal) {
   std::set<std::string> out; // we are never going to put NAs in the output?
+  // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
     Rcpp::CharacterVector major = parts[0];
@@ -137,12 +138,9 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
       Rcpp::CharacterVector newminors = icd9ExpandMinorShim(thisminor,
                                                             icd9IsASingleE(thismajor.c_str()));
 
-      // push back slower, but difficult to predict size of output
       std::vector<std::string> newshort = Rcpp::as<std::vector<std::string> >(
         icd9MajMinToShort(thismajor, newminors));
 
-      // std insert is a thousand times faster than looping through
-      // Rcpp::CharacterVector and push_backing
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {

@@ -148,16 +148,16 @@ test_that("can condense the big lists of comorbidities without errors", {
 
   for (defined_codes in c(TRUE, FALSE)) {
     if (defined_codes) {
-      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = defined_codes))
-      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = defined_codes))
-      expect_warning(qe <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes))
-      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, defined = defined_codes))
+      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq[c(1, 30)], icd_condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo[c(1, 17)], icd_condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(qe <- lapply(icd::icd9_map_quan_elix[c(1, 31)], icd_condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(elix <- lapply(icd::icd9_map_elix[c(1, 31)], icd_condense.icd9, defined = defined_codes))
     }
     else {
-      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
-      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
-      expect_warning(qe <- lapply(icd::icd9_map_quan_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
-      expect_warning(elix <- lapply(icd::icd9_map_elix, icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(ahrq <- lapply(icd::icd9_map_ahrq[c(1, 30)], icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(qd <- lapply(icd::icd9_map_quan_deyo[c(1, 17)], icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(qe <- lapply(icd::icd9_map_quan_elix[c(1, 30)], icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(elix <- lapply(icd::icd9_map_elix[c(1, 30)], icd_condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
     }
 
     expect_is(ahrq, class = "list")
