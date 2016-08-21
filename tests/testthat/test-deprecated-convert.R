@@ -256,20 +256,6 @@ test_that("deprecated - icd9 parts to short form V and E input, mismatched lengt
   expect_equal(icd9MajMinToShort("V01", c("0", "1")), c("V010", "V011"))
 })
 
-icd9ChaptersToMap <- icd9_chapters_to_map
-
-test_that("deprecated - convert list of icd-9 ranges (e.g. chapter definitions to comorbidity map)", {
-  skip_slow_tests()
-  ooe <- data.frame(visitId = sprintf("pt%02d", seq_along(one_of_each)), icd9 = one_of_each)
-
-  test_map <- icd9ChaptersToMap(icd::icd9Chapters)
-  cmb <- icd9Comorbid(icd9df = ooe, isShort = FALSE, icd9Mapping = test_map,
-                      isShortMapping = TRUE, return.df = TRUE)
-  cmbcmp <- unname(as.matrix(logical_to_binary(cmb)[-1]))
-  expmat <- diag(nrow = length(ooe$icd9))
-  expect_equivalent(cmbcmp, expmat)
-})
-
 # some functions are only called via C++ (at present), so the path through
 # RcppExports is not tested. Also, compare slower functions for identical
 # results as a regression test.
