@@ -273,12 +273,6 @@ test_that("explain icd9GetChapters simple input", {
 
 })
 
-test_that("working with named lists of codes, decimal is guessed", {
-  # warnings given for deprecated code
-  icd9ExplainDecimal(list(a = c("001"), b = c("001.1", "001.9")))
-  icd9Explain(list(a = c("001"), b = c("001.1", "001.9")))
-})
-
 test_that("icd9 descriptions was parsed correctly", {
   # TODO: only skip online if file not already available.
   x <- icd9Billable[["32"]]
