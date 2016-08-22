@@ -21,62 +21,53 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-tmpdir=
 TMP=$(mktemp -d /tmp/icd-docker.XXXXXXXX)
 
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
-: ${ICD_HOME:=$HOME/Documents/RProjects/icd}
-DOCKER_IMAGE=${1:-}
+echo "Working directory: ${ICD_HOME:=$HOME/Documents/RProjects/icd}"
+DOCKER_IMAGE="${1:-clang-3.8}"
 if [[ -z "$DOCKER_IMAGE" ]]; then
    echo "usage: $0 docker directory to build and run"
    exit 1
 fi
 
-ALT_CMD=${2:-}
-
 # strip directory symbol to get the docker image name from a dir with trailing slash
-IM_NM=`echo $DOCKER_IMAGE | tr -d "/"`
+IM_NM="$(echo $DOCKER_IMAGE | tr -d '/')"
+echo "IM_NM=$IM_NM"
 
-DOCKER_IMAGE_FULL_NAME=jackwasey/$IM_NM
+DOCKER_IMAGE_FULL_NAME="jackwasey/r-$IM_NM"
 
-TOOLS_DIR=$ICD_HOME/tools
-IM=$TMP
-DOCKER_SCRIPT=build_install_check_in_docker.sh
+TOOLS_DIR="$ICD_HOME/tools"
+IM="$TMP"
+DOCKER_SCRIPT=in_docker_check.sh
 
 if [ ! -d "$IM" ]; then
   echo "Docker image should be a directory under tools in the icd/icd9 project."
   exit 1
 fi
 
-cp -v $TOOLS_DIR/Dockerfile.template $IM/Dockerfile
+cp -v "$TOOLS_DIR/Dockerfile.template" "$IM/Dockerfile"
 # https://stackoverflow.com/questions/584894/sed-scripting-environment-variable-substitution
 sed -i 's@DOCKER_IMAGE_FULL_NAME@'"$DOCKER_IMAGE_FULL_NAME"'@' $IM/Dockerfile
-cp -v $TOOLS_DIR/$DOCKER_SCRIPT $IM
-docker build -t $IM_NM $IM || {
-  rm -f $IM/$DOCKER_SCRIPT
+cp -v "$TOOLS_DIR/$DOCKER_SCRIPT" "$IM"
+docker build -t "$DOCKER_IMAGE_FULL_NAME" "$IM" || {
+  rm -f "$IM/$DOCKER_SCRIPT"
 }
-rm -f $IM/Dockerfile
-rm -f $IM/$DOCKER_SCRIPT
-rmdir $TMP
+rm -f "$IM/Dockerfile"
+rm -f "$IM/$DOCKER_SCRIPT"
+rmdir "$TMP"
 
-: ${ICD_PROJECT_NAME:=icd}
-: ${R_PKG_NAME:=$ICD_PROJECT_NAME}
-: ${GITHUB_URL:=https://github.com}
-: ${GITHUB_USER:=jackwasey}
-: ${GITHUB_REPO:=$ICD_PROJECT_NAME}
-: ${GIT_BRANCH:=master}
-: ${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}
-: ${R_CMD:=R}
+echo "Environment:"
+echo "${ICD_PROJECT_NAME:=icd}"
+echo "${R_PKG_NAME:=$ICD_PROJECT_NAME}"
+echo "${GITHUB_URL:=https://github.com}"
+echo "${GITHUB_USER:=jackwasey}"
+echo "${GITHUB_REPO:=$ICD_PROJECT_NAME}"
+echo "${GIT_BRANCH:=master}"
+echo "${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
+echo "${R_CMD:=R}"
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
-docker run \
--e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
--e "R_PKG_NAME=$R_PKG_NAME" \
--e "GITHUB_URL=$GITHUB_URL" \
--e "GITHUB_USER=$GITHUB_USER" \
--e "GITHUB_REPO=$GITHUB_REPO" \
--e "GIT_BRANCH=$GIT_BRANCH" \
--e "GIT_URL=$GIT_URL" \
--e "R_CMD=$R_CMD" \
---rm -ti $IM_NM $ALT_CMD
-
+docker run -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
+           -e "R_PKG_NAME=$R_PKG_NAME" \
+           -e "GITHUB_URL=$GITHUB_URL" -e "GITHUB_USER=$GITHUB_USER" -e "GITHUB_REPO=$GITHUB_REPO" -e "GIT_BRANCH=$GIT_BRANCH" -e "GIT_URL=$GIT_URL" -e "R_CMD=$R_CMD" --rm -ti "$DOCKER_IMAGE_FULL_NAME" ${2:-}
