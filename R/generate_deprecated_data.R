@@ -3,9 +3,12 @@
 #' Unfortunately, this is easiest (and has a chance of passing CRAN checks) if I
 #' just duplicate data rather than trying to change the \code{NAMESPACE}.
 #' @template save_data
+#' @param compress single character string, or logical, just so a test can override and
+#'   avoid compression overhead. See \code{save}
 #' @keywords internal
 generate_deprecated_data <- function(save_data = FALSE,
-                                     path = file.path("data", "deprecated.RData")) {
+                                     path = file.path("data", "deprecated.RData"),
+                                     compress = "xz") {
 
   icd9Billable <- icd::icd9cm_billable
   for (b in seq_along(icd9Billable))
@@ -63,7 +66,7 @@ generate_deprecated_data <- function(save_data = FALSE,
          ahrqComorbidNamesHtnAbbrev,
          charlsonComorbidNames,
          charlsonComorbidNamesAbbrev,
-         file = path, compress = "xz")
+         file = path, compress = compress)
     message("now reload to update deprecated data")
   }
 

@@ -5,11 +5,14 @@
 \title{Generate deprecated data}
 \usage{
 generate_deprecated_data(save_data = FALSE, path = file.path("data",
-  "deprecated.RData"))
+  "deprecated.RData"), compress = "xz")
 }
 \arguments{
 \item{save_data}{single logical value, if \code{TRUE} will save the generated
 data}
+
+\item{compress}{single character string, or logical, just so a test can override and
+avoid compression overhead. See \code{save}}
 }
 \description{
 Unfortunately, this is easiest (and has a chance of passing CRAN checks) if I

@@ -612,13 +612,14 @@ test_that("deprecated - comorbidities created from source data frame coded as fa
 })
 
 test_that("deprecated data aliases are created", {
-  expect_warning(dep_dat <- generate_deprecated_data(save_data = FALSE), regexp = NA)
-
-  # actually save the deprecated data somewhere, and reload it
   tmp_file_path <- tempfile()
   on.exit(unlink(tmp_file_path))
-  generate_deprecated_data(save_data = TRUE, path = tmp_file_path)
-  get(load(tmp_file_path))
+  expect_warning(
+    dep_dat <- generate_deprecated_data(save_data = TRUE,
+                                        path = tmp_file_path,
+                                        compress = FALSE),
+    regexp = NA)
+  load(tmp_file_path)
 
   expect_true(
     setequal(names(dep_dat),
