@@ -1,5 +1,5 @@
 aclocal\.m4$
-.*_alt\.[Rr]$
+.*_alt\.[Rr]d?$
 \.aspell$
 autom4te\.cache$
 .*benchmark.*
