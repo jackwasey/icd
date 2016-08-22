@@ -166,9 +166,6 @@ icd10_comorbid_parent_search_orig <- function(x,
   out
 }
 
-#' find ICD-10 comorbidities without checking parent matches
-#'
-#' @keywords internal
 icd10_comorbid_no_parent_search <- function(x,
                                             map,
                                             visit_name = NULL,
