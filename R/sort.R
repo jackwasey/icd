@@ -100,4 +100,3 @@ icd9_order_short <- function(x) {
   }
   icd9_order_cpp(x)
 }
-
