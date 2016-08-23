@@ -99,7 +99,7 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
     skip("data-raw/comformat2012-2013.txt must be downloaded with icd9_fetch_ahrq_sas")
 
   # same but from source data. Should be absolutely identical.
-  expect_identical(result <- icd9_parse_ahrq_sas(save_data = FALSE), icd9_map_ahrq)
+  expect_identical(result <- icd9_parse_ahrq_sas(save_data = FALSE), icd::icd9_map_ahrq)
   checkmate::expect_list(result, len = 30)
   expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd::icd9_map_ahrq), list())
 

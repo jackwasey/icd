@@ -109,11 +109,14 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
     for (p in parents) {
       kids <- icd_children.icd9(p, defined = FALSE, short_code = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
-      if (all(kids %in% icd9_map_ahrq[[cmb]]))
-        icd9_map_ahrq[[cmb]] <- c(icd9_map_ahrq[[cmb]], p) %>%
-        unique %>%
-        icd_sort.icd9(short_code = TRUE) %>%
-        as.icd9 %>% as.icd_short_diag
+      if (all(kids %fin% icd9_map_ahrq[[cmb]])) {
+        icd9_map_ahrq[[cmb]] <-
+          as.icd_short_diag(
+            as.icd9(
+              icd_sort.icd9(
+                unique(
+                  c(icd9_map_ahrq[[cmb]], p)), short_code = TRUE)))
+      }
     }
   }
 

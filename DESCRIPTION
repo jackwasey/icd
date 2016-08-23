@@ -35,6 +35,7 @@ Suggests:
     xml2
 LazyData: true
 LazyDataCompression: xz
+ByteCompile: true
 BugReports: https://github.com/jackwasey/icd/issues
 License: GPL-3
 Copyright: See file (inst/)COPYRIGHTS

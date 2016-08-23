@@ -919,6 +919,67 @@ RcppExport SEXP icd_icd9AddLeadingZeroes(SEXP xSEXP, SEXP short_codeSEXP) {
     UNPROTECT(1);
     return __result;
 }
+// icd9AddLeadingZeroesShortSingle
+Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x);
+static SEXP icd_icd9AddLeadingZeroesShortSingle_try(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< Rcpp::String >::type x(xSEXP);
+    __result = Rcpp::wrap(icd9AddLeadingZeroesShortSingle(x));
+    return __result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd_icd9AddLeadingZeroesShortSingle(SEXP xSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd_icd9AddLeadingZeroesShortSingle_try(xSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
+// icd9AddLeadingZeroesDirect
+Rcpp::CharacterVector icd9AddLeadingZeroesDirect(Rcpp::CharacterVector x, bool short_code);
+static SEXP icd_icd9AddLeadingZeroesDirect_try(SEXP xSEXP, SEXP short_codeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< bool >::type short_code(short_codeSEXP);
+    __result = Rcpp::wrap(icd9AddLeadingZeroesDirect(x, short_code));
+    return __result;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd_icd9AddLeadingZeroesDirect(SEXP xSEXP, SEXP short_codeSEXP) {
+    SEXP __result;
+    {
+        Rcpp::RNGScope __rngScope;
+        __result = PROTECT(icd_icd9AddLeadingZeroesDirect_try(xSEXP, short_codeSEXP));
+    }
+    Rboolean __isInterrupt = Rf_inherits(__result, "interrupted-error");
+    if (__isInterrupt) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean __isError = Rf_inherits(__result, "try-error");
+    if (__isError) {
+        SEXP __msgSEXP = Rf_asChar(__result);
+        UNPROTECT(1);
+        Rf_error(CHAR(__msgSEXP));
+    }
+    UNPROTECT(1);
+    return __result;
+}
 // icd9ExpandMinorShim
 Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE);
 static SEXP icd_icd9ExpandMinorShim_try(SEXP minorSEXP, SEXP isESEXP) {
@@ -1617,6 +1678,8 @@ static int icd_RcppExport_validate(const char* sig) {
         signatures.insert("std::string(*icd9AddLeadingZeroesMajorSingleStd)(std::string)");
         signatures.insert("Rcpp::CharacterVector(*icd9_add_leading_zeroes_major)(Rcpp::CharacterVector)");
         signatures.insert("Rcpp::CharacterVector(*icd9_add_leading_zeroes_cpp)(Rcpp::CharacterVector,bool)");
+        signatures.insert("Rcpp::String(*icd9AddLeadingZeroesShortSingle)(Rcpp::String)");
+        signatures.insert("Rcpp::CharacterVector(*icd9_add_leading_zeroes_alt_cpp)(Rcpp::CharacterVector,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9ExpandMinorShim)(std::string,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9ChildrenShortCpp)(Rcpp::CharacterVector,bool)");
         signatures.insert("Rcpp::CharacterVector(*icd9ChildrenDecimalCpp)(Rcpp::CharacterVector,bool)");
@@ -1674,6 +1737,8 @@ RcppExport SEXP icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "icd_icd9AddLeadingZeroesMajorSingleStd", (DL_FUNC)icd_icd9AddLeadingZeroesMajorSingleStd_try);
     R_RegisterCCallable("icd", "icd_icd9_add_leading_zeroes_major", (DL_FUNC)icd_icd9AddLeadingZeroesMajor_try);
     R_RegisterCCallable("icd", "icd_icd9_add_leading_zeroes_cpp", (DL_FUNC)icd_icd9AddLeadingZeroes_try);
+    R_RegisterCCallable("icd", "icd_icd9AddLeadingZeroesShortSingle", (DL_FUNC)icd_icd9AddLeadingZeroesShortSingle_try);
+    R_RegisterCCallable("icd", "icd_icd9_add_leading_zeroes_alt_cpp", (DL_FUNC)icd_icd9AddLeadingZeroesDirect_try);
     R_RegisterCCallable("icd", "icd_icd9ExpandMinorShim", (DL_FUNC)icd_icd9ExpandMinorShim_try);
     R_RegisterCCallable("icd", "icd_icd9ChildrenShortCpp", (DL_FUNC)icd_icd9ChildrenShortCpp_try);
     R_RegisterCCallable("icd", "icd_icd9ChildrenDecimalCpp", (DL_FUNC)icd_icd9ChildrenDecimalCpp_try);

@@ -112,7 +112,6 @@ Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
 	return Rcpp::sapply(major, icd9AddLeadingZeroesMajorSingle);
 }
 
-
 //' @title Add leading zeroes to incomplete ICD-9 codes
 //' @description Non-decimal ICD-9 codes with length<5 are often ambiguous. E.g.
 //'   100 could be 1.00 10.0 or 100 if coded incorrectly. We must assume 100 is
@@ -120,10 +119,27 @@ Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
 //' @param x Character vector of ICD-9 codes
 //' @template short_code
 //' @return character vector of ICD-9 codes with leading zeroes
+//' @examples
+//' \dontrun{
+//' stopifnot(identical(
+//'   icd9_add_leading_zeroes_alt_cpp(c("1", "E2", "V1", "E"), short_code = TRUE),
+//'   icd9_add_leading_zeroes_cpp(c("1", "E2", "V1", "E"), short_code = TRUE)
+//'   ))
+//'
+//'   bad_codes <- sample(c("E2", "V01", "1234", "12", "1", "E99", "E987", "V"),
+//'                       size = 1e6, replace = TRUE)
+//'   microbenchmark::microbenchmark(
+//'     icd9_add_leading_zeroes_alt_cpp(bad_codes, short_code = TRUE),
+//'     icd9_add_leading_zeroes_cpp(bad_codes, short_code = TRUE)
+//'   )
+//' }
 //' @keywords internal manip
 // [[Rcpp::export(icd9_add_leading_zeroes_cpp)]]
 Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector x, bool short_code) {
   if (short_code) {
+  // a shortcut for when short codes is just to add the appropriate leading
+  // zeros when the total length is <3. Even then decimal may be quicker by
+  // converting from short than calculating by parts.
     Rcpp::List parts = icd9ShortToPartsCpp(x, "");
     parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
     return icd9PartsToShort(parts);
@@ -134,3 +150,49 @@ Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector x, bool short_c
     return icd9PartsToDecimal(parts);
   }
 }
+
+// [[Rcpp::export]]
+Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
+  if (x == NA_STRING) {
+    return (NA_STRING);
+  }
+  std::string s(x);
+  if (!icd9IsASingleVE(x.get_cstring())) {
+    switch (strlen(x.get_cstring())) {
+    case 0:
+      return (NA_STRING);
+    case 1:
+      return ("00" + s);
+    case 2:
+      return ("0" + s);
+    }
+  } else { // is V or E type
+    switch (strlen(x.get_cstring())) {
+    case 1:
+      return (NA_STRING); // just "V" or "E"
+    case 2:
+      if (icd9IsASingleV(s.c_str())) {
+        s.insert(1, "0");
+      } else {
+        s.insert(1, "00");
+      }
+    case 3:
+      if (!icd9IsASingleV(s.c_str())) {
+        s.insert(1, "0");
+      }
+    }
+  }
+  return (s);
+}
+
+// [[Rcpp::export(icd9_add_leading_zeroes_alt_cpp)]]
+Rcpp::CharacterVector icd9AddLeadingZeroesDirect(Rcpp::CharacterVector x, bool short_code) {
+  // a shortcut for when short codes is just to add the appropriate leading
+  // zeros when the total length is <3.
+  if (short_code)
+    return Rcpp::sapply(x, icd9AddLeadingZeroesShortSingle);
+
+    Rcpp::CharacterVector y = icd9DecimalToShort(x);
+    return Rcpp::sapply(y, icd9AddLeadingZeroesShortSingle);
+}
+

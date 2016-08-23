@@ -573,6 +573,44 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
+    inline Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
+        typedef SEXP(*Ptr_icd9AddLeadingZeroesShortSingle)(SEXP);
+        static Ptr_icd9AddLeadingZeroesShortSingle p_icd9AddLeadingZeroesShortSingle = NULL;
+        if (p_icd9AddLeadingZeroesShortSingle == NULL) {
+            validateSignature("Rcpp::String(*icd9AddLeadingZeroesShortSingle)(Rcpp::String)");
+            p_icd9AddLeadingZeroesShortSingle = (Ptr_icd9AddLeadingZeroesShortSingle)R_GetCCallable("icd", "icd_icd9AddLeadingZeroesShortSingle");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9AddLeadingZeroesShortSingle(Rcpp::wrap(x));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<Rcpp::String >(__result);
+    }
+
+    inline Rcpp::CharacterVector icd9_add_leading_zeroes_alt_cpp(Rcpp::CharacterVector x, bool short_code) {
+        typedef SEXP(*Ptr_icd9_add_leading_zeroes_alt_cpp)(SEXP,SEXP);
+        static Ptr_icd9_add_leading_zeroes_alt_cpp p_icd9_add_leading_zeroes_alt_cpp = NULL;
+        if (p_icd9_add_leading_zeroes_alt_cpp == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd9_add_leading_zeroes_alt_cpp)(Rcpp::CharacterVector,bool)");
+            p_icd9_add_leading_zeroes_alt_cpp = (Ptr_icd9_add_leading_zeroes_alt_cpp)R_GetCCallable("icd", "icd_icd9_add_leading_zeroes_alt_cpp");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9_add_leading_zeroes_alt_cpp(Rcpp::wrap(x), Rcpp::wrap(short_code));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<Rcpp::CharacterVector >(__result);
+    }
+
     inline Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
         typedef SEXP(*Ptr_icd9ExpandMinorShim)(SEXP,SEXP);
         static Ptr_icd9ExpandMinorShim p_icd9ExpandMinorShim = NULL;

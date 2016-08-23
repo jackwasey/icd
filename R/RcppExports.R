@@ -236,6 +236,14 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call('icd_icd9AddLeadingZeroes', PACKAGE = 'icd', x, short_code)
 }
 
+icd9AddLeadingZeroesShortSingle <- function(x) {
+    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
+}
+
+icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
+    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
+}
+
 icd9ExpandMinorShim <- function(minor, isE = FALSE) {
     .Call('icd_icd9ExpandMinorShim', PACKAGE = 'icd', minor, isE)
 }
