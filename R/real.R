@@ -56,7 +56,7 @@ icd_is_defined.icd9 <- function(x, short_code = icd_guess_short(x),
 }
 
 #' @describeIn icd_is_defined Same for ICD-10-CM
-#' @param nomatch integer value, passed to \code{fmatch} default is 0. Setting
+#' @param nomatch integer value, passed to \code{match} default is 0. Setting
 #'   this to \code{NA_integer_} would stop NA values being treated as undefined.
 #' @export
 #' @keywords internal
@@ -69,7 +69,7 @@ icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short(x),
   if (billable)
     icd_is_billable.icd10cm(x, short_code = short_code)
   else
-    fmatch(x, icd::icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L
+    match(x, icd::icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L
 }
 
 #' @describeIn icd_is_defined Same for ICD-10, temporarily using ICD-10-CM until
@@ -161,7 +161,7 @@ icd_is_billable.icd10cm <- function(x, short_code = icd_guess_short(x), icd10cm_
   if (!short_code)
     x <- icd_decimal_to_short(x)
 
-  x %fin% icd10cm2016[icd10cm2016[["billable"]] == 1, "code"]
+  x %in% icd10cm2016[icd10cm2016[["billable"]] == 1, "code"]
 }
 
 #' @describeIn icd_is_billable Which of the given ICD-10 codes are leaf nodes in
@@ -184,7 +184,7 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
   assert_string(icd9cm_edition)
   if (!short_code)
     x <- icd_decimal_to_short.icd9(x)
-  fmatch(x, icd::icd9cm_billable[[icd9cm_edition]][["code"]], nomatch = nomatch, ...) > 0L
+  match(x, icd::icd9cm_billable[[icd9cm_edition]][["code"]], nomatch = nomatch, ...) > 0L
 }
 
 #' @describeIn icd_is_billable Which of the given ICD codes are leaf nodes in

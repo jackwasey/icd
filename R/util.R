@@ -281,8 +281,8 @@ isNonASCII <- function(x)
 
 #' Fast Factor Generation
 #'
-#' This function generates factors more quickly, by leveraging
-#' \code{fastmatch}. The speed increase for ICD-9 codes is about
+#' This function generates factors more quickly, without leveraging
+#' \code{fastmatch}. The speed increase with fastmatch for ICD-9 codes was about
 #' 33% reduction for 10 million codes.
 #'
 #' \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
@@ -321,30 +321,12 @@ isNonASCII <- function(x)
 #'   alphanumeric sorting will likely be completely wrong.
 #' @keywords internal manip
 factor_nosort <- function(x, levels = NULL, labels = levels) {
-  # sort may be pre-requisite for fastmatch
   if (is.factor(x)) return(x)
   if (is.null(levels)) levels <- unique.default(x)
-  suppressWarnings(f <- fmatch(x, levels))
+  suppressWarnings(f <- match(x, levels))
   levels(f) <- as.character(labels)
   class(f) <- "factor"
   f
-}
-
-#' Fast find which \code{x} are \emph{not} in \code{table}
-#'
-#' Uses \code{fmatch} taken from the \code{fastmatch} package which creates hash
-#' table, and re-uses if \code{table} is re-used.
-#' @param x vector
-#' @param table vector
-#' @keywords internal
-`%fin%` <- function(x, table) {
-  fmatch(x, table, nomatch = 0L) > 0L
-}
-
-#' @rdname grapes-fin-grapes
-#' @keywords internal
-`%fnin%` <- function(x, table) {
-  fmatch(x, table, nomatch = 0L) == 0L
 }
 
 #' wrapper for \code{.Deprecated}
@@ -417,10 +399,6 @@ named_list <- function(...) {
   x <- list(...)
   names(x) <- as.character(match.call()[-1])
   x
-}
-
-fmatch <- function(x, table, nomatch = NA_integer_, incomparables = NULL) {
-  .Call("fmatch", PACKAGE = "icd", x, table, nomatch, incomparables)
 }
 
 # allows R 3.1 to work

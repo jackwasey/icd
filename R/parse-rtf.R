@@ -336,7 +336,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     lf <- lookup_fourth[f_num]
     f <- names(lf)
     parent_code <- icd_get_major.icd9(f, short_code = FALSE)
-    if (parent_code %fin% names(out)) {
+    if (parent_code %in% names(out)) {
       pair_fourth <- paste(out[parent_code], lookup_fourth[f_num], sep = ", ")
       names(pair_fourth) <- f
       out_fourth <- append(out_fourth, pair_fourth)
@@ -353,9 +353,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     f <- names(lf)
     parent_code <- substr(f, 0, nchar(f) - 1)
 
-    # repeated lookup in same table, so can benefit from fast match %fin%
-    # instead of %in%
-    if (parent_code %fin% names(out)) {
+    if (parent_code %in% names(out)) {
       # add just the suffix with name being the five digit code
       pair_fifth <- paste(out[parent_code], lf, sep = ", ")
       names(pair_fifth) <- f

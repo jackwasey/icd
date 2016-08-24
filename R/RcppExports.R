@@ -79,7 +79,6 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
 #' @template mapping
 #' @template visit_name
 #' @template icd_name
-#' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 #' @keywords internal
 icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
@@ -231,6 +230,20 @@ icd9_add_leading_zeroes_major <- function(major) {
 #' @param x Character vector of ICD-9 codes
 #' @template short_code
 #' @return character vector of ICD-9 codes with leading zeroes
+#' @examples
+#' \dontrun{
+#' stopifnot(identical(
+#'   icd9_add_leading_zeroes_alt_cpp(c("1", "E2", "V1", "E"), short_code = TRUE),
+#'   icd9_add_leading_zeroes_cpp(c("1", "E2", "V1", "E"), short_code = TRUE)
+#'   ))
+#'
+#'   bad_codes <- sample(c("E2", "V01", "1234", "12", "1", "E99", "E987", "V"),
+#'                       size = 1e6, replace = TRUE)
+#'   microbenchmark::microbenchmark(
+#'     icd9_add_leading_zeroes_alt_cpp(bad_codes, short_code = TRUE),
+#'     icd9_add_leading_zeroes_cpp(bad_codes, short_code = TRUE)
+#'   )
+#' }
 #' @keywords internal manip
 icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call('icd_icd9AddLeadingZeroes', PACKAGE = 'icd', x, short_code)

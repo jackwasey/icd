@@ -110,9 +110,6 @@ test_that("Quan Charlson icd9 mappings are all
 
               if (is.null(icd9_fetch_quan_deyo_sas(offline = TRUE)))
                 skip("data-raw/ICD9_E_Charlson.sas must be downloaded with icd9_fetch_quan_deyo_sas")
-              # just test equivalence because we can test class and short vs
-              # decimal independently, and fastmatch adds an attribute during
-              # testing pointing to the hash table.
               expect_equivalent(icd9_map_quan_deyo, icd9_parse_quan_deyo_sas(save_data = FALSE))
               expect_equivalent(
                 icd_get_invalid.icd_comorbidity_map(icd9_map_quan_deyo, short_code = TRUE),

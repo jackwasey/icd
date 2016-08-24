@@ -462,7 +462,7 @@ test_that("deprecated - sysdata.rda is okay", {
                "icd9_sources")
 
   sysdat <- generateSysData(save = FALSE)
-  expect_true(all(lknames %fin% names(sysdat)))
+  expect_true(all(lknames %in% names(sysdat)))
 
   expect_lt(length(icd9NShortBillable), length(icd9NShortReal))
   expect_lt(length(icd9VShortBillable), length(icd9VShortReal))
@@ -470,7 +470,7 @@ test_that("deprecated - sysdata.rda is okay", {
   expect_lt(length(icd9NShortReal), length(icd9NShort))
   expect_lt(length(icd9VShortReal), length(icd9VShort))
   expect_lt(length(icd9EShortReal), length(icd9EShort))
-  expect_true(all(icd9NShortReal %fin% icd9NShort))
-  expect_true(all(icd9VShortReal %fin% icd9VShort))
-  expect_true(all(icd9EShortReal %fin% icd9EShort))
+  expect_true(all(icd9NShortReal %in% icd9NShort))
+  expect_true(all(icd9VShortReal %in% icd9VShort))
+  expect_true(all(icd9EShortReal %in% icd9EShort))
 })

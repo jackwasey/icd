@@ -296,7 +296,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   bill32 <- icd9cm_billable[["32"]]
 
   billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)
-  billable_rows <- which(icd9cm_hierarchy[["code"]] %fin% billable_codes)
+  billable_rows <- which(icd9cm_hierarchy[["code"]] %in% billable_codes)
   title_rows <- which(icd9cm_hierarchy[["code"]] %nin% billable_codes)
   stopifnot(setdiff(c(billable_rows, title_rows), seq_along(icd9cm_hierarchy$code)) == integer(0))
   icd9cm_hierarchy[billable_rows, "short_desc"] <- bill32$short_desc

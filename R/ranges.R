@@ -116,7 +116,7 @@ icd_expand_range.icd10cm <- function(start, end, short_code = icd_guess_short(c(
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  pos <- fmatch(c(start, new_end), icd::icd10cm2016[["code"]])
+  pos <- match(c(start, new_end), icd::icd10cm2016[["code"]])
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
@@ -167,10 +167,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
   if (se[[1]] > se[[2]])
     stop(se[[1]], " is after ", se[[2]])
 
-  # fastmatch will add attribute to the variable with scope in this block, so
-  # it'll get garbage collected. If this ever matters, can call fmatch on the
-  # whole three_digit vector, and then unique the results to dedupe.
-  pos <- fmatch(se, unique_mjrs)
+  pos <- match(se, unique_mjrs)
   if (is.na(pos[[1]]))
     stop(se[[1]], " as start not found")
   if (is.na(pos[[2]]))
@@ -206,8 +203,8 @@ expand_range_worker <- function(start, end, lookup, defined,
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
 
-  start_index <- fmatch(start, lookup)
-  end_index <- fmatch(end, lookup)
+  start_index <- match(start, lookup)
+  end_index <- match(end, lookup)
   assert_integer(start_index, len = 1L)
   if (is.na(start_index[1]))
     stop(sprintf("start value '%s' not found in look-up table of ICD-9 codes.", start))
@@ -227,7 +224,7 @@ expand_range_worker <- function(start, end, lookup, defined,
     # 102.11, 102.2
     starts <- utils::tail(out, 5)
     for (s in starts) {
-      if (any(icd_children.icd9(s, short_code = TRUE, defined = defined) %fnin% out))
+      if (any(icd_children.icd9(s, short_code = TRUE, defined = defined) %nin% out))
         out <- out[-which(out == s)]
     }
   }
@@ -239,7 +236,7 @@ expand_range_worker <- function(start, end, lookup, defined,
     # kill it, if it spills over.
     out_cp <- out
     for (o in out_cp) {
-      if (any(icd_children.icd9(o, short_code = TRUE, defined = defined) %fnin% out))
+      if (any(icd_children.icd9(o, short_code = TRUE, defined = defined) %nin% out))
         out <- out[-which(out == o)]
     }
   }
