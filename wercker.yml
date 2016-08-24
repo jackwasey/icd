@@ -27,7 +27,7 @@ build:
     - script:
         name: run covr for codecov.io
         code: |
-            Rscript -e "library(covr); codecov(quiet = FALSE, line_exclusions = list('inst/include/icd_RcppExports.h', 'R/RcppExports.R', 'src/RcppExports.cpp', 'R/benchmark.R'))"
+            Rscript -e "covr::codecov(quiet = FALSE, line_exclusions = list('inst/include/icd_RcppExports.h', 'R/RcppExports.R', 'src/RcppExports.cpp', 'R/benchmark.R', 'R/comorbid_alt.R', 'R/sort_alt.R'))"
     - script:
         name: debug information after codecov with covr
         code: |
