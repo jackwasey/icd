@@ -79,6 +79,7 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
 #' @template mapping
 #' @template visit_name
 #' @template icd_name
+#' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 #' @keywords internal
 icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
