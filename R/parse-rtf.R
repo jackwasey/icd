@@ -198,7 +198,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   re_fourth_range <- "fourth-digit.+categor"
   fourth_rows <- grep(re_fourth_range, filtered)
 
-  lookup_fourth <- rtf_lookup_fourth(filtered, fourth_rows)
+  lookup_fourth <- rtf_generate_fourth_lookup(filtered, fourth_rows)
 
   # at least two examples of "Use 0 as fourth digit for category 672"
   re_fourth_digit_zero <- "Use 0 as fourth digit for category"
@@ -261,7 +261,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   # now here we could potentially capture chapter headings, but I can drop
   # excludes easily by removing lines with bracketed codes
-  filtered <- grep(paste0("\\((", re_icd9_decimal_bare, ")-(", re_icd9_decimal_bare, ")\\)"),
+  filtered <- grep(paste0("\\((", icd::re_icd9_decimal_bare,
+                          ")-(", icd::re_icd9_decimal_bare, ")\\)"),
                    filtered, value = TRUE, invert = TRUE)
   filtered <- grep(paste0("Exclude"), filtered, value = TRUE, invert = TRUE)
 
@@ -277,7 +278,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # again, we can keep some more information, but we'll just take the primary
   # description for each item, i.e. where a code begins a line. Some codes have
   # ten or so alternative descriptions, e.g. 410.0
-  filtered <- grep(paste0("^[[:space:]]*(", re_icd9_decimal_strict_bare, ") "), filtered, value = TRUE)
+  filtered <- grep(paste0("^[[:space:]]*(", icd::re_icd9_decimal_strict_bare, ") "), filtered, value = TRUE)
 
   # spaces to single
   filtered <- gsub("[[:space:]]+", " ", filtered)
@@ -291,11 +292,11 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # "2009 H1 N1 swine influenza virus"
   filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE)
   # "495.7 \"Ventilation\" pneumonitis"
-  re_code_desc <- paste0("^(", re_icd9_decimal_bare, ") +([ \"[:graph:]]+)")
+  re_code_desc <- paste0("^(", icd::re_icd9_decimal_bare, ") +([ \"[:graph:]]+)")
   # out is the start of the eventual output of code to description pairs
   out <- str_pair_match(filtered, re_code_desc)
 
-  out_fourth <- rtf_lookup_fourth()
+  out_fourth <- rtf_lookup_fourth(out = out, lookup_fourth = lookup_fourth)
 
   out <- c(out, out_fourth)
 
@@ -372,7 +373,11 @@ rtf_generate_fourth_lookup <- function(filtered, fourth_rows) {
 #' use the lookup table of fourth digit
 #'
 #' @keywords internal
-rtf_lookup_fourth <- function(out, lookup_fourth) {
+rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
+  rtf_lookup_fourth_alt_env(out = out, lookup_fourth = lookup_fourth, verbose = verbose)
+}
+
+rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
   out_fourth <- c()
   for (f_num in seq_along(lookup_fourth)) {
     lf <- lookup_fourth[f_num]
@@ -384,14 +389,16 @@ rtf_lookup_fourth <- function(out, lookup_fourth) {
       out_fourth <- append(out_fourth, pair_fourth)
     }
   }
-  message("fourth output lines: length = ", length(out_fourth), ", head: ")
-  print(head(out_fourth))
+  if (verbose) {
+    message("fourth output lines: length = ", length(out_fourth), ", head: ")
+    print(head(out_fourth))
+  }
   out_fourth
 }
 
-rtf_lookup_fourth_alt_env <- function(out, lookup_fourth) {
+rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = TRUE) {
   out_fourth <- c()
-  out_env <- as.environment(out)
+  out_env <- list2env(as.list(out))
   for (f_num in seq_along(lookup_fourth)) {
     lf <- lookup_fourth[f_num]
     f <- names(lf)
@@ -402,8 +409,11 @@ rtf_lookup_fourth_alt_env <- function(out, lookup_fourth) {
       out_fourth <- append(out_fourth, pair_fourth)
     }
   }
-  message("fourth output lines: length = ", length(out_fourth), ", head: ")
-  print(head(out_fourth))
+  if (verbose) {
+    message("fourth output lines: length = ", length(out_fourth), ", head: ")
+    print(head(out_fourth))
+  }
+  rm(out_env)
   out_fourth
 }
 #' Fix unicode characters in RTF
@@ -578,13 +588,12 @@ rtf_parse_qualifier_subset <- function(qual) {
 rtf_strip <- function(x) {
   #nolint start
   x <- gsub("\\\\tab ", " ", x)
-  x <- gsub("\\\\[[:punct:]]", "", x)  # control symbols only, not control words
-  x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x)  # special case, still needed?
-  x <- gsub("\\{\\\\bkmkstart.*?\\}", "", x)
-  x <- gsub("\\{\\\\bkmkend.*?\\}", "", x)
+  x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
+  x <- gsub("\\{\\\\bkmk(start|end).*?\\}", "", x)
   # no backslash in this next list, others removed from
   # http://www.regular-expressions.info/posixbrackets.html
-  x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x)
+  # punct is defined as:       [!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]
+  #x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
   x <- gsub(" *(\\}|\\{)", "", x)
   trim(x)
   #nolint end
