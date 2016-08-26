@@ -99,10 +99,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   assert_character(rtf_lines)
   assert_flag(verbose)
+  assert_flag(save_extras)
 
-  # filtered <- iconv(rtf_lines, from = "ASCII", to = "UTF-8", mark = TRUE) I
-  # think the first 127 characters of ASCII are the same in Unicode, but we must
-  # make sure R treats the lines as Unicode.
   filtered <- rtf_lines
   # merge any line NOT starting with "\\par" on to previous line
   non_par_lines <- grep(pattern = "^\\\\par", x = filtered, invert = TRUE)
@@ -119,31 +117,25 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   filtered <- fix_unicode(filtered)
 
-  # drop stupid long line at end:
-  longest_lines <- nchar(filtered) > 3000L
-  # if none, then -c() returns no rows, so we have to test first
-  if (any(longest_lines))
-    filtered <- filtered[-c(which(longest_lines))]
+  # extremely long terminal line in primary source is junk
+  longest_lines <- which(nchar(filtered) > 3000L)
+  filtered <- filtered[-longest_lines]
 
   filtered <- rtf_strip(filtered)
 
   filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE)
 
-  # somewhere around here, we can extract sub-chapters:
+  re_subchap_either <- paste0(
+    "^[-()A-Z,[:space:]]+", "(", "[[:space:]]+\\(", "|", "\\(", ")",
+    "(", icd::re_icd9_major_strict_bare, ")",
+    "(-(", icd::re_icd9_major_strict_bare, "))?",
+    "\\)")
 
-  # actually, these are ICD-9-CM sub-chapters, but I think this is a superset of
-  # ICD 9
+  paste0("^(", icd::re_icd9_major_strict_bare, ") ") -> re_major_start
 
-  # either range or a single value (which overlaps with the majors definition)
-  paste0("^[-()A-Z,[:space:]]+", "(", "[[:space:]]+\\(", "|", "\\(", ")",
-         "(", re_icd9_major_strict_bare, ")",
-         "(-(", re_icd9_major_strict_bare, "))?",
-         "\\)") -> re_subchap_either
-
-  paste0("^(", re_icd9_major_strict_bare, ") ") -> re_major_start
-
-  grep(re_subchap_either, filtered, value = TRUE) %>%
-    chapter_to_desc_range.icd9 -> icd9_sub_chapters
+  icd9_sub_chapters <- chapter_to_desc_range.icd9(
+    grep(re_subchap_either, filtered, value = TRUE)
+  )
 
   # The entire "E" block is incorrectly identified here, so make sure it is gone:
   icd9_sub_chapters["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"] <- NULL
@@ -178,7 +170,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   for (ql in qual_subset_lines) {
     # get prior code
     filtered[ql - 1] %>%
-      str_match_all(paste0("(", re_icd9_decimal_bare, ") (.*)")) %>%
+      str_match_all(paste0("(", icd::re_icd9_decimal_bare, ") (.*)")) %>%
       unlist %>% extract2(2) -> code
     sb <- rtf_parse_qualifier_subset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
@@ -193,10 +185,9 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # grab fifth digit ranges now:
   re_fifth_range_other <- "fifth +digit +to +identify +stage"
   re_fifth_range <- "ifth-digit subclas|fifth-digits are for use with codes"
-  re_fifth_range_V30V39 <-
-    "The following two fifths-digits are for use with the fourth-digit \\.0"
+  re_fifth_range_V30V39 <- "The following two fifths-digits are for use with the fourth-digit \\.0"
   re_fifth_rows <- paste(re_fifth_range, re_fifth_range_other, sep = "|")
-  filtered %>% grepl(pattern = re_fifth_rows) %>% which -> fifth_rows
+  fifth_rows <- grep(pattern = re_fifth_rows, x = filtered)
 
   # several occurances of "Requires fifth digit", referring back to the previous
   # higher-level definition, without having the parent code in the line itself
@@ -204,35 +195,10 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # for these, construct a string which will be captured in the next block
   filtered[fifth_backref] <- paste(filtered[fifth_backref], filtered[fifth_backref - 1])
 
-  # fourth-digit qualifiers:
   re_fourth_range <- "fourth-digit.+categor"
   fourth_rows <- grep(re_fourth_range, filtered)
 
-  # lookup_fourth will contain vector of suffices, with names being the codes
-  # they augment
-  lookup_fourth <- c()
-  for (f in fourth_rows) {
-    if (verbose)
-      message("working on fourth-digit row:", f)
-    range <- rtf_parse_fifth_digit_range(filtered[f])
-    filtered[seq(f + 1, f + 37)] %>%
-      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)") -> fourth_suffices
-    re_fourth_defined <- paste(c("\\.[", names(fourth_suffices), "]$"), collapse = "")
-    # drop members of range which don't have defined fourth digit
-    range <- grep(re_fourth_defined, range, value = TRUE)
-    # now replace value with the suffix, with name of item being the code itself
-    names(range) <- range
-    last <- -1
-    for (fourth in names(fourth_suffices)) {
-      if (last > as.integer(fourth)) break
-      re_fourth <- paste0("\\.", fourth, "$")
-
-      range[grep(re_fourth, range)] <- fourth_suffices[fourth]
-      last <- fourth
-    }
-    lookup_fourth <- c(lookup_fourth, range)
-  }
+  lookup_fourth <- rtf_lookup_fourth(filtered, fourth_rows)
 
   # at least two examples of "Use 0 as fourth digit for category 672"
   re_fourth_digit_zero <- "Use 0 as fourth digit for category"
@@ -326,23 +292,12 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE)
   # "495.7 \"Ventilation\" pneumonitis"
   re_code_desc <- paste0("^(", re_icd9_decimal_bare, ") +([ \"[:graph:]]+)")
+  # out is the start of the eventual output of code to description pairs
   out <- str_pair_match(filtered, re_code_desc)
 
-  out_fourth <- c()
-  # apply fourth digit qualifiers
-  for (f_num in seq_along(lookup_fourth)) {
-    if (verbose)
-      message("applying fourth digits to lookup row: ", f_num)
-    lf <- lookup_fourth[f_num]
-    f <- names(lf)
-    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
-    if (parent_code %in% names(out)) {
-      pair_fourth <- paste(out[parent_code], lookup_fourth[f_num], sep = ", ")
-      names(pair_fourth) <- f
-      out_fourth <- append(out_fourth, pair_fourth)
-    }
-  }
-  out <- append(out, out_fourth)
+  out_fourth <- rtf_lookup_fourth()
+
+  out <- c(out, out_fourth)
 
   out_fifth <- c()
   # apply fifth digit qualifiers:
@@ -365,8 +320,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
         message("parent code ", parent_code, " missing when looking up ", f)
     }
   }
-  out <- append(out, out_fifth)
-
+  out <- c(out, out_fifth)
   out <- fix_rtf_duplicates(out, verbose)
 
   # drop all the codes not specified by 5th digits in square brackets, which are
@@ -376,6 +330,82 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   fix_rtf_quirks_2015(out)
 }
 
+#' generate look-up for four digit codes
+#'
+#' \code{lookup_fourth} will contain vector of suffices, with names being the
+#' codes they augment
+#' @return named character vector, names are the ICD codes, values are the
+#'   descriptions
+#' @keywords internal
+rtf_generate_fourth_lookup <- function(filtered, fourth_rows) {
+  lookup_fourth <- c()
+  for (f in fourth_rows) {
+    range <- rtf_parse_fifth_digit_range(filtered[f])
+
+    fourth_suffices <- str_pair_match(
+      string = filtered[seq(f + 1, f + 37)],
+      pattern = "^([[:digit:]])[[:space:]](.*)"
+    )
+
+    re_fourth_defined <- paste(c("\\.[", names(fourth_suffices), "]$"), collapse = "")
+    # drop members of range which don't have defined fourth digit
+    range <- grep(re_fourth_defined, range, value = TRUE)
+    # now replace value with the suffix, with name of item being the code itself
+    names(range) <- range
+    last <- -1
+    for (fourth in names(fourth_suffices)) {
+      if (last > as.integer(fourth)) break
+      re_fourth <- paste0("\\.", fourth, "$")
+
+      range[grep(re_fourth, range)] <- fourth_suffices[fourth]
+      last <- fourth
+    }
+    lookup_fourth <- c(lookup_fourth, range)
+  }
+  message("lookup_fourth has length: ", length(lookup_fourth), "head: ")
+  print(head(lookup_fourth))
+  lookup_fourth
+}
+
+#' apply fourth digit qualifiers
+#'
+#' use the lookup table of fourth digit
+#'
+#' @keywords internal
+rtf_lookup_fourth <- function(out, lookup_fourth) {
+  out_fourth <- c()
+  for (f_num in seq_along(lookup_fourth)) {
+    lf <- lookup_fourth[f_num]
+    f <- names(lf)
+    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
+    if (parent_code %in% names(out)) {
+      pair_fourth <- paste(out[parent_code], lf, sep = ", ")
+      names(pair_fourth) <- f
+      out_fourth <- append(out_fourth, pair_fourth)
+    }
+  }
+  message("fourth output lines: length = ", length(out_fourth), ", head: ")
+  print(head(out_fourth))
+  out_fourth
+}
+
+rtf_lookup_fourth_alt_env <- function(out, lookup_fourth) {
+  out_fourth <- c()
+  out_env <- as.environment(out)
+  for (f_num in seq_along(lookup_fourth)) {
+    lf <- lookup_fourth[f_num]
+    f <- names(lf)
+    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
+    if (!is.null(out_env[[parent_code]])) {
+      pair_fourth <- paste(out[parent_code], lf, sep = ", ")
+      names(pair_fourth) <- f
+      out_fourth <- append(out_fourth, pair_fourth)
+    }
+  }
+  message("fourth output lines: length = ", length(out_fourth), ", head: ")
+  print(head(out_fourth))
+  out_fourth
+}
 #' Fix unicode characters in RTF
 #'
 #' fix ASCII/CP1252/Unicode horror: of course, some char defs are split over

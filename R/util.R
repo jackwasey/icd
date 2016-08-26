@@ -372,7 +372,7 @@ icd_deprecated <- function(...) {
     stop("Problem matching\n", x[!(okr || oks)], call. = FALSE)
   m <- ifelse(okr, mr, ms)
   out <- lapply(m, function(y) c(start = y[[3]], end = y[[length(y)]]))
-  names(out) <- vapply(m, function(y) y[[2]] %>% to_title_case %>% trim,
+  names(out) <- vapply(m, function(y) trim(to_title_case(y[[2]])),
                        FUN.VALUE = character(1))
   out
 }

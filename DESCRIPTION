@@ -21,7 +21,6 @@ Depends:
     R (>= 3.1.0)
 Imports:
     checkmate (>= 1.7.0),
-    data.table,
     magrittr,
     stats,
     Rcpp (>= 0.12.3),
