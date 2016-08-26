@@ -224,7 +224,7 @@ expand_range_worker <- function(start, end, lookup, defined,
     # 102.11, 102.2
     starts <- utils::tail(out, 5)
     for (s in starts) {
-      if (any(icd_children.icd9(s, short_code = TRUE, defined = defined) %nin% out))
+      if (!all(icd_children.icd9(s, short_code = TRUE, defined = defined) %in% out))
         out <- out[-which(out == s)]
     }
   }

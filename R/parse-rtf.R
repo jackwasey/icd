@@ -308,8 +308,9 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, per
   filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE, perl = perl, useBytes = useBytes)
   # "495.7 \"Ventilation\" pneumonitis"
   re_code_desc <- paste0("^(", icd::re_icd9_decimal_bare, ") +([ \"[:graph:]]+)")
-  # out is the start of the eventual output of code to description pairs
-  out <- str_pair_match(filtered, re_code_desc, perl = perl, useBytes = useBytes)
+  # out is the start of the eventual output of code to description pairs. seems
+  # to be quicker with perl and useBytes both FALSE
+  out <- str_pair_match(filtered, re_code_desc, perl = FALSE, useBytes = FALSE)
 
   out <- c(out, rtf_lookup_fourth(out = out, lookup_fourth = lookup_fourth))
   out <- c(out, rtf_lookup_fifth(out, lookup_fifth))
@@ -612,9 +613,7 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
 
 rtf_parse_qualifier_subset <- function(qual) {
   assert_string(qual) # one at a time
-
   out <- c()
-
   qual %>% strip %>%
     strsplit("[]\\[,]") %>%
     unlist %>%
@@ -657,13 +656,11 @@ rtf_strip <- function(x, perl = TRUE, useBytes = TRUE) {
   #nolint start
   x <- gsub("\\\\tab ", " ", x, perl = perl, useBytes = useBytes)
   x <- gsub("\\\\[[:punct:]]", "", x, perl = perl, useBytes = useBytes) # control symbols only, not control words
-  # x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
   x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x, perl = perl, useBytes = useBytes) # special case
   x <- gsub("\\{\\\\bkmk(start|end).*?\\}", "", x, perl = perl, useBytes = useBytes)
   # no backslash in this next list, others removed from
   # http://www.regular-expressions.info/posixbrackets.html
-  # punct is defined as:       [!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]
-  #x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
+  # punct is defined as:       [!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~], not quite the same
   x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x, perl = perl, useBytes = useBytes)
   x <- gsub(" *(\\}|\\{)", "", x, perl = perl, useBytes = useBytes)
   trim(x)
