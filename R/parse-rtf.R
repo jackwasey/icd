@@ -296,32 +296,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # out is the start of the eventual output of code to description pairs
   out <- str_pair_match(filtered, re_code_desc)
 
-  out_fourth <- rtf_lookup_fourth(out = out, lookup_fourth = lookup_fourth)
-
-  out <- c(out, out_fourth)
-
-  out_fifth <- c()
-  # apply fifth digit qualifiers:
-  for (f_num in seq_along(lookup_fifth)) {
-    if (verbose)
-      message("applying fifth digits to lookup row: ", f_num)
-    lf <- lookup_fifth[f_num]
-    f <- names(lf)
-    parent_code <- substr(f, 0, nchar(f) - 1)
-
-    if (parent_code %in% names(out)) {
-      # add just the suffix with name being the five digit code
-      pair_fifth <- paste(out[parent_code], lf, sep = ", ")
-      names(pair_fifth) <- f
-      out_fifth <- append(out_fifth, pair_fifth)
-    } else {
-      # this is really superfluous since we don't expect to match these, keep
-      # for debugging
-      if (FALSE)
-        message("parent code ", parent_code, " missing when looking up ", f)
-    }
-  }
-  out <- c(out, out_fifth)
+  out <- c(out, rtf_lookup_fourth(out = out, lookup_fourth = lookup_fourth))
+  out <- c(out, rtf_lookup_fifth(out, lookup_fifth))
   out <- fix_rtf_duplicates(out, verbose)
 
   # drop all the codes not specified by 5th digits in square brackets, which are
@@ -338,7 +314,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 #' @return named character vector, names are the ICD codes, values are the
 #'   descriptions
 #' @keywords internal
-rtf_generate_fourth_lookup <- function(filtered, fourth_rows) {
+rtf_generate_fourth_lookup <- function(filtered, fourth_rows, verbose = FALSE) {
   lookup_fourth <- c()
   for (f in fourth_rows) {
     range <- rtf_parse_fifth_digit_range(filtered[f])
@@ -363,8 +339,10 @@ rtf_generate_fourth_lookup <- function(filtered, fourth_rows) {
     }
     lookup_fourth <- c(lookup_fourth, range)
   }
-  message("lookup_fourth has length: ", length(lookup_fourth), "head: ")
-  print(head(lookup_fourth))
+  if (verbose) {
+    message("lookup_fourth has length: ", length(lookup_fourth), ", head: ")
+    print(head(lookup_fourth))
+  }
   lookup_fourth
 }
 
@@ -373,7 +351,7 @@ rtf_generate_fourth_lookup <- function(filtered, fourth_rows) {
 #' use the lookup table of fourth digit
 #'
 #' @keywords internal
-rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
+rtf_lookup_fourth <- function(out, lookup_fourth, verbose = FALSE) {
   rtf_lookup_fourth_alt_env(out = out, lookup_fourth = lookup_fourth, verbose = verbose)
 }
 
@@ -396,7 +374,7 @@ rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
   out_fourth
 }
 
-rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = TRUE) {
+rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = FALSE) {
   out_fourth <- c()
   out_env <- list2env(as.list(out))
   for (f_num in seq_along(lookup_fourth)) {
@@ -416,6 +394,54 @@ rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = TRUE) {
   rm(out_env)
   out_fourth
 }
+
+rtf_lookup_fifth <- function(out, lookup_fifth, verbose = FALSE) {
+  rtf_lookup_fifth_alt_env(out = out, lookup_fifth = lookup_fifth, verbose = verbose)
+}
+
+rtf_lookup_fifth_alt_base <- function(out, lookup_fifth, verbose = FALSE) {
+  out_fifth <- c()
+  for (f_num in seq_along(lookup_fifth)) {
+    lf <- lookup_fifth[f_num]
+    f <- names(lf)
+    parent_code <- substr(f, 0, nchar(f) - 1)
+
+    if (parent_code %in% names(out)) {
+      pair_fifth <- paste(out[parent_code], lf, sep = ", ")
+      names(pair_fifth) <- f
+      out_fifth <- c(out_fifth, pair_fifth)
+    }
+  }
+  if (verbose) {
+    message("fifth output lines: length = ", length(out_fifth), ", head: ")
+    print(head(out_fifth))
+  }
+  out_fifth
+}
+
+rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
+  out_fifth <- character(5000) # 2011 data is 4870 long
+  n <- 1L
+  out_env <- list2env(as.list(out))
+
+  for (f_num in seq_along(lookup_fifth)) {
+    lf <- lookup_fifth[f_num]
+    f <- names(lf)
+    parent_code <- substr(f, 0, nchar(f) - 1)
+    if (!is.null(out_env[[parent_code]])) {
+      out_fifth[n] <- paste(out[parent_code], lf, sep = ", ")
+      names(out_fifth)[n] <- f
+      n <- n + 1L
+    }
+  }
+  out_fifth <- out_fifth[1:n - 1]
+  if (verbose) {
+    message("fifth output lines: length = ", length(out_fifth), ", head: ")
+    print(head(out_fifth))
+  }
+  out_fifth
+}
+
 #' Fix unicode characters in RTF
 #'
 #' fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
