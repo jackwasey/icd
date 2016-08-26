@@ -36,19 +36,19 @@ test_that("icd10 2016 flat file details are okay", {
   expect_identical(colnames(res), col_names)
 
   # checkmate tests worked well here, but don't work with latest testthat
-  expect_character(res$code)
-  expect_logical(res$billable)
-  expect_character(res$short_desc)
-  expect_character(res$long_desc)
+  checkmate::expect_character(res$code)
+  checkmate::expect_logical(res$billable)
+  checkmate::expect_character(res$short_desc)
+  checkmate::expect_character(res$long_desc)
 
-  expect_character(icd::icd10cm2016$code)
-  expect_logical(icd::icd10cm2016$billable)
-  expect_character(icd::icd10cm2016$short_desc)
-  expect_character(icd::icd10cm2016$long_desc)
+  checkmate::expect_character(icd::icd10cm2016$code)
+  checkmate::expect_logical(icd::icd10cm2016$billable)
+  checkmate::expect_character(icd::icd10cm2016$short_desc)
+  checkmate::expect_character(icd::icd10cm2016$long_desc)
 
   for (n in c("three_digit", "major", "sub_chapter", "chapter")) {
-    expect_factor(res[[n]])
-    expect_factor(icd::icd10cm2016[[n]])
+    checkmate::expect_factor(res[[n]])
+    checkmate::expect_factor(icd::icd10cm2016[[n]])
     expect_identical(levels(res[[n]]), levels(icd::icd10cm2016[[n]]), info = paste("working on ", n))
     expect_identical(res[[n]], icd::icd10cm2016[[n]], info = paste("working on ", n))
   }

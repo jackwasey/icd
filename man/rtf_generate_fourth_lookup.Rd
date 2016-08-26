@@ -4,7 +4,7 @@
 \alias{rtf_generate_fourth_lookup}
 \title{generate look-up for four digit codes}
 \usage{
-rtf_generate_fourth_lookup(filtered, fourth_rows)
+rtf_generate_fourth_lookup(filtered, fourth_rows, verbose = FALSE)
 }
 \value{
 named character vector, names are the ICD codes, values are the

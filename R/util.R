@@ -380,13 +380,13 @@ icd_deprecated <- function(...) {
 #' @rdname chapter_to_desc_range
 #' @keywords internal
 chapter_to_desc_range.icd9 <- function(x) {
-  .chapter_to_desc_range(x, re_major = re_icd9_major_bare)
+  .chapter_to_desc_range(x, re_major = icd::re_icd9_major_bare)
 }
 
 #' @rdname chapter_to_desc_range
 #' @keywords internal
 chapter_to_desc_range.icd10 <- function(x) {
-  .chapter_to_desc_range(x, re_major = re_icd10_major_bare)
+  .chapter_to_desc_range(x, re_major = icd::re_icd10_major_bare)
 }
 
 na_to_false <- function(x) {
@@ -413,49 +413,15 @@ str_match_all <- function(x, pattern) {
   regmatches(x, regexec(pattern, x))
 }
 
-to_title_case <- function (text) {
-  lpat <- "^(a|an|and|are|as|at|be|but|by|en|for|if|in|is|nor|not|of|on|or|per|so|the|to|v[.]?|via|vs[.]?|from|into|than|that|with)$"
-  either <- c("all", "above", "after", "along", "also", "among",
-              "any", "both", "can", "few", "it", "less", "log", "many",
-              "may", "more", "over", "some", "their", "then", "this",
-              "under", "until", "using", "von", "when", "where", "which",
-              "will", "without", "yet", "you", "your")
-  titleCase1 <- function(x) {
-    do1 <- function(x) {
-      x1 <- substring(x, 1L, 1L)
-      if (nchar(x) >= 3L && x1 %in% c("'", "\""))
-        paste0(x1, toupper(substring(x, 2L, 2L)), tolower(substring(x,
-                                                                    3L)))
-      else paste0(toupper(x1), tolower(substring(x, 2L)))
-    }
-    xx <- strsplit(x, " -/\"()\n")
-    alone <- c("2D", "3D", "AIC", "BayesX", "GoF", "HTML", "LaTeX",
-               "MonetDB", "OpenBUGS", "TeX", "U.S.", "U.S.A.", "WinBUGS",
-               "aka", "et", "al.", "ggplot2", "i.e.", "jar", "jars",
-               "ncdf", "netCDF", "rgl", "rpart", "xls", "xlsx")
-    alone <- xx %in% c(alone, either)
-    alone <- alone | grepl("^'.*'$", xx)
-    havecaps <- grepl("^[[:alpha:]].*[[:upper:]]+", xx)
-    l <- grepl(lpat, xx, ignore.case = TRUE)
-    l[1L] <- FALSE
-    ind <- grep("[-:]$", xx)
-    ind <- ind[ind + 2L <= length(l)]
-    ind <- ind[(xx[ind + 1L] == " ") & grepl("^['[:alnum:]]",
-                                             xx[ind + 2L])]
-    l[ind + 2L] <- FALSE
-    ind <- which(xx == "\"")
-    ind <- ind[ind + 1L <= length(l)]
-    l[ind + 1L] <- FALSE
-    xx[l] <- tolower(xx[l])
-    keep <- havecaps | l | (nchar(xx) == 1L) | alone
-    xx[!keep] <- sapply(xx[!keep], do1)
-    paste(xx, collapse = "")
-  }
-  if (typeof(text) != "character")
-    stop("'text' must be a character vector")
-  sapply(text, titleCase1, USE.NAMES = FALSE)
-}
-
 capitalize_first <- function(name) {
   trim(paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name))))
+}
+
+to_title_case <- function(x) {
+  for (split_char in c(" ", "-", "[")) {
+  s <- strsplit(x, split_char, fixed = TRUE)[[1]]
+  x <- paste(toupper(substring(s, 1L, 1L)), substring(s, 2L),
+        sep = "", collapse = split_char)
+  }
+  x
 }

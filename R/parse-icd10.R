@@ -29,22 +29,22 @@
 #' @keywords internal
 icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   assert_flag(save_data)
-  loadNamespace("xml2")
+  requireNamespace("xml2")
   f_info <- icd10cm_get_xml_file()
   j <- xml2::read_xml(f_info$file_path)
 
   # using magrittr::equals and extract because I don't want to import them. See
   # \code{icd-package.R} for what is imported. No harm in being explicit, since
   # :: will do an implicit requireNamespace.
-  j  %>% xml2::xml_children() %>%
+  j %>% xml2::xml_children() %>%
     xml2::xml_name() %>%
-    magrittr::equals("chapter" ) -> chapter_indices
+    magrittr::equals("chapter") -> chapter_indices
   # could do xpath, but harder to loop
-  j  %>% xml2::xml_children() %>% magrittr::extract(chapter_indices) -> chaps
+  j %>% xml2::xml_children() %>% magrittr::extract(chapter_indices) -> chaps
 
   icd10_sub_chapters <- list()
   for (chap in chaps) {
-    chap  %>% xml2::xml_children() -> c_kids
+    chap %>% xml2::xml_children() -> c_kids
     c_kids %>% xml2::xml_name() %>% magrittr::equals("section") -> subchap_indices
     c_kids %>% magrittr::extract(subchap_indices) -> subchaps
 
