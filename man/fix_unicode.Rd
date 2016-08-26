@@ -11,4 +11,5 @@ fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
 lines... This needs care in Windows, or course. Maybe Mac, too?
 }
 \keyword{internal}
+\keyword{manip}
 

@@ -31,7 +31,7 @@ fetch_rtf_year <- function(year, offline = TRUE) {
   assert_string(year)
   assert_flag(offline)
 
-  rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
+  rtf_dat <- icd::icd9_sources[icd::icd9_sources$f_year == year, ]
   fn <- rtf_dat$rtf_filename
 
   unzip_to_data_raw(rtf_dat$rtf_url, file_name = fn, offline = offline)
@@ -420,15 +420,10 @@ rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = TRUE) {
 #'
 #' fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
 #' lines... This needs care in Windows, or course. Maybe Mac, too?
-#' @keywords internal
+#' @keywords internal manip
 fix_unicode <- function(filtered) {
-  #
-  filtered <- gsub("\\\\'e7", "\u00e7", filtered) # c cedila
-  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e gravel
-  filtered <- gsub("\\\\'e9", "\u00e9", filtered) # e acute
-  filtered <- gsub("\\\\'f1", "\u00f1", filtered) # n tilde
-  filtered <- gsub("\\\\'f16", "\u00f6", filtered) # o umlaut
-  filtered
+  filtered <- gsub("\\\\'e([789]{1})", "\u00e\\1", filtered) # c cedila, e grave, e acute
+  gsub("\\\\'f([16]{1})", "\u00f\\1", filtered) # n tilde, o umlaut
 }
 
 #' fix duplicates detected in RTF parsing
@@ -456,13 +451,14 @@ fix_rtf_duplicates <- function(out, verbose) {
   out
 }
 
+#' fix quirks for 2015 RTF parsing
+#'
+#' 2015 quirks (many more are baked into the parsing: try to splinter out the
+#' most specific) some may well apply to other years 650-659 ( and probably many
+#' others don't use whole subset of fourth or fifth digit qualifiers) going to
+#' have to parse these, e.g. [0,1,3], as there are so many...
+#' @keywords internal manip
 fix_rtf_quirks_2015 <- function(out) {
-  # 2015 quirks (many more are baked into the parsing: try to splinter out the
-  # most specific) some may well apply to other years
-
-  # 650-659 ( and probably many others don't use whole subset of fourth or fifth
-  # digit qualifiers) going to have to parse these, e.g. [0,1,3], as there are
-  # so many...
   out <- out[grep("65[12356789]\\.[[:digit:]][24]", names(out), invert = TRUE)]
 
   #657 just isn't formatted like any other codes
@@ -588,12 +584,15 @@ rtf_parse_qualifier_subset <- function(qual) {
 rtf_strip <- function(x) {
   #nolint start
   x <- gsub("\\\\tab ", " ", x)
-  x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
+  x <- gsub("\\\\[[:punct:]]", "", x) # control symbols only, not control words
+  # x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
+  x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x) # special case
   x <- gsub("\\{\\\\bkmk(start|end).*?\\}", "", x)
   # no backslash in this next list, others removed from
   # http://www.regular-expressions.info/posixbrackets.html
   # punct is defined as:       [!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]
   #x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
+  x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x)
   x <- gsub(" *(\\}|\\{)", "", x)
   trim(x)
   #nolint end
