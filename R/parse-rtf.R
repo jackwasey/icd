@@ -446,10 +446,27 @@ rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
 #'
 #' fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
 #' lines... This needs care in Windows, or course. Maybe Mac, too?
+#'
+#' First: c cedila, e grave, e acute
+#' Then:  n tilde, o umlaut
+#' @examples
+#' \dontrun{
+#' # fix_unicode is a slow step, useBytes and perl together is faster
+#' f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
+#' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
+#' microbenchmark::microbenchmark(
+#'   res_both <- fix_unicode(rtf_lines, perl = TRUE, useBytes = TRUE),
+#'   res_none <- fix_unicode(rtf_lines, perl = FALSE, useBytes = FALSE),
+#'   res_bytes <- fix_unicode(rtf_lines, perl = FALSE, useBytes = TRUE),
+#'   res_perl <- fix_unicode(rtf_lines, perl = TRUE, useBytes = FALSE),
+#'   times = 5
+#' )
+#' stopifnot(identical(res_both, res_none))
+#' }
 #' @keywords internal manip
-fix_unicode <- function(filtered) {
-  filtered <- gsub("\\\\'e([789]{1})", "\u00e\\1", filtered) # c cedila, e grave, e acute
-  gsub("\\\\'f([16]{1})", "\u00f\\1", filtered) # n tilde, o umlaut
+fix_unicode <- function(filtered, perl = TRUE, useBytes = TRUE) {
+  filtered <- gsub("\\\\'e([789]{1})", "\u00e\\1", filtered, perl = perl, useBytes = useBytes)
+  gsub("\\\\'f([16]{1})", "\u00f\\1", filtered, perl = perl, useBytes = useBytes)
 }
 
 #' fix duplicates detected in RTF parsing
@@ -606,20 +623,34 @@ rtf_parse_qualifier_subset <- function(qual) {
 #'
 #' just for \\tab, replace with space, otherwise, drop rtf tags entirely
 #' @param x vector of character strings containing RTF
+#' @examples
+#' \dontrun{
+#' # rtf_strip is a slow step, useBytes and perl together is five times faster
+#' f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
+#' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
+#' microbenchmark::microbenchmark(
+#'   res_both <- rtf_strip(rtf_lines, perl = TRUE, useBytes = TRUE),
+#'   res_none <- rtf_strip(rtf_lines, perl = FALSE, useBytes = FALSE),
+#'   res_bytes <- rtf_strip(rtf_lines, perl = FALSE, useBytes = TRUE),
+#'   res_perl <- rtf_strip(rtf_lines, perl = TRUE, useBytes = FALSE),
+#'   times = 5
+#' )
+#' stopifnot(identical(res_both, res_none))
+#' }
 #' @keywords internal manip
-rtf_strip <- function(x) {
+rtf_strip <- function(x, perl = TRUE, useBytes = TRUE) {
   #nolint start
-  x <- gsub("\\\\tab ", " ", x)
-  x <- gsub("\\\\[[:punct:]]", "", x) # control symbols only, not control words
+  x <- gsub("\\\\tab ", " ", x, perl = perl, useBytes = useBytes)
+  x <- gsub("\\\\[[:punct:]]", "", x, perl = perl, useBytes = useBytes) # control symbols only, not control words
   # x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
-  x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x) # special case
-  x <- gsub("\\{\\\\bkmk(start|end).*?\\}", "", x)
+  x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x, perl = perl, useBytes = useBytes) # special case
+  x <- gsub("\\{\\\\bkmk(start|end).*?\\}", "", x, perl = perl, useBytes = useBytes)
   # no backslash in this next list, others removed from
   # http://www.regular-expressions.info/posixbrackets.html
   # punct is defined as:       [!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]
   #x <- gsub("\\\\[-[:alnum:]]*[ [:punct:]]?", "", x)
-  x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x)
-  x <- gsub(" *(\\}|\\{)", "", x)
+  x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x, perl = perl, useBytes = useBytes)
+  x <- gsub(" *(\\}|\\{)", "", x, perl = perl, useBytes = useBytes)
   trim(x)
   #nolint end
 }
