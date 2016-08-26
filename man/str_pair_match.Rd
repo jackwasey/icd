@@ -4,7 +4,8 @@
 \alias{str_pair_match}
 \title{Match pairs of strings to get named vector}
 \usage{
-str_pair_match(string, pattern, pos, swap = FALSE)
+str_pair_match(string, pattern, pos, swap = FALSE, perl = TRUE,
+  useBytes = TRUE)
 }
 \arguments{
 \item{string}{vector of strings}

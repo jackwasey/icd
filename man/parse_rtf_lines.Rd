@@ -4,7 +4,8 @@
 \alias{parse_rtf_lines}
 \title{parse lines of RTF}
 \usage{
-parse_rtf_lines(rtf_lines, verbose = FALSE, save_extras = FALSE)
+parse_rtf_lines(rtf_lines, verbose = FALSE, save_extras = FALSE,
+  perl = TRUE, useBytes = TRUE)
 }
 \arguments{
 \item{rtf_lines}{character vector containing RTF. Encoding?}
@@ -16,6 +17,19 @@ named character vector, with names being the ICD-9 codes, and the
   contents being the descriptions from the RTF source. Elsewhere I do this
   the other way around, but the tests are now wired for this layout. 'Tidy'
   data would favour having an unnamed two-column data frame.
+  @examples
+  \dontrun{
+f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
+rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
+microbenchmark::microbenchmark(
+  res_both <- parse_rtf_lines(rtf_lines, perl = TRUE, useBytes = TRUE),
+  res_none <- parse_rtf_lines(rtf_lines, perl = FALSE, useBytes = FALSE),
+  res_bytes <- parse_rtf_lines(rtf_lines, perl = FALSE, useBytes = TRUE),
+  res_perl <- parse_rtf_lines(rtf_lines, perl = TRUE, useBytes = FALSE),
+  times = 5
+)
+stopifnot(identical(res_both, res_none))
+}
 }
 \description{
 parse a character vector containing RTF strings

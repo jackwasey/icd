@@ -142,7 +142,7 @@ logical_to_binary <- function(x) {
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
-str_pair_match <- function(string, pattern, pos, swap = FALSE) {
+str_pair_match <- function(string, pattern, pos, swap = FALSE, perl = TRUE, useBytes = TRUE) {
   assert_character(string, min.len = 1L)
   assert_string(pattern, min.chars = 5L)
   assert_flag(swap)
@@ -158,7 +158,9 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE) {
         x = x,
         m = regexec(
           pattern = pattern,
-          text = x))
+          text = x,
+          perl = perl,
+          useBytes = useBytes))
     )[-1]
   )
   result <- result[vapply(result, function(x) length(x) != 0, logical(1))]
@@ -408,9 +410,9 @@ dir.exists <- function(paths) {
 }
 
 # substitute for removed stringr function
-str_match_all <- function(x, pattern) {
+str_match_all <- function(x, pattern, perl = TRUE, useBytes = TRUE) {
   x <- as.character(x)
-  regmatches(x, regexec(pattern, x))
+  regmatches(x, regexec(pattern, x, perl = perl, useBytes = useBytes))
 }
 
 capitalize_first <- function(name) {
