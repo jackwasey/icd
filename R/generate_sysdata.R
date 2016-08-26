@@ -107,12 +107,12 @@ generate_sysdata <- function(save_data = TRUE) {
       "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v23_icd9.zip"),
     rtf_url = c( # FY11,12,13,14 are the same?
       rep_len("http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip", 4),
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/DTAB11.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab10.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab09.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab08.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab07.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab06.zip"),
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2010/DTAB11.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2008/Dtab09.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2007/Dtab08.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2006/Dtab07.zip",
+      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2005/Dtab06.zip"),
     rtf_filename = c(
       rep_len("Dtab12.rtf", 4), "DTAB11.RTF", "Dtab10.RTF", "Dtab09.RTF", "Dtab08.RTF",
       "Dtab07.RTF", "Dtab06.rtf"), # there are more, but not with corresponding CMS, back to 1990s
