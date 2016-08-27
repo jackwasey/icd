@@ -136,6 +136,25 @@ namespace icd {
         return Rcpp::as<Rcpp::LogicalMatrix >(__result);
     }
 
+    inline Rcpp::CharacterVector icd9MajMinToCodeOld(const Rcpp::CharacterVector major, const Rcpp::CharacterVector minor, bool isShort) {
+        typedef SEXP(*Ptr_icd9MajMinToCodeOld)(SEXP,SEXP,SEXP);
+        static Ptr_icd9MajMinToCodeOld p_icd9MajMinToCodeOld = NULL;
+        if (p_icd9MajMinToCodeOld == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd9MajMinToCodeOld)(const Rcpp::CharacterVector,const Rcpp::CharacterVector,bool)");
+            p_icd9MajMinToCodeOld = (Ptr_icd9MajMinToCodeOld)R_GetCCallable("icd", "icd_icd9MajMinToCodeOld");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9MajMinToCodeOld(Rcpp::wrap(major), Rcpp::wrap(minor), Rcpp::wrap(isShort));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<Rcpp::CharacterVector >(__result);
+    }
+
     inline Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major, const Rcpp::CharacterVector minor, bool isShort) {
         typedef SEXP(*Ptr_icd9MajMinToCode)(SEXP,SEXP,SEXP);
         static Ptr_icd9MajMinToCode p_icd9MajMinToCode = NULL;

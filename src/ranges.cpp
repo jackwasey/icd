@@ -128,7 +128,7 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
     Rcpp::CharacterVector major = parts[0];
     Rcpp::CharacterVector minor = parts[1];
-    // the next iterator seems to be a Rcpp::CharacterVector of length 1
+
     Rcpp::CharacterVector::iterator itmajor = major.begin();
     Rcpp::CharacterVector::iterator itminor = minor.begin();
     for (; itmajor != major.end(); ++itmajor, ++itminor) {

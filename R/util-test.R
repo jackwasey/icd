@@ -20,7 +20,7 @@ do_slow_tests <- function(x = TRUE) {
 }
 
 doing_slow_tests <- function() {
-  identical(getOption("icd.do_slow_tests"), FALSE)
+  identical(getOption("icd.do_slow_tests"), TRUE)
 }
 
 skip_slow_tests <- function(msg = "skipping slow test") {

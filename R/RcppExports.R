@@ -85,6 +85,25 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
 }
 
+#' Convert major and minor vectors to single code
+#'
+#' In debug mode, will check that major and minor are same length.
+#' @examples
+#' \dontrun{
+#' n <- 5
+#' majors <- as.character(sample(1:999, n, replace = TRUE))
+#' minors <- as.character(sample(0:99, n, replace = TRUE))
+#' microbenchmark::microbenchmark(
+#'   icd9MajMinToCode(majors, minors, TRUE),
+#'   icd9MajMinToCodeStd(majors, minors, TRUE),
+#'   times = 3
+#' )
+#' }
+#' # std method vastly quicker, e.g. x100 when n=5000
+icd9MajMinToCodeOld <- function(major, minor, isShort) {
+    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', major, minor, isShort)
+}
+
 icd9MajMinToCode <- function(major, minor, isShort) {
     .Call('icd_icd9MajMinToCode', PACKAGE = 'icd', major, minor, isShort)
 }
