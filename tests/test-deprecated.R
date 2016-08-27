@@ -32,7 +32,7 @@ on.exit(options(old_warn))
 
 icd:::setup_test_check()
 icd:::show_test_options()
-if (doing_slow_tests()) {
+if (icd:::doing_slow_tests()) {
   icd:::my_test_check("deprecated", "Running deprecated tests")
 } else {
   message("skipping deprecated tests because icd.do_slow_tests is FALSE")

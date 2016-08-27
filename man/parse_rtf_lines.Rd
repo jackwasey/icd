@@ -17,8 +17,12 @@ named character vector, with names being the ICD-9 codes, and the
   contents being the descriptions from the RTF source. Elsewhere I do this
   the other way around, but the tests are now wired for this layout. 'Tidy'
   data would favour having an unnamed two-column data frame.
-  @examples
-  \dontrun{
+}
+\description{
+parse a character vector containing RTF strings
+}
+\examples{
+\dontrun{
 f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
 rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
 microbenchmark::microbenchmark(
@@ -30,9 +34,6 @@ microbenchmark::microbenchmark(
 )
 stopifnot(identical(res_both, res_none))
 }
-}
-\description{
-parse a character vector containing RTF strings
 }
 \keyword{internal}
 

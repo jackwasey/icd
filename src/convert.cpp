@@ -39,68 +39,6 @@
 //' }
 //' # std method vastly quicker, e.g. x100 when n=5000
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9MajMinToCodeOld(const Rcpp::CharacterVector major,
-                                          const Rcpp::CharacterVector minor, bool isShort) {
-#ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "icd9MajMinToCode: major.size() = " << major.size()
-              << " and minor.size() = " << minor.size() << "\n";
-#endif
-#ifdef ICD_DEBUG
-  if (major.size() != minor.size())
-    Rcpp::stop("major and minor lengths differ");
-#endif
-
-#ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "major and minor are the same?\n";
-#endif
-
-  Rcpp::CharacterVector out; // TODO use vectors of strings and reserve space for this
-  Rcpp::CharacterVector::const_iterator j = major.begin();
-  Rcpp::CharacterVector::const_iterator n = minor.begin();
-
-  for (; j != major.end() && n != minor.end(); ++j, ++n) {
-    Rcpp::String mjrelem = *j;
-    if (mjrelem == NA_STRING) {
-      out.push_back(NA_STRING);
-      continue;
-    }
-    // work around Rcpp bug with push_front: convert to string just for this
-    // TODO: try to do this with C string instead
-    const char* smj_c = mjrelem.get_cstring();
-    std::string smj = std::string(smj_c);
-    switch (strlen(smj_c)) {
-    case 0:
-      out.push_back(NA_STRING);
-      continue;
-    case 1:
-      if (!icd9IsASingleVE(smj_c)) {
-        smj.insert(0, "00");
-      }
-      break;
-    case 2:
-      if (!icd9IsASingleVE(smj_c)) {
-        smj.insert(0, "0");
-      } else {
-        smj.insert(1, "0");
-      }
-      // default: // major is 3 (or more) chars already
-    }
-    Rcpp::String mnrelem = *n;
-    if (mnrelem == NA_STRING) {
-      out.push_back(smj);
-      continue;
-    }
-    if (!isShort && mnrelem != "") {
-      smj.append(".");
-    }
-    smj.append(mnrelem);
-    out.push_back(smj);
-
-  }
-  return out;
-}
-
-// [[Rcpp::export]]
 Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
                                        const Rcpp::CharacterVector minor, bool isShort) {
 #ifdef ICD_DEBUG_TRACE
@@ -167,6 +105,68 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
     r_out[std::distance(out_is_na.begin(), i)] = NA_STRING;
   }
   return r_out;
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector icd9MajMinToCodeOld(const Rcpp::CharacterVector major,
+                                          const Rcpp::CharacterVector minor, bool isShort) {
+#ifdef ICD_DEBUG_TRACE
+  Rcpp::Rcout << "icd9MajMinToCode: major.size() = " << major.size()
+              << " and minor.size() = " << minor.size() << "\n";
+#endif
+#ifdef ICD_DEBUG
+  if (major.size() != minor.size())
+    Rcpp::stop("major and minor lengths differ");
+#endif
+
+#ifdef ICD_DEBUG_TRACE
+  Rcpp::Rcout << "major and minor are the same?\n";
+#endif
+
+  Rcpp::CharacterVector out; // TODO use vectors of strings and reserve space for this
+  Rcpp::CharacterVector::const_iterator j = major.begin();
+  Rcpp::CharacterVector::const_iterator n = minor.begin();
+
+  for (; j != major.end() && n != minor.end(); ++j, ++n) {
+    Rcpp::String mjrelem = *j;
+    if (mjrelem == NA_STRING) {
+      out.push_back(NA_STRING);
+      continue;
+    }
+    // work around Rcpp bug with push_front: convert to string just for this
+    // TODO: try to do this with C string instead
+    const char* smj_c = mjrelem.get_cstring();
+    std::string smj = std::string(smj_c);
+    switch (strlen(smj_c)) {
+    case 0:
+      out.push_back(NA_STRING);
+      continue;
+    case 1:
+      if (!icd9IsASingleVE(smj_c)) {
+        smj.insert(0, "00");
+      }
+      break;
+    case 2:
+      if (!icd9IsASingleVE(smj_c)) {
+        smj.insert(0, "0");
+      } else {
+        smj.insert(1, "0");
+      }
+      // default: // major is 3 (or more) chars already
+    }
+    Rcpp::String mnrelem = *n;
+    if (mnrelem == NA_STRING) {
+      out.push_back(smj);
+      continue;
+    }
+    if (!isShort && mnrelem != "") {
+      smj.append(".");
+    }
+    smj.append(mnrelem);
+    out.push_back(smj);
+
+  }
+  return out;
 }
 
 // [[Rcpp::export]]

@@ -100,12 +100,12 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
 #' )
 #' }
 #' # std method vastly quicker, e.g. x100 when n=5000
-icd9MajMinToCodeOld <- function(major, minor, isShort) {
-    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', major, minor, isShort)
-}
-
 icd9MajMinToCode <- function(major, minor, isShort) {
     .Call('icd_icd9MajMinToCode', PACKAGE = 'icd', major, minor, isShort)
+}
+
+icd9MajMinToCodeOld <- function(major, minor, isShort) {
+    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', major, minor, isShort)
 }
 
 icd9MajMinToShort <- function(major, minor) {

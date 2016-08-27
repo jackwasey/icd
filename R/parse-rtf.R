@@ -31,7 +31,7 @@ fetch_rtf_year <- function(year, offline = TRUE) {
   assert_string(year)
   assert_flag(offline)
 
-  rtf_dat <- icd::icd9_sources[icd::icd9_sources$f_year == year, ]
+  rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
   fn <- rtf_dat$rtf_filename
 
   unzip_to_data_raw(rtf_dat$rtf_url, file_name = fn, offline = offline)
@@ -94,8 +94,8 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE, verbose = FALSE, of
 #'   contents being the descriptions from the RTF source. Elsewhere I do this
 #'   the other way around, but the tests are now wired for this layout. 'Tidy'
 #'   data would favour having an unnamed two-column data frame.
-#'   @examples
-#'   \dontrun{
+#' @examples
+#' \dontrun{
 #' f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
 #' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
 #' microbenchmark::microbenchmark(
@@ -357,7 +357,7 @@ rtf_generate_fourth_lookup <- function(filtered, fourth_rows, verbose = FALSE) {
   }
   if (verbose) {
     message("lookup_fourth has length: ", length(lookup_fourth), ", head: ")
-    print(head(lookup_fourth))
+    print(utils::head(lookup_fourth))
   }
   lookup_fourth
 }
@@ -385,7 +385,7 @@ rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
   }
   if (verbose) {
     message("fourth output lines: length = ", length(out_fourth), ", head: ")
-    print(head(out_fourth))
+    utils::print(head(out_fourth))
   }
   out_fourth
 }
@@ -405,7 +405,7 @@ rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = FALSE) {
   }
   if (verbose) {
     message("fourth output lines: length = ", length(out_fourth), ", head: ")
-    print(head(out_fourth))
+    print(utils::head(out_fourth))
   }
   rm(out_env)
   out_fourth
@@ -430,7 +430,7 @@ rtf_lookup_fifth_alt_base <- function(out, lookup_fifth, verbose = FALSE) {
   }
   if (verbose) {
     message("fifth output lines: length = ", length(out_fifth), ", head: ")
-    print(head(out_fifth))
+    utils::print(head(out_fifth))
   }
   out_fifth
 }
@@ -453,7 +453,7 @@ rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
   out_fifth <- out_fifth[1:n - 1]
   if (verbose) {
     message("fifth output lines: length = ", length(out_fifth), ", head: ")
-    print(head(out_fifth))
+    utils::print(head(out_fifth))
   }
   out_fifth
 }

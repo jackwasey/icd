@@ -22,7 +22,7 @@ build:
         name: debug information before codecov with covr
         code: |
             ls -R
-            echo $ICD_SLOW_TESTS
+            echo "ICD_SLOW_TESTS = $ICD_SLOW_TESTS"
             cat ./icd.Rcheck/tests/test-*.Rout*
     - script:
         name: run covr for codecov.io
