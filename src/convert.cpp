@@ -26,6 +26,9 @@
 //' Convert major and minor vectors to single code
 //'
 //' In debug mode, will check that major and minor are same length.
+//' @template major
+//' @template minor
+//' @template isShort
 //' @examples
 //' \dontrun{
 //' n <- 5
@@ -38,6 +41,7 @@
 //' )
 //' }
 //' # std method vastly quicker, e.g. x100 when n=5000
+//' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
                                        const Rcpp::CharacterVector minor, bool isShort) {

@@ -6,6 +6,22 @@
 \usage{
 icd9MajMinToCode(major, minor, isShort)
 }
+\arguments{
+\item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
+which falls before the decimal point, in decimal notation. (In five digit
+notation, the 'major' part is be the first three characters (with leading
+zeroes), and includes V or E prefix.}
+
+\item{minor}{character vector of 'minor' part of ICD-9 codes, i.e. that part
+which falls after the decimal point, in decimal notation. (In 'short' five
+digit notation, the 'major' part is the first three characters including
+leading zeroes which may be inferred; the last two characters represent the
+'minor' part.)}
+
+\item{isShort}{Deprecated. Single logical value which determines whether the
+ICD-9 code provided is in short (\code{TRUE}) or decimal (\code{FALSE})
+form. Where reasonable, this is guessed from the input data.}
+}
 \description{
 In debug mode, will check that major and minor are same length.
 }
@@ -22,4 +38,6 @@ microbenchmark::microbenchmark(
 }
 # std method vastly quicker, e.g. x100 when n=5000
 }
+\keyword{internal}
+\keyword{manip}
 
