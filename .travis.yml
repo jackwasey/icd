@@ -49,7 +49,7 @@ after_success:
   - cat ./icd.Rcheck/tests/test-all.Rout
   - Rscript -e 'covr::coveralls(quiet = FALSE, line_exclusions = list("R/benchmark.R", "R/comorbid_alt.R", "R/sort_alt.R"))'
 # TODO automatically show vignettes coverage once regular coverage is working fully
- - Rscript -e 'options(warn = -1); covr::package_coverage(type = "vignette", quiet = FALSE, exclusions = c("R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'
+  - Rscript -e 'options(warn = -1); covr::package_coverage(type = "vignette", quiet = FALSE, exclusions = c("R/generate_deprecated_data.R", "R/generate_mappings.R", "R/generate_sysdata.R"))'
 
 notifications:
   email:

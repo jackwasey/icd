@@ -272,7 +272,7 @@ expand_range_worker_alt_env <- function(start, end, lookup, defined,
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
 
-  lookup_list = as.list(1L:length(lookup))
+  lookup_list <- as.list(1L:length(lookup))
   names(lookup_list) <- lookup
   lookup_env <- list2env(lookup_list)
 
