@@ -24,7 +24,7 @@ doing_slow_tests <- function() {
 }
 
 skip_slow_tests <- function(msg = "skipping slow test") {
-  if (doing_slow_tests())
+  if (!doing_slow_tests())
     testthat::skip(msg)
 }
 
