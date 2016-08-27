@@ -239,17 +239,6 @@ test_that("deprecated - parts to short V code inputs", {
   expect_equal(icd9MajMinToShort("V01", c("", NA)), c("V01", "V01"))
 })
 
-test_that("deprecated - icd9 parts to short: don't allow cycling.", {
-  expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")))
-  # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
-  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
-})
-
-test_that("deprecated - Windows Rtools 3.2 hang test - also triggers bug #75", {
-  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
-  # see Rcpp issue #276.
-})
-
 test_that("deprecated - icd9 parts to short form V and E input, mismatched lengths", {
   expect_equal(icd9MajMinToShort(10L, "20"), "01020")
   expect_equal(icd9MajMinToShort("V10", c("0", "1")), c("V100", "V101"))
