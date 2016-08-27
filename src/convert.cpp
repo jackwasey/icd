@@ -158,13 +158,13 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "NA loop size: " << out_is_na.size() << "\n";
 #endif
-  for (std::vector<char>::const_iterator i = out_is_na.begin(); i != out_is_na.end(); ++i) {
+  for (std::vector<char>::iterator i = out_is_na.begin(); i != out_is_na.end(); ++i) {
 #ifdef ICD_DEBUG_TRACE
-    Rcpp::Rcout << "NA loop: " << std::distance(out_is_na.cbegin(), i) << "\n";
+    Rcpp::Rcout << "NA loop: " << std::distance(out_is_na.begin(), i) << "\n";
 #endif
     if (*i == 0)
       continue;
-    r_out[std::distance(out_is_na.cbegin(), i)] = NA_STRING;
+    r_out[std::distance(out_is_na.begin(), i)] = NA_STRING;
   }
   return r_out;
 }
