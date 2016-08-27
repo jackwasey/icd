@@ -231,7 +231,7 @@ icd::vermont_dx %>%
   extract2("icd_code")  %>%
   icd_sort.icd9(short_code = TRUE) %>%
   unique %>%
-  utils::head(10) -> vdat
+  head(10) -> vdat
 
 test_that("condense a factor of codes instead of character vector", {
   # this is not a condensable list

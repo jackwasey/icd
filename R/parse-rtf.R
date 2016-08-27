@@ -139,11 +139,11 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, per
 
   re_subchap_either <- paste0(
     "^[-()A-Z,[:space:]]+", "(", "[[:space:]]+\\(", "|", "\\(", ")",
-    "(", icd::re_icd9_major_strict_bare, ")",
-    "(-(", icd::re_icd9_major_strict_bare, "))?",
+    "(", re_icd9_major_strict_bare, ")",
+    "(-(", re_icd9_major_strict_bare, "))?",
     "\\)")
 
-  paste0("^(", icd::re_icd9_major_strict_bare, ") ") -> re_major_start
+  paste0("^(", re_icd9_major_strict_bare, ") ") -> re_major_start
 
   icd9_sub_chapters <- chapter_to_desc_range.icd9(
     grep(re_subchap_either, filtered, value = TRUE, perl = perl, useBytes = useBytes)
@@ -182,7 +182,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, per
   for (ql in qual_subset_lines) {
     # get prior code
     filtered[ql - 1] %>%
-      str_match_all(paste0("(", icd::re_icd9_decimal_bare, ") (.*)")) %>%
+      str_match_all(paste0("(", re_icd9_decimal_bare, ") (.*)")) %>%
       unlist %>% extract2(2) -> code
     sb <- rtf_parse_qualifier_subset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
@@ -273,8 +273,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, per
 
   # now here we could potentially capture chapter headings, but I can drop
   # excludes easily by removing lines with bracketed codes
-  filtered <- grep(paste0("\\((", icd::re_icd9_decimal_bare,
-                          ")-(", icd::re_icd9_decimal_bare, ")\\)"),
+  filtered <- grep(paste0("\\((", re_icd9_decimal_bare,
+                          ")-(", re_icd9_decimal_bare, ")\\)"),
                    filtered, value = TRUE, invert = TRUE,
                    perl = perl, useBytes = useBytes)
   filtered <- grep(paste0("Exclude"), filtered, value = TRUE, invert = TRUE, perl = perl, useBytes = useBytes)
@@ -292,7 +292,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, per
   # again, we can keep some more information, but we'll just take the primary
   # description for each item, i.e. where a code begins a line. Some codes have
   # ten or so alternative descriptions, e.g. 410.0
-  filtered <- grep(paste0("^[[:space:]]*(", icd::re_icd9_decimal_strict_bare, ") "),
+  filtered <- grep(paste0("^[[:space:]]*(", re_icd9_decimal_strict_bare, ") "),
                    filtered, value = TRUE, perl = perl, useBytes = useBytes)
 
   # spaces to single
@@ -307,7 +307,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, per
   # "2009 H1 N1 swine influenza virus"
   filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE, perl = perl, useBytes = useBytes)
   # "495.7 \"Ventilation\" pneumonitis"
-  re_code_desc <- paste0("^(", icd::re_icd9_decimal_bare, ") +([ \"[:graph:]]+)")
+  re_code_desc <- paste0("^(", re_icd9_decimal_bare, ") +([ \"[:graph:]]+)")
   # out is the start of the eventual output of code to description pairs. seems
   # to be quicker with perl and useBytes both FALSE
   out <- str_pair_match(filtered, re_code_desc, perl = FALSE, useBytes = FALSE)
@@ -357,7 +357,7 @@ rtf_generate_fourth_lookup <- function(filtered, fourth_rows, verbose = FALSE) {
   }
   if (verbose) {
     message("lookup_fourth has length: ", length(lookup_fourth), ", head: ")
-    print(utils::head(lookup_fourth))
+    print(head(lookup_fourth))
   }
   lookup_fourth
 }
@@ -385,7 +385,7 @@ rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
   }
   if (verbose) {
     message("fourth output lines: length = ", length(out_fourth), ", head: ")
-    utils::print(head(out_fourth))
+    print(head(out_fourth))
   }
   out_fourth
 }
@@ -405,7 +405,7 @@ rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = FALSE) {
   }
   if (verbose) {
     message("fourth output lines: length = ", length(out_fourth), ", head: ")
-    print(utils::head(out_fourth))
+    print(head(out_fourth))
   }
   rm(out_env)
   out_fourth
@@ -430,7 +430,7 @@ rtf_lookup_fifth_alt_base <- function(out, lookup_fifth, verbose = FALSE) {
   }
   if (verbose) {
     message("fifth output lines: length = ", length(out_fifth), ", head: ")
-    utils::print(head(out_fifth))
+    print(head(out_fifth))
   }
   out_fifth
 }
@@ -453,7 +453,7 @@ rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
   out_fifth <- out_fifth[1:n - 1]
   if (verbose) {
     message("fifth output lines: length = ", length(out_fifth), ", head: ")
-    utils::print(head(out_fifth))
+    print(head(out_fifth))
   }
   out_fifth
 }
