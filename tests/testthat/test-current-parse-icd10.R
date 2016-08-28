@@ -105,3 +105,13 @@ test_that("Y09 got picked up in sub-chapter parsing", {
   # chapter. Will have to manually correct for this until fixed.
   expect_icd10_sub_chap_equal("Assault", "X92", "Y09")
 })
+
+test_that("chapter parsing for ICD-10 went okay", {
+  chap_lookup <- icd10_generate_chap_lookup()
+  expect_false(any(duplicated(chap_lookup$chap_major)))
+})
+
+test_that("sub-chapter parsing for ICD-10 went okay", {
+  sc_lookup <- icd10_generate_subchap_lookup()
+  expect_false(any(duplicated(sc_lookup$sc_major)))
+})
