@@ -481,8 +481,12 @@ rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
 #' }
 #' @keywords internal manip
 fix_unicode <- function(filtered, perl = TRUE, useBytes = TRUE) {
-  filtered <- gsub("\\\\'e([789]{1})", "\u00e\\1", filtered, perl = perl, useBytes = useBytes)
-  gsub("\\\\'f([16]{1})", "\u00f\\1", filtered, perl = perl, useBytes = useBytes)
+  filtered <- gsub("\\\\'e7", "\u00e7", filtered, perl = perl, useBytes = useBytes) # c cedila
+  filtered <- gsub("\\\\'e8", "\u00e8", filtered, perl = perl, useBytes = useBytes) # e gravel
+  filtered <- gsub("\\\\'e9", "\u00e9", filtered, perl = perl, useBytes = useBytes) # e acute
+  filtered <- gsub("\\\\'f1", "\u00f1", filtered, perl = perl, useBytes = useBytes) # n tilde
+  filtered <- gsub("\\\\'f16", "\u00f6", filtered, perl = perl, useBytes = useBytes) # o umlaut
+  filtered
 }
 
 #' fix duplicates detected in RTF parsing
