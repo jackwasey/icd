@@ -76,3 +76,40 @@ test_that("guessing type of NA values defaults to short, and doesn't error", {
   expect_error(icd_guess_short(icd10(c(NA, TRUE))))
   expect_error(icd_guess_short(icd10cm(c(NA, TRUE))))
 })
+
+test_that("guess and update version", {
+  res <- icd_guess_version_update("1234", TRUE)
+  expect_true(is.icd9(res))
+  expect_false(is.icd10(res))
+
+  res <- icd_guess_version_update("12.34", FALSE)
+  expect_true(is.icd9(res))
+  expect_false(is.icd10(res))
+
+
+  res <- icd_guess_version_update("A010", TRUE)
+  expect_true(is.icd10(res))
+  expect_false(is.icd9(res))
+
+  res <- icd_guess_version_update("A01.0", FALSE)
+  expect_true(is.icd10(res))
+  expect_false(is.icd9(res))
+})
+
+test_that("guess short update", {
+  res <- icd_guess_short_update(as.icd9("1234"))
+  expect_true(is.icd_short_diag(res))
+  expect_false(is.icd_decimal_diag(res))
+
+  res <- icd_guess_short_update(as.icd9("12.34"))
+  expect_false(is.icd_short_diag(res))
+  expect_true(is.icd_decimal_diag(res))
+
+  res <- icd_guess_short_update(as.icd9("S1234"))
+  expect_true(is.icd_short_diag(res))
+  expect_false(is.icd_decimal_diag(res))
+
+  res <- icd_guess_short_update(as.icd9("S12.34"))
+  expect_false(is.icd_short_diag(res))
+  expect_true(is.icd_decimal_diag(res))
+})

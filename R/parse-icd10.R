@@ -81,7 +81,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   invisible(icd10cm2016)
 }
 
-icd10_generate_subchap_lookup <- function(lk_majors) {
+icd10_generate_subchap_lookup <- function(lk_majors, verbose = FALSE) {
   lk_majors <- unique(icd10cm2016[["three_digit"]])
   sc_lookup <- data.frame(major = NULL, desc = NULL)
   for (scn in names(icd::icd10_sub_chapters)) {
@@ -89,6 +89,11 @@ icd10_generate_subchap_lookup <- function(lk_majors) {
     si <- grep(sc["start"], lk_majors)
     se <- grep(sc["end"], lk_majors)
     sc_majors <- lk_majors[si:se]
+
+    if (verbose)
+      message("start = ", sc["start"], ", end = ", sc[["end"]],
+              ", si = ", si, ", se = ", se)
+
     sc_lookup <- rbind(
       sc_lookup,
       data.frame(sc_major = sc_majors, sc_desc = scn)
@@ -97,7 +102,7 @@ icd10_generate_subchap_lookup <- function(lk_majors) {
   sc_lookup
 }
 
-icd10_generate_chap_lookup <- function(lk_majors, verbose = FALSE) {
+icd10_generate_chap_lookup <- function(lk_majors) {
   lk_majors <- unique(icd10cm2016[["three_digit"]])
   chap_lookup <- data.frame(major = NULL, desc = NULL)
   for (chap_n in names(icd::icd10_chapters)) {
@@ -107,10 +112,6 @@ icd10_generate_chap_lookup <- function(lk_majors, verbose = FALSE) {
       chap["end"] <- "Y09"
     si <- grep(chap["start"], lk_majors)
     se <- grep(chap["end"], lk_majors)
-
-    if (verbose)
-      message("start = ", sc["start"], ", end = ", sc[["end"]],
-              ", si = ", si, ", se = ", se)
 
     chap_lookup <- rbind(
       chap_lookup,

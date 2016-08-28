@@ -85,6 +85,10 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
 }
 
+icd9MajMinToCodeOld <- function(major, minor, isShort) {
+    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', major, minor, isShort)
+}
+
 #' Convert major and minor vectors to single code
 #'
 #' In debug mode, will check that major and minor are same length.
@@ -106,10 +110,6 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
 #' @keywords internal manip
 icd9MajMinToCode <- function(major, minor, isShort) {
     .Call('icd_icd9MajMinToCode', PACKAGE = 'icd', major, minor, isShort)
-}
-
-icd9MajMinToCodeOld <- function(major, minor, isShort) {
-    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', major, minor, isShort)
 }
 
 icd9MajMinToShort <- function(major, minor) {
@@ -235,6 +235,14 @@ icd_long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call('icd_icd9LongToWideCpp', PACKAGE = 'icd', icd9df, visitId, icd9Field, aggregate)
 }
 
+icd9AddLeadingZeroesShortSingle <- function(x) {
+    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
+}
+
+icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
+    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
+}
+
 icd9AddLeadingZeroesMajorSingle <- function(major) {
     .Call('icd_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd', major)
 }
@@ -271,14 +279,6 @@ icd9_add_leading_zeroes_major <- function(major) {
 #' @keywords internal manip
 icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call('icd_icd9AddLeadingZeroes', PACKAGE = 'icd', x, short_code)
-}
-
-icd9AddLeadingZeroesShortSingle <- function(x) {
-    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
-}
-
-icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
-    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
 }
 
 icd9ExpandMinorShim <- function(minor, isE = FALSE) {

@@ -227,6 +227,18 @@ icd_is_valid <- function(x, ...) {
   UseMethod("icd_is_valid")
 }
 
+icd_valid_worker <- function(x, whitespace_ok, regex, regex_no_ws = regex) {
+  assert_flag(whitespace_ok)
+  if (length(x) == 0)
+    return(logical())
+
+  assert(checkFactor(x), checkCharacter(x))
+  if (whitespace_ok)
+    na_to_false(grepl(re_just_ws(regex), x))
+  else
+    na_to_false(grepl(re_just(regex_no_ws), x))
+}
+
 #' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
 #'   which at present assumes ICD-9 format. Converts to character than calls
 #'   \code{icd_is_valid.character}
@@ -353,19 +365,6 @@ icd9_is_valid_major_v <- function(x, whitespace_ok = TRUE) {
 icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_major_e)
 }
-
-icd_valid_worker <- function(x, whitespace_ok, regex, regex_no_ws = regex) {
-  assert_flag(whitespace_ok)
-  if (length(x) == 0)
-    return(logical())
-
-  assert(checkFactor(x), checkCharacter(x))
-  if (whitespace_ok)
-    na_to_false(grepl(re_just_ws(regex), x))
-  else
-    na_to_false(grepl(re_just(regex_no_ws), x))
-}
-
 
 #' @describeIn icd_is_valid Validate a mapping of ICD codes to comorbidities.
 #' @export
