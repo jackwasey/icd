@@ -15,9 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-# could also be done by test-all.R
-library("magrittr", quietly = TRUE, warn.conflicts = FALSE)
-
 local({
   do_slow_tests <- getOption("icd.do_slow_tests")
   if (is.null(do_slow_tests) || !do_slow_tests)
@@ -84,14 +81,23 @@ test_twenty <- structure(
   class = "data.frame")
 
 # first and last item from each AHRQ comorbidity:
-ahrq_end_codes <- icd9(unlist(unname(c(lapply(icd::icd9_map_ahrq, head, n = 1),
-                    lapply(icd::icd9_map_ahrq, tail, n = 1)))))
+icd9(
+  unlist(
+    unname(
+      c(lapply(icd::icd9_map_ahrq, head, n = 1),
+        lapply(icd::icd9_map_ahrq, tail, n = 1)
+      )
+    )
+  )
+) -> ahrq_end_codes
 
-ahrq_test_dat <- as.icd_long_data(data.frame(
-  visit_id = rep("visit1", times = length(ahrq_end_codes)),
-  icd9 = ahrq_end_codes,
-  stringsAsFactors = FALSE
-))
+ahrq_test_dat <- as.icd_long_data(
+  data.frame(
+    visit_id = rep("visit1", times = length(ahrq_end_codes)),
+    icd9 = ahrq_end_codes,
+    stringsAsFactors = FALSE
+  )
+)
 
 elix_end_codes <- unlist(unname(c(lapply(icd::elixComorbid, head, n = 1),
                                   lapply(icd::elixComorbid, tail, n = 1))))

@@ -48,7 +48,9 @@ a warning.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD-9 code, name
-  and description
+  and description. There is no guarantee on the order of the returned
+  descriptions. \code{icd_explain_table} is designed to provide results in a
+  reliable order (when not condensing codes, at least).
 }
 \description{
 Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
@@ -57,7 +59,8 @@ conversion to decimal notation, but to the textual format.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: Explain ICD codes from a character vector, guessing ICD version
+\item \code{default}: Explain ICD codes from a character vector, guessing
+ICD version
 
 \item \code{list}: Explain all ICD-9 codes in a list of vectors
 
