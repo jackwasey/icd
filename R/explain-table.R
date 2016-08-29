@@ -25,7 +25,8 @@
 #' descriptions to ICD10.  The code would otherwise have to be explicitly casted
 #' to get ICD9 descriptions.
 #'
-#' A column for source year may be added in the future.
+#' A column for source year may be added in the future. Other changes may occur
+#' this new feature gets testing and use.
 #'
 #' @param x vector or other structure of ICD codes to explain in human language
 #' @template short_code
