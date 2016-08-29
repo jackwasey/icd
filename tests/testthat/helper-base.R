@@ -28,7 +28,7 @@ n <- 500
 np <- round(n / 20) # icd9 codes per patients
 
 random_short_icd9_codes <- as.character(floor(stats::runif(min = 10000, max = 99999, n = n)))
-random_sample_ahrq_codes <- sample(unname(c(icd::icd9_map_ahrq, recursive = TRUE)),
+random_sample_ahrq_codes <- sample(unname(c(icd9_map_ahrq, recursive = TRUE)),
                                    replace = TRUE, size = n)
 few_icd9_codes <- c("27801", "7208", "25001", "34400", "4011", "4011")
 
