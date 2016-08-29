@@ -142,7 +142,7 @@ logical_to_binary <- function(x) {
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
-str_pair_match <- function(string, pattern, pos, swap = FALSE) {
+str_pair_match <- function(string, pattern, pos, swap = FALSE, perl = TRUE, useBytes = TRUE) {
   assert_character(string, min.len = 1L)
   assert_string(pattern, min.chars = 5L)
   assert_flag(swap)
@@ -158,7 +158,9 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE) {
         x = x,
         m = regexec(
           pattern = pattern,
-          text = x))
+          text = x,
+          perl = perl,
+          useBytes = useBytes))
     )[-1]
   )
   result <- result[vapply(result, function(x) length(x) != 0, logical(1))]
@@ -281,8 +283,8 @@ isNonASCII <- function(x)
 
 #' Fast Factor Generation
 #'
-#' This function generates factors more quickly, by leveraging
-#' \code{fastmatch}. The speed increase for ICD-9 codes is about
+#' This function generates factors more quickly, without leveraging
+#' \code{fastmatch}. The speed increase with fastmatch for ICD-9 codes was about
 #' 33% reduction for 10 million codes.
 #'
 #' \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
@@ -321,30 +323,12 @@ isNonASCII <- function(x)
 #'   alphanumeric sorting will likely be completely wrong.
 #' @keywords internal manip
 factor_nosort <- function(x, levels = NULL, labels = levels) {
-  # sort may be pre-requisite for fastmatch
   if (is.factor(x)) return(x)
   if (is.null(levels)) levels <- unique.default(x)
-  suppressWarnings(f <- fmatch(x, levels))
+  suppressWarnings(f <- match(x, levels))
   levels(f) <- as.character(labels)
   class(f) <- "factor"
   f
-}
-
-#' Fast find which \code{x} are \emph{not} in \code{table}
-#'
-#' Uses \code{fmatch} taken from the \code{fastmatch} package which creates hash
-#' table, and re-uses if \code{table} is re-used.
-#' @param x vector
-#' @param table vector
-#' @keywords internal
-`%fin%` <- function(x, table) {
-  fmatch(x, table, nomatch = 0L) > 0L
-}
-
-#' @rdname grapes-fin-grapes
-#' @keywords internal
-`%fnin%` <- function(x, table) {
-  fmatch(x, table, nomatch = 0L) == 0L
 }
 
 #' wrapper for \code{.Deprecated}
@@ -390,7 +374,7 @@ icd_deprecated <- function(...) {
     stop("Problem matching\n", x[!(okr || oks)], call. = FALSE)
   m <- ifelse(okr, mr, ms)
   out <- lapply(m, function(y) c(start = y[[3]], end = y[[length(y)]]))
-  names(out) <- vapply(m, function(y) y[[2]] %>% to_title_case %>% trim,
+  names(out) <- vapply(m, function(y) trim(to_title_case(y[[2]])),
                        FUN.VALUE = character(1))
   out
 }
@@ -419,10 +403,6 @@ named_list <- function(...) {
   x
 }
 
-fmatch <- function(x, table, nomatch = NA_integer_, incomparables = NULL) {
-  .Call("fmatch", PACKAGE = "icd", x, table, nomatch, incomparables)
-}
-
 # allows R 3.1 to work
 dir.exists <- function(paths) {
   x <- file.info(paths)$isdir
@@ -430,54 +410,20 @@ dir.exists <- function(paths) {
 }
 
 # substitute for removed stringr function
-str_match_all <- function(x, pattern) {
+str_match_all <- function(x, pattern, perl = TRUE, useBytes = TRUE) {
   x <- as.character(x)
-  regmatches(x, regexec(pattern, x))
-}
-
-to_title_case <- function (text) {
-  lpat <- "^(a|an|and|are|as|at|be|but|by|en|for|if|in|is|nor|not|of|on|or|per|so|the|to|v[.]?|via|vs[.]?|from|into|than|that|with)$"
-  either <- c("all", "above", "after", "along", "also", "among",
-              "any", "both", "can", "few", "it", "less", "log", "many",
-              "may", "more", "over", "some", "their", "then", "this",
-              "under", "until", "using", "von", "when", "where", "which",
-              "will", "without", "yet", "you", "your")
-  titleCase1 <- function(x) {
-    do1 <- function(x) {
-      x1 <- substring(x, 1L, 1L)
-      if (nchar(x) >= 3L && x1 %in% c("'", "\""))
-        paste0(x1, toupper(substring(x, 2L, 2L)), tolower(substring(x,
-                                                                    3L)))
-      else paste0(toupper(x1), tolower(substring(x, 2L)))
-    }
-    xx <- strsplit(x, " -/\"()\n")
-    alone <- c("2D", "3D", "AIC", "BayesX", "GoF", "HTML", "LaTeX",
-               "MonetDB", "OpenBUGS", "TeX", "U.S.", "U.S.A.", "WinBUGS",
-               "aka", "et", "al.", "ggplot2", "i.e.", "jar", "jars",
-               "ncdf", "netCDF", "rgl", "rpart", "xls", "xlsx")
-    alone <- xx %in% c(alone, either)
-    alone <- alone | grepl("^'.*'$", xx)
-    havecaps <- grepl("^[[:alpha:]].*[[:upper:]]+", xx)
-    l <- grepl(lpat, xx, ignore.case = TRUE)
-    l[1L] <- FALSE
-    ind <- grep("[-:]$", xx)
-    ind <- ind[ind + 2L <= length(l)]
-    ind <- ind[(xx[ind + 1L] == " ") & grepl("^['[:alnum:]]",
-                                             xx[ind + 2L])]
-    l[ind + 2L] <- FALSE
-    ind <- which(xx == "\"")
-    ind <- ind[ind + 1L <= length(l)]
-    l[ind + 1L] <- FALSE
-    xx[l] <- tolower(xx[l])
-    keep <- havecaps | l | (nchar(xx) == 1L) | alone
-    xx[!keep] <- sapply(xx[!keep], do1)
-    paste(xx, collapse = "")
-  }
-  if (typeof(text) != "character")
-    stop("'text' must be a character vector")
-  sapply(text, titleCase1, USE.NAMES = FALSE)
+  regmatches(x, regexec(pattern, x, perl = perl, useBytes = useBytes))
 }
 
 capitalize_first <- function(name) {
   trim(paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name))))
+}
+
+to_title_case <- function(x) {
+  for (split_char in c(" ", "-", "[")) {
+  s <- strsplit(x, split_char, fixed = TRUE)[[1]]
+  x <- paste(toupper(substring(s, 1L, 1L)), substring(s, 2L),
+        sep = "", collapse = split_char)
+  }
+  x
 }

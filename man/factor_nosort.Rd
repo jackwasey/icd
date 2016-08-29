@@ -20,8 +20,8 @@ type as \code{x}. By default, we compute the levels as
 set as \code{NA}; otherwise; they are removed.}
 }
 \description{
-This function generates factors more quickly, by leveraging
-\code{fastmatch}. The speed increase for ICD-9 codes is about
+This function generates factors more quickly, without leveraging
+\code{fastmatch}. The speed increase with fastmatch for ICD-9 codes was about
 33% reduction for 10 million codes.
 }
 \details{

@@ -19,7 +19,6 @@
 // [[Rcpp::plugins(openmp)]]
 
 #include "comorbidIcd10.h"
-#include "fastmatch.h"
 #include "local.h"
 #include <Rcpp.h>
 #include <vector>
@@ -65,9 +64,6 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
   // of buffer overflow here.
   char codeCur[16];
 
-  //char code_cstring[12]; // 12 should be enough. TOOD: test length
-  // SEXP test_str = PROTECT(Rf_allocVector(STRSXP, 1));
-
   for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
     // look backwards from length of current code in characters. This seems
     // terrible, but when there are so many miniscule subdivisions of ICD-10-CM,
@@ -94,7 +90,6 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
       Rcpp::Rcout << "icd10 cmbd working on comorbidity " << debug_buf << " from map\n";
 #endif
       oneCbd = map[j];
-      SEXP oneCbdSexp = PROTECT(oneCbd.eval());
 
       // Using fastmatch: either start with full string and lop off a character
       // at a time, or start with 3 digit substring and extend until it matches.
@@ -119,25 +114,28 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
 #ifdef ICD_DEBUG_TRACE
         Rcpp::Rcout << "codeCur = " << codeCur << "\n";
 #endif
-        // SET_STRING_ELT(test_str, 0, Rf_mkChar(codeCur));
         SEXP test_str = PROTECT(Rf_mkString(codeCur));
-        // TODO we can customize fast match to just 'find' and not match every term
 #ifdef ICD_DEBUG_TRACE
         CharacterVector s_debug(test_str);
         Rcpp::Rcout << "test_str = " << ((String)s_debug[0]).get_cstring() << "\n";
 #endif
 
-
-        //IntegerVector fm_out(fmatch(test_str, oneCbdSexp, IntegerVector(0).eval()));
-        //if (fm_out[0] != 0) {
-        if (ffind_one_str(test_str, oneCbdSexp) != 0) {
+        Rcpp::CharacterVector lookup_code = test_str;
+        Rcpp::IntegerVector matched_indices = Rcpp::match(lookup_code, oneCbd);
+#ifdef ICD_DEBUG
+        Rcpp::Rcout << "matched_indices[0] = " << matched_indices[0] << "\n";
+        if (matched_indices.size() > 1) {
+          Rcpp::stop("matched_indices should be length 1");
+        }
+#endif
+        if (matched_indices[0] > 0) {
 #ifdef ICD_DEBUG_TRACE
           Rcpp::Rcout << "found\n";
 #endif
           intermed(i, j) = true; // the rest are zero filled
-          UNPROTECT(1);
           // we've found the comorbidity for the current code, so break out of
           // comorbidity loop
+          UNPROTECT(1);
           goto got_comorbid;
         }
         UNPROTECT(1);
@@ -146,7 +144,7 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
       Rcpp::Rcout << "not found\n";
 #endif
       got_comorbid: // just placeholder for the goto target
-        UNPROTECT(1);
+        ;
     } // each comorbidity
   } // each row of input data
 
@@ -155,7 +153,7 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
   // res <- aggregate(x = t(just_cmb), by = x[visit_name], FUN = any)
   //aggregate.data.frame()
 
-   // UNPROTECT(1); // test_str
+
   // haven't aggregated yet, so there is a row for each row of the input data
   intermed.attr("dimnames") = Rcpp::List::create(x[visit_name], map.names());
 

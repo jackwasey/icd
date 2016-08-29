@@ -208,7 +208,7 @@ vermont_dx %>%
   extract2("icdCode")  %>%
   icd9SortShort %>%
   unique %>%
-  utils::head(10) -> vdat
+  head(10) -> vdat
 
 test_that("deprecated - condense a factor of codes instead of character vector", {
   # this is not a condensable list

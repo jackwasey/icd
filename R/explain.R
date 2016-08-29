@@ -175,13 +175,13 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x),
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
     for (chap_num in 1:length(icd::icd9_chapters)) {
-      if (majors[i] %fin% chap_lookup[[chap_num]]) {
+      if (majors[i] %in% chap_lookup[[chap_num]]) {
         out[i, "chapter"] <- names(icd::icd9_chapters)[chap_num]
         break
       }
     }
     for (subchap_num in 1:length(icd::icd9_sub_chapters)) {
-      if (majors[i] %fin% subchap_lookup[[subchap_num]]) {
+      if (majors[i] %in% subchap_lookup[[subchap_num]]) {
         out[i, "sub_chapter"] <- names(icd::icd9_sub_chapters)[subchap_num]
         break
       }

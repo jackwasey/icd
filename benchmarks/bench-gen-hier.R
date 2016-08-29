@@ -7,7 +7,7 @@ library(microbenchmark)
 
 
 Rprof(filename = "/tmp/gh.txt", interval = 0.001, line.profiling = TRUE)
-j <- icd9cm_generate_chapters_hierarchy()
+j <- icd:::icd9cm_generate_chapters_hierarchy()
 Rprof(NULL)
 summaryRprof("/tmp/gh.txt", lines = "show")
 

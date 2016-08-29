@@ -20,7 +20,6 @@
 
 #include <Rcpp.h> // includes Rinternals
 extern "C" {
-#include "fastmatch.h"
 #include <cstdlib>
 }
 

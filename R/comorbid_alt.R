@@ -23,7 +23,7 @@ icd10_comorbid_parent_search_str <- function(
            FUN = function(cmb) {
              # and if not found, slice off last char of test string
              for (n in char_count) {
-               if (!is.na(fmatch(substr(y, 1, n), map[[cmb]])))
+               if (!is.na(match(substr(y, 1, n), map[[cmb]])))
                  return(TRUE)
              }
              FALSE
@@ -64,7 +64,7 @@ icd10_comorbid_parent_search_all_at_once <- function(x,
            FUN = function(cmb) {
              # and if not found, slice off last char of test string
              perms_to_match <- vapply(char_count:3, substr, x = y, start = 1, FUN.VALUE = character(1))
-             any(fmatch(perms_to_match, map[[cmb]], nomatch = 0L) != 0)
+             any(match(perms_to_match, map[[cmb]], nomatch = 0L) != 0)
            })
   })
 
@@ -90,13 +90,6 @@ icd10_comorbid_parent_search_no_loop <- function(x,
 
   icd_codes <- x[[icd_name]]
 
-  # TODO: unclear whether the hash map is retained by fastmatch: "The first
-  # match against a table results in a hash table to be computed from the table.
-  # This table is then attached as the '.match.hash' attribute of the table so
-  # that it can be re-used on subsequent calls to fmatch with the same table."
-  # May need to pre-compute this when building package. May still be faster even
-  # if calculating hash map each time.
-
   # for each icd code
   just_cmb <- vapply(icd_codes, FUN.VALUE = logical(length(map)), FUN = function(y) {
     # look it up in each comorbidity, but TODO: once we have a comorbidity for
@@ -105,14 +98,14 @@ icd10_comorbid_parent_search_no_loop <- function(x,
     vapply(names(map), FUN.VALUE = logical(1),
            FUN = function(cmb) {
              # instead of loop, just declare the substring length
-             if (!is.na(fmatch(substr(y, 1, 10), map[[cmb]]))) return(TRUE)
-             if (!is.na(fmatch(substr(y, 1, 9), map[[cmb]]))) return(TRUE)
-             if (!is.na(fmatch(substr(y, 1, 8), map[[cmb]]))) return(TRUE)
-             if (!is.na(fmatch(substr(y, 1, 7), map[[cmb]]))) return(TRUE)
-             if (!is.na(fmatch(substr(y, 1, 6), map[[cmb]]))) return(TRUE)
-             if (!is.na(fmatch(substr(y, 1, 5), map[[cmb]]))) return(TRUE)
-             if (!is.na(fmatch(substr(y, 1, 4), map[[cmb]]))) return(TRUE)
-             if (!is.na(fmatch(substr(y, 1, 3), map[[cmb]]))) return(TRUE)
+             if (!is.na(match(substr(y, 1, 10), map[[cmb]]))) return(TRUE)
+             if (!is.na(match(substr(y, 1, 9), map[[cmb]]))) return(TRUE)
+             if (!is.na(match(substr(y, 1, 8), map[[cmb]]))) return(TRUE)
+             if (!is.na(match(substr(y, 1, 7), map[[cmb]]))) return(TRUE)
+             if (!is.na(match(substr(y, 1, 6), map[[cmb]]))) return(TRUE)
+             if (!is.na(match(substr(y, 1, 5), map[[cmb]]))) return(TRUE)
+             if (!is.na(match(substr(y, 1, 4), map[[cmb]]))) return(TRUE)
+             if (!is.na(match(substr(y, 1, 3), map[[cmb]]))) return(TRUE)
              FALSE
            })
   })
@@ -150,7 +143,7 @@ icd10_comorbid_parent_search_orig <- function(x,
            FUN = function(cmb) {
              # and if not found, slice off last char of test string
              for (n in char_count) {
-               if (!is.na(fmatch(substr(y, 1, n), map[[cmb]])))
+               if (!is.na(match(substr(y, 1, n), map[[cmb]])))
                  return(TRUE)
              }
              FALSE

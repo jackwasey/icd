@@ -85,6 +85,29 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
 }
 
+icd9MajMinToCodeOld <- function(major, minor, isShort) {
+    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', major, minor, isShort)
+}
+
+#' Convert major and minor vectors to single code
+#'
+#' In debug mode, will check that major and minor are same length.
+#' @template major
+#' @template minor
+#' @template isShort
+#' @examples
+#' \dontrun{
+#' n <- 5
+#' majors <- as.character(sample(1:999, n, replace = TRUE))
+#' minors <- as.character(sample(0:99, n, replace = TRUE))
+#' microbenchmark::microbenchmark(
+#'   icd9MajMinToCode(majors, minors, TRUE),
+#'   icd9MajMinToCodeStd(majors, minors, TRUE),
+#'   times = 3
+#' )
+#' }
+#' # std method vastly quicker, e.g. x100 when n=5000
+#' @keywords internal manip
 icd9MajMinToCode <- function(major, minor, isShort) {
     .Call('icd_icd9MajMinToCode', PACKAGE = 'icd', major, minor, isShort)
 }
@@ -212,6 +235,14 @@ icd_long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call('icd_icd9LongToWideCpp', PACKAGE = 'icd', icd9df, visitId, icd9Field, aggregate)
 }
 
+icd9AddLeadingZeroesShortSingle <- function(x) {
+    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
+}
+
+icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
+    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
+}
+
 icd9AddLeadingZeroesMajorSingle <- function(major) {
     .Call('icd_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd', major)
 }
@@ -231,17 +262,23 @@ icd9_add_leading_zeroes_major <- function(major) {
 #' @param x Character vector of ICD-9 codes
 #' @template short_code
 #' @return character vector of ICD-9 codes with leading zeroes
+#' @examples
+#' \dontrun{
+#' stopifnot(identical(
+#'   icd9_add_leading_zeroes_alt_cpp(c("1", "E2", "V1", "E"), short_code = TRUE),
+#'   icd9_add_leading_zeroes_cpp(c("1", "E2", "V1", "E"), short_code = TRUE)
+#'   ))
+#'
+#'   bad_codes <- sample(c("E2", "V01", "1234", "12", "1", "E99", "E987", "V"),
+#'                       size = 1e6, replace = TRUE)
+#'   microbenchmark::microbenchmark(
+#'     icd9_add_leading_zeroes_alt_cpp(bad_codes, short_code = TRUE),
+#'     icd9_add_leading_zeroes_cpp(bad_codes, short_code = TRUE)
+#'   )
+#' }
 #' @keywords internal manip
 icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call('icd_icd9AddLeadingZeroes', PACKAGE = 'icd', x, short_code)
-}
-
-icd9AddLeadingZeroesShortSingle <- function(x) {
-    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
-}
-
-icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
-    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
 }
 
 icd9ExpandMinorShim <- function(minor, isE = FALSE) {

@@ -109,7 +109,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
     for (p in parents) {
       kids <- icd_children.icd9(p, defined = FALSE, short_code = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
-      if (all(kids %fin% icd9_map_ahrq[[cmb]])) {
+      if (all(kids %in% icd9_map_ahrq[[cmb]])) {
         icd9_map_ahrq[[cmb]] <-
           as.icd_short_diag(
             as.icd9(

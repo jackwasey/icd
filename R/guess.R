@@ -130,8 +130,7 @@ icd_guess_version_update <- function(x, short_code = icd_guess_short(x)) {
 #' class of the returned data according to the guess.
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
-icd_guess_short_update <- function(x, icd_name = get_icd_name(x),
-                                   short_code = icd_guess_short(x)) {
+icd_guess_short_update <- function(x, short_code = icd_guess_short(x)) {
   if (short_code)
     as.icd_short_diag(x)
   else

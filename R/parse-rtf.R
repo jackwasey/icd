@@ -94,18 +94,28 @@ parse_rtf_year <- function(year = "2011", save_data = FALSE, verbose = FALSE, of
 #'   contents being the descriptions from the RTF source. Elsewhere I do this
 #'   the other way around, but the tests are now wired for this layout. 'Tidy'
 #'   data would favour having an unnamed two-column data frame.
+#' @examples
+#' \dontrun{
+#' f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
+#' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
+#' microbenchmark::microbenchmark(
+#'   res_both <- parse_rtf_lines(rtf_lines, perl = TRUE, useBytes = TRUE),
+#'   res_none <- parse_rtf_lines(rtf_lines, perl = FALSE, useBytes = FALSE),
+#'   res_bytes <- parse_rtf_lines(rtf_lines, perl = FALSE, useBytes = TRUE),
+#'   res_perl <- parse_rtf_lines(rtf_lines, perl = TRUE, useBytes = FALSE),
+#'   times = 5
+#' )
+#' stopifnot(identical(res_both, res_none))
+#' }
 #' @keywords internal
-parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
-
+parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, perl = TRUE, useBytes = TRUE) {
   assert_character(rtf_lines)
   assert_flag(verbose)
+  assert_flag(save_extras)
 
-  # filtered <- iconv(rtf_lines, from = "ASCII", to = "UTF-8", mark = TRUE) I
-  # think the first 127 characters of ASCII are the same in Unicode, but we must
-  # make sure R treats the lines as Unicode.
   filtered <- rtf_lines
   # merge any line NOT starting with "\\par" on to previous line
-  non_par_lines <- grep(pattern = "^\\\\par", x = filtered, invert = TRUE)
+  non_par_lines <- grep(pattern = "^\\\\par", x = filtered, invert = TRUE, perl = perl, useBytes = useBytes)
   # in reverse order, put each non-par line on end of previous, then filter out
   # all non-par lines
   if (verbose)
@@ -115,35 +125,29 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     filtered[i - 1] <- paste(filtered[i - 1], filtered[i], sep = "")
   }
 
-  filtered <- grep("^\\\\par", filtered, value = TRUE)
+  filtered <- grep("^\\\\par", filtered, value = TRUE, perl = perl, useBytes = useBytes)
 
   filtered <- fix_unicode(filtered)
 
-  # drop stupid long line at end:
-  longest_lines <- nchar(filtered) > 3000L
-  # if none, then -c() returns no rows, so we have to test first
-  if (any(longest_lines))
-    filtered <- filtered[-c(which(longest_lines))]
+  # extremely long terminal line in primary source is junk
+  longest_lines <- which(nchar(filtered) > 3000L)
+  filtered <- filtered[-longest_lines]
 
   filtered <- rtf_strip(filtered)
 
-  filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE)
+  filtered <- grep("^[[:space:]]*$", filtered, value = TRUE, invert = TRUE, perl = perl, useBytes = useBytes)
 
-  # somewhere around here, we can extract sub-chapters:
-
-  # actually, these are ICD-9-CM sub-chapters, but I think this is a superset of
-  # ICD 9
-
-  # either range or a single value (which overlaps with the majors definition)
-  paste0("^[-()A-Z,[:space:]]+", "(", "[[:space:]]+\\(", "|", "\\(", ")",
-         "(", re_icd9_major_strict_bare, ")",
-         "(-(", re_icd9_major_strict_bare, "))?",
-         "\\)") -> re_subchap_either
+  re_subchap_either <- paste0(
+    "^[-()A-Z,[:space:]]+", "(", "[[:space:]]+\\(", "|", "\\(", ")",
+    "(", re_icd9_major_strict_bare, ")",
+    "(-(", re_icd9_major_strict_bare, "))?",
+    "\\)")
 
   paste0("^(", re_icd9_major_strict_bare, ") ") -> re_major_start
 
-  grep(re_subchap_either, filtered, value = TRUE) %>%
-    chapter_to_desc_range.icd9 -> icd9_sub_chapters
+  icd9_sub_chapters <- chapter_to_desc_range.icd9(
+    grep(re_subchap_either, filtered, value = TRUE, perl = perl, useBytes = useBytes)
+  )
 
   # The entire "E" block is incorrectly identified here, so make sure it is gone:
   icd9_sub_chapters["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"] <- NULL
@@ -151,8 +155,8 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
 
   major_lines <- grep(re_major_start, filtered, value = TRUE)
   re_major_split <- "([^[:space:]]+)[[:space:]]+(.+)"
-  icd9_majors <- gsub(pattern = re_major_split, replacement = "\\1", x = major_lines, perl = TRUE)
-  names(icd9_majors) <- gsub(pattern = re_major_split, replacement = "\\2", x = major_lines, perl = TRUE)
+  icd9_majors <- gsub(pattern = re_major_split, replacement = "\\1", x = major_lines, perl = TRUE, useBytes = useBytes)
+  names(icd9_majors) <- gsub(pattern = re_major_split, replacement = "\\2", x = major_lines, perl = TRUE, useBytes = useBytes)
 
   # this sub-chapter is simply missing from the otherwise consistent RTF way
   # 'major' types are reported:
@@ -173,7 +177,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # and create lookup, so we can exclude these when processing the fourth an
   # fifth digits
   re_qual_subset <- "\\[[-, [:digit:]]+\\]"
-  qual_subset_lines <- grep(re_qual_subset, filtered)
+  qual_subset_lines <- grep(re_qual_subset, filtered, perl = perl, useBytes = useBytes)
   invalid_qual <- c()
   for (ql in qual_subset_lines) {
     # get prior code
@@ -184,7 +188,7 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     inv_sb <- setdiff(as.character(0:9), sb)
     if (length(inv_sb) == 0)
       next
-    if (grepl("\\.", code))
+    if (grepl("\\.", code, perl = perl, useBytes = useBytes))
       invalid_qual <- c(invalid_qual, paste0(code, inv_sb))
     else
       invalid_qual <- c(invalid_qual, paste0(code, ".", inv_sb))
@@ -193,58 +197,32 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # grab fifth digit ranges now:
   re_fifth_range_other <- "fifth +digit +to +identify +stage"
   re_fifth_range <- "ifth-digit subclas|fifth-digits are for use with codes"
-  re_fifth_range_V30V39 <-
-    "The following two fifths-digits are for use with the fourth-digit \\.0"
+  re_fifth_range_V30V39 <- "The following two fifths-digits are for use with the fourth-digit \\.0"
   re_fifth_rows <- paste(re_fifth_range, re_fifth_range_other, sep = "|")
-  filtered %>% grepl(pattern = re_fifth_rows) %>% which -> fifth_rows
+  fifth_rows <- grep(pattern = re_fifth_rows, x = filtered, perl = perl, useBytes = useBytes)
 
   # several occurances of "Requires fifth digit", referring back to the previous
   # higher-level definition, without having the parent code in the line itself
-  fifth_backref <- grep(re_fifth_range_other, filtered)
+  fifth_backref <- grep(re_fifth_range_other, filtered, perl = perl, useBytes = useBytes)
   # for these, construct a string which will be captured in the next block
   filtered[fifth_backref] <- paste(filtered[fifth_backref], filtered[fifth_backref - 1])
 
-  # fourth-digit qualifiers:
   re_fourth_range <- "fourth-digit.+categor"
-  fourth_rows <- grep(re_fourth_range, filtered)
+  fourth_rows <- grep(re_fourth_range, filtered, perl = perl, useBytes = useBytes)
 
-  # lookup_fourth will contain vector of suffices, with names being the codes
-  # they augment
-  lookup_fourth <- c()
-  for (f in fourth_rows) {
-    if (verbose)
-      message("working on fourth-digit row:", f)
-    range <- rtf_parse_fifth_digit_range(filtered[f])
-    filtered[seq(f + 1, f + 37)] %>%
-      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)") -> fourth_suffices
-    re_fourth_defined <- paste(c("\\.[", names(fourth_suffices), "]$"), collapse = "")
-    # drop members of range which don't have defined fourth digit
-    range <- grep(re_fourth_defined, range, value = TRUE)
-    # now replace value with the suffix, with name of item being the code itself
-    names(range) <- range
-    last <- -1
-    for (fourth in names(fourth_suffices)) {
-      if (last > as.integer(fourth)) break
-      re_fourth <- paste0("\\.", fourth, "$")
-
-      range[grep(re_fourth, range)] <- fourth_suffices[fourth]
-      last <- fourth
-    }
-    lookup_fourth <- c(lookup_fourth, range)
-  }
+  lookup_fourth <- rtf_generate_fourth_lookup(filtered, fourth_rows)
 
   # at least two examples of "Use 0 as fourth digit for category 672"
   re_fourth_digit_zero <- "Use 0 as fourth digit for category"
-  fourth_digit_zero_lines <- grep(re_fourth_digit_zero, filtered)
+  fourth_digit_zero_lines <- grep(re_fourth_digit_zero, filtered, perl = perl, useBytes = useBytes)
   filtered[fourth_digit_zero_lines] %>%
-    str_pair_match("(.*category )([[:digit:]]{3})$") %>%
+    str_pair_match("(.*category )([[:digit:]]{3})$", perl = perl, useBytes = useBytes) %>%
     unname -> fourth_digit_zero_categories
 
   for (categ in fourth_digit_zero_categories) {
-    parent_row <- grep(paste0("^", categ, " .+"), filtered, value = TRUE)
+    parent_row <- grep(paste0("^", categ, " .+"), filtered, value = TRUE, perl = perl, useBytes = useBytes)
     filtered[length(filtered) + 1] <-
-      paste0(categ, ".0 ", str_pair_match(parent_row, "([[:digit:]]{3} )(.+)"))
+      paste0(categ, ".0 ", str_pair_match(parent_row, "([[:digit:]]{3} )(.+)", perl = perl, useBytes = useBytes))
   }
 
 
@@ -255,12 +233,12 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
     if (verbose) message("working on fifth-digit row:", f)
     range <- rtf_parse_fifth_digit_range(filtered[f], verbose = verbose)
     fifth_suffices <- filtered[seq(f + 1, f + 20)] %>%
-      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)")
+      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE, perl = perl, useBytes = useBytes) %>%
+      str_pair_match("([[:digit:]])[[:space:]](.*)", perl = perl, useBytes = useBytes)
 
     re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
     # drop members of range which don't have defined fifth digit
-    range <- grep(re_fifth_defined, range, value = TRUE)
+    range <- grep(re_fifth_defined, range, value = TRUE, perl = perl, useBytes = useBytes)
     # now replace value with the suffix, with name of item being the code itself
     names(range) <- range
     last <- -1
@@ -280,29 +258,32 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   lines_V30V39 <- grep(re_fifth_range_V30V39, filtered)
   stopifnot(length(lines_V30V39) == 1)
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
-    grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE) %>%
-    str_pair_match("([[:digit:]])[[:space:]](.*)") -> suffices_V30V39
+    grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE, perl = perl, useBytes = useBytes) %>%
+    str_pair_match("([[:digit:]])[[:space:]](.*)", perl = perl, useBytes = useBytes) -> suffices_V30V39
   range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE, defined = FALSE))
-  range <- grep(re_V30V39_fifth, range, value = TRUE)
+  range <- grep(re_V30V39_fifth, range, value = TRUE, perl = perl, useBytes = useBytes)
   names(range) <- range
   for (fifth in names(suffices_V30V39)) {
     # only applies to .0x (in 2015 at least), but .1 also exists without 5th
     # digit
     re_fifth <- paste0("\\.0", fifth, "$")
-    range[grep(re_fifth, range)] <- suffices_V30V39[fifth]
+    range[grep(re_fifth, range, perl = perl, useBytes = useBytes)] <- suffices_V30V39[fifth]
   }
   lookup_fifth <- c(lookup_fifth, range)
 
   # now here we could potentially capture chapter headings, but I can drop
   # excludes easily by removing lines with bracketed codes
-  filtered <- grep(paste0("\\((", re_icd9_decimal_bare, ")-(", re_icd9_decimal_bare, ")\\)"),
-                   filtered, value = TRUE, invert = TRUE)
-  filtered <- grep(paste0("Exclude"), filtered, value = TRUE, invert = TRUE)
+  filtered <- grep(paste0("\\((", re_icd9_decimal_bare,
+                          ")-(", re_icd9_decimal_bare, ")\\)"),
+                   filtered, value = TRUE, invert = TRUE,
+                   perl = perl, useBytes = useBytes)
+  filtered <- grep(paste0("Exclude"), filtered, value = TRUE, invert = TRUE, perl = perl, useBytes = useBytes)
 
   # fix some odd-balls so they don't get dropped
   # "707.02Upper back", "066.40West Nile fever, unspecified", etc
 
-  filtered <- sub("((70[[:digit:]]\\.[[:digit:]]{2})|066\\.40)([[:alpha:]])", "\\1 \\2", filtered)
+  filtered <- sub("((70[[:digit:]]\\.[[:digit:]]{2})|066\\.40)([[:alpha:]])", "\\1 \\2",
+                  filtered, perl = perl, useBytes = useBytes)
 
   ##################
   # next step is the main filter for codes
@@ -311,64 +292,28 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   # again, we can keep some more information, but we'll just take the primary
   # description for each item, i.e. where a code begins a line. Some codes have
   # ten or so alternative descriptions, e.g. 410.0
-  filtered <- grep(paste0("^[[:space:]]*(", re_icd9_decimal_strict_bare, ") "), filtered, value = TRUE)
+  filtered <- grep(paste0("^[[:space:]]*(", re_icd9_decimal_strict_bare, ") "),
+                   filtered, value = TRUE, perl = perl, useBytes = useBytes)
 
   # spaces to single
-  filtered <- gsub("[[:space:]]+", " ", filtered)
+  filtered <- gsub("[[:space:]]+", " ", filtered, perl = perl, useBytes = useBytes)
   # fix a few things, e.g. "040. 1 Rhinoscleroma", "527 .0 Atrophy"
   filtered <-
     sub("^([VvEe]?[[:digit:]]+) ?\\. ?([[:digit:]]) (.*)", "\\1\\.\\2 \\3",
-        filtered)
+        filtered, perl = perl, useBytes = useBytes)
   # and high-level headings like "210-229 Benign neoplasms"
   filtered <- grep("^[[:space:]]*[[:digit:]]{3}-[[:digit:]]{3}.*", filtered,
-                   value = TRUE, invert = TRUE)
+                   value = TRUE, invert = TRUE, perl = perl, useBytes = useBytes)
   # "2009 H1 N1 swine influenza virus"
-  filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE)
+  filtered <- grep("^2009", filtered, value = TRUE, invert = TRUE, perl = perl, useBytes = useBytes)
   # "495.7 \"Ventilation\" pneumonitis"
   re_code_desc <- paste0("^(", re_icd9_decimal_bare, ") +([ \"[:graph:]]+)")
-  out <- str_pair_match(filtered, re_code_desc)
+  # out is the start of the eventual output of code to description pairs. seems
+  # to be quicker with perl and useBytes both FALSE
+  out <- str_pair_match(filtered, re_code_desc, perl = FALSE, useBytes = FALSE)
 
-  out_fourth <- c()
-  # apply fourth digit qualifiers
-  for (f_num in seq_along(lookup_fourth)) {
-    if (verbose)
-      message("applying fourth digits to lookup row: ", f_num)
-    lf <- lookup_fourth[f_num]
-    f <- names(lf)
-    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
-    if (parent_code %fin% names(out)) {
-      pair_fourth <- paste(out[parent_code], lookup_fourth[f_num], sep = ", ")
-      names(pair_fourth) <- f
-      out_fourth <- append(out_fourth, pair_fourth)
-    }
-  }
-  out <- append(out, out_fourth)
-
-  out_fifth <- c()
-  # apply fifth digit qualifiers:
-  for (f_num in seq_along(lookup_fifth)) {
-    if (verbose)
-      message("applying fifth digits to lookup row: ", f_num)
-    lf <- lookup_fifth[f_num]
-    f <- names(lf)
-    parent_code <- substr(f, 0, nchar(f) - 1)
-
-    # repeated lookup in same table, so can benefit from fast match %fin%
-    # instead of %in%
-    if (parent_code %fin% names(out)) {
-      # add just the suffix with name being the five digit code
-      pair_fifth <- paste(out[parent_code], lf, sep = ", ")
-      names(pair_fifth) <- f
-      out_fifth <- append(out_fifth, pair_fifth)
-    } else {
-      # this is really superfluous since we don't expect to match these, keep
-      # for debugging
-      if (FALSE)
-        message("parent code ", parent_code, " missing when looking up ", f)
-    }
-  }
-  out <- append(out, out_fifth)
-
+  out <- c(out, rtf_lookup_fourth(out = out, lookup_fourth = lookup_fourth))
+  out <- c(out, rtf_lookup_fifth(out, lookup_fifth))
   out <- fix_rtf_duplicates(out, verbose)
 
   # drop all the codes not specified by 5th digits in square brackets, which are
@@ -378,18 +323,169 @@ parse_rtf_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE) {
   fix_rtf_quirks_2015(out)
 }
 
+#' generate look-up for four digit codes
+#'
+#' \code{lookup_fourth} will contain vector of suffices, with names being the
+#' codes they augment
+#' @return named character vector, names are the ICD codes, values are the
+#'   descriptions
+#' @keywords internal
+rtf_generate_fourth_lookup <- function(filtered, fourth_rows, verbose = FALSE) {
+  lookup_fourth <- c()
+  for (f in fourth_rows) {
+    range <- rtf_parse_fifth_digit_range(filtered[f])
+
+    fourth_suffices <- str_pair_match(
+      string = filtered[seq(f + 1, f + 37)],
+      pattern = "^([[:digit:]])[[:space:]](.*)"
+    )
+
+    re_fourth_defined <- paste(c("\\.[", names(fourth_suffices), "]$"), collapse = "")
+    # drop members of range which don't have defined fourth digit
+    range <- grep(re_fourth_defined, range, value = TRUE)
+    # now replace value with the suffix, with name of item being the code itself
+    names(range) <- range
+    last <- -1
+    for (fourth in names(fourth_suffices)) {
+      if (last > as.integer(fourth)) break
+      re_fourth <- paste0("\\.", fourth, "$")
+
+      range[grep(re_fourth, range)] <- fourth_suffices[fourth]
+      last <- fourth
+    }
+    lookup_fourth <- c(lookup_fourth, range)
+  }
+  if (verbose) {
+    message("lookup_fourth has length: ", length(lookup_fourth), ", head: ")
+    print(head(lookup_fourth))
+  }
+  lookup_fourth
+}
+
+#' apply fourth digit qualifiers
+#'
+#' use the lookup table of fourth digit
+#'
+#' @keywords internal
+rtf_lookup_fourth <- function(out, lookup_fourth, verbose = FALSE) {
+  rtf_lookup_fourth_alt_env(out = out, lookup_fourth = lookup_fourth, verbose = verbose)
+}
+
+rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
+  out_fourth <- c()
+  for (f_num in seq_along(lookup_fourth)) {
+    lf <- lookup_fourth[f_num]
+    f <- names(lf)
+    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
+    if (parent_code %in% names(out)) {
+      pair_fourth <- paste(out[parent_code], lf, sep = ", ")
+      names(pair_fourth) <- f
+      out_fourth <- append(out_fourth, pair_fourth)
+    }
+  }
+  if (verbose) {
+    message("fourth output lines: length = ", length(out_fourth), ", head: ")
+    print(head(out_fourth))
+  }
+  out_fourth
+}
+
+rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = FALSE) {
+  out_fourth <- c()
+  out_env <- list2env(as.list(out))
+  for (f_num in seq_along(lookup_fourth)) {
+    lf <- lookup_fourth[f_num]
+    f <- names(lf)
+    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
+    if (!is.null(out_env[[parent_code]])) {
+      pair_fourth <- paste(out[parent_code], lf, sep = ", ")
+      names(pair_fourth) <- f
+      out_fourth <- append(out_fourth, pair_fourth)
+    }
+  }
+  if (verbose) {
+    message("fourth output lines: length = ", length(out_fourth), ", head: ")
+    print(head(out_fourth))
+  }
+  rm(out_env)
+  out_fourth
+}
+
+rtf_lookup_fifth <- function(out, lookup_fifth, verbose = FALSE) {
+  rtf_lookup_fifth_alt_env(out = out, lookup_fifth = lookup_fifth, verbose = verbose)
+}
+
+rtf_lookup_fifth_alt_base <- function(out, lookup_fifth, verbose = FALSE) {
+  out_fifth <- c()
+  for (f_num in seq_along(lookup_fifth)) {
+    lf <- lookup_fifth[f_num]
+    f <- names(lf)
+    parent_code <- substr(f, 0, nchar(f) - 1)
+
+    if (parent_code %in% names(out)) {
+      pair_fifth <- paste(out[parent_code], lf, sep = ", ")
+      names(pair_fifth) <- f
+      out_fifth <- c(out_fifth, pair_fifth)
+    }
+  }
+  if (verbose) {
+    message("fifth output lines: length = ", length(out_fifth), ", head: ")
+    print(head(out_fifth))
+  }
+  out_fifth
+}
+
+rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
+  out_fifth <- character(5000) # 2011 data is 4870 long
+  n <- 1L
+  out_env <- list2env(as.list(out))
+
+  for (f_num in seq_along(lookup_fifth)) {
+    lf <- lookup_fifth[f_num]
+    f <- names(lf)
+    parent_code <- substr(f, 0, nchar(f) - 1)
+    if (!is.null(out_env[[parent_code]])) {
+      out_fifth[n] <- paste(out[parent_code], lf, sep = ", ")
+      names(out_fifth)[n] <- f
+      n <- n + 1L
+    }
+  }
+  out_fifth <- out_fifth[1:n - 1]
+  if (verbose) {
+    message("fifth output lines: length = ", length(out_fifth), ", head: ")
+    print(head(out_fifth))
+  }
+  out_fifth
+}
+
 #' Fix unicode characters in RTF
 #'
 #' fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
 #' lines... This needs care in Windows, or course. Maybe Mac, too?
-#' @keywords internal
-fix_unicode <- function(filtered) {
-  #
-  filtered <- gsub("\\\\'e7", "\u00e7", filtered) # c cedila
-  filtered <- gsub("\\\\'e8", "\u00e8", filtered) # e gravel
-  filtered <- gsub("\\\\'e9", "\u00e9", filtered) # e acute
-  filtered <- gsub("\\\\'f1", "\u00f1", filtered) # n tilde
-  filtered <- gsub("\\\\'f16", "\u00f6", filtered) # o umlaut
+#'
+#' First: c cedila, e grave, e acute
+#' Then:  n tilde, o umlaut
+#' @examples
+#' \dontrun{
+#' # fix_unicode is a slow step, useBytes and perl together is faster
+#' f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
+#' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
+#' microbenchmark::microbenchmark(
+#'   res_both <- fix_unicode(rtf_lines, perl = TRUE, useBytes = TRUE),
+#'   res_none <- fix_unicode(rtf_lines, perl = FALSE, useBytes = FALSE),
+#'   res_bytes <- fix_unicode(rtf_lines, perl = FALSE, useBytes = TRUE),
+#'   res_perl <- fix_unicode(rtf_lines, perl = TRUE, useBytes = FALSE),
+#'   times = 5
+#' )
+#' stopifnot(identical(res_both, res_none))
+#' }
+#' @keywords internal manip
+fix_unicode <- function(filtered, perl = TRUE, useBytes = TRUE) {
+  filtered <- gsub("\\\\'e7", "\u00e7", filtered, perl = perl, useBytes = useBytes) # c cedila
+  filtered <- gsub("\\\\'e8", "\u00e8", filtered, perl = perl, useBytes = useBytes) # e gravel
+  filtered <- gsub("\\\\'e9", "\u00e9", filtered, perl = perl, useBytes = useBytes) # e acute
+  filtered <- gsub("\\\\'f1", "\u00f1", filtered, perl = perl, useBytes = useBytes) # n tilde
+  filtered <- gsub("\\\\'f16", "\u00f6", filtered, perl = perl, useBytes = useBytes) # o umlaut
   filtered
 }
 
@@ -418,13 +514,14 @@ fix_rtf_duplicates <- function(out, verbose) {
   out
 }
 
+#' fix quirks for 2015 RTF parsing
+#'
+#' 2015 quirks (many more are baked into the parsing: try to splinter out the
+#' most specific) some may well apply to other years 650-659 ( and probably many
+#' others don't use whole subset of fourth or fifth digit qualifiers) going to
+#' have to parse these, e.g. [0,1,3], as there are so many...
+#' @keywords internal manip
 fix_rtf_quirks_2015 <- function(out) {
-  # 2015 quirks (many more are baked into the parsing: try to splinter out the
-  # most specific) some may well apply to other years
-
-  # 650-659 ( and probably many others don't use whole subset of fourth or fifth
-  # digit qualifiers) going to have to parse these, e.g. [0,1,3], as there are
-  # so many...
   out <- out[grep("65[12356789]\\.[[:digit:]][24]", names(out), invert = TRUE)]
 
   #657 just isn't formatted like any other codes
@@ -520,9 +617,7 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
 
 rtf_parse_qualifier_subset <- function(qual) {
   assert_string(qual) # one at a time
-
   out <- c()
-
   qual %>% strip %>%
     strsplit("[]\\[,]") %>%
     unlist %>%
@@ -546,18 +641,32 @@ rtf_parse_qualifier_subset <- function(qual) {
 #'
 #' just for \\tab, replace with space, otherwise, drop rtf tags entirely
 #' @param x vector of character strings containing RTF
+#' @examples
+#' \dontrun{
+#' # rtf_strip is a slow step, useBytes and perl together is five times faster
+#' f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
+#' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
+#' microbenchmark::microbenchmark(
+#'   res_both <- rtf_strip(rtf_lines, perl = TRUE, useBytes = TRUE),
+#'   res_none <- rtf_strip(rtf_lines, perl = FALSE, useBytes = FALSE),
+#'   res_bytes <- rtf_strip(rtf_lines, perl = FALSE, useBytes = TRUE),
+#'   res_perl <- rtf_strip(rtf_lines, perl = TRUE, useBytes = FALSE),
+#'   times = 5
+#' )
+#' stopifnot(identical(res_both, res_none))
+#' }
 #' @keywords internal manip
-rtf_strip <- function(x) {
+rtf_strip <- function(x, perl = TRUE, useBytes = TRUE) {
   #nolint start
-  x <- gsub("\\\\tab ", " ", x)
-  x <- gsub("\\\\[[:punct:]]", "", x)  # control symbols only, not control words
-  x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x)  # special case, still needed?
-  x <- gsub("\\{\\\\bkmkstart.*?\\}", "", x)
-  x <- gsub("\\{\\\\bkmkend.*?\\}", "", x)
+  x <- gsub("\\\\tab ", " ", x, perl = perl, useBytes = useBytes)
+  x <- gsub("\\\\[[:punct:]]", "", x, perl = perl, useBytes = useBytes) # control symbols only, not control words
+  x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x, perl = perl, useBytes = useBytes) # special case
+  x <- gsub("\\{\\\\bkmk(start|end).*?\\}", "", x, perl = perl, useBytes = useBytes)
   # no backslash in this next list, others removed from
   # http://www.regular-expressions.info/posixbrackets.html
-  x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x)
-  x <- gsub(" *(\\}|\\{)", "", x)
+  # punct is defined as:       [!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~], not quite the same
+  x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x, perl = perl, useBytes = useBytes)
+  x <- gsub(" *(\\}|\\{)", "", x, perl = perl, useBytes = useBytes)
   trim(x)
   #nolint end
 }

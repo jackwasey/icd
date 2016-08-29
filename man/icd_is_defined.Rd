@@ -35,7 +35,7 @@ whether they are billable, i.e. leaf nodes. This is really only designed
 for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not
 designed for billing, but for public health and death reporting.}
 
-\item{nomatch}{integer value, passed to \code{fmatch} default is 0. Setting
+\item{nomatch}{integer value, passed to \code{match} default is 0. Setting
 this to \code{NA_integer_} would stop NA values being treated as undefined.}
 }
 \value{

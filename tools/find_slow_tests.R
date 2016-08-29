@@ -3,7 +3,6 @@ library(testthat)
 library(devtools)
 load_all()
 
-options("icd.do_slow_tests" = TRUE)
 test_all_res <- test_package(package = "icd", reporter = "list", filter = NULL)
 as.data.frame(test_all_res) -> resdf
 print(tail(resdf[order(resdf$user), ], n = 12L))

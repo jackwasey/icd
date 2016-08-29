@@ -21,41 +21,44 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-TMP=$(mktemp -d /tmp/icd-docker.XXXXXXXX)
+#TMP=$(mktemp -d /tmp/icd-docker.XXXXXXXX)
 
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/Documents/RProjects/icd}"
-DOCKER_IMAGE="${1:-clang-3.8}"
+DOCKER_IMAGE="${1:-r-clang-3.8}"
 if [[ -z "$DOCKER_IMAGE" ]]; then
    echo "usage: $0 docker directory to build and run"
    exit 1
 fi
 
 # strip directory symbol to get the docker image name from a dir with trailing slash
-IM_NM="$(echo $DOCKER_IMAGE | tr -d '/')"
-echo "IM_NM=$IM_NM"
+DOCKER_IMAGE="$(echo $DOCKER_IMAGE | tr -d '/')"
+echo "DOCKER_IMAGE=$DOCKER_IMAGE"
 
-DOCKER_IMAGE_FULL_NAME="jackwasey/r-$IM_NM"
+DOCKER_IMAGE_FULL_NAME="${DOCKER_IMAGE_FULL_NAME:-jackwasey/$DOCKER_IMAGE}"
+echo "using docker image: $DOCKER_IMAGE_FULL_NAME"
 
 TOOLS_DIR="$ICD_HOME/tools"
-IM="$TMP"
+WORKING_ROOT="/var/local/rock-icd"
 DOCKER_SCRIPT=in_docker_check.sh
+DOCKER_DIR="$WORKING_ROOT/$DOCKER_IMAGE_FULL_NAME"
 
-if [ ! -d "$IM" ]; then
-  echo "Docker image should be a directory under tools in the icd/icd9 project."
-  exit 1
+if [ ! -d "$DOCKER_DIR" ]; then
+  echo "Docker directory doesn't exist... Creating: $DOCKER_DIR"
+  mkdir -p $DOCKER_DIR
 fi
 
-cp -v "$TOOLS_DIR/Dockerfile.template" "$IM/Dockerfile"
+cp -v "$TOOLS_DIR/Dockerfile.template" "$DOCKER_DIR/Dockerfile"
 # https://stackoverflow.com/questions/584894/sed-scripting-environment-variable-substitution
-sed -i 's@DOCKER_IMAGE_FULL_NAME@'"$DOCKER_IMAGE_FULL_NAME"'@' $IM/Dockerfile
-cp -v "$TOOLS_DIR/$DOCKER_SCRIPT" "$IM"
-docker build -t "$DOCKER_IMAGE_FULL_NAME" "$IM" || {
-  rm -f "$IM/$DOCKER_SCRIPT"
+sed -i 's@DOCKER_IMAGE_FULL_NAME@'"$DOCKER_IMAGE_FULL_NAME"'@' $DOCKER_DIR/Dockerfile
+cp -v "$TOOLS_DIR/$DOCKER_SCRIPT" "$DOCKER_DIR"
+docker build -t "$DOCKER_IMAGE_FULL_NAME" "$DOCKER_DIR" || {
+  rm -f "$DOCKER_DIR/$DOCKER_SCRIPT"
 }
-rm -f "$IM/Dockerfile"
-rm -f "$IM/$DOCKER_SCRIPT"
-rmdir "$TMP"
+
+#rm -f "$IM/Dockerfile"
+#rm -f "$IM/$DOCKER_SCRIPT"
+#rmdir "$TMP"
 
 echo "Environment:"
 echo "${ICD_PROJECT_NAME:=icd}"
@@ -70,4 +73,10 @@ echo "${R_CMD:=R}"
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
 docker run -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
            -e "R_PKG_NAME=$R_PKG_NAME" \
-           -e "GITHUB_URL=$GITHUB_URL" -e "GITHUB_USER=$GITHUB_USER" -e "GITHUB_REPO=$GITHUB_REPO" -e "GIT_BRANCH=$GIT_BRANCH" -e "GIT_URL=$GIT_URL" -e "R_CMD=$R_CMD" --rm -ti "$DOCKER_IMAGE_FULL_NAME" ${2:-}
+           -e "GITHUB_URL=$GITHUB_URL" \
+           -e "GITHUB_USER=$GITHUB_USER" \
+           -e "GITHUB_REPO=$GITHUB_REPO" \
+           -e "GIT_BRANCH=$GIT_BRANCH" \
+           -e "GIT_URL=$GIT_URL" \
+           -e "R_CMD=$R_CMD" \
+           --rm -ti "$DOCKER_IMAGE_FULL_NAME" ${2:-}
