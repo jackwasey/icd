@@ -192,9 +192,7 @@ set_re_globals()
 #' @details Leading zeroes in the decimal form are not ambiguous. Although
 #'   integer ICD-9 codes could be intended by the user, there is a difference
 #'   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
-#'   is provided TODO: add default (when there is no class) which detected ICD-9
-#'   vs 10 if possible. TODO: use "short_code" or "long" attribute if available
-#'   to tighten validation, or guess if missing.
+#'   is provided.
 #' @section Class: S3 class of on object in R is just a vector. Attributes are
 #'   lost with manipulation, with the exception of class: therefore, elements of
 #'   the class vector are used to describe features of the data. If these are
@@ -232,11 +230,11 @@ icd_valid_worker <- function(x, whitespace_ok, regex, regex_no_ws = regex) {
   if (length(x) == 0)
     return(logical())
 
-  assert(checkFactor(x), checkCharacter(x))
+  assert(check_factor(x), check_character(x))
   if (whitespace_ok)
-    na_to_false(grepl(re_just_ws(regex), x))
+    na_to_false(grepl(re_just_ws(regex), x, perl = TRUE))
   else
-    na_to_false(grepl(re_just(regex_no_ws), x))
+    na_to_false(grepl(re_just(regex_no_ws), x, perl = TRUE))
 }
 
 #' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
@@ -260,14 +258,14 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
                                whitespace_ok = TRUE, ...) {
   assert_flag(short_code)
 
-  # TODO someday: check whether code has 'year' attribute. This is maybe more for
+  # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
   # testing 'realness' start with a broad regular expression
 
-  # TODO: test whether ICD-10-CM or WHO, if class not otherwise specified.
+  # SOMEDAY: test whether ICD-10-CM or WHO, if class not otherwise specified.
   if (short_code)
-    grepl(pattern = re_just(re_icd10_short), trim(x))
+    grepl(pattern = re_just(re_icd10_short), trim(x), perl = TRUE)
   else
-    grepl(pattern = re_just(re_icd10_decimal), trim(x))
+    grepl(pattern = re_just(re_icd10_decimal), trim(x), perl = TRUE)
 }
 
 #' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
@@ -373,7 +371,6 @@ icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
   assert_list(x, types = "character", any.missing = FALSE,
               min.len = 1, unique = TRUE, names = "named")
   assert_flag(short_code)
-  # TODO: warn/return the invalid labels?
   all(unlist(
     lapply(x, FUN = function(y) icd_is_valid(y, short_code = short_code)),
     use.names = FALSE
@@ -423,7 +420,7 @@ icd_get_valid.icd10 <- function(x, short_code = icd_guess_short(x)) {
 #' @export
 #' @keywords internal
 icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
-  # TODO: make ICD-10-CM specific
+  # SOMEDAY: make ICD-10-CM specific (when WHO codes are acutally implemented)
   x[icd_is_valid.icd10(x, short_code = short_code)]
 }
 
@@ -526,7 +523,7 @@ icd_is_major.icd10 <- function(x) {
 #' @keywords internal
 icd_is_major.icd10cm <- function(x) {
   assert_character(x)
-  grepl(re_just_ws(re_icd10cm_major), trim(x))
+  grepl(re_just_ws(re_icd10cm_major), trim(x), perl = TRUE)
 }
 
 #' @describeIn icd_is_major check whether a code is an ICD-9 major

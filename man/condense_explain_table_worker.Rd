@@ -7,7 +7,7 @@
 condense_explain_table_worker(x)
 }
 \value{
-details for condesable rows
+details for rows which can be condensed
 }
 \description{
 generate condensed code and condensed number columns

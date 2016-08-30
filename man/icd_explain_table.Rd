@@ -53,20 +53,18 @@ data frame with fields for ICD-9 code, name and description. The
   invalid input codes
 }
 \description{
-Output is ordered in the same order as the input. A boolean column ismajor
-indicates if the code is a parent Category.
+Output is ordered in the same order as the input. A logical column
+\code{ismajor} indicates if the code is a parent Category.
 }
 \details{
 If the code is both a valid ICD9 and a ICD10 the output will default the
-descriptions to ICD10.  The code would otherwise have to be explicitly casted
+descriptions to ICD10.  The code would otherwise have to be explicitly cast
 to get ICD9 descriptions.
 
 A column for source year may be added in the future. Other changes may occur
 this new feature gets testing and use.
 
 If the input x is of mixed type it will choose to convert by
-
-majority of icd9 vs. icd19
 }
 \section{Methods (by class)}{
 \itemize{

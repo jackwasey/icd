@@ -46,7 +46,7 @@ test_that("Elixhauser make sure all the children are listed in the saved data.",
   for (i in icd::icd9_map_quan_elix)
     expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
-# TODO: icd_sort vs plain sort
+
 test_that("Quan Charlson make sure all the children are listed in the saved data.", {
   for (i in icd::icd9_map_quan_deyo)
     expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
@@ -561,12 +561,9 @@ test_that("disordered visit ids", {
 })
 
 test_that("diff comorbid works", {
-  # TODO: S3 classes for this
-  # list, but not list of character vectors
   expect_error(icd_diff_comorbid(bad_input, bad_input))
 
   # no warning or error for good data
-  # TODO: should be testing correct dispatch here, too, since map is a different class.
   expect_warning(
     utils::capture.output(
       res <- icd_diff_comorbid(icd::icd9_map_ahrq, icd9_map_elix, show = FALSE)
@@ -690,8 +687,8 @@ test_that("failing example", {
                      icd9 = c("441", "412.93", "044.9"))
   cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE)
   expect_false("names" %in% names(attributes(cmb)))
-  icd_charlson(mydf, isShort = FALSE) # TODO: fix S3 classes ehre
-  icd_charlson(mydf, isShort = FALSE, return.df = TRUE)
+  icd_charlson(mydf, isShort = FALSE)
+  expect_is(icd_charlson(mydf, isShort = FALSE, return.df = TRUE), "data.frame")
   icd_charlson_from_comorbid(cmb)
 })
 
@@ -708,7 +705,7 @@ test_that("disordered visit_ids works by default", {
 })
 
 test_that("comorbidities created from source data frame coded as factors", {
-  v2 <- icd_wide_to_long(vermont_dx) # TODO: correct S3 method?
+  v2 <- icd_wide_to_long(vermont_dx)
   v2$visit_id <- as.factor(v2$visit_id)
   v2$icd_code <- as.factor(v2$icd_code)
 
@@ -718,6 +715,8 @@ test_that("comorbidities created from source data frame coded as factors", {
 })
 
 test_that("all AHRQ ICD-9 comorbidities are also in the ICD-10 maps, in same order", {
-  # TODO: similar for elix, deyo etc.
   expect_equal_no_icd(names(icd9_map_ahrq), names(icd10_map_ahrq))
+  expect_equal_no_icd(names(icd9_map_elix), names(icd10_map_elix))
+  expect_equal_no_icd(names(icd9_map_quan_elix), names(icd10_map_quan_elix))
+  expect_equal_no_icd(names(icd9_map_quan_deyo), names(icd10_map_quan_deyo))
 })

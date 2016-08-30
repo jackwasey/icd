@@ -68,7 +68,6 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
                  "I36", "I37", "I38", "I39", "Q230", "Q231", "Q232", "Q233", "Z952", "Z953", "Z954"),
     pulmonary_circ = c("I26", "I27", "I280", "I288", "I289"),
     pvd = c("I70", "I71", "I731", "I738", "I739", "I771", "I790", "I792", "K551", "K558", "K559", "Z958", "Z959"),
-    # TODO? shoudl htn simple and complex be merged
     htn = c("I10"),
     htncx = c("I11", "I12", "I13", "I15"),
     paralysis = c("G041", "G114", "G801", "G802", "G81", "G82", "G830", "G831", "G832", "G833", "G834", "G839"),
@@ -128,10 +127,8 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
 
 test_that("some hand-picked ICD-10 codes appear in the quan elix map", {
   expect_true("M12019" %in% icd::icd10_map_quan_elix$Rheumatic)
-  #TODO more
 })
 
 test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
   expect_true("I214" %in% icd::icd10_map_quan_deyo$MI)
-  #TODO more
 })

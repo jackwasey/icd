@@ -168,6 +168,6 @@ Doing the parsing requires additional dependencies, which are not gratuitously i
 One of the strengths of this package is a thorough test suite, including over 10,000 lines of testing code.
 
     find tests -type f -exec cat '{}' + | wc -l
-    10098
+    10910
 
 A better metric of testing and code quality is code coverage, for which [codecov](https://codecov.io/github/jackwasey/icd) and [coveralls](https://coveralls.io/github/jackwasey/icd) are used. The automated [wercker](https://app.wercker.com/#applications/5609d41e71f137d02f0a1069) builds report test coverage results to [codecov](https://codecov.io/github/jackwasey/icd), whereas the [travis](https://travis-ci.org/jackwasey/icd) builds report coverage to [coveralls](https://coveralls.io/github/jackwasey/icd). The parsing code is a significant chunk of code, and may or may not be included in the automated builds depending on whether the source data is available. With the data available, test coverage is &gt;95%.

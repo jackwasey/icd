@@ -68,7 +68,10 @@ icd_charlson <- function(x, visit_name = NULL,
   UseMethod("icd_charlson")
 }
 
-#' @describeIn icd_charlson Charlson scores from data frame of visits and ICD-9 codes
+#' @describeIn icd_charlson Charlson scores from data frame of visits and ICD-9
+#'   codes. ICD-10 Charlson can be calculated simply by getting the Charlson
+#'   (e.g. Quan Deyo) comorbidities, then calling
+#'   \code{icd_charlson_from_comorbid}.
 #' @export
 icd_charlson.data.frame <- function(x, visit_name = NULL,
                                     scoring_system = c("original", "charlson", "quan"),
@@ -76,7 +79,7 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
                                     stringsAsFactors = getOption("stringsAsFactors"), # nolint
                                     ...) {
   assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  assert(checkNull(visit_name), checkString(visit_name))
+  assert(check_null(visit_name), check_string(visit_name))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
@@ -300,7 +303,7 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
                                         stringsAsFactors = getOption("stringsAsFactors"), # nolint
                                         ...) {
   assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  assert(checkNull(visit_name), checkString(visit_name))
+  assert(check_null(visit_name), check_string(visit_name))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
@@ -323,7 +326,7 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
 #' @export
 icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
   assert(checkDataFrame(x), checkMatrix(x))
-  assert(checkNull(visit_name), checkString(visit_name))
+  assert(check_null(visit_name), check_string(visit_name))
   assert_flag(hierarchy)
   stopifnot(ncol(x) - is.data.frame(x) == 30)
   weights <- c(7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,

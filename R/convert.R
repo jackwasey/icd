@@ -103,8 +103,8 @@ icd_wide_to_long <- function(x,
                              icd_regex = c("icd", "diag", "dx_", "dx")) {
   assert_data_frame(x, min.rows = 1, min.cols = 2)
   assert_string(visit_name)
-  assert(checkNull(icd_labels),
-         checkCharacter(icd_labels, min.len = 1))
+  assert(check_null(icd_labels),
+         check_character(icd_labels, min.len = 1))
   assert_string(icd_name)
   assert_character(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
 

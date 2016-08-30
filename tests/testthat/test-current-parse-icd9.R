@@ -70,9 +70,8 @@ test_that("some majors are the same as sub-chapters", {
   # be more consistent to have every code being in a chapter, sub-chapter and
   # major, than some being exceptional.
 
-
-  # TODO: V85 to V91
-
+  expect_icd9_major_is_sub_chap("Body mass index", "V85")
+  expect_icd9_major_is_sub_chap("Multiple gestation placenta status", "V91")
   expect_icd9_major_is_sub_chap("External cause status", "E000")
 
 })

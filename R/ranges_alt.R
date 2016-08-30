@@ -42,7 +42,7 @@ expand_range_worker_alt_base <- function(start, end, lookup, defined,
     # just remove those codes at the beginning which have children not in the
     # output let's take the first 5, to cover cases like 100, 101, 102.1,
     # 102.11, 102.2
-    starts <- utils::tail(out, 5)
+    starts <- tail(out, 5)
     for (s in starts) {
       if (!all(icd_children.icd9(s, short_code = TRUE, defined = defined) %in% out))
         out <- out[-which(out == s)]

@@ -2,17 +2,16 @@
 % Please edit documentation in R/parse-rtf.R
 \name{fix_unicode}
 \alias{fix_unicode}
-\title{Fix unicode characters in RTF}
+\title{Fix Unicode characters in RTF}
 \usage{
 fix_unicode(filtered, perl = TRUE, useBytes = TRUE)
 }
 \description{
-fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
-lines... This needs care in Windows, or course. Maybe Mac, too?
+fix ASCII, Code Page 1252 and Unicode horror: some character definitions are
+split over lines... This needs care in Windows, or course. Maybe Mac, too?
 }
 \details{
-First: c cedila, e grave, e acute
-Then:  n tilde, o umlaut
+First: c cedilla, e grave, e acute Then:  n tilde, o umlaut
 }
 \examples{
 \dontrun{

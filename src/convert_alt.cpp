@@ -39,7 +39,7 @@ Rcpp::CharacterVector icd9MajMinToCodeOld(const Rcpp::CharacterVector major,
   Rcpp::Rcout << "major and minor are the same?\n";
 #endif
 
-  Rcpp::CharacterVector out; // TODO use vectors of strings and reserve space for this
+  Rcpp::CharacterVector out;
   Rcpp::CharacterVector::const_iterator j = major.begin();
   Rcpp::CharacterVector::const_iterator n = minor.begin();
 
@@ -50,7 +50,7 @@ Rcpp::CharacterVector icd9MajMinToCodeOld(const Rcpp::CharacterVector major,
       continue;
     }
     // work around Rcpp bug with push_front: convert to string just for this
-    // TODO: try to do this with C string instead
+    // SOMEDAY: try to do this with C string instead
     const char* smj_c = mjrelem.get_cstring();
     std::string smj = std::string(smj_c);
     switch (strlen(smj_c)) {

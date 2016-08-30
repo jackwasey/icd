@@ -21,8 +21,9 @@ set as \code{NA}; otherwise; they are removed.}
 }
 \description{
 This function generates factors more quickly, without leveraging
-\code{fastmatch}. The speed increase with fastmatch for ICD-9 codes was about
-33% reduction for 10 million codes.
+\code{fastmatch}. The speed increase with \code{fastmatch} for ICD-9 codes
+was about 33% reduction for 10 million codes. SOMEDAY could be faster still
+using \code{Rcpp}, and a hashed matching algorithm.
 }
 \details{
 \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted

@@ -458,13 +458,12 @@ rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
   out_fifth
 }
 
-#' Fix unicode characters in RTF
+#' Fix Unicode characters in RTF
 #'
-#' fix ASCII/CP1252/Unicode horror: of course, some char defs are split over
-#' lines... This needs care in Windows, or course. Maybe Mac, too?
+#' fix ASCII, Code Page 1252 and Unicode horror: some character definitions are
+#' split over lines... This needs care in Windows, or course. Maybe Mac, too?
 #'
-#' First: c cedila, e grave, e acute
-#' Then:  n tilde, o umlaut
+#' First: c cedilla, e grave, e acute Then:  n tilde, o umlaut
 #' @examples
 #' \dontrun{
 #' # fix_unicode is a slow step, useBytes and perl together is faster
@@ -481,11 +480,11 @@ rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
 #' }
 #' @keywords internal manip
 fix_unicode <- function(filtered, perl = TRUE, useBytes = TRUE) {
-  filtered <- gsub("\\\\'e7", "\u00e7", filtered, perl = perl, useBytes = useBytes) # c cedila
+  filtered <- gsub("\\\\'e7", "\u00e7", filtered, perl = perl, useBytes = useBytes) # c cedilla
   filtered <- gsub("\\\\'e8", "\u00e8", filtered, perl = perl, useBytes = useBytes) # e gravel
   filtered <- gsub("\\\\'e9", "\u00e9", filtered, perl = perl, useBytes = useBytes) # e acute
   filtered <- gsub("\\\\'f1", "\u00f1", filtered, perl = perl, useBytes = useBytes) # n tilde
-  filtered <- gsub("\\\\'f16", "\u00f6", filtered, perl = perl, useBytes = useBytes) # o umlaut
+  filtered <- gsub("\\\\'f6", "\u00f6", filtered, perl = perl, useBytes = useBytes) # o umlaut
   filtered
 }
 
@@ -639,7 +638,7 @@ rtf_parse_qualifier_subset <- function(qual) {
 #' Take a vector of character strings containing RTF, replace each \\tab with a
 #' space and eradicate all other RTF symbols
 #'
-#' just for \\tab, replace with space, otherwise, drop rtf tags entirely
+#' just for \\tab, replace with space, otherwise, drop RTF tags entirely
 #' @param x vector of character strings containing RTF
 #' @examples
 #' \dontrun{

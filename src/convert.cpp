@@ -65,8 +65,6 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector major,
       out_is_na[std::distance(major.begin(), j)] = 1;
       continue;
     }
-    // work around Rcpp bug with push_front: convert to string just for this
-    // TODO: try to do this with C string instead
     const char* smj_c = mjrelem.get_cstring();
     std::string smj = std::string(smj_c);
     switch (strlen(smj_c)) {
@@ -186,7 +184,7 @@ Rcpp::List icd9ShortToPartsCpp(const Rcpp::CharacterVector icd9Short, const Rcpp
       continue;
     }
 
-    std::string s(thisShort.get_cstring()); // TODO maybe better to use as?
+    std::string s(thisShort.get_cstring());
     s = strimCpp(s); // in place or rewrite?
     std::string::size_type sz = s.size();
 
@@ -292,10 +290,9 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
       minors.push_back(NA_STRING);
       continue;
     }
-    // TODO: Rcpp::Rcpp::String doesn't implement many functions, so using STL. A FAST way
-    // would be to use Rcpp::String's function get_cstring, and recode the trim
-    // functions to take const char *. This would avoid the type change AND be
-    // faster trimming.
+    // SOMEDAY, a faster way might be to use Rcpp::String's function
+    // get_cstring, and recode the trim functions to take const char *. This
+    // would avoid the type change AND may trim faster.
     std::string thiscode = Rcpp::as<std::string>(*it);
     thiscode = strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
     std::size_t pos = thiscode.find(".");
@@ -342,10 +339,6 @@ Rcpp::List icd10DecimalToPartsCpp(const Rcpp::CharacterVector x, const Rcpp::Str
       minors.push_back(NA_STRING);
       continue;
     }
-    // TODO: Rcpp::Rcpp::String doesn't implement many functions, so using STL. A FAST way
-    // would be to use Rcpp::String's function get_cstring, and recode the trim
-    // functions to take const char *. This would avoid the type change AND be
-    // faster trimming.
     std::string thiscode = Rcpp::as<std::string>(*it);
     thiscode = strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
     std::size_t pos = thiscode.find(".");
@@ -382,10 +375,6 @@ Rcpp::CharacterVector icd9DecimalToShort(
     Rcpp::String strna = x[i]; // need to copy here? does it copy?
     if (strna == NA_STRING || strna == "")
       continue;
-    // TODO: Rcpp::String doesn't implement many functions, so using STL. A FAST way
-    // might be to use Rcpp::String's function get_cstring, and recode the trim
-    // functions to take const char *. This would avoid the type change AND be
-    // faster trimming.
     const char * thiscode_cstr = strna.get_cstring();
     std::string thiscode(thiscode_cstr);
     thiscode = trimLeftCpp(thiscode);

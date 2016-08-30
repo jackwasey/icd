@@ -57,7 +57,10 @@ NULL
 #' hierarchy, each chapter containing sets of codes which span multiple
 #' three-digit 'major' codes, and in some cases also span codes across two
 #' alphabetic initial characters. E.g. Chapter I spans A00 to B99.
-#' @details TODO: confirm that ICD-10-CM is identical to ICD-10 at this level
+#'
+#' 2017 ICD-10-CM does not have any U codes (codes for special purposes).
+#' U00-U49 - Provisional assignment of new diseases of uncertain etiology or
+#' emergency use U82-U85 - Resistance to antimicrobial and anti-neoplastic drugs
 #' @source http://apps.who.int/classifications/icd10/browse/2016/en
 #' @format list with chapter names stored in list names, each with two element
 #'   named character vector with start and end codes.
@@ -136,6 +139,7 @@ NULL
 #' @format list of character vectors
 #' @source
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
+#' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comorbidity_icd10.jsp}
 #' @name icd9_map_ahrq
 #' @aliases ahrqComorbid ahrq icd10_map_ahrq
 NULL

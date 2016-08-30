@@ -41,10 +41,6 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
-  // possible work around possible clang 3.7 bug:
-  // http://stackoverflow.com/questions/32572966/did-i-misuse-a-reference-variable-in-a-simple-openmp-for-loop-or-is-it-a-clang
-  // const VecVecInt *vcdb = &_vcdb;
-  // const VecVecInt *map = &_map;
 #ifdef ICD_DEBUG_PARALLEL
   debug_parallel();
 #endif
@@ -52,8 +48,8 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 #ifdef ICD_OPENMP
   // I think const values are automatically shared, if default(none) is not used. Different compilers respond differently.
 #pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout, vcdb, map) private(chunk_end_i, vis_i)
-  // TODO: need to consider other processes using multiple cores, see Writing R Extensions.
-  //	omp_set_schedule(omp_sched_static, ompChunkSize); // TODO
+  // SOMEDAY: need to consider other processes using multiple cores, see Writing R Extensions.
+  //	omp_set_schedule(omp_sched_static, ompChunkSize);
   // #pragma omp for schedule(static)
 #endif
   // loop through chunks at a time
@@ -146,7 +142,6 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 }
 
 // just return the chunk results: this shouldn't cause invalidation of shared 'out'
-// TODO should chunk sizes be VecVecIntSz type?
 ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
                                      const VecVecInt& map, const int chunkSize, const int ompChunkSize) {
   // initialize output matrix with all false for all comorbidities
@@ -155,7 +150,7 @@ ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
   Rcpp::Rcout << "top level vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "top level map.size() = " << map.size() << "\n";
 #endif
-  //TODO: can I pass the output by reference, instead?
+  //SOMEDAY: can I pass the output by reference, instead?
   lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
   return out;
 }

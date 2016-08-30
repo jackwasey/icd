@@ -15,7 +15,7 @@ icd10_comorbid_parent_search_str <- function(
 
   # for each icd code
   just_cmb <- vapply(icd_codes, FUN.VALUE = logical(length(map)), FUN = function(y) {
-    # look it up in each comorbidity, but TODO: once we have a comorbidity for
+    # look it up in each comorbidity, but SOMEDAY: once we have a comorbidity for
     # one patient, we don't need to search within it again
 
     char_count <- nchar(as.character(y)):3
@@ -55,7 +55,7 @@ icd10_comorbid_parent_search_all_at_once <- function(x,
 
   # for each icd code
   just_cmb <- vapply(icd_codes, FUN.VALUE = logical(length(map)), FUN = function(y) {
-    # look it up in each comorbidity, but TODO: once we have a comorbidity for
+    # look it up in each comorbidity, but SOMEDAY: once we have a comorbidity for
     # one patient, we don't need to search within it again
 
 
@@ -92,7 +92,7 @@ icd10_comorbid_parent_search_no_loop <- function(x,
 
   # for each icd code
   just_cmb <- vapply(icd_codes, FUN.VALUE = logical(length(map)), FUN = function(y) {
-    # look it up in each comorbidity, but TODO: once we have a comorbidity for
+    # look it up in each comorbidity, but SOMEDAY: once we have a comorbidity for
     # one patient, we don't need to search within it again
 
     vapply(names(map), FUN.VALUE = logical(1),
@@ -134,7 +134,7 @@ icd10_comorbid_parent_search_orig <- function(x,
 
   # for each icd code
   just_cmb <- vapply(icd_codes, FUN.VALUE = logical(length(map)), FUN = function(y) {
-    # look it up in each comorbidity, but TODO: once we have a comorbidity for
+    # look it up in each comorbidity, but SOMEDAY: once we have a comorbidity for
     # one patient, we don't need to search within it again
 
 

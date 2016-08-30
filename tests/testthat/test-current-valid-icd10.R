@@ -35,7 +35,7 @@ test_that("icd10 codes that are billable and do exist", {
 test_that("icd10 codes that are not billable but do exist", {
   test_codes <- list("A00", "A01", "R19", "B005",
                      "C7A02", "C7B", "D498", "O9A11", "O9A51", "O9A5", "O9984", "P96",
-                     # TODO: someday, might consider stripping trailing X, but doubt this occur in real life:
+                     # SOMEDAY might consider stripping trailing X, but doubt this occur in real life:
                      # "V99XXX", "V988XX", "W009XX",
                      "Y99", "Z000")
   test_codes <- append(test_codes, lapply(test_codes, icd10cm))

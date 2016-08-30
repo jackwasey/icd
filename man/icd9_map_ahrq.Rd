@@ -10,6 +10,7 @@
 \format{list of character vectors}
 \source{
 \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
+\url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comorbidity_icd10.jsp}
 }
 \description{
 This mapping of comorbidities to ICD-9 codes is derived directly from SAS

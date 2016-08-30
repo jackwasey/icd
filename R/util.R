@@ -284,8 +284,9 @@ isNonASCII <- function(x)
 #' Fast Factor Generation
 #'
 #' This function generates factors more quickly, without leveraging
-#' \code{fastmatch}. The speed increase with fastmatch for ICD-9 codes was about
-#' 33% reduction for 10 million codes.
+#' \code{fastmatch}. The speed increase with \code{fastmatch} for ICD-9 codes
+#' was about 33% reduction for 10 million codes. SOMEDAY could be faster still
+#' using \code{Rcpp}, and a hashed matching algorithm.
 #'
 #' \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
 #' from https://github.com/kevinushey/Kmisc.git
@@ -421,9 +422,9 @@ capitalize_first <- function(name) {
 
 to_title_case <- function(x) {
   for (split_char in c(" ", "-", "[")) {
-  s <- strsplit(x, split_char, fixed = TRUE)[[1]]
-  x <- paste(toupper(substring(s, 1L, 1L)), substring(s, 2L),
-        sep = "", collapse = split_char)
+    s <- strsplit(x, split_char, fixed = TRUE)[[1]]
+    x <- paste(toupper(substring(s, 1L, 1L)), substring(s, 2L),
+               sep = "", collapse = split_char)
   }
   x
 }

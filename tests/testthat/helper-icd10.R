@@ -1,7 +1,3 @@
-# data to support ICD-10 tests
-
-# TODO: add this to @sources: http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comorbidity_icd10.jsp
-
 icd10_each_quan_elix_cmb <- icd10cm(c(
     "I42.6",
     "I44.39",

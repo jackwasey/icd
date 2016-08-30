@@ -20,12 +20,10 @@ context("ICD-10 comorbidity calculations")
 # very extensive.
 
 test_that("ICD-10 comorbidities from uranium are calculated without warnings or errors", {
-  skip_slow_tests("icd10 comorbidity calcs are unfortunatley slow")
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_elix), regexp = NA)
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_deyo), regexp = NA)
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_elix), regexp = NA)
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_ahrq), regexp = NA)
-  # TODO much more here
 })
 
 context("icd10 comorbidity lookups")
@@ -93,13 +91,13 @@ test_that("comorbidity from single ICD-10 leaf or non-leaf code doesn't cause in
                         "icd_comorbid_quan_deyo", "icd_comorbid_ahrq")) {
         code_with_class <- do.call(class_fun, list(code))
         df <- data.frame(visit = 1, code = code_with_class,
-                         stringsAsFactors = FALSE) # TODO: allow factors
+                         stringsAsFactors = FALSE)
         res <- do.call(map_fun, list(x = df))
         expect_true(res[, "CHF"])
         expect_false("HTNcx" %in% names(res))
 
         df2 <- data.frame(visit = c(1, 2), code = c(code_with_class, code_with_class),
-                          stringsAsFactors = FALSE) # TODO: allow factors
+                          stringsAsFactors = FALSE)
         res <- do.call(map_fun, list(df2))
         expect_true(all(res[, "CHF"]))
         expect_false("HTNcx" %in% names(res))

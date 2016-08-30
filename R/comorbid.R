@@ -55,14 +55,7 @@ icd9PoaChoices <- icd_poa_choices
 #' For ICD-10 codes, this method, it relies on exact matching, but not every of
 #' billions of possible ICD-10/ICD-10-CM codes are included in the mappings, so
 #' it will likely give incomplete results, without searching for parents of the
-#' input codes until a match is found in the map. TODO: this is incomplete! For
-#' ICD-10, there are two look-up methods. The classic look-up, as used for ICD-9
-#' codes, assumes any possible code is available to match in the comorbidity
-#' map. However, for ICD-10-CM, there are too many possible codes, specifying
-#' subsequent encounters, laterality, etc., etc., so this is too bulky. However
-#' for some mappings, there are exact definitions, e.g. AHRQ seems to specify
-#' everything (for a given ICD-10-CM year)
-#'
+#' input codes until a match is found in the map.
 #' @param map list (or name of a list if character vector of length one is given
 #'   as argument) of the comorbidities with each top-level list item containing
 #'   a vector of decimal ICD-9 codes. This is in the form of a list, with the
@@ -127,12 +120,12 @@ icd10_comorbid <- function(x,
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
 
-  assert(checkString(visit_name), checkNull(visit_name))
-  assert(checkString(icd_name), checkNull(icd_name))
+  assert(check_string(visit_name), check_null(visit_name))
+  assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)
-  assert(checkFlag(short_code), checkNull(short_code))
+  assert(check_flag(short_code), check_null(short_code))
   assert_flag(short_map)
 
   if (is.null(icd_name))
@@ -232,8 +225,8 @@ icd9_comorbid <- function(x,
                           return_df = FALSE, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
-  assert(checkString(visit_name), checkNull(visit_name))
-  assert(checkString(icd_name), checkNull(icd_name))
+  assert(check_string(visit_name), check_null(visit_name))
+  assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)
@@ -266,8 +259,8 @@ icd_comorbid_common <- function(x,
                                 return_df = FALSE, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
-  assert(checkString(visit_name), checkNull(visit_name))
-  assert(checkString(icd_name), checkNull(icd_name))
+  assert(check_string(visit_name), check_null(visit_name))
+  assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)

@@ -54,9 +54,7 @@ part of a character vector of codes, and will therefore be cast already to
 Leading zeroes in the decimal form are not ambiguous. Although
   integer ICD-9 codes could be intended by the user, there is a difference
   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
-  is provided TODO: add default (when there is no class) which detected ICD-9
-  vs 10 if possible. TODO: use "short_code" or "long" attribute if available
-  to tighten validation, or guess if missing.
+  is provided.
 }
 \section{Methods (by class)}{
 \itemize{

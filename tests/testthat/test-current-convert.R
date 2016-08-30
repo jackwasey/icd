@@ -379,7 +379,6 @@ test_that("code routes through RcppExports.R and slower versions", {
 
 
 context("icd10 conversions")
-# TODO: this needs fleshing out
 
 test_that("decimal ICD-10 to parts", {
   expect_identical(

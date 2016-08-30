@@ -274,7 +274,6 @@ test_that("explain icd9GetChapters simple input", {
 })
 
 test_that("icd9 descriptions was parsed correctly", {
-  # TODO: only skip online if file not already available.
   x <- icd9Billable[["32"]]
   expect_equal(names(x), c("icd9", "descShort", "descLong"))
   expect_equal(nrow(x), 14567)

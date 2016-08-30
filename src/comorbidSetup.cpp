@@ -96,7 +96,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
       // assume new visitId unless aggregating
       vcdb_new_idx = vcdb_max_idx + 1;
       if (aggregate) { // only use map if aggregating
-        VisLk::iterator found = vis_lookup.find(vi); // TODO make const?
+        VisLk::iterator found = vis_lookup.find(vi);
         if (found != vis_lookup.end()) {
           vcdb[found->second].push_back(n);
 #ifdef ICD_DEBUG_SETUP_TRACE

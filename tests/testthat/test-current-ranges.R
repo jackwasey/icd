@@ -36,14 +36,6 @@ test_that("expand icd9 range definition", {
            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
            "40139", NULL, "40140", "40141", "40142", "40143", "40144", "40145")))
-  # the following tests the unimplemented omitParents = TRUE
-  #   expect_equal(
-  #     icd_expand_range(short_code = TRUE, "4012", "40145", omitParents = TRUE),
-  #     sort(c("4012", "40120", "40121", "40122", "40123", "40124", "40125",
-  #            "40126", "40127", "40128", "40129", "4013", "40130", "40131",
-  #            "40132", "40133", "40134", "40135", "40136", "40137", "40138",
-  #            "40139", "40140", "40141", "40142", "40143", "40144", "40145")))
-  #
   expect_equal_no_icd(
     icd_expand_range(short_code = TRUE, "40100", "40101", defined = FALSE),
     c("40100", "40101")
@@ -587,5 +579,26 @@ test_that("chapter major expansion works for basic test", {
     icd9_expand_sub_chapter_majors("Other Accidents"),
     icd9(c("E916", "E917", "E918", "E919", "E920", "E921", "E922",
            "E923", "E924", "E925", "E926", "E927", "E928"))
+  )
+})
+
+test_that("remove ambiguous high-level codes at start of icd9 range expansion", {
+  expect_equivalent(
+    icd9_expand_range_short("001", "0011", defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = FALSE),
+    icd9(c("0010", "0011"))
+    )
+
+  expect_equivalent(
+    icd9_expand_range_short("550", "55013", defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = FALSE),
+    icd9(c("5500", "55000", "55001", "55002", "55003", "5501", "55010", "55011", "55012", "55013"))
+  )
+})
+
+test_that("if end of range expanded does reach the same code as the expansion of the high level start code,
+          then the start code should be included", {
+  expect_equivalent(
+    icd9_expand_range_short("550", "5509", defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = FALSE),
+    icd9(c("550", "5500", "55000", "55001", "55002", "55003", "5501", "55010", "55011", "55012", "55013",
+           "5509", "55090", "55091", "55092", "55093"))
   )
 })

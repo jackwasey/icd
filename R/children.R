@@ -66,7 +66,7 @@ icd_children.character <- function(x, ...) {
 #' @export
 icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
                               defined = TRUE, billable = FALSE, ...) {
-  assert(checkFactor(x), checkCharacter(x))
+  assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   assert_flag(defined)
   assert_flag(billable)
@@ -94,7 +94,7 @@ icd_children.icd10 <- function(x, short_code = icd_guess_short(x), defined, bill
 #' @export
 #' @keywords internal
 icd_children.icd10cm <- function(x, short_code = icd_guess_short(x), defined, billable = FALSE, ...) {
-  assert(checkFactor(x), checkCharacter(unclass(x)))
+  assert(check_factor(x), check_character(unclass(x)))
   assert_flag(short_code)
   assert_flag(billable)
 

@@ -18,16 +18,15 @@
 #' Explain ICD-9 and ICD-10 codes in English from decimal  (123.45 style),
 #' Tabulates the decimal format alongside converted non-decimal format.
 #'
-#' Output is ordered in the same order as the input. A boolean column ismajor
-#' indicates if the code is a parent Category.
+#' Output is ordered in the same order as the input. A logical column
+#' \code{ismajor} indicates if the code is a parent Category.
 #'
 #' If the code is both a valid ICD9 and a ICD10 the output will default the
-#' descriptions to ICD10.  The code would otherwise have to be explicitly casted
+#' descriptions to ICD10.  The code would otherwise have to be explicitly cast
 #' to get ICD9 descriptions.
 #'
 #' A column for source year may be added in the future. Other changes may occur
 #' this new feature gets testing and use.
-#'
 #' @param x vector or other structure of ICD codes to explain in human language
 #' @template short_code
 #' @param condense single logical value which indicates whether to condense the
@@ -50,7 +49,6 @@ icd_explain_table <- function(...)
 
 #' @describeIn icd_explain_table explaining ICD codes from a character vector, guessing ICD version
 #' @details If the input x is of mixed type it will choose to convert by
-#' @details majority of icd9 vs. icd19
 #' @export
 #' @keywords internal
 icd_explain_table.default <- function(x, short_code = icd_guess_short(x), condense = FALSE,
@@ -79,12 +77,17 @@ icd_explain_table.icd10 <- function(...) {
   icd_explain_table.icd10cm(...)
 }
 
-# TODO: these highlight the need for as.icd_short_code to convert if not already
-# short. icd_short_code(x) can just set the attr
+#' set \code{icd_short_to_decimal} attribute
+#'
+#' Does not convert between decimal and short codes. Calling
+#' \code{icd_short_to_decimal} should convert and set the attribute.
+#' @keywords internal
 shortcode_icd9 <- function(x, short_code = icd_guess_short(x)) {
   if (!short_code) icd_decimal_to_short.icd9(x) else x
 }
 
+#' @rdname shortcode_icd9
+#' @keywords internal
 shortcode_icd10 <- function(x, short_code = icd_guess_short(x)) {
   if (!short_code) icd_decimal_to_short.icd10(x) else x
 }
@@ -139,15 +142,16 @@ icd_explain_table.icd10cm <- function(x, short_code = icd_guess_short(x),
                            brief = brief, warn = warn, ...)
 }
 
-#' condense icd_explain_table output down to major codes
+#' condense \code{icd_explain_table} output down to major codes
 #'
 #' if a major code appears in the code column, and any children of that major
 #' code, the children are aggregated to a list and added to the major code row.
 #' This does currently not 'condense' e.g. middle-order codes
 #'
-#' Unlike icd_explain_table, preserving order doesn't make sense, since rows
-#' anywhere in the list can be aggregated, thus altering order compared to the
-#' input. Size of the output will also be different if any condensing was done.
+#' Unlike \code{icd_explain_table}, preserving order doesn't make sense, since
+#' rows anywhere in the list can be aggregated, thus altering order compared to
+#' the input. Size of the output will also be different if any condensing was
+#' done.
 #' @keywords internal
 condense_explain_table <- function(x) {
   condensed_majors <- condense_explain_table_worker(x)
@@ -168,7 +172,7 @@ condense_explain_table <- function(x) {
 
 #' generate condensed code and condensed number columns
 #'
-#' @return details for condesable rows
+#' @return details for rows which can be condensed
 #' @keywords internal
 condense_explain_table_worker <- function(x) {
   # we can only condense when we have three_digit major

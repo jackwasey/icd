@@ -55,12 +55,12 @@ icd_guess_version.factor <- function(x, short_code = NULL, ...) {
 #' @export
 #' @keywords internal
 icd_guess_version.character <- function(x, short_code = NULL, n = 10, ...) {
-  # TODO: this is too complicated, but tolerant of invalid codes. If we assume
+  # SOMEDAY: this is too complicated, but tolerant of invalid codes. If we assume
   # all the codes are valid ICD-9 or ICD-10, then we can just look for the first
   # code which starts with a number, which would be simpler and much faster.
 
   assert_character(x)
-  assert(checkFlag(short_code), checkNull(short_code))
+  assert(check_flag(short_code), check_null(short_code))
 
   x <- x[1:n]
 

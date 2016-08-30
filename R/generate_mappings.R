@@ -177,8 +177,6 @@ icd9_generate_map_quan_elix <- function(condense = NULL, save_data = TRUE, path 
     warning("'condense' and 'path' are deprecated in icd9_generate_map_elix, and no longer has any effect.
 The map can be condensed using other functions in the package. 'path' is the data dir in working tree.",
             call. = FALSE)
-  # TODO: need to deprecate this name so we can switch ICD-9 and ICD-10 (and
-  # their variations)
   icd9_map_quan_elix <- list(
     chf = c("398.91", "402.01", "402.11", "402.91", "404.01", "404.03",
             "404.11", "404.13", "404.91", "404.93", "425.4" %i9da% "425.9",
@@ -500,7 +498,6 @@ generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
   # death = 8 (other codes are for various discharge statuses)
   vermont_dx$dstat <- vermont_dx$dstat == 8
   names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
-  # TODO: or use class functions
   vermont_dx <- as.icd_wide_data(vermont_dx)
   dx_cols <- paste0("DX", 1:20)
   for (dc in dx_cols)

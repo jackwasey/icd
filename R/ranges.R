@@ -236,51 +236,52 @@ expand_range_worker_alt_env <- function(start, end, lookup, defined,
     return(icd_children.icd9(start, short_code = TRUE, defined = defined))
 
   out <- lookup[start_index:end_index]
-  out_list <- as.list(1:length(out))
+  out_list <- as.list(rep(TRUE, times = length(out)))
   names(out_list) <- out
   out_env <- list2env(out_list)
-  if (ex_ambig_start) {
-    # just remove those codes at the beginning which have children not in the
-    # output let's take the first 5, to cover cases like 100, 101, 102.1,
-    # 102.11, 102.2
-    starts <- utils::tail(out, 5) # TODO: beginning??? tail??? not head???
-
-    for (s in starts) {
-      kids <- icd9_get_missing_kids(s, out_env, defined)
-      if (length(kids) == 0L)
-        next
-
-      rm(list = s, envir = out_env)
-    }
-  }
 
   if (ex_ambig_end) {
-    # at the end, we don't want any higher-level codes at the end which would
+    # at the end, we may not want any higher-level codes at the end which would
     # have children beyond the range. There could be lots of lower level codes
     # at the end, so we actually have to search the whole list. This means that
     # even if trying to preserve the ambig start, setting ambig end will have to
     # kill it, if it spills over.
 
     for (e in ls(envir = out_env)) {
-      kids <- icd9_get_missing_kids(e, out_env, defined)
+      kids <- icd_get_missing_kids(e, out_env, defined)
       if (length(kids) == 0L)
         next
-      message("removing ", e, ", what is it now? ", out_env[[e]])
       rm(list = e, envir = out_env)
     }
   }
 
+  lapply(
+    icd_children.icd9(end, short_code = TRUE, defined = defined),
+    function(x) out_env[[x]] <- TRUE)
+
+  # need to insert terminal children before seeing whether any early high level
+  # codes need to be excluded.
+
+  if (ex_ambig_start) {
+    # just remove those codes at the beginning which have children not in the
+    # output let's take the first 5, to cover cases like 100, 101, 102.1,
+    # 102.11, 102.2
+    for (s in head(out, 5L)) {
+      kids <- icd_get_missing_kids(s, out_env, defined)
+      if (length(kids) == 0L)
+        next
+      if (isTRUE(out_env[[s]]))
+        rm(list = s, envir = out_env)
+    }
+  }
+
   icd_sort.icd9(
-    unique(
-      c(ls(envir = out_env),
-        icd_children.icd9(end, short_code = TRUE, defined = defined)
-      )
-    ),
+    unique(ls(envir = out_env)),
     short_code = TRUE)
 
 }
 
-icd9_get_missing_kids <- function(code, env, defined) {
+icd_get_missing_kids <- function(code, env, defined) {
   s_kids <- icd_children.icd9(code, short_code = TRUE, defined = defined)
   s_kids_in <- vapply(s_kids, function(x) !is.null(env[[x]]), logical(1))
   s_kids[!s_kids_in]
@@ -318,7 +319,6 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
     else
       stop("mismatch between numeric, V and E types in start and end")
   } else {
-
     if (icd9_is_n(start) && icd9_is_n(end))
       res <- expand_range_worker(start, end, icd9NShort, defined = FALSE,
                                  ex_ambig_start, ex_ambig_end)
