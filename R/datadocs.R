@@ -218,7 +218,7 @@ NULL
 #' for "Metastatic Cancer and Acute Leukemia", and will not be assigned the 
 #' CC for "Lung and other Severe Cancers". Once the hierarchy rules are applied, the codes
 #' are referred to as HCCs. This mapping can change over time. It remained the same from
-#' 2007-20
+#' 2007-10
 #' @docType data
 #' @keywords datasets
 #' @format \code{dataframe} with 3 columns (\code{icd_code}, \code{cc}, and \code{year})
@@ -230,7 +230,7 @@ NULL
 #'   Risk Adjustment, Centers for Medicare and Medicaid Services
 #'   \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}
 #' @name icd9_map_hcc
-#' @aliases icd10_map_hcc
+#' @aliases icd10_map_hcc icd_nap_cc_hcc
 
 #' Comorbidity names
 #'
@@ -256,7 +256,7 @@ NULL
 #'   icd_names_quan_elix icd_names_quan_elix_abbrev icd_names_quan_elix_htn
 #'   icd_names_quan_elix_htn_abbrev icd_names_ahrq icd_names_ahrq_abbrev
 #'   icd_names_ahrq_htn icd_names_ahrq_htn_abbrev icd_names_charlson
-#'   icd_names_charlson_abbrev elixComorbidNames elixComorbidNamesAbbrev
+#'   icd_names_charlson_abbrev icd_names_cc elixComorbidNames elixComorbidNamesAbbrev
 #'   elixComorbidNamesHtn elixComorbidNamesHtnAbbrev quanElixComorbidNames
 #'   quanElixComorbidNamesAbbrev quanElixComorbidNamesHtn
 #'   quanElixComorbidNamesHtnAbbrev ahrqComorbidNames ahrqComorbidNamesAbbrev
