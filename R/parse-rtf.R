@@ -485,7 +485,7 @@ fix_unicode <- function(filtered, perl = TRUE, useBytes = TRUE) {
   filtered <- gsub("\\\\'e9", "\u00e9", filtered, perl = perl, useBytes = useBytes) # e acute
   filtered <- gsub("\\\\'f1", "\u00f1", filtered, perl = perl, useBytes = useBytes) # n tilde
   filtered <- gsub("\\\\'f6", "\u00f6", filtered, perl = perl, useBytes = useBytes) # o umlaut
-  filtered
+  enc2utf8(filtered)
 }
 
 #' fix duplicates detected in RTF parsing

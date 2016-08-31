@@ -281,6 +281,8 @@ expand_range_worker_alt_env <- function(start, end, lookup, defined,
 
 }
 
+#' Find children of a code which are not in a given environment
+#' @keywords internal
 icd_get_missing_kids <- function(code, env, defined) {
   s_kids <- icd_children.icd9(code, short_code = TRUE, defined = defined)
   s_kids_in <- vapply(s_kids, function(x) !is.null(env[[x]]), logical(1))

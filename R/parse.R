@@ -100,9 +100,10 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
     icd9cm_billable[[v]] <- icd9_parse_leaf_desc_ver(version = v,
                                                      save_data = save_data,
                                                      offline = offline)
+    icd9cm_billable[[v]][["short_desc"]] <- enc2utf8(icd9cm_billable[[v]][["short_desc"]])
+    icd9cm_billable[[v]][["long_desc"]] <- enc2utf8(icd9cm_billable[[v]][["long_desc"]])
   }
 
-  # and in my utils.R  getNonASCII(charactervector)
   if (save_data)
     save_in_data_dir(icd9cm_billable)
   invisible(icd9cm_billable)
@@ -214,10 +215,10 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   on.exit(options(oldwarn))
   if (!is.na(fn_long_orig)) {
     encs <- Encoding(out[["long_desc"]])
-    message("Found labelled encodings: ", paste(unique(encs), collapse = ", "))
+    message("Found labelled encodings in long_desc: ", paste(unique(encs), collapse = ", "))
     message("non-ASCII rows of long descriptions are: ",
-            paste(getNonASCII(out[["long_desc"]]), collapse = ", "))
-    message("Encodings found: ", unique(Encoding(out[["long_desc"]][isNonASCII(out[["long_desc"]])])))
+            paste(get_non_ASCII(out[["long_desc"]]), collapse = ", "))
+    message("Encodings found in long_desc: ", unique(Encoding(out[["long_desc"]][is_non_ASCII(out[["long_desc"]])])))
   }
   invisible(out)
 }
@@ -327,6 +328,9 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
     stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
   }
   # nocov end
+
+  icd9cm_hierarchy[["short_desc"]] <- enc2utf8(icd9cm_hierarchy[["short_desc"]])
+  icd9cm_hierarchy[["long_desc"]] <- enc2utf8(icd9cm_hierarchy[["long_desc"]])
 
   if (save_data)
     save_in_data_dir("icd9cm_hierarchy") # nocov

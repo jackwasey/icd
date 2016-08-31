@@ -274,12 +274,27 @@ swap_names_vals <- function(x) {
   x
 }
 
-# mimic the R CMD check test
-getNonASCII <- function(x)
-  x[isNonASCII(x)]
+#' mimic the R CMD check test
+#' @examples
+#' sapply(icd9cm_hierarchy, get_non_ASCII)
+#' get_encodings(icd9cm_hierarchy)
+#' sapply(icd9cm_billable, get_non_ASCII)
+#' sapply(icd9cm_billable, get_encodings)
+#' @keywords internal
+get_non_ASCII <- function(x)
+  x[is_non_ASCII(as_char_no_warn(x))]
 
-isNonASCII <- function(x)
-  is.na(iconv(x, from = "latin1", to = "ASCII"))
+#' @rdname get_non_ASCII
+#' @keywords internal
+is_non_ASCII <- function(x)
+  is.na(iconv(as_char_no_warn(x), from = "latin1", to = "ASCII"))
+
+#' @rdname get_non_ASCII
+#' @keywords internal
+get_encodings <- function(x) {
+  stopifnot(is.list(x) || is.data.frame(x))
+  sapply(x, function(y) unique(Encoding(as_char_no_warn(y))))
+}
 
 #' Fast Factor Generation
 #'
