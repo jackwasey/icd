@@ -13,13 +13,16 @@ is_non_ASCII(x)
 get_encodings(x)
 }
 \description{
-mimic the R CMD check test
+\code{R CMD check} is quick to tell you where UTF-8 characters are not
+encoded, but gives no way of finding out which or where
 }
 \examples{
-sapply(icd9cm_hierarchy, get_non_ASCII)
-get_encodings(icd9cm_hierarchy)
-sapply(icd9cm_billable, get_non_ASCII)
-sapply(icd9cm_billable, get_encodings)
+\dontrun{
+sapply(icd9cm_hierarchy, icd:::get_non_ASCII)
+icd:::get_encodings(icd9cm_hierarchy)
+sapply(icd9cm_billable, icd:::get_non_ASCII)
+sapply(icd9cm_billable, icd:::get_encodings)
+}
 }
 \keyword{internal}
 
