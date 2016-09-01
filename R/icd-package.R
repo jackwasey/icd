@@ -83,5 +83,5 @@
 #' @useDynLib icd
 #' @import Rcpp checkmate
 #' @importFrom magrittr "%>%" "%<>%" set_names extract2
-#' @importFrom utils head tail
+#' @importFrom utils head tail read.fwf
 NULL

@@ -436,6 +436,13 @@ str_match_all <- function(x, pattern, perl = TRUE, useBytes = TRUE) {
   regmatches(x, regexec(pattern, x, perl = perl, useBytes = useBytes))
 }
 
+#' str_extract replacement
+#' @keywords internal
+str_extract <- function(string, pattern) {
+  vapply(regmatches(string, regexec(pattern = pattern, text = string)),
+         FUN = `[[`, 1, FUN.VALUE = character(1L))
+}
+
 capitalize_first <- function(name) {
   trim(paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name))))
 }
