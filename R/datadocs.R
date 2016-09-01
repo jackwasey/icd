@@ -81,7 +81,6 @@ NULL
 #' @name icd10_sub_chapters
 NULL
 
-
 #' Latest ICD-9-CM diagnosis codes, in flat \code{data.frame} format
 #'
 #' Short-form ICD-9 codes with short and long descriptions, and description of
@@ -212,29 +211,30 @@ NULL
 NULL
 
 #' Medicare Hierarchical Condition Categories
-#' 
+#'
 #' Medicare HCC model was developed to use current year diagnoses and demographics
 #' predict current year healthcare expenditure. This classification has been used
 #' for additional risk adjustment models. ICD codes are first assigned to numeric
 #' Condition Categories (CCs). A hierarchy rule is then applied so that each patient
 #' is coded for only the most severe of the Condition Categories in a group. For example,
 #' if a patient has metastatic lung cancer, they will only be assigned the CC
-#' for "Metastatic Cancer and Acute Leukemia", and will not be assigned the 
+#' for "Metastatic Cancer and Acute Leukemia", and will not be assigned the
 #' CC for "Lung and other Severe Cancers". Once the hierarchy rules are applied, the codes
 #' are referred to as HCCs. This mapping can change over time. It remained the same from
 #' 2007-10
 #' @docType data
 #' @keywords datasets
 #' @format \code{dataframe} with 3 columns (\code{icd_code}, \code{cc}, and \code{year})
-#' @references Pope, Gregory C., et al. 
-#'   "Diagnostic cost group hierarchical condition category models for Medicare risk adjustment." 
+#' @references Pope, Gregory C., et al.
+#'   "Diagnostic cost group hierarchical condition category models for Medicare risk adjustment."
 #'   Health Economics Research, Inc. Waltham, MA (2000).
 #'   \url{https://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Reports/Downloads/Pope_2000_2.pdf}
-#' 
+#'
 #'   Risk Adjustment, Centers for Medicare and Medicaid Services
 #'   \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}
 #' @name icd9_map_hcc
-#' @aliases icd10_map_hcc icd_nap_cc_hcc
+#' @aliases icd9_map_cc icd10_map_cc icd_map_cc_hcc
+NULL
 
 #' Comorbidity names
 #'

@@ -185,7 +185,7 @@ codes
   icd_comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
   pts <- icd_long_data(
              visit_name = c("1", "2", "3", "4", "4"),
-             icd9 = c("20084", "1742", "30410", "41514", "95893"),
+             icd_name = c("20084", "1742", "30410", "41514", "95893"),
              date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
                "2011-01-04", "2011-01-04")))
   pt_hccs <- icd_comorbid_hcc(pts, date_name = "date")
