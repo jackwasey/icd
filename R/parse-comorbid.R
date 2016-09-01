@@ -396,8 +396,15 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   )
 
   # convert it to a dataframe and bind it with the original icd_map_cc_ data
+  # identify the maximum number of CC hierarchy rules
   longest <- max(vapply(strsplit(todrop, " ,"), length, integer(1))) + 1
-  todrop <- str_split_fixed(todrop, ",", n = longest)
+  # split list of CCs, which are separated by comma, and convert into a dataframe
+  todrop <- strsplit(todrop, ",")
+  todrop <- do.call(rbind, lapply(todrop, function(x) {
+    length(x) <- longest
+    x
+  }))
+
   # convert to numeric (warnings for "" to NA)
   todrop <- suppressWarnings(
     as.data.frame(apply(todrop, 2, as.numeric), stringsAsFactors = FALSE)
