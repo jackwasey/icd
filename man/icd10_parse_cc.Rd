@@ -21,4 +21,5 @@ invisibly returns the list of vectors, where a co-morbidity name is
 Import the ICD10 to CC crosswalks
 }
 \keyword{internal}
+\keyword{manip}
 

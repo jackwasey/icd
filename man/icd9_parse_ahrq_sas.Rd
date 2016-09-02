@@ -23,4 +23,5 @@ in the development tree data directory, so this is an internal function, used
 in generating the package itself.
 }
 \keyword{internal}
+\keyword{manip}
 

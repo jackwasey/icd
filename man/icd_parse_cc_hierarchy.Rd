@@ -18,11 +18,17 @@ invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.
 }
 \description{
-The CMS Hierarchical Condition Categories are created by applying a series of rules to the Condition Categories (CC)
-These rules were obtained from CMS \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
-Due to the complex file structure of the original data (many nested zip files), they have
-been organized in the folder data/icd_hcc_rawdata/hierarchy.
-This function creates an .RData file containing rules for converting CCs to HCC
+The CMS Hierarchical Condition Categories are created by applying a series of
+rules to the Condition Categories (CC) These rules were obtained from CMS
+\href{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}{
+Medicare Risk Adjustors}. Due to the complex file structure of the original
+data (many nested zip files), they have been organized in the folder
+data/icd_hcc_rawdata/hierarchy.
+}
+\details{
+This function creates an .RData file containing rules for converting CCs to
+HCC
 }
 \keyword{internal}
+\keyword{manip}
 

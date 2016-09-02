@@ -39,4 +39,5 @@ With thanks to Dr. Quan, I have permission to distribute his SAS code.
   directly from Dr. Quan, however, the parsing results in identical data.
 }
 \keyword{internal}
+\keyword{manip}
 

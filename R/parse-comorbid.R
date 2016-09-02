@@ -57,7 +57,7 @@ icd10_fetch_ahrq_sas <- function(offline) {
 #' in the development tree data directory, so this is an internal function, used
 #' in generating the package itself.
 #' @template parse-template
-#' @keywords internal
+#' @keywords internal manip
 icd9_parse_ahrq_sas <- function(save_data = FALSE) {
   assert_flag(save_data)
 
@@ -185,7 +185,7 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 #'   directly from Dr. Quan, however, the parsing results in identical data.
 #' @template parse-template
 #' @template offline
-#' @keywords internal
+#' @keywords internal manip
 icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
   assert_flag(save_data)
 
@@ -215,15 +215,14 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
 #' Generate ICD to HCC Crosswalks from CMS
 #'
 #' The ICD/HCC mappings were obtained from CMS
-#' \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
-#' Due to the complex file structure of the original data (many nested zip files), they have
-#' been organized in the folder data/icd_hcc_rawdata/.
-#' This function creates an .RData file containing icd9/10 to CC crosswalks.
-
+#' \href{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}{
+#' Medicare Risk Adjustors}. Due to the complex file structure of the original
+#' data (many nested zip files), they have been organized in the folder
+#' data/icd_hcc_rawdata/. This function creates an .RData file containing
+#' icd9/10 to CC crosswalks.
 #' Import the ICD9 to CC crosswalks
 #' @template parse-template
-#' @keywords internal
-
+#' @keywords internal manip
 icd9_parse_cc <- function(save_data = FALSE) {
   assert_flag(save_data)
   # Import raw CMS data for ICD9
@@ -294,8 +293,7 @@ icd9_parse_cc <- function(save_data = FALSE) {
 
 #' Import the ICD10 to CC crosswalks
 #' @template parse-template
-#' @keywords internal
-
+#' @keywords internal manip
 icd10_parse_cc <- function(save_data = FALSE) {
   assert_flag(save_data)
 
@@ -342,15 +340,17 @@ icd10_parse_cc <- function(save_data = FALSE) {
 
 #' Import CMS HCC Rules
 #'
-#' The CMS Hierarchical Condition Categories are created by applying a series of rules to the Condition Categories (CC)
-#' These rules were obtained from CMS \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}.
-#' Due to the complex file structure of the original data (many nested zip files), they have
-#' been organized in the folder data/icd_hcc_rawdata/hierarchy.
-
-#' This function creates an .RData file containing rules for converting CCs to HCC
+#' The CMS Hierarchical Condition Categories are created by applying a series of
+#' rules to the Condition Categories (CC) These rules were obtained from CMS
+#' \href{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}{
+#' Medicare Risk Adjustors}. Due to the complex file structure of the original
+#' data (many nested zip files), they have been organized in the folder
+#' data/icd_hcc_rawdata/hierarchy.
+#'
+#' This function creates an .RData file containing rules for converting CCs to
+#' HCC
 #' @template parse-template
-#' @keywords internal
-
+#' @keywords internal manip
 icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   assert_flag(save_data)
 
@@ -396,8 +396,15 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   )
 
   # convert it to a dataframe and bind it with the original icd_map_cc_ data
+  # identify the maximum number of CC hierarchy rules
   longest <- max(vapply(strsplit(todrop, " ,"), length, integer(1))) + 1
-  todrop <- str_split_fixed(todrop, ",", n = longest)
+  # split list of CCs, which are separated by comma, and convert into a dataframe
+  todrop <- strsplit(todrop, ",")
+  todrop <- do.call(rbind, lapply(todrop, function(x) {
+    length(x) <- longest
+    x
+  }))
+
   # convert to numeric (warnings for "" to NA)
   todrop <- suppressWarnings(
     as.data.frame(apply(todrop, 2, as.numeric), stringsAsFactors = FALSE)
