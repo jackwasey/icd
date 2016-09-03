@@ -21,7 +21,8 @@ test_that("github issue #44 from wmurphyrd", {
   mydf <- data.frame(visit_id = c("a", "b", "c", "a", "b", "d"),
                      icd9 = c("441", "412.93", "044.9", "250.0", "250.0", "250.0"),
                      stringsAsFactors = TRUE)
-  icd_charlson(mydf, return_df = TRUE)
+  expect_warning(res <- icd_charlson(mydf, return_df = TRUE), NA)
+  expect_equal(res$Charlson, c(2, 2, 6, 1))
 })
 
 test_that("github issue #46 from wmurphyd", {
