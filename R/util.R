@@ -352,24 +352,6 @@ factor_nosort <- function(x, levels = NULL, labels = levels) {
   f
 }
 
-#' wrapper for \code{.Deprecated}
-#'
-#' Don't show warnings when using deprecated code. This allows people to
-#' continue using their \code{icd9} code without any modifications, and without
-#' flooding the user with warnings.
-#' @param ... arguments passed to \code{.Deprecated}
-#' @examples
-#' \dontrun{
-#' # turn off all deprecated warnings for this package
-#' options("icd.warn_deprecated" = FALSE)
-#' }
-#' @keywords internal
-icd_deprecated <- function(...) {
-  opt <- getOption("icd.warn_deprecated")
-  if (!(is.null(opt) || !opt))
-    .Deprecated(...)
-}
-
 #' Parse a (sub)chapter text description with parenthesised range
 #'
 #' @param x vector of descriptions followed by ICD code ranges

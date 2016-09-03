@@ -18,14 +18,14 @@
 #' Condense ICD-9 code by replacing complete families with parent codes
 #'
 #' This can be thought of as the inverse operation to
-#'   \code{icd9Children}.
+#'   \code{icd_children}.
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
 #' @template short_code
-#' @template onlyReal
 #' @template dotdotdot
 #' @family ICD-9 ranges
+#' @keywords manip
 #' @export
 icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
   UseMethod("icd_condense")
@@ -47,7 +47,7 @@ icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL
 #' @describeIn icd_condense Condense a set of ICD codes, guessing ICD version
 #'   from input data
 #' @export
-#' @keywords internal
+#' @keywords internal manip
 icd_condense.character <- function(x, short_code = icd_guess_short(x), defined = NULL, ...) {
 
   guess <- icd_guess_version.character(x, short_code = short_code)
@@ -74,6 +74,7 @@ icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE, keep_factor_le
 #' @param keep_factor_levels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
+#' @keywords internal manip
 icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_levels = FALSE) {
   assert(check_null(defined), check_flag(defined))
   assert_flag(warn)

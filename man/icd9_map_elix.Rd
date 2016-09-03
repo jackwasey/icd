@@ -2,7 +2,6 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_map_elix}
-\alias{elixComorbid}
 \alias{icd10_map_elix}
 \alias{icd9_map_elix}
 \title{Elixhauser comorbidities}

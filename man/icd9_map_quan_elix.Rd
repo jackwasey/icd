@@ -4,7 +4,6 @@
 \name{icd9_map_quan_elix}
 \alias{icd10_map_quan_elix}
 \alias{icd9_map_quan_elix}
-\alias{quanElixComorbid}
 \title{Quan adaptation of Elixhauser comorbidities}
 \format{list of character vectors, each named by co-morbidity}
 \description{

@@ -4,7 +4,6 @@
 \name{icd9_map_quan_deyo}
 \alias{icd10_map_quan_deyo}
 \alias{icd9_map_quan_deyo}
-\alias{quanDeyoComorbid}
 \title{Quan adaptation of Deyo/Charlson comorbidities}
 \format{list of character vectors, each named by co-morbidity}
 \description{

@@ -329,17 +329,14 @@ random_string <- function(n, max_chars = 4) {
 #' @keywords internal debugging
 show_test_options <- function() {
   print(options("icd.do_slow_tests"))
-  print(options("icd.warn_deprecated"))
 }
 
 # nocov start
 
 #' Set test options to do everything
 #'
-#' Default without setting options is for slow and online tests to be skipped,
-#' and warnings to be generated for deprecated functions. This function
-#' explicitly sets options to do slow and online tests, and not to warn for
-#' deprecated functions. This is intended for local testing.
+#' Default without setting options is for slow tests to be skipped. This
+#' function explicitly sets options to do slow tests.
 #' @keywords internal debugging
 set_full_test_options <- function() {
 
@@ -348,27 +345,20 @@ set_full_test_options <- function() {
 
   message("now setting full test options")
   options("icd.do_slow_tests" = TRUE)
-  options("icd.warn_deprecated" = FALSE)
   show_test_options()
 }
 # nocov end
 
 #' Set-up test options
 #'
-#' Checks shell environment for whether to do slow or online tests.
-#' Checks whether we should warn for deprecated functions (usually not
-#' when testing). If \code{covr} is detected (an option is set), then
-#' we may be in a sub-process and not see any shell environment or options
-#' from the calling process, so try to set slow tests on and warnings off.
+#' Checks shell environment for whether to do slow or online tests. If
+#' \code{covr} is detected (an option is set), then we may be in a sub-process
+#' and not see any shell environment or options from the calling process, so try
+#' to set slow tests on and warnings off.
 #' @keywords internal debugging
 setup_test_check <- function() {
 
-  # basic defaults if nothing else is set: skip slow and online tests and warn
-  # deprecated
-  if (is.null(options("icd.do_slow_tests")))
-    options("icd.do_slow_tests" = FALSE)
-  if (is.null(options("icd.warn_deprecated")))
-    options("icd.warn_deprecated" = TRUE)
+  options("icd.do_slow_tests" = isTRUE(options("icd.do_slow_tests")))
 
   # covr runs tests in a completely different R process, so seem like options are not
   # preserved.. An alternative might be to add an expression to be run to covr
@@ -378,7 +368,6 @@ setup_test_check <- function() {
     show_test_options()
     if (!is.null(getOption("icd.do_slow_tests")))
       options("icd.do_slow_tests" = TRUE)
-    options("icd.warn_deprecated" = FALSE)
     show_test_options()
 
     # also try to turn off all other warnings, e.g. testthat 'info' deprecation.
@@ -389,12 +378,6 @@ setup_test_check <- function() {
     message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
     options("icd.do_slow_tests" = TRUE)
   }
-  # nocov start
-  if (identical(tolower(Sys.getenv("ICD_WARN_DEPRECATED")), "true")) {
-    message("environment variable ICD_WARN_DEPRECATE found to be true, so warning for deprecated icd9 function use")
-    options("icd.warn_deprecated" = TRUE)
-  }
-  # nocov end
 }
 
 #' run \code{testtthat::test_check} with a Perl regular expression filter

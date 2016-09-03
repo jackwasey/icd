@@ -85,9 +85,6 @@ NULL
 #'
 #' Short-form ICD-9 codes with short and long descriptions, and description of
 #' each hierarchy level containing each code.
-#'
-#' \code{icd9Hierarchy} is deprecated in favor of \code{icd9cm_hierarchy}
-#'
 #' @docType data
 #' @keywords datasets
 #' @format data frame
@@ -107,7 +104,6 @@ NULL
 #' @source
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
 #' @name icd9cm_hierarchy
-#' @aliases icd9Hierarchy
 NULL
 
 #' ICD-10-CM
@@ -140,7 +136,7 @@ NULL
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comorbidity_icd10.jsp}
 #' @name icd9_map_ahrq
-#' @aliases ahrqComorbid ahrq icd10_map_ahrq
+#' @aliases ahrq icd10_map_ahrq
 NULL
 
 #' Quan adaptation of Deyo/Charlson comorbidities
@@ -165,7 +161,7 @@ NULL
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #'
 #' @name icd9_map_quan_deyo
-#' @aliases quanDeyoComorbid icd10_map_quan_deyo
+#' @aliases icd10_map_quan_deyo
 NULL
 
 #' Quan adaptation of Elixhauser comorbidities
@@ -184,7 +180,7 @@ NULL
 #'
 #'
 #' @name icd9_map_quan_elix
-#' @aliases quanElixComorbid icd10_map_quan_elix
+#' @aliases icd10_map_quan_elix
 NULL
 
 #' Elixhauser comorbidities
@@ -207,7 +203,7 @@ NULL
 #'   "Comorbidity Measures for Use with Administrative Data." Medical Care
 #'   January 1998 36, no. 1 (1998): 8-27.
 #' @name icd9_map_elix
-#' @aliases elixComorbid icd10_map_elix
+#' @aliases icd10_map_elix
 NULL
 
 #' Medicare Hierarchical Condition Categories
@@ -247,10 +243,10 @@ NULL
 #' as "Hypertension, combined." _abbrev suffix indicates a very short space-free
 #' description. Quan's version of Elixhauser is identical. AHRQ updates drops
 #' the arrythmia field. The naming convention is a root, e.g.
-#' \code{elixComorbid}, with neither/either/both suffixes \code{_htn} and
-#' \code{_abbrev}. The Charlson derived mappings do not include hypertension.
-#' _abbreviated comorbidity names are helpful for interactive work, whereas the
-#' full names might be preferred for plotting.
+#' \code{icd9_map_elix} or \code{icd10_map_elix}, with neither/either/both
+#' suffixes \code{_htn} and \code{_abbrev}. The Charlson derived mappings do not
+#' include hypertension. _abbreviated comorbidity names are helpful for
+#' interactive work, whereas the full names might be preferred for plotting.
 #' @format list, with character/numeric code. 'Hypertension, uncomplicated' and
 #'   'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
 #'   and metastasis are counted independently, as in the original paper, giving
@@ -260,12 +256,7 @@ NULL
 #'   icd_names_quan_elix icd_names_quan_elix_abbrev icd_names_quan_elix_htn
 #'   icd_names_quan_elix_htn_abbrev icd_names_ahrq icd_names_ahrq_abbrev
 #'   icd_names_ahrq_htn icd_names_ahrq_htn_abbrev icd_names_charlson
-#'   icd_names_charlson_abbrev icd_names_cc elixComorbidNames elixComorbidNamesAbbrev
-#'   elixComorbidNamesHtn elixComorbidNamesHtnAbbrev quanElixComorbidNames
-#'   quanElixComorbidNamesAbbrev quanElixComorbidNamesHtn
-#'   quanElixComorbidNamesHtnAbbrev ahrqComorbidNames ahrqComorbidNamesAbbrev
-#'   ahrqComorbidNamesHtn ahrqComorbidNamesHtnAbbrev charlsonComorbidNames
-#'   charlsonComorbidNamesAbbrev
+#'   icd_names_charlson_abbrev icd_names_cc
 #' @keywords datasets
 #' @docType data
 NULL

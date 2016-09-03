@@ -36,7 +36,7 @@
 #' @examples
 #' # by default, just show parent code and ignore children (428.0 not shown
 #' # because 428 is present):
-#' icd_explain(ahrqComorbid$CHF[1:3])
+#' icd_explain(icd9_map_ahrq$CHF[1:3])
 #' # same without condensing the list. In this case, 428.0 is shown:
 #' icd_explain(icd9_map_ahrq$CHF[1:3], brief = TRUE)
 #' # The first three in the ICD-10 equivalent are a little different:
@@ -141,7 +141,7 @@ icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
 #'   now. This is used to build a master list of ICD-9 codes with their
 #'   respective chapters, sub-chapters, etc.. The querying of the web page to
 #'   get these is already done, and the results saved in the lists
-#'   \code{icd9Chapters} etc which define ranges.
+#'   \code{icd9_chapters} etc. which define ranges.
 #' @param x vector of ICD-9 codes
 #' @template short_code
 #' @template verbose

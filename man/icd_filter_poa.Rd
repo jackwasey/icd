@@ -8,7 +8,7 @@
 \alias{icd_filter_poa_yes}
 \title{Filters data frame based on present-on-arrival flag}
 \usage{
-icd_filter_poa(x, poa_name = "poa", poa = icd9PoaChoices)
+icd_filter_poa(x, poa_name = "poa", poa = icd_poa_choices)
 
 icd_filter_poa_yes(x, poa_name = "poa")
 

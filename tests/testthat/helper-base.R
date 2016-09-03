@@ -40,7 +40,7 @@ simple_pts <- data.frame(
 
 simple_poa_pts <- data.frame(
   visit_id = c("v1", "v2", "v3", "v4"),
-  code = c("39891", "39790", "41791", "4401"), # deprecated tests likely need icd9 here
+  code = c("39891", "39790", "41791", "4401"),
   poa = c("y", "N", "E", NA_character_), # should tolerate mixed case
   stringsAsFactors = FALSE
 )
@@ -99,8 +99,8 @@ ahrq_test_dat <- as.icd_long_data(
   )
 )
 
-elix_end_codes <- unlist(unname(c(lapply(icd::elixComorbid, head, n = 1),
-                                  lapply(icd::elixComorbid, tail, n = 1))))
+elix_end_codes <- unlist(unname(c(lapply(icd::icd9_map_elix, head, n = 1),
+                                  lapply(icd::icd9_map_elix, tail, n = 1))))
 elix_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(elix_end_codes)),
   icd9 = elix_end_codes,
@@ -115,8 +115,8 @@ quan_elix_test_dat <- data.frame(
   stringsAsFactors = FALSE
 )
 
-quan_deyo_end_codes <- unlist(unname(c(lapply(icd::quanDeyoComorbid, head, n = 1),
-                                       lapply(icd::quanDeyoComorbid, tail, n = 1))))
+quan_deyo_end_codes <- unlist(unname(c(lapply(icd::icd9_map_quan_deyo, head, n = 1),
+                                       lapply(icd::icd9_map_quan_deyo, tail, n = 1))))
 quan_deyo_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(quan_deyo_end_codes)),
   icd9 = quan_deyo_end_codes,

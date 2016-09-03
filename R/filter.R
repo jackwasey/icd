@@ -127,7 +127,7 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #' }
 #' @keywords manip
 #' @export
-icd_filter_poa <- function(x, poa_name = "poa", poa = icd9PoaChoices) {
+icd_filter_poa <- function(x, poa_name = "poa", poa = icd_poa_choices) {
   poa <- match.arg(poa)
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(poa_name)

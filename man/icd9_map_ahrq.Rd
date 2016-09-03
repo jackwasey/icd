@@ -3,7 +3,6 @@
 \docType{data}
 \name{icd9_map_ahrq}
 \alias{ahrq}
-\alias{ahrqComorbid}
 \alias{icd10_map_ahrq}
 \alias{icd9_map_ahrq}
 \title{AHRQ comorbidities}

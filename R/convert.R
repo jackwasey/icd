@@ -51,7 +51,7 @@ NULL
 #' the chapter headings can be converted into the full set of their children,
 #' and then used to look-up which chapter, sub-chapter, or 'major' a given code
 #' belongs. Always returns a map with short-form ICD-9 codes. These can be
-#' converted in bulk with \code{lapply} and \code{icd9ShortToDecimal}.
+#' converted in bulk with \code{lapply} and \code{icd_short_to_decimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
 #'   \code{icd9_sub_chapters}
 #' @family ICD-9 convert

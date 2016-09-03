@@ -24,11 +24,6 @@
 #' @export
 icd_poa_choices <- c("yes", "no", "notYes", "notNo")
 
-#' @rdname icd_poa_choices
-#' @details \code{icd9PoaChoices} is deprecated. Use \code{icd_poa_choices}.
-#' @export
-icd9PoaChoices <- icd_poa_choices
-
 #' @rdname icd_in_reference_code
 #' @export
 #' @examples
@@ -653,7 +648,6 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
   x
 }
 
-
 #' @rdname apply_hier
 #' @keywords internal manip
 apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
@@ -698,9 +692,9 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
   if (abbrev_names)
-    colnames(cbd)[cr(cbd)] <- icd::charlsonComorbidNamesAbbrev
+    colnames(cbd)[cr(cbd)] <- icd::icd_names_charlson_abbrev
   else
-    colnames(cbd)[cr(cbd)] <- icd::charlsonComorbidNames
+    colnames(cbd)[cr(cbd)] <- icd::icd_names_charlson
 
   cbd
 }

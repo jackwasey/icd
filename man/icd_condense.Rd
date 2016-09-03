@@ -47,17 +47,10 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
 code, then the digits are greedily assigned to hundreds, then tens, then
 units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
-
-\item{onlyReal}{single logical value, if \code{TRUE}, will limit the search
-to those codes which appear in the master list, not just syntactically
-valid codes. Since nearly valid, out-dated or new codes may be missed, not
-limiting to officially defined values will be useful. Ultimately, there
-will need to be annual (and all-time) master lists of codes and the ability
-to test against a given master list given the year of the ICD-9 coding.}
 }
 \description{
 This can be thought of as the inverse operation to
-  \code{icd9Children}.
+  \code{icd_children}.
 }
 \section{Methods (by class)}{
 \itemize{

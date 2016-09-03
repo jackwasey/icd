@@ -62,9 +62,8 @@ icd_update_everything <- function() {
   icd10cm_get_all_defined(save_data = TRUE)
   icd10cm_extract_sub_chapters(save_data = TRUE)
 
-  # reload the newly saved data before generating chapters and deprecated data
+  # reload the newly saved data before generating chapters
   icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
-  generate_deprecated_data(save_data = TRUE)
 }
 # nocov end
 

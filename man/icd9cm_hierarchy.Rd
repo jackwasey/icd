@@ -2,7 +2,6 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9cm_hierarchy}
-\alias{icd9Hierarchy}
 \alias{icd9cm_hierarchy}
 \title{Latest ICD-9-CM diagnosis codes, in flat \code{data.frame} format}
 \format{data frame}
@@ -26,9 +25,6 @@ Rich text descriptions here:
 \description{
 Short-form ICD-9 codes with short and long descriptions, and description of
 each hierarchy level containing each code.
-}
-\details{
-\code{icd9Hierarchy} is deprecated in favor of \code{icd9cm_hierarchy}
 }
 \keyword{datasets}
 

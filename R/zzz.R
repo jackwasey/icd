@@ -22,9 +22,7 @@
   packageStartupMessage(
     "Welcome to the \"icd\" package for finding comorbidities and interpretation of ICD-9 and ICD-10 codes. Suggestions and contributions are welcome at https://github.com/jackwasey/icd .
 
-Available options are:
-options(\"icd.warn_deprecated\" = TRUE) which will warn if deprecated functions from the old \"icd9\" package are used.
-See the vignettes for examples.
+See the vignettes and help for examples.
 
 Please cite this package if you find it useful in your published work.
 citation(package = \"icd\")
@@ -34,32 +32,10 @@ citation(package = \"icd\")
   if (system.file(package = "icd9") != "")
     packageStartupMessage(
       "The 'icd9' package is now deprecated, and should be removed to avoid conflicts with 'icd'.
-The new 'icd' package contains tested versions of all the deprecated function names which overlap with those in the old
+The 'icd' package up to version 2.1 contains tested versions of all the deprecated function names which overlap with those in the old
 'icd9' package, e.g. 'icd9ComorbidAhrq'. It is strongly recommended to run the command:
 
             remove.packages(\"icd9\")")
-
-  if (!is.null(getOption("icd9.threads")))
-    packageStartupMessage("icd9.threads is deprecated, use icd.threads to control OpenMP")
-  if (!is.null(getOption("icd9.chunkSize")))
-    packageStartupMessage("icd9.chunkSize is deprecated, use icd.chunk_size to control OpenMP")
-  if (!is.null(getOption("icd9.ompChunkSize")))
-    packageStartupMessage("icd9.ompChunkSize is deprecated, use icd.omp_chunk_size to control OpenMP")
-
-  if (!is.null(warn_deprecated <- getOption("icd.warn_deprecated"))) {
-    if (warn_deprecated)
-      packageStartupMessage("Deprecated function names from the old 'icd9' package will generate warnings.
-                            Sometimes many warnings are generated for one call. To turn this off, use:
-                            option(icd.warn_deprecated = FALSE)")
-    else
-      packageStartupMessage("Deprecated function names from the old 'icd9' package will not generate warnings.
-                            This can result in conflicts with the old package (if still installed), and these
-                            functions will be removed. The new function names were needed for consistency when
-                            adding icd10 support, and conform to the popular coding style used by Hadley Wickham:
-                            http://adv-r.had.co.nz/Style.html . To warn for deprecated functions, use:
-                            option(icd.warn_deprecated = TRUE)")
-
-  }
 }
 
 .onUnload <- function(libpath) {
@@ -86,7 +62,6 @@ release_questions <- function() {
     "Has the development branch been merged/rebased into master?",
     "Are you happy with the code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
-    "Is the naming scheme consistent, with deprecated old style names?",
     "Are all public S3 classes all exported? use devtools::missing_s3()",
     "use LLVM scan build by adding 'scan-build before compiler path in .R/Makevars",
     # testing and compilation and different platforms:

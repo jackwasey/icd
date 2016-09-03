@@ -4,15 +4,14 @@
 \alias{icd9_generate_map_quan_elix}
 \title{Generate Quan's revised Elixhauser comorbidities}
 \usage{
-icd9_generate_map_quan_elix(condense = NULL, save_data = TRUE,
-  path = NULL)
+icd9_generate_map_quan_elix(save_data = TRUE)
 }
 \arguments{
-\item{condense}{Deprecated. The map is not condensed by default. If required,
-it can reduced to a smaller set of codes using \code{icd_condense}.}
-
 \item{save_data}{logical whether to save the result in the source tree.
 Defaults to \code{FALSE}.}
+
+\item{condense}{Deprecated. The map is not condensed by default. If required,
+it can reduced to a smaller set of codes using \code{icd_condense}.}
 }
 \value{
 invisibly returns the list of vectors, where a co-morbidity name is

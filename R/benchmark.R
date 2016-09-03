@@ -259,21 +259,21 @@ icd9_benchmark <- function() {
 
   tmp <- tempfile(fileext = ".Rprof")
   utils::Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = FALSE)
-  utils::capture.output(icd9ChildrenShort("300" %i9s% "450"))
+  utils::capture.output(icd_children.icd9("300" %i9s% "450", short_code = TRUE))
   utils::Rprof(NULL)
   utils::summaryRprof(filename = tmp, lines = "show")
 
   mydf <- data.frame(visitId = c("a", "b", "c"),
                      icd9 = c("441", "412.93", "044.9"),
                      stringsAsFactors = TRUE)
-  prof_charl <- profr::profr(icd9Charlson(mydf,
+  prof_charl <- profr::profr(icd_charlson(mydf,
                                           return.df = TRUE,
                                           stringsAsFactors = TRUE,
                                           isShort = FALSE))
   ggplot2::ggplot(prof_charl, minlabel = 0.04)
 
   rng <- "300" %i9s% "450"
-  prof_child <- profr::profr(icd9ChildrenShort(rng))
+  prof_child <- profr::profr(icd_children.icd9(rng, short_code = TRUE))
   ggplot2::ggplot(prof_child, minlabel = 0.001)
   ggplot2::ggsave("tmpggplot.jpg", width = 250, height = 5, dpi = 200, limitsize = FALSE)
 
@@ -303,11 +303,6 @@ icd9_benchmark <- function() {
                                    grepl(pattern = "v", icd9, fixed = TRUE))
 
   microbenchmark::microbenchmark(times = 3, grepl(pattern = "[EeVv]", rpts))
-}
-
-icd9Benchmark <- function() {
-  icd_deprecated("icd9_benchmark")
-  icd9_benchmark()
 }
 
 runOpenMPVecInt <- bench_omp_vec_int # nolint

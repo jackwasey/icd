@@ -16,13 +16,14 @@ ICD-10 codes. Common ambiguities and code formats are handled. This
 package enables a work flow from raw lists of ICD codes in hospital
 billing databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings
 from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. This
-package replaces icd9, which can now be uninstalled.
+package replaces icd9, which should be uninstalled.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{icd_comorbid}}
-  determines comorbidities for a set of patients with one or more ICD-9
-  codes each. \code{\link{icd9Charlson}} calculates Charlson score
-  (Comorbidity Index).
+  determines comorbidities for a set of patients with one or more ICD-9 codes
+  each. \code{\link{icd_charlson}} calculates Charlson score (Comorbidity
+  Index). If you already calculated the comorbidities, you can use
+  \code{\link{icd_charlson_from_comorbid}}.
 
   \itemize{
 
@@ -50,16 +51,16 @@ package replaces icd9, which can now be uninstalled.
 
   \item{Conversion}{ There are many functions to convert ICD-9 codes or their
   components between different formats and structures. The most commonly used
-  are:  \code{\link{icd9DecimalToShort}}, \code{\link{icd9ShortToDecimal}} to
-  convert, e.g., 002.3 to 0023 and back again. See \link{convert} for other
-  options.}
+  are:  \code{\link{icd_decimal_to_short}},
+  \code{\link{icd_short_to_decimal}} to convert, e.g., 002.3 to 0023 and back
+  again. See \link{convert} for other options.}
 
   \item{Manipulation}{You can find children of a higher-level ICD-9 code with
   \code{\link{icd_children}} and find a common parent to a set of children
   (or arbitrary list of ICD-9 codes) with \code{\link{icd_condense}}.
   \code{\link{icd_sort}} sorts in hierarchical, then numerical order, so
   100.0 comes before 100.00, for example. \code{\link{icd_wide_to_long}} and
-  \code{\link{icd9LongToWide}} convert the two most common data structures
+  \code{\link{icd_long_to_wide}} convert the two most common data structures
   containing patient disease data. This is more sophisticated and tailored to
   the problem than base reshaping or extension packages, although these could
   no doubt be used.}

@@ -23,9 +23,9 @@ library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 
 # we now rely on a testthat version with backwards-incompatible changes, the whole of the expectation setup has changed,
 # and there are many deprecations. For now, only run tests if testthat version is high enough:
-#
 if (packageVersion("testthat") < package_version("0.11.0.9000")) {
-  message("testthat version is less than 0.11.0.9000, so not running Catch tests. Consider using:
+  message("testthat version is less than 0.11.0.9000, so not running Catch tests. Consider
+           updating testthat using install.packages('testthat'), update.packages(), or
           devtools::install_github('hadley/testthat')")
 }
 
@@ -34,5 +34,4 @@ if (packageVersion("testthat") < package_version("0.11.0.9000")) {
 
 icd:::setup_test_check()
 icd:::show_test_options()
-# http://stackoverflow.com/questions/406230/regular-expression-to-match-line-that-doesnt-contain-a-word
-icd:::my_test_check("current-((?!comorbid).)*$", "Running current tests without comorbid")
+testthat::test_check("icd", reporter = "summary")

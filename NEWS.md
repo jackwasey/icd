@@ -1,3 +1,6 @@
+# Version 2.2
+ * Removed deprecated functions and data. `icd9` still available in CRAN repo, but not being updated.
+ 
 # Version 2.1
  * Many thanks to @anobel for providing parsing and lookup of Heirarchical Condition Codes.
  * Many thanks to @edlee123 for contributing `explain_table` which tabulates results of looking up various information about a list of ICD codes. This is a new feature which may be changed as it is used in the real world, and more tests are developed.
