@@ -85,10 +85,6 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
 }
 
-icd9MajMinToCodeOld <- function(major, minor, isShort) {
-    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', major, minor, isShort)
-}
-
 #' Convert major and minor vectors to single code
 #'
 #' In debug mode, will check that major and minor are same length.
@@ -180,6 +176,10 @@ icd_get_major.icd9 <- function(x, short_code) {
     .Call('icd_icd9GetMajor', PACKAGE = 'icd', x, short_code)
 }
 
+icd9MajMinToCodeOld <- function(major, minor, isShort) {
+    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', major, minor, isShort)
+}
+
 #' Guess whether codes are \code{short_code} or \code{decimal_code}
 #'
 #' The goal is to guess whether codes are \code{short_code} or
@@ -235,14 +235,6 @@ icd_long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call('icd_icd9LongToWideCpp', PACKAGE = 'icd', icd9df, visitId, icd9Field, aggregate)
 }
 
-icd9AddLeadingZeroesShortSingle <- function(x) {
-    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
-}
-
-icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
-    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
-}
-
 icd9AddLeadingZeroesMajorSingle <- function(major) {
     .Call('icd_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd', major)
 }
@@ -281,7 +273,15 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call('icd_icd9AddLeadingZeroes', PACKAGE = 'icd', x, short_code)
 }
 
-icd9ExpandMinorShim <- function(minor, isE = FALSE) {
+icd9AddLeadingZeroesShortSingle <- function(x) {
+    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
+}
+
+icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
+    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
+}
+
+icd9ExpandMinorShim <- function(minor, isE) {
     .Call('icd_icd9ExpandMinorShim', PACKAGE = 'icd', minor, isE)
 }
 
@@ -308,6 +308,22 @@ icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
 #' @keywords internal
 icd_in_reference_code <- function(icd, icd_reference, short_code, short_reference = TRUE) {
     .Call('icd_icd_in_reference_code', PACKAGE = 'icd', icd, icd_reference, short_code, short_reference)
+}
+
+#' Find child codes from vector of ICD-9 codes.
+#'
+#' Pure C++11 implementation using unordered set to find children of given codes
+#' @examples
+#' \dontrun{
+#' microbenchmark::microbenchmark(
+#'   icd9ChildrenShortCpp(c("001", 100:500), onlyReal = TRUE),
+#'   icd9ChildrenShortCpp11(c("001", 100:500), onlyReal = TRUE),
+#'   times = 5)
+#'   # C++11 about 15% faster for this data
+#' }
+#' @keywords internal
+icd9ChildrenShortCpp11 <- function(icd9Short, onlyReal) {
+    .Call('icd_icd9ChildrenShortCpp11', PACKAGE = 'icd', icd9Short, onlyReal)
 }
 
 trimLeftCpp <- function(s) {

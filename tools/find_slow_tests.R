@@ -8,9 +8,9 @@ for (slow in c(FALSE, TRUE)) {
 
   test_all_res <- test_package(package = "icd", reporter = "list", filter = NULL)
   as.data.frame(test_all_res) -> resdf
-  print(tail(resdf[order(resdf$user), ], n = 12L))
+  print(tail(resdf[order(resdf$user), -c(1, 2)], n = 12))
 
   # Rscript tools/find_slow_tests.R
   slow_by_file <-  aggregate(real ~ file, data = resdf, FUN = sum)
-  print(tail(slow_by_file[order(slow_by_file$real),]), 6L)
+  print(tail(slow_by_file[order(slow_by_file$real),]), 6)
 }

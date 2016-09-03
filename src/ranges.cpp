@@ -66,7 +66,7 @@ Rcpp::CharacterVector MakeAllMinors() {
 const Rcpp::CharacterVector vv = MakeAllMinors();
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
+Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE) {
 
   if (!isE) {
     switch (minor.size()) {
@@ -122,7 +122,7 @@ Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false) {
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool onlyReal) {
-  std::set<std::string> out; // we are never going to put NAs in the output?
+  icd_set out; // we are never going to put NAs in the output?
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
@@ -146,7 +146,7 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
     if (onlyReal) {
       const Rcpp::Environment env("package:icd");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
-      std::set<std::string> out_real;
+      icd_set out_real;
       std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
         icd9Hierarchy["code"]);
       // 'reals' is the set of majors, intermediate and leaf codes.
@@ -156,7 +156,7 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
                             std::inserter(out_real, out_real.begin()));
       out = out_real;
     }
-  }
+  } // input length != 0
   Rcpp::CharacterVector rcppOut = Rcpp::wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;

@@ -22,5 +22,5 @@
 
 Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool onlyReal = true);
 Rcpp::CharacterVector icd9ChildrenDecimalCpp(Rcpp::CharacterVector icd9Decimal, bool onlyReal = true);
-
+Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false);
 #endif /* RANGES_H_ */

@@ -89,9 +89,12 @@ typedef VecVecInt::size_type VecVecIntSz;
 // use flag set by configure
 #ifdef HAVE_CXX11
 #include <unordered_map>
+#include <unordered_set>
 typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
+typedef std::unordered_set<std::string> icd_set;
 #else
 typedef std::map<std::string, VecInt::size_type> VisLk;
+typedef std::set<std::string> icd_set;
 #endif
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);

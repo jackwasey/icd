@@ -90,8 +90,7 @@ test_that("icd9 comorbidities correct, logical to binary ok", {
   )
 })
 
-test_that("ahrq icd9 mappings generated from the current generation code", {
-
+test_that("ahrq icd9 map recreated", {
   skip_slow_tests()
 
   # skip this test if the file is not already in data-raw
@@ -115,6 +114,7 @@ test_that("Quan Charlson icd9 map generated = saved", {
 })
 
 test_that("Quan Elix icd9 map generated = saved", {
+  skip_slow_tests()
   expect_equivalent(icd9_map_quan_elix, icd9_generate_map_quan_elix(save_data = FALSE))
   expect_equivalent(
     icd_get_invalid.icd_comorbidity_map(icd9_map_quan_elix, short_code = TRUE),
@@ -122,6 +122,7 @@ test_that("Quan Elix icd9 map generated = saved", {
 })
 
 test_that("Elixhauser icd9 map generated = saved", {
+  skip_slow_tests()
   expect_equivalent(icd9_map_elix, icd9_generate_map_elix(save_data = FALSE))
   expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9_map_elix, short_code = TRUE), list())
 })
