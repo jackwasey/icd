@@ -415,7 +415,10 @@ dir.exists <- function(paths) {
 # substitute for removed stringr function
 str_match_all <- function(x, pattern, perl = TRUE, useBytes = TRUE) {
   x <- as.character(x)
-  regmatches(x, regexec(pattern, x, perl = perl, useBytes = useBytes))
+  if (!"perl" %in% names(as.list(regexec)))
+    regmatches(x, regexec(pattern, x, useBytes = useBytes))
+  else
+    regmatches(x, regexec(pattern, x, perl = perl, useBytes = useBytes))
 }
 
 #' str_extract replacement
