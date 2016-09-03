@@ -14,7 +14,7 @@ callgrind\.out
 \.cproject$
 cran-comments\.md$
 \.externalToolBuilders$
-^fuzz\.R$
+^R\/fuzz\.R$
 .*\.gcda$
 .*\.gch$
 .*\.gcno$
