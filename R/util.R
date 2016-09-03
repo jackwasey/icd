@@ -152,17 +152,31 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, perl = TRUE, useB
   else
     assert_integerish(pos, len = 2, lower = 1, any.missing = FALSE)
 
-  result <- lapply(
-    string, function(x) unlist(
-      regmatches(
-        x = x,
-        m = regexec(
-          pattern = pattern,
-          text = x,
-          perl = perl,
-          useBytes = useBytes))
-    )[-1]
-  )
+  if (!"perl" %in% names(as.list(regexec))) {
+    result <- lapply(
+      string, function(x) unlist(
+        regmatches(
+          x = x,
+          m = regexec(
+            pattern = pattern,
+            text = x,
+            useBytes = useBytes))
+      )[-1]
+    )
+  } else {
+    result <- lapply(
+      string, function(x) unlist(
+        regmatches(
+          x = x,
+          m = regexec(
+            pattern = pattern,
+            text = x,
+            perl = perl,
+            useBytes = useBytes))
+      )[-1]
+    )
+  }
+
   result <- result[vapply(result, function(x) length(x) != 0, logical(1))]
   result <- do.call(rbind, result)
 

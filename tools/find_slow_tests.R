@@ -3,10 +3,14 @@ library(testthat)
 library(devtools)
 load_all()
 
-test_all_res <- test_package(package = "icd", reporter = "list", filter = NULL)
-as.data.frame(test_all_res) -> resdf
-print(tail(resdf[order(resdf$user), ], n = 12L))
+for (slow in c(FALSE, TRUE)) {
+  icd:::do_slow_tests(slow)
 
-# Rscript tools/find_slow_tests.R
-slow_by_file <-  aggregate(real ~ file, data = resdf, FUN = sum)
-print(slow_by_file[order(slow_by_file$real),])
+  test_all_res <- test_package(package = "icd", reporter = "list", filter = NULL)
+  as.data.frame(test_all_res) -> resdf
+  print(tail(resdf[order(resdf$user), ], n = 12L))
+
+  # Rscript tools/find_slow_tests.R
+  slow_by_file <-  aggregate(real ~ file, data = resdf, FUN = sum)
+  print(tail(slow_by_file[order(slow_by_file$real),]), 6L)
+}

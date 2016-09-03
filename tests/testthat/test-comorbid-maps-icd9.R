@@ -22,7 +22,7 @@ test_that("try to induce c++ segfault bug", {
                regexp = NA)
 })
 
-test_that("ahrq make sure all the children are listed in the saved data.", {
+test_that("ahrq children same as saved", {
   skip("this is not true because we don't fill in EVERY (unreal) possible code
        when there is odd specification of the range in the SAS code.")
   for (i in names(icd::icd9_map_ahrq))
@@ -37,27 +37,27 @@ test_that("ahrq make sure all the children are listed in the saved data.", {
     )
 })
 
-test_that("AHRQ make sure all the children are listed in the saved data.", {
+test_that("AHRQ children same as saved", {
   for (i in icd::icd9_map_ahrq)
     expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
 
-test_that("Elixhauser make sure all the children are listed in the saved data.", {
+test_that("Elixhauser children same as saved", {
   for (i in icd::icd9_map_quan_elix)
     expect_equal(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
 
-test_that("Quan Charlson make sure all the children are listed in the saved data.", {
+test_that("Quan Charlson children same as saved", {
   for (i in icd::icd9_map_quan_deyo)
     expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
 
-test_that("Quan Elixhauser make sure all the children are listed in the saved data.", {
+test_that("Quan Elixhauser children same as saved", {
   for (i in icd::icd9_map_quan_elix)
     expect_equal_no_class_order(icd_children.icd9(i, defined = FALSE, short_code = TRUE), icd_sort.icd9(i))
 })
 
-test_that("icd9 comorbidities are created correctly, and logical to binary conversion ok", {
+test_that("icd9 comorbidities correct, logical to binary ok", {
   ptdf <- icd9_comorbid(simple_pts, map = icd::icd9_map_ahrq, short_code = TRUE,
                         visit_name = "visit_id", return_df = TRUE)
 
@@ -105,36 +105,31 @@ test_that("ahrq icd9 mappings generated from the current generation code", {
 
 })
 
-test_that("Quan Charlson icd9 mappings are all
-            generated from the current generation code", {
+test_that("Quan Charlson icd9 map generated = saved", {
+  if (is.null(icd9_fetch_quan_deyo_sas(offline = TRUE)))
+    skip("data-raw/ICD9_E_Charlson.sas must be downloaded with icd9_fetch_quan_deyo_sas")
+  expect_equivalent(icd9_map_quan_deyo, icd9_parse_quan_deyo_sas(save_data = FALSE))
+  expect_equivalent(
+    icd_get_invalid.icd_comorbidity_map(icd9_map_quan_deyo, short_code = TRUE),
+    list())
+})
 
-              if (is.null(icd9_fetch_quan_deyo_sas(offline = TRUE)))
-                skip("data-raw/ICD9_E_Charlson.sas must be downloaded with icd9_fetch_quan_deyo_sas")
-              expect_equivalent(icd9_map_quan_deyo, icd9_parse_quan_deyo_sas(save_data = FALSE))
-              expect_equivalent(
-                icd_get_invalid.icd_comorbidity_map(icd9_map_quan_deyo, short_code = TRUE),
-                list())
-            })
+test_that("Quan Elix icd9 map generated = saved", {
+  expect_equivalent(icd9_map_quan_elix, icd9_generate_map_quan_elix(save_data = FALSE))
+  expect_equivalent(
+    icd_get_invalid.icd_comorbidity_map(icd9_map_quan_elix, short_code = TRUE),
+    list())
+})
 
-test_that("Quan Elixhauser icd9 mappings are all
-            generated from the current generation code", {
-              expect_equivalent(icd9_map_quan_elix, icd9_generate_map_quan_elix(save_data = FALSE))
-              expect_equivalent(
-                icd_get_invalid.icd_comorbidity_map(icd9_map_quan_elix, short_code = TRUE),
-                list())
-            })
+test_that("Elixhauser icd9 map generated = saved", {
+  expect_equivalent(icd9_map_elix, icd9_generate_map_elix(save_data = FALSE))
+  expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9_map_elix, short_code = TRUE), list())
+})
 
-test_that("Elixhauser icd9 mappings are all
-            generated from the current generation code", {
-              expect_equivalent(icd9_map_elix, icd9_generate_map_elix(save_data = FALSE))
-              expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd9_map_elix, short_code = TRUE), list())
-            })
-
-test_that("Elixhauser icd10 mappings are all
-            generated from the current generation code", {
-              expect_equivalent(icd10_map_elix, icd10_generate_map_elix(save_data = FALSE))
-              expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd10_map_elix, short_code = TRUE), list())
-            })
+test_that("Elixhauser icd10 map generated = saved", {
+  expect_equivalent(icd10_map_elix, icd10_generate_map_elix(save_data = FALSE))
+  expect_equivalent(icd_get_invalid.icd_comorbidity_map(icd10_map_elix, short_code = TRUE), list())
+})
 
 test_that("can condense the big lists of comorbidities without errors", {
   # this is a useful but slow (8s on my PC) test because the data weren't

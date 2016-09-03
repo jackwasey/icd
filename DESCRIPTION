@@ -18,7 +18,7 @@ Authors@R: c(
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd
 Depends:
-    R (>= 3.2.0)
+    R (>= 3.1.0)
 Imports:
     checkmate (>= 1.7.0),
     magrittr,
