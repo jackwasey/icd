@@ -71,10 +71,18 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   assert_flag(defined)
   assert_flag(billable)
 
-  if (short_code)
-    res <- .Call("icd_icd9ChildrenShortCpp", PACKAGE = "icd", toupper(x), defined)
-  else
+  if (short_code) {
+    tm0 <- Sys.time()
+    res <- .Call("icd_icd9ChildrenShortCppUnordered", PACKAGE = "icd", toupper(x), defined)
+    dur <- as.numeric(difftime(Sys.time(), tm0, units = "secs"))
+
+    if (dur > 1.4)
+      message("Children for codes: ", head(x), " took a long time")
+
+  } else {
+    # TODO make unordered
     res <- .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = "icd", toupper(x), defined)
+  }
 
   if (billable)
     icd_get_billable.icd9cm(icd9cm(res), short_code)

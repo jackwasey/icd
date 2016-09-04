@@ -18,6 +18,7 @@ i9test.RData
 icd\.Rcheck
 icd_*.tar.gz
 icd9_*.tar.gz
+include-dependencies.d
 inst/doc/*
 *.o
 .project

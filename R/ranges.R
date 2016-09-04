@@ -247,11 +247,19 @@ expand_range_worker_alt_env <- function(start, end, lookup, defined,
     # even if trying to preserve the ambig start, setting ambig end will have to
     # kill it, if it spills over.
 
+    # do not want to check a load of leaf nodes for children, since they have none.
+    leaf_tmp <- icd9cm_billable[["32"]][["code"]]
+    leaf_list <- as.list(rep(TRUE, times = length(leaf_tmp)))
+    names(leaf_list) <- leaf_tmp
+    leaf_env <- list2env(leaf_list)
+
     for (e in ls(envir = out_env)) {
-      kids <- icd_get_missing_kids(e, out_env, defined)
-      if (length(kids) == 0L)
-        next
-      rm(list = e, envir = out_env)
+      if (!isTRUE(leaf_env[[e]])) {
+        kids <- icd_get_missing_kids(e, out_env, defined)
+        if (length(kids) == 0L)
+          next
+        rm(list = e, envir = out_env)
+      }
     }
   }
 

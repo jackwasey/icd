@@ -311,11 +311,21 @@ icd9ChildrenShortCpp <- function(icd9Short, onlyReal) {
     .Call('icd_icd9ChildrenShortCpp', PACKAGE = 'icd', icd9Short, onlyReal)
 }
 
+icd9ChildrenShortCppUnordered <- function(icd9Short, onlyReal) {
+    .Call('icd_icd9ChildrenShortCppUnordered', PACKAGE = 'icd', icd9Short, onlyReal)
+}
+
 #' C++ implementation of finding children of short codes
 #' @examples
+#' \dontrun{
 #' library(microbenchmark)
-#' microbenchmark(icd9ChildrenShortCpp("001", T), icd9ChildrenShortCppStd("001", T), times = 100) # about the same
-#' microbenchmark(icd9ChildrenShortCpp(c("001", 100:400), T), icd9ChildrenShortCppStd(c("001", 100:400), T), times = 10)
+#' microbenchmark(icd9ChildrenShortCpp("001", T), icd9ChildrenShortCppStd("001", T), times = 100)
+#' microbenchmark(icd9ChildrenShortCpp(c("001", 100:400), T),
+#'                icd9ChildrenShortCppUnordered(c("001", 100:400), T),
+#'                icd9ChildrenShortCppStd(c("001", 100:400), T),
+#'                times = 10)
+#' }
+#' # unordered set much faster, but may still need to sort result
 #' @keywords internal
 icd9ChildrenShortCppStd <- function(icd9Short, onlyReal) {
     .Call('icd_icd9ChildrenShortCppStd', PACKAGE = 'icd', icd9Short, onlyReal)

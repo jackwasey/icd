@@ -122,7 +122,7 @@ Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE) {
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool onlyReal) {
-  icd_set out; // we are never going to put NAs in the output, so use std structure
+  std::set<Str> out; // we are never going to put NAs in the output, so use std structure
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
     // TODO by reference or updating arguments instead? Unclear benefit, but
@@ -148,13 +148,54 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
     if (onlyReal) {
       const Rcpp::Environment env("package:icd");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
+      std::set<Str> out_real;
+      std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
+        icd9Hierarchy["code"]);
+      // 'reals' is the set of majors, intermediate and leaf codes.
+      std::set<Str> reals(tmp.begin(), tmp.end());
+
+      // set_intersection doesn't work for unordered sets
+      std::set_intersection(out.begin(), out.end(),
+                            reals.begin(), reals.end(),
+                            std::inserter(out_real, out_real.begin()));
+      out = out_real;
+    }
+  } // input length != 0
+  Rcpp::CharacterVector rcppOut = Rcpp::wrap(out);
+  rcppOut.attr("icd_short_diag") = true;
+  return rcppOut;
+}
+
+// [[Rcpp::export]]
+Rcpp::CharacterVector icd9ChildrenShortCppUnordered(Rcpp::CharacterVector icd9Short, bool onlyReal) {
+  icd_set out; // we are never going to put NAs in the output, so use std structure
+  // this is a slower function, can the output set be predefined in size?
+  if (icd9Short.size() != 0) {
+    Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
+    Rcpp::CharacterVector major = parts[0];
+    Rcpp::CharacterVector minor = parts[1];
+
+    Rcpp::CharacterVector::iterator itmajor = major.begin();
+    Rcpp::CharacterVector::iterator itminor = minor.begin();
+    for (; itmajor != major.end(); ++itmajor, ++itminor) {
+      Str thismajor = Rcpp::as<Str>(*itmajor);
+      Str thisminor = Rcpp::as<Str>(*itminor);
+
+      Rcpp::CharacterVector newminors = icd9ExpandMinorShim(thisminor,
+                                                            icd9IsASingleE(thismajor.c_str()));
+
+      VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismajor, newminors));
+      out.insert(newshort.begin(), newshort.end());
+    }
+    if (onlyReal) {
+      const Rcpp::Environment env("package:icd");
+      Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       icd_set out_real;
       std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
         icd9Hierarchy["code"]);
       // 'reals' is the set of majors, intermediate and leaf codes.
       icd_set reals(tmp.begin(), tmp.end());
 
-      // set_intersection doesn't work for unordered sets
 #ifdef HAVE_CXX11
       for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
         if (reals.find(*j) != reals.end())
@@ -175,9 +216,15 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
 
 //' C++ implementation of finding children of short codes
 //' @examples
+//' \dontrun{
 //' library(microbenchmark)
-//' microbenchmark(icd9ChildrenShortCpp("001", T), icd9ChildrenShortCppStd("001", T), times = 100) # about the same
-//' microbenchmark(icd9ChildrenShortCpp(c("001", 100:400), T), icd9ChildrenShortCppStd(c("001", 100:400), T), times = 10)
+//' microbenchmark(icd9ChildrenShortCpp("001", T), icd9ChildrenShortCppStd("001", T), times = 100)
+//' microbenchmark(icd9ChildrenShortCpp(c("001", 100:400), T),
+//'                icd9ChildrenShortCppUnordered(c("001", 100:400), T),
+//'                icd9ChildrenShortCppStd(c("001", 100:400), T),
+//'                times = 10)
+//' }
+//' # unordered set much faster, but may still need to sort result
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, bool onlyReal) {

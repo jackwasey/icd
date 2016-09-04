@@ -103,11 +103,6 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
     warning("only defined values requested, but some undefined ICD-9 code(s) were given, so dropping them")
   }
 
-  # find good four digit parents for five digit codes
-  # group with the provided four digit parents
-  # find good three-digit parents for four digit codes
-  # think about V and E codes.
-
   # any major codes are automatically in output (not condensing higher than
   # three digit code) and all their children can be removed from the work list
   out <- majors <- i9w[are_major <- icd_is_major.icd9(i9w)]
@@ -137,7 +132,7 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
   major_parents <- unique(icd_get_major.icd9(c(out, fout, i9w), short_code = TRUE))
   for (mp in major_parents) {
     test_kids <- icd_children.icd9(mp, short_code = TRUE, defined = defined)
-    test_kids <- test_kids[nchar(test_kids) < (5 + icd9_is_e(mp))] # we've done these already
+    test_kids <- test_kids[nchar(test_kids) < (5L + icd9_is_e(mp))] # we've done these already
     test_kids <- test_kids[-which(test_kids == mp)]
     if (length(test_kids) > 0 && all(test_kids %in% c(out, fout, i9w))) {
       out <- c(out, mp)
