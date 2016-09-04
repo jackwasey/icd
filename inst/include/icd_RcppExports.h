@@ -706,6 +706,25 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(__result);
     }
 
+    inline Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, bool onlyReal) {
+        typedef SEXP(*Ptr_icd9ChildrenShortCppStd)(SEXP,SEXP);
+        static Ptr_icd9ChildrenShortCppStd p_icd9ChildrenShortCppStd = NULL;
+        if (p_icd9ChildrenShortCppStd == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd9ChildrenShortCppStd)(Rcpp::CharacterVector,bool)");
+            p_icd9ChildrenShortCppStd = (Ptr_icd9ChildrenShortCppStd)R_GetCCallable("icd", "icd_icd9ChildrenShortCppStd");
+        }
+        RObject __result;
+        {
+            RNGScope __rngScope;
+            __result = p_icd9ChildrenShortCppStd(Rcpp::wrap(icd9Short), Rcpp::wrap(onlyReal));
+        }
+        if (__result.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (__result.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(__result).c_str());
+        return Rcpp::as<Rcpp::CharacterVector >(__result);
+    }
+
     inline Rcpp::CharacterVector icd9ChildrenDecimalCpp(Rcpp::CharacterVector icd9Decimal, bool onlyReal) {
         typedef SEXP(*Ptr_icd9ChildrenDecimalCpp)(SEXP,SEXP);
         static Ptr_icd9ChildrenDecimalCpp p_icd9ChildrenDecimalCpp = NULL;

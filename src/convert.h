@@ -28,9 +28,9 @@
 // but this is then not exported by Rcpp (which works on the function body).
 Rcpp::List icd9ShortToPartsCpp(Rcpp::CharacterVector icd9Short, Rcpp::String minor_empty = "");
 void icd9ShortToPartsCppStd(VecStr icd9Short,
-                            std::string minorEmpty,
-                            std::vector<std::string> &major,
-                            std::vector<std::string> &minor);
+                            Str minorEmpty,
+                            VecStr &major,
+                            VecStr &minor);
 Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String minor_empty = "");
 Rcpp::CharacterVector icd9PartsToShort(const Rcpp::List parts);
 Rcpp::CharacterVector icd9PartsToDecimal(const Rcpp::List parts);

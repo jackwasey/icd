@@ -311,6 +311,16 @@ icd9ChildrenShortCpp <- function(icd9Short, onlyReal) {
     .Call('icd_icd9ChildrenShortCpp', PACKAGE = 'icd', icd9Short, onlyReal)
 }
 
+#' C++ implementation of finding children of short codes
+#' @examples
+#' library(microbenchmark)
+#' microbenchmark(icd9ChildrenShortCpp("001", T), icd9ChildrenShortCppStd("001", T), times = 100) # about the same
+#' microbenchmark(icd9ChildrenShortCpp(c("001", 100:400), T), icd9ChildrenShortCppStd(c("001", 100:400), T), times = 10)
+#' @keywords internal
+icd9ChildrenShortCppStd <- function(icd9Short, onlyReal) {
+    .Call('icd_icd9ChildrenShortCppStd', PACKAGE = 'icd', icd9Short, onlyReal)
+}
+
 icd9ChildrenDecimalCpp <- function(icd9Decimal, onlyReal) {
     .Call('icd_icd9ChildrenDecimalCpp', PACKAGE = 'icd', icd9Decimal, onlyReal)
 }
