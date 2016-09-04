@@ -122,9 +122,11 @@ Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE) {
 
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool onlyReal) {
-  icd_set out; // we are never going to put NAs in the output?
+  icd_set out; // we are never going to put NAs in the output, so use std structure
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
+    // TODO by reference or updating arguments instead? Unclear benefit, but
+    // this does take a lot of cycles in valgrind
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
     Rcpp::CharacterVector major = parts[0];
     Rcpp::CharacterVector minor = parts[1];

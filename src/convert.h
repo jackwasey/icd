@@ -19,14 +19,18 @@
 #define CONVERT_H_
 
 #include "local.h"
+#include <Rcpp.h>
 #include "util.h"
 #include "is.h"
 #include "manip.h"
-#include <Rcpp.h>
 
 // need default argument here for other functions to exploit,
 // but this is then not exported by Rcpp (which works on the function body).
-Rcpp::List icd9ShortToPartsCpp(const Rcpp::CharacterVector icd9Short, const Rcpp::String minor_empty = "");
+Rcpp::List icd9ShortToPartsCpp(Rcpp::CharacterVector icd9Short, Rcpp::String minor_empty = "");
+void icd9ShortToPartsCppStd(VecStr icd9Short,
+                            std::string minorEmpty,
+                            std::vector<std::string> &major,
+                            std::vector<std::string> &minor);
 Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String minor_empty = "");
 Rcpp::CharacterVector icd9PartsToShort(const Rcpp::List parts);
 Rcpp::CharacterVector icd9PartsToDecimal(const Rcpp::List parts);

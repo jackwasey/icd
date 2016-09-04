@@ -18,10 +18,10 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include "convert.h"
 #include "local.h"
+#include <Rcpp.h>
 #include "util.h"
 #include "is.h"
 #include "manip.h"
-#include <Rcpp.h>
 
 //' Convert major and minor vectors to single code
 //'
@@ -172,7 +172,7 @@ Rcpp::List icd9MajMinToParts(const Rcpp::CharacterVector major,
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::List icd9ShortToPartsCpp(const Rcpp::CharacterVector icd9Short, const Rcpp::String minorEmpty) {
+Rcpp::List icd9ShortToPartsCpp(Rcpp::CharacterVector icd9Short, Rcpp::String minorEmpty) {
 
   Rcpp::CharacterVector major(icd9Short.size());
   Rcpp::CharacterVector minor(icd9Short.size());
@@ -211,7 +211,7 @@ Rcpp::List icd9ShortToPartsCpp(const Rcpp::CharacterVector icd9Short, const Rcpp
       case 2:
       case 3:
         major[i] = s.substr(0, sz);
-        minor[minorEmpty];
+        minor[i] = minorEmpty;
         continue;
       case 4:
       case 5:
@@ -219,6 +219,7 @@ Rcpp::List icd9ShortToPartsCpp(const Rcpp::CharacterVector icd9Short, const Rcpp
         minor[i] = s.substr(3, sz - 3);
         continue;
       default:
+
         major[i] = NA_STRING;
       minor[i] = NA_STRING;
       continue;
@@ -228,6 +229,61 @@ Rcpp::List icd9ShortToPartsCpp(const Rcpp::CharacterVector icd9Short, const Rcpp
   } // for
 
   return icd9MajMinToParts(icd9AddLeadingZeroesMajor(major), minor);
+}
+
+//' @rdname convert
+//' @keywords internal manip
+// [[Rcpp::export]]
+void icd9ShortToPartsCppStd(std::vector<std::string> icd9Short,
+                            std::string minorEmpty,
+                            std::vector<std::string> &major,
+                            std::vector<std::string> &minor) {
+  for (std::vector<std::string>::size_type i = 0; i != icd9Short.size(); ++i) {
+    Str s = icd9Short[i];
+
+    s = strimCpp(s); // in place or rewrite?
+    std::string::size_type sz = s.size();
+
+    if (!icd9IsASingleE(s.c_str())) { // not an E code
+      switch (sz) {
+      case 1:
+      case 2:
+      case 3:
+        major[i] = s.substr(0, sz);
+        minor[i] = minorEmpty;
+        continue;
+      case 4:
+      case 5:
+        major[i] = s.substr(0, 3);
+        minor[i] = s.substr(3, sz - 3);
+        continue;
+      default:
+        major[i] = "";
+      minor[i] = "";
+      continue;
+      } // switch size
+
+      return;
+    } // not E code
+
+  // E code
+    switch (sz) {
+    case 2:
+    case 3:
+    case 4:
+      major[i] = s.substr(0, sz);
+      minor[i] = minorEmpty;
+      break;
+    case 5:
+      major[i] = s.substr(0, 4);
+      minor[i] = s.substr(4, 1);
+      break;
+    default:
+      major[i] = "";
+    minor[i] = "";
+    continue;
+    }
+  } // for
 }
 
 //' @describeIn icd_decimal_to_parts Convert short ICD-10 code to parts

@@ -19,10 +19,8 @@
 #define LOCAL_H_
 
 #include "config.h"
-
 #include <Rcpp.h>
-#include <vector>
-#include <set>
+#include "icd_types.h"
 
 extern "C" {
 #include "cutil.h"
@@ -48,43 +46,32 @@ extern "C" {
 // not enough to test whether header is available, because it may be disabled in
 // R: #ifdef _OPENMP
 #ifdef HAVE_R_OPENMP
-  #include <omp.h>
-  // openmp is required for GLIBC standard library parallel alternatives:
-  // now was parallel mode STL requested?
-  #ifdef ICD_STD_PARALLEL
-  // WORKING_PARALLEL_ALGORITHM is defined by configure script, but at present
-  // always disabled because it leads to ?false positive 'abort' and 'printf'
-  // found during R CMD check --as-cran
-    #ifndef WORKING_PARALLEL_ALGORITHM
-  // but not available, so disable
-      #undef ICD_STD_PARALLEL
-    #endif
-  #endif
+#include <omp.h>
+// openmp is required for GLIBC standard library parallel alternatives:
+// now was parallel mode STL requested?
+#ifdef ICD_STD_PARALLEL
+// WORKING_PARALLEL_ALGORITHM is defined by configure script, but at present
+// always disabled because it leads to ?false positive 'abort' and 'printf'
+// found during R CMD check --as-cran
+#ifndef WORKING_PARALLEL_ALGORITHM
+// but not available, so disable
+#undef ICD_STD_PARALLEL
+#endif
+#endif
 #else
-  // OpenMP requested, but not available
-  #undef ICD_OPENMP
+// OpenMP requested, but not available
+#undef ICD_OPENMP
 #endif
 
 #ifdef ICD_VALGRIND
-  #ifdef HAVE_VALGRIND_VALGRIND_H
-    #include <valgrind/callgrind.h>
-  #else
-    #undef ICD_VALGRIND
-  #endif
+#ifdef HAVE_VALGRIND_VALGRIND_H
+#include <valgrind/callgrind.h>
+#else
+#undef ICD_VALGRIND
+#endif
 #endif
 
-typedef std::string Str;
-typedef std::vector<Str> VecStr;
-
-typedef std::vector<int> VecInt;
-typedef std::vector<char> ComorbidOut;
-// this could be int ( which works around Rcpp bug which can't cast vector<char>
-// to LogicalVector). Will need to benchmark. vector<bool> dangerous with
-// multiple threads
-
-typedef std::vector<VecStr> VecVecStr;
-typedef std::vector<VecInt> VecVecInt;
-typedef VecVecInt::size_type VecVecIntSz;
+#include <set>
 
 // use flag set by configure
 #ifdef HAVE_CXX11
@@ -99,10 +86,10 @@ typedef std::set<std::string> icd_set;
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
-		const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
-		const bool aggregate);
+                        const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
+                        const bool aggregate);
 ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
-		const VecVecInt& map, const int chunkSize, const int ompChunkSize);
+                                     const VecVecInt& map, const int chunkSize, const int ompChunkSize);
 
 #if (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #include <iostream>
@@ -111,34 +98,34 @@ ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
 // (no common parent class), without Boost
 template<typename VT>
 void printIt(std::vector<VT> v) {
-	typename std::vector<VT>::iterator i;
-	std::ostringstream o;
-	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
-	o << "\n";
-	Rcpp::Rcout << o.str();
-	Rcpp::Rcout.flush();
+  typename std::vector<VT>::iterator i;
+  std::ostringstream o;
+  for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
+  o << "\n";
+  Rcpp::Rcout << o.str();
+  Rcpp::Rcout.flush();
 }
 
 //overload for set
 template<typename ST>
 void printIt(std::set<ST> v) {
-	typename std::set<ST>::iterator i;
-	std::ostringstream o;
-	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
-	o << "\n";
-	Rcpp::Rcout << o.str();
-	Rcpp::Rcout.flush();
+  typename std::set<ST>::iterator i;
+  std::ostringstream o;
+  for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
+  o << "\n";
+  Rcpp::Rcout << o.str();
+  Rcpp::Rcout.flush();
 }
 
 //overload for map
 template<typename MK, typename MV>
 void printIt(std::map<MK,MV> v) {
-	typename std::vector<MK,MV>::iterator i;
-	std::ostringstream o;
-	for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
-	o << "\n";
-	Rcpp::Rcout << o.str();
-	Rcpp::Rcout.flush();
+  typename std::vector<MK,MV>::iterator i;
+  std::ostringstream o;
+  for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
+  o << "\n";
+  Rcpp::Rcout << o.str();
+  Rcpp::Rcout.flush();
 }
 
 #endif // end (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
