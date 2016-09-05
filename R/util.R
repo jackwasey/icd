@@ -67,6 +67,13 @@ as_char_no_warn <- function(x) {
   match(x, table, nomatch = 0) == 0
 }
 
+#' \code{%in%} equivalent for two \code{Environment} arguments
+"%eine%" <- function(x, table) {
+  assert_environment(x)
+  assert_environment(table)
+  vapply(ls(name = x), function(y) !is.null(table[[y]]), FUN.VALUE = logical(1L), USE.NAMES = FALSE)
+}
+
 #' Strip character(s) from character vector
 #'
 #' \code{gsub} is probably quicker than \code{stringr}/\code{stringi}. For
@@ -414,6 +421,10 @@ na_to_false <- function(x) {
   x
 }
 
+#' make a list using input argument names as names
+#' @param ... arguments whose names become list item names, and values become
+#'   the values in the list
+#' @keywords internal
 named_list <- function(...) {
   x <- list(...)
   names(x) <- as.character(match.call()[-1])
@@ -453,4 +464,31 @@ to_title_case <- function(x) {
                sep = "", collapse = split_char)
   }
   x
+}
+
+#' create environment from vector
+#'
+#' create an environment by inserting the value \code{val} with names taken from
+#' \code{x}
+#' @keywords internal
+vec_to_env <- function(x, val = TRUE, env = new.env(hash = TRUE, parent = baseenv())) {
+  lapply(x, function(y) { env[[y]] <- val; return()} )
+  return(invisible(env))
+}
+
+vec_to_env_count <- function(x, env = new.env(hash = TRUE, parent = baseenv())) {
+  for (i in 1L:length(x)) {
+    env[[x[i]]] <- i
+  }
+  return(invisible(env))
+}
+
+#' return a new environment with names and values swapped
+#' @keywords internal
+env_to_vec_flip <- function(env) {
+  warning("very slow!")
+  assert_environment(env)
+  out <- character(length(env))
+  lapply(ls(env), function(y) out[env[[y]]] <<- y)
+  out
 }

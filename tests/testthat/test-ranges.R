@@ -524,24 +524,23 @@ test_that("sorting char factors", {
 })
 
 test_that("sysdata.rda is okay", {
-  skip_slow_tests()
-  lknames <- c("icd9NShort", "icd9VShort", "icd9EShort",
-               "icd9NShortBillable", "icd9VShortBillable", "icd9EShortBillable",
-               "icd9NShortReal", "icd9VShortReal", "icd9EShortReal",
+  lknames <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
+               "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
+               "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
                "icd9_sources", ".nc")
 
   sysdat <- generate_sysdata(save_data = FALSE)
   expect_equal(names(sysdat), lknames)
 
-  expect_lt(length(icd9NShortBillable), length(icd9NShortReal))
-  expect_lt(length(icd9VShortBillable), length(icd9VShortReal))
-  expect_lt(length(icd9EShortBillable), length(icd9EShortReal))
-  expect_lt(length(icd9NShortReal), length(icd9NShort))
-  expect_lt(length(icd9VShortReal), length(icd9VShort))
-  expect_lt(length(icd9EShortReal), length(icd9EShort))
-  expect_true(all(icd9NShortReal %in% icd9NShort))
-  expect_true(all(icd9VShortReal %in% icd9VShort))
-  expect_true(all(icd9EShortReal %in% icd9EShort))
+  expect_lt(length(icd9_short_n_leaf), length(icd9_short_n_defined))
+  expect_lt(length(icd9_short_v_leaf), length(icd9_short_v_defined))
+  expect_lt(length(icd9_short_e_leaf), length(icd9_short_e_defined))
+  expect_lt(length(icd9_short_n_defined), length(icd9_short_n))
+  expect_lt(length(icd9_short_v_defined), length(icd9_short_v))
+  expect_lt(length(icd9_short_e_defined), length(icd9_short_e))
+  expect_true(all(icd9_short_n_defined %eine% icd9_short_n))
+  expect_true(all(icd9_short_v_defined %eine% icd9_short_v))
+  expect_true(all(icd9_short_e_defined %eine% icd9_short_e))
 })
 
 test_that("expand ICD-9 range character class deals with short vs long types", {

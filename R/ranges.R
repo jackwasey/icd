@@ -197,34 +197,24 @@ icd_expand_range.icd9 <- function(start, end,
 #' @examples
 #' \dontrun{
 #' microbenchmark::micmicrobenchmark(
-#'   expand_range_worker_alt_base("100", "114", icd9NShort, TRUE, TRUE, TRUE),
-#'   expand_range_worker_alt_env("100", "114", icd9NShort, TRUE, TRUE, TRUE),
+#'   expand_range_worker_alt_base("100", "114", icd9_short_n, TRUE, TRUE, TRUE),
+#'   expand_range_worker("100", "114", icd9_short_n, TRUE, TRUE, TRUE),
 #'   times = 5
 #' )
 #' }
 #' @keywords internal
-expand_range_worker <- function(start, end, lookup, defined,
+expand_range_worker <- function(start, end, lookup_env, defined,
                                 ex_ambig_start, ex_ambig_end) {
-  expand_range_worker_alt_env(start, end, lookup, defined,
-                              ex_ambig_start, ex_ambig_end)
-}
-
-expand_range_worker_alt_env <- function(start, end, lookup, defined,
-                                        ex_ambig_start, ex_ambig_end) {
   assert_string(start)
   assert_string(end)
-  assert_character(lookup, any.missing = FALSE, min.chars = 3)
+  assert_environment(lookup_env)
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
-
-  lookup_list <- as.list(1L:length(lookup))
-  names(lookup_list) <- lookup
-  lookup_env <- list2env(lookup_list)
 
   start_index <- lookup_env[[start]]
   end_index <- lookup_env[[end]]
   assert_integer(start_index, len = 1L)
-  if (is.na(start_index[1]))
+  if (is.na(start_index[1L]))
     stop(sprintf("start value '%s' not found in look-up table of ICD-9 codes.", start))
   assert_integer(end_index, len = 1L)
   if (is.na(end_index[1L]))
@@ -235,10 +225,16 @@ expand_range_worker_alt_env <- function(start, end, lookup, defined,
   if (start == end)
     return(icd_children.icd9(start, short_code = TRUE, defined = defined))
 
-  out <- lookup[start_index:end_index]
-  out_list <- as.list(rep(TRUE, times = length(out)))
-  names(out_list) <- out
-  out_env <- list2env(out_list)
+  # hashed env is not sorted, so sort by inserting by sequence number
+  lookup_vec <- env_to_vec_flip(lookup_env) # very slow
+  # this fills most of the output values, but misses children of a high-level end code
+  out_env <- vec_to_env(lookup_vec[start_index:end_index])
+
+  # do not want to check a load of leaf nodes for children, since they have none.
+  leaf_tmp <- icd9cm_billable[["32"]][["code"]]
+  leaf_list <- as.list(rep(TRUE, times = length(leaf_tmp)))
+  names(leaf_list) <- leaf_tmp
+  leaf_env <- list2env(leaf_list)
 
   if (ex_ambig_end) {
     # at the end, we may not want any higher-level codes at the end which would
@@ -246,12 +242,6 @@ expand_range_worker_alt_env <- function(start, end, lookup, defined,
     # at the end, so we actually have to search the whole list. This means that
     # even if trying to preserve the ambig start, setting ambig end will have to
     # kill it, if it spills over.
-
-    # do not want to check a load of leaf nodes for children, since they have none.
-    leaf_tmp <- icd9cm_billable[["32"]][["code"]]
-    leaf_list <- as.list(rep(TRUE, times = length(leaf_tmp)))
-    names(leaf_list) <- leaf_tmp
-    leaf_env <- list2env(leaf_list)
 
     for (e in ls(envir = out_env)) {
       if (!isTRUE(leaf_env[[e]])) {
@@ -263,30 +253,27 @@ expand_range_worker_alt_env <- function(start, end, lookup, defined,
     }
   }
 
+  # add children of end code to output environement
   lapply(
     icd_children.icd9(end, short_code = TRUE, defined = defined),
-    function(x) out_env[[x]] <- TRUE)
+    function(x) { out_env[[x]] <- TRUE; return() })
 
   # need to insert terminal children before seeing whether any early high level
   # codes need to be excluded.
-
   if (ex_ambig_start) {
     # just remove those codes at the beginning which have children not in the
     # output let's take the first 5, to cover cases like 100, 101, 102.1,
     # 102.11, 102.2
-    for (s in head(out, 5L)) {
-      kids <- icd_get_missing_kids(s, out_env, defined)
-      if (length(kids) == 0L)
-        next
-      if (isTRUE(out_env[[s]]))
-        rm(list = s, envir = out_env)
+    for (s in lookup_vec[start_index:start_index + 5L]) {
+      # only lookup non-leaf codes for children
+      if (is.null(leaf_env[[s]])) {
+        kids <- icd_get_missing_kids(s, out_env, defined)
+        if (!is.null(out_env[[s]]))
+          rm(list = s, envir = out_env)
+      }
     }
   }
-
-  icd_sort.icd9(
-    unique(ls(envir = out_env)),
-    short_code = TRUE)
-
+  icd_sort.icd9(ls(out_env), short_code = TRUE)
 }
 
 #' Find children of a code which are not in a given environment
@@ -318,25 +305,25 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
   if (defined) {
     stopifnot(icd_is_defined(start, short_code = TRUE), icd_is_defined(end, short_code = TRUE))
     if (icd9_is_n(start) && icd9_is_n(end))
-      res <- expand_range_worker(start, end, icd9NShortReal, defined = TRUE,
+      res <- expand_range_worker(start, end, icd9_short_n_defined, defined = TRUE,
                                  ex_ambig_start, ex_ambig_end)
     else if (icd9_is_v(start) && icd9_is_v(end))
-      res <- expand_range_worker(start, end, icd9VShortReal, defined = TRUE,
+      res <- expand_range_worker(start, end, icd9_short_v_defined, defined = TRUE,
                                  ex_ambig_start, ex_ambig_end)
     else if (icd9_is_e(start) && icd9_is_e(end))
-      res <- expand_range_worker(start, end, icd9EShortReal, defined = TRUE,
+      res <- expand_range_worker(start, end, icd9_short_e_defined, defined = TRUE,
                                  ex_ambig_start, ex_ambig_end)
     else
       stop("mismatch between numeric, V and E types in start and end")
   } else {
     if (icd9_is_n(start) && icd9_is_n(end))
-      res <- expand_range_worker(start, end, icd9NShort, defined = FALSE,
+      res <- expand_range_worker(start, end, icd9_short_n, defined = FALSE,
                                  ex_ambig_start, ex_ambig_end)
     else if (icd9_is_v(start) && icd9_is_v(end))
-      res <- expand_range_worker(start, end, icd9VShort, defined = FALSE,
+      res <- expand_range_worker(start, end, icd9_short_v, defined = FALSE,
                                  ex_ambig_start, ex_ambig_end)
     else if (icd9_is_e(start) && icd9_is_e(end))
-      res <- expand_range_worker(start, end, icd9EShort, defined = FALSE,
+      res <- expand_range_worker(start, end, icd9_short_e, defined = FALSE,
                                  ex_ambig_start, ex_ambig_end)
     else
       stop("mismatch between numeric, V and E types in start and end")

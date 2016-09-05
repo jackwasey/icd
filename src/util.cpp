@@ -320,3 +320,14 @@ std::vector<std::size_t> icd9OrderCpp(std::vector<std::string> x) {
   std::transform(vp.begin(), vp.end(), std::back_inserter(out), getSecondPlusOne);
   return out;
 }
+
+// //[[Rcpp::export]]
+// Rcpp::CharacterVector env_to_vec_flip(Rcpp::Environment env) {
+//   Rcpp::CharacterVector out(Rf_length(env.ls(true)));
+// for (Rcpp::CharacterVector::iterator i; i != out.end(); ++i) {
+//   out[env[*i]] = *i;
+// }
+//   Rcpp::sapply(Rcpp::as<Rcpp::CharacterVector>(env.ls(true)), out[env[[y]]] = y)
+//   out
+// }
+

@@ -22,43 +22,106 @@
 #' @template save_data
 #' @return invisibly returns the data as a list
 #' @keywords internal
-generate_sysdata <- function(save_data = TRUE) {
+icd_generate_sysdata <- function(save_data = TRUE) {
 
   path <- file.path("R", "sysdata.rda")
 
-  c() -> icd9NShort -> icd9VShort -> icd9EShort
-  for (i in as.character(1:999))
-    icd9NShort <- c(icd9NShort, sort(icd_children.icd9(i, short_code = TRUE, defined = FALSE)))
-  for (i in as.character(0:99))
-    icd9VShort <- c(icd9VShort, sort(icd_children.icd9(paste0("V", i), short_code = TRUE, defined = FALSE)))
-  for (i in as.character(0:999))
-    icd9EShort <- c(icd9EShort, sort(icd_children.icd9(paste0("E", i), short_code = TRUE, defined = FALSE)))
+  icd9_short_n <- icd9_generate_all_n()
+  icd9_short_v <- icd9_generate_all_v()
+  icd9_short_e <- icd9_generate_all_e()
 
   # we can either use the icd_is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
-  icd9NShortReal <- grep("^[^VE]+", icd::icd9cm_hierarchy[["code"]], value = TRUE) # nolint
-  icd9VShortReal <- grep("V", icd::icd9cm_hierarchy[["code"]], value = TRUE) # nolint
-  icd9EShortReal <- grep("E", icd::icd9cm_hierarchy[["code"]], value = TRUE) # nolint
+  codes <- icd::icd9cm_hierarchy[["code"]]
+  icd9_short_n_defined <- vec_to_env_count(grep("^[^VE]+", codes, perl = TRUE, value = TRUE))
+  icd9_short_v_defined <- vec_to_env_count(grep("^V", codes, perl = TRUE, value = TRUE))
+  icd9_short_e_defined <- vec_to_env_count(grep("^E", codes, perl = TRUE, value = TRUE))
 
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
-  icd9NShortBillable <- icd9cm_get_billable(icd9NShortReal, short_code = TRUE, icd9cm_edition = "32") # nolint
-  icd9VShortBillable <- icd9cm_get_billable(icd9VShortReal, short_code = TRUE, icd9cm_edition = "32") # nolint
-  icd9EShortBillable <- icd9cm_get_billable(icd9EShortReal, short_code = TRUE, icd9cm_edition = "32") # nolint
+  icd9_short_n_leaf <- vec_to_env_count(icd9cm_get_billable(
+    ls(name = icd9_short_n_defined), short_code = TRUE, icd9cm_edition = "32"),
+  )
+  icd9_short_v_leaf <- vec_to_env_count(icd9cm_get_billable(
+    ls(name = icd9_short_v_defined), short_code = TRUE, icd9cm_edition = "32"))
+  icd9_short_e_leaf <- vec_to_env_count(icd9cm_get_billable(
+    ls(name = icd9_short_e_defined), short_code = TRUE, icd9cm_edition = "32"))
 
-  # some very quick sanity checks: (duplicate in a test in test-ranges.R)
-  stopifnot(length(icd9NShortBillable) < length(icd9NShortReal))
-  stopifnot(length(icd9VShortBillable) < length(icd9VShortReal))
-  stopifnot(length(icd9EShortBillable) < length(icd9EShortReal))
-  stopifnot(length(icd9NShortReal) < length(icd9NShort))
-  stopifnot(length(icd9VShortReal) < length(icd9VShort))
-  stopifnot(length(icd9EShortReal) < length(icd9EShort))
-  stopifnot(all(icd9NShortReal %in% icd9NShort))
-  stopifnot(all(icd9VShortReal %in% icd9VShort))
-  stopifnot(all(icd9EShortReal %in% icd9EShort))
 
-  # http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
-  icd9_sources <- data.frame(
+  icd9_sources <- icd9_generate_sources()
+
+  # minimal data sources validation
+  long_fns <- icd9_sources[["long_filename"]]
+  short_fns <- icd9_sources[["long_filename"]]
+  # make.names is stricter than necessary, but no function to sanitize a file
+  # name in R, although R CMD check of course can do it...
+  message("non-portable long file names: ",
+          paste(long_fns[long_fns != make.names(long_fns)]))
+  message("non-portable short file names: ",
+          paste(short_fns[short_fns != make.names(short_fns)]))
+
+  .nc <- nchar(icd::icd10cm2016[["code"]])
+
+  sysdata_names <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
+    "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
+    "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
+    "icd9_sources", ".nc")
+
+  # we assume we are in the root of the package directory. Save to sysdata.rda
+  # because these are probably not of interest to a user and would clutter an
+  # already busy namespace.
+
+  if (save_data)
+    save(icd9_short_n, icd9_short_v, icd9_short_e,
+         icd9_short_n_defined, icd9_short_v_defined, icd9_short_e_defined,
+         icd9_short_n_leaf, icd9_short_v_leaf, icd9_short_e_leaf,
+         icd9_sources, .nc, file = path, compress = "xz")
+
+  invisible(named_list(icd9_short_n, icd9_short_v, icd9_short_e,
+                       icd9_short_n_defined, icd9_short_v_defined, icd9_short_e_defined,
+                       icd9_short_n_leaf, icd9_short_v_leaf, icd9_short_e_leaf,
+                       icd9_sources, .nc))
+}
+
+icd9_generate_all_major_n <- function() {
+  icd9_add_leading_zeroes(as.character(1:999))
+}
+
+icd9_generate_all_major_v <- function() {
+  icd9_add_leading_zeroes(paste("V", c("0", 1:99), sep = ""))
+}
+
+icd9_generate_all_major_e <- function() {
+  icd9_add_leading_zeroes(paste("E", c("0", 0:999), sep = ""))
+}
+
+icd9_generate_all_n <- function(...) {
+  icd9_generate_all_(major_fun = icd9_generate_all_major_n, ...)
+}
+
+icd9_generate_all_v <- function(...) {
+  icd9_generate_all_(major_fun = icd9_generate_all_major_v, ...)
+}
+
+icd9_generate_all_e <- function(...) {
+  icd9_generate_all_(major_fun = icd9_generate_all_major_e, ...)
+}
+
+icd9_generate_all_ <- function(major_fun, short_code = TRUE,
+                               env = new.env(hash = TRUE, baseenv())) {
+  for (i in major_fun()) {
+    kids <- icd_children.icd9(i, short_code = short_code, defined = FALSE)
+    for (j in 1L:length(kids))
+      env[[kids[j]]] <- j
+  }
+  return(invisible(env))
+}
+
+#' generate data for finding source data for ICD-9-CM
+#' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+#' @keywords internal
+icd9_generate_sources <- function() {
+  data.frame(
     version = as.character(c(32, 31, 30, 29, 28, 27, 26, 25, 24, 23)),
     f_year = c(as.character(seq(2014, 2005))),
     start_date = c("2014-10-01", "2013-10-01", "2012-10-01", "2011-10-01", "2010-10-01",
@@ -118,31 +181,4 @@ generate_sysdata <- function(save_data = TRUE) {
       "Dtab07.RTF", "Dtab06.rtf"), # there are more, but not with corresponding CMS, back to 1990s
     stringsAsFactors = FALSE
   )
-
-  # minimal data sources validation
-  long_fns <- icd9_sources[["long_filename"]]
-  short_fns <- icd9_sources[["long_filename"]]
-  # make.names is stricter than necessary, but no function to sanitize a file
-  # name in R, although R CMD check of course can do it...
-  message("non-portable long file names: ",
-          paste(long_fns[long_fns != make.names(long_fns)]))
-  message("non-portable short file names: ",
-          paste(short_fns[short_fns != make.names(short_fns)]))
-
-  .nc <- nchar(icd::icd10cm2016[["code"]])
-
-  # we assume we are in the root of the package directory. Save to sysdata.rda
-  # because these are probably not of interest to a user and would clutter an
-  # already busy namespace.
-
-  if (save_data)
-    save(icd9NShort, icd9VShort, icd9EShort,
-         icd9NShortBillable, icd9VShortBillable, icd9EShortBillable,
-         icd9NShortReal, icd9VShortReal, icd9EShortReal,
-         icd9_sources, .nc, file = path, compress = "xz")
-
-  invisible(named_list(icd9NShort, icd9VShort, icd9EShort,
-                       icd9NShortBillable, icd9VShortBillable, icd9EShortBillable,
-                       icd9NShortReal, icd9VShortReal, icd9EShortReal,
-                       icd9_sources, .nc))
 }
