@@ -88,9 +88,13 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
   # drop this superfluous finale which allocates any other ICD-9 code to the
   # "Other" group
   icd9_map_ahrq[[" "]] <- NULL
-  icd9_map_ahrq[ahrq_htn] %>% unlist %>% unname %>% as.icd9 %>% as.icd_short_diag -> icd9_map_ahrq[["HTNCX"]]
-  icd9_map_ahrq[ahrq_chf] %>% unlist %>% unname %>% as.icd9 %>% as.icd_short_diag -> icd9_map_ahrq[["CHF"]]
-  icd9_map_ahrq[ahrq_renal] %>% unlist %>% unname %>% as.icd9 %>% as.icd_short_diag -> icd9_map_ahrq[["RENLFAIL"]]
+  clean_up_map <- function(x) {
+    as.icd_short_diag(as.icd9(unname(unlist(x))))
+  }
+
+  clean_up_map(icd9_map_ahrq[ahrq_htn]) -> icd9_map_ahrq[["HTNCX"]]
+  clean_up_map(icd9_map_ahrq[ahrq_chf]) -> icd9_map_ahrq[["CHF"]]
+  clean_up_map(icd9_map_ahrq[ahrq_renal]) -> icd9_map_ahrq[["RENLFAIL"]]
 
   icd9_map_ahrq[ahrq_unused] <- NULL
 
