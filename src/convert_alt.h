@@ -15,19 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ICD_TYPES_H_
-#define ICD_TYPES_H_
+#ifndef CONVERT_ALT_H_
+#define CONVERT_ALT_H_
 
-#include <vector>
-#include <string>
-typedef std::string Str;
-typedef std::vector<Str> VecStr;
+#include "icd_types.h"
+#include <Rcpp.h>
+Rcpp::CharacterVector icd9MajMinToCodeOld(Rcpp::CharacterVector mjr,
+                                          Rcpp::CharacterVector mnr, bool isShort);
+void icd9ShortToPartsCppStd(std::vector<std::string> icd9Short,
+                            std::string mnrEmpty,
+                            std::vector<std::string> &mjr,
+                            std::vector<std::string> &mnr);
 
-typedef std::vector<int> VecInt;
-typedef std::vector<char> ComorbidOut;
-
-typedef std::vector<VecStr> VecVecStr;
-typedef std::vector<VecInt> VecVecInt;
-typedef VecVecInt::size_type VecVecIntSz;
-
-#endif
+#endif /* CONVERT_H_ */

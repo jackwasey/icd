@@ -19,8 +19,8 @@
 #define LOCAL_H_
 
 #include "config.h"
-#include <Rcpp.h>
 #include "icd_types.h"
+#include <Rcpp.h>
 
 extern "C" {
 #include "cutil.h"

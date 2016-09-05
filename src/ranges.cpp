@@ -16,10 +16,11 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
-#include <class.h>
-#include <ranges.h>
+#include "ranges.h"
+#include "icd_types.h"
+#include "local.h"
 #include <convert.h>
+// manip just for add leading zeroes: TODO remove this dep
 #include <manip.h>
 #include <is.h>
 
@@ -66,14 +67,14 @@ Rcpp::CharacterVector MakeAllMinors() {
 const Rcpp::CharacterVector vv = MakeAllMinors();
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE) {
+Rcpp::CharacterVector icd9ExpandMinorShim(std::string mnr, bool isE) {
 
   if (!isE) {
-    switch (minor.size()) {
+    switch (mnr.size()) {
     case 0:
       return vv;
     case 1:
-      switch (minor.at(0)) {
+      switch (mnr.at(0)) {
       case '0':
         return v0;
       case '1':
@@ -100,19 +101,19 @@ Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE) {
       }
       break;
     case 2:
-      return Rcpp::wrap(minor);
+      return Rcpp::wrap(mnr);
     default:
       Rcpp::stop("minor of more than two characters");
     return Rcpp::CharacterVector::create();
     }
   } else {
     // is E code, so minor must be just one character
-    switch (minor.size()) {
+    switch (mnr.size()) {
     case 0:
       return Rcpp::CharacterVector::create("", "0", "1", "2", "3", "4", "5",
                                            "6", "7", "8", "9");
     case 1:
-      return minor;
+      return mnr;
     default:
       Rcpp::stop("too many characters for an E code minor\n");
     }
@@ -196,68 +197,6 @@ Rcpp::CharacterVector icd9ChildrenShortCppUnordered(Rcpp::CharacterVector icd9Sh
       // 'reals' is the set of majors, intermediate and leaf codes.
       icd_set reals(tmp.begin(), tmp.end());
 
-#ifdef HAVE_CXX11
-      for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
-        if (reals.find(*j) != reals.end())
-          out_real.insert(*j);
-      }
-#else
-      std::set_intersection(out.begin(), out.end(),
-                            reals.begin(), reals.end(),
-                            std::inserter(out_real, out_real.begin()));
-#endif
-      out = out_real;
-    }
-  } // input length != 0
-  Rcpp::CharacterVector rcppOut = Rcpp::wrap(out);
-  rcppOut.attr("icd_short_diag") = true;
-  return rcppOut;
-}
-
-//' C++ implementation of finding children of short codes
-//' @examples
-//' \dontrun{
-//' library(microbenchmark)
-//' microbenchmark(icd9ChildrenShortCpp("001", T), icd9ChildrenShortCppStd("001", T), times = 100)
-//' microbenchmark(icd9ChildrenShortCpp(c("001", 100:400), T),
-//'                icd9ChildrenShortCppUnordered(c("001", 100:400), T),
-//'                icd9ChildrenShortCppStd(c("001", 100:400), T),
-//'                times = 10)
-//' }
-//' # unordered set much faster, but may still need to sort result
-//' @keywords internal
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, bool onlyReal) {
-  // set may be unordered_set if C++11 is available, so may have to reorder at end
-  icd_set out(icd9Short.size() * 5);
-  // we are never going to put NAs in the output, so use std structure this is a
-  // slower function, can the output set be predefined in size?
-  if (icd9Short.size() != 0) {
-    VecStr major(icd9Short.size());
-    VecStr minor(icd9Short.size());
-    icd9ShortToPartsCppStd(Rcpp::as<VecStr>(icd9Short), "", major, minor);
-
-    VecStr::const_iterator itmajor = major.begin();
-    VecStr::const_iterator itminor = minor.begin();
-    for (; itmajor != major.end(); ++itmajor, ++itminor) {
-      Str thismajor = *itmajor;
-      Str thisminor = *itminor;
-
-      Rcpp::CharacterVector newminors = icd9ExpandMinorShim(thisminor,
-                                                            icd9IsASingleE(thismajor.c_str()));
-
-      VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismajor, newminors));
-
-      out.insert(newshort.begin(), newshort.end());
-    }
-
-    if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
-      Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
-      icd_set out_real;
-      VecStr tmp = Rcpp::as<VecStr>(icd9Hierarchy["code"]);
-      // 'reals' is the set of all known, 'real' defined codes
-      icd_set reals(tmp.begin(), tmp.end());
 #ifdef HAVE_CXX11
       for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
         if (reals.find(*j) != reals.end())

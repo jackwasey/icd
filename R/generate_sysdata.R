@@ -63,9 +63,9 @@ icd_generate_sysdata <- function(save_data = TRUE) {
   .nc <- nchar(icd::icd10cm2016[["code"]])
 
   sysdata_names <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
-    "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
-    "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
-    "icd9_sources", ".nc")
+                     "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
+                     "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
+                     "icd9_sources", ".nc")
 
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
@@ -107,20 +107,32 @@ icd9_generate_all_e <- function(...) {
   icd9_generate_all_(major_fun = icd9_generate_all_major_e, ...)
 }
 
+#' generate lookup data for each class of ICD-9 code
+#'
+#' This is a little painful but the data is small enough, with huge speed gains
+#' in common operations
+#' @return list with two items, the first being an environment, the second being
+#'   a vector. The environment has short ICD-9 codes as the names, and the
+#'   sequence number as the contents. The vector contains the codes in order.
+#' @keywords internal
 icd9_generate_all_ <- function(major_fun, short_code = TRUE,
                                env = new.env(hash = TRUE, baseenv())) {
   for (i in major_fun()) {
     kids <- icd_children.icd9(i, short_code = short_code, defined = FALSE)
-    for (j in 1L:length(kids))
+    for (j in 1L:length(kids)) {
+      # can't lapply (quickly) because of scope
       env[[kids[j]]] <- j
+    }
   }
-  return(invisible(env))
+  invisible(list(env = env, vec = env_to_vec_flip(env)))
 }
 
 #' generate data for finding source data for ICD-9-CM
 #' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 #' @keywords internal
 icd9_generate_sources <- function() {
+  cms_base <- "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/"
+  cdc_base <- "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/"
   data.frame(
     version = as.character(c(32, 31, 30, 29, 28, 27, 26, 25, 24, 23)),
     f_year = c(as.character(seq(2014, 2005))),
@@ -153,32 +165,36 @@ icd9_generate_sources <- function() {
                        # "V27LONG_SHORT_DX_110909u021012.csv" is 'updated' but
                        # hasn't got correctly formatted <3digit codes.
                        NA, NA, NA, NA),
-    long_encoding = c("latin1", "latin1", "latin1", "latin1", "latin1", "latin1", NA, NA, NA, NA),
+    long_encoding = c("latin1", "latin1", "latin1",
+                      "latin1", "latin1", "latin1",
+                      NA, NA, NA, NA),
     short_encoding = rep_len("ASCII", 10),
     url = c(
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/ICD-9-CM-v32-master-descriptions.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv31-master-descriptions.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv30_master_descriptions.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv29_master_descriptions.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/cmsv28_master_descriptions.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/FY2010Diagnosis-ProcedureCodesFullTitles.zip", # nolint
+      paste0(cms_base, "ICD-9-CM-v32-master-descriptions.zip"),
+      paste0(cms_base, "cmsv31-master-descriptions.zip"),
+      paste0(cms_base, "cmsv30_master_descriptions.zip"),
+      paste0(cms_base, "cmsv29_master_descriptions.zip"),
+      paste0(cms_base, "cmsv28_master_descriptions.zip"),
+      paste0(cms_base, "FY2010Diagnosis-ProcedureCodesFullTitles.zip"),
       # but this one is in a different format! only contains short descs:
-      # "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v27_icd9.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v26_icd9.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v25_icd9.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v24_icd9.zip",
-      "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/v23_icd9.zip"),
+      # paste0(cms_base, "v27_icd9.zip",
+      paste0(cms_base, "v26_icd9.zip"),
+      paste0(cms_base, "v25_icd9.zip"),
+      paste0(cms_base, "v24_icd9.zip"),
+      paste0(cms_base, "v23_icd9.zip")),
     rtf_url = c( # FY11,12,13,14 are the same?
-      rep_len("http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip", 4),
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2010/DTAB11.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2009/Dtab10.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2008/Dtab09.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2007/Dtab08.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2006/Dtab07.zip",
-      "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2005/Dtab06.zip"),
+      rep_len(paste0(cdc_base, "ICD9-CM/2011/Dtab12.zip"), 4),
+      paste0(cdc_base, "ICD9-CM/2010/DTAB11.zip"),
+      paste0(cdc_base, "ICD9-CM/2009/Dtab10.zip"),
+      paste0(cdc_base, "ICD9-CM/2008/Dtab09.zip"),
+      paste0(cdc_base, "ICD9-CM/2007/Dtab08.zip"),
+      paste0(cdc_base, "ICD9-CM/2006/Dtab07.zip"),
+      paste0(cdc_base, "ICD9-CM/2005/Dtab06.zip")),
+    # there are more RTF files, but not with corresponding CMS, back to 1990s
     rtf_filename = c(
-      rep_len("Dtab12.rtf", 4), "DTAB11.RTF", "Dtab10.RTF", "Dtab09.RTF", "Dtab08.RTF",
-      "Dtab07.RTF", "Dtab06.rtf"), # there are more, but not with corresponding CMS, back to 1990s
+      rep_len("Dtab12.rtf", 4),
+      "DTAB11.RTF", "Dtab10.RTF", "Dtab09.RTF", "Dtab08.RTF",
+      "Dtab07.RTF", "Dtab06.rtf"),
     stringsAsFactors = FALSE
   )
 }

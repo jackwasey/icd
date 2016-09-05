@@ -484,6 +484,8 @@ vec_to_env_count <- function(x, env = new.env(hash = TRUE, parent = baseenv())) 
 }
 
 #' return a new environment with names and values swapped
+#' @param env environment with values being sequence numbers used to fill
+#'   returned vector
 #' @keywords internal
 env_to_vec_flip <- function(env) {
   warning("very slow!")
