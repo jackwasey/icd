@@ -85,10 +85,6 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
 }
 
-#' @rdname convert
-#' @keywords internal manip
-NULL
-
 icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
     .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', mjr, mnr, isShort)
 }

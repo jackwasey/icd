@@ -245,16 +245,17 @@ Rcpp::CharacterVector icd9ChildrenCpp(Rcpp::CharacterVector icd9, bool isShort,
 //' @keywords internal
 // [[Rcpp::export]]
 Rcpp::LogicalVector icd_in_reference_code(Rcpp::CharacterVector icd,
-                                          Rcpp::CharacterVector icd_reference, bool short_code,
+                                          Rcpp::CharacterVector icd_reference,
+                                          bool short_code,
                                           bool short_reference = true) {
 
-  Rcpp::CharacterVector x = icd9AddLeadingZeroes(icd, short_code);
   if (!short_code)
-    x = icd9DecimalToShort(x);
+    icd = icd9DecimalToShort(icd);
 
   Rcpp::CharacterVector y = icd9ChildrenCpp(icd_reference, short_reference, false);
   if (!short_reference)
     y = icd9DecimalToShort(y);
-  Rcpp::LogicalVector res = !is_na(match(x, y));
+  // TODO: use hash/environment
+  Rcpp::LogicalVector res = !is_na(match(icd, y));
   return res;
 }

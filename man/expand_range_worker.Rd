@@ -12,8 +12,8 @@ expand range worker function
 \examples{
 \dontrun{
 microbenchmark::micmicrobenchmark(
-  expand_range_worker_alt_base("100", "114", icd9NShort, TRUE, TRUE, TRUE),
-  expand_range_worker_alt_env("100", "114", icd9NShort, TRUE, TRUE, TRUE),
+  expand_range_worker_alt_base("100", "114", icd9_short_n, TRUE, TRUE, TRUE),
+  expand_range_worker("100", "114", icd9_short_n, TRUE, TRUE, TRUE),
   times = 5
 )
 }

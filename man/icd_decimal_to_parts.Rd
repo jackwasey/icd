@@ -7,9 +7,9 @@
 \alias{icd_short_to_parts.icd10}
 \title{Convert decimal ICD codes to component parts}
 \usage{
-\method{icd_short_to_parts}{icd10}(x, minor_empty = "")
+\method{icd_short_to_parts}{icd10}(x, mnr_empty = "")
 
-\method{icd_decimal_to_parts}{icd10}(x, minor_empty = "")
+\method{icd_decimal_to_parts}{icd10}(x, mnr_empty = "")
 
 icd_decimal_to_parts(x, minor_empty = "")
 

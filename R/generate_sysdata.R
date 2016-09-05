@@ -33,19 +33,18 @@ icd_generate_sysdata <- function(save_data = TRUE) {
   # we can either use the icd_is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
   codes <- icd::icd9cm_hierarchy[["code"]]
-  icd9_short_n_defined <- vec_to_env_count(grep("^[^VE]+", codes, perl = TRUE, value = TRUE))
-  icd9_short_v_defined <- vec_to_env_count(grep("^V", codes, perl = TRUE, value = TRUE))
-  icd9_short_e_defined <- vec_to_env_count(grep("^E", codes, perl = TRUE, value = TRUE))
+  icd9_short_n_defined <- vec_to_lookup_pair(grep("^[^VE]+", codes, perl = TRUE, value = TRUE))
+  icd9_short_v_defined <- vec_to_lookup_pair(grep("^V", codes, perl = TRUE, value = TRUE))
+  icd9_short_e_defined <- vec_to_lookup_pair(grep("^E", codes, perl = TRUE, value = TRUE))
 
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
-  icd9_short_n_leaf <- vec_to_env_count(icd9cm_get_billable(
-    ls(name = icd9_short_n_defined), short_code = TRUE, icd9cm_edition = "32"),
-  )
-  icd9_short_v_leaf <- vec_to_env_count(icd9cm_get_billable(
-    ls(name = icd9_short_v_defined), short_code = TRUE, icd9cm_edition = "32"))
-  icd9_short_e_leaf <- vec_to_env_count(icd9cm_get_billable(
-    ls(name = icd9_short_e_defined), short_code = TRUE, icd9cm_edition = "32"))
+  icd9_short_n_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
+    icd9_short_n_defined$vec, short_code = TRUE, icd9cm_edition = "32"))
+  icd9_short_v_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
+    icd9_short_v_defined$vec, short_code = TRUE, icd9cm_edition = "32"))
+  icd9_short_e_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
+    icd9_short_e_defined$vec, short_code = TRUE, icd9cm_edition = "32"))
 
 
   icd9_sources <- icd9_generate_sources()
@@ -72,27 +71,21 @@ icd_generate_sysdata <- function(save_data = TRUE) {
   # already busy namespace.
 
   if (save_data)
-    save(icd9_short_n, icd9_short_v, icd9_short_e,
-         icd9_short_n_defined, icd9_short_v_defined, icd9_short_e_defined,
-         icd9_short_n_leaf, icd9_short_v_leaf, icd9_short_e_leaf,
-         icd9_sources, .nc, file = path, compress = "xz")
+    save(list = sysdata_names, file = path, compress = "xz")
 
-  invisible(named_list(icd9_short_n, icd9_short_v, icd9_short_e,
-                       icd9_short_n_defined, icd9_short_v_defined, icd9_short_e_defined,
-                       icd9_short_n_leaf, icd9_short_v_leaf, icd9_short_e_leaf,
-                       icd9_sources, .nc))
+  invisible(mget(sysdata_names))
 }
 
 icd9_generate_all_major_n <- function() {
-  icd9_add_leading_zeroes(as.character(1:999))
+  sprintf("%03d", 1:999)
 }
 
 icd9_generate_all_major_v <- function() {
-  icd9_add_leading_zeroes(paste("V", c("0", 1:99), sep = ""))
+  sprintf("V%02d", 1:99)
 }
 
 icd9_generate_all_major_e <- function() {
-  icd9_add_leading_zeroes(paste("E", c("0", 0:999), sep = ""))
+  sprintf("E%03d", 0:999)
 }
 
 icd9_generate_all_n <- function(...) {
@@ -117,13 +110,12 @@ icd9_generate_all_e <- function(...) {
 #' @keywords internal
 icd9_generate_all_ <- function(major_fun, short_code = TRUE,
                                env = new.env(hash = TRUE, baseenv())) {
+  vec <- character()
   for (i in major_fun()) {
     kids <- icd_children.icd9(i, short_code = short_code, defined = FALSE)
-    for (j in 1L:length(kids)) {
-      # can't lapply (quickly) because of scope
-      env[[kids[j]]] <- j
-    }
+    vec <- c(vec, kids)
   }
+  vec_to_env_count(vec, env = env)
   invisible(list(env = env, vec = env_to_vec_flip(env)))
 }
 

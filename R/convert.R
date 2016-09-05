@@ -29,8 +29,8 @@
 #'   \code{major} \code{minor}. Yes, this is very like a data frame, but we do
 #'   not need the overhead of structuring it that way. \item two vectors of
 #'   separated major and minor parts }
-#' @template major
-#' @template minor
+#' @template mjr
+#' @template mnr
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal

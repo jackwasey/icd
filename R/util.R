@@ -67,7 +67,7 @@ as_char_no_warn <- function(x) {
   match(x, table, nomatch = 0) == 0
 }
 
-#' \code{%in%} equivalent for two \code{Environment} arguments
+#' %in% equivalent for two \code{Environment} arguments
 "%eine%" <- function(x, table) {
   assert_environment(x)
   assert_environment(table)
@@ -464,33 +464,4 @@ to_title_case <- function(x) {
                sep = "", collapse = split_char)
   }
   x
-}
-
-#' create environment from vector
-#'
-#' create an environment by inserting the value \code{val} with names taken from
-#' \code{x}
-#' @keywords internal
-vec_to_env <- function(x, val = TRUE, env = new.env(hash = TRUE, parent = baseenv())) {
-  lapply(x, function(y) { env[[y]] <- val; return()} )
-  return(invisible(env))
-}
-
-vec_to_env_count <- function(x, env = new.env(hash = TRUE, parent = baseenv())) {
-  for (i in 1L:length(x)) {
-    env[[x[i]]] <- i
-  }
-  return(invisible(env))
-}
-
-#' return a new environment with names and values swapped
-#' @param env environment with values being sequence numbers used to fill
-#'   returned vector
-#' @keywords internal
-env_to_vec_flip <- function(env) {
-  warning("very slow!")
-  assert_environment(env)
-  out <- character(length(env))
-  lapply(ls(env), function(y) out[env[[y]]] <<- y)
-  out
 }

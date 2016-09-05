@@ -58,12 +58,6 @@ test_that("expand icd9 range definition", {
   expect_error(icd_expand_range(short_code = TRUE, "2", "001"))
   expect_error(icd_expand_range(short_code = TRUE, "4010", "401"))
 
-  expect_identical(
-    icd_expand_range(short_code = TRUE, " 4280 ", " 4280 ", defined = FALSE),
-    icd_expand_range(short_code = TRUE, "4280", "4280", defined = FALSE)
-  )
-
-
   # the range 44100-4419 from the AHRQ found a gap in the code.
   expect_equal_no_icd(
     sort(icd_expand_range(short_code = TRUE, "4410", "4412", defined = FALSE)),
@@ -197,9 +191,6 @@ test_that("V code ranges", {
   expect_true(
     all(c("V10", "V100") %in% icd_expand_range.icd9(short_code = TRUE, "V099", "V1011", defined = FALSE,
                                                     ex_ambig_start = FALSE, ex_ambig_end = FALSE)))
-
-  # should fail despite end being 'longer' than start
-  expect_error(icd_expand_range.icd9(short_code = TRUE, "V10", " V1 "))
 
   expect_identical(
     icd_expand_range.icd9(short_code = TRUE, "V1009", "V101", defined = FALSE),
@@ -371,9 +362,6 @@ test_that("icd9 children decimal with valid input", {
     toupper(icd_children.icd9(short_code = FALSE, "v10.0", defined = FALSE)),
     icd_children.icd9(short_code = FALSE, "V10.0", defined = FALSE))
   expect_equal(
-    icd_children.icd9(short_code = FALSE, " V10.0 ", defined = FALSE),
-    icd_children.icd9(short_code = FALSE, "V10.0", defined = FALSE))
-  expect_equal(
     icd_children.icd9(short_code = FALSE, "10.0", defined = FALSE),
     icd_children.icd9(short_code = FALSE, "010.0", defined = FALSE))
   expect_equal_no_icd(
@@ -387,8 +375,6 @@ test_that("icd9 children short with valid input", {
                       paste("V100", c("", 0:9), sep = ""))
   expect_equal(icd_children.icd9(short_code = TRUE, "v100"),
                icd_children.icd9("V100"))
-  expect_equal(icd_children.icd9(short_code = TRUE, " V100 ", defined = FALSE),
-               icd_children.icd9(short_code = TRUE, "V100", defined = FALSE))
   expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "0100", defined = FALSE),
                       paste("0100", c("", 0:9), sep = ""))
   expect_equal_no_icd(icd_children.icd9(short_code = TRUE, "1", defined = FALSE)[1], "001")
@@ -466,10 +452,9 @@ test_that("icd_in_reference_code", {
 
 test_that("icd_in_reference_code works for numeric codes with major < 100", {
   expect_true(icd_in_reference_code("1", "1", short_code = TRUE))
-  expect_true(icd_in_reference_code(" 1", "01", short_code = TRUE))
+  expect_true(icd_in_reference_code("1", "01", short_code = TRUE))
   expect_true(icd_in_reference_code("1 ", "001", short_code = TRUE))
   expect_true(icd_in_reference_code("01", "1", short_code = TRUE))
-  expect_true(icd_in_reference_code(" 01", "01", short_code = TRUE))
   expect_true(icd_in_reference_code("001", "1", short_code = TRUE))
   expect_true(icd_in_reference_code("001", "001", short_code = TRUE))
 
@@ -488,14 +473,14 @@ test_that("icd_in_reference_code works for numeric codes with major < 100", {
 })
 
 test_that("sorting char vectors", {
-  expect_equal(icd_sort.icd9(short_code = TRUE, c("3", "02", "001", "003")),
-               c("001", "02", "3", "003"))
+  expect_equal(icd_sort.icd9(short_code = TRUE, c("003", "002", "001", "003")),
+               c("001", "002", "003", "003"))
   # same with dispatch
-  expect_equal(icd_sort(short_code = TRUE, c("3", "02", "001", "003")),
-               c("001", "02", "3", "003"))
+  expect_equal(icd_sort(short_code = TRUE, c("003", "002", "001", "003")),
+               c("001", "002", "003", "003"))
 
-  expect_equal(icd_sort.icd9(c("1", "V02", "V1", "E003"), short_code = TRUE),
-               c("1", "V1", "V02", "E003"))
+  expect_equal(icd_sort.icd9(c("001", "V02", "V01", "E003"), short_code = TRUE),
+               c("001", "V01", "V02", "E003"))
   expect_equal(icd_sort.icd9(short_code = TRUE, c("0032", "0288", "0019", "0031")),
                c("0019", "0031", "0032", "0288"))
   expect_equal(icd_sort.icd9(c("V251", "V25", "E0039", "E003"), short_code = TRUE),
@@ -508,10 +493,10 @@ test_that("sorting char vectors", {
 })
 
 test_that("sorting char factors", {
-  expect_equal(icd_sort.icd9(short_code = TRUE, factor(c("3", "02", "001", "003"))),
-               factor(c("001", "02", "3", "003")))
-  expect_equal(icd_sort.icd9(factor(c("1", "V02", "V1", "E003")), short_code = TRUE),
-               factor(c("1", "V1", "V02", "E003")))
+  expect_equal(icd_sort.icd9(short_code = TRUE, factor(c("003", "002", "001", "003"))),
+               factor(c("001", "002", "003", "003")))
+  expect_equal(icd_sort.icd9(factor(c("001", "V02", "V01", "E003")), short_code = TRUE),
+               factor(c("001", "V01", "V02", "E003")))
   expect_equal(icd_sort.icd9(short_code = TRUE, factor(c("0032", "0288", "0019", "0031"))),
                factor(c("0019", "0031", "0032", "0288")))
   expect_equal(icd_sort.icd9(factor(c("V251", "V25", "E0039", "E003")), short_code = TRUE),
@@ -529,7 +514,7 @@ test_that("sysdata.rda is okay", {
                "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
                "icd9_sources", ".nc")
 
-  sysdat <- generate_sysdata(save_data = FALSE)
+  sysdat <- icd_generate_sysdata(save_data = FALSE)
   expect_equal(names(sysdat), lknames)
 
   expect_lt(length(icd9_short_n_leaf), length(icd9_short_n_defined))

@@ -4,7 +4,7 @@
 \alias{icd_expand_minor}
 \title{expand decimal part of ICD-9 code to cover all possible sub-codes}
 \usage{
-icd_expand_minor(minor, ...)
+icd_expand_minor(mnr, ...)
 }
 \arguments{
 \item{minor}{character vector of 'minor' part of ICD-9 codes, i.e. that part

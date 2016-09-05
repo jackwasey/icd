@@ -82,8 +82,8 @@ Rcpp::CharacterVector icd9MajMinToCodeOld(Rcpp::CharacterVector mjr,
   return out;
 }
 
-//' @rdname convert
-//' @keywords internal manip
+////' @rdname convert
+////' @keywords internal manip
 // [[//Rcpp::export]]
 void icd9ShortToPartsCppStd(std::vector<std::string> icd9Short,
                             std::string mnrEmpty,
