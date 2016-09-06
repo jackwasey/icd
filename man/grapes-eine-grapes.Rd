@@ -2,11 +2,13 @@
 % Please edit documentation in R/util.R
 \name{\%eine\%}
 \alias{\%eine\%}
-\title{%in% equivalent for two \code{Environment} arguments}
+\title{in/match equivalent for two \code{Environment} arguments}
 \usage{
 x \%eine\% table
 }
 \description{
-%in% equivalent for two \code{Environment} arguments
+\code{x} and \code{table} are identical to match. Lookup is done based on
+environment element names; contents are ignored.
 }
+\keyword{internal}
 

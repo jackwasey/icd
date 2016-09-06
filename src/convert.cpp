@@ -403,11 +403,11 @@ Rcpp::CharacterVector icd9DecimalToShort(
   return out;
 }
 
-//' @describeIn icd_get_mjr Get mjr part of ICD-9 code, i.e. first three
+//' @describeIn icd_get_major Get mjr part of ICD-9 code, i.e. first three
 //' digits of numeric or V code, or first four digits of E code. This is the part
 //' before the decimal, when a decimal point is used.
 //' @keywords internal manip
-//[[Rcpp::export(name="icd_get_mjr.icd9")]]
+//[[Rcpp::export(name="icd_get_major.icd9")]]
 Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool short_code) {
   if (short_code) {
     // am I casting (or just compiler/syntax checker hinting?) SEXP may be

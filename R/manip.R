@@ -66,7 +66,7 @@ icd9_drop_leading_zeroes <- function(x, short_code = icd_guess_short(x)) {
   assert(check_null(short_code), check_flag(short_code))
 
   if (short_code) {
-    parts <- icd_short_to_parts.icd9(x = x, minor_empty = "")
+    parts <- icd_short_to_parts.icd9(x = x, mnr_empty = "")
     # very important: only drop the zero in V codes if the minor part is empty.
     are_empty <- parts[["mnr"]] == ""
     x[are_empty] <- icd9_drop_leading_zeroes_major(parts[are_empty, "mjr"])

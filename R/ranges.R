@@ -38,7 +38,7 @@ utils::globalVariables("icd9cm_billable")
 #' "4280" %i9s% "42821"
 #' "42799" %i9sa% "42802" # doesn't include 428 or 4280
 #' "427.99" %i9da% "428.02"
-#' "V80" %i9s% " V810"
+#' "V80" %i9s% "V810"
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
 #' @template onlyReal
@@ -200,17 +200,19 @@ icd_expand_range.icd9 <- function(start, end,
 #' Expands a range of short ICD-9 codes, dropping ambiguous codes in the middle
 #' of ranges
 #'
+#' @section Ambiguous terminal parent codes:
 #' At the end of the output, we may not want any higher-level codes at the end
 #' which would have children beyond the specified range. There could be lots of
 #' lower level codes at the end, so we actually have to search the whole list to
 #' be sure. One parent code could have maximum of 110 child codes, so we just
 #' search the last 110 (TODO). This means that even if trying to preserve the
 #' ambig start, setting ambig end will have to kill it, if it spills over.
-#' @section excluding abiguous parent codes from the start is easier than those
-#'   near the end of the result. Just remove those codes at the beginning which
-#'   have children not in the output let's take the first 5, to cover cases like
-#'   100, 101, 102.1, 102.11, 102.2. There are only so many ways for parent
-#'   codes to appear (assuming the input vector is ordered)
+#' @section Ambiguous starting parent codes:
+#' Excluding abiguous parent codes from the start is easier than those
+#' near the end of the result. Just remove those codes at the beginning which
+#' have children not in the output let's take the first 5, to cover cases like
+#' 100, 101, 102.1, 102.11, 102.2. There are only so many ways for parent codes
+#' to appear (assuming the input vector is ordered)
 #' @examples
 #' \dontrun{
 #' microbenchmark::micmicrobenchmark(

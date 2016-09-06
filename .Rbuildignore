@@ -1,5 +1,4 @@
 aclocal\.m4$
-.*_alt\.cpp$
 .*_alt\.[Rr]$
 \.aspell$
 autom4te\.cache$

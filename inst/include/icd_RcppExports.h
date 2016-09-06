@@ -384,17 +384,17 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(rcpp_result_gen);
     }
 
-    inline Rcpp::CharacterVector icd_get_mjr_icd9(const Rcpp::CharacterVector x, const bool short_code) {
-        typedef SEXP(*Ptr_icd_get_mjr_icd9)(SEXP,SEXP);
-        static Ptr_icd_get_mjr_icd9 p_icd_get_mjr_icd9 = NULL;
-        if (p_icd_get_mjr_icd9 == NULL) {
-            validateSignature("Rcpp::CharacterVector(*icd_get_mjr_icd9)(const Rcpp::CharacterVector,const bool)");
-            p_icd_get_mjr_icd9 = (Ptr_icd_get_mjr_icd9)R_GetCCallable("icd", "icd_icd_get_mjr_icd9");
+    inline Rcpp::CharacterVector icd_get_major_icd9(const Rcpp::CharacterVector x, const bool short_code) {
+        typedef SEXP(*Ptr_icd_get_major_icd9)(SEXP,SEXP);
+        static Ptr_icd_get_major_icd9 p_icd_get_major_icd9 = NULL;
+        if (p_icd_get_major_icd9 == NULL) {
+            validateSignature("Rcpp::CharacterVector(*icd_get_major_icd9)(const Rcpp::CharacterVector,const bool)");
+            p_icd_get_major_icd9 = (Ptr_icd_get_major_icd9)R_GetCCallable("icd", "icd_icd_get_major_icd9");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd_get_mjr_icd9(Rcpp::wrap(x), Rcpp::wrap(short_code));
+            rcpp_result_gen = p_icd_get_major_icd9(Rcpp::wrap(x), Rcpp::wrap(short_code));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

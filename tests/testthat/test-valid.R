@@ -411,11 +411,6 @@ test_that("get real codes from a longer list", {
   expect_equal(icd_get_defined(short_code = FALSE, c("003", "003.1", "3.2"), billable = TRUE), "003.1")
 })
 
-test_that("get real codes which are less than two digit major", {
-  expect_equal(icd_get_defined(short_code = TRUE, c("3", "11", "V2"), billable = FALSE), c("3", "11", "V2"))
-  expect_equal(icd_get_defined(short_code = FALSE, c("3", "11", "V2"), billable = FALSE), c("3", "11", "V2"))
-})
-
 test_that("billable codes are identified", {
   # care as this is dependent on year of ICD-9-CM
   expect_true(icd_is_billable("1000"))

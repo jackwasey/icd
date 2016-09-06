@@ -11,9 +11,9 @@
 
 \method{icd_decimal_to_parts}{icd10}(x, mnr_empty = "")
 
-icd_decimal_to_parts(x, minor_empty = "")
+icd_decimal_to_parts(x, mnr_empty = "")
 
-\method{icd_decimal_to_parts}{icd9}(x, minor_empty = "")
+\method{icd_decimal_to_parts}{icd9}(x, mnr_empty = "")
 }
 \description{
 Convert decimal ICD codes to component parts

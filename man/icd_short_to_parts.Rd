@@ -7,13 +7,13 @@
 \alias{icd_short_to_parts.icd9}
 \title{Convert short format ICD codes to component parts}
 \usage{
-icd_short_to_parts(x, minor_empty = "")
+icd_short_to_parts(x, mnr_empty = "")
 
-\method{icd_short_to_parts}{icd9}(x, minor_empty = "")
+\method{icd_short_to_parts}{icd9}(x, mnr_empty = "")
 
-\method{icd_short_to_parts}{character}(x, minor_empty = "")
+\method{icd_short_to_parts}{character}(x, mnr_empty = "")
 
-\method{icd_decimal_to_parts}{character}(x, minor_empty = "")
+\method{icd_decimal_to_parts}{character}(x, mnr_empty = "")
 }
 \description{
 Convert short format ICD codes to component parts

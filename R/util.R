@@ -67,7 +67,11 @@ as_char_no_warn <- function(x) {
   match(x, table, nomatch = 0) == 0
 }
 
-#' %in% equivalent for two \code{Environment} arguments
+#' in/match equivalent for two \code{Environment} arguments
+#'
+#' \code{x} and \code{table} are identical to match. Lookup is done based on
+#' environment element names; contents are ignored.
+#' @keywords internal
 "%eine%" <- function(x, table) {
   assert_environment(x)
   assert_environment(table)

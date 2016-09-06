@@ -172,11 +172,11 @@ icd9_decimal_to_short_cpp <- function(x) {
     .Call('icd_icd9DecimalToShort', PACKAGE = 'icd', x)
 }
 
-#' @describeIn icd_get_mjr Get mjr part of ICD-9 code, i.e. first three
+#' @describeIn icd_get_major Get mjr part of ICD-9 code, i.e. first three
 #' digits of numeric or V code, or first four digits of E code. This is the part
 #' before the decimal, when a decimal point is used.
 #' @keywords internal manip
-icd_get_mjr.icd9 <- function(x, short_code) {
+icd_get_major.icd9 <- function(x, short_code) {
     .Call('icd_icd9GetMajor', PACKAGE = 'icd', x, short_code)
 }
 
