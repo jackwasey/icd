@@ -98,7 +98,7 @@ Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, b
   // http://www.cplusplus.com/reference/unordered_set/unordered_set/unordered_set/
   icd_set out(icd9Short.size()); // n is hash buckets, not items
 #else
-  icd_set out(); // plain std::set does not have buckets, or possiblity of reserving space.
+  icd_set out; // plain std::set does not have buckets, or possiblity of reserving space.
 #endif
   // we are never going to put NAs in the output, so use std structure this is a
   // slower function, can the output set be predefined in size?

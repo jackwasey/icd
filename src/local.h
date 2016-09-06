@@ -80,8 +80,8 @@ extern "C" {
 typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
 typedef std::unordered_set<std::string> icd_set;
 #else
-typedef std::map<std::string, VecInt::size_type> VisLk;
-typedef std::set<std::string> icd_set;
+typedef std::map<Str, VecInt::size_type> VisLk;
+typedef std::set<Str> icd_set;
 #endif
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
