@@ -19,7 +19,6 @@ r:
 matrix:
   allow_failures:
     - r: oldrel
-    - os: osx
 
 repos:
   CRAN: https://cloud.r-project.org
@@ -44,12 +43,9 @@ before_script:
  - export _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 after_success:
-# environment is copied forward from previous, so slow tests are on. Repeat anyway while not working!
-# coverage does re-install the package (it needs to rebuild with debugging/coverage compilation), so there is potential to change .Rinstignore and .Rbuildignore
-#  - export ICD_SLOW_TESTS=TRUE
   - ls -R
   - cat ./icd.Rcheck/tests/test-all.Rout
-  - Rscript tools/covr.R "$R_COVR" coveralls
+  - Rscript ./tools/covr.R "${R_COVR}" coveralls
 
 notifications:
   email:
