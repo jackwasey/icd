@@ -1,6 +1,8 @@
 # https://docs.travis-ci.com/user/languages/r
 language: r
-dist: trusty
+# dist: trusty
+# trusty will only work with sudo: true for now
+# https://ropensci.org/blog/2016/07/12/travis-osx
 sudo: false
 cache: packages
 
@@ -31,7 +33,7 @@ warnings_are_errors: true
 # As of 2013 at least, travis offers ~1.5 cores per process
 env:
   - OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable"
-  - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native"
+  - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native" R_COVR=true
 
 before_script:
  - ls -R
@@ -45,24 +47,9 @@ after_success:
 # environment is copied forward from previous, so slow tests are on. Repeat anyway while not working!
 # coverage does re-install the package (it needs to rebuild with debugging/coverage compilation), so there is potential to change .Rinstignore and .Rbuildignore
 #  - export ICD_SLOW_TESTS=TRUE
-#  - ls -R
-  test-all-rout: cat ./icd.Rcheck/tests/test-all.Rout
-  do-coveralls: >
-    Rscript -e
-      "options(warn = -1);
-      line_exclusions = list(
-      'inst/include/icd_RcppExports.h',
-      'R/children_alt.R',
-      'R/comorbid_alt.R',
-      'R/parse-icd10cm-xml.R',
-      'R/ranges_alt.R',
-      'R/sort_alt.R',
-      'src/convert_alt.cpp',
-      'src/manip_alt.cpp',
-      'src/ranges_alt.cpp',
-      'R/fuzz.R');
-      covr::coveralls(quiet = TRUE, line_exclusions = line_exclusions);
-      covr::package_coverage(type = "vignette", quiet = TRUE, line_exclusions = line_exclusions)"
+  - ls -R
+  - cat ./icd.Rcheck/tests/test-all.Rout
+  - Rscript tools/covr.R "$R_COVR" coveralls
 
 notifications:
   email:

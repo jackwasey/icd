@@ -9,6 +9,7 @@ build:
         name: icd test environment
         code: |
             export ICD_SLOW_TESTS=true
+            export R_COVR=true
             rm .Rinstignore  # install everything for testing
             sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
@@ -23,18 +24,7 @@ build:
             cat ./icd.Rcheck/tests/test-*.Rout*
     - script:
         name: run covr for codecov.io
-        code: >
-            Rscript -e "covr::codecov(quiet = FALSE, line_exclusions = list(
-              'inst/include/icd_RcppExports.h',
-              'R/children_alt.R',
-              'R/comorbid_alt.R',
-              'R/parse-icd10cm-xml.R',
-              'R/ranges_alt.R',
-              'R/sort_alt.R',
-              'src/convert_alt.cpp',
-              'src/manip_alt.cpp',
-              'src/ranges_alt.cpp',
-              'R/fuzz.R'))"
+        code: Rscript tools/covr.R "$R_COVR" codecov
     - script:
         name: debug information after codecov with covr
         code: |
