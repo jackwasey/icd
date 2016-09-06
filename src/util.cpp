@@ -327,7 +327,6 @@ std::vector<std::size_t> icd9OrderCpp(std::vector<std::string> x) {
 // for (Rcpp::CharacterVector::iterator i; i != out.end(); ++i) {
 //   out[env[*i]] = *i;
 // }
-//   Rcpp::sapply(Rcpp::as<Rcpp::CharacterVector>(env.ls(true)), out[env[[y]]] = y)
-//   out
+// return
 // }
 
