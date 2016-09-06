@@ -94,7 +94,7 @@ Rcpp::CharacterVector icd9ChildrenShortCpp11(Rcpp::CharacterVector icd9Short, bo
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, bool onlyReal) {
   // set may be unordered_set if C++11 is available, so may have to reorder at end
-  icd_set out(icd9Short.size() * 5);
+  icd_set out(icd9Short.size() * 5L);
   // we are never going to put NAs in the output, so use std structure this is a
   // slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
