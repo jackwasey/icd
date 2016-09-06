@@ -234,20 +234,30 @@ expand_range_worker <- function(start, end, lookup, defined,
   # do not want to check a load of leaf nodes for children, since they have none.
   leaf_env <- vec_to_env(icd9cm_billable[["32"]][["code"]])
 
-  if (ex_ambig_end) {
-    # at the end, we may not want any higher-level codes at the end which would
-    # have children beyond the range. There could be lots of lower level codes
-    # at the end, so we actually have to search the whole list. This means that
-    # even if trying to preserve the ambig start, setting ambig end will have to
-    # kill it, if it spills over.
 
+  is_leaf <- function(x, def) {
+    # can only look-up leaf if we are using defined codes
+    if (def && !is.null(leaf_env[[x]]))
+      return(TRUE)
+    # if not defined, then any code of 5 chars must be a leaf.
+    nchar(x) > 4L
+  }
+
+  # at the end, we may not want any higher-level codes at the end which would
+  # have children beyond the range. There could be lots of lower level codes
+  # at the end, so we actually have to search the whole list. This means that
+  # even if trying to preserve the ambig start, setting ambig end will have to
+  # kill it, if it spills over.
+  if (ex_ambig_end) {
     for (e in ls(envir = out_env)) {
-      if (!isTRUE(leaf_env[[e]])) {
-        kids <- icd_get_missing_kids(e, out_env, defined)
-        if (length(kids) == 0L)
-          next
-        rm(list = e, envir = out_env)
-      }
+      # can only look-up leaf if we are using defined codes
+      if (is_leaf(e, defined))
+        next
+      kids <- icd_get_missing_kids(e, out_env, defined)
+      if (length(kids) == 0L)
+        next
+      message("ambig end: removing: ", e)
+      rm(list = e, envir = out_env)
     }
   }
 
@@ -263,14 +273,19 @@ expand_range_worker <- function(start, end, lookup, defined,
     # output let's take the first 5, to cover cases like 100, 101, 102.1,
     # 102.11, 102.2
     for (s in lookup$vec[start_index:(start_index + 5L)]) {
-      # only lookup non-leaf codes for children
-      if (is.null(leaf_env[[s]])) {
-        kids <- icd_get_missing_kids(s, out_env, defined)
-        if (!is.null(out_env[[s]]))
-          rm(list = s, envir = out_env)
-      }
+      message("considering ", s)
+      # only lookup non-leaf codes for children (which are never ambiguous)
+      if (is_leaf(s, defined))
+        next
+      message(s, " is not a leaf")
+      kids <- icd_get_missing_kids(s, out_env, defined)
+      if (length(kids) == 0L)
+        next
+      message("ambig start: removing: ", s)
+      rm(list = s, envir = out_env)
     }
   }
+
   icd_sort.icd9(ls(out_env), short_code = TRUE)
 }
 

@@ -130,7 +130,7 @@ test_that("expand icd9 range definition", {
   # found bugs when expanding Injury and Poisoning chapter.
   icd_expand_range(short_code = TRUE, "997", "998")
   expect_false("999" %in% icd_expand_range(short_code = TRUE, "998", "998", defined = FALSE))
-  expect_false("009" %in% icd_expand_range(short_code = TRUE, "8", "8", defined = FALSE))
+  expect_false("009" %in% icd_expand_range(short_code = TRUE, "008", "008", defined = FALSE))
 
 })
 
@@ -143,7 +143,7 @@ test_that("expand range worker gives correct ranges", {
   # really, the test is against icd9ExpandRange family, but we can isolate an
   # error to the sub-function
   expect_equal(
-    expand_range_worker("V10", "V1001", lookup = icd:::icd9VShort,
+    expand_range_worker("V10", "V1001", lookup = icd:::icd9_short_v,
                         defined = TRUE, ex_ambig_start = FALSE, ex_ambig_end = FALSE),
     c("V10", "V100", "V1000", "V1001"))
 })
@@ -212,7 +212,6 @@ test_that("E code ranges", {
     c("E950", "E9500", "E9501", "E9502", "E9503", "E9504",
       "E9505", "E9506", "E9507", "E9508", "E9509")
   )
-  expect_equal(icd9_add_leading_zeroes("E9501", short_code = TRUE), "E9501")
 })
 
 test_that("major ranges", {
@@ -250,15 +249,9 @@ test_that("major ranges", {
 })
 
 test_that("range bugs", {
-  # these both failed - need zero padding for the first
-  expect_equal_no_icd( ("042 " %i9s% "042 ")[1], "042")
-  expect_equal_no_icd( ("42" %i9s% "042 ")[1], "042")
-  expect_true("345" %nin% ("3420 " %i9s% "3449 "))
-
+  expect_equal_no_icd( ("042" %i9s% "042")[1], "042")
+  expect_true("345" %nin% ("3420" %i9s% "3449"))
   expect_identical("042.11" %i9da% "042.13", icd9(as.icd_decimal_diag(c("042.11", "042.12", "042.13"))))
-
-  # no presumption that missing leading zeroes will be missed on output:
-  expect_equivalent("42.11" %i9da% "42.13", icd9(as.icd_decimal_diag(c("042.11", "042.12", "042.13"))))
 })
 
 test_that("range doesn't include higher level parent github issue #14", {
@@ -451,25 +444,8 @@ test_that("icd_in_reference_code", {
 })
 
 test_that("icd_in_reference_code works for numeric codes with major < 100", {
-  expect_true(icd_in_reference_code("1", "1", short_code = TRUE))
-  expect_true(icd_in_reference_code("1", "01", short_code = TRUE))
-  expect_true(icd_in_reference_code("1 ", "001", short_code = TRUE))
-  expect_true(icd_in_reference_code("01", "1", short_code = TRUE))
-  expect_true(icd_in_reference_code("001", "1", short_code = TRUE))
   expect_true(icd_in_reference_code("001", "001", short_code = TRUE))
-
-  expect_identical(icd_in_reference_code("1", "001", short_code = TRUE),
-                   icd_in_reference_code("01", "001", short_code = TRUE))
-  expect_identical(icd_in_reference_code("1", "001", short_code = TRUE),
-                   icd_in_reference_code("001", "001", short_code = TRUE))
-  expect_identical(icd_in_reference_code("1", "1", short_code = TRUE),
-                   icd_in_reference_code("01", "1", short_code = TRUE))
-  expect_identical(icd_in_reference_code("1", "1", short_code = TRUE),
-                   icd_in_reference_code("001", "1", short_code = TRUE))
-  expect_identical(icd_in_reference_code("0011", "001", short_code = TRUE),
-                   icd_in_reference_code("0011", "1", short_code = TRUE))
-  expect_identical(icd_in_reference_code("0011", "001", short_code = TRUE),
-                   icd_in_reference_code("0011", "01", short_code = TRUE))
+  expect_true(icd_in_reference_code("0011", "001", short_code = TRUE))
 })
 
 test_that("sorting char vectors", {
@@ -539,10 +515,8 @@ test_that("expand ICD-9 range character class deals with short vs long types", {
 
 
 test_that("sort icd10", {
-
   expect_equal(icd_sort(as.icd10cm(c("Z00", "A99", "J4C"))), as.icd10cm(c("A99", "J4C", "Z00")))
   expect_equal(icd_sort(as.icd10cm("Z04")), as.icd10cm("Z04"))
-
 })
 
 test_that("chapter major expansion works for basic test", {
