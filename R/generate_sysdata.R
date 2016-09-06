@@ -26,9 +26,9 @@ icd_generate_sysdata <- function(save_data = TRUE) {
 
   path <- file.path("R", "sysdata.rda")
 
-  icd9_short_n <- icd9_generate_all_n()
-  icd9_short_v <- icd9_generate_all_v()
-  icd9_short_e <- icd9_generate_all_e()
+  icd9_short_n <- icd9_generate_all_n() # nolint
+  icd9_short_v <- icd9_generate_all_v() # nolint
+  icd9_short_e <- icd9_generate_all_e() # nolint
 
   # we can either use the icd_is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
@@ -40,11 +40,11 @@ icd_generate_sysdata <- function(save_data = TRUE) {
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
   icd9_short_n_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
-    icd9_short_n_defined$vec, short_code = TRUE, icd9cm_edition = "32"))
+    icd9_short_n_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
   icd9_short_v_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
-    icd9_short_v_defined$vec, short_code = TRUE, icd9cm_edition = "32"))
+    icd9_short_v_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
   icd9_short_e_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
-    icd9_short_e_defined$vec, short_code = TRUE, icd9cm_edition = "32"))
+    icd9_short_e_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
 
 
   icd9_sources <- icd9_generate_sources()
@@ -59,7 +59,7 @@ icd_generate_sysdata <- function(save_data = TRUE) {
   message("non-portable short file names: ",
           paste(short_fns[short_fns != make.names(short_fns)]))
 
-  .nc <- nchar(icd::icd10cm2016[["code"]])
+  .nc <- nchar(icd::icd10cm2016[["code"]]) # nolint
 
   sysdata_names <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
                      "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",

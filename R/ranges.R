@@ -277,7 +277,7 @@ icd9_expand_range_worker <- function(start, end, lookup, defined,
 
   lapply(
     icd_children.icd9(end, short_code = TRUE, defined = defined),
-    function(x) { out_env[[x]] <- TRUE; return() })
+    function(x) out_env[[x]] <- TRUE)
 
   if (!ex_ambig_end && ex_ambig_start)
     lapply(lookup$vec[start_index:(start_index + 5L)], exclude_ambiguous_parent, defined)

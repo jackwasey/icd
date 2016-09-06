@@ -21,7 +21,7 @@
 #' \code{x}
 #' @keywords internal
 vec_to_env <- function(x, val = TRUE, env = new.env(hash = TRUE, parent = baseenv())) {
-  lapply(x, function(y) { env[[y]] <- val; return()} )
+  lapply(x, function(y) env[[y]] <- val)
   return(invisible(env))
 }
 
