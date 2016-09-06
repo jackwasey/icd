@@ -288,9 +288,9 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
 
   # fix congenital abnormalities not having sub-chapter defined: (this might be
   # easier to do when parsing the chapters themselves...)
-  icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, 740, 759)
+  icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, "740", "759")
   # and hematopoietic organs
-  icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, 280, 289)
+  icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, "280", "289")
 
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
