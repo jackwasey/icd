@@ -20,8 +20,6 @@
 
 #include "local.h"
 #include <Rcpp.h>
-#include <vector>
-#include <string>
 
 void setDecimalDiag(Rcpp::RObject& x, bool value);
 void setDecimalDiag(Rcpp::CharacterVector& x, bool);

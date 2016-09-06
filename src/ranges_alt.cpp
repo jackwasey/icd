@@ -17,7 +17,7 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include <class.h>
+#include <attr.h>
 #include <ranges.h>
 #include <convert.h>
 #include <convert_alt.h>
@@ -94,7 +94,12 @@ Rcpp::CharacterVector icd9ChildrenShortCpp11(Rcpp::CharacterVector icd9Short, bo
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, bool onlyReal) {
   // set may be unordered_set if C++11 is available, so may have to reorder at end
-  icd_set out((int)icd9Short.size() * 5L);
+#ifdef HAVE_CXX11
+  // http://www.cplusplus.com/reference/unordered_set/unordered_set/unordered_set/
+  icd_set out(icd9Short.size()); // n is hash buckets, not items
+#else
+  icd_set out(); // plain std::set does not have buckets, or possiblity of reserving space.
+#endif
   // we are never going to put NAs in the output, so use std structure this is a
   // slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {

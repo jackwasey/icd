@@ -16,12 +16,8 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include "class.h"
-#include "local.h"
+#include "attr.h"
 #include <Rcpp.h>
-#include <vector>
-#include <string>
-#include <Rinternals.h>
 
 //' Set ICD short-form diagnosis code attribute
 //'
