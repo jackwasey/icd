@@ -130,7 +130,7 @@ test_that("expand icd9 range definition", {
   # found bugs when expanding Injury and Poisoning chapter.
   icd_expand_range(short_code = TRUE, "997", "998")
   expect_false("999" %in% icd_expand_range(short_code = TRUE, "998", "998", defined = FALSE))
-  expect_false("009" %in% icd_expand_range(short_code = TRUE, "8", "8", defined = FALSE))
+  expect_false("009" %in% icd_expand_range(short_code = TRUE, "008", "008", defined = FALSE))
 
 })
 
@@ -140,10 +140,10 @@ test_that("expand range defined by two four digit codes includes last code", {
 })
 
 test_that("expand range worker gives correct ranges", {
-  # really, the test is against icd9ExpandRange family, but we can isolate an
+  # really, the test is against icd9_exapnd_range family, but we can isolate an
   # error to the sub-function
   expect_equal(
-    expand_range_worker("V10", "V1001", lookup = icd:::icd9VShort,
+    icd9_expand_range_worker("V10", "V1001", lookup = icd:::icd9_short_v,
                         defined = TRUE, ex_ambig_start = FALSE, ex_ambig_end = FALSE),
     c("V10", "V100", "V1000", "V1001"))
 })
@@ -251,9 +251,8 @@ test_that("major ranges", {
 
 test_that("range bugs", {
   # these both failed - need zero padding for the first
-  expect_equal_no_icd( ("042 " %i9s% "042 ")[1], "042")
-  expect_equal_no_icd( ("42" %i9s% "042 ")[1], "042")
-  expect_true("345" %nin% ("3420 " %i9s% "3449 "))
+  expect_equal_no_icd(("042" %i9s% "042")[1], "042")
+  expect_true("345" %nin% ("3420" %i9s% "3449"))
 
   expect_identical("042.11" %i9da% "042.13", icd9(as.icd_decimal_diag(c("042.11", "042.12", "042.13"))))
 
@@ -451,23 +450,7 @@ test_that("icd_in_reference_code", {
 })
 
 test_that("icd_in_reference_code works for numeric codes with major < 100", {
-  expect_true(icd_in_reference_code("1", "1", short_code = TRUE))
-  expect_true(icd_in_reference_code("1", "01", short_code = TRUE))
-  expect_true(icd_in_reference_code("1 ", "001", short_code = TRUE))
-  expect_true(icd_in_reference_code("01", "1", short_code = TRUE))
-  expect_true(icd_in_reference_code("001", "1", short_code = TRUE))
   expect_true(icd_in_reference_code("001", "001", short_code = TRUE))
-
-  expect_identical(icd_in_reference_code("1", "001", short_code = TRUE),
-                   icd_in_reference_code("01", "001", short_code = TRUE))
-  expect_identical(icd_in_reference_code("1", "001", short_code = TRUE),
-                   icd_in_reference_code("001", "001", short_code = TRUE))
-  expect_identical(icd_in_reference_code("1", "1", short_code = TRUE),
-                   icd_in_reference_code("01", "1", short_code = TRUE))
-  expect_identical(icd_in_reference_code("1", "1", short_code = TRUE),
-                   icd_in_reference_code("001", "1", short_code = TRUE))
-  expect_identical(icd_in_reference_code("0011", "001", short_code = TRUE),
-                   icd_in_reference_code("0011", "1", short_code = TRUE))
   expect_identical(icd_in_reference_code("0011", "001", short_code = TRUE),
                    icd_in_reference_code("0011", "01", short_code = TRUE))
 })
@@ -517,15 +500,25 @@ test_that("sysdata.rda is okay", {
   sysdat <- icd_generate_sysdata(save_data = FALSE)
   expect_equal(names(sysdat), lknames)
 
-  expect_lt(length(icd9_short_n_leaf), length(icd9_short_n_defined))
-  expect_lt(length(icd9_short_v_leaf), length(icd9_short_v_defined))
-  expect_lt(length(icd9_short_e_leaf), length(icd9_short_e_defined))
-  expect_lt(length(icd9_short_n_defined), length(icd9_short_n))
-  expect_lt(length(icd9_short_v_defined), length(icd9_short_v))
-  expect_lt(length(icd9_short_e_defined), length(icd9_short_e))
-  expect_true(all(icd9_short_n_defined %eine% icd9_short_n))
-  expect_true(all(icd9_short_v_defined %eine% icd9_short_v))
-  expect_true(all(icd9_short_e_defined %eine% icd9_short_e))
+  expect_lt(length(icd9_short_n_leaf$vec), length(icd9_short_n_defined$vec))
+  expect_lt(length(icd9_short_v_leaf$vec), length(icd9_short_v_defined$vec))
+  expect_lt(length(icd9_short_e_leaf$vec), length(icd9_short_e_defined$vec))
+  expect_lt(length(icd9_short_n_defined$vec), length(icd9_short_n$vec))
+  expect_lt(length(icd9_short_v_defined$vec), length(icd9_short_v$vec))
+  expect_lt(length(icd9_short_e_defined$vec), length(icd9_short_e$vec))
+  expect_true(all(icd9_short_n_defined$env %eine% icd9_short_n$env))
+  expect_true(all(icd9_short_v_defined$env %eine% icd9_short_v$env))
+  expect_true(all(icd9_short_e_defined$env %eine% icd9_short_e$env))
+
+  expect_equal(length(icd9_short_n$env), length(icd9_short_n$vec))
+  expect_equal(length(icd9_short_v$env), length(icd9_short_v$vec))
+  expect_equal(length(icd9_short_e$env), length(icd9_short_e$vec))
+  expect_equal(length(icd9_short_n_defined$env), length(icd9_short_n_defined$vec))
+  expect_equal(length(icd9_short_v_defined$env), length(icd9_short_v_defined$vec))
+  expect_equal(length(icd9_short_e_defined$env), length(icd9_short_e_defined$vec))
+  expect_equal(length(icd9_short_n_leaf$env), length(icd9_short_n_leaf$vec))
+  expect_equal(length(icd9_short_v_leaf$env), length(icd9_short_v_leaf$vec))
+  expect_equal(length(icd9_short_e_leaf$env), length(icd9_short_e_leaf$vec))
 })
 
 test_that("expand ICD-9 range character class deals with short vs long types", {

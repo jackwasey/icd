@@ -84,7 +84,7 @@ test_that("icd9IsValidDecimal numeric-only", {
 
 test_that("icd9IsValidDecimal V codes", {
   expect_true(icd_is_valid.icd9(short_code = FALSE, "V55.55"))
-  expect_true(icd_is_valid.icd9(short_code = FALSE, "V99. "))
+  expect_true(icd_is_valid.icd9(short_code = FALSE, "V99."))
   expect_true(icd_is_valid.icd9(short_code = FALSE, "V1.")) # looks horrible, but not ambiguous
   expect_false(icd_is_valid.icd9(short_code = FALSE, "V0"))
   expect_false(icd_is_valid.icd9(short_code = FALSE, "V."))

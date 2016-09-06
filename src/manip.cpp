@@ -141,12 +141,12 @@ Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector x, bool short_c
   // zeros when the total length is <3. Even then decimal may be quicker by
   // converting from short than calculating by parts.
     Rcpp::List parts = icd9ShortToPartsCpp(x, "");
-    parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
+    parts["mjr"] = icd9AddLeadingZeroesMajor(parts["mjr"]);
     return icd9PartsToShort(parts);
   }
   else {
     Rcpp::List parts = icd9DecimalToPartsCpp(x);
-    parts["major"] = icd9AddLeadingZeroesMajor(parts["major"]);
+    parts["mjr"] = icd9AddLeadingZeroesMajor(parts["mjr"]);
     return icd9PartsToDecimal(parts);
   }
 }

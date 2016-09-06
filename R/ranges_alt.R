@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-expand_range_worker_alt_base <- function(start, end, lookup, defined,
+icd9_expand_range_worker_alt_base <- function(start, end, lookup, defined,
                                          ex_ambig_start, ex_ambig_end) {
   assert_string(start)
   assert_string(end)

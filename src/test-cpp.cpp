@@ -93,8 +93,8 @@ context("icd9ShortToPartsCpp") {
   test_that("icd9ShortToPartsCpp gives NA value") {
     Rcpp::List out = icd9ShortToPartsCpp("E12345678", "");
 
-    Rcpp::CharacterVector j = out["major"];
-    Rcpp::CharacterVector n = out["minor"];
+    Rcpp::CharacterVector j = out["mjr"];
+    Rcpp::CharacterVector n = out["mnr"];
 
     expect_true(Rcpp::CharacterVector::is_na(j[0]));
     expect_true(Rcpp::CharacterVector::is_na(n[0]));
@@ -107,8 +107,8 @@ context("icd9ShortToPartsCpp") {
                                                              "E8319473422");
     Rcpp::List out = icd9ShortToPartsCpp(cv, "");
 
-    Rcpp::CharacterVector j = out["major"];
-    Rcpp::CharacterVector n = out["minor"];
+    Rcpp::CharacterVector j = out["mjr"];
+    Rcpp::CharacterVector n = out["mnr"];
 
     expect_true(Rcpp::CharacterVector::is_na(j[0]));
     expect_true(Rcpp::CharacterVector::is_na(n[0]));

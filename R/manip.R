@@ -68,8 +68,8 @@ icd9_drop_leading_zeroes <- function(x, short_code = icd_guess_short(x)) {
   if (short_code) {
     parts <- icd_short_to_parts.icd9(x = x, minor_empty = "")
     # very important: only drop the zero in V codes if the minor part is empty.
-    are_empty <- parts[["minor"]] == ""
-    x[are_empty] <- icd9_drop_leading_zeroes_major(parts[are_empty, "major"])
+    are_empty <- parts[["mnr"]] == ""
+    x[are_empty] <- icd9_drop_leading_zeroes_major(parts[are_empty, "mjr"])
     x
   } else {
     gsub("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3", x)
