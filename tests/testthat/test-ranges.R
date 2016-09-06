@@ -249,7 +249,7 @@ test_that("major ranges", {
 })
 
 test_that("range bugs", {
-  expect_equal_no_icd(("042" %i9s% "042")[1], "042")
+  expect_equal_no_icd( ("042" %i9s% "042")[1], "042")
   expect_true("345" %nin% ("3420" %i9s% "3449"))
   expect_identical("042.11" %i9da% "042.13", icd9(as.icd_decimal_diag(c("042.11", "042.12", "042.13"))))
 })
