@@ -26,9 +26,9 @@ icd_generate_sysdata <- function(save_data = TRUE) {
 
   path <- file.path("R", "sysdata.rda")
 
-  icd9_short_n <- icd9_generate_all_n() # nolint
-  icd9_short_v <- icd9_generate_all_v() # nolint
-  icd9_short_e <- icd9_generate_all_e() # nolint
+  icd9_short_n <- icd9_generate_all_n()
+  icd9_short_v <- icd9_generate_all_v()
+  icd9_short_e <- icd9_generate_all_e()
 
   # we can either use the icd_is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
@@ -60,6 +60,20 @@ icd_generate_sysdata <- function(save_data = TRUE) {
           paste(short_fns[short_fns != make.names(short_fns)]))
 
   .nc <- nchar(icd::icd10cm2016[["code"]]) # nolint
+
+  # minimal test here just to use variable names to avoid warnings!
+  stopifnot(all(!is.na(.nc)))
+  stopifnot(length(icd9_short_n$vec) == length(icd9_short_n$env))
+  stopifnot(length(icd9_short_v$vec) == length(icd9_short_v$env))
+  stopifnot(length(icd9_short_e$vec) == length(icd9_short_e$env))
+  stopifnot(length(icd9_short_n_leaf$vec) == length(icd9_short_n_leaf$env))
+  stopifnot(length(icd9_short_v_leaf$vec) == length(icd9_short_v_leaf$env))
+  stopifnot(length(icd9_short_e_leaf$vec) == length(icd9_short_e_leaf$env))
+
+  icd9_short_e
+  icd9_short_n_leaf
+  icd9_short_v_leaf
+  icd9_short_e_leaf
 
   sysdata_names <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
                      "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
