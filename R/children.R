@@ -65,24 +65,30 @@ icd_children.character <- function(x, ...) {
 #' @describeIn icd_children Get children of ICD-9 codes
 #' @export
 icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
-                              defined = TRUE, billable = FALSE, ...) {
+                              defined = TRUE, billable = FALSE, debug = FALSE, ...) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   assert_flag(defined)
   assert_flag(billable)
 
   if (short_code) {
-    tm0 <- Sys.time()
-    res <- .Call("icd_icd9ChildrenShortCppUnordered", PACKAGE = "icd", toupper(x), defined)
-    dur <- as.numeric(difftime(Sys.time(), tm0, units = "secs"))
+    if (debug)
+      tm0 <- Sys.time()
 
-    if (dur > 1.4)
-      message("Children for codes: ", head(x), " took a long time")
+    res <- .Call("icd_icd9ChildrenShortCppUnordered", PACKAGE = "icd", toupper(x), defined)
+
+    if (debug) {
+      dur <- as.numeric(difftime(Sys.time(), tm0, units = "secs"))
+      if (dur > 1.4)
+        message("Children for codes: ", head(x), " took a long time")
+    }
 
   } else {
     # TODO make unordered
     res <- .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = "icd", toupper(x), defined)
   }
+
+  res <- icd_sort.icd9(res)
 
   if (billable)
     icd_get_billable.icd9cm(icd9cm(res), short_code)

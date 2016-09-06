@@ -16,34 +16,31 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include "convert.h"
-#include "local.h"
-#include "util.h"
+#include "convert_alt.h"
 #include "is.h"
-#include "manip.h"
-#include <Rcpp.h>
+#include "util.h"
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9MajMinToCodeOld(const Rcpp::CharacterVector major,
-                                          const Rcpp::CharacterVector minor, bool isShort) {
+Rcpp::CharacterVector icd9MajMinToCodeOld(Rcpp::CharacterVector mjr,
+                                          Rcpp::CharacterVector mnr, bool isShort) {
 #ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "icd9MajMinToCode: major.size() = " << major.size()
-              << " and minor.size() = " << minor.size() << "\n";
+  Rcpp::Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
+              << " and mnr.size() = " << mnr.size() << "\n";
 #endif
 #ifdef ICD_DEBUG
-  if (major.size() != minor.size())
-    Rcpp::stop("major and minor lengths differ");
+  if (mjr.size() != mnr.size())
+    Rcpp::stop("mjr and mnr lengths differ");
 #endif
 
 #ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "major and minor are the same?\n";
+  Rcpp::Rcout << "mjr and mnr are the same?\n";
 #endif
 
   Rcpp::CharacterVector out;
-  Rcpp::CharacterVector::const_iterator j = major.begin();
-  Rcpp::CharacterVector::const_iterator n = minor.begin();
+  Rcpp::CharacterVector::iterator j = mjr.begin();
+  Rcpp::CharacterVector::iterator n = mnr.begin();
 
-  for (; j != major.end() && n != minor.end(); ++j, ++n) {
+  for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
     Rcpp::String mjrelem = *j;
     if (mjrelem == NA_STRING) {
       out.push_back(NA_STRING);
@@ -68,7 +65,7 @@ Rcpp::CharacterVector icd9MajMinToCodeOld(const Rcpp::CharacterVector major,
       } else {
         smj.insert(1, "0");
       }
-      // default: // major is 3 (or more) chars already
+      // default: // mjr is 3 (or more) chars already
     }
     Rcpp::String mnrelem = *n;
     if (mnrelem == NA_STRING) {
@@ -83,4 +80,59 @@ Rcpp::CharacterVector icd9MajMinToCodeOld(const Rcpp::CharacterVector major,
 
   }
   return out;
+}
+
+////' @rdname convert
+////' @keywords internal manip
+// [[//Rcpp::export]]
+void icd9ShortToPartsCppStd(std::vector<std::string> icd9Short,
+                            std::string mnrEmpty,
+                            std::vector<std::string> &mjr,
+                            std::vector<std::string> &mnr) {
+  for (std::vector<std::string>::size_type i = 0; i != icd9Short.size(); ++i) {
+    Str s = icd9Short[i];
+
+    s = strimCpp(s); // in place or rewrite?
+    std::string::size_type sz = s.size();
+
+    if (!icd9IsASingleE(s.c_str())) { // not an E code
+      switch (sz) {
+      case 1:
+      case 2:
+      case 3:
+        mjr[i] = s.substr(0, sz);
+        mnr[i] = mnrEmpty;
+        continue;
+      case 4:
+      case 5:
+        mjr[i] = s.substr(0, 3);
+        mnr[i] = s.substr(3, sz - 3);
+        continue;
+      default:
+        mjr[i] = "";
+      mnr[i] = "";
+      continue;
+      } // switch size
+
+      return;
+    } // not E code
+
+    // E code
+    switch (sz) {
+    case 2:
+    case 3:
+    case 4:
+      mjr[i] = s.substr(0, sz);
+      mnr[i] = mnrEmpty;
+      break;
+    case 5:
+      mjr[i] = s.substr(0, 4);
+      mnr[i] = s.substr(4, 1);
+      break;
+    default:
+      mjr[i] = "";
+    mnr[i] = "";
+    continue;
+    }
+  } // for
 }

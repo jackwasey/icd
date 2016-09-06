@@ -32,7 +32,7 @@ icd_update_everything <- function() {
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from
   # development tree, not as installed package
-  generate_sysdata()
+  icd_generate_sysdata()
   load(file.path("R", "sysdata.rda"))
 
   generate_spelling()

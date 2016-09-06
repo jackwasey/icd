@@ -12,9 +12,9 @@ icd9PartsToShort(parts)
 
 icd9PartsToDecimal(parts)
 
-icd9ShortToPartsCpp(icd9Short, minorEmpty)
+icd9ShortToPartsCpp(icd9Short, mnrEmpty)
 
-icd9DecimalToPartsCpp(icd9Decimal, minor_empty)
+icd9DecimalToPartsCpp(icd9Decimal, mnr_empty)
 }
 \arguments{
 \item{parts}{data.frame with major and minor fields. This can be given
@@ -24,9 +24,6 @@ instead of major and minor vectors}
 given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010"}
-
-\item{minorEmpty}{vector of length one, to be used in place of minor part of
-zero. Defaults to ""}
 
 \item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
 code, then the digits are greedily assigned to hundreds, then tens, then
@@ -47,6 +44,9 @@ leading zeroes which may be inferred; the last two characters represent the
 is given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010".}
+
+\item{minorEmpty}{vector of length one, to be used in place of minor part of
+zero. Defaults to ""}
 
 \item{short_code}{single logical value which determines whether the ICD-9
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.

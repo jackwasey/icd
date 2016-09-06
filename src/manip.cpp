@@ -22,13 +22,13 @@
 #include "convert.h"
 
 // [[Rcpp::export]]
-Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String major) {
-	if (major == NA_STRING) {
+Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr) {
+	if (mjr == NA_STRING) {
 		return (NA_STRING);
 	}
-	std::string m(major);
-	if (!icd9IsASingleVE(major.get_cstring())) {
-		switch (strlen(major.get_cstring())) {
+	std::string m(mjr);
+	if (!icd9IsASingleVE(mjr.get_cstring())) {
+		switch (strlen(mjr.get_cstring())) {
 		case 0:
 			return (NA_STRING);
 		case 1:
@@ -39,7 +39,7 @@ Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String major) {
 			return (m);
 		}
 	} else {
-		switch (strlen(major.get_cstring())) {
+		switch (strlen(mjr.get_cstring())) {
 		case 1:
 			return (NA_STRING);
 		case 2:
@@ -108,8 +108,8 @@ std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
 }
 
 // [[Rcpp::export(icd9_add_leading_zeroes_major)]]
-Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major) {
-	return Rcpp::sapply(major, icd9AddLeadingZeroesMajorSingle);
+Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector mjr) {
+	return Rcpp::sapply(mjr, icd9AddLeadingZeroesMajorSingle);
 }
 
 //' @title Add leading zeroes to incomplete ICD-9 codes

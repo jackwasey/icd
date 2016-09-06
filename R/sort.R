@@ -63,7 +63,7 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   assert_flag(short_code)
 
   y <- if (short_code)
-    icd9_add_leading_zeroes(x, short_code = short_code)
+    x
   else
     icd_decimal_to_short.icd9(x)
 
@@ -76,6 +76,7 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
   attributes(res) <- attributes(x)
   res
 }
+
 #' Get order of short-form ICD-9 codes
 #'
 #' Puts E codes after V codes. \code{NA} values can't be ordered and are dropped

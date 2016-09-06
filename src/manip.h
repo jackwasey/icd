@@ -26,6 +26,6 @@ Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector icd9, bool isSh
 Rcpp::CharacterVector icd9AddLeadingZeroesShort(Rcpp::CharacterVector icd9Short);
 Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String major);
 std::string icd9AddLeadingZeroesMajorSingleStd(std::string m);
-Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector major);
+Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector mjr);
 
 #endif /* MANIP_H_ */

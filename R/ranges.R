@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+utils::globalVariables("icd9cm_billable")
+
 #' take two ICD-9 codes and expand range to include all child codes
 #'
 #' this is cumbersome code, covering a whole load of edge cases relating to the
@@ -203,16 +205,17 @@ icd_expand_range.icd9 <- function(start, end,
 #' )
 #' }
 #' @keywords internal
-expand_range_worker <- function(start, end, lookup_env, defined,
+expand_range_worker <- function(start, end, lookup, defined,
                                 ex_ambig_start, ex_ambig_end) {
   assert_string(start)
   assert_string(end)
-  assert_environment(lookup_env)
+  assert_environment(lookup$env)
+  assert_character(lookup$vec)
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
 
-  start_index <- lookup_env[[start]]
-  end_index <- lookup_env[[end]]
+  start_index <- lookup$env[[start]]
+  end_index <- lookup$env[[end]]
   assert_integer(start_index, len = 1L)
   if (is.na(start_index[1L]))
     stop(sprintf("start value '%s' not found in look-up table of ICD-9 codes.", start))
@@ -225,16 +228,11 @@ expand_range_worker <- function(start, end, lookup_env, defined,
   if (start == end)
     return(icd_children.icd9(start, short_code = TRUE, defined = defined))
 
-  # hashed env is not sorted, so sort by inserting by sequence number
-  lookup_vec <- env_to_vec_flip(lookup_env) # very slow
   # this fills most of the output values, but misses children of a high-level end code
-  out_env <- vec_to_env(lookup_vec[start_index:end_index])
+  out_env <- vec_to_env(lookup$vec[start_index:end_index])
 
   # do not want to check a load of leaf nodes for children, since they have none.
-  leaf_tmp <- icd9cm_billable[["32"]][["code"]]
-  leaf_list <- as.list(rep(TRUE, times = length(leaf_tmp)))
-  names(leaf_list) <- leaf_tmp
-  leaf_env <- list2env(leaf_list)
+  leaf_env <- vec_to_env(icd9cm_billable[["32"]][["code"]])
 
   if (ex_ambig_end) {
     # at the end, we may not want any higher-level codes at the end which would
@@ -264,7 +262,7 @@ expand_range_worker <- function(start, end, lookup_env, defined,
     # just remove those codes at the beginning which have children not in the
     # output let's take the first 5, to cover cases like 100, 101, 102.1,
     # 102.11, 102.2
-    for (s in lookup_vec[start_index:start_index + 5L]) {
+    for (s in lookup$vec[start_index:(start_index + 5L)]) {
       # only lookup non-leaf codes for children
       if (is.null(leaf_env[[s]])) {
         kids <- icd_get_missing_kids(s, out_env, defined)
@@ -295,9 +293,6 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
   assert_flag(defined)
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
-
-  start <- icd9_add_leading_zeroes(trim(start), short_code = TRUE)
-  end <- icd9_add_leading_zeroes(trim(end), short_code = TRUE)
 
   # potentially do some checks on start and end. Determine whether we are doing
   # N, V or E then lookup start and end indices in sysdata.rda lookup tables
@@ -406,7 +401,7 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
 #' Accepts a single number or character input starting point for
 #'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
 #'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
-#' @template minor
+#' @template mnr
 #' @param isE single logical, which if TRUE, treats the minor as part of an E
 #'   code (which is one character), as opposed to a V or numeric-only code,
 #'   which is two character. Default is \code{FALSE}.
@@ -421,17 +416,17 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
 #' @family ICD-9 ranges
 #' @keywords internal manip
 
-icd_expand_minor <- function(minor, ...) {
+icd_expand_minor <- function(mnr, ...) {
   UseMethod("icd_expand_minor")
 }
 
-icd_expand_minor.icd9 <- function(minor, is_e = FALSE) {
+icd_expand_minor.icd9 <- function(mnr, is_e = FALSE) {
   # clang 3.6 with address sanitizer seems to fail if a number is passed instead
   # of string. It SHOULD fail with type error, and that might be an Rcpp
   # problem...
-  assert_string(minor) # or character vector?
+  assert_string(mnr) # or character vector?
   assert_flag(is_e)
-  .Call("icd_icd9ExpandMinorShim", PACKAGE = "icd", minor, isE = is_e)
+  .Call("icd_icd9ExpandMinorShim", PACKAGE = "icd", mnr, isE = is_e)
 }
 
 # nocov start

@@ -18,7 +18,6 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include "util.h"
 #include "local.h"
-#include <Rcpp.h>
 #include <vector>
 #include <string>
 #ifdef ICD_OPENMP
