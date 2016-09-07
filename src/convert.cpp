@@ -31,16 +31,17 @@
 //' @template isShort
 //' @examples
 //' \dontrun{
-//' n <- 5
+//' n <- 5e6
 //' mjrs <- as.character(sample(1:999, n, replace = TRUE))
 //' mnrs <- as.character(sample(0:99, n, replace = TRUE))
 //' microbenchmark::microbenchmark(
 //'   icd9MajMinToCode(mjrs, mnrs, TRUE),
 //'   icd9MajMinToCodeStd(mjrs, mnrs, TRUE),
-//'   times = 3
+//'   times = 10
 //' )
 //' }
-//' # std method vastly quicker, e.g. x100 when n=5000
+//' # std method about the same with O3 (4% faster, but no NA handling), but 50% quicker with O0
+//' # std method without doing padding is 5 times quicker than previous...
 //' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
@@ -66,7 +67,7 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
       continue;
     }
     const char* smj_c = mjrelem.get_cstring();
-    std::string smj = std::string(smj_c);
+    Str smj = std::string(smj_c);
     switch (strlen(smj_c)) {
     case 0:
       out_is_na[std::distance(mjr.begin(), j)] = 1;
@@ -110,6 +111,21 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
 }
 
 // [[Rcpp::export]]
+VecStr icd9MajMinToCodeStd(const VecStr mjr, const VecStr mnr, bool isShort) {
+  VecStr::size_type mjsz = mjsz;
+  VecStr out(mjsz);
+  VecStr::size_type j;
+  for (j = 0; j != mjsz; ++j) {
+    out[j] = mjr[j];
+    if (!isShort && mnr[j] != "") {
+      out[j].append(".");
+    }
+    out[j].append(mnr[j]);
+  }
+  return out;
+}
+
+// [[Rcpp::export]]
 Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector mjr,
                                         const Rcpp::CharacterVector mnr) {
 #ifdef ICD_DEBUG_TRACE
@@ -131,6 +147,17 @@ Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector mjr,
     return icd9MajMinToCode(newmjr, mnr, true);
   }
   return icd9MajMinToCode(mjr, mnr, true);
+}
+
+// [[Rcpp::export]]
+VecStr icd9MajMinToShortStd(const VecStr mjr,
+                            const VecStr mnr) {
+  if (mjr.size() == 1) {
+    // initialize a std::vector of strings with repeated value of the minor
+    VecStr newmjr(mnr.size(), mjr[0]);
+    return icd9MajMinToCodeStd(newmjr, mnr, true);
+  }
+  return icd9MajMinToCodeStd(mjr, mnr, true);
 }
 
 // [[Rcpp::export]]
@@ -379,7 +406,6 @@ Rcpp::CharacterVector icd9DecimalToShort(
     const char * thiscode_cstr = strna.get_cstring();
     std::string thiscode(thiscode_cstr);
     thiscode = trimLeftCpp(thiscode);
-    // TODO consider rejecting grossly invalid codes as NA:
     std::size_t pos = thiscode.find_first_of(".");
     if (pos != std::string::npos) {
       // now we assume that the mjr is snug against the left side, so we can add zero padding

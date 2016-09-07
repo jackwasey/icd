@@ -27,13 +27,13 @@ In debug mode, will check that mjr and mnr are same length.
 }
 \examples{
 \dontrun{
-n <- 5
+n <- 5e5
 mjrs <- as.character(sample(1:999, n, replace = TRUE))
 mnrs <- as.character(sample(0:99, n, replace = TRUE))
 microbenchmark::microbenchmark(
   icd9MajMinToCode(mjrs, mnrs, TRUE),
   icd9MajMinToCodeStd(mjrs, mnrs, TRUE),
-  times = 3
+  times = 100
 )
 }
 # std method vastly quicker, e.g. x100 when n=5000

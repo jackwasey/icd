@@ -29,6 +29,7 @@ Rcpp::CharacterVector icd9PartsToShort(const Rcpp::List parts);
 Rcpp::CharacterVector icd9PartsToDecimal(const Rcpp::List parts);
 Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr, const Rcpp::CharacterVector mnr, bool isShort);
 Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector mjr, const Rcpp::CharacterVector mnr);
+VecStr icd9MajMinToShortStd(const VecStr mjr, const VecStr mnr);
 Rcpp::CharacterVector icd9MajMinToDecimal(const Rcpp::CharacterVector mjr, const Rcpp::CharacterVector mnr);
 Rcpp::CharacterVector icd9DecimalToShort(const Rcpp::CharacterVector icd9Decimal);
 Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector icd9Short);

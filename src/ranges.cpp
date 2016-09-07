@@ -127,7 +127,7 @@ Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
     // TODO by reference or updating arguments instead? Unclear benefit, but
-    // this does take a lot of cycles in valgrind
+    // this does/did take a lot of cycles in valgrind
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
     Rcpp::CharacterVector major = parts[0];
     Rcpp::CharacterVector minor = parts[1];

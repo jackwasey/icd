@@ -97,23 +97,31 @@ icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
 #' @template isShort
 #' @examples
 #' \dontrun{
-#' n <- 5
+#' n <- 5e6
 #' mjrs <- as.character(sample(1:999, n, replace = TRUE))
 #' mnrs <- as.character(sample(0:99, n, replace = TRUE))
 #' microbenchmark::microbenchmark(
 #'   icd9MajMinToCode(mjrs, mnrs, TRUE),
 #'   icd9MajMinToCodeStd(mjrs, mnrs, TRUE),
-#'   times = 3
+#'   times = 10
 #' )
 #' }
-#' # std method vastly quicker, e.g. x100 when n=5000
+#' # std method about the same with O3 (4% faster, but no NA handling), but 50% quicker with O0
 #' @keywords internal manip
 icd9MajMinToCode <- function(mjr, mnr, isShort) {
     .Call('icd_icd9MajMinToCode', PACKAGE = 'icd', mjr, mnr, isShort)
 }
 
+icd9MajMinToCodeStd <- function(mjr, mnr, isShort) {
+    .Call('icd_icd9MajMinToCodeStd', PACKAGE = 'icd', mjr, mnr, isShort)
+}
+
 icd9MajMinToShort <- function(mjr, mnr) {
     .Call('icd_icd9MajMinToShort', PACKAGE = 'icd', mjr, mnr)
+}
+
+icd9MajMinToShortStd <- function(mjr, mnr) {
+    .Call('icd_icd9MajMinToShortStd', PACKAGE = 'icd', mjr, mnr)
 }
 
 icd9MajMinToDecimal <- function(mjr, mnr) {
