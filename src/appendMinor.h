@@ -15,22 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ICD_TYPES_H_
-#define ICD_TYPES_H_
+#ifndef APPENDMINOR_H_
+#define APPENDMINOR_H_
 
-#include <vector>
-#include <string>
+#include "icd_types.h"
 #include <Rcpp.h>
-typedef std::string Str;
-typedef std::vector<Str> VecStr;
 
-typedef std::vector<int> VecInt;
-typedef std::vector<char> ComorbidOut;
+CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort);
+CV icd9MajMinToShort(const CV mjr, const CV mnr);
+VecStr icd9MajMinToShortStd(const VecStr mjr, const VecStr mnr);
+CV icd9MajMinToDecimal(const CV mjr, const CV mnr);
 
-typedef std::vector<VecStr> VecVecStr;
-typedef std::vector<VecInt> VecVecInt;
-typedef VecVecInt::size_type VecVecIntSz;
-
-typedef Rcpp::CharacterVector CV;
-
-#endif
+#endif /* APPENDMINOR_H_ */

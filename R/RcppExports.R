@@ -103,23 +103,48 @@ icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
 #' microbenchmark::microbenchmark(
 #'   icd9MajMinToCode(mjrs, mnrs, TRUE),
 #'   icd9MajMinToCodeStd(mjrs, mnrs, TRUE),
+#'   icd9MajMinToCodePrePadded(mjrs, mnrs, TRUE),
 #'   times = 10
 #' )
 #' }
 #' # std method about the same with O3 (4% faster, but no NA handling), but 50% quicker with O0
+#' # std method without doing padding is 5 times quicker than previous...
 #' @keywords internal manip
 icd9MajMinToCode <- function(mjr, mnr, isShort) {
     .Call('icd_icd9MajMinToCode', PACKAGE = 'icd', mjr, mnr, isShort)
+}
+
+#' @describeIn icd9MajMinToCode Same as \code{icd9MajMinToCode} but assume
+#' codes are already trimmed and correctly padded with zeros, e.g. E001, V09,
+#' 001. This version does handle NA values correctly. ' @keywords internal
+icd9MajMinToCodePrePadded <- function(mjr, mnr, isShort) {
+    .Call('icd_icd9MajMinToCodePrePadded', PACKAGE = 'icd', mjr, mnr, isShort)
 }
 
 icd9MajMinToCodeStd <- function(mjr, mnr, isShort) {
     .Call('icd_icd9MajMinToCodeStd', PACKAGE = 'icd', mjr, mnr, isShort)
 }
 
+#' append minor to major using std
+#'
+#' benefits from having reserve string size of 5
+icd9AppendMinor <- function(m, mnr, isShort) {
+    invisible(.Call('icd_icd9AppendMinor', PACKAGE = 'icd', m, mnr, isShort))
+}
+
+#' append minor to major using std, with reservation of string length
+#'
+#' if \code{m} string size is already reserved, then use other \code{icd9AppendMinor}
+icd9AppendMinor <- function(m, mnr, isShort, reserve = TRUE) {
+    invisible(.Call('icd_icd9AppendMinor', PACKAGE = 'icd', m, mnr, isShort, reserve))
+}
+
 icd9MajMinToShort <- function(mjr, mnr) {
     .Call('icd_icd9MajMinToShort', PACKAGE = 'icd', mjr, mnr)
 }
 
+#' initialize a std::vector of strings with repeated value of the minor
+#' @keywords internal
 icd9MajMinToShortStd <- function(mjr, mnr) {
     .Call('icd_icd9MajMinToShortStd', PACKAGE = 'icd', mjr, mnr)
 }
@@ -321,6 +346,10 @@ icd9ChildrenShortCppStd <- function(icd9Short, onlyReal) {
     .Call('icd_icd9ChildrenShortCppStd', PACKAGE = 'icd', icd9Short, onlyReal)
 }
 
+icd9ExpandMinorStd <- function(mnr, isE) {
+    .Call('icd_icd9ExpandMinorStd', PACKAGE = 'icd', mnr, isE)
+}
+
 icd9ExpandMinorShim <- function(mnr, isE) {
     .Call('icd_icd9ExpandMinorShim', PACKAGE = 'icd', mnr, isE)
 }
@@ -331,6 +360,10 @@ icd9ChildrenShortCpp <- function(icd9Short, onlyReal) {
 
 icd9ChildrenShortCppUnordered <- function(icd9Short, onlyReal) {
     .Call('icd_icd9ChildrenShortCppUnordered', PACKAGE = 'icd', icd9Short, onlyReal)
+}
+
+icd9ChildrenShortCppNoNaUnordered <- function(icd9Short, onlyReal) {
+    .Call('icd_icd9ChildrenShortCppNoNaUnordered', PACKAGE = 'icd', icd9Short, onlyReal)
 }
 
 icd9ChildrenDecimalCpp <- function(icd9Decimal, onlyReal) {
