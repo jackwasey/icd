@@ -11,8 +11,5 @@ RSNIP=${1:-icd:::icd9ChildrenShortCppUnordered(c("001", 100:115), onlyReal = TRU
 RCODE=${RCODE:-devtools::load_all(); valgrindCallgrindStart(TRUE); invisible($RSNIP); valgrindCallgrindStop()}
 INSTR_ATSTART="no"
 VALGRIND_CMD="valgrind --tool=callgrind --simulate-cache=yes --instr-atstart=$INSTR_ATSTART --separate-threads=no"
-
 R --vanilla --slave -d "$VALGRIND_CMD" -e "$RCODE"
-
-# then 'callgrind_control -i' or prograammatically start instrumentation
 popd

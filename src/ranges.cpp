@@ -17,88 +17,24 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "ranges.h"
+#include "range-const.h"
 #include "icd_types.h"
 #include "local.h"
 #include <convert.h>
 #include <appendMinor.h>
 #include <convert_alt.h>
-// manip just for add leading zeroes: TODO remove this dep
-#include <manip.h>
 #include <is.h>
 
-// this is simplest just to hard-code
-const CV vbase = CV::create("", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "00");
-const CV vbase_e = CV::create("", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "00");
-const CV v0 = CV::create("0", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09");
-const CV v1 = CV::create("1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19");
-const CV v2 = CV::create("2", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29");
-const CV v3 = CV::create("3", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39");
-const CV v4 = CV::create("4", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49");
-const CV v5 = CV::create("5", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59");
-const CV v6 = CV::create("6", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69");
-const CV v7 = CV::create("7", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79");
-const CV v8 = CV::create("8", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89");
-const CV v9 = CV::create("9", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99");
-
-const char* vbase_char[] = {"", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "00"};
-const char* vbase_e_char[] = {"", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "00"};
-const char* v0_char[] = {"0", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09"};
-const char* v1_char[] = {"1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19"};
-const char* v2_char[] = {"2", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"};
-const char* v3_char[] = {"3", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39"};
-const char* v4_char[] = {"4", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49"};
-const char* v5_char[] = {"5", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"};
-const char* v6_char[] = {"6", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69"};
-const char* v7_char[] = {"7", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79"};
-const char* v8_char[] = {"8", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89"};
-const char* v9_char[] = {"9", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"};
-
-// horrible one-off code to pre-generate all the minor codes
-CV MakeAllMinors() {
-  CV vv = vbase;
-
-  // create numbers 1 to 99 but cycle 10s first
-  for (int i = 0; i < 10; ++i) {
-    for (int j = 0; j < 10; ++j) {
-      std::ostringstream s;
-      s << j << i;
-      if (i + j != 0)
-        vv.push_back(s.str());
-    }
-  }
-  return(vv);
-}
-// generate the lookups
-const CV vv = MakeAllMinors();
-
-const char* vv_char[] = {
-  "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "00",
-  "0", "00", "01", "02", "03", "04", "05", "06", "07", "08", "09",
-  "1", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
-  "2", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
-  "3", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
-  "4", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49",
-  "5", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59",
-  "6", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69",
-  "7", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79",
-  "8", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89",
-  "9", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99"
-};
-
-const VecStr vv_std(vv_char, end(vv_char));
-const VecStr v0_std(v0_char, end(v0_char));
-const VecStr v1_std(v1_char, end(v1_char));
-const VecStr v2_std(v2_char, end(v2_char));
-const VecStr v3_std(v3_char, end(v3_char));
-const VecStr v4_std(v4_char, end(v4_char));
-const VecStr v5_std(v5_char, end(v5_char));
-const VecStr v6_std(v6_char, end(v6_char));
-const VecStr v7_std(v7_char, end(v7_char));
-const VecStr v8_std(v8_char, end(v8_char));
-const VecStr v9_std(v9_char, end(v9_char));
-const VecStr vbase_e_std(vbase_e_char, end(vbase_e_char));
-
-const VecStr v_empty_std(0L);
+// someday, can just directly memcopy the codes from the full set
+// const char  icd9ExpandMinorC(const char * mnr, bool isE) {
+//   if (!isE) {
+//     switch (strlen(mnr)) {
+//     case 0:
+//       return vv_char;
+//     case 1:
+// // vv_char, skip indices 0-11
+// return vv_char[12 +]
+// }
 
 // [[Rcpp::export]]
 VecStr icd9ExpandMinorStd(const Str& mnr, bool isE) {
@@ -152,7 +88,7 @@ VecStr icd9ExpandMinorStd(const Str& mnr, bool isE) {
 }
 
 // [[Rcpp::export(icd_expand_minor.icd9)]]
-CV icd9ExpandMinor(std::string mnr, bool isE) {
+CV icd9ExpandMinor(const Str& mnr, bool isE) {
 
   if (!isE) {
     switch (mnr.size()) {
@@ -207,7 +143,7 @@ CV icd9ExpandMinor(std::string mnr, bool isE) {
 }
 
 // [[Rcpp::export]]
-CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal) {
+CV icd9ChildrenShort(CV icd9Short, bool onlyReal) {
   std::set<Str> out; // we are never going to put NAs in the output, so use std structure
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
@@ -220,10 +156,10 @@ CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal) {
     CV::iterator itmjr = mjr.begin();
     CV::iterator itmnr = mnr.begin();
     for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-      std::string thismjr = Rcpp::as<std::string>(*itmjr);
-      std::string thismnr = Rcpp::as<std::string>(*itmnr);
+      Str thismjr = Rcpp::as<Str>(*itmjr);
+      Str thismnr = Rcpp::as<Str>(*itmnr);
 
-      CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
+      const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
 
       VecStr newshort = Rcpp::as<VecStr >(
         icd9MajMinToShort(thismjr, newminors));
@@ -232,12 +168,11 @@ CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal) {
     }
     if (onlyReal) {
       const Rcpp::Environment env("package:icd");
-      Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
+      const Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       std::set<Str> out_real;
-      VecStr tmp = Rcpp::as<VecStr >(
-        icd9Hierarchy["code"]);
+      const VecStr tmp = Rcpp::as<VecStr >(icd9Hierarchy["code"]);
       // 'reals' is the set of majors, intermediate and leaf codes.
-      std::set<Str> reals(tmp.begin(), tmp.end());
+      const std::set<Str> reals(tmp.begin(), tmp.end());
 
       // set_intersection doesn't work for unordered sets
       std::set_intersection(out.begin(), out.end(),
@@ -251,10 +186,10 @@ CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal) {
   return rcppOut;
 }
 
-// TODO: icd9ChildrenShortCppUnordered no NA version
+// TODO: icd9ChildrenShortUnordered no NA version
 
 // [[Rcpp::export]]
-CV icd9ChildrenShortCppUnordered(CV icd9Short, bool onlyReal) {
+CV icd9ChildrenShortUnordered(CV icd9Short, bool onlyReal) {
   icd_set out; // we are never going to put NAs in the output, so use std structure
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
@@ -268,7 +203,7 @@ CV icd9ChildrenShortCppUnordered(CV icd9Short, bool onlyReal) {
       Str thismjr = Rcpp::as<Str>(*itmjr);
       Str thismnr = Rcpp::as<Str>(*itmnr);
 
-      CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
+      const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
 
       VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismjr, newminors));
       out.insert(newshort.begin(), newshort.end());
@@ -301,7 +236,7 @@ CV icd9ChildrenShortCppUnordered(CV icd9Short, bool onlyReal) {
 }
 
 // [[Rcpp::export]]
-VecStr icd9ChildrenShortCppNoNaUnordered(const VecStr& icd9Short, const bool onlyReal) {
+VecStr icd9ChildrenShortNoNaUnordered(const VecStr& icd9Short, const bool onlyReal) {
   icd_set out; // we are never going to put NAs in the output, so use std structure
   // this is a slower function, can the output set be predefined in size?
   VecStr mjr(icd9Short.size());
@@ -312,7 +247,7 @@ VecStr icd9ChildrenShortCppNoNaUnordered(const VecStr& icd9Short, const bool onl
     VecStr::iterator itmjr = mjr.begin();
     VecStr::iterator itmnr = mnr.begin();
     for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-      VecStr newminors = icd9ExpandMinorStd(*itmnr, icd9IsASingleE((*itmjr).c_str()));
+      const VecStr& newminors = icd9ExpandMinorStd(*itmnr, icd9IsASingleE((*itmjr).c_str()));
       VecStr newshort = icd9MajMinToShortSingleStd(*itmjr, newminors);
       out.insert(newshort.begin(), newshort.end());
     }
@@ -354,7 +289,7 @@ VecStr icd9ChildrenShortCppNoNaUnordered(const VecStr& icd9Short, const bool onl
 CV icd9ChildrenDecimalCpp(CV icd9Decimal,
                           bool onlyReal) {
   CV shrt = icd9DecimalToShort(icd9Decimal);
-  CV kids = icd9ChildrenShortCpp(shrt, onlyReal);
+  CV kids = icd9ChildrenShort(shrt, onlyReal);
   CV out = icd9ShortToDecimal(kids);
   out.attr("icd_short_diag") = false;
   return out;
@@ -364,7 +299,7 @@ CV icd9ChildrenDecimalCpp(CV icd9Decimal,
 CV icd9ChildrenCpp(CV icd9, bool isShort,
                    bool onlyReal = true) {
   if (isShort)
-    return icd9ChildrenShortCpp(icd9, onlyReal);
+    return icd9ChildrenShort(icd9, onlyReal);
   return icd9ChildrenDecimalCpp(icd9, onlyReal);
 }
 

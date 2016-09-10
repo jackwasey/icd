@@ -33,8 +33,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   const VecVecIntSz last_i = vcdb.size() - 1;
   VecVecIntSz chunk_end_i;
   VecVecIntSz vis_i;
-  const VecVecIntSz vsz = 1;
-  //const VecVecIntSz vsz = vcdb.size();
+  const VecVecIntSz vsz = vcdb.size();
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "map.size() = " << map.size() << "\n";

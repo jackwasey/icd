@@ -27,7 +27,7 @@ T * end(T (&ra)[N]) {
 }
 
 VecStr icd9ExpandMinorStd(const Str& mnr, bool isE);
-CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal = true);
+CV icd9ChildrenShort(CV icd9Short, bool onlyReal = true);
 CV icd9ChildrenDecimalCpp(CV icd9Decimal, bool onlyReal = true);
-CV icd9ExpandMinor(Str minor, bool isE = false);
+CV icd9ExpandMinor(const Str& mnr, bool isE = false);
 #endif /* RANGES_H_ */

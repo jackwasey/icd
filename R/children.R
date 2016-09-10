@@ -71,22 +71,11 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
   assert_flag(defined)
   assert_flag(billable)
 
-  if (short_code) {
-    if (debug)
-      tm0 <- Sys.time()
-
-    res <- .Call("icd_icd9ChildrenShortCppUnordered", PACKAGE = "icd", toupper(x), defined)
-
-    if (debug) {
-      dur <- as.numeric(difftime(Sys.time(), tm0, units = "secs"))
-      if (dur > 1.4)
-        message("Children for codes: ", head(x), " took a long time")
-    }
-
-  } else {
-    # TODO make unordered
-    res <- .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = "icd", toupper(x), defined)
-  }
+  # TODO order/unorder consistently for decimal and short
+  res <- if (short_code)
+    .Call("icd_icd9ChildrenShortUnordered", PACKAGE = "icd", toupper(x), defined)
+  else
+    .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = "icd", toupper(x), defined)
 
   res <- icd_sort.icd9(res)
 

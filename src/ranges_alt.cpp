@@ -31,14 +31,14 @@
 //' @examples
 //' \dontrun{
 //' microbenchmark::microbenchmark(
-//'   icd9ChildrenShortCpp(c("001", 100:500), onlyReal = TRUE),
-//'   icd9ChildrenShortCpp11(c("001", 100:500), onlyReal = TRUE),
+//'   icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
+//'   icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
 //'   times = 5)
 //'   # C++11 about 15% faster for this data
 //' }
 //' @keywords internal
 // [[Rcpp::export]]
-CV icd9ChildrenShortCpp11(CV icd9Short, bool onlyReal) {
+CV icd9ChildrenShort11(CV icd9Short, bool onlyReal) {
   icd_set out; // we are never going to put NAs in the output?
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
@@ -77,21 +77,20 @@ CV icd9ChildrenShortCpp11(CV icd9Short, bool onlyReal) {
   return rcppOut;
 }
 
-
 //' C++ implementation of finding children of short codes
 //' @examples
 //' \dontrun{
 //' library(microbenchmark)
-//' microbenchmark(icd9ChildrenShortCpp("001", T), icd9ChildrenShortCppStd("001", T), times = 100)
-//' microbenchmark(icd9ChildrenShortCpp(c("001", 100:400), T),
-//'                icd9ChildrenShortCppUnordered(c("001", 100:400), T),
-//'                icd9ChildrenShortCppStd(c("001", 100:400), T),
+//' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
+//' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
+//'                icd9ChildrenShortUnordered(c("001", 100:400), T),
+//'                icd9ChildrenShortStd(c("001", 100:400), T),
 //'                times = 10)
 //' }
 //' # unordered set much faster, but may still need to sort result
 //' @keywords internal
 // [[Rcpp::export]]
-CV icd9ChildrenShortCppStd(CV icd9Short, bool onlyReal) {
+CV icd9ChildrenShortStd(CV icd9Short, bool onlyReal) {
   // set may be unordered_set if C++11 is available, so may have to reorder at end
 #ifdef HAVE_CXX11
   // http://www.cplusplus.com/reference/unordered_set/unordered_set/unordered_set/
