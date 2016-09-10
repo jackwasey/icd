@@ -15,15 +15,15 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef ATTR_H_
-#define ATTR_H_
+#ifndef APPENDMINOR_H_
+#define APPENDMINOR_H_
 
-#include "local.h"
+#include "icd_types.h"
 #include <Rcpp.h>
-
-void setDecimalDiag(Rcpp::RObject& x, bool value);
-void setDecimalDiag(CV& x, bool);
-void setShortDiag(Rcpp::RObject& x, bool value);
-void setShortDiag(CV& x, bool);
-
-#endif /* ATTR_H_ */
+CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort);
+CV icd9MajMinToShort(const CV mjr, const CV mnr);
+VecStr icd9MajMinToShortStd(const VecStr& mjr, const VecStr& mnr);
+VecStr icd9MajMinToShortSingleStd(const Str& mjr, const VecStr& mnr);
+CV icd9MajMinToDecimal(const CV mjr, const CV mnr);
+VecStr icd9MajMinToShortSingleStd(const Str& mjr, const VecStr& mnr);
+#endif /* APPENDMINOR_H_ */

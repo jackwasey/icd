@@ -43,13 +43,6 @@ env_to_vec_flip <- function(env) {
   out
 }
 
-env_to_lookup_pair <- function(env) {
-  env_vals <- mget(envir = env, ls(env))
-  stopifnot(is.integer(env_vals[[1L]]))
-  stopifnot(anyDuplicated(as.integer(env_vals)))
-  list(env, env_to_vec_flip(env))
-}
-
 vec_to_lookup_pair <- function(x, env = new.env(hash = TRUE, parent = baseenv())) {
   for (i in 1L:length(x)) {
     env[[x[i]]] <- i

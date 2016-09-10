@@ -17,10 +17,17 @@
 
 #ifndef RANGES_H_
 #define RANGES_H_
-
+#include "icd_types.h"
 #include <Rcpp.h>
 
-Rcpp::CharacterVector icd9ChildrenShortCpp(Rcpp::CharacterVector icd9Short, bool onlyReal = true);
-Rcpp::CharacterVector icd9ChildrenDecimalCpp(Rcpp::CharacterVector icd9Decimal, bool onlyReal = true);
-Rcpp::CharacterVector icd9ExpandMinorShim(std::string minor, bool isE = false);
+// define end() to get end index of a C array
+template<typename T, size_t N>
+T * end(T (&ra)[N]) {
+  return ra + N;
+}
+
+VecStr icd9ExpandMinorStd(const Str& mnr, bool isE);
+CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal = true);
+CV icd9ChildrenDecimalCpp(CV icd9Decimal, bool onlyReal = true);
+CV icd9ExpandMinor(Str minor, bool isE = false);
 #endif /* RANGES_H_ */

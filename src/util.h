@@ -37,18 +37,18 @@ int getOmpThreads();
 int getOmpMaxThreads();
 void debug_parallel();
 Rcpp::NumericVector randomMajorCpp(int n);
-std::vector<std::string> icd9RandomShortN(std::vector<std::string>::size_type n);
-std::vector<std::string> icd9RandomShortV(std::vector<std::string>::size_type n);
-std::vector<std::string> icd9RandomShortE(std::vector<std::string>::size_type n);
-std::vector<std::string> icd9RandomShort(std::vector<std::string>::size_type n);
+VecStr icd9RandomShortN(VecStr::size_type n);
+VecStr icd9RandomShortV(VecStr::size_type n);
+VecStr icd9RandomShortE(VecStr::size_type n);
+VecStr icd9RandomShort(VecStr::size_type n);
 
-std::vector<std::string> fastIntToStringStd(std::vector<int> x);
-Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x);
+VecStr fastIntToStringStd(std::vector<int> x);
+CV fastIntToStringRcpp(Rcpp::IntegerVector x);
 
 int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
 
 bool icd9CompareStrings(std::string a, std::string b);
-std::vector<std::size_t> icd9OrderCpp(std::vector<std::string> x);
+std::vector<std::size_t> icd9OrderCpp(VecStr x);
 
 #endif /* UTIL_H_ */

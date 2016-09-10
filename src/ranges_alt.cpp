@@ -17,12 +17,13 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include <attr.h>
-#include <ranges.h>
-#include <convert.h>
-#include <convert_alt.h>
-#include <manip.h>
-#include <is.h>
+#include "attr.h"
+#include "ranges.h"
+#include "convert.h"
+#include "convert_alt.h"
+#include "appendMinor.h"
+#include "manip.h"
+#include "is.h"
 
 //' Find child codes from vector of ICD-9 codes.
 //'
@@ -37,25 +38,23 @@
 //' }
 //' @keywords internal
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9ChildrenShortCpp11(Rcpp::CharacterVector icd9Short, bool onlyReal) {
+CV icd9ChildrenShortCpp11(CV icd9Short, bool onlyReal) {
   icd_set out; // we are never going to put NAs in the output?
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
-    Rcpp::CharacterVector major = parts[0];
-    Rcpp::CharacterVector minor = parts[1];
+    CV major = parts[0];
+    CV minor = parts[1];
 
-    Rcpp::CharacterVector::iterator itmajor = major.begin();
-    Rcpp::CharacterVector::iterator itminor = minor.begin();
+    CV::iterator itmajor = major.begin();
+    CV::iterator itminor = minor.begin();
     for (; itmajor != major.end(); ++itmajor, ++itminor) {
-      std::string thismajor = Rcpp::as<std::string>(*itmajor);
-      std::string thisminor = Rcpp::as<std::string>(*itminor);
+      Str thismajor = Rcpp::as<Str>(*itmajor);
+      Str thisminor = Rcpp::as<Str>(*itminor);
 
-      Rcpp::CharacterVector newminors = icd9ExpandMinorShim(thisminor,
-                                                            icd9IsASingleE(thismajor.c_str()));
+      VecStr newminors = icd9ExpandMinorStd(thisminor, icd9IsASingleE(thismajor.c_str()));
 
-      std::vector<std::string> newshort = Rcpp::as<std::vector<std::string> >(
-        icd9MajMinToShort(thismajor, newminors));
+      VecStr newshort = icd9MajMinToShortSingleStd(thismajor, newminors);
 
       out.insert(newshort.begin(), newshort.end());
     }
@@ -63,17 +62,17 @@ Rcpp::CharacterVector icd9ChildrenShortCpp11(Rcpp::CharacterVector icd9Short, bo
       const Rcpp::Environment env("package:icd");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       icd_set out_real;
-      std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
+      VecStr tmp = Rcpp::as<VecStr >(
         icd9Hierarchy["code"]);
       // 'reals' is the set of majors, intermediate and leaf codes.
-      std::set<std::string> reals(tmp.begin(), tmp.end());
+      std::set<Str> reals(tmp.begin(), tmp.end());
       std::set_intersection(out.begin(), out.end(),
                             reals.begin(), reals.end(),
                             std::inserter(out_real, out_real.begin()));
       out = out_real;
     }
   } // input length != 0
-  Rcpp::CharacterVector rcppOut = Rcpp::wrap(out);
+  CV rcppOut = Rcpp::wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
 }
@@ -92,7 +91,7 @@ Rcpp::CharacterVector icd9ChildrenShortCpp11(Rcpp::CharacterVector icd9Short, bo
 //' # unordered set much faster, but may still need to sort result
 //' @keywords internal
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, bool onlyReal) {
+CV icd9ChildrenShortCppStd(CV icd9Short, bool onlyReal) {
   // set may be unordered_set if C++11 is available, so may have to reorder at end
 #ifdef HAVE_CXX11
   // http://www.cplusplus.com/reference/unordered_set/unordered_set/unordered_set/
@@ -113,10 +112,8 @@ Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, b
       Str thismajor = *itmajor;
       Str thisminor = *itminor;
 
-      Rcpp::CharacterVector newminors = icd9ExpandMinorShim(thisminor,
-                                                            icd9IsASingleE(thismajor.c_str()));
-
-      VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismajor, newminors));
+      VecStr newminors = icd9ExpandMinorStd(thisminor, icd9IsASingleE(thismajor.c_str()));
+      VecStr newshort = icd9MajMinToShortSingleStd(thismajor, newminors);
 
       out.insert(newshort.begin(), newshort.end());
     }
@@ -141,7 +138,7 @@ Rcpp::CharacterVector icd9ChildrenShortCppStd(Rcpp::CharacterVector icd9Short, b
       out = out_real;
     }
   } // input length != 0
-  Rcpp::CharacterVector rcppOut = Rcpp::wrap(out);
+  CV rcppOut = Rcpp::wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
 }

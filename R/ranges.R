@@ -423,15 +423,6 @@ icd_expand_minor <- function(mnr, ...) {
   UseMethod("icd_expand_minor")
 }
 
-icd_expand_minor.icd9 <- function(mnr, is_e = FALSE) {
-  # clang 3.6 with address sanitizer seems to fail if a number is passed instead
-  # of string. It SHOULD fail with type error, and that might be an Rcpp
-  # problem...
-  assert_string(mnr) # or character vector?
-  assert_flag(is_e)
-  .Call("icd_icd9ExpandMinorShim", PACKAGE = "icd", mnr, isE = is_e)
-}
-
 # nocov start
 icd_expand_minor.icd10 <- function(x) {
   .NotYetImplemented()

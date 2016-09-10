@@ -30,8 +30,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
                               const VecVecIntSz ompChunkSize,
                               ComorbidOut& out) {
   const VecVecIntSz num_comorbid = map.size();
-  const VecVecIntSz num_visits = vcdb.size();
-  const VecVecIntSz last_i = num_visits - 1;
+  const VecVecIntSz last_i = vcdb.size() - 1;
   VecVecIntSz chunk_end_i;
   VecVecIntSz vis_i;
 #ifdef ICD_DEBUG_TRACE
@@ -51,7 +50,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   // #pragma omp for schedule(static)
 #endif
   // loop through chunks at a time
-  for (vis_i = 0; vis_i < num_visits; vis_i += chunkSize) {
+  for (vis_i = 0; vis_i < vcdb.size(); vis_i += chunkSize) {
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "vis_i = " << vis_i << "\n";
 #endif
@@ -62,7 +61,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
     // the last index in the chunk
     chunk_end_i = vis_i + chunkSize - 1;
     if (chunk_end_i > last_i)
-      chunk_end_i = last_i; // indices
+      chunk_end_i = last_i;
     ComorbidOut chunk;
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "OMP vcdb.size() = " << vcdb.size() << "\n";

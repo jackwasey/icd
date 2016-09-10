@@ -17,145 +17,29 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "convert.h"
-// util.h for strimCpp
-#include "util.h"
+#include "appendMinor.h"
 #include "is.h"
+#include "util.h"
 // for add leading zeroes mjr (TODO: remove this dependency)
 #include "manip.h"
-
-//' Convert mjr and mnr vectors to single code
-//'
-//' In debug mode, will check that mjr and mnr are same length.
-//' @template mjr
-//' @template mnr
-//' @template isShort
-//' @examples
-//' \dontrun{
-//' n <- 5
-//' mjrs <- as.character(sample(1:999, n, replace = TRUE))
-//' mnrs <- as.character(sample(0:99, n, replace = TRUE))
-//' microbenchmark::microbenchmark(
-//'   icd9MajMinToCode(mjrs, mnrs, TRUE),
-//'   icd9MajMinToCodeStd(mjrs, mnrs, TRUE),
-//'   times = 3
-//' )
-//' }
-//' # std method vastly quicker, e.g. x100 when n=5000
-//' @keywords internal manip
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
-                                       const Rcpp::CharacterVector mnr, bool isShort) {
-#ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
-              << " and mnr.size() = " << mnr.size() << "\n";
-#endif
-#ifdef ICD_DEBUG
-  if (mjr.size() != mnr.size())
-    Rcpp::stop("mjr and mnr lengths differ");
-#endif
-
-  std::vector<std::string> out(mjr.size());
-  std::vector<char> out_is_na(mjr.size()); // boolean in char
-  Rcpp::CharacterVector::const_iterator j = mjr.begin();
-  Rcpp::CharacterVector::const_iterator n = mnr.begin();
-
-  for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
-    Rcpp::String mjrelem = *j;
-    if (Rcpp::CharacterVector::is_na(*j)) {
-      out_is_na[std::distance(mjr.begin(), j)] = 1;
-      continue;
-    }
-    const char* smj_c = mjrelem.get_cstring();
-    std::string smj = std::string(smj_c);
-    switch (strlen(smj_c)) {
-    case 0:
-      out_is_na[std::distance(mjr.begin(), j)] = 1;
-      continue;
-    case 1:
-      if (!icd9IsASingleVE(smj_c)) {
-        smj.insert(0, "00");
-      }
-      break;
-    case 2:
-      if (!icd9IsASingleVE(smj_c)) {
-        smj.insert(0, "0");
-      } else {
-        smj.insert(1, "0");
-      }
-      // default: // mjr is 3 (or more) chars already
-    }
-    Rcpp::String mnrelem = *n;
-    if (Rcpp::CharacterVector::is_na(*n)) {
-      mnrelem = "";
-    }
-    if (!isShort && mnrelem != "") {
-      smj.append(".");
-    }
-    smj.append(mnrelem);
-    out[std::distance(mjr.begin(), j)] = smj;
-  }
-  Rcpp::CharacterVector r_out = Rcpp::wrap(out);
-#ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "NA loop size: " << out_is_na.size() << "\n";
-#endif
-  for (std::vector<char>::iterator i = out_is_na.begin(); i != out_is_na.end(); ++i) {
-#ifdef ICD_DEBUG_TRACE
-    Rcpp::Rcout << "NA loop: " << std::distance(out_is_na.begin(), i) << "\n";
-#endif
-    if (*i == 0)
-      continue;
-    r_out[std::distance(out_is_na.begin(), i)] = NA_STRING;
-  }
-  return r_out;
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector mjr,
-                                        const Rcpp::CharacterVector mnr) {
-#ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
-              << " and mnr.size() = " << mnr.size() << "\n";
-#endif
-#ifdef ICD_DEBUG
-  if ((mjr.size() != 1 && mjr.size() != mnr.size())
-        || (mjr.size() == 1 && mnr.size() == 0)) {
-    Rcpp::stop(
-      "icd9MajMinToShort, length of mjrs and mnrs must be equal, unless mjrs length is one.");
-  }
-#endif
-  if (mjr.size() == 1) {
-#ifdef ICD_DEBUG_TRACE
-    Rcpp::Rcout << "icd9MajMinToShort: mjr.size() = 1\n";
-#endif
-    Rcpp::CharacterVector newmjr(mnr.size(), mjr[0]);
-    return icd9MajMinToCode(newmjr, mnr, true);
-  }
-  return icd9MajMinToCode(mjr, mnr, true);
-}
-
-// [[Rcpp::export]]
-Rcpp::CharacterVector icd9MajMinToDecimal(const Rcpp::CharacterVector mjr,
-                                          const Rcpp::CharacterVector mnr) {
-  return icd9MajMinToCode(mjr, mnr, false);
-}
 
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9PartsToShort(const Rcpp::List parts) {
+CV icd9PartsToShort(const Rcpp::List parts) {
   return icd9MajMinToCode(parts["mjr"], parts["mnr"], true);
 }
 
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9PartsToDecimal(const Rcpp::List parts) {
+CV icd9PartsToDecimal(const Rcpp::List parts) {
   return icd9MajMinToCode(parts["mjr"], parts["mnr"], false);
 }
 
 // [[Rcpp::export]]
-Rcpp::List icd9MajMinToParts(const Rcpp::CharacterVector mjr,
-                             const Rcpp::CharacterVector mnr) {
+Rcpp::List icd9MajMinToParts(const CV mjr,
+                             const CV mnr) {
   Rcpp::List returned_frame = Rcpp::List::create(Rcpp::_["mjr"] = mjr,
                                                  Rcpp::_["mnr"] = mnr);
 
@@ -172,10 +56,10 @@ Rcpp::List icd9MajMinToParts(const Rcpp::CharacterVector mjr,
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::List icd9ShortToPartsCpp(Rcpp::CharacterVector icd9Short, Rcpp::String mnrEmpty) {
+Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnrEmpty) {
 
-  Rcpp::CharacterVector mjr(icd9Short.size());
-  Rcpp::CharacterVector mnr(icd9Short.size());
+  CV mjr(icd9Short.size());
+  CV mnr(icd9Short.size());
 
   for (int i = 0; i < icd9Short.size(); ++i) {
     Rcpp::String thisShort = icd9Short[i];
@@ -235,12 +119,12 @@ Rcpp::List icd9ShortToPartsCpp(Rcpp::CharacterVector icd9Short, Rcpp::String mnr
 //' @export
 //' @keywords internal manip
 // [[Rcpp::export(icd_short_to_parts.icd10)]]
-Rcpp::List icd10ShortToPartsCpp(const Rcpp::CharacterVector x, const Rcpp::String mnr_empty = "") {
+Rcpp::List icd10ShortToPartsCpp(const CV x, const Rcpp::String mnr_empty = "") {
 
   R_xlen_t i10sz = x.size();
 
-  Rcpp::CharacterVector mjr(i10sz);
-  Rcpp::CharacterVector mnr(i10sz);
+  CV mjr(i10sz);
+  CV mnr(i10sz);
   std::string::size_type sz;
 
   for (R_xlen_t i = 0; i != i10sz; ++i) {
@@ -272,18 +156,18 @@ Rcpp::List icd10ShortToPartsCpp(const Rcpp::CharacterVector x, const Rcpp::Strin
 //' @rdname convert
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String mnr_empty) {
-  Rcpp::CharacterVector mjrs;
-  Rcpp::CharacterVector mnrs;
+Rcpp::List icd9DecimalToPartsCpp(const CV icd9Decimal, const Rcpp::String mnr_empty) {
+  CV mjrs;
+  CV mnrs;
   int ilen = icd9Decimal.length();
 
   if (ilen == 0) {
     return Rcpp::List::create(Rcpp::_["mjr"] =
-                              Rcpp::CharacterVector::create(), Rcpp::_["mnr"] =
-                              Rcpp::CharacterVector::create());
+                              CV::create(), Rcpp::_["mnr"] =
+                              CV::create());
   }
 
-  for (Rcpp::CharacterVector::const_iterator it = icd9Decimal.begin();
+  for (CV::const_iterator it = icd9Decimal.begin();
        it != icd9Decimal.end(); ++it) {
     Rcpp::String strna = *it;
     if (strna == NA_STRING || strna == "") {
@@ -321,18 +205,18 @@ Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const 
 //' @export
 //' @keywords internal manip
 // [[Rcpp::export(icd_decimal_to_parts.icd10)]]
-Rcpp::List icd10DecimalToPartsCpp(const Rcpp::CharacterVector x, const Rcpp::String mnr_empty = "") {
-  Rcpp::CharacterVector mjrs;
-  Rcpp::CharacterVector mnrs;
+Rcpp::List icd10DecimalToPartsCpp(const CV x, const Rcpp::String mnr_empty = "") {
+  CV mjrs;
+  CV mnrs;
   R_xlen_t ilen = x.length();
 
   if (ilen == 0) {
     return Rcpp::List::create(Rcpp::_["mjr"] =
-                              Rcpp::CharacterVector::create(), Rcpp::_["mnr"] =
-                              Rcpp::CharacterVector::create());
+                              CV::create(), Rcpp::_["mnr"] =
+                              CV::create());
   }
 
-  for (Rcpp::CharacterVector::const_iterator it = x.begin();
+  for (CV::const_iterator it = x.begin();
        it != x.end(); ++it) {
     Rcpp::String strna = *it;
     if (strna == NA_STRING || strna == "") {
@@ -361,14 +245,14 @@ Rcpp::List icd10DecimalToPartsCpp(const Rcpp::CharacterVector x, const Rcpp::Str
 }
 
 // [[Rcpp::export(name = "icd9_short_to_decimal_cpp")]]
-Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector x) {
+CV icd9ShortToDecimal(const CV x) {
   return icd9PartsToDecimal(icd9ShortToPartsCpp(x, ""));
 }
 
 // [[Rcpp::export(name="icd9_decimal_to_short_cpp")]]
-Rcpp::CharacterVector icd9DecimalToShort(
-    const Rcpp::CharacterVector x) {
-  Rcpp::CharacterVector out = clone(x); // clone instead of pushing back thousands of times
+CV icd9DecimalToShort(
+    const CV x) {
+  CV out = clone(x); // clone instead of pushing back thousands of times
   size_t ilen = x.length();
   if (ilen == 0)
     return out;
@@ -379,7 +263,6 @@ Rcpp::CharacterVector icd9DecimalToShort(
     const char * thiscode_cstr = strna.get_cstring();
     std::string thiscode(thiscode_cstr);
     thiscode = trimLeftCpp(thiscode);
-    // TODO consider rejecting grossly invalid codes as NA:
     std::size_t pos = thiscode.find_first_of(".");
     if (pos != std::string::npos) {
       // now we assume that the mjr is snug against the left side, so we can add zero padding
@@ -408,7 +291,7 @@ Rcpp::CharacterVector icd9DecimalToShort(
 //' before the decimal, when a decimal point is used.
 //' @keywords internal manip
 //[[Rcpp::export(name="icd_get_major.icd9")]]
-Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool short_code) {
+CV icd9GetMajor(const CV x, const bool short_code) {
   if (short_code) {
     // am I casting (or just compiler/syntax checker hinting?) SEXP may be
     // costly, or is it just encapsulating a pointer to some fixed data somewhere?
@@ -416,8 +299,8 @@ Rcpp::CharacterVector icd9GetMajor(const Rcpp::CharacterVector x, const bool sho
     // I don't think i need to PROTECT here, because I immediately return the
     // result via Rcpp
     SEXP mjrs = icd9ShortToPartsCpp(x, "")[0]; // actually wants to be an Rcpp::List
-    return Rcpp::as<Rcpp::CharacterVector>(mjrs);
+    return Rcpp::as<CV>(mjrs);
   }
   SEXP mjrs = icd9DecimalToPartsCpp(x, "")[0];
-  return Rcpp::as<Rcpp::CharacterVector>(mjrs);
+  return Rcpp::as<CV>(mjrs);
 }
