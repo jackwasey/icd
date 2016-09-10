@@ -214,19 +214,19 @@ CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal) {
     // TODO by reference or updating arguments instead? Unclear benefit, but
     // this does/did take a lot of cycles in valgrind
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
-    CV major = parts[0];
-    CV minor = parts[1];
+    CV mjr = parts[0];
+    CV mnr = parts[1];
 
-    CV::iterator itmajor = major.begin();
-    CV::iterator itminor = minor.begin();
-    for (; itmajor != major.end(); ++itmajor, ++itminor) {
-      std::string thismajor = Rcpp::as<std::string>(*itmajor);
-      std::string thisminor = Rcpp::as<std::string>(*itminor);
+    CV::iterator itmjr = mjr.begin();
+    CV::iterator itmnr = mnr.begin();
+    for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
+      std::string thismjr = Rcpp::as<std::string>(*itmjr);
+      std::string thismnr = Rcpp::as<std::string>(*itmnr);
 
-      CV newminors = icd9ExpandMinor(thisminor, icd9IsASingleE(thismajor.c_str()));
+      CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
 
       VecStr newshort = Rcpp::as<VecStr >(
-        icd9MajMinToShort(thismajor, newminors));
+        icd9MajMinToShort(thismjr, newminors));
 
       out.insert(newshort.begin(), newshort.end());
     }
@@ -259,18 +259,18 @@ CV icd9ChildrenShortCppUnordered(CV icd9Short, bool onlyReal) {
   // this is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
-    CV major = parts[0];
-    CV minor = parts[1];
+    CV mjr = parts[0];
+    CV mnr = parts[1];
 
-    CV::iterator itmajor = major.begin();
-    CV::iterator itminor = minor.begin();
-    for (; itmajor != major.end(); ++itmajor, ++itminor) {
-      Str thismajor = Rcpp::as<Str>(*itmajor);
-      Str thisminor = Rcpp::as<Str>(*itminor);
+    CV::iterator itmjr = mjr.begin();
+    CV::iterator itmnr = mnr.begin();
+    for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
+      Str thismjr = Rcpp::as<Str>(*itmjr);
+      Str thismnr = Rcpp::as<Str>(*itmnr);
 
-      CV newminors = icd9ExpandMinor(thisminor, icd9IsASingleE(thismajor.c_str()));
+      CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
 
-      VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismajor, newminors));
+      VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismjr, newminors));
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
@@ -300,21 +300,20 @@ CV icd9ChildrenShortCppUnordered(CV icd9Short, bool onlyReal) {
   return rcppOut;
 }
 
-
 // [[Rcpp::export]]
 VecStr icd9ChildrenShortCppNoNaUnordered(const VecStr& icd9Short, const bool onlyReal) {
   icd_set out; // we are never going to put NAs in the output, so use std structure
   // this is a slower function, can the output set be predefined in size?
-  VecStr major(icd9Short.size());
-  VecStr minor(icd9Short.size());
+  VecStr mjr(icd9Short.size());
+  VecStr mnr(icd9Short.size());
   if (icd9Short.size() != 0) {
-    icd9ShortToPartsCppStd(icd9Short, "", major, minor);
+    icd9ShortToPartsCppStd(icd9Short, "", mjr, mnr);
 
-    VecStr::iterator itmajor = major.begin();
-    VecStr::iterator itminor = minor.begin();
-    for (; itmajor != major.end(); ++itmajor, ++itminor) {
-      VecStr newminors = icd9ExpandMinorStd(*itminor, icd9IsASingleE((*itmajor).c_str()));
-      VecStr newshort = icd9MajMinToShortSingleStd(*itmajor, newminors);
+    VecStr::iterator itmjr = mjr.begin();
+    VecStr::iterator itmnr = mnr.begin();
+    for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
+      VecStr newminors = icd9ExpandMinorStd(*itmnr, icd9IsASingleE((*itmjr).c_str()));
+      VecStr newshort = icd9MajMinToShortSingleStd(*itmjr, newminors);
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
@@ -369,7 +368,6 @@ CV icd9ChildrenCpp(CV icd9, bool isShort,
   return icd9ChildrenDecimalCpp(icd9, onlyReal);
 }
 
-
 //' @title match ICD9 codes
 //' @description Finds children of \code{icd9Reference} and looks for \code{icd9} in the
 //'   resulting vector.
@@ -384,14 +382,13 @@ Rcpp::LogicalVector icd_in_reference_code(CV icd,
                                           CV icd_reference,
                                           bool short_code,
                                           bool short_reference = true) {
-
   if (!short_code)
     icd = icd9DecimalToShort(icd);
 
   CV y = icd9ChildrenCpp(icd_reference, short_reference, false);
   if (!short_reference)
     y = icd9DecimalToShort(y);
-  // TODO: use hash/environment
+  // TODO: use hash/environment, although linear search in short maps may be ok
   Rcpp::LogicalVector res = !is_na(match(icd, y));
   return res;
 }

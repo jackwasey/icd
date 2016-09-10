@@ -33,6 +33,8 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   const VecVecIntSz last_i = vcdb.size() - 1;
   VecVecIntSz chunk_end_i;
   VecVecIntSz vis_i;
+  const VecVecIntSz vsz = 1;
+  //const VecVecIntSz vsz = vcdb.size();
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "map.size() = " << map.size() << "\n";
@@ -42,15 +44,13 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 #endif
 
 #ifdef ICD_OPENMP
-  // I think const values are automatically shared, if default(none) is not
-  // used. Different compilers respond differently.
 #pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout, vcdb, map) private(chunk_end_i, vis_i)
   // SOMEDAY: need to consider other processes using multiple cores, see Writing R Extensions.
   //	omp_set_schedule(omp_sched_static, ompChunkSize);
-  // #pragma omp for schedule(static)
 #endif
-  // loop through chunks at a time
-  for (vis_i = 0; vis_i < vcdb.size(); vis_i += chunkSize) {
+  // loop through chunks at a time, by integer size:
+  // https://stackoverflow.com/questions/2513988/iteration-through-std-containers-in-openmp
+  for (vis_i = 0; vis_i < vsz; vis_i += chunkSize) {
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "vis_i = " << vis_i << "\n";
 #endif
@@ -67,14 +67,13 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
     Rcpp::Rcout << "OMP vcdb.size() = " << vcdb.size() << "\n";
     Rcpp::Rcout << "OMP map.size() = " << map.size() << "\n";
 #endif
-    VecVecIntSz& begin = vis_i;
-    VecVecIntSz& end = chunk_end_i;
+    const VecVecIntSz& begin = vis_i;
+    const VecVecIntSz& end = chunk_end_i;
 
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
 #endif
-    const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin),
-                                         false);
+    const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin), false);
     chunk = falseComorbidChunk;
     for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
 #ifdef ICD_DEBUG_TRACE

@@ -118,6 +118,12 @@ icd10cm_children_defined_cpp <- function(x) {
     .Call('icd_icd10cmChildrenDefined', PACKAGE = 'icd', x)
 }
 
+#' core search for ICD code in a map
+#' @keywords internal
+lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {
+    invisible(.Call('icd_lookupComorbidByChunkFor', PACKAGE = 'icd', vcdb, map, chunkSize, ompChunkSize, out))
+}
+
 #' @rdname icd_comorbid
 #' @description \link{Rcpp} approach to comorbidity assignment with OpenMP and
 #'   vector of integers strategy. It is very fast, and most time is now spent
