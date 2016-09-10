@@ -108,7 +108,7 @@ std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
 }
 
 // [[Rcpp::export(icd9_add_leading_zeroes_major)]]
-Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector mjr) {
+CV icd9AddLeadingZeroesMajor(CV mjr) {
 	return Rcpp::sapply(mjr, icd9AddLeadingZeroesMajorSingle);
 }
 
@@ -135,7 +135,7 @@ Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector mjr) {
 //' }
 //' @keywords internal manip
 // [[Rcpp::export(icd9_add_leading_zeroes_cpp)]]
-Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector x, bool short_code) {
+CV icd9AddLeadingZeroes(CV x, bool short_code) {
   if (short_code) {
   // a shortcut for when short codes is just to add the appropriate leading
   // zeros when the total length is <3. Even then decimal may be quicker by

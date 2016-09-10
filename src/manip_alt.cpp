@@ -56,13 +56,13 @@ Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
 }
 
 // [[Rcpp::export(icd9_add_leading_zeroes_alt_cpp)]]
-Rcpp::CharacterVector icd9AddLeadingZeroesDirect(Rcpp::CharacterVector x, bool short_code) {
+CV icd9AddLeadingZeroesDirect(CV x, bool short_code) {
   // a shortcut for when short codes is just to add the appropriate leading
   // zeros when the total length is <3.
   if (short_code)
     return Rcpp::sapply(x, icd9AddLeadingZeroesShortSingle);
 
-  Rcpp::CharacterVector y = icd9DecimalToShort(x);
+  CV y = icd9DecimalToShort(x);
   return Rcpp::sapply(y, icd9AddLeadingZeroesShortSingle);
 }
 

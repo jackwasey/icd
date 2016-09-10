@@ -45,8 +45,8 @@
 //' # std method without doing padding is 5 times quicker than previous...
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
-                                       const Rcpp::CharacterVector mnr,
+CV icd9MajMinToCode(const CV mjr,
+                                       const CV mnr,
                                        bool isShort) {
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
@@ -57,14 +57,14 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
     Rcpp::stop("mjr and mnr lengths differ");
 #endif
 
-  std::vector<std::string> out(mjr.size());
+  VecStr out(mjr.size());
   std::vector<char> out_is_na(mjr.size()); // boolean in char
-  Rcpp::CharacterVector::const_iterator j = mjr.begin();
-  Rcpp::CharacterVector::const_iterator n = mnr.begin();
+  CV::const_iterator j = mjr.begin();
+  CV::const_iterator n = mnr.begin();
 
   for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
     Rcpp::String mjrelem = *j;
-    if (Rcpp::CharacterVector::is_na(*j)) {
+    if (CV::is_na(*j)) {
       out_is_na[std::distance(mjr.begin(), j)] = 1;
       continue;
     }
@@ -88,7 +88,7 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
       // default: // mjr is 3 (or more) chars already
     }
     Rcpp::String mnrelem = *n;
-    if (Rcpp::CharacterVector::is_na(*n)) {
+    if (CV::is_na(*n)) {
       mnrelem = "";
     }
     if (!isShort && mnrelem != "") {
@@ -97,7 +97,7 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
     smj.append(mnrelem);
     out[std::distance(mjr.begin(), j)] = smj;
   }
-  Rcpp::CharacterVector r_out = Rcpp::wrap(out);
+  CV r_out = Rcpp::wrap(out);
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "NA loop size: " << out_is_na.size() << "\n";
 #endif
@@ -116,11 +116,11 @@ Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr,
 //' codes are already trimmed and correctly padded with zeros, e.g. E001, V09,
 //' 001. This version does handle NA values correctly. ' @keywords internal
 //[[Rcpp::export]]
-Rcpp::CharacterVector icd9MajMinToCodePrePadded(const Rcpp::CharacterVector mjr,
-                                                const Rcpp::CharacterVector mnr,
+CV icd9MajMinToCodePrePadded(const CV mjr,
+                                                const CV mnr,
                                                 bool isShort) {
   R_xlen_t sz = mjr.size();
-  Rcpp::CharacterVector r_out(sz);
+  CV r_out(sz);
   Rcpp::String mnrelem;
   Rcpp::String outelem;
   for (R_xlen_t i = 0; i != sz; ++i) {
@@ -139,7 +139,7 @@ Rcpp::CharacterVector icd9MajMinToCodePrePadded(const Rcpp::CharacterVector mjr,
 }
 
 // [[Rcpp::export]]
-VecStr icd9MajMinToCodeStd(const VecStr mjr, const VecStr mnr, bool isShort) {
+VecStr icd9MajMinToCodeStd(const VecStr& mjr, const VecStr& mnr, bool isShort) {
   VecStr::size_type mjsz = mjr.size();
   VecStr out(mjsz);
   VecStr::size_type j;
@@ -153,53 +153,9 @@ VecStr icd9MajMinToCodeStd(const VecStr mjr, const VecStr mnr, bool isShort) {
   return out;
 }
 
-//' append minor to major using std
-//'
-//' benefits from having reserve string size of 5
 // [[Rcpp::export]]
-void icd9AppendMinor(VecStr& m, const VecStr mnr, bool isShort) {
-  VecStr::size_type mjsz = m.size();
-  VecStr::size_type j;
-  for (j = 0; j != mjsz; ++j) {
-    if (!isShort && mnr[j] != "")
-      m[j].append(".");
-    m[j].append(mnr[j]);
-  }
-}
-
-//' append minor to major using std, with reservation of string length
-//'
-//' if \code{m} string size is already reserved, then use other \code{icd9AppendMinor}
-// [[Rcpp::export]]
-void icd9AppendMinor(VecStr& m, const VecStr& mnr, bool isShort, bool reserve = true) {
-  if (reserve)
-    m.reserve(5 + (VecStr::size_type)isShort);
-  VecStr::size_type mjsz = m.size();
-  VecStr::size_type j;
-  for (j = 0; j != mjsz; ++j) {
-    if (!isShort && mnr[j] != "")
-      m[j].append(".");
-    m[j].append(mnr[j]);
-  }
-}
-
-inline void icd9AppendMinorShort(VecStr& m, const VecStr& mnr) {
-  for (VecStr::size_type j = 0; j != m.size(); ++j) {
-    m[j].append(mnr[j]);
-  }
-}
-
-inline void icd9AppendMinorShort(VecStr& m, const VecStr& mnr, bool reserve = true) {
-  if (reserve)
-    m.reserve(5);
-  for (VecStr::size_type j = 0; j != m.size(); ++j) {
-    m[j].append(mnr[j]);
-  }
-}
-
-// [[Rcpp::export]]
-CV icd9MajMinToShort(const Rcpp::CharacterVector mjr,
-                     const Rcpp::CharacterVector mnr) {
+CV icd9MajMinToShort(const CV mjr,
+                     const CV mnr) {
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
               << " and mnr.size() = " << mnr.size() << "\n";
@@ -215,10 +171,60 @@ CV icd9MajMinToShort(const Rcpp::CharacterVector mjr,
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "icd9MajMinToShort: mjr.size() = 1\n";
 #endif
-    Rcpp::CharacterVector newmjr(mnr.size(), mjr[0]);
+    CV newmjr(mnr.size(), mjr[0]);
     return icd9MajMinToCode(newmjr, mnr, true);
   }
   return icd9MajMinToCode(mjr, mnr, true);
+}
+
+// [[Rcpp::export]]
+CV icd9MajMinToDecimal(const CV mjr,
+                                          const CV mnr) {
+  return icd9MajMinToCode(mjr, mnr, false);
+}
+
+//' append minor to major using std
+//'
+//' benefits from having reserve string size of 5
+// [[Rcpp::export]]
+void icd9AppendMinors(VecStr& m, const VecStr& mnr, bool isShort) {
+  VecStr::size_type mjsz = m.size();
+  VecStr::size_type j;
+  for (j = 0; j != mjsz; ++j) {
+    if (!isShort && mnr[j] != "")
+      m[j].append(".");
+    m[j].append(mnr[j]);
+  }
+}
+
+// //' append minor to major using std, with reservation of string length
+// //'
+// //' if \code{m} string size is already reserved, then use other \code{icd9AppendMinors}
+// // [[Rcpp::export]]
+// void icd9AppendMinors(VecStr& m, const VecStr& mnr, bool isShort, bool reserve = true) {
+//   if (reserve)
+//     m.reserve(5 + (VecStr::size_type)isShort);
+//   VecStr::size_type mjsz = m.size();
+//   VecStr::size_type j;
+//   for (j = 0; j != mjsz; ++j) {
+//     if (!isShort && mnr[j] != "")
+//       m[j].append(".");
+//     m[j].append(mnr[j]);
+//   }
+// }
+
+inline void icd9AppendMinorsShort(VecStr& m, const VecStr& mnr) {
+  for (VecStr::size_type j = 0; j != m.size(); ++j) {
+    m[j].append(mnr[j]);
+  }
+}
+
+inline void icd9AppendMinorsShort(VecStr& m, const VecStr& mnr, bool reserve) {
+  if (reserve)
+    m.reserve(5);
+  for (VecStr::size_type j = 0; j != m.size(); ++j) {
+    m[j].append(mnr[j]);
+  }
 }
 
 //' initialize a std::vector of strings with repeated value of the minor
@@ -230,13 +236,14 @@ VecStr icd9MajMinToShortStd(const VecStr& mjr, const VecStr& mnr) {
     m.reserve(5);
     m = mjr[0];
     VecStr newmjr(mnr.size(), m);
-    return icd9MajMinToCodeStd(newmjr, mnr, true);
+    icd9AppendMinorsShort(newmjr, mnr);
+    return newmjr;
   }
   return icd9MajMinToCodeStd(mjr, mnr, true);
 }
 
 // [[Rcpp::export]]
-Rcpp::CharacterVector icd9MajMinToDecimal(const Rcpp::CharacterVector mjr,
-                                          const Rcpp::CharacterVector mnr) {
-  return icd9MajMinToCode(mjr, mnr, false);
+VecStr icd9MajMinToShortSingleStd(const Str& mjr, const VecStr& mnr) {
+    VecStr newmjr(mnr.size(), mjr);
+    return icd9MajMinToShortStd(newmjr, mnr);
 }

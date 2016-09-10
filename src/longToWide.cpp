@@ -22,23 +22,23 @@
 #include <valgrind/callgrind.h>
 #endif
 
-Rcpp::CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
+CV raggedToWide(const VecVecStr& ragged, int max_per_pt,
 		const VecStr &visitIds) {
 #ifdef ICD_DEBUG_TRACE
 	Rcpp::Rcout << "visitIds = ";
 	// printIt(visitIds); // broken, not sure why.
 #endif
 	VecStr::size_type distinct_visits = ragged.size();
-	Rcpp::CharacterVector out(distinct_visits * max_per_pt, NA_STRING); // optionally default empty strings? NA? User can do this for now.
+	CV out(distinct_visits * max_per_pt, NA_STRING); // optionally default empty strings? NA? User can do this for now.
 #ifdef ICD_DEBUG
 			if (distinct_visits == 0) {
 				Rcpp::Rcout << "no visits. returning blank data\n";
-				return Rcpp::CharacterVector::create();
+				return CV::create();
 			}
 			if (distinct_visits != visitIds.size()) {
 				Rcpp::Rcout << "visit and ragged sizes differ. visits = " << visitIds.size() <<
 				  ", ragged size = " << distinct_visits << ": returning blank data\n";
-				return Rcpp::CharacterVector::create();
+				return CV::create();
 			}
 #endif
 	for (VecVecStr::size_type row_it = 0; row_it < distinct_visits; ++row_it) {
@@ -58,7 +58,7 @@ Rcpp::CharacterVector raggedToWide(const VecVecStr& ragged, int max_per_pt,
 #ifdef ICD_DEBUG
 			Rcpp::Rcout << "writing labels\n";
 #endif
-			Rcpp::CharacterVector nonames;
+			CV nonames;
 	rownames(out) = Rcpp::wrap(visitIds);
 	return out;
 }
@@ -120,7 +120,7 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 }
 
 // [[Rcpp::export(icd_long_to_wide_cpp)]]
-Rcpp::CharacterVector icd9LongToWideCpp(const SEXP& icd9df,
+CV icd9LongToWideCpp(const SEXP& icd9df,
 		const std::string visitId, const std::string icd9Field,
 		bool aggregate = true) {
 

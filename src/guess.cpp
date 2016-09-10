@@ -73,10 +73,10 @@ bool guessShortCompleteCpp(SEXP x_,
 
 // [[Rcpp::export]]
 bool guessShortPlusFactorCpp(SEXP x_, int n) {
-  Rcpp::CharacterVector x;
+  CV x;
   switch(TYPEOF(x_)) {
   case STRSXP: {
-    x = Rcpp::as<Rcpp::CharacterVector>(x_);
+    x = Rcpp::as<CV>(x_);
     break;
   }
   case INTSXP: {

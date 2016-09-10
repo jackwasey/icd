@@ -20,6 +20,7 @@
 #include "icd_types.h"
 #include "local.h"
 #include <convert.h>
+#include <appendMinor.h>
 #include <convert_alt.h>
 // manip just for add leading zeroes: TODO remove this dep
 #include <manip.h>
@@ -150,8 +151,8 @@ VecStr icd9ExpandMinorStd(const Str& mnr, bool isE) {
   }
 }
 
-// [[Rcpp::export]]
-CV icd9ExpandMinorShim(std::string mnr, bool isE) {
+// [[Rcpp::export(icd_expand_minor.icd9)]]
+CV icd9ExpandMinor(std::string mnr, bool isE) {
 
   if (!isE) {
     switch (mnr.size()) {
@@ -195,7 +196,7 @@ CV icd9ExpandMinorShim(std::string mnr, bool isE) {
     switch (mnr.size()) {
     case 0:
       return CV::create("", "0", "1", "2", "3", "4", "5",
-                                           "6", "7", "8", "9");
+                        "6", "7", "8", "9");
     case 1:
       return mnr;
     default:
@@ -222,10 +223,9 @@ CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal) {
       std::string thismajor = Rcpp::as<std::string>(*itmajor);
       std::string thisminor = Rcpp::as<std::string>(*itminor);
 
-      CV newminors = icd9ExpandMinorShim(thisminor,
-                                                            icd9IsASingleE(thismajor.c_str()));
+      CV newminors = icd9ExpandMinor(thisminor, icd9IsASingleE(thismajor.c_str()));
 
-      std::vector<std::string> newshort = Rcpp::as<std::vector<std::string> >(
+      VecStr newshort = Rcpp::as<VecStr >(
         icd9MajMinToShort(thismajor, newminors));
 
       out.insert(newshort.begin(), newshort.end());
@@ -234,7 +234,7 @@ CV icd9ChildrenShortCpp(CV icd9Short, bool onlyReal) {
       const Rcpp::Environment env("package:icd");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       std::set<Str> out_real;
-      std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
+      VecStr tmp = Rcpp::as<VecStr >(
         icd9Hierarchy["code"]);
       // 'reals' is the set of majors, intermediate and leaf codes.
       std::set<Str> reals(tmp.begin(), tmp.end());
@@ -268,8 +268,7 @@ CV icd9ChildrenShortCppUnordered(CV icd9Short, bool onlyReal) {
       Str thismajor = Rcpp::as<Str>(*itmajor);
       Str thisminor = Rcpp::as<Str>(*itminor);
 
-      CV newminors = icd9ExpandMinorShim(thisminor,
-                                                            icd9IsASingleE(thismajor.c_str()));
+      CV newminors = icd9ExpandMinor(thisminor, icd9IsASingleE(thismajor.c_str()));
 
       VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismajor, newminors));
       out.insert(newshort.begin(), newshort.end());
@@ -278,7 +277,7 @@ CV icd9ChildrenShortCppUnordered(CV icd9Short, bool onlyReal) {
       const Rcpp::Environment env("package:icd");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       icd_set out_real;
-      std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
+      VecStr tmp = Rcpp::as<VecStr >(
         icd9Hierarchy["code"]);
       // 'reals' is the set of majors, intermediate and leaf codes.
       icd_set reals(tmp.begin(), tmp.end());
@@ -303,7 +302,7 @@ CV icd9ChildrenShortCppUnordered(CV icd9Short, bool onlyReal) {
 
 
 // [[Rcpp::export]]
-VecStr icd9ChildrenShortCppNoNaUnordered(VecStr icd9Short, bool onlyReal) {
+VecStr icd9ChildrenShortCppNoNaUnordered(const VecStr& icd9Short, const bool onlyReal) {
   icd_set out; // we are never going to put NAs in the output, so use std structure
   // this is a slower function, can the output set be predefined in size?
   VecStr major(icd9Short.size());
@@ -315,15 +314,14 @@ VecStr icd9ChildrenShortCppNoNaUnordered(VecStr icd9Short, bool onlyReal) {
     VecStr::iterator itminor = minor.begin();
     for (; itmajor != major.end(); ++itmajor, ++itminor) {
       VecStr newminors = icd9ExpandMinorStd(*itminor, icd9IsASingleE((*itmajor).c_str()));
-
-      VecStr newshort = icd9MajMinToShortStd(*itmajor, newminors);
+      VecStr newshort = icd9MajMinToShortSingleStd(*itmajor, newminors);
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
       const Rcpp::Environment env("package:icd");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       icd_set out_real;
-      std::vector<std::string> tmp = Rcpp::as<std::vector<std::string> >(
+      VecStr tmp = Rcpp::as<VecStr >(
         icd9Hierarchy["code"]);
       // 'reals' is the set of majors, intermediate and leaf codes.
       icd_set reals(tmp.begin(), tmp.end());
@@ -341,14 +339,21 @@ VecStr icd9ChildrenShortCppNoNaUnordered(VecStr icd9Short, bool onlyReal) {
       out = out_real;
     }
   } // input length != 0
-  VecStr rcppOut = Rcpp::wrap(out);
-  rcppOut.attr("icd_short_diag") = true;
-  return rcppOut;
+  // TODO in R wrapper: rcppOut.attr("icd_short_diag") = true;
+
+  // sort from set or unordered set into a vector:
+
+  VecStr out_vec(out.begin(), out.end());
+#ifdef HAVE_CXX11
+  // TODO
+#endif
+
+  return out_vec;
 }
 
 // [[Rcpp::export]]
 CV icd9ChildrenDecimalCpp(CV icd9Decimal,
-                                             bool onlyReal) {
+                          bool onlyReal) {
   CV shrt = icd9DecimalToShort(icd9Decimal);
   CV kids = icd9ChildrenShortCpp(shrt, onlyReal);
   CV out = icd9ShortToDecimal(kids);
@@ -358,7 +363,7 @@ CV icd9ChildrenDecimalCpp(CV icd9Decimal,
 
 // [[Rcpp::export]]
 CV icd9ChildrenCpp(CV icd9, bool isShort,
-                                      bool onlyReal = true) {
+                   bool onlyReal = true) {
   if (isShort)
     return icd9ChildrenShortCpp(icd9, onlyReal);
   return icd9ChildrenDecimalCpp(icd9, onlyReal);

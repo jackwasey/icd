@@ -19,13 +19,14 @@
 #define MANIP_H_
 
 // [[Rcpp::interfaces(r, cpp)]]
+#include "icd_types.h"
 #include <Rcpp.h>
 #include <string>
 
-Rcpp::CharacterVector icd9AddLeadingZeroes(Rcpp::CharacterVector icd9, bool isShort);
-Rcpp::CharacterVector icd9AddLeadingZeroesShort(Rcpp::CharacterVector icd9Short);
+CV icd9AddLeadingZeroes(CV icd9, bool isShort);
+CV icd9AddLeadingZeroesShort(CV icd9Short);
 Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String major);
 std::string icd9AddLeadingZeroesMajorSingleStd(std::string m);
-Rcpp::CharacterVector icd9AddLeadingZeroesMajor(Rcpp::CharacterVector mjr);
+CV icd9AddLeadingZeroesMajor(CV mjr);
 
 #endif /* MANIP_H_ */

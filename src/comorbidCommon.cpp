@@ -33,8 +33,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
                               const VecVecIntSz ompChunkSize,
                               ComorbidOut& out) {
   const VecVecIntSz num_comorbid = map.size();
-  const VecVecIntSz num_visits = vcdb.size();
-  const VecVecIntSz last_i = num_visits - 1;
+  const VecVecIntSz last_i = vcdb.size() - 1;
   VecVecIntSz chunk_end_i;
   VecVecIntSz vis_i;
 #ifdef ICD_DEBUG_TRACE
@@ -53,27 +52,23 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   // #pragma omp for schedule(static)
 #endif
   // loop through chunks at a time
-  for (vis_i = 0; vis_i < num_visits; vis_i += chunkSize) {
+  for (vis_i = 0; vis_i < vcdb.size(); vis_i += chunkSize) {
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "vis_i = " << vis_i << "\n";
 #endif
 #ifdef ICD_DEBUG_PARALLEL
     debug_parallel();
 #endif
-    chunk_end_i = vis_i + chunkSize - 1; // chunk end is an index, so for zero-based vis_i and chunk_end should be the last index in the chunk
+    // chunk end is an index, so for zero-based vis_i and chunk_end should be
+    // the last index in the chunk
+    chunk_end_i = vis_i + chunkSize - 1;
     if (chunk_end_i > last_i)
-      chunk_end_i = last_i; // indices
+      chunk_end_i = last_i;
     ComorbidOut chunk;
 #ifdef ICD_DEBUG_TRACE
-    // this gives size 0 with OMP enabled. bug #75 unravelling: this isn't zero!
     Rcpp::Rcout << "OMP vcdb.size() = " << vcdb.size() << "\n";
     Rcpp::Rcout << "OMP map.size() = " << map.size() << "\n";
 #endif
-    // lookupOneChunk(vcdb, map, num_comorbid, vis_i, chunk_end_i, chunk);
-    // Look up comorbidities for one chunk of vcdb, this is called in parallel
-    //		void lookupOneChunk(const VecVecInt& vcdb, const VecVecInt& map,
-    //const VecVecIntSz num_comorbid, const VecVecIntSz begin,
-    //const VecVecIntSz end, ComorbidOut& chunk) {
     VecVecIntSz begin = vis_i;
     VecVecIntSz end = chunk_end_i;
 

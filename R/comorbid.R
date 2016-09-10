@@ -338,63 +338,63 @@ icd_comorbid_common <- function(x,
 #' call the \code{icd9_} or \code{icd10_} prefixed function directly.
 #' @export
 icd9_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd9_comorbid(x, map = icd::icd9_map_ahrq, short_map = TRUE, ...)
+  cbd <- icd9_comorbid(x, map = icd9_map_ahrq, short_map = TRUE, ...)
   apply_hier_ahrq(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd10_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd::icd10_map_ahrq, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd10_map_ahrq, short_map = TRUE, ...)
   apply_hier_ahrq(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd9_comorbid_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd9_comorbid(x, map = icd::icd9_map_elix, short_map = TRUE, ...)
+  cbd <- icd9_comorbid(x, map = icd9_map_elix, short_map = TRUE, ...)
   apply_hier_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd10_comorbid_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd::icd10_map_elix, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd10_map_elix, short_map = TRUE, ...)
   apply_hier_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd9_comorbid_quan_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd9_comorbid(x, map = icd::icd9_map_quan_elix, short_map = TRUE, ...)
+  cbd <- icd9_comorbid(x, map = icd9_map_quan_elix, short_map = TRUE, ...)
   apply_hier_quan_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd10_comorbid_quan_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_elix, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd10_map_quan_elix, short_map = TRUE, ...)
   apply_hier_quan_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd9_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd9_comorbid(x, map = icd::icd9_map_quan_deyo, short_map = TRUE, ...)
+  cbd <- icd9_comorbid(x, map = icd9_map_quan_deyo, short_map = TRUE, ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_deyo, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd10_map_quan_deyo, short_map = TRUE, ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @rdname icd_comorbid
 #' @export
 icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_deyo, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd10_map_quan_deyo, short_map = TRUE, ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 

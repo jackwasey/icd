@@ -10,23 +10,23 @@ R_READY="message(\"ready to valgrind\")"
 
 VG_TOOL="callgrind"
 INSTR_ATSTART="no"
-RSNIP="x <- generate_random_pts(1000000); icd_comorbid_quan_deyo(x)"
+RSNIP="x <- icd:::generate_random_pts(1000000); invisible(icd_comorbid_quan_deyo(x))"
 
 R_CG_START=""
 R_CG_STOP=""
 IAS_ARG=""
 if [ $VG_TOOL = "callgrind" ]; then
-  R_CG_START="valgrindCallgrindStart()"
-  R_CG_STOP="valgrindCallgrindStop()"
+  R_CG_START="icd:::valgrindCallgrindStart()"
+  R_CG_STOP="icd:::valgrindCallgrindStop()"
   IAS_ARG="--instr-atstart=$INSTR_ATSTART"
 fi
 
 # VG_TOOL="helgrind"
 VG="valgrind --tool=${VG_TOOL} ${IAS_ARG:-}"
-R_CODE_DEFAULT="'library(icd); $R_READY; $R_CG_START; $RSNIP; $R_CG_STOP}'"
+R_CODE_DEFAULT="library(icd); $R_READY; $R_CG_START; $RSNIP; $R_CG_STOP"
 R_CODE=${RCODE:-$R_CODE_DEFAULT}
 # run data race detector or helgrind
-R CMD INSTALL ~/icd && R --vanilla --slave -d "${VG}" -e "${R_CODE}"
+R CMD INSTALL --no-help --no-docs --no-byte-compile ~/icd && R --vanilla --slave -d "${VG}" -e "${R_CODE}"
 
 # run with helgrind http://valgrind.org/docs/manual/hg-manual.html "Helgrind is
 # a Valgrind tool for detecting synchronisation errors in C, C++ and Fortran

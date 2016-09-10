@@ -20,11 +20,10 @@
 
 #include "icd_types.h"
 #include <Rcpp.h>
-Rcpp::CharacterVector icd9MajMinToCodeOld(Rcpp::CharacterVector mjr,
-                                          Rcpp::CharacterVector mnr, bool isShort);
-void icd9ShortToPartsCppStd(std::vector<std::string> icd9Short,
+CV icd9MajMinToCodeOld(CV mjr, CV mnr, bool isShort);
+void icd9ShortToPartsCppStd(VecStr icd9Short,
                             std::string mnrEmpty,
-                            std::vector<std::string> &mjr,
-                            std::vector<std::string> &mnr);
+                            VecStr &mjr,
+                            VecStr &mnr);
 
 #endif /* CONVERT_H_ */

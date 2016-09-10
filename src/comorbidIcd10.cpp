@@ -24,7 +24,6 @@
 #include <vector>
 #include <string>
 
-using Rcpp::CharacterVector;
 using Rcpp::IntegerVector;
 using Rcpp::LogicalMatrix;
 using Rcpp::String;
@@ -48,7 +47,7 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
                                                      std::string visit_name,
                                                      std::string icd_name) {
 
-  CharacterVector icd_codes = x[icd_name];
+  CV icd_codes = x[icd_name];
   LogicalMatrix intermed(icd_codes.size(), map.size()); // zero-filled
 
 #ifdef ICD_DEBUG
@@ -59,7 +58,7 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
 
   String code;
   std::size_t codeNchar; // or char? we know it'll be short
-  CharacterVector oneCbd;
+  CV oneCbd;
   // this must be longer than any code plus one for zero terminator. Some risk
   // of buffer overflow here.
   char codeCur[16];
@@ -116,11 +115,11 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
 #endif
         SEXP test_str = PROTECT(Rf_mkString(codeCur));
 #ifdef ICD_DEBUG_TRACE
-        CharacterVector s_debug(test_str);
+        CV s_debug(test_str);
         Rcpp::Rcout << "test_str = " << ((String)s_debug[0]).get_cstring() << "\n";
 #endif
 
-        Rcpp::CharacterVector lookup_code = test_str;
+        CV lookup_code = test_str;
         Rcpp::IntegerVector matched_indices = Rcpp::match(lookup_code, oneCbd);
 #ifdef ICD_DEBUG
         Rcpp::Rcout << "matched_indices[0] = " << matched_indices[0] << "\n";

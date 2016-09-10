@@ -23,16 +23,12 @@
 
 // need default argument here for other functions to exploit,
 // but this is then not exported by Rcpp (which works on the function body).
-Rcpp::List icd9ShortToPartsCpp(Rcpp::CharacterVector icd9Short, Rcpp::String mnr_empty = "");
-Rcpp::List icd9DecimalToPartsCpp(const Rcpp::CharacterVector icd9Decimal, const Rcpp::String mnr_empty = "");
-Rcpp::CharacterVector icd9PartsToShort(const Rcpp::List parts);
-Rcpp::CharacterVector icd9PartsToDecimal(const Rcpp::List parts);
-Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector mjr, const Rcpp::CharacterVector mnr, bool isShort);
-Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector mjr, const Rcpp::CharacterVector mnr);
-VecStr icd9MajMinToShortStd(const VecStr mjr, const VecStr mnr);
-Rcpp::CharacterVector icd9MajMinToDecimal(const Rcpp::CharacterVector mjr, const Rcpp::CharacterVector mnr);
-Rcpp::CharacterVector icd9DecimalToShort(const Rcpp::CharacterVector icd9Decimal);
-Rcpp::CharacterVector icd9ShortToDecimal(const Rcpp::CharacterVector icd9Short);
-Rcpp::CharacterVector icd9Getmjr(const Rcpp::CharacterVector icd9, const bool isShort);
+Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnr_empty = "");
+Rcpp::List icd9DecimalToPartsCpp(const CV icd9Decimal, const Rcpp::String mnr_empty = "");
+CV icd9PartsToShort(const Rcpp::List parts);
+CV icd9PartsToDecimal(const Rcpp::List parts);
+CV icd9DecimalToShort(const CV icd9Decimal);
+CV icd9ShortToDecimal(const CV icd9Short);
+CV icd9Getmjr(const CV icd9, const bool isShort);
 
 #endif /* CONVERT_H_ */

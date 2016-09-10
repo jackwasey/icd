@@ -37,31 +37,31 @@
 //  as.icd10cm(kids, short_code)
 
 // [[Rcpp::export(icd10cm_children_defined_cpp)]]
-Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector &x) {
+CV icd10cmChildrenDefined(CV &x) {
 
   // need namespace for sysdata (.nc) and package env for lazy data
   Rcpp::Environment env("package:icd"); // only works when package is loaded
   Rcpp::Environment ns = Rcpp::Environment::namespace_env("icd");
   Rcpp::List icd10cm2016 = env["icd10cm2016"];
-  Rcpp::CharacterVector allCodes = icd10cm2016["code"];
+  CV allCodes = icd10cm2016["code"];
   Rcpp::IntegerVector nc = ns[".nc"];
   Rcpp::IntegerVector matchesNa = Rcpp::match(x, allCodes);
   // now drop NA rows, Rcpp match doesn't do this, yet.
   // match(x, table, nomatch = 0L) > 0L
   Rcpp::IntegerVector matches = matchesNa[!is_na(matchesNa)]; // 1-based index (R style)
 
-  std::vector<std::string> kids;
+  VecStr kids;
 
   if (matches.length() == 0) {
     if (x.length() > 0) {
       Rcpp::warning("None of the provided ICD-10 codes matched the master ICD-10-CM list (currently 2016)");
     }
-    return(Rcpp::CharacterVector(0));
+    return(CV(0));
   }
 
   kids.reserve(x.length() * 10);
 
-  Rcpp::CharacterVector tmp = icd10cm2016[0];
+  CV tmp = icd10cm2016[0];
   int last_row = tmp.length(); // zero-based index
   int check_row; // zero-based index
   int parent_len; // number of characters in original parent code
@@ -72,9 +72,9 @@ Rcpp::CharacterVector icd10cmChildrenDefined(Rcpp::CharacterVector &x) {
     while (check_row < last_row && nc[check_row] > parent_len)
       ++check_row;
 
-    Rcpp::CharacterVector::iterator it = allCodes.begin();
+    CV::iterator it = allCodes.begin();
     std::advance(it, matches[i] - 1);
-    Rcpp::CharacterVector::iterator it2 = allCodes.begin();
+    CV::iterator it2 = allCodes.begin();
     std::advance(it2, check_row);
     kids.insert(kids.end(), it, it2);
   }

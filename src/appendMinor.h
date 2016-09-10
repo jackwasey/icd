@@ -20,10 +20,10 @@
 
 #include "icd_types.h"
 #include <Rcpp.h>
-
 CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort);
 CV icd9MajMinToShort(const CV mjr, const CV mnr);
-VecStr icd9MajMinToShortStd(const VecStr mjr, const VecStr mnr);
+VecStr icd9MajMinToShortStd(const VecStr& mjr, const VecStr& mnr);
+VecStr icd9MajMinToShortSingleStd(const Str& mjr, const VecStr& mnr);
 CV icd9MajMinToDecimal(const CV mjr, const CV mnr);
-
+VecStr icd9MajMinToShortSingleStd(const Str& mjr, const VecStr& mnr);
 #endif /* APPENDMINOR_H_ */
