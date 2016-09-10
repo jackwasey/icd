@@ -24,7 +24,9 @@ typedef std::string Str;
 typedef std::vector<Str> VecStr;
 
 typedef std::vector<int> VecInt;
-typedef std::vector<char> ComorbidOut;
+
+// SOMEDAY replace with char, but this stops Rcpp::export working
+typedef std::vector<int> ComorbidOut;
 
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
