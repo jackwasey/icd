@@ -264,20 +264,15 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
 #' @template offline
 #' @keywords internal
 icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
-                                               verbose = FALSE, offline = TRUE) {
+                                               verbose = FALSE, offline = TRUE,
+                                               perl = TRUE, useBytes = TRUE) {
   assert_flag(save_data)
   assert_flag(verbose)
   assert_flag(offline)
 
-  message("get column of ICD-9 codes, up to the three digit headings.")
-  icd9_rtf <- parse_rtf_year(year = "2011",
-                             save_data = FALSE,
-                             verbose = verbose, offline = offline)
-
-  message("slow step of building icd9 chapters hierarchy from 2011 RTF.")
-  chaps <- icd9_get_chapters(x = icd9_rtf$code,
-                             short_code = TRUE,
-                             verbose = verbose)
+  icd9_rtf <- rtf_parse_year(year = "2011", perl = perl, useBytes = useBytes,
+                             save_data = FALSE, verbose = verbose, offline = offline)
+  chaps <- icd9_get_chapters(x = icd9_rtf$code, short_code = TRUE, verbose = verbose)
 
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs

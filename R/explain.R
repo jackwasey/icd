@@ -113,7 +113,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
   c(mjexplain,
-    icd9cm_hierarchy[icd9cm_hierarchy[["code"]] %in% x, desc_field]
+    icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
 }
 
@@ -168,13 +168,13 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x), verbose = FALS
   )
 
   chap_lookup <- lapply(icd9_chapters, function(y)
-    vec_to_env(
+    vec_to_env_true(
       icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
     )
   )
 
   subchap_lookup <- lapply(icd9_sub_chapters, function(y)
-    vec_to_env(
+    vec_to_env_true(
       icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
     )
   )
@@ -199,7 +199,7 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x), verbose = FALS
   out$major[] <- names(icd::icd9_majors)[whch]
   out$three_digit[] <- unlist(icd::icd9_majors)[whch]
   # out is based on unique majors of the input codes. Now merge with original inputs to give output
-  out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = FALSE),
+  out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
         x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
 
   # many possible three digit codes don't exist. We should return NA for the

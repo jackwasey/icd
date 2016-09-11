@@ -20,10 +20,10 @@
 #include "range-const.h"
 #include "icd_types.h"
 #include "local.h"
-#include <convert.h>
-#include <appendMinor.h>
-#include <convert_alt.h>
-#include <is.h>
+#include "convert.h"
+#include "appendMinor.h"
+#include "convert_alt.h"
+#include "is.h"
 
 // someday, can just directly memcopy the codes from the full set
 // const char  icd9ExpandMinorC(const char * mnr, bool isE) {

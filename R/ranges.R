@@ -246,10 +246,10 @@ icd9_expand_range_worker <- function(start, end, lookup, defined,
     return(icd_children.icd9(start, short_code = TRUE, defined = defined))
 
   # this fills most of the output values, but misses children of a high-level end code
-  out_env <- vec_to_env(lookup$vec[start_index:end_index])
+  out_env <- vec_to_env_true(lookup$vec[start_index:end_index])
 
   # do not want to check a load of leaf nodes for children, since they have none. # TODO: pre-calculate
-  leaf_env <- vec_to_env(icd9cm_billable[["32"]][["code"]])
+  leaf_env <- vec_to_env_true(icd9cm_billable[["32"]][["code"]])
 
   is_parent <- function(x, defined) {
     if (!defined)

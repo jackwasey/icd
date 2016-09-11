@@ -108,8 +108,8 @@ if (rtf_year_ok(test_year)) {
                                     file_name = rtf_dat$rtf_filename,
                                     offline = TRUE)
 
-  rtf_lines <- readLines(f_info_short$file_path, warn = FALSE)
-  rtf <- parse_rtf_lines(rtf_lines)
+  # SOMEDAY, test with and without perl, useBytes
+  rtf <- rtf_parse_lines(readLines(f_info_short$file_path, warn = FALSE), perl = TRUE, useBytes = TRUE)
   nrtf <- names(rtf)
 
   test_that("all parsed codes are valid decimals", {
