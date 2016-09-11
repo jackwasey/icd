@@ -18,9 +18,7 @@ Where reasonable, this is guessed from the input data.}
 \description{
 This runs quite slowly. Used too rarely to be worth optimizing
   now. This is used to build a master list of ICD-9 codes with their
-  respective chapters, sub-chapters, etc.. The querying of the web page to
-  get these is already done, and the results saved in the lists
-  \code{icd9_chapters} etc. which define ranges.
+  respective chapters, sub-chapters, etc..
 }
 \keyword{internal}
 

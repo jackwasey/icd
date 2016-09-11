@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+utils::globalVariables(c(
+  "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
+  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo", "icd10_map_quan_elix"))
+
 #' Present-on-admission flags
 #'
 #' See \link{icd_filter_poa} for more details.
@@ -404,7 +408,7 @@ icd9_comorbid_hcc <- function(x,
                               date_name = "date",
                               visit_name = NULL,
                               icd_name = NULL
-                              ) {
+) {
   assert_data_frame(x, min.cols = 3, col.names = "unique")
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
@@ -451,7 +455,7 @@ icd9_comorbid_hcc <- function(x,
   todrop <- lapply(1:length(todrop), function(x) {
     names(todrop[[x]]) <- c(visit_name, date_name, "cc")
     return(todrop[[x]])
-    }
+  }
   )
   todrop <- do.call(rbind, todrop)
 
@@ -474,9 +478,9 @@ icd9_comorbid_hcc <- function(x,
 #' @rdname icd_comorbid
 #' @export
 icd10_comorbid_hcc <- function(x,
-                              date_name = "date",
-                              visit_name = NULL,
-                              icd_name = NULL) {
+                               date_name = "date",
+                               visit_name = NULL,
+                               icd_name = NULL) {
   assert_data_frame(x, min.cols = 3, col.names = "unique")
   assert(checkString(visit_name), checkNull(visit_name))
   assert(checkString(icd_name), checkNull(icd_name))
@@ -523,7 +527,7 @@ icd10_comorbid_hcc <- function(x,
   todrop <- lapply(1:length(todrop), function(x) {
     names(todrop[[x]]) <- c(visit_name, date_name, "cc")
     return(todrop[[x]])
-    }
+  }
   )
   todrop <- do.call(rbind, todrop)
 

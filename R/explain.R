@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+utils::globalVariables(c("icd9_majors", "icd9_chapters",
+                         "icd9_sub_chapters", "icd10cm2016"))
+
 #' Explain ICD-9 and ICD-10 codes in English
 #'
 #' Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
@@ -105,12 +108,12 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
   }
   mj <- unique(icd_get_major.icd9(x, short_code = TRUE))
 
-  mjexplain <- names(icd::icd9_majors)[icd::icd9_majors %in% mj[mj %in% x]]
+  mjexplain <- names(icd9_majors)[icd9_majors %in% mj[mj %in% x]]
   # don't double count when major is also billable
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
   c(mjexplain,
-    icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
+    icd9cm_hierarchy[icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
 }
 
@@ -131,87 +134,90 @@ icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
   if (!short_code)
     x <- icd_decimal_to_short.icd10(x)
 
-  icd::icd10cm2016[icd::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
-                   ifelse(brief, "short_desc", "long_desc")]
+  icd10cm2016[icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
+              ifelse(brief, "short_desc", "long_desc")]
 }
 
 #' get ICD-9 Chapters from vector of ICD-9 codes
 #'
 #' This runs quite slowly. Used too rarely to be worth optimizing
 #'   now. This is used to build a master list of ICD-9 codes with their
-#'   respective chapters, sub-chapters, etc.. The querying of the web page to
-#'   get these is already done, and the results saved in the lists
-#'   \code{icd9_chapters} etc. which define ranges.
+#'   respective chapters, sub-chapters, etc..
 #' @param x vector of ICD-9 codes
 #' @template short_code
 #' @template verbose
 #' @keywords internal
-icd9_get_chapters <- function(x, short_code = icd_guess_short(x),
-                              verbose = FALSE) {
+icd9_get_chapters <- function(x, short_code = icd_guess_short(x), verbose = FALSE) {
   # set up comorbidity maps for chapters/sub/major group, then loop through each
   # ICD-9 code, loop through each comorbidity and lookup code in the map for
   # that field, then add the factor level for the match. There should be 100%
   # matches.
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
-  icd9 <- as_char_no_warn(x)
-  majors <- icd_get_major.icd9(icd9, short_code)
+  x <- as_char_no_warn(x)
+  all_majors <- icd_get_major.icd9(x, short_code)
+  majors <- unique(all_majors)
+  lenm <- length(majors)
 
-  # could consider factor_nosort, but this isn't the main bottleneck
-  cf <- factor(rep(NA_character_, length(icd9)),
-               levels = c(names(icd::icd9_chapters), NA_character_))
-  sf <- factor(rep(NA_character_, length(icd9)),
-               levels = c(names(icd::icd9_sub_chapters), NA_character_))
-  mf <- factor(rep(NA_character_, length(icd9)),
-               levels = c(names(icd::icd9_majors), NA_character_))
-  thrdgt <- factor(rep(NA_character_, length(icd9)), levels = c(icd::icd9_majors, NA_character_))
-  out <- data.frame(three_digit = thrdgt, major = mf,
-                    sub_chapter = sf, chapter = cf)
+  # could consider faster factor generation
+  out <- data.frame(
+    three_digit = factor(rep(NA, lenm), levels = c(icd::icd9_majors, NA)),
+    major = factor(rep(NA, lenm), levels = c(names(icd::icd9_majors), NA)),
+    sub_chapter = factor(rep(NA, lenm), levels = c(names(icd::icd9_sub_chapters), NA)),
+    chapter = factor(rep(NA, lenm), levels = c(names(icd::icd9_chapters), NA))
+  )
 
-  chap_lookup <- lapply(icd::icd9_chapters, function(y)
-    icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
+  chap_lookup <- lapply(icd9_chapters, function(y)
+    vec_to_env(
+      icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
+    )
+  )
 
-  subchap_lookup <- lapply(icd::icd9_sub_chapters, function(y)
-    icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE))
+  subchap_lookup <- lapply(icd9_sub_chapters, function(y)
+    vec_to_env(
+      icd_expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
+    )
+  )
 
-  for (i in 1:length(majors)) {
+  for (i in 1L:length(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
-    for (chap_num in 1:length(icd::icd9_chapters)) {
-      if (majors[i] %in% chap_lookup[[chap_num]]) {
+    for (chap_num in 1L:length(icd::icd9_chapters)) {
+      if (majors[i] %ine% chap_lookup[[chap_num]]) {
         out[i, "chapter"] <- names(icd::icd9_chapters)[chap_num]
         break
       }
     }
     for (subchap_num in 1:length(icd::icd9_sub_chapters)) {
-      if (majors[i] %in% subchap_lookup[[subchap_num]]) {
+      if (majors[i] %ine% subchap_lookup[[subchap_num]]) {
         out[i, "sub_chapter"] <- names(icd::icd9_sub_chapters)[subchap_num]
         break
       }
     }
   }
-  whch <- match(majors, icd::icd9_majors, nomatch = NA_character_)
+  whch <- match(majors, icd::icd9_majors, nomatch = NA)
   out$major[] <- names(icd::icd9_majors)[whch]
   out$three_digit[] <- unlist(icd::icd9_majors)[whch]
-  out$three_digit <- out$three_digit %>% icd9cm
+  # out is based on unique majors of the input codes. Now merge with original inputs to give output
+  out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = FALSE),
+        x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
 
   # many possible three digit codes don't exist. We should return NA for the
   # whole row. Chapter is coded as a range, so picks up these non-existent codes
-  out$chapter[is.na(out$major)] <- NA_character_
-
+  out$chapter[is.na(out$major)] <- NA
   out
 }
 
 icd9_expand_chapter_majors <- function(chap) {
   icd_expand_range_major.icd9(
-    icd::icd9_chapters[[chap]]["start"],
-    icd::icd9_chapters[[chap]]["end"],
+    icd9_chapters[[chap]]["start"],
+    icd9_chapters[[chap]]["end"],
     defined = FALSE)
 }
 
 icd9_expand_sub_chapter_majors <- function(subchap) {
   icd_expand_range_major.icd9(
-    icd::icd9_sub_chapters[[subchap]]["start"],
-    icd::icd9_sub_chapters[[subchap]]["end"],
+    icd9_sub_chapters[[subchap]]["start"],
+    icd9_sub_chapters[[subchap]]["end"],
     defined = FALSE)
 }

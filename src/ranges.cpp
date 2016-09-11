@@ -87,7 +87,7 @@ VecStr icd9ExpandMinorStd(const Str& mnr, bool isE) {
   }
 }
 
-// [[Rcpp::export(icd_expand_minor.icd9)]]
+// [[Rcpp::export(icd9_expand_minor_wrap)]]
 CV icd9ExpandMinor(const Str& mnr, bool isE) {
 
   if (!isE) {

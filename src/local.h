@@ -32,12 +32,12 @@ extern "C" {
 // #define ICD_STD_PARALLEL // don't use right now: see comment below
 
 // debugging:
-#define ICD_DEBUG
+// #define ICD_DEBUG
 // #define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_TRACE
 // #define ICD_DEBUG_PARALLEL
-#define ICD_VALGRIND
+// #define ICD_VALGRIND
 
 // enabling this stops the package compiling, but is useful for testing purely
 // in C++. See tools/standalone.sh

@@ -23,5 +23,9 @@ description, and short and long descriptions. Currently this is specifically
 for the 2011 ICD-9-CM after which there have been minimal changes.
 Thankfully, ICD-10-CM has machine readable data available.
 }
+\details{
+SOMEDAY add 'billable' column, and make consistent icd9 and icd10 lookup
+tables
+}
 \keyword{internal}
 

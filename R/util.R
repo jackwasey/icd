@@ -67,17 +67,6 @@ as_char_no_warn <- function(x) {
   match(x, table, nomatch = 0) == 0
 }
 
-#' in/match equivalent for two \code{Environment} arguments
-#'
-#' \code{x} and \code{table} are identical to match. Lookup is done based on
-#' environment element names; contents are ignored.
-#' @keywords internal
-"%eine%" <- function(x, table) {
-  assert_environment(x)
-  assert_environment(table)
-  vapply(ls(name = x), function(y) !is.null(table[[y]]), FUN.VALUE = logical(1L), USE.NAMES = FALSE)
-}
-
 #' Strip character(s) from character vector
 #'
 #' \code{gsub} is probably quicker than \code{stringr}/\code{stringi}. For

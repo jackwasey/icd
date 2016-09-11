@@ -206,8 +206,7 @@ test_that("parse icd9_majors vs those listed
 
 test_that("unsorted hierarchy tests", {
   expect_equal(
-    tolower(icd::icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "00321",
-                                  "long_desc"]),
+    tolower(icd::icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "00321", "long_desc"]),
     tolower("Salmonella Meningitis"))
 })
 
@@ -216,15 +215,11 @@ test_that("explain gives appropriate warnings by default", {
   expect_warning(icd_condense.icd9("E7777", defined = TRUE, warn = TRUE))
 })
 
-test_that("explain icd9GetChapters bad input", {
-  skip("todo")
-})
-
 test_that("explain icd9GetChapters simple input", {
   chaps1 <- icd9_get_chapters(c("410", "411", "412"), short_code = TRUE)
   expect_equal(nrow(chaps1), 3)
 
-  chaps2 <- icd9_get_chapters("418", short_code = TRUE)
+  chaps2 <- icd9_get_chapters("418", short_code = TRUE) # no such code 418
   expect_is(chaps2, "data.frame")
   expect_is(chaps2$three_digit, "factor")
   expect_is(chaps2$major, "factor")

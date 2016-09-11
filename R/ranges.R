@@ -423,6 +423,10 @@ icd_expand_minor <- function(mnr, ...) {
   UseMethod("icd_expand_minor")
 }
 
+icd_expand_minor.icd9 <- function(mnr, is_e = FALSE) {
+  icd9_expand_minor_wrap(mnr, isE = is_e)
+}
+
 # nocov start
 icd_expand_minor.icd10 <- function(x) {
   .NotYetImplemented()

@@ -256,6 +256,9 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
 #' description, and short and long descriptions. Currently this is specifically
 #' for the 2011 ICD-9-CM after which there have been minimal changes.
 #' Thankfully, ICD-10-CM has machine readable data available.
+#'
+#' SOMEDAY add 'billable' column, and make consistent icd9 and icd10 lookup
+#' tables
 #' @template save_data
 #' @template verbose
 #' @template offline
@@ -266,12 +269,12 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   assert_flag(verbose)
   assert_flag(offline)
 
-  message("get column of ICD-9 codes, up to the three digit headings. ~10s")
+  message("get column of ICD-9 codes, up to the three digit headings.")
   icd9_rtf <- parse_rtf_year(year = "2011",
                              save_data = FALSE,
                              verbose = verbose, offline = offline)
 
-  message("slow step of building icd9 chapters hierarchy from 2011 RTF. ~10s")
+  message("slow step of building icd9 chapters hierarchy from 2011 RTF.")
   chaps <- icd9_get_chapters(x = icd9_rtf$code,
                              short_code = TRUE,
                              verbose = verbose)
@@ -283,8 +286,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
                "long_desc" = icd9_rtf$desc,
                stringsAsFactors = FALSE),
     # the following can and should be factors:
-    chaps
-  )
+    chaps)
 
   # fix congenital abnormalities not having sub-chapter defined: (this might be
   # easier to do when parsing the chapters themselves...)
@@ -295,7 +297,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
   # just copy the long description over.
-  bill32 <- icd9cm_billable[["32"]]
+  bill32 <- icd::icd9cm_billable[["32"]]
 
   billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)
   billable_rows <- which(icd9cm_hierarchy[["code"]] %in% billable_codes)
@@ -314,24 +316,10 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy <- icd9cm_hierarchy[c("code", "short_desc", "long_desc", "three_digit",
                                          "major", "sub_chapter", "chapter")]
 
-  #SOMEDAY add 'billable' column
-
-  # quick sanity checks - full tests in test-parse.R
-  stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)))
-  # nocov start
-  if (any(sapply(icd9cm_hierarchy, is.na))) {
-    #diagnose NAs
-    print(colSums(sapply(icd9cm_hierarchy, is.na)))
-    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$major)), ])
-    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$three_digit)), ])
-    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$sub_chapter))[1:10], ]) # just top ten
-    print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$chapter)), ])
-    stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
-  }
-  # nocov end
-
   icd9cm_hierarchy[["short_desc"]] <- enc2utf8(icd9cm_hierarchy[["short_desc"]])
   icd9cm_hierarchy[["long_desc"]] <- enc2utf8(icd9cm_hierarchy[["long_desc"]])
+
+  icd9cm_hierarchy_sanity(icd9cm_hierarchy)
 
   if (save_data)
     save_in_data_dir("icd9cm_hierarchy") # nocov
@@ -358,3 +346,18 @@ fixSubchapterNa <- function(x, start, end) {
   x$sub_chapter <- factor(new_subs, new_levels)
   x
 }
+
+# nocov start
+# quick sanity checks - full tests in test-parse.R
+icd9cm_hierarchy_sanity <- function(icd9cm_hierarchy) {
+  stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)))
+  if (!any(sapply(icd9cm_hierarchy, is.na)))
+    return()
+  print(colSums(sapply(icd9cm_hierarchy, is.na)))
+  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$major)), ])
+  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$three_digit)), ])
+  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$sub_chapter))[1:10], ]) # just top ten
+  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$chapter)), ])
+  stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
+}
+# nocov end

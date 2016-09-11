@@ -84,8 +84,8 @@ test_twenty <- structure(
 icd9(
   unlist(
     unname(
-      c(lapply(icd::icd9_map_ahrq, head, n = 1),
-        lapply(icd::icd9_map_ahrq, tail, n = 1)
+      c(lapply(icd9_map_ahrq, head, n = 1),
+        lapply(icd9_map_ahrq, tail, n = 1)
       )
     )
   )
