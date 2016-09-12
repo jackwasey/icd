@@ -21,11 +21,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-#TMP=$(mktemp -d /tmp/icd-docker.XXXXXXXX)
-
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
-echo "Working directory: ${ICD_HOME:=$HOME/Documents/RProjects/icd}"
-DOCKER_IMAGE="${1:-r-clang-3.8}"
+echo "Working directory: ${ICD_HOME:=$HOME/icd}"
+DOCKER_IMAGE="${1:-r-clang-3.9}"
 if [[ -z "$DOCKER_IMAGE" ]]; then
    echo "usage: $0 docker directory to build and run"
    exit 1
@@ -39,7 +37,7 @@ DOCKER_IMAGE_FULL_NAME="${DOCKER_IMAGE_FULL_NAME:-jackwasey/$DOCKER_IMAGE}"
 echo "using docker image: $DOCKER_IMAGE_FULL_NAME"
 
 TOOLS_DIR="$ICD_HOME/tools"
-WORKING_ROOT="/var/local/rock-icd"
+WORKING_ROOT="/usr/local/rock-icd"
 DOCKER_SCRIPT=in_docker_check.sh
 DOCKER_DIR="$WORKING_ROOT/$DOCKER_IMAGE_FULL_NAME"
 
@@ -50,25 +48,22 @@ fi
 
 cp -v "$TOOLS_DIR/Dockerfile.template" "$DOCKER_DIR/Dockerfile"
 # https://stackoverflow.com/questions/584894/sed-scripting-environment-variable-substitution
-sed -i 's@DOCKER_IMAGE_FULL_NAME@'"$DOCKER_IMAGE_FULL_NAME"'@' $DOCKER_DIR/Dockerfile
+sed -i.old 's@DOCKER_IMAGE_FULL_NAME@'"${DOCKER_IMAGE_FULL_NAME}"'@' "${DOCKER_DIR}/Dockerfile"
+
 cp -v "$TOOLS_DIR/$DOCKER_SCRIPT" "$DOCKER_DIR"
 docker build -t "$DOCKER_IMAGE_FULL_NAME" "$DOCKER_DIR" || {
   rm -f "$DOCKER_DIR/$DOCKER_SCRIPT"
 }
 
-#rm -f "$IM/Dockerfile"
-#rm -f "$IM/$DOCKER_SCRIPT"
-#rmdir "$TMP"
-
 echo "Environment:"
-echo "${ICD_PROJECT_NAME:=icd}"
-echo "${R_PKG_NAME:=$ICD_PROJECT_NAME}"
-echo "${GITHUB_URL:=https://github.com}"
-echo "${GITHUB_USER:=jackwasey}"
-echo "${GITHUB_REPO:=$ICD_PROJECT_NAME}"
-echo "${GIT_BRANCH:=master}"
-echo "${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
-echo "${R_CMD:=R}"
+echo "ICD_PROJECT=${ICD_PROJECT_NAME:=icd}"
+echo "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}"
+echo "GITHUB_URL=${GITHUB_URL:=https://github.com}"
+echo "GITHUB_USER=${GITHUB_USER:=jackwasey}"
+echo "GITHUB_REPO=${GITHUB_REPO:=$ICD_PROJECT_NAME}"
+echo "GIT_BRANCH=${GIT_BRANCH:=master}"
+echo "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
+echo "R_CMD=${R_CMD:=R}"
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
 docker run -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
