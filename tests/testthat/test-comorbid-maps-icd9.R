@@ -162,7 +162,7 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
                     "major", "sub_chapter", "chapter")
   cmh <- icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE, offline = TRUE)
   for (h in cmh_headings)
-    expect_equal(cmh[[h]], icd::icd9cm_hierarchy[[h]], info = h)
+    expect_equal(cmh[[h]], icd::icd9cm_hierarchy[[h]], info = paste("working on :", h))
 })
 
 test_that("Charlson Deyo doesn't double count disease with two severities", {
