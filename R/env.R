@@ -20,8 +20,15 @@
 #' create an environment by inserting the value \code{val} with names taken from
 #' \code{x}
 #' @keywords internal
-vec_to_env <- function(x, val = TRUE, env = new.env(hash = TRUE, parent = baseenv())) {
+vec_to_env_true <- function(x, val = TRUE, env = new.env(hash = TRUE, parent = baseenv())) {
   lapply(x, function(y) env[[y]] <- val)
+  env
+}
+
+vec_to_env_name <- function(x, env = new.env(hash = TRUE, parent = baseenv())) {
+  for (i in 1L:length(x)) {
+    env[[x[i]]] <- names(x)[i]
+  }
   env
 }
 

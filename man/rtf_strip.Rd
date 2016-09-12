@@ -4,7 +4,7 @@
 \alias{rtf_strip}
 \title{Strip RTF}
 \usage{
-rtf_strip(x, perl = TRUE, useBytes = TRUE)
+rtf_strip(x, ...)
 }
 \arguments{
 \item{x}{vector of character strings containing RTF}
@@ -19,7 +19,7 @@ just for \\tab, replace with space, otherwise, drop RTF tags entirely
 \examples{
 \dontrun{
 # rtf_strip is a slow step, useBytes and perl together is five times faster
-f_info_rtf <- fetch_rtf_year("2011", offline = FALSE)
+f_info_rtf <- rtf_fetch_year("2011", offline = FALSE)
 rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
 microbenchmark::microbenchmark(
   res_both <- rtf_strip(rtf_lines, perl = TRUE, useBytes = TRUE),

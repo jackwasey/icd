@@ -29,7 +29,7 @@ skip_slow_tests <- function(msg = "skipping slow test") {
 }
 
 rtf_year_ok <- function(year) {
-  !is.null(fetch_rtf_year(year, offline = TRUE))
+  !is.null(rtf_fetch_year(year, offline = TRUE))
 }
 
 skip_on_no_rtf <- function(test_year) {

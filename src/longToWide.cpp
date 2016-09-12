@@ -17,6 +17,7 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "local.h"
+#include "icd_types.h"
 #include <Rcpp.h>
 #ifdef ICD_VALGRIND
 #include <valgrind/callgrind.h>
