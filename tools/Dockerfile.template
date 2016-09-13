@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y -t unstable unixodbc-dev
 # Use R, not R-devel
 RUN Rscript -e "install.packages(c('codetools', 'testthat', 'Rcpp', 'RColorBrewer', 'dichromat', 'munsell', 'checkmate', 'scales', 'proto', 'caTools', 'evaluate', 'knitr', 'xtable', 'rmarkdown', 'fastmatch', 'RODBC', 'roxygen2', 'xml2'), INSTALL_opts = '--no-byte-compile')"
 
-ADD in_docker_check.sh /tmp
+COPY in_docker_check.sh /tmp
 
 ENV GIT_BRANCH master
 ENV R_CMD R

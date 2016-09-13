@@ -16,7 +16,7 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 # save this in package environment so it doesn't need to be done on the fly
-.have_regexec_perl = "perl" %in% names(as.list(regexec))
+.have_regexec_perl <- "perl" %in% names(as.list(regexec))
 
 #' Trim leading and trailing white space from a single string
 #'
