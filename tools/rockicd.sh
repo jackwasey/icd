@@ -25,7 +25,7 @@ IFS=$'\n\t'
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
 DOCKER_IMAGE="${1:-r-clang-3.9}"
 
-ROCK_TMP=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
+# ROCK_TMP=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 
 if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)?r-.+ ]]; then
    echo "WARNING: not using R from a jackwasey docker image"
@@ -40,29 +40,6 @@ DOCKER_IMAGE=${DOCKER_IMAGE/%\//}
 echo "using docker image: $DOCKER_IMAGE"
 
 TOOLS_DIR="$ICD_HOME/tools"
-WORKING_ROOT="/usr/local/icd/rock-icd"
-DOCKER_SCRIPT=in_docker_check.sh
-DOCKER_DIR="$WORKING_ROOT/$DOCKER_IMAGE"
-
-if [ ! -d "$DOCKER_DIR" ]; then
-  echo "Docker directory doesn't exist... Creating: $DOCKER_DIR"
-  mkdir -p $DOCKER_DIR
-fi
-
-cp -av "$TOOLS_DIR/Dockerfile.template" "$ROCK_TMP/Dockerfile"
-# https://stackoverflow.com/questions/584894/sed-scripting-environment-variable-substitution
-sed -i.old 's@DOCKER_IMAGE@'"${DOCKER_IMAGE}"'@' "${ROCK_TMP}/Dockerfile"
-rm -rf "${ROCK_TMP}/Dockerfile.old"
-
-cp -av "$TOOLS_DIR/$DOCKER_SCRIPT" "$ROCK_TMP"
-
-# now the files needed for Docker build are in a temp dir, rsync to the working
-# directory ignoring timestamp.
-rsync --checksum --ignore-times --recursive "${ROCK_TMP}/" "${DOCKER_DIR}"
-
-docker build -t "$DOCKER_IMAGE" "$DOCKER_DIR" || {
-  rm -f "$DOCKER_DIR/$DOCKER_SCRIPT"
-}
 
 echo "Environment:"
 echo "ICD_PROJECT=${ICD_PROJECT_NAME:=icd}"
@@ -75,7 +52,9 @@ echo "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
 echo "R_CMD=${R_CMD:=R}"
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
-docker run -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
+docker run --name rockicd \
+           -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
+           -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
            -e "R_PKG_NAME=$R_PKG_NAME" \
            -e "GITHUB_URL=$GITHUB_URL" \
            -e "GITHUB_USER=$GITHUB_USER" \
@@ -83,4 +62,4 @@ docker run -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
            -e "GIT_BRANCH=$GIT_BRANCH" \
            -e "GIT_URL=$GIT_URL" \
            -e "R_CMD=$R_CMD" \
-           --rm -ti "$DOCKER_IMAGE" ${2:-}
+           --rm -ti "$DOCKER_IMAGE" ${2:-/go.sh}
