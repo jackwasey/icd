@@ -38,7 +38,7 @@ DOCKER_IMAGE=${DOCKER_IMAGE/%\//}
 echo "using docker image: $DOCKER_IMAGE"
 
 TOOLS_DIR="$ICD_HOME/tools"
-WORKING_ROOT="/usr/local/rock-icd"
+WORKING_ROOT="/usr/local/icd/rock-icd"
 DOCKER_SCRIPT=in_docker_check.sh
 DOCKER_DIR="$WORKING_ROOT/$DOCKER_IMAGE"
 
@@ -47,11 +47,11 @@ if [ ! -d "$DOCKER_DIR" ]; then
   mkdir -p $DOCKER_DIR
 fi
 
-cp -v "$TOOLS_DIR/Dockerfile.template" "$DOCKER_DIR/Dockerfile"
+cp -av "$TOOLS_DIR/Dockerfile.template" "$DOCKER_DIR/Dockerfile"
 # https://stackoverflow.com/questions/584894/sed-scripting-environment-variable-substitution
 sed -i.old 's@DOCKER_IMAGE@'"${DOCKER_IMAGE}"'@' "${DOCKER_DIR}/Dockerfile"
 
-cp -v "$TOOLS_DIR/$DOCKER_SCRIPT" "$DOCKER_DIR"
+cp -av "$TOOLS_DIR/$DOCKER_SCRIPT" "$DOCKER_DIR"
 docker build -t "$DOCKER_IMAGE" "$DOCKER_DIR" || {
   rm -f "$DOCKER_DIR/$DOCKER_SCRIPT"
 }
