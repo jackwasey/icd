@@ -485,6 +485,7 @@ test_that("sorting char factors", {
 })
 
 test_that("sysdata.rda is okay", {
+  skip_slow_tests()
   lknames <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
                "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
                "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",

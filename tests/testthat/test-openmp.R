@@ -29,7 +29,8 @@ test_that("thousands of patients", {
   icd9_comorbid_quan_deyo(x, short_code = FALSE, applyHierarchy = TRUE)
 })
 
-test_that("vary everything", {
+test_that("vary all OMP-related numbers at once", {
+  skip_slow_tests()
   old_opts <- options("icd.threads", "icd.chunk_size", "icd.omp_chunk_size")
   omp_chunk_size <- 1
   # prime numbers

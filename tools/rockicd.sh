@@ -24,22 +24,23 @@ IFS=$'\n\t'
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
 DOCKER_IMAGE="${1:-r-clang-3.9}"
-if [[ -z "$DOCKER_IMAGE" ]]; then
-   echo "usage: $0 docker directory to build and run"
-   exit 1
+
+if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)?r-.+ ]]; then
+   echo "WARNING: not using R from a jackwasey docker image"
 fi
 
-# strip directory symbol to get the docker image name from a dir with trailing slash
-DOCKER_IMAGE="$(echo $DOCKER_IMAGE | tr -d '/')"
-echo "DOCKER_IMAGE=$DOCKER_IMAGE"
+if [[ ! $DOCKER_IMAGE =~ ^jackwasey\/ ]]; then
+  DOCKER_IMAGE="jackwasey/${DOCKER_IMAGE}"
+fi
 
-DOCKER_IMAGE_FULL_NAME="${DOCKER_IMAGE_FULL_NAME:-jackwasey/$DOCKER_IMAGE}"
-echo "using docker image: $DOCKER_IMAGE_FULL_NAME"
+# drop trailing slash
+DOCKER_IMAGE=${DOCKER_IMAGE/%\//}
+echo "using docker image: $DOCKER_IMAGE"
 
 TOOLS_DIR="$ICD_HOME/tools"
 WORKING_ROOT="/usr/local/rock-icd"
 DOCKER_SCRIPT=in_docker_check.sh
-DOCKER_DIR="$WORKING_ROOT/$DOCKER_IMAGE_FULL_NAME"
+DOCKER_DIR="$WORKING_ROOT/$DOCKER_IMAGE"
 
 if [ ! -d "$DOCKER_DIR" ]; then
   echo "Docker directory doesn't exist... Creating: $DOCKER_DIR"
@@ -48,10 +49,10 @@ fi
 
 cp -v "$TOOLS_DIR/Dockerfile.template" "$DOCKER_DIR/Dockerfile"
 # https://stackoverflow.com/questions/584894/sed-scripting-environment-variable-substitution
-sed -i.old 's@DOCKER_IMAGE_FULL_NAME@'"${DOCKER_IMAGE_FULL_NAME}"'@' "${DOCKER_DIR}/Dockerfile"
+sed -i.old 's@DOCKER_IMAGE@'"${DOCKER_IMAGE}"'@' "${DOCKER_DIR}/Dockerfile"
 
 cp -v "$TOOLS_DIR/$DOCKER_SCRIPT" "$DOCKER_DIR"
-docker build -t "$DOCKER_IMAGE_FULL_NAME" "$DOCKER_DIR" || {
+docker build -t "$DOCKER_IMAGE" "$DOCKER_DIR" || {
   rm -f "$DOCKER_DIR/$DOCKER_SCRIPT"
 }
 
@@ -74,4 +75,4 @@ docker run -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
            -e "GIT_BRANCH=$GIT_BRANCH" \
            -e "GIT_URL=$GIT_URL" \
            -e "R_CMD=$R_CMD" \
-           --rm -ti "$DOCKER_IMAGE_FULL_NAME" ${2:-}
+           --rm -ti "$DOCKER_IMAGE" ${2:-}

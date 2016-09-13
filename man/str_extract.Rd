@@ -4,7 +4,7 @@
 \alias{str_extract}
 \title{str_extract replacement}
 \usage{
-str_extract(string, pattern)
+str_extract(string, pattern, ...)
 }
 \description{
 str_extract replacement

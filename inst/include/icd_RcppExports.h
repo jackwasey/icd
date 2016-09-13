@@ -250,24 +250,6 @@ namespace icd {
         return Rcpp::as<Rcpp::RObject >(rcpp_result_gen);
     }
 
-    inline void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, ComorbidOut& out) {
-        typedef SEXP(*Ptr_lookupComorbidByChunkFor)(SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_lookupComorbidByChunkFor p_lookupComorbidByChunkFor = NULL;
-        if (p_lookupComorbidByChunkFor == NULL) {
-            validateSignature("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
-            p_lookupComorbidByChunkFor = (Ptr_lookupComorbidByChunkFor)R_GetCCallable("icd", "icd_lookupComorbidByChunkFor");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_lookupComorbidByChunkFor(Rcpp::wrap(vcdb), Rcpp::wrap(map), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize), Rcpp::wrap(out));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-    }
-
     inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
         typedef SEXP(*Ptr_icd9ComorbidShortCpp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortCpp p_icd9ComorbidShortCpp = NULL;
@@ -285,6 +267,24 @@ namespace icd {
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
+    inline void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, ComorbidOut& out) {
+        typedef SEXP(*Ptr_lookupComorbidByChunkFor)(SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_lookupComorbidByChunkFor p_lookupComorbidByChunkFor = NULL;
+        if (p_lookupComorbidByChunkFor == NULL) {
+            validateSignature("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
+            p_lookupComorbidByChunkFor = (Ptr_lookupComorbidByChunkFor)R_GetCCallable("icd", "icd_lookupComorbidByChunkFor");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_lookupComorbidByChunkFor(Rcpp::wrap(vcdb), Rcpp::wrap(map), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize), Rcpp::wrap(out));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
     }
 
     inline Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x, Rcpp::List map, std::string visit_name, std::string icd_name) {

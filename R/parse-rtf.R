@@ -161,7 +161,8 @@ rtf_parse_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, ...
     str_pair_match("(.*category )([[:digit:]]{3})$", ...) %>%
     unname -> fourth_digit_zero_categories
 
-  for (categ in fourth_digit_zero_categories) { #"657" "672"
+  # deal with 657 and 672 (in the default RTF)
+  for (categ in fourth_digit_zero_categories) {
     parent_row <- grep(paste0("^", categ, " .+"), filtered, value = TRUE, ...)
     filtered[length(filtered) + 1] <-
       paste0(categ, ".0 ", str_pair_match(parent_row, "([[:digit:]]{3} )(.+)", ...))
@@ -241,7 +242,7 @@ rtf_make_majors <- function(filtered, ..., save = FALSE) {
   # There are some duplicates created by the major search, mostly E001 to E030
   # which are just listed twice in RTF. Also 199 (with punctuation difference),
   # 209 and 239.
-  icd9_majors = icd9_majors[!duplicated(icd9_majors)]
+  icd9_majors <- icd9_majors[!duplicated(icd9_majors)]
 
   if (save)
     save_in_data_dir(icd9_majors)
@@ -256,7 +257,7 @@ rtf_make_sub_chapters <- function(filtered, ..., save = FALSE) {
     "\\)")
   chapter_to_desc_range.icd9(
     grep(re_subchap_either, filtered,
-         value = TRUE,...)
+         value = TRUE, ...)
   )
   # The entire "E" block is incorrectly identified here, so make sure it is gone:
   icd9_sub_chapters["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"] <- NULL
@@ -378,7 +379,6 @@ rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = FALSE) {
 
 rtf_make_lookup_fifth <- function(filtered, re_fifth_range_other, ..., verbose = FALSE) {
   re_fifth_range <- "ifth-digit subclas|fifth-digits are for use with codes"
-  # re_fifth_range_V30V39 <- "The following two fifths-digits are for use with the fourth-digit \\.0"
   re_fifth_rows <- paste(re_fifth_range, re_fifth_range_other, sep = "|")
   fifth_rows <- grep(pattern = re_fifth_rows, x = filtered, ...)
 

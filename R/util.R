@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# save this in package environment so it doesn't need to be done on the fly
+.have_regexec_perl = "perl" %in% names(as.list(regexec))
+
 #' Trim leading and trailing white space from a single string
 #'
 #' \code{NA} is accepted (and returned as \code{NA_character_})
@@ -129,6 +132,17 @@ logical_to_binary <- function(x) {
   x
 }
 
+#' regexec which accepts \code{perl} argument even in older R
+#' @keywords internal
+regexec32 <- function(pattern, text, ...) {
+  dots <- list(...)
+  dots[["pattern"]] <- pattern
+  dots[["text"]] <- text
+  if (!.have_regexec_perl)
+    dots[["perl"]] <- NULL
+  do.call(regexec, dots)
+}
+
 #' Match pairs of strings to get named vector
 #'
 #' Match a character vector against a regular expression with at least two
@@ -142,58 +156,37 @@ logical_to_binary <- function(x) {
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
 #' @keywords internal
-str_pair_match <- function(string, pattern, pos, swap = FALSE, perl = TRUE, useBytes = TRUE) {
+str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
   assert_character(string, min.len = 1L)
   assert_string(pattern, min.chars = 5L)
   assert_flag(swap)
   pos_missing <- missing(pos)
   if (pos_missing)
-    pos <- c(1, 2)
+    pos <- c(1L, 2L)
   else
-    assert_integerish(pos, len = 2, lower = 1, any.missing = FALSE)
+    assert_integerish(pos, len = 2L, lower = 1L, any.missing = FALSE)
 
-  if (!"perl" %in% names(as.list(regexec))) {
-    result <- lapply(
-      string, function(x) unlist(
-        regmatches(
-          x = x,
-          m = regexec(
-            pattern = pattern,
-            text = x,
-            useBytes = useBytes))
-      )[-1]
-    )
-  } else {
-    result <- lapply(
-      string, function(x) unlist(
-        regmatches(
-          x = x,
-          m = regexec(
-            pattern = pattern,
-            text = x,
-            perl = perl,
-            useBytes = useBytes))
-      )[-1]
-    )
-  }
+  res <- lapply(string,
+                function(x) unlist(
+                  regmatches(x = x, m = regexec32(pattern = pattern, text = x, ...))
+                )[-1]
+  )
 
-  result <- result[vapply(result, function(x) length(x) != 0, logical(1))]
-  result <- do.call(rbind, result)
+  res <- res[vapply(res, function(x) length(x) != 0, logical(1))]
+  res <- do.call(rbind, res)
 
-  if (pos_missing && ncol(result) > max(pos))
-    stop("the pair matching has three or more results but needed two.
+  if (pos_missing && ncol(res) > max(pos))
+    stop("the pair matching has three or more ress but needed two.
           Use (?: to have a non-grouping regular expression parenthesis")
 
-  out_names <- result[, ifelse(swap, 2, 1)]
-  if (any(is.na(out_names))) {
+  out_names <- res[, ifelse(swap, 2L, 1L)]
+  if (any(is.na(out_names)))
     stop("didn't match some rows:", string[is.na(out_names)],
          call. = FALSE)
-  }
 
-  out <- result[, ifelse(swap, 1, 2)]
+  out <- res[, ifelse(swap, 1L, 2L)]
   stopifnot(all(!is.na(out)))
-  names(out) <- out_names
-  out
+  setNames(out, out_names)
 }
 
 #' Get or guess the name of the visit ID column
@@ -430,19 +423,20 @@ dir.exists <- function(paths) {
   !is.na(x) & x
 }
 
-# substitute for removed stringr function
-str_match_all <- function(x, pattern, perl = TRUE, useBytes = TRUE) {
-  x <- as.character(x)
-  if (!"perl" %in% names(as.list(regexec)))
-    regmatches(x, regexec(pattern, x, useBytes = useBytes))
-  else
-    regmatches(x, regexec(pattern, x, perl = perl, useBytes = useBytes))
+#' return all matches for regex
+#'
+#' substitute for removed stringr function. \code{perl} is taken out if not
+#' supported, allows compatibility with older versions of R.
+#' @keywords internal
+str_match_all <- function(string, pattern, ...) {
+  string <- as.character(string)
+  regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...))
 }
 
 #' str_extract replacement
 #' @keywords internal
-str_extract <- function(string, pattern) {
-  vapply(regmatches(string, regexec(pattern = pattern, text = string)),
+str_extract <- function(string, pattern, ...) {
+  vapply(regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...)),
          FUN = `[[`, 1, FUN.VALUE = character(1L))
 }
 

@@ -19,7 +19,8 @@ context("ICD-10 comorbidity calculations")
 # since most of the code is common to ICD-9 and ICD-10, this doesn't need to be
 # very extensive.
 
-test_that("ICD-10 comorbidities from uranium are calculated without warnings or errors", {
+test_that("ICD-10 comorbidities from uranium", {
+  skip_slow_tests()
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_elix), regexp = NA)
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_deyo), regexp = NA)
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_elix), regexp = NA)

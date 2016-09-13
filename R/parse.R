@@ -63,7 +63,20 @@ icd_update_everything <- function() {
   icd10cm_extract_sub_chapters(save_data = TRUE)
 
   # reload the newly saved data before generating chapters
-  icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
+  icd9cm_make_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
+}
+
+# quick sanity checks - full tests of icd9cm_hierarchy in test-parse.R
+icd9cm_hierarchy_sanity <- function(icd9cm_hierarchy) {
+  stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)))
+  if (!any(sapply(icd9cm_hierarchy, is.na)))
+    return()
+  print(colSums(sapply(icd9cm_hierarchy, is.na)))
+  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$major)), ])
+  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$three_digit)), ])
+  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$sub_chapter))[1:10], ]) # just top ten
+  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$chapter)), ])
+  stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
 }
 # nocov end
 
@@ -263,7 +276,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
 #' @template verbose
 #' @template offline
 #' @keywords internal
-icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
+icd9cm_make_chapters_hierarchy <- function(save_data = FALSE,
                                                verbose = FALSE, offline = TRUE,
                                                perl = TRUE, useBytes = TRUE) {
   assert_flag(save_data)
@@ -341,18 +354,3 @@ fixSubchapterNa <- function(x, start, end) {
   x$sub_chapter <- factor(new_subs, new_levels)
   x
 }
-
-# nocov start
-# quick sanity checks - full tests in test-parse.R
-icd9cm_hierarchy_sanity <- function(icd9cm_hierarchy) {
-  stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)))
-  if (!any(sapply(icd9cm_hierarchy, is.na)))
-    return()
-  print(colSums(sapply(icd9cm_hierarchy, is.na)))
-  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$major)), ])
-  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$three_digit)), ])
-  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$sub_chapter))[1:10], ]) # just top ten
-  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$chapter)), ])
-  stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
-}
-# nocov end

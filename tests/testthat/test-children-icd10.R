@@ -47,7 +47,7 @@ expect_icd10cm_child_is_self <- function(...) {
 }
 
 test_that("children of a leaf node returns itself", {
-
+  skip_slow_tests()
   expect_icd10cm_child_is_self("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
                                "Z9981", "Z9989", "Z950", "C7A098", "C7A8")
 

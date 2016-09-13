@@ -85,4 +85,5 @@
 #' @import Rcpp checkmate
 #' @importFrom magrittr "%>%" "%<>%" set_names extract2
 #' @importFrom utils head tail read.fwf
+#' @importFrom stats setNames
 NULL
