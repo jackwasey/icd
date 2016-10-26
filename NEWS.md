@@ -1,5 +1,5 @@
 # Version 2.2
- * Removed deprecated functions and data. `icd9` still available in CRAN repo, but not being updated.
+ * Removed deprecated functions and data. `icd9` still available in CRAN repo, but not being updated. This greatly speeds up and simplifies the test suite.
  
 # Version 2.1
  * Many thanks to @anobel for providing parsing and lookup of Heirarchical Condition Codes.

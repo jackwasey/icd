@@ -57,7 +57,6 @@ patients_icd9 <- data.frame(
 ## Introduction
 
 <!-- _TODO: update with first paragraph from DESCRIPTION_ -->
-
 Calculate comorbidities, Charlson scores, perform fast and accurate
 validation, conversion, manipulation, filtering and comparison of ICD-9 and
 ICD-10 codes. Common ambiguities and code formats are handled. This
