@@ -328,6 +328,7 @@ icd9cm_make_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy[["long_desc"]] <- enc2utf8(icd9cm_hierarchy[["long_desc"]])
 
   icd9cm_hierarchy_sanity(icd9cm_hierarchy)
+  icd9cm_hierarchy <- icd9cm_hotfix(icd9cm_hierarchy)
 
   if (save_data)
     save_in_data_dir("icd9cm_hierarchy") # nocov
@@ -353,4 +354,13 @@ fixSubchapterNa <- function(x, start, end) {
   new_levels <- append(levels(x$sub_chapter), congenital_title, previous_sub_pos)
   x$sub_chapter <- factor(new_subs, new_levels)
   x
+}
+
+#' hotfix some parsing errors
+#'
+#' These are relevant to the most recent ICD-9-CM code sets, not the older
+#' historic versions. There will be no further updates, so this is reasonable.
+#' @keywords internal manip
+icd9cm_heirarchy_hotfix <- function(x) {
+  x[x$code == "0381", "short"] <- "Staphylococcal septicemia"
 }
