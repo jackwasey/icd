@@ -371,11 +371,12 @@ icd_decimal_to_short.icd10cm <- function(x) {
 #' @export
 #' @keywords internal
 icd_decimal_to_short.default <- function(x) {
-  if (is.factor(x)) {
-    levels(x) <- as.icd_short_diag(trim(gsub("\\.", "", levels(x))))
-    return(x)
-  }
-  as.icd_short_diag(trim(gsub("\\.", "", x)))
+  switch(
+    icd_guess_version(as_char_no_warn(x), short_code = FALSE),
+    "icd9" = icd_decimal_to_short.icd9(x),
+    "icd10" = icd_decimal_to_short.icd10(x),
+    stop("Unknown ICD version guessed from input")
+  )
 }
 
 #' Convert decimal ICD codes to component parts

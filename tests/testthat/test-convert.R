@@ -128,6 +128,11 @@ test_that("short to decimal bad input", {
                       c(NA_character_, NA_character_))
 })
 
+test_that("decimal to short with single value, no dispatch", {
+  # this may be intended behavior for unspecified type not to pad, to avoid expensive guess
+  expect_equal_no_icd(icd_decimal_to_short("1"), icd_decimal_to_short(as.icd9("1")))
+})
+
 test_that("icd10 short to decimal", {
   expect_true(is.icd_decimal_diag(icd_short_to_decimal("A00")))
   expect_true(is.icd_decimal_diag(icd_short_to_decimal.icd10("A00")))
@@ -170,6 +175,8 @@ test_that("icd10 short to decimal for multiple codes", {
 test_that("icd10 short to decimal and back", {
   expect_identical(icd_short_to_decimal(icd_decimal_to_short("A00.0")), as.icd10("A00.0") %>% as.icd_decimal_diag)
   expect_identical(icd_decimal_to_short(icd_short_to_decimal("A000")), as.icd10("A000") %>% as.icd_short_diag)
+  expect_identical(icd_short_to_decimal.icd10(icd_decimal_to_short.icd10("A00.0")), as.icd10("A00.0") %>% as.icd_decimal_diag)
+  expect_identical(icd_decimal_to_short.icd10(icd_short_to_decimal.icd10("A000")), as.icd10("A000") %>% as.icd_short_diag)
 })
 
 test_that("icd9 short to major part, E codes", {
@@ -192,29 +199,43 @@ test_that("running short to decimal conversion before and after expansion
               expect_equal_no_icd(
                 icd_decimal_to_short.icd9(icd_short_to_decimal.icd9(icd9List[[i]])),
                 icd9_add_leading_zeroes(icd9List[[i]], short_code = TRUE),
-                info = paste("in loop:", i)
+                info = paste("step 1, iteration:", i)
+              )
+
+              expect_equal_no_icd(
+                icd_decimal_to_short(icd_short_to_decimal(icd9List[[i]])),
+                icd9_add_leading_zeroes(icd9List[[i]], short_code = TRUE),
+                info = paste("step 2, iteration:", i)
               )
             }
 
             n <- 50
-            set.seed(1441)
-            rd9pad <- paste(
-              sprintf("%03d", round(stats::runif(min = 1, max = 199, n = n))),
-              sample(icd_expand_minor.icd9("", is_e = FALSE), replace = TRUE, size = n)[-1],
-              sep = "."
-            )
+            # set.seed(1441)
+            # rd9pad <- paste(
+            #   sprintf("%03d", round(stats::runif(min = 1, max = 199, n = n))),
+            #   sample(icd_expand_minor.icd9("", is_e = FALSE), replace = TRUE, size = n)[-1],
+            #   sep = "."
+            # )
             set.seed(1441)
             rd9 <- paste(
               sprintf("%d", round(stats::runif(min = 1, max = 199, n = n))),
               sample(icd_expand_minor.icd9("", is_e = FALSE), replace = TRUE, size = n)[-1],
               sep = "."
             )
-            rd9pad <- sub(pattern = "\\.$", replacement = "",
-                          rd9pad)
+            #rd9pad <- sub(pattern = "\\.$", replacement = "",
+            #              rd9pad)
+            rd9pad <- icd9_add_leading_zeroes(rd9)
             expect_equal_no_icd(
               icd_short_to_decimal.icd9(icd_decimal_to_short.icd9(rd9)),
               rd9pad
             )
+
+            # same with function to dispatch appropriately
+            expect_equal_no_icd(
+              icd_short_to_decimal(icd_decimal_to_short(rd9)),
+              rd9pad
+            )
+
             # test without decimal, too... starting with non-zero-spaced shorts
             set.seed(1441)
             rd2 <- as.character(round(stats::runif(min = 1, max = 999, n = n)))
@@ -227,6 +248,11 @@ test_that("running short to decimal conversion before and after expansion
 
             expect_equal_no_icd(icd_decimal_to_short.icd9("123."), "123")
           })
+
+
+test_that("minimal test case for showing why padding zeroes before decimal conv without class matters", {
+  expect_equal_no_icd(icd_short_to_decimal(icd_decimal_to_short("12.3")), "012.3")
+})
 
 test_that("short to decimal conversions also convert class", {
 
@@ -302,18 +328,12 @@ test_that("parts to valid short with empty or NA minor", {
 })
 
 test_that("parts to valid simple numeric inputs", {
-  expect_equal(icd9PartsToShort(list(mjr = "1", mnr = "23")),
-               "00123")
-  expect_equal(icd9PartsToShort(list(mjr = "01", mnr = "23", stringsAsFactors = TRUE)),
-               "00123")
-  expect_equal(icd9PartsToShort(list(mjr = "001", mnr = "23")),
-               "00123")
-  expect_equal(icd9PartsToShort(list(mjr = "10", mnr = "23", stringsAsFactors = TRUE)),
-               "01023")
-  expect_equal(icd9PartsToShort(list(mjr = "010", mnr = "23")),
-               "01023")
-  expect_equal(icd9PartsToShort(list(mjr = "100", mnr = "23", stringsAsFactors = TRUE)),
-               "10023")
+  expect_equal(icd9PartsToShort(list(mjr = "1", mnr = "23")), "00123")
+  expect_equal(icd9PartsToShort(list(mjr = "01", mnr = "23", stringsAsFactors = TRUE)), "00123")
+  expect_equal(icd9PartsToShort(list(mjr = "001", mnr = "23")), "00123")
+  expect_equal(icd9PartsToShort(list(mjr = "10", mnr = "23", stringsAsFactors = TRUE)), "01023")
+  expect_equal(icd9PartsToShort(list(mjr = "010", mnr = "23")), "01023")
+  expect_equal(icd9PartsToShort(list(mjr = "100", mnr = "23", stringsAsFactors = TRUE)), "10023")
 })
 
 test_that("parts to short V code inputs", {

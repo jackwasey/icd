@@ -81,7 +81,8 @@ skip_flat_icd9_avail_all <- function() {
 expect_equal_no_icd <- function(object, expected, ...) {
   class(object) <- class(object)[class(object) %nin% icd_all_classes]
   class(expected) <- class(expected)[class(expected) %nin% icd_all_classes]
-  eval(bquote(testthat::expect_equivalent(.(object), .(expected), ...)))
+  # may wrap wtih eval and bquote, but this can fail mysteriously
+  testthat::expect_equivalent(object, expected, ...)
 }
 
 expect_equal_no_class_order <- function(object, expected, ...) {

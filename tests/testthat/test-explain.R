@@ -258,3 +258,7 @@ test_that("working with named lists of codes, decimal is guessed", {
     list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE), regexp = NA)
   expect_warning(icd_explain(list(a = c("001"), b = c("001.1", "001.9"))), regexp = NA)
 })
+
+test_that("github #113 for ICD-9 code 038.1", {
+  expect_equal(icd_explain("0381"), "Staphylococcal septicemia")
+})
