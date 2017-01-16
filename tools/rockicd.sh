@@ -51,6 +51,9 @@ echo "GIT_BRANCH=${GIT_BRANCH:=master}"
 echo "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
 echo "R_CMD=${R_CMD:=R}"
 
+# expands variables and prints command
+set -x
+
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
 docker run --name rockicd \
            -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
