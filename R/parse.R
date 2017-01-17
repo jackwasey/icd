@@ -289,7 +289,7 @@ icd9cm_make_chapters_hierarchy <- function(save_data = FALSE,
 
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs
-  icd9cm_hierarchy <- cbind(
+  out <- cbind(
     data.frame("code" = icd9_rtf$code,
                "long_desc" = icd9_rtf$desc,
                stringsAsFactors = FALSE),
@@ -298,37 +298,37 @@ icd9cm_make_chapters_hierarchy <- function(save_data = FALSE,
 
   # fix congenital abnormalities not having sub-chapter defined: (this might be
   # easier to do when parsing the chapters themselves...)
-  icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, "740", "759")
+  out <- fixSubchapterNa(out, "740", "759")
   # and hematopoietic organs
-  icd9cm_hierarchy <- fixSubchapterNa(icd9cm_hierarchy, "280", "289")
+  out <- fixSubchapterNa(out, "280", "289")
 
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
   # just copy the long description over.
   bill32 <- icd::icd9cm_billable[["32"]]
 
-  billable_codes <- icd_get_billable.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)
-  billable_rows <- which(icd9cm_hierarchy[["code"]] %in% billable_codes)
-  title_rows <- which(icd9cm_hierarchy[["code"]] %nin% billable_codes)
-  stopifnot(setdiff(c(billable_rows, title_rows), seq_along(icd9cm_hierarchy$code)) == integer(0))
-  icd9cm_hierarchy[billable_rows, "short_desc"] <- bill32$short_desc
+  billable_codes <- icd_get_billable.icd9(out[["code"]], short_code = TRUE)
+  billable_rows <- which(out[["code"]] %in% billable_codes)
+  title_rows <- which(out[["code"]] %nin% billable_codes)
+  stopifnot(setdiff(c(billable_rows, title_rows), seq_along(out$code)) == integer(0))
+  out[billable_rows, "short_desc"] <- bill32$short_desc
   # for rows without a short description (i.e. titles, non-billable),
   # useexisting long desc
-  icd9cm_hierarchy[title_rows, "short_desc"] <- icd9cm_hierarchy[title_rows, "long_desc"]
+  out[title_rows, "short_desc"] <- out[title_rows, "long_desc"]
   # the billable codes list (where available) currently has better long
   # descriptions than the RTF parse. For previous years, there is no long desc
   # in billable, so careful when updating this.
-  icd9cm_hierarchy[billable_rows, "long_desc"] <- bill32$long_desc
+  out[billable_rows, "long_desc"] <- bill32$long_desc
 
   # now put the short description in the right column position
-  icd9cm_hierarchy <- icd9cm_hierarchy[c("code", "short_desc", "long_desc", "three_digit",
+  out <- out[c("code", "short_desc", "long_desc", "three_digit",
                                          "major", "sub_chapter", "chapter")]
 
-  icd9cm_hierarchy[["short_desc"]] <- enc2utf8(icd9cm_hierarchy[["short_desc"]])
-  icd9cm_hierarchy[["long_desc"]] <- enc2utf8(icd9cm_hierarchy[["long_desc"]])
+  out[["short_desc"]] <- enc2utf8(out[["short_desc"]])
+  out[["long_desc"]] <- enc2utf8(out[["long_desc"]])
 
-  icd9cm_hierarchy_sanity(icd9cm_hierarchy)
-  icd9cm_hierarchy <- icd9cm_hotfix(icd9cm_hierarchy)
+  icd9cm_hierarchy_sanity(out)
+  icd9cm_hierarchy <- icd9cm_hierarchy_hotfix(out)
 
   if (save_data)
     save_in_data_dir("icd9cm_hierarchy") # nocov
@@ -361,6 +361,6 @@ fixSubchapterNa <- function(x, start, end) {
 #' These are relevant to the most recent ICD-9-CM code sets, not the older
 #' historic versions. There will be no further updates, so this is reasonable.
 #' @keywords internal manip
-icd9cm_heirarchy_hotfix <- function(x) {
+icd9cm_hierarchy_hotfix <- function(x) {
   x[x$code == "0381", "short"] <- "Staphylococcal septicemia"
 }
