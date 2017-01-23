@@ -196,54 +196,6 @@ VecStr icd9RandomShort(VecStr::size_type n = 5) {
   return out;
 }
 
-//' Fast convert integer vector to character vector
-//'
-//' Fast conversion from integer vector to character vector using C++
-//' @param x vector of integers
-//' @param bufferSize int if any input strings are longer than this number
-//'   (default 16) there will be memory errors. No checks done for speed.
-//' @examples
-//' \dontrun{
-//' pts <- generate_random_pts(1e7)
-//' # conclusion: buffer size matters little (so default to be more generous),
-//' # and Rcpp version fastest.
-//' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
-//'                                fastIntToStringStd(pts$visit_id, buffer = 16),
-//'                                fastIntToStringStd(pts$visit_id, buffer = 64),
-//'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
-//'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
-//'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
-//'                                as.character(pts$visit_id),
-//'                                asCharacterNoWarn(pts$visit_id), times = 5)
-//' }
-//' @rdname fastIntToString
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr fastIntToStringStd(std::vector<int> x) {
-  VecStr::size_type len = x.size();
-  VecStr out(len);
-  char buffer[64];
-  for (std::vector<double>::size_type i = 0; i != len; ++i) {
-    sprintf(buffer, "%u", x[i]);
-    out[i] = buffer;
-  }
-  return out;
-}
-
-
-//' @rdname fastIntToString
-// [[Rcpp::export]]
-CV fastIntToStringRcpp(Rcpp::IntegerVector x) {
-  size_t len = x.size();
-  CV out(len);
-  char buffer[64];
-  for (size_t i = 0; i != len; ++i) {
-    sprintf(buffer, "%u", x[i]);
-    out[i] = buffer;
-  }
-  return out;
-}
-
 // [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
 #ifdef ICD_VALGRIND

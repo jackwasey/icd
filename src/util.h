@@ -42,9 +42,6 @@ VecStr icd9RandomShortV(VecStr::size_type n);
 VecStr icd9RandomShortE(VecStr::size_type n);
 VecStr icd9RandomShort(VecStr::size_type n);
 
-VecStr fastIntToStringStd(std::vector<int> x);
-CV fastIntToStringRcpp(Rcpp::IntegerVector x);
-
 int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
 

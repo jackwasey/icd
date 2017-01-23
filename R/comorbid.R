@@ -291,7 +291,7 @@ icd_comorbid_common <- function(x,
   # this is a moderately slow step (if needed to be done). Internally, the
   # \code{sort} is slow. Fast match speeds up the subsequent step.
   if (!is.factor(x[[icd_name]]))
-    x[[icd_name]] <- factor_nosort(x[[icd_name]])
+    x[[icd_name]] <- jwutil::factor_nosort(x[[icd_name]])
 
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
@@ -307,7 +307,7 @@ icd_comorbid_common <- function(x,
   # again, R is very fast at creating factors from a known set of levels
   icd_levels <- levels(x[[icd_name]])
   map <- lapply(map, function(y) {
-    f <- factor_nosort(y, icd_levels)
+    f <- jwutil::factor_nosort(y, icd_levels)
     f[!is.na(f)]
   })
 
@@ -323,7 +323,7 @@ icd_comorbid_common <- function(x,
 
   if (return_df) {
     if (visit_was_factor)
-      rownm <- factor_nosort(x = rownames(mat), levels = iv_levels)
+      rownm <- jwutil::factor_nosort(x = rownames(mat), levels = iv_levels)
     else
       rownm <- rownames(mat)
     df_out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = visit_was_factor)
