@@ -1142,44 +1142,6 @@ namespace icd {
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
-    inline VecStr fastIntToStringStd(std::vector<int> x) {
-        typedef SEXP(*Ptr_fastIntToStringStd)(SEXP);
-        static Ptr_fastIntToStringStd p_fastIntToStringStd = NULL;
-        if (p_fastIntToStringStd == NULL) {
-            validateSignature("VecStr(*fastIntToStringStd)(std::vector<int>)");
-            p_fastIntToStringStd = (Ptr_fastIntToStringStd)R_GetCCallable("icd", "icd_fastIntToStringStd");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_fastIntToStringStd(Rcpp::wrap(x));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<VecStr >(rcpp_result_gen);
-    }
-
-    inline CV fastIntToStringRcpp(Rcpp::IntegerVector x) {
-        typedef SEXP(*Ptr_fastIntToStringRcpp)(SEXP);
-        static Ptr_fastIntToStringRcpp p_fastIntToStringRcpp = NULL;
-        if (p_fastIntToStringRcpp == NULL) {
-            validateSignature("CV(*fastIntToStringRcpp)(Rcpp::IntegerVector)");
-            p_fastIntToStringRcpp = (Ptr_fastIntToStringRcpp)R_GetCCallable("icd", "icd_fastIntToStringRcpp");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_fastIntToStringRcpp(Rcpp::wrap(x));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<CV >(rcpp_result_gen);
-    }
-
     inline int valgrindCallgrindStart(bool zerostats = false) {
         typedef SEXP(*Ptr_valgrindCallgrindStart)(SEXP);
         static Ptr_valgrindCallgrindStart p_valgrindCallgrindStart = NULL;

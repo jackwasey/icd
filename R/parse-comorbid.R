@@ -128,7 +128,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
   icd9_map_ahrq %<>% icd_comorbidity_map
 
   if (save_data)
-    save_in_data_dir("icd9_map_ahrq")
+    jwutil::save_in_data_dir("icd9_map_ahrq")
 
   invisible(icd9_map_ahrq)
 }
@@ -158,7 +158,7 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE) {
   icd10_map_ahrq %<>% icd_comorbidity_map
 
   if (save_data)
-    save_in_data_dir("icd10_map_ahrq")
+    jwutil::save_in_data_dir("icd10_map_ahrq")
 
   invisible(icd10_map_ahrq)
 }
@@ -212,7 +212,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
   icd9_map_quan_deyo %<>% as.icd_short_diag %>% icd9 %>% icd_comorbidity_map
 
   if (save_data)
-    save_in_data_dir(icd9_map_quan_deyo)
+    jwutil::save_in_data_dir(icd9_map_quan_deyo)
   invisible(icd9_map_quan_deyo)
 }
 
@@ -291,7 +291,7 @@ icd9_parse_cc <- function(save_data = FALSE) {
   rm(extracodes)
 
   if (save_data)
-    save_in_data_dir(icd9_map_cc)
+    jwutil::save_in_data_dir(icd9_map_cc)
   invisible(icd9_map_cc)
 }
 
@@ -338,7 +338,7 @@ icd10_parse_cc <- function(save_data = FALSE) {
   # can adapt the code from icd9_map_cc()
 
   if (save_data)
-    save_in_data_dir(icd10_map_cc)
+    jwutil::save_in_data_dir(icd10_map_cc)
   invisible(icd10_map_cc)
 }
 
@@ -418,6 +418,6 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   icd_map_cc_hcc <- cbind(icd_map_cc_hcc[, c("year", "ifcc")], todrop)
 
   if (save_data)
-    save_in_data_dir(icd_map_cc_hcc)
+    jwutil::save_in_data_dir(icd_map_cc_hcc)
   invisible(icd_map_cc_hcc)
 }

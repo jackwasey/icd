@@ -32,7 +32,9 @@ icd_update_everything <- function() {
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from
   # development tree, not as installed package
+
   icd_generate_sysdata()
+
   load(file.path("R", "sysdata.rda"))
 
   generate_spelling()
@@ -119,7 +121,7 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
   }
 
   if (save_data)
-    save_in_data_dir(icd9cm_billable)
+    jwutil::save_in_data_dir(icd9cm_billable)
   invisible(icd9cm_billable)
 }
 
@@ -166,10 +168,10 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   fn_short_orig <- dat$short_filename
   fn_long_orig <- dat$long_filename
 
-  f_info_short <- unzip_to_data_raw(dat$url, file_name = fn_short_orig, offline = offline)
+  f_info_short <- jwutil::unzip_to_data_raw(dat$url, file_name = fn_short_orig, offline = offline)
   f_info_long <- NULL
   if (!is.na(fn_long_orig))
-    f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
+    f_info_long <- jwutil::unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
 
   message("short filename = ", f_info_short$file_name, "\n long filename = ", f_info_long$file_name)
   message("short path = ", f_info_short$file_path, "\n long path = ", f_info_long$file_name)
@@ -251,7 +253,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
 
   message("original v27 file name = '", fn_orig, "'. URL = ", url)
 
-  f27_info <- unzip_to_data_raw(url, fn_orig, offline = offline)
+  f27_info <- jwutil::unzip_to_data_raw(url, fn_orig, offline = offline)
 
   f <- file(f27_info$file_path, encoding = "latin1")
   icd9cm_billable27 <- utils::read.csv(f27_info$file_path, stringsAsFactors = FALSE,
@@ -331,7 +333,7 @@ icd9cm_make_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy <- icd9cm_hierarchy_hotfix(out)
 
   if (save_data)
-    save_in_data_dir("icd9cm_hierarchy") # nocov
+    jwutil::save_in_data_dir("icd9cm_hierarchy") # nocov
   invisible(icd9cm_hierarchy)
 }
 
@@ -346,10 +348,10 @@ fixSubchapterNa <- function(x, start, end) {
   # assert all the same:
   stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
   # now some work to insert a new level into the sub-chapter factor in the right place
-  previous_sub <- as_char_no_warn(x[(which(congenital) - 1)[1], "sub_chapter"])
+  previous_sub <- jwutil::as_char_no_warn(x[(which(congenital) - 1)[1], "sub_chapter"])
   previous_sub_pos <- which(levels(x$sub_chapter) == previous_sub)
-  congenital_title <- as_char_no_warn(x[which(congenital)[1], "chapter"])
-  new_subs <- as_char_no_warn(x$sub_chapter)
+  congenital_title <- jwutil::as_char_no_warn(x[which(congenital)[1], "chapter"])
+  new_subs <- jwutil::as_char_no_warn(x$sub_chapter)
   new_subs[congenital] <- congenital_title
   new_levels <- append(levels(x$sub_chapter), congenital_title, previous_sub_pos)
   x$sub_chapter <- factor(new_subs, new_levels)
@@ -362,5 +364,6 @@ fixSubchapterNa <- function(x, start, end) {
 #' historic versions. There will be no further updates, so this is reasonable.
 #' @keywords internal manip
 icd9cm_hierarchy_hotfix <- function(x) {
-  x[x$code == "0381", "short"] <- "Staphylococcal septicemia"
+  x[x$code == "0381", "short_desc"] <- "Staphylococcal septicemia"
+  x
 }

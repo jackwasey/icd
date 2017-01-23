@@ -89,7 +89,7 @@ icd9_generate_map_elix <- function(save_data = TRUE) {
   icd9_map_elix %<>% as.icd_comorbidity_map
 
   if (save_data)
-    save_in_data_dir(icd9_map_elix)
+    jwutil::save_in_data_dir(icd9_map_elix)
   invisible(icd9_map_elix)
 }
 
@@ -158,7 +158,7 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
   icd10_map_elix <- as.icd_comorbidity_map(icd10_map_elix)
 
   if (save_data)
-    save_in_data_dir(icd10_map_elix)
+    jwutil::save_in_data_dir(icd10_map_elix)
   invisible(icd10_map_elix)
 }
 
@@ -234,7 +234,7 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
   icd9_map_quan_elix %<>% as.icd_comorbidity_map
 
   if (save_data)
-    save_in_data_dir(icd9_map_quan_elix)
+    jwutil::save_in_data_dir(icd9_map_quan_elix)
   invisible(icd9_map_quan_elix)
 }
 
@@ -320,7 +320,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   icd10_map_quan_elix %<>% as.icd_comorbidity_map
 
   if (save_data)
-    save_in_data_dir(icd10_map_quan_elix)
+    jwutil::save_in_data_dir(icd10_map_quan_elix)
   invisible(icd10_map_quan_elix)
 }
 
@@ -400,12 +400,12 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
   if (save_data)
-    save_in_data_dir(icd10_map_quan_deyo)
+    jwutil::save_in_data_dir(icd10_map_quan_deyo)
   invisible(icd10_map_quan_deyo)
 }
 
 fetch_uranium_pathology <- function(offline = TRUE) {
-  unzip_to_data_raw(
+  jwutil::unzip_to_data_raw(
     url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
     file_name = "Pathology_Office2007.accdb",
     offline = offline)
@@ -447,12 +447,12 @@ generate_uranium_pathology <- function(save_data = TRUE, offline = TRUE) {
   uranium_pathology <- as.icd10(as.icd_long_data(uranium_pathology))
 
   if (save_data)
-    save_in_data_dir(uranium_pathology)
+    jwutil::save_in_data_dir(uranium_pathology)
   invisible(uranium_pathology)
 }
 
 fetch_vermont_dx <- function(offline) {
-  unzip_to_data_raw(
+  jwutil::unzip_to_data_raw(
     url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
     file_name = "VTINP13.TXT",
     offline = offline)
@@ -496,6 +496,6 @@ generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
     vermont_dx[[dc]]  <- as.icd9cm(as.icd_short_diag(vermont_dx[[dc]]))
 
   if (save_data)
-    save_in_data_dir(vermont_dx)
+    jwutil::save_in_data_dir(vermont_dx)
   invisible(vermont_dx)
 }

@@ -18,9 +18,11 @@ Authors@R: c(
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.1.0),
+    icdData
 Imports:
     checkmate (>= 1.7.0),
+    jwutil,
     magrittr,
     stats,
     Rcpp (>= 0.12.3),
@@ -40,6 +42,7 @@ License: GPL-3
 Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
 LinkingTo:
+    jwutil,
     Rcpp,
     testthat
 RoxygenNote: 5.0.1

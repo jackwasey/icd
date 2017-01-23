@@ -2,9 +2,6 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_chapters}
-\alias{icd9Chapters}
-\alias{icd9ChaptersMajor}
-\alias{icd9ChaptersSub}
 \alias{icd9_chapters}
 \alias{icd9_majors}
 \alias{icd9_sub_chapters}

@@ -7,7 +7,7 @@
 \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 }
 \usage{
-icd9_generate_sources()
+icd9_generate_sources(save_data = FALSE)
 }
 \description{
 generate data for finding source data for ICD-9-CM

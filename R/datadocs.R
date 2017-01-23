@@ -15,6 +15,44 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+requireNamespace("icdData")
+# 'copy' all the data from icdData into the icd namespace
+icdData_names <- c(
+  "icd10_map_ahrq",
+  "icd10_map_cc",
+  "icd10_map_elix",
+  "icd10_map_quan_deyo",
+  "icd10_map_quan_elix",
+  "icd10_sub_chapters",
+  "icd10cm2016",
+  "icd9ChaptersMajor",
+  "icd9ChaptersSub",
+  "icd9_majors",
+  "icd9_map_ahrq",
+  "icd9_map_cc",
+  "icd9_map_elix",
+  "icd9_map_quan_deyo",
+  "icd9_map_quan_elix",
+  "icd9_sources",
+  "icd9_sub_chapters",
+  "icd9cm_billable",
+  "icd9cm_hierarchy",
+  "icd9_chapters",
+  "icd10_chapters",
+  "icd_map_cc_hcc",
+  #"mappingNames",
+  NULL
+)
+
+# icdData is an Import for this package, so getting from it's environment should
+# always work
+e <- getNamespace(name = "icdData")
+for (n in icdData_names)
+  assign(n, get(n, envir = e))
+
+icdData_names <- NULL
+e <- NULL
+
 #' ICD-9 chapters
 #'
 #' \code{icd9_chapters}, \code{icd9_chapters_sub} and \code{icd9_majors} contain
@@ -47,7 +85,7 @@
 #' @format list with chapter/sub-chapter or major names stored in list names,
 #'   each with two element named character vector with start and end codes.
 #' @name icd9_chapters
-#' @aliases icd9Chapters icd9ChaptersSub icd9ChaptersMajor icd9_sub_chapters
+#' @aliases icd9_sub_chapters
 #'   icd9_majors
 NULL
 

@@ -136,10 +136,10 @@ icd9_generate_all_ <- function(major_fun, short_code = TRUE,
 #' generate data for finding source data for ICD-9-CM
 #' @source \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 #' @keywords internal
-icd9_generate_sources <- function() {
+icd9_generate_sources <- function(save_data = FALSE) {
   cms_base <- "http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/"
   cdc_base <- "http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/"
-  data.frame(
+  icd9_sources <- data.frame(
     version = as.character(c(32, 31, 30, 29, 28, 27, 26, 25, 24, 23)),
     f_year = c(as.character(seq(2014, 2005))),
     start_date = c("2014-10-01", "2013-10-01", "2012-10-01", "2011-10-01", "2010-10-01",
@@ -203,4 +203,7 @@ icd9_generate_sources <- function() {
       "Dtab07.RTF", "Dtab06.rtf"),
     stringsAsFactors = FALSE
   )
+  if (save_data)
+    jwutil::save_in_data_dir(icd9_sources)
+  invisible(icd9_sources)
 }
