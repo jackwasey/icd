@@ -32,7 +32,7 @@ icd_generate_sysdata <- function(save_data = TRUE) {
 
   # we can either use the icd_is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
-  codes <- icd::icd9cm_hierarchy[["code"]]
+  codes <- icdData::icd9cm_hierarchy[["code"]]
   icd9_short_n_defined <- vec_to_lookup_pair(grep("^[^VE]+", codes, perl = TRUE, value = TRUE))
   icd9_short_v_defined <- vec_to_lookup_pair(grep("^V", codes, perl = TRUE, value = TRUE))
   icd9_short_e_defined <- vec_to_lookup_pair(grep("^E", codes, perl = TRUE, value = TRUE))
@@ -203,7 +203,10 @@ icd9_generate_sources <- function(save_data = FALSE) {
       "Dtab07.RTF", "Dtab06.rtf"),
     stringsAsFactors = FALSE
   )
-  if (save_data)
+  # save in icdData and icd
+  if (save_data) {
     jwutil::save_in_data_dir(icd9_sources)
+    save_in_dd(icd9_sources)
+  }
   invisible(icd9_sources)
 }

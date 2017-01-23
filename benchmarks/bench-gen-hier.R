@@ -2,12 +2,12 @@ library(profr)
 library(microbenchmark)
 
 # the slow code we are trying to speed up is:
-# icd9cm_make_chapters_hierarchy()
+# icd9cm_generate_chapters_hierarchy()
 # of which icd9_get_chapters is the slowest step?
 
 
 Rprof(filename = "/tmp/gh.txt", interval = 0.001, line.profiling = TRUE)
-j <- icd:::icd9cm_make_chapters_hierarchy()
+j <- icd:::icd9cm_generate_chapters_hierarchy()
 Rprof(NULL)
 summaryRprof("/tmp/gh.txt", lines = "show")
 

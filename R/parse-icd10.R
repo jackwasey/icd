@@ -76,7 +76,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
     magrittr::extract2("chap_desc") -> icd10cm2016[["chapter"]]
 
   if (save_data)
-    jwutil::save_in_data_dir(icd10cm2016)
+    save_in_dd(icd10cm2016)
 
   invisible(icd10cm2016)
 }

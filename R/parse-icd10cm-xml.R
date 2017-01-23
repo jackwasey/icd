@@ -29,7 +29,6 @@
 #' @keywords internal
 icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
   assert_flag(save_data)
-  requireNamespace("xml2")
   f_info <- icd10cm_get_xml_file()
   j <- xml2::read_xml(f_info$file_path)
 
@@ -76,6 +75,6 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
     } #subchaps
   } #chapters
   if (save_data)
-    jwutil::save_in_data_dir(icd10_sub_chapters)
+    save_in_dd(icd10_sub_chapters)
   invisible(icd10_sub_chapters)
 }

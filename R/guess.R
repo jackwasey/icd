@@ -48,7 +48,7 @@ icd_guess_version.icd10 <- function(x, short_code, ...) "icd10" #nocov
 #' @export
 #' @keywords internal
 icd_guess_version.factor <- function(x, short_code = NULL, ...) {
-  icd_guess_version.character(as_char_no_warn(x), short_code = short_code, ...)
+  icd_guess_version.character(jwutil::as_char_no_warn(x), short_code = short_code, ...)
 }
 
 #' @describeIn icd_guess_version Guess version of ICD codes in character vector
@@ -147,8 +147,8 @@ icd_guess_short_update <- function(x, short_code = icd_guess_short(x)) {
 #'   error if conflicting results
 #' @keywords internal
 icd_guess_pair_version <- function(start, end, short_code = NULL) {
-  start_guess <- icd_guess_version.character(as_char_no_warn(start), short_code = short_code)
-  end_guess <- icd_guess_version.character(as_char_no_warn(end), short_code = short_code)
+  start_guess <- icd_guess_version.character(jwutil::as_char_no_warn(start), short_code = short_code)
+  end_guess <- icd_guess_version.character(jwutil::as_char_no_warn(end), short_code = short_code)
   if (start_guess != end_guess)
     stop("Cannot expand range because ICD code version cannot be guessed from ", start,
          " and ", end, ". Either specify the classes, e.g. icd9(\"100.4\"), or call the

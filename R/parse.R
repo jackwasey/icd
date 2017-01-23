@@ -64,8 +64,9 @@ icd_update_everything <- function() {
   icd10cm_get_all_defined(save_data = TRUE)
   icd10cm_extract_sub_chapters(save_data = TRUE)
 
-  # reload the newly saved data before generating chapters
-  icd9cm_make_chapters_hierarchy(save_data = TRUE, verbose = FALSE) # depends on icd9cm_billable
+  # reload the newly saved data before generating chapters.
+  # depends on icd9cm_billable
+  icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE)
 }
 
 # quick sanity checks - full tests of icd9cm_hierarchy in test-parse.R
@@ -121,7 +122,7 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
   }
 
   if (save_data)
-    jwutil::save_in_data_dir(icd9cm_billable)
+    save_in_dd(icd9cm_billable)
   invisible(icd9cm_billable)
 }
 
@@ -278,7 +279,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
 #' @template verbose
 #' @template offline
 #' @keywords internal
-icd9cm_make_chapters_hierarchy <- function(save_data = FALSE,
+icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
                                                verbose = FALSE, offline = TRUE,
                                                perl = TRUE, useBytes = TRUE) {
   assert_flag(save_data)
@@ -332,8 +333,9 @@ icd9cm_make_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy_sanity(out)
   icd9cm_hierarchy <- icd9cm_hierarchy_hotfix(out)
 
+  print(environment())
   if (save_data)
-    jwutil::save_in_data_dir("icd9cm_hierarchy") # nocov
+    save_in_dd(icd9cm_hierarchy) # nocov
   invisible(icd9cm_hierarchy)
 }
 
@@ -365,5 +367,6 @@ fixSubchapterNa <- function(x, start, end) {
 #' @keywords internal manip
 icd9cm_hierarchy_hotfix <- function(x) {
   x[x$code == "0381", "short_desc"] <- "Staphylococcal septicemia"
+  x[x$code == "0381", "long_desc"] <- "Staphylococcal septicemia"
   x
 }

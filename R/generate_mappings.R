@@ -89,7 +89,7 @@ icd9_generate_map_elix <- function(save_data = TRUE) {
   icd9_map_elix %<>% as.icd_comorbidity_map
 
   if (save_data)
-    jwutil::save_in_data_dir(icd9_map_elix)
+    save_in_dd(icd9_map_elix)
   invisible(icd9_map_elix)
 }
 
@@ -158,7 +158,7 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
   icd10_map_elix <- as.icd_comorbidity_map(icd10_map_elix)
 
   if (save_data)
-    jwutil::save_in_data_dir(icd10_map_elix)
+    save_in_dd(icd10_map_elix)
   invisible(icd10_map_elix)
 }
 
@@ -234,7 +234,7 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
   icd9_map_quan_elix %<>% as.icd_comorbidity_map
 
   if (save_data)
-    jwutil::save_in_data_dir(icd9_map_quan_elix)
+    save_in_dd(icd9_map_quan_elix)
   invisible(icd9_map_quan_elix)
 }
 
@@ -320,7 +320,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   icd10_map_quan_elix %<>% as.icd_comorbidity_map
 
   if (save_data)
-    jwutil::save_in_data_dir(icd10_map_quan_elix)
+    save_in_dd(icd10_map_quan_elix)
   invisible(icd10_map_quan_elix)
 }
 
@@ -400,7 +400,7 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
   if (save_data)
-    jwutil::save_in_data_dir(icd10_map_quan_deyo)
+    save_in_dd(icd10_map_quan_deyo)
   invisible(icd10_map_quan_deyo)
 }
 
@@ -447,7 +447,7 @@ generate_uranium_pathology <- function(save_data = TRUE, offline = TRUE) {
   uranium_pathology <- as.icd10(as.icd_long_data(uranium_pathology))
 
   if (save_data)
-    jwutil::save_in_data_dir(uranium_pathology)
+    save_in_dd(uranium_pathology)
   invisible(uranium_pathology)
 }
 
@@ -496,6 +496,6 @@ generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
     vermont_dx[[dc]]  <- as.icd9cm(as.icd_short_diag(vermont_dx[[dc]]))
 
   if (save_data)
-    jwutil::save_in_data_dir(vermont_dx)
+    save_in_dd(vermont_dx)
   invisible(vermont_dx)
 }

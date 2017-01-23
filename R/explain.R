@@ -61,7 +61,7 @@ icd_explain <- function(...)
 #' @keywords internal
 icd_explain.default <- function(x, short_code = icd_guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   switch(
-    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
+    icd_guess_version.character(jwutil::as_char_no_warn(x), short_code = short_code),
     "icd9" = icd_explain.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
     "icd10" = icd_explain.icd10(x, short_code = short_code, brief = brief, ...),
     stop("Unknown ICD version.")
@@ -113,7 +113,7 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
   c(mjexplain,
-    icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
+    icdData::icd9cm_hierarchy[icdData::icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
 }
 
@@ -134,7 +134,7 @@ icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
   if (!short_code)
     x <- icd_decimal_to_short.icd10(x)
 
-  icd10cm2016[icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
+  icd10cm2016[icd10cm2016[["code"]] %in% unique(jwutil::as_char_no_warn(x)),
               ifelse(brief, "short_desc", "long_desc")]
 }
 
@@ -154,7 +154,7 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x), verbose = FALS
   # matches.
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
-  x <- as_char_no_warn(x)
+  x <- jwutil::as_char_no_warn(x)
   all_majors <- icd_get_major.icd9(x, short_code)
   majors <- unique(all_majors)
   lenm <- length(majors)
