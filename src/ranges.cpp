@@ -167,7 +167,7 @@ CV icd9ChildrenShort(CV icd9Short, bool onlyReal) {
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
+      const Rcpp::Environment env("package:icdData");
       const Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       std::set<Str> out_real;
       const VecStr tmp = Rcpp::as<VecStr >(icd9Hierarchy["code"]);
@@ -209,7 +209,7 @@ CV icd9ChildrenShortUnordered(CV icd9Short, bool onlyReal) {
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
+      const Rcpp::Environment env("package:icdData");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       icd_set out_real;
       VecStr tmp = Rcpp::as<VecStr >(
@@ -252,7 +252,7 @@ VecStr icd9ChildrenShortNoNaUnordered(const VecStr& icd9Short, const bool onlyRe
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
+      const Rcpp::Environment env("package:icdData");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       icd_set out_real;
       VecStr tmp = Rcpp::as<VecStr >(

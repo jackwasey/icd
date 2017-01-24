@@ -87,11 +87,3 @@
 #' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames
 NULL
-
-#' Pipe
-#'
-#' Re-export the pipe-like function to allow chaining of 'icd' commands without
-#' explicitly loading the 'magrittr' library
-#' @keywords manip
-#' @export
-`%>%` <- magrittr::`%>%`

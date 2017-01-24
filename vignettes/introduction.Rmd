@@ -134,6 +134,7 @@ Vectors of codes, data frames and matrices can have a class set. Conflicting cla
 df <- data.frame(i9 = as.icd9(c("100", "001")), 
                  i10 = as.icd10(c("Z771", "Z87820")))
 
+# demonstrate that an error is thrown for trying to do this:
 try(df %>% as.icd9 %>% as.icd10)
 ```
 
@@ -164,12 +165,12 @@ icd_is_valid(c("1", "001", "100", "123456", "003.21"), short_code = TRUE)
 These functions generate syntactically valid ICD-9 codes, without including parent codes when the range limit would subset the parent. E.g. `"100.99" %i9da% "101.01"` does not include `100` or `100.0`, both of which imply larger subsets than requested by the range command (i.e. every code up to `100.99`). The shorter forms `%i9s%` and `%i9d%` return only *real* codes (i.e. listed in the CMS definitions as either three-digit codes or diagnoses), whereas `%i9sa%` and `%i9da%` return all possible syntactically valid ICD-9 codes:
 ```{r ranges}
 # get all possible codes
-"003" %i9sa% "0033" %>% head(9) # show first 9 of 111 values
+#"003" %i9sa% "0033" %>% head(9) # show first 9 of 111 values
 # just get the ones which correspond to diagnoses (keeping the 3-digit chapters)
-"494" %i9s% "4941"
+#"494" %i9s% "4941"
 
-"10099" %i9sa% "10101"
-"V10" %i9da% "V10.02"
+#"10099" %i9sa% "10101"
+#"V10" %i9da% "V10.02"
 "E987" %i9da% "E988.1"
 
 # can't range between different types:

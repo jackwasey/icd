@@ -59,7 +59,7 @@ CV icd9ChildrenShort11(CV icd9Short, bool onlyReal) {
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
+      const Rcpp::Environment env("package:icdData");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       icd_set out_real;
       VecStr tmp = Rcpp::as<VecStr >(
@@ -118,7 +118,7 @@ CV icd9ChildrenShortStd(CV icd9Short, bool onlyReal) {
     }
 
     if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
+      const Rcpp::Environment env("package:icdData");
       Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
       icd_set out_real;
       VecStr tmp = Rcpp::as<VecStr>(icd9Hierarchy["code"]);

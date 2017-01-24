@@ -41,7 +41,7 @@ CV icd10cmChildrenDefined(CV &x) {
 
   // need namespace for sysdata (.nc) and package env for lazy data
   Rcpp::Environment env("package:icd"); // only works when package is loaded
-  Rcpp::Environment ns = Rcpp::Environment::namespace_env("icd");
+  Rcpp::Environment ns = Rcpp::Environment::namespace_env("icdData");
   Rcpp::List icd10cm2016 = env["icd10cm2016"];
   CV allCodes = icd10cm2016["code"];
   Rcpp::IntegerVector nc = ns[".nc"];
