@@ -99,24 +99,24 @@ ahrq_test_dat <- as.icd_long_data(
   )
 )
 
-elix_end_codes <- unlist(unname(c(lapply(icd::icd9_map_elix, head, n = 1),
-                                  lapply(icd::icd9_map_elix, tail, n = 1))))
+elix_end_codes <- unlist(unname(c(lapply(icd9_map_elix, head, n = 1),
+                                  lapply(icd9_map_elix, tail, n = 1))))
 elix_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(elix_end_codes)),
   icd9 = elix_end_codes,
   stringsAsFactors = FALSE
 )
 
-quan_elix_end_codes <- unlist(unname(c(lapply(icd::icd9_map_quan_elix, head, n = 1),
-                                       lapply(icd::icd9_map_quan_elix, tail, n = 1))))
+quan_elix_end_codes <- unlist(unname(c(lapply(icd9_map_quan_elix, head, n = 1),
+                                       lapply(icd9_map_quan_elix, tail, n = 1))))
 quan_elix_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(quan_elix_end_codes)),
   icd9 = quan_elix_end_codes,
   stringsAsFactors = FALSE
 )
 
-quan_deyo_end_codes <- unlist(unname(c(lapply(icd::icd9_map_quan_deyo, head, n = 1),
-                                       lapply(icd::icd9_map_quan_deyo, tail, n = 1))))
+quan_deyo_end_codes <- unlist(unname(c(lapply(icd9_map_quan_deyo, head, n = 1),
+                                       lapply(icd9_map_quan_deyo, tail, n = 1))))
 quan_deyo_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(quan_deyo_end_codes)),
   icd9 = quan_deyo_end_codes,

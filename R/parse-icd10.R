@@ -51,14 +51,14 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   )
 
   icd10cm2016[["code"]] %<>% as.icd10cm %>% as.icd_short_diag
-  icd10cm2016[["code"]] %>% icd_get_major %>% factor_nosort -> icd10cm2016[["three_digit"]]
+  icd10cm2016[["code"]] %>% icd_get_major %>% jwutil::factor_nosort -> icd10cm2016[["three_digit"]]
 
   # here we must re-factor so we don't have un-used levels in major
   merge(x = icd10cm2016["three_digit"],
         y = icd10cm2016[c("code", "short_desc")],
         by.x = "three_digit", by.y = "code",
         all.x = TRUE) %>%
-    magrittr::extract2("short_desc") %>% factor_nosort -> icd10cm2016[["major"]]
+    magrittr::extract2("short_desc") %>% jwutil::factor_nosort -> icd10cm2016[["major"]]
 
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because
@@ -105,8 +105,8 @@ icd10_generate_subchap_lookup <- function(lk_majors, verbose = FALSE) {
 icd10_generate_chap_lookup <- function(lk_majors) {
   lk_majors <- unique(icd10cm2016[["three_digit"]])
   chap_lookup <- data.frame(major = NULL, desc = NULL)
-  for (chap_n in names(icd::icd10_chapters)) {
-    chap <- icd::icd10_chapters[[chap_n]]
+  for (chap_n in names(icd10_chapters)) {
+    chap <- icd10_chapters[[chap_n]]
     # fix a 2016 error in the CMS XML definitions
     if (chap["end"] == "Y08")
       chap["end"] <- "Y09"

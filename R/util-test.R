@@ -165,11 +165,11 @@ expect_icd9_chap_missing <- function(x, ...) {
 }
 
 expect_icd10_sub_chap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd::icd10_sub_chapters, ...)))
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd10_sub_chapters, ...)))
 }
 
 expect_icd10_chap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd::icd10_chapters, ...)))
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd10_chapters, ...)))
 }
 
 #' expect that a chapter with given title exists, case-insensitive
@@ -182,26 +182,26 @@ expect_chap_present <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
 #' @rdname expect_chap_present
 #' @keywords internal debugging
 expect_icd9_sub_chap_present <- function(x, info = NULL, label = NULL, ...) {
-  eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd9_sub_chapters,
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9_sub_chapters,
                                   info = info, label = label, ...)))
 }
 
 #' @rdname expect_chap_present
 #' @keywords internal debugging
 expect_icd9_chap_present <- function(x, ...) {
-  eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd9_chapters, ...)))
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd9_chapters, ...)))
 }
 
 #' @rdname expect_chap_present
 #' @keywords internal debugging
 expect_icd10_sub_chap_present <- function(x, ...) {
-  eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd10_sub_chapters, ...)))
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd10_sub_chapters, ...)))
 }
 
 #' @rdname expect_chap_present
 #' @keywords internal debugging
 expect_icd10_chap_present <- function(x, ...) {
-  eval(bquote(expect_chap_present(.(x), ver_chaps = icd::icd10_chapters, ...)))
+  eval(bquote(expect_chap_present(.(x), ver_chaps = icd10_chapters, ...)))
 }
 
 expect_icd9_only_chap <- function(x, ...) {

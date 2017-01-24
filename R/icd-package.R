@@ -82,7 +82,7 @@
 #' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd
-#' @import Rcpp checkmate
+#' @import Rcpp checkmate icdData
 #' @importFrom magrittr "%>%" "%<>%" set_names extract2
 #' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames

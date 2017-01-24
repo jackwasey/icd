@@ -29,6 +29,8 @@ repos:
 r_github_packages:
   - jimhester/covr
   - jimhester/lintr
+  - jackwasey/icdData
+  - jackwasey/jwutil
 
 warnings_are_errors: true
 

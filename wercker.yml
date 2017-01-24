@@ -13,7 +13,10 @@ build:
             rm .Rinstignore  # install everything for testing
             sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
-        github_packages: jimhester/covr
+        github_packages:
+         - jimhester/covr
+         - jackwasey/jwutil
+         - jackwasey/icdData
     - jimhester/r-lint
     - jimhester/r-check
     - script:
