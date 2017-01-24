@@ -126,9 +126,9 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
 })
 
 test_that("some hand-picked ICD-10 codes appear in the quan elix map", {
-  expect_true("M12019" %in% icd::icd10_map_quan_elix$Rheumatic)
+  expect_true("M12019" %in% icd10_map_quan_elix$Rheumatic)
 })
 
 test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
-  expect_true("I214" %in% icd::icd10_map_quan_deyo$MI)
+  expect_true("I214" %in% icd10_map_quan_deyo$MI)
 })

@@ -422,7 +422,7 @@ icd9_comorbid_hcc <- function(x,
   x$year <- as.numeric(format(x[[date_name]], "%Y"))
 
   # merge CCs to patient data based on ICD and year drop ICD info
-  x <- merge(x, icd::icd9_map_cc, all.x = TRUE)
+  x <- merge(x, icd9_map_cc, all.x = TRUE)
 
   # Drop missing CC and convert to numeric
   # Not all ICDs resolve to a CC by definition
@@ -438,7 +438,7 @@ icd9_comorbid_hcc <- function(x,
 
   # Import hierarchy mappings, and duplicate the ifcc column
   # needed for future matching
-  hierarchy <- icd::icd_map_cc_hcc
+  hierarchy <- icd_map_cc_hcc
   hierarchy$cc <- hierarchy$ifcc
 
   # Merge hierarchy rules with patient data
@@ -494,7 +494,7 @@ icd10_comorbid_hcc <- function(x,
   x$year <- as.numeric(format(x[[date_name]], "%Y"))
 
   # merge CCs to patient data based on ICD and year drop ICD info
-  x <- merge(x, icd::icd10_map_cc, all.x = TRUE)
+  x <- merge(x, icd10_map_cc, all.x = TRUE)
 
   # Drop missing CC and convert to numeric
   # Not all ICDs resolve to a CC by definition
@@ -510,8 +510,8 @@ icd10_comorbid_hcc <- function(x,
 
   # Import hierarchy mappings, and duplicate the ifcc column
   # needed for future matching
-  hierarchy <- icd::icd_map_cc_hcc
-  hierarchy$cc <- icd::icd_map_cc_hcc$ifcc
+  hierarchy <- icd_map_cc_hcc
+  hierarchy$cc <- icd_map_cc_hcc$ifcc
 
   # Merge hierarchy rules with patient data
   x <- merge(x, hierarchy, all.x = TRUE)
@@ -640,14 +640,14 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
     x <- x[, -which(colnames(x) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
-      colnames(x)[cr(x)] <- icd::icd_names_elix_abbrev
+      colnames(x)[cr(x)] <- icd_names_elix_abbrev
     else
-      colnames(x)[cr(x)] <- icd::icd_names_elix
+      colnames(x)[cr(x)] <- icd_names_elix
   } else {
     if (abbrev_names)
-      colnames(x)[cr(x)] <- icd::icd_names_elix_htn_abbrev
+      colnames(x)[cr(x)] <- icd_names_elix_htn_abbrev
     else
-      colnames(x)[cr(x)] <- icd::icd_names_elix_htn
+      colnames(x)[cr(x)] <- icd_names_elix_htn
   }
   x
 }
@@ -673,14 +673,14 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # comorbidities:
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_abbrev
+      colnames(cbd)[cr(cbd)] <- icd_names_quan_elix_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix
+      colnames(cbd)[cr(cbd)] <- icd_names_quan_elix
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_htn_abbrev
+      colnames(cbd)[cr(cbd)] <- icd_names_quan_elix_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_htn
+      colnames(cbd)[cr(cbd)] <- icd_names_quan_elix_htn
   }
   cbd
 }
@@ -696,9 +696,9 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
   if (abbrev_names)
-    colnames(cbd)[cr(cbd)] <- icd::icd_names_charlson_abbrev
+    colnames(cbd)[cr(cbd)] <- icd_names_charlson_abbrev
   else
-    colnames(cbd)[cr(cbd)] <- icd::icd_names_charlson
+    colnames(cbd)[cr(cbd)] <- icd_names_charlson
 
   cbd
 }
@@ -718,14 +718,14 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_abbrev
+      colnames(cbd)[cr(cbd)] <- icd_names_ahrq_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq
+      colnames(cbd)[cr(cbd)] <- icd_names_ahrq
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn_abbrev
+      colnames(cbd)[cr(cbd)] <- icd_names_ahrq_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn
+      colnames(cbd)[cr(cbd)] <- icd_names_ahrq_htn
   }
   cbd
 }

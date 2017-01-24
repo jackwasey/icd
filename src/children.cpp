@@ -31,7 +31,7 @@
 //    while (nc[check_row] > parent_len && check_row != last_row + 1)
 //      check_row <- check_row + 1
 //
-//    kids <- c(kids, icd::icd10cm2016[matches[i]:(check_row - 1), "code"])
+//    kids <- c(kids, icd10cm2016[matches[i]:(check_row - 1), "code"])
 //  }
 //
 //  as.icd10cm(kids, short_code)

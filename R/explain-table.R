@@ -137,7 +137,7 @@ icd_explain_table.icd9cm <- function(x, short_code = icd_guess_short(x),
 #' @keywords internal
 icd_explain_table.icd10cm <- function(x, short_code = icd_guess_short(x),
                                       condense = FALSE, brief = TRUE, warn = TRUE, ...) {
-  icd_explain_table_worker(x = x, hierarchy = icd::icd10cm2016,
+  icd_explain_table_worker(x = x, hierarchy = icd10cm2016,
                            short_code = short_code, condense = condense,
                            brief = brief, warn = warn, ...)
 }

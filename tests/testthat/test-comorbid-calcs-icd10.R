@@ -39,11 +39,11 @@ test_that("ahrq comorbidities found for test data", {
 
   for (test_name in names(td)) {
 
-    expect_error(res <- icd_comorbid(td[[test_name]], map = icd::icd10_map_ahrq), regexp = NA)
+    expect_error(res <- icd_comorbid(td[[test_name]], map = icd10_map_ahrq), regexp = NA)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method one comorbidity:", n, ", test: ", test_name))
 
-    expect_error(res <- icd10_comorbid(td[[test_name]], map = icd::icd10_map_ahrq), regexp = NA)
+    expect_error(res <- icd10_comorbid(td[[test_name]], map = icd10_map_ahrq), regexp = NA)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method two comorbidity:", n, ", test: ", test_name))
 
@@ -68,13 +68,13 @@ test_that("ahrq comorbidities found for test data for multiple patients each wit
   # just checking for a trace matrix of TRUE, but this way lets me find error much more quickly:
   for (test_name in names(td)) {
 
-    res <- icd_comorbid(td[[test_name]], icd::icd10_map_ahrq)
+    res <- icd_comorbid(td[[test_name]], icd10_map_ahrq)
     for (n in colnames(res))
       expect_equal(sum(res[, n]), 1, info = paste("col method one comorbidity:", n, ", test: ", test_name))
     for (n in rownames(res))
       expect_equal(sum(res[n, ]), 1, info = paste("row method one comorbidity:", n, ", test: ", test_name))
 
-    res <- icd10_comorbid(td[[test_name]], icd::icd10_map_ahrq)
+    res <- icd10_comorbid(td[[test_name]], icd10_map_ahrq)
     for (n in colnames(res))
       expect_equal(sum(res[, n]), 1, info = paste("method two comorbidity:", n, ", test: ", test_name))
     for (n in rownames(res))

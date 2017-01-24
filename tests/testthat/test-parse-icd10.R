@@ -41,18 +41,18 @@ test_that("icd10 2016 flat file details are okay", {
   checkmate::expect_character(res$short_desc)
   checkmate::expect_character(res$long_desc)
 
-  checkmate::expect_character(icd::icd10cm2016$code)
-  checkmate::expect_logical(icd::icd10cm2016$billable)
-  checkmate::expect_character(icd::icd10cm2016$short_desc)
-  checkmate::expect_character(icd::icd10cm2016$long_desc)
+  checkmate::expect_character(icd10cm2016$code)
+  checkmate::expect_logical(icd10cm2016$billable)
+  checkmate::expect_character(icd10cm2016$short_desc)
+  checkmate::expect_character(icd10cm2016$long_desc)
 
   for (n in c("three_digit", "major", "sub_chapter", "chapter")) {
     checkmate::expect_factor(res[[n]])
-    checkmate::expect_factor(icd::icd10cm2016[[n]])
-    expect_identical(levels(res[[n]]), levels(icd::icd10cm2016[[n]]), info = paste("working on ", n))
-    expect_identical(res[[n]], icd::icd10cm2016[[n]], info = paste("working on ", n))
+    checkmate::expect_factor(icd10cm2016[[n]])
+    expect_identical(levels(res[[n]]), levels(icd10cm2016[[n]]), info = paste("working on ", n))
+    expect_identical(res[[n]], icd10cm2016[[n]], info = paste("working on ", n))
   }
-  expect_identical(res, icd::icd10cm2016)
+  expect_identical(res, icd10cm2016)
 })
 
 context("icd10 XML parse")
@@ -92,10 +92,10 @@ test_that("ICD-10 chapters and sub-chapters are distinct", {
   # confused. This was really just a problem with RTF parsing for ICD-9, but
   # there are possible similiar problems with some of the XML hierarchy.
 
-  for (chap in names(icd::icd10_chapters))
+  for (chap in names(icd10_chapters))
     expect_icd10_only_chap(chap)
 
-  for (subchap in names(icd::icd10_sub_chapters))
+  for (subchap in names(icd10_sub_chapters))
     expect_icd10_only_sub_chap(subchap)
 })
 

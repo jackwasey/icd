@@ -25,11 +25,10 @@ icdData_names <- c(
   "icd10_map_quan_elix",
   "icd10_sub_chapters",
   "icd10cm2016",
-  "icd9ChaptersMajor",
-  "icd9ChaptersSub",
   "icd9_majors",
   "icd9_map_ahrq",
   "icd9_map_cc",
+  "icd10_map_cc",
   "icd9_map_elix",
   "icd9_map_quan_deyo",
   "icd9_map_quan_elix",
@@ -40,8 +39,17 @@ icdData_names <- c(
   "icd9_chapters",
   "icd10_chapters",
   "icd_map_cc_hcc",
-  #"mappingNames",
-  NULL
+  "icd10cm2016",
+  "icd9_chapters",
+  "icd9_majors",
+  "icd9_map_cc",
+  "icd9cm_billable",
+  "icd_names_ahrq", "icd_names_ahrq_abbrev", "icd_names_ahrq_htn",
+  "icd_names_ahrq_htn_abbrev", "icd_names_charlson",
+  "icd_names_charlson_abbrev", "icd_names_elix", "icd_names_elix_abbrev",
+  "icd_names_elix_htn", "icd_names_elix_htn_abbrev", "icd_names_quan_elix",
+  "icd_names_quan_elix_abbrev", "icd_names_quan_elix_htn",
+  "icd_names_quan_elix_htn_abbrev"
 )
 
 # icdData is an Import for this package, so getting from it's environment should

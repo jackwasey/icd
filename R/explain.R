@@ -161,10 +161,10 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x), verbose = FALS
 
   # could consider faster factor generation
   out <- data.frame(
-    three_digit = factor(rep(NA, lenm), levels = c(icd::icd9_majors, NA)),
-    major = factor(rep(NA, lenm), levels = c(names(icd::icd9_majors), NA)),
-    sub_chapter = factor(rep(NA, lenm), levels = c(names(icd::icd9_sub_chapters), NA)),
-    chapter = factor(rep(NA, lenm), levels = c(names(icd::icd9_chapters), NA))
+    three_digit = factor(rep(NA, lenm), levels = c(icd9_majors, NA)),
+    major = factor(rep(NA, lenm), levels = c(names(icd9_majors), NA)),
+    sub_chapter = factor(rep(NA, lenm), levels = c(names(icd9_sub_chapters), NA)),
+    chapter = factor(rep(NA, lenm), levels = c(names(icd9_chapters), NA))
   )
 
   chap_lookup <- lapply(icd9_chapters, function(y)
@@ -182,22 +182,22 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x), verbose = FALS
   for (i in 1L:length(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
-    for (chap_num in 1L:length(icd::icd9_chapters)) {
+    for (chap_num in 1L:length(icd9_chapters)) {
       if (majors[i] %ine% chap_lookup[[chap_num]]) {
-        out[i, "chapter"] <- names(icd::icd9_chapters)[chap_num]
+        out[i, "chapter"] <- names(icd9_chapters)[chap_num]
         break
       }
     }
-    for (subchap_num in 1:length(icd::icd9_sub_chapters)) {
+    for (subchap_num in 1:length(icd9_sub_chapters)) {
       if (majors[i] %ine% subchap_lookup[[subchap_num]]) {
-        out[i, "sub_chapter"] <- names(icd::icd9_sub_chapters)[subchap_num]
+        out[i, "sub_chapter"] <- names(icd9_sub_chapters)[subchap_num]
         break
       }
     }
   }
-  whch <- match(majors, icd::icd9_majors, nomatch = NA)
-  out$major[] <- names(icd::icd9_majors)[whch]
-  out$three_digit[] <- unlist(icd::icd9_majors)[whch]
+  whch <- match(majors, icd9_majors, nomatch = NA)
+  out$major[] <- names(icd9_majors)[whch]
+  out$three_digit[] <- unlist(icd9_majors)[whch]
   # out is based on unique majors of the input codes. Now merge with original inputs to give output
   out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
         x = out, by = "three_digit", sort = FALSE, all.x = TRUE)

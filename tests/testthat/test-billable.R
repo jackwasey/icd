@@ -19,7 +19,7 @@ context("billable code lists")
 
 test_that("specific known parsing errors", {
   # problems with whitespace stripping or sorting around: 12167 13276 14567
-  b32 <- icd::icd9cm_billable[["32"]]
+  b32 <- icd9cm_billable[["32"]]
   nines <- b32[b32$code == "9999", ]
   expect_equal(nrow(nines), 1)
   expect_equal(nines$long_desc, "Other and unspecified complications of medical care, not elsewhere classified")
@@ -36,7 +36,7 @@ test_that("ICD-9-CM billable codes package data is recreated", {
 
   check_billable <- parse_leaf_descriptions_all(save_data = FALSE, offline = TRUE)
   # check this one thing known to be dodgy
-  expect_identical(check_billable[["28"]][["long_desc"]], icd::icd9cm_billable[["28"]][["long_desc"]])
+  expect_identical(check_billable[["28"]][["long_desc"]], icd9cm_billable[["28"]][["long_desc"]])
 
   # make specific quick tests for previously known problems:
   b32 <- check_billable[["32"]]
@@ -47,10 +47,10 @@ test_that("ICD-9-CM billable codes package data is recreated", {
   expect_identical(b32[b32$code == "V9199", "short_desc"], "Mult gest-plac/sac undet")
 
   for (ver in c("27", "28", "29", "30", "31", "32")) {
-    v <- icd::icd9cm_billable[[ver]][["long_desc"]]
+    v <- icd9cm_billable[[ver]][["long_desc"]]
     cb <- check_billable[[ver]][["long_desc"]]
     diff <- v != cb
-    expect_identical(check_billable[[ver]], icd::icd9cm_billable[[ver]],
+    expect_identical(check_billable[[ver]], icd9cm_billable[[ver]],
                      info = paste("long_desc differences for version", ver,
                                   "\noriginal: ", paste(head(v[diff]), collapse = ", "),
                                   "\nprocess:", paste(head(cb[diff]), collapse = ", ")
@@ -67,7 +67,7 @@ test_that("billable codes for expected versions exist", {
 test_that("billable codes are all in order", {
   skip_slow_tests()
   for (v in names(icd9cm_billable)) {
-    i <- icd::icd9cm_billable[[v]][["code"]]
+    i <- icd9cm_billable[[v]][["code"]]
     expect_identical(i, icd_sort.icd9(i, short_code = TRUE),
                      info = paste("version = ", v))
   }

@@ -68,7 +68,7 @@ icd_is_defined.icd10cm <- function(x, short_code = icd_guess_short(x),
   if (billable)
     icd_is_billable.icd10cm(x, short_code = short_code)
   else
-    match(x, icd::icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L
+    match(x, icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L
 }
 
 #' @describeIn icd_is_defined Same for ICD-10, temporarily using ICD-10-CM until
@@ -183,7 +183,7 @@ icd_is_billable.icd9cm <- function(x, short_code = icd_guess_short(x),
   assert_string(icd9cm_edition)
   if (!short_code)
     x <- icd_decimal_to_short.icd9(x)
-  match(x, icd::icd9cm_billable[[icd9cm_edition]][["code"]], nomatch = nomatch, ...) > 0L
+  match(x, icd9cm_billable[[icd9cm_edition]][["code"]], nomatch = nomatch, ...) > 0L
 }
 
 #' @describeIn icd_is_billable Which of the given ICD codes are leaf nodes in

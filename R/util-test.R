@@ -115,12 +115,12 @@ expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
 
 #' @rdname expect_chap_equal
 expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd::icd10_sub_chapters, ...)))
+  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd10_sub_chapters, ...)))
 }
 
 #' @rdname expect_chap_equal
 expect_icd9_sub_chap_equal <- function(x, start, end, ...) {
-  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd::icd9_sub_chapters, ...)))
+  eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd9_sub_chapters, ...)))
 }
 
 expect_icd9_major_equals <- function(x, code, ...) {
@@ -157,11 +157,11 @@ expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
 }
 
 expect_icd9_sub_chap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd::icd9_sub_chapters, ...)))
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9_sub_chapters, ...)))
 }
 
 expect_icd9_chap_missing <- function(x, ...) {
-  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd::icd9_chapters, ...)))
+  eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9_chapters, ...)))
 }
 
 expect_icd10_sub_chap_missing <- function(x, ...) {

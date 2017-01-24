@@ -84,8 +84,8 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 icd10_generate_subchap_lookup <- function(lk_majors, verbose = FALSE) {
   lk_majors <- unique(icd10cm2016[["three_digit"]])
   sc_lookup <- data.frame(major = NULL, desc = NULL)
-  for (scn in names(icd::icd10_sub_chapters)) {
-    sc <- icd::icd10_sub_chapters[[scn]]
+  for (scn in names(icd10_sub_chapters)) {
+    sc <- icd10_sub_chapters[[scn]]
     si <- grep(sc["start"], lk_majors)
     se <- grep(sc["end"], lk_majors)
     sc_majors <- lk_majors[si:se]

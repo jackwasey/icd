@@ -308,7 +308,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
   # just copy the long description over.
-  bill32 <- icd::icd9cm_billable[["32"]]
+  bill32 <- icd9cm_billable[["32"]]
 
   billable_codes <- icd_get_billable.icd9(out[["code"]], short_code = TRUE)
   billable_rows <- which(out[["code"]] %in% billable_codes)
