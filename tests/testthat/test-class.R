@@ -104,7 +104,7 @@ test_that("ICD version supertype set", {
   expect_true(is.icd10(icd10cm("")))
 })
 
-x <- icd::icd9_map_quan_elix
+x <- icd9_map_quan_elix
 
 test_that("constructing a comorbidity map works", {
   expect_equal(icd_comorbidity_map(x), x)
@@ -199,7 +199,7 @@ test_that("data frame subsetting doesn't incorrectly set class on columns", {
 test_that("printing a comorbidity map works very simply", {
   expect_warning(
     capture.output(
-      print.icd_comorbidity_map(icd::icd9_map_quan_elix)
+      print.icd_comorbidity_map(icd9_map_quan_elix)
     ), regexp = NA)
 })
 
