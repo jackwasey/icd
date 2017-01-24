@@ -12,7 +12,8 @@ cache: packages
 addons:
   apt:
     packages:
-      r-cran-rodbc
+      - r-cran-rodbc
+      - unixodbc-dev
 
 r:
   - oldrel # when oldrel = 3.1, there are S3 method problems I can't debug
