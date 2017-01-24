@@ -1,8 +1,11 @@
 # https://docs.travis-ci.com/user/languages/r
 language: r
 # dist: trusty
+# precise vs trusty as of Jan 2017. Use old environment for testing old compilers, R?
 # trusty will only work with sudo: true for now
 # https://ropensci.org/blog/2016/07/12/travis-osx
+# https://docs.travis-ci.com/user/ci-environment/
+
 sudo: false
 cache: packages
 
@@ -25,6 +28,7 @@ repos:
 
 r_github_packages:
   - jimhester/covr
+  - jimhester/lintr
 
 warnings_are_errors: true
 
@@ -43,9 +47,10 @@ before_script:
  - export _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 after_success:
-  - ls -R
-  - cat ./icd.Rcheck/tests/test-all.Rout
-  - Rscript ./tools/covr.R "${R_COVR}" coveralls
+ - ls -R
+ - cat ./icd.Rcheck/tests/test-all.Rout
+ - Rscript ./tools/covr.R "${R_COVR}" coveralls
+ - Rscript -e 'lintr::lint_package()'
 
 notifications:
   email:
