@@ -17,7 +17,6 @@ build:
          - jimhester/covr
          - jackwasey/jwutil
          - jackwasey/icdData
-    - jimhester/r-lint
     - jimhester/r-check
     - script:
         name: debug information before codecov with covr
