@@ -45,6 +45,7 @@ before_script:
  - ls -R
  - rm .Rinstignore  # do install everything for testing
  - sed -i.old '/[Dd]ata/d' .Rbuildignore # do include data for testing
+ - rm -rf .Rbuildignore.old
  - export R_CHECK_CRAN_INCOMING_=FALSE
  - export ICD_SLOW_TESTS=TRUE
  - export _R_CHECK_FORCE_SUGGESTS_=FALSE
