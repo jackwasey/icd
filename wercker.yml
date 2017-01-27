@@ -1,5 +1,4 @@
 box: rocker/hadleyverse
-#box: jackwasey/r-devel-ubsan-gcc
 command-timeout: 60
 no-response-timeout: 60
 build:
@@ -15,6 +14,7 @@ build:
     - jimhester/r-dependencies:
         github_packages:
          - jimhester/covr
+         - jimhester/lintr
          - jackwasey/jwutil
          - jackwasey/icdData
     - jimhester/r-check
