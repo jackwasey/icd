@@ -42,7 +42,7 @@ env:
   - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native" R_COVR=true
 
 before_script:
- - ls -R
+ - ls -aR
  - rm .Rinstignore  # do install everything for testing
  - sed -i.old '/[Dd]ata/d' .Rbuildignore # do include data for testing
  - rm -rf .Rbuildignore.old
@@ -51,7 +51,7 @@ before_script:
  - export _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 after_success:
- - ls -R
+ - ls -aR
  - cat ./icd.Rcheck/tests/test-all.Rout
  - Rscript ./tools/covr.R "${R_COVR}" coveralls
  - Rscript -e 'lintr::lint_package()'
