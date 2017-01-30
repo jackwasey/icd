@@ -21,6 +21,9 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# show what we're doing
+set -x
+
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
 DOCKER_IMAGE="${1:-r-clang-3.9}"

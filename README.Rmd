@@ -51,15 +51,15 @@ patient_data <- data.frame(
 ```
 # icd
 ## icd statistics, based on Rstudio mirror
-[![CRAN version](http://www.r-pkg.org/badges/version/icd)](https://cran.r-project.org/package=icd)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
+[![CRAN version](https://www.r-pkg.org/badges/version/icd)](https://cran.r-project.org/package=icd)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
 [![Build Status](https://travis-ci.org/jackwasey/icd.svg?branch=master)](https://travis-ci.org/jackwasey/icd)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd?branch=master)
 [![Coverage Status](https://coveralls.io/repos/github/jackwasey/icd/badge.svg?branch=master)](https://coveralls.io/github/jackwasey/icd?branch=master)
 
 ## Old package icd9 statistics
-[![CRAN version](http://www.r-pkg.org/badges/version/icd9)](https://cran.r-project.org/package=icd9)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9)
+[![CRAN version](https://www.r-pkg.org/badges/version/icd9)](https://cran.r-project.org/package=icd9)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9)
 
 # ICD-9 and ICD-10 comorbidities, manipulation and validation
 
