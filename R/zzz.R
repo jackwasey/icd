@@ -76,6 +76,7 @@ release_questions <- function() {
       resembles a CRAN maintainers environment?",
     "Have you compiled with clang and gcc with full warnings and pedantic
       (normally done by UBSAN builds anyway)?",
+    "Make sure no temp data is left behind after tests",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially
