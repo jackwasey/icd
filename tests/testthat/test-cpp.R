@@ -18,6 +18,10 @@
 context("C++")
 
 test_that("C++ tests all pass", {
+
+  # Catch linking gives (spurious) UBSAN error.
+  skip_on_cran()
+
   # this does require a recent version of testthat > 1.0, which is now on CRAN,
   # but leaving this test in because I can easily see that some platforms may
   # not be able to do this
