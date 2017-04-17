@@ -31,9 +31,9 @@ RINSIDEINCL := 		$(shell echo 'RInside:::CxxFlags()' | $(R_HOME)/bin/R --vanilla
 RINSIDELIBS := 		$(shell echo 'RInside:::LdFlags()'  | $(R_HOME)/bin/R --vanilla --slave)
 
 ## compiler etc settings used in default make rules
-CXX := 			$(shell $(R_HOME)/bin/R CMD config CXX1X)
+CXX := 			$(shell $(R_HOME)/bin/R CMD config CXX11)
 CPPFLAGS := 		-Wall $(shell $(R_HOME)/bin/R CMD config CPPFLAGS)
-CXXFLAGS := 		$(RCPPFLAGS) $(RCPPINCL) $(RINSIDEINCL) $(shell $(R_HOME)/bin/R CMD config CXX1XFLAGS) -std=c++11 -DICD9_STANDALONE
+CXXFLAGS := 		$(RCPPFLAGS) $(RCPPINCL) $(RINSIDEINCL) $(shell $(R_HOME)/bin/R CMD config CXX11FLAGS) -std=c++11 -DICD9_STANDALONE
 LDLIBS := 		$(RLDFLAGS) $(RRPATH) $(RBLAS) $(RLAPACK) $(RINSIDELIBS) #$(RCPPLIBS)
 
 all: 			$(programs)
