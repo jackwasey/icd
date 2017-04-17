@@ -372,5 +372,8 @@ icd9cm_hierarchy_hotfix <- function(x) {
   x[x$code == "0381", "long_desc"] <- "Staphylococcal septicemia"
   x[x$code == "7806", "short_desc"] <- "Fever and other psychological disturbances of temperature regulation"
   x[x$code == "7806", "long_desc"] <- "Fever and other psychological disturbances of temperature regulation"
-  x
+  x[x$code == "737", "short_desc"] <- "Curvature of spine"
+  x[x$code == "737", "long_desc"] <- "Curvature of spine"
+
+    x
 }

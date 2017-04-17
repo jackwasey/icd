@@ -79,3 +79,9 @@ test_that("some majors are the same as sub-chapters", {
 test_that("7806 is correctly explained, github #116", {
   expect_equal(icd_explain("7806"), "Fever and other psychological disturbances of temperature regulation")
 })
+
+test_that("737 is correctly explained, github #111", {
+  expect_equal(icd_explain("737"), "Curvature of spine")
+  expect_equal(icd_explain_table("737")[["short_desc"]], "Curvature of spine")
+  expect_equal(icd_explain_table("737")[["long_desc"]], "Curvature of spine")
+})
