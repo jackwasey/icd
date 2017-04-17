@@ -145,8 +145,8 @@ icd_explain.icd10cm <- function(x, short_code = icd_guess_short(x),
 #' @keywords internal
 icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
-  icd_explain.icd10cm(x = x, short_code = short_code, condense = condense,
-                      brief = brief, warn = warn, ...)
+  # don't pass on condense and warn until they are implemented
+  icd_explain.icd10cm(x = x, short_code = short_code, brief = brief, ...)
 }
 
 #' get ICD-9 Chapters from vector of ICD-9 codes
