@@ -24,4 +24,3 @@ in generating the package itself.
 }
 \keyword{internal}
 \keyword{manip}
-

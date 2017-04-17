@@ -15,4 +15,3 @@ named character vector, names are the ICD codes, values are the
 codes they augment
 }
 \keyword{internal}
-

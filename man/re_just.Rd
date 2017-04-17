@@ -29,5 +29,5 @@ space
 \item \code{re_wrap_or}: contain any \code{|} options within a regular expression,
 e.g. ICD-9 codes without \code{^} or \code{$}.
 }}
-\keyword{internal}
 
+\keyword{internal}

@@ -37,4 +37,3 @@ For \code{icd_count_codes}, it is assumed that all the columns apart from
 \code{visit_name} represent actual or possible ICD-9 codes. Duplicate
 \code{visit_name}s are repeated as given and aggregated.
 }
-

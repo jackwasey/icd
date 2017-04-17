@@ -31,4 +31,3 @@ The file itself is 7 bit ASCII, but has its own internal encoding
 using CP1252. Test meniere's disease with lines  24821 to 24822 from 2012 RTF
 }
 \keyword{internal}
-

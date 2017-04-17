@@ -2,10 +2,10 @@
 % Please edit documentation in R/real.R
 \name{icd_is_defined}
 \alias{icd_is_defined}
-\alias{icd_is_defined.default}
-\alias{icd_is_defined.icd10}
-\alias{icd_is_defined.icd10cm}
 \alias{icd_is_defined.icd9}
+\alias{icd_is_defined.icd10cm}
+\alias{icd_is_defined.icd10}
+\alias{icd_is_defined.default}
 \title{Check whether ICD-9 codes exist}
 \usage{
 icd_is_defined(x, short_code = icd_guess_short(x), ...)
@@ -63,5 +63,5 @@ ICD-10 WHO is available in this package
 vs 10, maybe WHO vs CM or other in the future) and dispatches again on that
 type.
 }}
-\keyword{internal}
 
+\keyword{internal}

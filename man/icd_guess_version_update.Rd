@@ -21,4 +21,3 @@ Guesses the version of given ICD codes and sets the class of the
   returned data according to the guess.
 }
 \keyword{internal}
-

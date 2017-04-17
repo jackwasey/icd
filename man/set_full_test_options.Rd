@@ -12,4 +12,3 @@ function explicitly sets options to do slow tests.
 }
 \keyword{debugging}
 \keyword{internal}
-

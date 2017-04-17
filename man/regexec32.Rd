@@ -10,4 +10,3 @@ regexec32(pattern, text, ...)
 regexec which accepts \code{perl} argument even in older R
 }
 \keyword{internal}
-

@@ -10,4 +10,3 @@ str_extract(string, pattern, ...)
 str_extract replacement
 }
 \keyword{internal}
-

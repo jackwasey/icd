@@ -28,4 +28,3 @@ SOMEDAY add 'billable' column, and make consistent icd9 and icd10 lookup
 tables
 }
 \keyword{internal}
-

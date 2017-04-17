@@ -27,4 +27,3 @@ Short-form ICD-9 codes with short and long descriptions, and description of
 each hierarchy level containing each code.
 }
 \keyword{datasets}
-

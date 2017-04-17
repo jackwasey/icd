@@ -3,10 +3,11 @@
 \name{icd_explain}
 \alias{icd_explain}
 \alias{icd_explain.default}
-\alias{icd_explain.icd10}
+\alias{icd_explain.list}
 \alias{icd_explain.icd9}
 \alias{icd_explain.icd9cm}
-\alias{icd_explain.list}
+\alias{icd_explain.icd10cm}
+\alias{icd_explain.icd10}
 \title{Explain ICD-9 and ICD-10 codes in English}
 \usage{
 icd_explain(...)
@@ -19,6 +20,9 @@ icd_explain(...)
 \method{icd_explain}{icd9}(...)
 
 \method{icd_explain}{icd9cm}(x, short_code = icd_guess_short(x),
+  condense = TRUE, brief = FALSE, warn = TRUE, ...)
+
+\method{icd_explain}{icd10cm}(x, short_code = icd_guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
 \method{icd_explain}{icd10}(x, short_code = icd_guess_short(x),
@@ -68,8 +72,12 @@ ICD version
 
 \item \code{icd9cm}: explain character vector of ICD-9-CM codes
 
-\item \code{icd10}: ICD-10 explanation, current a minimal implementation
+\item \code{icd10cm}: ICD-10-CM explanation, current a minimal implementation
+
+\item \code{icd10}: ICD-10 explanation, falls back on ICD-10-CM until
+ICD-10 WHO copyright workaround is available
 }}
+
 \examples{
 # by default, just show parent code and ignore children (428.0 not shown
 # because 428 is present):
@@ -83,4 +91,3 @@ library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 icd_explain(icd9_map_ahrq$CHF[1:3] \%>\% icd_condense)
 }
 \keyword{internal}
-

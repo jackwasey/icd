@@ -25,4 +25,3 @@ The format of assignments is best seen in the SAS source files.
 \keyword{internal}
 \keyword{list}
 \keyword{programming}
-

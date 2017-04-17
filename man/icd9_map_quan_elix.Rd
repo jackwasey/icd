@@ -2,8 +2,8 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_map_quan_elix}
-\alias{icd10_map_quan_elix}
 \alias{icd9_map_quan_elix}
+\alias{icd10_map_quan_elix}
 \title{Quan adaptation of Elixhauser comorbidities}
 \format{list of character vectors, each named by co-morbidity}
 \description{
@@ -19,4 +19,3 @@ Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew Fong,
   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 }
 \keyword{datasets}
-

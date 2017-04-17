@@ -2,9 +2,9 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_map_hcc}
-\alias{icd10_map_cc}
-\alias{icd9_map_cc}
 \alias{icd9_map_hcc}
+\alias{icd9_map_cc}
+\alias{icd10_map_cc}
 \alias{icd_map_cc_hcc}
 \title{Medicare Hierarchical Condition Categories}
 \format{\code{dataframe} with 3 columns (\code{icd_code}, \code{cc}, and \code{year})}
@@ -30,4 +30,3 @@ Pope, Gregory C., et al.
   \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}
 }
 \keyword{datasets}
-

@@ -40,4 +40,3 @@ With thanks to Dr. Quan, I have permission to distribute his SAS code.
 }
 \keyword{internal}
 \keyword{manip}
-

@@ -22,4 +22,3 @@ extra levels would be to check the XML tree depth for a member of each
 putative sub-chapter.
 }
 \keyword{internal}
-

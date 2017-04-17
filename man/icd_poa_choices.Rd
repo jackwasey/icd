@@ -15,4 +15,3 @@ See \link{icd_filter_poa} for more details.
   icd_poa_choices
 }
 \keyword{character}
-

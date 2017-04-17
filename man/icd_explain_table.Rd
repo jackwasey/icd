@@ -3,10 +3,10 @@
 \name{icd_explain_table}
 \alias{icd_explain_table}
 \alias{icd_explain_table.default}
-\alias{icd_explain_table.icd10}
-\alias{icd_explain_table.icd10cm}
 \alias{icd_explain_table.icd9}
+\alias{icd_explain_table.icd10}
 \alias{icd_explain_table.icd9cm}
+\alias{icd_explain_table.icd10cm}
 \title{Explain ICD-9 and ICD-10 codes in English from decimal  (123.45 style),
 Tabulates the decimal format alongside converted non-decimal format.}
 \usage{
@@ -78,10 +78,10 @@ If the input x is of mixed type it will choose to convert by
 
 \item \code{icd10cm}: explain character vector of ICD1-10-CM codes
 }}
+
 \author{
 Ed Lee
 
 Ed Lee
 }
 \keyword{internal}
-

@@ -2,10 +2,10 @@
 % Please edit documentation in R/util-test.R
 \name{expect_chap_present}
 \alias{expect_chap_present}
-\alias{expect_icd10_chap_present}
-\alias{expect_icd10_sub_chap_present}
-\alias{expect_icd9_chap_present}
 \alias{expect_icd9_sub_chap_present}
+\alias{expect_icd9_chap_present}
+\alias{expect_icd10_sub_chap_present}
+\alias{expect_icd10_chap_present}
 \title{expect that a chapter with given title exists, case-insensitive}
 \usage{
 expect_chap_present(x, ver_chaps, info = NULL, label = NULL, ...)
@@ -23,4 +23,3 @@ expect that a chapter with given title exists, case-insensitive
 }
 \keyword{debugging}
 \keyword{internal}
-

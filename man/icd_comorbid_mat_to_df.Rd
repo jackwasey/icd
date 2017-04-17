@@ -40,4 +40,3 @@ df.out[, 1:4]
 # options("stringsAsFactors" = FALSE).
 is.factor(df.out[["visit_id"]])
 }
-

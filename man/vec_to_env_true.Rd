@@ -12,4 +12,3 @@ create an environment by inserting the value \code{val} with names taken from
 \code{x}
 }
 \keyword{internal}
-

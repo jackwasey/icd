@@ -21,4 +21,3 @@ invisibly returns the list of vectors, where a co-morbidity name is
 Based on Quan's SAS lists, transcribed by wmurphyrd
 }
 \keyword{internal}
-

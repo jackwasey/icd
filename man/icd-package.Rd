@@ -4,11 +4,12 @@
 \name{icd-package}
 \alias{icd}
 \alias{icd-package}
-\alias{icd10-package}
-\alias{icd9-package}
-\alias{package-icd10}
+\alias{icd-package}
 \alias{package-icd9}
-\title{Tools for Working with ICD-9 and ICD-10 Codes, and Finding Comorbidities}
+\alias{icd9-package}
+\alias{icd10-package}
+\alias{package-icd10}
+\title{icd: Tools for Working with ICD-9 and ICD-10 Codes, and Finding Comorbidities}
 \description{
 Calculate comorbidities, Charlson scores, perform fast and accurate
 validation, conversion, manipulation, filtering and comparison of ICD-9 and
@@ -77,15 +78,31 @@ package replaces icd9, which should be uninstalled.
 
   }
 }
-\author{
-Jack O. Wasey \email{jack@jackwasey.com}
-}
 \references{
 \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/jackwasey/icd}
+  \item Report bugs at \url{https://github.com/jackwasey/icd/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Jack O. Wasey \email{jack@jackwasey.com} [copyright holder]
+
+Other contributors:
+\itemize{
+  \item William Murphy \email{WMurphy@eatright.org} (Van Walraven scores) [contributor]
+  \item R Core Team (m4 macro for OpenMP detection in configure) [contributor, copyright holder]
+}
+
+
+Jack O. Wasey \email{jack@jackwasey.com}
 }
 \concept{
 ICD-9 ICD-10 comorbidity comorbidities
 }
 \keyword{misc}
 \keyword{utilities}
-

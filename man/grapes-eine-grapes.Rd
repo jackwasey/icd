@@ -11,4 +11,3 @@ x \%eine\% table
 environment element names; contents are ignored.
 }
 \keyword{internal}
-

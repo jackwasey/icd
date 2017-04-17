@@ -22,4 +22,3 @@ microbenchmark::microbenchmark(trim(s), trimws(s)) # trimws from R version 3.2
 }
 }
 \keyword{internal}
-

@@ -28,4 +28,3 @@ that the function \code{odbcConnectAccess2007} is only available in the
 Windows build of \pkg{RODBC}.
 }
 \keyword{internal}
-

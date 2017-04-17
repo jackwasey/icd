@@ -16,4 +16,3 @@ is defined as the lowest-level grouping of three-digit codes, e.g. C00-C14
 "Malignant neoplasms of lip, oral cavity and pharynx", not C00-C96 "Malignant
 neoplasms" which itself is a subset of the chapter C00-D49 "Neoplasms"
 }
-

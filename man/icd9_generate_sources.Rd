@@ -13,4 +13,3 @@ icd9_generate_sources(save_data = FALSE)
 generate data for finding source data for ICD-9-CM
 }
 \keyword{internal}
-

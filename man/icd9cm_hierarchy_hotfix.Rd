@@ -12,4 +12,3 @@ historic versions. There will be no further updates, so this is reasonable.
 }
 \keyword{internal}
 \keyword{manip}
-

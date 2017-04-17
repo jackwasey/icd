@@ -10,4 +10,3 @@ lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out)
 core search for ICD code in a map
 }
 \keyword{internal}
-

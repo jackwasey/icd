@@ -10,4 +10,3 @@ icd9MajMinToShortStd(mjr, mnr)
 initialize a std::vector of strings with repeated value of the minor
 }
 \keyword{internal}
-

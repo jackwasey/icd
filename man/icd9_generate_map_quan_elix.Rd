@@ -22,4 +22,3 @@ Generate Quan's revised Elixhauser comorbidities, expanded out
   to include all possible ICD-9 codes.
 }
 \keyword{internal}
-

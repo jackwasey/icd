@@ -36,5 +36,5 @@ quite fast, but does suffer from handling Unicode, locales, etc.
 
 \item \code{icd9}: check whether a code is an ICD-9 major
 }}
-\keyword{internal}
 
+\keyword{internal}

@@ -24,4 +24,3 @@ generate ICD-10 Quan/Elixhauser mapping
 Started with Quan's SAS code (in \code{data-raw}):
 }
 \keyword{internal}
-

@@ -113,14 +113,14 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
   c(mjexplain,
-    icdData::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
+    icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
 }
 
-#' @describeIn icd_explain ICD-10 explanation, current a minimal implementation
+#' @describeIn icd_explain ICD-10-CM explanation, current a minimal implementation
 #' @export
 #' @keywords internal
-icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
+icd_explain.icd10cm <- function(x, short_code = icd_guess_short(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert_vector(x)
   assert_flag(short_code)
@@ -134,8 +134,19 @@ icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
   if (!short_code)
     x <- icd_decimal_to_short.icd10(x)
 
+  # this is a linear lookup, but usually only "explaining" one or a few codes at a time.
   icd10cm2016[icd10cm2016[["code"]] %in% unique(jwutil::as_char_no_warn(x)),
               ifelse(brief, "short_desc", "long_desc")]
+}
+
+#' @describeIn icd_explain ICD-10 explanation, falls back on ICD-10-CM until
+#'   ICD-10 WHO copyright workaround is available
+#' @export
+#' @keywords internal
+icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
+                              condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+  icd_explain.icd10cm(x = x, short_code = short_code, condense = condense,
+                      brief = brief, warn = warn, ...)
 }
 
 #' get ICD-9 Chapters from vector of ICD-9 codes

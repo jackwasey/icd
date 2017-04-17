@@ -10,4 +10,3 @@ icd9_fetch_ahrq_sas(offline)
 Get the SAS code from AHRQ and save in data-raw if not already there.
 }
 \keyword{internal}
-

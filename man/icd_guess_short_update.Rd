@@ -14,4 +14,3 @@ Guesses whether the given ICD codes are short or long format, and set the
 class of the returned data according to the guess.
 }
 \keyword{internal}
-

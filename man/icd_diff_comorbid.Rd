@@ -45,6 +45,7 @@ overlapping names are compared.
 \item \code{list}: Show difference between comorbidity maps with
 ICD-9 codes
 }}
+
 \examples{
 # compare CHF for ICD-10 mappings from Elixhauser and AHRQ
 icd_diff_comorbid(icd10_map_elix, icd10_map_ahrq, show = FALSE)[["CHF"]]
@@ -59,4 +60,3 @@ diff_result <- icd_diff_comorbid(icd9_map_elix, icd9_map_ahrq, show = FALSE)
 icd_diff_comorbid(icd9_map_elix, icd9_map_ahrq)
 }
 }
-

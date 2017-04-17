@@ -15,4 +15,3 @@ Implemented as a function to give flexibility to calculate this, or use an
 option override.
 }
 \keyword{internal}
-

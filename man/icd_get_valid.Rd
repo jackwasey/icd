@@ -3,9 +3,9 @@
 \name{icd_get_valid}
 \alias{icd_get_valid}
 \alias{icd_get_valid.character}
+\alias{icd_get_valid.icd9}
 \alias{icd_get_valid.icd10}
 \alias{icd_get_valid.icd10cm}
-\alias{icd_get_valid.icd9}
 \title{invalid subset of decimal or short_code ICD-9 codes}
 \usage{
 icd_get_valid(x, short_code = icd_guess_short(x))
@@ -40,6 +40,6 @@ Given vector of short_code or decimal ICD-9 codes, return (in the
 
 \item \code{icd10cm}: Get valid ICD-10-CM codes
 }}
+
 \keyword{internal}
 \keyword{manip}
-

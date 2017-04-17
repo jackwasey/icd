@@ -17,4 +17,3 @@ character vector of length one
 }
 \keyword{character}
 \keyword{internal}
-

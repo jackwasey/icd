@@ -34,4 +34,3 @@ errors in the data due to coding or processing"
 Vermont Division of Health Care Administration
 }
 \keyword{datasets}
-

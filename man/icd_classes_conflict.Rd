@@ -32,4 +32,3 @@ microbenchmark::microbenchmark(attr(rp, "k", exact = TRUE), attributes(rp), time
 }
 }
 \keyword{internal}
-

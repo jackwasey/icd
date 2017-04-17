@@ -34,4 +34,3 @@ it counts \emph{comorbidities}, not individual diagnoses. It accepts any
 column for visit_name. No checks are made to see whether visit_name is
 duplicated.
 }
-

@@ -42,4 +42,3 @@ value guessing.
 \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 }
 \keyword{internal}
-

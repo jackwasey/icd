@@ -11,4 +11,3 @@ substitute for removed stringr function. \code{perl} is taken out if not
 supported, allows compatibility with older versions of R.
 }
 \keyword{internal}
-

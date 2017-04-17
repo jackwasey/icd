@@ -3,8 +3,8 @@
 \name{.attr_decimal_diag}
 \alias{.attr_decimal_diag}
 \alias{.attr_short_diag}
-\alias{as.icd_decimal_diag}
 \alias{as.icd_short_diag}
+\alias{as.icd_decimal_diag}
 \title{Set ICD short-form diagnosis code attribute}
 \usage{
 .attr_decimal_diag(x, value = TRUE)
@@ -44,4 +44,3 @@ c(address(j), refs(j))
 }
 \keyword{attribute}
 \keyword{internal}
-

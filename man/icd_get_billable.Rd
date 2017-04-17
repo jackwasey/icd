@@ -3,10 +3,10 @@
 \name{icd_get_billable}
 \alias{icd_get_billable}
 \alias{icd_get_billable.default}
-\alias{icd_get_billable.icd10}
-\alias{icd_get_billable.icd10cm}
-\alias{icd_get_billable.icd9}
 \alias{icd_get_billable.icd9cm}
+\alias{icd_get_billable.icd9}
+\alias{icd_get_billable.icd10cm}
+\alias{icd_get_billable.icd10}
 \title{Get billable ICD codes}
 \usage{
 icd_get_billable(...)
@@ -55,5 +55,5 @@ implemented assuming ICD-9-CM
 
 \item \code{icd10}: Get billable, i.e. leaf nodes from ICD-10-CM
 }}
-\keyword{internal}
 
+\keyword{internal}

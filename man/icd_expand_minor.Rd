@@ -40,4 +40,3 @@ Other ICD-9 ranges: \code{\link{icd_children}},
 }
 \keyword{internal}
 \keyword{manip}
-

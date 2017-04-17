@@ -2,9 +2,9 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_map_ahrq}
+\alias{icd9_map_ahrq}
 \alias{ahrq}
 \alias{icd10_map_ahrq}
-\alias{icd9_map_ahrq}
 \title{AHRQ comorbidities}
 \format{list of character vectors}
 \source{
@@ -17,4 +17,3 @@ code provided by AHRQ, and translated into this R data structure. This is a
 revision of the Elixhauser system, notably excluding cardiac arrythmia.
 }
 \keyword{datasets}
-

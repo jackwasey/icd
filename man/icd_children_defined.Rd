@@ -25,6 +25,7 @@ three digit code, or a leaf node. This is distinct from 'billable'.
 \item \code{icd10cm}: Internal function to get the children of
 ICD-10 code(s)
 }}
+
 \examples{
 \dontrun{
 library(microbenchmark)
@@ -36,4 +37,3 @@ stopifnot(identical(icd:::icd_children_defined.icd10cm("A00"),
 }
 }
 \keyword{internal}
-
