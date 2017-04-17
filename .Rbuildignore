@@ -1,3 +1,4 @@
+^_config\.yml$
 aclocal\.m4$
 .*_alt\.[Rr]$
 \.aspell$

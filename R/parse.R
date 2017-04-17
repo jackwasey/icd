@@ -368,13 +368,18 @@ fixSubchapterNa <- function(x, start, end) {
 #' historic versions. There will be no further updates, so this is reasonable.
 #' @keywords internal manip
 icd9cm_hierarchy_hotfix <- function(x) {
-  x[x$code == "0381", "short_desc"] <- "Staphylococcal septicemia"
-  x[x$code == "0381", "long_desc"] <- "Staphylococcal septicemia"
-  x[x$code == "7806", "short_desc"] <- "Fever and other psychological disturbances of temperature regulation"
-  x[x$code == "7806", "long_desc"] <- "Fever and other psychological disturbances of temperature regulation"
-  x[x$code == "737", "short_desc"] <- "Curvature of spine"
-  x[x$code == "737", "long_desc"] <- "Curvature of spine"
-  x[x$code == "3451", "short_desc"] <- "Generalized convulsive epilepsy"
-  x[x$code == "3451", "long_desc"] <- "Generalized convulsive epilepsy"
+  x %<>% .icd9cm_hierarchy_hotfix_both("0381", "Staphylococcal septicemia")
+  x %<>% .icd9cm_hierarchy_hotfix_both("7806", "Fever and other psychological disturbances of temperature regulation")
+  x %<>% .icd9cm_hierarchy_hotfix_both("737", "Curvature of spine")
+  x %<>% .icd9cm_hierarchy_hotfix_both("3451", "Generalized convulsive epilepsy")
+  x %<>% .icd9cm_hierarchy_hotfix_both("414", "Other forms of chronic ischemic heart disease")
+  x %<>% .icd9cm_hierarchy_hotfix_both("4140", "Coronary atherosclerosis")
+  x %<>% .icd9cm_hierarchy_hotfix_both("4141", "Aneurysm and dissection of heart")
+  x
+}
+
+.icd9cm_hierarchy_hotfix_both <- function(x, code, desc) {
+  x[x[["code"]] == code, "short_desc"] <- desc
+  x[x[["code"]] == code, "long_desc"] <- desc
   x
 }
