@@ -85,3 +85,7 @@ test_that("737 is correctly explained, github #111", {
   expect_equal(icd_explain_table("737")[["short_desc"]], "Curvature of spine")
   expect_equal(icd_explain_table("737")[["long_desc"]], "Curvature of spine")
 })
+
+test_that("345.1 is parsed correctly, github #109", {
+  expect_equal(icd_explain("345.1"), "Generalized convulsive epilepsy")
+})
