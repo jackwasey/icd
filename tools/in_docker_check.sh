@@ -26,7 +26,7 @@ echo "Cloning '$GIT_BRANCH' branch from '$GIT_URL'"
 pushd /tmp
 git clone --depth=1 -b $GIT_BRANCH $GIT_URL
 $R_CMD -e 'install.packages("devtools"); devtools::install_github("jackwasey/jwutil")'
-$R_CMD -e 'devtools::install_github("jackwasey/icdData")'
+
 # actually, we need to build based on the directory name, not the package name:
 CXXFLAGS="-O0 -Wall -Wno-unused" $R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)
 R_PKG_TAR_GZ=$(ls -t $R_PKG_NAME*tar.gz | tail -1)

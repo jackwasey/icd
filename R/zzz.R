@@ -45,8 +45,7 @@ The 'icd' package up to version 2.1 contains tested versions of all the deprecat
 release_questions <- function() {
   c(
     # data:
-    "Have you regenerated icd9cm_hierarchy and other compiled data on Linux using icdData?",
-    "data copied from icdData to icd package?",
+    "Have you regenerated icd9cm_hierarchy and other compiled data on Linux?",
     "Uranium data requires rebuild on Windows for RODBC to extract raw data",
     "Have you run tools::checkRdaFiles(\"data\") to check everything is optimally compressed?",
     # documentation:

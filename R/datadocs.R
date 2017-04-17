@@ -15,9 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-requireNamespace("icdData")
-# 'copy' all the data from icdData into the icd namespace
-icdData_names <- c(
+icd_data_names <- c(
   "icd10_map_ahrq",
   "icd10_map_cc",
   "icd10_map_elix",
@@ -51,15 +49,6 @@ icdData_names <- c(
   "icd_names_quan_elix_abbrev", "icd_names_quan_elix_htn",
   "icd_names_quan_elix_htn_abbrev"
 )
-
-# icdData is an Import for this package, so getting from it's environment should
-# always work
-e <- getNamespace(name = "icdData")
-for (n in icdData_names)
-  assign(n, get(n, envir = e))
-
-icdData_names <- NULL
-e <- NULL
 
 #' ICD-9 chapters
 #'
