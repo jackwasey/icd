@@ -245,7 +245,8 @@ rtf_make_majors <- function(filtered, ..., save = FALSE) {
   icd9_majors <- icd9_majors[!duplicated(icd9_majors)]
 
   if (save)
-    save_in_dd(icd9_majors)
+    jwutil::save_in_data_dir(icd9_majors)
+
   invisible(icd9_majors)
 }
 
@@ -264,7 +265,8 @@ rtf_make_sub_chapters <- function(filtered, ..., save = FALSE) {
   icd9_sub_chapters["Supplementary Classification Of External Causes Of Injury And Poisoning"] <- NULL
 
   if (save)
-    save_in_dd(icd9_sub_chapters)
+    jwutil::save_in_data_dir(icd9_sub_chapters)
+
   invisible(icd9_sub_chapters)
 }
 

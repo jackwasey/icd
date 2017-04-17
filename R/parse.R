@@ -122,7 +122,8 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
   }
 
   if (save_data)
-    save_in_dd(icd9cm_billable)
+    jwutil::save_in_data_dir(icd9cm_billable)
+
   invisible(icd9cm_billable)
 }
 
@@ -335,7 +336,8 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
 
   print(environment())
   if (save_data)
-    save_in_dd(icd9cm_hierarchy) # nocov
+    jwutil::save_in_data_dir(icd9cm_hierarchy) # nocov
+
   invisible(icd9cm_hierarchy)
 }
 
@@ -368,5 +370,7 @@ fixSubchapterNa <- function(x, start, end) {
 icd9cm_hierarchy_hotfix <- function(x) {
   x[x$code == "0381", "short_desc"] <- "Staphylococcal septicemia"
   x[x$code == "0381", "long_desc"] <- "Staphylococcal septicemia"
+  x[x$code == "7806", "short_desc"] <- "Fever and other psychological disturbances of temperature regulation"
+  x[x$code == "7806", "long_desc"] <- "Fever and other psychological disturbances of temperature regulation"
   x
 }

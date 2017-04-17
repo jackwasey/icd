@@ -75,3 +75,7 @@ test_that("some majors are the same as sub-chapters", {
   expect_icd9_major_is_sub_chap("External cause status", "E000")
 
 })
+
+test_that("7806 is correctly explained, github #116", {
+  expect_equal(icd_explain("7806"), "Fever and other psychological disturbances of temperature regulation")
+})
