@@ -58,12 +58,12 @@ icd10_fetch_ahrq_sas <- function(offline) {
 #' in generating the package itself.
 #' @template parse-template
 #' @keywords internal manip
-icd9_parse_ahrq_sas <- function(save_data = FALSE) {
+icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_info <- icd9_fetch_ahrq_sas(offline = TRUE)
+  ahrq_info <- icd9_fetch_ahrq_sas(offline = offline)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
@@ -135,10 +135,10 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
 
 # This is in some ways simpler than that ICD-9 equivalent because I make no
 # attempt to find all the child codes.
-icd10_parse_ahrq_sas <- function(save_data = FALSE) {
+icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
 
-  ahrq_info <- icd10_fetch_ahrq_sas(offline = TRUE)
+  ahrq_info <- icd10_fetch_ahrq_sas(offline = offline)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
@@ -190,12 +190,12 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 #' @template parse-template
 #' @template offline
 #' @keywords internal manip
-icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
+icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
 
   # download the file and/or just get the path or file name, fails if missing
   # by default
-  f_info <- icd9_fetch_quan_deyo_sas(offline = TRUE)
+  f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
 
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sas_extract_let_strings(quan_sas_lines)

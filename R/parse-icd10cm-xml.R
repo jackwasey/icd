@@ -27,9 +27,10 @@
 #' putative sub-chapter.
 #' @template save_data
 #' @keywords internal
-icd10cm_extract_sub_chapters <- function(save_data = FALSE) {
+icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
-  f_info <- icd10cm_get_xml_file()
+  f_info <- icd10cm_get_xml_file(offline = offline)
+  stopifnot(!is.null(f_info))
   j <- xml2::read_xml(f_info$file_path)
 
   # using magrittr::equals and extract because I don't want to import them. See

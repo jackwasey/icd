@@ -29,9 +29,10 @@
 #' @references
 #'   https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
-icd10cm_get_all_defined <- function(save_data = FALSE) {
+icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
 
-  f_info <- icd10cm_get_flat_file()
+  f_info <- icd10cm_get_flat_file(offline = offline)
+  stopifnot(!is.null(f_info))
 
   # readLines may muck up encoding, resulting in weird factor order generation later?
   x <- readLines(con = f_info$file_path, encoding = "ASCII")
@@ -51,14 +52,17 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   )
 
   icd10cm2016[["code"]] %<>% as.icd10cm %>% as.icd_short_diag
-  icd10cm2016[["code"]] %>% icd_get_major %>% jwutil::factor_nosort -> icd10cm2016[["three_digit"]]
+  icd10cm2016[["three_digit"]] <-
+    jwutil::factor_nosort(icd_get_major(icd10cm2016[["code"]]))
 
   # here we must re-factor so we don't have un-used levels in major
-  merge(x = icd10cm2016["three_digit"],
-        y = icd10cm2016[c("code", "short_desc")],
-        by.x = "three_digit", by.y = "code",
-        all.x = TRUE) %>%
-    magrittr::extract2("short_desc") %>% jwutil::factor_nosort -> icd10cm2016[["major"]]
+  icd10cm2016[["major"]] <- jwutil::factor_nosort(
+    merge(x = icd10cm2016["three_digit"],
+          y = icd10cm2016[c("code", "short_desc")],
+          by.x = "three_digit", by.y = "code",
+          all.x = TRUE)[["short_desc"]]
+  )
+
 
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because

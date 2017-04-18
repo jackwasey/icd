@@ -43,30 +43,30 @@ icd_update_everything <- function() {
   message("Parsing plain text billable codes to create icd9cm_billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
-  parse_leaf_descriptions_all(save_data = TRUE) # nolint
+  parse_leaf_descriptions_all(save_data = TRUE, offline = FALSE) # nolint
   load(system.file("data", "icd9cm_billable.RData", package = "icd"))
 
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
                        Depends on icd9cm_hierarchy being updated.")
   # ICD 9
-  icd9_parse_ahrq_sas(save_data = TRUE)
-  icd9_parse_quan_deyo_sas(save_data = TRUE)
+  icd9_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
+  icd9_parse_quan_deyo_sas(save_data = TRUE, offline = FALSE)
   icd9_parse_cc(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
   # ICD 10
-  icd10_parse_ahrq_sas(save_data = TRUE)
+  icd10_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
   icd10_parse_cc(save_data = TRUE)
   icd10_generate_map_quan_elix(save_data = TRUE)
   icd10_generate_map_quan_deyo(save_data = TRUE)
   icd10_generate_map_elix(save_data = TRUE)
-  icd10cm_get_all_defined(save_data = TRUE)
-  icd10cm_extract_sub_chapters(save_data = TRUE)
+  icd10cm_get_all_defined(save_data = TRUE, offline = FALSE)
+  icd10cm_extract_sub_chapters(save_data = TRUE, offline = FALSE)
 
   # reload the newly saved data before generating chapters.
   # depends on icd9cm_billable
-  icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE)
+  icd9cm_generate_chapters_hierarchy(save_data = TRUE, offline = FALSE, verbose = FALSE)
 }
 
 # quick sanity checks - full tests of icd9cm_hierarchy in test-parse.R
