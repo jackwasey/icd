@@ -41,7 +41,7 @@ test_that("codes and descriptions are valid and unique", {
 })
 
 test_that("some chapters are correct", {
-  chaps <- jwutil::as_char_no_warn(icd9cm_hierarchy$chapter)
+  chaps <- as_char_no_warn(icd9cm_hierarchy$chapter)
   codes <- icd9cm_hierarchy[["code"]]
   # first and last rows (E codes should be last)
   expect_equal(chaps[1], "Infectious And Parasitic Diseases")
@@ -59,7 +59,7 @@ test_that("some chapters are correct", {
 })
 
 test_that("some sub-chapters are correct", {
-  subchaps <- jwutil::as_char_no_warn(icd9cm_hierarchy$sub_chapter)
+  subchaps <- as_char_no_warn(icd9cm_hierarchy$sub_chapter)
   codes <- icd9cm_hierarchy[["code"]]
 
   # first and last
@@ -79,7 +79,7 @@ test_that("some sub-chapters are correct", {
 test_that("some randomly selected rows are correct", {
   expect_equal(
     icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "5060", ]  %>%
-      sapply(jwutil::as_char_no_warn) %>%
+      sapply(as_char_no_warn) %>%
       unname,
     c("5060", "Fum/vapor bronc/pneumon", "Bronchitis and pneumonitis due to fumes and vapors",
       "506", "Respiratory conditions due to chemical fumes and vapors",

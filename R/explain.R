@@ -61,7 +61,7 @@ icd_explain <- function(...)
 #' @keywords internal
 icd_explain.default <- function(x, short_code = icd_guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   switch(
-    icd_guess_version.character(jwutil::as_char_no_warn(x), short_code = short_code),
+    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
     "icd9" = icd_explain.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
     "icd10" = icd_explain.icd10(x, short_code = short_code, brief = brief, ...),
     stop("Unknown ICD version.")
@@ -135,7 +135,7 @@ icd_explain.icd10cm <- function(x, short_code = icd_guess_short(x),
     x <- icd_decimal_to_short.icd10(x)
 
   # this is a linear lookup, but usually only "explaining" one or a few codes at a time.
-  icd10cm2016[icd10cm2016[["code"]] %in% unique(jwutil::as_char_no_warn(x)),
+  icd10cm2016[icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
               ifelse(brief, "short_desc", "long_desc")]
 }
 
@@ -165,7 +165,7 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x), verbose = FALS
   # matches.
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
-  x <- jwutil::as_char_no_warn(x)
+  x <- as_char_no_warn(x)
   all_majors <- icd_get_major.icd9(x, short_code)
   majors <- unique(all_majors)
   lenm <- length(majors)

@@ -834,6 +834,66 @@ RcppExport SEXP icd_icd9GetMajor(SEXP xSEXP, SEXP short_codeSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// fastIntToStringStd
+std::vector<std::string> fastIntToStringStd(std::vector<int> x);
+static SEXP icd_fastIntToStringStd_try(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< std::vector<int> >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(fastIntToStringStd(x));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd_fastIntToStringStd(SEXP xSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(icd_fastIntToStringStd_try(xSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// fastIntToStringRcpp
+Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x);
+static SEXP icd_fastIntToStringRcpp_try(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(fastIntToStringRcpp(x));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP icd_fastIntToStringRcpp(SEXP xSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(icd_fastIntToStringRcpp_try(xSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // guessShortCompleteCpp
 bool guessShortCompleteCpp(SEXP x_, SEXP short_code, int n, SEXP icd_name);
 static SEXP icd_guessShortCompleteCpp_try(SEXP x_SEXP, SEXP short_codeSEXP, SEXP nSEXP, SEXP icd_nameSEXP) {
@@ -1993,6 +2053,8 @@ static int icd_RcppExport_validate(const char* sig) {
         signatures.insert("CV(*icd9_short_to_decimal_cpp)(const CV)");
         signatures.insert("CV(*icd9_decimal_to_short_cpp)(const CV)");
         signatures.insert("CV(*icd_get_major.icd9)(const CV,const bool)");
+        signatures.insert("std::vector<std::string>(*fastIntToStringStd)(std::vector<int>)");
+        signatures.insert("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector)");
         signatures.insert("bool(*icd_guess_short)(SEXP,SEXP,int,SEXP)");
         signatures.insert("bool(*guessShortPlusFactorCpp)(SEXP,int)");
         signatures.insert("std::vector<bool>(*icd9_is_n_cpp)(const VecStr&)");
@@ -2062,6 +2124,8 @@ RcppExport SEXP icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "icd_icd9_short_to_decimal_cpp", (DL_FUNC)icd_icd9ShortToDecimal_try);
     R_RegisterCCallable("icd", "icd_icd9_decimal_to_short_cpp", (DL_FUNC)icd_icd9DecimalToShort_try);
     R_RegisterCCallable("icd", "icd_icd_get_major.icd9", (DL_FUNC)icd_icd9GetMajor_try);
+    R_RegisterCCallable("icd", "icd_fastIntToStringStd", (DL_FUNC)icd_fastIntToStringStd_try);
+    R_RegisterCCallable("icd", "icd_fastIntToStringRcpp", (DL_FUNC)icd_fastIntToStringRcpp_try);
     R_RegisterCCallable("icd", "icd_icd_guess_short", (DL_FUNC)icd_guessShortCompleteCpp_try);
     R_RegisterCCallable("icd", "icd_guessShortPlusFactorCpp", (DL_FUNC)icd_guessShortPlusFactorCpp_try);
     R_RegisterCCallable("icd", "icd_icd9_is_n_cpp", (DL_FUNC)icd_icd9_is_n_cpp_try);

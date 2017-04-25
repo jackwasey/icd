@@ -159,10 +159,13 @@ The common comorbidity calculation code does not depend on ICD type.
   There is some type conversion so the map and input codes are all in 'short'
   format, fast factor generation, then fast comorbidity assignment.
 
-\code{data.frame}s of patient data may have columns within them which are of class \code{icd9}, \code{icd10} etc.,
-but do not themselves have a class: therefore, the S3 mechanism for dispatch is not suitable. I may add a wrapper function which
-looks inside a \code{data.frame} of comorbidities, and dispatches to the appropriate function, but right now the user must
-call the \code{icd9_} or \code{icd10_} prefixed function directly.
+\code{data.frame}s of patient data may have columns within them
+  which are of class \code{icd9}, \code{icd10} etc., but do not themselves
+  have a class: therefore, the S3 mechanism for dispatch is not suitable. I
+  may add a wrapper function which looks inside a \code{data.frame} of
+  comorbidities, and dispatches to the appropriate function, but right now
+  the user must call the \code{icd9_} or \code{icd10_} prefixed function
+  directly.
 
 Applying CMS Hierarchical Condition Categories
   \code{icd_comorbid_hcc} functions differently from the rest of the

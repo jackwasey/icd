@@ -130,7 +130,7 @@ icd_wide_to_long <- function(x,
                         v.names = icd_name)
 
   res <- res[!is.na(res[[icd_name]]), ]
-  res <- res[nchar(jwutil::as_char_no_warn(res[[icd_name]])) > 0, ]
+  res <- res[nchar(as_char_no_warn(res[[icd_name]])) > 0, ]
   res <- res[order(res[[visit_name]]), ]
   rownames(res) <- NULL
   res
@@ -173,8 +173,8 @@ icd_long_to_wide <- function(x,
                              return_df = FALSE) {
 
   assert_data_frame(x, col.names = "unique")
-  visit_name <- jwutil::as_char_no_warn(visit_name)
-  icd_name <- jwutil::as_char_no_warn(icd_name)
+  visit_name <- as_char_no_warn(visit_name)
+  icd_name <- as_char_no_warn(icd_name)
   assert_string(prefix, min.chars = 1)
   assert_count(min_width, na.ok = FALSE)
   assert_flag(aggr)
@@ -183,8 +183,8 @@ icd_long_to_wide <- function(x,
   # we're now going to return a matrix
   icd9_name_was_factor <- is.factor(x[[visit_name]])
   if (icd9_name_was_factor) iv_levels <- levels(x[[visit_name]])
-  x[[visit_name]] <- jwutil::as_char_no_warn(x[[visit_name]])
-  x[[icd_name]] <- jwutil::as_char_no_warn(x[[icd_name]])
+  x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
+  x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
   if (return_df) {
     mat <- icd_long_to_wide_cpp(x, visit_name, icd_name, aggr)
     if (icd9_name_was_factor)
@@ -292,7 +292,7 @@ icd_short_to_decimal <- function(x) {
 #' @keywords internal
 icd_short_to_decimal.default <- function(x) {
   switch(
-    icd_guess_version.character(jwutil::as_char_no_warn(x), short_code = TRUE),
+    icd_guess_version.character(as_char_no_warn(x), short_code = TRUE),
     "icd9" = icd_short_to_decimal.icd9(x),
     "icd10" = icd_short_to_decimal.icd10(x),
     stop("ICD type not known")
@@ -372,7 +372,7 @@ icd_decimal_to_short.icd10cm <- function(x) {
 #' @keywords internal
 icd_decimal_to_short.default <- function(x) {
   switch(
-    icd_guess_version(jwutil::as_char_no_warn(x), short_code = FALSE),
+    icd_guess_version(as_char_no_warn(x), short_code = FALSE),
     "icd9" = icd_decimal_to_short.icd9(x),
     "icd10" = icd_decimal_to_short.icd10(x),
     stop("Unknown ICD version guessed from input")

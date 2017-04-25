@@ -277,18 +277,18 @@ swap_names_vals <- function(x) {
 #' }
 #' @keywords internal
 get_non_ASCII <- function(x)
-  x[is_non_ASCII(jwutil::as_char_no_warn(x))]
+  x[is_non_ASCII(as_char_no_warn(x))]
 
 #' @rdname get_non_ASCII
 #' @keywords internal
 is_non_ASCII <- function(x)
-  is.na(iconv(jwutil::as_char_no_warn(x), from = "latin1", to = "ASCII"))
+  is.na(iconv(as_char_no_warn(x), from = "latin1", to = "ASCII"))
 
 #' @rdname get_non_ASCII
 #' @keywords internal
 get_encodings <- function(x) {
   stopifnot(is.list(x) || is.data.frame(x))
-  sapply(x, function(y) unique(Encoding(jwutil::as_char_no_warn(y))))
+  sapply(x, function(y) unique(Encoding(as_char_no_warn(y))))
 }
 
 #' Parse a (sub)chapter text description with parenthesised range

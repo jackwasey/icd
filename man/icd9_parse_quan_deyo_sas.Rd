@@ -4,18 +4,18 @@
 \alias{icd9_parse_quan_deyo_sas}
 \title{parse original SAS code defining Quan's update of Deyo comorbidities.}
 \usage{
-icd9_parse_quan_deyo_sas(save_data = FALSE)
+icd9_parse_quan_deyo_sas(save_data = FALSE, offline = TRUE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.
 Defaults to \code{FALSE}.}
 
-\item{condense}{Deprecated. The map is not condensed by default. If required,
-it can reduced to a smaller set of codes using \code{icd_condense}.}
-
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
 internet, only return path and file name if the file already exists in
 data-raw. This is helpful for testing without using the internet.}
+
+\item{condense}{Deprecated. The map is not condensed by default. If required,
+it can reduced to a smaller set of codes using \code{icd_condense}.}
 }
 \value{
 invisibly returns the list of vectors, where a co-morbidity name is

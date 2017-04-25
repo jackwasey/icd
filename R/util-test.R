@@ -47,7 +47,7 @@ skip_flat_icd9_avail <- function(ver = "31") {
     fn_orig <- dat$other_filename
 
   # don't try to download the file, just check it is there:
-  f_info_short <- jwutil::unzip_to_data_raw(dat$url,
+  f_info_short <- unzip_to_data_raw(dat$url,
                                     file_name = fn_orig,
                                     offline = TRUE)
   if (is.null(f_info_short))

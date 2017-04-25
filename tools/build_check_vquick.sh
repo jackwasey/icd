@@ -18,5 +18,5 @@ _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE" \
  _R_CHECK_EXIT_ON_FIRST_ERROR_=TRUE \
  _R_CHECK_TESTS_NLINES_=0 \
  _R_CHECK_NATIVE_ROUTINE_REGISTRATION_=TRUE \
- R CMD check --no-build-vignettes "$(ls -t /tmp/icd*.tar.gz | head -1)"
+ R CMD check --no-build-vignettes --no-manual --ignore-vignettes --no-install "$(ls -t /tmp/icd*.tar.gz | head -1)"
 popd

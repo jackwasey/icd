@@ -53,10 +53,10 @@ icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
 
   icd10cm2016[["code"]] %<>% as.icd10cm %>% as.icd_short_diag
   icd10cm2016[["three_digit"]] <-
-    jwutil::factor_nosort(icd_get_major(icd10cm2016[["code"]]))
+    factor_nosort(icd_get_major(icd10cm2016[["code"]]))
 
   # here we must re-factor so we don't have un-used levels in major
-  icd10cm2016[["major"]] <- jwutil::factor_nosort(
+  icd10cm2016[["major"]] <- factor_nosort(
     merge(x = icd10cm2016["three_digit"],
           y = icd10cm2016[c("code", "short_desc")],
           by.x = "three_digit", by.y = "code",
@@ -80,7 +80,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
     magrittr::extract2("chap_desc") -> icd10cm2016[["chapter"]]
 
   if (save_data)
-    jwutil::save_in_data_dir(icd10cm2016)
+    save_in_data_dir(icd10cm2016)
 
   invisible(icd10cm2016)
 }
@@ -88,8 +88,8 @@ icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
 icd10_generate_subchap_lookup <- function(lk_majors, verbose = FALSE) {
   lk_majors <- unique(icd10cm2016[["three_digit"]])
   sc_lookup <- data.frame(major = NULL, desc = NULL)
-  for (scn in names(icd10_sub_chapters)) {
-    sc <- icd10_sub_chapters[[scn]]
+  for (scn in names(icd::icd10_sub_chapters)) {
+    sc <- icd::icd10_sub_chapters[[scn]]
     si <- grep(sc["start"], lk_majors)
     se <- grep(sc["end"], lk_majors)
     sc_majors <- lk_majors[si:se]
@@ -109,8 +109,8 @@ icd10_generate_subchap_lookup <- function(lk_majors, verbose = FALSE) {
 icd10_generate_chap_lookup <- function(lk_majors) {
   lk_majors <- unique(icd10cm2016[["three_digit"]])
   chap_lookup <- data.frame(major = NULL, desc = NULL)
-  for (chap_n in names(icd10_chapters)) {
-    chap <- icd10_chapters[[chap_n]]
+  for (chap_n in names(icd::icd10_chapters)) {
+    chap <- icd::icd10_chapters[[chap_n]]
     # fix a 2016 error in the CMS XML definitions
     if (chap["end"] == "Y08")
       chap["end"] <- "Y09"

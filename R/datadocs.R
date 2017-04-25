@@ -359,3 +359,11 @@ NULL
 #' @docType data
 #' @keywords datasets
 NULL
+
+#' ICD-9 data sources
+#'
+#' List of ICD-9 data sources for different versions of ICD-9-CM
+#' @name icd9_sources
+#' @docType data
+#' @keywords datasets
+NULL

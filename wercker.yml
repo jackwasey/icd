@@ -15,7 +15,6 @@ build:
         github_packages:
          - jimhester/covr
          - jimhester/lintr
-         - jackwasey/jwutil
     - jimhester/r-check
     - script:
         name: debug information before codecov with covr

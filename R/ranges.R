@@ -157,7 +157,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
 
-  se <- jwutil::as_char_no_warn(c(start, end)) %>% trim %>% toupper
+  se <- as_char_no_warn(c(start, end)) %>% trim %>% toupper
 
   unique_mjrs <- icd10cm2016$three_digit %>% unique
 
@@ -174,7 +174,7 @@ icd_expand_range_major.icd10cm <- function(start, end) {
     stop(se[[1]], " as start not found")
   if (is.na(pos[[2]]))
     stop(se[[2]], " as end not found")
-  unique_mjrs[pos[[1]]:pos[[2]]] %>% jwutil::as_char_no_warn() %>% as.icd10cm
+  unique_mjrs[pos[[1]]:pos[[2]]] %>% as_char_no_warn() %>% as.icd10cm
 }
 
 #' @describeIn icd_expand_range Expand a range of ICD-9 codes

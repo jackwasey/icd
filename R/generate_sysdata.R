@@ -205,7 +205,7 @@ icd9_generate_sources <- function(save_data = FALSE) {
   )
 
   if (save_data)
-    jwutil::save_in_data_dir(icd9_sources)
+    save_in_data_dir(icd9_sources)
 
   invisible(icd9_sources)
 }

@@ -217,6 +217,36 @@ icd_get_major.icd9 <- function(x, short_code) {
     .Call('icd_icd9GetMajor', PACKAGE = 'icd', x, short_code)
 }
 
+#' @name fastIntToString
+#' @title Fast convert integer vector to character vector
+#' @description Fast conversion from integer vector to character vector using C++
+#' @param x vector of integers
+#' @param bufferSize int if any input strings are longer than this number
+#'   (default 16) there will be memory errors. No checks done for speed.
+#' @examples
+#' \dontrun{
+#' pts <- generate_random_pts(1e7)
+#' # conclusion: buffer size matters little (so default to be more generous),
+#' # and Rcpp version fastest.
+#' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
+#'                                fastIntToStringStd(pts$visit_id, buffer = 16),
+#'                                fastIntToStringStd(pts$visit_id, buffer = 64),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
+#'                                as.character(pts$visit_id),
+#'                                as_char_no_warn(pts$visit_id), times = 5)
+#' }
+#' @keywords internal
+fastIntToStringStd <- function(x) {
+    .Call('icd_fastIntToStringStd', PACKAGE = 'icd', x)
+}
+
+#' @describeIn fastIntToString Same using Rcpp
+fastIntToStringRcpp <- function(x) {
+    .Call('icd_fastIntToStringRcpp', PACKAGE = 'icd', x)
+}
+
 #' Guess whether codes are \code{short_code} or \code{decimal_code}
 #'
 #' The goal is to guess whether codes are \code{short_code} or

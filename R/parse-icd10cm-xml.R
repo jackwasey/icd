@@ -76,7 +76,7 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
     } #subchaps
   } #chapters
   if (save_data)
-    jwutil::save_in_data_dir(icd10_sub_chapters)
+    save_in_data_dir(icd10_sub_chapters)
 
   invisible(icd10_sub_chapters)
 }

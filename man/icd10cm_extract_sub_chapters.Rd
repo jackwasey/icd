@@ -4,7 +4,7 @@
 \alias{icd10cm_extract_sub_chapters}
 \title{Get sub-chapters from the 2016 XML for ICD-10-CM}
 \usage{
-icd10cm_extract_sub_chapters(save_data = FALSE)
+icd10cm_extract_sub_chapters(save_data = FALSE, offline = TRUE)
 }
 \arguments{
 \item{save_data}{single logical value, if \code{TRUE} will save the generated

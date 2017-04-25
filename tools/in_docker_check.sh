@@ -25,7 +25,7 @@ set -x
 echo "Cloning '$GIT_BRANCH' branch from '$GIT_URL'"
 pushd /tmp
 git clone --depth=1 -b $GIT_BRANCH $GIT_URL
-$R_CMD -e 'install.packages("devtools"); devtools::install_github("jackwasey/jwutil")'
+# $R_CMD -e 'install.packages("devtools"); devtools::install_github("jackwasey/jwutil")'
 
 # actually, we need to build based on the directory name, not the package name:
 CXXFLAGS="-O0 -Wall -Wno-unused" $R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)

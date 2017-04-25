@@ -34,7 +34,7 @@ rtf_fetch_year <- function(year, offline = TRUE) {
   rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
   fn <- rtf_dat$rtf_filename
 
-  jwutil::unzip_to_data_raw(rtf_dat$rtf_url, file_name = fn, offline = offline)
+  unzip_to_data_raw(rtf_dat$rtf_url, file_name = fn, offline = offline)
 }
 
 #' parse RTF description of entire ICD-9-CM for a specific year
@@ -245,7 +245,7 @@ rtf_make_majors <- function(filtered, ..., save = FALSE) {
   icd9_majors <- icd9_majors[!duplicated(icd9_majors)]
 
   if (save)
-    jwutil::save_in_data_dir(icd9_majors)
+    save_in_data_dir(icd9_majors)
 
   invisible(icd9_majors)
 }
@@ -265,7 +265,7 @@ rtf_make_sub_chapters <- function(filtered, ..., save = FALSE) {
   icd9_sub_chapters["Supplementary Classification Of External Causes Of Injury And Poisoning"] <- NULL
 
   if (save)
-    jwutil::save_in_data_dir(icd9_sub_chapters)
+    save_in_data_dir(icd9_sub_chapters)
 
   invisible(icd9_sub_chapters)
 }
