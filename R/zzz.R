@@ -64,6 +64,7 @@ release_questions <- function() {
     "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
     "Are all public S3 classes all exported? use devtools::missing_s3()",
     "use LLVM scan build by adding 'scan-build before compiler path in .R/Makevars",
+    "regenerate the function registration using tools/package-registration.r or the R 3.4 function",
     # testing and compilation and different platforms:
     "Have you run autoreconf before building and testing?",
     "Has config.h.win been updated to reflect latest configure.ac results?",

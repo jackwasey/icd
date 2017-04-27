@@ -297,4 +297,4 @@ package_native_routine_registration_skeleton <- function(dir, con = stdout(), al
                con)
 }
 
-package_native_routine_registration_skeleton(".")  ## when R 3.4.0 is out you only need this line
+tools::package_native_routine_registration_skeleton(".")  ## when R 3.4.0 is out you only need this line

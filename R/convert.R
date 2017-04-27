@@ -399,14 +399,14 @@ icd_short_to_parts <- function(x, mnr_empty = "") {
 icd_short_to_parts.icd9 <- function(x, mnr_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a
   # shim here.
-  .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, mnr_empty)
+  .Call("icd_icd9ShortToPartsCpp", x, mnr_empty)
 }
 
 #' @describeIn icd_decimal_to_parts Convert decimal ICD-9 code to parts
 #' @export
 #' @keywords internal manip
 icd_decimal_to_parts.icd9 <- function(x, mnr_empty = "") {
-  .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, mnr_empty)
+  .Call("icd_icd9DecimalToPartsCpp", x, mnr_empty)
 }
 
 #' @describeIn icd_short_to_parts Convert short format ICD code to parts,
@@ -418,7 +418,7 @@ icd_short_to_parts.character <- function(x, mnr_empty = "") {
   # shim here.
   switch(
     icd_guess_version(x, short_code = TRUE),
-    "icd9" = .Call("icd_icd9ShortToPartsCpp", PACKAGE = "icd", x, mnr_empty),
+    "icd9" = .Call("icd_icd9ShortToPartsCpp", x, mnr_empty),
     "icd10" = icd_short_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
@@ -431,7 +431,7 @@ icd_short_to_parts.character <- function(x, mnr_empty = "") {
 icd_decimal_to_parts.character <- function(x, mnr_empty = "") {
   switch(
     icd_guess_version(x, short_code = FALSE),
-    "icd9" = .Call("icd_icd9DecimalToPartsCpp", PACKAGE = "icd", x, mnr_empty),
+    "icd9" = .Call("icd_icd9DecimalToPartsCpp", x, mnr_empty),
     "icd10" = icd_decimal_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
