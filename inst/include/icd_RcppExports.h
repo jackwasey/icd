@@ -212,44 +212,6 @@ namespace icd {
             throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
     }
 
-    inline Rcpp::RObject as_icd_short_diag(Rcpp::RObject& x, bool value = true) {
-        typedef SEXP(*Ptr_as_icd_short_diag)(SEXP,SEXP);
-        static Ptr_as_icd_short_diag p_as_icd_short_diag = NULL;
-        if (p_as_icd_short_diag == NULL) {
-            validateSignature("Rcpp::RObject(*as_icd_short_diag)(Rcpp::RObject&,bool)");
-            p_as_icd_short_diag = (Ptr_as_icd_short_diag)R_GetCCallable("icd", "icd_as_icd_short_diag");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_as_icd_short_diag(Rcpp::wrap(x), Rcpp::wrap(value));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::RObject >(rcpp_result_gen);
-    }
-
-    inline Rcpp::RObject as_icd_decimal_diag(Rcpp::RObject& x, bool value = true) {
-        typedef SEXP(*Ptr_as_icd_decimal_diag)(SEXP,SEXP);
-        static Ptr_as_icd_decimal_diag p_as_icd_decimal_diag = NULL;
-        if (p_as_icd_decimal_diag == NULL) {
-            validateSignature("Rcpp::RObject(*as_icd_decimal_diag)(Rcpp::RObject&,bool)");
-            p_as_icd_decimal_diag = (Ptr_as_icd_decimal_diag)R_GetCCallable("icd", "icd_as_icd_decimal_diag");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_as_icd_decimal_diag(Rcpp::wrap(x), Rcpp::wrap(value));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::RObject >(rcpp_result_gen);
-    }
-
     inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
         typedef SEXP(*Ptr_icd9ComorbidShortCpp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_icd9ComorbidShortCpp p_icd9ComorbidShortCpp = NULL;

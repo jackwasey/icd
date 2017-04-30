@@ -3,17 +3,11 @@
 \name{.attr_decimal_diag}
 \alias{.attr_decimal_diag}
 \alias{.attr_short_diag}
-\alias{as.icd_short_diag}
-\alias{as.icd_decimal_diag}
 \title{Set ICD short-form diagnosis code attribute}
 \usage{
 .attr_decimal_diag(x, value = TRUE)
 
 .attr_short_diag(x, value = TRUE)
-
-as.icd_short_diag(x, value = TRUE)
-
-as.icd_decimal_diag(x, value = TRUE)
 }
 \description{
 Doing this in an R function doesn't work for 'void' equivalent, and does a

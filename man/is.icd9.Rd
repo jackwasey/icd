@@ -3,6 +3,8 @@
 \name{is.icd_short_diag}
 \alias{is.icd_short_diag}
 \alias{is.icd_decimal_diag}
+\alias{as.icd_short_diag}
+\alias{as.icd_decimal_diag}
 \alias{is.icd9}
 \alias{is.icd10}
 \alias{is.icd9cm}
@@ -15,6 +17,10 @@
 is.icd_short_diag(x, must_work = FALSE)
 
 is.icd_decimal_diag(x, must_work = FALSE)
+
+as.icd_short_diag(x, value)
+
+as.icd_decimal_diag(x, value)
 
 is.icd9(x)
 
@@ -36,6 +42,8 @@ is.icd_comorbidity_map(x)
 \item{must_work}{single logical value, if \code{FALSE} (the default) this may
 return \code{NULL} if the attribute is not present. If \code{TRUE}, then
 either \code{TRUE} or \code{FALSE} is returned.}
+
+\item{value}{true or false}
 }
 \description{
 currently no checks on correctness of the classes for these functions

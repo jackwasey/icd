@@ -41,3 +41,20 @@ is.icd_decimal_diag <- function(x, must_work = FALSE) {
   else
     return(identical(res, FALSE))
 }
+
+#' @rdname is.icd9
+#' @param value true or false
+#' @export
+as.icd_short_diag <- function(x, value) {
+  checkmate::assert_flag(value)
+  attributes(x) <- value
+  x
+}
+
+#' @rdname is.icd9
+#' @export
+as.icd_decimal_diag <- function(x, value) {
+  checkmate::assert_flag(value)
+  attributes(x) <- !value
+  x
+}

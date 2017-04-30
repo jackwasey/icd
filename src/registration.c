@@ -3,13 +3,11 @@
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
 
-/* FIXME: 
+/* FIXME:
    Check these declarations against the C/Fortran source code.
 */
 
 /* .Call calls */
-extern SEXP icd_asDecimalDiag(SEXP, SEXP);
-extern SEXP icd_asShortDiag(SEXP, SEXP);
 extern SEXP icd_fastIntToStringRcpp(SEXP);
 extern SEXP icd_fastIntToStringStd(SEXP);
 extern SEXP icd_getOmpCores();
@@ -77,8 +75,6 @@ extern SEXP icd_valgrindCallgrindStart(SEXP);
 extern SEXP icd_valgrindCallgrindStop();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"icd_asDecimalDiag",                      (DL_FUNC) &icd_asDecimalDiag,                      2},
-    {"icd_asShortDiag",                        (DL_FUNC) &icd_asShortDiag,                        2},
     {"icd_fastIntToStringRcpp",                (DL_FUNC) &icd_fastIntToStringRcpp,                1},
     {"icd_fastIntToStringStd",                 (DL_FUNC) &icd_fastIntToStringStd,                 1},
     {"icd_getOmpCores",                        (DL_FUNC) &icd_getOmpCores,                        0},

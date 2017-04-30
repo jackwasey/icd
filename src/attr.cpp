@@ -58,21 +58,22 @@ void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
 void setShortDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = value;
 }
-
-//' @rdname as.icd_short_diag
-//' @keywords attribute
-//' @export
-// [[Rcpp::export(as.icd_short_diag)]]
-Rcpp::RObject asShortDiag(Rcpp::RObject& x, bool value = true) {
-  x.attr("icd_short_diag") = value;
-  return x;
-}
-
-//' @rdname as.icd_short_diag
-//' @keywords attribute
-//' @export
-// [[Rcpp::export(as.icd_decimal_diag)]]
-Rcpp::RObject asDecimalDiag(Rcpp::RObject& x, bool value = true) {
-  x.attr("icd_short_diag") = !value;
-  return x;
-}
+// modification in-place is supposedly a bug (email from Tomas Kalibera)
+//
+// //' @rdname as.icd_short_diag
+// //' @keywords attribute
+// //' @export
+// // [[Rcpp::export(as.icd_short_diag)]]
+// Rcpp::RObject asShortDiag(Rcpp::RObject& x, bool value = true) {
+//   x.attr("icd_short_diag") = value;
+//   return x;
+// }
+//
+// //' @rdname as.icd_short_diag
+// //' @keywords attribute
+// //' @export
+// // [[Rcpp::export(as.icd_decimal_diag)]]
+// Rcpp::RObject asDecimalDiag(Rcpp::RObject& x, bool value = true) {
+//   x.attr("icd_short_diag") = !value;
+//   return x;
+// }

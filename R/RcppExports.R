@@ -101,20 +101,6 @@ icd9MajMinToShortSingleStd <- function(mjr, mnr) {
     invisible(.Call('icd_setShortDiag', PACKAGE = 'icd', x, value))
 }
 
-#' @rdname as.icd_short_diag
-#' @keywords attribute
-#' @export
-as.icd_short_diag <- function(x, value = TRUE) {
-    .Call('icd_asShortDiag', PACKAGE = 'icd', x, value)
-}
-
-#' @rdname as.icd_short_diag
-#' @keywords attribute
-#' @export
-as.icd_decimal_diag <- function(x, value = TRUE) {
-    .Call('icd_asDecimalDiag', PACKAGE = 'icd', x, value)
-}
-
 icd10cm_children_defined_cpp <- function(x) {
     .Call('icd_icd10cmChildrenDefined', PACKAGE = 'icd', x)
 }
