@@ -28,4 +28,3 @@ microbenchmark(icd9_order_short(x), icd9_order_short_r(x), times = 10)
 }
 }
 \keyword{internal}
-

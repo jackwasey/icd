@@ -21,4 +21,3 @@ This runs quite slowly. Used too rarely to be worth optimizing
   respective chapters, sub-chapters, etc..
 }
 \keyword{internal}
-

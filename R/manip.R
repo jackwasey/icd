@@ -27,7 +27,7 @@ icd9_extract_alpha_numeric <- function(x) {
   assert(check_factor(x), check_character(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
-  jwutil::as_char_no_warn(x) %>%
+  as_char_no_warn(x) %>%
     str_match_all(pattern = "([VvEe]?)([[:digit:].]+)") %>%
     vapply(FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
            FUN.VALUE = c(NA_character_, NA_character_)) %>% t
@@ -44,13 +44,12 @@ icd9_extract_alpha_numeric <- function(x) {
 #' @examples
 #' \dontrun{
 #' library(microbenchmark)
-#' requireNamespace(jwutil)
 #' x <- icd:::generate_random_decimal_icd9(1e6)
 #' microbenchmark(
-#'   x %>% jwutil::as_char_no_warn %>%
+#'   x %>% icd:::as_char_no_warn %>%
 #'   stringr::str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
 #'
-#'   stringr::str_replace(jwutil::as_char_no_warn(x),
+#'   stringr::str_replace(icd:::as_char_no_warn(x),
 #'               "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
 #'
 #'   gsub("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3", x),

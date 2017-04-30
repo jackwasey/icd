@@ -15,9 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-requireNamespace("icdData")
-# 'copy' all the data from icdData into the icd namespace
-icdData_names <- c(
+icd_data_names <- c(
   "icd10_map_ahrq",
   "icd10_map_cc",
   "icd10_map_elix",
@@ -51,15 +49,6 @@ icdData_names <- c(
   "icd_names_quan_elix_abbrev", "icd_names_quan_elix_htn",
   "icd_names_quan_elix_htn_abbrev"
 )
-
-# icdData is an Import for this package, so getting from it's environment should
-# always work
-e <- getNamespace(name = "icdData")
-for (n in icdData_names)
-  assign(n, get(n, envir = e))
-
-icdData_names <- NULL
-e <- NULL
 
 #' ICD-9 chapters
 #'
@@ -367,6 +356,14 @@ NULL
 #' @name uranium_pathology
 #' @source \url{http://www.ustur.wsu.edu/database/}
 #'   \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+#' @docType data
+#' @keywords datasets
+NULL
+
+#' ICD-9 data sources
+#'
+#' List of ICD-9 data sources for different versions of ICD-9-CM
+#' @name icd9_sources
 #' @docType data
 #' @keywords datasets
 NULL

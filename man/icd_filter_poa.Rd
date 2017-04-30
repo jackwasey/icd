@@ -2,10 +2,10 @@
 % Please edit documentation in R/filter.R
 \name{icd_filter_poa}
 \alias{icd_filter_poa}
+\alias{icd_filter_poa_yes}
 \alias{icd_filter_poa_no}
 \alias{icd_filter_poa_not_no}
 \alias{icd_filter_poa_not_yes}
-\alias{icd_filter_poa_yes}
 \title{Filters data frame based on present-on-arrival flag}
 \usage{
 icd_filter_poa(x, poa_name = "poa", poa = icd_poa_choices)
@@ -57,6 +57,7 @@ anything but 'Yes.' This would group exempt, unknown and other codes under
 which there are a quite large number, tend to describe chronic or
 out-of-hospital characteristics.
 }}
+
 \examples{
 \dontrun{
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
@@ -78,4 +79,3 @@ myData \%>\%
 }
 }
 \keyword{manip}
-

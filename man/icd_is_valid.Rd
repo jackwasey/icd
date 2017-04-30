@@ -64,6 +64,7 @@ Leading zeroes in the decimal form are not ambiguous. Although
 
 \item \code{icd_comorbidity_map}: Validate a mapping of ICD codes to comorbidities.
 }}
+
 \section{Three-digit validation}{
  \code{icd9_is_valid_major} validates just
   the 'major' three-digit part of an ICD-9 code. This can in fact be provided
@@ -82,6 +83,7 @@ Leading zeroes in the decimal form are not ambiguous. Although
   \code{short_code} or \code{decimal_code}, and ICD-9 or ICD-10 codes, so
   guessing is never going to be perfect.
 }
+
 \examples{
   icd_is_valid(as.icd9(c("", "1", "22", "333", "4444", "123.45", "V",
                      "V2", "V34", "V567", "E", "E1", "E70", "E")))
@@ -96,4 +98,3 @@ Leading zeroes in the decimal form are not ambiguous. Although
   \url{http://www.sascommunity.org/wiki/Validate_the_format_of_ICD-9_codes}
 }
 \keyword{internal}
-

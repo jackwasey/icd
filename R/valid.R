@@ -244,7 +244,7 @@ icd_valid_worker <- function(x, whitespace_ok, regex, regex_no_ws = regex) {
 #' @keywords internal
 icd_is_valid.default <- function(x, short_code = icd_guess_short(x), ...) {
   switch(
-    icd_guess_version.character(jwutil::as_char_no_warn(x), short_code = short_code),
+    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
     "icd9" = icd_is_valid.icd9(x, short_code = short_code, ...),
     "icd10" = icd_is_valid.icd10(x, short_code = short_code, ...),
     stop("ICD type not known")
@@ -439,7 +439,7 @@ icd_get_invalid <- function(...) {
 #' @keywords internal
 icd_get_invalid.default <- function(x, short_code = icd_guess_short(x), ...) {
   switch(
-    icd_guess_version.character(jwutil::as_char_no_warn(x), short_code = short_code),
+    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
     "icd9" = icd_get_invalid.icd9(x, short_code = short_code),
     "icd10" = icd_get_invalid.icd10(x, short_code = short_code),
     stop("ICD type not known")
@@ -541,19 +541,19 @@ icd_is_major.icd9 <- function(x) {
 #' @return logical vector
 #' @export
 icd9_is_n <- function(x) {
-  icd9_is_n_cpp(jwutil::as_char_no_warn(x))
+  icd9_is_n_cpp(as_char_no_warn(x))
 }
 
 #' @describeIn icd9_is_n are the given codes V type?
 #' @export
 icd9_is_v <- function(x) {
-  icd9_is_v_cpp(jwutil::as_char_no_warn(x))
+  icd9_is_v_cpp(as_char_no_warn(x))
 }
 
 #' @describeIn icd9_is_n are the given codes E type?
 #' @export
 icd9_is_e <- function(x) {
-  icd9_is_e_cpp(jwutil::as_char_no_warn(x))
+  icd9_is_e_cpp(as_char_no_warn(x))
 }
 
 warn_numeric_code <- function()

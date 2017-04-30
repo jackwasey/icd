@@ -38,4 +38,3 @@ stopifnot(identical(
 }
 \keyword{internal}
 \keyword{manip}
-

@@ -68,7 +68,7 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
     icd_decimal_to_short.icd9(x)
 
   res <- if (is.factor(x))
-    x[icd9_order_cpp(jwutil::as_char_no_warn(y))]
+    x[icd9_order_cpp(as_char_no_warn(y))]
   else
     x[icd9_order_cpp(y)]
 

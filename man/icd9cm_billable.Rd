@@ -2,8 +2,8 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9cm_billable}
-\alias{icd9Billable}
 \alias{icd9cm_billable}
+\alias{icd9Billable}
 \title{list of annual versions of billable leaf nodes of ICD-9-CM}
 \format{list of data frames. Each list item is named by the version as a
   string, e.g. "32". The constituent data frames have columns \code{icd9},
@@ -23,4 +23,3 @@ efforts, current locale can give different results, but this packaged data is
 correct, with some \code{UTF-8} encoded strings.
 }
 \keyword{datasets}
-

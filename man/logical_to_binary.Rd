@@ -20,4 +20,3 @@ binary takes more R memory, but allows more compact output
 \keyword{internal}
 \keyword{logical}
 \keyword{manip}
-

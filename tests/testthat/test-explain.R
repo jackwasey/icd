@@ -198,14 +198,14 @@ for (i in list("icd9_chapters", "icd9_sub_chapters", "icd9_majors")) {
 test_that(
   "parse icd9_majors vs those listed in the other CDC source of the leaf definitions.", {
     # get all the majors from the other list, to compare
-    compare_majors <- unique(icd_get_major.icd9(icdData::icd9cm_hierarchy[["code"]], short_code = TRUE))
+    compare_majors <- unique(icd_get_major.icd9(icd::icd9cm_hierarchy[["code"]], short_code = TRUE))
     expect_true(all(compare_majors %in% icd9_majors))
     expect_true(all(icd9_majors %in% compare_majors))
   })
 
 test_that("unsorted hierarchy tests", {
   expect_equal(
-    tolower(icdData::icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "00321", "long_desc"]),
+    tolower(icd::icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "00321", "long_desc"]),
     tolower("Salmonella Meningitis"))
 })
 
@@ -225,18 +225,18 @@ test_that("explain icd9GetChapters simple input", {
   expect_is(chaps2$major, "factor")
   expect_is(chaps2$sub_chapter, "factor")
   expect_is(chaps2$chapter, "factor")
-  expect_equal(jwutil::as_char_no_warn(chaps2$three_digit), NA_character_)
-  expect_equal(jwutil::as_char_no_warn(chaps2$major), NA_character_)
-  expect_equal(jwutil::as_char_no_warn(chaps2$sub_chapter), NA_character_)
-  expect_equal(jwutil::as_char_no_warn(chaps2$chapter), NA_character_)
+  expect_equal(as_char_no_warn(chaps2$three_digit), NA_character_)
+  expect_equal(as_char_no_warn(chaps2$major), NA_character_)
+  expect_equal(as_char_no_warn(chaps2$sub_chapter), NA_character_)
+  expect_equal(as_char_no_warn(chaps2$chapter), NA_character_)
 
   chaps3 <- icd9_get_chapters("417", short_code = FALSE)
-  expect_equal(jwutil::as_char_no_warn(chaps3$three_digit), "417")
-  expect_equal(jwutil::as_char_no_warn(chaps3$major),
+  expect_equal(as_char_no_warn(chaps3$three_digit), "417")
+  expect_equal(as_char_no_warn(chaps3$major),
                "Other diseases of pulmonary circulation")
-  expect_equal(jwutil::as_char_no_warn(chaps3$sub_chapter),
+  expect_equal(as_char_no_warn(chaps3$sub_chapter),
                "Diseases Of Pulmonary Circulation")
-  expect_equal(jwutil::as_char_no_warn(chaps3$chapter),
+  expect_equal(as_char_no_warn(chaps3$chapter),
                "Diseases Of The Circulatory System")
 
   chaps4 <- icd9_get_chapters("417", short_code = TRUE)

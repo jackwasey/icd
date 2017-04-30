@@ -3,8 +3,8 @@
 \name{icd_get_invalid}
 \alias{icd_get_invalid}
 \alias{icd_get_invalid.default}
-\alias{icd_get_invalid.icd10}
 \alias{icd_get_invalid.icd9}
+\alias{icd_get_invalid.icd10}
 \alias{icd_get_invalid.icd_comorbidity_map}
 \title{Get invalid ICD codes}
 \usage{
@@ -38,5 +38,5 @@ decimal not known.
 
 \item \code{icd_comorbidity_map}: Get invalid elements of a comorbidity map
 }}
-\keyword{internal}
 
+\keyword{internal}

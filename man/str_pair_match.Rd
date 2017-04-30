@@ -24,4 +24,3 @@ Match a character vector against a regular expression with at least two
 parenthetic groupings, returning named vector.
 }
 \keyword{internal}
-

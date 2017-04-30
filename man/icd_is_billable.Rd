@@ -2,11 +2,11 @@
 % Please edit documentation in R/real.R
 \name{icd_is_billable}
 \alias{icd_is_billable}
-\alias{icd_is_billable.default}
-\alias{icd_is_billable.icd10}
-\alias{icd_is_billable.icd10cm}
 \alias{icd_is_billable.icd9}
+\alias{icd_is_billable.icd10cm}
+\alias{icd_is_billable.icd10}
 \alias{icd_is_billable.icd9cm}
+\alias{icd_is_billable.default}
 \title{Determine whether codes are billable leaf-nodes}
 \usage{
 icd_is_billable(x, short_code = icd_guess_short(x), ...)
@@ -69,5 +69,5 @@ ICD-9-CM
 \item \code{default}: Which of the given ICD codes are leaf nodes in
 ICD version (9 vs 10) guessed from the codes themselves.
 }}
-\keyword{internal}
 
+\keyword{internal}

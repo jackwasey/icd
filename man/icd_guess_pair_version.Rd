@@ -23,4 +23,3 @@ Type of codes as single character \code{"icd9"} or \code{"icd10"}, or
 Designed for guessing version of codes given to delineate a range
 }
 \keyword{internal}
-

@@ -61,4 +61,3 @@ Other ICD-9 convert: \code{\link{icd9PartsToShort}},
   \code{\link{icd9_drop_leading_zeroes}},
   \code{\link{icd_long_to_wide}}
 }
-

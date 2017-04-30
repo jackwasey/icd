@@ -73,9 +73,9 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
 
   # TODO order/unorder consistently for decimal and short
   res <- if (short_code)
-    .Call("icd_icd9ChildrenShortUnordered", PACKAGE = "icd", toupper(x), defined)
+    .Call("icd_icd9ChildrenShortUnordered", toupper(x), defined)
   else
-    .Call("icd_icd9ChildrenDecimalCpp", PACKAGE = "icd", toupper(x), defined)
+    .Call("icd_icd9ChildrenDecimalCpp", toupper(x), defined)
 
   res <- icd_sort.icd9(res)
 

@@ -46,4 +46,3 @@ microbenchmark(trim(x), stringr::str_trim(x))
 }
 }
 \keyword{internal}
-

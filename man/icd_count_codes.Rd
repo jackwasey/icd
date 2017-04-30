@@ -61,4 +61,3 @@ first column is used.
   library(magrittr)
   wide \%>\% icd_wide_to_long \%>\% icd_count_codes
 }
-

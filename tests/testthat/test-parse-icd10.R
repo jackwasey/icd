@@ -115,3 +115,8 @@ test_that("sub-chapter parsing for ICD-10 went okay", {
   sc_lookup <- icd10_generate_subchap_lookup()
   expect_false(any(duplicated(sc_lookup$sc_major)))
 })
+
+# github issue #116
+test_that("W02 is correctly parsed", {
+  expect_equal_no_icd(icd_explain.icd10cm("W02"), character(0))
+})

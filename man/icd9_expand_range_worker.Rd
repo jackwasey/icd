@@ -29,6 +29,7 @@ have children not in the output let's take the first 5, to cover cases like
 100, 101, 102.1, 102.11, 102.2. There are only so many ways for parent codes
 to appear (assuming the input vector is ordered)
 }
+
 \examples{
 \dontrun{
 microbenchmark::micmicrobenchmark(
@@ -39,4 +40,3 @@ microbenchmark::micmicrobenchmark(
 }
 }
 \keyword{internal}
-

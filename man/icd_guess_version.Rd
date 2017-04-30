@@ -2,11 +2,11 @@
 % Please edit documentation in R/guess.R
 \name{icd_guess_version}
 \alias{icd_guess_version}
+\alias{icd_guess_version.icd9}
+\alias{icd_guess_version.icd10}
+\alias{icd_guess_version.factor}
 \alias{icd_guess_version.character}
 \alias{icd_guess_version.data.frame}
-\alias{icd_guess_version.factor}
-\alias{icd_guess_version.icd10}
-\alias{icd_guess_version.icd9}
 \title{Guess version of ICD codes}
 \usage{
 icd_guess_version(x, short_code, ...)
@@ -62,5 +62,5 @@ optionally throwing an error.
 \item \code{data.frame}: Guess version of ICD codes in a field in a
 \code{data.frame}
 }}
-\keyword{internal}
 
+\keyword{internal}

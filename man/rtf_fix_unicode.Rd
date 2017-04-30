@@ -30,4 +30,3 @@ stopifnot(identical(res_both, res_none))
 }
 \keyword{internal}
 \keyword{manip}
-

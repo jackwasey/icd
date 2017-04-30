@@ -75,3 +75,23 @@ test_that("some majors are the same as sub-chapters", {
   expect_icd9_major_is_sub_chap("External cause status", "E000")
 
 })
+
+test_that("7806 is correctly explained, github #116", {
+  expect_equal(icd_explain("7806"), "Fever and other psychological disturbances of temperature regulation")
+})
+
+test_that("737 is correctly explained, github #111", {
+  expect_equal(icd_explain("737"), "Curvature of spine")
+  expect_equal(icd_explain_table("737")[["short_desc"]], "Curvature of spine")
+  expect_equal(icd_explain_table("737")[["long_desc"]], "Curvature of spine")
+})
+
+test_that("345.1 is parsed correctly, github #109", {
+  expect_equal(icd_explain("345.1"), "Generalized convulsive epilepsy")
+})
+
+test_that("414, 4140 and 4141 are parsed correctly, github #99", {
+  expect_equal(icd_explain("414"), "Other forms of chronic ischemic heart disease")
+  expect_equal(icd_explain("4140"), "Coronary atherosclerosis")
+  expect_equal(icd_explain("4141"), "Aneurysm and dissection of heart")
+})

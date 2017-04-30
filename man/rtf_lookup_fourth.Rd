@@ -10,4 +10,3 @@ rtf_lookup_fourth(out, lookup_fourth, verbose = FALSE)
 use the lookup table of fourth digit
 }
 \keyword{internal}
-

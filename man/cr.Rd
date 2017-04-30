@@ -13,4 +13,3 @@ cr(x)
 Get sequence of column indices of comorbidity data frame
 }
 \keyword{internal}
-

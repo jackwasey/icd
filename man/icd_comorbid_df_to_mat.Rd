@@ -43,4 +43,3 @@ mat.out <- icd_comorbid_df_to_mat(cmbdf)
 stopifnot(is.matrix(mat.out))
 mat.out[, 1:4]
 }
-

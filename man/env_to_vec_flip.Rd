@@ -14,4 +14,3 @@ returned vector}
 return a new environment with names and values swapped
 }
 \keyword{internal}
-

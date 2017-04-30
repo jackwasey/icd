@@ -18,4 +18,3 @@ Generate correctly ordered look-up tables of numeric-only, V and E codes.
 This is quick, but much too slow when it appears many times in a loop.
 }
 \keyword{internal}
-

@@ -3,9 +3,9 @@
 \name{icd_short_to_decimal}
 \alias{icd_short_to_decimal}
 \alias{icd_short_to_decimal.default}
+\alias{icd_short_to_decimal.icd9}
 \alias{icd_short_to_decimal.icd10}
 \alias{icd_short_to_decimal.icd10cm}
-\alias{icd_short_to_decimal.icd9}
 \title{Convert ICD codes from short to decimal forms}
 \usage{
 icd_short_to_decimal(x)
@@ -38,5 +38,5 @@ format
 \item \code{icd10cm}: convert ICD-10-CM code from short to decimal
 format
 }}
-\keyword{internal}
 
+\keyword{internal}

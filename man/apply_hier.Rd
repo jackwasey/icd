@@ -2,10 +2,10 @@
 % Please edit documentation in R/comorbid.R
 \name{apply_hier}
 \alias{apply_hier}
-\alias{apply_hier_ahrq}
 \alias{apply_hier_elix}
-\alias{apply_hier_quan_deyo}
 \alias{apply_hier_quan_elix}
+\alias{apply_hier_quan_deyo}
+\alias{apply_hier_ahrq}
 \title{Apply hierarchy and choose naming for each comorbidity map}
 \usage{
 apply_hier_elix(x, abbrev_names = TRUE, hierarchy = TRUE)
@@ -38,4 +38,3 @@ For Deyo's Charlson comorbidities, strictly speaking, there is no
 }
 \keyword{internal}
 \keyword{manip}
-

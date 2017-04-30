@@ -19,4 +19,3 @@ assignments, but probably easy to adapter to numbers if ever needed.
 \keyword{internal}
 \keyword{list}
 \keyword{programming}
-

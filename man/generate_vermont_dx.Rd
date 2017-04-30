@@ -21,4 +21,3 @@ invisibly returns the list of vectors, where a co-morbidity name is
 Process data from \href{healthvermont.gov}{Health Vermont}
 }
 \keyword{internal}
-

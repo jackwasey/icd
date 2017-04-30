@@ -36,6 +36,7 @@ parser.
 
   so \code{RENLFAIL} needs special treatment
 }}
+
 \examples{
   \dontrun{
   sas_format_extract(readLines('data-raw/comformat2012-2013.txt'))
@@ -47,4 +48,3 @@ parser.
 \keyword{internal}
 \keyword{list}
 \keyword{programming}
-

@@ -29,9 +29,10 @@
 #' @references
 #'   https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
-icd10cm_get_all_defined <- function(save_data = FALSE) {
+icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
 
-  f_info <- icd10cm_get_flat_file()
+  f_info <- icd10cm_get_flat_file(offline = offline)
+  stopifnot(!is.null(f_info))
 
   # readLines may muck up encoding, resulting in weird factor order generation later?
   x <- readLines(con = f_info$file_path, encoding = "ASCII")
@@ -51,14 +52,17 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   )
 
   icd10cm2016[["code"]] %<>% as.icd10cm %>% as.icd_short_diag
-  icd10cm2016[["code"]] %>% icd_get_major %>% jwutil::factor_nosort -> icd10cm2016[["three_digit"]]
+  icd10cm2016[["three_digit"]] <-
+    factor_nosort(icd_get_major(icd10cm2016[["code"]]))
 
   # here we must re-factor so we don't have un-used levels in major
-  merge(x = icd10cm2016["three_digit"],
-        y = icd10cm2016[c("code", "short_desc")],
-        by.x = "three_digit", by.y = "code",
-        all.x = TRUE) %>%
-    magrittr::extract2("short_desc") %>% jwutil::factor_nosort -> icd10cm2016[["major"]]
+  icd10cm2016[["major"]] <- factor_nosort(
+    merge(x = icd10cm2016["three_digit"],
+          y = icd10cm2016[c("code", "short_desc")],
+          by.x = "three_digit", by.y = "code",
+          all.x = TRUE)[["short_desc"]]
+  )
+
 
   # can't use icd_expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because
@@ -73,7 +77,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
         by.x = "three_digit", by.y = "chap_major", all.x = TRUE)[["chap_desc"]]
 
   if (save_data)
-    save_in_dd(icd10cm2016)
+    save_in_data_dir(icd10cm2016)
 
   invisible(icd10cm2016)
 }
@@ -81,8 +85,8 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
 icd10_generate_subchap_lookup <- function(lk_majors, verbose = FALSE) {
   lk_majors <- unique(icd10cm2016[["three_digit"]])
   sc_lookup <- data.frame(major = NULL, desc = NULL)
-  for (scn in names(icd10_sub_chapters)) {
-    sc <- icd10_sub_chapters[[scn]]
+  for (scn in names(icd::icd10_sub_chapters)) {
+    sc <- icd::icd10_sub_chapters[[scn]]
     si <- grep(sc["start"], lk_majors)
     se <- grep(sc["end"], lk_majors)
     sc_majors <- lk_majors[si:se]
@@ -102,8 +106,8 @@ icd10_generate_subchap_lookup <- function(lk_majors, verbose = FALSE) {
 icd10_generate_chap_lookup <- function(lk_majors) {
   lk_majors <- unique(icd10cm2016[["three_digit"]])
   chap_lookup <- data.frame(major = NULL, desc = NULL)
-  for (chap_n in names(icd10_chapters)) {
-    chap <- icd10_chapters[[chap_n]]
+  for (chap_n in names(icd::icd10_chapters)) {
+    chap <- icd::icd10_chapters[[chap_n]]
     # fix a 2016 error in the CMS XML definitions
     if (chap["end"] == "Y08")
       chap["end"] <- "Y09"

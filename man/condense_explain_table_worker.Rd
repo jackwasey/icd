@@ -13,4 +13,3 @@ details for rows which can be condensed
 generate condensed code and condensed number columns
 }
 \keyword{internal}
-

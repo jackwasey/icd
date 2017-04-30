@@ -278,7 +278,7 @@ icd_comorbid_common <- function(x,
   if (!short_code)
     x[[icd_name]] <- icd_decimal_to_short(x[[icd_name]])
 
-  map <- lapply(map, jwutil::as_char_no_warn)
+  map <- lapply(map, as_char_no_warn)
 
   if (!short_map)
     map <- lapply(map, icd_decimal_to_short)
@@ -291,7 +291,7 @@ icd_comorbid_common <- function(x,
   # this is a moderately slow step (if needed to be done). Internally, the
   # \code{sort} is slow. Fast match speeds up the subsequent step.
   if (!is.factor(x[[icd_name]]))
-    x[[icd_name]] <- jwutil::factor_nosort(x[[icd_name]])
+    x[[icd_name]] <- factor_nosort(x[[icd_name]])
 
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
@@ -302,12 +302,12 @@ icd_comorbid_common <- function(x,
 
   # this may be the slowest step (again, if needed, and many will have character
   # IDs)
-  x[[visit_name]] <- jwutil::as_char_no_warn(x[[visit_name]])
+  x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
 
   # again, R is very fast at creating factors from a known set of levels
   icd_levels <- levels(x[[icd_name]])
   map <- lapply(map, function(y) {
-    f <- jwutil::factor_nosort(y, icd_levels)
+    f <- factor_nosort(y, icd_levels)
     f[!is.na(f)]
   })
 
@@ -319,11 +319,13 @@ icd_comorbid_common <- function(x,
   threads <- getOption("icd.threads", getOmpCores())
   chunk_size <- getOption("icd.chunk_size", 256L)
   omp_chunk_size <- getOption("icd.omp_chunk_size", 1L)
-  mat <- icd9ComorbidShortCpp(icd9df = x, icd9Mapping = map, visitId = visit_name, icd9Field = icd_name, threads = threads, chunk_size = chunk_size, omp_chunk_size = omp_chunk_size, aggregate = TRUE) # nolint
+  mat <- icd9ComorbidShortCpp(icd9df = x, icd9Mapping = map, visitId = visit_name,
+                              icd9Field = icd_name, threads = threads, chunk_size = chunk_size,
+                              omp_chunk_size = omp_chunk_size, aggregate = TRUE) # nolint
 
   if (return_df) {
     if (visit_was_factor)
-      rownm <- jwutil::factor_nosort(x = rownames(mat), levels = iv_levels)
+      rownm <- factor_nosort(x = rownames(mat), levels = iv_levels)
     else
       rownm <- rownames(mat)
     df_out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = visit_was_factor)
@@ -336,10 +338,13 @@ icd_comorbid_common <- function(x,
 }
 
 #' @rdname icd_comorbid
-#' @details \code{data.frame}s of patient data may have columns within them which are of class \code{icd9}, \code{icd10} etc.,
-#' but do not themselves have a class: therefore, the S3 mechanism for dispatch is not suitable. I may add a wrapper function which
-#' looks inside a \code{data.frame} of comorbidities, and dispatches to the appropriate function, but right now the user must
-#' call the \code{icd9_} or \code{icd10_} prefixed function directly.
+#' @details \code{data.frame}s of patient data may have columns within them
+#'   which are of class \code{icd9}, \code{icd10} etc., but do not themselves
+#'   have a class: therefore, the S3 mechanism for dispatch is not suitable. I
+#'   may add a wrapper function which looks inside a \code{data.frame} of
+#'   comorbidities, and dispatches to the appropriate function, but right now
+#'   the user must call the \code{icd9_} or \code{icd10_} prefixed function
+#'   directly.
 #' @export
 icd9_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
   cbd <- icd9_comorbid(x, map = icd9_map_ahrq, short_map = TRUE, ...)
@@ -422,7 +427,7 @@ icd9_comorbid_hcc <- function(x,
   x$year <- as.numeric(format(x[[date_name]], "%Y"))
 
   # merge CCs to patient data based on ICD and year drop ICD info
-  x <- merge(x, icd9_map_cc, all.x = TRUE)
+  x <- merge(x, icd::icd9_map_cc, all.x = TRUE)
 
   # Drop missing CC and convert to numeric
   # Not all ICDs resolve to a CC by definition
@@ -438,7 +443,7 @@ icd9_comorbid_hcc <- function(x,
 
   # Import hierarchy mappings, and duplicate the ifcc column
   # needed for future matching
-  hierarchy <- icd_map_cc_hcc
+  hierarchy <- icd::icd_map_cc_hcc
   hierarchy$cc <- hierarchy$ifcc
 
   # Merge hierarchy rules with patient data
@@ -494,7 +499,7 @@ icd10_comorbid_hcc <- function(x,
   x$year <- as.numeric(format(x[[date_name]], "%Y"))
 
   # merge CCs to patient data based on ICD and year drop ICD info
-  x <- merge(x, icd10_map_cc, all.x = TRUE)
+  x <- merge(x, icd::icd10_map_cc, all.x = TRUE)
 
   # Drop missing CC and convert to numeric
   # Not all ICDs resolve to a CC by definition
@@ -510,8 +515,8 @@ icd10_comorbid_hcc <- function(x,
 
   # Import hierarchy mappings, and duplicate the ifcc column
   # needed for future matching
-  hierarchy <- icd_map_cc_hcc
-  hierarchy$cc <- icd_map_cc_hcc$ifcc
+  hierarchy <- icd::icd_map_cc_hcc
+  hierarchy$cc <- icd::icd_map_cc_hcc$ifcc
 
   # Merge hierarchy rules with patient data
   x <- merge(x, hierarchy, all.x = TRUE)
@@ -640,14 +645,14 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
     x <- x[, -which(colnames(x) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
-      colnames(x)[cr(x)] <- icd_names_elix_abbrev
+      colnames(x)[cr(x)] <- icd::icd_names_elix_abbrev
     else
-      colnames(x)[cr(x)] <- icd_names_elix
+      colnames(x)[cr(x)] <- icd::icd_names_elix
   } else {
     if (abbrev_names)
-      colnames(x)[cr(x)] <- icd_names_elix_htn_abbrev
+      colnames(x)[cr(x)] <- icd::icd_names_elix_htn_abbrev
     else
-      colnames(x)[cr(x)] <- icd_names_elix_htn
+      colnames(x)[cr(x)] <- icd::icd_names_elix_htn
   }
   x
 }
@@ -673,14 +678,14 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # comorbidities:
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd_names_quan_elix_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd_names_quan_elix
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd_names_quan_elix_htn_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd_names_quan_elix_htn
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_quan_elix_htn
   }
   cbd
 }
@@ -696,9 +701,9 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
   if (abbrev_names)
-    colnames(cbd)[cr(cbd)] <- icd_names_charlson_abbrev
+    colnames(cbd)[cr(cbd)] <- icd::icd_names_charlson_abbrev
   else
-    colnames(cbd)[cr(cbd)] <- icd_names_charlson
+    colnames(cbd)[cr(cbd)] <- icd::icd_names_charlson
 
   cbd
 }
@@ -718,14 +723,14 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd_names_ahrq_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd_names_ahrq
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq
   } else {
     if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd_names_ahrq_htn_abbrev
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd_names_ahrq_htn
+      colnames(cbd)[cr(cbd)] <- icd::icd_names_ahrq_htn
   }
   cbd
 }

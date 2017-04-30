@@ -15,18 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-save_in_dd <- function(...,  envir = parent.frame()) {
-  jwutil::save_in_data_dir(..., package_dir = "../icdData", envir = envir)
-}
-
 icd10cm_get_xml_file <- function(...) {
-  jwutil::unzip_to_data_raw(
+  unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP",
     file_name = "Tabular.xml", ...)
 }
 
 icd10cm_get_flat_file <- function(...) {
-  jwutil::unzip_to_data_raw(
+  unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
     file_name = "icd10cm_order_2016.txt", ...)
 }

@@ -40,13 +40,13 @@ ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "HTN
 #' Get the SAS code from AHRQ and save in data-raw if not already there.
 #' @keywords internal
 icd9_fetch_ahrq_sas <- function(offline) {
-  jwutil::download_to_data_raw(
+  download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat2012-2013.txt",
     offline = offline)
 }
 
 icd10_fetch_ahrq_sas <- function(offline) {
-  jwutil::download_to_data_raw(
+  download_to_data_raw(
     url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comformat_icd10cm_2016.txt",
     offline = offline)
 }
@@ -58,12 +58,12 @@ icd10_fetch_ahrq_sas <- function(offline) {
 #' in generating the package itself.
 #' @template parse-template
 #' @keywords internal manip
-icd9_parse_ahrq_sas <- function(save_data = FALSE) {
+icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
 
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_info <- icd9_fetch_ahrq_sas(offline = TRUE)
+  ahrq_info <- icd9_fetch_ahrq_sas(offline = offline)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
@@ -128,17 +128,17 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
   icd9_map_ahrq %<>% icd_comorbidity_map
 
   if (save_data)
-    save_in_dd("icd9_map_ahrq")
+    save_in_data_dir("icd9_map_ahrq")
 
   invisible(icd9_map_ahrq)
 }
 
 # This is in some ways simpler than that ICD-9 equivalent because I make no
 # attempt to find all the child codes.
-icd10_parse_ahrq_sas <- function(save_data = FALSE) {
+icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
 
-  ahrq_info <- icd10_fetch_ahrq_sas(offline = TRUE)
+  ahrq_info <- icd10_fetch_ahrq_sas(offline = offline)
 
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
@@ -158,14 +158,14 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE) {
   icd10_map_ahrq %<>% icd_comorbidity_map
 
   if (save_data)
-    save_in_dd("icd10_map_ahrq")
+    save_in_data_dir("icd10_map_ahrq")
 
   invisible(icd10_map_ahrq)
 }
 
 #' @keywords internal
 icd9_fetch_quan_deyo_sas <- function(...) {
-  jwutil::download_to_data_raw(
+  download_to_data_raw(
     url =
       "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
     file_name = "ICD9_E_Charlson.sas", ...)
@@ -190,12 +190,12 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 #' @template parse-template
 #' @template offline
 #' @keywords internal manip
-icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
+icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
 
   # download the file and/or just get the path or file name, fails if missing
   # by default
-  f_info <- icd9_fetch_quan_deyo_sas(offline = TRUE)
+  f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
 
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sas_extract_let_strings(quan_sas_lines)
@@ -212,7 +212,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
   icd9_map_quan_deyo %<>% as.icd_short_diag %>% icd9 %>% icd_comorbidity_map
 
   if (save_data)
-    save_in_dd(icd9_map_quan_deyo)
+    save_in_data_dir(icd9_map_quan_deyo)
   invisible(icd9_map_quan_deyo)
 }
 
@@ -291,7 +291,7 @@ icd9_parse_cc <- function(save_data = FALSE) {
   rm(extracodes)
 
   if (save_data)
-    save_in_dd(icd9_map_cc)
+    save_in_data_dir(icd9_map_cc)
   invisible(icd9_map_cc)
 }
 
@@ -338,7 +338,7 @@ icd10_parse_cc <- function(save_data = FALSE) {
   # can adapt the code from icd9_map_cc()
 
   if (save_data)
-    save_in_dd(icd10_map_cc)
+    save_in_data_dir(icd10_map_cc)
   invisible(icd10_map_cc)
 }
 
@@ -418,6 +418,6 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   icd_map_cc_hcc <- cbind(icd_map_cc_hcc[, c("year", "ifcc")], todrop)
 
   if (save_data)
-    save_in_dd(icd_map_cc_hcc)
+    save_in_data_dir(icd_map_cc_hcc)
   invisible(icd_map_cc_hcc)
 }

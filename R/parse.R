@@ -43,30 +43,30 @@ icd_update_everything <- function() {
   message("Parsing plain text billable codes to create icd9cm_billable list of
                        data frames with descriptions of billable codes only.
                        No dependencies on other data.")
-  parse_leaf_descriptions_all(save_data = TRUE) # nolint
+  parse_leaf_descriptions_all(save_data = TRUE, offline = FALSE) # nolint
   load(system.file("data", "icd9cm_billable.RData", package = "icd"))
 
   message("Parsing comorbidity mappings from SAS and text sources.
                        (Make sure lookup files are updated first.)
                        Depends on icd9cm_hierarchy being updated.")
   # ICD 9
-  icd9_parse_ahrq_sas(save_data = TRUE)
-  icd9_parse_quan_deyo_sas(save_data = TRUE)
+  icd9_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
+  icd9_parse_quan_deyo_sas(save_data = TRUE, offline = FALSE)
   icd9_parse_cc(save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
   # ICD 10
-  icd10_parse_ahrq_sas(save_data = TRUE)
+  icd10_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
   icd10_parse_cc(save_data = TRUE)
   icd10_generate_map_quan_elix(save_data = TRUE)
   icd10_generate_map_quan_deyo(save_data = TRUE)
   icd10_generate_map_elix(save_data = TRUE)
-  icd10cm_get_all_defined(save_data = TRUE)
-  icd10cm_extract_sub_chapters(save_data = TRUE)
+  icd10cm_get_all_defined(save_data = TRUE, offline = FALSE)
+  icd10cm_extract_sub_chapters(save_data = TRUE, offline = FALSE)
 
   # reload the newly saved data before generating chapters.
   # depends on icd9cm_billable
-  icd9cm_generate_chapters_hierarchy(save_data = TRUE, verbose = FALSE)
+  icd9cm_generate_chapters_hierarchy(save_data = TRUE, offline = FALSE, verbose = FALSE)
 }
 
 # quick sanity checks - full tests of icd9cm_hierarchy in test-parse.R
@@ -122,7 +122,8 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
   }
 
   if (save_data)
-    save_in_dd(icd9cm_billable)
+    save_in_data_dir(icd9cm_billable)
+
   invisible(icd9cm_billable)
 }
 
@@ -169,10 +170,10 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   fn_short_orig <- dat$short_filename
   fn_long_orig <- dat$long_filename
 
-  f_info_short <- jwutil::unzip_to_data_raw(dat$url, file_name = fn_short_orig, offline = offline)
+  f_info_short <- unzip_to_data_raw(dat$url, file_name = fn_short_orig, offline = offline)
   f_info_long <- NULL
   if (!is.na(fn_long_orig))
-    f_info_long <- jwutil::unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
+    f_info_long <- unzip_to_data_raw(dat$url, file_name = fn_long_orig, offline = offline)
 
   message("short filename = ", f_info_short$file_name, "\n long filename = ", f_info_long$file_name)
   message("short path = ", f_info_short$file_path, "\n long path = ", f_info_long$file_name)
@@ -254,7 +255,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
 
   message("original v27 file name = '", fn_orig, "'. URL = ", url)
 
-  f27_info <- jwutil::unzip_to_data_raw(url, fn_orig, offline = offline)
+  f27_info <- unzip_to_data_raw(url, fn_orig, offline = offline)
 
   f <- file(f27_info$file_path, encoding = "latin1")
   icd9cm_billable27 <- utils::read.csv(f27_info$file_path, stringsAsFactors = FALSE,
@@ -325,7 +326,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
 
   # now put the short description in the right column position
   out <- out[c("code", "short_desc", "long_desc", "three_digit",
-                                         "major", "sub_chapter", "chapter")]
+               "major", "sub_chapter", "chapter")]
 
   out[["short_desc"]] <- enc2utf8(out[["short_desc"]])
   out[["long_desc"]] <- enc2utf8(out[["long_desc"]])
@@ -335,7 +336,8 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
 
   print(environment())
   if (save_data)
-    save_in_dd(icd9cm_hierarchy) # nocov
+    save_in_data_dir(icd9cm_hierarchy) # nocov
+
   invisible(icd9cm_hierarchy)
 }
 
@@ -350,10 +352,10 @@ fixSubchapterNa <- function(x, start, end) {
   # assert all the same:
   stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
   # now some work to insert a new level into the sub-chapter factor in the right place
-  previous_sub <- jwutil::as_char_no_warn(x[(which(congenital) - 1)[1], "sub_chapter"])
+  previous_sub <- as_char_no_warn(x[(which(congenital) - 1)[1], "sub_chapter"])
   previous_sub_pos <- which(levels(x$sub_chapter) == previous_sub)
-  congenital_title <- jwutil::as_char_no_warn(x[which(congenital)[1], "chapter"])
-  new_subs <- jwutil::as_char_no_warn(x$sub_chapter)
+  congenital_title <- as_char_no_warn(x[which(congenital)[1], "chapter"])
+  new_subs <- as_char_no_warn(x$sub_chapter)
   new_subs[congenital] <- congenital_title
   new_levels <- append(levels(x$sub_chapter), congenital_title, previous_sub_pos)
   x$sub_chapter <- factor(new_subs, new_levels)
@@ -366,7 +368,18 @@ fixSubchapterNa <- function(x, start, end) {
 #' historic versions. There will be no further updates, so this is reasonable.
 #' @keywords internal manip
 icd9cm_hierarchy_hotfix <- function(x) {
-  x[x$code == "0381", "short_desc"] <- "Staphylococcal septicemia"
-  x[x$code == "0381", "long_desc"] <- "Staphylococcal septicemia"
+  x %<>% .icd9cm_hierarchy_hotfix_both("0381", "Staphylococcal septicemia")
+  x %<>% .icd9cm_hierarchy_hotfix_both("7806", "Fever and other psychological disturbances of temperature regulation")
+  x %<>% .icd9cm_hierarchy_hotfix_both("737", "Curvature of spine")
+  x %<>% .icd9cm_hierarchy_hotfix_both("3451", "Generalized convulsive epilepsy")
+  x %<>% .icd9cm_hierarchy_hotfix_both("414", "Other forms of chronic ischemic heart disease")
+  x %<>% .icd9cm_hierarchy_hotfix_both("4140", "Coronary atherosclerosis")
+  x %<>% .icd9cm_hierarchy_hotfix_both("4141", "Aneurysm and dissection of heart")
+  x
+}
+
+.icd9cm_hierarchy_hotfix_both <- function(x, code, desc) {
+  x[x[["code"]] == code, "short_desc"] <- desc
+  x[x[["code"]] == code, "long_desc"] <- desc
   x
 }

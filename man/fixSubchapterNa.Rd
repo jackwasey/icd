@@ -10,4 +10,3 @@ fixSubchapterNa(x, start, end)
 Fixes a couple of corner cases in parsing the 2011 ICD-9-CM RTF
 }
 \keyword{internal}
-

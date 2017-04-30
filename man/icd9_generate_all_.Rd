@@ -17,4 +17,3 @@ This is a little painful but the data is small enough, with huge speed gains
 in common operations
 }
 \keyword{internal}
-

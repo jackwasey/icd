@@ -13,4 +13,3 @@ common code for generating full table of explanations of ICD codes
 Ed Lee
 }
 \keyword{internal}
-

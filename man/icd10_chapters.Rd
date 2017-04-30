@@ -19,4 +19,3 @@ alphabetic initial characters. E.g. Chapter I spans A00 to B99.
 U00-U49 - Provisional assignment of new diseases of uncertain etiology or
 emergency use U82-U85 - Resistance to antimicrobial and anti-neoplastic drugs
 }
-

@@ -18,4 +18,3 @@ Swap names and values of a vector. Non-character values are implicitly
 converted to names.
 }
 \keyword{internal}
-

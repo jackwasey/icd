@@ -32,6 +32,6 @@ test_that("ordered and unordered methods on ordered data are identical", {
 test_that("cpp: failure with non character visitId", {
   expect_error(icd_long_to_wide_cpp(pts, visitId = "visit_id", icd9Field = "code"), "converted to")
   # and make sure it works otherwise
-  pts$visit_id <- jwutil::as_char_no_warn(pts$visit_id)
+  pts$visit_id <- as_char_no_warn(pts$visit_id)
   res <- icd_long_to_wide_cpp(pts, visitId = "visit_id", icd9Field = "code")
 })

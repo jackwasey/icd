@@ -153,6 +153,10 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call('icd_icd10_comorbid_parent_search_cpp', PACKAGE = 'icd', x, map, visit_name, icd_name)
 }
 
+icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
+    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', mjr, mnr, isShort)
+}
+
 #' @rdname convert
 #' @keywords internal manip
 icd9PartsToShort <- function(parts) {
@@ -213,8 +217,34 @@ icd_get_major.icd9 <- function(x, short_code) {
     .Call('icd_icd9GetMajor', PACKAGE = 'icd', x, short_code)
 }
 
-icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
-    .Call('icd_icd9MajMinToCodeOld', PACKAGE = 'icd', mjr, mnr, isShort)
+#' @name fastIntToString
+#' @title Fast convert integer vector to character vector
+#' @description Fast conversion from integer vector to character vector using C++
+#' @param x vector of integers
+#' @param bufferSize int if any input strings are longer than this number
+#'   (default 16) there will be memory errors. No checks done for speed.
+#' @examples
+#' \dontrun{
+#' pts <- generate_random_pts(1e7)
+#' # conclusion: buffer size matters little (so default to be more generous),
+#' # and Rcpp version fastest.
+#' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
+#'                                fastIntToStringStd(pts$visit_id, buffer = 16),
+#'                                fastIntToStringStd(pts$visit_id, buffer = 64),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
+#'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
+#'                                as.character(pts$visit_id),
+#'                                as_char_no_warn(pts$visit_id), times = 5)
+#' }
+#' @keywords internal
+fastIntToStringStd <- function(x) {
+    .Call('icd_fastIntToStringStd', PACKAGE = 'icd', x)
+}
+
+#' @describeIn fastIntToString Same using Rcpp
+fastIntToStringRcpp <- function(x) {
+    .Call('icd_fastIntToStringRcpp', PACKAGE = 'icd', x)
 }
 
 #' Guess whether codes are \code{short_code} or \code{decimal_code}
@@ -272,6 +302,14 @@ icd_long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call('icd_icd9LongToWideCpp', PACKAGE = 'icd', icd9df, visitId, icd9Field, aggregate)
 }
 
+icd9AddLeadingZeroesShortSingle <- function(x) {
+    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
+}
+
+icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
+    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
+}
+
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call('icd_icd9AddLeadingZeroesMajorSingle', PACKAGE = 'icd', mjr)
 }
@@ -310,12 +348,36 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call('icd_icd9AddLeadingZeroes', PACKAGE = 'icd', x, short_code)
 }
 
-icd9AddLeadingZeroesShortSingle <- function(x) {
-    .Call('icd_icd9AddLeadingZeroesShortSingle', PACKAGE = 'icd', x)
+#' Find child codes from vector of ICD-9 codes.
+#'
+#' Pure C++11 implementation using unordered set to find children of given codes
+#' @examples
+#' \dontrun{
+#' microbenchmark::microbenchmark(
+#'   icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
+#'   icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
+#'   times = 5)
+#'   # C++11 about 15% faster for this data
+#' }
+#' @keywords internal
+icd9ChildrenShort11 <- function(icd9Short, onlyReal) {
+    .Call('icd_icd9ChildrenShort11', PACKAGE = 'icd', icd9Short, onlyReal)
 }
 
-icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
-    .Call('icd_icd9AddLeadingZeroesDirect', PACKAGE = 'icd', x, short_code)
+#' C++ implementation of finding children of short codes
+#' @examples
+#' \dontrun{
+#' library(microbenchmark)
+#' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
+#' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
+#'                icd9ChildrenShortUnordered(c("001", 100:400), T),
+#'                icd9ChildrenShortStd(c("001", 100:400), T),
+#'                times = 10)
+#' }
+#' # unordered set much faster, but may still need to sort result
+#' @keywords internal
+icd9ChildrenShortStd <- function(icd9Short, onlyReal) {
+    .Call('icd_icd9ChildrenShortStd', PACKAGE = 'icd', icd9Short, onlyReal)
 }
 
 icd9ExpandMinorStd <- function(mnr, isE) {
@@ -357,38 +419,6 @@ icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
 #' @keywords internal
 icd_in_reference_code <- function(icd, icd_reference, short_code, short_reference = TRUE) {
     .Call('icd_icd_in_reference_code', PACKAGE = 'icd', icd, icd_reference, short_code, short_reference)
-}
-
-#' Find child codes from vector of ICD-9 codes.
-#'
-#' Pure C++11 implementation using unordered set to find children of given codes
-#' @examples
-#' \dontrun{
-#' microbenchmark::microbenchmark(
-#'   icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
-#'   icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
-#'   times = 5)
-#'   # C++11 about 15% faster for this data
-#' }
-#' @keywords internal
-icd9ChildrenShort11 <- function(icd9Short, onlyReal) {
-    .Call('icd_icd9ChildrenShort11', PACKAGE = 'icd', icd9Short, onlyReal)
-}
-
-#' C++ implementation of finding children of short codes
-#' @examples
-#' \dontrun{
-#' library(microbenchmark)
-#' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
-#' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
-#'                icd9ChildrenShortUnordered(c("001", 100:400), T),
-#'                icd9ChildrenShortStd(c("001", 100:400), T),
-#'                times = 10)
-#' }
-#' # unordered set much faster, but may still need to sort result
-#' @keywords internal
-icd9ChildrenShortStd <- function(icd9Short, onlyReal) {
-    .Call('icd_icd9ChildrenShortStd', PACKAGE = 'icd', icd9Short, onlyReal)
 }
 
 trimLeftCpp <- function(s) {

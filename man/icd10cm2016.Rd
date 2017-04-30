@@ -21,4 +21,3 @@ There are annual revisions to this data. Currently, the 2016 edition is
 included.
 }
 \keyword{datasets}
-

@@ -2,13 +2,6 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd_names_elix}
-\alias{icd_names_ahrq}
-\alias{icd_names_ahrq_abbrev}
-\alias{icd_names_ahrq_htn}
-\alias{icd_names_ahrq_htn_abbrev}
-\alias{icd_names_cc}
-\alias{icd_names_charlson}
-\alias{icd_names_charlson_abbrev}
 \alias{icd_names_elix}
 \alias{icd_names_elix_abbrev}
 \alias{icd_names_elix_htn}
@@ -17,6 +10,13 @@
 \alias{icd_names_quan_elix_abbrev}
 \alias{icd_names_quan_elix_htn}
 \alias{icd_names_quan_elix_htn_abbrev}
+\alias{icd_names_ahrq}
+\alias{icd_names_ahrq_abbrev}
+\alias{icd_names_ahrq_htn}
+\alias{icd_names_ahrq_htn_abbrev}
+\alias{icd_names_charlson}
+\alias{icd_names_charlson_abbrev}
+\alias{icd_names_cc}
 \title{Comorbidity names}
 \format{list, with character/numeric code. 'Hypertension, uncomplicated' and
   'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
@@ -39,4 +39,3 @@ include hypertension. _abbreviated comorbidity names are helpful for
 interactive work, whereas the full names might be preferred for plotting.
 }
 \keyword{datasets}
-

@@ -7,7 +7,7 @@
 \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
 }
 \usage{
-icd10cm_get_all_defined(save_data = FALSE)
+icd10cm_get_all_defined(save_data = FALSE, offline = TRUE)
 }
 \description{
 Gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
@@ -22,4 +22,3 @@ sorting on some platforms, but not others (e.g. Travis and Wercker).
 https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 }
 \keyword{internal}
-

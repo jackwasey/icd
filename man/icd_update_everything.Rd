@@ -13,4 +13,3 @@ from the source SAS data. Elixhauser and Quan/Elixhauser mappings are
 generated from transcribed codes.
 }
 \keyword{internal}
-

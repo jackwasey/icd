@@ -25,4 +25,3 @@ Very quick heuristic, ploughs through ten million codes in less
   than one second and will stop more quickly if it finds a '.'.
 }
 \keyword{internal}
-

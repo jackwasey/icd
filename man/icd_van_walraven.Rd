@@ -60,6 +60,7 @@ metastatic tumor
 \item \code{data.frame}: van Walraven scores from data frame of visits
 and ICD-9 codes
 }}
+
 \examples{
 mydf <- as.icd9(data.frame(visit_name = c("a", "b", "c"),
                    icd9 = c("412.93", "441", "044.9")))
@@ -72,13 +73,12 @@ icd_van_walraven_from_comorbid(cmb)
 icd_van_walraven(mydf)
 icd_van_walraven(mydf, return_df = TRUE)
 }
-\author{
-wmurphyrd
-}
 \references{
 van Walraven C, Austin PC, Jennings A, Quan H, Forster AJ. A
   Modification to the Elixhauser Comorbidity Measures Into a Point System for
   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 }
-
+\author{
+wmurphyrd
+}

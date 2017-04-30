@@ -34,6 +34,7 @@ In debug mode, will check that mjr and mnr are same length.
 codes are already trimmed and correctly padded with zeros, e.g. E001, V09,
 001. This version does handle NA values correctly. ' @keywords internal
 }}
+
 \examples{
 \dontrun{
 n <- 5e6
@@ -51,4 +52,3 @@ microbenchmark::microbenchmark(
 }
 \keyword{internal}
 \keyword{manip}
-

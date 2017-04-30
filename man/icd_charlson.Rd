@@ -80,6 +80,7 @@ codes. ICD-10 Charlson can be calculated simply by getting the Charlson
 (e.g. Quan Deyo) comorbidities, then calling
 \code{icd_charlson_from_comorbid}.
 }}
+
 \examples{
 mydf <- data.frame(visit_name = c("a", "b", "c"),
                    icd9 = c("441", "412.93", "044.9"))
@@ -90,4 +91,3 @@ icd_charlson(mydf)
 icd_charlson(mydf, short_code = FALSE, return_df = TRUE)
 icd_charlson_from_comorbid(cmb)
 }
-

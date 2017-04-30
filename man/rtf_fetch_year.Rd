@@ -15,4 +15,3 @@ rtf_fetch_year(year, offline = TRUE)
 Will return NULL if offline and not available
 }
 \keyword{internal}
-

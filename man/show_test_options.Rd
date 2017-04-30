@@ -11,4 +11,3 @@ Get the options for all currently used \code{icd} testing options.
 }
 \keyword{debugging}
 \keyword{internal}
-

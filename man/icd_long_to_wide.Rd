@@ -63,4 +63,3 @@ Other ICD-9 convert: \code{\link{icd9PartsToShort}},
   \code{\link{icd_wide_to_long}}
 }
 \keyword{manip}
-

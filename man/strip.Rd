@@ -38,4 +38,3 @@ microbenchmark::microbenchmark(
 }
 }
 \keyword{internal}
-

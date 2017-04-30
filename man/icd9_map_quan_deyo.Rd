@@ -2,8 +2,8 @@
 % Please edit documentation in R/datadocs.R
 \docType{data}
 \name{icd9_map_quan_deyo}
-\alias{icd10_map_quan_deyo}
 \alias{icd9_map_quan_deyo}
+\alias{icd10_map_quan_deyo}
 \title{Quan adaptation of Deyo/Charlson comorbidities}
 \format{list of character vectors, each named by co-morbidity}
 \description{
@@ -26,4 +26,3 @@ Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew Fong,
   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 }
 \keyword{datasets}
-

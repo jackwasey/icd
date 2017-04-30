@@ -26,4 +26,3 @@ If the visit ID is known, it should be specified, ideally instead of calling
 this function, but if unavoidable, using the \code{visit_name} parameter.
 }
 \keyword{internal}
-
