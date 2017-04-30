@@ -46,7 +46,6 @@
 //' # Rcpp cleverer than R, and doesn't return a copy of the data
 //' }
 //' @keywords internal attribute
-//' @rdname as.icd_short_diag
 // [[Rcpp::export(.attr_decimal_diag)]]
 void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = !value;

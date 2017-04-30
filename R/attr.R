@@ -27,9 +27,9 @@
 is.icd_short_diag <- function(x, must_work = FALSE) {
   res <- attr(x, "icd_short_diag", exact = TRUE)
   if (!must_work)
-    return(res)
+    res
   else
-    return(isTRUE(res))
+    isTRUE(res)
 }
 
 #' @rdname is.icd9
@@ -37,23 +37,31 @@ is.icd_short_diag <- function(x, must_work = FALSE) {
 is.icd_decimal_diag <- function(x, must_work = FALSE) {
   res <- attr(x, "icd_short_diag", exact = TRUE)
   if (!must_work && is.null(res))
-    return(NULL)
+    NULL
   else
-    return(identical(res, FALSE))
+    identical(res, FALSE)
 }
 
-#' @rdname is.icd9
-#' @param value true or false
+#' Change whether ICD code has short or long attribute
+#'
+#' The attribute \code{icd_short_code} should be either \code{TRUE} or
+#' \code{FALSE}.
+#' @param x ICD data
+#' @param value True or false, default is \code{TRUE}
+#' @examples
+#' codes <- as.icd9("100.1", "441.3")
+#' codes <- as.icd_decimal_diag(codes)
+#' codes
 #' @export
-as.icd_short_diag <- function(x, value) {
+as.icd_short_diag <- function(x, value = TRUE) {
   checkmate::assert_flag(value)
   attributes(x) <- value
   x
 }
 
-#' @rdname is.icd9
+#' @rdname as.icd_short_diag
 #' @export
-as.icd_decimal_diag <- function(x, value) {
+as.icd_decimal_diag <- function(x, value = TRUE) {
   checkmate::assert_flag(value)
   attributes(x) <- !value
   x
