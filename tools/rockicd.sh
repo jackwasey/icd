@@ -22,7 +22,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # show what we're doing
-set -x
+# set -x
 
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
@@ -30,12 +30,14 @@ DOCKER_IMAGE="${1:-r-clang-3.9}"
 
 # ROCK_TMP=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 
-if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)?r-.+ ]]; then
-   echo "WARNING: not using R from a jackwasey docker image"
+if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)r-.+ ]]; then
+   echo "Not using R from a jackwasey docker image"
 fi
 
-if [[ ! $DOCKER_IMAGE =~ ^jackwasey\/ ]]; then
-  DOCKER_IMAGE="jackwasey/${DOCKER_IMAGE}"
+if [[ ! $DOCKER_IMAGE =~ ^rocker\/ ]]; then
+  if [[ ! $DOCKER_IMAGE =~ ^jackwasey\/ ]]; then
+    DOCKER_IMAGE="jackwasey/${DOCKER_IMAGE}"
+  fi
 fi
 
 # drop trailing slash

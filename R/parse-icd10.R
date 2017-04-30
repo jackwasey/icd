@@ -65,15 +65,12 @@ icd10cm_get_all_defined <- function(save_data = FALSE) {
   # there are some non-numeric characters scattered around)
 
   sc_lookup <- icd10_generate_subchap_lookup()
-  merge(x = icd10cm2016["three_digit"], y = sc_lookup,
-        by.x = "three_digit", by.y = "sc_major",
-        all.x = TRUE) %>%
-    magrittr::extract2("sc_desc") -> icd10cm2016[["sub_chapter"]]
+  icd10cm2016[["sub_chapter"]] <- merge(x = icd10cm2016["three_digit"], y = sc_lookup,
+        by.x = "three_digit", by.y = "sc_major", all.x = TRUE)[["sc_desc"]]
 
   chap_lookup <- icd10_generate_chap_lookup()
-  merge(icd10cm2016["three_digit"], chap_lookup,
-        by.x = "three_digit", by.y = "chap_major", all.x = TRUE) %>%
-    magrittr::extract2("chap_desc") -> icd10cm2016[["chapter"]]
+  icd10cm2016[["chapter"]] <- merge(icd10cm2016["three_digit"], chap_lookup,
+        by.x = "three_digit", by.y = "chap_major", all.x = TRUE)[["chap_desc"]]
 
   if (save_data)
     save_in_dd(icd10cm2016)
