@@ -286,9 +286,9 @@ CV icd9DecimalToShort(
   return out;
 }
 
-//' @describeIn icd_get_major Get mjr part of ICD-9 code, i.e. first three
-//' digits of numeric or V code, or first four digits of E code. This is the part
-//' before the decimal, when a decimal point is used.
+//' @describeIn icd_get_major Get major part of ICD-9 code, i.e. first three
+//'   digits of numeric or V code, or first four digits of E code. This is the
+//'   part before the decimal, when a decimal point is used.
 //' @keywords internal manip
 //[[Rcpp::export(name="icd_get_major.icd9")]]
 CV icd9GetMajor(const CV x, const bool short_code) {

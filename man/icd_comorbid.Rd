@@ -130,9 +130,9 @@ year there is a different ICD9/10 to CC mapping). This is only necessary
 for HCC mappings.}
 }
 \description{
-\link{Rcpp} approach to comorbidity assignment with OpenMP and
-  vector of integers strategy. It is very fast, and most time is now spent
-  setting up the data to be passed in.
+\link{\code{Rcpp}} approach to comorbidity assignment with
+  OpenMP and vector of integers strategy. It is very fast, and most time is
+  now spent setting up the data to be passed in.
 
 This is the main function which extracts comorbidities from a set of ICD-9
 codes. This is when some trivial post-processing of the comorbidity data is
@@ -170,11 +170,12 @@ The common comorbidity calculation code does not depend on ICD type.
 Applying CMS Hierarchical Condition Categories
   \code{icd_comorbid_hcc} functions differently from the rest of the
   comorbidity assignment functions. This is because CMS publishes a specific
-  ICD to Condition Category mapping including all child ICDs. In addition,
-  while these mappings were the same for 2007-2012, after 2013 there are
-  annual versions. In addition, there is a many:many linkage between ICD and
-  Condition Categories (CC). Once CCs are assigned, a series of hierarchy
-  rules (which can also change annually) are applied to create HCCs.
+  ICD to Condition Category mapping including all child ICD codes. In
+  addition, while these mappings were the same for 2007-2012, after 2013
+  there are annual versions. In addition, there is a many:many linkage
+  between ICD and Condition Categories (CC). Once CCs are assigned, a series
+  of hierarchy rules (which can also change annually) are applied to create
+  HCCs.
 }
 \section{Functions}{
 \itemize{

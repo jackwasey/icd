@@ -29,9 +29,9 @@
 #'   annually.
 #'
 #'   \item Quan revised both Deyo/Charlson and Elixhauser ICD-9 to comorbidity
-#'   mappings. These are presented as: \code{link{icd9_map_quan_deyo}} (which is
+#'   mappings. These are presented as: \code{\link{icd9_map_quan_deyo}} (which is
 #'   also derived from the original SAS code used in his publication, referenced
-#'   in the data documentation), \code{link{icd10_map_quan_deyo}},
+#'   in the data documentation), \code{\link{icd10_map_quan_deyo}},
 #'   \code{\link{icd9_map_quan_elix}}, and \code{\link{icd10_map_quan_elix}}
 #'   which was transcribed directly from the same paper.
 #'

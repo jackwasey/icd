@@ -7,7 +7,8 @@
 icd9ChildrenShort11(icd9Short, onlyReal)
 }
 \description{
-Pure C++11 implementation using unordered set to find children of given codes
+Pure C++11 implementation using \code{unordered set} to find children of
+given codes
 }
 \examples{
 \dontrun{

@@ -22,8 +22,8 @@ The ICD/HCC mappings were obtained from CMS
 \href{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}{
 Medicare Risk Adjustors}. Due to the complex file structure of the original
 data (many nested zip files), they have been organized in the folder
-data/icd_hcc_rawdata/. This function creates an .RData file containing
-icd9/10 to CC crosswalks.
+\code{data/icd_hcc_rawdata/}. This function creates a data file containing
+ICD-9/10 to CC crosswalks.
 Import the ICD9 to CC crosswalks
 }
 \keyword{internal}

@@ -13,7 +13,7 @@ generate_spelling <- function(out = ".aspell/words.pws", save_data = TRUE) {
                     "Sharabiani", "Travis", "Walraven", "Wasey", "Wercker", "Wickham",
                     "wmurphyrd")
   proper_nouns <- c(proper_nouns, paste(proper_nouns, "'s", sep = ""))
-  acronyms <- c("AHRQ", "BISHCA", "CRAN", "CDC", "CMS", "CSV", "DRG",
+  acronyms <- c("AHRQ", "BISHCA", "CC", "CCs", "CRAN", "CDC", "CMS", "CSV", "DRG",
                 "POA", "HTN", "ICD", "HCC", "HCCs",
                 "RTF", "SAS", "VAHHS", "NSO", "WSU")
   other <- c("comorbidity", "comorbidities", "comorbid",

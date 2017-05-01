@@ -115,7 +115,9 @@ logical_to_binary <- function(x) {
   x
 }
 
-#' regexec which accepts \code{perl} argument even in older R
+#' \code{regexec} which accepts \code{perl} argument even in older R
+#'
+#' TODO: deprecate this as we won't support ancient R versions indefinitely.
 #' @keywords internal
 regexec32 <- function(pattern, text, ...) {
   dots <- list(...)
@@ -264,9 +266,9 @@ swap_names_vals <- function(x) {
   x
 }
 
-#' mimic the R CMD check test
+#' mimic the \code{R CMD check} test
 #'
-#' \code{R CMD check} is quick to tell you where 'UTF-8' characters are not
+#' \code{R CMD check} is quick to tell you where \code{UTF-8} characters are not
 #' encoded, but gives no way of finding out which or where
 #' @examples
 #' \dontrun{
@@ -349,23 +351,23 @@ named_list <- function(...) {
   x
 }
 
-# allows R 3.1 to work
+# allows R 3.1 to work. TODO: obsolete
 dir.exists <- function(paths) {
   x <- file.info(paths)$isdir
   !is.na(x) & x
 }
 
-#' return all matches for regex
+#' return all matches for regular expression
 #'
 #' \code{perl} is taken out if not supported, allows compatibility with older
-#' versions of R. TODO: check for newer stringr function to do this.
+#' versions of R. TODO: check for newer \code{stringr} function to do this.
 #' @keywords internal
 str_match_all <- function(string, pattern, ...) {
   string <- as.character(string)
   regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...))
 }
 
-#' TODO does 'stringr' do this?
+#' TODO does \code{stringr} do this?
 #' @keywords internal
 str_extract <- function(string, pattern, ...) {
   vapply(regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...)),

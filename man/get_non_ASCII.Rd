@@ -4,7 +4,7 @@
 \alias{get_non_ASCII}
 \alias{is_non_ASCII}
 \alias{get_encodings}
-\title{mimic the R CMD check test}
+\title{mimic the \code{R CMD check} test}
 \usage{
 get_non_ASCII(x)
 
@@ -13,7 +13,7 @@ is_non_ASCII(x)
 get_encodings(x)
 }
 \description{
-\code{R CMD check} is quick to tell you where 'UTF-8' characters are not
+\code{R CMD check} is quick to tell you where \code{UTF-8} characters are not
 encoded, but gives no way of finding out which or where
 }
 \examples{

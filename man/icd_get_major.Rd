@@ -23,9 +23,9 @@ For ICD-10, this is an initial implementation. If speed needed, then
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd9}: Get mjr part of ICD-9 code, i.e. first three
-digits of numeric or V code, or first four digits of E code. This is the part
-before the decimal, when a decimal point is used.
+\item \code{icd9}: Get major part of ICD-9 code, i.e. first three
+digits of numeric or V code, or first four digits of E code. This is the
+part before the decimal, when a decimal point is used.
 
 \item \code{icd10}: Get major part of an ICD-10 code
 }}

@@ -2,11 +2,11 @@
 % Please edit documentation in R/util.R
 \name{regexec32}
 \alias{regexec32}
-\title{regexec which accepts \code{perl} argument even in older R}
+\title{\code{regexec} which accepts \code{perl} argument even in older R}
 \usage{
 regexec32(pattern, text, ...)
 }
 \description{
-regexec which accepts \code{perl} argument even in older R
+TODO: deprecate this as we won't support ancient R versions indefinitely.
 }
 \keyword{internal}

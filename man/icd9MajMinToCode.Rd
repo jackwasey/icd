@@ -3,7 +3,7 @@
 \name{icd9MajMinToCode}
 \alias{icd9MajMinToCode}
 \alias{icd9MajMinToCodePrePadded}
-\title{Convert mjr and mnr vectors to single code}
+\title{Convert \code{mjr} and \code{mnr} vectors to single code}
 \usage{
 icd9MajMinToCode(mjr, mnr, isShort)
 
@@ -26,7 +26,7 @@ leading zeroes which may be inferred; the last two characters represent the
 'minor' part.)}
 }
 \description{
-In debug mode, will check that mjr and mnr are same length.
+In debug mode, will check that \code{mjr} and \code{mnr} are same length.
 }
 \section{Functions}{
 \itemize{

@@ -27,7 +27,8 @@
 
 //' Find child codes from vector of ICD-9 codes.
 //'
-//' Pure C++11 implementation using unordered set to find children of given codes
+//' Pure C++11 implementation using \code{unordered set} to find children of
+//' given codes
 //' @examples
 //' \dontrun{
 //' microbenchmark::microbenchmark(
@@ -87,7 +88,7 @@ CV icd9ChildrenShort11(CV icd9Short, bool onlyReal) {
 //'                icd9ChildrenShortStd(c("001", 100:400), T),
 //'                times = 10)
 //' }
-//' # unordered set much faster, but may still need to sort result
+//' # un-ordered set much faster, but may still need to sort result
 //' @keywords internal
 // [[Rcpp::export]]
 CV icd9ChildrenShortStd(CV icd9Short, bool onlyReal) {

@@ -222,8 +222,8 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
 #' \href{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}{
 #' Medicare Risk Adjustors}. Due to the complex file structure of the original
 #' data (many nested zip files), they have been organized in the folder
-#' data/icd_hcc_rawdata/. This function creates an .RData file containing
-#' icd9/10 to CC crosswalks.
+#' \code{data/icd_hcc_rawdata/}. This function creates a data file containing
+#' ICD-9/10 to CC crosswalks.
 #' Import the ICD9 to CC crosswalks
 #' @template parse-template
 #' @keywords internal manip
@@ -372,7 +372,7 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   # Add year variable to each dataframe
   icd_map_cc_hcc <- mapply(cbind, icd_map_cc_hcc, "year" = years, SIMPLIFY = FALSE)
 
-  # Convert each item in the list of icd_map_cc_hcc objects into a dataframe
+  # Convert each item in the list of 'icd_map_cc_hcc' objects into a dataframe
   # and combine into a single DF
   icd_map_cc_hcc <- lapply(icd_map_cc_hcc, as.data.frame, stringsAsFactors = FALSE)
   icd_map_cc_hcc <- do.call(rbind, icd_map_cc_hcc)

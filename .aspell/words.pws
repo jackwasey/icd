@@ -1,10 +1,11 @@
-personal_ws-1.1 en 57 UTF-8
+personal_ws-1.1 en 61 UTF-8
 arrythmia
 Musculoskeletal
 Myocardial
 Puerperium
 laterality
 Infarction
+healthcare
 Charlson
 Deyo
 Elixhauser
@@ -41,6 +42,8 @@ DRG
 POA
 HTN
 ICD
+HCC
+HCCs
 RTF
 SAS
 VAHHS
@@ -56,3 +59,4 @@ TODO
 MERCHANTABILITY
 prepend
 prepends
+Adjustors

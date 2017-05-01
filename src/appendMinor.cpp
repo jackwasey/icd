@@ -23,9 +23,9 @@
 // for add leading zeroes mjr (TODO: remove this dependency)
 #include "manip.h"
 
-//' Convert mjr and mnr vectors to single code
+//' Convert \code{mjr} and \code{mnr} vectors to single code
 //'
-//' In debug mode, will check that mjr and mnr are same length.
+//' In debug mode, will check that \code{mjr} and \code{mnr} are same length.
 //' @template mjr
 //' @template mnr
 //' @template isShort

@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse.R
 \name{icd9cm_hierarchy_hotfix}
 \alias{icd9cm_hierarchy_hotfix}
-\title{hotfix some parsing errors}
+\title{fix some \code{RTF} parsing errors}
 \usage{
 icd9cm_hierarchy_hotfix(x)
 }

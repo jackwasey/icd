@@ -362,7 +362,7 @@ fixSubchapterNa <- function(x, start, end) {
   x
 }
 
-#' hotfix some parsing errors
+#' fix some \code{RTF} parsing errors
 #'
 #' These are relevant to the most recent ICD-9-CM code sets, not the older
 #' historic versions. There will be no further updates, so this is reasonable.

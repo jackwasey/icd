@@ -603,11 +603,12 @@ icd_comorbid_quan_deyo <- function(x, icd_name = get_icd_name(x), ...) {
 #' @details Applying CMS Hierarchical Condition Categories
 #'   \code{icd_comorbid_hcc} functions differently from the rest of the
 #'   comorbidity assignment functions. This is because CMS publishes a specific
-#'   ICD to Condition Category mapping including all child ICDs. In addition,
-#'   while these mappings were the same for 2007-2012, after 2013 there are
-#'   annual versions. In addition, there is a many:many linkage between ICD and
-#'   Condition Categories (CC). Once CCs are assigned, a series of hierarchy
-#'   rules (which can also change annually) are applied to create HCCs.
+#'   ICD to Condition Category mapping including all child ICD codes. In
+#'   addition, while these mappings were the same for 2007-2012, after 2013
+#'   there are annual versions. In addition, there is a many:many linkage
+#'   between ICD and Condition Categories (CC). Once CCs are assigned, a series
+#'   of hierarchy rules (which can also change annually) are applied to create
+#'   HCCs.
 #' @rdname icd_comorbid
 #' @param date column representing,  the date each record took place, as in each
 #'   year there is a different ICD9/10 to CC mapping). This is only necessary

@@ -2,12 +2,12 @@
 % Please edit documentation in R/util.R
 \name{str_match_all}
 \alias{str_match_all}
-\title{return all matches for regex}
+\title{return all matches for regular expression}
 \usage{
 str_match_all(string, pattern, ...)
 }
 \description{
 \code{perl} is taken out if not supported, allows compatibility with older
-versions of R. TODO: check for newer stringr function to do this.
+versions of R. TODO: check for newer \code{stringr} function to do this.
 }
 \keyword{internal}

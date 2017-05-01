@@ -18,6 +18,6 @@ microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
                icd9ChildrenShortStd(c("001", 100:400), T),
                times = 10)
 }
-# unordered set much faster, but may still need to sort result
+# un-ordered set much faster, but may still need to sort result
 }
 \keyword{internal}

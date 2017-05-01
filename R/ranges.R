@@ -206,7 +206,7 @@ icd_expand_range.icd9 <- function(start, end,
 #'   so we actually have to search the whole list to be sure. One parent code
 #'   could have maximum of 110 child codes, so we just search the last 110
 #'   (TODO). This means that even if trying to preserve the ambiguous start,
-#'   setting ambig end will have to kill it, if it spills over.
+#'   setting \code{ex_ambig end will have to kill it, if it spills over.
 #' @section Ambiguous starting parent codes: Excluding ambiguous parent codes
 #'   from the start is easier than those near the end of the result. Just remove
 #'   those codes at the beginning which have children not in the output let's
