@@ -26,7 +26,7 @@ IFS=$'\n\t'
 
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
-DOCKER_IMAGE="${1:-r-clang-3.9}"
+DOCKER_IMAGE="${1:-r-clang-4.0}"
 
 # ROCK_TMP=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 
@@ -54,7 +54,7 @@ echo "GITHUB_USER=${GITHUB_USER:=jackwasey}"
 echo "GITHUB_REPO=${GITHUB_REPO:=$ICD_PROJECT_NAME}"
 echo "GIT_BRANCH=${GIT_BRANCH:=master}"
 echo "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
-echo "R_CMD=${R_CMD:=R}"
+echo "R_CMD=${R_CMD:=RD}"
 
 # expands variables and prints command
 set -x

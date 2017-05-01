@@ -27,7 +27,7 @@ pushd /tmp
 
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 apt-get update -qq || true
-apt-get upgrade -qq -y || true
+apt-get dist-upgrade -qq -y || true
 apt-get install -y -qq libssl-dev libxml2-dev curl libcurl4-openssl-dev unixodbc-dev qpdf pandoc pandoc-citeproc # libssh2-1-dev (optional for git but has debian version problem at least in April 2017)
 # install debian packaged R packages to avoid compiling. may NEED to compile if USBAN or different compiler?
 apt-get install -y -qq r-cran-rodbc r-cran-rcpp r-cran-knitr r-cran-testthat r-cran-checkmate r-cran-xml2
@@ -44,9 +44,12 @@ fi
 
 git clone --depth=1 -b $GIT_BRANCH $GIT_URL
 
+# tolerate R_CMD unset or empty, and default to RD if empty or unset:
+echo "R_CMD is ${R_CMD:-RD}"
+
 # shorter if pre-installed debian packages, but these are not seen by RD as it has a different library?
 if [[ "${R_CMD}" =~ .*RD$ ]]; then
-  $R_CMD -e 'install.packages(c("knitr", "Rcpp", "testthat", "checkmate", "RODBC", "xml2"))'
+  ${R_CMD}script -e 'pkgs <- c("knitr", "Rcpp", "testthat", "checkmate", "RODBC", "xml2"); for (p in pkgs) { if (!require(p, character.only=T)) install.packages(p) }'
 fi
 # these two aren't on debian anyway:
 $R_CMD -e 'install.packages(c("roxygen2", "rmarkdown"))'

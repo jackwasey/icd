@@ -49,7 +49,7 @@ is.icd_decimal_diag <- function(x, must_work = FALSE) {
 #' @param x ICD data
 #' @param value True or false, default is \code{TRUE}
 #' @examples
-#' codes <- as.icd9("100.1", "441.3")
+#' codes <- as.icd9(c("100.1", "441.3"))
 #' codes <- as.icd_decimal_diag(codes)
 #' codes
 #' @export

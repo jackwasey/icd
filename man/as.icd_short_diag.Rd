@@ -22,7 +22,7 @@ The attribute \code{icd_short_code} should be either \code{TRUE} or
 \code{FALSE}.
 }
 \examples{
-codes <- as.icd9("100.1", "441.3")
+codes <- as.icd9(c("100.1", "441.3"))
 codes <- as.icd_decimal_diag(codes)
 codes
 }
