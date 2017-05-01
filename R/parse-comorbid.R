@@ -349,10 +349,10 @@ icd10_parse_cc <- function(save_data = FALSE) {
 #' \href{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}{
 #' Medicare Risk Adjustors}. Due to the complex file structure of the original
 #' data (many nested zip files), they have been organized in the folder
-#' data/icd_hcc_rawdata/hierarchy.
+#' \code{data/icd_hcc_rawdata/hierarchy}.
 #'
-#' This function creates an .RData file containing rules for converting CCs to
-#' HCC
+#' This function creates an \code{.RData} file containing rules for converting
+#' CCs to HCC
 #' @template parse-template
 #' @keywords internal manip
 icd_parse_cc_hierarchy <- function(save_data = FALSE) {

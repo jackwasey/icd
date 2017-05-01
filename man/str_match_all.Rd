@@ -7,7 +7,7 @@
 str_match_all(string, pattern, ...)
 }
 \description{
-substitute for removed stringr function. \code{perl} is taken out if not
-supported, allows compatibility with older versions of R.
+\code{perl} is taken out if not supported, allows compatibility with older
+versions of R. TODO: check for newer stringr function to do this.
 }
 \keyword{internal}

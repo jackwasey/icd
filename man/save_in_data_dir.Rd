@@ -8,13 +8,14 @@ save_in_data_dir(var_name, suffix = "", data_path = "data",
   package_dir = getwd(), envir = parent.frame())
 }
 \arguments{
-\item{var_name}{character or symbol, e.g. "myvar" or \code{myvar}, either of
-which would find \code{myvar} in the parent environment, and save it as
+\item{var_name}{character name of variable or its symbol either of which
+would find \code{myvar} in the parent environment, and save it as
 \code{myvar.RData} in \code{package_root/data}.}
 
 \item{suffix}{character scalar}
 
-\item{data_path}{path to data directory, default is data in current directory.}
+\item{data_path}{path to data directory, default is data in current
+directory.}
 
 \item{package_dir}{character containing the directory root of the package
 tree in which to save the data. Default is the current working directory.}
@@ -25,6 +26,7 @@ tree in which to save the data. Default is the current working directory.}
 invisibly returns the data
 }
 \description{
-File is named varname.RData with an optional suffix before .RData
+File is named \code{varname.RData} with an optional suffix before
+\code{.RData}
 }
 \keyword{internal}

@@ -51,12 +51,10 @@ release_questions <- function() {
     # documentation:
     "Have you checked all TODO comments, made into github issues where appropriate",
     "Do all examples look ok (not just run without errors)?",
-    "Vignette has updated description paragraph, in sync with DESCRIPTION",
     "Have all the fixed github issues been closed",
     "Is NEWS.md updated and contributors credited?",
     "Is README.Rmd updated and recompiled into README.md?",
     "Does every file have correct licence information?",
-    "Are github pages site refreshed from latest documentation?",
     "Is spelling correct everywhere? E.g. aspell_package_Rd_files('.')",
     # code quality:
     "Has the development branch been merged/rebased into master?",
@@ -83,6 +81,9 @@ release_questions <- function() {
     "Have all unnecessary files been ignored in built archive? Especially
       thinking of autoconfigure stuff. Look in the final built archive
       before submitting to CRAN?",
+    # not CRAN
+    "Are github pages site refreshed from latest documentation?",
+
     NULL
   )
 }

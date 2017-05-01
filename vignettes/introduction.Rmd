@@ -57,13 +57,9 @@ patients_icd9 <- data.frame(
 ## Introduction
 
 <!-- _TODO: update with first paragraph from DESCRIPTION_ -->
-Calculate comorbidities, Charlson scores, perform fast and accurate
-validation, conversion, manipulation, filtering and comparison of ICD-9 and
-ICD-10 codes. Common ambiguities and code formats are handled. This
-package enables a work flow from raw lists of ICD codes in hospital
-billing databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings
-from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. This
-package replaces 'icd9', which can now be uninstalled.
+```{r pkgdesc, results='asis', echo = FALSE}
+cat(packageDescription("icd")$Description)
+```
 
 When calculating which patients have which comorbidities, the data are typically structured in long or wide formats:
 ```{r show data formats, echo=TRUE}

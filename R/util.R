@@ -266,7 +266,7 @@ swap_names_vals <- function(x) {
 
 #' mimic the R CMD check test
 #'
-#' \code{R CMD check} is quick to tell you where UTF-8 characters are not
+#' \code{R CMD check} is quick to tell you where 'UTF-8' characters are not
 #' encoded, but gives no way of finding out which or where
 #' @examples
 #' \dontrun{
@@ -357,15 +357,15 @@ dir.exists <- function(paths) {
 
 #' return all matches for regex
 #'
-#' substitute for removed stringr function. \code{perl} is taken out if not
-#' supported, allows compatibility with older versions of R.
+#' \code{perl} is taken out if not supported, allows compatibility with older
+#' versions of R. TODO: check for newer stringr function to do this.
 #' @keywords internal
 str_match_all <- function(string, pattern, ...) {
   string <- as.character(string)
   regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...))
 }
 
-#' str_extract replacement
+#' TODO does 'stringr' do this?
 #' @keywords internal
 str_extract <- function(string, pattern, ...) {
   vapply(regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...)),

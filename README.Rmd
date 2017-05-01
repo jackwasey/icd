@@ -1,8 +1,6 @@
 ---
 title: icd Readme
 output:
-#  html_document:
-#    toc: true
   md_document:
     variant: markdown_github
 date: "`r format(Sys.time(), '%B %d, %Y')`"
@@ -77,7 +75,9 @@ patient_data <- data.frame(
 
 ## Introduction
 
-Calculate comorbidities, Charlson scores, perform fast and accurate validation, conversion, manipulation, filtering and comparison of ICD-9-CM (clinical modification) codes. ICD-9 codes appear numeric but leading and trailing zeroes, and both decimal and non-decimal "short" format codes exist. The package enables a work flow from raw lists of ICD-9 codes from hospital billing databases to comorbidities. ICD-9 to comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Any other mapping of codes, such as ICD-10, to comorbidities can be used.
+```{r pkgdesc, results='asis', echo = FALSE}
+cat(packageDescription("icd")$Description)
+```
 
 ## Relevance
 

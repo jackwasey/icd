@@ -274,7 +274,7 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
 #' for the 2011 ICD-9-CM after which there have been minimal changes.
 #' Thankfully, ICD-10-CM has machine readable data available.
 #'
-#' SOMEDAY add 'billable' column, and make consistent icd9 and icd10 lookup
+#' TODO Someday add 'billable' column, and make consistent ICD-9 and ICD-10 lookup
 #' tables
 #' @template save_data
 #' @template verbose

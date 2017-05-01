@@ -1,5 +1,7 @@
 # Version 2.2
  * Removed deprecated functions and data. `icd9` still available in CRAN repo, but not being updated. This greatly speeds up and simplifies the test suite.
+ * Bug fixes #89 #99 #106 #109 #100 #111 #113 #115 #116 #117 with many thanks to bug reporters and users
+ * stopped changing an attribute by reference, thanks to Tomas Kalibera for highlighting.
  
 # Version 2.1
  * Many thanks to @anobel for providing parsing and lookup of Heirarchical Condition Codes.

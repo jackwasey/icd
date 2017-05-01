@@ -8,8 +8,8 @@ Description: Calculate comorbidities, Charlson scores, perform fast and accurate
     from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. This
     package replaces icd9, which should be uninstalled.
 Classification/ACM-2012: Social and professional topics~Medical records, Applied computing~Health care information systems, Applied computing~Health informatics, Applied computing~Bioinformatics
-Version: 2.1.0.9000
-Date: 2016-08-30
+Version: 2.2
+Date: 2017-05-01
 Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
     person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org", comment = "Van Walraven scores"),
@@ -18,7 +18,7 @@ Authors@R: c(
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 URL: https://github.com/jackwasey/icd
 Depends:
-    R (>= 3.1.0)
+    R (>= 3.3.0)
 Imports:
     checkmate (>= 1.7.0),
     magrittr,

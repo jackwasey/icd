@@ -2,11 +2,11 @@
 % Please edit documentation in R/util.R
 \name{str_extract}
 \alias{str_extract}
-\title{str_extract replacement}
+\title{TODO does 'stringr' do this?}
 \usage{
 str_extract(string, pattern, ...)
 }
 \description{
-str_extract replacement
+TODO does 'stringr' do this?
 }
 \keyword{internal}
