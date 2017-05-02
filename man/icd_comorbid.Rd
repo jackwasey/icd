@@ -130,7 +130,7 @@ year there is a different ICD9/10 to CC mapping). This is only necessary
 for HCC mappings.}
 }
 \description{
-\link{\code{Rcpp}} approach to comorbidity assignment with
+\code{\link{Rcpp}} approach to comorbidity assignment with
   OpenMP and vector of integers strategy. It is very fast, and most time is
   now spent setting up the data to be passed in.
 

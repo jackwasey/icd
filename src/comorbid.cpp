@@ -29,7 +29,7 @@
 // R CMD INSTALL --no-docs icd && R -e "library(icd); icd:::runOpenMPVecInt();"
 
 //' @rdname icd_comorbid
-//' @description \link{\code{Rcpp}} approach to comorbidity assignment with
+//' @description \code{\link{Rcpp}} approach to comorbidity assignment with
 //'   OpenMP and vector of integers strategy. It is very fast, and most time is
 //'   now spent setting up the data to be passed in.
 //' @param aggregate single logical value, if \code{TRUE}, then take (possible

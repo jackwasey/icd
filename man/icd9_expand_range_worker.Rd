@@ -11,10 +11,20 @@ icd9_expand_range_worker(start, end, lookup, defined, ex_ambig_start,
 Expands a range of short ICD-9 codes, dropping ambiguous codes in the middle
 of ranges
 }
+\section{Ambiguous terminal parent codes}{
+ At the end of the output, we may
+  not want any higher-level codes at the end which would have children beyond
+  the specified range. There could be lots of lower level codes at the end,
+  so we actually have to search the whole list to be sure. One parent code
+  could have maximum of 110 child codes, so we just search the last 110
+  (TODO). This means that even if trying to preserve the ambiguous start,
+  setting \code{ex_ambig_end} will have to kill it, if it spills over.
+}
+
 \section{Ambiguous starting parent codes}{
  Excluding ambiguous parent codes
   from the start is easier than those near the end of the result. Just remove
-  those codes at the beginning which have children not in the output let's
+  those codes at the beginning which have children not in the output let us
   take the first 5, to cover cases like 100, 101, 102.1, 102.11, 102.2. There
   are only so many ways for parent codes to appear (assuming the input vector
   is ordered)
@@ -22,7 +32,7 @@ of ranges
 
 \examples{
 \dontrun{
-microbenchmark::micmicrobenchmark(
+microbenchmark::microbenchmark(
   icd9_expand_range_worker_alt_base("100", "114", icd9_short_n, TRUE, TRUE, TRUE),
   icd9_expand_range_worker("100", "114", icd9_short_n, TRUE, TRUE, TRUE),
   times = 5
