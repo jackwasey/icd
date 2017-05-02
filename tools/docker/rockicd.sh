@@ -44,7 +44,7 @@ fi
 DOCKER_IMAGE=${DOCKER_IMAGE/%\//}
 echo "using docker image: $DOCKER_IMAGE"
 
-TOOLS_DIR="$ICD_HOME/tools"
+TOOLS_DIR="$ICD_HOME/tools/docker"
 
 echo "Environment:"
 echo "ICD_PROJECT=${ICD_PROJECT_NAME:=icd}"

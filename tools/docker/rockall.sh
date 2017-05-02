@@ -6,5 +6,5 @@ IFS=$'\n\t'
 # clang builds which happen to have R installed.
 for d in $(docker images | awk '/jackwasey\/r-/{print $1}'); do
   echo "rocking: ${d}"
-  ./rock-icd "${d}"
+  ./rockicd.sh "${d}" || true # tolerate failure
 done
