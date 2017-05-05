@@ -1,3 +1,3 @@
-inters: with_defaults(camel_case_linter = NULL, snake_case_linter = NULL, object_usage_linter = NULL, line_length_linter(150), object_length_linter(length = 36L))
+linters: with_defaults(camel_case_linter = NULL, snake_case_linter = NULL, object_usage_linter = NULL, line_length_linter(150), object_length_linter(length = 36L))
 exclusions: list("R/RcppExports.R")
 cache: TRUE
