@@ -40,13 +40,13 @@ icd10_comorbid_parent_search_str <- function(
 }
 
 
-icd10_comorbid_parent_search_all_at_once <- function(x,
-                                                     map,
-                                                     visit_name = NULL,
-                                                     icd_name = get_icd_name(x),
-                                                     short_code = icd_guess_short(x, icd_name = icd_name),
-                                                     short_map = icd_guess_short(map),
-                                                     return_df = FALSE, ...) {
+icd10_comorbid_parent_search_all <- function(x,
+                                             map,
+                                             visit_name = NULL,
+                                             icd_name = get_icd_name(x),
+                                             short_code = icd_guess_short(x, icd_name = icd_name),
+                                             short_map = icd_guess_short(map),
+                                             return_df = FALSE, ...) {
 
   if (!short_code)
     x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])

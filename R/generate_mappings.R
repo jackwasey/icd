@@ -308,7 +308,9 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
     if (verbose)
       message("f working on: ", paste(x, collapse = " "))
     kids <- icd_children_defined.icd10cm(x, short_code = TRUE)
-    c(kids, x) %>% unique %>% icd_sort.icd10
+    c(kids, x) %>%
+      unique %>%
+      icd_sort.icd10
   }
 
   icd10_map_quan_elix <- lapply(quan_elix_raw, f)
@@ -388,7 +390,9 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   # size based on the input data before comorbidity matching.
   f <- function(x) {
     icd_children_defined.icd10cm(x, short_code = TRUE) %>%
-      c(x) %>% unique %>% icd_sort.icd10
+      c(x) %>%
+      unique %>%
+      icd_sort.icd10
   }
 
   icd10_map_quan_deyo <- lapply(quan_charl_raw, f)

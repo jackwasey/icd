@@ -78,7 +78,10 @@ rtf_parse_year <- function(year = "2011", ..., save_data = FALSE, verbose = FALS
 
   invisible(
     data.frame(
-      code  = out %>% unname %>% icd_decimal_to_short.icd9 %>% icd9cm,
+      code = out %>%
+        unname %>%
+        icd_decimal_to_short.icd9 %>%
+        icd9cm,
       desc = names(out),
       stringsAsFactors = FALSE)
   )
@@ -607,7 +610,7 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
   for (v in vals) {
     # take care of ranges
     if (grepl("-", v)) {
-      v %>%  strsplit("-", fixed = TRUE) %>% unlist -> pair
+      pair <- strsplit(v, "-", fixed = TRUE) %>% unlist
       # sanity check
       stopifnot(all(icd_is_valid.icd9(pair, short_code = FALSE)))
       if (verbose)
@@ -637,14 +640,16 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
 rtf_parse_qualifier_subset <- function(qual) {
   assert_string(qual) # one at a time
   out <- c()
-  qual %>% strip %>%
+  strip(qual) %>%
     strsplit("[]\\[,]") %>%
     unlist %>%
     grep(pattern = "[[:digit:]]", value = TRUE) %>%
     strsplit(",") %>% unlist -> vals
   for (v in vals) {
     if (grepl("-", v)) {
-      strsplit(v, "-") %>% unlist %>% as.integer -> pair
+      strsplit(v, "-") %>%
+        unlist %>%
+        as.integer -> pair
       out <- c(out, seq(pair[1], pair[2]))
       next
     }

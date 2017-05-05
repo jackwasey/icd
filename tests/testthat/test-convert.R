@@ -21,7 +21,7 @@ test_that("extract decimal parts - invalid or empty input", {
   expect_equal(icd_decimal_to_parts.icd9(character()), list(mjr = character(),
                                                             mnr = character()))
 
-  expect_equal( icd_decimal_to_parts.icd9(""), list(mjr = NA_character_, mnr = NA_character_) )
+  expect_equal(icd_decimal_to_parts.icd9(""), list(mjr = NA_character_, mnr = NA_character_))
 
   expect_equal(
     icd_decimal_to_parts.icd9("", mnr_empty = NA_character_),

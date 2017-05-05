@@ -173,15 +173,15 @@ test_that("Charlson Deyo doesn't double count disease with two severities", {
 
 test_that("Elixhauser doesn't double count disease with multiple severities", {
   expect_false(any(icd9_map_quan_elix[["DM"]] %in%
-                     icd9_map_quan_elix[["DMcx"]] ))
+                     icd9_map_quan_elix[["DMcx"]]))
   expect_false(any(icd9_map_quan_elix[["Tumor"]] %in%
-                     icd9_map_quan_elix[["Mets"]] ))
+                     icd9_map_quan_elix[["Mets"]]))
   expect_false(any(icd9_map_elix[["DM"]] %in%
-                     icd9_map_elix[["DMcx"]] ))
+                     icd9_map_elix[["DMcx"]]))
   expect_false(any(icd9_map_elix[["Tumor"]] %in%
-                     icd9_map_elix[["Mets"]] ))
-  expect_false(any(icd9_map_ahrq[["DM"]] %in% icd9_map_ahrq[["DMcx"]] ))
-  expect_false(any(icd9_map_ahrq[["Tumor"]] %in% icd9_map_ahrq[["Mets"]] ))
+                     icd9_map_elix[["Mets"]]))
+  expect_false(any(icd9_map_ahrq[["DM"]] %in% icd9_map_ahrq[["DMcx"]]))
+  expect_false(any(icd9_map_ahrq[["Tumor"]] %in% icd9_map_ahrq[["Mets"]]))
 })
 
 # next couple of tests demonstrate that the interpreted data is correctly
@@ -692,7 +692,9 @@ test_that("comorbidities created from source data frame coded as factors", {
   v2$icd_code <- as.factor(v2$icd_code)
 
   res <- icd9_comorbid_ahrq(v2)
-  res_nofactor <- vermont_dx %>% icd_wide_to_long %>% icd9_comorbid_ahrq
+  res_nofactor <- vermont_dx %>%
+    icd_wide_to_long %>%
+    icd9_comorbid_ahrq
   expect_identical(res, res_nofactor)
 })
 

@@ -1,11 +1,11 @@
 ## Note
-* Removed stringr dependency, thus resolves stringr-related errors, as requested.
+* fixes ASAN error by not including testthat.h
+* uses configure script to determine C++11 compatibility
 
 ## Test environments
-* Ubuntu 16.04 R 3.3.1, clang 3.9 and gcc 5.3.1
+* Ubuntu 17.04 R 3.4.0, clang 4.0
 * Ubuntu 14.04 (on travis-ci) R 3.2.4 patched, gcc 4.6.3
-* Wercker Debian (rocker/hadleyverse) GCC 5.3.1, R 3.2.4 patched
-* Debian testing/unstable in docker with R-devel, ASAN+UBSAN GCC, 3.8, 3.9 and trunk
+* Debian testing/unstable in docker with R-devel, ASAN+UBSAN GCC 7.1, 4.0 and trunk
 
 # R CMD check results
 

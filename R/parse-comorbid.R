@@ -82,7 +82,10 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
     the_pairs <- some_pairs[lapply(some_pairs, length) == 2]
     out <- c(out, lapply(the_pairs, function(x) sas_expand_range(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
-    out %>% unlist %>% unique %>% as.icd9 %>% as.icd_short_diag -> icd9_map_ahrq[[cmb]]
+    icd9_map_ahrq[[cmb]] <- unlist(out) %>%
+      unique %>%
+      as.icd9 %>%
+      as.icd_short_diag
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
@@ -143,9 +146,11 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
 
-  icd10_map_ahrq[ahrq_htn] %>% unlist %>% unname -> icd10_map_ahrq[["HTNCX"]]
-  icd10_map_ahrq[ahrq_chf] %>% unlist %>% unname -> icd10_map_ahrq[["CHF"]]
-  icd10_map_ahrq[ahrq_renal] %>% unlist %>% unname -> icd10_map_ahrq[["RENLFAIL"]]
+  unun <- function(x) unname(unlist(x))
+
+  icd10_map_ahrq[["HTNCX"]] <- icd10_map_ahrq[ahrq_htn] %>% unun
+  icd10_map_ahrq[["CHF"]] <- icd10_map_ahrq[ahrq_chf] %>% unun
+  icd10_map_ahrq[["RENLFAIL"]] <- icd10_map_ahrq[ahrq_renal] %>% unun
 
   icd10_map_ahrq[ahrq_unused] <- NULL
 
@@ -209,7 +214,10 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   # do use icd:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
   names(icd9_map_quan_deyo) <- icd::icd_names_charlson_abbrev
-  icd9_map_quan_deyo %<>% as.icd_short_diag %>% icd9 %>% icd_comorbidity_map
+  icd9_map_quan_deyo %<>%
+    as.icd_short_diag %>%
+    icd9 %>%
+    icd_comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd9_map_quan_deyo)

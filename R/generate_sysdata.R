@@ -188,7 +188,8 @@ icd9_generate_sources <- function(save_data = FALSE) {
       paste0(cms_base, "v25_icd9.zip"),
       paste0(cms_base, "v24_icd9.zip"),
       paste0(cms_base, "v23_icd9.zip")),
-    rtf_url = c( # FY11,12,13,14 are the same?
+    # FY11,12,13,14 are the same?
+    rtf_url = c(
       rep_len(paste0(cdc_base, "ICD9-CM/2011/Dtab12.zip"), 4),
       paste0(cdc_base, "ICD9-CM/2010/DTAB11.zip"),
       paste0(cdc_base, "ICD9-CM/2009/Dtab10.zip"),

@@ -204,7 +204,9 @@ test_that("printing a comorbidity map works very simply", {
 })
 
 test_that("is comorbidity map?", {
-  icd9_map_ahrq %>% unclass %>% icd_comorbidity_map -> x
+  icd9_map_ahrq %>%
+    unclass %>%
+    icd_comorbidity_map -> x
   expect_true(is.icd_comorbidity_map(icd9_map_ahrq))
   expect_true(is.icd_comorbidity_map(x))
   expect_is(icd9_map_ahrq, "icd_comorbidity_map")

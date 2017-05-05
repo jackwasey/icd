@@ -389,7 +389,7 @@ test_that("filter valid - data frame input", {
 
   # use invert and isShort args:
   expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = TRUE), pts_invalid_mix[2, ])
-  expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = FALSE), pts_invalid_mix[c(1, 3 ), ])
+  expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = FALSE), pts_invalid_mix[c(1, 3), ])
 })
 
 test_that("validate mappings", {
