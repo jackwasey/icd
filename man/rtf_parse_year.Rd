@@ -28,6 +28,6 @@ CDC release is \code{Dtab12.rtf} from 2011.
 }
 \details{
 The file itself is 7 bit ASCII, but has its own internal encoding using
-'CP1252.' Test meniere's disease with lines 24821 to 24822 from 2012 RTF
+'CP1252.' Test 'Meniere's' disease with lines 24821 to 24822 from 2012 RTF
 }
 \keyword{internal}

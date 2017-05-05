@@ -14,7 +14,7 @@ generate_spelling <- function(out = ".aspell/words.pws", save_data = TRUE) {
                     "wmurphyrd")
   proper_nouns <- c(proper_nouns, paste(proper_nouns, "'s", sep = ""))
   acronyms <- c("AHRQ", "BISHCA", "CC", "CCs", "CRAN", "CDC", "CMS", "CSV", "DRG",
-                "POA", "HTN", "ICD", "HCC", "HCCs",
+                "POA", "HTN", "ICD", "HCC", "HCCs", "icd",
                 "RTF", "SAS", "VAHHS", "NSO", "WSU")
   other <- c("comorbidity", "comorbidities", "comorbid",
              "unclassifiable", "requestor", "Transuranium", "TODO",

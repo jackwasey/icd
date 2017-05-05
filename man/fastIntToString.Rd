@@ -21,7 +21,7 @@ Fast conversion from integer vector to character vector using C++
 }
 \section{Functions}{
 \itemize{
-\item \code{fastIntToStringRcpp}: Same using Rcpp
+\item \code{fastIntToStringRcpp}: Same using \code{Rcpp}
 }}
 
 \examples{

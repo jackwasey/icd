@@ -6,7 +6,7 @@ Description: Calculate comorbidities, Charlson scores, perform fast and accurate
     package enables a work flow from raw lists of ICD codes in hospital
     billing databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings
     from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. This
-    package replaces icd9, which should be uninstalled.
+    package replaces 'icd9', which should be uninstalled.
 Classification/ACM-2012: Social and professional topics~Medical records, Applied computing~Health care information systems, Applied computing~Health informatics, Applied computing~Bioinformatics
 Version: 2.2
 Date: 2017-05-01

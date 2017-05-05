@@ -17,7 +17,7 @@ ICD-10 codes. Common ambiguities and code formats are handled. This
 package enables a work flow from raw lists of ICD codes in hospital
 billing databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings
 from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. This
-package replaces icd9, which should be uninstalled.
+package replaces 'icd9', which should be uninstalled.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{icd_comorbid}}
