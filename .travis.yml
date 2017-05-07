@@ -52,7 +52,7 @@ before_script:
 after_success:
  - ls -aR
  - cat ./icd.Rcheck/tests/test-all.Rout
- - Rscript ./tools/covr.R "${R_COVR}" coveralls
+ - Rscript ./tools/covr.R "${R_COVR:-true}" coveralls
  - Rscript -e 'lintr::lint_package()'
 
 notifications:
