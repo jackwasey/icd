@@ -48,6 +48,7 @@ before_script:
  - export R_CHECK_CRAN_INCOMING_=FALSE
  - export ICD_SLOW_TESTS=TRUE
  - export _R_CHECK_FORCE_SUGGESTS_=FALSE
+ - export R_COVR=TRUE # do on travis a wercker not functioning
 
 after_success:
  - ls -aR
