@@ -20,7 +20,7 @@ if (tolower(args[[1]]) == "true") {
     'src/ranges_alt.cpp',
     'R/fuzz.R')
 
-  message("excluding from coverage: ", paste(line_exclusions))
+  message("excluding from coverage: ", paste(exclusions))
 
   if (args[[2]] == "coveralls")
     covr::coveralls(quiet = FALSE, exclusions = exclusions)
