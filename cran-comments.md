@@ -4,8 +4,8 @@
 
 ## Test environments
 * Ubuntu 17.04 R 3.4.0, clang 4.0
-* Ubuntu 14.04 (on travis-ci) R 3.2.4 patched, gcc 4.6.3
-* Debian testing/unstable in docker with R-devel, ASAN+UBSAN GCC 7.1, 4.0 and trunk
+* Ubuntu 12.04 (on travis-ci) R-devel, gcc
+* Debian testing/unstable in docker with R-devel, ASAN+UBSAN GCC 7.1, 4.0, trunk
 
 # R CMD check results
 
