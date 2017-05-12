@@ -12,6 +12,12 @@ install:
 
 # Adapt as necessary starting from here
 
+# Jack: build on x86 and x64 (had a CRAN failure on 32 bit Windows...)
+platform:
+  - x86
+  - x64
+#  - Any CPU
+
 build_script:
   - travis-tool.sh install_deps
 

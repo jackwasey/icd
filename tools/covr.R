@@ -8,7 +8,7 @@ if (tolower(args[[1]]) == "true") {
 
   options(warn = -1)
 
-  line_exclusions = list(
+  exclusions = list(
     'inst/include/icd_RcppExports.h',
     'R/children_alt.R',
     'R/comorbid_alt.R',
@@ -20,16 +20,16 @@ if (tolower(args[[1]]) == "true") {
     'src/ranges_alt.cpp',
     'R/fuzz.R')
 
-  message("excluding from coverage: ", paste(line_exclusions))
+  message("excluding from coverage: ", paste(exclusions))
 
   if (args[[2]] == "coveralls")
-    covr::coveralls(quiet = TRUE, line_exclusions = line_exclusions)
+    covr::coveralls(quiet = FALSE, exclusions = exclusions)
   else if (args[[2]] == "codecov")
-    covr::codecov(quiet = TRUE, line_exclusions = line_exclusions)
+    covr::codecov(quiet = FALSE, exclusions = exclusions)
   else
     stop("Must use codecov or coveralls.")
 
-  covr::package_coverage(type = "vignette", quiet = TRUE, line_exclusions = line_exclusions)
+  covr::package_coverage(type = "vignette", quiet = FALSE, exclusions = exclusions)
 } else {
   message("Not running code coverage")
 }

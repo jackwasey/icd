@@ -4,25 +4,17 @@
 
 ## Test environments
 * Ubuntu 17.04 R 3.4.0, clang 4.0
-* Ubuntu 14.04 (on travis-ci) R 3.2.4 patched, gcc 4.6.3
-* Debian testing/unstable in docker with R-devel, ASAN+UBSAN GCC 7.1, 4.0 and trunk
+* Ubuntu 12.04 (on travis-ci) R-devel, gcc
+* Debian testing/unstable in docker with R-devel, ASAN+UBSAN GCC 7.1, clang 4.0, trunk
 
 # R CMD check results
 
-There are two notes:
+There is one note:
 
 * checking installed package size ... NOTE
   installed size is 13.0Mb
   sub-directories of 1Mb or more:
-    data   1.9Mb
-    doc    2.2Mb
-    libs   7.8Mb
-
-The included data is maximally compressed with xz, and the source package is
-only 2.8M.
-
-* checking data for non-ASCII characters ... NOTE
-  Note: found 14 marked Latin-1 strings
-  Note: found 96 marked UTF-8 strings
-
-These are required to describe disease names with accented characters correctly.
+    R      1.5Mb
+    data   1.3Mb
+    doc    2.1Mb
+    libs   7.6Mb

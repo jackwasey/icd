@@ -8,12 +8,12 @@ build:
         name: icd test environment
         code: |
             export ICD_SLOW_TESTS=true
-            export R_COVR=true
+            export R_COVR=false
             rm .Rinstignore  # install everything for testing
             sed -i '/[Dd]ata/d' .Rbuildignore # do include data for testing
     - jimhester/r-dependencies:
         github_packages:
-         - jimhester/covr
+         # - jimhester/covr
          - jimhester/lintr
          - jimhester/r-check
     - script:
