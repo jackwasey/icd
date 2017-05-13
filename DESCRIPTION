@@ -30,6 +30,7 @@ Suggests:
     RODBC,
     roxygen2 (>= 5.0.0),
     rmarkdown,
+    stringr,
     testthat,
     xml2
 LazyData: true
