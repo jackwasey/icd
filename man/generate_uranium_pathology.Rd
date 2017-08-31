@@ -4,7 +4,7 @@
 \alias{generate_uranium_pathology}
 \title{generate uranium pathology data}
 \source{
-\url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+\url{http://ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
 }
 \usage{
 generate_uranium_pathology(save_data = TRUE, offline = TRUE)

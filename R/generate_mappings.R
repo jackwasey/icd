@@ -410,7 +410,7 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
 
 fetch_uranium_pathology <- function(offline = TRUE) {
   unzip_to_data_raw(
-    url = "http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
+    url = "http://ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
     file_name = "Pathology_Office2007.accdb",
     offline = offline)
 }
@@ -424,7 +424,7 @@ fetch_uranium_pathology <- function(offline = TRUE) {
 #' Windows build of \pkg{RODBC}.
 #' @template parse-template
 #' @source
-#' \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+#' \url{http://ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
 #'
 #' @keywords internal
 generate_uranium_pathology <- function(save_data = TRUE, offline = TRUE) {
