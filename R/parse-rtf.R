@@ -28,7 +28,8 @@
 #' @param offline single logical value
 #' @keywords internal
 rtf_fetch_year <- function(year, offline = TRUE) {
-  assert_string(year)
+  year <- as.character(year)
+  assert_string(year, pattern = "[[:digit:]]{4}")
   assert_flag(offline)
 
   rtf_dat <- icd9_sources[icd9_sources$f_year == year, ]
@@ -152,6 +153,8 @@ rtf_parse_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, ...
 
   fifth_backref <- grep(re_fifth_range_other, filtered, ...)
   # for these, construct a string which will be captured in the next block
+  # e.g. "Requires fifth digit to identify stage:" becomes
+  # "Requires fifth digit to identify stage: 634 Spontaneous abortion"
   filtered[fifth_backref] <- paste(filtered[fifth_backref], filtered[fifth_backref - 1])
 
   re_fourth_range <- "fourth-digit.+categor"
@@ -164,7 +167,8 @@ rtf_parse_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, ...
     str_pair_match("(.*category )([[:digit:]]{3})$", ...) %>%
     unname -> fourth_digit_zero_categories
 
-  # deal with 657 and 672 (in the default RTF)
+  # deal with 657 and 672 (in the default RTF), by appending the elements to the
+  # end of the input list. argh.
   for (categ in fourth_digit_zero_categories) {
     parent_row <- grep(paste0("^", categ, " .+"), filtered, value = TRUE, ...)
     filtered[length(filtered) + 1] <-

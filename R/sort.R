@@ -73,7 +73,9 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
     x[icd9_order_cpp(y)]
 
   class(res) <- class(x)
+  keep_names <- names(res)
   attributes(res) <- attributes(x)
+  names(res) <- keep_names
   res
 }
 

@@ -76,8 +76,17 @@ test_that("some majors are the same as sub-chapters", {
 
 })
 
+test_that("Some known problem codes are correctly explained, github #126, #124, #123", {
+  expect_equal(icd_explain("0381"), "Staphylococcal septicemia")
+  expect_equal(icd_explain("291"), "Alcohol-induced mental disorders")
+  expect_equal(icd_explain("361"), "Retinal detachments and defects")
+  expect_equal(icd_explain("294"), "Persistent mental disorders due to conditions classified elsewhere")
+  expect_equal(icd_explain("6811"), "Toe") # Cellulitis and abscess of toe
+  expect_equal(icd_explain("7865"), "Chest pain")
+})
+
 test_that("7806 is correctly explained, github #116", {
-  expect_equal(icd_explain("7806"), "Fever and other psychological disturbances of temperature regulation")
+  expect_equal(icd_explain("7806"), "Fever and other physiologic disturbances of temperature regulation")
 })
 
 test_that("737 is correctly explained, github #111", {
