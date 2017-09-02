@@ -77,30 +77,56 @@ test_that("some majors are the same as sub-chapters", {
 })
 
 test_that("Some known problem codes are correctly explained, github #126, #124, #123", {
-  expect_equal(icd_explain("0381"), "Staphylococcal septicemia")
-  expect_equal(icd_explain("291"), "Alcohol-induced mental disorders")
-  expect_equal(icd_explain("361"), "Retinal detachments and defects")
-  expect_equal(icd_explain("294"), "Persistent mental disorders due to conditions classified elsewhere")
-  expect_equal(icd_explain("6811"), "Toe") # Cellulitis and abscess of toe
-  expect_equal(icd_explain("7865"), "Chest pain")
+  expect_explain_equal("0381", "Staphylococcal septicemia")
+  expect_explain_equal("291", "Alcohol-induced mental disorders")
+  expect_explain_equal("361", "Retinal detachments and defects")
+  expect_explain_equal("294", "Persistent mental disorders due to conditions classified elsewhere")
+  expect_explain_equal("6811", "Toe") # Cellulitis and abscess of toe
+  expect_explain_equal("7865", "Chest pain")
 })
 
 test_that("7806 is correctly explained, github #116", {
-  expect_equal(icd_explain("7806"), "Fever and other physiologic disturbances of temperature regulation")
+  expect_explain_equal("7806", "Fever and other physiologic disturbances of temperature regulation")
 })
 
 test_that("737 is correctly explained, github #111", {
-  expect_equal(icd_explain("737"), "Curvature of spine")
+  expect_explain_equal("737", "Curvature of spine")
   expect_equal(icd_explain_table("737")[["short_desc"]], "Curvature of spine")
   expect_equal(icd_explain_table("737")[["long_desc"]], "Curvature of spine")
 })
 
 test_that("345.1 is parsed correctly, github #109", {
-  expect_equal(icd_explain("345.1"), "Generalized convulsive epilepsy")
+  expect_explain_equal("345.1", "Generalized convulsive epilepsy")
 })
 
 test_that("414, 4140 and 4141 are parsed correctly, github #99", {
-  expect_equal(icd_explain("414"), "Other forms of chronic ischemic heart disease")
-  expect_equal(icd_explain("4140"), "Coronary atherosclerosis")
-  expect_equal(icd_explain("4141"), "Aneurysm and dissection of heart")
+  expect_explain_equal("414", "Other forms of chronic ischemic heart disease")
+  expect_explain_equal("4140", "Coronary atherosclerosis")
+  expect_explain_equal("4141", "Aneurysm and dissection of heart")
+})
+
+test_that("some randomly chosen codes are correct", {
+  expect_explain_equal("674.54", "Peripartum cardiomyopathy, postpartum condition or complication")
+  expect_explain_equal("E992.8", "Injury due to war operations by other marine weapons")
+  expect_explain_equal("E870.5", "Accidental cut, puncture, perforation or hemorrhage during aspiration of fluid or tissue, puncture, and catheterization") # nolint
+  expect_explain_equal("V53.0", "Devices related to nervous system and special senses")
+  expect_explain_equal("V53.3", "Cardiac device")
+  expect_explain_equal("996.88", "Complications of transplanted organ, stem cell")
+  expect_explain_equal("970.8", "Other specified central nervous system stimulants")
+  expect_explain_equal("970.81", "Poisoning by cocaine")
+  expect_explain_equal("786", "Symptoms involving respiratory system and other chest symptoms")
+  expect_explain_equal("621.4", "Hematometra")
+  expect_explain_equal("425.18", "Other hypertrophic cardiomyopathy")
+  expect_explain_equal("307.2", "Tics")
+  expect_explain_equal("307.23", "Tourette's disorder")
+  expect_explain_equal("151", "Malignant neoplasm of stomach")
+  expect_explain_equal("1518", "Malignant neoplasm of other specified sites of stomach")
+  expect_explain_equal("01896", "Miliary tuberculosis, unspecified, tubercle bacilli not found by bacteriological or histological examination, but tuberculosis confirmed by other methods [inoculation of animals]") # nolint
+
+  # cases which were special in parsing:
+  expect_explain_equal("V30", "Single liveborn")
+  expect_explain_equal("V300", "Single liveborn, Born in hospital")
+  expect_explain_equal("V3001", "Single liveborn, born in hospital, delivered by cesarean section")
+  expect_explain_equal("V302", "Single liveborn, born outside hospital and not hospitalized")
+  expect_explain_equal("345.01", "Generalized nonconvulsive epilepsy, with intractable epilepsy")
 })

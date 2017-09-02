@@ -118,6 +118,11 @@ expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
   eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd10_sub_chapters, ...)))
 }
 
+expect_explain_equal <- function(x, desc, ...) {
+  eval(bquote(expect_equal(icd_explain(.(x)), .(desc), ...)))
+}
+
+
 #' @rdname expect_chap_equal
 expect_icd9_sub_chap_equal <- function(x, start, end, ...) {
   eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd9_sub_chapters, ...)))

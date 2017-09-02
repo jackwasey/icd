@@ -1,3 +1,6 @@
+# Version 2.3
+ * Fixed nasty bug which failed to sort the names of a vector of ICD codes correctly, resulting in some incorrect icd_explain. Fixes github #123, #124, #126.
+
 # Version 2.2
  * Removed deprecated functions and data. `icd9` still available in CRAN repo, but not being updated. This greatly speeds up and simplifies the test suite.
  * Bug fixes #89 #99 #106 #109 #100 #111 #113 #115 #116 #117 with many thanks to bug reporters and users
