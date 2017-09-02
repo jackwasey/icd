@@ -17,7 +17,7 @@ namespace icd {
             require("icd", Rcpp::Named("quietly") = true);
             typedef int(*Ptr_validate)(const char*);
             static Ptr_validate p_validate = (Ptr_validate)
-                R_GetCCallable("icd", "icd_RcppExport_validate");
+                R_GetCCallable("icd", "_icd_RcppExport_validate");
             if (!p_validate(sig)) {
                 throw Rcpp::function_not_exported(
                     "C++ function with signature '" + std::string(sig) + "' not found in icd");
@@ -30,12 +30,12 @@ namespace icd {
         static Ptr_icd9MajMinToCode p_icd9MajMinToCode = NULL;
         if (p_icd9MajMinToCode == NULL) {
             validateSignature("CV(*icd9MajMinToCode)(const CV,const CV,bool)");
-            p_icd9MajMinToCode = (Ptr_icd9MajMinToCode)R_GetCCallable("icd", "icd_icd9MajMinToCode");
+            p_icd9MajMinToCode = (Ptr_icd9MajMinToCode)R_GetCCallable("icd", "_icd_icd9MajMinToCode");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToCode(Rcpp::wrap(mjr), Rcpp::wrap(mnr), Rcpp::wrap(isShort));
+            rcpp_result_gen = p_icd9MajMinToCode(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)), Shield<SEXP>(Rcpp::wrap(isShort)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -49,12 +49,12 @@ namespace icd {
         static Ptr_icd9MajMinToCodePrePadded p_icd9MajMinToCodePrePadded = NULL;
         if (p_icd9MajMinToCodePrePadded == NULL) {
             validateSignature("CV(*icd9MajMinToCodePrePadded)(const CV,const CV,bool)");
-            p_icd9MajMinToCodePrePadded = (Ptr_icd9MajMinToCodePrePadded)R_GetCCallable("icd", "icd_icd9MajMinToCodePrePadded");
+            p_icd9MajMinToCodePrePadded = (Ptr_icd9MajMinToCodePrePadded)R_GetCCallable("icd", "_icd_icd9MajMinToCodePrePadded");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToCodePrePadded(Rcpp::wrap(mjr), Rcpp::wrap(mnr), Rcpp::wrap(isShort));
+            rcpp_result_gen = p_icd9MajMinToCodePrePadded(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)), Shield<SEXP>(Rcpp::wrap(isShort)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -68,12 +68,12 @@ namespace icd {
         static Ptr_icd9MajMinToCodeStd p_icd9MajMinToCodeStd = NULL;
         if (p_icd9MajMinToCodeStd == NULL) {
             validateSignature("VecStr(*icd9MajMinToCodeStd)(const VecStr&,const VecStr&,bool)");
-            p_icd9MajMinToCodeStd = (Ptr_icd9MajMinToCodeStd)R_GetCCallable("icd", "icd_icd9MajMinToCodeStd");
+            p_icd9MajMinToCodeStd = (Ptr_icd9MajMinToCodeStd)R_GetCCallable("icd", "_icd_icd9MajMinToCodeStd");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToCodeStd(Rcpp::wrap(mjr), Rcpp::wrap(mnr), Rcpp::wrap(isShort));
+            rcpp_result_gen = p_icd9MajMinToCodeStd(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)), Shield<SEXP>(Rcpp::wrap(isShort)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -87,12 +87,12 @@ namespace icd {
         static Ptr_icd9MajMinToShort p_icd9MajMinToShort = NULL;
         if (p_icd9MajMinToShort == NULL) {
             validateSignature("CV(*icd9MajMinToShort)(const CV,const CV)");
-            p_icd9MajMinToShort = (Ptr_icd9MajMinToShort)R_GetCCallable("icd", "icd_icd9MajMinToShort");
+            p_icd9MajMinToShort = (Ptr_icd9MajMinToShort)R_GetCCallable("icd", "_icd_icd9MajMinToShort");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToShort(Rcpp::wrap(mjr), Rcpp::wrap(mnr));
+            rcpp_result_gen = p_icd9MajMinToShort(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -106,12 +106,12 @@ namespace icd {
         static Ptr_icd9MajMinToDecimal p_icd9MajMinToDecimal = NULL;
         if (p_icd9MajMinToDecimal == NULL) {
             validateSignature("CV(*icd9MajMinToDecimal)(const CV,const CV)");
-            p_icd9MajMinToDecimal = (Ptr_icd9MajMinToDecimal)R_GetCCallable("icd", "icd_icd9MajMinToDecimal");
+            p_icd9MajMinToDecimal = (Ptr_icd9MajMinToDecimal)R_GetCCallable("icd", "_icd_icd9MajMinToDecimal");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToDecimal(Rcpp::wrap(mjr), Rcpp::wrap(mnr));
+            rcpp_result_gen = p_icd9MajMinToDecimal(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -125,12 +125,12 @@ namespace icd {
         static Ptr_icd9AppendMinors p_icd9AppendMinors = NULL;
         if (p_icd9AppendMinors == NULL) {
             validateSignature("void(*icd9AppendMinors)(VecStr&,const VecStr&,bool)");
-            p_icd9AppendMinors = (Ptr_icd9AppendMinors)R_GetCCallable("icd", "icd_icd9AppendMinors");
+            p_icd9AppendMinors = (Ptr_icd9AppendMinors)R_GetCCallable("icd", "_icd_icd9AppendMinors");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9AppendMinors(Rcpp::wrap(m), Rcpp::wrap(mnr), Rcpp::wrap(isShort));
+            rcpp_result_gen = p_icd9AppendMinors(Shield<SEXP>(Rcpp::wrap(m)), Shield<SEXP>(Rcpp::wrap(mnr)), Shield<SEXP>(Rcpp::wrap(isShort)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -143,12 +143,12 @@ namespace icd {
         static Ptr_icd9MajMinToShortStd p_icd9MajMinToShortStd = NULL;
         if (p_icd9MajMinToShortStd == NULL) {
             validateSignature("VecStr(*icd9MajMinToShortStd)(const VecStr&,const VecStr&)");
-            p_icd9MajMinToShortStd = (Ptr_icd9MajMinToShortStd)R_GetCCallable("icd", "icd_icd9MajMinToShortStd");
+            p_icd9MajMinToShortStd = (Ptr_icd9MajMinToShortStd)R_GetCCallable("icd", "_icd_icd9MajMinToShortStd");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToShortStd(Rcpp::wrap(mjr), Rcpp::wrap(mnr));
+            rcpp_result_gen = p_icd9MajMinToShortStd(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -162,12 +162,12 @@ namespace icd {
         static Ptr_icd9MajMinToShortSingleStd p_icd9MajMinToShortSingleStd = NULL;
         if (p_icd9MajMinToShortSingleStd == NULL) {
             validateSignature("VecStr(*icd9MajMinToShortSingleStd)(const Str&,const VecStr&)");
-            p_icd9MajMinToShortSingleStd = (Ptr_icd9MajMinToShortSingleStd)R_GetCCallable("icd", "icd_icd9MajMinToShortSingleStd");
+            p_icd9MajMinToShortSingleStd = (Ptr_icd9MajMinToShortSingleStd)R_GetCCallable("icd", "_icd_icd9MajMinToShortSingleStd");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToShortSingleStd(Rcpp::wrap(mjr), Rcpp::wrap(mnr));
+            rcpp_result_gen = p_icd9MajMinToShortSingleStd(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -181,12 +181,12 @@ namespace icd {
         static Ptr__attr_decimal_diag p__attr_decimal_diag = NULL;
         if (p__attr_decimal_diag == NULL) {
             validateSignature("void(*_attr_decimal_diag)(Rcpp::RObject&,bool)");
-            p__attr_decimal_diag = (Ptr__attr_decimal_diag)R_GetCCallable("icd", "icd__attr_decimal_diag");
+            p__attr_decimal_diag = (Ptr__attr_decimal_diag)R_GetCCallable("icd", "_icd__attr_decimal_diag");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p__attr_decimal_diag(Rcpp::wrap(x), Rcpp::wrap(value));
+            rcpp_result_gen = p__attr_decimal_diag(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(value)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -199,12 +199,12 @@ namespace icd {
         static Ptr__attr_short_diag p__attr_short_diag = NULL;
         if (p__attr_short_diag == NULL) {
             validateSignature("void(*_attr_short_diag)(Rcpp::RObject&,bool)");
-            p__attr_short_diag = (Ptr__attr_short_diag)R_GetCCallable("icd", "icd__attr_short_diag");
+            p__attr_short_diag = (Ptr__attr_short_diag)R_GetCCallable("icd", "_icd__attr_short_diag");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p__attr_short_diag(Rcpp::wrap(x), Rcpp::wrap(value));
+            rcpp_result_gen = p__attr_short_diag(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(value)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -217,12 +217,12 @@ namespace icd {
         static Ptr_icd9ComorbidShortCpp p_icd9ComorbidShortCpp = NULL;
         if (p_icd9ComorbidShortCpp == NULL) {
             validateSignature("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
-            p_icd9ComorbidShortCpp = (Ptr_icd9ComorbidShortCpp)R_GetCCallable("icd", "icd_icd9ComorbidShortCpp");
+            p_icd9ComorbidShortCpp = (Ptr_icd9ComorbidShortCpp)R_GetCCallable("icd", "_icd_icd9ComorbidShortCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ComorbidShortCpp(Rcpp::wrap(icd9df), Rcpp::wrap(icd9Mapping), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(threads), Rcpp::wrap(chunk_size), Rcpp::wrap(omp_chunk_size), Rcpp::wrap(aggregate));
+            rcpp_result_gen = p_icd9ComorbidShortCpp(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)), Shield<SEXP>(Rcpp::wrap(threads)), Shield<SEXP>(Rcpp::wrap(chunk_size)), Shield<SEXP>(Rcpp::wrap(omp_chunk_size)), Shield<SEXP>(Rcpp::wrap(aggregate)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -236,12 +236,12 @@ namespace icd {
         static Ptr_lookupComorbidByChunkFor p_lookupComorbidByChunkFor = NULL;
         if (p_lookupComorbidByChunkFor == NULL) {
             validateSignature("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
-            p_lookupComorbidByChunkFor = (Ptr_lookupComorbidByChunkFor)R_GetCCallable("icd", "icd_lookupComorbidByChunkFor");
+            p_lookupComorbidByChunkFor = (Ptr_lookupComorbidByChunkFor)R_GetCCallable("icd", "_icd_lookupComorbidByChunkFor");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_lookupComorbidByChunkFor(Rcpp::wrap(vcdb), Rcpp::wrap(map), Rcpp::wrap(chunkSize), Rcpp::wrap(ompChunkSize), Rcpp::wrap(out));
+            rcpp_result_gen = p_lookupComorbidByChunkFor(Shield<SEXP>(Rcpp::wrap(vcdb)), Shield<SEXP>(Rcpp::wrap(map)), Shield<SEXP>(Rcpp::wrap(chunkSize)), Shield<SEXP>(Rcpp::wrap(ompChunkSize)), Shield<SEXP>(Rcpp::wrap(out)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -254,12 +254,12 @@ namespace icd {
         static Ptr_icd10_comorbid_parent_search_cpp p_icd10_comorbid_parent_search_cpp = NULL;
         if (p_icd10_comorbid_parent_search_cpp == NULL) {
             validateSignature("Rcpp::LogicalMatrix(*icd10_comorbid_parent_search_cpp)(Rcpp::DataFrame,Rcpp::List,std::string,std::string)");
-            p_icd10_comorbid_parent_search_cpp = (Ptr_icd10_comorbid_parent_search_cpp)R_GetCCallable("icd", "icd_icd10_comorbid_parent_search_cpp");
+            p_icd10_comorbid_parent_search_cpp = (Ptr_icd10_comorbid_parent_search_cpp)R_GetCCallable("icd", "_icd_icd10_comorbid_parent_search_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd10_comorbid_parent_search_cpp(Rcpp::wrap(x), Rcpp::wrap(map), Rcpp::wrap(visit_name), Rcpp::wrap(icd_name));
+            rcpp_result_gen = p_icd10_comorbid_parent_search_cpp(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(map)), Shield<SEXP>(Rcpp::wrap(visit_name)), Shield<SEXP>(Rcpp::wrap(icd_name)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -273,12 +273,12 @@ namespace icd {
         static Ptr_icd9MajMinToCodeOld p_icd9MajMinToCodeOld = NULL;
         if (p_icd9MajMinToCodeOld == NULL) {
             validateSignature("CV(*icd9MajMinToCodeOld)(CV,CV,bool)");
-            p_icd9MajMinToCodeOld = (Ptr_icd9MajMinToCodeOld)R_GetCCallable("icd", "icd_icd9MajMinToCodeOld");
+            p_icd9MajMinToCodeOld = (Ptr_icd9MajMinToCodeOld)R_GetCCallable("icd", "_icd_icd9MajMinToCodeOld");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToCodeOld(Rcpp::wrap(mjr), Rcpp::wrap(mnr), Rcpp::wrap(isShort));
+            rcpp_result_gen = p_icd9MajMinToCodeOld(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)), Shield<SEXP>(Rcpp::wrap(isShort)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -292,12 +292,12 @@ namespace icd {
         static Ptr_icd9PartsToShort p_icd9PartsToShort = NULL;
         if (p_icd9PartsToShort == NULL) {
             validateSignature("CV(*icd9PartsToShort)(const Rcpp::List)");
-            p_icd9PartsToShort = (Ptr_icd9PartsToShort)R_GetCCallable("icd", "icd_icd9PartsToShort");
+            p_icd9PartsToShort = (Ptr_icd9PartsToShort)R_GetCCallable("icd", "_icd_icd9PartsToShort");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9PartsToShort(Rcpp::wrap(parts));
+            rcpp_result_gen = p_icd9PartsToShort(Shield<SEXP>(Rcpp::wrap(parts)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -311,12 +311,12 @@ namespace icd {
         static Ptr_icd9PartsToDecimal p_icd9PartsToDecimal = NULL;
         if (p_icd9PartsToDecimal == NULL) {
             validateSignature("CV(*icd9PartsToDecimal)(const Rcpp::List)");
-            p_icd9PartsToDecimal = (Ptr_icd9PartsToDecimal)R_GetCCallable("icd", "icd_icd9PartsToDecimal");
+            p_icd9PartsToDecimal = (Ptr_icd9PartsToDecimal)R_GetCCallable("icd", "_icd_icd9PartsToDecimal");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9PartsToDecimal(Rcpp::wrap(parts));
+            rcpp_result_gen = p_icd9PartsToDecimal(Shield<SEXP>(Rcpp::wrap(parts)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -330,12 +330,12 @@ namespace icd {
         static Ptr_icd9MajMinToParts p_icd9MajMinToParts = NULL;
         if (p_icd9MajMinToParts == NULL) {
             validateSignature("Rcpp::List(*icd9MajMinToParts)(const CV,const CV)");
-            p_icd9MajMinToParts = (Ptr_icd9MajMinToParts)R_GetCCallable("icd", "icd_icd9MajMinToParts");
+            p_icd9MajMinToParts = (Ptr_icd9MajMinToParts)R_GetCCallable("icd", "_icd_icd9MajMinToParts");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9MajMinToParts(Rcpp::wrap(mjr), Rcpp::wrap(mnr));
+            rcpp_result_gen = p_icd9MajMinToParts(Shield<SEXP>(Rcpp::wrap(mjr)), Shield<SEXP>(Rcpp::wrap(mnr)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -349,12 +349,12 @@ namespace icd {
         static Ptr_icd9ShortToPartsCpp p_icd9ShortToPartsCpp = NULL;
         if (p_icd9ShortToPartsCpp == NULL) {
             validateSignature("Rcpp::List(*icd9ShortToPartsCpp)(CV,Rcpp::String)");
-            p_icd9ShortToPartsCpp = (Ptr_icd9ShortToPartsCpp)R_GetCCallable("icd", "icd_icd9ShortToPartsCpp");
+            p_icd9ShortToPartsCpp = (Ptr_icd9ShortToPartsCpp)R_GetCCallable("icd", "_icd_icd9ShortToPartsCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ShortToPartsCpp(Rcpp::wrap(icd9Short), Rcpp::wrap(mnrEmpty));
+            rcpp_result_gen = p_icd9ShortToPartsCpp(Shield<SEXP>(Rcpp::wrap(icd9Short)), Shield<SEXP>(Rcpp::wrap(mnrEmpty)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -368,12 +368,12 @@ namespace icd {
         static Ptr_icd_short_to_parts_icd10 p_icd_short_to_parts_icd10 = NULL;
         if (p_icd_short_to_parts_icd10 == NULL) {
             validateSignature("Rcpp::List(*icd_short_to_parts_icd10)(const CV,const Rcpp::String)");
-            p_icd_short_to_parts_icd10 = (Ptr_icd_short_to_parts_icd10)R_GetCCallable("icd", "icd_icd_short_to_parts_icd10");
+            p_icd_short_to_parts_icd10 = (Ptr_icd_short_to_parts_icd10)R_GetCCallable("icd", "_icd_icd_short_to_parts_icd10");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd_short_to_parts_icd10(Rcpp::wrap(x), Rcpp::wrap(mnr_empty));
+            rcpp_result_gen = p_icd_short_to_parts_icd10(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(mnr_empty)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -387,12 +387,12 @@ namespace icd {
         static Ptr_icd9DecimalToPartsCpp p_icd9DecimalToPartsCpp = NULL;
         if (p_icd9DecimalToPartsCpp == NULL) {
             validateSignature("Rcpp::List(*icd9DecimalToPartsCpp)(const CV,const Rcpp::String)");
-            p_icd9DecimalToPartsCpp = (Ptr_icd9DecimalToPartsCpp)R_GetCCallable("icd", "icd_icd9DecimalToPartsCpp");
+            p_icd9DecimalToPartsCpp = (Ptr_icd9DecimalToPartsCpp)R_GetCCallable("icd", "_icd_icd9DecimalToPartsCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9DecimalToPartsCpp(Rcpp::wrap(icd9Decimal), Rcpp::wrap(mnr_empty));
+            rcpp_result_gen = p_icd9DecimalToPartsCpp(Shield<SEXP>(Rcpp::wrap(icd9Decimal)), Shield<SEXP>(Rcpp::wrap(mnr_empty)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -406,12 +406,12 @@ namespace icd {
         static Ptr_icd_decimal_to_parts_icd10 p_icd_decimal_to_parts_icd10 = NULL;
         if (p_icd_decimal_to_parts_icd10 == NULL) {
             validateSignature("Rcpp::List(*icd_decimal_to_parts_icd10)(const CV,const Rcpp::String)");
-            p_icd_decimal_to_parts_icd10 = (Ptr_icd_decimal_to_parts_icd10)R_GetCCallable("icd", "icd_icd_decimal_to_parts_icd10");
+            p_icd_decimal_to_parts_icd10 = (Ptr_icd_decimal_to_parts_icd10)R_GetCCallable("icd", "_icd_icd_decimal_to_parts_icd10");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd_decimal_to_parts_icd10(Rcpp::wrap(x), Rcpp::wrap(mnr_empty));
+            rcpp_result_gen = p_icd_decimal_to_parts_icd10(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(mnr_empty)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -425,12 +425,12 @@ namespace icd {
         static Ptr_icd9_short_to_decimal_cpp p_icd9_short_to_decimal_cpp = NULL;
         if (p_icd9_short_to_decimal_cpp == NULL) {
             validateSignature("CV(*icd9_short_to_decimal_cpp)(const CV)");
-            p_icd9_short_to_decimal_cpp = (Ptr_icd9_short_to_decimal_cpp)R_GetCCallable("icd", "icd_icd9_short_to_decimal_cpp");
+            p_icd9_short_to_decimal_cpp = (Ptr_icd9_short_to_decimal_cpp)R_GetCCallable("icd", "_icd_icd9_short_to_decimal_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_short_to_decimal_cpp(Rcpp::wrap(x));
+            rcpp_result_gen = p_icd9_short_to_decimal_cpp(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -444,12 +444,12 @@ namespace icd {
         static Ptr_icd9_decimal_to_short_cpp p_icd9_decimal_to_short_cpp = NULL;
         if (p_icd9_decimal_to_short_cpp == NULL) {
             validateSignature("CV(*icd9_decimal_to_short_cpp)(const CV)");
-            p_icd9_decimal_to_short_cpp = (Ptr_icd9_decimal_to_short_cpp)R_GetCCallable("icd", "icd_icd9_decimal_to_short_cpp");
+            p_icd9_decimal_to_short_cpp = (Ptr_icd9_decimal_to_short_cpp)R_GetCCallable("icd", "_icd_icd9_decimal_to_short_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_decimal_to_short_cpp(Rcpp::wrap(x));
+            rcpp_result_gen = p_icd9_decimal_to_short_cpp(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -463,12 +463,12 @@ namespace icd {
         static Ptr_icd_get_major_icd9 p_icd_get_major_icd9 = NULL;
         if (p_icd_get_major_icd9 == NULL) {
             validateSignature("CV(*icd_get_major_icd9)(const CV,const bool)");
-            p_icd_get_major_icd9 = (Ptr_icd_get_major_icd9)R_GetCCallable("icd", "icd_icd_get_major_icd9");
+            p_icd_get_major_icd9 = (Ptr_icd_get_major_icd9)R_GetCCallable("icd", "_icd_icd_get_major_icd9");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd_get_major_icd9(Rcpp::wrap(x), Rcpp::wrap(short_code));
+            rcpp_result_gen = p_icd_get_major_icd9(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(short_code)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -482,12 +482,12 @@ namespace icd {
         static Ptr_fastIntToStringStd p_fastIntToStringStd = NULL;
         if (p_fastIntToStringStd == NULL) {
             validateSignature("std::vector<std::string>(*fastIntToStringStd)(std::vector<int>)");
-            p_fastIntToStringStd = (Ptr_fastIntToStringStd)R_GetCCallable("icd", "icd_fastIntToStringStd");
+            p_fastIntToStringStd = (Ptr_fastIntToStringStd)R_GetCCallable("icd", "_icd_fastIntToStringStd");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_fastIntToStringStd(Rcpp::wrap(x));
+            rcpp_result_gen = p_fastIntToStringStd(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -501,12 +501,12 @@ namespace icd {
         static Ptr_fastIntToStringRcpp p_fastIntToStringRcpp = NULL;
         if (p_fastIntToStringRcpp == NULL) {
             validateSignature("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector)");
-            p_fastIntToStringRcpp = (Ptr_fastIntToStringRcpp)R_GetCCallable("icd", "icd_fastIntToStringRcpp");
+            p_fastIntToStringRcpp = (Ptr_fastIntToStringRcpp)R_GetCCallable("icd", "_icd_fastIntToStringRcpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_fastIntToStringRcpp(Rcpp::wrap(x));
+            rcpp_result_gen = p_fastIntToStringRcpp(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -520,12 +520,12 @@ namespace icd {
         static Ptr_icd_guess_short p_icd_guess_short = NULL;
         if (p_icd_guess_short == NULL) {
             validateSignature("bool(*icd_guess_short)(SEXP,SEXP,int,SEXP)");
-            p_icd_guess_short = (Ptr_icd_guess_short)R_GetCCallable("icd", "icd_icd_guess_short");
+            p_icd_guess_short = (Ptr_icd_guess_short)R_GetCCallable("icd", "_icd_icd_guess_short");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd_guess_short(Rcpp::wrap(x_), Rcpp::wrap(short_code), Rcpp::wrap(n), Rcpp::wrap(icd_name));
+            rcpp_result_gen = p_icd_guess_short(Shield<SEXP>(Rcpp::wrap(x_)), Shield<SEXP>(Rcpp::wrap(short_code)), Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(icd_name)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -539,12 +539,12 @@ namespace icd {
         static Ptr_guessShortPlusFactorCpp p_guessShortPlusFactorCpp = NULL;
         if (p_guessShortPlusFactorCpp == NULL) {
             validateSignature("bool(*guessShortPlusFactorCpp)(SEXP,int)");
-            p_guessShortPlusFactorCpp = (Ptr_guessShortPlusFactorCpp)R_GetCCallable("icd", "icd_guessShortPlusFactorCpp");
+            p_guessShortPlusFactorCpp = (Ptr_guessShortPlusFactorCpp)R_GetCCallable("icd", "_icd_guessShortPlusFactorCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_guessShortPlusFactorCpp(Rcpp::wrap(x_), Rcpp::wrap(n));
+            rcpp_result_gen = p_guessShortPlusFactorCpp(Shield<SEXP>(Rcpp::wrap(x_)), Shield<SEXP>(Rcpp::wrap(n)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -558,12 +558,12 @@ namespace icd {
         static Ptr_icd9_is_n_cpp p_icd9_is_n_cpp = NULL;
         if (p_icd9_is_n_cpp == NULL) {
             validateSignature("std::vector<bool>(*icd9_is_n_cpp)(const VecStr&)");
-            p_icd9_is_n_cpp = (Ptr_icd9_is_n_cpp)R_GetCCallable("icd", "icd_icd9_is_n_cpp");
+            p_icd9_is_n_cpp = (Ptr_icd9_is_n_cpp)R_GetCCallable("icd", "_icd_icd9_is_n_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_is_n_cpp(Rcpp::wrap(sv));
+            rcpp_result_gen = p_icd9_is_n_cpp(Shield<SEXP>(Rcpp::wrap(sv)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -577,12 +577,12 @@ namespace icd {
         static Ptr_icd9_is_v_cpp p_icd9_is_v_cpp = NULL;
         if (p_icd9_is_v_cpp == NULL) {
             validateSignature("std::vector<bool>(*icd9_is_v_cpp)(const VecStr&)");
-            p_icd9_is_v_cpp = (Ptr_icd9_is_v_cpp)R_GetCCallable("icd", "icd_icd9_is_v_cpp");
+            p_icd9_is_v_cpp = (Ptr_icd9_is_v_cpp)R_GetCCallable("icd", "_icd_icd9_is_v_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_is_v_cpp(Rcpp::wrap(sv));
+            rcpp_result_gen = p_icd9_is_v_cpp(Shield<SEXP>(Rcpp::wrap(sv)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -596,12 +596,12 @@ namespace icd {
         static Ptr_icd9_is_e_cpp p_icd9_is_e_cpp = NULL;
         if (p_icd9_is_e_cpp == NULL) {
             validateSignature("std::vector<bool>(*icd9_is_e_cpp)(const VecStr&)");
-            p_icd9_is_e_cpp = (Ptr_icd9_is_e_cpp)R_GetCCallable("icd", "icd_icd9_is_e_cpp");
+            p_icd9_is_e_cpp = (Ptr_icd9_is_e_cpp)R_GetCCallable("icd", "_icd_icd9_is_e_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_is_e_cpp(Rcpp::wrap(sv));
+            rcpp_result_gen = p_icd9_is_e_cpp(Shield<SEXP>(Rcpp::wrap(sv)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -615,12 +615,12 @@ namespace icd {
         static Ptr_icd_long_to_wide_cpp p_icd_long_to_wide_cpp = NULL;
         if (p_icd_long_to_wide_cpp == NULL) {
             validateSignature("CV(*icd_long_to_wide_cpp)(const SEXP&,const std::string,const std::string,bool)");
-            p_icd_long_to_wide_cpp = (Ptr_icd_long_to_wide_cpp)R_GetCCallable("icd", "icd_icd_long_to_wide_cpp");
+            p_icd_long_to_wide_cpp = (Ptr_icd_long_to_wide_cpp)R_GetCCallable("icd", "_icd_icd_long_to_wide_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd_long_to_wide_cpp(Rcpp::wrap(icd9df), Rcpp::wrap(visitId), Rcpp::wrap(icd9Field), Rcpp::wrap(aggregate));
+            rcpp_result_gen = p_icd_long_to_wide_cpp(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)), Shield<SEXP>(Rcpp::wrap(aggregate)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -634,12 +634,12 @@ namespace icd {
         static Ptr_icd9AddLeadingZeroesShortSingle p_icd9AddLeadingZeroesShortSingle = NULL;
         if (p_icd9AddLeadingZeroesShortSingle == NULL) {
             validateSignature("Rcpp::String(*icd9AddLeadingZeroesShortSingle)(Rcpp::String)");
-            p_icd9AddLeadingZeroesShortSingle = (Ptr_icd9AddLeadingZeroesShortSingle)R_GetCCallable("icd", "icd_icd9AddLeadingZeroesShortSingle");
+            p_icd9AddLeadingZeroesShortSingle = (Ptr_icd9AddLeadingZeroesShortSingle)R_GetCCallable("icd", "_icd_icd9AddLeadingZeroesShortSingle");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9AddLeadingZeroesShortSingle(Rcpp::wrap(x));
+            rcpp_result_gen = p_icd9AddLeadingZeroesShortSingle(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -653,12 +653,12 @@ namespace icd {
         static Ptr_icd9_add_leading_zeroes_alt_cpp p_icd9_add_leading_zeroes_alt_cpp = NULL;
         if (p_icd9_add_leading_zeroes_alt_cpp == NULL) {
             validateSignature("CV(*icd9_add_leading_zeroes_alt_cpp)(CV,bool)");
-            p_icd9_add_leading_zeroes_alt_cpp = (Ptr_icd9_add_leading_zeroes_alt_cpp)R_GetCCallable("icd", "icd_icd9_add_leading_zeroes_alt_cpp");
+            p_icd9_add_leading_zeroes_alt_cpp = (Ptr_icd9_add_leading_zeroes_alt_cpp)R_GetCCallable("icd", "_icd_icd9_add_leading_zeroes_alt_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_add_leading_zeroes_alt_cpp(Rcpp::wrap(x), Rcpp::wrap(short_code));
+            rcpp_result_gen = p_icd9_add_leading_zeroes_alt_cpp(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(short_code)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -672,12 +672,12 @@ namespace icd {
         static Ptr_icd9AddLeadingZeroesMajorSingle p_icd9AddLeadingZeroesMajorSingle = NULL;
         if (p_icd9AddLeadingZeroesMajorSingle == NULL) {
             validateSignature("Rcpp::String(*icd9AddLeadingZeroesMajorSingle)(Rcpp::String)");
-            p_icd9AddLeadingZeroesMajorSingle = (Ptr_icd9AddLeadingZeroesMajorSingle)R_GetCCallable("icd", "icd_icd9AddLeadingZeroesMajorSingle");
+            p_icd9AddLeadingZeroesMajorSingle = (Ptr_icd9AddLeadingZeroesMajorSingle)R_GetCCallable("icd", "_icd_icd9AddLeadingZeroesMajorSingle");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9AddLeadingZeroesMajorSingle(Rcpp::wrap(mjr));
+            rcpp_result_gen = p_icd9AddLeadingZeroesMajorSingle(Shield<SEXP>(Rcpp::wrap(mjr)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -691,12 +691,12 @@ namespace icd {
         static Ptr_icd9AddLeadingZeroesMajorSingleStd p_icd9AddLeadingZeroesMajorSingleStd = NULL;
         if (p_icd9AddLeadingZeroesMajorSingleStd == NULL) {
             validateSignature("std::string(*icd9AddLeadingZeroesMajorSingleStd)(std::string)");
-            p_icd9AddLeadingZeroesMajorSingleStd = (Ptr_icd9AddLeadingZeroesMajorSingleStd)R_GetCCallable("icd", "icd_icd9AddLeadingZeroesMajorSingleStd");
+            p_icd9AddLeadingZeroesMajorSingleStd = (Ptr_icd9AddLeadingZeroesMajorSingleStd)R_GetCCallable("icd", "_icd_icd9AddLeadingZeroesMajorSingleStd");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9AddLeadingZeroesMajorSingleStd(Rcpp::wrap(m));
+            rcpp_result_gen = p_icd9AddLeadingZeroesMajorSingleStd(Shield<SEXP>(Rcpp::wrap(m)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -710,12 +710,12 @@ namespace icd {
         static Ptr_icd9_add_leading_zeroes_major p_icd9_add_leading_zeroes_major = NULL;
         if (p_icd9_add_leading_zeroes_major == NULL) {
             validateSignature("CV(*icd9_add_leading_zeroes_major)(CV)");
-            p_icd9_add_leading_zeroes_major = (Ptr_icd9_add_leading_zeroes_major)R_GetCCallable("icd", "icd_icd9_add_leading_zeroes_major");
+            p_icd9_add_leading_zeroes_major = (Ptr_icd9_add_leading_zeroes_major)R_GetCCallable("icd", "_icd_icd9_add_leading_zeroes_major");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_add_leading_zeroes_major(Rcpp::wrap(mjr));
+            rcpp_result_gen = p_icd9_add_leading_zeroes_major(Shield<SEXP>(Rcpp::wrap(mjr)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -729,12 +729,12 @@ namespace icd {
         static Ptr_icd9_add_leading_zeroes_cpp p_icd9_add_leading_zeroes_cpp = NULL;
         if (p_icd9_add_leading_zeroes_cpp == NULL) {
             validateSignature("CV(*icd9_add_leading_zeroes_cpp)(CV,bool)");
-            p_icd9_add_leading_zeroes_cpp = (Ptr_icd9_add_leading_zeroes_cpp)R_GetCCallable("icd", "icd_icd9_add_leading_zeroes_cpp");
+            p_icd9_add_leading_zeroes_cpp = (Ptr_icd9_add_leading_zeroes_cpp)R_GetCCallable("icd", "_icd_icd9_add_leading_zeroes_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_add_leading_zeroes_cpp(Rcpp::wrap(x), Rcpp::wrap(short_code));
+            rcpp_result_gen = p_icd9_add_leading_zeroes_cpp(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(short_code)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -748,12 +748,12 @@ namespace icd {
         static Ptr_icd9ChildrenShort11 p_icd9ChildrenShort11 = NULL;
         if (p_icd9ChildrenShort11 == NULL) {
             validateSignature("CV(*icd9ChildrenShort11)(CV,bool)");
-            p_icd9ChildrenShort11 = (Ptr_icd9ChildrenShort11)R_GetCCallable("icd", "icd_icd9ChildrenShort11");
+            p_icd9ChildrenShort11 = (Ptr_icd9ChildrenShort11)R_GetCCallable("icd", "_icd_icd9ChildrenShort11");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ChildrenShort11(Rcpp::wrap(icd9Short), Rcpp::wrap(onlyReal));
+            rcpp_result_gen = p_icd9ChildrenShort11(Shield<SEXP>(Rcpp::wrap(icd9Short)), Shield<SEXP>(Rcpp::wrap(onlyReal)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -767,12 +767,12 @@ namespace icd {
         static Ptr_icd9ChildrenShortStd p_icd9ChildrenShortStd = NULL;
         if (p_icd9ChildrenShortStd == NULL) {
             validateSignature("CV(*icd9ChildrenShortStd)(CV,bool)");
-            p_icd9ChildrenShortStd = (Ptr_icd9ChildrenShortStd)R_GetCCallable("icd", "icd_icd9ChildrenShortStd");
+            p_icd9ChildrenShortStd = (Ptr_icd9ChildrenShortStd)R_GetCCallable("icd", "_icd_icd9ChildrenShortStd");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ChildrenShortStd(Rcpp::wrap(icd9Short), Rcpp::wrap(onlyReal));
+            rcpp_result_gen = p_icd9ChildrenShortStd(Shield<SEXP>(Rcpp::wrap(icd9Short)), Shield<SEXP>(Rcpp::wrap(onlyReal)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -786,12 +786,12 @@ namespace icd {
         static Ptr_icd9ExpandMinorStd p_icd9ExpandMinorStd = NULL;
         if (p_icd9ExpandMinorStd == NULL) {
             validateSignature("VecStr(*icd9ExpandMinorStd)(const Str&,bool)");
-            p_icd9ExpandMinorStd = (Ptr_icd9ExpandMinorStd)R_GetCCallable("icd", "icd_icd9ExpandMinorStd");
+            p_icd9ExpandMinorStd = (Ptr_icd9ExpandMinorStd)R_GetCCallable("icd", "_icd_icd9ExpandMinorStd");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ExpandMinorStd(Rcpp::wrap(mnr), Rcpp::wrap(isE));
+            rcpp_result_gen = p_icd9ExpandMinorStd(Shield<SEXP>(Rcpp::wrap(mnr)), Shield<SEXP>(Rcpp::wrap(isE)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -805,12 +805,12 @@ namespace icd {
         static Ptr_icd9_expand_minor_wrap p_icd9_expand_minor_wrap = NULL;
         if (p_icd9_expand_minor_wrap == NULL) {
             validateSignature("CV(*icd9_expand_minor_wrap)(const Str&,bool)");
-            p_icd9_expand_minor_wrap = (Ptr_icd9_expand_minor_wrap)R_GetCCallable("icd", "icd_icd9_expand_minor_wrap");
+            p_icd9_expand_minor_wrap = (Ptr_icd9_expand_minor_wrap)R_GetCCallable("icd", "_icd_icd9_expand_minor_wrap");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_expand_minor_wrap(Rcpp::wrap(mnr), Rcpp::wrap(isE));
+            rcpp_result_gen = p_icd9_expand_minor_wrap(Shield<SEXP>(Rcpp::wrap(mnr)), Shield<SEXP>(Rcpp::wrap(isE)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -824,12 +824,12 @@ namespace icd {
         static Ptr_icd9ChildrenShort p_icd9ChildrenShort = NULL;
         if (p_icd9ChildrenShort == NULL) {
             validateSignature("CV(*icd9ChildrenShort)(CV,bool)");
-            p_icd9ChildrenShort = (Ptr_icd9ChildrenShort)R_GetCCallable("icd", "icd_icd9ChildrenShort");
+            p_icd9ChildrenShort = (Ptr_icd9ChildrenShort)R_GetCCallable("icd", "_icd_icd9ChildrenShort");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ChildrenShort(Rcpp::wrap(icd9Short), Rcpp::wrap(onlyReal));
+            rcpp_result_gen = p_icd9ChildrenShort(Shield<SEXP>(Rcpp::wrap(icd9Short)), Shield<SEXP>(Rcpp::wrap(onlyReal)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -843,12 +843,12 @@ namespace icd {
         static Ptr_icd9ChildrenShortUnordered p_icd9ChildrenShortUnordered = NULL;
         if (p_icd9ChildrenShortUnordered == NULL) {
             validateSignature("CV(*icd9ChildrenShortUnordered)(CV,bool)");
-            p_icd9ChildrenShortUnordered = (Ptr_icd9ChildrenShortUnordered)R_GetCCallable("icd", "icd_icd9ChildrenShortUnordered");
+            p_icd9ChildrenShortUnordered = (Ptr_icd9ChildrenShortUnordered)R_GetCCallable("icd", "_icd_icd9ChildrenShortUnordered");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ChildrenShortUnordered(Rcpp::wrap(icd9Short), Rcpp::wrap(onlyReal));
+            rcpp_result_gen = p_icd9ChildrenShortUnordered(Shield<SEXP>(Rcpp::wrap(icd9Short)), Shield<SEXP>(Rcpp::wrap(onlyReal)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -862,12 +862,12 @@ namespace icd {
         static Ptr_icd9ChildrenShortNoNaUnordered p_icd9ChildrenShortNoNaUnordered = NULL;
         if (p_icd9ChildrenShortNoNaUnordered == NULL) {
             validateSignature("VecStr(*icd9ChildrenShortNoNaUnordered)(const VecStr&,const bool)");
-            p_icd9ChildrenShortNoNaUnordered = (Ptr_icd9ChildrenShortNoNaUnordered)R_GetCCallable("icd", "icd_icd9ChildrenShortNoNaUnordered");
+            p_icd9ChildrenShortNoNaUnordered = (Ptr_icd9ChildrenShortNoNaUnordered)R_GetCCallable("icd", "_icd_icd9ChildrenShortNoNaUnordered");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ChildrenShortNoNaUnordered(Rcpp::wrap(icd9Short), Rcpp::wrap(onlyReal));
+            rcpp_result_gen = p_icd9ChildrenShortNoNaUnordered(Shield<SEXP>(Rcpp::wrap(icd9Short)), Shield<SEXP>(Rcpp::wrap(onlyReal)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -881,12 +881,12 @@ namespace icd {
         static Ptr_icd9ChildrenDecimalCpp p_icd9ChildrenDecimalCpp = NULL;
         if (p_icd9ChildrenDecimalCpp == NULL) {
             validateSignature("CV(*icd9ChildrenDecimalCpp)(CV,bool)");
-            p_icd9ChildrenDecimalCpp = (Ptr_icd9ChildrenDecimalCpp)R_GetCCallable("icd", "icd_icd9ChildrenDecimalCpp");
+            p_icd9ChildrenDecimalCpp = (Ptr_icd9ChildrenDecimalCpp)R_GetCCallable("icd", "_icd_icd9ChildrenDecimalCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ChildrenDecimalCpp(Rcpp::wrap(icd9Decimal), Rcpp::wrap(onlyReal));
+            rcpp_result_gen = p_icd9ChildrenDecimalCpp(Shield<SEXP>(Rcpp::wrap(icd9Decimal)), Shield<SEXP>(Rcpp::wrap(onlyReal)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -900,12 +900,12 @@ namespace icd {
         static Ptr_icd9ChildrenCpp p_icd9ChildrenCpp = NULL;
         if (p_icd9ChildrenCpp == NULL) {
             validateSignature("CV(*icd9ChildrenCpp)(CV,bool,bool)");
-            p_icd9ChildrenCpp = (Ptr_icd9ChildrenCpp)R_GetCCallable("icd", "icd_icd9ChildrenCpp");
+            p_icd9ChildrenCpp = (Ptr_icd9ChildrenCpp)R_GetCCallable("icd", "_icd_icd9ChildrenCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ChildrenCpp(Rcpp::wrap(icd9), Rcpp::wrap(isShort), Rcpp::wrap(onlyReal));
+            rcpp_result_gen = p_icd9ChildrenCpp(Shield<SEXP>(Rcpp::wrap(icd9)), Shield<SEXP>(Rcpp::wrap(isShort)), Shield<SEXP>(Rcpp::wrap(onlyReal)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -919,12 +919,12 @@ namespace icd {
         static Ptr_icd_in_reference_code p_icd_in_reference_code = NULL;
         if (p_icd_in_reference_code == NULL) {
             validateSignature("Rcpp::LogicalVector(*icd_in_reference_code)(CV,CV,bool,bool)");
-            p_icd_in_reference_code = (Ptr_icd_in_reference_code)R_GetCCallable("icd", "icd_icd_in_reference_code");
+            p_icd_in_reference_code = (Ptr_icd_in_reference_code)R_GetCCallable("icd", "_icd_icd_in_reference_code");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd_in_reference_code(Rcpp::wrap(icd), Rcpp::wrap(icd_reference), Rcpp::wrap(short_code), Rcpp::wrap(short_reference));
+            rcpp_result_gen = p_icd_in_reference_code(Shield<SEXP>(Rcpp::wrap(icd)), Shield<SEXP>(Rcpp::wrap(icd_reference)), Shield<SEXP>(Rcpp::wrap(short_code)), Shield<SEXP>(Rcpp::wrap(short_reference)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -938,12 +938,12 @@ namespace icd {
         static Ptr_trimLeftCpp p_trimLeftCpp = NULL;
         if (p_trimLeftCpp == NULL) {
             validateSignature("std::string(*trimLeftCpp)(std::string)");
-            p_trimLeftCpp = (Ptr_trimLeftCpp)R_GetCCallable("icd", "icd_trimLeftCpp");
+            p_trimLeftCpp = (Ptr_trimLeftCpp)R_GetCCallable("icd", "_icd_trimLeftCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_trimLeftCpp(Rcpp::wrap(s));
+            rcpp_result_gen = p_trimLeftCpp(Shield<SEXP>(Rcpp::wrap(s)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -957,12 +957,12 @@ namespace icd {
         static Ptr_strimCpp p_strimCpp = NULL;
         if (p_strimCpp == NULL) {
             validateSignature("std::string(*strimCpp)(std::string)");
-            p_strimCpp = (Ptr_strimCpp)R_GetCCallable("icd", "icd_strimCpp");
+            p_strimCpp = (Ptr_strimCpp)R_GetCCallable("icd", "_icd_strimCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_strimCpp(Rcpp::wrap(s));
+            rcpp_result_gen = p_strimCpp(Shield<SEXP>(Rcpp::wrap(s)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -976,12 +976,12 @@ namespace icd {
         static Ptr_trimCpp p_trimCpp = NULL;
         if (p_trimCpp == NULL) {
             validateSignature("VecStr(*trimCpp)(VecStr)");
-            p_trimCpp = (Ptr_trimCpp)R_GetCCallable("icd", "icd_trimCpp");
+            p_trimCpp = (Ptr_trimCpp)R_GetCCallable("icd", "_icd_trimCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_trimCpp(Rcpp::wrap(sv));
+            rcpp_result_gen = p_trimCpp(Shield<SEXP>(Rcpp::wrap(sv)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -995,7 +995,7 @@ namespace icd {
         static Ptr_getOmpCores p_getOmpCores = NULL;
         if (p_getOmpCores == NULL) {
             validateSignature("int(*getOmpCores)()");
-            p_getOmpCores = (Ptr_getOmpCores)R_GetCCallable("icd", "icd_getOmpCores");
+            p_getOmpCores = (Ptr_getOmpCores)R_GetCCallable("icd", "_icd_getOmpCores");
         }
         RObject rcpp_result_gen;
         {
@@ -1014,7 +1014,7 @@ namespace icd {
         static Ptr_getOmpMaxThreads p_getOmpMaxThreads = NULL;
         if (p_getOmpMaxThreads == NULL) {
             validateSignature("int(*getOmpMaxThreads)()");
-            p_getOmpMaxThreads = (Ptr_getOmpMaxThreads)R_GetCCallable("icd", "icd_getOmpMaxThreads");
+            p_getOmpMaxThreads = (Ptr_getOmpMaxThreads)R_GetCCallable("icd", "_icd_getOmpMaxThreads");
         }
         RObject rcpp_result_gen;
         {
@@ -1033,7 +1033,7 @@ namespace icd {
         static Ptr_getOmpThreads p_getOmpThreads = NULL;
         if (p_getOmpThreads == NULL) {
             validateSignature("int(*getOmpThreads)()");
-            p_getOmpThreads = (Ptr_getOmpThreads)R_GetCCallable("icd", "icd_getOmpThreads");
+            p_getOmpThreads = (Ptr_getOmpThreads)R_GetCCallable("icd", "_icd_getOmpThreads");
         }
         RObject rcpp_result_gen;
         {
@@ -1052,12 +1052,12 @@ namespace icd {
         static Ptr_randomMajorCpp p_randomMajorCpp = NULL;
         if (p_randomMajorCpp == NULL) {
             validateSignature("Rcpp::NumericVector(*randomMajorCpp)(int)");
-            p_randomMajorCpp = (Ptr_randomMajorCpp)R_GetCCallable("icd", "icd_randomMajorCpp");
+            p_randomMajorCpp = (Ptr_randomMajorCpp)R_GetCCallable("icd", "_icd_randomMajorCpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_randomMajorCpp(Rcpp::wrap(n));
+            rcpp_result_gen = p_randomMajorCpp(Shield<SEXP>(Rcpp::wrap(n)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -1071,12 +1071,12 @@ namespace icd {
         static Ptr_icd9RandomShortN p_icd9RandomShortN = NULL;
         if (p_icd9RandomShortN == NULL) {
             validateSignature("VecStr(*icd9RandomShortN)(VecStr::size_type)");
-            p_icd9RandomShortN = (Ptr_icd9RandomShortN)R_GetCCallable("icd", "icd_icd9RandomShortN");
+            p_icd9RandomShortN = (Ptr_icd9RandomShortN)R_GetCCallable("icd", "_icd_icd9RandomShortN");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9RandomShortN(Rcpp::wrap(n));
+            rcpp_result_gen = p_icd9RandomShortN(Shield<SEXP>(Rcpp::wrap(n)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -1090,12 +1090,12 @@ namespace icd {
         static Ptr_icd9RandomShortV p_icd9RandomShortV = NULL;
         if (p_icd9RandomShortV == NULL) {
             validateSignature("VecStr(*icd9RandomShortV)(VecStr::size_type)");
-            p_icd9RandomShortV = (Ptr_icd9RandomShortV)R_GetCCallable("icd", "icd_icd9RandomShortV");
+            p_icd9RandomShortV = (Ptr_icd9RandomShortV)R_GetCCallable("icd", "_icd_icd9RandomShortV");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9RandomShortV(Rcpp::wrap(n));
+            rcpp_result_gen = p_icd9RandomShortV(Shield<SEXP>(Rcpp::wrap(n)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -1109,12 +1109,12 @@ namespace icd {
         static Ptr_icd9RandomShortE p_icd9RandomShortE = NULL;
         if (p_icd9RandomShortE == NULL) {
             validateSignature("VecStr(*icd9RandomShortE)(VecStr::size_type)");
-            p_icd9RandomShortE = (Ptr_icd9RandomShortE)R_GetCCallable("icd", "icd_icd9RandomShortE");
+            p_icd9RandomShortE = (Ptr_icd9RandomShortE)R_GetCCallable("icd", "_icd_icd9RandomShortE");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9RandomShortE(Rcpp::wrap(n));
+            rcpp_result_gen = p_icd9RandomShortE(Shield<SEXP>(Rcpp::wrap(n)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -1128,12 +1128,12 @@ namespace icd {
         static Ptr_icd9RandomShort p_icd9RandomShort = NULL;
         if (p_icd9RandomShort == NULL) {
             validateSignature("VecStr(*icd9RandomShort)(VecStr::size_type)");
-            p_icd9RandomShort = (Ptr_icd9RandomShort)R_GetCCallable("icd", "icd_icd9RandomShort");
+            p_icd9RandomShort = (Ptr_icd9RandomShort)R_GetCCallable("icd", "_icd_icd9RandomShort");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9RandomShort(Rcpp::wrap(n));
+            rcpp_result_gen = p_icd9RandomShort(Shield<SEXP>(Rcpp::wrap(n)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -1147,12 +1147,12 @@ namespace icd {
         static Ptr_valgrindCallgrindStart p_valgrindCallgrindStart = NULL;
         if (p_valgrindCallgrindStart == NULL) {
             validateSignature("int(*valgrindCallgrindStart)(bool)");
-            p_valgrindCallgrindStart = (Ptr_valgrindCallgrindStart)R_GetCCallable("icd", "icd_valgrindCallgrindStart");
+            p_valgrindCallgrindStart = (Ptr_valgrindCallgrindStart)R_GetCCallable("icd", "_icd_valgrindCallgrindStart");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_valgrindCallgrindStart(Rcpp::wrap(zerostats));
+            rcpp_result_gen = p_valgrindCallgrindStart(Shield<SEXP>(Rcpp::wrap(zerostats)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -1166,7 +1166,7 @@ namespace icd {
         static Ptr_valgrindCallgrindStop p_valgrindCallgrindStop = NULL;
         if (p_valgrindCallgrindStop == NULL) {
             validateSignature("int(*valgrindCallgrindStop)()");
-            p_valgrindCallgrindStop = (Ptr_valgrindCallgrindStop)R_GetCCallable("icd", "icd_valgrindCallgrindStop");
+            p_valgrindCallgrindStop = (Ptr_valgrindCallgrindStop)R_GetCCallable("icd", "_icd_valgrindCallgrindStop");
         }
         RObject rcpp_result_gen;
         {
@@ -1185,12 +1185,12 @@ namespace icd {
         static Ptr_icd9_sort_cpp p_icd9_sort_cpp = NULL;
         if (p_icd9_sort_cpp == NULL) {
             validateSignature("VecStr(*icd9_sort_cpp)(VecStr)");
-            p_icd9_sort_cpp = (Ptr_icd9_sort_cpp)R_GetCCallable("icd", "icd_icd9_sort_cpp");
+            p_icd9_sort_cpp = (Ptr_icd9_sort_cpp)R_GetCCallable("icd", "_icd_icd9_sort_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_sort_cpp(Rcpp::wrap(x));
+            rcpp_result_gen = p_icd9_sort_cpp(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -1204,12 +1204,12 @@ namespace icd {
         static Ptr_icd9_order_cpp p_icd9_order_cpp = NULL;
         if (p_icd9_order_cpp == NULL) {
             validateSignature("std::vector<std::size_t>(*icd9_order_cpp)(VecStr)");
-            p_icd9_order_cpp = (Ptr_icd9_order_cpp)R_GetCCallable("icd", "icd_icd9_order_cpp");
+            p_icd9_order_cpp = (Ptr_icd9_order_cpp)R_GetCCallable("icd", "_icd_icd9_order_cpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_order_cpp(Rcpp::wrap(x));
+            rcpp_result_gen = p_icd9_order_cpp(Shield<SEXP>(Rcpp::wrap(x)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -233,14 +233,14 @@ rtf_main_filter <- function(filtered, ...) {
 }
 
 rtf_make_majors <- function(filtered, ..., save = FALSE) {
-  useBytes <- list(...)[["useBytes"]]
+  use_bytes <- list(...)[["useBytes"]]
   major_lines <- grep(paste0("^(", re_icd9_major_strict_bare, ") "),
                       filtered, value = TRUE)
   re_major_split <- "([^[:space:]]+)[[:space:]]+(.+)"
   icd9_majors <- gsub(pattern = re_major_split, replacement = "\\1",
-                      x = major_lines, perl = TRUE, useBytes = useBytes)
+                      x = major_lines, perl = TRUE, useBytes = use_bytes)
   names(icd9_majors) <- gsub(pattern = re_major_split, replacement = "\\2",
-                             x = major_lines, perl = TRUE, useBytes = useBytes)
+                             x = major_lines, perl = TRUE, useBytes = use_bytes)
 
   # this sub-chapter is simply missing from the otherwise consistent RTF way
   # 'major' types are reported:

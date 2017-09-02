@@ -3,8 +3,3 @@ PKG_CFLAGS = @OPENMP_CFLAGS_IN_PKG@
 PKG_CXXFLAGS = -I. @OPENMP_CFLAGS_IN_PKG@ @ICD_CXX11_FLAG@ @GCC_PARALLEL_CXXFLAGS@
 PKG_LIBS = @OPENMP_CFLAGS_IN_PKG@ @LIBS@
 
-strippedLib: $(SHLIB)
-	if test -e "/usr/bin/strip"; then /usr/bin/strip --strip-debug $(SHLIB); fi
-
-.phony: strippedLib
-
