@@ -358,7 +358,7 @@ NULL
 #' Transuranium & Uranium Registries, published in the public domain.
 #' @name uranium_pathology
 #' @source \url{http://www.ustur.wsu.edu/database/}
-#'   \url{http://www.ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+#'   \url{http://ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
 #' @docType data
 #' @keywords datasets
 NULL

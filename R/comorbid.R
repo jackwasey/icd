@@ -415,8 +415,8 @@ icd9_comorbid_hcc <- function(x,
                               icd_name = NULL
 ) {
   assert_data_frame(x, min.cols = 3, col.names = "unique")
-  assert(checkString(visit_name), checkNull(visit_name))
-  assert(checkString(icd_name), checkNull(icd_name))
+  assert(check_string(visit_name), check_null(visit_name))
+  assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(date_name)
@@ -487,8 +487,8 @@ icd10_comorbid_hcc <- function(x,
                                visit_name = NULL,
                                icd_name = NULL) {
   assert_data_frame(x, min.cols = 3, col.names = "unique")
-  assert(checkString(visit_name), checkNull(visit_name))
-  assert(checkString(icd_name), checkNull(icd_name))
+  assert(check_string(visit_name), check_null(visit_name))
+  assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(date_name)

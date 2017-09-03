@@ -69,16 +69,16 @@ icd_update_everything <- function() {
   icd9cm_generate_chapters_hierarchy(save_data = TRUE, offline = FALSE, verbose = FALSE)
 }
 
-# quick sanity checks - full tests of icd9cm_hierarchy in test-parse.R
-icd9cm_hierarchy_sanity <- function(icd9cm_hierarchy) {
-  stopifnot(all(icd_is_valid.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE)))
-  if (!any(sapply(icd9cm_hierarchy, is.na)))
+# quick sanity checks - full tests of x in test-parse.R
+icd9cm_hierarchy_sanity <- function(x) {
+  stopifnot(all(icd_is_valid.icd9(x[["code"]], short_code = TRUE)))
+  if (!any(sapply(x, is.na)))
     return()
-  print(colSums(sapply(icd9cm_hierarchy, is.na)))
-  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$major)), ])
-  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$three_digit)), ])
-  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$sub_chapter))[1:10], ]) # just top ten
-  print(icd9cm_hierarchy[which(is.na(icd9cm_hierarchy$chapter)), ])
+  print(colSums(sapply(x, is.na)))
+  print(x[which(is.na(x$major)), ])
+  print(x[which(is.na(x$three_digit)), ])
+  print(x[which(is.na(x$sub_chapter))[1:10], ]) # just top ten
+  print(x[which(is.na(x$chapter)), ])
   stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
 }
 # nocov end
@@ -282,12 +282,12 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
 #' @keywords internal
 icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
                                                verbose = FALSE, offline = TRUE,
-                                               perl = TRUE, useBytes = TRUE) {
+                                               perl = TRUE, use_bytes = TRUE) {
   assert_flag(save_data)
   assert_flag(verbose)
   assert_flag(offline)
 
-  icd9_rtf <- rtf_parse_year(year = "2011", perl = perl, useBytes = useBytes,
+  icd9_rtf <- rtf_parse_year(year = "2011", perl = perl, useBytes = use_bytes,
                              save_data = FALSE, verbose = verbose, offline = offline)
   chaps <- icd9_get_chapters(x = icd9_rtf$code, short_code = TRUE, verbose = verbose)
 
@@ -332,9 +332,9 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   out[["long_desc"]] <- enc2utf8(out[["long_desc"]])
 
   icd9cm_hierarchy_sanity(out)
-  icd9cm_hierarchy <- icd9cm_hierarchy_hotfix(out)
 
-  print(environment())
+  icd9cm_hierarchy <- out
+
   if (save_data)
     save_in_data_dir(icd9cm_hierarchy) # nocov
 
@@ -359,27 +359,5 @@ fixSubchapterNa <- function(x, start, end) {
   new_subs[congenital] <- congenital_title
   new_levels <- append(levels(x$sub_chapter), congenital_title, previous_sub_pos)
   x$sub_chapter <- factor(new_subs, new_levels)
-  x
-}
-
-#' fix some \code{RTF} parsing errors
-#'
-#' These are relevant to the most recent ICD-9-CM code sets, not the older
-#' historic versions. There will be no further updates, so this is reasonable.
-#' @keywords internal manip
-icd9cm_hierarchy_hotfix <- function(x) {
-  x %<>% .icd9cm_hierarchy_hotfix_both("0381", "Staphylococcal septicemia")
-  x %<>% .icd9cm_hierarchy_hotfix_both("7806", "Fever and other psychological disturbances of temperature regulation")
-  x %<>% .icd9cm_hierarchy_hotfix_both("737", "Curvature of spine")
-  x %<>% .icd9cm_hierarchy_hotfix_both("3451", "Generalized convulsive epilepsy")
-  x %<>% .icd9cm_hierarchy_hotfix_both("414", "Other forms of chronic ischemic heart disease")
-  x %<>% .icd9cm_hierarchy_hotfix_both("4140", "Coronary atherosclerosis")
-  x %<>% .icd9cm_hierarchy_hotfix_both("4141", "Aneurysm and dissection of heart")
-  x
-}
-
-.icd9cm_hierarchy_hotfix_both <- function(x, code, desc) {
-  x[x[["code"]] == code, "short_desc"] <- desc
-  x[x[["code"]] == code, "long_desc"] <- desc
   x
 }

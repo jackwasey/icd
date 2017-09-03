@@ -27,7 +27,7 @@
 strim <- function(x) {
   assert_string(x, na.ok = TRUE)
   if (!is.na(x[1]))
-    .Call("icd_strimCpp", PACKAGE = "icd", as.character(x))
+    .Call("_icd_strimCpp", PACKAGE = "icd", as.character(x))
   else
     return(NA_character_)
 }
@@ -45,7 +45,7 @@ strim <- function(x) {
 #' }
 trim <- function(x) {
   nax <- is.na(x)
-  x[!nax] <- .Call("icd_trimCpp", PACKAGE = "icd", as.character(x[!nax]))
+  x[!nax] <- .Call("_icd_trimCpp", PACKAGE = "icd", as.character(x[!nax]))
   x
 }
 

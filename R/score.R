@@ -101,8 +101,8 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
 icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
                                        scoring_system = c("original", "charlson", "quan")) {
   assert(
-    checkDataFrame(x, min.rows = 0, min.cols = 2, col.names = "named"),
-    checkMatrix(x, min.rows = 0, min.cols = 2, col.names = "named")
+    check_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named"),
+    check_matrix(x, min.rows = 0, min.cols = 2, col.names = "named")
   )
   stopifnot(ncol(x) - is.data.frame(x) == 17)
   if (match.arg(scoring_system) == "quan")
@@ -203,7 +203,7 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assert_string(visit_name)
   assert_flag(return_df)
-  assert(checkDataFrame(x), checkMatrix(x))
+  assert(check_data_frame(x), check_matrix(x))
   res <- apply(x[, names(x) %nin% visit_name],
                MARGIN = 1,
                FUN = sum)
@@ -325,7 +325,7 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
 #'   flagged.
 #' @export
 icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
-  assert(checkDataFrame(x), checkMatrix(x))
+  assert(check_data_frame(x), check_matrix(x))
   assert(check_null(visit_name), check_string(visit_name))
   assert_flag(hierarchy)
   stopifnot(ncol(x) - is.data.frame(x) == 30)

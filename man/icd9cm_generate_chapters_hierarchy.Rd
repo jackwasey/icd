@@ -5,7 +5,7 @@
 \title{generate ICD-9-CM hierarchy}
 \usage{
 icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE,
-  offline = TRUE, perl = TRUE, useBytes = TRUE)
+  offline = TRUE, perl = TRUE, use_bytes = TRUE)
 }
 \arguments{
 \item{save_data}{single logical value, if \code{TRUE} will save the generated

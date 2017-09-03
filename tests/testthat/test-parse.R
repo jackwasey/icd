@@ -180,6 +180,19 @@ if (rtf_year_ok(test_year)) {
     expect_identical(rtf[["611.8"]], "Other specified disorders of breast")
   })
 
+  test_that("at this early stage, hotfix failures are present", {
+    expect_identical(rtf[["038.1"]], "Staphylococcal septicemia")
+    expect_identical(rtf[["780.6"]], "Fever and other physiologic disturbances of temperature regulation")
+    expect_identical(rtf[["737"]], "Curvature of spine")
+    expect_identical(rtf[["345.1"]], "Generalized convulsive epilepsy")
+    expect_identical(rtf[["414"]], "Other forms of chronic ischemic heart disease")
+    expect_identical(rtf[["414.0"]], "Coronary atherosclerosis")
+    expect_identical(rtf[["414.1"]], "Aneurysm and dissection of heart")
+    expect_identical(rtf[["291"]], "Alcohol-induced mental disorders")
+    expect_identical(rtf[["361"]], "Retinal detachments and defects")
+    expect_identical(rtf[["294"]], "Persistent mental disorders due to conditions classified elsewhere")
+  })
+
   test_that("in rtf we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
     # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
     expect_false("640.02" %in% nrtf)
