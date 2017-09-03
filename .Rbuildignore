@@ -55,3 +55,4 @@ scrape_icd10_who
 ^tools$
 ^\.travis\.yml$
 ^wercker.yml$
+^appveyor\.yml$
