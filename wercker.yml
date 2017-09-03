@@ -1,10 +1,10 @@
-box: rocker/hadleyverse
+box: rocker/tidyverse
 command-timeout: 60
 no-response-timeout: 60
 build:
   steps:
-    - install-packages:
-        packages: libicu55
+    #- install-packages:
+        # packages: libicu57 - already exists, but libicu55 not in debian/stretch
     - script:
         name: icd test environment
         code: |
