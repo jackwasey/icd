@@ -4,7 +4,7 @@ no-response-timeout: 60
 build:
   steps:
     - install-packages:
-        packages: libicu57
+        packages: libicu55
     - script:
         name: icd test environment
         code: |
