@@ -38,21 +38,22 @@ apt-get install -y -qq libssl-dev libxml2-dev curl libcurl4-openssl-dev unixodbc
 if hash git 2>/dev/null; then
   echo "git found"
 else
-  apt-get update
   apt-get install -y -qq git
 fi
 
 git clone --depth=1 -b $GIT_BRANCH $GIT_URL
 
 # tolerate R_CMD unset or empty, and default to RD if empty or unset:
-echo "R_CMD is ${R_CMD:-RD}"
+# TODO: actually, RD is not available in all docker images, e.g. most basic rocker/tidyverse, verse, etc.
 
-# shorter if pre-installed debian packages, but these are not seen by RD as it has a different library?
-if [[ "${R_CMD}" =~ .*RD$ ]]; then
-  ${R_CMD}script -e 'pkgs <- c("knitr", "Rcpp", "testthat", "checkmate", "RODBC", "xml2"); for (p in pkgs) { if (!require(p, character.only=T)) install.packages(p) }'
+echo "checking ${R_CMD} exists"
+if ! command -v ${R_CMD:-RD} &>/dev/null; then
+  echo "setting R_CMD to R"
+  R_CMD=R
 fi
-# these two aren't on debian anyway:
-$R_CMD -e 'install.packages(c("roxygen2", "rmarkdown"))'
+
+# these are always checked for, so we don't care which R is installed:
+  ${R_CMD}script -e 'pkgs <- c("knitr", "Rcpp", "testthat", "checkmate", "RODBC", "xml2", "rmarkdown"); for (p in pkgs) { if (!require(p, character.only=T)) install.packages(p) }'
 
 # actually, we need to build based on the directory name, not the package name:
 $R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)
