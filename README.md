@@ -48,10 +48,22 @@ Features
 -   correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 conversion is left as an exercise for the user!
 -   comprehensive test suite to increase confidence in accurate processing of ICD codes
 
+Install
+-------
+
+The latest version is available in [github icd](https://github.com/jackwasey/icd), and can be installed with:
+
+``` r
+    install.packages("devtools")
+    devtools::install_github("jackwasey/icd")
+```
+
+The *master* branch at github should always build and pass all tests and R CMD check, and will be similar or identical to the most recent CRAN release. The CRAN releases are stable milestones. Contributions and bug reports are encouraged and essential for this package to remain current and useful to the many people who have installed it.
+
 Introduction
 ------------
 
-Calculate comorbidities, Charlson scores, perform fast and accurate validation, conversion, manipulation, filtering and comparison of ICD-9 and ICD-10 codes. Common ambiguities and code formats are handled. This package enables a work flow from raw lists of ICD codes in hospital billing databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. This package replaces icd9, which should be uninstalled.
+Calculate comorbidities, Charlson scores, perform fast and accurate validation, conversion, manipulation, filtering and comparison of ICD-9 and ICD-10 codes. Common ambiguities and code formats are handled. This package enables a work flow from raw lists of ICD codes in hospital billing databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. This package replaces 'icd9', which should be uninstalled.
 
 Relevance
 ---------
@@ -133,18 +145,6 @@ Look at the help files for details and examples of almost every function in this
 
 Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.
 
-Install
--------
-
-The latest version is available in [github icd](https://github.com/jackwasey/icd), and can be installed with:
-
-``` r
-    install.packages("devtools")
-    devtools::install_github("jackwasey/icd")
-```
-
-The *master* branch at github should always build and pass all tests and R CMD check, and will be similar or identical to the most recent CRAN release. The CRAN releases are stable milestones. Contributions and bug reports are encouraged and essential for this package to remain current and useful to the many people who have installed it.
-
 Advanced
 --------
 
@@ -162,3 +162,9 @@ One of the strengths of this package is a thorough test suite, including over 10
     10910
 
 A better metric of testing and code quality is code coverage, for which [codecov](https://codecov.io/github/jackwasey/icd) and [coveralls](https://coveralls.io/github/jackwasey/icd) are used. The automated [wercker](https://app.wercker.com/#applications/5609d41e71f137d02f0a1069) builds report test coverage results to [codecov](https://codecov.io/github/jackwasey/icd), whereas the [travis](https://travis-ci.org/jackwasey/icd) builds report coverage to [coveralls](https://coveralls.io/github/jackwasey/icd). The parsing code is a significant chunk of code, and may or may not be included in the automated builds depending on whether the source data is available. With the data available, test coverage is &gt;95%.
+
+### Contributing and Building
+
+Contributions of any kind to `icd` are very welcome.
+
+To build R, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following is required: `install.packages("Rcpp", type="source")` to avoid build errors.
