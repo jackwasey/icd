@@ -60,7 +60,7 @@ echo "R_CMD=${R_CMD:=RD}"
 set -x
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
-docker run --name rockicd \
+docker run \
            -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
            -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
            -e "R_PKG_NAME=$R_PKG_NAME" \
