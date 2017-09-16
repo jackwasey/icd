@@ -7,7 +7,11 @@
 
 # R CMD check results
 
-There is one note:
+On win64 only, I get the false positive NOTE with R Under development (unstable) (2017-09-02 r73196):
+File 'icd/libs/x64/icd.dll':
+  Found no calls to: 'R_registerRoutines', 'R_useDynamicSymbols'
+
+There is one other note:
 
 checking installed package size ... NOTE
   installed size is  6.3Mb
