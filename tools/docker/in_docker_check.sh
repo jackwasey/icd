@@ -22,7 +22,6 @@ IFS=$'\n\t'
 # echo expanded commands
 # set -x
 
-echo "Cloning '$GIT_BRANCH' branch from '$GIT_URL'"
 pushd /tmp
 
 echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
@@ -40,8 +39,32 @@ if hash git 2>/dev/null; then
 else
   apt-get install -y -qq git
 fi
-
+# or download zip from: https://github.com/jackwasey/icd/archive/master.zip
+echo "Cloning '$GIT_BRANCH' branch from '$GIT_URL'"
 git clone --depth=1 -b $GIT_BRANCH $GIT_URL
+
+R_CMD_ERR="${R_CMD}script -e 'cat()'"
+
+# which libasan library?
+if [ -e /usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so ]; then
+  if LD_PRELOAD="/usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so" ${R_CMD_ERR}; then
+    export LD_PRELOAD="/usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so"
+  fi
+elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.4 ]; then
+  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.4" ${R_CMD_ERR}; then
+    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.4"
+  fi
+elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.3 ]; then
+  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.3" ${R_CMD_ERR}; then
+    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.3"
+  fi
+elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.2 ]; then
+  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.2" ${R_CMD_ERR}; then
+    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.2"
+  fi
+else
+  echo "Cannot find libasan in /usr/lib/x86_64-linux-gnu"
+fi
 
 # tolerate R_CMD unset or empty, and default to RD if empty or unset:
 # TODO: actually, RD is not available in all docker images, e.g. most basic rocker/tidyverse, verse, etc.
@@ -52,8 +75,11 @@ if ! command -v ${R_CMD:-RD} &>/dev/null; then
   R_CMD=R
 fi
 
-# these are always checked for, so we don't care which R is installed:
-ASAN_OPTIONS=detect_leaks=0 ${R_CMD}script -e 'pkgs <- c("knitr", "Rcpp", "testthat", "checkmate", "RODBC", "xml2", "rmarkdown"); for (p in pkgs) { if (!require(p, character.only=T)) install.packages(p) }'
+# these are always checked for, so we don't care which R is installed. We also need to re-install some packages, for some reason unclear to me: https://github.com/rocker-org/r-devel-san-clang/issues/12
+for pkg in testthat checkmate RODBC xml2 Rcpp stringi knitr rmarkdown; do
+ASAN_OPTIONS=detect_leaks=0 ${R_CMD}script -e "install.packages(\"${pkg}\")"
+done
+#ASAN_OPTIONS=detect_leaks=0 ${R_CMD}script -e 'pkgs <- c("knitr", "Rcpp", "testthat", "checkmate", "RODBC", "xml2", "rmarkdown"); for (p in pkgs) { if (!require(p, character.only=T)) install.packages(p) }'
 
 # actually, we need to build based on the directory name, not the package name:
 $R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)

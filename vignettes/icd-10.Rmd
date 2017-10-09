@@ -47,7 +47,7 @@ knitr::opts_chunk$set(
 
 ```
 
-This package now includes ICD-10 support, with some sample ICD-10-CM codes, and comorbidity mappings from ICD-10 codes to comorbidities. The sample data are from http://www.ustur.wsu.edu/database/ where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
+This package now includes ICD-10 support, with some sample ICD-10-CM codes, and comorbidity mappings from ICD-10 codes to comorbidities. The sample data are from https://ustur.wsu.edu/about-us/ where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
 
 The sample data is in the 'long' format, i.e. multiple rows per case
 

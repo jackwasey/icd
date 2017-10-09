@@ -408,13 +408,6 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   invisible(icd10_map_quan_deyo)
 }
 
-fetch_uranium_pathology <- function(offline = TRUE) {
-  unzip_to_data_raw(
-    url = "http://ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip",
-    file_name = "Pathology_Office2007.accdb",
-    offline = offline)
-}
-
 #' generate uranium pathology data
 #'
 #' This is downloaded from \href{https://wsu.edu}{WSU} where it appears to be
@@ -424,8 +417,7 @@ fetch_uranium_pathology <- function(offline = TRUE) {
 #' Windows build of \pkg{RODBC}.
 #' @template parse-template
 #' @source
-#' \url{http://ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
-#'
+#' \url{https://ustur.wsu.edu/about-us/}
 #' @keywords internal
 generate_uranium_pathology <- function(save_data = TRUE, offline = TRUE) {
 
@@ -435,7 +427,7 @@ generate_uranium_pathology <- function(save_data = TRUE, offline = TRUE) {
   assert_flag(save_data)
   assert_flag(offline)
 
-  stopifnot(!is.null(file_path <- fetch_uranium_pathology(offline = offline)$file_path))
+  file_path <- system.file("data-raw", "Pathology_Office2007.accdb", package = "icd")
 
   # odbcConnectAccess2007 is only in the Windows version of RODBC
   channel <- RODBC::odbcConnectAccess2007(file_path)
