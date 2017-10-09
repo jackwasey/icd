@@ -1,4 +1,13 @@
-## Test environments
+I think the error shown at
+https://www.stats.ox.ac.uk/pub/bdr/memtests/gcc-ASAN/icd/ is a false
+positive. I can trigger the error by inserting some faulty code which
+triggers exactly the same sanitizer error, so I think my environment is
+capable of detecting this particular type of error if it exists. I used
+all the config fragments available ito set up the test environment, except
+your tests are run under gcc 7.1 and I used 7.2. In addition clang-trunk
+sanitizer does not detect this error.
+
+# Test environments
 * Ubuntu 17.04 R 3.4.1, clang 4.0, clang-trunk
 * Ubuntu 12.04 (on travis-ci) R-devel, gcc
 * Debian in docker with R-devel, ASAN+UBSAN GCC 7.1, clang 4.0 & trunk
