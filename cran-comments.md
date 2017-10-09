@@ -1,9 +1,13 @@
 ## Test environments
-* Ubuntu 17.04 R 3.4.1, clang 4.0, clang-trunk
+* Ubuntu 17.04 R 3.4.1, clang 4.0, clang-trunk, gcc 7.2
 * Ubuntu 12.04 (on travis-ci) R-devel, gcc
-* Debian in docker with R-devel, ASAN+UBSAN GCC 7.1, clang 4.0 & trunk
+* Debian in docker with R-devel, ASAN+UBSAN GCC 7.2, clang 4.0 & trunk
 * Windows 7, Rtools 3.4, 64-bit biarch and 32-bit, R-3.4 and R-devel
 * Appveyor Windows Server 2012 R2 x64, R 3.4.1-patched 32 and 64 bit
+
+# SAN error
+
+I think the error shown at https://www.stats.ox.ac.uk/pub/bdr/memtests/gcc-ASAN/icd/ is a false positive. I can trigger the error by inserting some faulty code which triggers exactly the same sanitizer error, so I think my environment is capable of detecting this particular type of error if it exists. I used all the config fragments available set up the test environment, except your tests are run under gcc 7.1 and I used 7.2. In addition clang-trunk does not detect this error.
 
 # R CMD check results
 
