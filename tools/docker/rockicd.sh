@@ -70,4 +70,9 @@ docker run \
            -e "GIT_BRANCH=$GIT_BRANCH" \
            -e "GIT_URL=$GIT_URL" \
            -e "R_CMD=$R_CMD" \
-           --rm -ti "$DOCKER_IMAGE" ${2:-/go.sh}
+           --rm \
+	   -ti \
+	   --cap-add SYS_PTRACE \
+	   "$DOCKER_IMAGE" \
+	   ${2:-/go.sh}
+

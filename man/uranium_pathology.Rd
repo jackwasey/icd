@@ -5,8 +5,7 @@
 \alias{uranium_pathology}
 \title{United States Transuranium & Uranium Registries}
 \source{
-\url{http://www.ustur.wsu.edu/database/}
-  \url{http://ustur.wsu.edu/Case_Studies/Pathology/mdb/Pathology_Office2007.zip}
+\url{https://ustur.wsu.edu/about-us/}
 }
 \description{
 an ICD-10 data set (not ICD-10-CM) with mortality from the United States

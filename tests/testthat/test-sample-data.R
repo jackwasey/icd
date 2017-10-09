@@ -15,17 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-test_that("generating uranium data is identical to saved", {
-  if (is.null(fetch_uranium_pathology(offline = TRUE)$file_path))
-    skip("uranium pathology data must be downloaded with fetch_uranium_pathology")
-
-  suppressWarnings(
-    if (!require("RODBC") || !existsFunction("odbcConnectAccess2007"))
-      skip("only test if RODBC::odbcConnectAccess2007 is available. (Probably just windows.)")
-  )
-  expect_identical(generate_uranium_pathology(save_data = FALSE), uranium_pathology)
-})
-
 test_that("ICD-10 codes in uranium data are okay", {
   skip("reinstate this test once ICD-10 WHO codes are available for comparison.
        Uranium Pathology data is not ICD-10-CM, but ICD-10 WHO.")
