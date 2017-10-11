@@ -1,3 +1,7 @@
+# Resubmission
+
+Updated DESCRIPTION date and moved credits from documentation to DESCRIPTION, as requested on previous CRAN submission.
+
 # SAN error 
 I think the error shown at https://www.stats.ox.ac.uk/pub/bdr/memtests/gcc-ASAN/icd/ is a false positive. I can trigger the error by inserting some faulty code which triggers exactly the same sanitizer error, so I think my environment is capable of detecting this particular type of error, if one exists. I used all the config fragments available to set up the test environment, except your tests are run under gcc 7.1 and I used 7.2. In addition clang-trunk sanitizer does not detect this error.
 
