@@ -96,6 +96,8 @@ Other contributors:
 \itemize{
   \item William Murphy \email{WMurphy@eatright.org} (Van Walraven scores) [contributor]
   \item Anobel Odisho \email{anobel.odisho@ucsf.edu} (Hierarchical Condition Codes) [contributor]
+  \item Ed Lee (explain codes in table format) [contributor]
+  \item Kevin Ushey (Code adapted for fast factor generation) [contributor]
   \item R Core Team (m4 macro for OpenMP detection in configure) [contributor, copyright holder]
 }
 
