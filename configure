@@ -9,7 +9,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# Copyright (C) 2014 - 2017  Jack O. Wasey
+# Copyright (C) 2014 - 2018  Jack O. Wasey
 ## -------------------- ##
 ## M4sh Initialization. ##
 ## -------------------- ##
@@ -1395,7 +1395,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-Copyright (C) 2014 - 2017  Jack O. Wasey
+Copyright (C) 2014 - 2018  Jack O. Wasey
 _ACEOF
   exit
 fi
