@@ -17,12 +17,14 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "guess.h"
-#include "local.h"
 #include <Rcpp.h>
 #include <vector>
 #include <string>
 #include <algorithm>
 #include <Rinternals.h>
+extern "C" {
+  #include "cutil.h"                            // for getRListOrDfElement
+}
 
 using Rcpp::LogicalVector;
 

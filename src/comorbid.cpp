@@ -18,6 +18,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 
+#include <Rcpp.h>
 #include <Rcpp/r/headers.h>                     // for TYPEOF, Rf_install, SEXP
 #include <string>                               // for string
 #include <vector>                               // for vector, operator-

@@ -16,12 +16,15 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include "local.h"
+#include <Rcpp.h>
 #include "icd_types.h"
 #include <Rcpp.h>
 #ifdef ICD_VALGRIND
 #include <valgrind/callgrind.h>
 #endif
+extern "C" {
+  #include "cutil.h"                            // for getRListOrDfElement
+}
 
 CV raggedToWide(const VecVecStr& ragged, int max_per_pt,
 		const VecStr &visitIds) {

@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#include "local.h"
+#include <Rcpp.h>
 #include <Rcpp/r/headers.h>              // for Rf_install
 #include <iterator>                      // for advance
 #include <vector>                        // for vector

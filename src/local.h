@@ -18,10 +18,6 @@
 #ifndef LOCAL_H_
 #define LOCAL_H_
 
-#include "config.h"
-#include "icd_types.h"
-#include <Rcpp.h>
-
 extern "C" {
 #include "cutil.h"
 #include <cstdlib>

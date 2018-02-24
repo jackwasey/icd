@@ -18,7 +18,6 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 
-#include "local.h"
 #include "comorbidIcd10.h"
 #include <Rcpp/r/headers.h>                 // for Rf_install, Rf_mkString
 #include <string.h>                         // for strlen, strncpy
