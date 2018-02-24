@@ -16,10 +16,18 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
 #include "manip.h"
-#include "is.h"
-#include "convert.h"
+#include <Rcpp/r/headers.h>               // for Rf_install, NA_STRING, Rf_l...
+#include <string.h>                       // for strlen
+#include "Rcpp.h"                         // for wrap
+#include "Rcpp/api/meat/proxy.h"          // for AttributeProxyPolicy::Attri...
+#include "Rcpp/exceptions.h"              // for index_out_of_bounds
+#include "Rcpp/sugar/functions/sapply.h"  // for Sapply, sapply
+#include "Rcpp/vector/Vector.h"           // for Vector<>::NameProxy
+#include "Rcpp/vector/instantiation.h"    // for List
+#include "Rcpp/vector/proxy.h"            // for r_vector_name_proxy<>::type
+#include "convert.h"                      // for icd9DecimalToPartsCpp, icd9...
+#include "is.h"                           // for icd9IsASingleV, icd9IsASingleE
 
 //' Simpler add leading zeroes without converting to parts and back
 //' @keywords internal manip

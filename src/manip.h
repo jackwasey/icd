@@ -20,7 +20,7 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "icd_types.h"
-#include <Rcpp.h>
+#include "Rcpp/String.h"  // for String
 #include <string>
 
 CV icd9AddLeadingZeroes(CV icd9, bool isShort);

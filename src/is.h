@@ -17,9 +17,8 @@
 
 #ifndef IS_H_
 #define IS_H_
-#include "icd_types.h"
-#include <string>
-#include <vector>
+#include <vector>       // for vector
+#include "icd_types.h"  // for VecStr
 
 bool icd9IsASingleV(const char* s);
 bool icd9IsASingleE(const char* s);

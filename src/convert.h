@@ -18,8 +18,10 @@
 #ifndef CONVERT_H_
 #define CONVERT_H_
 
-#include "icd_types.h"
 #include <Rcpp.h>
+#include "icd_types.h"                  // for CV
+#include "Rcpp/String.h"                // for String
+#include "Rcpp/vector/instantiation.h"  // for List
 
 // need default argument here for other functions to exploit,
 // but this is then not exported by Rcpp (which works on the function body).
