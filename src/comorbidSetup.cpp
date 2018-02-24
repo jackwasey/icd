@@ -18,7 +18,11 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include <Rcpp/r/headers.h>                   // for INTEGER, Rf_length, SEXP
-#include <algorithm>                          // for copy, sort
+#ifdef ICD_STD_PARALLEL
+#include <parallel/algorithm>
+#else
+#include <algorithm>
+#endif
 #include <map>                                // for _Rb_tree_iterator
 #include <string>                             // for string, basic_string
 #include <utility>                            // for make_pair, pair
@@ -34,11 +38,7 @@ extern "C" {
   #include "cutil.h"                            // for getRListOrDfElement
 }
 
-#ifdef ICD_STD_PARALLEL
-#include <parallel/algorithm>
-#else
-#include <algorithm>
-#endif
+
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map) {
   for (Rcpp::List::const_iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();

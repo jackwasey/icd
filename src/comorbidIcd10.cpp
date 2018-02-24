@@ -40,7 +40,7 @@
 #include "icd_types.h"                      // for CV
 extern "C" {
   #include <cstddef>                          // for size_t
-  #include <cstdlib>                          // for size_t
+  //#include <cstdlib>                          // for size_t
 }
 
 using Rcpp::IntegerVector;

@@ -17,8 +17,15 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "convert_alt.h"
-#include "is.h"
-#include "util.h"
+#include <Rcpp/r/headers.h>       // for NA_STRING, Rf_install
+#include <string.h>               // for strlen
+#include "Rcpp.h"                 // for wrap
+#include "Rcpp/String.h"          // for String
+#include "Rcpp/api/meat/proxy.h"  // for AttributeProxyPolicy::AttributeProx...
+#include "Rcpp/vector/Vector.h"   // for Vector<>::iterator
+#include "RcppCommon.h"           // for Proxy_Iterator
+#include "is.h"                   // for icd9IsASingleVE, icd9IsASingleE
+#include "util.h"                 // for strimCpp
 
 // [[Rcpp::export]]
 CV icd9MajMinToCodeOld(CV mjr,

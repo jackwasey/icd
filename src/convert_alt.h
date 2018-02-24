@@ -18,8 +18,9 @@
 #ifndef CONVERT_ALT_H_
 #define CONVERT_ALT_H_
 
-#include "icd_types.h"
-#include <Rcpp.h>
+#include <string>       // for string
+#include "icd_types.h"  // for CV, VecStr
+
 CV icd9MajMinToCodeOld(CV mjr, CV mnr, bool isShort);
 void icd9ShortToPartsCppStd(VecStr icd9Short,
                             std::string mnrEmpty,

@@ -18,13 +18,32 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 
-#include "local.h"
+#include <Rcpp/r/headers.h>                     // for TYPEOF, Rf_install, SEXP
+#include <string>                               // for string
+#include <vector>                               // for vector, operator-
+#include "Rcpp.h"                               // for wrap
+#include "Rcpp/Dimension.h"                     // for Dimension
+#include "Rcpp/Function.h"                      // for Function, Function_Impl
+#include "Rcpp/api/meat/Dimension.h"            // for Dimension::operator S...
+#include "Rcpp/api/meat/proxy.h"                // for AttributeProxyPolicy:...
+#include "Rcpp/exceptions.h"                    // for stop
+#include "Rcpp/generated/Function__operator.h"  // for Function_Impl::operat...
+#include "Rcpp/generated/Vector__create.h"      // for Vector::create
+#include "Rcpp/generated/grow__pairlist.h"      // for pairlist
+#include "Rcpp/proxy/AttributeProxy.h"          // for AttributeProxyPolicy<...
+#include "Rcpp/proxy/NamesProxy.h"              // for NamesProxyPolicy<>::c...
+#include "Rcpp/vector/Vector.h"                 // for Vector
+#include "Rcpp/vector/instantiation.h"          // for LogicalVector, List
+#include "icd_types.h"                          // for VecVecInt, ComorbidOut
+#include "local.h"                              // for buildMap, buildVisitC...
+extern "C" {
+  #include "cutil.h"                              // for getRListOrDfElement
+}
+
 #ifdef ICD_DEBUG_PARALLEL
 #include "util.h"
 #endif
-#include <Rcpp.h>
-#include <vector>
-#include <string>
+//#include <Rcpp.h>
 
 // R CMD INSTALL --no-docs icd && R -e "library(icd); icd:::runOpenMPVecInt();"
 

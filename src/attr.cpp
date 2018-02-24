@@ -16,8 +16,12 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
+//#include <Rcpp.h>                       // for wrap
 #include "attr.h"
-#include <Rcpp.h>                       // for wrap
+#include <Rcpp/r/headers.h>             // for Rf_install
+#include "Rcpp.h"                       // for wrap
+#include "Rcpp/api/meat/proxy.h"        // for AttributeProxyPolicy::Attribu...
+#include "Rcpp/proxy/AttributeProxy.h"  // for AttributeProxyPolicy<>::Attri...
 
 //' Set ICD short-form diagnosis code attribute
 //'

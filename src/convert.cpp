@@ -17,11 +17,28 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "convert.h"
-#include "appendMinor.h"
-#include "is.h"
-#include "util.h"
-// for add leading zeroes mjr (TODO: remove this dependency)
-#include "manip.h"
+#include <Rcpp/r/headers.h>                  // for Rf_install, NA_STRING
+extern "C" {
+  #include <cstddef>                           // for size_t
+}
+#include <string>                            // for string
+#include "Rcpp.h"                            // for wrap
+#include "Rcpp/Named.h"                      // for Argument, NamedPlaceHolder
+#include "Rcpp/api/meat/proxy.h"             // for AttributeProxyPolicy::At...
+#include "Rcpp/as.h"                         // for as
+#include "Rcpp/clone.h"                      // for clone
+#include "Rcpp/generated/Vector__create.h"   // for Vector::create
+#include "Rcpp/proxy/AttributeProxy.h"       // for AttributeProxyPolicy<>::...
+#include "Rcpp/sugar/functions/seq_along.h"  // for SeqLen, seq_along
+#include "Rcpp/traits/named_object.h"        // for named_object
+#include "Rcpp/vector/Vector.h"              // for Vector, Vector<>::Proxy
+#include "Rcpp/vector/const_string_proxy.h"  // for const_string_proxy
+#include "Rcpp/vector/proxy.h"               // for r_vector_name_proxy<>::type
+#include "RcppCommon.h"                      // for Proxy_Iterator, wrap
+#include "appendMinor.h"                     // for icd9MajMinToCode
+#include "is.h"                              // for icd9IsASingleE, icd9IsAS...
+#include "manip.h"                           // for icd9AddLeadingZeroesMajor
+#include "util.h"                            // for strimCpp, trimLeftCpp
 
 //' @rdname convert
 //' @keywords internal manip
