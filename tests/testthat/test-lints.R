@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-if (FALSE && requireNamespace("lintr", quietly = TRUE) &&
+if (requireNamespace("lintr", quietly = TRUE) &&
     "package:devtools" %nin% search()) {
   context("lints, if lintr available")
   test_that("there are no lints", {
-    # running lints keeps failing with devtools load_all interaction bug
+    # running lints keeps failing after devtools load_all, but works fine with
+    # fresh session
     lintr::expect_lint_free()
   })
 }

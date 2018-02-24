@@ -31,7 +31,9 @@
 //' j
 //' icd:::attr_decimal_diag(j)
 //' as.icd_decimal_diag(j)
-//' if (requireNamespace("pryr", quietly = TRUE)) {
+//' # if pryr is installed (not Suggest because purely for demonstrating internal works)
+//' pryr <- "pryr"
+//' if (require(pryr, quietly = TRUE, character.only = TRUE)) {
 //' j <- 1
 //' c(address(j), refs(j))
 //' attr(j, "icd_short_diag") <- TRUE

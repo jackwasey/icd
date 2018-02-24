@@ -129,7 +129,7 @@ CV icd9AddLeadingZeroesMajor(CV mjr) {
 //'     ))
 //'
 //'   bad_codes <- sample(c("E2", "V01", "1234", "12", "1", "E99", "E987", "V"),
-//'                       size = 1e5, replace = TRUE)
+//'                       size = 1e4, replace = TRUE)
 //'   microbenchmark::microbenchmark(
 //'     icd:::icd9_add_leading_zeroes_alt_cpp(bad_codes, short_code = TRUE),
 //'     icd:::icd9_add_leading_zeroes_cpp(bad_codes, short_code = TRUE)
