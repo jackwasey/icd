@@ -1973,7 +1973,7 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*icd9AppendMinors)(VecStr&,const VecStr&,bool)");
         signatures.insert("VecStr(*icd9MajMinToShortStd)(const VecStr&,const VecStr&)");
         signatures.insert("VecStr(*icd9MajMinToShortSingleStd)(const Str&,const VecStr&)");
-        signatures.insert("void(*.attr_decimal_diag)(Rcpp::RObject&,bool)");
+        signatures.insert("void(*attr_decimal_diag)(Rcpp::RObject&,bool)");
         signatures.insert("void(*.attr_short_diag)(Rcpp::RObject&,bool)");
         signatures.insert("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
         signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
@@ -2042,7 +2042,7 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_icd9AppendMinors", (DL_FUNC)_icd_icd9AppendMinors_try);
     R_RegisterCCallable("icd", "_icd_icd9MajMinToShortStd", (DL_FUNC)_icd_icd9MajMinToShortStd_try);
     R_RegisterCCallable("icd", "_icd_icd9MajMinToShortSingleStd", (DL_FUNC)_icd_icd9MajMinToShortSingleStd_try);
-    R_RegisterCCallable("icd", "_icd_.attr_decimal_diag", (DL_FUNC)_icd_setDecimalDiag_try);
+    R_RegisterCCallable("icd", "_icd_attr_decimal_diag", (DL_FUNC)_icd_setDecimalDiag_try);
     R_RegisterCCallable("icd", "_icd_.attr_short_diag", (DL_FUNC)_icd_setShortDiag_try);
     R_RegisterCCallable("icd", "_icd_icd9ComorbidShortCpp", (DL_FUNC)_icd_icd9ComorbidShortCpp_try);
     R_RegisterCCallable("icd", "_icd_lookupComorbidByChunkFor", (DL_FUNC)_icd_lookupComorbidByChunkFor_try);

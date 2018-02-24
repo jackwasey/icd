@@ -176,17 +176,17 @@ namespace icd {
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
-    inline void _attr_decimal_diag(Rcpp::RObject& x, bool value = true) {
-        typedef SEXP(*Ptr__attr_decimal_diag)(SEXP,SEXP);
-        static Ptr__attr_decimal_diag p__attr_decimal_diag = NULL;
-        if (p__attr_decimal_diag == NULL) {
-            validateSignature("void(*_attr_decimal_diag)(Rcpp::RObject&,bool)");
-            p__attr_decimal_diag = (Ptr__attr_decimal_diag)R_GetCCallable("icd", "_icd__attr_decimal_diag");
+    inline void attr_decimal_diag(Rcpp::RObject& x, bool value = true) {
+        typedef SEXP(*Ptr_attr_decimal_diag)(SEXP,SEXP);
+        static Ptr_attr_decimal_diag p_attr_decimal_diag = NULL;
+        if (p_attr_decimal_diag == NULL) {
+            validateSignature("void(*attr_decimal_diag)(Rcpp::RObject&,bool)");
+            p_attr_decimal_diag = (Ptr_attr_decimal_diag)R_GetCCallable("icd", "_icd_attr_decimal_diag");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p__attr_decimal_diag(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(value)));
+            rcpp_result_gen = p_attr_decimal_diag(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(value)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

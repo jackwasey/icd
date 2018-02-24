@@ -4,11 +4,5 @@
  * available in your package.
  */
 
-#include "config.h"
-
-#ifdef HAVE_TESTTHAT_H
-
 #define TESTTHAT_TEST_RUNNER
 #include <testthat.h>
-
-#endif

@@ -81,7 +81,7 @@ test_twenty <- structure(
   class = "data.frame")
 
 # first and last item from each AHRQ comorbidity:
-icd9(
+icd:::icd9(
   unlist(
     unname(
       c(lapply(icd9_map_ahrq, head, n = 1),
@@ -149,7 +149,7 @@ two_map <- list("malady" = c("100", "2000"),
 
 pts_invalid_mix <- icd_long_data(
   visit_id = c(1000, 1000, 1001),
-  icd9 = icd9(c("27801", "invalides", "25001")),
+  icd9 = icd:::icd9(c("27801", "invalides", "25001")),
   poa = factor(c("Y", "N", "Y")),
   stringsAsFactors = FALSE)
 

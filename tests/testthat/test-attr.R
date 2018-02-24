@@ -17,7 +17,7 @@ test_that("test that attribute is set by different mechanisms", {
   icd:::.attr_short_diag(j)
   expect_true(is.icd_short_diag(j))
   expect_false(is.icd_decimal_diag(j))
-  icd:::.attr_decimal_diag(j)
+  icd:::attr_decimal_diag(j)
   expect_false(is.icd_short_diag(j))
   expect_true(is.icd_decimal_diag(j))
 

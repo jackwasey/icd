@@ -24,4 +24,4 @@ context("function examples")
 old_opts <- options(warn = 2)
 on.exit(options(old_opts), add = TRUE)
 
-test_examples(path = "../../man")
+testthat::test_examples()

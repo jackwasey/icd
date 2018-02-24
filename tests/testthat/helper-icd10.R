@@ -1,4 +1,4 @@
-icd10_each_quan_elix_cmb <- icd10cm(c(
+icd10_each_quan_elix_cmb <- icd:::icd10cm(c(
     "I42.6",
     "I44.39",
     "Z95.3",
@@ -68,6 +68,6 @@ icd10_all_quan_elix_one_pt <- data.frame(pt_id = rep(1, 31), icd10_code = icd10_
 icd10_all_ahrq <- data.frame(pt_id = 1:30, icd10_code = icd10_each_ahrq_cmb, stringsAsFactors = FALSE)
 icd10_all_ahrq_one_pt <- data.frame(pt_id = rep(1, 30), icd10_code = icd10_each_ahrq_cmb)
 
-icd10_tricky <- icd10cm(c("V97.33XD", "W51.XXXA", "V00.01XD", "Y93.D", "Z99.89", "Y92.146",
+icd10_tricky <- icd:::icd10cm(c("V97.33XD", "W51.XXXA", "V00.01XD", "Y93.D", "Z99.89", "Y92.146",
                   "S10.87XA", "W55.41XA", "W61.62XD", "Z63.1", "Y93.D", "V91.07XD",
                   "W55.29XA", "V95.43XS", "W61.12XA", "R46.1"))

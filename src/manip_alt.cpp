@@ -21,6 +21,13 @@
 #include "is.h"
 #include "convert.h"
 
+//' Decompose a 'short' ICD code and insert the leading zeroes as needed.
+//'
+//' This should add leading zeroes when there is definitely no ambiguity,
+//' e.g. V1. However V10 should not be altered, because V010 is a different
+//' code. The goal is for this to be faster, but must be correct! Example in manip.cpp
+//' has the benchmark code.
+//' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
   if (x == NA_STRING) {
@@ -55,6 +62,8 @@ Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
   return (s);
 }
 
+//' @rdname icd9_add_leading_zeroes_cpp
+//' @keywords internal manip
 // [[Rcpp::export(icd9_add_leading_zeroes_alt_cpp)]]
 CV icd9AddLeadingZeroesDirect(CV x, bool short_code) {
   // a shortcut for when short codes is just to add the appropriate leading
@@ -65,4 +74,3 @@ CV icd9AddLeadingZeroesDirect(CV x, bool short_code) {
   CV y = icd9DecimalToShort(x);
   return Rcpp::sapply(y, icd9AddLeadingZeroesShortSingle);
 }
-

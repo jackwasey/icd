@@ -216,10 +216,8 @@ set_re_globals()
 #'   icd_is_valid(as.icd9(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E")))
 #'   # internal function:
-#'   \dontrun{
 #'   icd:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
-#'   }
 #' @export
 icd_is_valid <- function(x, ...) {
   UseMethod("icd_is_valid")

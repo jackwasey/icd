@@ -29,24 +29,23 @@
 //' j
 //' attr(j, "icd_short_diag") <- FALSE
 //' j
-//' icd:::.attr_decimal_diag(j)
+//' icd:::attr_decimal_diag(j)
 //' as.icd_decimal_diag(j)
-//' \dontrun{
-//' library(pryr)
+//' if (require(pryr)) {
 //' j <- 1
 //' c(address(j), refs(j))
 //' attr(j, "icd_short_diag") <- TRUE
 //' c(address(j), refs(j))
 //' attr(j, "icd_short_diag") <- FALSE
 //' c(address(j), refs(j))
-//' icd:::.attr_decimal_diag(j)
+//' icd:::attr_decimal_diag(j)
 //' c(address(j), refs(j))
 //' j <- as.icd_decimal_diag(j, TRUE)
 //' c(address(j), refs(j))
 //' # Rcpp cleverer than R, and doesn't return a copy of the data
 //' }
 //' @keywords internal attribute
-// [[Rcpp::export(.attr_decimal_diag)]]
+// [[Rcpp::export(attr_decimal_diag)]]
 void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = !value;
 }

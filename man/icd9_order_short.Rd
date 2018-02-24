@@ -20,11 +20,10 @@ with a warning if found.
 x <- icd:::generate_random_decimal_icd9(1e4)
 system.time(icd:::icd9_sort_cpp(x)) # vastly quicker
 system.time(icd:::icd9_order_short(x))
-\dontrun{
-# fastmatch was fractionally faster, but either is very slow
-library(microbenchmark)
-microbenchmark(icd9_order_short(x), icd9_order_short_r(x), times = 10)
-# C++ method (which also ignores NA values) is 100x faster.
+if (require("microbenchmark")) {
+  # fastmatch was fractionally faster, but either is very slow
+  microbenchmark(icd9_order_short(x), icd9_order_short_r(x), times = 10)
+  # C++ method (which also ignores NA values) is 100x faster.
 }
 }
 \keyword{internal}

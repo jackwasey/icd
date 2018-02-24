@@ -10,13 +10,6 @@
 #ifdef HAVE_TESTTHAT_H
 #include <testthat.h>
 
-context("C++ Catch") {
-  test_that("two plus two is four") {
-    int result = 2 + 2;
-    expect_true(result == 4);
-  }
-}
-
 context("internal 'is' functions") {
   test_that("is n") {
     VecStr v;
@@ -209,6 +202,15 @@ context("add leading zeroes to major") {
 
   test_that("E code with three char major works") {
     expect_true(icd9AddLeadingZeroesMajorSingleStd("E01") == "E001");
+  }
+}
+
+context("test alternate zero-adding code") {
+  test_that("when a code would be made ambiguous, don't change it") {
+    expect_true(icd9AddLeadingZeroesMajorSingle("E010") == "E010");
+  }
+  test_that("short E codes work") {
+    expect_true(icd9AddLeadingZeroesMajorSingle("E1") == "E001");
   }
 }
 
