@@ -189,7 +189,7 @@ context("MajMin to code") {
     expect_error(icd9MajMinToCode(mj, mn, true));
   }
 }
-#endif
+#endif // end debug-only block
 
 context("add leading zeroes to major") {
   test_that("when major len is 0, result is empty") {

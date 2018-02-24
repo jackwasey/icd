@@ -21,6 +21,8 @@
 #include "is.h"
 #include "convert.h"
 
+//' Simpler add leading zeroes without converting to parts and back
+//' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr) {
 	if (mjr == NA_STRING) {

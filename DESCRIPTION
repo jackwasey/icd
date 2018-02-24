@@ -30,6 +30,7 @@ Imports:
     utils
 Suggests:
     knitr,
+    microbenchmark,
     RODBC,
     roxygen2 (>= 5.0.0),
     rmarkdown,

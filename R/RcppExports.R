@@ -303,6 +303,8 @@ icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroesDirect`, x, short_code)
 }
 
+#' Simpler add leading zeroes without converting to parts and back
+#' @keywords internal manip
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call(`_icd_icd9AddLeadingZeroesMajorSingle`, mjr)
 }
