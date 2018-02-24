@@ -20,6 +20,7 @@
     _icd_icd9ComorbidShortCpp
     _icd_lookupComorbidByChunkFor
     _icd_icd10_comorbid_parent_search_cpp
+    _icd_icd9MajMinToCodeOld
     _icd_icd9PartsToShort
     _icd_icd9PartsToDecimal
     _icd_icd9MajMinToParts
@@ -30,7 +31,6 @@
     _icd_icd9ShortToDecimal
     _icd_icd9DecimalToShort
     _icd_icd9GetMajor
-    _icd_icd9MajMinToCodeOld
     _icd_fastIntToStringStd
     _icd_fastIntToStringRcpp
     _icd_guessShortCompleteCpp
@@ -39,12 +39,14 @@
     _icd_icd9_is_v_cpp
     _icd_icd9_is_e_cpp
     _icd_icd9LongToWideCpp
+    _icd_icd9AddLeadingZeroesShortSingle
+    _icd_icd9AddLeadingZeroesDirect
     _icd_icd9AddLeadingZeroesMajorSingle
     _icd_icd9AddLeadingZeroesMajorSingleStd
     _icd_icd9AddLeadingZeroesMajor
     _icd_icd9AddLeadingZeroes
-    _icd_icd9AddLeadingZeroesShortSingle
-    _icd_icd9AddLeadingZeroesDirect
+    _icd_icd9ChildrenShort11
+    _icd_icd9ChildrenShortStd
     _icd_icd9ExpandMinorStd
     _icd_icd9ExpandMinor
     _icd_icd9ChildrenShort
@@ -53,8 +55,6 @@
     _icd_icd9ChildrenDecimalCpp
     _icd_icd9ChildrenCpp
     _icd_icd_in_reference_code
-    _icd_icd9ChildrenShort11
-    _icd_icd9ChildrenShortStd
     _icd_trimLeftCpp
     _icd_strimCpp
     _icd_trimCpp
@@ -86,6 +86,7 @@ extern SEXP _icd_icd9ShortToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_RcppExport_registerCCallable();
 extern SEXP _icd_strimCpp(SEXP);
 extern SEXP _icd_trimCpp(SEXP);
+extern SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ChildrenDecimalCpp",       (DL_FUNC) &_icd_icd9ChildrenDecimalCpp,       2},
@@ -95,6 +96,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_RcppExport_registerCCallable", (DL_FUNC) &_icd_RcppExport_registerCCallable, 0},
     {"_icd_strimCpp",                     (DL_FUNC) &_icd_strimCpp,                     1},
     {"_icd_trimCpp",                      (DL_FUNC) &_icd_trimCpp,                      1},
+    {"run_testthat_tests",                (DL_FUNC) &run_testthat_tests,                0},
     {NULL, NULL, 0}
 };
 
