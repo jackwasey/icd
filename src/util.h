@@ -18,10 +18,15 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
-#include "local.h"
+#include <cstddef>                      // for size_t
+#include <string>                       // for string
+#include <utility>                      // for pair
+#include <vector>                       // for vector
 #include <Rcpp.h>
-#include <vector>
-#include <string>
+#include "Rcpp/vector/instantiation.h"  // for NumericVector
+#include "icd_types.h"                  // for VecStr
+#include "local.h"                      // for ICD_OPENMP
+
 #ifdef ICD_OPENMP
 #include <omp.h>
 #endif

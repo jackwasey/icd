@@ -17,13 +17,37 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "ranges.h"
-#include "range-const.h"
-#include "icd_types.h"
-#include "local.h"
-#include "convert.h"
-#include "appendMinor.h"
-#include "convert_alt.h"
-#include "is.h"
+#include <Rcpp/r/headers.h>                 // for Rf_install, NA_STRING
+#include <algorithm>                        // for set_intersection
+#include <iterator>                         // for insert_iterator, inserter
+#include <set>                              // for _Rb_tree_const_iterator, set
+#include <string>                           // for basic_string
+#include <vector>                           // for vector, vector<>::iterator
+#include "Rcpp.h"                           // for wrap
+#include "Rcpp/Environment.h"               // for Environment
+#include "Rcpp/api/meat/Environment.h"      // for Environment_Impl::Environ...
+#include "Rcpp/api/meat/proxy.h"            // for AttributeProxyPolicy::Att...
+#include "Rcpp/as.h"                        // for as
+#include "Rcpp/exceptions.h"                // for stop
+#include "Rcpp/generated/Vector__create.h"  // for Vector::create
+#include "Rcpp/proxy/AttributeProxy.h"      // for AttributeProxyPolicy<>::A...
+#include "Rcpp/proxy/Binding.h"             // for BindingPolicy<>::const_Bi...
+#include "Rcpp/sugar/functions/is_na.h"     // for is_na, IsNa
+#include "Rcpp/sugar/functions/match.h"     // for match
+#include "Rcpp/sugar/operators/not.h"       // for Not_Vector, operator!
+#include "Rcpp/vector/Vector.h"             // for Vector<>::iterator, Vecto...
+#include "Rcpp/vector/VectorBase.h"         // for VectorBase
+#include "Rcpp/vector/instantiation.h"      // for List, LogicalVector, Inte...
+#include "Rcpp/vector/proxy.h"              // for r_vector_proxy<>::type
+#include "Rcpp/vector/string_proxy.h"       // for string_proxy
+#include "RcppCommon.h"                     // for Proxy_Iterator
+#include "appendMinor.h"                    // for icd9MajMinToShort, icd9Ma...
+#include "convert.h"                        // for icd9DecimalToShort, icd9S...
+#include "convert_alt.h"                    // for icd9ShortToPartsCppStd
+#include "icd_types.h"                      // for CV, VecStr, Str
+#include "is.h"                             // for icd9IsASingleE
+#include "local.h"                          // for icd_set
+#include "range-const.h"                    // for v_empty_std, v0, v0_std, v1
 
 // someday, can just directly memcopy the codes from the full set
 // const char  icd9ExpandMinorC(const char * mnr, bool isE) {

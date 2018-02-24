@@ -21,8 +21,6 @@
 #include "comorbidIcd10.h"
 #include <Rcpp/r/headers.h>                 // for Rf_install, Rf_mkString
 #include <string.h>                         // for strlen, strncpy
-#include <cstddef>                          // for size_t
-#include <cstdlib>                          // for size_t
 #include <string>                           // for string
 #include "Rcpp.h"                           // for wrap
 #include "Rcpp/DataFrame.h"                 // for DataFrame
@@ -40,6 +38,10 @@
 #include "Rcpp/vector/proxy.h"              // for r_vector_name_proxy<>::type
 #include "RcppCommon.h"                     // for wrap
 #include "icd_types.h"                      // for CV
+extern "C" {
+  #include <cstddef>                          // for size_t
+  #include <cstdlib>                          // for size_t
+}
 
 using Rcpp::IntegerVector;
 using Rcpp::LogicalMatrix;

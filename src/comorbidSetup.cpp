@@ -16,8 +16,24 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include "local.h"
 #include <Rcpp.h>
+#include <Rcpp/r/headers.h>                   // for INTEGER, Rf_length, SEXP
+#include <algorithm>                          // for copy, sort
+#include <map>                                // for _Rb_tree_iterator
+#include <string>                             // for string, basic_string
+#include <utility>                            // for make_pair, pair
+#include <vector>                             // for vector
+#include "Rcpp/as.h"                          // for as
+#include "Rcpp/vector/Vector.h"               // for Vector<>::const_iterator
+#include "Rcpp/vector/const_generic_proxy.h"  // for const_generic_proxy
+#include "Rcpp/vector/instantiation.h"        // for List
+#include "RcppCommon.h"                       // for Proxy_Iterator
+#include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
+#include "local.h"                            // for VisLk
+extern "C" {
+  #include "cutil.h"                            // for getRListOrDfElement
+}
+
 #ifdef ICD_STD_PARALLEL
 #include <parallel/algorithm>
 #else

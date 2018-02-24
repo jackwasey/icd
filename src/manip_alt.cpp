@@ -16,11 +16,13 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
-#include "manip.h"
 #include "manip_alt.h"
-#include "is.h"
-#include "convert.h"
+#include <Rcpp/r/headers.h>               // for NA_STRING, Rf_install
+#include <string.h>                       // for strlen
+#include <string>                         // for string, operator+
+#include "Rcpp/sugar/functions/sapply.h"  // for Sapply, sapply
+#include "convert.h"                      // for icd9DecimalToShort
+#include "is.h"                           // for icd9IsASingleV, icd9IsASing...
 
 //' Decompose a 'short' ICD code and insert the leading zeroes as needed.
 //'

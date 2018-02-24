@@ -16,18 +16,30 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
+#include <Rcpp/r/headers.h>             // for Rf_install
 #include <algorithm>                    // for set_intersection
 #include <iterator>                     // for insert_iterator, inserter
 #include <set>                          // for _Rb_tree_const_iterator, set
 #include <vector>                       // for vector, vector<>::const_iterator
+#include "Rcpp.h"                       // for wrap
+#include "Rcpp/Environment.h"           // for Environment
+#include "Rcpp/api/meat/Environment.h"  // for Environment_Impl::Environment...
+#include "Rcpp/api/meat/proxy.h"        // for AttributeProxyPolicy::Attribu...
+#include "Rcpp/as.h"                    // for as
+#include "Rcpp/proxy/AttributeProxy.h"  // for AttributeProxyPolicy<>::Attri...
+#include "Rcpp/proxy/Binding.h"         // for BindingPolicy<>::const_Binding
+#include "Rcpp/vector/Vector.h"         // for Vector<>::iterator, Vector<>:...
+#include "Rcpp/vector/instantiation.h"  // for List
+#include "Rcpp/vector/proxy.h"          // for r_vector_name_proxy<>::type
+#include "Rcpp/vector/string_proxy.h"   // for string_proxy
+#include "RcppCommon.h"                 // for Proxy_Iterator
+#include "appendMinor.h"                // for icd9MajMinToShortSingleStd
+#include "convert.h"                    // for icd9ShortToPartsCpp
+#include "convert_alt.h"                // for icd9ShortToPartsCppStd
 #include "icd_types.h"                  // for VecStr, CV, Str
+#include "is.h"                         // for icd9IsASingleE
 #include "local.h"                      // for icd_set
-#include "convert.h"
-#include "convert_alt.h"
-#include "is.h"
-#include "ranges.h"
-#include "appendMinor.h"
+#include "ranges.h"                     // for icd9ExpandMinorStd
 
 //' Find child codes from vector of ICD-9 codes.
 //'

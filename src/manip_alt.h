@@ -20,9 +20,8 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include "manip.h"
-#include "is.h"
-#include "convert.h"
+#include "Rcpp/String.h"  // for String
+#include "icd_types.h"    // for CV
 
 Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x);
 CV icd9AddLeadingZeroesDirect(CV x, bool short_code);

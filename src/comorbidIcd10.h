@@ -18,8 +18,4 @@
 #ifndef COMORBIDICD10_H_H
 #define COMORBIDICD10_H_H
 
-extern "C" {
-#include <cstdlib>
-}
-
 #endif /* COMORBIDICD10_H_H */

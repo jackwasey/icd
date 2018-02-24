@@ -17,6 +17,7 @@
 
 #ifndef RANGES_H_
 #define RANGES_H_
+#include <stddef.h>     // for size_t
 #include "icd_types.h"
 #include <Rcpp.h>
 

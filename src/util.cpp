@@ -17,9 +17,28 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "util.h"
-#include "local.h"
-#include <vector>
-#include <string>
+#include <Rcpp/r/headers.h>                    // for Rf_install
+#include <stdlib.h>
+#include <math.h>                              // for floor
+#include <omp.h>                               // for omp_get_max_threads
+#include <stdio.h>                             // for sprintf
+#include <string.h>                            // for strcmp
+#include <algorithm>                           // for copy, sort, transform
+#include <iterator>                            // for back_insert_iterator
+#include <ostream>                             // for size_t, operator<<
+#include <string>                              // for string, basic_string
+#include <vector>                              // for vector, vector<>::size...
+#include "Rcpp/as.h"                           // for as
+#include "Rcpp/iostream/Rstreambuf.h"          // for Rcout, Rostream
+#include "Rcpp/stats/random/random.h"          // for runif
+#include "Rcpp/sugar/block/Vectorized_Math.h"  // for Vectorized
+#include "Rcpp/sugar/functions/math.h"         // for floor
+#include "Rcpp/sugar/operators/times.h"        // for Times_Vector_Primitive
+#include "Rcpp/traits/enable_if.h"             // for enable_if<>::type
+#include "Rcpp/vector/Vector.h"                // for Vector
+#include "Rcpp/vector/VectorBase.h"            // for VectorBase
+#include "local.h"                             // for ICD_OPENMP
+
 #ifdef ICD_OPENMP
 #include <omp.h>
 #ifdef ICD_STD_PARALLEL
