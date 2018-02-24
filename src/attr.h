@@ -18,8 +18,8 @@
 #ifndef ATTR_H_
 #define ATTR_H_
 
-#include "local.h"
-#include <Rcpp.h>
+#include <Rcpp.h>  // for RObject
+#include "icd_types.h"     // for CV
 
 void setDecimalDiag(Rcpp::RObject& x, bool value);
 void setDecimalDiag(CV& x, bool);

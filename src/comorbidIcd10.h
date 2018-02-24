@@ -18,7 +18,6 @@
 #ifndef COMORBIDICD10_H_H
 #define COMORBIDICD10_H_H
 
-#include <Rcpp.h> // includes Rinternals
 extern "C" {
 #include <cstdlib>
 }

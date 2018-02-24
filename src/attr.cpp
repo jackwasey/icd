@@ -17,7 +17,7 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include "attr.h"
-#include <Rcpp.h>
+#include <Rcpp.h>                       // for wrap
 
 //' Set ICD short-form diagnosis code attribute
 //'

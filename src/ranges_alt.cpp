@@ -17,13 +17,17 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
-#include "attr.h"
-#include "ranges.h"
+#include <algorithm>                    // for set_intersection
+#include <iterator>                     // for insert_iterator, inserter
+#include <set>                          // for _Rb_tree_const_iterator, set
+#include <vector>                       // for vector, vector<>::const_iterator
+#include "icd_types.h"                  // for VecStr, CV, Str
+#include "local.h"                      // for icd_set
 #include "convert.h"
 #include "convert_alt.h"
-#include "appendMinor.h"
-#include "manip.h"
 #include "is.h"
+#include "ranges.h"
+#include "appendMinor.h"
 
 //' Find child codes from vector of ICD-9 codes.
 //'

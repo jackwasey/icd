@@ -15,12 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#include "local.h"
 #include <Rcpp.h>
-#include <vector>
-#include <string>
-// #include <Rinternals.h>
-
+#include <iterator>                      // for advance
+#include <vector>                        // for vector
+#include "icd_types.h"                   // for CV, VecStr
 //
 //  # matches, nc, matches, last_row
 //  for (i in seq_along(icd10Short)) {

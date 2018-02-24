@@ -16,12 +16,19 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include "convert.h"
-// util.h for strimCpp
-#include "util.h"
-#include "is.h"
-// for add leading zeroes mjr (TODO: remove this dependency)
-#include "manip.h"
+#include <Rcpp/r/headers.h>                  // for NA_STRING, R_xlen_t, Rf_...
+#include <string.h>                          // for strlen
+#include <algorithm>                         // for fill
+#include <iterator>                          // for distance
+#include <string>                            // for basic_string, operator!=
+#include <vector>                            // for vector, vector<>::iterator
+#include "Rcpp.h"                            // for wrap
+#include "Rcpp/String.h"                     // for String, string_proxy::op...
+#include "Rcpp/vector/Vector.h"              // for Vector<>::const_iterator
+#include "Rcpp/vector/const_string_proxy.h"  // for const_string_proxy
+#include "RcppCommon.h"                      // for Proxy_Iterator
+#include "icd_types.h"                       // for VecStr, CV, Str
+#include "is.h"                              // for icd9IsASingleVE
 
 //' Convert \code{mjr} and \code{mnr} vectors to single code
 //'
