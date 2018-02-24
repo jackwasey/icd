@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
+#include "local.h"
 #include <Rcpp/r/headers.h>              // for Rf_install
 #include <iterator>                      // for advance
 #include <vector>                        // for vector
@@ -34,6 +35,7 @@
 #include "Rcpp/vector/instantiation.h"   // for IntegerVector, List
 #include "Rcpp/vector/proxy.h"           // for r_vector_name_proxy<>::type
 #include "icd_types.h"                   // for CV, VecStr
+
 //
 //  # matches, nc, matches, last_row
 //  for (i in seq_along(icd10Short)) {
