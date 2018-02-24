@@ -22,15 +22,13 @@
 #include <string>                       // for string
 #include <utility>                      // for pair
 #include <vector>                       // for vector
-#include <Rcpp.h>
-#include "Rcpp/vector/instantiation.h"  // for NumericVector
+#include <Rcpp.h> // IWYU pragma: keep
 #include "icd_types.h"                  // for VecStr
 #include "local.h"                      // for ICD_OPENMP
 
 #ifdef ICD_OPENMP
 #include <omp.h>
 #endif
-
 
 typedef std::pair<std::string, std::size_t> pas;
 
