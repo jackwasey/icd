@@ -208,10 +208,12 @@ context("add leading zeroes to major") {
 
 context("test alternate zero-adding code") {
   test_that("when a code would be made ambiguous, don't change it") {
-    expect_true(icd9AddLeadingZeroesDirect("E010") == "E010");
+    expect_true(Rcpp::as<std::string>(icd9AddLeadingZeroesDirect("E010", true)[0]) == "E010");
   }
   test_that("short E codes work") {
-    expect_true(icd9AddLeadingZeroesDirect("E1") == "E001");
+    expect_true(Rcpp::as<std::string>(icd9AddLeadingZeroesDirect("E1", true)[0]) == "E001");
+    Rcpp::String e1 = icd9AddLeadingZeroesShortSingle("E1");
+    expect_true(Rcpp::as<std::string>(CV::create(e1)) == "E001");
   }
 }
 

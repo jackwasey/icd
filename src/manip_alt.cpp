@@ -54,6 +54,7 @@ Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
       } else {
         s.insert(1, "00");
       }
+      return(s);
     case 3:
       if (!icd9IsASingleV(s.c_str())) {
         s.insert(1, "0");

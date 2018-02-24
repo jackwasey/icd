@@ -18,7 +18,7 @@ attr(j, "icd_short_diag") <- FALSE
 j
 icd:::attr_decimal_diag(j)
 as.icd_decimal_diag(j)
-if (require(pryr)) {
+if (requireNamespace("pryr", quietly = TRUE)) {
 j <- 1
 c(address(j), refs(j))
 attr(j, "icd_short_diag") <- TRUE
