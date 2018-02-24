@@ -18,6 +18,7 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include "manip.h"
+#include "manip_alt.h"
 #include "is.h"
 #include "convert.h"
 

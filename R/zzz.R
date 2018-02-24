@@ -80,6 +80,7 @@ release_questions <- function() {
     "Have all unnecessary files been ignored in built archive? Especially
       thinking of autoconfigure stuff. Look in the final built archive
       before submitting to CRAN?",
+    "Has .*_alt\\.[Rr]$ been reactivated in .Rbuildignore?",
     # not CRAN
     "Are github pages site refreshed from latest documentation?",
 

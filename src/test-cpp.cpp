@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include "is.h"
 #include "manip.h"
+#include "manip_alt.h"
 #include "util.h"
 #include "appendMinor.h"
 #include "convert.h"
@@ -207,10 +208,10 @@ context("add leading zeroes to major") {
 
 context("test alternate zero-adding code") {
   test_that("when a code would be made ambiguous, don't change it") {
-    expect_true(icd9AddLeadingZeroesMajorSingle("E010") == "E010");
+    expect_true(icd9AddLeadingZeroesDirect("E010") == "E010");
   }
   test_that("short E codes work") {
-    expect_true(icd9AddLeadingZeroesMajorSingle("E1") == "E001");
+    expect_true(icd9AddLeadingZeroesDirect("E1") == "E001");
   }
 }
 

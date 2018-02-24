@@ -1,6 +1,6 @@
 # Copyright (C) 2014 - 2018  Jack O. Wasey
 #
-# This file is part of icd9.
+# This file is part of icd.
 #
 # icd9 is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -142,5 +142,7 @@ AC_CHECK_HEADER(testthat.h, [AC_DEFINE(HAVE_TESTTHAT_H, 1, [define as 1 if testt
 
 AC_LANG_POP([C++])
 # end testthat test
+
+# TODO: if a debug flag is set, then update .Rbuildignore to NOT exclude _alt.cpp etc files
 
 AC_OUTPUT
