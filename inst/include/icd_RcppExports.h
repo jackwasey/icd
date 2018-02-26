@@ -40,7 +40,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -59,7 +59,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -78,7 +78,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -97,7 +97,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -116,7 +116,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -135,7 +135,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
     }
 
     inline VecStr icd9MajMinToShortStd(const VecStr& mjr, const VecStr& mnr) {
@@ -153,7 +153,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -172,7 +172,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -191,7 +191,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
     }
 
     inline void _attr_short_diag(Rcpp::RObject& x, bool value = true) {
@@ -209,7 +209,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
     }
 
     inline SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
@@ -227,7 +227,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
@@ -246,7 +246,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
     }
 
     inline Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x, Rcpp::List map, std::string visit_name, std::string icd_name) {
@@ -264,7 +264,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::LogicalMatrix >(rcpp_result_gen);
     }
 
@@ -283,7 +283,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -302,7 +302,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -321,7 +321,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -340,7 +340,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
@@ -359,7 +359,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
@@ -378,7 +378,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
@@ -397,7 +397,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
@@ -416,7 +416,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
@@ -435,7 +435,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -454,7 +454,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -473,7 +473,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -492,7 +492,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<std::string> >(rcpp_result_gen);
     }
 
@@ -511,7 +511,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::CharacterVector >(rcpp_result_gen);
     }
 
@@ -530,7 +530,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<bool >(rcpp_result_gen);
     }
 
@@ -549,7 +549,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<bool >(rcpp_result_gen);
     }
 
@@ -568,7 +568,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<bool> >(rcpp_result_gen);
     }
 
@@ -587,7 +587,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<bool> >(rcpp_result_gen);
     }
 
@@ -606,7 +606,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<bool> >(rcpp_result_gen);
     }
 
@@ -625,7 +625,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -644,7 +644,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::String >(rcpp_result_gen);
     }
 
@@ -663,7 +663,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -682,7 +682,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::String >(rcpp_result_gen);
     }
 
@@ -701,7 +701,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::string >(rcpp_result_gen);
     }
 
@@ -720,7 +720,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -739,7 +739,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -758,7 +758,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -777,7 +777,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -796,7 +796,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -815,7 +815,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -834,7 +834,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -853,7 +853,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -872,7 +872,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -891,7 +891,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -910,7 +910,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
@@ -929,7 +929,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::LogicalVector >(rcpp_result_gen);
     }
 
@@ -948,7 +948,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::string >(rcpp_result_gen);
     }
 
@@ -967,7 +967,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::string >(rcpp_result_gen);
     }
 
@@ -986,7 +986,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -1005,7 +1005,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
@@ -1024,7 +1024,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
@@ -1043,7 +1043,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
@@ -1062,7 +1062,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::NumericVector >(rcpp_result_gen);
     }
 
@@ -1081,7 +1081,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -1100,7 +1100,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -1119,7 +1119,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -1138,7 +1138,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -1157,7 +1157,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
@@ -1176,7 +1176,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
@@ -1195,7 +1195,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
@@ -1214,7 +1214,7 @@ namespace icd {
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+            throw Rcpp::exception(as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<std::size_t> >(rcpp_result_gen);
     }
 
