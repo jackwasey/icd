@@ -1,7 +1,11 @@
 context("github #133")
 
 test_that("github #133 doesn't crash R", {
-  x <- readRDS(system.file("tests", "testthat", "github138-b.rds", package = "icd"))
+  f <- system.file("tests", "testthat", "github133-b.rds", package = "icd", mustWork = FALSE)
+  if (f == "")
+    skip("cannot load github133-b.rds from tests/testthat")
+
+  x <- readRDS(f)
   res <- icd10_comorbid(x,
                         icd10_map_ahrq,
                         visit_name = "CLAIMNO",
