@@ -87,7 +87,14 @@ icd_poa_choices <- c("yes", "no", "notYes", "notNo")
 #'              date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
 #'                "2011-01-04", "2011-01-04")))
 #'   pt_hccs <- icd_comorbid_hcc(pts, date_name = "date")
-
+#'
+#'   pts10 <- icd_long_data(
+#'     visit_name = c("a", "b", "c", "d", "e"),
+#'     icd_name = c("I058", NA, "T82817A", "", "I69369"),
+#'     date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
+#'
+#'   icd10_comorbid(pts10, map = icd10_map_ahrq)
+#'
 #' @export
 icd_comorbid <- function(x, map, ...) {
   ver <- icd_guess_version.character(map[[1]])

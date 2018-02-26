@@ -38,6 +38,7 @@
 #include "Rcpp/vector/proxy.h"              // for r_vector_name_proxy<>::type
 #include "RcppCommon.h"                     // for wrap
 #include "icd_types.h"                      // for CV
+#include "local.h" // for DEBUG
 extern "C" {
   #include <cstddef>                          // for size_t
   //#include <cstdlib>                          // for size_t
@@ -100,6 +101,12 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
     codeNchar = strlen(code_cstring);
     if (codeNchar > 15)
       Rcpp::stop("ICD-10 codes must all be less than 16 characters long.");
+    if (codeNchar <3) {
+      // abort to avoid segfault. will need to do better than this and
+      // replace with NA and go to next item
+      Rcpp::stop("ICD-10 codes must be at least three characters long.");
+    }
+
     size_t codeCurChar;
 
     for (R_xlen_t j = 0; j != map.size(); ++j) {

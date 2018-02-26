@@ -27,3 +27,13 @@ test_that("github #138 doesn't crash R", {
                         icd_name = "icd10",
                         aggregate = FALSE)
 })
+
+test_that("github #138 possibly related bug", {
+  # just run to check it doesn't segfault
+  pts10 <- icd::icd_long_data(
+    visit = c("a"),
+    icd = c(""),
+    date = as.Date(c("2011-01-01")));
+  icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+
+})
