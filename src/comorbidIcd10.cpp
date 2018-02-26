@@ -104,7 +104,11 @@ Rcpp::LogicalMatrix icd10_comorbid_parent_search_cpp(Rcpp::DataFrame x,
     if (codeNchar <3) {
       // abort to avoid segfault. will need to do better than this and
       // replace with NA and go to next item
-      Rcpp::stop("ICD-10 codes must be at least three characters long.");
+      //Rcpp::stop("ICD-10 codes must be at least three characters long.");
+#ifdef ICD_DEBUG
+      Rcpp::Rcout << "continuing\n";
+#endif
+      continue;
     }
 
     size_t codeCurChar;
