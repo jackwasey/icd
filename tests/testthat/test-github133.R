@@ -13,12 +13,22 @@ test_that("github #133 doesn't crash R", {
                         aggregate = FALSE)
 })
 
-test_that("github #133 possibly related bug", {
-  # just run to check it doesn't segfault
+{
   pts10 <- icd::icd_long_data(
     visit = c("a"),
     icd = c(""),
     date = as.Date(c("2011-01-01")));
-  icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
 
-})
+  test_that("github #133 minimal example of bug", {
+    # just run to check it doesn't segfault
+    res <- icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+    expect_true(all(!res))
+  })
+
+  test_that("github #133 with NA", {
+    pts10[["icd"]] <- NA
+    res <- icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+    expect_true(all(!res))
+  })
+
+}

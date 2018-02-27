@@ -28,8 +28,8 @@
 //'
 //' This should add leading zeroes when there is definitely no ambiguity,
 //' e.g. V1. However V10 should not be altered, because V010 is a different
-//' code. The goal is for this to be faster, but must be correct! Example in manip.cpp
-//' has the benchmark code.
+//' code. The goal is for this to be faster, but must be correct! Example in
+//' \code{manip.cpp} has the benchmark code.
 //' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
