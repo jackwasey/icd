@@ -34,16 +34,14 @@ r_github_packages:
 warnings_are_errors: true
 
 env:
-  - OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" ICD_SLOW_TESTS=TRUE
-  - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native" R_COVR=true ICD_SLOW_TESTS=TRUE
+  - OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" ICD_SLOW_TESTS=TRUE R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+  - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native" R_COVR=true ICD_SLOW_TESTS=TRUE R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 before_script:
  - ls -aR
  - rm .Rinstignore  # do install everything for testing
  - sed -i.old '/[Dd]ata/d' .Rbuildignore # do include data for testing
  - rm -rf .Rbuildignore.old
- - export R_CHECK_CRAN_INCOMING_=FALSE
- - export _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 after_success:
  - ls -aR
