@@ -2,6 +2,7 @@
  * fixed github #133 - segfault with empty ICD-10 string in icd10_comorbid
  * add Suggested dependency on microbenchmark, now CRAN is sensibly not requiring Suggests to be installed even for testing
  * re-enabled testthat C++ Catch tests and make examples tests run correctly
+ * drop Wecker continuous integration support
 
 # Version 2.3
  * Fixed nasty bug which failed to sort the names of a vector of ICD codes correctly, resulting in some incorrect icd_explain. Fixes github #123, #124, #126.

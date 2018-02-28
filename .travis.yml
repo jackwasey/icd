@@ -41,7 +41,7 @@ before_script:
  - ls -aR
  - rm .Rinstignore  # do install everything for testing
  - sed -i.old '/[Dd]ata/d' .Rbuildignore # do include data for testing
- - rm -rf .Rbuildignore.old
+ - rm .Rbuildignore.old
 
 after_success:
  - ls -aR
