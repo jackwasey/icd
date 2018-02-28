@@ -19,6 +19,18 @@ test_that("github #133 possibly related bug", {
     visit = c("a"),
     icd = c(""),
     date = as.Date(c("2011-01-01")));
+
+  icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+
+})
+
+test_that("github #133 is NA also okay?", {
+  # just run to check it doesn't segfault
+  pts10 <- icd::icd_long_data(
+    visit = c("a"),
+    icd = c(NA_character_),
+    date = as.Date(c("2011-01-01")));
+
   icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
 
 })
