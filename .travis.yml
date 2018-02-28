@@ -30,15 +30,12 @@ repos:
 r_github_packages:
   - jimhester/covr
   - jimhester/lintr
-  - jackwasey/jwutil
 
 warnings_are_errors: true
 
-# seperate lines seems to mean the whole build is repeated each line.
-# As of 2013 at least, travis offers ~1.5 cores per process
 env:
-  - OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable"
-  - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native" R_COVR=true
+  - OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" ICD_SLOW_TESTS=TRUE
+  - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native" R_COVR=true ICD_SLOW_TESTS=TRUE
 
 before_script:
  - ls -aR
@@ -46,7 +43,6 @@ before_script:
  - sed -i.old '/[Dd]ata/d' .Rbuildignore # do include data for testing
  - rm -rf .Rbuildignore.old
  - export R_CHECK_CRAN_INCOMING_=FALSE
- - export ICD_SLOW_TESTS=TRUE
  - export _R_CHECK_FORCE_SUGGESTS_=FALSE
 
 after_success:
