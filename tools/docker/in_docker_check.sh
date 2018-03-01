@@ -77,7 +77,7 @@ fi
 
 # these are always checked for, so we don't care which R is installed. We also need to re-install some packages, for some reason unclear to me: https://github.com/rocker-org/r-devel-san-clang/issues/12
 for pkg in testthat checkmate RODBC xml2 Rcpp stringi knitr rmarkdown; do
-ASAN_OPTIONS=detect_leaks=0 ${R_CMD}script -e "install.packages(\"${pkg}\")"
+ASAN_OPTIONS=abort_on_error=1,detect_leaks=0 ${R_CMD}script -e "install.packages(\"${pkg}\")"
 done
 #ASAN_OPTIONS=detect_leaks=0 ${R_CMD}script -e 'pkgs <- c("knitr", "Rcpp", "testthat", "checkmate", "RODBC", "xml2", "rmarkdown"); for (p in pkgs) { if (!require(p, character.only=T)) install.packages(p) }'
 
