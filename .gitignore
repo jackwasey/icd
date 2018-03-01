@@ -24,6 +24,9 @@ inst/doc/*
 .project
 .RData
 .Rhistory
+RcppExports.cpp
+RcppExports.R
+icd_RcppExports.h
 Rplot.png
 .Rprofile
 Rprof.out
