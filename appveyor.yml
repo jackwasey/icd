@@ -18,6 +18,15 @@ platform:
   - x64
 #  - Any CPU
 
+r_github_packages:
+  - r-lib/covr
+
+environment:
+  ICD_SLOW_TESTS: "true"
+
+after_success:
+  - Rscript -e 'ICD_SLOW_TESTS=true covr::codecov(quiet = FALSE)'
+
 build_script:
   - travis-tool.sh install_deps
 
