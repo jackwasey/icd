@@ -54,5 +54,4 @@ scrape_icd10_who
 ^todo$
 ^tools$
 ^\.travis\.yml$
-^wercker.yml$
 ^appveyor\.yml$

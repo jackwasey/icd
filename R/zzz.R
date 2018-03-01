@@ -68,7 +68,7 @@ release_questions <- function() {
     "Has config.h.win been updated to reflect latest configure.ac results?",
     "Are there skipped tests which should be run?",
     "Have tests been run with slow and online tests turned on?",
-    "Does it compile and check fine on travis/wercker/appveyor?",
+    "Does it compile, test and check fine on travis and appveyor?",
     "Have you checked on Windows, win_builder (if possible with configure.win failure),
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",

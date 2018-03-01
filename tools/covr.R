@@ -1,7 +1,9 @@
 #!/usr/bin/env Rscript
 
-# simple script to encapsulate common code between travis and wercker (or other)
-# builds.
+# simple script to encapsulate coverage code for different build systems
+
+# first argument is "true" or "false"
+# second argument is "codecov" or "coveralls"
 
 args = commandArgs(trailingOnly = TRUE)
 if (tolower(args[[1]]) == "true") {
