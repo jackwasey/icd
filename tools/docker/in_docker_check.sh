@@ -20,7 +20,7 @@ set -euo pipefail
 IFS=$'\n\t'
 
 # echo expanded commands
-# set -x
+set -x
 
 pushd /tmp
 
