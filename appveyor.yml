@@ -26,6 +26,11 @@ environment:
   global:
     WARNINGS_ARE_ERRORS: 1
     ICD_SLOW_TESTS: "true"
+  matrix:
+    - R_VERSION: release
+
+    - R_VERSION: devel
+      R_ARCH: x64
 
 on_success:
   - Rscript -e 'ICD_SLOW_TESTS=true covr::codecov(quiet = FALSE)'
@@ -36,12 +41,6 @@ test_script:
 on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
-
-matrix:
-  - R_VERSION: release
-
-  - R_VERSION: devel
-    R_ARCH: x64
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
