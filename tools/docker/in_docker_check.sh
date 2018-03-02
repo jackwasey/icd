@@ -89,9 +89,8 @@ fi
 
 # these are always checked for, so we don't care which R is installed. We also need to re-install some packages, for some reason unclear to me: https://github.com/rocker-org/r-devel-san-clang/issues/12
 for pkg in testthat checkmate RODBC xml2 Rcpp stringi knitr rmarkdown; do
-ASAN_OPTIONS=abort_on_error=1,detect_leaks=0 ${R_CMD}script -e "install.packages(\"${pkg}\")"
+ASAN_OPTIONS=abort_on_error=0,detect_leaks=0 ${R_CMD}script -e "install.packages(\"${pkg}\")"
 done
-#ASAN_OPTIONS=detect_leaks=0 ${R_CMD}script -e 'pkgs <- c("knitr", "Rcpp", "testthat", "checkmate", "RODBC", "xml2", "rmarkdown"); for (p in pkgs) { if (!require(p, character.only=T)) install.packages(p) }'
 
 # actually, we need to build based on the directory name, not the package name:
 $R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)
@@ -99,5 +98,5 @@ R_PKG_TAR_GZ=$(ls -t ${R_PKG_NAME}*.tar.gz | tail -1)
 # for all the flags
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html
 # not sure what happens if I us --as-cran and turn off a feature: seems like qpdf is still sought.
-_R_CHECK_DOC_SIZES_=false _R_CHECK_CRAN_INCOMING_=false _R_CHECK_FORCE_SUGGESTS_=false $R_CMD CMD check $R_PKG_TAR_GZ
+ASAN_OPTIONS=abort_on_error=1 _R_CHECK_DOC_SIZES_=false _R_CHECK_CRAN_INCOMING_=false _R_CHECK_FORCE_SUGGESTS_=false $R_CMD CMD check $R_PKG_TAR_GZ
 popd

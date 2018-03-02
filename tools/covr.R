@@ -9,7 +9,8 @@
 args = commandArgs(trailingOnly = TRUE)
 if (tolower(args[[1]]) == "true") {
 
-  options(warn = -1)
+  # do give warnings as they arise
+  options(warn = 1)
 
   if (args[[2]] == "coveralls")
     covr::coveralls(quiet = FALSE)
