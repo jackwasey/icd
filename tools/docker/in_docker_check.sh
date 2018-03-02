@@ -93,7 +93,9 @@ ASAN_OPTIONS=abort_on_error=0,detect_leaks=0 ${R_CMD}script -e "install.packages
 done
 
 # the auto-generated Rcpp code is always changing order, if not content. Rstudio generates automatically, but we have to do manually here:
+pushd $GITHUB_REPO
 ${R_CMD}script -e 'Rcpp::compileAttributes()'
+popd
 
 # actually, we need to build based on the directory name, not the package name:
 $R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)
