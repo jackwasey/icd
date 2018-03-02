@@ -26,9 +26,9 @@ was not specified, then the first column of the data frame is used.}
 all columns matching the regular expression \code{icd_regex} will be
 included.}
 
-\item{icd_name}{The column in the \code{data.frame} which contains the ICD
-codes. This is a character vector of length one. If it is \code{NULL},
-\code{icd9} will attempt to guess the column name, looking for
+\item{icd_name}{The name of the column in the \code{data.frame} which
+contains the ICD codes. This is a character vector of length one. If it is
+\code{NULL}, \code{icd9} will attempt to guess the column name, looking for
 progressively less likely possibilities until it matches a single column.
 Failing this, it will take the first column in the data frame. Specifying
 the column using this argument avoids the guesswork.}

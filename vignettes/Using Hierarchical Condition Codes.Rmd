@@ -1,6 +1,8 @@
 ---
 title: "Using Hierarchical Condition Codes (HCC)"
-author: "Andrew Cooper"
+author:
+- Andrew Cooper (original)
+- Jack Wasey (minor updates)
 date: "June 14, 2017"
 output: html_document
 vignette: >
@@ -31,21 +33,16 @@ ICD also provides a method for mapping specific ICD codes to HCCs. The method `i
 pts <- data.frame(patient_id = c("1", "2", "3", "4", "4"),
                   icd_code = c("20084", "1742", "30410", "41514", "95893"), 
                   date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-04", "2011-01-04")))
+
+pts
 ```
 
-The function `icd_comorbid_hcc` takes as input a table of class 'ICD', rather than a matrix or data frame. Because of this, we must first convert our table the appropriate class, and we can use the function `icd_long_data` to do it. The function requires three fields: a column with patient identifiers, a column with ICD-9 or ICD-10 codes, and a column with visit dates. Note that the function requires the ICD codes to be in "short" format. If your codes are in "decimal" format, you can easily convert them with the function `icd_decimal_to_short`.
-
-```{r make_long}
-pts <- icd_long_data(visit_name = pts$patient_id, 
-                     icd_name = pts$icd_code, 
-                     date = pts$date)
-```
+The function `icd_comorbid_hcc` takes as input a data frame in the "long" format (i.e. mutiple rows per patients). If the data has one row per patient, but multiple codes in different columns, this is the "wide" format. `icd_wide_to_long` could be used to convert before inputting into `icd_comorbid_hcc`. Doing it this way, instead of with tools like `dplyr` allows some guessing for which columns are codes, and which are identifiers, and is also written specifically to do this task efficiently, given the usual structure of hospital data. `icd_comorbid_hcc` also requires the ICD codes to be in "short" format. If your codes are in "decimal" format, you can easily convert them with the function `icd_decimal_to_short`.
 
 Now that our data are in the correct form, we run the mapping function `icd_comorbid_hcc` with our input, specifying the name of the column in our dataset that contains patients' visit dates.
 
 ```{r hcc}
-pt_hccs <- icd_comorbid_hcc(pts, date_name = "date")
-print(pt_hccs)
+icd_comorbid_hcc(pts)
 ```
 
 Each of the four patients is assigned to an appropriate CC based on the risk level of their most severe diagnoses.

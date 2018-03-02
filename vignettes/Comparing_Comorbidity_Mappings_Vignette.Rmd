@@ -1,12 +1,12 @@
 ---
-title: "Comparing Comorbidity Mappings Vignette"
+title: "Comparing Comorbidity Mappings"
 author:
-- "Andrew Cooper" (original)
-- "Jack Wasey" (minor updates)
+- Andrew Cooper (original)
+- Jack Wasey (minor updates)
 date: "March 1, 2018"
 output: html_document
 vignette: >
-  %\VignetteIndexEntry{Using Hierarchical Condition Codes (HCC)}
+  %\VignetteIndexEntry{Comparing Comorbidity Mappings}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

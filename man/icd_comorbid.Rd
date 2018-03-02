@@ -15,13 +15,10 @@
 \alias{icd9_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_deyo}
-\alias{icd9_comorbid_hcc}
-\alias{icd10_comorbid_hcc}
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_elix}
 \alias{icd_comorbid_quan_elix}
 \alias{icd_comorbid_quan_deyo}
-\alias{icd_comorbid_hcc}
 \title{Find comorbidities from ICD-9 codes.}
 \usage{
 icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
@@ -58,12 +55,6 @@ icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
-icd9_comorbid_hcc(x, date_name = "date", visit_name = NULL,
-  icd_name = NULL)
-
-icd10_comorbid_hcc(x, date_name = "date", visit_name = NULL,
-  icd_name = NULL)
-
 icd_comorbid_ahrq(x, icd_name = get_icd_name(x), ...)
 
 icd_comorbid_elix(x, icd_name = get_icd_name(x), ...)
@@ -71,8 +62,6 @@ icd_comorbid_elix(x, icd_name = get_icd_name(x), ...)
 icd_comorbid_quan_elix(x, icd_name = get_icd_name(x), ...)
 
 icd_comorbid_quan_deyo(x, icd_name = get_icd_name(x), ...)
-
-icd_comorbid_hcc(x, icd_name = get_icd_name(x), ...)
 }
 \arguments{
 \item{aggregate}{single logical value, if \code{TRUE}, then take (possible
@@ -102,9 +91,9 @@ many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visit_id}
 was not specified, then the first column of the data frame is used.}
 
-\item{icd_name}{The column in the \code{data.frame} which contains the ICD
-codes. This is a character vector of length one. If it is \code{NULL},
-\code{icd9} will attempt to guess the column name, looking for
+\item{icd_name}{The name of the column in the \code{data.frame} which
+contains the ICD codes. This is a character vector of length one. If it is
+\code{NULL}, \code{icd9} will attempt to guess the column name, looking for
 progressively less likely possibilities until it matches a single column.
 Failing this, it will take the first column in the data frame. Specifying
 the column using this argument avoids the guesswork.}
@@ -124,10 +113,6 @@ which case the shorter human-readable names stored in e.g.
 \item{hierarchy}{single logical value that defaults to \code{TRUE}, in which
 case the hierarchy defined for the mapping is applied. E.g. in Elixhauser,
 you can't have uncomplicated and complicated diabetes both flagged.}
-
-\item{date}{column representing,  the date each record took place, as in each
-year there is a different ICD9/10 to CC mapping). This is only necessary
-for HCC mappings.}
 }
 \description{
 \code{\link{Rcpp}} approach to comorbidity assignment with
@@ -166,16 +151,6 @@ The common comorbidity calculation code does not depend on ICD type.
   comorbidities, and dispatches to the appropriate function, but right now
   the user must call the \code{icd9_} or \code{icd10_} prefixed function
   directly.
-
-Applying CMS Hierarchical Condition Categories
-  \code{icd_comorbid_hcc} functions differently from the rest of the
-  comorbidity assignment functions. This is because CMS publishes a specific
-  ICD to Condition Category mapping including all child ICD codes. In
-  addition, while these mappings were the same for 2007-2012, after 2013
-  there are annual versions. In addition, there is a many:many linkage
-  between ICD and Condition Categories (CC). Once CCs are assigned, a series
-  of hierarchy rules (which can also change annually) are applied to create
-  HCCs.
 }
 \section{Functions}{
 \itemize{
