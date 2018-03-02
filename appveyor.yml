@@ -25,7 +25,7 @@ build_script:
 
 environment:
   global:
-    WARNINGS_ARE_ERRORS: 0
+#    WARNINGS_ARE_ERRORS: 1
     ICD_SLOW_TESTS: "true"
   matrix:
     - R_VERSION: release
