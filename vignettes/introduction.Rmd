@@ -120,7 +120,7 @@ You can let `icd` guess types, or specify the type of your data explicitly:
 codes <- c("A10.01", "L40.50", "Z77.098")
 # set class to be icd10cm (and implicitly icd10)
 as.icd10cm(codes)
-# set class to indicate decimal code and icd10 (not necessarily icd10cm)
+# or set class to indicate decimal code and icd10 (not necessarily icd10cm)
 codes %>% as.icd_decimal_diag %>% as.icd10
 ```
 Doing this avoids mistakes in guessing type. For example code `V10` is valid in both ICD-9 and ICD-10.

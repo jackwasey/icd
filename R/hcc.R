@@ -25,11 +25,13 @@
 #' Also, there is a many:many linkage between ICD and Condition Categories (CC).
 #' Once CCs are assigned, a series of hierarchy rules (which can also change
 #' annually) are applied to create the HCCs.
-#' @param date the name of the column representing the date of each record.
+#' @param x data frame with columns for patient/visit ID, ICD code and date
+#' @param date_name the name of the column representing the date of each record.
 #'   Needed because each year there is a different ICD9/10 to CC mapping).
 #'   Default value is 'date'.
 #' @template visit_name
 #' @template icd_name
+#' @template dotdotdot
 #' @export
 icd_comorbid_hcc <- function(x, icd_name = get_icd_name(x), ...) {
   ver <- icd_guess_version.data.frame(x, icd_name = icd_name)

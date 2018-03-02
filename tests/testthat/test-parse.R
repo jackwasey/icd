@@ -162,7 +162,6 @@ if (rtf_year_ok(test_year)) {
       assign("manual_compare_descs",
              data.frame("From TXT" = v32$long_desc, "From RTF = rtf_leaves" = names(rtf_leaves)),
              envir = .GlobalEnv)
-      browser()
     }
   })
 

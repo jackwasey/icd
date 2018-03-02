@@ -15,12 +15,20 @@ icd10_comorbid_hcc(x, date_name = "date", visit_name = NULL,
   icd_name = NULL)
 }
 \arguments{
+\item{x}{data frame with columns for patient/visit ID, ICD code and date}
+
 \item{icd_name}{The name of the column in the \code{data.frame} which
 contains the ICD codes. This is a character vector of length one. If it is
 \code{NULL}, \code{icd9} will attempt to guess the column name, looking for
 progressively less likely possibilities until it matches a single column.
 Failing this, it will take the first column in the data frame. Specifying
 the column using this argument avoids the guesswork.}
+
+\item{...}{arguments passed on to other functions}
+
+\item{date_name}{the name of the column representing the date of each record.
+Needed because each year there is a different ICD9/10 to CC mapping).
+Default value is 'date'.}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -32,10 +40,6 @@ guesses proceed until a single match is made. Data frames may be wide with
 many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visit_id}
 was not specified, then the first column of the data frame is used.}
-
-\item{date}{the name of the column representing the date of each record.
-Needed because each year there is a different ICD9/10 to CC mapping).
-Default value is 'date'.}
 }
 \description{
 Applying CMS Hierarchical Condition Categories \code{icd_comorbid_hcc} works

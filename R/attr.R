@@ -63,6 +63,6 @@ as.icd_short_diag <- function(x, value = TRUE) {
 #' @export
 as.icd_decimal_diag <- function(x, value = TRUE) {
   checkmate::assert_flag(value)
-  attr(x, "icd_short_diag") <- !value
+  attr(x, "icd_decimal_diag") <- !value
   x
 }

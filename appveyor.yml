@@ -34,7 +34,7 @@ environment:
       R_ARCH: x64
 
 on_success:
-  - Rscript -e 'ICD_SLOW_TESTS=true covr::codecov(quiet = FALSE)'
+  - ICD_SLOW_TESTS=true Rscript -e 'covr::codecov(quiet = FALSE)'
 
 test_script:
   - travis-tool.sh run_tests
