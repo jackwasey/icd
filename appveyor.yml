@@ -21,6 +21,7 @@ platform:
 build_script:
   - travis-tool.sh github_package r-lib/covr
   - travis-tool.sh install_deps
+  - Rscript -e "Rcpp::compileAttributes()"
 
 environment:
   global:
