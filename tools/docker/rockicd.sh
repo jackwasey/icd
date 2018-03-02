@@ -36,7 +36,7 @@ trap finish EXIT
 
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
-DOCKER_IMAGE="${1:-r-clang-4.0}"
+DOCKER_IMAGE="${1:-r-clang-5.0}"
 
 # ROCK_TMP=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 
