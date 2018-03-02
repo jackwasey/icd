@@ -6,7 +6,6 @@
 #include "appendMinor.h"
 #include "convert.h"
 #include "convert_alt.h"
-#include "../inst/include/icd.h"
 #include "config.h"
 
 #ifdef HAVE_TESTTHAT_H
