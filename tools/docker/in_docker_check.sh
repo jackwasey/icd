@@ -36,21 +36,29 @@ trap finish EXIT
 
 pushd /tmp
 
-echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-apt-get update -qq || true
-apt-get dist-upgrade -qq -y || true
-apt-get install -y -qq libssl-dev libxml2-dev curl libcurl4-openssl-dev unixodbc-dev qpdf pandoc pandoc-citeproc # libssh2-1-dev (optional for git but has debian version problem at least in April 2017)
-# install debian packaged R packages to avoid compiling. may NEED to compile if USBAN or different compiler?
-# apt-get install -y -qq r-cran-rodbc r-cran-rcpp r-cran-knitr r-cran-testthat r-cran-checkmate r-cran-xml2
-
-# check whether git exists (it may not e.g. in rocker/r-devel)
-# https://stackoverflow.com/questions/592620/check-if-a-program-exists-from-a-bash-script
-
-if hash git 2>/dev/null; then
-  echo "git found"
+if [ -f /etc/os-release ]; then
+    source /etc/os-release
+    OS=$NAME
+elif type lsb_release >/dev/null 2>&1; then
+    OS=$(lsb_release -si)
+elif [ -f /etc/lsb-release ]; then
+    source /etc/lsb-release
+    OS=$DISTRIB_ID
+elif [ -f /etc/debian_version ]; then
+    OS=Debian
 else
-  apt-get install -y -qq git
+    OS=$(uname -s)
 fi
+
+if [[ "$OS" == "Ubuntu" || "$OS" == "Debian" ]]
+  echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+  apt-get update -qq || true
+  apt-get dist-upgrade -qq -y || true
+  apt-get install -y -qq git libssl-dev libxml2-dev curl libcurl4-openssl-dev unixodbc-dev qpdf pandoc pandoc-citeproc # libssh2-1-dev (optional for git but has debian version problem at least in April 2017)
+  # install debian packaged R packages to avoid compiling. may NEED to compile if USBAN or different compiler?
+  # apt-get install -y -qq r-cran-rodbc r-cran-rcpp r-cran-knitr r-cran-testthat r-cran-checkmate r-cran-xml2
+fi
+
 # or download zip from: https://github.com/jackwasey/icd/archive/master.zip
 echo "Cloning '$GIT_BRANCH' branch from '$GIT_URL'"
 git clone --depth=1 -b $GIT_BRANCH $GIT_URL
