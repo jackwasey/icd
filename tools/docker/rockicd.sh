@@ -44,10 +44,8 @@ if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)r-.+ ]]; then
    echo "Not using R from a jackwasey docker image"
 fi
 
-if [[ ! $DOCKER_IMAGE =~ ^rocker\/ ]]; then
-  if [[ ! $DOCKER_IMAGE =~ ^jackwasey\/ ]]; then
-    DOCKER_IMAGE="jackwasey/${DOCKER_IMAGE}"
-  fi
+if [[ ! $DOCKER_IMAGE =~ ^rocker\/ && ! $DOCKER_IMAGE =~ ^rhub\/ && ! $DOCKER_IMAGE =~ ^jackwasey\/ ]]; then
+  DOCKER_IMAGE="jackwasey/${DOCKER_IMAGE}"
 fi
 
 # drop trailing slash
