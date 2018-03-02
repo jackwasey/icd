@@ -44,6 +44,8 @@ before_script:
  - sed -i.old2 '/\.covrignore/d' .Rbuildignore
  - sed -i.old3 '/\.lintr/d' .Rbuildignore
  - rm .Rbuildignore.old{1,2,3}
+ - Rscript -e "Rcpp::compileAttributes()"
+
 
 after_success:
  - ls -aR
