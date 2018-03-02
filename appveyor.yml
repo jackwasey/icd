@@ -20,6 +20,7 @@ platform:
 
 build_script:
   - travis-tool.sh github_package r-lib/covr
+  - travis-tool.sh install_deps
 
 environment:
   global:
@@ -29,8 +30,6 @@ environment:
 after_success:
   - Rscript -e 'ICD_SLOW_TESTS=true covr::codecov(quiet = FALSE)'
 
-build_script:
-  - travis-tool.sh install_deps
 
 test_script:
   - travis-tool.sh run_tests
