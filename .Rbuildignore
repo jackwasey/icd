@@ -13,6 +13,7 @@ callgrind\.out
 ^configure\.ac$
 ^configure\.scan$
 ^CONTRIBUTING\.md$
+^\.covrignore$
 \.cproject$
 cran-comments\.md$
 \.externalToolBuilders$

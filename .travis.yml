@@ -40,8 +40,10 @@ env:
 before_script:
  - ls -aR
  - rm .Rinstignore  # do install everything for testing
- - sed -i.old '/[Dd]ata/d' .Rbuildignore # do include data for testing
- - rm .Rbuildignore.old
+ - sed -i.old1 '/[Dd]ata/d' .Rbuildignore # do include data for testing
+ - sed -i.old2 '/\.covrignore/d' .Rbuildignore
+ - sed -i.old3 '/\.lintr/d' .Rbuildignore
+ - rm .Rbuildignore.old{1,2,3}
 
 after_success:
  - ls -aR
