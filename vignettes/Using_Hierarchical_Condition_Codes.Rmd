@@ -1,12 +1,12 @@
 ---
-title: "Using Hierarchical Condition Codes (HCC)"
+title: "Using Hierarchical Condition Codes"
 author:
 - Andrew Cooper (original)
 - Jack Wasey (minor updates)
 date: "June 14, 2017"
 output: html_document
 vignette: >
-  %\VignetteIndexEntry{Using Hierarchical Condition Codes (HCC)}
+  %\VignetteIndexEntry{Using Hierarchical Condition Codes}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---

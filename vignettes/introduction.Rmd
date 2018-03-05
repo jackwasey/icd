@@ -130,8 +130,8 @@ Vectors of codes, data frames and matrices can have a class set. Conflicting cla
 df <- data.frame(i9 = as.icd9(c("100", "001")), 
                  i10 = as.icd10(c("Z771", "Z87820")))
 
-# demonstrate that an error is thrown for trying to do this:
-try(df %>% as.icd9 %>% as.icd10)
+# it is an error to try to convert ICD-9 class codes to ICD-10
+# df %>% as.icd9 %>% as.icd10
 ```
 
 ## Converting ICD-9 codes between types
