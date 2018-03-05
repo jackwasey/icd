@@ -19,7 +19,7 @@ as.icd_decimal_diag(x, value = TRUE)
 }
 \description{
 The attribute \code{icd_short_code} should be either \code{TRUE} or
-\code{FALSE}.
+\code{FALSE}. There is no attribute named \code{icd_decimal_code}.
 }
 \examples{
 codes <- as.icd9(c("100.1", "441.3"))

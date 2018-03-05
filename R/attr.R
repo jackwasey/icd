@@ -45,7 +45,7 @@ is.icd_decimal_diag <- function(x, must_work = FALSE) {
 #' Change whether ICD code has short or long attribute
 #'
 #' The attribute \code{icd_short_code} should be either \code{TRUE} or
-#' \code{FALSE}.
+#' \code{FALSE}. There is no attribute named \code{icd_decimal_code}.
 #' @param x ICD data
 #' @param value True or false, default is \code{TRUE}
 #' @examples
@@ -63,6 +63,6 @@ as.icd_short_diag <- function(x, value = TRUE) {
 #' @export
 as.icd_decimal_diag <- function(x, value = TRUE) {
   checkmate::assert_flag(value)
-  attr(x, "icd_decimal_diag") <- !value
+  attr(x, "icd_short_diag") <- !value
   x
 }
