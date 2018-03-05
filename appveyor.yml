@@ -29,12 +29,14 @@ environment:
     ICD_SLOW_TESTS: "true"
   matrix:
     - R_VERSION: release
+      R_COVR: true
 
     - R_VERSION: devel
       R_ARCH: x64
+      R_COVR: false
 
 on_success:
-  - ICD_SLOW_TESTS=true Rscript -e 'covr::codecov(quiet = FALSE)'
+  - Rscript -e 'R/covr.R %R_COVR% codecov'.
 
 test_script:
   - travis-tool.sh run_tests

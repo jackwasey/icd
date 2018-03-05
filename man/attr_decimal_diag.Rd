@@ -21,17 +21,17 @@ as.icd_decimal_diag(j)
 # if pryr is installed (not Suggest because purely for demonstrating internal works)
 pryr <- "pryr"
 if (require(pryr, quietly = TRUE, character.only = TRUE)) {
-j <- 1
-c(address(j), refs(j))
-attr(j, "icd_short_diag") <- TRUE
-c(address(j), refs(j))
-attr(j, "icd_short_diag") <- FALSE
-c(address(j), refs(j))
-icd:::attr_decimal_diag(j)
-c(address(j), refs(j))
-j <- as.icd_decimal_diag(j, TRUE)
-c(address(j), refs(j))
-# Rcpp cleverer than R, and doesn't return a copy of the data
+  j <- 1
+  c(address(j), refs(j))
+  attr(j, "icd_short_diag") <- TRUE
+  c(address(j), refs(j))
+  attr(j, "icd_short_diag") <- FALSE
+  c(address(j), refs(j))
+  icd:::attr_decimal_diag(j)
+  c(address(j), refs(j))
+  j <- as.icd_decimal_diag(j, TRUE)
+  c(address(j), refs(j))
+  # Rcpp cleverer than R, and doesn't return a copy of the data
 }
 }
 \keyword{attribute}

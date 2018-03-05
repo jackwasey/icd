@@ -23,7 +23,7 @@ test_that("github #133 minimal example of bug", {
   icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
 })
 
-{
+{# nolint
   pts10 <- icd::icd_long_data(
     visit = c("a"),
     icd = c(NA_character_),
@@ -40,5 +40,4 @@ test_that("github #133 minimal example of bug", {
     res <- icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
     expect_true(all(!res))
   })
-
 }
