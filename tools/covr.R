@@ -7,6 +7,8 @@
 # second argument is "codecov" or "coveralls"
 
 args = commandArgs(trailingOnly = TRUE)
+message("Running covr.R")
+message("args are: ", paste("args", sep = ", "))
 if (tolower(args[[1]]) == "true") {
 
   # do give warnings as they arise
