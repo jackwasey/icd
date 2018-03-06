@@ -15,8 +15,7 @@ if (tolower(args[[1]]) == "true") {
   # do give warnings as they arise
   options(warn = 1)
 
-  icd:::do_slow_tests()
-  # covr may start new process and thus ignore the R options set above. Try:
+  # icd not loaded so can't just set the option via icd::do_slow_tests. Try:
   Sys.setenv(ICD_SLOW_TESTS = "true")
 
   if (args[[2]] == "coveralls")
