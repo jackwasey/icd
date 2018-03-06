@@ -40,3 +40,4 @@ src-x64
 *.swp
 todo
 README.html
+include-dependencies

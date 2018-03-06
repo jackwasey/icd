@@ -16,7 +16,7 @@ if (tolower(args[[1]]) == "true") {
   options(warn = 1)
 
   # icd not loaded so can't just set the option via icd::do_slow_tests. Try:
-  Sys.setenv(ICD_SLOW_TESTS = "true")
+  Sys.setenv(ICD_SLOW_TESTS = "false")
 
   if (args[[2]] == "coveralls")
     covr::coveralls(quiet = FALSE)

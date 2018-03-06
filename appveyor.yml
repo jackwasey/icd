@@ -39,7 +39,7 @@ environment:
       R_COVR: false
 
 on_success:
-  - Rscript -e "covr::codecov()"
+  - Rscript -e "covr::codecov(quiet = FALSE)"
 
 test_script:
   - travis-tool.sh run_tests
