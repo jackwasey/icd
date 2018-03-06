@@ -34,7 +34,7 @@ icd9cm_billable[[:digit:]]+\.RData$
 ^icd.*\.out$
 icd.*\.Rnw$
 icd.*tar\.gz
-^include-dependencies\.d$
+^include-dependencies(\.d)?$
 inst\/standalone\/.*
 \.lintr$
 .*\.log$
