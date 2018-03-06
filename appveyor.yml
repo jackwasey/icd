@@ -36,7 +36,7 @@ environment:
       R_COVR: false
 
 on_success:
-  - Rscript -e 'R/covr.R %R_COVR% codecov'.
+  - Rscript -e "covr::codecov()"
 
 test_script:
   - travis-tool.sh run_tests
