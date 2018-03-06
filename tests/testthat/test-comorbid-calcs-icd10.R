@@ -20,7 +20,6 @@ context("ICD-10 comorbidity calculations")
 # very extensive.
 
 test_that("ICD-10 comorbidities from uranium", {
-  skip_slow_tests()
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_elix), regexp = NA)
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_quan_deyo), regexp = NA)
   expect_warning(icd_comorbid(uranium_pathology, icd10_map_elix), regexp = NA)

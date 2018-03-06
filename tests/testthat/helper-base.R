@@ -15,13 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-local({
-  do_slow_tests <- getOption("icd.do_slow_tests")
-  if (is.null(do_slow_tests) || !do_slow_tests)
-    message("Will skip slow tests")
-  else
-    message("Doing slow tests")
-})
+message("loading helper-base.R")
 
 set.seed(1441)
 n <- 500

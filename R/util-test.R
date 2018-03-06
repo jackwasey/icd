@@ -15,19 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-do_slow_tests <- function(x = TRUE) {
-  options("icd.do_slow_tests" = x)
-}
-
-doing_slow_tests <- function() {
-  identical(getOption("icd.do_slow_tests"), TRUE)
-}
-
-skip_slow_tests <- function(msg = "skipping slow test") {
-  if (!doing_slow_tests())
-    testthat::skip(msg)
-}
-
 rtf_year_ok <- function(year) {
   !is.null(rtf_fetch_year(year, offline = TRUE))
 }
@@ -327,12 +314,4 @@ random_string <- function(n, max_chars = 4) {
          FUN = function(x) rand_ch(),
          FUN.VALUE = character(n)
   )  %>% apply(1, paste0, collapse = "")
-}
-
-#' Show options which control testing
-#'
-#' Get the options for all currently used \code{icd} testing options.
-#' @keywords internal debugging
-show_test_options <- function() {
-  print(options("icd.do_slow_tests"))
 }

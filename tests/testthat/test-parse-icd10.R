@@ -26,7 +26,6 @@ test_that("icd10 WHO recreated exactly", {
 context("icd10 fixed width parse")
 
 test_that("icd10 2016 flat file details are okay", {
-  skip_slow_tests()
   skip_icd10cm_flat_avail()
 
   # check cols at a time, so I get better error feedback:

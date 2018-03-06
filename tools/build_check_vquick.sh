@@ -11,7 +11,6 @@ R CMD build --no-build-vignettes --no-manual --resave-data=no ~/icd
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE" \
- ICD_SLOW_TESTS=FALSE \
  _R_CHECK_VIGNETTES_NLINES_=0 \
  _R_CHECK_RD_EXAMPLES_T_AND_F_=TRUE \
  _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE \

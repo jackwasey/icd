@@ -363,7 +363,6 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
 })
 
 test_that("convert icd-9 ranges", {
-  skip_slow_tests()
   ooe <- icd_long_data(visit_id = sprintf("pt%02d", seq_along(one_of_each)),
                        code = one_of_each,
                        stringsAsFactors = TRUE)

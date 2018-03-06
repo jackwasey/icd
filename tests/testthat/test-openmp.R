@@ -30,7 +30,6 @@ test_that("thousands of patients", {
 })
 
 test_that("vary all OMP-related numbers at once", {
-  skip_slow_tests()
   old_opts <- options("icd.threads", "icd.chunk_size", "icd.omp_chunk_size")
   omp_chunk_size <- 1
   # prime numbers

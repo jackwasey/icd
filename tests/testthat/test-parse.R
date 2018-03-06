@@ -147,7 +147,6 @@ if (rtf_year_ok(test_year)) {
 
 
   test_that("all leaf codes from TXT are in flat file extract", {
-    skip_slow_tests()
     test_ver <- "32"
     skip_flat_icd9_avail(test_ver)
 

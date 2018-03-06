@@ -215,7 +215,6 @@ test_that("explain gives appropriate warnings by default", {
 })
 
 test_that("explain icd9GetChapters simple input", {
-  skip_slow_tests()
   chaps1 <- icd9_get_chapters(c("410", "411", "412"), short_code = TRUE)
   expect_equal(nrow(chaps1), 3)
 
