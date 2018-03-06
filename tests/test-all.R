@@ -30,8 +30,24 @@ if (packageVersion("testthat") < package_version("0.11.0.9000")) {
 }
 
 # when covr runs tests, it installs the package with source, and sources the files in the test directory.
-# This means that /data-raw would be absent, so it should be in inst/data-raw for testing.
+# This means that /data-raw would be absent, so it should be kept in inst/data-raw.
 
-icd:::setup_test_check()
+# covr runs tests in a completely different R process, so seem like options are not
+# preserved.. An alternative might be to add an expression to be run to covr
+# package_coverage command (or caller).
+if (identical(tolower(Sys.getenv("R_COVR")), "true")) {
+  message("covr detected so doing slow tests")
+  options("icd.do_slow_tests" = TRUE)
+
+  # warnings on: things go wrong during test suite e.g. during code coverage
+  # on travis, this may help see what is happening
+  options("warn" = 1)
+}
+
+if (identical(tolower(Sys.getenv("ICD_SLOW_TESTS")), "true")) {
+  message("environment variable ICD_SLOW_TESTS found to be true, so doing slow tests")
+  options("icd.do_slow_tests" = TRUE)
+}
+
 icd:::show_test_options()
 testthat::test_check("icd", reporter = "summary")
