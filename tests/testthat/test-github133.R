@@ -27,7 +27,9 @@ test_that("github #133 minimal example of bug", {
     icd = c(""),
     date = as.Date(c("2011-01-01")));
 
-  icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+  res <- icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+  expect_equal(dim(res), c(1L, 30L))
+  expect_equal(sum(res), 0)
 })
 
 {# nolint

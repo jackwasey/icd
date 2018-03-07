@@ -35,16 +35,15 @@ test_that("well ordered class lists are created", {
 })
 
 test_that("well ordered class lists short/decimal ICD combos are created", {
-  skip("this is time consuming, and we should probably tolerate mixed order anyway")
-  expect_icd_classes_ordered(icd_short_diag(icd9("V102")))
+  expect_icd_classes_ordered(as.icd_short_diag(icd9("V102")))
   expect_icd_classes_ordered(as.icd_decimal_diag(icd9cm("410.00")))
-  expect_icd_classes_ordered(icd_short_diag(icd10("A100")))
+  expect_icd_classes_ordered(as.icd_short_diag(icd10("A100")))
   expect_icd_classes_ordered(as.icd_decimal_diag(icd10cm("B23.1")))
 
   expect_icd_classes_ordered(as.icd_decimal_diag(icd9("V10.2")))
-  expect_icd_classes_ordered(icd_short_diag(icd9cm("41000")))
+  expect_icd_classes_ordered(as.icd_short_diag(icd9cm("41000")))
   expect_icd_classes_ordered(as.icd_decimal_diag(icd10("A10.0")))
-  expect_icd_classes_ordered(icd_short_diag(icd10cm("B231")))
+  expect_icd_classes_ordered(as.icd_short_diag(icd10cm("B231")))
 })
 
 test_that("is short or decimal code", {
@@ -62,18 +61,6 @@ test_that("no warning or error for combining same types", {
   expect_warning(c(as.icd9(""), as.icd9("")), regexp = NA)
   expect_warning(c(as.icd10(""), as.icd10("")), regexp = NA)
   expect_warning(c(as.icd10cm(""), as.icd10cm("")), regexp = NA)
-})
-
-test_that("warn if combining mixed ICD sub-version types", {
-  skip("hold off this for now")
-  c(as.icd9cm(""), as.icd9(""))
-  c(as.icd10cm(""), as.icd10(""))
-})
-
-test_that("error if combining mixed ICD version types, e.g. ICD-9 vs ICD-10", {
-  skip("this is nice to have, but adds weight to 'c'")
-  expect_error(c(as.icd9cm(""), as.icd10("")))
-  expect_error(c(as.icd10cm(""), as.icd9("")))
 })
 
 test_that("combining identity", {
@@ -245,7 +232,6 @@ test_that("conflicting ICD type classes can be found", {
 })
 
 test_that("long vs wide data conflict identified", {
-  skip("WIP")
   v_bad <- vermont_dx
   class(v_bad) <- c(class(v_bad), "icd_long_data")
   u_bad <- uranium_pathology

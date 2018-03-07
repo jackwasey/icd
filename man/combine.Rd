@@ -25,10 +25,11 @@ mixed ICD types and other types. Let R do what it normally does, but just try
 to keep classes of the first item in the list.
 }
 \examples{
-\dontrun{
-# throw an error? or assign type according to first argument?
+# Care with the following:
 c(as.icd9("E998"), as.icd10("A10"))
+# which results in both codes sharing the 'icd9' class.
 
+\dontrun{
 # benchmark subsetting to justify using .subset2 (5\% faster)
 library(microbenchmark)
 j <- list(as.icd9cm("E990"), as.icd9cm("10010"))
@@ -38,7 +39,7 @@ microbenchmark(j[[1]], .subset2(j, 1),
                times = 1e6)
 
 # logical list to vector
-a <- list(T,T)
+a <- list(TRUE, TRUE)
 microbenchmark(as.logical(a), c(a, recursive = TRUE), times = 1e6)
 
 # c(..., recursive = TRUE) vs unlist
