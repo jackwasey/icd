@@ -35,7 +35,7 @@
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal
 unzip_to_data_raw <- function(url, file_name, force = FALSE, verbose = FALSE, offline = TRUE,
-                              data_raw_path = system.file("inst", "data-raw", package = "icd")) {
+                              data_raw_path = system.file("data-raw", package = "icd")) {
   checkmate::assert_string(url, na.ok = FALSE)
   checkmate::assert_string(file_name, na.ok = FALSE)
   checkmate::assert_flag(offline)
@@ -63,14 +63,14 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE, verbose = FALSE, of
 download_to_data_raw <- function(
   url,
   file_name = regmatches(url, regexpr("[^/]*$", url)),
-  offline = TRUE, data_raw_path = "data-raw") {
+  offline = TRUE,
+  data_raw_path = system.file("data-raw", package = "icd")) {
   checkmate::assert_string(url)
   checkmate::assert_string(file_name)
   checkmate::assert_flag(offline)
 
   if (!dir.exists(data_raw_path))
     data_raw_path <- tempdir()
-
 
   save_path <- file.path(data_raw_path, file_name)
   f_info <- list(file_path = save_path, file_name = file_name)
