@@ -29,9 +29,9 @@ test_that("well ordered class lists are created", {
   expect_icd_classes_ordered(icd10(""))
   expect_icd_classes_ordered(icd10cm(""))
 
-  skip("this is time consuming, and we should probably tolerate mixed order anyway")
-  expect_icd_classes_ordered(icd_short_diag(""))
+  expect_icd_classes_ordered(as.icd_short_diag(""))
   expect_icd_classes_ordered(as.icd_decimal_diag(""))
+  expect_icd_classes_ordered(as.icd_decimal_diag(as.icd9("")))
 })
 
 test_that("well ordered class lists short/decimal ICD combos are created", {

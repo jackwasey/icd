@@ -73,7 +73,8 @@ icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
 #' }
 #' @keywords internal
 icd_classes_conflict <- function(x)
-  is.icd9(x) && is.icd10(x)
+  is.icd9(x) && is.icd10(x) ||
+  is.icd_long_data(x) && is.icd_wide_data(x)
 
 #' prefer an order of classes
 #'

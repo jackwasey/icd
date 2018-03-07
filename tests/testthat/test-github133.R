@@ -11,6 +11,13 @@ test_that("github #133 doesn't crash R", {
                         visit_name = "CLAIMNO",
                         icd_name = "icd10",
                         aggregate = FALSE)
+  expect_equal(dim(res), c(20, 30))
+  expect_equal(
+    rownames(res),
+    c("8534023", "8534024", "8534025", "8534026", "8534027", "8534028",
+      "8534029", "8534030", "8534031", "8534032", "8534033", "8534034",
+      "8534035", "8534036", "8534037", "8534038", "8534039", "8534040",
+      "8534041", "8534042"))
 })
 
 test_that("github #133 minimal example of bug", {

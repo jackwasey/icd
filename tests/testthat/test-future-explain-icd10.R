@@ -22,11 +22,3 @@ expect_icd10cm_explain_one <- function(...) {
   for (i in seq_along(x))
     eval(bquote(expect_identical(icd_explain(as.icd10cm(.(names(x[i]))), x[[i]]))))
 }
-
-test_that("explain leaf codes", {
-  skip("WIP")
-
-  expect_icd10cm_explain_one("G000" = "Hemophilus meningitis",
-                             "P960" = "Congenital renal failure"
-  )
-})

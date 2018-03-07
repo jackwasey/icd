@@ -27,9 +27,10 @@ test_that("single icd9 code comorbidity", {
   expect_equal(sum(y), 1)
 })
 
-test_that("thousands of patients", {
-  x <- generate_random_pts(10000)
-  icd9_comorbid_quan_deyo(x, short_code = FALSE, applyHierarchy = TRUE)
+test_that("icd9 comorbidities for thousands of random patients to stress OpenMP", {
+  x <- generate_random_pts(10000, n = 500)
+  res <- icd9_comorbid_quan_deyo(x, short_code = FALSE, applyHierarchy = TRUE)
+  expect_equal(dim(res), c(500, 17))
 })
 
 test_that("vary all OMP-related numbers at once", {
