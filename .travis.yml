@@ -16,7 +16,7 @@ addons:
       - unixodbc-dev
 
 r:
-  - oldrel # when oldrel = 3.1, there are S3 method problems I can't debug
+  - oldrel
   - release
   - devel
 
@@ -40,7 +40,7 @@ env:
 before_script:
  - ls -aR
  - rm .Rinstignore  # do install everything for testing
- - sed -i.old1 '/[Dd]ata/d' .Rbuildignore # do include data for testing
+ - sed -i.old1 '/[Dd]ata.*/d' .Rbuildignore # do include data for testing
  - sed -i.old2 '/\.covrignore/d' .Rbuildignore
  - sed -i.old3 '/\.lintr/d' .Rbuildignore
  - rm .Rbuildignore.old{1,2,3}
