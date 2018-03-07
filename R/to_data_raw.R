@@ -34,8 +34,8 @@
 #' @param data_raw_path path where the data-raw directory is.
 #' @return path of unzipped file in \code{data-raw}
 #' @keywords internal
-unzip_to_data_raw <- function(url, file_name, force = FALSE, verbose = FALSE,
-                              offline = TRUE, data_raw_path = "data-raw") {
+unzip_to_data_raw <- function(url, file_name, force = FALSE, verbose = FALSE, offline = TRUE,
+                              data_raw_path = system.file("inst", "data-raw", package = "icd")) {
   checkmate::assert_string(url, na.ok = FALSE)
   checkmate::assert_string(file_name, na.ok = FALSE)
   checkmate::assert_flag(offline)

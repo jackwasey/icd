@@ -155,7 +155,6 @@ icd10_comorbid <- function(x,
 #' find ICD-10 comorbidities by checking parents
 #'
 #' @examples
-#' \dontrun{
 #' up <- uranium_pathology[1:50, ]
 #' stopifnot(identical(
 #' icd:::icd10_comorbid_parent_search_orig(up, icd10_map_ahrq,
@@ -166,6 +165,7 @@ icd10_comorbid <- function(x,
 #'   short_code = FALSE, short_map = TRUE, return_df = FALSE)
 #' ))
 #'
+#' \dontrun{
 #' library(microbenchmark)
 #' microbenchmark(substr("12345", 1, 4), substring("12345", 1, 4),
 #'                stringr::str_sub("12345", 1, 4), times = 1e5)

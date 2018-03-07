@@ -1,8 +1,5 @@
 context("ICD-10 codes are valid, defined, billable")
 
-test_that("tricky ICD-10 codes", {
-})
-
 test_that("icd10 codes that are billable and do exist", {
   test_codes <- list("A000", "A001", "A009", "A09", "R197", "B0059",
                      "C7A024", "C7B1", "D4989", "O9A119", "O9A519", "O9A53", "O99845", "P969",

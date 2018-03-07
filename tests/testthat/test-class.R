@@ -47,13 +47,6 @@ test_that("well ordered class lists short/decimal ICD combos are created", {
   expect_icd_classes_ordered(icd_short_diag(icd10cm("B231")))
 })
 
-test_that("warn if changing ICD decimal to short or vice versa", {
-  skip("not sure I want this behaviour")
-  expect_warning(as.icd_short_diag(as.icd_decimal_diag("10.1"), warn = TRUE))
-  expect_warning(as.icd_decimal_diag(as.icd_short_diag("2222"), warn = TRUE))
-  expect_warning(as.icd_short_diag(as.icd_decimal_diag(icd9cm("10.1")), warn = TRUE))
-})
-
 test_that("is short or decimal code", {
   # todo, somehow clarify that this is not the same is icd_is_valid...
   expect_true(is.icd_short_diag(as.icd_short_diag("1234")))
@@ -241,7 +234,6 @@ test_that("no conflict for built-in data", {
 })
 
 test_that("conflicting ICD type classes can be found", {
-  skip("working on this")
   expect_true(icd_classes_conflict(structure("V10", class = c("icd9cm", "icd10", "character"))))
   expect_true(icd_classes_conflict(structure("V10", class = c("icd9", "icd10", "character"))))
   expect_true(icd_classes_conflict(structure("V10", class = c("icd9cm", "icd10cm", "character"))))
@@ -250,12 +242,6 @@ test_that("conflicting ICD type classes can be found", {
   expect_true(icd_classes_conflict(structure("V10", class = c("icd10", "icd9", "character"))))
   expect_true(icd_classes_conflict(structure("V10", class = c("icd10", "icd9cm", "character"))))
   expect_true(icd_classes_conflict(structure(list("V10", "A20"), class = c("icd9cm", "icd10", "list"))))
-})
-
-test_that("conflicting short vs decimal class asssignment", {
-  skip("working on this")
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd_short_diag", "icd_decimal_diag"))))
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd_decimal_diag", "icd_short_diag"))))
 })
 
 test_that("long vs wide data conflict identified", {

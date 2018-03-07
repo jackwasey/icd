@@ -6,7 +6,8 @@
 \title{Unzip file to \code{data-raw}}
 \usage{
 unzip_to_data_raw(url, file_name, force = FALSE, verbose = FALSE,
-  offline = TRUE, data_raw_path = "data-raw")
+  offline = TRUE, data_raw_path = system.file("inst", "data-raw", package =
+  "icd"))
 
 download_to_data_raw(url, file_name = regmatches(url, regexpr("[^/]*$", url)),
   offline = TRUE, data_raw_path = "data-raw")

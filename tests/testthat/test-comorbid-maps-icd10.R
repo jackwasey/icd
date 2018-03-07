@@ -116,11 +116,6 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
                  info = paste("checking quan elix canonical in indep_kids: ", i, " - ", names(quan_elix_independent)[i]))
     # yes, there are non-ICD-10-CM codes which are not in the ICD-10-CM children
     # (without including the codes themselves)
-
-    skip("his test reveals that ICD 10 CM codes may not be represented in ICD 10 WHO...")
-    expect_equal(setdiff(canon, indep_kids), character(),
-                 info = paste("checking quan elix indep in canonical: ", i, " - ",
-                              names(quan_elix_independent)[i]))
   }
 
 })

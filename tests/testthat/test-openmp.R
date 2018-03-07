@@ -21,7 +21,10 @@ context("OpenMP thread and chunk parameters")
 test_that("single icd9 code comorbidity", {
   # this is enough to segfault with clang 3.7, libc++ and libomp
   x <- data.frame(visit_id = "a", icd9 = "441")
-  icd9_comorbid_quan_deyo(x, short_code = FALSE, applyHierarchy = T)
+  y <- icd9_comorbid_quan_deyo(x, short_code = FALSE, applyHierarchy = TRUE)
+  expect_true(is.matrix(y))
+  expect_equal(dim(y), c(1L, 17L))
+  expect_equal(sum(y), 1)
 })
 
 test_that("thousands of patients", {

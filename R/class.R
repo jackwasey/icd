@@ -72,9 +72,8 @@ icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
 #' microbenchmark::microbenchmark(attr(rp, "k", exact = TRUE), attributes(rp), times = times)
 #' }
 #' @keywords internal
-icd_classes_conflict <- function(x) {
+icd_classes_conflict <- function(x)
   is.icd9(x) && is.icd10(x)
-}
 
 #' prefer an order of classes
 #'

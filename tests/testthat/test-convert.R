@@ -344,15 +344,16 @@ test_that("maj min to short for multiple majors", {
 })
 
 test_that("icd9 parts to short: don't allow cycling.", {
-  skip("removed this internal check for speed")
-  expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")))
+  expect_equal(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")),
+               c("1231", "03420", ""))
   # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
-  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
+  expect_equal(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
+               c("1231", "03420"))
 })
 
 test_that("Windows Rtools 3.2 hang test - also triggers bug #75", {
-  skip("removed this internal check for speed")
-  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")))
+  expect_equal(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
+               c("1231", "03420"))
   # see Rcpp issue #276.
 })
 
