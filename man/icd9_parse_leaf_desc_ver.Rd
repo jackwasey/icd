@@ -42,7 +42,7 @@ requireNamepsace("stringr")
 x <- icd:::generate_random_decimal_icd9(10)
 microbenchmark(strsplit(x, "\\\\."), stringr::str_split(x, "\\\\."))
 # str_trim is faster with nothing to trim
-microbenchmark(trim(x), stringr::str_trim(x))
+microbenchmark(icd:::trim(x), stringr::str_trim(x))
 }
 }
 \keyword{internal}

@@ -39,7 +39,7 @@ strim <- function(x) {
 #' @return character vector
 #' @examples
 #' s <- icd:::random_string(250);
-#' microbenchmark::microbenchmark(trim(s), trimws(s)) # trimws from R version 3.2
+#' microbenchmark::microbenchmark(icd:::trim(s), trimws(s)) # trimws from R version 3.2
 #' @keywords internal manip
 trim <- function(x) {
   nax <- is.na(x)

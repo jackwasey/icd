@@ -17,7 +17,7 @@ character vector
 }
 \examples{
 s <- icd:::random_string(250);
-microbenchmark::microbenchmark(trim(s), trimws(s)) # trimws from R version 3.2
+microbenchmark::microbenchmark(icd:::trim(s), trimws(s)) # trimws from R version 3.2
 }
 \keyword{internal}
 \keyword{manip}
