@@ -32,19 +32,21 @@
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
 #'
 #' # no children other than self
-#' icd_children("10201", short_code = TRUE, defined =FALSE)
+#' icd_children("10201", short_code = TRUE, defined = FALSE)
 #'
 #' # guess it was ICD-9 and a short, not decimal code
 #' icd_children("0032")
 #'
 #' # empty because 102.01 is not meaningful
-#' icd_children("10201", short_code = TRUE, defined =TRUE)
-#' icd_children("003", short_code = TRUE, defined =TRUE) %>%
+#' icd_children("10201", short_code = TRUE, defined = TRUE)
+#' icd_children("003", short_code = TRUE, defined = TRUE) %>%
 #'   icd_explain(condense = FALSE, short_code = TRUE)
 #'
 #' icd_children(short_code = FALSE, "100.0")
 #' icd_children(short_code = FALSE, "100.00")
 #' icd_children(short_code = FALSE, "2.34")
+#' @return Returns a vector of ICD codes, with class of \code{character} and the
+#'   class of the identified or specified ICD code, e.g. \code{icd9}
 #' @export
 icd_children <- function(x, ...)
   UseMethod("icd_children")
@@ -88,14 +90,12 @@ icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
 #' @describeIn icd_children Get children of ICD-10 codes (warns because this
 #'   only applies to ICD-10-CM for now).
 #' @export
-#' @keywords internal
 icd_children.icd10 <- function(x, short_code = icd_guess_short(x), defined, billable = FALSE, ...) {
   icd_children.icd10cm(x, short_code, defined, billable, ...)
 }
 
 #' @describeIn icd_children Get children of ICD-10-CM codes
 #' @export
-#' @keywords internal
 icd_children.icd10cm <- function(x, short_code = icd_guess_short(x), defined, billable = FALSE, ...) {
   assert(check_factor(x), check_character(unclass(x)))
   assert_flag(short_code)

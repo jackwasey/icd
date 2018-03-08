@@ -37,12 +37,10 @@ strim <- function(x) {
 #' \code{NA} is accepted and returned, probably as \code{NA_character_}
 #' @param x character vector
 #' @return character vector
-#' @keywords internal
 #' @examples
-#' \dontrun{
 #' s <- random_string(250);
 #' microbenchmark::microbenchmark(trim(s), trimws(s)) # trimws from R version 3.2
-#' }
+#' @keywords internal manip
 trim <- function(x) {
   nax <- is.na(x)
   x[!nax] <- .Call("_icd_trimCpp", PACKAGE = "icd", as.character(x[!nax]))

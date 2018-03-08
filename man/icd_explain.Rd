@@ -90,4 +90,3 @@ icd_explain(icd10_map_ahrq$CHF[1:3], brief = TRUE)
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 icd_explain(icd9_map_ahrq$CHF[1:3] \%>\% icd_condense)
 }
-\keyword{internal}

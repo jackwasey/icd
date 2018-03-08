@@ -39,6 +39,10 @@ whether they are billable, i.e. leaf nodes. This is really only designed
 for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not
 designed for billing, but for public health and death reporting.}
 }
+\value{
+Returns a vector of ICD codes, with class of \code{character} and the
+  class of the identified or specified ICD code, e.g. \code{icd9}
+}
 \description{
 Expand ICD codes to all possible sub-codes, optionally limiting to those
 codes which are \emph{defined} or \emph{billable} (leaf nodes).
@@ -60,14 +64,14 @@ only applies to ICD-10-CM for now).
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
 
 # no children other than self
-icd_children("10201", short_code = TRUE, defined =FALSE)
+icd_children("10201", short_code = TRUE, defined = FALSE)
 
 # guess it was ICD-9 and a short, not decimal code
 icd_children("0032")
 
 # empty because 102.01 is not meaningful
-icd_children("10201", short_code = TRUE, defined =TRUE)
-icd_children("003", short_code = TRUE, defined =TRUE) \%>\%
+icd_children("10201", short_code = TRUE, defined = TRUE)
+icd_children("003", short_code = TRUE, defined = TRUE) \%>\%
   icd_explain(condense = FALSE, short_code = TRUE)
 
 icd_children(short_code = FALSE, "100.0")
@@ -79,5 +83,4 @@ Other ICD-9 ranges: \code{\link{icd_condense}},
   \code{\link{icd_expand_minor}},
   \code{\link{icd_expand_range}}
 }
-\keyword{internal}
 \keyword{manip}

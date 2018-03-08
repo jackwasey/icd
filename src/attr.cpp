@@ -44,7 +44,7 @@ void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
 
 //' @rdname as.icd_short_diag
 //' @keywords internal attribute
-// [[Rcpp::export(.attr_short_diag)]]
+// [[Rcpp::export(attr_short_diag)]]
 void setShortDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = value;
 }

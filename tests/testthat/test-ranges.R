@@ -562,8 +562,7 @@ test_that("remove ambiguous high-level codes at start of icd9 range expansion", 
   )
 })
 
-test_that("if end of range expanded does reach the same code as the expansion of the high level start code,
-          then the start code should be included", {
+test_that("end of range expanded reaches same code as expansion of high level start code", {
   expect_equivalent(
     icd9_expand_range_short("550", "5509", defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = FALSE),
     icd9(c("550", "5500", "55000", "55001", "55002", "55003", "5501", "55010", "55011", "55012", "55013",

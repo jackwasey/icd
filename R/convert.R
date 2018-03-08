@@ -90,10 +90,11 @@ icd9_chapters_to_map <- function(x) {
 #'   a column named by \code{icd.name} containing all the non-NA and non-empty
 #'   codes found in the wide input data.
 #' @examples
-#'   widedf <- data.frame(visit_name = c("a", "b", "c"),
-#'     icd9_01 = c("441", "4424", "441"),
-#'     icd9_02 = c(NA, "443", NA))
-#'   icd_wide_to_long(widedf)
+#' widedf <- data.frame(visit_name = c("a", "b", "c"),
+#'   icd9_01 = c("441", "4424", "441"),
+#'   icd9_02 = c(NA, "443", NA)
+#'   )
+#' icd_wide_to_long(widedf)
 #' @family ICD-9 convert
 #' @export
 icd_wide_to_long <- function(x,

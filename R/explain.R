@@ -58,7 +58,6 @@ icd_explain <- function(...)
 #' @describeIn icd_explain Explain ICD codes from a character vector, guessing
 #'   ICD version
 #' @export
-#' @keywords internal
 icd_explain.default <- function(x, short_code = icd_guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   switch(
     icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
@@ -70,21 +69,18 @@ icd_explain.default <- function(x, short_code = icd_guess_short(x), condense = T
 
 #' @describeIn icd_explain Explain all ICD-9 codes in a list of vectors
 #' @export
-#' @keywords internal
 icd_explain.list <- function(x, ...) {
   lapply(x, icd_explain, ...)
 }
 
 #' @describeIn icd_explain explain character vector of ICD-9 codes.
 #' @export
-#' @keywords internal
 icd_explain.icd9 <- function(...) {
   icd_explain.icd9cm(...)
 }
 
 #' @describeIn icd_explain explain character vector of ICD-9-CM codes
 #' @export
-#' @keywords internal
 icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert(check_factor(x), check_character(x))
@@ -119,7 +115,6 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
 
 #' @describeIn icd_explain ICD-10-CM explanation, current a minimal implementation
 #' @export
-#' @keywords internal
 icd_explain.icd10cm <- function(x, short_code = icd_guess_short(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert_vector(x)
@@ -142,7 +137,6 @@ icd_explain.icd10cm <- function(x, short_code = icd_guess_short(x),
 #' @describeIn icd_explain ICD-10 explanation, falls back on ICD-10-CM until
 #'   ICD-10 WHO copyright workaround is available
 #' @export
-#' @keywords internal
 icd_explain.icd10 <- function(x, short_code = icd_guess_short(x),
                               condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   # don't pass on condense and warn until they are implemented

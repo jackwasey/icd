@@ -50,10 +50,11 @@ related to ICD codes. Empty strings and NA values will be dropped, and
 everything else kept. No validation of the ICD codes is done.
 }
 \examples{
-  widedf <- data.frame(visit_name = c("a", "b", "c"),
-    icd9_01 = c("441", "4424", "441"),
-    icd9_02 = c(NA, "443", NA))
-  icd_wide_to_long(widedf)
+widedf <- data.frame(visit_name = c("a", "b", "c"),
+  icd9_01 = c("441", "4424", "441"),
+  icd9_02 = c(NA, "443", NA)
+  )
+icd_wide_to_long(widedf)
 }
 \seealso{
 Other ICD-9 convert: \code{\link{icd9PartsToShort}},
