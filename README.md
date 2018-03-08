@@ -23,7 +23,7 @@ rmarkdown::render("README.Rmd")
 
 # icd
 
-## downloads from Rstudio mirror
+#### downloads from Rstudio mirror
 
 [![CRAN RStudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
@@ -32,13 +32,6 @@ version](https://www.r-pkg.org/badges/version/icd)](https://cran.r-project.org/p
 [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master)](https://travis-ci.org/jackwasey/icd)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/github/jackwasey/icd)](https://ci.appveyor.com/project/jackwasey/icd)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd?branch=master)
-
-## Old package icd9 statistics
-
-[![CRAN
-version](https://www.r-pkg.org/badges/version/icd9)](https://cran.r-project.org/package=icd9)
-[![CRAN RStudio mirror
-downloads](https://cranlogs.r-pkg.org/badges/icd9)](https://cran.r-project.org/package=icd9)
 
 # ICD-9 and ICD-10 comorbidities, manipulation and validation
 
