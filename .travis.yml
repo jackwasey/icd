@@ -50,8 +50,7 @@ before_script:
 after_success:
  - ls -aR
  - cat ./icd.Rcheck/tests/test-all.Rout
- - Rscript -e "covr::coveralls(quiet = FALSE)"
- - Rscript -e "lintr::lint_package()"
+ - Rscript -e "covr::codecov(quiet = FALSE)"
 
 notifications:
   email:

@@ -21,10 +21,18 @@ platform:
   - x64
 #  - Any CPU
 
+before_build:
+  - ls -aR
+  - rm .Rinstignore  # do install everything for testing
+  - sed -i.old1 '.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
+  - sed -i.old2 '/\.covrignore/d' .Rbuildignore
+  - sed -i.old3 '/\.lintr/d' .Rbuildignore
+  - rm .Rbuildignore.old{1,2,3}
+  - Rscript -e "Rcpp::compileAttributes()"
+
 build_script:
   - travis-tool.sh github_package r-lib/covr
   - travis-tool.sh install_deps
-  - Rscript -e "Rcpp::compileAttributes()"
 
 environment:
 #  global:
