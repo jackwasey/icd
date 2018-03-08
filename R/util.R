@@ -38,7 +38,7 @@ strim <- function(x) {
 #' @param x character vector
 #' @return character vector
 #' @examples
-#' s <- random_string(250);
+#' s <- icd:::random_string(250);
 #' microbenchmark::microbenchmark(trim(s), trimws(s)) # trimws from R version 3.2
 #' @keywords internal manip
 trim <- function(x) {
@@ -68,7 +68,7 @@ trim <- function(x) {
 #' \dontrun{
 #' requireNamespace("microbenchmark")
 #' requireNamespace("stringr")
-#' x <- random_string(25000);
+#' x <- icd:::random_string(25000);
 #' microbenchmark::microbenchmark(
 #'   gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE),
 #'   gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE, perl = TRUE),

@@ -13,7 +13,7 @@ icd_children(x, ...)
 \method{icd_children}{character}(x, ...)
 
 \method{icd_children}{icd9}(x, short_code = icd_guess_short(x),
-  defined = TRUE, billable = FALSE, debug = FALSE, ...)
+  defined = TRUE, billable = FALSE, ...)
 
 \method{icd_children}{icd10}(x, short_code = icd_guess_short(x), defined,
   billable = FALSE, ...)

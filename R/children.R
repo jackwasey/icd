@@ -67,7 +67,7 @@ icd_children.character <- function(x, ...) {
 #' @describeIn icd_children Get children of ICD-9 codes
 #' @export
 icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
-                              defined = TRUE, billable = FALSE, debug = FALSE, ...) {
+                              defined = TRUE, billable = FALSE, ...) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   assert_flag(defined)
