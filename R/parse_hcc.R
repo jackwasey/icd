@@ -28,7 +28,7 @@
 #' @keywords internal manip
 icd9_parse_cc <- function(save_data = FALSE) {
   assert_flag(save_data)
-  # Import raw CMS data for ICD9≥test
+  # Import raw CMS data for ICD-9
   icd9_map_cc <- apply(
     data.frame(paste("inst/data-raw/icd_hcc_rawdata/icd9/",
                      list.files("inst/data-raw/icd_hcc_rawdata/icd9/"), sep = "")),
