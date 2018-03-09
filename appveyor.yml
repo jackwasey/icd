@@ -24,7 +24,7 @@ platform:
 before_build:
   - ls -aR
   - rm .Rinstignore  # do install everything for testing
-  - sed -i -e '.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
+  - sed -i -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
   - sed -i -e '/\.covrignore/d' .Rbuildignore
   - sed -i -e '/\.lintr/d' .Rbuildignore
   - Rscript -e "Rcpp::compileAttributes()"

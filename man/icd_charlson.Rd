@@ -84,10 +84,18 @@ codes. ICD-10 Charlson can be calculated simply by getting the Charlson
 \examples{
 mydf <- data.frame(visit_name = c("a", "b", "c"),
                    icd9 = c("441", "412.93", "044.9"))
+icd_charlson(mydf)
 cmb <- icd9_comorbid_quan_deyo(mydf)
 cmb
-icd_charlson(mydf)
 # can specify short_code directly instead of guessing
 icd_charlson(mydf, short_code = FALSE, return_df = TRUE)
 icd_charlson_from_comorbid(cmb)
+\dontrun{
+# let's do five million patients and benchmark
+big <- icd:::generate_random_pts(5E6)
+microbenchmark::microbenchark(
+  icd_charlson(big),
+  times = 5
+)
+}
 }

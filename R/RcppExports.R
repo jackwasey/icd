@@ -125,10 +125,6 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
     .Call(`_icd_icd10_comorbid_parent_search_cpp`, x, map, visit_name, icd_name)
 }
 
-icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
-    .Call(`_icd_icd9MajMinToCodeOld`, mjr, mnr, isShort)
-}
-
 #' @rdname convert
 #' @keywords internal manip
 icd9PartsToShort <- function(parts) {
@@ -187,6 +183,10 @@ icd9_decimal_to_short_cpp <- function(x) {
 #' @keywords internal manip
 icd_get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
+}
+
+icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
+    .Call(`_icd_icd9MajMinToCodeOld`, mjr, mnr, isShort)
 }
 
 #' @name fastIntToString
@@ -274,23 +274,6 @@ icd_long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call(`_icd_icd9LongToWideCpp`, icd9df, visitId, icd9Field, aggregate)
 }
 
-#' Decompose a 'short' ICD code and insert the leading zeroes as needed.
-#'
-#' This should add leading zeroes when there is definitely no ambiguity,
-#' e.g. V1. However V10 should not be altered, because V010 is a different
-#' code. The goal is for this to be faster, but must be correct! Example in
-#' \code{manip.cpp} has the benchmark code.
-#' @keywords internal manip
-icd9AddLeadingZeroesShortSingle <- function(x) {
-    .Call(`_icd_icd9AddLeadingZeroesShortSingle`, x)
-}
-
-#' @rdname icd9_add_leading_zeroes_cpp
-#' @keywords internal manip
-icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
-    .Call(`_icd_icd9AddLeadingZeroesDirect`, x, short_code)
-}
-
 #' Simpler add leading zeroes without converting to parts and back
 #' @keywords internal manip
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
@@ -331,37 +314,21 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
 }
 
-#' Find child codes from vector of ICD-9 codes.
+#' Decompose a 'short' ICD code and insert the leading zeroes as needed.
 #'
-#' Pure C++11 implementation using \code{unordered set} to find children of
-#' given codes
-#' @examples
-#' if (requireNamespace("microbenchmark")) {
-#' microbenchmark::microbenchmark(
-#'   icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
-#'   icd:::icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
-#'   times = 5)
-#'   # C++11 about 15% faster for this data
-#' }
-#' @keywords internal
-icd9ChildrenShort11 <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShort11`, icd9Short, onlyReal)
+#' This should add leading zeroes when there is definitely no ambiguity,
+#' e.g. V1. However V10 should not be altered, because V010 is a different
+#' code. The goal is for this to be faster, but must be correct! Example in
+#' \code{manip.cpp} has the benchmark code.
+#' @keywords internal manip
+icd9AddLeadingZeroesShortSingle <- function(x) {
+    .Call(`_icd_icd9AddLeadingZeroesShortSingle`, x)
 }
 
-#' C++ implementation of finding children of short codes
-#' @examples
-#' \dontrun{
-#' library(microbenchmark)
-#' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
-#' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
-#'                icd9ChildrenShortUnordered(c("001", 100:400), T),
-#'                icd9ChildrenShortStd(c("001", 100:400), T),
-#'                times = 10)
-#' }
-#' # un-ordered set much faster, but may still need to sort result
-#' @keywords internal
-icd9ChildrenShortStd <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShortStd`, icd9Short, onlyReal)
+#' @rdname icd9_add_leading_zeroes_cpp
+#' @keywords internal manip
+icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
+    .Call(`_icd_icd9AddLeadingZeroesDirect`, x, short_code)
 }
 
 icd9ExpandMinorStd <- function(mnr, isE) {
@@ -403,6 +370,39 @@ icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
 #' @keywords internal
 icd_in_reference_code <- function(icd, icd_reference, short_code, short_reference = TRUE) {
     .Call(`_icd_icd_in_reference_code`, icd, icd_reference, short_code, short_reference)
+}
+
+#' Find child codes from vector of ICD-9 codes.
+#'
+#' Pure C++11 implementation using \code{unordered set} to find children of
+#' given codes
+#' @examples
+#' if (requireNamespace("microbenchmark")) {
+#' microbenchmark::microbenchmark(
+#'   icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
+#'   icd:::icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
+#'   times = 5)
+#'   # C++11 about 15% faster for this data
+#' }
+#' @keywords internal
+icd9ChildrenShort11 <- function(icd9Short, onlyReal) {
+    .Call(`_icd_icd9ChildrenShort11`, icd9Short, onlyReal)
+}
+
+#' C++ implementation of finding children of short codes
+#' @examples
+#' \dontrun{
+#' library(microbenchmark)
+#' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
+#' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
+#'                icd9ChildrenShortUnordered(c("001", 100:400), T),
+#'                icd9ChildrenShortStd(c("001", 100:400), T),
+#'                times = 10)
+#' }
+#' # un-ordered set much faster, but may still need to sort result
+#' @keywords internal
+icd9ChildrenShortStd <- function(icd9Short, onlyReal) {
+    .Call(`_icd_icd9ChildrenShortStd`, icd9Short, onlyReal)
 }
 
 trimLeftCpp <- function(s) {

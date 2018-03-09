@@ -44,9 +44,6 @@ extern "C" {
 #ifdef ICD_DEBUG_PARALLEL
 #include "util.h"
 #endif
-//#include <Rcpp.h>
-
-// R CMD INSTALL --no-docs icd && R -e "library(icd); icd:::runOpenMPVecInt();"
 
 //' @rdname icd_comorbid
 //' @description \code{\link{Rcpp}} approach to comorbidity assignment with

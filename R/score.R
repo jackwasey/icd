@@ -38,7 +38,7 @@
 #' @template visit_name
 #' @param scoring_system One of \code{original}, \code{charlson}, or
 #'   \code{quan}. The first two will give the original Charlson weights for each
-#'   comorbidity, whereas \code{quan} uses the updated weights from Quan 2001.
+#'   comorbidity, whereas \code{quan} uses the updated weights from Quan 2011.
 #' @param return_df single logical value, if true, a two column data frame will
 #'   be returned, with the first column named as in input data frame (i.e.
 #'   \code{visit_name}), containing all the visits, and the second column
@@ -53,12 +53,20 @@
 #' @examples
 #' mydf <- data.frame(visit_name = c("a", "b", "c"),
 #'                    icd9 = c("441", "412.93", "044.9"))
+#' icd_charlson(mydf)
 #' cmb <- icd9_comorbid_quan_deyo(mydf)
 #' cmb
-#' icd_charlson(mydf)
 #' # can specify short_code directly instead of guessing
 #' icd_charlson(mydf, short_code = FALSE, return_df = TRUE)
 #' icd_charlson_from_comorbid(cmb)
+#' \dontrun{
+#' # let's do five million patients and benchmark
+#' big <- icd:::generate_random_pts(5E6)
+#' microbenchmark::microbenchark(
+#'   icd_charlson(big),
+#'   times = 5
+#' )
+#' }
 #' @export
 icd_charlson <- function(x, visit_name = NULL,
                          scoring_system = c("original", "charlson", "quan"),
