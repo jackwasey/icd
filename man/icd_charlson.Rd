@@ -36,7 +36,7 @@ was not specified, then the first column of the data frame is used.}
 
 \item{scoring_system}{One of \code{original}, \code{charlson}, or
 \code{quan}. The first two will give the original Charlson weights for each
-comorbidity, whereas \code{quan} uses the updated weights from Quan 2001.}
+comorbidity, whereas \code{quan} uses the updated weights from Quan 2011.}
 
 \item{return_df}{single logical value, if true, a two column data frame will
 be returned, with the first column named as in input data frame (i.e.

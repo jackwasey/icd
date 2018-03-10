@@ -95,8 +95,9 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
   if (condense) {
     if (warn && !all(icd_is_defined.icd9(x, short_code = TRUE))) {
       undefined <- x[!icd_is_defined.icd9(x, short_code = TRUE)]
-      warning("Some ICD codes are not 'defined' when trying to condense when explaining codes.
-              Will drop these and continue. E.g. ",
+      warning("Some ICD codes are not 'defined' when trying to condense when explaining codes. ",
+              "Consider using warn = FALSE or condense = FALSE. ",
+              "Will drop these and continue. Examples: ",
               paste(undefined[seq(from = 1, to = min(5, length(undefined)))],
                     collapse = " "), call. = FALSE)
     }
@@ -108,15 +109,19 @@ icd_explain.icd9cm <- function(x, short_code = icd_guess_short(x),
   # don't double count when major is also billable
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
-  c(mjexplain,
-    icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
+  res <- c(mjexplain,
+           icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
+  if (length(res) != 0)
+    res
+  else
+    NA_character_
 }
 
 #' @describeIn icd_explain ICD-10-CM explanation, current a minimal implementation
 #' @export
 icd_explain.icd10cm <- function(x, short_code = icd_guess_short(x),
-                              condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+                                condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert_vector(x)
   assert_flag(short_code)
   assert_flag(brief)
@@ -205,7 +210,7 @@ icd9_get_chapters <- function(x, short_code = icd_guess_short(x), verbose = FALS
   out$three_digit[] <- unlist(icd9_majors)[whch]
   # out is based on unique majors of the input codes. Now merge with original inputs to give output
   out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
-        x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
+               x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
   class(out[["three_digit"]]) <- c("icd9cm", "factor")
   # many possible three digit codes don't exist. We should return NA for the
   # whole row. Chapter is coded as a range, so picks up these non-existent codes

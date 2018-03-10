@@ -70,9 +70,9 @@ test_that("explain S3 dispatch", {
                list(a = icd_explain.icd9cm("00321", short_code = TRUE),
                     b = "Rheumatic fever without mention of heart involvement"))
   expect_warning(res <- icd_explain.icd9(c(a = "not", b = "icd9code"), short_code = TRUE))
-  expect_equal(res, character(0))
+  expect_equal(res, NA_character_)
   expect_warning(res <- icd_explain(list(a = icd9("not"), b = icd9("icd9code")), short_code = FALSE))
-  expect_equal(res, list(a = character(0), b = character(0)))
+  expect_equal(res, list(a = NA_character_, b = NA_character_))
 
   expect_equal(icd_explain.icd9("00321", short_code = TRUE), "Salmonella meningitis")
 
@@ -102,7 +102,7 @@ test_that("explain handles mix of valid and invalid", {
 })
 
 test_that("explain works when none ICD-9 codes are even valid", {
-  expect_equal(icd_explain.icd9(c("radishes", "123123", NA), warn = FALSE), character(0))
+  expect_equal(icd_explain.icd9(c("radishes", "123123", NA), warn = FALSE), NA_character_)
 })
 
 
