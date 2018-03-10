@@ -1,9 +1,10 @@
-# Version 2.4
+# Version 2.4.1
  * updated HCC to include 2017 data, thanks to @anobel fixes #136
  * fixed github #133 - segfault with empty ICD-10 string in icd10_comorbid
  * add Suggested dependency on microbenchmark, now CRAN is sensibly not requiring Suggests to be installed even for testing
  * re-enabled testthat C++ Catch tests and make examples tests run correctly
  * drop Wecker continuous integration support
+ * fixed #108 - when no valid codes are given to icd_explain_table
 
 # Version 2.3
  * Fixed nasty bug which failed to sort the names of a vector of ICD codes correctly, resulting in some incorrect icd_explain. Fixes github #123, #124, #126.
