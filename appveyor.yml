@@ -38,11 +38,11 @@ environment:
 #     - WARNINGS_ARE_ERRORS: 1
   matrix:
     - R_VERSION: release
-      R_COVR: true
+      ICD_STRIP: true
 
     - R_VERSION: devel
       R_ARCH: x64
-      R_COVR: false
+      ICD_STRIP: false
 
 on_success:
   - Rscript -e "covr::codecov(quiet = FALSE)"

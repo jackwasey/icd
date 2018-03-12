@@ -6,6 +6,6 @@ PKG_LIBS = @OPENMP_CFLAGS_IN_PKG@ @LIBS@
 # see Eddelbeuttel suggestion on his blog. Note that MacOS doesn't have --strip-debug, so using -S
 # I additionally make sure the
 strippedLib: $(SHLIB)
-	if [ -e "/usr/bin/strip" -a "${RCOVR:-false}" = "true" ]; then  /usr/bin/strip -S $(SHLIB) >/dev/null 2>&1 ; fi
+	if [ -e "/usr/bin/strip" -a "${ICD_STRIP:-true}" = "true" ]; then echo "Stripping binary"; /usr/bin/strip -S $(SHLIB) >/dev/null 2>&1 ; else echo "Not stripping binary"; fi
 
 .phony: strippedLib

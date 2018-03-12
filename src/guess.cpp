@@ -88,13 +88,17 @@ bool guessShortPlusFactorCpp(SEXP x_, int n) {
   }
   case LGLSXP: {
     // we will accept all logical values, if all are NA, which defauts to
-    // logical unless otherwise specified. And we obviously don't know whether
-    // these NAs would have been short or long, just default to short.
+    // logical unless otherwise specified. We don't know whether
+    // a vector of NAs is short or decimal, Default to short.
     Rcpp::LogicalVector xl = Rcpp::LogicalVector(x_);
 
     if (Rcpp::all(is_na(xl)))
       return true;
-    // don't break, because if there were non-NA logicals, this is an error
+    // if there were non-NA logicals, this is an error. We only looked at
+    // logical vectors because a single or more NA values, are given type
+    // logical by R. Don't fall through so the logical is explicit and avoid
+    // compiler warning.
+    Rcpp::stop("only NA_logical_ , character vectors and factors are accepted");
   }
   default: {
     Rcpp::stop("Character vectors and factors are accepted");

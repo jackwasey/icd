@@ -34,6 +34,7 @@
 #include "RcppCommon.h"                       // for Proxy_Iterator
 #include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
 #include "local.h"                            // for VisLk
+#include "config.h"                            // for valgrind etc
 extern "C" {
   #include "cutil.h"                            // for getRListOrDfElement
 }

@@ -23,6 +23,7 @@
 #include "Rcpp/iostream/Rstreambuf.h"  // for Rcout
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
 #include "local.h"                     // for ICD_OPENMP
+#include "config.h"                     // for valgrind, CXX11 etc
 
 //' core search for ICD code in a map
 //' @keywords internal

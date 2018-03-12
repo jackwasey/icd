@@ -37,6 +37,7 @@
 #include "Rcpp/vector/instantiation.h"          // for LogicalVector, List
 #include "icd_types.h"                          // for VecVecInt, ComorbidOut
 #include "local.h"                              // for buildMap, buildVisitC...
+#include "config.h"                              // for buildMap, buildVisitC...
 extern "C" {
   #include "cutil.h"                              // for getRListOrDfElement
 }
@@ -62,13 +63,17 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                           const int omp_chunk_size = 1, bool aggregate = true) {
 #ifdef ICD_VALGRIND
 #ifdef ICD_DEBUG
-  Rcpp::Rcout << "Starting valgrind instrumentation... ";
+  Rcpp::Rcout << "Starting valgrind instrumentation\n";
 #endif
   CALLGRIND_START_INSTRUMENTATION;
   if (FALSE) {
-    Rcpp::Rcout << "Zeroing stats... ";
+    Rcpp::Rcout << "Zeroing stats\n";
     CALLGRIND_ZERO_STATS;
   }
+#else
+#ifdef ICD_DEBUG
+  Rcpp::Rcout << "NOT starting valgrind instrumentation\n";
+#endif
 #endif
 #if (defined ICD_DEBUG_SETUP || defined ICD9_SETUP)
   Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
