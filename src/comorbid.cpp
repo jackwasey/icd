@@ -38,6 +38,7 @@
 #include "icd_types.h"                          // for VecVecInt, ComorbidOut
 #include "local.h"                              // for buildMap, buildVisitC...
 #include "config.h"                              // for buildMap, buildVisitC...
+#include "util.h" // for valgrind helper
 extern "C" {
   #include "cutil.h"                              // for getRListOrDfElement
 }
@@ -61,39 +62,9 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                           const std::string visitId, const std::string icd9Field,
                           const int threads = 8, const int chunk_size = 256,
                           const int omp_chunk_size = 1, bool aggregate = true) {
-#ifdef ICD_VALGRIND
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "Starting valgrind instrumentation\n";
-#endif
-  CALLGRIND_START_INSTRUMENTATION;
-  if (FALSE) {
-    Rcpp::Rcout << "Zeroing stats\n";
-    CALLGRIND_ZERO_STATS;
-  }
-#else
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "NOT starting valgrind instrumentation\n";
-#endif
-#endif
-#if (defined ICD_DEBUG_SETUP || defined ICD9_SETUP)
-  Rcpp::Rcout << "icd9ComorbidShortOpenMPVecInt\n";
-  Rcpp::Rcout << "chunk size = " << chunk_size << "\n";
-#endif
 
-#ifdef ICD_DEBUG_PARALLEL
-  Rcpp::Rcout << "checking _OPENMP... ";
-#ifdef _OPENMP
-  Rcpp::Rcout << "_OPENMP is defined.\n";
-#else
-  Rcpp::Rcout << "_OPENMP is not defined.\n";
-#endif
-#ifdef ICD_OPENMP
-  Rcpp::Rcout << "ICD_OPENMP is defined.\n";
-#else
-  Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
-#endif
+  valgrindCallgrindStart(false);
   debug_parallel();
-#endif
 
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
 #ifdef ICD_DEBUG_SETUP
@@ -147,11 +118,6 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   Rcpp::Rcout << "out sum is " << outsum << "\n";
   Rcpp::Rcout << "Ready to convert to R Matrix\n";
 #endif
-#ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "out is: ";
-  // printIt(out); // don't think I can do this through template, since char it is a base type?
-  Rcpp::Rcout << "printed\n";
-#endif
   // try cast to logical first. (in which case I can use char for Out)
   std::vector<bool> intermed;
   intermed.assign(out.begin(), out.end());
@@ -170,13 +136,6 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #ifdef ICD_DEBUG
   Rcpp::Rcout << "Ready to transpose and return\n";
 #endif
-#ifdef ICD_VALGRIND
-#ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "Stopping valgrind instrumentation... ";
-#endif
-  CALLGRIND_STOP_INSTRUMENTATION;
-  ;
-  //CALLGRIND_DUMP_STATS;
-#endif
+  valgrindCallgrindStop();
   return t(mat_out);
 }

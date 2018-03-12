@@ -112,15 +112,27 @@ int getOmpThreads() {
 }
 
 void debug_parallel() {
+#ifdef ICD_DEBUG_PARALLEL
+  Rcpp::Rcout << "checking _OPENMP... ";
+#ifdef _OPENMP
+  Rcpp::Rcout << "_OPENMP is defined.\n";
+#else
+  Rcpp::Rcout << "_OPENMP is not defined.\n";
+#endif
+#ifdef ICD_OPENMP
+  Rcpp::Rcout << "ICD_OPENMP is defined.\n";
+#else
+  Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
+#endif
+
 #if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
   Rcpp::Rcout << "max threads per omp_get_schedule = " << getOmpMaxThreads() << ". ";
   Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
   Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << ". ";
   Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
-#else
-  Rcpp::Rcout << "ICD_OPENMP is not defined\n";
 #endif
+#endif // ICD_DEBUG_PARALLEL
 }
 
 // [[Rcpp::export]]
@@ -216,6 +228,10 @@ int valgrindCallgrindStart(bool zerostats = false) {
     Rcpp::Rcout << "Zeroing callgrind stats.\n";
     CALLGRIND_ZERO_STATS;
   }
+#else
+#ifdef ICD_DEBUG
+  Rcpp::Rcout << "NOT starting valgrind instrumentation.\n";
+#endif
 #endif
   return 0;
 }
