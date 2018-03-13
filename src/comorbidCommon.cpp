@@ -145,6 +145,9 @@ void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb,
  out.resize(vcdb.size());
 
   // loop through all patient visits
+#ifdef ICD_OPENMP
+#pragma omp taskloop grainsize (256)
+#endif
   for (vis_i = 0; vis_i != vcdb.size(); ++vis_i) {
 #ifdef ICD_DEBUG
     Rcpp::Rcout << "New visit: vis_i = " << vis_i << "\n";
