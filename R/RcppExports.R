@@ -105,8 +105,13 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
     .Call(`_icd_icd9ComorbidShortCpp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
-icd9ComorbidShortCppTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, aggregate = TRUE) {
-    .Call(`_icd_icd9ComorbidShortCppTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, aggregate)
+#' Work towards simpler comorbidity assignment, possibly using OpenMP taskloops
+#' vermont_dx %>% icd_wide_to_long() -> vt
+#' res <- icd_comorbid(vt, icd9_map_ahrq)
+#' res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = "icd9ComorbidTaskloop")
+#' @keywords internal
+icd9ComorbidTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
 #' core search for ICD code in a map
@@ -115,6 +120,10 @@ lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {
     invisible(.Call(`_icd_lookupComorbidByChunkFor`, vcdb, map, chunkSize, ompChunkSize, out))
 }
 
+#' alternate comorbidity search
+#'
+#' alternate version using much simplified with Openmp taskloop, only in OMP4.5
+#'
 #' @keywords internal
 lookupComorbidByChunkForTaskloop <- function(vcdb, map, out) {
     invisible(.Call(`_icd_lookupComorbidByChunkForTaskloop`, vcdb, map, out))

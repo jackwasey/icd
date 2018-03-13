@@ -231,17 +231,17 @@ namespace icd {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
-    inline SEXP icd9ComorbidShortCppTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, bool aggregate = true) {
-        typedef SEXP(*Ptr_icd9ComorbidShortCppTaskloop)(SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9ComorbidShortCppTaskloop p_icd9ComorbidShortCppTaskloop = NULL;
-        if (p_icd9ComorbidShortCppTaskloop == NULL) {
-            validateSignature("SEXP(*icd9ComorbidShortCppTaskloop)(const SEXP&,const Rcpp::List&,const std::string,const std::string,bool)");
-            p_icd9ComorbidShortCppTaskloop = (Ptr_icd9ComorbidShortCppTaskloop)R_GetCCallable("icd", "_icd_icd9ComorbidShortCppTaskloop");
+    inline SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
+        typedef SEXP(*Ptr_icd9ComorbidTaskloop)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidTaskloop p_icd9ComorbidTaskloop = NULL;
+        if (p_icd9ComorbidTaskloop == NULL) {
+            validateSignature("SEXP(*icd9ComorbidTaskloop)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
+            p_icd9ComorbidTaskloop = (Ptr_icd9ComorbidTaskloop)R_GetCCallable("icd", "_icd_icd9ComorbidTaskloop");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ComorbidShortCppTaskloop(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)), Shield<SEXP>(Rcpp::wrap(aggregate)));
+            rcpp_result_gen = p_icd9ComorbidTaskloop(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)), Shield<SEXP>(Rcpp::wrap(threads)), Shield<SEXP>(Rcpp::wrap(chunk_size)), Shield<SEXP>(Rcpp::wrap(omp_chunk_size)), Shield<SEXP>(Rcpp::wrap(aggregate)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -38,6 +38,7 @@ extern SEXP _icd_icd9ChildrenShortNoNaUnordered(SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShortStd(SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShortUnordered(SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidShortCpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_icd9ComorbidTaskloop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToShort(SEXP);
 extern SEXP _icd_icd9ExpandMinor(SEXP, SEXP);
@@ -64,6 +65,7 @@ extern SEXP _icd_icd9ShortToDecimal(SEXP);
 extern SEXP _icd_icd9ShortToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_icd9SortCpp(SEXP);
 extern SEXP _icd_lookupComorbidByChunkFor(SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_lookupComorbidByChunkForTaskloop(SEXP, SEXP, SEXP);
 extern SEXP _icd_randomMajorCpp(SEXP);
 extern SEXP _icd_RcppExport_registerCCallable();
 extern SEXP _icd_setDecimalDiag(SEXP, SEXP);
@@ -106,6 +108,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ChildrenShortStd",               (DL_FUNC) &_icd_icd9ChildrenShortStd,               2},
     {"_icd_icd9ChildrenShortUnordered",         (DL_FUNC) &_icd_icd9ChildrenShortUnordered,         2},
     {"_icd_icd9ComorbidShortCpp",               (DL_FUNC) &_icd_icd9ComorbidShortCpp,               8},
+    {"_icd_icd9ComorbidTaskloop",               (DL_FUNC) &_icd_icd9ComorbidTaskloop,               8},
     {"_icd_icd9DecimalToPartsCpp",              (DL_FUNC) &_icd_icd9DecimalToPartsCpp,              2},
     {"_icd_icd9DecimalToShort",                 (DL_FUNC) &_icd_icd9DecimalToShort,                 1},
     {"_icd_icd9ExpandMinor",                    (DL_FUNC) &_icd_icd9ExpandMinor,                    2},
@@ -132,6 +135,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ShortToPartsCpp",                (DL_FUNC) &_icd_icd9ShortToPartsCpp,                2},
     {"_icd_icd9SortCpp",                        (DL_FUNC) &_icd_icd9SortCpp,                        1},
     {"_icd_lookupComorbidByChunkFor",           (DL_FUNC) &_icd_lookupComorbidByChunkFor,           5},
+    {"_icd_lookupComorbidByChunkForTaskloop",   (DL_FUNC) &_icd_lookupComorbidByChunkForTaskloop,   3},
     {"_icd_randomMajorCpp",                     (DL_FUNC) &_icd_randomMajorCpp,                     1},
     {"_icd_RcppExport_registerCCallable",       (DL_FUNC) &_icd_RcppExport_registerCCallable,       0},
     {"_icd_setDecimalDiag",                     (DL_FUNC) &_icd_setDecimalDiag,                     2},

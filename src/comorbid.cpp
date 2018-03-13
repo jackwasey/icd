@@ -131,10 +131,16 @@ Rcpp::LogicalVector transposed_out = t(mat_out);
 return transposed_out;
 }
 
+//' Work towards simpler comorbidity assignment, possibly using OpenMP taskloops
+//' vermont_dx %>% icd_wide_to_long() -> vt
+//' res <- icd_comorbid(vt, icd9_map_ahrq)
+//' res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = "icd9ComorbidTaskloop")
+//' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9ComorbidShortCppTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
-                                  const std::string visitId, const std::string icd9Field,
-                                  bool aggregate = true) {
+SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+                          const std::string visitId, const std::string icd9Field,
+                          const int threads = 8, const int chunk_size = 256,
+                          const int omp_chunk_size = 1, bool aggregate = true) {
 
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
   VecVecInt vcdb; // size is reserved later
@@ -145,16 +151,24 @@ SEXP icd9ComorbidShortCppTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapp
     UNPROTECT(1); // vsexp
   }
   UNPROTECT(1); // vsexp not used further
-
-  // build structure of patient data, into vcdb
+#ifdef ICD_DEBUG
+  Rcpp::Rcout << "build structure of patient data, into vcdb\n";
+#endif
   buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
 
-  // build structure of comorbidity map data. This could be cached or memoised somehow
+#ifdef ICD_DEBUG
+  Rcpp::Rcout << "build structure of comorbidity map data. This could be cached or memoised somehow\n";
+#endif
+
   VecVecInt map;
   buildMap(icd9Mapping, map);
 
   const VecVecIntSz num_comorbid = map.size();
   const VecVecIntSz num_visits = vcdb.size();
+
+#ifdef ICD_DEBUG
+  Rcpp::Rcout << "look up the comorbidities\n";
+#endif
 
   VecVecBool out;
   out.reserve(vcdb.size() * map.size()); // reserve size, but still need to init consituent vectors to false
@@ -163,7 +177,9 @@ SEXP icd9ComorbidShortCppTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapp
   // now loop through the vec of bool vectors, each bool vector becomes a ROW.
   // This is against the col major nature of R, so do it the other way round
   // then transpose
+#ifdef ICD_DEBUG
+  Rcpp::Rcout << "transpose and return\n";
+#endif
   Rcpp::LogicalMatrix mat_out(num_comorbid, num_visits);
-  // TODO: transpose
   return mat_out;
 }

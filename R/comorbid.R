@@ -256,10 +256,10 @@ icd9_comorbid <- function(x,
                       short_map = short_map, return_df = return_df, ...)
 }
 
-#' @rdname icd_comorbid
-#' @details The common comorbidity calculation code does not depend on ICD type.
-#'   There is some type conversion so the map and input codes are all in 'short'
-#'   format, fast factor generation, then fast comorbidity assignment.
+#' @describeIn icd_comorbid Internal function. The common comorbidity
+#'   calculation code does not depend on ICD type. There is some type conversion
+#'   so the map and input codes are all in 'short' format, fast factor
+#'   generation, then fast comorbidity assignment.
 #' @template abbrev_names
 #' @template hierarchy
 #' @keywords internal
@@ -269,7 +269,8 @@ icd_comorbid_common <- function(x,
                                 icd_name,
                                 short_code,
                                 short_map,
-                                return_df = FALSE, ...) {
+                                return_df = FALSE,
+                                comorbid_fun = icd9ComorbidShortCpp, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
@@ -290,10 +291,9 @@ icd_comorbid_common <- function(x,
   if (!short_map)
     map <- lapply(map, icd_decimal_to_short)
 
-  # new stragegy is to start with a factor for the icd codes in x, recode (and
-  # drop superfluous) icd codes in the mapping, then do very fast match on
-  # integer without need for N, V or E distinction. Char to factor conversion in
-  # R is very fast.
+  # start with a factor for the icd codes in x, recode (and drop superfluous)
+  # icd codes in the mapping, then do very fast match on integer without need
+  # for N, V or E distinction. Char to factor conversion in R is very fast.
 
   # this is a moderately slow step (if needed to be done). Internally, the
   # \code{sort} is slow. Fast match speeds up the subsequent step.
@@ -323,12 +323,12 @@ icd_comorbid_common <- function(x,
   # can now do pure integer matching for icd9 codes. Only string manip becomes
   # (optionally) defactoring the visit_name for the matrix row names.
 
-  threads <- getOption("icd.threads", getOmpCores())
-  chunk_size <- getOption("icd.chunk_size", 256L)
-  omp_chunk_size <- getOption("icd.omp_chunk_size", 1L)
-  mat <- icd9ComorbidShortCpp(icd9df = x, icd9Mapping = map, visitId = visit_name,
-                              icd9Field = icd_name, threads = threads, chunk_size = chunk_size,
-                              omp_chunk_size = omp_chunk_size, aggregate = TRUE) # nolint
+  mat <- comorbid_fun(icd9df = x, icd9Mapping = map, visitId = visit_name,
+                      icd9Field = icd_name,
+                      threads = getOption("icd.threads", getOmpCores()),
+                      chunk_size = getOption("icd.chunk_size", 256L),
+                      omp_chunk_size = getOption("icd.omp_chunk_size", 1L),
+                      aggregate = TRUE) # nolint
 
   if (return_df) {
     if (visit_was_factor)
