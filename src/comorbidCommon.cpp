@@ -24,6 +24,7 @@
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
 #include "local.h"                     // for ICD_OPENMP
 #include "config.h"                     // for valgrind, CXX11 etc
+#include "util.h"                     // for debug_parallel
 
 //' core search for ICD code in a map
 //' @keywords internal
@@ -38,13 +39,12 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   VecVecIntSz chunk_end_i;
   VecVecIntSz vis_i;
   const VecVecIntSz vsz = vcdb.size();
-#ifdef ICD_DEBUG_TRACE
+
+  #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
-#ifdef ICD_DEBUG_PARALLEL
   debug_parallel();
-#endif
 
 #ifdef ICD_OPENMP
 #pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout, vcdb, map) private(chunk_end_i, vis_i)
@@ -57,9 +57,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "vis_i = " << vis_i << "\n";
 #endif
-#ifdef ICD_DEBUG_PARALLEL
     debug_parallel();
-#endif
     // chunk end is an index, so for zero-based vis_i and chunk_end should be
     // the last index in the chunk
     chunk_end_i = vis_i + chunkSize - 1;
@@ -82,7 +80,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 #ifdef ICD_DEBUG_TRACE
       Rcpp::Rcout << "row: " << 1 + urow - begin << " of " << 1 + end - begin << "\n";
 #endif
-      for (VecVecIntSz cmb = 0; cmb < num_comorbid; ++cmb) { // loop through icd codes for this visitId
+      for (VecVecIntSz cmb = 0; cmb != num_comorbid; ++cmb) { // loop through icd codes for this visitId
 #ifdef ICD_DEBUG_TRACE
         Rcpp::Rcout << "cmb = " << cmb << "\n";
         Rcpp::Rcout << "vcdb length in lookupOneChunk = " << vcdb.size() << "\n";
@@ -94,18 +92,14 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 
         const VecInt::const_iterator cbegin = codes.begin();
         const VecInt::const_iterator cend = codes.end();
-        for (VecInt::const_iterator code_it = cbegin; code_it != cend;
-        ++code_it) {
-          bool found_it = std::binary_search(mapCodes.begin(),
-                                             mapCodes.end(), *code_it);
+        for (VecInt::const_iterator code_it = cbegin; code_it != cend; ++code_it) {
+          // the maps were already sorted, now binary search is actually only O(log n)
+          bool found_it = std::binary_search(mapCodes.begin(), mapCodes.end(), *code_it);
           if (found_it) {
             const ComorbidOut::size_type chunk_idx = num_comorbid
             * (urow - begin) + cmb;
-#ifdef ICD_DEBUG
-            chunk.at(chunk_idx) = true;
-#else
+            // chunk.at(chunk_idx) = true; // for debug if going OOB
             chunk[chunk_idx] = true;
-#endif
             break;
           } // end if found_it
         } // end loop through codes in one comorbidity

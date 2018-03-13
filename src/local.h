@@ -19,6 +19,7 @@
 #define LOCAL_H_
 
 #include "config.h"
+#include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
 
 extern "C" {
 #include "cutil.h"
@@ -45,42 +46,21 @@ extern "C" {
 // R: #ifdef _OPENMP
 #ifdef HAVE_R_OPENMP
 #include <omp.h>
-// openmp is required for GLIBC standard library parallel alternatives:
-// now was parallel mode STL requested?
-#ifdef ICD_STD_PARALLEL
-// WORKING_PARALLEL_ALGORITHM is defined by configure script, but at present
-// always disabled because it leads to ?false positive 'abort' and 'printf'
-// found during R CMD check --as-cran
-#ifndef WORKING_PARALLEL_ALGORITHM
-// but not available, so disable
-#undef ICD_STD_PARALLEL
-#endif
-#endif
-#else
-// OpenMP requested, but not available
-#undef ICD_OPENMP
 #endif
 
-#ifdef ICD_VALGRIND
-#ifdef HAVE_VALGRIND_VALGRIND_H
+#if defined(ICD_VALGRIND) && defined(HAVE_VALGRIND_VALGRIND_H)
 #include <valgrind/callgrind.h>
 #else
 #undef ICD_VALGRIND
-#endif
 #endif
 
 #include <set>
 
 // use flag set by configure
-#ifdef HAVE_CXX11
 #include <unordered_map>
 #include <unordered_set>
 typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
 typedef std::unordered_set<std::string> icd_set;
-#else
-typedef std::map<Str, VecInt::size_type> VisLk;
-typedef std::set<Str> icd_set;
-#endif
 
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
 void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,

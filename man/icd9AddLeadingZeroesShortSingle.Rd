@@ -2,9 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{icd9AddLeadingZeroesShortSingle}
 \alias{icd9AddLeadingZeroesShortSingle}
+\alias{icd9_add_leading_zeroes_alt_cpp}
 \title{Decompose a 'short' ICD code and insert the leading zeroes as needed.}
 \usage{
 icd9AddLeadingZeroesShortSingle(x)
+
+icd9_add_leading_zeroes_alt_cpp(x, short_code)
 }
 \description{
 This should add leading zeroes when there is definitely no ambiguity,
@@ -12,5 +15,11 @@ e.g. V1. However V10 should not be altered, because V010 is a different
 code. The goal is for this to be faster, but must be correct! Example in
 \code{manip.cpp} has the benchmark code.
 }
+\section{Functions}{
+\itemize{
+\item \code{icd9_add_leading_zeroes_alt_cpp}: Directly apply
+icd9AddLeadingZeroesShortSingle to each code without separating into parts
+}}
+
 \keyword{internal}
 \keyword{manip}

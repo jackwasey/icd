@@ -1,3 +1,7 @@
+# Version 3.0
+ * Assume C++11, which is now four years old, and enables a great deal of code simplification. Would do C++14 but Rtools is still on GCC 4.9.3!
+ * drop unused and messy experimental code
+ 
 # Version 2.4.1
  * updated HCC to include 2017 data, thanks to @anobel fixes #136
  * fixed github #133 - segfault with empty ICD-10 string in icd10_comorbid

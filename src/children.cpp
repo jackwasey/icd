@@ -36,20 +36,6 @@
 #include "Rcpp/vector/proxy.h"           // for r_vector_name_proxy<>::type
 #include "icd_types.h"                   // for CV, VecStr
 
-//
-//  # matches, nc, matches, last_row
-//  for (i in seq_along(icd10Short)) {
-//    # now the children, assuming the source file is sorted logically, will be
-//    # subsequent codes, until a code of the same length is found
-//    check_row <- matches[i] + 1
-//    parent_len <- nc[matches[i]]
-//    while (nc[check_row] > parent_len && check_row != last_row + 1)
-//      check_row <- check_row + 1
-//
-//    kids <- c(kids, icd10cm2016[matches[i]:(check_row - 1), "code"])
-//  }
-//
-//  as.icd10cm(kids, short_code)
 
 // [[Rcpp::export(icd10cm_children_defined_cpp)]]
 CV icd10cmChildrenDefined(CV &x) {

@@ -109,14 +109,12 @@ CV icd9ChildrenShort11(CV icd9Short, bool onlyReal) {
 // [[Rcpp::export]]
 CV icd9ChildrenShortStd(CV icd9Short, bool onlyReal) {
   // set may be unordered_set if C++11 is available, so may have to reorder at end
-#ifdef HAVE_CXX11
   // http://www.cplusplus.com/reference/unordered_set/unordered_set/unordered_set/
   icd_set out(icd9Short.size()); // n is hash buckets, not items
-#else
-  icd_set out; // plain std::set does not have buckets, or possiblity of reserving space.
-#endif
+
   // we are never going to put NAs in the output, so use std structure this is a
-  // slower function, can the output set be predefined in size?
+
+  // This is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
     VecStr major(icd9Short.size());
     VecStr minor(icd9Short.size());
@@ -141,16 +139,10 @@ CV icd9ChildrenShortStd(CV icd9Short, bool onlyReal) {
       VecStr tmp = Rcpp::as<VecStr>(icd9Hierarchy["code"]);
       // 'reals' is the set of all known, 'real' defined codes
       icd_set reals(tmp.begin(), tmp.end());
-#ifdef HAVE_CXX11
       for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
         if (reals.find(*j) != reals.end())
           out_real.insert(*j);
       }
-#else
-      std::set_intersection(out.begin(), out.end(),
-                            reals.begin(), reals.end(),
-                            std::inserter(out_real, out_real.begin()));
-#endif
       out = out_real;
     }
   } // input length != 0

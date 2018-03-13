@@ -28,6 +28,7 @@
 #include <string>                              // for string, basic_string
 #include <vector>                              // for vector, vector<>::size...
 #include "local.h"                             // for ICD_OPENMP
+#include "config.h"                             // for ICD_VALGRIND
 
 #ifdef ICD_OPENMP
 #include <omp.h>

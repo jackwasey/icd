@@ -40,33 +40,24 @@ extern "C" {
 }
 
 
-
+// take an R list of vectors of ICD codes, and convert to std vector of vector
+// of integers
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map) {
-  for (Rcpp::List::const_iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end();
-  ++mi) {
+#ifdef ICD_DEBUG_SETUP
+  Rcpp::Rcout << "creating reference comorbidity mapping STL structure\n";
+#endif
+  for (Rcpp::List::const_iterator mi = icd9Mapping.begin(); mi != icd9Mapping.end(); ++mi) {
     VecInt vec(Rcpp::as<VecInt>(*mi));
     std::sort(vec.begin(), vec.end());
-    // to force a call to parallel version, not sure whether this forces
-    // parallel execution or just starts the heuristics which may invoke
-    // parallel execution:
-    //__gnu_parallel::sort(vec.begin(), vec.end());
-#ifdef ICD_DEBUG_SETUP_TRACE
-    Rcpp::Rcout << "pushing back vec of length: " << vec.size() << "\n";
-#endif
     map.push_back(vec);
-#ifdef ICD_DEBUG_SETUP_TRACE
-    Rcpp::Rcout << "last vec pushed back has length: "
-                << map[map.size() - 1].size() << "\n";
-#endif
   }
 #ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "reference comorbidity mapping STL structure created\n";
 #endif
 }
 
-// R CMD INSTALL --no-build-vignettes icd && R -d gdb -e "library(icd);x<-data.frame(visitId=c('a','b'),icd9=c('1','2'));icd9ComorbidAhrq(x)"
-
-// icd9 codes always strings. visitId may be factor or integer, but ultimately it becomes a string vector (as matrix row names)
+// icd9 codes always strings, but could be factors. visitId may be factor or
+// integer, but ultimately it becomes a string vector (as matrix row names)
 void buildVisitCodesVec(const SEXP& icd9df,
                         const std::string& visitId,
                         const std::string& icd9Field,
@@ -77,14 +68,6 @@ void buildVisitCodesVec(const SEXP& icd9df,
   SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
   const int approx_cmb_per_visit = 15; // just an estimate
   int vlen = Rf_length(icds); // or vsexp
-
-#ifdef ICD_DEBUG
-#ifdef HAVE_CXX11
-  Rcpp::Rcout << "unordered_map is available (or at least C++11 is in some form)\n";
-#else
-  Rcpp::Rcout << "unordered_map is not available\n";
-#endif
-#endif
   VisLk vis_lookup;
 
 #ifdef ICD_DEBUG

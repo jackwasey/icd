@@ -66,7 +66,8 @@ Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
   return (s);
 }
 
-//' @rdname icd9_add_leading_zeroes_cpp
+//' @describeIn icd9AddLeadingZeroesShortSingle Directly apply
+//' icd9AddLeadingZeroesShortSingle to each code without separating into parts
 //' @keywords internal manip
 // [[Rcpp::export(icd9_add_leading_zeroes_alt_cpp)]]
 CV icd9AddLeadingZeroesDirect(CV x, bool short_code) {

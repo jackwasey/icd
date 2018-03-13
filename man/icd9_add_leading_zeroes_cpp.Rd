@@ -2,12 +2,9 @@
 % Please edit documentation in R/RcppExports.R
 \name{icd9_add_leading_zeroes_cpp}
 \alias{icd9_add_leading_zeroes_cpp}
-\alias{icd9_add_leading_zeroes_alt_cpp}
 \title{Add leading zeroes to incomplete ICD-9 codes}
 \usage{
 icd9_add_leading_zeroes_cpp(x, short_code)
-
-icd9_add_leading_zeroes_alt_cpp(x, short_code)
 }
 \arguments{
 \item{x}{Character vector of ICD-9 codes}

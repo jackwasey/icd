@@ -81,25 +81,18 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "type of vsexp = " << TYPEOF(vsexp) << "\n";
 #endif
-  if (TYPEOF(vsexp) != STRSXP)
+  if (TYPEOF(vsexp) != STRSXP) {
     Rcpp::stop("expecting visit ID in input data frame to be character vector");
+    UNPROTECT(1); // vsexp
+  }
   UNPROTECT(1); // vsexp not used further
 
-#ifdef ICD_DEBUG_SETUP
-  Rcpp::Rcout << "icd9ComorbidShortMatrix STRSXP\n";
-#endif
-  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names,
-                     aggregate);
+  // build structure of patient data
+  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
 
-#ifdef ICD_DEBUG_SETUP
-  Rcpp::Rcout << "building icd9Mapping\n";
-#endif
+  // build structure of comorbidity map data
   VecVecInt map;
   buildMap(icd9Mapping, map);
-
-#ifdef ICD_DEBUG_SETUP
-  Rcpp::Rcout << "first cmb has len: " << map[0].size() << "\n";
-#endif
 
   const VecVecIntSz num_comorbid = map.size();
   const VecVecIntSz num_visits = vcdb.size();
@@ -112,11 +105,12 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunk_size, omp_chunk_size);
 
 #ifdef ICD_DEBUG
+{
   Rcpp::Rcout << "out length is " << out.size() << "\n";
-  // this next line now gives UBSAN in clang 3.7
   int outsum = std::accumulate(out.begin(), out.end(), 0);
   Rcpp::Rcout << "out sum is " << outsum << "\n";
   Rcpp::Rcout << "Ready to convert to R Matrix\n";
+}
 #endif
   // try cast to logical first. (in which case I can use char for Out)
   std::vector<bool> intermed;
@@ -124,10 +118,8 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #ifdef ICD_DEBUG
   Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast to R logical vector\n";
 #endif
-  Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed); // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "wrapped out\n";
-#endif
+  // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
+  Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed);
   mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
   mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(),
                out_row_names);
@@ -137,5 +129,6 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   Rcpp::Rcout << "Ready to transpose and return\n";
 #endif
   valgrindCallgrindStop();
-  return t(mat_out);
+  Rcpp::LogicalVector transposed_out = t(mat_out);
+  return transposed_out;
 }

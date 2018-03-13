@@ -20,18 +20,11 @@
 /* Other flags are produced by running configure in MinGW. */
 /* src/config.h.in.  Generated from configure.ac by autoheader.  */
 
-
-/* define if the compiler supports basic C++11 syntax */
-#define HAVE_CXX11 1
-
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the <memory.h> header file. */
 #define HAVE_MEMORY_H 1
-
-/* Define to 1 if you have the <parallel/algorithm> header file. */
-/* #undef HAVE_PARALLEL_ALGORITHM */
 
 /* "Whether OpenMP is available in R environment." */
 #define HAVE_R_OPENMP 1

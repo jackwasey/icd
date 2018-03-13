@@ -185,8 +185,7 @@ CV icd9ChildrenShort(CV icd9Short, bool onlyReal) {
 
       const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
 
-      VecStr newshort = Rcpp::as<VecStr >(
-        icd9MajMinToShort(thismjr, newminors));
+      VecStr newshort = Rcpp::as<VecStr >(icd9MajMinToShort(thismjr, newminors));
 
       out.insert(newshort.begin(), newshort.end());
     }
@@ -241,16 +240,10 @@ CV icd9ChildrenShortUnordered(CV icd9Short, bool onlyReal) {
       // 'reals' is the set of majors, intermediate and leaf codes.
       icd_set reals(tmp.begin(), tmp.end());
 
-#ifdef HAVE_CXX11
       for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
         if (reals.find(*j) != reals.end())
           out_real.insert(*j);
       }
-#else
-      std::set_intersection(out.begin(), out.end(),
-                            reals.begin(), reals.end(),
-                            std::inserter(out_real, out_real.begin()));
-#endif
       out = out_real;
     }
   } // input length != 0
@@ -284,28 +277,17 @@ VecStr icd9ChildrenShortNoNaUnordered(const VecStr& icd9Short, const bool onlyRe
       // 'reals' is the set of majors, intermediate and leaf codes.
       icd_set reals(tmp.begin(), tmp.end());
 
-#ifdef HAVE_CXX11
       for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
         if (reals.find(*j) != reals.end())
           out_real.insert(*j);
       }
-#else
-      std::set_intersection(out.begin(), out.end(),
-                            reals.begin(), reals.end(),
-                            std::inserter(out_real, out_real.begin()));
-#endif
       out = out_real;
     }
   } // input length != 0
   // TODO in R wrapper: rcppOut.attr("icd_short_diag") = true;
 
-  // sort from set or unordered set into a vector:
-
+  // sort from unordered set into a vector
   VecStr out_vec(out.begin(), out.end());
-#ifdef HAVE_CXX11
-  // TODO
-#endif
-
   return out_vec;
 }
 
