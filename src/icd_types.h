@@ -25,12 +25,15 @@ typedef std::string Str;
 typedef std::vector<Str> VecStr;
 
 typedef std::vector<int> VecInt;
+typedef std::vector<bool> VecBool; // naughty, but good compromise
+typedef VecInt::const_iterator VecIntIt;
 
 // SOMEDAY replace int with char, but this stops Rcpp::export working
-typedef std::vector<int> ComorbidOut;
+//typedef std::vector<int> ComorbidOut;
 
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;
+typedef std::vector<VecBool> VecVecBool;
 typedef VecVecInt::size_type VecVecIntSz;
 
 typedef Rcpp::CharacterVector CV;

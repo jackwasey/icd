@@ -39,13 +39,11 @@
 #include "local.h"                              // for buildMap, buildVisitC...
 #include "config.h"                              // for buildMap, buildVisitC...
 #include "util.h" // for valgrind helper
+#include "comorbidCommon.h"
+#include "comorbidSetup.h"
 extern "C" {
-  #include "cutil.h"                              // for getRListOrDfElement
+#include "cutil.h"                              // for getRListOrDfElement
 }
-
-#ifdef ICD_DEBUG_PARALLEL
-#include "util.h"
-#endif
 
 //' @rdname icd_comorbid
 //' @description \code{\link{Rcpp}} approach to comorbidity assignment with
@@ -101,8 +99,8 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   Rcpp::Rcout << num_visits << " visits\n";
   Rcpp::Rcout << num_comorbid << " is num_comorbid\n";
 #endif
-
-  const ComorbidOut out = lookupComorbidByChunkFor(vcdb, map, chunk_size, omp_chunk_size);
+  VecInt out(vcdb.size() * map.size(), false);
+  lookupComorbidByChunkFor(vcdb, map, chunk_size, omp_chunk_size, out);
 
 #ifdef ICD_DEBUG
 {
@@ -112,23 +110,60 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   Rcpp::Rcout << "Ready to convert to R Matrix\n";
 }
 #endif
-  // try cast to logical first. (in which case I can use char for Out)
-  std::vector<bool> intermed;
-  intermed.assign(out.begin(), out.end());
+// try cast to logical first. (in which case I can use char for Out)
+std::vector<bool> intermed;
+intermed.assign(out.begin(), out.end());
 #ifdef ICD_DEBUG
-  Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast to R logical vector\n";
+Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast to R logical vector\n";
 #endif
-  // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
-  Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed);
-  mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
-  mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(),
-               out_row_names);
-  // apparently don't need to set class as matrix here
-  Rcpp::Function t("t"); // use R transpose - seems pretty fast
+// matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
+Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed);
+mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
+mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(),
+             out_row_names);
+// apparently don't need to set class as matrix here
+Rcpp::Function t("t"); // use R transpose - seems pretty fast
 #ifdef ICD_DEBUG
-  Rcpp::Rcout << "Ready to transpose and return\n";
+Rcpp::Rcout << "Ready to transpose and return\n";
 #endif
-  valgrindCallgrindStop();
-  Rcpp::LogicalVector transposed_out = t(mat_out);
-  return transposed_out;
+valgrindCallgrindStop();
+Rcpp::LogicalVector transposed_out = t(mat_out);
+return transposed_out;
+}
+
+// [[Rcpp::export]]
+SEXP icd9ComorbidShortCppTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+                                  const std::string visitId, const std::string icd9Field,
+                                  bool aggregate = true) {
+
+  VecStr out_row_names; // size is reserved in buildVisitCodesVec
+  VecVecInt vcdb; // size is reserved later
+
+  const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
+  if (TYPEOF(vsexp) != STRSXP) {
+    Rcpp::stop("expecting visit ID in input data frame to be character vector");
+    UNPROTECT(1); // vsexp
+  }
+  UNPROTECT(1); // vsexp not used further
+
+  // build structure of patient data, into vcdb
+  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
+
+  // build structure of comorbidity map data. This could be cached or memoised somehow
+  VecVecInt map;
+  buildMap(icd9Mapping, map);
+
+  const VecVecIntSz num_comorbid = map.size();
+  const VecVecIntSz num_visits = vcdb.size();
+
+  VecVecBool out;
+  out.reserve(vcdb.size() * map.size()); // reserve size, but still need to init consituent vectors to false
+  lookupComorbidByChunkForTaskloop(vcdb, map, out);
+
+  // now loop through the vec of bool vectors, each bool vector becomes a ROW.
+  // This is against the col major nature of R, so do it the other way round
+  // then transpose
+  Rcpp::LogicalMatrix mat_out(num_comorbid, num_visits);
+  // TODO: transpose
+  return mat_out;
 }

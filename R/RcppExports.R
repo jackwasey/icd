@@ -105,10 +105,19 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
     .Call(`_icd_icd9ComorbidShortCpp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
+icd9ComorbidShortCppTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidShortCppTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, aggregate)
+}
+
 #' core search for ICD code in a map
 #' @keywords internal
 lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {
     invisible(.Call(`_icd_lookupComorbidByChunkFor`, vcdb, map, chunkSize, ompChunkSize, out))
+}
+
+#' @keywords internal
+lookupComorbidByChunkForTaskloop <- function(vcdb, map, out) {
+    invisible(.Call(`_icd_lookupComorbidByChunkForTaskloop`, vcdb, map, out))
 }
 
 #' Internal function to find ICD-10 parents

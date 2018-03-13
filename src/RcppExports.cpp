@@ -368,15 +368,49 @@ RcppExport SEXP _icd_icd9ComorbidShortCpp(SEXP icd9dfSEXP, SEXP icd9MappingSEXP,
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// icd9ComorbidShortCppTaskloop
+SEXP icd9ComorbidShortCppTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, bool aggregate);
+static SEXP _icd_icd9ComorbidShortCppTaskloop_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP aggregateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const SEXP& >::type icd9df(icd9dfSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type icd9Mapping(icd9MappingSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
+    Rcpp::traits::input_parameter< bool >::type aggregate(aggregateSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd9ComorbidShortCppTaskloop(icd9df, icd9Mapping, visitId, icd9Field, aggregate));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_icd9ComorbidShortCppTaskloop(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP aggregateSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_icd9ComorbidShortCppTaskloop_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, aggregateSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // lookupComorbidByChunkFor
-void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, ComorbidOut& out);
+void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, VecInt& out);
 static SEXP _icd_lookupComorbidByChunkFor_try(SEXP vcdbSEXP, SEXP mapSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP, SEXP outSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< const VecVecInt& >::type vcdb(vcdbSEXP);
     Rcpp::traits::input_parameter< const VecVecInt& >::type map(mapSEXP);
     Rcpp::traits::input_parameter< const VecVecIntSz >::type chunkSize(chunkSizeSEXP);
     Rcpp::traits::input_parameter< const VecVecIntSz >::type ompChunkSize(ompChunkSizeSEXP);
-    Rcpp::traits::input_parameter< ComorbidOut& >::type out(outSEXP);
+    Rcpp::traits::input_parameter< VecInt& >::type out(outSEXP);
     lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
     return R_NilValue;
 END_RCPP_RETURN_ERROR
@@ -386,6 +420,37 @@ RcppExport SEXP _icd_lookupComorbidByChunkFor(SEXP vcdbSEXP, SEXP mapSEXP, SEXP 
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
         rcpp_result_gen = PROTECT(_icd_lookupComorbidByChunkFor_try(vcdbSEXP, mapSEXP, chunkSizeSEXP, ompChunkSizeSEXP, outSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// lookupComorbidByChunkForTaskloop
+void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb, const VecVecInt& map, VecVecBool& out);
+static SEXP _icd_lookupComorbidByChunkForTaskloop_try(SEXP vcdbSEXP, SEXP mapSEXP, SEXP outSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< const VecVecInt& >::type vcdb(vcdbSEXP);
+    Rcpp::traits::input_parameter< const VecVecInt& >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< VecVecBool& >::type out(outSEXP);
+    lookupComorbidByChunkForTaskloop(vcdb, map, out);
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_lookupComorbidByChunkForTaskloop(SEXP vcdbSEXP, SEXP mapSEXP, SEXP outSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_lookupComorbidByChunkForTaskloop_try(vcdbSEXP, mapSEXP, outSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -1976,7 +2041,9 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*attr_decimal_diag)(Rcpp::RObject&,bool)");
         signatures.insert("void(*attr_short_diag)(Rcpp::RObject&,bool)");
         signatures.insert("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
-        signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
+        signatures.insert("SEXP(*icd9ComorbidShortCppTaskloop)(const SEXP&,const Rcpp::List&,const std::string,const std::string,bool)");
+        signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,VecInt&)");
+        signatures.insert("void(*lookupComorbidByChunkForTaskloop)(const VecVecInt&,const VecVecInt&,VecVecBool&)");
         signatures.insert("Rcpp::LogicalMatrix(*icd10_comorbid_parent_search_cpp)(Rcpp::DataFrame,Rcpp::List,std::string,std::string)");
         signatures.insert("CV(*icd9MajMinToCodeOld)(CV,CV,bool)");
         signatures.insert("CV(*icd9PartsToShort)(const Rcpp::List)");
@@ -2045,7 +2112,9 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_attr_decimal_diag", (DL_FUNC)_icd_setDecimalDiag_try);
     R_RegisterCCallable("icd", "_icd_attr_short_diag", (DL_FUNC)_icd_setShortDiag_try);
     R_RegisterCCallable("icd", "_icd_icd9ComorbidShortCpp", (DL_FUNC)_icd_icd9ComorbidShortCpp_try);
+    R_RegisterCCallable("icd", "_icd_icd9ComorbidShortCppTaskloop", (DL_FUNC)_icd_icd9ComorbidShortCppTaskloop_try);
     R_RegisterCCallable("icd", "_icd_lookupComorbidByChunkFor", (DL_FUNC)_icd_lookupComorbidByChunkFor_try);
+    R_RegisterCCallable("icd", "_icd_lookupComorbidByChunkForTaskloop", (DL_FUNC)_icd_lookupComorbidByChunkForTaskloop_try);
     R_RegisterCCallable("icd", "_icd_icd10_comorbid_parent_search_cpp", (DL_FUNC)_icd_icd10_comorbid_parent_search_cpp_try);
     R_RegisterCCallable("icd", "_icd_icd9MajMinToCodeOld", (DL_FUNC)_icd_icd9MajMinToCodeOld_try);
     R_RegisterCCallable("icd", "_icd_icd9PartsToShort", (DL_FUNC)_icd_icd9PartsToShort_try);

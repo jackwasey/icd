@@ -19,7 +19,6 @@
 #include "util.h"
 #include <stdlib.h>
 #include <math.h>                              // for floor
-#include <omp.h>                               // for omp_get_max_threads
 #include <stdio.h>                             // for sprintf
 #include <string.h>                            // for strcmp
 #include <algorithm>                           // for copy, sort, transform
@@ -32,11 +31,6 @@
 
 #ifdef ICD_OPENMP
 #include <omp.h>
-#ifdef ICD_STD_PARALLEL
-#include <parallel/algorithm>
-#else
-#include <algorithm>
-#endif
 #endif
 
 // trim one string from right
