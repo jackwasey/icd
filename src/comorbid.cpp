@@ -131,10 +131,23 @@ Rcpp::LogicalVector transposed_out = t(mat_out);
 return transposed_out;
 }
 
-//' Work towards simpler comorbidity assignment, possibly using OpenMP taskloops
+//' Simpler comorbidity assignment
+//'
+//' Re-written without OpenMP initially, but structured more simply, with the motivation of
+//' using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
+//' \link{\url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}}
+//'
+//' # basic test
+//' # use tests/testthat/helper-base.R for two_pts and two_map
+//' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
+//'
 //' vermont_dx %>% icd_wide_to_long() -> vt
-//' res <- icd_comorbid(vt, icd9_map_ahrq)
-//' res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = "icd9ComorbidTaskloop")
+//' microbenchmark::microbenchmark(
+//'   res <- icd_comorbid(vt, icd9_map_ahrq),
+//'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
+//'   times = 50)
+//' identical(res, res2)
+//'
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
@@ -169,17 +182,29 @@ SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 #ifdef ICD_DEBUG
   Rcpp::Rcout << "look up the comorbidities\n";
 #endif
-
-  VecVecBool out;
-  out.reserve(vcdb.size() * map.size()); // reserve size, but still need to init consituent vectors to false
+  NewOut out;
   lookupComorbidByChunkForTaskloop(vcdb, map, out);
 
-  // now loop through the vec of bool vectors, each bool vector becomes a ROW.
-  // This is against the col major nature of R, so do it the other way round
-  // then transpose
 #ifdef ICD_DEBUG
-  Rcpp::Rcout << "transpose and return\n";
+  Rcpp::Rcout << "Transform into LogicalMatrix while transposing\n";
 #endif
-  Rcpp::LogicalMatrix mat_out(num_comorbid, num_visits);
+  Rcpp::LogicalMatrix mat_out(num_visits, num_comorbid);
+  for (NewOutIt it = out.begin(); it != out.end(); ++it) {
+#ifdef ICD_DEBUG_TRACE
+    Rcpp::Rcout << "Injecting out data into matrix:\n";
+    printIt(*it);
+#endif
+    for (VecVecIntSz cmb = 0; cmb != num_comorbid; ++cmb) {
+#ifdef ICD_DEBUG_TRACE
+      Rcpp::Rcout << "ptid = " << std::distance(out.begin(), it) <<
+        " - comorbidity # " << cmb <<
+          " val = " << (*it)[cmb] << "\n";
+#endif
+      mat_out(std::distance(out.begin(), it), cmb) = (*it)[cmb];
+    }
+  }
+  mat_out.attr("dim") = Rcpp::Dimension((int) num_visits, (int) num_comorbid); // set dimensions in usual column major order
+  mat_out.attr("dimnames") = Rcpp::List::create(out_row_names, icd9Mapping.names());
   return mat_out;
 }
+

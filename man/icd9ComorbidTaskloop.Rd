@@ -2,18 +2,26 @@
 % Please edit documentation in R/RcppExports.R
 \name{icd9ComorbidTaskloop}
 \alias{icd9ComorbidTaskloop}
-\title{Work towards simpler comorbidity assignment, possibly using OpenMP taskloops
-up <- icd::uranium_pathology
-up[["case"]] <- as.character(up[["case"]])
-icd9ComorbidTaskloop(icd9df = up, icd9Mapping = icd10_map_ahrq, visitId = "case", icd9Field = "icd10", TRUE)}
+\title{Simpler comorbidity assignment}
 \usage{
-icd9ComorbidTaskloop(icd9df, icd9Mapping, visitId, icd9Field,
-  aggregate = TRUE)
+icd9ComorbidTaskloop(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
+  chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE)
 }
 \description{
-Work towards simpler comorbidity assignment, possibly using OpenMP taskloops
-up <- icd::uranium_pathology
-up[["case"]] <- as.character(up[["case"]])
-icd9ComorbidTaskloop(icd9df = up, icd9Mapping = icd10_map_ahrq, visitId = "case", icd9Field = "icd10", TRUE)
+Re-written without OpenMP initially, but structured more simply, with the motivation of
+using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
+\link{\url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}}
+}
+\details{
+# basic test
+# use tests/testthat/helper-base.R for two_pts and two_map
+icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
+
+vermont_dx %>% icd_wide_to_long() -> vt
+microbenchmark::microbenchmark(
+  res <- icd_comorbid(vt, icd9_map_ahrq),
+  res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
+  times = 50)
+identical(res, res2)
 }
 \keyword{internal}

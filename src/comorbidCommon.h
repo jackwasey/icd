@@ -27,4 +27,4 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
                               VecInt& out);
 void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb,
                                       const VecVecInt& map,
-                                      VecVecBool& out);
+                                      NewOut& out);

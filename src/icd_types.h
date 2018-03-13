@@ -36,6 +36,10 @@ typedef std::vector<VecInt> VecVecInt;
 typedef std::vector<VecBool> VecVecBool;
 typedef VecVecInt::size_type VecVecIntSz;
 
+typedef VecInt NewOutPt;
+typedef std::vector<NewOutPt> NewOut;
+typedef VecVecInt::iterator NewOutIt;
+
 typedef Rcpp::CharacterVector CV;
 
 #endif
