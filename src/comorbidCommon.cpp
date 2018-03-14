@@ -127,7 +127,6 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 #endif
 }
 
-
 //' alternate comorbidity search
 //'
 //' alternate version using much simplified with Openmp taskloop, only in OMP4.5
@@ -146,10 +145,13 @@ void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb,
 
   // loop through all patient visits
 #ifdef ICD_OPENMP
-#pragma omp taskloop //grainsize (256)
+ // may need shared(out) but as I think each element can be written to independently by different threads, try without..
+ // private(vis_i) superfluous?
+#pragma omp taskloop grainsize (256) shared(Rcpp::Rcout, vcdb, map)
 #endif
   for (vis_i = 0; vis_i < vcdb.size(); ++vis_i) {
 #ifdef ICD_DEBUG
+	  debug_parallel();
     Rcpp::Rcout << "New visit: vis_i = " << vis_i << "\n";
 #endif
     const VecInt& codes = vcdb[vis_i]; // these are the ICD-9 codes for the current visitid

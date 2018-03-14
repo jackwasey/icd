@@ -191,8 +191,9 @@ SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   Rcpp::LogicalMatrix mat_out(num_visits, num_comorbid);
   for (NewOutIt it = out.begin(); it != out.end(); ++it) {
 #ifdef ICD_DEBUG_TRACE
-    Rcpp::Rcout << "Injecting out data into matrix:\n";
+    Rcpp::Rcout << "Read to Inject out data into matrix:\n";
     printIt(*it);
+    Rcpp::Rcout << "Injecting out data into matrix:\n";
 #endif
     for (VecVecIntSz cmb = 0; cmb != num_comorbid; ++cmb) {
 #ifdef ICD_DEBUG_TRACE

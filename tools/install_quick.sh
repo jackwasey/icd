@@ -4,16 +4,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-tmpd=$(mktemp -d /tmp/icdinstall.XXXXXXXXXXX)
-function finish {
-  rm -rf "$tmpd"
-  echo "Not cleaning $tmpd"
-}
-trap finish EXIT
-
-cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
-pushd "$tmpd"
-
+pushd "${ICD_HOME:-$HOME/rprojects}"
 R CMD build --no-build-vignettes --no-resave-data icd
-R CMD INSTALL icd*.tar.gz
+R CMD INSTALL --install-tests --no-docs --as-cran "$(ls -t /tmp/icd*.tar.gz | head -1)"
 popd
