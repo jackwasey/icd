@@ -31,7 +31,7 @@ extern "C" {
 
 // debugging:
 #define ICD_DEBUG
-// #define ICD_DEBUG_TRACE
+#define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_TRACE
 // #define ICD_DEBUG_PARALLEL
