@@ -10,7 +10,7 @@ icd9ComorbidTaskloop(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
 \description{
 Re-written without OpenMP initially, but structured more simply, with the motivation of
 using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
-\link{\url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}}
+\url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}
 }
 \details{
 # basic test
@@ -19,9 +19,9 @@ icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
 
 vermont_dx %>% icd_wide_to_long() -> vt
 microbenchmark::microbenchmark(
-  res <- icd_comorbid(vt, icd9_map_ahrq),
+  res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
   times = 50)
-identical(res, res2)
+identical(res1, res2)
 }
 \keyword{internal}

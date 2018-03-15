@@ -29,6 +29,10 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 ```{r setup, include=FALSE}
 
+######## DEBUGGING ONLY ############
+# see https://stackoverflow.com/questions/49308254/how-do-i-debug-a-segfault-which-only-occurs-during-vignette-building?noredirect=1#comment85618697_49308254
+# writeLines(.libPaths(), "/tmp/libpaths.txt")
+
 suppressWarnings({
   suppressPackageStartupMessages({
     loadNamespace("knitr") # for opts_chunk only

@@ -135,7 +135,7 @@ return transposed_out;
 //'
 //' Re-written without OpenMP initially, but structured more simply, with the motivation of
 //' using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
-//' \link{\url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}}
+//' \url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}
 //'
 //' # basic test
 //' # use tests/testthat/helper-base.R for two_pts and two_map
@@ -143,10 +143,10 @@ return transposed_out;
 //'
 //' vermont_dx %>% icd_wide_to_long() -> vt
 //' microbenchmark::microbenchmark(
-//'   res <- icd_comorbid(vt, icd9_map_ahrq),
+//'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
 //'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
 //'   times = 50)
-//' identical(res, res2)
+//' identical(res1, res2)
 //'
 //' @keywords internal
 // [[Rcpp::export]]
