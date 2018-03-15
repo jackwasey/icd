@@ -39,3 +39,4 @@ todo
 README.html
 include-dependencies
 ccache.log
+.build.timestamp
