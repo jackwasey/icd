@@ -15,6 +15,7 @@
 \alias{icd9_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_deyo}
+\alias{icd9_comorbid_css}
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_elix}
 \alias{icd_comorbid_quan_elix}
@@ -54,6 +55,8 @@ icd9_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
+
+icd9_comorbid_css(x, ..., type = "Single", lvl = NULL)
 
 icd_comorbid_ahrq(x, icd_name = get_icd_name(x), ...)
 
