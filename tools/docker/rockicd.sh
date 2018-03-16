@@ -31,14 +31,10 @@ function finish {
 }
 trap finish EXIT
 
-# show what we're doing
-# set -x
+set -x
 
-# check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
-DOCKER_IMAGE="${1:-r-clang-5.0}"
-
-# ROCK_TMP=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
+DOCKER_IMAGE="${1:-r-clang-trunk}"
 
 if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)r-.+ ]]; then
    echo "Not using R from a jackwasey docker image"
@@ -54,30 +50,20 @@ echo "using docker image: $DOCKER_IMAGE"
 
 TOOLS_DIR="$ICD_HOME/tools/docker"
 
-echo "${0} Environment:"
-echo "ICD_PROJECT=${ICD_PROJECT_NAME:=icd}"
-echo "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}"
-echo "GITHUB_URL=${GITHUB_URL:=https://github.com}"
-echo "GITHUB_USER=${GITHUB_USER:=jackwasey}"
-echo "GITHUB_REPO=${GITHUB_REPO:=$ICD_PROJECT_NAME}"
-echo "GIT_BRANCH=${GIT_BRANCH:=master}"
-echo "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
-echo "R_CMD=${R_CMD:=RD}"
-
 # expands variables and prints command
 set -x
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
 docker run \
            -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
-           -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
-           -e "R_PKG_NAME=$R_PKG_NAME" \
-           -e "GITHUB_URL=$GITHUB_URL" \
-           -e "GITHUB_USER=$GITHUB_USER" \
-           -e "GITHUB_REPO=$GITHUB_REPO" \
-           -e "GIT_BRANCH=$GIT_BRANCH" \
-           -e "GIT_URL=$GIT_URL" \
-           -e "R_CMD=$R_CMD" \
+           -e "ICD_PROJECT_NAME=${ICD_PROJECT_NAME:=icd}" \
+           -e "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}" \
+           -e "GITHUB_URL=${GITHUB_URL:=https://github.com}" \
+           -e "GITHUB_USER=${GITHUB_USER:=jackwasey}" \
+           -e "GITHUB_REPO=${GITHUB_REPO:=$ICD_PROJECT_NAME}" \
+           -e "GIT_BRANCH=${GIT_BRANCH:=master}" \
+           -e "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}" \
+           -e "R_CMD=${R_CMD:=RD}" \
            --rm \
 	   -ti \
 	   --cap-add SYS_PTRACE \
