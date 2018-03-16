@@ -1,0 +1,34 @@
+ARG DOCKER_IMAGE
+
+FROM ${DOCKER_IMAGE}
+MAINTAINER "Jack Wasey" jack@jackwasey.com
+WORKDIR /usr/local/src
+
+#ENV ICD_PROJECT "${ICD_PROJECT_NAME:=icd}"
+#echo "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}"
+#echo "GITHUB_URL=${GITHUB_URL:=https://github.com}"
+#echo "GITHUB_USER=${GITHUB_USER:=jackwasey}"
+#echo "GITHUB_REPO=${GITHUB_REPO:=$ICD_PROJECT_NAME}"
+#echo "GIT_BRANCH=${GIT_BRANCH:=master}"
+#echo "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
+#echo "R_CMD=${R_CMD:=RD}"
+
+ARG ICD_PROJECT
+ARG R_PKG_NAME
+ARG GITHUB_URL
+ARG GITHUB_USER
+ARG GITHUB_REPO
+ARG GIT_BRANCH
+ARG GIT_URL
+ARG R_CMD
+
+COPY in_docker_base.sh .
+RUN ./in_docker_base.sh
+
+ENV ASAN_OPTIONS 'abort_on_error=1'
+ENV _R_CHECK_DOC_SIZES 'false'
+ENV _R_CHECK_CRAN_INCOMING_ 'false'
+ENV _R_CHECK_FORCE_SUGGESTS_ 'false'
+
+CMD ${R_CMD} CMD check $(ls -t /tmp/${ICD_PROJECT}*.tar.gz | tail -1)
+

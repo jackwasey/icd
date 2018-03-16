@@ -54,7 +54,7 @@ echo "using docker image: $DOCKER_IMAGE"
 
 TOOLS_DIR="$ICD_HOME/tools/docker"
 
-echo "${0} Environment:"
+echo "Environment:"
 echo "ICD_PROJECT=${ICD_PROJECT_NAME:=icd}"
 echo "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}"
 echo "GITHUB_URL=${GITHUB_URL:=https://github.com}"
@@ -68,8 +68,8 @@ echo "R_CMD=${R_CMD:=RD}"
 set -x
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
+           # -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
 docker run \
-           -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
            -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
            -e "R_PKG_NAME=$R_PKG_NAME" \
            -e "GITHUB_URL=$GITHUB_URL" \
@@ -82,5 +82,5 @@ docker run \
 	   -ti \
 	   --cap-add SYS_PTRACE \
 	   "$DOCKER_IMAGE" \
-	   ${2:-/go.sh}
+	   ${2:-/in_docker_base.sh}
 
