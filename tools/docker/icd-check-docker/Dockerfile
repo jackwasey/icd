@@ -4,6 +4,8 @@ FROM ${DOCKER_IMAGE}
 MAINTAINER "Jack Wasey" jack@jackwasey.com
 WORKDIR /usr/local/src
 
+RUN apt-get update && apt-get -y dist-upgrade && apt-get -y install git
+
 ARG ICD_PROJECT
 ARG R_PKG_NAME
 ARG GITHUB_URL
@@ -18,6 +20,7 @@ RUN ./in_docker_base.sh
 
 COPY in_docker_get_icd.sh .
 COPY in_docker_build_check.sh .
+COPY in_docker_ldpreload_asan.sh .
 
 ENV ASAN_OPTIONS 'abort_on_error=1'
 ENV _R_CHECK_DOC_SIZES 'false'

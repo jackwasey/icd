@@ -34,7 +34,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
                               const VecVecInt& map,
                               const VecVecIntSz chunkSize,
                               const VecVecIntSz ompChunkSize,
-                              VecInt& out) {
+                              ComorbidOut& out) {
   const VecVecIntSz num_comorbid = map.size();
   const VecVecIntSz last_i = vcdb.size() - 1;
   VecVecIntSz chunk_end_i;
@@ -64,7 +64,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
     chunk_end_i = vis_i + chunkSize - 1;
     if (chunk_end_i > last_i)
       chunk_end_i = last_i;
-    VecInt chunk;
+    ComorbidOut chunk;
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "OMP vcdb.size() = " << vcdb.size() << "\n";
     Rcpp::Rcout << "OMP map.size() = " << map.size() << "\n";
@@ -75,7 +75,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "lookupComorbidChunk begin = " << begin << ", end = " << end << "\n";
 #endif
-    const VecInt falseComorbidChunk(num_comorbid * (1 + end - begin), false);
+    const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin), false);
     chunk = falseComorbidChunk;
     for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
       for (VecVecIntSz cmb = 0; cmb != num_comorbid; ++cmb) { // loop through icd codes for this visitId
@@ -95,7 +95,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
           // the maps were already sorted, now binary search is actually only O(log n)
           bool found_it = std::binary_search(mapCodes.begin(), mapCodes.end(), *code_it);
           if (found_it) {
-            const VecInt::size_type chunk_idx = num_comorbid
+            const ComorbidOut::size_type chunk_idx = num_comorbid
             * (urow - begin) + cmb;
             // chunk.at(chunk_idx) = true; // for debug if going OOB
             chunk[chunk_idx] = true;

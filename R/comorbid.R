@@ -270,7 +270,7 @@ icd_comorbid_common <- function(x,
                                 short_code,
                                 short_map,
                                 return_df = FALSE,
-                                comorbid_fun = icd9ComorbidTaskloop, ...) {
+                                comorbid_fun = icd9ComorbidShortCpp, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))

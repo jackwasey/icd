@@ -29,7 +29,7 @@ typedef std::vector<bool> VecBool; // naughty, but good compromise
 typedef VecInt::const_iterator VecIntIt;
 
 // SOMEDAY replace int with char, but this stops Rcpp::export working
-//typedef std::vector<int> ComorbidOut;
+typedef VecInt ComorbidOut;
 
 typedef std::vector<VecStr> VecVecStr;
 typedef std::vector<VecInt> VecVecInt;

@@ -71,5 +71,5 @@ docker run \
 	   -ti \
 	   --cap-add SYS_PTRACE \
 	   "$DOCKER_IMAGE" \
-           "${2:-R_CMD}"
+           "${2:-./in_docker_build_check.sh}"
 
