@@ -55,7 +55,10 @@ set -x
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
 docker run \
-           -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
+           -v "${TOOLS_DIR}/in_docker_check.sh":/in_docker_check.sh \
+           -v "${TOOLS_DIR}/in_docker_base.sh":/in_docker_base.sh \
+           -v "${TOOLS_DIR}/in_docker_get_icd.sh":/in_docker_get_icd.sh \
+           -v "${TOOLS_DIR}/in_docker_build_check.sh":/in_docker_build_check.sh \
            -e "ICD_PROJECT_NAME=${ICD_PROJECT_NAME:=icd}" \
            -e "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}" \
            -e "GITHUB_URL=${GITHUB_URL:=https://github.com}" \
@@ -68,5 +71,5 @@ docker run \
 	   -ti \
 	   --cap-add SYS_PTRACE \
 	   "$DOCKER_IMAGE" \
-	   ${2:-/go.sh}
+	   ${2:-/in_docker_check.sh}
 

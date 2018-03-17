@@ -25,18 +25,18 @@ IFS=$'\n\t'
 # C stack limit problems hopefully fixed by this. Can also be set to "unlimited" Default is 8192k on my pc.
 old_ulimit=$(ulimit -s)
 ulimit -s unlimited
+# verify with Cstack_info()
 
 function finish {
 	ulimit -s "$old_ulimit"
 }
 trap finish EXIT
 
-# show what we're doing
-# set -x
+set -x
 
 # check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
-DOCKER_IMAGE="${1:-r-clang-5.0}"
+DOCKER_IMAGE="${1:-r-clang-5.0-icd}"
 
 # ROCK_TMP=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 
@@ -54,33 +54,22 @@ echo "using docker image: $DOCKER_IMAGE"
 
 TOOLS_DIR="$ICD_HOME/tools/docker"
 
-echo "Environment:"
-echo "ICD_PROJECT=${ICD_PROJECT_NAME:=icd}"
-echo "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}"
-echo "GITHUB_URL=${GITHUB_URL:=https://github.com}"
-echo "GITHUB_USER=${GITHUB_USER:=jackwasey}"
-echo "GITHUB_REPO=${GITHUB_REPO:=$ICD_PROJECT_NAME}"
-echo "GIT_BRANCH=${GIT_BRANCH:=master}"
-echo "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}"
-echo "R_CMD=${R_CMD:=RD}"
-
-# expands variables and prints command
 set -x
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
            # -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
 docker run \
-           -e "ICD_PROJECT_NAME=$ICD_PROJECT_NAME" \
-           -e "R_PKG_NAME=$R_PKG_NAME" \
-           -e "GITHUB_URL=$GITHUB_URL" \
-           -e "GITHUB_USER=$GITHUB_USER" \
-           -e "GITHUB_REPO=$GITHUB_REPO" \
-           -e "GIT_BRANCH=$GIT_BRANCH" \
-           -e "GIT_URL=$GIT_URL" \
-           -e "R_CMD=$R_CMD" \
+           -e "ICD_PROJECT_NAME=${ICD_PROJECT_NAME:=icd}" \
+           -e "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}" \
+           -e "GITHUB_URL=${GITHUB_URL:=https://github.com}" \
+           -e "GITHUB_USER=${GITHUB_USER:=jackwasey}" \
+           -e "GITHUB_REPO=${GITHUB_REPO:=$ICD_PROJECT_NAME}" \
+           -e "GIT_BRANCH=${GIT_BRANCH:=master}" \
+           -e "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}" \
+           -e "R_CMD=${R_CMD:=RD}" \
            --rm \
 	   -ti \
 	   --cap-add SYS_PTRACE \
 	   "$DOCKER_IMAGE" \
-	   ${2:-/in_docker_base.sh}
+           "${2:-R_CMD}"
 

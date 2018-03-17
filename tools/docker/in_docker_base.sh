@@ -55,15 +55,9 @@ if [[ "$OS" == "Ubuntu" || "$OS" == "Debian" ]]; then
   apt-get update -qq || true
   apt-get dist-upgrade -qq -y || true
   apt-get install -y -qq git libssl-dev libxml2-dev curl libcurl4-openssl-dev unixodbc-dev qpdf pandoc pandoc-citeproc # libssh2-1-dev (optional for git but has debian version problem at least in April 2017)
-  # install debian packaged R packages to avoid compiling. may NEED to compile if USBAN or different compiler?
-  # apt-get install -y -qq r-cran-rodbc r-cran-rcpp r-cran-knitr r-cran-testthat r-cran-checkmate r-cran-xml2
 elif [[ "$OS" == "Fedora" ]]; then
   dnf install -y git
 fi
-
-# or download zip from: https://github.com/jackwasey/icd/archive/master.zip
-echo "Cloning '${GIT_BRANCH:-omp-taskloop}' branch from '${GIT_URL:-https://github.com/jackwasey/icd.git}'"
-git clone --depth=1 -b $GIT_BRANCH $GIT_URL
 
 echo "R CMD: using '${R_CMD:-RD}'"
 echo "R CMD ERR: using '${R_CMD_ERR:-RD}'"
@@ -101,17 +95,12 @@ if ! command -v ${R_CMD:-RD} &>/dev/null; then
 fi
 
 # these are always checked for, so we don't care which R is installed. We also need to re-install some packages, for some reason unclear to me: https://github.com/rocker-org/r-devel-san-clang/issues/12
-for pkg in testthat checkmate RODBC xml2 Rcpp stringi knitr rmarkdown; do
+for pkg in testthat checkmate RODBC xml2 Rcpp stringi knitr rmarkdown microbenchmark; do
 ASAN_OPTIONS=abort_on_error=0,detect_leaks=0 ${R_CMD}script -e "install.packages(\"${pkg}\")"
 done
 
-# the auto-generated Rcpp code is always changing order, if not content. Rstudio generates automatically, but we have to do manually here:
-echo "Using github repo name '${GITHUB_REPO:-icd}'"
-pushd $GITHUB_REPO
-${R_CMD}script -e 'Rcpp::compileAttributes()'
-popd
 
-# actually, we need to build based on the directory name, not the package name:
-$R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)
+# We need to build based on the directory name, not the package name. Don't build vignettes now: they get built during check anyway.
+# $R_CMD CMD build --no-build-vignettes $GITHUB_REPO 
 popd # out of /tmp
 
