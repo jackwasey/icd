@@ -45,6 +45,7 @@ extern "C" {
 // not enough to test whether header is available, because it may be disabled in
 // R: #ifdef _OPENMP
 #ifdef HAVE_R_OPENMP
+#define ICD_OPENMP
 #include <omp.h>
 #endif
 

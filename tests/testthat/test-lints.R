@@ -21,6 +21,6 @@ if (requireNamespace("lintr", quietly = TRUE) &&
   test_that("there are no lints", {
     # running lints keeps failing after devtools load_all, but works fine with
     # fresh session
-    lintr::expect_lint_free()
+    # lintr::expect_lint_free() # skip this - currently ignoring .lintr and spamming github.
   })
 }
