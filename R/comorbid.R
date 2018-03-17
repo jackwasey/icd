@@ -17,7 +17,8 @@
 
 utils::globalVariables(c(
   "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
-  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo", "icd10_map_quan_elix"))
+  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo", "icd10_map_quan_elix",
+  "icd9_map_single_ccs","icd9_map_multi_ccs"))
 
 #' Present-on-admission flags
 #'
@@ -412,6 +413,22 @@ icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TR
 icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
   cbd <- icd10_comorbid(x, map = icd10_map_quan_deyo, short_map = TRUE, ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd9_comorbid_css <- function(x, ..., type = "Single", lvl = NULL ) {
+  lvl <- as.numeric(lvl[1])
+  if(type == "Multi" & !any(1:4 %in% lvl)){
+    stop("If type = 'Multi' then lvl must be supplied as 1,2,3 or 4")
+  }else if(type == "Multi" & any(1:4 %in% lvl)){
+    if(length(lvl)>1) warning("Multiple lvls given, only the first is used. Lvl:", lvl[1])
+    m <- icd9_map_multi_ccs[[paste0("lvl", lvl)]]
+  }else{
+    m <- icd9_map_single_ccs
+  }
+
+  icd9_comorbid(x, map = m, short_map = TRUE, ...)
 }
 
 #' @rdname icd_comorbid
