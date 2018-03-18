@@ -87,7 +87,7 @@ expect_equal_no_class_order <- function(object, expected, ...) {
 #' @param end ICD code
 #' @param ver_chaps list with each member being a start-end pair, and names
 #'   being the chapter names
-#' @param ... arguments passed to \code{\link[testthat]{expect_true}}
+#' @param ... arguments passed to \code{expect_true} in 'testthat' package
 #' @keywords internal debugging
 expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
   x <- tolower(x)
