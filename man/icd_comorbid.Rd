@@ -15,6 +15,7 @@
 \alias{icd9_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_deyo}
+\alias{icd9_comorbid_ccs}
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_elix}
 \alias{icd_comorbid_quan_elix}
@@ -54,6 +55,8 @@ icd9_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
+
+icd9_comorbid_ccs(x, ..., single = TRUE, lvl = NULL)
 
 icd_comorbid_ahrq(x, icd_name = get_icd_name(x), ...)
 
@@ -113,6 +116,12 @@ which case the shorter human-readable names stored in e.g.
 \item{hierarchy}{single logical value that defaults to \code{TRUE}, in which
 case the hierarchy defined for the mapping is applied. E.g. in Elixhauser,
 you can't have uncomplicated and complicated diabetes both flagged.}
+
+\item{single}{a logical value, if \code{TRUE} then use single level CCS,
+otherwise use multi level}
+
+\item{lvl}{If multiple level CCS, then level must be selected as a number
+between one and four.}
 }
 \description{
 \code{\link{Rcpp}} approach to comorbidity assignment with

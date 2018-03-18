@@ -47,7 +47,8 @@ icd_data_names <- c(
   "icd_names_charlson_abbrev", "icd_names_elix", "icd_names_elix_abbrev",
   "icd_names_elix_htn", "icd_names_elix_htn_abbrev", "icd_names_quan_elix",
   "icd_names_quan_elix_abbrev", "icd_names_quan_elix_htn",
-  "icd_names_quan_elix_htn_abbrev"
+  "icd_names_quan_elix_htn_abbrev",
+  "icd9_map_single_ccs", "icd9_map_multi_ccs"
 )
 
 #' ICD-9 chapters
@@ -268,6 +269,24 @@ NULL
 #'
 #' @name icd9_map_hcc
 #' @aliases icd9_map_cc icd10_map_cc icd_map_cc_hcc
+NULL
+
+#' Clinical Classifactions Software (CCS) for ICD9/10-CM
+#'
+#' The Clinical Classifications Software (CCS) for ICD-9-CM is one in a family of databases and software tools developed
+#' as part of the Healthcare Cost and Utilization Project (HCUP),a Federal-State-Industry partnership sponsored by the
+#' Agency for Healthcare Research and Quality. HCUP databases, tools, and software inform decision making at the
+#' national, State, and community levels. The software contains two different mappings. One is a single level mapping
+#' and one is a multi level classification. This data set contains the numeric representations of all of the codes.
+#'
+#' This file contains the updated ICD9 version that includes categories for Mental Health and Substance Abuse. More
+#' information on the ICD-9-CM data set can be found \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp}.
+#'
+#' @docType data
+#' @keywords datasets
+#' @format list of character vectors, each numbered by co-morbidity
+#' @name icd9_map_single_ccs
+#' @aliases icd9_map_multi_ccs
 NULL
 
 #' Comorbidity names

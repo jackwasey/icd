@@ -17,7 +17,9 @@
 
 utils::globalVariables(c(
   "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
-  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo", "icd10_map_quan_elix"))
+  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo", "icd10_map_quan_elix",
+  "icd9_map_single_ccs", "icd9_map_multi_ccs"
+))
 
 #' Present-on-admission flags
 #'
@@ -412,6 +414,24 @@ icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TR
 icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
   cbd <- icd10_comorbid(x, map = icd10_map_quan_deyo, short_map = TRUE, ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
+}
+
+#' @rdname icd_comorbid
+#' @template ccs-single
+#' @param lvl If multiple level CCS, then level must be selected as a number
+#'   between one and four.
+#' @export
+icd9_comorbid_ccs <- function(x, ..., single = TRUE, lvl = NULL ) {
+  assert_flag(single)
+  assert_int(lvl, lower = 1, upper = 4, null.ok = TRUE, na.ok = FALSE)
+  m <- icd9_map_single_ccs
+  if (!single) {
+    if (!is.null(lvl))
+      m <- icd9_map_multi_ccs[[paste0("lvl", lvl)]]
+    else
+      stop("If 'single' is false, then 'lvl' must be supplied as 1, 2, 3 or 4")
+  }
+  icd9_comorbid(x, map = m, short_map = TRUE, ...)
 }
 
 #' @rdname icd_comorbid
