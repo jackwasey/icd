@@ -1,4 +1,5 @@
 # Version 3.0
+ * Added AHRQ clinical condition software (CCS) classification, thanks to Vitaly Drucker
  * Assume C++11, which is now four years old, and enables a great deal of code simplification. Would do C++14 but Rtools is still on GCC 4.9.3!
  * drop unused and messy experimental code
  
