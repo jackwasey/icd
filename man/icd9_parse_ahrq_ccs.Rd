@@ -4,30 +4,31 @@
 \alias{icd9_parse_ahrq_ccs}
 \title{parse AHRQ CCS for mapping}
 \usage{
-icd9_parse_ahrq_ccs(type = "Single", save_data = FALSE, offline = TRUE)
+icd9_parse_ahrq_ccs(single = TRUE, save_data = FALSE, offline = TRUE)
 }
 \arguments{
-\item{type}{either "Single" or "Multi" depending on the type of CCS you want to download and parse}
+\item{single}{a logical value, if \code{TRUE} then use single level CCS,
+otherwise use multi level}
 
 \item{save_data}{logical whether to save the result in the source tree.
 Defaults to \code{FALSE}.}
 
-\item{condense}{Deprecated. The map is not condensed by default. If required,
-it can reduced to a smaller set of codes using \code{icd_condense}.}
-}
-\value{
-invisibly returns the list of vectors, where a co-morbidity name is
-  associated with a character vector of ICD-9 codes.
+\item{offline}{single logical, if \code{TRUE} then don't pull the file from
+internet, only return path and file name if the file already exists in
+data-raw. This is helpful for testing without using the internet.}
 }
 \description{
-Data is downloaded from AHRQ website. ICD9 codes were frozen so no updates are needed. CCS codes are available in a
-Multi level format and a Single level format. Single level is most common for risk adjustment (Ex. CMS Readmission
-metric)
+Data is downloaded from AHRQ website. ICD9 codes were frozen so no updates
+are needed. CCS codes are available in a Multi level format and a Single
+level format. Single level is most common for risk adjustment (Ex. CMS
+Readmission metric)
 }
 \examples{
 \dontrun{
-icd9_parse_ahrq_ccs(type = "Single", save_data = TRUE, offline = FALSE)
-icd9_parse_ahrq_ccs(type = "Multi", save_data = TRUE, offline = FALSE)
+  icd:::icd9_parse_ahrq_ccs(single = TRUE, save_data = FALSE, offline = FALSE)
+  icd:::icd9_parse_ahrq_ccs(single = TRUE, save_data = FALSE, offline = TRUE)
+  icd:::icd9_parse_ahrq_ccs(single = FALSE, save_data = FALSE, offline = FALSE)
+  icd:::icd9_parse_ahrq_ccs(single = FALSE, save_data = FALSE, offline = TRUE)
 }
 }
 \keyword{internal}

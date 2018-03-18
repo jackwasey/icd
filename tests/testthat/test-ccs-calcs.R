@@ -17,46 +17,39 @@
 
 context("ahrq ccs calculations")
 
-test_that("ahrq css icd 9 is performing correctly",{
+test_that("ahrq css icd 9 is performing correctly", {
   test_df <-
     data.frame(
       visit_id = c("a", "b", "b", "c"),
-      icd9 = c('01012','32341','83314','7721'),
+      icd9 = c("01012", "32341", "83314", "7721"),
       single = c("1", "77", "225", "224"),
       lvl1 = c("1", "6", "16", "15"),
       lvl2 = c("1.1", "6.1", "16.1", "15.7"),
       lvl3 = c("1.1.1", "6.1.2", " ", "15.7.4"),
-      lvl4 = c(" ", " ", " "," "),
+      lvl4 = c(" ", " ", " ", " "),
       stringsAsFactors = FALSE
     )
 
-  res <- icd9_comorbid_css(test_df,  visit_name = "visit_id", icd_name = "icd9")
+  res <- icd9_comorbid_ccs(test_df,  visit_name = "visit_id", icd_name = "icd9")
+  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$single)))
+  expect_equal(dim(res), c(3, 284))
 
-  expect_true(all(mapply(function(x,y){res[x,y]}, test_df$visit_id, test_df$single)))
-  expect_equal(dim(res), c(3,284))
+  expect_error(icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE))
+  expect_error(icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE, lvl = "a"))
 
-  expect_error(icd9_comorbid_css(test_df, visit_name = "visit_id",
-                                 icd_name = "icd9", type = "Multi"))
-  expect_error(icd9_comorbid_css(test_df, visit_name = "visit_id",
-                                 icd_name = "icd9", type = "Multi", lvl = "a"))
+  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE, lvl = 1)
+  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl1)))
+  expect_equal(dim(res), c(3, 18))
 
-  res <- icd9_comorbid_css(test_df, visit_name = "visit_id",
-                           icd_name = "icd9", type = "Multi", lvl = 1)
-  expect_true(all(mapply(function(x,y){res[x,y]}, test_df$visit_id, test_df$lvl1)))
-  expect_equal(dim(res), c(3,18))
-  res <- icd9_comorbid_css(test_df, visit_name = "visit_id",
-                           icd_name = "icd9", type = "Multi", lvl = 2)
-  expect_true(all(mapply(function(x,y){res[x,y]}, test_df$visit_id, test_df$lvl2)))
-  expect_equal(dim(res), c(3,136))
+  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE, lvl = 2)
+  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl2)))
+  expect_equal(dim(res), c(3, 136))
 
-  res <- icd9_comorbid_css(test_df, visit_name = "visit_id",
-                           icd_name = "icd9",  type = "Multi",  lvl = 3)
-  expect_true(all(mapply(function(x,y){res[x,y]}, test_df$visit_id, test_df$lvl3)))
-  expect_equal(dim(res), c(3,367))
+  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9",  single = FALSE,  lvl = 3)
+  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl3)))
+  expect_equal(dim(res), c(3, 367))
 
-  res <- icd9_comorbid_css(test_df, visit_name = "visit_id", icd_name = "icd9",
-                           type = "Multi", lvl = 4)
-  expect_true(all(mapply(function(x,y){res[x,y]}, test_df$visit_id, test_df$lvl4)))
-  expect_equal(dim(res), c(3,209))
+  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE, lvl = 4)
+  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl4)))
+  expect_equal(dim(res), c(3, 209))
 })
-

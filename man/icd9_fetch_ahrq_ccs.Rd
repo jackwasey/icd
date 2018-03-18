@@ -4,7 +4,15 @@
 \alias{icd9_fetch_ahrq_ccs}
 \title{Download ahrq-css-icd-09 definition}
 \usage{
-icd9_fetch_ahrq_ccs(type, offline)
+icd9_fetch_ahrq_ccs(single = TRUE, offline)
+}
+\arguments{
+\item{single}{a logical value, if \code{TRUE} then use single level CCS,
+otherwise use multi level}
+
+\item{offline}{single logical, if \code{TRUE} then don't pull the file from
+internet, only return path and file name if the file already exists in
+data-raw. This is helpful for testing without using the internet.}
 }
 \description{
 Download ahrq-css-icd-09 definition

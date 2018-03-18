@@ -48,7 +48,7 @@ icd_data_names <- c(
   "icd_names_elix_htn", "icd_names_elix_htn_abbrev", "icd_names_quan_elix",
   "icd_names_quan_elix_abbrev", "icd_names_quan_elix_htn",
   "icd_names_quan_elix_htn_abbrev",
-  "icd9_map_single_ccs","icd9_map_multi_ccs"
+  "icd9_map_single_ccs", "icd9_map_multi_ccs"
 )
 
 #' ICD-9 chapters

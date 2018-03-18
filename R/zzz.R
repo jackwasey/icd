@@ -47,7 +47,7 @@ release_questions <- function() {
     # data:
     "Have you regenerated icd9cm_hierarchy and other compiled data on Linux?",
     "Uranium data requires rebuild on Windows for RODBC to extract raw data",
-    "Have you run tools::checkRdaFiles('data') to check everything is optimally compressed?",
+    "Have you run tools::checkRdaFiles('data') to check everything is saved as xz?",
     # documentation:
     "Have you checked all TODO comments, made into github issues where appropriate",
     "Do all examples look ok (not just run without errors)?",
