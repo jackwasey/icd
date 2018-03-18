@@ -1,3 +1,4 @@
+#!/bin/bash
 # Copyright (C) 2014 - 2018  Jack O. Wasey
 #
 # This file is part of icd.
@@ -15,13 +16,16 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-if (requireNamespace("lintr", quietly = TRUE) &&
-    "package:devtools" %nin% search()) {
-  context("lints, if lintr available")
-  test_that("there are no lints", {
-    skip("currently ignoring .lintr and spamming github")
-    # running lints keeps failing after devtools load_all, but works fine with
-    # fresh session
-    # lintr::expect_lint_free() # skip this - currently ignoring .lintr and spamming github.
-  })
-}
+set -euo pipefail
+IFS=$'\n\t'
+
+# or download zip from: https://github.com/jackwasey/icd/archive/master.zip
+echo "Cloning '${GIT_BRANCH:-omp-taskloop}' branch from '${GIT_URL:-https://github.com/jackwasey/icd.git}'"
+git clone --depth=1 -b $GIT_BRANCH $GIT_URL
+
+# the auto-generated Rcpp code is always changing order, if not content. Rstudio generates automatically, but we have to do manually here:
+echo "Using github repo name '${GITHUB_REPO:-icd}'"
+pushd $GITHUB_REPO
+${R_CMD}script -e 'Rcpp::compileAttributes()'
+popd
+

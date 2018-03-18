@@ -36,7 +36,7 @@ icd9_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_map = icd_guess_short(map), return_df = FALSE, ...)
 
 icd_comorbid_common(x, map, visit_name = NULL, icd_name, short_code,
-  short_map, return_df = FALSE, ...)
+  short_map, return_df = FALSE, comorbid_fun = icd9ComorbidTaskloop, ...)
 
 icd9_comorbid_ahrq(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
@@ -149,10 +149,6 @@ There is a change in behavior from previous versions. The visit_name
   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
   the machine is used.
 
-The common comorbidity calculation code does not depend on ICD type.
-  There is some type conversion so the map and input codes are all in 'short'
-  format, fast factor generation, then fast comorbidity assignment.
-
 \code{data.frame}s of patient data may have columns within them
   which are of class \code{icd9}, \code{icd10} etc., but do not themselves
   have a class: therefore, the S3 mechanism for dispatch is not suitable. I
@@ -167,6 +163,11 @@ The common comorbidity calculation code does not depend on ICD type.
 
 \item \code{icd9_comorbid}: Get comorbidities from \code{data.frame} of ICD-9
 codes
+
+\item \code{icd_comorbid_common}: Internal function. The common comorbidity
+calculation code does not depend on ICD type. There is some type conversion
+so the map and input codes are all in 'short' format, fast factor
+generation, then fast comorbidity assignment.
 }}
 
 \examples{

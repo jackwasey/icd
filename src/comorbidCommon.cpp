@@ -17,6 +17,7 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
+#include "comorbidCommon.h"
 #include <Rcpp.h>
 #include <algorithm>                   // for binary_search, copy
 #include <vector>                      // for vector, vector<>::const_iterator
@@ -40,7 +41,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   VecVecIntSz vis_i;
   const VecVecIntSz vsz = vcdb.size();
 
-  #ifdef ICD_DEBUG_TRACE
+#ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
@@ -77,11 +78,9 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
     const ComorbidOut falseComorbidChunk(num_comorbid * (1 + end - begin), false);
     chunk = falseComorbidChunk;
     for (VecVecIntSz urow = begin; urow <= end; ++urow) { //end is index of end of chunk, so we include it in the loop.
-#ifdef ICD_DEBUG_TRACE
-      Rcpp::Rcout << "row: " << 1 + urow - begin << " of " << 1 + end - begin << "\n";
-#endif
       for (VecVecIntSz cmb = 0; cmb != num_comorbid; ++cmb) { // loop through icd codes for this visitId
 #ifdef ICD_DEBUG_TRACE
+        Rcpp::Rcout << "row: " << 1 + urow - begin << " of " << 1 + end - begin << ", ";
         Rcpp::Rcout << "cmb = " << cmb << "\n";
         Rcpp::Rcout << "vcdb length in lookupOneChunk = " << vcdb.size() << "\n";
         Rcpp::Rcout << "map length in lookupOneChunk = " << map.size() << "\n";
@@ -119,8 +118,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   Rcpp::Rcout << "writing a chunk beginning at: " << vis_i << "\n";
 #endif
   // write calculated data to the output matrix (must sync threads before this)
-  std::copy(chunk.begin(), chunk.end(),
-            out.begin() + (num_comorbid * vis_i));
+  std::copy(chunk.begin(), chunk.end(), out.begin() + (num_comorbid * vis_i));
 }
   } // end parallel for
 
@@ -129,16 +127,76 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
 #endif
 }
 
-ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map,
-                                     const int chunkSize, const int ompChunkSize) {
-  // initialize output matrix with all false for all comorbidities
-  ComorbidOut out(vcdb.size() * map.size(), false);
-#ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "top level vcdb.size() = " << vcdb.size() << "\n";
-  Rcpp::Rcout << "top level map.size() = " << map.size() << "\n";
-#endif
-  //TODO: pass the output by reference, instead?
-  lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
-  return out;
-}
+//' alternate comorbidity search
+//'
+//' alternate version using much simplified with Openmp taskloop, only in OMP4.5
+//'
+//' @keywords internal
+// [[Rcpp::export]]
+void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb,
+                                      const VecVecInt& map,
+                                      NewOut& out) {
+  const VecVecIntSz num_comorbid = map.size();
+  VecVecIntSz vis_i;
+  VecInt::const_iterator code_it;
 
+ // ensure out is big enough:
+ out.resize(vcdb.size());
+
+  // loop through all patient visits
+#ifdef ICD_OPENMP
+ // may need shared(out) but as I think each element can be written to independently by different threads, try without..
+ // private(vis_i) superfluous?
+#pragma omp taskloop grainsize (256) shared(Rcpp::Rcout, vcdb, map)
+#endif
+  for (vis_i = 0; vis_i < vcdb.size(); ++vis_i) {
+#ifdef ICD_DEBUG
+	  debug_parallel();
+    Rcpp::Rcout << "New visit: vis_i = " << vis_i << "\n";
+#endif
+    const VecInt& codes = vcdb[vis_i]; // these are the ICD-9 codes for the current visitid
+    const VecIntIt cbegin = codes.begin();
+    const VecIntIt cend = codes.end();
+
+    // usually avoid vector<bool>, but could avoid later conversion (maybe?)
+    // required by Rcpp, no thread competition in this inner loop, and it is
+    // compact. Initialize with false/0.
+    NewOutPt out_one_pt;
+    out_one_pt.assign(num_comorbid, false); // fill with false/0
+
+    // loop through this patient's ICD codes (almost always fewer codes per
+    // patient than number of codes in one element of a comorbidity map)
+    for (code_it = cbegin; code_it != cend; ++code_it) {
+      // now loop through the comorbidities
+      for (VecVecIntSz cmb = 0; cmb != num_comorbid; ++cmb) {
+#ifdef ICD_DEBUG_TRACE
+        Rcpp::Rcout << "vis_i = " << vis_i << "\n";
+        Rcpp::Rcout << "cmb = " << cmb << "\n";
+        Rcpp::Rcout << "this pt code# = " << std::distance(cbegin, code_it) << "\n";
+#endif
+
+        const VecInt& mapCodes = map[cmb]; // may be zero length
+        // the maps were already sorted in comorbidSetup, to enable binary search with O(log n)
+        bool found_it = std::binary_search(mapCodes.begin(), mapCodes.end(), *code_it);
+        if (found_it) {
+#ifdef ICD_DEBUG_TRACE
+          Rcpp::Rcout << "found - ";
+#endif
+#ifdef ICD_DEBUG_TRACE
+          Rcpp::Rcout << "vis_i = " << vis_i << " - ";
+          Rcpp::Rcout << "cmb = " << cmb << " - ";
+          Rcpp::Rcout << "this pt code# = " << std::distance(cbegin, code_it) << "\n";
+#endif
+          out_one_pt.at(cmb) = true; // or 1 for VecInt
+          break;
+        } // end if found_it
+      } // end loop through comorbidities
+    } // end loop through all ICD codes for one patient
+
+#ifdef ICD_DEBUG
+    Rcpp::Rcout << "Writing: out.size = " << out.size() << ", and vis_i = " << vis_i << "\n";
+    printIt(out_one_pt);
+#endif
+    out.at(vis_i) = out_one_pt;
+  } // end main loop through patient visits
+}

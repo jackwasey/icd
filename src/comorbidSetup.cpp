@@ -70,7 +70,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
   int vlen = Rf_length(icds); // or vsexp
   VisLk vis_lookup;
 
-#ifdef ICD_DEBUG
+#ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "vcdb resized to length vlen = " << vlen << "\n";
 #endif
   vcdb.resize(vlen); // over-estimate and allocate all at once (alternative is to reserve)

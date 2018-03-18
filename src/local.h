@@ -20,15 +20,14 @@
 
 #include "config.h"
 #include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
+#include <set>
+#include <unordered_map>
+#include <unordered_set>
 
 extern "C" {
 #include "cutil.h"
 #include <cstdlib>
 }
-
-// these are feature requests: if not available they are disabled.
-#define ICD_OPENMP
-// #define ICD_STD_PARALLEL // don't use right now: see comment below
 
 // debugging:
 // #define ICD_DEBUG
@@ -55,20 +54,15 @@ extern "C" {
 #undef ICD_VALGRIND
 #endif
 
-#include <set>
-
-// use flag set by configure
-#include <unordered_map>
-#include <unordered_set>
 typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
 typedef std::unordered_set<std::string> icd_set;
 
-void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
-void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
-                        const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
-                        const bool aggregate);
-ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
-                                     const VecVecInt& map, const int chunkSize, const int ompChunkSize);
+//void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map);
+//void buildVisitCodesVec(const SEXP& icd9df, const std::string& visitId,
+//                        const std::string& icd9Field, VecVecInt& vcdb, VecStr& visitIds,
+//                        const bool aggregate);
+//ComorbidOut lookupComorbidByChunkFor(const VecVecInt& vcdb,
+//                                     const VecVecInt& map, const int chunkSize, const int ompChunkSize);
 
 #if (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #include <iostream>

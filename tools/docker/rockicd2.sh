@@ -25,6 +25,7 @@ IFS=$'\n\t'
 # C stack limit problems hopefully fixed by this. Can also be set to "unlimited" Default is 8192k on my pc.
 old_ulimit=$(ulimit -s)
 ulimit -s unlimited
+# verify with Cstack_info()
 
 function finish {
 	ulimit -s "$old_ulimit"
@@ -33,8 +34,11 @@ trap finish EXIT
 
 set -x
 
+# check package using given (local) docker image. Won't work with straight rocker/r-base etc.
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
-DOCKER_IMAGE="${1:-r-clang-trunk}"
+DOCKER_IMAGE="${1:-r-clang-5.0-icd}"
+
+# ROCK_TMP=`mktemp -d 2>/dev/null || mktemp -d -t 'mytmpdir'`
 
 if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)r-.+ ]]; then
    echo "Not using R from a jackwasey docker image"
@@ -50,15 +54,11 @@ echo "using docker image: $DOCKER_IMAGE"
 
 TOOLS_DIR="$ICD_HOME/tools/docker"
 
-# expands variables and prints command
 set -x
 
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
+           # -v "${TOOLS_DIR}/in_docker_check.sh":/go.sh \
 docker run \
-           -v "${TOOLS_DIR}/in_docker_check.sh":/in_docker_check.sh \
-           -v "${TOOLS_DIR}/in_docker_base.sh":/in_docker_base.sh \
-           -v "${TOOLS_DIR}/in_docker_get_icd.sh":/in_docker_get_icd.sh \
-           -v "${TOOLS_DIR}/in_docker_build_check.sh":/in_docker_build_check.sh \
            -e "ICD_PROJECT_NAME=${ICD_PROJECT_NAME:=icd}" \
            -e "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}" \
            -e "GITHUB_URL=${GITHUB_URL:=https://github.com}" \
@@ -71,5 +71,5 @@ docker run \
 	   -ti \
 	   --cap-add SYS_PTRACE \
 	   "$DOCKER_IMAGE" \
-	   ${2:-/in_docker_check.sh}
+           "${2:-./in_docker_build_check.sh}"
 
