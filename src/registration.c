@@ -3,7 +3,7 @@
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
 
-/* FIXME: 
+/* FIXME:
    Check these declarations against the C/Fortran source code.
 */
 
@@ -37,6 +37,7 @@ extern SEXP _icd_icd9ChildrenShort11(SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShortNoNaUnordered(SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShortStd(SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShortUnordered(SEXP, SEXP);
+extern SEXP _icd_icd9ComorbidSparse(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidShortCpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidTaskloop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidTaskloop2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -108,6 +109,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ChildrenShortNoNaUnordered",     (DL_FUNC) &_icd_icd9ChildrenShortNoNaUnordered,     2},
     {"_icd_icd9ChildrenShortStd",               (DL_FUNC) &_icd_icd9ChildrenShortStd,               2},
     {"_icd_icd9ChildrenShortUnordered",         (DL_FUNC) &_icd_icd9ChildrenShortUnordered,         2},
+    {"_icd_icd9ComorbidSparse",               (DL_FUNC) &_icd_icd9ComorbidShortCpp,               8},
     {"_icd_icd9ComorbidShortCpp",               (DL_FUNC) &_icd_icd9ComorbidShortCpp,               8},
     {"_icd_icd9ComorbidTaskloop",               (DL_FUNC) &_icd_icd9ComorbidTaskloop,               8},
     {"_icd_icd9ComorbidTaskloop2",              (DL_FUNC) &_icd_icd9ComorbidTaskloop2,              8},

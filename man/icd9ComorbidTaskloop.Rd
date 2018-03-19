@@ -3,12 +3,16 @@
 \name{icd9ComorbidTaskloop}
 \alias{icd9ComorbidTaskloop}
 \alias{icd9ComorbidTaskloop2}
+\alias{icd9ComorbidSparse}
 \title{Simpler comorbidity assignment}
 \usage{
 icd9ComorbidTaskloop(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
   chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE)
 
 icd9ComorbidTaskloop2(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
+  chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE)
+
+icd9ComorbidSparse(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
   chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE)
 }
 \description{
@@ -31,6 +35,8 @@ identical(res1, res2)
 \section{Functions}{
 \itemize{
 \item \code{icd9ComorbidTaskloop2}: Taskloop but finish with R transpose
+
+\item \code{icd9ComorbidSparse}: Sparse comorbidity results with Eigen
 }}
 
 \keyword{internal}
