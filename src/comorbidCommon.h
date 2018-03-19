@@ -25,6 +25,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
                               const VecVecIntSz chunkSize,
                               const VecVecIntSz ompChunkSize,
                               VecInt& out);
+
 void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb,
                                       const VecVecInt& map,
                                       NewOut& out);

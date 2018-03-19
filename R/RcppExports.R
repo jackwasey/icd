@@ -127,6 +127,12 @@ icd9ComorbidTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
     .Call(`_icd_icd9ComorbidTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
+#' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
+#' @keywords internal
+icd9ComorbidTaskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidTaskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+}
+
 #' core search for ICD code in a map
 #' @keywords internal
 lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {

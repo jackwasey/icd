@@ -28,6 +28,7 @@ Imports:
     magrittr,
     stats,
     Rcpp (>= 0.12.3),
+    RcppEigen,
     utils
 Suggests:
     knitr,
@@ -47,5 +48,6 @@ Copyright: See file (inst/)COPYRIGHTS
 VignetteBuilder: knitr
 LinkingTo:
     Rcpp,
+    RcppEigen,
     testthat
 RoxygenNote: 6.0.1

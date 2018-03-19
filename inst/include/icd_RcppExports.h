@@ -5,6 +5,7 @@
 #define RCPP_icd_RCPPEXPORTS_H_GEN_
 
 #include "icd_types.h"
+#include <RcppEigen.h>
 #include <Rcpp.h>
 
 namespace icd {
@@ -250,11 +251,30 @@ namespace icd {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
-    inline void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, VecInt& out) {
+    inline SEXP icd9ComorbidTaskloop2(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
+        typedef SEXP(*Ptr_icd9ComorbidTaskloop2)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_icd9ComorbidTaskloop2 p_icd9ComorbidTaskloop2 = NULL;
+        if (p_icd9ComorbidTaskloop2 == NULL) {
+            validateSignature("SEXP(*icd9ComorbidTaskloop2)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
+            p_icd9ComorbidTaskloop2 = (Ptr_icd9ComorbidTaskloop2)R_GetCCallable("icd", "_icd_icd9ComorbidTaskloop2");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_icd9ComorbidTaskloop2(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)), Shield<SEXP>(Rcpp::wrap(threads)), Shield<SEXP>(Rcpp::wrap(chunk_size)), Shield<SEXP>(Rcpp::wrap(omp_chunk_size)), Shield<SEXP>(Rcpp::wrap(aggregate)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
+    inline void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, ComorbidOut& out) {
         typedef SEXP(*Ptr_lookupComorbidByChunkFor)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_lookupComorbidByChunkFor p_lookupComorbidByChunkFor = NULL;
         if (p_lookupComorbidByChunkFor == NULL) {
-            validateSignature("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,VecInt&)");
+            validateSignature("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
             p_lookupComorbidByChunkFor = (Ptr_lookupComorbidByChunkFor)R_GetCCallable("icd", "_icd_lookupComorbidByChunkFor");
         }
         RObject rcpp_result_gen;

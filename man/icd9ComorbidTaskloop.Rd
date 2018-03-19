@@ -2,9 +2,13 @@
 % Please edit documentation in R/RcppExports.R
 \name{icd9ComorbidTaskloop}
 \alias{icd9ComorbidTaskloop}
+\alias{icd9ComorbidTaskloop2}
 \title{Simpler comorbidity assignment}
 \usage{
 icd9ComorbidTaskloop(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
+  chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE)
+
+icd9ComorbidTaskloop2(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
   chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE)
 }
 \description{
@@ -24,4 +28,9 @@ microbenchmark::microbenchmark(
   times = 50)
 identical(res1, res2)
 }
+\section{Functions}{
+\itemize{
+\item \code{icd9ComorbidTaskloop2}: Taskloop but finish with R transpose
+}}
+
 \keyword{internal}

@@ -18,11 +18,6 @@
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include <Rcpp/r/headers.h>                   // for INTEGER, Rf_length, SEXP
-#ifdef ICD_STD_PARALLEL
-#include <parallel/algorithm>
-#else
-#include <algorithm>
-#endif
 #include <map>                                // for _Rb_tree_iterator
 #include <string>                             // for string, basic_string
 #include <utility>                            // for make_pair, pair

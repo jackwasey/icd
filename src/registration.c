@@ -39,6 +39,7 @@ extern SEXP _icd_icd9ChildrenShortStd(SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShortUnordered(SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidShortCpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidTaskloop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_icd9ComorbidTaskloop2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToShort(SEXP);
 extern SEXP _icd_icd9ExpandMinor(SEXP, SEXP);
@@ -109,6 +110,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ChildrenShortUnordered",         (DL_FUNC) &_icd_icd9ChildrenShortUnordered,         2},
     {"_icd_icd9ComorbidShortCpp",               (DL_FUNC) &_icd_icd9ComorbidShortCpp,               8},
     {"_icd_icd9ComorbidTaskloop",               (DL_FUNC) &_icd_icd9ComorbidTaskloop,               8},
+    {"_icd_icd9ComorbidTaskloop2",              (DL_FUNC) &_icd_icd9ComorbidTaskloop2,              8},
     {"_icd_icd9DecimalToPartsCpp",              (DL_FUNC) &_icd_icd9DecimalToPartsCpp,              2},
     {"_icd_icd9DecimalToShort",                 (DL_FUNC) &_icd_icd9DecimalToShort,                 1},
     {"_icd_icd9ExpandMinor",                    (DL_FUNC) &_icd_icd9ExpandMinor,                    2},

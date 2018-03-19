@@ -22,6 +22,8 @@
 #include <Rcpp/r/headers.h>                     // for TYPEOF, Rf_install, SEXP
 #include <string>                               // for string
 #include <vector>                               // for vector, operator-
+#include <iterator>
+#include <algorithm>
 #include "Rcpp.h"                               // for wrap
 #include "Rcpp/Dimension.h"                     // for Dimension
 #include "Rcpp/Function.h"                      // for Function, Function_Impl
@@ -43,6 +45,15 @@
 #include "comorbidSetup.h"
 extern "C" {
 #include "cutil.h"                              // for getRListOrDfElement
+}
+
+// concatenate a vector of vectors
+template <class COCiter, class Oiter>
+void my_concat (COCiter start, COCiter end, Oiter dest) {
+  while (start != end) {
+    dest = std::copy(start->begin(), start->end(), dest);
+    ++start;
+  }
 }
 
 //' @rdname icd_comorbid
@@ -119,15 +130,14 @@ Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast 
 // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
 Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed);
 mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
-mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(),
-             out_row_names);
+mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(), out_row_names);
 // apparently don't need to set class as matrix here
 Rcpp::Function t("t"); // use R transpose - seems pretty fast
 #ifdef ICD_DEBUG
 Rcpp::Rcout << "Ready to transpose and return\n";
 #endif
-valgrindCallgrindStop();
 Rcpp::LogicalVector transposed_out = t(mat_out);
+valgrindCallgrindStop();
 return transposed_out;
 }
 
@@ -154,7 +164,7 @@ SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                           const std::string visitId, const std::string icd9Field,
                           const int threads = 8, const int chunk_size = 256,
                           const int omp_chunk_size = 1, bool aggregate = true) {
-
+  valgrindCallgrindStart(false);
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
   VecVecInt vcdb; // size is reserved later
 
@@ -180,45 +190,81 @@ SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   const VecVecIntSz num_visits = vcdb.size();
 
 #ifdef ICD_DEBUG
+  Rcpp::Rcout << "num_comorbid = " << num_comorbid << "\n";
+  Rcpp::Rcout << "num_visits = " << num_visits << "\n";
   Rcpp::Rcout << "look up the comorbidities\n";
 #endif
-  NewOut out;
+  NewOut out(vcdb.size(), NewOutPt(num_comorbid));
   lookupComorbidByChunkForTaskloop(vcdb, map, out);
-
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "Transform into LogicalMatrix while transposing\n";
-#endif
   Rcpp::LogicalMatrix mat_out(num_visits, num_comorbid);
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "output R matrix created\n";
-  // do the following to ensure the message appears immediately
-  R_FlushConsole();
-  R_ProcessEvents();
-  R_CheckUserInterrupt();
-#endif
   for (NewOutIt it = out.begin(); it != out.end(); ++it) {
+
 #ifdef ICD_DEBUG_TRACE
-    Rcpp::Rcout << "Ready to inject 'out' data into R matrix:\n";
-    R_FlushConsole();
-    R_ProcessEvents();
-    R_CheckUserInterrupt();
     printIt(*it);
-    Rcpp::Rcout << "Injecting out data into matrix:\n";
+    Rcpp::Rcout << "2nd val in vector: " << it->at(1);
+    R_FlushConsole();
+    R_ProcessEvents();
+    R_CheckUserInterrupt();
+    Rcpp::Rcout << " Injecting out data into matrix:\n";
     R_FlushConsole();
     R_ProcessEvents();
     R_CheckUserInterrupt();
 #endif
+    NewOutPt out_one_pt;
     for (VecVecIntSz cmb = 0; cmb != num_comorbid; ++cmb) {
+      out_one_pt = *it;
 #ifdef ICD_DEBUG_TRACE
-      Rcpp::Rcout << "ptid = " << std::distance(out.begin(), it) <<
-        " - comorbidity # " << cmb <<
-          " val = " << (*it)[cmb] << "\n";
+      Rcpp::Rcout << "first vector has length " << out_one_pt.size() <<
+        " - ptid = " << std::distance(out.begin(), it) <<
+          " - comorbidity # " << cmb <<
+            " val = " << out_one_pt.at(cmb) << "\n";
 #endif
-      mat_out(std::distance(out.begin(), it), cmb) = (*it)[cmb];
+#ifdef ICD_DEBUG
+      mat_out(std::distance(out.begin(), it), cmb) = out_one_pt.at(cmb);
+#else
+      mat_out(std::distance(out.begin(), it), cmb) = out_one_pt[cmb];
+#endif
     }
   }
   mat_out.attr("dim") = Rcpp::Dimension((int) num_visits, (int) num_comorbid); // set dimensions in usual column major order
   mat_out.attr("dimnames") = Rcpp::List::create(out_row_names, icd9Mapping.names());
+  valgrindCallgrindStop();
   return mat_out;
 }
 
+//' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
+//' @keywords internal
+// [[Rcpp::export]]
+SEXP icd9ComorbidTaskloop2(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+                           const std::string visitId, const std::string icd9Field,
+                           const int threads = 8, const int chunk_size = 256,
+                           const int omp_chunk_size = 1, bool aggregate = true) {
+
+  valgrindCallgrindStart(false);
+  VecStr out_row_names; // size is reserved in buildVisitCodesVec
+  VecVecInt vcdb; // size is reserved later
+
+  const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
+  if (TYPEOF(vsexp) != STRSXP) {
+    Rcpp::stop("expecting visit ID in input data frame to be character vector");
+    UNPROTECT(1); // vsexp
+  }
+  UNPROTECT(1); // vsexp not used further
+  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
+
+  VecVecInt map;
+  buildMap(icd9Mapping, map);
+
+  const VecVecIntSz num_comorbid = map.size();
+  const VecVecIntSz num_visits = vcdb.size();
+  NewOut out(vcdb.size(), NewOutPt(num_comorbid));
+  lookupComorbidByChunkForTaskloop(vcdb, map, out);
+
+  Rcpp::IntegerMatrix mat_out(num_visits, num_comorbid);
+  my_concat(out.begin(), out.end(), mat_out.begin()); // write out row major
+  mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in usual column major order
+  mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(), out_row_names);
+  Rcpp::IntegerMatrix transposed_out = Rcpp::transpose(mat_out); // doesn't look efficient...
+  valgrindCallgrindStop();
+  return transposed_out;
+}
