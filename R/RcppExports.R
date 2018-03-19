@@ -105,47 +105,10 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
     .Call(`_icd_icd9ComorbidShortCpp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
-#' Simpler comorbidity assignment
-#'
-#' Re-written without OpenMP initially, but structured more simply, with the motivation of
-#' using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
-#' \url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}
-#'
-#' # basic test
-#' # use tests/testthat/helper-base.R for two_pts and two_map
-#' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
-#'
-#' vermont_dx %>% icd_wide_to_long() -> vt
-#' microbenchmark::microbenchmark(
-#'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
-#'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
-#'   times = 50)
-#' identical(res1, res2)
-#'
-#' @keywords internal
-icd9ComorbidTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9ComorbidTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
-}
-
-#' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
-#' @keywords internal
-icd9ComorbidTaskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9ComorbidTaskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
-}
-
 #' core search for ICD code in a map
 #' @keywords internal
 lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {
     invisible(.Call(`_icd_lookupComorbidByChunkFor`, vcdb, map, chunkSize, ompChunkSize, out))
-}
-
-#' alternate comorbidity search
-#'
-#' alternate version using much simplified with Openmp taskloop, only in OMP4.5
-#'
-#' @keywords internal
-lookupComorbidByChunkForTaskloop <- function(vcdb, map, out) {
-    invisible(.Call(`_icd_lookupComorbidByChunkForTaskloop`, vcdb, map, out))
 }
 
 #' Internal function to find ICD-10 parents
@@ -176,6 +139,53 @@ lookupComorbidSparse <- function(vcdb, map) {
 #' @keywords internal
 icd9ComorbidSparse <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
     .Call(`_icd_icd9ComorbidSparse`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+}
+
+#' @describeIn icd9ComorbidTaskloop Sparse comorbidity results with Eigen
+#' @keywords internal
+icd9ComorbidSparseOmp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidSparseOmp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+}
+
+#' alternate comorbidity search
+#'
+#' alternate version using much simplified with Openmp taskloop, only in OMP4.5
+#'
+#' @keywords internal
+lookupComorbidByChunkForTaskloop <- function(vcdb, map, out) {
+    invisible(.Call(`_icd_lookupComorbidByChunkForTaskloop`, vcdb, map, out))
+}
+
+#' Simpler comorbidity assignment
+#'
+#' Re-written without OpenMP initially, but structured more simply, with the motivation of
+#' using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
+#' \url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}
+#'
+#' # basic test
+#' # use tests/testthat/helper-base.R for two_pts and two_map
+#' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
+#'
+#' vermont_dx %>% icd_wide_to_long() -> vt
+#' microbenchmark::microbenchmark(
+#'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
+#'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
+#'   times = 50)
+#' identical(res1, res2)
+#'
+#' @keywords internal
+icd9ComorbidTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+}
+
+#' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
+#' @keywords internal
+icd9ComorbidTaskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidTaskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+}
+
+icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
+    .Call(`_icd_icd9MajMinToCodeOld`, mjr, mnr, isShort)
 }
 
 #' @rdname convert
@@ -236,10 +246,6 @@ icd9_decimal_to_short_cpp <- function(x) {
 #' @keywords internal manip
 icd_get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
-}
-
-icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
-    .Call(`_icd_icd9MajMinToCodeOld`, mjr, mnr, isShort)
 }
 
 #' @name fastIntToString
@@ -327,6 +333,24 @@ icd_long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call(`_icd_icd9LongToWideCpp`, icd9df, visitId, icd9Field, aggregate)
 }
 
+#' Decompose a 'short' ICD code and insert the leading zeroes as needed.
+#'
+#' This should add leading zeroes when there is definitely no ambiguity,
+#' e.g. V1. However V10 should not be altered, because V010 is a different
+#' code. The goal is for this to be faster, but must be correct! Example in
+#' \code{manip.cpp} has the benchmark code.
+#' @keywords internal manip
+icd9AddLeadingZeroesShortSingle <- function(x) {
+    .Call(`_icd_icd9AddLeadingZeroesShortSingle`, x)
+}
+
+#' @describeIn icd9AddLeadingZeroesShortSingle Directly apply
+#' icd9AddLeadingZeroesShortSingle to each code without separating into parts
+#' @keywords internal manip
+icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
+    .Call(`_icd_icd9AddLeadingZeroesDirect`, x, short_code)
+}
+
 #' Simpler add leading zeroes without converting to parts and back
 #' @keywords internal manip
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
@@ -367,22 +391,37 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
 }
 
-#' Decompose a 'short' ICD code and insert the leading zeroes as needed.
+#' Find child codes from vector of ICD-9 codes.
 #'
-#' This should add leading zeroes when there is definitely no ambiguity,
-#' e.g. V1. However V10 should not be altered, because V010 is a different
-#' code. The goal is for this to be faster, but must be correct! Example in
-#' \code{manip.cpp} has the benchmark code.
-#' @keywords internal manip
-icd9AddLeadingZeroesShortSingle <- function(x) {
-    .Call(`_icd_icd9AddLeadingZeroesShortSingle`, x)
+#' Pure C++11 implementation using \code{unordered set} to find children of
+#' given codes
+#' @examples
+#' if (requireNamespace("microbenchmark")) {
+#' microbenchmark::microbenchmark(
+#'   icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
+#'   icd:::icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
+#'   times = 5)
+#'   # C++11 about 15% faster for this data
+#' }
+#' @keywords internal
+icd9ChildrenShort11 <- function(icd9Short, onlyReal) {
+    .Call(`_icd_icd9ChildrenShort11`, icd9Short, onlyReal)
 }
 
-#' @describeIn icd9AddLeadingZeroesShortSingle Directly apply
-#' icd9AddLeadingZeroesShortSingle to each code without separating into parts
-#' @keywords internal manip
-icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
-    .Call(`_icd_icd9AddLeadingZeroesDirect`, x, short_code)
+#' C++ implementation of finding children of short codes
+#' @examples
+#' \dontrun{
+#' library(microbenchmark)
+#' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
+#' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
+#'                icd9ChildrenShortUnordered(c("001", 100:400), T),
+#'                icd9ChildrenShortStd(c("001", 100:400), T),
+#'                times = 10)
+#' }
+#' # un-ordered set much faster, but may still need to sort result
+#' @keywords internal
+icd9ChildrenShortStd <- function(icd9Short, onlyReal) {
+    .Call(`_icd_icd9ChildrenShortStd`, icd9Short, onlyReal)
 }
 
 icd9ExpandMinorStd <- function(mnr, isE) {
@@ -424,39 +463,6 @@ icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
 #' @keywords internal
 icd_in_reference_code <- function(icd, icd_reference, short_code, short_reference = TRUE) {
     .Call(`_icd_icd_in_reference_code`, icd, icd_reference, short_code, short_reference)
-}
-
-#' Find child codes from vector of ICD-9 codes.
-#'
-#' Pure C++11 implementation using \code{unordered set} to find children of
-#' given codes
-#' @examples
-#' if (requireNamespace("microbenchmark")) {
-#' microbenchmark::microbenchmark(
-#'   icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
-#'   icd:::icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
-#'   times = 5)
-#'   # C++11 about 15% faster for this data
-#' }
-#' @keywords internal
-icd9ChildrenShort11 <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShort11`, icd9Short, onlyReal)
-}
-
-#' C++ implementation of finding children of short codes
-#' @examples
-#' \dontrun{
-#' library(microbenchmark)
-#' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
-#' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
-#'                icd9ChildrenShortUnordered(c("001", 100:400), T),
-#'                icd9ChildrenShortStd(c("001", 100:400), T),
-#'                times = 10)
-#' }
-#' # un-ordered set much faster, but may still need to sort result
-#' @keywords internal
-icd9ChildrenShortStd <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShortStd`, icd9Short, onlyReal)
 }
 
 trimLeftCpp <- function(s) {

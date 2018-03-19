@@ -19,24 +19,10 @@
 // [[Rcpp::plugins(openmp)]]
 
 #include <Rcpp.h>
-#include <Rcpp/r/headers.h>                     // for TYPEOF, Rf_install, SEXP
 #include <string>                               // for string
 #include <vector>                               // for vector, operator-
 #include <iterator>
 #include <algorithm>
-#include "Rcpp.h"                               // for wrap
-#include "Rcpp/Dimension.h"                     // for Dimension
-#include "Rcpp/Function.h"                      // for Function, Function_Impl
-#include "Rcpp/api/meat/Dimension.h"            // for Dimension::operator S...
-#include "Rcpp/api/meat/proxy.h"                // for AttributeProxyPolicy:...
-#include "Rcpp/exceptions.h"                    // for stop
-#include "Rcpp/generated/Function__operator.h"  // for Function_Impl::operat...
-#include "Rcpp/generated/Vector__create.h"      // for Vector::create
-#include "Rcpp/generated/grow__pairlist.h"      // for pairlist
-#include "Rcpp/proxy/AttributeProxy.h"          // for AttributeProxyPolicy<...
-#include "Rcpp/proxy/NamesProxy.h"              // for NamesProxyPolicy<>::c...
-#include "Rcpp/vector/Vector.h"                 // for Vector
-#include "Rcpp/vector/instantiation.h"          // for LogicalVector, List
 #include "icd_types.h"                          // for VecVecInt, ComorbidOut
 #include "local.h"                              // for buildMap, buildVisitC...
 #include "config.h"                              // for buildMap, buildVisitC...
@@ -45,15 +31,6 @@
 #include "comorbidSetup.h"
 extern "C" {
 #include "cutil.h"                              // for getRListOrDfElement
-}
-
-// concatenate a vector of vectors
-template <class COCiter, class Oiter>
-void my_concat (COCiter start, COCiter end, Oiter dest) {
-  while (start != end) {
-    dest = std::copy(start->begin(), start->end(), dest);
-    ++start;
-  }
 }
 
 //' @rdname icd_comorbid
@@ -139,132 +116,4 @@ Rcpp::Rcout << "Ready to transpose and return\n";
 Rcpp::LogicalVector transposed_out = t(mat_out);
 valgrindCallgrindStop();
 return transposed_out;
-}
-
-//' Simpler comorbidity assignment
-//'
-//' Re-written without OpenMP initially, but structured more simply, with the motivation of
-//' using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
-//' \url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}
-//'
-//' # basic test
-//' # use tests/testthat/helper-base.R for two_pts and two_map
-//' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
-//'
-//' vermont_dx %>% icd_wide_to_long() -> vt
-//' microbenchmark::microbenchmark(
-//'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
-//'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
-//'   times = 50)
-//' identical(res1, res2)
-//'
-//' @keywords internal
-// [[Rcpp::export]]
-SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
-                          const std::string visitId, const std::string icd9Field,
-                          const int threads = 8, const int chunk_size = 256,
-                          const int omp_chunk_size = 1, bool aggregate = true) {
-  valgrindCallgrindStart(false);
-  VecStr out_row_names; // size is reserved in buildVisitCodesVec
-  VecVecInt vcdb; // size is reserved later
-
-  const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
-  if (TYPEOF(vsexp) != STRSXP) {
-    Rcpp::stop("expecting visit ID in input data frame to be character vector");
-    UNPROTECT(1); // vsexp
-  }
-  UNPROTECT(1); // vsexp not used further
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "build structure of patient data, into vcdb\n";
-#endif
-  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
-
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "build structure of comorbidity map data. This could be cached or memoised somehow\n";
-#endif
-
-  VecVecInt map;
-  buildMap(icd9Mapping, map);
-
-  const VecVecIntSz num_comorbid = map.size();
-  const VecVecIntSz num_visits = vcdb.size();
-
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "num_comorbid = " << num_comorbid << "\n";
-  Rcpp::Rcout << "num_visits = " << num_visits << "\n";
-  Rcpp::Rcout << "look up the comorbidities\n";
-#endif
-  NewOut out(vcdb.size(), NewOutPt(num_comorbid));
-  lookupComorbidByChunkForTaskloop(vcdb, map, out);
-  Rcpp::LogicalMatrix mat_out(num_visits, num_comorbid);
-  for (NewOutIt it = out.begin(); it != out.end(); ++it) {
-
-#ifdef ICD_DEBUG_TRACE
-    printIt(*it);
-    Rcpp::Rcout << "2nd val in vector: " << it->at(1);
-    R_FlushConsole();
-    R_ProcessEvents();
-    R_CheckUserInterrupt();
-    Rcpp::Rcout << " Injecting out data into matrix:\n";
-    R_FlushConsole();
-    R_ProcessEvents();
-    R_CheckUserInterrupt();
-#endif
-    NewOutPt out_one_pt;
-    for (VecVecIntSz cmb = 0; cmb != num_comorbid; ++cmb) {
-      out_one_pt = *it;
-#ifdef ICD_DEBUG_TRACE
-      Rcpp::Rcout << "first vector has length " << out_one_pt.size() <<
-        " - ptid = " << std::distance(out.begin(), it) <<
-          " - comorbidity # " << cmb <<
-            " val = " << out_one_pt.at(cmb) << "\n";
-#endif
-#ifdef ICD_DEBUG
-      mat_out(std::distance(out.begin(), it), cmb) = out_one_pt.at(cmb);
-#else
-      mat_out(std::distance(out.begin(), it), cmb) = out_one_pt[cmb];
-#endif
-    }
-  }
-  mat_out.attr("dim") = Rcpp::Dimension((int) num_visits, (int) num_comorbid); // set dimensions in usual column major order
-  mat_out.attr("dimnames") = Rcpp::List::create(out_row_names, icd9Mapping.names());
-  valgrindCallgrindStop();
-  return mat_out;
-}
-
-//' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
-//' @keywords internal
-// [[Rcpp::export]]
-SEXP icd9ComorbidTaskloop2(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
-                           const std::string visitId, const std::string icd9Field,
-                           const int threads = 8, const int chunk_size = 256,
-                           const int omp_chunk_size = 1, bool aggregate = true) {
-
-  valgrindCallgrindStart(false);
-  VecStr out_row_names; // size is reserved in buildVisitCodesVec
-  VecVecInt vcdb; // size is reserved later
-
-  const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
-  if (TYPEOF(vsexp) != STRSXP) {
-    Rcpp::stop("expecting visit ID in input data frame to be character vector");
-    UNPROTECT(1); // vsexp
-  }
-  UNPROTECT(1); // vsexp not used further
-  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
-
-  VecVecInt map;
-  buildMap(icd9Mapping, map);
-
-  const VecVecIntSz num_comorbid = map.size();
-  const VecVecIntSz num_visits = vcdb.size();
-  NewOut out(vcdb.size(), NewOutPt(num_comorbid));
-  lookupComorbidByChunkForTaskloop(vcdb, map, out);
-
-  Rcpp::IntegerMatrix mat_out(num_visits, num_comorbid);
-  my_concat(out.begin(), out.end(), mat_out.begin()); // write out row major
-  mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in usual column major order
-  mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(), out_row_names);
-  Rcpp::IntegerMatrix transposed_out = Rcpp::transpose(mat_out); // doesn't look efficient...
-  valgrindCallgrindStop();
-  return transposed_out;
 }

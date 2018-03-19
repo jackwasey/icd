@@ -275,7 +275,7 @@ VecStr icd9SortCpp(VecStr x) {
 }
 
 // add one because R indexes from 1, not 0
-std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) { return p.second + 1; }
+inline std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) { return p.second + 1; }
 
 // [[Rcpp::export(icd9_order_cpp)]]
 std::vector<std::size_t> icd9OrderCpp(VecStr x) {
