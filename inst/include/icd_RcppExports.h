@@ -250,11 +250,11 @@ namespace icd {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
-    inline void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, VecInt& out) {
+    inline void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, ComorbidOut& out) {
         typedef SEXP(*Ptr_lookupComorbidByChunkFor)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_lookupComorbidByChunkFor p_lookupComorbidByChunkFor = NULL;
         if (p_lookupComorbidByChunkFor == NULL) {
-            validateSignature("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,VecInt&)");
+            validateSignature("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
             p_lookupComorbidByChunkFor = (Ptr_lookupComorbidByChunkFor)R_GetCCallable("icd", "_icd_lookupComorbidByChunkFor");
         }
         RObject rcpp_result_gen;

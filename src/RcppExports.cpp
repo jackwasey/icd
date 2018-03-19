@@ -406,14 +406,14 @@ RcppExport SEXP _icd_icd9ComorbidTaskloop(SEXP icd9dfSEXP, SEXP icd9MappingSEXP,
     return rcpp_result_gen;
 }
 // lookupComorbidByChunkFor
-void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, VecInt& out);
+void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, ComorbidOut& out);
 static SEXP _icd_lookupComorbidByChunkFor_try(SEXP vcdbSEXP, SEXP mapSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP, SEXP outSEXP) {
 BEGIN_RCPP
     Rcpp::traits::input_parameter< const VecVecInt& >::type vcdb(vcdbSEXP);
     Rcpp::traits::input_parameter< const VecVecInt& >::type map(mapSEXP);
     Rcpp::traits::input_parameter< const VecVecIntSz >::type chunkSize(chunkSizeSEXP);
     Rcpp::traits::input_parameter< const VecVecIntSz >::type ompChunkSize(ompChunkSizeSEXP);
-    Rcpp::traits::input_parameter< VecInt& >::type out(outSEXP);
+    Rcpp::traits::input_parameter< ComorbidOut& >::type out(outSEXP);
     lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
     return R_NilValue;
 END_RCPP_RETURN_ERROR
@@ -2045,7 +2045,7 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*attr_short_diag)(Rcpp::RObject&,bool)");
         signatures.insert("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
         signatures.insert("SEXP(*icd9ComorbidTaskloop)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
-        signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,VecInt&)");
+        signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
         signatures.insert("void(*lookupComorbidByChunkForTaskloop)(const VecVecInt&,const VecVecInt&,NewOut&)");
         signatures.insert("Rcpp::LogicalMatrix(*icd10_comorbid_parent_search_cpp)(Rcpp::DataFrame,Rcpp::List,std::string,std::string)");
         signatures.insert("CV(*icd9MajMinToCodeOld)(CV,CV,bool)");

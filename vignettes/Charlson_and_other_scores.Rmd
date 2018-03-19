@@ -76,5 +76,6 @@ Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD cod
 The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.
 
 ```
-vermont_dx %>% icd_wide_to_long %>% icd_van_walraven %>% head(25)
+vermont_dx %>% icd_wide_to_long %>% icd_van_walraven %>% head(25) -> vw_scores
+vw_scores
 ```
