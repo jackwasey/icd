@@ -1,20 +1,22 @@
 #include <Rcpp.h>
-#include <RcppEigen.h>
+#ifdef ICD_EIGEN
+
+#include <RcppEigen.h> // also add LinkingTo element in DESCRIPTION to enable
 #include <Eigen/SparseCore>
-// [[Rcpp::depends(RcppEigen)]]
+
 // [[Rcpp::interfaces(r, cpp)]]
 #include "comorbidCommon.h"
 #include "comorbidSetup.h"
 #include <Rcpp.h>
 #include <algorithm>                   // for binary_search, copy
 #include <vector>                      // for vector, vector<>::const_iterator
-#include "Rcpp/iostream/Rstreambuf.h"  // for Rcout
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
 #include "local.h"                     // for ICD_OPENMP
 #include "config.h"                     // for valgrind, CXX11 etc
 #include "util.h"                     // for debug_parallel
 
 using namespace Rcpp;
+
 
 // use row-major sparse matrix - row major because easier to insert into Eigen
 // sparse matrix, and we discover comorbidities one patient at a time, i.e. row
@@ -63,7 +65,7 @@ Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbidSparseOmp(const VecVecI
   VecInt::const_iterator code_it;
   std::vector<Triplet> vecTrip;
   vecTrip.reserve(vcdb.size());
-#pragma omp taskloop shared(Rcpp::Rcout, out) //grainsize (256)
+#pragma omp taskloop shared(Rcpp::Rcout) //grainsize (256)
   for (VecVecIntSz vis_i = 0; vis_i < vcdb.size(); ++vis_i) {
     const VecInt& codes = vcdb[vis_i]; // these are the ICD-9 codes for the current visitid
     const VecIntIt cbegin = codes.begin();
@@ -130,27 +132,31 @@ T my_len( const T& x){
 //' @description
 //' The problem is that the matrices could be huge: the patient-icd matrix would
 //' be millions of patient rows, and ~15000 columns for all AHRQ comorbidities.
-//'
+//' @details
 //' Several ways of reducing the problem: firstly, as with existing code, we can
 //' drop any ICD codes from the map which are not in the patient data. With many
 //' patients, this will be less effective as the long tail becomes apparent.
 //' However, with the (small) Vermont data, we see ~15,000 codes being reduced to
 //' 339.
-//'
-//' \section{Sparse matrices} Using sparse matrices is another solution. Building
+//' @section Sparse matrices
+//' Using sparse matrices is another solution. Building
 //' the initial matrix may become a significant part of the calculation, but once
 //' done, the solution could be a simple matrix multiplication, which is
 //' potentially highly optimized (Eigen, BLAS, GPU, etc.)
-//'
-//' \section{Eigen} Eigen has parallel (non-GPU) optimized sparse row-major *
+//' @section Eigen
+//' Eigen has parallel (non-GPU) optimized sparse row-major *
 //' dense matrix. Patients-ICD matrix must be the row-major sparse one, so the
 //' dense matrix is then the comorbidity map
-//'
 //' @examples
 //' # show how many discrete ICD codes there are in the AHRQ map, before reducing
 //' # to the number which actually appear in a group of patient visits
 //' sapply(icd::icd9_map_ahrq, length) %>% sum
+//' icd_comorbid_ahrq(vermont_dx %>% icd_wide_to_long, comorbid_fun = icd:::icd9ComorbidShortCpp)
+//' \dontrun{
+//' # remove _alt line in .Rbuildignore, then these will be available
 //' icd_comorbid_ahrq(vermont_dx %>% icd_wide_to_long, comorbid_fun = icd:::icd9ComorbidMatMul)
+//' icd_comorbid_ahrq(vermont_dx %>% icd_wide_to_long, comorbid_fun = icd:::icd9ComorbidSparseOmp)
+//' }
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidMatMul(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
@@ -246,3 +252,5 @@ void buildVisitCodesVecSparse(const SEXP& icd9df,
   } // end loop through all visit-code input data
   UNPROTECT(2);
 }
+
+#endif // ICD_EIGEN

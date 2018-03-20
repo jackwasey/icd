@@ -5,7 +5,6 @@
 #define RCPP_icd_RCPPEXPORTS_H_GEN_
 
 #include "icd_types.h"
-#include <RcppEigen.h>
 #include <Rcpp.h>
 
 namespace icd {
@@ -267,82 +266,6 @@ namespace icd {
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::LogicalMatrix >(rcpp_result_gen);
-    }
-
-    inline Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbidSparse(const VecVecInt& vcdb, const VecVecInt& map) {
-        typedef SEXP(*Ptr_lookupComorbidSparse)(SEXP,SEXP);
-        static Ptr_lookupComorbidSparse p_lookupComorbidSparse = NULL;
-        if (p_lookupComorbidSparse == NULL) {
-            validateSignature("Eigen::SparseMatrix<char, Eigen::RowMajor>(*lookupComorbidSparse)(const VecVecInt&,const VecVecInt&)");
-            p_lookupComorbidSparse = (Ptr_lookupComorbidSparse)R_GetCCallable("icd", "_icd_lookupComorbidSparse");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_lookupComorbidSparse(Shield<SEXP>(Rcpp::wrap(vcdb)), Shield<SEXP>(Rcpp::wrap(map)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Eigen::SparseMatrix<char, Eigen::RowMajor> >(rcpp_result_gen);
-    }
-
-    inline SEXP icd9ComorbidSparse(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
-        typedef SEXP(*Ptr_icd9ComorbidSparse)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9ComorbidSparse p_icd9ComorbidSparse = NULL;
-        if (p_icd9ComorbidSparse == NULL) {
-            validateSignature("SEXP(*icd9ComorbidSparse)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
-            p_icd9ComorbidSparse = (Ptr_icd9ComorbidSparse)R_GetCCallable("icd", "_icd_icd9ComorbidSparse");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ComorbidSparse(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)), Shield<SEXP>(Rcpp::wrap(threads)), Shield<SEXP>(Rcpp::wrap(chunk_size)), Shield<SEXP>(Rcpp::wrap(omp_chunk_size)), Shield<SEXP>(Rcpp::wrap(aggregate)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<SEXP >(rcpp_result_gen);
-    }
-
-    inline SEXP icd9ComorbidMatMul(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
-        typedef SEXP(*Ptr_icd9ComorbidMatMul)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9ComorbidMatMul p_icd9ComorbidMatMul = NULL;
-        if (p_icd9ComorbidMatMul == NULL) {
-            validateSignature("SEXP(*icd9ComorbidMatMul)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
-            p_icd9ComorbidMatMul = (Ptr_icd9ComorbidMatMul)R_GetCCallable("icd", "_icd_icd9ComorbidMatMul");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ComorbidMatMul(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)), Shield<SEXP>(Rcpp::wrap(threads)), Shield<SEXP>(Rcpp::wrap(chunk_size)), Shield<SEXP>(Rcpp::wrap(omp_chunk_size)), Shield<SEXP>(Rcpp::wrap(aggregate)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<SEXP >(rcpp_result_gen);
-    }
-
-    inline SEXP icd9ComorbidSparseOmp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads = 8, const int chunk_size = 256, const int omp_chunk_size = 1, bool aggregate = true) {
-        typedef SEXP(*Ptr_icd9ComorbidSparseOmp)(SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP,SEXP);
-        static Ptr_icd9ComorbidSparseOmp p_icd9ComorbidSparseOmp = NULL;
-        if (p_icd9ComorbidSparseOmp == NULL) {
-            validateSignature("SEXP(*icd9ComorbidSparseOmp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int,bool)");
-            p_icd9ComorbidSparseOmp = (Ptr_icd9ComorbidSparseOmp)R_GetCCallable("icd", "_icd_icd9ComorbidSparseOmp");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9ComorbidSparseOmp(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)), Shield<SEXP>(Rcpp::wrap(threads)), Shield<SEXP>(Rcpp::wrap(chunk_size)), Shield<SEXP>(Rcpp::wrap(omp_chunk_size)), Shield<SEXP>(Rcpp::wrap(aggregate)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
     inline void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb, const VecVecInt& map, NewOut& out) {

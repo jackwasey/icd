@@ -2,11 +2,12 @@
 aclocal\.m4$
 .*_alt\.[Rr]$
 .*_alt\.cpp$
+.*_alt\.o$
 ^appveyor\.yml$
 \.aspell$
 autom4te\.cache$
 .*benchmark.*
-^vignettes\/\.build\.timestamp$
+(^vignettes\/)?\.build\.timestamp$
 .*_cache.*
 callgrind\.out
 ^config\.log$
