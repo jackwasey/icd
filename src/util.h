@@ -51,4 +51,13 @@ int valgrindCallgrindStop();
 bool icd9CompareStrings(std::string a, std::string b);
 std::vector<std::size_t> icd9OrderCpp(VecStr x);
 
+// concatenate a vector of vectors
+template <class COCiter, class Oiter>
+void my_concat (COCiter start, COCiter end, Oiter dest) {
+  while (start != end) {
+    dest = std::copy(start->begin(), start->end(), dest);
+    ++start;
+  }
+}
+
 #endif /* UTIL_H_ */

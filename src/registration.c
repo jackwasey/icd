@@ -40,6 +40,7 @@ extern SEXP _icd_icd9ChildrenShortUnordered(SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidMatMul(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidShortCpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidSparse(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_icd9ComorbidSparseOmp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidTaskloop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidTaskloop2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToPartsCpp(SEXP, SEXP);
@@ -114,6 +115,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ComorbidMatMul",                 (DL_FUNC) &_icd_icd9ComorbidMatMul,                 8},
     {"_icd_icd9ComorbidShortCpp",               (DL_FUNC) &_icd_icd9ComorbidShortCpp,               8},
     {"_icd_icd9ComorbidSparse",                 (DL_FUNC) &_icd_icd9ComorbidSparse,                 8},
+    {"_icd_icd9ComorbidSparseOmp",              (DL_FUNC) &_icd_icd9ComorbidSparseOmp,              8},
     {"_icd_icd9ComorbidTaskloop",               (DL_FUNC) &_icd_icd9ComorbidTaskloop,               8},
     {"_icd_icd9ComorbidTaskloop2",              (DL_FUNC) &_icd_icd9ComorbidTaskloop2,              8},
     {"_icd_icd9DecimalToPartsCpp",              (DL_FUNC) &_icd_icd9DecimalToPartsCpp,              2},

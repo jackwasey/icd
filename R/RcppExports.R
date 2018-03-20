@@ -105,47 +105,10 @@ icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, thread
     .Call(`_icd_icd9ComorbidShortCpp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
-#' Simpler comorbidity assignment
-#'
-#' Re-written without OpenMP initially, but structured more simply, with the motivation of
-#' using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
-#' \url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}
-#'
-#' # basic test
-#' # use tests/testthat/helper-base.R for two_pts and two_map
-#' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
-#'
-#' vermont_dx %>% icd_wide_to_long() -> vt
-#' microbenchmark::microbenchmark(
-#'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
-#'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
-#'   times = 50)
-#' identical(res1, res2)
-#'
-#' @keywords internal
-icd9ComorbidTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9ComorbidTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
-}
-
-#' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
-#' @keywords internal
-icd9ComorbidTaskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9ComorbidTaskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
-}
-
 #' core search for ICD code in a map
 #' @keywords internal
 lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {
     invisible(.Call(`_icd_lookupComorbidByChunkFor`, vcdb, map, chunkSize, ompChunkSize, out))
-}
-
-#' alternate comorbidity search
-#'
-#' alternate version using much simplified with Openmp taskloop, only in OMP4.5
-#'
-#' @keywords internal
-lookupComorbidByChunkForTaskloop <- function(vcdb, map, out) {
-    invisible(.Call(`_icd_lookupComorbidByChunkForTaskloop`, vcdb, map, out))
 }
 
 #' Internal function to find ICD-10 parents
@@ -206,6 +169,49 @@ icd9ComorbidSparse <- function(icd9df, icd9Mapping, visitId, icd9Field, threads 
 #' @keywords internal
 icd9ComorbidMatMul <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
     .Call(`_icd_icd9ComorbidMatMul`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+}
+
+#' @describeIn icd9ComorbidTaskloop Sparse comorbidity results with Eigen
+#' @keywords internal
+icd9ComorbidSparseOmp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidSparseOmp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+}
+
+#' alternate comorbidity search
+#'
+#' alternate version using much simplified with Openmp taskloop, only in OMP4.5
+#'
+#' @keywords internal
+lookupComorbidByChunkForTaskloop <- function(vcdb, map, out) {
+    invisible(.Call(`_icd_lookupComorbidByChunkForTaskloop`, vcdb, map, out))
+}
+
+#' Simpler comorbidity assignment
+#'
+#' Re-written without OpenMP initially, but structured more simply, with the motivation of
+#' using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
+#' \url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}
+#'
+#' # basic test
+#' # use tests/testthat/helper-base.R for two_pts and two_map
+#' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
+#'
+#' vermont_dx %>% icd_wide_to_long() -> vt
+#' microbenchmark::microbenchmark(
+#'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
+#'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
+#'   times = 50)
+#' identical(res1, res2)
+#'
+#' @keywords internal
+icd9ComorbidTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+}
+
+#' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
+#' @keywords internal
+icd9ComorbidTaskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9ComorbidTaskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
 icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
