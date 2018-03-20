@@ -43,7 +43,6 @@
 #include "RcppCommon.h"                     // for Proxy_Iterator
 #include "appendMinor.h"                    // for icd9MajMinToShort, icd9Ma...
 #include "convert.h"                        // for icd9DecimalToShort, icd9S...
-#include "convert_alt.h"                    // for icd9ShortToPartsCppStd
 #include "icd_types.h"                      // for CV, VecStr, Str
 #include "is.h"                             // for icd9IsASingleE
 #include "local.h"                          // for icd_set
@@ -250,45 +249,6 @@ CV icd9ChildrenShortUnordered(CV icd9Short, bool onlyReal) {
   CV rcppOut = Rcpp::wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
-}
-
-// [[Rcpp::export]]
-VecStr icd9ChildrenShortNoNaUnordered(const VecStr& icd9Short, const bool onlyReal) {
-  icd_set out; // we are never going to put NAs in the output, so use std structure
-  // this is a slower function, can the output set be predefined in size?
-  VecStr mjr(icd9Short.size());
-  VecStr mnr(icd9Short.size());
-  if (icd9Short.size() != 0) {
-    icd9ShortToPartsCppStd(icd9Short, "", mjr, mnr);
-
-    VecStr::iterator itmjr = mjr.begin();
-    VecStr::iterator itmnr = mnr.begin();
-    for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-      const VecStr& newminors = icd9ExpandMinorStd(*itmnr, icd9IsASingleE((*itmjr).c_str()));
-      VecStr newshort = icd9MajMinToShortSingleStd(*itmjr, newminors);
-      out.insert(newshort.begin(), newshort.end());
-    }
-    if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
-      Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
-      icd_set out_real;
-      VecStr tmp = Rcpp::as<VecStr >(
-        icd9Hierarchy["code"]);
-      // 'reals' is the set of majors, intermediate and leaf codes.
-      icd_set reals(tmp.begin(), tmp.end());
-
-      for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
-        if (reals.find(*j) != reals.end())
-          out_real.insert(*j);
-      }
-      out = out_real;
-    }
-  } // input length != 0
-  // TODO in R wrapper: rcppOut.attr("icd_short_diag") = true;
-
-  // sort from unordered set into a vector
-  VecStr out_vec(out.begin(), out.end());
-  return out_vec;
 }
 
 // [[Rcpp::export]]

@@ -24,9 +24,9 @@ platform:
 before_build:
   - ls -aR
   - rm .Rinstignore  # do install everything for testing
-  - sed -i -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
-  - sed -i -e '/\.covrignore/d' .Rbuildignore
-  - sed -i -e '/\.lintr/d' .Rbuildignore
+  - sed -i '' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
+  - sed -i '' -e '/\.covrignore/d' .Rbuildignore
+  - sed -i '' -e '/\.lintr/d' .Rbuildignore
   - Rscript -e "install.packages('Rcpp', repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
 
 build_script:

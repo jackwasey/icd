@@ -34,7 +34,7 @@ typedef Eigen::SparseMatrix<char, Eigen::RowMajor> PtsSparse;
 //' AHRQ comorbidity are positive, so under 10%.
 //' @keywords internal
 // [[Rcpp::export]]
-Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbidSparse(const VecVecInt& vcdb, const VecVecInt& map) {
+Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbid_alt_Sparse(const VecVecInt& vcdb, const VecVecInt& map) {
   const VecVecIntSz num_comorbid = map.size();
   VecVecIntSz vis_i;
   VecInt::const_iterator code_it;
@@ -60,7 +60,7 @@ Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbidSparse(const VecVecInt&
   return out;
   }
 
-Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbidSparseOmp(const VecVecInt& vcdb, const VecVecInt& map) {
+Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbid_alt_SparseOmp(const VecVecInt& vcdb, const VecVecInt& map) {
   const VecVecIntSz num_comorbid = map.size();
   VecInt::const_iterator code_it;
   std::vector<Triplet> vecTrip;
@@ -89,7 +89,7 @@ Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbidSparseOmp(const VecVecI
 //' @describeIn icd9ComorbidTaskloop Sparse comorbidity results with Eigen
 //' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9ComorbidSparse(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+SEXP icd9Comorbid_alt_Sparse(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                         const std::string visitId, const std::string icd9Field,
                         const int threads = 8, const int chunk_size = 256,
                         const int omp_chunk_size = 1, bool aggregate = true) {
@@ -159,7 +159,7 @@ T my_len( const T& x){
 //' }
 //' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9ComorbidMatMul(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+SEXP icd9Comorbid_alt_MatMul(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                         const std::string visitId, const std::string icd9Field,
                         const int threads = 8, const int chunk_size = 256,
                         const int omp_chunk_size = 1, bool aggregate = true) {
@@ -194,7 +194,7 @@ SEXP icd9ComorbidMatMul(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 //' @describeIn icd9ComorbidTaskloop Sparse comorbidity results with Eigen
 //' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9ComorbidSparseOmp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+SEXP icd9Comorbid_alt_SparseOmp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                            const std::string visitId, const std::string icd9Field,
                            const int threads = 8, const int chunk_size = 256,
                            const int omp_chunk_size = 1, bool aggregate = true) {

@@ -23,7 +23,7 @@
 #include "Rcpp/String.h"  // for String
 #include "icd_types.h"    // for CV
 
-Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x);
-CV icd9AddLeadingZeroesDirect(CV x, bool short_code);
+Rcpp::String icd9AddLeadingZeroes_alt_ShortSingle(Rcpp::String x);
+CV icd9AddLeadingZeroes_alt_Direct(CV x, bool short_code);
 
 #endif /* MANIP_ALT_H_ */

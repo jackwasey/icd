@@ -43,6 +43,9 @@ Where reasonable, this is guessed from the input data.}
 \item{short_map}{Same as short, but applied to \code{map} instead of the data
 frame of ICD codes, \code{x}. All the codes in a mapping should be of the
 same type, i.e. short or decimal.}
+
+\item{comorbid_fun}{function i.e. the function (not character string) to be
+called to do the comorbidity calculation}
 }
 \description{
 This common comorbidity calculation code does not depend on ICD type. There
@@ -52,8 +55,8 @@ reduce the problem by only looking up comorbidities for codes which actually
 appear in the data set.
 }
 \details{
-1. get list of ICD codes in the patient data, e.g. Vermont data has
-1825, but e.g. only 336 which appear in AHRQ map.
+1. get list of ICD codes in the patient data, e.g. Vermont data has 1825, but
+e.g. only 336 which appear in AHRQ map.
 
 2. make the patient data ICD codes a factor (if not already)
 

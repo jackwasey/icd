@@ -222,8 +222,8 @@ icd_get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }
 
-icd9MajMinToCodeOld <- function(mjr, mnr, isShort) {
-    .Call(`_icd_icd9MajMinToCodeOld`, mjr, mnr, isShort)
+icd9MajMinToCode_alt_Old <- function(mjr, mnr, isShort) {
+    .Call(`_icd_icd9MajMinToCode_alt_Old`, mjr, mnr, isShort)
 }
 
 #' @name fastIntToString
@@ -358,15 +358,15 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
 #' code. The goal is for this to be faster, but must be correct! Example in
 #' \code{manip.cpp} has the benchmark code.
 #' @keywords internal manip
-icd9AddLeadingZeroesShortSingle <- function(x) {
-    .Call(`_icd_icd9AddLeadingZeroesShortSingle`, x)
+icd9AddLeadingZeroes_alt_ShortSingle <- function(x) {
+    .Call(`_icd_icd9AddLeadingZeroes_alt_ShortSingle`, x)
 }
 
-#' @describeIn icd9AddLeadingZeroesShortSingle Directly apply
+#' @describeIn icd9AddLeadingZeroes_alt_ShortSingle Directly apply
 #' icd9AddLeadingZeroesShortSingle to each code without separating into parts
 #' @keywords internal manip
 icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
-    .Call(`_icd_icd9AddLeadingZeroesDirect`, x, short_code)
+    .Call(`_icd_icd9AddLeadingZeroes_alt_Direct`, x, short_code)
 }
 
 icd9ExpandMinorStd <- function(mnr, isE) {
@@ -383,10 +383,6 @@ icd9ChildrenShort <- function(icd9Short, onlyReal) {
 
 icd9ChildrenShortUnordered <- function(icd9Short, onlyReal) {
     .Call(`_icd_icd9ChildrenShortUnordered`, icd9Short, onlyReal)
-}
-
-icd9ChildrenShortNoNaUnordered <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShortNoNaUnordered`, icd9Short, onlyReal)
 }
 
 icd9ChildrenDecimalCpp <- function(icd9Decimal, onlyReal) {
@@ -419,14 +415,14 @@ icd_in_reference_code <- function(icd, icd_reference, short_code, short_referenc
 #' if (requireNamespace("microbenchmark")) {
 #'   microbenchmark::microbenchmark(
 #'     icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
-#'     icd:::icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
+#'     icd:::icd9ChildrenShort_alt11(c("001", 100:500), onlyReal = TRUE),
 #'     times = 5)
 #'     # C++11 about 15% faster for this data
 #' }
 #' }
 #' @keywords internal
-icd9ChildrenShort11 <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShort11`, icd9Short, onlyReal)
+icd9ChildrenShort_alt_11 <- function(icd9Short, onlyReal) {
+    .Call(`_icd_icd9ChildrenShort_alt_11`, icd9Short, onlyReal)
 }
 
 #' C++ implementation of finding children of short codes
@@ -441,8 +437,12 @@ icd9ChildrenShort11 <- function(icd9Short, onlyReal) {
 #' }
 #' # un-ordered set much faster, but may still need to sort result
 #' @keywords internal
-icd9ChildrenShortStd <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShortStd`, icd9Short, onlyReal)
+icd9ChildrenShort_alt_Std <- function(icd9Short, onlyReal) {
+    .Call(`_icd_icd9ChildrenShort_alt_Std`, icd9Short, onlyReal)
+}
+
+icd9ChildrenShortNoNaUnordered <- function(icd9Short, onlyReal) {
+    .Call(`_icd_icd9ChildrenShortNoNaUnordered`, icd9Short, onlyReal)
 }
 
 trimLeftCpp <- function(s) {

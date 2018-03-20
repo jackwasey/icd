@@ -267,8 +267,8 @@ icd9_comorbid <- function(x,
 #' reduce the problem by only looking up comorbidities for codes which actually
 #' appear in the data set.
 #'
-#' 1. get list of ICD codes in the patient data, e.g. Vermont data has
-#' 1825, but e.g. only 336 which appear in AHRQ map.
+#' 1. get list of ICD codes in the patient data, e.g. Vermont data has 1825, but
+#' e.g. only 336 which appear in AHRQ map.
 #'
 #' 2. make the patient data ICD codes a factor (if not already)
 #'
@@ -287,7 +287,8 @@ icd9_comorbid <- function(x,
 #' 5. call the C++ making sure the map and patient icd codes share the same
 #' factor levels
 #' @inheritParams icd9_comorbid
-#' @param comorbid_fun
+#' @param comorbid_fun function i.e. the function (not character string) to be
+#'   called to do the comorbidity calculation
 #' @keywords internal
 icd_comorbid_common <- function(x,
                                 map,
