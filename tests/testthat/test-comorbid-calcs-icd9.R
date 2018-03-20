@@ -21,7 +21,7 @@ test_that("ahrq comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
             res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                       abbrev_names = FALSE,
-                                      apply_hierarchy = TRUE, return_df = TRUE)
+                                      hierarchy = TRUE, return_df = TRUE)
             expect_equal(dim(res), c(1, 30))
             expect_true(setequal(c("visit_id", icd_names_ahrq), names(res)))
             # should not have dm and dmcx, etc
@@ -40,6 +40,16 @@ test_that("ahrq comorbidity mapping is applied correctly,
             expect_false(res[1, "Diabetes, uncomplicated"])
             expect_false(res[1, "Solid tumor without metastasis"])
           })
+
+test_that("empty data gives back same empty data with or without hierarchy", {
+  expect_identical(icd9_comorbid_ahrq(empty_pts, hierarchy = FALSE),
+                   empty_ahrq_mat)
+  expect_identical(dim(icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE)),
+                   dim(empty_ahrq_mat_heir))
+  expect_identical(icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE),
+                   empty_ahrq_mat_heir)
+  # TODO: same for other comorbidity mappings
+})
 
 test_that("elix comorbidity mapping is applied correctly,
           all comorbidities in one patient, no abbrev, hier", {
@@ -302,11 +312,9 @@ test_that("ahrq comorbidity mapping is applied correctly,
           })
 
 test_that("get Charlson/Deyo comorbidities for a single patient", {
-  mydf <- data.frame(visit_id = c("a"),
-                     icd9 = c("044.9"),
-                     stringsAsFactors = FALSE)
+
   expect_equal(
-    icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE),
+    icd9_comorbid_quan_deyo(one_pt_one_icd9, short_code = FALSE, return_df = TRUE),
     structure(
       list(
         visit_id = "a",
@@ -322,11 +330,8 @@ test_that("get Charlson/Deyo comorbidities for a single patient", {
       class = "data.frame")
   )
 
-  mydf <- data.frame(visit_id = c("a", "a"),
-                     icd9 = c("044.9", "044.9"),
-                     stringsAsFactors = FALSE)
-  expect_error(
-    icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE), NA)
+  expect_error( # why?
+    icd9_comorbid_quan_deyo(one_pt_two_icd9, short_code = FALSE, return_df = TRUE), NA)
 
   mydf <- data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93"))
   expect_error(

@@ -26,6 +26,21 @@ random_sample_ahrq_codes <- sample(unname(c(icd9_map_ahrq, recursive = TRUE)),
                                    replace = TRUE, size = n)
 few_icd9_codes <- c("27801", "7208", "25001", "34400", "4011", "4011")
 
+empty_pts <- data.frame(
+  visit_id = character(0),
+  icd9 = character(0),
+  icd10 = character(0),
+  poa = character(0)
+)
+
+empty_ahrq_mat <- matrix(nrow = 0, ncol = length(icd9_map_ahrq),
+                         dimnames = list(character(0), names(icd9_map_ahrq)))
+empty_ahrq_mat_heir <- matrix(nrow = 0, ncol = length(icd9_map_ahrq),
+                         dimnames = list(character(0), names(icd9_map_ahrq)))
+# according to https://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp
+# diabetes with complications is NOT foldeded into one new category, just hypertension.
+empty_ahrq_mat_heir <- empty_ahrq_mat_heir[, !colnames(empty_ahrq_mat_heir) %in% c("HTNcx")]
+
 simple_pts <- data.frame(
   visit_id = c(1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = few_icd9_codes,
@@ -133,6 +148,15 @@ othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
 one_of_each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
                  "390.00", "518", "525", "581", "631", "700", "720", "759.99",
                  "765", "780.95", "800", "V02.34", "E900.4")
+
+# one icd9 patient
+one_pt_one_icd9 <- data.frame(visit_id = c("a"),
+                              icd9 = c("044.9"),
+                              stringsAsFactors = FALSE)
+
+one_pt_two_icd9 <- data.frame(visit_id = c("a", "a"),
+                              icd9 = c("044.9", "044.9"),
+                              stringsAsFactors = FALSE)
 
 # two items per map, two codes per item, two codes for two visits
 two_pts <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),

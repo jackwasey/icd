@@ -322,10 +322,29 @@ icd_comorbid_common <- function(x,
   visit_was_factor <- is.factor(x[[visit_name]])
 
   if (visit_was_factor)
-    iv_levels <- levels(x[[visit_name]])
+    iv_levels <- levels(x[[visit_name]]) # maybe superfluous as we rebuild at end?
 
-  # this may be the slowest step (again, if needed: many will have character
-  # IDs already)
+  if (nrow(x) == 0) {
+    empty_mat_out <- matrix(nrow = 0,
+                            ncol = length(map),
+                            dimnames = list(character(0), names(map)))
+    if (return_df) {
+      if (visit_was_factor)
+        rownm <- factor(character(0), levels = iv_levels)
+      else
+        rownm <- character(0)
+      df_out <- cbind(rownm, as.data.frame(empty_mat_out), stringsAsFactors = visit_was_factor)
+      names(df_out)[1] <- visit_name
+      rownames(df_out) <- NULL
+      return(df_out)
+    } else {
+      return(empty_mat_out)
+    }
+  }
+
+  # may be slow for big data. `rle` might be quicker if we know that
+  # patient-visit rows are always contiguous.
+  uniq_visits <- unique(x[[visit_name]])
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
 
   # start with a factor for the icd codes in x, recode (and drop superfluous)
@@ -339,11 +358,19 @@ icd_comorbid_common <- function(x,
   # Internally, the \code{sort} is slow. 'fastmatch' inside factor creation
   # would speed up the next step but is unstable, and this is not a bottleneck
   # anyway.
+  fac <- factor(x[[icd_name]], levels = relevant_codes)
+  x[[icd_name]] <- fac
+  # get the visits where there is at least one code which is not in comorbidity
+  # map. This is the inverse of all the visits with codes with at least one non-NA value.
+  vtmp <- aggregate(
+    x[[icd_name]],
+    by = list(visit_name = x[[visit_name]]),
+    simplify = TRUE,
+    FUN = function(y) all(is.na(y))
+  )
+  visit_not_comorbid <- vtmp[vtmp$x, "visit_name"]
 
-  f <- factor(x[[icd_name]], levels = relevant_codes)
-  x[[icd_name]] <- f
-  visit_not_comorbid <- x[is.na(f), visit_name]
-  x <- x[!is.na(f), ]
+  x <- x[!is.na(fac), ]
 
   # again, R is very fast at creating factors from a known set of levels. Base
   # `factor` doesn't sort the levels if the levels are given
@@ -354,20 +381,23 @@ icd_comorbid_common <- function(x,
 
   # We can now do pure integer matching for icd9 codes. The only string manip
   # becomes (optionally) defactoring the visit_name for the matrix row names.
-
-  mat <- comorbid_fun(icd9df = x, icd9Mapping = map, visitId = visit_name,
-                      icd9Field = icd_name,
-                      threads = getOption("icd.threads", getOmpCores()),
-                      chunk_size = getOption("icd.chunk_size", 256L),
-                      omp_chunk_size = getOption("icd.omp_chunk_size", 1L),
-                      aggregate = TRUE) # nolint
+  mat_comorbid <- comorbid_fun(icd9df = x, icd9Mapping = map, visitId = visit_name,
+                               icd9Field = icd_name,
+                               threads = getOption("icd.threads", getOmpCores()),
+                               chunk_size = getOption("icd.chunk_size", 256L),
+                               omp_chunk_size = getOption("icd.omp_chunk_size", 1L),
+                               aggregate = TRUE) # nolint
 
   # replace dropped rows (which therefore have no comorbidities)
   mat_not_comorbid <- matrix(data = FALSE,
                              nrow = length(visit_not_comorbid),
-                             ncol = ncol(mat),
-                             dimnames = visit_not_comorbid)
-  mat <- rbind(mat, mat_not_comorbid)
+                             ncol = ncol(mat_comorbid),
+                             dimnames = list(visit_not_comorbid))
+  mat_comb <- rbind(mat_comorbid, mat_not_comorbid)
+  # now put the visits back in original order (bearing in mind that they may not
+  # have started that way)
+  mat_new_row_order <- match(rownames(mat_comb), uniq_visits)
+  mat <- mat_comb[mat_new_row_order,, drop = FALSE]
 
   if (return_df) {
     if (visit_was_factor)
@@ -613,6 +643,8 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    # according to https://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp
+    # diabetes with complications is NOT foldeded into one new category.
 
     # drop HTNcx without converting to vector if matrix only has one row
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
