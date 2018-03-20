@@ -1,6 +1,7 @@
 ^_config\.yml$
 aclocal\.m4$
-IGNORE.*_alt\.[Rr]$
+.*_alt\.[Rr]$
+.*_alt\.cpp$
 ^appveyor\.yml$
 \.aspell$
 autom4te\.cache$
