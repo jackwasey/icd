@@ -46,12 +46,14 @@
 //' Pure C++11 implementation using \code{unordered set} to find children of
 //' given codes
 //' @examples
+//' \dontrun{
 //' if (requireNamespace("microbenchmark")) {
-//' microbenchmark::microbenchmark(
-//'   icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
-//'   icd:::icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
-//'   times = 5)
-//'   # C++11 about 15% faster for this data
+//'   microbenchmark::microbenchmark(
+//'     icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
+//'     icd:::icd9ChildrenShort11(c("001", 100:500), onlyReal = TRUE),
+//'     times = 5)
+//'     # C++11 about 15% faster for this data
+//' }
 //' }
 //' @keywords internal
 // [[Rcpp::export]]

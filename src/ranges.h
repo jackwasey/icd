@@ -31,4 +31,5 @@ VecStr icd9ExpandMinorStd(const Str& mnr, bool isE);
 CV icd9ChildrenShort(CV icd9Short, bool onlyReal = true);
 CV icd9ChildrenDecimalCpp(CV icd9Decimal, bool onlyReal = true);
 CV icd9ExpandMinor(const Str& mnr, bool isE = false);
+
 #endif /* RANGES_H_ */
