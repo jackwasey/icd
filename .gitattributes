@@ -2,3 +2,5 @@
 * text=auto
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
+*RcppExports* diff=nodiff
+

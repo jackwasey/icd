@@ -69,16 +69,16 @@ icd_poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @template visit_name
 #' @template icd_name
 #' @template short_code
-#' @param short_map Same as short, but applied to \code{map} instead of
-#'   \code{icd_df}. All the codes in a mapping should be of the same type, i.e.
-#'   short or decimal.
-#' @details There is a change in behavior from previous versions. The visit_name
-#'   column is (implicitly) sorted by using std::set container. Previously, the
-#'   visit_name output order was whatever R's \code{aggregate} produced.
+#' @param short_map Same as short, but applied to \code{map} instead of the data
+#'   frame of ICD codes, \code{x}. All the codes in a mapping should be of the
+#'   same type, i.e. short or decimal.
+#' @details The order of visits may change depending on the original sequence,
+#'   and the underlying algorithm used. Usually this would be the order of the
+#'   first occurence of each visit/patient identifier.
 #'
 #'   The threading of the C++ can be controlled using e.g.
 #'   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
-#'   the machine is used.
+#'   the machine is used. 'OpenMP' environment variables also work.
 #' @examples
 #'   pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
 #'                    icd9 = c("39891", "40110", "09322", "41514", "39891"))
@@ -93,7 +93,8 @@ icd_poa_choices <- c("yes", "no", "notYes", "notNo")
 #'   pts10 <- icd_long_data(
 #'     visit_name = c("a", "b", "c", "d", "e"),
 #'     icd_name = c("I058", NA, "T82817A", "", "I69369"),
-#'     date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
+#'     date = as.Date(
+#'       c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
 #'
 #'   icd10_comorbid(pts10, map = icd10_map_ahrq)
 #'
@@ -258,12 +259,35 @@ icd9_comorbid <- function(x,
                       short_map = short_map, return_df = return_df, ...)
 }
 
-#' @describeIn icd_comorbid Internal function. The common comorbidity
-#'   calculation code does not depend on ICD type. There is some type conversion
-#'   so the map and input codes are all in 'short' format, fast factor
-#'   generation, then fast comorbidity assignment.
-#' @template abbrev_names
-#' @template hierarchy
+#' Internal function to calculate co-morbidities.
+#'
+#' This common comorbidity calculation code does not depend on ICD type. There
+#' is some type conversion so the map and input codes are all in 'short' format,
+#' fast factor generation, then fast comorbidity assignment. The trick is to
+#' reduce the problem by only looking up comorbidities for codes which actually
+#' appear in the data set.
+#'
+#' 1. get list of ICD codes in the patient data, e.g. Vermont data has
+#' 1825, but e.g. only 336 which appear in AHRQ map.
+#'
+#' 2. make the patient data ICD codes a factor (if not already)
+#'
+#' 3. drop all elements of the comorbidity map which are not in the patient
+#' data, about 336 out of 15000 remain (using AHRQ map as example)
+#'
+#' 4. drop all patient data where the ICD code is not in the comorbidity map
+#'
+#' 4a. care here because we need to return blank rows where a patient already
+#' didn't have any comorbidities (from the map).
+#'
+#' 4b. return either in same order provided (making sure we use 'aggregate' when
+#' calling C++ so there is only one result for each patient when there are
+#' out-of-order patients in the data)
+#'
+#' 5. call the C++ making sure the map and patient icd codes share the same
+#' factor levels
+#' @inheritParams icd9_comorbid
+#' @param comorbid_fun
 #' @keywords internal
 icd_comorbid_common <- function(x,
                                 map,
@@ -272,7 +296,7 @@ icd_comorbid_common <- function(x,
                                 short_code,
                                 short_map,
                                 return_df = FALSE,
-                                comorbid_fun = icd9ComorbidTaskloop, ...) {
+                                comorbid_fun = icd9ComorbidShortCpp, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
@@ -293,15 +317,6 @@ icd_comorbid_common <- function(x,
   if (!short_map)
     map <- lapply(map, icd_decimal_to_short)
 
-  # start with a factor for the icd codes in x, recode (and drop superfluous)
-  # icd codes in the mapping, then do very fast match on integer without need
-  # for N, V or E distinction. Char to factor conversion in R is very fast.
-
-  # this is a moderately slow step (if needed to be done). Internally, the
-  # \code{sort} is slow. Fast match speeds up the subsequent step.
-  if (!is.factor(x[[icd_name]]))
-    x[[icd_name]] <- factor_nosort(x[[icd_name]])
-
   # we need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here:
   visit_was_factor <- is.factor(x[[visit_name]])
@@ -309,21 +324,36 @@ icd_comorbid_common <- function(x,
   if (visit_was_factor)
     iv_levels <- levels(x[[visit_name]])
 
-  # this may be the slowest step (again, if needed, and many will have character
-  # IDs)
+  # this may be the slowest step (again, if needed: many will have character
+  # IDs already)
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
 
-  # again, R is very fast at creating factors from a known set of levels
-  icd_levels <- levels(x[[icd_name]])
+  # start with a factor for the icd codes in x, recode (and drop superfluous)
+  # icd codes in the mapping, then do very fast match on integer without need
+  # for N, V or E distinction. Char to factor conversion in R is very fast.
+  relevant_codes <- intersect(
+    unique(x[[icd_name]]),
+    unique(unlist(map, use.names = FALSE))
+  )
+
+  # Internally, the \code{sort} is slow. 'fastmatch' inside factor creation
+  # would speed up the next step but is unstable, and this is not a bottleneck
+  # anyway.
+
+  f <- factor(x[[icd_name]], levels = relevant_codes)
+  x[[icd_name]] <- f
+  visit_not_comorbid <- x[is.na(f), visit_name]
+  x <- x[!is.na(f), ]
+
+  # again, R is very fast at creating factors from a known set of levels. Base
+  # `factor` doesn't sort the levels if the levels are given
   map <- lapply(map, function(y) {
-    f <- factor_nosort(y, icd_levels)
+    f <- factor_nosort(y, levels = relevant_codes)
     f[!is.na(f)]
   })
 
-  # now we also benefit from only have factor levels in the mapping which appear
-  # in the diagnoses we are going to be examining. From the C++ perspective, we
-  # can now do pure integer matching for icd9 codes. Only string manip becomes
-  # (optionally) defactoring the visit_name for the matrix row names.
+  # We can now do pure integer matching for icd9 codes. The only string manip
+  # becomes (optionally) defactoring the visit_name for the matrix row names.
 
   mat <- comorbid_fun(icd9df = x, icd9Mapping = map, visitId = visit_name,
                       icd9Field = icd_name,
@@ -332,6 +362,13 @@ icd_comorbid_common <- function(x,
                       omp_chunk_size = getOption("icd.omp_chunk_size", 1L),
                       aggregate = TRUE) # nolint
 
+  # replace dropped rows (which therefore have no comorbidities)
+  mat_not_comorbid <- matrix(data = FALSE,
+                             nrow = length(visit_not_comorbid),
+                             ncol = ncol(mat),
+                             dimnames = visit_not_comorbid)
+  mat <- rbind(mat, mat_not_comorbid)
+
   if (return_df) {
     if (visit_was_factor)
       rownm <- factor_nosort(x = rownames(mat), levels = iv_levels)
@@ -339,7 +376,6 @@ icd_comorbid_common <- function(x,
       rownm <- rownames(mat)
     df_out <- cbind(rownm, as.data.frame(mat), stringsAsFactors = visit_was_factor)
     names(df_out)[1] <- visit_name
-    # perhaps leave (duplicated) rownames which came from the matrix:
     rownames(df_out) <- NULL
     return(df_out)
   }

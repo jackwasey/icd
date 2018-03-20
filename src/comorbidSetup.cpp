@@ -35,8 +35,8 @@ extern "C" {
 }
 
 
-// take an R list of vectors of ICD codes, and convert to std vector of vector
-// of integers
+// take an R list of factors of ICD codes, and convert to a sorted std vector of
+// vector of integers. May not be sorted already because I use factor_nosort.
 void buildMap(const Rcpp::List& icd9Mapping, VecVecInt& map) {
 #ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "creating reference comorbidity mapping STL structure\n";
@@ -61,7 +61,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
                         const bool aggregate = true) {
   SEXP icds = PROTECT(getRListOrDfElement(icd9df, icd9Field.c_str()));
   SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
-  const int approx_cmb_per_visit = 15; // just an estimate
+  const int approx_cmb_per_visit = 15; // just a moderate over-estimate
   int vlen = Rf_length(icds); // or vsexp
   VisLk vis_lookup;
 
@@ -93,7 +93,7 @@ void buildVisitCodesVec(const SEXP& icd9df,
       if (aggregate) { // only use map if aggregating
         VisLk::iterator found = vis_lookup.find(vi);
         if (found != vis_lookup.end()) {
-          vcdb[found->second].push_back(n);
+          vcdb[found->second].push_back(n); // found row, add a 'column'
 #ifdef ICD_DEBUG_SETUP_TRACE
           Rcpp::Rcout << "repeat key " << vi << " found at position " << vcdb_new_idx << "\n";
 #endif
