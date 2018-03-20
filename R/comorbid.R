@@ -397,7 +397,7 @@ icd_comorbid_common <- function(x,
   # now put the visits back in original order (bearing in mind that they may not
   # have started that way)
   mat_new_row_order <- match(rownames(mat_comb), uniq_visits)
-  mat <- mat_comb[mat_new_row_order,, drop = FALSE]
+  mat <- mat_comb[mat_new_row_order,, drop = FALSE] #nolint
 
   if (return_df) {
     if (visit_was_factor)

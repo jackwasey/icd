@@ -24,7 +24,7 @@ using namespace Rcpp;
 //typedef Eigen::SparseMatrix<char, Eigen::RowMajor> SparseOut; // bool, char or int?
 // https://eigen.tuxfamily.org/dox/group__TutorialSparse.html
 typedef Eigen::Triplet<char> Triplet;
-
+typedef Eigen::SparseMatrix<char, Eigen::RowMajor> PtsSparse;
 //' comorbidity search with sparse matrix result
 //'
 //' Much less memory competition in writing output. As an example the Vermont
@@ -177,12 +177,14 @@ SEXP icd9ComorbidMatMul(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
 
   // now build the patient:icd matrix... can probably re-use and simplify the
   // function 'buildVisitCodesVec'
+  PtsSparse pts; // rows = unique patients, cols = unique ICD codes
 
   // Eigen::MatrixXi map(map_rows,
   //icd9Mapping.length());
 
   return List();
 }
+
 //' @describeIn icd9ComorbidTaskloop Sparse comorbidity results with Eigen
 //' @keywords internal
 // [[Rcpp::export]]
@@ -220,3 +222,27 @@ SEXP icd9ComorbidSparseOmp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   return Rcpp::wrap(out);
 }
 
+
+// alternate version which builds a sparse matrix, row-major, which is good for
+// LHS of multrix multiplication in Eigen
+void buildVisitCodesVecSparse(const SEXP& icd9df,
+                              const std::string& visitId,
+                              const std::string& icd9Field,
+                              PtsSparse& sparse_db,
+                              VecStr& visitIds,
+                              const bool aggregate = true) {
+  SEXP icds = PROTECT(getRListOrDfElement(icd9df, icd9Field.c_str()));
+  SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
+  const int approx_cmb_per_visit = 15; // just a moderate over-estimate
+  int vlen = Rf_length(icds); // or vsexp
+  VisLk vis_lookup;
+
+  visitIds.resize(vlen); // resize and trim at end, as alternative to reserve
+  const char* lastVisitId = "JJ94967295JJ"; // random
+  int n;
+  for (int i = 0; i != vlen; ++i) {
+    const char* vi = CHAR(STRING_ELT(vsexp, i));
+    n = INTEGER(icds)[i];
+  } // end loop through all visit-code input data
+  UNPROTECT(2);
+}
