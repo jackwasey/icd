@@ -14,7 +14,7 @@ Authors@R: c(
     person(given = "Jack O.", family = "Wasey", role = c("aut", "cre", "cph"), email = "jack@jackwasey.com"),
     person(given = "William", family = "Murphy", role = "ctb", email = "WMurphy@eatright.org", comment = "Van Walraven scores"),
     person(given = "Anobel", family = "Odisho", role = "ctb", email = "anobel.odisho@ucsf.edu", comment = "Hierarchical Condition Codes"),
-    person(given = "Vitaly", family = "Drucker", role = "ctb", email = "vdrucker@gmail.com", comment = "AHRQ CCS"),
+    person(given = "Vitaly", family = "Druker", role = "ctb", email = "vdruker@gmail.com", comment = "AHRQ CCS"),
     person(given = "Ed", family = "Lee", role = "ctb", comment = "explain codes in table format"),
     person(given = "Kevin", family = "Ushey", role = "ctb", comment = "Code adapted for fast factor generation"),
     person("R Core Team", role = c("ctb", "cph"), comment = "m4 macro for OpenMP detection in configure")
