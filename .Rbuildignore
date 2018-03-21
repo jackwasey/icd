@@ -1,8 +1,7 @@
 ^_config\.yml$
 aclocal\.m4$
 .*_alt\.[Rr]$
-.*_alt\.cpp$
-.*_alt\.o$
+IGNORE.*_alt\.cpp$
 ^appveyor\.yml$
 \.aspell$
 autom4te\.cache$
@@ -43,6 +42,7 @@ inst\/standalone\/.*
 ^src\/Makevars$
 ^man-roxygen$
 ^NEWS\.md$
+^.*\.o$
 ^README-*\.png$
 ^README\.Rmd$
 ^README\.html$
