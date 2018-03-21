@@ -86,7 +86,7 @@ Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbid_alt_SparseOmp(const Ve
   return out;
 }
 
-//' @describeIn icd9ComorbidTaskloop Sparse comorbidity results with Eigen
+//' @describeIn icd9Comorbid_alt_Taskloop Sparse comorbidity results with Eigen
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9Comorbid_alt_Sparse(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
@@ -191,7 +191,7 @@ SEXP icd9Comorbid_alt_MatMul(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   return List();
 }
 
-//' @describeIn icd9ComorbidTaskloop Sparse comorbidity results with Eigen
+//' @describeIn icd9Comorbid_alt_Taskloop Sparse comorbidity results with Eigen
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9Comorbid_alt_SparseOmp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,

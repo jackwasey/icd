@@ -15,18 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef COMORBIDCOMMON_H_
-#define COMORBIDCOMMON_H_
+#ifndef RANGES_ALT_H_
+#define RANGES_ALT_H_
 
-//#include <vector>                      // for vector, vector<>::const_iterator
-#include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
-//#include "local.h"                     // for ICD_OPENMP
-//#include "config.h"                     // for valgrind, CXX11 etc
+#include <stddef.h>     // for size_t
+#include "icd_types.h"
+#include <Rcpp.h>
 
-void lookupComorbidByChunkFor(const VecVecInt& vcdb,
-                              const VecVecInt& map,
-                              const VecVecIntSz chunkSize,
-                              const VecVecIntSz ompChunkSize,
-                              VecInt& out);
+CV icd9ChildrenShort_alt_11(CV icd9Short, bool onlyReal);
 
-#endif /* COMORBIDCOMMON_H_ */
+#endif /* RANGES_ALT_H_ */

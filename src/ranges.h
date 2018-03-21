@@ -17,6 +17,7 @@
 
 #ifndef RANGES_H_
 #define RANGES_H_
+
 #include <stddef.h>     // for size_t
 #include "icd_types.h"
 #include <Rcpp.h>
@@ -31,5 +32,8 @@ VecStr icd9ExpandMinorStd(const Str& mnr, bool isE);
 CV icd9ChildrenShort(CV icd9Short, bool onlyReal = true);
 CV icd9ChildrenDecimalCpp(CV icd9Decimal, bool onlyReal = true);
 CV icd9ExpandMinor(const Str& mnr, bool isE = false);
+
+// ranges_alt.h
+CV icd9ChildrenShort_alt_11(CV icd9Short, bool onlyReal);
 
 #endif /* RANGES_H_ */

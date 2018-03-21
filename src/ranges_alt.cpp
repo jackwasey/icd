@@ -142,7 +142,7 @@ CV icd9ChildrenShort_alt_Std(CV icd9Short, bool onlyReal) {
 }
 
 // [[Rcpp::export]]
-VecStr icd9ChildrenShortNoNaUnordered(const VecStr& icd9Short, const bool onlyReal) {
+VecStr icd9Children_alt_ShortNoNaUnordered(const VecStr& icd9Short, const bool onlyReal) {
   icd_set out; // we are never going to put NAs in the output, so use std structure
   // this is a slower function, can the output set be predefined in size?
   VecStr mjr(icd9Short.size());

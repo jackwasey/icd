@@ -27,4 +27,4 @@ void icd9ShortToParts_alt_CppStd(VecStr icd9Short,
                             VecStr &mjr,
                             VecStr &mnr);
 
-#endif /* CONVERT_H_ */
+#endif /* CONVERT_ALT_H_ */

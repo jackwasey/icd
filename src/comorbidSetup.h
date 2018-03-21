@@ -15,6 +15,10 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
+#ifndef COMORBIDSETUP_H_
+#define COMORBIDSETUP_H_
+
+// n.b. Rcpp ignores the ifdef stuff
 // [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include <Rcpp/r/headers.h>                   // for INTEGER, Rf_length, SEXP
@@ -41,3 +45,5 @@ void buildVisitCodesVec(const SEXP& icd9df,
                         VecVecInt& vcdb,
                         VecStr& visitIds,
                         const bool aggregate = true);
+
+#endif /* COMORBIDSETUP_H_ */

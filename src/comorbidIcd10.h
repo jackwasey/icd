@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef COMORBIDICD10_H_H
-#define COMORBIDICD10_H_H
+#ifndef COMORBIDICD10_H_
+#define COMORBIDICD10_H_
 
-#endif /* COMORBIDICD10_H_H */
+#endif /* COMORBIDICD10_H_ */

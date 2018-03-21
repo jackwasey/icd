@@ -130,8 +130,8 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
 #' alternate version using much simplified with Openmp taskloop, only in OMP4.5
 #'
 #' @keywords internal
-lookupComorbidByChunkForTaskloop <- function(vcdb, map, out) {
-    invisible(.Call(`_icd_lookupComorbidByChunkForTaskloop`, vcdb, map, out))
+lookupComorbid_alt_ByChunkForTaskloop <- function(vcdb, map, out) {
+    invisible(.Call(`_icd_lookupComorbid_alt_ByChunkForTaskloop`, vcdb, map, out))
 }
 
 #' Simpler comorbidity assignment
@@ -142,24 +142,24 @@ lookupComorbidByChunkForTaskloop <- function(vcdb, map, out) {
 #'
 #' # basic test
 #' # use tests/testthat/helper-base.R for two_pts and two_map
-#' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
+#' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop)
 #'
 #' vermont_dx %>% icd_wide_to_long() -> vt
 #' microbenchmark::microbenchmark(
 #'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
-#'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
+#'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop),
 #'   times = 50)
 #' identical(res1, res2)
 #'
 #' @keywords internal
-icd9ComorbidTaskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9ComorbidTaskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+icd9Comorbid_alt_Taskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9Comorbid_alt_Taskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
-#' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
+#' @describeIn icd9Comorbid_alt_Taskloop Taskloop but finish with R transpose
 #' @keywords internal
-icd9ComorbidTaskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9ComorbidTaskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+icd9Comorbid_alt_Taskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
+    .Call(`_icd_icd9Comorbid_alt_Taskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
 }
 
 icd9MajMinToCode_alt_Old <- function(mjr, mnr, isShort) {
@@ -404,8 +404,8 @@ icd9ChildrenShort_alt_Std <- function(icd9Short, onlyReal) {
     .Call(`_icd_icd9ChildrenShort_alt_Std`, icd9Short, onlyReal)
 }
 
-icd9ChildrenShortNoNaUnordered <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShortNoNaUnordered`, icd9Short, onlyReal)
+icd9Children_alt_ShortNoNaUnordered <- function(icd9Short, onlyReal) {
+    .Call(`_icd_icd9Children_alt_ShortNoNaUnordered`, icd9Short, onlyReal)
 }
 
 icd9ExpandMinorStd <- function(mnr, isE) {

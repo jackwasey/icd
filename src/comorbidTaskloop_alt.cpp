@@ -17,7 +17,7 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
-#include "comorbidCommon.h"
+//#include "comorbid_alt.h"              // for lookupComorbid_alt_ByChunkForTaskloop
 #include "comorbidSetup.h"
 #include <Rcpp.h>
 #include <algorithm>                   // for binary_search, copy
@@ -34,7 +34,7 @@
 //'
 //' @keywords internal
 // [[Rcpp::export]]
-void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb,
+void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
                                       const VecVecInt& map,
                                       NewOut& out) {
   const VecVecIntSz num_comorbid = map.size();
@@ -106,18 +106,18 @@ void lookupComorbidByChunkForTaskloop(const VecVecInt& vcdb,
 //'
 //' # basic test
 //' # use tests/testthat/helper-base.R for two_pts and two_map
-//' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9ComorbidTaskloop)
+//' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop)
 //'
 //' vermont_dx %>% icd_wide_to_long() -> vt
 //' microbenchmark::microbenchmark(
 //'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
-//'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidTaskloop),
+//'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop),
 //'   times = 50)
 //' identical(res1, res2)
 //'
 //' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+SEXP icd9Comorbid_alt_Taskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                           const std::string visitId, const std::string icd9Field,
                           const int threads = 8, const int chunk_size = 256,
                           const int omp_chunk_size = 1, bool aggregate = true) {
@@ -152,7 +152,7 @@ SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   Rcpp::Rcout << "look up the comorbidities\n";
 #endif
   NewOut out(vcdb.size(), NewOutPt(num_comorbid));
-  lookupComorbidByChunkForTaskloop(vcdb, map, out);
+  lookupComorbid_alt_ByChunkForTaskloop(vcdb, map, out);
   Rcpp::LogicalMatrix mat_out(num_visits, num_comorbid);
   for (NewOutIt it = out.begin(); it != out.end(); ++it) {
 
@@ -189,10 +189,10 @@ SEXP icd9ComorbidTaskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   return mat_out;
 }
 
-//' @describeIn icd9ComorbidTaskloop Taskloop but finish with R transpose
+//' @describeIn icd9Comorbid_alt_Taskloop Taskloop but finish with R transpose
 //' @keywords internal
 // [[Rcpp::export]]
-SEXP icd9ComorbidTaskloop2(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
+SEXP icd9Comorbid_alt_Taskloop2(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                            const std::string visitId, const std::string icd9Field,
                            const int threads = 8, const int chunk_size = 256,
                            const int omp_chunk_size = 1, bool aggregate = true) {
@@ -215,7 +215,7 @@ SEXP icd9ComorbidTaskloop2(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   const VecVecIntSz num_comorbid = map.size();
   const VecVecIntSz num_visits = vcdb.size();
   NewOut out(vcdb.size(), NewOutPt(num_comorbid));
-  lookupComorbidByChunkForTaskloop(vcdb, map, out);
+  lookupComorbid_alt_ByChunkForTaskloop(vcdb, map, out);
 
   Rcpp::IntegerMatrix mat_out(num_visits, num_comorbid);
   my_concat(out.begin(), out.end(), mat_out.begin()); // write out row major
