@@ -40,9 +40,9 @@ env:
 before_script:
  - ls -aR
  - rm .Rinstignore  # do install everything for testing
- - sed -i '' '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
- - sed -i '' '/\.covrignore/d' .Rbuildignore
- - sed -i '' '/\.lintr/d' .Rbuildignore
+ - sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
+ - sed -i'' '/\.covrignore/d' .Rbuildignore
+ - sed -i'' '/\.lintr/d' .Rbuildignore
  - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
 
 after_success:
