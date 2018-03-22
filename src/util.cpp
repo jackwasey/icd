@@ -107,7 +107,7 @@ int getOmpThreads() {
   return threads;
 }
 
-// [[Rcpp:export]]
+// [[Rcpp::export]]
 void debug_parallel_env() {
 #ifdef ICD_DEBUG_PARALLEL
   Rcpp::Rcout << "checking OpenMP flags... ";
@@ -123,6 +123,7 @@ void debug_parallel_env() {
 #endif
 }
 
+// [[Rcpp::export]]
 void debug_parallel() {
 #if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
