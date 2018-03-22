@@ -53,7 +53,8 @@ extern "C" {
 #endif
 
 #ifdef ICD_EIGEN
-[[Rcpp::depends(RcppEigen)]]
+// comment out Eigen stuff as Rcpp ignores ifdef
+//[[ //Rcpp::depends(RcppEigen)]]
 #include <RcppEigen.h>
 #endif
 
