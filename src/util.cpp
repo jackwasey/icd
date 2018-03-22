@@ -110,28 +110,32 @@ int getOmpThreads() {
 // [[Rcpp::export]]
 void debug_parallel_env() {
 #ifdef ICD_DEBUG_PARALLEL
-  Rcpp::Rcout << "checking OpenMP flags... ";
-#ifdef _OPENMP
-  Rcpp::Rcout << "_OPENMP is defined.\n";
-#else
-  Rcpp::Rcout << "_OPENMP is not defined.\n";
-#endif
-#ifdef ICD_OPENMP
-  Rcpp::Rcout << "ICD_OPENMP is defined.\n";
-#else
-  Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
+  Rcpp::Rcout << "checking OpenMP flags...\n";
+  #ifdef HAVE_R_OPENMP
+    Rcpp::Rcout << "HAVE_R_OPENMP is defined.\n";
+  #endif
+  #ifdef _OPENMP
+    Rcpp::Rcout << "_OPENMP is defined.\n";
+  #else
+    Rcpp::Rcout << "_OPENMP is not defined.\n";
+  #endif
+
+  #ifdef ICD_OPENMP
+    Rcpp::Rcout << "ICD_OPENMP is defined.\n";
+  #else
+    Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
+  #endif
 #endif
 }
 
 // [[Rcpp::export]]
 void debug_parallel() {
 #if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
-  Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
-  Rcpp::Rcout << "max threads per omp_get_schedule = " << getOmpMaxThreads() << ". ";
-  Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
-  Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << ". ";
-  Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
-#endif
+  Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads()
+  << " max threads per omp_get_schedule = " << getOmpMaxThreads()
+  << " avail threads = " << omp_get_num_threads()
+  << " omp_get_thread_num = " << omp_get_thread_num()
+  << " omp_get_num_procs = " << getOmpCores() << "\n";
 #endif // ICD_DEBUG_PARALLEL
 }
 

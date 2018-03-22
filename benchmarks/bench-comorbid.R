@@ -2,7 +2,7 @@
 library(icd)
 library(microbenchmark)
 
-pts <- icd:::generate_random_pts(5e3)
+pts <- icd:::generate_random_pts(5e5)
 message("benchmark starting!")
 mb <- microbenchmark(
   icd_comorbid(pts, icd9_map_ahrq, comorbid_fun = icd:::icd9Comorbid_alt_Sparse),
