@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source ${ICD_HOME:$HOME/rprojects/icd}/tools/install_shared.sh
+source ${ICD_HOME:-$HOME/rprojects/icd}/tools/install_shared.sh
 
 
 R CMD build --no-build-vignettes --no-resave-data icd

@@ -13,15 +13,15 @@ find ICD-10 comorbidities by checking parents
 }
 \examples{
 up <- uranium_pathology[1:50, ]
-stopifnot(identical(
-icd:::icd10_comorbid_parent_search_orig(up, icd10_map_ahrq,
-  visit_name = "case", icd_name = "icd10",
-  short_code = FALSE, short_map = TRUE, return_df = FALSE),
-icd:::icd10_comorbid_parent_search_use_cpp(up, icd10_map_ahrq,
-  visit_name = "case", icd_name = "icd10",
-  short_code = FALSE, short_map = TRUE, return_df = FALSE)
-))
-
+if (exists("icd10_comorbid_parent_search_orig"))
+  stopifnot(identical(
+  icd:::icd10_comorbid_parent_search_orig(up, icd10_map_ahrq,
+    visit_name = "case", icd_name = "icd10",
+    short_code = FALSE, short_map = TRUE, return_df = FALSE),
+  icd:::icd10_comorbid_parent_search_use_cpp(up, icd10_map_ahrq,
+    visit_name = "case", icd_name = "icd10",
+    short_code = FALSE, short_map = TRUE, return_df = FALSE)
+  ))
 \dontrun{
 library(microbenchmark)
 microbenchmark(substr("12345", 1, 4), substring("12345", 1, 4),

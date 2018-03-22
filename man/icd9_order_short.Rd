@@ -20,7 +20,8 @@ with a warning if found.
 x <- icd:::generate_random_decimal_icd9(1e4)
 system.time(icd:::icd9_sort_cpp(x)) # vastly quicker
 system.time(icd:::icd9_order_short(x))
-if (require("microbenchmark", quietly = TRUE)) {
+if (exists("icd9_order_short") &&
+    require("microbenchmark", quietly = TRUE)) {
   # fastmatch was fractionally faster, but either is very slow
   microbenchmark(icd:::icd9_order_short(x),
                  icd:::icd9_order_short_r(x),
