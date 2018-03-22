@@ -45,7 +45,7 @@ void lookupComorbidByChunkFor(const VecVecInt& vcdb,
   Rcpp::Rcout << "vcdb.size() = " << vcdb.size() << "\n";
   Rcpp::Rcout << "map.size() = " << map.size() << "\n";
 #endif
-  debug_parallel();
+  debug_parallel_env();
 
 #ifdef ICD_OPENMP
 #pragma omp parallel for schedule(static) default(none) shared(out, Rcpp::Rcout, vcdb, map) private(chunk_end_i, vis_i)

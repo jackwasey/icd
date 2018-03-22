@@ -96,6 +96,7 @@ int getOmpMaxThreads() {
   return maxthreads;
 }
 
+// https://stackoverflow.com/questions/43736622/which-openmp-schedule-am-i-running/43755259#43755259
 // [[Rcpp::export]]
 int getOmpThreads() {
   int threads = 0;
@@ -106,9 +107,10 @@ int getOmpThreads() {
   return threads;
 }
 
-void debug_parallel() {
+// [[Rcpp:export]]
+void debug_parallel_env() {
 #ifdef ICD_DEBUG_PARALLEL
-  Rcpp::Rcout << "checking _OPENMP... ";
+  Rcpp::Rcout << "checking OpenMP flags... ";
 #ifdef _OPENMP
   Rcpp::Rcout << "_OPENMP is defined.\n";
 #else
@@ -119,7 +121,9 @@ void debug_parallel() {
 #else
   Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
 #endif
+}
 
+void debug_parallel() {
 #if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
   Rcpp::Rcout << "max threads per omp_get_schedule = " << getOmpMaxThreads() << ". ";

@@ -39,6 +39,7 @@ int getOmpCores();
 int getOmpThreads();
 int getOmpMaxThreads();
 void debug_parallel();
+void debug_parallel_env();
 Rcpp::NumericVector randomMajorCpp(int n);
 VecStr icd9RandomShortN(VecStr::size_type n);
 VecStr icd9RandomShortV(VecStr::size_type n);

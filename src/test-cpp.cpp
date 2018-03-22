@@ -101,6 +101,7 @@ context("icd9ShortToPartsCpp") {
 
 context("parallel debug") {
   test_that("debug parallel runs without error") {
+    debug_parallel_env();
     debug_parallel();
     expect_true(true);
   }

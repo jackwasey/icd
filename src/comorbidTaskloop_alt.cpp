@@ -37,22 +37,22 @@
 void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
                                       const VecVecInt& map,
                                       NewOut& out) {
+  debug_parallel_env();
   const VecVecIntSz num_comorbid = map.size();
   // https://stackoverflow.com/questions/2665936/is-there-a-way-to-specify-the-dimensions-of-a-nested-stl-vector-c
-  //NewOut out(vcdb.size(), NewOutPt(num_comorbid));
+  // NewOut out(vcdb.size(), NewOutPt(num_comorbid));
   VecVecIntSz vis_i;
   VecInt::const_iterator code_it;
 
   // loop through all patient visits
 #ifdef ICD_OPENMP
-  // may need shared(out) but as I think each element can be written to independently by different threads, try without..
-  // private(vis_i) superfluous?
+  // may need shared(out) but as I think each element can be written to
+  // independently by different threads, try without.. private(vis_i)
+  // superfluous?
 #pragma omp taskloop shared(Rcpp::Rcout, out) //grainsize (256)
 #endif
   for (vis_i = 0; vis_i < vcdb.size(); ++vis_i) {
-#ifdef ICD_DEBUG_PARALLEL
     debug_parallel();
-#endif
 #ifdef ICD_DEBUG
     Rcpp::Rcout << "New visit: vis_i = " << vis_i << "\n";
 #endif

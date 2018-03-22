@@ -26,7 +26,7 @@
 #include "icd_types.h"                          // for VecVecInt, ComorbidOut
 #include "local.h"                              // for buildMap, buildVisitC...
 #include "config.h"                              // for buildMap, buildVisitC...
-#include "util.h" // for valgrind helper
+#include "util.h" // for valgrind helper and openmp helper functions
 #include "comorbidCommon.h"
 #include "comorbidSetup.h"
 extern "C" {
@@ -50,7 +50,7 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                           const int omp_chunk_size = 1, bool aggregate = true) {
 
   valgrindCallgrindStart(false);
-  debug_parallel();
+  debug_parallel_env();
 
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
 #ifdef ICD_DEBUG_SETUP
