@@ -130,6 +130,10 @@ void debug_parallel_env() {
 
 // [[Rcpp::export]]
 void debug_parallel() {
+  //  cannot use Rcpp:Rcout in multithreaded code: alternative (for debugging
+  //  only) is RcppThreads. Small package but I'm reluctant to add another
+  //  dependency.
+   /*
 #if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads()
   << " max threads per omp_get_schedule = " << getOmpMaxThreads()
@@ -137,6 +141,7 @@ void debug_parallel() {
   << " omp_get_thread_num = " << omp_get_thread_num()
   << " omp_get_num_procs = " << getOmpCores() << "\n";
 #endif // ICD_DEBUG_PARALLEL
+   */
 }
 
 // [[Rcpp::export]]

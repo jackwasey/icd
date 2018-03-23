@@ -34,7 +34,7 @@ extern "C" {
 // #define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_TRACE
-#define ICD_DEBUG_PARALLEL
+// #define ICD_DEBUG_PARALLEL
 // #define ICD_VALGRIND
 
 // enabling this stops the package compiling, but is useful for testing purely

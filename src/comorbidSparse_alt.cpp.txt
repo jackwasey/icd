@@ -17,7 +17,6 @@
 
 using namespace Rcpp;
 
-
 // use row-major sparse matrix - row major because easier to insert into Eigen
 // sparse matrix, and we discover comorbidities one patient at a time, i.e. row
 // major
@@ -67,6 +66,7 @@ Eigen::SparseMatrix<char, Eigen::RowMajor> lookupComorbid_alt_SparseOmp(const Ve
   vecTrip.reserve(vcdb.size());
 #pragma omp taskloop shared(Rcpp::Rcout) //grainsize (256)
   for (VecVecIntSz vis_i = 0; vis_i < vcdb.size(); ++vis_i) {
+    debug_parallel();
     const VecInt& codes = vcdb[vis_i]; // these are the ICD-9 codes for the current visitid
     const VecIntIt cbegin = codes.begin();
     const VecIntIt cend = codes.end();

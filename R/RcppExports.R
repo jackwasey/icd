@@ -469,6 +469,14 @@ getOmpThreads <- function() {
     .Call(`_icd_getOmpThreads`)
 }
 
+debug_parallel_env <- function() {
+    invisible(.Call(`_icd_debug_parallel_env`))
+}
+
+debug_parallel <- function() {
+    invisible(.Call(`_icd_debug_parallel`))
+}
+
 randomMajorCpp <- function(n) {
     .Call(`_icd_randomMajorCpp`, n)
 }

@@ -13,4 +13,4 @@ mb <- microbenchmark(
   times = 5L)
 print(mb)
 
-# for 5e5 with openmp, sparse is slowest, but not multithreaded.
+# for 5e5 with openmp, sparse is slowest, but sparse was not then multithreaded.

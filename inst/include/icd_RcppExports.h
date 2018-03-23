@@ -1103,6 +1103,42 @@ namespace icd {
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
+    inline void debug_parallel_env() {
+        typedef SEXP(*Ptr_debug_parallel_env)();
+        static Ptr_debug_parallel_env p_debug_parallel_env = NULL;
+        if (p_debug_parallel_env == NULL) {
+            validateSignature("void(*debug_parallel_env)()");
+            p_debug_parallel_env = (Ptr_debug_parallel_env)R_GetCCallable("icd", "_icd_debug_parallel_env");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_debug_parallel_env();
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
+    inline void debug_parallel() {
+        typedef SEXP(*Ptr_debug_parallel)();
+        static Ptr_debug_parallel p_debug_parallel = NULL;
+        if (p_debug_parallel == NULL) {
+            validateSignature("void(*debug_parallel)()");
+            p_debug_parallel = (Ptr_debug_parallel)R_GetCCallable("icd", "_icd_debug_parallel");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_debug_parallel();
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
     inline Rcpp::NumericVector randomMajorCpp(int n) {
         typedef SEXP(*Ptr_randomMajorCpp)(SEXP);
         static Ptr_randomMajorCpp p_randomMajorCpp = NULL;

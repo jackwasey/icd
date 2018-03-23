@@ -1796,6 +1796,62 @@ RcppExport SEXP _icd_getOmpThreads() {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// debug_parallel_env
+void debug_parallel_env();
+static SEXP _icd_debug_parallel_env_try() {
+BEGIN_RCPP
+    debug_parallel_env();
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_debug_parallel_env() {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_debug_parallel_env_try());
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// debug_parallel
+void debug_parallel();
+static SEXP _icd_debug_parallel_try() {
+BEGIN_RCPP
+    debug_parallel();
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_debug_parallel() {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_debug_parallel_try());
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // randomMajorCpp
 Rcpp::NumericVector randomMajorCpp(int n);
 static SEXP _icd_randomMajorCpp_try(SEXP nSEXP) {
@@ -2127,6 +2183,8 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("int(*getOmpCores)()");
         signatures.insert("int(*getOmpMaxThreads)()");
         signatures.insert("int(*getOmpThreads)()");
+        signatures.insert("void(*debug_parallel_env)()");
+        signatures.insert("void(*debug_parallel)()");
         signatures.insert("Rcpp::NumericVector(*randomMajorCpp)(int)");
         signatures.insert("VecStr(*icd9RandomShortN)(VecStr::size_type)");
         signatures.insert("VecStr(*icd9RandomShortV)(VecStr::size_type)");
@@ -2199,6 +2257,8 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_getOmpCores", (DL_FUNC)_icd_getOmpCores_try);
     R_RegisterCCallable("icd", "_icd_getOmpMaxThreads", (DL_FUNC)_icd_getOmpMaxThreads_try);
     R_RegisterCCallable("icd", "_icd_getOmpThreads", (DL_FUNC)_icd_getOmpThreads_try);
+    R_RegisterCCallable("icd", "_icd_debug_parallel_env", (DL_FUNC)_icd_debug_parallel_env_try);
+    R_RegisterCCallable("icd", "_icd_debug_parallel", (DL_FUNC)_icd_debug_parallel_try);
     R_RegisterCCallable("icd", "_icd_randomMajorCpp", (DL_FUNC)_icd_randomMajorCpp_try);
     R_RegisterCCallable("icd", "_icd_icd9RandomShortN", (DL_FUNC)_icd_icd9RandomShortN_try);
     R_RegisterCCallable("icd", "_icd_icd9RandomShortV", (DL_FUNC)_icd_icd9RandomShortV_try);
