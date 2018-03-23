@@ -8,6 +8,8 @@
 */
 
 /* .Call calls */
+extern SEXP _icd_debug_parallel();
+extern SEXP _icd_debug_parallel_env();
 extern SEXP _icd_fastIntToStringRcpp(SEXP);
 extern SEXP _icd_fastIntToStringStd(SEXP);
 extern SEXP _icd_getOmpCores();
@@ -79,6 +81,8 @@ extern SEXP _icd_valgrindCallgrindStop();
 extern SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_icd_debug_parallel",                        (DL_FUNC) &_icd_debug_parallel,                        0},
+    {"_icd_debug_parallel_env",                    (DL_FUNC) &_icd_debug_parallel_env,                    0},
     {"_icd_fastIntToStringRcpp",                   (DL_FUNC) &_icd_fastIntToStringRcpp,                   1},
     {"_icd_fastIntToStringStd",                    (DL_FUNC) &_icd_fastIntToStringStd,                    1},
     {"_icd_getOmpCores",                           (DL_FUNC) &_icd_getOmpCores,                           0},
