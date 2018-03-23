@@ -78,22 +78,29 @@ AC_LANG_PUSH([C++])
 # this uses automake, however, and is designed to check newly compiled code: AX_VALGRIND_CHECK
 AC_CHECK_HEADERS([valgrind/valgrind.h])
 
+AC_MSG_NOTICE([getting path for R include dir])
+R_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -e "suppressWarnings(try(cat(Sys.getenv('R_INCLUDE_DIR')),silent=TRUE))"`
+
 AC_MSG_NOTICE([getting path to test for testthat Catch headers])
-TESTTHAT_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -q -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='testthat','include','testthat',mustWork=FALSE))),silent=TRUE))"`
-# maybe a better way, but I need to have the testthat package include dir in the pre-processor include directories:
-CPPFLAGS="$CPPFLAGS -I$TESTTHAT_INCLUDE_DIR"
+TESTTHAT_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='testthat','include','testthat',mustWork=FALSE))),silent=TRUE))"`
 
-AC_LANG_PUSH([C++])
-# this gives a config var with full path in it when built via check: AC_CHECK_HEADERS([testthat.h])
-# these don't work:
-## AC_CHECK_HEADERS([testthat])
-## AC_CHECK_HEADERS([testthat.h])
+AC_MSG_NOTICE([getting path to test for Rcpp headers])
+RCPP_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave  -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='Rcpp','include',mustWork=FALSE))),silent=TRUE))"`
 
-AC_CHECK_HEADER(testthat.h, [AC_DEFINE(HAVE_TESTTHAT_H, 1, [define as 1 if testthat catch available])],
-  [AC_MSG_NOTICE([testthat headers for Catch tests not found])])
+AC_MSG_NOTICE([getting path to test for RcppEigen headers])
+RCPPEIGEN_INCLUDE_DIR=`"${R_BIN}" --vanilla --slave  -e "suppressWarnings(try(cat(tools::file_path_as_absolute(base::system.file(package='RcppEigen','include',mustWork=FALSE))),silent=TRUE))"`
+
+echo "R include dir is $R_INCLUDE_DIR"
+echo "testthat include dir is $TESTTHAT_INCLUDE_DIR"
+echo "Rcpp include dir is $RCPP_INCLUDE_DIR"
+echo "RcppEigen include dir is $RCPPEIGEN_INCLUDE_DIR"
+
+CPPFLAGS="$CPPFLAGS -I$R_INCLUDE_DIR -I -I$TESTTHAT_INCLUDE_DIR -I$RCPPEIGEN_INCLUDE_DIR -I$RCPP_INCLUDE_DIR"
+AC_CHECK_HEADERS([testthat.h])
+AC_CHECK_HEADERS([RcppEigen.h])
 
 AC_LANG_POP([C++])
-# end testthat test
+# end testthat and RcppEigen tests
 
 # TODO: if a debug flag is set, then update .Rbuildignore to NOT exclude _alt.cpp etc files
 

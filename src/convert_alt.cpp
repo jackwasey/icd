@@ -28,7 +28,7 @@
 #include "util.h"                 // for strimCpp
 
 // [[Rcpp::export]]
-CV icd9MajMinToCodeOld(CV mjr,
+CV icd9MajMinToCode_alt_Old(CV mjr,
                                           CV mnr, bool isShort) {
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
@@ -90,7 +90,7 @@ CV icd9MajMinToCodeOld(CV mjr,
 }
 
 // [[//Rcpp::export]]
-void icd9ShortToPartsCppStd(VecStr icd9Short,
+void icd9ShortToParts_alt_CppStd(VecStr icd9Short,
                             std::string mnrEmpty,
                             VecStr &mjr,
                             VecStr &mnr) {

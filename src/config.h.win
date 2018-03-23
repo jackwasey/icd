@@ -81,9 +81,6 @@
 /* Define to 1 if you have the ANSI C header files. */
 #define STDC_HEADERS 1
 
-/* "Whether glibc parallel STL works in R package." */
-#define WORKING_PARALLEL_ALGORITHM 1
-
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus

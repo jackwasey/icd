@@ -39,6 +39,7 @@ int getOmpCores();
 int getOmpThreads();
 int getOmpMaxThreads();
 void debug_parallel();
+void debug_parallel_env();
 Rcpp::NumericVector randomMajorCpp(int n);
 VecStr icd9RandomShortN(VecStr::size_type n);
 VecStr icd9RandomShortV(VecStr::size_type n);
@@ -50,5 +51,14 @@ int valgrindCallgrindStop();
 
 bool icd9CompareStrings(std::string a, std::string b);
 std::vector<std::size_t> icd9OrderCpp(VecStr x);
+
+// concatenate a vector of vectors
+template <class COCiter, class Oiter>
+void my_concat (COCiter start, COCiter end, Oiter dest) {
+  while (start != end) {
+    dest = std::copy(start->begin(), start->end(), dest);
+    ++start;
+  }
+}
 
 #endif /* UTIL_H_ */

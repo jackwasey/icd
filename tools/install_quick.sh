@@ -1,10 +1,13 @@
 #!/bin/bash
-
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 IFS=$'\n\t'
 
-pushd "${ICD_HOME:-$HOME/rprojects}"
+source ${ICD_HOME:-$HOME/rprojects/icd}/tools/install_shared.sh
+
 R CMD build --no-build-vignettes --no-resave-data icd
-R CMD INSTALL --install-tests --no-docs "$(ls -t /tmp/icd*.tar.gz | head -1)"
-popd
+R CMD INSTALL -d \
+  --no-clean-on-error \
+  --library="$install_dir" \
+  --install-tests \
+  --no-docs \
+  "$(ls -t icd*.tar.gz icd*.tgz | head -1)"

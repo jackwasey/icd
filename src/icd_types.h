@@ -42,4 +42,4 @@ typedef VecVecInt::iterator NewOutIt;
 
 typedef Rcpp::CharacterVector CV;
 
-#endif
+#endif /* ICD_TYPES_H_ */

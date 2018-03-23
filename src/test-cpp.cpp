@@ -5,7 +5,6 @@
 #include "util.h"
 #include "appendMinor.h"
 #include "convert.h"
-#include "convert_alt.h"
 #include "config.h"
 
 #ifdef HAVE_TESTTHAT_H
@@ -102,6 +101,7 @@ context("icd9ShortToPartsCpp") {
 
 context("parallel debug") {
   test_that("debug parallel runs without error") {
+    debug_parallel_env();
     debug_parallel();
     expect_true(true);
   }
@@ -212,8 +212,8 @@ context("test alternate zero-adding code") {
   }
   test_that("short E codes work") {
     expect_true(Rcpp::as<std::string>(icd9AddLeadingZeroesDirect("E1", true)[0]) == "E001");
-    Rcpp::String e1 = icd9AddLeadingZeroesShortSingle("E1");
-    expect_true(Rcpp::as<std::string>(CV::create(e1)) == "E001");
+    //Rcpp::String e1 = icd9AddLeadingZeroes_alt_ShortSingle("E1");
+    //expect_true(Rcpp::as<std::string>(CV::create(e1)) == "E001");
   }
 }
 

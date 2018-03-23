@@ -96,6 +96,7 @@ int getOmpMaxThreads() {
   return maxthreads;
 }
 
+// https://stackoverflow.com/questions/43736622/which-openmp-schedule-am-i-running/43755259#43755259
 // [[Rcpp::export]]
 int getOmpThreads() {
   int threads = 0;
@@ -106,28 +107,41 @@ int getOmpThreads() {
   return threads;
 }
 
-void debug_parallel() {
+// [[Rcpp::export]]
+void debug_parallel_env() {
 #ifdef ICD_DEBUG_PARALLEL
-  Rcpp::Rcout << "checking _OPENMP... ";
-#ifdef _OPENMP
-  Rcpp::Rcout << "_OPENMP is defined.\n";
-#else
-  Rcpp::Rcout << "_OPENMP is not defined.\n";
-#endif
-#ifdef ICD_OPENMP
-  Rcpp::Rcout << "ICD_OPENMP is defined.\n";
-#else
-  Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
-#endif
+  Rcpp::Rcout << "checking OpenMP flags...\n";
+  #ifdef HAVE_R_OPENMP
+    Rcpp::Rcout << "HAVE_R_OPENMP is defined.\n";
+  #endif
+  #ifdef _OPENMP
+    Rcpp::Rcout << "_OPENMP is defined.\n";
+  #else
+    Rcpp::Rcout << "_OPENMP is not defined.\n";
+  #endif
 
-#if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
-  Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads() << ". ";
-  Rcpp::Rcout << "max threads per omp_get_schedule = " << getOmpMaxThreads() << ". ";
-  Rcpp::Rcout << "avail threads = " << omp_get_num_threads() << ". ";
-  Rcpp::Rcout << "omp_get_thread_num = " << omp_get_thread_num() << ". ";
-  Rcpp::Rcout << "omp_get_num_procs = " << getOmpCores() << "\n";
+  #ifdef ICD_OPENMP
+    Rcpp::Rcout << "ICD_OPENMP is defined.\n";
+  #else
+    Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
+  #endif
 #endif
+}
+
+// [[Rcpp::export]]
+void debug_parallel() {
+  //  cannot use Rcpp:Rcout in multithreaded code: alternative (for debugging
+  //  only) is RcppThreads. Small package but I'm reluctant to add another
+  //  dependency.
+   /*
+#if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
+  Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads()
+  << " max threads per omp_get_schedule = " << getOmpMaxThreads()
+  << " avail threads = " << omp_get_num_threads()
+  << " omp_get_thread_num = " << omp_get_thread_num()
+  << " omp_get_num_procs = " << getOmpCores() << "\n";
 #endif // ICD_DEBUG_PARALLEL
+   */
 }
 
 // [[Rcpp::export]]
@@ -275,7 +289,7 @@ VecStr icd9SortCpp(VecStr x) {
 }
 
 // add one because R indexes from 1, not 0
-std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) { return p.second + 1; }
+inline std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) { return p.second + 1; }
 
 // [[Rcpp::export(icd9_order_cpp)]]
 std::vector<std::size_t> icd9OrderCpp(VecStr x) {
@@ -300,4 +314,3 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
 // }
 // return
 // }
-

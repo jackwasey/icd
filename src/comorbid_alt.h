@@ -15,18 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef COMORBIDCOMMON_H_
-#define COMORBIDCOMMON_H_
 
-//#include <vector>                      // for vector, vector<>::const_iterator
+#ifndef COMORBID_ALT_H_
+#define COMORBID_ALT_H_
+
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
-//#include "local.h"                     // for ICD_OPENMP
-//#include "config.h"                     // for valgrind, CXX11 etc
+void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
+                                           const VecVecInt& map,
+                                           NewOut& out);
 
-void lookupComorbidByChunkFor(const VecVecInt& vcdb,
-                              const VecVecInt& map,
-                              const VecVecIntSz chunkSize,
-                              const VecVecIntSz ompChunkSize,
-                              VecInt& out);
-
-#endif /* COMORBIDCOMMON_H_ */
+#endif /* COMORBID_ALT_H_ */

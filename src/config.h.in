@@ -6,6 +6,9 @@
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H
 
+/* Define to 1 if you have the <RcppEigen.h> header file. */
+#undef HAVE_RCPPEIGEN_H
+
 /* "Whether OpenMP is available in R environment." */
 #undef HAVE_R_OPENMP
 
@@ -27,7 +30,7 @@
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
-/* define as 1 if testthat catch available */
+/* Define to 1 if you have the <testthat.h> header file. */
 #undef HAVE_TESTTHAT_H
 
 /* Define to 1 if you have the <unistd.h> header file. */

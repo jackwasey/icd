@@ -22,6 +22,6 @@ if (requireNamespace("lintr", quietly = TRUE) &&
     skip("currently ignoring .lintr and spamming github")
     # running lints keeps failing after devtools load_all, but works fine with
     # fresh session
-    # lintr::expect_lint_free() # skip this - currently ignoring .lintr and spamming github.
+    lintr::expect_lint_free() # skip this - currently ignoring .lintr and spamming github.
   })
 }

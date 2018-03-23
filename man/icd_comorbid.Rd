@@ -5,7 +5,6 @@
 \alias{icd_comorbid}
 \alias{icd10_comorbid}
 \alias{icd9_comorbid}
-\alias{icd_comorbid_common}
 \alias{icd9_comorbid_ahrq}
 \alias{icd10_comorbid_ahrq}
 \alias{icd9_comorbid_elix}
@@ -34,9 +33,6 @@ icd10_comorbid(x, map, visit_name = NULL, icd_name = NULL,
 icd9_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_code = icd_guess_short(x, icd_name = icd_name),
   short_map = icd_guess_short(map), return_df = FALSE, ...)
-
-icd_comorbid_common(x, map, visit_name = NULL, icd_name, short_code,
-  short_map, return_df = FALSE, comorbid_fun = icd9ComorbidShortCpp, ...)
 
 icd9_comorbid_ahrq(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
@@ -105,17 +101,9 @@ the column using this argument avoids the guesswork.}
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
-\item{short_map}{Same as short, but applied to \code{map} instead of
-\code{icd_df}. All the codes in a mapping should be of the same type, i.e.
-short or decimal.}
-
-\item{abbrev_names}{single logical value that defaults to \code{TRUE}, in
-which case the shorter human-readable names stored in e.g.
-\code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.}
-
-\item{hierarchy}{single logical value that defaults to \code{TRUE}, in which
-case the hierarchy defined for the mapping is applied. E.g. in Elixhauser,
-you can't have uncomplicated and complicated diabetes both flagged.}
+\item{short_map}{Same as short, but applied to \code{map} instead of the data
+frame of ICD codes, \code{x}. All the codes in a mapping should be of the
+same type, i.e. short or decimal.}
 
 \item{single}{a logical value, if \code{TRUE} then use single level CCS,
 otherwise use multi level}
@@ -141,13 +129,13 @@ billions of possible ICD-10/ICD-10-CM codes are included in the mappings, so
 it will likely give incomplete results, without searching for parents of the
 input codes until a match is found in the map.
 
-There is a change in behavior from previous versions. The visit_name
-  column is (implicitly) sorted by using std::set container. Previously, the
-  visit_name output order was whatever R's \code{aggregate} produced.
+The order of visits may change depending on the original sequence,
+  and the underlying algorithm used. Usually this would be the order of the
+  first occurence of each visit/patient identifier.
 
   The threading of the C++ can be controlled using e.g.
   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
-  the machine is used.
+  the machine is used. 'OpenMP' environment variables also work.
 
 \code{data.frame}s of patient data may have columns within them
   which are of class \code{icd9}, \code{icd10} etc., but do not themselves
@@ -163,11 +151,6 @@ There is a change in behavior from previous versions. The visit_name
 
 \item \code{icd9_comorbid}: Get comorbidities from \code{data.frame} of ICD-9
 codes
-
-\item \code{icd_comorbid_common}: Internal function. The common comorbidity
-calculation code does not depend on ICD type. There is some type conversion
-so the map and input codes are all in 'short' format, fast factor
-generation, then fast comorbidity assignment.
 }}
 
 \examples{
@@ -184,7 +167,8 @@ generation, then fast comorbidity assignment.
   pts10 <- icd_long_data(
     visit_name = c("a", "b", "c", "d", "e"),
     icd_name = c("I058", NA, "T82817A", "", "I69369"),
-    date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
+    date = as.Date(
+      c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
 
   icd10_comorbid(pts10, map = icd10_map_ahrq)
 

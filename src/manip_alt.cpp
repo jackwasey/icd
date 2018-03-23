@@ -32,7 +32,7 @@
 //' \code{manip.cpp} has the benchmark code.
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
+Rcpp::String icd9AddLeadingZeroes_alt_ShortSingle(Rcpp::String x) {
   if (x == NA_STRING) {
     return (NA_STRING);
   }
@@ -66,16 +66,16 @@ Rcpp::String icd9AddLeadingZeroesShortSingle(Rcpp::String x) {
   return (s);
 }
 
-//' @describeIn icd9AddLeadingZeroesShortSingle Directly apply
+//' @describeIn icd9AddLeadingZeroes_alt_ShortSingle Directly apply
 //' icd9AddLeadingZeroesShortSingle to each code without separating into parts
 //' @keywords internal manip
 // [[Rcpp::export(icd9_add_leading_zeroes_alt_cpp)]]
-CV icd9AddLeadingZeroesDirect(CV x, bool short_code) {
+CV icd9AddLeadingZeroes_alt_Direct(CV x, bool short_code) {
   // a shortcut for when short codes is just to add the appropriate leading
   // zeros when the total length is <3.
   if (short_code)
-    return Rcpp::sapply(x, icd9AddLeadingZeroesShortSingle);
+    return Rcpp::sapply(x, icd9AddLeadingZeroes_alt_ShortSingle);
 
   CV y = icd9DecimalToShort(x);
-  return Rcpp::sapply(y, icd9AddLeadingZeroesShortSingle);
+  return Rcpp::sapply(y, icd9AddLeadingZeroes_alt_ShortSingle);
 }

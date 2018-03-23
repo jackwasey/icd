@@ -21,10 +21,10 @@
 #include <string>       // for string
 #include "icd_types.h"  // for CV, VecStr
 
-CV icd9MajMinToCodeOld(CV mjr, CV mnr, bool isShort);
-void icd9ShortToPartsCppStd(VecStr icd9Short,
+CV icd9MajMinToCode_alt_Old(CV mjr, CV mnr, bool isShort);
+void icd9ShortToParts_alt_CppStd(VecStr icd9Short,
                             std::string mnrEmpty,
                             VecStr &mjr,
                             VecStr &mnr);
 
-#endif /* CONVERT_H_ */
+#endif /* CONVERT_ALT_H_ */

@@ -1,11 +1,12 @@
 ^_config\.yml$
 aclocal\.m4$
-IGNORE.*_alt\.[Rr]$
+.*_alt\.[Rr]$
+IGNORE.*_alt\.cpp$
 ^appveyor\.yml$
 \.aspell$
 autom4te\.cache$
 .*benchmark.*
-^vignettes\/\.build\.timestamp$
+(^vignettes\/)?\.build\.timestamp$
 .*_cache.*
 callgrind\.out
 ^config\.log$
@@ -41,6 +42,7 @@ inst\/standalone\/.*
 ^src\/Makevars$
 ^man-roxygen$
 ^NEWS\.md$
+^.*\.o$
 ^README-*\.png$
 ^README\.Rmd$
 ^README\.html$

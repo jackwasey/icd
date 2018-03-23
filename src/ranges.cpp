@@ -16,34 +16,15 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
+#include <Rcpp.h>
 #include "ranges.h"
-#include <Rcpp/r/headers.h>                 // for Rf_install, NA_STRING
 #include <algorithm>                        // for set_intersection
 #include <iterator>                         // for insert_iterator, inserter
 #include <set>                              // for _Rb_tree_const_iterator, set
 #include <string>                           // for basic_string
 #include <vector>                           // for vector, vector<>::iterator
-#include "Rcpp.h"                           // for wrap
-#include "Rcpp/Environment.h"               // for Environment
-#include "Rcpp/api/meat/Environment.h"      // for Environment_Impl::Environ...
-#include "Rcpp/api/meat/proxy.h"            // for AttributeProxyPolicy::Att...
-#include "Rcpp/as.h"                        // for as
-#include "Rcpp/exceptions.h"                // for stop
-#include "Rcpp/generated/Vector__create.h"  // for Vector::create
-#include "Rcpp/proxy/AttributeProxy.h"      // for AttributeProxyPolicy<>::A...
-#include "Rcpp/proxy/Binding.h"             // for BindingPolicy<>::const_Bi...
-#include "Rcpp/sugar/functions/is_na.h"     // for is_na, IsNa
-#include "Rcpp/sugar/functions/match.h"     // for match
-#include "Rcpp/sugar/operators/not.h"       // for Not_Vector, operator!
-#include "Rcpp/vector/Vector.h"             // for Vector<>::iterator, Vecto...
-#include "Rcpp/vector/VectorBase.h"         // for VectorBase
-#include "Rcpp/vector/instantiation.h"      // for List, LogicalVector, Inte...
-#include "Rcpp/vector/proxy.h"              // for r_vector_proxy<>::type
-#include "Rcpp/vector/string_proxy.h"       // for string_proxy
-#include "RcppCommon.h"                     // for Proxy_Iterator
 #include "appendMinor.h"                    // for icd9MajMinToShort, icd9Ma...
 #include "convert.h"                        // for icd9DecimalToShort, icd9S...
-#include "convert_alt.h"                    // for icd9ShortToPartsCppStd
 #include "icd_types.h"                      // for CV, VecStr, Str
 #include "is.h"                             // for icd9IsASingleE
 #include "local.h"                          // for icd_set
@@ -250,45 +231,6 @@ CV icd9ChildrenShortUnordered(CV icd9Short, bool onlyReal) {
   CV rcppOut = Rcpp::wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
-}
-
-// [[Rcpp::export]]
-VecStr icd9ChildrenShortNoNaUnordered(const VecStr& icd9Short, const bool onlyReal) {
-  icd_set out; // we are never going to put NAs in the output, so use std structure
-  // this is a slower function, can the output set be predefined in size?
-  VecStr mjr(icd9Short.size());
-  VecStr mnr(icd9Short.size());
-  if (icd9Short.size() != 0) {
-    icd9ShortToPartsCppStd(icd9Short, "", mjr, mnr);
-
-    VecStr::iterator itmjr = mjr.begin();
-    VecStr::iterator itmnr = mnr.begin();
-    for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-      const VecStr& newminors = icd9ExpandMinorStd(*itmnr, icd9IsASingleE((*itmjr).c_str()));
-      VecStr newshort = icd9MajMinToShortSingleStd(*itmjr, newminors);
-      out.insert(newshort.begin(), newshort.end());
-    }
-    if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
-      Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
-      icd_set out_real;
-      VecStr tmp = Rcpp::as<VecStr >(
-        icd9Hierarchy["code"]);
-      // 'reals' is the set of majors, intermediate and leaf codes.
-      icd_set reals(tmp.begin(), tmp.end());
-
-      for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
-        if (reals.find(*j) != reals.end())
-          out_real.insert(*j);
-      }
-      out = out_real;
-    }
-  } // input length != 0
-  // TODO in R wrapper: rcppOut.attr("icd_short_diag") = true;
-
-  // sort from unordered set into a vector
-  VecStr out_vec(out.begin(), out.end());
-  return out_vec;
 }
 
 // [[Rcpp::export]]

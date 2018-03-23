@@ -15,6 +15,9 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
+#ifndef RANGE_CONST_H_
+#define RANGE_CONST_H_
+
 #include "icd_types.h"
 
 // this is simplest just to hard-code
@@ -90,3 +93,5 @@ const VecStr v9_std(v9_char, end(v9_char));
 const VecStr vbase_e_std(vbase_e_char, end(vbase_e_char));
 
 const VecStr v_empty_std(0L);
+
+#endif /* RANGE_CONST_H_ */
