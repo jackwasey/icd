@@ -53,3 +53,72 @@ test_that("ahrq css icd 9 is performing correctly", {
   expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl4)))
   expect_equal(dim(res), c(3, 209))
 })
+
+
+test_that("ahrq css icd 10 is performing correctly", {
+  test_df <-
+    data.frame(
+      visit_id = c("a", "b", "b", "c"),
+      icd10 = c("M2578", "Z5681", "W290XXD", "L408"),
+      single = c("204", "255", "2601", "198"),
+      lvl1 = c("13", "17", "18", "12"),
+      lvl2 = c("13.2", "17.2", " ", "12.2"),
+      stringsAsFactors = FALSE
+    )
+
+
+  res <-
+    icd10_comorbid_ccs(test_df,  visit_name = "visit_id", icd_name = "icd10")
+  expect_true(all(mapply(
+    function(x, y)
+      res[x, y], test_df$visit_id, test_df$single
+  )))
+  expect_equal(dim(res), c(3, 283)) #there is no more cat 0 in icd10
+
+  expect_error(
+    icd10_comorbid_ccs(
+      test_df,
+      visit_name = "visit_id",
+      icd_name = "icd10",
+      single = FALSE
+    )
+  )
+  expect_error(
+    icd10_comorbid_ccs(
+      test_df,
+      visit_name = "visit_id",
+      icd_name = "icd10",
+      single = FALSE,
+      lvl = "a"
+    )
+  )
+
+  res <-
+    icd10_comorbid_ccs(
+      test_df,
+      visit_name = "visit_id",
+      icd_name = "icd10",
+      single = FALSE,
+      lvl = 1
+    )
+  expect_true(all(mapply(
+    function(x, y)
+      res[x, y], test_df$visit_id, test_df$lvl1
+  )))
+  expect_equal(dim(res), c(3, 18))
+
+  res <-
+    icd10_comorbid_ccs(
+      test_df,
+      visit_name = "visit_id",
+      icd_name = "icd10",
+      single = FALSE,
+      lvl = 2
+    )
+  expect_true(all(mapply(
+    function(x, y)
+      res[x, y], test_df$visit_id, test_df$lvl2
+  )))
+  expect_equal(dim(res), c(3, 136))
+
+})

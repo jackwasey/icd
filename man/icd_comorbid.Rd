@@ -15,10 +15,12 @@
 \alias{icd10_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_deyo}
 \alias{icd9_comorbid_ccs}
+\alias{icd10_comorbid_ccs}
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_elix}
 \alias{icd_comorbid_quan_elix}
 \alias{icd_comorbid_quan_deyo}
+\alias{icd_comorbid_ccs}
 \title{Find comorbidities from ICD-9 codes.}
 \usage{
 icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L,
@@ -54,6 +56,8 @@ icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd9_comorbid_ccs(x, ..., single = TRUE, lvl = NULL)
 
+icd10_comorbid_ccs(x, ..., single = TRUE, lvl = NULL)
+
 icd_comorbid_ahrq(x, icd_name = get_icd_name(x), ...)
 
 icd_comorbid_elix(x, icd_name = get_icd_name(x), ...)
@@ -61,6 +65,8 @@ icd_comorbid_elix(x, icd_name = get_icd_name(x), ...)
 icd_comorbid_quan_elix(x, icd_name = get_icd_name(x), ...)
 
 icd_comorbid_quan_deyo(x, icd_name = get_icd_name(x), ...)
+
+icd_comorbid_ccs(x, icd_name = get_icd_name(x), ...)
 }
 \arguments{
 \item{aggregate}{single logical value, if \code{TRUE}, then take (possible
@@ -110,6 +116,12 @@ otherwise use multi level}
 
 \item{lvl}{If multiple level CCS, then level must be selected as a number
 between one and four.}
+
+\item{single}{a logical value, if \code{TRUE} then use single level CCS,
+otherwise use multi level}
+
+\item{lvl}{If multiple level CCS, then level must be selected as a number
+between one and two.}
 }
 \description{
 \code{\link{Rcpp}} approach to comorbidity assignment with

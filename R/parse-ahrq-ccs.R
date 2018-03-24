@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' Download ahrq-css-icd-09 definition
+#' Download ahrq-css-icd9 definition
 #' @template ccs-single
 #' @template offline
 #' @keywords internal
@@ -127,3 +127,112 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE, offline = TRUE
   }
   invisible(out)
 }
+
+#' Download ahrq-css-icd10 definition
+#' @template offline
+#' @keywords internal
+icd10_fetch_ahrq_ccs <- function(version = "2018.1", offline) {
+  assert_character(version, pattern = "^20[0-9]{2}\\.[1-9]$")
+  assert_flag(offline)
+  version <- gsub(".", "_", version, fixed = TRUE)
+
+  # all information in one file, no need for single vs multi
+  unzip_to_data_raw(
+    url = paste0("https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs_dx_icd10cm_", version,".zip"),
+    file_name = paste0("ccs_dx_icd10cm_",version,".csv"),
+    offline = offline)
+}
+
+
+#' parse AHRQ CCS for mapping - ICD10
+#'
+#' Data is downloaded from AHRQ website. ICD10 codes are continually being
+#' updated so a paramter for \code{version} is provided. This parameter should
+#' mimic those found in
+#' \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp#archive}.
+#' These are in the format of \code{YYYY.1}, \code{YYYY.2} etc.
+#' @param version string in format like "2018.1" where 1 is the version number
+#'   as shown on the website
+#' @param save_data logical whether to save the result in the source tree.
+#'   Defaults to \code{FALSE}.
+#' @template offline
+#' @importFrom utils read.csv
+#' @examples
+#' \dontrun{
+#'   icd:::icd10_parse_ahrq_ccs(version = "2018.1",
+#'       save_data = FALSE, offline = FALSE)
+#'   icd:::icd10_parse_ahrq_ccs(version = "2018.1",
+#'       save_data = FALSE, offline = TRUE)
+#' }
+#' @keywords internal manip
+icd10_parse_ahrq_ccs <- function(version = "2018.1",
+                                 save_data = FALSE,
+                                 offline = TRUE) {
+  assert_character(version, pattern = "^20[0-9]{2}\\.[1-9]$")
+  assert_flag(save_data)
+  assert_flag(offline)
+
+  ahrq_ccs <-
+    icd10_fetch_ahrq_ccs(version = version, offline = offline)
+  # simpler structure than icd9, all categories in one file
+  ahrq_df <- read.csv(ahrq_ccs$file_path,
+                      quote = "'\"",
+                      colClasses = "character")
+
+  clean_icd10 <- function(x) {
+    x %>%
+      trimws() %>%
+      as.icd10()
+  }
+
+  resort_lvls <- function(x) {
+    # Function to reorder numbers of CCS
+    lvls_names <- names(x)
+    lvls_has_empty <- any(lvls_names == " ")
+    lvls <- lvls_names[lvls_names != " "]
+    lvls <- strsplit(lvls, ".", fixed = TRUE)
+    number_splits <- length(lvls[[1]])
+    lvls <- lvls %>%
+      unlist %>%
+      as.numeric %>%
+      matrix(
+        ncol = number_splits,
+        byrow = TRUE,
+        dimnames  = list(rownames = lvls_names[lvls_names != " "])
+      )
+
+    # complicated call needed or order using all columns of matrix
+    lvls <- lvls[do.call(order, as.data.frame(lvls)),]
+    if (is.null(dim(lvls)))
+      lvls <-
+      names(lvls) # if only looking at lvl1, then this becomes a vector, not a matrix
+    else
+      lvls <- rownames(lvls)
+
+    if (lvls_has_empty)
+      lvls <- c(lvls, " ")
+    x[lvls]
+  }
+
+  ccs_lvl_map <- function(col_name) {
+    tapply(ahrq_df[["ICD.10.CM.CODE"]], ahrq_df[[col_name]], clean_icd10) %>%
+      resort_lvls %>%
+      icd_comorbidity_map
+  }
+
+  #list to define which columns match to which definition
+  icd10_map_def <- list(single = "CCS.CATEGORY",
+                        lvl1 = "MULTI.CCS.LVL.1",
+                        lvl2 = "MULTI.CCS.LVL.2")
+
+  # Because data is in one file, only have one mapping file to save
+  icd10_map_ccs <- lapply(icd10_map_def, ccs_lvl_map)
+
+  if (save_data)
+    save_in_data_dir("icd10_map_ccs")
+
+  invisible(icd10_map_ccs)
+
+}
+
+

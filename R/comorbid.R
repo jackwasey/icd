@@ -18,7 +18,7 @@
 utils::globalVariables(c(
   "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
   "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo", "icd10_map_quan_elix",
-  "icd9_map_single_ccs", "icd9_map_multi_ccs"
+  "icd9_map_single_ccs", "icd9_map_multi_ccs", "icd10_map_ccs"
 ))
 
 #' Present-on-admission flags
@@ -502,6 +502,24 @@ icd9_comorbid_ccs <- function(x, ..., single = TRUE, lvl = NULL ) {
 }
 
 #' @rdname icd_comorbid
+#' @template ccs-single
+#' @param lvl If multiple level CCS, then level must be selected as a number
+#'   between one and two.
+#' @export
+icd10_comorbid_ccs <- function(x, ..., single = TRUE, lvl = NULL) {
+  assert_flag(single)
+  assert_int(lvl, lower = 1, upper = 2, null.ok = TRUE, na.ok = FALSE)
+  m <- icd10_map_ccs$single
+  if (!single) {
+    if (!is.null(lvl))
+      m <- icd10_map_ccs[[paste0("lvl", lvl)]]
+    else
+      stop("If 'single' is false, then 'lvl' must be supplied as 1 or 2")
+  }
+  icd10_comorbid(x, map = m, short_map = TRUE, ...)
+}
+
+#' @rdname icd_comorbid
 #' @export
 icd_comorbid_ahrq <- function(x, icd_name = get_icd_name(x), ...) {
   ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
@@ -545,6 +563,18 @@ icd_comorbid_quan_deyo <- function(x, icd_name = get_icd_name(x), ...) {
     icd9_comorbid_quan_deyo(x, icd_name = icd_name, ...)
   else if (ver == "icd10")
     icd10_comorbid_quan_deyo(x, icd_name = icd_name, ...)
+  else
+    stop("could not guess the ICD version using icd_name = ", icd_name)
+}
+
+#' @rdname icd_comorbid
+#' @export
+icd_comorbid_ccs <- function(x, icd_name = get_icd_name(x), ...) {
+  ver <- icd_guess_version.data.frame(x, icd_name = icd_name)
+  if (ver == "icd9")
+    icd9_comorbid_ccs(x, icd_name = icd_name, ...)
+  else if (ver == "icd10")
+    icd10_comorbid_ccs(x, icd_name = icd_name, ...)
   else
     stop("could not guess the ICD version using icd_name = ", icd_name)
 }
