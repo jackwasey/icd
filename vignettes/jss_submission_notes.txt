@@ -1,0 +1,7 @@
+no page limit, but definitely keep under 30 to avoid even longer review
+submission as R vignette is preferred
+platform requirements: C++11 compiler
+content should be reproducible: Make sure to initialize the generator for pseudo random numbers if the results rely on some form of simulation.
+Name-drop "reproducible research" in abtract and conclusions
+read style guide and FAQ carefully
+
