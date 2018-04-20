@@ -5,7 +5,7 @@
 \alias{icd9_drop_leading_zeroes_major}
 \title{drop zero padding from decimal ICD-9 code.}
 \usage{
-icd9_drop_leading_zeroes(x, short_code = icd_guess_short(x))
+icd9_drop_leading_zeroes(x, short_code = guess_short(x))
 
 icd9_drop_leading_zeroes_major(major)
 }
@@ -27,28 +27,6 @@ be problematic. This is the inverse of \code{icd9_add_leading_zeroes}.
 \details{
 Invalid codes have no guaranteed result, and may give NA, or a (possibly
 valid) code in response.
-}
-\examples{
-\dontrun{
-library(microbenchmark)
-x <- icd:::generate_random_decimal_icd9(1e6)
-microbenchmark(
-  x \%>\% icd:::as_char_no_warn \%>\%
-  stringr::str_replace("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
-
-  stringr::str_replace(icd:::as_char_no_warn(x),
-              "[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3"),
-
-  gsub("[[:space:]]*([EeVv]?)(0*)([\\\\.[:digit:]]*)[[:space:]]*", "\\\\1\\\\3", x),
-  times = 1000
-  )
-}
-}
-\seealso{
-Other ICD-9 convert: \code{\link{icd9PartsToShort}},
-  \code{\link{icd9_chapters_to_map}},
-  \code{\link{icd_long_to_wide}},
-  \code{\link{icd_wide_to_long}}
 }
 \keyword{internal}
 \keyword{manip}

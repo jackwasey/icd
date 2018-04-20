@@ -94,7 +94,6 @@ VecStr icd9ExpandMinorStd(const Str& mnr, bool isE) {
 
 // [[Rcpp::export(icd9_expand_minor_wrap)]]
 CV icd9ExpandMinor(const Str& mnr, bool isE) {
-
   if (!isE) {
     switch (mnr.size()) {
     case 0:
@@ -148,43 +147,34 @@ CV icd9ExpandMinor(const Str& mnr, bool isE) {
 }
 
 // [[Rcpp::export]]
-CV icd9ChildrenShort(CV icd9Short, bool onlyReal) {
-  std::set<Str> out; // we are never going to put NAs in the output, so use std structure
-  // this is a slower function, can the output set be predefined in size?
-  if (icd9Short.size() != 0) {
-    // TODO by reference or updating arguments instead? Unclear benefit, but
-    // this does/did take a lot of cycles in valgrind
-    Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
-    CV mjr = parts[0];
-    CV mnr = parts[1];
-
-    CV::iterator itmjr = mjr.begin();
-    CV::iterator itmnr = mnr.begin();
-    for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-      Str thismjr = Rcpp::as<Str>(*itmjr);
-      Str thismnr = Rcpp::as<Str>(*itmnr);
-
-      const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
-
-      VecStr newshort = Rcpp::as<VecStr >(icd9MajMinToShort(thismjr, newminors));
-
-      out.insert(newshort.begin(), newshort.end());
-    }
-    if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
-      const Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
-      std::set<Str> out_real;
-      const VecStr tmp = Rcpp::as<VecStr >(icd9Hierarchy["code"]);
-      // 'reals' is the set of majors, intermediate and leaf codes.
-      const std::set<Str> reals(tmp.begin(), tmp.end());
-
-      // set_intersection doesn't work for unordered sets
-      std::set_intersection(out.begin(), out.end(),
-                            reals.begin(), reals.end(),
-                            std::inserter(out_real, out_real.begin()));
-      out = out_real;
-    }
-  } // input length != 0
+CV icd9ChildrenShort(CV icd9Short,
+                     const VecStr& icd9cmReal,
+                     bool onlyReal) {
+  std::set<Str> out;
+  if (icd9Short.size() == 0) {
+    icd9Short.attr("icd_short_diag") = true;
+    return icd9Short;
+  }
+  Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
+  CV mjr = parts[0];
+  CV mnr = parts[1];
+  CV::iterator itmjr = mjr.begin();
+  CV::iterator itmnr = mnr.begin();
+  for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
+    Str thismjr = Rcpp::as<Str>(*itmjr);
+    Str thismnr = Rcpp::as<Str>(*itmnr);
+    const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
+    VecStr newshort = Rcpp::as<VecStr >(icd9MajMinToShort(thismjr, newminors));
+    out.insert(newshort.begin(), newshort.end());
+  }
+  if (onlyReal) {
+    std::set<Str> out_real;
+    const std::set<Str> reals(icd9cmReal.begin(), icd9cmReal.end());
+    std::set_intersection(out.begin(), out.end(),
+                          reals.begin(), reals.end(),
+                          std::inserter(out_real, out_real.begin()));
+    out = out_real;
+  }
   CV rcppOut = Rcpp::wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
@@ -193,41 +183,35 @@ CV icd9ChildrenShort(CV icd9Short, bool onlyReal) {
 // TODO: icd9ChildrenShortUnordered no NA version
 
 // [[Rcpp::export]]
-CV icd9ChildrenShortUnordered(CV icd9Short, bool onlyReal) {
-  icd_set out; // we are never going to put NAs in the output, so use std structure
-  // this is a slower function, can the output set be predefined in size?
-  if (icd9Short.size() != 0) {
-    Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
-    CV mjr = parts[0];
-    CV mnr = parts[1];
-
-    CV::iterator itmjr = mjr.begin();
-    CV::iterator itmnr = mnr.begin();
-    for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-      Str thismjr = Rcpp::as<Str>(*itmjr);
-      Str thismnr = Rcpp::as<Str>(*itmnr);
-
-      const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
-
-      VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismjr, newminors));
-      out.insert(newshort.begin(), newshort.end());
+CV icd9ChildrenShortUnordered(CV icd9Short,
+                              const VecStr& icd9cmReal,
+                              bool onlyReal) {
+  icd_set out;
+  if (icd9Short.size() == 0) {
+    icd9Short.attr("icd_short_diag") = true;
+    return icd9Short;
+  }
+  Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
+  CV mjr = parts[0];
+  CV mnr = parts[1];
+  CV::iterator itmjr = mjr.begin();
+  CV::iterator itmnr = mnr.begin();
+  for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
+    Str thismjr = Rcpp::as<Str>(*itmjr);
+    Str thismnr = Rcpp::as<Str>(*itmnr);
+    const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
+    VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismjr, newminors));
+    out.insert(newshort.begin(), newshort.end());
+  }
+  if (onlyReal) {
+    icd_set out_real;
+    icd_set reals(icd9cmReal.begin(), icd9cmReal.end());
+    for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
+      if (reals.find(*j) != reals.end())
+        out_real.insert(*j);
     }
-    if (onlyReal) {
-      const Rcpp::Environment env("package:icd");
-      Rcpp::List icd9Hierarchy = env["icd9cm_hierarchy"];
-      icd_set out_real;
-      VecStr tmp = Rcpp::as<VecStr >(
-        icd9Hierarchy["code"]);
-      // 'reals' is the set of majors, intermediate and leaf codes.
-      icd_set reals(tmp.begin(), tmp.end());
-
-      for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
-        if (reals.find(*j) != reals.end())
-          out_real.insert(*j);
-      }
-      out = out_real;
-    }
-  } // input length != 0
+    out = out_real;
+  }
   CV rcppOut = Rcpp::wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
@@ -235,9 +219,10 @@ CV icd9ChildrenShortUnordered(CV icd9Short, bool onlyReal) {
 
 // [[Rcpp::export]]
 CV icd9ChildrenDecimalCpp(CV icd9Decimal,
+                          const VecStr& icd9cmReal,
                           bool onlyReal) {
   CV shrt = icd9DecimalToShort(icd9Decimal);
-  CV kids = icd9ChildrenShort(shrt, onlyReal);
+  CV kids = icd9ChildrenShort(shrt, icd9cmReal, onlyReal);
   CV out = icd9ShortToDecimal(kids);
   out.attr("icd_short_diag") = false;
   return out;
@@ -245,33 +230,9 @@ CV icd9ChildrenDecimalCpp(CV icd9Decimal,
 
 // [[Rcpp::export]]
 CV icd9ChildrenCpp(CV icd9, bool isShort,
+                   const VecStr icd9cmReal,
                    bool onlyReal = true) {
   if (isShort)
-    return icd9ChildrenShort(icd9, onlyReal);
-  return icd9ChildrenDecimalCpp(icd9, onlyReal);
-}
-
-//' @title match ICD9 codes
-//' @description Finds children of \code{icd9Reference} and looks for \code{icd9} in the
-//'   resulting vector.
-//' @templateVar icd9AnyName "icd9,icd9Reference"
-//' @template icd9-any
-//' @template short_code
-//' @param isShortReference logical, see argument \code{short_code}
-//' @return logical vector
-//' @keywords internal
-// [[Rcpp::export]]
-Rcpp::LogicalVector icd_in_reference_code(CV icd,
-                                          CV icd_reference,
-                                          bool short_code,
-                                          bool short_reference = true) {
-  if (!short_code)
-    icd = icd9DecimalToShort(icd);
-
-  CV y = icd9ChildrenCpp(icd_reference, short_reference, false);
-  if (!short_reference)
-    y = icd9DecimalToShort(y);
-  // TODO: use hash/environment, although linear search in short maps may be ok
-  Rcpp::LogicalVector res = !is_na(match(icd, y));
-  return res;
+    return icd9ChildrenShort(icd9, icd9cmReal, onlyReal);
+  return icd9ChildrenDecimalCpp(icd9, icd9cmReal, onlyReal);
 }

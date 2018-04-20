@@ -42,13 +42,14 @@ icd_data_names <- c(
   "icd9_majors",
   "icd9_map_cc",
   "icd9cm_billable",
-  "icd_names_ahrq", "icd_names_ahrq_abbrev", "icd_names_ahrq_htn",
-  "icd_names_ahrq_htn_abbrev", "icd_names_charlson",
-  "icd_names_charlson_abbrev", "icd_names_elix", "icd_names_elix_abbrev",
-  "icd_names_elix_htn", "icd_names_elix_htn_abbrev", "icd_names_quan_elix",
-  "icd_names_quan_elix_abbrev", "icd_names_quan_elix_htn",
-  "icd_names_quan_elix_htn_abbrev",
-  "icd9_map_single_ccs", "icd9_map_multi_ccs"
+  "names_ahrq", "names_ahrq_abbrev", "names_ahrq_htn",
+  "names_ahrq_htn_abbrev", "names_charlson",
+  "names_charlson_abbrev", "names_elix", "names_elix_abbrev",
+  "names_elix_htn", "names_elix_htn_abbrev", "names_quan_elix",
+  "names_quan_elix_abbrev", "names_quan_elix_htn",
+  "names_quan_elix_htn_abbrev",
+  "icd9_map_single_ccs", "icd9_map_multi_ccs",
+  "icd10_map_ccs"
 )
 
 #' ICD-9 chapters
@@ -273,20 +274,28 @@ NULL
 
 #' Clinical Classifactions Software (CCS) for ICD9/10-CM
 #'
-#' The Clinical Classifications Software (CCS) for ICD-9-CM is one in a family of databases and software tools developed
-#' as part of the Healthcare Cost and Utilization Project (HCUP),a Federal-State-Industry partnership sponsored by the
-#' Agency for Healthcare Research and Quality. HCUP databases, tools, and software inform decision making at the
-#' national, State, and community levels. The software contains two different mappings. One is a single level mapping
-#' and one is a multi level classification. This data set contains the numeric representations of all of the codes.
+#' The Clinical Classifications Software (CCS) for ICD-9/10-CM is one in a
+#' family of databases and software tools developed as part of the Healthcare
+#' Cost and Utilization Project (HCUP),a Federal-State-Industry partnership
+#' sponsored by the Agency for Healthcare Research and Quality. HCUP databases,
+#' tools, and software inform decision making at the national, State, and
+#' community levels. The software contains two different mappings. One is a
+#' single level mapping and one is a multi level classification. This data set
+#' contains the numeric representations of all of the codes.
 #'
-#' This file contains the updated ICD9 version that includes categories for Mental Health and Substance Abuse. More
-#' information on the ICD-9-CM data set can be found \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp}.
+#' This file contains the updated ICD9 version that includes categories for
+#' Mental Health and Substance Abuse. More information on the ICD-9-CM data set
+#' can be found \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp}.
+#'
+#' The file \code{icd10_map_ccs} contains the 2018.1 ICD10 Version of the
+#' mapping. Mor information on the ICD10 code set can be found at
+#' \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp}
 #'
 #' @docType data
 #' @keywords datasets
 #' @format list of character vectors, each numbered by co-morbidity
 #' @name icd9_map_single_ccs
-#' @aliases icd9_map_multi_ccs
+#' @aliases icd9_map_multi_ccs icd10_map_ccs
 NULL
 
 #' Comorbidity names
@@ -308,12 +317,16 @@ NULL
 #'   'Hypertension, complicated' are labelled '6a' and '6b'. Diabetes, cancer,
 #'   and metastasis are counted independently, as in the original paper, giving
 #'   the original 30 groups. "01" to "30"
-#' @name icd_names_elix
-#' @aliases icd_names_elix_abbrev icd_names_elix_htn icd_names_elix_htn_abbrev
-#'   icd_names_quan_elix icd_names_quan_elix_abbrev icd_names_quan_elix_htn
-#'   icd_names_quan_elix_htn_abbrev icd_names_ahrq icd_names_ahrq_abbrev
-#'   icd_names_ahrq_htn icd_names_ahrq_htn_abbrev icd_names_charlson
-#'   icd_names_charlson_abbrev icd_names_cc
+#' @name names_elix
+#' @aliases names_elix_abbrev names_elix_htn names_elix_htn_abbrev
+#'   names_quan_elix names_quan_elix_abbrev names_quan_elix_htn
+#'   names_quan_elix_htn_abbrev names_ahrq names_ahrq_abbrev names_ahrq_htn
+#'   names_ahrq_htn_abbrev names_charlson names_charlson_abbrev names_cc
+#'   icd_names_elix icd_names_elix_abbrev icd_names_elix_htn
+#'   icd_names_elix_htn_abbrev icd_names_quan_elix icd_names_quan_elix_abbrev
+#'   icd_names_quan_elix_htn icd_names_quan_elix_htn_abbrev icd_names_ahrq
+#'   icd_names_ahrq_abbrev icd_names_ahrq_htn icd_names_ahrq_htn_abbrev
+#'   icd_names_charlson icd_names_charlson_abbrev icd_names_cc
 #' @keywords datasets
 #' @docType data
 NULL

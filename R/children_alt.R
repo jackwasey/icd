@@ -15,14 +15,14 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-icd_children_defined_r.icd10cm <- function(x, short_code = icd_guess_short(x), warn = FALSE) {
+children_defined_r.icd10cm <- function(x, short_code = guess_short(x), warn = FALSE) {
 
   assert_character(x)
   assert_flag(short_code)
 
   x <- trim(x)
   if (!short_code)
-    x <- icd_decimal_to_short.icd10cm(x)
+    x <- decimal_to_short.icd10cm(x)
 
   # we match twice here, once with %in% and once with match...
   matches_bool <- x %in% icd10cm2016[["code"]]

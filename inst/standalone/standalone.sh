@@ -1,17 +1,24 @@
-#!/bin/sh
-
+#!/bin/bash
+set -x
 # don't use this: use the Makefile. This is just for experimenting with paths
 
+rcpp=$(Rscript -e 'cat(system.file(package = "Rcpp"))')
+rinside=$(Rscript -e 'cat(system.file(package = "RInside"))')
+r=$(R RHOME)
+icd=$(Rscript -e 'cat(system.file(package = "icd"))')
+
 clang++ \
-	-I"/usr/share/R/include" \
-	-I"/home/jack/R/x86_64-pc-linux-gnu-library/3.2/Rcpp/include/" \
-	-I"/home/jack/R/x86_64-pc-linux-gnu-library/3.2/Rcpp/include/Rcpp/" \
-	-I"/home/jack/R/x86_64-pc-linux-gnu-library/3.2/RInside/include/" \
-	-I. \
-	-g -Wall -v \
-	-L"/usr/lib/R/lib/" \
-	-L"/home/jack/R/x86_64-pc-linux-gnu-library/3.2/Rcpp/libs/" \
+	-I"${r}/include" \
+	-I"${rcpp}/include" \
+	-I"${rcpp}/include/Rcpp" \
+	-I"${rinside}/include" \
+	-I"${icd}/include" \
+	-I"." \
+	-g \
+	-L"${rinside}/libs" \
+	-L"${rinside}/lib" \
+	-L"${icd}/libs" \
+	-L"${r}/lib" \
 	-lR \
-	-DICD_STANDALONE \
-	-o standalone.bin \
+	-o standalone.out \
 	standalone.cpp

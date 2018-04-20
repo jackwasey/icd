@@ -4,7 +4,7 @@
 \alias{icd9cm_get_billable}
 \title{Get billable ICD-9-CM codes}
 \usage{
-icd9cm_get_billable(x, short_code = icd_guess_short(x), invert = FALSE,
+icd9cm_get_billable(x, short_code = guess_short(x), invert = FALSE,
   icd9cm_edition = icd9cm_latest_edition())
 }
 \arguments{

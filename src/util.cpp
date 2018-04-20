@@ -78,7 +78,7 @@ void printCharVec(CV cv) {
 }
 #endif
 
-// [[Rcpp::export]]
+// [[Rcpp::export(get_omp_cores)]]
 int getOmpCores() {
   int cores = 0;
 #ifdef ICD_OPENMP
@@ -87,7 +87,7 @@ int getOmpCores() {
   return cores;
 }
 
-// [[Rcpp::export]]
+// [[Rcpp::export(get_omp_max_threads)]]
 int getOmpMaxThreads() {
   int maxthreads = 0;
 #ifdef ICD_OPENMP
@@ -97,7 +97,7 @@ int getOmpMaxThreads() {
 }
 
 // https://stackoverflow.com/questions/43736622/which-openmp-schedule-am-i-running/43755259#43755259
-// [[Rcpp::export]]
+// [[Rcpp::export(get_omp_threads)]]
 int getOmpThreads() {
   int threads = 0;
 #ifdef ICD_OPENMP
@@ -314,3 +314,31 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
 // }
 // return
 // }
+
+//' fast expand of logical matrix to add rows filled with false
+//' @keywords internal
+// [[Rcpp::export]]
+Rcpp::LogicalMatrix rbind_with_empty(Rcpp::LogicalMatrix a, int b_rows) {
+  // start with empty matrix
+  Rcpp::LogicalMatrix out = Rcpp::no_init_matrix(a.rows() + b_rows, a.cols());
+  // loop col-wise will be much faster
+  for (int j = 0; j != a.cols(); ++j) {
+    for (int i = 0; i != a.rows(); ++i)
+      out(i, j) = a(i,j); // copy
+    for (int i = a.rows(); i != out.rows(); ++i)
+      out(i, j) = false; // fill
+  } // end j loop
+  return out;
+}
+
+//' fast factor generation test
+//' @keywords internal
+// [[Rcpp::export]]
+SEXP factor_fast( SEXP x ) {
+  switch( TYPEOF(x) ) {
+  case INTSXP: return fast_factor_template<INTSXP>(x);
+  case REALSXP: return fast_factor_template<REALSXP>(x);
+  case STRSXP: return fast_factor_template<STRSXP>(x);
+  }
+  return R_NilValue;
+}

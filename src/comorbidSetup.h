@@ -20,20 +20,14 @@
 
 // n.b. Rcpp ignores the ifdef stuff
 // [[Rcpp::interfaces(r, cpp)]]
+#include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
+#include "local.h"                            // for VisLk
+#include "config.h"                            // for valgrind etc
 #include <Rcpp.h>
-#include <Rcpp/r/headers.h>                   // for INTEGER, Rf_length, SEXP
 #include <map>                                // for _Rb_tree_iterator
 #include <string>                             // for string, basic_string
 #include <utility>                            // for make_pair, pair
 #include <vector>                             // for vector
-#include "Rcpp/as.h"                          // for as
-#include "Rcpp/vector/Vector.h"               // for Vector<>::const_iterator
-#include "Rcpp/vector/const_generic_proxy.h"  // for const_generic_proxy
-#include "Rcpp/vector/instantiation.h"        // for List
-#include "RcppCommon.h"                       // for Proxy_Iterator
-#include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
-#include "local.h"                            // for VisLk
-#include "config.h"                            // for valgrind etc
 extern "C" {
 #include "cutil.h"                            // for getRListOrDfElement
 }
@@ -43,7 +37,6 @@ void buildVisitCodesVec(const SEXP& icd9df,
                         const std::string& visitId,
                         const std::string& icd9Field,
                         VecVecInt& vcdb,
-                        VecStr& visitIds,
-                        const bool aggregate = true);
+                        VecStr& visitIds);
 
 #endif /* COMORBIDSETUP_H_ */

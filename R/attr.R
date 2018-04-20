@@ -15,16 +15,31 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' @rdname is.icd9
-#' @details \code{is.icd_short_diag} tests for presence of an attribute, not
-#'   whether the code is a valid ICD code. If \code{must_work} is \code{TRUE}
-#'   then \code{NULL} (i.e. no attribute set) returns \code{FALSE}, otherwise
-#'   \code{NULL} is returned.
+#' Get or set whether ICD codes have have an attribute indicating 'short' or 'decimal' format
+#'
+#' \code{is.short_diag} tests for presence of an attribute, not whether the code
+#' is a valid ICD code. If \code{must_work} is \code{TRUE} then \code{NULL}
+#' (i.e. no attribute set) returns \code{FALSE}, otherwise \code{NULL} is
+#' returned.
+#'
+#' The attribute \code{icd_short_code} should be either \code{TRUE} or
+#' \code{FALSE}. There is no attribute named \code{icd_decimal_code}. These
+#' functions set and get the attribute safely.
+#' @param x ICD data
+#' @param value \code{TRUE} or \code{FALSE}, default is \code{TRUE} which sets the attribute to whatever is indicated in the function name. See examples.
 #' @param must_work single logical value, if \code{FALSE} (the default) this may
 #'   return \code{NULL} if the attribute is not present. If \code{TRUE}, then
 #'   either \code{TRUE} or \code{FALSE} is returned.
+#' @examples
+#' as.icd_short_diag("6670")
+#' decimal_type_code <- as.icd_short_diag("667.0", FALSE)
+#' stopifnot(is.icd_decimal_diag(decimal_type_code))
+#'
+#' codes <- as.icd9(c("100.1", "441.3"))
+#' codes <- as.decimal_diag(codes)
+#' codes
 #' @export
-is.icd_short_diag <- function(x, must_work = FALSE) {
+is.short_diag <- function(x, must_work = FALSE) {
   res <- attr(x, "icd_short_diag", exact = TRUE)
   if (!must_work)
     res
@@ -32,9 +47,9 @@ is.icd_short_diag <- function(x, must_work = FALSE) {
     isTRUE(res)
 }
 
-#' @rdname is.icd9
+#' @rdname is.short_diag
 #' @export
-is.icd_decimal_diag <- function(x, must_work = FALSE) {
+is.decimal_diag <- function(x, must_work = FALSE) {
   res <- attr(x, "icd_short_diag", exact = TRUE)
   if (!must_work && is.null(res))
     NULL
@@ -42,27 +57,38 @@ is.icd_decimal_diag <- function(x, must_work = FALSE) {
     identical(res, FALSE)
 }
 
-#' Change whether ICD code has short or long attribute
-#'
-#' The attribute \code{icd_short_code} should be either \code{TRUE} or
-#' \code{FALSE}. There is no attribute named \code{icd_decimal_code}.
-#' @param x ICD data
-#' @param value True or false, default is \code{TRUE}
-#' @examples
-#' codes <- as.icd9(c("100.1", "441.3"))
-#' codes <- as.icd_decimal_diag(codes)
-#' codes
+#' @rdname is.short_diag
 #' @export
-as.icd_short_diag <- function(x, value = TRUE) {
+is.icd_short_diag <- function(x, must_work = FALSE)
+  is.short_diag(x, must_work = must_work)
+
+#' @rdname is.short_diag
+#' @export
+is.icd_decimal_diag <- function(x, must_work = FALSE)
+  is.decimal_diag(x, must_work = must_work)
+
+#' @rdname is.short_diag
+#' @export
+as.short_diag <- function(x, value = TRUE) {
   checkmate::assert_flag(value)
   attr(x, "icd_short_diag") <- value
   x
 }
 
-#' @rdname as.icd_short_diag
+#' @rdname is.short_diag
 #' @export
-as.icd_decimal_diag <- function(x, value = TRUE) {
+as.decimal_diag <- function(x, value = TRUE) {
   checkmate::assert_flag(value)
   attr(x, "icd_short_diag") <- !value
   x
 }
+
+#' @rdname is.short_diag
+#' @export
+as.icd_short_diag <- function(x, value = TRUE)
+  as.short_diag(x, value)
+
+#' @rdname is.short_diag
+#' @export
+as.icd_decimal_diag <- function(x, value = TRUE)
+  as.decimal_diag(x, value)

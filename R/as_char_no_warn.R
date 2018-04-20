@@ -25,9 +25,18 @@ as_char_no_warn <- function(x) {
   old <- options(warn = -1)
   on.exit(options(old))
   if (is.integer(x))
-    fastIntToStringRcpp(x)
+    return(fastIntToStringRcpp(x))
   if (is.factor(x))
-    levels(x)[x]
-  else
-    as.character(x)
+    return(levels(x)[x])
+  as.character(x)
+}
+
+#' @describeIn as_char_no_warn If the argument is a factor, return the levels
+#'   instead
+as_char_or_levels <- function(x) {
+  if (is.character(x))
+    return(x)
+  if (is.factor(x))
+    return(levels(x))
+  as_char_no_warn(x)
 }

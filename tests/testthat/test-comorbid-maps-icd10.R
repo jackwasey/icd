@@ -39,11 +39,11 @@ test_that("the classes of the ICD-10 maps are correct", {
   maps <- named_list(icd10_map_ahrq, icd10_map_elix, icd10_map_quan_deyo, icd10_map_quan_elix)
   for (m in names(maps)) {
     # for each map, verify it has class map, and that all it's elements are ICD-10 short diag format
-    expect_identical(class(maps[[m]]), c("icd_comorbidity_map", "list"), info = paste("map: ", m))
+    expect_identical(class(maps[[m]]), c("comorbidity_map", "list"), info = paste("map: ", m))
     for (cbd in names(maps[[m]])) {
       y <- maps[[m]][[cbd]]
       expect_true(is.icd10(y), info = paste("map: ", m, " cbd = ", cbd))
-      expect_true(is.icd_short_diag(y), info = paste("map: ", m, " cbd = ", cbd))
+      expect_true(is.short_diag(y), info = paste("map: ", m, " cbd = ", cbd))
     }
   }
 })
@@ -56,7 +56,7 @@ test_that("the class of each element of the quan elix map is correct", {
     # not a list, it is a character vector
     expect_false(inherits(icd10_map_quan_elix[[i]], "list"), info = i)
     # this is the parent class, not the class of the elements
-    expect_false(inherits(icd10_map_quan_elix[[i]], "icd_comorbidity_map"), info = i)
+    expect_false(inherits(icd10_map_quan_elix[[i]], "comorbidity_map"), info = i)
   }
 })
 
@@ -108,7 +108,7 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
   # this list is just parent codes, whereas I store, for ICD-10, the icd-10-cm children also.
   for (i in 1:30) {
     indep <- quan_elix_independent[[i]]
-    indep_kids <- quan_elix_independent[[i]] %>% icd_children_defined.icd10cm
+    indep_kids <- quan_elix_independent[[i]] %>% children_defined.icd10cm
     canon <- icd10_map_quan_elix[[i]]
     expect_equal(setdiff(indep, canon), character(),
                  info = paste("checking quan elix canonical in indep: ", i, " - ", names(quan_elix_independent)[i]))

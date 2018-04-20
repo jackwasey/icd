@@ -27,4 +27,5 @@ source, or already stored in the \code{data-raw} directory, and it appears
 that the function \code{odbcConnectAccess2007} is only available in the
 Windows build of \pkg{RODBC}.
 }
+\keyword{datagen}
 \keyword{internal}

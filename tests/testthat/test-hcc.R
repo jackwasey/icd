@@ -47,7 +47,7 @@ hcc_test_invalid <- icd_long_data(
 test_that("hcc mapping is applied correctly,
           4 patients on different dates, each should have a single
           HCC assigned", {
-            res <- icd_comorbid_hcc(hcc_test_simple)
+            res <- comorbid_hcc(hcc_test_simple)
             expect_equal(dim(res), c(4, 3))
             expect_true(setequal(c("visit_id", "date", "hcc"), names(res)))
 })
@@ -55,7 +55,7 @@ test_that("hcc mapping is applied correctly,
 # Data as expected but only a single record
 test_that("hcc mapping is applied correctly, one patient, single visit
           should have a single HCC assigned", {
-            res <- icd_comorbid_hcc(hcc_test_single)
+            res <- comorbid_hcc(hcc_test_single)
             expect_equal(dim(res), c(1, 3))
             expect_true(setequal(c("visit", "date", "hcc"), names(res)))
 })
@@ -65,7 +65,7 @@ test_that("hcc mapping is applied correctly, one patient, single visit
 # should return 2 rows, 2 different patients
 test_that("hcc mapping is applied correctly, results in 2 pt/visit combos
           each should have a single HCC assigned", {
-            res <- icd_comorbid_hcc(hcc_test_invalid)
+            res <- comorbid_hcc(hcc_test_invalid)
             expect_equal(dim(res), c(2, 3))
             expect_true(setequal(c("patient", "date", "hcc"), names(res)))
 })

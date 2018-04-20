@@ -35,8 +35,7 @@ Failing this, it will take the first column in the data frame. Specifying
 the column using this argument avoids the guesswork.}
 }
 \description{
-Written in C++ for speed. There are no default arguments and there is no
-value guessing.
+Internal function to find ICD-10 parents
 }
 \seealso{
 \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}

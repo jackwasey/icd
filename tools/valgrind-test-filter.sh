@@ -1,8 +1,6 @@
 #!/bin/bash
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
+set -uo pipefail
 IFS=$'\n\t'
-
 
 set -x
 VERBOSE=""
@@ -12,7 +10,7 @@ VERBOSE=""
 TESTFILTER=${1:-comorbid-calcs-icd9}
 INSTR_ATSTART=${2:-no}
 
-ICD_HOME=${ICD_HOME:-"$HOME/rprojects/icd"}
+ICD_HOME=${ICD_HOME:-"$HOME/icd"}
 cd $ICD_HOME
 
 RCODE=${RCODE:-"library(testthat); message('Testing with valgrind: $TESTFILTER'); devtools::test(filter = '$TESTFILTER')"}

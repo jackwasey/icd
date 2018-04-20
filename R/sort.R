@@ -28,44 +28,42 @@
 #' @return sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
 #' @keywords manip
 #' @export
-icd_sort <- function(x, ...)
-  UseMethod("icd_sort")
+sort_icd <- function(x, ...)
+  UseMethod("sort_icd")
 
-#' @describeIn icd_sort Guess whether ICD-9 or ICD-10 (or possibly sub-type in
+#' @describeIn sort_icd Guess whether ICD-9 or ICD-10 (or possibly sub-type in
 #'   the future) then sort based on that type. ICD-10 codes, note that setting
 #'   \code{short} is unnecessary and ignored.
 #' @export
 #' @keywords internal
-icd_sort.default <- function(x, short_code = icd_guess_short(x), ...) {
+sort_icd.default <- function(x, short_code = guess_short(x), ...) {
   switch(
-    icd_guess_version(x, short_code = short_code),
-    "icd9" = icd_sort.icd9(x, short_code),
-    "icd10" = icd_sort.icd10(x, short_code),
+    guess_version(x, short_code = short_code),
+    "icd9" = sort_icd.icd9(x, short_code),
+    "icd10" = sort_icd.icd10(x, short_code),
     stop("ICD version not known")
   )
 }
 
-#' @describeIn icd_sort Sort ICD-10 codes, note that setting \code{short} is
+#' @describeIn sort_icd Sort ICD-10 codes, note that setting \code{short} is
 #'   unnecessary and ignored.
 #' @keywords internal
 #' @export
-icd_sort.icd10 <- function(x, short_code = NULL, ...) {
+sort_icd.icd10 <- function(x, short_code = NULL, ...) {
   # ignore short, it doesn't matter
   sort(x)
 }
 
-#' @describeIn icd_sort sort ICD-9 codes respecting numeric, then 'V', then 'E'
+#' @describeIn sort_icd sort ICD-9 codes respecting numeric, then 'V', then 'E'
 #'   codes, and accounting for leading zeroes. Will return a factor if a factor is given.
 #' @keywords internal
 #' @export
-icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
-  assert(check_factor(x), check_character(x))
-  assert_flag(short_code)
-
+sort_icd.icd9 <- function(x, short_code = guess_short(x), ...) {
+  # no assertions here: they are slower than the actual sorting...
   y <- if (short_code)
     x
   else
-    icd_decimal_to_short.icd9(x)
+    decimal_to_short.icd9(x)
 
   res <- if (is.factor(x))
     x[icd9_order_cpp(as_char_no_warn(y))]
@@ -84,18 +82,6 @@ icd_sort.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
 #' Puts E codes after V codes. \code{NA} values can't be ordered and are dropped
 #' with a warning if found.
 #' @param x vector or factor of ICD-9 codes
-#' @examples
-#' x <- icd:::generate_random_decimal_icd9(1e4)
-#' system.time(icd:::icd9_sort_cpp(x)) # vastly quicker
-#' system.time(icd:::icd9_order_short(x))
-#' if (exists("icd9_order_short") &&
-#'     require("microbenchmark", quietly = TRUE)) {
-#'   # fastmatch was fractionally faster, but either is very slow
-#'   microbenchmark(icd:::icd9_order_short(x),
-#'                  icd:::icd9_order_short_r(x),
-#'                  times = 10)
-#'   # C++ method (which also ignores NA values) is 100x faster.
-#' }
 #' @return vector of integers with length of the non-NA values in \code{x}
 #' @keywords internal
 icd9_order_short <- function(x) {

@@ -51,9 +51,9 @@ icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
     stringsAsFactors = FALSE
   )
 
-  icd10cm2016[["code"]] %<>% as.icd10cm %>% as.icd_short_diag
+  icd10cm2016[["code"]] %<>% as.icd10cm %>% as.short_diag
   icd10cm2016[["three_digit"]] <-
-    factor_nosort(icd_get_major(icd10cm2016[["code"]]))
+    factor_nosort(get_major(icd10cm2016[["code"]]))
 
   # here we must re-factor so we don't have un-used levels in major
   icd10cm2016[["major"]] <- factor_nosort(
@@ -64,7 +64,7 @@ icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
   )
 
 
-  # can't use icd_expand_range_major here for ICD-10-CM, because it would use
+  # can't use expand_range_major here for ICD-10-CM, because it would use
   # the output of this function (and it can't just do numeric ranges because
   # there are some non-numeric characters scattered around)
 

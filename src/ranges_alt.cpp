@@ -33,16 +33,6 @@
 //'
 //' Pure C++11 implementation using \code{unordered set} to find children of
 //' given codes
-//' @examples
-//' \dontrun{
-//' if (requireNamespace("microbenchmark")) {
-//'   microbenchmark::microbenchmark(
-//'     icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
-//'     icd:::icd9ChildrenShort_alt11(c("001", 100:500), onlyReal = TRUE),
-//'     times = 5)
-//'     # C++11 about 15% faster for this data
-//' }
-//' }
 //' @keywords internal
 // [[Rcpp::export]]
 CV icd9ChildrenShort_alt_11(CV icd9Short, bool onlyReal) {
@@ -85,16 +75,6 @@ CV icd9ChildrenShort_alt_11(CV icd9Short, bool onlyReal) {
 }
 
 //' C++ implementation of finding children of short codes
-//' @examples
-//' \dontrun{
-//' library(microbenchmark)
-//' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
-//' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
-//'                icd9ChildrenShortUnordered(c("001", 100:400), T),
-//'                icd9ChildrenShortStd(c("001", 100:400), T),
-//'                times = 10)
-//' }
-//' # un-ordered set much faster, but may still need to sort result
 //' @keywords internal
 // [[Rcpp::export]]
 CV icd9ChildrenShort_alt_Std(CV icd9Short, bool onlyReal) {

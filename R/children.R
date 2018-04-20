@@ -32,79 +32,94 @@
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
 #'
 #' # no children other than self
-#' icd_children("10201", short_code = TRUE, defined = FALSE)
+#' children("10201", short_code = TRUE, defined = FALSE)
 #'
 #' # guess it was ICD-9 and a short, not decimal code
-#' icd_children("0032")
+#' children("0032")
 #'
 #' # empty because 102.01 is not meaningful
-#' icd_children("10201", short_code = TRUE, defined = TRUE)
-#' icd_children("003", short_code = TRUE, defined = TRUE) %>%
-#'   icd_explain(condense = FALSE, short_code = TRUE)
+#' children("10201", short_code = TRUE, defined = TRUE)
+#' children("003", short_code = TRUE, defined = TRUE) %>%
+#'   explain(condense = FALSE, short_code = TRUE)
 #'
-#' icd_children(short_code = FALSE, "100.0")
-#' icd_children(short_code = FALSE, "100.00")
-#' icd_children(short_code = FALSE, "2.34")
+#' children(short_code = FALSE, "100.0")
+#' children(short_code = FALSE, "100.00")
+#' children(short_code = FALSE, "2.34")
 #' @return Returns a vector of ICD codes, with class of \code{character} and the
 #'   class of the identified or specified ICD code, e.g. \code{icd9}
 #' @export
-icd_children <- function(x, ...)
-  UseMethod("icd_children")
+children <- function(x, ...)
+  UseMethod("children")
 
-#' @describeIn icd_children Get child codes, guessing ICD version and short
+#' @describeIn children Get child codes, guessing ICD version and short
 #'   versus decimal format
 #' @export
-icd_children.character <- function(x, ...) {
-  ver <- icd_guess_version(x)
+children.character <- function(x, ...) {
+  ver <- guess_version(x)
   # eventually UseMethod again, but this would be circular until the icd10
   # method is defined.
-  switch(ver,
-         "icd9" = icd_children.icd9(x = x, ...),
-         "icd10" = icd_children.icd10(x = x, ...),
-         NULL)
+  if (ver %in% icd9_classes)
+    return(children.icd9(x = x, ...))
+  if (ver == "icd10")
+    return(children.icd10(x = x, ...))
+  if (ver == "icd10cm")
+    return(children.icd10cm(x = x, ...))
 }
 
-#' @describeIn icd_children Get children of ICD-9 codes
+#' @describeIn children Get children of ICD-9 codes
 #' @export
-icd_children.icd9 <- function(x, short_code = icd_guess_short(x),
-                              defined = TRUE, billable = FALSE, ...) {
+children.icd9 <- function(x, short_code = guess_short(x),
+                          defined = TRUE, billable = FALSE, ...) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   assert_flag(defined)
   assert_flag(billable)
-
   # TODO order/unorder consistently for decimal and short
   res <- if (short_code)
-    .Call("_icd_icd9ChildrenShortUnordered", toupper(x), defined)
+    .Call("_icd_icd9ChildrenShortUnordered",
+          icd9Decimal = toupper(x),
+          icd9cmReal = icd::icd9cm_hierarchy$code,
+          onlyReal = defined)
   else
-    .Call("_icd_icd9ChildrenDecimalCpp", toupper(x), defined)
-
-  res <- icd_sort.icd9(res)
-
-  if (billable)
-    icd_get_billable.icd9cm(icd9cm(res), short_code)
+    .Call("_icd_icd9ChildrenDecimalCpp",
+          icd9Decimal = toupper(x),
+          icd9cmReal = icd::icd9cm_hierarchy$code,
+          onlyReal = defined)
+  res <- sort_icd.icd9(res)
+  res <- if (billable)
+    get_billable.icd9cm(icd9cm(res), short_code)
   else
     as.icd9(res)
+  if (is.icd9cm(x))
+    return(as.icd9cm(res))
+  res
 }
 
-#' @describeIn icd_children Get children of ICD-10 codes (warns because this
+#' @describeIn children Get children of ICD-10 codes (warns because this
 #'   only applies to ICD-10-CM for now).
 #' @export
-icd_children.icd10 <- function(x, short_code = icd_guess_short(x), defined, billable = FALSE, ...) {
-  icd_children.icd10cm(x, short_code, defined, billable, ...)
+children.icd10 <- function(x, short_code = guess_short(x), defined, billable = FALSE, ...) {
+  res <- children.icd10cm(x, short_code, defined, billable, ...)
+  if (!is.icd10cm(x)) {
+    cl <- class(res)
+    cl <- cl[cl != "icd10cm"]
+    class(res) <- cl
+  }
+  res
 }
 
-#' @describeIn icd_children Get children of ICD-10-CM codes
+#' @describeIn children Get children of ICD-10-CM codes
 #' @export
-icd_children.icd10cm <- function(x, short_code = icd_guess_short(x), defined, billable = FALSE, ...) {
+children.icd10cm <- function(x, short_code = guess_short(x), defined, billable = FALSE, ...) {
   assert(check_factor(x), check_character(unclass(x)))
   assert_flag(short_code)
   assert_flag(billable)
-
   if (!missing(defined) && !defined)
     stop("Finding children of anything but defined ICD-10-CM codes is current not supported.")
-
-  icd_children_defined.icd10cm(x = x, short_code = short_code)
+  res <- children_defined.icd10cm(x = x, short_code = short_code)
+  if (is.icd10cm(x))
+    as.icd10cm(res)
+  res
 }
 
 # this is just lazy package data, but apparently need to declare it to keep CRAN
@@ -117,35 +132,23 @@ utils::globalVariables("icd10cm2016")
 #' three digit code, or a leaf node. This is distinct from 'billable'.
 #'
 #' @keywords internal
-icd_children_defined <- function(x)
-  UseMethod("icd_children_defined")
+children_defined <- function(x)
+  UseMethod("children_defined")
 
-#' @describeIn icd_children_defined Internal function to get the children of
+#' @describeIn children_defined Internal function to get the children of
 #'   ICD-10 code(s)
 #' @param warn single logical value, if \code{TRUE} will generate warnings when
 #'   some input codes are not known ICD-10-CM codes
 #' @param use_cpp single logical flag, whether to use C++ version
-#' @examples
-#' \dontrun{
-#' library(microbenchmark)
-#' microbenchmark::microbenchmark(
-#'   icd:::icd_children_defined.icd10cm("A01"),
-#'   icd:::icd_children_defined_r.icd10cm("A01")
-# ' )
-#' stopifnot(identical(icd:::icd_children_defined.icd10cm("A00"),
-#'   icd:::icd_children_defined_r.icd10cm("A00")))
-#' }
-#' @keywords internal
-icd_children_defined.icd10cm <- function(x, short_code = icd_guess_short(x), warn = FALSE) {
+#' @export
+children_defined.icd10cm <- function(x, short_code = guess_short(x), warn = FALSE) {
   assert_character(x)
   assert_flag(short_code)
   assert_flag(warn)
-
   x <- trim(x)
   x <- toupper(x)
   if (!short_code)
-    x <- icd_decimal_to_short.icd10cm(x)
-
-  kids <- icd10cm_children_defined_cpp(x)
+    x <- decimal_to_short.icd10cm(x)
+  kids <- icd10cm_children_defined_cpp(x, icd10cm2016, .nc)
   as.icd10cm(kids, short_code)
 }

@@ -21,21 +21,20 @@ test_that("github #133 doesn't crash R", {
 })
 
 test_that("github #133 minimal example of bug", {
-
-  pts10 <- icd::icd_long_data(
+  pts10 <- icd_long_data(
     visit = c("a"),
-    icd = c(""),
-    date = as.Date(c("2011-01-01")));
-
-  res <- icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+    icd = as.icd10(""),
+    date = as.Date(c("2011-01-01")),
+    stringsAsFactors = FALSE);
+  res <- icd::icd10_comorbid(pts10, map = icd10_map_ahrq)
   expect_equal(dim(res), c(1L, 30L))
   expect_equal(sum(res), 0)
 })
 
 {# nolint
-  pts10 <- icd::icd_long_data(
+  pts10 <- icd_long_data(
     visit = c("a"),
-    icd = c(NA_character_),
+    icd = as.icd10(NA_character_),
     date = as.Date(c("2011-01-01")));
 
   test_that("github #133 is NA also okay?", {

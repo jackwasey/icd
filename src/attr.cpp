@@ -34,7 +34,7 @@
 //' attr(j, "icd_short_diag") <- FALSE
 //' j
 //' icd:::attr_decimal_diag(j)
-//' as.icd_decimal_diag(j)
+//' as.decimal_diag(j)
 //' # if pryr is installed, use address and refs to see what is going on
 //' @keywords internal attribute
 // [[Rcpp::export(attr_decimal_diag)]]
@@ -42,7 +42,9 @@ void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
   x.attr("icd_short_diag") = !value;
 }
 
-//' @rdname as.icd_short_diag
+//' Set short diagnosis flag in C++
+//' @param x Any R object
+//' @param value \code{TRUE} or \code{FALSE}
 //' @keywords internal attribute
 // [[Rcpp::export(attr_short_diag)]]
 void setShortDiag(Rcpp::RObject& x, bool value = true) {
@@ -50,19 +52,19 @@ void setShortDiag(Rcpp::RObject& x, bool value = true) {
 }
 // modification in-place is supposedly a bug (email from Tomas Kalibera)
 //
-// //' @rdname as.icd_short_diag
+// //' @rdname as.short_diag
 // //' @keywords attribute
 // //' @export
-// // [[Rcpp::export(as.icd_short_diag)]]
+// // [[Rcpp::export(as.short_diag)]]
 // Rcpp::RObject asShortDiag(Rcpp::RObject& x, bool value = true) {
 //   x.attr("icd_short_diag") = value;
 //   return x;
 // }
 //
-// //' @rdname as.icd_short_diag
+// //' @rdname as.short_diag
 // //' @keywords attribute
 // //' @export
-// // [[Rcpp::export(as.icd_decimal_diag)]]
+// // [[Rcpp::export(as.decimal_diag)]]
 // Rcpp::RObject asDecimalDiag(Rcpp::RObject& x, bool value = true) {
 //   x.attr("icd_short_diag") = !value;
 //   return x;

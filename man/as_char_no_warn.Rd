@@ -2,9 +2,12 @@
 % Please edit documentation in R/as_char_no_warn.R
 \name{as_char_no_warn}
 \alias{as_char_no_warn}
+\alias{as_char_or_levels}
 \title{convert to character vector without warning}
 \usage{
 as_char_no_warn(x)
+
+as_char_or_levels(x)
 }
 \arguments{
 \item{x}{vector, typically numeric or a factor}
@@ -15,4 +18,10 @@ character vector
 \description{
 convert to character vector without warning
 }
+\section{Functions}{
+\itemize{
+\item \code{as_char_or_levels}: If the argument is a factor, return the levels
+instead
+}}
+
 \keyword{internal}

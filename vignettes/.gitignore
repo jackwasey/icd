@@ -7,3 +7,10 @@
 .build.timestamp
 *.R
 *.html
+*.fdb_latexmk
+*.fls
+*.pdf
+*.knit.md
+*.utf8.md
+test*.Rmd
+test2

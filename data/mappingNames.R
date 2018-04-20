@@ -1,4 +1,4 @@
-icd_names_charlson <- list(
+names_charlson <- list(
   "01" = "Myocardial Infarction",
   "02" = "Congestive Heart Failure",
   "03" = "Periphral Vascular Disease",
@@ -18,7 +18,7 @@ icd_names_charlson <- list(
   "17" = "HIV/AIDS"
 )
 
-icd_names_charlson_abbrev <- list(
+names_charlson_abbrev <- list(
   "01" = "MI",
   "02" = "CHF",
   "03" = "PVD",
@@ -40,7 +40,7 @@ icd_names_charlson_abbrev <- list(
 
 # 31 in this list, with two for HTN
 # HTN marked together as combined, but DM not.
-icd_names_elix_htn <- list(
+names_elix_htn <- list(
   "01" = "Congestive heart failure",
   "02" = "Cardiac arrhythmias",
   "03" = "Valvular disease",
@@ -75,7 +75,7 @@ icd_names_elix_htn <- list(
 )
 
 # HTN marked together as combined, but DM not.
-icd_names_elix_htn_abbrev <- list(
+names_elix_htn_abbrev <- list(
   "01" = "CHF",
   "02" = "Arrhythmia",
   "03" = "Valvular",
@@ -110,42 +110,42 @@ icd_names_elix_htn_abbrev <- list(
 )
 
 # Elixhauser with HTN combined:
-icd_names_elix <- icd_names_elix_htn
-icd_names_elix["06b"] <- NULL
-icd_names_elix["06a"] <- "Hypertension, combined"
-names(icd_names_elix)[6] <- "06"
+names_elix <- names_elix_htn
+names_elix["06b"] <- NULL
+names_elix["06a"] <- "Hypertension, combined"
+names(names_elix)[6] <- "06"
 # Abbreviated
-icd_names_elix_abbrev <- icd_names_elix_htn_abbrev
-icd_names_elix_abbrev["06b"] <- NULL
-names(icd_names_elix_abbrev)[6] <- "06"
+names_elix_abbrev <- names_elix_htn_abbrev
+names_elix_abbrev["06b"] <- NULL
+names(names_elix_abbrev)[6] <- "06"
 
 # Quan Elixhauser identical ot original
-icd_names_quan_elix <- icd_names_elix
-icd_names_quan_elix_htn <- icd_names_elix_htn
+names_quan_elix <- names_elix
+names_quan_elix_htn <- names_elix_htn
 # Abbreviated
-icd_names_quan_elix_abbrev <- icd_names_elix_abbrev
-icd_names_quan_elix_htn_abbrev <- icd_names_elix_htn_abbrev
+names_quan_elix_abbrev <- names_elix_abbrev
+names_quan_elix_htn_abbrev <- names_elix_htn_abbrev
 
 # AHRQ very similar to Elixhauser (with HTN combined, arrhythmia dropped, giving
 # 29 total)
-icd_names_ahrq <- icd_names_elix
-icd_names_ahrq["02"] <- NULL
-names(icd_names_ahrq) <- names(icd_names_elix)[-30]
+names_ahrq <- names_elix
+names_ahrq["02"] <- NULL
+names(names_ahrq) <- names(names_elix)[-30]
 # Abbreviated
-icd_names_ahrq_abbrev <- icd_names_elix_abbrev
-icd_names_ahrq_abbrev["02"] <- NULL
-names(icd_names_ahrq_abbrev) <- names(icd_names_elix_abbrev)[-30]
+names_ahrq_abbrev <- names_elix_abbrev
+names_ahrq_abbrev["02"] <- NULL
+names(names_ahrq_abbrev) <- names(names_elix_abbrev)[-30]
 # with HTN separated out:
-icd_names_ahrq_htn <- icd_names_elix_htn
-icd_names_ahrq_htn["02"] <- NULL
-names(icd_names_ahrq_htn) <- names(icd_names_elix_htn)[-30]
+names_ahrq_htn <- names_elix_htn
+names_ahrq_htn["02"] <- NULL
+names(names_ahrq_htn) <- names(names_elix_htn)[-30]
 # Abbreviated
-icd_names_ahrq_htn_abbrev <- icd_names_elix_htn_abbrev
-icd_names_ahrq_htn_abbrev["02"] <- NULL
-names(icd_names_ahrq_htn_abbrev) <-
-  names(icd_names_elix_htn_abbrev)[-30]
+names_ahrq_htn_abbrev <- names_elix_htn_abbrev
+names_ahrq_htn_abbrev["02"] <- NULL
+names(names_ahrq_htn_abbrev) <-
+  names(names_elix_htn_abbrev)[-30]
 
-icd_names_cc <- list(
+names_cc <- list(
   "1" = "HIV/AIDS",
   "2" = "Septicemia, Sepsis, Systemic Inflammatory Response Syndrome/Shock",
   "5" = "Opportunistic Infections",
@@ -266,3 +266,20 @@ icd_names_cc <- list(
   "188" = "Artificial Openings for Feeding or Elimination",
   "189" = "Amputation Status, Lower Limb/Amputation Complications"
 )
+
+# deprecated copies follow:
+icd_names_charlson <- names_charlson
+icd_names_charlson_abbrev <- names_charlson_abbrev
+icd_names_elix_htn <- names_elix_htn
+icd_names_elix_htn_abbrev <- names_elix_htn_abbrev
+icd_names_elix <- names_elix
+icd_names_elix_abbrev <- names_elix_abbrev
+icd_names_quan_elix <- names_quan_elix
+icd_names_quan_elix_htn <- names_quan_elix_htn
+icd_names_quan_elix_abbrev <- names_quan_elix_abbrev
+icd_names_quan_elix_htn_abbrev <- names_quan_elix_htn_abbrev
+icd_names_ahrq <- names_ahrq
+icd_names_ahrq_abbrev <- names_ahrq_abbrev
+icd_names_ahrq_htn <- names_ahrq_htn
+icd_names_ahrq_htn_abbrev <- names_ahrq_htn_abbrev
+icd_names_cc <- names_cc

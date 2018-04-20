@@ -4,7 +4,7 @@
 \alias{icd9_get_chapters}
 \title{get ICD-9 Chapters from vector of ICD-9 codes}
 \usage{
-icd9_get_chapters(x, short_code = icd_guess_short(x), verbose = FALSE)
+icd9_get_chapters(x, short_code = guess_short(x), verbose = FALSE)
 }
 \arguments{
 \item{x}{vector of ICD-9 codes}

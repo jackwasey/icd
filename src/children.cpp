@@ -15,58 +15,28 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
+#include "icd_types.h"                   // for CV, VecStr
 #include <Rcpp.h>
-#include <Rcpp/r/headers.h>              // for Rf_install
 #include <iterator>                      // for advance
 #include <vector>                        // for vector
-#include "Rcpp.h"                        // for wrap
-#include "Rcpp/Environment.h"            // for Environment
-#include "Rcpp/api/meat/Environment.h"   // for Environment_Impl::Environmen...
-#include "Rcpp/api/meat/proxy.h"         // for BindingPolicy::Binding::oper...
-#include "Rcpp/exceptions.h"             // for warning
-#include "Rcpp/proxy/Binding.h"          // for BindingPolicy<>::Binding
-#include "Rcpp/sugar/functions/is_na.h"  // for is_na, IsNa
-#include "Rcpp/sugar/functions/match.h"  // for match
-#include "Rcpp/sugar/operators/not.h"    // for Not_Vector, operator!
-#include "Rcpp/traits/storage_type.h"    // for storage_type<>::type
-#include "Rcpp/vector/Subsetter.h"       // for SubsetProxy
-#include "Rcpp/vector/Vector.h"          // for Vector<>::iterator, Vector<>...
-#include "Rcpp/vector/VectorBase.h"      // for VectorBase
-#include "Rcpp/vector/instantiation.h"   // for IntegerVector, List
-#include "Rcpp/vector/proxy.h"           // for r_vector_name_proxy<>::type
-#include "icd_types.h"                   // for CV, VecStr
-
 
 // [[Rcpp::export(icd10cm_children_defined_cpp)]]
-CV icd10cmChildrenDefined(CV &x) {
-
-  // need namespace for sysdata (.nc) and package env for lazy data
-  Rcpp::Environment env("package:icd"); // only works when package is loaded
-  Rcpp::Environment ns = Rcpp::Environment::namespace_env("icd");
-  Rcpp::List icd10cm2016 = env["icd10cm2016"];
+CV icd10cmChildrenDefined(CV &x, Rcpp::List icd10cm2016, Rcpp::IntegerVector nc) {
   CV allCodes = icd10cm2016["code"];
-  Rcpp::IntegerVector nc = ns[".nc"];
   Rcpp::IntegerVector matchesNa = Rcpp::match(x, allCodes);
-  // now drop NA rows, Rcpp match doesn't do this, yet.
-  // match(x, table, nomatch = 0L) > 0L
   Rcpp::IntegerVector matches = matchesNa[!is_na(matchesNa)]; // 1-based index (R style)
-
   VecStr kids;
-
   if (matches.length() == 0) {
     if (x.length() > 0) {
       Rcpp::warning("None of the provided ICD-10 codes matched the master ICD-10-CM list (currently 2016)");
     }
     return(CV(0));
   }
-
   kids.reserve(x.length() * 10);
-
   CV tmp = icd10cm2016[0];
   int last_row = tmp.length(); // zero-based index
   int check_row; // zero-based index
   int parent_len; // number of characters in original parent code
-
   for (int i = 0; i != matches.length(); ++i) {
     check_row = matches[i] + 1 - 1; // check the row after the parent (may be off end of vector)
     parent_len = nc[matches[i] - 1];

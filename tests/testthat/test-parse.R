@@ -129,9 +129,9 @@ if (rtf_year_ok(test_year)) {
   nrtf <- names(rtf)
 
   test_that("all parsed codes are valid decimals", {
-    expect_true(all(icd_is_valid.icd9(nrtf, short_code = FALSE)),
+    expect_true(all(is_valid.icd9(nrtf, short_code = FALSE)),
                 info = paste("invalid codes are :",
-                             paste(icd_get_invalid.icd9(nrtf),
+                             paste(get_invalid.icd9(nrtf),
                                    collapse = ", ")))
   })
 
@@ -143,7 +143,7 @@ if (rtf_year_ok(test_year)) {
   })
 
   test_that("all defined codes from csv are in rtf extract", {
-    missing_from_rtf <- setdiff(icd_short_to_decimal.icd9(icd::icd9cm_hierarchy[["code"]]), nrtf)
+    missing_from_rtf <- setdiff(short_to_decimal.icd9(icd::icd9cm_hierarchy[["code"]]), nrtf)
     expect_equal(length(missing_from_rtf), 0,
                  info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
   })
@@ -151,7 +151,7 @@ if (rtf_year_ok(test_year)) {
   test_that("majors extracted from web page are the same as those from RTF", {
     webmajors <- unlist(icd9_majors) # why is this even a list not a named vector?
     work <- swap_names_vals(rtf)
-    rtfmajors <- work[icd_is_major.icd9(work)]
+    rtfmajors <- work[is_major.icd9(work)]
 
     expect_identical(setdiff(rtfmajors, webmajors), character(0),
                      info = paste("these majors are from RTF but not retrieved from web: ",
@@ -167,10 +167,10 @@ if (rtf_year_ok(test_year)) {
     skip_flat_icd9_avail(test_ver)
 
     v32 <- icd9_parse_leaf_desc_ver(version = test_ver, save_data = FALSE, offline = TRUE)
-    v32$code %>% icd_short_to_decimal.icd9 -> leaves
+    v32$code %>% short_to_decimal.icd9 -> leaves
     expect_true(all(leaves %in% nrtf))
 
-    rtf[nrtf %in% icd_short_to_decimal.icd9(v32$code)] %>%
+    rtf[nrtf %in% short_to_decimal.icd9(v32$code)] %>%
       swap_names_vals %>%
       sort -> rtf_leaves
     if (FALSE && interactive()) {
@@ -207,7 +207,8 @@ if (rtf_year_ok(test_year)) {
     expect_identical(rtf[["294"]], "Persistent mental disorders due to conditions classified elsewhere")
   })
 
-  test_that("in rtf we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined", {
+  # in rtf we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined
+  test_that("correct assignment of undefined last digit codes", {
     # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
     expect_false("640.02" %in% nrtf)
     # grep "\[[[:digit:]],.*\]" Dtab12.rtf
@@ -222,7 +223,7 @@ if (rtf_year_ok(test_year)) {
       paste0("854.", 2:7),
       NULL)
     expect_true(all(bad_ones %nin% nrtf))
-    expect_true(all(icd_children.icd9(bad_ones) %nin% nrtf))
+    expect_true(all(children.icd9(bad_ones) %nin% nrtf))
 
     expect_true("012.4" %nin% nrtf)
     expect_true("012.40" %nin% nrtf)

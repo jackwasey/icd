@@ -17,7 +17,7 @@ j
 attr(j, "icd_short_diag") <- FALSE
 j
 icd:::attr_decimal_diag(j)
-as.icd_decimal_diag(j)
+as.decimal_diag(j)
 # if pryr is installed, use address and refs to see what is going on
 }
 \keyword{attribute}

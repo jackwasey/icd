@@ -138,7 +138,7 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 	return max_per_pt;
 }
 
-// [[Rcpp::export(icd_long_to_wide_cpp)]]
+// [[Rcpp::export(long_to_wide_cpp)]]
 CV icd9LongToWideCpp(const SEXP& icd9df,
 		const std::string visitId, const std::string icd9Field,
 		bool aggregate = true) {

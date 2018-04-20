@@ -55,15 +55,15 @@ The sample data is in the 'long' format, i.e. multiple rows per case
 uranium_pathology[1:10, ]
 ```
 
-We can convert the date from long to wide format easily. This is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using dplyr and friends for this manipulation.
+We can convert the date from long to wide format easily. This is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using \pkg{dplyr} and friends for this manipulation.
 
 ```{r uranium-wide}
-uranium_pathology %>% icd_long_to_wide %>% head
+uranium_pathology %>% long_to_wide %>% head
 ```
 
 Now map these diagnoses to disease groups as defined by Quan et al:
 ```{r comorbidities}
-quan_comorbidities <- icd_comorbid(uranium_pathology, icd10_map_quan_elix)
+quan_comorbidities <- comorbid(uranium_pathology, icd10_map_quan_elix)
 # see the first few rows and columns:
 quan_comorbidities[1:6, 3:10]
 ```
@@ -74,7 +74,7 @@ The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings
 # create trivial comorbidity map:
 cholera_typhoid_map <- list(cholera = "A00", typhoid = "A01")
 patients <- data.frame(patient = c("0001", "0001", "0002"), code = c("A001234567", "A01", "A019"))
-icd_comorbid(patients , map = cholera_typhoid_map)
+comorbid(patients , map = cholera_typhoid_map)
 ```
 
 Here are the codes for hypertension with complications from Quan et al. Note that the vector has class `icd10` and has the attribute `icd_short_diag` indicating there are no decimal point delimiters in the codes.
@@ -84,6 +84,6 @@ icd10_map_quan_elix$HTNcx
 
 For more information on working with ICD-10 codes, see the introduction vignette, and function examples. E.g.
 ```
-?icd_comorbid
-?icd_explain
+?comorbid
+?explain
 ```

@@ -30,7 +30,7 @@ icd_generate_sysdata <- function(save_data = TRUE) {
   icd9_short_v <- icd9_generate_all_v()
   icd9_short_e <- icd9_generate_all_e()
 
-  # we can either use the icd_is_defined functions on these lists, or just grep the
+  # we can either use the is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
   codes <- icd::icd9cm_hierarchy[["code"]]
   icd9_short_n_defined <- vec_to_lookup_pair(grep("^[^VE]+", codes, perl = TRUE, value = TRUE))
@@ -126,7 +126,7 @@ icd9_generate_all_ <- function(major_fun, short_code = TRUE,
                                env = new.env(hash = TRUE, baseenv())) {
   vec <- character()
   for (i in major_fun()) {
-    kids <- icd_children.icd9(i, short_code = short_code, defined = FALSE)
+    kids <- children.icd9(i, short_code = short_code, defined = FALSE)
     vec <- c(vec, kids)
   }
   vec_to_env_count(vec, env = env)

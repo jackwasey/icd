@@ -1,6 +1,6 @@
 ^_config\.yml$
 aclocal\.m4$
-.*_alt\.[Rr]$
+IGNORE.*_alt\.[Rr]$
 IGNORE.*_alt\.cpp$
 ^appveyor\.yml$
 \.aspell$
@@ -27,6 +27,8 @@ cran-comments\.md$
 ^data\/icd10_who.*$
 data-raw
 ^data-raw\/.*$
+^deprecated-tests$
+^Efficient.*\.md$
 icd.*\.aux$
 icd.*\.so$
 icd.*\.dll$
@@ -36,7 +38,7 @@ icd9cm_billable[[:digit:]]+\.RData$
 icd.*\.Rnw$
 icd.*tar\.gz
 ^include-dependencies(\.d)?$
-inst\/standalone\/.*
+standalone\/.*
 \.lintr$
 .*\.log$
 ^src\/Makevars$
@@ -57,4 +59,6 @@ scrape_icd10_who
 ^todo$
 ^tools$
 ^\.travis\.yml$
-^appveyor\.yml$
+^vignettes\/jss\.bst$
+^vignettes\/jss\.cls$
+^.*\.xcworkspace$

@@ -79,14 +79,14 @@ icd9_generate_map_elix <- function(save_data = TRUE) {
     depression = c("300.4", "301.12", "309.0", "309.1", "311")
   )
 
-  icd9_map_elix <- lapply(icd9_map_elix, icd_decimal_to_short.icd9)
+  icd9_map_elix <- lapply(icd9_map_elix, decimal_to_short.icd9)
 
   icd9_map_elix <- lapply(
     icd9_map_elix,
-    icd_children.icd9, short_code = TRUE, defined = FALSE)
+    children.icd9, short_code = TRUE, defined = FALSE)
 
-  names(icd9_map_elix) <- icd::icd_names_elix_htn_abbrev
-  icd9_map_elix %<>% as.icd_comorbidity_map
+  names(icd9_map_elix) <- icd::names_elix_htn_abbrev
+  icd9_map_elix %<>% as.comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd9_map_elix)
@@ -151,11 +151,11 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
     depression = c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432")
   )
 
-  names(icd10_map_elix) <- icd::icd_names_elix_htn_abbrev
+  names(icd10_map_elix) <- icd::names_elix_htn_abbrev
 
-  icd10_map_elix <- lapply(icd10_map_elix, as.icd_short_diag)
+  icd10_map_elix <- lapply(icd10_map_elix, as.short_diag)
   icd10_map_elix <- lapply(icd10_map_elix, as.icd10)
-  icd10_map_elix <- as.icd_comorbidity_map(icd10_map_elix)
+  icd10_map_elix <- as.comorbidity_map(icd10_map_elix)
 
   if (save_data)
     save_in_data_dir(icd10_map_elix)
@@ -224,14 +224,14 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
 
   icd9_map_quan_elix <- lapply(
     icd9_map_quan_elix,
-    function(x) icd_decimal_to_short.icd9(x))
+    function(x) decimal_to_short.icd9(x))
 
   icd9_map_quan_elix <- lapply(
     icd9_map_quan_elix,
-    icd_children.icd9, short_code = TRUE, defined = FALSE)
+    children.icd9, short_code = TRUE, defined = FALSE)
 
-  names(icd9_map_quan_elix) <- icd::icd_names_quan_elix_htn_abbrev
-  icd9_map_quan_elix %<>% as.icd_comorbidity_map
+  names(icd9_map_quan_elix) <- icd::names_quan_elix_htn_abbrev
+  icd9_map_quan_elix %<>% as.comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd9_map_quan_elix)
@@ -294,7 +294,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   )
   # there are 31 items in the list: hypertension is typically combined into one
   # category, whereas diabetes is kept as two categories
-  names(quan_elix_raw) <- icd::icd_names_elix_htn_abbrev
+  names(quan_elix_raw) <- icd::names_elix_htn_abbrev
 
   # this expansion will only be for 'defined' codes (currently the most
   # up-to-date canonical CMS ICD-10-CM list). Will ultimately need to generalize
@@ -307,19 +307,19 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   f <- function(x, verbose = TRUE) {
     if (verbose)
       message("f working on: ", paste(x, collapse = " "))
-    kids <- icd_children_defined.icd10cm(x, short_code = TRUE)
+    kids <- children_defined.icd10cm(x, short_code = TRUE)
     c(kids, x) %>%
       unique %>%
-      icd_sort.icd10
+      sort_icd.icd10
   }
 
   icd10_map_quan_elix <- lapply(quan_elix_raw, f)
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
-  icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd_short_diag)
+  icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.short_diag)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd10)
-  icd10_map_quan_elix %<>% as.icd_comorbidity_map
+  icd10_map_quan_elix %<>% as.comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd10_map_quan_elix)
@@ -376,7 +376,7 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
     hiv = c("B20", "B21", "B22", "B24")
   )
 
-  names(quan_charl_raw) <- icd::icd_names_charlson_abbrev
+  names(quan_charl_raw) <- icd::names_charlson_abbrev
 
   # this expansion will only be for 'defined' codes (currently the most
   # up-to-date canonical CMS ICD-10-CM list). Will ultimately need to generalize
@@ -389,17 +389,17 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   # worth it, even for ICD-10-CM, because I do end up cutting it back down to
   # size based on the input data before comorbidity matching.
   f <- function(x) {
-    icd_children_defined.icd10cm(x, short_code = TRUE) %>%
+    children_defined.icd10cm(x, short_code = TRUE) %>%
       c(x) %>%
       unique %>%
-      icd_sort.icd10
+      sort_icd.icd10
   }
 
   icd10_map_quan_deyo <- lapply(quan_charl_raw, f)
 
-  icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd_short_diag)
+  icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.short_diag)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd10)
-  icd10_map_quan_deyo %<>% as.icd_comorbidity_map
+  icd10_map_quan_deyo %<>% as.comorbidity_map
 
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
@@ -418,30 +418,22 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
 #' @template parse-template
 #' @source
 #' \url{https://ustur.wsu.edu/about-us/}
-#' @keywords internal
+#' @keywords internal datagen
 generate_uranium_pathology <- function(save_data = TRUE, offline = TRUE) {
-
   requireNamespace("RODBC")
   stopifnot(length(utils::find("odbcConnectAccess2007")) > 0)
-
   assert_flag(save_data)
   assert_flag(offline)
-
   file_path <- system.file("data-raw", "Pathology_Office2007.accdb", package = "icd")
-
   # odbcConnectAccess2007 is only in the Windows version of RODBC
   channel <- RODBC::odbcConnectAccess2007(file_path)
   uranium_pathology <- RODBC::sqlFetch(channel, "qry_ICD-10")
-
   uranium_pathology <- uranium_pathology[, c("Case_No", "ICD-10_code")]
   names(uranium_pathology) <- c("case", "icd10")
-
   uranium_pathology <- uranium_pathology[order(uranium_pathology["case"]), ]
-
+  uranium_pathology$icd10 <- as.decimal_diag(icd10(uranium_pathology$icd10))
   row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
-
-  uranium_pathology <- as.icd10(as.icd_long_data(uranium_pathology))
-
+  uranium_pathology <- as.icd_long_data(uranium_pathology)
   if (save_data)
     save_in_data_dir(uranium_pathology)
   invisible(uranium_pathology)
@@ -458,9 +450,8 @@ fetch_vermont_dx <- function(offline) {
 #'
 #' Process data from \href{healthvermont.gov}{Health Vermont}
 #' @template parse-template
-#' @keywords internal
+#' @keywords internal datagen
 generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
-
   assert_flag(save_data)
   assert_flag(offline)
   stopifnot(!is.null(vermont_raw_fp <- fetch_vermont_dx(offline = offline)))
@@ -489,7 +480,7 @@ generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
   vermont_dx <- as.icd_wide_data(vermont_dx)
   dx_cols <- paste0("DX", 1:20)
   for (dc in dx_cols)
-    vermont_dx[[dc]]  <- as.icd9cm(as.icd_short_diag(vermont_dx[[dc]]))
+    vermont_dx[[dc]]  <- as.icd9cm(as.short_diag(vermont_dx[[dc]]))
 
   if (save_data)
     save_in_data_dir(vermont_dx)

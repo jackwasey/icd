@@ -37,7 +37,7 @@ test_that("factors are in the right place", {
 
 test_that("codes and descriptions are valid and unique", {
   expect_equal(anyDuplicated(icd9cm_hierarchy[["code"]]), 0)
-  expect_true(all(icd_is_valid.icd9(icd9cm_hierarchy[["code"]])))
+  expect_true(all(is_valid.icd9(icd9cm_hierarchy[["code"]])))
 })
 
 test_that("some chapters are correct", {

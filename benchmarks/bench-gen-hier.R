@@ -31,8 +31,8 @@ summaryRprof("/tmp/gc.txt", lines = "show")
 microbenchmark("100" %i9mj% "100",
                "100" %i9mj% "110",
                "100" %i9mj% "999",
-               icd:::icd_expand_range_major.icd9("100", "999", defined = TRUE),
-               icd:::icd_expand_range_major.icd9("100", "999", defined = FALSE),
+               icd:::expand_range_major.icd9("100", "999", defined = TRUE),
+               icd:::expand_range_major.icd9("100", "999", defined = FALSE),
                times = 50)
 
 # baseline results:
@@ -50,7 +50,7 @@ microbenchmark("100" %i9mj% "100",
 
 Rprof(filename = "/tmp/mj.txt", interval = 0.001, line.profiling = TRUE)
 microbenchmark(
-  icd:::icd_expand_range_major.icd9("100", "999", defined = TRUE),
+  icd:::expand_range_major.icd9("100", "999", defined = TRUE),
   times = 100)
 Rprof(NULL)
 summaryRprof("/tmp/mj.txt", lines = "show")

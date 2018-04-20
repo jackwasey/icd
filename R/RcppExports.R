@@ -7,20 +7,6 @@
 #' @template mjr
 #' @template mnr
 #' @template isShort
-#' @examples
-#' \dontrun{
-#' n <- 5e6
-#' mjrs <- as.character(sample(1:999, n, replace = TRUE))
-#' mnrs <- as.character(sample(0:99, n, replace = TRUE))
-#' microbenchmark::microbenchmark(
-#'   icd9MajMinToCode(mjrs, mnrs, TRUE),
-#'   icd9MajMinToCodeStd(mjrs, mnrs, TRUE),
-#'   icd9MajMinToCodePrePadded(mjrs, mnrs, TRUE),
-#'   times = 10
-#' )
-#' }
-#' # std method about the same with O3 (4% faster, but no NA handling), but 50% quicker with O0
-#' # std method without doing padding is 5 times quicker than previous...
 #' @keywords internal manip
 icd9MajMinToCode <- function(mjr, mnr, isShort) {
     .Call(`_icd_icd9MajMinToCode`, mjr, mnr, isShort)
@@ -74,35 +60,57 @@ icd9MajMinToShortSingleStd <- function(mjr, mnr) {
 #' attr(j, "icd_short_diag") <- FALSE
 #' j
 #' icd:::attr_decimal_diag(j)
-#' as.icd_decimal_diag(j)
+#' as.decimal_diag(j)
 #' # if pryr is installed, use address and refs to see what is going on
 #' @keywords internal attribute
 attr_decimal_diag <- function(x, value = TRUE) {
     invisible(.Call(`_icd_setDecimalDiag`, x, value))
 }
 
-#' @rdname as.icd_short_diag
+#' Set short diagnosis flag in C++
+#' @param x Any R object
+#' @param value \code{TRUE} or \code{FALSE}
 #' @keywords internal attribute
 attr_short_diag <- function(x, value = TRUE) {
     invisible(.Call(`_icd_setShortDiag`, x, value))
 }
 
-icd10cm_children_defined_cpp <- function(x) {
-    .Call(`_icd_icd10cmChildrenDefined`, x)
+icd10cm_children_defined_cpp <- function(x, icd10cm2016, nc) {
+    .Call(`_icd_icd10cmChildrenDefined`, x, icd10cm2016, nc)
 }
 
-#' @rdname icd_comorbid
-#' @description \code{\link{Rcpp}} approach to comorbidity assignment with
-#'   OpenMP and vector of integers strategy. It is very fast, and most time is
-#'   now spent setting up the data to be passed in.
-#' @param aggregate single logical value, if \code{TRUE}, then take (possible
-#'   much) more time to aggregate out-of-sequence visit IDs in the input
-#'   data.frame. If this is \code{FALSE}, then each contiguous group of visit
-#'   IDs will result in a row of comorbidities in the output data. If you know
-#'   whether your visit IDs are disordered, then use \code{TRUE}.
-#' @keywords internal
-icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9ComorbidShortCpp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+#' @title prototype to do entire comorbidity calculation as a matrix multiplication
+#' @description
+#' The problem is that the matrices could be huge: the patient-icd matrix would
+#' be millions of patient rows, and ~15000 columns for all AHRQ comorbidities.
+#' @details
+#' Several ways of reducing the problem: firstly, as with existing code, we can
+#' drop any ICD codes from the map which are not in the patient data. With many
+#' patients, this will be less effective as the long tail becomes apparent.
+#' However, with the (small) Vermont data, we see ~15,000 codes being reduced to
+#' 339.
+#' @section Sparse matrices:
+#' Using sparse matrices is another solution. Building
+#' the initial matrix may become a significant part of the calculation, but once
+#' done, the solution could be a simple matrix multiplication, which is
+#' potentially highly optimized (Eigen, BLAS, GPU, etc.)
+#' @section Eigen:
+#' Eigen has parallel (non-GPU) optimized sparse row-major *
+#' dense matrix. Patients-ICD matrix must be the row-major sparse one, so the
+#' dense matrix is then the comorbidity map
+#' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
+#' @examples
+#' # show how many discrete ICD codes there are in the AHRQ map, before reducing
+#' # to the number which actually appear in a group of patient visitsben
+#' library(magrittr)
+#' sapply(icd::icd9_map_ahrq, length) %>% sum
+#' @keywords internal array algebra
+icd9Comorbid_alt_MatMul <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L) {
+    .Call(`_icd_icd9Comorbid_alt_MatMul`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
+}
+
+icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L) {
+    .Call(`_icd_icd9ComorbidShortCpp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
 }
 
 #' core search for ICD code in a map
@@ -112,9 +120,6 @@ lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {
 }
 
 #' Internal function to find ICD-10 parents
-#'
-#' Written in C++ for speed. There are no default arguments and there is no
-#' value guessing.
 #' @param x Character vector (not factor)
 #' @template mapping
 #' @template visit_name
@@ -122,7 +127,37 @@ lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {
 #' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 #' @keywords internal
 icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
-    .Call(`_icd_icd10_comorbid_parent_search_cpp`, x, map, visit_name, icd_name)
+    .Call(`_icd_icd10ComorbidParentSearchCpp`, x, map, visit_name, icd_name)
+}
+
+#' @title Internal function to simplify a comorbidity map by only including codes
+#' which are parents, or identical to, a given list of codes.
+#' @description
+#' Specifically, this is useful for ICD-10 codes where there are a huge number
+#' of possible codes, but we do not want to make a comorbidity map with such a
+#' large number of codes in it.
+#' @param x Character vector (not factor)
+#' @template mapping
+#' @template visit_name
+#' @template icd_name
+#' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
+#' @examples
+#' # one exact match, next cmb parent code, next cmb child code
+#' icd10 <- as.icd10(c("I0981", "A520", "I26019"))
+#' pts <- data.frame(visit_id = c("a", "b", "c"), icd10)
+#' simple_map <- icd:::simplify_map_lex(icd10, icd10_map_ahrq)
+#' stopifnot(simple_map$CHF == "I0981")
+#' stopifnot(simple_map$PHTN != character(0))
+#' stopifnot(simple_map$PVD == "I26019")
+#'
+#' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
+#' icd:::comorbid_common(uranium_pathology, icd10_map_ahrq,
+#'                           visit_name = "case", icd_name = "icd10",
+#'                           comorbid_fun = icd:::icd9Comorbid_alt_MatMul)
+#'
+#' @keywords internal
+simplify_map_lex <- function(pt_codes, map) {
+    .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)
 }
 
 #' alternate comorbidity search
@@ -142,38 +177,26 @@ lookupComorbid_alt_ByChunkForTaskloop <- function(vcdb, map, out) {
 #'
 #' # basic test
 #' # use tests/testthat/helper-base.R for two_pts and two_map
-#' icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop)
-#'
-#' vermont_dx %>% icd_wide_to_long() -> vt
-#' microbenchmark::microbenchmark(
-#'   res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
-#'   res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop),
-#'   times = 50)
-#' identical(res1, res2)
-#'
+#' comorbid(two_pts, two_map, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop)
 #' @keywords internal
-icd9Comorbid_alt_Taskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9Comorbid_alt_Taskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+icd9Comorbid_alt_Taskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L) {
+    .Call(`_icd_icd9Comorbid_alt_Taskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
 }
 
 #' @describeIn icd9Comorbid_alt_Taskloop Taskloop but finish with R transpose
 #' @keywords internal
-icd9Comorbid_alt_Taskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L, aggregate = TRUE) {
-    .Call(`_icd_icd9Comorbid_alt_Taskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size, aggregate)
+icd9Comorbid_alt_Taskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L) {
+    .Call(`_icd_icd9Comorbid_alt_Taskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
 }
 
 icd9MajMinToCode_alt_Old <- function(mjr, mnr, isShort) {
     .Call(`_icd_icd9MajMinToCode_alt_Old`, mjr, mnr, isShort)
 }
 
-#' @rdname convert
-#' @keywords internal manip
 icd9PartsToShort <- function(parts) {
     .Call(`_icd_icd9PartsToShort`, parts)
 }
 
-#' @rdname convert
-#' @keywords internal manip
 icd9PartsToDecimal <- function(parts) {
     .Call(`_icd_icd9PartsToDecimal`, parts)
 }
@@ -182,31 +205,27 @@ icd9MajMinToParts <- function(mjr, mnr) {
     .Call(`_icd_icd9MajMinToParts`, mjr, mnr)
 }
 
-#' @rdname convert
-#' @keywords internal manip
 icd9ShortToPartsCpp <- function(icd9Short, mnrEmpty) {
     .Call(`_icd_icd9ShortToPartsCpp`, icd9Short, mnrEmpty)
 }
 
-#' @describeIn icd_decimal_to_parts Convert short ICD-10 code to parts
+#' @describeIn decimal_to_parts Convert short ICD-10 code to parts
 #' @export
 #' @keywords internal manip
-icd_short_to_parts.icd10 <- function(x, mnr_empty = "") {
+short_to_parts.icd10 <- function(x, mnr_empty = "") {
     .Call(`_icd_icd10ShortToPartsCpp`, x, mnr_empty)
 }
 
-#' @rdname convert
-#' @keywords internal manip
 icd9DecimalToPartsCpp <- function(icd9Decimal, mnr_empty) {
     .Call(`_icd_icd9DecimalToPartsCpp`, icd9Decimal, mnr_empty)
 }
 
-#' @describeIn icd_decimal_to_parts Convert decimal ICD-10 code to parts. This
+#' @describeIn decimal_to_parts Convert decimal ICD-10 code to parts. This
 #'   shares almost 100% code with the ICD-9 version: someday combine the common
 #'   code.
 #' @export
 #' @keywords internal manip
-icd_decimal_to_parts.icd10 <- function(x, mnr_empty = "") {
+decimal_to_parts.icd10 <- function(x, mnr_empty = "") {
     .Call(`_icd_icd10DecimalToPartsCpp`, x, mnr_empty)
 }
 
@@ -218,11 +237,11 @@ icd9_decimal_to_short_cpp <- function(x) {
     .Call(`_icd_icd9DecimalToShort`, x)
 }
 
-#' @describeIn icd_get_major Get major part of ICD-9 code, i.e. first three
+#' @describeIn get_major Get major part of ICD-9 code, i.e. first three
 #'   digits of numeric or V code, or first four digits of E code. This is the
 #'   part before the decimal, when a decimal point is used.
 #' @keywords internal manip
-icd_get_major.icd9 <- function(x, short_code) {
+get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }
 
@@ -232,20 +251,6 @@ icd_get_major.icd9 <- function(x, short_code) {
 #' @param x vector of integers
 #' @param bufferSize int if any input strings are longer than this number
 #'   (default 16) there will be memory errors. No checks done for speed.
-#' @examples
-#' \dontrun{
-#' pts <- generate_random_pts(1e7)
-#' # conclusion: buffer size matters little (so default to be more generous),
-#' # and 'Rcpp' version fastest.
-#' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
-#'                                fastIntToStringStd(pts$visit_id, buffer = 16),
-#'                                fastIntToStringStd(pts$visit_id, buffer = 64),
-#'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
-#'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
-#'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
-#'                                as.character(pts$visit_id),
-#'                                as_char_no_warn(pts$visit_id), times = 5)
-#' }
 #' @keywords internal
 fastIntToStringStd <- function(x) {
     .Call(`_icd_fastIntToStringStd`, x)
@@ -271,7 +276,7 @@ fastIntToStringRcpp <- function(x) {
 #'   \code{short_code} type. If there is some uncertainty, then return
 #'   \code{NA}.
 #' @keywords internal
-icd_guess_short <- function(x_, short_code = NULL, n = 1000L, icd_name = NULL) {
+guess_short <- function(x_, short_code = NULL, n = 1000L, icd_name = NULL) {
     .Call(`_icd_guessShortCompleteCpp`, x_, short_code, n, icd_name)
 }
 
@@ -307,7 +312,7 @@ icd9_is_e_cpp <- function(sv) {
     .Call(`_icd_icd9_is_e_cpp`, sv)
 }
 
-icd_long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
+long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
     .Call(`_icd_icd9LongToWideCpp`, icd9df, visitId, icd9Field, aggregate)
 }
 
@@ -350,20 +355,6 @@ icd9_add_leading_zeroes_major <- function(mjr) {
 #' @param x Character vector of ICD-9 codes
 #' @template short_code
 #' @return character vector of ICD-9 codes with leading zeroes
-#' @examples
-#' if (require(microbenchmark)) {
-#'   stopifnot(identical(
-#'     icd:::icd9_add_leading_zeroes_alt_cpp(c("1", "E2", "V1", "E"), short_code = TRUE),
-#'     icd:::icd9_add_leading_zeroes_cpp(c("1", "E2", "V1", "E"), short_code = TRUE)
-#'     ))
-#'
-#'   bad_codes <- sample(c("E2", "V01", "1234", "12", "1", "E99", "E987", "V"),
-#'                       size = 1e4, replace = TRUE)
-#'   microbenchmark::microbenchmark(
-#'     icd:::icd9_add_leading_zeroes_alt_cpp(bad_codes, short_code = TRUE),
-#'     icd:::icd9_add_leading_zeroes_cpp(bad_codes, short_code = TRUE)
-#'   )
-#' }
 #' @keywords internal manip
 icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
@@ -373,32 +364,12 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
 #'
 #' Pure C++11 implementation using \code{unordered set} to find children of
 #' given codes
-#' @examples
-#' \dontrun{
-#' if (requireNamespace("microbenchmark")) {
-#'   microbenchmark::microbenchmark(
-#'     icd:::icd9ChildrenShort(c("001", 100:500), onlyReal = TRUE),
-#'     icd:::icd9ChildrenShort_alt11(c("001", 100:500), onlyReal = TRUE),
-#'     times = 5)
-#'     # C++11 about 15% faster for this data
-#' }
-#' }
 #' @keywords internal
 icd9ChildrenShort_alt_11 <- function(icd9Short, onlyReal) {
     .Call(`_icd_icd9ChildrenShort_alt_11`, icd9Short, onlyReal)
 }
 
 #' C++ implementation of finding children of short codes
-#' @examples
-#' \dontrun{
-#' library(microbenchmark)
-#' microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
-#' microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
-#'                icd9ChildrenShortUnordered(c("001", 100:400), T),
-#'                icd9ChildrenShortStd(c("001", 100:400), T),
-#'                times = 10)
-#' }
-#' # un-ordered set much faster, but may still need to sort result
 #' @keywords internal
 icd9ChildrenShort_alt_Std <- function(icd9Short, onlyReal) {
     .Call(`_icd_icd9ChildrenShort_alt_Std`, icd9Short, onlyReal)
@@ -416,33 +387,20 @@ icd9_expand_minor_wrap <- function(mnr, isE) {
     .Call(`_icd_icd9ExpandMinor`, mnr, isE)
 }
 
-icd9ChildrenShort <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShort`, icd9Short, onlyReal)
+icd9ChildrenShort <- function(icd9Short, icd9cmReal, onlyReal) {
+    .Call(`_icd_icd9ChildrenShort`, icd9Short, icd9cmReal, onlyReal)
 }
 
-icd9ChildrenShortUnordered <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShortUnordered`, icd9Short, onlyReal)
+icd9ChildrenShortUnordered <- function(icd9Short, icd9cmReal, onlyReal) {
+    .Call(`_icd_icd9ChildrenShortUnordered`, icd9Short, icd9cmReal, onlyReal)
 }
 
-icd9ChildrenDecimalCpp <- function(icd9Decimal, onlyReal) {
-    .Call(`_icd_icd9ChildrenDecimalCpp`, icd9Decimal, onlyReal)
+icd9ChildrenDecimalCpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
+    .Call(`_icd_icd9ChildrenDecimalCpp`, icd9Decimal, icd9cmReal, onlyReal)
 }
 
-icd9ChildrenCpp <- function(icd9, isShort, onlyReal = TRUE) {
-    .Call(`_icd_icd9ChildrenCpp`, icd9, isShort, onlyReal)
-}
-
-#' @title match ICD9 codes
-#' @description Finds children of \code{icd9Reference} and looks for \code{icd9} in the
-#'   resulting vector.
-#' @templateVar icd9AnyName "icd9,icd9Reference"
-#' @template icd9-any
-#' @template short_code
-#' @param isShortReference logical, see argument \code{short_code}
-#' @return logical vector
-#' @keywords internal
-icd_in_reference_code <- function(icd, icd_reference, short_code, short_reference = TRUE) {
-    .Call(`_icd_icd_in_reference_code`, icd, icd_reference, short_code, short_reference)
+icd9ChildrenCpp <- function(icd9, isShort, icd9cmReal, onlyReal = TRUE) {
+    .Call(`_icd_icd9ChildrenCpp`, icd9, isShort, icd9cmReal, onlyReal)
 }
 
 trimLeftCpp <- function(s) {
@@ -457,15 +415,15 @@ trimCpp <- function(sv) {
     .Call(`_icd_trimCpp`, sv)
 }
 
-getOmpCores <- function() {
+get_omp_cores <- function() {
     .Call(`_icd_getOmpCores`)
 }
 
-getOmpMaxThreads <- function() {
+get_omp_max_threads <- function() {
     .Call(`_icd_getOmpMaxThreads`)
 }
 
-getOmpThreads <- function() {
+get_omp_threads <- function() {
     .Call(`_icd_getOmpThreads`)
 }
 
@@ -522,6 +480,18 @@ icd9_sort_cpp <- function(x) {
 
 icd9_order_cpp <- function(x) {
     .Call(`_icd_icd9OrderCpp`, x)
+}
+
+#' fast expand of logical matrix to add rows filled with false
+#' @keywords internal
+rbind_with_empty <- function(a, b_rows) {
+    .Call(`_icd_rbind_with_empty`, a, b_rows)
+}
+
+#' fast factor generation test
+#' @keywords internal
+factor_fast <- function(x) {
+    .Call(`_icd_factor_fast`, x)
 }
 
 # Register entry points for exported C++ functions

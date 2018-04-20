@@ -4,7 +4,7 @@
 \alias{factor_nosort}
 \title{Fast Factor Generation}
 \usage{
-factor_nosort(x, levels = NULL, labels = levels)
+factor_nosort(x, levels, labels = levels, exclude = NA)
 }
 \arguments{
 \item{x}{An object of atomic type \code{integer}, \code{numeric},
@@ -34,22 +34,18 @@ I don't think there is any requirement for factor levels to be
   alphanumeric sorting will likely be completely wrong.
 }
 \examples{
-\dontrun{
-pts <- icd:::random_unordered_patients(1e7)
-u <- unique.default(pts$code)
-# this shows that stringr (which uses stringi) sort takes 50\% longer than
-# built-in R sort.
-microbenchmark::microbenchmark(sort(u), str_sort(u))
+x <- c("z", "a", "123")
+icd:::factor_nosort(x)
+# should return a factor without modification
+x <- as.factor(x)
+identical(icd:::factor_nosort(x), x)
+# unless the levels change:
+icd:::factor_nosort(x, levels = c("a", "z"))
 
-# this shows that \\code{factor_} is about 50\% faster than \\code{factor} for
-# big vectors of strings
-
-# without sorting is much faster:
-microbenchmark::microbenchmark(factor(pts$code),
-                               # factor_(pts$code),
-                               factor_nosort(pts$code),
-                               times = 25)
-}
+# existing factor levels aren't re-ordered without also moving elements
+f <- factor(c("a", "b", "b", "c"))
+g <- icd:::factor_nosort(f, levels = c("a", "c", "b"))
+stopifnot(g[4] == "c")
 }
 \author{
 Kevin Ushey, adapted by Jack Wasey

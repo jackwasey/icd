@@ -6,12 +6,10 @@
 \title{Simpler comorbidity assignment}
 \usage{
 icd9Comorbid_alt_Taskloop(icd9df, icd9Mapping, visitId, icd9Field,
-  threads = 8L, chunk_size = 256L, omp_chunk_size = 1L,
-  aggregate = TRUE)
+  threads = 8L, chunk_size = 256L, omp_chunk_size = 1L)
 
 icd9Comorbid_alt_Taskloop2(icd9df, icd9Mapping, visitId, icd9Field,
-  threads = 8L, chunk_size = 256L, omp_chunk_size = 1L,
-  aggregate = TRUE)
+  threads = 8L, chunk_size = 256L, omp_chunk_size = 1L)
 }
 \description{
 Re-written without OpenMP initially, but structured more simply, with the motivation of
@@ -21,14 +19,7 @@ using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
 \details{
 # basic test
 # use tests/testthat/helper-base.R for two_pts and two_map
-icd_comorbid(two_pts, two_map, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop)
-
-vermont_dx %>% icd_wide_to_long() -> vt
-microbenchmark::microbenchmark(
-  res1 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9ComorbidShortCpp),
-  res2 <- icd_comorbid(vt, icd9_map_ahrq, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop),
-  times = 50)
-identical(res1, res2)
+comorbid(two_pts, two_map, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop)
 }
 \section{Functions}{
 \itemize{

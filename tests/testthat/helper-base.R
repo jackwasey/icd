@@ -151,11 +151,11 @@ one_of_each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
 
 # one icd9 patient
 one_pt_one_icd9 <- data.frame(visit_id = c("a"),
-                              icd9 = c("044.9"),
+                              icd9 = c("042"),
                               stringsAsFactors = FALSE)
 
 one_pt_two_icd9 <- data.frame(visit_id = c("a", "a"),
-                              icd9 = c("044.9", "044.9"),
+                              icd9 = c("042", "042"),
                               stringsAsFactors = FALSE)
 
 # two items per map, two codes per item, two codes for two visits

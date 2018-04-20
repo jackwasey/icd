@@ -187,15 +187,15 @@ sas_expand_range <- function(start, end) {
   if (end == "0449")
     end <- start # HIV codes changed
 
-  reals <- icd_expand_range.icd9(start, end, short_code = TRUE, defined = TRUE,
+  reals <- expand_range.icd9(start, end, short_code = TRUE, defined = TRUE,
                                  # hmmm, maybe get the diff and test all children of ambigs present later
                                  ex_ambig_start = FALSE, ex_ambig_end = TRUE)
-  real_parents <- icd_condense.icd9(reals, defined = TRUE, short_code = TRUE)
+  real_parents <- condense.icd9(reals, defined = TRUE, short_code = TRUE)
   merged <- unique(c(reals, real_parents))
-  real_parents_of_merged <- icd_condense.icd9(merged, defined = TRUE, short_code = TRUE)
-  halfway <- icd_children.icd9(real_parents_of_merged, defined = FALSE, short_code = TRUE)
-  nonrealrange <- icd_expand_range.icd9(start, end, defined = FALSE, short_code = TRUE,
+  real_parents_of_merged <- condense.icd9(merged, defined = TRUE, short_code = TRUE)
+  halfway <- children.icd9(real_parents_of_merged, defined = FALSE, short_code = TRUE)
+  nonrealrange <- expand_range.icd9(start, end, defined = FALSE, short_code = TRUE,
                                         ex_ambig_start = TRUE,
                                         ex_ambig_end = TRUE)
-  icd_sort.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)
+  sort_icd.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)
 }

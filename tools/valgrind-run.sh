@@ -1,6 +1,6 @@
 #!/bin/bash
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
-set -euo pipefail
+set -uo pipefail
 IFS=$'\n\t'
 
 R_READY="message(\"ready to valgrind\")"

@@ -9,15 +9,4 @@ icd9ChildrenShort_alt_Std(icd9Short, onlyReal)
 \description{
 C++ implementation of finding children of short codes
 }
-\examples{
-\dontrun{
-library(microbenchmark)
-microbenchmark(icd9ChildrenShort("001", T), icd9ChildrenShortStd("001", T), times = 100)
-microbenchmark(icd9ChildrenShort(c("001", 100:400), T),
-               icd9ChildrenShortUnordered(c("001", 100:400), T),
-               icd9ChildrenShortStd(c("001", 100:400), T),
-               times = 10)
-}
-# un-ordered set much faster, but may still need to sort result
-}
 \keyword{internal}

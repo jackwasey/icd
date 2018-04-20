@@ -3,14 +3,14 @@
 \name{shortcode_icd9}
 \alias{shortcode_icd9}
 \alias{shortcode_icd10}
-\title{set \code{icd_short_to_decimal} attribute}
+\title{set \code{short_to_decimal} attribute}
 \usage{
-shortcode_icd9(x, short_code = icd_guess_short(x))
+shortcode_icd9(x, short_code = guess_short(x))
 
-shortcode_icd10(x, short_code = icd_guess_short(x))
+shortcode_icd10(x, short_code = guess_short(x))
 }
 \description{
 Does not convert between decimal and short codes. Calling
-\code{icd_short_to_decimal} should convert and set the attribute.
+\code{short_to_decimal} should convert and set the attribute.
 }
 \keyword{internal}

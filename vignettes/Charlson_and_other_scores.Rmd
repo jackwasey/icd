@@ -59,11 +59,11 @@ The Vermont data are actually discharge, not admission diagnoses, but can be use
 # typical hospital format data, with many columns for diagnoses
 head(vermont_dx)
 # convert to long format (could use other tools, but the icd version accounts better for known structure of the data.
-head(vermont_dx %>% icd_wide_to_long)
+head(vermont_dx %>% wide_to_long)
 # calculate charlson scores and summarize
-vermont_dx %>% icd_wide_to_long %>% icd_charlson %>% summary
+vermont_dx %>% wide_to_long %>% charlson %>% summary
 # show the first few actual scores: the names are the patient IDs:
-vermont_dx %>% icd_wide_to_long %>% icd_charlson %>% head(25) -> vermont_charlson
+vermont_dx %>% wide_to_long %>% charlson %>% head(25) -> vermont_charlson
 vermont_charlson
 names(vermont_charlson)
 unname(vermont_charlson)
@@ -76,6 +76,6 @@ Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD cod
 The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.
 
 ```
-vermont_dx %>% icd_wide_to_long %>% icd_van_walraven %>% head(25) -> vw_scores
+vermont_dx %>% wide_to_long %>% van_walraven %>% head(25) -> vw_scores
 vw_scores
 ```

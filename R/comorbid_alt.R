@@ -1,15 +1,83 @@
+# Copyright (C) 2014 - 2018  Jack O. Wasey
+#
+# This file is part of icd.
+#
+# icd is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd. If not, see <http:#www.gnu.org/licenses/>.
+
+#' find ICD-10 comorbidities by checking parents
+#'
+#' @examples
+#' up <- uranium_pathology[1:50, ]
+#' if (exists("icd10_comorbid_parent_search_orig"))
+#'   stopifnot(identical(
+#'   icd:::icd10_comorbid_parent_search_orig(up, icd10_map_ahrq,
+#'     visit_name = "case", icd_name ="icd10",
+#'     short_code = FALSE, short_map = TRUE, return_df = FALSE),
+#'   icd:::icd10_comorbid_parent_search_use_cpp(up, icd10_map_ahrq,
+#'     visit_name = "case", icd_name ="icd10",
+#'     short_code = FALSE, short_map = TRUE, return_df = FALSE),
+#'   icd:::icd10_comorbid_reduce(up, icd10_map_ahrq,
+#'     visit_name = "case", icd_name ="icd10",
+#'     short_code = FALSE, short_map = TRUE, return_df = FALSE)
+#'   ))
+#' @keywords internal
+icd10_comorbid_parent_search <- function(
+  x,
+  map,
+  visit_name = NULL,
+  icd_name = get_icd_name(x),
+  short_code = guess_short(x, icd_name = icd_name),
+  short_map = guess_short(map),
+  return_df = FALSE, ...) {
+  # use the CPP version by default
+  icd10_comorbid_parent_search_use_cpp(
+    x = x, map = map, visit_name = visit_name,
+    icd_name = icd_name, short_code = short_code,
+    short_map = short_map, return_df = return_df, ...)
+}
+
+icd10_comorbid_parent_search_use_cpp <- function(
+  x,
+  map,
+  visit_name = NULL,
+  icd_name = get_icd_name(x),
+  short_code = guess_short(x, icd_name = icd_name),
+  short_map = guess_short(map),
+  return_df = FALSE, ...) {
+  if (!short_code)
+    x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
+  intermed <- icd10_comorbid_parent_search_cpp(
+    x = x, map = map, visit_name = visit_name, icd_name = icd_name)
+  res <- aggregate(x = intermed, by = x[visit_name], FUN = any)
+  if (return_df)
+    return(res)
+  out <- as.matrix(res[-1])
+  rownames(out) <- res[[1]]
+  out
+}
 
 icd10_comorbid_parent_search_str <- function(
   x,
   map,
   visit_name = NULL,
   icd_name = get_icd_name(x),
-  short_code = icd_guess_short(x, icd_name = icd_name),
-  short_map = icd_guess_short(map),
+  short_code = guess_short(x, icd_name = icd_name),
+  short_map = guess_short(map),
   return_df = FALSE, ...) {
 
   if (!short_code)
-    x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
+    x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
 
   icd_codes <- x[[icd_name]]
 
@@ -39,17 +107,16 @@ icd10_comorbid_parent_search_str <- function(
   out
 }
 
-
 icd10_comorbid_parent_search_all <- function(x,
                                              map,
                                              visit_name = NULL,
                                              icd_name = get_icd_name(x),
-                                             short_code = icd_guess_short(x, icd_name = icd_name),
-                                             short_map = icd_guess_short(map),
+                                             short_code = guess_short(x, icd_name = icd_name),
+                                             short_map = guess_short(map),
                                              return_df = FALSE, ...) {
 
   if (!short_code)
-    x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
+    x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
 
   icd_codes <- x[[icd_name]]
 
@@ -81,12 +148,12 @@ icd10_comorbid_parent_search_no_loop <- function(x,
                                                  map,
                                                  visit_name = NULL,
                                                  icd_name = get_icd_name(x),
-                                                 short_code = icd_guess_short(x, icd_name = icd_name),
-                                                 short_map = icd_guess_short(map),
+                                                 short_code = guess_short(x, icd_name = icd_name),
+                                                 short_map = guess_short(map),
                                                  return_df = FALSE, ...) {
 
   if (!short_code)
-    x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
+    x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
 
   icd_codes <- x[[icd_name]]
 
@@ -123,12 +190,12 @@ icd10_comorbid_parent_search_orig <- function(x,
                                               map,
                                               visit_name = NULL,
                                               icd_name = get_icd_name(x),
-                                              short_code = icd_guess_short(x, icd_name = icd_name),
-                                              short_map = icd_guess_short(map),
+                                              short_code = guess_short(x, icd_name = icd_name),
+                                              short_map = guess_short(map),
                                               return_df = FALSE, ...) {
 
   if (!short_code)
-    x[[icd_name]] <- icd_decimal_to_short.icd10(x[[icd_name]])
+    x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
 
   icd_codes <- x[[icd_name]]
 
@@ -157,20 +224,4 @@ icd10_comorbid_parent_search_orig <- function(x,
   out <- as.matrix(res[-1])
   rownames(out) <- res[[1]]
   out
-}
-
-icd10_comorbid_no_parent_search <- function(x,
-                                            map,
-                                            visit_name = NULL,
-                                            icd_name = get_icd_name(x),
-                                            short_code = icd_guess_short(x, icd_name = icd_name),
-                                            short_map = icd_guess_short(map[[1]]),
-                                            return_df = FALSE, ...) {
-
-  # confirm class is ICD-9 so we dispatch correctly. The class may not be set if
-  # the S3 method was called directly.
-  if (!is.icd10(x[[icd_name]])) x[[icd_name]] <- icd10(x[[icd_name]]) # no as.icd10
-  icd_comorbid_common(x, map, visit_name, icd_name,
-                      short_code, short_map, return_df, ...)
-
 }

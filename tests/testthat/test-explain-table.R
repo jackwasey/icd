@@ -15,37 +15,37 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-test_that("icd_explain_table, with and without condense returns correct structure", {
+test_that("explain_table, with and without condense returns correct structure", {
   codes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
-  expect_equal(dim(icd_explain_table(codes, condense = FALSE)), c(7, 10))
-  expect_equal(dim(icd_explain_table(codes, condense = TRUE)), c(6, 12))
-  expect_equal(names(icd_explain_table(codes, condense = TRUE))[c(11, 12)],
+  expect_equal(dim(explain_table(codes, condense = FALSE)), c(7, 10))
+  expect_equal(dim(explain_table(codes, condense = TRUE)), c(6, 12))
+  expect_equal(names(explain_table(codes, condense = TRUE))[c(11, 12)],
                c("condensed_codes", "condensed_num"))
 })
 
-test_that("icd_explain_table reproduces icd_explain.list (element-by-element) with mixed major and minor codes", {
+test_that("explain_table reproduces explain.list (element-by-element) with mixed major and minor codes", {
   codes <- c("362.5", "413.9", "010.02", "584.9", "357.2", "588.81", "010")
-  method1 <- unlist(icd:::icd_explain.list(codes))
-  method2 <- icd_explain_table(codes, condense = FALSE)[["long_desc"]]
+  method1 <- unlist(icd:::explain.list(codes))
+  method2 <- explain_table(codes, condense = FALSE)[["long_desc"]]
   expect_identical(method1, method2)
 })
 
-test_that("icd_explain_table can handle invalid icd by filling with NAs.", {
+test_that("explain_table can handle invalid icd by filling with NAs.", {
 
-  res <- icd_explain_table("Rick Shaw", condense = TRUE)
+  res <- explain_table("Rick Shaw", condense = TRUE)
   expect_true(is.na(res[["short_desc"]]))
   expect_true(is.na(res[["is_major"]])) # could be false?
   expect_equal(res[["condensed_codes"]], res[["code"]])
   expect_equal(res[["condensed_num"]], 1L)
 
-  res <- icd_explain_table(c("bogus code", "Percy Veer"), condense = TRUE)
+  res <- explain_table(c("bogus code", "Percy Veer"), condense = TRUE)
   expect_true(all(is.na(res[["short_desc"]])))
   expect_true(all(is.na(res[["is_major"]])))
   expect_equal(res[["condensed_codes"]], res[["code"]])
   expect_equal(res[["condensed_num"]], c(1L, 1L))
 })
 
-test_that("condensing icd_explain_table generates correct columns", {
+test_that("condensing explain_table generates correct columns", {
   dat <- data.frame(code = c("123", "123.4"),
                     three_digit = factor(c("123", "123")),
                     stringsAsFactors = FALSE)
@@ -95,7 +95,7 @@ test_that("condensing icd_explain_table generates correct columns", {
   expect_identical(nrow(condense_explain_table_worker(dat)), 0L)
 })
 
-test_that("icd_explain_table num_condense sum after condense equals input length", {
+test_that("explain_table num_condense sum after condense equals input length", {
 
   variations <- list(
     c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414"),
@@ -103,7 +103,7 @@ test_that("icd_explain_table num_condense sum after condense equals input length
     "another bogus",
     c("one bogus", "two bogus"))
   for (codes in variations) {
-    res <- icd_explain_table(codes, condense = TRUE)
+    res <- explain_table(codes, condense = TRUE)
     expect_is(res[["condensed_num"]], "integer")
     expect_equal(
       sum(res$condensed_num, na.rm = TRUE),
@@ -113,19 +113,19 @@ test_that("icd_explain_table num_condense sum after condense equals input length
   }
 })
 
-test_that("icd_explain_table, appropriately convert mixed code character vector,
+test_that("explain_table, appropriately convert mixed code character vector,
           casted icd9, and casted icd10 vectors: ", {
 
             codes <- c("N18.3", "414", "362.5")
-            res <- icd_explain_table(icd9(codes))
+            res <- explain_table(icd9(codes))
             expect_equal(is.na(res$short_desc), c(TRUE, FALSE, FALSE))
 
-            res <- icd_explain_table(icd10(codes))
+            res <- explain_table(icd10(codes))
             expect_equal(is.na(res$short_desc), c(FALSE, TRUE, TRUE))
           })
 
-test_that("icd_explain_table works with factor input", {
+test_that("explain_table works with factor input", {
   f <- factor(c("25010", "E777", "lorem ipsum"))
-  expect_equal(dim(icd_explain_table(f)), c(3, 10))
-  expect_equal(icd_explain_table(f)[2, 2], NA_character_)
+  expect_equal(dim(explain_table(f)), c(3, 10))
+  expect_equal(explain_table(f)[2, 2], NA_character_)
 })

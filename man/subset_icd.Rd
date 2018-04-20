@@ -26,7 +26,7 @@ exactly the same as using x[n] or x[[n]] but preserves the ICD classes in
 result
 }
 \examples{
-x <- as.icd9(list(my_codes = c("V10.1", "441.1")))
+x <- list(my_codes = as.icd9(c("V10.1", "441.1")))
 x[1]
 x[[1]]
 x[[1]][2]

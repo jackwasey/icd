@@ -41,32 +41,16 @@ icd9_extract_alpha_numeric <- function(x) {
 #'
 #' Invalid codes have no guaranteed result, and may give NA, or a (possibly
 #' valid) code in response.
-#' @examples
-#' \dontrun{
-#' library(microbenchmark)
-#' x <- icd:::generate_random_decimal_icd9(1e6)
-#' microbenchmark(
-#'   x %>% icd:::as_char_no_warn %>%
-#'   stringr::str_replace("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
-#'
-#'   stringr::str_replace(icd:::as_char_no_warn(x),
-#'               "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3"),
-#'
-#'   gsub("[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*", "\\1\\3", x),
-#'   times = 1000
-#'   )
-#' }
 #' @template icd9-any
 #' @return character vector of ICD-9 codes with extra zeroes dropped from major
 #'   part
-#' @family ICD-9 convert
 #' @keywords internal manip
-icd9_drop_leading_zeroes <- function(x, short_code = icd_guess_short(x)) {
+icd9_drop_leading_zeroes <- function(x, short_code = guess_short(x)) {
   assert(check_factor(x), check_character(x))
   assert(check_null(short_code), check_flag(short_code))
 
   if (short_code) {
-    parts <- icd_short_to_parts.icd9(x = x, mnr_empty = "")
+    parts <- short_to_parts.icd9(x = x, mnr_empty = "")
     # very important: only drop the zero in V codes if the minor part is empty.
     are_empty <- parts[["mnr"]] == ""
     x[are_empty] <- icd9_drop_leading_zeroes_major(parts[are_empty, "mjr"])
@@ -77,7 +61,7 @@ icd9_drop_leading_zeroes <- function(x, short_code = icd_guess_short(x)) {
 }
 
 #' @keywords internal manip
-icd9_add_leading_zeroes <- function(x, short_code = icd_guess_short(x)) {
+icd9_add_leading_zeroes <- function(x, short_code = guess_short(x)) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   if (is.factor(x)) {

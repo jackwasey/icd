@@ -20,4 +20,5 @@ invisibly returns the list of vectors, where a co-morbidity name is
 \description{
 Process data from \href{healthvermont.gov}{Health Vermont}
 }
+\keyword{datagen}
 \keyword{internal}

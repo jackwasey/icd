@@ -91,8 +91,8 @@ test_that("7806 is correctly explained, github #116", {
 
 test_that("737 is correctly explained, github #111", {
   expect_explain_equal("737", "Curvature of spine")
-  expect_equal(icd_explain_table("737")[["short_desc"]], "Curvature of spine")
-  expect_equal(icd_explain_table("737")[["long_desc"]], "Curvature of spine")
+  expect_equal(explain_table("737")[["short_desc"]], "Curvature of spine")
+  expect_equal(explain_table("737")[["long_desc"]], "Curvature of spine")
 })
 
 test_that("345.1 is parsed correctly, github #109", {

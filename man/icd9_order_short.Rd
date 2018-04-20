@@ -16,17 +16,4 @@ vector of integers with length of the non-NA values in \code{x}
 Puts E codes after V codes. \code{NA} values can't be ordered and are dropped
 with a warning if found.
 }
-\examples{
-x <- icd:::generate_random_decimal_icd9(1e4)
-system.time(icd:::icd9_sort_cpp(x)) # vastly quicker
-system.time(icd:::icd9_order_short(x))
-if (exists("icd9_order_short") &&
-    require("microbenchmark", quietly = TRUE)) {
-  # fastmatch was fractionally faster, but either is very slow
-  microbenchmark(icd:::icd9_order_short(x),
-                 icd:::icd9_order_short_r(x),
-                 times = 10)
-  # C++ method (which also ignores NA values) is 100x faster.
-}
-}
 \keyword{internal}

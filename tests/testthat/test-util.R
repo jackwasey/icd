@@ -75,9 +75,9 @@ test_that("string pair match extraction", {
   expect_error(str_pair_match(pattern = "(abc)def(ghi)"))
   expect_error(str_pair_match(string = "bougie"))
   expect_error(str_pair_match(pattern = c("(a)b(c)", "(d)e(f)"),
-                            string = "abc"))
+                              string = "abc"))
   expect_error(str_pair_match(pattern = c("(a)b(c)", "(d)e(f)"),
-                            string = c("abc", "def")))
+                              string = c("abc", "def")))
 
   expect_error(str_pair_match(pattern = "[", string = "abc")) # invalid regex
   # only one parenthesis
@@ -85,10 +85,10 @@ test_that("string pair match extraction", {
   expect_error(str_pair_match(pattern = ".*(j)", string = "abc"))
   expect_equal(str_pair_match(pattern = "(a*)b(c*)", string = "abc"), c(a = "c"))
   expect_equal(str_pair_match(pattern = "([^mackarel]*)(spain)",
-                            string = "togospain"),
+                              string = "togospain"),
                c(togo = "spain"))
   expect_equal(str_pair_match(pattern = "([^mackarel]*)(spain)",
-                            string = c("togospain", "djiboutispain")),
+                              string = c("togospain", "djiboutispain")),
                c(togo = "spain", djibouti = "spain"))
   expect_equal(str_pair_match(pattern = "(a*)b(c*)", string = c("abc", "aabcc")),
                c(a = "c", aa = "cc"))
@@ -112,7 +112,7 @@ test_that("logical to binary for a matrix works", {
 
 test_that("chapter to desc range works for icd9", {
   expect_identical(chapter_to_desc_range.icd9("jack (110-120)"),
-    list(Jack = c(start = "110", end = "120"))
+                   list(Jack = c(start = "110", end = "120"))
   )
   expect_identical(chapter_to_desc_range.icd9("jack (V10-V20)"),
                    list(Jack = c(start = "V10", end = "V20"))
@@ -162,4 +162,72 @@ test_that("title case works", {
   expect_identical(to_title_case("ill-defined"), "Ill-Defined")
   expect_identical(to_title_case("body mass index [bmi]"), "Body Mass Index [Bmi]")
   expect_identical(to_title_case("body mass index [BMI]"), "Body Mass Index [BMI]")
+})
+
+context("heuristics for determining the field names of an input data frame")
+
+test_that("well structured data frame, ICD & visit guessed", {
+  expect_equal(get_visit_name(simple_poa_pts), "visit_id")
+  expect_equal(get_icd_name(simple_poa_pts), "code")
+  expect_equal(get_visit_name(complex_poa_pts), "visit_id")
+  expect_equal(get_icd_name(complex_poa_pts), "icd9")
+  expect_equal(get_visit_name(test_twenty), "visit_id")
+  expect_equal(get_icd_name(test_twenty), "icd9Code")
+})
+
+test_that("ambiguous icd_name gives warning", {
+  two_code_pt <-  data.frame(
+    visit_id = "V111111",
+    icd9 = "441",
+    icd10 = "A11",
+    poa = "N"
+  )
+  expect_warning(get_icd_name(two_code_pt))
+})
+
+test_that("icd name heuristic works for various", {
+  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd",
+               "diagnos", "diag.?code", "diag", "i(9|10)", "code")
+  x <- simple_pts
+  for (n in c("icd-10", "icd9", "diag", "diag1", "DIAGCODE", "i9code", "code", "diagnosis")) {
+    names(x)[2] <- n
+    expect_equal(get_icd_name(x), n)
+  }
+})
+
+test_that("error if an unnamed data frame is used to guess field", {
+  x <- unname(simple_pts)
+  expect_error(get_visit_name(x))
+  expect_error(get_icd_name(x))
+})
+
+test_that("icd9 field guessed from data if name fails, any order", {
+  x <- simple_poa_pts
+  x10 <- x
+  x10[[2]] <- icd10_each_ahrq_cmb[1:4]
+  names(x)[2] <- "not_helpful"
+  names(x10)[2] <- "not_helpful"
+  expect_equal(get_icd_name(x), "not_helpful")
+  perms <- matrix(nrow = 3, data = c(
+    1, 2, 3,
+    1, 3, 2,
+    2, 1, 3,
+    2, 3, 1,
+    3, 1, 2,
+    3, 2, 1)
+  )
+  apply(perms, 2, function(y) {
+    expect_equal(get_icd_name(x[y]), "not_helpful")
+    expect_equal(get_icd_name(x10[y]), "not_helpful")
+  })
+})
+
+test_that("icd field not present at all", {
+  x <- simple_pts
+  x[2] <- NULL
+  expect_error(get_icd_name(x))
+  names(x)[2] <- "icd"
+  expect_error(get_icd_name(x))
+  x[[2]] <- as.icd9(x[[2]])
+  expect_error(get_icd_name(x), regexp = NA)
 })

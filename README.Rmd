@@ -109,22 +109,22 @@ See also the vignettes and examples embedded in the help for each function for m
 patient_data
 
 # reformat input data as needed
-icd_long_to_wide(patient_data)
+long_to_wide(patient_data)
 
 # get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
-icd_comorbid_quan_deyo(patient_data)
+comorbid_quan_deyo(patient_data)
 
 # find diagnoses present on admission:
-icd_filter_poa(patient_data)
+filter_poa(patient_data)
 
 # get comorbidities based on present-on-arrival diagnoses, use magrittr to flow the data
-patient_data %>% icd_filter_poa %>% icd_comorbid_quan_deyo
+patient_data %>% filter_poa %>% comorbid_quan_deyo
 ```
 
 Look at the help files for details and examples of almost every function in this package.
 ```{r how to get further examples, echo = TRUE, eval = FALSE}
-?icd_is_valid
-?icd_comorbid
+?is_valid
+?comorbid
 ```
 
 Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.

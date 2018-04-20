@@ -4,6 +4,7 @@ autoscan.log
 *.bak
 callgrind.*
 confdefs.h
+conftest.*
 config.log
 config.status
 configure.scan
@@ -20,6 +21,7 @@ icd_*.tar.gz
 icd9_*.tar.gz
 include-dependencies.d
 inst/doc/*
+*.md
 *.o
 .project
 .RData
@@ -32,6 +34,7 @@ rprof.out
 .settings
 *.so
 *.swp
+src/*.o.tmp
 src-i386
 src-x64
 *.swp
@@ -40,3 +43,4 @@ README.html
 include-dependencies
 ccache.log
 .build.timestamp
+*.xcworkspace

@@ -16,39 +16,24 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
+#include <Rcpp.h>
+#include "icd_types.h"
 #include "convert.h"
-#include <Rcpp/r/headers.h>                  // for Rf_install, NA_STRING
 extern "C" {
   #include <cstddef>                           // for size_t
 }
 #include <string>                            // for string
 #include "Rcpp.h"                            // for wrap
-#include "Rcpp/Named.h"                      // for Argument, NamedPlaceHolder
-#include "Rcpp/api/meat/proxy.h"             // for AttributeProxyPolicy::At...
-#include "Rcpp/as.h"                         // for as
-#include "Rcpp/clone.h"                      // for clone
-#include "Rcpp/generated/Vector__create.h"   // for Vector::create
-#include "Rcpp/proxy/AttributeProxy.h"       // for AttributeProxyPolicy<>::...
-#include "Rcpp/sugar/functions/seq_along.h"  // for SeqLen, seq_along
-#include "Rcpp/traits/named_object.h"        // for named_object
-#include "Rcpp/vector/Vector.h"              // for Vector, Vector<>::Proxy
-#include "Rcpp/vector/const_string_proxy.h"  // for const_string_proxy
-#include "Rcpp/vector/proxy.h"               // for r_vector_name_proxy<>::type
-#include "RcppCommon.h"                      // for Proxy_Iterator, wrap
 #include "appendMinor.h"                     // for icd9MajMinToCode
 #include "is.h"                              // for icd9IsASingleE, icd9IsAS...
 #include "manip.h"                           // for icd9AddLeadingZeroesMajor
 #include "util.h"                            // for strimCpp, trimLeftCpp
 
-//' @rdname convert
-//' @keywords internal manip
 // [[Rcpp::export]]
 CV icd9PartsToShort(const Rcpp::List parts) {
   return icd9MajMinToCode(parts["mjr"], parts["mnr"], true);
 }
 
-//' @rdname convert
-//' @keywords internal manip
 // [[Rcpp::export]]
 CV icd9PartsToDecimal(const Rcpp::List parts) {
   return icd9MajMinToCode(parts["mjr"], parts["mnr"], false);
@@ -70,25 +55,19 @@ Rcpp::List icd9MajMinToParts(const CV mjr,
   return returned_frame;
 }
 
-//' @rdname convert
-//' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnrEmpty) {
-
   CV mjr(icd9Short.size());
   CV mnr(icd9Short.size());
-
   for (int i = 0; i < icd9Short.size(); ++i) {
     Rcpp::String thisShort = icd9Short[i];
     if (thisShort == NA_STRING) { // .is_na() is private?
       mnr[i] = NA_STRING; // I think set_na() might be an alternative.
       continue;
     }
-
     std::string s(thisShort.get_cstring());
     s = strimCpp(s); // in place or rewrite?
     std::string::size_type sz = s.size();
-
     if (icd9IsASingleE(s.c_str())) { // E code
       switch (sz) {
       case 2:
@@ -120,41 +99,33 @@ Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnrEmpty) {
         mnr[i] = s.substr(3, sz - 3);
         continue;
       default:
-
         mjr[i] = NA_STRING;
       mnr[i] = NA_STRING;
       continue;
       }
     }
-
   } // for
-
   return icd9MajMinToParts(icd9AddLeadingZeroesMajor(mjr), mnr);
 }
 
-//' @describeIn icd_decimal_to_parts Convert short ICD-10 code to parts
+//' @describeIn decimal_to_parts Convert short ICD-10 code to parts
 //' @export
 //' @keywords internal manip
-// [[Rcpp::export(icd_short_to_parts.icd10)]]
+// [[Rcpp::export(short_to_parts.icd10)]]
 Rcpp::List icd10ShortToPartsCpp(const CV x, const Rcpp::String mnr_empty = "") {
-
   R_xlen_t i10sz = x.size();
-
   CV mjr(i10sz);
   CV mnr(i10sz);
   std::string::size_type sz;
-
   for (R_xlen_t i = 0; i != i10sz; ++i) {
     Rcpp::String thisShort = x[i];
     if (thisShort == NA_STRING) {
       mnr[i] = NA_STRING;
       continue;
     }
-
     std::string s(thisShort.get_cstring()); // maybe faster to use as?
     s = strimCpp(s); // in place or rewrite? do this at all?
     sz = s.size();
-
     if (sz <= 3 && sz > 0) {
       mjr[i] = s.substr(0, sz);
       mnr[mnr_empty];
@@ -166,12 +137,9 @@ Rcpp::List icd10ShortToPartsCpp(const CV x, const Rcpp::String mnr_empty = "") {
       mnr[i] = NA_STRING;
     }
   } // for
-
   return icd9MajMinToParts(mjr, mnr);
 }
 
-//' @rdname convert
-//' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::List icd9DecimalToPartsCpp(const CV icd9Decimal, const Rcpp::String mnr_empty) {
   CV mjrs;
@@ -215,18 +183,16 @@ Rcpp::List icd9DecimalToPartsCpp(const CV icd9Decimal, const Rcpp::String mnr_em
                             mnrs);
 }
 
-
-//' @describeIn icd_decimal_to_parts Convert decimal ICD-10 code to parts. This
+//' @describeIn decimal_to_parts Convert decimal ICD-10 code to parts. This
 //'   shares almost 100% code with the ICD-9 version: someday combine the common
 //'   code.
 //' @export
 //' @keywords internal manip
-// [[Rcpp::export(icd_decimal_to_parts.icd10)]]
+// [[Rcpp::export(decimal_to_parts.icd10)]]
 Rcpp::List icd10DecimalToPartsCpp(const CV x, const Rcpp::String mnr_empty = "") {
   CV mjrs;
   CV mnrs;
   R_xlen_t ilen = x.length();
-
   if (ilen == 0) {
     return Rcpp::List::create(Rcpp::_["mjr"] =
                               CV::create(), Rcpp::_["mnr"] =
@@ -295,7 +261,6 @@ CV icd9DecimalToShort(
       }
       // otherwise leave the code alone
       out[i] = thiscode;
-
     } else {
       out[i] = Rcpp::String(icd9AddLeadingZeroesMajorSingleStd(thiscode));
     }
@@ -303,11 +268,11 @@ CV icd9DecimalToShort(
   return out;
 }
 
-//' @describeIn icd_get_major Get major part of ICD-9 code, i.e. first three
+//' @describeIn get_major Get major part of ICD-9 code, i.e. first three
 //'   digits of numeric or V code, or first four digits of E code. This is the
 //'   part before the decimal, when a decimal point is used.
 //' @keywords internal manip
-//[[Rcpp::export(name="icd_get_major.icd9")]]
+//[[Rcpp::export(name="get_major.icd9")]]
 CV icd9GetMajor(const CV x, const bool short_code) {
   if (short_code) {
     // am I casting (or just compiler/syntax checker hinting?) SEXP may be

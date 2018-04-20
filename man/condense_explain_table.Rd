@@ -2,7 +2,7 @@
 % Please edit documentation in R/explain-table.R
 \name{condense_explain_table}
 \alias{condense_explain_table}
-\title{condense \code{icd_explain_table} output down to major codes}
+\title{condense \code{explain_table} output down to major codes}
 \usage{
 condense_explain_table(x)
 }
@@ -12,7 +12,7 @@ code, the children are aggregated to a list and added to the major code row.
 This does currently not 'condense' e.g. middle-order codes
 }
 \details{
-Unlike \code{icd_explain_table}, preserving order doesn't make sense, since
+Unlike \code{explain_table}, preserving order doesn't make sense, since
 rows anywhere in the list can be aggregated, thus altering order compared to
 the input. Size of the output will also be different if any condensing was
 done.

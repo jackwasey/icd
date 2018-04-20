@@ -18,6 +18,7 @@
 #ifndef ICD_TYPES_H_
 #define ICD_TYPES_H_
 
+#include "config.h" // to know whether we have OpenMP, Eigen, etc. which have typedefs
 #include <vector>
 #include <string>
 #include <Rcpp.h>
@@ -40,6 +41,29 @@ typedef VecInt NewOutPt;
 typedef std::vector<NewOutPt> NewOut;
 typedef VecVecInt::iterator NewOutIt;
 
+typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
+typedef std::unordered_set<std::string> icd_set;
+
 typedef Rcpp::CharacterVector CV;
+
+#define ICD_EIGEN
+#ifndef HAVE_RCPPEIGEN_H
+#undef ICD_EIGEN
+#endif
+
+#ifdef ICD_EIGEN
+#include <RcppEigen.h> // also add LinkingTo element in DESCRIPTION to enable
+#include <Eigen/SparseCore>
+
+// using the typedef confuses Rcpp?
+//typedef Eigen::SparseMatrix<char, Eigen::RowMajor> SparseOut; // bool, char or int?
+// https://eigen.tuxfamily.org/dox/group__TutorialSparse.html
+typedef int SparseValue;
+typedef Eigen::Triplet<SparseValue> Triplet;
+typedef Eigen::SparseMatrix<SparseValue, Eigen::RowMajor> PtsSparse;
+typedef Eigen::MatrixXi DenseMap; // col major unless otherwise stated, I think
+typedef std::pair<std::string, VecInt::size_type> VisLkPair;
+
+#endif
 
 #endif /* ICD_TYPES_H_ */

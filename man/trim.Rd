@@ -15,9 +15,5 @@ character vector
 \description{
 \code{NA} is accepted and returned, probably as \code{NA_character_}
 }
-\examples{
-s <- icd:::random_string(250);
-microbenchmark::microbenchmark(icd:::trim(s), trimws(s)) # trimws from R version 3.2
-}
 \keyword{internal}
 \keyword{manip}

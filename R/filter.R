@@ -26,14 +26,14 @@
 #' @param ... arguments passed to the class-specific functions
 #' @keywords manip
 #' @export
-icd_filter_valid <- function(x, icd_name = get_icd_name(x),
-                             short_code = icd_guess_short(.subset2(x, icd_name)), invert = FALSE) {
+filter_valid <- function(x, icd_name = get_icd_name(x),
+                             short_code = guess_short(.subset2(x, icd_name)), invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(invert)
   # don't UseMethod because the data frame itself doesn't have an ICD version class
-  icd_ver <- icd_guess_version(.subset2(x, icd_name))
+  icd_ver <- guess_version(.subset2(x, icd_name))
   if (icd_ver == "icd9")
     icd9_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = invert)
   else if (icd_ver == "icd10")
@@ -42,41 +42,41 @@ icd_filter_valid <- function(x, icd_name = get_icd_name(x),
     stop("could not identify ICD code type")
 }
 
-#' @describeIn icd_filter_valid Filter invalid rows from data frame of patients with ICD codes.
-#'   This can also be achieved with \code{icd_filter_valid} and \code{invert = TRUE}
+#' @describeIn filter_valid Filter invalid rows from data frame of patients with ICD codes.
+#'   This can also be achieved with \code{filter_valid} and \code{invert = TRUE}
 #' @export
-icd_filter_invalid <- function(x, icd_name = get_icd_name(x), short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
-  icd_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
+filter_invalid <- function(x, icd_name = get_icd_name(x), short_code = guess_short(x[[icd_name]]), invert = FALSE) {
+  filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
-#' @describeIn icd_filter_valid Filter data frame for valid ICD codes
+#' @describeIn filter_valid Filter data frame for valid ICD codes
 #' @export
-icd9_filter_valid <- function(x, icd_name = get_icd_name(x), short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
+icd9_filter_valid <- function(x, icd_name = get_icd_name(x), short_code = guess_short(x[[icd_name]]), invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(invert)
   assert_data_frame(x, min.cols = 1, col.names = "named")
-  x[icd_is_valid.icd9(as_char_no_warn(.subset2(x, icd_name)), short_code = short_code) != invert, ]
+  x[is_valid.icd9(as_char_no_warn(.subset2(x, icd_name)), short_code = short_code) != invert, ]
 }
 
-#' @rdname icd_filter_valid
+#' @rdname filter_valid
 #' @export
 icd10_filter_valid <- function(x, icd_name = get_icd_name(x),
-                               short_code = icd_guess_short(x[[icd_name]]),
+                               short_code = guess_short(x[[icd_name]]),
                                invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(invert)
-  x[icd_is_valid.icd10(as_char_no_warn(.subset2(x, icd_name)), short_code = short_code) != invert, ]
+  x[is_valid.icd10(as_char_no_warn(.subset2(x, icd_name)), short_code = short_code) != invert, ]
 
 }
 
-#' @rdname icd_filter_valid
+#' @rdname filter_valid
 #' @export
 icd9_filter_invalid <- function(x, icd_name = get_icd_name(x),
-                                short_code = icd_guess_short(x[[icd_name]]), invert = FALSE) {
+                                short_code = guess_short(x[[icd_name]]), invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(icd_name)
   assert_flag(short_code)
@@ -84,10 +84,10 @@ icd9_filter_invalid <- function(x, icd_name = get_icd_name(x),
   icd9_filter_valid(x = x, icd_name = icd_name, short_code = short_code, invert = !invert)
 }
 
-#' @rdname icd_filter_valid
+#' @rdname filter_valid
 #' @export
 icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
-                                 short_code = icd_guess_short(x[[icd_name]]),
+                                 short_code = guess_short(x[[icd_name]]),
                                  invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(icd_name)
@@ -115,32 +115,32 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #'   poa = c("Y", "N", NA, "Y"),
 #'   stringsAsFactors = FALSE
 #' )
-#' myData %>% icd_filter_poa_not_no() %>% icd_comorbid_ahrq()
+#' myData %>% filter_poa_not_no() %>% comorbid_ahrq()
 #' # can fill out named fields also:
-#' myData %>% icd_filter_poa_yes(poa_name="poa") %>%
-#'   icd_comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
-#' # can call the core icd_comorbid() function with an arbitrary mapping
+#' myData %>% filter_poa_yes(poa_name="poa") %>%
+#'   comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
+#' # can call the core comorbid() function with an arbitrary mapping
 #' myData %>%
-#'   icd_filter_poa_yes %>%
-#'   icd_comorbid(icd_name = "diag", visit_name = "visit_id",
+#'   filter_poa_yes %>%
+#'   comorbid(icd_name = "diag", visit_name = "visit_id",
 #'     map = icd_map_quan_elix, short_mapping = TRUE)
 #' }
 #' @keywords manip
 #' @export
-icd_filter_poa <- function(x, poa_name = "poa", poa = icd_poa_choices) {
+filter_poa <- function(x, poa_name = "poa", poa = poa_choices) {
   poa <- match.arg(poa)
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(poa_name)
   stopifnot(poa_name %in% names(x))
   switch(poa,
-         "yes" = icd_filter_poa_yes(x, poa_name = poa_name),
-         "no" = icd_filter_poa_no(x, poa_name = poa_name),
-         "notYes" = icd_filter_poa_not_yes(x, poa_name = poa_name),
-         "notNo" = icd_filter_poa_not_no(x, poa_name = poa_name)
+         "yes" = filter_poa_yes(x, poa_name = poa_name),
+         "no" = filter_poa_no(x, poa_name = poa_name),
+         "notYes" = filter_poa_not_yes(x, poa_name = poa_name),
+         "notNo" = filter_poa_not_no(x, poa_name = poa_name)
   )
 }
 
-.icd_filter_poa <- function(x, poa_name, choice, invert = FALSE) {
+.filter_poa <- function(x, poa_name, choice, invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   assert_string(poa_name, na.ok = FALSE)
   assert_character(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
@@ -152,34 +152,34 @@ icd_filter_poa <- function(x, poa_name = "poa", poa = icd_poa_choices) {
   x[!is.na(p) & p %in% choice, names(x) != poa_name]
 }
 
-#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#' @describeIn filter_poa Select rows where Present-on-Arrival flag is
 #'   explicitly 'Yes.'
 #' @export
-icd_filter_poa_yes <- function(x, poa_name = "poa") {
-  .icd_filter_poa(x, poa_name, choice = c("Y", "y"), invert = FALSE)
+filter_poa_yes <- function(x, poa_name = "poa") {
+  .filter_poa(x, poa_name, choice = c("Y", "y"), invert = FALSE)
 }
 
-#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#' @describeIn filter_poa Select rows where Present-on-Arrival flag is
 #'   explicitly 'No.'
 #' @export
-icd_filter_poa_no <- function(x, poa_name = "poa") {
-  .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = FALSE)
+filter_poa_no <- function(x, poa_name = "poa") {
+  .filter_poa(x, poa_name, choice = c("N", "n"), invert = FALSE)
 }
 
-#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#' @describeIn filter_poa Select rows where Present-on-Arrival flag is
 #'   anything but 'No.' This includes unknown, exempt, other codes, and of
 #'   course all those marked 'Yes.'
 #' @export
-icd_filter_poa_not_no <- function(x, poa_name = "poa") {
-  .icd_filter_poa(x, poa_name, choice = c("N", "n"), invert = TRUE)
+filter_poa_not_no <- function(x, poa_name = "poa") {
+  .filter_poa(x, poa_name, choice = c("N", "n"), invert = TRUE)
 }
 
-#' @describeIn icd_filter_poa Select rows where Present-on-Arrival flag is
+#' @describeIn filter_poa Select rows where Present-on-Arrival flag is
 #'   anything but 'Yes.' This would group exempt, unknown and other codes under
 #'   'Not POA' which is unlikely to be a good choice, since exempt codes, of
 #'   which there are a quite large number, tend to describe chronic or
 #'   out-of-hospital characteristics.
 #' @export
-icd_filter_poa_not_yes <- function(x, poa_name = "poa") {
-  .icd_filter_poa(x, poa_name, choice = c("Y", "y"), invert = TRUE)
+filter_poa_not_yes <- function(x, poa_name = "poa") {
+  .filter_poa(x, poa_name, choice = c("Y", "y"), invert = TRUE)
 }

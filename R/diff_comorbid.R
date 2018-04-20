@@ -34,30 +34,30 @@
 #'   order to give a more succinct summary.
 #' @examples
 #' # compare CHF for ICD-10 mappings from Elixhauser and AHRQ
-#' icd_diff_comorbid(icd10_map_elix, icd10_map_ahrq, show = FALSE)[["CHF"]]
+#' diff_comorbid(icd10_map_elix, icd10_map_ahrq, show = FALSE)[["CHF"]]
 #' \dontrun{
 #' # default is to show the results in a human readable manner:
-#' diff_result <- icd_diff_comorbid(icd9_map_elix, icd9_map_ahrq)[["CHF"]]
+#' diff_result <- diff_comorbid(icd9_map_elix, icd9_map_ahrq)[["CHF"]]
 #' # show differences for
 #' # give full report on all comorbidities for these mappings
-#' diff_result <- icd_diff_comorbid(icd9_map_elix, icd9_map_ahrq, show = FALSE)
+#' diff_result <- diff_comorbid(icd9_map_elix, icd9_map_ahrq, show = FALSE)
 #'
 #' # the following outputs a summary to the console:
-#' icd_diff_comorbid(icd9_map_elix, icd9_map_ahrq)
+#' diff_comorbid(icd9_map_elix, icd9_map_ahrq)
 #' }
 #' @return A list, each item of which is another list containing the
 #'   intersections and both asymmetric differences.
 #' @export
-icd_diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL,
-                              y_names = NULL, show = TRUE, explain = TRUE) {
-  UseMethod("icd_diff_comorbid")
+diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL,
+                          y_names = NULL, show = TRUE, explain = TRUE) {
+  UseMethod("diff_comorbid")
 }
 
-#' @describeIn icd_diff_comorbid Show difference between comorbidity maps with
+#' @describeIn diff_comorbid Show difference between comorbidity maps with
 #'   ICD-9 codes
 #' @export
-icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
-                                   y_names = NULL, show = TRUE, explain = TRUE) {
+diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
+                               y_names = NULL, show = TRUE, explain = TRUE) {
   assert_list(x, min.len = 1, any.missing = FALSE,
               types = c("character"), names = "unique")
   assert_list(y, min.len = 1, any.missing = FALSE,
@@ -99,13 +99,13 @@ icd_diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
       if (length(only.x) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     x.title, length(only.x), y.title))
-        lapply(icd_explain(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(explain(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       if (length(only.y) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     y.title, length(only.y), x.title))
-        lapply(icd_explain(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(explain(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       cat("\n")

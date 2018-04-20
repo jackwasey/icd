@@ -18,7 +18,7 @@
 #' Condense ICD-9 code by replacing complete families with parent codes
 #'
 #' This can be thought of as the inverse operation to
-#'   \code{icd_children}.
+#'   \code{children}.
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
@@ -27,13 +27,13 @@
 #' @family ICD-9 ranges
 #' @keywords manip
 #' @export
-icd_condense <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
-  UseMethod("icd_condense")
+condense <- function(x, short_code = guess_short(x), defined = NULL, warn = TRUE, ...) {
+  UseMethod("condense")
 }
 
 #' @export
 #' @keywords internal
-icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL, warn = TRUE, ...) {
+condense.icd9 <- function(x, short_code = guess_short(x), defined = NULL, warn = TRUE, ...) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   assert(check_null(defined), check_flag(defined))
@@ -44,32 +44,32 @@ icd_condense.icd9 <- function(x, short_code = icd_guess_short(x), defined = NULL
     icd9_condense_decimal(x, defined = defined, warn = warn, ...)
 }
 
-#' @describeIn icd_condense Condense a set of ICD codes, guessing ICD version
+#' @describeIn condense Condense a set of ICD codes, guessing ICD version
 #'   from input data
 #' @export
 #' @keywords internal manip
-icd_condense.character <- function(x, short_code = icd_guess_short(x), defined = NULL, ...) {
+condense.character <- function(x, short_code = guess_short(x), defined = NULL, ...) {
 
-  guess <- icd_guess_version.character(x, short_code = short_code)
+  guess <- guess_version.character(x, short_code = short_code)
   if (guess == "icd9") {
-    if (is.null(short_code)) short_code <- icd_guess_short(x)
-    icd_condense.icd9(x, short_code = short_code, defined = defined, ...)
+    if (is.null(short_code)) short_code <- guess_short(x)
+    condense.icd9(x, short_code = short_code, defined = defined, ...)
   } else if (guess == "icd10") {
-    if (is.null(short_code)) short_code <- icd_guess_short(x)
-    stop("icd_condense.icd10 not implemented yet")
+    if (is.null(short_code)) short_code <- guess_short(x)
+    stop("condense.icd10 not implemented yet")
   } else {
     stop("Unknown ICD type")
   }
 }
 
-#' @rdname icd_condense
+#' @rdname condense
 #' @keywords internal manip
 icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE, keep_factor_levels = FALSE)
-  icd_short_to_decimal.icd9(
+  short_to_decimal.icd9(
     icd9_condense_short(
-      icd_decimal_to_short.icd9(x), defined = defined, warn = warn, keep_factor_levels = keep_factor_levels))
+      decimal_to_short.icd9(x), defined = defined, warn = warn, keep_factor_levels = keep_factor_levels))
 
-#' @rdname icd_condense
+#' @rdname condense
 #' @template warn
 #' @param keep_factor_levels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
@@ -85,10 +85,10 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
   # factors and character vectors in this function, so keep simple with
   # character only.
   x <- as_char_no_warn(x)
-  i9w <- unique(icd_get_valid.icd9(x, short_code = TRUE))
+  i9w <- unique(get_valid.icd9(x, short_code = TRUE))
 
   if (is.null(defined)) {
-    if (all(icd_is_defined.icd9(i9w, short_code = TRUE))) {
+    if (all(is_defined.icd9(i9w, short_code = TRUE))) {
       defined <- TRUE
       message("'defined' not given, but all codes are indeed defined, so assuming TRUE")
     } else {
@@ -98,21 +98,21 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
     }
   }
 
-  if (warn && defined && !all(icd_is_defined.icd9(x, short_code = TRUE))) {
-    x <- icd_get_defined.icd9(x, short_code = TRUE)
+  if (warn && defined && !all(is_defined.icd9(x, short_code = TRUE))) {
+    x <- get_defined.icd9(x, short_code = TRUE)
     warning("only defined values requested, but some undefined ICD-9 code(s) were given, so dropping them")
   }
 
   # any major codes are automatically in output (not condensing higher than
   # three digit code) and all their children can be removed from the work list
-  out <- majors <- i9w[are_major <- icd_is_major.icd9(i9w)]
+  out <- majors <- i9w[are_major <- is_major.icd9(i9w)]
   i9w <- i9w[!are_major]
-  i9w <- i9w[i9w %nin% icd_children.icd9(majors, short_code = TRUE, defined = defined)]
+  i9w <- i9w[i9w %nin% children.icd9(majors, short_code = TRUE, defined = defined)]
   fout <- c()
   four_digit_parents <- unique(substr(i9w, 0, 4))
   for (fp in four_digit_parents) {
     # onlyBillable at 5th level is same as onlyReal
-    test_kids <- icd_children.icd9(fp, defined = defined, short_code = TRUE, billable = FALSE)
+    test_kids <- children.icd9(fp, defined = defined, short_code = TRUE, billable = FALSE)
     if (length(test_kids) > 0 && all(test_kids %in% c(fp, i9w))) {
       #if ((length(test_kids) > 1) || (fp %in% i9w)) {
       fout <- c(fout, fp)
@@ -129,9 +129,9 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
   # was annoying.
 
   # set new variable so we don't change the thing we are looping over...
-  major_parents <- unique(icd_get_major.icd9(c(out, fout, i9w), short_code = TRUE))
+  major_parents <- unique(get_major.icd9(c(out, fout, i9w), short_code = TRUE))
   for (mp in major_parents) {
-    test_kids <- icd_children.icd9(mp, short_code = TRUE, defined = defined)
+    test_kids <- children.icd9(mp, short_code = TRUE, defined = defined)
     test_kids <- test_kids[nchar(test_kids) < (5L + icd9_is_e(mp))] # we've done these already
     test_kids <- test_kids[-which(test_kids == mp)]
     if (length(test_kids) > 0 && all(test_kids %in% c(out, fout, i9w))) {
@@ -139,7 +139,7 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
       fout <- fout[-which(fout %in% test_kids)]
     }
   }
-  out <- unique(icd_sort.icd9(c(out, fout, i9w), short_code = TRUE))
+  out <- unique(sort_icd.icd9(c(out, fout, i9w), short_code = TRUE))
 
   if (!is.null(icd9Levels)) {
     if (keep_factor_levels)
@@ -149,7 +149,7 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
   }
 
   if (defined)
-    icd_get_defined.icd9(out, short_code = TRUE) # would there be any undefined?
+    get_defined.icd9(out, short_code = TRUE)
   else
     out
 }

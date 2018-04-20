@@ -35,7 +35,7 @@ icd9_expand_range_worker_alt_base <- function(start, end, lookup, defined,
     stop("end code must be greater than or equal to start code")
 
   if (start == end)
-    return(icd_children.icd9(start, short_code = TRUE, defined = defined))
+    return(children.icd9(start, short_code = TRUE, defined = defined))
 
   out <- lookup[start_index:end_index]
   if (ex_ambig_start) {
@@ -44,7 +44,7 @@ icd9_expand_range_worker_alt_base <- function(start, end, lookup, defined,
     # 102.11, 102.2
     starts <- tail(out, 5)
     for (s in starts) {
-      if (!all(icd_children.icd9(s, short_code = TRUE, defined = defined) %in% out))
+      if (!all(children.icd9(s, short_code = TRUE, defined = defined) %in% out))
         out <- out[-which(out == s)]
     }
   }
@@ -56,14 +56,14 @@ icd9_expand_range_worker_alt_base <- function(start, end, lookup, defined,
     # kill it, if it spills over.
     out_cp <- out
     for (o in out_cp) {
-      if (any(icd_children.icd9(o, short_code = TRUE, defined = defined) %nin% out))
+      if (any(children.icd9(o, short_code = TRUE, defined = defined) %nin% out))
         out <- out[-which(out == o)]
     }
   }
-  icd_sort.icd9(
+  sort_icd.icd9(
     unique(
       c(out,
-        icd_children.icd9(end, short_code = TRUE, defined = defined)
+        children.icd9(end, short_code = TRUE, defined = defined)
       )
     ),
     short_code = TRUE

@@ -7,9 +7,10 @@
 cr(x)
 }
 \arguments{
-\item{cbd}{matrix or data.frame of comorbidities}
+\item{x}{matrix or data.frame of comorbidities}
 }
 \description{
-Get sequence of column indices of comorbidity data frame
+Get sequence of column indices of comorbidity data frame, which differ
+between tidy data frames and clean, row-named matrices
 }
 \keyword{internal}

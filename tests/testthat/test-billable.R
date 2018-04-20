@@ -68,7 +68,7 @@ test_that("billable codes are all in order", {
   testthat::skip_on_cran()
   for (v in names(icd9cm_billable)) {
     i <- icd9cm_billable[[v]][["code"]]
-    expect_identical(i, icd_sort.icd9(i, short_code = TRUE),
+    expect_identical(i, sort_icd.icd9(i, short_code = TRUE),
                      info = paste("version = ", v))
   }
 })

@@ -15,21 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-# get and set class types this package uses The master list is: icd9 icd9cm
-# icd10 icd10cm icd_long icd_wide icd_decimal icd_short
-# icd_comorbidity_map
-#
-# I'm not sure of the best order, so I think I'll avoid assuming any order,
-# except for more specific ICD types coming first.
-
-# list currently implemented classes for validation.
 icd9_sub_classes <- c("icd9cm")
 icd9_classes <- c(icd9_sub_classes, "icd9")
 icd10_sub_classes <- c("icd10cm")
 icd10_classes <- c(icd10_sub_classes, "icd10")
 icd_version_classes <- c(icd9_classes, icd10_classes)
 icd_data_classes <- c("icd_long_data", "icd_wide_data")
-icd_other_classes <- c("icd_comorbidity_map")
+icd_other_classes <- c("comorbidity_map")
 icd_all_classes <- c(icd_version_classes, icd_data_classes, icd_other_classes)
 icd_system_classes <- c("data.frame", "list", "numeric", "character", "factor")
 
@@ -61,16 +53,6 @@ icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
 #' bad_codes <- c("100", "A01", "V100", "E999.0")
 #' class(bad_codes) <- c("icd9", "icd10cm")
 #' stopifnot(icd:::icd_classes_conflict(bad_codes))
-#' \dontrun{
-#' # benchmark attributes vs attr for getting and setting
-#' rp <- "a"
-#' new_attr <- list(k = "b")
-#' times <- 5e6
-#' microbenchmark::microbenchmark(attr(rp, "k") <- "b", attributes(rp) <- new_attr, times = times)
-#' microbenchmark::microbenchmark(attr(rp, "k"), attributes(rp)[["k"]], times = times)
-#' microbenchmark::microbenchmark(attr(rp, "k"), attributes(rp), times = times)
-#' microbenchmark::microbenchmark(attr(rp, "k", exact = TRUE), attributes(rp), times = times)
-#' }
 #' @keywords internal
 icd_classes_conflict <- function(x)
   is.icd9(x) && is.icd10(x) ||
@@ -86,8 +68,7 @@ icd_classes_conflict <- function(x)
 #' @param x any object which may or may not have classes from this package
 
 #' @keywords internal
-icd_classes_ordered <- function(x) {
-
+classes_ordered <- function(x) {
   m <- match(class(x), c(icd_other_classes,
                          icd_version_classes,
                          icd_data_classes,
@@ -95,7 +76,7 @@ icd_classes_ordered <- function(x) {
   all(diff(m) >= 0, na.rm = TRUE)
 }
 
-#' Construct ICD-9 data types
+#' Construct ICD-9 and ICD-10 data types
 #'
 #' Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
 #' ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (\code{icd9cm}),
@@ -114,6 +95,7 @@ icd_classes_ordered <- function(x) {
 #' @param warn single logical value, if \code{TRUE} will gives warning when
 #'   converting between types. ICD-9 to ICD-10 will cause an error regardless.
 #' @name set_icd_class
+#' @seealso \code{\link{icd_long_data}}
 #' @examples
 #' x = as.icd10("A1009")
 #' attr(x, "icd_short_diag") <- TRUE
@@ -121,13 +103,16 @@ icd_classes_ordered <- function(x) {
 #' attributes(x) <- list(icd_short_diag = NULL)
 #' x
 #'
-#' # despite exhortation to implement [<- etc, the following seems to work:
-#' j <- as.icd_short_diag(as.icd10(c("A11", "B2222")))
+#' y <- as.decimal_diag(as.icd10("A10.09"))
+#' y
+#' is.short_diag(y)
+#'
+#' j <- as.short_diag(as.icd10(c("A11", "B2222")))
 #' j[2] <- "C33"
-#' stopifnot(is.icd_short_diag(j))
+#' stopifnot(is.short_diag(j))
 #' stopifnot(is.icd10(j), is.icd10(j[1]), is.icd10(j[[1]]))
 #' j[[1]] <- "D44001"
-#' stopifnot(is.icd_short_diag(j))
+#' stopifnot(is.short_diag(j))
 #' stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
 #' @keywords internal
 icd9 <- function(x) {
@@ -144,6 +129,7 @@ icd9 <- function(x) {
 #' @rdname set_icd_class
 #' @export
 as.icd9 <- function(x) {
+  stopifnot(is.atomic(x))
   if (missing(x)) x <- character()
   icd_check_conflict_with_icd9(x)
   if (is.icd9(x)) return(x)
@@ -164,6 +150,7 @@ icd9cm <- function(x) {
 #' @rdname set_icd_class
 #' @export
 as.icd9cm <- function(x) {
+  stopifnot(is.atomic(x))
   if (missing(x)) x <- character()
   icd_check_conflict_with_icd9cm(x)
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
@@ -179,6 +166,7 @@ as.icd9cm <- function(x) {
 #' @rdname set_icd_class
 #' @export
 as.icd10 <- function(x) {
+  stopifnot(is.atomic(x))
   if (missing(x)) x <- character()
   icd_check_conflict_with_icd10(x)
   if (inherits(x, "icd10")) return(x)
@@ -199,6 +187,7 @@ icd10 <- function(x) {
 #' @rdname set_icd_class
 #' @export
 as.icd10cm <- function(x, short_code = NULL) {
+  stopifnot(is.atomic(x))
   if (missing(x)) x <- character()
   icd_check_conflict_with_icd10cm(x)
   if (inherits(x, "icd10cm")) return(x)
@@ -225,15 +214,37 @@ icd10cm <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
-#' @details long or wide format data is always a data frame. It does not
-#'   carry any other ICD classes, even if it only contains one type of code.
+#' @title Convert between and identify 'long' and 'wide' patient data formats
+#' @description Long and Wide Formats: As is common with many datasets, key
+#'   variables can be concentrated in one column or spread over several. Tools
+#'   format of clinical and administrative hospital data, we can perform the
+#'   conversion efficiently and accurately, while keeping some metadata about
+#'   the codes intact, e.g. whether they are ICD-9 or ICD-10.
+#' @details Long or wide format ICD data is expected to be in a data frame. It
+#'   does not carry any ICD classes at the top level, even if it only contains
+#'   one type of code, but its constituent columns may have a class specified,
+#'   e.g. 'icd9'.
+#' @param x \code{data.frame} or \code{matrix} to set class, or convert.
+#' @param ... arguments passed on to create a \code{data.frame}
+#' @description \code{icd_long_data} and \code{icd_wide_data} create
+#'   \code{data.frame}s using all the arguments, and sets the class, whereas
+#'   \code{as.icd_long_data} and \code{as.icd_wide_data} just set the class of
+#'   an existing \code{data.frame}.
+#' @name icd_long_data
+#' @include convert.R
+NULL
+
+#' @describeIn icd_long_data Set class on a matrix or data.frame to
+#'   \code{icd_long_data}. To convert wide to long data, use
+#'   \code{\link{wide_to_long}}.
+#' @family ICD code conversion
 #' @export
 as.icd_long_data <- function(x) {
   # Also from Wickham: "When implementing a matrix/array class, you should
   # implement these methods: dim (gets you nrow and ncol), t, dimnames (gets you
   # rownames and colnames), dimnames<- (gets you colnames<-, rownames<-), cbind,
   # rbind."
+  stopifnot(is.data.frame(x) || is.matrix(x))
   assert_data_frame(x)
   if (is.icd_wide_data(x))
     warning("Setting 'icd_long_data' on a data.frame or matrix which already has 'icd_wide_data' class")
@@ -243,10 +254,13 @@ as.icd_long_data <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @describeIn icd_long_data Set class on a matrix or data.frame to
+#'   \code{icd_wide_data}. To convert long to wide data, use
+#'   \code{\link{long_to_wide}}.
+#' @family ICD code conversion
 #' @export
 as.icd_wide_data <- function(x) {
-  assert_data_frame(x)
+  stopifnot(is.data.frame(x) || is.matrix(x))
   if (is.icd_long_data(x))
     warning("Setting 'icd_wide_data' on a data.frame or matrix which already has 'icd_long_data' class")
   if (is.icd_wide_data(x))
@@ -255,22 +269,15 @@ as.icd_wide_data <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
-#' @param ... arguments passed on to create a \code{data.frame}
-#' @description \code{icd_long_data} and \code{icd_short_data} create
-#'   \code{data.frame}s using all the arguments, and sets the class, whereas
-#'   \code{as.icd_long_data} and \code{as.icd_wide_data} just set the class of
-#'   an existing \code{data.frame}.
+#' @describeIn icd_long_data Construct a \code{data.frame}, adding the \code{icd_long_data} class.
 #' @export
-icd_long_data <- function(...) {
+icd_long_data <- function(...)
   as.icd_long_data(data.frame(...))
-}
 
-#' @rdname set_icd_class
+#' @describeIn icd_long_data Construct a \code{data.frame}, adding the \code{icd_wide_data} class.
 #' @export
-icd_wide_data <- function(...) {
+icd_wide_data <- function(...)
   as.icd_wide_data(data.frame(...))
-}
 
 #' @rdname set_icd_class
 #' @details Using \code{attributes} instead of \code{class} is a better fit for
@@ -278,22 +285,22 @@ icd_wide_data <- function(...) {
 #'   set using the built-in R functions.
 #' @rdname set_icd_class
 #' @keywords internal
-icd_comorbidity_map <- function(x) {
+comorbidity_map <- function(x) {
   assert_list(x, any.missing = FALSE, min.len = 1, names = "unique")
   cl <- class(x)
-  if ("icd_comorbidity_map" %in% cl) return(x)
-  class(x) <- c("icd_comorbidity_map", cl)
+  if ("comorbidity_map" %in% cl) return(x)
+  class(x) <- c("comorbidity_map", cl)
   x
 }
 
 #' @rdname set_icd_class
 #' @export
-as.icd_comorbidity_map <- function(x) {
+as.comorbidity_map <- function(x) {
   assert_list(x, any.missing = FALSE, min.len = 1, names = "unique")
   # avoid copying the data if class is already correct.
-  if (inherits(x, "icd_comorbidity_map"))
+  if (inherits(x, "comorbidity_map"))
     return(x)
-  class(x) <- c("icd_comorbidity_map", class(x))
+  class(x) <- c("comorbidity_map", class(x))
   x
 }
 
@@ -305,9 +312,9 @@ as.icd_comorbidity_map <- function(x) {
 #' @template dotdotdot
 #' @examples
 #' # show that attributes are preserved when subsetting
-#' stopifnot(is.icd_short_diag(icd10_map_ahrq[[1]]))
+#' stopifnot(is.short_diag(icd10_map_ahrq[[1]]))
 #' @export
-`[[.icd_comorbidity_map` <- function(x, index, ...) {
+`[[.comorbidity_map` <- function(x, index, ...) {
   out <- NextMethod()
   # no need to reset attributes?
   out
@@ -328,28 +335,6 @@ as.icd_comorbidity_map <- function(x) {
 #' # Care with the following:
 #' c(as.icd9("E998"), as.icd10("A10"))
 #' # which results in both codes sharing the 'icd9' class.
-#'
-#' \dontrun{
-#' # benchmark subsetting to justify using .subset2 (5% faster)
-#' library(microbenchmark)
-#' j <- list(as.icd9cm("E990"), as.icd9cm("10010"))
-#' k <- list(rep(as.icd9cm("E990"), times = 500))
-#' microbenchmark(j[[1]], .subset2(j, 1),
-#'                k[[1]], .subset2(k, 1),
-#'                times = 1e6)
-#'
-#' # logical list to vector
-#' a <- list(TRUE, TRUE)
-#' microbenchmark(as.logical(a), c(a, recursive = TRUE), times = 1e6)
-#'
-#' # c(..., recursive = TRUE) vs unlist
-#' l = list(c("100", "440", "999"), c("123", "234"))
-#' microbenchmark::microbenchmark(c(l, recursive = TRUE),
-#'                                c(unlist(l)),
-#'                                times = 1e6)
-#' stopifnot(identical(c(l, recursive = TRUE), c(unlist(l))))
-#'
-#' }
 #' @name combine
 #' @export
 c.icd9 <- function(..., warn = FALSE) {
@@ -391,7 +376,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' @param x input data with list, vector, factor, and class set to an ICD type.
 #' @template dotdotdot
 #' @examples
-#' x <- as.icd9(list(my_codes = c("V10.1", "441.1")))
+#' x <- list(my_codes = as.icd9(c("V10.1", "441.1")))
 #' x[1]
 #' x[[1]]
 #' x[[1]][2]
@@ -463,14 +448,14 @@ is.icd9cm <- function(x) inherits(x, "icd9cm")
 #' @export
 is.icd10cm <- function(x) inherits(x, "icd10cm")
 
-#' @rdname is.icd9
+#' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the \code{icd_long_data} class.
 #' @export
 is.icd_long_data <- function(x) inherits(x, "icd_long_data")
 
-#' @rdname is.icd9
+#' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the \code{icd_wide_data} class.
 #' @export
 is.icd_wide_data <- function(x) inherits(x, "icd_wide_data")
 
 #' @rdname is.icd9
 #' @export
-is.icd_comorbidity_map <- function(x) inherits(x, "icd_comorbidity_map")
+is.comorbidity_map <- function(x) inherits(x, "comorbidity_map")

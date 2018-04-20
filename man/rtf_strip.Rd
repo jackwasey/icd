@@ -16,20 +16,5 @@ space and eradicate all other RTF symbols
 \details{
 just for \\tab, replace with space, otherwise, drop RTF tags entirely
 }
-\examples{
-\dontrun{
-# rtf_strip is a slow step, useBytes and perl together is five times faster
-f_info_rtf <- rtf_fetch_year("2011", offline = FALSE)
-rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
-microbenchmark::microbenchmark(
-  res_both <- rtf_strip(rtf_lines, perl = TRUE, useBytes = TRUE),
-  res_none <- rtf_strip(rtf_lines, perl = FALSE, useBytes = FALSE),
-  res_bytes <- rtf_strip(rtf_lines, perl = FALSE, useBytes = TRUE),
-  res_perl <- rtf_strip(rtf_lines, perl = TRUE, useBytes = FALSE),
-  times = 5
-)
-stopifnot(identical(res_both, res_none))
-}
-}
 \keyword{internal}
 \keyword{manip}

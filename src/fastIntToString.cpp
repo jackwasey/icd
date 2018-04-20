@@ -16,20 +16,6 @@ using namespace Rcpp;
 //' @param x vector of integers
 //' @param bufferSize int if any input strings are longer than this number
 //'   (default 16) there will be memory errors. No checks done for speed.
-//' @examples
-//' \dontrun{
-//' pts <- generate_random_pts(1e7)
-//' # conclusion: buffer size matters little (so default to be more generous),
-//' # and 'Rcpp' version fastest.
-//' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
-//'                                fastIntToStringStd(pts$visit_id, buffer = 16),
-//'                                fastIntToStringStd(pts$visit_id, buffer = 64),
-//'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
-//'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
-//'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
-//'                                as.character(pts$visit_id),
-//'                                as_char_no_warn(pts$visit_id), times = 5)
-//' }
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<std::string> fastIntToStringStd(std::vector<int> x) {

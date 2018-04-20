@@ -37,9 +37,6 @@ strim <- function(x) {
 #' \code{NA} is accepted and returned, probably as \code{NA_character_}
 #' @param x character vector
 #' @return character vector
-#' @examples
-#' s <- icd:::random_string(250);
-#' microbenchmark::microbenchmark(icd:::trim(s), trimws(s)) # trimws from R version 3.2
 #' @keywords internal manip
 trim <- function(x) {
   nax <- is.na(x)
@@ -64,18 +61,6 @@ trim <- function(x) {
 #'   slightly quicker \code{TRUE}
 #' @return character vector of same length as input
 #' @keywords internal
-#' @examples
-#' \dontrun{
-#' requireNamespace("microbenchmark")
-#' requireNamespace("stringr")
-#' x <- icd:::random_string(25000);
-#' microbenchmark::microbenchmark(
-#'   gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE),
-#'   gsub(x = x, pattern = "A", replacement = "", fixed = TRUE, useBytes = TRUE, perl = TRUE),
-#'   gsub(x = x, pattern = "A", replacement = ""),
-#'   stringr::str_replace_all(x, "A", "")
-#'   )
-#' }
 strip <- function(x, pattern = " ", use_bytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = use_bytes)
@@ -86,6 +71,11 @@ strip <- function(x, pattern = " ", use_bytes = TRUE)
 #' text containing \code{TRUE} and \code{FALSE} is inefficient. Convert to
 #' binary takes more R memory, but allows more compact output
 #' @param x \code{data.frame} which may contain logical fields
+#' @examples
+#' mat <- matrix(sample(c(TRUE, FALSE), size = 9, replace = TRUE), nrow = 3)
+#' mat
+#' icd:::logical_to_binary(mat)
+#' icd:::binary_to_logical(icd:::logical_to_binary(mat))
 #' @return \code{data.frame} without logical fields
 #' @keywords internal manip logical
 logical_to_binary <- function(x) {
@@ -112,6 +102,30 @@ logical_to_binary <- function(x) {
     )
   x
 }
+
+#' @describeIn logical_to_binary Convert integer columns to logical values
+binary_to_logical <- function(x) {
+  stopifnot(is.data.frame(x) || is.matrix(x))
+  if (is.matrix(x)) {
+    assert_matrix(x, min.rows = 1, min.cols = 1)
+    mode(x) <- "logical"
+    return(x)
+  }
+  assert_data_frame(x, min.rows = 1, min.cols = 1)
+  integer_fields <- names(x)[sapply(x, is.integer)]
+  if (is.na(integer_fields) || length(integer_fields) == 0)
+    return(x)
+
+  # update just the logical fields with integers
+  x[, integer_fields] <-
+    vapply(
+      X         = x[, integer_fields],
+      FUN       = function(y) ifelse(y, TRUE, FALSE),
+      FUN.VALUE = logical(length = dim(x)[1])
+    )
+  x
+}
+
 
 #' \code{regexec} which accepts \code{perl} argument even in older R
 #'
@@ -211,29 +225,74 @@ get_visit_name.matrix <- function(x, visit_name = NULL) {
   stop("matrices of comorbidity data are expected to be of logical type, and have row names corresponding to the visit or patient.")
 }
 
-# guess which field contains the (only) ICD code, in order of preference
-# case-insensitive regex. If there are zero or multiple matches, we move on down
-# the list, meaning some later possibilities are more or less specific regexes
-# than earlier ones.
-get_icd_name <- function(x, icd_name = NULL) {
-  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd", "diagnos", "diag.?code", "diag", "i(9|10)", "code")
+#' get the name of a \code{data.frame} column which is most likely to contain
+#' the ICD codes
+#'
+#' guess which field contains the (only) ICD code, in order of preference, the
+#' column name has an icd code class, case-insensitive regexes of commonly used
+#' names for ICD code fields, a single column has more than 10% valid ICD codes.
+#' If the result is not specified by class, or exactly with \code{icd_name}
+#' being given, we confirm there are at least some valid ICD codes in there
+#' @param x data frame
+#' @param icd_name usually \code{NULL} but if specified, will be checked it is
+#'   valid (i.e. a character vector of length one, which is indeed a name of one
+#'   of \code{x}'s columns) and returned unchanged
+#' @keywords internal
+get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes = FALSE) {
+  if (is.icd_wide_data(x))
+    stop("Unable to infer the name of a single ICD field name from wide data, which has multiple ICD fields. ",
+         "Comorbidity calculations require 'long' format data, 'wide' data should be converted to 'long' ",
+         "using 'wide_to_long'. ",
+         "If the data is indeed 'long' format, remove the class 'icd_wide_data' and ",
+         "use 'as.icd_long_data' to set the correct class. See '?icd_long_data' for help.")
+
+  if (!is.null(icd_name)) {
+    assert_string(icd_name)
+    stopifnot(icd_name %in% names(x))
+    return(icd_name)
+  }
+  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd",
+               "diagnos", "diag.?code", "diag", "i(9|10)", "code")
   assert_data_frame(x, min.cols = 1, col.names = "named")
-  if (is.null(icd_name)) {
-    for (guess in guesses) {
-      guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
-      if (length(guess_matched) == 1) {
-        icd_name <- guess_matched
+  # if one column exactly has a class like icd9, then we're done.
+  cls <- lapply(x, class)
+  class_cols <- unlist(lapply(cls, function(cl) sum(cl %in% icd_version_classes)))
+  one_class_col <- which(class_cols >= 1)
+  if (length(unname(one_class_col)) == 1)
+    return(names(x)[one_class_col])
+  # zero or multiple columns matched classes, and icd_name not already set:
+  for (guess in guesses) {
+    guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
+    if (length(guess_matched) == 1) {
+      icd_name <- guess_matched
+      break
+    } else if (length(guess_matched) > 1) {
+      warning(paste("more than one column name matched while guessing icd_name. Using first one.",
+                    "To specify exactly which column, use icd_name=\"myicdcol\" or set the class of",
+                    "the column, e.g. x$myicdcol <- as.icd10cm(x$myicdcol) .",
+                    "Matched column names are:", guess_matched))
+      icd_name <- guess_matched[1]
+    }
+  }
+  if (is.null(icd_name))
+    for (n in names(x)) {
+      pc <- get_icd_defined_percent(x[[n]])
+      if (pc$icd9 > 25 || pc$icd10 > 25) {
+        icd_name <- n
         break
       }
     }
-    if (is.null(icd_name))
-      # still NULL so fallback to second column
-      icd_name <- names(x)[2]
-    # Could look at contents of the data frame, although this evaluates a
-    # promise on potentially a big data frame, so could be costly
-  }
-  assert_string(icd_name)
-  stopifnot(icd_name %in% names(x))
+  if (nrow(x) < 2 || (!valid_codes && !defined_codes))
+    return(icd_name)
+  pc <- if (defined_codes)
+    get_icd_defined_percent(x[[icd_name]])
+  else
+    get_icd_valid_percent(x[[icd_name]])
+  if (pc$icd9 < 10 && pc$icd10 < 10)
+    stop(paste("identified field with ICD codes as: '", icd_name,
+               "' but fewer than 10% of codes are valid ICD-9 or ICD-10.",
+               "If this really is a valid column, set the class using something like",
+               "x[[icd_name]] <- as.icd9[[x[[icd_name]]"))
   icd_name
 }
 
@@ -372,8 +431,8 @@ str_extract <- function(string, pattern, ...) {
          FUN = `[[`, 1, FUN.VALUE = character(1L))
 }
 
-capitalize_first <- function(name) {
-  trim(paste0(toupper(substr(name, 1, 1)), substr(name, 2, nchar(name))))
+capitalize_first <- function(x) {
+  trim(paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x))))
 }
 
 to_title_case <- function(x) {

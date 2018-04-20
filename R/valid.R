@@ -172,7 +172,7 @@ set_re_globals()
 #' Check whether ICD-9 codes are syntactically valid
 #'
 #' This does not check whether the code corresponds to a real ICD-9-CM billing
-#' code, or parent grouping. For that, see \code{\link{icd_is_defined}}.
+#' code, or parent grouping. For that, see \code{\link{is_defined}}.
 #'
 #' Factors are accepted, and since the validation is done with \code{grepl}
 #' these are handled correctly.
@@ -213,14 +213,14 @@ set_re_globals()
 #' @return logical vector with \code{TRUE} or \code{FALSE} for each ICD code
 #'   provided according to its validity
 #' @examples
-#'   icd_is_valid(as.icd9(c("", "1", "22", "333", "4444", "123.45", "V",
+#'   is_valid(as.icd9(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E")))
 #'   # internal function:
-#'   icd:::icd_is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
+#'   icd:::is_valid_major(c("", "1", "22", "333", "4444", "123.45", "V",
 #'                      "V2", "V34", "V567", "E", "E1", "E70", "E"))
 #' @export
-icd_is_valid <- function(x, ...) {
-  UseMethod("icd_is_valid")
+is_valid <- function(x, ...) {
+  UseMethod("is_valid")
 }
 
 icd_valid_worker <- function(x, whitespace_ok, regex, regex_no_ws = regex) {
@@ -235,24 +235,24 @@ icd_valid_worker <- function(x, whitespace_ok, regex, regex_no_ws = regex) {
     na_to_false(grepl(re_just(regex_no_ws), x, perl = TRUE))
 }
 
-#' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
+#' @describeIn is_valid_major Test whether an ICD code is of major type,
 #'   which at present assumes ICD-9 format. Converts to character than calls
-#'   \code{icd_is_valid.character}
+#'   \code{is_valid.character}
 #' @export
 #' @keywords internal
-icd_is_valid.default <- function(x, short_code = icd_guess_short(x), ...) {
+is_valid.default <- function(x, short_code = guess_short(x), ...) {
   switch(
-    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
-    "icd9" = icd_is_valid.icd9(x, short_code = short_code, ...),
-    "icd10" = icd_is_valid.icd10(x, short_code = short_code, ...),
+    guess_version.character(as_char_no_warn(x), short_code = short_code),
+    "icd9" = is_valid.icd9(x, short_code = short_code, ...),
+    "icd10" = is_valid.icd10(x, short_code = short_code, ...),
     stop("ICD type not known")
   )
 }
 
-#' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
+#' @describeIn is_valid Test whether generic ICD-10 code is valid
 #' @export
 #' @keywords internal
-icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
+is_valid.icd10 <- function(x, short_code = guess_short(x),
                                whitespace_ok = TRUE, ...) {
   assert_flag(short_code)
 
@@ -266,10 +266,10 @@ icd_is_valid.icd10 <- function(x, short_code = icd_guess_short(x),
     grepl(pattern = re_just(re_icd10_decimal), trim(x), perl = TRUE)
 }
 
-#' @describeIn icd_is_valid Test whether generic ICD-10 code is valid
+#' @describeIn is_valid Test whether generic ICD-10 code is valid
 #' @export
 #' @keywords internal
-icd_is_valid.icd9 <- function(x, short_code = icd_guess_short(x),
+is_valid.icd9 <- function(x, short_code = guess_short(x),
                               whitespace_ok = TRUE, ...) {
   assert_flag(short_code)
   if (short_code)
@@ -317,60 +317,60 @@ icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
 #' @return logical vector of same length as input, with \code{TRUE} when a code
 #'   is a major (not necessarily a real one)
 #' @keywords internal
-icd_is_valid_major <- function(x, whitespace_ok = TRUE) {
+is_valid_major <- function(x, whitespace_ok = TRUE) {
   assert_flag(whitespace_ok)
-  UseMethod("icd_is_valid_major")
+  UseMethod("is_valid_major")
 }
 
-#' @describeIn icd_is_valid_major Test whether an ICD code is of major type,
+#' @describeIn is_valid_major Test whether an ICD code is of major type,
 #'   either ICD-9 or ICD-10
 #' @export
 #' @keywords internal
-icd_is_valid_major.default <- function(x, whitespace_ok = TRUE) {
-  icd_is_valid_major.icd9(x, whitespace_ok) |
-    icd_is_valid_major.icd10(x, whitespace_ok)
+is_valid_major.default <- function(x, whitespace_ok = TRUE) {
+  is_valid_major.icd9(x, whitespace_ok) |
+    is_valid_major.icd10(x, whitespace_ok)
 }
 
-#' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
+#' @describeIn is_valid_major Test whether an ICD-9 code is of major type.
 #' @export
 #' @keywords internal
-icd_is_valid_major.icd9 <- function(x, whitespace_ok = TRUE) {
+is_valid_major.icd9 <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_major, re_icd9_major_bare)
 }
 
-#' @describeIn icd_is_valid_major Test whether an ICD-9 code is of major type.
+#' @describeIn is_valid_major Test whether an ICD-9 code is of major type.
 #' @export
 #' @keywords internal
-icd_is_valid_major.icd10 <- function(x, whitespace_ok = TRUE) {
+is_valid_major.icd10 <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd10_major, re_icd10_major_bare)
 }
 
-#' @rdname icd_is_valid_major
+#' @rdname is_valid_major
 #' @keywords internal
 icd9_is_valid_major_n <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_major_n)
 }
 
-#' @rdname icd_is_valid_major
+#' @rdname is_valid_major
 #' @keywords internal
 icd9_is_valid_major_v <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_major_v)
 }
-#' @rdname icd_is_valid_major
+#' @rdname is_valid_major
 #' @keywords internal
 icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_major_e)
 }
 
-#' @describeIn icd_is_valid Validate a mapping of ICD codes to comorbidities.
+#' @describeIn is_valid Validate a mapping of ICD codes to comorbidities.
 #' @export
 #' @keywords internal
-icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
+is_valid.comorbidity_map <- function(x, short_code, ...) {
   assert_list(x, types = "character", any.missing = FALSE,
               min.len = 1, unique = TRUE, names = "named")
   assert_flag(short_code)
   all(unlist(
-    lapply(x, FUN = function(y) icd_is_valid(y, short_code = short_code)),
+    lapply(x, FUN = function(y) is_valid(y, short_code = short_code)),
     use.names = FALSE
   ))
 }
@@ -385,41 +385,41 @@ icd_is_valid.icd_comorbidity_map <- function(x, short_code, ...) {
 #' @keywords manip
 #' @family ICD-9 validation
 #' @export
-icd_get_valid <- function(x, short_code = icd_guess_short(x))
-  UseMethod("icd_get_valid")
+get_valid <- function(x, short_code = guess_short(x))
+  UseMethod("get_valid")
 
-#' @describeIn icd_get_valid get valid ICD codes from character vector, guessing ICD version
+#' @describeIn get_valid get valid ICD codes from character vector, guessing ICD version
 #' @export
 #' @keywords internal
-icd_get_valid.character <- function(x, short_code = icd_guess_short(x)) {
+get_valid.character <- function(x, short_code = guess_short(x)) {
   switch(
-    icd_guess_version.character(x, short_code = short_code),
-    "icd9" = icd_get_valid.icd9(x, short_code = short_code),
-    "icd10" = icd_get_valid.icd10(x, short_code = short_code),
+    guess_version.character(x, short_code = short_code),
+    "icd9" = get_valid.icd9(x, short_code = short_code),
+    "icd10" = get_valid.icd10(x, short_code = short_code),
     stop("ICD type not known")
   )
 }
 
-#' @describeIn icd_get_valid Get valid ICD-9 codes
+#' @describeIn get_valid Get valid ICD-9 codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd9 <- function(x, short_code = icd_guess_short(x)) {
-  x[icd_is_valid.icd9(x, short_code = short_code)]
+get_valid.icd9 <- function(x, short_code = guess_short(x)) {
+  x[is_valid.icd9(x, short_code = short_code)]
 }
 
-#' @describeIn icd_get_valid Get valid ICD-10 codes
+#' @describeIn get_valid Get valid ICD-10 codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd10 <- function(x, short_code = icd_guess_short(x)) {
-  x[icd_is_valid.icd10(x, short_code = short_code)]
+get_valid.icd10 <- function(x, short_code = guess_short(x)) {
+  x[is_valid.icd10(x, short_code = short_code)]
 }
 
-#' @describeIn icd_get_valid Get valid ICD-10-CM codes
+#' @describeIn get_valid Get valid ICD-10-CM codes
 #' @export
 #' @keywords internal
-icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
+get_valid.icd10cm <- function(x, short_code = guess_short(x)) {
   # SOMEDAY: make ICD-10-CM specific (when WHO codes are acutally implemented)
-  x[icd_is_valid.icd10(x, short_code = short_code)]
+  x[is_valid.icd10(x, short_code = short_code)]
 }
 
 #' Get invalid ICD codes
@@ -427,47 +427,47 @@ icd_get_valid.icd10cm <- function(x, short_code = icd_guess_short(x)) {
 #' Returns subset of codes which are not in valid short_code or
 #'   decimal format.
 #' @export
-icd_get_invalid <- function(...) {
-  UseMethod("icd_get_invalid")
+get_invalid <- function(...) {
+  UseMethod("get_invalid")
 }
 
-#' @describeIn icd_get_invalid Default method when ICD version or short versus
+#' @describeIn get_invalid Default method when ICD version or short versus
 #'   decimal not known.
 #' @export
 #' @keywords internal
-icd_get_invalid.default <- function(x, short_code = icd_guess_short(x), ...) {
+get_invalid.default <- function(x, short_code = guess_short(x), ...) {
   switch(
-    icd_guess_version.character(as_char_no_warn(x), short_code = short_code),
-    "icd9" = icd_get_invalid.icd9(x, short_code = short_code),
-    "icd10" = icd_get_invalid.icd10(x, short_code = short_code),
+    guess_version.character(as_char_no_warn(x), short_code = short_code),
+    "icd9" = get_invalid.icd9(x, short_code = short_code),
+    "icd10" = get_invalid.icd10(x, short_code = short_code),
     stop("ICD type not known")
   )
 }
 
-#' @describeIn icd_get_invalid Get invalid ICD-9 codes from vector of codes
+#' @describeIn get_invalid Get invalid ICD-9 codes from vector of codes
 #' @param x vector of ICD codes, or list of vectors of ICD codes forming a
 #'   comorbidity map
 #' @export
 #' @keywords internal
-icd_get_invalid.icd9 <- function(x, short_code = icd_guess_short(x), ...) {
-  x[!icd_is_valid.icd9(x, short_code = short_code)]
+get_invalid.icd9 <- function(x, short_code = guess_short(x), ...) {
+  x[!is_valid.icd9(x, short_code = short_code)]
 }
 
-#' @describeIn icd_get_invalid Get invalid ICD-10 codes from vector of codes
+#' @describeIn get_invalid Get invalid ICD-10 codes from vector of codes
 #' @export
 #' @keywords internal
-icd_get_invalid.icd10 <- function(x, short_code = icd_guess_short(x), ...) {
+get_invalid.icd10 <- function(x, short_code = guess_short(x), ...) {
   # this seems like boilerplate code, but avoids infinite recursion
-  x[!icd_is_valid.icd10(x, short_code = short_code)]
+  x[!is_valid.icd10(x, short_code = short_code)]
 }
 
-#' @describeIn icd_get_invalid Get invalid elements of a comorbidity map
+#' @describeIn get_invalid Get invalid elements of a comorbidity map
 #' @export
 #' @keywords internal
-icd_get_invalid.icd_comorbidity_map <- function(x, short_code = icd_guess_short(x), ...) {
+get_invalid.comorbidity_map <- function(x, short_code = guess_short(x), ...) {
   # todo: may need to switch on ICD code type
-  class(x) <- class(x)[class(x) != "icd_comorbidity_map"]
-  x <- lapply(x, FUN = icd_get_invalid, short_code = short_code)
+  class(x) <- class(x)[class(x) != "comorbidity_map"]
+  x <- lapply(x, FUN = get_invalid, short_code = short_code)
   x[lapply(x, length) > 0]
 }
 
@@ -476,57 +476,59 @@ icd_get_invalid.icd_comorbidity_map <- function(x, short_code = icd_guess_short(
 #' Returns major component of codes, i.e. the part before the decimal,
 #' or where the decimal would be.
 #' @keywords internal
-icd_get_major <- function(x) {
-  UseMethod("icd_get_major")
+get_major <- function(x) {
+  UseMethod("get_major")
 }
 
-#' @describeIn icd_get_major Get major part of an ICD-10 code
+#' @describeIn get_major Get major part of an ICD-10 code
 #' @details For ICD-10, this is an initial implementation. If speed needed, then
 #'   can re-use C++ ICD-9 version: just grabbing the first three characters,
 #'   after all, and this is much easier in ICD-10 then ICD-9
 #' @keywords internal
-icd_get_major.icd10 <- function(x) {
+get_major.icd10 <- function(x) {
   substr(trim(x), 1L, 3L)
 }
 
 #' Check whether a code is major
 #' @param icd character vector of ICD codes.
 #' @keywords internal
-icd_is_major <- function(x) {
-  UseMethod("icd_is_major")
+is_major <- function(x) {
+  UseMethod("is_major")
 }
 
-#' @describeIn icd_is_major Default method which guesses version
+#' @describeIn is_major Default method which guesses version
 #' @keywords internal
-icd_is_major.default <- function(x) {
+is_major.default <- function(x) {
   switch(
-    icd_guess_version(x),
-    "icd9" = icd_is_major.icd9(x),
-    "icd10" = icd_is_major.icd10(x),
+    guess_version(x),
+    "icd9" = is_major.icd9(x),
+    "icd9cm" = is_major.icd9(x),
+    "icd10" = is_major.icd10(x),
+    "icd10cm" = is_major.icd10(x),
     stop("ICD version not known")
   )
 }
 
-#' @describeIn icd_is_major check whether a code is an ICD-10 major
+#' @describeIn is_major check whether a code is an ICD-10 major
 #' @keywords internal
-icd_is_major.icd10 <- function(x) {
+is_major.icd10 <- function(x) {
   assert_character(x)
   # if not know whether ICD-10-CM, then use broader definition
-  icd_is_major.icd10cm(x)
+  is_major.icd10cm(x)
 }
 
-#' @describeIn icd_is_major check whether a code is an ICD-10-CM major.
+#' @describeIn is_major check whether a code is an ICD-10-CM major.
 #'   Currently uses \code{stringr} which uses \code{stringi} which should be
 #'   quite fast, but does suffer from handling Unicode, locales, etc.
 #' @keywords internal
-icd_is_major.icd10cm <- function(x) {
+is_major.icd10cm <- function(x) {
   assert_character(x)
   grepl(re_just_ws(re_icd10cm_major), trim(x), perl = TRUE)
 }
 
-#' @describeIn icd_is_major check whether a code is an ICD-9 major
+#' @describeIn is_major check whether a code is an ICD-9 major
 #' @keywords internal
-icd_is_major.icd9 <- function(x) {
+is_major.icd9 <- function(x) {
   x <- trim(x)
   nchar(x) - icd9_is_e(x) < 4
 }

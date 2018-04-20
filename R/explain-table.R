@@ -44,52 +44,52 @@
 #'   ordering is in the same order as input, including rows filled with NA for
 #'   invalid input codes
 #' @export
-icd_explain_table <- function(...)
-  UseMethod("icd_explain_table")
+explain_table <- function(...)
+  UseMethod("explain_table")
 
-#' @describeIn icd_explain_table explaining ICD codes from a character vector, guessing ICD version
+#' @describeIn explain_table explaining ICD codes from a character vector, guessing ICD version
 #' @details If the input x is of mixed type it will choose to convert by
 #' @export
 #' @keywords internal
-icd_explain_table.default <- function(x, short_code = icd_guess_short(x), condense = FALSE,
+explain_table.default <- function(x, short_code = guess_short(x), condense = FALSE,
                                       brief = TRUE, warn = TRUE, ...) {
   switch(
-    icd_guess_version(x, short_code = short_code),
-    "icd9" = icd_explain_table.icd9cm(x, short_code = short_code, condense = condense,
+    guess_version(x, short_code = short_code),
+    "icd9" = explain_table.icd9cm(x, short_code = short_code, condense = condense,
                                       brief = brief, warn = warn, ...),
-    "icd10" = icd_explain_table.icd10cm(x, short_code = short_code, condense = condense,
+    "icd10" = explain_table.icd10cm(x, short_code = short_code, condense = condense,
                                         brief = brief, warn = warn, ...),
     stop("Unknown ICD version.")
   )
 }
 
-#' @describeIn icd_explain_table from vector of ICD-9 codes.
+#' @describeIn explain_table from vector of ICD-9 codes.
 #' @export
 #' @keywords internal
-icd_explain_table.icd9 <- function(...) {
-  icd_explain_table.icd9cm(...)
+explain_table.icd9 <- function(...) {
+  explain_table.icd9cm(...)
 }
 
-#' @describeIn icd_explain_table from vector of ICD-10 codes.
+#' @describeIn explain_table from vector of ICD-10 codes.
 #' @export
 #' @keywords internal
-icd_explain_table.icd10 <- function(...) {
-  icd_explain_table.icd10cm(...)
+explain_table.icd10 <- function(...) {
+  explain_table.icd10cm(...)
 }
 
-#' set \code{icd_short_to_decimal} attribute
+#' set \code{short_to_decimal} attribute
 #'
 #' Does not convert between decimal and short codes. Calling
-#' \code{icd_short_to_decimal} should convert and set the attribute.
+#' \code{short_to_decimal} should convert and set the attribute.
 #' @keywords internal
-shortcode_icd9 <- function(x, short_code = icd_guess_short(x)) {
-  if (!short_code) icd_decimal_to_short.icd9(x) else x
+shortcode_icd9 <- function(x, short_code = guess_short(x)) {
+  if (!short_code) decimal_to_short.icd9(x) else x
 }
 
 #' @rdname shortcode_icd9
 #' @keywords internal
-shortcode_icd10 <- function(x, short_code = icd_guess_short(x)) {
-  if (!short_code) icd_decimal_to_short.icd10(x) else x
+shortcode_icd10 <- function(x, short_code = guess_short(x)) {
+  if (!short_code) decimal_to_short.icd10(x) else x
 }
 
 #' generate table of ICD code explanations
@@ -97,7 +97,7 @@ shortcode_icd10 <- function(x, short_code = icd_guess_short(x)) {
 #' common code for generating full table of explanations of ICD codes
 #' @author Ed Lee
 #' @keywords internal
-icd_explain_table_worker <- function(x, hierarchy, short_code, condense,
+explain_table_worker <- function(x, hierarchy, short_code, condense,
                                      brief, warn, ...) {
   assert(check_character(x), check_factor(x))
   assert(check_data_frame(hierarchy))
@@ -107,13 +107,13 @@ icd_explain_table_worker <- function(x, hierarchy, short_code, condense,
   assert_flag(warn)
 
   x <- as_char_no_warn(x)
-  xs <- if (!short_code) icd_decimal_to_short.icd9(x) else x
+  xs <- if (!short_code) decimal_to_short.icd9(x) else x
 
   exptable <- merge(data.frame(code = xs, stringsAsFactors = FALSE), hierarchy, all.x = TRUE)
   # merge has reordered...
   exptable[["is_major"]] <- exptable[["three_digit"]] == exptable[["code"]]
-  exptable[["valid_icd9"]] <- icd_is_valid.icd9(xs, short_code = TRUE)
-  exptable[["valid_icd10"]] <- icd_is_valid.icd10(xs, short_code = TRUE)
+  exptable[["valid_icd9"]] <- is_valid.icd9(xs, short_code = TRUE)
+  exptable[["valid_icd10"]] <- is_valid.icd10(xs, short_code = TRUE)
 
   if (condense)
     condense_explain_table(exptable)
@@ -121,35 +121,35 @@ icd_explain_table_worker <- function(x, hierarchy, short_code, condense,
     exptable[match(xs, exptable[["code"]]), ]
 }
 
-#' @describeIn icd_explain_table explain character vector of ICD1-10-CM codes
+#' @describeIn explain_table explain character vector of ICD1-10-CM codes
 #' @author Ed Lee
 #' @export
 #' @keywords internal
-icd_explain_table.icd9cm <- function(x, short_code = icd_guess_short(x),
+explain_table.icd9cm <- function(x, short_code = guess_short(x),
                                      condense = FALSE, brief = TRUE, warn = TRUE, ...) {
-  icd_explain_table_worker(x = x, hierarchy = icd::icd9cm_hierarchy,
+  explain_table_worker(x = x, hierarchy = icd::icd9cm_hierarchy,
                            short_code = short_code, condense = condense,
                            brief = brief, warn = warn, ...)
 }
 
-#' @describeIn icd_explain_table explain character vector of ICD1-10-CM codes
+#' @describeIn explain_table explain character vector of ICD1-10-CM codes
 #' @author Ed Lee
 #' @export
 #' @keywords internal
-icd_explain_table.icd10cm <- function(x, short_code = icd_guess_short(x),
+explain_table.icd10cm <- function(x, short_code = guess_short(x),
                                       condense = FALSE, brief = TRUE, warn = TRUE, ...) {
-  icd_explain_table_worker(x = x, hierarchy = icd10cm2016,
+  explain_table_worker(x = x, hierarchy = icd10cm2016,
                            short_code = short_code, condense = condense,
                            brief = brief, warn = warn, ...)
 }
 
-#' condense \code{icd_explain_table} output down to major codes
+#' condense \code{explain_table} output down to major codes
 #'
 #' if a major code appears in the code column, and any children of that major
 #' code, the children are aggregated to a list and added to the major code row.
 #' This does currently not 'condense' e.g. middle-order codes
 #'
-#' Unlike \code{icd_explain_table}, preserving order doesn't make sense, since
+#' Unlike \code{explain_table}, preserving order doesn't make sense, since
 #' rows anywhere in the list can be aggregated, thus altering order compared to
 #' the input. Size of the output will also be different if any condensing was
 #' done.

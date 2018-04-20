@@ -36,7 +36,7 @@ library(icd)
 
 When deciding which comorbidity mapping to use in research, it might be useful to compare mapping schemes. For instance, it would be useful to know which comorbidities a pair of mapping schemes share, and which comorbidities only exist in only one mapping scheme. For comorbidites that exist in both mapping schemes, how many ICD codes assigned to those comorbidities overlap? In other words, how similar are the mapping schemes structurally?
 
-To answer these questions, we can use the function `icd_diff_comorbid` in the "ICD" package. This function takes in two mapping schemes and outputs a comorbidity-by-comorbidity comparison of the two assignments. The function identifies comorbidities that are shared by both mapping schemes. It then takes each shared comorbidity and returns a list of codes that both mapping schemes assign to that comorbidity. The function returns a list of character lists, and condenses it into a summary of comparisons.
+To answer these questions, we can use the function `diff_comorbid` in the "ICD" package. This function takes in two mapping schemes and outputs a comorbidity-by-comorbidity comparison of the two assignments. The function identifies comorbidities that are shared by both mapping schemes. It then takes each shared comorbidity and returns a list of codes that both mapping schemes assign to that comorbidity. The function returns a list of character lists, and condenses it into a summary of comparisons.
 
 The following example demonstrates the comparison of two different mapping schemes. Say we were interested in comparing the mapping schemes of Elixhauser (1998) and Agency for Healthcare Research and Quality (AHRQ) in classifying ICD-9 codes. We can first use basic set operations to compare the comoribidity names. 
 
@@ -62,11 +62,11 @@ setdiff(Elix_comor, AHRQ_comor)
 
 We see that the comorbidity names are almost exactly the same except for Arrhythmia, which exists in the AHRQ mapping but not the Elixhauser mapping.
 
-Now we run the function `icd_diff_comorbid` and input the ICD-9 mappings from Elixhauser and AHRQ that are included in the package. The `all_names` option can be used if one wants to compare only a selection of comorbidities, in which case one can give a list of comorbidity names. By default, the function will compare all comorbidites in both mapping schemes. Similarly, `x_names` and `y_names` can be used to specify the comoribidities to compare in the first and second mapping schemes, respectively. Setting the option `show` to `TRUE` tells the function to print out the comparison summary, and setting the option `explain` to `TRUE` tells the function to attempt to combine many low-level ICD codes to form just their parent codes for the output, which can be much more concise.
+Now we run the function `diff_comorbid` and input the ICD-9 mappings from Elixhauser and AHRQ that are included in the package. The `all_names` option can be used if one wants to compare only a selection of comorbidities, in which case one can give a list of comorbidity names. By default, the function will compare all comorbidites in both mapping schemes. Similarly, `x_names` and `y_names` can be used to specify the comoribidities to compare in the first and second mapping schemes, respectively. Setting the option `show` to `TRUE` tells the function to print out the comparison summary, and setting the option `explain` to `TRUE` tells the function to attempt to combine many low-level ICD codes to form just their parent codes for the output, which can be much more concise.
 
 ```{r comparison}
-comp <- icd_diff_comorbid(icd9_map_ahrq, icd9_map_elix, 
-                          show = TRUE, explain = TRUE)
+comp <- diff_comorbid(icd9_map_ahrq, icd9_map_elix, 
+                      show = TRUE, explain = TRUE)
 ```
 
 The comparison summary provides the size of the asymmetric difference between mapping schemes for each shared comorbidity, along with a list of a few code descriptions in that difference. This summary doesn't provide a very detailed look at the similarities between comorbidity mappings. We can get a more detailed look at a particular comorbidity by specifying it.

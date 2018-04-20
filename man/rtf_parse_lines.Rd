@@ -23,18 +23,4 @@ parse a character vector containing RTF strings
 \details{
 \code{...} might include: \code{perl = TRUE, useBytes = TRUE}
 }
-\examples{
-\dontrun{
-f_info_rtf <- rtf_fetch_year("2011", offline = FALSE)
-rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
-microbenchmark::microbenchmark(
-  res_both <- rtf_parse_lines(rtf_lines, perl = TRUE, useBytes = TRUE),
-  res_none <- rtf_parse_lines(rtf_lines, perl = FALSE, useBytes = FALSE),
-  res_bytes <- rtf_parse_lines(rtf_lines, perl = FALSE, useBytes = TRUE),
-  res_perl <- rtf_parse_lines(rtf_lines, perl = TRUE, useBytes = FALSE),
-  times = 5
-)
-stopifnot(identical(res_both, res_none))
-}
-}
 \keyword{internal}

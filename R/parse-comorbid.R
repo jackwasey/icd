@@ -77,7 +77,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
     unpaired_items <- sapply(some_pairs, length) == 1
     out <- c()
     if (any(unpaired_items))
-      out <- icd_children.icd9(unlist(some_pairs[unpaired_items]), defined = FALSE, short_code = TRUE)
+      out <- children.icd9(unlist(some_pairs[unpaired_items]), defined = FALSE, short_code = TRUE)
 
     the_pairs <- some_pairs[lapply(some_pairs, length) == 2]
     out <- c(out, lapply(the_pairs, function(x) sas_expand_range(x[1], x[2])))
@@ -85,14 +85,14 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
     icd9_map_ahrq[[cmb]] <- unlist(out) %>%
       unique %>%
       as.icd9 %>%
-      as.icd_short_diag
+      as.short_diag
   }
 
   # drop this superfluous finale which allocates any other ICD-9 code to the
   # "Other" group
   icd9_map_ahrq[[" "]] <- NULL
   clean_up_map <- function(x) {
-    as.icd_short_diag(as.icd9(unname(unlist(x))))
+    as.short_diag(as.icd9(unname(unlist(x))))
   }
 
   clean_up_map(icd9_map_ahrq[ahrq_htn]) -> icd9_map_ahrq[["HTNCX"]]
@@ -111,24 +111,24 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   #   the parent
   for (cmb in names(icd9_map_ahrq)) {
     message("working on ranges for: ", cmb)
-    parents <- icd_condense.icd9(icd9_map_ahrq[[cmb]], defined = FALSE,
+    parents <- condense.icd9(icd9_map_ahrq[[cmb]], defined = FALSE,
                                  short_code = TRUE)
     for (p in parents) {
-      kids <- icd_children.icd9(p, defined = FALSE, short_code = TRUE)
+      kids <- children.icd9(p, defined = FALSE, short_code = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
       if (all(kids %in% icd9_map_ahrq[[cmb]])) {
         icd9_map_ahrq[[cmb]] <-
-          as.icd_short_diag(
+          as.short_diag(
             as.icd9(
-              icd_sort.icd9(
+              sort_icd.icd9(
                 unique(
                   c(icd9_map_ahrq[[cmb]], p)), short_code = TRUE)))
       }
     }
   }
 
-  names(icd9_map_ahrq) <- icd::icd_names_ahrq_htn_abbrev
-  icd9_map_ahrq %<>% icd_comorbidity_map
+  names(icd9_map_ahrq) <- icd::names_ahrq_htn_abbrev
+  icd9_map_ahrq %<>% comorbidity_map
 
   if (save_data)
     save_in_data_dir("icd9_map_ahrq")
@@ -157,10 +157,10 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   # put in the same order as the ICD-9 listings (and the publications)
   icd10_map_ahrq <- icd10_map_ahrq[match(ahrq_order, names(icd10_map_ahrq))]
 
-  names(icd10_map_ahrq) <- icd::icd_names_ahrq_htn_abbrev
-  icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd_short_diag)
+  names(icd10_map_ahrq) <- icd::names_ahrq_htn_abbrev
+  icd10_map_ahrq <- lapply(icd10_map_ahrq, as.short_diag)
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd10)
-  icd10_map_ahrq %<>% icd_comorbidity_map
+  icd10_map_ahrq %<>% comorbidity_map
 
   if (save_data)
     save_in_data_dir("icd10_map_ahrq")
@@ -208,16 +208,16 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
 
   # use validation: takes time, but these are run-once per package creation (and
   # test) tasks.
-  icd9_map_quan_deyo <- lapply(icd9_map_quan_deyo, icd_children.icd9,
+  icd9_map_quan_deyo <- lapply(icd9_map_quan_deyo, children.icd9,
                                short_code = TRUE, defined = FALSE)
 
   # do use icd:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
-  names(icd9_map_quan_deyo) <- icd::icd_names_charlson_abbrev
+  names(icd9_map_quan_deyo) <- icd::names_charlson_abbrev
   icd9_map_quan_deyo %<>%
-    as.icd_short_diag %>%
+    as.short_diag %>%
     icd9 %>%
-    icd_comorbidity_map
+    comorbidity_map
 
   if (save_data)
     save_in_data_dir(icd9_map_quan_deyo)

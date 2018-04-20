@@ -33,21 +33,11 @@ extern "C" {
 #include "cutil.h"                              // for getRListOrDfElement
 }
 
-//' @rdname icd_comorbid
-//' @description \code{\link{Rcpp}} approach to comorbidity assignment with
-//'   OpenMP and vector of integers strategy. It is very fast, and most time is
-//'   now spent setting up the data to be passed in.
-//' @param aggregate single logical value, if \code{TRUE}, then take (possible
-//'   much) more time to aggregate out-of-sequence visit IDs in the input
-//'   data.frame. If this is \code{FALSE}, then each contiguous group of visit
-//'   IDs will result in a row of comorbidities in the output data. If you know
-//'   whether your visit IDs are disordered, then use \code{TRUE}.
-//' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
                           const std::string visitId, const std::string icd9Field,
                           const int threads = 8, const int chunk_size = 256,
-                          const int omp_chunk_size = 1, bool aggregate = true) {
+                          const int omp_chunk_size = 1) {
 
   valgrindCallgrindStart(false);
   debug_parallel_env();
@@ -74,17 +64,16 @@ SEXP icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
   UNPROTECT(1); // vsexp not used further
 
   // build structure of patient data
-  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names, aggregate);
+  buildVisitCodesVec(icd9df, visitId, icd9Field, vcdb, out_row_names);
 
   // build structure of comorbidity map data
   VecVecInt map;
   buildMap(icd9Mapping, map);
 
   const VecVecIntSz num_comorbid = map.size();
-  const VecVecIntSz num_visits = vcdb.size();
 
 #ifdef ICD_DEBUG_SETUP
-  Rcpp::Rcout << num_visits << " visits\n";
+  Rcpp::Rcout << vcdb.size() << " visits\n";
   Rcpp::Rcout << num_comorbid << " is num_comorbid\n";
 #endif
   VecInt out(vcdb.size() * map.size(), false);
@@ -106,7 +95,7 @@ Rcpp::Rcout << "converted from ComorbidOut to vec bool, so Rcpp can handle cast 
 #endif
 // matrix is just a vector with dimensions (and col major...) Hope this isn't a data copy.
 Rcpp::LogicalVector mat_out = Rcpp::wrap(intermed);
-mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) num_visits); // set dimensions in reverse (row major for parallel step)
+mat_out.attr("dim") = Rcpp::Dimension((int) num_comorbid, (int) vcdb.size()); // set dimensions in reverse (row major for parallel step)
 mat_out.attr("dimnames") = Rcpp::List::create(icd9Mapping.names(), out_row_names);
 // apparently don't need to set class as matrix here
 Rcpp::Function t("t"); // use R transpose - seems pretty fast

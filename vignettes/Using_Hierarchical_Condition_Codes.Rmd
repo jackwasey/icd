@@ -27,7 +27,7 @@ head(icd9_map_cc)
 
 The method returns a table with each ICD-9 code and its corresponding CC. The third column labeled "year" specifies the year that a ICD-9 code was assigned to a corresponding CC. This is needed because HCC has been changed and updated over the years, so the CC assigned to a code in one year might be different from the CC assigned to that same code in another year.
 
-ICD also provides a method for mapping specific ICD codes to HCCs. The method `icd_comorbid_hcc` takes as input a list of ICD-9 or ICD-10 codes and outputs a mapping of those codes to their corresponding CCs. For this example, we have an arbitrary table of five ICD-9 codes along with their corresponding patient identifiers and dates of visit.
+ICD also provides a method for mapping specific ICD codes to HCCs. The method `comorbid_hcc` takes as input a list of ICD-9 or ICD-10 codes and outputs a mapping of those codes to their corresponding CCs. For this example, we have an arbitrary table of five ICD-9 codes along with their corresponding patient identifiers and dates of visit.
 
 ```{r pts}
 pts <- data.frame(patient_id = c("1", "2", "3", "4", "4"),
@@ -37,12 +37,12 @@ pts <- data.frame(patient_id = c("1", "2", "3", "4", "4"),
 pts
 ```
 
-The function `icd_comorbid_hcc` takes as input a data frame in the "long" format (i.e. mutiple rows per patients). If the data has one row per patient, but multiple codes in different columns, this is the "wide" format. `icd_wide_to_long` could be used to convert before inputting into `icd_comorbid_hcc`. Doing it this way, instead of with tools like `dplyr` allows some guessing for which columns are codes, and which are identifiers, and is also written specifically to do this task efficiently, given the usual structure of hospital data. `icd_comorbid_hcc` also requires the ICD codes to be in "short" format. If your codes are in "decimal" format, you can easily convert them with the function `icd_decimal_to_short`.
+The function `comorbid_hcc` takes as input a data frame in the "long" format (i.e. mutiple rows per patients). If the data has one row per patient, but multiple codes in different columns, this is the "wide" format. `wide_to_long` could be used to convert before inputting into `comorbid_hcc`. Doing it this way, instead of with tools like `dplyr` allows some guessing for which columns are codes, and which are identifiers, and is also written specifically to do this task efficiently, given the usual structure of hospital data. `comorbid_hcc` also requires the ICD codes to be in "short" format. If your codes are in "decimal" format, you can easily convert them with the function `decimal_to_short`.
 
-Now that our data are in the correct form, we run the mapping function `icd_comorbid_hcc` with our input, specifying the name of the column in our dataset that contains patients' visit dates.
+Now that our data are in the correct form, we run the mapping function `comorbid_hcc` with our input, specifying the name of the column in our dataset that contains patients' visit dates.
 
 ```{r hcc}
-icd_comorbid_hcc(pts)
+comorbid_hcc(pts)
 ```
 
 Each of the four patients is assigned to an appropriate CC based on the risk level of their most severe diagnoses.

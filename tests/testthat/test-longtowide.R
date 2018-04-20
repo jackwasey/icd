@@ -20,8 +20,8 @@ context("compare ordered long to wide methods")
 pts <- generate_random_ordered_pts(5000, 13)
 
 test_that("ordered and unordered methods on ordered data are identical", {
-  agg <- icd_long_to_wide(pts, aggr = TRUE)
-  ord <- icd_long_to_wide(pts, aggr = FALSE)
+  agg <- long_to_wide(pts, aggr = TRUE)
+  ord <- long_to_wide(pts, aggr = FALSE)
   expect_identical(ord, agg)
   expect_true(all(rownames(ord) %in% pts$visit_id))
   expect_true(all(rownames(agg) %in% pts$visit_id))
@@ -30,8 +30,10 @@ test_that("ordered and unordered methods on ordered data are identical", {
 })
 
 test_that("cpp: failure with non character visitId", {
-  expect_error(icd_long_to_wide_cpp(pts, visitId = "visit_id", icd9Field = "code"), "converted to")
+  pts_int_visit <- pts
+  pts_int_visit$visit_id <- as.integer(pts$visit_id)
+  expect_error(long_to_wide_cpp(pts_int_visit, visitId = "visit_id", icd9Field = "code"), "converted to")
   # and make sure it works otherwise
   pts$visit_id <- as_char_no_warn(pts$visit_id)
-  res <- icd_long_to_wide_cpp(pts, visitId = "visit_id", icd9Field = "code")
+  res <- long_to_wide_cpp(pts, visitId = "visit_id", icd9Field = "code")
 })

@@ -75,13 +75,13 @@ rtf_parse_year <- function(year = "2011", ..., save_data = FALSE, verbose = FALS
   out <- rtf_parse_lines(rtf_lines, verbose = verbose,
                          ..., save_extras = save_data)
   out <- swap_names_vals(out)
-  out <- icd_sort.icd9(out, short_code = FALSE)
+  out <- sort_icd.icd9(out, short_code = FALSE)
 
   invisible(
     data.frame(
       code = out %>%
         unname %>%
-        icd_decimal_to_short.icd9 %>%
+        decimal_to_short.icd9 %>%
         icd9cm,
       desc = names(out),
       stringsAsFactors = FALSE)
@@ -117,19 +117,6 @@ rtf_pre_filter <- function(filtered, ...) {
 #'   contents being the descriptions from the RTF source. Elsewhere I do this
 #'   the other way around, but the tests are now wired for this layout. 'Tidy'
 #'   data would favour having an unnamed two-column data frame.
-#' @examples
-#' \dontrun{
-#' f_info_rtf <- rtf_fetch_year("2011", offline = FALSE)
-#' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
-#' microbenchmark::microbenchmark(
-#'   res_both <- rtf_parse_lines(rtf_lines, perl = TRUE, useBytes = TRUE),
-#'   res_none <- rtf_parse_lines(rtf_lines, perl = FALSE, useBytes = FALSE),
-#'   res_bytes <- rtf_parse_lines(rtf_lines, perl = FALSE, useBytes = TRUE),
-#'   res_perl <- rtf_parse_lines(rtf_lines, perl = TRUE, useBytes = FALSE),
-#'   times = 5
-#' )
-#' stopifnot(identical(res_both, res_none))
-#' }
 #' @keywords internal
 rtf_parse_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, ...) {
   assert_character(rtf_lines)
@@ -351,7 +338,7 @@ rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
   for (f_num in seq_along(lookup_fourth)) {
     lf <- lookup_fourth[f_num]
     f <- names(lf)
-    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
+    parent_code <- get_major.icd9(f, short_code = FALSE)
     if (parent_code %in% names(out)) {
       pair_fourth <- paste(out[parent_code], lf, sep = ", ")
       names(pair_fourth) <- f
@@ -371,7 +358,7 @@ rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = FALSE) {
   for (f_num in seq_along(lookup_fourth)) {
     lf <- lookup_fourth[f_num]
     f <- names(lf)
-    parent_code <- icd_get_major.icd9(f, short_code = FALSE)
+    parent_code <- get_major.icd9(f, short_code = FALSE)
     if (!is.null(out_env[[parent_code]])) {
       pair_fourth <- paste(out[parent_code], lf, sep = ", ")
       names(pair_fourth) <- f
@@ -426,7 +413,7 @@ rtf_make_lookup_fifth <- function(filtered, re_fifth_range_other, ..., verbose =
   filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
     grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE, ...) %>%
     str_pair_match("([[:digit:]])[[:space:]](.*)", ...) -> suffices_V30V39
-  range <- c("V30" %i9da% "V37", icd_children.icd9("V39", short_code = FALSE, defined = FALSE))
+  range <- c("V30" %i9da% "V37", children.icd9("V39", short_code = FALSE, defined = FALSE))
   range <- grep(re_V30V39_fifth, range, value = TRUE, ...)
   names(range) <- range
   for (fifth in names(suffices_V30V39)) {
@@ -491,20 +478,6 @@ rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
 #' split over lines... This needs care in Windows, or course. Maybe Mac, too?
 #'
 #' First: c cedilla, e grave, e acute Then:  n tilde, o umlaut
-#' @examples
-#' \dontrun{
-#' # rtf_fix_unicode is a slow step, useBytes and perl together is faster
-#' f_info_rtf <- rtf_fetch_year("2011", offline = FALSE)
-#' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
-#' microbenchmark::microbenchmark(
-#'   res_both <- rtf_fix_unicode(rtf_lines, perl = TRUE, useBytes = TRUE),
-#'   res_none <- rtf_fix_unicode(rtf_lines, perl = FALSE, useBytes = FALSE),
-#'   res_bytes <- rtf_fix_unicode(rtf_lines, perl = FALSE, useBytes = TRUE),
-#'   res_perl <- rtf_fix_unicode(rtf_lines, perl = TRUE, useBytes = FALSE),
-#'   times = 5
-#' )
-#' stopifnot(identical(res_both, res_none))
-#' }
 #' @keywords internal manip
 rtf_fix_unicode <- function(filtered, ...) {
   filtered <- gsub("\\\\'e7", "\u00e7", filtered, ...) # c cedilla
@@ -591,21 +564,21 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
   grepl(pattern = "^\\.[[:digit:]]+.*", vals) -> decimal_start
   if (any(decimal_start)) {
     base_code <- vals[1] # assume first is the base
-    stopifnot(icd_is_valid.icd9(base_code, short_code = FALSE))
+    stopifnot(is_valid.icd9(base_code, short_code = FALSE))
     for (dotmnr in vals[-1]) {
       if (verbose)
         message("dotmnr is: ", dotmnr)
       if (grepl("-", dotmnr)) {
         # range of minors
         strsplit(dotmnr, "-", fixed = TRUE) %>% unlist -> pair
-        first <- paste0(icd_get_major.icd9(base_code, short_code = FALSE), pair[1])
-        last <- paste0(icd_get_major.icd9(base_code, short_code = FALSE), pair[2])
+        first <- paste0(get_major.icd9(base_code, short_code = FALSE), pair[1])
+        last <- paste0(get_major.icd9(base_code, short_code = FALSE), pair[2])
         if (verbose)
           message("expanding specified minor range from ", first, " to ", last)
         out <- c(out, first %i9da% last)
       } else {
-        single <- paste0(icd_get_major.icd9(base_code, short_code = FALSE), dotmnr)
-        out <- c(out, icd_children.icd9(single, short_code = FALSE, defined = FALSE))
+        single <- paste0(get_major.icd9(base_code, short_code = FALSE), dotmnr)
+        out <- c(out, children.icd9(single, short_code = FALSE, defined = FALSE))
       }
     }
     vals <- vals[1] # still need to process the base code
@@ -616,7 +589,7 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
     if (grepl("-", v)) {
       pair <- strsplit(v, "-", fixed = TRUE) %>% unlist
       # sanity check
-      stopifnot(all(icd_is_valid.icd9(pair, short_code = FALSE)))
+      stopifnot(all(is_valid.icd9(pair, short_code = FALSE)))
       if (verbose)
         message("expanding explicit range ", pair[1], " to ", pair[2])
       # formatting errors can lead to huge range expansions, e.g. "8-679"
@@ -631,10 +604,10 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
       out <- c(out, pair[1] %i9da% pair[2])
     } else {
       # take care of single values
-      if (!icd_is_valid.icd9(v, short_code = FALSE))
+      if (!is_valid.icd9(v, short_code = FALSE))
         stop(paste("invalid code is: ",
-                   icd_get_invalid.icd9(v, short_code = FALSE)))
-      out <- c(out, icd_children.icd9(v, short_code = FALSE, defined = FALSE))
+                   get_invalid.icd9(v, short_code = FALSE)))
+      out <- c(out, children.icd9(v, short_code = FALSE, defined = FALSE))
     }
 
   }
@@ -669,20 +642,6 @@ rtf_parse_qualifier_subset <- function(qual) {
 #'
 #' just for \\tab, replace with space, otherwise, drop RTF tags entirely
 #' @param x vector of character strings containing RTF
-#' @examples
-#' \dontrun{
-#' # rtf_strip is a slow step, useBytes and perl together is five times faster
-#' f_info_rtf <- rtf_fetch_year("2011", offline = FALSE)
-#' rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
-#' microbenchmark::microbenchmark(
-#'   res_both <- rtf_strip(rtf_lines, perl = TRUE, useBytes = TRUE),
-#'   res_none <- rtf_strip(rtf_lines, perl = FALSE, useBytes = FALSE),
-#'   res_bytes <- rtf_strip(rtf_lines, perl = FALSE, useBytes = TRUE),
-#'   res_perl <- rtf_strip(rtf_lines, perl = TRUE, useBytes = FALSE),
-#'   times = 5
-#' )
-#' stopifnot(identical(res_both, res_none))
-#' }
 #' @keywords internal manip
 rtf_strip <- function(x, ...) {
   #nolint start

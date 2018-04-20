@@ -13,20 +13,5 @@ split over lines... This needs care in Windows, or course. Maybe Mac, too?
 \details{
 First: c cedilla, e grave, e acute Then:  n tilde, o umlaut
 }
-\examples{
-\dontrun{
-# rtf_fix_unicode is a slow step, useBytes and perl together is faster
-f_info_rtf <- rtf_fetch_year("2011", offline = FALSE)
-rtf_lines <- readLines(f_info_rtf$file_path, warn = FALSE, encoding = "ASCII")
-microbenchmark::microbenchmark(
-  res_both <- rtf_fix_unicode(rtf_lines, perl = TRUE, useBytes = TRUE),
-  res_none <- rtf_fix_unicode(rtf_lines, perl = FALSE, useBytes = FALSE),
-  res_bytes <- rtf_fix_unicode(rtf_lines, perl = FALSE, useBytes = TRUE),
-  res_perl <- rtf_fix_unicode(rtf_lines, perl = TRUE, useBytes = FALSE),
-  times = 5
-)
-stopifnot(identical(res_both, res_none))
-}
-}
 \keyword{internal}
 \keyword{manip}

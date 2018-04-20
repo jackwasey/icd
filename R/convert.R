@@ -23,26 +23,13 @@
 #' \emph{major}) category, and the \emph{minor} part containing the subsidiary
 #' classifications.
 #'
-#' @section Structures: Structures used in this package are: \itemize{ \item
-#'   vector (usually character vectors) of \emph{short} or \emph{long} codes
-#'   \item list, containing two elements with equal length vectors called
-#'   \code{major} \code{minor}. Yes, this is very like a data frame, but we do
-#'   not need the overhead of structuring it that way. \item two vectors of
-#'   separated major and minor parts }
-#' @template mjr
-#' @template mnr
-#' @template icd9-any
-#' @template icd9-short
-#' @template icd9-decimal
-#' @param parts data.frame with major and minor fields. This can be given
-#'   instead of major and minor vectors
-#' @param minorEmpty vector of length one, to be used in place of minor part of
-#'   zero. Defaults to ""
-#' @template short_code
-#' @return Character vector or list. Deliberately returns zero-padded major,
-#'   because otherwise we are creating ambiguous codes (even if we know what we
-#'   mean)
-#' @family ICD-9 convert
+#' For conversions of ICD-9 or ICD-10 codes between the \emph{short} and
+#' \emph{decimal} forms, use \code{\link{short_to_decimal}} and
+#' \code{\link{decimal_to_short}}.
+#'
+#' \pkg{icd} does not covert ICD-9 to ICD-10 codes yet.
+#'
+#' @family ICD code conversion
 #' @name convert
 NULL
 
@@ -51,10 +38,9 @@ NULL
 #' the chapter headings can be converted into the full set of their children,
 #' and then used to look-up which chapter, sub-chapter, or 'major' a given code
 #' belongs. Always returns a map with short-form ICD-9 codes. These can be
-#' converted in bulk with \code{lapply} and \code{icd_short_to_decimal}.
+#' converted in bulk with \code{lapply} and \code{short_to_decimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
 #'   \code{icd9_sub_chapters}
-#' @family ICD-9 convert
 #' @keywords internal manip
 icd9_chapters_to_map <- function(x) {
   if (is.character(x) && exists(x))
@@ -63,7 +49,7 @@ icd9_chapters_to_map <- function(x) {
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- icd_expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = FALSE)
+    map[[r]] <- expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = FALSE)
   }
   map
 }
@@ -94,14 +80,14 @@ icd9_chapters_to_map <- function(x) {
 #'   icd9_01 = c("441", "4424", "441"),
 #'   icd9_02 = c(NA, "443", NA)
 #'   )
-#' icd_wide_to_long(widedf)
-#' @family ICD-9 convert
+#' wide_to_long(widedf)
+#' @family ICD code conversion
 #' @export
-icd_wide_to_long <- function(x,
-                             visit_name = get_visit_name(x),
-                             icd_labels = NULL,
-                             icd_name = "icd_code",
-                             icd_regex = c("icd", "diag", "dx_", "dx")) {
+wide_to_long <- function(x,
+                         visit_name = get_visit_name(x),
+                         icd_labels = NULL,
+                         icd_name = "icd_code",
+                         icd_regex = c("icd", "diag", "dx_", "dx")) {
   assert_data_frame(x, min.rows = 1, min.cols = 2)
   assert_string(visit_name)
   assert(check_null(icd_labels),
@@ -120,21 +106,17 @@ icd_wide_to_long <- function(x,
   assert_character(icd_labels, any.missing = FALSE, min.chars = 1,
                    min.len = 1, max.len = ncol(x) - 1)
   stopifnot(all(icd_labels %in% names(x)))
-
-  # could definitely do this with non-base functions, but this is quick enough
-  # and reliable.
   res <- stats::reshape(x,
                         direction = "long",
                         varying = icd_labels,
                         idvar = visit_name,
                         timevar = NULL,
                         v.names = icd_name)
-
   res <- res[!is.na(res[[icd_name]]), ]
   res <- res[nchar(as_char_no_warn(res[[icd_name]])) > 0, ]
   res <- res[order(res[[visit_name]]), ]
   rownames(res) <- NULL
-  res
+  icd_long_data(res)
 }
 
 #' Convert ICD data from long to wide format
@@ -160,18 +142,18 @@ icd_wide_to_long <- function(x,
 #' @examples
 #'   longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
 #'     icd9 = c("441", "4424", "443", "441"))
-#'   icd_long_to_wide(longdf)
-#'   icd_long_to_wide(longdf, prefix = "ICD10_")
+#'   long_to_wide(longdf)
+#'   long_to_wide(longdf, prefix = "ICD10_")
 #' @family ICD-9 convert
-#' @keywords manip
+#' @family ICD code conversion
 #' @export
-icd_long_to_wide <- function(x,
-                             visit_name = get_visit_name(x),
-                             icd_name = get_icd_name(x),
-                             prefix = "icd_",
-                             min_width = 0,
-                             aggr = TRUE,
-                             return_df = FALSE) {
+long_to_wide <- function(x,
+                         visit_name = get_visit_name(x),
+                         icd_name = get_icd_name(x),
+                         prefix = "icd_",
+                         min_width = 0,
+                         aggr = TRUE,
+                         return_df = FALSE) {
 
   assert_data_frame(x, col.names = "unique")
   visit_name <- as_char_no_warn(visit_name)
@@ -182,30 +164,28 @@ icd_long_to_wide <- function(x,
   assert_flag(return_df)
 
   # we're now going to return a matrix
-  icd9_name_was_factor <- is.factor(x[[visit_name]])
+  icd9_name_was_factor <- is.factor(x[[visit_name]]) # TODO: visit or icd name?
   if (icd9_name_was_factor) iv_levels <- levels(x[[visit_name]])
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
   x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
-  if (return_df) {
-    mat <- icd_long_to_wide_cpp(x, visit_name, icd_name, aggr)
-    if (icd9_name_was_factor)
-      rownm <- factor(x = rownames(mat), levels = iv_levels)
-    else
-      rownm <- rownames(mat)
-    df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9_name_was_factor)
-    names(df.out)[1] <- visit_name
-    # perhaps leave (duplicated) rownames which came from the matrix:
-    rownames(df.out) <- NULL
-    nc <- ncol(df.out) - 1
-    if (nc < min_width) {
-      df.out <- cbind(df.out, matrix(rep(NA, min_width - nc), nrow = 1))
-      nc <- min_width
-    }
-    names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:nc), sep = "")
-    df.out
-  } else {
-    icd_long_to_wide_cpp(x, visit_name, icd_name, aggr)
+  mat <- long_to_wide_cpp(x, visitId = visit_name, icd9Field = icd_name, aggregate = aggr)
+  if (!return_df)
+    return(as.icd_wide_data(mat))
+  if (icd9_name_was_factor)
+    rownm <- factor(x = rownames(mat), levels = iv_levels)
+  else
+    rownm <- rownames(mat)
+  df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9_name_was_factor)
+  names(df.out)[1] <- visit_name
+  # perhaps leave (duplicated) rownames which came from the matrix:
+  rownames(df.out) <- NULL
+  nc <- ncol(df.out) - 1
+  if (nc < min_width) {
+    df.out <- cbind(df.out, matrix(rep(NA, min_width - nc), nrow = 1))
+    nc <- min_width
   }
+  names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:nc), sep = "")
+  as.icd_wide_data(df.out)
 }
 
 #' convert comorbidity data frame from matrix
@@ -225,7 +205,7 @@ icd_long_to_wide <- function(x,
 #' class(mat)
 #' typeof(mat)
 #' rownames(mat)
-#' df.out <- icd_comorbid_mat_to_df(mat)
+#' df.out <- comorbid_mat_to_df(mat)
 #' stopifnot(is.data.frame(df.out))
 #' # output data frame has a factor for the visit_name column
 #' stopifnot(identical(rownames(mat), as.character(df.out[["visit_id"]])))
@@ -235,12 +215,12 @@ icd_long_to_wide <- function(x,
 #' # options("stringsAsFactors" = FALSE).
 #' is.factor(df.out[["visit_id"]])
 #' @export
-icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
-                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+comorbid_mat_to_df <- function(x, visit_name = "visit_id",
+                               stringsAsFactors = getOption("stringsAsFactors")) { # nolint
   assert_matrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint
-  out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors) # nolint
+  out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors, row.names = NULL) # nolint
   names(out)[1] <- visit_name
   rownames(out) <- NULL
   out
@@ -263,12 +243,12 @@ icd_comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' cmbdf <- icd9_comorbid_elix(longdf, return_df = TRUE)
 #' class(cmbdf)
 #' rownames(cmbdf)
-#' mat.out <- icd_comorbid_df_to_mat(cmbdf)
+#' mat.out <- comorbid_df_to_mat(cmbdf)
 #' stopifnot(is.matrix(mat.out))
 #' mat.out[, 1:4]
 #' @export
-icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
-                                   stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
+                               stringsAsFactors = getOption("stringsAsFactors")) { # nolint
   assert_data_frame(x, min.rows = 1, min.cols = 2, col.names = "named")
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint
@@ -283,51 +263,50 @@ icd_comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
 #' Convert codes between short and decimal forms
 #' @param x ICD codes
 #' @export
-icd_short_to_decimal <- function(x) {
-  UseMethod("icd_short_to_decimal")
+#' @keywords internal
+short_to_decimal <- function(x) {
+  UseMethod("short_to_decimal")
 }
 
-#' @describeIn icd_short_to_decimal convert ICD codes of unknown type from short
+#' @describeIn short_to_decimal convert ICD codes of unknown type from short
 #'   to decimal format
 #' @export
-#' @keywords internal
-icd_short_to_decimal.default <- function(x) {
+#' @keywords internal manip
+short_to_decimal.default <- function(x) {
   switch(
-    icd_guess_version.character(as_char_no_warn(x), short_code = TRUE),
-    "icd9" = icd_short_to_decimal.icd9(x),
-    "icd10" = icd_short_to_decimal.icd10(x),
+    guess_version.character(as_char_no_warn(x), short_code = TRUE),
+    "icd9" = short_to_decimal.icd9(x),
+    "icd10" = short_to_decimal.icd10(x),
     stop("ICD type not known")
   )
 }
 
-#' @describeIn icd_short_to_decimal convert ICD-9 codes from short to decimal
+#' @describeIn short_to_decimal convert ICD-9 codes from short to decimal
 #'   format
 #' @export
-#' @keywords internal
-icd_short_to_decimal.icd9 <- function(x) {
-  icd9(as.icd_decimal_diag(icd9_short_to_decimal_cpp(x)))
-}
+#' @keywords internal manip
+short_to_decimal.icd9 <- function(x)
+  icd9(as.decimal_diag(icd9_short_to_decimal_cpp(x)))
 
-#' @describeIn icd_short_to_decimal convert ICD-10 codes from short to decimal
+#' @describeIn short_to_decimal convert ICD-10 codes from short to decimal
 #'   format
 #' @export
-#' @keywords internal
-icd_short_to_decimal.icd10 <- function(x) {
+#' @keywords internal manip
+short_to_decimal.icd10 <- function(x) {
   x <- trim(x)
   # todo: these could/should be seperate functions
   out <- substr(x, 0, 3) # majors
   minors <- substr(x, 4, 100L)
   out[minors != ""] <- paste0(out[minors != ""], ".", minors[minors != ""])
-  icd10(as.icd_decimal_diag(out)) # not as.icd10
+  icd10(as.decimal_diag(out)) # not as.icd10
 }
 
-#' @describeIn icd_short_to_decimal convert ICD-10-CM code from short to decimal
+#' @describeIn short_to_decimal convert ICD-10-CM code from short to decimal
 #'   format
 #' @export
-#' @keywords internal
-icd_short_to_decimal.icd10cm <- function(x) {
-  icd_short_to_decimal.icd10(x) %>% as.icd10cm
-}
+#' @keywords internal manip
+short_to_decimal.icd10cm <- function(x)
+  as.icd10cm(short_to_decimal.icd10(x))
 
 #' Convert Decimal format ICD codes to short format
 #'
@@ -336,46 +315,52 @@ icd_short_to_decimal.icd10cm <- function(x) {
 #'
 #' @param x ICD codes
 #' @export
-#' @keywords internal
-icd_decimal_to_short <- function(x) {
-  UseMethod("icd_decimal_to_short")
+#' @keywords internal manip
+decimal_to_short <- function(x) {
+  UseMethod("decimal_to_short")
 }
 
+#' @describeIn decimal_to_short convert ICD-9 codes from decimal to short
+#'   format
 #' @export
-#' @keywords internal
-icd_decimal_to_short.icd9 <- function(x) {
+#' @keywords internal manip
+decimal_to_short.icd9 <- function(x) {
   if (is.factor(x)) {
-    levels(x) <- icd9(as.icd_short_diag(icd9_decimal_to_short_cpp(levels(x))))
+    levels(x) <- icd9(as.short_diag(icd9_decimal_to_short_cpp(levels(x))))
     return(x)
   }
-  icd9(as.icd_short_diag(icd9_decimal_to_short_cpp(x)))
+  icd9(as.short_diag(icd9_decimal_to_short_cpp(x)))
 }
 
+#' @describeIn decimal_to_short convert ICD-10 codes from decimal to short
+#'   format
 #' @export
-#' @keywords internal
-icd_decimal_to_short.icd10 <- function(x) {
+#' @keywords internal manip
+decimal_to_short.icd10 <- function(x) {
   if (is.factor(x)) {
     levels(x) <- gsub("\\.", "", levels(x))
-    return(icd10(as.icd_short_diag(x)))
+    return(icd10(as.short_diag(x)))
   }
-  icd10(as.icd_short_diag(gsub("\\.", "", x))) # not as.icd10
+  icd10(as.short_diag(gsub("\\.", "", x))) # not as.icd10
 }
 
+#' @describeIn decimal_to_short convert ICD-10-CM codes from decimal to short
+#'   format
 #' @export
-#' @keywords internal
-icd_decimal_to_short.icd10cm <- function(x) {
-  as.icd10cm(icd_decimal_to_short.icd10(x))
+#' @keywords internal manip
+decimal_to_short.icd10cm <- function(x) {
+  as.icd10cm(decimal_to_short.icd10(x))
 }
 
-#' @describeIn icd_decimal_to_short Guess ICD version and convert decimal to
+#' @describeIn decimal_to_short Guess ICD version and convert decimal to
 #'   short format
 #' @export
-#' @keywords internal
-icd_decimal_to_short.default <- function(x) {
+#' @keywords internal manip
+decimal_to_short.default <- function(x) {
   switch(
-    icd_guess_version(as_char_no_warn(x), short_code = FALSE),
-    "icd9" = icd_decimal_to_short.icd9(x),
-    "icd10" = icd_decimal_to_short.icd10(x),
+    guess_version(as_char_no_warn(x), short_code = FALSE),
+    "icd9" = decimal_to_short.icd9(x),
+    "icd10" = decimal_to_short.icd10(x),
     stop("Unknown ICD version guessed from input")
   )
 }
@@ -383,57 +368,57 @@ icd_decimal_to_short.default <- function(x) {
 #' Convert decimal ICD codes to component parts
 #' @export
 #' @keywords internal
-icd_decimal_to_parts <- function(x, mnr_empty = "") {
-  UseMethod("icd_decimal_to_parts")
+decimal_to_parts <- function(x, mnr_empty = "") {
+  UseMethod("decimal_to_parts")
 }
 
 #' Convert short format ICD codes to component parts
 #' @export
-#' @keywords internal
-icd_short_to_parts <- function(x, mnr_empty = "") {
-  UseMethod("icd_short_to_parts")
+#' @keywords internal manip
+short_to_parts <- function(x, mnr_empty = "") {
+  UseMethod("short_to_parts")
 }
 
-#' @describeIn icd_short_to_parts Convert short format ICD-9 code to parts
+#' @describeIn short_to_parts Convert short format ICD-9 code to parts
 #' @export
 #' @keywords internal manip
-icd_short_to_parts.icd9 <- function(x, mnr_empty = "") {
+short_to_parts.icd9 <- function(x, mnr_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a
   # shim here.
   .Call("_icd_icd9ShortToPartsCpp", x, mnr_empty)
 }
 
-#' @describeIn icd_decimal_to_parts Convert decimal ICD-9 code to parts
+#' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
 #' @export
 #' @keywords internal manip
-icd_decimal_to_parts.icd9 <- function(x, mnr_empty = "") {
+decimal_to_parts.icd9 <- function(x, mnr_empty = "") {
   .Call("_icd_icd9DecimalToPartsCpp", x, mnr_empty)
 }
 
-#' @describeIn icd_short_to_parts Convert short format ICD code to parts,
+#' @describeIn short_to_parts Convert short format ICD code to parts,
 #'   guessing whether ICD-9 or ICD-10
 #' @export
 #' @keywords internal manip
-icd_short_to_parts.character <- function(x, mnr_empty = "") {
+short_to_parts.character <- function(x, mnr_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a
   # shim here.
   switch(
-    icd_guess_version(x, short_code = TRUE),
+    guess_version(x, short_code = TRUE),
     "icd9" = .Call("_icd_icd9ShortToPartsCpp", x, mnr_empty),
-    "icd10" = icd_short_to_parts.icd10(x, mnr_empty = mnr_empty),
+    "icd10" = short_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
 }
 
-#' @describeIn icd_short_to_parts Convert decimal ICD code to parts, guessing
+#' @describeIn decimal_to_parts Convert decimal ICD code to parts, guessing
 #'   ICD version
 #' @export
 #' @keywords internal manip
-icd_decimal_to_parts.character <- function(x, mnr_empty = "") {
+decimal_to_parts.character <- function(x, mnr_empty = "") {
   switch(
-    icd_guess_version(x, short_code = FALSE),
+    guess_version(x, short_code = FALSE),
     "icd9" = .Call("_icd_icd9DecimalToPartsCpp", x, mnr_empty),
-    "icd10" = icd_decimal_to_parts.icd10(x, mnr_empty = mnr_empty),
+    "icd10" = decimal_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
 }

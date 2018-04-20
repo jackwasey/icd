@@ -31,75 +31,97 @@
 #' @param n number of elements or rows to sample
 #' @export
 #' @keywords internal
-icd_guess_version <- function(x, short_code, ...)
-  UseMethod("icd_guess_version")
+guess_version <- function(x, short_code, ...)
+  UseMethod("guess_version")
 
-#' @describeIn icd_guess_version Guess version class ICD-9 codes
+guess_version.icd9 <- function(x, short_code, ...) "icd9" #nocov
+guess_version.icd9cm <- function(x, short_code, ...) "icd9cm" #nocov
+guess_version.icd10 <- function(x, short_code, ...) "icd10" #nocov
+guess_version.icd10cm <- function(x, short_code, ...) "icd10cm" #nocov
+
+#' @describeIn guess_version Guess version of ICD codes in a factor
 #' @export
 #' @keywords internal
-icd_guess_version.icd9 <- function(x, short_code, ...) "icd9" #nocov
-
-#' @describeIn icd_guess_version Guess version of class ICD-10 codes
-#' @export
-#' @keywords internal
-icd_guess_version.icd10 <- function(x, short_code, ...) "icd10" #nocov
-
-#' @describeIn icd_guess_version Guess version of ICD codes in a factor
-#' @export
-#' @keywords internal
-icd_guess_version.factor <- function(x, short_code = NULL, ...) {
-  icd_guess_version.character(as_char_no_warn(x), short_code = short_code, ...)
+guess_version.factor <- function(x, short_code = NULL, ...) {
+  guess_version.character(as_char_no_warn(x), short_code = short_code, ...)
 }
 
-#' @describeIn icd_guess_version Guess version of ICD codes in character vector
-#' @export
-#' @keywords internal
-icd_guess_version.character <- function(x, short_code = NULL, n = 10, ...) {
-  # SOMEDAY: this is too complicated, but tolerant of invalid codes. If we assume
-  # all the codes are valid ICD-9 or ICD-10, then we can just look for the first
-  # code which starts with a number, which would be simpler and much faster.
-
-  assert_character(x)
-  assert(check_flag(short_code), check_null(short_code))
-
-  x <- x[1:n]
-
+get_icd_valid_percent <- function(x, short_code = NULL, n = 100) {
+  assert(check_character(x, min.len = 1), check_factor(x, min.len = 1))
+  y <- as_char_no_warn(x)[1:min(n, length(x))]
   if (!is.null(short_code)) {
     if (short_code) {
-      i9 <- sum(icd_is_valid.icd9(x, short_code = TRUE), na.rm = TRUE)
-      i10 <- sum(icd_is_valid.icd10(x, short_code = TRUE), na.rm = TRUE)
+      i9 <- sum(is_valid.icd9(y, short_code = TRUE), na.rm = TRUE)
+      i10 <- sum(is_valid.icd10(y, short_code = TRUE), na.rm = TRUE)
     } else {
-      i9 <- sum(icd_is_valid.icd9(x, short_code = FALSE), na.rm = TRUE)
-      i10 <- sum(icd_is_valid.icd10(x, short_code = FALSE), na.rm = TRUE)
+      i9 <- sum(is_valid.icd9(y, short_code = FALSE), na.rm = TRUE)
+      i10 <- sum(is_valid.icd10(y, short_code = FALSE), na.rm = TRUE)
     }
-
   } else {
     i9 <- max(
-      sum(icd_is_valid.icd9(x, short_code = TRUE), na.rm = TRUE),
-      sum(icd_is_valid.icd9(x, short_code = FALSE), na.rm = TRUE)
+      sum(is_valid.icd9(y, short_code = TRUE), na.rm = TRUE),
+      sum(is_valid.icd9(y, short_code = FALSE), na.rm = TRUE)
     )
     i10 <- max(
-      sum(icd_is_valid.icd10(x, short_code = TRUE), na.rm = TRUE),
-      sum(icd_is_valid.icd10(x, short_code = FALSE), na.rm = TRUE)
+      sum(is_valid.icd10(y, short_code = TRUE), na.rm = TRUE),
+      sum(is_valid.icd10(y, short_code = FALSE), na.rm = TRUE)
     )
   }
+  nfac = 100/min(100, length(x))
+  list(icd9 = i9 * nfac, icd10 = i10 * nfac)
+}
 
-  # no attempt at distinguishing ICD sub-types, e.g. ICD-10-CM, although this is
-  # possible, it would slow down and complicate this function
-  if (i9 >= i10)
+get_icd_defined_percent <- function(x, short_code = NULL, n = 100) {
+  assert(check_character(x, min.len = 1), check_factor(x, min.len = 1))
+  y <- as_char_no_warn(x)[1:min(n, length(x))]
+  if (!is.null(short_code)) {
+    if (short_code) {
+      i9 <- sum(is_defined.icd9(y, short_code = TRUE), na.rm = TRUE)
+      i10 <- sum(is_defined.icd10(y, short_code = TRUE), na.rm = TRUE)
+    } else {
+      i9 <- sum(is_defined.icd9(y, short_code = FALSE), na.rm = TRUE)
+      i10 <- sum(is_defined.icd10(y, short_code = FALSE), na.rm = TRUE)
+    }
+  } else {
+    i9 <- max(
+      sum(is_defined.icd9(y, short_code = TRUE), na.rm = TRUE),
+      sum(is_defined.icd9(y, short_code = FALSE), na.rm = TRUE)
+    )
+    i10 <- max(
+      sum(is_defined.icd10(y, short_code = TRUE), na.rm = TRUE),
+      sum(is_defined.icd10(y, short_code = FALSE), na.rm = TRUE)
+    )
+  }
+  nfac = 100/min(100, length(x))
+  list(icd9 = i9 * nfac, icd10 = i10 * nfac)
+}
+
+#' @describeIn guess_version Guess version of ICD codes in character vector
+#' @export
+#' @keywords internal
+guess_version.character <- function(x, short_code = NULL, ...) {
+  assert_character(x)
+  assert(check_flag(short_code), check_null(short_code))
+  dots <- list(...)
+  n <- dots[["n"]]
+  if (is.null(n))
+    n <- 100
+  pc <- get_icd_valid_percent(x, short_code, n)
+  if (pc$icd9 >= pc$icd10)
     "icd9"
   else
     "icd10"
 }
 
-#' @describeIn icd_guess_version Guess version of ICD codes in a field in a
+#' @describeIn guess_version Guess version of ICD codes in a field in a
 #'   \code{data.frame}
 #' @template icd_name
 #' @keywords internal
 #' @export
-icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_icd_name(x), ...) {
-  assert_data_frame(x)
-  icd_guess_version(x[[icd_name]])
+guess_version.data.frame <- function(x, short_code = NULL, icd_name = NULL, ...) {
+  if (is.null(icd_name))
+    icd_name <- get_icd_name(x)
+  guess_version(x[[icd_name]])
 }
 
 #' Guess version of ICD and update class
@@ -110,31 +132,18 @@ icd_guess_version.data.frame <- function(x, short_code = NULL, icd_name = get_ic
 #' @template short_code
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
-icd_guess_version_update <- function(x, short_code = icd_guess_short(x)) {
+guess_version_update <- function(x, short_code = guess_short(x)) {
   # could either return a method from the guess version function (nice and
   # functional), use the returned string as a function name to invoke, or switch
   # on the string. Just adding the class is bad, e.g. would miss icd10cm if
   # added
-  ver <- icd_guess_version(x, short_code)
+  ver <- guess_version(x, short_code)
   if (ver == "icd9")
     icd9(x)
   else if (ver == "icd10")
     icd10(x) # use the fast version, not as.icd10
   else
     stop("unknown type returned when guessing ICD version")
-}
-
-#' Guess short vs decimal of ICD and update class
-#'
-#' Guesses whether the given ICD codes are short or long format, and set the
-#' class of the returned data according to the guess.
-#' @return the input data with appropriate ICD class set
-#' @keywords internal
-icd_guess_short_update <- function(x, short_code = icd_guess_short(x)) {
-  if (short_code)
-    as.icd_short_diag(x)
-  else
-    as.icd_decimal_diag(x)
 }
 
 #' Guess the ICD version (9 or 10) from a pair of codes
@@ -146,12 +155,36 @@ icd_guess_short_update <- function(x, short_code = icd_guess_short(x)) {
 #' @return Type of codes as single character \code{"icd9"} or \code{"icd10"}, or
 #'   error if conflicting results
 #' @keywords internal
-icd_guess_pair_version <- function(start, end, short_code = NULL) {
-  start_guess <- icd_guess_version.character(as_char_no_warn(start), short_code = short_code)
-  end_guess <- icd_guess_version.character(as_char_no_warn(end), short_code = short_code)
+guess_pair_version <- function(start, end, short_code = NULL) {
+  start_guess <- guess_version.character(as_char_no_warn(start), short_code = short_code)
+  end_guess <- guess_version.character(as_char_no_warn(end), short_code = short_code)
   if (start_guess != end_guess)
     stop("Cannot expand range because ICD code version cannot be guessed from ", start,
          " and ", end, ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
-       S3 method directly, e.g. icd_expand_range.icd9")
+       S3 method directly, e.g. expand_range.icd9")
   start_guess
+}
+
+#' guess icd-9 or icd-10 or other type, and switch to call the given function
+#' @param x data frame of patient data
+#' @param funs named list of functions to call, with the names being at a
+#'   minimum 'icd9' and 'icd10', and 'icd9cm' or 'icd10cm' being used first if
+#'   provided.
+#' @param ... further arguments, perhaps including \code{icd_name}
+#' @keywords internal
+switch_ver_cmb <- function(x, funs, ...) {
+  dots <- list(...)
+  icd_name <- if ("icd_name" %in% names(list)) dots[["icd_name"]]
+  n <- names(funs)
+  stopifnot(all(c("icd9", "icd10") %in% n))
+  ver <- guess_version.data.frame(x, icd_name = icd_name)
+  if ("icd9cm" %in% n)
+    return(funs[["icd9cm"]](x, ...))
+  if ("icd10cm" %in% n)
+    return(funs[["icd10cm"]](x, ...))
+  if (ver %in% icd9_classes)
+    return(funs[["icd9"]](x, ...))
+  if (ver %in% icd10_classes)
+    return(funs[["icd10"]](x, ...))
+  stop("could not guess the ICD version using icd_name = ", icd_name)
 }

@@ -85,11 +85,11 @@ icd9_comorbid_ahrq(patients_icd9)[, 1:8]
 Things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. I use `magrittr` in the package itself, and I recommend trying it to clarify chains of commands, such as the following:
 ```{r getcomorbidities2}
 # find Elixhauser comorbidities present-on-arrival
-patients_icd9 %>% icd_filter_poa %>% icd9_comorbid_elix %>% head
+patients_icd9 %>% filter_poa %>% icd9_comorbid_elix %>% head
 
 # same as above, then summarize first five:
 patients_icd9 %>% 
-  icd_filter_poa %>% 
+  filter_poa %>% 
   icd9_comorbid_elix %>% 
   extract(, 1:5) %>% 
   apply(2, as.integer) %>% 
@@ -97,21 +97,21 @@ patients_icd9 %>%
 
 # convert vermont discharge data to wide format, 
 # find comorbidities, convert TRUE to 1 and show first few
-vermont_dx %>% icd_wide_to_long  %>% icd9_comorbid_quan_deyo  %>% apply(2, as.integer) %>%  head
+vermont_dx %>% wide_to_long  %>% icd9_comorbid_quan_deyo  %>% apply(2, as.integer) %>%  head
 ```
 
 The above can be rewritten in classic R with many parentheses:
 ```{r lots of brackets, eval = FALSE}
-head(apply(icd9_comorbid_quan_deyo(icd_wide_to_long(vermont_dx)), 2, as.integer))
+head(apply(icd9_comorbid_quan_deyo(wide_to_long(vermont_dx)), 2, as.integer))
 ```
 
 ## Specifying data types
 
 `icd` will guess the type and form of input data when possible, but there are ambiguities:
 ```{r type guessing}
-icd_is_valid("100") # valid ICD-9 code
-icd_is_valid("A1001") # valid ICD-10 code
-icd_is_valid(c("100", "A1001")) # they can't both be valid
+is_valid("100") # valid ICD-9 code
+is_valid("A1001") # valid ICD-10 code
+is_valid(c("100", "A1001")) # they can't both be valid
 ```
 
 You can let `icd` guess types, or specify the type of your data explicitly:
@@ -121,7 +121,7 @@ codes <- c("A10.01", "L40.50", "Z77.098")
 # set class to be icd10cm (and implicitly icd10)
 as.icd10cm(codes)
 # or set class to indicate decimal code and icd10 (not necessarily icd10cm)
-codes %>% as.icd_decimal_diag %>% as.icd10
+codes %>% as.decimal_diag %>% as.icd10
 ```
 Doing this avoids mistakes in guessing type. For example code `V10` is valid in both ICD-9 and ICD-10.
 
@@ -137,23 +137,23 @@ df <- data.frame(i9 = as.icd9(c("100", "001")),
 ## Converting ICD-9 codes between types
 ICD-9 codes are usually presented in *decimal* format (beware, for this is not a number), e.g. `003.21`, whereas most electronic records seem to use the *short* form without a decimal place. These are not interchangeable simply by removing the decimal place, and great care is taken to do this correctly. The functions were also designed to deal with the common problem of incorrectly formatted ICD-9 codes. The assumption is made that short codes of three or fewer characters are  describing only the 'major' part: there is no other reasonable interpretation. For example, `020` must be taken to mean `20`, not `2.0` or even `0.20`. In most cases, when *icd* works on ICD-9 codes, it will convert any codes of fewer than three characters into zero-padded three-digit codes.
 ```{r simple conversion}
-icd_decimal_to_short(c("1", "10.20", "100", "123.45"))
-icd_short_to_decimal(c("1", "22", "2244", "1005"))
+decimal_to_short(c("1", "10.20", "100", "123.45"))
+short_to_decimal(c("1", "22", "2244", "1005"))
 
 # similar operations with magrittr, also showing invalid codes
 codes <- as.icd9(c("87.65", "9999", "Aesop", -100, "", NA))
-icd_decimal_to_short(codes)
+decimal_to_short(codes)
 ```
 
 ## Validation of ICD-9 codes
 ```{r validation}
 # guess both ICD version (9, but could be 10?), and decimal vs short form
-icd_is_valid("V10.2")
+is_valid("V10.2")
 
 # state we are using short or decimal codes:
-icd_is_valid(c("099.17", "-1"), short_code = TRUE)
-icd_is_valid(c("099.17", "-1.1"), short_code = FALSE)
-icd_is_valid(c("1", "001", "100", "123456", "003.21"), short_code = TRUE)
+is_valid(c("099.17", "-1"), short_code = TRUE)
+is_valid(c("099.17", "-1.1"), short_code = FALSE)
+is_valid(c("1", "001", "100", "123456", "003.21"), short_code = TRUE)
 ```
 
 ## Ranges of ICD-9 codes
@@ -178,76 +178,76 @@ This is used internally to interpret ranges of ICD-9 codes specified in the lite
 Another way of specifying ranges are to use function calls. These are exactly equivalent to the `%i9s%` and `%i9d%` range operators. This example shows the result when the user specifies a range which would include parents but not all their children:
 
 ```{r rangeanomaly}
-icd_expand_range("4820", "4823") # default, equivalent to %i9s%
-icd_expand_range("4820", "4823", defined = FALSE)
+expand_range("4820", "4823") # default, equivalent to %i9s%
+expand_range("4820", "4823", defined = FALSE)
 # see the first few differences (which are by definition not 'real' codes):
-setdiff(icd_expand_range("4820", "4823", defined = FALSE),
-        icd_expand_range("4820", "4823")) %>% head
+setdiff(expand_range("4820", "4823", defined = FALSE),
+        expand_range("4820", "4823")) %>% head
 ```
 
 It is easy to find the children of a higher-level ICD-9 code:
 ```{r "childrenReal"}
-icd_children(as.icd9("391"))
+children(as.icd9("391"))
 # mid-level code
-icd:::icd_children.icd9("0032")
+icd:::children.icd9("0032")
 # leaf node has no children
 # be explicit about the type of code:
 test_code <- as.icd9(as.icd_short_diag("00321"))
-icd_children(test_code)
+children(test_code)
 # or the same, but guessing the characteristics
-icd_children("00321")
+children("00321")
 # pneumococcal pneumonia is a three-digit ICD-9 code with no descendants
-icd_children("481")
+children("481")
 ```
 By adding `defined = TRUE`, all syntactically valid ICD-9 codes are returned, even if not defined by CMS as diagnoses. This is relevant because of minor coding errors, or coding in a different year to the master list. A planned feature is to allow testing of an ICD-9 code against the valid codes for the year it was entered, but at present only the 2014 master list is used. This means that some older valid codes may no longer be on the list. However, there have been very few changes to ICD-9-CM in the last five years with ICD-10-CM in the wings.
 ```{r all children}
 # first ten possible ICD-9 child codes from 391
-icd_children("391", defined = FALSE)[1:10]
+children("391", defined = FALSE)[1:10]
 ```
 
 ## Decoding ICD-9 codes to descriptions
-There are various ways of extracting the description of the condition described by an ICD-9 code. the icd_explain group of functions return a data frame with a column for the ICD-9 code, a column for the full length Diagnosis, and a column for the short Description.
+There are various ways of extracting the description of the condition described by an ICD-9 code. the explain group of functions return a data frame with a column for the ICD-9 code, a column for the full length Diagnosis, and a column for the short Description.
 ```{r explain simple}
-icd_explain("1.0") # 'decimal' format code inferred
-icd_explain("0019") # 'short' format code inferred
+explain("1.0") # 'decimal' format code inferred
+explain("0019") # 'short' format code inferred
 ```
 
 ```{r explain complex}
 # we can be explicit about short vs decimal
-icd_explain("434.00", short_code = FALSE)
-icd_explain(c("43410", "43491"), short_code = TRUE)
+explain("434.00", short_code = FALSE)
+explain(c("43410", "43491"), short_code = TRUE)
 #explain top level code with children
-"391" %>% icd_explain # single three-digit code
-"391" %>% icd_children # let's see the child codes
-"391" %>% icd_children %>% icd_explain # children condensed to parent code
-"391" %>% icd_children %>% icd_explain(condense = FALSE) # prevent condense
+"391" %>% explain # single three-digit code
+"391" %>% children # let's see the child codes
+"391" %>% children %>% explain # children condensed to parent code
+"391" %>% children %>% explain(condense = FALSE) # prevent condense
 ```
 Arbitrary named list(s) of codes:
 ```{r explain arbitrary}
-icd_explain(list(somecodes = as.icd9(c("001", "391")),
+explain(list(somecodes = as.icd9(c("001", "391")),
                  morecodes = as.icd9cm(c("001.1", "001.9"))))
 ```
 `001` (Cholera) isn't itself a diagnostic code, i.e. leaf node in the hierarchy, but `390` (Rheumatic fever without heart involvement) is. Both are explained correctly:
 ```{r cholera}
-icd_explain(list(cholera = "001", rheumatic_heart = "390"))
+explain(list(cholera = "001", rheumatic_heart = "390"))
 ```
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
 ```{r noexplain, eval = FALSE}
-s <- icd_explain("001.5") # gives warning
+s <- explain("001.5") # gives warning
 ```
-As we have just seen, *icd_explain* can convert lists of ICD-9 or ICD-10 codes to a human-readable format. Let's apply the `icd_explain` to a list of comorbidity ICD-9 codes in one of the commonly-used mappings. This makes comprehending a complicated list much easier. Taking the list for dementia:
+As we have just seen, *explain* can convert lists of ICD-9 or ICD-10 codes to a human-readable format. Let's apply the `explain` to a list of comorbidity ICD-9 codes in one of the commonly-used mappings. This makes comprehending a complicated list much easier. Taking the list for dementia:
 ```{r Example Dementia}
 length(icd9_map_quan_deyo[["Dementia"]]) # 133 possible ICD-9 codes
 length(icd10_map_quan_deyo[["Dementia"]]) # the ICD-10 map is different
-# icd_explain summarizes these to just two groups:
-icd9_map_quan_deyo[["Dementia"]] %>% icd_explain(warn = FALSE)
+# explain summarizes these to just two groups:
+icd9_map_quan_deyo[["Dementia"]] %>% explain(warn = FALSE)
 # contrast with:
-icd9_map_quan_deyo[["Dementia"]] %>% icd_explain(condense = TRUE, warn = FALSE)
+icd9_map_quan_deyo[["Dementia"]] %>% explain(condense = TRUE, warn = FALSE)
 ```
 Use a range with more than two hundred ICD-9 codes (most of them not real):
 ```{r Show Range Operator}
 length("390" %i9da% "392.1")
-"390" %i9da% "392.1" %>% icd_explain(warn = FALSE)
+"390" %i9da% "392.1" %>% explain(warn = FALSE)
 ```
 The warnings here are irrelevant because we know that `%i9da% produces codes which do not correspond to diagnoses. However, in other usage, the user would typically expect the ICD-9 codes he or she is using to be diagnostic, hence the default to warn.
 
@@ -255,17 +255,17 @@ The warnings here are irrelevant because we know that `%i9da% produces codes whi
 
 This flag is recorded with each ICD-9 code, indicating whether that diagnosis was present on admission. With some caution, codes flagged specifically not *POA* can be treated as new diseases during an admission.
 
-Present-on-arrival (POA) is typically a factor, or vector of values such as "Y", "N", "X", "E", or NA. Intermediate codes, such as "exempt", "unknown" and NA mean that "yes" is not the same as "not no." This requires four functions to cover the possibilities stored in `icd_poa_choices`:
+Present-on-arrival (POA) is typically a factor, or vector of values such as "Y", "N", "X", "E", or NA. Intermediate codes, such as "exempt", "unknown" and NA mean that "yes" is not the same as "not no." This requires four functions to cover the possibilities stored in `poa_choices`:
 ```{r Show POA Choices, echo=FALSE}
-icd_poa_choices
+poa_choices
 ```
 Filter for present-on-arrival being "Y"
 ```{r simplepoa}
-patients_icd9 %>% icd_filter_poa_yes
+patients_icd9 %>% filter_poa_yes
 ```
 Show that *yes* is not equal to *not no* (e.g. due to NA in `poa` field)
 ```{r notnopoa}
-patients_icd9 %>% icd_filter_poa_not_no
+patients_icd9 %>% filter_poa_not_no
 ```
 
 ## Comorbidities
@@ -287,8 +287,8 @@ icd10_map_ahrq$CHF[1:5]
 Elixhauser originally devleoped this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
 ```{r elix}
 # the names of the comorbidities in each map are available as named lists:
-icd_names_elix[1:5]
-unlist(unname(icd_names_elix))
+names_elix[1:5]
+unlist(unname(names_elix))
 # The map contents have ICD codes with the class set
 icd9_map_elix$HTNcx
 icd10_map_elix$HTNcx
@@ -307,7 +307,7 @@ names(icd10_map_quan_elix)
 Take my patients, find the ones where there definitely or maybe was a diagnosis present on admission, then generate comorbidities based on the AHRQ mapping. N.b. `NotNo` is not the same as `Yes` because of some exempt, unclassifiable conditions, or `NA` values for the present-on-admission flag.
 ```{r chainpoatocomorbid}
 patients_icd9 %>%
-  icd_filter_poa_not_no %>%
+  filter_poa_not_no %>%
   icd9_comorbid_ahrq %>%
   extract(1:9)
 ```
@@ -315,16 +315,16 @@ patients_icd9 %>%
 ### Compare two comorbidity definitions
 We will find the differences between some categories of the original Elixhauser and the updated version by Quan. Just taking the select few comorbidity groups for brevity:
 ```{r elixvsquanelix}
-difference <- icd_diff_comorbid(icd9_map_elix, icd9_map_quan_elix,
-                 all_names = c("CHF", "PHTN", "HTN", "Valvular"))
+difference <- diff_comorbid(icd9_map_elix, icd9_map_quan_elix,
+                            all_names = c("CHF", "PHTN", "HTN", "Valvular"))
 # reuslts also returned as data
 str(difference)
 ```
 Which pulmonary hypertension codes are only in Quan's version?
 ```{r quanonlyphtn}
-difference$PHTN$only.y %>% icd_get_defined %>% icd_explain
+difference$PHTN$only.y %>% get_defined %>% explain
 ```
-(Passing through `icd_get_defined` stops `icd_explain` complaining that some of the input codes don't exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use `warn = FALSE` option in `icd_explain`)
+(Passing through `get_defined` stops `explain` complaining that some of the input codes don't exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use `warn = FALSE` option in `explain`)
 
 ### Find cardiac-related ICD-9 codes:
 ```{r cardiacgrep}
@@ -336,7 +336,7 @@ icd9cm_hierarchy[
 ```
 then explain the list, just showing the first ten:
 ```{r cardiac Chain Explain Example}
-as.icd9(cardiac) %>% icd_explain(warn = FALSE) %>% head(10)
+as.icd9(cardiac) %>% explain(warn = FALSE) %>% head(10)
 ```
 
 ### Find comorbidities for a large number of patients.
@@ -362,7 +362,7 @@ icd9_comorbid(patients_icd9, my_map) # no positive
 Suppose we want to exact match only real ICD-9 codes when looking up comorbdities for some patients. E.g. if the coder accidentally omitted a trailing zero, e.g. code `003.20` (*Localized salmonella infection, unspecified*) might have been written as `003.2` which has a heading (*Localized salmonella infections*) but is not itself billable. Use of ICD-9 codes for comorbidities generally assumes the codes are either right or wrong. How do we match only real codes, for a strict interpretation of comorbidities? It's one line or R code:
 
 ```{r realmapping}
-ahrq_strict <- lapply(icd9_map_ahrq, icd_get_defined)
+ahrq_strict <- lapply(icd9_map_ahrq, get_defined)
 str(icd9_map_ahrq[1:5]) # first five of the original:
 str(icd9_map_ahrq[1:5]) # and first five of the result:
 ```
@@ -378,11 +378,11 @@ The ICD-9-CM scheme is structured as follows:
  
  For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
 ```{r "find three digit billable"}
-icd9cm_hierarchy$code %>% icd_get_defined -> all_real
+icd9cm_hierarchy$code %>% get_defined -> all_real
 # select the non-V and non-E codes
 three_digit_real <- all_real[icd9_is_n(all_real)]
 # display
-three_digit_df <- data.frame(code = three_digit_real, description = icd_explain(three_digit_real, condense = FALSE))
+three_digit_df <- data.frame(code = three_digit_real, description = explain(three_digit_real, condense = FALSE))
 print(three_digit_df[1:10, ], row.names = FALSE)
 ```
 
@@ -397,9 +397,9 @@ lost_since_27 %<>% as.icd9cm
 lost_since_27 %<>% as.icd9cm
 
 # these are a few which were gained since v27
-data.frame(code = new_since_27, desc = new_since_27 %>% icd_explain)
+data.frame(code = new_since_27, desc = new_since_27 %>% explain)
 # these are a few which were lost since v27
-data.frame(code = lost_since_27, desc = lost_since_27 %>% icd_explain)
+data.frame(code = lost_since_27, desc = lost_since_27 %>% explain)
 ```
 
 ## Conclusion

@@ -20,7 +20,7 @@
 #' The default is to summarize by printing the first seven comorbidities, and
 #' the first seven codes for each. To print the whole thing, just convert it to
 #' a list.
-#' @param x a list optionally with class \code{icd_comorbidity_map}
+#' @param x a list optionally with class \code{comorbidity_map}
 #' @param n_comorbidities single integer, number of comorbidities to print
 #' @param n_codes single integer, number of codes per comorbidity to print
 #' @param ... further arguments are passed to \code{print}
@@ -33,7 +33,7 @@
 #' print(list(icd9_map_ahrq))
 #' }
 #' @export
-print.icd_comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
+print.comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
   assert_list(x, min.len = 1, names = "unique", any.missing = FALSE, types = "character")
   assert_int(n_comorbidities)
   assert_int(n_codes)

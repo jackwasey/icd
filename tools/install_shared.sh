@@ -55,13 +55,13 @@ icd_install_tmp=$(mktemp -d)
 dir="$icd_install_tmp"
 
 if [ "$use_icd_home" = "yes" ]; then
-  user_dir=${ICD_HOME:-$HOME/rprojects}
+  user_dir=${ICD_HOME:-$HOME/icd}
 fi
 
 if [ ! "$user_dir" = "" ]; then
   dir=$user_dir
 else
-  cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$icd_install_tmp"
+  cp -r "${ICD_HOME:-$HOME/icd}" "$icd_install_tmp"
 fi
 
 function finish {

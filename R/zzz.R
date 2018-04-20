@@ -18,16 +18,11 @@
 # nocov start
 
 .onAttach <- function(libname, pkgname) {
-  # nolint start
   packageStartupMessage(
-    "Welcome to the \"icd\" package for finding comorbidities and interpretation of ICD-9 and ICD-10 codes. Suggestions and contributions are welcome at https://github.com/jackwasey/icd .
-
-See the vignettes and help for examples.
-
-Please cite this package if you find it useful in your published work.
-citation(package = \"icd\")
-")
-  # nolint end
+    "Welcome to the 'icd' package for finding comorbidities and interpretation of ICD-9 and ICD-10 codes.\n",
+    "?icd to get started, then see the vignettes and help for details and examples.\n\n",
+    "Suggestions and contributions are welcome at https://github.com/jackwasey/icd . ",
+    "Please cite this package if you find it useful in your published work citation(package = \"icd\")")
 
   if (system.file(package = "icd9") != "")
     packageStartupMessage(
@@ -83,9 +78,7 @@ release_questions <- function() {
     "Has .*_alt\\.[Rr]$ been reactivated in .Rbuildignore?",
     # not CRAN
     "Are github pages site refreshed from latest documentation?",
-
     NULL
   )
 }
-
 # nocov end

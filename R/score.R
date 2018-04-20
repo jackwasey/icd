@@ -36,9 +36,7 @@
 #'   By default, the first column is the patient identifier and is not counted.
 #'   If \code{visit_name} is not specified, the first column is used.
 #' @template visit_name
-#' @param scoring_system One of \code{original}, \code{charlson}, or
-#'   \code{quan}. The first two will give the original Charlson weights for each
-#'   comorbidity, whereas \code{quan} uses the updated weights from Quan 2011.
+#' @template scoring-system
 #' @param return_df single logical value, if true, a two column data frame will
 #'   be returned, with the first column named as in input data frame (i.e.
 #'   \code{visit_name}), containing all the visits, and the second column
@@ -49,51 +47,43 @@
 #'   non-factor \code{visit_name} may be converted or not converted according to
 #'   your system default or this setting.
 #' @param ... further arguments to pass on to \code{icd9_comorbid_quan_deyo},
-#'   e.g. \code{icd_name}
+#'   e.g. \code{name}
 #' @examples
 #' mydf <- data.frame(visit_name = c("a", "b", "c"),
-#'                    icd9 = c("441", "412.93", "044.9"))
-#' icd_charlson(mydf)
+#'                    icd9 = c("441", "412.93", "042"))
+#' charlson(mydf)
 #' cmb <- icd9_comorbid_quan_deyo(mydf)
 #' cmb
 #' # can specify short_code directly instead of guessing
-#' icd_charlson(mydf, short_code = FALSE, return_df = TRUE)
-#' icd_charlson_from_comorbid(cmb)
-#' \dontrun{
-#' # let's do five million patients and benchmark
-#' big <- icd:::generate_random_pts(5E6)
-#' microbenchmark::microbenchark(
-#'   icd_charlson(big),
-#'   times = 5
-#' )
-#' }
+#' charlson(mydf, short_code = FALSE, return_df = TRUE)
+#' charlson_from_comorbid(cmb)
 #' @export
-icd_charlson <- function(x, visit_name = NULL,
-                         scoring_system = c("original", "charlson", "quan"),
-                         return_df = FALSE,
-                         stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                         ...) {
-  UseMethod("icd_charlson")
+charlson <- function(x, visit_name = NULL,
+                     scoring_system = c("original", "charlson", "quan"),
+                     return_df = FALSE,
+                     stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                     ...) {
+  UseMethod("charlson")
 }
 
-#' @describeIn icd_charlson Charlson scores from data frame of visits and ICD-9
+#' @describeIn charlson Charlson scores from data frame of visits and ICD-9
 #'   codes. ICD-10 Charlson can be calculated simply by getting the Charlson
 #'   (e.g. Quan Deyo) comorbidities, then calling
-#'   \code{icd_charlson_from_comorbid}.
+#'   \code{charlson_from_comorbid}.
 #' @export
-icd_charlson.data.frame <- function(x, visit_name = NULL,
-                                    scoring_system = c("original", "charlson", "quan"),
-                                    return_df = FALSE,
-                                    stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                                    ...) {
+charlson.data.frame <- function(x, visit_name = NULL,
+                                scoring_system = c("original", "charlson", "quan"),
+                                return_df = FALSE,
+                                stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                                ...) {
   assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assert(check_null(visit_name), check_string(visit_name))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
-  tmp <- icd9_comorbid_quan_deyo(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...)
-  res <- icd_charlson_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE, scoring_system = scoring_system)
-
+  res <- charlson_from_comorbid(
+    icd9_comorbid_quan_deyo(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...),
+    visit_name = visit_name, hierarchy = FALSE, scoring_system = scoring_system)
   if (!return_df) return(res)
   out <- cbind(names(res),
                data.frame("Charlson" = unname(res)),
@@ -102,12 +92,22 @@ icd_charlson.data.frame <- function(x, visit_name = NULL,
   out
 }
 
-#' @rdname icd_charlson
+#' Calculate Charlson scores from pre-computed Charlson comorbidities
+#'
+#' Calculate Charlson scores from pre-computed Charlson comorbidities, instead
+#' of directly from the ICD codes. This is useful if the comorbidity calculation
+#' is time consuming. Commonly, both the Charlson comorbidities and the Charlson
+#' scores will be calculated, and this function provides just that second step.
+#' @param x data.frame or matrix, typically the output of a comorbordity
+#'   calculation which uses the Charlson categories, e.g.
+#'   \code{comorbid_quan_deyo}
+#' @template visit_name
 #' @param hierarchy single logical value, default is \code{FALSE}. If
 #'   \code{TRUE}, will drop \code{DM} if \code{DMcx} is present, etc.
+#' @template scoring-system
 #' @export
-icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
-                                       scoring_system = c("original", "charlson", "quan")) {
+charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
+                                   scoring_system = c("original", "charlson", "quan")) {
   assert(
     check_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named"),
     check_matrix(x, min.rows = 0, min.cols = 2, col.names = "named")
@@ -140,7 +140,7 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 
 #' Count ICD codes or comorbidities for each patient
 #'
-#' \code{icd_count_codes} takes a data frame with a column for \code{visit_name}
+#' \code{count_codes} takes a data frame with a column for \code{visit_name}
 #' and another for ICD-9 code, and returns the number of distinct codes for each
 #' patient.
 #'
@@ -161,29 +161,27 @@ icd_charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #'   to metrics like the Charlson Comorbidity Index (aka Charlson Score)
 #' @examples
 #'   mydf <- data.frame(visit_name = c("r", "r", "s"),
-#'                    icd9 = c("441", "412.93", "044.9"))
-#'   icd_count_codes(mydf, return_df = TRUE)
-#'   icd_count_codes(mydf)
+#'                    icd9 = c("441", "412.93", "042"))
+#'   count_codes(mydf, return_df = TRUE)
+#'   count_codes(mydf)
 #'
 #'   cmb <- icd9_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
-#'   icd_count_comorbid(cmb)
+#'   count_comorbid(cmb)
 #'
 #'   wide <- data.frame(visit_name = c("r", "s", "t"),
 #'                    icd9_1 = c("0011", "441", "456"),
 #'                    icd9_2 = c(NA, "442", NA),
 #'                    icd9_3 = c(NA, NA, "510"))
-#'   icd_count_codes_wide(wide)
+#'   count_codes_wide(wide)
 #'   # or:
 #'   library(magrittr)
-#'   wide %>% icd_wide_to_long %>% icd_count_codes
-#' @importFrom stats aggregate
+#'   wide %>% wide_to_long %>% count_codes
 #' @export
-icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
+count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assert_data_frame(x, min.cols = 2, col.names = "named")
   assert_string(visit_name)
   assert_flag(return_df)
-
-  res <- aggregate(x[names(x) %nin% visit_name],
+  res <- stats::aggregate(x[names(x) %nin% visit_name],
                    by = x[visit_name],
                    FUN = length)
   names(res)[names(res) %nin% visit_name] <- "icd_count"
@@ -195,7 +193,7 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 
 #' Count number of comorbidities per patient
 #'
-#' \code{icd_count_comorbid} differs from the other counting functions in that
+#' \code{count_comorbid} differs from the other counting functions in that
 #' it counts \emph{comorbidities}, not individual diagnoses. It accepts any
 #' \code{data.frame} with either logical or binary contents, with a single
 #' column for visit_name. No checks are made to see whether visit_name is
@@ -208,7 +206,7 @@ icd_count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE
 #' @template visit_name
 #' @template return_df
 #' @export
-icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
+count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assert_string(visit_name)
   assert_flag(return_df)
   assert(check_data_frame(x), check_matrix(x))
@@ -224,7 +222,7 @@ icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FA
 
 #' Count ICD codes given in wide format
 #'
-#' For \code{icd_count_codes}, it is assumed that all the columns apart from
+#' For \code{count_codes}, it is assumed that all the columns apart from
 #' \code{visit_name} represent actual or possible ICD-9 codes. Duplicate
 #' \code{visit_name}s are repeated as given and aggregated.
 #' @param x \code{data.frame} with one row per patient, hospital visit,
@@ -238,10 +236,10 @@ icd_count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FA
 #'   duplicate \code{visit_name}s will be counted together.
 #' @importFrom stats aggregate
 #' @export
-icd_count_codes_wide <- function(x,
-                                 visit_name = get_visit_name(x),
-                                 return_df = FALSE,
-                                 aggr = FALSE) {
+count_codes_wide <- function(x,
+                             visit_name = get_visit_name(x),
+                             return_df = FALSE,
+                             aggr = FALSE) {
   assert_data_frame(x)
   assert_string(visit_name)
   assert_flag(return_df)
@@ -283,41 +281,40 @@ icd_count_codes_wide <- function(x,
 #' @template stringsAsFactors
 #' @template dotdotdot
 #' @examples
-#' mydf <- as.icd9(data.frame(visit_name = c("a", "b", "c"),
-#'                    icd9 = c("412.93", "441", "044.9")))
+#' mydf <- data.frame(visit_name = c("a", "b", "c"),
+#'                    icd9 = c("412.93", "441", "042"))
+#' van_walraven(mydf)
+#' # or calculate comorbodities first:
+#' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE)
+#' vwr <- van_walraven_from_comorbid(cmb)
+#' stopifnot(identical(van_walraven(mydf), vwr))
 #'
-#' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE, return_df=TRUE)
-#' cmb
-#'
-#' icd_van_walraven_from_comorbid(cmb)
-#'
-#' icd_van_walraven(mydf)
-#' icd_van_walraven(mydf, return_df = TRUE)
+#' # alternatively return as data frame in 'tidy' format
+#' van_walraven(mydf, return_df = TRUE)
 #' @author wmurphyrd
 #' @references van Walraven C, Austin PC, Jennings A, Quan H, Forster AJ. A
 #'   Modification to the Elixhauser Comorbidity Measures Into a Point System for
 #'   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
-icd_van_walraven <- function(x, visit_name = NULL, return_df = FALSE,
-                             stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                             ...)
-  UseMethod("icd_van_walraven")
+van_walraven <- function(x, visit_name = NULL, return_df = FALSE,
+                         stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                         ...)
+  UseMethod("van_walraven")
 
-#' @describeIn icd_van_walraven van Walraven scores from data frame of visits
+#' @describeIn van_walraven van Walraven scores from data frame of visits
 #'   and ICD-9 codes
 #' @export
-icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
-                                        stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                                        ...) {
+van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
+                                    stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                                    ...) {
   assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assert(check_null(visit_name), check_string(visit_name))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   tmp <- icd9_comorbid_quan_elix(x, visit_name, hierarchy = TRUE, return_df = TRUE, ...)
-  res <- icd_van_walraven_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE)
-
+  res <- van_walraven_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE)
   if (!return_df) return(res)
   out <- cbind(names(res),
                data.frame("vanWalraven" = unname(res)),
@@ -326,20 +323,19 @@ icd_van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
   out
 }
 
-#' @rdname icd_van_walraven
+#' @rdname van_walraven
 #' @param hierarchy single logical value that defaults to \code{TRUE}, in
 #'   which case the hierarchy defined for the mapping is applied. E.g. in
 #'   Elixhauser, you can't have uncomplicated and complicated diabetes both
 #'   flagged.
 #' @export
-icd_van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
+van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
   assert(check_data_frame(x), check_matrix(x))
   assert(check_null(visit_name), check_string(visit_name))
   assert_flag(hierarchy)
   stopifnot(ncol(x) - is.data.frame(x) == 30)
   weights <- c(7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,
                9, 12, 4, 0, 3, -4, 6, 5, -2, -2, 0, -7, 0, -3)
-
   if (hierarchy) {
     x[, "DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "Tumor"] <- x[, "Tumor"] & !x[, "Mets"]
