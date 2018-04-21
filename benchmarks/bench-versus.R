@@ -15,10 +15,12 @@ get_ten_million_icd9_pts <- function() {
 bench_versus_others <- function() {
   set.seed(43)
   ten_million_random_pts <- get_ten_million_icd9_pts()
-  bench_runs <- list("one" = c(n = 1, times = 1000),
-                     "thousand" = c(n = 1e3, times = 100),
-                     "ten thousand" = c(n = 1e4, times = 25),
-                     "one hundred thousand" = c(n = 1e5, times = 10)
+  bench_runs <- list("one" = c(n = 1, times = 100),
+                     "thousand" = c(n = 1e3, times = 25),
+                     "ten thousand" = c(n = 1e4, times = 10),
+                     "one hundred thousand" = c(n = 1e5, times = 7),
+                     "one million" = c(n = 1e6, times = 5),
+                     "ten million" = c(n = 1e7, times = 3)
   )
   bench_res <- list()
   for (b_name in names(bench_runs)) {
@@ -32,13 +34,30 @@ bench_versus_others <- function() {
     pts_mr <- pts
     names(pts_mr) <- c("id", "icd9cm")
     pts_mr$icd9cm <- paste("D", pts_mr$icd9cm, sep = "")
-    mb <- microbenchmark::microbenchmark(
-      icd::comorbid_charlson(pts, return_df = TRUE),
-      comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9"),
-      comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9", parallel = TRUE),
-      medicalrisk::generate_comorbidity_df(pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
-      times = times
-    )
+    # comorbidity with parallel is very slow for small numbers with overhead, and without parallel very slow with big numbers
+    mb <- if (n >= 1e6)
+      microbenchmark::microbenchmark(
+        icd::comorbid_charlson(pts, return_df = TRUE),
+        comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9", parallel = TRUE),
+        medicalrisk::generate_comorbidity_df(pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
+        times = times
+      )
+    else if (n == 1e5)
+      microbenchmark::microbenchmark(
+        icd::comorbid_charlson(pts, return_df = TRUE),
+        comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9"),
+        comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9", parallel = TRUE),
+        medicalrisk::generate_comorbidity_df(pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
+        times = times
+      )
+    else
+        microbenchmark::microbenchmark(
+          icd::comorbid_charlson(pts, return_df = TRUE),
+          comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9"),
+          medicalrisk::generate_comorbidity_df(pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
+          times = times
+        )
+    print(mb)
     bench_res[[b_name]] <- mb
   }
   lapply(bench_res, print)
