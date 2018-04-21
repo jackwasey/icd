@@ -49,7 +49,9 @@ void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
   // may need shared(out) but as I think each element can be written to
   // independently by different threads, try without.. private(vis_i)
   // superfluous?
-#pragma omp taskloop shared(Rcpp::Rcout, out) //grainsize (256)
+
+  // Requires OpenMP >4.5, so not available in current windows toolschain, thus makes a compiler warning.
+  // #pragma omp taskloop shared(Rcpp::Rcout, out) //grainsize (256)
 #endif
   for (vis_i = 0; vis_i < vcdb.size(); ++vis_i) {
     debug_parallel();
