@@ -431,11 +431,3 @@ expand_minor.icd9 <- function(mnr, is_e = FALSE) {
 expand_minor.icd10 <- function(x) {
   .NotYetImplemented() # nocov
 }
-
-# wrap icd9ChildrenShortUnordered to pass lazy-loaded data
-icd9_children_short <- function(icd9Short, onlyReal) {
-  .Call(`_icd_icd9ChildrenShortUnordered`,
-        icd9Short,
-        icd::icd9cm_hierarchy,
-        onlyReal = onlyReal)
-}

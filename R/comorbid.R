@@ -176,18 +176,18 @@ icd9_comorbid <- function(x,
                           short_map = guess_short(map),
                           return_df = FALSE,
                           preclean = TRUE,
-                          visitId = NULL,
-                          icd9Field = NULL,
+                          visitId = NULL, #nolint
+                          icd9Field = NULL, #nolint
                           ...) {
   if (!missing(visitId)) {
     warning("Use visit_name instead of visit_id.")
     if (is.null(visit_name))
-      visit_name <- visitId
+      visit_name <- visitId #nolint
   }
   if (!missing(icd9Field)) {
     warning("Use icd_name instead of icd9Field.")
     if (is.null(icd_name))
-      icd_name <- icd9Field
+      icd_name <- icd9Field #nolint
   }
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
