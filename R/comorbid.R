@@ -179,7 +179,7 @@ icd9_comorbid <- function(x,
                           visitId = NULL, #nolint
                           icd9Field = NULL, #nolint
                           ...) {
-  if (!missing(visitId)) {
+  if (!missing(visitId)) { #nolint
     warning("Use visit_name instead of visit_id.")
     if (is.null(visit_name))
       visit_name <- visitId #nolint
