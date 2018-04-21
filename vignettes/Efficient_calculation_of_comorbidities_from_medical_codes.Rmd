@@ -59,6 +59,23 @@ knitr::opts_chunk$set(
 
 ICD diagnostic codes are used to define tens of thousands of disease originally from the World Health Organization (WHO). The original purpose was to allow epidemiologists to compare and assess the health and causes of death around the world. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants based on the WHO versions. This makes ICD codes important in medical research of all kinds.
 
+## Example ICD code
+
+This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and difference betwen WHO ICD-10 and ICD-10-CM.
+
+```{r exampleicdcode}
+explain("S62")
+explain("S62.6") # this is where WHO ICD-10 ends
+explain("S62.60") # ICD-10-CM from here down
+explain("S62.607")
+explain("S62.607S")
+# these fall into these broader groupings:
+icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
+icd10_chapters$`Injury, poisoning and certain other consequences of external causes`
+```
+
+ICD-9 codes are primarily numeric, have fewer codes defined, and have a more variable format. Like ICD-10 codes, they have an hierarchical relationship to each other.
+
 ## What is a comorbidity?
 
 Given there are tens of thousands of diagnostic codes, it is impossible to use them directly in statistical models. The almost universal solution is to group these codes in a standardized way, and to use the presence or absence of diseases in each group as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after a hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code 'E11.2' meaning "Type 2 diabetes mellitus with renal complications", and 'I63.0' meaning "Cerebral infarction due to thrombosis of precerebral arteries." These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes, renal and neurologic.
