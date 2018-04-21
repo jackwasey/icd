@@ -81,7 +81,6 @@ extern SEXP _icd_trimCpp(SEXP);
 extern SEXP _icd_trimLeftCpp(SEXP);
 extern SEXP _icd_valgrindCallgrindStart(SEXP);
 extern SEXP _icd_valgrindCallgrindStop();
-extern SEXP fun(SEXP, SEXP, SEXP);
 extern SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
