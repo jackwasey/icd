@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' Get or set whether ICD codes have have an attribute indicating 'short' or 'decimal' format
+#' Get or set whether ICD codes have have an attribute indicating 'short' or
+#' 'decimal' format
 #'
 #' \code{is.short_diag} tests for presence of an attribute, not whether the code
 #' is a valid ICD code. If \code{must_work} is \code{TRUE} then \code{NULL}
@@ -26,7 +27,8 @@
 #' \code{FALSE}. There is no attribute named \code{icd_decimal_code}. These
 #' functions set and get the attribute safely.
 #' @param x ICD data
-#' @param value \code{TRUE} or \code{FALSE}, default is \code{TRUE} which sets the attribute to whatever is indicated in the function name. See examples.
+#' @param value \code{TRUE} or \code{FALSE}, default is \code{TRUE} which sets
+#'   the attribute to whatever is indicated in the function name. See examples.
 #' @param must_work single logical value, if \code{FALSE} (the default) this may
 #'   return \code{NULL} if the attribute is not present. If \code{TRUE}, then
 #'   either \code{TRUE} or \code{FALSE} is returned.
