@@ -97,7 +97,7 @@ test_that("ahrq ccs icd 9 is performing correctly", {
     )
 
   res <- icd9_comorbid_ccs(test_df,  visit_name = "visit_id", icd_name = "icd9")
-  if (exists("icd9Comorbid_alt_MatMul")) {
+  if (exists("icd9Comorbid_alt_MatMul") && exists("icd9ComorbidShortCpp")) {
     expect_identical(icd9_comorbid_ccs(test_df, comorbid_fun = icd:::icd9Comorbid_alt_MatMul),
                      icd9_comorbid_ccs(test_df, comorbid_fun = icd:::icd9ComorbidShortCpp))
   }

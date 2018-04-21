@@ -1,7 +1,17 @@
 #ifdef ICD_STANDALONE
 
 #include "icd.h"
-#include "comorbid_alt_MatMul.h"
+
+void buildVisitCodesVecSparse(const SEXP& icd9df,
+                              const std::string& visitId,
+                              const std::string& icd9Field,
+                              PtsSparse& sparse_db,
+                              VecStr& visitIds);
+
+LogicalMatrix icd9Comorbid_alt_MatMul(const Rcpp::DataFrame& icd9df, const Rcpp::List& icd9Mapping,
+                                      const std::string visitId, const std::string icd9Field,
+                                      const int threads = 8, const int chunk_size = 256,
+                                      const int omp_chunk_size = 1);
 
 // don't include my source files: this is like an external application so link
 // against my Rcpp generated headers.
@@ -38,7 +48,7 @@ int main(int argc, char *argv[]) {
     two_map["ailment"] = CharacterVector::create("003", "040");
 
     // call direct to avoid Rcpp intercepting the call?
-    Rcpp::IntegerMatrix out = icd9Comorbid_alt_MatMul(two_pts, two_map,
+    Rcpp::LogicalMatrix out = icd9Comorbid_alt_MatMul(two_pts, two_map,
                                                       "visit_id", "icd9",
                                                       0, 0, 0, true);
 
