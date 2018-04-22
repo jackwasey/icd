@@ -6,7 +6,7 @@ author:
       3401 Civic Center Blvd.
       Philadelphia, PA 19102, USA
       email: \email{waseyj@chop.edu}
-    url: http://www.chop.edu/doctors/wasey-jack
+      url: http://www.chop.edu/doctors/wasey-jack
 title:
   # If you use tex in the formatted title, also supply version without
   # For running headers, if needed
@@ -75,16 +75,16 @@ The original motivation for \pkg{icd} was lack of any \proglang{R} software in t
 
 ## Requirements
 
- - computation of Charlson and Elixhauser families of comorbidities
- - enable a reproducible workflow including a comorbidity computation
-   - after accuracy, the next priority is performance so that changing the patient population or comorbidity map can be done without waiting minutes or hours to recompute the comorbidities
-   - related to performance, the tool should be effective even with limited computing resources
- - the comorbidity maps should be implemented exactly as intended by the original authors
-   - to achieve this, the canonical \proglang{SAS} code should be parsed to extract the comorbidity relationships in a reproducible manner
-   - tolerate invalid data without compromising the accuracy of the comorbidity calculation
- - use of an arbitrary comorbidity map
- - find out the meaning and hierarchical position of ICD codes
- - use different national and annual revisions of ICD codes
+- computation of Charlson and Elixhauser families of comorbidities
+- enable a reproducible workflow including a comorbidity computation
+- after accuracy, the next priority is performance so that changing the patient population or comorbidity map can be done without waiting minutes or hours to recompute the comorbidities
+- related to performance, the tool should be effective even with limited computing resources
+- the comorbidity maps should be implemented exactly as intended by the original authors
+- to achieve this, the canonical \proglang{SAS} code should be parsed to extract the comorbidity relationships in a reproducible manner
+- tolerate invalid data without compromising the accuracy of the comorbidity calculation
+- use of an arbitrary comorbidity map
+- find out the meaning and hierarchical position of ICD codes
+- use different national and annual revisions of ICD codes
 
 ## Uses of comorbidities
 
@@ -101,7 +101,7 @@ The comorbidity definitions in published literature do not precisely specify eac
 
 ### Big data
 Bulk healthcare data even for one hospital often has hundreds of thousands or millions of encounters of different types. National databases and multi-hospital patient registries often have many more. Initial work using pure R code, with some optimization, resulted in calculations taking minutes for a few tens of thousands of patients. Although the problem is parallelizable, performance analysis on early versions using string matching showed that there was a lot of pressure on the CPU caches, so massive parallelization -- when even an option -- would have diminishing returns with scaling.
- 
+
 Naïve searches for codes in comorbidity maps assumes standardized formatting, which does not exist, even within the specifications from the WHO or national versions. Rather, there are acceptable formatting variations. Importantly for reproducible research, the analysis should be efficient with big data sets, and no efficient solution has been available to R users until now.
 
 ## Medical codes
@@ -171,8 +171,8 @@ The problem of determining which patients have which disease classes can be expr
 - for each ICD code:
 - for each comorbidity:
 - for each comorbidity:
-    - _search_ the lists of codes for that comorbidity
-    - if a matching diagnostic code is found, record that comorbidity for the current patient-visit.
+- _search_ the lists of codes for that comorbidity
+- if a matching diagnostic code is found, record that comorbidity for the current patient-visit.
 
 Executing this in big modern healthcare data sets is a computational challenge which 'icd' solves. For ICD-based comorbidity maps, the problems are as follows:
 - there are multiple notations of ICD codes, ICD-9-CM codes are particularly variable
@@ -194,8 +194,8 @@ The main feature of this software is the algorithm for assigning the diagnostic 
 
 There are three steps to the solution implemented by \pkg{icd}:
 
- 1. reduce the problem to a matrix multiplication
- 2. matrix multiplication
+1. reduce the problem to a matrix multiplication
+2. matrix multiplication
 
 ### Problem reduction
 
@@ -316,6 +316,40 @@ This can be represented thus:
 
 The Eigen linear algebra software has highly optimized multihtreaded code for some specific cases, including the type of matrix multiplication needed here: row-major sparse matrix multiplication with a column-major dense matrix. It would be possible to use a more distributed matrix algebra approach using multiple CPUs on multiple servers, however, most distributions of BLAS and LAPACK do not include sparse matrix handling, although it is in the standard (ref).
 
+# Results
+
+There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk}, and \pkg{comorbidity}. The following is a performance comparison using randomly generated patient data of different sizes:
+
+```{r bench, echo = FALSE}
+fac = 1e-3
+res <- data.frame(
+  datarows = 10^(seq(8) - 1),
+  icd = fac * c(
+    3.152695, 4.477749, 4.648492, 6.255048, 
+    17.4577, 111.1337, 1035.634, 10862.5),
+  comorbidity = fac * c(
+    22.528121, 22.638468, 32.976028, 127.175669,
+    1002.1865, 10354.9292, 35392.493, 402769.8),
+  medicalrisk = fac * c(
+    3.965962, 3.752622, 11.69087, 77.603945,
+    734.2927, 8355.8409, 83382.279, 1935343))
+
+# https://stackoverflow.com/questions/40938561/plot-new-has-not-been-called-yet-error-in-rmarkdown-rstudio-1-0-44#41947860
+plot(x = res$datarows, y = res$comorbidity, log = "xy", 
+     type = "l", col = 'darkred', 
+     xlab = "log rows of data", 
+     ylab = "log seconds",
+     xlim = c(1, max(res$datarows)),
+     ylim = c(fac, max(res$comorbidity))
+) +
+  lines(x = res$datarows, y = res$icd, col = 'black') +
+  lines(x = res$datarows, y = res$medicalrisk, col = 'darkblue') +
+  title("Performance comparison of comorbidity packages")
+
+```
+
+}
+
 # Other Functionality
 
 ## Validation
@@ -363,9 +397,9 @@ The matrices hold only true or false values, represented as 1 or 0. It appears i
 
 \proglang{R}'s S3 class system is used for extensibility, so it is straightforward to include additional ICD schemes, e.g., for different national systems. Likewise, it is also easy to add new comorbidity maps, or use user-defined ones. Several authors have contributed code which extends \pkg{icd}, including:
 
- - emulation of the AHRQ's official Clinical Classification Software (CCS)
- - assignment of ICD codes to AHRQ's Hierarchical Condition Codes (HCC)
- - Van Walraven risk scores, analagous to Charlson scores, based on the Elixhauser comomribidites.
+- emulation of the AHRQ's official Clinical Classification Software (CCS)
+- assignment of ICD codes to AHRQ's Hierarchical Condition Codes (HCC)
+- Van Walraven risk scores, analagous to Charlson scores, based on the Elixhauser comomribidites.
 
 # Conclusions
 
