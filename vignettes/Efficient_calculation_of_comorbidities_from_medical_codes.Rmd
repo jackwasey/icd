@@ -334,17 +334,31 @@ res <- data.frame(
     3.965962, 3.752622, 11.69087, 77.603945,
     734.2927, 8355.8409, 83382.279, 1935343))
 
+xseq = seq(0, 7)
+yseq = seq(-3, 3, 3)
+logxaxis <- sapply(paste("expression(10^", xseq, ")", sep = ""),
+                   function(x) eval(parse(text = x)))
+logyaxis <- sapply(paste("expression(10^", yseq, ")", sep = ""),
+                   function(x) eval(parse(text = x)))
+colours <- c(comorbidity = 'darkred', icd= 'black', medicalrisk = 'darkblue')
 # https://stackoverflow.com/questions/40938561/plot-new-has-not-been-called-yet-error-in-rmarkdown-rstudio-1-0-44#41947860
-plot(x = res$datarows, y = res$comorbidity, log = "xy", 
+{
+plot(NA, NA, log = "xy", 
      type = "l", col = 'darkred', 
-     xlab = "log rows of data", 
-     ylab = "log seconds",
+     xlab = "rows of data", 
+     ylab = "seconds",
      xlim = c(1, max(res$datarows)),
-     ylim = c(fac, max(res$comorbidity))
-) +
-  lines(x = res$datarows, y = res$icd, col = 'black') +
-  lines(x = res$datarows, y = res$medicalrisk, col = 'darkblue') +
+     ylim = c(fac, max(res$medicalrisk)),
+     xaxt = "n", yaxt = "n"
+)  
+  axis(1, 10^xseq, logxaxis) 
+  axis(2, 10^yseq, logyaxis) 
+  lines(x = res$datarows, y = res$comorbidity, col = colours["comorbidity"]) 
+  lines(x = res$datarows, y = res$icd, col = colours["icd"]) 
+  lines(x = res$datarows, y = res$medicalrisk, col = colours["medicalrisk"]) 
   title("Performance comparison of comorbidity packages")
+  legend(1, 1000, legend = names(res), fill = TRUE, col = colours)
+}
 
 ```
 
