@@ -49,9 +49,9 @@ suppressWarnings({
   })
 })
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  prompt = FALSE
+  collapse = TRUE
+  # comment = "#>",
+  #prompt = "R>"
 )
 ```
 
@@ -190,16 +190,16 @@ On the last point, big data solutions cannot often be solved by increasing hardw
 
 # Methods
 
-The main feature of this software is the algorithm for assigning the diagnostic codes of a patient into classes, defined by groups of codes. The core of this is a matrix multiplication. Other comorbidity calculation tools in R and other languages search by exact match or regular expression for each patient-visit code within each comorbidity. String matching requires more memory and CPU cycles than integer or boolean operations, and is much less CPU-cache friendly making it resistant to parallelization.
+The main feature of this software is the algorithm for assigning the diagnostic codes of a patient into classes, defined by groups of codes. The core of this is a matrix multiplication. Other comorbidity calculation tools in R and other languages search by exact match or regular expression for each patient-visit code within each comorbidity. String matching requires more memory and CPU cycles than integer or boolean operations, and is much less CPU cache friendly making it resistant to parallelization.
 
 There are three steps to the solution implemented by \pkg{icd}:
 
 1. reduce the problem to a matrix multiplication
-2. matrix multiplication
+2. perform the matrix multiplication
 
 ### Problem reduction
 
-Let matrix A represent the comorbidities associated with each patient visit, where each row, m, is a patient visit, and each column, n, represents a different code. Each cell of the matrix is therefore either unity, indicating that the patient visit on row m is associated with the code on column n; or zero, indicating that the patient has no diagnoses falling within that comorbidity.
+Let $A$ represent the matrix of comorbidities associated with each patient visit, where each row, $m$, is a patient visit, and each column, $n$, represents a different code. Each cell of the matrix is therefore either unity or zero. Unity indicating that the patient visit on row $m$ is associated with the code on column $n$; or zero, if not.
 
 $$A_{m,n} = 
 \begin{pmatrix}
@@ -209,33 +209,43 @@ a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\
 a_{m,1} & a_{m,2} & \cdots & a_{m,n} 
 \end{pmatrix}$$
 
-Let matrix B be the comorbidity map, where each row, n, represents a different code, and each column, p, represents a comorbidity.
+Let matrix B be the comorbidity map, where each row, $p$, represents a different code, and each column, $q$, represents a comorbidity.
 
-$$ B_{n,p} = 
+$$ B_{p,q} = 
 \begin{pmatrix}
-b_{1,1} & b_{1,2} & \cdots & b_{1,p} \\
-b_{2,1} & b_{2,2} & \cdots & b_{2,p} \\
+b_{1,1} & b_{1,2} & \cdots & b_{1,q} \\
+b_{2,1} & b_{2,2} & \cdots & b_{2,q} \\
 \vdots  & \vdots  & \ddots & \vdots  \\
-b_{n,1} & b_{n,2} & \cdots & b_{n,p} 
+b_{p,1} & b_{p,2} & \cdots & b_{p,q} 
 \end{pmatrix}$$
 
-Given there are tens or hundreds of thousands of possible ICD-9 or ICD-10 codes, the possible width of A is large (n columns). There are also many ICD codes for each comorbidity, so the height of B is large, although typical comorbidity maps only cover a subset of possible codes. Many data sets have tens of millions of patient visits, so the memory required (assuming one 32 bit word for each comorbidity, see below), this could mean, using lower estimates, $10^7 \cdot 10^4 \cdot 4 = 4 \cdot 10^{11}$, or 400 gigabytes simply to represent the patient-visit to disease relationships. There are two major simplifications: firstly, only a small fraction of possible ICD codes typically appear in billing data-sets; secondly, sparse matrix algebra can be used to dramatically reduce the memory requirement by just storing co-ordinates, not the entire grid.
+Given there are tens or hundreds of thousands of possible ICD-9 or ICD-10 codes, the possible width of $A$ is large ($n$ columns). There are also many ICD codes for each comorbidity, so the height of $B$ is large ($p$ rows), although typical comorbidity maps only cover a subset of possible codes. Many data sets have tens of millions of patient visits, so the memory required (assuming a four byte word for each comorbidity flag, see below why this is required instead of a single bit), this could mean, using lower estimates, $10^7 \cdot 10^4 \cdot 4 = 4 \cdot 10^{11}$, or ~400 gigabytes simply to represent the patient-visit to disease relationships.
 
-Whatever reduction of unnecessary data is performed on the patient-visit matrix must also be performed on the comorbity map, since the columns of the patient-visit matrix must match the rows of the comorbidity map both in number, and in what each represents. This is accomplished in \pkg{icd} by using a factor (footnote to explain what this is in R) where the factor levels represent the intersection of the codes in the patient-visit data and all the codes in the comorbidity map. Thus the factor indices become row or column indices in matrices A and B respectively. Note that we only need to represent codes which are in _both_ the patient-visit dad and the comorbidity map, making matrix A narrower and matrix B shorter. String searching strategies miss this optimization.
+There are two major simplifications: firstly, only a fraction of possible ICD codes typically appear in health data; secondly, sparse matrix representation can be used to dramatically reduce the memory requirement by just storing co-ordinates.
 
 These preparatory steps are themselves potentially resource intensive, e.g., finding the unique codes in an intersect of sets of millions of partly duplicated ICD codes. See section (xxxx) for a discussion of specific problems with ICD-10 codes.
 
+#### Reduce number of codes
+
+For matrix multiplication, the columns $n$ of the patient-visit matrix must match the rows $q$ of the comorbidity map both in number. This means a common vocabulary for the codes in the patient-visits and the comorbidity maps must be established. This is accomplished in \pkg{icd} by using a factor [^1] where the factor levels represent the intersection of codes from the patient-visit data and the whole comorbidity map. Thus the factor indices become row or column indices in matrices $A$ and $B$ respectively. I.e., we only need to represent codes which are in _both_ the patient-visit dad and the comorbidity map, making matrix $A$ narrower and matrix $B$ shorter. String searching strategies miss this optimization.
+
+[^1]: \proglang{R} uses a data structure called a `factor` in which each element is stored as an integer index into an array of strings. The strings are unique, whereas the integers may be repeated. In fact, \pkg{icd} uses a `factor` with a one-to-one relationship between strings and integers.
+
+#### Sparse matrix representation
+
+In a large data set, less common codes are more likely to appear, resulting in more nearly empty columns in the patient-visit matrix. Since this representation is used primarily to facilitate calculation of huge datasets, we ignore the fact that sparse format may be less efficient than dense for small datasets.
+
 ### Matrix multiplication 
 
-Then the comorbidities associated with each patient visit is the matrix product of these two.
+Since the ICD code `factor` is common between the patient-visit and comorbidity matrices, $n = q$ and the comorbidities for each patient-visit is their matrix product.
 
-$$C_{m,p} = 
+$$C_{m,q} = 
 A \cdot B = 
 \begin{pmatrix}
-c_{1,1} & c_{1,2} & \cdots & c_{1,p} \\
-c_{2,1} & c_{2,2} & \cdots & c_{2,p} \\
+c_{1,1} & c_{1,2} & \cdots & c_{1,q} \\
+c_{2,1} & c_{2,2} & \cdots & c_{2,q} \\
 \vdots  & \vdots  & \ddots & \vdots  \\
-c_{m,1} & c_{m,2} & \cdots & c_{m,p} 
+c_{m,1} & c_{m,2} & \cdots & c_{m,q} 
 \end{pmatrix}$$
 
 ## Worked example using ICD-10 codes
@@ -265,11 +275,11 @@ There are several things to note, which represent common features in real health
 - 'I11' appears in one comorbidities and its child code 'I110' appears in another.
 - Patient two has code 'I0981', but only the parent code 'I098' appears in the comorbidity map.
 
-In order to make this into a matrix algebra problem, all the patient-visit codes must be used to search for matching or parent ICD-10 codes in the comorbidity map. The same logic could be used for any complicated coding system in which addition of a digit or character denotes a relationship between a parent and child code. However, when there are a more limited number of possible codes, simply expanding out all the permutations into the comorbidity map avoids some computational expense, since fewer character-by-character comparisons have to be done. In 'icd' this is done for ICD-9 maps.
+In order to make this into a matrix algebra problem, all the patient-visit codes must be used to search for matching or parent ICD-10 codes in the comorbidity map. The same logic could be used for any complicated coding system in which addition of a digit or character denotes a relationship between a parent and child code. However, when there are a more limited number of possible codes, simply expanding out all the permutations into the comorbidity map avoids some computational expense, since fewer character-by-character comparisons have to be done. In \pkg{icd} this is done for ICD-9 maps.
 
-Let A be a simplified set of patient-visits, where the columns represent the ICD-10 codes "I0981" (rheumatic heart failure), "I10" (essential hypertension), and "I110" (hypertensive heart disease with heart failure). Again, each row is a different patient-visit.
+Let A be a simplified set of patient-visits, where the columns represent the ICD-10 codes "I0981" (rheumatic heart failure), 'I10' (essential hypertension), and 'I110' (hypertensive heart disease with heart failure). Again, each row is a different patient-visit.
 
-Let B be a simplified comorbidity map, where the columns represent congestive heart failure and hypertension, in that order. Note that "I110" is found in both these comrobidities.
+Let B be a simplified comorbidity map, where the columns represent congestive heart failure and hypertension, in that order. Note that '110' is found in both these comrobidities.
 
 $$A = 
 \begin{pmatrix}
@@ -294,7 +304,7 @@ C = A \cdot B =
 0 & 2 & 1 
 \end{pmatrix}$$
 
-Note that cell $C_{4,2} = 2$, because the condition "I110" is in two comorbidities, so the final result can be given as a logical matrix $A \cdot B \neq 0$
+Note that cell $C_{4,2} = 2$, because the condition 'I110' is in two comorbidities, so the final result can be given as a logical matrix $A \cdot B \neq 0$
 Thus, the final result is:
 
 $$(A \cdot B \neq 0) = 
@@ -318,12 +328,11 @@ The Eigen linear algebra software has highly optimized multihtreaded code for so
 
 # Results
 
-There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk}, and \pkg{comorbidity}. The following is a performance comparison using randomly generated patient data of different sizes:
-
+There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk}, and \pkg{comorbidity}. The following is a performance comparison using randomly generated patient data of different sizes, each patient being assigned twenty random codes which may or not have been in the AHRQ comorbidity map.
 ```{r bench, echo = FALSE}
 fac = 1e-3
 res <- data.frame(
-  datarows = 10^(seq(8) - 1),
+  datarows = 10^(0:7),
   icd = fac * c(
     3.152695, 4.477749, 4.648492, 6.255048, 
     17.4577, 111.1337, 1035.634, 10862.5),
@@ -334,13 +343,24 @@ res <- data.frame(
     3.965962, 3.752622, 11.69087, 77.603945,
     734.2927, 8355.8409, 83382.279, 1935343))
 
+# fit a line to the last four of 'icd' column and predict duration for one
+# hundred million patient-visits with twenty comorbidities per patient
+fit_res <- log10(res[5:8, ])
+icd_model <- lm(icd ~ datarows, data = fit_res)
+cmb_model <- lm(comorbidity ~ datarows, data = fit_res)
+mdr_model <- lm(medicalrisk ~ datarows, data = fit_res)
+pred_hours <- function(model)
+           10 ^ predict(model, data.frame(datarows = log10(20 * 10e8))) / 3600
+preds <- vapply(list(icd_model, cmb_model, mdr_model),
+                FUN = pred_hours, FUN.VALUE = numeric(1))
+names(preds) <- c("icd", "comorbidity", "medicalrisk")
 xseq = seq(0, 7)
 yseq = seq(-3, 3, 3)
 logxaxis <- sapply(paste("expression(10^", xseq, ")", sep = ""),
                    function(x) eval(parse(text = x)))
 logyaxis <- sapply(paste("expression(10^", yseq, ")", sep = ""),
                    function(x) eval(parse(text = x)))
-colours <- c(comorbidity = 'darkred', icd= 'black', medicalrisk = 'darkblue')
+colours <- c(comorbidity = 'darkred', icd = 'black', medicalrisk = 'darkblue')
 # https://stackoverflow.com/questions/40938561/plot-new-has-not-been-called-yet-error-in-rmarkdown-rstudio-1-0-44#41947860
 {
 plot(NA, NA, log = "xy", 
@@ -348,7 +368,7 @@ plot(NA, NA, log = "xy",
      xlab = "rows of data", 
      ylab = "seconds",
      xlim = c(1, max(res$datarows)),
-     ylim = c(fac, max(res$medicalrisk)),
+     ylim = c(fac, max(c(res$medicalrisk, res$comorbidity))),
      xaxt = "n", yaxt = "n"
 )  
   axis(1, 10^xseq, logxaxis) 
@@ -356,12 +376,40 @@ plot(NA, NA, log = "xy",
   lines(x = res$datarows, y = res$comorbidity, col = colours["comorbidity"]) 
   lines(x = res$datarows, y = res$icd, col = colours["icd"]) 
   lines(x = res$datarows, y = res$medicalrisk, col = colours["medicalrisk"]) 
+  abline(icd_model, col = colours["icd"], lty = 3)
+  abline(cmb_model, col = colours["comorbidity"], lty = 3)
+  abline(mdr_model, col = colours["medicalrisk"], lty = 3)
   title("Performance comparison of comorbidity packages")
-  legend(1, 1000, legend = names(res), fill = TRUE, col = colours)
+  legend(1, 1000, legend = names(res[-1]), fill = colours[names(res[-1])])
+}
+
+resratio <- data.frame(datarows = res$datarows, comorbidity = res$comorbidity / res$icd, medicalrisk = res$medicalrisk / res$icd)
+
+{
+  plot(NA, NA, log = "x", 
+       type = "l", col = 'darkred', 
+       xlab = "rows of data", 
+       ylab = "time / time using 'icd'",
+       xlim = c(1, max(resratio$datarows)),
+       ylim = c(fac, max(c(resratio$medicalrisk, resratio$comorbidity))),
+       xaxt = "n"
+  )
+  axis(1, 10^xseq, logxaxis)
+  lines(x = resratio$datarows, y = resratio$comorbidity, col = colours["comorbidity"])
+  lines(x = resratio$datarows, y = resratio$medicalrisk, col = colours["medicalrisk"])
+  legend(1, 170, legend = names(resratio[-1]), fill = colours[names(resratio[-1])])
+}
+
+{
+  barplot(preds,
+          col = colours[c("icd", "comorbidity", "medicalrisk")],
+          main = "Predicted time for bigger dataset",
+          sub = "One hundred million patients, twenty codes per patient",
+          xlab = "hours", log = "y", ylim = c(1, 2500))
+  legend(x = 0.2, y = 500, legend = names(preds), fill = colours[names(preds)])
 }
 
 ```
-
 }
 
 # Other Functionality
@@ -370,9 +418,10 @@ plot(NA, NA, log = "xy",
 
 \pkg{icd} allows checking whether codes are valid, and, in the USA, whether they are 'billable', or merely members of the hierarchy, but not considered diagnostic codes themselves. Research data may well contain relevant non-billable codes, and this is accounted for by the comorbidity calculations.
 ```{r validity}
-is_valid("441")
-is_billable("441")
-x <- data.frame(code = children("441"), billable = is_billable(children("441")))
+is_valid(c("441", "441.0", "441.01", "XXX"))
+is_billable(c("441", "441.0", "441.01", "XXX"))
+data.frame(code = children("441"),
+           billable = is_billable(children("441")))
 ```
 
 ## Explanation
@@ -384,16 +433,19 @@ explain(c("B50", "W51.XXXS")) # ICD-10
 
 ## Hierarchy
 
-```{r hierarchy}
-children(c("4410"))
+Functions are provided to navigate the ICD-9 and ICD-10 hierarchies. `r children("4110")`. 
 
+```{r hierarchy}
+# explore the hierarchy
+children(c("4410"))
+# when all the children are present, we just explain the common parent:
 explain(
   children(c("4410")))
-
+# except when we ask for them not to be condensed:
 explain(
   children(c("4410")),
   condense = FALSE)
-
+# ICD-10
 children(c("B50", "W51"))
 ```
 
@@ -403,7 +455,7 @@ children(c("B50", "W51"))
 
 This package is built on the strong foundations of \pkg{Rcpp} (ref), \pkg{RcppEigen} (ref), and \pkg{Eigen} (ref), the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplicaation with a dense matrix, a multithreaded solution. Once this was impemented, the code bottlenecks largely moved to the data preparation before the matrix multiplication.
 
-## Binary or integer representation
+## Binary versus integer representation
 
 The matrices hold only true or false values, represented as 1 or 0. It appears inefficient to use an entire integer which usually occupies a 32 bit word. However, bit packing of `bool` into words has a stormy history in the \proglang{C++} Standard Template Library (ref), and Eigen does not support matrices of booleans. Extending \pkg{RcppEigen} and \pkg{Eigen} itself to do logical operations on bit-packed Booleans is left as an exercise for the reader, and would certainly get a lot more data in the CPU cache lines at once, while potentially take six months to code.
 
@@ -421,7 +473,7 @@ This \proglang{R} package enables a common clinical research task by doing fast 
 
 # Acknolwedgements
 
-I am grateful to several people who have contributed code, notably the work on Van Walraven scores (William Murphy), HCC (Anobel Odisho), CCS (Vitaly Drucker) and an alternative ICD decoding format (Ed Lee). A full list of contributors may be seen on the ['icd'](https://cran.r-project.org/web/packages/icd/index.html) CRAN page, and on the [github project](https://github.com/jackwasey/icd) page.
+I am grateful to several people who have contributed code, notably the work on Van Walraven scores (William Murphy), HCC (Anobel Odisho), CCS (Vitaly Druker) and an alternative ICD decoding format (Ed Lee). A full list of contributors may be seen on the ['icd'](https://cran.r-project.org/web/packages/icd/index.html) CRAN page, and on the [github project](https://github.com/jackwasey/icd) page.
 
 ```{r echo=FALSE, eval=FALSE}
 #https://github.com/rstudio/rticles/issues/63
