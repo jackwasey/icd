@@ -362,6 +362,9 @@ logyaxis <- sapply(paste("expression(10^", yseq, ")", sep = ""),
                    function(x) eval(parse(text = x)))
 colours <- c(comorbidity = 'darkred', icd = 'black', medicalrisk = 'darkblue')
 # https://stackoverflow.com/questions/40938561/plot-new-has-not-been-called-yet-error-in-rmarkdown-rstudio-1-0-44#41947860
+resratio <- data.frame(datarows = res$datarows, comorbidity = res$comorbidity / res$icd, medicalrisk = res$medicalrisk / res$icd)
+```
+```{r echo=F, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, with rows > 10,000."}
 {
 plot(NA, NA, log = "xy", 
      type = "l", col = 'darkred', 
@@ -379,12 +382,10 @@ plot(NA, NA, log = "xy",
   abline(icd_model, col = colours["icd"], lty = 3)
   abline(cmb_model, col = colours["comorbidity"], lty = 3)
   abline(mdr_model, col = colours["medicalrisk"], lty = 3)
-  title("Performance comparison of comorbidity packages")
   legend(1, 1000, legend = names(res[-1]), fill = colours[names(res[-1])])
 }
-
-resratio <- data.frame(datarows = res$datarows, comorbidity = res$comorbidity / res$icd, medicalrisk = res$medicalrisk / res$icd)
-
+```
+```{r, echo=FALSE, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in Figure 1."}
 {
   plot(NA, NA, log = "x", 
        type = "l", col = 'darkred', 
@@ -399,18 +400,16 @@ resratio <- data.frame(datarows = res$datarows, comorbidity = res$comorbidity / 
   lines(x = resratio$datarows, y = resratio$medicalrisk, col = colours["medicalrisk"])
   legend(1, 170, legend = names(resratio[-1]), fill = colours[names(resratio[-1])])
 }
-
+```
+```{r echo=FALSE, fig.cap="Predicted duration of computation for one hundred-million patient-visits, with twenty patients per patient"}
 {
   barplot(preds,
           col = colours[c("icd", "comorbidity", "medicalrisk")],
-          main = "Predicted time for bigger dataset",
-          sub = "One hundred million patients, twenty codes per patient",
-          xlab = "hours", log = "y", ylim = c(1, 2500))
-  legend(x = 0.2, y = 500, legend = names(preds), fill = colours[names(preds)])
+          ylab = "hours", log = "y", ylim = c(1, 5000))
+  legend(x = 0.2, y = 2500, legend = names(preds), fill = colours[names(preds)])
 }
 
 ```
-}
 
 # Other Functionality
 
