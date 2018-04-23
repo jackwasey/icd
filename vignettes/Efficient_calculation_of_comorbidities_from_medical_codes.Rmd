@@ -1,12 +1,19 @@
 ---
 author:
-  - name: Jack Wasey
+  - name: Jack O. Wasey
     affiliation: Children's Hospital of Philadelphia
     address: >
       3401 Civic Center Blvd.
       Philadelphia, PA 19102, USA
       email: \email{waseyj@chop.edu}
       url: http://www.chop.edu/doctors/wasey-jack
+  - name: Mohamed A. Rehman
+    affiliation: All Children's Hospital
+    address: >
+      501 6th Ave S
+      St Petersburg, FL 33701, USA
+      email: rehman@jhmi.edu
+      url: http://www.jhmi.edu
 title:
   # If you use tex in the formatted title, also supply version without
   # For running headers, if needed
@@ -25,7 +32,9 @@ preamble: >
   \usepackage{booktabs}
 biblio-style: jss
 output: rticles::jss_article
-bibliography: icd.bib
+bibliography:
+  - icd
+  - gplv3
 vignette: >
   %\VignetteIndexEntry{Efficient calculation of comorbidities from medical codes}
   \usepackage[utf8]{inputenc}
@@ -42,6 +51,8 @@ editor_options:
 # JSS appears in this list of the American Statistical Society
 # https://www.amstat.org/ASA/Publications/Journals.aspx and in this index:
 # https://www.statindex.org/
+
+# https://www.hopkinsallchildrens.org/find-a-doctor/practitioner-details/mohamed--athaur--rehman
 
 suppressWarnings({
   suppressPackageStartupMessages({
@@ -104,6 +115,7 @@ In addition, it became useful during development to consider the following:
 - acceptance of invalid data without compromising the accuracy of the comorbidity calculation
 - use of arbitrary comorbidity maps
 - find out the meaning and hierarchical position of ICD codes
+- open source licence, GPL-3[@gplv3]
 
 ## Uses of comorbidities
 Almost every report of a clinical investigation in medicine includes a table showing the characteristics of the groups within a study population. One purpose of this table is to show any differences between the groups under investigation. Things like age and weight can be compared numerically, whereas tens of thousands of distinct diagnostic codes may only be compared by grouping into comorbidities. It is of central importance to retrospective studies that confounding is minimized by understanding differences in comorbidities between groups, then by risk adjustment. In randomized studies, this is achieved by recruiting enough patients and randomly assigning them to treatment: comorbidities of interest are still needed to demonstrate that recruitment was free from bias and that the sample size large enough.
@@ -490,7 +502,7 @@ children(c("B50", "W51"))
 
 ## Software libraries
 
-This package is built on the strong foundations of \pkg{Rcpp}[@Eddelbuettel_Rcpp_2011], \pkg{RcppEigen}[@Eddelbeuttel_Fast_2013] (ref), and \pkg{Eigen}[@Guennebaud_Eigen3_2017], the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplicaation with a dense matrix, a multithreaded solution. Once this was impemented, the code bottlenecks largely moved to the data preparation before the matrix multiplication.
+This package is built on the strong foundations of \pkg{Rcpp}[@Eddelbuettel_RcppSeamlessIntegration_2011], \pkg{RcppEigen}[@Eddelbeuttel_FastElegantNumerical_2013] (ref), and \pkg{Eigen}[@Guennebaud_Eigen3_2017], the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplicaation with a dense matrix, a multithreaded solution. Once this was impemented, the code bottlenecks largely moved to the data preparation before the matrix multiplication.
 
 ## Derivation of the comorbidity 
 
