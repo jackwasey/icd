@@ -41,31 +41,19 @@ editor_options:
   chunk_output_type: inline
 ---
 
-```{r setup, echo = FALSE, cache = FALSE}
-
+```{r setup, echo=FALSE, warning=FALSE, cache=FALSE}
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
-
 # JSS appears in this list of the American Statistical Society
-# https://www.amstat.org/ASA/Publications/Journals.aspx and in this index:
-# https://www.statindex.org/
-
+# https://www.amstat.org/ASA/Publications/Journals.aspx and in this index: https://www.statindex.org/
 # https://www.hopkinsallchildrens.org/find-a-doctor/practitioner-details/mohamed--athaur--rehman
 
 # JSS examples in github https://github.com/search?utf8=%E2%9C%93&q=jss++extension%3ARmd&type=Code
 
-suppressWarnings({
-  suppressPackageStartupMessages({
-    requireNamespace("knitr")
-    library(icd)
-    library(utils)
-  })
+suppressPackageStartupMessages({
+  requireNamespace("knitr")
+  library(icd)
 })
-knitr::opts_chunk$set(
-  collapse = TRUE
-  # comment = "#>",
-  #prompt = "R>"
-)
 ```
 
 # Introduction
@@ -86,9 +74,9 @@ Charlson did not initially use ICD codes to define the comorbidities, but variou
 
 ## Motivation
 The original motivation for \pkg{icd} was lack of any \proglang{R} software in the Comprehensive R Archive Network (CRAN) repository, or elsewhere, to compute comorbidities from ICD codes, nor any data that was easily parsable by \proglang{R} for interpreting ICD codes or representing the Charlson or Elixhauser schemes or the official lists of codes themselves. An additional goal was to make it possible to handle moderately big datasets with modest computing power:
- 
- - WHO ICD codes are used internationally, and it is important to enable their use without expensive computing resources
- - an analyst or researcher should be able to use a laptop to deal with all but the very biggest datasets, avoiding the complexity of using cloud computing, and the risk of moving protected health information across the internet.
+
+- WHO ICD codes are used internationally, and it is important to enable their use without expensive computing resources
+- an analyst or researcher should be able to use a laptop to deal with all but the very biggest datasets, avoiding the complexity of using cloud computing, and the risk of moving protected health information across the internet.
 
 ## Requirements
 The main requirements were:
@@ -406,7 +394,7 @@ icd_model <- lm(icd ~ datarows, data = fit_res)
 cmb_model <- lm(comorbidity ~ datarows, data = fit_res)
 mdr_model <- lm(medicalrisk ~ datarows, data = fit_res)
 pred_hours <- function(model)
-           10 ^ predict(model, data.frame(datarows = log10(20 * 10e8))) / 3600
+  10 ^ predict(model, data.frame(datarows = log10(20 * 10e8))) / 3600
 preds <- vapply(list(icd_model, cmb_model, mdr_model),
                 FUN = pred_hours, FUN.VALUE = numeric(1))
 names(preds) <- c("icd", "comorbidity", "medicalrisk")
@@ -422,14 +410,14 @@ resratio <- data.frame(datarows = res$datarows, comorbidity = res$comorbidity / 
 ```
 ```{r echo=F, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, R 3.4.4 using Linux, kernel 4.15 ."}
 {
-plot(NA, NA, log = "xy", 
-     type = "l", col = 'darkred', 
-     xlab = "rows of data", 
-     ylab = "seconds",
-     xlim = c(1, max(res$datarows)),
-     ylim = c(fac, max(c(res$medicalrisk, res$comorbidity))),
-     xaxt = "n", yaxt = "n"
-)  
+  plot(NA, NA, log = "xy", 
+       type = "l", col = 'darkred', 
+       xlab = "rows of data", 
+       ylab = "seconds",
+       xlim = c(1, max(res$datarows)),
+       ylim = c(fac, max(c(res$medicalrisk, res$comorbidity))),
+       xaxt = "n", yaxt = "n"
+  )  
   axis(1, 10^xseq, logxaxis) 
   axis(2, 10^yseq, logyaxis) 
   lines(x = res$datarows, y = res$comorbidity, col = colours["comorbidity"]) 
@@ -542,7 +530,7 @@ alice <- data.frame(id = "alice", icd9 = "49699")
 comorbid_charlson(alice, return_df = TRUE)$Pulmonary
 ```
 #### Parsing range definitions
-  
+
 For some mappings, no source code was available, but the comorbidities are described in journals using ranges. E.g., in the ICD-9 Elixhauser mapping, we find 243 -- 244.2 in the thyroid disease definition. This is a subset of the entire range of thyroid disesases in ICD-9: 244.3, 244.8 and 244.9 also exist. \pkg{icd} takes great care with false positives here by carefully excluding parent codes which might have been captured by a pattern matching approach. In this case, 244 should **not** be considered a match because it includes codes where which were clearly excluded. A number of ICD code range operators are defined to facilitate this:
 ```{r elixrange}
 head("243" %i9da% "244.2")
