@@ -1,7 +1,7 @@
 *.out
 *.aux
 *.blg
-*.bbg
+*.bbl
 *cache*
 *.tex
 *.synctex.gz

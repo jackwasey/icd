@@ -26,6 +26,37 @@
   pages = {8-27}
 }
 
+@article{quan_updating_2011,
+  title = {Updating and {{Validating}} the {{Charlson Comorbidity Index}} and {{Score}} for {{Risk Adjustment}} in {{Hospital Discharge Abstracts Using Data From}} 6 {{Countries}}},
+  volume = {173},
+  issn = {0002-9262, 1476-6256},
+  doi = {10.1093/aje/kwq433},
+  abstract = {With advances in the effectiveness of treatment and disease management, the contribution of chronic comorbid diseases (comorbidities) found within the Charlson comorbidity index to mortality is likely to have changed since development of the index in 1984. The authors reevaluated the Charlson index and reassigned weights to each condition by identifying and following patients to observe mortality within 1 year after hospital discharge. They applied the updated index and weights to hospital discharge data from 6 countries and tested for their ability to predict in-hospital mortality. Compared with the original Charlson weights, weights generated from the Calgary, Alberta, Canada, data (2004) were 0 for 5 comorbidities, decreased for 3 comorbidities, increased for 4 comorbidities, and did not change for 5 comorbidities. The C statistics for discriminating in-hospital mortality between the new score generated from the 12 comorbidities and the Charlson score were 0.825 (new) and 0.808 (old), respectively, in Australian data (2008), 0.828 and 0.825 in Canadian data (2008), 0.878 and 0.882 in French data (2004), 0.727 and 0.723 in Japanese data (2008), 0.831 and 0.836 in New Zealand data (2008), and 0.869 and 0.876 in Swiss data (2008). The updated index of 12 comorbidities showed good-to-excellent discrimination in predicting in-hospital mortality in data from 6 countries and may be more appropriate for use with more recent administrative data.},
+  language = {en},
+  number = {6},
+  journal = {American Journal of Epidemiology},
+  author = {Quan, Hude and Li, Bing and Couris, Chantal M. and Fushimi, Kiyohide and Graham, Patrick and Hider, Phil and Januel, Jean-Marie and Sundararajan, Vijaya},
+  month = mar,
+  year = {2011},
+  keywords = {Comorbidity,mortality,risk adjustment,Quality of Health Care,International Classification of Diseases},
+  pages = {676-682},
+  pmid = {21330339}
+}
+
+@article{charlson_new_1987,
+  title = {A New Method of Classifying Prognostic Comorbidity in Longitudinal Studies: {{Development}} and Validation},
+  volume = {40},
+  issn = {0021-9681},
+  shorttitle = {A New Method of Classifying Prognostic Comorbidity in Longitudinal Studies},
+  doi = {10.1016/0021-9681(87)90171-8},
+  abstract = {The objective of this study was to develop a prospectively applicable method for classifying comorbid conditions which might alter the risk of mortality for use in longitudinal studies. A weighted index that takes into account the number and the seriousness of comorbid disease was developed in a cohort of 559 medical patients. The 1-yr mortality rates for the different scores were: ``0'', 12\% (181); ``1\textendash{}2'', 26\% (225); ``3\textendash{}4'', 52\% (71); and ``$\geqslant$ 5'', 85\% (82). The index was tested for its ability to predict risk of death from comorbid disease in the second cohort of 685 patients during a 10-yr follow-up. The percent of patients who died of comorbid disease for the different scores were: ``0'', 8\% (588); ``1'', 25\% (54); ``2'', 48\% (25); `` $\geqslant$ 3'', 59\% (18). With each increased level of the comorbidity index, there were stepwise increases in the cumulative mortality attributable to comorbid disease (log rank $\chi$2 = 165; p \&lt; 0.0001). In this longer follow-up, age was also a predictor of mortality (p \&lt; 0.001). The new index performed similarly to a previous system devised by Kaplan and Feinstein. The method of classifying comorbidity provides a simple, readily applicable and valid method of estimating risk of death from comorbid disease for use in longitudinal studies. Further work in larger populations is still required to refine the approach because the number of patients with any given condition in this study was relatively small.},
+  number = {5},
+  journal = {Journal of Chronic Diseases},
+  author = {Charlson, Mary E. and Pompei, Peter and Ales, Kathy L. and MacKenzie, C. Ronald},
+  year = {1987},
+  pages = {373-383}
+}
+
 @misc{r_development_core_team_r_????,
   title = {R {{Development Core Team}} (2013). {{R}}: {{A}} Language and Environment for Statistical Computing. {{R Foundation}} for {{Statistical Computing}}, {{Vienna}}, {{Austria}}. {{ISBN}} 3-900051-07-0, {{URL}} {{http://www.R-project.org.}}},
   publisher = {{R Foundation for Statistical Computing, Vienna, Austria}},
@@ -103,6 +134,30 @@ CONCLUSION: When analyzing administrative data, the Elixhauser comorbidity syste
   keywords = {Cohort Studies,Comorbidity,Hospital Mortality,Humans,Hospitals; Teaching,Models; Statistical,Health Services Research,International Classification of Diseases,Hospital Administration,Risk Adjustment},
   pages = {626-633},
   pmid = {19433995}
+}
+
+@misc{Sutter_Fixingvector_2007,
+  title = {Fixing Vector},
+  howpublished = {http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2160.html},
+  author = {Sutter, Herb},
+  month = jan,
+  year = {2007}
+}
+
+@inproceedings{Jarvi_AlgorithmSpecializationGeneric_2006,
+  address = {New York, NY, USA},
+  series = {PLDI '06},
+  title = {Algorithm {{Specialization}} in {{Generic Programming}}: {{Challenges}} of {{Constrained Generics}} in {{C}}++},
+  isbn = {978-1-59593-320-1},
+  shorttitle = {Algorithm {{Specialization}} in {{Generic Programming}}},
+  doi = {10.1145/1133981.1134014},
+  abstract = {Generic programming has recently emerged as a paradigm for developing highly reusable software libraries, most notably in C++. We have designed and implemented a constrained generics extension for C++ to support modular type checking of generic algorithms and to address other issues associated with unconstrained generics. To be as broadly applicable as possible, generic algorithms are defined with minimal requirements on their inputs. At the same time, to achieve a high degree of efficiency, generic algorithms may have multiple implementations that exploit features of specific classes of inputs. This process of algorithm specialization relies on non-local type information and conflicts directly with the local nature of modular type checking. In this paper, we review the design and implementation of our extensions for generic programming in C++, describe the issues of algorithm specialization and modular type checking in detail, and discuss the important design tradeoffs in trying to accomplish both.We present the particular design that we chose for our implementation, with the goal of hitting the sweet spot in this interesting design space.},
+  booktitle = {Proceedings of the 27th {{ACM SIGPLAN Conference}} on {{Programming Language Design}} and {{Implementation}}},
+  publisher = {{ACM}},
+  author = {J{\"a}rvi, Jaakko and Gregor, Douglas and Willcock, Jeremiah and Lumsdaine, Andrew and Siek, Jeremy},
+  year = {2006},
+  keywords = {concepts,constrained generics,generic programming,parametric polymorphism,specialization},
+  pages = {272--282}
 }
 
 
