@@ -19,6 +19,7 @@ icd_data_names <- c(
   "icd10_map_ahrq",
   "icd10_map_cc",
   "icd10_map_elix",
+  "icd10_map_quan_charlson",
   "icd10_map_quan_deyo",
   "icd10_map_quan_elix",
   "icd10_sub_chapters",
@@ -28,6 +29,7 @@ icd_data_names <- c(
   "icd9_map_cc",
   "icd10_map_cc",
   "icd9_map_elix",
+  "icd9_map_charlson",
   "icd9_map_quan_deyo",
   "icd9_map_quan_elix",
   "icd9_sources",
@@ -184,7 +186,7 @@ NULL
 #' leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
 #' this, in the rare cases where someone had two or three of leukemia, lymphoma
 #' and non-metastatic cancer, the Quan adaptation would give a lower Charlson
-#' score than the original scheme. The Deyo original Charlson to ICD-9-CM groups
+#' score than the original scheme. The original Deyo Charlson to ICD-9-CM groups
 #' does include distinct categories for these things.
 #' @docType data
 #' @keywords datasets
@@ -198,7 +200,7 @@ NULL
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #'
 #' @name icd9_map_quan_deyo
-#' @aliases icd10_map_quan_deyo
+#' @aliases icd10_map_quan_deyo icd9_map_charlson icd10_map_charlson
 NULL
 
 #' Quan adaptation of Elixhauser comorbidities
