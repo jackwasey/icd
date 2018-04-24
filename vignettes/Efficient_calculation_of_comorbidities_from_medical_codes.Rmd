@@ -33,6 +33,7 @@ output: rticles::jss_article
 bibliography:
   - icd
   - gplv3
+  - other
 vignette: >
   %\VignetteIndexEntry{Efficient calculation of comorbidities from medical codes}
   \usepackage[utf8]{inputenc}
@@ -54,6 +55,11 @@ suppressPackageStartupMessages({
   requireNamespace("knitr")
   library(icd)
 })
+# Syntax highlighting: "tango", "pygments", "kate","zenburn", "textmate"
+fig.width = 6
+knitr::opts_chunk$set(fig.width = fig.width, 
+                      fig.height = fig.width / ((1 + sqrt(5)) / 2),
+                      highlight = TRUE)
 ```
 
 # Introduction
@@ -62,7 +68,7 @@ ICD diagnostic codes are used to define tens of thousands of disease originally 
 ICD-9 codes are primarily numeric, have fewer codes defined, and have a more variable format. Like ICD-10 codes, they have an hierarchical relationship to each other.
 
 ## What is a comorbidity?
-Given there are tens of thousands of diagnostic codes, it is impossible to use them directly in statistical models. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after a hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code 'E11.2' meaning 'Type 2 diabetes mellitus with renal complications', and 'I63.0' meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes and renal.
+Given there are tens of thousands of diagnostic codes, it is impossible to use them directly in statistical models. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after a hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications', and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes and renal.
 
 ## Uses of comorbidities
 Almost every report of a clinical investigation in medicine includes a table showing the characteristics of the groups within a study population. One purpose of this table is to show any differences between the groups under investigation. Things like age and weight can be compared numerically, whereas the tens of thousands of distinct diagnostic codes may only be compared by grouping into comorbidities. It is of central importance to retrospective studies that confounding is minimized by understanding differences in comorbidities between groups, then by risk adjustment. In randomized studies, this is achieved by recruiting enough patients and randomly assigning them to treatment: comorbidities of interest are still needed to demonstrate that recruitment was free from bias and that the sample size large enough.
@@ -93,19 +99,14 @@ In addition, it became useful during development to consider the following:
 - use of arbitrary comorbidity maps
 - open source licence, GPL-3 [@gplv3]
 
-## Invalid codes
-It is important to correctly capture relevant ICD codes and assign them to comorbidities for each patient, yet there are numerous ways which invalid data can appear which could result in false positive or false negative comorbidities.
-
 ## Computational problems
-There are two areas of computational interest:
+There are two areas of computational interest which are related. The first _seems_ to entail string matching, which is slow; and the second demands speed.
 
 ### Inexact comorbidity definitions
-The comorbidity definitions in published literature do not precisely specify each individual code. This is partly a function of the various annual and international revisions of ICD codes, and also the need for brevity in publications, so ranges of codes are specified. For example, in the Valvular Heart Disease comorbidity in the ICD-9 Elixhauser scheme, we see it contains the range 394.0 to 397.1 . In the ICD-10 version of that map, there are many top-level codes, such as I34, I35 and I36, which themselves are never or rarely used for diagnostic coding. Therefore, there are few or no exact matches between candidate ICD codes and the codes or ranges in the comorbidities, so some kind of string matching must be done, or a determination of whether a code falls in a specified range.
+The comorbidity definitions in published literature do not precisely specify each individual code. This is partly a function of the various annual and international revisions of ICD codes, and also the need for brevity in publications, so ranges of codes are specified. For example, in the Valvular Heart Disease comorbidity in the ICD-9 Elixhauser scheme, we see it contains the range _394.0_ to _397.1_ . In the ICD-10 version of that map, there are many top-level codes, such as _I34_, _I35_ and _I36_, which themselves are never or rarely used for diagnostic coding. Therefore, there are few or no exact matches between candidate ICD codes and the codes or ranges in the comorbidities, so some kind of string matching must be done, or a determination of whether a code falls in a specified range.
 
 ### Big data
 Bulk healthcare data even for one hospital often has hundreds of thousands or millions of encounters of different types. National databases and multi-hospital patient registries often have many more. Initial work using pure \proglang{R} code, with some optimization, resulted in calculations taking minutes for a few tens of thousands of patients. Although the problem is parallelizable, performance analysis on early versions using string matching showed that there was a lot of pressure on the CPU caches, so massive parallelization -- when even an option -- would have diminishing returns with scaling. This is demonstrated in the benchmarks in the #Results section.
-
-Naïve searches for codes in comorbidity maps assumes standardized formatting, which does not exist, even within the specifications from the WHO or national versions. Rather, there are acceptable formatting variations. Importantly for reproducible research, the analysis should be efficient with big data sets, and no efficient solution has been available to R users until now.
 
 ## Medical codes
 Medical coding has a complicated history beginning with epidemiology, and snowballing to include medical billing and research. There are several major coding schemes, including the WHO ICD family, various national modifacations and extensions of the WHO ICD codes, the extensive USA ICD-CM (clinical modification), SNOMED-CT, CPT, and more. There are codes for diagnoses, procedures, medical equipment, and causes and circumstances of disease or injury. Codes sometimes include details more important to medical billing than clinical care or research, for example:
@@ -195,7 +196,7 @@ The problem of determining which patients have which disease classes can be expr
 Executing this in big modern healthcare data sets is a computational challenge which \pkg{icd} solves efficiently, as can be seen in the benchmarks in the #Results section. For ICD-based comorbidity maps, the problems are as follows:
 
 - there are multiple notations of ICD codes, ICD-9-CM codes are particularly variable
-- there is an hierarchical relationship between codes, e.g., I110 is a child code of I11, the parent code, so partial matching must be done at some point
+- there is an hierarchical relationship between codes, e.g., _I110_ is a child code of _I11_, the parent code, so partial matching must be done at some point
 - some codes are only parents in the hierarchy and not considered diagnostic codes in their own right
 - raw healthcare data is often not normalized, thus has the ICD codes spread across many columns in a database table
 - codes entered by medical coders may not be constrained to a definitive list, so may contain invalid codes
@@ -211,11 +212,13 @@ On the last point, big data solutions cannot often be solved by increasing hardw
 
 The main feature of this software is the algorithm for assigning the diagnostic codes of a patient into classes, defined by groups of codes. The core of this is a matrix multiplication. Other comorbidity calculation tools in R and other languages search by exact match or regular expression for each patient-visit code within each comorbidity. String matching requires more memory and CPU cycles than integer or boolean operations, and is much less CPU cache friendly making it resistant to parallelization.
 
-There are three steps to the solution implemented by \pkg{icd}:
+There are several steps to the solution implemented by \pkg{icd}:
 
-1. reduce the problem to a matrix multiplication
-2. perform the matrix multiplication
-3. express the results in user-friendly manner
+1. pre-calculate possibel ICD-9 codes in ICD-9 maps
+2. reduce the problem to a matrix multiplication
+  * ICD-10 codes are partially matched
+3. perform the matrix multiplication
+4. express the results in user-friendly manner
 
 ### Problem reduction
 
@@ -368,10 +371,9 @@ The \pkg{Eigen} linear algebra software has highly optimized multihtreaded code 
 
 # Results {#Results}
 
-There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk}, and \pkg{comorbidity}. The following is a performance comparison using randomly generated patient data of different sizes, each patient being assigned twenty random codes which may or not have been in the AHRQ comorbidity map.
+There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk}[@medicalriskpkg], and \pkg{comorbidity}[@comorbiditypkg]. The following is a performance comparison using randomly generated patient data of different sizes, each patient being assigned twenty random codes which may or not have been in the AHRQ comorbidity map.
 
-These results show that \pkg{icd} is dramatically faster than the alternatives. Figure 1 shows time to compute comorbidites for increasing numbers of rows of data. Lines are fitted where the log-log relationship becomes linear from 10,000 rows of data, and these are used to extrapolate to estimates of the much larger computations seen in Figure 3. Figure 2 shows the relative speed up \pkg{icd} offers in comparison to the alternatives.
-
+These results show that \pkg{icd} is dramatically faster than the alternatives. Figure \ref{fig:versus} shows time to compute comorbidites for increasing numbers of rows of data. Lines are fitted where the log-log relationship becomes linear from 10,000 rows of data, and these are used to extrapolate to estimates of the much larger computations seen in \ref{fig:bigdata}. \ref{fig:speedup} shows the relative speed up \pkg{icd} offers in comparison to the alternatives.
 
 ```{r bench, echo = FALSE}
 fac = 1e-3
@@ -408,7 +410,8 @@ colours <- c(comorbidity = 'darkred', icd = 'black', medicalrisk = 'darkblue')
 # https://stackoverflow.com/questions/40938561/plot-new-has-not-been-called-yet-error-in-rmarkdown-rstudio-1-0-44#41947860
 resratio <- data.frame(datarows = res$datarows, comorbidity = res$comorbidity / res$icd, medicalrisk = res$medicalrisk / res$icd)
 ```
-```{r echo=F, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, R 3.4.4 using Linux, kernel 4.15 ."}
+
+```{r versus, echo=F, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, R 3.4.4 using Linux, kernel 4.15 . The 'comorbidity' package was run with and without parallel option, and the best result was chosen."}
 {
   plot(NA, NA, log = "xy", 
        type = "l", col = 'darkred', 
@@ -429,7 +432,7 @@ resratio <- data.frame(datarows = res$datarows, comorbidity = res$comorbidity / 
   legend(1, 1000, legend = names(res[-1]), fill = colours[names(res[-1])])
 }
 ```
-```{r, echo=FALSE, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in Figure 1."}
+```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in \ref{fig:versus}."}
 {
   plot(NA, NA, log = "x", 
        type = "l", col = 'darkred', 
@@ -445,7 +448,7 @@ resratio <- data.frame(datarows = res$datarows, comorbidity = res$comorbidity / 
   legend(1, 170, legend = names(resratio[-1]), fill = colours[names(resratio[-1])])
 }
 ```
-```{r echo=FALSE, fig.cap="Predicted duration of computation for one hundred-million patient-visits, with twenty patients per patient"}
+```{r bigdata, echo=FALSE, fig.cap="Predicted duration of computation for one hundred-million patient-visits, with twenty patients per patient"}
 {
   barplot(preds,
           col = colours[c("icd", "comorbidity", "medicalrisk")],
