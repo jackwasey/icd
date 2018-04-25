@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-utils::globalVariables(c("icd9_majors", "icd9_chapters",
-                         "icd9_sub_chapters", "icd10cm2016"))
+utils::globalVariables(c("icd9_chapters", "icd9_sub_chapters", "icd10cm2016"))
 
 #' Explain ICD-9 and ICD-10 codes in English
 #'
@@ -77,9 +76,8 @@ explain.list <- function(x, ...) {
 
 #' @describeIn explain explain character vector of ICD-9 codes.
 #' @export
-explain.icd9 <- function(...) {
+explain.icd9 <- function(...)
   explain.icd9cm(...)
-}
 
 #' @describeIn explain explain character vector of ICD-9-CM codes
 #' @export
@@ -107,7 +105,7 @@ explain.icd9cm <- function(x, short_code = guess_short(x),
   }
   mj <- unique(get_major.icd9(x, short_code = TRUE))
 
-  mjexplain <- names(icd9_majors)[icd9_majors %in% mj[mj %in% x]]
+  mjexplain <- names(icd::icd9_majors)[icd::icd9_majors %in% mj[mj %in% x]]
   # don't double count when major is also billable
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
@@ -173,8 +171,8 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
 
   # could consider faster factor generation
   out <- data.frame(
-    three_digit = factor(rep(NA, lenm), levels = c(icd9_majors, NA)),
-    major = factor(rep(NA, lenm), levels = c(names(icd9_majors), NA)),
+    three_digit = factor(rep(NA, lenm), levels = c(icd::icd9_majors, NA)),
+    major = factor(rep(NA, lenm), levels = c(names(icd::icd9_majors), NA)),
     sub_chapter = factor(rep(NA, lenm), levels = c(names(icd9_sub_chapters), NA)),
     chapter = factor(rep(NA, lenm), levels = c(names(icd9_chapters), NA))
   )
@@ -207,9 +205,9 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
       }
     }
   }
-  whch <- match(majors, icd9_majors, nomatch = NA)
-  out$major[] <- names(icd9_majors)[whch]
-  out$three_digit[] <- unlist(icd9_majors)[whch]
+  whch <- match(majors, icd::icd9_majors, nomatch = NA)
+  out$major[] <- names(icd::icd9_majors)[whch]
+  out$three_digit[] <- unlist(icd::icd9_majors)[whch]
   # out is based on unique majors of the input codes. Now merge with original inputs to give output
   out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
                x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
