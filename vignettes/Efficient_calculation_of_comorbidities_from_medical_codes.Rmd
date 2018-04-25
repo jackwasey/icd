@@ -489,6 +489,8 @@ resratio <- data.frame(datarows = res$datarows,
 
 ```
 
+# Implementation Details
+
 ## Other Functionality
 
 ### Validation
@@ -519,17 +521,15 @@ explain(
 children(c("B50", "W51"))
 ```
 
-## Implementation details
-
-### Software libraries
+## Software libraries
 
 This package is built on the strong foundations of \proglang{R} [@R_2018], \pkg{Rcpp} [@Eddelbuettel_RcppSeamlessIntegration_2011], \pkg{RcppEigen} [@Eddelbeuttel_FastElegantNumerical_2013], and \pkg{Eigen} [@Guennebaud_Eigen3_2017], the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplicaation with a dense matrix, a multithreaded solution. Once this was impemented, the code bottlenecks moved to the data preparation before the matrix multiplication, which itself was optimized by simple R techniques such as vectorization.
 
-### Derivation of the comorbidity maps
+## Derivation of the comorbidity maps
 
 It is important to have a reproducible audit trail for foundational work, so \pkg{icd} contains code which parses \proglang{SAS} source code in order to derive the original intent of the author in how the comorbidity maps were implemented. The AHRQ and \citeauthor{quan_updating_2011} provide such \proglang{SAS} source code, whereas other maps are only available in the form of tabulated data in journal articles.
 
-#### Parsing orignal SAS code
+### Parsing orignal SAS code
 
 For example, \citeauthor{quan_updating_2011} offer the following code for pulmonary disease in the ICD-9 Charlson map. The lines split for clarity.
 
@@ -566,7 +566,7 @@ alice <- data.frame(id = "alice", icd9 = "49699")
 comorbid_charlson(alice, return_df = TRUE)[["Pulmonary"]]
 ```
 
-#### Parsing range definitions
+### Parsing range definitions
 
 For some mappings, no source code was available, but the comorbidities are described in journals using ranges. E.g., in the ICD-9 Elixhauser mapping, we find _243_ -- _244.2_ in the thyroid disease definition. This is a subset of the entire range of thyroid disesases in ICD-9: _244.3_, _244.8_ and _244.9_ also exist. \pkg{icd} takes great care with false positives here by carefully excluding parent codes which might have been captured by a pattern matching approach. In this case, 244 should **not** be considered a match because it includes codes where which were clearly excluded. A number of ICD code range operators are defined to facilitate this:
 ```{r elixrange}
@@ -574,7 +574,7 @@ head("243" %i9da% "244.2")
 # 244 is too broad to fit the original Elixhauser description
 "244" %in% ("243" %i9da% "244.2")
 ```
-### Extensions
+## Extensions
 
 \proglang{R}'s S3 class system is used for extensibility, so it is straightforward to include additional ICD schemes, e.g., for different national systems. Likewise, it is also easy to add new comorbidity maps, or use user-defined ones. Several authors have contributed code which extends \pkg{icd}, including:
 
