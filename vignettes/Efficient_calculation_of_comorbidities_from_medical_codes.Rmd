@@ -119,17 +119,22 @@ Since the WHO ICD is a subset of ICD Clinical Modification, \pkg{icd} is driven 
 ### Breakdown of an ICD-10 code
 
 This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and difference betwen WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM:
+
 ```{r exampleicdcodewho}
 explain("S62")
 explain("S62.6")
 ```
+
 These three are refinements offered only by ICD-10-CM:
+
 ```{r exampleicdcodecm}
 explain("S62.60")
 explain("S62.607")
 explain("S62.607S")
 ```
+
 These codes are all contained in the following sub-chapter, and chapter:
+
 ```{r examplecodechap}
 icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
 icd10_chapters$`Injury, poisoning and certain other consequences of external causes`
@@ -197,13 +202,17 @@ knitr::kable(termdf, padding = 20, caption = "Comorbidity terminology")
 This package contains mappings to convert ICD codes to comorbidities, using methods from several sources, based on the AHRQ, Charlson or Elixhauser systems. Updated versions of these lists from @AgencyforHealthcareResearchandQuality_ElixhauserComorbiditySoftware_2018 and @quan_updating_2011 are included, along with the original @elixhauser_comorbidity_1998 mapping . Since some data is provided in SAS source code format, this package has internal functions to parse this SAS source code and generate R data structures. Some lists are transcribed directly from the published articles, but interpretation of SAS code used for the original publications is preferable.
 
 For example, here are the names of the comorbidities in the Charlson map:
+
 ```{r charlsonnames}
 names(icd10_map_charlson)
 ```
+
 and the ICD-10 codes from the few comorbidities:
+
 ```{r firstfewcharlson}
 icd10_map_charlson[["CHF"]]
 ```
+
 Note that these codes are of `icd10` and `character` class, and that they carry the attribute `icd_short_diag` which is set to `TRUE`.
 
 Since a comorbidity mapping is simply a set of sets of codes, the same computational framework can be used to solve other problems. For example, code was contributed to classify ICD codes according to AHRQ's Clinical Classification Software (CCS) [@AgencyforHealthcareResearchandQuality_ClinicalClassificationsSoftware_2012] which was implemented as a comorbidity map.
@@ -330,6 +339,7 @@ Take four patient-visits with the following ICD-10 codes in wide format:
 | Encounter 4   | I110  | H40001 | I10   |
 
 A simple comorbidity map is as follows:
+
 ```{r simplemap}
 simplemap <- list(
   "Rheumatic Heart Disease" = "I098",
@@ -496,6 +506,7 @@ resratio <- data.frame(datarows = res$datarows,
 ### Validation
 
 \pkg{icd} allows checking whether codes are valid, and, in the USA, whether they are 'billable', i.e., leaf nodes, or merely intermediate members of the hierarchy. Research data may well contain relevant non-billable codes, and this is accounted for by the comorbidity calculations.
+
 ```{r validity}
 is_valid(c("441", "441.0", "441.01", "XXX"))
 is_billable(c("441", "441.0", "441.01", "XXX"))
@@ -541,18 +552,24 @@ For example, \citeauthor{quan_updating_2011} offer the following code for pulmon
 ```
 
 Note that _497_ -- _499_ are undefined in ICD-9. What should be done if _497_ appears in a data set? Here an argument is made that this is completely invalid. Firstly, see the sub-chapter definitions:
+
 ```{r pulmonaryproblem}
 icd9_sub_chapters$`Chronic Obstructive Pulmonary Disease And Allied Conditions`
 icd9_sub_chapters$`Pneumoconioses And Other Lung Diseases Due To External Agents`
 ```
+
 497 is not a valid code itself. It could be a typo for any of the other combinations, of which three are valid:
+
 ```{r}
 explain(c("947", "749", "794", "479"), warn = FALSE)
 ```
+
 Given the wide range of disease processes, and no guarantee at all that the coder made a mistake only in the last digit, \pkg{icd} discards the code to avoid giving a false positive comorbidity flag.
+
 ```{r}
 "497" %in% icd9_map_charlson
 ```
+
 The comorbidity maps are therefore constructed by generously including all children (valid or invalid) of the explicitly defined three-digit codes, but they do not extrapolate to other three-digit codes. Suppose additional digits were defined by a country's extension of ICD-9, but do not appear in the WHO or ICD-9-CM definitions. \pkg{icd} already includes all possible _structurally_ valid ICD-9 child codes in the map. This can be seen here, where two ficticious decimal places are seen in the map, but not three:
 
 ```{r}
@@ -561,6 +578,7 @@ The comorbidity maps are therefore constructed by generously including all child
 ```
 
 More generosity is offered when calculating the comorbidities, so even if invalid codes appear, the intent of this code to fall within the pulmonary comorbidity hierarchy is clear enough:
+
 ```{r moregenerous}
 alice <- data.frame(id = "alice", icd9 = "49699")
 comorbid_charlson(alice, return_df = TRUE)[["Pulmonary"]]
@@ -569,6 +587,7 @@ comorbid_charlson(alice, return_df = TRUE)[["Pulmonary"]]
 ### Parsing range definitions
 
 For some mappings, no source code was available, but the comorbidities are described in journals using ranges. E.g., in the ICD-9 Elixhauser mapping, we find _243_ -- _244.2_ in the thyroid disease definition. This is a subset of the entire range of thyroid disesases in ICD-9: _244.3_, _244.8_ and _244.9_ also exist. \pkg{icd} takes great care with false positives here by carefully excluding parent codes which might have been captured by a pattern matching approach. In this case, 244 should **not** be considered a match because it includes codes where which were clearly excluded. A number of ICD code range operators are defined to facilitate this:
+
 ```{r elixrange}
 head("243" %i9da% "244.2")
 # 244 is too broad to fit the original Elixhauser description
