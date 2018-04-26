@@ -4,7 +4,6 @@
 #include "local.h"                     // for ICD_OPENMP
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
 #include <Rcpp.h>
-#ifdef ICD_EIGEN // rest of file
 #include "comorbidCommon.h"
 #include "comorbidSetup.h"
 #include <algorithm>                   // for binary_search, copy
@@ -148,6 +147,10 @@ LogicalMatrix icd9Comorbid_alt_MatMul(const Rcpp::DataFrame& icd9df, const Rcpp:
                                       const std::string visitId, const std::string icd9Field,
                                       const int threads = 8, const int chunk_size = 256,
                                       const int omp_chunk_size = 1) {
+#ifndef ICD_EIGEN
+  Rcpp::stop("RcppEigen headers not available");
+  // return LogicalMatrix::create();
+#else
   valgrindCallgrindStart(true);
 #ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "icd9Comorbid_alt_MatMul starting" << std::endl;
@@ -284,7 +287,6 @@ LogicalMatrix icd9Comorbid_alt_MatMul(const Rcpp::DataFrame& icd9df, const Rcpp:
     //
 
     valgrindCallgrindStop();
+#endif // RcppEigen headers
     return mat_out_bool;
 }
-
-#endif // ICD_EIGEN
