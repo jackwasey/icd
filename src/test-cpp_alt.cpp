@@ -4,6 +4,8 @@
 #include <Rcpp.h>
 #include "manip_alt.h"
 
+// nocov start
+
 #ifdef ICD_CATCH
 #include <testthat.h>
 
@@ -20,3 +22,5 @@ context("test alternate zero-adding code") {
 
 // endif have testthat ICD_CATCH
 #endif
+
+// nocov end

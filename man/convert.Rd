@@ -18,6 +18,6 @@ For conversions of ICD-9 or ICD-10 codes between the \emph{short} and
 \pkg{icd} does not covert ICD-9 to ICD-10 codes yet.
 }
 \seealso{
-Other ICD code conversion: \code{\link{icd_long_data}},
+Other ICD code conversion: \code{\link{as.icd_long_data}},
   \code{\link{long_to_wide}}, \code{\link{wide_to_long}}
 }

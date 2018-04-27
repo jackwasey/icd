@@ -9,7 +9,8 @@
 \alias{as.decimal_diag}
 \alias{as.icd_short_diag}
 \alias{as.icd_decimal_diag}
-\title{Get or set whether ICD codes have have an attribute indicating 'short' or 'decimal' format}
+\title{Get or set whether ICD codes have have an attribute indicating 'short' or
+'decimal' format}
 \usage{
 is.short_diag(x, must_work = FALSE)
 
@@ -34,7 +35,8 @@ as.icd_decimal_diag(x, value = TRUE)
 return \code{NULL} if the attribute is not present. If \code{TRUE}, then
 either \code{TRUE} or \code{FALSE} is returned.}
 
-\item{value}{\code{TRUE} or \code{FALSE}, default is \code{TRUE} which sets the attribute to whatever is indicated in the function name. See examples.}
+\item{value}{\code{TRUE} or \code{FALSE}, default is \code{TRUE} which sets
+the attribute to whatever is indicated in the function name. See examples.}
 }
 \description{
 \code{is.short_diag} tests for presence of an attribute, not whether the code

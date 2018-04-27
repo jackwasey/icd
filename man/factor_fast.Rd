@@ -2,11 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{factor_fast}
 \alias{factor_fast}
-\title{fast factor generation test}
+\title{fast factor generation WIP}
 \usage{
 factor_fast(x)
 }
 \description{
-fast factor generation test
+fast factor generation WIP
 }
 \keyword{internal}
+\keyword{manip}

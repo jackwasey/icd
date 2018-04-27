@@ -59,7 +59,7 @@ icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 comorbid_ccs(x, ...)
 
 icd9_comorbid_ccs(x, ..., single = TRUE, lvl = NULL,
-  map = icd9_map_single_ccs, short_map = TRUE)
+  map = icd::icd9_map_single_ccs, short_map = TRUE)
 
 icd10_comorbid_ccs(x, ..., single = TRUE, lvl = NULL)
 

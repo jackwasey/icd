@@ -18,7 +18,6 @@
 #ifndef MANIP_ALT_H_
 #define MANIP_ALT_H_
 
-// [[Rcpp::interfaces(r, cpp)]]
 #include <Rcpp.h>
 #include "Rcpp/String.h"  // for String
 #include "icd_types.h"    // for CV
