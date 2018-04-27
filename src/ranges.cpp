@@ -16,8 +16,10 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
+#include "local.h"                          // for icd_set
 #include "ranges.h"
+#include "icd_types.h"                      // for CV, VecStr, Str
+#include <Rcpp.h>
 #include <algorithm>                        // for set_intersection
 #include <iterator>                         // for insert_iterator, inserter
 #include <set>                              // for _Rb_tree_const_iterator, set
@@ -25,72 +27,7 @@
 #include <vector>                           // for vector, vector<>::iterator
 #include "appendMinor.h"                    // for icd9MajMinToShort, icd9Ma...
 #include "convert.h"                        // for icd9DecimalToShort, icd9S...
-#include "icd_types.h"                      // for CV, VecStr, Str
 #include "is.h"                             // for icd9IsASingleE
-#include "local.h"                          // for icd_set
-#include "range-const.h"                    // for v_empty_std, v0, v0_std, v1
-
-// someday, can just directly memcopy the codes from the full set
-// const char  icd9ExpandMinorC(const char * mnr, bool isE) {
-//   if (!isE) {
-//     switch (strlen(mnr)) {
-//     case 0:
-//       return vv_char;
-//     case 1:
-// // vv_char, skip indices 0-11
-// return vv_char[12 +]
-// }
-
-// [[Rcpp::export]]
-VecStr icd9ExpandMinorStd(const Str& mnr, bool isE) {
-  if (!isE) {
-    switch (mnr.size()) {
-    case 0:
-      return vv_std;
-    case 1:
-      switch (mnr[0]) { // use .at() for range check
-      case '0':
-        return v0_std;
-      case '1':
-        return v1_std;
-      case '2':
-        return v2_std;
-      case '3':
-        return v3_std;
-      case '4':
-        return v4_std;
-      case '5':
-        return v5_std;
-      case '6':
-        return v6_std;
-      case '7':
-        return v7_std;
-      case '8':
-        return v8_std;
-      case '9':
-        return v9_std;
-      default:
-        Rcpp::stop("unrecognized minor character");
-      return v_empty_std;
-      }
-    case 2:
-      return VecStr(1, mnr);
-    default:
-      Rcpp::stop("invalid minor in icd9ExpandMinorStd");
-    return v_empty_std;
-    }
-  } else {
-    // is E code, so minor must be just one character
-    switch (mnr.size()) {
-    case 0:
-      return vbase_e_std;
-    case 1:
-      return VecStr(1, mnr);
-    default:
-      Rcpp::stop("invalid E code minor in icd9ExpandMinorStd");
-    }
-  }
-}
 
 // [[Rcpp::export(icd9_expand_minor_wrap)]]
 CV icd9ExpandMinor(const Str& mnr, bool isE) {

@@ -228,7 +228,7 @@ comorbid_common <- function(x,
                             visit_name = NULL,
                             icd_name,
                             return_df = FALSE,
-                            comorbid_fun = icd9Comorbid_alt_MatMul,
+                            comorbid_fun = comorbidMatMul,
                             ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")

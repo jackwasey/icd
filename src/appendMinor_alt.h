@@ -15,16 +15,12 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef CONVERT_ALT_H_
-#define CONVERT_ALT_H_
+#ifndef APPENDMINOR_ALT_H_
+#define APPENDMINOR_ALT_H_
 
-#include <string>       // for string
-#include "icd_types.h"  // for CV, VecStr
+#include "icd_types.h"
+#include <Rcpp.h>
+VecStr icd9MajMinToShort_alt_Std(const VecStr& mjr, const VecStr& mnr);
+VecStr icd9MajMinToShortSingle_alt_Std(const Str& mjr, const VecStr& mnr);
 
-CV icd9MajMinToCode_alt_Old(CV mjr, CV mnr, bool isShort);
-void icd9ShortToParts_alt_CppStd(VecStr icd9Short,
-                                 std::string mnrEmpty,
-                                 VecStr &mjr,
-                                 VecStr &mnr);
-
-#endif /* CONVERT_ALT_H_ */
+#endif /* APPENDMINOR_ALT_H_ */

@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <Rinternals.h>
 extern "C" {
-  #include "cutil.h"                            // for getRListOrDfElement
+#include "cutil.h"                            // for getRListOrDfElement
 }
 
 using Rcpp::LogicalVector;

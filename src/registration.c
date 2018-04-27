@@ -8,6 +8,7 @@
 */
 
 /* .Call calls */
+extern SEXP _icd_comorbidMatMul(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_debug_parallel();
 extern SEXP _icd_debug_parallel_env();
 extern SEXP _icd_factor_fast(SEXP);
@@ -26,38 +27,24 @@ extern SEXP _icd_icd9_is_e_cpp(SEXP);
 extern SEXP _icd_icd9_is_n_cpp(SEXP);
 extern SEXP _icd_icd9_is_v_cpp(SEXP);
 extern SEXP _icd_icd9AddLeadingZeroes(SEXP, SEXP);
-extern SEXP _icd_icd9AddLeadingZeroes_alt_Direct(SEXP, SEXP);
-extern SEXP _icd_icd9AddLeadingZeroes_alt_ShortSingle(SEXP);
 extern SEXP _icd_icd9AddLeadingZeroesMajor(SEXP);
 extern SEXP _icd_icd9AddLeadingZeroesMajorSingle(SEXP);
 extern SEXP _icd_icd9AddLeadingZeroesMajorSingleStd(SEXP);
 extern SEXP _icd_icd9AppendMinors(SEXP, SEXP, SEXP);
-extern SEXP _icd_icd9Children_alt_ShortNoNaUnordered(SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenDecimalCpp(SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShort(SEXP, SEXP, SEXP);
-extern SEXP _icd_icd9ChildrenShort_alt_11(SEXP, SEXP);
-extern SEXP _icd_icd9ChildrenShort_alt_Std(SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShortUnordered(SEXP, SEXP, SEXP);
-extern SEXP _icd_icd9Comorbid_alt_MatMul(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _icd_icd9Comorbid_alt_Taskloop(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-extern SEXP _icd_icd9Comorbid_alt_Taskloop2(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ComorbidShortCpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToShort(SEXP);
 extern SEXP _icd_icd9ExpandMinor(SEXP, SEXP);
-extern SEXP _icd_icd9ExpandMinorStd(SEXP, SEXP);
 extern SEXP _icd_icd9GetMajor(SEXP, SEXP);
 extern SEXP _icd_icd9LongToWideCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToCode(SEXP, SEXP, SEXP);
-extern SEXP _icd_icd9MajMinToCode_alt_Old(SEXP, SEXP, SEXP);
-extern SEXP _icd_icd9MajMinToCodePrePadded(SEXP, SEXP, SEXP);
-extern SEXP _icd_icd9MajMinToCodeStd(SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToDecimal(SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToParts(SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToShort(SEXP, SEXP);
-extern SEXP _icd_icd9MajMinToShortSingleStd(SEXP, SEXP);
-extern SEXP _icd_icd9MajMinToShortStd(SEXP, SEXP);
 extern SEXP _icd_icd9OrderCpp(SEXP);
 extern SEXP _icd_icd9PartsToDecimal(SEXP);
 extern SEXP _icd_icd9PartsToShort(SEXP);
@@ -68,10 +55,8 @@ extern SEXP _icd_icd9RandomShortV(SEXP);
 extern SEXP _icd_icd9ShortToDecimal(SEXP);
 extern SEXP _icd_icd9ShortToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_icd9SortCpp(SEXP);
-extern SEXP _icd_lookupComorbid_alt_ByChunkForTaskloop(SEXP, SEXP, SEXP);
 extern SEXP _icd_lookupComorbidByChunkFor(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_randomMajorCpp(SEXP);
-extern SEXP _icd_rbind_with_empty(SEXP, SEXP);
 extern SEXP _icd_RcppExport_registerCCallable();
 extern SEXP _icd_setDecimalDiag(SEXP, SEXP);
 extern SEXP _icd_setShortDiag(SEXP, SEXP);
@@ -84,6 +69,7 @@ extern SEXP _icd_valgrindCallgrindStop();
 extern SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_icd_comorbidMatMul",                        (DL_FUNC) &_icd_comorbidMatMul,                        7},
     {"_icd_debug_parallel",                        (DL_FUNC) &_icd_debug_parallel,                        0},
     {"_icd_debug_parallel_env",                    (DL_FUNC) &_icd_debug_parallel_env,                    0},
     {"_icd_factor_fast",                           (DL_FUNC) &_icd_factor_fast,                           1},
@@ -102,38 +88,24 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9_is_n_cpp",                         (DL_FUNC) &_icd_icd9_is_n_cpp,                         1},
     {"_icd_icd9_is_v_cpp",                         (DL_FUNC) &_icd_icd9_is_v_cpp,                         1},
     {"_icd_icd9AddLeadingZeroes",                  (DL_FUNC) &_icd_icd9AddLeadingZeroes,                  2},
-    {"_icd_icd9AddLeadingZeroes_alt_Direct",       (DL_FUNC) &_icd_icd9AddLeadingZeroes_alt_Direct,       2},
-    {"_icd_icd9AddLeadingZeroes_alt_ShortSingle",  (DL_FUNC) &_icd_icd9AddLeadingZeroes_alt_ShortSingle,  1},
     {"_icd_icd9AddLeadingZeroesMajor",             (DL_FUNC) &_icd_icd9AddLeadingZeroesMajor,             1},
     {"_icd_icd9AddLeadingZeroesMajorSingle",       (DL_FUNC) &_icd_icd9AddLeadingZeroesMajorSingle,       1},
     {"_icd_icd9AddLeadingZeroesMajorSingleStd",    (DL_FUNC) &_icd_icd9AddLeadingZeroesMajorSingleStd,    1},
     {"_icd_icd9AppendMinors",                      (DL_FUNC) &_icd_icd9AppendMinors,                      3},
-    {"_icd_icd9Children_alt_ShortNoNaUnordered",   (DL_FUNC) &_icd_icd9Children_alt_ShortNoNaUnordered,   2},
     {"_icd_icd9ChildrenCpp",                       (DL_FUNC) &_icd_icd9ChildrenCpp,                       4},
     {"_icd_icd9ChildrenDecimalCpp",                (DL_FUNC) &_icd_icd9ChildrenDecimalCpp,                3},
     {"_icd_icd9ChildrenShort",                     (DL_FUNC) &_icd_icd9ChildrenShort,                     3},
-    {"_icd_icd9ChildrenShort_alt_11",              (DL_FUNC) &_icd_icd9ChildrenShort_alt_11,              2},
-    {"_icd_icd9ChildrenShort_alt_Std",             (DL_FUNC) &_icd_icd9ChildrenShort_alt_Std,             2},
     {"_icd_icd9ChildrenShortUnordered",            (DL_FUNC) &_icd_icd9ChildrenShortUnordered,            3},
-    {"_icd_icd9Comorbid_alt_MatMul",               (DL_FUNC) &_icd_icd9Comorbid_alt_MatMul,               7},
-    {"_icd_icd9Comorbid_alt_Taskloop",             (DL_FUNC) &_icd_icd9Comorbid_alt_Taskloop,             7},
-    {"_icd_icd9Comorbid_alt_Taskloop2",            (DL_FUNC) &_icd_icd9Comorbid_alt_Taskloop2,            7},
     {"_icd_icd9ComorbidShortCpp",                  (DL_FUNC) &_icd_icd9ComorbidShortCpp,                  7},
     {"_icd_icd9DecimalToPartsCpp",                 (DL_FUNC) &_icd_icd9DecimalToPartsCpp,                 2},
     {"_icd_icd9DecimalToShort",                    (DL_FUNC) &_icd_icd9DecimalToShort,                    1},
     {"_icd_icd9ExpandMinor",                       (DL_FUNC) &_icd_icd9ExpandMinor,                       2},
-    {"_icd_icd9ExpandMinorStd",                    (DL_FUNC) &_icd_icd9ExpandMinorStd,                    2},
     {"_icd_icd9GetMajor",                          (DL_FUNC) &_icd_icd9GetMajor,                          2},
     {"_icd_icd9LongToWideCpp",                     (DL_FUNC) &_icd_icd9LongToWideCpp,                     4},
     {"_icd_icd9MajMinToCode",                      (DL_FUNC) &_icd_icd9MajMinToCode,                      3},
-    {"_icd_icd9MajMinToCode_alt_Old",              (DL_FUNC) &_icd_icd9MajMinToCode_alt_Old,              3},
-    {"_icd_icd9MajMinToCodePrePadded",             (DL_FUNC) &_icd_icd9MajMinToCodePrePadded,             3},
-    {"_icd_icd9MajMinToCodeStd",                   (DL_FUNC) &_icd_icd9MajMinToCodeStd,                   3},
     {"_icd_icd9MajMinToDecimal",                   (DL_FUNC) &_icd_icd9MajMinToDecimal,                   2},
     {"_icd_icd9MajMinToParts",                     (DL_FUNC) &_icd_icd9MajMinToParts,                     2},
     {"_icd_icd9MajMinToShort",                     (DL_FUNC) &_icd_icd9MajMinToShort,                     2},
-    {"_icd_icd9MajMinToShortSingleStd",            (DL_FUNC) &_icd_icd9MajMinToShortSingleStd,            2},
-    {"_icd_icd9MajMinToShortStd",                  (DL_FUNC) &_icd_icd9MajMinToShortStd,                  2},
     {"_icd_icd9OrderCpp",                          (DL_FUNC) &_icd_icd9OrderCpp,                          1},
     {"_icd_icd9PartsToDecimal",                    (DL_FUNC) &_icd_icd9PartsToDecimal,                    1},
     {"_icd_icd9PartsToShort",                      (DL_FUNC) &_icd_icd9PartsToShort,                      1},
@@ -144,10 +116,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ShortToDecimal",                    (DL_FUNC) &_icd_icd9ShortToDecimal,                    1},
     {"_icd_icd9ShortToPartsCpp",                   (DL_FUNC) &_icd_icd9ShortToPartsCpp,                   2},
     {"_icd_icd9SortCpp",                           (DL_FUNC) &_icd_icd9SortCpp,                           1},
-    {"_icd_lookupComorbid_alt_ByChunkForTaskloop", (DL_FUNC) &_icd_lookupComorbid_alt_ByChunkForTaskloop, 3},
     {"_icd_lookupComorbidByChunkFor",              (DL_FUNC) &_icd_lookupComorbidByChunkFor,              5},
     {"_icd_randomMajorCpp",                        (DL_FUNC) &_icd_randomMajorCpp,                        1},
-    {"_icd_rbind_with_empty",                      (DL_FUNC) &_icd_rbind_with_empty,                      2},
     {"_icd_RcppExport_registerCCallable",          (DL_FUNC) &_icd_RcppExport_registerCCallable,          0},
     {"_icd_setDecimalDiag",                        (DL_FUNC) &_icd_setDecimalDiag,                        2},
     {"_icd_setShortDiag",                          (DL_FUNC) &_icd_setShortDiag,                          2},

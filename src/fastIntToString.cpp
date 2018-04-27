@@ -1,15 +1,10 @@
 #include <Rcpp.h>
-#include <Rcpp/r/headers.h>             // for Rf_install
 #include <stdio.h>                      // for sprintf, size_t
 #include <string>                       // for string, basic_string
 #include <vector>                       // for vector, vector<>::size_type
-#include "Rcpp/vector/Vector.h"         // for Vector<>::Proxy
-#include "Rcpp/vector/instantiation.h"  // for CharacterVector, IntegerVector
 
 using namespace Rcpp;
-
 // [[Rcpp::interfaces(r, cpp)]]
-
 //' @name fastIntToString
 //' @title Fast convert integer vector to character vector
 //' @description Fast conversion from integer vector to character vector using C++

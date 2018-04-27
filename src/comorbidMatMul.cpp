@@ -116,7 +116,7 @@ void buildVisitCodesVecSparse(const SEXP& icd9df,
   visitIds.resize(vcdb_max_idx + 1); // we over-sized (not just over-reserved) so now we trim.
 }
 
-//' @title prototype to do entire comorbidity calculation as a matrix multiplication
+//' @title Comorbidity calculation as a matrix multiplication
 //' @description
 //' The problem is that the matrices could be huge: the patient-icd matrix would
 //' be millions of patient rows, and ~15000 columns for all AHRQ comorbidities.
@@ -143,17 +143,17 @@ void buildVisitCodesVecSparse(const SEXP& icd9df,
 //' sapply(icd::icd9_map_ahrq, length) %>% sum
 //' @keywords internal array algebra
 // [[Rcpp::export]]
-LogicalMatrix icd9Comorbid_alt_MatMul(const Rcpp::DataFrame& icd9df, const Rcpp::List& icd9Mapping,
-                                      const std::string visitId, const std::string icd9Field,
-                                      const int threads = 8, const int chunk_size = 256,
-                                      const int omp_chunk_size = 1) {
+LogicalMatrix comorbidMatMul(const Rcpp::DataFrame& icd9df, const Rcpp::List& icd9Mapping,
+                             const std::string visitId, const std::string icd9Field,
+                             const int threads = 8, const int chunk_size = 256,
+                             const int omp_chunk_size = 1) {
 #ifndef ICD_EIGEN
   Rcpp::stop("RcppEigen headers not available");
   // return LogicalMatrix::create();
 #else
   valgrindCallgrindStart(true);
 #ifdef ICD_DEBUG_SETUP
-  Rcpp::Rcout << "icd9Comorbid_alt_MatMul starting" << std::endl;
+  Rcpp::Rcout << "comorbidMatMul starting" << std::endl;
 #endif
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
   // find eventual size of map matrix:
@@ -227,66 +227,66 @@ LogicalMatrix icd9Comorbid_alt_MatMul(const Rcpp::DataFrame& icd9df, const Rcpp:
 
 #ifdef ICD_DEBUG_SETUP_SLOW
   // just for debugging, convert to dense to show contents:
-    {
-      Rcpp::Rcout << "converting visit_codes_sparse to dense for debugging only (slow!):" << std::endl;
-      Eigen::MatrixXi dense = Eigen::MatrixXi(visit_codes_sparse);
-      Rcpp::Rcout << "visit_codes_sparse:" << std::endl;
-      if (visit_codes_sparse.rows() >= 4 && visit_codes_sparse.cols() >= 4)
-        Rcpp::Rcout << dense.block<4, 4>(0, 0) << std::endl;
-      else
-        Rcpp::Rcout << dense << std::endl;
-    }
+{
+  Rcpp::Rcout << "converting visit_codes_sparse to dense for debugging only (slow!):" << std::endl;
+  Eigen::MatrixXi dense = Eigen::MatrixXi(visit_codes_sparse);
+  Rcpp::Rcout << "visit_codes_sparse:" << std::endl;
+  if (visit_codes_sparse.rows() >= 4 && visit_codes_sparse.cols() >= 4)
+    Rcpp::Rcout << dense.block<4, 4>(0, 0) << std::endl;
+  else
+    Rcpp::Rcout << dense << std::endl;
+}
 #endif
 #endif
 
-    if (visit_codes_sparse.cols() != map.rows())
-      Rcpp::stop("matrix multiplication won't work");
+if (visit_codes_sparse.cols() != map.rows())
+  Rcpp::stop("matrix multiplication won't work");
 
-    DenseMap result = visit_codes_sparse * map; // col major result
+DenseMap result = visit_codes_sparse * map; // col major result
 
 #ifdef ICD_DEBUG_SETUP
-    Rcpp::Rcout << " done matrix multiplication. Result has " <<
-      "rows: " << result.rows() <<
-        " and cols: " << result.cols() << std::endl;
-    Rcpp::Rcout << "matrix result begins: " << std::endl;
-    if (result.rows() >= 4 && result.cols() >= 4)
-      Rcpp::Rcout << result.block<4, 4>(0, 0) << std::endl;
-    else
-      Rcpp::Rcout << result << std::endl;
+Rcpp::Rcout << " done matrix multiplication. Result has " <<
+  "rows: " << result.rows() <<
+    " and cols: " << result.cols() << std::endl;
+Rcpp::Rcout << "matrix result begins: " << std::endl;
+if (result.rows() >= 4 && result.cols() >= 4)
+  Rcpp::Rcout << result.block<4, 4>(0, 0) << std::endl;
+else
+  Rcpp::Rcout << result << std::endl;
 #endif
 #ifdef ICD_DEBUG_SETUP
-    Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic> result_bool = (result.array() != 0);
-    Rcpp::Rcout << "Result boolean array has " <<
-      "rows: " << result_bool.rows() <<
-        " and cols: " << result_bool.cols() << std::endl;
-    Rcpp::Rcout << "bool result begins: " << std::endl;
-    if (result_bool.rows() >= 4 && result_bool.cols() >= 4)
-      Rcpp::Rcout << result_bool.block<4, 4>(0, 0) << std::endl;
-    else
-      Rcpp::Rcout << result_bool << std::endl;
+Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic> result_bool = (result.array() != 0);
+Rcpp::Rcout << "Result boolean array has " <<
+  "rows: " << result_bool.rows() <<
+    " and cols: " << result_bool.cols() << std::endl;
+Rcpp::Rcout << "bool result begins: " << std::endl;
+if (result_bool.rows() >= 4 && result_bool.cols() >= 4)
+  Rcpp::Rcout << result_bool.block<4, 4>(0, 0) << std::endl;
+else
+  Rcpp::Rcout << result_bool << std::endl;
 #endif
-    // Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(result); // segfaults sometimes
-    Rcpp::IntegerMatrix mat_out_int = Rcpp::wrap(result); // try to avoid the segfault
-    Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
-    List dimnames = Rcpp::List::create(out_row_names, icd9Mapping.names());
-    CharacterVector rownames = dimnames[0];
-    CharacterVector colnames = dimnames[1];
+// Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(result); // segfaults sometimes
+Rcpp::IntegerMatrix mat_out_int = Rcpp::wrap(result); // try to avoid the segfault
+Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
+List dimnames = Rcpp::List::create(out_row_names, icd9Mapping.names());
+CharacterVector rownames = dimnames[0];
+CharacterVector colnames = dimnames[1];
 #ifdef ICD_DEBUG_SETUP
-    Rcpp::Rcout << "mat_out rows = " << mat_out_bool.rows() << std::endl;
-    Rcpp::Rcout << "mat_out cols = " << mat_out_bool.cols() << std::endl;
-    Rcpp::Rcout << "Length of dimnames = " << dimnames.size() << std::endl;
-    Rcpp::Rcout << "Length of rownames = " << rownames.size() << std::endl;
-    Rcpp::Rcout << "Length of colnames = " << colnames.size() << std::endl;
+Rcpp::Rcout << "mat_out rows = " << mat_out_bool.rows() << std::endl;
+Rcpp::Rcout << "mat_out cols = " << mat_out_bool.cols() << std::endl;
+Rcpp::Rcout << "Length of dimnames = " << dimnames.size() << std::endl;
+Rcpp::Rcout << "Length of rownames = " << rownames.size() << std::endl;
+Rcpp::Rcout << "Length of colnames = " << colnames.size() << std::endl;
 #endif
-    mat_out_bool.attr("dimnames") = dimnames;
+mat_out_bool.attr("dimnames") = dimnames;
 #ifdef ICD_DEBUG_SETUP
-    Rcpp::Rcout << "dimension names set" << std::endl;
+Rcpp::Rcout << "dimension names set" << std::endl;
 #endif
-    // todo: boolean reduction to get flags instead of various integers
-    // https://eigen.tuxfamily.org/dox/group__TutorialReductionsVisitorsBroadcasting.html
-    //
+// todo: boolean reduction to get flags instead of various integers
+// https://eigen.tuxfamily.org/dox/group__TutorialReductionsVisitorsBroadcasting.html
+//
 
-    valgrindCallgrindStop();
+valgrindCallgrindStop();
 #endif // RcppEigen headers
-    return mat_out_bool;
+return mat_out_bool;
 }

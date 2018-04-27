@@ -20,7 +20,7 @@
 #include "icd_types.h"
 #include "convert.h"
 extern "C" {
-  #include <cstddef>                           // for size_t
+#include <cstddef>                           // for size_t
 }
 #include <string>                            // for string
 #include "Rcpp.h"                            // for wrap
