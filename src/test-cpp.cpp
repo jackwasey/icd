@@ -8,6 +8,10 @@
 #include "appendMinor.h"
 #include "convert.h"
 
+// nocov start
+
+// nocov because covr seems to misinterpret contents of context sections
+
 #ifdef ICD_CATCH
 #include <testthat.h>
 
@@ -192,3 +196,5 @@ context("add leading zeroes to major") {
 
 // endif have testthat ICD_CATCH
 #endif
+
+// nocov stop

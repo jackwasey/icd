@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+#nocov start
+
 #' Save given variable in package data directory
 #'
 #' File is named \code{varname.RData} with an optional suffix before
@@ -46,3 +48,5 @@ save_in_data_dir <- function(var_name, suffix = "", data_path = "data",
   message("Now reload package to enable updated/new data: ", var_name)
   invisible(get(var_name, envir = envir))
 }
+
+#nocov stop
