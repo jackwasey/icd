@@ -103,7 +103,7 @@ comorbid_ahrq(vermont_dx %>% wide_to_long, comorbid_fun = icd:::icd9ComorbidShor
 # to test Eigen sparse calcs, remove _alt line in .Rbuildignore, then these will be available.
 # Also, re-enable [[Rcpp::depends(RcppEigen)]]
 microbenchmark::microbenchmark(
-  comorbid_ahrq(vermont_dx %>% wide_to_long, comorbid_fun = icd:::icd9Comorbid_alt_MatMul),
+  comorbid_ahrq(vermont_dx %>% wide_to_long, comorbid_fun = icd:::comorbidMatMul),
   comorbid_ahrq(vermont_dx %>% wide_to_long, comorbid_fun = icd:::icd9ComorbidShortCpp),
   times = 25)
 

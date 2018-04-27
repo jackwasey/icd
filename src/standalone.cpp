@@ -48,9 +48,9 @@ int main(int argc, char *argv[]) {
     two_map["ailment"] = CharacterVector::create("003", "040");
 
     // call direct to avoid Rcpp intercepting the call?
-    Rcpp::LogicalMatrix out = icd9Comorbid_alt_MatMul(two_pts, two_map,
-                                                      "visit_id", "icd9",
-                                                      0, 0, 0, true);
+    Rcpp::LogicalMatrix out = comorbidMatMul(two_pts, two_map,
+                                             "visit_id", "icd9",
+                                             0, 0, 0, true);
 
     std::cout << "res = " << out << "\n";
 
