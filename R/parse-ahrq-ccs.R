@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# nocov start
+
 #' Download ahrq-ccs-icd9 definition
 #' @template ccs-single
 #' @template offline
@@ -225,3 +227,5 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
     save_in_data_dir("icd10_map_ccs")
   invisible(icd10_map_ccs)
 }
+
+# nocov end
