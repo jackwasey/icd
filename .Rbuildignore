@@ -1,7 +1,7 @@
 ^_config\.yml$
 aclocal\.m4$
-.*_alt.*\.[Rr]$
-.*_alt.*\.cpp$
+IGNORE.*_alt.*\.[Rr]$
+IGNORE.*_alt.*\.cpp$
 .*_alt.h$
 ^appveyor\.yml$
 \.aspell$
