@@ -12,8 +12,8 @@ extern SEXP _icd_comorbidMatMul(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_debug_parallel();
 extern SEXP _icd_debug_parallel_env();
 extern SEXP _icd_factor_fast(SEXP);
+extern SEXP _icd_fastIntToString_alt_Std(SEXP);
 extern SEXP _icd_fastIntToStringRcpp(SEXP);
-extern SEXP _icd_fastIntToStringStd(SEXP);
 extern SEXP _icd_getOmpCores();
 extern SEXP _icd_getOmpMaxThreads();
 extern SEXP _icd_getOmpThreads();
@@ -87,8 +87,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_debug_parallel",                        (DL_FUNC) &_icd_debug_parallel,                        0},
     {"_icd_debug_parallel_env",                    (DL_FUNC) &_icd_debug_parallel_env,                    0},
     {"_icd_factor_fast",                           (DL_FUNC) &_icd_factor_fast,                           1},
+    {"_icd_fastIntToString_alt_Std",               (DL_FUNC) &_icd_fastIntToString_alt_Std,               1},
     {"_icd_fastIntToStringRcpp",                   (DL_FUNC) &_icd_fastIntToStringRcpp,                   1},
-    {"_icd_fastIntToStringStd",                    (DL_FUNC) &_icd_fastIntToStringStd,                    1},
     {"_icd_getOmpCores",                           (DL_FUNC) &_icd_getOmpCores,                           0},
     {"_icd_getOmpMaxThreads",                      (DL_FUNC) &_icd_getOmpMaxThreads,                      0},
     {"_icd_getOmpThreads",                         (DL_FUNC) &_icd_getOmpThreads,                         0},

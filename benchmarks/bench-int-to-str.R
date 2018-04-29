@@ -3,9 +3,9 @@
 //' pts <- generate_random_pts(1e7)
 //' # conclusion: buffer size matters little (so default to be more generous),
 //' # and 'Rcpp' version fastest.
-//' microbenchmark::microbenchmark(fastIntToStringStd(pts$visit_id, buffer = 8),
-//'                                fastIntToStringStd(pts$visit_id, buffer = 16),
-//'                                fastIntToStringStd(pts$visit_id, buffer = 64),
+//' microbenchmark::microbenchmark(fastIntToString_alt_Std(pts$visit_id, buffer = 8),
+//'                                fastIntToString_alt_Std(pts$visit_id, buffer = 16),
+//'                                fastIntToString_alt_Std(pts$visit_id, buffer = 64),
 //'                                fastIntToStringRcpp(pts$visit_id, buffer = 8),
 //'                                fastIntToStringRcpp(pts$visit_id, buffer = 16),
 //'                                fastIntToStringRcpp(pts$visit_id, buffer = 64),
