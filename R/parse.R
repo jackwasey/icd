@@ -87,7 +87,6 @@ icd9cm_hierarchy_sanity <- function(x) {
   print(x[which(is.na(x$chapter)), ])
   stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
 }
-# nocov end
 
 #' Get billable codes from all available years
 #'
@@ -132,6 +131,8 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
 
   invisible(icd9cm_billable)
 }
+
+# nocov end
 
 #' Read the ICD-9-CM description data as provided by the Center for Medicaid
 #' Services (CMS).
@@ -236,6 +237,8 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   }
   invisible(out)
 }
+
+#nocov start
 
 #' Parse billable codes for ICD-9-CM version 27
 #'
@@ -357,3 +360,5 @@ fixSubchapterNa <- function(x, start, end) {
   x$sub_chapter <- factor(new_subs, new_levels)
   x
 }
+
+#nocov end

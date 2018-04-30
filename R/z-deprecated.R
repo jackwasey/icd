@@ -1,5 +1,7 @@
 # git diff -U0 HEAD~4 -- NAMESPACE | grep icd_ | sed 's/.*(\(.*\)\(icd_\)\(.*\)).*/\1\2\3 <- function(...) { very_soft_deprecate("\1\3"); \1\3(...) }/' | tr , .
 
+#nocov start
+
 very_soft_deprecate <- function(fun, ...) {}
 
 #' @export
@@ -601,3 +603,5 @@ icd_wide_to_long <- function(...) { very_soft_deprecate("wide_to_long"); wide_to
 #' @template dotdotdot
 #' @export
 is.icd_comorbidity_map <- function(...) { very_soft_deprecate("is.comorbidity_map"); is.comorbidity_map(...) }
+
+#nocov end

@@ -408,6 +408,8 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   invisible(icd10_map_quan_deyo)
 }
 
+#nocov start
+
 #' generate uranium pathology data
 #'
 #' This is downloaded from \href{https://wsu.edu}{WSU} where it appears to be
@@ -445,6 +447,8 @@ fetch_vermont_dx <- function(offline) {
     file_name = "VTINP13.TXT",
     offline = offline)
 }
+
+#nocov end
 
 #' generate \code{vermont_dx} data
 #'
