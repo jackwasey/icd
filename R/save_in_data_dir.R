@@ -49,4 +49,4 @@ save_in_data_dir <- function(var_name, suffix = "", data_path = "data",
   invisible(get(var_name, envir = envir))
 }
 
-#nocov stop
+#nocov end

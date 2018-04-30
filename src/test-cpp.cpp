@@ -197,4 +197,4 @@ context("add leading zeroes to major") {
 // endif have testthat ICD_CATCH
 #endif
 
-// nocov stop
+// nocov end
