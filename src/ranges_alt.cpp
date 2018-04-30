@@ -15,6 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
+#include "icd_types.h"                  // for VecStr, CV, Str
 #include <Rcpp.h>
 #include <algorithm>                    // for set_intersection
 #include <iterator>                     // for insert_iterator, inserter
@@ -23,10 +24,7 @@
 #include "appendMinor_alt.h"           // for icd9MajMinToShortSingle_alt_Std
 #include "convert.h"                    // for icd9ShortToPartsCpp
 #include "convert_alt.h"                // for icd9ShortToParts_alt_Cpp
-//#include "icd_types.h"                  // for VecStr, CV, Str
 #include "is.h"                         // for icd9IsASingleE
-//#include "local.h"                      // for icd_set
-// #include "ranges.h" // #include "range-const.h"                    // for v_empty_std, v0, v0_std, v1
 #include "ranges_alt.h"                     // for icd9ExpandMinor_alt_Std
 
 //' Find child codes from vector of ICD-9 codes.

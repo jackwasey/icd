@@ -34,21 +34,4 @@ const CV v7 = CV::create("7", "70", "71", "72", "73", "74", "75", "76", "77", "7
 const CV v8 = CV::create("8", "80", "81", "82", "83", "84", "85", "86", "87", "88", "89");
 const CV v9 = CV::create("9", "90", "91", "92", "93", "94", "95", "96", "97", "98", "99");
 
-// horrible one-off code to pre-generate all the minor codes
-inline CV MakeAllMinors() {
-  CV vv = vbase;
-  // create numbers 1 to 99 but cycle 10s first
-  for (int i = 0; i < 10; ++i) {
-    for (int j = 0; j < 10; ++j) {
-      std::ostringstream s;
-      s << j << i;
-      if (i + j != 0)
-        vv.push_back(s.str());
-    }
-  }
-  return(vv);
-}
-// generate the lookups
-const CV vv = MakeAllMinors();
-
 #endif /* RANGE_CONST_H_ */
