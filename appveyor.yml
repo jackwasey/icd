@@ -45,7 +45,7 @@ environment:
       ICD_STRIP: false
 
 on_success:
-  - Rscript -e "covr::codecov(quiet = FALSE)"
+  - Rscript -e "covr::coveralls(quiet = FALSE)"
 
 test_script:
   - travis-tool.sh run_tests
