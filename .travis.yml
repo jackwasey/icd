@@ -9,11 +9,23 @@ language: r
 sudo: false
 cache: packages
 
-addons:
-  apt:
-    packages:
-      - r-cran-rodbc
-      - unixodbc-dev
+aptget_install:
+  - r-cran-rodbc
+  - unixodbc-dev
+
+# duplicate what's in DESCRIPTION
+r_binary_install:
+  - checkmate
+  - magrittr
+  - Rcpp
+  - RODBC
+  - stringr
+  - testthat
+
+r_install:
+  - knitr
+  - roxygen2
+  - rmarkdown
 
 r:
   - oldrel
@@ -27,7 +39,7 @@ matrix:
 repos:
   CRAN: https://cloud.r-project.org
 
-r_github_packages:
+install_github:
   - jimhester/covr
   - jimhester/lintr
 
