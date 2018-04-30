@@ -80,12 +80,12 @@ CV icd9ChildrenShort_alt_Std(CV icd9Short, bool onlyReal) {
 
   // This is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
-    VecStr major(icd9Short.size());
-    VecStr minor(icd9Short.size());
-    icd9ShortToParts_alt_CppStd(Rcpp::as<VecStr>(icd9Short), "", major, minor);
-    VecStr::const_iterator itmajor = major.begin();
-    VecStr::const_iterator itminor = minor.begin();
-    for (; itmajor != major.end(); ++itmajor, ++itminor) {
+    VecStr mjr(icd9Short.size());
+    VecStr mnr(icd9Short.size());
+    icd9ShortToParts_alt_CppStd(Rcpp::as<VecStr>(icd9Short), "", mjr, mnr);
+    VecStr::const_iterator itmajor = mjr.begin();
+    VecStr::const_iterator itminor = mnr.begin();
+    for (; itmajor != mjr.end(); ++itmajor, ++itminor) {
       Str thismajor = *itmajor;
       Str thisminor = *itminor;
       VecStr newminors = icd9ExpandMinor_alt_Std(thisminor, icd9IsASingleE(thismajor.c_str()));
