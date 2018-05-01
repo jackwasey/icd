@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# nocov start
+
 ahrq_htn <- c("HTNCX", "HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF",
               "HRENWRF", "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
 ahrq_chf <- c("CHF", "HTNWCHF", "HHRWCHF", "HHRWHRF")
@@ -200,3 +202,5 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   }
   invisible(icd9_map_quan_deyo)
 }
+
+# nocov end

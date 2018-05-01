@@ -138,8 +138,8 @@ myData \%>\% filter_poa_yes(poa_name="poa") \%>\%
 # can call the core comorbid() function with an arbitrary mapping
 myData \%>\%
   filter_poa_yes \%>\%
-  comorbid(icd_name = "diag", visit_name = "visit_id",
-    map = icd_map_quan_elix, short_mapping = TRUE)
+  comorbid_elix(icd_name = "diag", visit_name = "visit_id",
+  short_mapping = TRUE)
 }
 }
 \keyword{manip}

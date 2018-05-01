@@ -58,7 +58,6 @@ extern "C" {
 #endif
 
 #ifdef ICD_EIGEN
-#include <Rcpp.h>
 #include <RcppEigen.h> // also add LinkingTo element in DESCRIPTION to enable
 #include <Eigen/SparseCore>
 // https://eigen.tuxfamily.org/dox/group__TutorialSparse.html

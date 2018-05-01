@@ -4,6 +4,8 @@
 \name{icd9_map_quan_deyo}
 \alias{icd9_map_quan_deyo}
 \alias{icd10_map_quan_deyo}
+\alias{icd9_map_charlson}
+\alias{icd10_map_charlson}
 \title{Quan adaptation of Deyo/Charlson comorbidities}
 \format{list of character vectors, each named by co-morbidity}
 \description{
@@ -13,7 +15,7 @@ in-patient to <30d mortality. Of note, Deyo drops the distinction between
 leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
 this, in the rare cases where someone had two or three of leukemia, lymphoma
 and non-metastatic cancer, the Quan adaptation would give a lower Charlson
-score than the original scheme. The Deyo original Charlson to ICD-9-CM groups
+score than the original scheme. The original Deyo Charlson to ICD-9-CM groups
 does include distinct categories for these things.
 }
 \references{

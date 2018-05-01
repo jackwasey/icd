@@ -21,6 +21,8 @@
 # see https://github.com/LucaFoschini/ICD-9_Codes for a completely different
 # approach in python
 
+# nocov start
+
 #' Fetch RTF for a given year
 #'
 #' Will return NULL if offline and not available
@@ -657,3 +659,5 @@ rtf_strip <- function(x, ...) {
   trim(x)
   #nolint end
 }
+
+# nocov end

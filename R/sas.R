@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+#nocov start
+
 #' Extract assignments from a SAS FORMAT definition
 #'
 #' This is modelled entirely on a single chunk of SAS code, but hopefully can be
@@ -199,3 +201,5 @@ sas_expand_range <- function(start, end) {
                                         ex_ambig_end = TRUE)
   sort_icd.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)
 }
+
+#nocov end

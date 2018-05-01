@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-# nocov start
+#nocov start
 
 # icd9_sources is defined in this file and saved in sysdata.rda
 utils::globalVariables(c("icd9_sources", "icd9cm_billable"))
@@ -87,7 +87,6 @@ icd9cm_hierarchy_sanity <- function(x) {
   print(x[which(is.na(x$chapter)), ])
   stop("should not have any NA values in the ICD-9-CM flatten hierarchy data frame")
 }
-# nocov end
 
 #' Get billable codes from all available years
 #'
@@ -332,7 +331,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy <- out
 
   if (save_data)
-    save_in_data_dir(icd9cm_hierarchy) # nocov
+    save_in_data_dir(icd9cm_hierarchy)
 
   invisible(icd9cm_hierarchy)
 }
@@ -357,3 +356,5 @@ fixSubchapterNa <- function(x, start, end) {
   x$sub_chapter <- factor(new_subs, new_levels)
   x
 }
+
+#nocov end

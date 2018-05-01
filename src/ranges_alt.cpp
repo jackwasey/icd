@@ -15,19 +15,17 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-// [[Rcpp::interfaces(r, cpp)]]
-#include "Rcpp.h"                       // for wrap
+#include "icd_types.h"                  // for VecStr, CV, Str
+#include <Rcpp.h>
 #include <algorithm>                    // for set_intersection
 #include <iterator>                     // for insert_iterator, inserter
 #include <set>                          // for _Rb_tree_const_iterator, set
 #include <vector>                       // for vector, vector<>::const_iterator
-#include "appendMinor.h"                // for icd9MajMinToShortSingleStd
+#include "appendMinor_alt.h"           // for icd9MajMinToShortSingle_alt_Std
 #include "convert.h"                    // for icd9ShortToPartsCpp
 #include "convert_alt.h"                // for icd9ShortToParts_alt_Cpp
-#include "icd_types.h"                  // for VecStr, CV, Str
 #include "is.h"                         // for icd9IsASingleE
-#include "local.h"                      // for icd_set
-#include "ranges.h"                     // for icd9ExpandMinorStd
+#include "ranges_alt.h"                     // for icd9ExpandMinor_alt_Std
 
 //' Find child codes from vector of ICD-9 codes.
 //'
@@ -42,17 +40,13 @@ CV icd9ChildrenShort_alt_11(CV icd9Short, bool onlyReal) {
     Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
     CV major = parts[0];
     CV minor = parts[1];
-
     CV::iterator itmajor = major.begin();
     CV::iterator itminor = minor.begin();
     for (; itmajor != major.end(); ++itmajor, ++itminor) {
       Str thismajor = Rcpp::as<Str>(*itmajor);
       Str thisminor = Rcpp::as<Str>(*itminor);
-
-      VecStr newminors = icd9ExpandMinorStd(thisminor, icd9IsASingleE(thismajor.c_str()));
-
-      VecStr newshort = icd9MajMinToShortSingleStd(thismajor, newminors);
-
+      VecStr newminors = icd9ExpandMinor_alt_Std(thisminor, icd9IsASingleE(thismajor.c_str()));
+      VecStr newshort = icd9MajMinToShortSingle_alt_Std(thismajor, newminors);
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
@@ -86,19 +80,16 @@ CV icd9ChildrenShort_alt_Std(CV icd9Short, bool onlyReal) {
 
   // This is a slower function, can the output set be predefined in size?
   if (icd9Short.size() != 0) {
-    VecStr major(icd9Short.size());
-    VecStr minor(icd9Short.size());
-    icd9ShortToParts_alt_CppStd(Rcpp::as<VecStr>(icd9Short), "", major, minor);
-
-    VecStr::const_iterator itmajor = major.begin();
-    VecStr::const_iterator itminor = minor.begin();
-    for (; itmajor != major.end(); ++itmajor, ++itminor) {
+    VecStr mjr(icd9Short.size());
+    VecStr mnr(icd9Short.size());
+    icd9ShortToParts_alt_CppStd(Rcpp::as<VecStr>(icd9Short), "", mjr, mnr);
+    VecStr::const_iterator itmajor = mjr.begin();
+    VecStr::const_iterator itminor = mnr.begin();
+    for (; itmajor != mjr.end(); ++itmajor, ++itminor) {
       Str thismajor = *itmajor;
       Str thisminor = *itminor;
-
-      VecStr newminors = icd9ExpandMinorStd(thisminor, icd9IsASingleE(thismajor.c_str()));
-      VecStr newshort = icd9MajMinToShortSingleStd(thismajor, newminors);
-
+      VecStr newminors = icd9ExpandMinor_alt_Std(thisminor, icd9IsASingleE(thismajor.c_str()));
+      VecStr newshort = icd9MajMinToShortSingle_alt_Std(thismajor, newminors);
       out.insert(newshort.begin(), newshort.end());
     }
 
@@ -133,8 +124,8 @@ VecStr icd9Children_alt_ShortNoNaUnordered(const VecStr& icd9Short, const bool o
     VecStr::iterator itmjr = mjr.begin();
     VecStr::iterator itmnr = mnr.begin();
     for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-      const VecStr& newminors = icd9ExpandMinorStd(*itmnr, icd9IsASingleE((*itmjr).c_str()));
-      VecStr newshort = icd9MajMinToShortSingleStd(*itmjr, newminors);
+      const VecStr& newminors = icd9ExpandMinor_alt_Std(*itmnr, icd9IsASingleE((*itmjr).c_str()));
+      VecStr newshort = icd9MajMinToShortSingle_alt_Std(*itmjr, newminors);
       out.insert(newshort.begin(), newshort.end());
     }
     if (onlyReal) {
@@ -154,8 +145,58 @@ VecStr icd9Children_alt_ShortNoNaUnordered(const VecStr& icd9Short, const bool o
     }
   } // input length != 0
   // TODO in R wrapper: rcppOut.attr("icd_short_diag") = true;
-
   // sort from unordered set into a vector
   VecStr out_vec(out.begin(), out.end());
   return out_vec;
+}
+
+// [[Rcpp::export]]
+VecStr icd9ExpandMinor_alt_Std(const Str& mnr, bool isE) {
+  if (!isE) {
+    switch (mnr.size()) {
+    case 0:
+      return vv_std;
+    case 1:
+      switch (mnr[0]) { // use .at() for range check
+      case '0':
+        return v0_std;
+      case '1':
+        return v1_std;
+      case '2':
+        return v2_std;
+      case '3':
+        return v3_std;
+      case '4':
+        return v4_std;
+      case '5':
+        return v5_std;
+      case '6':
+        return v6_std;
+      case '7':
+        return v7_std;
+      case '8':
+        return v8_std;
+      case '9':
+        return v9_std;
+      default:
+        Rcpp::stop("unrecognized minor character");
+      return v_empty_std;
+      }
+    case 2:
+      return VecStr(1, mnr);
+    default:
+      Rcpp::stop("invalid minor in icd9ExpandMinor_alt_Std");
+    return v_empty_std;
+    }
+  } else {
+    // is E code, so minor must be just one character
+    switch (mnr.size()) {
+    case 0:
+      return vbase_e_std;
+    case 1:
+      return VecStr(1, mnr);
+    default:
+      Rcpp::stop("invalid E code minor in icd9ExpandMinor_alt_Std");
+    }
+  }
 }

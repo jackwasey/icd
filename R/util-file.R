@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+#nocov start
+
 icd10cm_get_xml_file <- function(...) {
   unzip_to_data_raw(
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP",
@@ -26,3 +28,5 @@ icd10cm_get_flat_file <- function(...) {
     url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
     file_name = "icd10cm_order_2016.txt", ...)
 }
+
+#nocov end

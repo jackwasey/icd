@@ -50,9 +50,9 @@ stopifnot(simple_map$PHTN != character(0))
 stopifnot(simple_map$PVD == "I26019")
 
 umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
-icd:::comorbid_common(uranium_pathology, icd10_map_ahrq,
-                          visit_name = "case", icd_name = "icd10",
-                          comorbid_fun = icd:::icd9Comorbid_alt_MatMul)
+head(icd:::comorbid_common(uranium_pathology, icd10_map_ahrq,
+                           visit_name = "case", icd_name = "icd10",
+                           comorbid_fun = icd:::comorbidMatMul))
 
 }
 \seealso{

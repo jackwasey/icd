@@ -17,6 +17,8 @@
 
 # some ICD-9 and ICD-10 mappings (others generated from SAS code parsing)
 
+#nocov start
+
 #' Generate Elixhauser comorbidities
 #'
 #' This function uses the \code{\%i9d\%} operator, so cannot be done as an R
@@ -382,6 +384,8 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd10)
   icd10_map_quan_deyo %<>% as.comorbidity_map
   icd10_map_charlson <- icd10_map_quan_deyo
+  # It does appear that there are numerous codes in the Quan Elixhauser scheme
+  # which are not present (?anymore) in the ICD-10-CM 2016 list.
   if (save_data) {
     save_in_data_dir(icd10_map_quan_deyo)
     save_in_data_dir(icd10_map_charlson)
@@ -467,3 +471,5 @@ generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
     save_in_data_dir(vermont_dx)
   invisible(vermont_dx)
 }
+
+#nocov end

@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# nocov start
+
 #' get all ICD-10-CM codes
 #'
 #' Gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
@@ -121,3 +123,5 @@ icd10_generate_chap_lookup <- function(lk_majors) {
   }
   chap_lookup
 }
+
+# nocov end

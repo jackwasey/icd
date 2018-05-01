@@ -21,21 +21,21 @@
 #include <vector>
 
 bool icd9IsASingleV(const char* s) {
-	while (*s == ' ')
-		++s;
-	return *s == 'V' || *s == 'v';
+  while (*s == ' ')
+    ++s;
+  return *s == 'V' || *s == 'v';
 }
 
 bool icd9IsASingleE(const char* s) {
-	while (*s == ' ')
-		++s;
-	return *s == 'E' || *s == 'e';
+  while (*s == ' ')
+    ++s;
+  return *s == 'E' || *s == 'e';
 }
 
 bool icd9IsASingleVE(const char* s) {
-	while (*s == ' ')
-		++s;
-	return *s == 'V' || *s == 'E' || *s == 'v' || *s == 'e';
+  while (*s == ' ')
+    ++s;
+  return *s == 'V' || *s == 'E' || *s == 'v' || *s == 'e';
 }
 
 //' Do elements of vector begin with V, E (or any other character)?
@@ -52,35 +52,35 @@ bool icd9IsASingleVE(const char* s) {
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<bool> icd9_is_n_cpp(const VecStr& sv) {
-	const int len = sv.size();
-	std::vector<bool> out(len);
-	for (int i = 0; i < len; ++i) {
-		out[i] = !icd9IsASingleVE(sv[i].c_str());
-	}
-	return out;
+  const int len = sv.size();
+  std::vector<bool> out(len);
+  for (int i = 0; i < len; ++i) {
+    out[i] = !icd9IsASingleVE(sv[i].c_str());
+  }
+  return out;
 }
 
 //' @rdname icd9_is_n_cpp
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<bool> icd9_is_v_cpp(const VecStr& sv) {
-	const int len = sv.size();
-	std::vector<bool> out(len);
-	for (int i = 0; i < len; ++i) {
-		out[i] = icd9IsASingleV(sv[i].c_str());
-	}
-	return out;
+  const int len = sv.size();
+  std::vector<bool> out(len);
+  for (int i = 0; i < len; ++i) {
+    out[i] = icd9IsASingleV(sv[i].c_str());
+  }
+  return out;
 }
 
 //' @rdname icd9_is_n_cpp
 //' @keywords internal
 // [[Rcpp::export]]
 std::vector<bool> icd9_is_e_cpp(const VecStr& sv) {
-	const int len = sv.size();
-	std::vector<bool> out(len);
-	for (int i = 0; i < len; ++i) {
-		out[i] = icd9IsASingleE(sv[i].c_str());
-	}
-	return out;
+  const int len = sv.size();
+  std::vector<bool> out(len);
+  for (int i = 0; i < len; ++i) {
+    out[i] = icd9IsASingleE(sv[i].c_str());
+  }
+  return out;
 }
 

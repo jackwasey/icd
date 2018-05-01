@@ -15,21 +15,14 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-// [[Rcpp::interfaces(r, cpp)]]
 #include "convert_alt.h"
-#include <Rcpp/r/headers.h>       // for NA_STRING, Rf_install
+#include <Rcpp.h>       // for NA_STRING, Rf_install
 #include <string.h>               // for strlen
-#include "Rcpp.h"                 // for wrap
-#include "Rcpp/String.h"          // for String
-#include "Rcpp/api/meat/proxy.h"  // for AttributeProxyPolicy::AttributeProx...
-#include "Rcpp/vector/Vector.h"   // for Vector<>::iterator
-#include "RcppCommon.h"           // for Proxy_Iterator
 #include "is.h"                   // for icd9IsASingleVE, icd9IsASingleE
 #include "util.h"                 // for strimCpp
 
 // [[Rcpp::export]]
-CV icd9MajMinToCode_alt_Old(CV mjr,
-                                          CV mnr, bool isShort) {
+CV icd9MajMinToCode_alt_Old(CV mjr, CV mnr, bool isShort) {
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
               << " and mnr.size() = " << mnr.size() << "\n";
@@ -91,9 +84,9 @@ CV icd9MajMinToCode_alt_Old(CV mjr,
 
 // [[//Rcpp::export]]
 void icd9ShortToParts_alt_CppStd(VecStr icd9Short,
-                            std::string mnrEmpty,
-                            VecStr &mjr,
-                            VecStr &mnr) {
+                                 std::string mnrEmpty,
+                                 VecStr &mjr,
+                                 VecStr &mnr) {
   for (VecStr::size_type i = 0; i != icd9Short.size(); ++i) {
     Str s = icd9Short[i];
 

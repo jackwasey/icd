@@ -122,8 +122,8 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #' # can call the core comorbid() function with an arbitrary mapping
 #' myData %>%
 #'   filter_poa_yes %>%
-#'   comorbid(icd_name = "diag", visit_name = "visit_id",
-#'     map = icd_map_quan_elix, short_mapping = TRUE)
+#'   comorbid_elix(icd_name = "diag", visit_name = "visit_id",
+#'   short_mapping = TRUE)
 #' }
 #' @keywords manip
 #' @export

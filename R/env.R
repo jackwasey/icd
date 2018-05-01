@@ -25,13 +25,6 @@ vec_to_env_true <- function(x, val = TRUE, env = new.env(hash = TRUE, parent = b
   env
 }
 
-vec_to_env_name <- function(x, env = new.env(hash = TRUE, parent = baseenv())) {
-  for (i in 1L:length(x)) {
-    env[[x[i]]] <- names(x)[i]
-  }
-  env
-}
-
 vec_to_env_count <- function(x, env = new.env(hash = TRUE, parent = baseenv())) {
   for (i in 1L:length(x)) {
     env[[x[i]]] <- i

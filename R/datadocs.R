@@ -19,7 +19,7 @@ icd_data_names <- c(
   "icd10_map_ahrq",
   "icd10_map_cc",
   "icd10_map_elix",
-  "icd10_map_quan_charlson",
+  "icd10_map_charlson",
   "icd10_map_quan_deyo",
   "icd10_map_quan_elix",
   "icd10_sub_chapters",

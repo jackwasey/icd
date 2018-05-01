@@ -54,7 +54,10 @@ utils::globalVariables(c("icd9_chapters", "icd9_sub_chapters", "icd10cm2016"))
 explain <- function(...)
   UseMethod("explain")
 
-icd_explain <- function(...) explain(...)
+#' @rdname explain
+#' @details \code{explain_icd} is a synonym for \code{\link{explain}} to avoid conflict with \code{dplyr::explain}. Alternative is to use \code{icd::explain}.
+#' @keywords internal
+explain_icd <- function(...) explain(...)
 
 #' @describeIn explain Explain ICD codes from a character vector, guessing
 #'   ICD version
@@ -70,9 +73,8 @@ explain.default <- function(x, short_code = guess_short(x), condense = TRUE, bri
 
 #' @describeIn explain Explain all ICD-9 codes in a list of vectors
 #' @export
-explain.list <- function(x, ...) {
+explain.list <- function(x, ...)
   lapply(x, explain, ...)
-}
 
 #' @describeIn explain explain character vector of ICD-9 codes.
 #' @export

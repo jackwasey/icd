@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+#nocov start
+
 #' Generate \code{sysdata.rda}
 #'
 #' Generate correctly ordered look-up tables of numeric-only, V and E codes.
@@ -210,3 +212,5 @@ icd9_generate_sources <- function(save_data = FALSE) {
 
   invisible(icd9_sources)
 }
+
+#nocov end

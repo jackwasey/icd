@@ -1,7 +1,8 @@
 ^_config\.yml$
 aclocal\.m4$
-IGNORE.*_alt\.[Rr]$
-IGNORE.*_alt\.cpp$
+IGNORE.*_alt.*\.[Rr]$
+IGNORE.*_alt.*\.cpp$
+IGNORE.*_alt.h$
 ^appveyor\.yml$
 \.aspell$
 autom4te\.cache$
@@ -27,7 +28,6 @@ cran-comments\.md$
 ^data\/icd10_who.*$
 data-raw
 ^data-raw\/.*$
-^deprecated-tests$
 ^Efficient.*\.md$
 icd.*\.aux$
 icd.*\.so$
@@ -56,6 +56,9 @@ standalone\/.*
 scrape_icd10_who
 ^\.settings$
 .*standalone.*
+^tests-slow$
+^tests-build$
+^tests-deprecated$
 ^todo$
 ^tools$
 ^\.travis\.yml$

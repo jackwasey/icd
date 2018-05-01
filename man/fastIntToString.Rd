@@ -2,11 +2,11 @@
 % Please edit documentation in R/RcppExports.R
 \name{fastIntToString}
 \alias{fastIntToString}
-\alias{fastIntToStringStd}
+\alias{fastIntToString_alt_Std}
 \alias{fastIntToStringRcpp}
 \title{Fast convert integer vector to character vector}
 \usage{
-fastIntToStringStd(x)
+fastIntToString_alt_Std(x)
 
 fastIntToStringRcpp(x)
 }

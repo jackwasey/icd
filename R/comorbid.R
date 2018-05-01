@@ -97,6 +97,10 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'     c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
 #'
 #' icd10_comorbid(pts10, map = icd10_map_ahrq)
+#' # or if library(icd) hasn't been called first:
+#' icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+#' # or most simply:
+#' icd::icd10_comorbid_ahrq(pts10)
 #'
 #' # specify a simple custom comorbidity map:
 #' my_map <- list("malady" = c("100", "2000"),
@@ -228,7 +232,7 @@ comorbid_common <- function(x,
                             visit_name = NULL,
                             icd_name,
                             return_df = FALSE,
-                            comorbid_fun = icd9Comorbid_alt_MatMul,
+                            comorbid_fun = comorbidMatMul,
                             ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")
@@ -353,56 +357,56 @@ comorbid_common <- function(x,
 #'   directly.
 #' @export
 icd9_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd9_comorbid(x, map = icd9_map_ahrq, short_map = TRUE, ...)
+  cbd <- icd9_comorbid(x, map = icd::icd9_map_ahrq, short_map = TRUE, ...)
   apply_hier_ahrq(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid AHRQ comorbidities for ICD-10 codes
 #' @export
 icd10_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd10_map_ahrq, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_ahrq, short_map = TRUE, ...)
   apply_hier_ahrq(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Elixhauser comorbidities for ICD-9 codes
 #' @export
 icd9_comorbid_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd9_comorbid(x, map = icd9_map_elix, short_map = TRUE, ...)
+  cbd <- icd9_comorbid(x, map = icd::icd9_map_elix, short_map = TRUE, ...)
   apply_hier_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Elixhauser comorbidities for ICD-10 codes
 #' @export
 icd10_comorbid_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd10_map_elix, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_elix, short_map = TRUE, ...)
   apply_hier_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Quan's Elixhauser comorbidities for ICD-9 codes
 #' @export
 icd9_comorbid_quan_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd9_comorbid(x, map = icd9_map_quan_elix, short_map = TRUE, ...)
+  cbd <- icd9_comorbid(x, map = icd::icd9_map_quan_elix, short_map = TRUE, ...)
   apply_hier_quan_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Quan's Elixhauser comorbidities for ICD-10 codes
 #' @export
 icd10_comorbid_quan_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd10_map_quan_elix, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_elix, short_map = TRUE, ...)
   apply_hier_quan_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Quan's Deyo (Charlson) comorbidities for ICD-9 codes
 #' @export
 icd9_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd9_comorbid(x, map = icd9_map_quan_deyo, short_map = TRUE, ...)
+  cbd <- icd9_comorbid(x, map = icd::icd9_map_quan_deyo, short_map = TRUE, ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Quan's Deyo (Charlson) comorbidities for ICD-10 codes
 #' @export
 icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd10_map_quan_deyo, short_map = TRUE, ...)
+  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_deyo, short_map = TRUE, ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
@@ -421,7 +425,7 @@ comorbid_ccs <- function(x, icd_name = get_icd_name(x), ...)
 icd9_comorbid_ccs <- function(x, ...,
                               single = TRUE,
                               lvl = NULL,
-                              map = icd9_map_single_ccs,
+                              map = icd::icd9_map_single_ccs,
                               short_map = TRUE) {
   assert_flag(single)
   assert_int(lvl, lower = 1, upper = 4, null.ok = TRUE, na.ok = FALSE)

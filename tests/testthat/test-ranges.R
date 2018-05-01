@@ -427,36 +427,6 @@ test_that("sorting char factors", {
                factor(c("77", "88.8", "999.99", "V02.1", "V2.2", "E001", "E1.1")))
 })
 
-test_that("sysdata.rda is okay", {
-  lknames <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
-               "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
-               "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
-               "icd9_sources", ".nc")
-
-  sysdat <- icd_generate_sysdata(save_data = FALSE)
-  expect_equal(names(sysdat), lknames)
-
-  expect_lt(length(icd9_short_n_leaf$vec), length(icd9_short_n_defined$vec))
-  expect_lt(length(icd9_short_v_leaf$vec), length(icd9_short_v_defined$vec))
-  expect_lt(length(icd9_short_e_leaf$vec), length(icd9_short_e_defined$vec))
-  expect_lt(length(icd9_short_n_defined$vec), length(icd9_short_n$vec))
-  expect_lt(length(icd9_short_v_defined$vec), length(icd9_short_v$vec))
-  expect_lt(length(icd9_short_e_defined$vec), length(icd9_short_e$vec))
-  expect_true(all(icd9_short_n_defined$env %eine% icd9_short_n$env))
-  expect_true(all(icd9_short_v_defined$env %eine% icd9_short_v$env))
-  expect_true(all(icd9_short_e_defined$env %eine% icd9_short_e$env))
-
-  expect_equal(length(icd9_short_n$env), length(icd9_short_n$vec))
-  expect_equal(length(icd9_short_v$env), length(icd9_short_v$vec))
-  expect_equal(length(icd9_short_e$env), length(icd9_short_e$vec))
-  expect_equal(length(icd9_short_n_defined$env), length(icd9_short_n_defined$vec))
-  expect_equal(length(icd9_short_v_defined$env), length(icd9_short_v_defined$vec))
-  expect_equal(length(icd9_short_e_defined$env), length(icd9_short_e_defined$vec))
-  expect_equal(length(icd9_short_n_leaf$env), length(icd9_short_n_leaf$vec))
-  expect_equal(length(icd9_short_v_leaf$env), length(icd9_short_v_leaf$vec))
-  expect_equal(length(icd9_short_e_leaf$env), length(icd9_short_e_leaf$vec))
-})
-
 test_that("expand ICD-9 range character class deals with short vs long types", {
   expect_true(all(is_valid.icd9(
     res_a <- expand_range("410", "410.8"), short_code = FALSE)))

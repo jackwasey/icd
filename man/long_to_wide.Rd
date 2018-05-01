@@ -72,6 +72,6 @@ is a reasonably simple solution using built-in functions.
   long_to_wide(longdf, prefix = "ICD10_")
 }
 \seealso{
-Other ICD code conversion: \code{\link{convert}},
-  \code{\link{icd_long_data}}, \code{\link{wide_to_long}}
+Other ICD code conversion: \code{\link{as.icd_long_data}},
+  \code{\link{convert}}, \code{\link{wide_to_long}}
 }

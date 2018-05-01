@@ -21,14 +21,12 @@ library("icd")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 
-# we now rely on a testthat version with backwards-incompatible changes, the whole of the expectation setup has changed,
-# and there are many deprecations. For now, only run tests if testthat version is high enough:
-if (packageVersion("testthat") < package_version("0.11.0.9000")) {
-  message("testthat version is less than 0.11.0.9000, so not running Catch tests. Consider
-           updating testthat using install.packages('testthat'), update.packages(), or
-          devtools::install_github('hadley/testthat')")
-}
+testthat::test_check("icd")
 
-testthat::test_check("icd", reporter = "summary")
+# test deprecated functions:
+if (tolower(Sys.getenv("ICD_TEST_DEPRECATED")) %in% c("yes", "true"))
+  test_dir("tests-deprecated")
 
-# to test deprecated functions: test_dir("deprecated-tests/testthat", report = testthat::ListReporter)
+# test slow functions:
+if (tolower(Sys.getenv("ICD_TEST_BUILD_DATA")) %in% c("yes", "true"))
+  test_dir("tests-build-data")
