@@ -31,9 +31,10 @@ if (packageVersion("testthat") < package_version("0.11.0.9000")) {
 
 testthat::test_check("icd")
 
-# # to test deprecated functions:
-# devtools::load_all() # loads helper code from tests/testthat/
-# test_dir("tests-deprecated", report = testthat::ListReporter)
-#
-# # to test slow functions:
-# test_dir("tests-build-data", report = testthat::ListReporter)
+# test deprecated functions:
+if (tolower(Sys.getenv("ICD_TEST_DEPRECATED")) %in% c("yes", "true"))
+  test_dir("tests-deprecated")
+
+# test slow functions:
+if (tolower(Sys.getenv("ICD_TEST_BUILD_DATA")) %in% c("yes", "true"))
+  test_dir("tests-build-data")

@@ -31,13 +31,6 @@ r:
   - release
   - oldrel
 
-matrix:
-  fast_finish: true
-  allow_failures:
-  - r: oldrel
-  include:
-  - env: LINTR_COMMENT_BOT=true
-
 repos:
   CRAN: https://cloud.r-project.org
 
@@ -51,9 +44,18 @@ env:
   global:
     - R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
     - LINTR_COMMENT_BOT=false
+    - ICD_COVERAGE=false
   matrix:
     - OMP_NUM_THREADS=1 CFLAGS="-Og -Werror -Wall -Wextra -pedantic" CXXFLAGS="-Og -Werror -Wall -Wextra -pedantic"
     - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native"
+
+matrix:
+  fast_finish: true
+  allow_failures:
+  - r: oldrel
+  include:
+  - env: LINTR_COMMENT_BOT=true
+  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true
 
 before_script:
  - ls -aR
@@ -66,7 +68,8 @@ before_script:
 after_success:
  - ls -aR
  - cat ./icd.Rcheck/tests/test-all.Rout
- - Rscript -e "covr::codecov(quiet = FALSE)"
+ - if [ "$ICD_COVERAGE" = "true" ]; then
+     Rscript -e "covr::codecov(quiet = FALSE)"; fi
  - Rscript -e "lintr::lint_package()"
 
 notifications:

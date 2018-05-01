@@ -56,7 +56,7 @@ standalone\/.*
 scrape_icd10_who
 ^\.settings$
 .*standalone.*
-^tests-build-data$
+^tests-build$
 ^tests-deprecated$
 ^todo$
 ^tools$

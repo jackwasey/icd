@@ -4,7 +4,7 @@
 \alias{icd9_chapters_to_map}
 \title{convert the chapter headings to lists of codes}
 \usage{
-icd9_chapters_to_map(x, defined = TRUE)
+icd9_chapters_to_map(x, defined = FALSE)
 }
 \arguments{
 \item{x}{Either a chapter list itself, or the name of one, e.g.
