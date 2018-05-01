@@ -424,7 +424,7 @@ str_match_all <- function(string, pattern, ...) {
   regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...))
 }
 
-#' TODO does \code{stringr} do this?
+#' \code{stringr} does this, but here we have a small amount of base R code
 #' @keywords internal
 str_extract <- function(string, pattern, ...) {
   vapply(regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...)),

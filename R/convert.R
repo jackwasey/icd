@@ -62,15 +62,18 @@ NULL
 #' converted in bulk with \code{lapply} and \code{short_to_decimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
 #'   \code{icd9_sub_chapters}
+#' @param defined Single logical value, if \code{TRUE}, the default, only
+#'   officially defined ICD-9 (currently ICD-9-CM) codes will be used in the
+#'   expansion, not any lexically possible ICD-9 code.
 #' @keywords internal manip
-icd9_chapters_to_map <- function(x) {
+icd9_chapters_to_map <- function(x, defined = FALSE) {
   if (is.character(x) && exists(x))
     x <- get(x)
   assert_list(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = FALSE)
+    map[[r]] <- expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = defined)
   }
   map
 }

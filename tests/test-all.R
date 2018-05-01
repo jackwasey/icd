@@ -29,6 +29,11 @@ if (packageVersion("testthat") < package_version("0.11.0.9000")) {
           devtools::install_github('hadley/testthat')")
 }
 
-testthat::test_check("icd", reporter = "summary")
+testthat::test_check("icd")
 
-# to test deprecated functions: test_dir("deprecated-tests/testthat", report = testthat::ListReporter)
+# # to test deprecated functions:
+# devtools::load_all() # loads helper code from tests/testthat/
+# test_dir("tests-deprecated", report = testthat::ListReporter)
+#
+# # to test slow functions:
+# test_dir("tests-build-data", report = testthat::ListReporter)

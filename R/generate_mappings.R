@@ -17,6 +17,8 @@
 
 # some ICD-9 and ICD-10 mappings (others generated from SAS code parsing)
 
+#nocov start
+
 #' Generate Elixhauser comorbidities
 #'
 #' This function uses the \code{\%i9d\%} operator, so cannot be done as an R
@@ -408,8 +410,6 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   invisible(icd10_map_quan_deyo)
 }
 
-#nocov start
-
 #' generate uranium pathology data
 #'
 #' This is downloaded from \href{https://wsu.edu}{WSU} where it appears to be
@@ -447,8 +447,6 @@ fetch_vermont_dx <- function(offline) {
     file_name = "VTINP13.TXT",
     offline = offline)
 }
-
-#nocov end
 
 #' generate \code{vermont_dx} data
 #'
@@ -490,3 +488,5 @@ generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
     save_in_data_dir(vermont_dx)
   invisible(vermont_dx)
 }
+
+#nocov end

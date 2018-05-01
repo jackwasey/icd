@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-# nocov start
+#nocov start
 
 # icd9_sources is defined in this file and saved in sysdata.rda
 utils::globalVariables(c("icd9_sources", "icd9cm_billable"))
@@ -132,8 +132,6 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
   invisible(icd9cm_billable)
 }
 
-# nocov end
-
 #' Read the ICD-9-CM description data as provided by the Center for Medicaid
 #' Services (CMS).
 #'
@@ -238,8 +236,6 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   invisible(out)
 }
 
-#nocov start
-
 #' Parse billable codes for ICD-9-CM version 27
 #'
 #' These have a quirk which needs a different approach
@@ -335,7 +331,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   icd9cm_hierarchy <- out
 
   if (save_data)
-    save_in_data_dir(icd9cm_hierarchy) # nocov
+    save_in_data_dir(icd9cm_hierarchy)
 
   invisible(icd9cm_hierarchy)
 }

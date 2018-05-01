@@ -59,6 +59,7 @@ release_questions <- function() {
     "use LLVM scan build by adding 'scan-build before compiler path in .R/Makevars",
     "regenerate the function registration using tools/package-registration.r or the R 3.4 function",
     # testing and compilation and different platforms:
+    "Have you run tests in tests-deprecated and tests-build-code?",
     "Have you run autoreconf before building and testing?",
     "Has config.h.win been updated to reflect latest configure.ac results?",
     "Are there skipped tests which should be run?",

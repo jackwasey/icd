@@ -2,12 +2,14 @@
 % Please edit documentation in R/explain.R, R/z-deprecated.R
 \name{explain}
 \alias{explain}
+\alias{explain_icd}
 \alias{explain.default}
 \alias{explain.list}
 \alias{explain.icd9}
 \alias{explain.icd9cm}
 \alias{explain.icd10cm}
 \alias{explain.icd10}
+\alias{icd_explain}
 \alias{icd_explain.default}
 \alias{icd_explain.icd10}
 \alias{icd_explain.icd10cm}
@@ -19,6 +21,8 @@
 \title{Explain ICD-9 and ICD-10 codes in English}
 \usage{
 explain(...)
+
+explain_icd(...)
 
 \method{explain}{default}(x, short_code = guess_short(x), condense = TRUE,
   brief = FALSE, warn = TRUE, ...)
@@ -35,6 +39,8 @@ explain(...)
 
 \method{explain}{icd10}(x, short_code = guess_short(x), condense = TRUE,
   brief = FALSE, warn = TRUE, ...)
+
+icd_explain(...)
 
 icd_explain.default(...)
 
@@ -84,6 +90,9 @@ data frame, or list of data frames, with fields for ICD-9 code, name
 Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
 description for human review there are official ICD9-CM data tables, not with
 conversion to decimal notation, but to the textual format.
+}
+\details{
+\code{explain_icd} is a synonym for \code{\link{explain}} to avoid conflict with \code{dplyr::explain}. Alternative is to use \code{icd::explain}.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -174,6 +183,15 @@ ICD-10 WHO copyright workaround is available
   or ICD-10 codes or their subtypes will retain the prefix. E.g.
   \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
   the prefix, e.g., \code{\link{icd_wide_data}}.
+
+ Future versions of \pkg{icd} will drop
+  the \code{icd_} prefix. For example, \code{charlson} should be used in
+  favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
+  consider using the namespace prefix \code{icd::} instead, e.g.,
+  \code{icd::charlson}. Functions which specifically operate on either ICD-9
+  or ICD-10 codes or their subtypes will retain the prefix. E.g.
+  \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
+  the prefix, e.g., \code{\link{icd_wide_data}}.
 }
 
 \examples{
@@ -188,3 +206,4 @@ explain(icd10_map_ahrq$CHF[1:3], brief = TRUE)
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 explain(icd9_map_ahrq$CHF[1:3] \%>\% condense)
 }
+\keyword{internal}

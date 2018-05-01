@@ -100,6 +100,11 @@ icd_expand_range_major.icd9 <- function(...) { very_soft_deprecate("expand_range
 #' @rdname explain
 #' @template deprecated-icd3
 #' @export
+icd_explain <- function(...) { very_soft_deprecate("explain"); explain(...) }
+
+#' @rdname explain
+#' @template deprecated-icd3
+#' @export
 icd_explain.default <- function(...) { very_soft_deprecate("explain.default"); explain.default(...) }
 
 #' @rdname explain
