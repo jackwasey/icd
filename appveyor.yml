@@ -38,11 +38,9 @@ environment:
 #     - WARNINGS_ARE_ERRORS: 1
   matrix:
     - R_VERSION: release
-      ICD_STRIP: false
 
     - R_VERSION: devel
       R_ARCH: x64
-      ICD_STRIP: true
 
 # on_success:
 #   - Rscript -e "covr::coveralls(quiet = FALSE)"

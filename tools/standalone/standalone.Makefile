@@ -38,7 +38,6 @@ CXXFLAGS := 		 -DICD_STANDALONE $(ICDINCL) $(RCPPEIGENINCL) $(RCPPFLAGS) $(RCPPI
 LDLIBS := 		$(ICDLIBS) $(RLDFLAGS) $(RRPATH) $(RBLAS) $(RLAPACK) $(RINSIDELIBS) -fno-openmp
 
 all: 			$(programs)
-##		@test -x /usr/bin/strip && strip $^
 
 ## all:          standalone
 standalone: standalone.o ; $(CXX) $(LDFLAGS) -o standalone standalone.o $(LDLIBS)
