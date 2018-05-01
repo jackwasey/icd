@@ -1,10 +1,12 @@
 # Version 3.0
- * function names without 'icd_' prefix, old names kept for compatiblity, but easier now to write `comorbid(patient_data)` and `icd::comorbid` may also be used.
- * Comorbidities for ICD-10 codes now 1.5 - 2 orders of magnitude faster using matrix multiplication to solve problem under the hood
+ * major improvement in comorbidity calculation speed using matrix multiplication behind the scenes. ICD-10 codes were slower than ICD-9 code comorbidities before, and are now 1.5 - 2 orders of magnitude faster.
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
- * Assume C++11, which is now four years old, and enables code simplification.
- * rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not callled.
- * deprecated rarely or unused code, including %i9in% 
+ * added 'charlson' synonyms for 'quan_deyo', e.g. Charlson comorbidities can now be found using `comorbid_charlson(patient_data)`
+ * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
+ * function names have lost the 'icd_' prefix, old names kept for compatiblity, but easier now to write `comorbid(patient_data)`, and `icd::comorbid` may also be used, and which many consider good practice.
+ * Assume C++11, which is now four years old, enabling code simplification
+ * rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not callled
+ * deprecated rarely or unused code, including %i9in%
  
 # Version 2.4.1
  * updated HCC to include 2017 data, thanks to @anobel fixes #136

@@ -171,19 +171,9 @@ set_re_globals()
 
 #' Check whether ICD-9 codes are syntactically valid
 #'
-#' This does not check whether the code corresponds to a real ICD-9-CM billing
-#' code, or parent grouping. For that, see \code{\link{is_defined}}.
-#'
-#' Factors are accepted, and since the validation is done with \code{grepl}
-#' these are handled correctly.
-#'
-#' Currently, there is a limitation on NA values. Calling with \code{NA} (which
-#' is a logical vector of length one by default) fails, because it is not a
-#' string. This is rarely of significance in real life, since the NA will be
-#' part of a character vector of codes, and will therefore be cast already to
-#' \code{NA_character}
-#'
-#' \code{NA} values result in a return value of \code{FALSE}.
+#' These functions check whether the given ICD codes look correct, but do not
+#' check whether they have actual definitions in any particular ICD scheme. For
+#' that, see \code{\link{is_defined}}.
 #' @section Three-digit validation: \code{icd9_is_valid_major} validates just
 #'   the 'major' three-digit part of an ICD-9 code. This can in fact be provided
 #'   as a numeric, since there is no ambiguity. Numeric-only codes should be one
@@ -193,6 +183,11 @@ set_re_globals()
 #'   integer ICD-9 codes could be intended by the user, there is a difference
 #'   between 100, 100.0, 100.00. Therefore a warning is given if a numeric value
 #'   is provided.
+#' @section \code{NA} values: Currently, there is a limitation on NA values.
+#'   Calling with \code{NA} (which is a logical vector of length one by default)
+#'   fails, because it is not a string. This is rarely of significance in real
+#'   life, since the NA will be part of a character vector of codes, and will
+#'   therefore be cast already to \code{NA_character}
 #' @section Class: S3 class of on object in R is just a vector. Attributes are
 #'   lost with manipulation, with the exception of class: therefore, elements of
 #'   the class vector are used to describe features of the data. If these are
@@ -201,7 +196,6 @@ set_re_globals()
 #'   any guess work. There is overlap between sets with combinations of
 #'   \code{short_code} or \code{decimal_code}, and ICD-9 or ICD-10 codes, so
 #'   guessing is never going to be perfect.
-#'
 #' @param x An ICD-9 or 10 code. If the class is set to \code{'icd9'},
 #'   \code{'icd10'}, \code{'icd10cm'} etc then perform appropriate validation.
 #' @template mjr

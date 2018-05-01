@@ -33,12 +33,15 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' Find comorbidities from ICD-9 codes.
 #'
 #' This is the main function which extracts comorbidities from a set of ICD-9
-#' codes. This is when some trivial post-processing of the comorbidity data is
-#' done, e.g. renaming to human-friendly field names, and updating fields
-#' according to rules. The exact fields from the original mappings can be
-#' obtained using \code{hierarchy = FALSE}, but for comorbidity counting,
-#' Charlson Score, etc., the rules should be applied. For more about computing
-#' Hierarchical Condition Codes (HCC), see \code{\link{comorbid_hcc}}
+#' codes. Some comorbidity schemes have rules, for example, what to do when both
+#' 'hypertension' and 'hypertension with complications' are present. These rules
+#' are applied by default; if the exact fields from the original mappings are
+#' needed, use \code{hierarchy = FALSE}. For comorbidity counting, Charlson or
+#' VanWalraven scores the default should be used to apply the rules. For more
+#' about computing Hierarchical Condition Codes (HCC), see
+#' \code{\link{comorbid_hcc}} For more about comorbidities following the
+#' Clinical Classification Software (CCS) rules from AHRQ, see
+#' \code{\link{comorbid_ccs}}.
 #' @param x \code{data.frame} containing a column of patient-visit identifiers
 #'   and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
 #'   format, like the example \code{vermont_dx} data. If it is in \sQuote{wide}
@@ -417,7 +420,8 @@ comorbid_ccs <- function(x, icd_name = get_icd_name(x), ...)
   switch_ver_cmb(x, list(icd9 = icd9_comorbid_ccs,
                          icd10 = icd10_comorbid_ccs), ...)
 
-#' @describeIn comorbid Compute AHRQ Clinical Classifications Software (CCS) scores
+#' @describeIn comorbid Compute AHRQ Clinical Classifications Software (CCS)
+#'   scores from ICD-9 codes
 #' @template ccs-single
 #' @param lvl If multiple level CCS, then level must be selected as a number
 #'   between one and four.
@@ -438,7 +442,8 @@ icd9_comorbid_ccs <- function(x, ...,
   icd9_comorbid(x, map = map, short_map = short_map, ...)
 }
 
-#' @rdname comorbid
+#' @describeIn comorbid Compute AHRQ Clinical Classifications Software (CCS)
+#'   scores from ICD-10 codes
 #' @export
 icd10_comorbid_ccs <- function(x, ..., single = TRUE, lvl = NULL) {
   assert_flag(single)
@@ -490,13 +495,6 @@ comorbid_quan_deyo <- function(x, ...)
 #' @export
 comorbid_charlson <- function(...)
   comorbid_quan_deyo(...)
-
-#' @describeIn comorbid Implementation of Clinical Classifcations Software from
-#'   AHRQ
-#' @export
-comorbid_ccs <- function(x, ...)
-  switch_ver_cmb(x, list(icd9 = icd9_comorbid_ccs,
-                         icd10 = .NotYetImplemented), ...)
 
 #' Apply hierarchy and choose naming for each comorbidity map
 #'

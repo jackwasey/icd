@@ -41,48 +41,40 @@ version](https://www.r-pkg.org/badges/version/icd)](https://cran.r-project.org/p
     or ICD-10 codes, e.g. Cancer, Heart Disease
       - several standard mappings of ICD codes to comorbidities are
         included (Quan, Deyo, Elixhauser, AHRQ)
-      - very fast assignment of ICD codes to comorbidities (using C and
-        C++ internally, with automatic parallel execution using OpenMP
-        when available), assigning millions of comorbidities in a few
-        seconds
+      - very fast assignment of ICD codes to comorbidities (using matrix
+        multiplication with C and C++ internally)
   - Charlson and Van Walraven score calculations
-  - Hierarchical Condition Codes (HCC)
+  - Hierarchical Condition Codes (HCC) from CMS
+  - Clinical Classifcations Software (CCS) comorbidities from AHRQ
   - validation of ICD codes from different annual revisions of ICD-9-CM
     and ICD-10-CM
   - summarizing ICD codes into groups, and to human-readable
     descriptions
   - correct conversion between different representations of ICD codes,
     with and without a decimal points, leading and trailing characters
-    (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 conversion is
-    left as an exercise for the user\!
+    (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is
+    not yet implemented
   - comprehensive test suite to increase confidence in accurate
     processing of ICD codes
+  - all internal ICD and comorbidity data is extracted directly from
+    publically available data or code, increasing confidence in the
+    results
 
 ## Install
 
-The latest version is available in [github
-icd](https://github.com/jackwasey/icd), and can be installed with:
-
 ``` r
-    install.packages("devtools")
-    devtools::install_github("jackwasey/icd")
+install.packages("icd")
 ```
-
-The *master* branch at github should always build and pass all tests and
-R CMD check, and will be similar or identical to the most recent CRAN
-release. The CRAN releases are stable milestones. Contributions and bug
-reports are encouraged and essential for this package to remain current
-and useful to the many people who have installed it.
 
 ## Introduction
 
 Calculate comorbidities, Charlson scores, perform fast and accurate
 validation, conversion, manipulation, filtering and comparison of ICD-9
-and ICD-10 codes. Common ambiguities and code formats are handled. This
-package enables a work flow from raw lists of ICD codes in hospital
-billing databases to comorbidities. ICD-9 and ICD-10 comorbidity
-mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ
-included. This package replaces ‘icd9’, which should be uninstalled.
+and ICD-10 codes. This package enables a work flow from raw lists of ICD
+codes in hospital databases to comorbidities. ICD-9 and ICD-10
+comorbidity mappings from Quan (Deyo and Elixhauser versions),
+Elixhauser and AHRQ included. Common ambiguities and code formats are
+handled.
 
 ## Relevance
 
@@ -147,15 +139,8 @@ patient_data
 #> 6     1001  4011    Y
 #> 7     1002  4011    E
 
-# reformat input data as needed
-icd_long_to_wide(patient_data)
-#>      [,1]    [,2]   [,3]   [,4]   
-#> 1000 "40201" "2258" "7208" "25001"
-#> 1001 "34400" "4011" NA     NA     
-#> 1002 "4011"  NA     NA     NA
-
 # get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
-icd_comorbid_quan_deyo(patient_data)
+comorbid_charlson(patient_data)
 #>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
 #> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
 #> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
@@ -165,29 +150,33 @@ icd_comorbid_quan_deyo(patient_data)
 #> 1001 FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE
 #> 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
 
-# find diagnoses present on admission:
-icd_filter_poa(patient_data)
-#>   visit_id  icd9
-#> 1     1000 40201
-#> 4     1000 25001
-#> 6     1001  4011
+# or go straight to the Charlson scores:
+charlson(patient_data)
+#> 1000 1001 1002 
+#>    2    2    0
 
 # get comorbidities based on present-on-arrival diagnoses, use magrittr to flow the data
-patient_data %>% icd_filter_poa %>% icd_comorbid_quan_deyo
-#>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
-#> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
-#> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
-#>         DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV
-#> 1000  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
-#> 1001 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
+patient_data %>% filter_poa %>% comorbid_elix
+#>        CHF Arrhythmia Valvular  PHTN   PVD   HTN Paralysis NeuroOther
+#> 1000 FALSE      FALSE    FALSE FALSE FALSE FALSE     FALSE      FALSE
+#> 1001 FALSE      FALSE    FALSE FALSE FALSE  TRUE     FALSE      FALSE
+#>      Pulmonary    DM  DMcx Hypothyroid Renal Liver   PUD   HIV Lymphoma
+#> 1000     FALSE  TRUE FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE
+#> 1001     FALSE FALSE FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE
+#>       Mets Tumor Rheumatic Coagulopathy Obesity WeightLoss FluidsLytes
+#> 1000 FALSE FALSE     FALSE        FALSE   FALSE      FALSE       FALSE
+#> 1001 FALSE FALSE     FALSE        FALSE   FALSE      FALSE       FALSE
+#>      BloodLoss Anemia Alcohol Drugs Psychoses Depression
+#> 1000     FALSE  FALSE   FALSE FALSE     FALSE      FALSE
+#> 1001     FALSE  FALSE   FALSE FALSE     FALSE      FALSE
 ```
 
 Look at the help files for details and examples of almost every function
 in this package.
 
 ``` r
-?icd_is_valid
-?icd_comorbid
+?comorbid
+?is_valid
 ```
 
 Note that reformatting from wide to long and back is not as
@@ -207,34 +196,31 @@ and rebuild the data; or use the tools provided by this package to
 update the data using new source data files, e.g. when ICD-10-CM 2017 is
 released.
 
-Doing the parsing requires additional dependencies, which are not
-gratuitously included in the package requirements, since most users
-won’t need them. Benchmarking this package also has additional
-requirements. These are: - xml2 - ggplot2 - digest
+### Development version
 
-### Automated testing
+The latest version is available in [github
+icd](https://github.com/jackwasey/icd), and can be installed with:
 
-One of the strengths of this package is a thorough test suite, including
-over 10,000 lines of testing code.
+``` r
+    install.packages("devtools")
+    devtools::install_github("jackwasey/icd")
+```
 
-    find tests -type f -exec cat '{}' + | wc -l
-    10910
-
-A better metric of testing and code quality is code coverage, for which
-[codecov](https://codecov.io/github/jackwasey/icd) and
-[coveralls](https://coveralls.io/github/jackwasey/icd) are used. The
-automated results to [codecov](https://codecov.io/github/jackwasey/icd),
-whereas the [travis](https://travis-ci.org/jackwasey/icd) builds report
-coverage to [coveralls](https://coveralls.io/github/jackwasey/icd). The
-parsing code is a significant chunk of code, and may or may not be
-included in the automated builds depending on whether the source data is
-available. With the data available, test coverage is \>95%.
+The *master* branch at github should always build and pass all tests and
+R CMD check, and will be similar or identical to the most recent CRAN
+release. The CRAN releases are stable milestones. Contributions and bug
+reports are encouraged and essential for this package to remain current
+and useful to the many people who have installed it.
 
 ### Contributing and Building
 
-Contributions of any kind to `icd` are very welcome.
+A substantial amount of code has now been contributed to the package.
+Contributions of any kind to `icd` are very welcome. See the \[GitHub
+issues page\]\](<https://github.com/jackwasey/icd/issues>) to see jobs
+and feature requests. Documentation, vignettes and examples are very
+welcome, especially if accompanied by some real-world data.
 
-To build R, `Rcpp` must be compiled from source. This happens
+To build `icd`, `Rcpp` must be compiled from source. This happens
 automatically on Linux, but on Mac and Windows, the following is
 required: `install.packages("Rcpp", type="source")` to avoid build
 errors.
