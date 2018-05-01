@@ -18,18 +18,19 @@
 #' Get or set whether ICD codes have have an attribute indicating 'short' or
 #' 'decimal' format
 #'
-#' @section Getting the attribute: \code{is.short_diag} tests for presence of an attribute, not whether the code
-#' is a valid ICD code. If \code{must_work} is \code{TRUE} then \code{NULL}
-#' (i.e. no attribute set) returns \code{FALSE}, otherwise \code{NULL} is
-#' returned. To test validity, see \code{\link{is_valid}}.
-#' @section Setting the attribute: Similarly, \code{as.icd_short_diag} and \code{as.icd_decimal_diag} set the
-#' attribute, but do not convert the codes themselves. For conversion between
-#' 'short' and 'decimal' forms, use \code{\link{decimal_to_short}} and
-#' \code{\link{short_to_decimal}}.
+#' @section Getting the attribute: \code{is.short_diag} tests for presence of an
+#'   attribute, not whether the code is a valid ICD code. If \code{must_work} is
+#'   \code{TRUE} then \code{NULL} (i.e. no attribute set) returns \code{FALSE},
+#'   otherwise \code{NULL} is returned. To test validity, see
+#'   \code{\link{is_valid}}.
+#' @section Setting the attribute: Similarly, \code{as.icd_short_diag} and
+#'   \code{as.icd_decimal_diag} set the attribute, but do not convert the codes
+#'   themselves. For conversion between 'short' and 'decimal' forms, use
+#'   \code{\link{decimal_to_short}} and \code{\link{short_to_decimal}}.
 #'
-#' The attribute \code{icd_short_code} should be either \code{TRUE} or
-#' \code{FALSE}. There is no attribute named \code{icd_decimal_code}. These
-#' functions set and get the attribute safely.
+#'   The attribute \code{icd_short_code} should be either \code{TRUE} or
+#'   \code{FALSE}. There is no attribute named \code{icd_decimal_code}. These
+#'   functions set and get the attribute safely.
 #' @param x ICD data
 #' @param value \code{TRUE} or \code{FALSE}, default is \code{TRUE} which sets
 #'   the attribute to whatever is indicated in the function name. See examples.

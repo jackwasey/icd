@@ -93,10 +93,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   # drop this superfluous finale which allocates any other ICD-9 code to the
   # "Other" group
   icd9_map_ahrq[[" "]] <- NULL
-  clean_up_map <- function(x) {
-    as.short_diag(as.icd9(unname(unlist(x))))
-  }
-
+  clean_up_map <- function(x) as.short_diag(as.icd9(unname(unlist(x))))
   clean_up_map(icd9_map_ahrq[ahrq_htn]) -> icd9_map_ahrq[["HTNCX"]]
   clean_up_map(icd9_map_ahrq[ahrq_chf]) -> icd9_map_ahrq[["CHF"]]
   clean_up_map(icd9_map_ahrq[ahrq_renal]) -> icd9_map_ahrq[["RENLFAIL"]]
@@ -220,9 +217,11 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
     as.short_diag %>%
     icd9 %>%
     comorbidity_map
-
-  if (save_data)
+  icd9_map_charlson <- icd9_map_quan_deyo
+  if (save_data) {
     save_in_data_dir(icd9_map_quan_deyo)
+    save_in_data_dir(icd9_map_charlson)
+  }
   invisible(icd9_map_quan_deyo)
 }
 

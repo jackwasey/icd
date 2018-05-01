@@ -74,15 +74,13 @@ explain.default <- function(x, short_code = guess_short(x), condense = TRUE, bri
 
 #' @describeIn explain Explain all ICD-9 codes in a list of vectors
 #' @export
-explain.list <- function(x, ...) {
+explain.list <- function(x, ...)
   lapply(x, explain, ...)
-}
 
 #' @describeIn explain explain character vector of ICD-9 codes.
 #' @export
-explain.icd9 <- function(...) {
+explain.icd9 <- function(...)
   explain.icd9cm(...)
-}
 
 #' @describeIn explain explain character vector of ICD-9-CM codes
 #' @export

@@ -20,7 +20,7 @@ pts10 <- icd::long_data(
      icd_name = c("I058", NA, "T82817A", "", "I69369"),
      date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
 
-icd::icd10_comorbid(pts10, map = icd10_map_ahrq)'
+icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)'
 
 R -d "$debugger" -e '
 pts10 <- icd::long_data(

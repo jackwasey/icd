@@ -97,6 +97,10 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'     c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
 #'
 #' icd10_comorbid(pts10, map = icd10_map_ahrq)
+#' # or if library(icd) hasn't been called first:
+#' icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+#' # or most simply:
+#' icd::icd10_comorbid_ahrq(pts10)
 #'
 #' # specify a simple custom comorbidity map:
 #' my_map <- list("malady" = c("100", "2000"),
