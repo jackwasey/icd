@@ -27,13 +27,16 @@ r_install:
   - rmarkdown
 
 r:
-  - oldrel
-  - release
   - devel
+  - release
+  - oldrel
 
 matrix:
+  fast_finish: true
   allow_failures:
-    - r: oldrel
+  - r: oldrel
+  include:
+  - env: LINTR_COMMENT_BOT=true
 
 repos:
   CRAN: https://cloud.r-project.org
@@ -47,9 +50,10 @@ warnings_are_errors: true
 env:
   global:
     - R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+    - LINTR_COMMENT_BOT=false
   matrix:
-    - LINTR_COMMENT_BOT=false OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable"
-    - LINTR_COMMENT_BOT=true  OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native"
+    - OMP_NUM_THREADS=1 CFLAGS="-Og -Werror -Wall -Wextra -pedantic" CXXFLAGS="-Og -Werror -Wall -Wextra -pedantic"
+    - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native"
 
 before_script:
  - ls -aR

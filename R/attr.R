@@ -50,15 +50,36 @@
 #' codes <- as.decimal_diag(codes)
 #' codes
 #' @export
-is.icd_short_diag <- function(x, must_work = FALSE) {
-  res <- attr(x, "icd_short_diag", exact = TRUE)
-  if (!must_work)
-    res
-  else
-    isTRUE(res)
+as.decimal_diag <- function(x, value = TRUE)
+  as.icd_decimal_diag(x, value)
+
+#' @rdname as.decimal_diag
+#' @export
+as.icd_decimal_diag <- function(x, value = TRUE) {
+  checkmate::assert_flag(value)
+  attr(x, "icd_short_diag") <- !value
+  x
 }
 
-#' @rdname is.short_diag
+#' @rdname as.decimal_diag
+#' @export
+as.short_diag <- function(x, value = TRUE)
+  as.icd_short_diag(x, value)
+
+#' @rdname as.decimal_diag
+#' @export
+as.icd_short_diag <- function(x, value = TRUE) {
+  checkmate::assert_flag(value)
+  attr(x, "icd_short_diag") <- value
+  x
+}
+
+#' @rdname as.decimal_diag
+#' @export
+is.decimal_diag <- function(x, must_work = FALSE)
+  is.icd_decimal_diag(x, must_work = must_work)
+
+#' @rdname as.decimal_diag
 #' @export
 is.icd_decimal_diag <- function(x, must_work = FALSE) {
   res <- attr(x, "icd_short_diag", exact = TRUE)
@@ -68,38 +89,17 @@ is.icd_decimal_diag <- function(x, must_work = FALSE) {
     identical(res, FALSE)
 }
 
-#' @rdname is.short_diag
+#' @rdname as.decimal_diag
 #' @export
 is.short_diag <- function(x, must_work = FALSE)
   is.icd_short_diag(x, must_work = must_work)
 
-#' @rdname is.short_diag
+#' @rdname as.decimal_diag
 #' @export
-is.decimal_diag <- function(x, must_work = FALSE)
-  is.icd_decimal_diag(x, must_work = must_work)
-
-#' @rdname is.short_diag
-#' @export
-as.icd_short_diag <- function(x, value = TRUE) {
-  checkmate::assert_flag(value)
-  attr(x, "icd_short_diag") <- value
-  x
+is.icd_short_diag <- function(x, must_work = FALSE) {
+  res <- attr(x, "icd_short_diag", exact = TRUE)
+  if (!must_work)
+    res
+  else
+    isTRUE(res)
 }
-
-#' @rdname is.short_diag
-#' @export
-as.icd_decimal_diag <- function(x, value = TRUE) {
-  checkmate::assert_flag(value)
-  attr(x, "icd_short_diag") <- !value
-  x
-}
-
-#' @rdname is.short_diag
-#' @export
-as.short_diag <- function(x, value = TRUE)
-  as.icd_short_diag(x, value)
-
-#' @rdname is.short_diag
-#' @export
-as.decimal_diag <- function(x, value = TRUE)
-  as.icd_decimal_diag(x, value)
