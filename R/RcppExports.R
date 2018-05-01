@@ -237,6 +237,7 @@ icd9_decimal_to_short_cpp <- function(x) {
 #'   digits of numeric or V code, or first four digits of E code. This is the
 #'   part before the decimal, when a decimal point is used.
 #' @keywords internal manip
+#' @export
 get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }

@@ -479,6 +479,7 @@ get_major <- function(x) {
 #'   can re-use C++ ICD-9 version: just grabbing the first three characters,
 #'   after all, and this is much easier in ICD-10 then ICD-9
 #' @keywords internal
+#' @export
 get_major.icd10 <- function(x) {
   substr(trim(x), 1L, 3L)
 }
@@ -492,6 +493,7 @@ is_major <- function(x) {
 
 #' @describeIn is_major Default method which guesses version
 #' @keywords internal
+#' @export
 is_major.default <- function(x) {
   switch(
     guess_version(x),
@@ -505,6 +507,7 @@ is_major.default <- function(x) {
 
 #' @describeIn is_major check whether a code is an ICD-10 major
 #' @keywords internal
+#' @export
 is_major.icd10 <- function(x) {
   assert_character(x)
   # if not know whether ICD-10-CM, then use broader definition
@@ -515,6 +518,7 @@ is_major.icd10 <- function(x) {
 #'   Currently uses \code{stringr} which uses \code{stringi} which should be
 #'   quite fast, but does suffer from handling Unicode, locales, etc.
 #' @keywords internal
+#' @export
 is_major.icd10cm <- function(x) {
   assert_character(x)
   grepl(re_just_ws(re_icd10cm_major), trim(x), perl = TRUE)
@@ -522,6 +526,7 @@ is_major.icd10cm <- function(x) {
 
 #' @describeIn is_major check whether a code is an ICD-9 major
 #' @keywords internal
+#' @export
 is_major.icd9 <- function(x) {
   x <- trim(x)
   nchar(x) - icd9_is_e(x) < 4

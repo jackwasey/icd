@@ -34,9 +34,20 @@
 guess_version <- function(x, short_code, ...)
   UseMethod("guess_version")
 
+#' @keywords internal
+#' @export
 guess_version.icd9 <- function(x, short_code, ...) "icd9" #nocov
+
+#' @keywords internal
+#' @export
 guess_version.icd9cm <- function(x, short_code, ...) "icd9cm" #nocov
+
+#' @keywords internal
+#' @export
 guess_version.icd10 <- function(x, short_code, ...) "icd10" #nocov
+
+#' @keywords internal
+#' @export
 guess_version.icd10cm <- function(x, short_code, ...) "icd10cm" #nocov
 
 #' @describeIn guess_version Guess version of ICD codes in a factor
