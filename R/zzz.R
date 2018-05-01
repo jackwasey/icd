@@ -52,7 +52,6 @@ release_questions <- function() {
     "Does every file have correct licence information?",
     "Is spelling correct everywhere? E.g. aspell_package_Rd_files('.')",
     # code quality:
-    "Has the development branch been merged/rebased into master?",
     "Are you happy with the code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
     "Are all public S3 classes all exported? use devtools::missing_s3()",
@@ -76,7 +75,6 @@ release_questions <- function() {
     "Have all unnecessary files been ignored in built archive? Especially
       thinking of autoconfigure stuff. Look in the final built archive
       before submitting to CRAN?",
-    "Has .*_alt\\.[Rr]$ been reactivated in .Rbuildignore?",
     # not CRAN
     "Are github pages site refreshed from latest documentation?",
     NULL

@@ -201,6 +201,8 @@ get_visit_name <- function(x, visit_name = NULL) {
 .visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
                          "in.*enc", "out.*enc", "encounter", "visit", "enc")
 
+#' @keywords internal
+#' @export
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
 
@@ -221,6 +223,8 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
   visit_name
 }
 
+#' @keywords internal
+#' @export
 get_visit_name.matrix <- function(x, visit_name = NULL) {
   stop("matrices of comorbidity data are expected to be of logical type, and have row names corresponding to the visit or patient.")
 }

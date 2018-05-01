@@ -490,7 +490,7 @@ comorbid_quan_deyo <- function(x, ...)
                          icd10 = icd10_comorbid_quan_deyo), ...)
 
 #' @describeIn comorbid Calculate comorbidities using Charlson categories
-#'   according to Quan/Deyo ICD categories. Synonymouse with
+#'   according to Quan/Deyo ICD categories. Synonymous with
 #'   \code{link{comorbid_quan_deyo}} in this release.
 #' @export
 comorbid_charlson <- function(...)

@@ -236,7 +236,7 @@ ICD-9 or ICD-10 codes
 use ICD-9 or ICD-10 codes
 
 \item \code{comorbid_charlson}: Calculate comorbidities using Charlson categories
-according to Quan/Deyo ICD categories. Synonymouse with
+according to Quan/Deyo ICD categories. Synonymous with
 \code{link{comorbid_quan_deyo}} in this release.
 }}
 
