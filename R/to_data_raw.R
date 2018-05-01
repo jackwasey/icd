@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+#nocov start
+
 #' Unzip file to \code{data-raw}
 #'
 #' Get a zip file from a URL, extract contents, and save file in
@@ -88,3 +90,5 @@ download_to_data_raw <- function(
   f_info
 
 }
+
+#nocov end

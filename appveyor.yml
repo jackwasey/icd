@@ -44,8 +44,8 @@ environment:
       R_ARCH: x64
       ICD_STRIP: false
 
-on_success:
-  - Rscript -e "covr::coveralls(quiet = FALSE)"
+# on_success:
+#   - Rscript -e "covr::coveralls(quiet = FALSE)"
 
 test_script:
   - travis-tool.sh run_tests
