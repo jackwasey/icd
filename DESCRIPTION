@@ -58,6 +58,7 @@ Suggests:
     RODBC,
     roxygen2 (>= 5.0.0),
     rmarkdown,
+    rticles,
     stringr,
     testthat (>= 0.11.1),
     xml2
