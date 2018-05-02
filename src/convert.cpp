@@ -272,6 +272,7 @@ CV icd9DecimalToShort(
 //'   digits of numeric or V code, or first four digits of E code. This is the
 //'   part before the decimal, when a decimal point is used.
 //' @keywords internal manip
+//' @export
 //[[Rcpp::export(name="get_major.icd9")]]
 CV icd9GetMajor(const CV x, const bool short_code) {
   if (short_code) {

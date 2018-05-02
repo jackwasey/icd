@@ -20,7 +20,6 @@
 \alias{comorbid_quan_elix}
 \alias{comorbid_quan_deyo}
 \alias{comorbid_charlson}
-\alias{comorbid_ccs}
 \alias{icd_comorbid}
 \alias{icd_comorbid_ahrq}
 \alias{icd_comorbid_elix}
@@ -56,7 +55,7 @@ icd9_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
-comorbid_ccs(x, ...)
+comorbid_ccs(x, icd_name = get_icd_name(x), ...)
 
 icd9_comorbid_ccs(x, ..., single = TRUE, lvl = NULL,
   map = icd::icd9_map_single_ccs, short_map = TRUE)
@@ -72,8 +71,6 @@ comorbid_quan_elix(x, ...)
 comorbid_quan_deyo(x, ...)
 
 comorbid_charlson(...)
-
-comorbid_ccs(x, ...)
 
 icd_comorbid(...)
 
@@ -168,12 +165,15 @@ between one and four.}
 }
 \description{
 This is the main function which extracts comorbidities from a set of ICD-9
-codes. This is when some trivial post-processing of the comorbidity data is
-done, e.g. renaming to human-friendly field names, and updating fields
-according to rules. The exact fields from the original mappings can be
-obtained using \code{hierarchy = FALSE}, but for comorbidity counting,
-Charlson Score, etc., the rules should be applied. For more about computing
-Hierarchical Condition Codes (HCC), see \code{\link{comorbid_hcc}}
+codes. Some comorbidity schemes have rules, for example, what to do when both
+'hypertension' and 'hypertension with complications' are present. These rules
+are applied by default; if the exact fields from the original mappings are
+needed, use \code{hierarchy = FALSE}. For comorbidity counting, Charlson or
+VanWalraven scores the default should be used to apply the rules. For more
+about computing Hierarchical Condition Codes (HCC), see
+\code{\link{comorbid_hcc}} For more about comorbidities following the
+Clinical Classification Software (CCS) rules from AHRQ, see
+\code{\link{comorbid_ccs}}.
 }
 \details{
 The order of visits may change depending on the original sequence,
@@ -217,7 +217,11 @@ codes
 
 \item \code{comorbid_ccs}: Use AHRQ CCS for comorbidity classification
 
-\item \code{icd9_comorbid_ccs}: Compute AHRQ Clinical Classifications Software (CCS) scores
+\item \code{icd9_comorbid_ccs}: Compute AHRQ Clinical Classifications Software (CCS)
+scores from ICD-9 codes
+
+\item \code{icd10_comorbid_ccs}: Compute AHRQ Clinical Classifications Software (CCS)
+scores from ICD-10 codes
 
 \item \code{comorbid_ahrq}: AHRQ comorbidities, infers whether to use ICD-9 or
 ICD-10 codes
@@ -232,11 +236,8 @@ ICD-9 or ICD-10 codes
 use ICD-9 or ICD-10 codes
 
 \item \code{comorbid_charlson}: Calculate comorbidities using Charlson categories
-according to Quan/Deyo ICD categories. Synonymouse with
+according to Quan/Deyo ICD categories. Synonymous with
 \code{link{comorbid_quan_deyo}} in this release.
-
-\item \code{comorbid_ccs}: Implementation of Clinical Classifcations Software from
-AHRQ
 }}
 
 \section{Deprecated function names}{

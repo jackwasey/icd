@@ -25,8 +25,8 @@ testthat::test_check("icd")
 
 # test deprecated functions:
 if (tolower(Sys.getenv("ICD_TEST_DEPRECATED")) %in% c("yes", "true"))
-  test_dir("tests-deprecated")
+  test_dir("../tests-deprecated")
 
 # test slow functions:
 if (tolower(Sys.getenv("ICD_TEST_BUILD_DATA")) %in% c("yes", "true"))
-  test_dir("tests-build-data")
+  test_dir("../tests-build-data")
