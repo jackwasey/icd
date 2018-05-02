@@ -1,16 +1,23 @@
 ---
 author:
   - name: Jack O. Wasey
-    affiliation: Children's Hospital of Philadelphia
+    affiliation: CHOP
     address: >
       3401 Civic Center Blvd.
       Philadelphia, PA 19102, USA
       email: \email{waseyj@chop.edu}
       url: http://www.chop.edu/doctors/wasey-jack
+  - name: Steven M. Frank
+    affiliation: Johns Hopkins Medical Institutions
+    address: >
+      1800 Orleans St.
+      Baltimore, MD 21287, USA
+      email: sfrank3@jhmi.edu
+      url: https://www.hopkinsmedicine.org/profiles/results/directory/profile/1819685/steven-frank
   - name: Mohamed A. Rehman
     affiliation: All Children's Hospital
     address: >
-      501 6th Ave S
+      501 6th Ave S.
       St Petersburg, FL 33701, USA
       email: rehman@jhmi.edu
       url: http://www.jhmi.edu
@@ -19,7 +26,7 @@ title:
   plain: "Efficient calculation of comorbidities from ICD codes with the R package 'icd'"
   short: "\\pkg{icd}: Efficient calculation of comorbidities from ICD codes"
 abstract: >
-  Most clinical research describes the existing diseases in its study populations, and retrospective research may rely on this information for risk adjustment. Groups of International Classifcation of Diseases (ICD) codes are often used for this, but existing tools do not scale to big data sets. This package includes carefully validated mappings of ICD codes to comorbidities, and uses an efficient, fast and scalable algorithm to apply these mappings to patient data. This enables reproducible workflows with hundreds of millions of patient records as are increasingly seen in large national and international databases.
+  Most clinical research describes the existing diseases in its study populations, and retrospective research may rely on this information for risk adjustment. Sets of International Classifcation of Diseases (ICD) codes are often used for classifying patients into comorbidities (e.g. 'Cancer') to summarize the characteristics of patients, but existing tools do not scale to big data sets. The \pkg{icd} extension for \proglang{R} includes carefully validated mappings of ICD codes to comorbidities, and uses an efficient, fast and scalable algorithm to apply these mappings to patient data. This enables reproducible workflows with hundreds of millions of patient records as are increasingly seen in large national and international databases.
 keywords:
   # at least one keyword must be supplied
   formatted: [medical informatics, administrative data, matrix algebra, "\\proglang{R}", "\\proglang{C++}"]
@@ -50,6 +57,7 @@ editor_options:
 # https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
 # https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html
 # http://merkel.texture.rocks/Latex/natbib.php
+# https://rmarkdown.rstudio.com/authoring_pandoc_markdown.html#raw-tex
 
 suppressPackageStartupMessages({
   requireNamespace("knitr")
@@ -60,12 +68,14 @@ knitr::opts_chunk$set(fig.width = fig.width,
                       fig.height = fig.width / ((1 + sqrt(5)) / 2)
                       )
 ```
-
+<!-- Aaron, final rec:
+I recommend ending section 1 with a single section that combines 1.4, 1.5, 1.7. I would also add a figure to this section that illustrates the problem to be solved. I would move section  1.6 above this new section. Also recommend integrating section 1.8 into 1.1
+-->
 # Introduction
-ICD diagnostic codes are used to define tens of thousands of disease originally from the World Health Organization (WHO). The original purpose was to allow epidemiologists to compare and assess the health and causes of death around the world. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants based on the WHO versions. This makes ICD codes important in many kinds of clinical research. \pkg{icd} was made to meet these needs in a reproducible workflow when used with big or small data.
+ICD diagnostic codes are used to define tens of thousands of disease originally from the World Health Organization (WHO). The original purpose was to allow epidemiologists to compare and assess the health and causes of death around the world. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants based on the WHO versions. This makes ICD codes important in many kinds of clinical research. \pkg{icd} was made to meet these needs in a reproducible workflow when used with big or small data. To do this, it uses mappings from the detailed ICD codes to [comorbidities](#terminology)), and applies these to patient data.
 
 ## What is a comorbidity?
-Given there are tens of thousands of diagnostic codes, it is impossible to use them directly in statistical models. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after a hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications', and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes and renal.
+Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after a hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications', and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes and renal. Thus the term _comorbidity_ generally refers to classes of diseases, not specific diagnoses, and that is how the term is used in the rest of this paper.
 
 ## Uses of comorbidities
 
@@ -73,7 +83,7 @@ Given there are tens of thousands of diagnostic codes, it is impossible to use t
 Almost every report of a clinical investigation in medicine includes a table showing the characteristics of the groups within a study population. One purpose of this table is to show any differences between the groups under investigation. Things like age and weight can be compared numerically, whereas the tens of thousands of distinct diagnostic codes may only be compared by grouping into comorbidities. It is of central importance to retrospective studies that confounding is minimized by understanding differences in comorbidities between groups, then by risk adjustment. In randomized studies, this is achieved by recruiting enough patients and randomly assigning them to treatment: comorbidities of interest are still needed to demonstrate that recruitment was free from bias and that the sample size large enough.
 
 ### Risk adjustment
-Identifying differences between groups in retrospective clinical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another is to use propensity matching which, for all its flaws, seems to work acceptably well: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or in the form of binary representation of the presence or absence of comorbidities for each patient or _patient-visit_ (See [Terminology](#Terminology).) More sophisticated matching also relies on comorbidities for excellent risk adjustment, \citep[e.g.][]{diamond_genetic_2012}.
+Identifying differences between groups in retrospective clinical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or _patient-visit_ (See [Terminology](#terminology)). More sophisticated matching also relies on comorbidities for excellent risk adjustment, \citep[e.g.][]{diamond_genetic_2012}.
 
 ## Ways of grouping ICD codes into comorbidities
 The ubiquity of ICD codes means there is a long history of grouping them to form comorbidities, and these standardized groups have been used for decades as the basis for clinical studies. As revisions of the ICD codes have appeared, and various diseases have waxed and waned in significance, people have worked to categorize them into these standardized comorbidity groups. The two main groups were developed by Charlson [@charlson_new_1987], and Elixhauser [@elixhauser_comorbidity_1998]. Such mappings between comorbidity categories and sets of diagnostic codes will henceforth be called, _comorbidity maps_.The benefits of using existing comorbidity maps are:
@@ -157,7 +167,7 @@ There are two main areas of computational interest, which are related. The first
 The comorbidity definitions in published literature do not precisely specify each individual code. This is partly a function of the various annual and international revisions of ICD codes, and also the need for brevity in publications, so ranges of codes are specified. For example, in the Valvular Heart Disease comorbidity in the ICD-9 Elixhauser scheme, we see it contains the range _394.0_ -- _397.1_ . In the ICD-10 version of that map, there are many top-level codes, such as _I34_, _I35_ and _I36_, which themselves are never or rarely used for diagnostic coding. Therefore, there are few or no exact matches between candidate ICD codes and the codes or ranges in the comorbidities, so some kind of string matching must be done, or a determination of whether a code falls in a specified range.
 
 ### Big data
-Bulk health care data, even for one hospital, often has hundreds of thousands or millions of encounters of different types. National databases and multi-hospital patient registries often have many more. Initial work using pure \proglang{R} code, with some optimization, resulted in calculations taking minutes for about ten thousand patients. Although the problem is parallelizable, performance analysis on early versions using string matching showed that there was a lot of pressure on the CPU caches, so massive parallelization -- when even an option -- would have had diminishing returns with scaling. This is demonstrated in the benchmarks in the [Results](#Results).
+Bulk health care data, even for one hospital, often has hundreds of thousands or millions of encounters of different types. National databases and multi-hospital patient registries often have many more. Initial work using pure \proglang{R} code, with some optimization, resulted in calculations taking minutes for about ten thousand patients. Although the problem is parallelizable, performance analysis on early versions using string matching showed that there was a lot of pressure on the CPU caches, so massive parallelization -- when even an option -- would have had diminishing returns with scaling. This is demonstrated in the benchmarks in the [Results](#results).
 
 ## Terminology
 
@@ -232,7 +242,7 @@ if a matching diagnostic code is found, then\\
 record that comorbidity for the current patient-visit
 }\label{pseudocode}
 
-Executing this in big health care data sets is a computational challenge which \pkg{icd} solves efficiently, as can be seen in the benchmarks in the [Results](#Results) section. Specifically, the problems arise from large numbers of patient-visits, and from the need to search for strings in each comorbidity for each ICD code.
+Executing this in big health care data sets is a computational challenge which \pkg{icd} solves efficiently, as can be seen in the benchmarks in the [Results](#results) section. Specifically, the problems arise from large numbers of patient-visits, and from the need to search for strings in each comorbidity for each ICD code.
 
 Big data solutions cannot often be solved simply by increasing hardware capacity. The availability of many computing cores in the cloud does not help an algorithm which is limited to a single thread, or an algorithm which is ignorant of how CPU memory caching works. \pkg{icd} was designed to work efficiently on big health care data using parallel processing, and by minimizing the memory reuqirements of the problem.
 
@@ -410,7 +420,7 @@ This can be represented thus:
 
 The \pkg{Eigen} linear algebra software has highly optimized multihtreaded code for some specific cases, including the type of matrix multiplication needed here: row-major sparse matrix multiplication with a column-major dense matrix. It would be possible to use a more distributed matrix algebra approach using multiple CPUs and GPUs on multiple servers, however, most distributions of Basic Linear Algebra Subprograms (BLAS) and Linear Algebra Package (LAPACK) do not include sparse matrix handling.
 
-# Results {#Results}
+# Results
 
 There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk} [@medicalriskpkg], and \pkg{comorbidity} [@comorbiditypkg]. The following is a performance comparison using randomly generated patient data of different sizes, each patient being assigned twenty random codes which may or not have been in the AHRQ comorbidity map.
 
