@@ -59,8 +59,11 @@ units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
 \item{...}{arguments passed on to other functions}
 }
 \description{
-This can be thought of as the inverse operation to
-  \code{children}.
+These functions take a set of ICD codes, and look for parent ICD codes in the
+hierarchy. If all the children of a parent are found, then the returned
+vector will just contain the parents of those codes. Any additional codes
+which did not have all the siblings present are retained. This can be thought
+of as the inverse operation to \code{children}.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -97,6 +100,26 @@ from input data
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
 
+\examples{
+kids <- children("V40")
+kids
+condense(kids, defined = TRUE)
+kids_with_undefined <- children("V40", defined = FALSE)
+head(kids_with_undefined)
+length(kids_with_undefined)
+condense(kids, defined = FALSE)
+
+# what happens if we have additional codes?
+# (condense will warn if we don't explicitly ask to condense
+# based on defined or possible codes.)
+condense(c(kids, "41100"), warn = FALSE)
+
+# a good use is to summarise the contents of a comorbidity:
+icd9_map_elix$CHF
+condense(icd9_map_elix$CHF)
+# explaining big groups of codes takes advantage of this:
+explain(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
+}
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},
   \code{\link{expand_minor}}, \code{\link{expand_range}}
