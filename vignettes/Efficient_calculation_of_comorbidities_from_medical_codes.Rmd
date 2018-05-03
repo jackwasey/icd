@@ -1,7 +1,7 @@
 ---
 author:
   - name: Jack O. Wasey
-    affiliation: "Children's Hospital of Philadelphia"
+    affiliation: Children''s Hospital of Philadelphia
     address: >
       3401 Civic Center Blvd.
       Philadelphia, PA 19102, USA
@@ -15,7 +15,7 @@ author:
       email: sfrank3@jhmi.edu
       url: https://www.hopkinsmedicine.org/profiles/results/directory/profile/1819685/steven-frank
   - name: Mohamed A. Rehman
-    affiliation: All Children's Hospital
+    affiliation: Johns Hopkins All Children's Hospital
     address: >
       501 6th Ave S.
       St Petersburg, FL 33701, USA
@@ -30,7 +30,7 @@ abstract: >
 keywords:
   formatted: [medical informatics, administrative data, matrix algebra, "\\proglang{R}", "\\proglang{C++}", "ICD", "mapping"]
   plain:     [medical informatics, administrative data, matrix algebra, R, C++, ICD, mapping]
-preamble: '\usepackage{amsmath}\usepackage{longtable}\usepackage{booktabs}\shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}\author{Jack O. Wasey\\Children''s Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\All Children''s Hospital}'
+preamble: '\usepackage{amsmath}\usepackage{longtable}\usepackage{booktabs}\shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}\author{Jack O. Wasey\\Children''s Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children''s Hospital}'
 biblio-style: jss
 output: rticles::jss_article
 bibliography:
@@ -48,7 +48,6 @@ editor_options:
 ```{r setup, echo=FALSE, warning=FALSE, cache=FALSE}
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
-# JSS examples in github https://github.com/search?utf8=%E2%9C%93&q=jss++extension%3ARmd&type=Code
 # https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
 # https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html
 # http://merkel.texture.rocks/Latex/natbib.php
@@ -150,22 +149,17 @@ ICD-9 codes are primarily numeric, have fewer codes defined, and have a more var
 ### Breakdown of an ICD-10 code
 
 This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and difference betwen WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM:
-
 ```{r exampleicdcodewho}
 explain("S62")
 explain("S62.6")
 ```
-
 These three are refinements offered only by ICD-10-CM:
-
 ```{r exampleicdcodecm}
 explain("S62.60")
 explain("S62.607")
 explain("S62.607S")
 ```
-
 These codes are all contained in the following sub-chapter, and chapter:
-
 ```{r examplecodechap}
 icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
 icd10_chapters$`Injury, poisoning and certain other consequences of external causes`
@@ -253,7 +247,7 @@ Big data solutions cannot often be solved simply by increasing hardware capacity
 
 # Methods
 
-The main feature of this software is the algorithm for assigning the diagnostic codes of a patient into comorbidities. The core of this implementation is a matrix multiplication. Other comorbidity calculation tools in \proglang{R} and other languages search by exact match or regular expression for each patient-visit code within each comorbidity. String matching requires more memory and CPU cycles than integer or boolean operations, and is not CPU cache-friendly, making it resistant to parallelization.
+The main internal feature of this software is the algorithm for assigning the diagnostic codes of a patient into comorbidities. The core of this implementation is a matrix multiplication. Other comorbidity calculation tools in \proglang{R} and other languages search by exact match or regular expression for each patient-visit code within each comorbidity. String matching requires more memory and CPU cycles than integer or boolean operations, and is not CPU cache-friendly, making it resistant to parallelization.
 
 There are several steps to the solution implemented by \pkg{icd}:
 
@@ -261,10 +255,10 @@ There are several steps to the solution implemented by \pkg{icd}:
     i) Either pre-calculate possible ICD-9 codes in ICD-9 maps;
     ii) Or use partial string matches to create a dictionary of ICD-10 codes in these data, which is done within step 2 to avoid scanning the data twice.
 2. Reduce the problem to a matrix multiplication
-    i) Compute intersection ($\mathcal{O}(\log{}n)$ with a tree-based data structure)
-3. Perform the matrix multiplication ($\mathcal{O}(n)$[^5])
+    i) Compute intersection ($\mathcal{O}(\log{}n)$ for time with a tree-based data structure)
+3. Perform a sparse by dense matrix multiplication ($\mathcal{O}(R_m\cdot m)$ where $R_m$ is the number of non-zero elements per row. For typical patient data, the mean is around five, with many administrative data being limited to thirty codes. This low number compares favorably to the matrix width of tens of thousands. [^5])
 
-[^5]: Dense matrix multiplication is$\mathcal{O}(n^3)$ but asymptotically, only one dimension of one matrix grows with increasing patient-visits in this problem. In addition  See below for details.
+[^5]: Sparse matrix multiplication with dense matrices is already $\mathcal{O}(n)$ using the widespread Compressed Row -- or Column -- Storage (CRS) scheme. Even if dense matrix multiplication were used, it would still be $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general case: in this problem, only one dimension of one matrix grows with increasing patient-visits. These are asymptotic limits for time, not for memory or bandwidth.
 
 The pre-calculation of the ICD-9 maps is done at package creation time, using internal functions which are included for reproducibility, and the results are included in \pkg{icd}. This is possible because of the limited number of permutations of syntactically valid ICD-9 codes. ICD-10 codes have many more possibilities, and although the same technique could be used, the ICD-10 maps would be huge, and vulnerable to unexpected modifications, for example a national ICD-10 variant using a different letter suffix.
 
@@ -291,27 +285,6 @@ b_{2,1} & b_{2,2} & \cdots & b_{2,q} \\
 \vdots  & \vdots  & \ddots & \vdots  \\
 b_{p,1} & b_{p,2} & \cdots & b_{p,q}
 \end{pmatrix}$$
-
-```{r comorbidmatrix, echo=FALSE,caption="This is a visualization of the complete ICD-9 AHRQ comorbidity map"}
-comorbidity_image <- function(map, ...) {
-  code <- unique(unlist(map))
-  x <- comorbid(map = map, x = data.frame(ptid = seq_along(code), code))
-  mode(x) <- "integer"
-  image(t(x[, ]), ylim = c(1, 0), col = c("#FFFFFF", "#000000"), xaxt = 'n', yaxt = 'n', ...)
-}
-ch_map <- R.cache::loadCache(key = list("icd9_map_chapters"))
-if (is.null(ch_map)) {
-  ch_map <- icd:::icd9_chapters_to_map(icd9_chapters)
-  R.cache::saveCache(ch_map, key = list("icd9_map_chapters"))
-}
-{
-  par(mfcol = c(1,4))
-  comorbidity_image(icd9_map_ahrq, xlab = "ICD-9 AHRQ\ncomorbidities", ylab = "ICD codes")
-  comorbidity_image(icd10_map_ahrq, xlab = "ICD-10 AHRQ\ncomorbidities")
-  comorbidity_image(icd9_map_multi_ccs$lvl1, xlab = "ICD-9 CCS categories")
-  comorbidity_image(ch_map, xlab = "ICD-9 chapters")
-}
-```
 
 Given there are tens or hundreds of thousands of possible ICD-9 or ICD-10 codes, the possible width of $\boldsymbol{A}$ is large ($n$ columns). There are also many ICD codes for each comorbidity, so the height of $\boldsymbol{B}$ is large ($p$ rows), although typical comorbidity maps only cover a subset of possible codes. Many data sets have tens of millions of patient-visits, each with typically up to 30 diagnostic codes, the mean being around five to ten, depending on the dataset, so the memory requirement using lower estimates and four bytes per flag[^2] is $10^7 \times 10^4 \times 4 = 4 \times 10^{11}$, which is 400 gigabytes simply to represent the patient-visit to disease relationships.
 
@@ -355,6 +328,21 @@ $$ B_{p,q} =
 1 & 0 & 1 & 0 & 0 \\
 \vdots & \vdots & \vdots & \vdots & \vdots
 \end{matrix}$$
+
+```{r comorbidmatrix, echo=FALSE,caption="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column"}
+cmbimage <- function(map, ...) {
+  code <- unique(unlist(map))
+  x <- comorbid(map = map, x = data.frame(ptid = seq_along(code), code))
+  mode(x) <- "integer"
+  image(t(x[, ]), ylim = c(1, 0), col = c("#FFFFFF", "#000000"), xaxt = 'n', yaxt = 'n', ...)
+}
+{
+  par(mfcol = c(1,3))
+  cmbimage(icd9_map_ahrq, xlab = "ICD-9 AHRQ\ncomorbidities", ylab = "ICD codes")
+  cmbimage(icd10_map_ahrq, xlab = "ICD-10 AHRQ\ncomorbidities")
+  cmbimage(icd9_map_multi_ccs$lvl1, xlab = "ICD-9 CCS categories")
+}
+```
 
 ### Matrix multiplication
 
@@ -439,12 +427,13 @@ $$(\boldsymbol{C} \neq 0) =
 
 This can be represented thus:
 
-| patient-visit   | rheum | HTN | CHF |
+| patient-visit   | Rheum | HTN | CHF |
 |-----------------|-------|-----|-----|
 | Encounter one   |       |     |     |
 | Encounter two   | yes   |     |     |
 | Encounter three |       | yes |     |
 | Encounter four  |       | yes | yes |
+[Rheum is Rheumatic Disease, HTN is hypertension, CHF is Congestive Heart Failure][exampleresult]
 
 The \pkg{Eigen} linear algebra software has highly optimized multihtreaded code for some specific cases, including the type of matrix multiplication needed here: row-major sparse matrix multiplication with a column-major dense matrix. It would be possible to use a more distributed matrix algebra approach using multiple CPUs and GPUs on multiple servers, however, most distributions of Basic Linear Algebra Subprograms (BLAS) and Linear Algebra Package (LAPACK) do not include sparse matrix handling.
 
@@ -649,7 +638,7 @@ In general, computation of comorbidities as used in medical research ignores the
 
 Many countries have their own variations on the WHO ICD codes, and these are not yet included in \pkg{icd}. These are unlikely to affect comorbidity calculations significantly. Also missing are WHO versions of ICD codes, which may be possible in the future, dependent upon licensing restrictions.
 
-The synthetic data used for benchmarking contained real and invalid codes. More benchmarking could be done using real data.
+The synthetic data used for benchmarking contained real and invalid codes. More benchmarking could be done using real data. Calculating $\mathcal{O}$ complexity for worst, typical and optimal cases could be of interest; this might highlight areas where performance could be improved.
 
 # Conclusions
 
