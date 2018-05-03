@@ -324,4 +324,13 @@ random_string <- function(n, max_chars = 4) {
 all_identical <- function(x)
   all(sapply(x[-1], function(y) identical(x[[1]], y)))
 
+get_one_of_each <- function()
+  c("002.3", "140.25", "245", "285", "290.01", "389.00",
+    "390.00", "518", "525", "581", "631", "700", "720", "759.99",
+    "765", "780.95", "800", "V02.34", "E900.4")
+
+test_env <- function() {
+  ns <- getNamespace("icd")
+  list2env(as.list(ns, all.names = TRUE), parent = parent.env(ns))
+}
 #nocov end

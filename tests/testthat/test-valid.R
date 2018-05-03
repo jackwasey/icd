@@ -338,7 +338,6 @@ test_that("icd-9 code is really in the list, not just syntactically valid", {
   expect_false(is_defined.icd9(short_code = FALSE, "V802.7"))
   expect_false(is_defined.icd9("V802.7", short_code = FALSE))
   expect_true(is_defined(icd9("802.7"), short_code = FALSE))
-
   expect_equal(is_defined.icd9(short_code = FALSE, "V802.7"), FALSE)
   expect_equal(
     is_defined(c("8027", "E9329", "E000", "armitage"), short_code = TRUE),
@@ -347,20 +346,14 @@ test_that("icd-9 code is really in the list, not just syntactically valid", {
 })
 
 test_that("filter valid - bad input", {
-  expect_error(filter_valid())
   expect_error(filter_valid(list(j = "k")))
-  expect_error(icd9_filter_valid())
-  expect_error(icd9_filter_valid())
-  expect_error(filter_valid.icd10(list(j = "k")))
   expect_error(filter_valid.icd10(list(j = "k")))
 })
 
 test_that("get valid - vector input", {
-
   expect_equal(get_valid.icd9("100"), "100")
   expect_equal(get_valid(icd9("100")), icd9("100"))
   expect_equal(get_valid.icd9(icd9("100")), icd9("100"))
-
   expect_equal(get_valid.icd9("nolk"), character())
   expect_equal(get_valid.icd9(c("100", "nolk")), "100")
   expect_equal(get_valid.icd9(short_code = FALSE, c("10.0", "100.x")), "10.0")
@@ -416,21 +409,17 @@ test_that("billable codes are identified", {
   expect_true(is_billable("1000"))
   expect_false(is_billable("1008"))
   expect_true(is_billable("1009"))
-
   expect_true(is_billable(icd9cm("1000")))
   expect_false(is_billable(icd9cm("1008")))
   expect_true(is_billable(icd9cm("1009")))
-
   expect_true(is_billable.icd9cm("410.00"))
   expect_false(is_billable.icd9cm("410.6"))
   expect_false(is_billable.icd9cm("410"))
-
 })
 
 test_that("get subset of billable codes", {
   x <- c("410", "410.0", "410.00")
   expect_equal_no_icd(get_billable(x), c("410.00"))
-  # SOMEDAY: reasonable to assume that if we're talking billable, we make it ICD-9-CM
   expect_true(is.decimal_diag(get_billable(x)))
   expect_true(is.icd9(get_billable(x)))
   expect_character(get_billable(x))

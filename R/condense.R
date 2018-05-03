@@ -17,13 +17,35 @@
 
 #' Condense ICD-9 code by replacing complete families with parent codes
 #'
-#' This can be thought of as the inverse operation to
-#'   \code{children}.
+#' These functions take a set of ICD codes, and look for parent ICD codes in the
+#' hierarchy. If all the children of a parent are found, then the returned
+#' vector will just contain the parents of those codes. Any additional codes
+#' which did not have all the siblings present are retained. This can be thought
+#' of as the inverse operation to \code{children}.
 #' @template icd9-any
 #' @template icd9-short
 #' @template icd9-decimal
 #' @template short_code
 #' @template dotdotdot
+#' @examples
+#' kids <- children("V40")
+#' kids
+#' condense(kids, defined = TRUE)
+#' kids_with_undefined <- children("V40", defined = FALSE)
+#' head(kids_with_undefined)
+#' length(kids_with_undefined)
+#' condense(kids, defined = FALSE)
+#'
+#' # what happens if we have additional codes?
+#' # (condense will warn if we don't explicitly ask to condense
+#' # based on defined or possible codes.)
+#' condense(c(kids, "41100"), warn = FALSE)
+#'
+#' # a good use is to summarise the contents of a comorbidity:
+#' icd9_map_elix$CHF
+#' condense(icd9_map_elix$CHF)
+#' # explaining big groups of codes takes advantage of this:
+#' explain(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
 #' @family ICD-9 ranges
 #' @keywords manip
 #' @export
@@ -49,12 +71,11 @@ condense.icd9 <- function(x, short_code = guess_short(x), defined = NULL, warn =
 #' @export
 #' @keywords internal manip
 condense.character <- function(x, short_code = guess_short(x), defined = NULL, ...) {
-
-  guess <- guess_version.character(x, short_code = short_code)
-  if (guess == "icd9") {
+  ver <- guess_version.character(x, short_code = short_code)
+  if (ver %in% icd9_classes) {
     if (is.null(short_code)) short_code <- guess_short(x)
     condense.icd9(x, short_code = short_code, defined = defined, ...)
-  } else if (guess == "icd10") {
+  } else if (ver %in% icd10_classes) {
     if (is.null(short_code)) short_code <- guess_short(x)
     stop("condense.icd10 not implemented yet")
   } else {
@@ -80,13 +101,11 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
   assert_flag(warn)
   assert_flag(keep_factor_levels)
   icd9Levels <- levels(x) # NULL if not a factor
-
   # we can convert back to factor later. Lots of scope for errors by handling
   # factors and character vectors in this function, so keep simple with
   # character only.
   x <- as_char_no_warn(x)
   i9w <- unique(get_valid.icd9(x, short_code = TRUE))
-
   if (is.null(defined)) {
     if (all(is_defined.icd9(i9w, short_code = TRUE))) {
       defined <- TRUE
@@ -97,12 +116,10 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
         warning("'defined' not given, but not all codes are defined so assuming FALSE")
     }
   }
-
   if (warn && defined && !all(is_defined.icd9(x, short_code = TRUE))) {
     x <- get_defined.icd9(x, short_code = TRUE)
     warning("only defined values requested, but some undefined ICD-9 code(s) were given, so dropping them")
   }
-
   # any major codes are automatically in output (not condensing higher than
   # three digit code) and all their children can be removed from the work list
   out <- majors <- i9w[are_major <- is_major.icd9(i9w)]
@@ -120,7 +137,6 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
       #}
     }
   }
-
   # 'out' now has original major codes, 'fout' has parent four digit codes. Now
   # see whether any groups of four digit codes comprise all the four digit codes
   # in any parent (or original) major. We test the original majors again to
@@ -140,14 +156,12 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE, keep_factor_leve
     }
   }
   out <- unique(sort_icd.icd9(c(out, fout, i9w), short_code = TRUE))
-
   if (!is.null(icd9Levels)) {
     if (keep_factor_levels)
       out <- factor(out, icd9Levels)
     else
       out <- factor(out)
   }
-
   if (defined)
     get_defined.icd9(out, short_code = TRUE)
   else

@@ -2,7 +2,7 @@
 title: icd Readme
 output:
   md_document:
-    variant: gfm
+    variant: markdown_github
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 author: Jack O. Wasey 
 ---
@@ -48,12 +48,12 @@ patient_data <- data.frame(
   )
 ```
 # icd
-#### downloads from Rstudio mirror
-[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
-[![CRAN version](https://www.r-pkg.org/badges/version/icd)](https://cran.r-project.org/package=icd)
-[![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master)](https://travis-ci.org/jackwasey/icd)
-[![Appveyor](https://ci.appveyor.com/api/projects/status/github/jackwasey/icd)](https://ci.appveyor.com/project/jackwasey/icd)
+[![CRAN version](https://www.r-pkg.org/badges/version/icd "CRAN Version")](https://cran.r-project.org/package=icd)
+[![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
+[![Appveyor](https://ci.appveyor.com/api/projects/status/github/jackwasey/icd "AppVeyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd?branch=master)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
+<!-- [![Coverity](https://scan.coverity.com/projects/15671/badge.svg "Coverity Scan Build Status")](https://scan.coverity.com/projects/jackwasey-icd) -->
 
 # ICD-9 and ICD-10 comorbidities, manipulation and validation
 
