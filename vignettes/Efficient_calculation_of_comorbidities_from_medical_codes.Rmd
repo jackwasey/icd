@@ -57,10 +57,9 @@ suppressPackageStartupMessages({
   requireNamespace("knitr")
   library(icd)
 })
-fig.width = 7
-knitr::opts_chunk$set(fig.width = fig.width,
-                      fig.height = fig.width / ((1 + sqrt(5)) / 2)
-                      )
+fig.width = 8
+knitr::opts_chunk$set(fig.width = fig.width)
+knitr::opts_chunk$set(fig.height = fig.width / ((1 + sqrt(5)) / 2))
 ```
 <!-- Aaron, final rec:
 I recommend ending section 1 with a single section that combines 1.4, 1.5, 1.7. I would also add a figure to this section that illustrates the problem to be solved. I would move section  1.6 above this new section. Also recommend integrating section 1.8 into 1.1
@@ -78,6 +77,10 @@ g <- structure(list(
 ), class = "rle")
 h <- inverse.rle(g)
 plot(h, type = "l", xlab = "ICD code, by descending frequency", ylab = "count", xlim = c(0, 4000))
+```
+
+```{r workaround}
+# $
 ```
 
 ## Terminology
@@ -161,8 +164,8 @@ explain("S62.607S")
 ```
 These codes are all contained in the following sub-chapter, and chapter:
 ```{r examplecodechap}
-icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
-icd10_chapters$`Injury, poisoning and certain other consequences of external causes`
+icd10_sub_chapters[["Injuries To The Wrist, Hand And Fingers"]]
+icd10_chapters[["Injury, poisoning and certain other consequences of external causes"]]
 ```
 
 ### Quirks of ICD codes
@@ -340,7 +343,7 @@ cmbimage <- function(map, ...) {
   par(mfcol = c(1,3))
   cmbimage(icd9_map_ahrq, xlab = "ICD-9 AHRQ\ncomorbidities", ylab = "ICD codes")
   cmbimage(icd10_map_ahrq, xlab = "ICD-10 AHRQ\ncomorbidities")
-  cmbimage(icd9_map_multi_ccs$lvl1, xlab = "ICD-9 CCS categories")
+  cmbimage(icd9_map_multi_ccs[["lvl1"]], xlab = "ICD-9 CCS categories")
 }
 ```
 
@@ -433,7 +436,8 @@ This can be represented thus:
 | Encounter two   | yes   |     |     |
 | Encounter three |       | yes |     |
 | Encounter four  |       | yes | yes |
-[Rheum is Rheumatic Disease, HTN is hypertension, CHF is Congestive Heart Failure][exampleresult]
+
+Table: Rheum is Rheumatic Disease, HTN is hypertension, CHF is Congestive Heart Failure
 
 The \pkg{Eigen} linear algebra software has highly optimized multihtreaded code for some specific cases, including the type of matrix multiplication needed here: row-major sparse matrix multiplication with a column-major dense matrix. It would be possible to use a more distributed matrix algebra approach using multiple CPUs and GPUs on multiple servers, however, most distributions of Basic Linear Algebra Subprograms (BLAS) and Linear Algebra Package (LAPACK) do not include sparse matrix handling.
 
@@ -503,7 +507,7 @@ resratio <- data.frame(datarows = res$datarows,
   legend(1, 1000, legend = names(res[-1]), fill = colours[names(res[-1])])
 }
 ```
-```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in \ref{fig:versus}."}
+```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in \\ref{fig:versus}."}
 {
   plot(NA, NA, log = "x",
        type = "l", col = 'darkred',
@@ -604,7 +608,7 @@ Given the wide range of disease processes, and no guarantee at all that the code
 The comorbidity maps are therefore constructed by generously including all children (valid or invalid) of the explicitly defined three-digit codes, but they do not extrapolate to other three-digit codes. Suppose additional digits were defined by a country's extension of ICD-9, but do not appear in the WHO or ICD-9-CM definitions. \pkg{icd} already includes all possible _structurally_ valid ICD-9 child codes in the map. This can be seen here, where two ficticious decimal places are seen in the map, but not three:
 
 ```{r}
-"49699" %in% icd9_map_quan_deyo$Pulmonary
+"49699" %in% icd9_map_quan_deyo[["Pulmonary"]]
 "496999" %in% icd9_map_charlson
 ```
 
