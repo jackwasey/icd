@@ -145,9 +145,7 @@ othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
                      "00323", "00324", "00329", "0038", "0039")
 
 # one code from each ICD-9 chapter
-one_of_each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
-                 "390.00", "518", "525", "581", "631", "700", "720", "759.99",
-                 "765", "780.95", "800", "V02.34", "E900.4")
+one_of_each <- icd:::get_one_of_each()
 
 # one icd9 patient
 one_pt_one_icd9 <- data.frame(visit_id = c("a"),
