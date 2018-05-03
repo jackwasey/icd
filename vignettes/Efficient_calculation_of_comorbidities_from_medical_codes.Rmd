@@ -48,10 +48,6 @@ editor_options:
 ```{r setup, echo=FALSE, warning=FALSE, cache=FALSE}
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
-# https://oeis.org/wiki/List_of_LaTeX_mathematical_symbols
-# https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html
-# http://merkel.texture.rocks/Latex/natbib.php
-# https://rmarkdown.rstudio.com/authoring_pandoc_markdown.html#raw-tex
 
 suppressPackageStartupMessages({
   requireNamespace("knitr")
@@ -68,19 +64,18 @@ I recommend ending section 1 with a single section that combines 1.4, 1.5, 1.7. 
 ICD diagnostic codes are used to define tens of thousands of disease originally from the World Health Organization (WHO). The original purpose was to allow epidemiologists to compare and assess the health and causes of death around the world. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants based on the WHO versions. This makes ICD codes important in many kinds of medical research. \pkg{icd} was made to meet these needs in a reproducible workflow when used with big or small data. To do this, it uses mappings from the detailed ICD codes to [comorbidities](#terminology)), and applies these to patient data.
 
 ## What is a comorbidity?
-Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after an hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications', and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes and renal. Thus the term _comorbidity_ generally refers to classes of diseases, not specific diagnoses, and that is how the term is used in the rest of this paper.
+Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after an hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications', and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes and renal. Thus the term _comorbidity_ generally refers to classes of diseases, not specific diagnoses, and that is how the term is used in the rest of this paper.
 
-```{r longtail, eval=FALSE,echo=FALSE, fig.cap="This frequency distribution of ICD codes found in 5,000 pediatric hospital inpatients show there are nearly 4,000 unique ICD codes; of which, 1401 appear only once, thus making them and other low-frequency closed useless in statistically meanginful inter-group comparisons."}
-g <- structure(list(
+```{r longtail, eval=TRUE, echo=FALSE, fig.cap="This frequency distribution of ICD codes found in 5,000 pediatric hospital inpatients show there are nearly 4,000 unique ICD codes; of which, 1,401 appear only once, thus making them and the many other low-frequency codes of low or negative value in inter-group comparisons."}
+h <- inverse.rle(structure(list(
   lengths = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 1, 4, 2, 1, 1, 2, 2, 4, 4, 2, 1, 1, 2, 1, 1, 1, 3, 1, 2, 1, 4, 1, 2, 4, 4, 3, 2, 3, 7, 5, 2, 10, 4, 4, 4, 5, 6, 6, 1, 8, 13, 9, 11, 10, 13, 13, 14, 10, 16, 23, 18, 24, 27, 32, 39, 45, 33, 51, 87, 86, 76, 126, 166, 240, 365, 632, 1401),
   values = c(525, 405, 296, 283, 281, 268, 227, 209, 193, 180, 168, 166, 156, 146, 144, 135, 134, 131, 120, 116, 115, 113, 110, 106, 103, 90, 88, 86, 85, 82, 81, 80, 78, 77, 76, 75, 73, 72, 71, 70, 69, 68, 67, 64, 63, 62, 61, 56, 55, 54, 53, 51, 50, 49, 48, 46, 45, 44, 43, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-), class = "rle")
-h <- inverse.rle(g)
-plot(h, type = "l", xlab = "ICD code, by descending frequency", ylab = "count", xlim = c(0, 4000))
-```
-
-```{r workaround}
-# $
+), class = "rle"))
+  plot(h, type = "h", 
+       xlab = "ICD code, by descending frequency", 
+       ylab = "count", 
+       xlim = c(0, 4000),
+       log = "y")
 ```
 
 ## Terminology
@@ -141,7 +136,7 @@ In addition, it became useful during development to consider the following:
 ## Medical codes
 Medical coding has a complicated history beginning with epidemiology, and snowballing to include medical billing and research. There are several major coding schemes, including the WHO ICD family, various national modifacations and extensions of the WHO ICD codes, the extensive USA ICD-CM (clinical modification), and several unrelated schemes with similar goals. There are codes for diagnoses, procedures, medical equipment, and causes and circumstances of disease or injury. Codes sometimes include details more important to medical billing than clinical care or research, for example:
 
-```{r}
+```{r suckedintoengine}
 explain("V97.33XD")
 ```
 
@@ -332,7 +327,7 @@ $$ B_{p,q} =
 \vdots & \vdots & \vdots & \vdots & \vdots
 \end{matrix}$$
 
-```{r comorbidmatrix, echo=FALSE,caption="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column"}
+```{r comorbidmatrix, echo=FALSE, caption="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column"}
 cmbimage <- function(map, ...) {
   code <- unique(unlist(map))
   x <- comorbid(map = map, x = data.frame(ptid = seq_along(code), code))
@@ -447,7 +442,7 @@ There are now three active CRAN packages which calculate comorbidities: \pkg{icd
 
 These results show that \pkg{icd} is dramatically faster than the alternatives. Figure \ref{fig:versus} shows time to compute comorbidites for increasing numbers of rows of data. Lines are fitted where the log-log relationship becomes linear from 10,000 rows of data, and these are used to extrapolate to estimates of the much larger computations seen in \ref{fig:bigdata}. \ref{fig:speedup} shows the relative speed up \pkg{icd} offers in comparison to the alternatives.
 
-```{r bench, echo = FALSE}
+```{r bench, echo=FALSE}
 fac <- 1e-3
 res <- data.frame(
   datarows = 10^(0:7),
@@ -460,7 +455,6 @@ res <- data.frame(
   medicalrisk = fac * c(
     3.965962, 3.752622, 11.69087, 77.603945,
     734.2927, 8355.8409, 83382.279, 1935343))
-
 # fit a line to the last four of 'icd' column and predict duration for one
 # hundred million patient-visits with twenty comorbidities per patient
 fit_res <- log10(res[5:8, ])
@@ -486,7 +480,7 @@ resratio <- data.frame(datarows = res$datarows,
                        medicalrisk = res$medicalrisk / res$icd)
 ```
 
-```{r versus, echo=FALSE, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, R 3.4.4 using Linux, kernel 4.15 . The 'comorbidity' package was run with and without parallel option, and the best result was chosen."}
+```{r versus, echo=FALSE, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, R 3.4.4 using Linux, kernel 4.15 . \\pkg{comorbidity} was run with and without parallel option, and the best result was chosen for each number of iterations."}
 {
   plot(NA, NA, log = "xy",
        type = "l", col = 'darkred',
@@ -595,19 +589,19 @@ icd9_sub_chapters$`Pneumoconioses And Other Lung Diseases Due To External Agents
 
 497 is not a valid code itself. It could be a typo for any of the other combinations, of which three are valid:
 
-```{r}
+```{r permute497}
 explain(c("947", "749", "794", "479"), warn = FALSE)
 ```
 
 Given the wide range of disease processes, and no guarantee at all that the coder made a mistake only in the last digit, \pkg{icd} discards the code to avoid giving a false positive comorbidity flag.
 
-```{r}
+```{r charlson497}
 "497" %in% icd9_map_charlson
 ```
 
 The comorbidity maps are therefore constructed by generously including all children (valid or invalid) of the explicitly defined three-digit codes, but they do not extrapolate to other three-digit codes. Suppose additional digits were defined by a country's extension of ICD-9, but do not appear in the WHO or ICD-9-CM definitions. \pkg{icd} already includes all possible _structurally_ valid ICD-9 child codes in the map. This can be seen here, where two ficticious decimal places are seen in the map, but not three:
 
-```{r}
+```{r neighbor497}
 "49699" %in% icd9_map_quan_deyo[["Pulmonary"]]
 "496999" %in% icd9_map_charlson
 ```
