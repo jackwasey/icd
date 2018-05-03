@@ -1,7 +1,7 @@
 ---
 author:
   - name: Jack O. Wasey
-    affiliation: CHOP
+    affiliation: "Children's Hospital of Philadelphia"
     address: >
       3401 Civic Center Blvd.
       Philadelphia, PA 19102, USA
@@ -31,11 +31,7 @@ keywords:
   # at least one keyword must be supplied
   formatted: [medical informatics, administrative data, matrix algebra, "\\proglang{R}", "\\proglang{C++}"]
   plain:     [medical informatics, administrative data, matrix algebra, R, C++]
-preamble: >
-  \usepackage{amsmath}
-  \usepackage{longtable}
-  \usepackage{booktabs}
-  \shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}
+preamble: '\usepackage{amsmath}\usepackage{longtable}\usepackage{booktabs}\shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}\author{Jack O. Wasey\\Children''s Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\All Children''s Hospital}'
 biblio-style: jss
 output: rticles::jss_article
 bibliography:
