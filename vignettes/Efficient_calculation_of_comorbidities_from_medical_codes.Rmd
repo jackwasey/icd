@@ -22,7 +22,9 @@ author:
       email: rehman@jhmi.edu
       url: http://www.jhmi.edu
 title:
-  formatted: "Efficient calculation of comorbidities from ICD codes using sparse matrix multiplication with the \\proglang{R} package \\pkg{icd}"
+  formatted: |
+    Efficient calculation of comorbidities\
+    from ICD codes using sparse matrix multiplication with the \proglang{R} package \pkg{icd}
   plain: "Efficient calculation of comorbidities from ICD codes with the R package 'icd'"
   short: "\\pkg{icd}: Efficient calculation of comorbidities from ICD codes"
 abstract: >
@@ -33,7 +35,6 @@ keywords:
 preamble: '\usepackage{amsmath}
 \usepackage{longtable}
 \usepackage{booktabs}
-\usepackage{mdframed}
 \widowpenalty 10000
 \clubpenalty 10000
 \raggedbottom
@@ -47,7 +48,7 @@ bibliography:
   - gplv3
   - other
 vignette: >
-  %\VignetteIndexEntry{Efficient calculation of comorbidities from medical codes}
+  %\VignetteIndexEntry{Efficient calculation of comorbidities from ICD codes with the R package icd}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -71,7 +72,21 @@ knitr::opts_knit$set(concordance = TRUE) # rstudio setting broken
 ICD diagnostic codes are used to define tens of thousands of disease. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
 
 ## What is a comorbidity?
-Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after an hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the ICD-10 code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications,' and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: 'Diabetes' and 'Renal' -- not 'Neurologic,' because that was the primary problem. Thus the term _comorbidity_ generally refers to classes of diseases, not specific diagnoses, and that is how the term is used in the rest of this paper.
+Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem.
+
+For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after an hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the ICD-10 code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications,' and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: 'Diabetes' and 'Renal', but not 'Neurologic,' because that was the primary problem. Thus the term _comorbidity_ generally refers to classes of diseases, not specific diagnoses, and that is how the term is used in the rest of this paper.
+
+```{r longtail, eval=TRUE, echo=FALSE, fig.cap="This frequency distribution of ICD codes found in 5,000 pediatric hospital inpatients show there are nearly 4,000 unique ICD codes; of which, 1,401 appear only once, thus making them and the many other low-frequency codes of low or negative value in inter-group comparisons."}
+h <- inverse.rle(structure(list(
+  lengths = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 1, 4, 2, 1, 1, 2, 2, 4, 4, 2, 1, 1, 2, 1, 1, 1, 3, 1, 2, 1, 4, 1, 2, 4, 4, 3, 2, 3, 7, 5, 2, 10, 4, 4, 4, 5, 6, 6, 1, 8, 13, 9, 11, 10, 13, 13, 14, 10, 16, 23, 18, 24, 27, 32, 39, 45, 33, 51, 87, 86, 76, 126, 166, 240, 365, 632, 1401),
+  values = c(525, 405, 296, 283, 281, 268, 227, 209, 193, 180, 168, 166, 156, 146, 144, 135, 134, 131, 120, 116, 115, 113, 110, 106, 103, 90, 88, 86, 85, 82, 81, 80, 78, 77, 76, 75, 73, 72, 71, 70, 69, 68, 67, 64, 63, 62, 61, 56, 55, 54, 53, 51, 50, 49, 48, 46, 45, 44, 43, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
+), class = "rle"))
+  plot(h, type = "h", 
+       xlab = "ICD code, by descending frequency", 
+       ylab = "count", 
+       xlim = c(0, 4000),
+       log = "y")
+```
 
 ## Terminology
 \renewcommand*{\arraystretch}{1.2}
@@ -88,18 +103,6 @@ knitr::kable(termdf, col.names = c("\\textbf{Term}", "\\textbf{Description}"),
              format = "latex",
              longtable = TRUE,
              align = c("l", "p{10 cm}"))
-```
-
-```{r longtail, eval=TRUE, echo=FALSE, fig.cap="This frequency distribution of ICD codes found in 5,000 pediatric hospital inpatients show there are nearly 4,000 unique ICD codes; of which, 1,401 appear only once, thus making them and the many other low-frequency codes of low or negative value in inter-group comparisons."}
-h <- inverse.rle(structure(list(
-  lengths = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 1, 4, 2, 1, 1, 2, 2, 4, 4, 2, 1, 1, 2, 1, 1, 1, 3, 1, 2, 1, 4, 1, 2, 4, 4, 3, 2, 3, 7, 5, 2, 10, 4, 4, 4, 5, 6, 6, 1, 8, 13, 9, 11, 10, 13, 13, 14, 10, 16, 23, 18, 24, 27, 32, 39, 45, 33, 51, 87, 86, 76, 126, 166, 240, 365, 632, 1401),
-  values = c(525, 405, 296, 283, 281, 268, 227, 209, 193, 180, 168, 166, 156, 146, 144, 135, 134, 131, 120, 116, 115, 113, 110, 106, 103, 90, 88, 86, 85, 82, 81, 80, 78, 77, 76, 75, 73, 72, 71, 70, 69, 68, 67, 64, 63, 62, 61, 56, 55, 54, 53, 51, 50, 49, 48, 46, 45, 44, 43, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-), class = "rle"))
-  plot(h, type = "h", 
-       xlab = "ICD code, by descending frequency", 
-       ylab = "count", 
-       xlim = c(0, 4000),
-       log = "y")
 ```
 
 ## Uses of comorbidities
@@ -307,20 +310,22 @@ Referring back to the pseudocode in section \ref{pseudocode}, integer representa
 
 \begin{figure}[h]
 \centering
+\setlength{\fboxsep}{1em}
+\setlength{\fboxrule}{1pt}
 \fbox{%
-\begin{minipage}{11 cm}
-\setlength{\fboxsep}{1em}%
-\setlength{\fboxrule}{1pt}%
+\begin{minipage}{12 cm}
 \begin{enumerate}
   \def\labelenumi{\arabic{enumi}.}
   \item Prepare
   \begin{enumerate}
+    \itemsep0em 
     \def\labelenumii{\alph{enumii}.}
-    \item ICD-9: all permutations of ICD-9 codes in ICD-9 maps
-    \item ICD-10: Create dictionary of relevant ICD-10 codes.
+      \item ICD-9: all permutations of ICD-9 codes in ICD-9 maps
+      \item ICD-10: Create dictionary of relevant ICD-10 codes.
   \end{enumerate}
   \item Reduce the problem
     \begin{enumerate}
+    \itemsep0em
     \def\labelenumii{\alph{enumii}.}
       \item Intersection of patient and map codes
       \item Encode as integer indices
