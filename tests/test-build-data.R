@@ -19,4 +19,6 @@ library("icd")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 if (tolower(Sys.getenv("ICD_TEST_BUILD_DATA")) %in% c("yes", "true"))
-  testthat::test_dir("tests-build-data", testthat::CheckReporter)
+  testthat::test_dir("tests-build-data",
+                     env = icd:::test_env(),
+                     reporter = testthat::CheckReporter)
