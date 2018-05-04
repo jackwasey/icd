@@ -30,7 +30,7 @@ abstract: >
 keywords:
   formatted: [medical informatics, administrative data, matrix algebra, "\\proglang{R}", "\\proglang{C++}", "ICD", "mapping"]
   plain:     [medical informatics, administrative data, matrix algebra, R, C++, ICD, mapping]
-preamble: '\usepackage{amsmath}\usepackage{longtable}\usepackage{booktabs}\shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}\author{Jack O. Wasey\\Children''s Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children''s Hospital}'
+preamble: '\usepackage{amsmath}\usepackage{longtable}\usepackage{booktabs}\shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}\author{Jack O. Wasey\\Children''s Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children''s Hospital}\widowpenalty 10000\clubpenalty 10000\raggedbottom'
 biblio-style: jss
 output: rticles::jss_article
 bibliography:
@@ -48,7 +48,6 @@ editor_options:
 ```{r setup, echo=FALSE, warning=FALSE, cache=FALSE}
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
-
 suppressPackageStartupMessages({
   requireNamespace("knitr")
   library(icd)
@@ -56,15 +55,14 @@ suppressPackageStartupMessages({
 fig.width = 6.5
 knitr::opts_chunk$set(fig.width = fig.width)
 knitr::opts_chunk$set(fig.height = fig.width / ((1 + sqrt(5)) / 2))
+knitr::opts_knit$set(concordance = TRUE) # rstudio setting broken
 ```
-<!-- Aaron, final rec:
-I recommend ending section 1 with a single section that combines 1.4, 1.5, 1.7. I would also add a figure to this section that illustrates the problem to be solved. I would move section  1.6 above this new section. Also recommend integrating section 1.8 into 1.1
--->
+
 # Introduction
 ICD diagnostic codes are used to define tens of thousands of disease originally from the World Health Organization (WHO). The original purpose was to allow epidemiologists to compare and assess the health and causes of death around the world. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants based on the WHO versions. This makes ICD codes important in many kinds of medical research. \pkg{icd} was made to meet these needs in a reproducible workflow when used with big or small data. To do this, it uses mappings from the detailed ICD codes to [comorbidities](#terminology)), and applies these to patient data.
 
 ## What is a comorbidity?
-Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after an hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications', and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes and renal. Thus the term _comorbidity_ generally refers to classes of diseases, not specific diagnoses, and that is how the term is used in the rest of this paper.
+Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term _comorbidity_ describes a disease which is present alongside the primary problem. For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after an hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the code _E11.2_ meaning 'Type 2 diabetes mellitus with renal complications', and _I63.0_ meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' These specifics may be important in specialized studies, but most researchers would be interested in the types of comorbidities. In this case, the comorbidities might be regarded as: diabetes and renal. Thus the term _comorbidity_ generally refers to classes of diseases, not specific diagnoses, and that is how the term is used in the rest of this paper.
 
 ```{r longtail, eval=TRUE, echo=FALSE, fig.cap="This frequency distribution of ICD codes found in 5,000 pediatric hospital inpatients show there are nearly 4,000 unique ICD codes; of which, 1,401 appear only once, thus making them and the many other low-frequency codes of low or negative value in inter-group comparisons."}
 h <- inverse.rle(structure(list(
@@ -104,34 +102,13 @@ Almost every report of a medical investigation includes a table showing the char
 Identifying differences between groups in retrospective medical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or _patient-visit_ (See [Terminology](#terminology)). More sophisticated matching also relies on comorbidities for excellent risk adjustment, \citep[e.g.][]{diamond_genetic_2012}.
 
 ## Ways of grouping ICD codes into comorbidities
-The ubiquity of ICD codes means there is a long history of grouping them to form comorbidities, and these standardized groups have been used for decades as the basis for medical studies. As revisions of the ICD codes have appeared, and various diseases have waxed and waned in significance, people have worked to categorize them into these standardized comorbidity groups. The two main groups were developed by Charlson [@charlson_new_1987], and Elixhauser [@elixhauser_comorbidity_1998]. Such mappings between comorbidity categories and sets of diagnostic codes will henceforth be called, _comorbidity maps_.The benefits of using existing comorbidity maps are:
+The ubiquity of ICD codes means there is a long history of grouping them to form comorbidities, and these standardized groups have been used for decades as the basis for medical studies. As revisions of the ICD codes have appeared, and various diseases have waxed and waned in significance, people have worked to categorize them into these standardized comorbidity groups. The two main groups were developed by Charlson [@charlson_new_1987], and Elixhauser [@elixhauser_comorbidity_1998]. Such mappings between comorbidity categories and sets of diagnostic codes will henceforth be called, _comorbidity maps_. The benefits of using existing comorbidity maps are:
 
  - consistency and comparability with existing research
  - they are well validated
  - researchers can avoid the effort and errors involved in developing new comorbidity schemes.
 
 Charlson did not initially use ICD codes to define the comorbidities, but various authors \citep[e.g.,][]{quan_coding_2005} have since classified  ICD codes into those 17 comorbidity categories. Elixhauser [-@elixhauser_comorbidity_1998] developed ICD-based comorbidities for 31 diseases, and the US-based Agency for Healthcare Research and Quality (AHRQ) used this as a foundation for its own comorbidity groups [@AgencyforHealthcareResearchandQuality_ElixhauserComorbiditySoftware_2018]. Elixhauser and Charlson comorbidities have undergone refinement over the years, especially by \citet{quan_updating_2011} whose meticulous work on ICD-9 and ICD-10 codes has been included in \pkg{icd}, alongside the AHRQ mappings.
-
-## Motivation
-The original motivation for \pkg{icd} was lack of any \proglang{R} software in the Comprehensive R Archive Network (CRAN) repository, or elsewhere, to compute comorbidities from ICD codes, nor any data that was easily parsable by \proglang{R} for interpreting ICD codes or representing the Charlson or Elixhauser schemes or the official lists of codes themselves. An additional goal was to make it possible to handle moderately big health care datasets [@simpao_big_2015] with modest computing power:
-
-- WHO ICD codes are used internationally, and it is important to enable their use without expensive computing resources
-- an analyst or researcher should be able to use a laptop to deal with all but the very biggest datasets, avoiding the complexity of using cloud computing, and the risk of moving protected health information across the internet.
-
-## Requirements
-The main requirements were:
-
-- **accurate** computation of Charlson and Elixhauser families of comorbidities
-- **faithful** representation of comorbidity maps as intended by the original authors, with a reproducible audit trail back to the original \proglang{SAS} code or published data
-- enable a **reproducible** workflow which includes a comorbidity computation
-- **performant** enough for big data; and also quick with moderate datasets that may be used by analysts with laptops, and in low-income countries, so that changing the patient population or comorbidity map can be done without waiting minutes or hours to recompute the comorbidities
-
-In addition, it became useful during development to consider the following:
-
-- acceptance of invalid data without compromising the accuracy of the comorbidity calculation
-- finding out the meaning and hierarchical position of ICD codes
-- use of arbitrary comorbidity maps
-- open source licence, GPL-3 [@gplv3]
 
 ## Medical codes
 Medical coding has a complicated history beginning with epidemiology, and snowballing to include medical billing and research. There are several major coding schemes, including the WHO ICD family, various national modifacations and extensions of the WHO ICD codes, the extensive USA ICD-CM (clinical modification), and several unrelated schemes with similar goals. There are codes for diagnoses, procedures, medical equipment, and causes and circumstances of disease or injury. Codes sometimes include details more important to medical billing than clinical care or research, for example:
@@ -140,7 +117,7 @@ Medical coding has a complicated history beginning with epidemiology, and snowba
 explain("V97.33XD")
 ```
 
-Since the WHO ICD is a subset of ICD Clinical Modification, \pkg{icd} is driven by ICD-9-CM and ICD-10-CM, both of which are available in the public domain, allowing analysis of WHO codes and more detailed USA or other national sets of codes. Unfortunately, the WHO exercises copyright over the international ICD-10 scheme, so it cannot be included. This does not affect comorbidity calculations.
+Since the WHO ICD is a subset of ICD Clinical Modification, \pkg{icd} is driven by ICD-9-CM and ICD-10-CM, both of which are available in the public domain, allowing analysis of WHO codes and more detailed USA or other national sets of codes. Unfortunately, the WHO exercises copyright over the international ICD-10 scheme, so it cannot be included. This does not affect comorbidity computations.
 
 ICD-9 codes are primarily numeric, have fewer codes defined, and have a more variable format, sometimes with a prefix of _V_ or _E_. ICD-10 codes have top-level code in the form of a letter, then two numbers, with a longer section of mixed numbers and letters after the decimal point divider. Both ICD-9 and ICD-10 codes can be presented with or without a decimal point divider, thus there is potential ambiguity between ICD-9 and ICD-10 (e.g., _V10_ is in both schemes), and between ICD-9 codes without separators (e.g., _0100_ and _100_).
 
@@ -159,8 +136,10 @@ explain("S62.607S")
 ```
 These codes are all contained in the following sub-chapter, and chapter:
 ```{r examplecodechap}
-icd10_sub_chapters[["Injuries To The Wrist, Hand And Fingers"]]
-icd10_chapters[["Injury, poisoning and certain other consequences of external causes"]]
+oldopt <- options(warnPartialMatchDollar = FALSE)
+icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
+icd10_chapters$Injury
+options(oldopt)
 ```
 
 ### Quirks of ICD codes
@@ -173,34 +152,81 @@ There are multiple possible notations of the same ICD codes, and ICD-9-CM codes 
 
 In real data, ICD codes may not be constrained to a definitive list, so may contain frankly invalid codes, or codes which are valid in one edition of ICD, but not another, yet do fall clearly into one comorbidity.
 
-## Main computational problems
-There are two main areas of computational interest, which are related. The first entails string matching, which is slow; and the second demands speed, which is achieved by \pkg{icd} without onerous cloud or hardware requirements.
+## Motivation and goals
+The original motivation for \pkg{icd} was lack of any \proglang{R} software in the Comprehensive \proglang{R} Archive Network (CRAN) repository, or elsewhere, to compute comorbidities from ICD codes, nor any data that was easily parsable by \proglang{R} for interpreting ICD codes or representing the Charlson or Elixhauser schemes or the official lists of codes themselves.
 
-### Inexact comorbidity definitions
-The comorbidity definitions in published literature do not precisely specify each individual code. This is partly a function of the various annual and international revisions of ICD codes, and also the need for brevity in publications, so ranges of codes are specified. For example, in the Valvular Heart Disease comorbidity in the ICD-9 Elixhauser scheme, we see it contains the range _394.0_ -- _397.1_ . In the ICD-10 version of that map, there are many top-level codes, such as _I34_, _I35_ and _I36_, which themselves are never or rarely used for diagnostic coding. Therefore, there are few or no exact matches between candidate ICD codes and the codes or ranges in the comorbidities, so some kind of string matching must be done, or a determination of whether a code falls in a specified range.
+The requirements at the outset were:
 
-### Big data
-Bulk health care data, even for one hospital, often has hundreds of thousands or millions of encounters of different types. National databases and multi-hospital patient registries often have many more. Initial work using pure \proglang{R} code, with some optimization, resulted in calculations taking minutes for about ten thousand patients. Although the problem is parallelizable, performance analysis on early versions using string matching showed that there was a lot of pressure on the CPU caches, so massive parallelization -- when even an option -- would have had diminishing returns with scaling. This is demonstrated in the benchmarks in the [Results](#results).
+- enable a **reproducible** workflow which includes a comorbidity computation
+- **accurate** computation of Charlson and Elixhauser families of comorbidities
+- **faithful** representation of comorbidity maps as intended by the original authors, with a reproducible audit trail back to the original \proglang{SAS} code or published data
+- **performant** enough for big data [@simpao_big_2015]: updating the input patient data or comorbidity map should be possible without waiting minutes or hours to recompute the comorbidities
+
+Handling big data well aligns with an additional goal to enable analysis of moderately big health care datasets with modest computing power. WHO ICD codes are used internationally, and it is important to enable their use without expensive computing resources, or reliance on internet for cloud computing. An open source licence [@gplv3] was chosen for this reason. This goal also helps an analyst or researcher to use a laptop to deal with all but the very biggest datasets, again avoiding the complexity of using cloud computing, and the risks of moving protected health information across the internet.
+
+During development it became clear that the following were also important:
+
+- handling of invalid data to minimize effect on comorbidities
+- finding out the meaning of ICD codes
+- navigating the ICD code hierarchies
+- user-defined comorbidity maps
+
+### Main computational problems
+
+There are three main areas of interest in comorbidity computation.
+
+@. String matching
+
+The central computational problem is one of string matching ICD codes between the patient-visit data and the comorbidity maps, and recordingy maps within the results. String matching is a slow operation; the innovation described here is the use of matrix algebra to solve the problem. This requires a brief pre-processing step with string matching: other solutions use string matching throughout.
+
+@. Inexact comorbidity definitions
+
+The comorbidity definitions in published literature do not precisely specify each individual code. This is partly a function of the various annual and international revisions of ICD codes, and also the need for brevity in publications, so ranges of codes are specified. For example, in the Valvular Heart Disease comorbidity in the ICD-9 Elixhauser scheme, we see it contains the range _394.0_ -- _397.1_ . In the ICD-10 version of that map, there are many top-level codes, such as _I34_, _I35_ and _I36_, which themselves are never or rarely used for diagnostic coding. Therefore, there are few or no exact matches between candidate ICD codes and the codes or ranges in the comorbidities, so some kind of string matching must be done, or a determination of whether a code falls in a specified range. This is dealt with in detail in Section \ref{derivation-of-the-comorbidity-maps}.
+
+@. Big data
+
+Bulk health care data, even for one hospital, often has hundreds of thousands or millions of encounters of different types. National databases and multi-hospital patient registries often have many more. Initial work using pure \proglang{R} code, with some optimization, resulted in computations taking minutes for about ten thousand patients. Although the problem is parallelizable, performance analysis on early versions using string matching showed that there was a lot of pressure on the CPU caches, so massive parallelization -- when even an option -- would have had diminishing returns with scaling. This is demonstrated in the benchmarks in the [Results](#results).
+
+Since a comorbidity mapping is simply a set of sets of codes, the same computational framework can be used to solve other problems. For example, code was contributed to classify ICD codes according to AHRQ's Clinical Classification Software (CCS) [@AgencyforHealthcareResearchandQuality_ClinicalClassificationsSoftware_2012] which was implemented as a comorbidity map.
+
+The problem of determining which patients have which disease classes can be expressed in pseudocode as nested loops:
+
+\begin{Code}
+for each patient-visit, get the ICD codes\\
+  for each ICD code\\
+    for each comorbidity\\
+      search the lists of codes for that comorbidity\\
+      if a matching diagnostic code is found, then\\
+        record that comorbidity for the current patient-visit
+\end{Code}\label{pseudocode}
+
+Therefore, this is an $\mathcal{O}(n)$ computation, since the search element is limited to the fixed comorbidity map, thus being asymptotically unimportant.
+
+The benchmarks in the [Results](#results) section show \pkg{icd} is much more efficient than string matching approaches.
+
+Big data solutions cannot often be solved simply by increasing hardware capacity. The availability of many computing cores in the cloud does not help an algorithm which is limited to a single thread, or an algorithm which is ignorant of how CPU memory caching works. \pkg{icd} was designed to work efficiently on big health care data using parallel processing, and by minimizing the memory requirements of the problem.
 
 # Main features
 
 ## User-facing
 
-- Comorbidity calculations
-  * calculate comorbidities based on ICD-9 or ICD-10 codes
-  * framework for comorbidity calculations based on any coding system
-- ICD code processing and comprehension[^1]
-  * validate ICD codes
-  * convert between different ICD code representations
-  * convert ICD codes to human-readable descriptions
-  * convert wide to long format patient data
-  * navigate the ICD hierarchies
-  * compare annual ICD versions
-- Scoring systems
-  * calculate AHRQ Hierarchical Condition Code (HCC) scores
-  * emulate AHRQ Clinical Classification Software (CCS)
+- Comorbidity computations
+    - compute comorbidities based on ICD-9 or ICD-10 codes
+    - framework for comorbidity computations based on any coding system
+- ICD code processing and comprehension[^crosswalk]
+    - validate ICD codes
+    - convert between different ICD code representations
+    - explain ICD codes with human-readable descriptions
+    - convert between wide and long format patient data
+    - navigate the ICD hierarchies
+    - compare annual or national ICD variations
+- Scoring systems based on comorbidities
+    - Charlson scores
+    - Van Walraven scores
+    - AHRQ Hierarchical Condition Code (HCC) scores
+    - AHRQ Clinical Classification Software (CCS) scores
 
-[^1]: \pkg{icd} does not yet convert (also known as 'cross-walk') between ICD-9-CM and ICD-10-CM.
+[^crosswalk]: \pkg{icd} does not yet convert (also known as 'cross-walk') between ICD-9-CM and ICD-10-CM.
 
 ## Internal
 
@@ -208,7 +234,9 @@ Bulk health care data, even for one hospital, often has hundreds of thousands or
 - \proglang{C} and \proglang{C++} code and accelerated matrix algebra to give accurate results quickly with big data
 - extensive test suite
 
-This package contains mappings to convert ICD codes to comorbidities, using methods from several sources, based on the AHRQ, Charlson or Elixhauser systems. Updated versions of these lists from @AgencyforHealthcareResearchandQuality_ElixhauserComorbiditySoftware_2018 and @quan_updating_2011 are included, along with the original @elixhauser_comorbidity_1998 mapping . Since some data is provided in SAS source code format, this package has internal functions to parse this SAS source code and generate R data structures. Some lists are transcribed directly from the published articles, but interpretation of SAS code used for the original publications is preferable.
+## Included comorbidity maps
+
+This package contains mappings to convert ICD codes to comorbidities using methods from several sources, based on the AHRQ, Charlson or Elixhauser systems. Updated versions of these lists from @AgencyforHealthcareResearchandQuality_ElixhauserComorbiditySoftware_2018 and @quan_updating_2011 are included, along with the original @elixhauser_comorbidity_1998 mapping . Since some data is provided in SAS source code format, this package has internal functions to parse this SAS source code and generate R data structures. Some lists are transcribed directly from the published articles, but interpretation of SAS code used for the original publications is preferable.
 
 For example, here are the names of the comorbidities in the Charlson map:
 
@@ -224,28 +252,9 @@ icd10_map_charlson[["CHF"]]
 
 Note that these codes are of `icd10` and `character` class, and that they carry the attribute `icd_short_diag` which is set to `TRUE`.
 
-Since a comorbidity mapping is simply a set of sets of codes, the same computational framework can be used to solve other problems. For example, code was contributed to classify ICD codes according to AHRQ's Clinical Classification Software (CCS) [@AgencyforHealthcareResearchandQuality_ClinicalClassificationsSoftware_2012] which was implemented as a comorbidity map.
-
-The problem of determining which patients have which disease classes can be expressed in pseudocode as nested loops:
-
-\begin{Code}
-for each patient-visit, get the ICD codes\\
-  for each ICD code\\
-    for each comorbidity\\
-      search the lists of codes for that comorbidity\\
-      if a matching diagnostic code is found, then\\
-        record that comorbidity for the current patient-visit
-\end{Code}\label{pseudocode}
-
-Therefore, this is an $\mathcal{O}(n)$ computation, since the search element is limited to the fixed comorbidity map.
-
-Executing this in big healthcare data sets is a computational challenge which \pkg{icd} solves efficiently, as can be seen in the benchmarks in the [Results](#results) section. Specifically, the problems arise from large numbers of patient-visits, and from the need to match strings in each comorbidity for each ICD code.
-
-Big data solutions cannot often be solved simply by increasing hardware capacity. The availability of many computing cores in the cloud does not help an algorithm which is limited to a single thread, or an algorithm which is ignorant of how CPU memory caching works. \pkg{icd} was designed to work efficiently on big health care data using parallel processing, and by minimizing the memory reuqirements of the problem.
-
 # Methods
 
-The main internal feature of this software is the algorithm for assigning the diagnostic codes of a patient into comorbidities. The core of this implementation is a matrix multiplication. Other comorbidity calculation tools in \proglang{R} and other languages search by exact match or regular expression for each patient-visit code within each comorbidity. String matching requires more memory and CPU cycles than integer or boolean operations, and is not CPU cache-friendly, making it resistant to parallelization.
+The main internal feature of this software is the algorithm for assigning the diagnostic codes of a patient into comorbidities. The core of this implementation is a matrix multiplication. Other comorbidity tools in \proglang{R} and other languages search by string matching with regular expressions for each patient-visit code within each comorbidity. String matching requires more memory and CPU cycles than integer or Boolean operations, is not CPU cache-friendly, making it resistant to parallelization, and are difficult to understand, potentially leading to errors.
 
 There are several steps to the solution implemented by \pkg{icd}:
 
@@ -254,9 +263,9 @@ There are several steps to the solution implemented by \pkg{icd}:
     ii) Or use partial string matches to create a dictionary of ICD-10 codes in these data, which is done within step 2 to avoid scanning the data twice.
 2. Reduce the problem to a matrix multiplication
     i) Compute intersection ($\mathcal{O}(\log{}n)$ for time with a tree-based data structure)
-3. Perform a sparse by dense matrix multiplication ($\mathcal{O}(R_m\cdot m)$ where $R_m$ is the number of non-zero elements per row. For typical patient data, the mean is around five, with many administrative data being limited to thirty codes. This low number compares favorably to the matrix width of tens of thousands. [^5])
+3. Perform a sparse by dense matrix multiplication ($\mathcal{O}(R_m\cdot m)$ where $R_m$ is the number of non-zero elements per row. For typical patient data, the mean is around five to ten, with many administrative data being limited to thirty codes per patient-visit. This low number compares favorably to the matrix width of tens of thousands. [^crs])
 
-[^5]: Sparse matrix multiplication with dense matrices is already $\mathcal{O}(n)$ using the widespread Compressed Row -- or Column -- Storage (CRS) scheme. Even if dense matrix multiplication were used, it would still be $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general case: in this problem, only one dimension of one matrix grows with increasing patient-visits. These are asymptotic limits for time, not for memory or bandwidth.
+[^crs]: Sparse matrix multiplication with dense matrices is already $\mathcal{O}(n)$ using the widespread Compressed Row -- or Column -- Storage (CRS or CCS) scheme. Even if dense matrix multiplication were used, it would still be $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general case: in this problem, only one dimension of one matrix grows with increasing patient-visits. These are asymptotic limits for time, not for memory or bandwidth.
 
 The pre-calculation of the ICD-9 maps is done at package creation time, using internal functions which are included for reproducibility, and the results are included in \pkg{icd}. This is possible because of the limited number of permutations of syntactically valid ICD-9 codes. ICD-10 codes have many more possibilities, and although the same technique could be used, the ICD-10 maps would be huge, and vulnerable to unexpected modifications, for example a national ICD-10 variant using a different letter suffix.
 
@@ -284,9 +293,9 @@ b_{2,1} & b_{2,2} & \cdots & b_{2,q} \\
 b_{p,1} & b_{p,2} & \cdots & b_{p,q}
 \end{pmatrix}$$
 
-Given there are tens or hundreds of thousands of possible ICD-9 or ICD-10 codes, the possible width of $\boldsymbol{A}$ is large ($n$ columns). There are also many ICD codes for each comorbidity, so the height of $\boldsymbol{B}$ is large ($p$ rows), although typical comorbidity maps only cover a subset of possible codes. Many data sets have tens of millions of patient-visits, each with typically up to 30 diagnostic codes, the mean being around five to ten, depending on the dataset, so the memory requirement using lower estimates and four bytes per flag[^2] is $10^7 \times 10^4 \times 4 = 4 \times 10^{11}$, which is 400 gigabytes simply to represent the patient-visit to disease relationships.
+Given there are tens or hundreds of thousands of possible ICD-9 or ICD-10 codes, the possible width of $\boldsymbol{A}$ is large ($n$ columns). There are also many ICD codes for each comorbidity, so the height of $\boldsymbol{B}$ is large ($p$ rows), although typical comorbidity maps only cover a subset of possible codes. Many data sets have tens of millions of patient-visits, each with typically up to 30 diagnostic codes, the mean being around five to ten, depending on the dataset, so the memory requirement using lower estimates and four bytes per flag[^word] is $10^7 \times 10^4 \times 4 = 4 \times 10^{11}$, which is 400 gigabytes simply to represent the patient-visit to disease relationships.
 
-[^2]: A \proglang{C++} \code{int} is used for each comorbidity flag, which is typically, in 2018, a four-byte word. However, the matrices used by \pkg{icd} hold only true or false values, represented as 1 or 0. It appears inefficient to use an entire \code{int}. An alternative is bit-packing of 32 `bool` bits into each \code{int}, which has a stormy history in the \proglang{C++} Standard Template Library [@Jarvi_AlgorithmSpecializationGeneric_2006], and, more importantly, is not supported by \pkg{Eigen} or any other major linear algebra library.
+[^word]: A \proglang{C++} \code{int} is used for each comorbidity flag, which is typically, in 2018, a four-byte word. However, the matrices used by \pkg{icd} hold only true or false values, represented as 1 or 0. It appears inefficient to use an entire \code{int}. An alternative is bit-packing of 32 `bool` bits into each \code{int}, which has a stormy history in the \proglang{C++} Standard Template Library [@Jarvi_AlgorithmSpecializationGeneric_2006], and, more importantly, is not supported by \pkg{Eigen} or any other major linear algebra library.
 
 There are two major simplifications:
 
@@ -297,19 +306,19 @@ These preparatory steps are themselves potentially resource intensive, e.g., fin
 
 #### Reduce number of codes
 
-For matrix multiplication, the columns $n$ of the patient-visit matrix must match the rows $q$ of the comorbidity map both in number. This means a common vocabulary for the codes in the patient-visits and the comorbidity maps must be established. This is accomplished in \pkg{icd} by using a factor[^3] where the factor levels represent the intersection of codes from the patient-visit data and the whole comorbidity map. Thus the integer factor indices become row or column indices in matrices $\boldsymbol{A}$ and $\boldsymbol{B}$ respectively. I.e., we only need to represent codes which are in _both_ the patient-visit dad and the comorbidity map, making matrix $\boldsymbol{A}$ narrower and matrix $\boldsymbol{B}$ shorter. String searching strategies miss this optimization.
+For matrix multiplication, the columns $n$ of the patient-visit matrix must match the rows $q$ of the comorbidity map both in number. This means a common vocabulary for the codes in the patient-visits and the comorbidity maps must be established. This is accomplished in \pkg{icd} by using a factor[^factor] where the factor levels represent the intersection of codes from the patient-visit data and the whole comorbidity map. Thus the integer factor indices become row or column indices in matrices $\boldsymbol{A}$ and $\boldsymbol{B}$ respectively. I.e., we only need to represent codes which are in _both_ the patient-visit dad and the comorbidity map, making matrix $\boldsymbol{A}$ narrower and matrix $\boldsymbol{B}$ shorter. String searching strategies miss this optimization.
 
 Referring back to the pseudocode in section \ref{pseudocode}, integer representation would allow much faster binary or linear search, but this is obviated by a matrix multiplication. Although the matrix multiplication _probably_ performs more computations than needed, it has simpler flow control and is a problem for which highly-optimized solutions exist.
 
-[^3]: \proglang{R} uses a data structure called a `factor` in which each element is stored as an integer index into an array of strings. The strings are unique, whereas the integers may be repeated.
+[^factor]: \proglang{R} uses a data structure called a `factor` in which each element is stored as an integer index into an array of strings. The strings are unique, whereas the integers may be repeated.
 
 #### Sparse matrix representation
 
 In a large data set, less common codes are more likely to appear, resulting in more nearly empty columns in the patient-visit matrix. Since this representation is used primarily to facilitate calculation of huge datasets, we ignore the fact that sparse format may be less efficient than dense for small datasets. Row-major representation also makes sense, with each row corresponding to a patient-visit.
 
-The comorbidity matrix is more sparse than the patient-visit matrix, but is implemented as a dense data structure for two reasons: firstly, \pkg{Eigen} is optimized for row-major sparse multiplications with dense matrices; secondly, this matrix has a maximum size limited by the comorbidity definitions, so does not need to scale with very large numbers of patients. For example, ignoring the problem reduction step described above, the maximum size of the ICD-9 AHRQ comorbidity matrix is: $14678 \times 30 \times 4 = 1.8 \times 10^6$[^4], i.e., less than two megabytes, which compares favorably to the eight megabyte CPU cache in the modest workstation used in the benchmarks presented in section \ref{Results}.
+The comorbidity matrix is more sparse than the patient-visit matrix, but is implemented as a dense data structure for two reasons: firstly, \pkg{Eigen} is optimized for row-major sparse multiplications with dense matrices; secondly, this matrix has a maximum size limited by the comorbidity definitions, so does not need to scale with very large numbers of patients. For example, ignoring the problem reduction step described above, the maximum size of the ICD-9 AHRQ comorbidity matrix is: $14678 \times 30 \times 4 = 1.8 \times 10^6$[^wordagain], i.e., less than two megabytes, which compares favorably to the eight megabyte CPU cache in the modest workstation used in the benchmarks presented in section \ref{results}.
 
-[^4]: Again the calculation is done using a 32-bit word for each flag.
+[^wordagain]: Again the calculation is done using a 32-bit word for each flag.
 
 There is a detailed example below in section \ref{workedex}, but a better idea of the bulk structure of this matrix can be seen here for a fictious comorbidity map with five categories. Note that the code represented by the last row appears in the first and third comorbidities, whereas the others are all unique to one comorbidity.
 $$ B_{p,q} =
@@ -327,12 +336,15 @@ $$ B_{p,q} =
 \vdots & \vdots & \vdots & \vdots & \vdots
 \end{matrix}$$
 
-```{r comorbidmatrix, echo=FALSE, caption="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column"}
+```{r comorbidmatrix, echo=FALSE, fig.cap="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column"}
 cmbimage <- function(map, xlab, ...) {
   code <- unique(unlist(map))
   x <- comorbid(map = map, x = data.frame(ptid = seq_along(code), code))
   mode(x) <- "integer"
-  image(t(x[, ]), ylim = c(1, 0), col = c("#FFFFFF", "#000000"), xaxt = 'n', yaxt = 'n', ...)
+  image(t(x[, ]), ylim = c(1, 0), 
+        col = c("#FFFFFF", "#000000"), 
+        xaxt = 'n', yaxt = 'n', 
+        useRaster = TRUE, ...)
   mtext(text = xlab, side = 1, line = 1.5, outer = FALSE)
 }
 {
@@ -439,11 +451,52 @@ Table: Rheum is Rheumatic Disease, HTN is hypertension, CHF is Congestive Heart 
 
 The \pkg{Eigen} linear algebra software has highly optimized multihtreaded code for some specific cases, including the type of matrix multiplication needed here: row-major sparse matrix multiplication with a column-major dense matrix. It would be possible to use a more distributed matrix algebra approach using multiple CPUs and GPUs on multiple servers, however, most distributions of Basic Linear Algebra Subprograms (BLAS) and Linear Algebra Package (LAPACK) do not include sparse matrix handling.
 
+## Worked example with anonymous patient data
+
+The US State of Vermont offers anonymized public hospital discharge data. A sample is included in \pkg{icd} and is used here to illustrate a real-world comorbidity calculation. [^disclaimer]
+
+```{r vermonthead}
+head(vermont_dx[1:10])
+```
+
+The data is in 'wide' format. ICD codes have the 'short' structure, without the decimal divider. Diagnoses are spread of the `DX` columns.
+
+```{r vermontlong}
+v <- wide_to_long(vermont_dx)[c("visit_id", "icd_code")]
+head(v)
+```
+
+This 'long' format is the structure required as input for the comorbidity functions, which can now be done:
+
+```{r vermontcompute}
+cmb <- comorbid_charlson(v, return_df = TRUE)
+#mode(cmb) <- "integer"
+head(cmb)
+```
+```{r vermontimage, echo=FALSE, fig.cap="This visualization of the result of the comorbidity calculation shows a black cell for each positive comorbidity"}
+comorbid_matrix <- comorbid_ahrq(v)
+{
+#  par(mar = par("mar") + 0)
+  image(comorbid_matrix, 
+        col = c("#FFFFFF", "#000000"),
+        xaxt = 'n', yaxt = 'n')
+        #useRaster = TRUE)
+  mtext(text = "Comorbidity", side = 2, line = 1)
+  mtext(text = "Patient-visit", side = 1, line = 1)
+}
+```
+
+[^disclaimer]: A condition of use of this data requires the following text be included: "Hospital discharge data for use in this study were supplied by the Vermont Association of Hospitals and Health Systems-Network Services Organization (VAHHS-NSO) and the Vermont Green Mountain Care Board (GMCB). All analyses, interpretations or conclusions based on these data are solely that of [the requestor]. VAHHS-NSO and GMCB disclaim responsibility for any such analyses, interpretations or conclusions. In addition, as the data have been edited and processed by VAHHS-NSO, GMCB assumes no responsibility for errors in the data due to coding or processing by hospitals, VAHHS-NSO or any other organization, including [the requestor]."
+
+\pagebreak
+
 # Results
 
-There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk} [@medicalriskpkg], and \pkg{comorbidity} [@comorbiditypkg]. The following is a performance comparison using randomly generated patient data of different sizes, each patient being assigned twenty random codes which may or not have been in the AHRQ comorbidity map.
+There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk} [@medicalriskpkg], and \pkg{comorbidity} [@comorbiditypkg]. The latter two work using the strategy described in the [psuedocode](#pseudocode) above.
 
-These results show that \pkg{icd} is dramatically faster than the alternatives. Figure \ref{fig:versus} shows time to compute comorbidites for increasing numbers of rows of data. Lines are fitted where the log-log relationship becomes linear from 10,000 rows of data, and these are used to extrapolate to estimates of the much larger computations seen in \ref{fig:bigdata}. \ref{fig:speedup} shows the relative speed up \pkg{icd} offers in comparison to the alternatives.
+The following is a limited performance comparison using synthetic data. This synthetic data shares some characteristics of real data: firstly, the more patients there are, the more coverage there is of the entire code space of the ICD scheme; secondly, there are both valid and invalid ICD codes; thirdly, each patient is assigned twenty codes. From the author's experience, the mean number of codes per patient is around five to ten, so twenty per patient represents twenty a mild stress-test of the algorithms.
+
+Figure \ref{fig:versus} shows time to compute comorbidites for increasing numbers of rows of data, showing \pkg{icd} is dramatically faster than the alternatives. Lines are fitted from where the relationship becomes linear at 10,000 rows of data, and these are used to extrapolate to estimates of the much larger computations seen in \ref{fig:bigdata}. \ref{fig:speedup} shows the relative speed up \pkg{icd} offers in comparison to the alternatives.
 
 ```{r bench, echo=FALSE}
 fac <- 1e-3
@@ -504,7 +557,7 @@ resratio <- data.frame(datarows = res$datarows,
   legend(1, 1000, legend = names(res[-1]), fill = colours[names(res[-1])])
 }
 ```
-```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in \\ref{fig:versus}."}
+```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in Figure \\ref{fig:versus}."}
 {
   plot(NA, NA, log = "x",
        type = "l", col = 'darkred',
@@ -532,41 +585,6 @@ resratio <- data.frame(datarows = res$datarows,
 ```
 
 # Implementation Details
-
-## Other Functionality
-
-### Validation
-
-\pkg{icd} allows checking whether codes are valid, and, in the USA, whether they are 'billable', i.e., leaf nodes, or merely intermediate members of the hierarchy. Research data may well contain relevant non-billable codes, and this is accounted for by the comorbidity calculations.
-
-```{r validity}
-is_valid(c("441", "441.0", "441.01", "XXX"))
-is_billable(c("441", "441.0", "441.01", "XXX"))
-data.frame(code = children("441"),
-           billable = is_billable(children("441")))
-```
-
-### Hierarchy
-
-Functions are provided to navigate the ICD-9 and ICD-10 hierarchies. `r children("4110")`.
-
-```{r hierarchy}
-# explore the hierarchy
-children(c("4410"))
-# when all the children are present, we just explain the common parent:
-explain(
-  children(c("4410")))
-# except when we ask for them not to be condensed:
-explain(
-  children(c("4410")),
-  condense = FALSE)
-# ICD-10
-children(c("B50", "W51"))
-```
-
-## Software libraries
-
-This package is built on the strong foundations of \proglang{R} [@R_2018], \pkg{Rcpp} [@Eddelbuettel_RcppSeamlessIntegration_2011], \pkg{RcppEigen} [@Eddelbeuttel_FastElegantNumerical_2013], and \pkg{Eigen} [@Guennebaud_Eigen3_2017], the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplicaation with a dense matrix, a multithreaded solution. Once this was impemented, the code bottlenecks moved to the data preparation before the matrix multiplication, which itself was optimized by simple R techniques such as vectorization.
 
 ## Derivation of the comorbidity maps
 
@@ -625,12 +643,48 @@ head("243" %i9da% "244.2")
 # 244 is too broad to fit the original Elixhauser description
 "244" %in% ("243" %i9da% "244.2")
 ```
+
+## Other Functionality
+
+### Validation
+
+\pkg{icd} allows checking whether codes are valid, and, in the USA, whether they are 'billable', i.e., leaf nodes, or merely intermediate members of the hierarchy. Research data may well contain relevant non-billable codes, and this is accounted for by the comorbidity calculations.
+
+```{r validity}
+is_valid(c("441", "441.0", "441.01", "XXX"))
+is_billable(c("441", "441.0", "441.01", "XXX"))
+data.frame(code = children("441"),
+           billable = is_billable(children("441")))
+```
+
+### Hierarchy and explanation
+
+Functions are provided to navigate the ICD-9 and ICD-10 hierarchies. This example first takes the children of the ICD-9 code _441.0_:
+```{r hierarchy441}
+children("441")
+```
+Several five-digit codes begin with _4410_. `explain` condenses all these children to their common parent, before interpreting the ICD code:
+```{r explain4410}
+explain(
+  children("4410"))
+```
+What does each one mean?
+```{r explaineach4410}
+explain(
+  children("4410"),
+  condense = FALSE)
+```
+
+## Software libraries
+
+This package is built on the strong foundations of \proglang{R} [@R_2018], \pkg{Rcpp} [@Eddelbuettel_RcppSeamlessIntegration_2011], \pkg{RcppEigen} [@Eddelbeuttel_FastElegantNumerical_2013], and \pkg{Eigen} [@Guennebaud_Eigen3_2017], the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplicaation with a dense matrix, a multithreaded solution. Once this was impemented, the code bottlenecks moved to the data preparation before the matrix multiplication, which itself was optimized by simple R techniques such as vectorization.
+
 ## Extensions
 
 \proglang{R}'s S3 class system is used for extensibility, so it is straightforward to include additional ICD schemes, e.g., for different national systems. Likewise, it is also easy to add new comorbidity maps, or use user-defined ones. Several authors have contributed code which extends \pkg{icd}, including:
 
-- assignment of ICD codes to Hierarchical Condition Codes (HCC) from the US Center for Medicare and Medicaid Services (CMS) [@Evans_EvaluationCMSHCCRisk_2011; @Pope_RiskadjustmentMedicare_2004]
 - Van Walraven risk scores [@vanWalraven_modification_2009], analagous to Charlson scores, based on the Elixhauser comomribidites.
+- assignment of ICD codes to Hierarchical Condition Codes (HCC) from the US Center for Medicare and Medicaid Services (CMS) [@Evans_EvaluationCMSHCCRisk_2011; @Pope_RiskadjustmentMedicare_2004]
 - emulation of the AHRQ's CCS [@AgencyforHealthcareResearchandQuality_ClinicalClassificationsSoftware_2012]
 
 # Limitations
