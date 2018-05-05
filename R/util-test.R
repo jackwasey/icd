@@ -324,4 +324,8 @@ random_string <- function(n, max_chars = 4) {
 all_identical <- function(x)
   all(sapply(x[-1], function(y) identical(x[[1]], y)))
 
+test_env <- function() {
+  ns <- getNamespace("icd")
+  list2env(as.list(ns, all.names = TRUE), parent = parent.env(ns))
+}
 #nocov end
