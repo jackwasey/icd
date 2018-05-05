@@ -65,4 +65,7 @@ scrape_icd10_who
 ^vignettes\/jss\.bst$
 ^vignettes\/jss\.cls$
 ^vignettes\/.*_files$
+^vignettes\/.*_latexmk$
+^vignettes\/.*\.dvi$
+^vignettes\/.*\.fls$
 ^.*\.xcworkspace$
