@@ -12,36 +12,52 @@ get_ten_million_icd9_pts <- function() {
   ten_million_random_pts
 }
 
-bench_versus_others <- function() {
+bench_n_vs_times <- function(start = 1, end = 4, it_base = 1e4, it_max = 25) {
+  r <- seq(from = start, to = end)
+  bench_times <- as.integer(it_base^(1/(r + 1)))
+  bench_times[bench_times > it_max] <- it_max
+  bench_n <- 10^r
+  unname(as.list(as.data.frame(t(matrix(byrow = FALSE, ncol = 2,
+         data = c(bench_n, bench_times))))))
+}
+
+medicalrisk_fix <- function(pts_mr) {
+  names(pts_mr) <- c("id", "icd9cm")
+  pts_mr$icd9cm <- paste("D", pts_mr$icd9cm, sep = "")
+  pts_mr
+}
+
+bench_versus_others <- function(do_slow = FALSE, bench_runs =  bench_n_vs_times()) {
   set.seed(43)
   ten_million_random_pts <- get_ten_million_icd9_pts()
-  bench_runs <- list("one" = c(n = 1, times = 1000),
-                     "thousand" = c(n = 1e3, times = 100),
-                     "ten thousand" = c(n = 1e4, times = 25),
-                     "one hundred thousand" = c(n = 1e5, times = 10)
-  )
+  stopifnot(nrow(ten_million_random_pts) >= 10^end)
   bench_res <- list()
-  for (b_name in names(bench_runs)) {
+  for (b_name in seq_along(bench_runs)) {
     print(b_name)
     b <- bench_runs[[b_name]]
-    print(b)
-    n <- b["n"]
-    times = b["times"]
+    n <- b[1]
+    times = b[2]
+    message("working on n = ", n, ", times = ", times)
     pts <- ten_million_random_pts[seq_len(n), ]
-    # fixes for medicalrisk
-    pts_mr <- pts
-    names(pts_mr) <- c("id", "icd9cm")
-    pts_mr$icd9cm <- paste("D", pts_mr$icd9cm, sep = "")
+    pts_mr <- medicalrisk_fix(pts)
     mb <- microbenchmark::microbenchmark(
-      icd::comorbid_charlson(pts, return_df = TRUE),
-      comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9"),
-      comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9", parallel = TRUE),
-      medicalrisk::generate_comorbidity_df(pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
-      times = times
-    )
+        icd::comorbid_charlson(pts, return_df = TRUE),
+        medicalrisk::generate_comorbidity_df(pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
+        times = times
+      )
+    # never use 'comorbidity' without parallel for huge calculations
+    mb2 <- if (n < 5e4 && do_slow)
+      microbenchmark::microbenchmark(
+        comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9", parallel = TRUE),
+        times = times)
+    else # if (n < cut_off)
+      microbenchmark::microbenchmark(
+        comorbidity::comorbidity(x = pts, id = "visit_id", code = "code", score = "charlson_icd9", parallel = FALSE),
+        times = times)
+    mb <- rbind(mb, mb2)
+    print(mb)
     bench_res[[b_name]] <- mb
   }
-  lapply(bench_res, print)
   invisible(bench_res)
 }
 
@@ -80,4 +96,10 @@ compare_versus_others <- function() {
   explain(icd:::icd_get_major.icd9(pt_39_codes, short_code = TRUE), warn = FALSE)
 }
 
-j <- bench_versus_others()
+# j <- bench_versus_others(start = 1, end = 1)
+
+# j <- bench_versus_others()
+
+k <- bench_versus_others(do_slow = FALSE, bench_runs = list(c(1,100), c(10,100), c(100,100)))
+m <- bench_versus_others(do_slow = FALSE, bench_runs = list(c(1e3, 100), c(1e4,10)))
+
