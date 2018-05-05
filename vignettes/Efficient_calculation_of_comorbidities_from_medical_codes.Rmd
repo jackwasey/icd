@@ -490,7 +490,7 @@ $$(\boldsymbol{C} \neq 0) =
 0 & 1 & 1
 \end{pmatrix}$$
 
-This can be represented thus:
+Table \ref{tab:cmbresult} shows how this can be represented to the user.
 
 | patient-visit   | Rheum | HTN | CHF |
 |-----------------|-------|-----|-----|
@@ -499,7 +499,7 @@ This can be represented thus:
 | Encounter three |       | yes |     |
 | Encounter four  |       | yes | yes |
 
-Table: Rheum is Rheumatic Disease, HTN is hypertension, CHF is Congestive Heart Failure
+Table: Rheum is Rheumatic Disease, HTN is hypertension, CHF is Congestive Heart Failure. \label{tab:cmbresult}
 
 ## Worked example with anonymous patient data
 
