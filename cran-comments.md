@@ -3,6 +3,7 @@
 * Ubuntu 14.04 (Travis) R-devel, gcc
 * Debian in docker with R-devel, ASAN+UBSAN GCC 7.3, clang 5.0.1
 * Windows Server 2012 R2 x64 (Appveyor), R 3.4.3 32 and 64 bit
+* OSX High Sierra, clang via brew
 
 # R CMD check results
 

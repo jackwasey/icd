@@ -26,8 +26,8 @@ cran-comments\.md$
 .*\.gcov$
 ^\.git/.*
 ^data\/icd10_who.*$
-data-raw
-^data-raw\/.*$
+^inst\/data-raw\/.*$
+^docs$
 ^Efficient.*\.md$
 icd.*\.aux$
 icd.*\.so$

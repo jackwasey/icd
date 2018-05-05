@@ -372,7 +372,7 @@ NULL
 #' edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
 #' errors in the data due to coding or processing"
 #' @source
-#' \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
+#' \url{http://www.healthvermont.gov/health-statistics-vital-records/health-care-systems-reporting/hospital-discharge-data}
 #' @format CSV original, minimally processed into R data frame.
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration

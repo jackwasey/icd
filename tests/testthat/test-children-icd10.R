@@ -20,7 +20,7 @@ context("generate defined child codes for ICD-10-CM")
 expect_icd10cm_child_is_self <- function(...) {
   dots <- unlist(list(...))
   for (i in dots) {
-    eval(bquote(expect_identical(children(icd10cm(.(i))),
+    eval(bquote(expect_identical(children(icd:::icd10cm(.(i))),
                                  as.icd10cm(as.short_diag(.(i))))))
     children(icd10(i))
     eval(bquote(expect_warning(warn_res <- children(as.icd10cm(.(i))), regexp = NA)))
@@ -65,7 +65,7 @@ test_that("zero length ICD-10-CM children", {
   expect_empty_icd10cm_kids(c("", ""))
   expect_empty_icd10cm_kids(character(0), has_warning = FALSE)
 
-  expect_warning(children_defined(icd10cm(character(0))), icd10cm(character(0)), regexp = NA)
+  expect_warning(children_defined(icd:::icd10cm(character(0))), icd:::icd10cm(character(0)), regexp = NA)
 })
 
 test_that("icd10cm children with one of several missing should not segfault", {

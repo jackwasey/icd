@@ -15,13 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("function examples")
-
-# this is essentially duplicated by R CMD check, which runs the examples, but
-# doing this here allows test coverage to include more code, and perhaps to make
-# sure there are no warnings thrown.
-
-old_opts <- options(warn = 2)
-on.exit(options(old_opts), add = TRUE)
-
-testthat::test_examples()
+library("icd")
+library("testthat", warn.conflicts = FALSE, quietly = TRUE)
+library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
+library("checkmate", warn.conflicts = FALSE, quietly = TRUE)
+if (tolower(Sys.getenv("ICD_TEST_DEPRECATED")) %in% c("yes", "true"))
+  testthat::test_dir("tests-deprecated",
+                     env = icd:::test_env(),
+                     reporter = testthat::CheckReporter)
