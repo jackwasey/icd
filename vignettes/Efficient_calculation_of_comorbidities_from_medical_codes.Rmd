@@ -145,16 +145,10 @@ These three are refinements offered only by ICD-10-CM:
 ```{r exampleicdcodecm}
 explain(c("S62.60", "S62.607", "S62.607S"))
 ```
-These codes are all contained in the following sub-chapter, and chapter:
-```{r exinvisopt, echo=FALSE}
-oldopt <- options(warnPartialMatchDollar = FALSE)
-```
+These codes are all contained in the following sub-chapter, and chapter: 
 ```{r examplecodechap}
 icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
-icd10_chapters$Injury
-```
-```{r exinvisrestore, echo=FALSE}
-options(oldopt)
+icd10_chapters$`Injury, poisoning and certain other consequences of external causes`
 ```
 
 [^libraryicd]: Here the \pkg{icd} function `explain` is used. More detail on this can be found in Section \ref{other-functionality}.
