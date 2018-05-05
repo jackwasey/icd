@@ -64,4 +64,5 @@ scrape_icd10_who
 ^\.travis\.yml$
 ^vignettes\/jss\.bst$
 ^vignettes\/jss\.cls$
+^vignettes\/.*_files$
 ^.*\.xcworkspace$
