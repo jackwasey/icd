@@ -34,4 +34,3 @@ test_that("icd-10 ahrq map is reproduced", {
     skip("AHRQ ICD-10 SAS must be downloaded with icd10_fetch_ahrq_sas")
   expect_equivalent(icd10_map_ahrq, icd10_parse_ahrq_sas(save_data = FALSE))
 })
-

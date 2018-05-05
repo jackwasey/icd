@@ -55,7 +55,9 @@ explain <- function(...)
   UseMethod("explain")
 
 #' @rdname explain
-#' @details \code{explain_icd} is a synonym for \code{\link{explain}} to avoid conflict with \code{dplyr::explain}. Alternative is to use \code{icd::explain}.
+#' @details \code{explain_icd} is a synonym for \code{\link{explain}} to avoid
+#'   conflict with \code{dplyr::explain}. Alternative is to use
+#'   \code{icd::explain}.
 #' @keywords internal
 explain_icd <- function(...) explain(...)
 
@@ -210,7 +212,8 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
   whch <- match(majors, icd::icd9_majors, nomatch = NA)
   out$major[] <- names(icd::icd9_majors)[whch]
   out$three_digit[] <- unlist(icd::icd9_majors)[whch]
-  # out is based on unique majors of the input codes. Now merge with original inputs to give output
+  # out is based on unique majors of the input codes. Now merge with original
+  # inputs to give output
   out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
                x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
   class(out[["three_digit"]]) <- c("icd9cm", "factor")
