@@ -15,9 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-# this is common code to all the tests, each of which runs test_check with a different filter:
 library("icd")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
-if (!tolower(Sys.getenv("ICD_TEST_ALL")) %in% c("no", "false"))
-  testthat::test_check("icd")
+library("checkmate", warn.conflicts = FALSE, quietly = TRUE)
+if (tolower(Sys.getenv("ICD_TEST_DEPRECATED")) %in% c("yes", "true"))
+  testthat::test_dir("tests-deprecated",
+                     env = icd:::test_env(),
+                     reporter = testthat::CheckReporter)
