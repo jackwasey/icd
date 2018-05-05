@@ -1,7 +1,7 @@
 Package: icd
 Title: Tools for Working with ICD-9 and ICD-10 Codes, and
     Finding Comorbidities
-Version: 3.0.0
+Version: 3.0.1
 Date: 2018-05-01
 Authors@R: 
     c(person(given = "Jack O.",
