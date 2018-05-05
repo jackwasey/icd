@@ -9,10 +9,6 @@ language: r
 sudo: false
 cache: packages
 
-apt_packages:
-  - r-cran-rodbc
-  - unixodbc-dev
-
 # duplicate what's in DESCRIPTION
 r_binary_packages:
   - checkmate
