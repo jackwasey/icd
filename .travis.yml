@@ -9,34 +9,29 @@ language: r
 sudo: false
 cache: packages
 
-aptget_install:
-  - r-cran-rodbc
-  - unixodbc-dev
-
 # duplicate what's in DESCRIPTION
-r_binary_install:
+r_binary_packages:
   - checkmate
   - magrittr
   - Rcpp
   - stringr
   - testthat
 
-r_install:
+r_packages:
   - knitr
   - roxygen2
   - rmarkdown
+
+r_github_packages:
+  - jimhester/covr
+  - jimhester/lintr
 
 r:
   - devel
   - release
   - oldrel
 
-repos:
-  CRAN: https://cloud.r-project.org
-
-install_github:
-  - jimhester/covr
-  - jimhester/lintr
+cran: https://cloud.r-project.org
 
 warnings_are_errors: true
 
@@ -51,12 +46,12 @@ env:
 
 matrix:
   fast_finish: true
-  allow_failures:
-  - r: oldrel
-  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_SLOW=true ICD_TEST_BUILD_DATA=true
   include:
   - env: LINTR_COMMENT_BOT=true
-  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_SLOW=true ICD_TEST_BUILD_DATA=true
+  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
+  allow_failures:
+  - r: oldrel
+  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
 
 before_script:
  - ls -aR
