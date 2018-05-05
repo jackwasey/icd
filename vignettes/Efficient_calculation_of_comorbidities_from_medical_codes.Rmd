@@ -565,8 +565,6 @@ comorbid_matrix <- comorbid_ahrq(v)
 
 [^disclaimer]: A condition of use of this data requires the following text be included: "Hospital discharge data for use in this study were supplied by the Vermont Association of Hospitals and Health Systems-Network Services Organization (VAHHS-NSO) and the Vermont Green Mountain Care Board (GMCB). All analyses, interpretations or conclusions based on these data are solely that of [the requestor]. VAHHS-NSO and GMCB disclaim responsibility for any such analyses, interpretations or conclusions. In addition, as the data have been edited and processed by VAHHS-NSO, GMCB assumes no responsibility for errors in the data due to coding or processing by hospitals, VAHHS-NSO or any other organization, including [the requestor]."
 
-\pagebreak
-
 # Results
 
 There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk} [@medicalriskpkg], and \pkg{comorbidity} [@comorbiditypkg]. The latter two work using the strategy described in the [psuedocode](#pseudocode) above.
@@ -772,11 +770,11 @@ Many countries have their own variations on the WHO ICD codes, and these are not
 
 The synthetic data used for benchmarking contained real and invalid codes. More benchmarking could be done using real data with different proportions of invalid codes, and different distributions of codes.
 
-\pagebreak
-
 # Conclusions
 
 \pkg{icd} gives \proglang{R} the ability to do a common medical research task by doing fast and accurate conversion of ICD-9 and ICD-10 into comorbidities. The key innovations are: the reduction of the problem to an equivalent smaller task; and the use of sparse matrix multiplication to compute comorbidities. This solution offers an efficient and elegant method that reduces time and memory complexity. The benchmarks show that this technique scales to the biggest health care data sets, and answers the goal of making this possible with modest computing power in a reproducible workflow.
+
+\pagebreak
 
 \section*{Acknowledgments}
 
