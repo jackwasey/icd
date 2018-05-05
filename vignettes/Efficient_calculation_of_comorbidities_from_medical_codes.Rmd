@@ -23,24 +23,26 @@ author:
       url: http://www.jhmi.edu
 title:
   formatted: |
-    Efficient calculation of comorbidities\
-    from ICD codes using sparse matrix multiplication with the \proglang{R} package \pkg{icd}
-  plain: "Efficient calculation of comorbidities from ICD codes with the R package 'icd'"
+    \pkg{icd}: Efficient Computation of Comorbidities\
+    from ICD Codes Using Sparse Matrix Multiplication in \proglang{R}
+  plain: "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R"
   short: "\\pkg{icd}: Efficient calculation of comorbidities from ICD codes"
 abstract: >
   Medical research often describes the existing diseases (comorbidities) in its study populations, and retrospective research may rely on this information for risk adjustment. Sets of International Classifcation of Diseases (ICD) codes are often used for high-level classification of patients into comorbidities (_e.g._, 'Cancer' or 'Heart Disease') to help summarize characteristics of a population. Similar tools were not available in \proglang{R}, and do not scale to big data sets. The \pkg{icd} extension for \proglang{R} includes validated mappings of ICD codes to comorbidities, and uses an efficient, fast and scalable algorithm to apply these mappings to patient data. This enables reproducible workflows with hundreds of millions of patient records as are increasingly seen in large national and international databases.
 keywords:
   formatted: [medical informatics, administrative data, matrix algebra, "\\proglang{R}", "\\proglang{C++}", "ICD", "mapping"]
   plain:     [medical informatics, administrative data, matrix algebra, R, C++, ICD, mapping]
-preamble: '\usepackage{amsmath}
-\usepackage{longtable}
-\usepackage{booktabs}
-\widowpenalty 10000
-\clubpenalty 10000
-\raggedbottom
-\shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}
-\author{Jack O. Wasey\\Children''s Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children''s Hospital}
-'
+preamble: |
+  \usepackage{amsmath}
+  \usepackage{longtable}
+  \usepackage{booktabs}
+  \usepackage{thumbpdf}
+  \widowpenalty 10000
+  \clubpenalty 10000
+  \raggedbottom
+  \shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}
+  \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
+# graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 biblio-style: jss
 output: rticles::jss_article
 bibliography:
