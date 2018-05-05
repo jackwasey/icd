@@ -52,13 +52,13 @@ release_questions <- function() {
     "Does every file have correct licence information?",
     "Is spelling correct everywhere? E.g. aspell_package_Rd_files('.')",
     # code quality:
-    "Has the development branch been merged/rebased into master?",
     "Are you happy with the code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
     "Are all public S3 classes all exported? use devtools::missing_s3()",
     "use LLVM scan build by adding 'scan-build before compiler path in .R/Makevars",
     "regenerate the function registration using tools/package-registration.r or the R 3.4 function",
     # testing and compilation and different platforms:
+    "Have you run tests in tests-deprecated and tests-build-code?",
     "Have you run autoreconf before building and testing?",
     "Has config.h.win been updated to reflect latest configure.ac results?",
     "Are there skipped tests which should be run?",
@@ -67,17 +67,13 @@ release_questions <- function() {
     "Have you checked on Windows, win_builder (if possible with configure.win failure),
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",
-    "Have you compiled with clang and gcc with full warnings and pedantic
-      (normally done by UBSAN builds anyway)?",
-    "Make sure no temp data is left behind after tests",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially
       thinking of autoconfigure stuff. Look in the final built archive
       before submitting to CRAN?",
-    "Has .*_alt\\.[Rr]$ been reactivated in .Rbuildignore?",
-    # not CRAN
-    "Are github pages site refreshed from latest documentation?",
+    "Are github pages site refreshed by running pkgdown::build_site() in the
+    main branch, then commiting the contents of docs/ to the gh-pages branch?",
     NULL
   )
 }

@@ -62,8 +62,8 @@ typedef int SparseValue;
 typedef Eigen::Triplet<SparseValue> Triplet;
 typedef Eigen::SparseMatrix<SparseValue, Eigen::RowMajor> PtsSparse;
 typedef Eigen::MatrixXi DenseMap; // col major unless otherwise stated, I think
-typedef std::pair<std::string, VecInt::size_type> VisLkPair;
-
 #endif
+
+typedef std::pair<std::string, VecInt::size_type> VisLkPair;
 
 #endif /* ICD_TYPES_H_ */

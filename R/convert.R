@@ -15,6 +15,27 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+#' @title Convert between and identify 'long' and 'wide' patient data formats
+#' @description Long and Wide Formats: As is common with many datasets, key
+#'   variables can be concentrated in one column or spread over several. Tools
+#'   format of clinical and administrative hospital data, we can perform the
+#'   conversion efficiently and accurately, while keeping some metadata about
+#'   the codes intact, e.g. whether they are ICD-9 or ICD-10.
+#' @details Long or wide format ICD data is expected to be in a data frame. It
+#'   does not carry any ICD classes at the top level, even if it only contains
+#'   one type of code, but its constituent columns may have a class specified,
+#'   e.g. 'icd9'.
+#' @param x \code{data.frame} or \code{matrix} to set class, or convert.
+#' @param ... arguments passed on to create a \code{data.frame}
+#' @description \code{icd_long_data} and \code{icd_wide_data} create
+#'   \code{data.frame}s using all the arguments, and sets the class, whereas
+#'   \code{as.icd_long_data} and \code{as.icd_wide_data} just set the class of
+#'   an existing \code{data.frame}.
+#' @name icd_long_data
+NULL
+# #' @include convert.R # avoid collation which gets confused by _alt in
+# .Rbuildignore, therefore keep it in convert.R instead.
+
 #' Convert ICD9 codes between formats and structures.
 #'
 #' ICD-9 codes are represented in \emph{short} and \emph{decimal} forms. The
@@ -41,15 +62,18 @@ NULL
 #' converted in bulk with \code{lapply} and \code{short_to_decimal}.
 #' @param x Either a chapter list itself, or the name of one, e.g.
 #'   \code{icd9_sub_chapters}
+#' @param defined Single logical value, if \code{TRUE}, the default, only
+#'   officially defined ICD-9 (currently ICD-9-CM) codes will be used in the
+#'   expansion, not any lexically possible ICD-9 code.
 #' @keywords internal manip
-icd9_chapters_to_map <- function(x) {
+icd9_chapters_to_map <- function(x, defined = FALSE) {
   if (is.character(x) && exists(x))
     x <- get(x)
   assert_list(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = FALSE)
+    map[[r]] <- expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = defined)
   }
   map
 }

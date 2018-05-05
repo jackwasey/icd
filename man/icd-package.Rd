@@ -16,7 +16,7 @@ Finding Comorbidities}
 Calculate comorbidities, Charlson scores, perform
 fast and accurate validation, conversion, manipulation, filtering and
 comparison of ICD-9 and ICD-10 codes. This package enables a work flow
-from raw lists of ICD codes in hospital billing databases to
+from raw lists of ICD codes in hospital databases to
 comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo
 and Elixhauser versions), Elixhauser and AHRQ included.  Common
 ambiguities and code formats are handled.

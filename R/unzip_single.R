@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with jwutil If not, see <http:#www.gnu.org/licenses/>.
 
+# nocov start
+
 #' unzip a single file from URL
 #'
 #' take a single file from zip located at a given URL, unzip into temporary
@@ -55,3 +57,5 @@ unzip_single <- function(url, file_name, save_path) {
   unlink(zipdir, recursive = TRUE)
   ret
 }
+
+# nocov end

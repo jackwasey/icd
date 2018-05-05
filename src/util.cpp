@@ -87,6 +87,8 @@ int getOmpCores() {
   return cores;
 }
 
+// nocov start
+
 // [[Rcpp::export(get_omp_max_threads)]]
 int getOmpMaxThreads() {
   int maxthreads = 0;
@@ -111,20 +113,20 @@ int getOmpThreads() {
 void debug_parallel_env() {
 #ifdef ICD_DEBUG_PARALLEL
   Rcpp::Rcout << "checking OpenMP flags...\n";
-  #ifdef HAVE_R_OPENMP
-    Rcpp::Rcout << "HAVE_R_OPENMP is defined.\n";
-  #endif
-  #ifdef _OPENMP
-    Rcpp::Rcout << "_OPENMP is defined.\n";
-  #else
-    Rcpp::Rcout << "_OPENMP is not defined.\n";
-  #endif
+#ifdef HAVE_R_OPENMP
+  Rcpp::Rcout << "HAVE_R_OPENMP is defined.\n";
+#endif
+#ifdef _OPENMP
+  Rcpp::Rcout << "_OPENMP is defined.\n";
+#else
+  Rcpp::Rcout << "_OPENMP is not defined.\n";
+#endif
 
-  #ifdef ICD_OPENMP
-    Rcpp::Rcout << "ICD_OPENMP is defined.\n";
-  #else
-    Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
-  #endif
+#ifdef ICD_OPENMP
+  Rcpp::Rcout << "ICD_OPENMP is defined.\n";
+#else
+  Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
+#endif
 #endif
 }
 
@@ -133,16 +135,18 @@ void debug_parallel() {
   //  cannot use Rcpp:Rcout in multithreaded code: alternative (for debugging
   //  only) is RcppThreads. Small package but I'm reluctant to add another
   //  dependency.
-   /*
+  /*
 #if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
-  Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads()
-  << " max threads per omp_get_schedule = " << getOmpMaxThreads()
-  << " avail threads = " << omp_get_num_threads()
-  << " omp_get_thread_num = " << omp_get_thread_num()
-  << " omp_get_num_procs = " << getOmpCores() << "\n";
+   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads()
+               << " max threads per omp_get_schedule = " << getOmpMaxThreads()
+               << " avail threads = " << omp_get_num_threads()
+               << " omp_get_thread_num = " << omp_get_thread_num()
+               << " omp_get_num_procs = " << getOmpCores() << "\n";
 #endif // ICD_DEBUG_PARALLEL
    */
 }
+
+// nocov end
 
 // [[Rcpp::export]]
 Rcpp::NumericVector randomMajorCpp(int	n) {
@@ -306,33 +310,8 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
   return out;
 }
 
-// //[[Rcpp::export]]
-// CV env_to_vec_flip(Rcpp::Environment env) {
-//   CV out(Rf_length(env.ls(true)));
-// for (CV::iterator i; i != out.end(); ++i) {
-//   out[env[*i]] = *i;
-// }
-// return
-// }
-
-//' fast expand of logical matrix to add rows filled with false
-//' @keywords internal
-// [[Rcpp::export]]
-Rcpp::LogicalMatrix rbind_with_empty(Rcpp::LogicalMatrix a, int b_rows) {
-  // start with empty matrix
-  Rcpp::LogicalMatrix out = Rcpp::no_init_matrix(a.rows() + b_rows, a.cols());
-  // loop col-wise will be much faster
-  for (int j = 0; j != a.cols(); ++j) {
-    for (int i = 0; i != a.rows(); ++i)
-      out(i, j) = a(i,j); // copy
-    for (int i = a.rows(); i != out.rows(); ++i)
-      out(i, j) = false; // fill
-  } // end j loop
-  return out;
-}
-
-//' fast factor generation test
-//' @keywords internal
+//' fast factor generation WIP
+//' @keywords internal manip
 // [[Rcpp::export]]
 SEXP factor_fast( SEXP x ) {
   switch( TYPEOF(x) ) {

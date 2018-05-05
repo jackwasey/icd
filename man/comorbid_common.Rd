@@ -5,7 +5,7 @@
 \title{Internal function to calculate co-morbidities.}
 \usage{
 comorbid_common(x, map, visit_name = NULL, icd_name, return_df = FALSE,
-  comorbid_fun = icd9Comorbid_alt_MatMul, ...)
+  comorbid_fun = comorbidMatMul, ...)
 }
 \arguments{
 \item{comorbid_fun}{function i.e. the function (not character string) to be

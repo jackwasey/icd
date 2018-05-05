@@ -34,9 +34,20 @@
 guess_version <- function(x, short_code, ...)
   UseMethod("guess_version")
 
+#' @keywords internal
+#' @export
 guess_version.icd9 <- function(x, short_code, ...) "icd9" #nocov
+
+#' @keywords internal
+#' @export
 guess_version.icd9cm <- function(x, short_code, ...) "icd9cm" #nocov
+
+#' @keywords internal
+#' @export
 guess_version.icd10 <- function(x, short_code, ...) "icd10" #nocov
+
+#' @keywords internal
+#' @export
 guess_version.icd10cm <- function(x, short_code, ...) "icd10cm" #nocov
 
 #' @describeIn guess_version Guess version of ICD codes in a factor
@@ -67,7 +78,7 @@ get_icd_valid_percent <- function(x, short_code = NULL, n = 100) {
       sum(is_valid.icd10(y, short_code = FALSE), na.rm = TRUE)
     )
   }
-  nfac = 100/min(100, length(x))
+  nfac <- 100 / min(100, length(x))
   list(icd9 = i9 * nfac, icd10 = i10 * nfac)
 }
 
@@ -92,7 +103,7 @@ get_icd_defined_percent <- function(x, short_code = NULL, n = 100) {
       sum(is_defined.icd10(y, short_code = FALSE), na.rm = TRUE)
     )
   }
-  nfac = 100/min(100, length(x))
+  nfac <- 100 / min(100, length(x))
   list(icd9 = i9 * nfac, icd10 = i10 * nfac)
 }
 

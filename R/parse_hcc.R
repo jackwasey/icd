@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# nocov start
+
 #' Generate ICD to HCC Crosswalks from CMS
 #'
 #' The ICD/HCC mappings were obtained from CMS
@@ -220,3 +222,5 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
     save_in_data_dir(icd_map_cc_hcc)
   invisible(icd_map_cc_hcc)
 }
+
+# nocov end

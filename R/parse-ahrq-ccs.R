@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# nocov start
+
 #' Download ahrq-ccs-icd9 definition
 #' @template ccs-single
 #' @template offline
@@ -43,8 +45,8 @@ icd10_fetch_ahrq_ccs <- function(version = "2018.1", offline) {
   version <- gsub(".", "_", version, fixed = TRUE)
   # all information in one file, no need for single vs multi
   unzip_to_data_raw(
-    url = paste0("https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs_dx_icd10cm_", version,".zip"),
-    file_name = paste0("ccs_dx_icd10cm_",version,".csv"),
+    url = paste0("https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs_dx_icd10cm_", version, ".zip"),
+    file_name = paste0("ccs_dx_icd10cm_", version, ".csv"),
     offline = offline)
 }
 
@@ -198,7 +200,7 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
         dimnames  = list(rownames = lvls_names[lvls_names != " "])
       )
     # complicated call needed or order using all columns of matrix
-    lvls <- lvls[do.call(order, as.data.frame(lvls)),]
+    lvls <- lvls[do.call(order, as.data.frame(lvls)), ]
     if (is.null(dim(lvls)))
       lvls <-
       names(lvls) # if only looking at lvl1, then this becomes a vector, not a matrix
@@ -225,3 +227,5 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
     save_in_data_dir("icd10_map_ccs")
   invisible(icd10_map_ccs)
 }
+
+# nocov end

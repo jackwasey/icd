@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-// [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 //#include "comorbid_alt.h"              // for lookupComorbid_alt_ByChunkForTaskloop
 #include "comorbidSetup.h"
@@ -35,8 +34,8 @@
 //' @keywords internal
 // [[Rcpp::export]]
 void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
-                                      const VecVecInt& map,
-                                      NewOut& out) {
+                                           const VecVecInt& map,
+                                           NewOut& out) {
   debug_parallel_env();
   const VecVecIntSz num_comorbid = map.size();
   // https://stackoverflow.com/questions/2665936/is-there-a-way-to-specify-the-dimensions-of-a-nested-stl-vector-c
@@ -49,7 +48,9 @@ void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
   // may need shared(out) but as I think each element can be written to
   // independently by different threads, try without.. private(vis_i)
   // superfluous?
-#pragma omp taskloop shared(Rcpp::Rcout, out) //grainsize (256)
+
+  // Requires OpenMP >4.5, so not available in current windows toolschain, thus makes a compiler warning.
+  // #pragma omp taskloop shared(Rcpp::Rcout, out) //grainsize (256)
 #endif
   for (vis_i = 0; vis_i < vcdb.size(); ++vis_i) {
     debug_parallel();
@@ -110,9 +111,9 @@ void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9Comorbid_alt_Taskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
-                          const std::string visitId, const std::string icd9Field,
-                          const int threads = 8, const int chunk_size = 256,
-                          const int omp_chunk_size = 1) {
+                               const std::string visitId, const std::string icd9Field,
+                               const int threads = 8, const int chunk_size = 256,
+                               const int omp_chunk_size = 1) {
   valgrindCallgrindStart(false);
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
   VecVecInt vcdb; // size is reserved later
@@ -186,9 +187,9 @@ SEXP icd9Comorbid_alt_Taskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping
 //' @keywords internal
 // [[Rcpp::export]]
 SEXP icd9Comorbid_alt_Taskloop2(const SEXP& icd9df, const Rcpp::List& icd9Mapping,
-                           const std::string visitId, const std::string icd9Field,
-                           const int threads = 8, const int chunk_size = 256,
-                           const int omp_chunk_size = 1) {
+                                const std::string visitId, const std::string icd9Field,
+                                const int threads = 8, const int chunk_size = 256,
+                                const int omp_chunk_size = 1) {
 
   valgrindCallgrindStart(false);
   VecStr out_row_names; // size is reserved in buildVisitCodesVec

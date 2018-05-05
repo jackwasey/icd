@@ -16,19 +16,8 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 # this is common code to all the tests, each of which runs test_check with a different filter:
-
 library("icd")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
-
-# we now rely on a testthat version with backwards-incompatible changes, the whole of the expectation setup has changed,
-# and there are many deprecations. For now, only run tests if testthat version is high enough:
-if (packageVersion("testthat") < package_version("0.11.0.9000")) {
-  message("testthat version is less than 0.11.0.9000, so not running Catch tests. Consider
-           updating testthat using install.packages('testthat'), update.packages(), or
-          devtools::install_github('hadley/testthat')")
-}
-
-testthat::test_check("icd", reporter = "summary")
-
-# to test deprecated functions: test_dir("deprecated-tests/testthat", report = testthat::ListReporter)
+if (!tolower(Sys.getenv("ICD_TEST_ALL")) %in% c("no", "false"))
+  testthat::test_check("icd")

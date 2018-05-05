@@ -15,6 +15,7 @@ conftest.err
 *.dll
 .DS_Store
 .externalToolBuilders
+*.gcno
 i9test.RData
 icd\.Rcheck
 icd_*.tar.gz

@@ -1,13 +1,14 @@
 Package: icd
 Title: Tools for Working with ICD-9 and ICD-10 Codes, and
     Finding Comorbidities
-Version: 3.0.0
-Date: 2018-04-20
+Version: 3.1.2
+Date: 2018-05-05
 Authors@R: 
     c(person(given = "Jack O.",
              family = "Wasey",
              role = c("aut", "cre", "cph"),
-             email = "jack@jackwasey.com"),
+             email = "jack@jackwasey.com",
+             comment = c(ORCID = "0000-0003-3738-4637")),
       person(given = "William",
              family = "Murphy",
              role = "ctb",
@@ -38,12 +39,12 @@ Maintainer: Jack O. Wasey <jack@jackwasey.com>
 Description: Calculate comorbidities, Charlson scores, perform
     fast and accurate validation, conversion, manipulation, filtering and
     comparison of ICD-9 and ICD-10 codes. This package enables a work flow
-    from raw lists of ICD codes in hospital billing databases to
+    from raw lists of ICD codes in hospital databases to
     comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo
     and Elixhauser versions), Elixhauser and AHRQ included.  Common
     ambiguities and code formats are handled.
 License: GPL-3
-URL: https://github.com/jackwasey/icd
+URL: https://jackwasey.github.io/icd/
 BugReports: https://github.com/jackwasey/icd/issues
 Depends:
     R (>= 3.4)
@@ -58,8 +59,9 @@ Suggests:
     RODBC,
     roxygen2 (>= 5.0.0),
     rmarkdown,
+    rticles,
     stringr,
-    testthat,
+    testthat (>= 0.11.1),
     xml2
 LinkingTo:
     Rcpp,
@@ -75,53 +77,3 @@ Copyright: See file (inst/)COPYRIGHTS
 LazyData: true
 LazyDataCompression: xz
 RoxygenNote: 6.0.1
-Collate: 
-    'RcppExports.R'
-    'as_char_no_warn.R'
-    'attr.R'
-    'catch-routine-registration.R'
-    'children.R'
-    'children_alt.R'
-    'convert.R'
-    'class.R'
-    'comorbid.R'
-    'comorbid_alt.R'
-    'condense.R'
-    'datadocs.R'
-    'diff_comorbid.R'
-    'env.R'
-    'explain-table.R'
-    'explain.R'
-    'factor_nosort.R'
-    'filter.R'
-    'generate_mappings.R'
-    'generate_spelling.R'
-    'generate_sysdata.R'
-    'guess.R'
-    'hcc.R'
-    'icd-package.R'
-    'manip.R'
-    'parse-ahrq-ccs.R'
-    'parse-comorbid.R'
-    'parse-icd10.R'
-    'parse-icd10cm-xml.R'
-    'parse-rtf.R'
-    'parse.R'
-    'parse_hcc.R'
-    'print.icd_comorbidity_map.R'
-    'ranges.R'
-    'ranges_alt.R'
-    'real.R'
-    'sas.R'
-    'save_in_data_dir.R'
-    'score.R'
-    'sort.R'
-    'sort_alt.R'
-    'to_data_raw.R'
-    'unzip_single.R'
-    'util-file.R'
-    'util-test.R'
-    'util.R'
-    'valid.R'
-    'z-deprecated.R'
-    'zzz.R'

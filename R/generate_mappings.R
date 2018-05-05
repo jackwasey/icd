@@ -17,6 +17,8 @@
 
 # some ICD-9 and ICD-10 mappings (others generated from SAS code parsing)
 
+#nocov start
+
 #' Generate Elixhauser comorbidities
 #'
 #' This function uses the \code{\%i9d\%} operator, so cannot be done as an R
@@ -78,16 +80,12 @@ icd9_generate_map_elix <- function(save_data = TRUE) {
     psychoses = c("295.00" %i9da% "298.9", "299.10" %i9da% "299.11"),
     depression = c("300.4", "301.12", "309.0", "309.1", "311")
   )
-
   icd9_map_elix <- lapply(icd9_map_elix, decimal_to_short.icd9)
-
   icd9_map_elix <- lapply(
     icd9_map_elix,
     children.icd9, short_code = TRUE, defined = FALSE)
-
   names(icd9_map_elix) <- icd::names_elix_htn_abbrev
   icd9_map_elix %<>% as.comorbidity_map
-
   if (save_data)
     save_in_data_dir(icd9_map_elix)
   invisible(icd9_map_elix)
@@ -150,13 +148,10 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
     psychoses = c("F20", "F22", "F23", "F24", "F25", "F28", "F29", "F302", "F312", "F315"),
     depression = c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432")
   )
-
   names(icd10_map_elix) <- icd::names_elix_htn_abbrev
-
   icd10_map_elix <- lapply(icd10_map_elix, as.short_diag)
   icd10_map_elix <- lapply(icd10_map_elix, as.icd10)
   icd10_map_elix <- as.comorbidity_map(icd10_map_elix)
-
   if (save_data)
     save_in_data_dir(icd10_map_elix)
   invisible(icd10_map_elix)
@@ -221,18 +216,14 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
                   "298"),
     depression = c("296.2", "296.3", "296.5", "300.4", "309", "311")
   )
-
   icd9_map_quan_elix <- lapply(
     icd9_map_quan_elix,
     function(x) decimal_to_short.icd9(x))
-
   icd9_map_quan_elix <- lapply(
     icd9_map_quan_elix,
     children.icd9, short_code = TRUE, defined = FALSE)
-
   names(icd9_map_quan_elix) <- icd::names_quan_elix_htn_abbrev
   icd9_map_quan_elix %<>% as.comorbidity_map
-
   if (save_data)
     save_in_data_dir(icd9_map_quan_elix)
   invisible(icd9_map_quan_elix)
@@ -245,7 +236,6 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
 #' @template parse-template
 #' @keywords internal
 icd10_generate_map_quan_elix <- function(save_data = TRUE) {
-
   quan_elix_raw <- list(
     c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426", "I427", "I428", "I429", "I43", "I50", "P290"),
     c("I441", "I442", "I443", "I456", "I459", "I47", "I48", "I49", "R000", "R001", "R008", "T821", "Z450", "Z950"),
@@ -312,15 +302,12 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
       unique %>%
       sort_icd.icd10
   }
-
   icd10_map_quan_elix <- lapply(quan_elix_raw, f)
-
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.short_diag)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd10)
   icd10_map_quan_elix %<>% as.comorbidity_map
-
   if (save_data)
     save_in_data_dir(icd10_map_quan_elix)
   invisible(icd10_map_quan_elix)
@@ -375,9 +362,7 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
     mets = c("C77", "C78", "C79", "C80"),
     hiv = c("B20", "B21", "B22", "B24")
   )
-
   names(quan_charl_raw) <- icd::names_charlson_abbrev
-
   # this expansion will only be for 'defined' codes (currently the most
   # up-to-date canonical CMS ICD-10-CM list). Will ultimately need to generalize
   # this.
@@ -394,17 +379,17 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
       unique %>%
       sort_icd.icd10
   }
-
   icd10_map_quan_deyo <- lapply(quan_charl_raw, f)
-
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.short_diag)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd10)
   icd10_map_quan_deyo %<>% as.comorbidity_map
-
+  icd10_map_charlson <- icd10_map_quan_deyo
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
-  if (save_data)
+  if (save_data) {
     save_in_data_dir(icd10_map_quan_deyo)
+    save_in_data_dir(icd10_map_charlson)
+  }
   invisible(icd10_map_quan_deyo)
 }
 
@@ -486,3 +471,5 @@ generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
     save_in_data_dir(vermont_dx)
   invisible(vermont_dx)
 }
+
+#nocov end

@@ -44,9 +44,9 @@ using Rcpp::as;
 //' @keywords internal
 // [[Rcpp::export(icd10_comorbid_parent_search_cpp)]]
 Rcpp::LogicalMatrix icd10ComorbidParentSearchCpp(Rcpp::DataFrame x,
-                                                     Rcpp::List map,
-                                                     std::string visit_name,
-                                                     std::string icd_name) {
+                                                 Rcpp::List map,
+                                                 std::string visit_name,
+                                                 std::string icd_name) {
   CV icd_codes = x[icd_name];
   LogicalMatrix intermed(icd_codes.size(), map.size()); // zero-filled
   // simplest code (and maybe fastest) is to calc comorbidity for each code,
@@ -123,9 +123,9 @@ Rcpp::LogicalMatrix icd10ComorbidParentSearchCpp(Rcpp::DataFrame x,
 //' stopifnot(simple_map$PVD == "I26019")
 //'
 //' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
-//' icd:::comorbid_common(uranium_pathology, icd10_map_ahrq,
-//'                           visit_name = "case", icd_name = "icd10",
-//'                           comorbid_fun = icd:::icd9Comorbid_alt_MatMul)
+//' head(icd:::comorbid_common(uranium_pathology, icd10_map_ahrq,
+//'                            visit_name = "case", icd_name = "icd10",
+//'                            comorbid_fun = icd:::comorbidMatMul))
 //'
 //' @keywords internal
 // [[Rcpp::export(simplify_map_lex)]]

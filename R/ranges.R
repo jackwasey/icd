@@ -140,6 +140,7 @@ expand_range_major <- function(start, end) {
 #' @describeIn expand_range_major Expand range of top-level, 'major' codes
 #'   of unknown type
 #' @keywords internal
+#' @export
 expand_range_major.default <- function(start, end) {
   icd_ver <- guess_pair_version(start, end, short_code = TRUE)
   if (icd_ver == "icd9")
@@ -150,6 +151,7 @@ expand_range_major.default <- function(start, end) {
 
 #' @describeIn expand_range_major Expand range of top-level ICD-10 codes
 #' @keywords internal
+#' @export
 expand_range_major.icd10cm <- function(start, end) {
 
   # codes may have alphabetic characters in 3rd position, so can't just do
@@ -430,12 +432,4 @@ expand_minor.icd9 <- function(mnr, is_e = FALSE) {
 #' @export
 expand_minor.icd10 <- function(x) {
   .NotYetImplemented() # nocov
-}
-
-# wrap icd9ChildrenShortUnordered to pass lazy-loaded data
-icd9_children_short <- function(icd9Short, onlyReal) {
-  .Call(`_icd_icd9ChildrenShortUnordered`,
-        icd9Short,
-        icd::icd9cm_hierarchy,
-        onlyReal = onlyReal)
 }

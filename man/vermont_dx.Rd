@@ -6,7 +6,7 @@
 \title{Hospital discharge data from Vermont}
 \format{CSV original, minimally processed into R data frame.}
 \source{
-\url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
+\url{http://www.healthvermont.gov/health-statistics-vital-records/health-care-systems-reporting/hospital-discharge-data}
 }
 \description{
 Anonymous data from public Vermont source for 2013

@@ -1,5 +1,7 @@
 *.out
 *.aux
+*.blg
+*.bbl
 *cache*
 *.tex
 *.synctex.gz
@@ -14,3 +16,4 @@
 *.utf8.md
 test*.Rmd
 test2
+*.dvi

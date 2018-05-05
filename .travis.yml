@@ -9,33 +9,49 @@ language: r
 sudo: false
 cache: packages
 
-addons:
-  apt:
-    packages:
-      - r-cran-rodbc
-      - unixodbc-dev
+# duplicate what's in DESCRIPTION
+r_binary_packages:
+  - checkmate
+  - magrittr
+  - Rcpp
+  - stringr
+  - testthat
 
-r:
-  - oldrel
-  - release
-  - devel
-
-matrix:
-  allow_failures:
-    - r: oldrel
-
-repos:
-  CRAN: https://cloud.r-project.org
+r_packages:
+  - knitr
+  - roxygen2
+  - rmarkdown
 
 r_github_packages:
   - jimhester/covr
   - jimhester/lintr
 
+r:
+  - devel
+  - release
+  - oldrel
+
+cran: https://cloud.r-project.org
+
 warnings_are_errors: true
 
 env:
-  - LINTR_COMMENT_BOT=false ICD_STRIP=false OMP_NUM_THREADS=1 CFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic -Wno-unused-parameter -Wno-unused-variable" R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
-  - LINTR_COMMENT_BOT=true ICD_STRIP=true OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native" R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+  global:
+    - R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+    - LINTR_COMMENT_BOT=false
+    - ICD_COVERAGE=false
+  matrix:
+    - OMP_NUM_THREADS=1 CFLAGS="-Og -Werror -Wall -Wextra -pedantic" CXXFLAGS="-Og -Werror -Wall -Wextra -pedantic"
+    - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native"
+
+matrix:
+  fast_finish: true
+  include:
+  - env: LINTR_COMMENT_BOT=true
+  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
+  allow_failures:
+  - r: oldrel
+  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
 
 before_script:
  - ls -aR
@@ -48,7 +64,8 @@ before_script:
 after_success:
  - ls -aR
  - cat ./icd.Rcheck/tests/test-all.Rout
- - Rscript -e "covr::codecov(quiet = FALSE)"
+ - if [ "$ICD_COVERAGE" = "true" ]; then
+     Rscript -e "covr::codecov(quiet = FALSE)"; fi
  - Rscript -e "lintr::lint_package()"
 
 notifications:

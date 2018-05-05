@@ -2,7 +2,7 @@
 title: icd Readme
 output:
   md_document:
-    variant: gfm
+    variant: markdown_github
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 author: Jack O. Wasey 
 ---
@@ -48,12 +48,12 @@ patient_data <- data.frame(
   )
 ```
 # icd
-#### downloads from Rstudio mirror
-[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
-[![CRAN version](https://www.r-pkg.org/badges/version/icd)](https://cran.r-project.org/package=icd)
-[![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master)](https://travis-ci.org/jackwasey/icd)
-[![Appveyor](https://ci.appveyor.com/api/projects/status/github/jackwasey/icd)](https://ci.appveyor.com/project/jackwasey/icd)
+[![CRAN version](https://www.r-pkg.org/badges/version/icd "CRAN Version")](https://cran.r-project.org/package=icd)
+[![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
+[![Appveyor](https://ci.appveyor.com/api/projects/status/github/jackwasey/icd "AppVeyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd?branch=master)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
+<!-- [![Coverity](https://scan.coverity.com/projects/15671/badge.svg "Coverity Scan Build Status")](https://scan.coverity.com/projects/jackwasey-icd) -->
 
 # ICD-9 and ICD-10 comorbidities, manipulation and validation
 
@@ -61,23 +61,21 @@ patient_data <- data.frame(
 
  * find comorbidities of patients based on admission or discharge ICD-9 or ICD-10 codes, e.g. Cancer, Heart Disease
      + several standard mappings of ICD codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
-     + very fast assignment of ICD codes to comorbidities (using C and C++ internally, with automatic parallel execution using OpenMP when available), assigning millions of comorbidities in a few seconds
+     + very fast assignment of ICD codes to comorbidities (using matrix multiplication with C and C++ internally)
  * Charlson and Van Walraven score calculations
- * Hierarchical Condition Codes (HCC)
+ * Hierarchical Condition Codes (HCC) from CMS
+ * Clinical Classifcations Software (CCS) comorbidities from AHRQ
  * validation of ICD codes from different annual revisions of ICD-9-CM and ICD-10-CM
  * summarizing ICD codes into groups, and to human-readable descriptions
- * correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 conversion is left as an exercise for the user!
+ * correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is not yet implemented
  * comprehensive test suite to increase confidence in accurate processing of ICD codes
+ * all internal ICD and comorbidity data is extracted directly from publically available data or code, increasing confidence in the results
 
 ## Install
 
-The latest version is available in [github icd](https://github.com/jackwasey/icd), and can be installed with:
-```{r show install, eval = FALSE, echo = TRUE}
-    install.packages("devtools")
-    devtools::install_github("jackwasey/icd")
+```{r simpleinstall, eval = FALSE, echo = TRUE}
+install.packages("icd")
 ```
-
-The _master_ branch at github should always build and pass all tests and R CMD check, and will be similar or identical to the most recent CRAN release. The CRAN releases are stable milestones. Contributions and bug reports are encouraged and essential for this package to remain current and useful to the many people who have installed it.
 
 ## Introduction
 
@@ -108,23 +106,20 @@ See also the vignettes and examples embedded in the help for each function for m
 ```{r example}
 patient_data
 
-# reformat input data as needed
-long_to_wide(patient_data)
-
 # get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
-comorbid_quan_deyo(patient_data)
+comorbid_charlson(patient_data)
 
-# find diagnoses present on admission:
-filter_poa(patient_data)
+# or go straight to the Charlson scores:
+charlson(patient_data)
 
 # get comorbidities based on present-on-arrival diagnoses, use magrittr to flow the data
-patient_data %>% filter_poa %>% comorbid_quan_deyo
+patient_data %>% filter_poa %>% comorbid_elix
 ```
 
 Look at the help files for details and examples of almost every function in this package.
 ```{r how to get further examples, echo = TRUE, eval = FALSE}
-?is_valid
 ?comorbid
+?is_valid
 ```
 
 Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.
@@ -135,25 +130,21 @@ Note that reformatting from wide to long and back is not as straightforward as u
 
 In the spirit of reproducible research, all the R data files in this package can be recreated from source. The size of the source files makes it cumbersome to include them in the R package available on CRAN. Using the github source, you can pull the original data and SAS format files, and rebuild the data; or use the tools provided by this package to update the data using new source data files, e.g. when ICD-10-CM 2017 is released.
 
-Doing the parsing requires additional dependencies, which are not gratuitously included in the package requirements, since most users won't need them. Benchmarking this package also has additional requirements. These are:
- - xml2
- - ggplot2
- - digest
+### Development version
 
-### Automated testing
+The latest version is available in [github icd](https://github.com/jackwasey/icd), and can be installed with:
+```{r show install, eval = FALSE, echo = TRUE}
+    install.packages("devtools")
+    devtools::install_github("jackwasey/icd")
+```
 
-One of the strengths of this package is a thorough test suite, including over 10,000 lines of testing code.
-```
-find tests -type f -exec cat '{}' + | wc -l
-10910
-```
-A better metric of testing and code quality is code coverage, for which [codecov](https://codecov.io/github/jackwasey/icd) and [coveralls](https://coveralls.io/github/jackwasey/icd) are used. The automated results to [codecov](https://codecov.io/github/jackwasey/icd), whereas the [travis](https://travis-ci.org/jackwasey/icd) builds report coverage to [coveralls](https://coveralls.io/github/jackwasey/icd).
-The parsing code is a significant chunk of code, and may or may not be included in the automated builds depending on whether the source data is available. With the data available, test coverage is >95%.
+The _master_ branch at github should always build and pass all tests and R CMD check, and will be similar or identical to the most recent CRAN release. The CRAN releases are stable milestones. Contributions and bug reports are encouraged and essential for this package to remain current and useful to the many people who have installed it.
+
 
 ### Contributing and Building
 
-Contributions of any kind to `icd` are very welcome.
+A substantial amount of code has now been contributed to the package. Contributions of any kind to `icd` are very welcome. See the [GitHub issues page]](https://github.com/jackwasey/icd/issues) to see jobs and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by some real-world data.
 
-To build R, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following is required:
+To build `icd`, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following is required:
 `install.packages("Rcpp", type="source")`
 to avoid build errors.

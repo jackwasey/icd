@@ -201,6 +201,8 @@ get_visit_name <- function(x, visit_name = NULL) {
 .visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
                          "in.*enc", "out.*enc", "encounter", "visit", "enc")
 
+#' @keywords internal
+#' @export
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
 
@@ -221,6 +223,8 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
   visit_name
 }
 
+#' @keywords internal
+#' @export
 get_visit_name.matrix <- function(x, visit_name = NULL) {
   stop("matrices of comorbidity data are expected to be of logical type, and have row names corresponding to the visit or patient.")
 }
@@ -424,7 +428,7 @@ str_match_all <- function(string, pattern, ...) {
   regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...))
 }
 
-#' TODO does \code{stringr} do this?
+#' \code{stringr} does this, but here we have a small amount of base R code
 #' @keywords internal
 str_extract <- function(string, pattern, ...) {
   vapply(regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...)),

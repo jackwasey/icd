@@ -19,6 +19,7 @@ icd_data_names <- c(
   "icd10_map_ahrq",
   "icd10_map_cc",
   "icd10_map_elix",
+  "icd10_map_charlson",
   "icd10_map_quan_deyo",
   "icd10_map_quan_elix",
   "icd10_sub_chapters",
@@ -26,8 +27,8 @@ icd_data_names <- c(
   "icd9_majors",
   "icd9_map_ahrq",
   "icd9_map_cc",
-  "icd10_map_cc",
   "icd9_map_elix",
+  "icd9_map_charlson",
   "icd9_map_quan_deyo",
   "icd9_map_quan_elix",
   "icd9_sources",
@@ -37,11 +38,6 @@ icd_data_names <- c(
   "icd9_chapters",
   "icd10_chapters",
   "icd_map_cc_hcc",
-  "icd10cm2016",
-  "icd9_chapters",
-  "icd9_majors",
-  "icd9_map_cc",
-  "icd9cm_billable",
   "names_ahrq", "names_ahrq_abbrev", "names_ahrq_htn",
   "names_ahrq_htn_abbrev", "names_charlson",
   "names_charlson_abbrev", "names_elix", "names_elix_abbrev",
@@ -184,7 +180,7 @@ NULL
 #' leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
 #' this, in the rare cases where someone had two or three of leukemia, lymphoma
 #' and non-metastatic cancer, the Quan adaptation would give a lower Charlson
-#' score than the original scheme. The Deyo original Charlson to ICD-9-CM groups
+#' score than the original scheme. The original Deyo Charlson to ICD-9-CM groups
 #' does include distinct categories for these things.
 #' @docType data
 #' @keywords datasets
@@ -198,7 +194,7 @@ NULL
 #'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
 #'
 #' @name icd9_map_quan_deyo
-#' @aliases icd10_map_quan_deyo
+#' @aliases icd10_map_quan_deyo icd9_map_charlson icd10_map_charlson
 NULL
 
 #' Quan adaptation of Elixhauser comorbidities
@@ -376,7 +372,7 @@ NULL
 #' edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
 #' errors in the data due to coding or processing"
 #' @source
-#' \url{http://healthvermont.gov/research/hospital-utilization/RECENT_PU_FILES.aspx}
+#' \url{http://www.healthvermont.gov/health-statistics-vital-records/health-care-systems-reporting/hospital-discharge-data}
 #' @format CSV original, minimally processed into R data frame.
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration

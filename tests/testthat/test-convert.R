@@ -363,23 +363,6 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
   expect_equal(icd9MajMinToShort("V01", c("0", "1")), c("V010", "V011"))
 })
 
-test_that("convert icd-9 ranges", {
-  ooe <- icd_long_data(visit_id = sprintf("pt%02d", seq_along(one_of_each)),
-                   code = one_of_each,
-                   stringsAsFactors = TRUE)
-
-  class(ooe[["code"]]) <- c("icd9", "icd_decimal_diag", "factor")
-
-  expect_warning(
-    test_map <- icd9_chapters_to_map(icd9_chapters), regexp = NA)
-  expect_warning(
-    cmb <- icd9_comorbid(x = ooe, short_code = FALSE, map = test_map,
-                         short_map = TRUE, return_df = TRUE), regexp = NA)
-  cmbcmp <- unname(as.matrix(logical_to_binary(cmb)[-1]))
-  expmat <- diag(nrow = length(ooe$code))
-  expect_equivalent(cmbcmp, expmat)
-})
-
 # some functions are only called via C++ (at present), so the path through
 # RcppExports is not tested. Also, compare slower functions for identical
 # results as a regression test.

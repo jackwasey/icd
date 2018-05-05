@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# nocov start
+
 #' Get sub-chapters from the 2016 XML for ICD-10-CM
 #'
 #' This is not quite a super-set of ICD-10 sub-chapters: many more codes than
@@ -81,3 +83,5 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
 
   invisible(icd10_sub_chapters)
 }
+
+# nocov end

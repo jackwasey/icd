@@ -73,6 +73,6 @@ widedf <- data.frame(visit_name = c("a", "b", "c"),
 wide_to_long(widedf)
 }
 \seealso{
-Other ICD code conversion: \code{\link{convert}},
-  \code{\link{icd_long_data}}, \code{\link{long_to_wide}}
+Other ICD code conversion: \code{\link{as.icd_long_data}},
+  \code{\link{convert}}, \code{\link{long_to_wide}}
 }

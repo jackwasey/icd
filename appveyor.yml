@@ -15,37 +15,24 @@ cache:
 
 # Adapt as necessary starting from here
 
-# Jack: build on x86 and x64 (had a CRAN failure on 32 bit Windows...)
 platform:
   - x86
   - x64
-#  - Any CPU
 
 before_build:
   - ls -aR
   - rm .Rinstignore  # do install everything for testing
-  - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
-  - sed -i'' -e '/\.covrignore/d' .Rbuildignore
-  - sed -i'' -e '/\.lintr/d' .Rbuildignore
+  - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
   - Rscript -e "install.packages('Rcpp', repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
 
 build_script:
-  - travis-tool.sh github_package r-lib/covr
   - travis-tool.sh install_deps
 
 environment:
-#  global:
-#     - WARNINGS_ARE_ERRORS: 1
+  WARNINGS_ARE_ERRORS: 1
   matrix:
     - R_VERSION: release
-      ICD_STRIP: true
-
     - R_VERSION: devel
-      R_ARCH: x64
-      ICD_STRIP: false
-
-on_success:
-  - Rscript -e "covr::codecov(quiet = FALSE)"
 
 test_script:
   - travis-tool.sh run_tests
