@@ -23,7 +23,7 @@ r_packages:
   - rmarkdown
 
 r_github_packages:
-  - jimhester/covr
+  - r-lib/covr
   - jimhester/lintr
 
 r:
