@@ -1,8 +1,8 @@
 Package: icd
 Title: Tools for Working with ICD-9 and ICD-10 Codes, and
     Finding Comorbidities
-Version: 3.0.0.9000
-Date: 2018-05-02
+Version: 3.1.1
+Date: 2018-05-05
 Authors@R: 
     c(person(given = "Jack O.",
              family = "Wasey",
