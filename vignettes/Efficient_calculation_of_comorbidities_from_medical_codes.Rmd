@@ -113,7 +113,7 @@ knitr::kable(termdf, col.names = c("\\textbf{Term}", "\\textbf{Description}"),
 Almost every report of a medical investigation includes a table showing the characteristics of the groups comprising a study population. One purpose of this table is to show any differences between the groups under investigation. Things like age and weight can be compared numerically, whereas the tens of thousands of distinct diagnostic codes may only be compared by grouping into comorbidities. It is of central importance to retrospective studies that confounding is minimized by understanding differences in comorbidities between groups, then by risk adjustment. In randomized studies, this is achieved by recruiting enough patients and randomly assigning them to treatment: comorbidities of interest are still needed to demonstrate that recruitment was free from bias and that the sample size large enough.
 
 ### Risk adjustment
-Identifying differences between groups in retrospective medical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or _patient-visit_ (See [Terminology](#terminology)). More sophisticated matching also relies on comorbidities for better risk adjustment, \citep[\textit{e.g.}][]{diamond_genetic_2012}.
+Identifying differences between groups in retrospective medical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or _patient-visit_ (See [Terminology](#terminology)). More sophisticated matching also relies on comorbidities for better risk adjustment, \citep[\textit{e.g.},][]{diamond_genetic_2012}.
 
 ## Mapping ICD codes onto comorbidities
 The ubiquity of ICD codes means there is a long history of grouping them to form comorbidities, and these standardized groups have been used for decades as the basis for medical studies. As revisions of the ICD codes have appeared, and various diseases have waxed and waned in significance, people have worked to categorize them into these standardized comorbidity groups. The two main groups were developed by Charlson [@charlson_new_1987], and Elixhauser [@elixhauser_comorbidity_1998]. Such mappings between comorbidity categories and sets of diagnostic codes will henceforth be called, _comorbidity maps_. The benefits of using existing comorbidity maps are:
@@ -128,6 +128,7 @@ Charlson did not initially use ICD codes to define the comorbidities, but variou
 Medical coding has a complicated history beginning with epidemiology, and snowballing to include medical billing and research. There are several major coding schemes, including the WHO ICD family, various national modifacations and extensions of the WHO ICD codes, the extensive USA ICD-CM (Clinical Modification), and several unrelated schemes with similar goals. There are codes for diagnoses, procedures, medical equipment, and causes and circumstances of disease or injury. Codes sometimes have detail beyond what seems useful for routine clinical care, for example:
 
 ```{r suckedintoengine}
+library(icd)
 explain("V97.33XD")
 ```
 
@@ -299,7 +300,7 @@ There are two major simplifications:
 
 Reducing the total number of codes in both patient-visit and comorbidity data is performed in step \ref{itm:intersect} of the algorithm. For matrix multiplication, the columns $n$ of the patient-visit matrix must match the rows $q$ of the comorbidity map both in number. This means a common vocabulary for the codes in the patient-visits and the comorbidity maps must be established. This is accomplished in \pkg{icd} by using a factor[^factor] where the levels represent the intersection of codes from the patient-visit data and the whole comorbidity map. Thus the integer factor indices become row or column indices in matrices $\boldsymbol{A}$ and $\boldsymbol{B}$ respectively. I.e., we only need to represent codes which are in _both_ the patient-visit dad and the comorbidity map, making matrix $\boldsymbol{A}$ narrower and matrix $\boldsymbol{B}$ shorter. String searching strategies miss this optimization.
 
-Referring back to the pseudocode in section \ref{pseudocode}, integer representation would allow much faster binary or linear search, but this is obviated by a matrix multiplication. Although the matrix multiplication _probably_ performs more computations than needed, it has simpler flow control and is a problem for which highly-optimized solutions exist.
+Referring back to the pseudocode in Section \ref{pseudocode}, integer representation would allow much faster binary or linear search, but this is obviated by a matrix multiplication. Although the matrix multiplication _probably_ performs more computations than needed, it has simpler flow control and is a problem for which highly-optimized solutions exist.
 
 [^factor]: \proglang{R} uses a data structure called a `factor` in which each element is stored as an integer index into an array of strings. The strings are unique, whereas the integers may be repeated.
 
@@ -340,11 +341,11 @@ Referring back to the pseudocode in section \ref{pseudocode}, integer representa
 
 In a large data set, less common codes are more likely to appear, resulting in more nearly empty columns in the patient-visit matrix. Since this representation is used primarily to facilitate calculation of huge datasets, we ignore the fact that sparse format may be less efficient than dense for small datasets. Row-major representation also makes sense, with each row corresponding to a patient-visit. This is done in step \ref{itm:gensparse} of the algorithm.
 
-The comorbidity matrix is more sparse than the patient-visit matrix, but is implemented as a dense data structure in step {itm:gendense} of the algorithm for two reasons: firstly, linear algebra software is often optimized for row-major sparse multiplications with dense matrices; secondly, this matrix has a maximum size limited by the comorbidity definitions, so does not need to scale with very large numbers of patients. For example, ignoring the problem reduction step described above, the maximum size of the ICD-9 AHRQ comorbidity matrix is: $14678 \times 30 \times 4 = 1.8 \times 10^6$, _i.e._, less than two megabytes[^wordagain], which compares favorably to the eight megabyte CPU cache in the modest workstation used in the benchmarks presented in section \ref{results}.
+The comorbidity matrix is more sparse than the patient-visit matrix, but is implemented as a dense data structure in step {itm:gendense} of the algorithm for two reasons: firstly, linear algebra software is often optimized for row-major sparse multiplications with dense matrices; secondly, this matrix has a maximum size limited by the comorbidity definitions, so does not need to scale with very large numbers of patients. For example, ignoring the problem reduction step described above, the maximum size of the ICD-9 AHRQ comorbidity matrix is: $14678 \times 30 \times 4 = 1.8 \times 10^6$, _i.e._, less than two megabytes[^wordagain], which compares favorably to the eight megabyte CPU cache in the modest workstation used in the benchmarks presented in Section \ref{results}.
 
 [^wordagain]: Again the calculation is done using a 32-bit word for each flag.
 
-There is a detailed example below in section \ref{workedex}, but a better idea of the bulk structure of this matrix can be seen here for a fictious comorbidity map with five categories, and in Figure \ref{fig:comorbidmatrix}. Note that the code represented by the last row appears in the first and third comorbidities, whereas the others are all unique to one comorbidity.
+There is a detailed example below in Section \ref{workedex}, but a better idea of the bulk structure of this matrix can be seen here for a fictious comorbidity map with five categories, and in Figure \ref{fig:comorbidmatrix}. Note that the code represented by the last row appears in the first and third comorbidities, whereas the others are all unique to one comorbidity.
 $$ B_{p,q} =
 \begin{matrix}
 1 & 0 & 0 & 0 & 0 \\
@@ -420,24 +421,28 @@ c_{m,1} & c_{m,2} & \cdots & c_{m,q}
 
 ## Worked example using ICD-10 codes {#workedex}
 
-Take four patient-visits with the following ICD-10 codes in wide format:
+Take four patient-visits with the following ICD-10 codes in wide format, seen in Table \ref{tab:workedexdat}, and this simple comorbidity map:
 
-| patient-visit | code1 | code2  | code3 |
-|---------------|-------|--------|-------|
-| Encounter 1   | K401  |        |       |   
-| Encounter 2   | I0981 | C450   |       |   
-| Encounter 3   | M352  | I10    |       |   
-| Encounter 4   | I110  | H40001 | I10   |
-
-A simple comorbidity map is as follows:
-
-```{r simplemap}
+```{r simplemap, echo = FALSE}
 simplemap <- list(
   "Rheumatic Heart Disease" = "I098",
   "Hypertension" = c("I10", "I11"),
   "Heart failure" = c("I50", "I110")
 )
 ```
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+patient-Pisit & Code 1 & Code 2 & Code 3\tabularnewline
+\midrule
+\endhead
+Encounter 1 & K401 & &\tabularnewline
+Encounter 2 & I0981 & C450 &\tabularnewline
+Encounter 3 & M352 & I10 &\tabularnewline
+Encounter 4 & I110 & H40001 & I10\tabularnewline
+\bottomrule\tabularnewline
+\caption{Four patient records in `wide' format for worked example.\label{tab:workedexdat}}
+\end{longtable}
 
 There are several things to note, which represent common features in real health care data:
 
@@ -490,7 +495,7 @@ Table \ref{tab:cmbresult} shows how this can be represented to the user.
 
 \begin{longtable}[]{@{}llll@{}}
 \toprule
-patient-visit & Rheum & HTN & CHF\tabularnewline
+Patient-Visit & Rheum & HTN & CHF\tabularnewline
 \midrule
 \endfirsthead
 \toprule
