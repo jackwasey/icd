@@ -27,6 +27,7 @@ cran-comments\.md$
 ^\.git/.*
 ^data\/icd10_who.*$
 ^inst\/data-raw\/.*$
+^inst\/extdata\/.*$
 ^docs$
 ^Efficient.*\.md$
 icd.*\.aux$

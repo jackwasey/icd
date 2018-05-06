@@ -39,7 +39,8 @@ ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "HTN
 
 #' get the SAS code from AHRQ
 #'
-#' Get the SAS code from AHRQ and save in data-raw if not already there.
+#' Get the SAS code from AHRQ and save in raw data directory, if not already
+#' there.
 #' @keywords internal
 icd9_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(

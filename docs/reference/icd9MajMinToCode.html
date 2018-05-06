@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert <code>mjr</code> and <code>mnr</code> vectors to single code — icd9MajMinToCode • icd</title>
+<title>Convert <code>mjr</code> and <code>mnr</code> vectors to single code — icd9MajMinToCode_alt_PrePadded • icd</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,7 +28,7 @@
 
 
 
-<meta property="og:title" content="Convert <code>mjr</code> and <code>mnr</code> vectors to single code — icd9MajMinToCode" />
+<meta property="og:title" content="Convert <code>mjr</code> and <code>mnr</code> vectors to single code — icd9MajMinToCode_alt_PrePadded" />
 
 <meta property="og:description" content="In debug mode, will check that mjr and mnr are same length." />
 <meta name="twitter:card" content="summary" />
@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -90,6 +90,9 @@
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
+    </li>
+    <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
     </li>
     <li>
@@ -106,12 +109,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -125,7 +123,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert <code>mjr</code> and <code>mnr</code> vectors to single code</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/RcppExports.R'><code>R/RcppExports.R</code></a></small>
+    
     <div class="hidden name"><code>icd9MajMinToCode.Rd</code></div>
     </div>
 
@@ -135,9 +133,9 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>icd9MajMinToCode</span>(<span class='no'>mjr</span>, <span class='no'>mnr</span>, <span class='no'>isShort</span>)
+    <pre class="usage"><span class='fu'>icd9MajMinToCode_alt_PrePadded</span>(<span class='no'>mjr</span>, <span class='no'>mnr</span>, <span class='no'>isShort</span>)
 
-<span class='fu'>icd9MajMinToCode_alt_PrePadded</span>(<span class='no'>mjr</span>, <span class='no'>mnr</span>, <span class='no'>isShort</span>)</pre>
+<span class='fu'>icd9MajMinToCode</span>(<span class='no'>mjr</span>, <span class='no'>mnr</span>, <span class='no'>isShort</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

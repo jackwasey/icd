@@ -34,8 +34,8 @@
 #'   which exactly encompass certain subsets. E.g. If all cholera diagnoses are
 #'   provided, only '001 - Cholera' needs to be displayed, not all sub-types.
 #' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
-#'   the short description from the canonical CMS descriptions (included in
-#'   \code{data-raw}) will be used, otherwise the long description is used.
+#'   the short description from the canonical CMS descriptions will be used,
+#'   otherwise the long description is used.
 #' @param warn single logical value, default is \code{TRUE}, meaning that codes
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.

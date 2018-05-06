@@ -1,10 +1,11 @@
 pandoc: 1.19.2.4
-pkgdown: 1.0.0
-pkgdown_sha: d43ca38c74827d1d6babc3a80d48cd3a8e8fad8c
+pkgdown: 1.0.0.9000
+pkgdown_sha: d7c658122bfbd143552cd28585f867dd344302ad
 articles:
   Calculating_comorbidities_from_medical_codes: Calculating_comorbidities_from_medical_codes.html
   Charlson_and_other_scores: Charlson_and_other_scores.html
   Comparing_Comorbidity_Mappings_Vignette: Comparing_Comorbidity_Mappings_Vignette.html
+  Efficient_calculation_of_comorbidities_from_medical_codes: Efficient_calculation_of_comorbidities_from_medical_codes.html
   Using_Hierarchical_Condition_Codes: Using_Hierarchical_Condition_Codes.html
   icd-10: icd-10.html
   introduction: introduction.html

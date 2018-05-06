@@ -7,6 +7,7 @@
 icd9_fetch_ahrq_sas(offline)
 }
 \description{
-Get the SAS code from AHRQ and save in data-raw if not already there.
+Get the SAS code from AHRQ and save in raw data directory, if not already
+there.
 }
 \keyword{internal}

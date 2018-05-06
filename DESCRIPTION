@@ -56,11 +56,8 @@ Imports:
     utils
 Suggests:
     knitr,
-    RODBC,
     roxygen2 (>= 5.0.0),
     rmarkdown,
-    rticles,
-    stringr,
     testthat (>= 0.11.1),
     xml2
 LinkingTo:

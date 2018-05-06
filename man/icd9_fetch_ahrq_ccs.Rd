@@ -11,8 +11,8 @@ icd9_fetch_ahrq_ccs(single = TRUE, offline)
 otherwise use multi level}
 
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and file name if the file already exists in
-data-raw. This is helpful for testing without using the internet.}
+internet, only return path and file name if the file already exists in the
+raw data directory. This is helpful for testing without using the internet.}
 }
 \description{
 Download ahrq-ccs-icd9 definition
