@@ -19,14 +19,13 @@ callgrind\.out
 \.cproject$
 cran-comments\.md$
 \.externalToolBuilders$
-^R\/fuzz\.R$
 .*\.gcda$
 .*\.gch$
 .*\.gcno$
 .*\.gcov$
 ^\.git/.*
 ^data\/icd10_who.*$
-^inst\/data-raw\/.*$
+^data-raw\/.*$
 ^inst\/extdata\/.*$
 ^docs$
 ^Efficient.*\.md$

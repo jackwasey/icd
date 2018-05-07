@@ -9,5 +9,6 @@ test_env()
 \description{
 Set up a test environment which also has the internal functions
 }
+\keyword{data}
 \keyword{debugging}
 \keyword{internal}

@@ -22,11 +22,7 @@ rmarkdown::render("README.Rmd")
 icd
 ===
 
-[![CRAN version](https://www.r-pkg.org/badges/version/icd "CRAN Version")](https://cran.r-project.org/package=icd) [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd) [![Appveyor](https://ci.appveyor.com/api/projects/status/github/jackwasey/icd "AppVeyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd) [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd?branch=master) <!-- [![Coverity](https://scan.coverity.com/projects/15671/badge.svg "Coverity Scan Build Status")](https://scan.coverity.com/projects/jackwasey-icd) -->
-
-#### downloads from [RStudio mirror](https://cloud.r-project.org/)
-
-[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
+[![CRAN version](https://www.r-pkg.org/badges/version/icd "CRAN Version")](https://cran.r-project.org/package=icd) [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd) [![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/master?svg=true "Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/master) [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master)](https://codecov.io/github/jackwasey/icd?branch=master) [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd) <!-- [![Coverity](https://scan.coverity.com/projects/15671/badge.svg "Coverity Scan Build Status")](https://scan.coverity.com/projects/jackwasey-icd) -->
 
 ICD-9 and ICD-10 comorbidities, manipulation and validation
 ===========================================================
