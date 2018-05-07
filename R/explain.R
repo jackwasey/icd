@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-utils::globalVariables(c("icd9_majors", "icd9_chapters",
-                         "icd9_sub_chapters", "icd10cm2016"))
+utils::globalVariables(c("icd9_chapters", "icd9_sub_chapters", "icd10cm2016"))
 
 #' Explain ICD-9 and ICD-10 codes in English
 #'
@@ -30,8 +29,8 @@ utils::globalVariables(c("icd9_majors", "icd9_chapters",
 #'   which exactly encompass certain subsets. E.g. If all cholera diagnoses are
 #'   provided, only '001 - Cholera' needs to be displayed, not all sub-types.
 #' @param brief single logical value, default is \code{FALSE}. If \code{TRUE},
-#'   the short description from the canonical CMS descriptions (included in
-#'   \code{data-raw}) will be used, otherwise the long description is used.
+#'   the short description from the canonical CMS descriptions will be used,
+#'   otherwise the long description is used.
 #' @param warn single logical value, default is \code{TRUE}, meaning that codes
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.
@@ -56,7 +55,9 @@ explain <- function(...)
   UseMethod("explain")
 
 #' @rdname explain
-#' @details \code{explain_icd} is a synonym for \code{\link{explain}} to avoid conflict with \code{dplyr::explain}. Alternative is to use \code{icd::explain}.
+#' @details \code{explain_icd} is a synonym for \code{\link{explain}} to avoid
+#'   conflict with \code{dplyr::explain}. Alternative is to use
+#'   \code{icd::explain}.
 #' @keywords internal
 explain_icd <- function(...) explain(...)
 
@@ -211,7 +212,8 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
   whch <- match(majors, icd::icd9_majors, nomatch = NA)
   out$major[] <- names(icd::icd9_majors)[whch]
   out$three_digit[] <- unlist(icd::icd9_majors)[whch]
-  # out is based on unique majors of the input codes. Now merge with original inputs to give output
+  # out is based on unique majors of the input codes. Now merge with original
+  # inputs to give output
   out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
                x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
   class(out[["three_digit"]]) <- c("icd9cm", "factor")

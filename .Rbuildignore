@@ -19,14 +19,14 @@ callgrind\.out
 \.cproject$
 cran-comments\.md$
 \.externalToolBuilders$
-^R\/fuzz\.R$
 .*\.gcda$
 .*\.gch$
 .*\.gcno$
 .*\.gcov$
 ^\.git/.*
 ^data\/icd10_who.*$
-^inst\/data-raw\/.*$
+^data-raw\/.*$
+^inst\/extdata\/.*$
 ^docs$
 ^Efficient.*\.md$
 icd.*\.aux$
@@ -64,4 +64,8 @@ scrape_icd10_who
 ^\.travis\.yml$
 ^vignettes\/jss\.bst$
 ^vignettes\/jss\.cls$
+^vignettes\/.*_files$
+^vignettes\/.*_latexmk$
+^vignettes\/.*\.dvi$
+^vignettes\/.*\.fls$
 ^.*\.xcworkspace$

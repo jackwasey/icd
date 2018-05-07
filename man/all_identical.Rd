@@ -2,7 +2,7 @@
 % Please edit documentation in R/util-test.R
 \name{all_identical}
 \alias{all_identical}
-\title{allow microbenchmark to compare multiple results}
+\title{allow \pkg{microbenchmark} to compare multiple results}
 \usage{
 all_identical(x)
 }
@@ -11,6 +11,6 @@ all_identical(x)
 expression in \code{microbenchmark::microbenchmark}}
 }
 \description{
-allow microbenchmark to compare multiple results
+allow \pkg{microbenchmark} to compare multiple results
 }
 \keyword{internal}

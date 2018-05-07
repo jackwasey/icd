@@ -8,8 +8,8 @@ parse_leaf_desc_icd9cm_v27(offline = TRUE)
 }
 \arguments{
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and file name if the file already exists in
-data-raw. This is helpful for testing without using the internet.}
+internet, only return path and file name if the file already exists in the
+raw data directory. This is helpful for testing without using the internet.}
 }
 \description{
 These have a quirk which needs a different approach

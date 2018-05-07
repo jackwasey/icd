@@ -59,12 +59,12 @@ this to \code{NA_integer_} would stop NA values being treated as undefined.}
 logical vector
 }
 \description{
-This is different from syntactic validity: it looks it up in the canonical
-list of ICD-9 codes published by the CMS, and which are included in this
-package under \code{data-raw}. Checking syntactic validity using
-\code{link{is_valid}} etc. is still useful, with a changing list of ICD-9
-codes over time, and possible imperfections in the master lists derived from
-CMS.
+This is different from syntactic validity: it looks up codes in the canonical
+lists published by the CMS.
+}
+\details{
+The source data from CMS, and code to generate the R data are included in the
+source tree of this package.
 }
 \section{Methods (by class)}{
 \itemize{

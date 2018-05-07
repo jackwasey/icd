@@ -55,7 +55,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -87,6 +87,11 @@
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">\pkg{icd}: Efficient Computation of Comorbidities\
+from ICD Codes Using Sparse Matrix Multiplication in \proglang{R}
+ (PDF)</a>
+    </li>
+    <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
     </li>
     <li>
@@ -103,12 +108,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -122,7 +122,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/jackwasey/icd/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      
     </div>
 
     <div id="version-3-0" class="section level1">
@@ -131,10 +131,10 @@
 </h1>
 <ul>
 <li>major improvement in comorbidity calculation speed using matrix multiplication behind the scenes. ICD-10 codes were slower than ICD-9 code comorbidities before, and are now 1.5 - 2 orders of magnitude faster.</li>
-<li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes <a href='https://github.com/jackwasey/icd/issues/127'>#127</a></li>
+<li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127</li>
 <li>added ‘charlson’ synonyms for ‘quan_deyo’, e.g. Charlson comorbidities can now be found using <code><a href="../reference/comorbid.html">comorbid_charlson(patient_data)</a></code>
 </li>
-<li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes <a href='https://github.com/jackwasey/icd/issues/127'>#127</a></li>
+<li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127</li>
 <li>function names have lost the ‘icd_’ prefix, old names kept for compatiblity, but easier now to write <code><a href="../reference/comorbid.html">comorbid(patient_data)</a></code>, and <code><a href="../reference/comorbid.html">icd::comorbid</a></code> may also be used, and which many consider good practice.</li>
 <li>Assume C++11, which is now four years old, enabling code simplification</li>
 <li>rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not callled</li>
@@ -146,12 +146,12 @@
 <a href="#version-2-4-1" class="anchor"></a>Version 2.4.1<small> 2018-03-10 </small>
 </h1>
 <ul>
-<li>updated HCC to include 2017 data, thanks to <a href='http://github.com/anobel'>@anobel</a> fixes <a href='https://github.com/jackwasey/icd/issues/136'>#136</a></li>
-<li>fixed github <a href='https://github.com/jackwasey/icd/issues/133'>#133</a> - segfault with empty ICD-10 string in icd10_comorbid</li>
+<li>updated HCC to include 2017 data, thanks to <a href='http://github.com/anobel'>@anobel</a> fixes #136</li>
+<li>fixed github #133 - segfault with empty ICD-10 string in icd10_comorbid</li>
 <li>add Suggested dependency on microbenchmark, now CRAN is sensibly not requiring Suggests to be installed even for testing</li>
 <li>re-enabled testthat C++ Catch tests and make examples tests run correctly</li>
 <li>drop Wecker continuous integration support</li>
-<li>fixed <a href='https://github.com/jackwasey/icd/issues/108'>#108</a> - when no valid codes are given to icd_explain_table</li>
+<li>fixed #108 - when no valid codes are given to icd_explain_table</li>
 </ul>
 </div>
     <div id="version-2-3" class="section level1">
@@ -159,7 +159,7 @@
 <a href="#version-2-3" class="anchor"></a>Version 2.3<small> Unreleased </small>
 </h1>
 <ul>
-<li>Fixed nasty bug which failed to sort the names of a vector of ICD codes correctly, resulting in some incorrect icd_explain. Fixes github <a href='https://github.com/jackwasey/icd/issues/123'>#123</a>, <a href='https://github.com/jackwasey/icd/issues/124'>#124</a>, <a href='https://github.com/jackwasey/icd/issues/126'>#126</a>.</li>
+<li>Fixed nasty bug which failed to sort the names of a vector of ICD codes correctly, resulting in some incorrect icd_explain. Fixes github #123, #124, #126.</li>
 <li>update stale URLs for example data sources</li>
 </ul>
 </div>
@@ -169,7 +169,7 @@
 </h1>
 <ul>
 <li>Removed deprecated functions and data. <code>icd9</code> still available in CRAN repo, but not being updated. This greatly speeds up and simplifies the test suite.</li>
-<li>Bug fixes <a href='https://github.com/jackwasey/icd/issues/89'>#89</a> <a href='https://github.com/jackwasey/icd/issues/99'>#99</a> <a href='https://github.com/jackwasey/icd/issues/106'>#106</a> <a href='https://github.com/jackwasey/icd/issues/109'>#109</a> <a href='https://github.com/jackwasey/icd/issues/100'>#100</a> <a href='https://github.com/jackwasey/icd/issues/111'>#111</a> <a href='https://github.com/jackwasey/icd/issues/113'>#113</a> <a href='https://github.com/jackwasey/icd/issues/115'>#115</a> <a href='https://github.com/jackwasey/icd/issues/116'>#116</a> <a href='https://github.com/jackwasey/icd/issues/117'>#117</a> with many thanks to bug reporters and users</li>
+<li>Bug fixes #89 #99 #106 #109 #100 #111 #113 #115 #116 #117 with many thanks to bug reporters and users</li>
 <li>stopped changing an attribute by reference, thanks to Tomas Kalibera for highlighting.</li>
 </ul>
 </div>
@@ -181,10 +181,10 @@
 <li>Many thanks to <a href='http://github.com/anobel'>@anobel</a> for providing parsing and lookup of Heirarchical Condition Codes.</li>
 <li>Many thanks to <a href='http://github.com/edlee123'>@edlee123</a> for contributing <code>explain_table</code> which tabulates results of looking up various information about a list of ICD codes. This is a new feature which may be changed as it is used in the real world, and more tests are developed.</li>
 <li>removed <code>stringr</code> family of dependencies: it was often slower on benchmarking than built-ins, and no clear benefits other than internally consistent syntax, and stringr updates caused CRAN warnings due to a documentation change.</li>
-<li>Fixes <a href='https://github.com/jackwasey/icd/issues/86'>#86</a>, thanks to <a href='http://github.com/anobel'>@anobel</a></li>
-<li>Fixes <a href='https://github.com/jackwasey/icd/issues/91'>#91</a></li>
-<li>Fixes <a href='https://github.com/jackwasey/icd/issues/93'>#93</a> thanks to <a href='http://github.com/nancyorgan'>@nancyorgan</a></li>
-<li>Fixes <a href='https://github.com/jackwasey/icd/issues/97'>#97</a>, thanks to <a href='http://github.com/michaelgao8'>@michaelgao8</a></li>
+<li>Fixes #86, thanks to <a href='http://github.com/anobel'>@anobel</a></li>
+<li>Fixes #91</li>
+<li>Fixes #93 thanks to <a href='http://github.com/nancyorgan'>@nancyorgan</a></li>
+<li>Fixes #97, thanks to <a href='http://github.com/michaelgao8'>@michaelgao8</a></li>
 <li>Speed improvements, mostly simply from using base R hashed Environments instead of lists</li>
 </ul>
 </div>
@@ -226,7 +226,7 @@
 <a href="#version-1-2-2" class="anchor"></a>Version 1.2.2<small> Unreleased </small>
 </h1>
 <ul>
-<li>Completed fix from version 1.2.1 by temporarily disabling OpenMP on all platforms. Still runs quickly due to other optimizations made in supporting the OpenMP. It’ll be back, but only when I or someone else can create a docker or VM image which runs Clang 3.7 or greater, OpenMP, with/without LLVM C++ standard library. See <a href='https://github.com/jackwasey/icd/issues/75'>#75</a></li>
+<li>Completed fix from version 1.2.1 by temporarily disabling OpenMP on all platforms. Still runs quickly due to other optimizations made in supporting the OpenMP. It’ll be back, but only when I or someone else can create a docker or VM image which runs Clang 3.7 or greater, OpenMP, with/without LLVM C++ standard library. See #75</li>
 </ul>
 </div>
     <div id="version-1-2-1" class="section level1">
@@ -263,13 +263,13 @@
 <ul>
 <li>C++ OpenMP parallel processing of comorbidities for further many-fold speed improvement, scaling to cores available in a machine, allocating about a million rows of comorbidities in a second or two, on a moderate workstation. Some speed is lost by (optionally) allowing disordered input visit IDs.</li>
 <li>C++ optimization using simpler, faster STL structures, working with R factors (converted automatically) so comorbidity assignment is done using integer logic only</li>
-<li>drop unwanted old vignette from the build. Fixes <a href='https://github.com/jackwasey/icd/issues/42'>#42</a></li>
-<li>refinement of many functions to specifically accept factors or character vectors, but not integers in most cases. Fixes <a href='https://github.com/jackwasey/icd/issues/38'>#38</a></li>
+<li>drop unwanted old vignette from the build. Fixes #42</li>
+<li>refinement of many functions to specifically accept factors or character vectors, but not integers in most cases. Fixes #38</li>
 <li>more natural use of matrix for comorbidities, with option to return data frames. Allow matrix or data.frame in fuctions which accept comorbidities</li>
-<li>bug fixes with thanks to <a href='http://github.com/wmurhpyrd'>@wmurhpyrd</a>. Fixes <a href='https://github.com/jackwasey/icd/issues/44'>#44</a>, fixes <a href='https://github.com/jackwasey/icd/issues/46'>#46</a></li>
-<li>fixes <a href='https://github.com/jackwasey/icd/issues/41'>#41</a></li>
+<li>bug fixes with thanks to <a href='http://github.com/wmurhpyrd'>@wmurhpyrd</a>. Fixes #44, fixes #46</li>
+<li>fixes #41</li>
 <li>extensive use of the excellent and very efficient checkmate package for validating function arguments</li>
-<li>improved test coverage, demonstrated by the excellent covr package and coveralls.io . Fixes <a href='https://github.com/jackwasey/icd/issues/4'>#4</a></li>
+<li>improved test coverage, demonstrated by the excellent covr package and coveralls.io . Fixes #4</li>
 </ul>
 </div>
     <div id="version-1-0" class="section level1">
@@ -301,12 +301,12 @@
 <a href="#version-0-5" class="anchor"></a>Version 0.5<small> Unreleased </small>
 </h1>
 <ul>
-<li>Filter icd9 data for validity or existence. Fixes issue <a href='https://github.com/jackwasey/icd/issues/27'>#27</a></li>
-<li>Guess whether a code is short or decimal. Fixes <a href='https://github.com/jackwasey/icd/issues/22'>#22</a></li>
-<li>Enable ranges for Exxx codes. Fixes <a href='https://github.com/jackwasey/icd/issues/9'>#9</a></li>
-<li>Explain and condense long lists of ICD-9 codes using maximum number of higher-level descriptions without being overly broad. Fixes <a href='https://github.com/jackwasey/icd/issues/3'>#3</a></li>
-<li>Include high level descriptions, chapters, majors, which do not have CMS descriptions because they are not themselves billable codes. Fixes <a href='https://github.com/jackwasey/icd/issues/2'>#2</a></li>
-<li>E codes &lt;800 can be valid in 2014. Fixes <a href='https://github.com/jackwasey/icd/issues/1'>#1</a></li>
+<li>Filter icd9 data for validity or existence. Fixes issue #27</li>
+<li>Guess whether a code is short or decimal. Fixes #22</li>
+<li>Enable ranges for Exxx codes. Fixes #9</li>
+<li>Explain and condense long lists of ICD-9 codes using maximum number of higher-level descriptions without being overly broad. Fixes #3</li>
+<li>Include high level descriptions, chapters, majors, which do not have CMS descriptions because they are not themselves billable codes. Fixes #2</li>
+<li>E codes &lt;800 can be valid in 2014. Fixes #1</li>
 <li>Bug fixes, vignette and other documentation updated.</li>
 <li>Test suite ever more comprehensive.</li>
 <li>Rename Elixhauser arguments and functions to “Elix” for clarity of code, and ease of typing.</li>
@@ -320,8 +320,8 @@
 <li>Present-on-arrival field handled gracefully</li>
 <li>Revised co-morbidity handling, with functions specific to each mapping</li>
 <li>Standardized naming of fields across Elixhauser and Charlson based mappings for clarity, consistency and comparaibility</li>
-<li>Handle mild and severe co-morbidities without double-counting. Fixes issue <a href='https://github.com/jackwasey/icd/issues/23'>#23</a></li>
-<li>Enable magrittr-style piping as option to clarify chains of operations. Issue <a href='https://github.com/jackwasey/icd/issues/5'>#5</a></li>
+<li>Handle mild and severe co-morbidities without double-counting. Fixes issue #23</li>
+<li>Enable magrittr-style piping as option to clarify chains of operations. Issue #5</li>
 <li>many more test cases, including specific tests for individual values in each computed mapping, and also for the new comorbidity functions</li>
 <li>Vignette updated to demonstrate clearer new functions</li>
 </ul>

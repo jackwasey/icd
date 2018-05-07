@@ -45,3 +45,5 @@ include-dependencies
 ccache.log
 .build.timestamp
 *.xcworkspace
+docs/articles/Efficient_calculation_of_comorbidities_from_medical_codes_files/
+docs/articles/Efficient_calculation_of_comorbidities_from_medical_codes.tex

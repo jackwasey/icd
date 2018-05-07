@@ -229,14 +229,14 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
   invisible(icd9_map_quan_elix)
 }
 
-#' generate ICD-10 Quan/Elixhauser mapping
+#' generate ICD-10 Quan Elixhauser mapping
 #'
-#' @details Started with Quan's SAS code (in \code{data-raw}):
+#' Started with Quan's SAS code (in raw data directory of source tree):
 #` \code{grep %STR\(.*[[:digit:]] ICD10_Elixhauser.sas}
+#
 #' @template parse-template
 #' @keywords internal
 icd10_generate_map_quan_elix <- function(save_data = TRUE) {
-
   quan_elix_raw <- list(
     c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426", "I427", "I428", "I429", "I43", "I50", "P290"),
     c("I441", "I442", "I443", "I456", "I459", "I47", "I48", "I49", "R000", "R001", "R008", "T821", "Z450", "Z950"),
@@ -392,85 +392,6 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
     save_in_data_dir(icd10_map_charlson)
   }
   invisible(icd10_map_quan_deyo)
-}
-
-#' generate uranium pathology data
-#'
-#' This is downloaded from \href{https://wsu.edu}{WSU} where it appears to be
-#' provided in the public domain. It requires the file to be downloaded from
-#' source, or already stored in the \code{data-raw} directory, and it appears
-#' that the function \code{odbcConnectAccess2007} is only available in the
-#' Windows build of \pkg{RODBC}.
-#' @template parse-template
-#' @source
-#' \url{https://ustur.wsu.edu/about-us/}
-#' @keywords internal datagen
-generate_uranium_pathology <- function(save_data = TRUE, offline = TRUE) {
-  requireNamespace("RODBC")
-  stopifnot(length(utils::find("odbcConnectAccess2007")) > 0)
-  assert_flag(save_data)
-  assert_flag(offline)
-  file_path <- system.file("data-raw", "Pathology_Office2007.accdb", package = "icd")
-  # odbcConnectAccess2007 is only in the Windows version of RODBC
-  channel <- RODBC::odbcConnectAccess2007(file_path)
-  uranium_pathology <- RODBC::sqlFetch(channel, "qry_ICD-10")
-  uranium_pathology <- uranium_pathology[, c("Case_No", "ICD-10_code")]
-  names(uranium_pathology) <- c("case", "icd10")
-  uranium_pathology <- uranium_pathology[order(uranium_pathology["case"]), ]
-  uranium_pathology$icd10 <- as.decimal_diag(icd10(uranium_pathology$icd10))
-  row.names(uranium_pathology) <- 1:nrow(uranium_pathology)
-  uranium_pathology <- as.icd_long_data(uranium_pathology)
-  if (save_data)
-    save_in_data_dir(uranium_pathology)
-  invisible(uranium_pathology)
-}
-
-fetch_vermont_dx <- function(offline) {
-  unzip_to_data_raw(
-    url = "http://healthvermont.gov/research/hospital-utilization/VTINP13.zip",
-    file_name = "VTINP13.TXT",
-    offline = offline)
-}
-
-#' generate \code{vermont_dx} data
-#'
-#' Process data from \href{healthvermont.gov}{Health Vermont}
-#' @template parse-template
-#' @keywords internal datagen
-generate_vermont_dx <- function(save_data = TRUE, offline = TRUE) {
-  assert_flag(save_data)
-  assert_flag(offline)
-  stopifnot(!is.null(vermont_raw_fp <- fetch_vermont_dx(offline = offline)))
-
-  vermont_dx <- utils::read.csv(vermont_raw_fp$file_path,
-                                stringsAsFactors = FALSE,
-                                strip.white = TRUE,
-                                nrows = 1001)[, c(74, 4, 6, 7, 11, 13:32)]
-  vermont_dx <- vermont_dx[1:1000, ]
-  age_group <- vermont_dx$intage
-  attr(age_group, "class") <- "factor"
-  attr(age_group, "levels") <- c("Under 1", "1-17", "18-24",
-                                 "25-29", "30-34", "35-39",
-                                 "40-44", "45-49", "50-54",
-                                 "55-59", "60-64", "65-69",
-                                 "70-74", "75 and over",
-                                 "Unknown")
-  sex <- vermont_dx$sex
-  attr(sex, "class") <- "factor"
-  attr(sex, "levels") <- c("male", "female", "unknown")
-  vermont_dx$intage <- age_group
-  vermont_dx$sex <- sex
-  # death = 8 (other codes are for various discharge statuses)
-  vermont_dx$dstat <- vermont_dx$dstat == 8
-  names(vermont_dx)[c(1:5)] <- c("visit_id", "age_group", "sex", "death", "DRG")
-  vermont_dx <- as.icd_wide_data(vermont_dx)
-  dx_cols <- paste0("DX", 1:20)
-  for (dc in dx_cols)
-    vermont_dx[[dc]]  <- as.icd9cm(as.short_diag(vermont_dx[[dc]]))
-
-  if (save_data)
-    save_in_data_dir(vermont_dx)
-  invisible(vermont_dx)
 }
 
 #nocov end

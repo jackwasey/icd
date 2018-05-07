@@ -39,12 +39,6 @@ test_that("sample data frames have correct class", {
   expect_false(any(c("icd10", "icd10cm", "icd10who") %in% class(uranium_pathology)))
 })
 
-test_that("generating vermont data is identical to saved", {
-  if (is.null(fetch_vermont_dx(offline = TRUE)$file_path))
-    skip("vermont data must be downloaded with fetch_vermont_dx")
-  expect_identical(generate_vermont_dx(save_data = FALSE), vermont_dx)
-})
-
 test_that("uranium data looks okay", {
   # generating uranium data depends on RODBC and an access database source file,
   # so don't do this.

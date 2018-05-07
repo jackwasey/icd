@@ -19,12 +19,11 @@ utils::globalVariables("icd10cm2016")
 
 #' Check whether ICD-9 codes exist
 #'
-#' This is different from syntactic validity: it looks it up in the canonical
-#' list of ICD-9 codes published by the CMS, and which are included in this
-#' package under \code{data-raw}. Checking syntactic validity using
-#' \code{link{is_valid}} etc. is still useful, with a changing list of ICD-9
-#' codes over time, and possible imperfections in the master lists derived from
-#' CMS.
+#' This is different from syntactic validity: it looks up codes in the canonical
+#' lists published by the CMS.
+#'
+#' The source data from CMS, and code to generate the R data are included in the
+#' source tree of this package.
 #' @param x vector if ICD codes to test whether defined in certain ICD code list
 #' @template short_code
 #' @template billable

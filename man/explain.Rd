@@ -73,8 +73,8 @@ which exactly encompass certain subsets. E.g. If all cholera diagnoses are
 provided, only '001 - Cholera' needs to be displayed, not all sub-types.}
 
 \item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
-the short description from the canonical CMS descriptions (included in
-\code{data-raw}) will be used, otherwise the long description is used.}
+the short description from the canonical CMS descriptions will be used,
+otherwise the long description is used.}
 
 \item{warn}{single logical value, default is \code{TRUE}, meaning that codes
 which do not correspond to diagnoses, or to three-digit codes, will trigger
@@ -92,7 +92,9 @@ description for human review there are official ICD9-CM data tables, not with
 conversion to decimal notation, but to the textual format.
 }
 \details{
-\code{explain_icd} is a synonym for \code{\link{explain}} to avoid conflict with \code{dplyr::explain}. Alternative is to use \code{icd::explain}.
+\code{explain_icd} is a synonym for \code{\link{explain}} to avoid
+  conflict with \code{dplyr::explain}. Alternative is to use
+  \code{icd::explain}.
 }
 \section{Methods (by class)}{
 \itemize{

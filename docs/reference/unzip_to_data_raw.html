@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Unzip file to <code>data-raw</code> — unzip_to_data_raw • icd</title>
+<title>Unzip file to raw data directory — unzip_to_data_raw • icd</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,10 +28,10 @@
 
 
 
-<meta property="og:title" content="Unzip file to <code>data-raw</code> — unzip_to_data_raw" />
+<meta property="og:title" content="Unzip file to raw data directory — unzip_to_data_raw" />
 
-<meta property="og:description" content="Get a zip file from a URL, extract contents, and save file in
-data-raw. If the file already exists there, it is only retrieved if
+<meta property="og:description" content="Get a zip file from a URL, extract contents, and save file in the raw data
+directory. If the file already exists there, it is only retrieved if
 force is set to TRUE. If offline is FALSE, then
 NULL is returned if the file isn't already downloaded." />
 <meta name="twitter:card" content="summary" />
@@ -61,7 +61,7 @@ NULL is returned if the file isn't already downloaded." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -93,6 +93,9 @@ NULL is returned if the file isn't already downloaded." />
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
+    </li>
+    <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
     </li>
     <li>
@@ -109,12 +112,7 @@ NULL is returned if the file isn't already downloaded." />
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -127,25 +125,25 @@ NULL is returned if the file isn't already downloaded." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Unzip file to <code>data-raw</code></h1>
-    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/to_data_raw.R'><code>R/to_data_raw.R</code></a></small>
+    <h1>Unzip file to raw data directory</h1>
+    
     <div class="hidden name"><code>unzip_to_data_raw.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get a zip file from a URL, extract contents, and save file in
-<code>data-raw</code>. If the file already exists there, it is only retrieved if
+    <p>Get a zip file from a URL, extract contents, and save file in the raw data
+directory. If the file already exists there, it is only retrieved if
 <code>force</code> is set to <code>TRUE</code>. If <code>offline</code> is <code>FALSE</code>, then
 <code>NULL</code> is returned if the file isn't already downloaded.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>unzip_to_data_raw</span>(<span class='no'>url</span>, <span class='no'>file_name</span>, <span class='kw'>force</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data_raw_path</span> <span class='kw'>=</span> <span class='fu'>system.file</span>(<span class='st'>"data-raw"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"icd"</span>))
+  <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data_raw_path</span> <span class='kw'>=</span> <span class='fu'><a href='get_raw_data_dir.html'>get_raw_data_dir</a></span>())
 
 <span class='fu'>download_to_data_raw</span>(<span class='no'>url</span>, <span class='kw'>file_name</span> <span class='kw'>=</span> <span class='fu'>regmatches</span>(<span class='no'>url</span>, <span class='fu'>regexpr</span>(<span class='st'>"[^/]*$"</span>, <span class='no'>url</span>)),
-  <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data_raw_path</span> <span class='kw'>=</span> <span class='fu'>system.file</span>(<span class='st'>"data-raw"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"icd"</span>))</pre>
+  <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data_raw_path</span> <span class='kw'>=</span> <span class='fu'><a href='get_raw_data_dir.html'>get_raw_data_dir</a></span>())</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -160,8 +158,8 @@ NULL is returned if the file isn't already downloaded." />
     </tr>
     <tr>
       <th>force</th>
-      <td><p>logical, if TRUE, then download even if already in
-<code>data-raw</code></p></td>
+      <td><p>logical, if TRUE, then download even if already in the raw data
+directory</p></td>
     </tr>
     <tr>
       <th>verbose</th>
@@ -170,18 +168,18 @@ NULL is returned if the file isn't already downloaded." />
     <tr>
       <th>offline</th>
       <td><p>single logical, if <code>TRUE</code> then don't pull the file from
-internet, only return path and file name if the file already exists in
-data-raw. This is helpful for testing without using the internet.</p></td>
+internet, only return path and file name if the file already exists in the
+raw data directory. This is helpful for testing without using the internet.</p></td>
     </tr>
     <tr>
       <th>data_raw_path</th>
-      <td><p>path where the data-raw directory is.</p></td>
+      <td><p>path where the raw directory is</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>path of unzipped file in <code>data-raw</code></p>
+    <p>path of unzipped file in the raw data directory</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 

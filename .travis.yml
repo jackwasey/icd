@@ -51,7 +51,6 @@ matrix:
   - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
   allow_failures:
   - r: oldrel
-  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
 
 before_script:
  - ls -aR
