@@ -43,7 +43,6 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE,
   checkmate::assert_string(file_name, na.ok = FALSE)
   checkmate::assert_flag(offline)
   # This temporary directory should be cleaned up if run during testing.
-  stop("about to create temp dir which won't get cleaned up in tests")
   if (!dir.exists(data_raw_path))
     data_raw_path <- tempdir()
   file_path <- file.path(data_raw_path, make.names(file_name))
