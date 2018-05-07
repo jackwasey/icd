@@ -58,7 +58,9 @@ Suggests:
     knitr,
     roxygen2 (>= 5.0.0),
     rmarkdown,
+    rticles,
     testthat (>= 0.11.1),
+    tinytex,
     xml2
 LinkingTo:
     Rcpp,
