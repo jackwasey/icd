@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Charlson and other scores from ICD-9 and ICD-10 codes • icd</title>
+<title>Charlson and Van Walraven scores • icd</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Charlson and other scores from ICD-9 and ICD-10 codes">
+<script src="../jquery.sticky-kit.min.js"></script><script src="../pkgdown.js"></script><meta property="og:title" content="Charlson and Van Walraven scores">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -55,10 +55,13 @@
       <a href="../articles/Calculating_comorbidities_from_medical_codes.html">Calculating comorbidities from medical codes</a>
     </li>
     <li>
-      <a href="../articles/Charlson_and_other_scores.html">Charlson and other scores from ICD-9 and ICD-10 codes</a>
+      <a href="../articles/Charlson_and_other_scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
@@ -75,14 +78,7 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
+<ul class="nav navbar-nav navbar-right"></ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -94,12 +90,12 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Charlson and other scores from ICD-9 and ICD-10 codes</h1>
+      <h1>Charlson and Van Walraven scores</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2018-05-02</h4>
+            <h4 class="date">2018-05-07</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/jackwasey/icd/blob/master/vignettes/Charlson_and_other_scores.Rmd"><code>vignettes/Charlson_and_other_scores.Rmd</code></a></small>
+      
       <div class="hidden name"><code>Charlson_and_other_scores.Rmd</code></div>
 
     </div>
@@ -134,8 +130,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h2 class="hasAnchor">
 <a href="#vermont-example-data-charlson-scores" class="anchor"></a>Vermont example data, Charlson scores</h2>
 <p>The Vermont data are actually discharge, not admission diagnoses, but can be used to demonstrate generating Charlson scores.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># typical hospital format data, with many columns for diagnoses</span>
-<span class="kw">head</span>(vermont_dx)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(vermont_dx[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])
 <span class="co">#&gt;   visit_id   age_group    sex death DRG   DX1   DX2   DX3   DX4   DX5</span>
 <span class="co">#&gt; 1        7       40-44   male  TRUE 640 27801 03842 51881 41519 99591</span>
 <span class="co">#&gt; 2       10 75 and over female FALSE 470 71526 25000 42830  4280  4019</span>
@@ -143,22 +138,8 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <span class="co">#&gt; 4       16       55-59 female FALSE 470 71535 49390 53081 27800  V140</span>
 <span class="co">#&gt; 5       37       70-74   male FALSE 462 71536  4241  2859  2720  4414</span>
 <span class="co">#&gt; 6       41       70-74   male FALSE 462 71536 V1259 V1582  V160  V171</span>
-<span class="co">#&gt;     DX6   DX7   DX8   DX9  DX10  DX11  DX12  DX13 DX14 DX15  DX16 DX17</span>
-<span class="co">#&gt; 1 42842  5849  5609  6826  5853 42731 42732 25542 1533 5693 45340 6822</span>
-<span class="co">#&gt; 2  4241   311 49390  2724 73300 41401                                 </span>
-<span class="co">#&gt; 3   311  4019 53081 56400                                             </span>
-<span class="co">#&gt; 4  V141  V142  V160 V8538                                             </span>
-<span class="co">#&gt; 5 53081 V5866                                                         </span>
-<span class="co">#&gt; 6                                                                     </span>
-<span class="co">#&gt;    DX18  DX19 DX20</span>
-<span class="co">#&gt; 1 70712 27803 2767</span>
-<span class="co">#&gt; 2                 </span>
-<span class="co">#&gt; 3                 </span>
-<span class="co">#&gt; 4                 </span>
-<span class="co">#&gt; 5                 </span>
-<span class="co">#&gt; 6</span>
-<span class="co"># convert to long format (could use other tools, but the icd version accounts better for known structure of the data.</span>
-<span class="kw">head</span>(vermont_dx <span class="op">%&gt;%</span><span class="st"> </span>wide_to_long)
+v &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(vermont_dx)
+<span class="kw">head</span>(v)
 <span class="co">#&gt;   visit_id age_group  sex death DRG icd_code</span>
 <span class="co">#&gt; 1        7     40-44 male  TRUE 640    27801</span>
 <span class="co">#&gt; 2        7     40-44 male  TRUE 640    03842</span>
@@ -166,31 +147,50 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <span class="co">#&gt; 4        7     40-44 male  TRUE 640    41519</span>
 <span class="co">#&gt; 5        7     40-44 male  TRUE 640    99591</span>
 <span class="co">#&gt; 6        7     40-44 male  TRUE 640    42842</span>
-<span class="co"># calculate charlson scores and summarize</span>
-vermont_dx <span class="op">%&gt;%</span><span class="st"> </span>wide_to_long <span class="op">%&gt;%</span><span class="st"> </span>charlson <span class="op">%&gt;%</span><span class="st"> </span>summary
+<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v) <span class="op">%&gt;%</span><span class="st"> </span>summary
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
 <span class="co">#&gt;    0.00    0.00    1.00    1.57    2.00    9.00</span>
-<span class="co"># show the first few actual scores: the names are the patient IDs:</span>
-vermont_dx <span class="op">%&gt;%</span><span class="st"> </span>wide_to_long <span class="op">%&gt;%</span><span class="st"> </span>charlson <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">25</span>) -&gt;<span class="st"> </span>vermont_charlson
-vermont_charlson
-<span class="co">#&gt;   7  10  13  16  37  41  42  52  68  70  74  78  81  87 120 136 159 167 </span>
-<span class="co">#&gt;   5   3   0   1   1   0   0   0   0   0   0   1   2   0   4   0   0   1 </span>
-<span class="co">#&gt; 168 169 188 242 299 316 321 </span>
-<span class="co">#&gt;   0   0   0   0   1   0   0</span>
-<span class="kw">names</span>(vermont_charlson)
-<span class="co">#&gt;  [1] "7"   "10"  "13"  "16"  "37"  "41"  "42"  "52"  "68"  "70"  "74" </span>
-<span class="co">#&gt; [12] "78"  "81"  "87"  "120" "136" "159" "167" "168" "169" "188" "242"</span>
-<span class="co">#&gt; [23] "299" "316" "321"</span>
-<span class="kw">unname</span>(vermont_charlson)
-<span class="co">#&gt;  [1] 5 3 0 1 1 0 0 0 0 0 0 1 2 0 4 0 0 1 0 0 0 0 1 0 0</span></code></pre></div>
+<span class="kw">head</span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v))
+<span class="co">#&gt;  7 10 13 16 37 41 </span>
+<span class="co">#&gt;  5  3  0  1  1  0</span>
+<span class="kw">head</span>(<span class="kw">names</span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v)))
+<span class="co">#&gt; [1] "7"  "10" "13" "16" "37" "41"</span></code></pre></div>
+<p>This default result is a numeric vector with the names (top numbers) as the patient identifiers. Those who like working with ‘tidy’ data frames can use:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v, <span class="dt">return_df =</span> <span class="ot">TRUE</span>))
+<span class="co">#&gt;   visit_id Charlson</span>
+<span class="co">#&gt; 1        7        5</span>
+<span class="co">#&gt; 2       10        3</span>
+<span class="co">#&gt; 3       13        0</span>
+<span class="co">#&gt; 4       16        1</span>
+<span class="co">#&gt; 5       37        1</span>
+<span class="co">#&gt; 6       41        0</span></code></pre></div>
 <p>Behind the scenes, <em>icd</em> calculates the Charlson comorbidities for those ICD codes, applies the Charlson scoring system, and returns the Charlson score for each patient.</p>
 </div>
 <div id="vermont-example-data-van-walraven-scores" class="section level2">
 <h2 class="hasAnchor">
 <a href="#vermont-example-data-van-walraven-scores" class="anchor"></a>Vermont example data, Van Walraven scores</h2>
 <p>The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.</p>
-<pre><code>vermont_dx %&gt;% wide_to_long %&gt;% van_walraven %&gt;% head(25) -&gt; vw_scores
-vw_scores</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">`</span><span class="dt">Vermont Van Walraven Scores</span><span class="st">`</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/van_walraven.html">van_walraven</a></span>(v)
+<span class="kw">hist</span>(<span class="st">`</span><span class="dt">Vermont Van Walraven Scores</span><span class="st">`</span>)</code></pre></div>
+<p><img src="README-vermontvanwalraven-1.png" width="700"></p>
+</div>
+<div id="working-with-mixed-icd-9-and-icd-10-codes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#working-with-mixed-icd-9-and-icd-10-codes" class="anchor"></a>Working with mixed ICD-9 and ICD-10 codes</h2>
+<p>All the functions in <code>icd</code> work with one code type. They are tolerant of having different sub-types of ICD-9 or ICD-10 codes together for comorbidity calculations, but patients with mixed data can be combined. E.g. patient A has two ICD-9 and two ICD-10 codes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icd9 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">pts =</span> <span class="kw">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>), <span class="kw">c</span>(<span class="st">"041.04"</span>, <span class="st">"244.9"</span>))
+icd10 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">pts =</span> <span class="kw">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>), <span class="kw">c</span>(<span class="st">"C82.28"</span>, <span class="st">"M08.979"</span>))
+both &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">comorbid_elix</a></span>(icd9) <span class="op">|</span><span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">comorbid_elix</a></span>(icd10)
+<span class="kw"><a href="../reference/van_walraven.html">van_walraven_from_comorbid</a></span>(both)
+<span class="co">#&gt; A </span>
+<span class="co">#&gt; 9</span></code></pre></div>
+<p>More commonly, some patients before a certain date will have ICD-9 codes, and others will have ICD-10 codes:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icd9 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">pts =</span> <span class="kw">c</span>(<span class="st">"A"</span>, <span class="st">"A"</span>), <span class="kw">c</span>(<span class="st">"041.04"</span>, <span class="st">"244.9"</span>))
+icd10 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">pts =</span> <span class="kw">c</span>(<span class="st">"B"</span>, <span class="st">"B"</span>), <span class="kw">c</span>(<span class="st">"C82.28"</span>, <span class="st">"M08.979"</span>))
+both &lt;-<span class="st"> </span><span class="kw">rbind</span>(<span class="kw"><a href="../reference/comorbid.html">comorbid_elix</a></span>(icd9), <span class="kw"><a href="../reference/comorbid.html">comorbid_elix</a></span>(icd10))
+<span class="kw"><a href="../reference/van_walraven.html">van_walraven_from_comorbid</a></span>(both)
+<span class="co">#&gt; A B </span>
+<span class="co">#&gt; 0 9</span></code></pre></div>
 </div>
   </div>
 
@@ -202,6 +202,7 @@ vw_scores</code></pre>
 <li><a href="#icd-code-scoring-systems">ICD code scoring systems</a></li>
       <li><a href="#vermont-example-data-charlson-scores">Vermont example data, Charlson scores</a></li>
       <li><a href="#vermont-example-data-van-walraven-scores">Vermont example data, Van Walraven scores</a></li>
+      <li><a href="#working-with-mixed-icd-9-and-icd-10-codes">Working with mixed ICD-9 and ICD-10 codes</a></li>
       </ul>
 </div>
       </div>

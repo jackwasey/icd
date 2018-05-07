@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>generate ICD-10 Quan/Elixhauser mapping — icd10_generate_map_quan_elix • icd</title>
+<title>generate ICD-10 Quan Elixhauser mapping — icd10_generate_map_quan_elix • icd</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,9 @@
 
 
 
-<meta property="og:title" content="generate ICD-10 Quan/Elixhauser mapping — icd10_generate_map_quan_elix" />
+<meta property="og:title" content="generate ICD-10 Quan Elixhauser mapping — icd10_generate_map_quan_elix" />
 
-<meta property="og:description" content="generate ICD-10 Quan/Elixhauser mapping" />
+<meta property="og:description" content="Started with Quan's SAS code (in raw data directory of source tree):" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -84,10 +84,13 @@
       <a href="../articles/Calculating_comorbidities_from_medical_codes.html">Calculating comorbidities from medical codes</a>
     </li>
     <li>
-      <a href="../articles/Charlson_and_other_scores.html">Charlson and other scores from ICD-9 and ICD-10 codes</a>
+      <a href="../articles/Charlson_and_other_scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
@@ -106,12 +109,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -124,14 +122,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>generate ICD-10 Quan/Elixhauser mapping</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/generate_mappings.R'><code>R/generate_mappings.R</code></a></small>
+    <h1>generate ICD-10 Quan Elixhauser mapping</h1>
+    
     <div class="hidden name"><code>icd10_generate_map_quan_elix.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>generate ICD-10 Quan/Elixhauser mapping</p>
+    <p>Started with Quan's SAS code (in raw data directory of source tree):</p>
     
     </div>
 
@@ -157,10 +155,6 @@ it can reduced to a smaller set of codes using <code>icd_condense</code>.</p></t
     <p>invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.</p>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>Started with Quan's SAS code (in <code>data-raw</code>):</p>
-    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -169,8 +163,6 @@ it can reduced to a smaller set of codes using <code>icd_condense</code>.</p></t
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
           </ul>
 
   </div>

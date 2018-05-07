@@ -60,7 +60,7 @@ conversion to decimal notation, but to the textual format." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -86,10 +86,13 @@ conversion to decimal notation, but to the textual format." />
       <a href="../articles/Calculating_comorbidities_from_medical_codes.html">Calculating comorbidities from medical codes</a>
     </li>
     <li>
-      <a href="../articles/Charlson_and_other_scores.html">Charlson and other scores from ICD-9 and ICD-10 codes</a>
+      <a href="../articles/Charlson_and_other_scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
@@ -108,12 +111,7 @@ conversion to decimal notation, but to the textual format." />
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -127,7 +125,7 @@ conversion to decimal notation, but to the textual format." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Explain ICD-9 and ICD-10 codes in English</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/explain.R'><code>R/explain.R</code></a>, <a href='https://github.com/jackwasey/icd/blob/master/R/z-deprecated.R'><code>R/z-deprecated.R</code></a></small>
+    
     <div class="hidden name"><code>explain.Rd</code></div>
     </div>
 
@@ -210,8 +208,8 @@ provided, only '001 - Cholera' needs to be displayed, not all sub-types.</p></td
     <tr>
       <th>brief</th>
       <td><p>single logical value, default is <code>FALSE</code>. If <code>TRUE</code>,
-the short description from the canonical CMS descriptions (included in
-<code>data-raw</code>) will be used, otherwise the long description is used.</p></td>
+the short description from the canonical CMS descriptions will be used,
+otherwise the long description is used.</p></td>
     </tr>
     <tr>
       <th>warn</th>
@@ -230,7 +228,9 @@ a warning.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>explain_icd</code> is a synonym for <code>explain</code> to avoid conflict with <code><a href='http://dplyr.tidyverse.org/reference/explain.html'>dplyr::explain</a></code>. Alternative is to use <code>icd::explain</code>.</p>
+    <p><code>explain_icd</code> is a synonym for <code>explain</code> to avoid
+  conflict with <code><a href='http://dplyr.tidyverse.org/reference/explain.html'>dplyr::explain</a></code>. Alternative is to use
+  <code>icd::explain</code>.</p>
     
     <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
 

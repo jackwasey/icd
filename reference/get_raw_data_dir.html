@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title><code>regexec</code> which accepts <code>perl</code> argument even in older R — regexec32 • icd</title>
+<title>Get the raw data directory — get_raw_data_dir • icd</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,11 @@
 
 
 
-<meta property="og:title" content="<code>regexec</code> which accepts <code>perl</code> argument even in older R — regexec32" />
+<meta property="og:title" content="Get the raw data directory — get_raw_data_dir" />
 
-<meta property="og:description" content="TODO: deprecate this as we won't support ancient R versions indefinitely." />
+<meta property="og:description" content="Following Hadley Wickham recommendations
+in R Packages, should be in inst/extdata. devtools overrides
+system.file." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,18 +124,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1><code>regexec</code> which accepts <code>perl</code> argument even in older R</h1>
+    <h1>Get the raw data directory</h1>
     
-    <div class="hidden name"><code>regexec32.Rd</code></div>
+    <div class="hidden name"><code>get_raw_data_dir.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>TODO: deprecate this as we won't support ancient R versions indefinitely.</p>
+    <p>Following Hadley Wickham recommendations
+in R Packages, should be in inst/extdata. devtools overrides
+<code>system.file</code>.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>regexec32</span>(<span class='no'>pattern</span>, <span class='no'>text</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>get_raw_data_dir</span>()</pre>
         
 
   </div>

@@ -61,7 +61,7 @@ parser." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -87,10 +87,13 @@ parser." />
       <a href="../articles/Calculating_comorbidities_from_medical_codes.html">Calculating comorbidities from medical codes</a>
     </li>
     <li>
-      <a href="../articles/Charlson_and_other_scores.html">Charlson and other scores from ICD-9 and ICD-10 codes</a>
+      <a href="../articles/Charlson_and_other_scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
@@ -109,12 +112,7 @@ parser." />
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -128,7 +126,7 @@ parser." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Extract assignments from a SAS FORMAT definition</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/sas.R'><code>R/sas.R</code></a></small>
+    
     <div class="hidden name"><code>sas_format_extract.Rd</code></div>
     </div>
 
@@ -177,11 +175,6 @@ parser.</p>
     <p><a href='http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm'>http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm</a></p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  </div><span class='co'># NOT RUN {</span>
-  <span class='fu'>sas_format_extract</span>(<span class='fu'>readLines</span>(<span class='st'>'data-raw/comformat2012-2013.txt'</span>))
-
-<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -193,9 +186,7 @@ parser.</p>
       <li><a href="#functions">Functions</a></li>
 
       <li><a href="#references">References</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+          </ul>
 
   </div>
 </div>

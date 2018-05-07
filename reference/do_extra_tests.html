@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title><code>regexec</code> which accepts <code>perl</code> argument even in older R — regexec32 • icd</title>
+<title>Set system environment to do extra tests — do_extra_tests • icd</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,11 @@
 
 
 
-<meta property="og:title" content="<code>regexec</code> which accepts <code>perl</code> argument even in older R — regexec32" />
+<meta property="og:title" content="Set system environment to do extra tests — do_extra_tests" />
 
-<meta property="og:description" content="TODO: deprecate this as we won't support ancient R versions indefinitely." />
+<meta property="og:description" content="These extra tests are not run except for one CI job, and locally as needed.
+The frequently run tests cover the core code, whereas the extra tests cover
+things like parsing the ICD and comorbidity definitions." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -122,18 +124,20 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1><code>regexec</code> which accepts <code>perl</code> argument even in older R</h1>
+    <h1>Set system environment to do extra tests</h1>
     
-    <div class="hidden name"><code>regexec32.Rd</code></div>
+    <div class="hidden name"><code>do_extra_tests.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>TODO: deprecate this as we won't support ancient R versions indefinitely.</p>
+    <p>These extra tests are not run except for one CI job, and locally as needed.
+The frequently run tests cover the core code, whereas the extra tests cover
+things like parsing the ICD and comorbidity definitions.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>regexec32</span>(<span class='no'>pattern</span>, <span class='no'>text</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>do_extra_tests</span>(<span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"true"</span>)</pre>
         
 
   </div>

@@ -61,7 +61,7 @@ ismajor indicates if the code is a parent Category." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -87,10 +87,13 @@ ismajor indicates if the code is a parent Category." />
       <a href="../articles/Calculating_comorbidities_from_medical_codes.html">Calculating comorbidities from medical codes</a>
     </li>
     <li>
-      <a href="../articles/Charlson_and_other_scores.html">Charlson and other scores from ICD-9 and ICD-10 codes</a>
+      <a href="../articles/Charlson_and_other_scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
@@ -109,12 +112,7 @@ ismajor indicates if the code is a parent Category." />
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -129,7 +127,7 @@ ismajor indicates if the code is a parent Category." />
     <div class="page-header">
     <h1>Explain ICD-9 and ICD-10 codes in English from decimal  (123.45 style),
 Tabulates the decimal format alongside converted non-decimal format.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/explain-table.R'><code>R/explain-table.R</code></a>, <a href='https://github.com/jackwasey/icd/blob/master/R/z-deprecated.R'><code>R/z-deprecated.R</code></a></small>
+    
     <div class="hidden name"><code>explain_table.Rd</code></div>
     </div>
 
@@ -197,8 +195,8 @@ provided, only '001 - Cholera' needs to be displayed, not all sub-types.</p></td
     <tr>
       <th>brief</th>
       <td><p>single logical value, default is <code>FALSE</code>. If <code>TRUE</code>,
-the short description from the canonical CMS descriptions (included in
-<code>data-raw</code>) will be used, otherwise the long description is used.</p></td>
+the short description from the canonical CMS descriptions will be used,
+otherwise the long description is used.</p></td>
     </tr>
     <tr>
       <th>warn</th>

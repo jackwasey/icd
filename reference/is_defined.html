@@ -30,12 +30,8 @@
 
 <meta property="og:title" content="Check whether ICD-9 codes exist — is_defined" />
 
-<meta property="og:description" content="This is different from syntactic validity: it looks it up in the canonical
-list of ICD-9 codes published by the CMS, and which are included in this
-package under data-raw. Checking syntactic validity using
-link{is_valid} etc. is still useful, with a changing list of ICD-9
-codes over time, and possible imperfections in the master lists derived from
-CMS." />
+<meta property="og:description" content="This is different from syntactic validity: it looks up codes in the canonical
+lists published by the CMS." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -63,7 +59,7 @@ CMS." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -89,10 +85,13 @@ CMS." />
       <a href="../articles/Calculating_comorbidities_from_medical_codes.html">Calculating comorbidities from medical codes</a>
     </li>
     <li>
-      <a href="../articles/Charlson_and_other_scores.html">Charlson and other scores from ICD-9 and ICD-10 codes</a>
+      <a href="../articles/Charlson_and_other_scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
@@ -111,12 +110,7 @@ CMS." />
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -130,18 +124,14 @@ CMS." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check whether ICD-9 codes exist</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/real.R'><code>R/real.R</code></a>, <a href='https://github.com/jackwasey/icd/blob/master/R/z-deprecated.R'><code>R/z-deprecated.R</code></a></small>
+    
     <div class="hidden name"><code>is_defined.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This is different from syntactic validity: it looks it up in the canonical
-list of ICD-9 codes published by the CMS, and which are included in this
-package under <code>data-raw</code>. Checking syntactic validity using
-<code>link{is_valid}</code> etc. is still useful, with a changing list of ICD-9
-codes over time, and possible imperfections in the master lists derived from
-CMS.</p>
+    <p>This is different from syntactic validity: it looks up codes in the canonical
+lists published by the CMS.</p>
     
     </div>
 
@@ -211,6 +201,11 @@ this to <code>NA_integer_</code> would stop NA values being treated as undefined
 
     <p>logical vector</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The source data from CMS, and code to generate the R data are included in the
+source tree of this package.</p>
+    
     <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
 
     <ul>
@@ -275,6 +270,8 @@ type.</p></li>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
 
       <li><a href="#methods-by-class-">Methods (by class)</a></li>
 

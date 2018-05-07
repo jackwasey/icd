@@ -30,8 +30,11 @@
 
 <meta property="og:title" content="Condense ICD-9 code by replacing complete families with parent codes — condense" />
 
-<meta property="og:description" content="This can be thought of as the inverse operation to
-  children." />
+<meta property="og:description" content="These functions take a set of ICD codes, and look for parent ICD codes in the
+hierarchy. If all the children of a parent are found, then the returned
+vector will just contain the parents of those codes. Any additional codes
+which did not have all the siblings present are retained. This can be thought
+of as the inverse operation to children." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -59,7 +62,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.0.0.9000</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
       </span>
     </div>
 
@@ -85,10 +88,13 @@
       <a href="../articles/Calculating_comorbidities_from_medical_codes.html">Calculating comorbidities from medical codes</a>
     </li>
     <li>
-      <a href="../articles/Charlson_and_other_scores.html">Charlson and other scores from ICD-9 and ICD-10 codes</a>
+      <a href="../articles/Charlson_and_other_scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
       <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
@@ -107,12 +113,7 @@
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/jackwasey/icd">
-    <span class="fa fa-github fa-lg"></span>
-     
-  </a>
-</li>
+        
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -126,14 +127,17 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Condense ICD-9 code by replacing complete families with parent codes</h1>
-    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/condense.R'><code>R/condense.R</code></a>, <a href='https://github.com/jackwasey/icd/blob/master/R/z-deprecated.R'><code>R/z-deprecated.R</code></a></small>
+    
     <div class="hidden name"><code>condense.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>This can be thought of as the inverse operation to
-  <code>children</code>.</p>
+    <p>These functions take a set of ICD codes, and look for parent ICD codes in the
+hierarchy. If all the children of a parent are found, then the returned
+vector will just contain the parents of those codes. Any additional codes
+which did not have all the siblings present are retained. This can be thought
+of as the inverse operation to <code>children</code>.</p>
     
     </div>
 
@@ -246,6 +250,48 @@ from input data</p></li>
   <code><a href='expand_minor.html'>expand_minor</a></code>, <code><a href='expand_range.html'>expand_range</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>kids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='children.html'>children</a></span>(<span class='st'>"V40"</span>)
+<span class='no'>kids</span></div><div class='output co'>#&gt; [1] "V40"   "V400"  "V401"  "V402"  "V403"  "V4031" "V4039" "V409" 
+#&gt; attr(,"icd_short_diag")
+#&gt; [1] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>condense</span>(<span class='no'>kids</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "V40"</div><div class='input'><span class='no'>kids_with_undefined</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='children.html'>children</a></span>(<span class='st'>"V40"</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>head</span>(<span class='no'>kids_with_undefined</span>)</div><div class='output co'>#&gt; [1] "V40"   "V400"  "V4000" "V4001" "V4002" "V4003"
+#&gt; attr(,"icd_short_diag")
+#&gt; [1] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>length</span>(<span class='no'>kids_with_undefined</span>)</div><div class='output co'>#&gt; [1] 111</div><div class='input'><span class='fu'>condense</span>(<span class='no'>kids</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "V40"</div><div class='input'>
+<span class='co'># what happens if we have additional codes?</span>
+<span class='co'># (condense will warn if we don't explicitly ask to condense</span>
+<span class='co'># based on defined or possible codes.)</span>
+<span class='fu'>condense</span>(<span class='fu'>c</span>(<span class='no'>kids</span>, <span class='st'>"41100"</span>), <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "41100" "V40"  </div><div class='input'>
+<span class='co'># a good use is to summarise the contents of a comorbidity:</span>
+<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span></div><div class='output co'>#&gt;   [1] "39891" "40211" "40291" "40411" "40413" "40491" "40493" "4280"  "42800"
+#&gt;  [10] "42801" "42802" "42803" "42804" "42805" "42806" "42807" "42808" "42809"
+#&gt;  [19] "4281"  "42810" "42811" "42812" "42813" "42814" "42815" "42816" "42817"
+#&gt;  [28] "42818" "42819" "4282"  "42820" "42821" "42822" "42823" "42824" "42825"
+#&gt;  [37] "42826" "42827" "42828" "42829" "4283"  "42830" "42831" "42832" "42833"
+#&gt;  [46] "42834" "42835" "42836" "42837" "42838" "42839" "4284"  "42840" "42841"
+#&gt;  [55] "42842" "42843" "42844" "42845" "42846" "42847" "42848" "42849" "4285" 
+#&gt;  [64] "42850" "42851" "42852" "42853" "42854" "42855" "42856" "42857" "42858"
+#&gt;  [73] "42859" "4286"  "42860" "42861" "42862" "42863" "42864" "42865" "42866"
+#&gt;  [82] "42867" "42868" "42869" "4287"  "42870" "42871" "42872" "42873" "42874"
+#&gt;  [91] "42875" "42876" "42877" "42878" "42879" "4288"  "42880" "42881" "42882"
+#&gt; [100] "42883" "42884" "42885" "42886" "42887" "42888" "42889" "4289"  "42890"
+#&gt; [109] "42891" "42892" "42893" "42894" "42895" "42896" "42897" "42898" "42899"
+#&gt; attr(,"icd_short_diag")
+#&gt; [1] TRUE
+#&gt; attr(,"class")
+#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>condense</span>(<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: 'defined' not given, but not all codes are defined so assuming FALSE</span></div><div class='output co'>#&gt; [1] "39891" "40211" "40291" "40411" "40413" "40491" "40493" "428"  </div><div class='input'><span class='co'># explaining big groups of codes takes advantage of this:</span>
+<span class='fu'><a href='explain.html'>explain</a></span>(<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span>, <span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "Heart failure"                                                                                                                                          
+#&gt; [2] "Rheumatic heart failure (congestive)"                                                                                                                   
+#&gt; [3] "Benign hypertensive heart disease with heart failure"                                                                                                   
+#&gt; [4] "Unspecified hypertensive heart disease with heart failure"                                                                                              
+#&gt; [5] "Hypertensive heart and chronic kidney disease, benign, with heart failure and with chronic kidney disease stage I through stage IV, or unspecified"     
+#&gt; [6] "Hypertensive heart and chronic kidney disease, benign, with heart failure and chronic kidney disease stage V or end stage renal disease"                
+#&gt; [7] "Hypertensive heart and chronic kidney disease, unspecified, with heart failure and with chronic kidney disease stage I through stage IV, or unspecified"
+#&gt; [8] "Hypertensive heart and chronic kidney disease, unspecified, with heart failure and chronic kidney disease stage V or end stage renal disease"           </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -257,7 +303,9 @@ from input data</p></li>
       <li><a href="#deprecated-function-names">Deprecated function names</a></li>
 
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
