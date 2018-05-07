@@ -28,7 +28,6 @@ test_that("ahrq comorbidity mapping is applied correctly,
             expect_false(all(as.logical(res[1, unlist(icd_names_ahrq)])))
             expect_false(res[1, "Diabetes, uncomplicated"])
             expect_false(res[1, "Solid tumor without metastasis"])
-
             #matrix
             res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                       abbrev_names = FALSE,
@@ -62,7 +61,6 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_false(all(as.logical(res[1, unlist(icd_names_elix)])))
             expect_false(res[1, "Diabetes, uncomplicated"])
             expect_false(res[1, "Solid tumor without metastasis"])
-
             #matrix
             res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                       abbrev_names = FALSE,
@@ -88,7 +86,6 @@ test_that("elix comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(icd_names_elix_abbrev)])))
             expect_false(res[1, "DM"])
             expect_false(res[1, "Tumor"])
-
             #matrix
             res <- icd9_comorbid_elix(elix_test_dat,
                                       short_code = TRUE,
@@ -112,7 +109,6 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_true(setequal(c("visit_id", icd_names_elix_htn), names(res)))
             # not applying hierarchy, so dm and dmcx can both be true
             expect_true(all(as.logical(res[1, unlist(icd_names_elix_htn)])))
-
             # same for matrix result
             res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                       abbrev_names = FALSE,
@@ -132,7 +128,6 @@ test_that("elix comorbidity mapping is applied correctly,
             expect_true(setequal(c("visit_id", icd_names_elix_htn_abbrev), names(res)))
             expect_true(
               all(as.logical(res[1, unlist(icd_names_elix_htn_abbrev)])))
-
             #matrix
             res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
                                       abbrev_names = TRUE,
@@ -156,7 +151,6 @@ test_that("qelix comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(icd_names_quan_elix)])))
             expect_false(res[1, "Diabetes, uncomplicated"])
             expect_false(res[1, "Solid tumor without metastasis"])
-
             #matrix
             res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                            short_code = TRUE,
@@ -212,7 +206,6 @@ test_that("qelix comorbidity mapping is applied correctly,
             expect_true(setequal(c("visit_id", icd_names_quan_elix_htn), names(res)))
             expect_true(
               all(as.logical(res[1, unlist(icd_names_quan_elix_htn)])))
-
             #matrix
             res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
                                            short_code = TRUE,
@@ -258,7 +251,6 @@ test_that("ahrq comorbidity mapping is applied correctly,
               all(as.logical(res[1, unlist(icd_names_ahrq_abbrev)])))
             expect_false(res[1, "DM"])
             expect_false(res[1, "Tumor"])
-
             #same for matrix
             res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                       abbrev_names = TRUE,
@@ -281,7 +273,6 @@ test_that("ahrq comorbidity mapping is applied correctly,
             # not applying hierarchy, so dm and dmcx can both be true
             expect_true(setequal(c("visit_id", icd_names_ahrq_htn), names(res)))
             expect_true(all(as.logical(res[1, unlist(icd_names_ahrq_htn)])))
-
             #same for matrix:
             res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
                                       abbrev_names = FALSE,
@@ -312,7 +303,6 @@ test_that("ahrq comorbidity mapping is applied correctly,
           })
 
 test_that("get Charlson/Deyo comorbidities for a single patient", {
-
   expect_equal(
     icd9_comorbid_quan_deyo(one_pt_one_icd9, short_code = FALSE, return_df = TRUE),
     structure(
@@ -329,10 +319,8 @@ test_that("get Charlson/Deyo comorbidities for a single patient", {
       row.names = 1L,
       class = "data.frame")
   )
-
-  expect_error( # why?
+  expect_error(
     icd9_comorbid_quan_deyo(one_pt_two_icd9, short_code = FALSE, return_df = TRUE), NA)
-
   mydf <- data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93"))
   expect_error(
     icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE), NA)

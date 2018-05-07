@@ -30,7 +30,7 @@
 #' @keywords internal manip
 icd9_parse_cc <- function(save_data = FALSE) {
   assert_flag(save_data)
-  hcc_icd9_dir <- file.path(get_raw_data_dir(),"icd_hcc_rawdata", "icd9")
+  hcc_icd9_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd9")
   icd9_map_cc <- lapply(
     list.files(hcc_icd9_dir, full.names = TRUE),
     FUN = read.fwf, widths = c(7, 4), header = FALSE, stringsAsFactors = FALSE)

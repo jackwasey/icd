@@ -68,7 +68,6 @@ download_to_data_raw <- function(
   checkmate::assert_string(url)
   checkmate::assert_string(file_name)
   checkmate::assert_flag(offline)
-  stop("about to create temp dir which won't get cleaned up in tests")
   if (!dir.exists(data_raw_path))
     data_raw_path <- tempdir()
   save_path <- file.path(data_raw_path, file_name)
