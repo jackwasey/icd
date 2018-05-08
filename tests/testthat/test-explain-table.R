@@ -134,5 +134,5 @@ test_that("explain_table works with factor input", {
 
 test_that("same columns returned for ICD-9 and ICD-10 codes", {
   expect_identical(colnames(icd_explain_table.icd9(c("E879", "E932", "E915", "E947", "E939", "E911", "E928"))),
-                   colnames(icd_explain_table.icd10(c('M97', 'V07', 'E934'))))
+                   colnames(icd_explain_table.icd10(c("M97", "V07", "E934"))))
 })
