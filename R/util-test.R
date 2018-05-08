@@ -349,4 +349,3 @@ do_extra_tests <- function(value = "true") {
 }
 
 #nocov end
-
