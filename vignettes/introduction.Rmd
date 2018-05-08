@@ -53,6 +53,15 @@ patients_icd9 <- data.frame(
   )
 ```
 
+## Quick Start
+
+```{r quickstart}
+head(uranium_pathology, 10)
+head(comorbid_charlson(uranium_pathology))
+comorbid_charlson(uranium_pathology, return_df = TRUE)[1:5, 1:5]
+hist(charlson(uranium_pathology))
+```
+
 ## Introduction
 
 ```{r pkgdesc, results='asis', echo = FALSE}
