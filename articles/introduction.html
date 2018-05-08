@@ -64,6 +64,9 @@
       <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
+      <a href="../articles/Ranges.html">Ranges of ICD codes</a>
+    </li>
+    <li>
       <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
     </li>
     <li>
@@ -120,10 +123,49 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
+<div id="quick-start" class="section level2">
+<h2 class="hasAnchor">
+<a href="#quick-start" class="anchor"></a>Quick Start</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(uranium_pathology, <span class="dv">10</span>)
+<span class="co">#&gt;    case icd10</span>
+<span class="co">#&gt; 1     1 F17.9</span>
+<span class="co">#&gt; 2     1 I21.9</span>
+<span class="co">#&gt; 3     1 K75.9</span>
+<span class="co">#&gt; 4     1   R55</span>
+<span class="co">#&gt; 5     2 I25.1</span>
+<span class="co">#&gt; 6     2 I35.8</span>
+<span class="co">#&gt; 7     2 I63.9</span>
+<span class="co">#&gt; 8     2   I64</span>
+<span class="co">#&gt; 9     2 J43.9</span>
+<span class="co">#&gt; 10    2 J84.1</span>
+<span class="kw">head</span>(<span class="kw"><a href="../reference/comorbid.html">comorbid_charlson</a></span>(uranium_pathology))
+<span class="co">#&gt;      MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild</span>
+<span class="co">#&gt; 1  TRUE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt; 2 FALSE FALSE FALSE   TRUE    FALSE      TRUE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt; 3  TRUE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt; 4 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt; 5 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt; 6  TRUE FALSE  TRUE  FALSE    FALSE      TRUE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt;      DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV</span>
+<span class="co">#&gt; 1 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span>
+<span class="co">#&gt; 2 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span>
+<span class="co">#&gt; 3 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span>
+<span class="co">#&gt; 4 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span>
+<span class="co">#&gt; 5 FALSE FALSE     FALSE FALSE  FALSE       FALSE  TRUE FALSE</span>
+<span class="co">#&gt; 6 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span>
+<span class="kw"><a href="../reference/comorbid.html">comorbid_charlson</a></span>(uranium_pathology, <span class="dt">return_df =</span> <span class="ot">TRUE</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]
+<span class="co">#&gt;   case    MI   CHF   PVD Stroke</span>
+<span class="co">#&gt; 1    1  TRUE FALSE FALSE  FALSE</span>
+<span class="co">#&gt; 2    2 FALSE FALSE FALSE   TRUE</span>
+<span class="co">#&gt; 3    3  TRUE FALSE FALSE  FALSE</span>
+<span class="co">#&gt; 4    4 FALSE FALSE FALSE  FALSE</span>
+<span class="co">#&gt; 5    5 FALSE FALSE FALSE  FALSE</span>
+<span class="kw">hist</span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(uranium_pathology))</code></pre></div>
+<p><img src="introduction_files/figure-html/quickstart-1.png" width="700"></p>
+</div>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
-<!-- _TODO: update with first paragraph from DESCRIPTION_ -->
 <p>Calculate comorbidities, Charlson scores, perform fast and accurate validation, conversion, manipulation, filtering and comparison of ICD-9 and ICD-10 codes. This package enables a work flow from raw lists of ICD codes in hospital databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Common ambiguities and code formats are handled.</p>
 <p>When calculating which patients have which comorbidities, the data are typically structured in long or wide formats:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># long format ICD-9-CM codes, with present-on-arrival flags</span>
@@ -154,17 +196,16 @@ vermont_dx[<span class="dv">1</span><span class="op">:</span><span class="dv">5<
 <span class="co">#&gt; 3       13 71535 59651 78052 27800 V8537   311  4019 53081 56400      </span>
 <span class="co">#&gt; 4       16 71535 49390 53081 27800  V140  V141  V142  V160 V8538      </span>
 <span class="co">#&gt; 5       37 71536  4241  2859  2720  4414 53081 V5866</span></code></pre></div>
-<p>In real life, there are often problems with the data, such is <code>NA</code> entries, out-of-order <code>visit_id</code>s, non-existent or invalid ICD codes, etc.. Although standard R tools can be used to clean the data, knowing the specific validation rules for ICD-9 and ICD-10 codes, as well as the standardized structure of the data enables faster and more accurate data cleaning.</p>
-<p>One use of this package is to identify diagnoses present on admission to hospital (POA). If a POA field is present in the data, it can be used to filter the diagnosis codes. Let’s walk through an example for some ICD-9 data:</p>
+<p>In real life, there are often problems with the data, such as <code>NA</code> values, out-of-order <code>visit_id</code>s, non-existent or invalid ICD codes, etc.. Although standard R tools or the <code>tidyverse</code> can be used to clean the data, knowing the specific validation rules for ICD-9 and ICD-10 codes, as well as the standardized structure of healthcare data enables faster and more accurate data cleaning.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use AHRQ revision of Elixhauser comorbidities, show only first eight columns</span>
-<span class="kw"><a href="../reference/comorbid.html">icd9_comorbid_ahrq</a></span>(patients_icd9)[, <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]
+<span class="kw"><a href="../reference/comorbid.html">comorbid_ahrq</a></span>(patients_icd9)[, <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]
 <span class="co">#&gt;        CHF Valvular  PHTN   PVD   HTN Paralysis NeuroOther Pulmonary</span>
 <span class="co">#&gt; 1000  TRUE    FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span>
 <span class="co">#&gt; 1001 FALSE    FALSE FALSE FALSE  TRUE      TRUE      FALSE     FALSE</span>
 <span class="co">#&gt; 1002 FALSE    FALSE FALSE FALSE  TRUE     FALSE      FALSE     FALSE</span></code></pre></div>
-<p>Things work beautifully using <a href="https://cran.r-project.org/package=magrittr">magrittr</a> <code>%&gt;%</code> to chain functions together. I use <code>magrittr</code> in the package itself, and I recommend trying it to clarify chains of commands, such as the following:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># find Elixhauser comorbidities present-on-arrival</span>
-patients_icd9 <span class="op">%&gt;%</span><span class="st"> </span>filter_poa <span class="op">%&gt;%</span><span class="st"> </span>icd9_comorbid_elix <span class="op">%&gt;%</span><span class="st"> </span>head
+<p>Things work beautifully using <a href="https://cran.r-project.org/package=magrittr">magrittr</a> <code>%&gt;%</code> to chain functions together. <code>magrittr</code> is useful for chains of commands, such as the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># find Elixhauser comorbidities which were present-on-arrival</span>
+patients_icd9 <span class="op">%&gt;%</span><span class="st"> </span>filter_poa <span class="op">%&gt;%</span><span class="st"> </span>comorbid_elix
 <span class="co">#&gt;        CHF Arrhythmia Valvular  PHTN   PVD   HTN Paralysis NeuroOther</span>
 <span class="co">#&gt; 1000 FALSE      FALSE    FALSE FALSE FALSE FALSE     FALSE      FALSE</span>
 <span class="co">#&gt; 1001 FALSE      FALSE    FALSE FALSE FALSE  TRUE     FALSE      FALSE</span>
@@ -178,24 +219,22 @@ patients_icd9 <span class="op">%&gt;%</span><span class="st"> </span>filter_poa 
 <span class="co">#&gt; 1000     FALSE  FALSE   FALSE FALSE     FALSE      FALSE</span>
 <span class="co">#&gt; 1001     FALSE  FALSE   FALSE FALSE     FALSE      FALSE</span>
 
-<span class="co"># same as above, then summarize first five:</span>
-patients_icd9 <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>filter_poa <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>icd9_comorbid_elix <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">extract</span>(, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, as.integer) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>summary
-<span class="co">#&gt;       CHF      Arrhythmia    Valvular      PHTN        PVD   </span>
-<span class="co">#&gt;  Min.   :0   Min.   :0    Min.   :0   Min.   :0   Min.   :0  </span>
-<span class="co">#&gt;  1st Qu.:0   1st Qu.:0    1st Qu.:0   1st Qu.:0   1st Qu.:0  </span>
-<span class="co">#&gt;  Median :0   Median :0    Median :0   Median :0   Median :0  </span>
-<span class="co">#&gt;  Mean   :0   Mean   :0    Mean   :0   Mean   :0   Mean   :0  </span>
-<span class="co">#&gt;  3rd Qu.:0   3rd Qu.:0    3rd Qu.:0   3rd Qu.:0   3rd Qu.:0  </span>
-<span class="co">#&gt;  Max.   :0   Max.   :0    Max.   :0   Max.   :0   Max.   :0</span>
+<span class="co"># same as above, then summarize five columns:</span>
+patients_icd9 <span class="op">%&gt;%</span>
+<span class="st">  </span>filter_poa <span class="op">%&gt;%</span>
+<span class="st">  </span>comorbid_elix <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">extract</span>(, <span class="dv">5</span><span class="op">:</span><span class="dv">10</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span>colSums
+<span class="co">#&gt;        PVD        HTN  Paralysis NeuroOther  Pulmonary         DM </span>
+<span class="co">#&gt;          0          1          0          0          0          1</span>
 
 <span class="co"># convert vermont discharge data to wide format, </span>
 <span class="co"># find comorbidities, convert TRUE to 1 and show first few</span>
-vermont_dx <span class="op">%&gt;%</span><span class="st"> </span>wide_to_long  <span class="op">%&gt;%</span><span class="st"> </span>icd9_comorbid_quan_deyo  <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">apply</span>(<span class="dv">2</span>, as.integer) <span class="op">%&gt;%</span><span class="st">  </span>head
+vermont_cmb &lt;-<span class="st"> </span>vermont_dx <span class="op">%&gt;%</span><span class="st"> </span>wide_to_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>icd9_comorbid_quan_deyo <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">apply</span>(<span class="dv">2</span>, as.integer) <span class="co"># convert logical to integer</span>
+
+<span class="kw">head</span>(vermont_cmb)
 <span class="co">#&gt;      MI CHF PVD Stroke Dementia Pulmonary Rheumatic PUD LiverMild DM DMcx</span>
 <span class="co">#&gt; [1,]  0   1   0      0        0         0         0   0         0  0    0</span>
 <span class="co">#&gt; [2,]  0   1   0      0        0         1         0   0         0  1    0</span>
@@ -209,14 +248,18 @@ vermont_dx <span class="op">%&gt;%</span><span class="st"> </span>wide_to_long  
 <span class="co">#&gt; [3,]         0     0      0           0    0   0</span>
 <span class="co">#&gt; [4,]         0     0      0           0    0   0</span>
 <span class="co">#&gt; [5,]         0     0      0           0    0   0</span>
-<span class="co">#&gt; [6,]         0     0      0           0    0   0</span></code></pre></div>
+<span class="co">#&gt; [6,]         0     0      0           0    0   0</span>
+
+<span class="kw">barplot</span>(<span class="kw">colSums</span>(vermont_cmb[,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]),
+        <span class="dt">main =</span> <span class="st">"Histogram of Elixhauser Comorbidities in Vermont data"</span>)</code></pre></div>
+<p><img src="introduction_files/figure-html/getcomorbidities2-1.png" width="700"></p>
 <p>The above can be rewritten in classic R with many parentheses:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(<span class="kw">apply</span>(<span class="kw"><a href="../reference/comorbid.html">icd9_comorbid_quan_deyo</a></span>(<span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(vermont_dx)), <span class="dv">2</span>, as.integer))</code></pre></div>
 </div>
 <div id="specifying-data-types" class="section level2">
 <h2 class="hasAnchor">
 <a href="#specifying-data-types" class="anchor"></a>Specifying data types</h2>
-<p><code>icd</code> will guess the type and form of input data when possible, but there are ambiguities:</p>
+<p><code>icd</code> will guess the type and form of input data when possible, but there are sometimes ambiguities when ICD-9 and ICD-10 codes are mixed.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="st">"100"</span>) <span class="co"># valid ICD-9 code</span>
 <span class="co">#&gt; [1] TRUE</span>
 <span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="st">"A1001"</span>) <span class="co"># valid ICD-10 code</span>
@@ -231,7 +274,7 @@ codes &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">"
 <span class="co">#&gt; [1] "A10.01"  "L40.50"  "Z77.098"</span>
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "icd10cm"   "icd10"     "character"</span>
-<span class="co"># or set class to indicate decimal code and icd10 (not necessarily icd10cm)</span>
+<span class="co"># indicate decimal code and icd10 (not necessarily icd10cm)</span>
 codes <span class="op">%&gt;%</span><span class="st"> </span>as.decimal_diag <span class="op">%&gt;%</span><span class="st"> </span>as.icd10
 <span class="co">#&gt; [1] "A10.01"  "L40.50"  "Z77.098"</span>
 <span class="co">#&gt; attr(,"icd_short_diag")</span>
@@ -239,17 +282,11 @@ codes <span class="op">%&gt;%</span><span class="st"> </span>as.decimal_diag <sp
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "icd10"     "character"</span></code></pre></div>
 <p>Doing this avoids mistakes in guessing type. For example code <code>V10</code> is valid in both ICD-9 and ICD-10.</p>
-<p>Vectors of codes, data frames and matrices can have a class set. Conflicting classes are not allowed, e.g. if a data frame has columns with both ICD-9 and ICD-10 codes, it doesn’t make sense to set an ICD version for the data frame.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">i9 =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="kw">c</span>(<span class="st">"100"</span>, <span class="st">"001"</span>)), 
-                 <span class="dt">i10 =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd10</a></span>(<span class="kw">c</span>(<span class="st">"Z771"</span>, <span class="st">"Z87820"</span>)))
-
-<span class="co"># it is an error to try to convert ICD-9 class codes to ICD-10</span>
-<span class="co"># df %&gt;% as.icd9 %&gt;% as.icd10</span></code></pre></div>
 </div>
-<div id="converting-icd-9-codes-between-types" class="section level2">
+<div id="converting-icd-codes-between-types" class="section level2">
 <h2 class="hasAnchor">
-<a href="#converting-icd-9-codes-between-types" class="anchor"></a>Converting ICD-9 codes between types</h2>
-<p>ICD-9 codes are usually presented in <em>decimal</em> format (beware, for this is not a number), e.g. <code>003.21</code>, whereas most electronic records seem to use the <em>short</em> form without a decimal place. These are not interchangeable simply by removing the decimal place, and great care is taken to do this correctly. The functions were also designed to deal with the common problem of incorrectly formatted ICD-9 codes. The assumption is made that short codes of three or fewer characters are describing only the ‘major’ part: there is no other reasonable interpretation. For example, <code>020</code> must be taken to mean <code>20</code>, not <code>2.0</code> or even <code>0.20</code>. In most cases, when <em>icd</em> works on ICD-9 codes, it will convert any codes of fewer than three characters into zero-padded three-digit codes.</p>
+<a href="#converting-icd-codes-between-types" class="anchor"></a>Converting ICD codes between types</h2>
+<p>ICD codes are usually presented in <em>decimal</em> format (beware, for this is not a number), e.g., the ICD-9 code <code>003.21</code>, or ICD-10 code <code>T81.10XD</code>, whereas most electronic records seem to use the <em>short</em> form without a decimal place. These are not interchangeable simply by removing the decimal place, and great care is taken to do this correctly. Most ICD-9 codes do not have a letter prefix, so there is possible ambiguity here. icd was designed to deal with the common problem of incorrectly formatted ICD codes. The assumption is made that short codes of three or fewer characters are describing only the ‘major’ part: there is no other reasonable interpretation. For example, <code>020</code> must be taken to mean <code>20</code>, not <code>2.0</code> or even <code>0.20</code>. In most cases, when <em>icd</em> works on ICD-9 codes, it will convert any codes of fewer than three characters into zero-padded three-digit codes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/decimal_to_short.html">decimal_to_short</a></span>(<span class="kw">c</span>(<span class="st">"1"</span>, <span class="st">"10.20"</span>, <span class="st">"100"</span>, <span class="st">"123.45"</span>))
 <span class="co">#&gt; [1] "001"   "01020" "100"   "12345"</span>
 <span class="co">#&gt; attr(,"icd_short_diag")</span>
@@ -270,7 +307,15 @@ codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_i
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "icd9"      "character"</span>
 <span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<span class="co">#&gt; [1] TRUE</span>
+
+<span class="co"># ICD-10</span>
+<span class="kw"><a href="../reference/decimal_to_short.html">decimal_to_short</a></span>(<span class="st">"T81.10XD"</span>)
+<span class="co">#&gt; [1] "T8110XD"</span>
+<span class="co">#&gt; attr(,"icd_short_diag")</span>
+<span class="co">#&gt; [1] TRUE</span>
+<span class="co">#&gt; attr(,"class")</span>
+<span class="co">#&gt; [1] "icd10"     "character"</span></code></pre></div>
 </div>
 <div id="validation-of-icd-9-codes" class="section level2">
 <h2 class="hasAnchor">
@@ -286,97 +331,6 @@ codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_i
 <span class="co">#&gt; [1]  TRUE FALSE</span>
 <span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw">c</span>(<span class="st">"1"</span>, <span class="st">"001"</span>, <span class="st">"100"</span>, <span class="st">"123456"</span>, <span class="st">"003.21"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)
 <span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE FALSE</span></code></pre></div>
-</div>
-<div id="ranges-of-icd-9-codes" class="section level2">
-<h2 class="hasAnchor">
-<a href="#ranges-of-icd-9-codes" class="anchor"></a>Ranges of ICD-9 codes</h2>
-<p>These functions generate syntactically valid ICD-9 codes, without including parent codes when the range limit would subset the parent. E.g. <code>"100.99" %i9da% "101.01"</code> does not include <code>100</code> or <code>100.0</code>, both of which imply larger subsets than requested by the range command (i.e. every code up to <code>100.99</code>). The shorter forms <code>%i9s%</code> and <code>%i9d%</code> return only <em>real</em> codes (i.e. listed in the CMS definitions as either three-digit codes or diagnoses), whereas <code>%i9sa%</code> and <code>%i9da%</code> return all possible syntactically valid ICD-9 codes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get all possible codes</span>
-<span class="co">#"003" %i9sa% "0033" %&gt;% head(9) # show first 9 of 111 values</span>
-<span class="co"># just get the ones which correspond to diagnoses (keeping the 3-digit chapters)</span>
-<span class="co">#"494" %i9s% "4941"</span>
-
-<span class="co">#"10099" %i9sa% "10101"</span>
-<span class="co">#"V10" %i9da% "V10.02"</span>
-<span class="st">"E987"</span> <span class="op">%i9da%</span><span class="st"> "E988.1"</span>
-<span class="co">#&gt;  [1] "E987"   "E987.0" "E987.1" "E987.2" "E987.3" "E987.4" "E987.5"</span>
-<span class="co">#&gt;  [8] "E987.6" "E987.7" "E987.8" "E987.9" "E988.0" "E988.1"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] FALSE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span>
-
-<span class="co"># can't range between different types:</span>
-<span class="co"># "V10" %i9s% "E800" # throws an error</span></code></pre></div>
-<p>This is used internally to interpret ranges of ICD-9 codes specified in the literature. Sometimes it is not clear exactly what an ICD-9 range presented in a paper means, but at least we can explicitly decide what should be included in our interpretation, and the ranges can be reused even when the underlying codes may be different, as codes are added and removed from time-to-time, and although the original papers would have been based on their ICD-9 ranges resolving to a specific set of codes, they are likely to be valid for new diagnoses in the given subgroups. Ultimately, this needs detailed attention, but the strategy in  is to give a good best guess, given these limitations.</p>
-<p>Another way of specifying ranges are to use function calls. These are exactly equivalent to the <code>%i9s%</code> and <code>%i9d%</code> range operators. This example shows the result when the user specifies a range which would include parents but not all their children:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>) <span class="co"># default, equivalent to %i9s%</span>
-<span class="co">#&gt; [1] "4820"  "4821"  "4822"  "4823"  "48230" "48231" "48232" "48239"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span>
-<span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>)
-<span class="co">#&gt;  [1] "4820"  "48200" "48201" "48202" "48203" "48204" "48205" "48206"</span>
-<span class="co">#&gt;  [9] "48207" "48208" "48209" "4821"  "48210" "48211" "48212" "48213"</span>
-<span class="co">#&gt; [17] "48214" "48215" "48216" "48217" "48218" "48219" "4822"  "48220"</span>
-<span class="co">#&gt; [25] "48221" "48222" "48223" "48224" "48225" "48226" "48227" "48228"</span>
-<span class="co">#&gt; [33] "48229" "4823"  "48230" "48231" "48232" "48233" "48234" "48235"</span>
-<span class="co">#&gt; [41] "48236" "48237" "48238" "48239"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span>
-<span class="co"># see the first few differences (which are by definition not 'real' codes):</span>
-<span class="kw">setdiff</span>(<span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>),
-        <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>)) <span class="op">%&gt;%</span><span class="st"> </span>head
-<span class="co">#&gt; [1] "48200" "48201" "48202" "48203" "48204" "48205"</span></code></pre></div>
-<p>It is easy to find the children of a higher-level ICD-9 code:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="st">"391"</span>))
-<span class="co">#&gt; [1] "391"  "3910" "3911" "3912" "3918" "3919"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span>
-<span class="co"># mid-level code</span>
-icd<span class="op">:::</span><span class="kw"><a href="../reference/children.html">children.icd9</a></span>(<span class="st">"0032"</span>)
-<span class="co">#&gt; [1] "0032"  "00320" "00321" "00322" "00323" "00324" "00329"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span>
-<span class="co"># leaf node has no children</span>
-<span class="co"># be explicit about the type of code:</span>
-test_code &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="kw"><a href="../reference/as.decimal_diag.html">as.icd_short_diag</a></span>(<span class="st">"00321"</span>))
-<span class="kw"><a href="../reference/children.html">children</a></span>(test_code)
-<span class="co">#&gt; [1] "00321"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span>
-<span class="co"># or the same, but guessing the characteristics</span>
-<span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"00321"</span>)
-<span class="co">#&gt; [1] "00321"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span>
-<span class="co"># pneumococcal pneumonia is a three-digit ICD-9 code with no descendants</span>
-<span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"481"</span>)
-<span class="co">#&gt; [1] "481"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span></code></pre></div>
-<p>By adding <code>defined = TRUE</code>, all syntactically valid ICD-9 codes are returned, even if not defined by CMS as diagnoses. This is relevant because of minor coding errors, or coding in a different year to the master list. A planned feature is to allow testing of an ICD-9 code against the valid codes for the year it was entered, but at present only the 2014 master list is used. This means that some older valid codes may no longer be on the list. However, there have been very few changes to ICD-9-CM in the last five years with ICD-10-CM in the wings.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># first ten possible ICD-9 child codes from 391</span>
-<span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"391"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]
-<span class="co">#&gt;  [1] "391"   "3910"  "39100" "39101" "39102" "39103" "39104" "39105"</span>
-<span class="co">#&gt;  [9] "39106" "39107"</span>
-<span class="co">#&gt; attr(,"icd_short_diag")</span>
-<span class="co">#&gt; [1] TRUE</span>
-<span class="co">#&gt; attr(,"class")</span>
-<span class="co">#&gt; [1] "icd9"      "character"</span></code></pre></div>
 </div>
 <div id="decoding-icd-9-codes-to-descriptions" class="section level2">
 <h2 class="hasAnchor">
@@ -646,9 +600,9 @@ icd10_map_elix<span class="op">$</span>HTNcx
 <span class="co">#&gt; [4] "Other specified diseases of pulmonary circulation"</span></code></pre></div>
 <p>(Passing through <code>get_defined</code> stops <code>explain</code> complaining that some of the input codes don’t exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use <code>warn = FALSE</code> option in <code>explain</code>)</p>
 </div>
-<div id="find-cardiac-related-icd-9-codes" class="section level3">
+<div id="find-cardiac-icd-9-codes" class="section level3">
 <h3 class="hasAnchor">
-<a href="#find-cardiac-related-icd-9-codes" class="anchor"></a>Find cardiac-related ICD-9 codes:</h3>
+<a href="#find-cardiac-icd-9-codes" class="anchor"></a>Find cardiac ICD-9 codes</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icd9cm_hierarchy[
   <span class="kw">grepl</span>(<span class="dt">pattern =</span> <span class="st">"(heart)|(cardiac)"</span>,
         <span class="dt">x =</span> <span class="kw">c</span>(icd9cm_hierarchy<span class="op">$</span>long_desc, icd9cm_hierarchy<span class="op">$</span>short_desc),
@@ -667,20 +621,20 @@ icd10_map_elix<span class="op">$</span>HTNcx
 <span class="co">#&gt;  [9] "Other forms of chronic ischemic heart disease"           </span>
 <span class="co">#&gt; [10] "Acute pulmonary heart disease"</span></code></pre></div>
 </div>
-<div id="find-comorbidities-for-a-large-number-of-patients-" class="section level3">
+<div id="find-comorbidities-for-a-large-number-of-patients" class="section level3">
 <h3 class="hasAnchor">
-<a href="#find-comorbidities-for-a-large-number-of-patients-" class="anchor"></a>Find comorbidities for a large number of patients.</h3>
+<a href="#find-comorbidities-for-a-large-number-of-patients" class="anchor"></a>Find comorbidities for a large number of patients</h3>
 <p>I understand that comorbiditity assignment using SAS is a lengthy business. Let’s generate 100,000 patients with a random selection of comorbidities:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># codes selected from AHRQ mapping</span>
-many_patients &lt;-<span class="st"> </span>icd<span class="op">:::</span><span class="kw"><a href="../reference/generate_random_short_icd9.html">generate_random_pts</a></span>(<span class="fl">1e7</span>) 
+many_patients &lt;-<span class="st"> </span>icd<span class="op">:::</span><span class="kw"><a href="../reference/generate_random_short_icd9.html">generate_random_pts</a></span>(<span class="fl">1e7</span>)
 <span class="kw">system.time</span>(
-  <span class="kw">icd999999999_comorbid_ahrq</span>(many_patients)
+  <span class="kw"><a href="../reference/comorbid.html">comorbid_ahrq</a></span>(many_patients)
   )[[<span class="st">"elapsed"</span>]] </code></pre></div>
-<p>This is not run to avoid unnecessary load when CRAN builds the package. I get about 5 seconds for 10 million rows of comorbidities on a moderately powerful workstation.</p>
+<p>This takes about five seconds on a 2016 8-core workstation. More detailed benchmarks can be seen comparing icd to other packages in the vignette article in this package.</p>
 </div>
-<div id="arbitrary-icd-9-mapping" class="section level3">
+<div id="use-an-arbitrary-icd-9-mapping" class="section level3">
 <h3 class="hasAnchor">
-<a href="#arbitrary-icd-9-mapping" class="anchor"></a>Arbitrary ICD-9 mapping</h3>
+<a href="#use-an-arbitrary-icd-9-mapping" class="anchor"></a>Use an arbitrary ICD-9 mapping</h3>
 <p>The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in <a href="https://github.com/jackwasey/icd/issues">github</a> or email me at <a href="mailto:jack@jackwasey.com">jack@jackwasey.com</a>) Included in this package is a small data set called <code>icd9_chapters</code>, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(icd9_chapters)[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">14</span>)]
 <span class="co">#&gt; [1] "Infectious And Parasitic Diseases"                                    </span>
@@ -696,9 +650,9 @@ my_map &lt;-<span class="st"> </span>icd<span class="op">:::</span><span class="
 <span class="co">#&gt; 1001     FALSE            FALSE                FALSE</span>
 <span class="co">#&gt; 1002     FALSE            FALSE                FALSE</span></code></pre></div>
 </div>
-<div id="reduce-comorbidity-mapping-from-possible-values-to-defined-diagnostic-codes-" class="section level3">
+<div id="reduce-comorbidity-mapping-from-possible-values-to-defined-diagnostic-codes" class="section level3">
 <h3 class="hasAnchor">
-<a href="#reduce-comorbidity-mapping-from-possible-values-to-defined-diagnostic-codes-" class="anchor"></a>Reduce comorbidity mapping from possible values to defined diagnostic codes.</h3>
+<a href="#reduce-comorbidity-mapping-from-possible-values-to-defined-diagnostic-codes" class="anchor"></a>Reduce comorbidity mapping from possible values to defined diagnostic codes</h3>
 <p>Suppose we want to exact match only real ICD-9 codes when looking up comorbdities for some patients. E.g. if the coder accidentally omitted a trailing zero, e.g. code <code>003.20</code> (<em>Localized salmonella infection, unspecified</em>) might have been written as <code>003.2</code> which has a heading (<em>Localized salmonella infections</em>) but is not itself billable. Use of ICD-9 codes for comorbidities generally assumes the codes are either right or wrong. How do we match only real codes, for a strict interpretation of comorbidities? It’s one line or R code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ahrq_strict &lt;-<span class="st"> </span><span class="kw">lapply</span>(icd9_map_ahrq, get_defined)
 <span class="kw">str</span>(icd9_map_ahrq[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]) <span class="co"># first five of the original:</span>
@@ -752,7 +706,7 @@ three_digit_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(
 </div>
 <div id="which-icd-9-codes-have-changed-between-versions-of-icd-9" class="section level3">
 <h3 class="hasAnchor">
-<a href="#which-icd-9-codes-have-changed-between-versions-of-icd-9" class="anchor"></a>Which ICD-9 codes have changed between versions of ICD-9?</h3>
+<a href="#which-icd-9-codes-have-changed-between-versions-of-icd-9" class="anchor"></a>Which ICD-9 codes have changed between versions of ICD-9</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">new_since_<span class="dv">27</span> &lt;-<span class="st"> </span><span class="kw">setdiff</span>(icd9cm_billable[[<span class="st">"32"</span>]][[<span class="st">"code"</span>]],
                          icd9cm_billable[[<span class="st">"27"</span>]][[<span class="st">"code"</span>]]) <span class="op">%&gt;%</span><span class="st"> </span>head
 lost_since_<span class="dv">27</span> &lt;-<span class="st"> </span><span class="kw">setdiff</span>(icd9cm_billable[[<span class="st">"27"</span>]][[<span class="st">"code"</span>]],
@@ -800,11 +754,11 @@ lost_since_<span class="dv">27</span> <span class="op">%&lt;&gt;%</span><span cl
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-<li><a href="#introduction">Introduction</a></li>
+<li><a href="#quick-start">Quick Start</a></li>
+      <li><a href="#introduction">Introduction</a></li>
       <li><a href="#specifying-data-types">Specifying data types</a></li>
-      <li><a href="#converting-icd-9-codes-between-types">Converting ICD-9 codes between types</a></li>
+      <li><a href="#converting-icd-codes-between-types">Converting ICD codes between types</a></li>
       <li><a href="#validation-of-icd-9-codes">Validation of ICD-9 codes</a></li>
-      <li><a href="#ranges-of-icd-9-codes">Ranges of ICD-9 codes</a></li>
       <li><a href="#decoding-icd-9-codes-to-descriptions">Decoding ICD-9 codes to descriptions</a></li>
       <li><a href="#filtering-by-present-on-arrival">Filtering by Present-on-Arrival</a></li>
       <li><a href="#comorbidities">Comorbidities</a></li>
