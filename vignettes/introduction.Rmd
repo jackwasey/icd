@@ -322,7 +322,7 @@ Suppose we want to exact match only real ICD-9 codes when looking up comorbditie
 ```{r realmapping}
 ahrq_strict <- lapply(icd9_map_ahrq, get_defined)
 str(icd9_map_ahrq[1:5]) # first five of the original:
-str(icd9_map_ahrq[1:5]) # and first five of the result:
+str(ahrq_strict[1:5]) # and first five of the result:
 ```
 Note the much smaller numbers of codes in each group, now we have discarded all the ones which are not defined as diagnoses.
 
