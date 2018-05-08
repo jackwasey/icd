@@ -25,11 +25,13 @@ echo "Cloning '${GIT_BRANCH:-omp-taskloop}' branch from '${GIT_URL:-https://gith
 echo "Using github repo name '${GITHUB_REPO:-icd}'"
 wget "https://github.com/jackwasey/$GITHUB_REPO/archive/$GIT_BRANCH.zip"
 # if the branch is of the format v1.2.3 then the zip contains a directory called icd-1.2.3
-unzip "$GIT_BRANCH.zip" -d "$GITHUB_REPO"
-#zipdir=$(find "$GITHUB_REPO" -maxdepth 0 -type d)
-zipdir=$(ls -r "$GITHUB_REPO")
-mv "$GITHUB_REPO/$zipdir"/* "$GITHUB_REPO"
-rmdir "$GITHUB_REPO/$zipdir"
+tempdest=$(mktemp -d)
+unzip -d "$tempdest" "$GIT_BRANCH.zip"
+#zipdir=$(ls -r "$GITHUB_REPO")
+zipdir=("$tempdest"/*)
+mkidr -p "$GITHUB_REPO"
+mv "$zipdir"/* "$GITHUB_REPO"
+rm -rf "$tempdest"
 
 # the auto-generated Rcpp code is always changing order, if not content. Rstudio generates automatically, but we have to do manually here:
 pushd "$GITHUB_REPO"
