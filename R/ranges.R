@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-utils::globalVariables("icd9cm_billable")
-
 #' take two ICD-9 codes and expand range to include all child codes
 #'
 #' this is cumbersome code, covering a whole load of edge cases relating to the
@@ -247,7 +245,7 @@ icd9_expand_range_worker <- function(start, end, lookup, defined,
   out_env <- vec_to_env_true(lookup$vec[start_index:end_index])
 
   # do not want to check a load of leaf nodes for children, since they have none. # TODO: pre-calculate
-  leaf_env <- vec_to_env_true(icd9cm_billable[["32"]][["code"]])
+  leaf_env <- vec_to_env_true(icd::icd9cm_billable[["32"]][["code"]])
 
   is_parent <- function(x, defined) {
     if (!defined)

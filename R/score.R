@@ -82,7 +82,7 @@ charlson.data.frame <- function(x, visit_name = NULL,
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   res <- charlson_from_comorbid(
-    icd9_comorbid_quan_deyo(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...),
+    comorbid_quan_deyo(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...),
     visit_name = visit_name, hierarchy = FALSE, scoring_system = scoring_system)
   if (!return_df) return(res)
   out <- cbind(names(res),
