@@ -1,0 +1,9 @@
+articles/*.tex
+articles/*_files/*.pdf
+
+articles/Efficient_calculation_of_comorbidities_from_medical_codes_files/figure-latex/bigdata-1.pdf
+articles/Efficient_calculation_of_comorbidities_from_medical_codes_files/figure-latex/comorbidmatrix-1.pdf
+articles/Efficient_calculation_of_comorbidities_from_medical_codes_files/figure-latex/longtail-1.pdf
+articles/Efficient_calculation_of_comorbidities_from_medical_codes_files/figure-latex/speedup-1.pdf
+articles/Efficient_calculation_of_comorbidities_from_medical_codes_files/figure-latex/vermontimage-1.pdf
+articles/Efficient_calculation_of_comorbidities_from_medical_codes_files/figure-latex/versus-1.pdf
