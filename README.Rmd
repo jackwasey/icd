@@ -119,6 +119,8 @@ patient_data %>% filter_poa %>% comorbid_elix
 Look at the help files for details and examples of almost every function in this package.
 ```{r how to get further examples, echo = TRUE, eval = FALSE}
 ?comorbid
+?comorbid_hcc
+?explain
 ?is_valid
 ```
 

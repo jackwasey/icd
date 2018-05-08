@@ -13,7 +13,6 @@ very_soft_deprecate <- function(fun, ...) {}
 icd_charlson <- function(...) { very_soft_deprecate("charlson"); charlson(...) }
 
 #' @rdname charlson
-#' @template deprecated-icd3
 #' @export
 icd_charlson.data.frame <- function(...) { very_soft_deprecate("charlson.data.frame"); charlson.data.frame(...) }
 
@@ -23,17 +22,14 @@ icd_charlson.data.frame <- function(...) { very_soft_deprecate("charlson.data.fr
 icd_children.character <- function(...) { very_soft_deprecate("children.character"); children.character(...) }
 
 #' @rdname children
-#' @template deprecated-icd3
 #' @export
 icd_children.icd10 <- function(...) { very_soft_deprecate("children.icd10"); children.icd10(...) }
 
 #' @rdname children
-#' @template deprecated-icd3
 #' @export
 icd_children.icd10cm <- function(...) { very_soft_deprecate("children.icd10cm"); children.icd10cm(...) }
 
 #' @rdname children
-#' @template deprecated-icd3
 #' @export
 icd_children.icd9 <- function(...) { very_soft_deprecate("children.icd9"); children.icd9(...) }
 
@@ -43,7 +39,6 @@ icd_children.icd9 <- function(...) { very_soft_deprecate("children.icd9"); child
 icd_condense.character <- function(...) { very_soft_deprecate("condense.character"); condense.character(...) }
 
 #' @rdname condense
-#' @template deprecated-icd3
 #' @export
 icd_condense.icd9 <- function(...) { very_soft_deprecate("condense.icd9"); condense.icd9(...) }
 
@@ -83,17 +78,14 @@ icd_diff_comorbid.list <- function(...) { very_soft_deprecate("diff_comorbid.lis
 icd_expand_range.character <- function(...) { very_soft_deprecate("expand_range.character"); expand_range.character(...) }
 
 #' @rdname expand_range
-#' @template deprecated-icd3
 #' @export
 icd_expand_range.icd10cm <- function(...) { very_soft_deprecate("expand_range.icd10cm"); expand_range.icd10cm(...) }
 
 #' @rdname expand_range
-#' @template deprecated-icd3
 #' @export
 icd_expand_range.icd9 <- function(...) { very_soft_deprecate("expand_range.icd9"); expand_range.icd9(...) }
 
 #' @rdname expand_range
-#' @template deprecated-icd3
 #' @export
 icd_expand_range_major.icd9 <- function(...) { very_soft_deprecate("expand_range_major.icd9"); expand_range_major.icd9(...) }
 
@@ -103,37 +95,30 @@ icd_expand_range_major.icd9 <- function(...) { very_soft_deprecate("expand_range
 icd_explain <- function(...) { very_soft_deprecate("explain"); explain(...) }
 
 #' @rdname explain
-#' @template deprecated-icd3
 #' @export
 icd_explain.default <- function(...) { very_soft_deprecate("explain.default"); explain.default(...) }
 
 #' @rdname explain
-#' @template deprecated-icd3
 #' @export
 icd_explain.icd10 <- function(...) { very_soft_deprecate("explain.icd10"); explain.icd10(...) }
 
 #' @rdname explain
-#' @template deprecated-icd3
 #' @export
 icd_explain.icd10cm <- function(...) { very_soft_deprecate("explain.icd10cm"); explain.icd10cm(...) }
 
 #' @rdname explain
-#' @template deprecated-icd3
 #' @export
 icd_explain.icd9 <- function(...) { very_soft_deprecate("explain.icd9"); explain.icd9(...) }
 
 #' @rdname explain
-#' @template deprecated-icd3
 #' @export
 icd_explain.icd9cm <- function(...) { very_soft_deprecate("explain.icd9cm"); explain.icd9cm(...) }
 
 #' @rdname explain
-#' @template deprecated-icd3
 #' @export
 icd_explain.list <- function(...) { very_soft_deprecate("explain.list"); explain.list(...) }
 
 #' @rdname explain
-#' @template deprecated-icd3
 #' @export
 icd_explain_table.default <- function(...) { very_soft_deprecate("explain_table.default"); explain_table.default(...) }
 
@@ -143,17 +128,14 @@ icd_explain_table.default <- function(...) { very_soft_deprecate("explain_table.
 icd_explain_table.icd10 <- function(...) { very_soft_deprecate("explain_table.icd10"); explain_table.icd10(...) }
 
 #' @rdname explain_table
-#' @template deprecated-icd3
 #' @export
 icd_explain_table.icd10cm <- function(...) { very_soft_deprecate("explain_table.icd10cm"); explain_table.icd10cm(...) }
 
 #' @rdname explain_table
-#' @template deprecated-icd3
 #' @export
 icd_explain_table.icd9 <- function(...) { very_soft_deprecate("explain_table.icd9"); explain_table.icd9(...) }
 
 #' @rdname explain_table
-#' @template deprecated-icd3
 #' @export
 icd_explain_table.icd9cm <- function(...) { very_soft_deprecate("explain_table.icd9cm"); explain_table.icd9cm(...) }
 
@@ -168,17 +150,14 @@ icd_get_defined.icd9 <- function(...) { very_soft_deprecate("get_defined.icd9");
 icd_get_invalid.comorbidity_map <- function(...) { very_soft_deprecate("get_invalid.comorbidity_map"); get_invalid.comorbidity_map(...) }
 
 #' @rdname get_invalid
-#' @template deprecated-icd3
 #' @export
 icd_get_invalid.icd9 <- function(...) { very_soft_deprecate("get_invalid.icd9"); get_invalid.icd9(...) }
 
 #' @rdname get_invalid
-#' @template deprecated-icd3
 #' @export
 icd_get_invalid.icd_comorbidity_map <- function(...) { very_soft_deprecate("icd_get_invalid.comorbidity_map"); icd_get_invalid.comorbidity_map(...) }
 
 #' @rdname get_invalid
-#' @template deprecated-icd3
 #' @export
 icd_get_valid.icd9 <- function(...) { very_soft_deprecate("get_valid.icd9"); get_valid.icd9(...) }
 
@@ -213,22 +192,18 @@ icd_guess_version.icd9 <- function(...) { very_soft_deprecate("guess_version.icd
 icd_is_billable.default <- function(...) { very_soft_deprecate("is_billable.default"); is_billable.default(...) }
 
 #' @rdname is_billable
-#' @template deprecated-icd3
 #' @export
 icd_is_billable.icd10 <- function(...) { very_soft_deprecate("is_billable.icd10"); is_billable.icd10(...) }
 
 #' @rdname is_billable
-#' @template deprecated-icd3
 #' @export
 icd_is_billable.icd10cm <- function(...) { very_soft_deprecate("is_billable.icd10cm"); is_billable.icd10cm(...) }
 
 #' @rdname is_billable
-#' @template deprecated-icd3
-#' @export is_billable
+#' @export
 icd_is_billable.icd9 <- function(...) { very_soft_deprecate("is_billable.icd9"); is_billable.icd9(...) }
 
 #' @rdname is_billable
-#' @template deprecated-icd3
 #' @export
 icd_is_billable.icd9cm <- function(...) { very_soft_deprecate("is_billable.icd9cm"); is_billable.icd9cm(...) }
 
@@ -238,17 +213,14 @@ icd_is_billable.icd9cm <- function(...) { very_soft_deprecate("is_billable.icd9c
 icd_is_defined.default <- function(...) { very_soft_deprecate("is_defined.default"); is_defined.default(...) }
 
 #' @rdname is_defined
-#' @template deprecated-icd3
 #' @export
 icd_is_defined.icd10 <- function(...) { very_soft_deprecate("is_defined.icd10"); is_defined.icd10(...) }
 
 #' @rdname is_defined
-#' @template deprecated-icd3
 #' @export
 icd_is_defined.icd10cm <- function(...) { very_soft_deprecate("is_defined.icd10cm"); is_defined.icd10cm(...) }
 
 #' @rdname is_defined
-#' @template deprecated-icd3
 #' @export
 icd_is_defined.icd9 <- function(...) { very_soft_deprecate("is_defined.icd9"); is_defined.icd9(...) }
 
@@ -258,37 +230,30 @@ icd_is_defined.icd9 <- function(...) { very_soft_deprecate("is_defined.icd9"); i
 icd_is_valid.default <- function(...) { very_soft_deprecate("is_valid.default"); is_valid.default(...) }
 
 #' @rdname is_valid
-#' @template deprecated-icd3
 #' @export
 icd_is_valid.icd10 <- function(...) { very_soft_deprecate("is_valid.icd10"); is_valid.icd10(...) }
 
 #' @rdname is_valid
-#' @template deprecated-icd3
 #' @export
 icd_is_valid.icd9 <- function(...) { very_soft_deprecate("is_valid.icd9"); is_valid.icd9(...) }
 
 #' @rdname is_valid
-#' @template deprecated-icd3
 #' @export
 icd_is_valid.icd_comorbidity_map <- function(...) { very_soft_deprecate("icd_is_valid.comorbidity_map"); is_valid.comorbidity_map(...) }
 
 #' @rdname is_valid
-#' @template deprecated-icd3
 #' @export
 icd_is_valid_major <- function(...) { very_soft_deprecate("is_valid_major"); is_valid_major(...) }
 
 #' @rdname is_valid
-#' @template deprecated-icd3
 #' @export
 icd_is_valid_major.default <- function(...) { very_soft_deprecate("is_valid_major.default"); is_valid_major.default(...) }
 
 #' @rdname is_valid
-#' @template deprecated-icd3
 #' @export
 icd_is_valid_major.icd10 <- function(...) { very_soft_deprecate("is_valid_major.icd10"); is_valid_major.icd10(...) }
 
 #' @rdname is_valid
-#' @template deprecated-icd3
 #' @export
 icd_is_valid_major.icd9 <- function(...) { very_soft_deprecate("is_valid_major.icd9"); is_valid_major.icd9(...) }
 
