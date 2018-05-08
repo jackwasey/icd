@@ -1,14 +1,14 @@
 ---
-title: 'Quick Introduction to _icd_: ICD-9 and ICD-10 comorbidities, validation and manipulation'
+title: 'Quick Introduction to icd'
 author: "Jack O. Wasey"
-date: '`r format(Sys.time(), "%Y-%m-%d")`'
+date: "8 May, 2018"
 output:
   html_document:
     toc: yes
   pdf_document:
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{Quick Introduction to icd: ICD-9 and ICD-10 comorbidities, validation and manipulation}
+  %\VignetteIndexEntry{Quick Introduction to icd}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -42,8 +42,7 @@ suppressWarnings({
 
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
+  comment = "#>"
 )
 
 patients_icd9 <- data.frame(

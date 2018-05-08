@@ -1,7 +1,7 @@
 ---
 title: "ICD-10 comorbidities"
 author: "Jack O. Wasey"
-date: '`r format(Sys.time(), "%Y-%m-%d")`'
+date: "8 May, 2018"
 output: html_document
 vignette: >
   %\VignetteIndexEntry{ICD-10 comorbidities}
@@ -41,8 +41,7 @@ suppressWarnings({
 
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
+  comment = "#>"
 )
 
 ```

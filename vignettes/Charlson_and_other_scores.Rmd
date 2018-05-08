@@ -1,7 +1,7 @@
 ---
 title: "Charlson and Van Walraven scores"
 author: "Jack O. Wasey"
-date: '`r format(Sys.time(), "%Y-%m-%d")`'
+date: "8 May, 2018"
 output: html_document
 vignette: >
   %\VignetteIndexEntry{Charlson and Van Walraven scores}
@@ -36,8 +36,7 @@ suppressWarnings({
   })
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
+  comment = "#>"
 )
 ```
 ## ICD code scoring systems
