@@ -15,12 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-utils::globalVariables(c(
-  "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
-  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo", "icd10_map_quan_elix",
-  "icd9_map_single_ccs", "icd9_map_multi_ccs", "icd10_map_ccs"
-))
-
 #' Present-on-admission flags
 #'
 #' See \link{filter_poa} for more details.
@@ -435,7 +429,7 @@ icd9_comorbid_ccs <- function(x, ...,
   assert_int(lvl, lower = 1, upper = 4, null.ok = TRUE, na.ok = FALSE)
   if (!single) {
     if (!is.null(lvl))
-      map <- icd9_map_multi_ccs[[paste0("lvl", lvl)]]
+      map <- icd::icd9_map_multi_ccs[[paste0("lvl", lvl)]]
     else
       stop("If 'single' is false, then 'lvl' must be supplied as 1, 2, 3 or 4")
   }
@@ -448,10 +442,10 @@ icd9_comorbid_ccs <- function(x, ...,
 icd10_comorbid_ccs <- function(x, ..., single = TRUE, lvl = NULL) {
   assert_flag(single)
   assert_int(lvl, lower = 1, upper = 2, null.ok = TRUE, na.ok = FALSE)
-  m <- icd10_map_ccs$single
+  m <- icd::icd10_map_ccs$single
   if (!single) {
     if (!is.null(lvl))
-      m <- icd10_map_ccs[[paste0("lvl", lvl)]]
+      m <- icd::icd10_map_ccs[[paste0("lvl", lvl)]]
     else
       stop("If 'single' is false, then 'lvl' must be supplied as 1 or 2")
   }

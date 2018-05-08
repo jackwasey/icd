@@ -52,45 +52,43 @@ explain_table <- function(...)
 #' @export
 #' @keywords internal
 explain_table.default <- function(x, short_code = guess_short(x), condense = FALSE,
-                                      brief = TRUE, warn = TRUE, ...) {
-  switch(
-    guess_version(x, short_code = short_code),
-    "icd9" = explain_table.icd9cm(x, short_code = short_code, condense = condense,
-                                      brief = brief, warn = warn, ...),
-    "icd10" = explain_table.icd10cm(x, short_code = short_code, condense = condense,
-                                        brief = brief, warn = warn, ...),
-    stop("Unknown ICD version.")
-  )
+                                  brief = TRUE, warn = TRUE, ...) {
+  ver <- guess_version(x, short_code = short_code)
+  if (ver %in% icd9_classes)
+    return(explain_table.icd9cm(x, short_code = short_code, condense = condense,
+                                brief = brief, warn = warn, ...))
+  if (ver %in% icd10_classes)
+    return(explain_table.icd10cm(x, short_code = short_code, condense = condense,
+                                 brief = brief, warn = warn, ...))
+  stop("Unknown ICD version in explain_table.default.
+       Check the class of the input data, or call either
+       explain_table.icd9 or explain_table.icd10 directly.")
 }
 
 #' @describeIn explain_table from vector of ICD-9 codes.
 #' @export
 #' @keywords internal
-explain_table.icd9 <- function(...) {
+explain_table.icd9 <- function(...)
   explain_table.icd9cm(...)
-}
 
 #' @describeIn explain_table from vector of ICD-10 codes.
 #' @export
 #' @keywords internal
-explain_table.icd10 <- function(...) {
+explain_table.icd10 <- function(...)
   explain_table.icd10cm(...)
-}
 
 #' set \code{short_to_decimal} attribute
 #'
 #' Does not convert between decimal and short codes. Calling
 #' \code{short_to_decimal} should convert and set the attribute.
 #' @keywords internal
-shortcode_icd9 <- function(x, short_code = guess_short(x)) {
+shortcode_icd9 <- function(x, short_code = guess_short(x))
   if (!short_code) decimal_to_short.icd9(x) else x
-}
 
 #' @rdname shortcode_icd9
 #' @keywords internal
-shortcode_icd10 <- function(x, short_code = guess_short(x)) {
+shortcode_icd10 <- function(x, short_code = guess_short(x))
   if (!short_code) decimal_to_short.icd10(x) else x
-}
 
 #' generate table of ICD code explanations
 #'
@@ -98,23 +96,20 @@ shortcode_icd10 <- function(x, short_code = guess_short(x)) {
 #' @author Ed Lee
 #' @keywords internal
 explain_table_worker <- function(x, hierarchy, short_code, condense,
-                                     brief, warn, ...) {
+                                 brief, warn, ...) {
   assert(check_character(x), check_factor(x))
   assert(check_data_frame(hierarchy))
   assert_flag(short_code)
   assert_flag(condense)
   assert_flag(brief)
   assert_flag(warn)
-
   x <- as_char_no_warn(x)
   xs <- if (!short_code) decimal_to_short.icd9(x) else x
-
   exptable <- merge(data.frame(code = xs, stringsAsFactors = FALSE), hierarchy, all.x = TRUE)
   # merge has reordered...
   exptable[["is_major"]] <- exptable[["three_digit"]] == exptable[["code"]]
   exptable[["valid_icd9"]] <- is_valid.icd9(xs, short_code = TRUE)
   exptable[["valid_icd10"]] <- is_valid.icd10(xs, short_code = TRUE)
-
   if (condense)
     condense_explain_table(exptable)
   else
@@ -126,22 +121,20 @@ explain_table_worker <- function(x, hierarchy, short_code, condense,
 #' @export
 #' @keywords internal
 explain_table.icd9cm <- function(x, short_code = guess_short(x),
-                                     condense = FALSE, brief = TRUE, warn = TRUE, ...) {
+                                 condense = FALSE, brief = TRUE, warn = TRUE, ...)
   explain_table_worker(x = x, hierarchy = icd::icd9cm_hierarchy,
-                           short_code = short_code, condense = condense,
-                           brief = brief, warn = warn, ...)
-}
+                       short_code = short_code, condense = condense,
+                       brief = brief, warn = warn, ...)
 
 #' @describeIn explain_table explain character vector of ICD1-10-CM codes
 #' @author Ed Lee
 #' @export
 #' @keywords internal
 explain_table.icd10cm <- function(x, short_code = guess_short(x),
-                                      condense = FALSE, brief = TRUE, warn = TRUE, ...) {
-  explain_table_worker(x = x, hierarchy = icd10cm2016,
-                           short_code = short_code, condense = condense,
-                           brief = brief, warn = warn, ...)
-}
+                                  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+  explain_table_worker(x = x, hierarchy = icd::icd10cm2016,
+                       short_code = short_code, condense = condense,
+                       brief = brief, warn = warn, ...)
 
 #' condense \code{explain_table} output down to major codes
 #'

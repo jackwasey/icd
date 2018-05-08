@@ -24,21 +24,17 @@
 #' @template save_data
 #' @return invisibly returns the data as a list
 #' @keywords internal
-icd_generate_sysdata <- function(save_data = TRUE) {
-
+generate_sysdata <- function(save_data = TRUE) {
   path <- file.path("R", "sysdata.rda")
-
   icd9_short_n <- icd9_generate_all_n()
   icd9_short_v <- icd9_generate_all_v()
   icd9_short_e <- icd9_generate_all_e()
-
   # we can either use the is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
   codes <- icd::icd9cm_hierarchy[["code"]]
   icd9_short_n_defined <- vec_to_lookup_pair(grep("^[^VE]+", codes, perl = TRUE, value = TRUE))
   icd9_short_v_defined <- vec_to_lookup_pair(grep("^V", codes, perl = TRUE, value = TRUE))
   icd9_short_e_defined <- vec_to_lookup_pair(grep("^E", codes, perl = TRUE, value = TRUE))
-
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
   icd9_short_n_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
@@ -47,10 +43,7 @@ icd_generate_sysdata <- function(save_data = TRUE) {
     icd9_short_v_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
   icd9_short_e_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
     icd9_short_e_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
-
-
   icd9_sources <- icd9_generate_sources()
-
   # minimal data sources validation
   long_fns <- icd9_sources[["long_filename"]]
   short_fns <- icd9_sources[["long_filename"]]
@@ -60,9 +53,7 @@ icd_generate_sysdata <- function(save_data = TRUE) {
           paste(long_fns[long_fns != make.names(long_fns)]))
   message("non-portable short file names: ",
           paste(short_fns[short_fns != make.names(short_fns)]))
-
-  .nc <- nchar(icd10cm2016[["code"]]) # nolint
-
+  .nc <- nchar(icd::icd10cm2016[["code"]]) # nolint
   # minimal test here just to use variable names to avoid warnings!
   stopifnot(all(!is.na(.nc)))
   stopifnot(length(icd9_short_n$vec) == length(icd9_short_n$env))
@@ -71,24 +62,19 @@ icd_generate_sysdata <- function(save_data = TRUE) {
   stopifnot(length(icd9_short_n_leaf$vec) == length(icd9_short_n_leaf$env))
   stopifnot(length(icd9_short_v_leaf$vec) == length(icd9_short_v_leaf$env))
   stopifnot(length(icd9_short_e_leaf$vec) == length(icd9_short_e_leaf$env))
-
   icd9_short_e
   icd9_short_n_leaf
   icd9_short_v_leaf
   icd9_short_e_leaf
-
   sysdata_names <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
                      "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
                      "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
                      "icd9_sources", ".nc")
-
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.
-
   if (save_data)
-    save(list = sysdata_names, file = path, compress = "xz")
-
+    save(list = sysdata_names, file = path)
   invisible(mget(sysdata_names))
 }
 

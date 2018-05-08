@@ -251,7 +251,7 @@ generate_random_short_icd9 <- function(n = 50000) {
 #' @template short_code
 #' @keywords internal debugging datagen
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  x <- sample(unlist(icd10cm2016[icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
+  x <- sample(unlist(icd::icd10cm2016[icd::icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
   if (short_code)
     x
   else
@@ -300,7 +300,7 @@ generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient =
 #' @rdname generate_random_short_icd9
 #' @keywords internal debugging datagen
 generate_random_short_ahrq_icd9 <- function(n = 50000) {
-  sample(unname(unlist(icd9_map_ahrq)), size = n, replace = TRUE)
+  sample(unname(unlist(icd::icd9_map_ahrq)), size = n, replace = TRUE)
 }
 
 #' generate random strings

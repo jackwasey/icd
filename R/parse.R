@@ -17,9 +17,6 @@
 
 #nocov start
 
-# icd9_sources is defined in this file and saved in sysdata.rda
-utils::globalVariables(c("icd9_sources", "icd9cm_billable"))
-
 #' generate all package data
 #'
 #' Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get
@@ -32,7 +29,7 @@ update_everything <- function() {
   # up already saved files from previous steps. It can take hours to complete,
   # but only needs to be done rarely. This is only intended to be run from
   # development tree, not as installed package
-  icd_generate_sysdata()
+  generate_sysdata()
   load(file.path("R", "sysdata.rda"))
   generate_spelling()
   # plain text billable codes
@@ -103,9 +100,7 @@ icd9cm_hierarchy_sanity <- function(x) {
 parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
   assert_flag(save_data)
   assert_flag(offline)
-
-  # icd9_sources is in sysdata.RData
-  versions <- icd9_sources$version
+  versions <- icd::icd9_sources$version
   message("Available versions of sources are: ", paste(versions, collapse = ", "))
   icd9cm_billable <- list()
   for (v in versions) {
@@ -147,8 +142,8 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   message("Fetching billable codes version: ", version)
   if (version == "27")
     return(invisible(parse_leaf_desc_icd9cm_v27(offline = offline)))
-  stopifnot(version %in% icd9_sources$version)
-  dat <- icd9_sources[icd9_sources$version == version, ]
+  stopifnot(version %in% icd::icd9_sources$version)
+  dat <- icd::icd9_sources[icd::icd9_sources$version == version, ]
   fn_short_orig <- dat$short_filename
   fn_long_orig <- dat$long_filename
 
@@ -222,7 +217,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
 parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
   message("working on version 27 quirk")
   assert_flag(offline)
-  v27_dat <- icd9_sources[icd9_sources$version == "27", ]
+  v27_dat <- icd::icd9_sources[icd::icd9_sources$version == "27", ]
   fn_orig <- v27_dat$other_filename
   url <- v27_dat$url
   message("original v27 file name = '", fn_orig, "'. URL = ", url)
@@ -275,7 +270,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   # insert the short descriptions from the billable codes text file. Where there
   # is no short description, e.g. for most Major codes, or intermediate codes,
   # just copy the long description over.
-  bill32 <- icd9cm_billable[["32"]]
+  bill32 <- icd::icd9cm_billable[["32"]]
   billable_codes <- get_billable.icd9(out[["code"]], short_code = TRUE)
   billable_rows <- which(out[["code"]] %in% billable_codes)
   title_rows <- which(out[["code"]] %nin% billable_codes)
@@ -294,7 +289,8 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   out[["short_desc"]] <- enc2utf8(out[["short_desc"]])
   out[["long_desc"]] <- enc2utf8(out[["long_desc"]])
   icd9cm_hierarchy_sanity(out)
-  icd9cm_hierarchy <- out
+  billable <- is_billable.icd9cm(out$code)
+  icd9cm_hierarchy <- cbind(out[1], billable, out[-1])
   if (save_data)
     save_in_data_dir(icd9cm_hierarchy)
   invisible(icd9cm_hierarchy)

@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-utils::globalVariables(c("icd9_chapters", "icd9_sub_chapters", "icd10cm2016"))
-
 #' Explain ICD-9 and ICD-10 codes in English
 #'
 #' Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
@@ -139,7 +137,7 @@ explain.icd10cm <- function(x, short_code = guess_short(x),
     x <- decimal_to_short.icd10(x)
 
   # this is a linear lookup, but usually only "explaining" one or a few codes at a time.
-  icd10cm2016[icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
+  icd::icd10cm2016[icd::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
               ifelse(brief, "short_desc", "long_desc")]
 }
 

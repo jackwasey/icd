@@ -122,10 +122,6 @@ children.icd10cm <- function(x, short_code = guess_short(x), defined, billable =
   res
 }
 
-# this is just lazy package data, but apparently need to declare it to keep CRAN
-# happy. May not be needed if doing icd::
-utils::globalVariables("icd10cm2016")
-
 #' defined children of ICD codes
 #'
 #' Find defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
@@ -149,6 +145,6 @@ children_defined.icd10cm <- function(x, short_code = guess_short(x), warn = FALS
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  kids <- icd10cm_children_defined_cpp(x, icd10cm2016, .nc)
+  kids <- icd10cm_children_defined_cpp(x, icd::icd10cm2016, .nc)
   as.icd10cm(kids, short_code)
 }

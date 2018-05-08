@@ -23,7 +23,7 @@ test_that("sysdata.rda is okay", {
                "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
                "icd9_sources", ".nc")
 
-  sysdat <- icd_generate_sysdata(save_data = FALSE)
+  sysdat <- generate_sysdata(save_data = FALSE)
   expect_equal(names(sysdat), lknames)
 
   expect_lt(length(icd9_short_n_leaf$vec), length(icd9_short_n_defined$vec))

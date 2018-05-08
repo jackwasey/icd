@@ -43,7 +43,7 @@
 #'
 #' # a good use is to summarise the contents of a comorbidity:
 #' icd9_map_elix$CHF
-#' condense(icd9_map_elix$CHF)
+#' condense(icd9_map_elix$CHF, warn = FALSE)
 #' # explaining big groups of codes takes advantage of this:
 #' explain(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
 #' @family ICD-9 ranges
