@@ -19,6 +19,6 @@ Rscript --vanilla -e 'jwutil::reqinst("pkgdown"); pkgdown::build_site()'
 mkdir -p "$GH_PAGES"
 cp -r docs/* "$GH_PAGES" 
 git -C "$GH_PAGES" status
-git commit -am "pkgdown rerun"
+git -C "$GH_PAGES" commit -am "pkgdown rerun"
 git -C "$GH_PAGES" push origin gh-pages
 
