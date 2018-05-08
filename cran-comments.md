@@ -9,7 +9,9 @@ Please accept this submission just one week after previous due to significant bu
 
 # R CMD check results
 
-There is one note:
+There are two notes:
+
+Days since last update: 6
 
 * checking installed package size ... NOTE
   installed size is  9.3Mb
