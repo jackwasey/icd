@@ -37,11 +37,6 @@ parser.
   so \code{RENLFAIL} needs special treatment
 }}
 
-\examples{
-  \dontrun{
-  sas_format_extract(readLines('data-raw/comformat2012-2013.txt'))
-  }
-}
 \references{
 \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}
 }

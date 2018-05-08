@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_mappings.R
 \name{icd10_generate_map_quan_elix}
 \alias{icd10_generate_map_quan_elix}
-\title{generate ICD-10 Quan/Elixhauser mapping}
+\title{generate ICD-10 Quan Elixhauser mapping}
 \usage{
 icd10_generate_map_quan_elix(save_data = TRUE)
 }
@@ -18,9 +18,6 @@ invisibly returns the list of vectors, where a co-morbidity name is
   associated with a character vector of ICD-9 codes.
 }
 \description{
-generate ICD-10 Quan/Elixhauser mapping
-}
-\details{
-Started with Quan's SAS code (in \code{data-raw}):
+Started with Quan's SAS code (in raw data directory of source tree):
 }
 \keyword{internal}

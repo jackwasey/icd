@@ -19,7 +19,7 @@ Hierarchical Condition Categories (HCC) is a method of categorizing ICD codes cr
 
 HCC first assigns ICD codes to Condition Categories (CC). Condition categories are numeric values ranked based on severity/risk. If an ICD code belongs to more than one CC, the most severe CC is assigned. In other words, HCC classifies patients based on their most severe conditions.
 
-We can see the mapping of ICD-9 and ICD-10 codes to HCC with the `icd9_map_cc` and `icd10_map_cc` functions.
+We can see the mapping of ICD-9 and ICD-10 codes to HCC with the `icd9_map_cc` and `icd10_map_cc` data.
 
 ```{r head}
 head(icd9_map_cc)

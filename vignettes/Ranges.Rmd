@@ -1,0 +1,127 @@
+---
+title: "Ranges of ICD codes"
+author: "Jack O. Wasey"
+date: "8 May, 2018"
+output:
+  html_document:
+    toc: yes
+  pdf_document:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{Ranges of ICD codes}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+<!--
+Copyright (C) 2014 - 2018  Jack O. Wasey
+
+This file is part of icd.
+
+icd is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+icd is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with icd. If not, see <http:#www.gnu.org/licenses/>.
+-->
+```{r setup, echo = FALSE, cache = FALSE}
+suppressWarnings({
+  suppressPackageStartupMessages({
+    loadNamespace("knitr") # for opts_chunk only
+    library(icd)
+    library(magrittr)
+    library(utils)
+    })
+  })
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Ranges of ICD-9 codes
+
+These internal functions generate ranges of valid ICD-9 codes, without including parent codes when the range limit would subset the parent. These were primarily designed to accurately reflect definitions for comorbidity maps. For example, the published article defining Quan's version of the Elixhauser comorbidities includes the following expression as part of the definition of the arrythmia comorbidity: _746.3 -- 746.6_.
+
+The functions can be used by running `devtools::load_all()` from the icd source tree available from [github](https://github.com/jackwasey/icd), or by using the 
+
+Using icd, we can use this shortcut to expand decimal ICD-9 codes to all possible child codes:
+```{r arrythmiaexpand, eval = FALSE}
+"746.3" %i9da% "746.6"
+# equivalent to:
+identical("746.3" %i9da% "746.6",
+  icd:::expand_range("746.3", "746.6", defined = FALSE))
+```
+
+This includes all possible codes, not just the ones that have been explicitly defined: this is important in correctly assigning new or slightly incorrect ICD codes in the right comorbidity). In contrast, the same expression using just defined codes gives:
+```{r arrythmiadefinedonly, eval = FALSE}
+"746.3" %i9d% "746.6"
+```
+
+If a country adds more detail, e.g., a new code `746.60`, we want to capture this as an arrythmia comorbidity, even though the USA or WHO schemes do not include it. For this reason, icd expands out all the possible codes for each ICD-9 comorbidity in the included maps. (ICD-10 codes cannot be expanded this way in the maps due to the very large number of permutations, but the equivalent is done during the computation of comorbidities.)
+
+## Ranges spanning higher-level codes
+
+Another problem is whether to include broader parent codes when a range does not include all the children: e.g., `"100.99" %i9da% "101.01"` does not include `100` or `100.0`, both of which imply larger subsets than requested by the range command (i.e., every code from `100.00` to `100.99`). The shorter forms `%i9s%` and `%i9d%` return only *real* codes (i.e., listed in the CMS definitions as either three-digit codes or diagnoses), whereas `%i9sa%` and `%i9da%` return all possible syntactically valid ICD-9 codes:
+```{r ranges, eval = FALSE}
+# get all possible codes
+"003" %i9sa% "0033" %>% head(9) # show first 9 of 111 values
+# just get the ones which correspond to diagnoses (keeping the 3-digit chapters)
+"494" %i9s% "4941"
+
+"10099" %i9sa% "10101"
+"V10" %i9da% "V10.02"
+"E987" %i9da% "E988.1"
+
+# can't range between different types:
+"V10" %i9s% "E800" # should throw an error
+```
+
+This is used internally to interpret ranges of ICD-9 codes specified in the literature. Sometimes it is not clear exactly what an ICD-9 range presented in a paper means, but at least we can explicitly decide what should be included in our interpretation, and the ranges can be reused even when the underlying codes may be different, as codes are added and removed from time-to-time, and although the original papers would have been based on their ICD-9 ranges resolving to a specific set of codes, they are likely to be valid for new diagnoses in the given subgroups. Ultimately, this needs detailed attention, but the strategy in \code{icd9} is to give a good best guess, given these limitations.
+
+## Alternative way to expand ranges
+
+Another way of specifying ranges are to use function calls. These are exactly equivalent to the `%i9s%` and `%i9d%` range operators. This example shows the result when the user specifies a range which would include parents but not all their children:
+
+```{r rangeanomaly}
+icd:::expand_range("4820", "4823") # default, equivalent to %i9s%
+icd:::expand_range("4820", "4823", defined = FALSE)
+# see the first few differences (which are by definition not 'real' codes):
+setdiff(icd:::expand_range("4820", "4823", defined = FALSE),
+        icd:::expand_range("4820", "4823")) %>% head
+```
+
+## Finding codes in hierarchy
+
+It is easy to find the children of a higher-level ICD-9 code:
+```{r "childrenReal"}
+children("391")
+# mid-level code
+children("0032")
+# leaf node has no children, so returns itself
+children("00320")
+
+# pneumococcal pneumonia is a three-digit ICD-9 code with no descendants
+children("481")
+```
+By adding `defined = TRUE`, all syntactically valid ICD-9 codes are returned, even if not defined by CMS as diagnoses. This is relevant because of minor coding errors, or coding in a different year to the master list. A planned feature is to allow testing of an ICD-9 code against the valid codes for the year it was entered, but at present only the 2014 master list is used. This means that some older valid codes may no longer be on the list. However, there have been very few changes to ICD-9-CM in the last five years with ICD-10-CM in the wings.
+```{r all children}
+# first ten possible ICD-9 child codes from 391
+children("391", defined = FALSE)[1:10]
+```
+
+`condense` is the reverse operation to `children`. You need to specify whether you want to consider all possible children or just defined codes.
+```{r condense}
+icd::condense(children("0032"), defined = TRUE)
+
+codes <- children("0032", defined = FALSE)
+codes
+icd::condense(codes, defined = FALSE)
+```

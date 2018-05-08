@@ -433,7 +433,7 @@ test_that("get subset of billable codes", {
   # SOMEDAY: reasonable to assume that if we're talking billable, we make it ICD-9-CM
   expect_true(is.icd_decimal_diag(icd_get_billable(x)))
   expect_true(is.icd9(icd_get_billable(x)))
-  expect_character(icd_get_billable(x))
+  checkmate::expect_character(icd_get_billable(x))
 
   expect_equal_no_icd(icd_get_billable.icd9cm(x), "410.00")
   # assume ICD-9 means ICD-9-CM: this may change
@@ -444,7 +444,7 @@ test_that("get inverted subset of billable codes", {
   x_inv <- c("410", "410.0", "410.00")
   expect_true(is.icd_decimal_diag(res <- icd_get_billable(x_inv, invert = TRUE)))
   expect_true(is.icd9(res))
-  expect_character(res)
+  checkmate::expect_character(res)
 
   expect_equal_no_icd(icd_get_billable.icd9cm(x_inv, invert = TRUE), c("410", "410.0"))
   # assume ICD-9 means ICD-9-CM: this may change

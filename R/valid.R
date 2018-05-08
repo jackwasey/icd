@@ -61,8 +61,11 @@ utils::globalVariables(
     "re_icd9_major_v", "re_icd9_major_n_strict", "re_icd9_major_n"))
 
 # nolint start
-set_re_globals <- function(env = parent.frame()) {
 
+#' Put ICD validation regexes in the icd::: namespace only
+#' @param env target environment to save the data
+#' @keywords internal sysdata data
+set_re_globals <- function(env = parent.frame()) {
   re_icd9_major_n <- "[[:digit:]]{1,3}"
   re_icd9_major_n_strict <- "[[:digit:]]{3}"
   re_icd9_major_v <- "[Vv](?:0[1-9]|[1-9][[:digit:]]?)"

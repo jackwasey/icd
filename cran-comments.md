@@ -1,3 +1,5 @@
+Please accept this submission just one week after previous due to significant bug fixes.
+
 # Test environments
 * Ubuntu 18.04 R 3.5.0, GCC 7.3, clang 5.0.1
 * Ubuntu 14.04 (Travis) R-devel, gcc
@@ -16,3 +18,4 @@ There is one note:
     data   2.0Mb
     doc    3.8Mb
     libs   1.3Mb
+

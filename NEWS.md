@@ -1,9 +1,18 @@
+# Version 3.1.2
+ * Documentation improved
+ * https://jackwasey.github.io/icd/ now has `pkgdown` generated site in `gh-pages` branch.
+ * Allow more functions to work without having called `library(icd)` first
+
+# Version 3.1.1
+ * Includes article submitted to the Journal of Statistical Software, brings in minimal new dependencies with `rticles` and `tinytex`
+ * Drop RODBC dependency. Uranium sample data can still be reproduced offline.
+
 # Version 3.0
  * major improvement in comorbidity calculation speed using matrix multiplication behind the scenes. ICD-10 codes were slower than ICD-9 code comorbidities before, and are now 1.5 - 2 orders of magnitude faster.
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
  * added 'charlson' synonyms for 'quan_deyo', e.g. Charlson comorbidities can now be found using `comorbid_charlson(patient_data)`
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
- * function names have lost the 'icd_' prefix, old names kept for compatiblity, but easier now to write `comorbid(patient_data)`, and `icd::comorbid` may also be used, and which many consider good practice.
+ * function names have lost the 'icd_' prefix, old names kept for compatiblity, but easier now to write `comorbid(patient_data)`, and `icd::comorbid` may also be used, and which many consider good practice. `explain_icd` synonym avoids name conflict with the popular `dplyr` package, but `icd::explain` also a nice option.
  * Assume C++11, which is now four years old, enabling code simplification
  * rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not callled
  * deprecated rarely or unused code, including %i9in%

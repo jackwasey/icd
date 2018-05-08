@@ -23,7 +23,7 @@ r_packages:
   - rmarkdown
 
 r_github_packages:
-  - jimhester/covr
+  - r-lib/covr
   - jimhester/lintr
 
 r:
@@ -31,8 +31,7 @@ r:
   - release
   - oldrel
 
-repos:
-  CRAN: https://cloud.r-project.org
+cran: https://cloud.r-project.org
 
 warnings_are_errors: true
 
@@ -47,12 +46,11 @@ env:
 
 matrix:
   fast_finish: true
-  allow_failures:
-  - r: oldrel
-  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true
   include:
   - env: LINTR_COMMENT_BOT=true
-  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true
+  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
+  allow_failures:
+  - r: oldrel
 
 before_script:
  - ls -aR

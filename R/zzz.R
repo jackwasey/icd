@@ -51,6 +51,8 @@ release_questions <- function() {
     "Is README.Rmd updated and recompiled into README.md?",
     "Does every file have correct licence information?",
     "Is spelling correct everywhere? E.g. aspell_package_Rd_files('.')",
+    "Are github pages site refreshed by running pkgdown::build_site() in the
+    main branch, then commiting the contents of docs/ to the gh-pages branch?",
     # code quality:
     "Are you happy with the code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
@@ -67,16 +69,12 @@ release_questions <- function() {
     "Have you checked on Windows, win_builder (if possible with configure.win failure),
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",
-    "Have you compiled with clang and gcc with full warnings and pedantic
-      (normally done by UBSAN builds anyway)?",
-    "Make sure no temp data is left behind after tests",
+    "is R_OPENMP macro updated from R sources: m4/openmp.m4",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially
       thinking of autoconfigure stuff. Look in the final built archive
       before submitting to CRAN?",
-    # not CRAN
-    "Are github pages site refreshed from latest documentation?",
     NULL
   )
 }

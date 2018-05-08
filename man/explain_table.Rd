@@ -7,6 +7,7 @@
 \alias{explain_table.icd10}
 \alias{explain_table.icd9cm}
 \alias{explain_table.icd10cm}
+\alias{icd_explain_table.default}
 \alias{icd_explain_table.icd10}
 \alias{icd_explain_table.icd10cm}
 \alias{icd_explain_table.icd9}
@@ -29,6 +30,8 @@ explain_table(...)
 
 \method{explain_table}{icd10cm}(x, short_code = guess_short(x),
   condense = FALSE, brief = TRUE, warn = TRUE, ...)
+
+icd_explain_table.default(...)
 
 icd_explain_table.icd10(...)
 
@@ -55,8 +58,8 @@ which exactly encompass certain subsets. E.g. If all cholera diagnoses are
 provided, only '001 - Cholera' needs to be displayed, not all sub-types.}
 
 \item{brief}{single logical value, default is \code{FALSE}. If \code{TRUE},
-the short description from the canonical CMS descriptions (included in
-\code{data-raw}) will be used, otherwise the long description is used.}
+the short description from the canonical CMS descriptions will be used,
+otherwise the long description is used.}
 
 \item{warn}{single logical value, default is \code{TRUE}, meaning that codes
 which do not correspond to diagnoses, or to three-digit codes, will trigger
@@ -97,42 +100,6 @@ If the input x is of mixed type it will choose to convert by
 }}
 
 \section{Deprecated function names}{
- Future versions of \pkg{icd} will drop
-  the \code{icd_} prefix. For example, \code{charlson} should be used in
-  favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
-  \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
-  the prefix, e.g., \code{\link{icd_wide_data}}.
-
- Future versions of \pkg{icd} will drop
-  the \code{icd_} prefix. For example, \code{charlson} should be used in
-  favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
-  \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
-  the prefix, e.g., \code{\link{icd_wide_data}}.
-
- Future versions of \pkg{icd} will drop
-  the \code{icd_} prefix. For example, \code{charlson} should be used in
-  favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
-  \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
-  the prefix, e.g., \code{\link{icd_wide_data}}.
-
- Future versions of \pkg{icd} will drop
-  the \code{icd_} prefix. For example, \code{charlson} should be used in
-  favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
-  \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
-  the prefix, e.g., \code{\link{icd_wide_data}}.
-
  Future versions of \pkg{icd} will drop
   the \code{icd_} prefix. For example, \code{charlson} should be used in
   favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,

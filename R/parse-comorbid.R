@@ -39,7 +39,8 @@ ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "HTN
 
 #' get the SAS code from AHRQ
 #'
-#' Get the SAS code from AHRQ and save in data-raw if not already there.
+#' Get the SAS code from AHRQ and save in raw data directory, if not already
+#' there.
 #' @keywords internal
 icd9_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(
@@ -62,25 +63,20 @@ icd10_fetch_ahrq_sas <- function(offline) {
 #' @keywords internal manip
 icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
-
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
   ahrq_info <- icd9_fetch_ahrq_sas(offline = offline)
-
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
   icd9_map_ahrq <- list()
-
   for (cmb in names(icd9_map_ahrq_working)) {
     message("parsing AHRQ SAS codes for '", cmb, "'")
     some_pairs <- strsplit(x = icd9_map_ahrq_working[[cmb]], split = "-")
-
     # non-range values (and their children) just go on list
     unpaired_items <- sapply(some_pairs, length) == 1
     out <- c()
     if (any(unpaired_items))
       out <- children.icd9(unlist(some_pairs[unpaired_items]), defined = FALSE, short_code = TRUE)
-
     the_pairs <- some_pairs[lapply(some_pairs, length) == 2]
     out <- c(out, lapply(the_pairs, function(x) sas_expand_range(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
@@ -97,7 +93,6 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   clean_up_map(icd9_map_ahrq[ahrq_htn]) -> icd9_map_ahrq[["HTNCX"]]
   clean_up_map(icd9_map_ahrq[ahrq_chf]) -> icd9_map_ahrq[["CHF"]]
   clean_up_map(icd9_map_ahrq[ahrq_renal]) -> icd9_map_ahrq[["RENLFAIL"]]
-
   icd9_map_ahrq[ahrq_unused] <- NULL
 
   # officially, AHRQ HTN with complications means that HTN on its own should be
@@ -106,8 +101,8 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   # hard to write an AHRQ specific function to do this if needed, but it makes
   # more sense to me
 
-  #   condense to parents, for each parent, if children are all in the list, add
-  #   the parent
+  # condense to parents, for each parent, if children are all in the list, add
+  # the parent
   for (cmb in names(icd9_map_ahrq)) {
     message("working on ranges for: ", cmb)
     parents <- condense.icd9(icd9_map_ahrq[[cmb]], defined = FALSE,
@@ -125,13 +120,10 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
       }
     }
   }
-
   names(icd9_map_ahrq) <- icd::names_ahrq_htn_abbrev
   icd9_map_ahrq %<>% comorbidity_map
-
   if (save_data)
     save_in_data_dir("icd9_map_ahrq")
-
   invisible(icd9_map_ahrq)
 }
 
@@ -139,31 +131,22 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
 # attempt to find all the child codes.
 icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
-
   ahrq_info <- icd10_fetch_ahrq_sas(offline = offline)
-
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
-
   unun <- function(x) unname(unlist(x))
-
   icd10_map_ahrq[["HTNCX"]] <- icd10_map_ahrq[ahrq_htn] %>% unun
   icd10_map_ahrq[["CHF"]] <- icd10_map_ahrq[ahrq_chf] %>% unun
   icd10_map_ahrq[["RENLFAIL"]] <- icd10_map_ahrq[ahrq_renal] %>% unun
-
   icd10_map_ahrq[ahrq_unused] <- NULL
-
   # put in the same order as the ICD-9 listings (and the publications)
   icd10_map_ahrq <- icd10_map_ahrq[match(ahrq_order, names(icd10_map_ahrq))]
-
   names(icd10_map_ahrq) <- icd::names_ahrq_htn_abbrev
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.short_diag)
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd10)
   icd10_map_ahrq %<>% comorbidity_map
-
   if (save_data)
     save_in_data_dir("icd10_map_ahrq")
-
   invisible(icd10_map_ahrq)
 }
 
@@ -196,20 +179,16 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 #' @keywords internal manip
 icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
-
   # download the file and/or just get the path or file name, fails if missing
   # by default
   f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
-
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sas_extract_let_strings(quan_sas_lines)
   icd9_map_quan_deyo <- let_statements[grepl("DC[[:digit:]]+", names(let_statements))]
-
   # use validation: takes time, but these are run-once per package creation (and
   # test) tasks.
   icd9_map_quan_deyo <- lapply(icd9_map_quan_deyo, children.icd9,
                                short_code = TRUE, defined = FALSE)
-
   # do use icd:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
   names(icd9_map_quan_deyo) <- icd::names_charlson_abbrev

@@ -29,4 +29,13 @@ icd10cm_get_flat_file <- function(...) {
     file_name = "icd10cm_order_2016.txt", ...)
 }
 
+#' Get the raw data directory
+#'
+#' Following Hadley Wickham recommendations
+#' in R Packages, should be in inst/extdata. devtools overrides
+#' \code{system.file}.
+#' @keywords internal
+get_raw_data_dir <- function()
+  system.file("extdata", package = "icd")
+
 #nocov end

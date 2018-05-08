@@ -14,8 +14,8 @@ data}
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and file name if the file already exists in
-data-raw. This is helpful for testing without using the internet.}
+internet, only return path and file name if the file already exists in the
+raw data directory. This is helpful for testing without using the internet.}
 }
 \description{
 For each row of billing code, give the chapter, sub-chapter, major code and

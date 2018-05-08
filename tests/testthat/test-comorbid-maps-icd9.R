@@ -622,3 +622,8 @@ test_that("all AHRQ ICD-9 comorbidities are also in the ICD-10 maps, in same ord
   expect_equal_no_icd(names(icd9_map_quan_elix), names(icd10_map_quan_elix))
   expect_equal_no_icd(names(icd9_map_quan_deyo), names(icd10_map_quan_deyo))
 })
+
+test_that("Charlson synonyms are present", {
+  expect_identical(icd9_map_charlson, icd9_map_quan_deyo)
+  expect_identical(icd10_map_charlson, icd10_map_quan_deyo)
+})

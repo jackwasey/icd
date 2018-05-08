@@ -3,36 +3,36 @@
 \name{unzip_to_data_raw}
 \alias{unzip_to_data_raw}
 \alias{download_to_data_raw}
-\title{Unzip file to \code{data-raw}}
+\title{Unzip file to raw data directory}
 \usage{
 unzip_to_data_raw(url, file_name, force = FALSE, verbose = FALSE,
-  offline = TRUE, data_raw_path = system.file("data-raw", package = "icd"))
+  offline = TRUE, data_raw_path = get_raw_data_dir())
 
 download_to_data_raw(url, file_name = regmatches(url, regexpr("[^/]*$", url)),
-  offline = TRUE, data_raw_path = system.file("data-raw", package = "icd"))
+  offline = TRUE, data_raw_path = get_raw_data_dir())
 }
 \arguments{
 \item{url}{URL of a zip file}
 
 \item{file_name}{file name of a single file in that zip}
 
-\item{force}{logical, if TRUE, then download even if already in
-\code{data-raw}}
+\item{force}{logical, if TRUE, then download even if already in the raw data
+directory}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and file name if the file already exists in
-data-raw. This is helpful for testing without using the internet.}
+internet, only return path and file name if the file already exists in the
+raw data directory. This is helpful for testing without using the internet.}
 
-\item{data_raw_path}{path where the data-raw directory is.}
+\item{data_raw_path}{path where the raw directory is}
 }
 \value{
-path of unzipped file in \code{data-raw}
+path of unzipped file in the raw data directory
 }
 \description{
-Get a zip file from a URL, extract contents, and save file in
-\code{data-raw}. If the file already exists there, it is only retrieved if
+Get a zip file from a URL, extract contents, and save file in the raw data
+directory. If the file already exists there, it is only retrieved if
 \code{force} is set to \code{TRUE}. If \code{offline} is \code{FALSE}, then
 \code{NULL} is returned if the file isn't already downloaded.
 }

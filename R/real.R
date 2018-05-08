@@ -15,16 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-utils::globalVariables("icd10cm2016")
-
 #' Check whether ICD-9 codes exist
 #'
-#' This is different from syntactic validity: it looks it up in the canonical
-#' list of ICD-9 codes published by the CMS, and which are included in this
-#' package under \code{data-raw}. Checking syntactic validity using
-#' \code{link{is_valid}} etc. is still useful, with a changing list of ICD-9
-#' codes over time, and possible imperfections in the master lists derived from
-#' CMS.
+#' This is different from syntactic validity: it looks up codes in the canonical
+#' lists published by the CMS.
+#'
+#' The source data from CMS, and code to generate the R data are included in the
+#' source tree of this package.
 #' @param x vector if ICD codes to test whether defined in certain ICD code list
 #' @template short_code
 #' @template billable
@@ -68,7 +65,7 @@ is_defined.icd10cm <- function(x, short_code = guess_short(x),
   if (billable)
     is_billable.icd10cm(x, short_code = short_code)
   else
-    match(x, icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L
+    match(x, icd::icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L
 }
 
 #' @describeIn is_defined Same for ICD-10, temporarily using ICD-10-CM until
@@ -160,7 +157,7 @@ is_billable.icd10cm <- function(x, short_code = guess_short(x), icd10cm_edition 
   if (!short_code)
     x <- decimal_to_short(x)
 
-  x %in% icd10cm2016[icd10cm2016[["billable"]] == 1, "code"]
+  x %in% icd::icd10cm2016[icd::icd10cm2016[["billable"]] == 1, "code"]
 }
 
 #' @describeIn is_billable Which of the given ICD-10 codes are leaf nodes in
@@ -183,7 +180,7 @@ is_billable.icd9cm <- function(x, short_code = guess_short(x),
   assert_string(icd9cm_edition)
   if (!short_code)
     x <- decimal_to_short.icd9(x)
-  match(x, icd9cm_billable[[icd9cm_edition]][["code"]], nomatch = nomatch, ...) > 0L
+  match(x, icd::icd9cm_billable[[icd9cm_edition]][["code"]], nomatch = nomatch, ...) > 0L
 }
 
 #' @describeIn is_billable Which of the given ICD codes are leaf nodes in

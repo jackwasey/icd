@@ -15,7 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+context("deprecated test-explain-table")
+
 test_that("icd_explain_table, with and without condense returns correct structure", {
+  skip("updated")
   codes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
   expect_equal(dim(icd_explain_table(codes, condense = FALSE)), c(7, 10))
   expect_equal(dim(icd_explain_table(codes, condense = TRUE)), c(6, 12))
@@ -125,6 +128,7 @@ test_that("icd_explain_table, appropriately convert mixed code character vector,
           })
 
 test_that("icd_explain_table works with factor input", {
+  skip("updated")
   f <- factor(c("25010", "E777", "lorem ipsum"))
   expect_equal(dim(icd_explain_table(f)), c(3, 10))
   expect_equal(icd_explain_table(f)[2, 2], NA_character_)

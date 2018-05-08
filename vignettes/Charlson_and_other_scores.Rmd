@@ -1,10 +1,10 @@
 ---
-title: "Charlson and other scores from ICD-9 and ICD-10 codes"
+title: "Charlson and Van Walraven scores"
 author: "Jack O. Wasey"
-date: '`r format(Sys.time(), "%Y-%m-%d")`'
+date: "8 May, 2018"
 output: html_document
 vignette: >
-  %\VignetteIndexEntry{Charlson and other scores from ICD-9 and ICD-10 codes}
+  %\VignetteIndexEntry{Charlson and Van Walraven scores}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -26,25 +26,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
-
 ```{r setup, include=FALSE}
-
-######## DEBUGGING ONLY ############
-# see https://stackoverflow.com/questions/49308254/how-do-i-debug-a-segfault-which-only-occurs-during-vignette-building?noredirect=1#comment85618697_49308254
-# writeLines(.libPaths(), "/tmp/libpaths.txt")
-
 suppressWarnings({
   suppressPackageStartupMessages({
-    loadNamespace("knitr") # for opts_chunk only
+    requireNamespace("knitr")
     library(icd)
     library(magrittr)
     })
   })
-
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
+  comment = "#>"
 )
 ```
 ## ICD code scoring systems
@@ -56,17 +48,16 @@ More complicated scoring systems may use lab values, patient demographic informa
 
 The Vermont data are actually discharge, not admission diagnoses, but can be used to demonstrate generating Charlson scores.
 ```{r vermont-charlson}
-# typical hospital format data, with many columns for diagnoses
-head(vermont_dx)
-# convert to long format (could use other tools, but the icd version accounts better for known structure of the data.
-head(vermont_dx %>% wide_to_long)
-# calculate charlson scores and summarize
-vermont_dx %>% wide_to_long %>% charlson %>% summary
-# show the first few actual scores: the names are the patient IDs:
-vermont_dx %>% wide_to_long %>% charlson %>% head(25) -> vermont_charlson
-vermont_charlson
-names(vermont_charlson)
-unname(vermont_charlson)
+head(vermont_dx[1:10])
+v <- wide_to_long(vermont_dx)
+head(v)
+charlson(v) %>% summary
+head(charlson(v))
+head(names(charlson(v)))
+```
+This default result is a numeric vector with the names (top numbers) as the patient identifiers. Those who like working with 'tidy' data frames can use:
+```{r charlsondf}
+head(charlson(v, return_df = TRUE))
 ```
 
 Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD codes, applies the Charlson scoring system, and returns the Charlson score for each patient.
@@ -75,7 +66,24 @@ Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD cod
 
 The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.
 
+```{r vermontvanwalraven}
+`Vermont Van Walraven Scores` <- van_walraven(v)
+hist(`Vermont Van Walraven Scores`)
 ```
-vermont_dx %>% wide_to_long %>% van_walraven %>% head(25) -> vw_scores
-vw_scores
+
+## Working with mixed ICD-9 and ICD-10 codes
+
+All the functions in `icd` work with one code type. They are tolerant of having different sub-types of ICD-9 or ICD-10 codes together for comorbidity calculations, but patients with mixed data can be combined. E.g. patient A has two ICD-9 and two ICD-10 codes:
+```{r icd9and10}
+icd9 <- data.frame(pts = c("A", "A"), c("041.04", "244.9"))
+icd10 <- data.frame(pts = c("A", "A"), c("C82.28", "M08.979"))
+both <- comorbid_elix(icd9) | comorbid_elix(icd10)
+van_walraven_from_comorbid(both)
+```
+More commonly, some patients before a certain date will have ICD-9 codes, and others will have ICD-10 codes:
+```{r icd9then10}
+icd9 <- data.frame(pts = c("A", "A"), c("041.04", "244.9"))
+icd10 <- data.frame(pts = c("B", "B"), c("C82.28", "M08.979"))
+both <- rbind(comorbid_elix(icd9), comorbid_elix(icd10))
+van_walraven_from_comorbid(both)
 ```

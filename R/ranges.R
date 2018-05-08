@@ -15,8 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-utils::globalVariables("icd9cm_billable")
-
 #' take two ICD-9 codes and expand range to include all child codes
 #'
 #' this is cumbersome code, covering a whole load of edge cases relating to the
@@ -118,12 +116,12 @@ expand_range.icd10cm <- function(start, end, short_code = guess_short(c(start, e
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  pos <- match(c(start, new_end), icd10cm2016[["code"]])
+  pos <- match(c(start, new_end), icd::icd10cm2016[["code"]])
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
 
-  icd10cm2016[pos[1]:pos[2], "code"]
+  icd::icd10cm2016[pos[1]:pos[2], "code"]
 }
 
 #' Expand major codes to range
@@ -153,26 +151,20 @@ expand_range_major.default <- function(start, end) {
 #' @keywords internal
 #' @export
 expand_range_major.icd10cm <- function(start, end) {
-
   # codes may have alphabetic characters in 3rd position, so can't just do
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
-
   se <- as_char_no_warn(c(start, end)) %>%
     trim %>%
     toupper
-
-  unique_mjrs <- icd10cm2016$three_digit %>% unique
-
+  unique_mjrs <- icd::icd10cm2016$three_digit %>% unique
   if (!is_major.icd10cm(se[[1]]))
     stop("start: ", start, " is not an ICD-10-CM major (three character) code")
   if (!is_major.icd10cm(se[[2]]))
     stop("end: ", end, " is not an ICD-10-CM major (three character) code")
-
   if (se[[1]] > se[[2]])
     stop(se[[1]], " is after ", se[[2]])
-
   pos <- match(se, unique_mjrs)
   if (is.na(pos[[1]]))
     stop(se[[1]], " as start not found")
@@ -193,12 +185,10 @@ expand_range.icd9 <- function(start, end,
                               ...) {
   if (short_code)
     icd9_expand_range_short(start, end, defined,
-                            ex_ambig_start,
-                            ex_ambig_end)
+                            ex_ambig_start, ex_ambig_end)
   else
     icd9_expand_range_decimal(start, end, defined,
-                              ex_ambig_start,
-                              ex_ambig_end)
+                              ex_ambig_start, ex_ambig_end)
 }
 
 #' expand range worker
@@ -228,7 +218,6 @@ icd9_expand_range_worker <- function(start, end, lookup, defined,
   assert_character(lookup$vec)
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
-
   start_index <- lookup$env[[start]]
   end_index <- lookup$env[[end]]
   assert_integer(start_index, len = 1L)
@@ -239,28 +228,22 @@ icd9_expand_range_worker <- function(start, end, lookup, defined,
     stop(sprintf("end value '%s' not found in look-up table of ICD-9 codes.", end))
   if (end_index < start_index)
     stop("end code must be greater than or equal to start code")
-
   if (start == end)
     return(children.icd9(start, short_code = TRUE, defined = defined))
-
   # this fills most of the output values, but misses children of a high-level end code
   out_env <- vec_to_env_true(lookup$vec[start_index:end_index])
-
   # do not want to check a load of leaf nodes for children, since they have none. # TODO: pre-calculate
-  leaf_env <- vec_to_env_true(icd9cm_billable[["32"]][["code"]])
-
+  leaf_env <- vec_to_env_true(icd::icd9cm_billable[["32"]][["code"]])
   is_parent <- function(x, defined) {
     if (!defined)
       return(nchar(x) < 5L)
     is.null(leaf_env[[x]])
   }
-
   icd_get_missing_kids <- function(code, defined) {
     s_kids <- children.icd9(code, short_code = TRUE, defined = defined)
     s_kids_in <- vapply(s_kids, function(x) !is.null(out_env[[x]]), logical(1))
     s_kids[!s_kids_in]
   }
-
   # operate on the environment, works by side effects, not return value
   exclude_ambiguous_parent <- function(x, defined) {
     if (!is_parent(x, defined))
@@ -273,14 +256,11 @@ icd9_expand_range_worker <- function(start, end, lookup, defined,
 
   if (ex_ambig_end)
     lapply(ls(out_env), exclude_ambiguous_parent, defined)
-
   lapply(
     children.icd9(end, short_code = TRUE, defined = defined),
     function(x) out_env[[x]] <- TRUE)
-
   if (!ex_ambig_end && ex_ambig_start)
     lapply(lookup$vec[start_index:(start_index + 5L)], exclude_ambiguous_parent, defined)
-
   sort_icd.icd9(ls(out_env), short_code = TRUE)
 }
 

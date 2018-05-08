@@ -15,11 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+context("explain in table format")
+
 test_that("explain_table, with and without condense returns correct structure", {
   codes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
-  expect_equal(dim(explain_table(codes, condense = FALSE)), c(7, 10))
-  expect_equal(dim(explain_table(codes, condense = TRUE)), c(6, 12))
-  expect_equal(names(explain_table(codes, condense = TRUE))[c(11, 12)],
+  expect_equal(dim(explain_table(codes, condense = FALSE)), c(7, 11))
+  expect_equal(dim(explain_table(codes, condense = TRUE)), c(6, 13))
+  expect_equal(names(explain_table(codes, condense = TRUE))[c(12, 13)],
                c("condensed_codes", "condensed_num"))
 })
 
@@ -126,6 +128,11 @@ test_that("explain_table, appropriately convert mixed code character vector,
 
 test_that("explain_table works with factor input", {
   f <- factor(c("25010", "E777", "lorem ipsum"))
-  expect_equal(dim(explain_table(f)), c(3, 10))
-  expect_equal(explain_table(f)[2, 2], NA_character_)
+  expect_equal(dim(explain_table(f)), c(3, 11))
+  expect_equal(explain_table(f)[2, 3], NA_character_)
+})
+
+test_that("same columns returned for ICD-9 and ICD-10 codes", {
+  expect_identical(colnames(icd_explain_table.icd9(c("E879", "E932", "E915", "E947", "E939", "E911", "E928"))),
+                   colnames(icd_explain_table.icd10(c("M97", "V07", "E934"))))
 })

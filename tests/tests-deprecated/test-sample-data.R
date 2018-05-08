@@ -28,14 +28,7 @@ test_that("ICD-10 codes in uranium data are okay", {
 
 })
 
-test_that("generating vermont data is identical to saved", {
-  if (is.null(fetch_vermont_dx(offline = TRUE)$file_path))
-    skip("vermont data must be downloaded with fetch_vermont_dx")
-  expect_identical(generate_vermont_dx(save_data = FALSE), vermont_dx)
-})
-
 test_that("uranium data looks okay", {
-
   expect_is(uranium_pathology, c("icd_long_data", "icd10", "icd_decimal_diag"))
   expect_equal(dim(uranium_pathology), c(2376, 2))
 })

@@ -251,7 +251,7 @@ generate_random_short_icd9 <- function(n = 50000) {
 #' @template short_code
 #' @keywords internal debugging datagen
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  x <- sample(unlist(icd10cm2016[icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
+  x <- sample(unlist(icd::icd10cm2016[icd::icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
   if (short_code)
     x
   else
@@ -300,7 +300,7 @@ generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient =
 #' @rdname generate_random_short_icd9
 #' @keywords internal debugging datagen
 generate_random_short_ahrq_icd9 <- function(n = 50000) {
-  sample(unname(unlist(icd9_map_ahrq)), size = n, replace = TRUE)
+  sample(unname(unlist(icd::icd9_map_ahrq)), size = n, replace = TRUE)
 }
 
 #' generate random strings
@@ -317,15 +317,36 @@ random_string <- function(n, max_chars = 4) {
   )  %>% apply(1, paste0, collapse = "")
 }
 
-#' allow microbenchmark to compare multiple results
+#' allow \pkg{microbenchmark} to compare multiple results
 #' @param x list of values to compare for identity, e.g. results from evaluated
 #'   expression in \code{microbenchmark::microbenchmark}
 #' @keywords internal
 all_identical <- function(x)
   all(sapply(x[-1], function(y) identical(x[[1]], y)))
 
+get_one_of_each <- function()
+  c("002.3", "140.25", "245", "285", "290.01", "389.00",
+    "390.00", "518", "525", "581", "631", "700", "720", "759.99",
+    "765", "780.95", "800", "V02.34", "E900.4")
+
+#' Set up a test environment which also has the internal functions
+#' @keywords internal debugging data
 test_env <- function() {
   ns <- getNamespace("icd")
   list2env(as.list(ns, all.names = TRUE), parent = parent.env(ns))
 }
+
+#' Set system environment to do extra tests
+#'
+#' These extra tests are not run except for one CI job, and locally as needed.
+#' The frequently run tests cover the core code, whereas the extra tests cover
+#' things like parsing the ICD and comorbidity definitions.
+#' @keywords internal debugging
+do_extra_tests <- function(value = "true") {
+  Sys.setenv(ICD_TEST_SLOW = value)
+  Sys.setenv(ICD_TEST_BUILD_DATA = value)
+  Sys.setenv(ICD_TEST_DEPRECATED = value)
+}
+
 #nocov end
+

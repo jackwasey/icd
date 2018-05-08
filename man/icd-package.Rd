@@ -122,7 +122,7 @@ ambiguities and code formats are handled.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/jackwasey/icd}
+  \item \url{https://jackwasey.github.io/icd/}
   \item Report bugs at \url{https://github.com/jackwasey/icd/issues}
 }
 

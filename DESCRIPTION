@@ -1,13 +1,14 @@
 Package: icd
 Title: Tools for Working with ICD-9 and ICD-10 Codes, and
     Finding Comorbidities
-Version: 3.0.1
-Date: 2018-05-01
+Version: 3.1.2
+Date: 2018-05-08
 Authors@R: 
     c(person(given = "Jack O.",
              family = "Wasey",
              role = c("aut", "cre", "cph"),
-             email = "jack@jackwasey.com"),
+             email = "jack@jackwasey.com",
+             comment = c(ORCID = "0000-0003-3738-4637")),
       person(given = "William",
              family = "Murphy",
              role = "ctb",
@@ -43,7 +44,7 @@ Description: Calculate comorbidities, Charlson scores, perform
     and Elixhauser versions), Elixhauser and AHRQ included.  Common
     ambiguities and code formats are handled.
 License: GPL-3
-URL: https://github.com/jackwasey/icd
+URL: https://jackwasey.github.io/icd/
 BugReports: https://github.com/jackwasey/icd/issues
 Depends:
     R (>= 3.4)
@@ -55,11 +56,11 @@ Imports:
     utils
 Suggests:
     knitr,
-    RODBC,
     roxygen2 (>= 5.0.0),
     rmarkdown,
-    stringr,
+    rticles,
     testthat (>= 0.11.1),
+    tinytex,
     xml2
 LinkingTo:
     Rcpp,
