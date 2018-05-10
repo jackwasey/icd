@@ -59,17 +59,17 @@ children.character <- function(x, ...) {
   # eventually UseMethod again, but this would be circular until the icd10
   # method is defined.
   if (ver %in% icd9_classes)
-    return(children.icd9(x = x, ...))
+    return(children.icd9cm(x = x, ...))
   if (ver == "icd10")
     return(children.icd10(x = x, ...))
   if (ver == "icd10cm")
     return(children.icd10cm(x = x, ...))
 }
 
-#' @describeIn children Get children of ICD-9 codes
+#' @describeIn children Get children of ICD-9-CM codes
 #' @export
-children.icd9 <- function(x, short_code = guess_short(x),
-                          defined = TRUE, billable = FALSE, ...) {
+children.icd9cm <- function(x, short_code = guess_short(x),
+                            defined = TRUE, billable = FALSE, ...) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   assert_flag(defined)
@@ -94,6 +94,14 @@ children.icd9 <- function(x, short_code = guess_short(x),
     return(as.icd9cm(res))
   res
 }
+
+#' @describeIn children Get children of ICD-9 codes, based on the superset
+#'   ICD-9-CM at present
+#' @export
+children.icd9 <- function(x, short_code = guess_short(x),
+                          defined = TRUE, billable = FALSE, ...)
+  children.icd9cm(x, short_code = short_code,
+                  defined = defined, billable = billable)
 
 #' @describeIn children Get children of ICD-10 codes (warns because this
 #'   only applies to ICD-10-CM for now).

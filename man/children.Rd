@@ -3,6 +3,7 @@
 \name{children}
 \alias{children}
 \alias{children.character}
+\alias{children.icd9cm}
 \alias{children.icd9}
 \alias{children.icd10}
 \alias{children.icd10cm}
@@ -18,6 +19,9 @@
 children(x, ...)
 
 \method{children}{character}(x, ...)
+
+\method{children}{icd9cm}(x, short_code = guess_short(x), defined = TRUE,
+  billable = FALSE, ...)
 
 \method{children}{icd9}(x, short_code = guess_short(x), defined = TRUE,
   billable = FALSE, ...)
@@ -73,7 +77,10 @@ codes which are \emph{defined} or \emph{billable} (leaf nodes).
 \item \code{character}: Get child codes, guessing ICD version and short
 versus decimal format
 
-\item \code{icd9}: Get children of ICD-9 codes
+\item \code{icd9cm}: Get children of ICD-9-CM codes
+
+\item \code{icd9}: Get children of ICD-9 codes, based on the superset
+ICD-9-CM at present
 
 \item \code{icd10}: Get children of ICD-10 codes (warns because this
 only applies to ICD-10-CM for now).

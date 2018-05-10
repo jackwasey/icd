@@ -393,5 +393,4 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   }
   invisible(icd10_map_quan_deyo)
 }
-
 #nocov end
