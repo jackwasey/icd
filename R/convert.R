@@ -113,6 +113,8 @@ wide_to_long <- function(x,
                          icd_name = "icd_code",
                          icd_regex = c("icd", "diag", "dx_", "dx")) {
   assert_data_frame(x, min.rows = 1, min.cols = 2)
+  # explicitly make a data frame so tibble works (and maybe data.table, too?)
+  x <- as.data.frame(x)
   assert_string(visit_name)
   assert(check_null(icd_labels),
          check_character(icd_labels, min.len = 1))
