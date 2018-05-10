@@ -107,8 +107,19 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'   stringsAsFactors = FALSE)
 #' comorbid(two_pts, map = my_map)
 #' @export
-comorbid <- function(x, map, ...)
-  switch_ver_cmb(x, list(icd9 = icd9_comorbid, icd10 = icd10_comorbid), map = map, ...)
+comorbid <- function(x, map,
+                     visit_name = NULL,
+                     icd_name = NULL,
+                     short_code = guess_short(x, icd_name = icd_name),
+                     short_map = guess_short(map),
+                     return_df = FALSE, ...)
+  switch_ver_cmb(x,
+                 funs = list(icd9 = icd9_comorbid, icd10 = icd10_comorbid),
+                 map = map,
+                 visit_name = visit_name,
+                 icd_name = icd_name,
+                 short_code = short_code,
+                 return_df = return_df, ...)
 
 #' @describeIn comorbid ICD-10 comorbidities
 #' @param icd10_comorbid_fun function Internal parameter, default will be fast
