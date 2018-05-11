@@ -32,8 +32,9 @@ icd10_generate_map_pccc_pc(save_data = TRUE)
 data}
 }
 \description{
-There are four maps: ICD-9 diagnosis and procedure codes, ICD-10 diagnosis
-and procedure codes.
+There are seven maps: ICD-9 diagnosis and procedure codes, ICD-10 diagnosis
+and procedure codes. There is no eighth map because there are no elements of
+ICD-10 procedure codes for 'fixed' comorbidities.
 }
 \examples{
 icd:::generate_maps_pccc(save_data = FALSE)

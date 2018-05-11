@@ -19,8 +19,12 @@
 
 #' Generate PCCC data
 #'
-#' There are four maps: ICD-9 diagnosis and procedure codes, ICD-10 diagnosis
-#' and procedure codes.
+#' There are seven maps: ICD-9 diagnosis and procedure codes, ICD-10 diagnosis
+#' and procedure codes. There is no eighth map because there are no elements of
+#' ICD-10 procedure codes for 'fixed' comorbidities.
+#'
+#' The 'fixed' data are those identified in the JAMA Pediatrics letter which
+#' required exact matching to avoid overly broad capture of diagnoses.
 #' @template save_data
 #' @examples
 #' icd:::generate_maps_pccc(save_data = FALSE)
@@ -33,7 +37,7 @@ generate_maps_pccc <- function(save_data = TRUE) {
   icd10_generate_map_pccc_dx(save_data)
   icd10_generate_map_pccc_pc(save_data)
   icd10_generate_map_pccc_fixed_dx(save_data)
-  # missing icd10 fixed?
+  # no icd10 fixed
 }
 
 #' @rdname generate_maps_pccc
@@ -45,16 +49,13 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
                   "35921","35922","35923","35929","3593","3361","3368","3379","3418","34290","3440","34481","3449","34511",
                   "3453","34541","34561","34571","34591","3481","3484","3491","43401","43491","740",
                   "741","742","7595","78003","9962","99663","V452","V5301","V5302"),
-    fixed_neuromusc = c("359","3592"),
     cvd = c("4161","4168","4169","4240","4258","4242","4243","4250","4251","4252","4253",
             "4254","426","4270","4271","4272","4273","4274","4276","4277","4278","4279","4280","42883",
             "4291","4293","43311","7450","7451","7452","7453","7456","746","7471","7472","7473","7474",
             "74781","74789","9960","9961","99661","99662","V421","V422","V432","V433","V450","V4581",
             "V533"),
-    fixed_cvd = c("416"),
     respiratory = c("32725","4160","4162","51630","51631","51637","51884","5190","2770","748","7704","V426",
                     "V440","V4576","V460","V461","V550"),
-    fixed_respiratory = c("5163"),
     renal = c("34461","585","5964","59653","59654","753","99668","V420","V445","V446",
               "V451","V4573","V4574","V536","V555","V556","V56"),
     gi = c("4530","5364","555","556","5571","5602","5647","5714","5715","5716","5717",
@@ -89,7 +90,7 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
     save_in_data_dir(icd9_map_pccc_dx)
     save_in_data_dir(icd9_map_pccc_orig_dx)
   }
-  invisible(icd9_map_pccc_dx)
+  invisible(list(icd9_map_pccc_dx, icd9_map_pccc_orig_dx))
 }
 
 #' @rdname generate_maps_pccc
@@ -100,15 +101,9 @@ icd9_generate_map_pccc_fixed_dx <- function(save_data = TRUE) {
     cvd = c("416"),
     respiratory = c("5163")
   )
-  icd9_map_pccc_fixed_dx <- lapply(
-    icd9_map_pccc_orig_fixed_dx,
-    children.icd9, short_code = TRUE, defined = FALSE)
-  # TODO icd_names_pccc etc
   icd9_map_pccc_fixed_dx <- as.comorbidity_map(icd9_map_pccc_fixed_dx)
-  if (save_data) {
+  if (save_data)
     save_in_data_dir(icd9_map_pccc_fixed_dx)
-    save_in_data_dir(icd9_map_pccc_orig_fixed_dx)
-  }
   invisible(icd9_map_pccc_fixed_dx)
 }
 
@@ -137,7 +132,6 @@ icd9_generate_map_pccc_pc <- function(save_data = TRUE) {
                     "4194"),
     metabolic = c("064","0652","0681","073","0764","0765","0768","0769","6241","645","6551",
                   "6553","6561","6563","6841","6849","6851","6859","6861","6869","6871","6879","8606"),
-    fixed_metabolic = c("624"),
     malignancy = c("0010","9925"),
     tech_dep = c("0221","0222","0231","0232","0233","0234","0235","0239","0241","0242","0293","0371",
                  "0372","0379","0393","0397","0492","0050","0051","0053","0054","0055","0057","1751","1752",
@@ -160,20 +154,15 @@ icd9_generate_map_pccc_pc <- function(save_data = TRUE) {
     save_in_data_dir(icd9_map_pccc_pc)
     save_in_data_dir(icd9_map_pccc_orig_pc)
   }
-  invisible(icd9_map_pccc_pc)
+  invisible(list(icd9_map_pccc_pc, icd9_map_pccc_orig_pc))
 }
 
 #' @rdname generate_maps_pccc
 #' @keywords internal
 icd9_generate_map_pccc_fixed_pc <- function(save_data = TRUE) {
-  icd9_map_pccc_orig_fixed_pc <- list(
-    metabolic = c("624")
-  )
-  icd9_map_pccc_fixed_pc <- as.comorbidity_map(icd9_map_pccc_orig_fixed_pc)
-  if (save_data) {
+  icd9_map_pccc_fixed_pc <- as.comorbidity_map(list(metabolic = c("624")))
+  if (save_data)
     save_in_data_dir(icd9_map_pccc_fixed_pc)
-    save_in_data_dir(icd9_map_pccc_orig_fixed_pc)
-  }
   invisible(icd9_map_pccc_fixed_pc)
 }
 
@@ -190,7 +179,6 @@ icd10_generate_map_pccc_dx <- function(save_data) {
                   "G20","G210","G2111","G2119","G218","G230","G231","G232","G238","G2402","G248",
                   "G254","G255","G2581","G2582","G2583","G2589","G259","R403","G9782","T8509XA",
                   "T85190A","T85192A","T85199A","T8579XA","Z982","Z4541","Z4542", "Q851"),
-    fixed_neuromusc = c("G80"),
     cvd = c("I270","I271","I272","I2781","I2789","I279","I340","I348","I360","I368","I370",
             "I378","I42","I43","I44","I45","I47","I48","I490","I491","I493","I494","I495","I498","I499",
             "I509","I515","I517","I5181","I63139","I63239","Q20","Q212","Q213","Q214","Q218","Q219","Q22","Q23",
@@ -254,30 +242,20 @@ icd10_generate_map_pccc_dx <- function(save_data) {
   icd10_map_pccc_dx <- lapply(
     icd10_map_pccc_orig_dx,
     children_defined.icd10cm, short_code = TRUE)
-  # TODO: need icd::names_pccc etc
   icd10_map_pccc_dx <- as.comorbidity_map(icd10_map_pccc_dx)
   if (save_data) {
     save_in_data_dir(icd10_map_pccc_dx)
     save_in_data_dir(icd10_map_pccc_orig_dx)
   }
-  invisible(icd10_map_pccc_dx)
+  invisible(list(icd10_map_pccc_dx, icd10_map_pccc_orig_dx))
 }
 
 #' @rdname generate_maps_pccc
 #' @keywords internal
 icd10_generate_map_pccc_fixed_dx <- function(save_data) {
-  icd10_map_pccc_orig_fixed_dx <- list(
-    neuromusc = c("G80")
-  )
-  icd10_map_pccc_fixed_dx <- lapply(
-    icd10_map_pccc_orig_fixed_dx,
-    children_defined.icd10cm, short_code = TRUE)
-  # TODO: need icd::names_pccc etc
-  icd10_map_pccc_fixed_dx <- as.comorbidity_map(icd10_map_pccc_fixed_dx)
-  if (save_data) {
+  icd10_map_pccc_fixed_dx <- as.comorbidity_map(list(neuromusc = c("G80")))
+  if (save_data)
     save_in_data_dir(icd10_map_pccc_fixed_dx)
-    save_in_data_dir(icd10_map_pccc_orig_fixed_dx)
-  }
   invisible(icd10_map_pccc_fixed_dx)
 }
 
@@ -489,6 +467,3 @@ icd10_generate_map_pccc_pc <- function(save_data = TRUE) {
   invisible(icd10_map_pccc_pc)
 }
 #nocov end
-
-
-#TODO fixed metabolic PC for ICD-10, and fixed_cvd, fixed_respiratory diagnosis codes for ICD-10 missing from source?
