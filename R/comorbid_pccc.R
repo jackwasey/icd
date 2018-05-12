@@ -14,10 +14,8 @@ icd9_comorbid_pccc_dx <- function(x,
                                   icd_name = NULL,
                                   short_code = guess_short(x, icd_name = icd_name),
                                   return_df = FALSE, ...) {
-  i9map <- if (!pccc_orig_maps) icd::icd9_map_pccc_dx else icd::icd9_map_pccc_orig_dx
-  i9fixed <- if (!pccc_orig_maps) icd::icd9_map_pccc_fixed_dx else icd::icd9_map_pccc_orig_fixed_dx
   not_fixed <- icd9_comorbid(x = x,
-                             map = i9map,
+                             map = icd::icd9_map_pccc_dx,
                              visit_name = visit_name,
                              icd_name = icd_name,
                              short_code = short_code,
@@ -25,7 +23,7 @@ icd9_comorbid_pccc_dx <- function(x,
                              return_df = FALSE,
                              ...)
   fixed <- icd9_comorbid(x = x,
-                         map = i9fixed,
+                         map = icd::icd9_map_pccc_orig_fixed_dx,
                          visit_name = visit_name,
                          icd_name = icd_name,
                          short_code = short_code,

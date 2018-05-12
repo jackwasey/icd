@@ -10,3 +10,7 @@ icd9_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
 \description{
 Calculate pediatric complex chronic conditions (PCCC) comorbidities
 }
+\examples{
+# not pediatric data, but let's look for this example
+head(icd9_comorbid_pccc_dx(wide_to_long(vermont_dx)))
+}

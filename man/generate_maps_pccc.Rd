@@ -36,6 +36,10 @@ There are seven maps: ICD-9 diagnosis and procedure codes, ICD-10 diagnosis
 and procedure codes. There is no eighth map because there are no elements of
 ICD-10 procedure codes for 'fixed' comorbidities.
 }
+\details{
+The 'fixed' data are those identified in the JAMA Pediatrics letter which
+required exact matching to avoid overly broad capture of diagnoses.
+}
 \examples{
 icd:::generate_maps_pccc(save_data = FALSE)
 }
