@@ -105,8 +105,7 @@
 #'   between revisions by different authors. \code{\link{icd9cm_hierarchy}} is a
 #'   \code{data.frame} containing the full ICD-9 classification for each
 #'   diagnosis. \code{\link{icd9_chapters}} contains definitions of chapters,
-#'   sub-chapters and three-digit groups.}
-#'   }
+#'   sub-chapters and three-digit groups.} }
 #' @docType package
 #' @name icd-package
 #' @aliases icd icd-package package-icd package-icd9 icd9-package icd10-package
@@ -121,8 +120,9 @@
 #' @importFrom checkmate assert assert_flag assert_list assert_data_frame
 #'   assert_string check_string check_null check_factor check_character
 #'   assert_int expect_numeric check_flag assert_logical assert_character
-#'   check_data_frame check_matrix assert_count expect_data_frame
-#'   assert_scalar
+#'   check_data_frame check_matrix assert_count expect_data_frame assert_scalar
+#'   assert_environment assert_vector assert_matrix assert_integer
+#'   expect_scalar_na expect_logical assert_integerish expect_character
 #' @importFrom magrittr "%>%" "%<>%" set_names extract2
 #' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames
