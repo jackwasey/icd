@@ -66,6 +66,9 @@ condense.icd9 <- function(x, short_code = guess_short(x), defined = NULL, warn =
     icd9_condense_decimal(x, defined = defined, warn = warn, ...)
 }
 
+# TODO: condense.icd10, especially thinking of the long lists of ICD-10 codes in
+# PCCC maps.
+
 #' @describeIn condense Condense a set of ICD codes, guessing ICD version
 #'   from input data
 #' @export

@@ -380,3 +380,11 @@ test_that("if we try to do comorbidity calc on wide data, it gives error", {
   expect_error(comorbid_elix(vermont_dx), regex = "wide data")
   expect_error(comorbid_charlson(long_to_wide(uranium_pathology, return_df = TRUE)), regex = "wide data")
 })
+
+test_that("code appearing in two icd9 comorbidities", {
+  dat <- data.frame(id = 1, icd9 = c("123"))
+  map <- list(a = "123", b = "123")
+  expect_identical(icd9_comorbid(dat, map),
+                   matrix(c(TRUE, TRUE), nrow = 1, dimnames = list("1", c("a", "b")))
+  )
+})
