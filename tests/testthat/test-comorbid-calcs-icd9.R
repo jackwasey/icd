@@ -384,7 +384,8 @@ test_that("if we try to do comorbidity calc on wide data, it gives error", {
 test_that("code appearing in two icd9 comorbidities", {
   dat <- data.frame(id = 1, icd9 = c("123"))
   map <- list(a = "123", b = "123")
-  expect_identical(icd9_comorbid(dat, map),
+  expect_identical(res <- icd9_comorbid(dat, map),
                    matrix(c(TRUE, TRUE), nrow = 1, dimnames = list("1", c("a", "b")))
   )
+  expect_identical(res, icd9_comorbid(dat, map, comorbid_fun = icd:::icd9ComorbidShortCpp))
 })

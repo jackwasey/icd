@@ -25,10 +25,10 @@ vec_to_env_true <- function(x, val = TRUE, env = new.env(hash = TRUE, parent = b
   env
 }
 
-vec_to_env_count <- function(x, env = new.env(hash = TRUE, parent = baseenv())) {
-  for (i in 1L:length(x)) {
+vec_to_env_count <- function(x, env = new.env(hash = TRUE,
+                                              parent = baseenv())) {
+  for (i in seq_along(x))
     env[[x[i]]] <- i
-  }
   env
 }
 
@@ -44,10 +44,10 @@ env_to_vec_flip <- function(env) {
   invisible(out)
 }
 
-vec_to_lookup_pair <- function(x, env = new.env(hash = TRUE, parent = baseenv())) {
-  for (i in 1L:length(x)) {
+vec_to_lookup_pair <- function(x, env = new.env(hash = TRUE,
+                                                parent = baseenv())) {
+  for (i in seq_along(x))
     env[[x[i]]] <- i
-  }
   invisible(list(env = env, vec = x))
 }
 

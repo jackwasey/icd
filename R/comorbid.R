@@ -249,18 +249,13 @@ comorbid_common <- function(x,
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)
-
   stopifnot(visit_name %in% names(x))
-
   map <- lapply(map, as_char_no_warn)
-
-  # we need to convert to string and group these anyway, and much easier and
-  # pretty quick to do it here:
+  # need to convert to string and group these anyway, and much easier and
+  # pretty quick to do it here than in C++
   visit_was_factor <- is.factor(x[[visit_name]])
-
   if (visit_was_factor)
     iv_levels <- levels(x[[visit_name]]) # maybe superfluous as we rebuild at end?
-
   if (nrow(x) == 0) {
     empty_mat_out <- matrix(nrow = 0,
                             ncol = length(map),
@@ -275,14 +270,11 @@ comorbid_common <- function(x,
     rownames(df_out) <- NULL
     return(df_out)
   }
-
   # may be slow for big data. `rle` might be quicker if we know that
   # patient-visit rows are always contiguous.
   uniq_visits <- unique(x[[visit_name]]) # factor or vector
-
   if (!is.character(x[[visit_name]]))
     x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
-
   # start with a factor for the icd codes in x, recode (and drop superfluous)
   # icd codes in the mapping, then do very fast match on integer without need
   # for N, V or E distinction. Char to factor conversion in R is very fast.
@@ -290,27 +282,22 @@ comorbid_common <- function(x,
     unlist(map, use.names = FALSE),
     x[[icd_name]]
   )
-
   # Internally, the \code{sort} is slow. This step is one of the slowest steps
   # with very large numbers of patients. #TODO SLOW
   x[[icd_name]] <- factor_nosort(x[[icd_name]], levels = relevant_codes)
   # get the visits where there is at least one code which is not in comorbidity
-  # map. many rows are NA, because most are NOT in comorbidity maps:
-
-  # but first keep track of the visits with no comorbidities in the given map
-  # using internal subset for speed
+  # map. many rows are NA, because most are NOT in comorbidity maps: but first
+  # keep track of the visits with no comorbidities in the given map using
+  # internal subset for speed
   visit_not_comorbid <- unique(
     .subset2(
       .subset(x, is.na(
         .subset2(x, icd_name))), visit_name))
   # then drop the rows where the code was not in a map
-
   visit_not_comorbid <- unique(.subset2(x, visit_name)[is.na(.subset2(x, icd_name))])
-
   x <- x[!is.na(x[[icd_name]]), ]
   # now make remove rows where there was both NA and a real code:
   visit_not_comorbid <- visit_not_comorbid[visit_not_comorbid %nin% x[[visit_name]]]
-
   map <- lapply(map, function(y) {
     f <- factor_nosort(y, levels = relevant_codes)
     # drop map codes that were not in the input comorbidities

@@ -54,6 +54,7 @@ release_questions <- function() {
     "Are github pages site refreshed by running pkgdown::build_site() in the
     main branch, then commiting the contents of docs/ to the gh-pages branch?",
     # code quality:
+    "Consider results of 'goodpractice' package.",
     "Are you happy with the code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
     "Are all public S3 classes all exported? use devtools::missing_s3()",
