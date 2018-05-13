@@ -113,7 +113,6 @@ ambiguities and code formats are handled.
   \code{data.frame} containing the full ICD-9 classification for each
   diagnosis. \code{\link{icd9_chapters}} contains definitions of chapters,
   sub-chapters and three-digit groups.}
-
   }
 }
 \references{

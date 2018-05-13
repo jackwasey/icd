@@ -89,11 +89,11 @@ test_that("cmb from a ICD-10, no infinite recursion with Elix", {
                         "comorbid_quan_deyo", "comorbid_ahrq")) {
         code_w_class <- do.call(class_fun, list(code))
         df <- data.frame(visit = 1, code = code_w_class, stringsAsFactors = FALSE)
-        expect_error(res <- do.call(map_fun, list(x = df)), regex = NA, info = paste(class_fun, map_fun))
+        expect_error(res <- do.call(map_fun, list(x = df)), regexp = NA, info = paste(class_fun, map_fun))
         expect_true(res[, "CHF"])
         expect_false("HTNcx" %in% names(res))
         df2 <- data.frame(visit = c(1, 2), code = c(code_w_class, code_w_class), stringsAsFactors = FALSE)
-        expect_error(res <- do.call(map_fun, list(df2)), regex = NA, info = paste(class_fun, map_fun))
+        expect_error(res <- do.call(map_fun, list(df2)), regexp = NA, info = paste(class_fun, map_fun))
         expect_true(all(res[, "CHF"]))
         expect_false("HTNcx" %in% names(res))
       }
