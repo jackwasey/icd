@@ -119,7 +119,9 @@
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd, .registration=TRUE
 #' @importFrom Rcpp cppFunction
-#' @importFrom checkmate assert assert_flag assert_list assert_data_frame assert_string
+#' @importFrom checkmate assert assert_flag assert_list assert_data_frame
+#'   assert_string check_string check_null check_factor check_character
+#'   assert_int expect_numeric
 #' @importFrom magrittr "%>%" "%<>%" set_names extract2
 #' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames
