@@ -102,7 +102,7 @@ comorbid_hcc_worker <- function(x,
   for (i in 1:6) todrop[[i]] <- x[!is.na(x$ifcc), c(3, 4, 5 + i)]
   # Rename all dataframes in list to same column names
   # rbind into a single dataframe
-  todrop <- lapply(1:length(todrop), function(x) {
+  todrop <- lapply(seq_along(todrop), function(x) {
     names(todrop[[x]]) <- c(visit_name, date_name, "cc")
     todrop[[x]]
   })

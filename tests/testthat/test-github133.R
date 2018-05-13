@@ -25,7 +25,7 @@ test_that("github #133 minimal example of bug", {
     visit = c("a"),
     icd = as.icd10(""),
     date = as.Date(c("2011-01-01")),
-    stringsAsFactors = FALSE);
+    stringsAsFactors = FALSE)
   res <- icd::icd10_comorbid(pts10, map = icd10_map_ahrq)
   expect_equal(dim(res), c(1L, 30L))
   expect_equal(sum(res), 0)
@@ -35,7 +35,7 @@ test_that("github #133 minimal example of bug", {
   pts10 <- icd_long_data(
     visit = c("a"),
     icd = as.icd10(NA_character_),
-    date = as.Date(c("2011-01-01")));
+    date = as.Date(c("2011-01-01")))
 
   test_that("github #133 is NA also okay?", {
     # just run to check it doesn't segfault

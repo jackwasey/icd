@@ -190,10 +190,10 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   stopifnot(!anyNA(reorder))
   stopifnot(!any(grepl(out[["code"]], pattern = "[[:space:]]")))
   stopifnot(!anyDuplicated(reorder))
-  stopifnot(all(1:nrow(out)) %in% reorder)
+  stopifnot(all(seq_along(out)) %in% reorder)
   # catches a mistaken zero-indexed reorder result
-  stopifnot(length(setdiff(1:nrow(out), reorder)) == 0)
-  stopifnot(length(setdiff(reorder, 1:nrow(out))) == 0)
+  stopifnot(length(setdiff(seq_along(out), reorder)) == 0)
+  stopifnot(length(setdiff(reorder, seq_along(out))) == 0)
   message("order found")
   out <- out[reorder, ]
   message("reordered")
