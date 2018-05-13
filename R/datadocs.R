@@ -381,11 +381,8 @@ NULL
 #'   \url{https://www.ncbi.nlm.nih.gov/pubmed/25102958}
 #' @seealso \url{https://feudtnerlab.research.chop.edu/ccc_version_2.php}
 #' @name icd9_map_pccc
-#' @aliases icd9_map_pccc_dx icd9_map_pccc_pc icd9_map_pccc_fixed_pc
-#'   icd9_map_pccc_fixed_pc icd10_map_pccc_dx icd10_map_pccc_fixed_dx
-#'   icd10_map_pccc_pc icd9_map_pccc_orig_dx icd9_map_pccc_orig_pc
-#'   icd9_map_pccc_orig_fixed_pc icd9_map_pccc_orig_fixed_pc
-#'   icd10_map_pccc_orig_dx icd10_map_pccc_orig_fixed_dx icd10_map_pccc_orig_pc
+#' @aliases icd9_map_pccc_dx icd9_map_pccc_pc icd10_map_pccc_dx
+#'   icd10_map_pccc_pc
 #' @docType data
 #' @keywords datasets
 NULL

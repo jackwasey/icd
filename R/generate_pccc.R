@@ -32,11 +32,8 @@
 generate_maps_pccc <- function(save_data = TRUE) {
   icd9_generate_map_pccc_dx(save_data)
   icd9_generate_map_pccc_pc(save_data)
-  icd9_generate_map_pccc_fixed_dx(save_data)
-  icd9_generate_map_pccc_fixed_pc(save_data)
   icd10_generate_map_pccc_dx(save_data)
   icd10_generate_map_pccc_pc(save_data)
-  icd10_generate_map_pccc_fixed_dx(save_data)
   # no icd10 fixed
 }
 
@@ -85,6 +82,10 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
   icd9_map_pccc_dx <- lapply(
     icd9_map_pccc_orig_dx,
     children.icd9, short_code = TRUE, defined = FALSE)
+  # the following are "fixed", replicating the JAMA Pediatrics Letter
+  icd9_map_pccc_dx[["neuromusc"]] %<>% c("359","3592")
+  icd9_map_pccc_dx[["cvd"]] %<>% c("416")
+  icd9_map_pccc_dx[["respiratory"]] %<>% c("5163")
   # TODO icd_names_pccc etc
   icd9_map_pccc_dx <- as.comorbidity_map(icd9_map_pccc_dx)
   if (save_data) {
@@ -92,20 +93,6 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
     save_in_data_dir(icd9_map_pccc_orig_dx)
   }
   invisible(list(icd9_map_pccc_dx, icd9_map_pccc_orig_dx))
-}
-
-#' @rdname generate_maps_pccc
-#' @keywords internal
-icd9_generate_map_pccc_fixed_dx <- function(save_data = TRUE) {
-  icd9_map_pccc_orig_fixed_dx <- list(
-    neuromusc = c("359","3592"),
-    cvd = c("416"),
-    respiratory = c("5163")
-  )
-  icd9_map_pccc_fixed_dx <- as.comorbidity_map(icd9_map_pccc_fixed_dx)
-  if (save_data)
-    save_in_data_dir(icd9_map_pccc_fixed_dx)
-  invisible(icd9_map_pccc_fixed_dx)
 }
 
 #' @rdname generate_maps_pccc
@@ -150,21 +137,14 @@ icd9_generate_map_pccc_pc <- function(save_data = TRUE) {
                    "5283","5284","5285","5286","4100","4101","4102","4103","4104","4105","4106","4107","4108",
                    "4109","4194","0091","0092","0093")
   )
+  # no mechanism for children of procedure codes yet
+  icd9_map_pccc_orig_pc[["metabolic"]] %<>% c("624")
   icd9_map_pccc_pc <- as.comorbidity_map(icd9_map_pccc_orig_pc)
   if (save_data) {
     save_in_data_dir(icd9_map_pccc_pc)
     save_in_data_dir(icd9_map_pccc_orig_pc)
   }
   invisible(list(icd9_map_pccc_pc, icd9_map_pccc_orig_pc))
-}
-
-#' @rdname generate_maps_pccc
-#' @keywords internal
-icd9_generate_map_pccc_fixed_pc <- function(save_data = TRUE) {
-  icd9_map_pccc_fixed_pc <- as.comorbidity_map(list(metabolic = c("624")))
-  if (save_data)
-    save_in_data_dir(icd9_map_pccc_fixed_pc)
-  invisible(icd9_map_pccc_fixed_pc)
 }
 
 #' @rdname generate_maps_pccc
@@ -243,21 +223,14 @@ icd10_generate_map_pccc_dx <- function(save_data) {
   icd10_map_pccc_dx <- lapply(
     icd10_map_pccc_orig_dx,
     children_defined.icd10cm, short_code = TRUE)
+  # add the fixed code, per JAMA Pediatrics Letter
+  icd10_map_pccc_dx[["neuromusc"]] %<>% c("G80")
   icd10_map_pccc_dx <- as.comorbidity_map(icd10_map_pccc_dx)
   if (save_data) {
     save_in_data_dir(icd10_map_pccc_dx)
     save_in_data_dir(icd10_map_pccc_orig_dx)
   }
   invisible(list(icd10_map_pccc_dx, icd10_map_pccc_orig_dx))
-}
-
-#' @rdname generate_maps_pccc
-#' @keywords internal
-icd10_generate_map_pccc_fixed_dx <- function(save_data) {
-  icd10_map_pccc_fixed_dx <- as.comorbidity_map(list(neuromusc = c("G80")))
-  if (save_data)
-    save_in_data_dir(icd10_map_pccc_fixed_dx)
-  invisible(icd10_map_pccc_fixed_dx)
 }
 
 #' @rdname generate_maps_pccc

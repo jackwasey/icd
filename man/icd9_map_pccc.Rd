@@ -5,16 +5,8 @@
 \alias{icd9_map_pccc}
 \alias{icd9_map_pccc_dx}
 \alias{icd9_map_pccc_pc}
-\alias{icd9_map_pccc_fixed_pc}
 \alias{icd10_map_pccc_dx}
-\alias{icd10_map_pccc_fixed_dx}
 \alias{icd10_map_pccc_pc}
-\alias{icd9_map_pccc_orig_dx}
-\alias{icd9_map_pccc_orig_pc}
-\alias{icd9_map_pccc_orig_fixed_pc}
-\alias{icd10_map_pccc_orig_dx}
-\alias{icd10_map_pccc_orig_fixed_dx}
-\alias{icd10_map_pccc_orig_pc}
 \title{Pediatric Complex Chronic Conditions}
 \description{
 There are seven comorbidity maps which represent the combinations of ICD-9,
