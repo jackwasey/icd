@@ -15,13 +15,16 @@ fastIntToStringRcpp(x)
 
 \item{bufferSize}{int if any input strings are longer than this number
 (default 16) there will be memory errors. No checks done for speed.}
+
+\item{x}{Vector of integers}
+}
+\value{
+Vector of characters
 }
 \description{
 Fast conversion from integer vector to character vector using C++
-}
-\section{Functions}{
-\itemize{
-\item \code{fastIntToStringRcpp}: Same using \code{Rcpp}
-}}
 
+Have tried R, sprintf with Rcpp and C++ standard library.
+}
 \keyword{internal}
+\keyword{manip}

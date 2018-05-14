@@ -16,44 +16,41 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 message("loading helper-base.R")
-
 set.seed(1441)
 n <- 500
 np <- round(n / 20) # icd9 codes per patients
-
-random_short_icd9_codes <- as.character(floor(stats::runif(min = 10000, max = 99999, n = n)))
-random_sample_ahrq_codes <- sample(unname(c(icd9_map_ahrq, recursive = TRUE)),
-                                   replace = TRUE, size = n)
+random_short_icd9_codes <-
+  as.character(floor(stats::runif(min = 10000, max = 99999, n = n)))
+random_sample_ahrq_codes <-
+  sample(unname(c(icd9_map_ahrq, recursive = TRUE)), replace = TRUE, size = n)
 few_icd9_codes <- c("27801", "7208", "25001", "34400", "4011", "4011")
-
 empty_pts <- data.frame(
   visit_id = character(0),
   icd9 = character(0),
   icd10 = character(0),
   poa = character(0)
 )
-
 empty_ahrq_mat <- matrix(nrow = 0, ncol = length(icd9_map_ahrq),
                          dimnames = list(character(0), names(icd9_map_ahrq)))
 empty_ahrq_mat_heir <- matrix(nrow = 0, ncol = length(icd9_map_ahrq),
-                         dimnames = list(character(0), names(icd9_map_ahrq)))
-# according to https://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp
-# diabetes with complications is NOT foldeded into one new category, just hypertension.
-empty_ahrq_mat_heir <- empty_ahrq_mat_heir[, !colnames(empty_ahrq_mat_heir) %in% c("HTNcx")]
-
+                              dimnames = list(character(0), names(icd9_map_ahrq)))
+# according to
+# https://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp
+# diabetes with complications is NOT foldeded into one new category, just
+# hypertension.
+empty_ahrq_mat_heir <-
+  empty_ahrq_mat_heir[, !colnames(empty_ahrq_mat_heir) %in% c("HTNcx")]
 simple_pts <- data.frame(
   visit_id = c(1000, 1000, 1000, 1001, 1001, 1002),
   icd9 = few_icd9_codes,
   poa = factor(c("Y", "N", "Y", "N", "Y", "N"))
 )
-
 simple_poa_pts <- data.frame(
   visit_id = c("v1", "v2", "v3", "v4"),
   code = c("39891", "39790", "41791", "4401"),
   poa = c("y", "N", "E", NA_character_), # should tolerate mixed case
   stringsAsFactors = FALSE
 )
-
 # multiple codes for POA and not POA, bad POA input. Throw in some invalid ICD9
 # codes
 complex_poa_pts <- data.frame(
@@ -62,14 +59,12 @@ complex_poa_pts <- data.frame(
   poa = c("Y", "n", NA_character_, "E", NA_character_, "paris", ""),
   stringsAsFactors = FALSE
 )
-
 random_test_patients <- data.frame(
   visit_id = sample(seq(1, np), replace = TRUE, size = n),
   icd9 = random_short_icd9_codes,
   poa = as.factor(sample(x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
                          replace = TRUE, size = n))
 )
-
 test_twenty <- structure(
   list(visit_id = c(207210584L, 207210584L, 207210584L,
                     207210584L, 207210584L, 207210600L, 207210600L,
@@ -88,7 +83,6 @@ test_twenty <- structure(
   .Names = c("visit_id", "icd9Code", "poa"),
   row.names = 5000000:5000019,
   class = "data.frame")
-
 # first and last item from each AHRQ comorbidity:
 icd:::icd9(
   unlist(
@@ -99,7 +93,6 @@ icd:::icd9(
     )
   )
 ) -> ahrq_end_codes
-
 ahrq_test_dat <- as.icd_long_data(
   data.frame(
     visit_id = rep("visit1", times = length(ahrq_end_codes)),
@@ -107,7 +100,6 @@ ahrq_test_dat <- as.icd_long_data(
     stringsAsFactors = FALSE
   )
 )
-
 elix_end_codes <- unlist(unname(c(lapply(icd9_map_elix, head, n = 1),
                                   lapply(icd9_map_elix, tail, n = 1))))
 elix_test_dat <- data.frame(
@@ -115,7 +107,6 @@ elix_test_dat <- data.frame(
   icd9 = elix_end_codes,
   stringsAsFactors = FALSE
 )
-
 quan_elix_end_codes <- unlist(unname(c(lapply(icd9_map_quan_elix, head, n = 1),
                                        lapply(icd9_map_quan_elix, tail, n = 1))))
 quan_elix_test_dat <- data.frame(
@@ -123,7 +114,6 @@ quan_elix_test_dat <- data.frame(
   icd9 = quan_elix_end_codes,
   stringsAsFactors = FALSE
 )
-
 quan_deyo_end_codes <- unlist(unname(c(lapply(icd9_map_quan_deyo, head, n = 1),
                                        lapply(icd9_map_quan_deyo, tail, n = 1))))
 quan_deyo_test_dat <- data.frame(
@@ -131,7 +121,6 @@ quan_deyo_test_dat <- data.frame(
   icd9 = quan_deyo_end_codes,
   stringsAsFactors = FALSE
 )
-
 multi_comorbid <- rbind(
   ahrq_test_dat,
   elix_test_dat,
@@ -140,33 +129,44 @@ multi_comorbid <- rbind(
 )
 multi_comorbid$visit_id <-
   sample(c("v1", "v2", "v3", "v4"), size = nrow(multi_comorbid), replace = TRUE)
-
 othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
                      "00323", "00324", "00329", "0038", "0039")
-
 # one code from each ICD-9 chapter
 one_of_each <- c("002.3", "140.25", "245", "285", "290.01", "389.00",
                  "390.00", "518", "525", "581", "631", "700", "720", "759.99",
                  "765", "780.95", "800", "V02.34", "E900.4")
-
-# one icd9 patient
 one_pt_one_icd9 <- data.frame(visit_id = c("a"),
                               icd9 = c("042"),
                               stringsAsFactors = FALSE)
-
 one_pt_two_icd9 <- data.frame(visit_id = c("a", "a"),
                               icd9 = c("042", "042"),
                               stringsAsFactors = FALSE)
-
 # two items per map, two codes per item, two codes for two visits
 two_pts <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
                       icd9 = c("040", "000", "100", "000"),
                       stringsAsFactors = FALSE)
 two_map <- list("malady" = c("100", "2000"),
                 "ailment" = c("003", "040"))
-
 pts_invalid_mix <- icd_long_data(
   visit_id = c(1000, 1000, 1001),
   icd9 = icd:::icd9(c("27801", "invalides", "25001")),
   poa = factor(c("Y", "N", "Y")),
   stringsAsFactors = FALSE)
+# Sample datasets for HCC tests
+# 4 patients, some with ICDs that do not exist in CC crosswalk
+# One of the patients with multiple visit dates, all valid ICDs
+hcc_test_simple <- icd_long_data(
+  visit_id = c("1", "2", "3", "4", "4"),
+  icd_code = c("20084", "1742", "30410", "41514", "95893"),
+  date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
+                   "2011-01-04", "2011-01-04")))
+hcc_test_single <- icd_long_data(
+  visit = c("1"),
+  icd_code = c("20084"),
+  date = as.Date(c("2011-01-01")))
+# Mix of valid and invalid ICD Codes
+hcc_test_invalid <- icd_long_data(
+  patient = c("1", "2", "3", "4", "4"),
+  icd_code = c("20084", "174242", "aB30410", "41514", "95893"),
+  date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
+                   "2011-01-04", "2011-01-04")))

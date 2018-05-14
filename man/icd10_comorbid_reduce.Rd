@@ -4,9 +4,8 @@
 \alias{icd10_comorbid_reduce}
 \title{ICD-10 comorbidities by reducing problem size}
 \usage{
-icd10_comorbid_reduce(x = x, map = map, visit_name = visit_name,
-  icd_name = icd_name, short_code = short_code, short_map = short_map,
-  return_df = return_df, ...)
+icd10_comorbid_reduce(x = x, map, visit_name, icd_name, short_code, short_map,
+  return_df, return_binary = FALSE, ...)
 }
 \description{
 Use method to reduce ICD-10 problem by initially finding only relevant codes

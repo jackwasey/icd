@@ -100,14 +100,9 @@ test_that("str_pair_match error if more than two outputs", {
   str_pair_match(string = "hadoop", pattern = "(ha)(do)(op)", pos = c(1, 2))
 })
 
-
 test_that("logical to binary for a matrix works", {
-  # matrix is all logical or all not logical by definition, so this is easy
-  m <- matrix(c(T, F, T, F), nrow = 2)
-  n <- matrix(c(1L, 0L, 1L, 0L), nrow = 2)
-
-  expect_identical(logical_to_binary(m), n)
-
+  expect_identical(logical_to_binary(matrix(c(T, F, T, F), nrow = 2)),
+                   matrix(c(1L, 0L, 1L, 0L), nrow = 2))
 })
 
 test_that("chapter to desc range works for icd9", {

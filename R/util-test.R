@@ -347,5 +347,4 @@ do_extra_tests <- function(value = "true") {
   Sys.setenv(ICD_TEST_BUILD_DATA = value)
   Sys.setenv(ICD_TEST_DEPRECATED = value)
 }
-
 #nocov end

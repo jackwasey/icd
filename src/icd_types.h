@@ -27,6 +27,8 @@ typedef std::vector<Str> VecStr;
 
 typedef std::vector<int> VecInt;
 typedef std::vector<bool> VecBool; // naughty, but good compromise
+typedef std::vector<char> VecChar;
+typedef VecChar::iterator VecCharIt;
 typedef VecInt::const_iterator VecIntIt;
 
 // SOMEDAY replace int with char, but this stops Rcpp::export working

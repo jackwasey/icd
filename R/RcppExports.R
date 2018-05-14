@@ -28,6 +28,7 @@ icd9MajMinToShortSingle_alt_Std <- function(mjr, mnr) {
 #' @template mjr
 #' @template mnr
 #' @template isShort
+#' @return Character vector
 #' @keywords internal manip
 icd9MajMinToCode <- function(mjr, mnr, isShort) {
     .Call(`_icd_icd9MajMinToCode`, mjr, mnr, isShort)
@@ -257,7 +258,12 @@ fastIntToString_alt_Std <- function(x) {
     .Call(`_icd_fastIntToString_alt_Std`, x)
 }
 
-#' @describeIn fastIntToString Same using \code{Rcpp}
+#' @title Convert integers to strings as quickly as possible
+#' @description Have tried R, sprintf with Rcpp and C++ standard library.
+#' @param x Vector of integers
+#' @return Vector of characters
+#' @keywords internal manip
+#' @rdname fastIntToString
 fastIntToStringRcpp <- function(x) {
     .Call(`_icd_fastIntToStringRcpp`, x)
 }

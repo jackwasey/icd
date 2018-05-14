@@ -132,3 +132,26 @@ test_that("providing icd_name to `comorbid` actually works", {
   expect_identical(comorbid(x, map = icd10_map_quan_elix),
                    icd:::icd10_comorbid(x, map = icd10_map_quan_elix, visit_name = "col1", icd_name = "col0"))
 })
+
+test_that("comorbid for icd10 gives binary values if asked for matrices", {
+  res_bin <- comorbid(random_icd10_pts, map = icd10_map_charlson,
+                      return_binary = TRUE, return_df = FALSE)
+  res_log <- comorbid(random_icd10_pts, map = icd10_map_charlson,
+                      return_binary = FALSE, return_df = FALSE)
+  expect_true(is.integer(res_bin))
+  expect_true(is.logical(res_log))
+  expect_equivalent(apply(res_log, 2, as.integer), res_bin)
+  expect_identical(res_bin, logical_to_binary(res_log))
+  expect_identical(res_log, binary_to_logical(res_bin))
+})
+
+test_that("comorbid for icd10 gives binary values if asked for data.frames", {
+  res_bin <- comorbid(random_icd10_pts, map = icd10_map_charlson,
+                      return_binary = TRUE, return_df = TRUE)
+  res_log <- comorbid(random_icd10_pts, map = icd10_map_charlson,
+                      return_binary = FALSE, return_df = TRUE)
+  expect_true(all(vapply(res_bin[-1], is.integer, logical(1))))
+  expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
+  expect_identical(res_bin, logical_to_binary(res_log))
+  expect_identical(res_log, binary_to_logical(res_bin))
+})

@@ -58,6 +58,12 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @template abbrev_names
 #' @template hierarchy
 #' @template return_df
+#' @param return_binary Single logical value, if \code{TRUE}, the returned
+#'   \code{matrix} or \code{data.frame} will be composed of \code{1} and
+#'   \code{0}, instead of \code{TRUE} and \code{FALSE}, respectively. This
+#'   conversion can also be done by the internal functions
+#'   \code{icd:::logical_to_binary} and \code{icd:::binary_to_logical}, or using
+#'   other tools, e.g. \code{apply(x, 2, as.integer)}
 #' @template dotdotdot
 #' @details The order of visits may change depending on the original sequence,
 #'   and the underlying algorithm used. Usually this would be the order of the
@@ -112,14 +118,14 @@ comorbid <- function(x, map,
                      icd_name = NULL,
                      short_code = guess_short(x, icd_name = icd_name),
                      short_map = guess_short(map),
-                     return_df = FALSE, ...)
+                     return_df = FALSE, return_binary = FALSE, ...)
   switch_ver_cmb(x,
                  funs = list(icd9 = icd9_comorbid, icd10 = icd10_comorbid),
                  map = map,
                  visit_name = visit_name,
                  icd_name = icd_name,
                  short_code = short_code,
-                 return_df = return_df, ...)
+                 return_df = return_df, return_binary = return_binary, ...)
 
 #' @describeIn comorbid ICD-10 comorbidities
 #' @param icd10_comorbid_fun function Internal parameter, default will be fast
@@ -133,10 +139,10 @@ icd10_comorbid <- function(x,
                            icd_name = NULL,
                            short_code = NULL,
                            short_map = guess_short(map),
-                           return_df = FALSE,
+                           return_df = FALSE, return_binary = FALSE,
                            icd10_comorbid_fun = icd10_comorbid_reduce, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
-  assert_list(map, any.missing = FALSE, min.len = 1, unique = TRUE, names = "unique")
+  assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
   assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
@@ -148,8 +154,10 @@ icd10_comorbid <- function(x,
     icd_name <- get_icd_name(x)
   if (is.null(short_code))
     short_code <- guess_short(x[[icd_name]])
-  icd10_comorbid_fun(x = x, map = map, visit_name = visit_name, icd_name = icd_name,
-                     short_code = short_code, short_map = short_map, return_df = return_df, ...)
+  icd10_comorbid_fun(x = x, map = map, visit_name = visit_name,
+                     icd_name = icd_name, short_code = short_code,
+                     short_map = short_map, return_df = return_df,
+                     return_binary = return_binary, ...)
 }
 
 #' ICD-10 comorbidities by reducing problem size
@@ -158,16 +166,15 @@ icd10_comorbid <- function(x,
 #' in the map, then populating map only with the exact patient ICD codes (not
 #' the original map codes), before doing 'comorbid_common'
 #' @keywords internal
-icd10_comorbid_reduce <- function(x = x, map = map, visit_name = visit_name,
-                                  icd_name = icd_name, short_code = short_code,
-                                  short_map = short_map, return_df = return_df, ...) {
+icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
+                                  short_map, return_df,
+                                  return_binary = FALSE, ...) {
   if (!short_code)
     x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
-
   reduced_map <- simplify_map_lex(as_char_or_levels(x[[icd_name]]), map)
   comorbid_common(x = x, map = reduced_map,
                   visit_name = visit_name, icd_name = icd_name,
-                  return_df = return_df, ...)
+                  return_df = return_df, return_binary = return_binary, ...)
 }
 
 #' @describeIn comorbid Get comorbidities from \code{data.frame} of ICD-9
@@ -187,6 +194,7 @@ icd9_comorbid <- function(x,
                           short_code = guess_short(x, icd_name = icd_name),
                           short_map = guess_short(map),
                           return_df = FALSE,
+                          return_binary = FALSE,
                           preclean = TRUE,
                           visitId = NULL, #nolint
                           icd9Field = NULL, #nolint
@@ -224,7 +232,8 @@ icd9_comorbid <- function(x,
   if (!short_map)
     map <- lapply(map, decimal_to_short)
   comorbid_common(x = x, map = map, visit_name = visit_name,
-                  icd_name = icd_name, return_df = return_df, ...)
+                  icd_name = icd_name, return_df = return_df,
+                  return_binary = return_binary, ...)
 }
 
 #' Internal function to calculate co-morbidities.
@@ -240,6 +249,7 @@ comorbid_common <- function(x,
                             visit_name = NULL,
                             icd_name,
                             return_df = FALSE,
+                            return_binary = FALSE,
                             comorbid_fun = comorbidMatMul,
                             ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
@@ -265,10 +275,10 @@ comorbid_common <- function(x,
       row_names <- factor_nosort(character(0), levels = iv_levels)
     else
       row_names <- character(0)
-    df_out <- cbind(row_names, as.data.frame(empty_mat_out), stringsAsFactors = visit_was_factor)
-    names(df_out)[1] <- visit_name
-    rownames(df_out) <- NULL
-    return(df_out)
+    df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out), stringsAsFactors = visit_was_factor)
+    names(df_empty_out)[1] <- visit_name
+    rownames(df_empty_out) <- NULL
+    return(df_empty_out)
   }
   # may be slow for big data. `rle` might be quicker if we know that
   # patient-visit rows are always contiguous.
@@ -327,7 +337,7 @@ comorbid_common <- function(x,
   # have started that way)
   mat_new_row_order <- match(rownames(mat_comb), uniq_visits)
   mat <- mat_comb[order(mat_new_row_order),, drop = FALSE] #nolint
-
+  if (return_binary) mat <- logical_to_binary(mat)
   if (!return_df)
     return(mat)
   if (visit_was_factor)

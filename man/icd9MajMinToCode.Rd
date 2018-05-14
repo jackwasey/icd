@@ -25,6 +25,9 @@ digit notation, the 'major' part is the first three characters including
 leading zeroes which may be inferred; the last two characters represent the
 'minor' part.)}
 }
+\value{
+Character vector
+}
 \description{
 In debug mode, will check that \code{mjr} and \code{mnr} are same length.
 }
