@@ -31,9 +31,9 @@
 #' @keywords internal
 generate_maps_pccc <- function(save_data = TRUE) {
   icd9_generate_map_pccc_dx(save_data)
-  icd9_generate_map_pccc_pc(save_data)
+  icd9_generate_map_pccc_pcs(save_data)
   icd10_generate_map_pccc_dx(save_data)
-  icd10_generate_map_pccc_pc(save_data)
+  icd10_generate_map_pccc_pcs(save_data)
   # no icd10 fixed
 }
 
@@ -88,16 +88,14 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
   icd9_map_pccc_dx[["respiratory"]] %<>% c("5163")
   # TODO icd_names_pccc etc
   icd9_map_pccc_dx <- as.comorbidity_map(icd9_map_pccc_dx)
-  if (save_data) {
+  if (save_data)
     save_in_data_dir(icd9_map_pccc_dx)
-    save_in_data_dir(icd9_map_pccc_orig_dx)
-  }
   invisible(icd9_map_pccc_dx)
 }
 
 #' @rdname generate_maps_pccc
 #' @keywords internal
-icd9_generate_map_pccc_pc <- function(save_data = TRUE) {
+icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
   icd9_map_pccc_orig_pc <- list(
     neuromusc = c("0152", "0153", "0221", "0222", "0231", "0232", "0233", "0234", "0235", "0239", "0241",
                   "0242", "0293", "0371", "0372", "0379", "0393", "0397", "0492"),
@@ -139,10 +137,10 @@ icd9_generate_map_pccc_pc <- function(save_data = TRUE) {
   )
   # no mechanism for children of procedure codes yet
   icd9_map_pccc_orig_pc[["metabolic"]] %<>% c("624")
-  icd9_map_pccc_pc <- as.comorbidity_map(icd9_map_pccc_orig_pc)
+  icd9_map_pccc_pcs <- as.comorbidity_map(icd9_map_pccc_orig_pc)
   if (save_data)
-    save_in_data_dir(icd9_map_pccc_pc)
-  invisible(icd9_map_pccc_pc)
+    save_in_data_dir(icd9_map_pccc_pcs)
+  invisible(icd9_map_pccc_pcs)
 }
 
 #' @rdname generate_maps_pccc
@@ -231,7 +229,7 @@ icd10_generate_map_pccc_dx <- function(save_data) {
 
 #' @rdname generate_maps_pccc
 #' @keywords internal
-icd10_generate_map_pccc_pc <- function(save_data = TRUE) {
+icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
   icd10_map_pccc_orig_pc <- list(
     neuromusc = c("0016070", "0016071", "0016072", "0016073", "0016074", "0016075", "0016076", "0016077",
                   "0016078", "001607B", "00160J0", "00160J1", "00160J2", "00160J4", "00160J5", "00160J6", "00160J7",
@@ -429,9 +427,9 @@ icd10_generate_map_pccc_pc <- function(save_data = TRUE) {
                    "30253X1", "30253Y0", "30253Y1", "30260G0", "30260G1", "30260X0", "30260X1", "30260Y0", "30260Y1",
                    "30263G0", "30263G1", "30263X0", "30263X1", "30263Y0", "30263Y1")
   )
-  icd10_map_pccc_pc <- as.comorbidity_map(icd10_map_pccc_orig_pc)
+  icd10_map_pccc_pcs <- as.comorbidity_map(icd10_map_pccc_orig_pc)
   if (save_data)
-    save_in_data_dir(icd10_map_pccc_pc)
-  invisible(icd10_map_pccc_pc)
+    save_in_data_dir(icd10_map_pccc_pcs)
+  invisible(icd10_map_pccc_pcs)
 }
 #nocov end

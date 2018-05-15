@@ -101,7 +101,6 @@ icd10_generate_chap_lookup <- function(lk_majors) {
       chap["end"] <- "Y09"
     si <- grep(chap["start"], lk_majors)
     se <- grep(chap["end"], lk_majors)
-
     chap_lookup <- rbind(
       chap_lookup,
       data.frame(chap_major = lk_majors[si:se], chap_desc = chap_n)
@@ -110,7 +109,7 @@ icd10_generate_chap_lookup <- function(lk_majors) {
   chap_lookup
 }
 
-icd10_parse_ahrq_pc <- function(save_data = TRUE, offline = FALSE) {
+icd10_parse_ahrq_pcs <- function(save_data = TRUE, offline = FALSE) {
   f <- unzip_to_data_raw(
     url = "https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/pc_icd10pcs_2018_1.zip",
     file_name = "pc_icd10pcs_2018.csv", offline = offline)
@@ -122,12 +121,11 @@ icd10_parse_ahrq_pc <- function(save_data = TRUE, offline = FALSE) {
                                  "Major Diagnostic", "Major Therapeutic"))
   dat$class_number <- NULL
   dat$code <- gsub(dat$code, pattern = "'", replacement = "")
-  icd10cm2018pc <- dat[c("code", "desc")]
-  icd10_map_ahrq_pc <- split(dat$code, dat$class)
+  icd10cm2018pcs <- dat[c("code", "desc")]
+  icd10_map_ahrq_pcs <- split(dat$code, dat$class)
   if (save_data) {
-    save_in_data_dir(icd10cm2018pc)
-    save_in_data_dir(icd10_map_ahrq_pc)
+    save_in_data_dir(icd10cm2018pcs)
+    save_in_data_dir(icd10_map_ahrq_pcs)
   }
-
 }
 # nocov end

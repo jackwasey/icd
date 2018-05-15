@@ -3,20 +3,20 @@
 \name{generate_maps_pccc}
 \alias{generate_maps_pccc}
 \alias{icd9_generate_map_pccc_dx}
-\alias{icd9_generate_map_pccc_pc}
+\alias{icd9_generate_map_pccc_pcs}
 \alias{icd10_generate_map_pccc_dx}
-\alias{icd10_generate_map_pccc_pc}
+\alias{icd10_generate_map_pccc_pcs}
 \title{Generate PCCC data}
 \usage{
 generate_maps_pccc(save_data = TRUE)
 
 icd9_generate_map_pccc_dx(save_data = TRUE)
 
-icd9_generate_map_pccc_pc(save_data = TRUE)
+icd9_generate_map_pccc_pcs(save_data = TRUE)
 
 icd10_generate_map_pccc_dx(save_data)
 
-icd10_generate_map_pccc_pc(save_data = TRUE)
+icd10_generate_map_pccc_pcs(save_data = TRUE)
 }
 \arguments{
 \item{save_data}{single logical value, if \code{TRUE} will save the generated

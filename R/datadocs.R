@@ -381,8 +381,29 @@ NULL
 #'   \url{https://www.ncbi.nlm.nih.gov/pubmed/25102958}
 #' @seealso \url{https://feudtnerlab.research.chop.edu/ccc_version_2.php}
 #' @name icd9_map_pccc
-#' @aliases icd9_map_pccc_dx icd9_map_pccc_pc icd10_map_pccc_dx
-#'   icd10_map_pccc_pc
+#' @aliases icd9_map_pccc_dx icd9_map_pccc_pcs icd10_map_pccc_dx
+#'   icd10_map_pccc_pcs
 #' @docType data
 #' @keywords datasets
 NULL
+
+#' ICD-10-CM Procedure Codes
+#'
+#' ICD-10-PCS is the annually-updated set of procedure codes designed by 3M for
+#' the US CMS. There is no directory of WHO ICD procedure codes.
+#' @name icd10pcs2018
+#' @seealso \url{https://www.cms.gov/Medicare/Coding/ICD10/downloads/pcs_refman.pdf}
+#' @docType data
+#' @keywords datasets
+
+#' AHRQ ICD-10-PCS categories
+#'
+#' The AHRQ has categorized each of the ICD-10-PCS (Procedure Codes) into one of
+#' four groups: minor diagnostic, minor therapeutic, major diagnostic or major
+#' therapeutic. This mapping can be used to get the type(s) of procedure(s)
+#' performed on a patient from a \code{data.frame} of patients and associated
+#' procedure codes in 'long' format. See the ICD-10 vignette for an example.
+#' @name icd10_map_ahrq_pcs
+#' @seealso \url{https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp}
+#' @docType data
+#' @keywords datasets

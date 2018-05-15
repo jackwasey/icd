@@ -77,7 +77,11 @@ The AHRQ publishes an annually updated categorization of ICD-10-CM procedure cod
 set.seed(1441)
 pts <- data.frame(id = sample(LETTERS, 10),
                   pc = sample(icd10cm2018pcs$code, 10))
-print(res <- icd10_comorbid(pts, map = icd10_map_ahrq_pc, icd_name = "pc"))
+res <- icd10_comorbid(pts,
+                      map = icd10_map_ahrq_pcs, 
+                      icd_name = "pc",
+                      return_binary = TRUE)
+print(res)
 colSums(res)
 ```
 
