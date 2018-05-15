@@ -53,6 +53,7 @@ update_everything <- function() {
   # ICD 10
   icd10_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
   icd10_parse_cc(save_data = TRUE)
+  icd10_parse_ahrq_pcs(save_data = TRUE)
   icd10_generate_map_quan_elix(save_data = TRUE)
   icd10_generate_map_quan_deyo(save_data = TRUE)
   icd10_generate_map_elix(save_data = TRUE)
