@@ -1,4 +1,4 @@
-Please accept this submission just one week after previous due to significant bug fixes.
+With more users of this package, a bug was revealed which could affect accuracy of results, so please accept this new version.
 
 # Test environments
 * Ubuntu 18.04 R 3.5.0, GCC 7.3, clang 5.0.1
