@@ -15,39 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-icd_data_names <- c(
-  "icd10_map_ahrq",
-  "icd10_map_cc",
-  "icd10_map_elix",
-  "icd10_map_charlson",
-  "icd10_map_quan_deyo",
-  "icd10_map_quan_elix",
-  "icd10_sub_chapters",
-  "icd10cm2016",
-  "icd9_majors",
-  "icd9_map_ahrq",
-  "icd9_map_cc",
-  "icd9_map_elix",
-  "icd9_map_charlson",
-  "icd9_map_quan_deyo",
-  "icd9_map_quan_elix",
-  "icd9_sources",
-  "icd9_sub_chapters",
-  "icd9cm_billable",
-  "icd9cm_hierarchy",
-  "icd9_chapters",
-  "icd10_chapters",
-  "icd_map_cc_hcc",
-  "names_ahrq", "names_ahrq_abbrev", "names_ahrq_htn",
-  "names_ahrq_htn_abbrev", "names_charlson",
-  "names_charlson_abbrev", "names_elix", "names_elix_abbrev",
-  "names_elix_htn", "names_elix_htn_abbrev", "names_quan_elix",
-  "names_quan_elix_abbrev", "names_quan_elix_htn",
-  "names_quan_elix_htn_abbrev",
-  "icd9_map_single_ccs", "icd9_map_multi_ccs",
-  "icd10_map_ccs"
-)
-
 #' ICD-9 chapters
 #'
 #' \code{icd9_chapters}, \code{icd9_chapters_sub} and \code{icd9_majors} contain
@@ -394,6 +361,28 @@ NULL
 #'
 #' List of ICD-9 data sources for different versions of ICD-9-CM
 #' @name icd9_sources
+#' @docType data
+#' @keywords datasets
+NULL
+
+#' Pediatric Complex Chronic Conditions
+#'
+#' There are seven comorbidity maps which represent the combinations of ICD-9,
+#' ICD-10, diagnosis and procedure codes, and three also with a set of 'fixed'
+#' codes. (See reference).
+#' @references Feudtner C, et al. Pediatric complex chronic conditions
+#'   classification system version 2: updated for ICD-10 and complex medical
+#'   technology dependence and transplantation, BMC Pediatrics, 2014, 14:199,
+#'   DOI: 10.1186/1471-2431-14-199
+#' @references Feudtner C, Feinstein JA, Zhong W, Hall M, Dai D. Pediatric
+#'   complex chronicconditions classification system version 2: updated for
+#'   ICD-10 and complexmedical technology dependence and transplantation. BMC
+#'   Pediatr. 2014 Aug8;14:199. doi: 10.1186/1471-2431-14-199.
+#'   \url{https://www.ncbi.nlm.nih.gov/pubmed/25102958}
+#' @seealso \url{https://feudtnerlab.research.chop.edu/ccc_version_2.php}
+#' @name icd9_map_pccc
+#' @aliases icd9_map_pccc_dx icd9_map_pccc_pc icd10_map_pccc_dx
+#'   icd10_map_pccc_pc
 #' @docType data
 #' @keywords datasets
 NULL

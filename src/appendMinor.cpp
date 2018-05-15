@@ -31,6 +31,7 @@
 //' @template mjr
 //' @template mnr
 //' @template isShort
+//' @return Character vector
 //' @keywords internal manip
 // [[Rcpp::export]]
 CV icd9MajMinToCode(const CV mjr,
@@ -44,12 +45,10 @@ CV icd9MajMinToCode(const CV mjr,
   if (mjr.size() != mnr.size())
     Rcpp::stop("mjr and mnr lengths differ");
 #endif
-
   VecStr out(mjr.size());
-  std::vector<char> out_is_na(mjr.size()); // boolean in char
+  VecChar out_is_na(mjr.size()); // boolean in char
   CV::const_iterator j = mjr.begin();
   CV::const_iterator n = mnr.begin();
-
   for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
     Rcpp::String mjrelem = *j;
     if (CV::is_na(*j)) {
@@ -89,7 +88,7 @@ CV icd9MajMinToCode(const CV mjr,
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "NA loop size: " << out_is_na.size() << "\n";
 #endif
-  for (std::vector<char>::iterator i = out_is_na.begin(); i != out_is_na.end(); ++i) {
+  for (VecCharIt i = out_is_na.begin(); i != out_is_na.end(); ++i) {
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "NA loop: " << std::distance(out_is_na.begin(), i) << "\n";
 #endif
@@ -111,7 +110,7 @@ CV icd9MajMinToShort(const CV mjr,
   if ((mjr.size() != 1 && mjr.size() != mnr.size())
         || (mjr.size() == 1 && mnr.size() == 0)) {
     Rcpp::stop(
-      "icd9MajMinToShort, length of mjrs and mnrs must be equal, unless mjrs length is one.");
+      "Length of mjrs and mnrs must be equal, unless mjrs length is one.");
   }
 #endif
   if (mjr.size() == 1) {

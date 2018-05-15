@@ -89,7 +89,7 @@ logical_to_binary <- function(x) {
 
   assert_data_frame(x, min.rows = 1, min.cols = 1)
 
-  logical_fields <- names(x)[sapply(x, is.logical)]
+  logical_fields <- names(x)[vapply(x, is.logical, logical(1))]
   if (is.na(logical_fields) || length(logical_fields) == 0)
     return(x)
 
@@ -112,7 +112,7 @@ binary_to_logical <- function(x) {
     return(x)
   }
   assert_data_frame(x, min.rows = 1, min.cols = 1)
-  integer_fields <- names(x)[sapply(x, is.integer)]
+  integer_fields <- names(x)[vapply(x, is.integer, logical(1))]
   if (is.na(integer_fields) || length(integer_fields) == 0)
     return(x)
 

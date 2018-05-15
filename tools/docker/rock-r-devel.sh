@@ -20,10 +20,6 @@
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 IFS=$'\n\t'
-
-# show what we're doing
 set -x
-
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
-
 R_CMD="RD" ${ICD_HOME}/tools/docker/rockicd.sh rocker/r-devel

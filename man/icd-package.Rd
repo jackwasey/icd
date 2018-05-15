@@ -112,9 +112,7 @@ ambiguities and code formats are handled.
   between revisions by different authors. \code{\link{icd9cm_hierarchy}} is a
   \code{data.frame} containing the full ICD-9 classification for each
   diagnosis. \code{\link{icd9_chapters}} contains definitions of chapters,
-  sub-chapters and three-digit groups.}
-
-  }
+  sub-chapters and three-digit groups.} }
 }
 \references{
 \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}

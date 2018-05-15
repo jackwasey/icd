@@ -5,7 +5,12 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 
-//' @describeIn fastIntToString Same using \code{Rcpp}
+//' @title Convert integers to strings as quickly as possible
+//' @description Have tried R, sprintf with Rcpp and C++ standard library.
+//' @param x Vector of integers
+//' @return Vector of characters
+//' @keywords internal manip
+//' @rdname fastIntToString
 // [[Rcpp::export]]
 Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
   size_t len = x.size();

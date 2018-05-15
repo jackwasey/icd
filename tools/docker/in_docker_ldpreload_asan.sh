@@ -18,8 +18,6 @@
 
 set -euo pipefail
 IFS=$'\n\t'
-
-# echo expanded commands
 set -x
 
 # This is in in_docker_base.sh but apparently the environment is not remembered (or the test didn't work in that script)
@@ -44,4 +42,3 @@ elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.2 ]; then
 else
   echo "Cannot find libasan in /usr/lib/x86_64-linux-gnu"
 fi
-

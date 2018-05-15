@@ -191,16 +191,16 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
     )
   )
 
-  for (i in 1L:length(majors)) {
+  for (i in seq_along(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
-    for (chap_num in 1L:length(icd::icd9_chapters)) {
+    for (chap_num in seq_along(icd::icd9_chapters)) {
       if (majors[i] %ine% chap_lookup[[chap_num]]) {
         out[i, "chapter"] <- names(icd::icd9_chapters)[chap_num]
         break
       }
     }
-    for (subchap_num in 1:length(icd::icd9_sub_chapters)) {
+    for (subchap_num in seq_along(icd::icd9_sub_chapters)) {
       if (majors[i] %ine% subchap_lookup[[subchap_num]]) {
         out[i, "sub_chapter"] <- names(icd::icd9_sub_chapters)[subchap_num]
         break

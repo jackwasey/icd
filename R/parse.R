@@ -53,6 +53,7 @@ update_everything <- function() {
   # ICD 10
   icd10_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
   icd10_parse_cc(save_data = TRUE)
+  icd10_parse_ahrq_pcs(save_data = TRUE)
   icd10_generate_map_quan_elix(save_data = TRUE)
   icd10_generate_map_quan_deyo(save_data = TRUE)
   icd10_generate_map_elix(save_data = TRUE)
@@ -190,10 +191,10 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   stopifnot(!anyNA(reorder))
   stopifnot(!any(grepl(out[["code"]], pattern = "[[:space:]]")))
   stopifnot(!anyDuplicated(reorder))
-  stopifnot(all(1:nrow(out)) %in% reorder)
+  stopifnot(all(seq_len(nrow(out))) %in% reorder)
   # catches a mistaken zero-indexed reorder result
-  stopifnot(length(setdiff(1:nrow(out), reorder)) == 0)
-  stopifnot(length(setdiff(reorder, 1:nrow(out))) == 0)
+  stopifnot(length(setdiff(seq_len(nrow(out)), reorder)) == 0)
+  stopifnot(length(setdiff(reorder, seq_len(nrow(out)))) == 0)
   message("order found")
   out <- out[reorder, ]
   message("reordered")

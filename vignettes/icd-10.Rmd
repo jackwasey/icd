@@ -26,11 +26,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
-
-
-
 ```{r setup, include=FALSE}
-
 suppressWarnings({
   suppressPackageStartupMessages({
     loadNamespace("knitr") # for opts_chunk only
@@ -38,24 +34,19 @@ suppressWarnings({
     library(magrittr)
     })
   })
-
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-
 ```
 
-This package now includes ICD-10 support, with some sample ICD-10-CM codes, and comorbidity mappings from ICD-10 codes to comorbidities. The sample data are from https://ustur.wsu.edu/about-us/ where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
+This package now includes ICD-10 support, with some sample ICD-10-CM data, and comorbidity mappings from ICD-10 codes to comorbidities. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these from AHRQ. The sample data are from https://ustur.wsu.edu/about-us/ where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
 
-The sample data is in the 'long' format, i.e. multiple rows per case
-
+The sample data is in the 'long' format, i.e., multiple rows per case
 ```{r uranium-long}
 uranium_pathology[1:10, ]
 ```
-
 We can convert the date from long to wide format easily. This is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using \pkg{dplyr} and friends for this manipulation.
-
 ```{r uranium-wide}
 uranium_pathology %>% long_to_wide %>% head
 ```
@@ -68,17 +59,26 @@ quan_comorbidities[1:6, 3:10]
 ```
 
 The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings in this package. The ICD-9 mappings included all possible permutations of child codes. Since ICD-10 codes contain letters, and are seven characters long, this became impractical. Therefore, the current mappings include only codes for the most recent update of ICD-10-CM. The code which assigns comorbidities for ICD-10 therefore doesn't rely on all the possible codes being listed in the mappings, so it will (more slowly) search for each possible parent of the given code, up to the three digit 'major' (e.g. if Cholera was in the comorbidity mapping, then A0034212647 would eventually match A00)
-
 ```{r cholera}
 # create trivial comorbidity map:
 cholera_typhoid_map <- list(cholera = "A00", typhoid = "A01")
 patients <- data.frame(patient = c("0001", "0001", "0002"), code = c("A001234567", "A01", "A019"))
 comorbid(patients , map = cholera_typhoid_map)
 ```
-
 Here are the codes for hypertension with complications from Quan et al. Note that the vector has class `icd10` and has the attribute `icd_short_diag` indicating there are no decimal point delimiters in the codes.
 ```{r htncx}
 icd10_map_quan_elix$HTNcx
+```
+
+## Procedure codes
+
+The AHRQ publishes an annually updated categorization of ICD-10-CM procedure codes into four classes, representing diagnostic and therapeutic procedures, each being either minor or major.
+```{r icd10pcs}
+set.seed(1441)
+pts <- data.frame(id = sample(LETTERS, 10),
+                  pc = sample(icd10cm2018pcs$code, 10))
+print(res <- icd10_comorbid(pts, map = icd10_map_ahrq_pc, icd_name = "pc"))
+colSums(res)
 ```
 
 For more information on working with ICD-10 codes, see the introduction vignette, and function examples. E.g.

@@ -27,7 +27,7 @@ test_that("specific known parsing errors", {
 
 test_that("billable codes for expected versions exist", {
   expect_true(all(as.character(23:32) %in% names(icd9cm_billable)))
-  expect_true(all(sapply(icd9cm_billable, is.data.frame)))
+  expect_true(all(vapply(icd9cm_billable, is.data.frame, logical(1))))
 })
 
 test_that("billable codes are all in order", {

@@ -54,12 +54,14 @@ icd10_comorbid_parent_search_use_cpp <- function(
   icd_name = get_icd_name(x),
   short_code = guess_short(x, icd_name = icd_name),
   short_map = guess_short(map),
-  return_df = FALSE, ...) {
+  return_df = FALSE, return_binary = FALSE, ...) {
   if (!short_code)
     x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
   intermed <- icd10_comorbid_parent_search_cpp(
     x = x, map = map, visit_name = visit_name, icd_name = icd_name)
   res <- aggregate(x = intermed, by = x[visit_name], FUN = any)
+  if (return_binary)
+    res <- logical_to_binary(res)
   if (return_df)
     return(res)
   out <- as.matrix(res[-1])

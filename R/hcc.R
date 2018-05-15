@@ -31,24 +31,26 @@
 #'   Default value is 'date'.
 #' @template visit_name
 #' @template icd_name
-#' @template dotdotdot
 #' @export
-comorbid_hcc <- function(x, ...)
+comorbid_hcc <- function(x, date_name = "date",
+                         visit_name = get_visit_name(x),
+                         icd_name = get_icd_name(x))
   switch_ver_cmb(x, list(icd9 = icd9_comorbid_hcc,
-                         icd10 = icd10_comorbid_hcc), ...)
+                         icd10 = icd10_comorbid_hcc),
+                 date_name = date_name, visit_name = visit_name,
+                 icd_name = icd_name)
 
 #' @describeIn comorbid_hcc Get HCCs from a data frame of ICD-9 codes
 #' @export
 icd9_comorbid_hcc <- function(x,
                               date_name = "date",
                               visit_name = NULL,
-                              icd_name = NULL) {
+                              icd_name = NULL)
   comorbid_hcc_worker(x,
                       map = icd::icd9_map_cc,
                       date_name = date_name,
                       visit_name = visit_name,
                       icd_name = icd_name)
-}
 
 #' @describeIn comorbid_hcc Get HCCs from a data frame of ICD-10 codes
 #' @export
@@ -102,7 +104,7 @@ comorbid_hcc_worker <- function(x,
   for (i in 1:6) todrop[[i]] <- x[!is.na(x$ifcc), c(3, 4, 5 + i)]
   # Rename all dataframes in list to same column names
   # rbind into a single dataframe
-  todrop <- lapply(1:length(todrop), function(x) {
+  todrop <- lapply(seq_along(todrop), function(x) {
     names(todrop[[x]]) <- c(visit_name, date_name, "cc")
     todrop[[x]]
   })

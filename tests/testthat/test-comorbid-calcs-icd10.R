@@ -89,11 +89,11 @@ test_that("cmb from a ICD-10, no infinite recursion with Elix", {
                         "comorbid_quan_deyo", "comorbid_ahrq")) {
         code_w_class <- do.call(class_fun, list(code))
         df <- data.frame(visit = 1, code = code_w_class, stringsAsFactors = FALSE)
-        expect_error(res <- do.call(map_fun, list(x = df)), regex = NA, info = paste(class_fun, map_fun))
+        expect_error(res <- do.call(map_fun, list(x = df)), regexp = NA, info = paste(class_fun, map_fun))
         expect_true(res[, "CHF"])
         expect_false("HTNcx" %in% names(res))
         df2 <- data.frame(visit = c(1, 2), code = c(code_w_class, code_w_class), stringsAsFactors = FALSE)
-        expect_error(res <- do.call(map_fun, list(df2)), regex = NA, info = paste(class_fun, map_fun))
+        expect_error(res <- do.call(map_fun, list(df2)), regexp = NA, info = paste(class_fun, map_fun))
         expect_true(all(res[, "CHF"]))
         expect_false("HTNcx" %in% names(res))
       }
@@ -115,7 +115,6 @@ test_that("using reduction method for ICD-10", {
     skip("icd10_comorbid_reduce not available")
   res <- icd10_comorbid(uranium_pathology, map = icd10_map_ahrq, icd10_comorbid_fun = icd10_comorbid_reduce)
   expect_equal(ncol(res), 30)
-
   expect_identical(
     icd10_comorbid_parent_search_use_cpp(uranium_pathology, icd10_map_ahrq,
                                          visit_name = "case", icd_name = "icd10",
@@ -123,5 +122,36 @@ test_that("using reduction method for ICD-10", {
     icd10_comorbid_reduce(uranium_pathology, icd10_map_ahrq,
                           visit_name = "case", icd_name = "icd10",
                           short_code = FALSE, short_map = TRUE, return_df = FALSE))
+})
 
+test_that("providing icd_name to `comorbid` actually works", {
+  x <- icd10_all_quan_elix
+  names(x) <- c("col1", "col0")
+  expect_identical(comorbid(x, map = icd10_map_quan_elix),
+                   comorbid(x, map = icd10_map_quan_elix, visit_name = "col1", icd_name = "col0"))
+  expect_identical(comorbid(x, map = icd10_map_quan_elix),
+                   icd:::icd10_comorbid(x, map = icd10_map_quan_elix, visit_name = "col1", icd_name = "col0"))
+})
+
+test_that("comorbid for icd10 gives binary values if asked for matrices", {
+  res_bin <- comorbid(random_icd10_pts, map = icd10_map_charlson,
+                      return_binary = TRUE, return_df = FALSE)
+  res_log <- comorbid(random_icd10_pts, map = icd10_map_charlson,
+                      return_binary = FALSE, return_df = FALSE)
+  expect_true(is.integer(res_bin))
+  expect_true(is.logical(res_log))
+  expect_equivalent(apply(res_log, 2, as.integer), res_bin)
+  expect_identical(res_bin, logical_to_binary(res_log))
+  expect_identical(res_log, binary_to_logical(res_bin))
+})
+
+test_that("comorbid for icd10 gives binary values if asked for data.frames", {
+  res_bin <- comorbid(random_icd10_pts, map = icd10_map_charlson,
+                      return_binary = TRUE, return_df = TRUE)
+  res_log <- comorbid(random_icd10_pts, map = icd10_map_charlson,
+                      return_binary = FALSE, return_df = TRUE)
+  expect_true(all(vapply(res_bin[-1], is.integer, logical(1))))
+  expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
+  expect_identical(res_bin, logical_to_binary(res_log))
+  expect_identical(res_log, binary_to_logical(res_bin))
 })

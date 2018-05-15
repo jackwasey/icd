@@ -80,7 +80,7 @@ diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
   x.title <- deparse(substitute(x))
   y.title <- deparse(substitute(y))
 
-  out <- list();
+  out <- list()
 
   for (n in common.names) {
     both <- intersect(x[[n]], y[[n]])

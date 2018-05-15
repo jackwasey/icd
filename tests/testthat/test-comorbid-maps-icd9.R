@@ -627,3 +627,8 @@ test_that("Charlson synonyms are present", {
   expect_identical(icd9_map_charlson, icd9_map_quan_deyo)
   expect_identical(icd10_map_charlson, icd10_map_quan_deyo)
 })
+
+test_that("Quan Elix should only have children of 588.0, not 588", {
+  expect_true(all(c("5880", "58809") %in% icd9_map_quan_elix$Renal))
+  expect_false(any(c("5890", "5881", "58819", "58899") %in% icd9_map_quan_elix$Renal))
+})

@@ -6,7 +6,8 @@
 \alias{icd10_comorbid_hcc}
 \title{Get Heirarchical Condition Codes (HCC)}
 \usage{
-comorbid_hcc(x, ...)
+comorbid_hcc(x, date_name = "date", visit_name = get_visit_name(x),
+  icd_name = get_icd_name(x))
 
 icd9_comorbid_hcc(x, date_name = "date", visit_name = NULL,
   icd_name = NULL)
@@ -16,8 +17,6 @@ icd10_comorbid_hcc(x, date_name = "date", visit_name = NULL,
 }
 \arguments{
 \item{x}{data frame with columns for patient/visit ID, ICD code and date}
-
-\item{...}{arguments passed on to other functions}
 
 \item{date_name}{the name of the column representing the date of each record.
 Needed because each year there is a different ICD9/10 to CC mapping).

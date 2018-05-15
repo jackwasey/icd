@@ -1,4 +1,6 @@
 # Version 3.1.2
+ * fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map
+ * added ICD-10 procedure code data, and AHRQ procedure code classification. See ICD-10 vignette.
  * Documentation improved
  * https://jackwasey.github.io/icd/ now has `pkgdown` generated site in `gh-pages` branch.
  * Allow more functions to work without having called `library(icd)` first

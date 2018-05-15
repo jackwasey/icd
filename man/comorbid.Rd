@@ -28,16 +28,19 @@
 \alias{icd_comorbid_quan_elix}
 \title{Find comorbidities from ICD-9 codes.}
 \usage{
-comorbid(x, map, ...)
+comorbid(x, map, visit_name = NULL, icd_name = NULL,
+  short_code = guess_short(x, icd_name = icd_name),
+  short_map = guess_short(map), return_df = FALSE, return_binary = FALSE,
+  ...)
 
 icd10_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_code = NULL, short_map = guess_short(map), return_df = FALSE,
-  icd10_comorbid_fun = icd10_comorbid_reduce, ...)
+  return_binary = FALSE, icd10_comorbid_fun = icd10_comorbid_reduce, ...)
 
 icd9_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name),
-  short_map = guess_short(map), return_df = FALSE, preclean = TRUE,
-  visitId = NULL, icd9Field = NULL, ...)
+  short_map = guess_short(map), return_df = FALSE, return_binary = FALSE,
+  preclean = TRUE, visitId = NULL, icd9Field = NULL, ...)
 
 icd9_comorbid_ahrq(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
@@ -100,8 +103,6 @@ is no default: the user should use the family of functions, e.g.
 \code{comorbid_ahrq}, since these also name the fields correctly, apply any
 hierarchical rules (see \code{hierarchy} below)}
 
-\item{...}{arguments passed on to other functions}
-
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
 patients come leave and enter hospital with different ICD-9 codes. It is a
@@ -131,6 +132,15 @@ same type, i.e. short or decimal.}
 \item{return_df}{single logical value, if \code{TRUE}, return the result as a data frame with the first column being
 the \code{visit_id}, and the second being the count. If \code{visit_id} was a factor or named differently in the
 input, this is preserved.}
+
+\item{return_binary}{Single logical value, if \code{TRUE}, the returned
+\code{matrix} or \code{data.frame} will be composed of \code{1} and
+\code{0}, instead of \code{TRUE} and \code{FALSE}, respectively. This
+conversion can also be done by the internal functions
+\code{icd:::logical_to_binary} and \code{icd:::binary_to_logical}, or using
+other tools, e.g. \code{apply(x, 2, as.integer)}}
+
+\item{...}{arguments passed on to other functions}
 
 \item{icd10_comorbid_fun}{function Internal parameter, default will be fast
 and accurate. A function which calculates comorbidities for ICD-10 codes,

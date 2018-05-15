@@ -63,10 +63,10 @@ icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
   # there are some non-numeric characters scattered around)
   sc_lookup <- icd10_generate_subchap_lookup()
   icd10cm2016[["sub_chapter"]] <- merge(x = icd10cm2016["three_digit"], y = sc_lookup,
-        by.x = "three_digit", by.y = "sc_major", all.x = TRUE)[["sc_desc"]]
+                                        by.x = "three_digit", by.y = "sc_major", all.x = TRUE)[["sc_desc"]]
   chap_lookup <- icd10_generate_chap_lookup()
   icd10cm2016[["chapter"]] <- merge(icd10cm2016["three_digit"], chap_lookup,
-        by.x = "three_digit", by.y = "chap_major", all.x = TRUE)[["chap_desc"]]
+                                    by.x = "three_digit", by.y = "chap_major", all.x = TRUE)[["chap_desc"]]
   if (save_data)
     save_in_data_dir(icd10cm2016)
   invisible(icd10cm2016)
@@ -110,4 +110,24 @@ icd10_generate_chap_lookup <- function(lk_majors) {
   chap_lookup
 }
 
+icd10_parse_ahrq_pc <- function(save_data = TRUE, offline = FALSE) {
+  f <- unzip_to_data_raw(
+    url = "https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/pc_icd10pcs_2018_1.zip",
+    file_name = "pc_icd10pcs_2018.csv", offline = offline)
+  dat <- read.csv(file = f$file_path, skip = 1, stringsAsFactors = FALSE,
+                             colClasses = "character", encoding = "latin1")
+  names(dat) <- c("code", "desc", "class_number", "class")
+  dat$class <- factor(dat$class,
+                      levels = c("Minor Diagnostic", "Minor Therapeutic",
+                                 "Major Diagnostic", "Major Therapeutic"))
+  dat$class_number <- NULL
+  dat$code <- gsub(dat$code, pattern = "'", replacement = "")
+  icd10cm2018pc <- dat[c("code", "desc")]
+  icd10_map_ahrq_pc <- split(dat$code, dat$class)
+  if (save_data) {
+    save_in_data_dir(icd10cm2018pc)
+    save_in_data_dir(icd10_map_ahrq_pc)
+  }
+
+}
 # nocov end

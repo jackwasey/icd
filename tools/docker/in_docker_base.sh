@@ -18,22 +18,16 @@
 
 set -euo pipefail
 IFS=$'\n\t'
-
-# echo expanded commands
 set -x
-
 #https://stackoverflow.com/questions/14719349/error-c-stack-usage-is-too-close-to-the-limit#14719448
 # C stack limit problems hopefully fixed by this. Can also be set to "unlimited" Default is 8192k on my pc.
 # do this inside and outside the docker container
-
 old_ulimit=$(ulimit -s)
 ulimit -s unlimited
-
 function finish {
         ulimit -s "$old_ulimit"
 }
 trap finish EXIT
-
 pushd /tmp
 
 if [ -f /etc/os-release ]; then
@@ -49,7 +43,6 @@ elif [ -f /etc/debian_version ]; then
 else
     OS=$(uname -s)
 fi
-
 if [[ "$OS" == "Ubuntu" || "$OS" == "Debian" ]]; then
   echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
   apt-get update -qq || true
@@ -58,13 +51,9 @@ if [[ "$OS" == "Ubuntu" || "$OS" == "Debian" ]]; then
 elif [[ "$OS" == "Fedora" ]]; then
   dnf install -y git
 fi
-
 echo "R CMD: using '${R_CMD:-RD}'"
 echo "R CMD ERR: using '${R_CMD_ERR:-RD}'"
-
 R_CMD_ERR="${R_CMD}script -e 'cat()'"
-
-# which libasan library?
 if [ -e /usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so ]; then
   if LD_PRELOAD="/usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so" ${R_CMD_ERR}; then
     export LD_PRELOAD="/usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so"
@@ -87,7 +76,6 @@ fi
 
 # tolerate R_CMD unset or empty, and default to RD if empty or unset:
 # TODO: actually, RD is not available in all docker images, e.g. most basic rocker/tidyverse, verse, etc.
-
 echo "checking ${R_CMD} exists"
 if ! command -v ${R_CMD:-RD} &>/dev/null; then
   echo "setting R_CMD to R"
@@ -99,8 +87,6 @@ for pkg in testthat checkmate RODBC xml2 Rcpp stringi knitr rmarkdown microbench
 ASAN_OPTIONS=abort_on_error=0,detect_leaks=0 ${R_CMD}script -e "install.packages(\"${pkg}\")"
 done
 
-
 # We need to build based on the directory name, not the package name. Don't build vignettes now: they get built during check anyway.
-# $R_CMD CMD build --no-build-vignettes $GITHUB_REPO 
+# $R_CMD CMD build --no-build-vignettes $GITHUB_REPO
 popd # out of /tmp
-

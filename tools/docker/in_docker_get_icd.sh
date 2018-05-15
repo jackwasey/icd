@@ -18,7 +18,7 @@
 
 set -euo pipefail
 IFS=$'\n\t'
-
+set -x
 # or download zip from: https://github.com/jackwasey/icd/archive/master.zip
 echo "Downloading/cloning '${GIT_BRANCH:-omp-taskloop}' branch from '${GIT_URL:-https://github.com/jackwasey/icd.git}'"
 #git clone --depth=1 -b $GIT_BRANCH $GIT_URL
@@ -42,4 +42,3 @@ ls "$GITHUB_REPO"
 pushd "$GITHUB_REPO"
 # "${R_CMD}script" -e 'Rcpp::compileAttributes()'
 popd
-
